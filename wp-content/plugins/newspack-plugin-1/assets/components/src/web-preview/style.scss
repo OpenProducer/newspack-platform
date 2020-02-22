@@ -1,0 +1,134 @@
+/**
+ * Web Preview
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+body.newspack-web-preview__open {
+	overflow: hidden;
+}
+
+.newspack-web-preview__container {
+	background: rgba( $primary-500, 0.8 );
+	box-sizing: border-box;
+	height: 100%;
+	left: 0;
+	margin: 0;
+	max-width: 100%;
+	padding: 24px 24px 0;
+	position: fixed;
+	top: 0;
+	width: 100%;
+	z-index: 99999;
+
+	&.phone iframe {
+		max-width: 480px;
+	}
+
+	&.tablet iframe {
+		max-width: 768px;
+	}
+
+	&.newspack-web-preview__is-loaded iframe {
+		opacity: 1;
+	}
+}
+
+.newspack-web-preview__interior {
+	animation: newspack-web-preview__appear-animation 0.1s ease-out;
+	animation-fill-mode: forwards;
+	background: white;
+	border-radius: 4px 4px 0 0;
+	box-shadow: 0 8px 16px rgba( black, 0.08 );
+	height: 100%;
+	width: 100%;
+}
+
+.newspack-web-preview__content {
+	background: $light-gray-100;
+	height: 100%;
+	-webkit-overflow-scrolling: touch;
+	overflow-x: hidden;
+	width: 100%;
+
+	iframe {
+		display: block;
+		height: 100%;
+		height: calc( 100% - 65px );
+		margin: 0 auto;
+		max-width: 100%;
+		opacity: 0;
+		outline: 1px solid $light-gray-500;
+		padding: 0;
+		pointer-events: all;
+		transition: max-width 125ms ease-in-out, opacity 250ms ease-in-out;
+		width: 100%;
+	}
+}
+
+.newspack-web-preview__is-waiting {
+	display: flex;
+	left: 50%;
+	margin: -12px 0 0 0;
+	position: absolute;
+	top: 50%;
+	transform: translateX(-50%);
+}
+
+.newspack-web-preview__toolbar {
+	border-bottom: 1px solid $light-gray-500;
+	display: flex;
+
+	.newspack-button {
+		height: 48px;
+		justify-content: center;
+		margin: 8px;
+		padding: 0;
+		width: 48px;
+	}
+}
+
+.newspack-web-preview__toolbar-left {
+	flex: 0 0 auto;
+
+	.newspack-button {
+		display: none;
+
+		@media screen and ( min-width: 528px ) {
+			&.is-phone,
+			&.is-tablet {
+				display: inline-flex;
+			}
+
+			&.is-phone {
+				margin-left: -4px;
+			}
+		}
+
+		@media screen and ( min-width: 816px ) {
+			&.is-desktop {
+				display: inline-flex;
+			}
+
+			&.is-tablet {
+				margin-left: -4px;
+			}
+		}
+	}
+}
+
+.newspack-web-preview__toolbar-right {
+	display: flex;
+	flex: 1;
+	justify-content: flex-end;
+}
+
+@keyframes newspack-web-preview__appear-animation {
+	from {
+		margin-top: 32px;
+	}
+	to {
+		margin-top: 0;
+	}
+}

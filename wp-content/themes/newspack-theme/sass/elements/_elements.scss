@@ -1,0 +1,52 @@
+html {
+	box-sizing: border-box;
+}
+
+*,
+*::before,
+*::after {
+	box-sizing: inherit;
+}
+
+body {
+	background-color: $color__background-body;
+}
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+	margin: $size__spacing-unit 0;
+}
+
+hr {
+	background-color: $color__text-light;
+	border: 0;
+	height: 2px;
+}
+
+@import 'lists';
+
+img {
+	height: auto;
+	max-width: 100%;
+	position: relative;
+}
+
+figure {
+	margin: 0;
+}
+
+blockquote {
+	> p {
+		margin: 0 0 $size__spacing-unit;
+	}
+
+	cite {
+		color: $color__text-light;
+	}
+}
+
+@import 'tables';

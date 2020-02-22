@@ -1,0 +1,41 @@
+.nav2 {
+	ul,
+	li {
+		list-style: none;
+		margin: 0;
+		padding: 0;
+	}
+
+	a {
+		color: inherit;
+		padding: #{0.125 * $size__spacing-unit} #{0.25 * $size__spacing-unit};
+
+		&:hover {
+			opacity: 0.75;
+		}
+	}
+}
+
+/* Desktop-specific styles */
+.site-header {
+	.nav2 {
+		ul,
+		li {
+			align-items: center;
+			display: flex;
+			flex-wrap: wrap;
+		}
+
+		li {
+			margin-right: #{$size__spacing-unit};
+		}
+
+		li:first-child a {
+			padding-left: 0;
+		}
+
+		a {
+			font-size: $font__size-xs;
+		}
+	}
+}

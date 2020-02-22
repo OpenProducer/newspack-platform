@@ -1,0 +1,39 @@
+{
+  "name": "newspack-ads",
+  "version": "0.1.0",
+  "author": "Automattic",
+  "private": true,
+  "devDependencies": {
+    "@automattic/calypso-build": "^5.1.0",
+    "@babel/core": "^7.5.4",
+    "@wordpress/blocks": "^6.4.0",
+    "@wordpress/element": "^2.5.0",
+    "classnames": "^2.2.6",
+    "eslint": "^6.0.1",
+    "grunt": "~0.4.5",
+    "grunt-wp-i18n": "~0.5.0",
+    "grunt-wp-readme-to-markdown": "~1.0.0",
+    "npm-run-all": "^4.1.5",
+    "prettier": "https://github.com/Automattic/wp-prettier/releases/download/wp-1.16.4/wp-prettier-1.16.4.tgz",
+    "webpack": "^4.35.3",
+    "webpack-cli": "^3.3.5"
+  },
+  "scripts": {
+    "build:js": "calypso-build",
+    "build": "run-p \"build:*\"",
+    "dev:js": "calypso-build --watch",
+    "dev": "run-p \"dev:*\"",
+    "start": "npm run dev",
+    "clean": "rm -rf dist/",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "release:archive": "run-p \"clean\" && NODE_ENV=production run-p \"build\" && mkdir -p release && zip -r release/newspack-ads.zip . -x node_modules/\\* .git/\\* .github/\\* .gitignore .DS_Store vendor/\\*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Automattic/newspack-ads.git"
+  },
+  "license": "GPL-3.0-or-later",
+  "bugs": {
+    "url": "https://github.com/Automattic/newspack-ads/issues"
+  }
+}

@@ -1,0 +1,30 @@
+/**
+ * Toggle Control
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-toggle-control {
+	.components-base-control__field {
+		margin: 0;
+		height: 24px;
+
+		label {
+			color: $dark-gray-300;
+			font-size: 14px;
+			line-height: 24px;
+			margin: 0;
+		}
+
+		.components-form-toggle {
+			margin-right: 8px;
+
+			&.is-checked {
+				.components-form-toggle__track {
+					background: $primary-500;
+				}
+			}
+		}
+	}
+}

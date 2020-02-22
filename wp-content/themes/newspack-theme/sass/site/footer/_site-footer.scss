@@ -1,0 +1,164 @@
+/* Site footer */
+
+.site-footer {
+	margin: #{2 * $size__spacing-unit} 0 0;
+
+	a {
+		color: $color__text-light;
+	}
+
+	.footer-branding {
+		.wrapper {
+			padding-top: $size__spacing-unit;
+		}
+
+		.custom-logo-link,
+		.footer-logo-link {
+			margin-bottom: $size__spacing-unit;
+			max-height: 75px;
+			max-width: 200px;
+
+			img {
+				max-height: inherit;
+				width: auto;
+			}
+		}
+	}
+
+	.footer-widgets {
+		padding: $size__spacing-unit 0 #{2 * $size__spacing-unit};
+
+		.wrapper {
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+	}
+
+	.footer-widgets .widget {
+		width: 100%;
+
+		@include media( mobile ) {
+			flex: 1 0 0;
+			margin-right: #{2 * $size__spacing-unit};
+			min-width: calc( 50% - #{2 * $size__spacing-unit} );
+		}
+
+		@include media( tablet ) {
+			min-width: calc( 25% - #{2 * $size__spacing-unit} );
+		}
+
+		&:last-child {
+			margin-right: 0;
+		}
+	}
+
+	.widget-title {
+		color: $color__text-light;
+		font-size: inherit;
+	}
+}
+
+.site-info {
+	color: $color__text-light;
+	padding-bottom: $size__spacing-unit;
+
+	.wrapper {
+		display: block;
+
+		@include media( tablet ) {
+			display: flex;
+
+			&.site-info-contain {
+				justify-content: flex-start;
+
+				> *:not( :first-child ) {
+					margin-left: $size__spacing-unit;
+				}
+
+				> *:last-child {
+					margin-left: auto;
+				}
+			}
+		}
+	}
+
+	a {
+		color: inherit;
+		display: block;
+
+		&:hover {
+			text-decoration: none;
+		}
+	}
+
+	a,
+	.copyright {
+		margin: #{0.25 * $size__spacing-unit} 0;
+	}
+
+	.site-info-contain:first-child {
+		border-top: 1px solid $color__border;
+		padding-top: $size__spacing-unit;
+	}
+
+	.widget-area {
+		.wrapper {
+			border-top: 1px solid $color__border;
+			justify-content: space-between;
+			padding: $size__spacing-unit 0 #{0.5 * $size__spacing-unit};
+		}
+
+		.widget {
+			font-size: inherit;
+
+			@include media( mobile ) {
+				margin: 0 $size__spacing-unit 0 0;
+
+				&:last-child {
+					margin-right: 0;
+				}
+			}
+		}
+
+		.widget-title {
+			display: inline-block;
+			margin: 0 $size__spacing-unit 0 0;
+		}
+
+		ul,
+		li {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+
+		a {
+			margin: 0;
+		}
+
+		@include media( mobile ) {
+			ul,
+			li a {
+				display: inline;
+			}
+
+			li {
+				display: inline-block;
+				margin: 0 $size__spacing-unit 0 0;
+
+				ul {
+					display: inline-block;
+					margin-left: $size__spacing-unit;
+				}
+
+				&:last-child {
+					margin-right: 0;
+				}
+			}
+		}
+
+		p {
+			margin: 0;
+		}
+	}
+}

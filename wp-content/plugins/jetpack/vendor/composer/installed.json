@@ -1,0 +1,642 @@
+[
+    {
+        "name": "automattic/jetpack-abtest",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-abtest.git",
+            "reference": "faed5181e0dbe596b7e083e40affceed686928ba"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-abtest/zipball/faed5181e0dbe596b7e083e40affceed686928ba",
+            "reference": "faed5181e0dbe596b7e083e40affceed686928ba",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-connection": "@dev",
+            "automattic/jetpack-error": "@dev"
+        },
+        "require-dev": {
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Provides an interface to the WP.com A/B tests."
+    },
+    {
+        "name": "automattic/jetpack-assets",
+        "version": "v1.1.1",
+        "version_normalized": "1.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-assets.git",
+            "reference": "157b2d4adfddc7cc395929b6a0de8ab43bc52155"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-assets/zipball/157b2d4adfddc7cc395929b6a0de8ab43bc52155",
+            "reference": "157b2d4adfddc7cc395929b6a0de8ab43bc52155",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-constants": "@dev"
+        },
+        "require-dev": {
+            "brain/monkey": "2.4.0",
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2020-01-27T11:04:11+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Asset management utilities for Jetpack ecosystem packages"
+    },
+    {
+        "name": "automattic/jetpack-autoloader",
+        "version": "v1.4.0",
+        "version_normalized": "1.4.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-autoloader.git",
+            "reference": "3cb0ad8496d04a648435ebee7c2a652c80eaf550"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-autoloader/zipball/3cb0ad8496d04a648435ebee7c2a652c80eaf550",
+            "reference": "3cb0ad8496d04a648435ebee7c2a652c80eaf550",
+            "shasum": ""
+        },
+        "require": {
+            "composer-plugin-api": "^1.1"
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2020-01-22T17:49:03+00:00",
+        "type": "composer-plugin",
+        "extra": {
+            "class": "Automattic\\Jetpack\\Autoloader\\CustomAutoloaderPlugin"
+        },
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "Automattic\\Jetpack\\Autoloader\\": "src"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Creates a custom autoloader for a plugin or theme."
+    },
+    {
+        "name": "automattic/jetpack-backup",
+        "version": "v1.0.2",
+        "version_normalized": "1.0.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-backup.git",
+            "reference": "ea2aaa9be3697d8b885a74a11411c7818fba5a75"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-backup/zipball/ea2aaa9be3697d8b885a74a11411c7818fba5a75",
+            "reference": "ea2aaa9be3697d8b885a74a11411c7818fba5a75",
+            "shasum": ""
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "actions.php"
+            ],
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Tools to assist with backing up Jetpack sites."
+    },
+    {
+        "name": "automattic/jetpack-compat",
+        "version": "v1.0.5",
+        "version_normalized": "1.0.5.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-compat.git",
+            "reference": "2a4a2fd64bbcaab0a6af6dfe3a5ea8342eca9cbf"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-compat/zipball/2a4a2fd64bbcaab0a6af6dfe3a5ea8342eca9cbf",
+            "reference": "2a4a2fd64bbcaab0a6af6dfe3a5ea8342eca9cbf",
+            "shasum": ""
+        },
+        "require-dev": {
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "functions.php"
+            ],
+            "classmap": [
+                "legacy"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Compatibility layer with previous versions of Jetpack"
+    },
+    {
+        "name": "automattic/jetpack-config",
+        "version": "v1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-config.git",
+            "reference": "df7cfce4231fb50e8cd433a6ccf52e99a269c16c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-config/zipball/df7cfce4231fb50e8cd433a6ccf52e99a269c16c",
+            "reference": "df7cfce4231fb50e8cd433a6ccf52e99a269c16c",
+            "shasum": ""
+        },
+        "time": "2020-01-21T22:42:22+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Jetpack configuration package that initializes other packages and configures Jetpack's functionality. Can be used as a base for all variants of Jetpack package usage."
+    },
+    {
+        "name": "automattic/jetpack-connection",
+        "version": "v1.8.0",
+        "version_normalized": "1.8.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-connection.git",
+            "reference": "e9e898ca3acb174a418637cac69355d6aad89762"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-connection/zipball/e9e898ca3acb174a418637cac69355d6aad89762",
+            "reference": "e9e898ca3acb174a418637cac69355d6aad89762",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-constants": "@dev",
+            "automattic/jetpack-options": "@dev",
+            "automattic/jetpack-roles": "@dev"
+        },
+        "require-dev": {
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2020-01-27T11:20:58+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "files": [
+                "legacy/load-ixr.php"
+            ],
+            "classmap": [
+                "legacy",
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Everything needed to connect to the Jetpack infrastructure"
+    },
+    {
+        "name": "automattic/jetpack-constants",
+        "version": "v1.1.3",
+        "version_normalized": "1.1.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-constants.git",
+            "reference": "5fdd94dec1151e7defd684a97e0b64fe6ff1bd3a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-constants/zipball/5fdd94dec1151e7defd684a97e0b64fe6ff1bd3a",
+            "reference": "5fdd94dec1151e7defd684a97e0b64fe6ff1bd3a",
+            "shasum": ""
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "A wrapper for defining constants in a more testable way."
+    },
+    {
+        "name": "automattic/jetpack-error",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-error.git",
+            "reference": "2128dd5a666154506727010350518529cc87b23d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-error/zipball/2128dd5a666154506727010350518529cc87b23d",
+            "reference": "2128dd5a666154506727010350518529cc87b23d",
+            "shasum": ""
+        },
+        "require-dev": {
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Jetpack Error - a wrapper around WP_Error."
+    },
+    {
+        "name": "automattic/jetpack-jitm",
+        "version": "v1.1.1",
+        "version_normalized": "1.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-jitm.git",
+            "reference": "3d8419a38d5ea45c174f98a30e0420011e4bc01c"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-jitm/zipball/3d8419a38d5ea45c174f98a30e0420011e4bc01c",
+            "reference": "3d8419a38d5ea45c174f98a30e0420011e4bc01c",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-assets": "@dev",
+            "automattic/jetpack-connection": "@dev",
+            "automattic/jetpack-constants": "@dev",
+            "automattic/jetpack-logo": "@dev",
+            "automattic/jetpack-options": "@dev",
+            "automattic/jetpack-tracking": "@dev"
+        },
+        "require-dev": {
+            "mockery/mockery": "^1.2",
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2020-01-21T22:42:22+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Just in time messages for Jetpack"
+    },
+    {
+        "name": "automattic/jetpack-logo",
+        "version": "v1.1.4",
+        "version_normalized": "1.1.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-logo.git",
+            "reference": "7da178a529f772cddfd0bbf1775eb30a852739c2"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-logo/zipball/7da178a529f772cddfd0bbf1775eb30a852739c2",
+            "reference": "7da178a529f772cddfd0bbf1775eb30a852739c2",
+            "shasum": ""
+        },
+        "require-dev": {
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "A logo for Jetpack"
+    },
+    {
+        "name": "automattic/jetpack-options",
+        "version": "v1.1.2",
+        "version_normalized": "1.1.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-options.git",
+            "reference": "cc81a75b7b3fecd1155a517a057ca74975ca8b5d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-options/zipball/cc81a75b7b3fecd1155a517a057ca74975ca8b5d",
+            "reference": "cc81a75b7b3fecd1155a517a057ca74975ca8b5d",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-constants": "@dev"
+        },
+        "require-dev": {
+            "10up/wp_mock": "0.4.2",
+            "phpunit/phpunit": "7.*.*"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "legacy"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "A wrapper for wp-options to manage specific Jetpack options."
+    },
+    {
+        "name": "automattic/jetpack-partner",
+        "version": "v1.0.1",
+        "version_normalized": "1.0.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-partner.git",
+            "reference": "866dfe161654acd18115b94aa117186f53a6ee6d"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-partner/zipball/866dfe161654acd18115b94aa117186f53a6ee6d",
+            "reference": "866dfe161654acd18115b94aa117186f53a6ee6d",
+            "shasum": ""
+        },
+        "require-dev": {
+            "brain/monkey": "2.4.0",
+            "mockery/mockery": "^1.2",
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2020-01-27T11:04:11+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Support functions for Jetpack hosting partners."
+    },
+    {
+        "name": "automattic/jetpack-roles",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-roles.git",
+            "reference": "0cdcff4fdc489c79f20a361c084ec48e326ce483"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-roles/zipball/0cdcff4fdc489c79f20a361c084ec48e326ce483",
+            "reference": "0cdcff4fdc489c79f20a361c084ec48e326ce483",
+            "shasum": ""
+        },
+        "require-dev": {
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Utilities, related with user roles and capabilities."
+    },
+    {
+        "name": "automattic/jetpack-status",
+        "version": "v1.1.1",
+        "version_normalized": "1.1.1.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-status.git",
+            "reference": "c688b03859381e66164c821971e851408a5e232a"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-status/zipball/c688b03859381e66164c821971e851408a5e232a",
+            "reference": "c688b03859381e66164c821971e851408a5e232a",
+            "shasum": ""
+        },
+        "require-dev": {
+            "brain/monkey": "2.4.0",
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2020-01-27T11:04:11+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Used to retrieve information about the current status of Jetpack and the site overall."
+    },
+    {
+        "name": "automattic/jetpack-sync",
+        "version": "dev-fork/jetpack-sync-v1.7.4+vip",
+        "version_normalized": "dev-fork/jetpack-sync-v1.7.4+vip",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-sync.git",
+            "reference": "070a46e38d34a0ceba15b9d4b0de115fbe76b20f"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-sync/zipball/070a46e38d34a0ceba15b9d4b0de115fbe76b20f",
+            "reference": "070a46e38d34a0ceba15b9d4b0de115fbe76b20f",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-connection": "@dev",
+            "automattic/jetpack-constants": "@dev",
+            "automattic/jetpack-options": "@dev",
+            "automattic/jetpack-roles": "@dev",
+            "automattic/jetpack-status": "@dev"
+        },
+        "time": "2020-02-14T17:53:00+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Everything needed to allow syncing to the WP.com infrastructure."
+    },
+    {
+        "name": "automattic/jetpack-terms-of-service",
+        "version": "v1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-terms-of-service.git",
+            "reference": "fcee8e9de7f37d36bd68ac1ebabdb15cf6e10952"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-terms-of-service/zipball/fcee8e9de7f37d36bd68ac1ebabdb15cf6e10952",
+            "reference": "fcee8e9de7f37d36bd68ac1ebabdb15cf6e10952",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-connection": "@dev",
+            "automattic/jetpack-options": "@dev",
+            "automattic/jetpack-status": "@dev"
+        },
+        "require-dev": {
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-15T16:03:27+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Everything need to manage the terms of service state"
+    },
+    {
+        "name": "automattic/jetpack-tracking",
+        "version": "v1.2.2",
+        "version_normalized": "1.2.2.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/Automattic/jetpack-tracking.git",
+            "reference": "d337a8f4234c684e80a43ff9ad3051a46a1f35d6"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/Automattic/jetpack-tracking/zipball/d337a8f4234c684e80a43ff9ad3051a46a1f35d6",
+            "reference": "d337a8f4234c684e80a43ff9ad3051a46a1f35d6",
+            "shasum": ""
+        },
+        "require": {
+            "automattic/jetpack-options": "@dev",
+            "automattic/jetpack-terms-of-service": "@dev"
+        },
+        "require-dev": {
+            "php-mock/php-mock": "^2.1",
+            "phpunit/phpunit": "^5.7 || ^6.5 || ^7.5"
+        },
+        "time": "2019-11-08T21:16:05+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "classmap": [
+                "legacy",
+                "src/"
+            ]
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "Tracking for Jetpack"
+    }
+]

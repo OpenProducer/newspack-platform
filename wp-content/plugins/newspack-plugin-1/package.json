@@ -1,0 +1,91 @@
+{
+  "name": "newspack",
+  "version": "1.0.0",
+  "description": "The Newspack plugin. https://newspack.blog",
+  "bugs": {
+    "url": "https://github.com/Automattic/newspack-plugin/issues"
+  },
+  "homepage": "https://newspack.blog",
+  "devDependencies": {
+    "@automattic/calypso-build": "^5.1.0",
+    "@babel/core": "^7.4.0",
+    "@wordpress/base-styles": "^1.0.0",
+    "@wordpress/blocks": "^6.2.0",
+    "@wordpress/browserslist-config": "^2.2.2",
+    "@wordpress/components": "^7.3.1",
+    "@wordpress/element": "^2.3.0",
+    "autoprefixer": "^9.1.5",
+    "chokidar-cli": "^1.2.1",
+    "classnames": "^2.2.6",
+    "enzyme": "^3.9.0",
+    "enzyme-adapter-react-16": "^1.12.1",
+    "eslint": "^5.16.0",
+    "grunt": "^0.4.5",
+    "grunt-wp-i18n": "^0.5.4",
+    "grunt-wp-readme-to-markdown": "^1.0.0",
+    "identity-obj-proxy": "^3.0.0",
+    "jest": "^24.7.1",
+    "mini-css-extract-plugin": "0.6.0",
+    "node-sass": "^4.13.0",
+    "npm-run-all": "^4.1.5",
+    "postcss-cli": "^6.0.1",
+    "postcss-focus-within": "^3.0.0",
+    "prettier": "https://github.com/Automattic/wp-prettier/releases/download/wp-1.16.4/wp-prettier-1.16.4.tgz",
+    "react-router-dom": "^5.0.1",
+    "rtlcss": "^2.4.0",
+    "webpack": "^4.29.6",
+    "webpack-cli": "^3.3.0"
+  },
+  "rtlcssConfig": {
+    "options": {
+      "autoRename": false,
+      "autoRenameStrict": false,
+      "blacklist": {},
+      "clean": true,
+      "greedy": false,
+      "processUrls": false,
+      "stringMap": []
+    },
+    "plugins": [],
+    "map": false
+  },
+  "browserslist": [
+    "extends @wordpress/browserslist-config"
+  ],
+  "jest": {
+    "setupFilesAfterEnv": [
+      "<rootDir>/assets/setupTests.js"
+    ],
+    "testMatch": [
+      "<rootDir>/**/*test.js?(x)",
+      "!**/.eslintrc.*"
+    ],
+    "transform": {
+      "^.+\\.js?$": "babel-jest"
+    },
+    "moduleNameMapper": {
+      "\\.(scss|css)$": "identity-obj-proxy"
+    },
+    "verbose": false
+  },
+  "scripts": {
+    "build:style-plugins-screen": "node-sass assets/plugins-screen/plugins-screen.scss assets/plugins-screen/plugins-screen.css --output-style expanded && postcss -r assets/plugins-screen/plugins-screen.css",
+    "build:style-plugins-screen-rtl": "rtlcss assets/plugins-screen/plugins-screen.css assets/plugins-screen/plugins-screen-rtl.css",
+    "build:scss": "npm run build:style-plugins-screen && npm run build:style-plugins-screen-rtl",
+    "build:js": "calypso-build",
+    "build": "run-p \"build:*\"",
+    "clean": "rm -rf assets/dist/",
+    "dev:js": "calypso-build --watch",
+    "dev:scss": "chokidar \"./assets/**/*.scss\" -c \"npm run build:scss\" --initial",
+    "dev": "run-p \"dev:*\"",
+    "start": "npm run dev",
+    "test": "jest",
+    "release:build-all": "composer install --no-dev && run-p \"build\"",
+    "release:archive": "mkdir -p assets/release && zip -r assets/release/newspack-plugin.zip . -x node_modules/\\* .git/\\* .github/\\* .gitignore .DS_Store",
+    "release": "run-p \"release:build-all\" && run-p \"release:archive\""
+  },
+  "dependencies": {
+    "@material-ui/core": "^4.8.2",
+    "@material-ui/icons": "^4.5.1"
+  }
+}

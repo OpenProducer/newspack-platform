@@ -1,0 +1,129 @@
+/*!
+ * Newspack Theme Editor Overrides
+ *
+ * This CSS files contains Gutenberg editor styles that need to reference classes on the body tag.
+ */
+
+/** === Includes === */
+
+@import 'variables-site/variables-site';
+@import 'mixins/mixins-master';
+
+/** === Default Template === */
+
+@include media( mobile ) {
+	body.newspack-default-template .wp-block[data-align='full'] {
+		margin-left: auto;
+		margin-right: auto;
+		max-width: 780px;
+	}
+}
+
+/** === One Column Templates === */
+
+@include media( desktop ) {
+	body.newspack-single-column-template .wp-block[data-align='wide'] {
+		max-width: 1230px;
+	}
+}
+
+/** === Wide Templates === */
+
+body.newspack-static-front-page,
+body.newspack-single-wide-template {
+	.wp-block {
+		max-width: 1230px; // 1200px + 30px to offset padding
+	}
+
+	.wp-block[data-align='wide'] {
+		max-width: 1430px; // 1400px + 30px to offset padding
+	}
+
+	.wp-block[data-type='core/group'][data-align='wide'],
+	.wp-block[data-type='core/group'][data-align='full'] {
+		.wp-block:not( [data-align='wide'] ):not( [data-align='full'] ) {
+			max-width: 1230px; // 1200px + 30px to offset padding
+		}
+
+		.wp-block[data-align='wide'] {
+			max-width: 1430px; // 1400px + 30px to offset padding
+		}
+	}
+
+	figcaption {
+		max-width: 1230px;
+	}
+}
+
+/** === Wide Blocks === */
+
+body.newspack-static-front-page,
+body.newspack-single-wide-template,
+body.newspack-single-column-template {
+	.wp-block[data-align='full'] {
+		max-width: 100vw;
+		width: auto;
+
+		figcaption {
+			padding: 0 $size__spacing-unit;
+		}
+	}
+
+	.wp-block[data-align='left'] {
+		@include media( desktop ) {
+			left: #{-2 * $size__spacing-unit};
+		}
+		@include media( wide ) {
+			left: #{-4 * $size__spacing-unit};
+		}
+	}
+
+	.block-editor-inner-blocks .wp-block[data-align='left'] {
+		left: auto;
+	}
+
+	.wp-block[data-align='right'] {
+		@include media( desktop ) {
+			right: #{-2 * $size__spacing-unit};
+		}
+		@include media( wide ) {
+			right: #{-4 * $size__spacing-unit};
+		}
+	}
+
+	.block-editor-inner-blocks .wp-block[data-align='right'] {
+		right: auto;
+	}
+}
+
+/** === Single Posts === */
+
+body.post-type-post {
+	.editor-post-title__block {
+		max-width: 1200px;
+		.editor-post-title__input {
+			font-size: $font__size-xl;
+
+			@include media( mobile ) {
+				font-size: $font__size-xxl;
+			}
+
+			@include media( tablet ) {
+				font-size: $font__size-xxxl;
+			}
+
+			@include media( desktop ) {
+				font-size: $font__size-xxxxl;
+			}
+		}
+	}
+
+	&.style-pack-style-4 {
+		.editor-post-title__block {
+			max-width: 1020px; // 85% of 1200px.
+			.editor-post-title__input {
+				text-align: center;
+			}
+		}
+	}
+}

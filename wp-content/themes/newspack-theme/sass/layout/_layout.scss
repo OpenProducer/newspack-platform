@@ -1,0 +1,124 @@
+/** === Layout === */
+
+.wrapper {
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-between;
+	margin: auto;
+	max-width: 90%;
+	width: $size__site-main;
+
+	@include media( tablet ) {
+		flex-wrap: nowrap;
+	}
+}
+
+#page {
+	overflow: hidden;
+	width: 100%;
+}
+
+.site-content {
+	min-height: 30vh;
+	margin-top: #{1.5 * $size__spacing-unit};
+
+	@include media( tablet ) {
+		margin-top: #{4 * $size__spacing-unit};
+	}
+}
+
+#primary {
+	margin: auto;
+	max-width: 90%;
+	width: $size__site-main;
+}
+
+#secondary {
+	margin-top: $size__spacing-unit;
+}
+
+.single,
+.page:not( .newspack-front-page ) {
+	&.has-sidebar #main {
+		@include media( tablet ) {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+	}
+}
+
+.archive,
+.blog,
+.search {
+	&.has-sidebar #primary {
+		@include media( tablet ) {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: space-between;
+		}
+	}
+}
+
+.archive #main,
+.blog #main,
+.search #main,
+.page .main-content,
+.single .main-content,
+.newspack-front-page.page-template-single-feature .site-main {
+	@include media( tablet ) {
+		width: 65%;
+	}
+}
+
+.archive #secondary,
+.blog #secondary,
+.search #secondary,
+.page #secondary,
+.single #secondary {
+	@include media( tablet ) {
+		width: calc( 35% - #{2 * $size__spacing-unit} );
+	}
+	@include media( desktop ) {
+		width: calc( 35% - #{3 * $size__spacing-unit} );
+	}
+}
+
+.hide {
+	display: none;
+}
+
+// Single-column layouts
+.post-template-single-feature .main-content,
+.page-template-single-feature .main-content,
+.newspack-front-page.page-template-single-feature .site-main {
+	margin-left: auto;
+	margin-right: auto;
+}
+
+.page-template-single-feature {
+	@include media( tablet ) {
+		.entry-header {
+			margin-left: auto;
+			margin-right: auto;
+			width: 65%;
+		}
+	}
+}
+
+.newspack-front-page,
+.post-template-single-wide,
+.page-template-single-wide {
+	.main-content {
+		width: 100%;
+	}
+
+	@include media( tablet ) {
+		.author-bio,
+		.comments-area {
+			margin-left: auto;
+			margin-right: auto;
+			width: 65%;
+		}
+	}
+}

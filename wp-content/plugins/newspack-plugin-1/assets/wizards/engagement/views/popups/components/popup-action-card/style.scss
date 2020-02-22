@@ -1,0 +1,35 @@
+/**
+ * Popup Action Card styles
+ */
+
+@import '~@wordpress/base-styles/colors';
+
+.newspack-menu-group__sitewide {
+	> div {
+		padding-left: 15px;
+		padding-right: 15px;
+	}
+}
+
+.newspack-action-card {
+	.newspack-popover {
+		.components-menu-group + .components-menu-group {
+			border-top: 1px solid $light-gray-500;
+		}
+
+		.newspack-toggle-control {
+			.components-base-control__field .components-form-toggle {
+				margin-right: 8px;
+			}
+		}
+
+		.newspack-button {
+			border-radius: 0;
+			font-weight: normal;
+		}
+	}
+
+	&:not(.newspack-card__is-primary) .newspack-popover {
+		margin-left: 18px;
+	}
+}

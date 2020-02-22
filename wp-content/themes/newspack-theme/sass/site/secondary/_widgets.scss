@@ -1,0 +1,143 @@
+.widget {
+	font-family: $font__heading;
+	font-size: $font__size-sm;
+	margin: 0 0 $size__spacing-unit;
+	word-wrap: break-word;
+
+	@include media( tablet ) {
+		margin: 0 0 #{$size__spacing-unit * 3};
+	}
+
+	&:last-child {
+		margin-bottom: 0;
+	}
+
+	/* Make sure select elements fit in widgets. */
+	select {
+		max-width: 100%;
+	}
+
+	a {
+		&:hover {
+			color: $color__primary-variation;
+		}
+	}
+}
+
+.widget_archive,
+.widget_categories,
+.widget_meta,
+.widget_nav_menu,
+.widget_pages,
+.widget_recent_comments,
+.widget_recent_entries,
+.widget_rss {
+	ul {
+		padding: 0;
+		list-style: none;
+
+		li {
+			font-family: $font__heading;
+			margin-bottom: #{0.25 * $size__spacing-unit};
+
+			ul {
+				margin-left: 1.5em;
+				margin-top: #{0.5 * $size__spacing-unit};
+			}
+		}
+	}
+}
+
+.widget_recent_comments,
+.widget_recent_entries {
+	ul li {
+		margin-bottom: #{0.75 * $size__spacing-unit};
+	}
+}
+
+.widget_recent_entries {
+	a {
+		color: inherit;
+		font-size: $font__size-lg;
+		font-weight: 700;
+		line-height: $font__line-height-heading;
+	}
+
+	.post-date {
+		color: inherit;
+		font-size: $font__size-sm;
+		display: block;
+		opacity: 0.8;
+	}
+}
+
+.widget_calendar .calendar_wrap {
+	text-align: center;
+
+	table td,
+	table th {
+		border: none;
+	}
+
+	a {
+		text-decoration: underline;
+	}
+}
+
+.widgets-list-layout {
+	.widgets-list-layout-blavatar {
+		width: auto;
+	}
+
+	.widgets-list-layout-links {
+		width: calc( 100% - 60px );
+	}
+}
+
+.jetpack_subscription_widget {
+	.error,
+	div {
+		background-color: $color__background-pre;
+		padding: $size__spacing-unit;
+
+		p {
+			margin: 0;
+		}
+	}
+}
+
+.widget_authors.widget {
+	a {
+		align-items: center;
+		display: flex;
+	}
+
+	img {
+		margin-right: #{0.5 * $size__spacing-unit};
+	}
+
+	ul ul {
+		margin: 0 0 #{1.5 * $size__spacing-unit} #{1.5 * $size__spacing-unit};
+	}
+}
+
+#secondary {
+	section:first-child,
+	section:first-child > div {
+		> *:first-child {
+			margin-top: 0;
+		}
+	}
+
+	.widget-title {
+		font-size: $font__size-md;
+	}
+}
+
+.single #secondary {
+	padding-top: calc( #{$size__spacing-unit} * 1.5 );
+}
+
+.above-content {
+	margin: $size__spacing-unit 0 0;
+}

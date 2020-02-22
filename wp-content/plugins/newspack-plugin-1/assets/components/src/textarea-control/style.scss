@@ -1,0 +1,76 @@
+/**
+ * Textarea Control
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-textarea-control {
+	color: $dark-gray-300;
+	font-size: 14px;
+	line-height: 24px;
+	margin: 32px 0;
+
+	label {
+		color: $dark-gray-900;
+		font-size: inherit;
+		font-weight: bold;
+		line-height: inherit;
+		margin: 0;
+	}
+
+	textarea {
+		background: white;
+		border: 1px solid $light-gray-500;
+		border-radius: 3px;
+		box-shadow: none;
+		color: inherit;
+		display: block;
+		font-size: 16px;
+		line-height: inherit;
+		margin: 0;
+		min-height: 48px;
+		padding: 11px 8px;
+		transition: border-color 125ms ease-in-out, box-shadow 125ms ease-in-out;
+		width: 100%;
+
+		@media screen and ( min-width: 768px ) {
+			font-size: inherit;
+		}
+
+		&:focus {
+			border-color: $primary-500;
+			box-shadow: 0 0 0 2px $primary-500;
+		}
+
+		&:disabled,
+		&.disabled {
+			background: $light-gray-100;
+			color: $light-gray-900;
+			cursor: not-allowed;
+		}
+	}
+
+	// Multiple Textarea Controls
+
+	& + & {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+
+	// Multiple Controls
+
+	& + .newspack-select-control,
+	& + .newspack-text-control {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+
+	// Reset
+
+	.components-base-control__field,
+	.components-base-control__label {
+		display: block;
+		margin: 0;
+	}
+}

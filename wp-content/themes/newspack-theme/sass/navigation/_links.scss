@@ -1,0 +1,20 @@
+a {
+	@include link-transition;
+	color: $color__text-light;
+
+	&:visited {
+		color: inherit;
+	}
+
+	&:hover,
+	&:active {
+		color: $color__text-main;
+		outline: 0;
+		text-decoration: none;
+	}
+
+	&:focus {
+		outline: thin dotted;
+		text-decoration: underline;
+	}
+}
