@@ -1,0 +1,33 @@
+/**
+ * Money Input
+ */
+
+@import '~@wordpress/base-styles/colors';
+
+.newspack-donations-wizard__money-input {
+	align-items: flex-end;
+	display: flex;
+
+	.currency {
+		background: $light-gray-500;
+		border-radius: 3px 0 0 3px;
+		color: $dark-gray-900;
+		display: block;
+		flex: 0 0 32px;
+		font-weight: bold;
+		height: 48px;
+		line-height: 48px;
+		margin: 32px 0;
+		text-align: center;
+	}
+
+	.newspack-text-control {
+		label {
+			margin-left: -32px;
+		}
+
+		input[type='number'] {
+			border-radius: 0 3px 3px 0;
+		}
+	}
+}

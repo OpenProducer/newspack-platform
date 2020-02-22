@@ -1,0 +1,115 @@
+/**
+ * Style Card
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-style-card {
+	border: 1px solid $light-gray-200;
+	border-radius: 3px;
+	box-sizing: border-box;
+	margin: 32px 0;
+	overflow: hidden;
+	padding: 4px;
+	width: 100%;
+
+	&:hover,
+	&:focus {
+		.newspack-style-card__actions,
+		.newspack-style-card__actions .newspack-button {
+			opacity: 1;
+		}
+	}
+
+	// Web Preview
+	body.newspack-web-preview__open & {
+		.newspack-style-card__actions {
+			background: transparent;
+			opacity: 1;
+		}
+	}
+
+	// Active
+	&.newspack-style-card__is-active {
+		border-color: $primary-600;
+		box-shadow: 0 0 0 2px $primary-500;
+
+		.newspack-style-card__actions {
+			display: none;
+		}
+
+		.newspack-style-card__content {
+			background: $primary-500;
+			color: white;
+
+			.newspack-style-card__heading {
+				color: inherit;
+				font-weight: bold;
+			}
+		}
+	}
+
+	// Image
+	.newspack-style-card__image {
+		position: relative;
+
+		img {
+			border-radius: 2px 2px 0 0;
+			display: block;
+			height: auto;
+			max-width: 100%;
+		}
+	}
+
+	// Content
+	.newspack-style-card__content {
+		border-radius: 0 0 2px 2px;
+
+		.newspack-style-card__heading {
+			display: flex;
+			flex-wrap: wrap;
+			margin: 0;
+			padding: 16px;
+		}
+
+		.newspack-style-card__title {
+			margin-right: 8px;
+		}
+
+		.newspack-style-card__status {
+			border: 1px solid;
+			border-radius: 12px;
+			display: block;
+			flex: 0 0 auto;
+			font-size: 12px;
+			font-weight: bold;
+			line-height: 16px;
+			margin: 3px 0;
+			padding: 0 8px;
+			text-transform: uppercase;
+		}
+	}
+
+	// Actions
+	.newspack-style-card__actions {
+		align-items: center;
+		background: rgba( white, 0.8 );
+		bottom: 0;
+		display: flex;
+		justify-content: center;
+		left: 0;
+		opacity: 0;
+		padding: 12px;
+		position: absolute;
+		right: 0;
+		top: 0;
+		transition: opacity 125ms ease-in-out;
+
+		> .newspack-button {
+			margin: 4px;
+			opacity: 0;
+			transition: opacity 125ms ease-in-out;
+		}
+	}
+}

@@ -1,0 +1,215 @@
+/**
+ * Button
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-button {
+	border-radius: 3px;
+	font-size: 14px;
+	font-weight: bold;
+	height: auto;
+	line-height: 24px;
+	padding: 11px 24px;
+	transition: background 125ms ease-in-out, border-color 125ms ease-in-out,
+		box-shadow 125ms ease-in-out, color 125ms ease-in-out;
+
+	&.is-large {
+		font-size: 17px;
+		height: auto;
+		line-height: 24px;
+	}
+
+	&.is-small {
+		font-size: 14px;
+		height: auto;
+		line-height: 24px;
+		padding: 3px 12px;
+	}
+
+	&.icon-only {
+		align-items: center;
+		height: 36px;
+		justify-content: center;
+		padding: 0;
+		width: 36px;
+	}
+
+	&:disabled,
+	&:disabled:active:enabled,
+	&[aria-disabled='true'],
+	&[aria-disabled='true']:active:enabled {
+		cursor: not-allowed;
+		text-shadow: none;
+	}
+
+	&.is-button {
+		border-radius: 3px;
+		font-size: 14px;
+		font-weight: bold;
+		height: auto;
+		line-height: 24px;
+		padding: 11px 24px;
+	}
+
+	&.is-primary,
+	&.is-pressed {
+		background: $primary-500;
+		border: 1px solid $primary-600;
+		color: white;
+
+		&:active,
+		&:active:enabled,
+		&:focus,
+		&:focus:enabled,
+		&:hover,
+		&:not( :disabled ):not( [aria-disabled='true'] ):not( .is-default ):hover {
+			background: $primary-600;
+			border-color: $primary-700;
+			color: white;
+		}
+
+		&:focus,
+		&:focus:enabled {
+			box-shadow: 0 0 0 2px $primary-500;
+		}
+
+		&:disabled,
+		&:disabled:active:enabled,
+		&[aria-disabled='true'],
+		&[aria-disabled='true']:active:enabled {
+			background: $primary-400;
+			border-color: $primary-500;
+			color: $primary-200;
+
+			&:hover {
+				background: $primary-400;
+				border-color: $primary-500;
+				color: $primary-200;
+			}
+		}
+
+		.newspack-is-waiting {
+			fill: white;
+		}
+	}
+
+	&.is-default,
+	&.is-secondary {
+		background: white;
+		border: 1px solid $light-gray-500;
+		color: $primary-500;
+
+		&:active,
+		&:active:enabled,
+		&:focus,
+		&:focus:enabled,
+		&:hover,
+		&:not( :disabled ):not( [aria-disabled='true'] ):not( .is-default ):hover {
+			background: $light-gray-100;
+			border-color: $primary-500;
+			color: $primary-500;
+		}
+
+		&:focus,
+		&:focus:enabled {
+			border-color: $primary-600;
+			box-shadow: 0 0 0 2px $primary-500;
+		}
+
+		&:disabled,
+		&:disabled:active:enabled,
+		&[aria-disabled='true'],
+		&[aria-disabled='true']:active:enabled {
+			background: $light-gray-100;
+			border-color: $light-gray-500;
+			color: $light-gray-900;
+
+			&:hover {
+				background: $light-gray-100;
+				border-color: $light-gray-500;
+				color: $light-gray-900;
+			}
+		}
+	}
+
+	&.is-tertiary {
+		background: $light-gray-300;
+		border: 1px solid $light-gray-500;
+		color: $dark-gray-600;
+
+		&:active,
+		&:active:enabled,
+		&:focus,
+		&:focus:enabled,
+		&:hover,
+		&:not( :disabled ):not( [aria-disabled='true'] ):not( .is-default ):hover {
+			background: $light-gray-400;
+			border-color: $light-gray-900;
+			color: $dark-gray-900;
+		}
+
+		&:focus,
+		&:focus:enabled {
+			border-color: $primary-600;
+			box-shadow: 0 0 0 2px $primary-500;
+		}
+
+		&:disabled,
+		&:disabled:active:enabled,
+		&[aria-disabled='true'],
+		&[aria-disabled='true']:active:enabled {
+			background: $light-gray-300;
+			border-color: $light-gray-500;
+			color: $dark-gray-100;
+
+			&:hover {
+				background: $light-gray-300;
+				border-color: $light-gray-500;
+				color: $dark-gray-100;
+			}
+		}
+
+		.newspack-is-waiting {
+			fill: $dark-gray-600;
+		}
+	}
+
+	&.is-link {
+		background: none;
+		border: 0;
+		border-radius: 0;
+		color: $primary-500;
+		font-weight: normal;
+		padding: 0;
+		transition: color 125ms ease-in-out, outline 125ms ease-in-out;
+
+		&:active,
+		&:active:enabled,
+		&:focus,
+		&:focus:enabled,
+		&:hover,
+		&:not( :disabled ):not( [aria-disabled='true'] ):not( .is-default ):hover {
+			background: transparent;
+			color: $primary-600;
+			text-decoration: none;
+		}
+
+		&:focus,
+		&:focus:enabled {
+			box-shadow: none;
+			outline: 2px solid $primary-500;
+			outline-offset: 2px;
+		}
+
+		&.is-small,
+		&.is-large {
+			padding: 0;
+		}
+	}
+
+	.components-tooltip {
+		font-weight: normal;
+	}
+}

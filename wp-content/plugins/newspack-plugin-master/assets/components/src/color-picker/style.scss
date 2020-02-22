@@ -1,0 +1,182 @@
+/**
+ * Color Picker
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-color-picker {
+	margin: 32px 0;
+
+	.newspack-color-picker__label {
+		align-items: center;
+		color: $dark-gray-900;
+		display: flex;
+		font-weight: bold;
+	}
+
+	.component-color-indicator {
+		border-color: rgba( black, 0.2 );
+	}
+
+	.components-circular-option-picker {
+		margin-top: 8px;
+	}
+
+	// Buttons
+
+	.components-circular-option-picker__custom-clear-wrapper {
+		align-items: center;
+		font-size: 14px;
+		line-height: 24px;
+
+		.is-link {
+			color: $primary-500;
+			font-size: inherit;
+			line-height: inherit;
+			transition: color 125ms ease-in-out, outline 125ms ease-in-out;
+
+			&:active,
+			&:active:enabled,
+			&:focus,
+			&:focus:enabled,
+			&:hover,
+			&:not( :disabled ):not( [aria-disabled='true'] ):not( .is-default ):hover {
+				color: $primary-600;
+				text-decoration: none;
+			}
+
+			&:focus,
+			&:focus:enabled {
+				box-shadow: none;
+				outline: 2px solid $primary-500;
+				outline-offset: 2px;
+			}
+		}
+
+		.is-secondary.is-small {
+			background: white;
+			border: 1px solid $light-gray-500;
+			border-radius: 3px;
+			color: $primary-500;
+			font-size: inherit;
+			font-weight: bold;
+			height: auto;
+			line-height: inherit;
+			padding: 3px 12px;
+			transition: background 125ms ease-in-out, border-color 125ms ease-in-out,
+				box-shadow 125ms ease-in-out, color 125ms ease-in-out;
+
+			&:active,
+			&:active:enabled,
+			&:focus,
+			&:focus:enabled,
+			&:hover,
+			&:not( :disabled ):not( [aria-disabled='true'] ):not( .is-default ):hover {
+				background: $light-gray-100;
+				border-color: $primary-500;
+				color: $primary-500;
+			}
+
+			&:focus,
+			&:focus:enabled {
+				border-color: $primary-600;
+				box-shadow: 0 0 0 2px $primary-500;
+			}
+
+			&:disabled,
+			&:disabled:active:enabled,
+			&[aria-disabled='true'],
+			&[aria-disabled='true']:active:enabled {
+				background: $light-gray-100;
+				border-color: $light-gray-500;
+				color: $light-gray-900;
+
+				&:hover {
+					background: $light-gray-100;
+					border-color: $light-gray-500;
+					color: $light-gray-900;
+				}
+			}
+		}
+	}
+
+	// Option Picker
+
+	.components-circular-option-picker__option-wrapper {
+		box-sizing: border-box;
+
+		*,
+		*::after {
+			box-sizing: inherit;
+		}
+
+		.components-circular-option-picker__option {
+			&:focus::after {
+				box-shadow: none;
+			}
+		}
+	}
+
+	// Inputs
+
+	.components-color-picker__inputs-fields {
+		margin-right: 8px;
+	}
+
+	.components-color-picker__inputs-field {
+		color: $dark-gray-300;
+		font-size: 14px;
+		line-height: 24px;
+		margin: 0;
+
+		+ .components-color-picker__inputs-field {
+			margin-left: 4px;
+		}
+
+		label {
+			color: $dark-gray-900;
+			font-size: inherit;
+			font-weight: bold;
+			line-height: inherit;
+			margin: 0;
+		}
+
+		input[type='number'],
+		input[type='text'] {
+			background: white;
+			border: 1px solid $light-gray-500;
+			border-radius: 3px;
+			box-shadow: none;
+			color: inherit;
+			font-size: 16px;
+			line-height: inherit;
+			margin: 0;
+			min-height: 48px;
+			padding: 11px 8px;
+			transition: border-color 125ms ease-in-out, box-shadow 125ms ease-in-out;
+			width: 100%;
+
+			@media screen and ( min-width: 768px ) {
+				font-size: inherit;
+			}
+
+			&:focus {
+				border-color: $primary-500;
+				box-shadow: 0 0 0 2px $primary-500;
+			}
+		}
+
+		// Reset
+
+		.components-base-control__field,
+		.components-base-control__label {
+			display: block;
+			margin: 0;
+		}
+	}
+
+	.components-color-picker__inputs-toggle {
+		margin-bottom: 9px;
+	}
+}

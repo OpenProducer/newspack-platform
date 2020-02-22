@@ -1,0 +1,225 @@
+@import '../../shared/sass/colors';
+
+.wpbnbd {
+	background: $color__background-body;
+	border: 1px solid $color__border;
+	color: $color__text-main;
+	font-size: 14px;
+	position: relative;
+	width: 100%;
+
+	input[type='radio'] {
+		display: none;
+	}
+
+	.donation-frequency-label,
+	.tier-select-label {
+		text-align: center;
+		display: block;
+		line-height: 3em;
+		height: 3em;
+		font-weight: bold;
+		cursor: pointer;
+	}
+
+	button[type='submit'] {
+		margin-bottom: 2em;
+		font-size: 16px;
+		margin-left: 24px;
+	}
+
+	.wp-block-newspack-blocks-donate__thanks {
+		font-size: 14px;
+		margin-left: 2em;
+	}
+}
+
+.wpbnbd.tiered {
+	.wp-block-newspack-blocks-donate__tiers {
+		margin-top: 2em;
+		display: none;
+
+		.tier-select-label {
+			border: 1px solid $color__border;
+			border-radius: 5px;
+			font-size: 16px;
+			margin-left: 25px;
+			padding-left: 1em;
+			padding-right: 1em;
+
+			&:hover {
+				background: $color__background-screen;
+			}
+		}
+
+		input[type='radio']:checked {
+			+ .tier-select-label {
+				background-color: $color__primary;
+				border-color: transparent;
+				color: $color__background-body;
+			}
+		}
+
+		.other-donate-label {
+			position: absolute;
+			top: 10em;
+			left: 2em;
+		}
+
+		input.other-input {
+			~ .wp-block-newspack-blocks-donate__money-input,
+			~ .other-donate-label {
+				display: none;
+			}
+
+			&:checked ~ .wp-block-newspack-blocks-donate__money-input,
+			&:checked ~ .other-donate-label {
+				display: block;
+			}
+
+			&:checked + label {
+				margin-bottom: 6em;
+			}
+		}
+	}
+
+	.wp-block-newspack-blocks-donate__money-input {
+		position: absolute;
+		top: 12em;
+		left: 24px;
+	}
+}
+
+.wpbnbd.untiered {
+	padding-top: 3em;
+
+	.input-container {
+		margin-left: 2em;
+		margin-top: 2em;
+		display: none;
+
+		label {
+			color: $color__text-main;
+		}
+	}
+
+	input[type='radio']:checked ~ .input-container {
+		display: block;
+	}
+}
+
+.wp-block-newspack-blocks-donate__money-input {
+	position: relative;
+	max-width: 200px;
+	background-color: $color__background-input;
+	border-radius: 3px;
+	border: 1px solid $color__border;
+
+	&:focus-within {
+		border-color: $color__text-input-focus;
+		outline: thin solid rgba( $color__text-input-focus, 0.15 );
+		outline-offset: -4px;
+	}
+
+	.currency {
+		font-size: 16px;
+		padding-left: 0.5em;
+		cursor: default;
+	}
+
+	input[type='number'] {
+		font-size: 16px;
+		border: none;
+		outline: none;
+		box-shadow: none;
+		background: none;
+		max-width: 174px;
+
+		&:focus {
+			border: none;
+			outline: none;
+			box-shadow: none;
+		}
+	}
+}
+
+.wp-block-newspack-blocks-donate__frequencies {
+	position: relative;
+	padding-top: 3em;
+}
+
+.wp-block-newspack-blocks-donate__frequency {
+	.donation-frequency-label {
+		width: 33.3333%;
+		width: calc( 100% / 3 );
+		position: absolute;
+		top: 0;
+		border: 0 solid $color__border;
+		border-width: 0 0 1px;
+		text-transform: uppercase;
+		color: $color__text-light;
+		left: 0;
+
+		&:hover {
+			background: $color__background-screen;
+			color: inherit;
+		}
+	}
+
+	input[type='radio']:checked {
+		+ .donation-frequency-label {
+			color: inherit;
+			border-bottom-color: transparent;
+
+			&:hover {
+				background: transparent;
+			}
+		}
+
+		~ .wp-block-newspack-blocks-donate__tiers {
+			display: flex;
+		}
+	}
+
+	&:nth-of-type( 2 ) .donation-frequency-label {
+		left: 33.3333%;
+		left: calc( 100% / 3 );
+		border-left-width: 1px;
+		border-right-width: 1px;
+	}
+
+	&:nth-of-type( 3 ) .donation-frequency-label {
+		left: 66.6667%;
+		left: calc( 100% / 3 * 2 );
+	}
+}
+
+@media screen and ( max-width: 600px ) {
+	.wpbnbd {
+		.donation-frequency-label {
+			font-size: 12px;
+			height: 42px;
+			line-height: 42px;
+		}
+
+		&.tiered {
+			.wp-block-newspack-blocks-donate__tiers {
+				justify-content: space-around;
+
+				.tier-select-label {
+					margin-left: 0;
+					border-radius: 0;
+					font-size: 12px;
+				}
+
+				.other-donate-label {
+					top: 8.5em;
+				}
+
+				.wp-block-newspack-blocks-donate__money-input {
+					top: 10.5em;
+				}
+			}
+		}
+	}
+}
