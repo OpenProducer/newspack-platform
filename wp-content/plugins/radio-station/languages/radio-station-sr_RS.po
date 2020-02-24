@@ -1,0 +1,552 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: radio station\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-11-08 08:46-0600\n"
+"PO-Revision-Date: 2013-11-08 08:49-0600\n"
+"Last-Translator: Miodrag <miodrag75@gmail.com>\n"
+"Language-Team: \n"
+"Language: sr_RS\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Poedit-KeywordsList: _e;__;esc_attr_e\n"
+"X-Poedit-SourceCharset: UTF-8\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-Basepath: c:\\xampp\\htdocs\\wp352test\\wp-content\\plugins\\radio-"
+"station\n"
+"X-Poedit-SearchPath-0: includes\n"
+"X-Poedit-SearchPath-1: templates\n"
+"X-Poedit-SearchPath-2: .\n"
+
+#: includes/dj-on-air.php:90 includes/dj-on-air.php:664
+#: includes/playlist.php:22 includes/playlist.php:359
+#: includes/playlist.php:546
+msgid "View Playlist"
+msgstr "Преглед плејлисте"
+
+#: includes/dj-on-air.php:480
+msgid "None Upcoming"
+msgstr "Без емисија"
+
+#: includes/dj-on-air.php:495
+msgid "The current on-air DJ."
+msgstr "Водитељ емисије."
+
+#: includes/dj-on-air.php:496
+msgid "Radio Station: Show/DJ On-Air"
+msgstr "Радио Станица: Емисија/Водитељ Ета"
+
+#: includes/dj-on-air.php:511 includes/dj-on-air.php:738
+#: includes/playlist.php:436
+msgid "Title"
+msgstr "Наслов"
+
+#: includes/dj-on-air.php:519 includes/dj-on-air.php:746
+msgid "Show Avatars"
+msgstr "Покажи Слике Аватаре"
+
+#: includes/dj-on-air.php:526
+msgid "Link to the Show/DJ's profile"
+msgstr "Линк ка страници Емисије/Водитеља "
+
+#: includes/dj-on-air.php:533 includes/dj-on-air.php:767
+msgid "Display schedule info for this show"
+msgstr "Покажи сатницу за ову Емисију"
+
+#: includes/dj-on-air.php:540
+msgid "Display link to show's playlist"
+msgstr "Покжи линк ка списку песама Емисије"
+
+#: includes/dj-on-air.php:545
+msgid "Default DJ Name"
+msgstr "Име Диџеја"
+
+#: includes/dj-on-air.php:548 includes/dj-on-air.php:761
+msgid ""
+"If no Show/DJ is scheduled for the current hour, display this name/text."
+msgstr "Уколико нема Емисије/Водитеља за овај сат , испиши ово име/текст"
+
+#: includes/dj-on-air.php:552 includes/dj-on-air.php:779
+msgid "Time Format"
+msgstr "Формат времена"
+
+#: includes/dj-on-air.php:554 includes/dj-on-air.php:781
+msgid "12-hour"
+msgstr "12-часовно"
+
+#: includes/dj-on-air.php:555 includes/dj-on-air.php:782
+msgid "24-hour"
+msgstr "24-часовно"
+
+#: includes/dj-on-air.php:558
+msgid "Choose time format for displayed schedules"
+msgstr "Изабери формат времена за исписану сатницу"
+
+#: includes/dj-on-air.php:722
+msgid "The upcoming DJs/Shows."
+msgstr "Следеће Водитељи/Емисије."
+
+#: includes/dj-on-air.php:723
+msgid "Radio Station: Upcoming DJ On-Air"
+msgstr "Радио Станица: Следеће на програму"
+
+#: includes/dj-on-air.php:753
+msgid "Link to Show/DJ's user profile"
+msgstr "Линк ка страници Емисије/Водитеља "
+
+#: includes/dj-on-air.php:758
+msgid "No Additional Schedules"
+msgstr "Нема додатне Сатнице"
+
+#: includes/dj-on-air.php:772
+msgid "Limit"
+msgstr "Граница"
+
+#: includes/dj-on-air.php:775
+msgid "Number of upcoming DJs/Shows to display."
+msgstr "Број Емисија који се исписују."
+
+#: includes/dj-on-air.php:785
+msgid "Choose time format for displayed schedules."
+msgstr "Изабери формат времена за испис сатнице"
+
+#: includes/master_schedule.php:21 includes/master_schedule.php:22
+#, fuzzy
+msgid "Schedule Override"
+msgstr "Сатница"
+
+#: includes/master_schedule.php:23 includes/master_schedule.php:24
+msgid "Add Schedule Override"
+msgstr "Убаци Сатница"
+
+#: includes/master_schedule.php:25
+msgid "Edit Schedule Override"
+msgstr "Преуреди Сатница"
+
+#: includes/master_schedule.php:26
+msgid "New Schedule Override"
+msgstr "Нова Сатница"
+
+#: includes/master_schedule.php:27
+msgid "View Schedule Override"
+msgstr "Прегледај Сатница"
+
+#: includes/master_schedule.php:30
+#, fuzzy
+msgid "Post type for Schedule Override"
+msgstr "Post type for Show descriptions"
+
+#: includes/master_schedule.php:49
+#, fuzzy
+msgid "Override Schedule"
+msgstr "Сатница"
+
+#: includes/master_schedule.php:79
+#, fuzzy
+msgid "Date"
+msgstr "Крајњи датум"
+
+#: includes/master_schedule.php:82 includes/playlist.php:756
+#: includes/playlist.php:835
+msgid "Start Time"
+msgstr "Стартно време"
+
+#: includes/master_schedule.php:108 includes/playlist.php:782
+#: includes/playlist.php:861
+msgid "End Time"
+msgstr "Завршно време"
+
+#: includes/master_schedule.php:432 includes/master_schedule.php:595
+msgid "encore airing"
+msgstr "Бис емитовања;"
+
+#: includes/master_schedule.php:437 includes/master_schedule.php:600
+msgid "Audio File"
+msgstr "Аудио фајл"
+
+#: includes/master_schedule.php:454
+msgid "Sun"
+msgstr "Нед"
+
+#: includes/master_schedule.php:454
+msgid "Mon"
+msgstr "Пон"
+
+#: includes/master_schedule.php:454
+msgid "Tue"
+msgstr "Уто"
+
+#: includes/master_schedule.php:454
+msgid "Wed"
+msgstr "Сре"
+
+#: includes/master_schedule.php:454
+msgid "Thu"
+msgstr "Чет"
+
+#: includes/master_schedule.php:454
+msgid "Fri"
+msgstr "Пет"
+
+#: includes/master_schedule.php:454
+msgid "Sat"
+msgstr "Суб"
+
+#: includes/master_schedule.php:619 includes/playlist.php:572
+msgid "Genres"
+msgstr "Стил"
+
+#: includes/playlist.php:16 templates/single-show.php:136
+msgid "Playlists"
+msgstr "Плејлисте"
+
+#: includes/playlist.php:17
+msgid "Playlist"
+msgstr "Плејлиста"
+
+#: includes/playlist.php:18 includes/playlist.php:19
+msgid "Add Playlist"
+msgstr "Убаци Плејлисту"
+
+#: includes/playlist.php:20
+msgid "Edit Playlist"
+msgstr "Преуреди плејлисту"
+
+#: includes/playlist.php:21
+msgid "New Playlist"
+msgstr "Нова Плејлиста"
+
+#: includes/playlist.php:25
+msgid "Post type for Playlist descriptions"
+msgstr "Post type for Playlist descriptions"
+
+#: includes/playlist.php:42
+msgid "Shows"
+msgstr "Емисије"
+
+#: includes/playlist.php:43 includes/playlist.php:191
+msgid "Show"
+msgstr "Емисија"
+
+#: includes/playlist.php:44 includes/playlist.php:45
+msgid "Add Show"
+msgstr "Убаци емисију"
+
+#: includes/playlist.php:46
+msgid "Edit Show"
+msgstr "Преуреди Емисију"
+
+#: includes/playlist.php:47
+msgid "New Show"
+msgstr "Нова Емисија"
+
+#: includes/playlist.php:48
+msgid "View Show"
+msgstr "Прегледај Емисију"
+
+#: includes/playlist.php:51
+msgid "Post type for Show descriptions"
+msgstr "Post type for Show descriptions"
+
+#: includes/playlist.php:71
+msgid "Playlist Entries"
+msgstr "Уноси у плејлисту"
+
+#: includes/playlist.php:93 templates/single-playlist.php:43
+msgid "Artist"
+msgstr "Извођачи"
+
+#: includes/playlist.php:93 templates/single-playlist.php:44
+msgid "Song"
+msgstr "Песма"
+
+#: includes/playlist.php:93 templates/single-playlist.php:45
+msgid "Album"
+msgstr "Албум"
+
+#: includes/playlist.php:93 templates/single-playlist.php:46
+msgid "Record Label"
+msgstr "Издавач Песме"
+
+#: includes/playlist.php:93 templates/single-playlist.php:47
+msgid "DJ Comments"
+msgstr "Коментар Диџеја"
+
+#: includes/playlist.php:93
+msgid "New"
+msgstr "Нов"
+
+#: includes/playlist.php:93
+msgid "Status"
+msgstr "Статус"
+
+#: includes/playlist.php:93 includes/playlist.php:127
+#: includes/playlist.php:144 includes/playlist.php:807
+#: includes/playlist.php:888
+msgid "Remove"
+msgstr "Избаци"
+
+#: includes/playlist.php:119 includes/playlist.php:144
+msgid "Queued"
+msgstr "Убачено на чекању"
+
+#: includes/playlist.php:123 includes/playlist.php:144
+msgid "Played"
+msgstr "Пуштано"
+
+#: includes/playlist.php:136
+msgid "Add Entry"
+msgstr "Убаци унос"
+
+#: includes/playlist.php:163 includes/playlist.php:164
+#: templates/single-show.php:99
+msgid "Schedule"
+msgstr "Сатница"
+
+#: includes/playlist.php:166 includes/playlist.php:167
+msgid "Publish"
+msgstr "Објави"
+
+#: includes/playlist.php:170
+msgid "Submit for Review"
+msgstr "Пошаљи на оцењивања"
+
+#: includes/playlist.php:171 includes/playlist.php:176
+msgid "Update Playlist"
+msgstr "Update Playlist"
+
+#: includes/playlist.php:175
+msgid "Update"
+msgstr "Update"
+
+#: includes/playlist.php:420
+msgid "Display the current song."
+msgstr "Испиши тренутно емитовану песму"
+
+#: includes/playlist.php:421
+msgid "Radio Station: Now Playing"
+msgstr "Радио Станица: Тренутно слушамо"
+
+#: includes/playlist.php:444
+msgid "Show Artist Name"
+msgstr "Покажи име извођача"
+
+#: includes/playlist.php:451
+msgid "Show Song Title"
+msgstr "Покажи име песме"
+
+#: includes/playlist.php:458
+msgid "Show Album Name"
+msgstr "Покажи име албума"
+
+#: includes/playlist.php:465
+msgid "Show Record Label Name"
+msgstr "Покажи издавача"
+
+#: includes/playlist.php:472
+msgid "Show DJ Comments"
+msgstr "Покажи коментар Диџеја"
+
+#: includes/playlist.php:573 templates/single-show.php:60
+msgid "Genre"
+msgstr "Стил"
+
+#: includes/playlist.php:594
+msgid "Information"
+msgstr "Информација"
+
+#: includes/playlist.php:612
+msgid "Active"
+msgstr "Активно"
+
+#: includes/playlist.php:614
+msgid ""
+"Check this box if show is currently active (Show will not appear on "
+"programming schedule if unchecked)"
+msgstr ""
+"Check this box if show is currently active (Show will not appear on "
+"programming schedule if unchecked)"
+
+#: includes/playlist.php:616
+msgid "Current Audio File"
+msgstr "Тренутни аудио фајл"
+
+#: includes/playlist.php:619
+msgid "DJ Email"
+msgstr "ДЈ-маил"
+
+#: includes/playlist.php:622
+msgid "Website Link"
+msgstr "Линк портала"
+
+#: includes/playlist.php:633
+msgid "DJs"
+msgstr "Диџеји"
+
+#: includes/playlist.php:719
+msgid "Schedules"
+msgstr "Сатница"
+
+#: includes/playlist.php:744 includes/playlist.php:824
+msgid "Day"
+msgstr "Дан"
+
+#: includes/playlist.php:747 includes/playlist.php:827
+msgid "Monday"
+msgstr "Понедељак"
+
+#: includes/playlist.php:748 includes/playlist.php:828
+msgid "Tuesday"
+msgstr "Уторак"
+
+#: includes/playlist.php:749 includes/playlist.php:829
+msgid "Wednesday"
+msgstr "Среда"
+
+#: includes/playlist.php:750 includes/playlist.php:830
+msgid "Thursday"
+msgstr "Четвртак"
+
+#: includes/playlist.php:751 includes/playlist.php:831
+msgid "Friday"
+msgstr "Петак"
+
+#: includes/playlist.php:752 includes/playlist.php:832
+msgid "Saturday"
+msgstr "Субота"
+
+#: includes/playlist.php:753 includes/playlist.php:833
+msgid "Sunday"
+msgstr "Недеља"
+
+#: includes/playlist.php:806 includes/playlist.php:886
+msgid "Encore Presentation"
+msgstr "Бис презентације"
+
+#: includes/playlist.php:817
+msgid "Add Shift"
+msgstr "Убаци термин емисије"
+
+#: includes/playlist.php:980
+msgid "More Playlists"
+msgstr "More Playlists"
+
+#: includes/playlist.php:1041
+msgid "More Blog Posts"
+msgstr "More Blog Posts"
+
+#: templates/archive-playlist.php:15
+msgid "Playlist Archive for"
+msgstr "Playlist Archive for"
+
+#: templates/archive-playlist.php:50 templates/single-playlist.php:13
+#: templates/single-show.php:13
+msgid "Post navigation"
+msgstr "Post navigation"
+
+#: templates/archive-playlist.php:51
+msgid "Older posts"
+msgstr "Older posts"
+
+#: templates/archive-playlist.php:52
+msgid "Newer posts"
+msgstr "Newer posts"
+
+#: templates/archive-playlist.php:61 templates/author.php:93
+#: templates/playlist-archive-template.php:63
+#: templates/show-blog-archive-template.php:71
+msgid "Nothing Found"
+msgstr "Није пронађено"
+
+#: templates/archive-playlist.php:65 templates/author.php:97
+#: templates/playlist-archive-template.php:67
+#: templates/show-blog-archive-template.php:75
+msgid ""
+"Apologies, but no results were found for the requested archive. Perhaps "
+"searching will help find a related post."
+msgstr "Извињавамо се али није пронађено оно што тражите,покушајте поново "
+
+#: templates/author.php:51
+#, php-format
+msgid "Author Archives: %s"
+msgstr "Архива Аутора: %s"
+
+#: templates/author.php:70
+#, php-format
+msgid "About %s"
+msgstr "О %s"
+
+#: templates/playlist-archive-template.php:16
+msgid "Playlist Archive"
+msgstr "Архива плејлисти"
+
+#: templates/show-blog-archive-template.php:16
+msgid "Blog Archive"
+msgstr "Архива блога"
+
+#: templates/show-blog-archive-template.php:46
+msgid "Posted by"
+msgstr "Објавио "
+
+#: templates/single-playlist.php:14 templates/single-show.php:14
+msgid "Previous"
+msgstr "Претходни"
+
+#: templates/single-playlist.php:15 templates/single-show.php:15
+msgid "Next"
+msgstr "Следећи"
+
+#: templates/single-playlist.php:32 templates/single-show.php:144
+msgid "Pages:"
+msgstr "Стране:"
+
+#: templates/single-playlist.php:65
+msgid "No entries for this playlist"
+msgstr "Нема уноса за ову плејлисту."
+
+#: templates/single-show.php:32
+msgid "Hosted by"
+msgstr "Домаћин"
+
+#: templates/single-show.php:84
+msgid "Email the DJ"
+msgstr "Пошаљи поруку Водитељу/Музичком уреднику"
+
+#: templates/single-show.php:88
+msgid "Show Website"
+msgstr "Покажи презентацију"
+
+#: templates/single-show.php:95
+msgid "Most recent broadcast"
+msgstr "Скорошња емитовања"
+
+#: templates/single-show.php:140
+msgid "Blog Posts"
+msgstr "Блог чланака"
+
+#: radio-station.php:244 radio-station.php:330
+msgid "Export Playlists"
+msgstr "Извези Плејлисте"
+
+#: radio-station.php:244 radio-station.php:451
+msgid "Export"
+msgstr "Извези"
+
+#: radio-station.php:323
+msgid "Right-click and download this file to save your export"
+msgstr ""
+"Десни клик и преузми овај фајл да би сачувао свој извозClick droit et "
+"t&eacute;l&eacute;chargez ce fichier pour sauvegarder l&eacute;exportation"
+
+#: radio-station.php:340
+msgid "Start Date"
+msgstr "Стартни датум"
+
+#: radio-station.php:394
+msgid "End Date"
+msgstr "Крајњи датум"
+
+#: radio-station.php:466
+msgid "Related to Show"
+msgstr "У вези са емисијом"

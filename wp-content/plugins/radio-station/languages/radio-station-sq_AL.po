@@ -1,0 +1,598 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: radio-station\n"
+"POT-Creation-Date: 2013-11-08 08:36-0600\n"
+"PO-Revision-Date: 2013-11-08 08:46-0600\n"
+"Last-Translator: Lorenc Tona <lorenc_tona@yahoo.com>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SearchPath-0: c:\\xampp\\htdocs\\wp352test\\wp-content\\plugins"
+"\\radio-station\n"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:244
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:330
+msgid "Export Playlists"
+msgstr "Eksporto listën"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:244
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:451
+msgid "Export"
+msgstr "Eksporto"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:323
+msgid "Right-click and download this file to save your export"
+msgstr ""
+"Kliko me butonin e djathtë dhe shkarko këtë skedar për ta ruajtur eksportimin"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:340
+msgid "Start Date"
+msgstr "Data e fillimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:394
+msgid "End Date"
+msgstr "Data e mbarimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:466
+msgid "Related to Show"
+msgstr "Që kanë të bëjmë me programin"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:90
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:664
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:22
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:359
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:546
+msgid "View Playlist"
+msgstr "Shiko listën e transmetimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:480
+msgid "None Upcoming"
+msgstr "Asnjë i ardhshëm"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:495
+msgid "The current on-air DJ."
+msgstr "DJ/Programi aktual"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:496
+msgid "Radio Station: Show/DJ On-Air"
+msgstr "Radio Station: DJ/Programi aktual"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:511
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:738
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:436
+msgid "Title"
+msgstr "Titulli"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:519
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:746
+msgid "Show Avatars"
+msgstr "Shfaq avatarët"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:526
+msgid "Link to the Show/DJ's profile"
+msgstr "Lidhje për profilin për DJ/Programin"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:533
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:767
+msgid "Display schedule info for this show"
+msgstr "Shfaq të dhënat e transmetimit për këtë program"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:540
+msgid "Display link to show's playlist"
+msgstr "Shfaq lidhjen për listën e transmetimit të programit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:545
+msgid "Default DJ Name"
+msgstr "Emri albumit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:548
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:761
+msgid ""
+"If no Show/DJ is scheduled for the current hour, display this name/text."
+msgstr ""
+"Nëse nuk është caktuar asnjë DJ/Program për orën aktuale, shfaq këtë emër/"
+"tekst."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:552
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:779
+msgid "Time Format"
+msgstr "Formati koha"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:554
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:781
+msgid "12-hour"
+msgstr "Orë-12"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:555
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:782
+msgid "24-hour"
+msgstr "Orë-24"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:558
+msgid "Choose time format for displayed schedules"
+msgstr "Zgjidh formatin e kohës për orarin e transmetimeve të shfaqura."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:722
+msgid "The upcoming DJs/Shows."
+msgstr "DJ/Programet e radhës"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:723
+msgid "Radio Station: Upcoming DJ On-Air"
+msgstr "Radio Station: DJ/Programet e radhës"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:753
+msgid "Link to Show/DJ's user profile"
+msgstr "Lidhje për profilin e DJ/Programit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:758
+msgid "No Additional Schedules"
+msgstr "Asnjë Oraret shtesë"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:772
+msgid "Limit"
+msgstr "Kufizoj"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:775
+msgid "Number of upcoming DJs/Shows to display."
+msgstr "Numri i DJ/Programeve të radhës për të shfaqur."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:785
+msgid "Choose time format for displayed schedules."
+msgstr "Zgjidh formatin e kohës për orarin e transmetimeve të shfaqura"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:21
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:22
+#, fuzzy
+msgid "Schedule Override"
+msgstr "Orari i trasmetimeve"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:23
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:24
+msgid "Add Schedule Override"
+msgstr "Shto Orari i trasmetimeve"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:25
+msgid "Edit Schedule Override"
+msgstr "Ndrysho Orari i trasmetimeve"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:26
+msgid "New Schedule Override"
+msgstr "Orari i trasmetimeve e re"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:27
+msgid "View Schedule Override"
+msgstr "Shiko Orari i trasmetimeve"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:30
+#, fuzzy
+msgid "Post type for Schedule Override"
+msgstr "Lloj postimi për përshkrimet e programit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:49
+#, fuzzy
+msgid "Override Schedule"
+msgstr "Orari i trasmetimeve"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:79
+msgid "Date"
+msgstr "Data"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:82
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:756
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:835
+msgid "Start Time"
+msgstr "Ora e fillimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:108
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:782
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:861
+msgid "End Time"
+msgstr "Ora e mbarimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:432
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:595
+msgid "encore airing"
+msgstr "ritransmetim"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:437
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:600
+msgid "Audio File"
+msgstr "Skedar audio"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Sun"
+msgstr "Die"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Mon"
+msgstr "Hën"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Tue"
+msgstr "Mar"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Wed"
+msgstr "Mër"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Thu"
+msgstr "Enj"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Fri"
+msgstr "Pre"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Sat"
+msgstr "Sht"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:619
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:572
+msgid "Genres"
+msgstr "Kategoritë"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:16
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:136
+msgid "Playlists"
+msgstr "Listat e transmetimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:17
+msgid "Playlist"
+msgstr "Listë transmetimi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:18
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:19
+msgid "Add Playlist"
+msgstr "Shto listë transmetimi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:20
+msgid "Edit Playlist"
+msgstr "Ndrysho listë transmetimi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:21
+msgid "New Playlist"
+msgstr "Listë transmetimi e re"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:25
+msgid "Post type for Playlist descriptions"
+msgstr "Lloj postimi për përshkrimet e listës së transmetimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:42
+msgid "Shows"
+msgstr "Programet"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:43
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:191
+msgid "Show"
+msgstr "Programi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:44
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:45
+msgid "Add Show"
+msgstr "Shto program të ri"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:46
+msgid "Edit Show"
+msgstr "Përpuno programin"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:47
+msgid "New Show"
+msgstr "Program i ri"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:48
+msgid "View Show"
+msgstr "Shiko programin"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:51
+msgid "Post type for Show descriptions"
+msgstr "Lloj postimi për përshkrimet e programit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:71
+msgid "Playlist Entries"
+msgstr "Hyrje për listën e transmetimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:43
+msgid "Artist"
+msgstr "Artisti"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:44
+msgid "Song"
+msgstr "Kënga"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:45
+msgid "Album"
+msgstr "Albumi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:46
+msgid "Record Label"
+msgstr "Etiketa diskografike"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:47
+msgid "DJ Comments"
+msgstr "Komente nga DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+msgid "New"
+msgstr "I ri"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+msgid "Status"
+msgstr "Statusi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:127
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:144
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:807
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:888
+msgid "Remove"
+msgstr "Hiqe"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:119
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:144
+msgid "Queued"
+msgstr "në pritje"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:123
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:144
+msgid "Played"
+msgstr "transmetuar"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:136
+msgid "Add Entry"
+msgstr "Shto hyrje të re"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:163
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:164
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:99
+msgid "Schedule"
+msgstr "Orari i trasmetimeve"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:166
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:167
+msgid "Publish"
+msgstr "Publiko"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:170
+msgid "Submit for Review"
+msgstr "Paraqesë për rishikim"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:171
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:176
+msgid "Update Playlist"
+msgstr "Përditëso listën e transmetimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:175
+msgid "Update"
+msgstr "Freskoj"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:420
+msgid "Display the current song."
+msgstr "Shfaq këngën aktuale."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:421
+msgid "Radio Station: Now Playing"
+msgstr "Radio Station: Në transmetim"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:444
+msgid "Show Artist Name"
+msgstr "Shfaq emrin e artistit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:451
+msgid "Show Song Title"
+msgstr "Shfaq titullin e këngës"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:458
+msgid "Show Album Name"
+msgstr "Shfaq emrin e albumit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:465
+msgid "Show Record Label Name"
+msgstr "Shfaq emrin e etiketës diskografike"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:472
+msgid "Show DJ Comments"
+msgstr "Shfaq komentet nga DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:573
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:60
+msgid "Genre"
+msgstr "Zhanri"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:594
+msgid "Information"
+msgstr "Informacion"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:612
+msgid "Active"
+msgstr "Aktiv"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:614
+msgid ""
+"Check this box if show is currently active (Show will not appear on "
+"programming schedule if unchecked)"
+msgstr ""
+"Zgjidh këtë kuti nëse programi është aktualisht aktiv (Programi nuk do të "
+"shfaqet në orarin e transmetimit nëse nuk zgjidhet)"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:616
+msgid "Current Audio File"
+msgstr "Skedari audio aktual"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:619
+msgid "DJ Email"
+msgstr "E-posta për DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:622
+msgid "Website Link"
+msgstr "Uebfaqe"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:633
+msgid "DJs"
+msgstr "DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:719
+msgid "Schedules"
+msgstr "Oraret e transmetimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:744
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:824
+msgid "Day"
+msgstr "Dita"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:747
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:827
+msgid "Monday"
+msgstr "E hënë"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:748
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:828
+msgid "Tuesday"
+msgstr "E martë"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:749
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:829
+msgid "Wednesday"
+msgstr "E mërkurë"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:750
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:830
+msgid "Thursday"
+msgstr "E enjte"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:751
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:831
+msgid "Friday"
+msgstr "E premte"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:752
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:832
+msgid "Saturday"
+msgstr "E shtunë"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:753
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:833
+msgid "Sunday"
+msgstr "E diel"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:806
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:886
+msgid "Encore Presentation"
+msgstr "Ritransmetim"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:817
+msgid "Add Shift"
+msgstr "Shto transmetim të ri"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:980
+msgid "More Playlists"
+msgstr "Më shumë lista transmetimi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:1041
+msgid "More Blog Posts"
+msgstr "Më shumë postime blogu"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:15
+msgid "Playlist Archive for"
+msgstr "Arkiv i listës së transmetimit për"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:50
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:13
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:13
+msgid "Post navigation"
+msgstr "Punë shturmani"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:51
+msgid "Older posts"
+msgstr "Të vjetër"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:52
+msgid "Newer posts"
+msgstr "Të reja"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:61
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/playlist-archive-template.php:63
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:71
+msgid "Nothing Found"
+msgstr "Asgjë për të gjetur"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:65
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:97
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/playlist-archive-template.php:67
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:75
+msgid ""
+"Apologies, but no results were found for the requested archive. Perhaps "
+"searching will help find a related post."
+msgstr "Asgjë për të gjetur"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:51
+#, php-format
+msgid "Author Archives: %s"
+msgstr "Arkivi: %s"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:70
+#, php-format
+msgid "About %s"
+msgstr "për %s"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/playlist-archive-template.php:16
+msgid "Playlist Archive"
+msgstr "Arkivi i listës së transmetimit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:16
+msgid "Blog Archive"
+msgstr "Arkiv blogu"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:46
+#, fuzzy
+msgid "Posted by"
+msgstr "Prezantuar nga"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:14
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:14
+msgid "Previous"
+msgstr "I mëparshëm"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:15
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:15
+msgid "Next"
+msgstr "Tjetër"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:32
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:144
+msgid "Pages:"
+msgstr "Pages:"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:65
+msgid "No entries for this playlist"
+msgstr "Asnjë hyrje për këtë listë transmetimi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:32
+msgid "Hosted by"
+msgstr "Prezantuar nga"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:84
+msgid "Email the DJ"
+msgstr "Kontakto DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:88
+msgid "Show Website"
+msgstr "Shfaq uebfaqe"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:95
+msgid "Most recent broadcast"
+msgstr "Transmetimet më të fundit"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:140
+msgid "Blog Posts"
+msgstr "Postime blogu"

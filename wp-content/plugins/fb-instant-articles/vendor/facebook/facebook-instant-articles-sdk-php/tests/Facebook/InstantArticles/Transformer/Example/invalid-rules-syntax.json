@@ -1,0 +1,21 @@
+{
+  "style_name" : "mydefaultstyle",
+  "ads" : {
+    "audience_network_placement_id": "1234",
+    "raw_html": "<script>alert('hello world!');</script><div class='block'></div>"
+  },
+  "analytics" : {
+    "fb_pixel_id": "4321",
+    "raw_html": "<script>alert('hello world!');</script><div class='block'></div>"
+  }
+  "rules" :
+[
+  {
+    "class": "TextNodeRule"
+  },
+  {
+    "class": "PassThroughRule",
+    "selector" : "html, head, script, body"
+  }
+]
+}

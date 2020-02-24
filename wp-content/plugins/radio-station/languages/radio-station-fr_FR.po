@@ -1,0 +1,600 @@
+msgid ""
+msgstr ""
+"Project-Id-Version: radio-station\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2013-09-26 09:09-0600\n"
+"PO-Revision-Date: 2013-09-26 09:24-0600\n"
+"Last-Translator: dan <danco38@gmail.com>\n"
+"Language-Team: dan bp-fr.net\n"
+"Language: fr_FR\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"X-Generator: Poedit 1.5.7\n"
+"X-Poedit-KeywordsList: __;_e;esc_attr_e\n"
+"X-Poedit-Basepath: ..\n"
+"X-Poedit-SourceCharset: utf8\n"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:244
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:330
+msgid "Export Playlists"
+msgstr "Exporter les playlists"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:244
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:451
+msgid "Export"
+msgstr "Exporter"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:323
+msgid "Right-click and download this file to save your export"
+msgstr ""
+"Click droit et t&eacute;l&eacute;chargez ce fichier pour sauvegarder "
+"l&eacute;exportation"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:340
+msgid "Start Date"
+msgstr "Date de d&eacute;but"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:394
+msgid "End Date"
+msgstr "Date de fin"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/radio-station.php:466
+msgid "Related to Show"
+msgstr "Relatif &agrave; l&#39;&eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:90
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:664
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:22
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:359
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:546
+msgid "View Playlist"
+msgstr "Afficher la playlist"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:480
+msgid "None Upcoming"
+msgstr "Aucune &eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:495
+msgid "The current on-air DJ."
+msgstr "Le DJ actuellement &agrave; l&#39;antenne."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:496
+msgid "Radio Station: Show/DJ On-Air"
+msgstr "Station Radio: &Eacute;mission/DJ en cours"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:511
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:738
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:436
+msgid "Title"
+msgstr "Titre"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:519
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:746
+msgid "Show Avatars"
+msgstr "Afficher un avatar"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:526
+msgid "Link to the Show/DJ's profile"
+msgstr "Lien vers le profil de l&#39;&eacute;mission/DJ "
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:533
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:767
+msgid "Display schedule info for this show"
+msgstr "Afficher les horaires de l&#39;&eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:540
+msgid "Display link to show's playlist"
+msgstr "Afficher un lien vers la playlist de l&#39;&eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:545
+msgid "Default DJ Name"
+msgstr "Nom par d&eacute;faut du DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:548
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:761
+msgid ""
+"If no Show/DJ is scheduled for the current hour, display this name/text."
+msgstr ""
+"Si aucune programmation n&#39;est pr&eacute;vue pour l&#39;heure en cours, "
+"afficher ce nom/texte"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:552
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:779
+msgid "Time Format"
+msgstr "Format horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:554
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:781
+msgid "12-hour"
+msgstr "12-heure"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:555
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:782
+msgid "24-hour"
+msgstr "24-heure"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:558
+msgid "Choose time format for displayed schedules"
+msgstr ""
+"Choix du format d&#39;heure pour l&#39;affichage des horaires de diffusion"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:722
+msgid "The upcoming DJs/Shows."
+msgstr "Les DJ/&eacute;missions &agrave; venir"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:723
+msgid "Radio Station: Upcoming DJ On-Air"
+msgstr "Station Radio: prochain DJ &agrave; l&#39;antenne"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:753
+msgid "Link to Show/DJ's user profile"
+msgstr "Lien vers le profil du DJ de l&#39;&eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:758
+msgid "No Additional Schedules"
+msgstr "Programmation absente"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:772
+msgid "Limit"
+msgstr "Limite"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:775
+msgid "Number of upcoming DJs/Shows to display."
+msgstr "Nombre de DJ/&eacute;missions &agrave; afficher."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/dj-on-air.php:785
+msgid "Choose time format for displayed schedules."
+msgstr ""
+"Choix du format d&#39;heure pour l&#39;affichage des horaires de diffusion"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:21
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:22
+msgid "Schedule Override"
+msgstr "Remplacement de Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:23
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:24
+msgid "Add Schedule Override"
+msgstr "Ajouter Remplacement de Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:25
+msgid "Edit Schedule Override"
+msgstr "Modifier Remplacement de Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:26
+msgid "New Schedule Override"
+msgstr "Nouvelle  Remplacement de Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:27
+msgid "View Schedule Override"
+msgstr "Afficher Remplacement de Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:30
+msgid "Post type for Schedule Override"
+msgstr "Post Type de la description de Remplacement de Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:49
+msgid "Override Schedule"
+msgstr "Outrepasser Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:79
+msgid "Date"
+msgstr "Date"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:82
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:756
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:835
+msgid "Start Time"
+msgstr "Heure de d&eacute;but"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:108
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:782
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:861
+msgid "End Time"
+msgstr "Heure de fin"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:432
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:595
+msgid "encore airing"
+msgstr "En diff&eacute;r&eacute;"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:437
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:600
+msgid "Audio File"
+msgstr "Fichier audio"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Sun"
+msgstr "Dim"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Mon"
+msgstr "Lun"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Tue"
+msgstr "Mar"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Wed"
+msgstr "Merc"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Thu"
+msgstr "Jeu"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Fri"
+msgstr "Vend"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:454
+msgid "Sat"
+msgstr "Sam"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/master_schedule.php:619
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:572
+msgid "Genres"
+msgstr "Styles"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:16
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:136
+msgid "Playlists"
+msgstr "Playlists"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:17
+msgid "Playlist"
+msgstr "Playlist"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:18
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:19
+msgid "Add Playlist"
+msgstr "Ajouter une playlist"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:20
+msgid "Edit Playlist"
+msgstr "Modifier la playlist"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:21
+msgid "New Playlist"
+msgstr "Nouvelle playlist"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:25
+msgid "Post type for Playlist descriptions"
+msgstr "Post Type de la description de la playlist"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:42
+msgid "Shows"
+msgstr "&Eacute;missions"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:43
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:191
+msgid "Show"
+msgstr "&Eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:44
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:45
+msgid "Add Show"
+msgstr "Ajouter une &eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:46
+msgid "Edit Show"
+msgstr "Modifier l&#39;&eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:47
+msgid "New Show"
+msgstr "Nouvelle &eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:48
+msgid "View Show"
+msgstr "Afficher l&#39;&eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:51
+msgid "Post type for Show descriptions"
+msgstr "Post Type de la description de l&#39;&eacute;mission"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:71
+msgid "Playlist Entries"
+msgstr "&Eacute;l&eacute;ments de la playlist"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:43
+msgid "Artist"
+msgstr "Artiste"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:44
+msgid "Song"
+msgstr "Titre"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:45
+msgid "Album"
+msgstr "Album"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:46
+msgid "Record Label"
+msgstr "Label de production"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:47
+msgid "DJ Comments"
+msgstr "Commentaires du DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+msgid "New"
+msgstr "Nouveau"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+msgid "Status"
+msgstr "Statut"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:127
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:144
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:807
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:888
+msgid "Remove"
+msgstr "Supprimer"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:119
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:144
+msgid "Queued"
+msgstr "En attente"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:123
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:144
+msgid "Played"
+msgstr "P.A.D."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:136
+msgid "Add Entry"
+msgstr "Ajouter un &eacute;lement"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:163
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:164
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:99
+msgid "Schedule"
+msgstr "Horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:166
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:167
+msgid "Publish"
+msgstr "Publier"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:170
+msgid "Submit for Review"
+msgstr "Soumettre pour examen"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:171
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:176
+msgid "Update Playlist"
+msgstr "Mettre la playlist &agrave; jour"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:175
+msgid "Update"
+msgstr "Mettre à jour"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:420
+msgid "Display the current song."
+msgstr "Afficher le morceau actuel"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:421
+msgid "Radio Station: Now Playing"
+msgstr "Station Radio: détails du programme en cours"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:444
+msgid "Show Artist Name"
+msgstr "Afficher le nom de l&#39;artiste"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:451
+msgid "Show Song Title"
+msgstr "Afficher le titre du morceau"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:458
+msgid "Show Album Name"
+msgstr "Afficher le nom de l&#39;album"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:465
+msgid "Show Record Label Name"
+msgstr "Afficher le label de production"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:472
+msgid "Show DJ Comments"
+msgstr "Afficher les commentaires du DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:573
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:60
+msgid "Genre"
+msgstr "Style"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:594
+msgid "Information"
+msgstr "Information"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:612
+msgid "Active"
+msgstr "&Eacute;mission active"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:614
+msgid ""
+"Check this box if show is currently active (Show will not appear on "
+"programming schedule if unchecked)"
+msgstr ""
+"Cochez cette case si l&#39;&eacute;mission est active (sinon elle "
+"n'apparaitra pas sur la grille des programmes)"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:616
+msgid "Current Audio File"
+msgstr "Fichier audio actuel"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:619
+msgid "DJ Email"
+msgstr "Email du DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:622
+msgid "Website Link"
+msgstr "Lien du site web"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:633
+msgid "DJs"
+msgstr "Animateurs"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:719
+msgid "Schedules"
+msgstr "Horaires"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:744
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:824
+msgid "Day"
+msgstr "Jour"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:747
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:827
+msgid "Monday"
+msgstr "Lundi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:748
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:828
+msgid "Tuesday"
+msgstr "Mardi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:749
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:829
+msgid "Wednesday"
+msgstr "Mercredi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:750
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:830
+msgid "Thursday"
+msgstr "Jeudi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:751
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:831
+msgid "Friday"
+msgstr "Vendredi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:752
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:832
+msgid "Saturday"
+msgstr "Samedi"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:753
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:833
+msgid "Sunday"
+msgstr "Dimanche"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:806
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:886
+msgid "Encore Presentation"
+msgstr "En diff&eacute;r&eacute;"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:817
+msgid "Add Shift"
+msgstr "Ajouter un horaire"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:980
+msgid "More Playlists"
+msgstr "Voir plus de playlists"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/includes/playlist.php:1041
+msgid "More Blog Posts"
+msgstr "Voir plus d&#39;articles"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:15
+msgid "Playlist Archive for"
+msgstr "Playlist archiv&eacute;e de"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:50
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:13
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:13
+msgid "Post navigation"
+msgstr "Feuilleter les articles"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:51
+msgid "Older posts"
+msgstr "Articles plus anciens"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:52
+msgid "Newer posts"
+msgstr "Articles plus récents"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:61
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:93
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/playlist-archive-template.php:63
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:71
+msgid "Nothing Found"
+msgstr "Rien n&rsquo;a été trouvé"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/archive-playlist.php:65
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:97
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/playlist-archive-template.php:67
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:75
+msgid ""
+"Apologies, but no results were found for the requested archive. Perhaps "
+"searching will help find a related post."
+msgstr ""
+"Désolé, l'archive demandée ne peut être trouvée. Essayez de rechercher un "
+"article en rapport avec elle."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:51
+#, php-format
+msgid "Author Archives: %s"
+msgstr "Archives de l'auteur: %s"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/author.php:70
+#, php-format
+msgid "About %s"
+msgstr "A propos de %s"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/playlist-archive-template.php:16
+msgid "Playlist Archive"
+msgstr "Playlist archiv&eacute;e"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:16
+msgid "Blog Archive"
+msgstr "Archive du blog"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/show-blog-archive-template.php:46
+msgid "Posted by"
+msgstr "Publi&eacute; par "
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:14
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:14
+msgid "Previous"
+msgstr "Précédent"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:15
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:15
+msgid "Next"
+msgstr "Suivant"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:32
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:144
+msgid "Pages:"
+msgstr "Pages:"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-playlist.php:65
+msgid "No entries for this playlist"
+msgstr "Cette playlist est vide."
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:32
+msgid "Hosted by"
+msgstr "H&eacute;b&eacute;rg&eacute; par"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:84
+msgid "Email the DJ"
+msgstr "Envoyer un mail au DJ"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:88
+msgid "Show Website"
+msgstr "Afficher le site web"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:95
+msgid "Most recent broadcast"
+msgstr "Diffusion la plus r&eacute;cente"
+
+#: c:\xampp\htdocs\wp352test\wp-content\plugins\radio-station/templates/single-show.php:140
+msgid "Blog Posts"
+msgstr "Articles du blog"
