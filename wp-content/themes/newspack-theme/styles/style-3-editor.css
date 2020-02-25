@@ -183,6 +183,12 @@ figcaption,
   position: relative;
 }
 
+/** === Newspack Carousel === */
+.wp-block-newspack-blocks-carousel h3 a,
+.wp-block-newspack-blocks-carousel h3 a:visited {
+  color: #fff;
+}
+
 /** === Table === */
 .wp-block-table {
   font-family: "Barlow", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -672,24 +678,32 @@ ul.wp-block-archives li ul,
   padding-left: 0;
 }
 
+.wp-block-latest-comments .wp-block-latest-comments__comment {
+  font-size: 0.8em;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
 .wp-block-latest-comments .wp-block-latest-comments__comment-meta {
   font-family: "Barlow", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-weight: bold;
 }
 
-.wp-block-latest-comments .wp-block-latest-comments__comment-meta .wp-block-latest-comments__comment-date {
-  color: #767676;
-  font-weight: normal;
+.wp-block-latest-comments .wp-block-latest-comments__comment-meta a,
+.wp-block-latest-comments .wp-block-latest-comments__comment-meta a:visited {
+  color: #111;
+  text-decoration: none;
 }
 
-.wp-block-latest-comments .wp-block-latest-comments__comment {
-  line-height: 1.6;
-  margin-bottom: 1rem;
+.wp-block-latest-comments .wp-block-latest-comments__comment-meta .wp-block-latest-comments__comment-date {
+  color: #767676;
+  font-size: 0.9em;
+  font-weight: normal;
+  margin: 0.5rem 0;
 }
 
 .wp-block-latest-comments .wp-block-latest-comments__comment-excerpt p {
-  font-size: 1.1em;
-  line-height: 1.6;
+  font-size: 1.05em;
   margin: 0;
 }
 

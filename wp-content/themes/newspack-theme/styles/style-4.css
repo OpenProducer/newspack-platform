@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.0.0-alpha.31
+Version: 1.0.0-alpha.32
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -1344,6 +1344,11 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   font-weight: bold;
 }
 
+.highlight-menu a,
+.highlight-menu a:visited {
+  color: #555;
+}
+
 .h-cl .site-header .highlight-menu-contain .wrapper {
   justify-content: center;
   text-align: center;
@@ -1416,6 +1421,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 
 .mobile-menu-toggle:hover, .mobile-menu-toggle:focus {
   background-color: transparent;
+  color: inherit;
 }
 
 .mobile-menu-toggle .svg-icon {
@@ -3968,6 +3974,11 @@ body.page .entry-title {
   max-width: 100%;
 }
 
+.wp-block-newspack-blocks-carousel h3 a,
+.wp-block-newspack-blocks-carousel h3 a:visited {
+  color: #fff;
+}
+
 .wp-block-columns .wp-block-cover,
 .wp-block-columns .wp-block-cover-image {
   min-height: 330px;
@@ -4222,24 +4233,36 @@ body.page .entry-title {
   padding-left: 0;
 }
 
+.wp-block-latest-comments .wp-block-latest-comments__comment {
+  font-size: 0.8em;
+  line-height: 1.6;
+}
+
 .wp-block-latest-comments .wp-block-latest-comments__comment-meta {
   font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
   font-weight: bold;
 }
 
-.wp-block-latest-comments .wp-block-latest-comments__comment-meta .wp-block-latest-comments__comment-date {
-  color: #767676;
-  font-weight: normal;
-  margin: 0.25rem 0;
+.wp-block-latest-comments .wp-block-latest-comments__comment-meta a,
+.wp-block-latest-comments .wp-block-latest-comments__comment-meta a:visited {
+  color: #111;
+  text-decoration: none;
 }
 
-.wp-block-latest-comments .wp-block-latest-comments__comment {
-  line-height: 1.6;
+.wp-block-latest-comments .wp-block-latest-comments__comment-meta a:hover {
+  text-decoration: underline;
+}
+
+.wp-block-latest-comments .wp-block-latest-comments__comment-meta .wp-block-latest-comments__comment-date {
+  color: #767676;
+  font-size: 0.9em;
+  font-weight: normal;
+  margin: 0.15rem 0 0;
 }
 
 .wp-block-latest-comments .wp-block-latest-comments__comment-excerpt p {
-  font-size: 1.1em;
-  line-height: 1.6;
+  font-size: 1.05em;
+  margin-top: 0;
 }
 
 .entry .entry-content {
@@ -5078,13 +5101,18 @@ svg {
 figcaption,
 .wp-caption-text {
   color: #767676;
-  font-size: 0.7em;
-  font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
-  line-height: 1.6;
   margin: 0 auto;
   max-width: 780px;
   padding: 0;
   text-align: left;
+}
+
+figcaption,
+.wp-caption-text,
+.amp-image-lightbox-caption {
+  font-size: 0.7em;
+  font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
+  line-height: 1.6;
 }
 
 .newspack-front-page figcaption,

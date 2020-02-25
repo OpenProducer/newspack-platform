@@ -1,0 +1,124 @@
+.newspack-lightbox {
+  -webkit-box-align: center;
+          align-items: center;
+  bottom: 0;
+  display: -webkit-box;
+  display: flex;
+  -webkit-box-pack: center;
+          justify-content: center;
+  right: 0;
+  margin: 0 !important;
+  max-width: 100% !important;
+  opacity: 0;
+  position: fixed;
+  left: 0;
+  top: 0;
+  visibility: hidden;
+  width: 100% !important;
+  z-index: 99999;
+  /* Placements */ }
+  @media only screen and (min-width: 601px) {
+    .admin-bar .newspack-lightbox {
+      padding-top: 46px !important; } }
+  @media only screen and (min-width: 783px) {
+    .admin-bar .newspack-lightbox {
+      padding-top: 32px !important; } }
+  .newspack-lightbox .newspack-lightbox-shim {
+    background: black;
+    border: 0;
+    border-radius: 0;
+    cursor: auto;
+    height: 100%;
+    right: 0;
+    margin: 0;
+    padding: 0;
+    position: absolute;
+    top: 0;
+    width: 100%;
+    z-index: 0; }
+  .newspack-lightbox .newspack-popup-wrapper {
+    background: white;
+    border: none;
+    box-shadow: 0 0 1em 0.5em rgba(0, 0, 0, 0.1);
+    overflow-x: hidden;
+    position: relative;
+    z-index: 1; }
+  .newspack-lightbox .newspack-popup {
+    background: transparent;
+    margin: 0 auto;
+    max-width: 780px;
+    padding: 1.5em; }
+    .newspack-lightbox .newspack-popup > *:first-child {
+      margin-top: 0; }
+    .newspack-lightbox .newspack-popup > *:nth-last-child(2) {
+      margin-bottom: 0; }
+    .newspack-lightbox .newspack-popup .wp-block-column > *:first-child {
+      margin-top: 0; }
+    .newspack-lightbox .newspack-popup .wp-block-column > *:last-child {
+      margin-bottom: 0; }
+  .newspack-lightbox .newspack-lightbox__close {
+    -webkit-box-align: center;
+            align-items: center;
+    box-shadow: none;
+    cursor: pointer;
+    display: -webkit-box;
+    display: flex;
+    font-size: inherit;
+    height: 36px;
+    -webkit-box-pack: center;
+            justify-content: center;
+    margin: 0;
+    padding: 6px;
+    position: absolute;
+    left: 0.25em;
+    top: 0.25em;
+    width: 36px; }
+    .newspack-lightbox .newspack-lightbox__close svg {
+      fill: currentcolor;
+      -webkit-box-flex: 0;
+              flex: 0 0 24px; }
+  .newspack-lightbox .popup-not-interested-form {
+    display: -webkit-box;
+    display: flex;
+    -webkit-box-pack: center;
+            justify-content: center;
+    margin-top: 1.5em; }
+    .newspack-lightbox .popup-not-interested-form button {
+      background: transparent;
+      border: 0;
+      border-radius: 0;
+      color: #555;
+      font-size: 0.7em;
+      font-weight: normal;
+      line-height: 1;
+      margin: 0;
+      padding: 0;
+      text-decoration: underline; }
+      .newspack-lightbox .popup-not-interested-form button:active, .newspack-lightbox .popup-not-interested-form button:focus, .newspack-lightbox .popup-not-interested-form button:hover {
+        color: #3c3c3c;
+        outline-offset: 2px;
+        text-decoration: none; }
+  .newspack-lightbox.newspack-lightbox-placement-center .newspack-popup-wrapper {
+    max-height: 90%;
+    max-height: calc(100% - 1.5em);
+    min-width: 100%;
+    overflow-y: auto; }
+    @media only screen and (min-width: 780px) {
+      .newspack-lightbox.newspack-lightbox-placement-center .newspack-popup-wrapper {
+        min-width: 780px; } }
+  .newspack-lightbox.newspack-lightbox-placement-bottom .newspack-popup-wrapper, .newspack-lightbox.newspack-lightbox-placement-top .newspack-popup-wrapper {
+    max-height: 100%;
+    overflow-y: auto;
+    width: 100%; }
+  .newspack-lightbox.newspack-lightbox-placement-bottom .newspack-popup, .newspack-lightbox.newspack-lightbox-placement-top .newspack-popup {
+    max-width: 90%;
+    padding-right: 0;
+    padding-left: 0;
+    width: 1200px; }
+  .newspack-lightbox.newspack-lightbox-placement-bottom {
+    -webkit-box-align: end;
+            align-items: flex-end; }
+  .newspack-lightbox.newspack-lightbox-placement-top {
+    -webkit-box-align: start;
+            align-items: flex-start; }
+
