@@ -1,0 +1,64 @@
+/**
+ * Notice
+ */
+
+@import '~@wordpress/base-styles/colors';
+@import '../../../shared/scss/colors';
+
+.newspack-notice {
+	align-items: flex-start;
+	background: $light-gray-100;
+	border-radius: 3px;
+	color: $dark-gray-300;
+	display: flex;
+	font-size: 14px;
+	justify-content: flex-start;
+	line-height: 24px;
+	margin: 32px 0;
+	padding: 8px;
+
+	> svg {
+		display: block;
+		fill: $dark-gray-900;
+		flex: 0 0 24px;
+		margin-right: 4px;
+	}
+
+	&.newspack-notice__is-success {
+		background: lighten( $alert-green, 47% );
+
+		> svg {
+			fill: $alert-green;
+		}
+	}
+
+	&.newspack-notice__is-error {
+		background: lighten( $alert-red, 40.5% );
+
+		> svg {
+			fill: $alert-red;
+		}
+	}
+
+	&.newspack-notice__is-warning {
+		background: lighten( $alert-yellow, 36% );
+
+		> svg {
+			fill: $alert-yellow;
+		}
+	}
+
+	&.newspack-notice__is-primary {
+		background: $primary-000;
+
+		> svg {
+			fill: $primary-500;
+		}
+	}
+
+	.newspack-notice__content {
+		> div > * {
+			margin: 0;
+		}
+	}
+}

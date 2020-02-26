@@ -1,0 +1,15 @@
+/**
+ * Button Group
+ */
+
+.newspack-button-group {
+	display: block;
+	margin: 32px 0;
+
+	.newspack-button {
+		&:active,
+		&:hover {
+			position: relative;
+		}
+	}
+}

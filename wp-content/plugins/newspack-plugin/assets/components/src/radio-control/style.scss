@@ -1,0 +1,93 @@
+/**
+ * Radio Control
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-radio-control {
+	color: $dark-gray-300;
+	font-size: 14px;
+	line-height: 24px;
+	margin: 32px 0;
+
+	label {
+		color: inherit;
+		font-size: inherit;
+		line-height: inherit;
+		margin: 0;
+	}
+
+	.components-base-control__label {
+		color: $dark-gray-900;
+		font-weight: bold;
+	}
+
+	// Options
+
+	.components-radio-control__option {
+		align-items: center;
+		display: flex;
+		margin: 0 0 8px 0;
+
+		&:first-of-type {
+			margin-top: 8px;
+		}
+
+		&:last-child {
+			margin-bottom: 0;
+		}
+	}
+
+	// Radio
+
+	input[type='radio'] {
+		border: 2px solid $light-gray-900;
+		box-shadow: none;
+		height: 20px;
+		margin: 2px;
+		width: 20px;
+		transition: box-shadow 125ms ease-in-out;
+
+		&:focus {
+			box-shadow: 0 0 0 2px white, 0 0 0 4px $primary-500;
+			outline: 0;
+		}
+
+		&:checked::before {
+			background: $primary-500;
+			height: 10px;
+			margin: 3px;
+			width: 10px;
+		}
+
+		+ label {
+			padding-left: 4px;
+		}
+	}
+
+	// Multiple Text Controls
+
+	& + & {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+
+	// Multiple Controls
+
+	+ .newspack-select-control,
+	+ .newspack-text-control,
+	+ .newspack-textarea-control {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+
+	// Reset
+
+	.components-base-control__field,
+	.components-base-control__label,
+	.components-base-control__help {
+		display: block;
+		margin: 0;
+	}
+}

@@ -1,0 +1,9 @@
+/**
+ * Popups
+ */
+
+.newspack-engagement__popups-row {
+	& + & {
+		margin-top: -16px;
+	}
+}

@@ -198,9 +198,9 @@ class Admin_Plugins_Screen {
 
 		wp_register_script(
 			'newspack_plugins_screen',
-			Newspack::plugin_url() . '/assets/plugins-screen/plugins-screen.js',
+			Newspack::plugin_url() . '/dist/plugins-screen.js',
 			[ 'jquery' ],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/plugins-screen/plugins-screen.js' ),
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/plugins-screen.js' ),
 			true
 		);
 
@@ -220,9 +220,9 @@ class Admin_Plugins_Screen {
 
 		wp_register_style(
 			'newspack_plugins_screen',
-			Newspack::plugin_url() . '/assets/plugins-screen/plugins-screen.css',
+			Newspack::plugin_url() . '/dist/plugins-screen.css',
 			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/plugins-screen/plugins-screen.css' )
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/plugins-screen.css' )
 		);
 		wp_style_add_data( 'newspack_plugins_screen', 'rtl', 'replace' );
 		wp_enqueue_style( 'newspack_plugins_screen' );

@@ -1,0 +1,50 @@
+/**
+ * Toggle Control
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-toggle-control {
+	.components-base-control__field {
+		margin: 0;
+		height: 24px;
+
+		.components-toggle-control__label {
+			color: $dark-gray-300;
+			font-size: 14px;
+			line-height: 24px;
+			margin: 0;
+		}
+
+		.components-form-toggle {
+			border-top: 3px solid transparent;
+			margin-right: 8px;
+
+			&.is-checked {
+				.components-form-toggle__track {
+					background: $primary-500;
+				}
+			}
+		}
+	}
+
+	// Is Dark
+
+	&.newspack-toggle-control__is-dark {
+		.components-base-control__field label {
+			color: $dark-gray-900;
+			font-weight: bold;
+		}
+
+		.components-base-control__help {
+			font-style: normal;
+		}
+	}
+
+	// Reset
+
+	.components-base-control__help {
+		margin: 0 0 0 44px;
+	}
+}

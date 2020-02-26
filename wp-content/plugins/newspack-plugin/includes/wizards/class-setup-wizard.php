@@ -31,6 +31,13 @@ class Setup_Wizard extends Wizard {
 	protected $capability = 'install_plugins';
 
 	/**
+	 * An array of theme mods that are media library IDs.
+	 *
+	 * @var array
+	 */
+	protected $media_theme_mods = [ 'newspack_footer_logo' ];
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
@@ -99,6 +106,20 @@ class Setup_Wizard extends Wizard {
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_theme' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+		register_rest_route(
+			'newspack/v1/wizard/' . $this->slug,
+			'/theme-mods',
+			[
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_theme_mods' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'theme_mods' => [
+						'sanitize_callback' => [ $this, 'sanitize_theme_mods' ],
+					],
+				],
 			]
 		);
 		register_rest_route(
@@ -195,7 +216,22 @@ class Setup_Wizard extends Wizard {
 	 * @return WP_REST_Response containing info.
 	 */
 	public function api_retrieve_theme() {
-		return rest_ensure_response( [ 'theme' => Starter_Content::get_theme() ] );
+		$theme_mods = get_theme_mods();
+
+		foreach ( $theme_mods as $key => &$theme_mod ) {
+			if ( in_array( $key, $this->$media_theme_mods ) ) {
+				$attachment = wp_get_attachment_image_src( $theme_mod )[0];
+				$theme_mod  = [
+					'url' => is_array( $attachment ) ? $attachment[0] : null,
+				];
+			}
+		}
+		return rest_ensure_response(
+			[
+				'theme'      => Starter_Content::get_theme(),
+				'theme_mods' => $theme_mods,
+			]
+		);
 	}
 
 	/**
@@ -206,7 +242,25 @@ class Setup_Wizard extends Wizard {
 	 */
 	public function api_update_theme( $request ) {
 		$theme = $request['theme'];
-		return rest_ensure_response( [ 'theme' => Starter_Content::set_theme( $theme ) ] );
+		Starter_Content::set_theme( $theme );
+		return self::api_retrieve_theme();
+	}
+
+	/**
+	 * Update theme mods
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response containing info.
+	 */
+	public function api_update_theme_mods( $request ) {
+		$theme_mods = $request['theme_mods'];
+		foreach ( $theme_mods as $key => $value ) {
+			if ( in_array( $key, $this->$media_theme_mods ) ) {
+				$value = $value['id'];
+			}
+			set_theme_mod( $key, $value );
+		}
+		return self::api_retrieve_theme();
 	}
 
 	/**
@@ -259,5 +313,14 @@ class Setup_Wizard extends Wizard {
 			wp_safe_redirect( esc_url( $setup_url ) );
 			exit;
 		}
+	}
+
+	/**
+	 * Sanitize theme mods.
+	 *
+	 * @param array $theme_mods An array of theme mods.
+	 */
+	public function sanitize_theme_mods( $theme_mods ) {
+		return $theme_mods;
 	}
 }

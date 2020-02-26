@@ -1,0 +1,110 @@
+/**
+ * Form Token Field
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-form-token-field {
+	color: $dark-gray-300;
+	font-size: 14px;
+	line-height: 24px;
+	margin: 32px 0;
+
+	label {
+		color: $dark-gray-900;
+		font-size: inherit;
+		font-weight: bold;
+		line-height: inherit;
+		margin: 0;
+	}
+
+	.newspack-form-token-field__input-container {
+		background: white;
+		border: 1px solid $light-gray-500;
+		border-radius: 3px;
+		box-shadow: none;
+		box-sizing: border-box;
+		color: inherit;
+		font-size: 16px;
+		line-height: inherit;
+		margin: 0;
+		min-height: 48px;
+		padding: 9px 8px;
+		transition: border-color 125ms ease-in-out, box-shadow 125ms ease-in-out;
+		width: 100%;
+
+		@media screen and ( min-width: 768px ) {
+			font-size: inherit;
+		}
+
+		&.is-active {
+			border-color: $primary-500;
+			box-shadow: 0 0 0 2px $primary-500;
+		}
+
+		input[type='text'] {
+			border: 0;
+			line-height: inherit;
+			margin: 2px 0;
+			padding: 0;
+
+			&:focus {
+				box-shadow: none;
+			}
+		}
+
+		.components-form-token-field__token-text {
+			font-size: inherit;
+		}
+
+		.components-form-token-field__remove-token {
+			height: 24px;
+		}
+	}
+
+	.components-form-token-field__suggestions-list {
+		border-top-color: $light-gray-500;
+		margin: 12px -8px -11px;
+		padding: 8px 0 0;
+
+		.components-form-token-field__suggestion {
+			font-size: inherit;
+			margin-bottom: 8px;
+
+			&.is-selected {
+				background: $primary-500;
+			}
+		}
+	}
+
+	// Help Text
+
+	.components-form-token-field__help {
+		margin: 0;
+	}
+
+	// Multiple Form Token Field
+
+	& + & {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+
+	// Multiple Controls
+
+	+ .newspack-select-control,
+	+ .newspack-textarea-control,
+	+ .newspack-text-control {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+
+	// Reset
+
+	.components-base-control__field,
+	.components-base-control__label {
+		display: block;
+		margin: 0;
+	}
+}

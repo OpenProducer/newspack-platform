@@ -1,0 +1,36 @@
+/**
+ * Waiting
+ */
+
+@import '~@wordpress/base-styles/colors';
+
+.newspack-is-waiting {
+	animation: newspack-is-waiting__animation 1s infinite linear;
+	display: block;
+	fill: $light-gray-900;
+	flex: 0 0 24px;
+
+	&.newspack-is-waiting__is-left {
+		margin-right: 4px;
+	}
+
+	&.newspack-is-waiting__is-right {
+		margin-right: 4px;
+		order: -1;
+
+		@media screen and ( min-width: 744px ) {
+			margin-left: 4px;
+			margin-right: 0;
+			order: 1;
+		}
+	}
+}
+
+@keyframes newspack-is-waiting__animation {
+	from {
+		transform: rotate( 360deg );
+	}
+	to {
+		transform: rotate( 0deg );
+	}
+}
