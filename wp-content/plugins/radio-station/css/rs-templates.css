@@ -1,0 +1,308 @@
+/* ============================= */
+/* Radio Station Template Styles */
+/* ============================= */
+
+/* ---------------- */
+/* Show Page Styles */
+/* ---------------- */
+
+#show-content .show-sections {
+    min-width: 250px;
+}
+
+#show-content .show-sections h3, #show-content .show-sections h4, #show-content .show-sections h5 {
+	clear: none;
+}
+
+/* Show Info */
+/* --------- */
+#show-content .show-info {
+	float: left; 
+}
+
+#show-content .show-info .show-block {
+	vertical-align: top;
+	line-height: 1.8em;
+	max-width: 250px;
+	margin-top: 20px;
+}
+
+#show-content .show-info .show-block.first-block {
+	margin-top: 0px;
+}
+
+#show-content .show-info .show-block.last-block {
+	margin-bottom: 20px;
+}
+
+#show-content .show-info .show-avatar {
+	display: inline-block;
+	vertical-align: top;
+	margin-right: 10px;
+	text-align: center;
+}
+
+#show-content .show-avatar img {
+	width: 200px;
+	height: 200px;
+}
+
+#show-content .show-embed {
+	display: inline-block;
+	vertical-align: middle;
+	width: 100%;
+	min-width: 150px;
+	max-width: 200px;
+}
+
+#show-content .show-download {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 10px;
+	margin-top: 5px;
+}
+
+#show-content .show-embed .mejs-container {
+	border-radius: 15px;
+	overflow: hidden;
+}
+
+#show-content .show-embed .mejs-container,
+#show-content .show-embed .mejs-controls,
+#show-content .show-embed .mejs-embed,
+#show-content .show-embed .mejs-embed body {
+	background-color: #AAAAAA;
+}
+
+#show-content .show-embed .mejs-horizontal-volume-total {
+	width: 100%;
+}
+
+#show-content .show-icons {
+	vertical-align: top;
+	margin-top: 10px;
+}
+
+#show-content .show-icons .show-icon {
+	display: inline-block;
+	margin-right: 10px;
+	margin-bottom: 10px;
+}
+
+#show-content .show-icons .show-icon span, 
+#show-content .show-download span {
+	font-size: 28px;
+}
+
+#show-content .show-icon a {
+	text-decoration: none;
+}
+
+/* Show Schedule */
+/* ------------- */
+#show-content .show-info .show-block h3, #show-content .show-info .show-block h4 {
+	margin-top: 0;
+}
+
+#show-content .show-times .show-offset {
+	font-size: 16px;
+}
+
+#show-content .show-times .show-encore {
+	color: #CC0000;
+}
+
+#show-content .show-times .show-encore-label {
+	font-size: 14px;
+}
+
+#show-content .show-times table {
+	padding: 0;
+	margin: 0;
+}
+
+#show-content .show-times table td {
+	vertical-align: top;
+}
+
+#show-content .show-times .show-schedule-link {
+	width: 100%;
+	text-align: right;
+}
+
+#show-content .show-times .show-day-time, #show-content .show-times .show-time {
+	font-size: 16px;
+}
+
+#show-content .show-latest-title {
+    margin-bottom: 10px;
+}
+
+/* Show Description */
+/* ---------------- */
+#show-content .show-sections .show-jump-links {
+	font-size: 12px;
+}
+
+#show-content .show-description {
+	position: relative;
+	max-height: 800px;
+	overflow: hidden;
+}
+
+#show-content .show-description.expanded,
+#show-content .show-description.narrow.expanded {
+	max-height: none;
+}
+
+#show-content #show-desc-buttons {
+	width: 100%;
+	text-align: right;
+	padding-bottom: 20px;
+}
+
+#show-content #show-desc-buttons #show-desc-less {
+	display: none;
+}
+
+#show-content #show-more-overlay {
+    position: absolute; 
+    bottom: 0;
+    width: 100%;
+    height: 6em;
+    background: -webkit-linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%); 
+    background-image: -moz-linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background-image: -o-linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background-image: linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+    background-image: -ms-linear-gradient(rgba(255, 255, 255, 0) 0%, rgba(255, 255, 255, 1) 100%);
+} 
+
+#show-content .show-description.expanded #show-more-overlay {
+	display: none;
+}
+
+#show-content .show-description.expanded {
+	max-height: none;
+	overflow: visible;
+}
+
+/* Show Tabs */
+/* --------- */
+#show-content .show-tabs .show-tab {
+	display: inline-block; 
+	width: 100px;
+	line-height: 40px;
+	font-size: 18px;
+	color: #444444;
+	margin: 0px;
+	cursor: pointer; 
+	text-align: center; 
+	background-color: #eeeeee; 
+	border-radius: 7px 7px 0 0;
+	border: 1px solid #000000;
+	padding: 6px 14px;
+}
+
+#show-content .show-tabs .show-tab-spacer {
+	display: inline-block;
+	width: 50px;
+	line-height: 40px;
+	font-size: 18px;
+	border-bottom: 1px solid #000000;
+	border-top: 1px solid transparent;
+	padding: 6px 0;
+}
+
+#show-content .show-tabs .show-tab.tab-active {
+	font-weight: bold; 
+	background-color: transparent; 
+	color: #000000;
+	border-bottom: 0;
+}
+
+#show-content .show-tabs .show-tab.tab-inactive {
+
+}
+
+#show-content .show-tabs .show-tab.tab-inactive:hover {
+	background-color: #f5f5f5;	
+}
+
+#show-content .show-section .show-tab.tab-inactive {
+	display: none;
+}
+
+/* Alternative Layouts */
+/* ------------------- */
+#show-content.left-blocks .show-info {
+	margin-right: 30px;
+}
+
+#show-content.right-blocks .show-info {
+	float: right; 
+	margin-left: 30px;
+}
+
+#show-content.top-blocks .show-info {
+	float: none;
+}
+
+#show-content.top-blocks .show-info .show-block {
+	display: inline-block;
+	border-left: 1px solid #AAAAAA;
+	padding-left: 20px;
+	margin-left: 20px;
+	margin-top: 0;
+}
+
+#show-content.top-blocks .show-info .show-block.first-block {
+	border-left: none;
+	padding-left: 0;
+	margin-left: 0;
+}
+
+#show-content.top-blocks .show-info .show-block.last-block {
+	margin-bottom: 0;
+}
+
+/* Mobile Screens */
+/* -------------- */
+#show-content.narrow .show-sections {
+	overflow: hidden;
+}
+
+#show-content.narrow .show-description {
+	max-height:600px;
+}
+
+#show-content.narrow .show-tabs .show-tab-spacer {
+	width: 20px;
+}
+
+#show-content.right-blocks.narrow .show-info {
+	margin-left: 0;
+}
+
+#show-content.narrow .show-info .show-block {
+	max-width: 95%;
+	margin-left: auto;
+	margin-right: auto;
+}
+
+#show-content.narrow .show-info .show-avatar, #show-content.narrow .show-info .show-controls {
+	display: inline-block;
+}
+
+#show-content.narrow .show-info .show-images {
+    margin-right: 20px;
+    margin-left: 0;
+}
+
+#show-content.narrow .show-info .show-avatar img {
+	width: 150px;
+	height: 150px;
+}
+
+#show-content.narrow .show-info .show-download {
+	margin-left: 0;
+}

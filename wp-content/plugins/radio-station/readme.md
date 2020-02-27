@@ -1,11 +1,18 @@
 # Radio Station
 Contributors: tonyzeoli, majick
+
 Donate link: https://www.patreon.com/radiostation
+
 Tags: dj, music, playlist, radio, shows, scheduling, broadcasting
+
 Requires at least: 3.3.1
+
 Tested up to: 5.2.2
+
 Stable tag: trunk
+
 License: GPLv2 or later
+
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
 Radio Station is a plugin to build and manage a Show Calendar in a radio station or Internet broadcaster's WordPress website. Functionality is based on Drupal 6's Station plugin.
