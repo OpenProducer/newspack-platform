@@ -18,9 +18,7 @@ const wizardsScripts = fs
 	.filter( wizard =>
 		fs.existsSync( path.join( __dirname, 'assets', 'wizards', wizard, 'index.js' ) )
 	);
-const wizardsScriptFiles = {
-	'plugins-screen': path.join( __dirname, 'assets', 'plugins-screen', 'plugins-screen.js' ),
-};
+const wizardsScriptFiles = {};
 wizardsScripts.forEach( function( wizard ) {
 	wizardsScriptFiles[ wizard ] = [
 		path.join( __dirname, 'assets', 'shared', 'js', 'public-path.js' ),

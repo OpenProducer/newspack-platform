@@ -175,7 +175,7 @@ function akismet_get_ip_address() {
 function akismet_cron_recheck() {
 	return Akismet::cron_recheck();
 }
-function akismet_add_comment_nonce() {
+function akismet_add_comment_nonce( $post_id ) {
 	return Akismet::add_comment_nonce( $post_id );
 }
 function akismet_fix_scheduled_recheck() {
@@ -206,7 +206,8 @@ function akismet_kill_proxy_check( $option ) {
 	return 0;
 }
 function akismet_pingback_forwarded_for( $r, $url ) {
-	return Akismet::pingback_forwarded_for( $r, $url );
+	// This functionality is now in core.
+	return false;
 }
 function akismet_pre_check_pingback( $method ) {
 	return Akismet::pre_check_pingback( $method );

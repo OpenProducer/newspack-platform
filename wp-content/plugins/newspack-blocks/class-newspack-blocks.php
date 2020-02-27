@@ -57,6 +57,13 @@ class Newspack_Blocks {
 				$script_data['version'],
 				true
 			);
+			wp_localize_script(
+				'newspack-blocks-editor',
+				'newspack_blocks_data',
+				[
+					'patterns' => self::get_patterns_for_post_type( get_post_type() ),
+				]
+			);
 
 			wp_set_script_translations(
 				'newspack-blocks-editor',
@@ -402,6 +409,37 @@ class Newspack_Blocks {
 				'display_name'  => get_the_author_meta( 'display_name' ),
 			),
 		);
+	}
+
+	/**
+	 * Get patterns for post type.
+	 *
+	 * @param string $post_type Post type.
+	 * @return array Array of patterns.
+	 */
+	public static function get_patterns_for_post_type( $post_type = null ) {
+		$patterns    = apply_filters( 'newspack_blocks_patterns', [], $post_type );
+		$categorized = [];
+		$clean       = [];
+		foreach ( $patterns as $pattern ) {
+			if ( ! isset( $pattern['preview_image'] ) || ! $pattern['preview_image'] ) {
+				continue;
+			}
+			$category = isset( $pattern['category'] ) ? $pattern['category'] : __( 'Common', 'newspack-blocks' );
+			if ( ! isset( $categorized[ $category ] ) ) {
+				$categorized[ $category ] = [];
+			}
+			$categorized[ $category ][] = $pattern;
+		}
+		$categories = array_keys( $categorized );
+		sort( $categories );
+		foreach ( $categories as $category ) {
+			$clean[] = [
+				'title' => $category,
+				'items' => $categorized[ $category ],
+			];
+		}
+		return $clean;
 	}
 }
 Newspack_Blocks::init();
