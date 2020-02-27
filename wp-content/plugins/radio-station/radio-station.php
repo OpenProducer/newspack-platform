@@ -957,14 +957,6 @@ function radio_station_get_template( $type, $template, $paths = false ) {
 				);
 			}
 		}
-		if ( defined( RADIO_STATION_PRO_DIR ) ) {
-			foreach ( $paths as $path ) {
-				$dirs[] = array(
-					'path'    => RADIO_STATION_PRO_DIR . '/' . $path,
-					'urlpath' => plugins_url( $path, RADIO_STATION_PRO_FILE ),
-				);
-			}
-		}
 		foreach ( $paths as $path ) {
 			$dirs[] = array(
 				'path'    => RADIO_STATION_DIR . '/' . $path,
