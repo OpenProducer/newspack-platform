@@ -28,6 +28,9 @@
 	<config name="minimum_supported_wp_version" value="4.6"/>
 	<rule ref="WordPress">
 	</rule>
+		<rule ref="WordPress">
+		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found" />
+	</rule>
 	<rule ref="WordPress.NamingConventions.PrefixAllGlobals">
 		<properties>
 			<!-- Value: replace the function, class, and variable prefixes used. Separate multiple prefixes with a comma. -->
