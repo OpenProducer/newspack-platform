@@ -1,11 +1,12 @@
 === Twenty Fifteen ===
-Contributors: the WordPress team
+Contributors: wordpressdotorg
 Requires at least: WordPress 4.1
-Tested up to: WordPress 4.5-trunk
-Version: 1.4
+Tested up to: WordPress 5.0
+Requires PHP: 5.2.4
+Version: 2.5
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
-Tags: black, blue, gray, pink, purple, white, yellow, dark, light, two-columns, left-sidebar, fixed-layout, responsive-layout, accessibility-ready, custom-background, custom-colors, custom-header, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, threaded-comments, translation-ready
+Tags: blog, two-columns, left-sidebar, accessibility-ready, custom-background, custom-colors, custom-header, custom-logo, custom-menu, editor-style, featured-images, microformats, post-formats, rtl-language-support, sticky-post, threaded-comments, translation-ready
 
 == Description ==
 Our 2015 default theme is clean, blog-focused, and designed for clarity. Twenty Fifteen's simple, straightforward typography is readable on a wide variety of screen sizes, and suitable for multiple languages. We designed it using a mobile-first approach, meaning your content takes center-stage, regardless of whether your visitors arrive by smartphone, tablet, laptop, or desktop computer.
@@ -30,7 +31,7 @@ For more information about Twenty Fifteen please go to https://codex.wordpress.o
 
 == Copyright ==
 
-Twenty Fifteen WordPress Theme, Copyright 2014-2015 WordPress.org & Automattic.com
+Twenty Fifteen WordPress Theme, Copyright 2014-2018 WordPress.org & Automattic.com
 Twenty Fifteen is distributed under the terms of the GNU GPL
 
 This program is free software: you can redistribute it and/or modify
@@ -49,11 +50,66 @@ HTML5 Shiv v3.7.0, Copyright 2014 Alexander Farkas
 Licenses: MIT/GPL2
 Source: https://github.com/aFarkas/html5shiv
 
-Genericons icon font, Copyright 2013-2015 Automattic.com
+Genericons icon font, Copyright 2013-2017 Automattic.com
 License: GNU GPL, Version 2 (or later)
 Source: http://www.genericons.com
 
 == Changelog ==
+
+= 2.5 =
+* Released: May 7, 2019
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_2.5
+
+= 2.4 =
+* Released: February 21, 2019
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_2.4
+
+= 2.3 =
+* Released: January 9, 2019
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_2.3
+
+= 2.2 =
+* Released: December 19, 2018
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_2.2
+
+= 2.1 =
+* Released: December 6, 2018
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_2.1
+
+= 2.0 =
+* Released: May 17, 2018
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_2.0
+
+= 1.9 =
+* Released: November 14, 2017
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_1.9
+
+= 1.8 =
+* Released: June 8, 2017
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_1.8
+
+= 1.7 =
+* Released: December 6, 2016
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_1.7
+
+= 1.6 =
+* Released: August 15, 2016
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_1.6
+
+= 1.5 =
+* Released: April 12, 2016
+
+https://codex.wordpress.org/Twenty_Fifteen_Theme_Changelog#Version_1.5
 
 = 1.4 =
 * Released: December 8, 2015

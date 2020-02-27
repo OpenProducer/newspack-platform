@@ -116,6 +116,7 @@ blockquote {
 	font-style: italic;
 	line-height: 1.4736842105;
 	margin-bottom: 28px;
+	overflow: hidden;
 	padding: 0 0 0 24px;
 }
 
@@ -222,11 +223,11 @@ sub {
 	vertical-align: baseline;
 }
 
-sub {
+sup {
 	top: -6px;
 }
 
-sup {
+sub {
 	bottom: -3px;
 }
 
