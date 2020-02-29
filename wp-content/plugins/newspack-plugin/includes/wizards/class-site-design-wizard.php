@@ -71,17 +71,17 @@ class Site_Design_Wizard extends Wizard {
 
 		\wp_enqueue_script(
 			'newspack-site-design-wizard',
-			Newspack::plugin_url() . '/assets/dist/site-design.js',
+			Newspack::plugin_url() . '/dist/site-design.js',
 			$this->get_script_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/dist/site-design.js' ),
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/site-design.js' ),
 			true
 		);
 
 		\wp_register_style(
 			'newspack-site-design-wizard',
-			Newspack::plugin_url() . '/assets/dist/site-design.css',
+			Newspack::plugin_url() . '/dist/site-design.css',
 			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/dist/site-design.css' )
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/site-design.css' )
 		);
 		\wp_style_add_data( 'newspack-site-design-wizard', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-site-design-wizard' );

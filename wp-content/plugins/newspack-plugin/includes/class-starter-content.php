@@ -42,13 +42,15 @@ class Starter_Content {
 			'post_title'    => $title,
 			'post_name'     => sanitize_title_with_dashes( $title, '', 'save' ),
 			'post_status'   => 'publish',
-			'page_template' => $page_templates[ wp_rand( 0, 2 ) ],
+			'page_template' => $page_templates[ wp_rand( 0, 1 ) ],
 			'post_content'  => html_entity_decode(
 				implode(
 					'',
 					array_map(
 						function( $paragraph ) {
-							return self::create_block( 'paragraph', null, '<p>' . $paragraph . '</p>' );
+							return strlen( trim( $paragraph ) ) ?
+								self::create_block( 'paragraph', null, '<p>' . $paragraph . '</p>' ) :
+								'';
 						},
 						$paragraphs
 					)
@@ -283,18 +285,16 @@ class Starter_Content {
 	 * @return string Lorem Ipsum.
 	 */
 	public static function get_lipsum( $type, $amount ) {
-		$url = 'https://www.lipsum.com/feed/json?' .
-		build_query(
-			[
-				'what'   => $type,
-				'amount' => $amount,
-				'start'  => 'no',
-			]
-		);
+		$url = ( 'paras' === $type ) ?
+			sprintf( 'https://loripsum.net/api/%d/long/plaintext', $amount ) :
+			'https://loripsum.net/api/1/short/plaintext';
 
 		$data = wp_safe_remote_get( $url );
-		$json = json_decode( $data['body'], true );
-		return $json['feed']['lipsum'];
+		$text = $data['body'];
+		if ( 'paras' !== $type ) {
+			$text = implode( ' ', array_slice( explode( ' ', $text ), 0, $amount ) );
+		}
+		return $text;
 	}
 
 	/**

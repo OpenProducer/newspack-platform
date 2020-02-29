@@ -9,14 +9,15 @@
 	},
 	"require"    : {
 			"composer/installers": "~1.6",
-			"brainmaestro/composer-git-hooks": "^2.6",
-			"xwp/wp-dev-lib": "^1.5"
+			"stripe/stripe-php": "^7.25"
 	},
 	"require-dev": {
-			"automattic/vipwpcs": "^2.0.0",
-			"wp-coding-standards/wpcs": "*",
-			"dealerdirect/phpcodesniffer-composer-installer": "*",
-			"phpcompatibility/phpcompatibility-wp": "*"
+		"brainmaestro/composer-git-hooks": "^2.6",
+		"xwp/wp-dev-lib": "^1.5",
+		"automattic/vipwpcs": "^2.0.0",
+		"wp-coding-standards/wpcs": "*",
+		"dealerdirect/phpcodesniffer-composer-installer": "*",
+		"phpcompatibility/phpcompatibility-wp": "*"
 	},
 	"scripts": {
 		"post-install-cmd": [
