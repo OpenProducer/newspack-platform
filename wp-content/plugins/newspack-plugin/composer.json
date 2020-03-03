@@ -9,7 +9,7 @@
 	},
 	"require"    : {
 			"composer/installers": "~1.6",
-			"stripe/stripe-php": "^7.25"
+      "joshtronic/php-loremipsum": "^1.0"
 	},
 	"require-dev": {
 		"brainmaestro/composer-git-hooks": "^2.6",

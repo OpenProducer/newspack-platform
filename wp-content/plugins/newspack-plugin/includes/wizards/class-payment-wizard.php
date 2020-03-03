@@ -86,6 +86,7 @@ class Payment_Wizard extends Wizard {
 		$params = [
 			'customer_id'     => sanitize_text_field( get_option( self::NEWSPACK_STRIPE_CUSTOMER, '' ) ),
 			'subscription_id' => sanitize_text_field( get_option( self::NEWSPACK_STRIPE_SUBSCRIPTION, '' ) ),
+			'mode'            => self::stripe_mode(),
 		];
 		$result = Client::wpcom_json_api_request_as_blog(
 			$path,
@@ -120,6 +121,7 @@ class Payment_Wizard extends Wizard {
 			'base_url'        => get_admin_url( null, 'admin.php' ) . '?page=newspack-payment-wizard',
 			'stripe_plan_id'  => self::stripe_plan(),
 			'user_email'      => $user->user_email,
+			'mode'            => self::stripe_mode(),
 		];
 		$result = Client::wpcom_json_api_request_as_blog(
 			$path,
@@ -156,6 +158,7 @@ class Payment_Wizard extends Wizard {
 		$args   = [ 'method' => 'POST' ];
 		$params = [
 			'session_id' => $session_id,
+			'mode'       => self::stripe_mode(),
 		];
 		$result = Client::wpcom_json_api_request_as_blog(
 			$path,
@@ -245,5 +248,14 @@ class Payment_Wizard extends Wizard {
 	 */
 	public static function configured() {
 		return self::stripe_plan();
+	}
+
+	/**
+	 * Which Stripe mode to use (live|test).
+	 *
+	 * @return string Stripe mode (live|test).
+	 */
+	public static function stripe_mode() {
+		return ( defined( 'NEWSPACK_STRIPE_MODE' ) && 'live' === NEWSPACK_STRIPE_MODE ) ? 'live' : 'test';
 	}
 }

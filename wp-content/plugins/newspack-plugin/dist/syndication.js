@@ -81,7 +81,7 @@
 /******/
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 15);
+/******/ 	return __webpack_require__(__webpack_require__.s = 16);
 /******/ })
 /************************************************************************/
 /******/ ({
@@ -2721,14 +2721,14 @@ eval("__webpack_require__.r(__webpack_exports__);\nvar _typeof = typeof Symbol =
 
 /***/ }),
 
-/***/ 15:
+/***/ 16:
 /*!*************************************************************************************!*\
   !*** multi ./assets/shared/js/public-path.js ./assets/wizards/syndication/index.js ***!
   \*************************************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("__webpack_require__(/*! /Users/claudiulodro/Documents/Projects/VVV/www/newspack/public_html/wp-content/plugins/newspack-plugin/assets/shared/js/public-path.js */\"./assets/shared/js/public-path.js\");\nmodule.exports = __webpack_require__(/*! /Users/claudiulodro/Documents/Projects/VVV/www/newspack/public_html/wp-content/plugins/newspack-plugin/assets/wizards/syndication/index.js */\"./assets/wizards/syndication/index.js\");\n\n\n//# sourceURL=webpack:///multi_./assets/shared/js/public-path.js_./assets/wizards/syndication/index.js?");
+eval("__webpack_require__(/*! /home/circleci/project/assets/shared/js/public-path.js */\"./assets/shared/js/public-path.js\");\nmodule.exports = __webpack_require__(/*! /home/circleci/project/assets/wizards/syndication/index.js */\"./assets/wizards/syndication/index.js\");\n\n\n//# sourceURL=webpack:///multi_./assets/shared/js/public-path.js_./assets/wizards/syndication/index.js?");
 
 /***/ }),
 

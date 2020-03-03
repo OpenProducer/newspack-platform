@@ -1,6 +1,6 @@
 {
   "name": "newspack-blocks",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "main": "Gruntfile.js",
   "author": "Automattic",
   "devDependencies": {

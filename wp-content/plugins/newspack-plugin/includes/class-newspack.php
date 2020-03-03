@@ -123,6 +123,10 @@ final class Newspack {
 			wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
 			exit;
 		}
+		if ( Payment_Wizard::configured() && filter_input( INPUT_POST, 'newspack_reset_subscription', FILTER_SANITIZE_STRING ) === 'on' ) {
+			update_option( Payment_Wizard::NEWSPACK_STRIPE_CUSTOMER, null );
+			update_option( Payment_Wizard::NEWSPACK_STRIPE_SUBSCRIPTION, null );
+		}
 	}
 
 	/**

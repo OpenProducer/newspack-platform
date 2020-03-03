@@ -99,6 +99,15 @@ class Settings {
 			'newspack-settings-admin',
 			'newspack_settings'
 		);
+		if ( Payment_Wizard::configured() ) {
+			add_settings_field(
+				'newspack_reset_subscription',
+				__( 'Reset Managed Newspack Subscription', 'newspack' ),
+				[ __CLASS__, 'newspack_reset_subscription_callback' ],
+				'newspack-settings-admin',
+				'newspack_settings'
+			);
+		}
 	}
 
 	/**
@@ -119,6 +128,15 @@ class Settings {
 	public static function newspack_reset_callback() {
 		printf(
 			'<input type="checkbox" id="newspack_reset" name="newspack_reset" />'
+		);
+	}
+
+	/**
+	 * Render reset subscription button.
+	 */
+	public static function newspack_reset_subscription_callback() {
+		printf(
+			'<input type="checkbox" id="newspack_reset_subscription" name="newspack_reset_subscription" />'
 		);
 	}
 }

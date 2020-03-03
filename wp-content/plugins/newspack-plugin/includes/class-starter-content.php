@@ -7,6 +7,8 @@
 
 namespace Newspack;
 
+require_once NEWSPACK_ABSPATH . 'vendor/autoload.php';
+
 use \WP_Error, \WP_Query, Newspack\Theme_Manager;
 
 defined( 'ABSPATH' ) || exit;
@@ -243,7 +245,7 @@ class Starter_Content {
 		$file = wp_upload_bits(
 			'newspack-logo.png',
 			null,
-			file_get_contents( NEWSPACK_ABSPATH . 'assets/shared/images/newspack-logo.png' )
+			file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/images/newspack-logo.png' )
 		);
 
 		if ( ! $file || empty( $file['file'] ) ) {
@@ -285,14 +287,16 @@ class Starter_Content {
 	 * @return string Lorem Ipsum.
 	 */
 	public static function get_lipsum( $type, $amount ) {
-		$url = ( 'paras' === $type ) ?
-			sprintf( 'https://loripsum.net/api/%d/long/plaintext', $amount ) :
-			'https://loripsum.net/api/1/short/plaintext';
-
-		$data = wp_safe_remote_get( $url );
-		$text = $data['body'];
-		if ( 'paras' !== $type ) {
-			$text = implode( ' ', array_slice( explode( ' ', $text ), 0, $amount ) );
+		$lipsum = new \joshtronic\LoremIpsum();
+		switch ( $type ) {
+			case 'paras':
+				$text = $lipsum->paragraphs( $amount + 1 );
+				$text = implode( PHP_EOL, array_slice( explode( PHP_EOL, $text ), 1 ) );
+				break;
+			default:
+				$text = $lipsum->words( $amount + 12 );
+				$text = implode( ' ', array_slice( explode( ' ', $text ), 12 ) );
+				break;
 		}
 		return $text;
 	}

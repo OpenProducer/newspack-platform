@@ -17,6 +17,9 @@ require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
  * Interface for support for Newspack customers.
  */
 class Support_Wizard extends Wizard {
+	const NEWSPACK_WPCOM_ACCESS_TOKEN = '_newspack_wpcom_access_token';
+	const NEWSPACK_WPCOM_EXPIRES_IN   = '_newspack_wpcom_expires_in';
+
 	/**
 	 * The slug of this wizard.
 	 *
@@ -53,6 +56,37 @@ class Support_Wizard extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
+
+		// Handle access token from WPCOM.
+		register_rest_route(
+			'newspack/v1/wizard/',
+			'/newspack-support-wizard/wpcom_access_token',
+			[
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'api_wpcom_access_token' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+	}
+
+	/**
+	 * Save WPCOM credentials.
+	 *
+	 * @param WP_REST_Request $request The request.
+	 */
+	public function api_wpcom_access_token( $request ) {
+		if ( isset( $request['access_token'], $request['expires_in'] ) ) {
+			$user_id = get_current_user_id();
+			update_user_meta( $user_id, self::NEWSPACK_WPCOM_ACCESS_TOKEN, sanitize_text_field( $request['access_token'] ) );
+			update_user_meta( $user_id, self::NEWSPACK_WPCOM_EXPIRES_IN, sanitize_text_field( $request['expires_in'] ) );
+			return \rest_ensure_response(
+				array(
+					'status' => 'saved',
+				)
+			);
+		} else {
+			return new WP_Error( 'missing_parameters', __( 'Missing parameters in request.', 'newspack' ) );
+		}
 	}
 
 	/**
@@ -164,11 +198,18 @@ class Support_Wizard extends Wizard {
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/support.js' ),
 			true
 		);
+
+		$client_id    = self::wpcom_client_id();
+		$redirect_uri = admin_url() . 'admin.php?page=' . $this->slug;
+		$access_token = get_user_meta( get_current_user_id(), self::NEWSPACK_WPCOM_ACCESS_TOKEN, true );
+		$access_token = $access_token ? $access_token : '';
 		wp_localize_script(
 			'newspack-support-wizard',
 			'newspack_support_data',
 			array(
-				'API_URL' => self::support_api_url(),
+				'API_URL'            => self::support_api_url(),
+				'WPCOM_AUTH_URL'     => 'https://public-api.wordpress.com/oauth2/authorize?client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&response_type=token',
+				'WPCOM_ACCESS_TOKEN' => $access_token,
 			)
 		);
 		wp_enqueue_script( 'newspack-support-wizard' );
@@ -202,11 +243,20 @@ class Support_Wizard extends Wizard {
 	}
 
 	/**
+	 * Return client id of WPCOM auth app.
+	 *
+	 * @return string client id.
+	 */
+	public static function wpcom_client_id() {
+		return ( defined( 'NEWSPACK_WPCOM_CLIENT_ID' ) && NEWSPACK_WPCOM_CLIENT_ID ) ? NEWSPACK_WPCOM_CLIENT_ID : false;
+	}
+
+	/**
 	 * Check if wizard is configured and should be displayed.
 	 *
 	 * @return bool True if necessary variables are present.
 	 */
 	public static function configured() {
-		return self::support_api_url() && self::support_email();
+		return self::support_api_url() && self::support_email() && self::wpcom_client_id();
 	}
 }
