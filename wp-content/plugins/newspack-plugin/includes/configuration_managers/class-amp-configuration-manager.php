@@ -24,6 +24,25 @@ class AMP_Configuration_Manager extends Configuration_Manager {
 	public $slug = 'amp';
 
 	/**
+	 * Check if AMP plugin is in Standard mode.
+	 *
+	 * @return bool || WP_Error Return true if successful, or WP_Error if not.
+	 */
+	public function is_standard_mode() {
+		if ( ! $this->is_configured() ) {
+			return new \WP_Error(
+				'newspack_amp_not_configured',
+				esc_html__( 'The AMP plugin is not configured properly.', 'newspack' ),
+				[
+					'status' => 400,
+					'level'  => 'fatal',
+				]
+			);
+		}
+		return \AMP_Theme_Support::STANDARD_MODE_SLUG === \AMP_Options_Manager::get_option( 'theme_support' );
+	}
+
+	/**
 	 * Configure AMP for Newspack use.
 	 *
 	 * @return bool || WP_Error Return true if successful, or WP_Error if not.
@@ -33,10 +52,22 @@ class AMP_Configuration_Manager extends Configuration_Manager {
 		if ( ! $active || is_wp_error( $active ) ) {
 			return $active;
 		}
-		if ( class_exists( 'AMP_Options_Manager' ) ) {
+		if ( class_exists( 'AMP_Options_Manager', 'AMP_Theme_Support' ) ) {
 			\AMP_Options_Manager::update_option( 'theme_support', \AMP_Theme_Support::STANDARD_MODE_SLUG );
 		}
 		$this->set_newspack_has_configured( true );
 		return true;
+	}
+
+	/**
+	 * Is AMP installed and connected?
+	 *
+	 * @return bool Plugin ready state.
+	 */
+	public function is_configured() {
+		if ( $this->is_active() && class_exists( 'AMP_Theme_Support', 'AMP_Options_Manager' ) ) {
+			return true;
+		}
+		return false;
 	}
 }

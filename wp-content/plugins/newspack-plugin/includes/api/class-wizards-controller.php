@@ -23,7 +23,7 @@ class Wizards_Controller extends WP_REST_Controller {
 	 *
 	 * @var string
 	 */
-	protected $namespace = '/newspack/v1';
+	protected $namespace = NEWSPACK_API_NAMESPACE;
 
 	/**
 	 * Endpoint resource.

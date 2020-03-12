@@ -1,3 +1,18 @@
+# [1.1.0](https://github.com/Automattic/newspack-plugin/compare/v1.0.0...v1.1.0) (2020-03-10)
+
+
+### Bug Fixes
+
+* fix Site Kit module deactivation ([96787e9](https://github.com/Automattic/newspack-plugin/commit/96787e971ef08ce3a6df1cdd715a20d804bb317b))
+* standardize REST API namespace usage ([44d15b2](https://github.com/Automattic/newspack-plugin/commit/44d15b20fd113277cd43a9113aabbea963b0c696))
+
+
+### Features
+
+* **support:** add a link to support docs ([#470](https://github.com/Automattic/newspack-plugin/issues/470)) ([af4754d](https://github.com/Automattic/newspack-plugin/commit/af4754d1856294c73cad429d33c686aac756c7c8))
+* **support:** send initial info on chat start ([#471](https://github.com/Automattic/newspack-plugin/issues/471)) ([1392452](https://github.com/Automattic/newspack-plugin/commit/13924525f889de4509f0501e39dd2fec6703e2ba))
+* **support:** update subject string for support tickets ([aca9963](https://github.com/Automattic/newspack-plugin/commit/aca9963a778855ee7a9d656605958ac7255450ab))
+
 # 1.0.0 (2020-03-03)
 
 

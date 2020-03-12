@@ -72,8 +72,8 @@ class Engagement_Wizard extends Wizard {
 	 */
 	public function register_api_endpoints() {
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'engagement',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/engagement',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_engagement_settings' ],
@@ -81,8 +81,8 @@ class Engagement_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'popup/(?P<id>\d+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/popup/(?P<id>\d+)',
 			[
 				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ $this, 'api_delete_popup' ],
@@ -95,8 +95,8 @@ class Engagement_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'sitewide-popup/(?P<id>\d+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/sitewide-popup/(?P<id>\d+)',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_set_sitewide_popup' ],
@@ -109,8 +109,8 @@ class Engagement_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'sitewide-popup/(?P<id>\d+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/sitewide-popup/(?P<id>\d+)',
 			[
 				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ $this, 'api_unset_sitewide_popup' ],
@@ -123,8 +123,8 @@ class Engagement_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'popup-categories/(?P<id>\d+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/popup-categories/(?P<id>\d+)',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_set_popup_categories' ],

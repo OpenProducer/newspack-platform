@@ -9,6 +9,8 @@ namespace Newspack;
 
 defined( 'ABSPATH' ) || exit;
 
+define( 'NEWSPACK_API_NAMESPACE', 'newspack/v1' );
+
 /**
  * Clean variables using sanitize_text_field. Arrays are cleaned recursively.
  * Non-scalar values are ignored.

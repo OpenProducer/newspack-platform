@@ -296,6 +296,14 @@ class Plugin_Manager {
 				'PluginURI'   => 'https://github.com/xwp/pwa-wp',
 				'Download'    => 'wporg',
 			],
+			'pym-shortcode'                 => [
+				'Name'        => 'Pym.js Embeds',
+				'Description' => 'A WordPress solution to embed iframes that are responsive horizontally and vertically using the NPR Visuals Team\'s Pym.js.',
+				'Author'      => 'INN Labs',
+				'AuthorURI'   => 'http://labs.inn.org/',
+				'PluginURI'   => 'https://github.com/INN/pym-shortcode',
+				'Download'    => 'wporg',
+			],
 			'redirection'                   => [
 				'Name'        => 'Redirection',
 				'Description' => 'Manage all your 301 redirects and monitor 404 errors.',

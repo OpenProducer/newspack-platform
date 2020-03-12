@@ -727,6 +727,10 @@ ul.wp-block-archives li ul,
   font-size: 0.7em;
 }
 
+.wp-block-jetpack-mailchimp .block-editor-rich-text__editable {
+  font-size: 0.8em;
+}
+
 /** === Organic Profile Block === */
 .wp-block-organic-profile-block {
   box-shadow: none;

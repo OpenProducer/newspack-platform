@@ -82,8 +82,8 @@ class Setup_Wizard extends Wizard {
 	public function register_api_endpoints() {
 		// Update option when setup is complete.
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/complete',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/complete',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_complete' ],
@@ -91,8 +91,8 @@ class Setup_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/theme',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/theme',
 			[
 				'methods'             => WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_retrieve_theme' ],
@@ -100,8 +100,8 @@ class Setup_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/theme/(?P<theme>[\a-z]+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/theme/(?P<theme>[\a-z]+)',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_theme' ],
@@ -109,8 +109,8 @@ class Setup_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/theme-mods',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/theme-mods',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_theme_mods' ],
@@ -123,8 +123,8 @@ class Setup_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/starter-content/categories',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/starter-content/categories',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_starter_content_categories' ],
@@ -132,8 +132,8 @@ class Setup_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/starter-content/post',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/starter-content/post',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_starter_content_post' ],
@@ -141,8 +141,8 @@ class Setup_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/starter-content/theme',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/starter-content/theme',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_starter_content_theme' ],
@@ -150,8 +150,8 @@ class Setup_Wizard extends Wizard {
 			]
 		);
 		register_rest_route(
-			'newspack/v1/wizard/' . $this->slug,
-			'/starter-content/homepage',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/starter-content/homepage',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_starter_content_homepage' ],

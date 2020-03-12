@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.0.0
+Version: 1.1.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -4996,6 +4996,14 @@ body.page .entry-title {
 .page-template-single-feature .wpnbha.alignfull {
   padding-left: 1rem;
   padding-right: 1rem;
+}
+
+.wp-block-jetpack-mailchimp input[type='email'] {
+  width: 100%;
+}
+
+.wp-block-jetpack-mailchimp #wp-block-jetpack-mailchimp_consent-text {
+  font-size: 0.8em;
 }
 
 .wp-block-organic-profile-block {

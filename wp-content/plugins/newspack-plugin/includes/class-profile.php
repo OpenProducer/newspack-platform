@@ -83,7 +83,7 @@ class Profile {
 	public function register_api_endpoints() {
 		// Get profile data.
 		register_rest_route(
-			'newspack/v1/',
+			NEWSPACK_API_NAMESPACE,
 			'/profile/',
 			[
 				'methods'             => WP_REST_Server::READABLE,
@@ -94,7 +94,7 @@ class Profile {
 
 		// Update profile data.
 		register_rest_route(
-			'newspack/v1/',
+			NEWSPACK_API_NAMESPACE,
 			'/profile/',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,

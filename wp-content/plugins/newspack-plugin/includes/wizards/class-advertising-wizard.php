@@ -104,8 +104,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Get all Newspack advertising data.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_advertising' ],
@@ -115,8 +115,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Update header code.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/service/(?P<service>[\a-z]+)/network_code',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/service/(?P<service>[\a-z]+)/network_code',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_network_code' ],
@@ -134,8 +134,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Enable one service.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/service/(?P<service>[\a-z]+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/service/(?P<service>[\a-z]+)',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_enable_service' ],
@@ -150,8 +150,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Disable one service.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/service/(?P<service>[\a-z]+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/service/(?P<service>[\a-z]+)',
 			[
 				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ $this, 'api_disable_service' ],
@@ -166,8 +166,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Update placement.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/placement/(?P<placement>[\a-z]+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/placement/(?P<placement>[\a-z]+)',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_placement' ],
@@ -182,8 +182,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Disable placement.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/placement/(?P<placement>[\a-z]+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/placement/(?P<placement>[\a-z]+)',
 			[
 				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ $this, 'api_disable_placement' ],
@@ -198,8 +198,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Save a ad unit.
 		\register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/ad_unit/(?P<id>\d+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/ad_unit/(?P<id>\d+)',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_adunit' ],
@@ -227,8 +227,8 @@ class Advertising_Wizard extends Wizard {
 
 		// Delete a ad unit.
 		\register_rest_route(
-			'newspack/v1/wizard/',
-			'/advertising/ad_unit/(?P<id>\d+)',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/ad_unit/(?P<id>\d+)',
 			[
 				'methods'             => 'DELETE',
 				'callback'            => [ $this, 'api_delete_adunit' ],

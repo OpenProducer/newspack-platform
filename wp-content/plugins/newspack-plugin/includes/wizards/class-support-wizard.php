@@ -48,8 +48,8 @@ class Support_Wizard extends Wizard {
 	public function register_api_endpoints() {
 		// Create a support ticket.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/newspack-support-wizard/ticket',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/newspack-support-wizard/ticket',
 			[
 				'methods'             => \WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'api_create_support_ticket' ],
@@ -59,8 +59,8 @@ class Support_Wizard extends Wizard {
 
 		// Handle access token from WPCOM.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/newspack-support-wizard/wpcom_access_token',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/newspack-support-wizard/wpcom_access_token',
 			[
 				'methods'             => \WP_REST_Server::CREATABLE,
 				'callback'            => [ $this, 'api_wpcom_access_token' ],
@@ -121,7 +121,7 @@ class Support_Wizard extends Wizard {
 						'name'  => $full_name,
 						'email' => $user->data->user_email,
 					),
-					'subject'   => '[Newspack] ' . $request['subject'],
+					'subject'   => '[Newspack Support] ' . $request['subject'],
 					'comment'   => array(
 						'html_body' => $message,
 						'uploads'   => $request['uploads'],

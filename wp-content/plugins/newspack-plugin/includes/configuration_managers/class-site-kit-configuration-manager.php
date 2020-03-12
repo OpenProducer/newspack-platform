@@ -116,7 +116,7 @@ class Site_Kit_Configuration_Manager extends Configuration_Manager {
 	 * @param string $module The module slug. See `get_module_info` for valid slugs.
 	 */
 	public function deactivate_module( $module ) {
-		$sitekit_active_modules = get_option( 'googlesitekit-active-modules', [] );
+		$sitekit_active_modules = get_option( $this->active_modules_option, [] );
 		$updated_modules        = [];
 
 		foreach ( $sitekit_active_modules as $active_module ) {
@@ -125,7 +125,7 @@ class Site_Kit_Configuration_Manager extends Configuration_Manager {
 			}
 		}
 
-		update_option( 'googlesitekit-active-modules', $updated_modules );
+		update_option( $this->active_modules_option, $updated_modules );
 	}
 
 	/**

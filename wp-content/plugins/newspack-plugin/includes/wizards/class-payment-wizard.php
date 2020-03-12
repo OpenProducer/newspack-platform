@@ -53,8 +53,8 @@ class Payment_Wizard extends Wizard {
 
 		// Get data about Stripe customer/subscription.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/newspack-payment-wizard/',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/newspack-payment-wizard/',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_stripe_data' ],
@@ -64,8 +64,8 @@ class Payment_Wizard extends Wizard {
 
 		// Create a Stripe checkout session, return information needed to redirect to it.
 		register_rest_route(
-			'newspack/v1/wizard/',
-			'/newspack-payment-wizard/checkout',
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/newspack-payment-wizard/checkout',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_stripe_checkout_id' ],
