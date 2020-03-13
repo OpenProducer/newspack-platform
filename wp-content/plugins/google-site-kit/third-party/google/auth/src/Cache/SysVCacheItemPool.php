@@ -67,7 +67,7 @@ class SysVCacheItemPool implements \Google\Site_Kit_Dependencies\Psr\Cache\Cache
     public function __construct($options = [])
     {
         if (!\extension_loaded('sysvshm')) {
-            throw \Google\Site_Kit_Dependencies\RuntimeException('sysvshm extension is required to use this ItemPool');
+            throw new \RuntimeException('sysvshm extension is required to use this ItemPool');
         }
         $this->options = $options + ['variableKey' => self::VAR_KEY, 'proj' => self::DEFAULT_PROJ, 'memsize' => self::DEFAULT_MEMSIZE, 'perm' => self::DEFAULT_PERM];
         $this->items = [];

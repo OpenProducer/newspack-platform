@@ -27,15 +27,16 @@ function gutenberg_render_block_core_post_date( $attributes ) {
  * Registers the `core/post-date` block on the server.
  */
 function gutenberg_register_block_core_post_date() {
+	$path     = __DIR__ . '/post-date/block.json';
+	$metadata = json_decode( file_get_contents( $path ), true );
+
 	register_block_type(
-		'core/post-date',
-		array(
-			'attributes'      => array(
-				'format' => array(
-					'type' => 'string',
-				),
-			),
-			'render_callback' => 'gutenberg_render_block_core_post_date',
+		$metadata['name'],
+		array_merge(
+			$metadata,
+			array(
+				'render_callback' => 'gutenberg_render_block_core_post_date',
+			)
 		)
 	);
 }

@@ -23,10 +23,16 @@ function gutenberg_render_block_core_post_author() {
  * Registers the `core/post-author` block on the server.
  */
 function gutenberg_register_block_core_post_author() {
+	$path     = __DIR__ . '/post-author/block.json';
+	$metadata = json_decode( file_get_contents( $path ), true );
+
 	register_block_type(
-		'core/post-author',
-		array(
-			'render_callback' => 'gutenberg_render_block_core_post_author',
+		$metadata['name'],
+		array_merge(
+			$metadata,
+			array(
+				'render_callback' => 'gutenberg_render_block_core_post_author',
+			)
 		)
 	);
 }

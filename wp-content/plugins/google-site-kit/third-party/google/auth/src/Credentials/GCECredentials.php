@@ -26,6 +26,7 @@ use Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ClientException;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Exception\RequestException;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Exception\ServerException;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request;
+use InvalidArgumentException;
 /**
  * GCECredentials supports authorization on Google Compute Engine.
  *
@@ -64,6 +65,10 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      * The metadata path of the default token.
      */
     const TOKEN_URI_PATH = 'v1/instance/service-accounts/default/token';
+    /**
+     * The metadata path of the default id token.
+     */
+    const ID_TOKEN_URI_PATH = 'v1/instance/service-accounts/default/identity';
     /**
      * The metadata path of the client ID.
      */
@@ -113,13 +118,21 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      */
     private $tokenUri;
     /**
+     * @var string
+     */
+    private $targetAudience;
+    /**
      * @param Iam $iam [optional] An IAM instance.
      * @param string|array $scope [optional] the scope of the access request,
      *        expressed either as an array or as a space-delimited string.
+     * @param string $targetAudience [optional] The audience for the ID token.
      */
-    public function __construct(\Google\Site_Kit_Dependencies\Google\Auth\Iam $iam = null, $scope = null)
+    public function __construct(\Google\Site_Kit_Dependencies\Google\Auth\Iam $iam = null, $scope = null, $targetAudience = null)
     {
         $this->iam = $iam;
+        if ($scope && $targetAudience) {
+            throw new \InvalidArgumentException('Scope and targetAudience cannot both be supplied');
+        }
         $tokenUri = self::getTokenUri();
         if ($scope) {
             if (\is_string($scope)) {
@@ -127,6 +140,9 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
             }
             $scope = \implode(',', $scope);
             $tokenUri = $tokenUri . '?scopes=' . $scope;
+        } elseif ($targetAudience) {
+            $tokenUri = \sprintf('http://%s/computeMetadata/%s?audience=%s', self::METADATA_IP, self::ID_TOKEN_URI_PATH, $targetAudience);
+            $this->targetAudience = $targetAudience;
         }
         $this->tokenUri = $tokenUri;
     }
@@ -200,11 +216,14 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      *
      * @param callable $httpHandler callback which delivers psr7 request
      *
-     * @return array A set of auth related metadata, containing the following
-     * keys:
+     * @return array A set of auth related metadata, based on the token type.
+     *
+     * Access tokens have the following keys:
      *   - access_token (string)
      *   - expires_in (int)
      *   - token_type (string)
+     * ID tokens have the following keys:
+     *   - id_token (string)
      *
      * @throws \Exception
      */
@@ -219,8 +238,11 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
             return array();
             // return an empty array with no access token
         }
-        $json = $this->getFromMetadata($httpHandler, $this->tokenUri);
-        if (null === ($json = \json_decode($json, \true))) {
+        $response = $this->getFromMetadata($httpHandler, $this->tokenUri);
+        if ($this->targetAudience) {
+            return ['id_token' => $response];
+        }
+        if (null === ($json = \json_decode($response, \true))) {
             throw new \Exception('Invalid JSON response');
         }
         // store this so we can retrieve it later
