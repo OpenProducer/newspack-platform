@@ -97,8 +97,8 @@ function radio_station_create_post_types() {
 		'description'       => __( 'Post type for Playlist descriptions', 'radio-station' ),
 		'public'            => true,
 		'hierarchical'      => false,
-		// 2.3.0: added custom field and revision support
-		'supports'          => array( 'title', 'editor', 'comments', 'custom-fields', 'revisions' ),
+		// 2.3.0: added thumbnail, custom field and revision support
+		'supports'          => array( 'title', 'editor', 'thumbnail', 'comments', 'custom-fields', 'revisions' ),
 		'can_export'        => true,
 		// 2.3.0: changed from playlists-archive
 		'has_archive'       => 'playlists',

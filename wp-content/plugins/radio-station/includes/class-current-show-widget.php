@@ -43,8 +43,8 @@ class DJ_Widget extends WP_Widget {
 		// 2.3.0: convert template style code to strings
 		$fields = '
 		<p>
-			<label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">: 
-			' . esc_html( __( 'Title', 'radio-station' ) ) . '
+			<label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">
+			' . esc_html( __( 'Title', 'radio-station' ) ) . ':
 				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" />
 			</label>
 		</p>
@@ -83,8 +83,8 @@ class DJ_Widget extends WP_Widget {
 		</p>
 
 		<p>
-			<label for="' . esc_attr( $this->get_field_id( 'avatar_width' ) ) . '">: 
-				' . esc_html( __( 'Avatar Width', 'radio-station' ) ) . '
+			<label for="' . esc_attr( $this->get_field_id( 'avatar_width' ) ) . '"> 
+				' . esc_html( __( 'Avatar Width', 'radio-station' ) ) . ':
 				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'avatar_width' ) ) . '" name="' . esc_attr( $this->get_field_name( 'avatar_width' ) ) . '" type="text" value="' . esc_attr( $avatar_width ) . '" />
 			</label>
 			<small>' . esc_html( __( 'Width of Show Avatar (in pixels, default full width)', 'radio-station' ) ) . '</small>

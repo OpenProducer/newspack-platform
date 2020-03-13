@@ -54,12 +54,14 @@ function radio_station_master_schedule( $atts ) {
 		'show_encore'       => 1,
 	);
 	// 2.3.0: change some defaults for tabbed and list view
-	if ( 'tabs' == $atts['view'] ) {
-		$defaults['show_image'] = 1;
-		$defaults['show_hosts'] = 1;
-		$defaults['show_genres'] = 1;
-	} elseif ( 'list' == $atts['view'] ) {
-		$defaults['show_genres'] = 1;
+	if ( isset( $atts['view'] ) ) {
+		if ( 'tabs' == $atts['view'] ) {
+			$defaults['show_image'] = 1;
+			$defaults['show_hosts'] = 1;
+			$defaults['show_genres'] = 1;
+		} elseif ( 'list' == $atts['view'] ) {
+			$defaults['show_genres'] = 1;
+		}
 	}
 
 	// --- merge attributes with defaults ---
@@ -127,7 +129,7 @@ function radio_station_master_schedule( $atts ) {
 
 		return $output;
 	} elseif ( 'tabs' == $atts['view'] ) {
-		// 2.2.7: add tab switching javascript to footer
+		// 2.2.7: add tabbed view javascript to footer
 		add_action( 'wp_footer', 'radio_station_master_schedule_tabs_js' );
 		$template = radio_station_get_template( 'file', 'master-schedule-tabs.php' );
 		require $template;
@@ -366,38 +368,6 @@ function radio_station_master_schedule_selector() {
 	return $html;
 }
 
-// ------------------------
-// Tab Switching Javascript
-// ------------------------
-// 2.2.7: added for tabbed schedule view
-function radio_station_master_schedule_tabs_js() {
-
-	$js = "jQuery(document).ready(function() {
-		dayweek = new Date().getDay();
-		if (dayweek == '0') {day = 'sunday';}
-		if (dayweek == '1') {day = 'monday';}
-		if (dayweek == '2') {day = 'tuesday';}
-		if (dayweek == '3') {day = 'wednesday';}
-		if (dayweek == '4') {day = 'thursday';}
-		if (dayweek == '5') {day = 'friday';}
-		if (dayweek == '6') {day = 'saturday';}
-		jQuery('#master-schedule-tabs-header-'+day).addClass('active-day-tab');
-		jQuery('#master-schedule-tabs-day-'+day).addClass('active-day-panel');
-		jQuery('.master-schedule-tabs-day').bind('click', function (event) {
-			headerID = jQuery(event.target).closest('li').attr('id');
-			panelID = headerID.replace('header', 'day');
-			jQuery('.master-schedule-tabs-day').removeClass('active-day-tab');
-			jQuery('#'+headerID).addClass('active-day-tab');
-			jQuery('.master-schedule-tabs-panel').removeClass('active-day-panel');
-			jQuery('#'+panelID).addClass('active-day-panel');
-		});
-	});";
-
-	// --- enqueue script inline ---
-	// 2.3.0: enqueue instead of echoing
-	wp_add_inline_script( 'radio-station', $js );
-}
-
 // ---------------------
 // Table View Javascript
 // ---------------------
@@ -414,8 +384,7 @@ function radio_station_master_schedule_table_js() {
 	function radio_table_responsive() {
 		tablewidth = jQuery('#master-program-schedule').width();
 		daycolumns = Math.floor(tablewidth / 100) - 1;
-		if (daycolumns < 1) {daycolumns = 1;}
-		if (daycolumns > 7) {daycolumns = 7;}
+		if (daycolumns < 1) {daycolumns = 1;} else if (daycolumns > 7) {daycolumns = 7;}
 		for (i = 0; i < 7; i++) {
 			if (jQuery('.master-program-day.day-'+i).hasClass('selected-day')) {selected = i;}
 		}
@@ -445,24 +414,24 @@ function radio_station_master_schedule_table_js() {
 		if (lastcolumn < 6) {
 			jQuery('.master-program-day.day-'+lastcolumn).addClass('last-column');
 		}
-		console.log('Day Columns:' +daycolumns);
-		console.log('Selected Column: '+selected);
-		console.log('Start Column: '+startcolumn);
-		console.log('Last Column: '+lastcolumn);
+		if (radio.debug) {
+			console.log('Day Columns:' +daycolumns);
+			console.log('Selected Column: '+selected);
+			console.log('Start Column: '+startcolumn);
+			console.log('Last Column: '+lastcolumn);
+		}
 	}
 	
 	/* Shift Day Left /  Right */
 	function radio_shift_day(leftright) {
 		tablewidth = jQuery('#master-program-schedule').width();
 		daycolumns = Math.floor(tablewidth / 100) - 1;
-		if (daycolumns < 1) {daycolumns = 1;}
-		if (daycolumns > 7) {daycolumns = 7;}
+		if (daycolumns < 1) {daycolumns = 1;} else if (daycolumns > 7) {daycolumns = 7;}
 		for (i = 0; i < 7; i++) {
 			if (jQuery('.master-program-day.day-'+i).hasClass('selected-day')) {selected = i;}
 		}
 		if ((selected + daycolumns) > 6) {selected = 7 - daycolumns;}
-		if (leftright == 'left') {selected--;}
-		if (leftright == 'right') {selected++;} 
+		if (leftright == 'left') {selected--;} else if (leftright == 'right') {selected++;} 
 		for (i = 0; i < 7; i++) {
 			if (i == selected) {jQuery('.master-program-day.day-'+i).addClass('selected-day');}
 			else {jQuery('.master-program-day.day-'+i).removeClass('selected-day');}
@@ -471,5 +440,116 @@ function radio_station_master_schedule_table_js() {
 	}";
 
 	// --- enqueue script inline ---
+	wp_add_inline_script( 'radio-station', $js );
+}
+
+// ----------------------
+// Tabbed View Javascript
+// ----------------------
+// 2.2.7: added for tabbed schedule view
+function radio_station_master_schedule_tabs_js() {
+
+	// --- tab switching function ---
+	$js = "jQuery(document).ready(function() {
+		dayweek = new Date().getDay();
+		if (dayweek == '0') {day = 'sunday';}
+		if (dayweek == '1') {day = 'monday';}
+		if (dayweek == '2') {day = 'tuesday';}
+		if (dayweek == '3') {day = 'wednesday';}
+		if (dayweek == '4') {day = 'thursday';}
+		if (dayweek == '5') {day = 'friday';}
+		if (dayweek == '6') {day = 'saturday';}
+		jQuery('#master-schedule-tabs-header-'+day).addClass('active-day-tab');
+		jQuery('#master-schedule-tabs-day-'+day).addClass('active-day-panel');
+		jQuery('.master-schedule-tabs-day-name').bind('click', function (event) {
+			headerID = jQuery(event.target).closest('li').attr('id');
+			panelID = headerID.replace('header', 'day');
+			jQuery('.master-schedule-tabs-day').removeClass('active-day-tab');
+			jQuery('#'+headerID).addClass('active-day-tab');
+			jQuery('.master-schedule-tabs-panel').removeClass('active-day-panel');
+			jQuery('#'+panelID).addClass('active-day-panel');
+		});
+	});";
+
+	// --- tabbed view responsiveness ---
+	// 2.3.0: added for tabbed responsiveness
+	$js .= "/* Trigger Responsive Tabs */
+	jQuery(document).ready(function() {radio_tabs_responsive();} );
+	jQuery(window).resize(function () {
+		radio_resize_debounce(radio_tabs_responsive, 500, 'scheduletabs');
+	});
+
+	/* Make Tabs Responsive */
+	function radio_tabs_responsive() {
+		tabswidth = jQuery('#master-schedule-tabs').width();
+		daycolumns = Math.floor(tabswidth / 125);
+		if (daycolumns < 1) {daycolumns = 1;} else if (daycolumns > 7) {daycolumns = 7;}
+		for (i = 0; i < 7; i++) {
+			if (jQuery('.master-schedule-tabs-day.day-'+i).hasClass('selected-day')) {selected = i;}
+		}
+		startcolumn = selected;
+		if ((selected + daycolumns) > 6) {startcolumn = 7 - daycolumns;}
+
+		columns = 0; firstcolumn = -1;
+		for (i = 0; i < 7; i++) {
+			if (jQuery('.master-schedule-tabs-day.day-'+i).hasClass('active-day-tab')) {
+				activeday = i;
+			}
+		}
+		for (i = 0; i < 7; i++) {
+			jQuery('.master-schedule-tabs-day.day-'+i).removeClass('first-tab');
+			jQuery('.master-schedule-tabs-day.day-'+i).removeClass('last-tab');
+			if ( ((i + 1) > startcolumn) && (columns < daycolumns) ) {
+				jQuery('.master-schedule-tabs-day.day-'+i).show();
+				if (firstcolumn < 0) { 
+					firstcolumn = 0;
+					jQuery('.master-schedule-tabs-day.day-'+i).addClass('first-tab');
+				}
+				lastcolumn = i; columns++;
+			} else {
+				jQuery('.master-schedule-tabs-day.day-'+i).hide();
+			}
+		}
+
+		if (lastcolumn < 6) {
+			jQuery('.master-schedule-tabs-day.day-'+lastcolumn).addClass('last-tab');
+		}
+		if (radio.debug) {
+			console.log('Active Day: '+activeday);
+			console.log('Day Columns:'+daycolumns);
+			console.log('Selected Column: '+selected);
+			console.log('Start Column: '+startcolumn);
+			console.log('Last Column: '+lastcolumn);
+		}
+
+		/* maybe change clicked day if outside view */		
+		if (activeday > lastcolumn) {
+			jQuery('.master-schedule-tabs-day.day-'+lastcolumn+' .master-schedule-tabs-day-name').click();
+		} else if (activeday < startcolumn ) {
+			jQuery('.master-schedule-tabs-day.day-'+startcolumn+' .master-schedule-tabs-day-name').click();
+		}
+		
+	}
+	
+	/* Shift Day Left /  Right */
+	function radio_shift_tab(leftright) {
+		tabswidth = jQuery('#master-schedule-tabs').width();
+		daycolumns = Math.floor(tabswidth / 100);
+		console.log('Tabs Width:'+tabswidth+' - Day Columns:'+daycolumns);
+		if (daycolumns < 1) {daycolumns = 1;} else if (daycolumns > 7) {daycolumns = 7;}
+		for (i = 0; i < 7; i++) {
+			if (jQuery('.master-schedule-tabs-day.day-'+i).hasClass('selected-day')) {selected = i;}
+		}
+		if ((selected + daycolumns) > 6) {selected = 7 - daycolumns;}
+		if (leftright == 'left') {selected--;} else if (leftright == 'right') {selected++;} 
+		for (i = 0; i < 7; i++) {
+			if (i == selected) {jQuery('.master-schedule-tabs-day.day-'+i).addClass('selected-day');}
+			else {jQuery('.master-schedule-tabs-day.day-'+i).removeClass('selected-day');}
+		}
+		radio_tabs_responsive();
+	}";
+
+	// --- enqueue script inline ---
+	// 2.3.0: enqueue instead of echoing
 	wp_add_inline_script( 'radio-station', $js );
 }

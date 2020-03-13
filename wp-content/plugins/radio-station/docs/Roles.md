@@ -2,8 +2,9 @@
 
 ***
 
-Note that while the default interface in WordPress allows you to assign a single role to a user, it also supports multiple roles, but you need to add a plugin to get an interface for this. The [Multiple Roles Plugin](https://wordpress.org/plugins/multiple-roles/) is one such plugin. Radio Station Pro includes a Role Editing Interface for assigning plugin roles to users directly, and this is available on the Plugin Settings page. If you want more fine-grained control over specific capabilities and roles, then you can use the [User Role Editor Plugin](https://wordpress.org/plugins/). 
+Note that while the default interface in WordPress allows you to assign a single role to a user, it also supports multiple roles, but you need to add a plugin to get an interface for this.  Radio Station Pro will include a Role Editing Interface for assigning plugin roles to users directly, and this will be available on the Plugin Settings page. 
 
+For the free version, you can also use the [Multiple Roles Plugin](https://wordpress.org/plugins/multiple-roles/) to assign roles from a User page. If you want even more fine-grained control over specific user capabilities and roles, then you can use the [User Role Editor Plugin](https://wordpress.org/plugins/user-role-editor/) or Justin Tadlock's excellent [Members](http://wordpress.org/extend/plugins/members/) plugin.
 
 ### Plugin Roles
 

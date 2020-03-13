@@ -112,24 +112,34 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 	// TODO: add pagination to Archive list shortcode
 
 	// --- merge defaults with passed attributes ---
+	$time_format = radio_station_get_setting( 'clock_time_format' );
 	$defaults = array(
+		// --- shortcode display ----
+		'description'  => 'excerpt',
+		'hide_empty'   => 0,
+		'time'         => $time_format,
+		// --- taxonomy queries ---
 		'genre'        => '',
 		'language'     => '',
-		'thumbnails'   => 1,
-		'hide_empty'   => 0,
-		'content'      => 'excerpt',
-		// query args
+		// --- query args ---
 		'orderby'      => 'title',
 		'order'        => 'ASC',
 		'status'       => 'publish',
 		'perpage'      => - 1,
 		'offset'       => 0,
-		// shows and overrides
-		'show_avatars' => 1,
-		// shows only
-		'with_shifts'  => 1,
-		// TODO: genre archive result pagination
 		// 'pagination'	=> 1,
+		// --- shows only ---
+		'with_shifts'  => 1,
+		// 'show_shifts' => 0,
+		// --- overrides only ---
+		'show_dates' => 1,
+		// --- shows and overrides ---
+		// 'display_genres' => 0,
+		// 'display_languages' => 0,
+		'show_avatars' => 1,
+		'thumbnails'   => 0,
+		// --- playlists ---
+		// 'track_count' => 0,
 	);
 
 	// --- handle possible pagination offset ---
@@ -144,11 +154,11 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 	// --- get published shows ---
 	$args = array(
 		'post_type'   => $type,
+		'post_status' => $atts['status'],
 		'numberposts' => $atts['perpage'],
 		'offset'      => $atts['offset'],
 		'orderby'     => $atts['orderby'],
 		'order'       => $atts['order'],
-		'post_status' => $atts['status'],
 	);
 
 	// --- extra queries for shows ---
@@ -160,13 +170,13 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 			$args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
-					'meta_key	' => 'show_sched',
-					'compare'      => 'EXISTS',
+					'key'		=> 'show_sched',
+					'compare'	=> 'EXISTS',
 				),
 				array(
-					'meta_key'   => 'show_active',
-					'mata_value' => 'on',
-					'compare'    => '=',
+					'key'		=> 'show_active',
+					'value'		=> 'on',
+					'compare'	=> '=',
 				),
 			);
 		} else {
@@ -174,9 +184,9 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 			// --- just active shows ---
 			$args['meta_query'] = array(
 				array(
-					'meta_key'   => 'show_active',
-					'meta_value' => 'on',
-					'compare'    => '=',
+					'key'		=> 'show_active',
+					'value' 	=> 'on',
+					'compare'	=> '=',
 				),
 			);
 		}
@@ -204,7 +214,7 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 		);
 	}
 
-	// --- specific languagees taxonomy query ---
+	// --- specific languages taxonomy query ---
 	// 2.3.0: added language taxonomy support
 	if ( !empty( $atts['language'] ) && in_array( $type, array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_OVERRIDE_SLUG ) ) ) {
 
@@ -233,9 +243,76 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 	$archive_posts = get_posts( $args );
 	$archive_posts = apply_filters( 'radio_station_' . $type . '_archive_posts', $archive_posts );
 
+	// --- process playlist taxonomy query ---
+	if ( RADIO_STATION_PLAYLIST_SLUG == $type ) {
+	
+		// --- check assigned show has a specified genre term ---
+		if ( !empty( $atts['genre'] ) && $archive_posts && ( count( $archive_posts ) > 0 ) ) {
+			$genres = explode( ',', $atts['genre'] );
+			foreach ( $archive_posts as $i => $archive_post ) {
+				$found_genre = false;
+				$show_id = get_post_meta( $archive_post->ID, 'playlist_show_id', true );
+				if ( $show_id ) {
+					$show_genres = get_post_terms( $show_id, RADIO_STATION_GENRES_SLUG );
+					if ( $show_genres ) {
+						foreach ( $show_genres as $show_genre ) {
+							if ( in_array( $show_genre->term_id, $genres ) || in_array( $show_genre->slug, $genres) ) {
+								$found_genre = true;
+							}
+						}	
+					}
+				}
+				if ( !$found_genre ) {
+					unset( $archive_posts[$i] );
+				}
+			}
+		}
+		
+		// --- check assigned show has a specified language term ---
+		if ( !empty( $atts['language'] ) && $archive_posts && ( count( $archive_posts ) > 0 ) ) {
+			$languages = explode( ',', $atts['language'] );
+			foreach ( $archive_posts as $i => $archive_post ) {
+				$found_language = false;
+				$show_id = get_post_meta( $archive_post->ID, 'playlist_show_id', true );
+				if ( $show_id ) {
+					$show_languages = get_post_terms( $show_id, RADIO_STATION_LANGUAGES_SLUG );
+					if ( $show_languages ) {
+						foreach ( $show_languages as $show_language ) {
+							if ( in_array( $show_language->term_id, $languages ) || in_array( $show_language->slug, $languages ) ) {
+								$found_language = true;
+							}
+						}
+					}
+				}
+				if ( !$found_language ) {
+					unset( $archive_posts[$i] );
+				}
+			}
+		}
+	}
+
+	// --- check override dates ---
+	if ( RADIO_STATION_OVERRIDE_SLUG == $type ) {
+		if ( $archive_posts && is_array( $archive_posts ) && ( count( $archive_posts ) > 0 ) ) {
+			foreach( $archive_posts as $i => $archive_post ) {
+				$datetime = get_post_meta( $archive_post->ID, 'show_override_sched', true );
+				if ( $datetime || !is_array( $datetime ) || ( count( $datetime ) == 0 ) ) {
+					unset( $archive_posts[$i] );
+				}			
+			}
+		}
+	}
+
+	// --- get meridiem conversions ---
+	// 2.3.0: added once-off pre-conversions
+	if ( 12 == (int) $atts['time'] ) {
+		$am = radio_station_translate_meridiem( 'am' );
+		$pm = radio_station_translate_meridiem( 'pm' );
+	}
+
 	// --- check for results ---
 	$list = '<div class="' . esc_attr( $type ) . '-archives">';
-	if ( !$archive_posts || ( count( $archive_posts ) == 0 ) ) {
+	if ( !$archive_posts || !is_array( $archive_posts ) || ( count( $archive_posts ) == 0 ) ) {
 
 		if ( $atts['hide_empty'] ) {
 			return '';
@@ -263,18 +340,16 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 
 			$list .= '<li class="' . esc_attr( $type ) . '-archive-item">';
 
-			// --- show avatar or thumbnail ---
+			// --- show avatar or thumbnail fallback ---
 			$list .= '<div class="' . esc_attr( $type ) . '-archive-item-thumbnail">';
+			$show_avatar = false;
 			if ( $atts['show_avatars'] && in_array( $type, array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_OVERRIDE_SLUG ) ) ) {
-
-				// --- show avatar for shows ---
 				$attr = array( 'class' => esc_attr( $type ) . '-thumbnail-image' );
 				$show_avatar = radio_station_get_show_avatar( $archive_post->ID, 'thumbnail', $attr );
-				if ( $show_avatar ) {
-					$list .= $show_avatar;
-				}
+			}
+			if ( $show_avatar ) {
+				$list .= $show_avatar;
 			} elseif ( $atts['thumbnails'] ) {
-				// --- post thumbnail ---
 				if ( has_post_thumbnail( $archive_post->ID ) ) {
 					$atts = array( 'class' => esc_attr( $type ) . '-thumbnail-image' );
 					$thumbnail = get_the_post_thumbnail( $archive_post->ID, 'thumbnail', $atts );
@@ -289,26 +364,68 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 			$list .= esc_html( $archive_post->post_title ) . '</a>';
 			$list .= '</div>';
 
-			// --- meta data ---
+			// --- display Override date(s) ---
+			if ( ( RADIO_STATION_OVERRIDE_SLUG == $type ) && ( $atts['show_dates'] ) ) {
+				$datetime = get_post_meta( $archive_post->ID, 'show_override_sched', true );
+				echo "<div class='override-archive-date'>";
+
+				// --- convert date info ---
+				$day = date( 'l', strtotime( $datetime['date'] ) );
+				$display_day = radio_station_translate_weekday( $day );
+				$start = $datetime['start_hour'] . ':' . $datetime['start_min'] . ' ' . $datetime['start_meridian'];
+				$end = $datetime['end_hour'] . ':' . $datetime['end_min'] . ' ' . $datetime['end_meridian'];
+				$shift_start_time = strtotime( $datetime['day'] . ' ' . $start );
+				$shift_end_time = strtotime( $datetime['day'] . ' ' . $end );
+				if ( $start_start_time > $shift_end_time ) {
+					$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
+				}
+
+				// --- convert shift times ---
+				if ( 24 == (int) $atts['time'] ) {
+					$start = radio_station_convert_shift_time( $start, 24 );
+					$end = radio_station_convert_shift_time( $end, 24 );
+					$data_format =  'j, H:i';
+					$data_format2 = 'H:i';
+				} else {
+					$start = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $start );
+					$end = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $end );
+					$data_format = 'j, g:i a';
+					$data_format2 = 'g:i a';
+				}
+			
+				echo '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+				echo esc_html( $display_day ) . ', ' . $start . '</span> - ';
+				echo '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+				echo "</div>";
+			}
+
+			// TODO: display Show shifts ?
 			// if ( RADIO_STATION_SHOW_SLUG == $type ) {
-			// TODO: show shifts, genres, languages
-			// $shifts = get_post_meta( $archive_post->ID, 'show_sched', true );
-			// $genres = wp_get_post_terms( $archive_post->ID, RADIO_STATION_GENRES_SLUG );
-			// $languages = wp_get_post_terms( $archive_post->ID, RADIO_STATION_LANGUAGES_SLUG );
-			// }
-			// if ( RADIO_STATION_PLAYLIST_SLUG == $type ) {
-			// TODO: playlist track / count
-			// $tracks = get_post_meta( $archive_post->ID, 'playlist', true );
-			// }
-			// if ( RADIO_STATION_OVERRIDE_SLUG == $type ) {
-			// TODO: override date
-			// $date = get_post_meta( $archive_post->ID, 'show_override_sched', true );
+			//	if ( $atts['show_shifts'] ) {
+			//		$shifts = radio_station_get_show_schedule( $archive_post->ID );
+			//	}
 			// }
 
-			// --- content ---
-			if ( 'none' == $atts['content'] ) {
+			// TODO: display genre and language terms ?
+			// if ( in_array( $type, array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_OVERRIDE_SLUG ) ) ) {
+			//	if ( $atts['show_genres'] ) {
+			//		$genres = wp_get_post_terms( $archive_post->ID, RADIO_STATION_GENRES_SLUG );
+			//	}
+			//	if ( $atts['show_languages'] ) {
+			//		$languages = wp_get_post_terms( $archive_post->ID, RADIO_STATION_LANGUAGES_SLUG );
+			//	}
+			// }
+			
+			// TODO: playlist tracks / track count ?
+			// if ( RADIO_STATION_PLAYLIST_SLUG == $type ) {
+			// 	$tracks = get_post_meta( $archive_post->ID, 'playlist', true );
+			//	$track_count = count( $tracks );
+			// }
+
+			// --- description ---
+			if ( 'none' == $atts['description'] ) {
 				$list .= '';
-			} elseif ( 'full' == $atts['content'] ) {
+			} elseif ( 'full' == $atts['description'] ) {
 				$list .= '<div class="' . esc_attr( $type ) . '-archive-item-content">';
 				$content = apply_filters( 'radio_station_' . $type . '_archive_content', $archive_post->post_content, $archive_post->ID );
 				$list .= $content;
@@ -375,23 +492,25 @@ add_shortcode( 'genres-archive', 'radio_station_genre_archive_list' );
 function radio_station_genre_archive_list( $atts ) {
 
 	$defaults = array(
-		// genre display options
+		// --- genre display options ---
 		'genres'       => '',
 		'link_genres'  => 1,
-		'description'  => 1,
+		'genre_desc'   => 1,
 		'genre_images' => 1,
+		'image_width'  => 150,
 		'hide_empty'   => 1,
-		// show query args
+		// --- query args ---
+		'status'       => 'publish',
 		'perpage'      => - 1,
 		'offset'       => 0,
 		'orderby'      => 'title',
 		'order'        => 'ASC',
-		'status'       => 'publish',
-		// show display options
 		'with_shifts'  => 1,
-		'show_avatars' => 0,
-		'show_desc'    => 0,
+		// --- show display options ---
+		'show_avatars' => 1,
 		'thumbnails'   => 0,
+		'avatar_width' => 75,
+		'show_desc'    => 0,
 		// TODO: genre archive result pagination
 		// 'pagination'	=> 1,
 	);
@@ -460,13 +579,13 @@ function radio_station_genre_archive_list( $atts ) {
 			$args['meta_query'] = array(
 				'relation' => 'AND',
 				array(
-					'meta_key	' => 'show_sched',
-					'compare'      => 'EXISTS',
+					'key'		=> 'show_sched',
+					'compare'	=> 'EXISTS',
 				),
 				array(
-					'meta_key'   => 'show_active',
-					'mata_value' => 'on',
-					'compare'    => '=',
+					'key'		=> 'show_active',
+					'value'		=> 'on',
+					'compare'	=> '=',
 				),
 			);
 
@@ -475,9 +594,9 @@ function radio_station_genre_archive_list( $atts ) {
 			// --- just active shows ---
 			$args['meta_query'] = array(
 				array(
-					'meta_key'   => 'show_active',
-					'meta_value' => 'on',
-					'compare'    => '=',
+					'key'		=> 'show_active',
+					'value'		=> 'on',
+					'compare'	=> '=',
 				),
 			);
 		}
@@ -505,13 +624,17 @@ function radio_station_genre_archive_list( $atts ) {
 		}
 		if ( $has_posts || ( !$has_posts && !$atts['hide_empty'] ) ) {
 
-			// --- Genre image ---
-			$list .= '<div class="genre-image-wrapper">';
+			// --- genre image ---
 			$genre_image = apply_filters( 'radio_station_genre_image', false, $genre );
 			if ( $genre_image ) {
+				$width_style = '';
+				if ( absint( $atts['image_width'] ) > 0 ) {
+					$width_style = ' style="width: ' . esc_attr( absint( $atts['image_width'] ) ) . 'px"';
+				}
+				$list .= '<div class="genre-image-wrapper"' . $width_style . '>';
 				$list .= $genre_image;
-			}
-			$list .= '</div>';
+				$list .= '</div>';
+			}		
 
 			// --- genre title ---
 			$list .= '<div class="genre-title"><h3 class="genre-title">';
@@ -523,7 +646,7 @@ function radio_station_genre_archive_list( $atts ) {
 			$list .= '</h3></div>';
 
 			// --- genre description ---
-			if ( $atts['description'] && !empty( $genre['description'] ) ) {
+			if ( $atts['genre_desc'] && !empty( $genre['genre_desc'] ) ) {
 				$list .= '<div class="genre-description">';
 				$list .= $genre['description'];
 				$list .= '</div>';
@@ -546,15 +669,19 @@ function radio_station_genre_archive_list( $atts ) {
 			foreach ( $posts as $post ) {
 				$list .= '<li class="show-archive-item">';
 
-				// --- avatar or thumbnail ---
-				$list .= '<div class="show-archive-item-thumbnail">';
+				// --- show avatar or thumbnail fallback ---
+				$width_style = '';
+				if ( absint( $atts['avatar_width'] ) > 0 ) {
+					$width_styles = ' style="width: ' . esc_attr( absint( $atts['avatar_width'] ) ) . 'px"';
+				}
+				$list .= '<div class="show-archive-item-thumbnail"' . $width_style . '>';
+				$show_avatar = false;
 				if ( $atts['show_avatars'] ) {
-					// --- get show avatar ---
 					$attr = array( 'class' => 'show-thumbnail-image' );
 					$show_avatar = radio_station_get_show_avatar( $post->ID, 'thumbnail', $attr );
-					if ( $show_avatar ) {
-						$list .= $show_avatar;
-					}
+				}
+				if ( $show_avatar ) {
+					$list .= $show_avatar;
 				} elseif ( $atts['thumbnails'] ) {
 					if ( has_post_thumbnail( $post->ID ) ) {
 						$attr = array( 'class' => 'show-thumbnail-image' );
@@ -628,8 +755,9 @@ function radio_station_show_list_shortcode( $type, $atts ) {
 
 	// --- get shortcode attributes ---
 	$defaults = array(
+		'show'       => false,
 		'per_page'   => 15,
-		'limit'      => - 1,
+		'limit'      => 0,
 		'content'    => 'excerpt',
 		'thumbnails' => 1,
 		'pagination' => 1,
@@ -646,7 +774,7 @@ function radio_station_show_list_shortcode( $type, $atts ) {
 
 	} else {
 		// --- check for show ID (required at minimum) ---
-		if ( !isset( $atts['show'] ) ) {
+		if ( !$atts['show'] ) {
 			return '';
 		}
 		$show_id = $atts['show'];
@@ -906,8 +1034,8 @@ function radio_station_current_show_shortcode( $atts ) {
 		// --- legacy options ---
 		'title'          => '',
 		'display_hosts'  => 0,
-		'show_avatar'    => 0,
-		'show_link'      => 0,
+		'show_avatar'    => 1,
+		'show_link'      => 1,
 		'default_name'   => '',
 		'time'           => $time_format,
 		'show_sched'     => 1,
@@ -918,16 +1046,20 @@ function radio_station_current_show_shortcode( $atts ) {
 		// 'display_producers' => 0,
 		'avatar_width'   => '',
 		'title_position' => 'right',
-		'link_djs'       => 0,
+		'link_hosts'     => 0,
 		'countdown'      => 0,
 		'dynamic'        => 0,
 		'widget'         => 0,
 		'id'             => '',
 	);
-	// 2.3.0: convert old attribute display_djs to display_hosts
+	// 2.3.0: convert old attributes for DJs to hosts
 	if ( isset( $atts['display_djs'] ) && !isset( $atts['display_hosts'] ) ) {
 		$atts['display_hosts'] = $atts['display_djs'];
 		unset( $atts['display_djs'] );
+	}
+	if ( isset( $atts['link_djs'] ) && !isset( $atts['link_hosts'] ) ) {
+		$atts['link_hosts'] = $atts['link_djs'];
+		unset( $atts['link_djs'] );
 	}
 	// 2.3.0: renamed shortcode identifier to current-show
 	$atts = shortcode_atts( $defaults, $atts, 'current-show' );
@@ -964,7 +1096,7 @@ function radio_station_current_show_shortcode( $atts ) {
 
 	// --- get current show ---
 	// 2.3.0: use new get current show function
-	$shift = radio_station_get_current_show();
+	$current_shift = radio_station_get_current_show();
 
 	// --- open shortcode div wrapper ---
 	if ( !$atts['widget'] ) {
@@ -990,7 +1122,7 @@ function radio_station_current_show_shortcode( $atts ) {
 	// --- open current show list ---
 	$output .= '<ul class="current-show-list on-air-list">';
 
-	if ( !$shift ) {
+	if ( !$current_shift ) {
 
 		// --- default output if no current shift ---
 		$output .= '<li class="current-show on-air-dj default-dj">';
@@ -1004,7 +1136,7 @@ function radio_station_current_show_shortcode( $atts ) {
 	} else {
 
 		// --- set current show data ---
-		$show = $shift['show'];
+		$show = $current_shift['show'];
 
 		$output .= '<li class="current-show on-air-dj">';
 
@@ -1086,7 +1218,7 @@ function radio_station_current_show_shortcode( $atts ) {
 						$radio_station_data['user-' . $host] = $user;
 					}
 
-					if ( $atts['link_djs'] ) {
+					if ( $atts['link_hosts'] ) {
 						// 2.3.0: use new get host URL function
 						$host_link = radio_station_get_host_url( $host );
 						$host_link = apply_filters( 'radio_station_dj_link', $host_link, $host );
@@ -1105,6 +1237,23 @@ function radio_station_current_show_shortcode( $atts ) {
 						$output .= ', ';
 					}
 				}
+				$output .= '</div>';
+			}
+		}
+
+		// --- current show playlist ---
+		// 2.3.0: convert span to div tags for consistency
+		if ( $atts['show_playlist'] ) {
+			// 2.3.0: use new function to get current playlist
+			$playlist  = radio_station_get_now_playing();
+			if ( RADIO_STATION_DEBUG ) {
+				$output .= '<span style="display:none;">' . print_r( $playlist, true ) . '</span>';
+			}
+			if ( $playlist && isset( $playlist['playlist_url'] ) ) {
+				$output .= '<div class="current-show-playlist on-air-dj-playlist">';
+				$output .= '<a href="' . esc_url( $playlist['playlist_url'] ) . '">';
+				$output .= esc_html( __( 'View Playlist', 'radio-station' ) );
+				$output .= '</a>';
 				$output .= '</div>';
 			}
 		}
@@ -1139,49 +1288,55 @@ function radio_station_current_show_shortcode( $atts ) {
 			$output .= '</div>';
 		}
 
-		// --- current show playlist ---
-		// 2.3.0: convert span to div tags for consistency
-		if ( $atts['show_playlist'] ) {
-			// 2.3.0: use new function to get current playlist
-			$playlist  = radio_station_get_now_playing();
-			$output .= '<div class="current-show-playlist on-air-dj-playlist">';
-			$output .= '<a href="' . esc_url( $playlist['playlist_url'] ) . '">';
-			$output .= esc_html( __( 'View Playlist', 'radio-station' ) );
-			$output .= '</a>';
-			$output .= '</div>';
-		}
+		// --- check show schedule ---
+		if ( $atts['show_sched'] || $atts['show_all_sched'] ) {
 
-		$output .= '<span class="radio-clear"></span>';
+			$shift_display = '<div class="current-show-schedule on-air-dj-schedule">';
 
-		// --- show schedule ---
-		if ( $atts['show_sched'] ) {
-
-			$output .= '<br><div class="current-show-schedule on-air-dj-schedule">';
+			// --- show times subheading ---
+			// 2.3.0: added for all shift display
+			if ( $atts['show_all_sched'] ) {
+				$shift_display .= '<div class="current-show-schedule-title on-air-dj-schedule-title">';
+				$shift_display .= esc_html( __( 'Show Times', 'radio-station' ) );
+				$shift_display .= '</div>';
+			}
 
 			// --- maybe show all shifts ---
 			// (only if not a schedule override)
 			if ( !isset( $show['override'] ) && $atts['show_all_sched'] ) {
-				$shifts = get_post_meta( $show['id'], 'show_sched', true );
+				$shifts = radio_station_get_show_schedule( $show['id'] );
 			} else {
-				$shifts = array( $show['shifts'] );
+				$shifts = array( $current_shift );
 			}
 
-			foreach ( $shifts as $shift ) {
+			// --- get weekdates ---
+			// 2.3.0: use dates for reliability
+			$now = strtotime( current_time( 'mysql' ) );
+			$weekdays = radio_station_get_schedule_weekdays();
+			$weekdates = radio_station_get_schedule_weekdates( $weekdays, $now );
+
+			foreach ( $shifts as $i => $shift ) {
 
 				// --- convert shift info ---
 				// 2.2.2: translate weekday for display
+				// 2.3.0: use dates for reliability
 				$display_day = radio_station_translate_weekday( $shift['day'] );
-				$start = $shift['start_hour'] . ':' . $shift['start_min'] . ' ' . $shift['start_meridian'];
-				$end = $shift['end_hour'] . ':' . $shift['end_min'] . ' ' . $shift['end_meridian'];
-				$shift_start_time = strtotime( $start );
-				$shift_end_time = strtotime( $end );
-				if ( $start > $end ) {
+				$weekdate = $weekdates[$shift['day']];
+				if ( isset( $shift['start'] ) ) {
+					$start = $shift['start'];
+					$end = $shift['end'];
+				} else {
+					$start = $shift['start_hour'] . ':' . $shift['start_min'] . ' ' . $shift['start_meridian'];
+					$end = $shift['end_hour'] . ':' . $shift['end_min'] . ' ' . $shift['end_meridian'];
+				}
+				$shift_start_time = strtotime( $weekdate . ' ' . $start );
+				$shift_end_time = strtotime( $weekdate . ' ' . $end );
+				if ( $shift_start_time > $shift_end_time ) {
 					$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
 				}
 
-				// --- add class to highlight now playing shift ---
+				// --- set shift classes ---
 				$classes = array( 'current-show-shifts', 'on-air-dj-sched' );
-				$now = strtotime( current_time( 'mysql' ) );
 				if ( ( $now > $shift_start_time ) && ( $now < $shift_end_time ) ) {
 					$current_shift = $shift;
 					$current_shift_start = $shift_start_time;
@@ -1192,32 +1347,39 @@ function radio_station_current_show_shortcode( $atts ) {
 
 				// --- convert shift times ---
 				if ( 24 == (int) $atts['time'] ) {
-					$start = radio_station_convert_time( $start, 24 );
-					$end = radio_station_convert_time( $end, 24 );
-					$data_format =  'j, g:i';
-					$data_format2 = 'g:i';
+					$start = radio_station_convert_shift_time( $start, 24 );
+					$end = radio_station_convert_shift_time( $end, 24 );
+					$data_format =  'j, H:i';
+					$data_format2 = 'H:i';
 				} else {
 					$start = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $start );
 					$end = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $end );
-					$data_format = 'j, H:i a';
-					$data_format2 = 'H:i a';
+					$data_format = 'j, g:i a';
+					$data_format2 = 'g:i a';
 				}
 
 				// --- shift display output ---
-				$output .= '<div class="' . esc_attr( $class ) . '">';
-				$output .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
-				$output .= esc_html( $display_day ) . ', ' . $start . '</span> - ';
-				$output .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
-				$output .= '</div>';
+				$shift_display .= '<div class="' . esc_attr( $class ) . '">';
+				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span> - ';
+				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+				$shift_display .= '</div>';
 			}
 
-			$output .= '</div>';
+			$shift_display .= '</div>';
 		}
 
 		// --- countdown timer display ---
 		if ( isset( $current_shift_end ) && $atts['countdown'] ) {
 			$output .= '<div class="current-show-countdown rs-countdown"></div>';
 			do_action( 'radio_station_countdown_enqueue' );
+		}
+
+		$output .= '<span class="radio-clear"></span>';
+
+		// --- output show schedule ---
+		if ( $atts['show_sched'] || $atts['show_all_sched'] ) {
+			$output .= $shift_display;
 		}
 
 		$output .= '</li>';
@@ -1232,6 +1394,15 @@ function radio_station_current_show_shortcode( $atts ) {
 
 		// --- hidden inputs for current shift time ---
 		$output .= '<input type="hidden" class="current-show-end" value="' . esc_attr( $current_shift_end ) . '">';
+		
+		if ( RADIO_STATION_DEBUG ) {
+			$output .= '<span style="display:none;">';
+			$output .= 'Now: ' . date( 'Y-m-d H:i:s', $now ) . ' (' . esc_attr( $now ) . ')' . PHP_EOL;
+			$output .= 'Shift Start Time: ' . date( 'Y-m-d H:i:s', $current_shift_start ) . ' (' . esc_attr( $current_shift_start ) . ')' . PHP_EOL;
+			$output .= 'Shift End Time: ' . date( 'Y-m-d H:i:s', $current_shift_end ) . ' (' . esc_attr( $current_shift_end ) . ')' . PHP_EOL;
+			$output .= 'Remaining: ' . ( $current_shift_end - $now ) . PHP_EOL;
+			$output .= '</span>';
+		}
 
 		// --- for dynamic reloading ---
 		if ( $atts['dynamic'] ) {
@@ -1246,6 +1417,9 @@ function radio_station_current_show_shortcode( $atts ) {
 	if ( !$atts['widget'] ) {
 		$output .= '</div>';
 	}
+
+	// --- enqueue shortcode styles ---
+	radio_station_enqueue_style( 'shortcodes' );
 
 	return $output;
 }
@@ -1270,9 +1444,9 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 	$defaults = array(
 		// --- legacy options ---
 		'title'             => '',
+		'limit'             => 1,
 		'show_avatar'       => 0,
 		'show_link'         => 0,
-		'limit'             => 1,
 		'time'              => $time_format,
 		'show_sched'        => 1,
 		'default_name'      => '',
@@ -1280,18 +1454,22 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 		// 'display_producers' => 0,
 		// 'show_desc'         => 0,
 		'display_hosts'     => 0,
+		'link_hosts'        => 0,
 		'avatar_width'      => '',
 		'title_position'    => 'right',
-		'link_djs'          => 0,
 		'countdown'         => 0,
 		'dynamic'           => 0,
 		'widget'            => 0,
 		'id'                => '',
 	);
-	// 2.3.0: convert old attribute display_djs to display_hosts
+	// 2.3.0: convert old attributes for DJs to hosts
 	if ( isset( $atts['display_djs'] ) && !isset( $atts['display_hosts'] ) ) {
 		$atts['display_hosts'] = $atts['display_djs'];
 		unset( $atts['display_djs'] );
+	}
+	if ( isset( $atts['link_djs'] ) && !isset( $atts['link_hosts'] ) ) {
+		$atts['link_hosts'] = $atts['link_djs'];
+		unset( $atts['link_djs'] );
 	}
 	// 2.3.0: renamed shortcode identifier to upcoming-shows
 	$atts = shortcode_atts( $defaults, $atts, 'upcoming-shows' );
@@ -1410,12 +1588,11 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 				$output .= $title; // already escaped
 			}
 
-			$output .= '<span class="radio-clear"></span>';
+			// $output .= '<span class="radio-clear"></span>';
 
 			// --- encore presentation ---
 			// 2.2.4: added encore presentation display
-			// if ( array_key_exists( $showtime, $djs['encore'] ) ) {
-			if ( isset( $show['encore'] ) && ( $show['encore'] ) ) {
+			if ( isset( $show['encore'] ) && ( 'on' == $show['encore'] ) ) {
 				$output .= '<div class="upcoming-show-encore on-air-dj-encore">';
 				$output .= esc_html( __( 'Encore Presentation', 'radio-station' ) );
 				$output .= '</div>';
@@ -1446,7 +1623,7 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 							$radio_station_data['user-' . $host] = $user;
 						}
 
-						if ( $atts['link_djs'] ) {
+						if ( $atts['link_hosts'] ) {
 							// 2.3.0: use new get host URL function
 							$host_link = radio_station_get_host_url( $host );
 							$host_link = apply_filters( 'radio_station_dj_link', $host_link, $host );
@@ -1471,16 +1648,27 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 
 			$output .= '<span class="radio-clear"></span>';
 
-			// --- show schedule ---
-			if ( $atts['show_sched'] ) {
+			// --- check show schedule ---
+			if ( $atts['show_sched'] || $atts['countdown'] || $atts['dynamic'] ) {
 
-				$output .= '<div class="upcoming-show-schedule on-air-dj-schedule">';
+				$shift_display = '<div class="upcoming-show-schedule on-air-dj-schedule">';
+
+				if ( RADIO_STATION_DEBUG ) {
+					$shift_display .= "<span style='display:none;'>Upcoming Shift: " . print_r( $shift, true ) . "</span>";
+				}
+
+				// --- convert dates ---
+				// 2.3.0: use weekdates for reliability
+				$now = strtotime( current_time( 'mysql' ) );
+				$weekdays = radio_station_get_schedule_weekdays();
+				$weekdates = radio_station_get_schedule_weekdates( $weekdays, $now );
 
 				// --- convert shift info ---
 				// 2.2.2: fix to weekday value to be translated
 				$display_day = radio_station_translate_weekday( $shift['day'] );
-				$shift_start_time = strtotime ( $shift['day'] . ' ' . $shift['start'] );
-				$shift_end_time = strtotime( $shift['day'] . ' ' . $shift['end'] );
+				$weekdate = $weekdates[$shift['day']];
+				$shift_start_time = strtotime ( $weekdate . ' ' . $shift['start'] );
+				$shift_end_time = strtotime( $weekdate . ' ' . $shift['end'] );
 				if ( $shift_end_time < $shift_start_time ) {
 					$shift_end_time = $shift_end_time + ( 7 * 60 * 60 );
 				}
@@ -1491,44 +1679,49 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 					$next_end_time = $shift_end_time;
 				}
 
+				// --- set shift classes ---
 				$classes = array( 'upcoming-show-shift', 'on-air-dj-sched' );
-				$now = strtotime( current_time( 'mysql' ) );
 				if ( ( $now > $shift_start_time ) && ( $now < $shift_end_time ) ) {
 					$classes[] = 'current-shift';
 				}
 				$class = implode( ' ', $classes );
 
+				// --- maybe convert times ---
 				// 2.2.7: fix to convert time to integer
 				if ( 24 == (int) $atts['time'] ) {
 
 					// --- convert start/end time to 24 hours ---
-					$start = radio_station_convert_time( $shift['start'], 24 );
-					$end = radio_station_convert_time( $shift['end'], 24 );
-					$data_format = 'j, G:i';
-					$data_format2 = 'G:i';
+					$start = radio_station_convert_shift_time( $shift['start'], 24 );
+					$end = radio_station_convert_shift_time( $shift['end'], 24 );
+					$data_format = 'j, H:i';
+					$data_format2 = 'H:i';
 
 				} else {
 
 					$start = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $shift['start'] );
 					$end = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $shift['end'] );
-					$data_format = 'j, H:i a';
-					$data_format2 = 'H:i a';
+					$data_format = 'j, g:i a';
+					$data_format2 = 'g:i a';
 
 				}
 
-				$output .= '<div class="' . esc_attr( $class ) . '">';
-				$output .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
-				$output .= esc_html( $display_day ) . ', ' . $start . '</span> - ';
-				$output .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
-				$output .= '</div>';
+				$shift_display .= '<div class="' . esc_attr( $class ) . '">';
+				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span> - ';
+				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+				$shift_display .= '</div>';
 
-				$output .= '</div>';
+				$shift_display .= '</div>';
 			}
 
 			// --- countdown timer display ---
 			if ( ( 0 == $i ) && isset( $next_start_time ) && $atts['countdown'] ) {
-				$output .= '<div class="upcoming-show-countdown rs-countdown"></div>';
-				do_action( 'radio_station_countdown_enqueue' );
+				$output .= '<div class="upcoming-show-countdown rs-countdown"></div>';				
+			}
+
+			// --- output show schedule ---
+			if ( $atts['show_sched'] ) {
+				$output .= $shift_display;
 			}
 
 			$output .= '</li>';
@@ -1543,9 +1736,19 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 	// 2.3.0: added for countdowns
 	if ( isset( $next_start_time ) && ( $atts['countdown'] || $atts['dynamic'] ) ) {
 
+		// --- enqueue countdown javascript ---
+		do_action( 'radio_station_countdown_enqueue' );
+
 		// --- hidden input for next start time ---
 		$output .= '<input type="hidden" class="upcoming-show-times" value="' . esc_attr( $next_start_time ) . '-' . esc_attr( $next_end_time ) . '">';
-		$output .= '<!-- ' . date('y-m-d H:i:s', $next_start_time ) . ' --- ' . date( 'y-m-d H:i:s', $next_end_time ) . ' -->';
+		if ( RADIO_STATION_DEBUG ) {
+			$output .= '<span style="display:none;">';
+			$output .= 'Now: ' . date( 'Y-m-d H:i:s', $now ) . ' (' . $now . ')' . PHP_EOL;
+			$output .= 'Next Start Time: ' . date('y-m-d H:i:s', $next_start_time ) . ' (' . $next_start_time . ')' . PHP_EOL;
+			$output .= 'Next End Time: ' . date( 'y-m-d H:i:s', $next_end_time ) . ' (' . $next_end_time . ')' . PHP_EOL;
+			$output .= 'Starting in: ' . ( $next_start_time - $now ) . PHP_EOL;
+			$output .= '</span>';
+		}
 
 		// --- for dynamic reloading ---
 		if ( $atts['dynamic'] ) {
@@ -1560,6 +1763,9 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 	if ( !$atts['widget'] ) {
 		$output .= '</div>';
 	}
+
+	// --- enqueue shortcode styles ---
+	radio_station_enqueue_style( 'shortcodes' );
 
 	return $output;
 }
@@ -1657,21 +1863,21 @@ function radio_station_current_playlist_shortcode( $atts ) {
 				$output .= '</div>';
 			}
 
-			if ( $atts['album'] && isset( $track['playlist_entry_album'] ) ) {
+			if ( $atts['album'] && !empty( $track['playlist_entry_album'] ) ) {
 				$output .= '<div class="show-playlist-album myplaylist-album">';
 				$output .= esc_html( __( 'Album', 'radio-station' ) );
 				$output .= ': ' . esc_html( $track['playlist_entry_album'] );
 				$output .= '</div>';
 			}
 
-			if ( $atts['label'] && isset( $track['playlist_entry_label'] ) ) {
+			if ( $atts['label'] && !empty( $track['playlist_entry_label'] ) ) {
 				$output .= '<div class="show-playlist-label myplaylist-label">';
 				$output .= esc_html( __( 'Label', 'radio-station' ) );
 				$output .= ': ' . esc_html( $track['playlist_entry_label'] );
 				$output .= '</div>';
 			}
 
-			if ( $atts['comments'] && isset( $track['playlist_entry_comments'] ) ) {
+			if ( $atts['comments'] && !empty( $track['playlist_entry_comments'] ) ) {
 				$output .= '<div class="show-playlist-comments myplaylist-comments">';
 				$output .= esc_html( __( 'Comments', 'radio-station' ) );
 				$output .= ': ' . esc_html( $track['playlist_entry_comments'] );
@@ -1742,6 +1948,9 @@ function radio_station_current_playlist_shortcode( $atts ) {
 	if ( !$atts['widget'] ) {
 		$output .= '</div>';
 	}
+
+	// --- enqueue shortcode styles ---
+	radio_station_enqueue_style( 'shortcodes' );
 	
 	return $output;
 }
@@ -1761,7 +1970,7 @@ function radio_station_countdown_enqueue() {
 	radio.label_showended = '" . esc_js( __( 'This Show has ended.', 'radio-station' ) ) . "';
 	radio.label_playlistended = '" . esc_js( __( 'This Playlist has ended.', 'radio-station') ) . "';
 	radio.label_timecommencing = '" . esc_js( __( 'Commencing in', 'radio-station' ) ) . "';
-	radio.label_timeremaining = '" . esc_js( __( 'Remaining', 'radio-station' ) ) . "'; 
+	radio.label_timeremaining = '" . esc_js( __( 'Remaining Time', 'radio-station' ) ) . "'; 
 	";
 
 	// --- add script inline ---
@@ -1798,10 +2007,9 @@ function radio_station_shortcode_list_shows( $atts ) {
 		'post_status'    => 'publish',
 		'meta_query'     => array(
 			array(
-				// 2.3.0: fix key/value to meta_key/meta_value
-				'meta_key'   => 'show_active',
-				'meta_value' => 'on',
-				'compare'    => '=',
+				'key'		=> 'show_active',
+				'value'		=> 'on',
+				'compare'	=> '=',
 			),
 		),
 	);

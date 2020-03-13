@@ -142,11 +142,11 @@ foreach ( $weekdays as $day ) {
 				if ( 24 == (int) $atts['time'] ) {
 					$start = radio_station_convert_shift_time( $shift['start'], 24 );
 					$end = radio_station_convert_shift_time( $shift['end'], 24 );
-					$data_format = "G:i";
+					$data_format = "H:i";
 				} else {
 					$start = str_replace( array( 'am', 'pm'), array( ' ' . $am, ' ' . $pm), $shift['start'] );
 					$end = str_replace( array( 'am', 'pm'), array( '  ' . $am, ' ' . $pm), $shift['end'] );
-					$data_format = "H:i a";
+					$data_format = "g:i a";
 				}
 
 				// 2.3.0: filter show time by show and context

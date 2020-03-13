@@ -156,7 +156,8 @@ function radio_station_add_admin_menus() {
 	}
 
 	add_submenu_page( 'radio-station', $rs . ' ' . __( 'Settings', 'radio-station' ), __( 'Settings', 'radio-station' ), $settingscap, 'radio-station', 'radio_station_settings_page' );
-	add_submenu_page( 'radio-station', $rs . ' ' . __( 'Help', 'radio-station' ), __( 'Help', 'radio-station' ), 'publish_playlists', 'radio-station-help', 'radio_station_plugin_help_page' );
+	// TODO: redo help page with new docs
+	// add_submenu_page( 'radio-station', $rs . ' ' . __( 'Help', 'radio-station' ), __( 'Help', 'radio-station' ), 'publish_playlists', 'radio-station-help', 'radio_station_plugin_help_page' );
 	do_action( 'radio_station_admin_submenu_bottom' );
 
 	// --- hack the submenu global to add post type add/edit URLs ---
@@ -302,7 +303,8 @@ function radio_station_plugin_help_page() {
 
 	// --- output announcement content ---
 	// 2.2.2: include patreon button link
-	echo wp_kses_post( radio_station_announcement_content( false ) );
+	// phpcs:ignore WordPress.Security.OutputNotEscaped
+	echo radio_station_announcement_content( false );
 
 	// --- show MailChimp signup form ---
 	radio_station_mailchimp_form();
@@ -936,6 +938,7 @@ function radio_station_mailchimp_form() {
 
 	// --- output MailChimp signup form ---
 	?>
+	
 	<div id="mc_embed_signup">
 		<form action="https://netmix.us8.list-manage.com/subscribe/post?u=c53a6feec82d81974edd00a95&amp;id=7130454f20" method="post" id="mc-embedded-subscribe-form" name="mc-embedded-subscribe-form" class="validate" target="_blank" novalidate>
 			<div style="position: absolute; left: -5000px;" aria-hidden="true">

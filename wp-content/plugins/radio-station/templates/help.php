@@ -246,4 +246,4 @@ If you want the new role to be able to create or approve new shows, you should a
 		<li>Spanish (es_ES)</li>
 	</ul>
 
-My foreign language skills are rather lacking.  I managed a Spanish translation, sheerly due to the fact that I still remember at least some of what I learned in high school Spanish class.  But I've included the .pot file in the /languages directory.  If you want to give it a shot, be my guest.  If you <a href="mailto:nblight@nlb-creations.com">send me</a> your finished translation, I'd love to include it.</p>
+My foreign language skills are rather lacking.  I managed a Spanish translation, sheerly due to the fact that I still remember at least some of what I learned in high school Spanish class.  But I've included the .pot file in the /languages directory.  If you want to give it a shot, be my guest.  If you <a href="mailto:info@netmix.com">send me</a> your finished translation, I'd love to include it.</p>

@@ -35,12 +35,14 @@ class DJ_Upcoming_Widget extends WP_Widget {
 		$title_position = isset( $instance['title_position'] ) ? $instance['title_position'] : 'right';
 		$avatar_width = isset( $instance['avatar_width'] ) ? $instance['avatar_width'] : '75';
 		$link_djs = isset( $instance['link_djs'] ) ? $instance['link_djs'] : '';
+		// 2.3.0: added countdown field option
+		$countdown = isset( $instance['countdown'] ) ? $instance['countdown'] : '';
 
 		// 2.3.0: convert template style code to straight php echo
 		$fields = '
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">
-				' . esc_html( __( 'Title', 'radio-station' ) ) . '
+				' . esc_html( __( 'Title', 'radio-station' ) ) . ':
 				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" />
 			</label>
 		</p>
@@ -101,10 +103,10 @@ class DJ_Upcoming_Widget extends WP_Widget {
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'default' ) ) . '">
-				' . esc_html( __( 'No Additional Schedules', 'radio-station' ) ) . '
+				' . esc_html( __( 'No Additional Schedules Text', 'radio-station' ) ) . '
 				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'default' ) ) . '" name="' . esc_attr( $this->get_field_name( 'default' ) ) . '" type="text" value="' . esc_attr( $default ) . '" />
 			</label>
-			<small>' . esc_html_e( 'If no Show is scheduled for the current time, display this text.', 'radio-station' ) . '</small>
+			<small>' . esc_html( 'If no Show is scheduled for the current time, display this text.', 'radio-station' ) . '</small>
 		</p>
 
 		<p>

@@ -10,20 +10,20 @@ function radio_show_player() {
 
 /* Switch Section Tabs */
 function radio_show_tab(tab) {
-    if (typeof jQuery == 'function') {
-        jQuery('.show-tab').removeClass('tab-active').addClass('tab-inactive');
-        jQuery('#show-'+tab+'-tab').removeClass('tab-inactive').addClass('tab-active');
-        jQuery('#show-'+tab).removeClass('tab-inactive').addClass('tab-active');
-    } else {
-        tabs = document.getElementsByClassName('show-tab');
-        for (i = 0; i < tabs.length; i++) {
-            tabs[i].className = tabs[i].className.replace('-tab-active', '-tab-inactive');
-        }
-        button = document.getElementById('show-'+tab+'-tab');
-        button.className = button.className.replace('-tab-inactive', '-tab-active');
-        content = document.getElementById('show-'+tab);
-        content.className = content.className.replace('-tab-inactive', '-tab-active');
-    }
+	if ( (typeof jQuery == 'function') && jQuery('#show-'+tab+'-tab') ) {
+		jQuery('.show-tab').removeClass('tab-active').addClass('tab-inactive');
+		jQuery('#show-'+tab+'-tab').removeClass('tab-inactive').addClass('tab-active');
+		jQuery('#show-'+tab).removeClass('tab-inactive').addClass('tab-active');
+	} else if (document.getElementById('show-'+tab+'-tab')) {
+		tabs = document.getElementsByClassName('show-tab');
+		for (i = 0; i < tabs.length; i++) {
+			tabs[i].className = tabs[i].className.replace('-tab-active', '-tab-inactive');
+		}
+		button = document.getElementById('show-'+tab+'-tab');
+		button.className = button.className.replace('-tab-inactive', '-tab-active');
+		content = document.getElementById('show-'+tab);
+		content.className = content.className.replace('-tab-inactive', '-tab-active');
+	}
 }
 
 /* Responsive Page */

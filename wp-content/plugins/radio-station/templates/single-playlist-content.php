@@ -1,7 +1,23 @@
 <?php
 
+// --- link show playlists (top) ---
+$post_id = get_the_ID();
+$related_show = get_post_meta( $post_id, 'playlist_show_id', true );
+if ( $related_show ) {
+	$show = get_post( $related_show );
+	$permalink = get_permalink( $show->ID );
+	$show_link = '<a href="' . esc_url( $permalink ) . '">' . $show->post_title . '</a>';
+	$before = __( 'Playlist for Show', 'radio-station' ) . ': ' . $show_link . '<br>';
+	$before = apply_filters( 'radio_station_link_playlist_to_show_before', $before, $post, $show );
+	echo $before;
+}
+
+// --- output the playlist post content ---
+echo '<br>';
+the_content();
+		
 // --- get the playlist data ---
-$playlist = get_post_meta( get_the_ID(), 'playlist', true );
+$playlist = get_post_meta( $post_id, 'playlist', true );
 
 if ( $playlist ) {
     ?>
@@ -42,4 +58,12 @@ if ( $playlist ) {
 	<div class="myplaylist-no-entries">
 		<?php esc_html_e( 'No entries for this Playlist', 'radio-station' ); ?>
 	</div>
-<?php } ?>
+<?php } 
+
+// --- link show playlists (bottom) ---
+if ( $related_show ) {
+	$show_playlists_link = '<a href="' . esc_url( $permalink ) . '#show-playlists">&larr; ' . __( 'All Playlists for Show', 'radio-station' ) . ': ' . $show->post_title . '</a>';
+	$after = '<br>' . $show_playlists_link;
+	$after = apply_filters( 'radio_station_link_playlist_to_show_before', $after, $post, $show );
+	echo $after;
+}

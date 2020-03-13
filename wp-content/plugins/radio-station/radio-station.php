@@ -50,15 +50,15 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // - Show Content Template Filter
 // - Playlist Content Template Filter
 // - Override Content Template Filter
-// - DJ / Host / Author Template Fix
+// - DJ / Host / Producer Template Fix
 // - Get DJ / Host Template
 // - Get Producer Template
 // - Single Template Hierarchy
 // - Single Templates Loader
 // - Archive Template Hierarchy
 // x Archive Templates Loader
-// - Show Archive Page Content
-// - Show Playlist Page Content
+// - Add Links Back to Show
+// - Show Posts Adjacent Links
 // === Query Filters ===
 // - Playlist Archive Query Filter
 // === User Roles ===
@@ -402,9 +402,9 @@ $options = array(
 
 	// ==== Archives ===
 
-	// --- Show Archive Page ---
+	// --- Shows Archive Page ---
 	'show_archive_page'       => array(
-		'label'   => __( 'Show Archives Page', 'radio-station' ),
+		'label'   => __( 'Shows Archive Page', 'radio-station' ),
 		'type'    => 'select',
 		'options' => 'PAGEID',
 		'default' => '',
@@ -424,9 +424,9 @@ $options = array(
 		'section' => 'archives',
 	),
 
-	// ? --- Redirect Show Archive --- ?
+	// ? --- Override Shows Archive --- ?
 	// 'show_archive_override' => array(
-	// 	'label'   => __( 'Redirect Show Archive', 'radio-station' ),
+	// 	'label'   => __( 'Override Shows Archive', 'radio-station' ),
 	// 	'type'    => 'checkbox',
 	// 	'value'   => 'yes',
 	// 	'default' => '',
@@ -435,9 +435,42 @@ $options = array(
 	// 	'section' => 'archives',
 	// ),
 
-	// --- Playlist Archive Page ---
+	// --- Overrides Archive Page ---
+	'override_archive_page'       => array(
+		'label'   => __( 'Overrides Archive Page', 'radio-station' ),
+		'type'    => 'select',
+		'options' => 'PAGEID',
+		'default' => '',
+		'helper'  => __( 'Select the Page for displaying the Override archive list.', 'radio-station' ),
+		'tab'     => 'pages',
+		'section' => 'archives',
+	),
+
+	// --- Automatic Display ---
+	'override_archive_auto' => array(
+		'label'   => __( 'Automatic Display', 'radio-station' ),
+		'type'    => 'checkbox',
+		'value'   => 'yes',
+		'default' => 'yes',
+		'helper'  => __( 'Replaces selected page content with default Override Archive. Alternatively customize display using the shortcode:', 'radio-station' ) . ' [overrides-archive]',
+		'tab'     => 'pages',
+		'section' => 'archives',
+	),
+
+	// ? --- Override Overrides Archive --- ?
+	// 'override_archive_override' => array(
+	// 	'label'   => __( 'Override Overrides Archive', 'radio-station' ),
+	// 	'type'    => 'checkbox',
+	// 	'value'   => 'yes',
+	// 	'default' => '',
+	// 	'helper'  => __( '', 'radio-station' ),
+	// 	'tab'     => 'pages',
+	// 	'section' => 'archives',
+	// ),
+
+	// --- Playlists Archive Page ---
 	'playlist_archive_page' => array(
-		'label'   => __( 'Playlist Archives Page', 'radio-station' ),
+		'label'   => __( 'Playlists Archive Page', 'radio-station' ),
 		'type'    => 'select',
 		'options' => 'PAGEID',
 		'default' => '',
@@ -457,9 +490,9 @@ $options = array(
 		'section' => 'archives',
 	),
 
-	// ? --- Redirect Playlist Archive --- ?
+	// ? --- Override Playlists Archive --- ?
 	// 'playlist_archive_override' => array(
-	// 	'label'   => __( 'Redirect Playlist Archive', 'radio-station' ),
+	// 	'label'   => __( 'Override Playlists Archive', 'radio-station' ),
 	// 	'type'    => 'checkbox',
 	// 	'value'   => 'yes',
 	// 	'default' => '',
@@ -468,9 +501,9 @@ $options = array(
 	// 	'section' => 'archives',
 	// ),
 
-	// --- Genre Archive Page ---
+	// --- Genres Archive Page ---
 	'genre_archive_page' => array(
-		'label'   => __( 'Genre Archives Page', 'radio-station' ),
+		'label'   => __( 'Genres Archive Page', 'radio-station' ),
 		'type'    => 'select',
 		'options' => 'PAGEID',
 		'default' => '',
@@ -490,9 +523,9 @@ $options = array(
 		'section' => 'archives',
 	),
 
-	// ? --- Redirect Genre Archives --- ?
+	// ? --- Override Genres Archives --- ?
 	// 'genre_archive_override' => array(
-	//  'label'   => __( 'Redirect Genres Archive', 'radio-station' ),
+	//  'label'   => __( 'Override Genres Archive', 'radio-station' ),
 	//	'type'    => 'checkbox',
 	//	'value'   => 'yes',
 	//	'default' => '',
@@ -509,7 +542,7 @@ $options = array(
 		'label'   => __( 'Templates Change Note', 'radio-station' ),
 		'helper'  => __( 'Since 2.3.0, the way that Templates are implemented has changed.', 'radio-station' )
 		             . ' ' . __( 'See the Documentation for more information:', 'radio-station' )
-		             . ' <a href="' . RADIO_STATION_DOCS_URL . 'templates/" target="_blank">' . __( 'Templates Documentation', 'radio-station' ) . '</a>',
+		             . ' <a href="' . RADIO_STATION_DOCS_URL . 'display/#page-templates" target="_blank">' . __( 'Templates Documentation', 'radio-station' ) . '</a>',
 		'tab'     => 'templates',
 		'section' => 'single',
 	),
@@ -660,6 +693,7 @@ $settings = array(
 	'title'        => 'Radio Station',
 	'parentmenu'   => 'radio-station',
 	'home'         => RADIO_STATION_HOME_URL,
+	'docs'		   => RADIO_STATION_DOCS_URL,
 	'support'      => 'https://github.com/netmix/radio-station/issues/',
 	'ratetext'     => __( 'Rate on WordPress.org', 'radio-station' ),
 	// 'share'			=> 'https://netmix.com/radio-station/#share',
@@ -1068,7 +1102,15 @@ function radio_station_automatic_pages_content( $content ) {
 			$automatic = radio_station_get_setting( 'schedule_auto' );
 			if ( 'yes' === (string) $automatic ) {
 				$view = radio_station_get_setting( 'schedule_view' );
-				$shortcode = '[master-schedule view="' . $view . '"]';
+				$atts = array( 'view' => $view );
+				$atts = apply_filters( 'radio_station_automatic_schedule_atts', $atts );
+				$atts_string = '';
+				if ( is_array( $atts ) && ( count( $atts ) > 0 ) ) {
+					foreach ( $atts as $key => $value ) {
+						$atts_string = ' ' . $key . '="' . $value . '"';
+					}
+				}
+				$shortcode = '[master-schedule' . $atts_string . ']';
 				remove_filter( 'the_content', 'radio_station_automatic_pages_content', 11 );
 				return do_shortcode( $shortcode );
 			}
@@ -1082,9 +1124,41 @@ function radio_station_automatic_pages_content( $content ) {
 		if ( is_page( $show_archive_page ) ) {
 			$automatic = radio_station_get_setting( 'show_archive_auto' );
 			if ( 'yes' === (string) $automatic ) {
-				// $view = radio_station_get_setting( 'show_archive_view' );
-				// $shortcode = '[shows-archive view="' . $view . '"]';
-				$shortcode = '[shows-archive]';
+				$atts = array();
+				$view = radio_station_get_setting( 'show_archive_view' );
+				if ( $view ) {$atts['view'] = $view;}
+				$atts = apply_filters( 'radio_station_automatic_show_archive_atts', $atts );
+				$atts_string = '';
+				if ( is_array( $atts ) && ( count( $atts ) > 0 ) ) {
+					foreach ( $atts as $key => $value ) {
+						$atts_string = ' ' . $key . '="' . $value . '"';
+					}
+				}
+				$shortcode = '[shows-archive' . $atts_string . ']';
+				remove_filter( 'the_content', 'radio_station_automatic_pages_content', 11 );
+				return do_shortcode( $shortcode );
+			}
+		}
+	}
+
+	// --- override archive page ---
+	// 2.3.0: added automatic display of override archive page
+	$override_archive_page = radio_station_get_setting( 'override_archive_page' );
+	if ( !is_null( $override_archive_page ) && !empty( $override_archive_page ) ) {
+		if ( is_page( $override_archive_page ) ) {
+			$automatic = radio_station_get_setting( 'override_archive_auto' );
+			if ( 'yes' === (string) $automatic ) {
+				$atts = array();
+				$view = radio_station_get_setting( 'override_archive_view' );
+				if ( $view ) {$atts['view'] = $view;}
+				$atts = apply_filters( 'radio_station_automatic_override_archive_atts', $atts );
+				$atts_string = '';
+				if ( is_array( $atts ) && ( count( $atts ) > 0 ) ) {
+					foreach ( $atts as $key => $value ) {
+						$atts_string = ' ' . $key . '="' . $value . '"';
+					}
+				}
+				$shortcode = '[overrides-archive' . $atts_string . ']';
 				remove_filter( 'the_content', 'radio_station_automatic_pages_content', 11 );
 				return do_shortcode( $shortcode );
 			}
@@ -1098,9 +1172,17 @@ function radio_station_automatic_pages_content( $content ) {
 		if ( is_page( $playlist_archive_page ) ) {
 			$automatic = radio_station_get_setting( 'playlist_archive_auto' );
 			if ( 'yes' == $automatic ) {
-				// $view = radio_station_get_setting( 'playlist_archive_view' );
-				// $shortcode = '[playlists-archive view="' . $view . '"]'
-				$shortcode = '[playlists-archive]';
+				$atts = array();
+				$view = radio_station_get_setting( 'playlist_archive_view' );
+				if ( $view ) {$atts['view'] = $view;}
+				$atts = apply_filters( 'radio_station_automatic_playlist_archive_atts', $atts );
+				$atts_string = '';
+				if ( is_array( $atts ) && ( count( $atts ) > 0 ) ) {
+					foreach ( $atts as $key => $value ) {
+						$atts_string = ' ' . $key . '="' . $value . '"';
+					}
+				}
+				$shortcode = '[playlists-archive' . $atts_string . ']';
 				remove_filter( 'the_content', 'radio_station_automatic_pages_content', 11 );
 				return do_shortcode( $shortcode );
 			}
@@ -1114,9 +1196,17 @@ function radio_station_automatic_pages_content( $content ) {
 		if ( is_page( $genre_archive_page ) ) {
 			$automatic = radio_station_get_setting( 'genre_archive_auto' );
 			if ( 'yes' === (string) $automatic ) {
-				// $view = radio_station_get_setting( 'genre_archive_view' );
-				// $shortcode = '[genres-archive view="' . $view . '"]';
-				$shortcode = '[genres-archive]';
+				$atts = array();
+				$view = radio_station_get_setting( 'genre_archive_view' );
+				if ( $view ) {$atts['view'] = $view;}
+				$atts = apply_filters( 'radio_station_automatic_genre_archive_atts', $atts );
+				$atts_string = '';
+				if ( is_array( $atts ) && ( count( $atts ) > 0 ) ) {
+					foreach ( $atts as $key => $value ) {
+						$atts_string = ' ' . $key . '="' . $value . '"';
+					}
+				}
+				$shortcode = '[genres-archive' . $atts_string. ']';
 				remove_filter( 'the_content', 'radio_station_automatic_pages_content', 11 );
 				return do_shortcode( $shortcode );
 			}
@@ -1145,6 +1235,12 @@ function radio_station_single_content_template( $content, $post_type ) {
 		$theme_dir . '/single-' . $post_type . '-content.php',
 		RADIO_STATION_DIR . '/templates/single-' . $post_type . '-content.php',
 	);
+	// 2.3.0: fallback to show content template for overrides
+	if ( RADIO_STATION_OVERRIDE_SLUG == $post_type ) {
+		$templates[] = $theme_dir . '/templates/single-' . RADIO_STATION_SHOW_SLUG . '-content.php';
+		$templates[] = $theme_dir . '/single-' . RADIO_STATION_SHOW_SLUG . '-content.php';
+		$templates[] = RADIO_STATION_DIR . '/templates/single-' . RADIO_STATION_SHOW_SLUG . '-content.php';
+	}
 	$templates = apply_filters( 'radio_station_' . $post_type . '_content_templates', $templates, $post_type );
 	foreach ( $templates as $template ) {
 		if ( file_exists( $template ) ) {
@@ -1165,10 +1261,10 @@ function radio_station_single_content_template( $content, $post_type ) {
 	// --- start buffer and include content template ---
 	ob_start();
 	include $content_template;
-
-	// --- filter and return buffered content ---
 	$output = ob_get_contents();
 	ob_end_clean();
+
+	// --- filter and return buffered content ---
 	$output = str_replace( '<!-- the_content -->', $content, $output );
 	$output = apply_filters( 'radio_station_content_' . $post_type, $output, get_the_ID() );
 
@@ -1205,9 +1301,9 @@ function radio_station_override_content_template( $content ) {
 	return radio_station_single_content_template( $content, RADIO_STATION_OVERRIDE_SLUG );
 }
 
-// -------------------------------
-// DJ / Host / Author Template Fix
-// -------------------------------
+// ---------------------------------
+// DJ / Host / Producer Template Fix
+// ---------------------------------
 // 2.2.8: temporary fix to not 404 author pages for DJs without blog posts
 // Ref: https://wordpress.org/plugins/show-authors-without-posts/
 add_filter( '404_template', 'radio_station_author_host_pages' );
@@ -1336,6 +1432,7 @@ function radio_station_single_template_hierarchy( $templates ) {
 	// --- remove single.php as the show / playlist fallback ---
 	// (allows for user selection of page.php or single.php later)
 	if ( ( RADIO_STATION_SHOW_SLUG === (string) $post->post_type )
+		 || ( RADIO_STATION_OVERRIDE_SLUG === (string) $post->post_type )
 	     || ( RADIO_STATION_PLAYLIST_SLUG === (string) $post->post_type ) ) {
 		$i = array_search( 'single.php', $templates );
 		if ( false !== $i ) {
@@ -1356,12 +1453,9 @@ function radio_station_load_template( $single_template, $type, $templates ) {
 
 	// --- handle single templates ---
 	$post_type = $post->post_type;
-	$post_types = array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_PLAYLIST_SLUG );
-	// ... RADIO_STATION_HOST_SLUG, RADIO_STATION_PRODUCER_SLUG
-	//
+	$post_types = array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_OVERRIDE_SLUG, RADIO_STATION_PLAYLIST_SLUG );
+	// TODO: RADIO_STATION_EPISODE_SLUG, RADIO_STATION_HOST_SLUG, RADIO_STATION_PRODUCER_SLUG
 	if ( in_array( $post_type, $post_types ) ) {
-
-		// $user_template = get_stylesheet_directory() . '/single-' . $post_type . '.php';
 
 		// --- check for existing template override ---
 		// note: single.php is removed from template hierarchy via filter
@@ -1421,9 +1515,14 @@ function radio_station_archive_template_hierarchy( $templates ) {
 	$post_types = array_filter( (array) get_query_var( 'post_type' ) );
 	if ( count( $post_types ) == 1 ) {
 		$post_type = reset( $post_types );
-		$post_types = array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_PLAYLIST_SLUG, RADIO_STATION_HOST_SLUG, RADIO_STATION_PRODUCER_SLUG );
+		$post_types = array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_PLAYLIST_SLUG, RADIO_STATION_OVERRIDE_SLUG, RADIO_STATION_HOST_SLUG, RADIO_STATION_PRODUCER_SLUG );
 		if ( in_array( $post_type, $post_types ) ) {
-			$templates = array_merge( array( 'templates/archive-' . $post_type . '.php' ), $templates );
+			$template = array( 'templates/archive-' . $post_type . '.php' );
+			// 2.3.0: add fallback to show archive template for overrides
+			if ( RADIO_STATION_OVERRIDE_SLUG == $post_type ) {
+				$template[] = 'templates/archive-' . RADIO_STATION_SHOW_SLUG . '.php';
+			}
+			$templates = array_merge( $template, $templates );
 		}
 	}
 
@@ -1433,8 +1532,9 @@ function radio_station_archive_template_hierarchy( $templates ) {
 // ------------------------
 // Archive Templates Loader
 // ------------------------
-// add_filter( 'archive_template', 'radio_station_load_custom_post_type_template', 10, 3 );
-function radio_station_load_custom_post_type_template( $archive_template, $type, $templates ) {
+// TODO: implement standard archive page overrides via plugin settings
+// add_filter( 'archive_template', 'radio_station_post_type_archive_template', 10, 3 );
+function radio_station_post_type_archive_template( $archive_template, $type, $templates ) {
 	global $post;
 
 	// --- check for archive template override ---
@@ -1453,37 +1553,160 @@ function radio_station_load_custom_post_type_template( $archive_template, $type,
 }
 
 // -------------------------
-// Show Archive Page Content
+// Add Links to Back to Show
 // -------------------------
-function radio_station_show_archive( $content ) {
-	$auto = radio_station_get_setting( 'show_archive_auto' );
-	if ( 'yes' !== (string) $auto ) {
-		return $content;
-	}
-	$shortcode = '[show-archive';
-	// $view = radio_station_get_setting( 'show_archive_view' );
-	// if ( $view == 'grid' ) {$shortcode .= ' view="grid"';}
-	$shortcode .= ']';
-	$content = do_shortcode( $shortcode );
+// 2.3.0: add links to show from show posts and playlists
+add_filter( 'the_content', 'radio_station_add_show_links', 20 );
+function radio_station_add_show_links( $content ) {
 
+	global $post;
+
+	// note: playlists are linked via single-playlist-content.php template
+
+	// --- filter to allow related post types ---
+	$post_types = apply_filters( 'radio_station_show_related_post_types', array( 'post' ) );
+	
+	if ( in_array( $post->post_type, $post_types ) ) {
+
+		// --- link show posts ---
+		$related_show = get_post_meta( $post->ID, 'post_showblog_id', true );
+		if ( $related_show ) {
+			$positions = array( 'after' );	
+			$positions = apply_filters( 'radio_station_link_to_show_positions', $positions, $post_type );
+			if ( $positions && is_array( $positions ) && ( count( $positions ) > 0 ) ) {
+				if ( in_array( 'before', $positions ) || in_array( 'after', $positions ) ) {
+					$before = $after = '';
+					$show = get_post( $related_show );
+					$post_type_object = get_post_type_object( $post->post_type );
+					$singular = $post_type_object->labels->singular_name;
+					$plural = $post_type_object->labels->name;
+					$permalink = get_permalink( $show->ID );
+					if ( in_array( 'before', $positions ) ) {
+						$show_link = sprintf( __( '%s for Show', 'radio-station' ), $singular );
+						$show_link .= ': <a href="' . esc_url( $permalink ) . '">' . $show->post_title . '</a>';
+						$before = $show_link . '<br><br>';
+						$before = apply_filters( 'radio_station_link_to_show_before', $before, $post, $show );
+					}
+					if ( in_array( 'after', $positions ) ) {
+						$post_type_sections = array( 'post', RADIO_STATION_EPISODE_SLUG );
+						if ( in_array( $post->post_type, $post_type_sections ) ) {
+							$post_type_ref = '#show-' . str_replace( 'rs-', '', $post->post_type ) . 's';
+							$anchor = sprintf( __( 'All %s for Show %s', 'radio-station' ), $plural, $show->post_title );
+							$show_link = '<a href="' . esc_url( $permalink ) . $post_type_ref . '">&larr; ' . $anchor . '</a>';
+						}
+						$after = '<br>' . $show_link;
+						$after = apply_filters( 'radio_station_link_to_show_after', $after, $post, $show );
+					}
+					$content = $before . $content . $after;
+				}
+			}
+		
+			// --- adjacent post links debug test ---
+			if ( RADIO_STATION_DEBUG ) {
+				$content .= "Previous Link: " . get_previous_post_link() . "<br>";
+				$content .= "Next Link: " . get_next_post_link() . "<br>";
+			}
+		}
+		
+	} 
+	
 	return $content;
 }
 
-// -----------------------------
-// Playlist Archive Page Content
-// -----------------------------
-function radio_station_playlist_archive( $content ) {
-	$auto = radio_station_get_setting( 'playlist_archive_auto' );
-	if ( 'yes' !== (string) $auto ) {
-		return $content;
-	}
-	$shortcode = '[playlist-archive';
-	// $view = radio_station_get_setting( 'playlist_archive_view' );
-	// if ( $view == 'grid' ) {$shortcode .= ' view="grid"';}
-	$shortcode .= ']';
-	$content = do_shortcode( $shortcode );
+// -------------------------
+// Show Posts Adjacent Links
+// -------------------------
+// 2.3.0: added show post adjacent links filter
+add_filter( 'next_post_link', 'radio_station_get_show_post_link', 11, 5 );
+add_filter( 'previous_post_link', 'radio_station_get_show_post_link', 11, 5 );
+function radio_station_get_show_post_link( $output, $format, $link, $adjacent_post, $adjacent ) {
 
-	return $content;
+	global $post;
+	
+	// --- filter to allow disabling ---
+	$link_show_posts = apply_filters( 'radio_station_link_show_posts', true, $post );
+	if ( !$link_show_posts ) {
+		return $output;
+	}
+
+	// --- filter to allow related post types ---
+	$post_types = apply_filters( 'radio_station_show_related_post_types', array( 'post' ) );
+	if ( !in_array( $post->post_type, $post_types ) ) {
+		return $output;
+	}
+	
+	// --- get related show ---
+	$related_show = get_post_meta( $post->ID,  'post_showblog_id', true );
+	if ( !$related_show ) {
+		return $output;
+	}
+
+	// --- get adjacent post query ---
+	$args = array(
+		'post_type'	=> $post->post_type,
+		'meta_query'	=> array(
+			array(
+				'key'		=> 'post_showblog_id',
+				'value'		=> $related_show,
+				'compare'	=> '=',
+			),
+		),
+		'order_by'	=> 'post_date',
+	);
+	
+	// --- setup previous or next post ---
+	$post_type_object = get_post_type_object( $post->post_type );
+	if ( 'previous' == $adjacent ) {
+		$rel = 'prev';
+		$args['order'] = 'DESC';
+		$title = __( 'Previous Show', 'radio-station' ) . ' ' . $post_type_object->labels->singular_name;
+		$show_posts = get_posts( $args );
+	} elseif ( 'next' == $adjacent ) {
+		$rel = 'next';
+		$args['order'] = 'ASC';
+		$title = __( 'Next Show', 'radio-station' ) . ' ' . $post_type_object->labels->singular_name;
+		$show_posts = get_posts( $args );
+	}
+
+	// --- loop posts to get adjacent post ---
+	$found_current_post = $adjacent_post = false;
+	if ( count( $show_posts ) > 0 ) {
+		foreach ( $show_posts as $show_post ) {
+			if ( $found_current_post ) {
+				$related_id = get_post_meta( $show_post->ID, 'post_showblog_id', true );
+				if ( $related_id == $related_show ) {
+					$adjacent_post = $show_post;
+					break;
+				}
+			}
+			if ( $show_post->ID == $post->ID ) {
+				$found_current_post = true;
+			}
+		}
+				
+		if ( $adjacent_post ) {
+
+			// --- adjacent post title ---
+			$post_title = $adjacent_post->post_title;
+			if ( empty( $adjacent_post->post_title ) ) {
+				$post_title = $title;
+			}
+			$post_title = apply_filters( 'the_title', $post_title, $adjacent_post->ID );
+
+			// --- adjacent post link ---
+			// (from get_adjacent_post_link)
+			$date = mysql2date( get_option( 'date_format' ), $adjacent_post->post_date );
+			$string = '<a href="' . esc_url( get_permalink( $adjacent_post ) ) . '" rel="' . esc_attr( $rel ) . '" title="' . $title . '">';
+			$inlink = str_replace( '%title', $post_title, $link );
+			$inlink = str_replace( '%date', $date, $inlink );
+			$inlink = $string . $inlink . '</a>';
+			$output = str_replace( '%link', $inlink, $format );
+
+		}
+
+	}
+
+	return $output;
 }
 
 

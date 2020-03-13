@@ -26,7 +26,7 @@ $languages = wp_get_post_terms( $post_id, RADIO_STATION_LANGUAGES_SLUG );
 $hosts = get_post_meta( $post_id, 'show_user_list', true );
 $producers = get_post_meta( $post_id, 'show_producer_list', true );
 $active = get_post_meta( $post_id, 'show_active', true );
-$shifts = get_post_meta( $post_id, 'show_sched', true );
+$shifts = radio_station_get_show_schedule( $post_id );
 
 // --- get show icon / button data ---
 $show_file = get_post_meta( $post_id, 'show_file', true );
@@ -407,46 +407,48 @@ if ( !$active || !$shifts ) {
 	$current_time = strtotime( current_time( 'mysql' ) );
 	foreach ( $weekdays as $day ) {
 		$show_times = array();
-		foreach ( $shifts as $shift ) {
-			if ( $day == $shift['day'] ) {
+		if ( $shifts && is_array( $shifts ) && ( count( $shifts ) > 0 ) ) {
+			foreach ( $shifts as $shift ) {
+				if ( $day == $shift['day'] ) {
 
-				// --- convert shift info ---
-				$start = $shift['start_hour'] . ':' . $shift['start_min'] . ' ' . $shift['start_meridian'];
-				$end = $shift['end_hour'] . ':' . $shift['end_min'] . ' ' . $shift['end_meridian'];
-				$shift_start_time = strtotime( $start );
-				$shift_end_time = strtotime( $end );
-				if ( $shift_end_time < $shift_start_time ) {
-					$shift_end_time = $shift_end_time + ( 7 * 60 * 60 );
-				}
+					// --- convert shift info ---
+					$start = $shift['start_hour'] . ':' . $shift['start_min'] . ' ' . $shift['start_meridian'];
+					$end = $shift['end_hour'] . ':' . $shift['end_min'] . ' ' . $shift['end_meridian'];
+					$shift_start_time = strtotime( $start );
+					$shift_end_time = strtotime( $end );
+					if ( $shift_end_time < $shift_start_time ) {
+						$shift_end_time = $shift_end_time + ( 7 * 60 * 60 );
+					}
 
-				// --- maybe convert to 24 hour format ---
-				if ( 24 == (int) $time_format ) {
-					$start = radio_station_convert_shift_time( $start, 24 );
-					$end = radio_station_convert_shift_time( $end, 24 );
-					$data_format = 'G:i';
-				} else {
-					$start = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $start );
-					$end = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $end );
-					$data_format = 'H:i a';
-				}
+					// --- maybe convert to 24 hour format ---
+					if ( 24 == (int) $time_format ) {
+						$start = radio_station_convert_shift_time( $start, 24 );
+						$end = radio_station_convert_shift_time( $end, 24 );
+						$data_format = 'H:i';
+					} else {
+						$start = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $start );
+						$end = str_replace( array( 'am', 'pm' ), array( $am, $pm ), $end );
+						$data_format = 'g:i a';
+					}
 
-				// --- check if current shift ---
-				$classes = array( 'show-shift-time' );
-				if ( ( $current_time > $shift_start_time ) && ( $current_time < $shift_end_time ) ) {
-					$classes[] = 'current-shift';
-				}
-				$class = implode( ' ', $classes );
+					// --- check if current shift ---
+					$classes = array( 'show-shift-time' );
+					if ( ( $current_time > $shift_start_time ) && ( $current_time < $shift_end_time ) ) {
+						$classes[] = 'current-shift';
+					}
+					$class = implode( ' ', $classes );
 
-				// --- set show time output ---
-				$show_time = '<div class="' . esc_attr( $class ) . '">';
-				$show_time .= '<span class="rs-time" data-format="' . esc_attr( $data_format ) . '">' . esc_html( $start ) . '</span>';
-				$show_time .= ' - <span class="rs-time" data-format="' . esc_attr( $data_format ) . '">' . esc_html( $end ) . '</span>';
-				if ( isset( $shift['encore'] ) && ( 'on' == $shift['encore'] ) ) {
-					$found_encore = true;
-					$show_time .= '<span class="show-encore">*</span>';
+					// --- set show time output ---
+					$show_time = '<div class="' . esc_attr( $class ) . '">';
+					$show_time .= '<span class="rs-time" data-format="' . esc_attr( $data_format ) . '">' . esc_html( $start ) . '</span>';
+					$show_time .= ' - <span class="rs-time" data-format="' . esc_attr( $data_format ) . '">' . esc_html( $end ) . '</span>';
+					if ( isset( $shift['encore'] ) && ( 'on' == $shift['encore'] ) ) {
+						$found_encore = true;
+						$show_time .= '<span class="show-encore">*</span>';
+					}
+					$show_time .= '</div>';
+					$show_times[] = $show_time;
 				}
-				$show_time .= '</div>';
-				$show_times[] = $show_time;
 			}
 		}
 		$show_times_count = count( $show_times );
@@ -484,7 +486,7 @@ if ( $schedule_page && !empty( $schedule_page ) ) {
 	$schedule_link = get_permalink( $schedule_page );
 	$blocks['show_times'] .= '<div class="show-schedule-link">';
 	$blocks['show_times'] .= '<a href="' . esc_url( $schedule_link ) . '" title="' . esc_attr( __( 'Go to Full Station Schedule Page', 'radio-station' ) ) . '">';
-	$blocks['show_times'] .= esc_html( __( 'Full Station Schedule', 'radio-station' ) ) . ' &rarr;</a>';
+	$blocks['show_times'] .= '&larr; ' . esc_html( __( 'Full Station Schedule', 'radio-station' ) ) . '</a>';
 	$blocks['show_times'] .= '</div>';
 }
 
@@ -519,7 +521,8 @@ if ( ( strlen( trim( $content ) ) > 0 ) || $show_posts || $show_playlists || $sh
 	$i = 0;
 	if ( $show_description ) {
 
-		$sections['about']['heading'] = '<h3 id="show-section-about">' . esc_html( __( 'About the Show', 'radio-station' ) ) . '</h3>';
+		$sections['about']['heading'] = '<a name="show-description"></a>';
+		$sections['about']['heading'] .= '<h3 id="show-section-about">' . esc_html( __( 'About the Show', 'radio-station' ) ) . '</h3>';
 		$sections['about']['anchor'] = __( 'About', 'radio-station' );
 
 		$sections['about']['content'] = '<div id="show-about" class="show-tab tab-active"><br>';
@@ -534,7 +537,8 @@ if ( ( strlen( trim( $content ) ) > 0 ) || $show_posts || $show_playlists || $sh
 	// --- Show Episodes Tab ---
 	if ( $show_episodes ) {
 
-		$sections['episodes']['heading'] = '<h3 id="show-section-episodes">' . esc_html( __( 'Show Episodes', 'radio-station' ) ) . '</h3>';
+		$sections['episodes']['heading'] = '<a name="show-episodes"></a>';
+		$sections['episodes']['heading'] .= '<h3 id="show-section-episodes">' . esc_html( __( 'Show Episodes', 'radio-station' ) ) . '</h3>';
 		$sections['episodes']['anchor'] = __( 'Episodes', 'radio-station' );
 
 		$sections['episodes']['content'] = '<div id="show-episodes" class="show-section-content"><br>';
@@ -549,7 +553,8 @@ if ( ( strlen( trim( $content ) ) > 0 ) || $show_posts || $show_playlists || $sh
 	// --- Show Blog Posts Tab ---
 	if ( $show_posts ) {
 
-		$sections['posts']['heading'] = '<h3 id="show-section-posts">' . esc_html( __( 'Show Posts', 'radio-station' ) ) . '</h3>';
+		$sections['posts']['heading'] = '<a name="show-posts"></a>';
+		$sections['posts']['heading'] .= '<h3 id="show-section-posts">' . esc_html( __( 'Show Posts', 'radio-station' ) ) . '</h3>';
 		$sections['posts']['anchor'] = __( 'Posts', 'radio-station' );
 
 		$sections['posts']['content'] = '<div id="show-posts" class="show-section-content"><br>';
@@ -564,7 +569,8 @@ if ( ( strlen( trim( $content ) ) > 0 ) || $show_posts || $show_playlists || $sh
 	// --- Show Playlists Tab ---
 	if ( $show_playlists ) {
 
-		$sections['playlists']['heading'] = '<h3 id="show-section-playlists">' . esc_html( __( 'Show Playlists', 'radio-station' ) ) . '</h3>';
+		$sections['playlists']['heading'] = '<a name="show-playlists">';
+		$sections['playlists']['heading'] .= '<h3 id="show-section-playlists">' . esc_html( __( 'Show Playlists', 'radio-station' ) ) . '</h3>';
 		$sections['playlists']['anchor'] = __( 'Playlists', 'radio-station' );
 
 		$sections['playlists']['content'] = '<div id="show-playlists" class="show-section-content"><br>';
@@ -613,7 +619,8 @@ $class = implode( ' ', $classes );
 			$header_image .= '<img class="show-image" src="' . esc_url( $header_url ) . '" width="' . esc_attr( $header_width ) . '" height="' . esc_attr( $header_height ) . '">';
 			$header_image .= '</div><br>';
 			$header_image = apply_filters( 'radio_station_show_page_header_image', $header_image, $post_id );
-			echo wp_kses_post( $header_image );
+			// phpcs:ignore WordPress.Security.OutputNotEscaped
+			echo $header_image;
 		}
 
 		// --- Show Info Blocks ---
@@ -693,7 +700,8 @@ $class = implode( ' ', $classes );
 
 					// --- output first section as non-tabbed ---
 					if ( isset( $sections[$section_order[0]] ) ) {
-						echo wp_kses_post( $sections[$section_order[0]]['heading'] );
+						// phpcs:ignore WordPress.Security.OutputNotEscaped
+						echo $sections[$section_order[0]]['heading'];
 						echo $sections[$section_order[0]]['content'];
 					}
 					unset( $section_order[0] );
@@ -732,7 +740,8 @@ $class = implode( ' ', $classes );
 							if ( 'tabbed' != $section_layout ) {
 
 								// --- section heading ---
-								echo wp_kses_post( $sections[$section]['heading'] );
+								// phpcs:ignore WordPress.Security.OutputNotEscaped
+								echo $sections[$section]['heading'];
 
 								// --- section jump links ---
 								if ( 'yes' == $jump_links ) {
@@ -768,7 +777,6 @@ $class = implode( ' ', $classes );
 							}
 
 							// --- section content ---
-							// echo wp_kses_post( $sections[$section]['content'] );
 							// phpcs:ignore WordPress.Security.OutputNotEscaped
 							echo $sections[$section]['content'];
 
@@ -788,6 +796,20 @@ $class = implode( ' ', $classes );
 
 <?php
 
-// --- enqueue script inline ---
+// --- enqueue show page script ---
 // 2.3.0: enqueue script instead of echoing
 radio_station_enqueue_script( 'radio-station-show-page', array( 'radio-station' ), true );
+
+// --- maybe detect and switch to # tab ---
+if ( 'tabbed' == 'section_layout' ) {
+	$js = "setTimeout(function() {
+		if (window.location.hash) {
+			hash = window.location.hash.substring(1);
+			if (hash.indexOf('show-') > -1) {
+				tab = hash.replace('show-', '');
+				radio_show_tab('about');}
+			}
+		}
+	}, 500);";	
+	wp_add_inline_script( 'radio-station-show-page', $js );
+}

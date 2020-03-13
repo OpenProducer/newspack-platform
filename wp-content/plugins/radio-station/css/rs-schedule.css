@@ -60,11 +60,19 @@
 }
 
 #master-program-schedule .master-program-day.current-day {
-	border: 2px solid #F00000;
+	border: 1px solid #F00000;
+}
+
+#master-program-schedule th .headings {
+	display: inline-block;
 }
 
 #master-program-schedule th .day-heading {
-	display: inline-block;
+	font-size: 1em;	
+}
+
+#master-program-schedule th .date-subheading {
+	font-size: 0.75em;
 }
 
 #master-program-schedule th a {
@@ -112,7 +120,7 @@
 }
 
 #master-program-schedule .master-program-hour.current-hour {
-	border: 2px solid #F00000;
+	border: 1px solid #F00000;
 }
 
 #master-program-schedule .master-program-hour div {
@@ -147,7 +155,7 @@
 }
 
 #master-program-schedule .show-info .master-show-entry.nowplaying {
-    border: 3px solid #F00000;
+    border: 2px solid #F00000;
 }
 
 #master-program-schedule .show-info .master-show-entry.overflow,
@@ -226,11 +234,36 @@
 	border: none; 
 	padding: 0;
 	margin: 0;
+	width: 100%;
+}
+
+#master-schedule-tabs .shift-left-arrow {
+	float: left;
+}
+
+#master-schedule-tabs .shift-right-arrow {
+	float: right;
+}
+
+#master-schedule-tabs .shift-left-arrow, #master-schedule-tabs .shift-right-arrow, 
+#master-schedule-tabs .first-tab.day-0 .shift-left-arrow, #master-schedule-tabs .last-tab.day-6 .shift-right-arrow {
+	display: none;
+	padding: 0;
+}
+
+#master-schedule-tabs .shift-left-arrow a, #master-schedule-tabs .shift-right-arrow a {
+	text-decoration: none;
+}
+
+#master-schedule-tabs .first-tab .shift-left-arrow, #master-schedule-tabs .last-tab .shift-right-arrow {
+	display: inline-block;
+	padding: 5px;
 }
 
 #master-schedule-tabs .master-schedule-tabs-day {
-	display: inline-block; 
-	width: 98px; 
+	display: inline-block;
+	position: relative;
+	min-width: 100px;
 	margin: 0px; 
 	cursor: pointer; 
 	text-align: center; 
@@ -240,9 +273,17 @@
 	font-weight: bold;
     border-radius: 7px 7px 0 0;
     border: 1px solid #000000;
+    list-style: none;
+    margin-left: 20px;
+    border-bottom: 0;
+}
+
+#master-schedule-tabs .master-schedule-tabs-day.first-tab {
+	margin-left: 0;
 }
 
 #master-schedule-tabs .master-schedule-tabs-day-name {
+	display: inline-block;
 	padding: 5px 0 5px 0;
 }
 
@@ -250,7 +291,22 @@
 	font-weight: bold; 
 	background-color: #ffffff; 
 	color: #000000;
-	border-bottom: 0;
+	/* border-bottom: 0; */
+}
+
+#master-schedule-tabs .master-schedule-tabs-day .master-schedule-tab-bottom {
+	display: none;
+}
+
+#master-schedule-tabs .master-schedule-tabs-day.active-day-tab .master-schedule-tab-bottom {
+    position: absolute;
+    display: block;
+	bottom: 0;
+    height: 1px;
+    width: 100%;
+    background-color: #FFF;
+    margin-bottom: -1px;
+    z-index: 999;
 }
 
 #master-schedule-tab-panels .master-schedule-tabs-panel {
@@ -260,7 +316,8 @@
 	padding: 0;
 	position: relative; 
 	text-align: left; 
-	width: 698px; 
+	/* width: 698px; */
+	width: 100%;
 	list-style: none;
 }
 
@@ -275,8 +332,8 @@
 	display: block; 
 	border: 1px solid #333333; 
 	background-color: #ffffff;
-	border-top: 0;
-	border-radius: 0 0 7px 7px;
+	/* border-top: 0; */
+	border-radius: 0 7px 7px 7px;
 }
 
 #master-schedule-tab-panels .master-schedule-tabs-show .show-info,

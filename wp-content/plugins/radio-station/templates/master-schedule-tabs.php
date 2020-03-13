@@ -5,12 +5,15 @@
  */
 
 // --- get all the required info ---
-$weekdays = radio_station_get_schedule_weekdays();
 $schedule = radio_station_get_current_schedule();
 $hours = radio_station_get_hours();
 $now = strtotime( current_time( 'mysql' ) );
+$date = date( 'Y-m-d', $now );
+$today =  strtolower( date( 'l', $now ) );
 $am = str_replace( ' ', '', radio_station_translate_meridiem( 'am' ) );
 $pm = str_replace( ' ', '', radio_station_translate_meridiem( 'pm' ) );
+$weekdays = radio_station_get_schedule_weekdays();
+$weekdates = radio_station_get_schedule_weekdates( $weekdays, $now );
 
 // --- filter show avatar size ---
 $avatar_size = apply_filters( 'radio_station_schedule_show_avatar_size', 'thumbnail', 'tabs' );
@@ -21,20 +24,37 @@ $output .= '<ul id="master-schedule-tabs">';
 $panels = '';
 $tcount = 0;
 // 2.3.0: loop weekdays instead of legacy master list
-foreach ( $weekdays as $day ) {
+foreach ( $weekdays as $i => $weekday ) {
+
+	// --- set tab classes ---	
+	$weekdate = $weekdates[$weekday];
+	$classes = array( 'master-schedule-tabs-day', 'day-' . $i );
+	if ( $weekdate == $date ) {
+		$classes[] = 'current-day';
+		$classes[] = 'selected-day';
+	}
+	$class = implode( ' ', $classes );
 
 	// 2.2.2: use translate function for weekday string
-	$display_day = radio_station_translate_weekday( $day );
-	$output .= '<li class="master-schedule-tabs-day" id="master-schedule-tabs-header-' . strtolower( $day ) . '">';
+	$display_day = radio_station_translate_weekday( $weekday );
+	
+	$output .= '<li id="master-schedule-tabs-header-' . strtolower( $weekday ) . '" class="' . esc_attr( $class ) . '">';
+	$output .= '<div class="shift-left-arrow">';
+	$output .= '<a href="javacript:void(0);" onclick="radio_shift_tab(\'left\');" title="' . esc_attr( __( 'Previous Day', 'radio-station' ) ) . '"><</a>';
+	$output .= '</div>';
 	$output .= '<div class="master-schedule-tabs-day-name">' . esc_html( $display_day ) . '</div>';
+	$output .= '<div class="shift-right-arrow">';
+	$output .= '<a href="javacript:void(0);" onclick="radio_shift_tab(\'right\');" title="' . esc_attr( __( 'Next Day', 'radio-station' ) ) . '">></a>';
+	$output .= '</div>';
+	$output .= '<div id="master-schedule-tab-bottom-' . strtolower( $weekday ) . '" class="master-schedule-tab-bottom"></div>';
 	$output .= '</li>';
 
 	// 2.2.7: separate headings from panels for tab view
-	$panels .= '<ul class="master-schedule-tabs-panel" id="master-schedule-tabs-day-' . strtolower( $day ) . '">';
+	$panels .= '<ul class="master-schedule-tabs-panel" id="master-schedule-tabs-day-' . strtolower( $weekday ) . '">';
 
 	// --- get shifts for this day ---
-	if ( isset( $schedule[$day] ) ) {
-		$shifts = $schedule[$day];
+	if ( isset( $schedule[$weekday] ) ) {
+		$shifts = $schedule[$weekday];
 	} else {
 		$shifts = array();
 	}
@@ -50,9 +70,11 @@ foreach ( $weekdays as $day ) {
 
 			$show = $shift['show'];
 
+			$show_link = false;
 			if ( $atts['show_link'] ) {
-				$show_link = apply_filters( 'radio_station_schedule_show_link', $show['url'], $show['id'], 'tabs' );
+				$show_link = $show['url'];
 			}
+			$show_link = apply_filters( 'radio_station_schedule_show_link', $show_link, $show['id'], 'tabs' );
 
 			// 2.3.0: add genre classes for highlighting
 			$classes = array( 'master-schedule-tabs-show' );
@@ -156,11 +178,11 @@ foreach ( $weekdays as $day ) {
 				if ( 24 == (int) $atts['time'] ) {
 					$start = radio_station_convert_shift_time( $shift['start'], 24 );
 					$end = radio_station_convert_shift_time( $shift['end'], 24 );
-					$data_format = 'G:i';
+					$data_format = 'H:i';
 				} else {
 					$start = str_replace( array( 'am', 'pm'), array( ' ' . $am, ' ' . $pm), $shift['start'] );
 					$end = str_replace( array( 'am', 'pm'), array( ' ' . $am, ' ' . $pm), $shift['end'] );
-					$data_format = 'H:i a';
+					$data_format = 'g:i a';
 				}
 
 				// 2.3.0: filter show time by show and context

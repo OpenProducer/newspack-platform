@@ -5,8 +5,7 @@
 Note if you want to display a Shortcode within a custom Template, you can use `do_shortcode`.
 eg. `do_shortcode('[master-schedule]');`
 
-
-[Radio Station Demo Site](http://radiostationdemo.com)
+Shortcode Output Examples can be seen on the [Radio Station Demo Site](http://radiostationdemo.com)
 
 
 ## Master Schedule
@@ -17,67 +16,193 @@ Use the shortcode `[master-schedule]` on any page. This will generate a full-pag
 
 The following attributes are available for the shortcode:
 
-* 'view' => Valid values are 'table', 'tabbed', 'list', 'divs', 'legacy'. Default value is 'table'.
-* 'time' => The time format you with to use.  Valid values are 12 and 24. Default is the Plugin Setting.
-* 'show_link' => Display the title of the show as a link to its profile page. Valid values are 0 for hide, 1 for show.  Default is 1.
-* 'display_show_time' => Display start and end times of each show after the title in the grid. Valid values are 0 for hide, 1 for show.  Default is 1.
-* 'show_image' => If set to a value of 1, the show's avatar will be displayed. Default value is 0.
-* 'show_djs' => If set to a value of 1, the names of the show's DJs will be displayed.  Default value is 0.
+* *view* : Valid values are 'table', 'tabbed', 'list', 'divs', 'legacy'. Default value is 'table'.
+* *time* : Display time format you with to use.  Valid values are 12 and 24. Default is the Plugin Setting.
+* *show_link* : Display the title of the show as a link to its profile page. Valid values are 0 for hide, 1 for show.  Default is 1.
+* *display_show_time* : Display start and end times of each show after the title in the grid. Valid values are 0 for hide, 1 for show.  Default is 1.
+* *show_image* : If set to a value of 1, the show's avatar will be displayed. Default value is 0.
+* *show_djs* : If set to a value of 1, the names of the show's DJs will be displayed.  Default value is 0.
+* *divheight* : Set the height, in pixels, of the individual divs in the 'divs' view only. Default is 45.
+* *single_day* : Display schedule for only a single day of the week.  Only works if you are using the 'list' view.
 
-* 'divheight' => Set the height, in pixels, of the individual divs in the 'divs' layout only. Default is 45.
-* 'single_day' => Display schedule for only a single day of the week.  Only works if you are using the 'list' format.  
+Example: Display the schedule in 24-hour time format, use `[master-schedule time="24"]`.  
 
-For example, if you wish to display the schedule in 24-hour time format, use `[master-schedule time="24"]`.  If you want to only show Sunday's schedule, use `[master-schedule list="list" single_day="sunday"]`.
+#### Radio Timezone Shortcode
+
+`[radio-timezone]`
+
+Displays the Radio Station Timezone selected via Plugin Settings. There are no attributes for this shortcode.
 
 
 ## Archive Shortcodes
 
+Note for ease of use either the singular or plural version of each archive shortcode will work.
+
 ### Shows Archive Shortcode
+
 `[shows-archive]` (or `[show-archive]`)
 
+The following attributes are available for this shortcode:
+
+* *description* : Show description display. 'none', 'full' or 'excerpt'. Default 'excerpt'.
+* *hide_empty* : Only display if Shows are found. 0 or 1. Default 0.
+* *time* : Display time format you with to use.  Valid values are 12 and 24. Default is the Plugin Setting.
+* *genre* : Genres to display (ID or slug). Separate multiple values with commas. Default empty (all)
+* *language* : Languages to display (ID or slug). Separate multiple values with commas. Default empty (all)
+* *status* : Query for Show status. Default 'publish'.
+* *perpage* : Query for number of Shows. Default -1 (all)
+* *offset* : Query for Show offset. Default '' (no offset)
+* *orderby* : Query to order Show display by. Default 'title'.
+* *order* : Query order for Shows. Default 'ASC'.
+* *show_avatars* : Display the Show Avatar. 0 or 1. Default 1.
+* *thumbnails* : Display Show Featured image if no Show Avatar. 0 or 1. Default 0.
+* *with_shifts* : Only display Shows with active Shifts. 0 or 1. Default 0.
+
+[Demo Site Example Output](https://radiostationdemo.com/archive-shortcodes/shows-archive/)
+
 ### Overrides Archive Shortcode
+
 `[overrides-archive]` (or `[override-archive]`)
 
+The following attributes are available for this shortcode:
+
+* *description* : Override description display. 'none', 'full' or 'excerpt'. Default 'excerpt'.
+* *hide_empty* : Only display if Overides are found. 0 or 1. Default 0.
+* *show_dates* : Display the Schedule Override dates and start/end times. 0 or 1. Default 1.
+* *time* : Display time format you with to use.  Valid values are 12 and 24. Default is the Plugin Setting.
+* *genre* : Genres to display (ID or slug). Separate multiple values with commas. Default empty (all)
+* *language* : Languages to display (ID or slug). Separate multiple values with commas. Default empty (all)
+* *status* : Query for Override status. Default 'publish'.
+* *perpage* : Query for number of Overrides. Default -1 (all)
+* *offset* : Query for Override offset. Default '' (no offset)
+* *orderby* : Query to order Override display by. Default 'title'.
+* *order* : Query order for Overrides. Default 'ASC'.
+* *show_avatars* : Display the Override Avatar. 0 or 1. Default 1.
+* *thumbnails* : Display Override Featured image if no Overide Avatar. 0 or 1. Default 0.
+* *with_dates* : Only display Shows with Date set. 0 or 1. Default 0.
+
+[Demo Site Example Output](https://radiostationdemo.com/archive-shortcodes/overrides-archive/)
+
 ### Playlists Archive Shortcode
+
 `[playlists-archive]` (or `[playlist-archive]`)
 
+The following attributes are available for this shortcode:
+
+* *description* : Playlist description display. 'none', 'full' or 'excerpt'. Default 'excerpt'.
+* *hide_empty* : Only display if Playlists are found. 0 or 1. Default 0.
+* *genre* : Genres to display (ID or slug). Separate multiple values with commas. Default empty (all)
+* *language* : Languages to display (ID or slug). Separate multiple values with commas. Default empty (all)
+* *status* : Query for Playlist status. Default 'publish'.
+* *perpage* : Query for number of Playlists. Default -1 (all)
+* *offset* : Query for Playlists offset. Default '' (no offset)
+* *orderby* : Query to order Playlists display by. Default 'title'.
+* *order* : Query order for Playlists. Default 'ASC'.
+
+[Demo Site Example Output](https://radiostationdemo.com/archive-shortcodes/playlists-archive/)
+
 ### Genres Archive Shortcode
+
 `[genres-archive]` (or `[genre-archive]`)
 
+The following attributes are available for this shortcode:
+
+* *genres* : Genres to display (ID or slug). Separate multiple values with commas. Default empty (all)
+* *link_genres* : Link Genre titles to term pages. 0 or 1. Default 1.
+* *genre_desc' :  Display Genre term description. 0 or 1. Default 1.
+* *genre_images' : [Pro] Display Genre images. 0 or 1. Default 1.
+* *image_width' : [Pro] Set a width style in pixels for Genre images. Default is 100.
+* *hide_empty' : No output if no records to display for Genre. 0 or 1. Default 1.
+* *status* : Query for Show status. Default 'publish'.
+* *perpage* : Query for number of Shows. Default -1 (all)
+* *offset* : Query for Show offset. Default '' (no offset)
+* *orderby* : Query to order Show display by. Default 'title'.
+* *order* : Query order for Shows. Default 'ASC'.
+* *with_shifts* : Only display Shows with active Shifts. 0 or 1. Default 0.
+* *show_avatars* : Display the Show Avatar. 0 or 1. Default 1.
+* *thumbnails* : Display Show Featured image if no Show Avatar. 0 or 1. Default 0.
+* *avatar_width* : * *avatar_width* : Set a width style in pixels for Show Avatars. Default is 75.
+* *show_desc* : Display Show Descriptions. 'none', 'full' or 'excerpt'. Default 'none'.
+
+[Demo Site Example Output](https://radiostationdemo.com/archive-shortcodes/genres-archive/)
+
 ### Language Archive Shortcode
+
 `[languages-archive]` (or `[language-archive]`)
-This shortcode will be available in a future version.
+
+This shortcode will be available in a future version, similar to the Genre archive shortcode.
 
 ### Show Posts Archive Shortcode
+
 `[show-posts-archive]` (or `[show-post-archive]`)
 
+The following attributes are available for this shortcode:
+
+* *per_page* : Number of Show Posts to display per page. Default 15.
+* *limit* : Limit of Show Posts to display. Default 0 (no limit)
+* *content* : Post Content display. 'none', 'full' or 'excerpt'. Default 'excerpt'.
+* *thumbnails* : Display Show Post Thumbnails. 0 or 1. Default 1.
+* *pagination* : Paginate Show Post Display. 0 or 1. Default 1.
+
+[Demo Site Example Output](https://radiostationdemo.com/archive-shortcodes/show-posts-archive/)
+
 ### Show Playlists Archive Shortcode
+
 `[show-playlists-archive]` (or `[show-playlist-archive]`)
+
+The following attributes are available for this shortcode:
+
+* *per_page* : Number of Show Playlists to display per page. Default 15.
+* *limit* : Limit of Show Playlists to display. Default 0 (no limit)
+* *content* : Playlist Content display. 'none', 'full' or 'excerpt. Default 'excerpt'.
+* *pagination* : Paginate Show Post Display. 0 or 1. Default 1.
+
+[Demo Site Example Output](https://radiostationdemo.com/archive-shortcodes/show-playlists-archive/)
+
+### [Pro] Show Episodes Archive Shortcode
+
+`[show-episodes-archive]` (or `[show-episode-archive]`)
+
+This shortcode will be available in a future version of Radio Station Pro.
 
 
 ## Widget Shortcodes
 
 ### Current Show Widget Shortcode
-see [Current Show Widget](./Widgets.md#current-show-widget)
+
+`[current-show]` - see [Current Show Widget](./Widgets.md#current-show-widget)
 
 ### Upcoming Shows Widget Shortcode
-see [Upcoming Shows Widget](./Widgets.md#upcoming-shows-widget)
+
+`[upcoming-shows]` - see [Upcoming Shows Widget](./Widgets.md#upcoming-shows-widget)
 
 ### Current Playlist Widget Shortcode
-see [Current Playlist Widget](./Widgets.md#current-playlist-widget)
+
+`[current-playlist]` - see [Current Playlist Widget](./Widgets.md#current-playlist-widget)
 
 
 ### Legacy Shortcodes
 
 #### Show List
+
 `[show-list]`
+
 This shortcode is considered Deprecated. Use the [Shows Archive Shortcode](#shows-archive-shortcode) instead: `[shows-archive]`
 
 The following attributes are available for this shortcode:
-* 'genre' => Displays shows only from the specified genre(s). Separate multiple genres with a comma, e.g. genre="pop,rock".
+
+* *genre* : Displays shows only from the specified genre(s). Separate multiple genres with a comma, e.g. genre="pop,rock".
 
 Examples: `[list-shows genre="pop"]`, `[list-shows genre="pop,rock,metal"]`
 
 #### Show Playlists
+
+`[show-playlists]` (or `[get-playlists]`
+
 This shortcode is considered Deprecated. Use the [Show Playlists Archive Shortcode](#show-playlists-archive-shortcode) instead: `[show-playlists-archive]`
-`[show-playlists]`
+
+The following attributes are available for this shortcode:
+
+* *show* : The ID of the Show to display Playlists for.
+* *limit* : Maximum number of Playlists to display.
+

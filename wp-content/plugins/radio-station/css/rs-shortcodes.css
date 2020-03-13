@@ -13,10 +13,18 @@
 
 /* Archive Shortcodes */
 /* ------------------ */
+
+
+.show-archive-list, .playlist-archive-list, .override-archive-list {
+	list-style: none;
+	padding-left: 0;
+}
+
 .show-archive-item, .playlist-archive-item, .override-archive-item {
     list-style: none;
 	clear: both;
 	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .show-archive-item-thumbnail, .playlist-archive-item-thumbnail, .override-archive-item-thumbnail {
@@ -24,9 +32,14 @@
 	padding-right: 20px;
 }
 
+.genre-archive .show-archive-item-title {
+    font-size: 1em;
+    margin-bottom: 5px;
+}
+
 .show-archive-item-title, .playlist-archive-item-title, .override-archive-item-title {
 	font-size: 1.25em;
-	margin-bottom: 15px;
+	margin-bottom: 10px;
 }
 
 /* Show Subarchive Shortcodes */
@@ -83,6 +96,10 @@
 /* Widget/Shortcode Styles */
 /* ----------------------- */
 
+.current-show-list, .current-show-list li, .upcoming-shows-list, .upcoming-shows-list li {
+    list-style: none;
+}
+
 .current-show-avatar, .upcoming-show-avatar, .on-air-dj-avatar {
 	padding-bottom: 5px;
 	display: block;
@@ -96,20 +113,16 @@
 
 .current-show-avatar.float-left, .upcoming-show-avatar.float-left, .on-air-dj-avatar.float-left {
 	float: left;
-	padding-right: 15px;
+	margin-right: 15px;
 }
 
 .current-show-avatar.float-right, .upcoming-show-avatar.float-right, .on-air-dj-avatar.float-right {
 	float: right;
-	padding-left: 15px;
+	margin-left: 15px;
 }
 
 .current-show-list .current-show-title, .on-air-list .on-air-dj-title {
 	font-size: 1.25em;
-}
-
-.upcoming-shows-list .upcoming-show-title, .on-air-upcoming-list .on-air-dj-title {
-	font-size: 1.1em;
 }
 
 .current-show-encore, .upcoming-show-encore, .on-air-dj-encore {
@@ -117,12 +130,7 @@
 }
 
 .current-show-encore, .current-show-hosts, .on-air-dj-encore, .on-air-dj-names {
-	font-size: 1em;
-}
-
-.upcoming-shows-list .upcoming-show-encore, .upcoming-shows-list .upcoming-show-hosts,
-.on-air-upcoming-list .on-air-dj-encore, .on-air-upcoming-list .on-air-dj-names {
-	font-size: 0.9em;
+	font-size: 0.85em;
 }
 
 .current-show-list, .upcoming-shows-list,
@@ -130,9 +138,43 @@
 	list-style: none;
 }
 
-.current-show-desc, .current-show-schedule, .upcoming-show-schedule, .on-air-dj-desc, .on-air-dj-sched {
-	font-size: 0.8em;
+.current-show-countdown .rs-label, .upcoming-show-countdown .rs-label {
+    font-weight: bold;
 }
+
+.current-show-countdown .rs-hours, .current-show-countdown .rs-minutes, .current-show-countdown .rs-seconds,
+.upcoming-show-countdown .rs-hours, .upcoming-show-countdown .rs-minutes, .upcoming-show-countdown .rs-seconds,
+.show-playlist-countdown .rs-hours, .show-playlist-countdown .rs-minutes, .show-playlist-countdown .rs-seconds {
+	background-color: #F0F0F0;
+	padding: 1px 3px;
+}
+
+.current-show-countdown, .upcoming-show-countdown, .show-playlist-countdown {
+	margin-top: 5px;
+	margin-bottom: 5px;
+}
+
+.current-show-desc, .on-air-dj-desc,
+.current-show-schedule, .upcoming-show-schedule, .on-air-dj-sched, 
+.current-show-playlist, .on-air-dj-playlist {
+    font-size: 0.8em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.current-show-schedule .current-show-shifts.current-shift {
+    font-weight: bold;
+}
+
+.upcoming-shows-list .upcoming-show-title, .on-air-upcoming-list .on-air-dj-title {
+	font-size: 1em;
+}
+
+.upcoming-shows-list .upcoming-show-encore, .upcoming-shows-list .upcoming-show-hosts,
+.on-air-upcoming-list .on-air-dj-encore, .on-air-upcoming-list .on-air-dj-names {
+	font-size: 0.75em;
+}
+
 
 /* Current Playlist Widget */
 .show-playlist-tracks {

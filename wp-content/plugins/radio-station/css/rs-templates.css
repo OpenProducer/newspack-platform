@@ -134,8 +134,7 @@
 }
 
 #show-content .show-times .show-schedule-link {
-	width: 100%;
-	text-align: right;
+	font-size: 0.8em;
 }
 
 #show-content .show-times .show-day-time, #show-content .show-times .show-time {
