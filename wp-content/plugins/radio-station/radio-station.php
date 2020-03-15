@@ -110,11 +110,13 @@ if ( get_option( 'radio_show_cpts_prefixed' ) ) {
 // --------------------
 // 2.3.0: include new data feeds file
 // 2.3.0: renamed widget files to match new widget names
+// 2.3.0: separate file for legacy support functions
 
 // --- Main Includes ---
 require RADIO_STATION_DIR . '/includes/post-types.php';
 require RADIO_STATION_DIR . '/includes/support-functions.php';
 require RADIO_STATION_DIR . '/includes/data-feeds.php';
+require RADIO_STATION_DIR . '/includes/legacy.php';
 
 // --- Shortcodes ---
 require RADIO_STATION_DIR . '/includes/master-schedule.php';
@@ -885,8 +887,8 @@ function radio_station_enqueue_style( $stylekey ) {
 // ---------------------
 // Localize Time Strings
 // ---------------------
-add_action( 'wp_enqueue_scripts', 'radio_station_localize_time_strings' );
-function radio_station_localize_time_strings() {
+add_action( 'wp_enqueue_scripts', 'radio_station_localize_script' );
+function radio_station_localize_script() {
 
 	// --- create settings object ---
 	$js = "var radio = {}; ";
@@ -1572,7 +1574,7 @@ function radio_station_add_show_links( $content ) {
 		$related_show = get_post_meta( $post->ID, 'post_showblog_id', true );
 		if ( $related_show ) {
 			$positions = array( 'after' );	
-			$positions = apply_filters( 'radio_station_link_to_show_positions', $positions, $post_type );
+			$positions = apply_filters( 'radio_station_link_to_show_positions', $positions, $post->post_type );
 			if ( $positions && is_array( $positions ) && ( count( $positions ) > 0 ) ) {
 				if ( in_array( 'before', $positions ) || in_array( 'after', $positions ) ) {
 					$before = $after = '';
@@ -1588,7 +1590,10 @@ function radio_station_add_show_links( $content ) {
 						$before = apply_filters( 'radio_station_link_to_show_before', $before, $post, $show );
 					}
 					if ( in_array( 'after', $positions ) ) {
-						$post_type_sections = array( 'post', RADIO_STATION_EPISODE_SLUG );
+						$post_type_sections = array( 'post' );
+						if ( defined( 'RADIO_STATION_EPISODE_SLUG' ) ) {
+							$post_type_sections[] = RADIO_STATION_EPISODE_SLUG;
+						}
 						if ( in_array( $post->post_type, $post_type_sections ) ) {
 							$post_type_ref = '#show-' . str_replace( 'rs-', '', $post->post_type ) . 's';
 							$anchor = sprintf( __( 'All %s for Show %s', 'radio-station' ), $plural, $show->post_title );

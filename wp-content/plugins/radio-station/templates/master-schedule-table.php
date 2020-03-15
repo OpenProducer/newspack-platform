@@ -332,8 +332,8 @@ foreach ( $hours as $hour ) {
 						if ( $atts['display_show_time'] ) {
 
 							// --- convert shift time data ---
-							$shift_start_time = strtotime( $weekdate[$shift['day']] . ' ' . $shift['start'] );
-							$shift_end_time = strtotime( $weekdate[$shift['day']] . ' ' . $shift['end'] );
+							$shift_start_time = strtotime( $weekdates[$shift['day']] . ' ' . $shift['start'] );
+							$shift_end_time = strtotime( $weekdates[$shift['day']] . ' ' . $shift['end'] );
 
 							// --- convert shift time for display ---
 							if ( '00:00 am' == $shift['start'] ) {
@@ -353,7 +353,7 @@ foreach ( $hours as $hour ) {
 							}
 
 							$show_time = '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">' . $start . '</span>';
-							$show_time .= ' ' . esc_html( __( 'to', 'radio-station' ) ) . ' ';
+							$show_time .= '<span class="rs-sep"> ' . esc_html( __( 'to', 'radio-station' ) ) . ' </span>';
 							$show_time .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format ) . '">' . $end . '</span>';
 							$show_time = apply_filters( 'radio_station_schedule_show_time', $show_time, $show['id'], 'table' );
 							$cell .= '<div class="show-time" id="show-time-' . esc_attr( $tcount ) . '">' . $show_time . '</div>';

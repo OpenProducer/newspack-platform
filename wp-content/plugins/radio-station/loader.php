@@ -5,7 +5,7 @@
 // ===========================
 //
 // --------------
-// Version: 1.0.9
+// Version: 1.1.0
 // --------------
 // * changelog at end of file! *
 //
@@ -284,7 +284,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 		public function add_settings() {
 
 			// --- add the default plugin settings ---
-			$args = $this->args;
+			$args = $this->args; 
 			$defaults = $this->default_settings();
 			$added = add_option( $args['option'], $defaults );
 
@@ -294,6 +294,10 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 				foreach ( $defaults as $key => $value ) {
 					$GLOBALS[$namespace][$key] = $value;
 				}
+				
+				// --- record first installed version ---
+				// 1.1.0: added record for tracking first install version
+				add_option( $args['option'] . '_first_install', $args['version'] );
 			}
 
 			// 1.0.9: trigger add settings action
@@ -606,13 +610,8 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						foreach ( $valid as $option => $label ) {
 							$optionkey = $args['settings'] . '_' . $key . '-' . $option;
 							if ( isset( $_POST[$optionkey] ) && ( 'yes' == $_POST[$optionkey] ) ) {
-								if ( isset( $values['value'] ) ) {
-									$posted[$option] = $values['value'];
-								} else {
-									$posted[$option] = 'yes';
-								}
-							} else {
-								$posted[$option] = '';
+								// 1.1.0: fixed to save only array of key values
+								$posted[] = $option;
 							}
 						}
 						$settings[$key] = $posted;
@@ -1708,7 +1707,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 
 				// --- output tab switcher script ---
 				// 1.0.9: add to settings scripts
-				$script = "function show_settings_tab(tab) {" . PHP_EOL;
+				$script = "function settings_display_tab(tab) {" . PHP_EOL;
 				foreach ( $tabs as $tab => $label ) {
 					$script .= "	document.getElementById('" . esc_js( $tab ) . "-tab-button').className = 'settings-tab-button inactive';" . PHP_EOL;
 					$script .= "	document.getElementById('" . esc_js( $tab ) . "-tab').className = 'settings-tab inactive'; " . PHP_EOL;
@@ -1727,7 +1726,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						$class = 'active';
 					}
 					echo "<li id='" . esc_attr( $tab ) . "-tab-button' class='settings-tab-button " . esc_attr( $class ) . "' onclick='";
-					echo 'show_settings_tab("' . esc_attr( $tab ) . '");';
+					echo 'settings_display_tab("' . esc_attr( $tab ) . '");';
 					echo "'>" . esc_html( $tablabel ) . "</li>";
 					$i ++;
 				}
@@ -1739,7 +1738,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 			// --- reset to default script ---
 			// 1.0.9: add to settings scripts
 			$confirmreset = __( 'Are you sure you want to reset to default settings?' );
-			$script = "function resettodefaults() {
+			$script = "function settings_reset_defaults() {
 			agree = confirm('" . esc_js( $confirmreset ) . "'); if (!agree) {return false;}
 			document.getElementById('settings-action').value = 'reset';
 			document.getElementById('settings-form').submit();
@@ -1840,7 +1839,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 				// (filtered so removable from any specific tab)
 				$buttons = "<tr height='25'><td> </td></tr>";
 				$buttons .= "<tr><td align='center'>";
-				$buttons .= "<input type='button' class='button-secondary settings-button' onclick='return resettodefaults();' value='" . esc_attr( __( 'Reset Settings' ) ) . "'>";
+				$buttons .= "<input type='button' class='button-secondary settings-button' onclick='return settings_reset_defaults();' value='" . esc_attr( __( 'Reset Settings' ) ) . "'>";
 				$buttons .= "</td><td colspan='3'></td><td align='center'>";
 				$buttons .= "<input type='submit' class='button-primary settings-button' value='" . esc_attr( __( 'Save Settings' ) ) . "'>";
 				$buttons .= "</td></tr>";
@@ -1871,7 +1870,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 
 			// --- number input step script ---
 			// 1.0.9: added to script array
-			$script = "function number_step(updown, id, min, max, step) {
+			$script = "function settings_number_step(updown, id, min, max, step) {
 			if (updown == 'up') {multiplier = 1;}
 			if (updown == 'down') {multiplier = -1;}
 			current = parseInt(document.getElementById(id).value);
@@ -2112,10 +2111,9 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 
 						// --- toggle ---
 						// 1.0.9: add toggle input (styled checkbox)
+						$checked = '';
 						if ( $setting == $option['value'] ) {
-							$checked = ' checked';
-						} else {
-							$checked = '';
+							$checked = " checked='checked'";
 						}
 						$row .= "<label for='" . esc_attr( $name ) . "' class='setting-toggle'>";
 						$row .= "<input type='checkbox' name='" . esc_attr( $name ) . "' class='setting-toggle' value='" . esc_attr( $option['value'] ) . "'" . $checked . ">";
@@ -2128,10 +2126,9 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 					} elseif ( 'checkbox' == $type ) {
 
 						// --- checkbox ---
+						$checked = '';
 						if ( $setting == $option['value'] ) {
-							$checked = ' checked';
-						} else {
-							$checked = '';
+							$checked = " checked='checked'";
 						}
 						$row .= "<input type='checkbox' name='" . $name . "' class='setting-checkbox' value='" . esc_attr( $option['value'] ) . "'" . $checked . ">";
 						if ( isset( $option['suffix'] ) ) {
@@ -2143,10 +2140,9 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						// --- multicheck boxes ---
 						$checkboxes = array();
 						foreach ( $option['options'] as $key => $label ) {
+							$checked = '';
 							if ( is_array( $setting ) && in_array( $key, $setting ) ) {
-								$checked = ' checked';
-							} else {
-								$checked = '';
+								$checked = " checked='checked'";
 							}
 							$checkboxes[] = "<input type='checkbox' name='" . esc_attr( $name ) . "-" . esc_attr( $key ) . "' class='setting-checkbox' value='yes'" . $checked . "> " . esc_html( $label );
 						}
@@ -2157,10 +2153,9 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						// --- radio buttons ---
 						$radios = array();
 						foreach ( $option['options'] as $value => $label ) {
+							$checked = '';
 							if ( $setting === $value ) {
-								$checked = " checked";
-							} else {
-								$checked = '';
+								$checked = " checked='checked'";
 							}
 							$radios[] = "<input type='radio' class='setting-radio' name='" . esc_attr( $name ) . "' value='" . esc_attr( $value ) . "'" . $checked . "> " . esc_html( $label );
 						}
@@ -2269,8 +2264,8 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						} else {
 							$step = 1;
 						}
-						$onclickup = 'number_step("up", "' . esc_attr( $name ) . '", ' . esc_attr( $min ) . ', ' . esc_attr( $max ) . ', ' . esc_attr( $step ) . ');';
-						$onclickdown = 'number_step("down", "' . esc_attr( $name ) . '", ' . esc_attr( $min ) . ', ' . esc_attr( $max ) . ', ' . esc_attr( $step ) . ');';
+						$onclickup = 'settings_number_step("up", "' . esc_attr( $name ) . '", ' . esc_attr( $min ) . ', ' . esc_attr( $max ) . ', ' . esc_attr( $step ) . ');';
+						$onclickdown = 'settings_number_step("down", "' . esc_attr( $name ) . '", ' . esc_attr( $min ) . ', ' . esc_attr( $max ) . ', ' . esc_attr( $step ) . ');';
 						$row .= "<input class='setting-button button-secondary' type='button' value='-' onclick='" . esc_js( $onclickdown ) . "'>";
 						$row .= "<input class='setting-numeric' type='text' name='" . esc_attr( $name ) . "' id='" . esc_attr( $name ) . "' value='" . esc_attr( $setting ) . "' placeholder='" . esc_attr( $placeholder ) . "'>";
 						$row .= "<input class='setting-button button-secondary' type='button' value='+' onclick='" . esc_js( $onclickup ) . "'>";
@@ -2407,8 +2402,8 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// the below functions use the function name to grab and load the corresponding class method
 		// all function name suffixes here must be two words for the magic namespace grabber to work
 		// ie. _add_settings, because the namespace is taken from *before the second-last underscore*
-		if ( !function_exists( 'radio_station_get_namespace_slug' ) ) {
-			function radio_station_get_namespace_slug( $f ) {
+		if ( !function_exists( 'radio_station_get_radio_station_slug' ) ) {
+			function radio_station_get_radio_station_slug( $f ) {
 				return substr( $f, 0, strrpos( $f, '_', ( strrpos( $f, '_' ) - strlen( $f ) - 1 ) ) );
 			}
 		}
@@ -2419,7 +2414,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// 2.3.0: added function for getting loader class instance
 		if ( !function_exists( 'radio_station_loader_instance' ) ) {
 			function radio_station_loader_instance() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 
 				return $GLOBALS[$namespace . '_instance'];
 			}
@@ -2431,7 +2426,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// 2.3.0: added function for getting Freemius class instance
 		if ( !function_exists( 'radio_station_freemius_instance' ) ) {
 			function radio_station_freemius_instance() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 
 				return $GLOBALS[$namespace . '_freemius'];
 			}
@@ -2443,7 +2438,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// 2.3.0: added function for getting plugin data
 		if ( !function_exists( 'radio_station_plugin_data' ) ) {
 			function radio_station_plugin_data() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 
 				return $instance->plugin_data();
@@ -2455,7 +2450,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// ------------
 		if ( !function_exists( 'radio_station_add_settings' ) ) {
 			function radio_station_add_settings() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->add_settings();
 			}
@@ -2466,7 +2461,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// ------------
 		if ( !function_exists( 'radio_station_default_settings' ) ) {
 			function radio_station_default_settings( $key = false ) {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 
 				return $instance->default_settings( $key );
@@ -2478,7 +2473,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// -----------
 		if ( !function_exists( 'radio_station_get_options' ) ) {
 			function radio_station_get_options() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 
 				return $instance->options;
@@ -2490,7 +2485,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// -----------
 		if ( !function_exists( 'radio_station_get_setting' ) ) {
 			function radio_station_get_setting( $key, $filter = true ) {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 
 				return $instance->get_setting( $key, $filter );
@@ -2503,7 +2498,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// 1.0.9: added missing get_settings prefixed function
 		if ( !function_exists( 'radio_station_get_settings' ) ) {
 			function radio_station_get_settings( $filter = true ) {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 
 				return $instance->get_settings( $filter );
@@ -2515,7 +2510,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// --------------
 		if ( !function_exists( 'radio_station_reset_settings' ) ) {
 			function radio_station_reset_settings() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->reset_settings();
 			}
@@ -2526,7 +2521,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// ---------------
 		if ( !function_exists( 'radio_station_update_settings' ) ) {
 			function radio_station_update_settings() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->update_settings();
 			}
@@ -2537,7 +2532,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// ---------------
 		if ( !function_exists( 'radio_station_delete_settings' ) ) {
 			function radio_station_delete_settings() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->delete_settings();
 			}
@@ -2548,7 +2543,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// -----------------
 		if ( !function_exists( 'radio_station_pro_namespace' ) ) {
 			function radio_station_pro_namespace( $pronamespace ) {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->pro_namespace( $pronamespace );
 			}
@@ -2559,7 +2554,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// -----------
 		if ( !function_exists( 'radio_station_message_box' ) ) {
 			function radio_station_message_box( $message, $echo = false ) {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 
 				return $instance->message_box( $message, $echo );
@@ -2571,7 +2566,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// ---------------
 		if ( !function_exists( 'radio_station_settings_header' ) ) {
 			function radio_station_settings_header() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->settings_header();
 			}
@@ -2582,7 +2577,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// -------------
 		if ( !function_exists( 'radio_station_settings_page' ) ) {
 			function radio_station_settings_page() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->settings_page();
 			}
@@ -2594,7 +2589,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// 1.0.9: added for standalone setting table output
 		if ( !function_exists( 'radio_station_settings_table' ) ) {
 			function radio_station_settings_table() {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->settings_table();
 			}
@@ -2606,7 +2601,7 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 		// 1.0.9: added for standalone setting row output
 		if ( !function_exists( 'radio_station_settings_row' ) ) {
 			function radio_station_settings_row( $option, $setting ) {
-				$namespace = radio_station_get_namespace_slug( __FUNCTION__ );
+				$namespace = radio_station_get_radio_station_slug( __FUNCTION__ );
 				$instance = $GLOBALS[$namespace . '_instance'];
 				$instance->settings_row( $option, $setting );
 			}
@@ -2622,6 +2617,10 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 // =========
 // CHANGELOG
 // =========
+
+// == 1.1.0 ==
+// - fix to saving multicheck as single array of values
+// - added record for tracking first install version
 
 // == 1.0.9 ==
 // - added automated Settings table and Admin Page output

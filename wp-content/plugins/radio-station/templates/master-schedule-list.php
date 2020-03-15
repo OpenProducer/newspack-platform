@@ -151,7 +151,7 @@ foreach ( $weekdays as $day ) {
 
 				// 2.3.0: filter show time by show and context
 				$show_time = '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">' . $start . '</span>';
-				$show_time .= ' ' . esc_html( __( 'to', 'radio-station' ) ) . ' ';
+				$show_time .= '<span class="rs-sep"> ' . esc_html( __( 'to', 'radio-station' ) ) . ' </span>';
 				$show_time .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format ) . '">' . $end . '</span>';
 				$show_time = apply_filters( 'radio_station_schedule_show_time', $show_time, $show['id'], 'list' );
 

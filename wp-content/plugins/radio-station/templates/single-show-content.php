@@ -417,7 +417,7 @@ if ( !$active || !$shifts ) {
 					$shift_start_time = strtotime( $start );
 					$shift_end_time = strtotime( $end );
 					if ( $shift_end_time < $shift_start_time ) {
-						$shift_end_time = $shift_end_time + ( 7 * 60 * 60 );
+						$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
 					}
 
 					// --- maybe convert to 24 hour format ---
@@ -441,7 +441,8 @@ if ( !$active || !$shifts ) {
 					// --- set show time output ---
 					$show_time = '<div class="' . esc_attr( $class ) . '">';
 					$show_time .= '<span class="rs-time" data-format="' . esc_attr( $data_format ) . '">' . esc_html( $start ) . '</span>';
-					$show_time .= ' - <span class="rs-time" data-format="' . esc_attr( $data_format ) . '">' . esc_html( $end ) . '</span>';
+					$show_time .= '<span class="rs-sep"> - </span>';
+					$show_time .= '<span class="rs-time" data-format="' . esc_attr( $data_format ) . '">' . esc_html( $end ) . '</span>';
 					if ( isset( $shift['encore'] ) && ( 'on' == $shift['encore'] ) ) {
 						$found_encore = true;
 						$show_time .= '<span class="show-encore">*</span>';

@@ -333,6 +333,10 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 
 	} else {
 
+		// --- filter excerpt length and more ---
+		$length = apply_filters( 'radio_station_archive_' . $type. '_list_excerpt_length', false );
+		$more = apply_filters( 'radio_station_archive_' . $type . '_list_excerpt_more', '[&hellip;]' );
+
 		// --- archive list ---
 		$list .= '<ul class="' . esc_attr( $type ) . '-archive-list">';
 
@@ -394,7 +398,8 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 				}
 			
 				echo '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
-				echo esc_html( $display_day ) . ', ' . $start . '</span> - ';
+				echo esc_html( $display_day ) . ', ' . $start . '</span>';
+				echo '<span class="rs-sep"> - </span>';
 				echo '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
 				echo "</div>";
 			}
@@ -432,10 +437,12 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 				$list .= '</div>';
 			} else {
 				$list .= '<div class="' . esc_attr( $type ) . '-archive-item-excerpt">';
+				$permalink = get_permalink( $archive_post->ID );
 				if ( !empty( $archive_post->post_excerpt ) ) {
 					$excerpt = $archive_post->post_excerpt;
+					$excerpt .= ' <a href="' . esc_url( $permalink ) . '">' . $more . '</a>';
 				} else {
-					$excerpt = radio_station_trim_excerpt( $archive_post->post_content );
+					$excerpt = radio_station_trim_excerpt( $archive_post->post_content, $length, $more, $permalink );
 				}
 				$excerpt = apply_filters( 'radio_station_' . $type . '_archive_excerpt', $excerpt, $archive_post->ID );
 				$list .= $excerpt;
@@ -805,6 +812,10 @@ function radio_station_show_list_shortcode( $type, $atts ) {
 	}
 	if ( !isset( $posts ) || !$posts || !is_array( $posts ) || ( count( $posts ) == 0 ) )  {return '';}
 
+	// --- filter excerpt length and more ---
+	$length = apply_filters( 'radio_station_show_' . $type. '_list_excerpt_length', false );
+	$more = apply_filters( 'radio_station_show_' . $type . '_list_excerpt_more', '[&hellip;]' );
+
 	// --- show list div ---
 	$list = '<div id="show-' . esc_attr( $show_id ) . '-' . esc_attr( $type ) . 's-list" class="show-' . esc_attr( $type ) . 's-list">';
 
@@ -872,10 +883,12 @@ function radio_station_show_list_shortcode( $type, $atts ) {
 			$list .= '</div>';
 		} else {
 			$list .= '<div class="show-' . esc_attr( $type ) . '-excerpt">';
+			$permalink = get_permalink( $post['ID'] );
 			if ( !empty( $post['post_excerpt'] ) ) {
 				$excerpt = $post['post_excerpt'];
+				$excerpt .= ' <a href="' . esc_url( $permalink ) . '">' . $more . '</a>';
 			} else {
-				$excerpt = radio_station_trim_excerpt( $post['post_content'] );
+				$excerpt = radio_station_trim_excerpt( $post['post_content'], $length, $more, $permalink );
 			}
 			$excerpt = apply_filters( 'radio_station_show_' . $type . '_excerpt', $excerpt, $post['ID'] );
 			$list .= $excerpt;
@@ -1087,10 +1100,10 @@ function radio_station_current_show_shortcode( $atts ) {
 	if ( $atts['show_desc'] ) {
 		if ( $atts['widget'] ) {
 			$length = apply_filters( 'radio_station_current_show_widget_excerpt_length', false );
-			$more = apply_filters( 'radio_station_current_show_widget_excerpt_more', false );
+			$more = apply_filters( 'radio_station_current_show_widget_excerpt_more', '[&hellip;]' );
 		} else {
 			$length = apply_filters( 'radio_station_current_show_shortcode_excerpt_length', false );
-			$more = apply_filters( 'radio_station_current_show_shortcode_excerpt_more', false );
+			$more = apply_filters( 'radio_station_current_show_shortcode_excerpt_more', '[&hellip;]' );
 		}
 	}
 
@@ -1260,34 +1273,6 @@ function radio_station_current_show_shortcode( $atts ) {
 
 		$output .= '<span class="radio-clear"></span>';
 
-		// --- show description ---
-		// 2.3.0: convert span to div tags for consistency
-		if ( $atts['show_desc'] ) {
-
-			// --- get show post ---
-			$show_post = get_post( $show['id'] );
-
-			// --- get show excerpt ---
-			if ( !empty( $show_post->post_excerpt ) ) {
-				$excerpt = $show_post->post_excerpt;
-			} else {
-				$excerpt = radio_station_trim_excerpt( $show_post->post_content, $length, $more );
-			}
-
-			// --- filter excerpt by context ---
-			// 2.3.0: added contextual filtering
-			if ( $atts['widget'] ) {
-				$excerpt = apply_filters( 'radio_station_current_show_widget_excerpt', $excerpt, $show['id'] );
-			} else {
-				$excerpt = apply_filters( 'radio_station_current_show_shortcode_excerpt', $excerpt, $show['id'] );
-			}
-
-			// --- output excerpt ---
-			$output .= '<div class="current-show-desc on-air-show-desc">';
-			$output .= $excerpt;
-			$output .= '</div>';
-		}
-
 		// --- check show schedule ---
 		if ( $atts['show_sched'] || $atts['show_all_sched'] ) {
 
@@ -1328,22 +1313,12 @@ function radio_station_current_show_shortcode( $atts ) {
 				} else {
 					$start = $shift['start_hour'] . ':' . $shift['start_min'] . ' ' . $shift['start_meridian'];
 					$end = $shift['end_hour'] . ':' . $shift['end_min'] . ' ' . $shift['end_meridian'];
-				}
-				$shift_start_time = strtotime( $weekdate . ' ' . $start );
-				$shift_end_time = strtotime( $weekdate . ' ' . $end );
+				}			
+				$shift_start_time = strtotime( $weekdates[$shift['day']] . ' ' . $start );
+				$shift_end_time = strtotime( $weekdates[$shift['day']] . ' ' . $end );
 				if ( $shift_start_time > $shift_end_time ) {
 					$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
 				}
-
-				// --- set shift classes ---
-				$classes = array( 'current-show-shifts', 'on-air-dj-sched' );
-				if ( ( $now > $shift_start_time ) && ( $now < $shift_end_time ) ) {
-					$current_shift = $shift;
-					$current_shift_start = $shift_start_time;
-					$current_shift_end = $shift_end_time;
-					$classes[] = 'current-shift';
-				}
-				$class = implode( ' ', $classes );
 
 				// --- convert shift times ---
 				if ( 24 == (int) $atts['time'] ) {
@@ -1358,15 +1333,44 @@ function radio_station_current_show_shortcode( $atts ) {
 					$data_format2 = 'g:i a';
 				}
 
+				// --- set shift classes ---
+				$classes = array( 'current-show-shifts', 'on-air-dj-sched' );
+				if ( ( $now > $shift_start_time ) && ( $now < $shift_end_time ) ) {
+					$current_shift_start = $shift_start_time;
+					$current_shift_end = $shift_end_time;
+					$classes[] = 'current-shift';
+					$class = implode( ' ', $classes );
+									
+					$current_shift_display .= '<div class="' . esc_attr( $class ) . '">';
+					$current_shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+					$current_shift_display .= esc_html( $display_day ) . ', ' . $start . '</span>';
+					$current_shift_display .= '<span class="rs-sep"> - </span>';
+					$current_shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+					$current_shift_display .= '</div>';
+				}
+				$class = implode( ' ', $classes );
+
 				// --- shift display output ---
 				$shift_display .= '<div class="' . esc_attr( $class ) . '">';
+				if ( in_array( 'current-shift', $classes ) ) {
+					$shift_display .= '<ul class="current-shift-list"><li class="current-shift-list-item">';
+				}
 				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
-				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span> - ';
+				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span>';
+				$shift_display .= '<span class="rs-sep"> - </span>';
 				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+				if ( in_array( 'current-shift', $classes ) ) {
+					$shift_display .= '</li></ul>';
+				}
 				$shift_display .= '</div>';
 			}
 
 			$shift_display .= '</div>';
+		}
+
+		// --- output current shift display ---
+		if ( $atts['show_sched'] ) {
+			$output .= $current_shift_display;
 		}
 
 		// --- countdown timer display ---
@@ -1375,10 +1379,40 @@ function radio_station_current_show_shortcode( $atts ) {
 			do_action( 'radio_station_countdown_enqueue' );
 		}
 
+		// --- show description ---
+		// 2.3.0: convert span to div tags for consistency
+		if ( $atts['show_desc'] ) {
+
+			// --- get show post ---
+			$show_post = get_post( $show['id'] );
+			$permalink = get_permalink( $show_post->ID );
+
+			// --- get show excerpt ---
+			if ( !empty( $show_post->post_excerpt ) ) {
+				$excerpt = $show_post->post_excerpt;
+				$excerpt .= ' <a href="' . esc_url( $permalink ) . '">' . $more . '</a>';
+			} else {
+				$excerpt = radio_station_trim_excerpt( $show_post->post_content, $length, $more, $permalink );
+			}
+
+			// --- filter excerpt by context ---
+			// 2.3.0: added contextual filtering
+			if ( $atts['widget'] ) {
+				$excerpt = apply_filters( 'radio_station_current_show_widget_excerpt', $excerpt, $show['id'] );
+			} else {
+				$excerpt = apply_filters( 'radio_station_current_show_shortcode_excerpt', $excerpt, $show['id'] );
+			}
+
+			// --- output excerpt ---
+			$output .= '<div class="current-show-desc on-air-show-desc">';
+			$output .= $excerpt;
+			$output .= '</div>';
+		}
+
 		$output .= '<span class="radio-clear"></span>';
 
-		// --- output show schedule ---
-		if ( $atts['show_sched'] || $atts['show_all_sched'] ) {
+		// --- output full show schedule ---
+		if ( $atts['show_all_sched'] ) {
 			$output .= $shift_display;
 		}
 
@@ -1496,6 +1530,9 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 	// --- get the upcoming shows ---
 	// 2.3.0: use new get next shows function
 	$shows = radio_station_get_next_shows( $atts['limit'] );
+	if ( RADIO_STATION_DEBUG ) {
+		$output .= '<span style="display:none;">' . print_r( $shows, true ) . '</span>';
+	}
 
 	// --- open shortcode only wrapper ---
 	if ( !$atts['widget'] ) {
@@ -1657,6 +1694,11 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 					$shift_display .= "<span style='display:none;'>Upcoming Shift: " . print_r( $shift, true ) . "</span>";
 				}
 
+				// --- display fix for split shifts ---
+				if ( isset( $shift['split'] ) && $shift['split'] ) {
+					$shift['end'] = $shift['real_end'];
+				}
+
 				// --- convert dates ---
 				// 2.3.0: use weekdates for reliability
 				$now = strtotime( current_time( 'mysql' ) );
@@ -1666,11 +1708,10 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 				// --- convert shift info ---
 				// 2.2.2: fix to weekday value to be translated
 				$display_day = radio_station_translate_weekday( $shift['day'] );
-				$weekdate = $weekdates[$shift['day']];
-				$shift_start_time = strtotime ( $weekdate . ' ' . $shift['start'] );
-				$shift_end_time = strtotime( $weekdate . ' ' . $shift['end'] );
+				$shift_start_time = strtotime ( $weekdates[$shift['day']] . ' ' . $shift['start'] );
+				$shift_end_time = strtotime( $weekdates[$shift['day']] . ' ' . $shift['end'] );
 				if ( $shift_end_time < $shift_start_time ) {
-					$shift_end_time = $shift_end_time + ( 7 * 60 * 60 );
+					$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
 				}
 
 				// --- maybe set next show shift times ---
@@ -1707,7 +1748,8 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 
 				$shift_display .= '<div class="' . esc_attr( $class ) . '">';
 				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
-				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span> - ';
+				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span>';
+				$shift_display .= '<span class="rs-sep"> - </span>';
 				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
 				$shift_display .= '</div>';
 

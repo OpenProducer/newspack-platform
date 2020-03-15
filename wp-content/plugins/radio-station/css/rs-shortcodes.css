@@ -155,15 +155,36 @@
 }
 
 .current-show-desc, .on-air-dj-desc,
-.current-show-schedule, .upcoming-show-schedule, .on-air-dj-sched, 
 .current-show-playlist, .on-air-dj-playlist {
     font-size: 0.8em;
     margin-top: 5px;
     margin-bottom: 5px;
 }
 
+.current-show-schedule, .upcoming-show-schedule, .on-air-dj-schedule {
+    font-size: 0.85em;
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+.current-show-shifts, .upcoming-show-shifts, .on-air-dj-sched {
+    font-size: 0.85em;
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+.current-shift-list, .current-shift-list-item {
+    margin: 0 !important;
+    padding: 0 !important;
+}
+
+.current-shift-list .current-shift-list-item {
+    list-style: disc;
+    text-indent: 20px;
+}
+
 .current-show-schedule .current-show-shifts.current-shift {
-    font-weight: bold;
+    font-style: italic;
 }
 
 .upcoming-shows-list .upcoming-show-title, .on-air-upcoming-list .on-air-dj-title {
