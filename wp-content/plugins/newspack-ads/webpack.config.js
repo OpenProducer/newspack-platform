@@ -47,12 +47,15 @@ const editorScript = [
 	...blockScripts( 'editor', path.join( __dirname, 'src' ), blocks ),
 ];
 
+const suppressAdsScript = path.join( __dirname, 'src', 'suppress-ads' );
+
 const webpackConfig = getBaseWebpackConfig(
 	{ WP: true },
 	{
 		entry: {
 			editor: editorScript,
 			...viewBlocksScripts,
+			'suppress-ads': suppressAdsScript,
 		},
 		'output-path': path.join( __dirname, 'dist' ),
 	}

@@ -422,7 +422,7 @@ class Newspack_Blocks {
 		$categorized = [];
 		$clean       = [];
 		foreach ( $patterns as $pattern ) {
-			if ( ! isset( $pattern['preview_image'] ) || ! $pattern['preview_image'] ) {
+			if ( ! isset( $pattern['image'] ) || ! $pattern['image'] ) {
 				continue;
 			}
 			$category = isset( $pattern['category'] ) ? $pattern['category'] : __( 'Common', 'newspack-blocks' );

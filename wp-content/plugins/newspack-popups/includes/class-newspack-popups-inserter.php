@@ -64,13 +64,13 @@ final class Newspack_Popups_Inserter {
 	}
 
 	/**
-	 * Process popup and insert into post and page ontent if needed.
+	 * Process popup and insert into post and page content if needed.
 	 *
 	 * @param string $content The content of the post.
 	 * @return string The content with popup inserted.
 	 */
 	public static function popup( $content = '' ) {
-		if ( is_admin() ) {
+		if ( is_admin() || ! is_singular() ) {
 			return $content;
 		}
 		$popup = self::popup_for_post();
@@ -83,12 +83,17 @@ final class Newspack_Popups_Inserter {
 			return $content;
 		}
 
-		// Pop-ups triggered by scroll position can only appear on Posts.
-		if ( 'scroll' === $popup['options']['trigger_type'] && ! is_single() && ! Newspack_Popups::previewed_popup_id() ) {
+		$is_inline = 'inline' === $popup['options']['placement'];
+
+		if ( $is_inline && ! is_single() ) {
+			// Inline Pop-ups can only appear in Posts.
+			return $content;
+		} elseif ( 'scroll' === $popup['options']['trigger_type'] && ! is_single() && ! Newspack_Popups::previewed_popup_id() ) {
+			// Pop-ups triggered by scroll position can only appear on Posts.
 			return $content;
 		}
 
-		$content = self::insert_popup( $content, $popup );
+		$content = $is_inline ? self::insert_inline_popup( $content, $popup ) : self::insert_popup( $content, $popup );
 		\wp_register_style(
 			'newspack-popups-view',
 			plugins_url( '../dist/view.css', __FILE__ ),
@@ -124,6 +129,20 @@ final class Newspack_Popups_Inserter {
 			return;
 		}
 
+		\wp_register_style(
+			'newspack-popups-view',
+			plugins_url( '../dist/view.css', __FILE__ ),
+			null,
+			filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/view.css' )
+		);
+		\wp_style_add_data( 'newspack-popups-view', 'rtl', 'replace' );
+		\wp_enqueue_style( 'newspack-popups-view' );
+
+		// Inline Pop-ups can only appear in Posts.
+		if ( 'inline' === $popup['options']['placement'] ) {
+			return;
+		}
+
 		echo $popup['markup']; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
@@ -139,6 +158,36 @@ final class Newspack_Popups_Inserter {
 			return $popup['markup'] . $content;
 		}
 
+		$position  = 0;
+		$positions = [];
+		$close_tag = '</p>';
+		while ( stripos( $content, $close_tag, $position ) !== false ) {
+			$position    = stripos( $content, '</p>', $position ) + strlen( $close_tag );
+			$positions[] = $position;
+		}
+		$total_length       = strlen( $content );
+		$percentage         = intval( $popup['options']['trigger_scroll_progress'] ) / 100;
+		$precise_position   = $total_length * $percentage;
+		$insertion_position = $total_length;
+		foreach ( $positions as $position ) {
+			if ( $position >= $precise_position ) {
+				$insertion_position = $position;
+				break;
+			}
+		}
+		$before_popup = substr( $content, 0, $insertion_position );
+		$after_popup  = substr( $content, $insertion_position );
+		return $before_popup . $popup['markup'] . $after_popup;
+	}
+
+	/**
+	 * Insert inline Popup markup into content
+	 *
+	 * @param string $content The content of the post.
+	 * @param object $popup The popup object to insert.
+	 * @return string The content with popup inserted.
+	 */
+	public static function insert_inline_popup( $content = '', $popup = [] ) {
 		$position  = 0;
 		$positions = [];
 		$close_tag = '</p>';

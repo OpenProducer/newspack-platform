@@ -15,7 +15,12 @@
     },
     "extra": {
       "hooks": {
-        "pre-commit": "./vendor/xwp/wp-dev-lib/scripts/pre-commit"
+        "pre-commit": [
+          "./vendor/xwp/wp-dev-lib/scripts/pre-commit && ./node_modules/.bin/lint-staged"
+        ],
+        "commit-msg": [
+          "cat $1 | ./node_modules/.bin/commitlint"
+        ]
       }
     },
     "require": {

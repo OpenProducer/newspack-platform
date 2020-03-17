@@ -1,3 +1,16 @@
+# [1.1.0](https://github.com/Automattic/newspack-blocks/compare/v1.0.0...v1.1.0) (2020-03-17)
+
+
+### Bug Fixes
+
+* double-encoded load more urls ([#415](https://github.com/Automattic/newspack-blocks/issues/415)) ([9d7d7d5](https://github.com/Automattic/newspack-blocks/commit/9d7d7d522cf10da7b1b75c0e95d9d34518d979ec))
+
+
+### Features
+
+* add homepage posts, donation, and subscribe patterns ([98ab74c](https://github.com/Automattic/newspack-blocks/commit/98ab74cc6f3541d9052bd946538f996fb1e470a2))
+* update default carousel style for focused elements ([#410](https://github.com/Automattic/newspack-blocks/issues/410)) ([02335c4](https://github.com/Automattic/newspack-blocks/commit/02335c4c65ddd628168a32ecdfe4411675a25d4e))
+
 # 1.0.0 (2020-03-02)
 
 

@@ -1,14 +1,16 @@
 /**
- * External dependencies
+ * WordPress dependencies
  */
-import { Path, SVG } from '@wordpress/components';
+import { ExternalLink, Path, SVG } from '@wordpress/components';
+import { Fragment } from '@wordpress/element';
 import { getCategories } from '@wordpress/blocks';
+import { __ } from '@wordpress/i18n';
 
 /**
  * Internal dependencies
  */
-import { __ } from '@wordpress/i18n';
 import edit from './edit';
+
 /**
  * Style dependencies - will load in editor
  */
@@ -28,7 +30,12 @@ export const settings = {
 	icon,
 	category: getCategories().some( ( { slug } ) => slug === 'newspack' ) ? 'newspack' : 'common',
 	keywords: [ __( 'ad' ), __( 'advert' ), __( 'ads' ) ],
-	description: __( 'A block for displaying ad inventory.' ),
+	description: (
+		<Fragment>
+			<p>{ __( 'A block for displaying ad inventory.', 'newspack' ) }</p>
+			<ExternalLink href="/wp-admin/admin.php?page=newspack-advertising-wizard#/google_ad_manager">{ __( 'Manage ad units', 'newspack' ) }</ExternalLink>
+		</Fragment>
+	),
 	attributes: {
 		activeAd: {
 			type: 'string',
@@ -36,7 +43,11 @@ export const settings = {
 	},
 	supports: {
 		html: false,
-		align: true,
+		align: [
+			'left',
+			'center',
+			'right',
+		],
 	},
 	edit,
 	save: () => null, // to use view.php

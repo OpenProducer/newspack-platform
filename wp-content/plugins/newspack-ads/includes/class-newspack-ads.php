@@ -44,7 +44,7 @@ final class Newspack_Ads {
 	 * Define Constants.
 	 */
 	private function define_constants() {
-		define( 'NEWSPACK_ADS_VERSION', '0.0.1' );
+		define( 'NEWSPACK_ADS_VERSION', '1.0.0' );
 		define( 'NEWSPACK_ADS_ABSPATH', dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/' );
 	}
 
@@ -56,6 +56,7 @@ final class Newspack_Ads {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-blocks.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-model.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-widget.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/suppress-ads.php';
 	}
 
 	/**

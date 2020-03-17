@@ -19,9 +19,15 @@ const PopupPreviewSetting = ( { autosavePost, isSavingPost, postId, metaFields }
 		...metaFields,
 	} );
 
+	// For inline placements, use most recent post to preview. For anything else, use the home.
+	const previewURL =
+		'inline' === metaFields.placement
+			? window && window.newspack_popups_data && window.newspack_popups_data.preview_post
+			: '/';
+
 	return (
 		<WebPreview
-			url={ `/?${ query }` }
+			url={ `${ previewURL }?${ query }` }
 			renderButton={ ( { showPreview } ) => (
 				<Button
 					isPrimary

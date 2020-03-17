@@ -1,12 +1,65 @@
 .newspack-ads-ad-unit {
-	margin: 0 auto;
-	.components-base-control__label {
-		font-weight: bold;
+	margin: 0 0 28px;
+	max-width: 100%;
+	max-width: calc(100vw - 28px);
+	overflow-x: hidden;
+	position: relative;
+	width: 100%;
+
+	@media screen and ( min-width: 600px ) {
+		max-width: calc(100vw - 116px);
 	}
+
+	.newspack-ads-ad-unit__ratio {
+		padding: 0 0 75%;
+	}
+
 	.components-placeholder {
-		display: block;
-		height: 100%;
+		margin: 0;
+		min-height: 100px;
+		padding: 0;
+
+		.components-placeholder__label {
+			display: none;
+		}
+	}
+
+	.components-spinner {
+		left: 50%;
+		margin: -9px 0 0 -9px;
+		position: absolute;
+		top: 50%;
+	}
+
+	.components-base-control {
+		bottom: 1.5384615385em;
 		display: flex;
-		min-height: 31px;
+		left: 1.5384615385em;
+		position: absolute;
+		right: 1.5384615385em;
+		top: 1.5384615385em;
+
+		.components-base-control__field {
+			display: flex;
+			flex-direction: column;
+			justify-content: center;
+			margin: 0;
+			width: 100%;
+		}
+
+		.components-base-control__label {
+			font-weight: 600;
+		}
+	}
+
+}
+
+// Align center
+.wp-block[data-type="newspack-ads/ad-unit"] {
+	&[data-align="center"] {
+		.components-placeholder {
+			margin-left: auto;
+			margin-right: auto;
+		}
 	}
 }

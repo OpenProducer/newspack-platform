@@ -47,6 +47,7 @@ final class Newspack_Popups {
 		add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
 		add_filter( 'show_admin_bar', [ __CLASS__, 'hide_admin_bar_for_preview' ], 10, 2 );
 		add_action( 'rest_api_init', [ __CLASS__, 'rest_api_init' ] );
+		add_action( 'save_post_newspack_popups_cpt', [ __CLASS__, 'popup_default_fields' ], 10, 3 );
 
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-model.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-inserter.php';
@@ -238,6 +239,22 @@ final class Newspack_Popups {
 			filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/editor.js' ),
 			true
 		);
+		$recent_posts = wp_get_recent_posts(
+			[
+				'numberposts' => 1,
+				'post_status' => 'publish',
+			],
+			OBJECT
+		);
+		$preview_post = count( $recent_posts ) > 0 ? get_the_permalink( $recent_posts[0] ) : '';
+
+		\wp_localize_script(
+			'newspack-popups',
+			'newspack_popups_data',
+			[
+				'preview_post' => $preview_post,
+			]
+		);
 		\wp_enqueue_style(
 			'newspack-popups-editor',
 			plugins_url( '../dist/editor.css', __FILE__ ),
@@ -311,6 +328,32 @@ final class Newspack_Popups {
 				],
 			]
 		);
+	}
+
+
+	/**
+	 * Set default fields when Pop-up is created.
+	 *
+	 * @param int     $post_id ID of post being saved.
+	 * @param WP_POST $post The post being saved.
+	 * @param bool    $update True if this is an update, false if a newly created post.
+	 */
+	public static function popup_default_fields( $post_id, $post, $update ) {
+		// Set meta only if this is a newly created post.
+		if ( $update ) {
+			return;
+		}
+		update_post_meta( $post_id, 'background_color', '#FFFFFF' );
+		update_post_meta( $post_id, 'display_title', false );
+		update_post_meta( $post_id, 'dismiss_text', __( "I'm not interested", 'newspack' ) );
+		update_post_meta( $post_id, 'frequency', 'test' );
+		update_post_meta( $post_id, 'overlay_color', '#000000' );
+		update_post_meta( $post_id, 'overlay_opacity', 30 );
+		update_post_meta( $post_id, 'placement', 'center' );
+		update_post_meta( $post_id, 'trigger_type', 'time' );
+		update_post_meta( $post_id, 'trigger_delay', 3 );
+		update_post_meta( $post_id, 'trigger_scroll_progress', 30 );
+		update_post_meta( $post_id, 'utm_suppression', '' );
 	}
 }
 Newspack_Popups::instance();

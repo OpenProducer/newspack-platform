@@ -107,7 +107,7 @@ class Newspack_Ads_Model {
 					'id'             => \get_the_ID(),
 					'name'           => html_entity_decode( \get_the_title(), ENT_QUOTES ),
 					self::SIZES      => self::sanitize_sizes( \get_post_meta( get_the_ID(), self::SIZES, true ) ),
-					self::CODE       => sanitize_title( \get_post_meta( get_the_ID(), self::CODE, true ) ),
+					self::CODE       => esc_html( \get_post_meta( get_the_ID(), self::CODE, true ) ),
 					self::AD_SERVICE => \get_post_meta( get_the_ID(), self::AD_SERVICE, true ),
 				);
 			}
@@ -279,7 +279,7 @@ class Newspack_Ads_Model {
 
 		$sanitised_ad_unit = array(
 			'name'           => \esc_html( $ad_unit['name'] ),
-			self::CODE       => sanitize_title( $ad_unit[ self::CODE ] ),
+			self::CODE       => esc_html( $ad_unit[ self::CODE ] ),
 			self::SIZES      => self::sanitize_sizes( $ad_unit[ self::SIZES ] ),
 			self::AD_SERVICE => self::sanitize_ad_service( $ad_unit[ self::AD_SERVICE ] ),
 
@@ -421,7 +421,7 @@ class Newspack_Ads_Model {
 			$div_id = sprintf(
 				'%s%s-%dx%d',
 				$prefix,
-				esc_attr( $ad_unit['code'] ),
+				sanitize_title( $ad_unit['code'] ),
 				$width,
 				$height
 			);

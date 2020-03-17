@@ -14,6 +14,9 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 	position: fixed;
 	right: 0;
 	top: 0;
+	// Popup needs to be initially out of the viewport,
+	// so that analytics work when checking visibility.
+	transform: translateY( 100vh );
 	visibility: hidden;
 	width: 100% !important;
 	z-index: 99999;
@@ -58,20 +61,21 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 		max-width: 780px;
 		padding: 1.5em;
 
-		& > *:first-child {
+		> *:first-child {
 			margin-top: 0;
 		}
 
-		& > *:nth-last-child(2) { // Last child being .popup-dismiss-form
+		> *:nth-last-child( 3 ) {
+			// Last 2 child being .popup-dismiss-form and .popup-not-interested-form
 			margin-bottom: 0;
 		}
 
 		.wp-block-column {
-			& > *:first-child {
+			> *:first-child {
 				margin-top: 0;
 			}
 
-			& > *:last-child {
+			> *:last-child {
 				margin-bottom: 0;
 			}
 		}
@@ -79,7 +83,11 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 
 	.newspack-lightbox__close {
 		align-items: center;
+		background: transparent;
+		border: none;
+		border-radius: 0;
 		box-shadow: none;
+		color: inherit;
 		cursor: pointer;
 		display: flex;
 		font-size: inherit;
@@ -88,40 +96,23 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 		margin: 0;
 		padding: 6px;
 		position: absolute;
-		right: 0.25em;
-		top: 0.25em;
+		right: 0;
+		top: 0;
 		width: 36px;
 
 		svg {
-			fill: currentcolor;
+			fill: currentColor;
 			flex: 0 0 24px;
 		}
-	}
 
-	.popup-not-interested-form {
-		display: flex;
-		justify-content: center;
-		margin-top: 1.5em;
+		&:active,
+		&:hover {
+			opacity: 0.6;
+		}
 
-		button {
-			background: transparent;
-			border: 0;
-			border-radius: 0;
-			color: $color__secondary;
-			font-size: 0.7em;
-			font-weight: normal;
-			line-height: 1;
-			margin: 0;
-			padding: 0;
-			text-decoration: underline;
-
-			&:active,
-			&:focus,
-			&:hover {
-				color: $color__secondary-variation;
-				outline-offset: 2px;
-				text-decoration: none;
-			}
+		&:focus {
+			outline: 1px solid;
+			outline-offset: -1px;
 		}
 	}
 
@@ -129,11 +120,11 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 	&.newspack-lightbox-placement-center {
 		.newspack-popup-wrapper {
 			max-height: 90%;
-			max-height: calc(100% - 1.5em);
+			max-height: calc( 100% - 1.5em );
 			min-width: 100%;
 			overflow-y: auto;
 
-			@media only screen and (min-width: 780px) {
+			@media only screen and ( min-width: 780px ) {
 				min-width: 780px;
 			}
 		}
@@ -161,5 +152,84 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 
 	&.newspack-lightbox-placement-top {
 		align-items: flex-start;
+	}
+}
+
+// Alignment
+.entry-content {
+	.newspack-lightbox {
+		.newspack-popup {
+			.alignfull,
+			.alignwide {
+				margin-left: 0;
+				margin-right: 0;
+				max-width: 100%;
+				padding-left: 0;
+				padding-right: 0;
+
+				@media only screen and ( min-width: 600px ) {
+					&.wp-block-columns {
+						margin-left: -16px;
+						margin-right: -16px;
+						max-width: calc( 100% + 32px );
+						width: calc( 100% + 32px );
+					}
+				}
+
+				&.wp-block-columns,
+				&.wp-block-columns .wp-block-column {
+					padding-left: 0;
+					padding-right: 0;
+				}
+			}
+
+			@media only screen and ( min-width: 600px ) {
+				.alignfull.wp-block-columns {
+					margin-left: -16px;
+					margin-right: -16px;
+					max-width: calc( 100% + 32px );
+					width: calc( 100% + 32px );
+				}
+			}
+		}
+	}
+}
+
+.newspack-inline-popup {
+	padding: 0.75em;
+	border: 1px solid rgba( black, 0.2 );
+
+	&:focus {
+		outline: none;
+	}
+}
+
+.newspack-lightbox,
+.newspack-inline-popup {
+	.popup-not-interested-form {
+		display: flex;
+		justify-content: center;
+		margin-top: 1.5em;
+
+		button {
+			background: transparent;
+			border: 0;
+			border-radius: 0;
+			color: $color__secondary;
+			font-size: 0.7em;
+			font-weight: normal;
+			line-height: 1;
+			margin: 0;
+			padding: 0;
+			text-decoration: underline;
+
+			&:active,
+			&:focus,
+			&:hover {
+				color: $color__secondary-variation;
+				outline-offset: 2px;
+				text-decoration: none;
+			}
+		}
 	}
 }

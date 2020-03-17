@@ -1,5 +1,7 @@
 /**
  * Data selector for popup options (stored in post meta)
+ *
+ * @param {Function} select Select function
  */
 export const optionsFieldsSelector = select => {
 	const { getEditedPostAttribute, getCurrentPostId, isSavingPost, isCurrentPostPublished } = select(
@@ -43,6 +45,8 @@ export const optionsFieldsSelector = select => {
 /**
  * Convert hex color to RGB.
  * From https://stackoverflow.com/questions/5623838/rgb-to-hex-and-hex-to-rgb
+ *
+ * @param {string} hex Color in HEX format
  */
 const hexToRGB = hex =>
 	hex
@@ -54,6 +58,8 @@ const hexToRGB = hex =>
 /**
  * Set the background color meta field.
  * Based on https://github.com/Automattic/newspack-theme/blob/master/newspack-theme/inc/template-functions.php#L401-L431
+ *
+ * @param {string} backgroundColor color string
  */
 export const updateEditorColors = backgroundColor => {
 	if ( ! backgroundColor ) {
@@ -66,13 +72,13 @@ export const updateEditorColors = backgroundColor => {
 	const blackRGB = hexToRGB( blackColor );
 
 	const l1 =
-		0.2126 * Math.pow( backgroundColorRGB[0] / 255, 2.2 ) +
-		0.7152 * Math.pow( backgroundColorRGB[1] / 255, 2.2 ) +
-		0.0722 * Math.pow( backgroundColorRGB[2] / 255, 2.2 );
+		0.2126 * Math.pow( backgroundColorRGB[ 0 ] / 255, 2.2 ) +
+		0.7152 * Math.pow( backgroundColorRGB[ 1 ] / 255, 2.2 ) +
+		0.0722 * Math.pow( backgroundColorRGB[ 2 ] / 255, 2.2 );
 	const l2 =
-		0.2126 * Math.pow( blackRGB[0] / 255, 2.2 ) +
-		0.7152 * Math.pow( blackRGB[1] / 255, 2.2 ) +
-		0.0722 * Math.pow( blackRGB[2] / 255, 2.2 );
+		0.2126 * Math.pow( blackRGB[ 0 ] / 255, 2.2 ) +
+		0.7152 * Math.pow( blackRGB[ 1 ] / 255, 2.2 ) +
+		0.0722 * Math.pow( blackRGB[ 2 ] / 255, 2.2 );
 
 	const contrastRatio =
 		l1 > l2 ? parseInt( ( l1 + 0.05 ) / ( l2 + 0.05 ) ) : parseInt( ( l2 + 0.05 ) / ( l1 + 0.05 ) );
@@ -88,13 +94,13 @@ export const updateEditorColors = backgroundColor => {
 	);
 
 	if ( editorStylesEl ) {
-		editorStylesEl.style[ 'backgroundColor' ] = backgroundColor;
-		editorStylesEl.style[ 'color' ] = foregroundColor;
+		editorStylesEl.style.backgroundColor = backgroundColor;
+		editorStylesEl.style.color = foregroundColor;
 	}
 	if ( editorPostTitleEl ) {
-		editorPostTitleEl.style[ 'color' ] = foregroundColor;
+		editorPostTitleEl.style.color = foregroundColor;
 	}
 	if ( editorPostTitlePlaceholderEl ) {
-		editorPostTitlePlaceholderEl.style[ 'color' ] = foregroundColor;
+		editorPostTitlePlaceholderEl.style.color = foregroundColor;
 	}
 };

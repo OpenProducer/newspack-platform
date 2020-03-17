@@ -13,6 +13,10 @@
  * @return string Returns the post content with latest posts added.
  */
 function newspack_ads_render_block_ad_unit( $attributes ) {
+	if ( ! newspack_ads_should_show_ads() ) {
+		return '';
+	}
+
 	$active_ad = isset( $attributes['activeAd'] ) ? (int) $attributes['activeAd'] : 0;
 
 	if ( 1 > $active_ad ) {
@@ -21,10 +25,16 @@ function newspack_ads_render_block_ad_unit( $attributes ) {
 
 	$classes = Newspack_Ads_Blocks::block_classes( 'wp-block-newspack-ads-blocks-ad-unit', $attributes );
 
+	$align = 'inherit';
+
+	if ( strpos( $classes, 'aligncenter' ) == true ) {
+		$align = 'center';
+	}
+
 	$ad_unit = Newspack_Ads_Model::get_ad_unit( $active_ad );
 
 	if ( is_wp_error( $ad_unit ) ) {
-		return;
+		return '';
 	}
 
 	$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
@@ -36,8 +46,9 @@ function newspack_ads_render_block_ad_unit( $attributes ) {
 	}
 
 	$content = sprintf(
-		'<div class="%s">%s</div>',
+		'<div class="%1$s" style="text-align:%2$s">%3$s</div>',
 		esc_attr( $classes ),
+		esc_attr( $align ),
 		$code /* TODO: escape with wp_kses() */
 	);
 

@@ -55,7 +55,7 @@ function buildLoadMoreHandler( blockWrapperEl ) {
 		const requestURL =
 			btnEl.getAttribute( 'data-next' ) + '&exclude_ids=' + getRenderedPostsIds().join( ',' );
 
-		fetchWithRetry( { url: encodeURI( requestURL ), onSuccess, onError }, fetchRetryCount );
+		fetchWithRetry( { url: requestURL, onSuccess, onError }, fetchRetryCount );
 
 		/**
 		 * @param {Object} data Post data

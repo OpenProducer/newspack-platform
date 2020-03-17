@@ -1,0 +1,36 @@
+#!/usr/bin/env php
+<?php
+$dir = getcwd();
+if (is_file($autoload = __DIR__ . '/vendor/autoload.php')) {
+    require_once $autoload;
+} elseif (is_file($autoload = __DIR__ . '/../../autoload.php')) {
+    require_once $autoload;
+} else {
+    fwrite(STDERR,
+        'You must set up the project dependencies, run the following commands:' . PHP_EOL .
+        'curl -s http://getcomposer.org/installer | php' . PHP_EOL .
+        'php composer.phar install' . PHP_EOL
+    );
+    exit(1);
+}
+
+use BrainMaestro\GitHooks\Hook;
+use BrainMaestro\GitHooks\Commands\AddCommand;
+use BrainMaestro\GitHooks\Commands\UpdateCommand;
+use BrainMaestro\GitHooks\Commands\RemoveCommand;
+use BrainMaestro\GitHooks\Commands\ListCommand;
+use BrainMaestro\GitHooks\Commands\HookCommand;
+use Symfony\Component\Console\Application;
+
+$application = new Application('Composer Git Hooks', '2.8.3');
+
+$application->add(new AddCommand());
+$application->add(new UpdateCommand());
+$application->add(new RemoveCommand());
+$application->add(new ListCommand());
+
+foreach (Hook::getValidHooks($dir) as $hook => $script) {
+    $application->add(new HookCommand($hook, $script));
+}
+
+$application->run();

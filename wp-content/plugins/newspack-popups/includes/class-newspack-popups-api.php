@@ -123,7 +123,12 @@ final class Newspack_Popups_API {
 
 		$response['currentViews'] = (int) $data['count'];
 
-		$frequency             = $popup['options']['frequency'];
+		$frequency = $popup['options']['frequency'];
+		$placement = $popup['options']['placement'];
+		if ( 'inline' !== $placement && 'always' === $frequency ) {
+			$frequency = 'once';
+		}
+
 		$utm_suppression       = ! empty( $popup['options']['utm_suppression'] ) ? $popup['options']['utm_suppression'] : null;
 		$current_views         = ! empty( $response['currentViews'] ) ? (int) $response['currentViews'] : 0;
 		$suppress_forever      = ! empty( $data['suppress_forever'] ) ? (int) $data['suppress_forever'] : false;
@@ -138,6 +143,7 @@ final class Newspack_Popups_API {
 				$response['displayPopup'] = $current_views < 1;
 				break;
 			case 'test':
+			case 'always':
 				$response['displayPopup'] = true;
 				break;
 			case 'never':
@@ -188,7 +194,7 @@ final class Newspack_Popups_API {
 			if ( $request['suppress_forever'] ) {
 				$data['suppress_forever'] = true;
 			}
-			if ( $request['mailing_list_status'] && 'subscribed' === $request['mailing_list_status'] ) {
+			if ( $this->get_mailing_list_status( $request ) ) {
 				$data['mailing_list_status'] = true;
 			}
 			set_transient( $transient_name, $data, 0 );
@@ -229,10 +235,30 @@ final class Newspack_Popups_API {
 		}
 		$popup_id = isset( $request['popup_id'] ) ? $request['popup_id'] : false;
 		$url      = isset( $request['url'] ) ? esc_url_raw( urldecode( $request['url'] ) ) : false;
+		if ( ! $popup_id && ! $url ) {
+			$body     = json_decode( $request->get_body(), true );
+			$popup_id = isset( $body['popup_id'] ) ? $body['popup_id'] : false;
+			$url      = isset( $body['url'] ) ? esc_url_raw( urldecode( $body['url'] ) ) : false;
+		}
 		if ( $reader_id && $url && $popup_id ) {
 			return $reader_id . '-' . $popup_id . '-popup';
 		}
 		return false;
+	}
+
+	/**
+	 * Get mailing list status.
+	 *
+	 * @param WP_REST_Request $request amp-access request.
+	 * @return string Mailing list status.
+	 */
+	public function get_mailing_list_status( $request ) {
+		$mailing_list_status = isset( $request['mailing_list_status'] ) ? esc_attr( $request['mailing_list_status'] ) : false;
+		if ( ! $mailing_list_status ) {
+			$body                = json_decode( $request->get_body(), true );
+			$mailing_list_status = isset( $body['mailing_list_status'] ) ? $body['mailing_list_status'] : false;
+		}
+		return 'subscribed' === $mailing_list_status;
 	}
 
 	/**

@@ -3,7 +3,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Component, Fragment } from '@wordpress/element';
-import { ExternalLink, SelectControl, Placeholder, withNotices } from '@wordpress/components';
+import { ExternalLink, Placeholder, SelectControl, Spinner, withNotices } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 
 /**
@@ -81,19 +81,16 @@ class Edit extends Component {
 		const { activeAd } = attributes;
 		const { adUnits } = this.state;
 		const { width, height } = this.activeAdDataForActiveAd( activeAd );
-		const style =
-			width && height
-				? {
-						width: `${ width || 400 }px`,
-						height: `${ height || 100 }px`,
-				  }
-				: {};
+		const adWidth = width ? { width: `${ width }px` } : {};
+		const ratio = width && height ? { padding: `0 0 ${ ( height * 100 / width ) }%` } : {};
 		return (
 			<Fragment>
 				{ noticeUI }
 				<div className="wp-block-newspack-ads-blocks-ad-unit">
-					<div className="newspack-ads-ad-unit" style={ style }>
-						<Placeholder>
+					<div className="newspack-ads-ad-unit">
+						<Placeholder style={ adWidth }>
+							<div className="newspack-ads-ad-unit__ratio" style={ ratio } />
+							{ ! adUnits && <Spinner /> }
 							{ adUnits && !! adUnits.length && (
 								<SelectControl
 									label={ __( 'Ad Unit' ) }
@@ -103,12 +100,14 @@ class Edit extends Component {
 								/>
 							) }
 							{ adUnits && ! adUnits.length && (
-								<Fragment>
-									{ __( 'No ad units have been created yet.' ) }
-									<ExternalLink href="/wp-admin/admin.php?page=newspack-google-ad-manager-wizard#/">
-										{ __( 'You can create ad units in the Ads wizard' ) }
-									</ExternalLink>{' '}
-								</Fragment>
+								<div className="components-base-control">
+									<div className="components-base-control__field">
+										{ __( 'No ad units have been created yet.' ) }
+										<ExternalLink href="/wp-admin/admin.php?page=newspack-google-ad-manager-wizard#/">
+											{ __( 'You can create ad units in the Ads wizard' ) }
+										</ExternalLink>
+									</div>
+								</div>
 							) }
 						</Placeholder>
 					</div>

@@ -33,14 +33,14 @@ class Newspack_Ads_Blocks {
 			'newspack-ads-editor',
 			$editor_script,
 			$dependencies,
-			'0.1.0',
+			NEWSPACK_ADS_VERSION,
 			true
 		);
 		wp_enqueue_style(
 			'newspack-ads-editor',
 			$editor_style,
 			array(),
-			'0.1.0'
+			NEWSPACK_ADS_VERSION
 		);
 	}
 
@@ -69,7 +69,7 @@ class Newspack_Ads_Blocks {
 	 * @return string Class list separated by spaces.
 	 */
 	public static function block_classes( $type, $attributes = array() ) {
-		$align   = isset( $attributes['align'] ) ? $attributes['align'] : 'center';
+		$align   = isset( $attributes['align'] ) ? $attributes['align'] : 'none';
 		$classes = array(
 			"wp-block-newspack-blocks-{$type}",
 			"align{$align}",
@@ -112,6 +112,10 @@ class Newspack_Ads_Blocks {
 	 * Google Ad Manager header code
 	 */
 	public static function insert_google_ad_manager_header_code() {
+		if ( ! newspack_ads_should_show_ads() ) {
+			return;
+		}
+
 		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 		if ( $is_amp ) {
 			return;
@@ -131,6 +135,10 @@ class Newspack_Ads_Blocks {
 	 * Google Ad Manager footer code
 	 */
 	public static function insert_google_ad_manager_footer_code() {
+		if ( ! newspack_ads_should_show_ads() ) {
+			return;
+		}
+
 		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 		if ( $is_amp ) {
 			return;
