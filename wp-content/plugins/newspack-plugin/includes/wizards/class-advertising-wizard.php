@@ -555,7 +555,11 @@ class Advertising_Wizard extends Wizard {
 		}
 
 		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-		$ad_unit               = $configuration_manager->get_ad_unit( $placement['ad_unit'], $placement_slug );
+		if ( ! $configuration_manager->should_show_ads() ) {
+			return;
+		}
+
+		$ad_unit = $configuration_manager->get_ad_unit( $placement['ad_unit'], $placement_slug );
 		if ( is_wp_error( $ad_unit ) ) {
 			return;
 		}

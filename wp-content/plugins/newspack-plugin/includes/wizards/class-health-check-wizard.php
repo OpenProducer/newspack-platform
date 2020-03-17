@@ -178,15 +178,6 @@ class Health_Check_Wizard extends Wizard {
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/health-check.js' ),
 			true
 		);
-
-		\wp_register_style(
-			'newspack-health-check-wizard',
-			Newspack::plugin_url() . '/dist/health-check.css',
-			[ 'wp-components' ],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/health-check.css' )
-		);
-		\wp_style_add_data( 'newspack-health-check-wizard', 'rtl', 'replace' );
-		\wp_enqueue_style( 'newspack-health-check-wizard' );
 	}
 
 	/**

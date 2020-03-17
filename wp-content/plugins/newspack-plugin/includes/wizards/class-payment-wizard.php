@@ -221,15 +221,6 @@ class Payment_Wizard extends Wizard {
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/payment.js' ),
 			true
 		);
-
-		\wp_register_style(
-			'newspack-payment-wizard',
-			Newspack::plugin_url() . '/dist/payment.css',
-			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/payment.css' )
-		);
-		\wp_style_add_data( 'newspack-payment-wizard', 'rtl', 'replace' );
-		\wp_enqueue_style( 'newspack-payment-wizard' );
 	}
 
 	/**

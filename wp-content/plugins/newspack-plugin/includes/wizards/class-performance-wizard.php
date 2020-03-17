@@ -165,14 +165,5 @@ class Performance_Wizard extends Wizard {
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/performance.js' ),
 			true
 		);
-
-		wp_register_style(
-			'newspack-performance-wizard',
-			Newspack::plugin_url() . '/dist/performance.css',
-			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/performance.css' )
-		);
-		wp_style_add_data( 'newspack-performance-wizard', 'rtl', 'replace' );
-		wp_enqueue_style( 'newspack-performance-wizard' );
 	}
 }

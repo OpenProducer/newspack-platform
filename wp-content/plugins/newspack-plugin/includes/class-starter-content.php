@@ -15,6 +15,7 @@ defined( 'ABSPATH' ) || exit;
 
 define( 'NEWSPACK_STARTER_CONTENT_CATEGORIES', '_newspack_starter_content_categories' );
 define( 'NEWSPACK_STARTER_CONTENT_POSTS', '_newspack_starter_content_posts' );
+define( 'NEWSPACK_STARTER_CONTENT_POST_INDEX', '_newspack_starter_content_post_index' );
 
 /**
  * Manages settings for PWA.
@@ -37,15 +38,15 @@ class Starter_Content {
 		if ( ! function_exists( 'wp_insert_post' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/post.php';
 		}
+		$post_index     = get_option( NEWSPACK_STARTER_CONTENT_POST_INDEX, 0 );
 		$page_templates = [ '', 'single-feature.php' ];
 		$paragraphs     = explode( PHP_EOL, self::get_lipsum( 'paras', 5 ) );
 		$title          = self::generate_title();
 		$post_data      = [
-			'post_title'    => $title,
-			'post_name'     => sanitize_title_with_dashes( $title, '', 'save' ),
-			'post_status'   => 'publish',
-			'page_template' => $page_templates[ wp_rand( 0, 1 ) ],
-			'post_content'  => html_entity_decode(
+			'post_title'   => $title,
+			'post_name'    => sanitize_title_with_dashes( $title, '', 'save' ),
+			'post_status'  => 'publish',
+			'post_content' => html_entity_decode(
 				implode(
 					'',
 					array_map(
@@ -62,15 +63,28 @@ class Starter_Content {
 
 		$post_id = wp_insert_post( $post_data );
 
+		$page_template_id = self::is_e2e() ? ( $post_index % 2 ) : wp_rand( 0, 1 );
+
+		$page_template = $page_templates[ $page_template_id ];
+
+		$update = [
+			'ID'            => $post_id,
+			'page_template' => $page_template,
+		];
+
+		wp_update_post( $update );
+
 		$newspack_featured_image_positions = [ null, 'behind', 'beside' ];
 
-		$newspack_featured_image_position = $newspack_featured_image_positions[ wp_rand( 0, 2 ) ];
+		$newspack_featured_image_index = self::is_e2e() ? ( $post_index % 3 ) : wp_rand( 0, 2 );
+
+		$newspack_featured_image_position = $newspack_featured_image_positions[ $newspack_featured_image_index ];
 
 		if ( $newspack_featured_image_position ) {
 			add_post_meta( $post_id, 'newspack_featured_image_position', $newspack_featured_image_position );
 		}
 
-		$attachment_id = self::add_featured_image( $post_id );
+		$attachment_id = self::add_featured_image( $post_id, $post_index );
 
 		$categories = get_categories(
 			[
@@ -84,6 +98,8 @@ class Starter_Content {
 
 		wp_set_post_categories( $post_id, $categories[0] );
 		wp_publish_post( $post_id );
+
+		update_option( NEWSPACK_STARTER_CONTENT_POST_INDEX, $post_index + 1 );
 
 		return $post_id;
 	}
@@ -102,6 +118,7 @@ class Starter_Content {
 			self::$starter_categories
 		);
 		update_option( NEWSPACK_STARTER_CONTENT_CATEGORIES, $category_ids );
+		update_option( NEWSPACK_STARTER_CONTENT_POST_INDEX, 0 );
 		return $category_ids;
 	}
 
@@ -274,6 +291,9 @@ class Starter_Content {
 	 * @return string The title.
 	 */
 	public static function generate_title() {
+		if ( self::is_e2e() ) {
+			return file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/markup/title.txt' );
+		}
 		$title = self::get_lipsum( 'words', wp_rand( 7, 14 ) );
 		$title = ucfirst( strtolower( str_replace( '.', '', $title ) ) ); // Remove periods, convert to sentence case.
 		return $title;
@@ -287,6 +307,9 @@ class Starter_Content {
 	 * @return string Lorem Ipsum.
 	 */
 	public static function get_lipsum( $type, $amount ) {
+		if ( self::is_e2e() ) {
+			return file_get_contents( NEWSPACK_ABSPATH . 'includes/raw_assets/markup/body.txt' );
+		}
 		$lipsum = new \joshtronic\LoremIpsum();
 		switch ( $type ) {
 			case 'paras':
@@ -324,17 +347,19 @@ class Starter_Content {
 	 * Download and add a featured image to a post.
 	 *
 	 * @param int $post_id The post ID.
+	 * @param int $post_index The index of the post within the set of starter content posts.
 	 *
 	 * @return string Block markup.
 	 */
-	private static function add_featured_image( $post_id ) {
+	private static function add_featured_image( $post_id, $post_index ) {
 		if ( ! function_exists( 'download_url' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/file.php';
 		}
 		if ( ! function_exists( 'wp_crop_image' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
-		$url = 'https://picsum.photos/1200/800';
+
+		$url = self::is_e2e() ? 'https://picsum.photos/id/' . $post_index . '/1200/800' : 'https://picsum.photos/1200/800';
 
 		$temp_file = download_url( $url );
 
@@ -380,5 +405,14 @@ class Starter_Content {
 		wp_update_attachment_metadata( $attach_id, $attach_data );
 
 		set_post_thumbnail( $post_id, $attach_id );
+	}
+
+	/**
+	 * Is this an E2E testing environment?
+	 *
+	 * @return bool E2E testing environment?
+	 */
+	private static function is_e2e() {
+		return defined( 'WP_NEWSPACK_DETERMINISTIC_STARTER_CONTENT' ) && WP_NEWSPACK_DETERMINISTIC_STARTER_CONTENT;
 	}
 }

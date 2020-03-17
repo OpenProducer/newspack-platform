@@ -118,6 +118,15 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Check whether the current screen should show ads.
+	 *
+	 * @return bool Returns true if ads should be shown.
+	 */
+	public function should_show_ads() {
+		return $this->is_configured() && function_exists( 'newspack_ads_should_show_ads' ) ? newspack_ads_should_show_ads() : false;
+	}
+
+	/**
 	 * Error to return if the plugin is not installed and activated.
 	 *
 	 * @return WP_Error

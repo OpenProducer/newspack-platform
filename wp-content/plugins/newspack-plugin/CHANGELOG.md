@@ -1,3 +1,23 @@
+# [1.2.0](https://github.com/Automattic/newspack-plugin/compare/v1.1.0...v1.2.0) (2020-03-17)
+
+
+### Bug Fixes
+
+* button box-shadow since Gutenberg 7.7 ([#483](https://github.com/Automattic/newspack-plugin/issues/483)) ([0b4e70a](https://github.com/Automattic/newspack-plugin/commit/0b4e70ab71c14c7dd2eb94106f63931b8aad93f6))
+* prevent errors if ads plugin out of date with this plugin ([f4943f0](https://github.com/Automattic/newspack-plugin/commit/f4943f07a0976380ca1a142c9aabd8f1c272b3c3))
+* use https in author/plugin uri ([fbf7088](https://github.com/Automattic/newspack-plugin/commit/fbf7088e21eb1749d3ebc448c654da7bf608a336))
+
+
+### Features
+
+* ability to suppress ads on posts and pages ([86b08c2](https://github.com/Automattic/newspack-plugin/commit/86b08c20631e8368ea8f2d589dbd26b38a38f5e1))
+* non-random starter content for e2e testing ([b35e749](https://github.com/Automattic/newspack-plugin/commit/b35e749746f05b972c21ff2f2dada04ce5746df9))
+
+
+### Performance Improvements
+
+* reduce deliverable zip size by 70% ([#481](https://github.com/Automattic/newspack-plugin/issues/481)) ([6a10fb5](https://github.com/Automattic/newspack-plugin/commit/6a10fb55106053265598fa4495ce715a91562d3a))
+
 # [1.1.0](https://github.com/Automattic/newspack-plugin/compare/v1.0.0...v1.1.0) (2020-03-10)
 
 

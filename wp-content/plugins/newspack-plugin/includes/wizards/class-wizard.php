@@ -84,6 +84,24 @@ abstract class Wizard {
 			return;
 		}
 
+		wp_register_script(
+			'newspack_commons',
+			Newspack::plugin_url() . '/dist/commons.js',
+			[],
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/commons.js' ),
+			true
+		);
+		wp_enqueue_script( 'newspack_commons' );
+
+		wp_register_style(
+			'newspack-commons',
+			Newspack::plugin_url() . '/dist/commons.css',
+			[ 'wp-components' ],
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/commons.css' )
+		);
+		wp_style_add_data( 'newspack-commons', 'rtl', 'replace' );
+		wp_enqueue_style( 'newspack-commons' );
+
 		// This script is just used for making newspack data available in JS vars.
 		// It should not actually load a JS file.
 		wp_register_script( 'newspack_data', '', [], '1.0', false );
