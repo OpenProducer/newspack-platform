@@ -248,12 +248,13 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 	
 		// --- check assigned show has a specified genre term ---
 		if ( !empty( $atts['genre'] ) && $archive_posts && ( count( $archive_posts ) > 0 ) ) {
-			$genres = explode( ',', $atts['genre'] );
+			if ( is_array( $atts['genre'] ) ) {$genres = $atts['genre'];}
+			else {$genres = explode( ',', $atts['genre'] );}
 			foreach ( $archive_posts as $i => $archive_post ) {
 				$found_genre = false;
 				$show_id = get_post_meta( $archive_post->ID, 'playlist_show_id', true );
 				if ( $show_id ) {
-					$show_genres = get_post_terms( $show_id, RADIO_STATION_GENRES_SLUG );
+					$show_genres = wp_get_post_terms( $show_id, RADIO_STATION_GENRES_SLUG );
 					if ( $show_genres ) {
 						foreach ( $show_genres as $show_genre ) {
 							if ( in_array( $show_genre->term_id, $genres ) || in_array( $show_genre->slug, $genres) ) {
@@ -270,12 +271,13 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 		
 		// --- check assigned show has a specified language term ---
 		if ( !empty( $atts['language'] ) && $archive_posts && ( count( $archive_posts ) > 0 ) ) {
-			$languages = explode( ',', $atts['language'] );
+			if ( is_array( $atts['language'] ) )  {$languages = $atts['language'];}
+			else {$languages = explode( ',', $atts['language'] );}
 			foreach ( $archive_posts as $i => $archive_post ) {
 				$found_language = false;
 				$show_id = get_post_meta( $archive_post->ID, 'playlist_show_id', true );
 				if ( $show_id ) {
-					$show_languages = get_post_terms( $show_id, RADIO_STATION_LANGUAGES_SLUG );
+					$show_languages = wp_get_post_terms( $show_id, RADIO_STATION_LANGUAGES_SLUG );
 					if ( $show_languages ) {
 						foreach ( $show_languages as $show_language ) {
 							if ( in_array( $show_language->term_id, $languages ) || in_array( $show_language->slug, $languages ) ) {
@@ -380,7 +382,7 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 				$end = $datetime['end_hour'] . ':' . $datetime['end_min'] . ' ' . $datetime['end_meridian'];
 				$shift_start_time = strtotime( $datetime['day'] . ' ' . $start );
 				$shift_end_time = strtotime( $datetime['day'] . ' ' . $end );
-				if ( $start_start_time > $shift_end_time ) {
+				if ( $shift_start_time > $shift_end_time ) {
 					$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
 				}
 
@@ -397,10 +399,10 @@ function radio_station_archive_list_shortcode( $type, $atts ) {
 					$data_format2 = 'g:i a';
 				}
 			
-				echo '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+				echo '<span class="rs-time rs-start-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
 				echo esc_html( $display_day ) . ', ' . $start . '</span>';
 				echo '<span class="rs-sep"> - </span>';
-				echo '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+				echo '<span class="rs-time rs-end-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
 				echo "</div>";
 			}
 
@@ -705,7 +707,10 @@ function radio_station_genre_archive_list( $atts ) {
 				$list .= '</div>';
 
 				// --- show excerpt ---
-				// n/a
+				// TODO: show description
+				// if ( $atts['show_desc' ] ) {
+				//
+				// } 
 
 				$list .= '</li>';
 			}
@@ -1341,11 +1346,11 @@ function radio_station_current_show_shortcode( $atts ) {
 					$classes[] = 'current-shift';
 					$class = implode( ' ', $classes );
 									
-					$current_shift_display .= '<div class="' . esc_attr( $class ) . '">';
-					$current_shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+					$current_shift_display = '<div class="' . esc_attr( $class ) . '">';
+					$current_shift_display .= '<span class="rs-time rs-start-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
 					$current_shift_display .= esc_html( $display_day ) . ', ' . $start . '</span>';
 					$current_shift_display .= '<span class="rs-sep"> - </span>';
-					$current_shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+					$current_shift_display .= '<span class="rs-time rs-end-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
 					$current_shift_display .= '</div>';
 				}
 				$class = implode( ' ', $classes );
@@ -1355,10 +1360,10 @@ function radio_station_current_show_shortcode( $atts ) {
 				if ( in_array( 'current-shift', $classes ) ) {
 					$shift_display .= '<ul class="current-shift-list"><li class="current-shift-list-item">';
 				}
-				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+				$shift_display .= '<span class="rs-time rs-start-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
 				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span>';
 				$shift_display .= '<span class="rs-sep"> - </span>';
-				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+				$shift_display .= '<span class="rs-time rs-end-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
 				if ( in_array( 'current-shift', $classes ) ) {
 					$shift_display .= '</li></ul>';
 				}
@@ -1747,10 +1752,10 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 				}
 
 				$shift_display .= '<div class="' . esc_attr( $class ) . '">';
-				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
+				$shift_display .= '<span class="rs-time rs-start-time" data="' . esc_attr( $shift_start_time ) . '" data-format="' . esc_attr( $data_format ) . '">';
 				$shift_display .= esc_html( $display_day ) . ', ' . $start . '</span>';
 				$shift_display .= '<span class="rs-sep"> - </span>';
-				$shift_display .= '<span class="rs-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
+				$shift_display .= '<span class="rs-time rs-end-time" data="' . esc_attr( $shift_end_time ) . '" data-format="' . esc_attr( $data_format2 ) . '">' . $end . '</span>';
 				$shift_display .= '</div>';
 
 				$shift_display .= '</div>';

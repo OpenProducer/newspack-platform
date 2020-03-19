@@ -1,9 +1,11 @@
 <?php
+
 /**
  * @package Radio Station
  * @version 2.3.0
  */
 /*
+
 Plugin Name: Radio Station
 Plugin URI: https://netmix.com/radio-station
 Description: Adds Show pages, DJ role, playlist and on-air programming functionality to your site.
@@ -79,9 +81,11 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // -----------------------
 define( 'RADIO_STATION_FILE', __FILE__ );
 define( 'RADIO_STATION_DIR', dirname( __FILE__ ) );
+define( 'RADIO_STATION_BASENAME', plugin_basename( __FILE__ ) );
 define( 'RADIO_STATION_HOME_URL', 'https://netmix.com/radio-station/' );
 define( 'RADIO_STATION_DOCS_URL', 'https://netmix.com/radio-station/docs/' );
 define( 'RADIO_STATION_API_DOCS_URL', 'https://netmix.com/radio-station/docs/api/' );
+define( 'RADIO_STATION_PRO_URL', 'https://netmix.com/radio-station-pro/' );
 
 // ------------------------
 // Define Plugin Data Slugs
@@ -698,8 +702,8 @@ $settings = array(
 	'docs'		   => RADIO_STATION_DOCS_URL,
 	'support'      => 'https://github.com/netmix/radio-station/issues/',
 	'ratetext'     => __( 'Rate on WordPress.org', 'radio-station' ),
-	// 'share'			=> 'https://netmix.com/radio-station/#share',
-	// 'sharetext'		=> __( 'Share the Plugin Love', 'radio-station' ),
+	'share'        => RADIO_STATION_HOME_URL . '?share',
+	'sharetext'    => __( 'Share the Plugin Love', 'radio-station' ),
 	'donate'       => 'https://patreon.com/radiostation',
 	'donatetext'   => __( 'Support this Plugin', 'radio-station' ),
 	'readme'       => false,
@@ -1584,9 +1588,9 @@ function radio_station_add_show_links( $content ) {
 					$plural = $post_type_object->labels->name;
 					$permalink = get_permalink( $show->ID );
 					if ( in_array( 'before', $positions ) ) {
-						$show_link = sprintf( __( '%s for Show', 'radio-station' ), $singular );
-						$show_link .= ': <a href="' . esc_url( $permalink ) . '">' . $show->post_title . '</a>';
-						$before = $show_link . '<br><br>';
+						$show_link_before = sprintf( __( '%s for Show', 'radio-station' ), $singular );
+						$show_link_before .= ': <a href="' . esc_url( $permalink ) . '">' . $show->post_title . '</a>';
+						$before = $show_link_before . '<br><br>';
 						$before = apply_filters( 'radio_station_link_to_show_before', $before, $post, $show );
 					}
 					if ( in_array( 'after', $positions ) ) {
@@ -1597,9 +1601,11 @@ function radio_station_add_show_links( $content ) {
 						if ( in_array( $post->post_type, $post_type_sections ) ) {
 							$post_type_ref = '#show-' . str_replace( 'rs-', '', $post->post_type ) . 's';
 							$anchor = sprintf( __( 'All %s for Show %s', 'radio-station' ), $plural, $show->post_title );
-							$show_link = '<a href="' . esc_url( $permalink ) . $post_type_ref . '">&larr; ' . $anchor . '</a>';
+							$show_link_after = '<a href="' . esc_url( $permalink ) . $post_type_ref . '">&larr; ' . $anchor . '</a>';
 						}
-						$after = '<br>' . $show_link;
+						if ( isset( $show_link_after ) ) {
+							$after = '<br>' . $show_link_after;
+						}
 						$after = apply_filters( 'radio_station_link_to_show_after', $after, $post, $show );
 					}
 					$content = $before . $content . $after;
@@ -1675,7 +1681,7 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 
 	// --- loop posts to get adjacent post ---
 	$found_current_post = $adjacent_post = false;
-	if ( count( $show_posts ) > 0 ) {
+	if ( $show_posts && is_array( $show_posts ) && ( count( $show_posts ) > 0 ) ) {
 		foreach ( $show_posts as $show_post ) {
 			if ( $found_current_post ) {
 				$related_id = get_post_meta( $show_post->ID, 'post_showblog_id', true );
@@ -2113,8 +2119,11 @@ function radio_station_debug( $data, $echo = true, $file = false ) {
 
 	// --- maybe output debug info ---
 	if ( $echo ) {
+		// 2.3.0: added span wrap for hidden display
+		echo '<span style="display:none;">';
 		// phpcs:ignore WordPress.Security.OutputNotEscaped
 		echo $data;
+		echo '</span>' . PHP_EOL;
 	}
 
 	// --- check for logging constant ---

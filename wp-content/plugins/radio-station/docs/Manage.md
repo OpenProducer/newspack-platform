@@ -14,7 +14,9 @@ You can add Show Shifts from the Show's Edit page. You can click Add Shift as ma
 
 ### Shift Save Checking
 
-Since 2.3.0, when Shifts are saved on the Show Edit page, they are checked against all other Show's (active) Shifts - and then against other Shifts for the same show - to detect for Shift Conflicts. If a conflict is found, that Shift is disabled and the specific conflict is displayed underneath the Shift after saving. Once the time is altered (or altered on the conflicting Show) so there is no conflict, you can then uncheck the Disabled box and the Shift will then be active.
+Since 2.3.0, when Shifts are saved on the Show Edit page, they are checked against all other Show's (active) Shifts - and then against other Shifts for the same show - to detect for Shift Conflicts. If a conflict is found, that Shift is disabled and the specific conflict is displayed underneath the Shift after saving. 
+
+Once the time is adjusted (or adjusted on the conflicting Show Shift and saved) so that there is no conflict, you can then uncheck the Disabled box for that Shift. If there are no further conflicts found, the Shift will then be active.
 
 ### Existing Schedule Conflicts
 

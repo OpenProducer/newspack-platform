@@ -14,6 +14,9 @@
 /* Archive Shortcodes */
 /* ------------------ */
 
+.genre-archive {
+	clear: both;
+}
 
 .show-archive-list, .playlist-archive-list, .override-archive-list {
 	list-style: none;

@@ -637,9 +637,9 @@ function radio_station_legacy_functions() {
 			$error = defined( 'E_USER_DEPRECATED' ) ? E_USER_DEPRECATED : E_USER_WARNING;
 			if ( function_exists( '__' ) ) {
 				/* translators: 1: PHP function name, 2: Version number, 3: Alternative function name. */
-				trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since Radio Station version %2$s! Use %3$s or check for updated functionality.' ), $function, $version, $replacement ), $error );
+				trigger_error( sprintf( __( '%1$s is <strong>deprecated</strong> since Radio Station version %2$s! Use %3$s or check documentation for updated functionality.' ), $function, $version, $replacement ), $error );
 			} else {
-				trigger_error( sprintf( '%1$s is <strong>deprecated</strong> since Radio Station version %2$s! Use %3$s or check for updated functionality.', $function, $version, $replacement ), $error );
+				trigger_error( sprintf( '%1$s is <strong>deprecated</strong> since Radio Station version %2$s! Use %3$s or check documentation for updated functionality.', $function, $version, $replacement ), $error );
 			}
 		}
     }
@@ -647,7 +647,7 @@ function radio_station_legacy_functions() {
 	if ( !function_exists( 'station_current_schedule' ) ) {
 		function station_current_schedule( $scheds = array() ) {
 			radio_station_deprecated_function( __FUNCTION__, 'radio_station_current_schedule', '2.2.0' );
-			return radio_station_current_schedule( $sched );
+			return radio_station_current_schedule( $scheds );
 		}
 	}
 

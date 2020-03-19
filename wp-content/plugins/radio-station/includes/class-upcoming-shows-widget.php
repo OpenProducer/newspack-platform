@@ -106,7 +106,7 @@ class DJ_Upcoming_Widget extends WP_Widget {
 				' . esc_html( __( 'No Additional Schedules Text', 'radio-station' ) ) . '
 				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'default' ) ) . '" name="' . esc_attr( $this->get_field_name( 'default' ) ) . '" type="text" value="' . esc_attr( $default ) . '" />
 			</label>
-			<small>' . esc_html( 'If no Show is scheduled for the current time, display this text.', 'radio-station' ) . '</small>
+			<small>' . esc_html( __( 'If no Show is scheduled for the current time, display this text.', 'radio-station' ) ) . '</small>
 		</p>
 
 		<p>

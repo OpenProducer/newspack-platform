@@ -12,18 +12,31 @@ Shortcode Output Examples can be seen on the [Radio Station Demo Site](http://ra
 
 ### Master Schedule Shortcode
 
-Use the shortcode `[master-schedule]` on any page. This will generate a full-page schedule in one of five Views: Table, Tabbed, List, Divs and Legacy, with Table being the default. Note that Divs and Legacy do not honour Schedule Overrides and should be considered Deprecated but have been kept for backwards compatibility.
+Use the shortcode `[master-schedule]` on any page. This will generate a full-page schedule in one of five Views: 
+
+* Table (default) - responsive program grid in table form
+* Tabbed - responsive styled list view with day selection tabs
+* List - unstyled plain list view for custom development use
+* Divs - (display issues) legacy unstyled div based view 
+* Legacy - (deprecated) legacy table grid view 
+
+Note that Divs and Legacy do not honour Schedule Overrides, but have been kept for backwards compatibility. The legacy Divs view also has display issues but may be rewritten in future.
 
 The following attributes are available for the shortcode:
 
-* *view* : Valid values are 'table', 'tabbed', 'list', 'divs', 'legacy'. Default value is 'table'.
-* *time* : Display time format you with to use.  Valid values are 12 and 24. Default is the Plugin Setting.
-* *show_link* : Display the title of the show as a link to its profile page. Valid values are 0 for hide, 1 for show.  Default is 1.
-* *display_show_time* : Display start and end times of each show after the title in the grid. Valid values are 0 for hide, 1 for show.  Default is 1.
-* *show_image* : If set to a value of 1, the show's avatar will be displayed. Default value is 0.
-* *show_djs* : If set to a value of 1, the names of the show's DJs will be displayed.  Default value is 0.
-* *divheight* : Set the height, in pixels, of the individual divs in the 'divs' view only. Default is 45.
-* *single_day* : Display schedule for only a single day of the week.  Only works if you are using the 'list' view.
+* *view* : Which View to use for display output. 'table', 'tabbed', 'list', 'divs', 'legacy'. Default 'table'.
+* *time* : Display time format you with to use. 12 and 24. Default is the Plugin Setting.
+* *show_link* : Display the title of the show as a link to its profile page. 0 or 1.  Default 1.
+* *show_times* : Whether to display the show shift's start and end times. 0 or 1. Default 1.
+* *show_image* : Whether the display the show's avatar. 0 or 1. Default 0 (1 for Tabbed View.)
+* *show_genres* : Whether to display a list of show genres. 0 or 1. Default 0 (1 for Tabbed View.)
+* *show_desc* : Whether to display Show Description excerpt. 0 or 1. 
+* *show_hosts* : Whether to display a list of show hosts. 0 or 1. Default 0.
+* *link_hosts* : Whether to link each show host to their profile page. 0 or 1. Default 0.
+* *show_encore* : Whether to display 'encore airing' for a show shift. 0 or 1. Default 1.
+* *show_file* : Whether to add a link to the latest audio file. 0 or 1. Default 0.
+* *days* : Display schedule for single day or multiple days, comma separated. Default all.
+* *divheight* : Set the height, in pixels, of the individual divs. For 'divs' view only. Default 45.
 
 Example: Display the schedule in 24-hour time format, use `[master-schedule time="24"]`.  
 

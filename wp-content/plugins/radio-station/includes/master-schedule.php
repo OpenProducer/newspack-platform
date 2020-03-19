@@ -23,8 +23,19 @@ function radio_station_master_schedule( $atts ) {
 		$atts['show_hosts'] = $atts['show_djs'];
 		unset( $atts['show_djs'] );
 	}
+	// 2.3.0: convert display_show_time attribute to show_times
+	if ( !isset( $atts['show_times'] ) && isset( $atts['display_show_time'] ) ) {
+		$atts['show_times'] = $atts['display_show_time'];
+		unset( $atts['display_show_time'] );
+	}
+	// 2.3.0: convert single_day to days
+	if ( !isset( $atts['days'] ) && isset( $atts['single_day'] ) ) {
+		$atts['days'] = $atts['single_day'];
+		unset( $atts['single_day'] );
+	}
 
 	// --- merge shortcode attributes with defaults ---
+	// 2.3.0: added show_desc (default off)
 	// 2.3.0: added show_hosts (alias of show_djs)
 	// 2.3.0: added show_file attribute (default off)
 	// 2.3.0: added show_encore attribute (default on)
@@ -36,22 +47,25 @@ function radio_station_master_schedule( $atts ) {
 	$time_format = (int) radio_station_get_setting( 'clock_time_format' );
 	$defaults = array(
 		'time'              => $time_format,
+		'show_times'		=> 1,
 		'show_link'         => 1,
-		'display_show_time' => 1,
 		'view'              => 'table',
+		'days'				=> false,
 		'divheight'         => 45,
 		// 'list'           => 0, // converted above / deprecated
 		// 'show_djs'       => 0, // converted above / deprecated
+		// 'display_show_time' => 1, // converted above / deprecated
 
 		// --- new display options ---
 		'selector'          => 1,
 		'clock'             => 1,
 		'show_image'        => 0,
+		'show_desc'			=> 0,
 		'show_hosts'        => 0,
 		'link_hosts'        => 0,
 		'show_genres'       => 0,
-		'show_file'         => 0,
 		'show_encore'       => 1,
+		'show_file'         => 0,
 	);
 	// 2.3.0: change some defaults for tabbed and list view
 	if ( isset( $atts['view'] ) ) {
@@ -517,12 +531,12 @@ function radio_station_master_schedule_tabs_js() {
 		if (radio.debug) {
 			console.log('Active Day: '+activeday);
 			console.log('Day Columns:'+daycolumns);
-			console.log('Selected Column: '+selected);
 			console.log('Start Column: '+startcolumn);
+			console.log('Selected Column: '+selected);
 			console.log('Last Column: '+lastcolumn);
 		}
 
-		/* maybe change clicked day if outside view */		
+		/* maybe change active clicked day if outside view */		
 		if (activeday > lastcolumn) {
 			jQuery('.master-schedule-tabs-day.day-'+lastcolumn+' .master-schedule-tabs-day-name').click();
 		} else if (activeday < startcolumn ) {
@@ -534,13 +548,19 @@ function radio_station_master_schedule_tabs_js() {
 	/* Shift Day Left /  Right */
 	function radio_shift_tab(leftright) {
 		tabswidth = jQuery('#master-schedule-tabs').width();
-		daycolumns = Math.floor(tabswidth / 100);
-		console.log('Tabs Width:'+tabswidth+' - Day Columns:'+daycolumns);
+		daycolumns = Math.floor(tabswidth / 120);
 		if (daycolumns < 1) {daycolumns = 1;} else if (daycolumns > 7) {daycolumns = 7;}
 		for (i = 0; i < 7; i++) {
 			if (jQuery('.master-schedule-tabs-day.day-'+i).hasClass('selected-day')) {selected = i;}
 		}
-		if ((selected + daycolumns) > 6) {selected = 7 - daycolumns;}
+		if (radio.debug) {
+			console.log('Tabs Width: '+tabswidth+' - Day Columns: '+daycolumns);
+			console.log('Selected Day: '+selected);
+		}
+		if ((selected + daycolumns) > 6) {
+			selected = 7 - daycolumns;
+			if (radio.debug) {console.log('Adjusted Select: '+selected);}
+		}
 		if (leftright == 'left') {selected--;} else if (leftright == 'right') {selected++;} 
 		for (i = 0; i < 7; i++) {
 			if (i == selected) {jQuery('.master-schedule-tabs-day.day-'+i).addClass('selected-day');}

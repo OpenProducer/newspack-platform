@@ -186,7 +186,7 @@ foreach ( $master_list as $hour => $days ) {
 				$output .= '</span>';
 			}
 
-			if ( $atts['display_show_time'] ) {
+			if ( $atts['show_times'] ) {
 
 				$output .= '<span class="show-time">';
 

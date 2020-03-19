@@ -10,7 +10,7 @@
 | [Display](./Display.md) | Automatic Pages, Templates and Images |
 | [Manage](./Manage.md) | Admin Lists, Shift Editing, Conflict Checker |
 | [Roles](./Roles.md) | Plugin Roles and related Capabilities |
-| [Widgets](./Widgets.md) | Current Show, Upcoming Shows, Current Playlist, Radio Clock, Streaming Player |
+| [Widgets](./Widgets.md) | Current Show, Upcoming Shows, Playlist, Clock, Player |
 | [Shortcodes](./Shortcodes.md) | Data List Archives and Master Schedule Views |
 | [Data](./Data.md) | Post Types, Taxonomies and Data Filters |
 | [API](./API.md) | Data API via REST and Feed Endpoints
@@ -31,7 +31,7 @@ There are a few [Widgets](./Widgets.md) you can add via your Appearance -> Widge
 
 Then there are also a number of other [Shortcodes](./Shortcodes.md) you can use in your pages with different display options you can use in various places on your site also. There is the Master Schedule, Widget Shortcodes, and also Archive Shortcodes for each of the different data records. 
 
-Radio Station has several in-built [Data](./Data.md) types. These include [Custom Post Types](./Data.md#custom-post-types) for Shows, Schedule Overrides and Playlists. There are [Taxonomies](./Data.md#taxonomies) for Genres and Languages. You can override most data values and display output via custom [Data Filters](#data-filters) throughout the plugin. We have also incorporated an [API](./API.md) in the plugin via REST and/or WordPress Feeds, and this data is accessible in JSON format. 
+Radio Station has several in-built [Data](./Data.md) types. These include [Custom Post Types](./Data.md#custom-post-types) for Shows, Schedule Overrides and Playlists. There are [Taxonomies](./Data.md#taxonomies) for Genres and Languages. You can override most data values and display output via custom [Data Filters](./Data.md#data-filters) throughout the plugin. We have also incorporated an [API](./API.md) in the plugin via REST and/or WordPress Feeds, and this data is accessible in JSON format. 
 
 This plugin is under active development and we are continuously working to enhance the Free version available on [WordPress.Org](https://wordpress.org/plugins/radio-station/), as well as creating new feature additions for [Radio Station Pro](https://netmix.com/radio-station-pro/). Check out the [Roadmap](./Roadmap.md) if you are interested in seeing what is coming up next!
 

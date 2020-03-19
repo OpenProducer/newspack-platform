@@ -1,5 +1,5 @@
 /* MailChimp Form Embed Code - Slim - 12/15/2015 v10.7 */
-#mc_embed_signup {background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif;}
+#mc_embed_signup {background:#fff; clear:left; font:14px Helvetica,Arial,sans-serif; max-width: 1000px;}
 #mc_embed_signup form {display:block; position:relative; text-align:left; padding:10px 0 10px 3%}
 #mc_embed_signup h2 {font-weight:bold; padding:0; margin:15px 0; font-size:1.4em;}
 #mc_embed_signup input {border:1px solid #999; -webkit-appearance:none;}

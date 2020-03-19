@@ -14,7 +14,7 @@
 }
 
 #master-schedule-clock-wrapper, #master-schedule-timezone-wrapper, #master-schedule-selector-wrapper {
-	font-size: 13px;
+	font-size: 0.8em;
 	vertical-align: top;
 	text-align: left;
 }
@@ -26,7 +26,7 @@
 /* Genre Selector */
 /* -------------- */
 #master-genre-list {
-	font-size: 13px;
+	font-size: 0.8em;
 	float: left;
 }
 
@@ -57,6 +57,8 @@
 	width: 12%;
 	text-align: center;
 	vertical-align: top;
+	min-width: 100%;
+	padding: 0.5em 0;
 }
 
 #master-program-schedule .master-program-day.current-day {
@@ -101,7 +103,7 @@
 
 #master-program-schedule td {
 	vertical-align: top;
-	font-size: 12px;
+	font-size: 1em;
 	text-align: center;
 	padding: 0px;
 	height: 100%;
@@ -117,6 +119,7 @@
 
 #master-program-schedule td div {
 	border-top: 1px solid #EEEEEE;
+	font-size: 0.9em;
 }
 
 #master-program-schedule .master-program-hour.current-hour {
@@ -186,24 +189,25 @@
 }
 
 #master-program-schedule .show-host-names {
-	font-size: 12px;
+	font-size: 0.8em;
 }
 
-#master-program-schedule span.show-time {
-	font-size: 10px;
+#master-program-schedule .show-time, #master-program-schedule .show-user-time {
+	font-size: 0.8em;
 }
 
-#master-program-schedule span.show-encore {
-	font-size: 10px;
+#master-program-schedule .show-encore {
+	font-size: 0.8em;
 	color: #EE8E66;
 }
 
-#master-program-schedule span.show-file {
+#master-program-schedule .show-file {
 	margin-bottom: 5px;
 	margin-top: 5px;
+	font-size: 0.6em;
 }
 
-#master-program-schedule span.show-file a {
+#master-program-schedule .show-file a {
 	width: 95%;
 	height: 20px;
 	background-color: #931B25;
@@ -213,9 +217,13 @@
 	margin-bottom: 3px;
 }
 
-#master-program-schedule span.show-file a:hover {
+#master-program-schedule .show-file a:hover {
 	background-color: #C51D2E;
 	color: #ffffff;
+}
+
+#master-program-schedule .show-desc {
+	font-size: 0.6em;
 }
 
 
@@ -269,7 +277,7 @@
 	text-align: center; 
 	background-color: #eeeeee; 
     color: #444444;
-	font-size: 16px;
+	font-size: 1em;
 	font-weight: bold;
     border-radius: 7px 7px 0 0;
     border: 1px solid #000000;
@@ -284,7 +292,8 @@
 
 #master-schedule-tabs .master-schedule-tabs-day-name {
 	display: inline-block;
-	padding: 5px 0 5px 0;
+	padding: 5px 10px 5px 10px;
+	font-size: 1em;
 }
 
 #master-schedule-tabs .master-schedule-tabs-day.active-day-tab {
@@ -316,7 +325,6 @@
 	padding: 0;
 	position: relative; 
 	text-align: left; 
-	/* width: 698px; */
 	width: 100%;
 	list-style: none;
 }
@@ -337,9 +345,11 @@
 }
 
 #master-schedule-tab-panels .master-schedule-tabs-show .show-info,
-#master-schedule-tab-panels .master-schedule-tabs-show .show-image {
+#master-schedule-tab-panels .master-schedule-tabs-show .show-image,
+#master-schedule-tab-panels .master-schedule-tabs-show .show-desc {
 	display: inline-block;
 	vertical-align: top;
+	font-size: 1em;
 }
 
 #master-schedule-tab-panels .master-schedule-tabs-show .show-image {
@@ -349,10 +359,20 @@
 }
 
 #master-schedule-tab-panels .master-schedule-tabs-show .show-time,
-#master-schedule-tab-panels .master-schedule-tabs-show .show-host-names,
+#master-schedule-tab-panels .master-schedule-tabs-show .show-user-time,
+#master-schedule-tab-panels .master-schedule-tabs-show .show-host-names {
+	font-size: 0.9em;
+}
+
 #master-schedule-tab-panels .master-schedule-tabs-show .show-encore,
+#master-schedule-tab-panels .master-schedule-tabs-show .show-file,
 #master-schedule-tab-panels .master-schedule-tabs-show .show-genres {
-	font-size: 15px;
+	font-size: 0.8em;
+}
+
+#master-schedule-tab-panels .master-schedule-tabs-show .show-desc {
+	font-size: 0.75em;
+	margin-left: 20px;
 }
 
 #master-schedule-tab-panels .master-schedule-tabs-show.highlighted {

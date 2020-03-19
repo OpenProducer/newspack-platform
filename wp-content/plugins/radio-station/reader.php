@@ -3467,7 +3467,7 @@ if (!class_exists('WordPress_Readme_Parser')) {
 
 		if ( $markdown ) { // Parse markdown.
 			if ( !function_exists('Markdown') )
-				require( WORDPRESS_README_MARKDOWN );
+				require WORDPRESS_README_MARKDOWN;
 			$text = Markdown($text);
 		}
 

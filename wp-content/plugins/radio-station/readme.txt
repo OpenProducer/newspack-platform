@@ -3,7 +3,7 @@ Contributors: tonyzeoli, majick, nourma
 Donate link: https://netmix.co/donate
 Tags: dj, music, playlist, radio, shows, scheduling, broadcasting
 Requires at least: 3.3.1
-Tested up to: 5.3.0
+Tested up to: 5.3.2
 Stable tag: trunk
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -76,13 +76,17 @@ Love Radio Station and ready for more? As the free version develops, we have als
 3. Give any users who need access to the plugin the role of "Host", "Producer" or "Show Editor". Only these roles have administrative access to the plugin's records.
 4. Create Shows, add Shifts to them, and assign Images, Genres, Languages, Hosts and/or Producers.
 5. Add Playlists to your Shows or assign posts to Shows as needed.
-6. See the QuickStart Guide for more detailed instructions of what else is available.
+6. See the QuickStart Guide above for more detailed instructions of what else is available.
 
 == Frequently Asked Questions ==
 
+= How do I get started with Radio Station? =
+
+Read the [Quickstart Guide](https://netmix.com/radio-station/docs/#quickstart-guide) for an introduction to the plugin, what features are available and how to set them up.
+
 = Where can I find the full plugin documentation? =
 
-The latest documentation can be found online at [NetMix.com](https://netmix.com/radio-station/docs/). The Markdown-formatted files used for these are in the `/docs/` folder of the [GitHub Repository](https://github.com/netmix/radio-station/docs/) and in the `/docs` folder of the plugin directory. 
+The latest documentation can be found online at [NetMix.com](https://netmix.com/radio-station/docs/). Documentation is also included with for the currently installed version via the Radio Station Help menu. You can find the Markdown-formatted files in the `/docs` folder of the [GitHub Repository](https://github.com/netmix/radio-station/docs/) and in the `/docs` folder of the plugin directory. 
 
 = How do I schedule a Show? =
 
@@ -92,7 +96,7 @@ Simply create a new show via Add Show in the Radio Station plugin menu in the Ad
 
 In the Plugin Settings, you can select a Page on which to automatically display the schedule as well as which View to display (a Table grid by default.) Alternatively, you can use the shortcode `[master-schedule]` on any page (or post.) This option allows you to use further shortcode attributes to control the what is displayed in the Schedule (see [Master Schedule Shortcode Docs](./Shortcodes.md#master-schedule-shortcode) )
 
-= I've scheduled all my Shows, but some are not showing up on the programming grid?! =
+= I've scheduled all my Shows, but some are not showing up on the program schedule? =
 
 Did you remember to check the "Active" checkbox for each Show? If a Show is not marked active, the plugin assumes that it's not currently in production and it is not shown on the Schedule. A Show will also not be shown if it has no active Shifts assigned to it.
 
@@ -175,7 +179,7 @@ You may translate the plugin into another language. Please visit our [WordPress 
 == Changelog ==
 
 = 2.3.0 =
-* Include: Plugin Loader (1.0.9) with plugin options and settings
+* Include: Plugin Loader (1.1.0) with plugin options and settings
 * Include: Freemius SDK (2.3.0) and Freemius integration
 * Feature: assign new Producer role to a Show for Show displays
 * Feature: internal Schedule Show Shift Conflict checking 
@@ -517,7 +521,9 @@ You may translate the plugin into another language. Please visit our [WordPress 
 == Upgrade Notice ==
 
 = 2.3.0 =
-* https://netmix.com/blog/2-3-0-release-announcement/
-* Revamped Templates, Improved Master Schedule, Improved User Roles, 
-* New Shortcodes, Admin Options, Show Producers, Improved Show Images,
-* REST API Routes, Shift Conflict Checking, Extra Post Type Supports
+* Major Update including many new features, enhancements and fixes!
+* https://netmix.com/radio-station-2-3-0-release/
+* Revamped Templates, Master Schedule Views, Shortcodes and Widgets
+* Added Admin Options, REST API Routes and Shift Conflict Checking
+* Added Show Producers, Language Taxonomy, Timezones and Countdowns
+* Improved User Roles, Show Images, Post Type Supports + much more!

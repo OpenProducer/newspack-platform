@@ -951,7 +951,7 @@ function radio_station_show_info_metabox() {
 	echo '<div id="meta_inner">';
 
 		echo '<p><div style="width:100px; display:inline-block;"><label>' . esc_html( __( 'Active', 'radio-station' ) ) . '?</label></div> 
-		<input type="checkbox" name="show_active" ' . checked( $active, 'on', false ) . '/> 
+		<input type="checkbox" name="show_active" ' . checked( $active, 'on', false ) . '> 
 		<em>' . esc_html( __( 'Check this box if show is currently active (Show will not appear on programming schedule if unchecked.)', 'radio-station' ) ) . '</em></p>';
 
 		echo '<p><div style="width:100px; display:inline-block;"><label>' . esc_html( __( 'Website Link', 'radio-station' ) ) . ':</label></div> 
@@ -1470,7 +1470,7 @@ function radio_station_show_shifts_metabox() {
 		echo esc_html( __( 'Fix the Shift and/or the Shift on the conflicting Show and Update them both.', 'radio-station' ) ) . '<br>';
 		echo esc_html( __( 'Then you can uncheck the shift Disable box and Update to re-enable the Shift.', 'radio-station' ) ) . '<br>';
 		// TODO: add more information blog post / documentation link ?
-		// echo '<a href="' . RADIO_STATION_DOC_URL . '/shows/" target="_blank">' . esc_html( __( 'Show Documentation', 'radio-station' ) ) . '</a>';
+		// echo '<a href="' . RADIO_STATION_DOC_URL . '/manage/#" target="_blank">' . esc_html( __( 'Show Documentation', 'radio-station' ) ) . '</a>';
 		echo '</div><br>';
 	}
 
@@ -1644,37 +1644,37 @@ function radio_station_show_shifts_metabox() {
 
 	// --- shift display styles ---
 	echo '<style>
-        .show-shift {
-            list-style: none;
-            margin-bottom: 10px;
-            border: 2px solid green;
-        }
-        .show-shift li {
-            display: inline-block;
-            vertical-align: middle;
-            margin-left: 20px;
-            margin-top: 10px;
-            margin-bottom: 10px;
-        }
-        .show-shift li.first {
-            margin-left: 10px;
-        }
-        .show-shift li.last {
-            margin-right: 10px;
-        }        
-        .show-shift.disabled {
-            border: 2px dashed orange;
-        }        
-        .show-shift.conflicts {
-            outline: 2px solid red;
-        }        
-        .show-shift.disabled.conflicts {
-            border: 2px dashed red;
-            outline: none;
-        }        
-        .show-shift select.incomplete {
-            border: 2px solid orange;
-        }</style>';
+	.show-shift {
+		list-style: none;
+		margin-bottom: 10px;
+		border: 2px solid green;
+	}
+	.show-shift li {
+		display: inline-block;
+		vertical-align: middle;
+		margin-left: 20px;
+		margin-top: 10px;
+		margin-bottom: 10px;
+	}
+	.show-shift li.first {
+		margin-left: 10px;
+	}
+	.show-shift li.last {
+		margin-right: 10px;
+	}        
+	.show-shift.disabled {
+		border: 2px dashed orange;
+	}        
+	.show-shift.conflicts {
+		outline: 2px solid red;
+	}        
+	.show-shift.disabled.conflicts {
+		border: 2px dashed red;
+		outline: none;
+	}        
+	.show-shift select.incomplete {
+		border: 2px solid orange;
+	}</style>';
 
 	echo '</div>';
 }
@@ -1701,22 +1701,23 @@ function radio_station_add_show_helper_box() {
 // 2.3.0: added metabox for show description helper text
 function radio_station_show_helper_box() {
 
-	echo "<p>";
-
 	// --- show description helper text ---
+	echo '<p>';
 	echo esc_html( __( "The text field below is for your Show Description. It will display in the About section of your Show page.", 'radio-station' ) );
 	echo ' ' . esc_html( __( "It is not recommended to include your past show content or archives in this area, as it will affect the Show page layout your visitors see.", 'radio-station' ) );
 	echo esc_html( __( "It may also impact SEO, as archived content won't have their own pages and thus their own SEO and Social meta rules.", 'radio-station' ) ) . "<br>";
 	echo esc_html( __( "We recommend using WordPress Posts to add new posts and assign them to your Show(s) using the Related Show metabox on the Post Edit screen so they display on the Show page.", 'radio-station' ) );
 	echo ' ' . esc_html( __( "You can then assign them to a relevent Post Category for display on your site also.", 'radio-station' ) );
+	echo '</p>';
 
 	// TODO: upgrade to Pro for upcoming Show Episodes blurb
+	// echo '<br>' . esc_html( 'In future, Radio Station Pro will include an Episodes post type', 'radio-station' ) );
+	// TODO: change this text/link when Pro Episodes become available
 	// $upgrade_url = radio_station_get_upgrade_url();
-	// echo '<a href="' . $upgrade_url . '">';
-	// echo esc_html( __( "Upgrade to Radio Station Pro', 'radio-station' ) );
-	// echo '</a>';
-
-	echo "</p>";
+	// echo '<br><a href="' . esc_url( $upgrade_url ) . '" target="_blank">';
+	//	// echo esc_html( __( "Upgrade to Radio Station Pro', 'radio-station' ) );
+	//	echo esc_html( __( 'Find out more about Radio Station Pro', 'radio-station' ) );
+	// echo ' &rarr;</a>.';
 
 }
 
@@ -1731,7 +1732,7 @@ function radio_station_rename_featured_image_metabox() {
 	remove_meta_box( 'postimagediv', RADIO_STATION_SHOW_SLUG, 'side' );
 	add_meta_box(
 		'postimagediv',
-		__( 'Show Logo' ),
+		__( 'Show Logo', 'radio-station' ),
 		'post_thumbnail_meta_box',
 		RADIO_STATION_SHOW_SLUG,
 		'side',
@@ -2390,16 +2391,16 @@ function radio_station_show_column_data( $column, $post_id ) {
 				$end_time = strtotime( $weekdates[$shift['day']] . ' ' . $end );
 
 				// --- make weekday filter selections bold ---
+				// 2.3.0: fix to bolding only if weekday isset
+				$bold = false;
 				if ( isset( $_GET['weekday'] ) ) {
 					$weekday = trim( $_GET['weekday'] );
-				}
-				$nextday = radio_station_get_next_day( $weekday );
-				// 2.3.0: handle shifts that go overnight for weekday filter
-				if ( ( $weekday == $shift['day'] ) || ( ( $shift['day'] == $nextday ) && ( $end_time < $start_time ) ) ) {
-					echo "<b>";
-					$bold = true;
-				} else {
-					$bold = false;
+					$nextday = radio_station_get_next_day( $weekday );
+					// 2.3.0: handle shifts that go overnight for weekday filter
+					if ( ( $weekday == $shift['day'] ) || ( ( $shift['day'] == $nextday ) && ( $end_time < $start_time ) ) ) {
+						echo "<b>";
+						$bold = true;
+					}
 				}
 
 				echo esc_html( radio_station_translate_weekday( $shift['day'] ) );

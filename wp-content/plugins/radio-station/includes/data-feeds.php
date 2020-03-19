@@ -174,7 +174,7 @@ function radio_station_get_broadcast_data() {
 	$current_show = radio_station_convert_show_shift( $current_show );
 	print_r( $current_show );
 	$next_show = radio_station_get_next_show();
-	print_r( $nextt_show );
+	print_r( $next_show );
 	$next_show = radio_station_convert_show_shift( $next_show );
 	print_r( $nextt_show );
 
@@ -504,7 +504,7 @@ function radio_station_route_station( $request ) {
 	$station['genres'] = $genres_data;
 	$languages_data = radio_station_get_languages_data();
 	$station['languages'] = $languages_data;
-	$station = radio_station_add_station_data( $data );
+	$station = radio_station_add_station_data( $station );
 	$station['endpoints'] = radio_station_get_route_urls();
 	$station = apply_filters( 'radio_station_route_station', $station, $request );
 
@@ -549,6 +549,7 @@ function radio_station_route_schedule( $request ) {
 	$schedule_data = radio_station_convert_schedule_shifts( $schedule_data );
 
 	// --- check for weekday query ---
+	$weekdays = array();
 	$weekday = $singular = $multiple = false;
 	if ( isset( $_GET['weekday'] ) ) {
 	
@@ -1008,6 +1009,7 @@ function radio_station_feed_schedule( $comment_feed, $feed_name ) {
 	$schedule_data = radio_station_convert_schedule_shifts( $schedule_data );
 
 	// --- check for weekday query ---
+	$weekdays = array();
 	$weekday = $singular = $multiple = false;
 	if ( isset( $_GET['weekday'] ) ) {
 	

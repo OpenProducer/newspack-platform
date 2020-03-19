@@ -2,9 +2,13 @@
 
 ***
 
+### How do I get started with Radio Station?
+
+Read the [Quickstart Guide](./index.md#quickstart-guide) for an introduction to the plugin, what features are available and how to set them up.
+
 ### Where can I find the full plugin documentation?
 
-The latest documentation can be found online at [NetMix.com](https://netmix.com/radio-station/docs/). The Markdown-formatted files used for these are in the `/docs/` folder of the [GitHub Repository](https://github.com/netmix/radio-station/docs/) and in the `/docs` folder of the plugin directory. 
+The latest documentation can be found online at [NetMix.com](https://netmix.com/radio-station/docs/). Documentation is also included with for the currently installed version via the Radio Station Help menu. You can find the Markdown-formatted files in the `/docs` folder of the [GitHub Repository](https://github.com/netmix/radio-station/docs/) and in the `/docs` folder of the plugin directory. 
 
 ### How do I schedule a Show? 
 
@@ -14,7 +18,7 @@ Simply create a new show via Add Show in the Radio Station plugin menu in the Ad
 
 In the Plugin Settings, you can select a Page on which to automatically display the schedule as well as which View to display (a Table grid by default.) Alternatively, you can use the shortcode `[master-schedule]` on any page (or post.) This option allows you to use further shortcode attributes to control the what is displayed in the Schedule (see [Master Schedule Shortcode Docs](./Shortcodes.md#master-schedule-shortcode) )
 
-### I've scheduled all my Shows, but some are not showing up on the programming grid?!
+### I've scheduled all my Shows, but some are not showing up on the program schedule?
 
 Did you remember to check the "Active" checkbox for each Show? If a Show is not marked active, the plugin assumes that it's not currently in production and it is not shown on the Schedule. A Show will also not be shown if it has no active Shifts assigned to it.
 

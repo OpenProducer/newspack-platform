@@ -51,7 +51,7 @@ class DJ_Widget extends WP_Widget {
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'link' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'link' ) ) . '" name="' . esc_attr( $this->get_field_name( 'link' ) ) . '" type="checkbox" ' . checked( $link, true, false ) . ' />
+			<input id="' . esc_attr( $this->get_field_id( 'link' ) ) . '" name="' . esc_attr( $this->get_field_name( 'link' ) ) . '" type="checkbox" ' . checked( $link, true, false ) . '>
 				' . esc_html( __( 'Link the title to the Show page', 'radio-station' ) ) . '
 			</label>
 		</p>
@@ -77,7 +77,7 @@ class DJ_Widget extends WP_Widget {
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'djavatar' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'djavatar' ) ) . '" name="' . esc_attr( $this->get_field_name( 'djavatar' ) ) . '" type="checkbox" ' . checked( $djavatar, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'djavatar' ) ) . '" name="' . esc_attr( $this->get_field_name( 'djavatar' ) ) . '" type="checkbox" ' . checked( $djavatar, true, false ) . '>
 				' . esc_html( __( 'Display Show Avatar', 'radio-station' ) ) . '
 			</label>
 		</p>
@@ -85,49 +85,49 @@ class DJ_Widget extends WP_Widget {
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'avatar_width' ) ) . '"> 
 				' . esc_html( __( 'Avatar Width', 'radio-station' ) ) . ':
-				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'avatar_width' ) ) . '" name="' . esc_attr( $this->get_field_name( 'avatar_width' ) ) . '" type="text" value="' . esc_attr( $avatar_width ) . '" />
+				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'avatar_width' ) ) . '" name="' . esc_attr( $this->get_field_name( 'avatar_width' ) ) . '" type="text" value="' . esc_attr( $avatar_width ) . '">
 			</label>
 			<small>' . esc_html( __( 'Width of Show Avatar (in pixels, default full width)', 'radio-station' ) ) . '</small>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'display_djs' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'display_djs' ) ) . '" name="' . esc_attr( $this->get_field_name( 'display_djs' ) ) . '" type="checkbox" ' . checked( $display_djs, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'display_djs' ) ) . '" name="' . esc_attr( $this->get_field_name( 'display_djs' ) ) . '" type="checkbox" ' . checked( $display_djs, true, false ) . '>
 				' . esc_html( __( 'Display names of the DJs on the Show', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'link_djs' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'link_djs' ) ) . '" name="' . esc_attr( $this->get_field_name( 'link_djs' ) ) . '" type="checkbox" ' . checked( $link_djs, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'link_djs' ) ) . '" name="' . esc_attr( $this->get_field_name( 'link_djs' ) ) . '" type="checkbox" ' . checked( $link_djs, true, false ) . '>
 				' . esc_html( __( 'Link DJ names to author pages', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'show_sched' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'show_sched' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_sched' ) ) . '" type="checkbox" ' . checked( $show_sched, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'show_sched' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_sched' ) ) . '" type="checkbox" ' . checked( $show_sched, true, false ) . '>
 				' . esc_html( __( 'Display schedule info for this show', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'show_all_sched' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'show_all_sched' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_all_sched' ) ) . '" type="checkbox" ' . checked( $show_all_sched, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'show_all_sched' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_all_sched' ) ) . '" type="checkbox" ' . checked( $show_all_sched, true, false ) . '>
 				' . esc_html( __( 'Display multiple schedules (if show airs more than once per week)', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'show_desc' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'show_desc' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_desc' ) ) . '" type="checkbox" ' . checked( $show_desc, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'show_desc' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_desc' ) ) . '" type="checkbox" ' . checked( $show_desc, true, false ) . '>
 				' . esc_html( __( 'Display description of show', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'show_playlist' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'show_playlist' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_playlist' ) ) . '" type="checkbox" ' . checked( $show_playlist, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'show_playlist' ) ) . '" name="' . esc_attr( $this->get_field_name( 'show_playlist' ) ) . '" type="checkbox" ' . checked( $show_playlist, true, false ) . '>
 				' . esc_html( __( "Display link to show's playlist", 'radio-station' ) ) . '
 			</label>
 		</p>
@@ -135,7 +135,7 @@ class DJ_Widget extends WP_Widget {
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'default' ) ) . '">
 				' . esc_html( __( 'No Show Display Text', 'radio-station' ) ) . ':
-				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'default' ) ) . '" name="' . esc_attr( $this->get_field_name( 'default' ) ) . '" type="text" value="' . esc_attr( $default ) . '" />
+				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'default' ) ) . '" name="' . esc_attr( $this->get_field_name( 'default' ) ) . '" type="text" value="' . esc_attr( $default ) . '">
 			</label>
 			<small>' . esc_html( __( 'Text to display if no Show is scheduled for the current time.', 'radio-station' ) ) . '</small>
 		</p>
@@ -153,7 +153,7 @@ class DJ_Widget extends WP_Widget {
 		
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'countdown' ) ) . '">
-			<input id="' .esc_attr( $this->get_field_id( 'countdown' ) ) . '" name="' . esc_attr( $this->get_field_name( 'countdown' ) ) . '" type="checkbox" ' . checked( $countdown, true, false ) . '/>
+			<input id="' .esc_attr( $this->get_field_id( 'countdown' ) ) . '" name="' . esc_attr( $this->get_field_name( 'countdown' ) ) . '" type="checkbox" ' . checked( $countdown, true, false ) . '>
 				' . esc_html( __( 'Display Countdown Timer', 'radio-station' ) ) . '
 			</label>
         </p>';

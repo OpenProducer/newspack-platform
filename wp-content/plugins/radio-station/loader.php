@@ -1344,6 +1344,9 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 					add_options_page( $args['pagetitle'], $args['menutitle'], $args['capability'], $args['slug'], $args['namespace'] . '_settings_page' );
 				}
 			}
+
+			// 1.1.0: add admin notices boxer
+			add_action( 'all_admin_notices', array( $this, 'notice_boxer' ), 999 );
 		}
 
 		// -----------------
@@ -1400,6 +1403,55 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 			return '';
 		}
 
+		// ------------
+		// Notice Boxer
+		// ------------
+		// 1.1.0: added admin notices boxer to settings pages
+		public function notice_boxer() {
+
+			$args = $this->args;
+
+			// --- bug out if not on radio station pages ---
+			if ( !isset( $_REQUEST['page'] ) ) {
+				return;
+			}
+			if ( $args['slug'] != substr( $_REQUEST['page'], 0, strlen( $args['slug'] ) ) ) {
+				return;
+			}
+
+			// --- output notice box ---
+			echo '<div style="width: 98%;" id="admin-notices-box" class="postbox">';
+			echo '<h3 class="admin-notices-title" style="cursor:pointer; margin:7px 14px; font-size:16px;" onclick="settings_toggle_notices();">';
+			echo '<span id="admin-notices-arrow" style="font-size:24px;">&#9656;</span> &nbsp; ';
+			echo '<span id="admin-notices-title" style="vertical-align:top;">' . __( 'Notices' ) . '</span>  &nbsp; ';
+			echo '<span id="admin-notices-count" style="vertical-align:top;"></span></h3>';
+
+			echo '<div id="admin-notices-wrap" style="display:none";><h2 style="display:none;"></h2></div>';
+			echo '</div>';
+
+			// --- toggle notice box script ---
+			echo "<script>function settings_toggle_notices() {
+				if (document.getElementById('admin-notices-wrap').style.display == '') {
+					document.getElementById('admin-notices-wrap').style.display = 'none';
+					document.getElementById('admin-notices-arrow').innerHTML = '&#9656;';
+				} else {
+					document.getElementById('admin-notices-wrap').style.display = '';
+					document.getElementById('admin-notices-arrow').innerHTML= '&#9662;';
+				} 
+			} ";
+			
+			// --- modified from /wp-admin/js/common.js to move notices ---
+			echo "jQuery(document).ready(function() {
+				setTimeout(function() {
+					jQuery('div.update-nag, div.updated, div.error, div.notice').not('.inline, .below-h2').insertAfter(jQuery('#admin-notices-wrap h2'));
+					count = parseInt(jQuery('#admin-notices-wrap').children().length - 1);
+					if (count > 0) {jQuery('#admin-notices-count').html('('+count+')');}
+					else {jQuery('#admin-notices-box').hide();}
+				}, 500);
+			});</script>";
+
+		}
+
 		// ------------------
 		// Plugin Page Header
 		// ------------------
@@ -1434,7 +1486,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 			// 1.0.9: fix to check if PNG file exists
 			$icon_url = false;
 			if ( file_exists( $this->args['dir'] . '/images/' . $args['slug'] . '.gif' ) ) {
-				$icon_url = admin_page_tab_plugins_url( 'images/' . $args['slug'] . '.gif', $args['file'] );
+				$icon_url = plugins_url( 'images/' . $args['slug'] . '.gif', $args['file'] );
 			} elseif ( file_exists( $this->args['dir'] . '/images/' . $args['slug'] . '.png' ) ) {
 				$icon_url = plugins_url( 'images/' . $args['slug'] . '.png', $args['file'] );
 			}
@@ -1453,7 +1505,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 
 			// --- plugin header styles ---
 			echo "<style>.pluginlink {text-decoration:none;} .smalllink {font-size:11px;}
-		.readme:hover {text-decoration:underline;}</style>";
+			.readme:hover {text-decoration:underline;}</style>";
 
 			// --- open header table ---
 			echo "<table><tr>";
@@ -1467,12 +1519,14 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 
 			echo "<td width='20'></td><td>";
 
-			echo "<table><tr><td>";
+			echo "<table><tr>";
 
 			// --- plugin title ---
-			echo "<h3 style='font-size:20px;'><a href='" . esc_url( $args['home'] ) . "' style='text-decoration:none;'>" . esc_html( $args['title'] ) . "</a></h2></a>";
+			echo "<td><h3 style='font-size:20px;'>";
+			echo "<a href='" . esc_url( $args['home'] ) . "' target='_blank' style='text-decoration:none;'>" . esc_html( $args['title'] ) . "</a>";
+			echo "</h3></td>";
 
-			echo "</td><td width='20'></td>";
+			echo "<td width='20'></td>";
 
 			// --- plugin version ---
 			echo "<td><h3>v" . esc_html( $args['version'] ) . "</h3></td></tr>";
@@ -1490,19 +1544,24 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 
 			// --- readme / docs / support links ---
 			// 1.0.8: use filtered links array with automatic separator
+			// 1.1.0: added explicit plugin home link
+			// 1.1.0: added title attributes to links
 			$links = array();
+			if ( isset( $args['home'] ) ) {
+				$links[] = "<a href='" . esc_url( $args['home'] ) . "' class='pluginlink smalllink' title='" . esc_attr( __( 'Plugin Homepage' ) ) . "' target='_blank'><b>" . esc_html( __( 'Home' ) ) . "</b></a>";
+			}
 			if ( !isset( $args['readme'] ) || ( false !== $args['readme'] ) ) {
 				$readme_url = add_query_arg( 'action', $namespace . '_readme_viewer', admin_url( 'admin-ajax.php' ) );
-				$links[] = "<a href='" . esc_url( $readme_url ) . "' class='pluginlink smalllink thickbox' title='readme.txt'><b>" . esc_html( __( 'Readme' ) ) . "</b></a>";
+				$links[] = "<a href='" . esc_url( $readme_url ) . "' class='pluginlink smalllink thickbox' title='" . esc_attr( __( 'View Plugin' ) ) . " readme.txt'><b>" . esc_html( __( 'Readme' ) ) . "</b></a>";
 			}
 			if ( isset( $args['docs'] ) ) {
-				$links[] = "<a href='" . esc_url( $args['docs'] ) . "' class='pluginlink smalllink' target='_blank'><b>" . esc_html( __( 'Docs' ) ) . "</b></a>";
+				$links[] = "<a href='" . esc_url( $args['docs'] ) . "' class='pluginlink smalllink' title='" . esc_attr( __( 'Plugin Documentation' ) ) . "' target='_blank'><b>" . esc_html( __( 'Docs' ) ) . "</b></a>";
 			}
 			if ( isset( $args['support'] ) ) {
-				$links[] = "<a href='" . esc_url( $args['support'] ) . "' class='pluginlink smalllink' target='_blank'><b>" . esc_html( __( 'Support' ) ) . "</b></a>";
+				$links[] = "<a href='" . esc_url( $args['support'] ) . "' class='pluginlink smalllink' title='" . esc_attr( __( 'Plugin Support' ) ) . "' target='_blank'><b>" . esc_html( __( 'Support' ) ) . "</b></a>";
 			}
 			if ( isset( $args['development'] ) ) {
-				$links[] = "<a href='" . esc_url( $args['development'] ) . "' class='pluginlink smalllink' target='_blank'><b>" . esc_html( __( 'Dev' ) ) . "</b></a>";
+				$links[] = "<a href='" . esc_url( $args['development'] ) . "' class='pluginlink smalllink' title='" . esc_attr( __( 'Plugin Development' ) ) . "' target='_blank'><b>" . esc_html( __( 'Dev' ) ) . "</b></a>";
 			}
 
 			// 1.0.9: change filter from _plugin_links to disambiguate
@@ -2620,7 +2679,9 @@ if ( !function_exists( 'radio_station_load_prefixed_functions' ) ) {
 
 // == 1.1.0 ==
 // - fix to saving multicheck as single array of values
+// - added admin notices boxer to settings pages
 // - added record for tracking first install version
+// - added explicit home link to plugin page links
 
 // == 1.0.9 ==
 // - added automated Settings table and Admin Page output

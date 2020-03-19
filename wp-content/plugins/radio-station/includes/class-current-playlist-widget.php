@@ -38,55 +38,55 @@ class Playlist_Widget extends WP_Widget {
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'title' ) ) . '">
 				' . esc_html( __( 'Title', 'radio-station' ) ) . ':
-				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '" />
+				<input class="widefat" id="' . esc_attr( $this->get_field_id( 'title' ) ) . '" name="' . esc_attr( $this->get_field_name( 'title' ) ) . '" type="text" value="' . esc_attr( $title ) . '">
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'song' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'song' ) ) . '" name="' . esc_attr( $this->get_field_name( 'song' ) ) . '" type="checkbox" ' . checked( $song, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'song' ) ) . '" name="' . esc_attr( $this->get_field_name( 'song' ) ) . '" type="checkbox" ' . checked( $song, true, false ) . '>
 				' . esc_html( __( 'Show Song Title', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'artist' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'artist' ) ) . '" name="' . esc_attr( $this->get_field_name( 'artist' ) ) . '" type="checkbox"' . checked( $artist, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'artist' ) ) . '" name="' . esc_attr( $this->get_field_name( 'artist' ) ) . '" type="checkbox"' . checked( $artist, true, false ) . '>
 				' . esc_html( __( 'Show Artist Name', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'album' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'album' ) ) . '" name="' . esc_attr( $this->get_field_name( 'album' ) ) . '" type="checkbox" ' . checked( $album, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'album' ) ) . '" name="' . esc_attr( $this->get_field_name( 'album' ) ) . '" type="checkbox" ' . checked( $album, true, false ) . '>
 				' . esc_html( __( ' Show Album Name', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'label' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'label' ) ) . '" name="' . esc_attr( $this->get_field_name( 'label' ) ) . '" type="checkbox" ' . checked( $label, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'label' ) ) . '" name="' . esc_attr( $this->get_field_name( 'label' ) ) . '" type="checkbox" ' . checked( $label, true, false ) . '>
 				' . esc_html( __( 'Show Record Label Name', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'comments' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'comments' ) ) . '" name="' . esc_attr( $this->get_field_name( 'comments' ) ) . '" type="checkbox" ' . checked( $comments, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'comments' ) ) . '" name="' . esc_attr( $this->get_field_name( 'comments' ) ) . '" type="checkbox" ' . checked( $comments, true, false ) . '>
 				' . esc_html( __( 'Show DJ Comments', 'radio-station' ) ) . '
 			</label>
 		</p>
 
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'hide_empty' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'hide_empty' ) ) . '" name="' . esc_attr( $this->get_field_name( 'hide_empty' ) ) . '" type="checkbox" ' . checked( $hide_empty, true, false ) . '/>
+			<input id="' . esc_attr( $this->get_field_id( 'hide_empty' ) ) . '" name="' . esc_attr( $this->get_field_name( 'hide_empty' ) ) . '" type="checkbox" ' . checked( $hide_empty, true, false ) . '>
 				' . esc_html( __( 'Hide Widget if Empty', 'radio-station' ) ) . '
 			</label>
 		</p>
 		
 		<p>
 			<label for="' . esc_attr( $this->get_field_id( 'countdown' ) ) . '">
-			<input id="' .esc_attr( $this->get_field_id( 'countdown' ) ) . '" name="' . esc_attr( $this->get_field_name( 'countdown' ) ) . '" type="checkbox" ' . checked( $countdown, true, false ) . '/>
+			<input id="' .esc_attr( $this->get_field_id( 'countdown' ) ) . '" name="' . esc_attr( $this->get_field_name( 'countdown' ) ) . '" type="checkbox" ' . checked( $countdown, true, false ) . '>
 				' . esc_html( __( 'Display Countdown Timer', 'radio-station' ) ) . '
 			</label>
         </p>';

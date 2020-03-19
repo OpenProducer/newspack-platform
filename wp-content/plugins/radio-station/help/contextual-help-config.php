@@ -94,7 +94,7 @@ function radio_station_contextual_help( $contextual_help, $screen_id, $screen ) 
 // -------------------------
 function radio_station_get_help_output( $path ) {
     ob_start();
-    include( $path );
+    include $path;
     $var = ob_get_contents();
     ob_end_clean();
     return $var;
