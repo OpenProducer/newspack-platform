@@ -42,7 +42,7 @@ class Newspack_Ads_Unit_Tests_Bootstrap {
 	 * Setup the unit testing environment.
 	 */
 	public function __construct() {
-		// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions, WordPress.PHP.DevelopmentFunctions
+		// phpcs:disable WordPress.PHP.DiscouragedPHPFunctions, WordPress.PHP.DevelopmentFunctions, WordPress.PHP.IniSet.display_errors_Blacklisted
 		ini_set( 'display_errors', 'on' );
 		error_reporting( E_ALL );
 		// phpcs:enable WordPress.PHP.DiscouragedPHPFunctions, WordPress.PHP.DevelopmentFunctions
@@ -89,6 +89,7 @@ class Newspack_Ads_Unit_Tests_Bootstrap {
 		// include $this->plugin_dir . '/uninstall.php';
 		// Install the plugin here if needed.
 		// Reload capabilities after install, see https://core.trac.wordpress.org/ticket/28374.
+		// phpcs:disable WordPress.WP.GlobalVariablesOverride.DeprecatedWhitelistCommentFound
 		$GLOBALS['wp_roles'] = null; // WPCS: override ok.
 		wp_roles();
 

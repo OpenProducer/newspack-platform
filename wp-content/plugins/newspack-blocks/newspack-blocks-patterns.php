@@ -375,9 +375,6 @@ add_filter(
 	'newspack_blocks_patterns',
 	function( $patterns, $post_type ) {
 		if ( in_array( $post_type, [ 'page', 'post', 'newspack_popups_cpt' ], true ) ) {
-			if ( ! function_exists( 'jetpack_mailchimp_verify_connection' ) || ! jetpack_mailchimp_verify_connection() ) {
-				return $patterns;
-			}
 			$decode = json_decode( file_get_contents( NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/patterns/markup/subscribe/style-1.json'), true ); //phpcs:ignore
 			$patterns[] = [
 				'category' => __( 'Subscribe', 'newspack-blocks' ),
@@ -404,9 +401,6 @@ add_filter(
 	'newspack_blocks_patterns',
 	function( $patterns, $post_type ) {
 		if ( in_array( $post_type, [ 'page', 'post', 'newspack_popups_cpt' ], true ) ) {
-			if ( ! function_exists( 'jetpack_mailchimp_verify_connection' ) || ! jetpack_mailchimp_verify_connection() ) {
-				return $patterns;
-			}
 			$decode = json_decode( file_get_contents( NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/patterns/markup/subscribe/style-2.json'), true ); //phpcs:ignore
 			$patterns[] = [
 				'category' => __( 'Subscribe', 'newspack-blocks' ),

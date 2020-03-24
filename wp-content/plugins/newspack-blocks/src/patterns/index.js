@@ -12,14 +12,10 @@ import { registerPlugin } from '@wordpress/plugins';
 import { ENTER, SPACE } from '@wordpress/keycodes';
 
 /**
- * Material UI dependencies.
- */
-import Icon from '@material-ui/icons/ViewQuilt';
-
-/**
  * Internal dependencies.
  */
 import './style.scss';
+import Icon from '../shared/js/newspack-icon';
 
 class PatternsSidebar extends Component {
 	state = {
@@ -97,7 +93,7 @@ class PatternsSidebar extends Component {
 						</PanelBody>
 					) }
 				</PluginSidebar>
-				<PluginSidebarMoreMenuItem target={ sidebarId } icon=<Icon />>
+				<PluginSidebarMoreMenuItem target={ sidebarId } icon={ <Icon /> }>
 					{ sidebarTitle }
 				</PluginSidebarMoreMenuItem>
 			</Fragment>

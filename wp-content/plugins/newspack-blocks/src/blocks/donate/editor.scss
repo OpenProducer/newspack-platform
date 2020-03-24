@@ -1,13 +1,14 @@
 @import '../../shared/sass/colors';
-@import '../../shared/sass/placeholder';
+@import '../../shared/sass/variables';
 
 .wp-block-newspack-blocks-donate {
 	button[type='submit'] {
-		background: $color__primary;
+		background: $color__secondary;
 		border: none;
 		border-radius: 5px;
 		box-sizing: border-box;
 		color: $color__background-body;
+		font-size: $font__size-sm;
 		font-weight: bold;
 		outline: none;
 		line-height: 3em;

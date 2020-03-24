@@ -146,7 +146,7 @@ class Health_Check_Wizard extends Wizard {
 	 *
 	 * @return array Advertising data.
 	 */
-	private function retrieve_data() {
+	public static function retrieve_data() {
 		$amp_manager     = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'amp' );
 		$jetpack_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'jetpack' );
 		$sitekit_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );

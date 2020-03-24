@@ -12,6 +12,7 @@ module.exports = {
 	},
 	globals: {
 		newspack_urls: 'readonly',
+		newspack_aux_data: 'readonly',
 	},
 	ignorePatterns: [ 'dist/', 'node_modules/', 'assets/components/node_modules' ],
 	rules: {

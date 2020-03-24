@@ -7,7 +7,6 @@
   },
   "require-dev": {
     "automattic/vipwpcs": "^2.0.0",
-    "xwp/wp-dev-lib": "^1.0",
     "brainmaestro/composer-git-hooks": "^2.6",
     "wp-coding-standards/wpcs": "*",
     "dealerdirect/phpcodesniffer-composer-installer": "*",
@@ -20,7 +19,12 @@
   },
   "extra": {
     "hooks": {
-      "pre-commit": "./vendor/xwp/wp-dev-lib/scripts/pre-commit"
+      "pre-commit": [
+        "./node_modules/.bin/lint-staged"
+      ],
+      "commit-msg": [
+        "cat $1 | ./node_modules/.bin/commitlint"
+      ]
     }
   }
 }

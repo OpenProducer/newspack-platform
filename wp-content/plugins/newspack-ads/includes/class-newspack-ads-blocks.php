@@ -52,8 +52,9 @@ class Newspack_Ads_Blocks {
 	 * @return array Array of dependencides.
 	 */
 	public static function dependencies_from_path( $path ) {
+		// TODO: use this better approach: https://github.com/Automattic/newspack-blocks/blob/master/class-newspack-blocks.php#L27-L44.
 		$dependencies = file_exists( $path )
-			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			// phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
 			? json_decode( file_get_contents( $path ) )
 			: array();
 		$dependencies[] = 'wp-polyfill';

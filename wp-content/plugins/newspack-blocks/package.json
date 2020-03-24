@@ -1,6 +1,6 @@
 {
   "name": "newspack-blocks",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "main": "Gruntfile.js",
   "author": "Automattic",
   "devDependencies": {
@@ -80,8 +80,8 @@
     "i18n": "NODE_ENV=production npm run build; bash ./bin/update-translations.sh",
     "clean": "rm -rf dist/",
     "test": "echo \"Error: no test specified\" && exit 1",
-    "release": "npm run build && npm run semantic-release",
-    "release:archive": "run-p \"clean\" && NODE_ENV=production run-p \"build\" && mkdir -p assets/release && zip -r assets/release/newspack-blocks.zip . -x node_modules/\\* .git/\\* .github/\\* .gitignore .DS_Store vendor/\\*"
+    "release": "NODE_ENV=production npm run build && npm run semantic-release",
+    "release:archive": "mkdir -p assets/release && zip -r assets/release/newspack-blocks.zip . -x node_modules/\\* .git/\\* .github/\\* .gitignore .DS_Store vendor/\\*"
   },
   "lint-staged": {
     "*.scss": "npm run lint:scss:staged",

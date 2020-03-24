@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.2.0
+Version: 1.3.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -3156,7 +3156,7 @@ body.page .entry-title {
 
 .comment .comment-author .fn {
   position: relative;
-  display: block;
+  display: inline-block;
 }
 
 .comment .comment-author .fn a {
@@ -3168,28 +3168,31 @@ body.page .entry-title {
 }
 
 .comment .comment-author .post-author-badge {
+  background: #36f;
   border-radius: 100%;
-  display: block;
-  height: 18px;
-  position: absolute;
-  background: #5c85ff;
-  left: calc( 100% - 2.5rem);
-  top: -3px;
-  width: 18px;
+  color: #fff;
+  display: inline-block;
+  height: 16px;
+  line-height: 16px;
+  margin-right: 0.25rem;
+  text-align: center;
+  width: 16px;
 }
 
 @media only screen and (min-width: 782px) {
   .comment .comment-author .post-author-badge {
-    left: calc( 100% + 0.75rem);
+    height: 18px;
+    line-height: 18px;
+    width: 18px;
   }
 }
 
 .comment .comment-author .post-author-badge svg {
-  width: inherit;
+  display: inline-block;
+  fill: currentColor;
   height: inherit;
-  display: block;
-  fill: white;
   transform: scale(0.875);
+  width: inherit;
 }
 
 .comment .comment-metadata > a,
@@ -3663,6 +3666,11 @@ body.page .entry-title {
   margin: 0;
 }
 
+#colophon .site-info .widget-title {
+  color: inherit;
+  font-size: 1em;
+}
+
 /* Widgets */
 .widget {
   font-family: "Old Standard TT", georgia, serif;
@@ -3986,7 +3994,7 @@ body.page .entry-title {
 }
 
 .wp-block-columns .wp-block-column > *:first-child,
-.wp-block-columns .wp-block-column > *.wpnbha:first-child .article-section-title,
+.wp-block-columns .wp-block-column > *:first-child .article-section-title,
 .wp-block-columns .wp-block-column > *.accent-header + div.wpnbha {
   margin-top: 0;
 }
@@ -4026,13 +4034,6 @@ body.page .entry-title {
 .wp-block-cover-image .wp-block-cover__inner-container,
 .wp-block-cover .wp-block-cover__inner-container {
   width: 100%;
-}
-
-.wp-block-cover-image h2,
-.wp-block-cover h2 {
-  max-width: 100%;
-  padding-right: 0;
-  text-align: right;
 }
 
 .wp-block-cover-image article .entry-meta,
@@ -4986,11 +4987,47 @@ body.page .entry-title {
   padding-left: 1rem;
 }
 
+.newspack-front-page .entry .entry-content .wp-block-column .alignwide,
+.newspack-front-page .entry .entry-content .wp-block-column .alignfull,
+.newspack-front-page .entry .entry-content .wp-block-group .alignwide,
+.newspack-front-page .entry .entry-content .wp-block-group .alignfull,
+.newspack-front-page .entry .entry-content .wp-block-cover .alignwide,
+.newspack-front-page .entry .entry-content .wp-block-cover .alignfull,
+.post-template-single-wide .entry .entry-content .wp-block-column .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-column .alignfull,
+.post-template-single-wide .entry .entry-content .wp-block-group .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-group .alignfull,
+.post-template-single-wide .entry .entry-content .wp-block-cover .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-cover .alignfull,
+.page-template-single-wide .entry .entry-content .wp-block-column .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-column .alignfull,
+.page-template-single-wide .entry .entry-content .wp-block-group .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-group .alignfull,
+.page-template-single-wide .entry .entry-content .wp-block-cover .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-cover .alignfull,
+.post-template-single-feature .entry .entry-content .wp-block-column .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-column .alignfull,
+.post-template-single-feature .entry .entry-content .wp-block-group .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-group .alignfull,
+.post-template-single-feature .entry .entry-content .wp-block-cover .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-cover .alignfull,
+.page-template-single-feature .entry .entry-content .wp-block-column .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-column .alignfull,
+.page-template-single-feature .entry .entry-content .wp-block-group .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-group .alignfull,
+.page-template-single-feature .entry .entry-content .wp-block-cover .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-cover .alignfull {
+  margin-right: 0;
+  margin-left: 0;
+  padding-right: 0;
+  padding-left: 0;
+}
+
 .wp-block-jetpack-mailchimp input[type='email'] {
   width: 100%;
 }
 
-.wp-block-jetpack-mailchimp #wp-block-jetpack-mailchimp_consent-text {
+.wp-block-jetpack-mailchimp p[id^='wp-block-jetpack-mailchimp'] {
   font-size: 0.8em;
 }
 
@@ -5351,7 +5388,7 @@ input[type='submit'] {
 .widget-title.accent-header span::after {
   background-color: currentColor;
   content: '';
-  flex: 1.2 0 0.25rem;
+  flex: 1 0 0.25rem;
   height: 1px;
   margin: 0 0.25rem 0 0;
 }
@@ -5378,7 +5415,7 @@ input[type='submit'] {
 .single .cat-links::after {
   background-color: currentColor;
   content: '';
-  flex: 1.2 0 0.25rem;
+  flex: 1 0 0.25rem;
   height: 1px;
   margin: 0 0.25rem 0 0;
 }

@@ -23,9 +23,9 @@ class NewspackSuppressAdsPanel extends Component {
 				title={ __( 'Newspack Ad Settings', 'newspack' ) }
 				className="newspack-subtitle"
 			>
-				<ToggleControl 
+				<ToggleControl
 					label={ __( "Don't show ads on this post or page", 'newspack' ) }
-        			checked={ newspack_ads_suppress_ads }
+					checked={ newspack_ads_suppress_ads }
 					onChange={ value => {
 						updateSuppressAds( value );
 					} }
@@ -33,7 +33,7 @@ class NewspackSuppressAdsPanel extends Component {
 			</PluginDocumentSettingPanel>
 		);
 	}
-};
+}
 
 const ComposedPanel = compose( [
 	withSelect( select => {

@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || exit;
 
 define( 'NEWSPACK_STARTER_CONTENT_CATEGORIES', '_newspack_starter_content_categories' );
 define( 'NEWSPACK_STARTER_CONTENT_POSTS', '_newspack_starter_content_posts' );
-define( 'NEWSPACK_STARTER_CONTENT_POST_INDEX', '_newspack_starter_content_post_index' );
 
 /**
  * Manages settings for PWA.
@@ -32,13 +31,13 @@ class Starter_Content {
 	/**
 	 * Create a single post.
 	 *
+	 * @param number $post_index Post index.
 	 * @return int Post ID
 	 */
-	public static function create_post() {
+	public static function create_post( $post_index ) {
 		if ( ! function_exists( 'wp_insert_post' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/post.php';
 		}
-		$post_index     = get_option( NEWSPACK_STARTER_CONTENT_POST_INDEX, 0 );
 		$page_templates = [ '', 'single-feature.php' ];
 		$paragraphs     = explode( PHP_EOL, self::get_lipsum( 'paras', 5 ) );
 		$title          = self::generate_title();
@@ -60,6 +59,10 @@ class Starter_Content {
 				)
 			),
 		];
+
+		if ( self::is_e2e() ) {
+			$post_data['post_date'] = '2020-03-03 10:00:00';
+		};
 
 		$post_id = wp_insert_post( $post_data );
 
@@ -96,10 +99,11 @@ class Starter_Content {
 			]
 		);
 
-		wp_set_post_categories( $post_id, $categories[0] );
-		wp_publish_post( $post_id );
+		$category_ids = get_option( NEWSPACK_STARTER_CONTENT_CATEGORIES );
+		$category_id  = self::is_e2e() ? $category_ids[ $post_index ] : $categories[0];
 
-		update_option( NEWSPACK_STARTER_CONTENT_POST_INDEX, $post_index + 1 );
+		wp_set_post_categories( $post_id, $category_id );
+		wp_publish_post( $post_id );
 
 		return $post_id;
 	}
@@ -118,7 +122,6 @@ class Starter_Content {
 			self::$starter_categories
 		);
 		update_option( NEWSPACK_STARTER_CONTENT_CATEGORIES, $category_ids );
-		update_option( NEWSPACK_STARTER_CONTENT_POST_INDEX, 0 );
 		return $category_ids;
 	}
 
@@ -359,7 +362,8 @@ class Starter_Content {
 			require_once ABSPATH . 'wp-admin/includes/image.php';
 		}
 
-		$url = self::is_e2e() ? 'https://picsum.photos/id/' . $post_index . '/1200/800' : 'https://picsum.photos/1200/800';
+		// Use same image everywhere for e2e.
+		$url = self::is_e2e() ? 'https://picsum.photos/id/424/1200/800' : 'https://picsum.photos/1200/800';
 
 		$temp_file = download_url( $url );
 
@@ -412,7 +416,7 @@ class Starter_Content {
 	 *
 	 * @return bool E2E testing environment?
 	 */
-	private static function is_e2e() {
+	public static function is_e2e() {
 		return defined( 'WP_NEWSPACK_DETERMINISTIC_STARTER_CONTENT' ) && WP_NEWSPACK_DETERMINISTIC_STARTER_CONTENT;
 	}
 }

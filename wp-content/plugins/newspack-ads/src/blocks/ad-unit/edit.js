@@ -3,13 +3,14 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Component, Fragment } from '@wordpress/element';
-import { ExternalLink, Placeholder, SelectControl, Spinner, withNotices } from '@wordpress/components';
+import {
+	ExternalLink,
+	Placeholder,
+	SelectControl,
+	Spinner,
+	withNotices,
+} from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
-
-/**
- * Internal dependencies.
- */
-import { icon } from './';
 
 class Edit extends Component {
 	/**
@@ -65,7 +66,7 @@ class Edit extends Component {
 
 	dimensionsFromAd = adData => {
 		const { sizes } = adData || {};
-		const primarySize = ( sizes && sizes.length ) ? sizes[0] : [ 320, 240 ];
+		const primarySize = sizes && sizes.length ? sizes[ 0 ] : [ 320, 240 ];
 		const [ width, height ] = primarySize;
 		return {
 			width,
@@ -82,7 +83,7 @@ class Edit extends Component {
 		const { adUnits } = this.state;
 		const { width, height } = this.activeAdDataForActiveAd( activeAd );
 		const adWidth = width ? { width: `${ width }px` } : {};
-		const ratio = width && height ? { padding: `0 0 ${ ( height * 100 / width ) }%` } : {};
+		const ratio = width && height ? { padding: `0 0 ${ ( height * 100 ) / width }%` } : {};
 		return (
 			<Fragment>
 				{ noticeUI }
@@ -96,7 +97,7 @@ class Edit extends Component {
 									label={ __( 'Ad Unit' ) }
 									value={ activeAd }
 									options={ this.adUnitsForSelect( adUnits ) }
-									onChange={ activeAd => setAttributes( { activeAd } ) }
+									onChange={ _activeAd => setAttributes( { activeAd: _activeAd } ) }
 								/>
 							) }
 							{ adUnits && ! adUnits.length && (

@@ -1,10 +1,11 @@
 @import '../../shared/sass/colors';
+@import '../../shared/sass/mixins';
+@import '../../shared/sass/variables';
 
 .wpbnbd {
 	background: $color__background-body;
 	border: 1px solid $color__border;
 	color: $color__text-main;
-	font-size: 14px;
 	position: relative;
 	width: 100%;
 
@@ -14,38 +15,70 @@
 
 	.donation-frequency-label,
 	.tier-select-label {
-		text-align: center;
 		display: block;
-		line-height: 3em;
-		height: 3em;
 		font-weight: bold;
 		cursor: pointer;
 	}
 
+	.donation-frequency-label {
+		background: $color__background-body;
+		color: $color__text-light;
+		line-height: $font__line-height-body;
+		overflow: hidden;
+		padding: 0.38rem 0.76rem;
+		text-overflow: ellipsis;
+		text-transform: uppercase;
+		white-space: nowrap;
+		width: 100%;
+		z-index: 1;
+
+		@include media( tablet ) {
+			text-align: center;
+		}
+
+		&:focus,
+		&:hover {
+			background: $color__background-screen;
+			color: $color__text-main;
+		}
+	}
+
 	button[type='submit'] {
-		margin-bottom: 2em;
-		font-size: 16px;
-		margin-left: 24px;
+		margin: 0 0.76rem 0.76rem;
+
+		@include media( tablet ) {
+			margin: 0 1.5rem 1.5rem;
+		}
 	}
 
 	.wp-block-newspack-blocks-donate__thanks {
-		font-size: 14px;
-		margin-left: 2em;
+		color: $color__text-light;
+		font-size: $font__size-sm;
+		margin: 0.38rem 0.76rem 0.76rem;
+
+		@include media( tablet ) {
+			margin-left: 1.5rem;
+			margin-right: 1.5rem;
+		}
 	}
 }
 
 .wpbnbd.tiered {
 	.wp-block-newspack-blocks-donate__tiers {
-		margin-top: 2em;
+		margin: 0.38rem;
 		display: none;
+		flex-wrap: wrap;
+		position: relative;
+
+		@include media( tablet ) {
+			margin: 1.12rem 1.12rem 0.38rem;
+		}
 
 		.tier-select-label {
 			border: 1px solid $color__border;
 			border-radius: 5px;
-			font-size: 16px;
-			margin-left: 25px;
-			padding-left: 1em;
-			padding-right: 1em;
+			margin: 0.38rem;
+			padding: 0.38rem 0.76rem;
 
 			&:hover {
 				background: $color__background-screen;
@@ -61,9 +94,10 @@
 		}
 
 		.other-donate-label {
+			font-weight: bold;
+			left: 0.38rem;
 			position: absolute;
-			top: 10em;
-			left: 2em;
+			bottom: calc( 1.6em + 1.1rem + 2px );
 		}
 
 		input.other-input {
@@ -78,28 +112,43 @@
 			}
 
 			&:checked + label {
-				margin-bottom: 6em;
+				margin-bottom: calc( 3.2em + 1.86rem + 2px );
 			}
 		}
 	}
 
 	.wp-block-newspack-blocks-donate__money-input {
+		bottom: 0.38rem;
+		left: 0.38rem;
 		position: absolute;
-		top: 12em;
-		left: 24px;
 	}
 }
 
 .wpbnbd.untiered {
-	padding-top: 3em;
+	padding-top: 7.65em;
+	padding-top: calc( 3 * ( 0.76rem + 1.28em + 1px ) );
+	position: relative;
+
+	@include media( tablet ) {
+		padding-top: 2.55em;
+		padding-top: calc( 0.76rem + 1.28em + 1px );
+	}
+
+	.donation-frequency-label {
+		font-size: $font__size-sm;
+	}
 
 	.input-container {
-		margin-left: 2em;
-		margin-top: 2em;
+		margin: 0.76rem;
 		display: none;
 
+		@include media( tablet ) {
+			margin: 1.5rem 1.5rem 0.76rem;
+		}
+
 		label {
-			color: $color__text-main;
+			font-size: $font__size-sm;
+			font-weight: bold;
 		}
 	}
 
@@ -122,13 +171,12 @@
 	}
 
 	.currency {
-		font-size: 16px;
-		padding-left: 0.5em;
 		cursor: default;
+		font-size: $font__size-sm;
+		padding-left: 0.5em;
 	}
 
 	input[type='number'] {
-		font-size: 16px;
 		border: none;
 		outline: none;
 		box-shadow: none;
@@ -144,35 +192,61 @@
 }
 
 .wp-block-newspack-blocks-donate__frequencies {
+	font-size: $font__size-sm;
+	padding-top: 7.65em;
+	padding-top: calc( 3 * ( 0.76rem + 1.6em + 1px ) );
 	position: relative;
-	padding-top: 3em;
+
+	@include media( tablet ) {
+		padding-top: 2.55em;
+		padding-top: calc( 0.76rem + 1.6em + 1px );
+	}
 }
 
 .wp-block-newspack-blocks-donate__frequency {
 	.donation-frequency-label {
-		width: 33.3333%;
-		width: calc( 100% / 3 );
-		position: absolute;
-		top: 0;
+		align-items: center;
 		border: 0 solid $color__border;
 		border-width: 0 0 1px;
-		text-transform: uppercase;
-		color: $color__text-light;
+		display: flex;
 		left: 0;
+		position: absolute;
+		top: 0;
+		width: 100%;
 
-		&:hover {
-			background: $color__background-screen;
-			color: inherit;
+		&::before {
+			background-image: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%23767676' /%3E%3C/svg%3E" );
+			content: '';
+			display: block;
+			height: 24px;
+			margin-right: 0.25rem;
+			width: 24px;
+		}
+
+		@include media( tablet ) {
+			justify-content: center;
+			width: 33.33%;
+
+			&::before {
+				display: none;
+			}
 		}
 	}
 
 	input[type='radio']:checked {
 		+ .donation-frequency-label {
 			color: inherit;
-			border-bottom-color: transparent;
+
+			&::before {
+				background-image: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%23111'/%3E%3C/svg%3E" );
+			}
+
+			@include media( tablet ) {
+				border-bottom-color: transparent;
+			}
 
 			&:hover {
-				background: transparent;
+				background: $color__background-body;
 			}
 		}
 
@@ -182,44 +256,22 @@
 	}
 
 	&:nth-of-type( 2 ) .donation-frequency-label {
-		left: 33.3333%;
-		left: calc( 100% / 3 );
-		border-left-width: 1px;
-		border-right-width: 1px;
+		top: calc( 0.76rem + 1.6em + 1px );
+
+		@include media( tablet ) {
+			border-left-width: 1px;
+			border-right-width: 1px;
+			left: 33.33%;
+			top: 0;
+		}
 	}
 
 	&:nth-of-type( 3 ) .donation-frequency-label {
-		left: 66.6667%;
-		left: calc( 100% / 3 * 2 );
-	}
-}
+		top: calc( 2 * ( 0.76rem + 1.6em + 1px ) );
 
-@media screen and ( max-width: 600px ) {
-	.wpbnbd {
-		.donation-frequency-label {
-			font-size: 12px;
-			height: 42px;
-			line-height: 42px;
-		}
-
-		&.tiered {
-			.wp-block-newspack-blocks-donate__tiers {
-				justify-content: space-around;
-
-				.tier-select-label {
-					margin-left: 0;
-					border-radius: 0;
-					font-size: 12px;
-				}
-
-				.other-donate-label {
-					top: 8.5em;
-				}
-
-				.wp-block-newspack-blocks-donate__money-input {
-					top: 10.5em;
-				}
-			}
+		@include media( tablet ) {
+			left: 66.66%;
+			top: 0;
 		}
 	}
 }

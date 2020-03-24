@@ -60,18 +60,28 @@ class Newspack_Ads_Model {
 	 *
 	 * @param number $id The id of the ad unit to retrieve.
 	 * @param string $placement The id of the placement region.
+	 * @param string $context An optional parameter to describe the context of the ad. For example, in the Widget, the widget ID.
 	 */
-	public static function get_ad_unit( $id, $placement = null ) {
-		$ad_unit = \get_post( $id );
-		$responsive_placements = [ 'global_above_header', 'global_below_header', 'global_above_footer' ]; // TODO: Add a filter, so other plugins can register responsive regions.
+	public static function get_ad_unit( $id, $placement = null, $context = null ) {
+		$ad_unit               = \get_post( $id );
+		$responsive_placements = [ 'global_above_header', 'global_below_header', 'global_above_footer' ];
 		if ( is_a( $ad_unit, 'WP_Post' ) ) {
+			$responsive = apply_filters(
+				'newspack_ads_maybe_use_responsive_placement',
+				in_array( $placement, $responsive_placements ),
+				$placement,
+				$context
+			);
+
 			$prepared_ad_unit = [
 				'id'             => $ad_unit->ID,
 				'name'           => $ad_unit->post_title,
 				self::SIZES      => self::sanitize_sizes( \get_post_meta( $ad_unit->ID, self::SIZES, true ) ),
 				self::CODE       => \get_post_meta( $ad_unit->ID, self::CODE, true ),
 				self::AD_SERVICE => self::sanitize_ad_service( \get_post_meta( $ad_unit->ID, self::AD_SERVICE, true ) ),
-				'responsive'     => in_array( $placement, $responsive_placements ),
+				'responsive'     => $responsive,
+				'placement'      => $placement,
+				'context'        => $context,
 			];
 
 			$prepared_ad_unit['ad_code']     = self::code_for_ad_unit( $prepared_ad_unit );
@@ -397,28 +407,45 @@ class Newspack_Ads_Model {
 		$network_code = self::get_network_code( 'google_ad_manager' );
 		$code         = $ad_unit['code'];
 		$sizes        = $ad_unit['sizes'];
-		usort(
-			$sizes,
-			function( $a, $b ) {
-				return $a[0] < $b[0] ? $a : $b;
-			}
-		);
 
-		$markup  = [];
-		$styles  = [];
-		$counter = 0;
+		array_multisort( $sizes );
 
+		$markup = [];
+		$styles = [];
 		$widths = array_map(
 			function ( $item ) {
 				return $item[0];
 			},
 			$sizes
 		);
-		foreach ( $sizes as $size ) {
-			$width  = absint( $size[0] );
-			$height = absint( $size[1] );
-			$prefix = $is_amp ? 'div-gpt-amp-' : 'div-gpt-';
-			$div_id = sprintf(
+
+		// Generate an array of media query data, with a likely min and max width for each size.
+		$media_queries = [];
+		foreach ( $sizes as $index => $size ) {
+			$width           = absint( $size[0] );
+			$height          = absint( $size[1] );
+			$media_queries[] = [
+				'width'     => $width,
+				'height'    => $height,
+				'min_width' => ( $width > 0 ) ? $width : null,
+				'max_width' => ( count( $widths ) > $index + 1 ) ? ( $widths[ $index + 1 ] - 1 ) : null,
+			];
+		}
+
+		// Allow themes to filter the media query data based on the size, placement, and context of the ad.
+		$media_queries = apply_filters(
+			'newspack_ads_media_queries',
+			$media_queries,
+			$ad_unit['placement'],
+			$ad_unit['context']
+		);
+
+		foreach ( $sizes as $index => $size ) {
+			$media_query = $media_queries[ $index ];
+			$width       = absint( $size[0] );
+			$height      = absint( $size[1] );
+			$prefix      = $is_amp ? 'div-gpt-amp-' : 'div-gpt-';
+			$div_id      = sprintf(
 				'%s%s-%dx%d',
 				$prefix,
 				sanitize_title( $ad_unit['code'] ),
@@ -426,19 +453,24 @@ class Newspack_Ads_Model {
 				$height
 			);
 
-			$media_query = [];
-			if ( $widths[ $counter ] > 0 ) {
-				$media_query[] = sprintf( '(min-width:%dpx)', $widths[ $counter ] );
+			$media_query_elements = [];
+			if ( $media_query['min_width'] ) {
+				$media_query_elements[] = sprintf( '(min-width:%dpx)', $media_query['min_width'] );
 			}
-			if ( count( $widths ) > $counter + 1 ) {
-				$media_query[] = sprintf( '(max-width:%dpx)', $widths[ $counter + 1 ] );
+			if ( $media_query['max_width'] ) {
+				$media_query_elements[] = sprintf( '(max-width:%dpx)', $media_query['max_width'] );
 			}
 			$styles[] = sprintf(
-				'#%s{ display: none; } @media %s {#%s{ display: block; } }',
-				$div_id,
-				implode( ' and ', $media_query ),
+				'#%s{ display: none; }',
 				$div_id
 			);
+			if ( count( $media_query_elements ) > 0 ) {
+				$styles[] = sprintf(
+					'@media %s {#%s{ display: block; } }',
+					implode( ' and ', $media_query_elements ),
+					$div_id
+				);
+			}
 
 			if ( $is_amp ) {
 				$markup[] = sprintf(
@@ -460,9 +492,8 @@ class Newspack_Ads_Model {
 					$div_id
 				);
 			}
-
-			$counter++;
 		}
+
 		return sprintf(
 			'<style>%s</style>%s',
 			implode( ' ', $styles ),

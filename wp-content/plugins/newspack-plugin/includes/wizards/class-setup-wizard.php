@@ -133,7 +133,7 @@ class Setup_Wizard extends Wizard {
 		);
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/starter-content/post',
+			'/wizard/' . $this->slug . '/starter-content/post/(?P<id>[\a-z]+)',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_starter_content_post' ],
@@ -183,10 +183,12 @@ class Setup_Wizard extends Wizard {
 	/**
 	 * Install one starter content post
 	 *
+	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response containing info.
 	 */
-	public function api_starter_content_post() {
-		$status = Starter_Content::create_post();
+	public function api_starter_content_post( $request ) {
+		$id     = $request['id'];
+		$status = Starter_Content::create_post( $id );
 		return rest_ensure_response( [ 'status' => $status ] );
 	}
 

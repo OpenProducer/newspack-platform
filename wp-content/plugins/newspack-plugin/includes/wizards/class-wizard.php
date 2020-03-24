@@ -7,6 +7,7 @@
 
 namespace Newspack;
 
+use Newspack\Starter_Content;
 defined( 'ABSPATH' ) || exit;
 
 define( 'NEWSPACK_WIZARD_COMPLETED_OPTION_PREFIX', 'newspack_wizard_completed_' );
@@ -116,7 +117,12 @@ abstract class Wizard {
 			],
 		];
 
+		$aux_data = [
+			'is_e2e' => Starter_Content::is_e2e(),
+		];
+
 		wp_localize_script( 'newspack_data', 'newspack_urls', $urls );
+		wp_localize_script( 'newspack_data', 'newspack_aux_data', $aux_data );
 		wp_enqueue_script( 'newspack_data' );
 	}
 

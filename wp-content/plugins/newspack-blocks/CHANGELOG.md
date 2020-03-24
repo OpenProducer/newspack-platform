@@ -1,3 +1,16 @@
+# [1.2.0](https://github.com/Automattic/newspack-blocks/compare/v1.1.0...v1.2.0) (2020-03-24)
+
+
+### Bug Fixes
+
+* make sure styles hiding updated date doesn't hide all dates  ([#406](https://github.com/Automattic/newspack-blocks/issues/406)) ([d1bb53c](https://github.com/Automattic/newspack-blocks/commit/d1bb53ca82a67e56b1dea616e86a9c099c5498b4))
+
+
+### Features
+
+* display subscribe pattern when mailchimp is inactive ([#418](https://github.com/Automattic/newspack-blocks/issues/418)) ([09716c1](https://github.com/Automattic/newspack-blocks/commit/09716c10005483d919a8332e92d462c32a992625))
+* update the pattern's icon with newspack logo ([#419](https://github.com/Automattic/newspack-blocks/issues/419)) ([8532c6f](https://github.com/Automattic/newspack-blocks/commit/8532c6f1a1a8f3de2ccb9c6c8d5d2216798aa2a3))
+
 # [1.1.0](https://github.com/Automattic/newspack-blocks/compare/v1.0.0...v1.1.0) (2020-03-17)
 
 

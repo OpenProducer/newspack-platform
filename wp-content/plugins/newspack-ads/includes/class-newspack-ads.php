@@ -17,7 +17,7 @@ final class Newspack_Ads {
 	 *
 	 * @var Newspack_Ads
 	 */
-	protected static $_instance = null;
+	protected static $instance = null;
 
 	/**
 	 * Main Newspack Ads Instance.
@@ -26,10 +26,10 @@ final class Newspack_Ads {
 	 * @return Newspack Ads - Main instance.
 	 */
 	public static function instance() {
-		if ( is_null( self::$_instance ) ) {
-			self::$_instance = new self();
+		if ( is_null( self::$instance ) ) {
+			self::$instance = new self();
 		}
-		return self::$_instance;
+		return self::$instance;
 	}
 
 	/**

@@ -15,7 +15,6 @@ import metadata from './block.json';
 
 const { name } = metadata;
 export const STORE_NAMESPACE = name;
-const blockName = `newspack-blocks/${ name }`;
 
 const initialState = {
 	queryBlocks: [], // list of Query blocks in the order they are on the page
@@ -85,51 +84,50 @@ const selectors = {
 	},
 };
 
-/**
- * Returns an array of all newspack-blocks/query blocks in the order they are on
- * the page. This is needed to be able to show the editor blocks in the order
- * that PHP will render them.
- *
- * @param {Block[]} blocks any blocks
- * @returns {Block[]} ordered newspack-blocks/query blocks
- */
-const getQueryBlocksInOrder = blocks =>
-	blocks.flatMap( block => {
-		const queryBlocks = [];
-		if ( block.name === blockName ) {
-			queryBlocks.push( block );
+export const registerQueryStore = blockName => {
+	/**
+	 * Returns an array of all newspack-blocks/query blocks in the order they are on
+	 * the page. This is needed to be able to show the editor blocks in the order
+	 * that PHP will render them.
+	 *
+	 * @param {Block[]} blocks any blocks
+	 * @returns {Block[]} ordered newspack-blocks/query blocks
+	 */
+	const getQueryBlocksInOrder = blocks =>
+		blocks.flatMap( block => {
+			const queryBlocks = [];
+			if ( block.name === blockName ) {
+				queryBlocks.push( block );
+			}
+			return queryBlocks.concat( getQueryBlocksInOrder( block.innerBlocks ) );
+		} );
+
+	const reducer = ( state = initialState, action ) => {
+		switch ( action.type ) {
+			case UPDATE_BLOCKS:
+				return {
+					...state,
+					queryBlocks: getQueryBlocksInOrder( action.blocks ),
+				};
+			case MARK_POSTS_DISPLAYED:
+				return {
+					...state,
+					postsByBlock: {
+						...state.postsByBlock,
+						[ action.clientId ]: action.posts,
+					},
+				};
+			case MARK_SPECIFIC_POSTS_DISPLAYED:
+				return {
+					...state,
+					specificPostsByBlock: {
+						...state.specificPostsByBlock,
+						[ action.clientId ]: action.posts,
+					},
+				};
 		}
-		return queryBlocks.concat( getQueryBlocksInOrder( block.innerBlocks ) );
-	} );
-
-const reducer = ( state = initialState, action ) => {
-	switch ( action.type ) {
-		case UPDATE_BLOCKS:
-			return {
-				...state,
-				queryBlocks: getQueryBlocksInOrder( action.blocks ),
-			};
-		case MARK_POSTS_DISPLAYED:
-			return {
-				...state,
-				postsByBlock: {
-					...state.postsByBlock,
-					[ action.clientId ]: action.posts,
-				},
-			};
-		case MARK_SPECIFIC_POSTS_DISPLAYED:
-			return {
-				...state,
-				specificPostsByBlock: {
-					...state.specificPostsByBlock,
-					[ action.clientId ]: action.posts,
-				},
-			};
-	}
-	return state;
-};
-
-export const registerQueryStore = () => {
+		return state;
+	};
 	registerStore( STORE_NAMESPACE, {
 		reducer,
 		actions,

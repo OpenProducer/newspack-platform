@@ -212,8 +212,12 @@
 			margin-right: 1.5em;
 		}
 
-		.updated:not( .published ) {
+		.updated {
 			display: none;
+
+			&.published {
+				display: block;
+			}
 		}
 	}
 
