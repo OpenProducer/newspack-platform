@@ -157,6 +157,7 @@ return array(
     'Tribe\\Events\\Views\\V2\\Template\\Event' => $baseDir . '/src/Tribe/Views/V2/Template/Event.php',
     'Tribe\\Events\\Views\\V2\\Template\\EventTest' => $baseDir . '/tests/views_integration/Tribe/Events/Views/V2/Template/EventTest.php',
     'Tribe\\Events\\Views\\V2\\Template\\Excerpt' => $baseDir . '/src/Tribe/Views/V2/Template/Excerpt.php',
+    'Tribe\\Events\\Views\\V2\\Template\\JSON_LD' => $baseDir . '/src/Tribe/Views/V2/Template/JSON_LD.php',
     'Tribe\\Events\\Views\\V2\\Template\\Page' => $baseDir . '/src/Tribe/Views/V2/Template/Page.php',
     'Tribe\\Events\\Views\\V2\\Template\\PageTest' => $baseDir . '/tests/views_integration/Tribe/Events/Views/V2/Template/PageTest.php',
     'Tribe\\Events\\Views\\V2\\Template\\Settings\\Advanced_Display' => $baseDir . '/src/Tribe/Views/V2/Template/Settings/Advanced_Display.php',

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitde607817ee3d2e83ae81ad71e6007d43
+class ComposerStaticInit4267824f1642aa779bf0cde76bda7e5b
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -182,6 +182,7 @@ class ComposerStaticInitde607817ee3d2e83ae81ad71e6007d43
         'Tribe\\Events\\Views\\V2\\Template\\Event' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Event.php',
         'Tribe\\Events\\Views\\V2\\Template\\EventTest' => __DIR__ . '/../..' . '/tests/views_integration/Tribe/Events/Views/V2/Template/EventTest.php',
         'Tribe\\Events\\Views\\V2\\Template\\Excerpt' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Excerpt.php',
+        'Tribe\\Events\\Views\\V2\\Template\\JSON_LD' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/JSON_LD.php',
         'Tribe\\Events\\Views\\V2\\Template\\Page' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Page.php',
         'Tribe\\Events\\Views\\V2\\Template\\PageTest' => __DIR__ . '/../..' . '/tests/views_integration/Tribe/Events/Views/V2/Template/PageTest.php',
         'Tribe\\Events\\Views\\V2\\Template\\Settings\\Advanced_Display' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Template/Settings/Advanced_Display.php',
@@ -244,9 +245,9 @@ class ComposerStaticInitde607817ee3d2e83ae81ad71e6007d43
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitde607817ee3d2e83ae81ad71e6007d43::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitde607817ee3d2e83ae81ad71e6007d43::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitde607817ee3d2e83ae81ad71e6007d43::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4267824f1642aa779bf0cde76bda7e5b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4267824f1642aa779bf0cde76bda7e5b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4267824f1642aa779bf0cde76bda7e5b::$classMap;
 
         }, null, ClassLoader::class);
     }

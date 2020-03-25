@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 4.0.0\n"
+"Project-Id-Version: WooCommerce 4.0.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2020-03-10T15:50:16+00:00\n"
+"POT-Creation-Date: 2020-03-19T18:44:40+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: woocommerce\n"
@@ -7660,7 +7660,7 @@ msgstr ""
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:58
 #: includes/admin/settings/views/html-webhooks-edit.php:36
 #: includes/wc-account-functions.php:198
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:128
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:144
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:97
 #: packages/woocommerce-admin/includes/connect-existing-pages.php:37
 #: packages/woocommerce-admin/src/API/Reports/Orders/Controller.php:479
@@ -7960,7 +7960,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-menus.php:82
 #: includes/admin/views/html-admin-page-status-report.php:812
-#: includes/class-wc-install.php:1300
+#: includes/class-wc-install.php:1292
 #: packages/woocommerce-admin/includes/connect-existing-pages.php:33
 #: packages/woocommerce-admin/src/Features/Analytics.php:142
 msgid "Settings"
@@ -9688,8 +9688,8 @@ msgid "Product categories for your store can be managed here. To change the orde
 msgstr ""
 
 #: includes/admin/class-wc-admin-taxonomies.php:334
-#: includes/class-wc-install.php:611
-#: includes/class-wc-install.php:617
+#: includes/class-wc-install.php:603
+#: includes/class-wc-install.php:609
 msgctxt "Default category slug"
 msgid "Uncategorized"
 msgstr ""
@@ -10123,8 +10123,8 @@ msgid "Once connected, your WooCommerce.com purchases will be listed here."
 msgstr ""
 
 #: includes/admin/helper/views/html-oauth-start.php:27
-#: packages/woocommerce-admin/src/Features/Onboarding.php:855
-#: packages/woocommerce-admin/src/Features/Onboarding.php:859
+#: packages/woocommerce-admin/src/Features/Onboarding.php:856
+#: packages/woocommerce-admin/src/Features/Onboarding.php:860
 #: packages/woocommerce-admin/src/Notes/WC_Admin_Notes_Woo_Subscriptions_Notes.php:193
 msgid "Connect"
 msgstr ""
@@ -14208,7 +14208,7 @@ msgstr ""
 
 #. translators: Link to WooCommerce Docs.
 #: includes/admin/settings/class-wc-settings-products.php:275
-msgid "Not required if you download directory is protected. <a href='%s'>See this guide</a> for more details. Files already uploaded will not be affected."
+msgid "Not required if your download directory is protected. <a href='%s'>See this guide</a> for more details. Files already uploaded will not be affected."
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-products.php:295
@@ -15936,7 +15936,7 @@ msgstr ""
 
 #: includes/admin/views/html-bulk-edit-product.php:189
 #: includes/admin/views/html-quick-edit-product.php:146
-#: packages/action-scheduler/classes/abstracts/ActionScheduler_Abstract_ListTable.php:673
+#: packages/action-scheduler/classes/abstracts/ActionScheduler_Abstract_ListTable.php:672
 #: packages/woocommerce-blocks/assets/js/blocks/product-search/block.js:52
 #: packages/woocommerce-blocks/assets/js/blocks/product-search/edit.js:88
 #: packages/woocommerce-blocks/assets/js/blocks/product-search/index.js:50
@@ -16033,7 +16033,7 @@ msgstr ""
 
 #. translators: %s: Link to settings page.
 #: includes/admin/views/html-notice-redirect-only-download.php:18
-msgid "Your store is configured to serve digital products using \"Redirect only\" method. This method is deprecated, <a href=\"%s\">please switch to  a different method instead.</a>"
+msgid "Your store is configured to serve digital products using \"Redirect only\" method. This method is deprecated, <a href=\"%s\">please switch to  a different method instead.</a><br><em>If you use a remote server for downloadable files (such as Google Drive, Dropbox, Amazon S3), the right method will automatically be used, so select any of the other options to make this notice go away.</em>"
 msgstr ""
 
 #: includes/admin/views/html-notice-regenerating-lookup-table.php:14
@@ -17189,111 +17189,111 @@ msgstr ""
 msgid "Please enter a stronger password."
 msgstr ""
 
-#: includes/class-wc-install.php:458
+#: includes/class-wc-install.php:450
 msgid "Monthly"
 msgstr ""
 
-#: includes/class-wc-install.php:462
+#: includes/class-wc-install.php:454
 msgid "Every 15 Days"
 msgstr ""
 
-#: includes/class-wc-install.php:510
+#: includes/class-wc-install.php:502
 msgctxt "Page slug"
 msgid "shop"
 msgstr ""
 
-#: includes/class-wc-install.php:511
+#: includes/class-wc-install.php:503
 msgctxt "Page title"
 msgid "Shop"
 msgstr ""
 
-#: includes/class-wc-install.php:515
+#: includes/class-wc-install.php:507
 msgctxt "Page slug"
 msgid "cart"
 msgstr ""
 
-#: includes/class-wc-install.php:516
+#: includes/class-wc-install.php:508
 msgctxt "Page title"
 msgid "Cart"
 msgstr ""
 
-#: includes/class-wc-install.php:520
+#: includes/class-wc-install.php:512
 msgctxt "Page slug"
 msgid "checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:521
+#: includes/class-wc-install.php:513
 msgctxt "Page title"
 msgid "Checkout"
 msgstr ""
 
-#: includes/class-wc-install.php:525
+#: includes/class-wc-install.php:517
 msgctxt "Page slug"
 msgid "my-account"
 msgstr ""
 
-#: includes/class-wc-install.php:526
+#: includes/class-wc-install.php:518
 msgctxt "Page title"
 msgid "My account"
 msgstr ""
 
-#: includes/class-wc-install.php:571
+#: includes/class-wc-install.php:563
 msgid "Reduced rate"
 msgstr ""
 
-#: includes/class-wc-install.php:572
+#: includes/class-wc-install.php:564
 msgid "Zero rate"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1047
+#: includes/class-wc-install.php:1039
 msgctxt "User role"
 msgid "Customer"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1049
+#: includes/class-wc-install.php:1041
 msgctxt "User role"
 msgid "Shop manager"
 msgstr ""
 
-#: includes/class-wc-install.php:1300
+#: includes/class-wc-install.php:1292
 msgid "View WooCommerce settings"
 msgstr ""
 
-#: includes/class-wc-install.php:1317
+#: includes/class-wc-install.php:1309
 msgid "View WooCommerce documentation"
 msgstr ""
 
-#: includes/class-wc-install.php:1317
+#: includes/class-wc-install.php:1309
 msgid "Docs"
 msgstr ""
 
-#: includes/class-wc-install.php:1318
+#: includes/class-wc-install.php:1310
 msgid "View WooCommerce API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:1318
+#: includes/class-wc-install.php:1310
 msgid "API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:1319
+#: includes/class-wc-install.php:1311
 msgid "Visit premium customer support"
 msgstr ""
 
-#: includes/class-wc-install.php:1319
+#: includes/class-wc-install.php:1311
 msgid "Premium support"
 msgstr ""
 
 #. translators: 1: plugin name, 2: error message, 3: URL to install plugin manually.
 #. translators: 1: theme slug, 2: error message, 3: URL to install theme manually.
-#: includes/class-wc-install.php:1450
-#: includes/class-wc-install.php:1554
+#: includes/class-wc-install.php:1442
+#: includes/class-wc-install.php:1546
 msgid "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it manually by clicking here.</a>"
 msgstr ""
 
 #. translators: 1: plugin name, 2: URL to WP plugin page.
-#: includes/class-wc-install.php:1478
+#: includes/class-wc-install.php:1470
 msgid "%1$s was installed but could not be activated. <a href=\"%2$s\">Please activate it manually by clicking here.</a>"
 msgstr ""
 
@@ -21096,9 +21096,9 @@ msgstr ""
 
 #: includes/shipping/legacy-local-delivery/class-wc-shipping-legacy-local-delivery.php:117
 #: includes/shipping/legacy-local-pickup/class-wc-shipping-legacy-local-pickup.php:96
-#: packages/woocommerce-admin/src/Features/Onboarding.php:764
-#: packages/woocommerce-admin/src/Features/Onboarding.php:841
-#: packages/woocommerce-admin/src/Features/Onboarding.php:847
+#: packages/woocommerce-admin/src/Features/Onboarding.php:765
+#: packages/woocommerce-admin/src/Features/Onboarding.php:842
+#: packages/woocommerce-admin/src/Features/Onboarding.php:848
 msgid "Enable"
 msgstr ""
 
@@ -22755,7 +22755,6 @@ msgid "action ignored via %s"
 msgstr ""
 
 #: packages/action-scheduler/classes/abstracts/ActionScheduler_Logger.php:131
-#: packages/action-scheduler/classes/abstracts/ActionScheduler_Logger.php:133
 msgid "action ignored"
 msgstr ""
 
@@ -22797,28 +22796,28 @@ msgstr ""
 msgid "Invalid action - must be a recurring action."
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:57
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:72
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:73
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:60
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:75
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:76
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:89
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore_PostTypeRegistrar.php:19
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore_PostTypeRegistrar.php:30
 msgid "Scheduled Actions"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:111
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:127
 msgid "About"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:113
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:129
 msgid "About Action Scheduler %s"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:115
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:131
 msgid "Action Scheduler is a scalable, traceable job queue for background processing large sets of actions. Action Scheduler works by triggering an action hook to run at some time in the future. Scheduled actions can also be scheduled to run on a recurring schedule."
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:123
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:139
 #: packages/woocommerce-blocks/assets/js/blocks/handpicked-products/block.js:49
 #: packages/woocommerce-blocks/assets/js/components/grid-layout-control/index.js:28
 #: packages/woocommerce-blocks/build/all-products.js:1
@@ -22841,64 +22840,64 @@ msgstr ""
 msgid "Columns"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:125
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:141
 msgid "Scheduled Action Columns"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:127
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:143
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:96
 msgid "Hook"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:127
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:143
 msgid "Name of the action hook that will be triggered."
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:128
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:144
 msgid "Action statuses are Pending, Complete, Canceled, Failed"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:129
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:145
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:98
 msgid "Arguments"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:129
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:145
 msgid "Optional data array passed to the action hook."
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:130
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:146
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:99
 msgid "Group"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:130
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:146
 msgid "Optional action group."
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:131
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:147
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:100
 msgid "Recurrence"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:131
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:147
 msgid "The action's schedule frequency."
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:132
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:148
 msgid "Scheduled"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:132
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:148
 msgid "The date/time the action is/was scheduled to run."
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:133
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:149
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:102
 msgid "Log"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:133
+#: packages/action-scheduler/classes/ActionScheduler_AdminView.php:149
 msgid "Activity log for the action."
 msgstr ""
 
@@ -23005,54 +23004,58 @@ msgstr ""
 msgid "Non-repeating"
 msgstr ""
 
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:341
+msgid "It appears one or more database tables were missing. Attempting to re-create the missing table(s)."
+msgstr ""
+
 #. translators: %s: amount of claims
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:331
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:357
 msgid "Maximum simultaneous queues already in progress (%s queue). No additional queues will begin processing until the current queues are complete."
 msgid_plural "Maximum simultaneous queues already in progress (%s queues). No additional queues will begin processing until the current queues are complete."
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: process URL
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:348
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:374
 msgid "A new queue has begun processing. <a href=\"%s\">View actions in-progress &raquo;</a>"
 msgstr ""
 
 #. translators: %d: seconds
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:351
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:377
 msgid "The next queue will begin processing in approximately %d seconds."
 msgstr ""
 
 #. translators: %s: action HTML
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:372
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:398
 msgid "Successfully executed action: %s"
 msgstr ""
 
 #. translators: %s: action HTML
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:376
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:402
 msgid "Successfully canceled action: %s"
 msgstr ""
 
 #. translators: %s: action HTML
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:380
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:406
 msgid "Successfully processed change for action: %s"
 msgstr ""
 
 #. translators: 1: action HTML 2: action ID 3: error message
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:386
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:412
 msgid "Could not process change for action: \"%1$s\" (ID: %2$d). Error: %3$s"
 msgstr ""
 
 #. translators: %s: date interval
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:432
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:458
 msgid " (%s ago)"
 msgstr ""
 
 #. translators: %s: date interval
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:435
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:461
 msgid " (%s)"
 msgstr ""
 
-#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:562
+#: packages/action-scheduler/classes/ActionScheduler_ListTable.php:609
 msgid "Search hook, args and claim ID"
 msgstr ""
 
@@ -23098,27 +23101,27 @@ msgstr ""
 msgid "Action Scheduler has migrated data to custom tables; however, orphaned log entries exist in the WordPress Comments table. %1$s <a href=\"%2$s\">Learn more &raquo;</a>"
 msgstr ""
 
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:66
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:67
 msgid "Database error."
 msgstr ""
 
 #. translators: %s: error message
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:74
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:75
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore.php:25
 #: packages/action-scheduler/classes/migration/ActionScheduler_DBStoreMigrator.php:44
 msgid "Error saving action: %s"
 msgstr ""
 
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:267
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:268
 msgid "Invalid value for select or count parameter. Cannot query actions."
 msgstr ""
 
 #. translators: %s: action ID
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:457
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:547
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:579
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:776
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:818
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:458
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:548
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:580
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:777
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:819
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore.php:457
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore.php:468
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore.php:495
@@ -23127,22 +23130,22 @@ msgid "Unidentified action %s"
 msgstr ""
 
 #. translators: %s: group name
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:660
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:661
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore.php:627
 msgid "The group \"%s\" does not exist."
 msgstr ""
 
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:674
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:675
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore.php:607
 msgid "Unable to claim actions. Database error."
 msgstr ""
 
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:837
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:838
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore.php:740
 msgid "Invalid action ID. No status found."
 msgstr ""
 
-#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:839
+#: packages/action-scheduler/classes/data-stores/ActionScheduler_DBStore.php:840
 msgid "Unknown status found for action."
 msgstr ""
 
@@ -23866,19 +23869,19 @@ msgstr ""
 msgid "Extra business extensions to install."
 msgstr ""
 
-#: packages/woocommerce-admin/src/API/OnboardingProfile.php:331
+#: packages/woocommerce-admin/src/API/OnboardingProfile.php:335
 msgid "Selected store theme."
 msgstr ""
 
-#: packages/woocommerce-admin/src/API/OnboardingProfile.php:339
+#: packages/woocommerce-admin/src/API/OnboardingProfile.php:343
 msgid "Whether or not the user opted to purchase items now or later."
 msgstr ""
 
-#: packages/woocommerce-admin/src/API/OnboardingProfile.php:346
+#: packages/woocommerce-admin/src/API/OnboardingProfile.php:350
 msgid "Whether or not this store was setup for a client."
 msgstr ""
 
-#: packages/woocommerce-admin/src/API/OnboardingProfile.php:353
+#: packages/woocommerce-admin/src/API/OnboardingProfile.php:357
 msgid "Whether or not the store was connected to WooCommerce.com during the extension flow."
 msgstr ""
 
@@ -25453,21 +25456,21 @@ msgid "A zip file of the theme to be uploaded."
 msgstr ""
 
 #. translators: 1: URL of WooCommerce plugin, 2: The minimum WooCommerce version number
-#: packages/woocommerce-admin/src/FeaturePlugin.php:234
+#: packages/woocommerce-admin/src/FeaturePlugin.php:217
 msgid "The WooCommerce Admin feature plugin requires <a href=\"%1$s\">WooCommerce</a> %2$s or greater to be installed and active."
 msgstr ""
 
 #. translators: 1: URL of WordPress.org, 2: The minimum WordPress version number
-#: packages/woocommerce-admin/src/FeaturePlugin.php:243
+#: packages/woocommerce-admin/src/FeaturePlugin.php:226
 msgid "The WooCommerce Admin feature plugin requires <a href=\"%1$s\">WordPress</a> %2$s or greater to be installed and active."
 msgstr ""
 
-#: packages/woocommerce-admin/src/FeaturePlugin.php:291
+#: packages/woocommerce-admin/src/FeaturePlugin.php:274
 msgid "You have installed a development version of WooCommerce Admin which requires files to be built. From the plugin directory, run <code>npm install</code> to install dependencies, <code>npm run build</code> to build the files."
 msgstr ""
 
 #. translators: 1: URL of GitHub Repository build page
-#: packages/woocommerce-admin/src/FeaturePlugin.php:294
+#: packages/woocommerce-admin/src/FeaturePlugin.php:277
 msgid "Or you can download a pre-built version of the plugin by visiting <a href=\"%1$s\">the releases page in the repository</a>."
 msgstr ""
 
@@ -25542,59 +25545,59 @@ msgstr ""
 msgid " — %s"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:762
-#: packages/woocommerce-admin/src/Features/Onboarding.php:862
+#: packages/woocommerce-admin/src/Features/Onboarding.php:763
+#: packages/woocommerce-admin/src/Features/Onboarding.php:863
 msgid "New onboarding experience"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:763
+#: packages/woocommerce-admin/src/Features/Onboarding.php:764
 msgid "If you want to try out the new WooCommerce onboarding experience, click the button below."
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:835
+#: packages/woocommerce-admin/src/Features/Onboarding.php:836
 msgid "WooCommerce Onboarding"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:837
+#: packages/woocommerce-admin/src/Features/Onboarding.php:838
 msgid "Profile Setup Wizard"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:838
+#: packages/woocommerce-admin/src/Features/Onboarding.php:839
 msgid "If you need to enable or disable the setup wizard again, please click on the button below."
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:840
-#: packages/woocommerce-admin/src/Features/Onboarding.php:848
-#: packages/woocommerce-admin/src/Features/Onboarding.php:864
+#: packages/woocommerce-admin/src/Features/Onboarding.php:841
+#: packages/woocommerce-admin/src/Features/Onboarding.php:849
+#: packages/woocommerce-admin/src/Features/Onboarding.php:865
 msgid "Disable"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:844
+#: packages/woocommerce-admin/src/Features/Onboarding.php:845
 msgid "Task List"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:845
+#: packages/woocommerce-admin/src/Features/Onboarding.php:846
 msgid "If you need to enable or disable the task list, please click on the button below."
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:852
+#: packages/woocommerce-admin/src/Features/Onboarding.php:853
 msgid "Calypso / WordPress.com"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:854
+#: packages/woocommerce-admin/src/Features/Onboarding.php:855
 msgid "Quickly access the Jetpack connection flow in Calypso."
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:858
+#: packages/woocommerce-admin/src/Features/Onboarding.php:859
 msgid "Quickly access the WooCommerce.com connection flow in Calypso."
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:863
+#: packages/woocommerce-admin/src/Features/Onboarding.php:864
 msgid "To disable the new WooCommerce onboarding experience, click the button below."
 msgstr ""
 
-#: packages/woocommerce-admin/src/Features/Onboarding.php:910
-#: packages/woocommerce-admin/src/Features/Onboarding.php:916
+#: packages/woocommerce-admin/src/Features/Onboarding.php:911
+#: packages/woocommerce-admin/src/Features/Onboarding.php:917
 msgid "WooCommerce Helper was not able to connect to WooCommerce.com."
 msgstr ""
 
@@ -25628,7 +25631,7 @@ msgstr ""
 msgid "Default Date Range"
 msgstr ""
 
-#: packages/woocommerce-admin/src/Notes/DataStore.php:115
+#: packages/woocommerce-admin/src/Notes/DataStore.php:124
 msgid "Invalid data store for admin note."
 msgstr ""
 
