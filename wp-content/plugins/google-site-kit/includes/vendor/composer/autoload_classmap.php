@@ -64,6 +64,7 @@ return array(
     'Google\\Site_Kit\\Core\\Util\\Debug_Data' => $baseDir . '/Core/Util/Debug_Data.php',
     'Google\\Site_Kit\\Core\\Util\\Developer_Plugin_Installer' => $baseDir . '/Core/Util/Developer_Plugin_Installer.php',
     'Google\\Site_Kit\\Core\\Util\\Exit_Handler' => $baseDir . '/Core/Util/Exit_Handler.php',
+    'Google\\Site_Kit\\Core\\Util\\Google_URL_Matcher_Trait' => $baseDir . '/Core/Util/Google_URL_Matcher_Trait.php',
     'Google\\Site_Kit\\Core\\Util\\Input' => $baseDir . '/Core/Util/Input.php',
     'Google\\Site_Kit\\Core\\Util\\Migrate_Legacy_Keys' => $baseDir . '/Core/Util/Migrate_Legacy_Keys.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_3_0' => $baseDir . '/Core/Util/Migration_1_3_0.php',
