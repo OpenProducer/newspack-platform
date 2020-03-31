@@ -7,19 +7,20 @@
  *
  * @wordpress-plugin
  * Plugin Name: PWA
- * Plugin URI:  https://github.com/xwp/pwa-wp
+ * Plugin URI:  https://github.com/GoogleChromeLabs/pwa-wp
  * Description: Feature plugin to bring Progressive Web App (PWA) capabilities to Core
- * Version:     0.3.0
+ * Version:     0.4.0
  * Author:      PWA Plugin Contributors
- * Author URI:  https://github.com/xwp/pwa-wp/graphs/contributors
+ * Author URI:  https://github.com/GoogleChromeLabs/pwa-wp/graphs/contributors
  * Text Domain: pwa
  * License:     GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-define( 'PWA_VERSION', '0.3.0' );
+define( 'PWA_VERSION', '0.4.0' );
 define( 'PWA_PLUGIN_FILE', __FILE__ );
 define( 'PWA_PLUGIN_DIR', dirname( __FILE__ ) );
+define( 'PWA_WORKBOX_VERSION', '5.1.2' );
 define( 'PWA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
@@ -95,7 +96,7 @@ function _pwa_print_build_needed_notice() {
 	</div>
 	<?php
 }
-if ( ! file_exists( __DIR__ . '/wp-includes/js/workbox/' ) || ! file_exists( __DIR__ . '/wp-includes/js/workbox/workbox-sw.js' ) ) {
+if ( ! file_exists( __DIR__ . '/wp-includes/js/workbox-v' . PWA_WORKBOX_VERSION ) || ! file_exists( __DIR__ . '/wp-includes/js/workbox-v' . PWA_WORKBOX_VERSION . '/workbox-sw.js' ) ) {
 	add_action( 'admin_notices', '_pwa_print_build_needed_notice' );
 	return;
 }
@@ -118,7 +119,7 @@ function _pwa_add_disabled_navigation_preload_site_status_test( $tests ) {
 add_filter( 'site_status_tests', '_pwa_add_disabled_navigation_preload_site_status_test' );
 
 /**
- * Print admin notice when a build has not been been performed.
+ * Flag navigation preload incorrectly being disabled.
  *
  * This is temporary measure to correct a mistake in the example for how navigation request caching strategies.
  *

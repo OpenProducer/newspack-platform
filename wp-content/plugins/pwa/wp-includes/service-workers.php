@@ -94,7 +94,7 @@ function wp_get_service_worker_url( $scope = WP_Service_Workers::SCOPE_FRONT ) {
 	if ( WP_Service_Workers::SCOPE_FRONT === $scope ) {
 		return add_query_arg(
 			array( WP_Service_Workers::QUERY_VAR => $scope ),
-			home_url( '/' )
+			home_url( '/', 'relative' )
 		);
 	}
 
@@ -275,22 +275,6 @@ function wp_disable_script_concatenation() {
 		$concatenate_scripts = rest_sanitize_boolean( $_GET['wp_concatenate_scripts'] );
 	}
 	// phpcs:enable
-}
-
-/**
- * Preserve stream fragment query param on canonical redirects.
- *
- * @since 0.2
- *
- * @param string $link New URL of the post.
- * @return string URL to be redirected.
- */
-function wp_service_worker_fragment_redirect_old_slug_to_new_url( $link ) {
-	$fragment = WP_Service_Worker_Navigation_Routing_Component::get_stream_fragment_query_var();
-	if ( $fragment ) {
-		$link = add_query_arg( WP_Service_Worker_Navigation_Routing_Component::STREAM_FRAGMENT_QUERY_VAR, $fragment, $link );
-	}
-	return $link;
 }
 
 /**
