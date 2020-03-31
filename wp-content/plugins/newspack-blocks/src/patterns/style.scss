@@ -5,13 +5,12 @@
  */
 
 .newspack-patterns-block-styles {
-	.block-editor-block-styles__item {
-		padding-top: 6px;
-	}
+	padding: 0;
+	margin-bottom: -16px;
 
-	.block-editor-block-styles__item-preview {
+	.block-editor-patterns__item-preview {
 		margin: 0;
-		padding: 3px;
+		padding: 3px 3px 0;
 		width: 100%;
 	}
 }

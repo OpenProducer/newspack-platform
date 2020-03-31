@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/Automattic/newspack-blocks/compare/v1.2.0...v1.2.1) (2020-03-31)
+
+
+### Bug Fixes
+
+* fix broken author URL on WP.com ([#407](https://github.com/Automattic/newspack-blocks/issues/407)) ([9614350](https://github.com/Automattic/newspack-blocks/commit/9614350286d1a0124aab7ee61de2cec8849434fd))
+* pattern sidebar to match gutenberg patterns sidebar ([#424](https://github.com/Automattic/newspack-blocks/issues/424)) ([fb2d209](https://github.com/Automattic/newspack-blocks/commit/fb2d209581881d39921d22db121974133d0746af))
+
 # [1.2.0](https://github.com/Automattic/newspack-blocks/compare/v1.1.0...v1.2.0) (2020-03-24)
 
 
