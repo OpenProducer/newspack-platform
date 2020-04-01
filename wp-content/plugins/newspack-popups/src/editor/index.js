@@ -84,9 +84,13 @@ class PopupSidebar extends Component {
 		} = this.props;
 		const { isSiteWideDefault } = this.state;
 		const isInline = 'inline' === placement;
+
+		// The sitewide default option is for overlay popups only.
+		const canBeSiteWideDefault = ! isInline && isCurrentPostPublished;
+
 		return (
 			<Fragment>
-				{ isCurrentPostPublished && (
+				{ canBeSiteWideDefault && (
 					<CheckboxControl
 						label={ __( 'Sitewide Default', 'newspack-popups' ) }
 						checked={ isSiteWideDefault }

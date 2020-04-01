@@ -61,7 +61,7 @@
   .newspack-lightbox .newspack-lightbox__close {
     -webkit-box-align: center;
             align-items: center;
-    background: transparent;
+    background: white;
     border: none;
     border-radius: 0;
     box-shadow: none;
@@ -141,8 +141,9 @@
     width: calc( 100% + 32px); } }
 
 .newspack-inline-popup {
-  padding: 0.75em;
-  border: 1px solid rgba(0, 0, 0, 0.2); }
+  border: 1px solid rgba(0, 0, 0, 0.2);
+  clear: both;
+  padding: 0.75em; }
   .newspack-inline-popup:focus {
     outline: none; }
 
@@ -172,4 +173,22 @@
       color: #3c3c3c;
       outline-offset: 2px;
       text-decoration: none; }
+
+.newspack-inline-popup .newspack-pattern.subscribe__style-1,
+.newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 {
+  margin: -0.75em -0.75em 0; }
+  .newspack-inline-popup .newspack-pattern.subscribe__style-1 p:empty,
+  .newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 p:empty {
+    display: none; }
+  .newspack-inline-popup .newspack-pattern.subscribe__style-1 .wp-block-group__inner-container > *,
+  .newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 .wp-block-group__inner-container > * {
+    margin-bottom: 0.75em; }
+  .newspack-inline-popup .newspack-pattern.subscribe__style-1 + .popup-not-interested-form,
+  .newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 + .popup-not-interested-form {
+    margin-top: 0.75rem; }
+
+.newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 {
+  margin: -1.5em -1.5em 0; }
+  .newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 + .popup-not-interested-form {
+    margin-bottom: -0.75rem; }
 

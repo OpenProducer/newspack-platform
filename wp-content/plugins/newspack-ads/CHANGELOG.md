@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/Automattic/newspack-ads/compare/v1.1.0...v1.1.1) (2020-04-01)
+
+
+### Bug Fixes
+
+* unique IDs for responsive ads ([#35](https://github.com/Automattic/newspack-ads/issues/35)) ([e98b0fc](https://github.com/Automattic/newspack-ads/commit/e98b0fc0c573b80820802db50148f50af968f956))
+
 # [1.1.0](https://github.com/Automattic/newspack-ads/compare/v1.0.0...v1.1.0) (2020-03-24)
 
 

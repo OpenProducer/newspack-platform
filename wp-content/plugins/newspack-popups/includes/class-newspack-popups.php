@@ -264,7 +264,7 @@ final class Newspack_Popups {
 	}
 
 	/**
-	 * Display 'Sitewide Default' state by the appropriate pop-up.
+	 * Display popup states by the pop-ups.
 	 *
 	 * @param array   $post_states An array of post display states.
 	 * @param WP_Post $post        The current post object.
@@ -273,8 +273,12 @@ final class Newspack_Popups {
 		if ( self::NEWSPACK_PLUGINS_CPT !== $post->post_type ) {
 			return $post_states;
 		}
-		if ( absint( get_option( self::NEWSPACK_POPUPS_SITEWIDE_DEFAULT, null ) ) === absint( $post->ID ) ) {
-			$post_states['newspack_popups_sitewide_default'] = __( 'Sitewide Default', 'newspack-popups' );
+		$post_status_object = get_post_status_object( $post->post_status );
+		$is_inline          = get_post_meta( $post->ID, 'placement', true ) == 'inline';
+		if ( $is_inline ) {
+			$post_states[ $post_status_object->name ] = __( 'Inline', 'newspack-popups' );
+		} elseif ( absint( get_option( self::NEWSPACK_POPUPS_SITEWIDE_DEFAULT, null ) ) === absint( $post->ID ) ) {
+			$post_states[ $post_status_object->name ] = __( 'Sitewide Default', 'newspack-popups' );
 		}
 		return $post_states;
 	}

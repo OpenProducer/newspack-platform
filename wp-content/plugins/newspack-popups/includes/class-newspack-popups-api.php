@@ -162,7 +162,7 @@ final class Newspack_Popups_API {
 			$response['displayPopup'] = false;
 		}
 
-		if ( $this->is_preview_request( $request ) ) {
+		if ( $this->is_preview_request( $request ) || 'test' === $frequency ) {
 			$response['displayPopup'] = true;
 		};
 

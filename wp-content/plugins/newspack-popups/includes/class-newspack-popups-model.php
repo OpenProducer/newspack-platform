@@ -13,7 +13,7 @@ defined( 'ABSPATH' ) || exit;
 final class Newspack_Popups_Model {
 
 	/**
-	 * Retrieve all Popus (first 100).
+	 * Retrieve all Popups (first 100).
 	 *
 	 * @return array Array of Popup objects.
 	 */
@@ -26,9 +26,13 @@ final class Newspack_Popups_Model {
 
 		$sitewide_default_id = get_option( Newspack_Popups::NEWSPACK_POPUPS_SITEWIDE_DEFAULT, null );
 
-		$popups = self::retrieve_popup_with_query( new WP_Query( $args ), true );
+		$popups = self::retrieve_popups_with_query( new WP_Query( $args ), true );
 		foreach ( $popups as &$popup ) {
-			$popup['sitewide_default'] = absint( $sitewide_default_id ) === absint( $popup['id'] );
+			// UI will not allow for setting inline as sitewide default, but there may be
+			// legacy popups from before this update.
+			if ( 'inline' !== $popup['options']['placement'] ) {
+				$popup['sitewide_default'] = absint( $sitewide_default_id ) === absint( $popup['id'] );
+			}
 		}
 		return $popups;
 	}
@@ -44,6 +48,18 @@ final class Newspack_Popups_Model {
 			return new \WP_Error(
 				'newspack_popups_popup_doesnt_exist',
 				esc_html__( 'The Popup specified does not exist.', 'newspack-popups' ),
+				[
+					'status' => 400,
+					'level'  => 'fatal',
+				]
+			);
+		}
+
+		// Such update will not be permitted by the UI, but it's handled just to be explicit about it.
+		if ( 'inline' === $popup['options']['placement'] ) {
+			return new \WP_Error(
+				'newspack_popups_inline_sitewide',
+				esc_html__( 'An inline popup cannot be a sitewide default.', 'newspack-popups' ),
 				[
 					'status' => 400,
 					'level'  => 'fatal',
@@ -103,39 +119,48 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Retrieve popup CPT post.
+	 * Retrieve all inline popups.
 	 *
-	 * @param array $categories An array of categories to match.
-	 * @return object Popup object
+	 * @return array Inline popup objects.
 	 */
-	public static function retrieve_popup( $categories = [] ) {
+	public static function retrieve_inline_popups() {
+		$args = [
+			'post_type'   => Newspack_Popups::NEWSPACK_PLUGINS_CPT,
+			'post_status' => 'publish',
+			'meta_key'    => 'placement',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+			'meta_value'  => 'inline',
+		];
+
+		return self::retrieve_popups_with_query( new WP_Query( $args ) );
+	}
+
+	/**
+	 * Retrieve first overlay popup matching post categries.
+	 *
+	 * @return object|null Popup object.
+	 */
+	public static function retrieve_category_overlay_popup() {
+		$post_categories = get_the_category();
+
+		if ( empty( $post_categories ) ) {
+			return null;
+		}
+
 		$args = [
 			'post_type'      => Newspack_Popups::NEWSPACK_PLUGINS_CPT,
 			'posts_per_page' => 1,
 			'post_status'    => 'publish',
+			'category__in'   => array_column( $post_categories, 'term_id' ),
+			'meta_key'       => 'placement',
+			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+			'meta_value'     => 'inline',
+			'meta_compare'   => '!=',
 		];
 
-		$category_ids = array_map(
-			function( $category ) {
-				return $category->term_id;
-			},
-			$categories
-		);
-		if ( count( $category_ids ) ) {
-			$args['category__in'] = $category_ids;
-		} else {
-			$args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-				[
-					'taxonomy' => 'category',
-					'operator' => 'NOT EXISTS',
-				],
-			];
-		}
-
-		$popups = self::retrieve_popup_with_query( new WP_Query( $args ) );
+		$popups = self::retrieve_popups_with_query( new WP_Query( $args ) );
 		return count( $popups ) > 0 ? $popups[0] : null;
 	}
-
 
 	/**
 	 * Retrieve popup preview CPT post.
@@ -144,10 +169,14 @@ final class Newspack_Popups_Model {
 	 * @return object Popup object.
 	 */
 	public static function retrieve_preview_popup( $post_id ) {
-		// A preview is stored in an autosave.
-		$autosave = wp_get_post_autosave( $post_id );
+		// Up-to-date post data is stored in an autosave.
+		$autosave    = wp_get_post_autosave( $post_id );
+		$post_object = $autosave ? $autosave : get_post( $post_id );
+		// Setting proper id for correct API calls.
+		$post_object->ID = $post_id;
+
 		return self::create_popup_object(
-			$autosave ? $autosave : get_post( $post_id ),
+			$post_object,
 			false,
 			[
 				'background_color'        => filter_input( INPUT_GET, 'background_color', FILTER_SANITIZE_STRING ),
@@ -179,27 +208,29 @@ final class Newspack_Popups_Model {
 			'p'              => $post_id,
 		];
 
-		$popups = self::retrieve_popup_with_query( new WP_Query( $args ) );
+		$popups = self::retrieve_popups_with_query( new WP_Query( $args ) );
 		return count( $popups ) > 0 ? $popups[0] : null;
 	}
 
 	/**
-	 * Retrieve popup CPT post.
+	 * Retrieve popup CPT posts.
 	 *
 	 * @param WP_Query $query The query to use.
 	 * @param boolean  $include_categories If true, returned objects will include assigned categories.
 	 * @return array Popup objects array
 	 */
-	protected static function retrieve_popup_with_query( WP_Query $query, $include_categories = false ) {
+	protected static function retrieve_popups_with_query( WP_Query $query, $include_categories = false ) {
 		$popups = [];
-		while ( $query->have_posts() ) {
-			$query->the_post();
-			$popups[] = self::create_popup_object(
-				get_post( get_the_ID() ),
-				$include_categories
-			);
+		if ( $query->have_posts() ) {
+			while ( $query->have_posts() ) {
+				$query->the_post();
+				$popups[] = self::create_popup_object(
+					get_post( get_the_ID() ),
+					$include_categories
+				);
+			}
+			wp_reset_postdata();
 		}
-		wp_reset_postdata();
 		return $popups;
 	}
 
@@ -258,7 +289,7 @@ final class Newspack_Popups_Model {
 			$popup['categories'] = get_the_category( $id );
 		}
 
-		if ( 'inline' === $popup['options']['placement'] ) {
+		if ( self::is_inline( $popup ) ) {
 			$popup['markup'] = self::generate_inline_popup( $popup );
 			return $popup;
 		}
@@ -300,6 +331,16 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
+	 * Is it an inline popup or not.
+	 *
+	 * @param object $popup The popup object.
+	 * @return boolean True if it is an inline popup.
+	 */
+	protected static function is_inline( $popup ) {
+		return 'inline' === $popup['options']['placement'];
+	}
+
+	/**
 	 * Insert analytics tracking code.
 	 *
 	 * @param object $popup The popup object.
@@ -313,6 +354,7 @@ final class Newspack_Popups_Model {
 		} else {
 			return '';
 		}
+		global $wp;
 
 		$event_category = 'Newspack Announcement';
 		$event_label    = 'Newspack Announcement: ' . $popup['title'] . ' (' . $popup['id'] . ')';
@@ -321,6 +363,25 @@ final class Newspack_Popups_Model {
 		$has_form                = preg_match( '/<form\s/', $popup['body'] ) !== 0;
 		$has_dismiss_form        = 'inline' !== $popup['options']['placement'];
 		$has_not_interested_form = self::get_dismiss_text( $popup );
+		$is_inline               = self::is_inline( $popup );
+		$endpoint                = self::get_dismiss_endpoint();
+
+		// Mailchimp.
+		$mailchimp_form_selector = '';
+		if ( preg_match( '/wp-block-jetpack-mailchimp/', $popup['body'] ) !== 0 ) {
+			$mailchimp_form_selector = '.wp-block-jetpack-mailchimp form';
+		}
+		if ( preg_match( '/mc4wp-form/', $popup['body'] ) !== 0 ) {
+			$mailchimp_form_selector = '.mc4wp-form';
+		}
+
+		$is_amp                   = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+		$custom_form_submit_event = 'amp-form-submit-success';
+		if ( ! $is_amp ) {
+			// For non-AMP forms, the *-success handler is not fired (maybe because of missing action-xhr attribute?).
+			// This might result in some false-positives, though (event fired when form not submitted successfully).
+			$custom_form_submit_event = 'amp-form-submit';
+		}
 
 		?>
 		<amp-analytics type="gtag" data-credentials="include">
@@ -347,7 +408,7 @@ final class Newspack_Popups_Model {
 						<?php endif; ?>
 						<?php if ( $has_form ) : ?>
 							"popupFormSubmitSuccess": {
-								"on": "amp-form-submit-success",
+								"on": "<?php echo esc_attr( $custom_form_submit_event ); ?>",
 								"request": "event",
 								"selector": "#<?php echo esc_attr( $element_id ); ?> form:not(.popup-action-form)",
 								"vars": {
@@ -408,26 +469,38 @@ final class Newspack_Popups_Model {
 				}
 			</script>
 		</amp-analytics>
-		<?php
-	}
 
-	/**
-	 * Generate markup inline popup.
-	 *
-	 * @param string $popup The popup object.
-	 * @return string The generated markup.
-	 */
-	public static function generate_inline_popup( $popup ) {
-		global $wp;
-		$element_id         = 'lightbox' . rand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
-		$classes            = [ 'newspack-inline-popup' ];
-		$endpoint           = self::get_dismiss_endpoint();
-		$display_title      = $popup['options']['display_title'];
-		$hidden_fields      = self::get_hidden_fields( $popup );
-		$dismiss_text       = self::get_dismiss_text( $popup );
-		$has_mailchimp_form = preg_match( '/mailchimp_form/', $popup['body'] ) !== 0;
-		ob_start();
-		?>
+		<?php if ( $mailchimp_form_selector ) : ?>
+			<amp-analytics>
+				<script type="application/json">
+					{
+						"requests": {
+							"event": "<?php echo esc_url( $endpoint ); ?>"
+						},
+						"triggers": {
+							"formSubmitSuccess": {
+								"on": "<?php echo esc_attr( $custom_form_submit_event ); ?>",
+								"request": "event",
+								"selector": "#<?php echo esc_attr( $element_id ); ?> <?php echo esc_attr( $mailchimp_form_selector ); ?>",
+								"extraUrlParams": {
+									"popup_id": "<?php echo ( esc_attr( $popup['id'] ) ); ?>",
+									"url": "<?php echo esc_url( home_url( $wp->request ) ); ?>",
+									"mailing_list_status": "subscribed"
+								}
+							}
+						},
+						"transport": {
+							"beacon": true,
+							"xhrpost": true,
+							"useBody": true,
+							"image": false
+						}
+					}
+				</script>
+			</amp-analytics>
+		<?php endif; ?>
+
+		<?php if ( $is_inline ) : ?>
 			<amp-analytics>
 				<script type="application/json">
 					{
@@ -449,18 +522,6 @@ final class Newspack_Popups_Model {
 									"url": "<?php echo esc_url( home_url( $wp->request ) ); ?>"
 								}
 							}
-							<?php if ( $has_mailchimp_form ) : ?>
-							,"formSubmitSuccess": {
-								"on": "amp-form-submit-success",
-								"request": "event",
-								"selector": "#mailchimp_form",
-								"extraUrlParams": {
-									"popup_id": "<?php echo ( esc_attr( $popup['id'] ) ); ?>",
-									"url": "<?php echo esc_url( home_url( $wp->request ) ); ?>",
-									"mailing_list_status": "subscribed"
-								}
-							}
-							<?php endif; ?>
 						},
 						"transport": {
 							"beacon": true,
@@ -471,8 +532,28 @@ final class Newspack_Popups_Model {
 					}
 				</script>
 			</amp-analytics>
+		<?php endif; ?>
+		<?php
+	}
+
+	/**
+	 * Generate markup inline popup.
+	 *
+	 * @param string $popup The popup object.
+	 * @return string The generated markup.
+	 */
+	public static function generate_inline_popup( $popup ) {
+		global $wp;
+		$element_id    = 'lightbox' . rand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
+		$classes       = [ 'newspack-inline-popup' ];
+		$endpoint      = self::get_dismiss_endpoint();
+		$display_title = $popup['options']['display_title'];
+		$hidden_fields = self::get_hidden_fields( $popup );
+		$dismiss_text  = self::get_dismiss_text( $popup );
+		ob_start();
+		?>
 			<?php self::insert_event_tracking( $popup, $element_id ); ?>
-			<amp-layout amp-access="displayPopup" amp-access-hide class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>" id="<?php echo esc_attr( $element_id ); ?>">
+			<amp-layout amp-access="popup_<?php echo esc_attr( $popup['id'] ); ?>.displayPopup" amp-access-hide class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>" id="<?php echo esc_attr( $element_id ); ?>">
 				<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
 					<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
 				<?php endif; ?>
@@ -488,7 +569,7 @@ final class Newspack_Popups_Model {
 							type="hidden"
 							value="1"
 						/>
-						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" aria-label="<?php esc_attr( $dismiss_text ); ?>"><?php echo esc_attr( $dismiss_text ); ?></button>
+						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" aria-label="<?php esc_attr( $dismiss_text ); ?>" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>"><?php echo esc_attr( $dismiss_text ); ?></button>
 					</form>
 				<?php endif; ?>
 			</amp-layout>
@@ -514,7 +595,7 @@ final class Newspack_Popups_Model {
 
 		ob_start();
 		?>
-		<amp-layout amp-access="displayPopup" amp-access-hide class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" id="<?php echo esc_attr( $element_id ); ?>">
+		<amp-layout amp-access="popup_<?php echo esc_attr( $popup['id'] ); ?>.displayPopup" amp-access-hide class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" id="<?php echo esc_attr( $element_id ); ?>">
 			<div class="newspack-popup-wrapper" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>">
 				<div class="newspack-popup">
 					<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
@@ -532,7 +613,7 @@ final class Newspack_Popups_Model {
 							type="hidden"
 							value="1"
 						/>
-						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" aria-label="<?php esc_attr( $dismiss_text ); ?>"><?php echo esc_attr( $dismiss_text ); ?></button>
+						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" aria-label="<?php esc_attr( $dismiss_text ); ?>" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>"><?php echo esc_attr( $dismiss_text ); ?></button>
 					</form>
 					<?php endif; ?>
 					<form class="popup-dismiss-form popup-action-form"
@@ -540,7 +621,7 @@ final class Newspack_Popups_Model {
 						action-xhr="<?php echo esc_url( $endpoint ); ?>"
 						target="_top">
 						<?php echo $hidden_fields; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" class="newspack-lightbox__close" aria-label="<?php esc_html_e( 'Close Pop-up', 'newspack-popups' ); ?>">
+						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" class="newspack-lightbox__close" aria-label="<?php esc_html_e( 'Close Pop-up', 'newspack-popups' ); ?>" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
 						</button>
 					</form>

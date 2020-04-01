@@ -83,7 +83,7 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 
 	.newspack-lightbox__close {
 		align-items: center;
-		background: transparent;
+		background: white;
 		border: none;
 		border-radius: 0;
 		box-shadow: none;
@@ -196,8 +196,9 @@ $color__secondary-variation: darken( $color__secondary, 10% );
 }
 
 .newspack-inline-popup {
-	padding: 0.75em;
 	border: 1px solid rgba( black, 0.2 );
+	clear: both;
+	padding: 0.75em;
 
 	&:focus {
 		outline: none;

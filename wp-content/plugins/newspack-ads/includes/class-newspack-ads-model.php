@@ -341,7 +341,6 @@ class Newspack_Ads_Model {
 		$code         = $ad_unit['code'];
 		$network_code = self::get_network_code( 'google_ad_manager' );
 		$unique_id    = uniqid();
-
 		if ( ! is_array( $sizes ) ) {
 			$sizes = [];
 		}
@@ -349,7 +348,7 @@ class Newspack_Ads_Model {
 		self::$ad_ids[ $unique_id ] = $ad_unit;
 
 		if ( $ad_unit['responsive'] ) {
-			return self::ad_elements_for_sizes( $ad_unit );
+			return self::ad_elements_for_sizes( $ad_unit, $unique_id );
 		}
 
 		$largest = self::largest_ad_size( $sizes );
@@ -375,13 +374,14 @@ class Newspack_Ads_Model {
 		$sizes        = $ad_unit['sizes'];
 		$code         = $ad_unit['code'];
 		$network_code = self::get_network_code( 'google_ad_manager' );
+		$unique_id    = uniqid();
 
 		if ( ! is_array( $sizes ) ) {
 			$sizes = [];
 		}
 
 		if ( $ad_unit['responsive'] ) {
-			return self::ad_elements_for_sizes( $ad_unit, true );
+			return self::ad_elements_for_sizes( $ad_unit, $unique_id, true );
 		}
 
 		$largest = self::largest_ad_size( $sizes );
@@ -401,9 +401,10 @@ class Newspack_Ads_Model {
 	 * Generate divs for a series of ad sizes.
 	 *
 	 * @param array   $ad_unit The ad unit to generate code for.
+	 * @param string  $unique_id Unique ID for this ad unit instance.
 	 * @param boolean $is_amp Are these AMP units or not.
 	 */
-	public static function ad_elements_for_sizes( $ad_unit, $is_amp = false ) {
+	public static function ad_elements_for_sizes( $ad_unit, $unique_id, $is_amp = false ) {
 		$network_code = self::get_network_code( 'google_ad_manager' );
 		$code         = $ad_unit['code'];
 		$sizes        = $ad_unit['sizes'];
@@ -446,9 +447,10 @@ class Newspack_Ads_Model {
 			$height      = absint( $size[1] );
 			$prefix      = $is_amp ? 'div-gpt-amp-' : 'div-gpt-';
 			$div_id      = sprintf(
-				'%s%s-%dx%d',
+				'%s%s-%s-%dx%d',
 				$prefix,
 				sanitize_title( $ad_unit['code'] ),
+				$unique_id,
 				$width,
 				$height
 			);

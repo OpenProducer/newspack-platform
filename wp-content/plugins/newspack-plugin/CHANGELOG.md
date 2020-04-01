@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Automattic/newspack-plugin/compare/v1.3.0...v1.4.0) (2020-04-01)
+
+
+### Features
+
+* add grid view option to the dashboard ([#496](https://github.com/Automattic/newspack-plugin/issues/496)) ([03b0646](https://github.com/Automattic/newspack-plugin/commit/03b06467a7c3d5a7e503c232b1a3dff749c2d6aa))
+
 # [1.3.0](https://github.com/Automattic/newspack-plugin/compare/v1.2.1...v1.3.0) (2020-03-24)
 
 

@@ -708,10 +708,8 @@ ul.wp-block-archives li ul,
 }
 
 /** === Jetpack Blocks === */
-.jp-relatedposts-i2 {
-  border-top: 1px solid #ccc;
-  border-bottom: 1px solid #ccc;
-  padding: 1rem 0;
+.jp-relatedposts-i2 a {
+  color: #111;
 }
 
 .jp-relatedposts-i2 a,
@@ -724,6 +722,7 @@ ul.wp-block-archives li ul,
 
 .jp-relatedposts-i2 .jp-related-posts-i2__post-date,
 .jp-relatedposts-i2 .jp-related-posts-i2__post-context {
+  font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
   font-size: 0.7em;
 }
 
