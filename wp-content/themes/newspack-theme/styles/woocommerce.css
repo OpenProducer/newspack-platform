@@ -73,6 +73,10 @@ a.button:hover, a.button:visited {
   visibility: visible;
 }
 
+.woocommerce form .form-row.form-row-first {
+  clear: left;
+}
+
 .woocommerce-breadcrumb {
   margin-bottom: 3rem;
   font-size: 0.88889em;
@@ -148,32 +152,21 @@ a.button:hover, a.button:visited {
   color: #111;
 }
 
-.woocommerce-error,
-.woocommerce-info {
-  color: #fff;
-}
-
-.woocommerce-error a,
-.woocommerce-info a {
-  color: #fff;
-}
-
-.woocommerce-error a:hover,
-.woocommerce-info a:hover {
-  color: #fff;
-}
-
-.woocommerce-error a.button,
-.woocommerce-info a.button {
-  background: #111;
-}
-
 .woocommerce-error {
   background: firebrick;
+  color: #fff;
 }
 
-.woocommerce-info {
-  background: #36f;
+.woocommerce-error a {
+  color: #fff;
+}
+
+.woocommerce-error a:hover {
+  color: #fff;
+}
+
+.woocommerce-error a.button {
+  background: #111;
 }
 
 .woocommerce-store-notice {
@@ -1126,8 +1119,15 @@ table.variations select {
   border-color: black;
 }
 
-.woocommerce-checkout-review-order-table td {
-  padding: 1rem 0.5rem;
+.woocommerce-checkout-review-order-table {
+  border-top: 1px solid #ccc;
+}
+
+.woocommerce-checkout-review-order-table td,
+.woocommerce-checkout-review-order-table th {
+  border-color: #ccc;
+  border-width: 0 0 1px;
+  padding: 0.5rem;
 }
 
 .woocommerce-checkout-review-order-table dl.variation {
@@ -1360,4 +1360,54 @@ table.variations select {
   .woocommerce .content-area .site-main {
     max-width: calc( 6 * ( 100vw / 12 ) - 28px);
   }
+}
+
+/* Toggle order details */
+.cart-summary-header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.cart-summary-header h3 {
+  margin-top: 1rem;
+}
+
+#toggle-order-details {
+  align-items: center;
+  background: transparent;
+  color: #111;
+  display: flex;
+  padding: 0;
+}
+
+#toggle-order-details:hover {
+  background: transparent;
+  color: #767676;
+}
+
+#toggle-order-details svg {
+  transform: rotate(90deg);
+}
+
+#toggle-order-details.order-details-hidden svg {
+  transform: rotate(-90deg);
+}
+
+#order-details-wrapper h3 {
+  margin-top: 3rem;
+}
+
+.order-details-hidden {
+  display: none;
+}
+
+.order-details-summary h4 {
+  font-size: 0.95em;
+  font-weight: normal;
+}
+
+.order-details-summary h4 > span {
+  color: #767676;
+  display: block;
 }

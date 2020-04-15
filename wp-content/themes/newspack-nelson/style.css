@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.4.0
+Version: 1.5.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -2030,8 +2030,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .blog #main,
   .search #main,
   .page .main-content,
-  .single .main-content,
-  .newspack-front-page.page-template-single-feature .site-main {
+  .single .main-content {
     width: 65%;
   }
 }
@@ -2065,13 +2064,16 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .newspack-front-page.page-template-single-feature .site-main {
   margin-left: auto;
   margin-right: auto;
+  max-width: 780px;
+  width: 100%;
 }
 
 @media only screen and (min-width: 782px) {
   .page-template-single-feature .entry-header {
     margin-left: auto;
     margin-right: auto;
-    width: 65%;
+    max-width: 780px;
+    width: 100%;
   }
 }
 
@@ -2836,6 +2838,14 @@ body.page .entry-title {
   }
 }
 
+.author-bio a {
+  text-decoration: underline;
+}
+
+.author-bio a:hover {
+  text-decoration: none;
+}
+
 .author-bio .author-bio-text {
   width: calc( 100% - 60px - 1em);
 }
@@ -2881,6 +2891,7 @@ body.page .entry-title {
 .author-bio .author-link {
   color: #36f;
   font-weight: bold;
+  text-decoration: none;
 }
 
 .author-bio .author-link:hover {
@@ -3731,6 +3742,14 @@ body.page .entry-title {
 .taxonomy-description {
   color: #767676;
   font-style: italic;
+}
+
+.taxonomy-description a {
+  text-decoration: underline;
+}
+
+.taxonomy-description a:hover {
+  text-decoration: none;
 }
 
 @media only screen and (min-width: 782px) {
@@ -4661,10 +4680,6 @@ body.page .entry-title {
 .entry .entry-content .wp-block-archives li,
 .entry .entry-content .wp-block-categories li,
 .entry .entry-content .wp-block-latest-posts li {
-  color: #767676;
-  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
-  font-weight: bold;
-  line-height: 1.2;
   padding-bottom: 0.75rem;
 }
 
@@ -4680,6 +4695,13 @@ body.page .entry-title {
 .entry .entry-content .wp-block-categories li a,
 .entry .entry-content .wp-block-latest-posts li a {
   text-decoration: none;
+}
+
+.entry .entry-content .wp-block-archives li,
+.entry .entry-content .wp-block-categories li {
+  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
+  font-weight: bold;
+  line-height: 1.2;
 }
 
 .entry .entry-content .wp-block-archives.aligncenter,
@@ -4705,6 +4727,21 @@ body.page .entry-title {
   font-weight: normal;
   content: "– " counters(submenu, "– ", none);
   counter-increment: submenu;
+}
+
+.entry .entry-content .wp-block-latest-posts li > a {
+  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
+  font-weight: bold;
+  line-height: 1.2;
+}
+
+.entry .entry-content .wp-block-latest-posts time {
+  color: #767676;
+  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
+}
+
+.entry .entry-content .wp-block-latest-posts .wp-block-latest-posts__post-excerpt {
+  font-size: 0.8em;
 }
 
 .entry .entry-content .wp-block-latest-posts.is-grid li {
@@ -5540,6 +5577,39 @@ body.style-pack-style-2 .newspack_global_ad.global_below_header {
   display: none;
 }
 
+/* Yoast Breadcrumb support */
+.site-breadcrumb {
+  color: #767676;
+}
+
+.site-breadcrumb .wrapper {
+  padding: 0.5em 0;
+}
+
+.site-breadcrumb .wrapper > span {
+  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
+  font-size: 0.6em;
+  line-height: 1.2;
+}
+
+.site-breadcrumb .breadcrumb_last {
+  color: #111;
+}
+
+.home .site-breadcrumb,
+.single-featured-image-behind .site-breadcrumb,
+.single-featured-image-beside .site-breadcrumb {
+  display: none;
+}
+
+.has-highlight-menu .site-breadcrumb {
+  padding-top: 0.25rem;
+}
+
+.has-highlight-menu .site-breadcrumb .wrapper {
+  border-top: 1px solid #ccc;
+}
+
 .h-sb .site-header {
   background-color: #36f;
 }
@@ -5582,14 +5652,16 @@ body.style-pack-style-2 .newspack_global_ad.global_below_header {
 
 @media only screen and (min-width: 782px) {
   .site-content,
-  .newspack-front-page.hide-homepage-title .site-content {
+  .newspack-front-page.hide-homepage-title .site-content,
+  .site-breadcrumb {
     margin-top: -3.5rem;
   }
 }
 
 @media only screen and (min-width: 1168px) {
   .site-content,
-  .newspack-front-page.hide-homepage-title .site-content {
+  .newspack-front-page.hide-homepage-title .site-content,
+  .site-breadcrumb {
     margin-top: -6rem;
   }
 }
@@ -6001,4 +6073,35 @@ blockquote p {
   .entry-content .newspack-lightbox .newspack-popup-wrapper {
     border-width: 10px;
   }
+}
+
+@media only screen and (min-width: 782px) {
+  .site-breadcrumb {
+    margin-bottom: 3.5rem;
+  }
+}
+
+@media only screen and (min-width: 1168px) {
+  .site-breadcrumb {
+    margin-bottom: 6rem;
+  }
+}
+
+.h-sb .site-breadcrumb {
+  color: #fff;
+}
+
+.h-sb .site-breadcrumb a,
+.h-sb .site-breadcrumb .breadcrumb_last {
+  color: inherit;
+}
+
+.h-sb .site-breadcrumb a:active,
+.h-sb .site-breadcrumb a:focus,
+.h-sb .site-breadcrumb a:hover {
+  opacity: 0.75;
+}
+
+.has-highlight-menu .site-breadcrumb .wrapper {
+  border-top-color: #2240d5;
 }
