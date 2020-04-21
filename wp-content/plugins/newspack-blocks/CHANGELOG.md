@@ -1,3 +1,16 @@
+# [1.3.0](https://github.com/Automattic/newspack-blocks/compare/v1.2.1...v1.3.0) (2020-04-21)
+
+
+### Bug Fixes
+
+* patterns sidebar background color ([#431](https://github.com/Automattic/newspack-blocks/issues/431)) ([d2dfda3](https://github.com/Automattic/newspack-blocks/commit/d2dfda3679947dbf6f4b20bf97d5ca3e005c21de))
+
+
+### Features
+
+* add 2 new subscribe patterns ([#426](https://github.com/Automattic/newspack-blocks/issues/426)) ([07e8239](https://github.com/Automattic/newspack-blocks/commit/07e82391ec208c2daff78596953defd63ce53931))
+* update carousel style since amp 1.5.1 ([#427](https://github.com/Automattic/newspack-blocks/issues/427)) ([94312d2](https://github.com/Automattic/newspack-blocks/commit/94312d2d23394471d15e713cec8c2ba444f89946))
+
 ## [1.2.1](https://github.com/Automattic/newspack-blocks/compare/v1.2.0...v1.2.1) (2020-03-31)
 
 

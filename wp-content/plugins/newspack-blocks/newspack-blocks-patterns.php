@@ -423,6 +423,58 @@ add_filter(
 	2
 );
 
+add_filter(
+	'newspack_blocks_patterns',
+	function( $patterns, $post_type ) {
+		if ( in_array( $post_type, [ 'page', 'post', 'newspack_popups_cpt' ], true ) ) {
+			$decode = json_decode( file_get_contents( NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/patterns/markup/subscribe/style-3.json'), true ); //phpcs:ignore
+			$patterns[] = [
+				'category' => __( 'Subscribe', 'newspack-blocks' ),
+				'content'  => str_replace(
+					[
+						'Subscribe to our newsletter',
+					],
+					[
+						__( 'Subscribe to our newsletter', 'newspack-blocks' ),
+					],
+					$decode['content']
+				),
+				'image'    => plugins_url( 'src/patterns/images/subscribe/style-3.png', __FILE__ ),
+				'title'    => __( 'Style 3', 'newspack-blocks' ),
+			];
+		}
+		return $patterns;
+	},
+	10,
+	2
+);
+
+add_filter(
+	'newspack_blocks_patterns',
+	function( $patterns, $post_type ) {
+		if ( in_array( $post_type, [ 'page', 'post', 'newspack_popups_cpt' ], true ) ) {
+			$decode = json_decode( file_get_contents( NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/patterns/markup/subscribe/style-4.json'), true ); //phpcs:ignore
+			$patterns[] = [
+				'category' => __( 'Subscribe', 'newspack-blocks' ),
+				'content'  => str_replace(
+					[
+						'Subscribe to our newsletter',
+					],
+					[
+						__( 'Subscribe to our newsletter', 'newspack-blocks' ),
+					],
+					$decode['content']
+				),
+				'image'    => plugins_url( 'src/patterns/images/subscribe/style-4.png', __FILE__ ),
+				'title'    => __( 'Style 4', 'newspack-blocks' ),
+			];
+		}
+		return $patterns;
+	},
+	10,
+	2
+);
+
 /**
  * Donation.
  */

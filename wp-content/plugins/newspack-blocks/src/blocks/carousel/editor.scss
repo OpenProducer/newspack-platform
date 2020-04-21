@@ -18,19 +18,19 @@
 	}
 	.swiper-pagination-bullet.swiper-pagination-bullet-active {
 		opacity: 1;
-		transform: scale( 1 );
+		width: 24px;
 	}
 	.amp-carousel-button {
 		&.amp-carousel-button-next,
 		&.amp-carousel-button-prev {
-			left: 16px;
-			margin-top: -18px; // bullets height / 2
+			left: 1.5em;
+			margin-top: -24px; // buttons height / 2
 			transform: translateY( -50% );
 		}
 
 		&.amp-carousel-button-next {
 			left: auto;
-			right: 16px;
+			right: 1.5em;
 		}
 	}
 }

@@ -1,3 +1,15 @@
+# [1.5.0](https://github.com/Automattic/newspack-plugin/compare/v1.4.0...v1.5.0) (2020-04-21)
+
+
+### Bug Fixes
+
+* admin color scheme conflict with newspack buttons ([#503](https://github.com/Automattic/newspack-plugin/issues/503)) ([c248078](https://github.com/Automattic/newspack-plugin/commit/c248078899a3f4f1c3bf5c829ecde9197aefd07d))
+
+
+### Features
+
+* **components:**  change mobile preset width of WebPreview ([#509](https://github.com/Automattic/newspack-plugin/issues/509)) ([29e0877](https://github.com/Automattic/newspack-plugin/commit/29e08770120fdf2fa9ad5ed9cd739ae1d2d70dd0))
+
 # [1.4.0](https://github.com/Automattic/newspack-plugin/compare/v1.3.0...v1.4.0) (2020-04-01)
 
 

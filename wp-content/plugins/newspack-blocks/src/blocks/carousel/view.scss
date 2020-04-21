@@ -51,7 +51,7 @@
 		}
 		.entry-wrapper {
 			bottom: 0;
-			background-color: rgba( 0, 0, 0, 0.5 );
+			background-color: rgba( black, 0.5 );
 			color: white;
 			left: 0;
 			padding: 1.5em;
@@ -89,23 +89,25 @@
 		white-space: normal;
 	}
 	.swiper-pagination-bullets {
+		align-items: flex-end;
 		bottom: 0;
-		line-height: 24px;
-		padding: 10px 0 2px;
+		display: flex;
+		flex-wrap: wrap;
+		height: calc( 1.5em + 12px );
+		justify-content: center;
+		padding: 0;
 		position: relative;
-		text-align: center;
 	}
 	.swiper-pagination-bullet {
 		background: black;
+		border-radius: 6px;
 		display: inline-block;
-		height: 16px;
-		opacity: 0.5;
-		transform: scale( 0.75 );
-		transition: box-shadow 250ms, opacity 250ms, transform 250ms;
-		width: 16px;
-		border-radius: 100%;
-		padding: 0;
+		height: 12px;
 		margin: 0 4px;
+		opacity: 0.5;
+		padding: 0;
+		transition: box-shadow 250ms, opacity 250ms, width 250ms;
+		width: 12px;
 		&:focus {
 			box-shadow: 0 0 0 2px white, 0 0 0 4px black;
 			outline: 0;
@@ -113,12 +115,12 @@
 		&[selected] {
 			opacity: 1;
 			outline: 0;
-			transform: scale( 1 );
+			width: 24px;
 		}
 	}
 
 	.amp-carousel-button {
-		background-color: rgba( 0, 0, 0, 0.5 );
+		background-color: rgba( black, 0.5 );
 		background-position: center;
 		background-repeat: no-repeat;
 		background-size: 24px;
@@ -133,15 +135,16 @@
 		width: 48px;
 		&:focus,
 		&:hover {
-			background-color: rgba( 0, 0, 0, 0.75 );
+			background-color: rgba( black, 0.75 );
 		}
 		&:focus {
-			box-shadow: inset 0 0 0 2px rgba( 0, 0, 0, 0.75 ), inset 0 0 0 4px white;
+			box-shadow: inset 0 0 0 2px rgba( black, 0.75 ), inset 0 0 0 4px white;
 			outline: 0;
 		}
 	}
 	.amp-carousel-button-next,
 	.amp-carousel-button-prev {
+		left: 1.5em;
 		display: none;
 
 		@include media( mobile ) {
@@ -150,6 +153,8 @@
 	}
 	.amp-carousel-button-next {
 		background-image: url( "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M5.88%204.12L13.76%2012l-7.88%207.88L8%2022l10-10L8%202z'%20fill='white'/%3E%3Cpath%20fill='none'%20d='M0 0h24v24H0z'/%3E%3C/svg%3E" );
+		left: auto;
+		right: 1.5em;
 	}
 	.amp-carousel-button-prev {
 		background-image: url( "data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20width='24'%20height='24'%20viewBox='0%200%2024%2024'%3E%3Cpath%20d='M18%204.12L10.12%2012%2018%2019.88%2015.88%2022l-10-10%2010-10z'%20fill='white'/%3E%3Cpath%20fill='none'%20d='M0 0h24v24H0z'/%3E%3C/svg%3E" );
@@ -160,8 +165,8 @@
 		display: none;
 		margin-top: 0;
 		position: absolute;
-		right: 16px;
-		top: 16px;
+		right: 1.5em;
+		top: 1.5em;
 		transform: none;
 		z-index: 1;
 	}
