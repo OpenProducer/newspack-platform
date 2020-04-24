@@ -1119,29 +1119,53 @@ table.variations select {
   border-color: black;
 }
 
-.woocommerce-checkout-review-order-table {
+.woocommerce-checkout-review-order-table,
+table.woocommerce-table--order-details.shop_table,
+.my_account_orders {
   border-top: 1px solid #ccc;
 }
 
 .woocommerce-checkout-review-order-table td,
-.woocommerce-checkout-review-order-table th {
+table.woocommerce-table--order-details.shop_table td,
+.my_account_orders td {
+  font-weight: normal;
+}
+
+.woocommerce-checkout-review-order-table td,
+.woocommerce-checkout-review-order-table th,
+table.woocommerce-table--order-details.shop_table td,
+table.woocommerce-table--order-details.shop_table th,
+.my_account_orders td,
+.my_account_orders th {
   border-color: #ccc;
   border-width: 0 0 1px;
   padding: 0.5rem;
 }
 
-.woocommerce-checkout-review-order-table dl.variation {
+.woocommerce-checkout-review-order-table dl.variation,
+table.woocommerce-table--order-details.shop_table dl.variation,
+.my_account_orders dl.variation {
   margin: 0;
 }
 
-.woocommerce-checkout-review-order-table dl.variation p {
+.woocommerce-checkout-review-order-table dl.variation p,
+table.woocommerce-table--order-details.shop_table dl.variation p,
+.my_account_orders dl.variation p {
   margin: 0;
 }
 
 .woocommerce-checkout-review-order-table thead th,
 .woocommerce-checkout-review-order-table thead td,
 .woocommerce-checkout-review-order-table .recurring-totals th,
-.woocommerce-checkout-review-order-table .recurring-totals td {
+.woocommerce-checkout-review-order-table .recurring-totals td,
+table.woocommerce-table--order-details.shop_table thead th,
+table.woocommerce-table--order-details.shop_table thead td,
+table.woocommerce-table--order-details.shop_table .recurring-totals th,
+table.woocommerce-table--order-details.shop_table .recurring-totals td,
+.my_account_orders thead th,
+.my_account_orders thead td,
+.my_account_orders .recurring-totals th,
+.my_account_orders .recurring-totals td {
   background-color: #eee;
   font-weight: bold;
 }
@@ -1151,13 +1175,33 @@ table.variations select {
 .woocommerce-checkout-review-order-table .woocommerce-shipping-totals.shipping th,
 .woocommerce-checkout-review-order-table .woocommerce-shipping-totals.shipping td,
 .woocommerce-checkout-review-order-table .shipping.recurring-total th,
-.woocommerce-checkout-review-order-table .shipping.recurring-total td {
+.woocommerce-checkout-review-order-table .shipping.recurring-total td,
+table.woocommerce-table--order-details.shop_table .cart-subtotal th,
+table.woocommerce-table--order-details.shop_table .cart-subtotal td,
+table.woocommerce-table--order-details.shop_table .woocommerce-shipping-totals.shipping th,
+table.woocommerce-table--order-details.shop_table .woocommerce-shipping-totals.shipping td,
+table.woocommerce-table--order-details.shop_table .shipping.recurring-total th,
+table.woocommerce-table--order-details.shop_table .shipping.recurring-total td,
+.my_account_orders .cart-subtotal th,
+.my_account_orders .cart-subtotal td,
+.my_account_orders .woocommerce-shipping-totals.shipping th,
+.my_account_orders .woocommerce-shipping-totals.shipping td,
+.my_account_orders .shipping.recurring-total th,
+.my_account_orders .shipping.recurring-total td {
   font-size: calc( $font__size-sm * 1rem);
   font-weight: normal;
 }
 
-.woocommerce-checkout-review-order-table .cart-subtotal.recurring-total {
+.woocommerce-checkout-review-order-table .cart-subtotal.recurring-total,
+table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total,
+.my_account_orders .cart-subtotal.recurring-total {
   font-weight: bold;
+}
+
+.woocommerce-checkout-review-order-table tfoot th,
+table.woocommerce-table--order-details.shop_table tfoot th,
+.my_account_orders tfoot th {
+  font-weight: normal;
 }
 
 .woocommerce-checkout-review-order ul {
@@ -1410,4 +1454,14 @@ table.variations select {
 .order-details-summary h4 > span {
   color: #767676;
   display: block;
+}
+
+.woocommerce-customer-details {
+  border-top: 1px solid #ccc;
+  padding-top: 1rem;
+}
+
+.woocommerce-customer-details address {
+  font-size: 90%;
+  font-style: normal;
 }
