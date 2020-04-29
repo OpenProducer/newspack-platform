@@ -26,16 +26,10 @@ function gutenberg_render_block_core_post_content() {
  * Registers the `core/post-content` block on the server.
  */
 function gutenberg_register_block_core_post_content() {
-	$path     = __DIR__ . '/post-content/block.json';
-	$metadata = json_decode( file_get_contents( $path ), true );
-
-	register_block_type(
-		$metadata['name'],
-		array_merge(
-			$metadata,
-			array(
-				'render_callback' => 'gutenberg_render_block_core_post_content',
-			)
+	register_block_type_from_metadata(
+		__DIR__ . '/post-content',
+		array(
+			'render_callback' => 'gutenberg_render_block_core_post_content',
 		)
 	);
 }

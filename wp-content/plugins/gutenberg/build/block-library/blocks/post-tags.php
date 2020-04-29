@@ -29,16 +29,10 @@ function gutenberg_render_block_core_post_tags() {
  * Registers the `core/post-tags` block on the server.
  */
 function gutenberg_register_block_core_post_tags() {
-	$path     = __DIR__ . '/post-tags/block.json';
-	$metadata = json_decode( file_get_contents( $path ), true );
-
-	register_block_type(
-		$metadata['name'],
-		array_merge(
-			$metadata,
-			array(
-				'render_callback' => 'gutenberg_render_block_core_post_tags',
-			)
+	register_block_type_from_metadata(
+		__DIR__ . '/post-tags',
+		array(
+			'render_callback' => 'gutenberg_render_block_core_post_tags',
 		)
 	);
 }

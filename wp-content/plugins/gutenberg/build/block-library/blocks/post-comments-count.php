@@ -32,21 +32,15 @@ function gutenberg_render_block_core_post_comments_count( $attributes ) {
  * Registers the `core/post-comments-count` block on the server.
  */
 function gutenberg_register_block_core_post_comments_count() {
-	$path     = __DIR__ . '/post-comments-count/block.json';
-	$metadata = json_decode( file_get_contents( $path ), true );
-
-	register_block_type(
-		$metadata['name'],
-		array_merge(
-			$metadata,
-			array(
-				'attributes'      => array(
-					'className' => array(
-						'type' => 'string',
-					),
+	register_block_type_from_metadata(
+		__DIR__ . '/post-comments-count',
+		array(
+			'attributes'      => array(
+				'className' => array(
+					'type' => 'string',
 				),
-				'render_callback' => 'gutenberg_render_block_core_post_comments_count',
-			)
+			),
+			'render_callback' => 'gutenberg_render_block_core_post_comments_count',
 		)
 	);
 }
