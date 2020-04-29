@@ -342,31 +342,23 @@ figcaption,
 }
 
 /** === Button === */
-.wp-block-button .wp-block-button__link {
+.wp-block-button__link {
+  background: #555;
+  border-radius: 5px;
   line-height: 1.8;
   font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 0.8em;
   font-weight: bold;
 }
 
-.wp-block-button:not(.is-style-outline) .wp-block-button__link {
-  background: #555;
-}
-
-.wp-block-button:not(.is-style-squared) .wp-block-button__link {
-  border-radius: 5px;
-}
-
-.wp-block-button.is-style-outline, .wp-block-button.is-style-outline:hover, .wp-block-button.is-style-outline:focus, .wp-block-button.is-style-outline:active {
+.is-style-outline .wp-block-button__link,
+.wp-block-button__link.is-style-outline {
   background: transparent;
   color: #555;
 }
 
-.wp-block-button.is-style-outline .wp-block-button__link, .wp-block-button.is-style-outline:hover .wp-block-button__link, .wp-block-button.is-style-outline:focus .wp-block-button__link, .wp-block-button.is-style-outline:active .wp-block-button__link {
-  background: transparent;
-}
-
-.wp-block-button.is-style-outline .wp-block-button__link:not(.has-text-color), .wp-block-button.is-style-outline:hover .wp-block-button__link:not(.has-text-color), .wp-block-button.is-style-outline:focus .wp-block-button__link:not(.has-text-color), .wp-block-button.is-style-outline:active .wp-block-button__link:not(.has-text-color) {
+.is-style-outline .wp-block-button__link:not(.has-text-color),
+.wp-block-button__link.is-style-outline:not(.has-text-color) {
   color: #555;
 }
 
@@ -842,6 +834,71 @@ ul.wp-block-archives li,
 /** === Post Subtitle === */
 #newspack-post-subtitle-element {
   font-style: italic;
+}
+
+/** === Custom Colors === */
+.has-primary-background-color {
+  background-color: #36f;
+}
+
+.has-primary-variation-background-color {
+  background-color: #2240d5;
+}
+
+.has-secondary-background-color {
+  background-color: #555;
+}
+
+.has-secondary-variation-background-color {
+  background-color: #3c3c3c;
+}
+
+.has-dark-gray-background-color {
+  background-color: #111;
+}
+
+.has-medium-gray-background-color {
+  background-color: #767676;
+}
+
+.has-light-gray-background-color {
+  background-color: #eee;
+}
+
+.has-white-background-color {
+  background-color: #fff;
+}
+
+.has-primary-color {
+  color: #36f;
+}
+
+.has-primary-variation-color {
+  color: #2240d5;
+}
+
+.has-secondary-color {
+  color: #555;
+}
+
+.has-secondary-variation-color {
+  color: #3c3c3c;
+}
+
+.has-dark-gray-color {
+  color: #111;
+}
+
+.has-medium-gray-color {
+  color: #767676;
+}
+
+.has-light-gray-color {
+  color: #eee;
+}
+
+.has-white-color {
+  color: #fff;
 }
 
 .accent-header,

@@ -259,63 +259,67 @@ function newspack_blocks_carousel_block_autoplay_ui( $block_ordinal = 0 ) {
  */
 function newspack_blocks_register_carousel() {
 	register_block_type(
-		'newspack-blocks/carousel',
-		array(
-			'attributes'      => array(
-				'className'    => array(
-					'type' => 'string',
-				),
-				'postsToShow'  => array(
-					'type'    => 'integer',
-					'default' => 3,
-				),
-				'authors'      => array(
-					'type'    => 'array',
-					'default' => array(),
-					'items'   => array(
-						'type' => 'integer',
+		apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/carousel' ),
+		apply_filters(
+			'newspack_blocks_block_args',
+			array(
+				'attributes'      => array(
+					'className'    => array(
+						'type' => 'string',
+					),
+					'postsToShow'  => array(
+						'type'    => 'integer',
+						'default' => 3,
+					),
+					'authors'      => array(
+						'type'    => 'array',
+						'default' => array(),
+						'items'   => array(
+							'type' => 'integer',
+						),
+					),
+					'categories'   => array(
+						'type'    => 'array',
+						'default' => array(),
+						'items'   => array(
+							'type' => 'integer',
+						),
+					),
+					'tags'         => array(
+						'type'    => 'array',
+						'default' => array(),
+						'items'   => array(
+							'type' => 'integer',
+						),
+					),
+					'autoplay'     => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
+					'delay'        => array(
+						'type'    => 'integer',
+						'default' => 5,
+					),
+					'showAuthor'   => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
+					'showAvatar'   => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
+					'showCategory' => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
+					'showDate'     => array(
+						'type'    => 'boolean',
+						'default' => true,
 					),
 				),
-				'categories'   => array(
-					'type'    => 'array',
-					'default' => array(),
-					'items'   => array(
-						'type' => 'integer',
-					),
-				),
-				'tags'         => array(
-					'type'    => 'array',
-					'default' => array(),
-					'items'   => array(
-						'type' => 'integer',
-					),
-				),
-				'autoplay'     => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-				'delay'        => array(
-					'type'    => 'integer',
-					'default' => 5,
-				),
-				'showAuthor'   => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showAvatar'   => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
-				'showCategory' => array(
-					'type'    => 'boolean',
-					'default' => false,
-				),
-				'showDate'     => array(
-					'type'    => 'boolean',
-					'default' => true,
-				),
+				'render_callback' => 'newspack_blocks_render_block_carousel',
 			),
-			'render_callback' => 'newspack_blocks_render_block_carousel',
+			'carousel'
 		)
 	);
 }
