@@ -159,17 +159,42 @@ function gutenberg_render_block_core_latest_posts( $attributes ) {
  * Registers the `core/latest-posts` block on server.
  */
 function gutenberg_register_block_core_latest_posts() {
-	$path     = __DIR__ . '/latest-posts/block.json';
-	$metadata = json_decode( file_get_contents( $path ), true );
-
-	register_block_type(
-		$metadata['name'],
-		array_merge(
-			$metadata,
-			array(
-				'render_callback' => 'gutenberg_render_block_core_latest_posts',
-			)
+	register_block_type_from_metadata(
+		__DIR__ . '/latest-posts',
+		array(
+			'render_callback' => 'gutenberg_render_block_core_latest_posts',
 		)
 	);
 }
 add_action( 'init', 'gutenberg_register_block_core_latest_posts', 20 );
+
+/**
+ * Handles outdated versions of the `core/latest-posts` block by converting
+ * attribute `categories` from a numeric string to an array with key `id`.
+ *
+ * This is done to accommodate the changes introduced in #20781 that sought to
+ * add support for multiple categories to the block. However, given that this
+ * block is dynamic, the usual provisions for block migration are insufficient,
+ * as they only act when a block is loaded in the editor.
+ *
+ * TODO: Remove when and if the bottom client-side deprecation for this block
+ * is removed.
+ *
+ * @param array $block A single parsed block object.
+ *
+ * @return array The migrated block object.
+ */
+function gutenberg_block_core_latest_posts_migrate_categories( $block ) {
+	if (
+		'core/latest-posts' === $block['blockName'] &&
+		! empty( $block['attrs']['categories'] ) &&
+		is_string( $block['attrs']['categories'] )
+	) {
+		$block['attrs']['categories'] = array(
+			array( 'id' => absint( $block['attrs']['categories'] ) ),
+		);
+	}
+
+	return $block;
+}
+add_filter( 'render_block_data', 'gutenberg_block_core_latest_posts_migrate_categories' );
