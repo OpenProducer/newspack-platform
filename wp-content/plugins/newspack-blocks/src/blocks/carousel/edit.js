@@ -5,19 +5,20 @@
  */
 import QueryControls from '../../components/query-controls';
 import createSwiper from './create-swiper';
-import classnames from 'classnames';
+import { formatAvatars, formatByline } from '../../shared/js/utils';
 
 /**
  * External dependencies
  */
 import { isUndefined, pickBy } from 'lodash';
-import moment from 'moment';
+import classnames from 'classnames';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { Component, createRef, Fragment, RawHTML } from '@wordpress/element';
+import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
+import { Component, createRef, Fragment } from '@wordpress/element';
 import { InspectorControls } from '@wordpress/editor';
 import {
 	PanelBody,
@@ -78,6 +79,7 @@ class Edit extends Component {
 			{}
 		);
 	}
+
 	render() {
 		const { attributes, className, setAttributes, latestPosts } = this.props;
 		const { autoPlayState } = this.state;
@@ -99,7 +101,7 @@ class Edit extends Component {
 			'swiper-container',
 			autoplay && autoPlayState && 'wp-block-newspack-blocks-carousel__autoplay-playing'
 		);
-
+		const dateFormat = __experimentalGetSettings().formats.date;
 		return (
 			<Fragment>
 				<div className={ classes } ref={ this.carouselRef }>
@@ -119,7 +121,7 @@ class Edit extends Component {
 												<figure className="post-thumbnail">
 													{ post.newspack_featured_image_src && (
 														<a href="#" rel="bookmark">
-															<img src={ post.newspack_featured_image_src.landscape } alt="" />
+															<img src={ post.newspack_featured_image_src.large } alt="" />
 														</a>
 													) }
 												</figure>
@@ -133,26 +135,13 @@ class Edit extends Component {
 														<a href="#">{ decodeEntities( post.title.rendered.trim() ) }</a>
 													</h3>
 													<div className="entry-meta">
-														{ showAuthor && showAvatar && post.newspack_author_info.avatar && (
-															<span className="avatar author-avatar" key="author-avatar">
-																<RawHTML>{ post.newspack_author_info.avatar }</RawHTML>
-															</span>
-														) }
-														{ showAuthor && (
-															<span className="byline">
-																{ __( 'by' ) }{' '}
-																<span className="author vcard">
-																	<a className="url fn n" href="#">
-																		{ post.newspack_author_info.display_name }
-																	</a>
-																</span>
-															</span>
-														) }
+														{ showAuthor &&
+															showAvatar &&
+															formatAvatars( post.newspack_author_info ) }
+														{ showAuthor && formatByline( post.newspack_author_info ) }
 														{ showDate && (
 															<time className="entry-date published" key="pub-date">
-																{ moment( post.date_gmt )
-																	.local()
-																	.format( 'MMMM DD, Y' ) }
+																{ dateI18n( dateFormat, post.date_gmt ) }
 															</time>
 														) }
 													</div>

@@ -1,7 +1,7 @@
 @import '../../../shared/sass/variables';
 @import '../../../shared/sass/mixins';
 
-.wp-block .wp-block-columns {
+.wp-block-columns {
 	@include media( mobile ) {
 		&[class*='is-style-first-col-to'] [data-type='core/column'] {
 			margin-left: 46px;

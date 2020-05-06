@@ -1,3 +1,17 @@
+# [1.4.0](https://github.com/Automattic/newspack-blocks/compare/v1.3.1...v1.4.0) (2020-05-05)
+
+
+### Bug Fixes
+
+* byline, avatar and date in carousel block ([#455](https://github.com/Automattic/newspack-blocks/issues/455)) ([85b7865](https://github.com/Automattic/newspack-blocks/commit/85b78651a1ed270d5a316c7abf4bf9060a77e890))
+* patterns preview thumbnails ([#453](https://github.com/Automattic/newspack-blocks/issues/453)) ([3ca80e0](https://github.com/Automattic/newspack-blocks/commit/3ca80e056f0df5f0db978f6065625963739ef050))
+* update editor selector for reordering columns ([#435](https://github.com/Automattic/newspack-blocks/issues/435)) ([396826a](https://github.com/Automattic/newspack-blocks/commit/396826adc88217b9ea02a7d60512c9fb6e497bfe))
+
+
+### Features
+
+* use swiper for non-amp carousels ([94c0a2b](https://github.com/Automattic/newspack-blocks/commit/94c0a2bf3f203f08a72326e578724f06bc0464cc))
+
 ## [1.3.1](https://github.com/Automattic/newspack-blocks/compare/v1.3.0...v1.3.1) (2020-04-29)
 
 

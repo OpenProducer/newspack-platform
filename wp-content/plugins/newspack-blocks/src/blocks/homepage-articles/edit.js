@@ -6,6 +6,7 @@
 import QueryControls from '../../components/query-controls';
 import { STORE_NAMESPACE } from './store';
 import { isBlogPrivate, isSpecificPostModeActive, queryCriteriaFromAttributes } from './utils';
+import { formatAvatars, formatByline } from '../../shared/js/utils';
 
 /**
  * External dependencies
@@ -15,7 +16,7 @@ import classNames from 'classnames';
 /**
  * WordPress dependencies
  */
-import { __, _x } from '@wordpress/i18n';
+import { __ } from '@wordpress/i18n';
 import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
 import { Component, Fragment, RawHTML } from '@wordpress/element';
 import {
@@ -178,8 +179,8 @@ class Edit extends Component {
 						</RawHTML>
 					) }
 					<div className="entry-meta">
-						{ showAuthor && showAvatar && this.formatAvatars( post.newspack_author_info ) }
-						{ showAuthor && this.formatByline( post.newspack_author_info ) }
+						{ showAuthor && showAvatar && formatAvatars( post.newspack_author_info ) }
+						{ showAuthor && formatByline( post.newspack_author_info ) }
 						{ showDate && (
 							<time className="entry-date published" key="pub-date">
 								{ dateI18n( dateFormat, post.date_gmt ) }
@@ -202,35 +203,6 @@ class Edit extends Component {
 			return decodeEntities( post.title.rendered.trim() );
 		}
 	};
-
-	formatAvatars = authorInfo =>
-		authorInfo.map( author => (
-			<span className="avatar author-avatar" key={ author.id }>
-				<a className="url fn n" href="#">
-					<RawHTML>{ author.avatar }</RawHTML>
-				</a>
-			</span>
-		) );
-
-	formatByline = authorInfo => (
-		<span className="byline">
-			{ _x( 'by', 'post author', 'newspack-blocks' ) }{' '}
-			{ authorInfo.reduce( ( accumulator, author, index ) => {
-				return [
-					...accumulator,
-					<span className="author vcard" key={ author.id }>
-						<a className="url fn n" href="#">
-							{ author.display_name }
-						</a>
-					</span>,
-					index < authorInfo.length - 2 && ', ',
-					authorInfo.length > 1 &&
-						index === authorInfo.length - 2 &&
-						_x( ' and ', 'post author', 'newspack-blocks' ),
-				];
-			}, [] ) }
-		</span>
-	);
 
 	renderInspectorControls = () => {
 		const { attributes, setAttributes, textColor, setTextColor } = this.props;

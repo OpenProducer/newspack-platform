@@ -13,39 +13,6 @@
  * @return string Returns the post content with latest posts added.
  */
 function newspack_blocks_render_block_carousel( $attributes ) {
-	if ( ! wp_script_is( 'amp-runtime', 'registered' ) ) {
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-		wp_register_script(
-			'amp-runtime',
-			'https://cdn.ampproject.org/v0.js',
-			null,
-			null,
-			true
-		);
-	}
-	if ( ! wp_script_is( 'amp-carousel', 'registered' ) ) {
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-		wp_register_script(
-			'amp-carousel',
-			'https://cdn.ampproject.org/v0/amp-carousel-latest.js',
-			array( 'amp-runtime' ),
-			null,
-			true
-		);
-	}
-	if ( ! wp_script_is( 'amp-selector', 'registered' ) ) {
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-		wp_register_script(
-			'amp-selector',
-			'https://cdn.ampproject.org/v0/amp-selector-latest.js',
-			array( 'amp-runtime' ),
-			null,
-			true
-		);
-	}
-
-	wp_enqueue_script( 'amp-carousel' );
-	wp_enqueue_script( 'amp-selector' );
 	static $newspack_blocks_carousel_id = 0;
 	$newspack_blocks_carousel_id++;
 	$autoplay      = isset( $attributes['autoplay'] ) ? $attributes['autoplay'] : false;
@@ -54,6 +21,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	$authors       = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
 	$categories    = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
 	$tags          = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
+	$is_amp        = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 
 	$other = array();
 	if ( $autoplay ) {
@@ -61,7 +29,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	}
 	$classes = Newspack_Blocks::block_classes( 'carousel', $attributes, $other );
 
-	$args          = array(
+	$args = array(
 		'posts_per_page'      => $posts_to_show,
 		'post_status'         => 'publish',
 		'suppress_filters'    => false,
@@ -81,8 +49,14 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 		$args['tag__in'] = $tags;
 	}
 
-	$article_query = new WP_Query( $args );
-	$counter       = 0;
+	$article_query   = new WP_Query( $args );
+	$counter         = 0;
+	$article_classes = [
+		'post-has-image',
+	];
+	if ( ! $is_amp ) {
+		$article_classes[] = 'swiper-slide';
+	}
 	ob_start();
 	if ( $article_query->have_posts() ) :
 		while ( $article_query->have_posts() ) :
@@ -93,7 +67,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			$counter++;
 			?>
 
-			<article class="post-has-image">
+			<article class="<?php echo esc_attr( implode( ' ', $article_classes ) ); ?>">
 				<figure class="post-thumbnail">
 					<a href="<?php echo esc_url( get_permalink() ); ?>" rel="bookmark">
 						<?php
@@ -162,21 +136,21 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 							<?php
 							endif;
 
-							if ( $attributes['showDate'] ) {
-								$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-								if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-									$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
-								}
-								$time_string = sprintf(
-									$time_string,
-									esc_attr( get_the_date( DATE_W3C ) ),
-									esc_html( get_the_date() ),
-									esc_attr( get_the_modified_date( DATE_W3C ) ),
-									esc_html( get_the_modified_date() )
-								);
-								echo $time_string; // WPCS: XSS OK.
+						if ( $attributes['showDate'] ) {
+							$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
+							if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
+								$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
 							}
-							?>
+							$time_string = sprintf(
+								$time_string,
+								esc_attr( get_the_date( DATE_W3C ) ),
+								esc_html( get_the_date() ),
+								esc_attr( get_the_modified_date( DATE_W3C ) ),
+								esc_html( get_the_modified_date() )
+							);
+							echo $time_string; // phpcs:ignore
+						}
+						?>
 					</div><!-- .entry-meta -->
 				</div><!-- .entry-wrapper -->
 			</article>
@@ -199,38 +173,79 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			0 === $x ? 'selected' : ''
 		);
 	}
-	$selector = sprintf(
-		'<amp-selector id="wp-block-newspack-carousel__amp-pagination__%1$d" class="swiper-pagination-bullets amp-pagination" on="select:wp-block-newspack-carousel__amp-carousel__%1$d.goToSlide(index=event.targetOption)" layout="container">%2$s</amp-selector>',
-		absint( $newspack_blocks_carousel_id ),
-		implode( '', $buttons )
-	);
-	$carousel = sprintf(
-		'<amp-carousel width="4" height="3" layout="responsive" type="slides" data-next-button-aria-label="%1$s" data-prev-button-aria-label="%2$s" controls loop %3$s id="wp-block-newspack-carousel__amp-carousel__%4$s" on="slideChange:wp-block-newspack-carousel__amp-pagination__%4$s.toggle(index=event.index, value=true)">%5$s</amp-carousel>',
-		esc_attr__( 'Next Slide', 'newspack-blocks' ),
-		esc_attr__( 'Previous Slide', 'newspack-blocks' ),
-		$autoplay ? 'autoplay delay=' . esc_attr( $delay * 1000 ) : '',
-		absint( $newspack_blocks_carousel_id ),
-		$slides
-	);
+	if ( $is_amp ) {
+		$selector    = sprintf(
+			'<amp-selector id="wp-block-newspack-carousel__amp-pagination__%1$d" class="swiper-pagination-bullets amp-pagination" on="select:wp-block-newspack-carousel__amp-carousel__%1$d.goToSlide(index=event.targetOption)" layout="container">%2$s</amp-selector>',
+			absint( $newspack_blocks_carousel_id ),
+			implode( '', $buttons )
+		);
+		$carousel    = sprintf(
+			'<amp-carousel width="4" height="3" layout="responsive" type="slides" data-next-button-aria-label="%1$s" data-prev-button-aria-label="%2$s" controls loop %3$s id="wp-block-newspack-carousel__amp-carousel__%4$s" on="slideChange:wp-block-newspack-carousel__amp-pagination__%4$s.toggle(index=event.index, value=true)">%5$s</amp-carousel>',
+			esc_attr__( 'Next Slide', 'newspack-blocks' ),
+			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
+			$autoplay ? 'autoplay delay=' . esc_attr( $delay * 1000 ) : '',
+			absint( $newspack_blocks_carousel_id ),
+			$slides
+		);
+		$autoplay_ui = $autoplay ? newspack_blocks_carousel_block_autoplay_ui_amp( $newspack_blocks_carousel_id ) : '';
+	} else {
+		$selector    = sprintf(
+			'<div class="swiper-pagination-bullets amp-pagination">%s</div>',
+			implode( '', $buttons )
+		);
+		$navigation  = sprintf(
+			'<a class="swiper-button swiper-button-prev" role="button" aria-label="%s"></a><a class="swiper-button swiper-button-next" role="button" aria-labvel="%s"></a>',
+			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
+			esc_attr__( 'Next Slide', 'newspack-blocks' )
+		);
+		$carousel    = sprintf(
+			'<div class="swiper-container"><div class="swiper-wrapper">%s</div>%s</div>',
+			$slides,
+			$navigation
+		);
+		$autoplay_ui = $autoplay ? newspack_blocks_carousel_block_autoplay_ui( $newspack_blocks_carousel_id ) : '';
+	}
+	$data_attributes = [];
+
+	if ( $autoplay && ! $is_amp ) {
+		$data_attributes[] = 'data-autoplay=1';
+		$data_attributes[] = sprintf( 'data-autoplay_delay=%s', esc_attr( $delay ) );
+	}
 	Newspack_Blocks::enqueue_view_assets( 'carousel' );
 	return sprintf(
-		'<div class="%1$s" id="wp-block-newspack-carousel__%2$d">%3$s%4$s%5$s</div>',
+		'<div class="%1$s" id="wp-block-newspack-carousel__%2$d" %3$s>%4$s%5$s%6$s</div>',
 		esc_attr( $classes ),
 		absint( $newspack_blocks_carousel_id ),
+		esc_attr( implode( ' ', $data_attributes ) ),
 		$carousel,
-		$autoplay ? newspack_blocks_carousel_block_autoplay_ui( $newspack_blocks_carousel_id ) : '',
+		$autoplay_ui,
 		$selector
 	);
 }
 
 /**
- * Generate autoplay play/pause UI.
+ * Generate autoplay play/pause UI for non-AMP requests.
  *
  * @param int $block_ordinal The ordinal number of the block, used in unique ID.
  *
  * @return string Autoplay UI markup.
  */
 function newspack_blocks_carousel_block_autoplay_ui( $block_ordinal = 0 ) {
+	return sprintf(
+		'<a aria-label="%s" class="swiper-button swiper-button-pause" role="button"></a><a aria-label="%s" class="swiper-button swiper-button-play" role="button"></a>',
+		esc_attr__( 'Pause Slideshow', 'newspack-blocks' ),
+		esc_attr__( 'Play Slideshow', 'newspack-blocks' )
+	);
+}
+
+/**
+ * Generate autoplay play/pause UI for AMP requests.
+ *
+ * @param int $block_ordinal The ordinal number of the block, used in unique ID.
+ *
+ * @return string Autoplay UI markup.
+ */
+function newspack_blocks_carousel_block_autoplay_ui_amp( $block_ordinal = 0 ) {
 	$block_id        = sprintf(
 		'wp-block-newspack-carousel__%d',
 		absint( $block_ordinal )

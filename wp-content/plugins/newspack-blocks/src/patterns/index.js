@@ -56,13 +56,13 @@ class PatternsSidebar extends Component {
 									initialOpen={ true }
 									key={ patternGroupIndex }
 								>
-									<div className="block-editor-patterns newspack-patterns-block-styles">
+									<div className="newspack-block-patterns">
 										{ patternGroup.items &&
 											patternGroup.items.map(
 												( { image: image, content, title }, patternIndex ) => (
 													<div
 														key={ patternIndex }
-														className="block-editor-patterns__item"
+														className="newspack-block-patterns__item"
 														onClick={ () => this.insert( content ) }
 														onKeyDown={ event => {
 															if ( ENTER === event.keyCode || SPACE === event.keyCode ) {
@@ -74,10 +74,9 @@ class PatternsSidebar extends Component {
 														tabIndex="0"
 														aria-label={ title }
 													>
-														<div className="block-editor-patterns__item-preview">
+														<div className="newspack-block-patterns__item-preview">
 															<img src={ image } alt={ __( 'Preview', 'newspack-block' ) } />
 														</div>
-														<div className="block-editor-patterns__item-title">{ title }</div>
 													</div>
 												)
 											) }
