@@ -2,9 +2,9 @@
 Contributors: automattic
 Tags: ecommerce, e-commerce, store, sales, reports, analytics, dashboard, activity, notices, insights, stats, woo commerce, woocommerce
 Requires at least: 5.3.0
-Tested up to: 5.3.2
+Tested up to: 5.4.1
 Requires PHP: 5.6.20
-Stable tag: 1.0.3
+Stable tag: 1.1.1
 License: GPLv3
 License URI: https://github.com/woocommerce/woocommerce-admin/blob/master/license.txt
 
@@ -70,6 +70,64 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 3. Analytics
 
 == Changelog ==
+
+= 1.1.1 2020-05-05 =
+- Fix: OBW Industry selection bug for non-US stores. #4120
+- Tweak: Remove Stripe deferred account activation, and revert to oAuth connection flow. #4164
+- Tweak: Remove A/B testing from order page shipping prompt. #4180
+- Tweak: Move Storefront theme to the beginning of the theme OBW step. #4187
+- Fix: Button hover color on shipping label banner. #4230
+- Fix: WooCommerce Services installation when OBW is disabled. #4233
+- Fix: App crash when using date-based advanced filters. #4286
+
+= 1.1.0 2020-04-14 =
+- Tweak: Update form example to better format the form return data #3706
+- Dev: Align WooCommerce javascript code standards/linting/styles with WordPress core. #3674
+- Tweak: Added link to "go shopping" button #3712
+- Fix: Make analytics tables use the site's date format setting #3715
+- Fix: Alignment of select text #3723 🎉 @edmundcwm
+- Dev: Added Storybook for documenting internal components. #3679
+- Dev: Add PayFast payment gateway option for sites in South Africa #3738 
+- Dev: Onboarding: Update screen order and remove Jetpack connection in profiler #3739
+- Dev: Onboarding - business step: add more options in the competitors list and other fixes #3812
+- Dev: Onboarding: Redesign plugin benefits screen #3764
+- Fix: inconsistent wording downloads report #3844 🎉 @jobthomas
+- Tweak: Onboarding: Use full width template for homepage in stores using Storefront #3846
+- Tweak: Remove 'add first product' note. #3876
+- Enhancement: Improve focus on task list #3796
+- Enhancement: Allow individual payment method setup in the onboarding task list #3782
+- Dev: Onboarding: Add toggles to configured payments in task list #3801
+- Onboarding: Add offline payment methods #3832
+- Fix: Verify Stripe API keys in payment set up step. #3910
+- Fix: Connect to WooCommerce.com note disappears before connecting. #3909
+- Tweak: Onboarding - payments task: filter payment gateways if the user selects CBD #3745
+- Enahncement: Create flat rate or free shipping methods from the onboarding task list #3927
+- Fix: Add WooCommerce support if store is using default theme #3908
+- Fix: Make WooCommerce breadcrumbs use WooCommerce Branding if it is installed #3798
+- Fix undefined variable slug on theme activation error #3942 🎉 2nad@m1992 
+- Tweak: Style and icon updates for Activity Panel #3965
+- Fix: handle cases where coupon dates are in an unexpected format. #3984
+- Enhancement: "Personalize your store" reminder: new inbox notification #3895
+- Fix: Onboarding: only validate other platform name for 'other' selling venues #4011
+- Performance: only query necessary data in Orders Panel. #3969
+- Tweak: Remove icon-button classes from Tag component #3993
+- Enhancement: WooCommerce Shipping order page banner prompt #3955
+- Performance: speed up indicators endpoint response. #3997
+- Enahncement: Add WC Pay to startup checklist
+- Enhancement: Marketing Tab
+- Enhancement: Add WooCommerce Payments Inbox note #4013
+- Dev: Added hook to delete woocommerce_onboarding_homepage_post_id #4015
+- Performance: only query requested stat totals in reports. #4009
+- Fix: Show admin notices on legacy admin screens. #4019
+- Tweak: Reduce the number of default widgets on the dashboard. #4035
+- Tweak: Onboarding: Remove plugins step from profiler #3974
+- Fix: wc-admin pages work in Internet Explorer 11. #4037
+- Dev: Handle orphaned order statuses in analytics settings. #4090
+- Tweak: Overwrite button overflow css from Wordpress 5.4 defaults #4108
+- Dev: Fix usage of WP_Error in non-global namespaces. #4115
+- Tweak: business details step: increase max-height on competitors listbox #4111
+- Fix: OBW: Allow CBD only for US stores #4117
+
 
 = 1.0.3 2020-03-19 =
 
@@ -137,6 +195,13 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 - Fix: Create Onboarding homepage without redirect #3727
 - Add: Deactivation note for feature plugin #3687
 - Dev: Travis tests on Github for release branch #3751
+
+= 0.25.1 2020-02-07 =
+
+- Dev: Enable onboarding #3651 (Onboarding) 
+- Now `decodeEntities` method is used to correct the breadcrumb. #3653 (Activity Panel) 
+- Fix: Fix styling of search control in report table header and filters. #3603 (Analytics, Components, Packages) 
+🤯
 
 = 0.25.0 2020-01-29 =
 

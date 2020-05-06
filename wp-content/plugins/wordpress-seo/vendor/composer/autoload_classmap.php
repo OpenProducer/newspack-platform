@@ -6,6 +6,11 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'AddCollationToTables' => $baseDir . '/src/config/migrations/20200408101900_AddCollationToTables.php',
+    'AddColumnsToIndexables' => $baseDir . '/src/config/migrations/20200420073606_AddColumnsToIndexables.php',
+    'AddIndexableObjectIdAndTypeIndex' => $baseDir . '/src/config/migrations/20200430075614_AddIndexableObjectIdAndTypeIndex.php',
+    'BreadcrumbTitleAndHierarchyReset' => $baseDir . '/src/config/migrations/20200428123747_BreadcrumbTitleAndHierarchyReset.php',
+    'ClearIndexableTables' => $baseDir . '/src/config/migrations/20200430150130_ClearIndexableTables.php',
     'Composer\\Installers\\AglInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AglInstaller.php',
     'Composer\\Installers\\AimeosInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
     'Composer\\Installers\\AnnotateCmsInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
@@ -96,6 +101,8 @@ return array(
     'Composer\\Installers\\YawikInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
     'Composer\\Installers\\ZendInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
     'Composer\\Installers\\ZikulaInstaller' => $vendorDir . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
+    'ExpandIndexableColumnLengths' => $baseDir . '/src/config/migrations/20200428194858_ExpandIndexableColumnLengths.php',
+    'TruncateIndexableTables' => $baseDir . '/src/config/migrations/20200429105310_TruncateIndexableTables.php',
     'WPSEO_Abstract_Capability_Manager' => $baseDir . '/admin/capabilities/class-abstract-capability-manager.php',
     'WPSEO_Abstract_Metabox_Tab_With_Sections' => $baseDir . '/admin/metabox/class-abstract-sectioned-metabox-tab.php',
     'WPSEO_Abstract_Post_Filter' => $baseDir . '/admin/filters/class-abstract-post-filter.php',
@@ -461,6 +468,10 @@ return array(
     'WPSEO_WordPress_AJAX_Integration' => $baseDir . '/inc/interface-wpseo-wordpress-ajax-integration.php',
     'WPSEO_WordPress_Integration' => $baseDir . '/inc/interface-wpseo-wordpress-integration.php',
     'WPSEO_Yoast_Columns' => $baseDir . '/admin/class-yoast-columns.php',
+    'WpYoastDropIndexableMetaTableIfExists' => $baseDir . '/src/config/migrations/20190529075038_WpYoastDropIndexableMetaTableIfExists.php',
+    'WpYoastIndexable' => $baseDir . '/src/config/migrations/20171228151840_WpYoastIndexable.php',
+    'WpYoastIndexableHierarchy' => $baseDir . '/src/config/migrations/20191011111109_WpYoastIndexableHierarchy.php',
+    'WpYoastPrimaryTerm' => $baseDir . '/src/config/migrations/20171228151841_WpYoastPrimaryTerm.php',
     'YoastSEO_Vendor\\GuzzleHttp\\Client' => $baseDir . '/vendor_prefixed/guzzlehttp/guzzle/src/Client.php',
     'YoastSEO_Vendor\\GuzzleHttp\\ClientInterface' => $baseDir . '/vendor_prefixed/guzzlehttp/guzzle/src/ClientInterface.php',
     'YoastSEO_Vendor\\GuzzleHttp\\Cookie\\CookieJar' => $baseDir . '/vendor_prefixed/guzzlehttp/guzzle/src/Cookie/CookieJar.php',

@@ -42,6 +42,7 @@ class Init {
 			'Automattic\WooCommerce\Admin\API\DataCountries',
 			'Automattic\WooCommerce\Admin\API\DataDownloadIPs',
 			'Automattic\WooCommerce\Admin\API\Leaderboards',
+			MarketingOverview::class,
 			'Automattic\WooCommerce\Admin\API\Options',
 			'Automattic\WooCommerce\Admin\API\Orders',
 			'Automattic\WooCommerce\Admin\API\Products',
@@ -82,6 +83,14 @@ class Init {
 					'Automattic\WooCommerce\Admin\API\OnboardingPlugins',
 					'Automattic\WooCommerce\Admin\API\OnboardingTasks',
 					'Automattic\WooCommerce\Admin\API\OnboardingThemes',
+				)
+			);
+		} elseif ( Loader::is_feature_enabled( 'shipping-label-banner' ) ) {
+			// Shipping Banner needs to use /active /install and /activate endpoints.
+			$controllers = array_merge(
+				$controllers,
+				array(
+					\Automattic\WooCommerce\Admin\API\OnboardingPlugins::class,
 				)
 			);
 		}

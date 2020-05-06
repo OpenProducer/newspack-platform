@@ -10,6 +10,7 @@ namespace Automattic\WooCommerce\Admin\Features;
 
 use \Automattic\WooCommerce\Admin\Loader;
 use \Automattic\WooCommerce\Admin\Notes\WC_Admin_Notes_Onboarding_Profiler;
+use \Automattic\WooCommerce\Admin\PluginsHelper;
 
 /**
  * Contains backend logic for the onboarding profile and checklist feature.
@@ -269,6 +270,31 @@ class Onboarding {
 	}
 
 	/**
+	 * Sort themes returned from WooCommerce.com
+	 *
+	 * @param  array $themes Array of themes from WooCommerce.com.
+	 * @return array
+	 */
+	public static function sort_woocommerce_themes( $themes ) {
+		usort(
+			$themes,
+			function ( $product_1, $product_2 ) {
+				if ( ! property_exists( $product_1, 'id' ) || ! property_exists( $product_1, 'slug' ) ) {
+					return 1;
+				}
+				if ( ! property_exists( $product_2, 'id' ) || ! property_exists( $product_2, 'slug' ) ) {
+					return 1;
+				}
+				if ( in_array( 'Storefront', array( $product_1->slug, $product_2->slug ), true ) ) {
+					return 'Storefront' === $product_1->slug ? -1 : 1;
+				}
+				return $product_1->id < $product_2->id ? 1 : -1;
+			}
+		);
+		return $themes;
+	}
+
+	/**
 	 * Get a list of themes for the onboarding wizard.
 	 *
 	 * @return array
@@ -280,18 +306,11 @@ class Onboarding {
 			$themes     = array();
 
 			if ( ! is_wp_error( $theme_data ) ) {
-				$theme_data = json_decode( $theme_data['body'] );
-				usort(
-					$theme_data->products,
-					function ( $product_1, $product_2 ) {
-						if ( 'Storefront' === $product_1->slug ) {
-							return -1;
-						}
-						return $product_1->id < $product_2->id ? 1 : -1;
-					}
-				);
+				$theme_data    = json_decode( $theme_data['body'] );
+				$woo_themes    = property_exists( $theme_data, 'products' ) ? $theme_data->products : array();
+				$sorted_themes = self::sort_woocommerce_themes( $woo_themes );
 
-				foreach ( $theme_data->products as $theme ) {
+				foreach ( $sorted_themes as $theme ) {
 					$slug                                       = sanitize_title_with_dashes( $theme->slug );
 					$themes[ $slug ]                            = (array) $theme;
 					$themes[ $slug ]['is_installed']            = false;
@@ -307,6 +326,11 @@ class Onboarding {
 				$theme_data       = self::get_theme_data( $theme );
 				$installed_themes = wp_get_themes();
 				$themes[ $slug ]  = $theme_data;
+			}
+
+			// Add the WooCommerce support tag for default themes that don't explicitly declare support.
+			if ( function_exists( 'wc_is_wp_default_theme_active' ) && wc_is_wp_default_theme_active() ) {
+				$themes[ $active_theme ]['has_woocommerce_support'] = true;
 			}
 
 			$themes = array( $active_theme => $themes[ $active_theme ] ) + $themes;
@@ -459,7 +483,7 @@ class Onboarding {
 		// Only fetch if the onboarding wizard OR the task list is incomplete.
 		if ( self::should_show_profiler() || self::should_show_tasks() ) {
 			$settings['onboarding']['activePlugins']            = self::get_active_plugins();
-			$settings['onboarding']['installedPlugins']         = self::get_installed_plugins();
+			$settings['onboarding']['installedPlugins']         = PluginsHelper::get_installed_plugin_slugs();
 			$settings['onboarding']['stripeSupportedCountries'] = self::get_stripe_supported_countries();
 			$settings['onboarding']['euCountries']              = WC()->countries->get_european_union_countries();
 			$settings['onboarding']['connectNonce']             = wp_create_nonce( 'connect' );
@@ -480,6 +504,7 @@ class Onboarding {
 	 */
 	public function preload_options( $options ) {
 		$options[] = 'woocommerce_task_list_hidden';
+		$options[] = 'woocommerce_task_list_do_this_later';
 
 		if ( ! self::should_show_tasks() && ! self::should_show_profiler() ) {
 			return $options;
@@ -489,9 +514,20 @@ class Onboarding {
 		$options[] = 'woocommerce_task_list_welcome_modal_dismissed';
 		$options[] = 'woocommerce_task_list_prompt_shown';
 		$options[] = 'woocommerce_task_list_payments';
+		$options[] = 'woocommerce_task_list_tracked_completed_tasks';
 		$options[] = 'woocommerce_allow_tracking';
 		$options[] = 'woocommerce_stripe_settings';
+		$options[] = 'woocommerce_ppec_paypal_settings';
+		$options[] = 'wc_square_refresh_tokens';
+		$options[] = 'woocommerce_square_credit_card_settings';
+		$options[] = 'woocommerce_payfast_settings';
 		$options[] = 'woocommerce_default_country';
+		$options[] = 'woocommerce_kco_settings';
+		$options[] = 'woocommerce_klarna_payments_settings';
+		$options[] = 'woocommerce_cod_settings';
+		$options[] = 'woocommerce_bacs_settings';
+		$options[] = 'woocommerce_bacs_accounts';
+		$options[] = 'woocommerce_woocommerce_payments_settings';
 
 		return $options;
 	}
@@ -589,6 +625,8 @@ class Onboarding {
 				'klarna-payments-for-woocommerce'     => 'klarna-payments-for-woocommerce/klarna-payments-for-woocommerce.php',
 				'woocommerce-square'                  => 'woocommerce-square/woocommerce-square.php',
 				'woocommerce-shipstation-integration' => 'woocommerce-shipstation-integration/woocommerce-shipstation.php',
+				'woocommerce-payfast-gateway'         => 'woocommerce-payfast-gateway/gateway-payfast.php',
+				'woocommerce-payments'                => 'woocommerce-payments/woocommerce-payments.php',
 			)
 		);
 	}
@@ -599,16 +637,7 @@ class Onboarding {
 	 * @return array
 	 */
 	public static function get_active_plugins() {
-		$all_active_plugins   = get_option( 'active_plugins', array() );
-		$allowed_plugins      = self::get_allowed_plugins();
-		$active_plugin_files  = array_intersect( $all_active_plugins, $allowed_plugins );
-		$allowed_plugin_slugs = array_flip( $allowed_plugins );
-		$active_plugins       = array();
-		foreach ( $active_plugin_files as $file ) {
-			$slug             = $allowed_plugin_slugs[ $file ];
-			$active_plugins[] = $slug;
-		}
-		return $active_plugins;
+		return array_values( array_intersect( PluginsHelper::get_active_plugin_slugs(), array_keys( self::get_allowed_plugins() ) ) );
 	}
 
 	/**
@@ -632,21 +661,6 @@ class Onboarding {
 	}
 
 	/**
-	 * Get an array of installed plugin slugs.
-	 *
-	 * @return array
-	 */
-	public static function get_installed_plugins() {
-		return array_map(
-			function( $plugin_path ) {
-				$path_parts = explode( '/', $plugin_path );
-				return $path_parts[0];
-			},
-			array_keys( get_plugins() )
-		);
-	}
-
-	/**
 	 * Let the app know that we will be showing the onboarding route, so wp-admin elements should be hidden while loading.
 	 *
 	 * @param bool $is_loading Indicates if the `woocommerce-admin-is-loading` should be appended or not.
@@ -654,7 +668,7 @@ class Onboarding {
 	 */
 	public function is_loading( $is_loading ) {
 		$show_profiler = self::should_show_profiler();
-		$is_dashboard  = ! isset( $_GET['path'] ); // WPCS: csrf ok.
+		$is_dashboard  = ! isset( $_GET['path'] ); // phpcs:ignore csrf ok.
 
 		if ( ! $show_profiler || ! $is_dashboard ) {
 			return $is_loading;
@@ -674,7 +688,7 @@ class Onboarding {
 		if ( substr( $location, -strlen( $settings_page ) ) === $settings_page ) {
 			$settings_array = (array) get_option( 'woocommerce_ppec_paypal_settings', array() );
 			$connected      = isset( $settings_array['api_username'] ) && isset( $settings_array['api_password'] ) ? true : false;
-			return wc_admin_url( '&task=payments&paypal-connect=' . $connected );
+			return wc_admin_url( '&task=payments&method=paypal&paypal-connect=' . $connected );
 		}
 		return $location;
 	}
@@ -685,7 +699,7 @@ class Onboarding {
 	public function finish_paypal_connect() {
 		if (
 			! Loader::is_admin_page() ||
-			! isset( $_GET['paypal-connect-finish'] ) // WPCS: CSRF ok.
+			! isset( $_GET['paypal-connect-finish'] ) // phpcs:ignore CSRF ok.
 		) {
 			return;
 		}
@@ -710,7 +724,7 @@ class Onboarding {
 	public function overwrite_square_redirect( $location, $status ) {
 		$settings_page = 'page=wc-settings&tab=square';
 		if ( substr( $location, -strlen( $settings_page ) ) === $settings_page ) {
-			return wc_admin_url( '&task=payments&square-connect=1' );
+			return wc_admin_url( '&task=payments&method=square&square-connect=1' );
 		}
 		return $location;
 	}
@@ -721,7 +735,7 @@ class Onboarding {
 	public function finish_square_connect() {
 		if (
 			! Loader::is_admin_page() ||
-			! isset( $_GET['square-connect-finish'] ) // WPCS: CSRF ok.
+			! isset( $_GET['square-connect-finish'] ) // phpcs:ignore CSRF ok.
 		) {
 			return;
 		}
@@ -872,9 +886,9 @@ class Onboarding {
 	 * Allows quick access to testing the calypso parts of onboarding.
 	 */
 	public static function calypso_tests() {
-		$calypso_env = defined( 'WOOCOMMERCE_CALYPSO_ENVIRONMENT' ) && in_array( WOOCOMMERCE_CALYPSO_ENVIRONMENT, array( 'development', 'wpcalypso', 'horizon', 'stage' ) ) ? WOOCOMMERCE_CALYPSO_ENVIRONMENT : 'production';
+		$calypso_env = defined( 'WOOCOMMERCE_CALYPSO_ENVIRONMENT' ) && in_array( WOOCOMMERCE_CALYPSO_ENVIRONMENT, array( 'development', 'wpcalypso', 'horizon', 'stage' ), true ) ? WOOCOMMERCE_CALYPSO_ENVIRONMENT : 'production';
 
-		if ( Loader::is_admin_page() && class_exists( 'Jetpack' ) && isset( $_GET['test_wc_jetpack_connect'] ) && 1 === absint( $_GET['test_wc_jetpack_connect'] ) ) { // WPCS: CSRF ok.
+		if ( Loader::is_admin_page() && class_exists( 'Jetpack' ) && isset( $_GET['test_wc_jetpack_connect'] ) && 1 === absint( $_GET['test_wc_jetpack_connect'] ) ) { // phpcs:ignore CSRF ok.
 			$redirect_url = esc_url_raw(
 				add_query_arg(
 					array(
@@ -891,7 +905,7 @@ class Onboarding {
 			exit;
 		}
 
-		if ( Loader::is_admin_page() && isset( $_GET['test_wc_helper_connect'] ) && 1 === absint( $_GET['test_wc_helper_connect'] ) ) { // WPCS: CSRF ok.
+		if ( Loader::is_admin_page() && isset( $_GET['test_wc_helper_connect'] ) && 1 === absint( $_GET['test_wc_helper_connect'] ) ) { // phpcs:ignore CSRF ok.
 			include_once WC_ABSPATH . 'includes/admin/helper/class-wc-helper-api.php';
 
 			$redirect_uri = wc_admin_url( '&task=connect&wccom-connected=1' );
@@ -941,16 +955,16 @@ class Onboarding {
 	public static function reset_profiler() {
 		if (
 			! Loader::is_admin_page() ||
-			! isset( $_GET['reset_profiler'] ) // WPCS: CSRF ok.
+			! isset( $_GET['reset_profiler'] ) // phpcs:ignore CSRF ok.
 		) {
 			return;
 		}
 
-		$previous  = 1 === absint( $_GET['reset_profiler'] );
+		$previous  = 1 === absint( $_GET['reset_profiler'] ); // phpcs:ignore CSRF ok.
 		$new_value = ! $previous;
 
 		wc_admin_record_tracks_event(
-			'wcadmin_storeprofiler_toggled',
+			'storeprofiler_toggled',
 			array(
 				'previous'  => $previous,
 				'new_value' => $new_value,
@@ -977,12 +991,12 @@ class Onboarding {
 	public static function reset_task_list() {
 		if (
 			! Loader::is_admin_page() ||
-			! isset( $_GET['reset_task_list'] ) // WPCS: CSRF ok.
+			! isset( $_GET['reset_task_list'] ) // phpcs:ignore CSRF ok.
 		) {
 			return;
 		}
 
-		$new_value = 1 === absint( $_GET['reset_task_list'] ) ? 'no' : 'yes'; // WPCS: CSRF ok.
+		$new_value = 1 === absint( $_GET['reset_task_list'] ) ? 'no' : 'yes'; // phpcs:ignore CSRF ok.
 		update_option( 'woocommerce_task_list_hidden', $new_value );
 		wp_safe_redirect( wc_admin_url() );
 		exit;

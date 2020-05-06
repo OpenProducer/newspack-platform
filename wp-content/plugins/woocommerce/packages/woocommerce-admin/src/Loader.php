@@ -10,6 +10,9 @@ namespace Automattic\WooCommerce\Admin;
 
 use \_WP_Dependency;
 use Automattic\WooCommerce\Admin\Features\Onboarding;
+use Automattic\WooCommerce\Admin\API\Reports\Orders\DataStore as OrdersDataStore;
+use WC_Marketplace_Suggestions;
+
 
 /**
  * Loader Class.
@@ -73,11 +76,12 @@ class Loader {
 		add_action( 'in_admin_header', array( __CLASS__, 'embed_page_header' ) );
 		add_filter( 'woocommerce_settings_groups', array( __CLASS__, 'add_settings_group' ) );
 		add_filter( 'woocommerce_settings-wc_admin', array( __CLASS__, 'add_settings' ) );
-		add_filter( 'option_woocommerce_actionable_order_statuses', array( __CLASS__, 'filter_invalid_statuses' ) );
-		add_filter( 'option_woocommerce_excluded_report_order_statuses', array( __CLASS__, 'filter_invalid_statuses' ) );
 		add_action( 'admin_head', array( __CLASS__, 'remove_notices' ) );
 		add_action( 'admin_notices', array( __CLASS__, 'inject_before_notices' ), -9999 );
 		add_action( 'admin_notices', array( __CLASS__, 'inject_after_notices' ), PHP_INT_MAX );
+
+		// Added this hook to delete the field woocommerce_onboarding_homepage_post_id when deleting the homepage.
+		add_action( 'trashed_post', array( __CLASS__, 'delete_homepage' ) );
 
 		// priority is 20 to run after https://github.com/woocommerce/woocommerce/blob/a55ae325306fc2179149ba9b97e66f32f84fdd9c/includes/admin/class-wc-admin-menus.php#L165.
 		add_action( 'admin_head', array( __CLASS__, 'remove_app_entry_page_menu_item' ), 20 );
@@ -176,9 +180,8 @@ class Loader {
 
 		$onboarding_opt_in        = 'yes' === get_option( Onboarding::OPT_IN_OPTION, 'no' );
 		$legacy_onboarding_opt_in = 'yes' === get_option( 'wc_onboarding_opt_in', 'no' );
-		$onboarding_filter_opt_in = defined( 'WOOCOMMERCE_ADMIN_ONBOARDING_ENABLED' ) && true === WOOCOMMERCE_ADMIN_ONBOARDING_ENABLED;
 
-		if ( self::is_dev() || $onboarding_filter_opt_in || $onboarding_opt_in || $legacy_onboarding_opt_in ) {
+		if ( $onboarding_opt_in || $legacy_onboarding_opt_in ) {
 			return true;
 		}
 
@@ -330,6 +333,14 @@ class Loader {
 			true
 		);
 
+		wp_register_script(
+			'wc-store-data',
+			self::get_url( 'data/index.js' ),
+			array(),
+			self::get_file_version( 'data/index.js' ),
+			true
+		);
+
 		wp_set_script_translations( 'wc-date', 'woocommerce' );
 
 		wp_register_script(
@@ -339,6 +350,7 @@ class Loader {
 				'moment',
 				'wp-api-fetch',
 				'wp-data',
+				'wp-data-controls',
 				'wp-element',
 				'wp-hooks',
 				'wp-html-entities',
@@ -349,6 +361,7 @@ class Loader {
 				'wc-date',
 				'wc-navigation',
 				'wc-number',
+				'wc-store-data',
 			),
 			self::get_file_version( 'components/index.js' ),
 			true
@@ -410,7 +423,7 @@ class Loader {
 	 * Loads the required scripts on the correct pages.
 	 */
 	public static function load_scripts() {
-		if ( ! self::is_admin_page() && ! self::is_embed_page() ) {
+		if ( ! self::is_admin_or_embed_page() ) {
 			return;
 		}
 
@@ -433,6 +446,14 @@ class Loader {
 			wp_enqueue_style( 'wc-admin-ie' );
 		}
 
+	}
+
+	/**
+	 * Returns true if we are on a JS powered admin page or
+	 * a "classic" (non JS app) powered admin page (an embedded page).
+	 */
+	public static function is_admin_or_embed_page() {
+		return self::is_admin_page() || self::is_embed_page();
 	}
 
 	/**
@@ -498,9 +519,6 @@ class Loader {
 			<div class="woocommerce-layout">
 				<div class="woocommerce-layout__header is-embed-loading">
 					<h1 class="woocommerce-layout__header-breadcrumbs">
-					<span>
-						<a href="<?php echo esc_url( admin_url( 'admin.php?page=wc-admin' ) ); ?>"><?php esc_html_e( 'WooCommerce', 'woocommerce' ); ?></a>
-					</span>
 						<?php foreach ( $sections as $section ) : ?>
 							<?php self::output_breadcrumbs( $section ); ?>
 						<?php endforeach; ?>
@@ -517,7 +535,7 @@ class Loader {
 	 * @param string $admin_body_class Body class to add.
 	 */
 	public static function add_admin_body_classes( $admin_body_class = '' ) {
-		if ( ! self::is_admin_page() && ! self::is_embed_page() ) {
+		if ( ! self::is_admin_or_embed_page() ) {
 			return $admin_body_class;
 		}
 
@@ -547,7 +565,7 @@ class Loader {
 	 * Removes notices that should not be displayed on WC Admin pages.
 	 */
 	public static function remove_notices() {
-		if ( ! self::is_admin_page() && ! self::is_embed_page() ) {
+		if ( ! self::is_admin_or_embed_page() ) {
 			return;
 		}
 
@@ -561,20 +579,32 @@ class Loader {
 	 * Runs before admin notices action and hides them.
 	 */
 	public static function inject_before_notices() {
-		if ( ( ! self::is_admin_page() && ! self::is_embed_page() ) ) {
+		if ( ! self::is_admin_or_embed_page() ) {
 			return;
 		}
+
+		// Wrap the notices in a hidden div to prevent flickering before
+		// they are moved elsewhere in the page by WordPress Core.
 		echo '<div class="woocommerce-layout__notice-list-hide" id="wp__notice-list">';
-		echo '<div class="wp-header-end" id="woocommerce-layout__notice-catcher"></div>'; // https://github.com/WordPress/WordPress/blob/f6a37e7d39e2534d05b9e542045174498edfe536/wp-admin/js/common.js#L737.
+
+		if ( self::is_admin_page() ) {
+			// Capture all notices and hide them. WordPress Core looks for
+			// `.wp-header-end` and appends notices after it if found.
+			// https://github.com/WordPress/WordPress/blob/f6a37e7d39e2534d05b9e542045174498edfe536/wp-admin/js/common.js#L737 .
+			echo '<div class="wp-header-end" id="woocommerce-layout__notice-catcher"></div>';
+		}
 	}
 
 	/**
 	 * Runs after admin notices and closes div.
 	 */
 	public static function inject_after_notices() {
-		if ( ( ! self::is_admin_page() && ! self::is_embed_page() ) ) {
+		if ( ! self::is_admin_or_embed_page() ) {
 			return;
 		}
+
+		// Close the hidden div used to prevent notices from flickering before
+		// they are inserted elsewhere in the page.
 		echo '</div>';
 	}
 
@@ -690,6 +720,14 @@ class Loader {
 		$settings['wcVersion']         = WC_VERSION;
 		$settings['siteUrl']           = site_url();
 		$settings['onboardingEnabled'] = self::is_onboarding_enabled();
+		$settings['dateFormat']        = get_option( 'date_format' );
+		// Plugins that depend on changing the translation work on the server but not the client -
+		// WooCommerce Branding is an example of this - so pass through the translation of
+		// 'WooCommerce' to wcSettings.
+		$settings['woocommerceTranslation'] = __( 'WooCommerce', 'woocommerce' );
+		// We may have synced orders with a now-unregistered status.
+		// E.g An extension that added statuses is now inactive or removed.
+		$settings['unregisteredOrderStatuses'] = self::get_unregistered_order_statuses();
 
 		if ( ! empty( $preload_data_endpoints ) ) {
 			$settings['dataEndpoints'] = isset( $settings['dataEndpoints'] )
@@ -708,6 +746,9 @@ class Loader {
 		if ( self::is_embed_page() ) {
 			$settings['embedBreadcrumbs'] = self::get_embed_breadcrumbs();
 		}
+
+		$settings['allowMarketplaceSuggestions'] = WC_Marketplace_Suggestions::allow_suggestions();
+
 		return $settings;
 	}
 
@@ -724,6 +765,21 @@ class Loader {
 			$formatted_statuses[ $formatted_key ] = $value;
 		}
 		return $formatted_statuses;
+	}
+
+	/**
+	 * Get all order statuses present in analytics tables that aren't registered.
+	 *
+	 * @return array Unregistered order statuses.
+	 */
+	public static function get_unregistered_order_statuses() {
+		$registered_statuses   = wc_get_order_statuses();
+		$all_synced_statuses   = OrdersDataStore::get_all_statuses();
+		$unregistered_statuses = array_diff( $all_synced_statuses, array_keys( $registered_statuses ) );
+		$formatted_status_keys = self::get_order_statuses( array_fill_keys( $unregistered_statuses, '' ) );
+		$formatted_statuses    = array_keys( $formatted_status_keys );
+
+		return array_combine( $formatted_statuses, $formatted_statuses );
 	}
 
 	/**
@@ -748,7 +804,10 @@ class Loader {
 	 * @return array
 	 */
 	public static function add_settings( $settings ) {
-		$statuses   = self::get_order_statuses( wc_get_order_statuses() );
+		$unregistered_statuses = self::get_unregistered_order_statuses();
+		$registered_statuses   = self::get_order_statuses( wc_get_order_statuses() );
+		$all_statuses          = array_merge( $unregistered_statuses, $registered_statuses );
+
 		$settings[] = array(
 			'id'          => 'woocommerce_excluded_report_order_statuses',
 			'option_key'  => 'woocommerce_excluded_report_order_statuses',
@@ -756,7 +815,7 @@ class Loader {
 			'description' => __( 'Statuses that should not be included when calculating report totals.', 'woocommerce' ),
 			'default'     => array( 'pending', 'cancelled', 'failed' ),
 			'type'        => 'multiselect',
-			'options'     => $statuses,
+			'options'     => $all_statuses,
 		);
 		$settings[] = array(
 			'id'          => 'woocommerce_actionable_order_statuses',
@@ -765,7 +824,7 @@ class Loader {
 			'description' => __( 'Statuses that require extra action on behalf of the store admin.', 'woocommerce' ),
 			'default'     => array( 'processing', 'on-hold' ),
 			'type'        => 'multiselect',
-			'options'     => $statuses,
+			'options'     => $all_statuses,
 		);
 		$settings[] = array(
 			'id'          => 'woocommerce_default_date_range',
@@ -776,21 +835,6 @@ class Loader {
 			'type'        => 'text',
 		);
 		return $settings;
-	}
-
-	/**
-	 * Filter invalid statuses from saved settings to avoid removed statuses throwing errors.
-	 *
-	 * @param array|null $value Saved order statuses.
-	 * @return array|null
-	 */
-	public static function filter_invalid_statuses( $value ) {
-		if ( is_array( $value ) ) {
-			$valid_statuses = array_keys( self::get_order_statuses( wc_get_order_statuses() ) );
-			$value          = array_intersect( $value, $valid_statuses );
-		}
-
-		return $value;
 	}
 
 	/**
@@ -960,6 +1004,21 @@ class Loader {
 					$script->deps[] = 'wc-settings';
 				}
 			}
+		}
+	}
+
+	/**
+	 * Delete woocommerce_onboarding_homepage_post_id field when the homepage is deleted
+	 *
+	 * @param int $post_id The deleted post id.
+	 */
+	public static function delete_homepage( $post_id ) {
+		if ( 'page' !== get_post_type( $post_id ) ) {
+			return;
+		}
+		$homepage_id = intval( get_option( 'woocommerce_onboarding_homepage_post_id', false ) );
+		if ( $homepage_id === $post_id ) {
+			delete_option( 'woocommerce_onboarding_homepage_post_id' );
 		}
 	}
 }

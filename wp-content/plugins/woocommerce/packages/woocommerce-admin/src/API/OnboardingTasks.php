@@ -185,6 +185,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 	 * @return string Block content.
 	 */
 	private static function get_homepage_cover_block( $image ) {
+		$shop_url = get_permalink( wc_get_page_id( 'shop' ) );
 		if ( ! empty( $image['url'] ) && ! empty( $image['id'] ) ) {
 			return '<!-- wp:cover {"url":"' . esc_url( $image['url'] ) . '","id":' . intval( $image['id'] ) . ',"dimRatio":0} -->
 			<div class="wp-block-cover" style="background-image:url(' . esc_url( $image['url'] ) . ')"><div class="wp-block-cover__inner-container"><!-- wp:paragraph {"align":"center","placeholder":"' . __( 'Write title…', 'woocommerce' ) . '","textColor":"white","fontSize":"large"} -->
@@ -196,7 +197,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 			<!-- /wp:paragraph -->
 
 			<!-- wp:button {"align":"center"} -->
-			<div class="wp-block-button aligncenter"><a class="wp-block-button__link">' . __( 'Go shopping', 'woocommerce' ) . '</a></div>
+			<div class="wp-block-button aligncenter"><a href="' . esc_url( $shop_url ) . '" class="wp-block-button__link">' . __( 'Go shopping', 'woocommerce' ) . '</a></div>
 			<!-- /wp:button --></div></div>
 			<!-- /wp:cover -->';
 		}
@@ -211,7 +212,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 		<!-- /wp:paragraph -->
 
 		<!-- wp:button {"align":"center"} -->
-		<div class="wp-block-button aligncenter"><a class="wp-block-button__link">' . __( 'Go shopping', 'woocommerce' ) . '</a></div>
+		<div class="wp-block-button aligncenter"><a href="' . esc_url( $shop_url ) . '" class="wp-block-button__link">' . __( 'Go shopping', 'woocommerce' ) . '</a></div>
 		<!-- /wp:button --></div></div>
 		<!-- /wp:cover -->';
 	}
@@ -412,7 +413,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 			)
 		);
 
-		if ( ! is_wp_error( $post_id ) ) {
+		if ( ! is_wp_error( $post_id ) && 0 < $post_id ) {
 
 			$template = self::get_homepage_template( $post_id );
 			wp_update_post(
@@ -425,6 +426,11 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 			update_option( 'show_on_front', 'page' );
 			update_option( 'page_on_front', $post_id );
 			update_option( 'woocommerce_onboarding_homepage_post_id', $post_id );
+
+			// Use the full width template on stores using Storefront.
+			if ( 'storefront' === get_stylesheet() ) {
+				update_post_meta( $post_id, '_wp_page_template', 'template-fullwidth.php' );
+			}
 
 			return array(
 				'status'         => 'success',
