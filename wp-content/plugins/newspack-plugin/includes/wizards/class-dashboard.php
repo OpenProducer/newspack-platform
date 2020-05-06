@@ -115,6 +115,13 @@ class Dashboard extends Wizard {
 				'description' => Wizards::get_description( 'engagement' ),
 				'status'      => 'enabled',
 			],
+			[
+				'slug'        => 'popups',
+				'name'        => Wizards::get_name( 'popups' ),
+				'url'         => Wizards::get_url( 'popups' ),
+				'description' => Wizards::get_description( 'popups' ),
+				'status'      => 'enabled',
+			],
 		];
 
 		return $dashboard;

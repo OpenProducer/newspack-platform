@@ -1,3 +1,18 @@
+# [1.6.0](https://github.com/Automattic/newspack-plugin/compare/v1.5.0...v1.6.0) (2020-05-06)
+
+
+### Bug Fixes
+
+* previewing for inline popups in wizard ([e909372](https://github.com/Automattic/newspack-plugin/commit/e909372d2014e636112faf7241a7c5f2566f8fe4))
+* remove pop-ups ui from engagement wizard ([#517](https://github.com/Automattic/newspack-plugin/issues/517)) ([68367b5](https://github.com/Automattic/newspack-plugin/commit/68367b585f9fecab96dc4adec1f82d65b4991ab9))
+
+
+### Features
+
+* pop-ups wizard ([ae033d0](https://github.com/Automattic/newspack-plugin/commit/ae033d0d0a6a5ebd61abdef1fb70e702bf6abe81))
+* popup wizard ui for draft popups ([8095ba4](https://github.com/Automattic/newspack-plugin/commit/8095ba4b32f01cff13768e57e1a2e4b38ebffe92))
+* whitelist newspack newsletters plugin ([f1d1ff6](https://github.com/Automattic/newspack-plugin/commit/f1d1ff681855bf1d145275bb529599e9b2fd9203))
+
 # [1.5.0](https://github.com/Automattic/newspack-plugin/compare/v1.4.0...v1.5.0) (2020-04-21)
 
 

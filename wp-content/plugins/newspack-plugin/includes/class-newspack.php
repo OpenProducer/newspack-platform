@@ -85,6 +85,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-health-check-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-support-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-payment-wizard.php';
+		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-popups-wizard.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-wizards.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-checklists.php';

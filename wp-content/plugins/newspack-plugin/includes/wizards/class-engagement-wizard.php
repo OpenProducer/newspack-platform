@@ -73,70 +73,11 @@ class Engagement_Wizard extends Wizard {
 	public function register_api_endpoints() {
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/engagement',
+			'/wizard/' . $this->slug,
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_engagement_settings' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/popup/(?P<id>\d+)',
-			[
-				'methods'             => \WP_REST_Server::DELETABLE,
-				'callback'            => [ $this, 'api_delete_popup' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'id' => [
-						'sanitize_callback' => 'absint',
-					],
-				],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/sitewide-popup/(?P<id>\d+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_set_sitewide_popup' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'id' => [
-						'sanitize_callback' => 'absint',
-					],
-				],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/sitewide-popup/(?P<id>\d+)',
-			[
-				'methods'             => \WP_REST_Server::DELETABLE,
-				'callback'            => [ $this, 'api_unset_sitewide_popup' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'id' => [
-						'sanitize_callback' => 'absint',
-					],
-				],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/popup-categories/(?P<id>\d+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_set_popup_categories' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'id'         => [
-						'sanitize_callback' => 'absint',
-					],
-					'categories' => [
-						'sanitize_callback' => [ $this, 'sanitize_categories' ],
-					],
-				],
 			]
 		);
 	}
@@ -148,15 +89,13 @@ class Engagement_Wizard extends Wizard {
 	 * @return WP_REST_Response with the info.
 	 */
 	public function api_get_engagement_settings() {
-		$jetpack_configuration_manager         = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'jetpack' );
-		$wc_configuration_manager              = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
-		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
+		$jetpack_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'jetpack' );
+		$wc_configuration_manager      = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
 
 		$response = array(
 			'connected'   => false,
 			'connectURL'  => null,
 			'wcConnected' => false,
-			'popups'      => array(),
 		);
 
 		$jetpack_status = $jetpack_configuration_manager->get_mailchimp_connection_status();
@@ -165,91 +104,7 @@ class Engagement_Wizard extends Wizard {
 			$response['connectURL']  = $jetpack_status['connectURL'];
 			$response['wcConnected'] = $wc_configuration_manager->is_active();
 		}
-		if ( $newspack_popups_configuration_manager->is_configured() ) {
-			$response['popups'] = array_map(
-				function( $popup ) {
-					$popup['edit_link'] = get_edit_post_link( $popup['id'] );
-					return $popup;
-				},
-				$newspack_popups_configuration_manager->get_popups()
-			);
-		}
 		return rest_ensure_response( $response );
-	}
-
-	/**
-	 * Delete a Pop-up.
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response with complete info to render the Engagement Wizard.
-	 */
-	public function api_delete_popup( $request ) {
-		$id = $request['id'];
-
-		$popup = get_post( $id );
-		if ( is_a( $popup, 'WP_Post' ) && 'newspack_popups_cpt' === $popup->post_type ) {
-			wp_delete_post( $id );
-		}
-
-		return $this->api_get_engagement_settings();
-	}
-
-	/**
-	 * Set the sitewide default Popup
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response with the info.
-	 */
-	public function api_set_sitewide_popup( $request ) {
-		$sitewide_default = $request['id'];
-
-		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
-
-		$response = $newspack_popups_configuration_manager->set_sitewide_popup( $sitewide_default );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		return $this->api_get_engagement_settings();
-	}
-
-	/**
-	 * Unset the sitewide default Popup
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response with the info.
-	 */
-	public function api_unset_sitewide_popup( $request ) {
-		$sitewide_default = $request['id'];
-
-		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
-
-		$response = $newspack_popups_configuration_manager->unset_sitewide_popup( $sitewide_default );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		return $this->api_get_engagement_settings();
-	}
-
-	/**
-	 * Set categories for one Popup.
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response with the info.
-	 */
-	public function api_set_popup_categories( $request ) {
-		$id         = $request['id'];
-		$categories = $request['categories'];
-
-		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
-
-		$response = $newspack_popups_configuration_manager->set_popup_categories( $id, $categories );
-		if ( is_wp_error( $response ) ) {
-			return $response;
-		}
-
-		return $this->api_get_engagement_settings();
 	}
 
 	/**

@@ -37,11 +37,12 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	/**
 	 * Retrieve all Pop-up CPTs
 	 *
+	 * @param  boolean $include_unpublished Whether to include unpublished posts.
 	 * @return array All Pop-ups
 	 */
-	public function get_popups() {
+	public function get_popups( $include_unpublished = false ) {
 		return $this->is_configured() ?
-			\Newspack_Popups_Model::retrieve_popups() :
+			\Newspack_Popups_Model::retrieve_popups( $include_unpublished ) :
 			$this->unconfigured_error();
 	}
 
@@ -76,6 +77,18 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	public function set_popup_categories( $id, $categories ) {
 		return $this->is_configured() ?
 			\Newspack_Popups_Model::set_popup_categories( $id, $categories ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Set Popup options/
+	 *
+	 * @param integer $id ID of sitewide popup.
+	 * @param array   $options Array of categories to be set.
+	 */
+	public function set_popup_options( $id, $options ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Model::set_popup_options( $id, $options ) :
 			$this->unconfigured_error();
 	}
 
