@@ -136,20 +136,13 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 							<?php
 							endif;
 
-						if ( $attributes['showDate'] ) {
-							$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
-							if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) {
-								$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';
-							}
-							$time_string = sprintf(
-								$time_string,
-								esc_attr( get_the_date( DATE_W3C ) ),
-								esc_html( get_the_date() ),
-								esc_attr( get_the_modified_date( DATE_W3C ) ),
-								esc_html( get_the_modified_date() )
-							);
-							echo $time_string; // phpcs:ignore
-						}
+							if ( $attributes['showDate'] ) :
+								printf(
+									'<time class="entry-date published" datetime="%1$s">%2$s</time>',
+									esc_attr( get_the_date( DATE_W3C ) ),
+									esc_html( get_the_date() )
+								);
+							endif;
 						?>
 					</div><!-- .entry-meta -->
 				</div><!-- .entry-wrapper -->

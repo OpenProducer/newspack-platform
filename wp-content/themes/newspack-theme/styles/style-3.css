@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.6.0
+Version: 1.6.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -4288,17 +4288,6 @@ body.page .entry-title {
   max-width: 100%;
 }
 
-.wpnbha .posted-on,
-.wpnbha .cat-links,
-.wpnbha .tags-links,
-.wpnbha .byline,
-.wpnbha .author-avatar {
-  clip: auto;
-  height: auto;
-  position: relative;
-  width: auto;
-}
-
 .wp-block-newspack-blocks-carousel h3 a,
 .wp-block-newspack-blocks-carousel h3 a:visited {
   color: #fff;
@@ -5049,56 +5038,68 @@ body.page .entry-title {
 .entry .entry-content .has-primary-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-primary-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-primary-color p,
-.entry .entry-content .wp-block-button.has-primary-color {
+.entry .entry-content .wp-block-button.has-primary-color,
+.entry .entry-content .is-style-outline .wp-block-button__link.has-primary-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-primary-color:not(:hover) {
   color: #36f;
 }
 
 .entry .entry-content .has-primary-variation-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-primary-variation-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-primary-variation-color p,
-.entry .entry-content .wp-block-button.has-primary-variation-color {
+.entry .entry-content .wp-block-button.has-primary-variation-color,
+.entry .entry-content .is-style-outline .wp-block-button__link.has-primary-variation-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-primary-variation-color:not(:hover) {
   color: #2240d5;
 }
 
 .entry .entry-content .has-secondary-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-secondary-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-secondary-color p,
-.entry .entry-content .wp-block-button.has-secondary-color {
+.entry .entry-content .wp-block-button.has-secondary-color,
+.entry .entry-content .is-style-outline .wp-block-button__link.has-secondary-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-secondary-color:not(:hover) {
   color: #555;
 }
 
 .entry .entry-content .has-secondary-variation-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-secondary-variation-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-secondary-variation-color p,
-.entry .entry-content .wp-block-button.has-secondary-variation-color {
+.entry .entry-content .wp-block-button.has-secondary-variation-color,
+.entry .entry-content .is-style-outline .wp-block-button__link.has-secondary-variation-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-secondary-variation-color:not(:hover) {
   color: #3c3c3c;
 }
 
 .entry .entry-content .has-dark-gray-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-dark-gray-color,
 .entry .entry-content .wp-block-button.has-dark-gray-color,
-.entry .entry-content .wp-block-button__link.is-style-outline.has-dark-gray-color {
+.entry .entry-content .is-style-outline .wp-block-button__link.has-dark-gray-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-dark-gray-color:not(:hover) {
   color: #111;
 }
 
 .entry .entry-content .has-medium-gray-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-medium-gray-color,
 .entry .entry-content .wp-block-button.has-medium-gray-color,
-.entry .entry-content .wp-block-button__link.is-style-outline.has-medium-gray-color {
+.entry .entry-content .is-style-outline .wp-block-button__link.has-medium-gray-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-medium-gray-color:not(:hover) {
   color: #767676;
 }
 
 .entry .entry-content .has-light-gray-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-light-gray-color,
 .entry .entry-content .wp-block-button.has-light-gray-color,
-.entry .entry-content .wp-block-button__link.is-style-outline.has-light-gray-color {
+.entry .entry-content .is-style-outline .wp-block-button__link.has-light-gray-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-light-gray-color:not(:hover) {
   color: #eee;
 }
 
 .entry .entry-content .has-white-color,
 .entry .entry-content .wp-block-pullquote.is-style-solid-color blockquote.has-white-color,
 .entry .entry-content .wp-block-button.has-white-color,
-.entry .entry-content .wp-block-button__link.is-style-outline.has-white-color {
+.entry .entry-content .is-style-outline .wp-block-button__link.has-white-color:not(:hover),
+.entry .entry-content .wp-block-button__link.is-style-outline.has-white-color:not(:hover) {
   color: #fff;
 }
 

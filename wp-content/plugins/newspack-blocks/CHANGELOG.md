@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/Automattic/newspack-blocks/compare/v1.4.0...v1.5.0) (2020-05-07)
+
+
+### Bug Fixes
+
+* carousel image being distorted ([36f72c6](https://github.com/Automattic/newspack-blocks/commit/36f72c6afcaef9f15e957b0dc8d23fb6a566136c))
+* make sure content options don't affect blocks ([91ecd2c](https://github.com/Automattic/newspack-blocks/commit/91ecd2cede297021472d411c381fef0ab2cc85e4))
+
+
+### Features
+
+* add a max-height to the slider ([ea477a2](https://github.com/Automattic/newspack-blocks/commit/ea477a2d2530df8726acd996a7984f2a4e3f37f1))
+
 # [1.4.0](https://github.com/Automattic/newspack-blocks/compare/v1.3.1...v1.4.0) (2020-05-05)
 
 
