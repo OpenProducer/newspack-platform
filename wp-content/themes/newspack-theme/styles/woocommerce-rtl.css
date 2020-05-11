@@ -59,6 +59,10 @@ a.button:hover, a.button:visited {
   }
 }
 
+.woocommerce .page-description {
+  font-size: 1em;
+}
+
 .woocommerce form .form-row .required {
   color: firebrick;
   text-decoration: none;
@@ -251,6 +255,7 @@ ul.products {
 
 ul.products li.product {
   list-style: none;
+  display: block;
 }
 
 ul.products li.product .woocommerce-loop-product__link {
@@ -292,6 +297,7 @@ ul.products li.product .woocommerce-placeholder {
 
 ul.products li.product .button {
   vertical-align: middle;
+  word-break: normal;
 }
 
 ul.products li.product .button.loading {
@@ -405,6 +411,7 @@ dl.variation p, dl.variation:last-child,
 
 .single-product .entry .entry-title {
   margin-top: 0;
+  font-size: 2em;
 }
 
 .single-product .entry .entry-title::before {

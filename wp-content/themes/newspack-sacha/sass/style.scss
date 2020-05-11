@@ -5,7 +5,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.6.2
+Version: 1.7.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -57,8 +57,24 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 	}
 }
 
-// Accent headers
+// Subpage header with a solid background
+.h-sub.h-sb.single-featured-image-beside {
+	@include media( tablet ) {
+		.middle-header-contain {
+			color: $color__text-main;
+		}
 
+		.alternative-logo {
+			display: none;
+
+			~ .custom-logo-link {
+				display: inline-block;
+			}
+		}
+	}
+}
+
+// Accent headers
 .accent-header,
 .article-section-title,
 .cat-links {
