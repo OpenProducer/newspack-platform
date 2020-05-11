@@ -163,6 +163,7 @@
     font-weight: 500; }
   .googlesitekit-plugin .googlesitekit-nodata {
     display: none; }
+  .googlesitekit-plugin legend,
   .googlesitekit-plugin p {
     font-size: 1rem; }
   .googlesitekit-plugin a {
@@ -184,6 +185,9 @@
     .googlesitekit-plugin button:focus {
       outline: 1px dashed #4285f4;
       outline-offset: 3px; }
+  .googlesitekit-plugin legend {
+    line-height: 1.5;
+    margin: 1em 0; }
   .googlesitekit-plugin .screen-reader-only {
     clip: rect(1px, 1px, 1px, 1px);
     height: 1px;

@@ -12,6 +12,7 @@ return array(
     'Google\\Site_Kit\\Core\\Admin\\Notices' => $baseDir . '/Core/Admin/Notices.php',
     'Google\\Site_Kit\\Core\\Admin\\Screen' => $baseDir . '/Core/Admin/Screen.php',
     'Google\\Site_Kit\\Core\\Admin\\Screens' => $baseDir . '/Core/Admin/Screens.php',
+    'Google\\Site_Kit\\Core\\Admin\\Standalone' => $baseDir . '/Core/Admin/Standalone.php',
     'Google\\Site_Kit\\Core\\Admin_Bar\\Admin_Bar' => $baseDir . '/Core/Admin_Bar/Admin_Bar.php',
     'Google\\Site_Kit\\Core\\Assets\\Asset' => $baseDir . '/Core/Assets/Asset.php',
     'Google\\Site_Kit\\Core\\Assets\\Assets' => $baseDir . '/Core/Assets/Assets.php',
