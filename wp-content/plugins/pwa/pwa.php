@@ -9,7 +9,7 @@
  * Plugin Name: PWA
  * Plugin URI:  https://github.com/GoogleChromeLabs/pwa-wp
  * Description: Feature plugin to bring Progressive Web App (PWA) capabilities to Core
- * Version:     0.4.0
+ * Version:     0.5.0
  * Author:      PWA Plugin Contributors
  * Author URI:  https://github.com/GoogleChromeLabs/pwa-wp/graphs/contributors
  * Text Domain: pwa
@@ -17,10 +17,10 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-define( 'PWA_VERSION', '0.4.0' );
+define( 'PWA_VERSION', '0.5.0' );
 define( 'PWA_PLUGIN_FILE', __FILE__ );
 define( 'PWA_PLUGIN_DIR', dirname( __FILE__ ) );
-define( 'PWA_WORKBOX_VERSION', '5.1.2' );
+define( 'PWA_WORKBOX_VERSION', '5.1.3' );
 define( 'PWA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
@@ -222,6 +222,9 @@ require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-c
 
 /** WordPress Service Worker Functions */
 require_once PWA_PLUGIN_DIR . '/wp-includes/service-workers.php';
+
+/** WordPress Service Worker Deprecated */
+require_once PWA_PLUGIN_DIR . '/wp-includes/deprecated.php';
 
 /** Amend default filters */
 require_once PWA_PLUGIN_DIR . '/wp-includes/default-filters.php';

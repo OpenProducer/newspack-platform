@@ -389,17 +389,17 @@
     },
     {
         "name": "woocommerce/action-scheduler",
-        "version": "v3.1.5",
-        "version_normalized": "3.1.5.0",
+        "version": "3.1.6",
+        "version_normalized": "3.1.6.0",
         "source": {
             "type": "git",
             "url": "https://github.com/woocommerce/action-scheduler.git",
-            "reference": "93451c8b1061010f0dcf1ac50da7e4b44d119fb1"
+            "reference": "275d0ba54b1c263dfc62688de2fa9a25a373edf8"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/93451c8b1061010f0dcf1ac50da7e4b44d119fb1",
-            "reference": "93451c8b1061010f0dcf1ac50da7e4b44d119fb1",
+            "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/275d0ba54b1c263dfc62688de2fa9a25a373edf8",
+            "reference": "275d0ba54b1c263dfc62688de2fa9a25a373edf8",
             "shasum": ""
         },
         "require-dev": {
@@ -407,7 +407,7 @@
             "woocommerce/woocommerce-sniffs": "0.0.8",
             "wp-cli/wp-cli": "~1.5.1"
         },
-        "time": "2020-05-05T13:26:04+00:00",
+        "time": "2020-05-12T16:22:33+00:00",
         "type": "wordpress-plugin",
         "extra": {
             "scripts-description": {
@@ -426,17 +426,17 @@
     },
     {
         "name": "woocommerce/woocommerce-admin",
-        "version": "v1.1.1",
-        "version_normalized": "1.1.1.0",
+        "version": "v1.1.3",
+        "version_normalized": "1.1.3.0",
         "source": {
             "type": "git",
             "url": "https://github.com/woocommerce/woocommerce-admin.git",
-            "reference": "ac862f831eced0e6a3692539a24c738d5aafc4ee"
+            "reference": "8bc27a150218a2e3195400701754d286aa12911e"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/woocommerce/woocommerce-admin/zipball/ac862f831eced0e6a3692539a24c738d5aafc4ee",
-            "reference": "ac862f831eced0e6a3692539a24c738d5aafc4ee",
+            "url": "https://api.github.com/repos/woocommerce/woocommerce-admin/zipball/8bc27a150218a2e3195400701754d286aa12911e",
+            "reference": "8bc27a150218a2e3195400701754d286aa12911e",
             "shasum": ""
         },
         "require": {
@@ -448,7 +448,7 @@
             "phpunit/phpunit": "7.5.20",
             "woocommerce/woocommerce-sniffs": "0.0.9"
         },
-        "time": "2020-05-05T14:47:41+00:00",
+        "time": "2020-05-18T20:57:31+00:00",
         "type": "wordpress-plugin",
         "extra": {
             "scripts-description": {

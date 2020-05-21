@@ -73,7 +73,7 @@ return array(
     'Google\\Site_Kit\\Core\\Util\\Input' => $baseDir . '/Core/Util/Input.php',
     'Google\\Site_Kit\\Core\\Util\\Migrate_Legacy_Keys' => $baseDir . '/Core/Util/Migrate_Legacy_Keys.php',
     'Google\\Site_Kit\\Core\\Util\\Migration_1_3_0' => $baseDir . '/Core/Util/Migration_1_3_0.php',
-    'Google\\Site_Kit\\Core\\Util\\Migration_1_5_0' => $baseDir . '/Core/Util/Migration_1_5_0.php',
+    'Google\\Site_Kit\\Core\\Util\\Migration_1_8_1' => $baseDir . '/Core/Util/Migration_1_8_1.php',
     'Google\\Site_Kit\\Core\\Util\\Requires_Javascript_Trait' => $baseDir . '/Core/Util/Requires_Javascript_Trait.php',
     'Google\\Site_Kit\\Core\\Util\\Reset' => $baseDir . '/Core/Util/Reset.php',
     'Google\\Site_Kit\\Core\\Util\\Tracking' => $baseDir . '/Core/Util/Tracking.php',

@@ -71,7 +71,7 @@ $generated_i18n_strings = array(
 	// Reference: node_modules/@yoast/components/WordOccurrences.js:57
 	__( '%d occurrences', 'wordpress-seo' ),
 
-	// Reference: node_modules/@yoast/components/field-group/FieldGroup.js:42
+	// Reference: node_modules/@yoast/components/help-icon/HelpIcon.js:50
 	__( '(Opens in a new browser tab)', 'wordpress-seo' ),
 
 	// Reference: node_modules/yoast-components/composites/LinkSuggestions/LinkSuggestion.js:49

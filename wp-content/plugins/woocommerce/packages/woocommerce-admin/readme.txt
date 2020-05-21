@@ -4,7 +4,7 @@ Tags: ecommerce, e-commerce, store, sales, reports, analytics, dashboard, activi
 Requires at least: 5.3.0
 Tested up to: 5.4.1
 Requires PHP: 5.6.20
-Stable tag: 1.1.1
+Stable tag: 1.1.3
 License: GPLv3
 License URI: https://github.com/woocommerce/woocommerce-admin/blob/master/license.txt
 
@@ -70,6 +70,13 @@ Release and roadmap notes are available on the [WooCommerce Developers Blog](htt
 3. Analytics
 
 == Changelog ==
+
+= 1.1.3 2020-05-18 =
+- Tweak: Onboarding: Add Jetpack flow back to onboarding profiler. #4382
+- Fix: Respect tracking opt-in before new page load. #4368
+
+= 1.1.2 N/A =
+- Version bumped on Composer/Packagist but not released to WordPress.org.
 
 = 1.1.1 2020-05-05 =
 - Fix: OBW Industry selection bug for non-US stores. #4120
