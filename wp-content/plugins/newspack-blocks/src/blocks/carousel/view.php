@@ -160,7 +160,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			absint( $x + 1 )
 		);
 		$buttons[] = sprintf(
-			'<button option="%d" class="swiper-pagination-bullet" tabindex="0" role="button" aria-label="%s" %s></button>',
+			'<button option="%d" class="swiper-pagination-bullet" aria-label="%s" %s></button>',
 			absint( $x ),
 			esc_attr( $aria_label ),
 			0 === $x ? 'selected' : ''
@@ -187,7 +187,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			implode( '', $buttons )
 		);
 		$navigation  = sprintf(
-			'<a class="swiper-button swiper-button-prev" role="button" aria-label="%s"></a><a class="swiper-button swiper-button-next" role="button" aria-labvel="%s"></a>',
+			'<button class="swiper-button swiper-button-prev" aria-label="%s"></button><button class="swiper-button swiper-button-next" aria-label="%s"></button>',
 			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
 			esc_attr__( 'Next Slide', 'newspack-blocks' )
 		);
@@ -210,8 +210,8 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 		esc_attr( $classes ),
 		absint( $newspack_blocks_carousel_id ),
 		esc_attr( implode( ' ', $data_attributes ) ),
-		$carousel,
 		$autoplay_ui,
+		$carousel,
 		$selector
 	);
 }
@@ -225,7 +225,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
  */
 function newspack_blocks_carousel_block_autoplay_ui( $block_ordinal = 0 ) {
 	return sprintf(
-		'<a aria-label="%s" class="swiper-button swiper-button-pause" role="button"></a><a aria-label="%s" class="swiper-button swiper-button-play" role="button"></a>',
+		'<button aria-label="%s" class="swiper-button swiper-button-pause"></button><button aria-label="%s" class="swiper-button swiper-button-play"></button>',
 		esc_attr__( 'Pause Slideshow', 'newspack-blocks' ),
 		esc_attr__( 'Play Slideshow', 'newspack-blocks' )
 	);
@@ -248,13 +248,13 @@ function newspack_blocks_carousel_block_autoplay_ui_amp( $block_ordinal = 0 ) {
 		absint( $block_ordinal )
 	);
 	$autoplay_pause  = sprintf(
-		'<a aria-label="%s" class="amp-carousel-button-pause amp-carousel-button" role="button" on="tap:%s.toggleAutoplay(toggleOn=false),%s.toggleClass(class=wp-block-newspack-blocks-carousel__autoplay-playing,force=false)"></a>',
+		'<button aria-label="%s" class="amp-carousel-button-pause amp-carousel-button" on="tap:%s.toggleAutoplay(toggleOn=false),%s.toggleClass(class=wp-block-newspack-blocks-carousel__autoplay-playing,force=false)"></button>',
 		esc_attr__( 'Pause Slideshow', 'newspack-blocks' ),
 		esc_attr( $amp_carousel_id ),
 		esc_attr( $block_id )
 	);
 	$autoplay_play   = sprintf(
-		'<a aria-label="%s" class="amp-carousel-button-play amp-carousel-button" role="button" on="tap:%s.toggleAutoplay(toggleOn=true),%s.toggleClass(class=wp-block-newspack-blocks-carousel__autoplay-playing,force=true)"></a>',
+		'<button aria-label="%s" class="amp-carousel-button-play amp-carousel-button" on="tap:%s.toggleAutoplay(toggleOn=true),%s.toggleClass(class=wp-block-newspack-blocks-carousel__autoplay-playing,force=true)"></button>',
 		esc_attr__( 'Play Slideshow', 'newspack-blocks' ),
 		esc_attr( $amp_carousel_id ),
 		esc_attr( $block_id )

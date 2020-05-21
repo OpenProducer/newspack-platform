@@ -2,7 +2,9 @@
  * External dependencies
  */
 import { addFilter } from '@wordpress/hooks';
+import { registerBlockStyle } from '@wordpress/blocks';
 import './editor.scss';
+
 addFilter( 'blocks.registerBlockType', 'newspack-blocks', ( settings, name ) => {
 	if ( name === 'core/group' ) {
 		const { supports } = settings;
@@ -15,4 +17,9 @@ addFilter( 'blocks.registerBlockType', 'newspack-blocks', ( settings, name ) => 
 		}
 	}
 	return settings;
+} );
+
+registerBlockStyle( 'core/group', {
+	name: 'border',
+	label: 'Border',
 } );

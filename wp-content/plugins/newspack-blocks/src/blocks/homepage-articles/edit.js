@@ -153,7 +153,7 @@ class Edit extends Component {
 				<div className="entry-wrapper">
 					{ showCategory && post.newspack_category_info.length && (
 						<div className="cat-links">
-							<a href="#">{ post.newspack_category_info }</a>
+							<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
 						</div>
 					) }
 					{ RichText.isEmpty( sectionHeader ) ? (
@@ -508,7 +508,7 @@ class Edit extends Component {
 			[ `image-align${ mediaPosition }` ]: showImage,
 			[ `is-${ imageScale }` ]: imageScale !== '1' && showImage,
 			'mobile-stack': mobileStack,
-			[ `image-shape${ imageShape }` ]: imageShape !== 'landscape',
+			[ `is-${ imageShape }` ]: showImage,
 			'has-text-color': textColor.color !== '',
 			'show-caption': showCaption,
 			'show-category': showCategory,

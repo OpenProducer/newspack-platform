@@ -16,7 +16,7 @@ import './view.scss';
 import './editor.scss';
 
 export const name = 'carousel';
-export const title = __( 'Articles Carousel' );
+export const title = __( 'Post Carousel' );
 
 /* From https://material.io/tools/icons */
 export const icon = (
@@ -31,7 +31,7 @@ export const settings = {
 	icon,
 	category: 'newspack',
 	keywords: [ __( 'posts' ), __( 'slideshow' ), __( 'carousel' ) ],
-	description: __( 'A carousel of articles.' ),
+	description: __( 'A carousel of posts.' ),
 	attributes: {
 		className: {
 			type: 'string',

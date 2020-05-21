@@ -1,16 +1,9 @@
 /* eslint-disable jsx-a11y/anchor-is-valid, jsx-a11y/anchor-has-content, jsx-a11y/click-events-have-key-events, jsx-a11y/interactive-supports-focus */
 
 /**
- * Internal dependencies
- */
-import QueryControls from '../../components/query-controls';
-import createSwiper from './create-swiper';
-import { formatAvatars, formatByline } from '../../shared/js/utils';
-
-/**
  * External dependencies
  */
-import { isUndefined, pickBy } from 'lodash';
+import { isEqual, isUndefined, pickBy } from 'lodash';
 import classnames from 'classnames';
 
 /**
@@ -32,57 +25,79 @@ import { withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { decodeEntities } from '@wordpress/html-entities';
 
+/**
+ * Internal dependencies
+ */
+import QueryControls from '../../components/query-controls';
+import createSwiper from './create-swiper';
+import { formatAvatars, formatByline } from '../../shared/js/utils';
+
 class Edit extends Component {
 	constructor( props ) {
 		super( props );
-		this.state = {
-			autoPlayState: true,
-		};
+
+		this.btnPlayRef = createRef();
+		this.btnPauseRef = createRef();
 		this.btnNextRef = createRef();
 		this.btnPrevRef = createRef();
 		this.carouselRef = createRef();
 		this.paginationRef = createRef();
 	}
-	componentDidUpdate() {
+
+	componentDidMount() {
+		this.initializeSwiper( 0 );
+	}
+
+	componentDidUpdate( prevProps ) {
 		const { attributes, latestPosts } = this.props;
-		const { autoPlayState } = this.state;
-		const { autoplay, delay } = attributes;
-		const realIndex =
-			this.swiperInstance && latestPosts && this.swiperInstance.realIndex < latestPosts.length
-				? this.swiperInstance.realIndex
-				: 0;
-		// eslint-disable-next-line no-unused-expressions
-		this.swiperInstance && this.swiperInstance.destroy( true, true );
-		this.swiperInstance = createSwiper(
-			this.carouselRef.current,
-			{
-				autoplay:
-					autoplay && autoPlayState
-						? {
-								delay: delay * 1000,
-								disableOnInteraction: false,
-						  }
-						: false,
-				effect: 'slide',
-				initialSlide: realIndex,
-				loop: true,
-				navigation: {
-					nextEl: this.btnNextRef.current,
-					prevEl: this.btnPrevRef.current,
+
+		if (
+			prevProps.latestPosts !== latestPosts ||
+			( prevProps.latestPosts &&
+				latestPosts &&
+				prevProps.latestPosts.length !== latestPosts.length ) ||
+			! isEqual( prevProps.attributes, attributes )
+		) {
+			let initialSlide = 0;
+
+			if ( this.swiperInstance ) {
+				if ( latestPosts && this.swiperInstance.realIndex < latestPosts.length ) {
+					initialSlide = this.swiperInstance.realIndex;
+				}
+				this.swiperInstance.destroy( true, true );
+			}
+
+			this.initializeSwiper( initialSlide );
+		}
+	}
+
+	initializeSwiper( initialSlide ) {
+		const { latestPosts } = this.props;
+
+		if ( latestPosts && latestPosts.length ) {
+			const { autoplay, delay } = this.props.attributes;
+
+			this.swiperInstance = createSwiper(
+				{
+					block: this.carouselRef.current, // Editor uses the same wrapper for block and swiper container.
+					container: this.carouselRef.current,
+					next: this.btnNextRef.current,
+					prev: this.btnPrevRef.current,
+					play: this.btnPlayRef.current,
+					pause: this.btnPauseRef.current,
+					pagination: this.paginationRef.current,
 				},
-				pagination: {
-					clickable: true,
-					el: this.paginationRef.current,
-					type: 'bullets',
-				},
-			},
-			{}
-		);
+				{
+					autoplay,
+					delay: delay * 1000,
+					initialSlide,
+				}
+			);
+		}
 	}
 
 	render() {
 		const { attributes, className, setAttributes, latestPosts } = this.props;
-		const { autoPlayState } = this.state;
 		const {
 			authors,
 			autoplay,
@@ -99,7 +114,7 @@ class Edit extends Component {
 			className,
 			'wp-block-newspack-blocks-carousel', // Default to make styles work for third-party consumers.
 			'swiper-container',
-			autoplay && autoPlayState && 'wp-block-newspack-blocks-carousel__autoplay-playing'
+			autoplay && 'wp-block-newspack-blocks-carousel__autoplay-playing'
 		);
 		const dateFormat = __experimentalGetSettings().formats.date;
 		return (
@@ -113,6 +128,18 @@ class Edit extends Component {
 					) }
 					{ latestPosts && (
 						<Fragment>
+							{ autoplay && (
+								<Fragment>
+									<button
+										className="amp-carousel-button-pause amp-carousel-button"
+										ref={ this.btnPauseRef }
+									/>
+									<button
+										className="amp-carousel-button-play amp-carousel-button"
+										ref={ this.btnPlayRef }
+									/>
+								</Fragment>
+							) }
 							<div className="swiper-wrapper">
 								{ latestPosts.map(
 									post =>
@@ -128,7 +155,7 @@ class Edit extends Component {
 												<div className="entry-wrapper">
 													{ showCategory && post.newspack_category_info.length && (
 														<div className="cat-links">
-															<a href="#">{ post.newspack_category_info }</a>
+															<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
 														</div>
 													) }
 													<h3 className="entry-title">
@@ -150,36 +177,14 @@ class Edit extends Component {
 										)
 								) }
 							</div>
-							<a
+							<button
 								className="amp-carousel-button amp-carousel-button-prev swiper-button-prev"
 								ref={ this.btnPrevRef }
-								role="button"
 							/>
-							<a
+							<button
 								className="amp-carousel-button amp-carousel-button-next swiper-button-next"
 								ref={ this.btnNextRef }
-								role="button"
 							/>
-							{ autoplay && (
-								<Fragment>
-									<a
-										className="amp-carousel-button-pause amp-carousel-button"
-										role="button"
-										onClick={ () => {
-											this.swiperInstance.autoplay.stop();
-											this.setState( { autoPlayState: false } );
-										} }
-									/>
-									<a
-										className="amp-carousel-button-play amp-carousel-button"
-										role="button"
-										onClick={ () => {
-											this.swiperInstance.autoplay.start();
-											this.setState( { autoPlayState: true } );
-										} }
-									/>
-								</Fragment>
-							) }
 							<div
 								className="swiper-pagination-bullets amp-pagination"
 								ref={ this.paginationRef }
@@ -193,7 +198,9 @@ class Edit extends Component {
 							<QueryControls
 								enableSpecific={ false }
 								numberOfItems={ postsToShow }
-								onNumberOfItemsChange={ value => setAttributes( { postsToShow: value } ) }
+								onNumberOfItemsChange={ value =>
+									setAttributes( { postsToShow: value ? value : 1 } )
+								}
 								authors={ authors }
 								onAuthorsChange={ value => setAttributes( { authors: value } ) }
 								categories={ categories }

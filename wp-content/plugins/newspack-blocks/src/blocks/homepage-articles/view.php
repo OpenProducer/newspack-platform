@@ -35,6 +35,9 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 	if ( $attributes['showImage'] && isset( $attributes['imageScale'] ) ) {
 		$classes .= ' is-' . $attributes['imageScale'];
 	}
+	if ( $attributes['showImage'] ) {
+		$classes .= ' is-' . $attributes['imageShape'];
+	}
 	if ( $attributes['showImage'] && $attributes['mobileStack'] ) {
 		$classes .= ' mobile-stack';
 	}

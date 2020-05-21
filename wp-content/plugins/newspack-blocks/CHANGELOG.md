@@ -1,3 +1,19 @@
+# [1.6.0](https://github.com/Automattic/newspack-blocks/compare/v1.5.0...v1.6.0) (2020-05-19)
+
+
+### Bug Fixes
+
+* decode entities in categories when shown ([#474](https://github.com/Automattic/newspack-blocks/issues/474)) ([5347ba3](https://github.com/Automattic/newspack-blocks/commit/5347ba3904b12a7d4b7de5527927a3353fd198a1))
+* decode entities in categories when shown in carousel ([#475](https://github.com/Automattic/newspack-blocks/issues/475)) ([20dcfd3](https://github.com/Automattic/newspack-blocks/commit/20dcfd382134989a55a3d9c40889fadbb3dd79ff))
+* disallow 0 as post to show value ([80db497](https://github.com/Automattic/newspack-blocks/commit/80db497f1d734f8bb9b60d4441670d6deab5e7f7))
+* initializing swiper for multiple blocks ([#476](https://github.com/Automattic/newspack-blocks/issues/476)) ([f480d54](https://github.com/Automattic/newspack-blocks/commit/f480d5480b801d21490cf406f8c55bcfb5620fbc))
+
+
+### Features
+
+* add border style to group block ([#463](https://github.com/Automattic/newspack-blocks/issues/463)) ([1c1f89d](https://github.com/Automattic/newspack-blocks/commit/1c1f89dbb8ec6cbdf39e0303457551c43612480a))
+* add image shape classes to the front end ([#473](https://github.com/Automattic/newspack-blocks/issues/473)) ([c90df2e](https://github.com/Automattic/newspack-blocks/commit/c90df2e2e89d685a979b20e4d7ff005af2356869))
+
 # [1.5.0](https://github.com/Automattic/newspack-blocks/compare/v1.4.0...v1.5.0) (2020-05-07)
 
 
