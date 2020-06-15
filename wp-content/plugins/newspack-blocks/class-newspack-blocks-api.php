@@ -71,6 +71,21 @@ class Newspack_Blocks_API {
 				],
 			]
 		);
+
+		/* Add list of categories for CSS classes */
+		register_rest_field(
+			'post',
+			'newspack_article_classes',
+			[
+				'get_callback' => [ 'Newspack_Blocks_API', 'newspack_blocks_get_cat_tag_classes' ],
+				'schema'       => [
+					'context' => [
+						'edit',
+					],
+					'type'    => 'string',
+				],
+			]
+		);
 	}
 
 	/**
@@ -234,6 +249,16 @@ class Newspack_Blocks_API {
 		}
 
 		return $category->name;
+	}
+
+	/**
+	 * Get a list of category, tag classes for the rest field.
+	 *
+	 * @param array $object The object info.
+	 * @return string classes from assigned categories and tags.
+	 */
+	public static function newspack_blocks_get_cat_tag_classes( $object ) {
+		return Newspack_Blocks::get_term_classes( $object['id'] );
 	}
 
 	/**

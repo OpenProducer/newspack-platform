@@ -139,6 +139,7 @@ figcaption,
   font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
   font-size: 2.2em;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 @media only screen and (min-width: 1168px) {
@@ -988,10 +989,18 @@ blockquote {
   font-size: 12px;
 }
 
+.wp-block-newspack-blocks-carousel .entry-meta .byline a {
+  color: inherit;
+}
+
 .has-drop-cap:not(:focus)::first-letter {
   color: #555;
   font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
   font-weight: 800;
+}
+
+.wp-block-group.is-style-border {
+  border-color: currentColor;
 }
 
 .wp-block[data-type='core/pullquote'] .wp-block-pullquote {

@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.6.2
+Version: 1.8.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -406,6 +406,7 @@ textarea {
 .cat-links,
 .entry-footer,
 .author-bio .author-link,
+.author-meta,
 .nav1,
 .secondary-menu,
 .nav3,
@@ -2198,8 +2199,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 @media only screen and (max-width: 781px) {
   .site-header .custom-logo-link .custom-logo {
     height: auto;
-    max-height: 75px;
-    max-width: 175px;
+    min-height: 45px;
+    object-fit: contain;
     width: auto;
   }
 }
@@ -2271,7 +2272,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   padding: 1rem 0;
 }
 
-@media only screen and (min-width: 600px) {
+@media only screen and (min-width: 782px) {
   .middle-header-contain .wrapper {
     padding: 1.5rem 0;
   }
@@ -2350,7 +2351,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 
 @media only screen and (min-width: 782px) {
   .h-cl .site-header .middle-header-contain .wrapper > div {
-    flex: 1;
     width: 35%;
   }
   .h-cl .site-header .middle-header-contain .wrapper > div.site-branding {
@@ -2376,12 +2376,10 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
     margin-left: 0;
   }
   .h-cl .site-header .custom-logo-link img {
-    max-width: inherit;
+    height: auto;
+    max-width: 100%;
     margin: auto;
   }
-}
-
-@media only screen and (min-width: 782px) {
   .h-cl.h-dh .site-header .middle-header-contain .wrapper .site-branding, .h-cl.h-sub .site-header .middle-header-contain .wrapper .site-branding {
     display: flex;
     justify-content: center;
@@ -2406,6 +2404,26 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .h-cl.h-sh .site-description {
     text-align: center;
     width: 100%;
+  }
+}
+
+@media only screen and (min-width: 1168px) {
+  .h-cl .site-header .middle-header-contain .wrapper > div {
+    flex: 1;
+    width: auto;
+  }
+  .h-cl .site-header .middle-header-contain .wrapper > div.site-branding {
+    width: auto;
+  }
+  .h-cl .site-header .custom-logo-link img {
+    max-width: inherit;
+  }
+}
+
+@media screen and (-ms-high-contrast: none) and (min-width: 1168px) {
+  .h-cl .site-header .custom-logo-link img {
+    height: auto;
+    max-width: 100%;
   }
 }
 
@@ -2528,6 +2546,10 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 @media only screen and (min-width: 782px) {
+  .h-sub .site-header .custom-logo {
+    width: auto;
+    height: auto;
+  }
   .h-sub.h-db .middle-header-contain {
     border-bottom: 1px solid #ccc;
   }
@@ -2543,12 +2565,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 @media only screen and (min-width: 782px) {
-  .h-sub .middle-header-contain .custom-logo {
-    height: auto;
-    max-height: 50px;
-    max-width: 180px;
-    width: auto;
-  }
   .h-sub .middle-header-contain .header-search-contain {
     margin-right: auto;
   }
@@ -2558,6 +2574,13 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   }
   .h-sub.h-cl .site-header .middle-header-contain .wrapper > div:last-of-type {
     text-align: left;
+  }
+  .h-sub.h-ll {
+    /* stylelint-disable selector-type-no-unknown  */
+    /* stylelint-enable */
+  }
+  .h-sub.h-ll .site-header .custom-logo-link amp-img.amp-wp-enforced-sizes[layout='intrinsic'] > img {
+    object-position: left center;
   }
   .h-sub.h-sh .featured-image-behind,
   .h-sub.h-sh .featured-image-beside, .h-sub.h-dh .featured-image-behind,
@@ -3033,15 +3056,6 @@ body.page .entry-title {
   }
 }
 
-.author-bio .author-meta,
-.author-bio .author-link {
-  font-size: 0.8em;
-}
-
-.author-bio .author-meta a {
-  color: #767676;
-}
-
 .author-bio p {
   font-size: calc( 1em * 0.9);
   margin: 0.5em 0;
@@ -3049,6 +3063,7 @@ body.page .entry-title {
 
 .author-bio .author-link {
   color: #36f;
+  font-size: 0.8em;
   font-weight: bold;
   text-decoration: none;
 }
@@ -3057,9 +3072,63 @@ body.page .entry-title {
   color: #2240d5;
 }
 
-.hide-author-bio .author-bio,
-.hide-author-email .author-bio .author-email {
-  display: none;
+.author-meta {
+  color: #767676;
+  font-size: 0.7em;
+}
+
+.author-meta a {
+  color: inherit;
+  text-decoration: none;
+}
+
+.author-meta a:hover {
+  color: #111;
+}
+
+.author-meta .author-email {
+  align-items: center;
+  display: flex;
+}
+
+.author-meta .author-email svg {
+  margin-left: 0.25em;
+}
+
+@media only screen and (min-width: 1168px) {
+  .author-meta {
+    align-items: center;
+    display: flex;
+  }
+  .author-meta .author-social-links {
+    margin-top: 0;
+  }
+  .author-meta .author-social-links:not(:first-child) {
+    border-right: 1px solid #ccc;
+    margin-right: 1rem;
+    padding-right: 1rem;
+  }
+}
+
+.author-social-links {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.author-social-links:not(:first-child) {
+  margin-top: 0.33rem;
+}
+
+.author-social-links li {
+  margin-left: 0.33rem;
+}
+
+.author-social-links a:visited {
+  color: #767676;
 }
 
 /* Featured Image - special styles */
@@ -4448,8 +4517,12 @@ body.page .entry-title {
 }
 
 .wp-block-newspack-blocks-carousel h3 a,
-.wp-block-newspack-blocks-carousel h3 a:visited {
-  color: #fff;
+.wp-block-newspack-blocks-carousel h3 a:visited,
+.wp-block-newspack-blocks-carousel .entry-meta .byline a,
+.wp-block-newspack-blocks-carousel .entry-meta .byline a:visited,
+.wp-block-newspack-blocks-carousel .cat-links a,
+.wp-block-newspack-blocks-carousel .cat-links a:visited {
+  color: inherit;
 }
 
 .wp-block-columns .wp-block-cover,
@@ -5771,6 +5844,14 @@ body.style-pack-style-2 .newspack_global_ad.global_below_header {
   display: none;
 }
 
+.h-sub.single-featured-image-beside .global_below_header, .h-sub.single-featured-image-behind .global_below_header {
+  display: none;
+}
+
+.h-sub.single-featured-image-beside:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header + .site-content, .h-sub.single-featured-image-behind:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header + .site-content {
+  margin-top: 0;
+}
+
 /* Yoast Breadcrumb support */
 .site-breadcrumb {
   color: #767676;
@@ -5916,6 +5997,10 @@ body.style-pack-style-2 .newspack_global_ad.global_below_header {
   display: none;
 }
 
+.wp-block-newspack-blocks-carousel .cat-links::before {
+  display: none;
+}
+
 .wp-block-cover .wpnbha.show-image.image-aligntop:not(.show-caption):not(.show-category)
 .post-has-image
 .entry-title,
@@ -6004,7 +6089,8 @@ figcaption::after,
   display: none;
 }
 
-.wp-block-columns.is-style-borders .wp-block-column::after {
+.wp-block-columns.is-style-borders .wp-block-column::after,
+.wp-block-group.is-style-border {
   border-style: dotted;
   border-color: #111;
 }

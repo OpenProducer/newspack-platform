@@ -123,6 +123,56 @@ if ( ! function_exists( 'newspack_posted_by' ) ) :
 	}
 endif;
 
+if ( ! function_exists( 'newspack_author_social_links' ) ) :
+	/**
+	 * Prints list of social links for the current author.
+	 */
+	function newspack_author_social_links( $author_id, $size = 24 ) {
+
+		// Get list of available social profiles.
+		$social_profiles = array(
+			'facebook',
+			'twitter',
+			'instagram',
+			'linkedin',
+			'myspace',
+			'pinterest',
+			'soundcloud',
+			'tumblr',
+			'youtube',
+			'wikipedia',
+		);
+
+		// Create empty string for links.
+		$links = '';
+
+		// Create array of allowed HTML, including SVG markup.
+		$allowed_html = array(
+			'a'  => array(
+				'href'   => array(),
+				'title'  => array(),
+				'target' => array(),
+			),
+			'li' => array(),
+		);
+		$allowed_html = array_merge( $allowed_html, newspack_sanitize_svgs() );
+
+		foreach ( $social_profiles as $profile ) {
+			if ( '' !== get_the_author_meta( $profile, $author_id ) ) {
+				if ( 'twitter' === $profile ) {
+					$links .= '<li><a href="https://twitter.com/' . esc_attr( get_the_author_meta( $profile, $author_id ) ) . '" target="_blank">' . newspack_get_social_icon_svg( $profile, $size, $profile ) . '</a></li>';
+				} else {
+					$links .= '<li><a href="' . esc_url( get_the_author_meta( $profile, $author_id ) ) . '" target="_blank">' . newspack_get_social_icon_svg( $profile, $size, $profile ) . '</a></li>';
+				}
+			}
+		}
+
+		if ( '' !== $links && true === get_theme_mod( 'show_author_social', false ) ) {
+			echo '<ul class="author-social-links">' . wp_kses( $links, $allowed_html ) . '</ul>';
+		}
+	}
+endif;
+
 if ( ! function_exists( 'newspack_comment_count' ) ) :
 	/**
 	 * Prints HTML with the comment count for the current post.
@@ -346,8 +396,14 @@ function newspack_primary_menu() {
 	if ( ! has_nav_menu( 'primary-menu' ) ) {
 		return;
 	}
+
+	// Only set a toolbar-target attributes if the primary menu container exists in the header - if not subpage header.
+	$toolbar_attributes = '';
+	if ( false === get_theme_mod( 'header_sub_simplified', false ) || is_front_page() ) {
+		$toolbar_attributes = 'toolbar-target="site-navigation" toolbar="(min-width: 767px)"';
+	}
 	?>
-	<nav toolbar="(min-width: 767px)" toolbar-target="site-navigation" class="main-navigation nav1" aria-label="<?php esc_attr_e( 'Top Menu', 'newspack' ); ?>">
+	<nav class="main-navigation nav1" aria-label="<?php esc_attr_e( 'Top Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php
 		wp_nav_menu(
 			array(
@@ -370,9 +426,9 @@ function newspack_secondary_menu() {
 		return;
 	}
 
-	// Only set the AMP toolbar attributes if the secondary menu container exists in the header.
+	// Only set a toolbar-target attributes if the secondary menu container exists in the header - if not short or subpage header.
 	$toolbar_attributes = '';
-	if ( false === get_theme_mod( 'header_simplified', false ) ) {
+	if ( false === get_theme_mod( 'header_simplified', false ) && ( false === get_theme_mod( 'header_sub_simplified', false ) || is_front_page() ) ) {
 		$toolbar_attributes = 'toolbar-target="secondary-nav-contain" toolbar="(min-width: 767px)"';
 	}
 
@@ -400,8 +456,14 @@ function newspack_tertiary_menu() {
 	if ( ! has_nav_menu( 'tertiary-menu' ) ) {
 		return;
 	}
+
+	// Only set a toolbar-target attributes if the tertiary menu container exists in the header - if not subpage header.
+	$toolbar_attributes = '';
+	if ( false === get_theme_mod( 'header_sub_simplified', false ) || is_front_page() ) {
+		$toolbar_attributes = 'toolbar-target="tertiary-nav-contain" toolbar="(min-width: 767px)"';
+	}
 	?>
-		<nav toolbar="(min-width: 767px)" toolbar-target="tertiary-nav-contain" class="tertiary-menu nav3" aria-label="<?php esc_attr_e( 'Tertiary Menu', 'newspack' ); ?>">
+		<nav class="tertiary-menu nav3" aria-label="<?php esc_attr_e( 'Tertiary Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 			<?php
 			wp_nav_menu(
 				array(
@@ -440,9 +502,9 @@ function newspack_social_menu_header() {
 		return;
 	}
 
-	// Only set a toolbar-target attributes if the social menu container exists in the header.
+	// Only set a toolbar-target attributes if the social menu container exists in the header - if not short or subpage header.
 	$toolbar_attributes = '';
-	if ( false === get_theme_mod( 'header_simplified', false ) ) {
+	if ( false === get_theme_mod( 'header_simplified', false ) && ( false === get_theme_mod( 'header_sub_simplified', false ) || is_front_page() ) ) {
 		$toolbar_attributes = 'toolbar="(min-width: 767px)" toolbar-target="social-nav-contain"';
 	}
 	?>

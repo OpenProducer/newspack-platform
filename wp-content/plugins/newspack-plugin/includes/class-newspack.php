@@ -68,6 +68,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-admin-plugins-screen.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-setup-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-dashboard.php';
@@ -127,6 +128,9 @@ final class Newspack {
 		if ( Payment_Wizard::configured() && filter_input( INPUT_POST, 'newspack_reset_subscription', FILTER_SANITIZE_STRING ) === 'on' ) {
 			update_option( Payment_Wizard::NEWSPACK_STRIPE_CUSTOMER, null );
 			update_option( Payment_Wizard::NEWSPACK_STRIPE_SUBSCRIPTION, null );
+		}
+		if ( Support_Wizard::get_wpcom_access_token() && filter_input( INPUT_POST, 'newspack_remove_wpcom_token', FILTER_SANITIZE_STRING ) === 'on' ) {
+			delete_user_meta( get_current_user_id(), Support_Wizard::NEWSPACK_WPCOM_ACCESS_TOKEN );
 		}
 	}
 

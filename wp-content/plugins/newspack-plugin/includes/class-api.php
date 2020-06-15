@@ -9,6 +9,7 @@ namespace Newspack;
 
 use Newspack\Api\Plugins_Controller;
 use Newspack\Api\Wizards_Controller;
+use Newspack\Api\Popups_Analytics_Controller;
 
 defined( 'ABSPATH' ) || exit;
 

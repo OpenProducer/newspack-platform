@@ -108,6 +108,15 @@ class Settings {
 				'newspack_settings'
 			);
 		}
+		if ( Support_Wizard::get_wpcom_access_token() ) {
+			add_settings_field(
+				'newspack_remove_wpcom_token',
+				__( 'Reset WordPress.com authentication', 'newspack' ),
+				[ __CLASS__, 'newspack_remove_wpcom_token_callback' ],
+				'newspack-settings-admin',
+				'newspack_settings'
+			);
+		}
 	}
 
 	/**
@@ -123,7 +132,7 @@ class Settings {
 	}
 
 	/**
-	 * Render Reset button.
+	 * Render Reset checkbox.
 	 */
 	public static function newspack_reset_callback() {
 		printf(
@@ -132,11 +141,20 @@ class Settings {
 	}
 
 	/**
-	 * Render reset subscription button.
+	 * Render reset subscription checkbox.
 	 */
 	public static function newspack_reset_subscription_callback() {
 		printf(
 			'<input type="checkbox" id="newspack_reset_subscription" name="newspack_reset_subscription" />'
+		);
+	}
+
+	/**
+	 * Render remove WPCOM token checkbox.
+	 */
+	public static function newspack_remove_wpcom_token_callback() {
+		printf(
+			'<input type="checkbox" id="newspack_remove_wpcom_token" name="newspack_remove_wpcom_token" />'
 		);
 	}
 }

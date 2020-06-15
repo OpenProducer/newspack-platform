@@ -139,6 +139,7 @@ figcaption,
   font-family: "Barlow", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 2.2em;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 @media only screen and (min-width: 1168px) {
@@ -1143,4 +1144,9 @@ hr {
   .wp-block .wp-block-columns.is-style-borders [data-type='core/column']::after {
     border-color: #111;
   }
+}
+
+.wp-block-group.is-style-border {
+  border-style: dotted;
+  border-color: #111;
 }

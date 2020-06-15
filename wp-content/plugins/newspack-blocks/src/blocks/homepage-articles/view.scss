@@ -36,10 +36,7 @@
 			flex-basis: 100%;
 
 			@include media( tablet ) {
-				&:last-child,
-				& {
-					margin-bottom: 1em;
-				}
+				margin-bottom: 1em;
 			}
 		}
 	}

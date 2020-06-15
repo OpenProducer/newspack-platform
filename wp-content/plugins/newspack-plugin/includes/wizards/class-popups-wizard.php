@@ -12,6 +12,7 @@ use \WP_Error, \WP_Query;
 defined( 'ABSPATH' ) || exit;
 
 require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
+require_once NEWSPACK_ABSPATH . 'includes/popups-analytics/class-popups-analytics-utils.php';
 
 /**
  * Interface for managing Pop-ups.
@@ -169,6 +170,30 @@ class Popups_Wizard extends Wizard {
 					],
 					'options' => [
 						'validate_callback' => [ $this, 'api_validate_options' ],
+					],
+				],
+			]
+		);
+
+		// Register newspack/v1/popups-analytics/report endpoint.
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/popups-analytics/report',
+			[
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ $this, 'get_popups_analytics_report' ],
+					'permission_callback' => [ $this, 'api_permissions_check' ],
+					'args'                => [
+						'offset'         => [
+							'sanitize_callback' => 'sanitize_text_field',
+						],
+						'event_label_id' => [
+							'sanitize_callback' => 'sanitize_text_field',
+						],
+						'event_action'   => [
+							'sanitize_callback' => 'sanitize_text_field',
+						],
 					],
 				],
 			]
@@ -404,5 +429,20 @@ class Popups_Wizard extends Wizard {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Get Campaigns Analytics report.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+	 */
+	public function get_popups_analytics_report( $request ) {
+		$options = array(
+			'offset'         => $request['offset'],
+			'event_label_id' => $request['event_label_id'],
+			'event_action'   => $request['event_action'],
+		);
+		return rest_ensure_response( \Popups_Analytics_Utils::get_report( $options ) );
 	}
 }

@@ -195,7 +195,7 @@ class Newspack_Blocks {
 			$classes = array_merge( $classes, $extra );
 		}
 
-		return implode( $classes, ' ' );
+		return implode( ' ', $classes );
 	}
 
 	/**
@@ -320,6 +320,31 @@ class Newspack_Blocks {
 		if ( ! $newspack_blocks_post_id ) {
 			$newspack_blocks_post_id = array();
 		}
+
+		// Get all blocks and gather specificPosts ids of all Homepage Articles blocks.
+		global $newspack_blocks_all_specific_posts_ids;
+		if ( ! is_array( $newspack_blocks_all_specific_posts_ids ) ) {
+			$blocks                                 = parse_blocks( get_the_content() );
+			$block_name                             = apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/homepage-articles' );
+			$newspack_blocks_all_specific_posts_ids = array_reduce(
+				$blocks,
+				function ( $acc, $block ) use ( $block_name ) {
+					if (
+						$block_name === $block['blockName'] &&
+						isset( $block['attrs']['specificMode'], $block['attrs']['specificPosts'] ) &&
+						count( $block['attrs']['specificPosts'] )
+					) {
+						return array_merge(
+							$block['attrs']['specificPosts'],
+							$acc
+						);
+					}
+					return $acc;
+				},
+				[]
+			);
+		}
+
 		$authors        = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
 		$categories     = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
 		$tags           = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
@@ -336,7 +361,19 @@ class Newspack_Blocks {
 			$args['post__in'] = $specific_posts;
 			$args['orderby']  = 'post__in';
 		} else {
-			$args['posts_per_page'] = $posts_to_show + count( $newspack_blocks_post_id );
+			$args['posts_per_page'] = $posts_to_show;
+			if ( ! self::is_experimental_mode() ) {
+				$args['posts_per_page'] += count( $newspack_blocks_post_id );
+			}
+			if ( count( $newspack_blocks_all_specific_posts_ids ) ) {
+				$args['post__not_in'] = $newspack_blocks_all_specific_posts_ids;
+			}
+			if ( self::is_experimental_mode() && count( $newspack_blocks_post_id ) ) {
+				$args['post__not_in'] = array_merge(
+					$args['post__not_in'] ?? [],
+					array_keys( $newspack_blocks_post_id )
+				);
+			}
 			if ( $authors && count( $authors ) ) {
 				$args['author__in'] = $authors;
 			}
@@ -412,6 +449,32 @@ class Newspack_Blocks {
 	}
 
 	/**
+	 * Prepare a list of classes based on assigned tags and categories.
+	 *
+	 * @param string $post_id Post ID.
+	 * @return string CSS classes.
+	 */
+	public static function get_term_classes( $post_id ) {
+		$classes = [];
+
+		$tags = get_the_terms( $post_id, 'post_tag' );
+		if ( ! empty( $tags ) ) {
+			foreach ( $tags as $tag ) {
+				$classes[] = 'tag-' . $tag->slug;
+			}
+		}
+
+		$categories = get_the_terms( $post_id, 'category' );
+		if ( ! empty( $categories ) ) {
+			foreach ( $categories as $cat ) {
+				$classes[] = 'category-' . $cat->slug;
+			}
+		}
+
+		return implode( ' ', $classes );
+	}
+
+	/**
 	 * Get patterns for post type.
 	 *
 	 * @param string $post_type Post type.
@@ -440,6 +503,15 @@ class Newspack_Blocks {
 			];
 		}
 		return $clean;
+	}
+
+	/**
+	 * Is experimental mode flag set in wp-config.php
+	 *
+	 * @return boolean Experimental mode flag.
+	 */
+	public static function is_experimental_mode() {
+		return defined( 'NEWSPACK_BLOCKS_EXPERIMENTAL_MODE' ) && NEWSPACK_BLOCKS_EXPERIMENTAL_MODE;
 	}
 }
 Newspack_Blocks::init();

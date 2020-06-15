@@ -423,7 +423,6 @@ function newspack_customize_register( $wp_customize ) {
 		'show_author_bio',
 		array(
 			'default'           => true,
-			'transport'         => 'postMessage',
 			'sanitize_callback' => 'newspack_sanitize_checkbox',
 		)
 	);
@@ -442,7 +441,6 @@ function newspack_customize_register( $wp_customize ) {
 		'show_author_email',
 		array(
 			'default'           => false,
-			'transport'         => 'postMessage',
 			'sanitize_callback' => 'newspack_sanitize_checkbox',
 		)
 	);
@@ -451,7 +449,25 @@ function newspack_customize_register( $wp_customize ) {
 		array(
 			'type'        => 'checkbox',
 			'label'       => esc_html__( 'Display Author Email', 'newspack' ),
-			'description' => esc_html__( 'Display Author email with bio on individual posts.', 'newspack' ),
+			'description' => esc_html__( 'Display Author email with bio on individual posts and author archives.', 'newspack' ),
+			'section'     => 'author_bio_options',
+		)
+	);
+
+	// Add option to hide author social links.
+	$wp_customize->add_setting(
+		'show_author_social',
+		array(
+			'default'           => false,
+			'sanitize_callback' => 'newspack_sanitize_checkbox',
+		)
+	);
+	$wp_customize->add_control(
+		'show_author_social',
+		array(
+			'type'        => 'checkbox',
+			'label'       => esc_html__( 'Display Author Social Media links', 'newspack' ),
+			'description' => esc_html__( 'Display social media links with the author bio on individual posts and author archives (this option requires the Yoast plugin).', 'newspack' ),
 			'section'     => 'author_bio_options',
 		)
 	);

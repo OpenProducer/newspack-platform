@@ -9,10 +9,17 @@
 call_user_func(
 	function( $data ) {
 		$attributes = $data['attributes'];
+		$authors    = Newspack_Blocks::prepare_authors();
+		$classes    = array();
+		$styles     = '';
 
-		$authors = Newspack_Blocks::prepare_authors();
+		// Add classes based on the post's assigned categories and tags.
+		$classes[] = Newspack_Blocks::get_term_classes( get_the_ID() );
 
-		$styles = '';
+		// Add class if post has a featured image.
+		if ( has_post_thumbnail() ) {
+			$classes[] = 'post-has-image';
+		}
 
 		if ( 'behind' === $attributes['mediaPosition'] && $attributes['showImage'] && has_post_thumbnail() ) {
 			$styles = 'min-height: ' . $attributes['minHeight'] . 'vh; padding-top: ' . ( $attributes['minHeight'] / 5 ) . 'vh;';
@@ -42,10 +49,9 @@ call_user_func(
 			}
 		}
 		?>
+
 	<article data-post-id="<?php the_id(); ?>"
-		<?php if ( has_post_thumbnail() ) : ?>
-		class="post-has-image"
-		<?php endif; ?>
+		class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>"
 		<?php if ( $styles ) : ?>
 		style="<?php echo esc_attr( $styles ); ?>"
 		<?php endif; ?>

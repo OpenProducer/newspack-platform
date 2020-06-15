@@ -14,6 +14,10 @@
  */
 function newspack_blocks_render_block_carousel( $attributes ) {
 	static $newspack_blocks_carousel_id = 0;
+
+	// This will let the FSE plugin know we need CSS/JS now.
+	do_action( 'newspack_blocks_render_post_carousel' );
+
 	$newspack_blocks_carousel_id++;
 	$autoplay      = isset( $attributes['autoplay'] ) ? $attributes['autoplay'] : false;
 	$delay         = isset( $attributes['delay'] ) ? absint( $attributes['delay'] ) : 3;

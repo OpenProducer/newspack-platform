@@ -139,6 +139,7 @@ figcaption,
   font-family: "Old Standard TT", georgia, serif;
   font-size: 2.2em;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 @media only screen and (min-width: 1168px) {
@@ -960,6 +961,10 @@ ul.wp-block-archives li,
   .wp-block .wp-block-columns.is-style-borders [data-type='core/column']::after {
     border-color: currentColor;
   }
+}
+
+.wp-block-group.is-style-border {
+  border: 3px double currentColor;
 }
 
 /* Separator */

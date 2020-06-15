@@ -139,6 +139,7 @@ figcaption,
   font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 2.2em;
   font-weight: 700;
+  line-height: 1.2;
 }
 
 @media only screen and (min-width: 1168px) {
@@ -977,6 +978,10 @@ ul.wp-block-archives li,
 .has-drop-cap:not(:focus)::first-letter {
   font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-weight: bold;
+}
+
+.wp-block-newspack-blocks-carousel .entry-meta .byline a {
+  color: inherit;
 }
 
 .wp-block[data-type='core/pullquote'] .wp-block-pullquote {

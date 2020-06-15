@@ -1,3 +1,39 @@
+# [1.8.0](https://github.com/Automattic/newspack-plugin/compare/v1.7.0...v1.8.0) (2020-06-09)
+
+
+### Bug Fixes
+
+* add non-interactive event handling ([c0763b1](https://github.com/Automattic/newspack-plugin/commit/c0763b1c3079771315ffe80d98dd97caa78150c0))
+* determine non-interactive based on ga event type ([90655bb](https://github.com/Automattic/newspack-plugin/commit/90655bb9c2ab9c8e152324076b027292cda8c9eb))
+* ie11 compatibility ([20eab91](https://github.com/Automattic/newspack-plugin/commit/20eab910ada47fc6d38ed4b575f32321731d2e4c))
+* non-AMP events ([3a6981d](https://github.com/Automattic/newspack-plugin/commit/3a6981d6c88bf5d5eed60ba504a3e064c0ff66c7))
+* remove short-circuit ([6cc0ed7](https://github.com/Automattic/newspack-plugin/commit/6cc0ed7807ebf01c99667e1f7bb5021042fbf8f5))
+* scroll event reporting ([3b095b9](https://github.com/Automattic/newspack-plugin/commit/3b095b9e8eabb71ef1d782a95c27fcc271d82a27))
+
+
+### Features
+
+* add up Campaigns Analytics view ([#516](https://github.com/Automattic/newspack-plugin/issues/516)) ([dd0608d](https://github.com/Automattic/newspack-plugin/commit/dd0608d7d2f6a01c9e94cd75ee6fcd2fca842a1a))
+* add value to NTG scroll events ([0a365d6](https://github.com/Automattic/newspack-plugin/commit/0a365d6f4b5d317514efb3d9523e5c78e0c9699c))
+* analytics events framework ([4b876a4](https://github.com/Automattic/newspack-plugin/commit/4b876a495f97760f1f6e0a6c174ec2feea087c78))
+
+# [1.7.0](https://github.com/Automattic/newspack-plugin/compare/v1.6.0...v1.7.0) (2020-06-04)
+
+
+### Bug Fixes
+
+* duplicate key ([f18c0ae](https://github.com/Automattic/newspack-plugin/commit/f18c0ae17a93f811102f853cffabbb2dbf291cd2))
+* **support:** validate token before starting chat ([#520](https://github.com/Automattic/newspack-plugin/issues/520)) ([1112600](https://github.com/Automattic/newspack-plugin/commit/1112600549128e01b6314a82866efbe499c6f99e))
+* handle empty title for campaigns ([3d4f6df](https://github.com/Automattic/newspack-plugin/commit/3d4f6df817e615e24beaf319854afa1c0ed333b6))
+* plugin messages in wizard pluralization ([#518](https://github.com/Automattic/newspack-plugin/issues/518)) ([5661b0a](https://github.com/Automattic/newspack-plugin/commit/5661b0aec5d17ea41147fdf804eab940de553be1)), closes [#453](https://github.com/Automattic/newspack-plugin/issues/453)
+
+
+### Features
+
+* **support:** enable removing WPCOM token in settings; change auth scope to global ([#546](https://github.com/Automattic/newspack-plugin/issues/546)) ([1210967](https://github.com/Automattic/newspack-plugin/commit/1210967c1f49f3c91603b95e2c462986f044a550))
+* **support:** list user's support tickets ([#534](https://github.com/Automattic/newspack-plugin/issues/534)) ([dca3497](https://github.com/Automattic/newspack-plugin/commit/dca34970c207d276f72d7b54293f678659b2e176))
+* add small action card and plugin installer ([cb08ab0](https://github.com/Automattic/newspack-plugin/commit/cb08ab0c95570cb2ab793be03267481266bea743))
+
 # [1.6.0](https://github.com/Automattic/newspack-plugin/compare/v1.5.0...v1.6.0) (2020-05-06)
 
 
