@@ -11,28 +11,8 @@ namespace Facebook\InstantArticles\Utils;
 use Facebook\InstantArticles\Parser\Parser;
 use PHPUnit\Framework;
 
-class FileUtilsPHPUnitTestCase extends Framework\TestCase
+abstract class FileUtilsPHPUnitTestCase extends Framework\TestCase
 {
-    protected function setUp()
-    {
-        \Logger::configure(
-            [
-                'rootLogger' => [
-                    'appenders' => ['facebook-instantarticles-traverser']
-                ],
-                'appenders' => [
-                    'facebook-instantarticles-traverser' => [
-                        'class' => 'LoggerAppenderConsole',
-                        'threshold' => 'INFO',
-                        'layout' => [
-                            'class' => 'LoggerLayoutSimple'
-                        ]
-                    ]
-                ]
-            ]
-        );
-    }
-
     /**
      * Loads HTML file using by default file_get_contents
      */
@@ -76,5 +56,15 @@ class FileUtilsPHPUnitTestCase extends Framework\TestCase
         $document = $this->loadDOMDocument($file, $encoding);
         $parser = new Parser();
         return $parser->parse($document);
+    }
+
+    protected function assertEqualsHtml($expected, $actual)
+    {
+        $from = ['/\>[^\S ]+/s', '/[^\S ]+\</s', '/(\s)+/s', '/> </s'];
+        $to = ['>', '<', '\\1', '><'];
+        $this->assertEquals(
+            preg_replace($from, $to, $expected),
+            preg_replace($from, $to, $actual)
+        );
     }
 }

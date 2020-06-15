@@ -25,7 +25,7 @@ class AMPArticleTest extends FileUtilsPHPUnitTestCase
         $instant_article->addMetaProperty('op:generator:transformer:version', '1.0.0');
         $result = $instant_article->render('', true)."\n";
 
-        $this->assertEquals($html_file, $result);
+        $this->assertEqualsHtml($html_file, $result);
     }
 
     public function testTransformIAtoAMPTest1()
@@ -131,7 +131,7 @@ class AMPArticleTest extends FileUtilsPHPUnitTestCase
         $ampExpectedNoStyles = $this->getMarkupWithoutStyles($ampExpected);
         $ampRenderedNoStyles = $this->getMarkupWithoutStyles($ampRendered);
 
-        $this->assertEquals($ampExpectedNoStyles, $ampRenderedNoStyles);
+        $this->assertEqualsHtml($ampExpectedNoStyles, $ampRenderedNoStyles);
     }
 
     public function runIAtoAMPTest($test, $customProperties = null)
@@ -182,7 +182,7 @@ class AMPArticleTest extends FileUtilsPHPUnitTestCase
     {
         $discoveryMetadata = $this->getDiscoveryMetadata($test);
 
-        $this->assertFalse(array_key_exists($key, $discoveryMetadata), "Found unexpected '$key' key in Schema.org metadata");
+        $this->assertArrayNotHasKey($key, $discoveryMetadata, "Found unexpected '$key' key in Schema.org metadata");
     }
 
     public function testSchemaOrgContext()
@@ -219,7 +219,7 @@ class AMPArticleTest extends FileUtilsPHPUnitTestCase
     {
         $key = 'dateModified';
         $discoveryMetadata = $this->getDiscoveryMetadata('tutorial');
-        $this->assertTrue(array_key_exists($key, $discoveryMetadata), "Did not found expected '$key' key in Schema.org metadata");
+        $this->assertArrayHasKey($key, $discoveryMetadata, "Did not found expected '$key' key in Schema.org metadata");
     }
 
     public function testSchemaOrgAuthor()

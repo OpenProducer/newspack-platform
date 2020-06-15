@@ -4,7 +4,7 @@
  * Description: Add support for Instant Articles for Facebook to your WordPress site.
  * Author: Automattic, Dekode, Facebook
  * Author URI: https://vip.wordpress.com/plugins/instant-articles/
- * Version: 4.2.0
+ * Version: 4.2.1
  * Text Domain: instant-articles
  * License: GPLv2
  * License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -35,7 +35,7 @@ if ( version_compare( PHP_VERSION, '5.4', '<' ) ) {
 
 	defined( 'ABSPATH' ) || die( 'Shame on you' );
 
-	define( 'IA_PLUGIN_VERSION', '4.2.0' );
+	define( 'IA_PLUGIN_VERSION', '4.2.1' );
 	define( 'IA_PLUGIN_PATH_FULL', __FILE__ );
 	define( 'IA_PLUGIN_PATH', plugin_basename( __FILE__ ) );
 	define( 'IA_PLUGIN_FILE_BASENAME', pathinfo( __FILE__, PATHINFO_FILENAME ) );
@@ -419,7 +419,7 @@ if ( version_compare( PHP_VERSION, '5.4', '<' ) ) {
 
 	function fbia_indicator_column_heading( $columns ) {
 		$publishing_settings = Instant_Articles_Option_Publishing::get_option_decoded();
-		$display_warning_column = $publishing_settings[ 'display_warning_column' ];
+		$display_warning_column = isset( $publishing_settings[ 'display_warning_column' ] ) ? $publishing_settings[ 'display_warning_column' ] : '0';
 
 		if( "1" === $display_warning_column ) {
 			$columns[ 'FBIA' ] = "<span title='Facebook Instant Article Distribution Status' class='fbia-col-heading'>FB IA Status</span>";
@@ -430,7 +430,7 @@ if ( version_compare( PHP_VERSION, '5.4', '<' ) ) {
 
 	function fbia_indication_column( $column_name, $post_ID ) {
 		$publishing_settings = Instant_Articles_Option_Publishing::get_option_decoded();
-		$display_warning_column = $publishing_settings[ 'display_warning_column' ];
+		$display_warning_column = isset( $publishing_settings[ 'display_warning_column' ] ) ? $publishing_settings[ 'display_warning_column' ] : '0';
 
 		if( "1" === $display_warning_column ) {
 			$red_light = '<span title="Instant article is empty after transformation." class="instant-articles-col-status error"></span>';

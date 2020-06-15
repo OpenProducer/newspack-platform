@@ -11,8 +11,8 @@ namespace Automattic\WooCommerce\Admin;
 use \_WP_Dependency;
 use Automattic\WooCommerce\Admin\Features\Onboarding;
 use Automattic\WooCommerce\Admin\API\Reports\Orders\DataStore as OrdersDataStore;
+use Automattic\WooCommerce\Admin\API\Plugins;
 use WC_Marketplace_Suggestions;
-
 
 /**
  * Loader Class.
@@ -191,23 +191,30 @@ class Loader {
 	/**
 	 * Gets the URL to an asset file.
 	 *
-	 * @param  string $file name.
+	 * @param  string $file File name (without extension).
+	 * @param  string $ext File extension.
 	 * @return string URL to asset.
 	 */
-	public static function get_url( $file ) {
-		return plugins_url( self::get_path( $file ) . $file, WC_ADMIN_PLUGIN_FILE );
+	public static function get_url( $file, $ext ) {
+		$suffix = '';
+
+		// Potentially enqueue minified JavaScript.
+		if ( 'js' === $ext ) {
+			$suffix = defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ? '' : '.min';
+		}
+
+		return plugins_url( self::get_path( $ext ) . $file . $suffix . '.' . $ext, WC_ADMIN_PLUGIN_FILE );
 	}
 
 	/**
 	 * Gets the file modified time as a cache buster if we're in dev mode, or the plugin version otherwise.
 	 *
-	 * @param string $file Local path to the file.
+	 * @param string $ext File extension.
 	 * @return string The cache buster value to use for the given file.
 	 */
-	public static function get_file_version( $file ) {
+	public static function get_file_version( $ext ) {
 		if ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) {
-			$file = trim( $file, '/' );
-			return filemtime( WC_ADMIN_ABSPATH . self::get_path( $file ) );
+			return filemtime( WC_ADMIN_ABSPATH . self::get_path( $ext ) );
 		}
 		return WC_ADMIN_VERSION_NUMBER;
 	}
@@ -215,11 +222,11 @@ class Loader {
 	/**
 	 * Gets the path for the asset depending on file type.
 	 *
-	 * @param  string $file name.
+	 * @param  string $ext File extension.
 	 * @return string Folder path of asset.
 	 */
-	private static function get_path( $file ) {
-		return '.css' === substr( $file, -4 ) ? WC_ADMIN_DIST_CSS_FOLDER : WC_ADMIN_DIST_JS_FOLDER;
+	private static function get_path( $ext ) {
+		return ( 'css' === $ext ) ? WC_ADMIN_DIST_CSS_FOLDER : WC_ADMIN_DIST_JS_FOLDER;
 	}
 
 	/**
@@ -243,9 +250,12 @@ class Loader {
 	 * @todo The entry point for the embed needs moved to this class as well.
 	 */
 	public static function register_page_handler() {
+		$features = wc_admin_get_feature_config();
+		$id = $features['homepage'] ? 'woocommerce-home' : 'woocommerce-dashboard';
+
 		wc_admin_register_page(
 			array(
-				'id'         => 'woocommerce-dashboard', // Expected to be overridden if dashboard is enabled.
+				'id'         => $id, // Expected to be overridden if dashboard is enabled.
 				'parent'     => 'woocommerce',
 				'title'      => null,
 				'path'       => self::APP_ENTRY_POINT,
@@ -291,19 +301,22 @@ class Loader {
 			return;
 		}
 
+		$js_file_version  = self::get_file_version( 'js' );
+		$css_file_version = self::get_file_version( 'css' );
+
 		wp_register_script(
 			'wc-csv',
-			self::get_url( 'csv-export/index.js' ),
+			self::get_url( 'csv-export/index', 'js' ),
 			array( 'moment' ),
-			self::get_file_version( 'csv-export/index.js' ),
+			$js_file_version,
 			true
 		);
 
 		wp_register_script(
 			'wc-currency',
-			self::get_url( 'currency/index.js' ),
+			self::get_url( 'currency/index', 'js' ),
 			array( 'wc-number' ),
-			self::get_file_version( 'currency/index.js' ),
+			$js_file_version,
 			true
 		);
 
@@ -311,33 +324,33 @@ class Loader {
 
 		wp_register_script(
 			'wc-navigation',
-			self::get_url( 'navigation/index.js' ),
+			self::get_url( 'navigation/index', 'js' ),
 			array(),
-			self::get_file_version( 'navigation/index.js' ),
+			$js_file_version,
 			true
 		);
 
 		wp_register_script(
 			'wc-number',
-			self::get_url( 'number/index.js' ),
+			self::get_url( 'number/index', 'js' ),
 			array(),
-			self::get_file_version( 'number/index.js' ),
+			$js_file_version,
 			true
 		);
 
 		wp_register_script(
 			'wc-date',
-			self::get_url( 'date/index.js' ),
+			self::get_url( 'date/index', 'js' ),
 			array( 'moment', 'wp-date', 'wp-i18n' ),
-			self::get_file_version( 'date/index.js' ),
+			$js_file_version,
 			true
 		);
 
 		wp_register_script(
 			'wc-store-data',
-			self::get_url( 'data/index.js' ),
+			self::get_url( 'data/index', 'js' ),
 			array(),
-			self::get_file_version( 'data/index.js' ),
+			$js_file_version,
 			true
 		);
 
@@ -345,7 +358,7 @@ class Loader {
 
 		wp_register_script(
 			'wc-components',
-			self::get_url( 'components/index.js' ),
+			self::get_url( 'components/index', 'js' ),
 			array(
 				'moment',
 				'wp-api-fetch',
@@ -363,7 +376,7 @@ class Loader {
 				'wc-number',
 				'wc-store-data',
 			),
-			self::get_file_version( 'components/index.js' ),
+			$js_file_version,
 			true
 		);
 
@@ -371,43 +384,50 @@ class Loader {
 
 		wp_register_style(
 			'wc-components',
-			self::get_url( 'components/style.css' ),
+			self::get_url( 'components/style', 'css' ),
 			array(),
-			self::get_file_version( 'components/style.css' )
+			$css_file_version
 		);
 		wp_style_add_data( 'wc-components', 'rtl', 'replace' );
 
 		wp_register_style(
 			'wc-components-ie',
-			self::get_url( 'components/ie.css' ),
+			self::get_url( 'components/ie', 'css' ),
 			array(),
-			self::get_file_version( 'components/ie.css' )
+			$css_file_version
 		);
 		wp_style_add_data( 'wc-components-ie', 'rtl', 'replace' );
 
 		wp_register_script(
 			WC_ADMIN_APP,
-			self::get_url( 'app/index.js' ),
+			self::get_url( 'app/index', 'js' ),
 			array( 'wc-components', 'wc-navigation', 'wp-date', 'wp-html-entities', 'wp-keycodes', 'wp-i18n', 'moment' ),
-			self::get_file_version( 'app/index.js' ),
+			$js_file_version,
 			true
+		);
+		wp_localize_script(
+			WC_ADMIN_APP,
+			'wcAdminAssets',
+			array(
+				'path' => plugins_url( self::get_path( 'js' ), WC_ADMIN_PLUGIN_FILE ),
+			)
 		);
 
 		wp_set_script_translations( WC_ADMIN_APP, 'woocommerce' );
 
 		wp_register_style(
 			WC_ADMIN_APP,
-			self::get_url( 'app/style.css' ),
+			self::get_url( 'app/style', 'css' ),
 			array( 'wc-components' ),
-			self::get_file_version( 'app/style.css' )
+			$css_file_version
 		);
 		wp_style_add_data( WC_ADMIN_APP, 'rtl', 'replace' );
 
 		wp_register_style(
 			'wc-admin-ie',
-			self::get_url( 'ie/style.css' ),
+			self::get_url( 'ie/style', 'css' ),
 			array( WC_ADMIN_APP ),
-			self::get_file_version( 'ie/style.css' )
+			$css_file_version
 		);
 		wp_style_add_data( 'wc-admin-ie', 'rtl', 'replace' );
 
@@ -415,7 +435,7 @@ class Loader {
 			'wc-material-icons',
 			'https://fonts.googleapis.com/icon?family=Material+Icons+Outlined',
 			array(),
-			self::get_file_version( 'https://fonts.googleapis.com/icon?family=Material+Icons' )
+			$css_file_version
 		);
 	}
 
@@ -446,6 +466,85 @@ class Loader {
 			wp_enqueue_style( 'wc-admin-ie' );
 		}
 
+		// Preload our assets.
+		self::output_header_preload_tags();
+	}
+
+	/**
+	 * Render a preload link tag for a dependency, optionally
+	 * checked against a provided whitelist.
+	 *
+	 * See: https://macarthur.me/posts/preloading-javascript-in-wordpress
+	 *
+	 * @param WP_Dependency $dependency The WP_Dependency being preloaded.
+	 * @param string        $type Dependency type - 'script' or 'style'.
+	 * @param array         $whitelist Optional. List of allowed dependency handles.
+	 */
+	public static function maybe_output_preload_link_tag( $dependency, $type, $whitelist = array() ) {
+		if ( ! empty( $whitelist ) && ! in_array( $dependency->handle, $whitelist, true ) ) {
+			return;
+		}
+
+		$source = $dependency->ver ? add_query_arg( 'ver', $dependency->ver, $dependency->src ) : $dependency->src;
+
+		echo '<link rel="preload" href="', esc_url( $source ), '" as="', esc_attr( $type ), '" />', "\n";
+	}
+
+	/**
+	 * Output a preload link tag for dependencies (and their sub dependencies)
+	 * with an optional whitelist.
+	 *
+	 * See: https://macarthur.me/posts/preloading-javascript-in-wordpress
+	 *
+	 * @param string $type Dependency type - 'script' or 'style'.
+	 * @param array  $whitelist Optional. List of allowed dependency handles.
+	 */
+	public static function output_header_preload_tags_for_type( $type, $whitelist = array() ) {
+		if ( 'script' === $type ) {
+			$dependencies_of_type = wp_scripts();
+		} elseif ( 'style' === $type ) {
+			$dependencies_of_type = wp_styles();
+		} else {
+			return;
+		}
+
+		foreach ( $dependencies_of_type->queue as $dependency_handle ) {
+			$dependency = $dependencies_of_type->registered[ $dependency_handle ];
+
+			// Preload the subdependencies first.
+			foreach ( $dependency->deps as $sub_dependency_handle ) {
+				$sub_dependency = $dependencies_of_type->registered[ $sub_dependency_handle ];
+				self::maybe_output_preload_link_tag( $sub_dependency, $type, $whitelist );
+			}
+
+			self::maybe_output_preload_link_tag( $dependency, $type, $whitelist );
+		}
+	}
+
+	/**
+	 * Output preload link tags for all enqueued stylesheets and scripts.
+	 *
+	 * See: https://macarthur.me/posts/preloading-javascript-in-wordpress
+	 */
+	public static function output_header_preload_tags() {
+		$wc_admin_scripts = array(
+			WC_ADMIN_APP,
+			'wc-components',
+		);
+
+		$wc_admin_styles = array(
+			WC_ADMIN_APP,
+			'wc-components',
+			'wc-components-ie',
+			'wc-admin-ie',
+			'wc-material-icons',
+		);
+
+		// Preload styles.
+		self::output_header_preload_tags_for_type( 'style', $wc_admin_styles );
+
+		// Preload scripts.
+		self::output_header_preload_tags_for_type( 'script', $wc_admin_scripts );
 	}
 
 	/**
@@ -504,11 +603,24 @@ class Loader {
 	 * The initial contents here are meant as a place loader for when the PHP page initialy loads.
 	 */
 	public static function embed_page_header() {
-		if ( ! self::is_embed_page() ) {
+
+		$features = wc_admin_get_feature_config();
+		if (
+			$features['navigation'] &&
+			\Automattic\WooCommerce\Admin\Features\Navigation::instance()->is_woocommerce_page()
+		) {
+			self::embed_navigation_menu();
+		}
+
+		if ( ! self::is_admin_page() && ! self::is_embed_page() ) {
 			return;
 		}
 
 		if ( ! static::user_can_analytics() ) {
+			return;
+		}
+
+		if ( ! self::is_embed_page() ) {
 			return;
 		}
 
@@ -530,6 +642,16 @@ class Loader {
 	}
 
 	/**
+	 * Set up a div for the navigation menu.
+	 * The initial contents here are meant as a place loader for when the PHP page initialy loads.
+	 */
+	protected static function embed_navigation_menu() {
+		?>
+		<div id="woocommerce-embedded-navigation"></div>
+		<?php
+	}
+
+	/**
 	 * Adds body classes to the main wp-admin wrapper, allowing us to better target elements in specific scenarios.
 	 *
 	 * @param string $admin_body_class Body class to add.
@@ -545,9 +667,17 @@ class Loader {
 			$classes[] = 'woocommerce-embed-page';
 		}
 
-		// Some routes or features like onboarding hide the wp-admin navigation and masterbar. Setting `woocommerce_admin_is_loading` to true allows us
-		// to premeptively hide these elements while the JS app loads. This class is removed when `<Layout />` is rendered.
-		if ( self::is_admin_page() && apply_filters( 'woocommerce_admin_is_loading', false ) ) {
+		/**
+		 * Some routes or features like onboarding hide the wp-admin navigation and masterbar.
+		 * Setting `woocommerce_admin_is_loading` to true allows us to premeptively hide these
+		 * elements while the JS app loads.
+		 * This class needs to be removed by those feature components (like <ProfileWizard />).
+		 *
+		 * @param bool $is_loading If WooCommerce Admin is loading a fullscreen view.
+		 */
+		$is_loading = apply_filters( 'woocommerce_admin_is_loading', false );
+
+		if ( self::is_admin_page() && $is_loading ) {
 			$classes[] = 'woocommerce-admin-is-loading';
 		}
 
@@ -678,6 +808,9 @@ class Loader {
 		}
 
 		$preload_data_endpoints = apply_filters( 'woocommerce_component_settings_preload_endpoints', array( '/wc/v3' ) );
+		if ( class_exists( 'Jetpack' ) ) {
+			$preload_data_endpoints['jetpackStatus'] = '/jetpack/v4/connection';
+		}
 		if ( ! empty( $preload_data_endpoints ) ) {
 			$preload_data = array_reduce(
 				array_values( $preload_data_endpoints ),
@@ -721,6 +854,10 @@ class Loader {
 		$settings['siteUrl']           = site_url();
 		$settings['onboardingEnabled'] = self::is_onboarding_enabled();
 		$settings['dateFormat']        = get_option( 'date_format' );
+		$settings['plugins']           = array(
+			'installedPlugins' => PluginsHelper::get_installed_plugin_slugs(),
+			'activePlugins'    => Plugins::get_active_plugins(),
+		);
 		// Plugins that depend on changing the translation work on the server but not the client -
 		// WooCommerce Branding is an example of this - so pass through the translation of
 		// 'WooCommerce' to wcSettings.

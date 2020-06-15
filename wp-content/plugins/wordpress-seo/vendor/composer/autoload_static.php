@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504
+class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -118,6 +118,7 @@ class ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504
         'Composer\\Installers\\ZikulaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
         'DeleteDuplicateIndexables' => __DIR__ . '/../..' . '/src/config/migrations/20200507054848_DeleteDuplicateIndexables.php',
         'ExpandIndexableColumnLengths' => __DIR__ . '/../..' . '/src/config/migrations/20200428194858_ExpandIndexableColumnLengths.php',
+        'ResetIndexableHierarchyTable' => __DIR__ . '/../..' . '/src/config/migrations/20200513133401_ResetIndexableHierarchyTable.php',
         'TruncateIndexableTables' => __DIR__ . '/../..' . '/src/config/migrations/20200429105310_TruncateIndexableTables.php',
         'WPSEO_Abstract_Capability_Manager' => __DIR__ . '/../..' . '/admin/capabilities/class-abstract-capability-manager.php',
         'WPSEO_Abstract_Metabox_Tab_With_Sections' => __DIR__ . '/../..' . '/admin/metabox/class-abstract-sectioned-metabox-tab.php',
@@ -670,14 +671,14 @@ class ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504
         'Yoast\\WP\\SEO\\Commands\\Index_Command' => __DIR__ . '/../..' . '/src/commands/index-command.php',
         'Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Breadcrumbs_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/breadcrumbs-enabled-conditional.php',
-        'Yoast\\WP\\SEO\\Conditionals\\Conditional' => __DIR__ . '/../..' . '/src/conditionals/conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Conditional' => __DIR__ . '/../..' . '/src/conditionals/conditional-interface.php',
         'Yoast\\WP\\SEO\\Conditionals\\Development_Conditional' => __DIR__ . '/../..' . '/src/conditionals/development-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Feature_Flag_Conditional' => __DIR__ . '/../..' . '/src/conditionals/feature-flag-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Front_End_Conditional' => __DIR__ . '/../..' . '/src/conditionals/front-end-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Headless_Rest_Endpoints_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/headless-rest-endpoints-enabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Jetpack_Conditional' => __DIR__ . '/../..' . '/src/conditionals/jetpack-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Migrations_Conditional' => __DIR__ . '/../..' . '/src/conditionals/migrations-conditional.php',
-        'Yoast\\WP\\SEO\\Conditionals\\No_Conditionals' => __DIR__ . '/../..' . '/src/conditionals/no-conditionals.php',
+        'Yoast\\WP\\SEO\\Conditionals\\No_Conditionals' => __DIR__ . '/../..' . '/src/conditionals/no-conditionals-trait.php',
         'Yoast\\WP\\SEO\\Conditionals\\Open_Graph_Conditional' => __DIR__ . '/../..' . '/src/conditionals/open-graph-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Primary_Category_Conditional' => __DIR__ . '/../..' . '/src/conditionals/primary-category-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\WPML_Conditional' => __DIR__ . '/../..' . '/src/conditionals/wpml-conditional.php',
@@ -739,7 +740,7 @@ class ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Indexation_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/indexation-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Migration_Error_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/migration-error-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Breadcrumbs_Integration' => __DIR__ . '/../..' . '/src/integrations/breadcrumbs-integration.php',
-        'Yoast\\WP\\SEO\\Integrations\\Front_End\\Backwards_Compatibility' => __DIR__ . '/../..' . '/src/integrations/front-end/backwards-compatiblity.php',
+        'Yoast\\WP\\SEO\\Integrations\\Front_End\\Backwards_Compatibility' => __DIR__ . '/../..' . '/src/integrations/front-end/backwards-compatibility.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Category_Term_Description' => __DIR__ . '/../..' . '/src/integrations/front-end/category-term-description.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Comment_Link_Fixer' => __DIR__ . '/../..' . '/src/integrations/front-end/comment-link-fixer.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Force_Rewrite_Title' => __DIR__ . '/../..' . '/src/integrations/front-end/force-rewrite-title.php',
@@ -784,7 +785,7 @@ class ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504
         'Yoast\\WP\\SEO\\Models\\SEO_Meta' => __DIR__ . '/../..' . '/src/models/seo-meta.php',
         'Yoast\\WP\\SEO\\Oauth\\Client' => __DIR__ . '/../..' . '/src/oauth/client.php',
         'Yoast\\WP\\SEO\\Presentations\\Abstract_Presentation' => __DIR__ . '/../..' . '/src/presentations/abstract-presentation.php',
-        'Yoast\\WP\\SEO\\Presentations\\Archive_Adjacent' => __DIR__ . '/../..' . '/src/presentations/archive-adjacent.php',
+        'Yoast\\WP\\SEO\\Presentations\\Archive_Adjacent' => __DIR__ . '/../..' . '/src/presentations/archive-adjacent-trait.php',
         'Yoast\\WP\\SEO\\Presentations\\Indexable_Author_Archive_Presentation' => __DIR__ . '/../..' . '/src/presentations/indexable-author-archive-presentation.php',
         'Yoast\\WP\\SEO\\Presentations\\Indexable_Date_Archive_Presentation' => __DIR__ . '/../..' . '/src/presentations/indexable-date-archive-presentation.php',
         'Yoast\\WP\\SEO\\Presentations\\Indexable_Error_Page_Presentation' => __DIR__ . '/../..' . '/src/presentations/indexable-error-page-presentation.php',
@@ -896,9 +897,9 @@ class ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4bf56a192e35dbfaa84a178c46dfe504::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b::$classMap;
 
         }, null, ClassLoader::class);
     }

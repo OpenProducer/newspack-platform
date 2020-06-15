@@ -8,7 +8,6 @@
  */
 namespace Facebook\InstantArticles\AMP;
 
-
 use Facebook\InstantArticles\Elements\InstantArticle;
 use Facebook\InstantArticles\Elements\Header;
 use Facebook\InstantArticles\Elements\Image;
@@ -19,27 +18,6 @@ use PHPUnit\Framework;
 
 class AMPCaptionTest extends Framework\TestCase
 {
-
-    protected function setUp()
-    {
-        \Logger::configure(
-            [
-                'rootLogger' => [
-                    'appenders' => ['facebook-instantarticles-traverser']
-                ],
-                'appenders' => [
-                    'facebook-instantarticles-traverser' => [
-                        'class' => 'LoggerAppenderConsole',
-                        'threshold' => 'INFO',
-                        'layout' => [
-                            'class' => 'LoggerLayoutSimple'
-                        ]
-                    ]
-                ]
-            ]
-        );
-    }
-
     private function genInstantArticle()
     {
         return InstantArticle::create()

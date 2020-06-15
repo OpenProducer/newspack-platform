@@ -10,10 +10,12 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'analytics-dashboard/customizable' => true,
 			'devdocs' => false,
 			'marketing' => true,
+			'navigation' => false,
 			'onboarding' => true,
 			'shipping-label-banner' => true,
 			'store-alerts' => true,
 			'wcpay' => true,
+			'homepage' => false,
 		);
 	}
 }

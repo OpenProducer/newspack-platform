@@ -32,7 +32,7 @@ $generated_i18n_strings = array(
 	__( 'Something went wrong. Please reload the page.', 'wordpress-seo' ),
 
 	// Reference: node_modules/@yoast/components/KeywordSuggestions.js:106
-	// Reference: node_modules/@yoast/components/WordOccurrences.js:130
+	// Reference: node_modules/@yoast/components/data-model/DataModel.js:50
 	__( 'Prominent words', 'wordpress-seo' ),
 
 	// Reference: node_modules/@yoast/components/KeywordSuggestions.js:23
@@ -68,7 +68,7 @@ $generated_i18n_strings = array(
 	// Reference: node_modules/@yoast/components/Toggle.js:146
 	__( 'Off', 'wordpress-seo' ),
 
-	// Reference: node_modules/@yoast/components/WordOccurrences.js:57
+	// Reference: node_modules/@yoast/components/data-model/DataModel.js:25
 	__( '%d occurrences', 'wordpress-seo' ),
 
 	// Reference: node_modules/@yoast/components/help-icon/HelpIcon.js:50

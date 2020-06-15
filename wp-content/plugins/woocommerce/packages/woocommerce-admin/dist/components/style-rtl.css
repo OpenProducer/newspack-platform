@@ -489,6 +489,8 @@ The CSSTransition element creates a containing div without a class
           border: solid #fff;
           border-width: 0 0 2px 2px;
           transform: rotate(-45deg); }
+          .rtl .woocommerce-legend__item > button .woocommerce-legend__item-container .woocommerce-legend__item-checkmark.woocommerce-legend__item-checkmark-checked::after {
+            transform: rotate(45deg) scaleX(-1); }
     .woocommerce-legend__item > button .woocommerce-legend__item-container .woocommerce-legend__item-total {
       margin-right: auto;
       font-weight: bold; }
@@ -2435,6 +2437,8 @@ button.woocommerce-filters-date__tab {
     vertical-align: middle;
     margin-left: 3px;
     fill: currentColor; }
+    .rtl .woocommerce-summary__item .woocommerce-summary__item-delta-icon.gridicons-arrow-right {
+      transform: scaleX(-1); }
     .woocommerce-summary__item .woocommerce-summary__item-delta-icon.gridicons-arrow-up {
       transform: rotate(-45deg); }
     .woocommerce-summary__item .woocommerce-summary__item-delta-icon.gridicons-arrow-down {

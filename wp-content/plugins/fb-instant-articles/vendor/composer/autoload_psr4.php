@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Symfony\\Component\\CssSelector\\' => array($vendorDir . '/symfony/css-selector'),
-    'Facebook\\InstantArticles\\' => array($vendorDir . '/facebook/facebook-instant-articles-sdk-php/src/Facebook/InstantArticles', $vendorDir . '/facebook/facebook-instant-articles-sdk-extensions-in-php/src/Facebook/InstantArticles'),
+    'Facebook\\InstantArticles\\' => array($vendorDir . '/facebook/facebook-instant-articles-sdk-extensions-in-php/src/Facebook/InstantArticles', $vendorDir . '/facebook/facebook-instant-articles-sdk-php/src/Facebook/InstantArticles'),
     'Facebook\\' => array($vendorDir . '/facebook/graph-sdk/src/Facebook'),
+    'Doctrine\\Instantiator\\' => array($vendorDir . '/doctrine/instantiator/src/Doctrine/Instantiator'),
 );

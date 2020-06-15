@@ -20,6 +20,10 @@ class ComposerStaticInit8b1e91281cd41e15c5fb1bef205d265f
             'Facebook\\InstantArticles\\' => 25,
             'Facebook\\' => 9,
         ),
+        'D' => 
+        array (
+            'Doctrine\\Instantiator\\' => 22,
+        ),
     );
 
     public static $prefixDirsPsr4 = array (
@@ -29,12 +33,16 @@ class ComposerStaticInit8b1e91281cd41e15c5fb1bef205d265f
         ),
         'Facebook\\InstantArticles\\' => 
         array (
-            0 => __DIR__ . '/..' . '/facebook/facebook-instant-articles-sdk-php/src/Facebook/InstantArticles',
-            1 => __DIR__ . '/..' . '/facebook/facebook-instant-articles-sdk-extensions-in-php/src/Facebook/InstantArticles',
+            0 => __DIR__ . '/..' . '/facebook/facebook-instant-articles-sdk-extensions-in-php/src/Facebook/InstantArticles',
+            1 => __DIR__ . '/..' . '/facebook/facebook-instant-articles-sdk-php/src/Facebook/InstantArticles',
         ),
         'Facebook\\' => 
         array (
             0 => __DIR__ . '/..' . '/facebook/graph-sdk/src/Facebook',
+        ),
+        'Doctrine\\Instantiator\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/doctrine/instantiator/src/Doctrine/Instantiator',
         ),
     );
 

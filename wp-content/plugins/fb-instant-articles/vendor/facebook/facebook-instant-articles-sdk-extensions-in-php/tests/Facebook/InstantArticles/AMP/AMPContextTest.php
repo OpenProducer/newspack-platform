@@ -12,30 +12,8 @@ use Facebook\InstantArticles\Elements\InstantArticle;
 use Facebook\InstantArticles\Elements\Paragraph;
 use PHPUnit\Framework;
 
-
-
 class AMPContextTest extends Framework\TestCase
 {
-    protected function setUp()
-    {
-        \Logger::configure(
-            [
-                'rootLogger' => [
-                    'appenders' => ['facebook-instantarticles-traverser']
-                ],
-                'appenders' => [
-                    'facebook-instantarticles-traverser' => [
-                        'class' => 'LoggerAppenderConsole',
-                        'threshold' => 'INFO',
-                        'layout' => [
-                            'class' => 'LoggerLayoutSimple'
-                        ]
-                    ]
-                ]
-            ]
-        );
-    }
-
     public function testContextCreation()
     {
         $context = AMPContext::create(new \DOMDocument(), InstantArticle::create());

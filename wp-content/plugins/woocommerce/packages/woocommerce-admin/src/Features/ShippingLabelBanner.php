@@ -32,8 +32,6 @@ class ShippingLabelBanner {
 			return;
 		}
 		add_action( 'add_meta_boxes', array( $this, 'add_meta_boxes' ), 6, 2 );
-		add_filter( 'woocommerce_components_settings', array( $this, 'component_settings' ), 20 );
-		add_filter( 'woocommerce_shared_settings', array( $this, 'component_settings' ), 20 );
 	}
 
 	/**
@@ -147,16 +145,16 @@ class ShippingLabelBanner {
 		$rtl = is_rtl() ? '-rtl' : '';
 		wp_enqueue_style(
 			'print-shipping-label-banner-style',
-			Loader::get_url( "print-shipping-label-banner/style{$rtl}.css" ),
+			Loader::get_url( "print-shipping-label-banner/style{$rtl}", 'css' ),
 			array( 'wp-components' ),
-			Loader::get_file_version( 'print-shipping-label-banner/style.css' )
+			Loader::get_file_version( 'css' )
 		);
 
 		wp_enqueue_script(
 			'print-shipping-label-banner',
-			Loader::get_url( 'wp-admin-scripts/print-shipping-label-banner.js' ),
+			Loader::get_url( 'wp-admin-scripts/print-shipping-label-banner', 'js' ),
 			array( 'wp-i18n', 'wp-data', 'wp-element', 'moment', 'wp-api-fetch', WC_ADMIN_APP ),
-			Loader::get_file_version( 'wp-admin-scripts/print-shipping-label-banner.js' ),
+			Loader::get_file_version( 'js' ),
 			true
 		);
 
@@ -181,23 +179,5 @@ class ShippingLabelBanner {
 		<div id="wc-admin-shipping-banner-root" class="woocommerce <?php echo esc_attr( 'wc-admin-shipping-banner' ); ?>" data-args="<?php echo esc_attr( wp_json_encode( $args['args'] ) ); ?>">
 		</div>
 		<?php
-	}
-
-	/**
-	 * Return the settings for the component for wc-api to use. If onboarding
-	 * is active, return its settings. Otherwise, loads "activePlugins" since
-	 * that's the ones we need to get installation status for WCS and Jetpack.
-	 *
-	 * @param array $settings Component settings.
-	 * @return array
-	 */
-	public function component_settings( $settings ) {
-		if ( ! isset( $settings['onboarding'] ) ) {
-			$settings['onboarding'] = array();
-		}
-		if ( ! isset( $settings['onboarding']['activePlugins'] ) ) {
-			$settings['onboarding']['activePlugins'] = Onboarding::get_active_plugins();
-		}
-		return $settings;
 	}
 }
