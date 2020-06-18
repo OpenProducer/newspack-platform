@@ -5,7 +5,12 @@
  */
 import QueryControls from '../../components/query-controls';
 import { STORE_NAMESPACE } from './store';
-import { isBlogPrivate, isSpecificPostModeActive, queryCriteriaFromAttributes } from './utils';
+import {
+	getEditorBlocksIds,
+	isBlogPrivate,
+	shouldReflow,
+	queryCriteriaFromAttributes,
+} from './utils';
 import { formatAvatars, formatByline } from '../../shared/js/utils';
 
 /**
@@ -91,7 +96,7 @@ const coverIcon = (
 
 class Edit extends Component {
 	renderPost = post => {
-		const { attributes } = this.props;
+		const { attributes, isUIDisabled } = this.props;
 		const {
 			showImage,
 			imageShape,
@@ -121,7 +126,10 @@ class Edit extends Component {
 		};
 
 		const postClasses = classNames(
-			{ 'post-has-image': post.newspack_featured_image_src },
+			{
+				'post-has-image': post.newspack_featured_image_src,
+				'homepage-posts-block__post--disabled': isUIDisabled,
+			},
 			post.newspack_article_classes
 		);
 
@@ -292,7 +300,6 @@ class Edit extends Component {
 							setAttributes( { tagExclusions: _tagExclusions } )
 						}
 					/>
-
 					{ postLayout === 'grid' && (
 						<RangeControl
 							label={ __( 'Columns', 'newspack-blocks' ) }
@@ -467,6 +474,18 @@ class Edit extends Component {
 		);
 	};
 
+	componentDidMount() {
+		this.props.triggerReflow();
+	}
+	componentDidUpdate( props ) {
+		if ( shouldReflow( props, this.props ) ) {
+			this.props.triggerReflow();
+		}
+	}
+	componentWillUnmount() {
+		this.props.triggerReflow();
+	}
+
 	render() {
 		/**
 		 * Constants
@@ -475,12 +494,11 @@ class Edit extends Component {
 		const {
 			attributes,
 			className,
-			clientId,
 			setAttributes,
 			isSelected,
 			latestPosts,
 			textColor,
-			markPostsAsDisplayed,
+			error,
 		} = this.props;
 
 		const {
@@ -584,7 +602,6 @@ class Edit extends Component {
 			},
 		];
 
-		markPostsAsDisplayed( clientId, latestPosts );
 		return (
 			<Fragment>
 				<div
@@ -606,9 +623,15 @@ class Edit extends Component {
 						{ latestPosts && ! latestPosts.length && (
 							<Placeholder>{ __( 'Sorry, no posts were found.', 'newspack-blocks' ) }</Placeholder>
 						) }
-						{ ! latestPosts && (
+						{ ! latestPosts && ! error && (
 							<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
 						) }
+						{ ! latestPosts && error && (
+							<Placeholder className="component-placeholder__align-center homepage-posts-block--error">
+								{ error }
+							</Placeholder>
+						) }
+
 						{ latestPosts && latestPosts.map( post => this.renderPost( post ) ) }
 					</div>
 				</div>
@@ -645,27 +668,39 @@ class Edit extends Component {
 
 export default compose( [
 	withColors( { textColor: 'color' } ),
-	withSelect( ( select, props ) => {
-		const { attributes, clientId } = props;
+	withSelect( ( select, { clientId, attributes } ) => {
+		const { getEditorBlocks, getBlocks } = select( 'core/editor' );
+		const editorBlocksIds = getEditorBlocksIds( getEditorBlocks() );
+		// The block might be rendered in the block styles preview, not in the editor.
+		const isEditorBlock = editorBlocksIds.indexOf( clientId ) >= 0;
 
-		const latestPostsQuery = queryCriteriaFromAttributes( attributes );
-		if ( ! isSpecificPostModeActive( attributes ) ) {
-			const postIdsToExclude = select( STORE_NAMESPACE ).previousPostIds( clientId );
-			latestPostsQuery.exclude = postIdsToExclude.join( ',' );
+		const { getPosts, getError, isUIDisabled } = select( STORE_NAMESPACE );
+
+		const props = {
+			isEditorBlock,
+			isUIDisabled: isUIDisabled(),
+			error: getError( { clientId } ),
+			topBlocksClientIdsInOrder: getBlocks().map( block => block.clientId ),
+		};
+
+		if ( isEditorBlock ) {
+			props.latestPosts = getPosts( { clientId } );
+		} else {
+			// For block preview, display without deduplication. If there would be a way to match the outside-editor's
+			// block clientId to the clientId of the block that's being previewed, the correct posts could be shown here.
+			props.latestPosts = select( 'core' ).getEntityRecords(
+				'postType',
+				'post',
+				queryCriteriaFromAttributes( attributes )
+			);
 		}
 
-		return {
-			latestPosts: select( 'core' ).getEntityRecords( 'postType', 'post', latestPostsQuery ),
-		};
+		return props;
 	} ),
-	withDispatch( ( dispatch, props ) => {
-		const { attributes } = props;
-		const markPostsAsDisplayed = isSpecificPostModeActive( attributes )
-			? dispatch( STORE_NAMESPACE ).markSpecificPostsAsDisplayed
-			: dispatch( STORE_NAMESPACE ).markPostsAsDisplayed;
-
+	withDispatch( ( dispatch, { isEditorBlock } ) => {
 		return {
-			markPostsAsDisplayed,
+			// Only editor blocks can trigger reflows.
+			triggerReflow: isEditorBlock ? dispatch( STORE_NAMESPACE ).reflow : () => {},
 		};
 	} ),
 ] )( Edit );

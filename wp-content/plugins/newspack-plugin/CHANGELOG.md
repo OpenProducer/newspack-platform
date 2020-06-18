@@ -1,3 +1,10 @@
+# [1.9.0](https://github.com/Automattic/newspack-plugin/compare/v1.8.0...v1.9.0) (2020-06-18)
+
+
+### Features
+
+* **campaign-analytics:** better error handling ([900644b](https://github.com/Automattic/newspack-plugin/commit/900644b40eebf95d17fb9dfbb780102225b4ee9b))
+
 # [1.8.0](https://github.com/Automattic/newspack-plugin/compare/v1.7.0...v1.8.0) (2020-06-09)
 
 

@@ -362,18 +362,13 @@ class Newspack_Blocks {
 			$args['orderby']  = 'post__in';
 		} else {
 			$args['posts_per_page'] = $posts_to_show;
-			if ( ! self::is_experimental_mode() ) {
-				$args['posts_per_page'] += count( $newspack_blocks_post_id );
-			}
 			if ( count( $newspack_blocks_all_specific_posts_ids ) ) {
 				$args['post__not_in'] = $newspack_blocks_all_specific_posts_ids;
 			}
-			if ( self::is_experimental_mode() && count( $newspack_blocks_post_id ) ) {
-				$args['post__not_in'] = array_merge(
-					$args['post__not_in'] ?? [],
-					array_keys( $newspack_blocks_post_id )
-				);
-			}
+			$args['post__not_in'] = array_merge(
+				$args['post__not_in'] ?? [],
+				array_keys( $newspack_blocks_post_id )
+			);
 			if ( $authors && count( $authors ) ) {
 				$args['author__in'] = $authors;
 			}
@@ -503,15 +498,6 @@ class Newspack_Blocks {
 			];
 		}
 		return $clean;
-	}
-
-	/**
-	 * Is experimental mode flag set in wp-config.php
-	 *
-	 * @return boolean Experimental mode flag.
-	 */
-	public static function is_experimental_mode() {
-		return defined( 'NEWSPACK_BLOCKS_EXPERIMENTAL_MODE' ) && NEWSPACK_BLOCKS_EXPERIMENTAL_MODE;
 	}
 }
 Newspack_Blocks::init();

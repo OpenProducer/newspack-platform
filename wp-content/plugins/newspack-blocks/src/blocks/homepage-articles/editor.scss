@@ -1,5 +1,6 @@
 @import '../../shared/sass/variables';
 @import '../../shared/sass/placeholder';
+@import '../../shared/sass/colors';
 
 .type-scale-slider {
 	.dashicon {
@@ -47,4 +48,26 @@
 
 .editor-styles-wrapper.wpnbha__wp-block-button__wrapper {
 	background-color: transparent;
+}
+
+.homepage-posts-block {
+	&--error.components-placeholder {
+		color: $color__error;
+	}
+	&__post {
+		&--disabled {
+			position: relative;
+			&::after {
+				content: '';
+				position: absolute;
+				z-index: 2;
+				width: 100%;
+				height: 100%;
+				top: 0;
+				left: 0;
+				background-color: #fff;
+				opacity: 0.6;
+			}
+		}
+	}
 }

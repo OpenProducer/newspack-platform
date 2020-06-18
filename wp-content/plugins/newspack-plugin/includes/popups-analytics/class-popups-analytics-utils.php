@@ -148,14 +148,21 @@ class Popups_Analytics_Utils {
 				$authentication = new Authentication( $context, $ga_options, $user_options );
 				$client         = $authentication->get_oauth_client()->get_client();
 
-				$analyticsreporting = new Google_Service_AnalyticsReporting( $client );
-				$report_results     = $analyticsreporting->reports->batchGet( $body );
-
-				if ( isset( $report_results->reports[0] ) ) {
-					return $report_results->reports[0]->data->rows;
-				} else {
-					return [];
+				try {
+					$analyticsreporting = new Google_Service_AnalyticsReporting( $client );
+					$report_results     = $analyticsreporting->reports->batchGet( $body );
+					if ( isset( $report_results->reports[0] ) ) {
+						return $report_results->reports[0]->data->rows;
+					}
+				} catch ( \Exception $error ) {
+					$error_data = json_decode( $error->getMessage() );
+					if ( isset( $error_data ) && 'UNAUTHENTICATED' === $error_data->error->status ) {
+						return new WP_Error( 'newspack_campaign_analytics_sitekit_auth', __( 'Please authenticate with Google Analytics to view Campaign analytics.', 'newspack' ) );
+					}
+					return new WP_Error( 'newspack_campaign_analytics', __( 'Google Analytics data fetching error.', 'newspack' ), $error_data );
 				}
+			} else {
+				return new WP_Error( 'newspack_campaign_analytics_sitekit_disconnected', __( 'Connect Site Kit plugin to view Campaign Analytics.', 'newspack' ) );
 			}
 		}
 	}
@@ -172,6 +179,9 @@ class Popups_Analytics_Utils {
 		$event_action   = $options['event_action'];
 
 		$ga_data_rows = self::get_ga_report( $options );
+		if ( is_wp_error( $ga_data_rows ) ) {
+			return $ga_data_rows;
+		}
 
 		$all_actions = [];
 		$all_labels  = [];

@@ -1,3 +1,16 @@
+# [1.8.0](https://github.com/Automattic/newspack-blocks/compare/v1.7.2...v1.8.0) (2020-06-18)
+
+
+### Bug Fixes
+
+* correct count ([19c7a6c](https://github.com/Automattic/newspack-blocks/commit/19c7a6c5946eb9cbd60e838f6b9b9db06dda0855))
+* donations wizard link ([84e0092](https://github.com/Automattic/newspack-blocks/commit/84e0092a47d2bc1f01e041521844bfca921798c1))
+
+
+### Features
+
+* improve Homepage Posts block editor performance ([#499](https://github.com/Automattic/newspack-blocks/issues/499)) ([e1c68c5](https://github.com/Automattic/newspack-blocks/commit/e1c68c56741dc4d193aa6ceea9462191c7163d35)), closes [#493](https://github.com/Automattic/newspack-blocks/issues/493)
+
 ## [1.7.2](https://github.com/Automattic/newspack-blocks/compare/v1.7.1...v1.7.2) (2020-06-13)
 
 

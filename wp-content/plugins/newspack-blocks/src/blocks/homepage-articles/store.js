@@ -1,152 +1,166 @@
 /**
  * External dependencies
  */
-import { uniq } from 'lodash';
+import { createStore, applyMiddleware } from 'redux';
+import { call, put, takeLatest, delay } from 'redux-saga/effects';
+import createSagaMiddleware from 'redux-saga';
+import { set } from 'lodash';
 
 /**
  * WordPress dependencies
  */
-import { registerStore, select, subscribe, dispatch } from '@wordpress/data';
+import { registerGenericStore, select } from '@wordpress/data';
+import apiFetch from '@wordpress/api-fetch';
+import { addQueryArgs } from '@wordpress/url';
 
 /**
  * Internal dependencies
  */
 import metadata from './block.json';
+import { getBlockQueries } from './utils';
 
 const { name } = metadata;
-export const STORE_NAMESPACE = name;
+export const STORE_NAMESPACE = `newspack-blocks/${ name }`;
 
 const initialState = {
-	queryBlocks: [], // list of Query blocks in the order they are on the page
-	postsByBlock: {}, // map of returned posts to block clientId
-	specificPostsByBlock: {}, // posts displayed by specific-mode, which always return in the selector
+	// Map of returned posts to block clientIds.
+	postsByBlock: {},
+	errorsByBlock: {},
 };
 
-const UPDATE_BLOCKS = 'UPDATE_BLOCKS';
-const MARK_POSTS_DISPLAYED = 'MARK_POSTS_DISPLAYED';
-const MARK_SPECIFIC_POSTS_DISPLAYED = 'MARK_SPECIFIC_POSTS_DISPLAYED';
-
+// Generic redux action creators, not @wordpress/data actions.
 const actions = {
-	updateBlocks( blocks ) {
-		return {
-			type: UPDATE_BLOCKS,
-			blocks,
-		};
-	},
-	markPostsAsDisplayed( clientId, posts ) {
-		return {
-			type: MARK_POSTS_DISPLAYED,
-			clientId,
-			posts,
-		};
-	},
-	markSpecificPostsAsDisplayed( clientId, posts ) {
-		return {
-			type: MARK_SPECIFIC_POSTS_DISPLAYED,
-			clientId,
-			posts,
-		};
+	reflow: () => {
+		reduxStore.dispatch( {
+			type: 'REFLOW',
+		} );
 	},
 };
 
-/**
- * @typedef Block A Gutenberg editor block
- * @type {object}
- * @typedef uuid Unique id
- * @type {string}
- */
-
-/**
- * Returns the Query blocks that appear before the current one on the page
- *
- * @param {Block[]} orderedBlocks Ordered Blocks
- * @param {uuid} clientId client id
- * @returns {Block[]} blocks
- */
-const blocksBefore = ( orderedBlocks, clientId ) => {
-	const ourBlockIdx = orderedBlocks.findIndex( b => b.clientId === clientId );
-	return orderedBlocks.slice( 0, ourBlockIdx );
-};
-
+// Generic redux selectors, not @wordpress/data selectors.
 const selectors = {
-	previousPostIds( state, _clientId ) {
-		const { queryBlocks, specificPostsByBlock, postsByBlock } = state;
-
-		const postIdsFromSpecificMode = queryBlocks
-			.filter( ( { clientId } ) => specificPostsByBlock[ clientId ] )
-			.flatMap( ( { clientId } ) => specificPostsByBlock[ clientId ].map( p => p.id ) );
-
-		const previousPostIds = blocksBefore( queryBlocks, _clientId )
-			.filter( ( { clientId } ) => postsByBlock[ clientId ] )
-			.flatMap( ( { clientId } ) => postsByBlock[ clientId ].map( p => p.id ) );
-
-		return uniq( postIdsFromSpecificMode.concat( previousPostIds ) ).sort();
+	getPosts( { clientId } ) {
+		return reduxStore.getState().postsByBlock[ clientId ];
 	},
+	getError( { clientId } ) {
+		return reduxStore.getState().errorsByBlock[ clientId ];
+	},
+	isUIDisabled() {
+		return reduxStore.getState().isUIDisabled;
+	},
+};
+
+const reducer = ( state = initialState, action ) => {
+	switch ( action.type ) {
+		case 'DISABLE_UI':
+			return set( state, 'isUIDisabled', true );
+		case 'ENABLE_UI':
+			return set( state, 'isUIDisabled', false );
+		case 'UPDATE_BLOCK_POSTS':
+			return set( state, [ 'postsByBlock', action.clientId ], action.posts );
+		case 'UPDATE_BLOCK_ERROR':
+			return set( state, [ 'errorsByBlock', action.clientId ], action.error );
+	}
+	return state;
+};
+
+// create the saga middleware
+const sagaMiddleware = createSagaMiddleware();
+// mount it on the Store
+const reduxStore = createStore( reducer, applyMiddleware( sagaMiddleware ) );
+
+const genericStore = {
+	getSelectors() {
+		return selectors;
+	},
+	getActions() {
+		return actions;
+	},
+	...reduxStore,
+};
+
+/**
+ * A cache for posts queries.
+ */
+const POSTS_QUERIES_CACHE = {};
+const createCacheKey = JSON.stringify;
+
+/**
+ * Get posts for a single block.
+ *
+ * @param {Object} block an object with a postsQuery and a clientId
+ */
+function* getPosts( block ) {
+	const cacheKey = createCacheKey( block.postsQuery );
+	let posts = POSTS_QUERIES_CACHE[ cacheKey ];
+	if ( posts === undefined ) {
+		const path = addQueryArgs( '/wp/v2/posts', {
+			...block.postsQuery,
+			// `context=edit` is needed, so that custom REST fields are returned.
+			context: 'edit',
+		} );
+		posts = yield call( apiFetch, { path } );
+		POSTS_QUERIES_CACHE[ cacheKey ] = posts;
+	}
+
+	const postsIds = posts.map( post => post.id );
+	yield put( { type: 'UPDATE_BLOCK_POSTS', clientId: block.clientId, posts } );
+	return postsIds;
+}
+
+const createFetchPostsSaga = blockName => {
+	/**
+	 * "worker" Saga: will be fired on REFLOW actions
+	 */
+	function* fetchPosts() {
+		// debounce by 300ms
+		yield delay( 300 );
+
+		const { getBlocks } = select( 'core/block-editor' );
+
+		yield put( { type: 'DISABLE_UI' } );
+
+		const blockQueries = getBlockQueries( getBlocks(), blockName );
+
+		// Use requested specific posts ids as the starting state of exclusion list.
+		const specificPostsId = blockQueries.reduce( ( acc, { postsQuery } ) => {
+			if ( postsQuery.include ) {
+				acc = [ ...acc, ...postsQuery.include ];
+			}
+			return acc;
+		}, [] );
+
+		let exclude = specificPostsId;
+		while ( blockQueries.length ) {
+			const nextBlock = blockQueries.shift();
+			nextBlock.postsQuery.exclude = exclude;
+			let fetchedPostIds = [];
+			try {
+				fetchedPostIds = yield call( getPosts, nextBlock );
+			} catch ( e ) {
+				yield put( { type: 'UPDATE_BLOCK_ERROR', clientId: nextBlock.clientId, error: e.message } );
+			}
+			exclude = [ ...exclude, ...fetchedPostIds ];
+		}
+
+		yield put( { type: 'ENABLE_UI' } );
+	}
+
+	/**
+	 * Starts fetchPosts on each dispatched `REFLOW` action.
+	 *
+	 * fetchPosts will wait 300ms before fetching. Thanks to takeLatest,
+	 * if new reflow happens during this time, the reflow from before
+	 * will be cancelled.
+	 */
+	return function* fetchPostsSaga() {
+		yield takeLatest( 'REFLOW', fetchPosts );
+	};
 };
 
 export const registerQueryStore = blockName => {
-	/**
-	 * Returns an array of all newspack-blocks/query blocks in the order they are on
-	 * the page. This is needed to be able to show the editor blocks in the order
-	 * that PHP will render them.
-	 *
-	 * @param {Block[]} blocks any blocks
-	 * @returns {Block[]} ordered newspack-blocks/query blocks
-	 */
-	const getQueryBlocksInOrder = blocks =>
-		blocks.flatMap( block => {
-			const queryBlocks = [];
-			if ( block.name === blockName ) {
-				queryBlocks.push( block );
-			}
-			return queryBlocks.concat( getQueryBlocksInOrder( block.innerBlocks ) );
-		} );
+	registerGenericStore( STORE_NAMESPACE, genericStore );
 
-	const reducer = ( state = initialState, action ) => {
-		switch ( action.type ) {
-			case UPDATE_BLOCKS:
-				return {
-					...state,
-					queryBlocks: getQueryBlocksInOrder( action.blocks ),
-				};
-			case MARK_POSTS_DISPLAYED:
-				return {
-					...state,
-					postsByBlock: {
-						...state.postsByBlock,
-						[ action.clientId ]: action.posts,
-					},
-				};
-			case MARK_SPECIFIC_POSTS_DISPLAYED:
-				return {
-					...state,
-					specificPostsByBlock: {
-						...state.specificPostsByBlock,
-						[ action.clientId ]: action.posts,
-					},
-				};
-		}
-		return state;
-	};
-	registerStore( STORE_NAMESPACE, {
-		reducer,
-		actions,
-		selectors,
-		initialState,
-	} );
-
-	const { getClientIdsWithDescendants, getBlocks } = select( 'core/block-editor' );
-	const { updateBlocks } = dispatch( STORE_NAMESPACE );
-
-	let currentBlocksIds;
-	subscribe( () => {
-		const newBlocksIds = getClientIdsWithDescendants();
-		// I don't know why != works but it does, I guess getClientIdsWithDescendants is memoized?
-		const blocksChanged = newBlocksIds !== currentBlocksIds;
-		currentBlocksIds = newBlocksIds;
-
-		if ( blocksChanged ) {
-			updateBlocks( getBlocks() );
-		}
-	} );
+	// Run the saga ✨
+	sagaMiddleware.run( createFetchPostsSaga( blockName ) );
 };

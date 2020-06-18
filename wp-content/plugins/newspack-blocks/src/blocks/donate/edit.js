@@ -324,7 +324,7 @@ class Edit extends Component {
 					label={ __( 'Error', 'newspack-blocks' ) }
 					instructions={ error }
 				>
-					<ExternalLink href="/wp-admin/admin.php?page=newspack-donations-wizard#/">
+					<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
 						{ __( 'Go to donation settings to troubleshoot.', 'newspack-blocks' ) }
 					</ExternalLink>
 				</Placeholder>
@@ -340,7 +340,7 @@ class Edit extends Component {
 						'newspack-blocks'
 					) }
 				>
-					<ExternalLink href="/wp-admin/admin.php?page=newspack-donations-wizard#/">
+					<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
 						{ __( 'Set up donation settings.', 'newspack-blocks' ) }
 					</ExternalLink>
 				</Placeholder>
@@ -461,7 +461,7 @@ class Edit extends Component {
 									) }
 								</p>
 
-								<ExternalLink href="/wp-admin/admin.php?page=newspack-donations-wizard#/">
+								<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
 									{ __( 'Edit donation settings.', 'newspack-blocks' ) }
 								</ExternalLink>
 							</Fragment>
