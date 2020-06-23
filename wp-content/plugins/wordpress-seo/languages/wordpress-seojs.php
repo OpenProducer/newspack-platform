@@ -73,6 +73,18 @@ $generated_i18n_strings = array(
 	// Reference: js/src/components/CornerstoneToggle.js:26
 	__( 'Mark as cornerstone content', 'wordpress-seo' ),
 
+	// Reference: js/src/components/DocumentSidebar.js:29
+	// Reference: js/src/components/PrePublish.js:41
+	__( 'Readability analysis:', 'wordpress-seo' ),
+
+	// Reference: js/src/components/DocumentSidebar.js:33
+	// Reference: js/src/components/PrePublish.js:45
+	__( 'SEO analysis:', 'wordpress-seo' ),
+
+	// Reference: js/src/components/DocumentSidebar.js:36
+	// Reference: js/src/components/PrePublish.js:48
+	__( 'Improve your post with Yoast SEO', 'wordpress-seo' ),
+
 	// Reference: js/src/components/LocalSEOUpsell.js:76
 	__( 'Serving local customers?', 'wordpress-seo' ),
 
@@ -85,6 +97,18 @@ $generated_i18n_strings = array(
 	// Reference: js/src/components/Metabox.js:58
 	// Reference: js/src/components/SnippetPreviewModal.js:53
 	__( 'Google preview', 'wordpress-seo' ),
+
+	// Reference: js/src/components/PostPublish.js:17
+	__( 'Share your post!', 'wordpress-seo' ),
+
+	// Reference: js/src/components/PrePublish.js:29
+	__( 'We\'ve analyzed your post. Everything looks good. Well done!', 'wordpress-seo' ),
+
+	// Reference: js/src/components/PrePublish.js:31
+	__( 'We\'ve analyzed your post. There is still room for improvement!', 'wordpress-seo' ),
+
+	// Reference: js/src/components/PrePublish.js:37
+	__( 'No focus keyword was entered', 'wordpress-seo' ),
 
 	// Reference: js/src/components/PrimaryTaxonomyFilter.js:80
 	__( 'An error occurred loading the %s primary taxonomy picker.', 'wordpress-seo' ),
@@ -206,8 +230,50 @@ $generated_i18n_strings = array(
 	// Reference: js/src/containers/SnippetEditor.js:107
 	__( 'Please provide a meta description by editing the snippet below.', 'wordpress-seo' ),
 
+	// Reference: js/src/edit.js:196
+	__( 'Yoast SEO', 'wordpress-seo' ),
+
+	// Reference: js/src/edit.js:84
+	__( 'Marking links with nofollow/sponsored has been disabled for WordPress installs < 5.4.', 'wordpress-seo' ),
+
+	// Reference: js/src/edit.js:87
+	__( 'Please upgrade your WordPress version or install the Gutenberg plugin to get this %1$s feature.', 'wordpress-seo' ),
+
 	// Reference: js/src/help-scout-beacon.js:208
 	__( 'When you click OK we will open our HelpScout beacon where you can find answers to your questions. This beacon will load our support data and also potentially set cookies.', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/edit-link.js:109
+	__( 'Link removed.', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/edit-link.js:136
+	__( 'Unlink', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/edit-link.js:27
+	__( 'Link', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/inline.js:175
+	__( 'Warning: the link has been inserted but may have errors. Please test it.', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/inline.js:181
+	__( 'Link edited.', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/inline.js:183
+	__( 'Link inserted.', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/inline.js:192
+	__( 'Learn more about marking a link as nofollow or sponsored.', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/inline.js:198
+	__( 'Search engines should ignore this link (mark as %1$snofollow%2$s)%3$s', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/inline.js:211
+	__( 'This is a sponsored link or advert (mark as %1$ssponsored%2$s)%3$s', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/inline.js:225
+	__( 'Open in new tab', 'wordpress-seo' ),
+
+	// Reference: js/src/inline-links/utils.js:101
+	__( '%s (opens in a new tab)', 'wordpress-seo' ),
 
 	// Reference: js/src/structured-data-blocks/faq/block.js:23
 	__( 'List your Frequently Asked Questions in an SEO-friendly way. You can only use one FAQ block per post.', 'wordpress-seo' ),

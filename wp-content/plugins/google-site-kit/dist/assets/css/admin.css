@@ -5973,37 +5973,7 @@ a.mdc-list-item {
   .googlesitekit-plugin .mdc-switch + label {
     margin-left: 10px; }
 
-.googlesitekit-plugin .mdc-tab .mdc-tab__text-label {
-  color: #757575; }
-
 .googlesitekit-plugin .mdc-tab.mdc-tab--active .mdc-tab__text-label {
-  color: #1a73e8; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__icon {
-  color: #1a73e8;
-  fill: currentColor; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__ripple::before, .googlesitekit-plugin .mdc-tab .mdc-tab__ripple::after {
-  background-color: #1a73e8; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__ripple:hover::before {
-  opacity: 0.04; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__ripple:not(.mdc-ripple-upgraded):focus::before, .googlesitekit-plugin .mdc-tab .mdc-tab__ripple.mdc-ripple-upgraded--background-focused::before {
-  transition-duration: 75ms;
-  opacity: 0.12; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__ripple:not(.mdc-ripple-upgraded)::after {
-  transition: opacity 150ms linear; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__ripple:not(.mdc-ripple-upgraded):active::after {
-  transition-duration: 75ms;
-  opacity: 0.12; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__ripple.mdc-ripple-upgraded {
-  --mdc-ripple-fg-opacity: 0.12; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__text-label {
   color: #1a73e8; }
 
 .googlesitekit-plugin .mdc-tab .mdc-tab__ripple::before, .googlesitekit-plugin .mdc-tab .mdc-tab__ripple::after {
@@ -6032,9 +6002,6 @@ a.mdc-list-item {
 .googlesitekit-plugin .mdc-tab:focus {
   color: #1a73e8;
   outline: none; }
-
-.googlesitekit-plugin .mdc-tab .mdc-tab__text-label {
-  color: #757575; }
 
 .googlesitekit-plugin .mdc-text-field {
   width: 250px; }
@@ -6244,6 +6211,9 @@ a.mdc-list-item {
     overflow: hidden;
     position: absolute !important;
     width: 1px; }
+  @media (max-width: 599px) {
+    .googlesitekit-plugin .hidden-on-mobile {
+      display: none; } }
 
 /*
  * Components
@@ -6818,6 +6788,46 @@ a.mdc-list-item {
         margin-top: 12px; } }
 
 /**
+ * DeviceSizeTabBar styles.
+ *
+ * Site Kit by Google, Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.googlesitekit-device-size-tab-bar {
+  border-radius: 8px;
+  overflow: hidden;
+  width: auto; }
+  .googlesitekit-device-size-tab-bar .mdc-tab-scroller__scroll-content button.mdc-tab {
+    background: #fff;
+    height: 32px;
+    width: 56px; }
+    .googlesitekit-device-size-tab-bar .mdc-tab-scroller__scroll-content button.mdc-tab:first-child {
+      border-bottom-left-radius: 8px;
+      border-top-left-radius: 8px; }
+    .googlesitekit-device-size-tab-bar .mdc-tab-scroller__scroll-content button.mdc-tab:last-child {
+      border-bottom-right-radius: 8px;
+      border-top-right-radius: 8px; }
+    .googlesitekit-device-size-tab-bar .mdc-tab-scroller__scroll-content button.mdc-tab svg path {
+      fill: #5f6368; }
+    .googlesitekit-device-size-tab-bar .mdc-tab-scroller__scroll-content button.mdc-tab.mdc-tab--active {
+      background: #1a73e8; }
+      .googlesitekit-device-size-tab-bar .mdc-tab-scroller__scroll-content button.mdc-tab.mdc-tab--active svg path {
+        fill: #fff; }
+    .googlesitekit-device-size-tab-bar .mdc-tab-scroller__scroll-content button.mdc-tab .mdc-tab-indicator {
+      display: none; }
+
+/**
  * Error text styles.
  *
  * Site Kit by Google, Copyright 2019 Google LLC
@@ -7347,9 +7357,9 @@ a.mdc-list-item {
     margin-top: 25px; }
 
 /**
- * Pagespeed report styles.
+ * PageSpeed Insights Dashboard Widget styles.
  *
- * Site Kit by Google, Copyright 2019 Google LLC
+ * Site Kit by Google, Copyright 2020 Google LLC
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -7363,77 +7373,12 @@ a.mdc-list-item {
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-.googlesitekit-pagespeed-report__loading {
-  text-align: center; }
-
-.googlesitekit-pagespeed-report__heading-wrapper {
-  align-items: flex-start;
+.googlesitekit-pagespeed-widget header {
   display: flex;
-  flex-wrap: nowrap;
-  justify-content: space-between;
-  margin-right: 16px; }
-  @media (min-width: 600px) {
-    .googlesitekit-pagespeed-report__heading-wrapper {
-      margin-right: 0; } }
-  .googlesitekit-pagespeed-report__heading-wrapper h3 {
-    flex: 1;
-    margin-top: 0; }
+  justify-content: space-between; }
 
-.googlesitekit-pagespeed-report__score-category-wrapper {
-  align-items: center;
-  display: inline-flex; }
-  .googlesitekit-pagespeed-report__score-category-wrapper--fast {
-    color: #178239; }
-  .googlesitekit-pagespeed-report__score-category-wrapper--average {
-    color: #e67700; }
-  .googlesitekit-pagespeed-report__score-category-wrapper--slow {
-    color: #c7221f; }
-
-.googlesitekit-pagespeed-report__score-icon {
-  display: inline-block;
-  margin-left: 10px;
-  margin-top: 1px; }
-  .googlesitekit-pagespeed-report__score-icon::before {
-    background-position: center center;
-    background-repeat: no-repeat;
-    background-size: contain;
-    border-radius: 50%;
-    content: "";
-    display: inline-block;
-    height: 17px;
-    width: 17px; }
-  .googlesitekit-pagespeed-report__score-icon--fast::before {
-    background-color: #178239;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2216%22%20height%3D%2212%22%20viewBox%3D%220%200%2016%2012%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22%23FFF%22%20fill-rule%3D%22evenodd%22%3E%3Cpath%20d%3D%22M0%206.414L1.415%205l5.292%205.292-1.414%201.415z%22%2F%3E%3Cpath%20d%3D%22M14.146.146l1.415%201.414L5.414%2011.707%204%2010.292z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-    border: 4px solid #178239; }
-  .googlesitekit-pagespeed-report__score-icon--average::before {
-    background-color: #e67700;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%222%22%20height%3D%2212%22%20viewBox%3D%220%200%202%2012%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cg%20fill%3D%22%23fff%22%20fill-rule%3D%22evenodd%22%3E%3Cpath%20d%3D%22M0%200h2v7H0zM0%2010h2v2H0z%22%2F%3E%3C%2Fg%3E%3C%2Fsvg%3E");
-    border: 4px solid #e67700; }
-  .googlesitekit-pagespeed-report__score-icon--slow::before {
-    background-color: #fff;
-    background-image: url("data:image/svg+xml;charset=UTF-8,%3Csvg%20width%3D%2228%22%20height%3D%2225%22%20viewBox%3D%220%200%2028%2025%22%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%3E%3Cpath%20d%3D%22M3.332%2024.75h21.335c2.182%200%203.542-2.366%202.451-4.25L16.451%202.07C15.36.184%2012.64.184%2011.549%202.07L.882%2020.5c-1.091%201.884.269%204.25%202.45%204.25zM14%2014.833a1.42%201.42%200%200%201-1.417-1.416v-2.834c0-.779.638-1.416%201.417-1.416.78%200%201.417.637%201.417%201.416v2.834A1.42%201.42%200%200%201%2014%2014.833zm1.417%205.667h-2.834v-2.833h2.834V20.5z%22%20fill%3D%22%23c7221f%22%20fill-rule%3D%22nonzero%22%2F%3E%3C%2Fsvg%3E");
-    border-radius: 0; }
-
-.googlesitekit-pagespeed-report__scale {
-  color: #757575;
-  font-size: 0.75rem; }
-
-.googlesitekit-pagespeed-report__scale-range {
-  color: #757575; }
-  .googlesitekit-pagespeed-report__scale-range::before {
-    border-radius: 4px;
-    content: "";
-    display: inline-block;
-    height: 8px;
-    margin: 1px 8px;
-    width: 16px; }
-  .googlesitekit-pagespeed-report__scale-range--fast::before {
-    background-color: #178239; }
-  .googlesitekit-pagespeed-report__scale-range--average::before {
-    background-color: #e67700; }
-  .googlesitekit-pagespeed-report__scale-range--slow::before {
-    background-color: #c7221f; }
+.googlesitekit-pagespeed-widget .googlesitekit-pagespeed-widget__data-src-tabs {
+  display: flex; }
 
 /**
  * Page header styles.
@@ -7529,11 +7474,11 @@ a.mdc-list-item {
   position: relative;
   width: 1em; }
   .googlesitekit-percentage-circle--fast {
-    color: #178239; }
+    color: #188038; }
   .googlesitekit-percentage-circle--average {
-    color: #e67700; }
+    color: #e37400; }
   .googlesitekit-percentage-circle--slow {
-    color: #c7221f; }
+    color: #d93025; }
   .googlesitekit-percentage-circle::after {
     background-color: #fff;
     border-radius: 50%;
@@ -8375,13 +8320,13 @@ a.mdc-list-item {
     transform: rotate(360deg); }
   .googlesitekit-percentage-circle--fast .googlesitekit-percentage-circle__bar,
   .googlesitekit-percentage-circle--fast .googlesitekit-percentage-circle__fill {
-    border-color: #178239; }
+    border-color: #188038; }
   .googlesitekit-percentage-circle--average .googlesitekit-percentage-circle__bar,
   .googlesitekit-percentage-circle--average .googlesitekit-percentage-circle__fill {
-    border-color: #e67700; }
+    border-color: #e37400; }
   .googlesitekit-percentage-circle--slow .googlesitekit-percentage-circle__bar,
   .googlesitekit-percentage-circle--slow .googlesitekit-percentage-circle__fill {
-    border-color: #c7221f; }
+    border-color: #d93025; }
 
 /**
  * Post searcher styles.
@@ -8557,6 +8502,8 @@ a.mdc-list-item {
     @media (min-width: 960px) {
       .googlesitekit-publisher-win .googlesitekit-publisher-win__detect {
         margin-left: 48px; } }
+  .googlesitekit-publisher-win .googlesitekit-publisher-win__link a {
+    font-size: 1.1rem; }
   .googlesitekit-publisher-win .googlesitekit-publisher-win__stats {
     margin-bottom: 24px; }
   .googlesitekit-publisher-win.win-stats-increase .googlesitekit-publisher-win__stats {
@@ -8672,13 +8619,15 @@ a.mdc-list-item {
       padding: 24px; } }
   .googlesitekit-details-widget .googlesitekit-table,
   .googlesitekit-alltraffic-widget .googlesitekit-table,
-  .googlesitekit-wp-dashboard .googlesitekit-table,
-  .googlesitekit-pagespeed-report .googlesitekit-table {
+  .googlesitekit-wp-dashboard .googlesitekit-table {
     padding: 0; }
   .googlesitekit-table .googlesitekit-table__wrapper {
     border-collapse: collapse;
     table-layout: fixed;
     width: 100%; }
+    @media (max-width: 599px) {
+      .googlesitekit-table .googlesitekit-table__wrapper.googlesitekit-table__wrapper--mobile-2-col .googlesitekit-table__head-item--primary {
+        width: 75%; } }
   .googlesitekit-table .googlesitekit-table__head-row {
     border-bottom: 1px solid #e6e6e6; }
   .googlesitekit-table .googlesitekit-table__head-item {
@@ -8688,11 +8637,14 @@ a.mdc-list-item {
         -ms-hyphens: auto;
             hyphens: auto;
     outline: 0;
-    padding: 0 8px 8px 8px;
+    padding: 0 4px 8px 4px;
     position: relative;
     text-align: right;
     text-decoration: none;
     white-space: normal; }
+    @media (min-width: 600px) {
+      .googlesitekit-table .googlesitekit-table__head-item {
+        padding: 0 8px 8px 8px; } }
     @media (min-width: 960px) {
       .googlesitekit-table .googlesitekit-table__head-item {
         padding: 0 12px 12px 12px; } }
@@ -8704,10 +8656,7 @@ a.mdc-list-item {
     .googlesitekit-table .googlesitekit-table__head-item--primary {
       width: 50%; }
     .googlesitekit-table-overflow .googlesitekit-table .googlesitekit-table__head-item:last-child {
-      padding-right: 16px; }
-      @media (min-width: 600px) {
-        .googlesitekit-table-overflow .googlesitekit-table .googlesitekit-table__head-item:last-child {
-          padding-right: 0; } }
+      padding-right: 0; }
     @media (min-width: 960px) {
       .googlesitekit-table .googlesitekit-table__head-item[data-tooltip]::before {
         background: rgba(0, 0, 0, 0.7);
@@ -8736,8 +8685,11 @@ a.mdc-list-item {
   .googlesitekit-table .googlesitekit-table__body-row {
     border-bottom: 1px solid #e6e6e6; }
   .googlesitekit-table .googlesitekit-table__body-item {
-    padding: 8px;
+    padding: 8px 4px;
     text-align: right; }
+    @media (min-width: 600px) {
+      .googlesitekit-table .googlesitekit-table__body-item {
+        padding: 8px; } }
     @media (min-width: 960px) {
       .googlesitekit-table .googlesitekit-table__body-item {
         padding: 12px; } }
@@ -8752,10 +8704,7 @@ a.mdc-list-item {
         .googlesitekit-table .googlesitekit-table__body-item .googlesitekit-mini-chart {
           display: block; } }
     .googlesitekit-table-overflow .googlesitekit-table .googlesitekit-table__body-item:last-child {
-      padding-right: 16px; }
-      @media (min-width: 600px) {
-        .googlesitekit-table-overflow .googlesitekit-table .googlesitekit-table__body-item:last-child {
-          padding-right: 0; } }
+      padding-right: 0; }
   .googlesitekit-table--with-list .googlesitekit-table__body-row {
     transition: background-color 0.2s ease-in-out; }
     .googlesitekit-table--with-list .googlesitekit-table__body-row:last-child {
@@ -8946,6 +8895,171 @@ a.mdc-list-item {
 
 .googlesitekit-dashboard-single-url .googlesitekit-dashboard-single-url__title {
   margin: 0 0 10px 0; }
+
+/**
+ * DashboardPageSpeed styles.
+ *
+ * Site Kit by Google, Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.googlesitekit-pagespeed-widget .googlesitekit-cta-link {
+  white-space: nowrap; }
+
+.googlesitekit-pagespeed-widget .googlesitekit-table {
+  border-spacing: 0;
+  padding: 0;
+  width: 100%; }
+  .googlesitekit-pagespeed-widget .googlesitekit-table thead {
+    display: none; }
+
+.googlesitekit-pagespeed-widget .googlesitekit-pagespeed-widget__header {
+  align-items: flex-end;
+  background: #fafafa;
+  box-shadow: inset 0 -1px 0 rgba(0, 0, 0, 0.1);
+  display: flex;
+  justify-content: space-between; }
+  @media (max-width: 449px) {
+    .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-widget__header {
+      align-items: center;
+      flex-direction: column-reverse;
+      justify-content: flex-end; } }
+
+.googlesitekit-pagespeed-widget .googlesitekit-pagespeed-widget__data-src-tabs button.mdc-tab {
+  font-size: 0.875rem;
+  letter-spacing: 0.25px;
+  line-height: 1.25rem;
+  margin: 0 10px;
+  text-transform: none; }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-widget__data-src-tabs button.mdc-tab .mdc-tab-indicator__content--underline {
+    border-top-left-radius: 3px;
+    border-top-right-radius: 3px;
+    height: 3px; }
+
+.googlesitekit-pagespeed-widget .googlesitekit-pagespeed-widget__device-size-tab-bar-wrapper {
+  padding: 12px;
+  width: auto; }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-widget__device-size-tab-bar-wrapper .googlesitekit-device-size-tab-bar {
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.2); }
+
+.googlesitekit-pagespeed-widget .googlesitekit-pagespeed-insights-web-vitals-metrics--field-data-unavailable {
+  align-items: center;
+  display: flex;
+  height: auto;
+  justify-content: center;
+  padding: 16px; }
+  @media (min-width: 600px) {
+    .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-insights-web-vitals-metrics--field-data-unavailable {
+      min-height: 285px;
+      padding: 24px; } }
+
+.googlesitekit-pagespeed-widget .googlesitekit-pagespeed-insights-web-vitals-metrics__field-data-unavailable-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  max-width: 600px;
+  width: 75%; }
+  @media (max-width: 599px) {
+    .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-insights-web-vitals-metrics__field-data-unavailable-content {
+      width: 100%; } }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-insights-web-vitals-metrics__field-data-unavailable-content h3 {
+    font-size: 1.25rem;
+    line-height: 1.75rem;
+    margin: 0 0 0.25rem; }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-insights-web-vitals-metrics__field-data-unavailable-content p {
+    font-size: 0.875rem;
+    line-height: 1.25rem;
+    margin: 0.25rem 0; }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-insights-web-vitals-metrics__field-data-unavailable-content a {
+    margin: 0; }
+
+.googlesitekit-pagespeed-widget .googlesitekit-pagespeed-report__row {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 18px 16px; }
+  @media (min-width: 600px) {
+    .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-report__row {
+      padding: 18px 24px; } }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-report__row p {
+    color: #6e7275;
+    font-size: 0.875rem;
+    letter-spacing: 0.2px;
+    line-height: 1.25rem; }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-report__row--first {
+    padding: 12px 16px 8px 16px; }
+    @media (min-width: 600px) {
+      .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-report__row--first {
+        padding: 18px 24px 12px 24px; } }
+  .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-report__row--last {
+    padding: 8px 16px 12px 16px; }
+    @media (min-width: 600px) {
+      .googlesitekit-pagespeed-widget .googlesitekit-pagespeed-report__row--last {
+        padding: 12px 24px 18px 24px; } }
+
+/**
+ * ReportMetric styles.
+ *
+ * Site Kit by Google, Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric__title {
+  color: #000;
+  font-size: 1rem;
+  letter-spacing: 0.1px;
+  line-height: 1.5rem; }
+
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric-value-container {
+  align-items: flex-end;
+  display: flex;
+  flex-direction: column;
+  font-size: 0.75rem;
+  justify-content: center;
+  letter-spacing: 0.3px;
+  line-height: 1rem;
+  text-align: right; }
+
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric-value__display-value,
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric-value__rating {
+  width: auto; }
+
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric-value__display-value {
+  font-size: 1rem;
+  line-height: 1.5rem;
+  white-space: nowrap; }
+
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric-value__rating {
+  text-transform: uppercase; }
+
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric--fast {
+  color: #188038; }
+
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric--average {
+  color: #e37400; }
+
+.googlesitekit-pagespeed-report-metric .googlesitekit-pagespeed-report-metric--slow {
+  color: #d93025; }
 
 /**
  * Dashboard splash styles.
@@ -9911,7 +10025,9 @@ a.mdc-list-item {
     .googlesitekit-settings-module .googlesitekit-settings-module__meta-item--nomargin {
       margin: 0; }
   .googlesitekit-settings-module .googlesitekit-settings-module__meta-item-type {
+    color: #757575;
     font-size: 0.75rem;
+    font-weight: inherit;
     margin: 0 0 8px 0; }
   .googlesitekit-settings-module .googlesitekit-settings-module__meta-item-data {
     color: #5b5b61;
@@ -10060,4 +10176,24 @@ a.mdc-list-item {
  */
 .googlesitekit-plugin .googlesitekit-margin-bottom-0 {
   margin-bottom: 0 !important; }
+
+/**
+ * Text alignment utility styles.
+ *
+ * Site Kit by Google, Copyright 2020 Google LLC
+ *
+ * Licensed under the Apache License, Version 2.0 (the "License");
+ * you may not use this file except in compliance with the License.
+ * You may obtain a copy of the License at
+ *
+ *     https://www.apache.org/licenses/LICENSE-2.0
+ *
+ * Unless required by applicable law or agreed to in writing, software
+ * distributed under the License is distributed on an "AS IS" BASIS,
+ * WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ * See the License for the specific language governing permissions and
+ * limitations under the License.
+ */
+.googlesitekit-plugin .googlesitekit-text-align-center {
+  text-align: center; }
 

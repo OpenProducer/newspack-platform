@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
+class ComposerStaticInit5f6b4390fe0b9f0860b977d3dd766580
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -21,11 +21,6 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
     );
 
     public static $classMap = array (
-        'AddCollationToTables' => __DIR__ . '/../..' . '/src/config/migrations/20200408101900_AddCollationToTables.php',
-        'AddColumnsToIndexables' => __DIR__ . '/../..' . '/src/config/migrations/20200420073606_AddColumnsToIndexables.php',
-        'AddIndexableObjectIdAndTypeIndex' => __DIR__ . '/../..' . '/src/config/migrations/20200430075614_AddIndexableObjectIdAndTypeIndex.php',
-        'BreadcrumbTitleAndHierarchyReset' => __DIR__ . '/../..' . '/src/config/migrations/20200428123747_BreadcrumbTitleAndHierarchyReset.php',
-        'ClearIndexableTables' => __DIR__ . '/../..' . '/src/config/migrations/20200430150130_ClearIndexableTables.php',
         'Composer\\Installers\\AglInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AglInstaller.php',
         'Composer\\Installers\\AimeosInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AimeosInstaller.php',
         'Composer\\Installers\\AnnotateCmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/AnnotateCmsInstaller.php',
@@ -116,10 +111,6 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'Composer\\Installers\\YawikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
         'Composer\\Installers\\ZendInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
         'Composer\\Installers\\ZikulaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
-        'DeleteDuplicateIndexables' => __DIR__ . '/../..' . '/src/config/migrations/20200507054848_DeleteDuplicateIndexables.php',
-        'ExpandIndexableColumnLengths' => __DIR__ . '/../..' . '/src/config/migrations/20200428194858_ExpandIndexableColumnLengths.php',
-        'ResetIndexableHierarchyTable' => __DIR__ . '/../..' . '/src/config/migrations/20200513133401_ResetIndexableHierarchyTable.php',
-        'TruncateIndexableTables' => __DIR__ . '/../..' . '/src/config/migrations/20200429105310_TruncateIndexableTables.php',
         'WPSEO_Abstract_Capability_Manager' => __DIR__ . '/../..' . '/admin/capabilities/class-abstract-capability-manager.php',
         'WPSEO_Abstract_Metabox_Tab_With_Sections' => __DIR__ . '/../..' . '/admin/metabox/class-abstract-sectioned-metabox-tab.php',
         'WPSEO_Abstract_Post_Filter' => __DIR__ . '/../..' . '/admin/filters/class-abstract-post-filter.php',
@@ -216,6 +207,7 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'WPSEO_Customizer' => __DIR__ . '/../..' . '/admin/class-customizer.php',
         'WPSEO_Database_Proxy' => __DIR__ . '/../..' . '/admin/class-database-proxy.php',
         'WPSEO_Date_Helper' => __DIR__ . '/../..' . '/inc/date-helper.php',
+        'WPSEO_Deprecated_Graph_Piece' => __DIR__ . '/../..' . '/deprecated/frontend/abstract-class-deprecated-schema-piece.php',
         'WPSEO_Dismissible_Notification' => __DIR__ . '/../..' . '/admin/notifiers/dismissible-notification.php',
         'WPSEO_Endpoint' => __DIR__ . '/../..' . '/admin/endpoints/class-endpoint.php',
         'WPSEO_Endpoint_Factory' => __DIR__ . '/../..' . '/inc/class-wpseo-endpoint-factory.php',
@@ -486,10 +478,6 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'WPSEO_WordPress_AJAX_Integration' => __DIR__ . '/../..' . '/inc/interface-wpseo-wordpress-ajax-integration.php',
         'WPSEO_WordPress_Integration' => __DIR__ . '/../..' . '/inc/interface-wpseo-wordpress-integration.php',
         'WPSEO_Yoast_Columns' => __DIR__ . '/../..' . '/admin/class-yoast-columns.php',
-        'WpYoastDropIndexableMetaTableIfExists' => __DIR__ . '/../..' . '/src/config/migrations/20190529075038_WpYoastDropIndexableMetaTableIfExists.php',
-        'WpYoastIndexable' => __DIR__ . '/../..' . '/src/config/migrations/20171228151840_WpYoastIndexable.php',
-        'WpYoastIndexableHierarchy' => __DIR__ . '/../..' . '/src/config/migrations/20191011111109_WpYoastIndexableHierarchy.php',
-        'WpYoastPrimaryTerm' => __DIR__ . '/../..' . '/src/config/migrations/20171228151841_WpYoastPrimaryTerm.php',
         'YoastSEO_Vendor\\GuzzleHttp\\Client' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Client.php',
         'YoastSEO_Vendor\\GuzzleHttp\\ClientInterface' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/ClientInterface.php',
         'YoastSEO_Vendor\\GuzzleHttp\\Cookie\\CookieJar' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Cookie/CookieJar.php',
@@ -603,26 +591,6 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'YoastSEO_Vendor\\Psr\\Log\\LoggerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/LoggerInterface.php',
         'YoastSEO_Vendor\\Psr\\Log\\LoggerTrait' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/LoggerTrait.php',
         'YoastSEO_Vendor\\Psr\\Log\\NullLogger' => __DIR__ . '/../..' . '/vendor_prefixed/psr/log/Psr/Log/NullLogger.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_Base' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/Base.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_ColumnDefinition' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/ColumnDefinition.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_Interface' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/Interface.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_MySQL_Base' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/MySQL/Base.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_MySQL_TableDefinition' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/MySQL/TableDefinition.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_PgSQL_Base' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/PgSQL/Base.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_PgSQL_TableDefinition' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/PgSQL/TableDefinition.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_Sqlite3_Base' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/Sqlite3/Base.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_Sqlite3_TableDefinition' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/Sqlite3/TableDefinition.php',
-        'YoastSEO_Vendor\\Ruckusing_Adapter_TableDefinition' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Adapter/TableDefinition.php',
-        'YoastSEO_Vendor\\Ruckusing_BaseMigration' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Migration/Base.php',
-        'YoastSEO_Vendor\\Ruckusing_Exception' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Exception.php',
-        'YoastSEO_Vendor\\Ruckusing_FrameworkRunner' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/FrameworkRunner.php',
-        'YoastSEO_Vendor\\Ruckusing_Migration_Base' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Migration/Base.php',
-        'YoastSEO_Vendor\\Ruckusing_Task_Base' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Task/Base.php',
-        'YoastSEO_Vendor\\Ruckusing_Task_Interface' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Task/Interface.php',
-        'YoastSEO_Vendor\\Ruckusing_Task_Manager' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Task/Manager.php',
-        'YoastSEO_Vendor\\Ruckusing_Util_Logger' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Util/Logger.php',
-        'YoastSEO_Vendor\\Ruckusing_Util_Migrator' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Util/Migrator.php',
-        'YoastSEO_Vendor\\Ruckusing_Util_Naming' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Ruckusing/Util/Naming.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\Argument\\RewindableGenerator' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/Argument/RewindableGenerator.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\Container' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/Container.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ContainerInterface.php',
@@ -639,16 +607,13 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBag' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ParameterBag/ParameterBag.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ParameterBag\\ParameterBagInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ParameterBag/ParameterBagInterface.php',
         'YoastSEO_Vendor\\Symfony\\Component\\DependencyInjection\\ResettableContainerInterface' => __DIR__ . '/../..' . '/vendor_prefixed/symfony/dependency-injection/ResettableContainerInterface.php',
-        'YoastSEO_Vendor\\Task_Db_Generate' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Task/Db/Generate.php',
-        'YoastSEO_Vendor\\Task_Db_Migrate' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Task/Db/Migrate.php',
-        'YoastSEO_Vendor\\Task_Db_Schema' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Task/Db/Schema.php',
-        'YoastSEO_Vendor\\Task_Db_Setup' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Task/Db/Setup.php',
-        'YoastSEO_Vendor\\Task_Db_Status' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Task/Db/Status.php',
-        'YoastSEO_Vendor\\Task_Db_Version' => __DIR__ . '/../..' . '/vendor_prefixed/ruckusing/lib/Task/Db/Version.php',
+        'Yoast\\WP\\Lib\\Migrations\\Adapter' => __DIR__ . '/../..' . '/lib/migrations/adapter.php',
+        'Yoast\\WP\\Lib\\Migrations\\Column' => __DIR__ . '/../..' . '/lib/migrations/column.php',
+        'Yoast\\WP\\Lib\\Migrations\\Constants' => __DIR__ . '/../..' . '/lib/migrations/constants.php',
+        'Yoast\\WP\\Lib\\Migrations\\Migration' => __DIR__ . '/../..' . '/lib/migrations/migration.php',
+        'Yoast\\WP\\Lib\\Migrations\\Table' => __DIR__ . '/../..' . '/lib/migrations/table.php',
         'Yoast\\WP\\Lib\\Model' => __DIR__ . '/../..' . '/lib/model.php',
         'Yoast\\WP\\Lib\\ORM' => __DIR__ . '/../..' . '/lib/orm.php',
-        'Yoast\\WP\\Lib\\Ruckusing_Adapter' => __DIR__ . '/../..' . '/lib/ruckusing-adapter.php',
-        'Yoast\\WP\\Lib\\Ruckusing_Framework_Runner' => __DIR__ . '/../..' . '/lib/ruckusing-framework-runner.php',
         'Yoast\\WP\\SEO\\Actions\\Indexables\\Indexable_Head_Action' => __DIR__ . '/../..' . '/src/actions/indexables/indexable-head-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexation\\Indexable_General_Indexation_Action' => __DIR__ . '/../..' . '/src/actions/indexation/indexable-general-indexation-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexation\\Indexable_Post_Indexation_Action' => __DIR__ . '/../..' . '/src/actions/indexation/indexable-post-indexation-action.php',
@@ -686,7 +651,20 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'Yoast\\WP\\SEO\\Conditionals\\Yoast_Admin_And_Dashboard_Conditional' => __DIR__ . '/../..' . '/src/conditionals/yoast-admin-and-dashboard-conditional.php',
         'Yoast\\WP\\SEO\\Config\\Dependency_Management' => __DIR__ . '/../..' . '/src/config/dependency-management.php',
         'Yoast\\WP\\SEO\\Config\\Migration_Status' => __DIR__ . '/../..' . '/src/config/migration-status.php',
-        'Yoast\\WP\\SEO\\Config\\Ruckusing_Framework' => __DIR__ . '/../..' . '/src/config/ruckusing-framework.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\AddCollationToTables' => __DIR__ . '/../..' . '/src/config/migrations/20200408101900_AddCollationToTables.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\AddColumnsToIndexables' => __DIR__ . '/../..' . '/src/config/migrations/20200420073606_AddColumnsToIndexables.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\AddHasAncestorsColumn' => __DIR__ . '/../..' . '/src/config/migrations/20200609154515_AddHasAncestorsColumn.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\AddIndexableObjectIdAndTypeIndex' => __DIR__ . '/../..' . '/src/config/migrations/20200430075614_AddIndexableObjectIdAndTypeIndex.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\BreadcrumbTitleAndHierarchyReset' => __DIR__ . '/../..' . '/src/config/migrations/20200428123747_BreadcrumbTitleAndHierarchyReset.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\ClearIndexableTables' => __DIR__ . '/../..' . '/src/config/migrations/20200430150130_ClearIndexableTables.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\DeleteDuplicateIndexables' => __DIR__ . '/../..' . '/src/config/migrations/20200507054848_DeleteDuplicateIndexables.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\ExpandIndexableColumnLengths' => __DIR__ . '/../..' . '/src/config/migrations/20200428194858_ExpandIndexableColumnLengths.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\ResetIndexableHierarchyTable' => __DIR__ . '/../..' . '/src/config/migrations/20200513133401_ResetIndexableHierarchyTable.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\TruncateIndexableTables' => __DIR__ . '/../..' . '/src/config/migrations/20200429105310_TruncateIndexableTables.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\WpYoastDropIndexableMetaTableIfExists' => __DIR__ . '/../..' . '/src/config/migrations/20190529075038_WpYoastDropIndexableMetaTableIfExists.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\WpYoastIndexable' => __DIR__ . '/../..' . '/src/config/migrations/20171228151840_WpYoastIndexable.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\WpYoastIndexableHierarchy' => __DIR__ . '/../..' . '/src/config/migrations/20191011111109_WpYoastIndexableHierarchy.php',
+        'Yoast\\WP\\SEO\\Config\\Migrations\\WpYoastPrimaryTerm' => __DIR__ . '/../..' . '/src/config/migrations/20171228151841_WpYoastPrimaryTerm.php',
         'Yoast\\WP\\SEO\\Config\\Schema_IDs' => __DIR__ . '/../..' . '/src/config/schema-ids.php',
         'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => __DIR__ . '/../..' . '/src/context/meta-tags-context.php',
         'Yoast\\WP\\SEO\\Exceptions\\Missing_Method' => __DIR__ . '/../..' . '/src/exceptions/missing-method.php',
@@ -714,6 +692,7 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'Yoast\\WP\\SEO\\Helpers\\Date_Helper' => __DIR__ . '/../..' . '/src/helpers/date-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Home_Url_Helper' => __DIR__ . '/../..' . '/src/helpers/home-url-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Image_Helper' => __DIR__ . '/../..' . '/src/helpers/image-helper.php',
+        'Yoast\\WP\\SEO\\Helpers\\Language_Helper' => __DIR__ . '/../..' . '/src/helpers/language-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Meta_Helper' => __DIR__ . '/../..' . '/src/helpers/meta-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Open_Graph\\Image_Helper' => __DIR__ . '/../..' . '/src/helpers/open-graph/image-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Options_Helper' => __DIR__ . '/../..' . '/src/helpers/options-helper.php',
@@ -773,7 +752,6 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
         'Yoast\\WP\\SEO\\Loadable_Interface' => __DIR__ . '/../..' . '/src/loadable-interface.php',
         'Yoast\\WP\\SEO\\Loader' => __DIR__ . '/../..' . '/src/loader.php',
         'Yoast\\WP\\SEO\\Loggers\\Logger' => __DIR__ . '/../..' . '/src/loggers/logger.php',
-        'Yoast\\WP\\SEO\\Loggers\\Migration_Logger' => __DIR__ . '/../..' . '/src/loggers/migration-logger.php',
         'Yoast\\WP\\SEO\\Main' => __DIR__ . '/../..' . '/src/main.php',
         'Yoast\\WP\\SEO\\Memoizers\\Meta_Tags_Context_Memoizer' => __DIR__ . '/../..' . '/src/memoizers/meta-tags-context-memoizer.php',
         'Yoast\\WP\\SEO\\Memoizers\\Presentation_Memoizer' => __DIR__ . '/../..' . '/src/memoizers/presentation-memoizer.php',
@@ -897,9 +875,9 @@ class ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit5a7dd57aa1001ba4ffc487e5b8c22e4b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5f6b4390fe0b9f0860b977d3dd766580::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5f6b4390fe0b9f0860b977d3dd766580::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5f6b4390fe0b9f0860b977d3dd766580::$classMap;
 
         }, null, ClassLoader::class);
     }

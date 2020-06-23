@@ -426,17 +426,17 @@
     },
     {
         "name": "woocommerce/woocommerce-admin",
-        "version": "v1.2.3",
-        "version_normalized": "1.2.3.0",
+        "version": "v1.2.4",
+        "version_normalized": "1.2.4.0",
         "source": {
             "type": "git",
             "url": "https://github.com/woocommerce/woocommerce-admin.git",
-            "reference": "5560c9b6e31e1d794a55a0eb4ccf040fd2cee4c7"
+            "reference": "52ff00ce76c8d1200e3015a6af9bae2fb31acc29"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/woocommerce/woocommerce-admin/zipball/5560c9b6e31e1d794a55a0eb4ccf040fd2cee4c7",
-            "reference": "5560c9b6e31e1d794a55a0eb4ccf040fd2cee4c7",
+            "url": "https://api.github.com/repos/woocommerce/woocommerce-admin/zipball/52ff00ce76c8d1200e3015a6af9bae2fb31acc29",
+            "reference": "52ff00ce76c8d1200e3015a6af9bae2fb31acc29",
             "shasum": ""
         },
         "require": {
@@ -448,7 +448,7 @@
             "phpunit/phpunit": "7.5.20",
             "woocommerce/woocommerce-sniffs": "0.0.9"
         },
-        "time": "2020-05-22T18:45:16+00:00",
+        "time": "2020-06-11T19:20:26+00:00",
         "type": "wordpress-plugin",
         "extra": {
             "scripts-description": {

@@ -195,6 +195,9 @@
     overflow: hidden;
     position: absolute !important;
     width: 1px; }
+  @media (max-width: 599px) {
+    .googlesitekit-plugin .hidden-on-mobile {
+      display: none; } }
 
 :root {
   --mdc-layout-grid-margin-desktop: 24px;
