@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/Automattic/newspack-plugin/compare/v1.9.0...v1.10.0) (2020-06-23)
+
+
+### Features
+
+* **analytics:** add non-AMP submit, ini-load events handling ([#558](https://github.com/Automattic/newspack-plugin/issues/558)) ([fd3edc4](https://github.com/Automattic/newspack-plugin/commit/fd3edc4633351af2735f21601e6e3f892a39adac))
+
 # [1.9.0](https://github.com/Automattic/newspack-plugin/compare/v1.8.0...v1.9.0) (2020-06-18)
 
 

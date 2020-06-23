@@ -171,7 +171,7 @@ class Newspack_Blocks_API {
 	public static function newspack_blocks_get_author_info( $object ) {
 		$author_data = [];
 
-		if ( function_exists( 'coauthors_posts_links' ) ) :
+		if ( function_exists( 'coauthors_posts_links' ) && ! empty( get_coauthors() ) ) :
 			$authors = get_coauthors();
 
 			foreach ( $authors as $author ) {

@@ -1,3 +1,10 @@
+## [1.8.1](https://github.com/Automattic/newspack-blocks/compare/v1.8.0...v1.8.1) (2020-06-23)
+
+
+### Bug Fixes
+
+* fall back to author if coauthor fails ([18501f6](https://github.com/Automattic/newspack-blocks/commit/18501f6482c3ee881c68da9afcc7523e6c2726a0))
+
 # [1.8.0](https://github.com/Automattic/newspack-blocks/compare/v1.7.2...v1.8.0) (2020-06-18)
 
 

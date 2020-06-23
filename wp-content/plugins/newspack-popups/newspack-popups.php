@@ -1,13 +1,13 @@
 <?php
 /**
- * Plugin Name:     Newspack Popups
- * Plugin URI:      https://newspack.block
- * Description:     AMP-compatible popup notifications.
+ * Plugin Name:     Newspack Campaigns
+ * Plugin URI:      https://newspack.blog
+ * Description:     AMP-compatible overlay and inline Campaigns.
  * Author:          Automattic
- * Author URI:      https://newspack.block
+ * Author URI:      https://newspack.blog
  * Text Domain:     newspack-popups
  * Domain Path:     /languages
- * Version:         1.2.0
+ * Version:         1.7.0
  *
  * @package         Newspack_Popups
  */

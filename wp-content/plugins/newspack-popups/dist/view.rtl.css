@@ -192,3 +192,7 @@
   .newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 + .popup-not-interested-form {
     margin-bottom: -0.75rem; }
 
+.newspack-lightbox-has-title.newspack-inline-popup .newspack-pattern.subscribe__style-1,
+.newspack-lightbox-has-title.newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 {
+  margin-top: 0; }
+

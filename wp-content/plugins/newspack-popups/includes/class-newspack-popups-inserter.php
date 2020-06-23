@@ -84,6 +84,41 @@ final class Newspack_Popups_Inserter {
 		add_action( 'after_header', [ $this, 'insert_popups_after_header' ] ); // This is a Newspack theme hook. When used with other themes, popups won't be inserted on archive pages.
 		add_action( 'wp_head', [ $this, 'insert_popups_amp_access' ] );
 		add_action( 'wp_head', [ $this, 'register_amp_scripts' ] );
+
+		add_filter(
+			'newspack_newsletters_assess_has_disabled_popups',
+			function () {
+				return get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true );
+			}
+		);
+
+		// Suppress popups on product pages.
+		// Until the popups non-AMP refactoring happens, they will break Add to Cart buttons.
+		add_filter(
+			'newspack_newsletters_assess_has_disabled_popups',
+			function( $disabled ) {
+				if ( function_exists( 'is_product' ) && is_product() ) {
+					return true;
+				}
+				return $disabled;
+			}
+		);
+
+		// These hooks are fired before and after rendering posts in the Homepage Posts block.
+		// By removing the the_content filter before rendering, we avoid incorrectly injecting campaign content into excerpts in the block.
+		add_action(
+			'newspack_blocks_homepage_posts_before_render',
+			function() {
+				remove_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
+			}
+		);
+
+		add_action(
+			'newspack_blocks_homepage_posts_after_render',
+			function() {
+				add_filter( 'the_content', [ $this, 'insert_popups_in_content' ], 1 );
+			}
+		);
 	}
 
 	/**
@@ -92,7 +127,13 @@ final class Newspack_Popups_Inserter {
 	 * @param string $content The content of the post.
 	 */
 	public static function insert_popups_in_content( $content = '' ) {
-		if ( is_admin() || ! is_singular() ) {
+		if ( is_admin() || ! is_singular() || self::assess_has_disabled_popups( $content ) ) {
+			return $content;
+		}
+
+		// Don't inject inline popups on paywalled posts.
+		// It doesn't make sense with a paywall message and also causes an infinite loop.
+		if ( function_exists( 'wc_memberships_is_post_content_restricted' ) && wc_memberships_is_post_content_restricted() ) {
 			return $content;
 		}
 
@@ -122,14 +163,54 @@ final class Newspack_Popups_Inserter {
 			$content = scaip_maybe_insert_shortcode( $content );
 		}
 
-		// Now insert the popups.
+		$total_length = strlen( $content );
+
+		// 1. Separate campaigns into inline and overlay.
+		$inline_popups  = [];
+		$overlay_popups = [];
 		foreach ( $popups as $popup ) {
-			$content = self::insert_popup( $content, $popup );
+			if ( 'inline' === $popup['options']['placement'] ) {
+				$percentage                = intval( $popup['options']['trigger_scroll_progress'] ) / 100;
+				$popup['precise_position'] = $total_length * $percentage;
+				$popup['is_inserted']      = false;
+				$inline_popups[]           = $popup;
+			} else {
+				$overlay_popups[] = $popup;
+			}
+		}
+
+		// 2. Iterate overall blocks and insert inline campaigns.
+		$pos    = 0;
+		$output = '';
+		foreach ( parse_blocks( $content ) as $block ) {
+			$block_content = render_block( $block );
+			$pos          += strlen( $block_content );
+			foreach ( $inline_popups as &$inline_popup ) {
+				if ( ! $inline_popup['is_inserted'] && $pos > $inline_popup['precise_position'] ) {
+					$output .= '<!-- wp:shortcode -->[newspack-popup id="' . $inline_popup['id'] . '"]<!-- /wp:shortcode -->';
+
+					$inline_popup['is_inserted'] = true;
+				}
+			}
+			$output .= $block_content;
+		}
+
+		// 3. Insert any remaining inline campaigns at the end.
+		foreach ( $inline_popups as $inline_popup ) {
+			if ( ! $inline_popup['is_inserted'] ) {
+				$output .= '<!-- wp:shortcode -->[newspack-popup id="' . $inline_popup['id'] . '"]<!-- /wp:shortcode -->';
+
+				$inline_popup['is_inserted'] = true;
+			}
+		}
+
+		// 4. Insert overlay campaigns at the top of content.
+		foreach ( $overlay_popups as $overlay_popup ) {
+			$output = '<!-- wp:html -->' . $overlay_popup['markup'] . '<!-- /wp:html -->' . $output;
 		}
 
 		self::enqueue_popup_assets();
-
-		return $content;
+		return $output;
 	}
 
 	/**
@@ -155,6 +236,18 @@ final class Newspack_Popups_Inserter {
 	 * Enqueue the assets needed to display the popups.
 	 */
 	public static function enqueue_popup_assets() {
+		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+		if ( ! $is_amp ) {
+			wp_register_script(
+				'newspack-popups-view',
+				plugins_url( '../dist/view.js', __FILE__ ),
+				null,
+				filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/view.js' ),
+				true
+			);
+			wp_enqueue_script( 'newspack-popups-view' );
+		}
+
 		\wp_register_style(
 			'newspack-popups-view',
 			plugins_url( '../dist/view.css', __FILE__ ),
@@ -163,44 +256,6 @@ final class Newspack_Popups_Inserter {
 		);
 		\wp_style_add_data( 'newspack-popups-view', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-popups-view' );
-	}
-
-	/**
-	 * Insert Popup markup into content.
-	 *
-	 * @param string $content The content of the post.
-	 * @param object $popup The popup object to insert.
-	 * @return string The content with popup markup inserted.
-	 */
-	public static function insert_popup( $content = '', $popup = [] ) {
-		$is_inline    = 'inline' === $popup['options']['placement'];
-		$popup_markup = $is_inline ? '[newspack-popup id="' . $popup['id'] . '"]' : $popup['markup'];
-
-		if ( ! $is_inline && 0 === $popup['options']['trigger_scroll_progress'] ) {
-			return $popup_markup . $content;
-		}
-
-		$position  = 0;
-		$positions = [];
-		$close_tag = '</p>';
-		while ( stripos( $content, $close_tag, $position ) !== false ) {
-			$position    = stripos( $content, '</p>', $position ) + strlen( $close_tag );
-			$positions[] = $position;
-		}
-		$total_length       = strlen( $content );
-		$percentage         = intval( $popup['options']['trigger_scroll_progress'] ) / 100;
-		$precise_position   = $total_length * $percentage;
-		$insertion_position = $total_length;
-		foreach ( $positions as $position ) {
-			if ( $position >= $precise_position ) {
-				$insertion_position = $position;
-				break;
-			}
-		}
-		$before_popup = substr( $content, 0, $insertion_position );
-		$after_popup  = substr( $content, $insertion_position );
-
-		return $before_popup . $popup_markup . $after_popup;
 	}
 
 	/**
@@ -227,7 +282,7 @@ final class Newspack_Popups_Inserter {
 	 * @param object $popups The popup objects to handle.
 	 */
 	public static function insert_popups_amp_access( $popups ) {
-		if ( is_admin() ) {
+		if ( is_admin() || self::assess_has_disabled_popups() ) {
 			return;
 		}
 
@@ -269,9 +324,21 @@ final class Newspack_Popups_Inserter {
 	}
 
 	/**
+	 * Disable popups on posts and pages which have newspack_popups_has_disabled_popups.
+	 *
+	 * @return bool True if popups should be disabled for current page.
+	 */
+	public static function assess_has_disabled_popups() {
+		return apply_filters( 'newspack_newsletters_assess_has_disabled_popups', [] );
+	}
+
+	/**
 	 * Register and enqueue all required AMP scripts, if needed.
 	 */
 	public static function register_amp_scripts() {
+		if ( self::assess_has_disabled_popups() ) {
+			return;
+		}
 		if ( ! is_admin() && ! wp_script_is( 'amp-runtime', 'registered' ) ) {
 		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 			wp_register_script(
@@ -282,7 +349,7 @@ final class Newspack_Popups_Inserter {
 				true
 			);
 		}
-		$scripts = [ 'amp-access', 'amp-analytics', 'amp-animation', 'amp-form', 'amp-bind', 'amp-position-observer' ];
+		$scripts = [ 'amp-access', 'amp-analytics', 'amp-animation', 'amp-bind', 'amp-position-observer' ];
 		foreach ( $scripts as $script ) {
 			if ( ! wp_script_is( $script, 'registered' ) ) {
 				$path = "https://cdn.ampproject.org/v0/{$script}-latest.js";

@@ -1,0 +1,30 @@
+{
+  "name": "automattic/newspack-newsletters",
+  "description": "Newsletter authoring plugin.",
+  "type": "wordpress-plugin",
+  "require": {
+    "drewm/mailchimp-api": "^2.5"
+  },
+  "require-dev": {
+    "automattic/vipwpcs": "^2.0",
+    "wp-coding-standards/wpcs": "^2.2",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.6.2",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "brainmaestro/composer-git-hooks": "^2.8"
+  },
+  "license": "GPL-2.0-or-later",
+  "scripts": {
+    "post-install-cmd": [ "vendor/bin/cghooks add --no-lock" ],
+    "post-update-cmd": [ "vendor/bin/cghooks update" ]
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": [
+        "./node_modules/.bin/lint-staged"
+      ],
+      "commit-msg": [
+        "cat $1 | ./node_modules/.bin/commitlint"
+      ]
+    }
+  }
+}
