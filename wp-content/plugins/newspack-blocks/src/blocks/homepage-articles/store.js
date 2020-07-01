@@ -117,6 +117,7 @@ const createFetchPostsSaga = blockName => {
 		yield delay( 300 );
 
 		const { getBlocks } = select( 'core/block-editor' );
+		const { getCurrentPostId } = select( 'core/editor' );
 
 		yield put( { type: 'DISABLE_UI' } );
 
@@ -130,7 +131,7 @@ const createFetchPostsSaga = blockName => {
 			return acc;
 		}, [] );
 
-		let exclude = specificPostsId;
+		let exclude = [ ...specificPostsId, getCurrentPostId() ];
 		while ( blockQueries.length ) {
 			const nextBlock = blockQueries.shift();
 			nextBlock.postsQuery.exclude = exclude;

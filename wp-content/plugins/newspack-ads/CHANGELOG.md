@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Automattic/newspack-ads/compare/v1.3.0...v1.4.0) (2020-06-30)
+
+
+### Features
+
+* add filter for controlling whether ads are displayed ([d0d0851](https://github.com/Automattic/newspack-ads/commit/d0d085138950f359c03ac2f12a7a2418662bd1f6))
+
 # [1.3.0](https://github.com/Automattic/newspack-ads/compare/v1.2.0...v1.3.0) (2020-06-23)
 
 

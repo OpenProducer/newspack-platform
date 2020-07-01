@@ -181,6 +181,75 @@ class Reader_Revenue_Wizard extends Wizard {
 			]
 		);
 
+		// Save Salesforce settings.
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/salesforce/',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_salesforce_settings' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'client_id'     => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'client_secret' => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'access_token'  => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'refresh_token' => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+				],
+			]
+		);
+
+		// Validate Salesforce client_id and client_secret credentials.
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/salesforce/validate',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_validate_salesforce_creds' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+
+		// Get access and refresh tokens from Salesforce.
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/salesforce/tokens',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_get_salesforce_tokens' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'client_id'     => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'client_secret' => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'redirect_uri'  => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+				],
+			]
+		);
+
+		// Check validity of refresh token with Salesforce.
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/salesforce/introspect',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_check_salesforce_token' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
 			'/wizard/newspack-donations-wizard/donation/',
@@ -314,6 +383,126 @@ class Reader_Revenue_Wizard extends Wizard {
 	}
 
 	/**
+	 * API endpoint for setting Salesforce settings.
+	 *
+	 * @param WP_REST_Request $request Request containing settings.
+	 * @return WP_REST_Response with the latest settings.
+	 */
+	public function api_update_salesforce_settings( $request ) {
+		$salesforce_response = Salesforce::set_salesforce_settings( $request->get_params() );
+		if ( is_wp_error( $salesforce_response ) ) {
+			return rest_ensure_response( $salesforce_response );
+		}
+		return \rest_ensure_response( $this->fetch_all_data() );
+	}
+
+	/**
+	 * API endpoint for validating Salesforce client id/secret credentials.
+	 *
+	 * @param WP_REST_Request $request Request containing settings.
+	 * @return WP_REST_Response with the latest settings.
+	 */
+	public function api_validate_salesforce_creds( $request ) {
+		$args  = $request->get_params();
+		$valid = false;
+
+		// Must have a valid API key and secret.
+		if ( ! empty( $args['client_id'] ) && ! empty( $args['client_secret'] ) ) {
+			$url = 'https://login.salesforce.com/services/oauth2/authorize?response_type=code&' . http_build_query(
+				[
+					'client_id'     => $args['client_id'],
+					'client_secret' => $args['client_secret'],
+					'redirect_uri'  => $args['redirect_uri'],
+				]
+			);
+
+			$response = wp_safe_remote_get( $url );
+			$valid    = wp_remote_retrieve_response_code( $response ) === 200;
+		}
+
+		return \rest_ensure_response( $valid );
+	}
+
+	/**
+	 * API endpoint for getting Salesforce API tokens.
+	 *
+	 * @param WP_REST_Request $request Request containing settings.
+	 * @throws \Exception Error message.
+	 * @return WP_REST_Response with the latest settings.
+	 */
+	public function api_get_salesforce_tokens( $request ) {
+		$args                = $request->get_params();
+		$salesforce_settings = Salesforce::get_salesforce_settings();
+
+		// Must have a valid API key and secret.
+		if ( empty( $salesforce_settings['client_id'] ) || empty( $salesforce_settings['client_secret'] ) ) {
+			throw new \Exception( 'Invalid Consumer Key or Secret.' );
+		}
+
+		// Hit Salesforce OAuth endpoint to request API tokens.
+		$salesforce_response = wp_safe_remote_post(
+			'https://login.salesforce.com/services/oauth2/token?' . http_build_query(
+				array(
+					'client_id'     => $salesforce_settings['client_id'],
+					'client_secret' => $salesforce_settings['client_secret'],
+					'code'          => $args['code'],
+					'redirect_uri'  => $args['redirect_uri'],
+					'grant_type'    => 'authorization_code',
+					'format'        => 'json',
+				)
+			)
+		);
+
+		$response_body = json_decode( $salesforce_response['body'] );
+
+		if ( ! empty( $response_body->access_token ) && ! empty( $response_body->refresh_token ) ) {
+			$update_args = wp_parse_args( $response_body, $salesforce_settings );
+
+			// Save tokens.
+			$update_response = Salesforce::set_salesforce_settings( $update_args );
+			if ( is_wp_error( $update_response ) ) {
+				return \rest_ensure_response( $update_response );
+			}
+
+			return \rest_ensure_response( $update_args );
+		}
+	}
+
+	/**
+	 * API endpoint for checking validity of a Salesforce refresh token.
+	 *
+	 * @throws \Exception Error message.
+	 * @return WP_REST_Response with the active status.
+	 */
+	public function api_check_salesforce_token() {
+		$salesforce_settings = Salesforce::get_salesforce_settings();
+
+		// Must have a valid API key and secret.
+		if (
+			empty( $salesforce_settings['client_id'] ) ||
+			empty( $salesforce_settings['client_secret'] ) ||
+			empty( $salesforce_settings['refresh_token'] )
+		) {
+			throw new \Exception( 'Invalid Consumer Key, Secret, or Refresh Token.' );
+		}
+
+		// Hit Salesforce OAuth endpoint to introspect refresh token.
+		$salesforce_response = wp_safe_remote_post(
+			'https://login.salesforce.com/services/oauth2/introspect?' . http_build_query(
+				array(
+					'client_id'     => $salesforce_settings['client_id'],
+					'client_secret' => $salesforce_settings['client_secret'],
+					'token'         => $salesforce_settings['refresh_token'],
+				)
+			)
+		);
+
+		$response_body = json_decode( $salesforce_response['body'] );
+
+		return \rest_ensure_response( $response_body );
+	}
+
+	/**
 	 * Fetch all data needed to render the Wizard
 	 *
 	 * @return Array
@@ -327,6 +516,7 @@ class Reader_Revenue_Wizard extends Wizard {
 			'stripe_data'          => $wc_configuration_manager->stripe_data(),
 			'donation_data'        => Donations::get_donation_settings(),
 			'donation_page'        => Donations::get_donation_page_info(),
+			'salesforce_settings'  => Salesforce::get_salesforce_settings(),
 		];
 	}
 

@@ -40,7 +40,9 @@ function newspack_blocks_render_block_donate( $attributes ) {
 
 	$campaign = $attributes['campaign'] ?? false;
 
-	$uid = rand(); // Unique identifier to prevent labels colliding with other instances of Donate block.
+	$uid = wp_rand( 10000, 99999 ); // Unique identifier to prevent labels colliding with other instances of Donate block.
+
+	$button_text = $attributes['buttonText'];
 
 	ob_start();
 
@@ -102,7 +104,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 					<?php echo esc_html__( 'Your contribution is appreciated.', 'newspack-blocks' ); ?>
 				</p>
 				<button type='submit'>
-					<?php echo esc_html__( 'Donate now!', 'newspack-blocks' ); ?>
+					<?php echo wp_kses_post( $button_text ); ?>
 				</button>
 				<?php if ( $campaign ) : ?>
 					<input type='hidden' name='campaign' value='<?php echo esc_attr( $campaign ); ?>' />
@@ -202,7 +204,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 					<?php echo esc_html__( 'Your contribution is appreciated.', 'newspack-blocks' ); ?>
 				</p>
 				<button type='submit'>
-					<?php echo esc_html__( 'Donate now!', 'newspack-blocks' ); ?>
+					<?php echo wp_kses_post( $button_text ); ?>
 				</button>
 				<?php if ( $campaign ) : ?>
 					<input type='hidden' name='campaign' value='<?php echo esc_attr( $campaign ); ?>' />
@@ -210,7 +212,6 @@ function newspack_blocks_render_block_donate( $attributes ) {
 			</form>
 		</div>
 		<?php
-
 	endif;
 
 	return apply_filters( 'newspack_blocks_donate_block_html', ob_get_clean() );
@@ -232,6 +233,9 @@ function newspack_blocks_register_donate() {
 				],
 				'suggestedAmounts'        => [
 					'type'    => 'array',
+					'items'   => [
+						'type' => 'integer',
+					],
 					'default' => [ 0, 0, 0 ],
 				],
 				'suggestedAmountUntiered' => [
@@ -242,8 +246,12 @@ function newspack_blocks_register_donate() {
 					'default' => true,
 				],
 				'campaign'                => [
+					'type' => 'string',
+				],
+				'buttonText'              => [
 					'type'    => 'string',
-				]
+					'default' => __( 'Donate now!', 'newspack-blocks' ),
+				],
 			),
 			'render_callback' => 'newspack_blocks_render_block_donate',
 		)

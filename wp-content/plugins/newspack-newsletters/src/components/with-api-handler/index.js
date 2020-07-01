@@ -1,6 +1,7 @@
 /**
  * WordPress dependencies
  */
+import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { dispatch, select } from '@wordpress/data';
 import { createHigherOrderComponent } from '@wordpress/compose';
@@ -16,13 +17,19 @@ export default () =>
 			const setInFlightForAsync = () => {
 				setInFlight( true );
 			};
+			const successNote = __( 'Campaign sent on ', 'newspack-newsletters' );
 			const apiFetchWithErrorHandling = apiRequest => {
 				setInFlight( true );
 				return new Promise( ( resolve, reject ) => {
 					apiFetch( apiRequest )
 						.then( response => {
 							const { message } = response;
-							getNotices().forEach( notice => removeNotice( notice.id ) );
+							getNotices().forEach( notice => {
+								// Don't remove the "Campaign sent" notice.
+								if ( 'success' !== notice.status || -1 === notice.content.indexOf( successNote ) ) {
+									removeNotice( notice.id );
+								}
+							} );
 							if ( message ) {
 								createSuccessNotice( message );
 							}
@@ -32,7 +39,12 @@ export default () =>
 						} )
 						.catch( error => {
 							const { message } = error;
-							getNotices().forEach( notice => removeNotice( notice.id ) );
+							getNotices().forEach( notice => {
+								// Don't remove the "Campaign sent" notice.
+								if ( 'success' !== notice.status || -1 === notice.content.indexOf( successNote ) ) {
+									removeNotice( notice.id );
+								}
+							} );
 							createErrorNotice( message );
 							setInFlight( false );
 							setErrors( { [ error.code ]: true } );
@@ -47,6 +59,7 @@ export default () =>
 					errors={ errors }
 					setInFlightForAsync={ setInFlightForAsync }
 					inFlight={ inFlight }
+					successNote={ successNote }
 				/>
 			);
 		},

@@ -68,6 +68,7 @@ class Advertising_Wizard extends Wizard {
 		add_action( 'before_header', [ $this, 'inject_above_header_ad' ] );
 		add_action( 'after_header', [ $this, 'inject_below_header_ad' ] );
 		add_action( 'before_footer', [ $this, 'inject_above_footer_ad' ] );
+		add_filter( 'newspack_ads_should_show_ads', [ $this, 'maybe_disable_gam_ads' ] );
 	}
 
 	/**
@@ -575,6 +576,25 @@ class Advertising_Wizard extends Wizard {
 			<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> 
 		</div>
 		<?php
+	}
+
+	/**
+	 * If the Ad Manager integration is toggled off, don't show ads on the frontend.
+	 *
+	 * @param bool $should_show_ads Whether Newspack Ads should display ads or not.
+	 * @return bool Modified $should_show_ads.
+	 */
+	public function maybe_disable_gam_ads( $should_show_ads ) {
+		if ( is_admin() ) {
+			return $should_show_ads;
+		}
+
+		$services = self::get_services();
+		if ( ! $services['google_ad_manager']['enabled'] ) {
+			return false;
+		}
+
+		return $should_show_ads;
 	}
 
 	/**

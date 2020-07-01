@@ -1,3 +1,10 @@
+## [1.7.1](https://github.com/Automattic/newspack-popups/compare/v1.7.0...v1.7.1) (2020-06-30)
+
+
+### Bug Fixes
+
+* ad insertion in overlay campaigns ([d036de1](https://github.com/Automattic/newspack-popups/commit/d036de19d81fd8f03b0a15263f0905258214852d)), closes [#158](https://github.com/Automattic/newspack-popups/issues/158)
+
 # [1.7.0](https://github.com/Automattic/newspack-popups/compare/v1.6.0...v1.7.0) (2020-06-23)
 
 

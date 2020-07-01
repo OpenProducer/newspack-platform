@@ -61,19 +61,42 @@ const fontOptgroups = [
 	},
 ];
 
-export default compose( [
+const customStylesSelector = select => {
+	const { getEditedPostAttribute } = select( 'core/editor' );
+	const meta = getEditedPostAttribute( 'meta' );
+	return {
+		fontBody: meta.font_body || '',
+		fontHeader: meta.font_header || '',
+		backgroundColor: meta.background_color || '',
+	};
+};
+
+export const ApplyStyling = withSelect( customStylesSelector )(
+	( { fontBody, fontHeader, backgroundColor } ) => {
+		useEffect(() => {
+			document.documentElement.style.setProperty( '--body-font', fontBody );
+		}, [ fontBody ]);
+		useEffect(() => {
+			document.documentElement.style.setProperty( '--header-font', fontHeader );
+		}, [ fontHeader ]);
+		useEffect(() => {
+			document.querySelector( '.edit-post-visual-editor' ).style.backgroundColor = backgroundColor;
+		}, [ backgroundColor ]);
+
+		return null;
+	}
+);
+
+export const Styling = compose( [
 	withDispatch( dispatch => {
 		const { editPost } = dispatch( 'core/editor' );
 		return { editPost };
 	} ),
 	withSelect( select => {
-		const { getEditedPostAttribute, getCurrentPostId } = select( 'core/editor' );
-		const meta = getEditedPostAttribute( 'meta' );
+		const { getCurrentPostId } = select( 'core/editor' );
 		return {
 			postId: getCurrentPostId(),
-			fontBody: meta.font_body || '',
-			fontHeader: meta.font_header || '',
-			backgroundColor: meta.background_color || '',
+			...customStylesSelector( select ),
 		};
 	} ),
 ] )( ( { editPost, fontBody, fontHeader, backgroundColor, postId } ) => {
@@ -85,16 +108,6 @@ export default compose( [
 			path: `/newspack-newsletters/v1/styling/${ postId }`,
 		} );
 	};
-
-	useEffect(() => {
-		document.documentElement.style.setProperty( '--body-font', fontBody );
-	}, [ fontBody ]);
-	useEffect(() => {
-		document.documentElement.style.setProperty( '--header-font', fontHeader );
-	}, [ fontHeader ]);
-	useEffect(() => {
-		document.querySelector( '.edit-post-visual-editor' ).style.backgroundColor = backgroundColor;
-	}, [ backgroundColor ]);
 
 	const instanceId = useInstanceId( SelectControlWithOptGroup );
 	const id = `inspector-select-control-${ instanceId }`;

@@ -1,3 +1,17 @@
+# [1.9.0](https://github.com/Automattic/newspack-blocks/compare/v1.8.1...v1.9.0) (2020-06-30)
+
+
+### Bug Fixes
+
+* make load more button styles more specific ([#527](https://github.com/Automattic/newspack-blocks/issues/527)) ([68089aa](https://github.com/Automattic/newspack-blocks/commit/68089aad84661c4db52a6b2096264b7475560cb9))
+* php warnings, phpcs warnings ([#540](https://github.com/Automattic/newspack-blocks/issues/540)) ([23b34a1](https://github.com/Automattic/newspack-blocks/commit/23b34a10e557d36a89e6c426962a6bde0ce5ee05))
+
+
+### Features
+
+* editable donate button text ([#535](https://github.com/Automattic/newspack-blocks/issues/535)) ([6261e3f](https://github.com/Automattic/newspack-blocks/commit/6261e3ff50d325471e981bd6dd0bc4b133facdfa))
+* exclude current post in homepage posts block ([#539](https://github.com/Automattic/newspack-blocks/issues/539)) ([030024d](https://github.com/Automattic/newspack-blocks/commit/030024d70135fa655985aff801568bee2550caa0))
+
 ## [1.8.1](https://github.com/Automattic/newspack-blocks/compare/v1.8.0...v1.8.1) (2020-06-23)
 
 

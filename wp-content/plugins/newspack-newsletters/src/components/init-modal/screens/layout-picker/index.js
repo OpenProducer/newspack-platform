@@ -13,7 +13,6 @@ import { compose } from '@wordpress/compose';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { Button, Spinner } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { BlockPreview } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
@@ -22,6 +21,7 @@ import { BLANK_LAYOUT_ID } from '../../../../utils/consts';
 import { isUserDefinedLayout } from '../../../../utils';
 import { useLayoutsState } from '../../../../utils/hooks';
 import SingleLayoutPreview from './SingleLayoutPreview';
+import NewsletterPreview from '../../../newsletter-preview';
 
 const LAYOUTS_TABS = [
 	{
@@ -35,11 +35,17 @@ const LAYOUTS_TABS = [
 	},
 ];
 
-const LayoutPicker = ( { getBlocks, insertBlocks, replaceBlocks, savePost, setLayoutIdMeta } ) => {
+const LayoutPicker = ( {
+	getBlocks,
+	insertBlocks,
+	replaceBlocks,
+	savePost,
+	setNewsletterMeta,
+} ) => {
 	const { layouts, isFetchingLayouts, deleteLayoutPost } = useLayoutsState();
 
 	const insertLayout = layoutId => {
-		const { post_content: content } = find( layouts, { ID: layoutId } ) || {};
+		const { post_content: content, meta = {} } = find( layouts, { ID: layoutId } ) || {};
 		const blocksToInsert = content ? parse( content ) : [];
 		const existingBlocksIds = getBlocks().map( ( { clientId } ) => clientId );
 		if ( existingBlocksIds.length ) {
@@ -47,21 +53,25 @@ const LayoutPicker = ( { getBlocks, insertBlocks, replaceBlocks, savePost, setLa
 		} else {
 			insertBlocks( blocksToInsert );
 		}
-		setLayoutIdMeta( layoutId );
+		const metaPayload = {
+			template_id: layoutId,
+			...meta,
+		};
+		setNewsletterMeta( metaPayload );
 		setTimeout( savePost, 1 );
 	};
 
 	const [ selectedLayoutId, setSelectedLayoutId ] = useState( null );
-	const layoutBlocks = useMemo(() => {
+	const layoutPreviewProps = useMemo(() => {
 		const layout = selectedLayoutId && find( layouts, { ID: selectedLayoutId } );
-		return layout ? parse( layout.post_content ) : null;
+		return layout ? { blocks: parse( layout.post_content ), meta: layout.meta } : null;
 	}, [ selectedLayoutId, layouts.length ]);
 
-	const canRenderPreview = layoutBlocks && layoutBlocks.length > 0;
+	const canRenderPreview = layoutPreviewProps && layoutPreviewProps.blocks.length > 0;
 
 	const renderPreview = () =>
 		canRenderPreview ? (
-			<BlockPreview blocks={ layoutBlocks } viewportWidth={ 600 } />
+			<NewsletterPreview { ...layoutPreviewProps } viewportWidth={ 600 } />
 		) : (
 			<p>{ __( 'Select a layout to preview.', 'newspack-newsletters' ) }</p>
 		);
@@ -166,7 +176,7 @@ export default compose( [
 			savePost,
 			insertBlocks,
 			replaceBlocks,
-			setLayoutIdMeta: id => editPost( { meta: { template_id: id } } ),
+			setNewsletterMeta: meta => editPost( { meta } ),
 		};
 	} ),
 ] )( LayoutPicker );

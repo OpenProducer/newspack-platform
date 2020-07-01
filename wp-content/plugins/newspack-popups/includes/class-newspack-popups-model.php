@@ -13,6 +13,13 @@ defined( 'ABSPATH' ) || exit;
 final class Newspack_Popups_Model {
 
 	/**
+	 * An array of all retrieved campaigns, to avoid double-rendering.
+	 *
+	 * @var array
+	 */
+	protected static $campaigns = [];
+
+	/**
 	 * Retrieve all Popups (first 100).
 	 *
 	 * @param  boolean $include_unpublished Whether to include unpublished posts.
@@ -309,6 +316,17 @@ final class Newspack_Popups_Model {
 	 */
 	protected static function create_popup_object( $campaign_post, $containing_post_id = null, $include_categories = false, $options = null ) {
 
+		$containing_post_key = $containing_post_id ? $containing_post_id : 0;
+
+		if ( empty( self::$campaigns[ $containing_post_key ] ) ) {
+			self::$campaigns[ $containing_post_key ] = [];
+		}
+
+		// If campaign has already been created for the same containing post, return it without re-rendering.
+		if ( ! empty( self::$campaigns[ $containing_post_key ][ $campaign_post->ID ] ) ) {
+			return self::$campaigns[ $containing_post_key ][ $campaign_post->ID ];
+		}
+
 		// Query the containing post to enable dynamic blocks like Jetpack Related Posts to function properly.
 		if ( $containing_post_id ) {
 			$containing_post = new WP_Query(
@@ -373,6 +391,9 @@ final class Newspack_Popups_Model {
 
 		if ( self::is_inline( $popup ) ) {
 			$popup['markup'] = self::generate_inline_popup( $popup );
+
+			// Store campaign to avoid re-rendering.
+			self::$campaigns[ $containing_post_key ][ $campaign_post->ID ] = $popup;
 			return $popup;
 		}
 
@@ -389,6 +410,9 @@ final class Newspack_Popups_Model {
 			$popup['options']['placement'] = 'center';
 		}
 		$popup['markup'] = self::generate_popup( $popup );
+
+		// Store campaign to avoid re-rendering.
+		self::$campaigns[ $containing_post_key ][ $campaign_post->ID ] = $popup;
 		return $popup;
 	}
 

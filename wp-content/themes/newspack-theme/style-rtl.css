@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.9.0
+Version: 1.10.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -433,6 +433,7 @@ textarea {
 
 .comment-metadata,
 .comment-reply-link,
+.comment-reply-login,
 .comments-title,
 .comment-author .fn,
 .discussion-meta-info,
@@ -572,6 +573,7 @@ h5 {
 .discussion-meta-info,
 .has-small-font-size,
 .comment-reply-link,
+.comment-reply-login,
 .comment-metadata,
 .comment-notes,
 #cancel-comment-reply-link,
@@ -1758,7 +1760,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 .desktop-menu-opened #desktop-sidebar-fallback,
-.subpage-sidebar-opened #subpage-sidebar-fallback {
+.subpage-menu-opened #subpage-sidebar-fallback {
   right: 0;
 }
 
@@ -1767,39 +1769,37 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   transition: left 0.2s;
 }
 
-.menu-opened #mobile-sidebar-fallback {
+.mobile-menu-opened #mobile-sidebar-fallback {
   left: 0;
 }
 
-.menu-opened #mobile-sidebar-fallback > *,
+.mobile-menu-opened #mobile-sidebar-fallback > *,
 .desktop-menu-opened #desktop-sidebar-fallback > *,
-.subpage-sidebar-opened #subpage-sidebar-fallback > * {
+.subpage-menu-opened #subpage-sidebar-fallback > * {
   display: block;
 }
 
-.menu-opened #mobile-sidebar-fallback > .desktop-menu-toggle,
-.menu-opened #mobile-sidebar-fallback > .mobile-menu-toggle,
-.menu-opened #mobile-sidebar-fallback > .subpage-toggle,
+.mobile-menu-opened #mobile-sidebar-fallback > .desktop-menu-toggle,
+.mobile-menu-opened #mobile-sidebar-fallback > .mobile-menu-toggle,
+.mobile-menu-opened #mobile-sidebar-fallback > .subpage-toggle,
 .desktop-menu-opened #desktop-sidebar-fallback > .desktop-menu-toggle,
 .desktop-menu-opened #desktop-sidebar-fallback > .mobile-menu-toggle,
 .desktop-menu-opened #desktop-sidebar-fallback > .subpage-toggle,
-.subpage-sidebar-opened #subpage-sidebar-fallback > .desktop-menu-toggle,
-.subpage-sidebar-opened #subpage-sidebar-fallback > .mobile-menu-toggle,
-.subpage-sidebar-opened #subpage-sidebar-fallback > .subpage-toggle {
+.subpage-menu-opened #subpage-sidebar-fallback > .desktop-menu-toggle,
+.subpage-menu-opened #subpage-sidebar-fallback > .mobile-menu-toggle,
+.subpage-menu-opened #subpage-sidebar-fallback > .subpage-toggle {
   display: flex;
 }
 
-.menu-opened::after,
-.desktop-menu-opened::after,
-.subpage-sidebar-opened::after {
-  background-color: rgba(0, 0, 0, 0.2);
+.overlay-mask {
+  background-color: rgba(0, 0, 0, 0.5);
   bottom: 0;
   content: '';
   right: 0;
   position: fixed;
   left: 0;
   top: 0;
-  z-index: 99;
+  z-index: 999998;
 }
 
 /*--------------------------------------------------------------
@@ -3621,6 +3621,7 @@ body.page .entry-title {
   display: none;
 }
 
+.comment-reply .comment-reply-login,
 .comment-reply .comment-reply-link {
   display: inline-block;
 }
@@ -3775,13 +3776,20 @@ body.page .entry-title {
   text-decoration: none;
 }
 
+.must-log-in {
+  font-size: 0.8em;
+  font-style: italic;
+}
+
 .comment-reply-link,
-#cancel-comment-reply-link {
+#cancel-comment-reply-link,
+.comment-reply-login {
   font-weight: 500;
 }
 
 .comment-reply-link:hover,
-#cancel-comment-reply-link:hover {
+#cancel-comment-reply-link:hover,
+.comment-reply-login:hover {
   color: #2240d5;
 }
 

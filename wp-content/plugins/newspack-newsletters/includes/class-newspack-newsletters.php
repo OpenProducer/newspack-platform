@@ -7,8 +7,6 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/vendor/autoload.php';
-
 use \DrewM\MailChimp\MailChimp;
 
 /**
@@ -42,6 +40,13 @@ final class Newspack_Newsletters {
 	protected static $instance = null;
 
 	/**
+	 * Instance of the service provider class.
+	 *
+	 * @var Newspack_Newsletters_Service_Provider
+	 */
+	protected static $provider = null;
+
+	/**
 	 * Main Newspack Newsletter Author Instance.
 	 * Ensures only one instance of Newspack Author Instance is loaded or can be loaded.
 	 *
@@ -62,13 +67,16 @@ final class Newspack_Newsletters {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'rest_api_init', [ __CLASS__, 'rest_api_init' ] );
 		add_action( 'default_title', [ __CLASS__, 'default_title' ], 10, 2 );
-		add_action( 'save_post_' . self::NEWSPACK_NEWSLETTERS_CPT, [ __CLASS__, 'save_post' ], 10, 3 );
-		add_action( 'publish_' . self::NEWSPACK_NEWSLETTERS_CPT, [ __CLASS__, 'send_campaign' ], 10, 2 );
-		add_action( 'wp_trash_post', [ __CLASS__, 'trash_post' ], 10, 1 );
+		add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
 
-		$needs_nag =
-			is_admin() &&
-			( ! self::mailchimp_api_key() || ! get_option( 'newspack_newsletters_mjml_api_key', false ) || ! get_option( 'newspack_newsletters_mjml_api_secret', false ) ) &&
+		switch ( self::service_provider() ) {
+			case 'mailchimp':
+				self::$provider = Newspack_Newsletters_Mailchimp::instance();
+				break;
+		}
+
+		$needs_nag = is_admin() &&
+			( ! self::$provider->api_key() || ! get_option( 'newspack_newsletters_mjml_api_key', false ) || ! get_option( 'newspack_newsletters_mjml_api_secret', false ) ) &&
 			! get_option( 'newspack_newsletters_activation_nag_viewed', false );
 
 		if ( $needs_nag ) {
@@ -76,10 +84,6 @@ final class Newspack_Newsletters {
 			add_action( 'admin_enqueue_scripts', [ __CLASS__, 'activation_nag_dismissal_script' ] );
 			add_action( 'wp_ajax_newspack_newsletters_activation_nag_dismissal', [ __CLASS__, 'activation_nag_dismissal_ajax' ] );
 		}
-		include_once dirname( __FILE__ ) . '/class-newspack-newsletters-editor.php';
-		include_once dirname( __FILE__ ) . '/class-newspack-newsletters-layouts.php';
-		include_once dirname( __FILE__ ) . '/class-newspack-newsletters-settings.php';
-		include_once dirname( __FILE__ ) . '/class-newspack-newsletters-renderer.php';
 	}
 
 	/**
@@ -152,30 +156,6 @@ final class Newspack_Newsletters {
 				'auth_callback'  => '__return_true',
 			]
 		);
-		/**
-		 * The default color palette lives in the editor frontend and is not
-		 * retrievable on the backend. The workaround is to set it as post meta
-		 * so that it's available to the email renderer.
-		 */
-		\register_meta(
-			'post',
-			'color_palette',
-			[
-				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => array(
-					'schema' => array(
-						'type'                 => 'object',
-						'properties'           => array(),
-						'additionalProperties' => array(
-							'type' => 'string',
-						),
-					),
-				),
-				'type'           => 'object',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
 	}
 
 	/**
@@ -215,6 +195,39 @@ final class Newspack_Newsletters {
 	}
 
 	/**
+	 * Filter post states in admin posts list.
+	 *
+	 * @param array   $post_states An array of post display states.
+	 * @param WP_Post $post        The current post object.
+	 * @return array The filtered $post_states array.
+	 */
+	public static function display_post_states( $post_states, $post ) {
+		if ( self::NEWSPACK_NEWSLETTERS_CPT !== $post->post_type ) {
+			return $post_states;
+		}
+
+		$post_status = get_post_status_object( $post->post_status );
+		$is_sent     = 'publish' === $post_status->name;
+
+		if ( $is_sent ) {
+			$sent_date = get_the_time( 'U', $post );
+			$time_diff = time() - $sent_date;
+			$sent_date = human_time_diff( $sent_date, time() );
+
+			// Show relative date if sent within the past 24 hours.
+			if ( $time_diff < 86400 ) {
+				/* translators: Relative time stamp of sent/published date */
+				$post_states[ $post_status->name ] = sprintf( __( 'Sent %1$s ago', 'newspack-newsletters' ), $sent_date );
+			} else {
+				/* translators:  Absolute time stamp of sent/published date */
+				$post_states[ $post_status->name ] = sprintf( __( 'Sent %1$s', 'newspack-newsletters' ), get_the_time( get_option( 'date_format' ), $post ) );
+			}
+		}
+
+		return $post_states;
+	}
+
+	/**
 	 * Add newspack_popups_is_sitewide_default to Popup object.
 	 */
 	public static function rest_api_init() {
@@ -225,91 +238,6 @@ final class Newspack_Newsletters {
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ __CLASS__, 'api_get_layouts' ],
 				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-			]
-		);
-		\register_rest_route(
-			'newspack-newsletters/v1',
-			'mailchimp/(?P<id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ __CLASS__, 'api_mailchimp_data' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id' => [
-						'sanitize_callback' => 'absint',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			'newspack-newsletters/v1',
-			'mailchimp/(?P<id>[\a-z]+)/test',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_test_mailchimp_campaign' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'         => [
-						'sanitize_callback' => 'absint',
-					],
-					'test_email' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			'newspack-newsletters/v1',
-			'mailchimp/(?P<id>[\a-z]+)/list/(?P<list_id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_set_mailchimp_list' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'      => [
-						'sanitize_callback' => 'absint',
-					],
-					'list_id' => [
-						'sanitize_callback' => 'esc_attr',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			'newspack-newsletters/v1',
-			'mailchimp/(?P<id>[\a-z]+)/interest/(?P<interest_id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_set_mailchimp_interest' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'          => [
-						'sanitize_callback' => 'absint',
-					],
-					'interest_id' => [
-						'sanitize_callback' => 'esc_attr',
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			'newspack-newsletters/v1',
-			'mailchimp/(?P<id>[\a-z]+)/settings',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_set_campaign_settings' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'id'        => [
-						'sanitize_callback' => 'absint',
-					],
-					'from_name' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'reply_to'  => [
-						'sanitize_callback' => 'sanitize_email',
-					],
-				],
 			]
 		);
 		\register_rest_route(
@@ -364,6 +292,27 @@ final class Newspack_Newsletters {
 				],
 			]
 		);
+		\register_rest_route(
+			'newspack-newsletters/v1',
+			'color-palette',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ __CLASS__, 'api_set_color_palette' ],
+				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
+			]
+		);
+	}
+
+	/**
+	 * The default color palette lives in the editor frontend and is not
+	 * retrievable on the backend. The workaround is to set it as an option
+	 * so that it's available to the email renderer.
+	 *
+	 * @param WP_REST_Request $request API request object.
+	 */
+	public static function api_set_color_palette( $request ) {
+		update_option( 'newspack_newsletters_color_palette', $request->get_body() );
+		return \rest_ensure_response( [] );
 	}
 
 	/**
@@ -429,8 +378,19 @@ final class Newspack_Newsletters {
 				'posts_per_page' => -1,
 			)
 		);
+		$user_layouts  = array_map(
+			function ( $post ) {
+				$post->meta = [
+					'background_color' => get_post_meta( $post->ID, 'background_color', true ),
+					'font_body'        => get_post_meta( $post->ID, 'font_body', true ),
+					'font_header'      => get_post_meta( $post->ID, 'font_header', true ),
+				];
+				return $post;
+			},
+			$layouts_query->get_posts()
+		);
 		$layouts       = array_merge(
-			$layouts_query->get_posts(),
+			$user_layouts,
 			Newspack_Newsletters_Layouts::get_default_layouts(),
 			apply_filters( 'newspack_newsletters_templates', [] )
 		);
@@ -439,20 +399,10 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Retrieve API keys.
+	 * Retrieve service API keys for API endpoints.
 	 */
 	public static function api_get_keys() {
-		$mailchimp_api_key = self::mailchimp_api_key();
-		$mjml_api_key      = get_option( 'newspack_newsletters_mjml_api_key', false );
-		$mjml_api_secret   = get_option( 'newspack_newsletters_mjml_api_secret', false );
-
-		$keys = [
-			'mailchimp_api_key' => $mailchimp_api_key ? $mailchimp_api_key : '',
-			'mjml_api_key'      => $mjml_api_key ? $mjml_api_key : '',
-			'mjml_api_secret'   => $mjml_api_secret ? $mjml_api_secret : '',
-			'status'            => ! empty( $mailchimp_api_key ) && ! empty( $mjml_api_key ) && ! empty( $mjml_api_secret ),
-		];
-		return \rest_ensure_response( $keys );
+		return \rest_ensure_response( self::api_keys() );
 	}
 
 	/**
@@ -472,19 +422,11 @@ final class Newspack_Newsletters {
 				__( 'Please input a Mailchimp API key.', 'newspack-newsletters' )
 			);
 		} else {
-			try {
-				$mc   = new Mailchimp( $mailchimp_api_key );
-				$ping = $mc->get( 'ping' );
-			} catch ( Exception $e ) {
-				$ping = null;
-			}
-			if ( $ping ) {
-				update_option( 'newspack_newsletters_mailchimp_api_key', $mailchimp_api_key );
-			} else {
-				$wp_error->add(
-					'newspack_newsletters_invalid_keys_mailchimp',
-					__( 'Please input a valid Mailchimp API key.', 'newspack-newsletters' )
-				);
+			$status = self::$provider->set_api_key( $mailchimp_api_key );
+			if ( is_wp_error( $status ) ) {
+				foreach ( $status->errors as $code => $message ) {
+					$wp_error->add( $code, implode( ' ', $message ) );
+				}
 			}
 		}
 
@@ -525,364 +467,29 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Update Campaign settings.
-	 *
-	 * @param WP_REST_Request $request API request object.
+	 * Retrieve service API keys.
 	 */
-	public static function api_set_campaign_settings( $request ) {
-		$id        = $request['id'];
-		$from_name = $request['from_name'];
-		$reply_to  = $request['reply_to'];
+	public static function api_keys() {
+		$mailchimp_api_key = self::$provider->api_key(); // For now, it will only be Mailchimp.
+		$mjml_api_key      = get_option( 'newspack_newsletters_mjml_api_key', false );
+		$mjml_api_secret   = get_option( 'newspack_newsletters_mjml_api_secret', false );
 
-		if ( self::NEWSPACK_NEWSLETTERS_CPT !== get_post_type( $id ) ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Post is not a Newsletter.', 'newspack-newsletters' )
-			);
-		}
-
-		$mc_campaign_id = get_post_meta( $id, 'mc_campaign_id', true );
-		if ( ! $mc_campaign_id ) {
-			return new WP_Error(
-				'newspack_newsletters_no_campaign_id',
-				__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
-			);
-		}
-		try {
-			$mc = new Mailchimp( self::mailchimp_api_key() );
-
-			$result = self::validate_mailchimp_operation(
-				$mc->get( 'verified-domains' ),
-				__( 'Error retrieving verified domains from Mailchimp.', 'newspack-newsletters' )
-			);
-
-			$verified_domains = array_filter(
-				array_map(
-					function( $domain ) {
-						return $domain['verified'] ? strtolower( trim( $domain['domain'] ) ) : null;
-					},
-					$result['domains']
-				),
-				function( $domain ) {
-					return ! empty( $domain );
-				}
-			);
-
-			$explode = explode( '@', $reply_to );
-			$domain  = strtolower( trim( array_pop( $explode ) ) );
-
-			if ( ! in_array( $domain, $verified_domains ) ) {
-				return new WP_Error(
-					'newspack_newsletters_unverified_sender_domain',
-					sprintf(
-						// Translators: explanation that current domain is not verified, list of verified options.
-						__( '%1$s is not a verified domain. Verified domains for the linked Mailchimp account are: %2$s.', 'newspack-newsletters' ),
-						$domain,
-						implode( ', ', $verified_domains )
-					)
-				);
-			}
-
-			$settings = [];
-			if ( $from_name ) {
-				$settings['from_name'] = $from_name;
-			}
-			if ( $reply_to ) {
-				$settings['reply_to'] = $reply_to;
-			}
-			$payload = [
-				'settings' => $settings,
-			];
-			$result  = self::validate_mailchimp_operation(
-				$mc->patch( "campaigns/$mc_campaign_id", $payload ),
-				__( 'Error setting sender name and email.', 'newspack_newsletters' )
-			);
-
-			$data           = self::retrieve_data( $id );
-			$data['result'] = $result;
-
-			return \rest_ensure_response( $data );
-		} catch ( Exception $e ) {
-			return new WP_Error(
-				'newspack_newsletters_mailchimp_error',
-				$e->getMessage()
-			);
-		}
+		return [
+			'mailchimp_api_key' => $mailchimp_api_key ? $mailchimp_api_key : '',
+			'mjml_api_key'      => $mjml_api_key ? $mjml_api_key : '',
+			'mjml_api_secret'   => $mjml_api_secret ? $mjml_api_secret : '',
+			'status'            => ! empty( $mailchimp_api_key ) && ! empty( $mjml_api_key ) && ! empty( $mjml_api_secret ),
+		];
 	}
 
 	/**
-	 * Set Mailchimp list.
+	 * Are all the needed API keys available?
 	 *
-	 * @param WP_REST_Request $request API request object.
+	 * @return bool Whether all API keys are set.
 	 */
-	public static function api_set_mailchimp_list( $request ) {
-		$id      = $request['id'];
-		$list_id = $request['list_id'];
-
-		if ( self::NEWSPACK_NEWSLETTERS_CPT !== get_post_type( $id ) ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Post is not a Newsletter.', 'newspack-newsletters' )
-			);
-		}
-
-
-		$mc_campaign_id = get_post_meta( $id, 'mc_campaign_id', true );
-		if ( ! $mc_campaign_id ) {
-			return new WP_Error(
-				'newspack_newsletters_no_campaign_id',
-				__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
-			);
-		}
-
-		try {
-			$mc      = new Mailchimp( self::mailchimp_api_key() );
-			$payload = [
-				'recipients' => [
-					'list_id' => $list_id,
-				],
-			];
-			$result  = self::validate_mailchimp_operation(
-				$mc->patch( "campaigns/$mc_campaign_id", $payload ),
-				__( 'Error setting Mailchimp list.', 'newspack_newsletters' )
-			);
-
-			$data           = self::retrieve_data( $id );
-			$data['result'] = $result;
-
-			return \rest_ensure_response( $data );
-		} catch ( Exception $e ) {
-			return new WP_Error(
-				'newspack_newsletters_mailchimp_error',
-				$e->getMessage()
-			);
-		}
-	}
-
-	/**
-	 * Set Mailchimp Interest.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 */
-	public static function api_set_mailchimp_interest( $request ) {
-		$id          = $request['id'];
-		$exploded    = explode( ':', $request['interest_id'] );
-		$field       = count( $exploded ) ? $exploded[0] : null;
-		$interest_id = count( $exploded ) > 1 ? $exploded[1] : null;
-
-		if ( self::NEWSPACK_NEWSLETTERS_CPT !== get_post_type( $id ) ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Post is not a Newsletter.', 'newspack-newsletters' )
-			);
-		}
-
-		if ( 'no_interests' !== $request['interest_id'] && ( ! $field || ! $interest_id ) ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Invalid Mailchimp Interest .', 'newspack-newsletters' )
-			);
-		}
-
-		$mc_campaign_id = get_post_meta( $id, 'mc_campaign_id', true );
-		if ( ! $mc_campaign_id ) {
-			return new WP_Error(
-				'newspack_newsletters_no_campaign_id',
-				__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
-			);
-		}
-		try {
-			$mc       = new Mailchimp( self::mailchimp_api_key() );
-			$campaign = self::validate_mailchimp_operation(
-				$mc->get( "campaigns/$mc_campaign_id" ),
-				__( 'Error retrieving Mailchimp campaign.', 'newspack_newsletters' )
-			);
-			$list_id  = isset( $campaign, $campaign['recipients'], $campaign['recipients']['list_id'] ) ? $campaign['recipients']['list_id'] : null;
-
-			if ( ! $list_id ) {
-				return new WP_Error(
-					'newspack_newsletters_no_campaign_id',
-					__( 'Mailchimp list ID not found.', 'newspack-newsletters' )
-				);
-			}
-
-			$segment_opts = ( 'no_interests' === $request['interest_id'] ) ?
-				(object) [] :
-				[
-					'match'      => 'any',
-					'conditions' => [
-						[
-							'condition_type' => 'Interests',
-							'field'          => $field,
-							'op'             => 'interestcontains',
-							'value'          => [
-								$interest_id,
-							],
-						],
-					],
-				];
-
-			$payload = [
-				'recipients' => [
-					'list_id'      => $list_id,
-					'segment_opts' => $segment_opts,
-				],
-			];
-
-			$result = self::validate_mailchimp_operation(
-				$mc->patch( "campaigns/$mc_campaign_id", $payload ),
-				__( 'Error updating Mailchimp groups.', 'newspack_newsletters' )
-			);
-
-			$data           = self::retrieve_data( $id );
-			$data['result'] = $result;
-
-			return \rest_ensure_response( $data );
-		} catch ( Exception $e ) {
-			return new WP_Error(
-				'newspack_newsletters_mailchimp_error',
-				$e->getMessage()
-			);
-		}
-	}
-
-	/**
-	 * Get Mailchimp data.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 */
-	public static function api_mailchimp_data( $request ) {
-		return \rest_ensure_response( self::retrieve_data( $request['id'] ) );
-	}
-
-	/**
-	 * Send a test email via Mailchimp.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 */
-	public static function api_test_mailchimp_campaign( $request ) {
-		$id         = $request['id'];
-		$test_email = $request['test_email'];
-		if ( self::NEWSPACK_NEWSLETTERS_CPT !== get_post_type( $id ) ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Post is not a Newsletter.', 'newspack-newsletters' )
-			);
-		}
-		$mc_campaign_id = get_post_meta( $id, 'mc_campaign_id', true );
-		if ( ! $mc_campaign_id ) {
-			return new WP_Error(
-				'newspack_newsletters_no_campaign_id',
-				__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
-			);
-		}
-		try {
-			$mc = new Mailchimp( self::mailchimp_api_key() );
-
-			$test_emails = explode( ',', $test_email );
-			foreach ( $test_emails as &$email ) {
-				$email = sanitize_email( trim( $email ) );
-			}
-			$payload = [
-				'test_emails' => $test_emails,
-				'send_type'   => 'html',
-			];
-			$result  = self::validate_mailchimp_operation(
-				$mc->post(
-					"campaigns/$mc_campaign_id/actions/test",
-					$payload
-				),
-				__( 'Error sending test email.', 'newspack_newsletters' )
-			);
-
-			$data            = self::retrieve_data( $id );
-			$data['result']  = $result;
-			$data['message'] = sprintf(
-				// translators: Message after successful test email.
-				__( 'Mailchimp test sent successfully to %s.', 'newspack-newsletters' ),
-				implode( ' ', $test_emails )
-			);
-
-			return \rest_ensure_response( $data );
-		} catch ( Exception $e ) {
-			return new WP_Error(
-				'newspack_newsletters_mailchimp_error',
-				$e->getMessage()
-			);
-		}
-	}
-
-	/**
-	 * Get Mailchimp data.
-	 *
-	 * @param string $id post ID.
-	 */
-	public static function retrieve_data( $id ) {
-		$transient       = sprintf( 'newspack_newsletters_error_%s_%s', $id, get_current_user_id() );
-		$persisted_error = get_transient( $transient );
-		if ( $persisted_error ) {
-			delete_transient( $transient );
-			return new WP_Error(
-				'newspack_newsletters_mailchimp_error',
-				$persisted_error
-			);
-		}
-
-		try {
-			$mc_campaign_id = get_post_meta( $id, 'mc_campaign_id', true );
-			if ( ! $mc_campaign_id ) {
-				return new WP_Error(
-					'newspack_newsletters_mailchimp_error',
-					__( 'No Mailchimp campaign ID found for this Newsletter', 'newspack-newsletter' )
-				);
-			}
-			$mc                  = new Mailchimp( self::mailchimp_api_key() );
-			$campaign            = self::validate_mailchimp_operation(
-				$mc->get( "campaigns/$mc_campaign_id" ),
-				__( 'Error retrieving Mailchimp campaign.', 'newspack_newsletters' )
-			);
-			$list_id             = $campaign && isset( $campaign['recipients']['list_id'] ) ? $campaign['recipients']['list_id'] : null;
-			$interest_categories = $list_id ? self::validate_mailchimp_operation(
-				$mc->get( "lists/$list_id/interest-categories" ),
-				__( 'Error retrieving Mailchimp groups.', 'newspack_newsletters' )
-			) : null;
-			if ( $interest_categories && count( $interest_categories['categories'] ) ) {
-				foreach ( $interest_categories['categories'] as &$category ) {
-					$category_id           = $category['id'];
-					$category['interests'] = self::validate_mailchimp_operation(
-						$mc->get( "lists/$list_id/interest-categories/$category_id/interests" ),
-						__( 'Error retrieving Mailchimp groups.', 'newspack_newsletters' )
-					);
-				}
-			}
-
-			return [
-				'lists'               => self::validate_mailchimp_operation(
-					$mc->get(
-						'lists',
-						[
-							'count' => 1000,
-						]
-					),
-					__( 'Error retrieving Mailchimp lists.', 'newspack_newsletters' )
-				),
-				'campaign'            => $campaign,
-				'campaign_id'         => $mc_campaign_id,
-				'interest_categories' => $interest_categories,
-			];
-		} catch ( Exception $e ) {
-			return new WP_Error(
-				'newspack_newsletters_mailchimp_error',
-				$e->getMessage()
-			);
-		}
-	}
-
-	/**
-	 * Get Mailchimp API key.
-	 */
-	public static function mailchimp_api_key() {
-		return get_option( 'newspack_newsletters_mailchimp_api_key', false );
+	public static function has_keys() {
+		$keys = self::api_keys();
+		return $keys['status'];
 	}
 
 	/**
@@ -921,166 +528,6 @@ final class Newspack_Newsletters {
 			);
 		}
 		return true;
-	}
-
-	/**
-	 * Callback for CPT save. Will sync with Mailchimp.
-	 *
-	 * @param string  $id post ID.
-	 * @param WP_Post $post the post.
-	 * @param boolean $update Is this an update of the post.
-	 */
-	public static function save_post( $id, $post, $update ) {
-		if ( ! $update ) {
-			update_post_meta( $id, 'template_id', -1 );
-		}
-		$status = get_post_status( $id );
-		if ( 'trash' === $status ) {
-			return;
-		}
-		self::sync_with_mailchimp( $post );
-	}
-
-	/**
-	 * Callback for CPT trashing. Will delete corresponding campaign on Mailchimp.
-	 *
-	 * @param string $id post ID.
-	 */
-	public static function trash_post( $id ) {
-		if ( self::NEWSPACK_NEWSLETTERS_CPT !== get_post_type( $id ) ) {
-			return;
-		}
-		$mc_campaign_id = get_post_meta( $id, 'mc_campaign_id', true );
-		if ( ! $mc_campaign_id ) {
-			return;
-		}
-
-		$api_key = self::mailchimp_api_key();
-		if ( ! $api_key ) {
-			return;
-		}
-		try {
-			$mc       = new Mailchimp( $api_key );
-			$campaign = $mc->get( "campaigns/$mc_campaign_id" );
-			if ( $campaign ) {
-				$status = $campaign['status'];
-				if ( ! in_array( $status, [ 'sent', 'sending' ] ) ) {
-					$result = $mc->delete( "campaigns/$mc_campaign_id" );
-					delete_post_meta( $id, 'mc_campaign_id', $mc_campaign_id );
-				}
-			}
-		} catch ( Exception $e ) {
-			return; // Fail silently.
-		}
-	}
-
-	/**
-	 * Synchronize CPT with Mailchimp campaign.
-	 *
-	 * @param WP_Post $post the post.
-	 */
-	public static function sync_with_mailchimp( $post ) {
-		$api_key = self::mailchimp_api_key();
-		if ( ! $api_key ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'No Mailchimp API key available.', 'newspack-newsletters' )
-			);
-		}
-		try {
-			$mc      = new Mailchimp( $api_key );
-			$payload = [
-				'type'         => 'regular',
-				'content_type' => 'template',
-				'settings'     => [
-					'subject_line' => $post->post_title,
-					'title'        => $post->post_title,
-				],
-			];
-
-			$mc_campaign_id = get_post_meta( $post->ID, 'mc_campaign_id', true );
-			if ( $mc_campaign_id ) {
-				$campaign_result = self::validate_mailchimp_operation(
-					$mc->patch( "campaigns/$mc_campaign_id", $payload ),
-					__( 'Error updating campaign title.', 'newspack_newsletters' )
-				);
-			} else {
-				$campaign_result = self::validate_mailchimp_operation(
-					$mc->post( 'campaigns', $payload ),
-					__( 'Error setting campaign title.', 'newspack_newsletters' )
-				);
-				$mc_campaign_id  = $campaign_result['id'];
-				update_post_meta( $post->ID, 'mc_campaign_id', $mc_campaign_id );
-			}
-
-			// Prevent updating content of a sent campaign.
-			if ( in_array( $campaign_result['status'], [ 'sent', 'sending' ] ) ) {
-				return;
-			}
-
-			$renderer        = new Newspack_Newsletters_Renderer();
-			$content_payload = [
-				'html' => $renderer->render_html_email( $post ),
-			];
-
-			$content_result = self::validate_mailchimp_operation(
-				$mc->put( "campaigns/$mc_campaign_id/content", $content_payload ),
-				__( 'Error updating campaign content.', 'newspack_newsletters' )
-			);
-			return [
-				'campaign_result' => $campaign_result,
-				'content_result'  => $content_result,
-			];
-		} catch ( Exception $e ) {
-			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-			set_transient( $transient, $e->getMessage(), 45 );
-			return;
-		}
-	}
-
-	/**
-	 * Callback for CPT publish. Sends the campaign.
-	 *
-	 * @param string  $id post ID.
-	 * @param WP_Post $post the post.
-	 */
-	public static function send_campaign( $id, $post ) {
-		if ( self::NEWSPACK_NEWSLETTERS_CPT !== get_post_type( $id ) ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Post is not a Newsletter.', 'newspack-newsletters' )
-			);
-		}
-
-		try {
-			$sync_result = self::sync_with_mailchimp( $post );
-
-			if ( is_wp_error( $sync_result ) ) {
-				return $sync_result;
-			}
-
-			$mc_campaign_id = get_post_meta( $id, 'mc_campaign_id', true );
-			if ( ! $mc_campaign_id ) {
-				return new WP_Error(
-					'newspack_newsletters_no_campaign_id',
-					__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
-				);
-			}
-
-			$mc = new Mailchimp( self::mailchimp_api_key() );
-
-			$payload = [
-				'send_type' => 'html',
-			];
-			$result  = self::validate_mailchimp_operation(
-				$mc->post( "campaigns/$mc_campaign_id/actions/send", $payload ),
-				__( 'Error sending campaign.', 'newspack_newsletters' )
-			);
-		} catch ( Exception $e ) {
-			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-			set_transient( $transient, $e->getMessage(), 45 );
-			return;
-		}
 	}
 
 	/**
@@ -1157,50 +604,21 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Throw an Exception if Mailchimp response indicates an error.
-	 *
-	 * @param object $result Result of the Mailchimp operation.
-	 * @param string $preferred_error Preset error to use instead of Mailchimp errors.
-	 * @throws Exception Error message.
-	 */
-	public static function validate_mailchimp_operation( $result, $preferred_error = null ) {
-		if ( ! $result ) {
-			if ( $preferred_error ) {
-				throw new Exception( $preferred_error );
-			} else {
-				throw new Exception( __( 'A Mailchimp error has occurred.', 'newspack-newsletters' ) );
-			}
-		}
-		if ( ! empty( $result['status'] ) && in_array( $result['status'], [ 400, 404 ] ) ) {
-			if ( $preferred_error && ! self::debug_mode() ) {
-				throw new Exception( $preferred_error );
-			}
-			$messages = [];
-			if ( ! empty( $result['errors'] ) ) {
-				foreach ( $result['errors'] as $error ) {
-					if ( ! empty( $error['message'] ) ) {
-						$messages[] = $error['message'];
-					}
-				}
-			}
-			if ( ! count( $messages ) && ! empty( $result['detail'] ) ) {
-				$messages[] = $result['detail'];
-			}
-			if ( ! count( $messages ) ) {
-				$message[] = __( 'A Mailchimp error has occurred.', 'newspack-newsletters' );
-			}
-			throw new Exception( implode( ' ', $messages ) );
-		}
-		return $result;
-	}
-
-	/**
 	 * Is wp-config debug flag set.
 	 *
 	 * @return boolean Is debug mode on?
 	 */
 	public static function debug_mode() {
 		return defined( 'NEWSPACK_NEWSLETTERS_DEBUG_MODE' ) ? NEWSPACK_NEWSLETTERS_DEBUG_MODE : false;
+	}
+
+	/**
+	 * Which Email Service Provider should be used.
+	 *
+	 * @return string Name of the Email Service Provider.
+	 */
+	public static function service_provider() {
+		return 'mailchimp'; // For now, Mailchimp is the only choice.
 	}
 }
 Newspack_Newsletters::instance();

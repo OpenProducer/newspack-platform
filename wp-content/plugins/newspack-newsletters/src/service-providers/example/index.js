@@ -62,7 +62,7 @@ const ProviderSidebar = ( {
 } ) => {
 	const handleSenderUpdate = ( { senderName, senderEmail } ) =>
 		apiFetch( {
-			path: `/newspack-newsletters/v1/example/${ postId }/settings`,
+			path: `/newspack-newsletters/v1/example/${ postId }/sender`,
 			data: {
 				from_name: senderName,
 				reply_to: senderEmail,

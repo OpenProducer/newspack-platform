@@ -11,7 +11,6 @@ import { parse } from '@wordpress/blocks';
 import { useState, useMemo } from '@wordpress/element';
 import { Button, TextControl } from '@wordpress/components';
 import { ENTER, SPACE } from '@wordpress/keycodes';
-import { BlockPreview } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
 
 /**
@@ -19,6 +18,7 @@ import { __ } from '@wordpress/i18n';
  */
 import { LAYOUT_CPT_SLUG } from '../../../../utils/consts';
 import { setPreventDeduplicationForPostsInserter } from '../../../../editor/blocks/posts-inserter/utils';
+import NewsletterPreview from '../../../newsletter-preview';
 
 const SingleLayoutPreview = ( {
 	isEditable,
@@ -29,6 +29,7 @@ const SingleLayoutPreview = ( {
 	ID,
 	post_title: title,
 	post_content: content,
+	meta,
 } ) => {
 	const handleDelete = () => {
 		// eslint-disable-next-line no-alert
@@ -75,7 +76,7 @@ const SingleLayoutPreview = ( {
 				aria-label={ title }
 			>
 				{ '' === content ? null : (
-					<BlockPreview blocks={ blockPreviewBlocks } viewportWidth={ 600 } />
+					<NewsletterPreview meta={ meta } blocks={ blockPreviewBlocks } viewportWidth={ 600 } />
 				) }
 			</div>
 			{ isEditable ? (

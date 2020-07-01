@@ -1,3 +1,38 @@
+# [1.11.0](https://github.com/Automattic/newspack-plugin/compare/v1.10.0...v1.11.0) (2020-06-30)
+
+
+### Bug Fixes
+
+* add non_interaction: true for scroll events ([a5660ae](https://github.com/Automattic/newspack-plugin/commit/a5660aecc425eaa5e3a4aaf82b0fde758e016742))
+* add text domain to text strings ([159256f](https://github.com/Automattic/newspack-plugin/commit/159256f02a16183e34b767ed0d7434502fe35851))
+* bug fixes from PR ([99dce9f](https://github.com/Automattic/newspack-plugin/commit/99dce9fb9eac85557d0b7c6088d9092b831e755c))
+* cleaner handling of redirectURI without using props ([37c8893](https://github.com/Automattic/newspack-plugin/commit/37c88936a6da32b847f1cac3746291f000ae7f90))
+* eslint error ([b2852ed](https://github.com/Automattic/newspack-plugin/commit/b2852ed206916110f03e2f7bffb064d16d9746e2))
+* eslint errors ([2558b34](https://github.com/Automattic/newspack-plugin/commit/2558b347a2e8c0f42433a43e298411392f6d429e))
+* explicitly set admin user ID when creating Salesforce webhooks ([7bb5246](https://github.com/Automattic/newspack-plugin/commit/7bb52462db0e1ea84388852412199606d61353d9))
+* make gam toggle work correctly ([7467c88](https://github.com/Automattic/newspack-plugin/commit/7467c88c2700b04b7723763db53b05cb00281350))
+* missing close quote ([d373f27](https://github.com/Automattic/newspack-plugin/commit/d373f27724a3ede863c4dd680da11da934f99717))
+* mop up a couple of remain instances of "lead" in text ([0340cc8](https://github.com/Automattic/newspack-plugin/commit/0340cc8eec2abdd8bf3dc15fa8b54dd0e320aa90))
+* move getTokens call into lifecycle function instead of render ([22bddef](https://github.com/Automattic/newspack-plugin/commit/22bddefeb7eea5e464b6ce2de4b631fdb891e5b0))
+* only create webhooks when SF is connected (and delete when reset) ([5ac347c](https://github.com/Automattic/newspack-plugin/commit/5ac347c351aa6d79148dba19459ec546833e102e))
+* properly map WC fields to SF fields on webhook delivery ([0af5581](https://github.com/Automattic/newspack-plugin/commit/0af558132312fd80e49f784351fc4771e8f3d30a))
+* remove extra translation wrapper ([85ed3ae](https://github.com/Automattic/newspack-plugin/commit/85ed3ae83597553f0bc9c56448ff82f4ffe19dfc))
+* remove unused var to fix lint error ([118eff7](https://github.com/Automattic/newspack-plugin/commit/118eff7c0040bafc3a6cd4436fdffcab45085997))
+* sync to Contact, not Lead, and format donation line items ([6970926](https://github.com/Automattic/newspack-plugin/commit/6970926e09aa9d3c5ce50fa2143f164675cdf0da))
+* update help copy; await update promise to resolve before validating ([c4edac0](https://github.com/Automattic/newspack-plugin/commit/c4edac0325a7cbb04f639321d6d2044035ea2be5))
+
+
+### Features
+
+* add ActionCardSections component (from PopupGroup) ([#563](https://github.com/Automattic/newspack-plugin/issues/563)) ([883f22e](https://github.com/Automattic/newspack-plugin/commit/883f22e473995f943fdc15c05f05f9f5b8e0f5f4))
+* add request handlers for updating/adding Leads via Salesforce API ([2f7ae6b](https://github.com/Automattic/newspack-plugin/commit/2f7ae6b95992f0e23ebe3bcc12e57b2fa96ef276))
+* add some handling for invalid client id/secret and error responses ([a930f7c](https://github.com/Automattic/newspack-plugin/commit/a930f7c1f80f12ee7fc5c596a1e67b1a8c6f312f))
+* check refresh token before assuming connection is valid ([a5976e6](https://github.com/Automattic/newspack-plugin/commit/a5976e6e1487b92a855b3f8f5074c59e85e3c14d))
+* finish SalesForce OAuth flow in admin dashboard ([92e5805](https://github.com/Automattic/newspack-plugin/commit/92e58051160616bf372924fd688fdfba65c41b87))
+* re-enable disabling of text field sonce Salesforce is connected ([d279790](https://github.com/Automattic/newspack-plugin/commit/d279790dcfc1c172d84b400c236b8009398e0372))
+* start SalesForce admin UI ([a349b37](https://github.com/Automattic/newspack-plugin/commit/a349b375a7b681c29306740a06a48bc49a9c09e1))
+* update SalesForce settings page, store settings as options ([2658022](https://github.com/Automattic/newspack-plugin/commit/26580229117eefbcd2d6536e27f13854361effba))
+
 # [1.10.0](https://github.com/Automattic/newspack-plugin/compare/v1.9.0...v1.10.0) (2020-06-23)
 
 

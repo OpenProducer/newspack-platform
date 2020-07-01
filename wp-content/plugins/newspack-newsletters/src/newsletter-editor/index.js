@@ -15,7 +15,7 @@ import InitModal from '../components/init-modal';
 import Layout from './layout/';
 import Sidebar from './sidebar/';
 import Testing from './testing/';
-import Styling from './styling/';
+import { Styling, ApplyStyling } from './styling/';
 import registerEditorPlugin from './editor/';
 
 registerEditorPlugin();
@@ -55,6 +55,8 @@ const NewsletterEdit = ( { layoutId } ) => {
 			>
 				<Layout />
 			</PluginDocumentSettingPanel>
+
+			<ApplyStyling />
 		</Fragment>
 	);
 };

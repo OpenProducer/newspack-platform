@@ -40,15 +40,17 @@ add_action( 'enqueue_block_editor_assets', 'newspack_ads_enqueue_suppress_ad_ass
  * @return bool
  */
 function newspack_ads_should_show_ads( $post_id = null ) {
+	$should_show = true;
+
 	if ( is_singular() ) {
 		if ( null === $post_id ) {
 			$post_id = get_the_ID();
 		}
 
 		if ( get_post_meta( $post_id, 'newspack_ads_suppress_ads', true ) ) {
-			return false;
+			$should_show = false;
 		}
 	}
 
-	return true;
+	return apply_filters( 'newspack_ads_should_show_ads', $should_show, $post_id );
 }

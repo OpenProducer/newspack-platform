@@ -10,6 +10,7 @@ namespace Newspack;
 defined( 'ABSPATH' ) || exit;
 
 define( 'NEWSPACK_API_NAMESPACE', 'newspack/v1' );
+define( 'NEWSPACK_API_URL', get_site_url() . '/wp-json/' . NEWSPACK_API_NAMESPACE );
 
 /**
  * Clean variables using sanitize_text_field. Arrays are cleaned recursively.

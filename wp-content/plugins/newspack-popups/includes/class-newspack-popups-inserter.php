@@ -127,7 +127,33 @@ final class Newspack_Popups_Inserter {
 	 * @param string $content The content of the post.
 	 */
 	public static function insert_popups_in_content( $content = '' ) {
-		if ( is_admin() || ! is_singular() || self::assess_has_disabled_popups( $content ) ) {
+		// Not Frontend.
+		if ( is_admin() ) {
+			return $content;
+		}
+
+		// Content is empty.
+		if ( empty( trim( $content ) ) ) {
+			return $content;
+		}
+
+		// No campaign insertion in archive pages.
+		if ( ! is_singular() ) {
+			return $content;
+		}
+
+		// If not in the loop, ignore.
+		if ( ! in_the_loop() ) {
+			return $content;
+		}
+
+		// Campaigns disabled for this page.
+		if ( self::assess_has_disabled_popups() ) {
+			return $content;
+		}
+
+		// If the current post is a Campaign, ignore.
+		if ( Newspack_Popups::NEWSPACK_PLUGINS_CPT == get_post_type() ) {
 			return $content;
 		}
 
@@ -143,17 +169,7 @@ final class Newspack_Popups_Inserter {
 			return $content;
 		}
 
-		// First needs to check if there any inline popups, to handle SCAIP.
-		$has_an_inline_popup = count(
-			array_filter(
-				$popups,
-				function( $p ) {
-					return 'inline' === $p['options']['placement'];
-				}
-			)
-		);
-
-		if ( $has_an_inline_popup && function_exists( 'scaip_maybe_insert_shortcode' ) ) {
+		if ( function_exists( 'scaip_maybe_insert_shortcode' ) ) {
 			// Prevent default SCAIP insertion.
 			remove_filter( 'the_content', 'scaip_maybe_insert_shortcode', 10 );
 

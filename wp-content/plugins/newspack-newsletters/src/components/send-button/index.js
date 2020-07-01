@@ -3,9 +3,10 @@
  */
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
-import { Button, Modal } from '@wordpress/components';
-import { Fragment, useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { Button, Modal, Notice } from '@wordpress/components';
+import { Fragment, useEffect, useState } from '@wordpress/element';
+import { __, sprintf, _n } from '@wordpress/i18n';
+import apiFetch from '@wordpress/api-fetch';
 
 /**
  * External dependencies
@@ -16,6 +17,8 @@ import { get } from 'lodash';
  * Internal dependencies
  */
 import { getServiceProvider } from '../../service-providers';
+import { NEWSLETTER_AD_CPT_SLUG, NEWSLETTER_CPT_SLUG } from '../../utils/consts';
+import { isAdActive } from '../../ads-admin/utils';
 
 const { renderPreSendInfo } = getServiceProvider();
 
@@ -92,6 +95,28 @@ export default compose( [
 			publishStatus = 'publish';
 		}
 
+		const [ adsWarning, setAdsWarning ] = useState();
+		useEffect(() => {
+			apiFetch( {
+				path: `/wp/v2/${ NEWSLETTER_AD_CPT_SLUG }`,
+			} ).then( response => {
+				const activeAds = response.filter( isAdActive );
+				if ( activeAds.length ) {
+					setAdsWarning(
+						sprintf(
+							_n(
+								'There is %d active ad.',
+								'There are %d active ads.',
+								activeAds.length,
+								'newspack-newsletters'
+							),
+							activeAds.length
+						)
+					);
+				}
+			} );
+		}, []);
+
 		const triggerCampaignSend = () => {
 			editPost( { status: publishStatus } );
 			savePost();
@@ -117,6 +142,16 @@ export default compose( [
 						title={ __( 'Send your newsletter?', 'newspack-newsletters' ) }
 						onRequestClose={ () => setModalVisible( false ) }
 					>
+						{ adsWarning ? (
+							<Notice isDismissible={ false }>
+								{ adsWarning }{' '}
+								<a
+									href={ `/wp-admin/edit.php?post_type=${ NEWSLETTER_CPT_SLUG }&page=newspack-newsletters-ads-admin` }
+								>
+									{ __( 'Manage ads', 'newspack-newsletters' ) }
+								</a>
+							</Notice>
+						) : null }
 						{ renderPreSendInfo( newsletterData ) }
 						<Button
 							isPrimary

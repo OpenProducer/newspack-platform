@@ -367,7 +367,8 @@ class Newspack_Blocks {
 			}
 			$args['post__not_in'] = array_merge(
 				$args['post__not_in'] ?? [],
-				array_keys( $newspack_blocks_post_id )
+				array_keys( $newspack_blocks_post_id ),
+				get_the_ID() ? [ get_the_ID() ] : []
 			);
 			if ( $authors && count( $authors ) ) {
 				$args['author__in'] = $authors;

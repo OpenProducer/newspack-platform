@@ -36,7 +36,7 @@ const ProviderSidebar = ( {
 
 	const setSender = ( { senderName, senderEmail } ) =>
 		apiFetch( {
-			path: `/newspack-newsletters/v1/mailchimp/${ postId }/settings`,
+			path: `/newspack-newsletters/v1/mailchimp/${ postId }/sender`,
 			data: {
 				from_name: senderName,
 				reply_to: senderEmail,

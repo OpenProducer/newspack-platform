@@ -38,8 +38,9 @@ const PostsInserterBlock = ( {
 	setInsertedPostsIds,
 	removeBlock,
 } ) => {
+	// Stringify added to minimize flicker.
 	const templateBlocks = useMemo( () => getTemplateBlocks( postList, attributes ), [
-		postList,
+		JSON.stringify( postList ),
 		attributes,
 	] );
 
@@ -188,6 +189,7 @@ const PostsInserterBlockWithSelect = compose( [
 		}
 
 		return {
+			// Not used by the component, but needed in deduplication.
 			existingBlocks: getBlocks(),
 			selectedBlock: getSelectedBlock(),
 			postList: posts.map( post => {

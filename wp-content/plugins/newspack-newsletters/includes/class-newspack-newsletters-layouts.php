@@ -42,6 +42,7 @@ final class Newspack_Newsletters_Layouts {
 	 */
 	public function __construct() {
 		add_action( 'init', [ __CLASS__, 'register_layout_cpt' ] );
+		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 	}
 
 	/**
@@ -55,10 +56,49 @@ final class Newspack_Newsletters_Layouts {
 		$cpt_args = [
 			'public'       => false,
 			'show_in_rest' => true,
-			'supports'     => [ 'editor', 'title' ],
+			'supports'     => [ 'editor', 'title', 'custom-fields' ],
 			'taxonomies'   => [],
 		];
 		\register_post_type( self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT, $cpt_args );
+	}
+
+	/**
+	 * Register custom fields.
+	 */
+	public static function register_meta() {
+		\register_meta(
+			'post',
+			'font_header',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+		\register_meta(
+			'post',
+			'font_body',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+		\register_meta(
+			'post',
+			'background_color',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
 	}
 
 	/**

@@ -1,3 +1,21 @@
+# [1.3.0](https://github.com/Automattic/newspack-newsletters/compare/v1.2.0...v1.3.0) (2020-06-30)
+
+
+### Bug Fixes
+
+* apply custom styles even if styling tab in sidebar is closed ([#240](https://github.com/Automattic/newspack-newsletters/issues/240)) ([20b08bc](https://github.com/Automattic/newspack-newsletters/commit/20b08bca750434f52d0a4415b99ce4142e707eae))
+* localize date formats and notice text ([0cb82f1](https://github.com/Automattic/newspack-newsletters/commit/0cb82f1ebad2a23e71e50d0daa9cd9feb30b1732))
+* posts-inserter columns warning ([5db6b97](https://github.com/Automattic/newspack-newsletters/commit/5db6b97c30272d357f8bc780ce108814a4745a4c))
+* store translated success note as prop ([5638aee](https://github.com/Automattic/newspack-newsletters/commit/5638aee41caaa4a368b3513c4dfbe4fd1fc759f9))
+
+
+### Features
+
+* add "sent" status to posts list in dashboard ([ed369e4](https://github.com/Automattic/newspack-newsletters/commit/ed369e46f71670ff1685b294af64ea0c46786feb))
+* add a "sent" editor notice after a campaign has been sent ([188908e](https://github.com/Automattic/newspack-newsletters/commit/188908ede101860911f19c4f900a140cdcd31868))
+* column middle alignment handling ([5f82db4](https://github.com/Automattic/newspack-newsletters/commit/5f82db4f14dd38845882935d7b9c246d83f91b4b)), closes [#231](https://github.com/Automattic/newspack-newsletters/issues/231)
+* handle custom styling of layouts ([#238](https://github.com/Automattic/newspack-newsletters/issues/238)) ([2ba844d](https://github.com/Automattic/newspack-newsletters/commit/2ba844dc5f2d9d62c82217b3dd4897a6573ebe8d)), closes [#225](https://github.com/Automattic/newspack-newsletters/issues/225)
+
 # [1.2.0](https://github.com/Automattic/newspack-newsletters/compare/v1.1.0...v1.2.0) (2020-06-18)
 
 

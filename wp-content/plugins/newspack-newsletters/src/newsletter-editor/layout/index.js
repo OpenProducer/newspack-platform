@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { find } from 'lodash';
+import { isEqual, find } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -9,7 +9,6 @@ import { find } from 'lodash';
 import { compose } from '@wordpress/compose';
 import { parse, serialize } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
-import { BlockPreview } from '@wordpress/block-editor';
 import { withDispatch, withSelect } from '@wordpress/data';
 import { Fragment, useState, useEffect, useMemo } from '@wordpress/element';
 import { Button, Modal, TextControl, Spinner } from '@wordpress/components';
@@ -22,22 +21,28 @@ import { LAYOUT_CPT_SLUG, NEWSLETTER_CPT_SLUG } from '../../utils/consts';
 import { isUserDefinedLayout } from '../../utils';
 import './style.scss';
 import { setPreventDeduplicationForPostsInserter } from '../../editor/blocks/posts-inserter/utils';
+import NewsletterPreview from '../../components/newsletter-preview';
 
 export default compose( [
 	withSelect( select => {
 		const { getEditedPostAttribute, isEditedPostEmpty, getCurrentPostId } = select( 'core/editor' );
 		const { getBlocks } = select( 'core/block-editor' );
 		const meta = getEditedPostAttribute( 'meta' );
-		const { template_id: layoutId } = meta;
+		const { template_id: layoutId, background_color, font_body, font_header } = meta;
 		return {
 			layoutId,
 			postTitle: getEditedPostAttribute( 'title' ),
 			postBlocks: getBlocks(),
 			isEditedPostEmpty: isEditedPostEmpty(),
 			currentPostId: getCurrentPostId(),
+			stylingMeta: {
+				background_color,
+				font_body,
+				font_header,
+			},
 		};
 	} ),
-	withDispatch( ( dispatch, { currentPostId } ) => {
+	withDispatch( ( dispatch, { currentPostId, stylingMeta } ) => {
 		const { replaceBlocks } = dispatch( 'core/block-editor' );
 		const { editPost } = dispatch( 'core/editor' );
 		const { saveEntityRecord } = dispatch( 'core' );
@@ -48,7 +53,7 @@ export default compose( [
 				editPost( { meta: { template_id: id } } );
 				saveEntityRecord( 'postType', NEWSLETTER_CPT_SLUG, {
 					id: currentPostId,
-					meta: { template_id: id },
+					meta: { template_id: id, ...stylingMeta },
 				} );
 			},
 			saveLayout: payload =>
@@ -67,6 +72,7 @@ export default compose( [
 		postBlocks,
 		postTitle,
 		isEditedPostEmpty,
+		stylingMeta,
 	} ) => {
 		const [ warningModalVisible, setWarningModalVisible ] = useState( false );
 		const { layouts, isFetchingLayouts } = useLayoutsState();
@@ -108,13 +114,15 @@ export default compose( [
 		};
 
 		const postContent = useMemo( () => serialize( postBlocks ), [ postBlocks ] );
-		const isPostContentSameAsLayout = postContent === usedLayout.post_content;
+		const isPostContentSameAsLayout =
+			postContent === usedLayout.post_content && isEqual( usedLayout.meta, stylingMeta );
 
 		const handleSaveAsLayout = () => {
 			setIsSavingLayout( true );
 			const updatePayload = {
 				title: newLayoutName,
 				content: postContent,
+				meta: stylingMeta,
 			};
 			saveLayout( updatePayload ).then( newLayout => {
 				setIsManageModalVisible( false );
@@ -130,8 +138,9 @@ export default compose( [
 			) {
 				setIsSavingLayout( true );
 				const updatePayload = {
-					content: postContent,
 					id: usedLayout.ID,
+					content: postContent,
+					meta: stylingMeta,
 				};
 				saveLayout( updatePayload ).then( handleLayoutUpdate );
 			}
@@ -150,7 +159,8 @@ export default compose( [
 					<div className="newspack-newsletters-layouts">
 						<div className="newspack-newsletters-layouts__item">
 							<div className="newspack-newsletters-layouts__item-preview">
-								<BlockPreview
+								<NewsletterPreview
+									meta={ usedLayout.meta }
 									blocks={ setPreventDeduplicationForPostsInserter( blockPreview ) }
 									viewportWidth={ 600 }
 								/>

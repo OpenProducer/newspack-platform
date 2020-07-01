@@ -111,7 +111,7 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 			class="<?php echo esc_attr( $classes ); ?>"
 			style="<?php echo esc_attr( $styles ); ?>"
 			>
-			<div data-posts>
+			<div data-posts data-current-post-id="<?php the_ID(); ?>">
 				<?php if ( '' !== $attributes['sectionHeader'] ) : ?>
 					<h2 class="article-section-title">
 						<span><?php echo wp_kses_post( $attributes['sectionHeader'] ); ?></span>
@@ -261,7 +261,7 @@ function newspack_blocks_inject_amp_state() {
 	if ( ! $newspack_blocks_post_id || ! count( $newspack_blocks_post_id ) ) {
 		return;
 	}
-	$post_ids = implode( ', ', array_keys( $newspack_blocks_post_id ) );
+	$post_ids = implode( ', ', array_merge( array_keys( $newspack_blocks_post_id ), [ get_the_ID() ] ) );
 	ob_start();
 	?>
 	<amp-state id='newspackHomepagePosts'>
