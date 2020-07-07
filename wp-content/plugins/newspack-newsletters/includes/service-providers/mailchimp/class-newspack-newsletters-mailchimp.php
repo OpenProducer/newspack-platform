@@ -141,6 +141,15 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				}
 			}
 
+			$tags = [];
+			if ( $list_id ) {
+				$tags_response = $this->validate(
+					$mc->get( "lists/$list_id/segments?count=1000" ),
+					__( 'Error retrieving Mailchimp tags.', 'newspack_newsletters' )
+				);
+				$tags          = $tags_response['segments'];
+			}
+
 			return [
 				'lists'               => $this->validate(
 					$mc->get(
@@ -154,6 +163,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				'campaign'            => $campaign,
 				'campaign_id'         => $mc_campaign_id,
 				'interest_categories' => $interest_categories,
+				'tags'                => $tags,
 			];
 		} catch ( Exception $e ) {
 			return new WP_Error(
@@ -449,22 +459,25 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	}
 
 	/**
-	 * Set Mailchimp Interest.
+	 * Set Mailchimp Audience segments for a Campaign.
 	 *
-	 * @param string $post_id Numeric ID of the post.
-	 * @param string $compound_interest_id ID of the interest, including field.
+	 * @param string   $post_id Numeric ID of the post.
+	 * @param string   $compound_interest_id ID of the interest, including field.
+	 * @param number[] $tag_ids List of tag IDs.
 	 * @return object|WP_Error API API Response or error.
 	 */
-	public function interest( $post_id, $compound_interest_id ) {
-		$exploded    = explode( ':', $compound_interest_id );
-		$field       = count( $exploded ) ? $exploded[0] : null;
-		$interest_id = count( $exploded ) > 1 ? $exploded[1] : null;
-
-		if ( 'no_interests' !== $compound_interest_id && ( ! $field || ! $interest_id ) ) {
-			return new WP_Error(
-				'newspack_newsletters_invalid_mailchimp_interest',
-				__( 'Invalid Mailchimp Interest .', 'newspack-newsletters' )
-			);
+	public function audience_segments( $post_id, $compound_interest_id, $tag_ids ) {
+		if ( $compound_interest_id ) {
+			$exploded              = explode( ':', $compound_interest_id );
+			$field                 = count( $exploded ) ? $exploded[0] : null;
+			$interest_id           = count( $exploded ) > 1 ? $exploded[1] : null;
+			$is_unsetting_interest = 'no_interests' === $compound_interest_id;
+			if ( ! $is_unsetting_interest && ( ! $field || ! $interest_id ) ) {
+				return new WP_Error(
+					'newspack_newsletters_invalid_mailchimp_interest',
+					__( 'Invalid Mailchimp Interest.', 'newspack-newsletters' )
+				);
+			}
 		}
 
 		$mc_campaign_id = get_post_meta( $post_id, 'mc_campaign_id', true );
@@ -489,21 +502,38 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				);
 			}
 
-			$segment_opts = ( 'no_interests' === $compound_interest_id ) ?
-				(object) [] :
-				[
-					'match'      => 'any',
-					'conditions' => [
-						[
-							'condition_type' => 'Interests',
-							'field'          => $field,
-							'op'             => 'interestcontains',
-							'value'          => [
-								$interest_id,
-							],
-						],
-					],
+			$has_interest = $compound_interest_id && ! $is_unsetting_interest;
+
+			$segment_opts = (object) [];
+
+			if ( $has_interest || $tag_ids ) {
+				$segment_opts = [
+					'match'      => 'all',
+					'conditions' => [],
 				];
+
+				if ( $has_interest ) {
+					$segment_opts['conditions'][] = [
+						'condition_type' => 'Interests',
+						'field'          => $field,
+						'op'             => 'interestcontains',
+						'value'          => [
+							$interest_id,
+						],
+					];
+				}
+
+				if ( $tag_ids ) {
+					foreach ( $tag_ids as $tag_id ) {
+						$segment_opts['conditions'][] = [
+							'condition_type' => 'StaticSegment',
+							'field'          => 'static_segment',
+							'op'             => 'static_is',
+							'value'          => $tag_id,
+						];
+					}
+				}
+			}
 
 			$payload = [
 				'recipients' => [
@@ -514,7 +544,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 			$result = $this->validate(
 				$mc->patch( "campaigns/$mc_campaign_id", $payload ),
-				__( 'Error updating Mailchimp groups.', 'newspack_newsletters' )
+				__( 'Error updating Mailchimp segments.', 'newspack_newsletters' )
 			);
 
 			$data           = $this->retrieve( $post_id );

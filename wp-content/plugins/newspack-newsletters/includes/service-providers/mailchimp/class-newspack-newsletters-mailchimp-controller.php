@@ -106,10 +106,10 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 		);
 		\register_rest_route(
 			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/interest/(?P<interest_id>[\a-z]+)',
+			'(?P<id>[\a-z]+)/segments',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_interest' ],
+				'callback'            => [ $this, 'api_segments' ],
 				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
 				'args'                => [
 					'id'          => [
@@ -118,6 +118,9 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 					],
 					'interest_id' => [
 						'sanitize_callback' => 'esc_attr',
+					],
+					'tag_ids'     => [
+						'sanitize_callback' => 'wp_parse_list',
 					],
 				],
 			]
@@ -183,15 +186,16 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 	}
 
 	/**
-	 * Set Mailchimp interest (group) for a campaign.
+	 * Set Mailchimp audience segments for a campaign.
 	 *
 	 * @param WP_REST_Request $request API request object.
 	 * @return WP_REST_Response|mixed API response or error.
 	 */
-	public function api_interest( $request ) {
-		$response = $this->service_provider->interest(
+	public function api_segments( $request ) {
+		$response = $this->service_provider->audience_segments(
 			$request['id'],
-			$request['interest_id']
+			$request['interest_id'],
+			$request['tag_ids']
 		);
 		return \rest_ensure_response( $response );
 	}

@@ -152,11 +152,3 @@ body.post-type-post .editor-post-title__block .editor-post-title__input {
     font-size: 3.2em;
   }
 }
-
-body.post-type-post.style-pack-style-4 .editor-post-title__block {
-  max-width: 1020px;
-}
-
-body.post-type-post.style-pack-style-4 .editor-post-title__block .editor-post-title__input {
-  text-align: center;
-}

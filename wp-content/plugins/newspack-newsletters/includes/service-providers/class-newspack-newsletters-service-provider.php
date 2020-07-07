@@ -19,7 +19,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 *
 	 * @var \WP_REST_Controller.
 	 */
-	private static $controller;
+	private $controller;
 
 	/**
 	 * Name of the service.

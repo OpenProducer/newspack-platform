@@ -13,14 +13,17 @@ import { find } from 'lodash';
  * Internal dependencies
  */
 import ProviderSidebar from './ProviderSidebar';
-import { getListInterestsSettings } from './utils';
+import './style.scss';
 
 const validateNewsletter = ( { campaign } ) => {
 	const { recipients, settings, status } = campaign || {};
-	const { list_id: listId } = recipients || {};
+	const { list_id: listId, recipient_count: recipientCount } = recipients || {};
 	const { from_name: senderName, reply_to: senderEmail } = settings || {};
 
 	const messages = [];
+	if ( recipientCount === 0 ) {
+		messages.push( __( 'There are no contacts in the chosen audience.', 'newspack-newsletters' ) );
+	}
 	if ( 'sent' === status || 'sending' === status ) {
 		messages.push( __( 'Newsletter has already been sent.', 'newspack-newsletters' ) );
 	}
@@ -53,16 +56,11 @@ const renderPreSendInfo = newsletterData => {
 			'id',
 			newsletterData.campaign.recipients.list_id,
 		] );
-		const interestSettings = getListInterestsSettings( newsletterData );
-
 		if ( list ) {
-			listData = { name: list.name, subscribers: parseInt( list.stats.member_count ) };
-			if ( interestSettings && interestSettings.setInterest ) {
-				listData.groupName = interestSettings.setInterest.rawInterest.name;
-				listData.subscribers = parseInt(
-					interestSettings.setInterest.rawInterest.subscriber_count
-				);
-			}
+			listData = {
+				name: list.name,
+				subscribers: parseInt( newsletterData.campaign.recipients.recipient_count ),
+			};
 		}
 	}
 

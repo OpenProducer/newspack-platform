@@ -17,7 +17,7 @@ abstract class Newspack_Newsletters_Service_Provider_Controller extends \WP_REST
 	 *
 	 * @var Newspack_Newsletters_Service_Provider $service_provider
 	 */
-	private static $service_provider;
+	private $service_provider;
 
 	/**
 	 * Newspack_Newsletters_Service_Provider_Controller constructor.

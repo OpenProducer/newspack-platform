@@ -37,6 +37,15 @@ const AdCard = ( { adPost, deleteAd } ) => {
 	if ( expiry_date ) {
 		isExpired = ! isInTheFuture( expiry_date );
 	}
+	let description = null;
+	if ( expiry_date ) {
+		const formattedExpiryDate = format( 'M j Y', expiry_date );
+		description = isExpired
+			? `${ __( 'Expired', 'newspack-newsletters' ) } ${ formattedExpiryDate }.`
+			: `${ __( 'Will expire', 'newspack-newsletters' ) } ${ formattedExpiryDate }.`;
+	} else if ( ! isExpired ) {
+		description = __( 'No expiry date set.', 'newspack-newsletters' );
+	}
 	return (
 		<Fragment>
 			<ActionCard
@@ -56,16 +65,7 @@ const AdCard = ( { adPost, deleteAd } ) => {
 					e.preventDefault();
 					return false;
 				} }
-				description={
-					// eslint-disable-next-line no-nested-ternary
-					expiry_date
-						? `${
-								isExpired
-									? __( 'Expired', 'newspack-newsletters' )
-									: __( 'Will expire', 'newspack-newsletters' )
-						  } ${ format( 'M j Y', expiry_date ) }`
-						: null
-				}
+				description={ description }
 			/>
 			{ modalVisible && (
 				<Modal

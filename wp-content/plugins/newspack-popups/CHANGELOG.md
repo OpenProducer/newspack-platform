@@ -1,3 +1,10 @@
+## [1.7.2](https://github.com/Automattic/newspack-popups/compare/v1.7.1...v1.7.2) (2020-07-07)
+
+
+### Bug Fixes
+
+* duplicate execution of the_content filter ([2692867](https://github.com/Automattic/newspack-popups/commit/26928678c00fb9993785ef049154579382387b1d))
+
 ## [1.7.1](https://github.com/Automattic/newspack-popups/compare/v1.7.0...v1.7.1) (2020-06-30)
 
 

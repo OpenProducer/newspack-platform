@@ -13,13 +13,6 @@ defined( 'ABSPATH' ) || exit;
 final class Newspack_Popups_Model {
 
 	/**
-	 * An array of all retrieved campaigns, to avoid double-rendering.
-	 *
-	 * @var array
-	 */
-	protected static $campaigns = [];
-
-	/**
 	 * Retrieve all Popups (first 100).
 	 *
 	 * @param  boolean $include_unpublished Whether to include unpublished posts.
@@ -236,7 +229,6 @@ final class Newspack_Popups_Model {
 	 * @return object Popup object.
 	 */
 	public static function retrieve_preview_popup( $post_id ) {
-		$containing_post_id = get_the_ID();
 		// Up-to-date post data is stored in an autosave.
 		$autosave    = wp_get_post_autosave( $post_id );
 		$post_object = $autosave ? $autosave : get_post( $post_id );
@@ -245,7 +237,6 @@ final class Newspack_Popups_Model {
 
 		return self::create_popup_object(
 			$post_object,
-			$containing_post_id,
 			false,
 			[
 				'background_color'        => filter_input( INPUT_GET, 'background_color', FILTER_SANITIZE_STRING ),
@@ -289,14 +280,12 @@ final class Newspack_Popups_Model {
 	 * @return array Popup objects array
 	 */
 	protected static function retrieve_popups_with_query( WP_Query $query, $include_categories = false ) {
-		$containing_post_id = get_the_ID();
 		$popups             = [];
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$popups[] = self::create_popup_object(
 					get_post( get_the_ID() ),
-					$containing_post_id,
 					$include_categories
 				);
 			}
@@ -309,44 +298,11 @@ final class Newspack_Popups_Model {
 	 * Create the popup object.
 	 *
 	 * @param WP_Post $campaign_post The campaign post object.
-	 * @param integer $containing_post_id ID of the post that will contain the Campaign.
 	 * @param boolean $include_categories If true, returned objects will include assigned categories.
 	 * @param object  $options Popup options to use instead of the options retrieved from the post. Used for popup previews.
 	 * @return object Popup object
 	 */
-	protected static function create_popup_object( $campaign_post, $containing_post_id = null, $include_categories = false, $options = null ) {
-
-		$containing_post_key = $containing_post_id ? $containing_post_id : 0;
-
-		if ( empty( self::$campaigns[ $containing_post_key ] ) ) {
-			self::$campaigns[ $containing_post_key ] = [];
-		}
-
-		// If campaign has already been created for the same containing post, return it without re-rendering.
-		if ( ! empty( self::$campaigns[ $containing_post_key ][ $campaign_post->ID ] ) ) {
-			return self::$campaigns[ $containing_post_key ][ $campaign_post->ID ];
-		}
-
-		// Query the containing post to enable dynamic blocks like Jetpack Related Posts to function properly.
-		if ( $containing_post_id ) {
-			$containing_post = new WP_Query(
-				[
-					'p' => $containing_post_id,
-				]
-			);
-			if ( $containing_post->have_posts() ) {
-				$containing_post->the_post();
-			}
-		}
-		$blocks = parse_blocks( $campaign_post->post_content );
-		$body   = '';
-		foreach ( $blocks as $block ) {
-			$body .= render_block( $block );
-		}
-		if ( $containing_post_id ) {
-			wp_reset_postdata();
-		}
-
+	protected static function create_popup_object( $campaign_post, $include_categories = false, $options = null ) {
 		$id = $campaign_post->ID;
 
 		$post_options = isset( $options ) ? $options : [
@@ -367,7 +323,7 @@ final class Newspack_Popups_Model {
 			'id'      => $id,
 			'status'  => $campaign_post->post_status,
 			'title'   => $campaign_post->post_title,
-			'body'    => $body,
+			'content' => $campaign_post->post_content,
 			'options' => wp_parse_args(
 				array_filter( $post_options ),
 				[
@@ -390,10 +346,6 @@ final class Newspack_Popups_Model {
 		}
 
 		if ( self::is_inline( $popup ) ) {
-			$popup['markup'] = self::generate_inline_popup( $popup );
-
-			// Store campaign to avoid re-rendering.
-			self::$campaigns[ $containing_post_key ][ $campaign_post->ID ] = $popup;
 			return $popup;
 		}
 
@@ -409,10 +361,6 @@ final class Newspack_Popups_Model {
 		if ( ! in_array( $popup['options']['placement'], [ 'top', 'bottom' ], true ) ) {
 			$popup['options']['placement'] = 'center';
 		}
-		$popup['markup'] = self::generate_popup( $popup );
-
-		// Store campaign to avoid re-rendering.
-		self::$campaigns[ $containing_post_key ][ $campaign_post->ID ] = $popup;
 		return $popup;
 	}
 
@@ -453,7 +401,7 @@ final class Newspack_Popups_Model {
 	 * @param string $element_id The id of the popup element.
 	 * @return string Prints the generated amp-analytics element.
 	 */
-	protected static function insert_event_tracking( $popup, $element_id ) {
+	protected static function insert_event_tracking( $popup, $body, $element_id ) {
 		if ( Newspack_Popups::previewed_popup_id() ) {
 			return '';
 		}
@@ -464,10 +412,10 @@ final class Newspack_Popups_Model {
 
 		// Mailchimp.
 		$mailchimp_form_selector = '';
-		if ( preg_match( '/wp-block-jetpack-mailchimp/', $popup['body'] ) !== 0 ) {
+		if ( preg_match( '/wp-block-jetpack-mailchimp/', $body ) !== 0 ) {
 			$mailchimp_form_selector = '.wp-block-jetpack-mailchimp form';
 		}
-		if ( preg_match( '/mc4wp-form/', $popup['body'] ) !== 0 ) {
+		if ( preg_match( '/mc4wp-form/', $body ) !== 0 ) {
 			$mailchimp_form_selector = '.mc4wp-form';
 		}
 
@@ -585,7 +533,7 @@ final class Newspack_Popups_Model {
 	 * @param object $popup The popup object.
 	 * @param string $element_id The id of the popup element.
 	 */
-	protected static function get_analytics_events( $popup, $element_id ) {
+	protected static function get_analytics_events( $popup, $body, $element_id ) {
 		if ( Newspack_Popups::previewed_popup_id() ) {
 			return '';
 		}
@@ -594,8 +542,8 @@ final class Newspack_Popups_Model {
 		$event_category = 'Newspack Announcement';
 		$event_label    = 'Newspack Announcement: ' . $popup['title'] . ' (' . $popup_id . ')';
 
-		$has_link                = preg_match( '/<a\s/', $popup['body'] ) !== 0;
-		$has_form                = preg_match( '/<form\s/', $popup['body'] ) !== 0;
+		$has_link                = preg_match( '/<a\s/', $body ) !== 0;
+		$has_form                = preg_match( '/<form\s/', $body ) !== 0;
 		$has_dismiss_form        = 'inline' !== $popup['options']['placement'];
 		$has_not_interested_form = self::get_dismiss_text( $popup );
 
@@ -667,31 +615,40 @@ final class Newspack_Popups_Model {
 	 */
 	public static function generate_inline_popup( $popup ) {
 		global $wp;
+
+		do_action( 'newspack_campaigns_before_campaign_render', $popup );
+		$blocks = parse_blocks( $popup['content'] );
+		$body   = '';
+		foreach ( $blocks as $block ) {
+			$body .= render_block( $block );
+		}
+		do_action( 'newspack_campaigns_after_campaign_render', $popup );
+
 		$element_id           = 'lightbox' . rand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
 		$endpoint             = self::get_dismiss_endpoint();
 		$display_title        = $popup['options']['display_title'];
 		$hidden_fields        = self::get_hidden_fields( $popup );
 		$dismiss_text         = self::get_dismiss_text( $popup );
-		$is_newsletter_prompt = false !== strpos( $popup['body'], 'wp-block-jetpack-mailchimp' ); // Is this a newsletter prompt? Add a class so we can target for analytics.
+		$is_newsletter_prompt = false !== strpos( $body, 'wp-block-jetpack-mailchimp' ); // Is this a newsletter prompt? Add a class so we can target for analytics.
 		$classes              = array( 'newspack-inline-popup' );
 		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
 
 		add_filter(
 			'newspack_analytics_events',
-			function ( $evts ) use ( $popup, $element_id ) {
-					return array_merge( $evts, self::get_analytics_events( $popup, $element_id ) );
+			function ( $evts ) use ( $popup, $body, $element_id ) {
+					return array_merge( $evts, self::get_analytics_events( $popup, $body, $element_id ) );
 			}
 		);
 
 		ob_start();
 		?>
-			<?php self::insert_event_tracking( $popup, $element_id ); ?>
+			<?php self::insert_event_tracking( $popup, $body, $element_id ); ?>
 			<amp-layout amp-access="popup_<?php echo esc_attr( $popup['id'] ); ?>.displayPopup" amp-access-hide class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>" id="<?php echo esc_attr( $element_id ); ?>">
 						<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
 					<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
 				<?php endif; ?>
-						<?php echo ( $popup['body'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+						<?php echo ( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 						<?php if ( $dismiss_text ) : ?>
 					<form class="popup-not-interested-form popup-action-form"
 						method="POST"
@@ -718,6 +675,19 @@ final class Newspack_Popups_Model {
 	 * @return string The generated markup.
 	 */
 	public static function generate_popup( $popup ) {
+
+		if ( isset( $popup['options'], $popup['options']['placement'] ) && 'inline' === $popup['options']['placement'] ) {
+			return self::generate_inline_popup( $popup );
+		}
+
+		do_action( 'newspack_campaigns_before_campaign_render', $popup );
+		$blocks = parse_blocks( $popup['content'] );
+		$body   = '';
+		foreach ( $blocks as $block ) {
+			$body .= render_block( $block );
+		}
+		do_action( 'newspack_campaigns_after_campaign_render', $popup );
+
 		$element_id           = 'lightbox' . rand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
 		$endpoint             = self::get_dismiss_endpoint();
 		$dismiss_text         = self::get_dismiss_text( $popup );
@@ -725,15 +695,15 @@ final class Newspack_Popups_Model {
 		$overlay_opacity      = absint( $popup['options']['overlay_opacity'] ) / 100;
 		$overlay_color        = $popup['options']['overlay_color'];
 		$hidden_fields        = self::get_hidden_fields( $popup );
-		$is_newsletter_prompt = false !== strpos( $popup['body'], 'wp-block-jetpack-mailchimp' ); // Is this a newsletter prompt? Add a class so we can target for analytics.
+		$is_newsletter_prompt = false !== strpos( $body, 'wp-block-jetpack-mailchimp' ); // Is this a newsletter prompt? Add a class so we can target for analytics.
 		$classes              = array( 'newspack-lightbox', 'newspack-lightbox-placement-' . $popup['options']['placement'] );
 		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;
 
 		add_filter(
 			'newspack_analytics_events',
-			function ( $evts ) use ( $popup, $element_id ) {
-				return array_merge( $evts, self::get_analytics_events( $popup, $element_id ) );
+			function ( $evts ) use ( $popup, $body, $element_id ) {
+				return array_merge( $evts, self::get_analytics_events( $popup, $body, $element_id ) );
 			}
 		);
 
@@ -745,7 +715,7 @@ final class Newspack_Popups_Model {
 					<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
 						<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
 					<?php endif; ?>
-					<?php echo ( $popup['body'] ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo ( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<?php if ( $dismiss_text ) : ?>
 					<form class="popup-not-interested-form popup-action-form"
 						method="POST"
@@ -822,7 +792,7 @@ final class Newspack_Popups_Model {
 				}
 			</script>
 		</amp-animation>
-		<?php self::insert_event_tracking( $popup, $element_id ); ?>
+		<?php self::insert_event_tracking( $popup, $body, $element_id ); ?>
 		<?php
 		return ob_get_clean();
 	}

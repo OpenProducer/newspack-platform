@@ -1,3 +1,18 @@
+# [1.4.0](https://github.com/Automattic/newspack-newsletters/compare/v1.3.0...v1.4.0) (2020-07-07)
+
+
+### Bug Fixes
+
+* resolve php notices ([#256](https://github.com/Automattic/newspack-newsletters/issues/256)) ([e854521](https://github.com/Automattic/newspack-newsletters/commit/e8545215d1ea94a8c6c05eafc19e81632d8a0a74))
+
+
+### Features
+
+* **ads:** allow no expiry date on ads ([#252](https://github.com/Automattic/newspack-newsletters/issues/252)) ([eacb5f7](https://github.com/Automattic/newspack-newsletters/commit/eacb5f73d2993c8d6fd8019ab2a9c4fa37f2327a)), closes [#251](https://github.com/Automattic/newspack-newsletters/issues/251)
+* **mailchimp:** handle segmentation via tags ([#241](https://github.com/Automattic/newspack-newsletters/issues/241)) ([99f2f1f](https://github.com/Automattic/newspack-newsletters/commit/99f2f1f3d091e590123228142180ead02d5e65e9)), closes [#21](https://github.com/Automattic/newspack-newsletters/issues/21)
+* **mjml:** handle social icons block aligment options ([#257](https://github.com/Automattic/newspack-newsletters/issues/257)) ([ce10875](https://github.com/Automattic/newspack-newsletters/commit/ce108750ee41106d2dfc6498300f2c97d2904333))
+* support linked images ([#255](https://github.com/Automattic/newspack-newsletters/issues/255)) ([7f7ce8e](https://github.com/Automattic/newspack-newsletters/commit/7f7ce8e0bc3c6067d8fa9d6fd8885c4e6915743e))
+
 # [1.3.0](https://github.com/Automattic/newspack-newsletters/compare/v1.2.0...v1.3.0) (2020-06-30)
 
 

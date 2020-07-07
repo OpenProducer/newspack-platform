@@ -17,6 +17,7 @@ import { get } from 'lodash';
  * Internal dependencies
  */
 import { getServiceProvider } from '../../service-providers';
+import './style.scss';
 import { NEWSLETTER_AD_CPT_SLUG, NEWSLETTER_CPT_SLUG } from '../../utils/consts';
 import { isAdActive } from '../../ads-admin/utils';
 
@@ -58,18 +59,14 @@ export default compose( [
 		isSaving,
 		savePost,
 		status,
-		validationErrors,
+		validationErrors = [],
 		isEditedPostBeingScheduled,
 		hasPublishAction,
 		visibility,
 		newsletterData,
 	} ) => {
 		const isButtonEnabled =
-			( isPublishable || isEditedPostBeingScheduled ) &&
-			isSaveable &&
-			validationErrors &&
-			! validationErrors.length &&
-			'publish' !== status;
+			( isPublishable || isEditedPostBeingScheduled ) && isSaveable && 'publish' !== status;
 		let label;
 		if ( 'publish' === status ) {
 			label = isSaving
@@ -153,8 +150,22 @@ export default compose( [
 							</Notice>
 						) : null }
 						{ renderPreSendInfo( newsletterData ) }
+						{ validationErrors.length ? (
+							<Notice status="error" isDismissible={ false }>
+								{ __(
+									'The following errors prevent the newsletter from being sent:',
+									'newspack-newsletters'
+								) }
+								<ul>
+									{ validationErrors.map( ( error, i ) => (
+										<li key={ i }>{ error }</li>
+									) ) }
+								</ul>
+							</Notice>
+						) : null }
 						<Button
 							isPrimary
+							disabled={ validationErrors.length > 0 }
 							onClick={ () => {
 								triggerCampaignSend();
 								setModalVisible( false );

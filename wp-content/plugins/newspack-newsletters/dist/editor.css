@@ -485,6 +485,11 @@
   .newspack-newsletters-layouts__item-label .components-base-control__field {
     margin-bottom: 0; }
 
+.newspack-newsletters__mailchimp-tags {
+  margin-bottom: 1em; }
+  .newspack-newsletters__mailchimp-tags + .components-form-token-field__help {
+    display: none; }
+
 /**
  * Colors
  */
@@ -522,6 +527,12 @@
 
 .interface-interface-skeleton__sidebar .components-notice {
   margin: 0; }
+
+.newspack-newsletters__modal .components-notice {
+  margin: 0 0 1em; }
+  .newspack-newsletters__modal .components-notice ul {
+    list-style-type: disc;
+    margin-left: 1.3em; }
 
 .post-type-newspack_nl_cpt .editor-post-title {
   display: none; }

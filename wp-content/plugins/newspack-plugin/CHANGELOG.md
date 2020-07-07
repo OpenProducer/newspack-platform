@@ -1,3 +1,11 @@
+# [1.12.0](https://github.com/Automattic/newspack-plugin/compare/v1.11.0...v1.12.0) (2020-07-07)
+
+
+### Features
+
+* clean up release zip ([75d2167](https://github.com/Automattic/newspack-plugin/commit/75d2167f011d3fe7daed1bb67b25cd13f00ff568))
+* ntg mailing list events in amp ([#575](https://github.com/Automattic/newspack-plugin/issues/575)) ([9017dda](https://github.com/Automattic/newspack-plugin/commit/9017ddab56cc45e982283d2421c9287605bcff5d))
+
 # [1.11.0](https://github.com/Automattic/newspack-plugin/compare/v1.10.0...v1.11.0) (2020-06-30)
 
 

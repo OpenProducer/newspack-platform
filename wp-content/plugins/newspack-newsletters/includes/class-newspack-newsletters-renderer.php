@@ -273,8 +273,12 @@ final class Newspack_Newsletters_Renderer {
 				}
 				if ( isset( $attrs['linkDestination'] ) ) {
 					$img_attrs['href'] = $attrs['linkDestination'];
+				} else {
+					$maybe_link = $img->parentNode;// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					if ( $maybe_link && 'a' === $maybe_link->nodeName && $maybe_link->getAttribute( 'href' ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+						$img_attrs['href'] = trim( $maybe_link->getAttribute( 'href' ) );
+					}
 				}
-
 				if ( isset( $attrs['className'] ) && strpos( $attrs['className'], 'is-style-rounded' ) !== false ) {
 					$img_attrs['border-radius'] = '999px';
 				}
@@ -399,14 +403,18 @@ final class Newspack_Newsletters_Renderer {
 				);
 
 				$social_wrapper_attrs = array(
-					'align'         => isset( $attrs['align'] ) && 'center' == $attrs['align'] ? 'center' : 'left',
 					'icon-size'     => '22px',
 					'mode'          => 'horizontal',
 					'padding'       => '0',
 					'border-radius' => '999px',
 					'icon-padding'  => '8px',
 				);
-				$markup               = '<mj-social ' . self::array_to_attributes( $social_wrapper_attrs ) . '>';
+				if ( isset( $attrs['align'] ) ) {
+					$social_wrapper_attrs['align'] = $attrs['align'];
+				} else {
+					$social_wrapper_attrs['align'] = 'left';
+				}
+				$markup = '<mj-social ' . self::array_to_attributes( $social_wrapper_attrs ) . '>';
 				foreach ( $inner_blocks as $link_block ) {
 					if ( isset( $link_block['attrs']['url'] ) ) {
 						$url = $link_block['attrs']['url'];
@@ -563,21 +571,21 @@ final class Newspack_Newsletters_Renderer {
 				array(
 					'post_type'      => Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
 					'posts_per_page' => -1,
-					'meta_query'     => array( // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
-						array(
-							'key'     => 'expiry_date',
-							'value'   => gmdate( 'Y-m-d' ),
-							'compare' => '>=',
-							'type'    => 'DATE',
-						),
-					),
 				)
 			);
 			$ads        = $ads_query->get_posts();
 			$ads_markup = '';
 			foreach ( $ads as $ad ) {
 				$expiry_date = new DateTime( get_post_meta( $ad->ID, 'expiry_date', true ) );
-				$ads_markup .= self::post_to_mjml_components( $ad, false );
+				if ( ! $expiry_date ) {
+					$ads_markup .= self::post_to_mjml_components( $ad, false );
+				} else {
+					$now_date    = gmdate( 'Y-m-d' );
+					$expiry_date = $expiry_date->format( 'Y-m-d' );
+					if ( $expiry_date >= $now_date ) {
+						$ads_markup .= self::post_to_mjml_components( $ad, false );
+					}
+				}
 			}
 			$body .= $ads_markup;
 		}

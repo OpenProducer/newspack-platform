@@ -1,3 +1,10 @@
+## [1.4.1](https://github.com/Automattic/newspack-ads/compare/v1.4.0...v1.4.1) (2020-07-07)
+
+
+### Bug Fixes
+
+* dont define slots that arent present ([f7439ff](https://github.com/Automattic/newspack-ads/commit/f7439ffce8114a4a83c505789cd0e4d1aa25c39c))
+
 # [1.4.0](https://github.com/Automattic/newspack-ads/compare/v1.3.0...v1.4.0) (2020-06-30)
 
 
