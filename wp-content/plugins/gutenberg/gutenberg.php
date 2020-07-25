@@ -5,7 +5,7 @@
  * Description: Printing since 1440. This is the development plugin for the new block editor in core.
  * Requires at least: 5.3
  * Requires PHP: 5.6
- * Version: 8.4.0
+ * Version: 8.6.0
  * Author: Gutenberg Team
  * Text Domain: gutenberg
  *
@@ -13,8 +13,8 @@
  */
 
 ### BEGIN AUTO-GENERATED DEFINES
-define( 'GUTENBERG_VERSION', '8.4.0' );
-define( 'GUTENBERG_GIT_COMMIT', '83f36e40d7a7ab0b2b9df7ea1036abeb15122f55' );
+define( 'GUTENBERG_VERSION', '8.6.0' );
+define( 'GUTENBERG_GIT_COMMIT', '7a2691869c57e6f4ad010883239fab06f7e366a9' );
 ### END AUTO-GENERATED DEFINES
 
 gutenberg_pre_init();
@@ -162,3 +162,23 @@ function gutenberg_rest_nonce() {
 	exit( wp_create_nonce( 'wp_rest' ) );
 }
 add_action( 'wp_ajax_gutenberg_rest_nonce', 'gutenberg_rest_nonce' );
+
+
+/**
+ * Exposes the site icon url to the Gutenberg editor through the WordPress REST
+ * API. The site icon url should instead be fetched from the wp/v2/settings
+ * endpoint when https://github.com/WordPress/gutenberg/pull/19967 is complete.
+ *
+ * @since 8.2.1
+ *
+ * @param WP_REST_Response $response Response data served by the WordPress REST index endpoint.
+ * @return WP_REST_Response
+ */
+function register_site_icon_url( $response ) {
+	$data                  = $response->data;
+	$data['site_icon_url'] = get_site_icon_url();
+	$response->set_data( $data );
+	return $response;
+}
+
+add_filter( 'rest_index', 'register_site_icon_url' );

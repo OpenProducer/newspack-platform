@@ -34,6 +34,9 @@ class Google_Http_REST
      *
      * @param Google_Client $client
      * @param Psr\Http\Message\RequestInterface $req
+     * @param string $expectedClass
+     * @param array $config
+     * @param array $retryMap
      * @return array decoded result
      * @throws Google_Service_Exception on server side error (ie: not authenticated,
      *  invalid or malformed post body, invalid url)
@@ -51,6 +54,7 @@ class Google_Http_REST
      *
      * @param Google_Client $client
      * @param Psr\Http\Message\RequestInterface $request
+     * @param string $expectedClass
      * @return array decoded result
      * @throws Google_Service_Exception on server side error (ie: not authenticated,
      *  invalid or malformed post body, invalid url)
@@ -79,6 +83,7 @@ class Google_Http_REST
      * @throws Google_Service_Exception
      * @param Psr\Http\Message\RequestInterface $response The http response to be decoded.
      * @param Psr\Http\Message\ResponseInterface $response
+     * @param string $expectedClass
      * @return mixed|null
      */
     public static function decodeHttpResponse(\Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response, \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request = null, $expectedClass = null)

@@ -45,23 +45,25 @@ use Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface;
  *
  * This allows it to be used as follows with GuzzleHttp\Client:
  *
- *   use Google\Auth\ApplicationDefaultCredentials;
- *   use GuzzleHttp\Client;
- *   use GuzzleHttp\HandlerStack;
+ * ```
+ * use Google\Auth\ApplicationDefaultCredentials;
+ * use GuzzleHttp\Client;
+ * use GuzzleHttp\HandlerStack;
  *
- *   $middleware = ApplicationDefaultCredentials::getMiddleware(
- *       'https://www.googleapis.com/auth/taskqueue'
- *   );
- *   $stack = HandlerStack::create();
- *   $stack->push($middleware);
+ * $middleware = ApplicationDefaultCredentials::getMiddleware(
+ *     'https://www.googleapis.com/auth/taskqueue'
+ * );
+ * $stack = HandlerStack::create();
+ * $stack->push($middleware);
  *
- *   $client = new Client([
- *       'handler' => $stack,
- *       'base_uri' => 'https://www.googleapis.com/taskqueue/v1beta2/projects/',
- *       'auth' => 'google_auth' // authorize all requests
- *   ]);
+ * $client = new Client([
+ *     'handler' => $stack,
+ *     'base_uri' => 'https://www.googleapis.com/taskqueue/v1beta2/projects/',
+ *     'auth' => 'google_auth' // authorize all requests
+ * ]);
  *
- *   $res = $client->get('myproject/taskqueues/myqueue');
+ * $res = $client->get('myproject/taskqueues/myqueue');
+ * ```
  */
 class ApplicationDefaultCredentials
 {
@@ -73,13 +75,12 @@ class ApplicationDefaultCredentials
      * this does not fallback to the compute engine defaults.
      *
      * @param string|array scope the scope of the access request, expressed
-     *   either as an Array or as a space-delimited String.
+     *        either as an Array or as a space-delimited String.
      * @param callable $httpHandler callback which delivers psr7 request
      * @param array $cacheConfig configuration for the cache when it's present
-     * @param CacheItemPoolInterface $cache an implementation of CacheItemPoolInterface
-     *
+     * @param CacheItemPoolInterface $cache A cache implementation, may be
+     *        provided if you have one already available for use.
      * @return AuthTokenSubscriber
-     *
      * @throws DomainException if no implementation can be obtained.
      */
     public static function getSubscriber($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
@@ -95,13 +96,12 @@ class ApplicationDefaultCredentials
      * this does not fallback to the compute engine defaults.
      *
      * @param string|array scope the scope of the access request, expressed
-     *   either as an Array or as a space-delimited String.
+     *        either as an Array or as a space-delimited String.
      * @param callable $httpHandler callback which delivers psr7 request
      * @param array $cacheConfig configuration for the cache when it's present
-     * @param CacheItemPoolInterface $cache
-     *
+     * @param CacheItemPoolInterface $cache A cache implementation, may be
+     *        provided if you have one already available for use.
      * @return AuthTokenMiddleware
-     *
      * @throws DomainException if no implementation can be obtained.
      */
     public static function getMiddleware($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
@@ -118,16 +118,18 @@ class ApplicationDefaultCredentials
      * this does not fallback to the Compute Engine defaults.
      *
      * @param string|array scope the scope of the access request, expressed
-     *   either as an Array or as a space-delimited String.
+     *        either as an Array or as a space-delimited String.
      * @param callable $httpHandler callback which delivers psr7 request
      * @param array $cacheConfig configuration for the cache when it's present
-     * @param CacheItemPoolInterface $cache
+     * @param CacheItemPoolInterface $cache A cache implementation, may be
+     *        provided if you have one already available for use.
+     * @param string $quotaProject specifies a project to bill for access
+     *   charges associated with the request.
      *
      * @return CredentialsLoader
-     *
      * @throws DomainException if no implementation can be obtained.
      */
-    public static function getCredentials($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
+    public static function getCredentials($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null, $quotaProject = null)
     {
         $creds = null;
         $jsonKey = \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader::fromEnv() ?: \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader::fromWellKnownFile();
@@ -139,11 +141,12 @@ class ApplicationDefaultCredentials
             $httpHandler = \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build($client);
         }
         if (!\is_null($jsonKey)) {
+            $jsonKey['quota_project'] = $quotaProject;
             $creds = \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader::makeCredentials($scope, $jsonKey);
         } elseif (\Google\Site_Kit_Dependencies\Google\Auth\Credentials\AppIdentityCredentials::onAppEngine() && !\Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials::onAppEngineFlexible()) {
             $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\AppIdentityCredentials($scope);
         } elseif (\Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials::onGce($httpHandler)) {
-            $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials(null, $scope);
+            $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials(null, $scope, null, $quotaProject);
         }
         if (\is_null($creds)) {
             throw new \DomainException(self::notFound());
@@ -164,10 +167,9 @@ class ApplicationDefaultCredentials
      * @param string $targetAudience The audience for the ID token.
      * @param callable $httpHandler callback which delivers psr7 request
      * @param array $cacheConfig configuration for the cache when it's present
-     * @param CacheItemPoolInterface $cache
-     *
+     * @param CacheItemPoolInterface $cache A cache implementation, may be
+     *        provided if you have one already available for use.
      * @return AuthTokenMiddleware
-     *
      * @throws DomainException if no implementation can be obtained.
      */
     public static function getIdTokenMiddleware($targetAudience, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
@@ -183,10 +185,9 @@ class ApplicationDefaultCredentials
      * @param string $targetAudience The audience for the ID token.
      * @param callable $httpHandler callback which delivers psr7 request
      * @param array $cacheConfig configuration for the cache when it's present
-     * @param CacheItemPoolInterface $cache
-     *
+     * @param CacheItemPoolInterface $cache A cache implementation, may be
+     *        provided if you have one already available for use.
      * @return CredentialsLoader
-     *
      * @throws DomainException if no implementation can be obtained.
      * @throws InvalidArgumentException if JSON "type" key is invalid
      */

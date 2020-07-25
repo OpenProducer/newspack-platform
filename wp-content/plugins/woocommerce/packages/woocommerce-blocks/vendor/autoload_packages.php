@@ -178,7 +178,7 @@ if ( ! function_exists( __NAMESPACE__ . '\autoloader' ) ) {
 /**
  * Prepare all the classes for autoloading.
  */
-function enqueue_packages_52ae821df89e8ee2e85358c67f3a54ad() {
+function enqueue_packages_79ae06eafd0c9fc3b6dd2f3b40b49b43() {
 	$class_map = require_once dirname( __FILE__ ) . '/composer/autoload_classmap_package.php';
 	foreach ( $class_map as $class_name => $class_info ) {
 		enqueue_package_class( $class_name, $class_info['version'], $class_info['path'] );
@@ -202,4 +202,4 @@ function enqueue_packages_52ae821df89e8ee2e85358c67f3a54ad() {
 		file_loader(); // Either WordPress is not loaded or plugin is doing it wrong. Either way we'll load the files so nothing breaks.
 	}
 }
-enqueue_packages_52ae821df89e8ee2e85358c67f3a54ad();
+enqueue_packages_79ae06eafd0c9fc3b6dd2f3b40b49b43();

@@ -384,7 +384,7 @@ class JWT
      * Encodes signature from a DER object.
      *
      * @param   string  $der binary signature in DER format
-     * @param   int     $keySize the nubmer of bits in the key
+     * @param   int     $keySize the number of bits in the key
      * @return  string  the signature
      */
     private static function signatureFromDER($der, $keySize)
@@ -430,9 +430,7 @@ class JWT
             $pos++;
             // Skip the first contents octet (padding indicator)
             $data = \substr($der, $pos, $len - 1);
-            if (!$ignore_bit_strings) {
-                $pos += $len - 1;
-            }
+            $pos += $len - 1;
         } elseif (!$constructed) {
             $data = \substr($der, $pos, $len);
             $pos += $len;
