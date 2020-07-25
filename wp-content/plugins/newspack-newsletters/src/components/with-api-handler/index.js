@@ -25,8 +25,11 @@ export default () =>
 						.then( response => {
 							const { message } = response;
 							getNotices().forEach( notice => {
-								// Don't remove the "Campaign sent" notice.
-								if ( 'success' !== notice.status || -1 === notice.content.indexOf( successNote ) ) {
+								// Don't remove the "Campaign sent" notice or error messages from async ops.
+								if (
+									'error' !== notice.status &&
+									( 'success' !== notice.status || -1 === notice.content.indexOf( successNote ) )
+								) {
 									removeNotice( notice.id );
 								}
 							} );
@@ -40,8 +43,11 @@ export default () =>
 						.catch( error => {
 							const { message } = error;
 							getNotices().forEach( notice => {
-								// Don't remove the "Campaign sent" notice.
-								if ( 'success' !== notice.status || -1 === notice.content.indexOf( successNote ) ) {
+								// Don't remove the "Campaign sent" notice or error messages from async ops.
+								if (
+									'error' !== notice.status &&
+									( 'success' !== notice.status || -1 === notice.content.indexOf( successNote ) )
+								) {
 									removeNotice( notice.id );
 								}
 							} );

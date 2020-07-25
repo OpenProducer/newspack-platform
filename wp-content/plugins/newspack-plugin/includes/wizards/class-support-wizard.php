@@ -112,6 +112,9 @@ class Support_Wizard extends Wizard {
 				)
 			)
 		);
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
 		if ( 200 !== $response['response']['code'] ) {
 			return new WP_Error( 'invalid_wpcom_token', __( 'Invalid WPCOM token.', 'newspack' ) );
 		}
@@ -172,19 +175,27 @@ class Support_Wizard extends Wizard {
 		<b>Message:</b> ' . $request['message'] . '<br/><br/>
 		<i>' . sprintf( 'Sent from %s on %s', home_url(), gmdate( 'c', time() ) ) . ' UTC</i>';
 
+		$subject_sufffix = self::is_pre_launch() ? 'Pre-launch' : 'Support';
+
+		$support_request = array(
+			'requester' => array(
+				'name'  => $full_name,
+				'email' => $wpcom_user_data->email,
+			),
+			'subject'   => '[Newspack ' . $subject_sufffix . '] ' . $request['subject'],
+			'comment'   => array(
+				'html_body' => $message,
+				'uploads'   => $request['uploads'],
+			),
+		);
+
+		if ( isset( $request['priority'] ) ) {
+			$support_request['priority'] = $request['priority'];
+		}
+
 		$request_body = wp_json_encode(
 			array(
-				'request' => array(
-					'requester' => array(
-						'name'  => $full_name,
-						'email' => $wpcom_user_data->email,
-					),
-					'subject'   => '[Newspack Support] ' . $request['subject'],
-					'comment'   => array(
-						'html_body' => $message,
-						'uploads'   => $request['uploads'],
-					),
-				),
+				'request' => $support_request,
 			)
 		);
 
@@ -333,6 +344,7 @@ class Support_Wizard extends Wizard {
 				'API_URL'            => self::support_api_url(),
 				'WPCOM_AUTH_URL'     => 'https://public-api.wordpress.com/oauth2/authorize?client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&response_type=token&scope=global',
 				'WPCOM_ACCESS_TOKEN' => $access_token,
+				'IS_PRE_LAUNCH'      => false !== self::is_pre_launch(),
 			)
 		);
 		wp_enqueue_script( 'newspack-support-wizard' );
@@ -381,5 +393,14 @@ class Support_Wizard extends Wizard {
 	 */
 	public static function configured() {
 		return self::support_api_url() && self::support_email() && self::wpcom_client_id();
+	}
+
+	/**
+	 * Return pre-launch tickets information..
+	 *
+	 * @return boolean if the instance should handle tickets as pre-launch tickets.
+	 */
+	public static function is_pre_launch() {
+		return defined( 'NEWSPACK_SUPPORT_IS_PRE_LAUNCH' ) && NEWSPACK_SUPPORT_IS_PRE_LAUNCH;
 	}
 }

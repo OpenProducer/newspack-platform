@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.11.1
+Version: 1.12.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -1496,6 +1496,34 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin-left: auto;
 }
 
+.button.mb-cta {
+  background: #d33;
+  color: #fff;
+  font-size: 0.7em;
+  margin-left: auto;
+  padding: 0.6rem 0.75rem;
+}
+
+.button.mb-cta:hover {
+  background: #111;
+  color: #fff;
+}
+
+.button.mb-cta + .mobile-menu-toggle {
+  margin-left: 1rem;
+}
+
+.button.mb-cta + .mobile-menu-toggle span {
+  display: inline-block;
+  overflow: hidden;
+  width: 0;
+}
+
+.button.mb-cta + .mobile-menu-toggle svg {
+  height: 29px;
+  width: 29px;
+}
+
 .site-header .desktop-menu-toggle,
 .subpage-toggle-contain {
   display: none;
@@ -1521,7 +1549,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 
 @media only screen and (min-width: 782px) {
   .h-dh .site-header .mobile-menu-toggle,
-  .h-sub .site-header .mobile-menu-toggle {
+  .h-sub .site-header .mobile-menu-toggle,
+  .h-dh .mb-cta {
     display: none;
   }
   .h-dh .site-header .desktop-menu-toggle,
@@ -1531,7 +1560,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 @media only screen and (min-width: 960px) {
-  .h-sh .site-header .mobile-menu-toggle {
+  .h-sh .site-header .mobile-menu-toggle,
+  .h-sh .mb-cta {
     display: none;
   }
   .h-sh .site-header .desktop-menu-toggle {
@@ -2309,7 +2339,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 
 .middle-header-contain .wrapper {
   align-items: center;
-  padding: 1rem 0;
+  padding: 0.75rem 0;
 }
 
 @media only screen and (min-width: 782px) {

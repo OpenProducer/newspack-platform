@@ -37,6 +37,12 @@ class Analytics {
 		add_filter( 'render_block', [ __CLASS__, 'prepare_blocks_for_events' ], 10, 2 );
 		add_action( 'newspack_campaigns_before_campaign_render', [ __CLASS__, 'set_campaign_render_context' ], 10, 1 );
 		add_action( 'newspack_campaigns_after_campaign_render', [ __CLASS__, 'reset_render_context' ], 10, 1 );
+		add_action( 'comment_form', [ __CLASS__, 'prepare_comment_events' ] );
+
+		// WooCommerce hooks. https://docs.woocommerce.com/wc-apidocs/hook-docs.html.
+		add_action( 'woocommerce_login_form_end', [ __CLASS__, 'prepare_login_events' ] );
+		add_action( 'woocommerce_register_form_end', [ __CLASS__, 'prepare_registration_events' ] );
+		add_action( 'woocommerce_after_checkout_registration_form', [ __CLASS__, 'prepare_checkout_registration_events' ] );
 	}
 
 	/**
@@ -117,43 +123,51 @@ class Analytics {
 				'event_label'    => 'linkedin',
 				'event_category' => 'NTG social',
 			],
-			[
-				'id'              => 'articleRead25',
-				'on'              => 'scroll',
-				'event_name'      => '25%',
-				'event_value'     => 25,
-				'event_label'     => get_the_title(),
-				'event_category'  => 'NTG article milestone',
-				'non_interaction' => true,
-				'scrollSpec'      => [
-					'verticalBoundaries' => [ 25 ],
-				],
-			],
-			[
-				'id'              => 'articleRead50',
-				'on'              => 'scroll',
-				'event_name'      => '50%',
-				'event_value'     => 50,
-				'event_label'     => get_the_title(),
-				'event_category'  => 'NTG article milestone',
-				'non_interaction' => true,
-				'scrollSpec'      => [
-					'verticalBoundaries' => [ 50 ],
-				],
-			],
-			[
-				'id'              => 'articleRead100',
-				'on'              => 'scroll',
-				'event_name'      => '100%',
-				'event_value'     => 100,
-				'event_label'     => get_the_title(),
-				'event_category'  => 'NTG article milestone',
-				'non_interaction' => true,
-				'scrollSpec'      => [
-					'verticalBoundaries' => [ 100 ],
-				],
-			],
 		];
+
+		if ( ! is_front_page() && ! is_archive() ) {
+			$events = array_merge(
+				$events,
+				[
+					[
+						'id'              => 'articleRead25',
+						'on'              => 'scroll',
+						'event_name'      => '25%',
+						'event_value'     => 25,
+						'event_label'     => get_the_title(),
+						'event_category'  => 'NTG article milestone',
+						'non_interaction' => true,
+						'scrollSpec'      => [
+							'verticalBoundaries' => [ 25 ],
+						],
+					],
+					[
+						'id'              => 'articleRead50',
+						'on'              => 'scroll',
+						'event_name'      => '50%',
+						'event_value'     => 50,
+						'event_label'     => get_the_title(),
+						'event_category'  => 'NTG article milestone',
+						'non_interaction' => true,
+						'scrollSpec'      => [
+							'verticalBoundaries' => [ 50 ],
+						],
+					],
+					[
+						'id'              => 'articleRead100',
+						'on'              => 'scroll',
+						'event_name'      => '100%',
+						'event_value'     => 100,
+						'event_label'     => get_the_title(),
+						'event_category'  => 'NTG article milestone',
+						'non_interaction' => true,
+						'scrollSpec'      => [
+							'verticalBoundaries' => [ 100 ],
+						],
+					],
+				]
+			);
+		}
 
 		/**
 		 * Other integrations can add events to track using this filter.
@@ -219,6 +233,66 @@ class Analytics {
 	}
 
 	/**
+	 * Prepare event triggers on user commenting.
+	 */
+	public static function prepare_comment_events() {
+		self::$block_events[] = [
+			'id'             => 'addComment',
+			'amp_on'         => 'amp-form-submit-success',
+			'on'             => 'submit',
+			'element'        => '#commentform',
+			'event_name'     => 'comment added',
+			'event_category' => 'NTG user',
+			'event_label'    => get_the_title(),
+		];
+	}
+
+	/**
+	 * Add login event triggers for the WooCommerce My Account and Checkout pages.
+	 */
+	public static function prepare_login_events() {
+		self::$block_events[] = [
+			'id'             => 'loginSuccess',
+			'amp-on'         => 'amp-form-submit-success',
+			'on'             => 'submit',
+			'element'        => '.woocommerce-form-login',
+			'event_category' => 'NTG account',
+			'event_name'     => 'login',
+			'event_label'    => 'success',
+		];
+	}
+
+	/**
+	 * Add registration event triggers for the WooCommerce My Account page.
+	 */
+	public static function prepare_registration_events() {
+		self::$block_events[] = [
+			'id'             => 'registrationSuccess',
+			'amp-on'         => 'amp-form-submit-success',
+			'on'             => 'submit',
+			'element'        => '.woocommerce-form-register',
+			'event_category' => 'NTG account',
+			'event_name'     => 'registration',
+			'event_label'    => 'success',
+		];
+	}
+
+	/**
+	 * Add a registration event trigger for the WooCommerce Checkout page.
+	 */
+	public static function prepare_checkout_registration_events() {
+		self::$block_events[] = [
+			'id'             => 'registrationSuccess',
+			'amp-on'         => 'amp-form-submit-success',
+			'on'             => 'submit',
+			'element'        => '.woocommerce-checkout',
+			'event_category' => 'NTG account',
+			'event_name'     => 'registration',
+			'event_label'    => 'success',
+		];
+	}
+
+	/**
 	 * Inject event listeners on AMP pages.
 	 *
 	 * @param array $config AMP Analytics config from Site Kit.
@@ -254,17 +328,6 @@ class Analytics {
 
 			if ( ! isset( $config['triggers'] ) ) {
 				$config['triggers'] = [];
-			}
-
-			if ( 'click' !== $event_config['on'] ) {
-				/**
-				 * This is how non-interactive events are added to amp-analytics.
-				 *
-				 * @see https://github.com/ampproject/amphtml/issues/5018#issuecomment-247402181
-				 */
-				$event_config['extraUrlParams'] = [
-					'ni' => 1,
-				];
 			}
 
 			// Other integrations can use this filter if they need to modify the AMP-specific event config.
@@ -479,6 +542,7 @@ class Analytics {
 										{
 											event_category: '<?php echo esc_attr( $event['event_category'] ); ?>',
 											event_label: '<?php echo esc_attr( $event['event_label'] ); ?>',
+											non_interaction: <?php echo esc_attr( ! empty( $event['non_interaction'] ) && true === $event['non_interaction'] ? 'true' : 'false' ); ?>,
 										}
 									);
 								}
@@ -513,7 +577,7 @@ class Analytics {
 						{
 							event_category: '<?php echo esc_attr( $event['event_category'] ); ?>',
 							event_label: '<?php echo esc_attr( $event['event_label'] ); ?>',
-							non_interaction: true,
+							non_interaction: <?php echo esc_attr( ! empty( $event['non_interaction'] ) && true === $event['non_interaction'] ? 'true' : 'false' ); ?>,
 						}
 					);
 				};

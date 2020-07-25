@@ -178,6 +178,7 @@ function newspack_blocks_register_homepage_articles() {
 			array(
 				'attributes'      => $block['attributes'],
 				'render_callback' => 'newspack_blocks_render_block_homepage_articles',
+				'supports'        => [],
 			),
 			$block['name']
 		)

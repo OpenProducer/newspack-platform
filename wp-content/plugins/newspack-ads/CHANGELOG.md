@@ -1,3 +1,10 @@
+## [1.4.2](https://github.com/Automattic/newspack-ads/compare/v1.4.1...v1.4.2) (2020-07-22)
+
+
+### Bug Fixes
+
+* remove early ad display calls ([95a2217](https://github.com/Automattic/newspack-ads/commit/95a221767735665149b3d9a0abff8e8e831e1c2a))
+
 ## [1.4.1](https://github.com/Automattic/newspack-ads/compare/v1.4.0...v1.4.1) (2020-07-07)
 
 

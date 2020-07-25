@@ -1,3 +1,45 @@
+## [1.9.2](https://github.com/Automattic/newspack-popups/compare/v1.9.1...v1.9.2) (2020-07-22)
+
+
+### Bug Fixes
+
+* a typo in one of the campaign settings options ([7ddd1c8](https://github.com/Automattic/newspack-popups/commit/7ddd1c8976c4583a44f7af6c984708dc8c83b57c))
+* js error on non-AMP pages ([81e01fc](https://github.com/Automattic/newspack-popups/commit/81e01fceec66fa3d83c0d6b4559bc85ffb5b45f9))
+
+## [1.9.1](https://github.com/Automattic/newspack-popups/compare/v1.9.0...v1.9.1) (2020-07-15)
+
+
+### Bug Fixes
+
+* utm paramers suppression conflict ([b2c577c](https://github.com/Automattic/newspack-popups/commit/b2c577c71fd910c3be6e7c0e621de34fcceaaaa2))
+
+# [1.9.0](https://github.com/Automattic/newspack-popups/compare/v1.8.0...v1.9.0) (2020-07-14)
+
+
+### Bug Fixes
+
+* decode URL when checking utm_source suppression; fix transient ([#178](https://github.com/Automattic/newspack-popups/issues/178)) ([cd55311](https://github.com/Automattic/newspack-popups/commit/cd553112312c9f8974354193a4e025f0969848a1)), closes [#177](https://github.com/Automattic/newspack-popups/issues/177)
+* **settings:** styling ([2c77bd4](https://github.com/Automattic/newspack-popups/commit/2c77bd4a03f369d2337533de249b890f50a111ce))
+
+
+### Features
+
+* hide non-test campagins for logged-in users ([#169](https://github.com/Automattic/newspack-popups/issues/169)) ([476e5c0](https://github.com/Automattic/newspack-popups/commit/476e5c030b10417d45bc3abc33925681669a2d24))
+* **settings:** suppress all newsletter campaigns if one was dismissed ([#175](https://github.com/Automattic/newspack-popups/issues/175)) ([ed91a73](https://github.com/Automattic/newspack-popups/commit/ed91a7357ac94a0c82c3beda622230d99e2f8fd9))
+* add option to suppress newsletter campaigns if visiting from email ([e1371f5](https://github.com/Automattic/newspack-popups/commit/e1371f58dee5331210009207ab59cfd5e2eee959))
+
+# [1.8.0](https://github.com/Automattic/newspack-popups/compare/v1.7.2...v1.8.0) (2020-07-09)
+
+
+### Bug Fixes
+
+* make popupseen non-interactive event ([4278a17](https://github.com/Automattic/newspack-popups/commit/4278a17b948958b8f07ea3214c681fa449fb4bd9))
+
+
+### Features
+
+* mark load event as non interaction ([9abff5d](https://github.com/Automattic/newspack-popups/commit/9abff5d35666134e66b54cc81b33bfbccf86c2f2))
+
 ## [1.7.2](https://github.com/Automattic/newspack-popups/compare/v1.7.1...v1.7.2) (2020-07-07)
 
 

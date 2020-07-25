@@ -10,14 +10,21 @@ import { registerBlockType } from '@wordpress/blocks';
 import { __ } from '@wordpress/i18n';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
-import { RangeControl, Button, ToggleControl, PanelBody, Toolbar } from '@wordpress/components';
+import {
+	RangeControl,
+	Button,
+	ToggleControl,
+	PanelBody,
+	Spinner,
+	Toolbar,
+} from '@wordpress/components';
 import {
 	InnerBlocks,
 	BlockPreview,
 	InspectorControls,
 	BlockControls,
 } from '@wordpress/block-editor';
-import { Fragment, useEffect, useMemo } from '@wordpress/element';
+import { Fragment, useEffect, useMemo, useState } from '@wordpress/element';
 
 /**
  * Internal dependencies
@@ -38,11 +45,53 @@ const PostsInserterBlock = ( {
 	setInsertedPostsIds,
 	removeBlock,
 } ) => {
+	const [ isReady, setIsReady ] = useState( ! attributes.displayFeaturedImage );
+	const stringifiedPostList = JSON.stringify( postList );
+
 	// Stringify added to minimize flicker.
 	const templateBlocks = useMemo( () => getTemplateBlocks( postList, attributes ), [
-		JSON.stringify( postList ),
+		stringifiedPostList,
 		attributes,
 	] );
+
+	const stringifiedTemplateBlocks = JSON.stringify( templateBlocks );
+
+	useEffect(() => {
+		const { isDisplayingSpecificPosts, specificPosts } = attributes;
+
+		// No spinner if we're not dealing with images.
+		if ( ! attributes.displayFeaturedImage ) {
+			return setIsReady( true );
+		}
+
+		// No spinner if we're in the middle of selecting a specific post.
+		if ( isDisplayingSpecificPosts && 0 === specificPosts.length ) {
+			return setIsReady( true );
+		}
+
+		// Reset ready state.
+		setIsReady( false );
+
+		// If we have a post to show, check for featured image blocks.
+		if ( 0 < postList.length ) {
+			// Find all the featured images.
+			const images = [];
+			postList.map( post => post.featured_media && images.push( post.featured_media ) );
+
+			// If no posts have featured media, skip loading state.
+			if ( 0 === images.length ) {
+				return setIsReady( true );
+			}
+
+			// Wait for image blocks to be added to the BlockPreview.
+			const imageBlocks = stringifiedTemplateBlocks.match( /\"name\":\"core\/image\"/g ) || [];
+
+			// Preview is ready once all image blocks are accounted for.
+			if ( imageBlocks.length === images.length ) {
+				setIsReady( true );
+			}
+		}
+	}, [ stringifiedPostList, stringifiedTemplateBlocks ]);
 
 	const innerBlocksToInsert = templateBlocks.map( convertBlockSerializationFormat );
 	useEffect(() => {
@@ -130,7 +179,11 @@ const PostsInserterBlock = ( {
 					<span>{ __( 'Posts Inserter', 'newspack-newsletters' ) }</span>
 				</div>
 				<div className="newspack-posts-inserter__preview">
-					<BlockPreview blocks={ templateBlocks } viewportWidth={ 558 } />
+					{ isReady ? (
+						<BlockPreview blocks={ templateBlocks } viewportWidth={ 558 } />
+					) : (
+						<Spinner />
+					) }
 				</div>
 				<div className="newspack-posts-inserter__footer">
 					<Button isPrimary onClick={ () => setAttributes( { areBlocksInserted: true } ) }>

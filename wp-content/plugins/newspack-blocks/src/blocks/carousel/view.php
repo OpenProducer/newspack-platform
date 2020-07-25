@@ -330,6 +330,7 @@ function newspack_blocks_register_carousel() {
 					),
 				),
 				'render_callback' => 'newspack_blocks_render_block_carousel',
+				'supports'        => [],
 			),
 			'carousel'
 		)

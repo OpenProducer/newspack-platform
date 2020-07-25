@@ -43,6 +43,7 @@ function newspack_blocks_register_video_playlist() {
 				),
 			),
 			'render_callback' => 'newspack_blocks_render_block_video_playlist',
+			'supports'        => [],
 		)
 	);
 }

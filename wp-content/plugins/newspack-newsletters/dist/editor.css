@@ -158,11 +158,16 @@
     .newspack-posts-inserter__header span {
       font-size: 18pt; }
   .newspack-posts-inserter__preview {
+    align-items: center;
     border: 0 solid #1e1e1e;
     border-width: 1px 0;
-    margin: 1em 0; }
+    display: flex;
+    justify-content: center;
+    margin: 1em 0;
+    min-height: 4rem; }
     .newspack-posts-inserter__preview:empty {
-      border: 0; }
+      border: 0;
+      min-height: 0; }
     .newspack-posts-inserter__preview .block-editor-block-preview__container {
       max-height: 400px;
       overflow: scroll; }
@@ -527,6 +532,11 @@
 
 .interface-interface-skeleton__sidebar .components-notice {
   margin: 0; }
+
+.newspack-newsletters__testing-controls {
+  align-items: center;
+  display: flex;
+  justify-content: flex-start; }
 
 .newspack-newsletters__modal .components-notice {
   margin: 0 0 1em; }

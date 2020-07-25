@@ -280,7 +280,7 @@ final class Newspack_Popups_Model {
 	 * @return array Popup objects array
 	 */
 	protected static function retrieve_popups_with_query( WP_Query $query, $include_categories = false ) {
-		$popups             = [];
+		$popups = [];
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
@@ -395,6 +395,16 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
+	 * Does the popup have newsletter prompt?
+	 *
+	 * @param object $popup The popup object.
+	 * @return boolean True if popup has a newsletter prompt.
+	 */
+	public static function has_newsletter_prompt( $popup ) {
+		return false !== strpos( $popup['content'], 'wp:jetpack/mailchimp' );
+	}
+
+	/**
 	 * Insert amp-analytics tracking code.
 	 *
 	 * @param object $popup The popup object.
@@ -484,47 +494,6 @@ final class Newspack_Popups_Model {
 			</amp-analytics>
 		<?php endif; ?>
 		<?php
-
-		// GA events which are not supported by Newspack plugin filter.
-		if ( class_exists( '\Google\Site_Kit\Context', '\Google\Site_Kit\Modules\Analytics' ) ) {
-			$analytics           = new \Google\Site_Kit\Modules\Analytics( new \Google\Site_Kit\Context( GOOGLESITEKIT_PLUGIN_MAIN_FILE ) );
-			$google_analytics_id = $analytics->get_settings()->get()['propertyID'];
-		} else {
-			return '';
-		}
-
-		$event_category = 'Newspack Announcement';
-		$event_label    = 'Newspack Announcement: ' . $popup['title'] . ' (' . $popup['id'] . ')';
-
-		?>
-		<amp-analytics type="gtag" data-credentials="include">
-			<script type="application/json">
-				{
-					"vars" : {
-						"gtag_id": "<?php echo esc_attr( $google_analytics_id ); ?>",
-						"config" : {
-							"<?php echo esc_attr( $google_analytics_id ); ?>": { "groups": "default", "send_page_view": false }
-						}
-					},
-					"triggers": {
-						"popupVisible": {
-							"on": "visible",
-							"request": "event",
-							"selector": "#<?php echo esc_attr( $element_id ); ?>",
-							"visibilitySpec": {
-								"totalTimeMin": "500"
-							},
-							"vars": {
-								"event_name": "<?php echo esc_html__( 'Seen', 'newspack-popups' ); ?>",
-								"event_label": "<?php echo esc_attr( $event_label ); ?>",
-								"event_category": "<?php echo esc_attr( $event_category ); ?>"
-							}
-						}
-					}
-				}
-			</script>
-		</amp-analytics>
-		<?php
 	}
 
 	/**
@@ -549,12 +518,25 @@ final class Newspack_Popups_Model {
 
 		$analytics_events = [
 			[
-				'id'             => 'popupPageLoaded-' . $popup_id,
-				'on'             => 'ini-load',
-				'element'        => '#' . esc_attr( $element_id ),
-				'event_name'     => esc_html__( 'Load', 'newspack-popups' ),
-				'event_label'    => esc_attr( $event_label ),
-				'event_category' => esc_attr( $event_category ),
+				'id'              => 'popupPageLoaded-' . $popup_id,
+				'on'              => 'ini-load',
+				'element'         => '#' . esc_attr( $element_id ),
+				'event_name'      => esc_html__( 'Load', 'newspack-popups' ),
+				'event_label'     => esc_attr( $event_label ),
+				'event_category'  => esc_attr( $event_category ),
+				'non_interaction' => true,
+			],
+			[
+				'id'              => 'popupSeen-' . $popup_id,
+				'on'              => 'visible',
+				'element'         => '#' . esc_attr( $element_id ),
+				'event_name'      => esc_html__( 'Seen', 'newspack-popups' ),
+				'event_label'     => esc_attr( $event_label ),
+				'event_category'  => esc_attr( $event_category ),
+				'non_interaction' => true,
+				'visibilitySpec'  => [
+					'totalTimeMin' => 500,
+				],
 			],
 		];
 
@@ -629,7 +611,7 @@ final class Newspack_Popups_Model {
 		$display_title        = $popup['options']['display_title'];
 		$hidden_fields        = self::get_hidden_fields( $popup );
 		$dismiss_text         = self::get_dismiss_text( $popup );
-		$is_newsletter_prompt = false !== strpos( $body, 'wp-block-jetpack-mailchimp' ); // Is this a newsletter prompt? Add a class so we can target for analytics.
+		$is_newsletter_prompt = self::has_newsletter_prompt( $popup );
 		$classes              = array( 'newspack-inline-popup' );
 		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
@@ -695,7 +677,7 @@ final class Newspack_Popups_Model {
 		$overlay_opacity      = absint( $popup['options']['overlay_opacity'] ) / 100;
 		$overlay_color        = $popup['options']['overlay_color'];
 		$hidden_fields        = self::get_hidden_fields( $popup );
-		$is_newsletter_prompt = false !== strpos( $body, 'wp-block-jetpack-mailchimp' ); // Is this a newsletter prompt? Add a class so we can target for analytics.
+		$is_newsletter_prompt = self::has_newsletter_prompt( $popup );
 		$classes              = array( 'newspack-lightbox', 'newspack-lightbox-placement-' . $popup['options']['placement'] );
 		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;

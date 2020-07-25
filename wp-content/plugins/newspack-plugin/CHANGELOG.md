@@ -1,3 +1,47 @@
+## [1.14.2](https://github.com/Automattic/newspack-plugin/compare/v1.14.1...v1.14.2) (2020-07-23)
+
+
+### Reverts
+
+* Revert "feat(analytics): report category as custom dimension (#588)" ([bb914c6](https://github.com/Automattic/newspack-plugin/commit/bb914c67142f12eb4f3119e1c7f7d548e79a4fe6)), closes [#588](https://github.com/Automattic/newspack-plugin/issues/588)
+
+## [1.14.1](https://github.com/Automattic/newspack-plugin/compare/v1.14.0...v1.14.1) (2020-07-22)
+
+
+### Bug Fixes
+
+* allow newspack to install site kit ([#596](https://github.com/Automattic/newspack-plugin/issues/596)) ([728175a](https://github.com/Automattic/newspack-plugin/commit/728175a06c7bdbbea04f6557c0c1a4146bf52075))
+
+# [1.14.0](https://github.com/Automattic/newspack-plugin/compare/v1.13.0...v1.14.0) (2020-07-22)
+
+
+### Features
+
+* **analytics:** report category as custom dimension ([#588](https://github.com/Automattic/newspack-plugin/issues/588)) ([bdbcbbd](https://github.com/Automattic/newspack-plugin/commit/bdbcbbd97507a86d8eec2ad45adcd66451aa7fbf))
+* display latest releases info in plugin dashboard ([#552](https://github.com/Automattic/newspack-plugin/issues/552)) ([72d6086](https://github.com/Automattic/newspack-plugin/commit/72d608672bc72981963c30d9e6016830403556ec))
+
+# [1.13.0](https://github.com/Automattic/newspack-plugin/compare/v1.12.1...v1.13.0) (2020-07-14)
+
+
+### Bug Fixes
+
+* merge conflicts with master ([b469891](https://github.com/Automattic/newspack-plugin/commit/b469891b02136c38b1af5589adbb5fb2d7b8899c))
+* **analytics:** report milestone events for articles only ([#584](https://github.com/Automattic/newspack-plugin/issues/584)) ([de2a24c](https://github.com/Automattic/newspack-plugin/commit/de2a24cfae05e663ed35ebc6adbb6ba66fa4a794))
+
+
+### Features
+
+* handle pre-launch tickets; enhanced ticket creation ([#585](https://github.com/Automattic/newspack-plugin/issues/585)) ([6f0fc2b](https://github.com/Automattic/newspack-plugin/commit/6f0fc2b209dd89db591e51284167a49ea39775d1)), closes [#548](https://github.com/Automattic/newspack-plugin/issues/548)
+* track NTG event when comment form is submitted ([52ac3fd](https://github.com/Automattic/newspack-plugin/commit/52ac3fd4292f22c78de34c731e08d0098d24864d))
+* use WC hooks to add NTG account events ([bfa612e](https://github.com/Automattic/newspack-plugin/commit/bfa612ee8765e2fcb2db92f06be11417fed43b60))
+
+## [1.12.1](https://github.com/Automattic/newspack-plugin/compare/v1.12.0...v1.12.1) (2020-07-09)
+
+
+### Bug Fixes
+
+* **analytics:** non-interaction handling ([9013ad8](https://github.com/Automattic/newspack-plugin/commit/9013ad8c0ae8d40bdda7e2668d5fdb64cbcbc865))
+
 # [1.12.0](https://github.com/Automattic/newspack-plugin/compare/v1.11.0...v1.12.0) (2020-07-07)
 
 

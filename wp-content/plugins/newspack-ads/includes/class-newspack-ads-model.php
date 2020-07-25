@@ -354,13 +354,12 @@ class Newspack_Ads_Model {
 		$largest = self::largest_ad_size( $sizes );
 
 		$code = sprintf(
-			"<!-- /%s/%s --><div id='div-gpt-ad-%s-0' style='width: %spx; height: %spx;'><script>googletag.cmd.push(function() { googletag.display('div-gpt-ad-%s-0'); });</script></div>",
+			"<!-- /%s/%s --><div id='div-gpt-ad-%s-0' style='width: %spx; height: %spx;'></div>",
 			$network_code,
 			$code,
 			$unique_id,
 			$largest[0],
-			$largest[1],
-			$unique_id
+			$largest[1]
 		);
 		return $code;
 	}
@@ -485,13 +484,12 @@ class Newspack_Ads_Model {
 				);
 			} else {
 				$markup[] = sprintf(
-					'<!-- /%s/%s --><div id="%s" style="width:%dpx;height:%dpx;"><script>googletag.cmd.push(function() { googletag.display("%s"); });</script></div>',
+					'<!-- /%s/%s --><div id="%s" style="width:%dpx;height:%dpx;"></div>',
 					$network_code,
 					$code,
 					$div_id,
 					$width,
-					$height,
-					$div_id
+					$height
 				);
 			}
 		}

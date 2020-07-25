@@ -87,6 +87,7 @@ final class Newspack_Newsletters_Editor {
 			'core/column',
 			'core/columns',
 			'core/buttons',
+			'core/button',
 			'core/image',
 			'core/separator',
 			'core/list',

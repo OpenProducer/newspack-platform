@@ -1,5 +1,4 @@
 @import '~@wordpress/base-styles/colors';
-
 .newspack-posts-inserter {
 	border: 1px solid $dark-gray-primary;
 	border-radius: 2px;
@@ -22,12 +21,17 @@
 	}
 
 	&__preview {
+		align-items: center;
 		border: 0 solid $dark-gray-primary;
 		border-width: 1px 0;
+		display: flex;
+		justify-content: center;
 		margin: 1em 0;
+		min-height: 4rem;
 
 		&:empty {
 			border: 0;
+			min-height: 0;
 		}
 
 		.block-editor-block-preview {

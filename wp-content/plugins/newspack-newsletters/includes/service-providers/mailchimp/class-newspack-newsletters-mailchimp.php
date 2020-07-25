@@ -577,6 +577,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		}
 		if ( ! empty( $result['status'] ) && in_array( $result['status'], [ 400, 404 ] ) ) {
 			if ( $preferred_error && ! Newspack_Newsletters::debug_mode() ) {
+				if ( ! empty( $result['detail'] ) ) {
+					$preferred_error .= ' ' . $result['detail'];
+				}
 				throw new Exception( $preferred_error );
 			}
 			$messages = [];

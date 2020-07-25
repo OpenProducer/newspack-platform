@@ -5,13 +5,14 @@ import { __ } from '@wordpress/i18n';
 import { withSelect, withDispatch } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { Fragment, useState } from '@wordpress/element';
-import { Button, TextControl } from '@wordpress/components';
+import { Button, Spinner, TextControl } from '@wordpress/components';
 import { hasValidEmail } from '../utils';
 
 /**
  * Internal dependencies
  */
 import withApiHandler from '../../components/with-api-handler';
+import './style.scss';
 
 export default compose( [
 	withApiHandler(),
@@ -48,13 +49,18 @@ export default compose( [
 				onChange={ setTestEmail }
 				help={ __( 'Use commas to separate multiple emails.', 'newspack-newsletters' ) }
 			/>
-			<Button
-				isPrimary
-				onClick={ sendTestEmail }
-				disabled={ inFlight || ! hasValidEmail( testEmail ) }
-			>
-				{ __( 'Send a Test Email', 'newspack-newsletters' ) }
-			</Button>
+			<div className="newspack-newsletters__testing-controls">
+				<Button
+					isPrimary
+					onClick={ sendTestEmail }
+					disabled={ inFlight || ! hasValidEmail( testEmail ) }
+				>
+					{ inFlight
+						? __( 'Sending Test Email...', 'newspack-newsletters' )
+						: __( 'Send a Test Email', 'newspack-newsletters' ) }
+				</Button>
+				{ inFlight && <Spinner /> }
+			</div>
 		</Fragment>
 	);
 } );

@@ -1,3 +1,10 @@
+## [1.9.1](https://github.com/Automattic/newspack-blocks/compare/v1.9.0...v1.9.1) (2020-07-22)
+
+
+### Bug Fixes
+
+* php notices in gutenberg 8.6.0 ([#549](https://github.com/Automattic/newspack-blocks/issues/549)) ([c129449](https://github.com/Automattic/newspack-blocks/commit/c129449fa250e9920273128b4a2adbe776cd506e))
+
 # [1.9.0](https://github.com/Automattic/newspack-blocks/compare/v1.8.1...v1.9.0) (2020-06-30)
 
 

@@ -271,7 +271,7 @@ final class Newspack_Popups_Inserter {
 			wp_register_script(
 				'newspack-popups-view',
 				plugins_url( '../dist/view.js', __FILE__ ),
-				null,
+				[ 'wp-dom-ready' ],
 				filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/view.js' ),
 				true
 			);
@@ -445,13 +445,19 @@ final class Newspack_Popups_Inserter {
 	}
 
 	/**
-	 * Should Popup be displayed, based on universal conditions.
+	 * Should Popup be rendered, based on universal conditions.
 	 *
 	 * @param object $popup The popup to assess.
 	 * @return bool Should popup be shown.
 	 */
 	public static function should_display( $popup ) {
-		return self::assess_is_post( $popup ) && self::assess_test_mode( $popup ) && self::assess_categories_filter( $popup );
+		// Hide non-test mode campaigns for logged-in users.
+		if ( is_user_logged_in() && 'test' !== $popup['options']['frequency'] ) {
+			return false;
+		}
+		return self::assess_is_post( $popup ) &&
+			self::assess_test_mode( $popup ) &&
+			self::assess_categories_filter( $popup );
 	}
 }
 $newspack_popups_inserter = new Newspack_Popups_Inserter();

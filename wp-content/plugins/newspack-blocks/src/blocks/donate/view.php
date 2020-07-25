@@ -254,6 +254,7 @@ function newspack_blocks_register_donate() {
 				],
 			),
 			'render_callback' => 'newspack_blocks_render_block_donate',
+			'supports'        => [],
 		)
 	);
 }

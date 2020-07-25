@@ -1,6 +1,6 @@
 {
   "name": "newspack-newsletters",
-  "version": "1.4.0",
+  "version": "1.6.0",
   "description": "",
   "scripts": {
     "cm": "git-cz",
@@ -113,7 +113,7 @@
     "@wordpress/plugins": "^2.13.0",
     "@wordpress/url": "^2.13.0",
     "classnames": "^2.2.6",
-    "lodash": "^4.17.15",
+    "lodash": "^4.17.19",
     "newspack-components": "^1.2.0",
     "webpack": "^4.42.1"
   },
