@@ -5,7 +5,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.12.0
+Version: 1.13.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -562,4 +562,24 @@ blockquote {
 			border-top-color: $color__primary-variation;
 		}
 	}
+}
+
+/* Trust Indicators */
+
+@include media( tablet ) {
+	.featured-image-beside {
+		.entry-meta .trust-label {
+			color: #fff;
+		}
+	}
+}
+
+.featured-image-behind {
+	.entry-meta .trust-label {
+		color: #fff;
+	}
+}
+
+.entry-meta .trust-label {
+	margin-top: #{0.5 * $size__spacing-unit};
 }

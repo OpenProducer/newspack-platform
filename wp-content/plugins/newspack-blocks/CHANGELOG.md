@@ -1,3 +1,10 @@
+# [1.10.0](https://github.com/Automattic/newspack-blocks/compare/v1.9.1...v1.10.0) (2020-07-28)
+
+
+### Features
+
+* experimental title-only specific posts lookup endpoint ([#556](https://github.com/Automattic/newspack-blocks/issues/556)) ([5816ef9](https://github.com/Automattic/newspack-blocks/commit/5816ef90e52a72d5e79c07e1432025ff62d5e303))
+
 ## [1.9.1](https://github.com/Automattic/newspack-blocks/compare/v1.9.0...v1.9.1) (2020-07-22)
 
 

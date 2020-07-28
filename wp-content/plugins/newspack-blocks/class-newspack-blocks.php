@@ -61,7 +61,8 @@ class Newspack_Blocks {
 				'newspack-blocks-editor',
 				'newspack_blocks_data',
 				[
-					'patterns' => self::get_patterns_for_post_type( get_post_type() ),
+					'patterns'      => self::get_patterns_for_post_type( get_post_type() ),
+					'_experimental' => self::use_experimental(),
 				]
 			);
 
@@ -499,6 +500,15 @@ class Newspack_Blocks {
 			];
 		}
 		return $clean;
+	}
+
+	/**
+	 * Whether to use experimental features.
+	 *
+	 * @return bool Experimental status.
+	 */
+	public static function use_experimental() {
+		return defined( 'NEWSPACK_BLOCKS_EXPERIMENTAL' ) && NEWSPACK_BLOCKS_EXPERIMENTAL;
 	}
 }
 Newspack_Blocks::init();

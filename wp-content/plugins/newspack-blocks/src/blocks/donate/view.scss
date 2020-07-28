@@ -13,14 +13,14 @@
 		display: none;
 	}
 
-	.donation-frequency-label,
-	.tier-select-label {
+	.freq-label,
+	.tier-label {
 		display: block;
 		font-weight: bold;
 		cursor: pointer;
 	}
 
-	.donation-frequency-label {
+	.freq-label {
 		background: $color__background-body;
 		color: $color__text-light;
 		line-height: $font__line-height-body;
@@ -43,7 +43,7 @@
 		}
 	}
 
-	button[type='submit'] {
+	button {
 		margin: 0 0.76rem 0.76rem;
 
 		@include media( tablet ) {
@@ -51,7 +51,7 @@
 		}
 	}
 
-	.wp-block-newspack-blocks-donate__thanks {
+	.thanks {
 		color: $color__text-light;
 		font-size: $font__size-sm;
 		margin: 0.38rem 0.76rem 0.76rem;
@@ -64,7 +64,7 @@
 }
 
 .wpbnbd.tiered {
-	.wp-block-newspack-blocks-donate__tiers {
+	.tiers {
 		margin: 0.38rem;
 		display: none;
 		flex-wrap: wrap;
@@ -74,7 +74,7 @@
 			margin: 1.12rem 1.12rem 0.38rem;
 		}
 
-		.tier-select-label {
+		.tier-label {
 			border: 1px solid $color__border;
 			border-radius: 5px;
 			margin: 0.38rem;
@@ -86,14 +86,15 @@
 		}
 
 		input[type='radio']:checked {
-			+ .tier-select-label {
+			+ .tier-label {
 				background-color: $color__primary;
 				border-color: transparent;
 				color: $color__background-body;
 			}
 		}
 
-		.other-donate-label {
+		// other-donate-label
+		.odl {
 			font-weight: bold;
 			left: 0.38rem;
 			position: absolute;
@@ -101,13 +102,14 @@
 		}
 
 		input.other-input {
-			~ .wp-block-newspack-blocks-donate__money-input,
-			~ .other-donate-label {
+			~ .money-input,
+			// other-donate-label
+			~ .odl {
 				display: none;
 			}
 
-			&:checked ~ .wp-block-newspack-blocks-donate__money-input,
-			&:checked ~ .other-donate-label {
+			&:checked ~ .money-input,
+			&:checked ~ .other-label {
 				display: block;
 			}
 
@@ -117,7 +119,7 @@
 		}
 	}
 
-	.wp-block-newspack-blocks-donate__money-input {
+	.money-input {
 		bottom: 0.38rem;
 		left: 0.38rem;
 		position: absolute;
@@ -134,7 +136,7 @@
 		padding-top: calc( 0.76rem + 1.28em + 1px );
 	}
 
-	.donation-frequency-label {
+	.freq-label {
 		font-size: $font__size-sm;
 	}
 
@@ -157,7 +159,7 @@
 	}
 }
 
-.wp-block-newspack-blocks-donate__money-input {
+.wpbnbd .money-input {
 	position: relative;
 	max-width: 200px;
 	background-color: $color__background-input;
@@ -191,7 +193,7 @@
 	}
 }
 
-.wp-block-newspack-blocks-donate__frequencies {
+.wpbnbd .frequencies {
 	font-size: $font__size-sm;
 	padding-top: 7.65em;
 	padding-top: calc( 3 * ( 0.76rem + 1.6em + 1px ) );
@@ -203,8 +205,8 @@
 	}
 }
 
-.wp-block-newspack-blocks-donate__frequency {
-	.donation-frequency-label {
+.wpbnbd .frequency {
+	.freq-label {
 		align-items: center;
 		border: 0 solid $color__border;
 		border-width: 0 0 1px;
@@ -215,12 +217,14 @@
 		width: 100%;
 
 		&::before {
-			background-image: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%23767676' /%3E%3C/svg%3E" );
+			border: 2px solid currentColor;
+			border-radius: 100%;
 			content: '';
 			display: block;
-			height: 24px;
+			height: 20px;
+			padding: 3px;
 			margin-right: 0.25rem;
-			width: 24px;
+			width: 20px;
 		}
 
 		@include media( tablet ) {
@@ -234,11 +238,12 @@
 	}
 
 	input[type='radio']:checked {
-		+ .donation-frequency-label {
+		+ .freq-label {
 			color: inherit;
 
 			&::before {
-				background-image: url( "data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' height='24' viewBox='0 0 24 24' width='24'%3E%3Cpath d='M12 7c-2.76 0-5 2.24-5 5s2.24 5 5 5 5-2.24 5-5-2.24-5-5-5zm0-5C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8z' fill='%23111'/%3E%3C/svg%3E" );
+				background: $color__text-main;
+				background-clip: content-box;
 			}
 
 			@include media( tablet ) {
@@ -250,12 +255,12 @@
 			}
 		}
 
-		~ .wp-block-newspack-blocks-donate__tiers {
+		~ .tiers {
 			display: flex;
 		}
 	}
 
-	&:nth-of-type( 2 ) .donation-frequency-label {
+	&:nth-of-type( 2 ) .freq-label {
 		top: calc( 0.76rem + 1.6em + 1px );
 
 		@include media( tablet ) {
@@ -266,7 +271,7 @@
 		}
 	}
 
-	&:nth-of-type( 3 ) .donation-frequency-label {
+	&:nth-of-type( 3 ) .freq-label {
 		top: calc( 2 * ( 0.76rem + 1.6em + 1px ) );
 
 		@include media( tablet ) {

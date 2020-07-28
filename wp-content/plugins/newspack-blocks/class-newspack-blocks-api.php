@@ -276,6 +276,31 @@ class Newspack_Blocks_API {
 	}
 
 	/**
+	 * Register specific posts endpoint.
+	 */
+	public static function register_post_lookup_endpoint() {
+		if ( ! Newspack_Blocks::use_experimental() ) {
+			return;
+		}
+		register_rest_route(
+			'newspack-blocks/v1',
+			'/specific-posts',
+			[
+				'methods'  => \WP_REST_Server::READABLE,
+				'callback' => [ 'Newspack_Blocks_API', 'specific_posts_endpoint' ],
+				'args'     => [
+					'search'   => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'per_page' => [
+						'sanitize_callback' => 'absint',
+					],
+				],
+			]
+		);
+	}
+
+	/**
 	 * Process requests to the video-playlist endpoint.
 	 *
 	 * @param WP_REST_Request $request Request object.
@@ -284,6 +309,54 @@ class Newspack_Blocks_API {
 	public static function video_playlist_endpoint( $request ) {
 		$args = $request->get_params();
 		return new \WP_REST_Response( newspack_blocks_get_video_playlist( $args ), 200 );
+	}
+
+	/**
+	 * Lookup individual posts by title only.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response.
+	 */
+	public static function specific_posts_endpoint( $request ) {
+		$params = $request->get_params();
+		if ( empty( $params['search'] ) ) {
+			return new \WP_REST_Response( [] );
+		}
+		add_filter( 'posts_where', [ 'Newspack_Blocks_API', 'add_post_title_wildcard_search' ], 10, 2 );
+
+		$args = [
+			'post_type'             => 'post',
+			'post_status'           => 'publish',
+			'title_wildcard_search' => esc_sql( $params['search'] ),
+			'posts_per_page'        => $params['per_page'],
+		];
+
+		$query = new WP_Query( $args );
+		remove_filter( 'posts_where', [ 'Newspack_Blocks_API', 'add_post_title_wildcard_search' ], 10, 2 );
+		return new \WP_REST_Response(
+			array_map(
+				function( $post ) {
+					return [
+						'id'    => $post->ID,
+						'title' => $post->post_title,
+					];
+				},
+				$query->posts
+			),
+			200
+		);
+	}
+
+	/**
+	 * Add title wildcard search to post lookup query.
+	 *
+	 * @param String   $where Where clause.
+	 * @param WP_Query $query The query.
+	 */
+	public static function add_post_title_wildcard_search( $where, $query ) {
+		$search = ! empty( $query->query['title_wildcard_search'] ) ? $query->query['title_wildcard_search'] : null;
+		$where .= ' AND post_title LIKE "%' . $search . '%" ';
+		return $where;
 	}
 
 	/**
@@ -315,4 +388,5 @@ class Newspack_Blocks_API {
 
 add_action( 'rest_api_init', array( 'Newspack_Blocks_API', 'register_rest_fields' ) );
 add_action( 'rest_api_init', array( 'Newspack_Blocks_API', 'register_video_playlist_endpoint' ) );
+add_action( 'rest_api_init', array( 'Newspack_Blocks_API', 'register_post_lookup_endpoint' ) );
 add_filter( 'rest_post_query', array( 'Newspack_Blocks_API', 'post_meta_request_params' ), 10, 2 );

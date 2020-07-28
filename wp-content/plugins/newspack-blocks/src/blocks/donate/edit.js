@@ -158,7 +158,10 @@ class Edit extends Component {
 				<form>
 					<div className="wp-block-newspack-blocks-donate__options">
 						{ Object.keys( frequencies ).map( frequencySlug => (
-							<div className="wp-block-newspack-blocks-donate__frequency" key={ frequencySlug }>
+							<div
+								className="wp-block-newspack-blocks-donate__frequency frequency"
+								key={ frequencySlug }
+							>
 								<input
 									type="radio"
 									onClick={ () => this.setState( { selectedFrequency: frequencySlug } ) }
@@ -168,7 +171,7 @@ class Edit extends Component {
 								/>
 								<label
 									htmlFor={ 'newspack-donate-' + frequencySlug + '-' + uid }
-									className="donation-frequency-label"
+									className="donation-frequency-label freq-label"
 								>
 									{ frequencies[ frequencySlug ] }
 								</label>
@@ -179,7 +182,7 @@ class Edit extends Component {
 									>
 										{ __( 'Donation amount', 'newspack-blocks' ) }
 									</label>
-									<div className="wp-block-newspack-blocks-donate__money-input">
+									<div className="wp-block-newspack-blocks-donate__money-input money-input">
 										<span className="currency">{ currencySymbol }</span>
 										<input
 											type="number"
@@ -194,7 +197,7 @@ class Edit extends Component {
 							</div>
 						) ) }
 					</div>
-					<p className="wp-block-newspack-blocks-donate__thanks">
+					<p className="wp-block-newspack-blocks-donate__thanks thanks">
 						{ __( 'Your contribution is appreciated.', 'newspack-blocks' ) }
 					</p>
 					<button type="submit" onClick={ evt => evt.preventDefault() }>
@@ -231,9 +234,12 @@ class Edit extends Component {
 			<div className={ classNames( className, 'tiered wpbnbd' ) }>
 				<form>
 					<div className="wp-block-newspack-blocks-donate__options">
-						<div className="wp-block-newspack-blocks-donate__frequencies">
+						<div className="wp-block-newspack-blocks-donate__frequencies frequencies">
 							{ Object.keys( frequencies ).map( frequencySlug => (
-								<div className="wp-block-newspack-blocks-donate__frequency" key={ frequencySlug }>
+								<div
+									className="wp-block-newspack-blocks-donate__frequency frequency"
+									key={ frequencySlug }
+								>
 									<input
 										type="radio"
 										onClick={ () => this.setState( { selectedFrequency: frequencySlug } ) }
@@ -243,12 +249,12 @@ class Edit extends Component {
 									/>
 									<label
 										htmlFor={ 'newspack-donate-' + frequencySlug + '-' + uid }
-										className="donation-frequency-label"
+										className="donation-frequency-label freq-label"
 									>
 										{ frequencies[ frequencySlug ] }
 									</label>
 
-									<div className="wp-block-newspack-blocks-donate__tiers">
+									<div className="wp-block-newspack-blocks-donate__tiers tiers">
 										{ suggestedAmounts.map( ( suggestedAmount, index ) => (
 											<div className="wp-block-newspack-blocks-donate__tier" key={ index }>
 												<input
@@ -258,7 +264,7 @@ class Edit extends Component {
 													checked={ index === activeTier }
 												/>
 												<label
-													className="tier-select-label"
+													className="tier-select-label tier-label"
 													htmlFor={ 'newspack-tier-' + frequencySlug + '-' + uid + '-' + index }
 												>
 													{ this.formatCurrency(
@@ -279,18 +285,18 @@ class Edit extends Component {
 												checked={ 'other' === activeTier }
 											/>
 											<label
-												className="tier-select-label"
+												className="tier-select-label tier-label"
 												htmlFor={ 'newspack-tier-' + frequencySlug + '-' + uid + '-other' }
 											>
 												{ __( 'Other', 'newspack-blocks' ) }
 											</label>
 											<label
-												className="other-donate-label"
+												className="other-donate-label odl"
 												htmlFor={ 'newspack-tier-' + frequencySlug + '-' + uid + '-other-input' }
 											>
 												{ __( 'Donation amount', 'newspack-blocks' ) }
 											</label>
-											<div className="wp-block-newspack-blocks-donate__money-input">
+											<div className="wp-block-newspack-blocks-donate__money-input money-input">
 												<span className="currency">{ currencySymbol }</span>
 												<input
 													type="number"
@@ -305,7 +311,7 @@ class Edit extends Component {
 							) ) }
 						</div>
 					</div>
-					<p className="wp-block-newspack-blocks-donate__thanks">
+					<p className="wp-block-newspack-blocks-donate__thanks thanks">
 						{ __( 'Your contribution is appreciated.', 'newspack-blocks' ) }
 					</p>
 					<button type="submit" onClick={ evt => evt.preventDefault() }>

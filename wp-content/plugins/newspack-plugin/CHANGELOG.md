@@ -1,3 +1,10 @@
+# [1.15.0](https://github.com/Automattic/newspack-plugin/compare/v1.14.2...v1.15.0) (2020-07-28)
+
+
+### Features
+
+* **analytics:** report category as custom dimension ([#600](https://github.com/Automattic/newspack-plugin/issues/600)) ([762c70d](https://github.com/Automattic/newspack-plugin/commit/762c70d455e9fac5e0e9761c4995b18bc712b04a)), closes [#588](https://github.com/Automattic/newspack-plugin/issues/588)
+
 ## [1.14.2](https://github.com/Automattic/newspack-plugin/compare/v1.14.1...v1.14.2) (2020-07-23)
 
 

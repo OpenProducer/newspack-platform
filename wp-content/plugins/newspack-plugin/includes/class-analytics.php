@@ -33,6 +33,7 @@ class Analytics {
 	 */
 	public function __construct() {
 		add_filter( 'googlesitekit_amp_gtag_opt', [ __CLASS__, 'inject_amp_events' ] );
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'handle_category_reporting' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'inject_non_amp_events' ] );
 		add_filter( 'render_block', [ __CLASS__, 'prepare_blocks_for_events' ], 10, 2 );
 		add_action( 'newspack_campaigns_before_campaign_render', [ __CLASS__, 'set_campaign_render_context' ], 10, 1 );
@@ -43,6 +44,50 @@ class Analytics {
 		add_action( 'woocommerce_login_form_end', [ __CLASS__, 'prepare_login_events' ] );
 		add_action( 'woocommerce_register_form_end', [ __CLASS__, 'prepare_registration_events' ] );
 		add_action( 'woocommerce_after_checkout_registration_form', [ __CLASS__, 'prepare_checkout_registration_events' ] );
+	}
+
+	/**
+	 * Tell Site Kit to report the article's category as custom dimension of index 1.
+	 * More about custom dimensions:
+	 * https://support.google.com/analytics/answer/2709828.
+	 */
+	public static function handle_category_reporting() {
+		$category_dimension_id = get_option( Analytics_Wizard::$category_dimension_option_name );
+		if ( ! $category_dimension_id ) {
+			return;
+		}
+		// Remove `ga:` prefix.
+		$category_dimension_id = substr( $category_dimension_id, 3 );
+
+		$categories = get_the_category();
+		if ( ! empty( $categories ) ) {
+			$categories_slugs = implode(
+				',',
+				array_map(
+					function( $cat ) {
+						return $cat->slug;
+					},
+					$categories
+				)
+			);
+			// Non-AMP.
+			add_filter(
+				'googlesitekit_gtag_opt',
+				function ( $gtag_opt ) use ( $categories_slugs, $category_dimension_id ) {
+					$gtag_opt[ $category_dimension_id ] = $categories_slugs;
+					return $gtag_opt;
+				}
+			);
+			// AMP.
+			add_filter(
+				'googlesitekit_amp_gtag_opt',
+				function ( $gtag_amp_opt ) use ( $categories_slugs, $category_dimension_id ) {
+					$tracking_id = $gtag_amp_opt['vars']['gtag_id'];
+					$gtag_amp_opt['vars']['config'][ $tracking_id ][ $category_dimension_id ] = $categories_slugs;
+					return $gtag_amp_opt;
+				}
+			);
+		}
 	}
 
 	/**
