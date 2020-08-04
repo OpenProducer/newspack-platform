@@ -3,7 +3,8 @@
   "description": "Newsletter authoring plugin.",
   "type": "wordpress-plugin",
   "require": {
-    "drewm/mailchimp-api": "^2.5"
+    "drewm/mailchimp-api": "^2.5",
+    "constantcontact/constantcontact": "2.1.*"
   },
   "require-dev": {
     "automattic/vipwpcs": "^2.0",

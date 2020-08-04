@@ -4,6 +4,7 @@
 .wp-block-newspack-blocks-carousel {
 	position: relative;
 	margin-top: 0;
+
 	article {
 		max-width: 100%;
 		padding: 0;
@@ -11,9 +12,8 @@
 		margin-bottom: 0;
 		word-break: break-word;
 		overflow-wrap: break-word;
-
 		a {
-			color: inherit;
+			color: #fff;
 
 			&:active,
 			&:focus,
@@ -59,12 +59,12 @@
 			right: 0;
 		}
 		.entry-meta {
-			color: inherit;
+			color: #fff;
 			margin-bottom: 0;
 			font-size: 0.8em;
 
 			a {
-				color: inherit;
+				color: #fff;
 				font-weight: bold;
 				text-decoration: none;
 
@@ -211,7 +211,7 @@
 	.entry-title {
 		margin: 0 0 0.25em;
 		a {
-			color: inherit;
+			color: #fff;
 			text-decoration: none;
 		}
 	}
@@ -227,7 +227,7 @@
 		}
 	}
 	.cat-links {
-		color: inherit;
+		color: #fff;
 		font-size: 0.6em;
 		font-weight: bold;
 		margin: 0 0 0.5em;

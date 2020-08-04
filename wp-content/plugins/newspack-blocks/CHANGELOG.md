@@ -1,3 +1,10 @@
+## [1.10.1](https://github.com/Automattic/newspack-blocks/compare/v1.10.0...v1.10.1) (2020-08-04)
+
+
+### Bug Fixes
+
+* make sure Post Carousel text colors aren't overridden ([#553](https://github.com/Automattic/newspack-blocks/issues/553)) ([4b246fe](https://github.com/Automattic/newspack-blocks/commit/4b246fe11b2c1159cb041a3fecb99e79ce8c711a))
+
 # [1.10.0](https://github.com/Automattic/newspack-blocks/compare/v1.9.1...v1.10.0) (2020-07-28)
 
 

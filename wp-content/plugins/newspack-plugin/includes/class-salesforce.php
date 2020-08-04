@@ -141,55 +141,72 @@ class Salesforce {
 	 * Ensures that the data only contains valid Salesforce field names.
 	 *
 	 * @param $array $data Raw data to parse.
-	 * @return @array Parsed data.
+	 * @return @array|bool Parsed data, or false.
 	 */
 	public static function parse_wc_order_data( $data ) {
-		$fields_to_update = [];
+		$contact = [];
+		$orders  = [];
 
-		// We need billing info from the order before we can do anything.
-		if ( empty( $data['billing'] ) ) {
-			return $fields_to_update;
+		// We need billing and transaction info from the order before we can do anything.
+		if ( empty( $data['billing'] ) || empty( $data['line_items'] ) ) {
+			return false;
 		}
 
-		// Parse billing info from WooCommerce.
-		if ( ! empty( $data['billing']['email'] ) ) {
-			$fields_to_update['Email'] = $data['billing']['email'];
-		}
-		if ( ! empty( $data['billing']['first_name'] ) ) {
-			$fields_to_update['FirstName'] = $data['billing']['first_name'];
-		}
-		if ( ! empty( $data['billing']['last_name'] ) ) {
-			$fields_to_update['LastName'] = $data['billing']['last_name'];
-		}
-		if ( ! empty( $data['billing']['phone'] ) ) {
-			$fields_to_update['HomePhone'] = $data['billing']['phone'];
-		}
-		if ( ! empty( $data['billing']['address_1'] ) ) {
-			$fields_to_update['MailingStreet'] = $data['billing']['address_1'];
-		}
-		if ( ! empty( $data['billing']['address_2'] ) ) {
-			$fields_to_update['MailingStreet'] .= "\n" . $data['billing']['address_2'];
-		}
-		if ( ! empty( $data['billing']['city'] ) ) {
-			$fields_to_update['MailingCity'] = $data['billing']['city'];
-		}
-		if ( ! empty( $data['billing']['state'] ) ) {
-			$fields_to_update['MailingState'] = $data['billing']['state'];
-		}
-		if ( ! empty( $data['billing']['postcode'] ) ) {
-			$fields_to_update['MailingPostalCode'] = $data['billing']['postcode'];
-		}
-		if ( ! empty( $data['line_items'] ) ) {
-			$donation_date = $data['date_created_gmt'];
-			$donation_info = $data['line_items'][0];
+		$billing          = $data['billing'];
+		$transactions     = $data['line_items'];
+		$transaction_date = $data['date_created_gmt'];
 
-			$fields_to_update['Description'] = 'Transaction: ' . $donation_info['name'] . ' on ' . $donation_date . ' with subtotal ' . $donation_info['subtotal'] . ' and total ' . $donation_info['total'];
+		// Parse billing contact info from WooCommerce.
+		if ( ! empty( $billing['email'] ) ) {
+			$contact['Email'] = $billing['email'];
+		}
+		if ( ! empty( $billing['first_name'] ) ) {
+			$contact['FirstName'] = $billing['first_name'];
+		}
+		if ( ! empty( $billing['last_name'] ) ) {
+			$contact['LastName'] = $billing['last_name'];
+		}
+		if ( ! empty( $billing['phone'] ) ) {
+			$contact['HomePhone'] = $billing['phone'];
+		}
+		if ( ! empty( $billing['address_1'] ) ) {
+			$contact['MailingStreet'] = $billing['address_1'];
+		}
+		if ( ! empty( $billing['address_2'] ) ) {
+			$contact['MailingStreet'] .= "\n" . $billing['address_2'];
+		}
+		if ( ! empty( $billing['city'] ) ) {
+			$contact['MailingCity'] = $billing['city'];
+		}
+		if ( ! empty( $billing['state'] ) ) {
+			$contact['MailingState'] = $billing['state'];
+		}
+		if ( ! empty( $billing['postcode'] ) ) {
+			$contact['MailingPostalCode'] = $billing['postcode'];
+		}
+		if ( ! empty( $billing['country'] ) ) {
+			$contact['MailingCountry'] = $billing['country'];
 		}
 		if ( 0 === $data['meta_data'][0]['mailchimp_woocommerce_is_subscribed'] ) {
-			$fields_to_update['HasOptedOutOfEmail'] = true;
+			$contact['HasOptedOutOfEmail'] = true;
 		}
 
-		return $fields_to_update;
+		if ( is_array( $transactions ) ) {
+			foreach ( $transactions as $transaction ) {
+				$orders[] = [
+					'Amount'      => $transaction['total'],
+					'CloseDate'   => $transaction_date,
+					'Description' => 'WooCommerce Order Number: ' . $data['id'],
+					'Name'        => $transaction['name'],
+					'StageName'   => 'New',
+				];
+			}
+		}
+
+		return [
+			'contact' => $contact,
+			'orders'  => $orders,
+		];
 	}
 
 	/**
@@ -285,6 +302,93 @@ class Salesforce {
 		$url                 = $salesforce_settings['instance_url'] . '/services/data/v48.0/sobjects/Contact/';
 
 		// Create contact record via Salesforce API, using cached access_token.
+		$response = wp_safe_remote_post(
+			$url,
+			[
+				'headers' => [
+					'Authorization' => 'Bearer ' . $salesforce_settings['access_token'],
+					'Content-Type'  => 'application/json',
+				],
+				'body'    => wp_json_encode( $data ),
+			]
+		);
+
+		// If our access token has expired, refresh it and re-send the request.
+		if ( wp_remote_retrieve_response_code( $response ) === 401 ) {
+			$access_token = self::refresh_salesforce_token();
+			$response     = wp_safe_remote_post(
+				$url,
+				[
+					'headers' => [
+						'Authorization' => 'Bearer ' . $access_token,
+						'Content-Type'  => 'application/json',
+					],
+					'body'    => wp_json_encode( $data ),
+				]
+			);
+		}
+
+		return json_decode( $response['body'] );
+	}
+
+	/**
+	 * Create a new opportunity record in Salesforce.
+	 *
+	 * @param array $data Data to use in creating the new opportunity. Keys must be valid Salesforce field names.
+	 * @return array Response from Salesforce API.
+	 */
+	public static function create_opportunity( $data ) {
+		$salesforce_settings = self::get_salesforce_settings();
+		$url                 = $salesforce_settings['instance_url'] . '/services/data/v48.0/sobjects/Opportunity/';
+
+		// Create opportunity record via Salesforce API, using cached access_token.
+		$response = wp_safe_remote_post(
+			$url,
+			[
+				'headers' => [
+					'Authorization' => 'Bearer ' . $salesforce_settings['access_token'],
+					'Content-Type'  => 'application/json',
+				],
+				'body'    => wp_json_encode( $data ),
+			]
+		);
+
+		// If our access token has expired, refresh it and re-send the request.
+		if ( wp_remote_retrieve_response_code( $response ) === 401 ) {
+			$access_token = self::refresh_salesforce_token();
+			$response     = wp_safe_remote_post(
+				$url,
+				[
+					'headers' => [
+						'Authorization' => 'Bearer ' . $access_token,
+						'Content-Type'  => 'application/json',
+					],
+					'body'    => wp_json_encode( $data ),
+				]
+			);
+		}
+
+		return json_decode( $response['body'] );
+	}
+
+	/**
+	 * Create a new opportunity contact role record in Salesforce.
+	 * This intermediate object type creates a relationship between the given contact and opportunity.
+	 *
+	 * @param string $opportunity_id Unique ID for the opportunity to link.
+	 * @param string $contact_id Unique ID for the contact to link.
+	 * @return array Response from Salesforce API.
+	 */
+	public static function create_opportunity_contact_role( $opportunity_id, $contact_id ) {
+		$salesforce_settings = self::get_salesforce_settings();
+		$url                 = $salesforce_settings['instance_url'] . '/services/data/v48.0/sobjects/OpportunityContactRole/';
+		$data                = [
+			'ContactId'     => $contact_id,
+			'IsPrimary'     => true,
+			'OpportunityId' => $opportunity_id,
+		];
+
+		// Create opportunity contact role record via Salesforce API, using cached access_token.
 		$response = wp_safe_remote_post(
 			$url,
 			[

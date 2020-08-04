@@ -1,3 +1,16 @@
+# [1.5.0](https://github.com/Automattic/newspack-ads/compare/v1.4.2...v1.5.0) (2020-08-04)
+
+
+### Bug Fixes
+
+* add 'supports' to block to prevent Gutenberg 8.6.0 notice ([3651cb8](https://github.com/Automattic/newspack-ads/commit/3651cb865cc1932ea9b842dec45bec309a05d1ca))
+* dont show ads on viewports smaller than smallest ad size ([f726214](https://github.com/Automattic/newspack-ads/commit/f726214e1e229d389853f1a1daf782c266fc0bc4))
+
+
+### Features
+
+* automatic responsive ad handling in non-AMP mode ([7d4719e](https://github.com/Automattic/newspack-ads/commit/7d4719e1b394e53ecc02774f2dd077eba96a6e2b))
+
 ## [1.4.2](https://github.com/Automattic/newspack-ads/compare/v1.4.1...v1.4.2) (2020-07-22)
 
 

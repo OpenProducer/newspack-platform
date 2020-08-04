@@ -47,6 +47,7 @@ final class Newspack_Newsletters_Ads {
 	public function __construct() {
 		add_action( 'init', [ __CLASS__, 'register_ads_cpt' ] );
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
+		add_action( 'save_post_' . self::NEWSPACK_NEWSLETTERS_ADS_CPT, [ __CLASS__, 'ad_default_fields' ], 10, 3 );
 		add_action( 'admin_menu', [ __CLASS__, 'add_ads_page' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
 	}
@@ -62,6 +63,17 @@ final class Newspack_Newsletters_Ads {
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_ADS_CPT,
 				'show_in_rest'   => true,
 				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+		\register_meta(
+			'post',
+			'position_in_content',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_ADS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'integer',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
@@ -139,5 +151,19 @@ final class Newspack_Newsletters_Ads {
 		\register_post_type( self::NEWSPACK_NEWSLETTERS_ADS_CPT, $cpt_args );
 	}
 
+	/**
+	 * Set default fields when Ad is created.
+	 *
+	 * @param int     $post_id ID of post being saved.
+	 * @param WP_POST $post The post being saved.
+	 * @param bool    $update True if this is an update, false if a newly created post.
+	 */
+	public static function ad_default_fields( $post_id, $post, $update ) {
+		// Set meta only if this is a newly created post.
+		if ( $update ) {
+			return;
+		}
+		update_post_meta( $post_id, 'position_in_content', 100 );
+	}
 }
 Newspack_Newsletters_Ads::instance();

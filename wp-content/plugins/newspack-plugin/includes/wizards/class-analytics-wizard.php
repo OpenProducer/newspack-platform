@@ -223,6 +223,20 @@ class Analytics_Wizard extends Wizard {
 					return new WP_Error( 'newspack_analytics_sitekit_authentication', __( 'Please authenticate with the Site Kit plugin.', 'newspack' ) );
 				}
 
+				// A user might have authenticated with Site Kit before this version of the plugin,
+				// which updated authorization scopes, was deployed.
+				$unsatisfied_scopes = $authentication->get_oauth_client()->get_unsatisfied_scopes();
+				if ( 0 !== count( $unsatisfied_scopes ) ) {
+					return new WP_Error(
+						'newspack_analytics_sitekit_unsatisfied_scopes',
+						__( 'Please re-authorize', 'newspack' ) .
+						' <a href="' . get_admin_url() . 'admin.php?page=googlesitekit-dashboard">' .
+						__( 'Site Kit plugin', 'newspack' ) .
+						'</a> ' .
+						__( 'to allow updating Google Analytics settings.', 'newspack' ) 
+					);
+				}
+
 				$client = $authentication->get_oauth_client()->get_client();
 
 				return [
@@ -246,10 +260,14 @@ class Analytics_Wizard extends Wizard {
 		if ( is_wp_error( $ga_utils ) ) {
 			return $ga_utils;
 		}
-		$custom_dimensions = $ga_utils['analytics_service']->management_customDimensions->listManagementCustomDimensions(
-			$ga_utils['settings']['accountID'],
-			$ga_utils['settings']['propertyID']
-		);
+		try {
+			$custom_dimensions = $ga_utils['analytics_service']->management_customDimensions->listManagementCustomDimensions(
+				$ga_utils['settings']['accountID'],
+				$ga_utils['settings']['propertyID']
+			);
+		} catch ( \Throwable $e ) {
+			return new WP_Error( 'newspack_analytics', __( 'Error retrieving custom dimensions.', 'newspack' ) );
+		}
 		if ( isset( $custom_dimensions['items'] ) ) {
 			$option_name = self::$category_dimension_option_name;
 			return array_map(

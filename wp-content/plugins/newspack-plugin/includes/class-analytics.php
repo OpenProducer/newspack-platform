@@ -47,7 +47,7 @@ class Analytics {
 	}
 
 	/**
-	 * Tell Site Kit to report the article's category as custom dimension of index 1.
+	 * Tell Site Kit to report the article's category as custom dimension.
 	 * More about custom dimensions:
 	 * https://support.google.com/analytics/answer/2709828.
 	 */

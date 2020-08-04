@@ -208,11 +208,42 @@ class Newspack_Ads_Blocks {
 					for ( var target_key in ad_unit['targeting'] ) {
 						defined_ad_units[ container_id ].setTargeting( target_key, ad_unit['targeting'][ target_key ] );
 					}
+
+					/** 
+					 * Configure responsive ads.
+					 * Ads wider than the viewport should not show.
+					 */
+
+					// Get all of the unique ad widths.
+					var unique_widths = {};
+					ad_unit['sizes'].forEach( function( size ) {
+						unique_widths[ size[0] ] = [];
+					} );
+
+					// For each width, get all of the sizes equal-to-or-smaller than it. 
+					for ( width in unique_widths ) {
+						ad_unit['sizes'].forEach( function( size ) {
+							if ( size[0] <= width ) {
+								unique_widths[ width ].push( size );
+							}
+						} );
+					}
+
+					// Build and set the responsive mapping.
+					// @see https://developers.google.com/doubleclick-gpt/guides/ad-sizes#responsive_ads
+					var mapping = googletag.sizeMapping();
+					for ( width in unique_widths ) {
+						mapping.addSize( [ parseInt( width ), 0 ], unique_widths[ width ] );
+					}
+					// On viewports smaller than the smallest ad size, don't show any ads.
+					mapping.addSize( [0, 0], [] );
+					defined_ad_units[ container_id ].defineSizeMapping( mapping.build() );
 				}
 
 				if ( ad_config['disable_initial_load'] ) {
 					googletag.pubads().disableInitialLoad();
 				}
+				googletag.pubads().collapseEmptyDivs();
 				googletag.pubads().enableSingleRequest();
 				googletag.pubads().enableLazyLoad( {
 					fetchMarginPercent: 500,   // Fetch slots within 5 viewports.

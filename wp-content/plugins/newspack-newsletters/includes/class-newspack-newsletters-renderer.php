@@ -33,6 +33,13 @@ final class Newspack_Newsletters_Renderer {
 	protected static $font_body = null;
 
 	/**
+	 * Ads to insert.
+	 *
+	 * @var Array
+	 */
+	protected static $ads_to_insert = [];
+
+	/**
 	 * Convert a list to HTML attributes.
 	 *
 	 * @param array $attributes Array of attributes.
@@ -562,6 +569,55 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
+	 * Get total length of newsletter's content.
+	 *
+	 * @param array $blocks Array of post blocks.
+	 * @return number Total length of the newsletter content.
+	 */
+	private static function get_total_newsletter_character_length( $blocks ) {
+		return array_reduce(
+			$blocks,
+			function( $length, $block ) {
+				if ( 'newspack-newsletters/posts-inserter' === $block['blockName'] ) {
+					$length += self::get_total_newsletter_character_length( $block['attrs']['innerBlocksToInsert'] );
+				} elseif ( isset( $block['innerBlocks'] ) && count( $block['innerBlocks'] ) ) {
+					$length += self::get_total_newsletter_character_length( $block['innerBlocks'] );
+				} else {
+					$length += strlen( wp_strip_all_tags( $block['innerHTML'] ) );
+				}
+				return $length;
+			},
+			0
+		);
+	}
+
+	/**
+	 * Insert ads in a piece of markup.
+	 *
+	 * @param string $markup The markup.
+	 * @param number $current_position Current position, as character offset.
+	 * @return string Markup with ads inserted.
+	 */
+	private static function insert_ads( $markup, $current_position ) {
+		foreach ( self::$ads_to_insert as &$ad_to_insert ) {
+			if (
+				! $ad_to_insert['is_inserted'] &&
+				(
+					// If ad is at 100%, insert it only in the last pass, which appends ads to the bottom of the newsletter.
+					// Otherwise, such ad might end up right before the last block because of the `>=` check below.
+					1 === $ad_to_insert['percentage']
+						? INF === $current_position
+						: $current_position >= $ad_to_insert['precise_position']
+				)
+			) {
+				$markup                     .= $ad_to_insert['markup'];
+				$ad_to_insert['is_inserted'] = true;
+			}
+		}
+		return $markup;
+	}
+
+	/**
 	 * Convert a WP post to MJML components.
 	 *
 	 * @param WP_Post $post The post.
@@ -578,38 +634,78 @@ final class Newspack_Newsletters_Renderer {
 		if ( ! in_array( self::$font_body, Newspack_Newsletters::$supported_fonts ) ) {
 			self::$font_body = 'Georgia';
 		}
-		$blocks = parse_blocks( $post->post_content );
-		$body   = '';
-		foreach ( $blocks as $block ) {
-			$block_content = self::render_mjml_component( $block );
-			if ( ! empty( $block_content ) ) {
-				$body .= $block_content;
-			}
-		}
 
-		// Insert any ads.
-		if ( $include_ads ) {
-			$ads_query  = new WP_Query(
+		$body         = '';
+		$valid_blocks = array_filter(
+			parse_blocks( $post->post_content ),
+			function ( $block ) {
+				return null !== $block['blockName'];
+			}
+		);
+		$total_length = self::get_total_newsletter_character_length( $valid_blocks );
+
+		// Gather ads.
+		if ( $include_ads && ! get_post_meta( $post->ID, 'diable_ads', true ) ) {
+			$ads_query = new WP_Query(
 				array(
 					'post_type'      => Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
 					'posts_per_page' => -1,
 				)
 			);
-			$ads        = $ads_query->get_posts();
-			$ads_markup = '';
-			foreach ( $ads as $ad ) {
+
+			foreach ( $ads_query->get_posts() as $ad ) {
 				$expiry_date = new DateTime( get_post_meta( $ad->ID, 'expiry_date', true ) );
-				if ( ! $expiry_date ) {
-					$ads_markup .= self::post_to_mjml_components( $ad, false );
-				} else {
-					$now_date    = gmdate( 'Y-m-d' );
-					$expiry_date = $expiry_date->format( 'Y-m-d' );
-					if ( $expiry_date >= $now_date ) {
-						$ads_markup .= self::post_to_mjml_components( $ad, false );
-					}
+
+				// Ad is active if it has no expiry date (a peristent ad) or the date is equal to or after today.
+				if ( ! $expiry_date || $expiry_date->format( 'Y-m-d' ) >= gmdate( 'Y-m-d' ) ) {
+					$percentage            = intval( get_post_meta( $ad->ID, 'position_in_content', true ) ) / 100;
+					self::$ads_to_insert[] = [
+						'precise_position' => $total_length * $percentage,
+						'percentage'       => $percentage,
+						'markup'           => self::post_to_mjml_components( $ad, false ),
+						'is_inserted'      => false,
+					];
 				}
 			}
-			$body .= $ads_markup;
+		}
+
+		// Build MJML body and insert ads.
+		$current_position = 0;
+		foreach ( $valid_blocks as $block ) {
+			$block_content = '';
+
+			// Insert ads between top-level group blocks' inner blocks.
+			if ( 'core/group' === $block['blockName'] ) {
+				$default_attrs = [];
+				$attrs         = $block['attrs'];
+				if ( isset( $attrs['color'] ) ) {
+					$default_attrs['color'] = $attrs['color'];
+				}
+				$mjml_markup = '<mj-wrapper ' . self::array_to_attributes( $attrs ) . '>';
+				foreach ( $block['innerBlocks'] as $block ) {
+					$inner_block_content = self::render_mjml_component( $block, false, true, $default_attrs );
+					if ( $include_ads ) {
+						$current_position += strlen( wp_strip_all_tags( $inner_block_content ) );
+						$mjml_markup       = self::insert_ads( $mjml_markup, $current_position );
+					}
+					$mjml_markup .= $inner_block_content;
+				}
+				$block_content = $mjml_markup . '</mj-wrapper>';
+			} else {
+				// Insert ads between other blocks.
+				$block_content = self::render_mjml_component( $block );
+				if ( $include_ads ) {
+					$current_position += strlen( wp_strip_all_tags( $block_content ) );
+					$body              = self::insert_ads( $body, $current_position );
+				}
+			}
+
+			$body .= $block_content;
+		}
+
+		// Insert any remaining ads at the end.
+		if ( $include_ads ) {
+			$body = self::insert_ads( $body, INF );
 		}
 
 		return self::process_links( $body );
@@ -625,6 +721,7 @@ final class Newspack_Newsletters_Renderer {
 		$title            = $post->post_title; // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 		$body             = self::post_to_mjml_components( $post, true ); // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 		$background_color = get_post_meta( $post->ID, 'background_color', true );
+		$preview_text     = get_post_meta( $post->ID, 'preview_text', true );
 		if ( ! $background_color ) {
 			$background_color = '#ffffff';
 		}

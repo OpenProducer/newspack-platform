@@ -98,6 +98,9 @@
 				border: 0 !important;
 			}
 		</mj-style>
+		<?php if ( isset( $preview_text ) ): ?>
+			<mj-preview><?php echo $preview_text; ?></mj-preview>
+		<?php endif; ?>
 	</mj-head>
 	<mj-body background-color="<?php echo $background_color; ?>">
 		<?php echo $body; ?>

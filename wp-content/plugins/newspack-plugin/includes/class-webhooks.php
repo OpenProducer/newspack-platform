@@ -49,31 +49,81 @@ class Webhooks {
 	 * Webhook callback handler for syncing data to Salesforce.
 	 *
 	 * @param WP_REST_Request $request Request containing webhook.
-	 * @throws \Exception Error message.
-	 * @return WP_REST_Response with the response from Salesforce.
+	 * @return WP_REST_Response|WP_Error The response from Salesforce, or WP_Error.
 	 */
 	public function api_sync_salesforce( $request ) {
-		$args             = $request->get_params();
-		$fields_to_update = Salesforce::parse_wc_order_data( $args );
+		$args          = $request->get_params();
+		$order_details = Salesforce::parse_wc_order_data( $args );
 
-		if ( empty( $fields_to_update['Email'] ) ) {
-			return \rest_ensure_response( 'No valid email address.' );
+		if ( empty( $order_details ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_invalid_order',
+				__( 'No valid WooCommerce order data.', 'newspack' )
+			);
 		}
 
-		$contacts = Salesforce::get_contacts_by_email( $fields_to_update['Email'] );
+		$contact       = $order_details['contact'];
+		$orders        = $order_details['orders'];
+		$opportunities = [];
+
+		if ( empty( $contact ) || empty( $orders ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_invalid_contact_or_transaction',
+				__( 'No valid transaction or contact data.', 'newspack' )
+			);
+		}
+
+		if ( empty( $contact['Email'] ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_invalid_contact_email',
+				__( 'No valid contact email address.', 'newspack' )
+			);
+		}
+
+		$contacts = Salesforce::get_contacts_by_email( $contact['Email'] );
+
+		if ( empty( $contacts ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_invalid_salesforce_lookup',
+				__( 'Could not communicate with Salesforce.', 'newspack' )
+			);
+		}
 
 		if ( $contacts->totalSize > 0 ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			// Update existing contact.
-			if ( ! empty( $contacts->records[0]->Description && ! empty( $fields_to_update['Description'] ) ) ) {
-				$fields_to_update['Description'] .= "\n" . $contacts->records[0]->Description; // Update line items.
-			}
-			$response = Salesforce::update_contact( $contacts->records[0]->Id, $fields_to_update );
+			$contact_id       = $contacts->records[0]->Id;
+			$contact_response = Salesforce::update_contact( $contact_id, $contact );
 		} else {
 			// Create new contact.
-			$response = Salesforce::create_contact( $fields_to_update );
+			$contact_response = Salesforce::create_contact( $contact );
+			$contact_id       = $contact_response->id;
 		}
 
-		return \rest_ensure_response( $response );
+		if ( empty( $contact_id ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_sync_failure',
+				__( 'Could not create or update Salesforce data.', 'newspack' )
+			);
+		}
+
+		// Sync WooCommerce orders to Salesforce opportunities.
+		if ( is_array( $orders ) ) {
+			foreach ( $orders as $order ) {
+				$opportunity_response = Salesforce::create_opportunity( $order );
+				$opportunity_id       = $opportunity_response->id;
+
+				if ( ! empty( $opportunity_id ) ) {
+					$opportunities[] = $opportunity_response;
+					Salesforce::create_opportunity_contact_role( $opportunity_id, $contact_id );
+				}
+			}
+		}
+
+		return \rest_ensure_response(
+			[
+				'contact'       => $contact_response,
+				'opportunities' => $opportunities,
+			]
+		);
 	}
 }
 

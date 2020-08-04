@@ -105,7 +105,7 @@ export const Styling = compose( [
 		apiFetch( {
 			data: { key, value },
 			method: 'POST',
-			path: `/newspack-newsletters/v1/styling/${ postId }`,
+			path: `/newspack-newsletters/v1/post-meta/${ postId }`,
 		} );
 	};
 

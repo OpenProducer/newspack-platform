@@ -1,4 +1,9 @@
 /**
+ * External dependencies
+ */
+import classnames from 'classnames';
+
+/**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
@@ -7,10 +12,15 @@ import { compose } from '@wordpress/compose';
 import { Fragment } from '@wordpress/element';
 import { PluginDocumentSettingPanel, PluginPrePublishPanel } from '@wordpress/edit-post';
 import { registerPlugin } from '@wordpress/plugins';
-import { DatePicker, Notice, Button } from '@wordpress/components';
+import { DatePicker, BaseControl, Notice, Button, RangeControl } from '@wordpress/components';
 import { format, isInTheFuture } from '@wordpress/date';
 
-const AdEdit = ( { expiryDate, editPost } ) => {
+/**
+ * Internal dependencies
+ */
+import './style.scss';
+
+const AdEdit = ( { expiryDate, positionInContent, editPost } ) => {
 	let noticeProps;
 	if ( expiryDate ) {
 		const formattedExpiryDate = format( 'M j Y', expiryDate );
@@ -30,24 +40,39 @@ const AdEdit = ( { expiryDate, editPost } ) => {
 		<Fragment>
 			<PluginDocumentSettingPanel
 				name="newsletters-ads-settings-panel"
-				title={ __( 'Expiry date', 'newspack-newsletters' ) }
+				title={ __( 'Ad settings', 'newspack-newsletters' ) }
 			>
-				<DatePicker
-					currentDate={ expiryDate }
-					onChange={ expiry_date => editPost( { meta: { expiry_date } } ) }
+				<RangeControl
+					label={ __( 'Approximate position (in percent)' ) }
+					value={ positionInContent }
+					onChange={ position_in_content => editPost( { meta: { position_in_content } } ) }
+					min={ 0 }
+					max={ 100 }
 				/>
-				{ expiryDate ? (
-					<div style={ { textAlign: 'center' } }>
-						<Button
-							isSecondary
-							isLink
-							isDestructive
-							onClick={ () => editPost( { meta: { expiry_date: null } } ) }
-						>
-							{ __( 'Remove expiry date', 'newspack-newsletters' ) }
-						</Button>
-					</div>
-				) : null }
+				{ /* eslint-disable-next-line @wordpress/no-base-control-with-label-without-id */ }
+				<BaseControl
+					className={ classnames( 'newspack-newsletters__date-picker', {
+						'newspack-newsletters__date-picker--has-no-date': ! expiryDate,
+					} ) }
+					label={ __( 'Expiration Date', 'newspack-newsletters' ) }
+				>
+					<DatePicker
+						currentDate={ expiryDate }
+						onChange={ expiry_date => editPost( { meta: { expiry_date } } ) }
+					/>
+					{ expiryDate ? (
+						<div style={ { textAlign: 'center' } }>
+							<Button
+								isSecondary
+								isLink
+								isDestructive
+								onClick={ () => editPost( { meta: { expiry_date: null } } ) }
+							>
+								{ __( 'Remove expiry date', 'newspack-newsletters' ) }
+							</Button>
+						</div>
+					) : null }
+				</BaseControl>
 			</PluginDocumentSettingPanel>
 			{ noticeProps ? (
 				<PluginPrePublishPanel>
@@ -62,7 +87,7 @@ const AdEditWithSelect = compose( [
 	withSelect( select => {
 		const { getEditedPostAttribute } = select( 'core/editor' );
 		const meta = getEditedPostAttribute( 'meta' );
-		return { expiryDate: meta.expiry_date };
+		return { expiryDate: meta.expiry_date, positionInContent: meta.position_in_content };
 	} ),
 	withDispatch( dispatch => {
 		const { editPost } = dispatch( 'core/editor' );

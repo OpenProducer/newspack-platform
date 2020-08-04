@@ -1,3 +1,12 @@
+# [1.7.0](https://github.com/Automattic/newspack-newsletters/compare/v1.6.0...v1.7.0) (2020-08-04)
+
+
+### Features
+
+* add infrastructure for constant contact support ([f08ee75](https://github.com/Automattic/newspack-newsletters/commit/f08ee751aa4beb549e71b7f8d17d31d5312b2ebf))
+* add preview text option ([#276](https://github.com/Automattic/newspack-newsletters/issues/276)) ([3ea6b30](https://github.com/Automattic/newspack-newsletters/commit/3ea6b302711755ac4f7fdc11d15ccaae9ca8a364))
+* **ads:** handle setting ad position ([#260](https://github.com/Automattic/newspack-newsletters/issues/260)) ([7ad92dc](https://github.com/Automattic/newspack-newsletters/commit/7ad92dc9e21b705a9eb3e186cab70581c8f7bc5f)), closes [#237](https://github.com/Automattic/newspack-newsletters/issues/237)
+
 # [1.6.0](https://github.com/Automattic/newspack-newsletters/compare/v1.5.0...v1.6.0) (2020-07-22)
 
 

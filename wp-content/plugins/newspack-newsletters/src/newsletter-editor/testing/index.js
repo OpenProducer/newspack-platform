@@ -29,10 +29,14 @@ export default compose( [
 ] )( ( { apiFetchWithErrorHandling, inFlight, postId, savePost, setInFlightForAsync } ) => {
 	const [ testEmail, setTestEmail ] = useState( '' );
 	const sendTestEmail = async () => {
+		const serviceProvider =
+			window &&
+			window.newspack_newsletters_data &&
+			window.newspack_newsletters_data.service_provider;
 		setInFlightForAsync();
 		await savePost();
 		const params = {
-			path: `/newspack-newsletters/v1/mailchimp/${ postId }/test`,
+			path: `/newspack-newsletters/v1/${ serviceProvider }/${ postId }/test`,
 			data: {
 				test_email: testEmail,
 			},

@@ -73,6 +73,9 @@ final class Newspack_Newsletters {
 			case 'mailchimp':
 				self::$provider = Newspack_Newsletters_Mailchimp::instance();
 				break;
+			case 'constant_contact':
+				self::$provider = Newspack_Newsletters_Constant_Contact::instance();
+				break;
 		}
 
 		$needs_nag = is_admin() &&
@@ -93,6 +96,17 @@ final class Newspack_Newsletters {
 		\register_meta(
 			'post',
 			'mc_campaign_id',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+		\register_meta(
+			'post',
+			'cc_campaign_id',
 			[
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
 				'show_in_rest'   => true,
@@ -152,6 +166,28 @@ final class Newspack_Newsletters {
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
 				'show_in_rest'   => true,
 				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+		\register_meta(
+			'post',
+			'preview_text',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+		\register_meta(
+			'post',
+			'diable_ads',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'boolean',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
@@ -271,10 +307,10 @@ final class Newspack_Newsletters {
 		);
 		\register_rest_route(
 			'newspack-newsletters/v1',
-			'styling/(?P<id>[\a-z]+)',
+			'post-meta/(?P<id>[\a-z]+)',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_set_styling' ],
+				'callback'            => [ __CLASS__, 'api_set_post_meta' ],
 				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
 				'args'                => [
 					'id'    => [
@@ -282,11 +318,10 @@ final class Newspack_Newsletters {
 						'sanitize_callback' => 'absint',
 					],
 					'key'   => [
-						'validate_callback' => [ __CLASS__, 'validate_newsletter_styling_key' ],
+						'validate_callback' => [ __CLASS__, 'validate_newsletter_post_meta_key' ],
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 					'value' => [
-						'validate_callback' => [ __CLASS__, 'validate_newsletter_styling_value' ],
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
@@ -316,19 +351,20 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Set styling meta.
+	 * Set post meta.
 	 * The save_post action fires before post meta is updated.
 	 * This causes newsletters to be synced to the ESP before recent changes to custom fields have been recorded,
-	 * which leads to incorrect rendering. This is addressed through custom endpoints to update the styling fields
+	 * which leads to incorrect rendering. This is addressed through custom endpoints to update the  fields
 	 * as soon as they are changed in the editor, so that the changes are available the next time sync to ESP occurs.
 	 *
 	 * @param WP_REST_Request $request API request object.
 	 */
-	public static function api_set_styling( $request ) {
+	public static function api_set_post_meta( $request ) {
 		$id    = $request['id'];
 		$key   = $request['key'];
 		$value = $request['value'];
 		update_post_meta( $id, $key, $value );
+		return [];
 	}
 
 	/**
@@ -341,31 +377,21 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Validate styling key.
+	 * Validate meta key.
 	 *
 	 * @param String $key Meta key.
 	 */
-	public static function validate_newsletter_styling_key( $key ) {
+	public static function validate_newsletter_post_meta_key( $key ) {
 		return in_array(
 			$key,
 			[
 				'font_header',
 				'font_body',
 				'background_color',
+				'preview_text',
+				'diable_ads',
 			]
 		);
-	}
-
-	/**
-	 * Validate styling value (font name or hex color).
-	 *
-	 * @param String $key Meta value.
-	 */
-	public static function validate_newsletter_styling_value( $key ) {
-		return in_array(
-			$key,
-			self::$supported_fonts
-		) || preg_match( '/^#[a-f0-9]{6}$/', $key );
 	}
 
 	/**
@@ -618,6 +644,15 @@ final class Newspack_Newsletters {
 	 * @return string Name of the Email Service Provider.
 	 */
 	public static function service_provider() {
+		// TODO: UI for user input of API key in keys modal and settings page.
+		if (
+			defined( 'NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_API_KEY' ) &&
+			defined( 'NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_ACCESS_TOKEN' ) &&
+			NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_API_KEY &&
+			NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_ACCESS_TOKEN
+		) {
+			return 'constant_contact';
+		}
 		return 'mailchimp'; // For now, Mailchimp is the only choice.
 	}
 }

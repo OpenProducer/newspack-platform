@@ -1,3 +1,31 @@
+## [1.16.2](https://github.com/Automattic/newspack-plugin/compare/v1.16.1...v1.16.2) (2020-08-04)
+
+
+### Bug Fixes
+
+* prevent vendor contents exclusion in zip ([#619](https://github.com/Automattic/newspack-plugin/issues/619)) ([c8d6e35](https://github.com/Automattic/newspack-plugin/commit/c8d6e355d335388416910f0eca0d222edadad603))
+
+## [1.16.1](https://github.com/Automattic/newspack-plugin/compare/v1.16.0...v1.16.1) (2020-08-04)
+
+
+### Bug Fixes
+
+* revert setting version in release zip file name ([d8e421b](https://github.com/Automattic/newspack-plugin/commit/d8e421bfae03cb15cb566e04536c058353fac952))
+
+# [1.16.0](https://github.com/Automattic/newspack-plugin/compare/v1.15.0...v1.16.0) (2020-08-04)
+
+
+### Bug Fixes
+
+* dont output uninstalled managed plugins in WP CLI ([66a050e](https://github.com/Automattic/newspack-plugin/commit/66a050e206d012d2399a83f9e2bda2a3bcd08fca))
+* empty space in three-column wizard grid ([#612](https://github.com/Automattic/newspack-plugin/issues/612)) ([61ef44a](https://github.com/Automattic/newspack-plugin/commit/61ef44a8cdb79d2bc298a85ff94800f44a6d404d))
+* site kit connection error handling ([#606](https://github.com/Automattic/newspack-plugin/issues/606)) ([13ad3ae](https://github.com/Automattic/newspack-plugin/commit/13ad3ae7833d747ff981bd24fe5cb29ee75246b0))
+
+
+### Features
+
+* sync country code of WooCommerce order to Salesforce ([#608](https://github.com/Automattic/newspack-plugin/issues/608)) ([c92c5d8](https://github.com/Automattic/newspack-plugin/commit/c92c5d8180645b234faf3d58f140b543ef35e63f))
+
 # [1.15.0](https://github.com/Automattic/newspack-plugin/compare/v1.14.2...v1.15.0) (2020-07-28)
 
 

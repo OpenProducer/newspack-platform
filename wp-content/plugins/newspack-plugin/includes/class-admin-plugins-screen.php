@@ -33,6 +33,11 @@ class Admin_Plugins_Screen {
 	 * @return array Modified $plugins.
 	 */
 	public function inject_managed_plugins( $plugins ) {
+		// Don't add managed plugins to the plugins list when using WP CLI.
+		if ( ( defined( 'WP_CLI' ) && WP_CLI ) ) {
+			return $plugins;
+		}
+
 		$managed_plugins   = Plugin_Manager::get_managed_plugins();
 		$installed_plugins = Plugin_Manager::get_installed_plugins();
 

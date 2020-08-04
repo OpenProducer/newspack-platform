@@ -70,6 +70,7 @@ function newspack_ads_register_ad_unit() {
 				),
 			),
 			'render_callback' => 'newspack_ads_render_block_ad_unit',
+			'supports'        => [],
 		)
 	);
 }

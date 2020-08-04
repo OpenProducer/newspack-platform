@@ -2104,3 +2104,6 @@ a.newspack-button {
 #newspack-newsletters-ads-admin .newspack-action-card__secondary_button {
   cursor: pointer; }
 
+.newspack-newsletters__modal .components-button + .components-button {
+  margin-left: 12px; }
+
