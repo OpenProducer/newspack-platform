@@ -206,7 +206,7 @@ class Actions {
 			return false;
 		}
 
-		if ( ( new Status() )->is_development_mode() ) {
+		if ( ( new Status() )->is_offline_mode() ) {
 			return false;
 		}
 
@@ -329,7 +329,6 @@ class Actions {
 		$rpc = new \Jetpack_IXR_Client(
 			array(
 				'url'     => $url,
-				'user_id' => Jetpack_Connection::JETPACK_MASTER_USER,
 				'timeout' => $query_args['timeout'],
 			)
 		);

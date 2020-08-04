@@ -3,7 +3,7 @@ Contributors: matveb, joen, karmatosed
 Requires at least: 5.3.0
 Tested up to: 5.4
 Requires PHP: 5.6
-Stable tag: 8.5.1
+Stable tag: 8.6.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,4 +57,4 @@ View <a href="https://developer.wordpress.org/block-editor/principles/versions-i
 
 == Changelog ==
 
-To read the changelog for Gutenberg 8.6.0, please navigate to the <a href="https://github.com/WordPress/gutenberg/releases/tag/v8.6.0">release page</a>.
+To read the changelog for Gutenberg 8.6.1, please navigate to the <a href="https://github.com/WordPress/gutenberg/releases/tag/v8.6.1">release page</a>.
