@@ -115,6 +115,15 @@ class Plugin_Manager {
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=instant-articles-wizard',
 			],
+			'distributor'                   => [
+				'Name'        => 'Distributor',
+				'Description' => 'Makes it easy to distribute and reuse content across your websites, whether inside of a multisite or across the web.',
+				'Author'      => '10up Inc.',
+				'AuthorURI'   => 'https://distributorplugin.com/',
+				'PluginURI'   => 'https://distributorplugin.com/',
+				'Download'    => 'https://github.com/10up/distributor/releases/latest/download/distributor.zip',
+				'EditPath'    => 'admin.php?page=pull',
+			],
 			'google-site-kit'               => [
 				'Name'        => 'Google Site Kit',
 				'Description' => 'Site Kit is is a one-stop solution for WordPress users to use everything Google has to offer to make them successful on the web.',
@@ -236,6 +245,14 @@ class Plugin_Manager {
 				'PluginURI'   => 'https://newspack.blog',
 				'AuthorURI'   => 'https://automattic.com',
 				'Download'    => 'https://github.com/Automattic/newspack-popups/releases/latest/download/newspack-popups.zip',
+			],
+			'newspack-sponsors'             => [
+				'Name'        => 'Newspack Sponsors',
+				'Description' => 'Sponsored and underwritten content for Newspack sites.',
+				'Author'      => 'Automattic',
+				'PluginURI'   => 'https://newspack.blog',
+				'AuthorURI'   => 'https://automattic.com',
+				'Download'    => 'https://github.com/Automattic/newspack-sponsors/releases/latest/download/newspack-sponsors.zip',
 			],
 			'newspack-rename-comments'      => [
 				'Name'        => 'Newspack Rename Comments',
@@ -381,17 +398,30 @@ class Plugin_Manager {
 			'woocommerce-one-page-checkout' => [
 				'Name'        => __( 'WooCommerce One Page Checkout', 'newspack' ),
 				'Description' => esc_html__( 'Super fast sales with WooCommerce. Add to cart, checkout & pay all on the one page!', 'newspack' ),
-				'Author'      => 'Prospress Inc.',
+				'Author'      => 'WooCommerce',
 				'PluginURI'   => 'https://woocommerce.com/products/woocommerce-one-page-checkout/',
-				'AuthorURI'   => 'https://prospress.com/',
+				'AuthorURI'   => 'https://woocommerce.com/',
 			],
 			'woocommerce-subscriptions'     => [
 				'Name'        => __( 'WooCommerce Subscriptions', 'newspack' ),
 				'Description' => esc_html__( 'An eCommerce toolkit that helps you sell anything. Beautifully.', 'newspack' ),
-				'Author'      => 'Prospress Inc.',
+				'Author'      => 'WooCommerce',
 				'PluginURI'   => 'https://woocommerce.com/products/woocommerce-subscriptions/',
-				'AuthorURI'   => 'https://prospress.com',
-
+				'AuthorURI'   => 'https://woocommerce.com/',
+			],
+			'automatewoo'                   => [
+				'Name'        => 'AutomateWoo',
+				'Description' => esc_html__( 'Convert and retain customers with automated marketing that does the hard work for you.', 'newspack' ),
+				'Author'      => 'WooCommerce',
+				'PluginURI'   => 'https://woocommerce.com/products/woocommerce-subscriptions/',
+				'AuthorURI'   => 'https://woocommerce.com/',
+			],
+			'automatewoo-refer-a-friend'    => [
+				'Name'        => __( 'AutomateWoo - Refer A Friend', 'newspack' ),
+				'Description' => esc_html__( 'Boost your organic sales by adding a customer referral program to your WooCommerce store.', 'newspack' ),
+				'Author'      => 'WooCommerce',
+				'PluginURI'   => 'https://woocommerce.com/products/automatewoo-refer-a-friend/',
+				'AuthorURI'   => 'https://woocommerce.com/',
 			],
 			'wordpress-seo'                 => [
 				'Name'        => 'Yoast SEO',
@@ -401,10 +431,26 @@ class Plugin_Manager {
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=wpseo_dashboard',
 			],
+			'wordpress-seo-premium'         => [
+				'Name'  => 'Yoast SEO Premium',
+				'Quiet' => true,
+			],
+			'wpseo-news'                    => [
+				'Name'  => 'Yoast SEO: News',
+				'Quiet' => true,
+			],
 			'wordpress-settings-discussion' => [
 				'Name'     => 'Wordpress Commenting',
 				'WPCore'   => true,
 				'EditPath' => 'options-discussion.php',
+			],
+			'wp-gdpr-cookie-notice'         => [
+				'Name'        => 'WP GDPR Cookie Notice',
+				'Description' => esc_html__( 'Simple performant cookie consent notice that supports AMP, granular cookie control and live preview customization.', 'newspack' ),
+				'Author'      => 'Felix Arntz',
+				'AuthorURI'   => 'https://felix-arntz.me/',
+				'PluginURI'   => 'https://wordpress.org/plugins/wp-gdpr-cookie-notice/',
+				'Download'    => 'wporg',
 			],
 			'wp-user-avatar'                => [
 				'Name'        => 'WP User Avatar',

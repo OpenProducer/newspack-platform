@@ -117,6 +117,17 @@ final class Newspack_Newsletters_Renderer {
 		if ( isset( $block_attrs['customColor'] ) ) {
 			$colors['border-color'] = $block_attrs['customColor'];
 		}
+
+		// Custom color handling.
+		if ( isset( $block_attrs['style'] ) ) {
+			if ( isset( $block_attrs['style']['color']['background'] ) ) {
+				$colors['background-color'] = $block_attrs['style']['color']['background'];
+			}
+			if ( isset( $block_attrs['style']['color']['text'] ) ) {
+				$colors['color'] = $block_attrs['style']['color']['text'];
+			}
+		}
+
 		return $colors;
 	}
 
@@ -134,15 +145,6 @@ final class Newspack_Newsletters_Renderer {
 		$font_size = self::get_font_size( $attrs );
 		if ( isset( $font_size ) ) {
 			$attrs['font-size'] = $font_size;
-		}
-
-		if ( isset( $attrs['style'] ) ) {
-			if ( isset( $attrs['style']['color']['background'] ) ) {
-				$attrs['background-color'] = $attrs['style']['color']['background'];
-			}
-			if ( isset( $attrs['style']['color']['text'] ) ) {
-				$attrs['color'] = $attrs['style']['color']['text'];
-			}
 		}
 
 		// Remove block-only attributes.
@@ -165,7 +167,7 @@ final class Newspack_Newsletters_Renderer {
 		}
 
 		if ( isset( $attrs['full-width'] ) && 'full-width' == $attrs['full-width'] && isset( $attrs['background-color'] ) ) {
-			$attrs['padding'] = '20px 0';
+			$attrs['padding'] = '12px 0';
 		}
 
 		return $attrs;
@@ -228,7 +230,7 @@ final class Newspack_Newsletters_Renderer {
 		// Default attributes for the column which will envelop the component.
 		$column_attrs = array_merge(
 			array(
-				'padding' => '20px',
+				'padding' => '12px',
 			)
 		);
 
@@ -625,16 +627,6 @@ final class Newspack_Newsletters_Renderer {
 	 * @return string MJML markup to be injected into the template.
 	 */
 	private static function post_to_mjml_components( $post, $include_ads ) {
-		self::$color_palette = json_decode( get_option( 'newspack_newsletters_color_palette', false ), true );
-		self::$font_header   = get_post_meta( $post->ID, 'font_header', true );
-		self::$font_body     = get_post_meta( $post->ID, 'font_body', true );
-		if ( ! in_array( self::$font_header, Newspack_Newsletters::$supported_fonts ) ) {
-			self::$font_header = 'Arial';
-		}
-		if ( ! in_array( self::$font_body, Newspack_Newsletters::$supported_fonts ) ) {
-			self::$font_body = 'Georgia';
-		}
-
 		$body         = '';
 		$valid_blocks = array_filter(
 			parse_blocks( $post->post_content ),
@@ -677,7 +669,7 @@ final class Newspack_Newsletters_Renderer {
 			// Insert ads between top-level group blocks' inner blocks.
 			if ( 'core/group' === $block['blockName'] ) {
 				$default_attrs = [];
-				$attrs         = $block['attrs'];
+				$attrs         = self::process_attributes( $block['attrs'] );
 				if ( isset( $attrs['color'] ) ) {
 					$default_attrs['color'] = $attrs['color'];
 				}
@@ -718,6 +710,16 @@ final class Newspack_Newsletters_Renderer {
 	 * @return string MJML markup.
 	 */
 	private static function render_mjml( $post ) {
+		self::$color_palette = json_decode( get_option( 'newspack_newsletters_color_palette', false ), true );
+		self::$font_header   = get_post_meta( $post->ID, 'font_header', true );
+		self::$font_body     = get_post_meta( $post->ID, 'font_body', true );
+		if ( ! in_array( self::$font_header, Newspack_Newsletters::$supported_fonts ) ) {
+			self::$font_header = 'Arial';
+		}
+		if ( ! in_array( self::$font_body, Newspack_Newsletters::$supported_fonts ) ) {
+			self::$font_body = 'Georgia';
+		}
+
 		$title            = $post->post_title; // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 		$body             = self::post_to_mjml_components( $post, true ); // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 		$background_color = get_post_meta( $post->ID, 'background_color', true );

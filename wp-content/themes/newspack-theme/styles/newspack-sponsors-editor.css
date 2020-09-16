@@ -1,0 +1,32 @@
+/* If we add the border using a regular CSS border, it won't look good on non-retina devices,
+ * since its edges can look jagged due to lack of antialiasing. In this case, we are several
+ * layers of box-shadow to add the border visually, which will render the border smoother. */
+/* Calculates maximum width for post content */
+/* Nested sub-menu padding: 10 levels deep */
+.sponsor-label {
+  align-items: center;
+  display: flex;
+}
+
+.sponsor-label .flag {
+  background: #fed850;
+  color: #111;
+  line-height: 1;
+  padding: 0.3em 0.5em;
+  text-transform: uppercase;
+}
+
+.sponsor-logos {
+  align-items: center;
+  display: inline-flex;
+  line-height: 1;
+}
+
+.sponsor-logos img {
+  margin-right: 0.75rem;
+}
+
+.wpnbha .sponsor-logos {
+  margin: 0.125rem 0 0.25rem;
+  width: 100%;
+}

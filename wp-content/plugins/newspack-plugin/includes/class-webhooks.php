@@ -39,8 +39,9 @@ class Webhooks {
 			NEWSPACK_API_NAMESPACE,
 			'/salesforce/sync',
 			[
-				'methods'  => \WP_REST_Server::EDITABLE,
-				'callback' => [ $this, 'api_sync_salesforce' ],
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_sync_salesforce' ],
+				'permission_callback' => '__return_true',
 			]
 		);
 	}

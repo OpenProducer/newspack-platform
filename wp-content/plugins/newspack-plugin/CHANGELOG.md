@@ -1,3 +1,63 @@
+# [1.21.0](https://github.com/Automattic/newspack-plugin/compare/v1.20.0...v1.21.0) (2020-09-15)
+
+
+### Bug Fixes
+
+* ignore Yoast weight limit to prevent missing og:image tags ([#666](https://github.com/Automattic/newspack-plugin/issues/666)) ([8d8bdaa](https://github.com/Automattic/newspack-plugin/commit/8d8bdaa9259926511079a3a7c11ceacbf50f5058))
+* override site kit _gl query param behavior ([37500f5](https://github.com/Automattic/newspack-plugin/commit/37500f5542372e73913f8c7d91fcf17e884d76aa))
+* select-related layouts ([483de25](https://github.com/Automattic/newspack-plugin/commit/483de25ecf91eb1d0cea2f299b9a6a61e340f1ad))
+
+
+### Features
+
+* add author, word count, publish date custom dimensions ([#655](https://github.com/Automattic/newspack-plugin/issues/655)) ([7f8662d](https://github.com/Automattic/newspack-plugin/commit/7f8662df5e75278295269626f6fe998a66572a96))
+* **analytics:** report User ID ([e1c26d0](https://github.com/Automattic/newspack-plugin/commit/e1c26d07f470e15a9ccd80a55de80fbd05d046ee))
+
+# [1.20.0](https://github.com/Automattic/newspack-plugin/compare/v1.19.0...v1.20.0) (2020-09-08)
+
+
+### Features
+
+* add support wizard to dashboard ([#650](https://github.com/Automattic/newspack-plugin/issues/650)) ([87ac1dd](https://github.com/Automattic/newspack-plugin/commit/87ac1dd88d05ccb92713edc930a84e7a1f7a8b1b))
+* append categories, tags data to WC order; sync w/ SF ([c357155](https://github.com/Automattic/newspack-plugin/commit/c3571556d5d5baec0980721249f6390470bab8e7))
+
+# [1.19.0](https://github.com/Automattic/newspack-plugin/compare/v1.18.0...v1.19.0) (2020-08-25)
+
+
+### Features
+
+* "quiet" support for yoast premium and yoast news ([0b04912](https://github.com/Automattic/newspack-plugin/commit/0b04912dc9e387963cfe10724b4b7f370f069daf))
+* add newspack-sponsors as a managed plugin ([#641](https://github.com/Automattic/newspack-plugin/issues/641)) ([1f0f60b](https://github.com/Automattic/newspack-plugin/commit/1f0f60bc61e5375980e2a75c8d2eda70c1e8ca11))
+* add support to distributor ([#635](https://github.com/Automattic/newspack-plugin/issues/635)) ([b7e602f](https://github.com/Automattic/newspack-plugin/commit/b7e602f288d09f6d4ae3819444b49c786a4df907))
+* remove performance wizard ([#645](https://github.com/Automattic/newspack-plugin/issues/645)) ([b0774e2](https://github.com/Automattic/newspack-plugin/commit/b0774e2bfd6f0e22d51387881439a78d2a555f8b))
+
+# [1.18.0](https://github.com/Automattic/newspack-plugin/compare/v1.17.0...v1.18.0) (2020-08-18)
+
+
+### Bug Fixes
+
+* notice in analtyics wizard ([45be0ad](https://github.com/Automattic/newspack-plugin/commit/45be0ad10c58c8572685bf5e81e7332c113ae392))
+
+
+### Features
+
+* add AutomateWoo and AW Refer Friend to the list of vetted plugins ([#637](https://github.com/Automattic/newspack-plugin/issues/637)) ([018b0ff](https://github.com/Automattic/newspack-plugin/commit/018b0ffe2de29b7fb64399eacbc25b26acec2942))
+* update dashboard default view to grid ([#634](https://github.com/Automattic/newspack-plugin/issues/634)) ([77e2e2a](https://github.com/Automattic/newspack-plugin/commit/77e2e2adcb58fa18018e22a85c4cdb4f0a65f07e))
+
+# [1.17.0](https://github.com/Automattic/newspack-plugin/compare/v1.16.2...v1.17.0) (2020-08-11)
+
+
+### Bug Fixes
+
+* add permission_callback to REST route defn ([8dacf2c](https://github.com/Automattic/newspack-plugin/commit/8dacf2cc2249e603c4ea05d1f580cff5c586cad7))
+* remove un-cacheable ajax call in AMP mode from WP GDPR Cookie Notice ([#622](https://github.com/Automattic/newspack-plugin/issues/622)) ([d3be717](https://github.com/Automattic/newspack-plugin/commit/d3be71702b0c2c549ba30cde58c0c555edd3228d))
+
+
+### Features
+
+* add custom events adding UI ([#611](https://github.com/Automattic/newspack-plugin/issues/611)) ([8f4483a](https://github.com/Automattic/newspack-plugin/commit/8f4483a04bec6d090c661f6026a68fe854afd7bd)), closes [#601](https://github.com/Automattic/newspack-plugin/issues/601)
+* update updates wizard details style ([#625](https://github.com/Automattic/newspack-plugin/issues/625)) ([a22beef](https://github.com/Automattic/newspack-plugin/commit/a22beefd51b2ed8569deffb9ba6e3e0e2bc64ac0))
+
 ## [1.16.2](https://github.com/Automattic/newspack-plugin/compare/v1.16.1...v1.16.2) (2020-08-04)
 
 

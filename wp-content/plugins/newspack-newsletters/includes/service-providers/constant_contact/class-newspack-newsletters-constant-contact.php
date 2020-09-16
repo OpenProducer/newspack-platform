@@ -26,10 +26,31 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		$this->controller = new Newspack_Newsletters_Constant_Contact_Controller( $this );
 
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
-		add_action( 'publish_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'send' ], 10, 2 );
+		add_action( 'transition_post_status_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'send' ], 10, 3 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
 
 		parent::__construct( $this );
+	}
+
+	/**
+	 * Get API credentials for service provider.
+	 *
+	 * @return Object Stored API credentials for the service provider.
+	 */
+	public function api_credentials() {
+		return [
+			'api_key'      => get_option( 'newspack_newsletters_constant_contact_api_key', '' ),
+			'access_token' => get_option( 'newspack_newsletters_constant_contact_api_access_token', '' ),
+		];
+	}
+
+	/**
+	 * Check if provider has all necessary credentials set.
+	 *
+	 * @return Boolean Result.
+	 */
+	public function has_api_credentials() {
+		return ! empty( $this->api_key() ) && ! empty( $this->access_token() );
 	}
 
 	/**
@@ -38,8 +59,8 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @return String Stored API key for the service provider.
 	 */
 	public function api_key() {
-		// TODO: UI for user input of API key in keys modal and settings page.
-		return defined( 'NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_API_KEY' ) ? NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_API_KEY : null;
+		$credentials = self::api_credentials();
+		return $credentials['api_key'];
 	}
 
 	/**
@@ -48,18 +69,26 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @return String Stored Access Token key for the service provider.
 	 */
 	public function access_token() {
-		// TODO: UI for user input of access token in keys modal and settings page.
-		return defined( 'NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_ACCESS_TOKEN' ) ? NEWSPACK_NEWSLETTERS_CONSTANT_CONTACT_ACCESS_TOKEN : null;
+		$credentials = self::api_credentials();
+		return $credentials['access_token'];
 	}
 
 	/**
-	 * Set the API key for the service provider.
+	 * Set the API credentials for the service provider.
 	 *
-	 * @param string $key API key.
+	 * @param object $credentials API credentials.
 	 */
-	public function set_api_key( $key ) {
-		// TODO: UI for user input of Constant Contact API credentials.
-		return null;
+	public function set_api_credentials( $credentials ) {
+		if ( empty( $credentials['api_key'] ) || empty( $credentials['access_token'] ) ) {
+			return new WP_Error(
+				'newspack_newsletters_invalid_keys',
+				__( 'Please input Constant Contact API key and access token.', 'newspack-newsletters' )
+			);
+		} else {
+			$update_api_key      = update_option( 'newspack_newsletters_constant_contact_api_key', $credentials['api_key'] );
+			$update_access_token = update_option( 'newspack_newsletters_constant_contact_api_access_token', $credentials['access_token'] );
+			return $update_api_key && $update_access_token;
+		}
 	}
 
 	/**
@@ -138,6 +167,9 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @return object|WP_Error API Response or error.
 	 */
 	public function retrieve( $post_id ) {
+		if ( ! $this->has_api_credentials() ) {
+			return [];
+		}
 		$transient       = sprintf( 'newspack_newsletters_error_%s_%s', $post_id, get_current_user_id() );
 		$persisted_error = get_transient( $transient );
 		if ( $persisted_error ) {
@@ -335,9 +367,6 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @param boolean $update Whether this is an existing post being updated or not.
 	 */
 	public function save( $post_id, $post, $update ) {
-		if ( ! $update ) {
-			update_post_meta( $post_id, 'template_id', -1 );
-		}
 		$status = get_post_status( $post_id );
 		if ( 'trash' === $status ) {
 			return;
@@ -348,10 +377,13 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	/**
 	 * Send a campaign.
 	 *
-	 * @param integer $post_id Post ID to send.
+	 * @param string  $new_status New status of the post.
+	 * @param string  $old_status Old status of the post.
 	 * @param WP_POST $post Post to send.
 	 */
-	public function send( $post_id, $post ) {
+	public function send( $new_status, $old_status, $post ) {
+		$post_id = $post->ID;
+
 		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
 			return new WP_Error(
 				'newspack_newsletters_incorrect_post_type',
@@ -359,34 +391,36 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 			);
 		}
 
-		try {
-			$sync_result = $this->sync( $post );
+		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
+			try {
+				$sync_result = $this->sync( $post );
 
-			if ( is_wp_error( $sync_result ) ) {
-				return $sync_result;
+				if ( is_wp_error( $sync_result ) ) {
+					return $sync_result;
+				}
+
+				$cc_campaign_id = get_post_meta( $post_id, 'cc_campaign_id', true );
+				if ( ! $cc_campaign_id ) {
+					return new WP_Error(
+						'newspack_newsletters_no_campaign_id',
+						__( 'Constant Contact campaign ID not found.', 'newspack-newsletters' )
+					);
+				}
+
+				$cc       = new ConstantContact( $this->api_key() );
+				$schedule = new Schedule();
+
+				$cc->campaignScheduleService->addSchedule( $this->access_token(), $cc_campaign_id, $schedule ); //phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			} catch ( CtctException $e ) {
+				$wp_error  = $this->manage_ctct_exception( $e );
+				$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
+				set_transient( $transient, implode( ' ', $wp_error->get_error_messages() ), 45 );
+				return $wp_error;
+			} catch ( Exception $e ) {
+				$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
+				set_transient( $transient, $e->getMessage(), 45 );
+				return;
 			}
-
-			$cc_campaign_id = get_post_meta( $post_id, 'cc_campaign_id', true );
-			if ( ! $cc_campaign_id ) {
-				return new WP_Error(
-					'newspack_newsletters_no_campaign_id',
-					__( 'Constant Contact campaign ID not found.', 'newspack-newsletters' )
-				);
-			}
-
-			$cc       = new ConstantContact( $this->api_key() );
-			$schedule = new Schedule();
-
-			$cc->campaignScheduleService->addSchedule( $this->access_token(), $cc_campaign_id, $schedule ); //phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		} catch ( CtctException $e ) {
-			$wp_error  = $this->manage_ctct_exception( $e );
-			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-			set_transient( $transient, implode( ' ', $wp_error->get_error_messages() ), 45 );
-			return $wp_error;
-		} catch ( Exception $e ) {
-			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-			set_transient( $transient, $e->getMessage(), 45 );
-			return;
 		}
 	}
 

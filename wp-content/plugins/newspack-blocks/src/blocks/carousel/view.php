@@ -87,33 +87,41 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 				</figure>
 				<div class="entry-wrapper">
 
+				<?php if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) : ?>
+					<span class="cat-links sponsor-label">
+						<span class="flag">
+							<?php echo esc_html( Newspack_Blocks::get_sponsor_label( get_the_id() ) ); ?>
+						</span>
+					</span>
 					<?php
-					$category = false;
+					else :
+						$category = false;
 
-					// Use Yoast primary category if set.
-					if ( class_exists( 'WPSEO_Primary_Term' ) ) {
-						$primary_term = new WPSEO_Primary_Term( 'category', get_the_ID() );
-						$category_id  = $primary_term->get_primary_term();
-						if ( $category_id ) {
-							$category = get_term( $category_id );
+						// Use Yoast primary category if set.
+						if ( class_exists( 'WPSEO_Primary_Term' ) ) {
+							$primary_term = new WPSEO_Primary_Term( 'category', get_the_ID() );
+							$category_id  = $primary_term->get_primary_term();
+							if ( $category_id ) {
+								$category = get_term( $category_id );
+							}
 						}
-					}
 
-					if ( ! $category ) {
-						$categories_list = get_the_category();
-						if ( ! empty( $categories_list ) ) {
-							$category = $categories_list[0];
+						if ( ! $category ) {
+							$categories_list = get_the_category();
+							if ( ! empty( $categories_list ) ) {
+								$category = $categories_list[0];
+							}
 						}
-					}
 
-					if ( $attributes['showCategory'] && $category ) :
-						?>
-						<div class="cat-links">
-							<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>">
-								<?php echo esc_html( $category->name ); ?>
-							</a>
-						</div>
-						<?php
+						if ( $attributes['showCategory'] && $category ) :
+							?>
+							<div class="cat-links">
+								<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>">
+									<?php echo esc_html( $category->name ); ?>
+								</a>
+							</div>
+							<?php
+						endif;
 					endif;
 					?>
 
@@ -122,31 +130,69 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 					?>
 
 					<div class="entry-meta">
-						<?php if ( $attributes['showAuthor'] ) : ?>
-							<?php
-							if ( $attributes['showAvatar'] ) {
-								echo get_avatar( get_the_author_meta( 'ID' ) );
-							}
-							?>
-							<span class="byline">
-								<?php
-								printf(
-									/* translators: %s: post author. */
-									esc_html_x( 'by %s', 'post author', 'newspack-blocks' ),
-									'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
-								);
+						<?php
+						if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) :
+							$logos = Newspack_Blocks::get_sponsor_logos( get_the_id() );
+							if ( ! empty( $logos ) ) :
 								?>
-							</span><!-- .author-name -->
-							<?php
-							endif;
+							<span class="sponsor-logos">
+								<?php
+								foreach ( $logos as $logo ) {
+									if ( '' !== $logo['url'] ) {
+										echo '<a href="' . esc_url( $logo['url'] ) . '" target="_blank">';
+									}
+									echo '<img src="' . esc_url( $logo['src'] ) . '" width="' . esc_attr( $logo['width'] ) . '" height="' . esc_attr( $logo['height'] ) . '">';
+									if ( '' !== $logo['url'] ) {
+										echo '</a>';
+									}
+								}
+								?>
+							</span>
+							<?php endif; ?>
 
-							if ( $attributes['showDate'] ) :
-								printf(
-									'<time class="entry-date published" datetime="%1$s">%2$s</time>',
-									esc_attr( get_the_date( DATE_W3C ) ),
-									esc_html( get_the_date() )
-								);
+							<span class="byline sponsor-byline">
+								<?php
+								$bylines = Newspack_Blocks::get_sponsor_byline( get_the_id() );
+								echo esc_html( $bylines[0]['byline'] ) . ' ';
+								foreach ( $bylines as $byline ) {
+									echo '<span class="author">';
+									if ( '' !== $byline['url'] ) {
+										echo '<a target="_blank" href="' . esc_url( $byline['url'] ) . '">';
+									}
+									echo esc_html( $byline['name'] );
+									if ( '' !== $byline['url'] ) {
+										'</a>';
+									}
+									echo '</span>' . esc_html( $byline['sep'] );
+								}
+								?>
+							</span>
+							<?php
+						else :
+							if ( $attributes['showAuthor'] ) :
+								if ( $attributes['showAvatar'] ) {
+									echo get_avatar( get_the_author_meta( 'ID' ) );
+								}
+								?>
+								<span class="byline">
+									<?php
+									printf(
+										/* translators: %s: post author. */
+										esc_html_x( 'by %s', 'post author', 'newspack-blocks' ),
+										'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
+									);
+									?>
+								</span><!-- .author-name -->
+								<?php
 							endif;
+						endif;
+						if ( $attributes['showDate'] ) :
+							printf(
+								'<time class="entry-date published" datetime="%1$s">%2$s</time>',
+								esc_attr( get_the_date( DATE_W3C ) ),
+								esc_html( get_the_date() )
+							);
+						endif;
 						?>
 					</div><!-- .entry-meta -->
 				</div><!-- .entry-wrapper -->

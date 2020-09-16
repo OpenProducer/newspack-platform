@@ -114,20 +114,20 @@ final class Newspack_Newsletters_Editor {
 
 		if ( self::is_editing_newsletter_ad() ) {
 			\wp_enqueue_script(
-				Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_PAGE,
+				'newspack-newsletters-ads-page',
 				plugins_url( '../dist/adsEditor.js', __FILE__ ),
 				[ 'wp-components', 'wp-api-fetch' ],
 				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/adsEditor.js' ),
 				true
 			);
 			wp_register_style(
-				Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_PAGE,
+				'newspack-newsletters-ads-page',
 				plugins_url( '../dist/adsEditor.css', __FILE__ ),
 				[],
 				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/adsEditor.css' )
 			);
-			wp_style_add_data( Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_PAGE, 'rtl', 'replace' );
-			wp_enqueue_style( Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_PAGE );
+			wp_style_add_data( 'newspack-newsletters-ads-page', 'rtl', 'replace' );
+			wp_enqueue_style( 'newspack-newsletters-ads-page' );
 		}
 
 		if ( ! self::is_editing_newsletter() ) {
@@ -144,8 +144,8 @@ final class Newspack_Newsletters_Editor {
 			'newspack-newsletters',
 			'newspack_newsletters_data',
 			[
-				'has_keys'         => Newspack_Newsletters::has_keys(),
-				'service_provider' => Newspack_Newsletters::service_provider(),
+				'is_service_provider_configured' => Newspack_Newsletters::is_service_provider_configured(),
+				'service_provider'               => Newspack_Newsletters::service_provider(),
 			]
 		);
 	}
@@ -154,16 +154,14 @@ final class Newspack_Newsletters_Editor {
 	 * Is editing a newsletter?
 	 */
 	public static function is_editing_newsletter() {
-		$post_type = get_post()->post_type;
-		return Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT === $post_type;
+		return Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT === get_post_type();
 	}
 
 	/**
 	 * Is editing a newsletter ad?
 	 */
 	public static function is_editing_newsletter_ad() {
-		$post_type = get_post()->post_type;
-		return Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT === $post_type;
+		return Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT === get_post_type();
 	}
 }
 Newspack_Newsletters_Editor::instance();

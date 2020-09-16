@@ -5,6 +5,7 @@
 	margin-bottom: 1em;
 
 	article {
+		min-width: 0; // fixes column width on certain themes
 		margin-bottom: 1.5em;
 		word-break: break-word;
 		overflow-wrap: break-word;
@@ -68,7 +69,6 @@
 	}
 
 	/* Image styles */
-
 	.post-thumbnail {
 		margin: 0;
 		margin-bottom: 0.25em;
@@ -181,21 +181,6 @@
 		a {
 			color: inherit;
 			text-decoration: none;
-		}
-	}
-
-	/* Article meta */
-	.cat-links {
-		font-size: $font__size-xxs;
-		font-weight: bold;
-		margin: 0 0 0.5em;
-
-		a {
-			text-decoration: none;
-
-			&:hover {
-				text-decoration: underline;
-			}
 		}
 	}
 
@@ -367,6 +352,27 @@
 		width: auto;
 	}
 }
+
+/* stylelint-disable selector-type-no-unknown  */
+.wpnbha,
+amp-script .wpnbha {
+	/* Article meta */
+	.cat-links {
+		display: flex;
+		font-size: $font__size-xxs;
+		font-weight: bold;
+		margin: 0 0 0.5em;
+
+		a {
+			text-decoration: none;
+
+			&:hover {
+				text-decoration: underline;
+			}
+		}
+	}
+}
+/* stylelint-enable */
 
 /*
 	Some really rough font sizing.

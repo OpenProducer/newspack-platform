@@ -1,3 +1,84 @@
+## [1.11.2](https://github.com/Automattic/newspack-newsletters/compare/v1.11.1...v1.11.2) (2020-09-15)
+
+
+### Bug Fixes
+
+* handle missing provider ([121630c](https://github.com/Automattic/newspack-newsletters/commit/121630c2c94a8438166d43f7875cae8a0f461b3e))
+* increase timeout for api tag retrieval ([5b39839](https://github.com/Automattic/newspack-newsletters/commit/5b398393e4b6dc3130654cec56a8c284b752e707))
+* take MJML creds into account for settings status ([cfab93a](https://github.com/Automattic/newspack-newsletters/commit/cfab93ac6270f7beb0e59bff04478d4401ce2c9f))
+
+## [1.11.1](https://github.com/Automattic/newspack-newsletters/compare/v1.11.0...v1.11.1) (2020-09-08)
+
+
+### Bug Fixes
+
+* **posts-inserter:** remove empty category select ([1978bd5](https://github.com/Automattic/newspack-newsletters/commit/1978bd5c011793435f47b686ce73dc4c5fe29ed9))
+* harden post type checks ([14a3de2](https://github.com/Automattic/newspack-newsletters/commit/14a3de23187f1eb11008b6e9af8842a9d102934c))
+
+# [1.11.0](https://github.com/Automattic/newspack-newsletters/compare/v1.10.0...v1.11.0) (2020-09-01)
+
+
+### Bug Fixes
+
+* assorted bugfixes ([#317](https://github.com/Automattic/newspack-newsletters/issues/317)) ([01a72fb](https://github.com/Automattic/newspack-newsletters/commit/01a72fb6f418b7c46205e76536249cece7e57ff0)), closes [#300](https://github.com/Automattic/newspack-newsletters/issues/300) [#305](https://github.com/Automattic/newspack-newsletters/issues/305)
+* escaped domain ([#315](https://github.com/Automattic/newspack-newsletters/issues/315)) ([5e83e8b](https://github.com/Automattic/newspack-newsletters/commit/5e83e8b0525633e2a1f83fc7068e45f5a7ab25f3))
+* modal margin and header height ([#310](https://github.com/Automattic/newspack-newsletters/issues/310)) ([b87a768](https://github.com/Automattic/newspack-newsletters/commit/b87a7688e1185e4dba137a76d28f5cef2bbc4fee))
+
+
+### Features
+
+* add branding banner to the CPT wp-admin pages ([#316](https://github.com/Automattic/newspack-newsletters/issues/316)) ([285785c](https://github.com/Automattic/newspack-newsletters/commit/285785c7b008b1343c91d83fb0f3725cd43f3089))
+* option to specify public newsletters slug ([77656dd](https://github.com/Automattic/newspack-newsletters/commit/77656dd551ec73c211da2a6f2beb3093b01f9bd6))
+* remove Newspack UI from Ads screen ([#314](https://github.com/Automattic/newspack-newsletters/issues/314)) ([d68caa7](https://github.com/Automattic/newspack-newsletters/commit/d68caa7aee414ff68256e90a147349f1f16b4e55))
+
+# [1.10.0](https://github.com/Automattic/newspack-newsletters/compare/v1.9.0...v1.10.0) (2020-08-25)
+
+
+### Bug Fixes
+
+* reduce padding between elements in newsletter emails ([#308](https://github.com/Automattic/newspack-newsletters/issues/308)) ([4806e76](https://github.com/Automattic/newspack-newsletters/commit/4806e7615c50a22c4af92fbded6f93c7ce0fb6c5))
+
+
+### Features
+
+* update icon ([#303](https://github.com/Automattic/newspack-newsletters/issues/303)) ([53d91f0](https://github.com/Automattic/newspack-newsletters/commit/53d91f094a9d9a9f47e99b9ca60aa9503cb1f965))
+
+# [1.9.0](https://github.com/Automattic/newspack-newsletters/compare/v1.8.1...v1.9.0) (2020-08-20)
+
+
+### Bug Fixes
+
+* button custom colors ([#301](https://github.com/Automattic/newspack-newsletters/issues/301)) ([8ebcf5d](https://github.com/Automattic/newspack-newsletters/commit/8ebcf5d1d3f00b327974c78d75172fb10720b2a1))
+* first time set up flow ([c16d6bf](https://github.com/Automattic/newspack-newsletters/commit/c16d6bfe09eb8e1586a6a183a1859388e9c9abff))
+* pre-send info if no list set ([#297](https://github.com/Automattic/newspack-newsletters/issues/297)) ([f575d94](https://github.com/Automattic/newspack-newsletters/commit/f575d94d6bef04f9828f1870ee4360dc99056bdb))
+
+
+### Features
+
+* enable public newsletter posts ([#272](https://github.com/Automattic/newspack-newsletters/issues/272)) ([ef90bf9](https://github.com/Automattic/newspack-newsletters/commit/ef90bf96f8e56d06d9fd1cb47c9f136406099aa8))
+
+## [1.8.1](https://github.com/Automattic/newspack-newsletters/compare/v1.8.0...v1.8.1) (2020-08-13)
+
+
+### Bug Fixes
+
+* group block background color ([56b96ea](https://github.com/Automattic/newspack-newsletters/commit/56b96ead54c08de09f4b1d4dae64c8f7f6e37554))
+* use hex value for group background colors in default layouts ([#292](https://github.com/Automattic/newspack-newsletters/issues/292)) ([4cc9b84](https://github.com/Automattic/newspack-newsletters/commit/4cc9b841d23a9388cc1d7413f136dfb67dde0ce2))
+
+# [1.8.0](https://github.com/Automattic/newspack-newsletters/compare/v1.7.0...v1.8.0) (2020-08-11)
+
+
+### Bug Fixes
+
+* links in heading color inheritance ([6c4e4dd](https://github.com/Automattic/newspack-newsletters/commit/6c4e4dd1880a49a542ab86426f24ea2dbc36aaf1)), closes [#279](https://github.com/Automattic/newspack-newsletters/issues/279)
+* **posts-inserter:** handle excerpt ([4b92ab3](https://github.com/Automattic/newspack-newsletters/commit/4b92ab33ff3068196306ca253c726da0c70650a3)), closes [#278](https://github.com/Automattic/newspack-newsletters/issues/278)
+
+
+### Features
+
+* **posts-inserter:** font size, color options ([70f3a46](https://github.com/Automattic/newspack-newsletters/commit/70f3a462158edf90c750aae5ecfb312e30aa67fc))
+* **posts-inserter:** increase posts count cap to 20 ([c622ce4](https://github.com/Automattic/newspack-newsletters/commit/c622ce46c43744e557a6cfa304f2e59ebb0067d9)), closes [#246](https://github.com/Automattic/newspack-newsletters/issues/246)
+
 # [1.7.0](https://github.com/Automattic/newspack-newsletters/compare/v1.6.0...v1.7.0) (2020-08-04)
 
 

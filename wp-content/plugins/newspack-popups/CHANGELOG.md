@@ -1,3 +1,36 @@
+# [1.11.0](https://github.com/Automattic/newspack-popups/compare/v1.10.0...v1.11.0) (2020-09-15)
+
+
+### Bug Fixes
+
+* handle false get_transient return value ([#211](https://github.com/Automattic/newspack-popups/issues/211)) ([11c9f3b](https://github.com/Automattic/newspack-popups/commit/11c9f3b17bcc125e9a87dfce942f03194e9c5657))
+
+
+### Features
+
+* lightweight GET API for campaigns ([#208](https://github.com/Automattic/newspack-popups/issues/208)) ([3bae873](https://github.com/Automattic/newspack-popups/commit/3bae8733a17e58db779c595ea2c2c82c9beb92f4))
+
+# [1.10.0](https://github.com/Automattic/newspack-popups/compare/v1.9.4...v1.10.0) (2020-08-26)
+
+
+### Features
+
+* add interoperation features ([#201](https://github.com/Automattic/newspack-popups/issues/201)) ([7b5e941](https://github.com/Automattic/newspack-popups/commit/7b5e941975b63cc06b6a962063ad742049b11cf1))
+
+## [1.9.4](https://github.com/Automattic/newspack-popups/compare/v1.9.3...v1.9.4) (2020-08-18)
+
+
+### Bug Fixes
+
+* dismissal events as non-interaction ([164ce5f](https://github.com/Automattic/newspack-popups/commit/164ce5fb91900c670a5ced2f632d7449d11538e0))
+
+## [1.9.3](https://github.com/Automattic/newspack-popups/compare/v1.9.2...v1.9.3) (2020-08-11)
+
+
+### Bug Fixes
+
+* add permission_callback to REST route defn ([2626bb6](https://github.com/Automattic/newspack-popups/commit/2626bb6c70592fac741f0723a85f221c47782673))
+
 ## [1.9.2](https://github.com/Automattic/newspack-popups/compare/v1.9.1...v1.9.2) (2020-07-22)
 
 

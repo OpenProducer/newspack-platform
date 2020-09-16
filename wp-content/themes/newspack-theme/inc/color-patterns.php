@@ -88,10 +88,10 @@ function newspack_custom_colors_css() {
 			.mobile-sidebar a:visited,
 			.mobile-sidebar .nav1 .sub-menu > li > a,
 			.mobile-sidebar .nav1 ul.main-menu > li > a,
-			.site-header .nav1 .sub-menu a:hover,
-			.site-header .nav1 .sub-menu a:focus,
-			.site-header .nav1 .sub-menu > li.menu-item-has-children a:hover + .submenu-expand,
-			.site-header .nav1 .sub-menu > li.menu-item-has-children a:focus + .submenu-expand,
+			.site-header .dd-menu .sub-menu a:hover,
+			.site-header .dd-menu .sub-menu a:focus,
+			.site-header .dd-menu .sub-menu > li.menu-item-has-children a:hover + .submenu-expand,
+			.site-header .dd-menu .sub-menu > li.menu-item-has-children a:focus + .submenu-expand,
 			.highlight-menu .menu-label,
 			/* Header default background; default height */
 			body.h-db.h-dh .site-header .nav3 .menu-highlight a,
@@ -115,6 +115,10 @@ function newspack_custom_colors_css() {
 			.entry .entry-content .wp-block-quote:not(.is-large),
 			.entry .entry-content .wp-block-quote:not(.is-style-large) {
 				border-color: ' . esc_html( $primary_color ) . '; /* base: #0073a8; */
+			}
+
+			.sponsor-uw-info {
+				border-left-color: ' . esc_html( $primary_color ) . '; /* base: #0073a8; */
 			}
 
 			.mobile-sidebar nav + nav,
@@ -166,14 +170,14 @@ function newspack_custom_colors_css() {
 
 			/* Set primary variation background color */
 
-			.site-header .nav1 .sub-menu > li > a:hover,
-			.site-header .nav1 .sub-menu > li > a:focus,
-			.site-header .nav1 .sub-menu > li > a:hover:after,
-			.site-header .nav1 .sub-menu > li > a:focus:after,
-			.site-header .nav1 .sub-menu > li > .menu-item-link-return:hover,
-			.site-header .nav1 .sub-menu > li > .menu-item-link-return:focus,
-			.site-header .nav1 .sub-menu > li > a:not(.submenu-expand):hover,
-			.site-header .nav1 .sub-menu > li > a:not(.submenu-expand):focus,
+			.site-header .dd-menu .sub-menu > li > a:hover,
+			.site-header .dd-menu .sub-menu > li > a:focus,
+			.site-header .dd-menu .sub-menu > li > a:hover:after,
+			.site-header .dd-menu .sub-menu > li > a:focus:after,
+			.site-header .dd-menu .sub-menu > li > .menu-item-link-return:hover,
+			.site-header .dd-menu .sub-menu > li > .menu-item-link-return:focus,
+			.site-header .dd-menu .sub-menu > li > a:not(.submenu-expand):hover,
+			.site-header .dd-menu .sub-menu > li > a:not(.submenu-expand):focus,
 			.entry .entry-content .has-primary-variation-background-color,
 			.entry .entry-content *[class^="wp-block-"].has-primary-variation-background-color,
 			.entry .entry-content *[class^="wp-block-"] .has-primary-variation-background-color,
@@ -220,6 +224,14 @@ function newspack_custom_colors_css() {
 			.entry .entry-content .is-style-outline .wp-block-button__link.has-secondary-variation-color:not(:hover), /* legacy styles */
 			.entry .entry-content .wp-block-button__link.is-style-outline.has-secondary-variation-color:not(:hover){
 				color:' . esc_html( newspack_adjust_brightness( $secondary_color, -40 ) ) . '; /* base: #666 */
+			}
+
+			/* Set gradients */
+			.entry .entry-content .has-grad-1-gradient-background {
+				background-image: linear-gradient( 135deg, ' . esc_html( $primary_color ) . ' 0%, ' . esc_html( newspack_adjust_brightness( $primary_color, -40 ) ) . ' 100% );
+			}
+			.entry .entry-content .has-grad-2-gradient-background {
+				background-image: linear-gradient( 135deg, ' . esc_html( $secondary_color ) . ' 0%, ' . esc_html( newspack_adjust_brightness( $secondary_color, -40 ) ) . ' 100% );
 			}
 			';
 
@@ -443,6 +455,14 @@ function newspack_custom_colors_css() {
 		.block-editor-block-list__layout .block-editor-block-list__block .is-style-outline .wp-block-button__link.has-secondary-variation-background-color, /* legacy selector */
 		.block-editor-block-list__layout .block-editor-block-list__block .is-style-outline.wp-block-button__link.has-secondary-variation-background-color {
 			background-color: ' . esc_html( newspack_adjust_brightness( $secondary_color, -30 ) ) . ';
+		}
+
+		/* Set gradients */
+		.edit-post-visual-editor.editor-styles-wrapper .has-grad-1-gradient-background {
+			background-image: linear-gradient( 135deg, ' . esc_html( $primary_color ) . ' 0%, ' . esc_html( newspack_adjust_brightness( $primary_color, -40 ) ) . ' 100% );
+		}
+		.edit-post-visual-editor.editor-styles-wrapper .has-grad-2-gradient-background {
+			background-image: linear-gradient( 135deg, ' . esc_html( $secondary_color ) . ' 0%, ' . esc_html( newspack_adjust_brightness( $secondary_color, -40 ) ) . ' 100% );
 		}
 		';
 

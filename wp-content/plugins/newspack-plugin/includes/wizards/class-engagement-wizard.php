@@ -33,11 +33,19 @@ class Engagement_Wizard extends Wizard {
 	protected $capability = 'manage_options';
 
 	/**
+	 * The name of the option for Related Posts max age.
+	 *
+	 * @var string
+	 */
+	protected $related_posts_option = 'newspack_related_posts_max_age';
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 		add_action( 'rest_api_init', [ $this, 'register_api_endpoints' ] );
+		add_filter( 'jetpack_relatedposts_filter_date_range', [ $this, 'restrict_age_of_related_posts' ] );
 	}
 
 	/**
@@ -80,6 +88,16 @@ class Engagement_Wizard extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/related-posts-max-age',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_related_posts_max_age' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'sanitize_callback'   => 'sanitize_text_field',
+			]
+		);
 	}
 
 	/**
@@ -98,13 +116,64 @@ class Engagement_Wizard extends Wizard {
 			'wcConnected' => false,
 		);
 
-		$jetpack_status = $jetpack_configuration_manager->get_mailchimp_connection_status();
-		if ( ! is_wp_error( $jetpack_status ) ) {
-			$response['connected']   = $jetpack_status['connected'];
-			$response['connectURL']  = $jetpack_status['connectURL'];
-			$response['wcConnected'] = $wc_configuration_manager->is_active();
+		$related_posts_max_age = get_option( $this->related_posts_option, 0 );
+
+		$jetpack_mailchimp_status     = $jetpack_configuration_manager->get_mailchimp_connection_status();
+		$jetpack_related_posts_status = $jetpack_configuration_manager->is_related_posts_enabled();
+		if ( ! is_wp_error( $jetpack_mailchimp_status ) ) {
+			$response['connected']           = $jetpack_mailchimp_status['connected'];
+			$response['connectURL']          = $jetpack_mailchimp_status['connectURL'];
+			$response['wcConnected']         = $wc_configuration_manager->is_active();
+			$response['relatedPostsEnabled'] = $jetpack_related_posts_status;
+			$response['relatedPostsMaxAge']  = $related_posts_max_age;
 		}
 		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * Update the Related Posts Max Age setting.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response|WP_Error Updated value, if successful, or WP_Error.
+	 */
+	public function api_update_related_posts_max_age( $request ) {
+		$args = $request->get_params();
+
+		if ( is_numeric( $args['relatedPostsMaxAge'] ) && 0 <= $args['relatedPostsMaxAge'] ) {
+			update_option( $this->related_posts_option, $args['relatedPostsMaxAge'] );
+		} else {
+			return new WP_Error(
+				'newspack_related_posts_invalid_arg',
+				esc_html__( 'Invalid argument: max age must be a number greater than zero.', 'newspack' ),
+				[
+					'status' => 400,
+					'level'  => 'notice',
+				]
+			);
+		}
+
+		return \rest_ensure_response(
+			[
+				'relatedPostsMaxAge' => $args['relatedPostsMaxAge'],
+			]
+		);
+	}
+
+	/**
+	 * Restrict the age of related content shown by Jetpack Related Posts.
+	 *
+	 * @param array $date_range Array of start and end dates.
+	 * @return array Filtered array of start/end dates.
+	 */
+	public function restrict_age_of_related_posts( $date_range ) {
+		$related_posts_max_age = get_option( $this->related_posts_option );
+
+		if ( is_numeric( $related_posts_max_age ) && 0 < $related_posts_max_age ) {
+			$date_range['from'] = strtotime( '-' . $related_posts_max_age . ' months' );
+			$date_range['to']   = time();
+		}
+
+		return $date_range;
 	}
 
 	/**

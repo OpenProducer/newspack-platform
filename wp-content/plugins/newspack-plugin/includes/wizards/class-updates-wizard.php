@@ -55,7 +55,7 @@ class Updates_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Updates to the Newspack plugins and theme.', 'newspack' );
+		return \esc_html__( 'Updates to the Newspack plugins and theme', 'newspack' );
 	}
 
 	/**

@@ -171,6 +171,17 @@
 				visibility();
 				setting.bind( visibility );
 			} );
+			wp.customize.control( 'slideout_sidebar_side', function( control ) {
+				const visibility = function() {
+					if ( true === setting.get() ) {
+						control.container.slideDown( 180 );
+					} else {
+						control.container.slideUp( 180 );
+					}
+				};
+				visibility();
+				setting.bind( visibility );
+			} );
 		} );
 
 		// Only show Alternative Logo option if 'simple subpage header' is picked
@@ -191,6 +202,21 @@
 		// Only show Author Bio truncate options when enabled.
 		wp.customize( 'author_bio_truncate', function( setting ) {
 			wp.customize.control( 'author_bio_length', function( control ) {
+				const visibility = function() {
+					if ( true === setting.get() ) {
+						control.container.slideDown( 180 );
+					} else {
+						control.container.slideUp( 180 );
+					}
+				};
+				visibility();
+				setting.bind( visibility );
+			} );
+		} );
+
+		// Only show 'time ago' cutoff field when enabled.
+		wp.customize( 'post_time_ago', function( setting ) {
+			wp.customize.control( 'post_time_ago_cut_off', function( control ) {
 				const visibility = function() {
 					if ( true === setting.get() ) {
 						control.container.slideDown( 180 );

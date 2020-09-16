@@ -184,6 +184,33 @@ figcaption,
   position: relative;
 }
 
+/** === Homepage Posts === */
+.wpnbha article.format-aside .entry-meta > a,
+.wpnbha article.format-aside .entry-meta .byline,
+.wpnbha article.format-aside .entry-meta .author-avatar {
+  display: none;
+}
+
+.wpnbha.ts-4 article.format-aside .entry-title, .wpnbha.ts-5 article.format-aside .entry-title, .wpnbha.ts-6 article.format-aside .entry-title, .wpnbha.ts-7 article.format-aside .entry-title, .wpnbha.ts-8 article.format-aside .entry-title, .wpnbha.ts-9 article.format-aside .entry-title, .wpnbha.ts-10 article.format-aside .entry-title {
+  font-size: 1em;
+}
+
+.wpnbha.ts-4 article.format-aside .entry-wrapper, .wpnbha.ts-5 article.format-aside .entry-wrapper, .wpnbha.ts-6 article.format-aside .entry-wrapper, .wpnbha.ts-7 article.format-aside .entry-wrapper, .wpnbha.ts-8 article.format-aside .entry-wrapper, .wpnbha.ts-9 article.format-aside .entry-wrapper, .wpnbha.ts-10 article.format-aside .entry-wrapper {
+  font-size: 90%;
+}
+
+.wpnbha.ts-4 article.format-aside p, .wpnbha.ts-5 article.format-aside p, .wpnbha.ts-6 article.format-aside p, .wpnbha.ts-7 article.format-aside p, .wpnbha.ts-8 article.format-aside p, .wpnbha.ts-9 article.format-aside p, .wpnbha.ts-10 article.format-aside p {
+  font-size: inherit;
+}
+
+.wpnbha.ts-3 article.format-aside .entry-title {
+  font-size: 0.8em;
+}
+
+.wpnbha.ts-2 article.format-aside .entry-title {
+  font-size: 0.7em;
+}
+
 /** === Newspack Carousel === */
 .wp-block-newspack-blocks-carousel h3 a,
 .wp-block-newspack-blocks-carousel h3 a:visited {
@@ -944,6 +971,30 @@ ul.wp-block-archives li,
 .is-style-outline .wp-block-button__link.has-white-color,
 .wp-block-button__link.is-style-outline.has-white-color {
   color: #fff;
+}
+
+.has-grad-1-gradient-background {
+  background-image: linear-gradient(135deg, #36f 0%, #2240d5 100%);
+}
+
+.has-grad-2-gradient-background {
+  background-image: linear-gradient(135deg, #555 0%, #444444 100%);
+}
+
+.has-grad-3-gradient-background {
+  background-image: linear-gradient(135deg, #111111 0%, #555555 100%);
+}
+
+.has-grad-4-gradient-background {
+  background-image: linear-gradient(135deg, #444444 0%, #888888 100%);
+}
+
+.has-grad-5-gradient-background {
+  background-image: linear-gradient(135deg, #777777 0%, #dddddd 100%);
+}
+
+.has-grad-6-gradient-background {
+  background-image: linear-gradient(135deg, #dddddd 0%, white 100%);
 }
 
 /* Paragraph */

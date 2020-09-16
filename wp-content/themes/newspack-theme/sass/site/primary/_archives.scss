@@ -64,6 +64,10 @@
 			margin-right: $size__spacing-unit;
 		}
 	}
+
+	.format-aside .byline {
+		display: none;
+	}
 }
 
 .archive {
@@ -76,11 +80,8 @@
 			display: block;
 
 			.post-thumbnail {
+				margin-bottom: $size__spacing-unit;
 				max-width: 100%;
-			}
-
-			.entry-header {
-				margin: $size__spacing-unit 0 0;
 			}
 		}
 	}

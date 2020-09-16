@@ -22,10 +22,30 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		$this->controller = new Newspack_Newsletters_Mailchimp_Controller( $this );
 
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
-		add_action( 'publish_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'send' ], 10, 2 );
+		add_action( 'transition_post_status', [ $this, 'send' ], 10, 3 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
 
 		parent::__construct( $this );
+	}
+
+	/**
+	 * Get API credentials for service provider.
+	 *
+	 * @return Object Stored API credentials for the service provider.
+	 */
+	public function api_credentials() {
+		return [
+			'api_key' => get_option( 'newspack_newsletters_mailchimp_api_key', '' ),
+		];
+	}
+
+	/**
+	 * Check if provider has all necessary credentials set.
+	 *
+	 * @return Boolean Result.
+	 */
+	public function has_api_credentials() {
+		return ! empty( $this->api_key() );
 	}
 
 	/**
@@ -34,25 +54,33 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 * @return String Stored API key for the service provider.
 	 */
 	public function api_key() {
-		return get_option( 'newspack_newsletters_mailchimp_api_key', false );
+		$credentials = self::api_credentials();
+		return $credentials['api_key'];
 	}
 
 	/**
-	 * Set the API key for the service provider.
+	 * Set the API credentials for the service provider.
 	 *
-	 * @param string $key API key.
+	 * @param object $credentials API credentials.
 	 */
-	public function set_api_key( $key ) {
+	public function set_api_credentials( $credentials ) {
+		$api_key = $credentials['api_key'];
+		if ( empty( $api_key ) ) {
+			return new WP_Error(
+				'newspack_newsletters_invalid_keys',
+				__( 'Please input a Mailchimp API key.', 'newspack-newsletters' )
+			);
+		}
 		try {
-			$mc   = new Mailchimp( $key );
+			$mc   = new Mailchimp( $api_key );
 			$ping = $mc->get( 'ping' );
 		} catch ( Exception $e ) {
 			$ping = null;
 		}
 		return $ping ?
-			update_option( 'newspack_newsletters_mailchimp_api_key', $key ) :
+			update_option( 'newspack_newsletters_mailchimp_api_key', $api_key ) :
 			new WP_Error(
-				'newspack_newsletters_invalid_keys_mailchimp',
+				'newspack_newsletters_invalid_keys',
 				__( 'Please input a valid Mailchimp API key.', 'newspack-newsletters' )
 			);
 	}
@@ -104,6 +132,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 * @return object|WP_Error API Response or error.
 	 */
 	public function retrieve( $post_id ) {
+		if ( ! $this->has_api_credentials() ) {
+			return [];
+		}
 		$transient       = sprintf( 'newspack_newsletters_error_%s_%s', $post_id, get_current_user_id() );
 		$persisted_error = get_transient( $transient );
 		if ( $persisted_error ) {
@@ -144,7 +175,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			$tags = [];
 			if ( $list_id ) {
 				$tags_response = $this->validate(
-					$mc->get( "lists/$list_id/segments?count=1000" ),
+					$mc->get( "lists/$list_id/segments?count=1000", [], 20 ),
 					__( 'Error retrieving Mailchimp tags.', 'newspack_newsletters' )
 				);
 				$tags          = $tags_response['segments'];
@@ -370,9 +401,6 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 * @param boolean $update Whether this is an existing post being updated or not.
 	 */
 	public function save( $post_id, $post, $update ) {
-		if ( ! $update ) {
-			update_post_meta( $post_id, 'template_id', -1 );
-		}
 		$status = get_post_status( $post_id );
 		if ( 'trash' === $status ) {
 			return;
@@ -383,10 +411,13 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	/**
 	 * Send a campaign.
 	 *
-	 * @param integer $post_id Post ID to send.
+	 * @param string  $new_status New status of the post.
+	 * @param string  $old_status Old status of the post.
 	 * @param WP_POST $post Post to send.
 	 */
-	public function send( $post_id, $post ) {
+	public function send( $new_status, $old_status, $post ) {
+		$post_id = $post->ID;
+
 		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
 			return new WP_Error(
 				'newspack_newsletters_incorrect_post_type',
@@ -394,34 +425,36 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			);
 		}
 
-		try {
-			$sync_result = $this->sync( $post );
+		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
+			try {
+				$sync_result = $this->sync( $post );
 
-			if ( is_wp_error( $sync_result ) ) {
-				return $sync_result;
-			}
+				if ( is_wp_error( $sync_result ) ) {
+					return $sync_result;
+				}
 
-			$mc_campaign_id = get_post_meta( $post_id, 'mc_campaign_id', true );
-			if ( ! $mc_campaign_id ) {
-				return new WP_Error(
-					'newspack_newsletters_no_campaign_id',
-					__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
+				$mc_campaign_id = get_post_meta( $post_id, 'mc_campaign_id', true );
+				if ( ! $mc_campaign_id ) {
+					return new WP_Error(
+						'newspack_newsletters_no_campaign_id',
+						__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
+					);
+				}
+
+				$mc = new Mailchimp( $this->api_key() );
+
+				$payload = [
+					'send_type' => 'html',
+				];
+				$result  = $this->validate(
+					$mc->post( "campaigns/$mc_campaign_id/actions/send", $payload ),
+					__( 'Error sending campaign.', 'newspack_newsletters' )
 				);
+			} catch ( Exception $e ) {
+				$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
+				set_transient( $transient, $e->getMessage(), 45 );
+				return;
 			}
-
-			$mc = new Mailchimp( $this->api_key() );
-
-			$payload = [
-				'send_type' => 'html',
-			];
-			$result  = $this->validate(
-				$mc->post( "campaigns/$mc_campaign_id/actions/send", $payload ),
-				__( 'Error sending campaign.', 'newspack_newsletters' )
-			);
-		} catch ( Exception $e ) {
-			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-			set_transient( $transient, $e->getMessage(), 45 );
-			return;
 		}
 	}
 

@@ -446,7 +446,7 @@ class Newspack_Blocks {
 	}
 
 	/**
-	 * Prepare a list of classes based on assigned tags and categories.
+	 * Prepare a list of classes based on assigned tags, categories and post formats.
 	 *
 	 * @param string $post_id Post ID.
 	 * @return string CSS classes.
@@ -466,6 +466,11 @@ class Newspack_Blocks {
 			foreach ( $categories as $cat ) {
 				$classes[] = 'category-' . $cat->slug;
 			}
+		}
+
+		$post_format = get_post_format( $post_id );
+		if ( false !== $post_format ) {
+			$classes[] = 'format-' . $post_format;
 		}
 
 		return implode( ' ', $classes );
@@ -500,6 +505,105 @@ class Newspack_Blocks {
 			];
 		}
 		return $clean;
+	}
+
+	/**
+	 * Function to check if plugin is enabled, and if there are sponsors.
+	 *
+	 * @param string $id Post ID.
+	 * @return array Array of sponsors.
+	 */
+	public static function get_all_sponsors( $id = null, $scope = 'native', $type = 'post', $logo_options = array() ) {
+		if ( function_exists( '\Newspack_Sponsors\get_sponsors_for_post' ) ) {
+			$sponsors = \Newspack_Sponsors\get_all_sponsors( $id, $scope, $type, $logo_options ); // phpcs:ignore PHPCompatibility.LanguageConstructs.NewLanguageConstructs.t_ns_separatorFound
+			if ( $sponsors ) {
+				return $sponsors;
+			} else {
+				return false;
+			}
+		}
+	}
+
+	/**
+	 * Function to return sponsor 'flag' from first sponsor.
+	 *
+	 * @param string $id Post ID.
+	 * @return string Sponsor flag label.
+	 */
+	public static function get_sponsor_label( $id ) {
+		$sponsors = self::get_all_sponsors( $id );
+		if ( ! empty( $sponsors ) ) {
+			$sponsor_flag = $sponsors[0]['sponsor_flag'];
+			return $sponsor_flag;
+		}
+	}
+
+	/**
+	 * Outputs the sponsor byline markup for the theme.
+	 *
+	 * @param string $id Post ID.
+	 * @return array Array of Sponsor byline information.
+	 */
+	public static function get_sponsor_byline( $id ) {
+		$sponsors = self::get_all_sponsors( $id );
+		if ( ! empty( $sponsors ) ) {
+			$sponsor_count = count( $sponsors );
+			$i             = 1;
+			$sponsor_list  = [];
+
+			foreach ( $sponsors as $sponsor ) {
+				$i++;
+				if ( $sponsor_count === $i ) :
+					/* translators: separates last two sponsor names; needs a space on either side. */
+					$sep = esc_html__( ' and ', 'newspack-blocks' );
+				elseif ( $sponsor_count > $i ) :
+					/* translators: separates all but the last two sponsor names; needs a space at the end. */
+					$sep = esc_html__( ', ', 'newspack-blocks' );
+				else :
+					$sep = '';
+				endif;
+
+				$sponsor_list[] = array(
+					'byline' => $sponsor['sponsor_byline'],
+					'url'    => $sponsor['sponsor_url'],
+					'name'   => $sponsor['sponsor_name'],
+					'sep'    => $sep,
+				);
+			}
+			return $sponsor_list;
+		}
+	}
+
+	/**
+	 * Outputs set of sponsor logos with links.
+	 *
+	 * @param string $id Post ID.
+	 */
+	public static function get_sponsor_logos( $id ) {
+		$sponsors = self::get_all_sponsors(
+			$id,
+			'native',
+			'post',
+			array(
+				'maxwidth'  => 80,
+				'maxheight' => 40,
+			)
+		);
+		if ( ! empty( $sponsors ) ) {
+			$sponsor_logos = [];
+			foreach ( $sponsors as $sponsor ) {
+				if ( ! empty( $sponsor['sponsor_logo'] ) ) :
+					$sponsor_logos[] = array(
+						'url'    => $sponsor['sponsor_url'],
+						'src'    => esc_url( $sponsor['sponsor_logo']['src'] ),
+						'width'  => esc_attr( $sponsor['sponsor_logo']['img_width'] ),
+						'height' => esc_attr( $sponsor['sponsor_logo']['img_height'] ),
+					);
+				endif;
+			}
+
+			return $sponsor_logos;
+		}
 	}
 
 	/**

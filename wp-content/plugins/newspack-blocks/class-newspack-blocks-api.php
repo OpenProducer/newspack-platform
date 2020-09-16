@@ -86,6 +86,36 @@ class Newspack_Blocks_API {
 				],
 			]
 		);
+
+		/* Sponsors */
+		register_rest_field(
+			'post',
+			'newspack_post_sponsors',
+			[
+				'get_callback' => [ 'Newspack_Blocks_API', 'newspack_blocks_sponsor_info' ],
+				'schema'       => [
+					'context' => [
+						'edit',
+					],
+					'type'    => 'array',
+				],
+			]
+		);
+
+		/* Post format */
+		register_rest_field(
+			'post',
+			'newspack_post_format',
+			[
+				'get_callback' => [ 'Newspack_Blocks_API', 'newspack_blocks_post_format' ],
+				'schema'       => [
+					'context' => [
+						'edit',
+					],
+					'type'    => 'string',
+				],
+			]
+		);
 	}
 
 	/**
@@ -262,6 +292,56 @@ class Newspack_Blocks_API {
 	}
 
 	/**
+	 * Get all sponsor information for the rest field.
+	 *
+	 * @param array $object The object info.
+	 * @return array sponsor information.
+	 */
+	public static function newspack_blocks_sponsor_info( $object ) {
+		$sponsors = Newspack_Blocks::get_all_sponsors(
+			$object['id'],
+			'native',
+			'post',
+			array(
+				'maxwidth'  => 80,
+				'maxheight' => 40,
+			)
+		);
+		if ( ! empty( $sponsors ) ) {
+			foreach ( $sponsors as $sponsor ) {
+				$sponsor_info_item = [
+					'flag'          => $sponsor['sponsor_flag'],
+					'sponsor_name'  => $sponsor['sponsor_name'],
+					'sponsor_url'   => $sponsor['sponsor_url'],
+					'byline_prefix' => $sponsor['sponsor_byline'],
+					'id'            => $sponsor['sponsor_id'],
+					'scope'         => $sponsor['sponsor_scope'],
+				];
+				if ( ! empty( $sponsor['sponsor_logo'] ) ) {
+					$sponsor_info_item['src']        = $sponsor['sponsor_logo']['src'];
+					$sponsor_info_item['img_width']  = $sponsor['sponsor_logo']['img_width'];
+					$sponsor_info_item['img_height'] = $sponsor['sponsor_logo']['img_height'];
+				}
+				$sponsor_info[] = $sponsor_info_item;
+			}
+			return $sponsor_info;
+		} else {
+			return false;
+		}
+	}
+
+	/**
+	 * Pass post format to editor.
+	 *
+	 * @param array $object The object info.
+	 * @return string post format.
+	 */
+	public static function newspack_blocks_post_format( $object ) {
+		$post_format = get_post_format( $object['id'] );
+		return $post_format;
+	}
+
+	/**
 	 * Register the video-playlist endpoint.
 	 */
 	public static function register_video_playlist_endpoint() {
@@ -271,6 +351,9 @@ class Newspack_Blocks_API {
 			[
 				'methods'  => 'GET',
 				'callback' => [ 'Newspack_Blocks_API', 'video_playlist_endpoint' ],
+				'permission_callback' => function( $request ) {
+					return current_user_can( 'edit_posts' );
+				},
 			]
 		);
 	}
@@ -296,6 +379,9 @@ class Newspack_Blocks_API {
 						'sanitize_callback' => 'absint',
 					],
 				],
+				'permission_callback' => function( $request ) {
+					return current_user_can( 'edit_posts' );
+				},
 			]
 		);
 	}

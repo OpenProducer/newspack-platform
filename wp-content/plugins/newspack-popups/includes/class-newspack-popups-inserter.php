@@ -315,8 +315,16 @@ final class Newspack_Popups_Inserter {
 		}
 
 		$popups                  = self::popups_for_post();
-		$endpoint                = str_replace( 'http://', '//', get_rest_url( null, 'newspack-popups/v1/reader' ) );
+		$endpoint                = str_replace(
+			'http://',
+			'//',
+			! Newspack_Popups::previewed_popup_id() && self::should_use_lightweight_api() ?
+				plugins_url( '../api/', __FILE__ ) :
+				get_rest_url( null, 'newspack-popups/v1/reader' )
+		);
 		$popups_access_providers = [];
+
+		$settings = \Newspack_Popups_Settings::get_settings();
 
 		foreach ( $popups as $popup ) {
 			// In test frequency cases (logged in site editor) and when previewing,
@@ -327,9 +335,20 @@ final class Newspack_Popups_Inserter {
 				current_user_can( 'edit_others_pages' )
 			);
 
+			$authorization =
+				esc_url( $endpoint ) .
+				'?popup_id=' . esc_attr( $popup['id'] ) .
+				'&rid=READER_ID&url=CANONICAL_URL&RANDOM&' .
+				'frequency=' . esc_attr( $popup['options']['frequency'] ) .
+				'&placement=' . esc_attr( $popup['options']['placement'] ) .
+				'&utm_suppression=' . esc_attr( $popup['options']['utm_suppression'] ) .
+				'&suppress_newsletter_campaigns=' . esc_attr( $settings['suppress_newsletter_campaigns'] ) .
+				'&suppress_all_newsletter_campaigns_if_one_dismissed=' . esc_attr( $settings['suppress_all_newsletter_campaigns_if_one_dismissed'] ) .
+				'&has_newsletter_prompt=' . esc_attr( \Newspack_Popups_Model::has_newsletter_prompt( $popup ) );
+
 			$amp_access_provider = array(
 				'namespace'                     => 'popup_' . $popup['id'],
-				'authorization'                 => esc_url( $endpoint ) . '?popup_id=' . esc_attr( $popup['id'] ) . '&rid=READER_ID&url=CANONICAL_URL&RANDOM',
+				'authorization'                 => $authorization,
 				'noPingback'                    => true,
 				'authorizationTimeout'          => 10000, // For development purposes. If #development=1 is appended to URL the maximum timeout for amp-access is raised to 10s.
 				'authorizationFallbackResponse' => array(
@@ -458,6 +477,15 @@ final class Newspack_Popups_Inserter {
 		return self::assess_is_post( $popup ) &&
 			self::assess_test_mode( $popup ) &&
 			self::assess_categories_filter( $popup );
+	}
+
+	/**
+	 * Should the lightweight API be used.
+	 *
+	 * @return bool Should lightweight API be used.
+	 */
+	public static function should_use_lightweight_api() {
+		return file_exists( WP_CONTENT_DIR . '/../newspack-popups-config.php' );
 	}
 }
 $newspack_popups_inserter = new Newspack_Popups_Inserter();

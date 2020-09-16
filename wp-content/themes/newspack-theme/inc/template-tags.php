@@ -302,6 +302,14 @@ if ( ! function_exists( 'newspack_post_thumbnail' ) ) :
 					// Check the existance of the caption separately, so filters -- like ones that add ads -- don't interfere.
 					$caption_exists = get_post( get_post_thumbnail_id() )->post_excerpt;
 
+					// Account for featured images that have a credit but no caption.
+					if ( ! $caption_exists && class_exists( 'Newspack_Image_Credits' ) ) {
+						$maybe_newspack_image_credit = Newspack_Image_Credits::get_media_credit_string( get_post_thumbnail_id() );
+						if ( strlen( wp_strip_all_tags( $maybe_newspack_image_credit ) ) ) {
+							$caption_exists = true;
+						}
+					}
+
 					if ( $caption_exists ) :
 					?>
 						<figcaption><?php echo wp_kses_post( $caption ); ?></figcaption>
@@ -425,7 +433,7 @@ function newspack_primary_menu() {
 		$toolbar_attributes = 'toolbar-target="site-navigation" toolbar="(min-width: 767px)"';
 	}
 	?>
-	<nav class="main-navigation nav1" aria-label="<?php esc_attr_e( 'Top Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<nav class="main-navigation nav1 dd-menu" aria-label="<?php esc_attr_e( 'Top Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php
 		wp_nav_menu(
 			array(
@@ -450,12 +458,12 @@ function newspack_secondary_menu() {
 
 	// Only set a toolbar-target attributes if the secondary menu container exists in the header - if not short or subpage header.
 	$toolbar_attributes = '';
-	if ( false === get_theme_mod( 'header_simplified', false ) && ( false === get_theme_mod( 'header_sub_simplified', false ) || is_front_page() ) ) {
+	if ( false === get_theme_mod( 'header_sub_simplified', false ) || is_front_page() ) {
 		$toolbar_attributes = 'toolbar-target="secondary-nav-contain" toolbar="(min-width: 767px)"';
 	}
 
 	?>
-	<nav class="secondary-menu nav2" aria-label="<?php esc_attr_e( 'Secondary Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
+	<nav class="secondary-menu nav2 dd-menu" aria-label="<?php esc_attr_e( 'Secondary Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
 		<?php
 		wp_nav_menu(
 			array(
@@ -463,7 +471,6 @@ function newspack_secondary_menu() {
 				'menu_class'     => 'secondary-menu',
 				'container'      => false,
 				'items_wrap'     => '<ul id="%1$s" class="%2$s">%3$s</ul>',
-				'depth'          => 1,
 			)
 		);
 		?>
@@ -524,10 +531,19 @@ function newspack_social_menu_header() {
 		return;
 	}
 
-	// Only set a toolbar-target attributes if the social menu container exists in the header - if not short or subpage header.
-	$toolbar_attributes = '';
-	if ( false === get_theme_mod( 'header_simplified', false ) && ( false === get_theme_mod( 'header_sub_simplified', false ) || is_front_page() ) ) {
-		$toolbar_attributes = 'toolbar="(min-width: 767px)" toolbar-target="social-nav-contain"';
+	$header_simplified     = get_theme_mod( 'header_simplified', false );
+	$header_center_logo    = get_theme_mod( 'header_center_logo', false );
+	$header_sub_simplified = get_theme_mod( 'header_sub_simplified', false );
+
+	$toolbar_attributes = 'toolbar="(min-width: 767px)" toolbar-target="social-nav-contain"';
+
+	// In some cases when this menu won't appear on desktop, override the Toobar Attributes for AMP, so it doesn't try to "move" it.
+	if (
+		( true === $header_simplified && ! has_nav_menu( 'secondary-menu' ) ) ||
+		( true === $header_sub_simplified && ! is_front_page() ) ||
+		( false === $header_simplified && ! has_nav_menu( 'secondary-menu' ) && false === $header_center_logo )
+	) {
+		$toolbar_attributes = '';
 	}
 	?>
 	<nav class="social-navigation" aria-label="<?php esc_attr_e( 'Social Links Menu', 'newspack' ); ?>" <?php echo $toolbar_attributes; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>

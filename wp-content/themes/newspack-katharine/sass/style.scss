@@ -5,7 +5,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.13.1
+Version: 1.19.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -138,15 +138,19 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 	border-bottom-color: $color__text-main;
 }
 
-.wpnbha.show-image.image-aligntop:not( .show-caption ):not( .show-category )
-	.post-has-image
+.wpnbha.show-image.image-aligntop:not( .show-caption ):not( .show-category ) .post-has-image {
 	.entry-title {
-	background-color: $color__background-body;
-	margin-top: -1.5em;
-	padding: 0.5em 0.25em 0 0;
-	position: relative;
-	width: 85%;
-	z-index: 1;
+		background-color: $color__background-body;
+		margin-top: -1.5em;
+		padding: 0.5em 0.25em 0 0;
+		position: relative;
+		width: 85%;
+		z-index: 1;
+	}
+	.sponsor-label + .entry-title {
+		margin-top: 0;
+		padding: 0;
+	}
 }
 
 .wpnbha figcaption::after {
@@ -431,4 +435,9 @@ figcaption,
 			border-top-style: dotted;
 		}
 	}
+}
+
+// Sponsored Content
+.featured-image-beside .sponsor-label .sponsor-info a {
+	color: #fff;
 }

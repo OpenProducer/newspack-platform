@@ -63,7 +63,7 @@
 				color: #767676;
 			}
 			.wp-block-quote p {
-				padding-bottom: 20px;
+				padding-bottom: 12px;
 			}
 			.wp-block-quote.is-style-large {
 				border-left: 0;
@@ -90,7 +90,7 @@
 			/* Has Background */
 			.mj-column-has-width .has-background,
 			.mj-column-per-50 .has-background {
-				padding: 20px;
+				padding: 12px;
 			}
 
 			/* Mailchimp Footer */

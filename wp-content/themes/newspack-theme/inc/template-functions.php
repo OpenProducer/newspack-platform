@@ -114,6 +114,12 @@ function newspack_body_classes( $classes ) {
 		$classes[] = 'h-dh'; // Header default height.
 	}
 
+	$cta_show = get_theme_mod( 'show_header_cta', false );
+	$cta_url  = get_theme_mod( 'header_cta_url', '' );
+	if ( true === $cta_show && '' !== $cta_url ) {
+		$classes[] = 'h-cta'; // Mobile CTA is showing.
+	}
+
 	// Adds classes if menus are assigned
 	if ( has_nav_menu( 'tertiary-menu' ) ) {
 		$classes[] = 'has-tertiary-menu';
@@ -214,11 +220,17 @@ function newspack_get_the_archive_title() {
 	} elseif ( is_author() ) {
 		$title = esc_html__( 'Author Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_author_meta( 'display_name' ) . '</span>';
 	} elseif ( is_year() ) {
+		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 2 );
 		$title = esc_html__( 'Yearly Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_date( _x( 'Y', 'yearly archives date format', 'newspack' ) ) . '</span>';
+		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 2 );
 	} elseif ( is_month() ) {
+		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 2 );
 		$title = esc_html__( 'Monthly Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_date( _x( 'F Y', 'monthly archives date format', 'newspack' ) ) . '</span>';
+		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 2 );
 	} elseif ( is_day() ) {
+		remove_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 2 );
 		$title = esc_html__( 'Daily Archives: ', 'newspack' ) . '<span class="page-description">' . get_the_date() . '</span>';
+		add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 2 );
 	} elseif ( is_post_type_archive() ) {
 		$title = esc_html__( 'Post Type Archives: ', 'newspack' ) . '<span class="page-description">' . post_type_archive_title( '', false ) . '</span>';
 	} elseif ( is_tax() ) {
@@ -355,7 +367,7 @@ add_filter( 'nav_menu_link_attributes', 'newspack_nav_menu_link_attributes', 10,
 function newspack_add_dropdown_icons( $output, $item, $depth, $args ) {
 
 	// Only add class to 'top level' items on the 'primary' menu.
-	if ( ! isset( $args->theme_location ) || 'primary-menu' !== $args->theme_location ) {
+	if ( ! isset( $args->theme_location ) || ( 'primary-menu' !== $args->theme_location && 'secondary-menu' !== $args->theme_location ) ) {
 		return $output;
 	}
 
@@ -482,6 +494,14 @@ function newspack_color_with_contrast( $color ) {
 }
 
 /**
+ * Turns hex color value into RGB.
+ */
+function newspack_hex_to_rgb( $hex ) {
+	list( $r, $g, $b ) = sscanf( $hex, '#%02x%02x%02x' );
+	return 'rgb( ' . $r . ', ' . $g . ', ' . $b . ')';
+}
+
+/**
  * Decides which logo to use, based on Customizer settings and current post.
  */
 function newspack_the_custom_logo() {
@@ -516,3 +536,31 @@ function newspack_the_custom_logo() {
 		the_custom_logo();
 	}
 }
+
+/**
+ * Change date to 'time ago' format if enabled in the Customizer.
+ */
+function newspack_convert_to_time_ago( $post_time, $format ) {
+	global $post;
+	$use_time_ago = get_theme_mod( 'post_time_ago', false );
+
+	// Only filter time when $use_time_ago is enabled, and it's not using a machine-readable format (for datetime).
+	if ( true === $use_time_ago && 'Y-m-d\TH:i:sP' !== $format ) {
+		$current_time = current_time( 'timestamp' ); // phpcs:ignore WordPress.DateTime.CurrentTimeTimestamp.Requested
+		$org_time     = strtotime( $post->post_date );
+		$cut_off      = get_theme_mod( 'post_time_ago_cut_off', '14' );
+
+		// Transform cut off from days to seconds.
+		$cut_off_seconds = $cut_off * 86400;
+
+		if ( $cut_off_seconds >= ( $current_time - $org_time ) ) {
+			$post_time = sprintf(
+				/* translators: %s: Time ago date format */
+				esc_html__( '%s ago', 'newspack' ),
+				human_time_diff( $org_time, $current_time )
+			);
+		}
+	}
+	return $post_time;
+}
+add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 2 );

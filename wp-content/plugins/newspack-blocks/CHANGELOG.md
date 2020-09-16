@@ -1,3 +1,58 @@
+# [1.13.0](https://github.com/Automattic/newspack-blocks/compare/v1.12.2...v1.13.0) (2020-09-15)
+
+
+### Bug Fixes
+
+* **homepage-posts:** display info about load more posts if blog is private ([11e2934](https://github.com/Automattic/newspack-blocks/commit/11e293408c8d37aec3ae5709c7586fcc420c5a66)), closes [#507](https://github.com/Automattic/newspack-blocks/issues/507)
+* **sponsors:** prevent warnings when sponsor image is not set ([b715706](https://github.com/Automattic/newspack-blocks/commit/b7157068b1246098908b3b91caab2cc9e1c07e9e))
+
+
+### Features
+
+* add support for the aside post format ([dd69bc2](https://github.com/Automattic/newspack-blocks/commit/dd69bc2939f5200b9fa94a66d60af666f70f13bf))
+
+## [1.12.2](https://github.com/Automattic/newspack-blocks/compare/v1.12.1...v1.12.2) (2020-09-08)
+
+
+### Bug Fixes
+
+* make sure sponsored content styles survive tree shaking ([#585](https://github.com/Automattic/newspack-blocks/issues/585)) ([b15e7d7](https://github.com/Automattic/newspack-blocks/commit/b15e7d7b66400108faddd58a8dafae7a016b5e27))
+
+## [1.12.1](https://github.com/Automattic/newspack-blocks/compare/v1.12.0...v1.12.1) (2020-08-26)
+
+
+### Bug Fixes
+
+* prevent errors when there is no sponsor logo, link ([#581](https://github.com/Automattic/newspack-blocks/issues/581)) ([e1337a2](https://github.com/Automattic/newspack-blocks/commit/e1337a2fb1a6e0bf6cbd221a387f9eb4e4ec7330))
+
+# [1.12.0](https://github.com/Automattic/newspack-blocks/compare/v1.11.1...v1.12.0) (2020-08-25)
+
+
+### Features
+
+* trigger release ([419ffe7](https://github.com/Automattic/newspack-blocks/commit/419ffe7f9e168abadbc5fe91b68d7100b087d476))
+
+## [1.11.1](https://github.com/Automattic/newspack-blocks/compare/v1.11.0...v1.11.1) (2020-08-18)
+
+
+### Bug Fixes
+
+* moving check for sponsors to prevent notices ([#573](https://github.com/Automattic/newspack-blocks/issues/573)) ([0cd9810](https://github.com/Automattic/newspack-blocks/commit/0cd98108aff171d5cd2c077be1c84d9b056d5f6e))
+
+# [1.11.0](https://github.com/Automattic/newspack-blocks/compare/v1.10.2...v1.11.0) (2020-08-18)
+
+
+### Features
+
+* add sponsor labels to homepage posts and post carousel blocks ([#563](https://github.com/Automattic/newspack-blocks/issues/563)) ([cbcd65f](https://github.com/Automattic/newspack-blocks/commit/cbcd65f7932e61c4a63a1ac72a54aa819bd13e9a))
+
+## [1.10.2](https://github.com/Automattic/newspack-blocks/compare/v1.10.1...v1.10.2) (2020-08-11)
+
+
+### Bug Fixes
+
+* don't render homepage posts blocks in feeds ([51f72eb](https://github.com/Automattic/newspack-blocks/commit/51f72ebd6a8db158bc93ea2a4ceaf2b044653944))
+
 ## [1.10.1](https://github.com/Automattic/newspack-blocks/compare/v1.10.0...v1.10.1) (2020-08-04)
 
 

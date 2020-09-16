@@ -1434,7 +1434,7 @@ table.woocommerce-table--order-details.shop_table tfoot th,
 
 #toggle-order-details:hover {
   background: transparent;
-  color: #767676;
+  color: #515151;
 }
 
 #toggle-order-details svg {
@@ -1459,7 +1459,7 @@ table.woocommerce-table--order-details.shop_table tfoot th,
 }
 
 .order-details-summary h4 > span {
-  color: #767676;
+  color: #515151;
   display: block;
 }
 

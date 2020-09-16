@@ -79,7 +79,7 @@ class Dashboard extends Wizard {
 				'slug'        => 'syndication',
 				'name'        => Wizards::get_name( 'syndication' ),
 				'url'         => Wizards::get_url( 'syndication' ),
-				'description' => esc_html__( 'Apple News, Facebook Instant Articles', 'newspack' ),
+				'description' => esc_html__( 'Distribute your content across multiple websites', 'newspack' ),
 				'status'      => Checklists::get_status( 'syndication' ),
 			],
 			[
@@ -88,12 +88,6 @@ class Dashboard extends Wizard {
 				'url'         => Wizards::get_url( 'analytics' ),
 				'description' => esc_html__( 'Track traffic and activity', 'newspack' ),
 				'status'      => 'enabled',
-			],
-			[
-				'slug'        => 'performance',
-				'name'        => Wizards::get_name( 'performance' ),
-				'url'         => Wizards::get_url( 'performance' ),
-				'description' => esc_html__( 'Page Speed, AMP, Progressive Web App', 'newspack' ),
 			],
 			[
 				'slug'        => 'seo',
@@ -130,6 +124,16 @@ class Dashboard extends Wizard {
 				'status'      => 'enabled',
 			],
 		];
+
+		if ( Support_Wizard::configured() ) {
+			$dashboard[] = [
+				'slug'        => 'support',
+				'name'        => Wizards::get_name( 'support' ),
+				'url'         => Wizards::get_url( 'support' ),
+				'description' => Wizards::get_description( 'support' ),
+				'status'      => 'enabled',
+			];
+		}
 
 		return $dashboard;
 	}

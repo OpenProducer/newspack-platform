@@ -3,6 +3,7 @@ $color__primary: #36f;
 $color__primary-variation: #2240d5;
 $color__secondary: #555;
 $color__secondary-variation: darken( $color__secondary, 10% );
+$color__highlight: #fed850;
 
 // Backgrounds
 $color__background-body: #fff;
@@ -22,7 +23,7 @@ $color__background-dark: #333;
 
 // Text
 $color__text-main: #111;
-$color__text-light: #767676;
+$color__text-light: #515151;
 $color__text-hover: lighten( #111, 22.5% );
 $color__text-screen: #21759b;
 $color__text-input: #666;

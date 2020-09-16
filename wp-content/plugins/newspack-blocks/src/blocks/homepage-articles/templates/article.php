@@ -69,7 +69,13 @@ call_user_func(
 		<?php endif; ?>
 
 		<div class="entry-wrapper">
-			<?php if ( $attributes['showCategory'] && $category ) : ?>
+			<?php if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) : ?>
+				<span class="cat-links sponsor-label">
+					<span class="flag">
+						<?php echo esc_html( Newspack_Blocks::get_sponsor_label( get_the_id() ) ); ?>
+					</span>
+				</span>
+			<?php elseif ( $attributes['showCategory'] && $category ) : ?>
 				<div class="cat-links">
 					<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>">
 						<?php echo esc_html( $category->name ); ?>
@@ -79,9 +85,19 @@ call_user_func(
 			endif;
 
 			if ( '' === $attributes['sectionHeader'] ) :
-				the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
+				// Don't link the title if using the post format aside.
+				if ( has_post_format( 'aside' ) ) :
+					the_title( '<h2 class="entry-title">', '</h2>' );
+				else :
+					the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
+				endif;
 			else :
+				// Don't link the title if using the post format aside.
+				if ( has_post_format( 'aside' ) ) :
+					the_title( '<h3 class="entry-title">', '</h3>' );
+				else :
 				the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' );
+				endif;
 			endif;
 			?>
 			<?php
@@ -93,38 +109,80 @@ call_user_func(
 			<?php endif; ?>
 			<?php
 			if ( $attributes['showExcerpt'] ) :
-				the_excerpt();
+				if ( has_post_format( 'aside' ) ) :
+					the_content();
+				else :
+					the_excerpt();
+				endif;
 			endif;
-			if ( $attributes['showAuthor'] || $attributes['showDate'] ) :
+			if ( $attributes['showAuthor'] || $attributes['showDate'] || Newspack_Blocks::get_all_sponsors( get_the_id() ) ) :
 				?>
 				<div class="entry-meta">
-					<?php
-					if ( $attributes['showAuthor'] ) :
-						if ( $attributes['showAvatar'] ) :
-							echo wp_kses(
-								newspack_blocks_format_avatars( $authors ),
-								array(
-									'img'      => array(
-										'class'  => true,
-										'src'    => true,
-										'alt'    => true,
-										'width'  => true,
-										'height' => true,
-										'data-*' => true,
-										'srcset' => true,
-									),
-									'noscript' => array(),
-									'a'        => array(
-										'href' => true,
-									),
-								)
-							);
-						endif;
-						?>
-						<span class="byline">
-							<?php echo wp_kses_post( newspack_blocks_format_byline( $authors ) ); ?>
-						</span><!-- .author-name -->
+					<?php if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) : ?>
 						<?php
+						$logos = Newspack_Blocks::get_sponsor_logos( get_the_id() );
+						if ( ! empty( $logos ) ) :
+							?>
+						<span class="sponsor-logos">
+							<?php
+							foreach ( $logos as $logo ) {
+								if ( '' !== $logo['url'] ) {
+									echo '<a href="' . esc_url( $logo['url'] ) . '" target="_blank">';
+								}
+								echo '<img src="' . esc_url( $logo['src'] ) . '" width="' . esc_attr( $logo['width'] ) . '" height="' . esc_attr( $logo['height'] ) . '">';
+								if ( '' !== $logo['url'] ) {
+									echo '</a>';
+								}
+							}
+							?>
+						</span>
+					<?php endif; ?>
+					<span class="byline sponsor-byline">
+						<?php
+						$bylines = Newspack_Blocks::get_sponsor_byline( get_the_id() );
+						echo esc_html( $bylines[0]['byline'] ) . ' ';
+						foreach ( $bylines as $byline ) {
+							echo '<span class="author">';
+							if ( '' !== $byline['url'] ) {
+								echo '<a target="_blank" href="' . esc_url( $byline['url'] ) . '">';
+							}
+							echo esc_html( $byline['name'] );
+							if ( '' !== $byline['url'] ) {
+								'</a>';
+							}
+							echo '</span>' . esc_html( $byline['sep'] );
+						}
+						?>
+					</span>
+					<?php
+					else :
+						if ( $attributes['showAuthor'] ) :
+							if ( $attributes['showAvatar'] ) :
+								echo wp_kses(
+									newspack_blocks_format_avatars( $authors ),
+									array(
+										'img'      => array(
+											'class'  => true,
+											'src'    => true,
+											'alt'    => true,
+											'width'  => true,
+											'height' => true,
+											'data-*' => true,
+											'srcset' => true,
+										),
+										'noscript' => array(),
+										'a'        => array(
+											'href' => true,
+										),
+									)
+								);
+							endif;
+							?>
+							<span class="byline">
+								<?php echo wp_kses_post( newspack_blocks_format_byline( $authors ) ); ?>
+							</span><!-- .author-name -->
+							<?php
+						endif;
 					endif;
 					if ( $attributes['showDate'] ) :
 						$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';

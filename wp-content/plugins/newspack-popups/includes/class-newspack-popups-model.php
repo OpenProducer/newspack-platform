@@ -445,7 +445,8 @@ final class Newspack_Popups_Model {
 								"extraUrlParams": {
 									"popup_id": "<?php echo ( esc_attr( $popup['id'] ) ); ?>",
 									"url": "<?php echo esc_url( home_url( $wp->request ) ); ?>",
-									"mailing_list_status": "subscribed"
+									"mailing_list_status": "subscribed",
+									"email": "${formFields[email]}"
 								}
 							}
 						},
@@ -565,28 +566,51 @@ final class Newspack_Popups_Model {
 		}
 		if ( $has_dismiss_form ) {
 			$analytics_events[] = [
-				'id'             => 'popupDismissed-' . $popup_id,
-				'amp_on'         => 'amp-form-submit-success',
-				'on'             => 'submit',
-				'element'        => '#' . esc_attr( $element_id ) . ' form.popup-dismiss-form',
-				'event_name'     => esc_html__( 'Dismissal', 'newspack-popups' ),
-				'event_label'    => esc_attr( $event_label ),
-				'event_category' => esc_attr( $event_category ),
+				'id'              => 'popupDismissed-' . $popup_id,
+				'amp_on'          => 'amp-form-submit-success',
+				'on'              => 'submit',
+				'element'         => '#' . esc_attr( $element_id ) . ' form.popup-dismiss-form',
+				'event_name'      => esc_html__( 'Dismissal', 'newspack-popups' ),
+				'event_label'     => esc_attr( $event_label ),
+				'event_category'  => esc_attr( $event_category ),
+				'non_interaction' => true,
 			];
 		}
 		if ( $has_not_interested_form ) {
 			$analytics_events[] = [
-				'id'             => 'popupNotInterested-' . $popup_id,
-				'amp_on'         => 'amp-form-submit-success',
-				'on'             => 'submit',
-				'element'        => '#' . esc_attr( $element_id ) . ' form.popup-not-interested-form',
-				'event_name'     => esc_html__( 'Permanent Dismissal', 'newspack-popups' ),
-				'event_label'    => esc_attr( $event_label ),
-				'event_category' => esc_attr( $event_category ),
+				'id'              => 'popupNotInterested-' . $popup_id,
+				'amp_on'          => 'amp-form-submit-success',
+				'on'              => 'submit',
+				'element'         => '#' . esc_attr( $element_id ) . ' form.popup-not-interested-form',
+				'event_name'      => esc_html__( 'Permanent Dismissal', 'newspack-popups' ),
+				'event_label'     => esc_attr( $event_label ),
+				'event_category'  => esc_attr( $event_category ),
+				'non_interaction' => true,
 			];
 		}
 
 		return $analytics_events;
+	}
+
+	/**
+	 * Add "newspack-popups-content-block" class name to a block.
+	 * This way a block rendered inside of a popup can be easily told apart.
+	 * This will only work in dynamic blocks.
+	 *
+	 * @param object $block A block.
+	 * @return object Block with className appended.
+	 */
+	public static function append_class_to_block( $block ) {
+		$class_name = 'newspack-popups-content-block';
+		if ( isset( $block['attrs']['className'] ) ) {
+			$block['attrs']['className'] = $block['attrs']['className'] . ' ' . $class_name;
+		} else {
+			$block['attrs']['className'] = $class_name;
+		}
+
+		$block['innerBlocks'] = array_map( [ __CLASS__, 'append_class_to_block' ], $block['innerBlocks'] );
+
+		return $block;
 	}
 
 	/**
@@ -602,7 +626,7 @@ final class Newspack_Popups_Model {
 		$blocks = parse_blocks( $popup['content'] );
 		$body   = '';
 		foreach ( $blocks as $block ) {
-			$body .= render_block( $block );
+			$body .= render_block( self::append_class_to_block( $block ) );
 		}
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 
@@ -666,7 +690,7 @@ final class Newspack_Popups_Model {
 		$blocks = parse_blocks( $popup['content'] );
 		$body   = '';
 		foreach ( $blocks as $block ) {
-			$body .= render_block( $block );
+			$body .= render_block( self::append_class_to_block( $block ) );
 		}
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 

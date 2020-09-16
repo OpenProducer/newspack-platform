@@ -33,7 +33,7 @@ class Analytics {
 	 */
 	public function __construct() {
 		add_filter( 'googlesitekit_amp_gtag_opt', [ __CLASS__, 'inject_amp_events' ] );
-		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'handle_category_reporting' ] );
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'handle_custom_dimensions_reporting' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'inject_non_amp_events' ] );
 		add_filter( 'render_block', [ __CLASS__, 'prepare_blocks_for_events' ], 10, 2 );
 		add_action( 'newspack_campaigns_before_campaign_render', [ __CLASS__, 'set_campaign_render_context' ], 10, 1 );
@@ -47,47 +47,83 @@ class Analytics {
 	}
 
 	/**
-	 * Tell Site Kit to report the article's category as custom dimension.
-	 * More about custom dimensions:
-	 * https://support.google.com/analytics/answer/2709828.
+	 * Tell Site Kit to report the article's data as custom dimensions.
+	 * More about custom dimensions: https://support.google.com/analytics/answer/2709828.
 	 */
-	public static function handle_category_reporting() {
-		$category_dimension_id = get_option( Analytics_Wizard::$category_dimension_option_name );
-		if ( ! $category_dimension_id ) {
-			return;
-		}
-		// Remove `ga:` prefix.
-		$category_dimension_id = substr( $category_dimension_id, 3 );
+	public static function handle_custom_dimensions_reporting() {
+		$custom_dimensions = Analytics_Wizard::list_configured_custom_dimensions();
+		foreach ( $custom_dimensions as $dimension ) {
+			$dimension_role = $dimension['role'];
+			// Remove `ga:` prefix.
+			$dimension_id = substr( $dimension['id'], 3 );
 
-		$categories = get_the_category();
-		if ( ! empty( $categories ) ) {
-			$categories_slugs = implode(
-				',',
-				array_map(
-					function( $cat ) {
-						return $cat->slug;
-					},
-					$categories
-				)
-			);
-			// Non-AMP.
-			add_filter(
-				'googlesitekit_gtag_opt',
-				function ( $gtag_opt ) use ( $categories_slugs, $category_dimension_id ) {
-					$gtag_opt[ $category_dimension_id ] = $categories_slugs;
-					return $gtag_opt;
+			$post = get_post();
+			if ( $post ) {
+				if ( 'category' === $dimension_role ) {
+					$categories = get_the_category();
+					if ( ! empty( $categories ) ) {
+						$categories_slugs = implode(
+							',',
+							array_map(
+								function( $cat ) {
+									return $cat->slug;
+								},
+								$categories
+							)
+						);
+						self::add_custom_dimension_to_ga_config( $dimension_id, $categories_slugs );
+					}
 				}
-			);
-			// AMP.
-			add_filter(
-				'googlesitekit_amp_gtag_opt',
-				function ( $gtag_amp_opt ) use ( $categories_slugs, $category_dimension_id ) {
-					$tracking_id = $gtag_amp_opt['vars']['gtag_id'];
-					$gtag_amp_opt['vars']['config'][ $tracking_id ][ $category_dimension_id ] = $categories_slugs;
-					return $gtag_amp_opt;
+
+				if ( 'author' === $dimension_role ) {
+					$author_id = $post->post_author;
+					self::add_custom_dimension_to_ga_config(
+						$dimension_id,
+						get_the_author_meta( 'display_name', $author_id )
+					);
 				}
-			);
+
+				if ( 'word_count' === $dimension_role ) {
+					self::add_custom_dimension_to_ga_config(
+						$dimension_id,
+						count( explode( ' ', wp_strip_all_tags( $post->post_content ) ) )
+					);
+				}
+
+				if ( 'publish_date' === $dimension_role ) {
+					self::add_custom_dimension_to_ga_config(
+						$dimension_id,
+						get_the_time( 'Y-m-d H:i', $post->ID )
+					);
+				}
+			}
 		}
+	}
+
+	/**
+	 * Add custom dimension to GA config via Site Kit filters.
+	 *
+	 * @param string $dimension_id Dimension ID.
+	 * @param string $payload Payload.
+	 */
+	public static function add_custom_dimension_to_ga_config( $dimension_id, $payload ) {
+		// Non-AMP.
+		add_filter(
+			'googlesitekit_gtag_opt',
+			function ( $gtag_opt ) use ( $payload, $dimension_id ) {
+				$gtag_opt[ $dimension_id ] = $payload;
+				return $gtag_opt;
+			}
+		);
+		// AMP.
+		add_filter(
+			'googlesitekit_amp_gtag_opt',
+			function ( $gtag_amp_opt ) use ( $payload, $dimension_id ) {
+				$tracking_id = $gtag_amp_opt['vars']['gtag_id'];
+				$gtag_amp_opt['vars']['config'][ $tracking_id ][ $dimension_id ] = $payload;
+				return $gtag_amp_opt;
+			}
+		);
 	}
 
 	/**
@@ -213,6 +249,25 @@ class Analytics {
 				]
 			);
 		}
+
+		$custom_events = array_reduce(
+			json_decode( get_option( Analytics_Wizard::$custom_events_option_name, '[]' ) ),
+			function ( $all_custom_events, $event ) {
+				$event = (array) $event;
+				if ( $event['is_active'] ) {
+					if ( 'submit' === $event['on'] ) {
+						$event['amp_on'] = 'amp-form-submit-success';
+					}
+					if ( '' === $event['amp_element'] ) {
+						unset( $event['amp_element'] );
+					}
+					$all_custom_events[] = $event;
+				}
+				return $all_custom_events;
+			},
+			[]
+		);
+		$events        = array_merge( $events, $custom_events );
 
 		/**
 		 * Other integrations can add events to track using this filter.
@@ -344,6 +399,9 @@ class Analytics {
 	 * @return array Modified $config.
 	 */
 	public static function inject_amp_events( $config ) {
+		if ( is_user_logged_in() ) {
+			$config['vars']['user_id'] = get_current_user_id();
+		}
 		$all_events = array_merge( self::get_events(), self::$block_events );
 		foreach ( $all_events as $event ) {
 			$event_config = [
@@ -440,19 +498,22 @@ class Analytics {
 		?>
 		<script>
 			( function() {
-				var elementSelector = '<?php echo esc_attr( $event['element'] ); ?>';
+				var elementSelector = '<?php echo str_replace( '&quot;', '"', esc_attr( $event['element'] ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped -- Allow quotes for CSS selectors validity. ?>';
 				var elements        = Array.prototype.slice.call( document.querySelectorAll( elementSelector ) );
 
 				for ( var i = 0; i < elements.length; ++i ) {
-					elements[i].addEventListener( 'click', function() {
-						gtag(
-							'event',
-							'<?php echo esc_attr( $event['event_name'] ); ?>',
-							{
-								event_category: '<?php echo esc_attr( $event['event_category'] ); ?>',
-								event_label: '<?php echo esc_attr( $event['event_label'] ); ?>',
-							}
-						);
+					elements[i].addEventListener( 'click', function( event ) {
+						<?php // Ensure the clicked element still matches the selector. For example an aria attribue might've changed. ?>
+						if (event.currentTarget.matches(elementSelector)) {
+							gtag(
+								'event',
+								'<?php echo esc_attr( $event['event_name'] ); ?>',
+								{
+									event_category: '<?php echo esc_attr( $event['event_category'] ); ?>',
+									event_label: '<?php echo esc_attr( $event['event_label'] ); ?>',
+								}
+							);
+						};
 					} );
 				}
 			} )();

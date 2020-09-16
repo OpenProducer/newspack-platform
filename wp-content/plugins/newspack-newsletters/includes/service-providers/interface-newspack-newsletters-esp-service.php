@@ -11,18 +11,25 @@
 interface Newspack_Newsletters_ESP_API_Interface {
 
 	/**
-	 * Get API key for service provider.
+	 * Get API credentials for service provider.
 	 *
-	 * @return String Stored API key for the service provider.
+	 * @return Object Stored API credentials for the service provider.
 	 */
-	public function api_key();
+	public function api_credentials();
 
 	/**
-	 * Set the API key for the service provider.
+	 * Set the API credentials for the service provider.
 	 *
-	 * @param string $key API key.
+	 * @param object $credentials API credentials.
 	 */
-	public function set_api_key( $key );
+	public function set_api_credentials( $credentials );
+
+	/**
+	 * Check if provider has all necessary credentials set.
+	 *
+	 * @return Boolean Result.
+	 */
+	public function has_api_credentials();
 
 	/**
 	 * Set list for a campaign.

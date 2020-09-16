@@ -133,7 +133,9 @@ class Salesforce {
 	public static function delete_webhook( $webhook_id ) {
 		update_option( self::SALESFORCE_WEBHOOK_ID, '' );
 		$webhook = wc_get_webhook( $webhook_id );
-		$webhook->delete( true );
+		if ( null !== $webhook ) {
+			$webhook->delete( true );
+		}
 	}
 
 	/**
@@ -187,8 +189,16 @@ class Salesforce {
 		if ( ! empty( $billing['country'] ) ) {
 			$contact['MailingCountry'] = $billing['country'];
 		}
-		if ( 0 === $data['meta_data'][0]['mailchimp_woocommerce_is_subscribed'] ) {
-			$contact['HasOptedOutOfEmail'] = true;
+
+		$referer_tags       = 'none';
+		$referer_categories = 'none';
+		foreach ( $data['meta_data'] as $meta_field ) {
+			if ( 'referer_tags' === $meta_field['key'] ) {
+				$referer_tags = $meta_field['value'];
+			}
+			if ( 'referer_categories' === $meta_field['key'] ) {
+				$referer_categories = $meta_field['value'];
+			}
 		}
 
 		if ( is_array( $transactions ) ) {
@@ -199,6 +209,7 @@ class Salesforce {
 					'Description' => 'WooCommerce Order Number: ' . $data['id'],
 					'Name'        => $transaction['name'],
 					'StageName'   => 'New',
+					'LeadSource'  => 'Post categories: ' . $referer_categories . ', tags: ' . $referer_tags,
 				];
 			}
 		}

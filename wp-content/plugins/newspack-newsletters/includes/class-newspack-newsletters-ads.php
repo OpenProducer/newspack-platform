@@ -17,11 +17,6 @@ final class Newspack_Newsletters_Ads {
 	const NEWSPACK_NEWSLETTERS_ADS_CPT = 'newspack_nl_ads_cpt';
 
 	/**
-	 * Ads admin page handler.
-	 */
-	const NEWSPACK_NEWSLETTERS_ADS_PAGE = 'newspack-newsletters-ads-admin';
-
-	/**
 	 * The single instance of the class.
 	 *
 	 * @var Newspack_Newsletters
@@ -49,7 +44,6 @@ final class Newspack_Newsletters_Ads {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'save_post_' . self::NEWSPACK_NEWSLETTERS_ADS_CPT, [ __CLASS__, 'ad_default_fields' ], 10, 3 );
 		add_action( 'admin_menu', [ __CLASS__, 'add_ads_page' ] );
-		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
 	}
 
 	/**
@@ -89,47 +83,10 @@ final class Newspack_Newsletters_Ads {
 			__( 'Newsletters Ads', 'newspack-newsletters' ),
 			__( 'Ads', 'newspack-newsletters' ),
 			'manage_options',
-			self::NEWSPACK_NEWSLETTERS_ADS_PAGE,
-			[ __CLASS__, 'create_admin_page' ]
+			'/edit.php?post_type=' . self::NEWSPACK_NEWSLETTERS_ADS_CPT,
+			null,
+			2
 		);
-	}
-
-	/**
-	 * Ads page callback.
-	 */
-	public static function create_admin_page() {
-		?>
-			<div class="wrap">
-				<div id="newspack-newsletters-ads-admin"></div>
-			</div>
-		<?php
-	}
-
-	/**
-	 * Enqueue ads admin scripts.
-	 *
-	 * @param string $handler Page handler.
-	 */
-	public static function admin_enqueue_scripts( $handler ) {
-		if ( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT . '_page_' . self::NEWSPACK_NEWSLETTERS_ADS_PAGE !== $handler ) {
-			return;
-		};
-
-		\wp_enqueue_script(
-			self::NEWSPACK_NEWSLETTERS_ADS_PAGE,
-			plugins_url( '../dist/adsAdmin.js', __FILE__ ),
-			[ 'wp-components', 'wp-api-fetch', 'wp-date' ],
-			filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/adsAdmin.js' ),
-			true
-		);
-		wp_register_style(
-			self::NEWSPACK_NEWSLETTERS_ADS_PAGE,
-			plugins_url( '../dist/adsAdmin.css', __FILE__ ),
-			[ 'wp-components' ],
-			filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/adsAdmin.css' )
-		);
-		wp_style_add_data( self::NEWSPACK_NEWSLETTERS_ADS_PAGE, 'rtl', 'replace' );
-		wp_enqueue_style( self::NEWSPACK_NEWSLETTERS_ADS_PAGE );
 	}
 
 	/**
@@ -140,8 +97,32 @@ final class Newspack_Newsletters_Ads {
 			return;
 		}
 
+		$labels = [
+			'name'                     => _x( 'Newsletter Ads', 'post type general name', 'newspack-newsletters' ),
+			'singular_name'            => _x( 'Newsletter Ad', 'post type singular name', 'newspack-newsletters' ),
+			'menu_name'                => _x( 'Newsletter Ads', 'admin menu', 'newspack-newsletters' ),
+			'name_admin_bar'           => _x( 'Newsletter Ad', 'add new on admin bar', 'newspack-newsletters' ),
+			'add_new'                  => _x( 'Add New', 'popup', 'newspack-newsletters' ),
+			'add_new_item'             => __( 'Add New Newsletter Ad', 'newspack-newsletters' ),
+			'new_item'                 => __( 'New Newsletter Ad', 'newspack-newsletters' ),
+			'edit_item'                => __( 'Edit Newsletter Ad', 'newspack-newsletters' ),
+			'view_item'                => __( 'View Newsletter Ad', 'newspack-newsletters' ),
+			'all_items'                => __( 'All Newsletter Ads', 'newspack-newsletters' ),
+			'search_items'             => __( 'Search Newsletter Ads', 'newspack-newsletters' ),
+			'parent_item_colon'        => __( 'Parent Newsletter Ads:', 'newspack-newsletters' ),
+			'not_found'                => __( 'No Newsletter Ads found.', 'newspack-newsletters' ),
+			'not_found_in_trash'       => __( 'No Newsletter Ads found in Trash.', 'newspack-newsletters' ),
+			'items_list'               => __( 'Newsletter Ads list', 'newspack-newsletters' ),
+			'item_published'           => __( 'Newsletter Ad published', 'newspack-newsletters' ),
+			'item_published_privately' => __( 'Newsletter Ad published privately', 'newspack-newsletters' ),
+			'item_reverted_to_draft'   => __( 'Newsletter Ad reverted to draft', 'newspack-newsletters' ),
+			'item_scheduled'           => __( 'Newsletter Ad scheduled', 'newspack-newsletters' ),
+			'item_updated'             => __( 'Newsletter Ad updated', 'newspack-newsletters' ),
+		];
+
 		$cpt_args = [
 			'public'       => false,
+			'labels'       => $labels,
 			'show_ui'      => true,
 			'show_in_menu' => false,
 			'show_in_rest' => true,

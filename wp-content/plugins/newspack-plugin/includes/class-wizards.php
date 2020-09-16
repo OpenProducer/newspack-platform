@@ -35,7 +35,6 @@ class Wizards {
 			'syndication'     => new Syndication_Wizard(),
 			'analytics'       => new Analytics_Wizard(),
 			'components-demo' => new Components_Demo(),
-			'performance'     => new Performance_Wizard(),
 			'seo'             => new SEO_Wizard(),
 			'health-check'    => new Health_Check_Wizard(),
 			'engagement'      => new Engagement_Wizard(),

@@ -1,3 +1,24 @@
+# [1.7.0](https://github.com/Automattic/newspack-ads/compare/v1.6.1...v1.7.0) (2020-09-15)
+
+
+### Features
+
+* optimize amp-ads for viewability ([#72](https://github.com/Automattic/newspack-ads/issues/72)) ([6a29e67](https://github.com/Automattic/newspack-ads/commit/6a29e67b052ec8b6baa7bed187cccb192e15d946))
+
+## [1.6.1](https://github.com/Automattic/newspack-ads/compare/v1.6.0...v1.6.1) (2020-08-18)
+
+
+### Bug Fixes
+
+* remove redundant responsive ad handling ([a8b5727](https://github.com/Automattic/newspack-ads/commit/a8b5727572893f2353ccec93b02af77dd671b359))
+
+# [1.6.0](https://github.com/Automattic/newspack-ads/compare/v1.5.0...v1.6.0) (2020-08-11)
+
+
+### Features
+
+* trigger release ([af80dd2](https://github.com/Automattic/newspack-ads/commit/af80dd25986c38724edfed1025085daefb19aeb7))
+
 # [1.5.0](https://github.com/Automattic/newspack-ads/compare/v1.4.2...v1.5.0) (2020-08-04)
 
 

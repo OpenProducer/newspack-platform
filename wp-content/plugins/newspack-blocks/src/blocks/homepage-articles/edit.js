@@ -11,7 +11,12 @@ import {
 	shouldReflow,
 	queryCriteriaFromAttributes,
 } from './utils';
-import { formatAvatars, formatByline } from '../../shared/js/utils';
+import {
+	formatAvatars,
+	formatByline,
+	formatSponsorLogos,
+	formatSponsorByline,
+} from '../../shared/js/utils';
 
 /**
  * External dependencies
@@ -135,6 +140,7 @@ class Edit extends Component {
 
 		const postTitle = this.titleForPost( post );
 		const dateFormat = __experimentalGetSettings().formats.date;
+
 		return (
 			<article className={ postClasses } key={ post.id } style={ styles }>
 				{ showImage && post.newspack_featured_image_src && (
@@ -160,18 +166,23 @@ class Edit extends Component {
 				) }
 
 				<div className="entry-wrapper">
-					{ showCategory && post.newspack_category_info.length && (
+					{ post.newspack_post_sponsors && (
+						<span className="cat-links sponsor-label">
+							<span className="flag">{ post.newspack_post_sponsors[ 0 ].flag }</span>
+						</span>
+					) }
+					{ showCategory && post.newspack_category_info.length && ! post.newspack_post_sponsors && (
 						<div className="cat-links">
 							<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
 						</div>
 					) }
 					{ RichText.isEmpty( sectionHeader ) ? (
 						<h2 className="entry-title" key="title">
-							<a href="#">{ postTitle }</a>
+							{ post.newspack_post_format === 'aside' ? postTitle : <a href="#">{ postTitle }</a> }
 						</h2>
 					) : (
 						<h3 className="entry-title" key="title">
-							<a href="#">{ postTitle }</a>
+							{ post.newspack_post_format === 'aside' ? postTitle : <a href="#">{ postTitle }</a> }
 						</h3>
 					) }
 					{ IS_SUBTITLE_SUPPORTED_IN_THEME && showSubtitle && (
@@ -184,12 +195,21 @@ class Edit extends Component {
 					) }
 					{ showExcerpt && (
 						<RawHTML key="excerpt" className="excerpt-contain">
-							{ post.excerpt.rendered }
+							{ post.newspack_post_format === 'aside'
+								? post.content.rendered
+								: post.excerpt.rendered }
 						</RawHTML>
 					) }
 					<div className="entry-meta">
-						{ showAuthor && showAvatar && formatAvatars( post.newspack_author_info ) }
-						{ showAuthor && formatByline( post.newspack_author_info ) }
+						{ post.newspack_post_sponsors && formatSponsorLogos( post.newspack_post_sponsors ) }
+						{ post.newspack_post_sponsors && formatSponsorByline( post.newspack_post_sponsors ) }
+						{ showAuthor &&
+							showAvatar &&
+							! post.newspack_post_sponsors &&
+							formatAvatars( post.newspack_author_info ) }
+						{ showAuthor &&
+							! post.newspack_post_sponsors &&
+							formatByline( post.newspack_author_info ) }
 						{ showDate && (
 							<time className="entry-date published" key="pub-date">
 								{ dateI18n( dateFormat, post.date_gmt ) }
@@ -310,16 +330,23 @@ class Edit extends Component {
 							required
 						/>
 					) }
-					{ ! specificMode && ! isBlogPrivate() && (
+					{ ! specificMode && isBlogPrivate() ? (
 						/*
-						 * Hide the "More" button option on private sites.
+						 * Hide the "Load more posts" button option on private sites.
 						 *
 						 * Client-side fetching from a private WP.com blog requires authentication,
 						 * which is not provided in the current implementation.
 						 * See https://github.com/Automattic/newspack-blocks/issues/306.
 						 */
+						<i>
+							{ __(
+								'This blog is private, therefore the "Load more posts" feature is not active.',
+								'newspack-blocks'
+							) }
+						</i>
+					) : (
 						<ToggleControl
-							label={ __( 'Show "More" Button', 'newspack-blocks' ) }
+							label={ __( 'Show "Load more posts" Button', 'newspack-blocks' ) }
 							checked={ moreButton }
 							onChange={ () => setAttributes( { moreButton: ! moreButton } ) }
 						/>

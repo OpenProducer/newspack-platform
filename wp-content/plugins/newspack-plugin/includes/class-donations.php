@@ -27,6 +27,8 @@ class Donations {
 	public static function init() {
 		if ( ! is_admin() ) {
 			add_action( 'wp_loaded', [ __CLASS__, 'process_donation_form' ], 99 );
+			add_action( 'woocommerce_checkout_update_order_meta', [ __CLASS__, 'woocommerce_checkout_update_order_meta' ] );
+			add_filter( 'woocommerce_billing_fields', [ __CLASS__, 'woocommerce_billing_fields' ] );
 		}
 	}
 
@@ -360,6 +362,32 @@ class Donations {
 			}
 		}
 
+		if ( function_exists( 'wpcom_vip_url_to_postid' ) ) {
+			$referer_post_id = wpcom_vip_url_to_postid( wp_get_referer() );
+		} else {
+			$referer_post_id = url_to_postid( wp_get_referer() ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.url_to_postid_url_to_postid
+		}
+		$referer_tags       = [];
+		$referer_categories = [];
+		$tags               = get_the_tags( $referer_post_id );
+		if ( $tags && ! empty( $tags ) ) {
+			$referer_tags = array_map(
+				function ( $item ) {
+					return $item->slug;
+				},
+				$tags
+			);
+		}
+		$categories = get_the_category( $referer_post_id );
+		if ( $categories && ! empty( $categories ) ) {
+			$referer_categories = array_map(
+				function ( $item ) {
+					return $item->slug;
+				},
+				$categories
+			);
+		}
+
 		// Add product to cart.
 		$product_id = $donation_settings['products'][ $donation_frequency ];
 		if ( ! $product_id ) {
@@ -378,8 +406,16 @@ class Donations {
 			]
 		);
 
+		$checkout_url = add_query_arg(
+			[
+				'referer_tags'       => implode( ',', $referer_tags ),
+				'referer_categories' => implode( ',', $referer_categories ),
+			],
+			\wc_get_page_permalink( 'checkout' )
+		);
+
 		// Redirect to checkout.
-		\wp_safe_redirect( apply_filters( 'newspack_donation_checkout_url', \wc_get_page_permalink( 'checkout' ), $donation_value, $donation_frequency ) );
+		\wp_safe_redirect( apply_filters( 'newspack_donation_checkout_url', $checkout_url, $donation_value, $donation_frequency ) );
 		exit;
 	}
 
@@ -503,6 +539,47 @@ class Donations {
 			'editUrl' => html_entity_decode( get_edit_post_link( $page_id ) ),
 			'status'  => get_post_status( $page_id ),
 		];
+	}
+
+	/**
+	 * Add a hidden billing fields with tags and categories.
+	 *
+	 * @param Array $form_fields WC form fields.
+	 */
+	public static function woocommerce_billing_fields( $form_fields ) {
+		$referer_tags       = filter_input( INPUT_GET, 'referer_tags', FILTER_SANITIZE_STRING );
+		$referer_categories = filter_input( INPUT_GET, 'referer_categories', FILTER_SANITIZE_STRING );
+
+		if ( $referer_tags ) {
+			$form_fields['referer_tags'] = [
+				'type'    => 'text',
+				'default' => $referer_tags,
+				'class'   => [ 'hide' ],
+			];
+		}
+		if ( $referer_categories ) {
+			$form_fields['referer_categories'] = [
+				'type'    => 'text',
+				'default' => $referer_categories,
+				'class'   => [ 'hide' ],
+			];
+		}
+
+		return $form_fields;
+	}
+
+	/**
+	 * Update WC order with the client id from hidden form field.
+	 *
+	 * @param String $order_id WC order id.
+	 */
+	public static function woocommerce_checkout_update_order_meta( $order_id ) {
+		if ( ! empty( $_POST['referer_tags'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			update_post_meta( $order_id, 'referer_tags', sanitize_text_field( $_POST['referer_tags'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		}
+		if ( ! empty( $_POST['referer_categories'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			update_post_meta( $order_id, 'referer_categories', sanitize_text_field( $_POST['referer_categories'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		}
 	}
 }
 Donations::init();

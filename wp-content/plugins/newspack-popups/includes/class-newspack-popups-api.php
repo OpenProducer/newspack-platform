@@ -29,16 +29,18 @@ final class Newspack_Popups_API {
 			'newspack-popups/v1',
 			'reader',
 			[
-				'methods'  => \WP_REST_Server::READABLE,
-				'callback' => [ $this, 'reader_get_endpoint' ],
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'reader_get_endpoint' ],
+				'permission_callback' => '__return_true',
 			]
 		);
 		\register_rest_route(
 			'newspack-popups/v1',
 			'reader',
 			[
-				'methods'  => \WP_REST_Server::CREATABLE,
-				'callback' => [ $this, 'reader_post_endpoint' ],
+				'methods'             => \WP_REST_Server::CREATABLE,
+				'callback'            => [ $this, 'reader_post_endpoint' ],
+				'permission_callback' => '__return_true',
 			]
 		);
 		\register_rest_route(
@@ -157,6 +159,11 @@ final class Newspack_Popups_API {
 			return rest_ensure_response( $response );
 		}
 		$data = get_transient( $transient_name );
+		if ( false === $data ) {
+			$data = [
+				'count' => 0,
+			];
+		}
 
 		$response['currentViews'] = (int) $data['count'];
 
@@ -188,7 +195,6 @@ final class Newspack_Popups_API {
 				$response['displayPopup'] = false;
 				break;
 		}
-
 		$referer_url = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING );
 
 		// Suppressing based on UTM Source parameter in the URL.
@@ -261,7 +267,12 @@ final class Newspack_Popups_API {
 	public function reader_post_endpoint( $request ) {
 		$transient_name = $this->get_popup_data_transient_name( $request );
 		if ( $transient_name && ! $this->is_preview_request( $request ) ) {
-			$data          = get_transient( $transient_name );
+			$data = get_transient( $transient_name );
+			if ( false === $data ) {
+				$data = [
+					'count' => 0,
+				];
+			}
 			$data['count'] = (int) $data['count'] + 1;
 			$data['time']  = time();
 			if ( $request['suppress_forever'] ) {
@@ -270,7 +281,8 @@ final class Newspack_Popups_API {
 					$popup               = \Newspack_Popups_Model::retrieve_popup_by_id( $popup_id );
 					$is_newsletter_popup = \Newspack_Popups_Model::has_newsletter_prompt( $popup );
 					if ( $is_newsletter_popup ) {
-						set_transient( $this->get_newsletter_campaigns_suppression_transient_name( $request ), true );
+						$suppression_transient_name = $this->get_newsletter_campaigns_suppression_transient_name( $request );
+						$this->update_cache( $suppression_transient_name, true );
 					}
 				}
 
@@ -279,9 +291,30 @@ final class Newspack_Popups_API {
 			if ( $this->get_mailing_list_status( $request ) ) {
 				$data['mailing_list_status'] = true;
 			}
-			set_transient( $transient_name, $data, 0 );
+			$email_address = $this->get_email_address( $request );
+			if ( $email_address ) {
+				do_action(
+					'newspack_popups_mailing_list_subscription',
+					[
+						'email' => $email_address,
+					]
+				);
+			}
+			$this->update_cache( $transient_name, $data );
 		}
 		return $this->reader_get_endpoint( $request );
+	}
+
+	/**
+	 * Update the cache after setting a transient.
+	 *
+	 * @param string $transient_name The transient name.
+	 * @param mixed  $data The transient data.
+	 */
+	public function update_cache( $transient_name, $data ) {
+		$full_name = '_transient_' . $transient_name;
+		wp_cache_set( $full_name, maybe_serialize( $data ), 'newspack-popups' );
+		set_transient( $transient_name, $data, 0 );
 	}
 
 	/**
@@ -361,6 +394,21 @@ final class Newspack_Popups_API {
 	}
 
 	/**
+	 * Get email address.
+	 *
+	 * @param WP_REST_Request $request amp-access request.
+	 * @return string Email address.
+	 */
+	public function get_email_address( $request ) {
+		$email_address = isset( $request['email'] ) ? esc_attr( $request['email'] ) : false;
+		if ( ! $email_address ) {
+			$body          = json_decode( $request->get_body(), true );
+			$email_address = isset( $body['email'] ) ? esc_attr( $body['email'] ) : false;
+		}
+		return $email_address;
+	}
+
+	/**
 	 * Set the utm_source suppression-related transient.
 	 *
 	 * @param string $utm_source utm_source param.
@@ -371,7 +419,7 @@ final class Newspack_Popups_API {
 			if ( $transient_name ) {
 				$transient                = self::get_utm_source_transient();
 				$transient[ $utm_source ] = true;
-				set_transient( $transient_name, $transient, 0 );
+				$this->update_cache( $transient_name, $transient );
 			}
 		}
 	}
@@ -383,7 +431,7 @@ final class Newspack_Popups_API {
 	public function set_utm_medium_transient() {
 		$transient_name = self::get_suppression_data_transient_name( 'utm_medium' );
 		if ( $transient_name ) {
-			set_transient( $transient_name, true, 0 );
+			$this->update_cache( $transient_name, true );
 		}
 	}
 

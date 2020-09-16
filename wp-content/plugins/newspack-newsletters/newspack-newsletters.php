@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name:     Newspack Newsletters
- * Plugin URI:      https://newspack.blog
+ * Plugin URI:      https://newspack.pub
  * Description:     Newsletter authoring using the Gutenberg editor.
  * Author:          Automattic
- * Author URI:      https://newspack.blog
+ * Author URI:      https://newspack.pub
  * Text Domain:     newspack-newsletters
  * Domain Path:     /languages
- * Version:         1.7.0
+ * Version:         1.11.2
  *
  * @package         Newspack_Newsletters
  */

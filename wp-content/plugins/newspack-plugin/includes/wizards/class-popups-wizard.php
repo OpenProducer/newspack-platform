@@ -56,7 +56,7 @@ class Popups_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Reach your readers with configurable campaigns.', 'newspack' );
+		return \esc_html__( 'Reach your readers with configurable campaigns', 'newspack' );
 	}
 
 	/**

@@ -171,6 +171,47 @@ figcaption,
 	position: relative;
 }
 
+/** === Homepage Posts === */
+
+.wpnbha {
+	article.format-aside {
+		.entry-meta > a,
+		.entry-meta .byline,
+		.entry-meta .author-avatar {
+			display: none;
+		}
+	}
+
+	&.ts-4,
+	&.ts-5,
+	&.ts-6,
+	&.ts-7,
+	&.ts-8,
+	&.ts-9,
+	&.ts-10 {
+		article.format-aside {
+			.entry-title {
+				font-size: 1em;
+			}
+			.entry-wrapper {
+				font-size: 90%;
+			}
+
+			p {
+				font-size: inherit;
+			}
+		}
+	}
+
+	&.ts-3 article.format-aside .entry-title {
+		font-size: 0.8em;
+	}
+
+	&.ts-2 article.format-aside .entry-title {
+		font-size: 0.7em;
+	}
+}
+
 /** === Newspack Carousel === */
 .wp-block-newspack-blocks-carousel h3 a,
 .wp-block-newspack-blocks-carousel h3 a:visited {
@@ -925,4 +966,28 @@ ul.wp-block-archives,
 .is-style-outline .wp-block-button__link.has-white-color, //legacy selector
 .wp-block-button__link.is-style-outline.has-white-color {
 	color: #fff;
+}
+
+// Gradients
+.has-grad-1-gradient-background {
+	background-image: linear-gradient( 135deg, $color__primary 0%, $color__primary-variation 100% );
+}
+.has-grad-2-gradient-background {
+	background-image: linear-gradient(
+		135deg,
+		$color__secondary 0%,
+		$color__secondary-variation 100%
+	);
+}
+.has-grad-3-gradient-background {
+	background-image: linear-gradient( 135deg, rgb( 17, 17, 17 ) 0%, rgb( 85, 85, 85 ) 100% );
+}
+.has-grad-4-gradient-background {
+	background-image: linear-gradient( 135deg, rgb( 68, 68, 68 ) 0%, rgb( 136, 136, 136 ) 100% );
+}
+.has-grad-5-gradient-background {
+	background-image: linear-gradient( 135deg, rgb( 119, 119, 119 ) 0%, rgb( 221, 221, 221 ) 100% );
+}
+.has-grad-6-gradient-background {
+	background-image: linear-gradient( 135deg, rgb( 221, 221, 221 ) 0%, rgb( 255, 255, 255 ) 100% );
 }

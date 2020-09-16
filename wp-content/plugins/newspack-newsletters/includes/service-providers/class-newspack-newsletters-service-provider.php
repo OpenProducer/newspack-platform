@@ -64,7 +64,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		if ( ! current_user_can( 'edit_others_posts' ) ) {
 			return new \WP_Error(
 				'newspack_rest_forbidden',
-				esc_html__( 'You cannot use this resource.', 'newspack' ),
+				esc_html__( 'You cannot use this resource.', 'newspack-newsletters' ),
 				[
 					'status' => 403,
 				]

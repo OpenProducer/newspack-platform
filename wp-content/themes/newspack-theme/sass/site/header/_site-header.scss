@@ -7,7 +7,7 @@
 	justify-content: flex-start;
 	position: relative;
 	@include media( tablet ) {
-		flex-basis: 60%;
+		margin-right: auto;
 	}
 }
 
@@ -17,6 +17,19 @@
 	line-height: 1;
 	margin: 0 $size__spacing-unit 0 0;
 	overflow: hidden;
+	@include media( mobile ) {
+		margin-right: #{0.5 * $size__spacing-unit};
+	}
+}
+
+@include media( mobileonly ) {
+	.h-cta .site-header .custom-logo-link {
+		max-width: 140px;
+
+		.custom-logo {
+			max-width: 100%;
+		}
+	}
 }
 
 .site-header .custom-logo-link .custom-logo {
@@ -80,6 +93,7 @@
 	color: #fff;
 
 	.wrapper {
+		align-items: center;
 		justify-content: flex-start;
 	}
 
@@ -91,6 +105,10 @@
 	#social-nav-contain {
 		margin-left: auto;
 	}
+}
+
+.h-sh .top-header-contain nav {
+	padding: #{0.125 * $size__spacing-unit} 0;
 }
 
 // Middle bar
@@ -186,6 +204,7 @@
 			width: 35%;
 
 			&.site-branding {
+				margin-right: auto;
 				width: 30%;
 			}
 

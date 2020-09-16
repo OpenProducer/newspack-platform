@@ -130,7 +130,13 @@ class Jetpack_Configuration_Manager extends Configuration_Manager {
 	public function deactivate_wordads() {
 		return class_exists( 'Jetpack' ) && \Jetpack::deactivate_module( 'wordads' );
 	}
+
+	/**
+	 * Is Related Posts module active?
+	 *
+	 * @return bool Returns true if the module is currently active.
+	 */
+	public function is_related_posts_enabled() {
+		return class_exists( 'Jetpack' ) && \Jetpack::is_module_active( 'related-posts' );
+	}
 }
-
-
-
