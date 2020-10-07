@@ -187,6 +187,18 @@ h5.block-editor-rich-text__editable a,
 h6.block-editor-rich-text__editable a {
   color: inherit; }
 
+.autocomplete-tokenfield {
+  position: relative;
+  /* Workaround for hard-coded help text in FormTokenField. */ }
+  .autocomplete-tokenfield .components-spinner {
+    position: absolute;
+    top: 2em;
+    right: 0; }
+  .autocomplete-tokenfield .components-form-token-field > .components-form-token-field__help {
+    display: none; }
+  .autocomplete-tokenfield .autocomplete-tokenfield__help {
+    font-style: italic; }
+
 .newspack-newsletters__layout-preview {
   width: 100%;
   height: 100%;
@@ -570,5 +582,8 @@ h6.block-editor-rich-text__editable a {
   display: none; }
 
 .post-type-newspack_nl_cpt .components-button.editor-post-publish-button__button.is-primary {
+  display: none; }
+
+.post-type-newspack_nl_cpt .editor-post-switch-to-draft {
   display: none; }
 

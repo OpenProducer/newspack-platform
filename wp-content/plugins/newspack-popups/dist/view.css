@@ -112,33 +112,34 @@
     -webkit-box-align: start;
             align-items: flex-start; }
 
-.entry-content .newspack-lightbox .newspack-popup .alignfull,
-.entry-content .newspack-lightbox .newspack-popup .alignwide {
-  margin-left: 0;
-  margin-right: 0;
-  max-width: 100%;
-  padding-left: 0;
-  padding-right: 0; }
-  @media only screen and (min-width: 600px) {
+.entry-content {
+  /* stylelint-disable-next-line no-duplicate-selectors */ }
+  .entry-content .newspack-lightbox .newspack-popup .alignfull,
+  .entry-content .newspack-lightbox .newspack-popup .alignwide {
+    margin-left: 0;
+    margin-right: 0;
+    max-width: 100%;
+    padding-left: 0;
+    padding-right: 0; }
+    @media only screen and (min-width: 600px) {
+      .entry-content .newspack-lightbox .newspack-popup .alignfull.wp-block-columns,
+      .entry-content .newspack-lightbox .newspack-popup .alignwide.wp-block-columns {
+        margin-left: -16px;
+        margin-right: -16px;
+        max-width: calc( 100% + 32px);
+        width: calc( 100% + 32px); } }
     .entry-content .newspack-lightbox .newspack-popup .alignfull.wp-block-columns,
-    .entry-content .newspack-lightbox .newspack-popup .alignwide.wp-block-columns {
+    .entry-content .newspack-lightbox .newspack-popup .alignfull.wp-block-columns .wp-block-column,
+    .entry-content .newspack-lightbox .newspack-popup .alignwide.wp-block-columns,
+    .entry-content .newspack-lightbox .newspack-popup .alignwide.wp-block-columns .wp-block-column {
+      padding-left: 0;
+      padding-right: 0; }
+  @media only screen and (min-width: 600px) {
+    .entry-content .newspack-lightbox .newspack-popup .alignfull.wp-block-columns {
       margin-left: -16px;
       margin-right: -16px;
       max-width: calc( 100% + 32px);
       width: calc( 100% + 32px); } }
-  .entry-content .newspack-lightbox .newspack-popup .alignfull.wp-block-columns,
-  .entry-content .newspack-lightbox .newspack-popup .alignfull.wp-block-columns .wp-block-column,
-  .entry-content .newspack-lightbox .newspack-popup .alignwide.wp-block-columns,
-  .entry-content .newspack-lightbox .newspack-popup .alignwide.wp-block-columns .wp-block-column {
-    padding-left: 0;
-    padding-right: 0; }
-
-@media only screen and (min-width: 600px) {
-  .entry-content .newspack-lightbox .newspack-popup .alignfull.wp-block-columns {
-    margin-left: -16px;
-    margin-right: -16px;
-    max-width: calc( 100% + 32px);
-    width: calc( 100% + 32px); } }
 
 .newspack-inline-popup {
   border: 1px solid rgba(0, 0, 0, 0.2);
@@ -173,6 +174,10 @@
       color: #3c3c3c;
       outline-offset: 2px;
       text-decoration: none; }
+
+/* stylelint-disable-next-line no-duplicate-selectors */
+.entry-content {
+  position: relative !important; }
 
 .newspack-inline-popup .newspack-pattern.subscribe__style-1,
 .newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 {

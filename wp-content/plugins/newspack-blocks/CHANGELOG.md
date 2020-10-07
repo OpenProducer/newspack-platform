@@ -1,3 +1,10 @@
+## [1.13.1](https://github.com/Automattic/newspack-blocks/compare/v1.13.0...v1.13.1) (2020-09-29)
+
+
+### Bug Fixes
+
+* add alignment options to post carousel block ([#597](https://github.com/Automattic/newspack-blocks/issues/597)) ([19a3965](https://github.com/Automattic/newspack-blocks/commit/19a3965b6b502f3e74f6697c43c0fdadf87176d7))
+
 # [1.13.0](https://github.com/Automattic/newspack-blocks/compare/v1.12.2...v1.13.0) (2020-09-15)
 
 

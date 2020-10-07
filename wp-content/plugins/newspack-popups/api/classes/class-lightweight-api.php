@@ -12,88 +12,11 @@
 class Lightweight_API {
 
 	/**
-	 * Database object.
-	 *
-	 * @var db
-	 */
-	public $db;
-
-	/**
-	 * Unique client ID.
-	 *
-	 * @var client_id
-	 */
-	public $client_id;
-
-	/**
-	 * Campaign ID.
-	 *
-	 * @var popup_id
-	 */
-	public $popup_id;
-
-	/**
-	 * Campaign frequency.
-	 *
-	 * @var frequency
-	 */
-	public $frequency;
-
-	/**
-	 * Campaign placement.
-	 *
-	 * @var placement
-	 */
-	public $placement;
-
-	/**
-	 * Campaign UTM Suppression.
-	 *
-	 * @var utm_suppression
-	 */
-	public $utm_suppression;
-
-	/**
-	 * Suppress Newsletter Campaigns setting.
-	 *
-	 * @var suppress_newsletter_campaigns
-	 */
-	public $suppress_newsletter_campaigns;
-
-	/**
-	 * Suppress all newsletter campaigns if one dismissed setting.
-	 *
-	 * @var suppress_all_newsletter_campaigns_if_one_dismissed
-	 */
-	public $suppress_all_newsletter_campaigns_if_one_dismissed;
-
-	/**
-	 * Campaign has Newsletter prompt.
-	 *
-	 * @var has_newsletter_prompt
-	 */
-	public $has_newsletter_prompt;
-
-	/**
 	 * Response object.
 	 *
 	 * @var response
 	 */
 	public $response = [];
-
-	/**
-	 * The referer URL.
-	 *
-	 * @var referer_url
-	 */
-	public $referer_url;
-
-	/**
-	 * Database credentials.
-	 *
-	 * @var credentials
-	 */
-	public $credentials;
 
 	/**
 	 * Debugging info.
@@ -104,6 +27,8 @@ class Lightweight_API {
 
 	/**
 	 * Constructor.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function __construct() {
 		if ( ! $this->verify_referer() ) {
@@ -115,92 +40,49 @@ class Lightweight_API {
 			'cache_count'            => 0,
 			'read_empty_transients'  => 0,
 			'write_empty_transients' => 0,
+			'write_read_query_count' => 0,
 			'start_time'             => microtime( true ),
 			'end_time'               => null,
 			'duration'               => null,
 		];
-
-		$this->client_id       = ! empty( $_REQUEST['rid'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'rid', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-		$this->popup_id        = ! empty( $_REQUEST['popup_id'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'popup_id', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-		$this->frequency       = ! empty( $_REQUEST['frequency'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'frequency', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-		$this->placement       = ! empty( $_REQUEST['placement'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'placement', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-		$this->utm_suppression = ! empty( $_REQUEST['utm_suppression'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'utm_suppression', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-
-		$this->suppress_newsletter_campaigns                      = ! empty( $_REQUEST['suppress_newsletter_campaigns'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'suppress_newsletter_campaigns', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-		$this->suppress_all_newsletter_campaigns_if_one_dismissed = ! empty( $_REQUEST['suppress_all_newsletter_campaigns_if_one_dismissed'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'suppress_all_newsletter_campaigns_if_one_dismissed', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-		$this->has_newsletter_prompt = ! empty( $_REQUEST['has_newsletter_prompt'] ) ? // phpcs:ignore
-			filter_input( INPUT_POST | INPUT_GET, 'has_newsletter_prompt', FILTER_SANITIZE_SPECIAL_CHARS ) :
-			null; // phpcs:ignore
-
-		$this->referer_url = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING );
-
-		if ( 'inline' !== $this->placement && 'always' === $this->frequency ) {
-			$this->frequency = 'once';
-		}
 	}
 
 	/**
 	 * Verify referer is valid.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function verify_referer() {
 		$http_referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? parse_url( $_SERVER['HTTP_REFERER'] , PHP_URL_HOST ) : null; // phpcs:ignore
 		$valid_referers = [
 			$http_referer,
-			// TODO: Add AMP Cache.
 		];
 		$http_host = ! empty( $_SERVER['HTTP_HOST'] ) ? $_SERVER['HTTP_HOST'] : null; // phpcs:ignore
+		// Enable requests from AMP Cache.
+		if ( preg_match( '/\.cdn\.ampproject\.org/', $http_referer ) ) {
+			return true;
+		}
 		return ! empty( $http_referer ) && ! empty( $http_host ) && in_array( strtolower( $http_host ), $valid_referers, true );
 	}
 
 	/**
 	 * Get transient name.
-	 */
-	public function get_transient_name() {
-		return sprintf( '%s-%s-popup', $this->client_id, $this->popup_id );
-	}
-
-	/**
-	 * Get suppression-related transient value
 	 *
-	 * @param string $prefix transient prefix.
+	 * @param string $client_id Client ID.
+	 * @param string $popup_id Popup ID.
 	 */
-	public function get_suppression_data_transient_name( $prefix ) {
-		return sprintf(
-			'%s-%s',
-			$prefix,
-			$this->client_id
-		);
-	}
-
-	/**
-	 * Get suppression-related transient value for newsletter-campaign-suppression, which has the order of client_id and key reversed from the others.
-	 *
-	 * @param string $prefix transient prefix.
-	 */
-	public function legacy_get_suppression_data_transient_name_reversed( $prefix ) {
-		return sprintf(
-			'%s-%s',
-			$this->client_id,
-			$prefix
-		);
+	public function get_transient_name( $client_id, $popup_id = null ) {
+		if ( null === $popup_id ) {
+			// For data about popups in general.
+			return sprintf( '%s-popups', $client_id );
+		}
+		return sprintf( '%s-%s-popup', $client_id, $popup_id );
 	}
 
 	/**
 	 * Complete the API and print response.
+	 *
+	 * @codeCoverageIgnore
 	 */
 	public function respond() {
 		$this->debug['end_time'] = microtime( true );
@@ -208,6 +90,8 @@ class Lightweight_API {
 		if ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ) {
 			$this->response['debug'] = $this->debug;
 		}
+		header( 'Access-Control-Allow-Origin: https://' . parse_url( $_SERVER['HTTP_REFERER'] )['host'], false ); // phpcs:ignore
+		header( 'Access-Control-Allow-Credentials: true', false );
 		http_response_code( 200 );
 		print json_encode( $this->response ); // phpcs:ignore
 		exit;
@@ -236,7 +120,7 @@ class Lightweight_API {
 		$value = wp_cache_get( $name, 'newspack-popups' );
 		if ( -1 === $value ) {
 			$this->debug['read_empty_transients'] += 1;
-			$this->debug['cache_count'] += 1;
+			$this->debug['cache_count']           += 1;
 			return null;
 		} elseif ( false === $value ) {
 			$this->debug['read_query_count'] += 1;
@@ -268,5 +152,90 @@ class Lightweight_API {
 		$result           = $wpdb->query( $wpdb->prepare( "INSERT INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)", $name, $serialized_value, $autoload ) ); // phpcs:ignore
 
 		$this->debug['write_query_count'] += 1;
+	}
+
+	/**
+	 * Retrieve campaign data.
+	 *
+	 * @param string $client_id Client ID.
+	 * @param string $campaign_id Campaign ID.
+	 * @return object Campaign data.
+	 */
+	public function get_campaign_data( $client_id, $campaign_id ) {
+		$data = $this->get_transient( $this->get_transient_name( $client_id, $campaign_id ) );
+		return [
+			'count'            => ! empty( $data['count'] ) ? (int) $data['count'] : 0,
+			'last_viewed'      => ! empty( $data['last_viewed'] ) ? (int) $data['last_viewed'] : 0,
+			// Primarily caused by permanent dismissal, but also by email signup
+			// (on a newsletter campaign) or a UTM param suppression.
+			'suppress_forever' => ! empty( $data['suppress_forever'] ) ? (int) $data['suppress_forever'] : false,
+		];
+	}
+
+	/**
+	 * Save campaign data.
+	 *
+	 * @param string $client_id Client ID.
+	 * @param string $campaign_id Campaign ID.
+	 * @param string $campaign_data Campaign data.
+	 */
+	public function save_campaign_data( $client_id, $campaign_id, $campaign_data ) {
+		return $this->set_transient( $this->get_transient_name( $client_id, $campaign_id ), $campaign_data );
+	}
+
+	/**
+	 * Retrieve client data.
+	 *
+	 * @param string $client_id Client ID.
+	 */
+	public function get_client_data( $client_id ) {
+		$data = $this->get_transient( $this->get_transient_name( $client_id ) );
+		if ( ! $data ) {
+			return [
+				'suppressed_newsletter_campaign' => false,
+			];
+		}
+		return $data;
+	}
+
+	/**
+	 * Save client data.
+	 *
+	 * @param string $client_id Client ID.
+	 * @param string $client_data Client data.
+	 */
+	public function save_client_data( $client_id, $client_data ) {
+		return $this->set_transient( $this->get_transient_name( $client_id ), $client_data );
+	}
+
+	/**
+	 * Get request param.
+	 *
+	 * @param string $param Param name.
+	 * @param object $request A POST request.
+	 */
+	public function get_request_param( $param, $request ) {
+		$value = isset( $request[ $param ] ) ? $request[ $param ] : false; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		return $value;
+	}
+
+	/**
+	 * Get POST request payload.
+	 */
+	public function get_post_payload() {
+		$payload = $_POST; // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		if ( null == $payload ) {
+			// A POST request made by amp-analytics has to be parsed in this way.
+			// $_POST contains the payload if the request has FormData.
+			$payload = file_get_contents( 'php://input' ); // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsRemoteFile
+			if ( ! empty( $payload ) ) {
+				$payload = (array) json_decode( $payload );
+			}
+		}
+		if ( null == $payload ) {
+			// Of all else fails, look for payload in query string.
+			return $_GET; // phpcs:ignore WordPress.Security.NonceVerification.Missing, WordPress.Security.NonceVerification.Recommended
+		}
+		return $payload;
 	}
 }

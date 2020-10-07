@@ -9,16 +9,11 @@
   position: relative;
 }
 
-.sponsor-label .flag,
 .sponsor-label button {
   align-items: center;
-  display: inline-flex;
-  position: relative;
-}
-
-.sponsor-label button {
   background: transparent;
   color: #515151;
+  display: inline-flex;
   margin-right: 0.25rem;
   padding: 0;
   position: relative;

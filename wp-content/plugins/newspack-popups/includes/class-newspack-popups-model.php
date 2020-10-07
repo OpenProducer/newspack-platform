@@ -99,7 +99,7 @@ final class Newspack_Popups_Model {
 	 * @param array   $categories Array of categories to be set.
 	 */
 	public static function set_popup_categories( $id, $categories ) {
-		$popup = self::retrieve_popup_by_id( $id );
+		$popup = self::retrieve_popup_by_id( $id, true );
 		if ( ! $popup ) {
 			return new \WP_Error(
 				'newspack_popups_popup_doesnt_exist',
@@ -120,13 +120,13 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Set options for a Popup.
+	 * Set options for a Popup. Can be used by other plugins to set popup's options.
 	 *
 	 * @param integer $id ID of Popup.
 	 * @param array   $options Array of options to update.
 	 */
 	public static function set_popup_options( $id, $options ) {
-		$popup = self::retrieve_popup_by_id( $id );
+		$popup = self::retrieve_popup_by_id( $id, true );
 		if ( ! $popup ) {
 			return new \WP_Error(
 				'newspack_popups_popup_doesnt_exist',
@@ -164,6 +164,9 @@ final class Newspack_Popups_Model {
 						);
 					}
 					update_post_meta( $id, $key, $value );
+					break;
+				case 'utm_suppression':
+					update_post_meta( $id, $key, esc_attr( $value ) );
 					break;
 				default:
 					return new \WP_Error(
@@ -258,15 +261,18 @@ final class Newspack_Popups_Model {
 	 * Retrieve popup CPT post by ID.
 	 *
 	 * @param string $post_id Post id.
+	 * @param bool   $include_drafts Include drafts.
 	 * @return object Popup object.
 	 */
-	public static function retrieve_popup_by_id( $post_id ) {
+	public static function retrieve_popup_by_id( $post_id, $include_drafts = false ) {
 		$args = [
 			'post_type'      => Newspack_Popups::NEWSPACK_PLUGINS_CPT,
-			'post_status'    => 'publish',
 			'posts_per_page' => 1,
 			'p'              => $post_id,
 		];
+		if ( false === $include_drafts ) {
+			$args['post_status'] = 'publish';
+		}
 
 		$popups = self::retrieve_popups_with_query( new WP_Query( $args ) );
 		return count( $popups ) > 0 ? $popups[0] : null;
@@ -302,7 +308,7 @@ final class Newspack_Popups_Model {
 	 * @param object  $options Popup options to use instead of the options retrieved from the post. Used for popup previews.
 	 * @return object Popup object
 	 */
-	protected static function create_popup_object( $campaign_post, $include_categories = false, $options = null ) {
+	public static function create_popup_object( $campaign_post, $include_categories = false, $options = null ) {
 		$id = $campaign_post->ID;
 
 		$post_options = isset( $options ) ? $options : [
@@ -408,17 +414,17 @@ final class Newspack_Popups_Model {
 	 * Insert amp-analytics tracking code.
 	 *
 	 * @param object $popup The popup object.
+	 * @param string $body Post body.
 	 * @param string $element_id The id of the popup element.
 	 * @return string Prints the generated amp-analytics element.
 	 */
 	protected static function insert_event_tracking( $popup, $body, $element_id ) {
-		if ( Newspack_Popups::previewed_popup_id() ) {
+		if ( Newspack_Popups::previewed_popup_id() || 'test' === $popup['options']['frequency'] ) {
 			return '';
 		}
 		global $wp;
 
-		$is_inline = self::is_inline( $popup );
-		$endpoint  = self::get_dismiss_endpoint();
+		$endpoint = self::get_reader_endpoint();
 
 		// Mailchimp.
 		$mailchimp_form_selector = '';
@@ -443,8 +449,8 @@ final class Newspack_Popups_Model {
 								"request": "event",
 								"selector": "#<?php echo esc_attr( $element_id ); ?> <?php echo esc_attr( $mailchimp_form_selector ); ?>",
 								"extraUrlParams": {
-									"popup_id": "<?php echo ( esc_attr( $popup['id'] ) ); ?>",
-									"url": "<?php echo esc_url( home_url( $wp->request ) ); ?>",
+									"popup_id": "<?php echo esc_attr( self::canonize_popup_id( $popup['id'] ) ); ?>",
+									"cid": "CLIENT_ID( <?php echo esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ); ?> )",
 									"mailing_list_status": "subscribed",
 									"email": "${formFields[email]}"
 								}
@@ -461,39 +467,37 @@ final class Newspack_Popups_Model {
 			</amp-analytics>
 		<?php endif; ?>
 
-		<?php if ( $is_inline ) : ?>
-			<amp-analytics>
-				<script type="application/json">
-					{
-						"requests": {
-							"event": "<?php echo esc_url( $endpoint ); ?>"
-						},
-						"triggers": {
-							"trackPageview": {
-								"on": "visible",
-								"request": "event",
-								"visibilitySpec": {
-									"selector": "#<?php echo esc_attr( $element_id ); ?>",
-									"visiblePercentageMin": 90,
-									"totalTimeMin": 500,
-									"continuousTimeMin": 200
-								},
-								"extraUrlParams": {
-									"popup_id": "<?php echo ( esc_attr( $popup['id'] ) ); ?>",
-									"url": "<?php echo esc_url( home_url( $wp->request ) ); ?>"
-								}
+		<amp-analytics>
+			<script type="application/json">
+				{
+					"requests": {
+						"event": "<?php echo esc_url( $endpoint ); ?>"
+					},
+					"triggers": {
+						"trackPageview": {
+							"on": "visible",
+							"request": "event",
+							"visibilitySpec": {
+								"selector": "#<?php echo esc_attr( $element_id ); ?>",
+								"visiblePercentageMin": 90,
+								"totalTimeMin": 500,
+								"continuousTimeMin": 200
+							},
+							"extraUrlParams": {
+								"popup_id": "<?php echo esc_attr( self::canonize_popup_id( $popup['id'] ) ); ?>",
+								"cid": "CLIENT_ID( <?php echo esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ); ?> )"
 							}
-						},
-						"transport": {
-							"beacon": true,
-							"xhrpost": true,
-							"useBody": true,
-							"image": false
 						}
+					},
+					"transport": {
+						"beacon": true,
+						"xhrpost": true,
+						"useBody": true,
+						"image": false
 					}
-				</script>
-			</amp-analytics>
-		<?php endif; ?>
+				}
+			</script>
+		</amp-analytics>
 		<?php
 	}
 
@@ -501,11 +505,12 @@ final class Newspack_Popups_Model {
 	 * Add tracked analytics events to use in Newspack Plugin's newspack_analytics_events filter.
 	 *
 	 * @param object $popup The popup object.
+	 * @param string $body Post body.
 	 * @param string $element_id The id of the popup element.
 	 */
 	protected static function get_analytics_events( $popup, $body, $element_id ) {
 		if ( Newspack_Popups::previewed_popup_id() ) {
-			return '';
+			return [];
 		}
 
 		$popup_id       = $popup['id'];
@@ -614,6 +619,31 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
+	 * Canonise popups id. The id from WP will be an integer, but AMP does not play well with that and needs a string.
+	 *
+	 * @param int $popup_id Popup id.
+	 */
+	public static function canonize_popup_id( $popup_id ) {
+		return 'id_' . $popup_id;
+	}
+
+	/**
+	 * Get amp-access attributes for a popup-enclosing amp-layout tag.
+	 *
+	 * @param object $popup Popup.
+	 */
+	public static function get_access_attrs( $popup ) {
+		if (
+			( 'test' === $popup['options']['frequency'] || Newspack_Popups::previewed_popup_id() ) &&
+			is_user_logged_in() &&
+			current_user_can( 'edit_others_pages' )
+		) {
+			return '';
+		}
+		return 'amp-access="popups.' . esc_attr( self::canonize_popup_id( $popup['id'] ) ) . '" amp-access-hide ';
+	}
+
+	/**
 	 * Generate markup inline popup.
 	 *
 	 * @param string $popup The popup object.
@@ -631,7 +661,7 @@ final class Newspack_Popups_Model {
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 
 		$element_id           = 'lightbox' . rand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
-		$endpoint             = self::get_dismiss_endpoint();
+		$endpoint             = self::get_reader_endpoint();
 		$display_title        = $popup['options']['display_title'];
 		$hidden_fields        = self::get_hidden_fields( $popup );
 		$dismiss_text         = self::get_dismiss_text( $popup );
@@ -640,17 +670,20 @@ final class Newspack_Popups_Model {
 		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
 
-		add_filter(
-			'newspack_analytics_events',
-			function ( $evts ) use ( $popup, $body, $element_id ) {
-					return array_merge( $evts, self::get_analytics_events( $popup, $body, $element_id ) );
-			}
-		);
+		$analytics_events = self::get_analytics_events( $popup, $body, $element_id );
+		if ( ! empty( $analytics_events ) ) {
+			add_filter(
+				'newspack_analytics_events',
+				function ( $evts ) use ( $analytics_events ) {
+					return array_merge( $evts, $analytics_events );
+				}
+			);
+		}
 
 		ob_start();
 		?>
 			<?php self::insert_event_tracking( $popup, $body, $element_id ); ?>
-			<amp-layout amp-access="popup_<?php echo esc_attr( $popup['id'] ); ?>.displayPopup" amp-access-hide class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>" id="<?php echo esc_attr( $element_id ); ?>">
+			<amp-layout <?php echo self::get_access_attrs( $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>" id="<?php echo esc_attr( $element_id ); ?>">
 						<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
 					<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
 				<?php endif; ?>
@@ -695,7 +728,7 @@ final class Newspack_Popups_Model {
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 
 		$element_id           = 'lightbox' . rand(); // phpcs:ignore WordPress.WP.AlternativeFunctions.rand_rand
-		$endpoint             = self::get_dismiss_endpoint();
+		$endpoint             = self::get_reader_endpoint();
 		$dismiss_text         = self::get_dismiss_text( $popup );
 		$display_title        = $popup['options']['display_title'];
 		$overlay_opacity      = absint( $popup['options']['overlay_opacity'] ) / 100;
@@ -715,7 +748,7 @@ final class Newspack_Popups_Model {
 
 		ob_start();
 		?>
-		<amp-layout amp-access="popup_<?php echo esc_attr( $popup['id'] ); ?>.displayPopup" amp-access-hide class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" id="<?php echo esc_attr( $element_id ); ?>">
+		<amp-layout <?php echo self::get_access_attrs( $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> class="<?php echo esc_attr( implode( ' ', $classes ) ); ?>" role="button" tabindex="0" id="<?php echo esc_attr( $element_id ); ?>">
 			<div class="newspack-popup-wrapper" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>">
 				<div class="newspack-popup">
 					<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
@@ -755,9 +788,8 @@ final class Newspack_Popups_Model {
 				<button style="opacity: <?php echo floatval( $overlay_opacity ); ?>;background-color:<?php echo esc_attr( $overlay_color ); ?>;" class="newspack-lightbox-shim" on="tap:<?php echo esc_attr( $element_id ); ?>.hide"></button>
 			</form>
 		</amp-layout>
-		<div id="newspack-lightbox-marker">
-			<amp-position-observer on="enter:showAnim.start;" once layout="nodisplay" />
-		</div>
+		<div id="page-position-marker" style="position: absolute; top: <?php echo esc_attr( $popup['options']['trigger_scroll_progress'] ); ?>%"></div>
+		<amp-position-observer target="page-position-marker" on="enter:showAnim.start;" once layout="nodisplay"></amp-position-observer>
 		<amp-animation id="showAnim" layout="nodisplay">
 			<script type="application/json">
 				{
@@ -857,16 +889,16 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Endpoint to dismiss Pop-up.
+	 * Endpoint to handle Pop-up data.
 	 *
 	 * @return string Endpoint URL.
 	 */
-	public static function get_dismiss_endpoint() {
-		return str_replace( 'http://', '//', get_rest_url( null, 'newspack-popups/v1/reader' ) );
+	public static function get_reader_endpoint() {
+		return plugins_url( '../api/campaigns/index.php', __FILE__ );
 	}
 
 	/**
-	 * Generate hidden fields to be used in all dismiss FORMs.
+	 * Generate hidden fields to be used in all forms.
 	 *
 	 * @param  object $popup A Pop-up object.
 	 * @return string Hidden fields markup.
@@ -875,20 +907,25 @@ final class Newspack_Popups_Model {
 		ob_start();
 		?>
 		<input
-			name="url"
-			type="hidden"
-			value="CANONICAL_URL"
-			data-amp-replace="CANONICAL_URL"
-		/>
-		<input
 			name="popup_id"
 			type="hidden"
-			value="<?php echo ( esc_attr( $popup['id'] ) ); ?>"
+			value="<?php echo esc_attr( self::canonize_popup_id( $popup['id'] ) ); ?>"
+		/>
+		<input
+			name="cid"
+			type="hidden"
+			value="CLIENT_ID(<?php echo esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ); ?>)"
+			data-amp-replace="CLIENT_ID"
 		/>
 		<input
 			name="mailing_list_status"
 			type="hidden"
 			[value]="mailing_list_status"
+		/>
+		<input
+			name="is_newsletter_popup"
+			type="hidden"
+			value="<?php echo esc_attr( self::has_newsletter_prompt( $popup ) ); ?>"
 		/>
 		<?php
 		return ob_get_clean();

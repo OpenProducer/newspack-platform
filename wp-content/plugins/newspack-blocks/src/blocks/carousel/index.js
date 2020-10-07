@@ -76,7 +76,7 @@ export const settings = {
 	},
 	supports: {
 		html: false,
-		align: false,
+		align: [ 'center', 'wide', 'full' ],
 	},
 	edit,
 	save: () => null, // to use view.php

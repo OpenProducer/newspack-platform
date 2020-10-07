@@ -16,7 +16,7 @@ final class Newspack_Newsletters_Renderer {
 	 *
 	 * @var Object
 	 */
-	protected static $color_palette = null;
+	public static $color_palette = null;
 
 	/**
 	 * The header font.
@@ -179,7 +179,7 @@ final class Newspack_Newsletters_Renderer {
 	 * @param string $html input HTML.
 	 * @return string HTML with processed links.
 	 */
-	private static function process_links( $html ) {
+	public static function process_links( $html ) {
 		preg_match_all( '/href="([^"]*)"/', $html, $matches );
 		$href_params = $matches[0];
 		$urls        = $matches[1];
@@ -206,7 +206,7 @@ final class Newspack_Newsletters_Renderer {
 	 * @param array    $default_attrs Default attributes for the component.
 	 * @return string MJML component.
 	 */
-	private static function render_mjml_component( $block, $is_in_column = false, $is_in_group = false, $default_attrs = [] ) {
+	public static function render_mjml_component( $block, $is_in_column = false, $is_in_group = false, $default_attrs = [] ) {
 		$block_name   = $block['blockName'];
 		$attrs        = $block['attrs'];
 		$inner_blocks = $block['innerBlocks'];
@@ -642,6 +642,7 @@ final class Newspack_Newsletters_Renderer {
 				array(
 					'post_type'      => Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
 					'posts_per_page' => -1,
+					'posts_status'   => 'publish',
 				)
 			);
 

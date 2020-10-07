@@ -1,3 +1,10 @@
+## [1.21.1](https://github.com/Automattic/newspack-plugin/compare/v1.21.0...v1.21.1) (2020-09-22)
+
+
+### Bug Fixes
+
+* **campaigns-wizard:** prevent edge case errors ([7d261c0](https://github.com/Automattic/newspack-plugin/commit/7d261c0d90b3172ab4b4bfb06a3759a25f99dcc9))
+
 # [1.21.0](https://github.com/Automattic/newspack-plugin/compare/v1.20.0...v1.21.0) (2020-09-15)
 
 

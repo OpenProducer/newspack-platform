@@ -1,3 +1,42 @@
+# [1.13.0](https://github.com/Automattic/newspack-popups/compare/v1.12.2...v1.13.0) (2020-10-07)
+
+
+### Features
+
+* segmentation data collection ([ff5ffdc](https://github.com/Automattic/newspack-popups/commit/ff5ffdca2969418fa58a4dd59df8dabd1381b2cd)), closes [#233](https://github.com/Automattic/newspack-popups/issues/233)
+
+## [1.12.2](https://github.com/Automattic/newspack-popups/compare/v1.12.1...v1.12.2) (2020-09-30)
+
+
+### Bug Fixes
+
+* scroll-triggered popups on non-AMP pages ([6b55e13](https://github.com/Automattic/newspack-popups/commit/6b55e1360aeb0c3d9896917cf10c39904ee29fac))
+
+## [1.12.1](https://github.com/Automattic/newspack-popups/compare/v1.12.0...v1.12.1) (2020-09-29)
+
+
+### Bug Fixes
+
+* scroll-triggered campaigns ([#236](https://github.com/Automattic/newspack-popups/issues/236)) ([79b654a](https://github.com/Automattic/newspack-popups/commit/79b654a5b83afb59dca8bf80b81e135a6e1d5fc2))
+* scroll-triggered popups ([#232](https://github.com/Automattic/newspack-popups/issues/232)) ([cff67c6](https://github.com/Automattic/newspack-popups/commit/cff67c6db04a7aafb9c092fe18f8ec499e93e0be)), closes [#217](https://github.com/Automattic/newspack-popups/issues/217) [#231](https://github.com/Automattic/newspack-popups/issues/231)
+
+# [1.12.0](https://github.com/Automattic/newspack-popups/compare/v1.11.0...v1.12.0) (2020-09-22)
+
+
+### Bug Fixes
+
+* **api:** config creation ([#228](https://github.com/Automattic/newspack-popups/issues/228)) ([d06daa5](https://github.com/Automattic/newspack-popups/commit/d06daa5af2e2a076b5925f7de69f673253cb0ffe))
+* prevent a test category popup from taking the place of a sitewide default ([c610ad0](https://github.com/Automattic/newspack-popups/commit/c610ad0ce9dbefe79fa8a6f52e6400b2d1fd71e6)), closes [#219](https://github.com/Automattic/newspack-popups/issues/219)
+* reporting view on overlay campaigns ([#221](https://github.com/Automattic/newspack-popups/issues/221)) ([6f63f5b](https://github.com/Automattic/newspack-popups/commit/6f63f5ba8ff645e573540526f6f075198b6af287)), closes [#220](https://github.com/Automattic/newspack-popups/issues/220)
+* **api:** enable drafts handling for setting options and categories ([4828355](https://github.com/Automattic/newspack-popups/commit/48283550208901658c8e6dd2c53e972294a75bc4))
+
+
+### Features
+
+* **api:** allow requests from AMP Cache ([#226](https://github.com/Automattic/newspack-popups/issues/226)) ([e0f7aaf](https://github.com/Automattic/newspack-popups/commit/e0f7aaff79aac68cf2db65e64c441211fb1a7154))
+* create config if not exists ([#212](https://github.com/Automattic/newspack-popups/issues/212)) ([0bdc4a3](https://github.com/Automattic/newspack-popups/commit/0bdc4a3d3ef1291e0309ca98c5d9aaa4b1d98ea2))
+* use single request for amp-access; lightweight POST endpoint ([#213](https://github.com/Automattic/newspack-popups/issues/213)) ([e7c3356](https://github.com/Automattic/newspack-popups/commit/e7c3356a75d19f3c163319e14d2380ebfa17028f))
+
 # [1.11.0](https://github.com/Automattic/newspack-popups/compare/v1.10.0...v1.11.0) (2020-09-15)
 
 

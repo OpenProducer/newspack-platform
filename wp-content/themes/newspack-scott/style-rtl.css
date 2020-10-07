@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.18.0
+Version: 1.20.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -1077,7 +1077,7 @@ a:focus {
 }
 
 .site-header .dd-menu .sub-menu a:hover, .site-header .dd-menu .sub-menu a:focus {
-  background: #2240d5;
+  background-color: #020202;
 }
 
 .site-header .dd-menu .sub-menu .submenu-expand {
@@ -3045,7 +3045,7 @@ amp-script .cat-links {
   }
 }
 
-div.sharedaddy h3.sd-title,
+div.sharedaddy .sd-social h3.sd-title,
 .share-customize-link {
   display: none;
 }
@@ -6287,7 +6287,6 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   font-size: 20px;
 }
 
-#colophon .widget,
 .site-info {
   font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }

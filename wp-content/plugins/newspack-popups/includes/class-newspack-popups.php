@@ -17,6 +17,8 @@ final class Newspack_Popups {
 
 	const NEWSPACK_POPUP_PREVIEW_QUERY_PARAM = 'newspack_popups_preview_id';
 
+	const LIGHTWEIGHT_API_CONFIG_FILE_PATH = WP_CONTENT_DIR . '/../newspack-popups-config.php';
+
 	/**
 	 * The single instance of the class.
 	 *
@@ -41,6 +43,8 @@ final class Newspack_Popups {
 	 * Constructor.
 	 */
 	public function __construct() {
+		add_action( 'init', [ __CLASS__, 'create_lightweight_api_config' ] );
+		add_action( 'admin_notices', [ __CLASS__, 'api_config_missing_notice' ] );
 		add_action( 'init', [ __CLASS__, 'register_cpt' ] );
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
@@ -56,6 +60,8 @@ final class Newspack_Popups {
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-inserter.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-api.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-settings.php';
+		include_once dirname( __FILE__ ) . '/class-newspack-popups-segmentation.php';
+		include_once dirname( __FILE__ ) . '/class-newspack-popups-parse-logs.php';
 	}
 
 	/**
@@ -361,6 +367,12 @@ final class Newspack_Popups {
 		);
 	}
 
+	/**
+	 * Get the default dismiss text.
+	 */
+	public static function get_default_dismiss_text() {
+		return __( "I'm not interested", 'newspack' );
+	}
 
 	/**
 	 * Set default fields when Pop-up is created.
@@ -378,7 +390,7 @@ final class Newspack_Popups {
 
 		update_post_meta( $post_id, 'background_color', '#FFFFFF' );
 		update_post_meta( $post_id, 'display_title', false );
-		update_post_meta( $post_id, 'dismiss_text', __( "I'm not interested", 'newspack' ) );
+		update_post_meta( $post_id, 'dismiss_text', self::get_default_dismiss_text() );
 		update_post_meta( $post_id, 'frequency', 'test' );
 		update_post_meta( $post_id, 'overlay_color', '#000000' );
 		update_post_meta( $post_id, 'overlay_opacity', 30 );
@@ -387,6 +399,46 @@ final class Newspack_Popups {
 		update_post_meta( $post_id, 'trigger_delay', 3 );
 		update_post_meta( $post_id, 'trigger_scroll_progress', 30 );
 		update_post_meta( $post_id, 'utm_suppression', '' );
+	}
+
+	/**
+	 * Create the config file for the API, unless it exists.
+	 */
+	public static function create_lightweight_api_config() {
+		if ( ! ( defined( 'ATOMIC_SITE_ID' ) && ATOMIC_SITE_ID ) || file_exists( self::LIGHTWEIGHT_API_CONFIG_FILE_PATH ) ) {
+			return;
+		}
+		global $wpdb;
+		file_put_contents( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents -- VIP will have to create a config manually
+			self::LIGHTWEIGHT_API_CONFIG_FILE_PATH,
+			'<?php' .
+			// Insert these only if they are defined, but not in the as environment variables.
+			// This way only variables which are already declared in wp-config.php should be inserted in this config file.
+			( ! getenv( 'DB_CHARSET' ) && defined( 'DB_CHARSET' ) ? "\ndefine( 'DB_CHARSET', '" . DB_CHARSET . "' );" : '' ) .
+			( ! getenv( 'WP_CACHE_KEY_SALT' ) && defined( 'WP_CACHE_KEY_SALT' ) ? "\ndefine( 'WP_CACHE_KEY_SALT', '" . WP_CACHE_KEY_SALT . "' );" : '' ) .
+			"\ndefine( 'DB_PREFIX', '" . $wpdb->prefix . "' );" .
+			"\n"
+		);
+		error_log( 'Created the config file: ' . self::LIGHTWEIGHT_API_CONFIG_FILE_PATH ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+	}
+
+	/**
+	 * Add an admin notice if config is missing.
+	 */
+	public static function api_config_missing_notice() {
+		if ( file_exists( self::LIGHTWEIGHT_API_CONFIG_FILE_PATH ) ) {
+			return;
+		}
+		?>
+			<div class="notice notice-error">
+				<p>
+					<?php _e( 'Newspack Campaigns requires a custom configuration file, which is missing. Please create this file following instructions found ', 'newspack-popups' ); ?>
+					<a href="https://github.com/Automattic/newspack-popups/blob/master/api/README.md">
+						<?php _e( 'here.', 'newspack-popups' ); ?>
+					</a>
+				</p>
+			</div>
+		<?php
 	}
 }
 Newspack_Popups::instance();
