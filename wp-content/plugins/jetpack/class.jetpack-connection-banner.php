@@ -3,6 +3,8 @@
 use Automattic\Jetpack\Assets;
 use Automattic\Jetpack\Assets\Logo;
 use Automattic\Jetpack\Constants;
+use Automattic\Jetpack\Licensing;
+use Automattic\Jetpack\Redirect;
 
 class Jetpack_Connection_Banner {
 	/**
@@ -99,7 +101,12 @@ class Jetpack_Connection_Banner {
 			return;
 		}
 
-		add_action( 'admin_notices', array( $this, 'render_banner' ) );
+		if ( ! empty( Licensing::instance()->stored_licenses() ) ) {
+			add_action( 'admin_notices', array( $this, 'render_license_aware_banner' ) );
+		} else {
+			add_action( 'admin_notices', array( $this, 'render_banner' ) );
+		}
+
 		add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_banner_scripts' ) );
 		add_action( 'admin_print_styles', array( Jetpack::init(), 'admin_banner_styles' ) );
 
@@ -194,7 +201,7 @@ class Jetpack_Connection_Banner {
 				'forceVariation'        => $force_variation,
 				'connectInPlaceUrl'     => Jetpack::admin_url( 'page=jetpack#/setup' ),
 				'dashboardUrl'          => Jetpack::admin_url( 'page=jetpack#/dashboard' ),
-				'plansPromptUrl'        => Jetpack::admin_url( 'page=jetpack#/plans-prompt' ),
+				'plansPromptUrl'        => Redirect::get_url( 'jetpack-connect-plans' ),
 				'identity'              => $identity,
 				'preFetchScript'        => plugins_url( '_inc/build/admin.js', JETPACK__PLUGIN_FILE ) . '?ver=' . JETPACK__VERSION,
 			)
@@ -301,6 +308,74 @@ class Jetpack_Connection_Banner {
 	}
 
 	/**
+	 * Renders the license-away version of the connection banner.
+	 *
+	 * @since 9.0.0
+	 */
+	public function render_license_aware_banner() {
+		?>
+		<div id="message" class="updated jp-wpcom-connect__container">
+			<div class="jp-wpcom-connect__inner-container">
+				<div class="jp-wpcom-connect__content-container">
+					<!-- slide 1: intro -->
+					<div class="jp-wpcom-connect__slide jp-wpcom-connect__slide-one jp__slide-is-active">
+
+						<div class="jp-wpcom-connect__content-icon jp-connect-illo">
+							<?php echo ( new Logo() )->render(); ?>
+							<img
+								src="<?php echo esc_url( plugins_url( 'images/jetpack-powering-up.svg', JETPACK__PLUGIN_FILE ) ); ?>"
+								class="jp-wpcom-connect__hide-phone-and-smaller"
+								alt="
+								<?php
+								esc_attr_e(
+									'Jetpack premium services offer even more powerful performance, security, and revenue tools to help you keep your site safe, fast, and help generate income.',
+									'jetpack'
+								);
+								?>
+								"
+								height="auto"
+								width="225"
+								/>
+						</div>
+
+						<div class="jp-wpcom-connect__slide-text">
+							<h2 class="jp-wpcom-connect__quest">
+								<svg class="gridicon gridicons-notice jp-wpcom-connect__quest-marker" height="38" width="38" viewBox="0 0 24 24">
+									<g>
+										<rect x="8" y="6" width="8" height="12" style="fill:#000000" />
+										<path d="M12 2C6.477 2 2 6.477 2 12s4.477 10 10 10 10-4.477 10-10S17.523 2 12 2zm1 15h-2v-2h2v2zm0-4h-2l-.5-6h3l-.5 6z"></path>
+									</g>
+								</svg>
+								<?php esc_html_e( 'Your Jetpack purchase needs completion! Please set up the plugin for your subscription.', 'jetpack' ); ?>
+							</h2>
+
+							<p>
+								<?php
+								esc_html_e(
+									'Jetpack offers security, performance, and marketing tools made for WordPress sites by the WordPress experts. Set up Jetpack to enable new features for this site; don\'t let your subscription go to waste!',
+									'jetpack'
+								);
+								?>
+							</p>
+
+							<div class="jp-banner__button-container">
+								<span class="jp-banner__tos-blurb"><?php jetpack_render_tos_blurb(); ?></span>
+								<a
+									href="<?php echo esc_url( $this->build_connect_url_for_slide( '90' ) ); ?>"
+									class="dops-button is-primary jp-banner__alt-connect-button">
+									<?php esc_html_e( 'Set up Jetpack', 'jetpack' ); ?>
+								</a>
+							</div>
+
+						</div>
+					</div> <!-- end slide 1 -->
+				</div>
+			</div>
+		</div>
+		<?php
+	}
+
+	/**
 	 * Renders the full-screen connection prompt.  Only shown once and on plugin activation.
 	 */
 	public static function render_connect_prompt_full_screen() {
@@ -352,44 +427,38 @@ class Jetpack_Connection_Banner {
 					<div class="jp-connect-full__slide">
 						<div class="jp-connect-full__slide-card illustration">
 							<img
-									src="<?php echo plugins_url( 'images/security.svg', JETPACK__PLUGIN_FILE ); ?>"
+									src="<?php echo plugins_url( 'images/jetpack-connection-security.svg', JETPACK__PLUGIN_FILE ); ?>"
 									alt="<?php esc_attr_e( 'Security & Backups', 'jetpack' ); ?>"
 							/>
 						</div>
 						<div class="jp-connect-full__slide-card">
-							<p>
-							<?php
-								esc_html_e(
-									'Jetpack protects you against brute force attacks and unauthorized logins. ' .
-									'Basic protection is always free, while premium plans add unlimited backups of your whole site, ' .
-									'spam protection, malware scanning, and automated fixes.',
-									'jetpack'
-								);
-							?>
-								</p>
+							<h3><?php esc_html_e( 'Always-on Security', 'jetpack' ); ?></h3>
+							<ul>
+								<li><?php esc_html_e( 'Stay one step ahead of security threats with automatic scanning, one-click fixes, and spam protection.', 'jetpack' ); ?></li>
+								<li><?php esc_html_e( 'Real-time backups save every change and one-click restores get you back online quickly.', 'jetpack' ); ?></li>
+								<li><?php esc_html_e( 'Free protection against brute force attacks and instant notifications if your site goes down.', 'jetpack' ); ?></li>
+							</ul>
 						</div>
 					</div>
 					<div class="jp-connect-full__slide">
 						<div class="jp-connect-full__slide-card illustration">
 							<img
-									src="<?php echo plugins_url( 'images/jetpack-speed.svg', JETPACK__PLUGIN_FILE ); ?>"
+									src="<?php echo plugins_url( 'images/jetpack-connection-performance.svg', JETPACK__PLUGIN_FILE ); ?>"
 									alt="<?php esc_attr_e( 'Built-in Performance', 'jetpack' ); ?>"
 							/>
 						</div>
 						<div class="jp-connect-full__slide-card">
-							<p>
-							<?php
-								esc_html_e(
-									'Activate site accelerator tools and watch your page load times decrease—' .
-									"we'll optimize your images and serve them from our own powerful global network of servers, " .
-									'and speed up your mobile site to reduce bandwidth usage.',
-									'jetpack'
-								);
-							?>
-								</p>
+							<h3><?php esc_html_e( 'Built-in Performance', 'jetpack' ); ?></h3>
+							<ul>
+								<li><?php esc_html_e( 'Keep people on your site longer with lightning-fast page load times through our free global CDN.', 'jetpack' ); ?></li>
+								<li><?php esc_html_e( 'Speed up your mobile site and reduce bandwidth usage automatically.', 'jetpack' ); ?></li>
+								<li><?php esc_html_e( 'Improve visitor engagement and sales with a customized search experience.', 'jetpack' ); ?></li>
+							</ul>
 						</div>
 					</div>
 				</div>
+
+				<h2 class="jp-connect-full__testimonial"><?php esc_html_e( 'More than 5 million WordPress sites trust Jetpack for their website security and performance.', 'jetpack' ); ?></h2>
 
 				<?php if ( 'plugins' === $current_screen->base ) : ?>
 

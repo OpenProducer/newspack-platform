@@ -112,6 +112,7 @@ class Jetpack_Options {
 			'first_admin_view',             // (bool)   Set to true the first time the user views the admin. Usually after the initial connection.
 			'setup_wizard_questionnaire',   // (array)  List of user choices from the setup wizard.
 			'setup_wizard_status',          // (string) Status of the setup wizard.
+			'licensing_error',              // (string) Last error message occurred while attaching licenses that is yet to be surfaced to the user.
 		);
 	}
 
@@ -611,6 +612,7 @@ class Jetpack_Options {
 			'jetpack_connection_banner_ab',
 			'jetpack_active_plan',
 			'jetpack_activation_source',
+			'jetpack_site_products',
 			'jetpack_sso_match_by_email',
 			'jetpack_sso_require_two_step',
 			'jetpack_sso_remove_login_form',

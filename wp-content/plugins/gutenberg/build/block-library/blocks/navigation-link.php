@@ -115,7 +115,6 @@ function gutenberg_render_block_core_navigation_link( $attributes, $content, $bl
 		$colors['css_classes'],
 		$font_sizes['css_classes']
 	);
-	$classes[]       = 'wp-block-navigation-link';
 	$style_attribute = ( $colors['inline_styles'] || $font_sizes['inline_styles'] );
 
 	$css_classes = trim( implode( ' ', $classes ) );
@@ -141,11 +140,14 @@ function gutenberg_render_block_core_navigation_link( $attributes, $content, $bl
 		$html .= ' target="_blank"  ';
 	}
 
-	// Start appending HTML attributes to anchor tag.
 	if ( isset( $attributes['rel'] ) ) {
 		$html .= ' rel="' . esc_attr( $attributes['rel'] ) . '"';
 	} elseif ( isset( $attributes['nofollow'] ) && $attributes['nofollow'] ) {
 		$html .= ' rel="nofollow"';
+	}
+
+	if ( isset( $attributes['title'] ) ) {
+		$html .= ' title="' . esc_attr( $attributes['title'] ) . '"';
 	}
 
 	// End appending HTML attributes to anchor tag.

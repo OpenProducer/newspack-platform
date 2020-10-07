@@ -1,9 +1,4 @@
 <?php
-/**
- * Presenter class for the indexation modal.
- *
- * @package Yoast\YoastSEO\Presenters\Admin
- */
 
 namespace Yoast\WP\SEO\Presenters\Admin;
 
@@ -11,7 +6,7 @@ use WPSEO_Shortlinker;
 use Yoast\WP\SEO\Presenters\Abstract_Presenter;
 
 /**
- * Indexation_List_Item_Presenter class.
+ * Presenter class for the indexation list item.
  */
 class Indexation_List_Item_Presenter extends Abstract_Presenter {
 
@@ -66,7 +61,7 @@ class Indexation_List_Item_Presenter extends Abstract_Presenter {
 		else {
 			$output .= \sprintf(
 				'<span id="yoast-indexation">' .
-					'<button type="button" class="button yoast-open-indexation" data-title="%1$s">' .
+					'<button type="button" class="button yoast-open-indexation" data-title="%1$s" data-settings="yoastIndexationData">' .
 						'%2$s' .
 					'</button>' .
 				'</span>',

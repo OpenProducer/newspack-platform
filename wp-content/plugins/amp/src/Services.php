@@ -1,99 +1,96 @@
 <?php
 /**
- * Interface BackgroundTask.
+ * Class Services.
  *
  * @package AmpProject\AmpWP
  */
 
 namespace AmpProject\AmpWP;
 
-use AmpProject\AmpWP\BackgroundTask\MonitorCssTransientCaching;
+use AmpProject\AmpWP\Infrastructure\Injector;
+use AmpProject\AmpWP\Infrastructure\Plugin;
+use AmpProject\AmpWP\Infrastructure\Service;
+use AmpProject\AmpWP\Infrastructure\ServiceContainer;
 
 /**
- * Centralized service handler to simplify management of registration, activation and deactivation hooks.
+ * Convenience class to get easy access to the service container.
+ *
+ * Using this should always be the last resort.
+ * Always prefer to use constructor injection instead.
  *
  * @package AmpProject\AmpWP
+ * @since 2.0
+ * @internal
  */
 final class Services {
 
 	/**
-	 * List of known services.
+	 * Plugin object instance.
 	 *
-	 * @var string[]
+	 * @var Plugin
 	 */
-	const ALL = [
-		MonitorCssTransientCaching::class,
-	];
+	private static $plugin;
 
 	/**
-	 * Array of service object instances.
+	 * Service container object instance.
 	 *
-	 * @var Service[]
+	 * @var ServiceContainer
 	 */
-	private static $instances = [];
+	private static $container;
 
 	/**
-	 * Register the services with the system.
+	 * Dependency injector object instance.
 	 *
-	 * @return void
+	 * @var Injector
 	 */
-	public static function register() {
-		foreach ( self::instances() as $service ) {
-			$service->register();
-		}
+	private static $injector;
+
+	/**
+	 * Get a particular service out of the service container.
+	 *
+	 * @param string $service Service ID to retrieve.
+	 * @return Service
+	 */
+	public static function get( $service ) {
+		return self::get_container()->get( $service );
 	}
 
 	/**
-	 * Run activation logic.
+	 * Get an instance of the plugin.
 	 *
-	 * This should be hooked up to the WordPress activation hook.
-	 *
-	 * @todo Iterate over blogs on multisite to activate on all subsites by default here?
-	 *
-	 * @param bool $network_wide Whether the activation was done network-wide.
-	 * @return void
+	 * @return Plugin Plugin object instance.
 	 */
-	public static function activate( $network_wide ) {
-		foreach ( self::instances() as $service ) {
-			if ( ! $service instanceof HasActivation ) {
-				continue;
-			}
-
-			$service->activate( $network_wide );
+	public static function get_plugin() {
+		if ( null === self::$plugin ) {
+			self::$plugin = AmpWpPluginFactory::create();
 		}
+
+		return self::$plugin;
 	}
 
 	/**
-	 * Run deactivation logic.
+	 * Get an instance of the service container.
 	 *
-	 * This should be hooked up to the WordPress deactivation hook.
-	 *
-	 * @todo Iterate over blogs on multisite to deactivate on all subsites by default here?
-	 *
-	 * @param bool $network_wide Whether the deactivation was done network-wide.
-	 * @return void
+	 * @return ServiceContainer Service container object instance.
 	 */
-	public static function deactivate( $network_wide ) {
-		foreach ( self::instances() as $service ) {
-			if ( ! $service instanceof HasDeactivation ) {
-				continue;
-			}
-
-			$service->deactivate( $network_wide );
+	public static function get_container() {
+		if ( null === self::$container ) {
+			self::$container = self::get_plugin()->get_container();
 		}
+
+		return self::$container;
 	}
 
 	/**
-	 * Get the services.
+	 * Get an instance of the dependency injector.
 	 *
-	 * @return Service[] Services.
+	 * @return Injector Dependency injector object instance.
 	 */
-	private static function instances() {
-		if ( empty( self::$instances ) ) {
-			foreach ( self::ALL as $service_class ) {
-				self::$instances[ $service_class ] = new $service_class();
-			}
+	public static function get_injector() {
+		if ( null === self::$injector ) {
+			self::$injector = self::get_container()->get( 'injector' );
 		}
-		return self::$instances;
+
+		return self::$injector;
 	}
 }

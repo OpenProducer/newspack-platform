@@ -9,6 +9,7 @@
 
 namespace Automattic\Jetpack\Extensions\OpenTable;
 
+use Automattic\Jetpack\Blocks;
 use Jetpack_Gutenberg;
 
 const FEATURE_NAME = 'opentable';
@@ -52,24 +53,35 @@ function load_assets( $attributes ) {
 
 	Jetpack_Gutenberg::load_assets_as_required( FEATURE_NAME );
 
-	$classes = array( sprintf( 'wp-block-jetpack-%s-theme-%s', FEATURE_NAME, get_attribute( $attributes, 'style' ) ) );
+	$classes    = array();
+	$class_name = get_attribute( $attributes, 'className' );
+	$style      = get_attribute( $attributes, 'style' );
+
+	if ( 'wide' === $style && jetpack_is_mobile() ) {
+		$attributes = array_merge( $attributes, array( 'style' => 'standard' ) );
+		$classes[]  = 'is-style-mobile';
+	}
+
+	// Handles case of deprecated version using theme instead of block styles.
+	if ( ! $class_name || strpos( $class_name, 'is-style-' ) === false ) {
+		$classes[] = sprintf( 'is-style-%s', $style );
+	}
+
 	if ( array_key_exists( 'rid', $attributes ) && is_array( $attributes['rid'] ) && count( $attributes['rid'] ) > 1 ) {
 		$classes[] = 'is-multi';
 	}
 	if ( array_key_exists( 'negativeMargin', $attributes ) && $attributes['negativeMargin'] ) {
 		$classes[] = 'has-no-margin';
 	}
-	$classes = Jetpack_Gutenberg::block_classes(
-		FEATURE_NAME,
-		$attributes,
-		$classes
-	);
+	$classes = Blocks::classes( FEATURE_NAME, $attributes, $classes );
 	$content = '<div class="' . esc_attr( $classes ) . '">';
+
 	// The OpenTable script uses multiple `rid` paramters,
 	// so we can't use WordPress to output it, as WordPress attempts to validate it and removes them.
 	// phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
 	$content .= '<script type="text/javascript" src="' . esc_url( build_embed_url( $attributes ) ) . '"></script>';
 	$content .= '</div>';
+
 	return $content;
 }
 

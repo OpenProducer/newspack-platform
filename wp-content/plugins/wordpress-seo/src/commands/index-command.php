@@ -1,19 +1,16 @@
 <?php
-/**
- * Command to generate indexables for all posts and terms.
- *
- * @package Yoast\WP\SEO\Commands
- */
 
 namespace Yoast\WP\SEO\Commands;
 
 use WP_CLI;
+use WP_CLI\Utils;
 use Yoast\WP\Lib\Model;
+use Yoast\WP\SEO\Actions\Indexation\Indexable_Complete_Indexation_Action;
 use Yoast\WP\SEO\Actions\Indexation\Indexable_General_Indexation_Action;
 use Yoast\WP\SEO\Actions\Indexation\Indexable_Post_Indexation_Action;
 use Yoast\WP\SEO\Actions\Indexation\Indexable_Post_Type_Archive_Indexation_Action;
+use Yoast\WP\SEO\Actions\Indexation\Indexable_Prepare_Indexation_Action;
 use Yoast\WP\SEO\Actions\Indexation\Indexable_Term_Indexation_Action;
-use Yoast\WP\SEO\Actions\Indexation\Indexable_Complete_Indexation_Action;
 use Yoast\WP\SEO\Actions\Indexation\Indexation_Action_Interface;
 use Yoast\WP\SEO\Main;
 
@@ -58,6 +55,13 @@ class Index_Command implements Command_Interface {
 	private $complete_indexation_action;
 
 	/**
+	 * The prepare indexation action.
+	 *
+	 * @var Indexable_Prepare_Indexation_Action
+	 */
+	private $prepare_indexation_action;
+
+	/**
 	 * Generate_Indexables_Command constructor.
 	 *
 	 * @param Indexable_Post_Indexation_Action              $post_indexation_action              The post indexation
@@ -70,19 +74,23 @@ class Index_Command implements Command_Interface {
 	 *                                                                                           action.
 	 * @param Indexable_Complete_Indexation_Action          $complete_indexation_action          The complete indexation
 	 *                                                                                           action.
+	 * @param Indexable_Prepare_Indexation_Action           $prepare_indexation_action           The prepare indexation
+	 *                                                                                           action.
 	 */
 	public function __construct(
 		Indexable_Post_Indexation_Action $post_indexation_action,
 		Indexable_Term_Indexation_Action $term_indexation_action,
 		Indexable_Post_Type_Archive_Indexation_Action $post_type_archive_indexation_action,
 		Indexable_General_Indexation_Action $general_indexation_action,
-		Indexable_Complete_Indexation_Action $complete_indexation_action
+		Indexable_Complete_Indexation_Action $complete_indexation_action,
+		Indexable_Prepare_Indexation_Action $prepare_indexation_action
 	) {
 		$this->post_indexation_action              = $post_indexation_action;
 		$this->term_indexation_action              = $term_indexation_action;
 		$this->post_type_archive_indexation_action = $post_type_archive_indexation_action;
 		$this->general_indexation_action           = $general_indexation_action;
 		$this->complete_indexation_action          = $complete_indexation_action;
+		$this->prepare_indexation_action           = $prepare_indexation_action;
 	}
 
 	/**
@@ -162,6 +170,8 @@ class Index_Command implements Command_Interface {
 			'general objects'    => $this->general_indexation_action,
 		];
 
+		$this->prepare_indexation_action->prepare();
+
 		foreach ( $indexation_actions as $name => $indexation_action ) {
 			$this->run_indexation_action( $name, $indexation_action );
 		}
@@ -181,7 +191,7 @@ class Index_Command implements Command_Interface {
 		$total = $indexation_action->get_total_unindexed();
 		if ( $total > 0 ) {
 			$limit    = $indexation_action->get_limit();
-			$progress = \WP_CLI\Utils\make_progress_bar( 'Indexing ' . $name, $total );
+			$progress = Utils\make_progress_bar( 'Indexing ' . $name, $total );
 			do {
 				$indexables = $indexation_action->index();
 				$count      = \count( $indexables );
@@ -197,6 +207,9 @@ class Index_Command implements Command_Interface {
 	protected function clear() {
 		global $wpdb;
 
+		// For the PreparedSQLPlaceholders issue, see: https://github.com/WordPress/WordPress-Coding-Standards/issues/1903
+		// For the DirectDBQuery issue, see: https://github.com/WordPress/WordPress-Coding-Standards/issues/1947
+		// phpcs:disable WordPress.DB -- Table names should not be quoted and truncate queries can not be cached.
 		$wpdb->query(
 			$wpdb->prepare(
 				'TRUNCATE TABLE %1$s',
@@ -209,5 +222,6 @@ class Index_Command implements Command_Interface {
 				Model::get_table_name( 'Indexable_Hierarchy' )
 			)
 		);
+		// phpcs:enable
 	}
 }

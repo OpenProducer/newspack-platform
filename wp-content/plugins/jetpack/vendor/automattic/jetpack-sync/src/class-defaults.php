@@ -165,6 +165,7 @@ class Defaults {
 		'jetpack_publicize_options',
 		'jetpack_connection_active_plugins',
 		'jetpack_sync_non_blocking', // is non-blocking Jetpack Sync flow enabled.
+		'ce4wp_referred_by', // Creative Mail. See pbtFPC-H5-p2 .
 	);
 
 	/**
@@ -300,6 +301,8 @@ class Defaults {
 		'available_jetpack_blocks'         => array( 'Jetpack_Gutenberg', 'get_availability' ), // Includes both Gutenberg blocks *and* plugins.
 		'paused_themes'                    => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_paused_themes' ),
 		'paused_plugins'                   => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_paused_plugins' ),
+		'theme_support'                    => array( 'Automattic\\Jetpack\\Sync\\Functions', 'get_theme_support' ),
+
 	);
 
 
@@ -723,6 +726,7 @@ class Defaults {
 		'_wp_page_template',
 		'_wp_trash_meta_comments_status',
 		'_wpas_mess',
+		'_wpas_is_tweetstorm',
 		'content_width',
 		'custom_css_add',
 		'custom_css_preprocessor',
@@ -891,7 +895,6 @@ class Defaults {
 		'promote_users',
 		'delete_themes',
 		'export',
-		'edit_comment',
 		'upload_plugins',
 		'upload_themes',
 	);
@@ -949,6 +952,7 @@ class Defaults {
 		'jetpack_protect_key',
 		'jetpack_protect_global_whitelist',
 		'active_sitewide_plugins',
+		'auto_update_plugins', // WordPress 5.5+ auto-updates.
 	);
 
 	/**

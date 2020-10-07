@@ -14,15 +14,18 @@ use Google\Site_Kit\Core\Modules\Module;
 use Google\Site_Kit\Core\Modules\Module_Settings;
 use Google\Site_Kit\Core\Modules\Module_With_Admin_Bar;
 use Google\Site_Kit\Core\Modules\Module_With_Debug_Fields;
+use Google\Site_Kit\Core\Modules\Module_With_Owner;
 use Google\Site_Kit\Core\Modules\Module_With_Screen;
 use Google\Site_Kit\Core\Modules\Module_With_Screen_Trait;
 use Google\Site_Kit\Core\Modules\Module_With_Scopes;
 use Google\Site_Kit\Core\Modules\Module_With_Scopes_Trait;
+use Google\Site_Kit\Core\Authentication\Owner_ID;
 use Google\Site_Kit\Core\Authentication\Clients\Google_Site_Kit_Client;
 use Google\Site_Kit\Core\Modules\Module_With_Settings;
 use Google\Site_Kit\Core\Modules\Module_With_Settings_Trait;
 use Google\Site_Kit\Core\Modules\Module_With_Assets;
 use Google\Site_Kit\Core\Modules\Module_With_Assets_Trait;
+use Google\Site_Kit\Core\Permissions\Permissions;
 use Google\Site_Kit\Core\REST_API\Exception\Invalid_Datapoint_Exception;
 use Google\Site_Kit\Core\Assets\Script;
 use Google\Site_Kit\Core\REST_API\Data_Request;
@@ -49,7 +52,7 @@ use WP_Error;
  * @ignore
  */
 final class Search_Console extends Module
-	implements Module_With_Screen, Module_With_Scopes, Module_With_Settings, Module_With_Assets, Module_With_Admin_Bar, Module_With_Debug_Fields {
+	implements Module_With_Screen, Module_With_Scopes, Module_With_Settings, Module_With_Assets, Module_With_Admin_Bar, Module_With_Debug_Fields, Module_With_Owner {
 	use Module_With_Screen_Trait, Module_With_Scopes_Trait, Module_With_Settings_Trait, Google_URL_Matcher_Trait, Module_With_Assets_Trait;
 
 	/**
@@ -66,6 +69,10 @@ final class Search_Console extends Module
 		add_action(
 			'googlesitekit_authorize_user',
 			function( array $token_response ) {
+				if ( ! current_user_can( Permissions::SETUP ) ) {
+					return;
+				}
+
 				// If the response includes the Search Console property, set that.
 				if ( ! empty( $token_response['search_console_property'] ) ) {
 					$this->get_settings()->merge(
@@ -186,21 +193,32 @@ final class Search_Console extends Module
 			case 'GET:matched-sites':
 				return $this->get_webmasters_service()->sites->listSites();
 			case 'GET:searchanalytics':
-				list ( $start_date, $end_date ) = $this->parse_date_range(
-					$data['dateRange'] ?: 'last-28-days',
-					$data['compareDateRanges'] ? 2 : 1,
-					3
-				);
+				$start_date = $data['startDate'];
+				$end_date   = $data['endDate'];
+				if ( ! strtotime( $start_date ) || ! strtotime( $end_date ) ) {
+					list ( $start_date, $end_date ) = $this->parse_date_range(
+						$data['dateRange'] ?: 'last-28-days',
+						$data['compareDateRanges'] ? 2 : 1,
+						3
+					);
+				}
 
 				$data_request = array(
-					'page'       => $data['url'],
 					'start_date' => $start_date,
 					'end_date'   => $end_date,
-					'dimensions' => array_filter( explode( ',', $data['dimensions'] ) ),
 				);
+
+				if ( ! empty( $data['url'] ) ) {
+					$data_request['page'] = $data['url'];
+				}
 
 				if ( isset( $data['limit'] ) ) {
 					$data_request['row_limit'] = $data['limit'];
+				}
+
+				$dimensions = $this->parse_string_list( $data['dimensions'] );
+				if ( is_array( $dimensions ) && ! empty( $dimensions ) ) {
+					$data_request['dimensions'] = $dimensions;
 				}
 
 				return $this->create_search_analytics_data_request( $data_request );
@@ -334,7 +352,7 @@ final class Search_Console extends Module
 	 *     @type string $start_date Start date in 'Y-m-d' format. Default empty string.
 	 *     @type string $end_date   End date in 'Y-m-d' format. Default empty string.
 	 *     @type string $page       Specific page URL to filter by. Default empty string.
-	 *     @type int    $row_limit  Limit of rows to return. Default 500.
+	 *     @type int    $row_limit  Limit of rows to return. Default 1000.
 	 * }
 	 * @return RequestInterface Search Console analytics request instance.
 	 */
@@ -346,9 +364,11 @@ final class Search_Console extends Module
 				'start_date' => '',
 				'end_date'   => '',
 				'page'       => '',
-				'row_limit'  => 500,
+				'row_limit'  => 1000,
 			)
 		);
+
+		$property_id = $this->get_property_id();
 
 		$request = new Google_Service_Webmasters_SearchAnalyticsQueryRequest();
 		if ( ! empty( $args['dimensions'] ) ) {
@@ -360,21 +380,42 @@ final class Search_Console extends Module
 		if ( ! empty( $args['end_date'] ) ) {
 			$request->setEndDate( $args['end_date'] );
 		}
-		if ( ! empty( $args['page'] ) ) {
-			$filter = new Google_Service_Webmasters_ApiDimensionFilter();
-			$filter->setDimension( 'page' );
-			$filter->setExpression( esc_url_raw( $args['page'] ) );
-			$filters = new Google_Service_Webmasters_ApiDimensionFilterGroup();
-			$filters->setFilters( array( $filter ) );
-			$request->setDimensionFilterGroups( array( $filters ) );
+
+		$filters = array();
+
+		// If domain property, limit data to URLs that are part of the current site.
+		if ( 0 === strpos( $property_id, 'sc-domain:' ) ) {
+			$scope_site_filter = new Google_Service_Webmasters_ApiDimensionFilter();
+			$scope_site_filter->setDimension( 'page' );
+			$scope_site_filter->setOperator( 'contains' );
+			$scope_site_filter->setExpression( esc_url_raw( $this->context->get_reference_site_url() ) );
+			$filters[] = $scope_site_filter;
 		}
+
+		// If specific URL requested, limit data to that URL.
+		if ( ! empty( $args['page'] ) ) {
+			$single_url_filter = new Google_Service_Webmasters_ApiDimensionFilter();
+			$single_url_filter->setDimension( 'page' );
+			$single_url_filter->setOperator( 'equals' );
+			$single_url_filter->setExpression( esc_url_raw( $args['page'] ) );
+			$filters[] = $single_url_filter;
+		}
+
+		// If there are relevant filters, add them to the request.
+		if ( ! empty( $filters ) ) {
+			$filter_group = new Google_Service_Webmasters_ApiDimensionFilterGroup();
+			$filter_group->setGroupType( 'and' );
+			$filter_group->setFilters( $filters );
+			$request->setDimensionFilterGroups( array( $filter_group ) );
+		}
+
 		if ( ! empty( $args['row_limit'] ) ) {
 			$request->setRowLimit( $args['row_limit'] );
 		}
 
 		return $this->get_webmasters_service()
 			->searchanalytics
-			->query( $this->get_property_id(), $request );
+			->query( $property_id, $request );
 	}
 
 	/**
@@ -555,4 +596,17 @@ final class Search_Console extends Module
 			),
 		);
 	}
+
+	/**
+	 * Gets an owner ID for the module.
+	 *
+	 * @since 1.16.0
+	 *
+	 * @return int Owner ID.
+	 */
+	public function get_owner_id() {
+		$owner = new Owner_ID( $this->options );
+		return $owner->get();
+	}
+
 }

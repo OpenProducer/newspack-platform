@@ -1,9 +1,4 @@
 <?php
-/**
- * Reindexation action for indexables.
- *
- * @package Yoast\WP\SEO\Actions\Indexation
- */
 
 namespace Yoast\WP\SEO\Actions\Indexation;
 
@@ -14,7 +9,7 @@ use Yoast\WP\SEO\Models\Indexable;
 use Yoast\WP\SEO\Repositories\Indexable_Repository;
 
 /**
- * Indexable_Post_Indexation_Action class.
+ * Reindexation action for post indexables.
  */
 class Indexable_Post_Indexation_Action implements Indexation_Action_Interface {
 
@@ -149,6 +144,7 @@ class Indexable_Post_Indexation_Action implements Indexation_Action_Interface {
 				SELECT object_id
 				FROM $indexable_table
 				WHERE object_type = 'post'
+				AND permalink_hash IS NOT NULL
 			)
 			AND post_type IN (" . \implode( ', ', \array_fill( 0, \count( $public_post_types ), '%s' ) ) . ")
 			$limit_query",

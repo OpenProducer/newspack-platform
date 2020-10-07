@@ -256,14 +256,26 @@ class Sender {
 	 * @return boolean|\WP_Error True if this sync sending was successful, error object otherwise.
 	 */
 	public function do_full_sync() {
-		if ( ! Modules::get_module( 'full-sync' ) ) {
+		$sync_module = Modules::get_module( 'full-sync' );
+		if ( ! $sync_module ) {
 			return;
 		}
 		if ( ! Settings::get_setting( 'full_sync_sender_enabled' ) ) {
 			return;
 		}
 		$this->continue_full_sync_enqueue();
-		return $this->do_sync_and_set_delays( $this->full_sync_queue );
+		// immediate full sync sends data in continue_full_sync_enqueue.
+		if ( false === strpos( get_class( $sync_module ), 'Full_Sync_Immediately' ) ) {
+			return $this->do_sync_and_set_delays( $this->full_sync_queue );
+		} else {
+			$status = $sync_module->get_status();
+			// Sync not started or Sync finished.
+			if ( false === $status['started'] || ( ! empty( $status['started'] ) && ! empty( $status['finished'] ) ) ) {
+				return false;
+			} else {
+				return true;
+			}
+		}
 	}
 
 	/**
@@ -313,6 +325,11 @@ class Sender {
 		// Don't sync if importing.
 		if ( defined( 'WP_IMPORTING' ) && WP_IMPORTING ) {
 			return new \WP_Error( 'is_importing' );
+		}
+
+		// Don't sync if request is marked as read only.
+		if ( Constants::is_true( 'JETPACK_SYNC_READ_ONLY' ) ) {
+			return new \WP_Error( 'jetpack_sync_read_only' );
 		}
 
 		if ( ! Settings::is_sender_enabled( $queue->id ) ) {

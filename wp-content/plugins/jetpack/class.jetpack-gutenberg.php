@@ -6,6 +6,7 @@
  * @package Jetpack
  */
 
+use Automattic\Jetpack\Blocks;
 use Automattic\Jetpack\Constants;
 use Automattic\Jetpack\Status;
 
@@ -40,11 +41,13 @@ function jetpack_register_block( $slug, $args = array() ) {
 	$feature_name = Jetpack_Gutenberg::remove_extension_prefix( $slug );
 	// If the block is dynamic, and a Jetpack block, wrap the render_callback to check availability.
 	if (
-		isset( $args['plan_check'], $args['render_callback'] )
+		isset( $args['plan_check'] )
 		&& true === $args['plan_check']
 	) {
-		$args['render_callback'] = Jetpack_Gutenberg::get_render_callback_with_availability_check( $feature_name, $args['render_callback'] );
-		$method_name             = 'set_availability_for_plan';
+		if ( isset( $args['render_callback'] ) ) {
+			$args['render_callback'] = Jetpack_Gutenberg::get_render_callback_with_availability_check( $feature_name, $args['render_callback'] );
+		}
+		$method_name = 'set_availability_for_plan';
 	} else {
 		$method_name = 'set_extension_available';
 	}
@@ -647,7 +650,7 @@ class Jetpack_Gutenberg {
 			$script_dependencies = array_unique( array_merge( $script_dependencies, $asset_manifest['dependencies'] ) );
 		}
 
-		if ( ( ! class_exists( 'Jetpack_AMP_Support' ) || ! Jetpack_AMP_Support::is_amp_request() ) && self::block_has_asset( $script_relative_path ) ) {
+		if ( ! Blocks::is_amp_request() && self::block_has_asset( $script_relative_path ) ) {
 			$script_version = self::get_asset_version( $script_relative_path );
 			$view_script    = plugins_url( $script_relative_path, JETPACK__PLUGIN_FILE );
 			wp_enqueue_script( 'jetpack-block-' . $type, $view_script, $script_dependencies, $script_version, false );
@@ -769,8 +772,11 @@ class Jetpack_Gutenberg {
 				'jetpack'          => array(
 					'is_active'                 => Jetpack::is_active(),
 					'is_current_user_connected' => $is_current_user_connected,
+					/** This filter is documented in class.jetpack-gutenberg.php */
+					'enable_upgrade_nudge'      => apply_filters( 'jetpack_block_editor_enable_upgrade_nudge', false ),
 				),
 				'siteFragment'     => $site_fragment,
+				'adminUrl'         => esc_url( admin_url() ),
 				'tracksUserData'   => $user_data,
 				'wpcomBlogId'      => $blog_id,
 				'allowedMimeTypes' => wp_get_mime_types(),
@@ -805,6 +811,26 @@ class Jetpack_Gutenberg {
 	}
 
 	/**
+	 * Loads PHP components of extended-blocks.
+	 *
+	 * @since 8.9.0
+	 */
+	public static function load_extended_blocks() {
+		if ( self::should_load() ) {
+			$extended_blocks = glob( JETPACK__PLUGIN_DIR . 'extensions/extended-blocks/*' );
+
+			foreach ( $extended_blocks as $block ) {
+				$name = basename( $block );
+				$path = JETPACK__PLUGIN_DIR . 'extensions/extended-blocks/' . $name . '/' . $name . '.php';
+
+				if ( file_exists( $path ) ) {
+					include_once $path;
+				}
+			}
+		}
+	}
+
+	/**
 	 * Get CSS classes for a block.
 	 *
 	 * @since 7.7.0
@@ -816,34 +842,8 @@ class Jetpack_Gutenberg {
 	 * @return string $classes List of CSS classes for a block.
 	 */
 	public static function block_classes( $slug = '', $attr, $extra = array() ) {
-		if ( empty( $slug ) ) {
-			return '';
-		}
-
-		// Basic block name class.
-		$classes = array(
-			'wp-block-jetpack-' . $slug,
-		);
-
-		// Add alignment if provided.
-		if (
-			! empty( $attr['align'] )
-			&& in_array( $attr['align'], array( 'left', 'center', 'right', 'wide', 'full' ), true )
-		) {
-			array_push( $classes, 'align' . $attr['align'] );
-		}
-
-		// Add custom classes if provided in the block editor.
-		if ( ! empty( $attr['className'] ) ) {
-			array_push( $classes, $attr['className'] );
-		}
-
-		// Add any extra classes.
-		if ( is_array( $extra ) && ! empty( $extra ) ) {
-			$classes = array_merge( $classes, array_filter( $extra ) );
-		}
-
-		return implode( ' ', $classes );
+		_deprecated_function( __METHOD__, '9.0.0', 'Automattic\\Jetpack\\Blocks::classes' );
+		return Blocks::classes( $slug, $attr, $extra );
 	}
 
 	/**
@@ -1129,8 +1129,6 @@ class Jetpack_Gutenberg {
 			$bare_slug    = self::remove_extension_prefix( $slug );
 			if ( isset( $availability[ $bare_slug ] ) && $availability[ $bare_slug ]['available'] ) {
 				return call_user_func( $render_callback, $prepared_attributes, $block_content );
-			} elseif ( isset( $availability[ $bare_slug ]['details']['required_plan'] ) ) {
-				return self::upgrade_nudge( $availability[ $bare_slug ]['details']['required_plan'] );
 			}
 
 			return null;

@@ -99,13 +99,7 @@ class REST_Connector {
 			array(
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => array( $this, 'connection_reconnect' ),
-				'args'                => array(
-					'action' => array(
-						'type'     => 'string',
-						'required' => true,
-					),
-				),
-				'permission_callback' => __CLASS__ . '::jetpack_disconnect_permission_check',
+				'permission_callback' => __CLASS__ . '::jetpack_reconnect_permission_check',
 			)
 		);
 	}
@@ -229,8 +223,8 @@ class REST_Connector {
 	 *
 	 * @return bool|WP_Error Whether user has the capability 'jetpack_disconnect'.
 	 */
-	public static function jetpack_disconnect_permission_check() {
-		if ( current_user_can( 'jetpack_disconnect' ) ) {
+	public static function jetpack_reconnect_permission_check() {
+		if ( current_user_can( 'jetpack_reconnect' ) ) {
 			return true;
 		}
 
@@ -251,28 +245,39 @@ class REST_Connector {
 	 *
 	 * @since 8.8.0
 	 *
-	 * @param WP_REST_Request $request The request sent to the WP REST API.
-	 *
 	 * @return \WP_REST_Response|WP_Error
 	 */
-	public function connection_reconnect( WP_REST_Request $request ) {
-		$params = $request->get_json_params();
-
+	public function connection_reconnect() {
 		$response = array();
 
-		switch ( $params['action'] ) {
-			case 'reconnect':
-				$result = $this->connection->reconnect();
+		$next = null;
 
-				if ( true === $result ) {
-					$response['status']       = 'in_progress';
-					$response['authorizeUrl'] = $this->connection->get_authorization_url();
-				} elseif ( is_wp_error( $result ) ) {
-					$response = $result;
-				}
+		$result = $this->connection->restore();
+
+		if ( is_wp_error( $result ) ) {
+			$response = $result;
+		} elseif ( is_string( $result ) ) {
+			$next = $result;
+		} else {
+			$next = true === $result ? 'completed' : 'failed';
+		}
+
+		switch ( $next ) {
+			case 'authorize':
+				$response['status']       = 'in_progress';
+				$response['authorizeUrl'] = $this->connection->get_authorization_url();
 				break;
-			default:
-				$response = new WP_Error( 'Unknown action' );
+			case 'completed':
+				$response['status'] = 'completed';
+				/**
+				 * Action fired when reconnection has completed successfully.
+				 *
+				 * @since 9.0.0
+				 */
+				do_action( 'jetpack_reconnection_completed' );
+				break;
+			case 'failed':
+				$response = new WP_Error( 'Reconnect failed' );
 				break;
 		}
 

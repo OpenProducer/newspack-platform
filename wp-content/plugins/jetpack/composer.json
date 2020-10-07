@@ -10,7 +10,8 @@
 	"require": {
 		"ext-fileinfo": "*",
 		"ext-json": "*",
-		"ext-openssl": "*"
+		"ext-openssl": "*",
+		"nojimage/twitter-text-php": "^3.1"
 	},
 	"require-dev": {
 		"dealerdirect/phpcodesniffer-composer-installer": "0.7.0",
@@ -20,7 +21,7 @@
 		"wp-coding-standards/wpcs": "2.3.0"
 	},
 	"scripts": {
-		"php:compatibility": "vendor/bin/phpcs -p -s --runtime-set testVersion '5.6-' --standard=PHPCompatibilityWP --ignore=docker,tools,tests,node_modules,vendor --extensions=php",
+		"php:compatibility": "vendor/bin/phpcs -p -s --runtime-set testVersion '5.6-' --standard=PHPCompatibilityWP --ignore=docker,tools,tests,node_modules,vendor,packages/*/wordpress --extensions=php",
 		"php:lint": "vendor/bin/phpcs -p -s",
 		"php:changed": "vendor/sirbrillig/phpcs-changed/bin/phpcs-changed --git",
 		"php:autofix": "vendor/bin/phpcbf",
@@ -40,6 +41,9 @@
 	"minimum-stability": "dev",
 	"prefer-stable": true,
 	"config": {
-		"sort-packages": true
+		"sort-packages": true,
+		"platform": {
+			"ext-intl": "0.0.0"
+		}
 	}
 }

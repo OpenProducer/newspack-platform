@@ -1,9 +1,4 @@
 <?php
-/**
- * Class that contains all relevant data for rendering the meta tags.
- *
- * @package Yoast\YoastSEO\Context
- */
 
 namespace Yoast\WP\SEO\Context;
 
@@ -22,7 +17,9 @@ use Yoast\WP\SEO\Presentations\Abstract_Presentation;
 use Yoast\WP\SEO\Presentations\Indexable_Presentation;
 
 /**
- * Class Meta_Tags_Context
+ * Class Meta_Tags_Context.
+ *
+ * Class that contains all relevant data for rendering the meta tags.
  *
  * @property string      $canonical
  * @property string      $title
@@ -390,18 +387,62 @@ class Meta_Tags_Context extends Abstract_Presentation {
 				$type = 'CollectionPage';
 				break;
 			default:
-				$type = 'WebPage';
-				if ( (int) \get_option( 'page_for_posts' ) === $this->indexable->object_id ) {
-					$type = 'CollectionPage';
+				$additional_type = $this->indexable->schema_page_type;
+				if ( \is_null( $additional_type ) ) {
+					$additional_type = $this->options->get( 'schema-page-type-' . $this->indexable->object_sub_type );
 				}
+
+				$type = [ 'WebPage', $additional_type ];
+
+				// Is this indexable set as a page for posts, e.g. in the WordPress reading settings as a static homepage?
+				if ( (int) \get_option( 'page_for_posts' ) === $this->indexable->object_id ) {
+					$type[] = 'CollectionPage';
+				}
+
+				// Ensure we get only unique values, and remove any null values and the index.
+				$type = \array_filter( \array_values( \array_unique( $type ) ) );
 		}
 
 		/**
 		 * Filter: 'wpseo_schema_webpage_type' - Allow changing the WebPage type.
 		 *
-		 * @api string $type The WebPage type.
+		 * @api string|array $type The WebPage type.
 		 */
 		return \apply_filters( 'wpseo_schema_webpage_type', $type );
+	}
+
+	/**
+	 * Returns the schema article type.
+	 *
+	 * @return string|array The schema article type.
+	 */
+	public function generate_schema_article_type() {
+		$additional_type = $this->indexable->schema_article_type;
+		if ( \is_null( $additional_type ) ) {
+			$additional_type = $this->options->get( 'schema-article-type-' . $this->indexable->object_sub_type );
+		}
+
+		$type = 'Article';
+
+		/*
+		 * If `None` is set (either on the indexable or as a default), set type to 'None'.
+		 * This simplifies is_needed checks downstream.
+		 */
+		if ( $additional_type === 'None' ) {
+			$type = $additional_type;
+		}
+
+		if ( $additional_type !== $type ) {
+			$type = [ $type, $additional_type ];
+		}
+
+		/**
+		 * Filter: 'wpseo_schema_article_type' - Allow changing the Article type.
+		 *
+		 * @param string|string[] $type      The Article type.
+		 * @param Indexable       $indexable The indexable.
+		 */
+		return \apply_filters( 'wpseo_schema_article_type', $type, $this->indexable );
 	}
 
 	/**

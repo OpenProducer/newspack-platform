@@ -157,9 +157,11 @@ abstract class WPSEO_Option {
 			 * The option validation routines remove the default filters to prevent failing
 			 * to insert an option if it's new. Let's add them back afterwards.
 			 */
-			add_action( 'add_option', [ $this, 'add_default_filters' ] ); // Adding back after INSERT.
+			add_action( 'add_option', [ $this, 'add_default_filters_if_same_option' ] ); // Adding back after INSERT.
 
-			add_action( 'update_option', [ $this, 'add_default_filters' ] );
+			add_action( 'update_option', [ $this, 'add_default_filters_if_same_option' ] );
+
+			add_filter( 'pre_update_option', [ $this, 'add_default_filters_if_not_changed' ], PHP_INT_MAX, 3 );
 
 			// Refills the cache when the option has been updated.
 			add_action( 'update_option_' . $this->option_name, [ 'WPSEO_Options', 'clear_cache' ], 10 );
@@ -175,6 +177,7 @@ abstract class WPSEO_Option {
 			 */
 			add_action( 'add_site_option_' . $this->option_name, [ $this, 'add_default_filters' ] );
 			add_action( 'update_site_option_' . $this->option_name, [ $this, 'add_default_filters' ] );
+			add_filter( 'pre_update_site_option_' . $this->option_name, [ $this, 'add_default_filters_if_not_changed' ], PHP_INT_MAX, 3 );
 
 			// Refills the cache when the option has been updated.
 			add_action( 'update_site_option_' . $this->option_name, [ 'WPSEO_Options', 'clear_cache' ], 1, 0 );
@@ -216,26 +219,29 @@ abstract class WPSEO_Option {
 		}
 	}
 
-// @codingStandardsIgnoreStart
-	/**
+	/*
 	 * All concrete classes *must* contain the get_instance method.
 	 *
 	 * {@internal Unfortunately I can't define it as an abstract as it also *has* to be static...}}
-	 */
-	// abstract protected static function get_instance();
-
-
-	/**
+	 *
+	 * ```
+	 * abstract protected static function get_instance();
+	 * ```
+	 * ---------------
+	 *
 	 * Concrete classes *may* contain a translate_defaults method.
-	 */
-	// abstract public function translate_defaults();
-
-
-	/**
+	 * ```
+	 * abstract public function translate_defaults();
+	 * ```
+	 * ---------------
+	 *
 	 * Concrete classes *may* contain a enrich_defaults method to add additional defaults once
 	 * all post_types and taxonomies have been registered.
+	 *
+	 * ```
+	 * abstract public function enrich_defaults();
+	 * ```
 	 */
-	// abstract public function enrich_defaults();
 
 	/* *********** METHODS INFLUENCING get_option() *********** */
 
@@ -251,7 +257,43 @@ abstract class WPSEO_Option {
 		}
 	}
 
-	// @codingStandardsIgnoreStart
+	/**
+	 * Adds back the default filters that were removed during validation if the option was changed.
+	 * Checks if this option was changed to prevent constantly checking if filters are present.
+	 *
+	 * @param string $option_name The option name.
+	 *
+	 * @return void
+	 */
+	public function add_default_filters_if_same_option( $option_name ) {
+		if ( $option_name === $this->option_name ) {
+			$this->add_default_filters();
+		}
+	}
+
+	/**
+	 * Adds back the default filters that were removed during validation if the option was not changed.
+	 * This is because in that case the latter actions are not called and thus the filters are never
+	 * added back.
+	 *
+	 * @param mixed  $value       The current value.
+	 * @param string $option_name The option name.
+	 * @param mixed  $old_value   The old value.
+	 *
+	 * @return string The current value.
+	 */
+	public function add_default_filters_if_not_changed( $value, $option_name, $old_value ) {
+		if ( $option_name !== $this->option_name ) {
+			return $value;
+		}
+
+		if ( $value === $old_value || maybe_serialize( $value ) === maybe_serialize( $old_value ) ) {
+			$this->add_default_filters();
+		}
+
+		return $value;
+	}
+
 	/**
 	 * Validate webmaster tools & Pinterest verification strings.
 	 *
@@ -759,11 +801,15 @@ abstract class WPSEO_Option {
 		return $this->option_name;
 	}
 
-	/**
+	/*
 	 * Concrete classes *may* contain a clean_option method which will clean out old/renamed
 	 * values within the option.
+	 *
+	 * ```
+	 * abstract public function clean_option( $option_value, $current_version = null, $all_old_option_values = null );
+	 * ```
 	 */
-	// abstract public function clean_option( $option_value, $current_version = null, $all_old_option_values = null );
+
 	/* *********** HELPER METHODS for internal use. *********** */
 
 	/**

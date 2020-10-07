@@ -1,16 +1,11 @@
 <?php
-/**
- * Presenter class for the indexation modal.
- *
- * @package Yoast\YoastSEO\Presenters\Admin
- */
 
 namespace Yoast\WP\SEO\Presenters\Admin;
 
 use Yoast\WP\SEO\Presenters\Abstract_Presenter;
 
 /**
- * Indexation_Modal_Presenter class.
+ * Presenter class for the indexation modal.
  */
 class Indexation_Modal_Presenter extends Abstract_Presenter {
 
@@ -63,7 +58,7 @@ class Indexation_Modal_Presenter extends Abstract_Presenter {
 		);
 
 		return \sprintf(
-			'<div id="yoast-indexation-wrapper" class="hidden">%s<button id="yoast-indexation-stop" type="button" class="button">%s</button></div>',
+			'<div id="yoast-indexation-wrapper" class="hidden">%s<button class="button yoast-indexation-stop" type="button">%s</button></div>',
 			\implode( '<hr />', $blocks ),
 			\esc_html__( 'Stop indexing', 'wordpress-seo' )
 		);

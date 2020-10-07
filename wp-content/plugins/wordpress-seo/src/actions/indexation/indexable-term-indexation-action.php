@@ -1,9 +1,4 @@
 <?php
-/**
- * Reindexation action for indexables.
- *
- * @package Yoast\WP\SEO\Actions\Indexation
- */
 
 namespace Yoast\WP\SEO\Actions\Indexation;
 
@@ -14,7 +9,7 @@ use Yoast\WP\SEO\Models\Indexable;
 use Yoast\WP\SEO\Repositories\Indexable_Repository;
 
 /**
- * Indexable_Term_Indexation_Action class.
+ * Reindexation action for term indexables.
  */
 class Indexable_Term_Indexation_Action implements Indexation_Action_Interface {
 
@@ -58,7 +53,7 @@ class Indexable_Term_Indexation_Action implements Indexation_Action_Interface {
 	}
 
 	/**
-	 * The total number of unindexed terms.
+	 * Gets the total number of unindexed terms.
 	 *
 	 * @return int|false The amount of unindexed terms. False if the query fails.
 	 */
@@ -149,6 +144,7 @@ class Indexable_Term_Indexation_Action implements Indexation_Action_Interface {
 				SELECT object_id
 				FROM $indexable_table
 				WHERE object_type = 'term'
+				AND permalink_hash IS NOT NULL
 			)
 			AND taxonomy IN (" . \implode( ', ', \array_fill( 0, \count( $public_taxonomies ), '%s' ) ) . ")
 			$limit_query",

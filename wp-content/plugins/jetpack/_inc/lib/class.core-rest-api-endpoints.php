@@ -1,10 +1,13 @@
 <?php
 
 use Automattic\Jetpack\Connection\Client;
+use Automattic\Jetpack\Jetpack_CRM_Data;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\REST_Connector;
 use Automattic\Jetpack\JITMS\JITM;
+use Automattic\Jetpack\Licensing;
 use Automattic\Jetpack\Tracking;
+
 
 /**
  * Register WP REST API endpoints for Jetpack.
@@ -413,18 +416,94 @@ class Jetpack_Core_Json_Api_Endpoints {
 			'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
 		) );
 
-		// Plugins: get list of all plugins.
-		register_rest_route( 'jetpack/v4', '/plugins', array(
-			'methods' => WP_REST_Server::READABLE,
-			'callback' => __CLASS__ . '::get_plugins',
-			'permission_callback' => __CLASS__ . '::activate_plugins_permission_check',
-		) );
+		/*
+		 * Plugins: manage plugins on your site.
+		 *
+		 * @since 8.9.0
+		 *
+		 * @to-do: deprecate and switch to /wp/v2/plugins when WordPress 5.5 is the minimum required version.
+		 * Noting that the `source` parameter is Jetpack-specific (not implemented in Core).
+		 */
+		register_rest_route(
+			'jetpack/v4',
+			'/plugins',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => __CLASS__ . '::get_plugins',
+					'permission_callback' => __CLASS__ . '::activate_plugins_permission_check',
+				),
+				array(
+					'methods'             => WP_REST_Server::CREATABLE,
+					'callback'            => __CLASS__ . '::install_plugin',
+					'permission_callback' => __CLASS__ . '::activate_plugins_permission_check',
+					'args'                => array(
+						'slug'   => array(
+							'type'        => 'string',
+							'required'    => true,
+							'description' => __( 'WordPress.org plugin directory slug.', 'jetpack' ),
+							'pattern'     => '[\w\-]+',
+						),
+						'status' => array(
+							'description' => __( 'The plugin activation status.', 'jetpack' ),
+							'type'        => 'string',
+							'enum'        => is_multisite() ? array( 'inactive', 'active', 'network-active' ) : array( 'inactive', 'active' ),
+							'default'     => 'inactive',
+						),
+						'source' => array(
+							'required'          => false,
+							'type'              => 'string',
+							'validate_callback' => __CLASS__ . '::validate_string',
+						),
+					),
+				),
+			)
+		);
 
-		register_rest_route( 'jetpack/v4', '/plugins/akismet/activate', array(
-			'methods' => WP_REST_Server::EDITABLE,
-			'callback' => __CLASS__ . '::activate_akismet',
-			'permission_callback' => __CLASS__ . '::activate_plugins_permission_check',
-		) );
+		/*
+		 * Plugins: activate a specific plugin.
+		 *
+		 * @since 8.9.0
+		 *
+		 * @to-do: deprecate and switch to /wp/v2/plugins when WordPress 5.5 is the minimum required version.
+		 * Noting that the `source` parameter is Jetpack-specific (not implemented in Core).
+		 */
+		register_rest_route(
+			'jetpack/v4',
+			'/plugins/(?P<plugin>[^.\/]+(?:\/[^.\/]+)?)',
+			array(
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => __CLASS__ . '::activate_plugin',
+				'permission_callback' => __CLASS__ . '::activate_plugins_permission_check',
+				'args'                => array(
+					'status' => array(
+						'required'          => true,
+						'type'              => 'string',
+						'validate_callback' => __CLASS__ . '::validate_activate_plugin',
+					),
+					'source' => array(
+						'required'          => false,
+						'type'              => 'string',
+						'validate_callback' => __CLASS__ . '::validate_string',
+					),
+				),
+			)
+		);
+
+		/**
+		 * Install and Activate the Akismet plugin.
+		 *
+		 * @deprecated 8.9.0 Use the /plugins route instead.
+		 */
+		register_rest_route(
+			'jetpack/v4',
+			'/plugins/akismet/activate',
+			array(
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => __CLASS__ . '::activate_akismet',
+				'permission_callback' => __CLASS__ . '::activate_plugins_permission_check',
+			)
+		);
 
 		// Plugins: check if the plugin is active.
 		register_rest_route( 'jetpack/v4', '/plugin/(?P<plugin>[a-z\/\.\-_]+)', array(
@@ -534,6 +613,60 @@ class Jetpack_Core_Json_Api_Endpoints {
 							'required'          => false,
 							'type'              => 'string',
 							'validate_callback' => __CLASS__ . '::validate_string',
+						),
+					),
+				),
+			)
+		);
+
+		/*
+		 * Get and update the last licensing error message.
+		 */
+		register_rest_route(
+			'jetpack/v4',
+			'/licensing/error',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => __CLASS__ . '::get_licensing_error',
+					'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
+				),
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => __CLASS__ . '::update_licensing_error',
+					'permission_callback' => __CLASS__ . '::view_admin_page_permission_check',
+					'args'                => array(
+						'error' => array(
+							'required'          => true,
+							'type'              => 'string',
+							'validate_callback' => __CLASS__ . '::validate_string',
+							'sanitize_callback' => 'sanitize_text_field',
+						),
+					),
+				),
+			)
+		);
+
+		/*
+		 * Manage the Jetpack CRM plugin's integration with Jetpack contact forms.
+		 */
+		register_rest_route(
+			'jetpack/v4',
+			'jetpack_crm',
+			array(
+				array(
+					'methods'             => WP_REST_Server::READABLE,
+					'callback'            => __CLASS__ . '::get_jetpack_crm_data',
+					'permission_callback' => __CLASS__ . '::jetpack_crm_data_permission_check',
+				),
+				array(
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => __CLASS__ . '::activate_crm_jetpack_forms_extension',
+					'permission_callback' => __CLASS__ . '::activate_crm_extensions_permission_check',
+					'args'                => array(
+						'extension' => array(
+							'required' => true,
+							'type'     => 'text',
 						),
 					),
 				),
@@ -1636,17 +1769,17 @@ class Jetpack_Core_Json_Api_Endpoints {
 	}
 
 	/**
-	 * Fetch site data from .com including the site's current plan.
+	 * Fetch site data from .com including the site's current plan and the site's products.
 	 *
 	 * @since 5.5.0
 	 *
-	 * @return array Array of site properties.
+	 * @return stdClass|WP_Error
 	 */
 	public static function site_data() {
 		$site_id = Jetpack_Options::get_option( 'id' );
 
 		if ( ! $site_id ) {
-			new WP_Error( 'site_id_missing' );
+			return new WP_Error( 'site_id_missing', '', array( 'api_error_code' => __( 'site_id_missing', 'jetpack' ) ) );
 		}
 
 		$args = array( 'headers' => array() );
@@ -1658,23 +1791,30 @@ class Jetpack_Core_Json_Api_Endpoints {
 		}
 
 		$response = Client::wpcom_json_api_request_as_blog( sprintf( '/sites/%d', $site_id ) .'?force=wpcom', '1.1', $args );
+		$body     = wp_remote_retrieve_body( $response );
+		$data     = $body ? json_decode( $body ) : null;
 
 		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			return new WP_Error( 'site_data_fetch_failed' );
+			$api_error_code = null;
+
+			if ( is_wp_error( $response ) ) {
+				$api_error_code = $response->get_error_code() ? wp_strip_all_tags( $response->get_error_code() ) : null;
+			} elseif ( $data && ! empty( $data->error ) ) {
+				$api_error_code = $data->error;
+			}
+
+			return new WP_Error( 'site_data_fetch_failed', '', array( 'api_error_code' => $api_error_code ) );
 		}
 
 		Jetpack_Plan::update_from_sites_response( $response );
 
-		$body = wp_remote_retrieve_body( $response );
-
-		return json_decode( $body );
+		return $data;
 	}
 	/**
 	 * Get site data, including for example, the site's current plan.
 	 *
+	 * @return WP_Error|WP_HTTP_Response|WP_REST_Response
 	 * @since 4.3.0
-	 *
-	 * @return array Array of site properties.
 	 */
 	public static function get_site_data() {
 		$site_data = self::site_data();
@@ -1693,13 +1833,17 @@ class Jetpack_Core_Json_Api_Endpoints {
 				)
 			);
 		}
-		if ( $site_data->get_error_code() === 'site_data_fetch_failed' ) {
-			return new WP_Error( 'site_data_fetch_failed', esc_html__( 'Failed fetching site data from WordPress.com. If the problem persists, try reconnecting Jetpack.', 'jetpack' ), array( 'status' => 400 ) );
+
+		$error_data = $site_data->get_error_data();
+
+		if ( empty( $error_data['api_error_code'] ) ) {
+			$error_message = esc_html__( 'Failed fetching site data from WordPress.com. If the problem persists, try reconnecting Jetpack.', 'jetpack' );
+		} else {
+			/* translators: %s is an error code (e.g. `token_mismatch`) */
+			$error_message = sprintf( esc_html__( 'Failed fetching site data from WordPress.com (%s). If the problem persists, try reconnecting Jetpack.', 'jetpack' ), $error_data['api_error_code'] );
 		}
 
-		if ( $site_data->get_error_code() === 'site_id_missing' ) {
-			return new WP_Error( 'site_id_missing', esc_html__( 'The ID of this site does not exist.', 'jetpack' ), array( 'status' => 404 ) );
-		}
+		return new WP_Error( $site_data->get_error_code(), $error_message, array( 'status' => 400 ) );
 	}
 
 	/**
@@ -3276,31 +3420,6 @@ class Jetpack_Core_Json_Api_Endpoints {
 
 
 	/**
-	 * Returns a list of all plugins in the site.
-	 *
-	 * @since 4.2.0
-	 * @uses get_plugins()
-	 *
-	 * @return array
-	 */
-	private static function core_get_plugins() {
-		if ( ! function_exists( 'get_plugins' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-		/** This filter is documented in wp-admin/includes/class-wp-plugins-list-table.php */
-		$plugins = apply_filters( 'all_plugins', get_plugins() );
-
-		if ( is_array( $plugins ) && ! empty( $plugins ) ) {
-			foreach ( $plugins as $plugin_slug => $plugin_data ) {
-				$plugins[ $plugin_slug ]['active'] = self::core_is_plugin_active( $plugin_slug );
-			}
-			return $plugins;
-		}
-
-		return array();
-	}
-
-	/**
 	 * Deprecated - Get third party plugin API keys.
 	 * @deprecated
 	 *
@@ -3395,22 +3514,6 @@ class Jetpack_Core_Json_Api_Endpoints {
 	}
 
 	/**
-	 * Checks if the queried plugin is active.
-	 *
-	 * @since 4.2.0
-	 * @uses is_plugin_active()
-	 *
-	 * @return bool
-	 */
-	private static function core_is_plugin_active( $plugin ) {
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-			require_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		return is_plugin_active( $plugin );
-	}
-
-	/**
 	 * Get plugins data in site.
 	 *
 	 * @since 4.2.0
@@ -3418,7 +3521,8 @@ class Jetpack_Core_Json_Api_Endpoints {
 	 * @return WP_REST_Response|WP_Error List of plugins in the site. Otherwise, a WP_Error instance with the corresponding error.
 	 */
 	public static function get_plugins() {
-		$plugins = self::core_get_plugins();
+		jetpack_require_lib( 'plugins' );
+		$plugins = Jetpack_Plugins::get_plugins();
 
 		if ( ! empty( $plugins ) ) {
 			return rest_ensure_response( $plugins );
@@ -3432,23 +3536,217 @@ class Jetpack_Core_Json_Api_Endpoints {
 	 *
 	 * @since 7.7
 	 *
+	 * @deprecated 8.9.0 Use install_plugin instead.
+	 *
 	 * @return WP_REST_Response A response indicating whether or not the installation was successful.
 	 */
 	public static function activate_akismet() {
-		jetpack_require_lib( 'plugins' );
-		$result = Jetpack_Plugins::install_and_activate_plugin('akismet');
+		_deprecated_function( __METHOD__, 'jetpack-8.9.0', 'install_plugin' );
 
-		if ( is_wp_error( $result ) ) {
-			return rest_ensure_response( array(
-				'code'    => 'failure',
-				'message' => esc_html__( 'Unable to activate Akismet', 'jetpack' )
-			) );
-		} else {
-			return rest_ensure_response( array(
-				'code'    => 'success',
-				'message' => esc_html__( 'Activated Akismet', 'jetpack' )
-			) );
+		$args = array(
+			'slug'   => 'akismet',
+			'status' => 'active',
+		);
+		return self::install_plugin( $args );
+	}
+
+	/**
+	 * Install a specific plugin and optionally activates it.
+	 *
+	 * @since 8.9.0
+	 *
+	 * @param WP_REST_Request $request {
+	 *     Array of parameters received by request.
+	 *
+	 *     @type string $slug   Plugin slug.
+	 *     @type string $status Plugin status.
+	 *     @type string $source Where did the plugin installation request originate.
+	 * }
+	 *
+	 * @return WP_REST_Response|WP_Error A response object if the installation and / or activation was successful, or a WP_Error object if it failed.
+	 */
+	public static function install_plugin( $request ) {
+		$plugin = stripslashes( $request['slug'] );
+
+		jetpack_require_lib( 'plugins' );
+
+		// Let's make sure the plugin isn't already installed.
+		$plugin_id = Jetpack_Plugins::get_plugin_id_by_slug( $plugin );
+
+		// If not installed, let's install now.
+		if ( ! $plugin_id ) {
+			$result = Jetpack_Plugins::install_plugin( $plugin );
+
+			if ( is_wp_error( $result ) ) {
+				return new WP_Error(
+					'install_plugin_failed',
+					sprintf(
+						/* translators: %1$s: plugin name. -- %2$s: error message. */
+						__( 'Unable to install %1$s: %2$s ', 'jetpack' ),
+						$plugin,
+						$result->get_error_message()
+					),
+					array( 'status' => 500 )
+				);
+			}
 		}
+
+		/*
+		 * We may want to activate the plugin as well.
+		 * Let's check for the status parameter in the request to find out.
+		 * If none was passed (or something other than active), let's return now.
+		 */
+		if ( empty( $request['status'] ) || 'active' !== $request['status'] ) {
+			return rest_ensure_response(
+				array(
+					'code'    => 'success',
+					'message' => esc_html(
+						sprintf(
+							/* translators: placeholder is a plugin name. */
+							__( 'Installed %s', 'jetpack' ),
+							$plugin
+						)
+					),
+				)
+			);
+		}
+
+		/*
+		 * Proceed with plugin activation.
+		 * Let's check again for the plugin's ID if we don't already have it.
+		 */
+		if ( ! $plugin_id ) {
+			$plugin_id = Jetpack_Plugins::get_plugin_id_by_slug( $plugin );
+			if ( ! $plugin_id ) {
+				return new WP_Error(
+					'unable_to_determine_installed_plugin',
+					__( 'Unable to determine what plugin was installed.', 'jetpack' ),
+					array( 'status' => 500 )
+				);
+			}
+		}
+
+		$source      = ! empty( $request['source'] ) ? stripslashes( $request['source'] ) : 'rest_api';
+		$plugin_args = array(
+			'plugin' => substr( $plugin_id, 0, - 4 ),
+			'status' => 'active',
+			'source' => $source,
+		);
+		return self::activate_plugin( $plugin_args );
+	}
+
+	/**
+	 * Activate a specific plugin.
+	 *
+	 * @since 8.9.0
+	 *
+	 * @param WP_REST_Request $request {
+	 *     Array of parameters received by request.
+	 *
+	 *     @type string $plugin Plugin long slug (slug/index-file)
+	 *     @type string $status Plugin status. We only support active in Jetpack.
+	 *     @type string $source Where did the plugin installation request originate.
+	 * }
+	 *
+	 * @return WP_REST_Response|WP_Error A response object if the activation was successful, or a WP_Error object if the activation failed.
+	 */
+	public static function activate_plugin( $request ) {
+		/*
+		 * We need an "active" status parameter to be passed to the request
+		 * just like the core plugins endpoind we'll eventually switch to.
+		 */
+		if ( empty( $request['status'] ) || 'active' !== $request['status'] ) {
+			return new WP_Error(
+				'missing_status_parameter',
+				esc_html__( 'Status parameter missing.', 'jetpack' ),
+				array( 'status' => 403 )
+			);
+		}
+
+		jetpack_require_lib( 'plugins' );
+		$plugins = Jetpack_Plugins::get_plugins();
+
+		if ( empty( $plugins ) ) {
+			return new WP_Error( 'no_plugins_found', esc_html__( 'This site has no plugins.', 'jetpack' ), array( 'status' => 404 ) );
+		}
+
+		if ( empty( $request['plugin'] ) ) {
+			return new WP_Error( 'no_plugin_specified', esc_html__( 'You did not specify a plugin.', 'jetpack' ), array( 'status' => 404 ) );
+		}
+
+		$plugin = $request['plugin'] . '.php';
+
+		// Is the plugin installed?
+		if ( ! in_array( $plugin, array_keys( $plugins ), true ) ) {
+			return new WP_Error(
+				'plugin_not_found',
+				esc_html(
+					sprintf(
+						/* translators: placeholder is a plugin slug. */
+						__( 'Plugin %s is not installed.', 'jetpack' ),
+						$plugin
+					)
+				),
+				array( 'status' => 404 )
+			);
+		}
+
+		// Is the plugin active already?
+		$status = Jetpack_Plugins::get_plugin_status( $plugin );
+		if ( in_array( $status, array( 'active', 'network-active' ), true ) ) {
+			return new WP_Error(
+				'plugin_already_active',
+				esc_html(
+					sprintf(
+						/* translators: placeholder is a plugin slug. */
+						__( 'Plugin %s is already active.', 'jetpack' ),
+						$plugin
+					)
+				),
+				array( 'status' => 404 )
+			);
+		}
+
+		// Now try to activate the plugin.
+		$activated = activate_plugin( $plugin );
+
+		if ( is_wp_error( $activated ) ) {
+			return $activated;
+		} else {
+			$source = ! empty( $request['source'] ) ? stripslashes( $request['source'] ) : 'rest_api';
+			/**
+			 * Fires when Jetpack installs a plugin for you.
+			 *
+			 * @since 8.9.0
+			 *
+			 * @param string $plugin_file Plugin file.
+			 * @param string $source      Where did the plugin installation originate.
+			 */
+			do_action( 'jetpack_activated_plugin', $plugin, $source );
+			return rest_ensure_response(
+				array(
+					'code'    => 'success',
+					'message' => sprintf(
+						/* translators: placeholder is a plugin name. */
+						esc_html__( 'Activated %s', 'jetpack' ),
+						$plugin
+					),
+				)
+			);
+		}
+	}
+
+	/**
+	 * Check if a plugin can be activated.
+	 *
+	 * @since 8.9.0
+	 *
+	 * @param string|bool     $value   Value to check.
+	 * @param WP_REST_Request $request The request sent to the WP REST API.
+	 * @param string          $param   Name of the parameter passed to endpoint holding $value.
+	 */
+	public static function validate_activate_plugin( $value, $request, $param ) { // phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+		return 'active' === $value;
 	}
 
 	/**
@@ -3465,8 +3763,8 @@ class Jetpack_Core_Json_Api_Endpoints {
 	 * @return bool|WP_Error True if module was activated. Otherwise, a WP_Error instance with the corresponding error.
 	 */
 	public static function get_plugin( $request ) {
-
-		$plugins = self::core_get_plugins();
+		jetpack_require_lib( 'plugins' );
+		$plugins = Jetpack_Plugins::get_plugins();
 
 		if ( empty( $plugins ) ) {
 			return new WP_Error( 'no_plugins_found', esc_html__( 'This site has no plugins.', 'jetpack' ), array( 'status' => 404 ) );
@@ -3480,7 +3778,7 @@ class Jetpack_Core_Json_Api_Endpoints {
 
 		$plugin_data = $plugins[ $plugin ];
 
-		$plugin_data['active'] = self::core_is_plugin_active( $plugin );
+		$plugin_data['active'] = in_array( Jetpack_Plugins::get_plugin_status( $plugin ), array( 'active', 'network-active' ), true );
 
 		return rest_ensure_response( array(
 			'code'    => 'success',
@@ -3523,4 +3821,95 @@ class Jetpack_Core_Json_Api_Endpoints {
 			)
 		);
 	}
+
+	/**
+	 * Get the last licensing error message, if any.
+	 *
+	 * @since 9.0.0
+	 *
+	 * @return string Licensing error message or empty string.
+	 */
+	public static function get_licensing_error() {
+		return Licensing::instance()->last_error();
+	}
+
+	/**
+	 * Update the last licensing error message.
+	 *
+	 * @since 9.0.0
+	 *
+	 * @param WP_REST_Request $request The request.
+	 *
+	 * @return bool true.
+	 */
+	public static function update_licensing_error( $request ) {
+		Licensing::instance()->log_error( $request['error'] );
+
+		return true;
+	}
+
+	/**
+	 * Returns the Jetpack CRM data.
+	 *
+	 * @return WP_REST_Response A response object containing the Jetpack CRM data.
+	 */
+	public static function get_jetpack_crm_data() {
+		$jetpack_crm_data = ( new Automattic\Jetpack\Jetpack_CRM_Data() )->get_crm_data();
+		return rest_ensure_response( $jetpack_crm_data );
+	}
+
+	/**
+	 * Activates Jetpack CRM's Jetpack Forms extension.
+	 *
+	 * @param WP_REST_Request $request The request sent to the WP REST API.
+	 * @return WP_REST_Response|WP_Error A response object if the extension activation was successful, or a WP_Error object if it failed.
+	 */
+	public static function activate_crm_jetpack_forms_extension( $request ) {
+		if ( ! isset( $request['extension'] ) || 'jetpackforms' !== $request['extension'] ) {
+			return new WP_Error( 'invalid_param', esc_html__( 'Missing or invalid extension parameter.', 'jetpack' ), array( 'status' => 404 ) );
+		}
+
+		$result = ( new Automattic\Jetpack\Jetpack_CRM_Data() )->activate_crm_jetpackforms_extension();
+
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return rest_ensure_response( array( 'code' => 'success' ) );
+	}
+
+	/**
+	 * Verifies that the current user has the required permission for accessing the CRM data.
+	 *
+	 * @return true|WP_Error Returns true if the user has the required capability, else a WP_Error object.
+	 */
+	public static function jetpack_crm_data_permission_check() {
+		if ( current_user_can( 'publish_posts' ) ) {
+			return true;
+		}
+
+		return new WP_Error(
+			'invalid_user_permission_jetpack_crm_data',
+			self::$user_permissions_error_msg,
+			array( 'status' => rest_authorization_required_code() )
+		);
+	}
+
+	/**
+	 * Verifies that the current user has the required capability for activating Jetpack CRM extensions.
+	 *
+	 * @return true|WP_Error Returns true if the user has the required capability, else a WP_Error object.
+	 */
+	public static function activate_crm_extensions_permission_check() {
+		if ( current_user_can( 'admin_zerobs_manage_options' ) ) {
+			return true;
+		}
+
+		return new WP_Error(
+			'invalid_user_permission_activate_jetpack_crm_ext',
+			self::$user_permissions_error_msg,
+			array( 'status' => rest_authorization_required_code() )
+		);
+	}
+
 } // class end
