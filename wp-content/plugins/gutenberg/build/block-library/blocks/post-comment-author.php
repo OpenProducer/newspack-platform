@@ -18,7 +18,13 @@ function gutenberg_render_block_core_post_comment_author( $attributes, $content,
 		return '';
 	}
 
-	return sprintf( '<div>%1$s</div>', get_comment_author( $block->context['commentId'] ) );
+	$wrapper_attributes = get_block_wrapper_attributes();
+
+	return sprintf(
+		'<div %1$s>%2$s</div>',
+		$wrapper_attributes,
+		get_comment_author( $block->context['commentId'] )
+	);
 }
 
 /**

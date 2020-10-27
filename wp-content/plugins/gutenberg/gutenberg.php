@@ -5,7 +5,7 @@
  * Description: Printing since 1440. This is the development plugin for the new block editor in core.
  * Requires at least: 5.3
  * Requires PHP: 5.6
- * Version: 9.1.1
+ * Version: 9.2.2
  * Author: Gutenberg Team
  * Text Domain: gutenberg
  *
@@ -13,8 +13,8 @@
  */
 
 ### BEGIN AUTO-GENERATED DEFINES
-define( 'GUTENBERG_VERSION', '9.1.1' );
-define( 'GUTENBERG_GIT_COMMIT', '6920f7ae7b03c5cd6a6c6d07059c75f9fa0ff409' );
+define( 'GUTENBERG_VERSION', '9.2.2' );
+define( 'GUTENBERG_GIT_COMMIT', '28b1593597ced9fd9dfb3450ad8dca9f087ab198' );
 ### END AUTO-GENERATED DEFINES
 
 gutenberg_pre_init();
@@ -105,6 +105,23 @@ function gutenberg_menu() {
 	);
 }
 add_action( 'admin_menu', 'gutenberg_menu', 9 );
+
+/**
+ * Modify WP admin bar.
+ *
+ * @param WP_Admin_Bar $wp_admin_bar Core class used to implement the Toolbar API.
+ */
+function modify_admin_bar( $wp_admin_bar ) {
+	if ( gutenberg_use_widgets_block_editor() ) {
+		$wp_admin_bar->add_menu(
+			array(
+				'id'   => 'widgets',
+				'href' => admin_url( 'themes.php?page=gutenberg-widgets' ),
+			)
+		);
+	}
+}
+add_action( 'admin_bar_menu', 'modify_admin_bar', 40 );
 
 /**
  * Display a version notice and deactivate the Gutenberg plugin.
