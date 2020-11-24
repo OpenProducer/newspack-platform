@@ -22,7 +22,7 @@ export const title = __( 'Post Carousel' );
 export const icon = (
 	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 		<Path d="M0 0h24v24H0z" fill="none" />
-		<Path d="M7 19h10V4H7v15zm-5-2h4V6H2v11zM18 6v11h4V6h-4z" />
+		<Path d="M2 6h4v11H2zm5 13h10V4H7v15zM9 6h6v11H9V6zm9 0h4v11h-4z" fill="#36f" />
 	</SVG>
 );
 

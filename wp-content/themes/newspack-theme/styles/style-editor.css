@@ -243,7 +243,8 @@ figcaption,
 .wp-block-cover .entry-meta a,
 .wp-block-cover .entry-meta a:visited,
 .wp-block-cover .entry-meta .byline a,
-.wp-block-cover .entry-meta .byline a:visited {
+.wp-block-cover .entry-meta .byline a:visited,
+.wp-block-cover cite {
   color: inherit;
 }
 
@@ -494,6 +495,10 @@ figcaption,
 .wp-block[data-type='core/pullquote'] .wp-block-pullquote__citation::before {
   content: '\2014';
   margin-right: 0.25rem;
+}
+
+.wp-block[data-type='core/pullquote'] div.wp-block-pullquote__citation {
+  opacity: 0.8;
 }
 
 .wp-block[data-type='core/pullquote'] em {
@@ -1002,6 +1007,7 @@ ul.wp-block-archives li,
   border-bottom: 4px solid #ccc;
   color: #36f;
   font-size: 0.8em;
-  margin: 0 0 0.75rem;
+  margin-top: 0;
+  margin-bottom: 0.75rem;
   padding: 0 0 0.33rem;
 }

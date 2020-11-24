@@ -45,13 +45,90 @@ class Newspack_Popups_Settings {
 	}
 
 	/**
+	 * Update settings.
+	 *
+	 * @param object $options options.
+	 */
+	public static function set_settings( $options ) {
+		if ( update_option( $options['option_name'], $options['option_value'] ) ) {
+			return self::get_settings();
+		} else {
+			return new \WP_Error(
+				'newspack_popups_settings_error',
+				esc_html__( 'Error updating the settings.', 'newspack' )
+			);
+		}
+	}
+
+	/**
+	 * Return a single setting value.
+	 *
+	 * @param string $key Key name.
+	 */
+	public static function get_setting( $key ) {
+		return get_option( $key, true );
+	}
+
+	/**
 	 * Return all settings.
 	 */
 	public static function get_settings() {
 		return [
-			'suppress_newsletter_campaigns' => get_option( 'suppress_newsletter_campaigns', true ),
-			'suppress_all_newsletter_campaigns_if_one_dismissed' => get_option( 'suppress_all_newsletter_campaigns_if_one_dismissed', true ),
+			[
+				'key'   => 'suppress_newsletter_campaigns',
+				'value' => get_option( 'suppress_newsletter_campaigns', true ),
+				'label' => __(
+					'Suppress Newsletter campaigns if visitor is coming from email.',
+					'newspack-popups'
+				),
+			],
+			[
+				'key'   => 'suppress_all_newsletter_campaigns_if_one_dismissed',
+				'value' => get_option( 'suppress_all_newsletter_campaigns_if_one_dismissed', true ),
+				'label' => __(
+					'Suppress all Newsletter campaigns if at least one Newsletter campaign was permanently dismissed.',
+					'newspack-popups'
+				),
+			],
+			[
+				'key'   => 'suppress_donation_campaigns_if_donor',
+				'value' => get_option( 'suppress_donation_campaigns_if_donor', false ),
+				'label' => __(
+					'Suppress all donation campaigns if the reader has donated.',
+					'newspack-popups'
+				),
+			],
+			[
+				'key'   => 'newspack_newsletters_non_interative_mode',
+				'value' => self::is_non_interactive(),
+				'label' => __(
+					'Enable non-interactive mode.',
+					'newspack-popups'
+				),
+				'help'  => __(
+					'Use this setting in high traffic scenarios. No API requests will be made, reducing server load. Inline campaigns will be shown to all users without dismissal buttons, and overlay campaigns will be suppressed.',
+					'newspack-popups'
+				),
+			],
+			[
+				'key'   => 'all_segments',
+				'value' => array_reduce(
+					Newspack_Popups_Segmentation::get_segments(),
+					function( $acc, $item ) {
+						$acc[ $item['id'] ] = $item['configuration'];
+						return $acc;
+					},
+					[]
+				),
+			],
 		];
+	}
+
+	/**
+	 * Is the non-interactive setting on?
+	 */
+	public static function is_non_interactive() {
+		return get_option( 'newspack_newsletters_non_interative_mode', false );
 	}
 
 	/**

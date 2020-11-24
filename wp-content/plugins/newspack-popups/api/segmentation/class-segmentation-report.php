@@ -14,7 +14,7 @@ class Segmentation_Report {
 	 *
 	 * @param object $payload a payload.
 	 */
-	public static function api_handle_post_read( $payload ) {
+	public static function log_single_visit( $payload ) {
 		if ( $payload['is_post'] ) {
 			// Add line to log file.
 			$line = implode(

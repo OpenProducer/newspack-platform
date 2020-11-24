@@ -636,10 +636,21 @@ function newspack_customize_register( $wp_customize ) {
 	/**
 	 * Template Settings
 	 */
+	$wp_customize->add_panel(
+		'newspack_template_settings',
+		array(
+			'title' => esc_html__( 'Template Settings', 'newspack' ),
+		)
+	);
+
+	/**
+	 * Post Template Settings
+	 */
 	$wp_customize->add_section(
 		'post_default_settings',
 		array(
-			'title' => esc_html__( 'Template Settings', 'newspack' ),
+			'title' => esc_html__( 'Post Settings', 'newspack' ),
+			'panel' => 'newspack_template_settings',
 		)
 	);
 
@@ -720,6 +731,60 @@ function newspack_customize_register( $wp_customize ) {
 			'type'    => 'number',
 			'label'   => esc_html__( 'Cut off for "time ago" date in days.', 'newspack' ),
 			'section' => 'post_default_settings',
+		)
+	);
+
+	// Add option to turn off Yoast's Primary Category functionality.
+	if ( class_exists( 'WPSEO_Primary_Term' ) ) {
+		$wp_customize->add_setting(
+			'post_primary_category',
+			array(
+				'default'           => 'true',
+				'sanitize_callback' => 'newspack_sanitize_checkbox',
+			)
+		);
+		$wp_customize->add_control(
+			'post_primary_category',
+			array(
+				'type'    => 'checkbox',
+				'label'   => __( 'Use Yoast\'s primary category functionality', 'newspack' ),
+				'section' => 'post_default_settings',
+			)
+		);
+	}
+
+	/**
+	 * Page Template Settings
+	 */
+	$wp_customize->add_section(
+		'page_default_settings',
+		array(
+			'title' => esc_html__( 'Page Settings', 'newspack' ),
+			'panel' => 'newspack_template_settings',
+		)
+	);
+
+	// Add option to set a featured image default.
+	$wp_customize->add_setting(
+		'page_featured_image_default',
+		array(
+			'default'           => 'small',
+			'sanitize_callback' => 'newspack_sanitize_feature_image_position',
+		)
+	);
+	$wp_customize->add_control(
+		'page_featured_image_default',
+		array(
+			'type'    => 'radio',
+			'label'   => __( 'Featured Image Default Position', 'newspack' ),
+			'choices' => array(
+				'large'  => esc_html__( 'Large', 'newspack' ),
+				'small'  => esc_html__( 'Small', 'newspack' ),
+				'behind' => esc_html__( 'Behind article title', 'newspack' ),
+				'beside' => esc_html__( 'Beside article title', 'newspack' ),
+				'hidden' => esc_html__( 'Hidden', 'newspack' ),
+			),
+			'section' => 'page_default_settings',
 		)
 	);
 

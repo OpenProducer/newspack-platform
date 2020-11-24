@@ -5,17 +5,12 @@
  * @package Newspack
  */
 
-// @codeCoverageIgnoreStart
 require_once '../setup.php';
 
 switch ( $_SERVER['REQUEST_METHOD'] ) { //phpcs:ignore
-	case 'GET':
-		include './class-maybe-show-campaign.php';
-		break;
 	case 'POST':
-		include './class-report-campaign-data.php';
+		include './class-segmentation-client-data.php';
 		break;
 	default:
 		die( "{ error: 'unsupported_method' }" );
 }
-// @codeCoverageIgnoreEnd

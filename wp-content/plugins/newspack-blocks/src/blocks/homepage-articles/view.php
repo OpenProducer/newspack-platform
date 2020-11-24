@@ -255,7 +255,6 @@ function newspack_blocks_format_byline( $author_info ) {
 	return implode( '', $elements );
 }
 
-
 /**
  * Inject amp-state containing all post IDs visible on page load.
  */

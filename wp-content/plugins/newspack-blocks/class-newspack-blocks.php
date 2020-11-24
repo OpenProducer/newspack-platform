@@ -357,6 +357,7 @@ class Newspack_Blocks {
 			'post_status'         => 'publish',
 			'suppress_filters'    => false,
 			'ignore_sticky_posts' => true,
+			'has_password'        => false,
 		);
 		if ( $specific_mode && $specific_posts ) {
 			$args['post__in'] = $specific_posts;
@@ -513,39 +514,49 @@ class Newspack_Blocks {
 	 * @param string $id Post ID.
 	 * @return array Array of sponsors.
 	 */
-	public static function get_all_sponsors( $id = null, $scope = 'native', $type = 'post', $logo_options = array() ) {
+	public static function get_all_sponsors( $id = null, $scope = 'native', $type = 'post', $logo_options = array(
+		'maxwidth'  => 80,
+		'maxheight' => 40,
+	) ) {
 		if ( function_exists( '\Newspack_Sponsors\get_sponsors_for_post' ) ) {
-			$sponsors = \Newspack_Sponsors\get_all_sponsors( $id, $scope, $type, $logo_options ); // phpcs:ignore PHPCompatibility.LanguageConstructs.NewLanguageConstructs.t_ns_separatorFound
-			if ( $sponsors ) {
-				return $sponsors;
-			} else {
-				return false;
-			}
+			return \Newspack_Sponsors\get_all_sponsors( $id, $scope, $type, $logo_options ); // phpcs:ignore PHPCompatibility.LanguageConstructs.NewLanguageConstructs.t_ns_separatorFound
 		}
+
+		return false;
 	}
 
 	/**
 	 * Function to return sponsor 'flag' from first sponsor.
 	 *
+	 * @param array  $sponsors Array of sponsors.
 	 * @param string $id Post ID.
-	 * @return string Sponsor flag label.
+	 * @return string|boolean Sponsor flag label, or false if none found.
 	 */
-	public static function get_sponsor_label( $id ) {
-		$sponsors = self::get_all_sponsors( $id );
+	public static function get_sponsor_label( $sponsors = null, $id = null ) {
+		if ( null === $sponsors && ! empty( $id ) ) {
+			$sponsors = self::get_all_sponsors( $id );
+		}
+
 		if ( ! empty( $sponsors ) ) {
 			$sponsor_flag = $sponsors[0]['sponsor_flag'];
 			return $sponsor_flag;
 		}
+
+		return false;
 	}
 
 	/**
 	 * Outputs the sponsor byline markup for the theme.
 	 *
+	 * @param array  $sponsors Array of sponsors.
 	 * @param string $id Post ID.
-	 * @return array Array of Sponsor byline information.
+	 * @return array|boolean Array of Sponsor byline information, or false if none found.
 	 */
-	public static function get_sponsor_byline( $id ) {
-		$sponsors = self::get_all_sponsors( $id );
+	public static function get_sponsor_byline( $sponsors = null, $id = null ) {
+		if ( null === $sponsors & ! empty( $id ) ) {
+			$sponsors = self::get_all_sponsors( $id );
+		}
+
 		if ( ! empty( $sponsors ) ) {
 			$sponsor_count = count( $sponsors );
 			$i             = 1;
@@ -572,23 +583,30 @@ class Newspack_Blocks {
 			}
 			return $sponsor_list;
 		}
+
+		return false;
 	}
 
 	/**
 	 * Outputs set of sponsor logos with links.
 	 *
+	 * @param array  $sponsors Array of sponsors.
 	 * @param string $id Post ID.
+	 * @return array Array of sponsor logo images, or false if none found.
 	 */
-	public static function get_sponsor_logos( $id ) {
-		$sponsors = self::get_all_sponsors(
-			$id,
-			'native',
-			'post',
-			array(
-				'maxwidth'  => 80,
-				'maxheight' => 40,
-			)
-		);
+	public static function get_sponsor_logos( $sponsors = null, $id = null ) {
+		if ( null === $sponsors && ! empty( $id ) ) {
+			$sponsors = self::get_all_sponsors(
+				$id,
+				'native',
+				'post',
+				array(
+					'maxwidth'  => 80,
+					'maxheight' => 40,
+				)
+			);
+		}
+
 		if ( ! empty( $sponsors ) ) {
 			$sponsor_logos = [];
 			foreach ( $sponsors as $sponsor ) {
@@ -604,6 +622,8 @@ class Newspack_Blocks {
 
 			return $sponsor_logos;
 		}
+
+		return false;
 	}
 
 	/**

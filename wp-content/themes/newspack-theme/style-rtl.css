@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.20.1
+Version: 1.21.2
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -3092,7 +3092,8 @@ div.sharedaddy .sd-social h3.sd-title,
   margin-bottom: 0;
 }
 
-.page:not(.home) article.page > .post-thumbnail {
+.page .entry-header + .post-thumbnail,
+.page .main-content > .post-thumbnail:first-child {
   margin-top: 1.5rem;
 }
 
@@ -3342,6 +3343,12 @@ div.sharedaddy .sd-social h3.sd-title,
 .featured-image-behind .entry-meta .byline {
   display: inline-block;
   margin-left: 1rem;
+}
+
+@media only screen and (min-width: 782px) {
+  .page .featured-image-behind .entry-header {
+    margin-bottom: 3rem;
+  }
 }
 
 .featured-image-beside > .wrapper {
@@ -4481,6 +4488,10 @@ div.sharedaddy .sd-social h3.sd-title,
   padding-top: calc( 1rem * 1.5);
 }
 
+.page #secondary {
+  padding-top: 1rem;
+}
+
 .above-content {
   margin: 1rem 0 0;
 }
@@ -4832,10 +4843,12 @@ div.sharedaddy .sd-social h3.sd-title,
 
 .wp-block-pullquote cite {
   display: inline-block;
+  color: inherit;
   font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 0.7em;
+  opacity: 0.8;
   line-height: 1.6;
   text-transform: none;
-  font-size: 0.7em;
 }
 
 .wp-block-pullquote cite::before {
@@ -5234,14 +5247,19 @@ div.sharedaddy .sd-social h3.sd-title,
   text-align: right;
 }
 
-.entry .entry-content .wp-block-image .alignleft figcaption,
-.entry .entry-content .wp-block-image .aligncenter figcaption,
-.entry .entry-content .wp-block-image .alignright figcaption {
-  display: block;
-}
-
-.entry .entry-content .wp-block-image .aligncenter {
-  display: block;
+@media only screen and (max-width: 599px) {
+  .entry .entry-content .wp-block-image .alignleft figcaption,
+  .entry .entry-content .wp-block-image .aligncenter figcaption,
+  .entry .entry-content .wp-block-image .alignright figcaption {
+    display: block;
+  }
+  .entry .entry-content .wp-block-image .aligncenter {
+    display: block;
+  }
+  .entry .entry-content .wp-block-image .aligncenter img {
+    margin-right: auto;
+    margin-left: auto;
+  }
 }
 
 .entry .entry-content .wp-block-gallery {
@@ -5869,7 +5887,6 @@ figcaption,
 .wp-caption-text {
   color: #515151;
   margin: 0 auto;
-  max-width: 780px;
   padding: 0;
   text-align: right;
 }
@@ -5882,12 +5899,17 @@ figcaption,
   line-height: 1.6;
 }
 
-.newspack-front-page figcaption,
-.newspack-front-page .wp-caption-text,
-.post-template-single-wide figcaption,
-.post-template-single-wide .wp-caption-text,
-.page-template-single-wide figcaption,
-.page-template-single-wide .wp-caption-text {
+.entry-content .wp-caption-text,
+.entry-content figcaption {
+  max-width: 780px;
+}
+
+.newspack-front-page .entry-content .wp-caption-text,
+.newspack-front-page .entry-content figcaption,
+.post-template-single-wide .entry-content .wp-caption-text,
+.post-template-single-wide .entry-content figcaption,
+.page-template-single-wide .entry-content .wp-caption-text,
+.page-template-single-wide .entry-content figcaption {
   max-width: 1200px;
 }
 

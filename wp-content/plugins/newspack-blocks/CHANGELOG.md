@@ -1,3 +1,32 @@
+# [1.16.0](https://github.com/Automattic/newspack-blocks/compare/v1.15.0...v1.16.0) (2020-11-24)
+
+
+### Features
+
+* optimize sponsor queries ([#633](https://github.com/Automattic/newspack-blocks/issues/633)) ([1509951](https://github.com/Automattic/newspack-blocks/commit/150995197e39ade7bb3f71cbf6325b6fa60fd2f8))
+
+# [1.15.0](https://github.com/Automattic/newspack-blocks/compare/v1.14.0...v1.15.0) (2020-11-17)
+
+
+### Features
+
+* Add French (Belgium) translation to the blocks ([#626](https://github.com/Automattic/newspack-blocks/issues/626)) ([e2f9dc6](https://github.com/Automattic/newspack-blocks/commit/e2f9dc62ddab5f5c146d83ced822fb2edbc16482))
+
+# [1.14.0](https://github.com/Automattic/newspack-blocks/compare/v1.13.2...v1.14.0) (2020-11-11)
+
+
+### Features
+
+* add option to change excerpt length ([#607](https://github.com/Automattic/newspack-blocks/issues/607)) ([a1968d9](https://github.com/Automattic/newspack-blocks/commit/a1968d905cb2117a35ad969804d685076fb292e4))
+* update blocks icons style and colour ([#615](https://github.com/Automattic/newspack-blocks/issues/615)) ([f4d68cb](https://github.com/Automattic/newspack-blocks/commit/f4d68cb74210e28cec17deec1d16b35ede68e901))
+
+## [1.13.2](https://github.com/Automattic/newspack-blocks/compare/v1.13.1...v1.13.2) (2020-10-27)
+
+
+### Bug Fixes
+
+* suppress password protected posts ([#609](https://github.com/Automattic/newspack-blocks/issues/609)) ([ff667d7](https://github.com/Automattic/newspack-blocks/commit/ff667d714bb6ac92ad5d8961e8d59a6230261e5e))
+
 ## [1.13.1](https://github.com/Automattic/newspack-blocks/compare/v1.13.0...v1.13.1) (2020-09-29)
 
 

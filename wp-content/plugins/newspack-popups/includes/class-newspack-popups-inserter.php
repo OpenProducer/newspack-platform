@@ -25,7 +25,7 @@ final class Newspack_Popups_Inserter {
 	 *
 	 * @var boolean
 	 */
-	protected static $the_content_has_rendered = false;
+	public static $the_content_has_rendered = false;
 
 	/**
 	 * Retrieve the appropriate popups for the current post.
@@ -33,6 +33,17 @@ final class Newspack_Popups_Inserter {
 	 * @return array Popup objects.
 	 */
 	public static function popups_for_post() {
+		// Inject campaigns only in posts, pages, and CPTs that explicitly opt in.
+		if ( ! in_array(
+			get_post_type(),
+			apply_filters(
+				'newspack_campaigns_post_types_for_campaigns',
+				[ 'post', 'page' ]
+			)
+		) ) {
+			return [];
+		}
+
 		if ( ! empty( self::$popups ) ) {
 			return self::$popups;
 		}
@@ -42,10 +53,18 @@ final class Newspack_Popups_Inserter {
 			return [ Newspack_Popups_Model::retrieve_preview_popup( Newspack_Popups::previewed_popup_id() ) ];
 		}
 
-		// 1. Get all inline popups in there first.
+		// 1. Get all inline popups.
 		$popups_to_maybe_display = Newspack_Popups_Model::retrieve_inline_popups();
 
-		// 2. Get the overlay popup.
+		// 2. Get the overlay popup/s. There can be only one displayed, unless in test mode.
+
+		// Any overlay test popups, if the user is logged in.
+		if ( is_user_logged_in() ) {
+			$popups_to_maybe_display = array_merge(
+				$popups_to_maybe_display,
+				Newspack_Popups_Model::retrieve_overlay_test_popups()
+			);
+		}
 
 		// Check if there's an overlay popup with matching category.
 		$category_overlay_popup = Newspack_Popups_Model::retrieve_category_overlay_popup();
@@ -72,10 +91,28 @@ final class Newspack_Popups_Inserter {
 			}
 		}
 
-		$popups_to_display = array_filter(
+		// Allow only one overlay campaign.
+		$has_overlay                     = false;
+		$popups_to_maybe_display_deduped = array_filter(
 			$popups_to_maybe_display,
+			function ( $campaign ) use ( &$has_overlay ) {
+				if ( 'inline' !== $campaign['options']['placement'] ) {
+					if ( $has_overlay ) {
+						return false;
+					} else {
+						$has_overlay = true;
+						return true;
+					}
+				}
+				return true;
+			}
+		);
+
+		$popups_to_display = array_filter(
+			$popups_to_maybe_display_deduped,
 			[ __CLASS__, 'should_display' ]
 		);
+
 		if ( ! empty( $popups_to_display ) ) {
 			return $popups_to_display;
 		}
@@ -269,12 +306,15 @@ final class Newspack_Popups_Inserter {
 	 * Enqueue the assets needed to display the popups.
 	 */
 	public static function enqueue_popup_assets() {
+		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
+			return;
+		}
 		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 		if ( ! $is_amp ) {
 			wp_register_script(
 				'newspack-popups-view',
 				plugins_url( '../dist/view.js', __FILE__ ),
-				[ 'wp-dom-ready' ],
+				[ 'wp-dom-ready', 'wp-url' ],
 				filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/view.js' ),
 				true
 			);
@@ -304,7 +344,9 @@ final class Newspack_Popups_Inserter {
 		} elseif ( isset( $atts['id'] ) ) {
 			$found_popup = Newspack_Popups_Model::retrieve_popup_by_id( $atts['id'] );
 		}
-		return Newspack_Popups_Model::generate_popup( $found_popup );
+		// Wrapping the inline popup in an aside element prevents the markup from being mangled
+		// if the shortcode is the first block.
+		return '<aside>' . Newspack_Popups_Model::generate_popup( $found_popup ) . '</aside>';
 	}
 
 	/**
@@ -322,7 +364,9 @@ final class Newspack_Popups_Inserter {
 			'id'  => $popup_id_string,
 			'f'   => $frequency,
 			'utm' => $popup['options']['utm_suppression'],
+			's'   => $popup['options']['selected_segment_id'],
 			'n'   => \Newspack_Popups_Model::has_newsletter_prompt( $popup ),
+			'd'   => \Newspack_Popups_Model::has_donation_block( $popup ),
 		];
 	}
 
@@ -369,8 +413,17 @@ final class Newspack_Popups_Inserter {
 			);
 		}
 
+		$settings                                 = array_reduce(
+			\Newspack_Popups_Settings::get_settings(),
+			function ( $acc, $item ) {
+				$key       = $item['key'];
+				$acc->$key = $item['value'];
+				return $acc;
+			},
+			(object) []
+		);
 		$popups_access_provider['authorization'] .= '&popups=' . wp_json_encode( $popups_configs );
-		$popups_access_provider['authorization'] .= '&settings=' . wp_json_encode( \Newspack_Popups_Settings::get_settings() );
+		$popups_access_provider['authorization'] .= '&settings=' . wp_json_encode( $settings );
 		$popups_access_provider['authorization'] .= '&visit=' . wp_json_encode(
 			[
 				'post_id'    => esc_attr( get_the_ID() ),
@@ -398,7 +451,7 @@ final class Newspack_Popups_Inserter {
 	 * Register and enqueue all required AMP scripts, if needed.
 	 */
 	public static function register_amp_scripts() {
-		if ( ! Newspack_Popups_Segmentation::is_tracking() ) {
+		if ( self::assess_has_disabled_popups() ) {
 			return;
 		}
 		if ( ! is_admin() && ! wp_script_is( 'amp-runtime', 'registered' ) ) {
@@ -411,7 +464,7 @@ final class Newspack_Popups_Inserter {
 				true
 			);
 		}
-		$scripts = [ 'amp-access', 'amp-analytics', 'amp-animation', 'amp-bind', 'amp-position-observer' ];
+		$scripts = [ 'amp-access', 'amp-animation', 'amp-bind', 'amp-position-observer' ];
 		foreach ( $scripts as $script ) {
 			if ( ! wp_script_is( $script, 'registered' ) ) {
 				$path = "https://cdn.ampproject.org/v0/{$script}-latest.js";
@@ -466,10 +519,28 @@ final class Newspack_Popups_Inserter {
 	public static function assess_categories_filter( $popup ) {
 		$post_categories  = get_the_category();
 		$popup_categories = get_the_category( $popup['id'] );
-		if ( $popup_categories && count( $popup_categories ) ) {
+		if ( $post_categories && count( $post_categories ) && $popup_categories && count( $popup_categories ) ) {
 			return array_intersect(
 				array_column( $post_categories, 'term_id' ),
 				array_column( $popup_categories, 'term_id' )
+			);
+		}
+		return true;
+	}
+
+	/**
+	 * If Pop-up has tags, it should only be shown on posts/pages with those.
+	 *
+	 * @param object $popup The popup to assess.
+	 * @return bool Should popup be shown based on tags it has.
+	 */
+	public static function assess_tags_filter( $popup ) {
+		$post_tags  = get_the_tags();
+		$popup_tags = get_the_tags( $popup['id'] );
+		if ( $post_tags && count( $post_tags ) && $popup_tags && count( $popup_tags ) ) {
+			return array_intersect(
+				array_column( $post_tags, 'term_id' ),
+				array_column( $popup_tags, 'term_id' )
 			);
 		}
 		return true;
@@ -486,9 +557,14 @@ final class Newspack_Popups_Inserter {
 		if ( is_user_logged_in() && 'test' !== $popup['options']['frequency'] ) {
 			return false;
 		}
+		// Hide overlay campaigns in non-interactive mode, for non-logged-in users.
+		if ( ! is_user_logged_in() && Newspack_Popups_Settings::is_non_interactive() && ! Newspack_Popups_Model::is_inline( $popup ) ) {
+			return false;
+		}
 		return self::assess_is_post( $popup ) &&
 			self::assess_test_mode( $popup ) &&
-			self::assess_categories_filter( $popup );
+			self::assess_categories_filter( $popup ) &&
+			self::assess_tags_filter( $popup );
 	}
 }
 $newspack_popups_inserter = new Newspack_Popups_Inserter();

@@ -26,6 +26,18 @@ class Lightweight_API {
 	public $debug;
 
 	/**
+	 * Default client data.
+	 *
+	 * @var client_data_blueprint
+	 */
+	private $client_data_blueprint = [
+		'suppressed_newsletter_campaign' => false,
+		'posts_read'                     => [],
+		'donations'                      => [],
+		'email_subscriptions'            => [],
+	];
+
+	/**
 	 * Constructor.
 	 *
 	 * @codeCoverageIgnore
@@ -49,8 +61,6 @@ class Lightweight_API {
 
 	/**
 	 * Verify referer is valid.
-	 *
-	 * @codeCoverageIgnore
 	 */
 	public function verify_referer() {
 		$http_referer = ! empty( $_SERVER['HTTP_REFERER'] ) ? parse_url( $_SERVER['HTTP_REFERER'] , PHP_URL_HOST ) : null; // phpcs:ignore
@@ -85,6 +95,9 @@ class Lightweight_API {
 	 * @codeCoverageIgnore
 	 */
 	public function respond() {
+		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
+			return;
+		}
 		$this->debug['end_time'] = microtime( true );
 		$this->debug['duration'] = $this->debug['end_time'] - $this->debug['start_time'];
 		if ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ) {
@@ -187,25 +200,65 @@ class Lightweight_API {
 	 * Retrieve client data.
 	 *
 	 * @param string $client_id Client ID.
+	 * @param bool   $do_not_rebuild Whether to rebuild cache if not found.
 	 */
-	public function get_client_data( $client_id ) {
+	public function get_client_data( $client_id, $do_not_rebuild = false ) {
 		$data = $this->get_transient( $this->get_transient_name( $client_id ) );
-		if ( ! $data ) {
-			return [
-				'suppressed_newsletter_campaign' => false,
-			];
+		if ( $data ) {
+			// Handle legacy data which might not have some default keys.
+			return array_merge(
+				$this->client_data_blueprint,
+				$data
+			);
 		}
-		return $data;
+		if ( $do_not_rebuild ) {
+			return $this->client_data_blueprint;
+		}
+
+		// Rebuild cache, it might've been purged or it's the first time.
+		global $wpdb;
+		$events_table_name       = Segmentation::get_events_table_name();
+		$client_post_read_events = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare( "SELECT * FROM $events_table_name WHERE client_id = %s AND type = 'post_read'", $client_id ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+		);
+
+		$this->save_client_data(
+			$client_id,
+			[
+				'posts_read' => array_map(
+					function ( $item ) {
+						return [
+							'post_id'      => $item->post_id,
+							'category_ids' => $item->category_ids,
+						];
+					},
+					$client_post_read_events
+				),
+			]
+		);
+
+		return $this->get_transient( $this->get_transient_name( $client_id ) );
 	}
 
 	/**
 	 * Save client data.
 	 *
 	 * @param string $client_id Client ID.
-	 * @param string $client_data Client data.
+	 * @param string $client_data_update Client data.
 	 */
-	public function save_client_data( $client_id, $client_data ) {
-		return $this->set_transient( $this->get_transient_name( $client_id ), $client_data );
+	public function save_client_data( $client_id, $client_data_update ) {
+		$existing_client_data                       = $this->get_client_data( $client_id, true );
+		$updated_client_data                        = array_merge_recursive(
+			$existing_client_data,
+			$client_data_update
+		);
+		$updated_client_data['posts_read']          = array_unique( $updated_client_data['posts_read'], SORT_REGULAR );
+		$updated_client_data['email_subscriptions'] = array_unique( $updated_client_data['email_subscriptions'], SORT_REGULAR );
+		$updated_client_data['donations']           = array_unique( $updated_client_data['donations'], SORT_REGULAR );
+		return $this->set_transient(
+			$this->get_transient_name( $client_id ),
+			$updated_client_data
+		);
 	}
 
 	/**

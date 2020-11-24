@@ -13,6 +13,9 @@ call_user_func(
 		$classes    = array();
 		$styles     = '';
 
+		// Get sponsors for this post.
+		$sponsors = Newspack_Blocks::get_all_sponsors( get_the_id() );
+
 		// Add classes based on the post's assigned categories and tags.
 		$classes[] = Newspack_Blocks::get_term_classes( get_the_ID() );
 
@@ -69,10 +72,10 @@ call_user_func(
 		<?php endif; ?>
 
 		<div class="entry-wrapper">
-			<?php if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) : ?>
+			<?php if ( ! empty( $sponsors ) ) : ?>
 				<span class="cat-links sponsor-label">
 					<span class="flag">
-						<?php echo esc_html( Newspack_Blocks::get_sponsor_label( get_the_id() ) ); ?>
+						<?php echo esc_html( Newspack_Blocks::get_sponsor_label( $sponsors ) ); ?>
 					</span>
 				</span>
 			<?php elseif ( $attributes['showCategory'] && $category ) : ?>
@@ -115,12 +118,12 @@ call_user_func(
 					the_excerpt();
 				endif;
 			endif;
-			if ( $attributes['showAuthor'] || $attributes['showDate'] || Newspack_Blocks::get_all_sponsors( get_the_id() ) ) :
+			if ( $attributes['showAuthor'] || $attributes['showDate'] || ! empty( $sponsors ) ) :
 				?>
 				<div class="entry-meta">
-					<?php if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) : ?>
+					<?php if ( ! empty( $sponsors ) ) : ?>
 						<?php
-						$logos = Newspack_Blocks::get_sponsor_logos( get_the_id() );
+						$logos = Newspack_Blocks::get_sponsor_logos( $sponsors );
 						if ( ! empty( $logos ) ) :
 							?>
 						<span class="sponsor-logos">
@@ -139,7 +142,7 @@ call_user_func(
 					<?php endif; ?>
 					<span class="byline sponsor-byline">
 						<?php
-						$bylines = Newspack_Blocks::get_sponsor_byline( get_the_id() );
+						$bylines = Newspack_Blocks::get_sponsor_byline( $sponsors );
 						echo esc_html( $bylines[0]['byline'] ) . ' ';
 						foreach ( $bylines as $byline ) {
 							echo '<span class="author">';

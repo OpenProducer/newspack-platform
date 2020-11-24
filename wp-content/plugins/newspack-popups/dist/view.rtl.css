@@ -142,6 +142,7 @@
       width: calc( 100% + 32px); } }
 
 .newspack-inline-popup {
+  display: block;
   border: 1px solid rgba(0, 0, 0, 0.2);
   clear: both;
   padding: 0.75em; }
@@ -155,6 +156,14 @@
   -webkit-box-pack: center;
           justify-content: center;
   margin-top: 1.5em; }
+  .newspack-lightbox .popup-not-interested-form.align-left,
+  .newspack-inline-popup .popup-not-interested-form.align-left {
+    -webkit-box-pack: start;
+            justify-content: flex-start; }
+  .newspack-lightbox .popup-not-interested-form.align-right,
+  .newspack-inline-popup .popup-not-interested-form.align-right {
+    -webkit-box-pack: end;
+            justify-content: flex-end; }
   .newspack-lightbox .popup-not-interested-form button,
   .newspack-inline-popup .popup-not-interested-form button {
     background: transparent;

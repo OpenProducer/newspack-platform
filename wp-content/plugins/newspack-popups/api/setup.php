@@ -5,6 +5,7 @@
  * @package Newspack
  */
 
+// @codeCoverageIgnoreStart
 $wp_root_path = substr( $_SERVER['SCRIPT_FILENAME'], 0, strrpos( $_SERVER['SCRIPT_FILENAME'], 'wp-content/plugins/' ) ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPress.Security.ValidatedSanitizedInput.InputNotValidated
 
 if ( file_exists( $wp_root_path . '__wp__' ) ) {
@@ -21,7 +22,15 @@ if ( ! defined( 'WP_DEBUG' ) ) {
 	define( 'WP_DEBUG', false );
 }
 
-require_once $wp_root_path . 'newspack-popups-config.php';
+$legacy_config_path = $wp_root_path . 'newspack-popups-config.php';
+$config_path        = $wp_root_path . 'wp-content/newspack-popups-config.php';
+if ( file_exists( $legacy_config_path ) ) {
+	require_once $legacy_config_path;
+} elseif ( file_exists( $config_path ) ) {
+	require_once $config_path;
+} else {
+	die( 'missing config file' );
+}
 
 // phpcs:disable
 
@@ -62,3 +71,5 @@ wp_cache_init();
 // phpcs:enable
 
 require_once 'segmentation/class-segmentation.php';
+
+// @codeCoverageIgnoreEnd

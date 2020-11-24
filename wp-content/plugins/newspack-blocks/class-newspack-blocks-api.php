@@ -116,6 +116,21 @@ class Newspack_Blocks_API {
 				],
 			]
 		);
+
+		/* Has custom excerpt */
+		register_rest_field(
+			'post',
+			'newspack_has_custom_excerpt',
+			[
+				'get_callback' => [ 'Newspack_Blocks_API', 'newspack_blocks_has_custom_excerpt' ],
+				'schema'       => [
+					'context' => [
+						'edit',
+					],
+					'type'    => 'boolean',
+				],
+			]
+		);
 	}
 
 	/**
@@ -325,9 +340,9 @@ class Newspack_Blocks_API {
 				$sponsor_info[] = $sponsor_info_item;
 			}
 			return $sponsor_info;
-		} else {
-			return false;
 		}
+
+		return false;
 	}
 
 	/**
@@ -339,6 +354,17 @@ class Newspack_Blocks_API {
 	public static function newspack_blocks_post_format( $object ) {
 		$post_format = get_post_format( $object['id'] );
 		return $post_format;
+	}
+
+	/**
+	 * Pass whether there is a custom excerpt to the editor.
+	 *
+	 * @param array $object The object info.
+	 * @return boolean custom excerpt status.
+	 */
+	public static function newspack_blocks_has_custom_excerpt( $object ) {
+		$post_has_custom_excerpt = has_excerpt( $object['id'] );
+		return $post_has_custom_excerpt;
 	}
 
 	/**
@@ -468,8 +494,13 @@ class Newspack_Blocks_API {
 			// phpcs:enable WordPress.DB.SlowDBQuery
 		}
 
+		if ( $request->get_param( 'suppress_password_protected_posts' ) ) {
+			$args['has_password'] = false;
+		}
+
 		return $args;
 	}
+
 }
 
 add_action( 'rest_api_init', array( 'Newspack_Blocks_API', 'register_rest_fields' ) );

@@ -78,6 +78,7 @@ export const queryCriteriaFromAttributes = attributes => {
 			  },
 		value => ! isUndefined( value )
 	);
+	criteria.suppress_password_protected_posts = true;
 	return criteria;
 };
 

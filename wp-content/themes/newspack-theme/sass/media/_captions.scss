@@ -12,7 +12,6 @@ figcaption,
 .wp-caption-text {
 	color: $color__text-light;
 	margin: 0 auto;
-	max-width: 780px;
 	padding: 0;
 	text-align: left;
 }
@@ -25,11 +24,20 @@ figcaption,
 	line-height: $font__line-height-pre;
 }
 
+.entry-content {
+	.wp-caption-text,
+	figcaption {
+		max-width: 780px;
+	}
+}
+
 .newspack-front-page,
 .post-template-single-wide,
 .page-template-single-wide {
-	figcaption,
-	.wp-caption-text {
-		max-width: 1200px;
+	.entry-content {
+		.wp-caption-text,
+		figcaption {
+			max-width: 1200px;
+		}
 	}
 }

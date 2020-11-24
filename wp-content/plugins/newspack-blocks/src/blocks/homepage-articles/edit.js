@@ -141,6 +141,22 @@ class Edit extends Component {
 		const postTitle = this.titleForPost( post );
 		const dateFormat = __experimentalGetSettings().formats.date;
 
+		const getTrimmedExcerpt = ( currentPost, { excerptLength } ) => {
+			const regex = /(<([^>]+)>)/gi;
+			const excerpt = currentPost.excerpt.rendered;
+			const content = currentPost.content.rendered;
+			const newExcerpt = content.replace( regex, '' );
+
+			const needsEllipsis = excerptLength < newExcerpt.trim().split( ' ' ).length;
+			const postExcerpt = needsEllipsis
+				? `${ newExcerpt.split( ' ', excerptLength ).join( ' ' ) } […]`
+				: newExcerpt;
+
+			return currentPost.newspack_has_custom_excerpt
+				? excerpt
+				: '<p>' + postExcerpt.trim() + '</p>';
+		};
+
 		return (
 			<article className={ postClasses } key={ post.id } style={ styles }>
 				{ showImage && post.newspack_featured_image_src && (
@@ -197,7 +213,7 @@ class Edit extends Component {
 						<RawHTML key="excerpt" className="excerpt-contain">
 							{ post.newspack_post_format === 'aside'
 								? post.content.rendered
-								: post.excerpt.rendered }
+								: getTrimmedExcerpt( post, attributes ) }
 						</RawHTML>
 					) }
 					<div className="entry-meta">
@@ -249,6 +265,7 @@ class Edit extends Component {
 			minHeight,
 			moreButton,
 			showExcerpt,
+			excerptLength,
 			showSubtitle,
 			typeScale,
 			showDate,
@@ -442,6 +459,15 @@ class Edit extends Component {
 							onChange={ () => setAttributes( { showExcerpt: ! showExcerpt } ) }
 						/>
 					</PanelRow>
+					{ showExcerpt && (
+						<RangeControl
+							label={ __( 'Max number of words in excerpt', 'newspack-blocks' ) }
+							value={ excerptLength }
+							onChange={ value => setAttributes( { excerptLength: value } ) }
+							min={ 10 }
+							max={ 100 }
+						/>
+					) }
 					<RangeControl
 						className="type-scale-slider"
 						label={ __( 'Type Scale', 'newspack-blocks' ) }

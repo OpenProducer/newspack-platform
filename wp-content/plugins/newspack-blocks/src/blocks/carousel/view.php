@@ -68,6 +68,10 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			if ( ! has_post_thumbnail() ) {
 				continue;
 			}
+
+			// Get sponsors for this post.
+			$sponsors = Newspack_Blocks::get_all_sponsors( get_the_id() );
+
 			$counter++;
 			?>
 
@@ -87,10 +91,10 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 				</figure>
 				<div class="entry-wrapper">
 
-				<?php if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) : ?>
+				<?php if ( ! empty( $sponsors ) ) : ?>
 					<span class="cat-links sponsor-label">
 						<span class="flag">
-							<?php echo esc_html( Newspack_Blocks::get_sponsor_label( get_the_id() ) ); ?>
+							<?php echo esc_html( Newspack_Blocks::get_sponsor_label( $sponsors ) ); ?>
 						</span>
 					</span>
 					<?php
@@ -131,8 +135,8 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 
 					<div class="entry-meta">
 						<?php
-						if ( Newspack_Blocks::get_all_sponsors( get_the_id() ) ) :
-							$logos = Newspack_Blocks::get_sponsor_logos( get_the_id() );
+						if ( ! empty( $sponsors ) ) :
+							$logos = Newspack_Blocks::get_sponsor_logos( $sponsors );
 							if ( ! empty( $logos ) ) :
 								?>
 							<span class="sponsor-logos">
@@ -152,7 +156,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 
 							<span class="byline sponsor-byline">
 								<?php
-								$bylines = Newspack_Blocks::get_sponsor_byline( get_the_id() );
+								$bylines = Newspack_Blocks::get_sponsor_byline( $sponsors );
 								echo esc_html( $bylines[0]['byline'] ) . ' ';
 								foreach ( $bylines as $byline ) {
 									echo '<span class="author">';
