@@ -8,7 +8,6 @@
 namespace Automattic\Jetpack;
 
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
-use Jetpack;
 use Jetpack_IXR_ClientMulticall;
 use Jetpack_Options;
 use WP_Error;
@@ -199,7 +198,7 @@ class Licensing {
 			$this->log_error(
 				sprintf(
 					/* translators: %s is a comma-separated list of license keys. */
-					__( 'The following Jetpack licenses are invalid, already in use or revoked: %s', 'jetpack' ),
+					__( 'The following Jetpack licenses are invalid, already in use, or revoked: %s', 'jetpack' ),
 					implode( ', ', $failed )
 				)
 			);

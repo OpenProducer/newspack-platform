@@ -43,6 +43,7 @@ class BufferStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Str
     public function detach()
     {
         $this->close();
+        return null;
     }
     public function getSize()
     {

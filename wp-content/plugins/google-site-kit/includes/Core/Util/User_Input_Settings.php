@@ -13,6 +13,7 @@ namespace Google\Site_Kit\Core\Util;
 use Google\Site_Kit\Context;
 use Google\Site_Kit\Core\Authentication\Authentication;
 use Google\Site_Kit\Core\Authentication\Google_Proxy;
+use Google\Site_Kit\Core\Authentication\User_Input_State;
 use Google\Site_Kit\Core\Storage\Transients;
 use Google\Site_Kit\Core\Storage\User_Transients;
 use WP_Error;
@@ -87,6 +88,36 @@ class User_Input_Settings {
 	}
 
 	/**
+	 * Determines whether the current user input settings have empty values or not.
+	 *
+	 * @since 1.21.0
+	 *
+	 * @param array $settings The settings to check.
+	 * @return boolean|null TRUE if at least one of the settings has empty values, otherwise FALSE. If a request to the proxy server fails, it will return NULL.
+	 */
+	public function are_settings_empty( $settings = array() ) {
+		if ( empty( $settings ) ) {
+			$settings = $this->get_settings();
+			if ( is_wp_error( $settings ) ) {
+				// NULL is like an undefined here and means that we can't say exactly
+				// whether the settings are empty or not because we can't pull data from
+				// the proxy server. It's quite unlikely that we can get an error here,
+				// but we need to be prepared in case it suddenly happens.
+				return null;
+			}
+		}
+
+		$empty_settings = array_filter(
+			$settings,
+			function( $setting ) {
+				return empty( $setting['values'] );
+			}
+		);
+
+		return 0 < count( $empty_settings );
+	}
+
+	/**
 	 * Sends POST request to the proxy's settings endpoint to sync user input settings.
 	 *
 	 * @since 1.19.0
@@ -147,11 +178,10 @@ class User_Input_Settings {
 				continue;
 			}
 
-			$values = is_array( $setting_data['values'] ) ? $setting_data['values'] : array();
 			if ( 'site' === $setting_data['scope'] ) {
-				$site_settings[ $setting_key ] = $values;
+				$site_settings[ $setting_key ] = $setting_data;
 			} elseif ( 'user' === $setting_data['scope'] ) {
-				$user_settings[ $setting_key ] = $values;
+				$user_settings[ $setting_key ] = $setting_data;
 			}
 		}
 
@@ -184,15 +214,25 @@ class User_Input_Settings {
 			return $this->sync_with_proxy();
 		}
 
-		$settings = array();
+		$user_id  = get_current_user_id();
+		$settings = array_merge( $data['site'], $data['user'] );
 
-		foreach ( $data as $scope => $values ) {
-			foreach ( $values as $key => $value ) {
-				$settings[ $key ] = array(
-					'values' => $value,
-					'scope'  => $scope,
-				);
+		foreach ( $settings as &$setting ) {
+			if ( ! isset( $setting['answeredBy'] ) ) {
+				continue;
 			}
+
+			$answered_by = intval( $setting['answeredBy'] );
+			unset( $setting['answeredBy'] );
+
+			if ( ! $answered_by || $answered_by === $user_id ) {
+				continue;
+			}
+
+			$setting['author'] = array(
+				'photo' => get_avatar_url( $answered_by ),
+				'name'  => get_the_author_meta( 'user_email', $answered_by ),
+			);
 		}
 
 		return $settings;
@@ -207,13 +247,23 @@ class User_Input_Settings {
 	 * @return array|WP_Error User input settings.
 	 */
 	public function set_settings( $settings ) {
-		return $this->is_connected_to_proxy()
-			? $this->sync_with_proxy( $settings )
-			: new WP_Error(
+		if ( ! $this->is_connected_to_proxy() ) {
+			return new WP_Error(
 				'not_connected',
 				__( 'Not Connected', 'google-site-kit' ),
 				array( 'status' => 400 )
 			);
+		}
+
+		$response = $this->sync_with_proxy( $settings );
+		if ( ! is_wp_error( $response ) ) {
+			$is_empty = $this->are_settings_empty( $response );
+			if ( ! is_null( $is_empty ) ) {
+				$this->authentication->get_user_input_state()->set( $is_empty ? User_Input_State::VALUE_MISSING : User_Input_State::VALUE_COMPLETED );
+			}
+		}
+
+		return $response;
 	}
 
 }

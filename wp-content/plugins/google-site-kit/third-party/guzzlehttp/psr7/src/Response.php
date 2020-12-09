@@ -30,7 +30,7 @@ class Response implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Respons
         $this->assertStatusCodeRange($status);
         $this->statusCode = $status;
         if ($body !== '' && $body !== null) {
-            $this->stream = stream_for($body);
+            $this->stream = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($body);
         }
         $this->setHeaders($headers);
         if ($reason == '' && isset(self::$phrases[$this->statusCode])) {
@@ -58,7 +58,7 @@ class Response implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Respons
         if ($reasonPhrase == '' && isset(self::$phrases[$new->statusCode])) {
             $reasonPhrase = self::$phrases[$new->statusCode];
         }
-        $new->reasonPhrase = $reasonPhrase;
+        $new->reasonPhrase = (string) $reasonPhrase;
         return $new;
     }
     private function assertStatusCodeIsInteger($statusCode)

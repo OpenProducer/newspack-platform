@@ -42,6 +42,9 @@ class WebProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\Pr
         } else {
             throw new \UnexpectedValueException('$serverData must be an array or object implementing ArrayAccess.');
         }
+        if (isset($this->serverData['UNIQUE_ID'])) {
+            $this->extraFields['unique_id'] = 'UNIQUE_ID';
+        }
         if (null !== $extraFields) {
             if (isset($extraFields[0])) {
                 foreach (\array_keys($this->extraFields) as $fieldName) {
@@ -86,9 +89,6 @@ class WebProcessor implements \Google\Site_Kit_Dependencies\Monolog\Processor\Pr
     {
         foreach ($this->extraFields as $extraName => $serverName) {
             $extra[$extraName] = isset($this->serverData[$serverName]) ? $this->serverData[$serverName] : null;
-        }
-        if (isset($this->serverData['UNIQUE_ID'])) {
-            $extra['unique_id'] = $this->serverData['UNIQUE_ID'];
         }
         return $extra;
     }

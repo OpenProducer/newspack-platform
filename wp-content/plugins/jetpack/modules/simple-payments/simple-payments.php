@@ -1,9 +1,15 @@
-<?php
-/*
+<?php // phpcs:ignore WordPress.Files.FileName.InvalidClassFileName
+/**
  * Simple Payments lets users embed a PayPal button fully integrated with wpcom to sell products on the site.
  * This is not a proper module yet, because not all the pieces are in place. Until everything is shipped, it can be turned
  * into module that can be enabled/disabled.
-*/
+ *
+ * @package Jetpack
+ */
+
+/**
+ * Jetpack_Simple_Payments
+ */
 class Jetpack_Simple_Payments {
 	// These have to be under 20 chars because that is CPT limit.
 	static $post_type_order = 'jp_pay_order';
@@ -168,17 +174,8 @@ class Jetpack_Simple_Payments {
 
 		$data['id'] = $attrs['id'];
 
-		if ( defined( 'IS_WPCOM' ) && IS_WPCOM ) {
-			require_once WP_CONTENT_DIR . '/lib/display-context.php';
-			$context = \A8C\Display_Context\get_current_context();
-			if ( \A8C\Display_Context\EMAIL === $context ) {
-				// Avoid enqueueing unsupported files by emails.
-				return $this->output_shortcode( $data );
-			}
-		}
-
 		if ( ! $this->is_enabled_jetpack_simple_payments() ) {
-			if ( ! is_feed() ) {
+			if ( jetpack_is_frontend() ) {
 				return $this->output_admin_warning( $data );
 			}
 			return;
@@ -293,28 +290,8 @@ class Jetpack_Simple_Payments {
 	 * @return string           Formatted price.
 	 */
 	private function format_price( $price, $currency ) {
-		$currency_details = self::get_currency( $currency );
-
-		if ( $currency_details ) {
-			// Ensure USD displays as 1234.56 even in non-US locales.
-			$amount = 'USD' === $currency
-				? number_format( $price, $currency_details['decimal'], '.', ',' )
-				: number_format_i18n( $price, $currency_details['decimal'] );
-
-			return sprintf(
-				$currency_details['format'],
-				$currency_details['symbol'],
-				$amount
-			);
-		}
-
-		// Fall back to unspecified currency symbol like `¤1,234.05`.
-		// @link https://en.wikipedia.org/wiki/Currency_sign_(typography).
-		if ( ! $currency ) {
-			return '¤' . number_format_i18n( $price, 2 );
-		}
-
-		return number_format_i18n( $price, 2 ) . ' ' . $currency;
+		jetpack_require_lib( 'class-jetpack-currencies' );
+		return Jetpack_Currencies::format_price( $price, $currency );
 	}
 
 	/**
@@ -576,128 +553,8 @@ class Jetpack_Simple_Payments {
 	 * @return ?array               Currency object or null if not found.
 	 */
 	private static function get_currency( $the_currency ) {
-		$currencies = array(
-			'USD' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => '$',
-				'decimal' => 2,
-			),
-			'GBP' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => '&#163;',
-				'decimal' => 2,
-			),
-			'JPY' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => '&#165;',
-				'decimal' => 0,
-			),
-			'BRL' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => 'R$',
-				'decimal' => 2,
-			),
-			'EUR' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => '&#8364;',
-				'decimal' => 2,
-			),
-			'NZD' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => 'NZ$',
-				'decimal' => 2,
-			),
-			'AUD' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => 'A$',
-				'decimal' => 2,
-			),
-			'CAD' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => 'C$',
-				'decimal' => 2,
-			),
-			'ILS' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => '₪',
-				'decimal' => 2,
-			),
-			'RUB' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => '₽',
-				'decimal' => 2,
-			),
-			'MXN' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => 'MX$',
-				'decimal' => 2,
-			),
-			'MYR' => array(
-				'format'  => '%2$s%1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'RM',
-				'decimal' => 2,
-			),
-			'SEK' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'Skr',
-				'decimal' => 2,
-			),
-			'HUF' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'Ft',
-				'decimal' => 0, // Decimals are supported by Stripe but not by PayPal.
-			),
-			'CHF' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'CHF',
-				'decimal' => 2,
-			),
-			'CZK' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'Kč',
-				'decimal' => 2,
-			),
-			'DKK' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'Dkr',
-				'decimal' => 2,
-			),
-			'HKD' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'HK$',
-				'decimal' => 2,
-			),
-			'NOK' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'Kr',
-				'decimal' => 2,
-			),
-			'PHP' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => '₱',
-				'decimal' => 2,
-			),
-			'PLN' => array(
-				'format'  => '%2$s %1$s', // 1: Symbol 2: currency value
-				'symbol'  => 'PLN',
-				'decimal' => 2,
-			),
-			'SGD' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => 'S$',
-				'decimal' => 2,
-			),
-			'TWD' => array(
-				'format'  => '%1$s%2$s', // 1: Symbol 2: currency value
-				'symbol'  => 'NT$',
-				'decimal' => 0, // Decimals are supported by Stripe but not by PayPal.
-			),
-			'THB' => array(
-				'format'  => '%2$s%1$s', // 1: Symbol 2: currency value
-				'symbol'  => '฿',
-				'decimal' => 2,
-			),
-		);
+		jetpack_require_lib( 'class-jetpack-currencies' );
+		$currencies = Jetpack_Currencies::CURRENCIES;
 
 		if ( isset( $currencies[ $the_currency ] ) ) {
 			return $currencies[ $the_currency ];

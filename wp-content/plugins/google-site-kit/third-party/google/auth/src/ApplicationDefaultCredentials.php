@@ -101,12 +101,14 @@ class ApplicationDefaultCredentials
      * @param array $cacheConfig configuration for the cache when it's present
      * @param CacheItemPoolInterface $cache A cache implementation, may be
      *        provided if you have one already available for use.
+     * @param string $quotaProject specifies a project to bill for access
+     *   charges associated with the request.
      * @return AuthTokenMiddleware
      * @throws DomainException if no implementation can be obtained.
      */
-    public static function getMiddleware($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
+    public static function getMiddleware($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null, $quotaProject = null)
     {
-        $creds = self::getCredentials($scope, $httpHandler, $cacheConfig, $cache);
+        $creds = self::getCredentials($scope, $httpHandler, $cacheConfig, $cache, $quotaProject);
         return new \Google\Site_Kit_Dependencies\Google\Auth\Middleware\AuthTokenMiddleware($creds, $httpHandler);
     }
     /**
@@ -117,7 +119,7 @@ class ApplicationDefaultCredentials
      * If supplied, $scope is used to in creating the credentials instance if
      * this does not fallback to the Compute Engine defaults.
      *
-     * @param string|array scope the scope of the access request, expressed
+     * @param string|array $scope the scope of the access request, expressed
      *        either as an Array or as a space-delimited String.
      * @param callable $httpHandler callback which delivers psr7 request
      * @param array $cacheConfig configuration for the cache when it's present
@@ -125,14 +127,18 @@ class ApplicationDefaultCredentials
      *        provided if you have one already available for use.
      * @param string $quotaProject specifies a project to bill for access
      *   charges associated with the request.
+     * @param string|array $defaultScope The default scope to use if no
+     *   user-defined scopes exist, expressed either as an Array or as a
+     *   space-delimited string.
      *
      * @return CredentialsLoader
      * @throws DomainException if no implementation can be obtained.
      */
-    public static function getCredentials($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null, $quotaProject = null)
+    public static function getCredentials($scope = null, callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null, $quotaProject = null, $defaultScope = null)
     {
         $creds = null;
         $jsonKey = \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader::fromEnv() ?: \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader::fromWellKnownFile();
+        $anyScope = $scope ?: $defaultScope;
         if (!$httpHandler) {
             if (!($client = \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient())) {
                 $client = new \Google\Site_Kit_Dependencies\GuzzleHttp\Client();
@@ -141,12 +147,14 @@ class ApplicationDefaultCredentials
             $httpHandler = \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build($client);
         }
         if (!\is_null($jsonKey)) {
-            $jsonKey['quota_project'] = $quotaProject;
-            $creds = \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader::makeCredentials($scope, $jsonKey);
+            if ($quotaProject) {
+                $jsonKey['quota_project_id'] = $quotaProject;
+            }
+            $creds = \Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader::makeCredentials($scope, $jsonKey, $defaultScope);
         } elseif (\Google\Site_Kit_Dependencies\Google\Auth\Credentials\AppIdentityCredentials::onAppEngine() && !\Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials::onAppEngineFlexible()) {
-            $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\AppIdentityCredentials($scope);
-        } elseif (\Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials::onGce($httpHandler)) {
-            $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials(null, $scope, null, $quotaProject);
+            $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\AppIdentityCredentials($anyScope);
+        } elseif (self::onGce($httpHandler, $cacheConfig, $cache)) {
+            $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials(null, $anyScope, null, $quotaProject);
         }
         if (\is_null($creds)) {
             throw new \DomainException(self::notFound());
@@ -213,7 +221,7 @@ class ApplicationDefaultCredentials
                 throw new \InvalidArgumentException('invalid value in the type field');
             }
             $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ServiceAccountCredentials(null, $jsonKey, null, $targetAudience);
-        } elseif (\Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials::onGce($httpHandler)) {
+        } elseif (self::onGce($httpHandler, $cacheConfig, $cache)) {
             $creds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\GCECredentials(null, null, $targetAudience);
         }
         if (\is_null($creds)) {
@@ -231,5 +239,15 @@ class ApplicationDefaultCredentials
         $msg .= '/accounts/docs/application-default-credentials';
         $msg .= ' for more information';
         return $msg;
+    }
+    private static function onGce(callable $httpHandler = null, array $cacheConfig = null, \Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface $cache = null)
+    {
+        $gceCacheConfig = [];
+        foreach (['lifetime', 'prefix'] as $key) {
+            if (isset($cacheConfig['gce_' . $key])) {
+                $gceCacheConfig[$key] = $cacheConfig['gce_' . $key];
+            }
+        }
+        return (new \Google\Site_Kit_Dependencies\Google\Auth\GCECache($gceCacheConfig, $cache))->onGce($httpHandler);
     }
 }

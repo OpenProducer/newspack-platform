@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
+class ComposerStaticInit5af47b3e37a962d9eb526f0acdf7d42a
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -39,6 +39,7 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Composer\\Installers\\CraftInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CraftInstaller.php',
         'Composer\\Installers\\CroogoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/CroogoInstaller.php',
         'Composer\\Installers\\DecibelInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DecibelInstaller.php',
+        'Composer\\Installers\\DframeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DframeInstaller.php',
         'Composer\\Installers\\DokuWikiInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DokuWikiInstaller.php',
         'Composer\\Installers\\DolibarrInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DolibarrInstaller.php',
         'Composer\\Installers\\DrupalInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/DrupalInstaller.php',
@@ -56,6 +57,7 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Composer\\Installers\\JoomlaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/JoomlaInstaller.php',
         'Composer\\Installers\\KanboardInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KanboardInstaller.php',
         'Composer\\Installers\\KirbyInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KirbyInstaller.php',
+        'Composer\\Installers\\KnownInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KnownInstaller.php',
         'Composer\\Installers\\KodiCMSInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KodiCMSInstaller.php',
         'Composer\\Installers\\KohanaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/KohanaInstaller.php',
         'Composer\\Installers\\LanManagementSystemInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/LanManagementSystemInstaller.php',
@@ -67,6 +69,7 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Composer\\Installers\\MagentoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MagentoInstaller.php',
         'Composer\\Installers\\MajimaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MajimaInstaller.php',
         'Composer\\Installers\\MakoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MakoInstaller.php',
+        'Composer\\Installers\\MantisBTInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MantisBTInstaller.php',
         'Composer\\Installers\\MauticInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MauticInstaller.php',
         'Composer\\Installers\\MayaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MayaInstaller.php',
         'Composer\\Installers\\MediaWikiInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/MediaWikiInstaller.php',
@@ -90,6 +93,7 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Composer\\Installers\\PxcmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/PxcmsInstaller.php',
         'Composer\\Installers\\RadPHPInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/RadPHPInstaller.php',
         'Composer\\Installers\\ReIndexInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ReIndexInstaller.php',
+        'Composer\\Installers\\Redaxo5Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Redaxo5Installer.php',
         'Composer\\Installers\\RedaxoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/RedaxoInstaller.php',
         'Composer\\Installers\\RoundcubeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/RoundcubeInstaller.php',
         'Composer\\Installers\\SMFInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SMFInstaller.php',
@@ -97,9 +101,11 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Composer\\Installers\\SilverStripeInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SilverStripeInstaller.php',
         'Composer\\Installers\\SiteDirectInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SiteDirectInstaller.php',
         'Composer\\Installers\\SyDESInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyDESInstaller.php',
+        'Composer\\Installers\\SyliusInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/SyliusInstaller.php',
         'Composer\\Installers\\Symfony1Installer' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/Symfony1Installer.php',
         'Composer\\Installers\\TYPO3CmsInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3CmsInstaller.php',
         'Composer\\Installers\\TYPO3FlowInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TYPO3FlowInstaller.php',
+        'Composer\\Installers\\TaoInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TaoInstaller.php',
         'Composer\\Installers\\TheliaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TheliaInstaller.php',
         'Composer\\Installers\\TuskInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/TuskInstaller.php',
         'Composer\\Installers\\UserFrostingInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/UserFrostingInstaller.php',
@@ -210,9 +216,9 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'WPSEO_Endpoint_Statistics' => __DIR__ . '/../..' . '/admin/endpoints/class-endpoint-statistics.php',
         'WPSEO_Export' => __DIR__ . '/../..' . '/admin/class-export.php',
         'WPSEO_Expose_Shortlinks' => __DIR__ . '/../..' . '/admin/class-expose-shortlinks.php',
-        'WPSEO_Extension' => __DIR__ . '/../..' . '/admin/class-extension.php',
-        'WPSEO_Extension_Manager' => __DIR__ . '/../..' . '/admin/class-extension-manager.php',
-        'WPSEO_Extensions' => __DIR__ . '/../..' . '/admin/class-extensions.php',
+        'WPSEO_Extension' => __DIR__ . '/../..' . '/src/deprecated/admin/extension.php',
+        'WPSEO_Extension_Manager' => __DIR__ . '/../..' . '/src/deprecated/admin/extension-manager.php',
+        'WPSEO_Extensions' => __DIR__ . '/../..' . '/src/deprecated/admin/extensions.php',
         'WPSEO_Features' => __DIR__ . '/../..' . '/inc/class-wpseo-features.php',
         'WPSEO_File_Size_Exception' => __DIR__ . '/../..' . '/admin/exceptions/class-file-size-exception.php',
         'WPSEO_File_Size_Service' => __DIR__ . '/../..' . '/admin/services/class-file-size.php',
@@ -269,7 +275,7 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'WPSEO_Installation' => __DIR__ . '/../..' . '/inc/class-wpseo-installation.php',
         'WPSEO_Keyword_Synonyms_Modal' => __DIR__ . '/../..' . '/admin/class-keyword-synonyms-modal.php',
         'WPSEO_Language_Utils' => __DIR__ . '/../..' . '/inc/language-utils.php',
-        'WPSEO_License_Page_Manager' => __DIR__ . '/../..' . '/admin/class-license-page-manager.php',
+        'WPSEO_License_Page_Manager' => __DIR__ . '/../..' . '/src/deprecated/admin/license-page-manager.php',
         'WPSEO_Link_Compatibility_Notifier' => __DIR__ . '/../..' . '/src/deprecated/admin/links/class-link-compatibility-notifier.php',
         'WPSEO_Link_Table_Accessible_Notifier' => __DIR__ . '/../..' . '/src/deprecated/admin/links/class-link-table-accessible-notifier.php',
         'WPSEO_Listener' => __DIR__ . '/../..' . '/admin/listeners/class-listener.php',
@@ -568,10 +574,11 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexable_Indexing_Complete_Action' => __DIR__ . '/../..' . '/src/actions/indexing/indexable-indexing-complete-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexable_Post_Indexation_Action' => __DIR__ . '/../..' . '/src/actions/indexing/indexable-post-indexation-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexable_Post_Type_Archive_Indexation_Action' => __DIR__ . '/../..' . '/src/actions/indexing/indexable-post-type-archive-indexation-action.php',
-        'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexable_Prepare_Indexation_Action' => __DIR__ . '/../..' . '/src/actions/indexing/indexable-prepare-indexation-action.php',
+        'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexable_Prepare_Indexation_Action' => __DIR__ . '/../..' . '/src/deprecated/src/actions/indexing/indexable-prepare-indexation-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexable_Term_Indexation_Action' => __DIR__ . '/../..' . '/src/actions/indexing/indexable-term-indexation-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexation_Action_Interface' => __DIR__ . '/../..' . '/src/actions/indexing/indexation-action-interface.php',
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexing_Complete_Action' => __DIR__ . '/../..' . '/src/actions/indexing/indexing-complete-action.php',
+        'Yoast\\WP\\SEO\\Actions\\Indexing\\Indexing_Prepare_Action' => __DIR__ . '/../..' . '/src/actions/indexing/indexing-prepare-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Post_Link_Indexing_Action' => __DIR__ . '/../..' . '/src/actions/indexing/post-link-indexing-action.php',
         'Yoast\\WP\\SEO\\Actions\\Indexing\\Term_Link_Indexing_Action' => __DIR__ . '/../..' . '/src/actions/indexing/term-link-indexing-action.php',
         'Yoast\\WP\\SEO\\Actions\\SEMrush\\SEMrush_Login_Action' => __DIR__ . '/../..' . '/src/actions/semrush/semrush-login-action.php',
@@ -585,13 +592,14 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast\\WP\\SEO\\Builders\\Indexable_Link_Builder' => __DIR__ . '/../..' . '/src/builders/indexable-link-builder.php',
         'Yoast\\WP\\SEO\\Builders\\Indexable_Post_Builder' => __DIR__ . '/../..' . '/src/builders/indexable-post-builder.php',
         'Yoast\\WP\\SEO\\Builders\\Indexable_Post_Type_Archive_Builder' => __DIR__ . '/../..' . '/src/builders/indexable-post-type-archive-builder.php',
-        'Yoast\\WP\\SEO\\Builders\\Indexable_Rebuilder' => __DIR__ . '/../..' . '/src/builders/indexable-rebuilder.php',
         'Yoast\\WP\\SEO\\Builders\\Indexable_Social_Image_Trait' => __DIR__ . '/../..' . '/src/builders/indexable-social-image-trait.php',
         'Yoast\\WP\\SEO\\Builders\\Indexable_System_Page_Builder' => __DIR__ . '/../..' . '/src/builders/indexable-system-page-builder.php',
         'Yoast\\WP\\SEO\\Builders\\Indexable_Term_Builder' => __DIR__ . '/../..' . '/src/builders/indexable-term-builder.php',
         'Yoast\\WP\\SEO\\Builders\\Primary_Term_Builder' => __DIR__ . '/../..' . '/src/builders/primary-term-builder.php',
         'Yoast\\WP\\SEO\\Commands\\Command_Interface' => __DIR__ . '/../..' . '/src/commands/command-interface.php',
         'Yoast\\WP\\SEO\\Commands\\Index_Command' => __DIR__ . '/../..' . '/src/commands/index-command.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Admin\\Elementor_Edit_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin/elementor-edit-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Admin\\Posts_Overview_Or_Ajax_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin/posts-overview-or-ajax-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Breadcrumbs_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/breadcrumbs-enabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Conditional' => __DIR__ . '/../..' . '/src/conditionals/conditional-interface.php',
@@ -605,17 +613,19 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast\\WP\\SEO\\Conditionals\\No_Conditionals' => __DIR__ . '/../..' . '/src/conditionals/no-conditionals-trait.php',
         'Yoast\\WP\\SEO\\Conditionals\\No_Tool_Selected_Conditional' => __DIR__ . '/../..' . '/src/conditionals/no-tool-selected-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Open_Graph_Conditional' => __DIR__ . '/../..' . '/src/conditionals/open-graph-conditional.php',
-        'Yoast\\WP\\SEO\\Conditionals\\Posts_Overview_Or_Ajax_Conditional' => __DIR__ . '/../..' . '/src/conditionals/admin/posts-overview-or-ajax-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Primary_Category_Conditional' => __DIR__ . '/../..' . '/src/conditionals/primary-category-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\SEMrush_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/semrush-enabled-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Schema_Blocks_Conditional' => __DIR__ . '/../..' . '/src/conditionals/schema-blocks-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Should_Index_Links_Conditional' => __DIR__ . '/../..' . '/src/conditionals/should-index-links-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\The_Events_Calendar_Conditional' => __DIR__ . '/../..' . '/src/conditionals/the-events-calendar-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\W3_Total_Cache_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/w3-total-cache-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\WPML_Conditional' => __DIR__ . '/../..' . '/src/conditionals/wpml-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Web_Stories_Conditional' => __DIR__ . '/../..' . '/src/conditionals/web-stories-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\WooCommerce_Conditional' => __DIR__ . '/../..' . '/src/conditionals/woocommerce-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\XMLRPC_Conditional' => __DIR__ . '/../..' . '/src/conditionals/xmlrpc-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Yoast_Admin_And_Dashboard_Conditional' => __DIR__ . '/../..' . '/src/conditionals/yoast-admin-and-dashboard-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Yoast_Tools_Page_Conditional' => __DIR__ . '/../..' . '/src/conditionals/yoast-tools-page-conditional.php',
+        'Yoast\\WP\\SEO\\Config\\Indexing_Reasons' => __DIR__ . '/../..' . '/src/config/indexing-reasons.php',
         'Yoast\\WP\\SEO\\Config\\Migration_Status' => __DIR__ . '/../..' . '/src/config/migration-status.php',
         'Yoast\\WP\\SEO\\Config\\Migrations\\AddCollationToTables' => __DIR__ . '/../..' . '/src/config/migrations/20200408101900_AddCollationToTables.php',
         'Yoast\\WP\\SEO\\Config\\Migrations\\AddColumnsToIndexables' => __DIR__ . '/../..' . '/src/config/migrations/20200420073606_AddColumnsToIndexables.php',
@@ -672,6 +682,7 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast\\WP\\SEO\\Helpers\\Home_Url_Helper' => __DIR__ . '/../..' . '/src/helpers/home-url-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Image_Helper' => __DIR__ . '/../..' . '/src/helpers/image-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Indexable_Helper' => __DIR__ . '/../..' . '/src/helpers/indexable-helper.php',
+        'Yoast\\WP\\SEO\\Helpers\\Indexing_Helper' => __DIR__ . '/../..' . '/src/helpers/indexing-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Language_Helper' => __DIR__ . '/../..' . '/src/helpers/language-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Meta_Helper' => __DIR__ . '/../..' . '/src/helpers/meta-helper.php',
         'Yoast\\WP\\SEO\\Helpers\\Notification_Helper' => __DIR__ . '/../..' . '/src/helpers/notification-helper.php',
@@ -716,6 +727,7 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Internal_Linking_Category' => __DIR__ . '/../..' . '/src/integrations/blocks/block-categories.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Structured_Data_Blocks' => __DIR__ . '/../..' . '/src/integrations/blocks/structured-data-blocks.php',
         'Yoast\\WP\\SEO\\Integrations\\Breadcrumbs_Integration' => __DIR__ . '/../..' . '/src/integrations/breadcrumbs-integration.php',
+        'Yoast\\WP\\SEO\\Integrations\\Duplicate_Post_Integration' => __DIR__ . '/../..' . '/src/integrations/duplicate-post-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Backwards_Compatibility' => __DIR__ . '/../..' . '/src/integrations/front-end/backwards-compatibility.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Category_Term_Description' => __DIR__ . '/../..' . '/src/integrations/front-end/category-term-description.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Comment_Link_Fixer' => __DIR__ . '/../..' . '/src/integrations/front-end/comment-link-fixer.php',
@@ -729,10 +741,13 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast\\WP\\SEO\\Integrations\\Front_End_Integration' => __DIR__ . '/../..' . '/src/integrations/front-end-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Integration_Interface' => __DIR__ . '/../..' . '/src/integrations/integration-interface.php',
         'Yoast\\WP\\SEO\\Integrations\\Primary_Category' => __DIR__ . '/../..' . '/src/integrations/primary-category.php',
+        'Yoast\\WP\\SEO\\Integrations\\Schema_Blocks' => __DIR__ . '/../..' . '/src/integrations/schema-blocks.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\AMP' => __DIR__ . '/../..' . '/src/integrations/third-party/amp.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\BbPress' => __DIR__ . '/../..' . '/src/integrations/third-party/bbpress.php',
+        'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Elementor' => __DIR__ . '/../..' . '/src/integrations/third-party/elementor.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Jetpack' => __DIR__ . '/../..' . '/src/integrations/third-party/jetpack.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\The_Events_Calendar' => __DIR__ . '/../..' . '/src/integrations/third-party/the-events-calendar.php',
+        'Yoast\\WP\\SEO\\Integrations\\Third_Party\\W3_Total_Cache' => __DIR__ . '/../..' . '/src/integrations/third-party/w3-total-cache.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\WPML' => __DIR__ . '/../..' . '/src/integrations/third-party/wpml.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Web_Stories' => __DIR__ . '/../..' . '/src/integrations/third-party/web-stories.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\WooCommerce' => __DIR__ . '/../..' . '/src/integrations/third-party/woocommerce.php',
@@ -856,7 +871,6 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast\\WP\\SEO\\Wrappers\\WP_Query_Wrapper' => __DIR__ . '/../..' . '/src/wrappers/wp-query-wrapper.php',
         'Yoast\\WP\\SEO\\Wrappers\\WP_Remote_Handler' => __DIR__ . '/../..' . '/src/wrappers/wp-remote-handler.php',
         'Yoast\\WP\\SEO\\Wrappers\\WP_Rewrite_Wrapper' => __DIR__ . '/../..' . '/src/wrappers/wp-rewrite-wrapper.php',
-        'Yoast_API_Request' => __DIR__ . '/..' . '/yoast/license-manager/class-api-request.php',
         'Yoast_Dashboard_Widget' => __DIR__ . '/../..' . '/admin/class-yoast-dashboard-widget.php',
         'Yoast_Dismissable_Notice_Ajax' => __DIR__ . '/../..' . '/admin/ajax/class-yoast-dismissable-notice.php',
         'Yoast_Feature_Toggle' => __DIR__ . '/../..' . '/admin/views/class-yoast-feature-toggle.php',
@@ -869,7 +883,6 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast_Input_Select' => __DIR__ . '/../..' . '/admin/views/class-yoast-input-select.php',
         'Yoast_Input_Validation' => __DIR__ . '/../..' . '/admin/class-yoast-input-validation.php',
         'Yoast_Integration_Toggles' => __DIR__ . '/../..' . '/admin/views/class-yoast-integration-toggles.php',
-        'Yoast_License_Manager' => __DIR__ . '/..' . '/yoast/license-manager/class-license-manager.php',
         'Yoast_Network_Admin' => __DIR__ . '/../..' . '/admin/class-yoast-network-admin.php',
         'Yoast_Network_Settings_API' => __DIR__ . '/../..' . '/admin/class-yoast-network-settings-api.php',
         'Yoast_Notification' => __DIR__ . '/../..' . '/admin/class-yoast-notification.php',
@@ -878,22 +891,15 @@ class ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05
         'Yoast_OnPage_Ajax' => __DIR__ . '/../..' . '/src/deprecated/admin/ajax/class-yoast-onpage-ajax.php',
         'Yoast_Plugin_Conflict' => __DIR__ . '/../..' . '/admin/class-yoast-plugin-conflict.php',
         'Yoast_Plugin_Conflict_Ajax' => __DIR__ . '/../..' . '/admin/ajax/class-yoast-plugin-conflict-ajax.php',
-        'Yoast_Plugin_License_Manager' => __DIR__ . '/..' . '/yoast/license-manager/class-plugin-license-manager.php',
-        'Yoast_Plugin_Update_Manager' => __DIR__ . '/..' . '/yoast/license-manager/class-plugin-update-manager.php',
-        'Yoast_Product' => __DIR__ . '/..' . '/yoast/license-manager/class-product.php',
-        'Yoast_Theme_License_Manager' => __DIR__ . '/..' . '/yoast/license-manager/class-theme-license-manager.php',
-        'Yoast_Theme_Update_Manager' => __DIR__ . '/..' . '/yoast/license-manager/class-theme-update-manager.php',
-        'Yoast_Update_Manager' => __DIR__ . '/..' . '/yoast/license-manager/class-update-manager.php',
         'Yoast_View_Utils' => __DIR__ . '/../..' . '/admin/views/class-view-utils.php',
-        'iYoast_License_Manager' => __DIR__ . '/..' . '/yoast/license-manager/class-license-manager.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc53b915dd8979f2173b5e23ed9d16a05::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5af47b3e37a962d9eb526f0acdf7d42a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5af47b3e37a962d9eb526f0acdf7d42a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5af47b3e37a962d9eb526f0acdf7d42a::$classMap;
 
         }, null, ClassLoader::class);
     }

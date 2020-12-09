@@ -109,7 +109,7 @@ class CachingStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\St
     private function cacheEntireStream()
     {
         $target = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\FnStream(['write' => 'strlen']);
-        copy_to_stream($this, $target);
+        \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::copyToStream($this, $target);
         return $this->tell();
     }
 }

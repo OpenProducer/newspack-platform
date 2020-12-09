@@ -21,7 +21,7 @@ const BLOCK_NAME   = 'jetpack/' . FEATURE_NAME;
  * registration if we need to.
  */
 function register_block() {
-	jetpack_register_block(
+	Blocks::jetpack_register_block(
 		BLOCK_NAME,
 		array( 'render_callback' => __NAMESPACE__ . '\render_block' )
 	);
@@ -173,7 +173,6 @@ function get_button_styles( $attributes ) {
 
 	return implode( ' ', $styles );
 }
-
 
 /**
  * Get filtered attributes.

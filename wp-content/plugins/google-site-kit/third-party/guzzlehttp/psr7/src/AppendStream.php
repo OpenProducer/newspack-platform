@@ -54,7 +54,7 @@ class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Str
     }
     public function getContents()
     {
-        return copy_to_string($this);
+        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::copyToString($this);
     }
     /**
      * Closes each attached stream.
@@ -85,6 +85,7 @@ class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Str
             $stream->detach();
         }
         $this->streams = [];
+        return null;
     }
     public function tell()
     {

@@ -76,6 +76,10 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
      * @var string|null
      */
     protected $projectId;
+    /*
+     * @var array|null
+     */
+    private $lastReceivedJwtAccessToken;
     /**
      * Create a new ServiceAccountCredentials.
      *
@@ -104,8 +108,8 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
         if (!\array_key_exists('private_key', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the private_key field');
         }
-        if (\array_key_exists('quota_project', $jsonKey)) {
-            $this->quotaProject = (string) $jsonKey['quota_project'];
+        if (\array_key_exists('quota_project_id', $jsonKey)) {
+            $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
         if ($scope && $targetAudience) {
             throw new \InvalidArgumentException('Scope and targetAudience cannot both be supplied');
@@ -146,7 +150,9 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
      */
     public function getLastReceivedToken()
     {
-        return $this->auth->getLastReceivedToken();
+        // If self-signed JWTs are being used, fetch the last received token
+        // from memory. Else, fetch it from OAuth2
+        return $this->useSelfSignedJwt() ? $this->lastReceivedJwtAccessToken : $this->auth->getLastReceivedToken();
     }
     /**
      * Get the project ID from the service account keyfile.
@@ -171,14 +177,18 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
     public function updateMetadata($metadata, $authUri = null, callable $httpHandler = null)
     {
         // scope exists. use oauth implementation
-        $scope = $this->auth->getScope();
-        if (!\is_null($scope)) {
+        if (!$this->useSelfSignedJwt()) {
             return parent::updateMetadata($metadata, $authUri, $httpHandler);
         }
         // no scope found. create jwt with the auth uri
         $credJson = array('private_key' => $this->auth->getSigningKey(), 'client_email' => $this->auth->getIssuer());
         $jwtCreds = new \Google\Site_Kit_Dependencies\Google\Auth\Credentials\ServiceAccountJwtAccessCredentials($credJson);
-        return $jwtCreds->updateMetadata($metadata, $authUri, $httpHandler);
+        $updatedMetadata = $jwtCreds->updateMetadata($metadata, $authUri, $httpHandler);
+        if ($lastReceivedToken = $jwtCreds->getLastReceivedToken()) {
+            // Keep self-signed JWTs in memory as the last received token
+            $this->lastReceivedJwtAccessToken = $lastReceivedToken;
+        }
+        return $updatedMetadata;
     }
     /**
      * @param string $sub an email address account to impersonate, in situations when
@@ -208,5 +218,9 @@ class ServiceAccountCredentials extends \Google\Site_Kit_Dependencies\Google\Aut
     public function getQuotaProject()
     {
         return $this->quotaProject;
+    }
+    private function useSelfSignedJwt()
+    {
+        return \is_null($this->auth->getScope());
     }
 }

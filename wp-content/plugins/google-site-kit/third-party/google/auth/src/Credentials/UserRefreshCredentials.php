@@ -72,8 +72,8 @@ class UserRefreshCredentials extends \Google\Site_Kit_Dependencies\Google\Auth\C
             throw new \InvalidArgumentException('json key is missing the refresh_token field');
         }
         $this->auth = new \Google\Site_Kit_Dependencies\Google\Auth\OAuth2(['clientId' => $jsonKey['client_id'], 'clientSecret' => $jsonKey['client_secret'], 'refresh_token' => $jsonKey['refresh_token'], 'scope' => $scope, 'tokenCredentialUri' => self::TOKEN_CREDENTIAL_URI]);
-        if (\array_key_exists('quota_project', $jsonKey)) {
-            $this->quotaProject = (string) $jsonKey['quota_project'];
+        if (\array_key_exists('quota_project_id', $jsonKey)) {
+            $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
     }
     /**

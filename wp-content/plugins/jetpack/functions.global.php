@@ -11,8 +11,8 @@
  */
 
 use Automattic\Jetpack\Connection\Client;
-use Automattic\Jetpack\Redirect;
 use Automattic\Jetpack\Device_Detection;
+use Automattic\Jetpack\Redirect;
 
 /**
  * Disable direct access.
@@ -268,7 +268,7 @@ function jetpack_render_tos_blurb() {
  * @return array|bool|WP_Error
  */
 function jetpack_theme_update( $preempt, $r, $url ) {
-	if ( false !== stripos( $url, JETPACK__WPCOM_JSON_API_HOST . '/rest/v1/themes/download' ) ) {
+	if ( 0 === stripos( $url, JETPACK__WPCOM_JSON_API_BASE . '/rest/v1/themes/download' ) ) {
 		$file = $r['filename'];
 		if ( ! $file ) {
 			return new WP_Error( 'problem_creating_theme_file', esc_html__( 'Problem creating file for theme download', 'jetpack' ) );
@@ -309,7 +309,6 @@ function jetpack_upgrader_pre_download( $reply ) {
 }
 
 add_filter( 'upgrader_pre_download', 'jetpack_upgrader_pre_download' );
-
 
 /**
  * Wraps data in a way so that we can distinguish between objects and array and also prevent object recursion.

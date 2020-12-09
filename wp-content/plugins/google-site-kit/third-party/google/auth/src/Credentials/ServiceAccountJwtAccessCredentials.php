@@ -68,8 +68,8 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
         if (!\array_key_exists('private_key', $jsonKey)) {
             throw new \InvalidArgumentException('json key is missing the private_key field');
         }
-        if (\array_key_exists('quota_project', $jsonKey)) {
-            $this->quotaProject = (string) $jsonKey['quota_project'];
+        if (\array_key_exists('quota_project_id', $jsonKey)) {
+            $this->quotaProject = (string) $jsonKey['quota_project_id'];
         }
         $this->auth = new \Google\Site_Kit_Dependencies\Google\Auth\OAuth2(['issuer' => $jsonKey['client_email'], 'sub' => $jsonKey['client_email'], 'signingAlgorithm' => 'RS256', 'signingKey' => $jsonKey['private_key']]);
         $this->projectId = isset($jsonKey['project_id']) ? $jsonKey['project_id'] : null;
@@ -106,6 +106,8 @@ class ServiceAccountJwtAccessCredentials extends \Google\Site_Kit_Dependencies\G
             return null;
         }
         $access_token = $this->auth->toJwt();
+        // Set the self-signed access token in OAuth2 for getLastReceivedToken
+        $this->auth->setAccessToken($access_token);
         return array('access_token' => $access_token);
     }
     /**

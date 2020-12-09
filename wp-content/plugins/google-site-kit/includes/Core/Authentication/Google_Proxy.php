@@ -11,6 +11,7 @@
 namespace Google\Site_Kit\Core\Authentication;
 
 use Google\Site_Kit\Context;
+use WP_Error;
 use Exception;
 
 /**
@@ -27,6 +28,7 @@ class Google_Proxy {
 	const OAUTH2_REVOKE_URI       = '/o/oauth2/revoke/';
 	const OAUTH2_TOKEN_URI        = '/o/oauth2/token/';
 	const OAUTH2_AUTH_URI         = '/o/oauth2/auth/';
+	const OAUTH2_DELETE_SITE_URI  = '/o/oauth2/delete-site/';
 	const SETUP_URI               = '/site-management/setup/';
 	const PERMISSIONS_URI         = '/site-management/permissions/';
 	const USER_INPUT_SETTINGS_URI = '/settings/';
@@ -95,6 +97,72 @@ class Google_Proxy {
 	}
 
 	/**
+	 * Fetch site fields
+	 *
+	 * @since 1.22.0
+	 *
+	 * @param Credentials $credentials Credentials instance.
+	 * @return array|WP_Error The response as an associative array or WP_Error on failure.
+	 */
+	public function fetch_site_fields( Credentials $credentials ) {
+		if ( ! $credentials->has() ) {
+			return new WP_Error( 'oauth_credentials_not_exist' );
+		}
+
+		$creds = $credentials->get();
+
+		$request_args = array(
+			'body' => array(
+				'site_id'     => $creds['oauth2_client_id'],
+				'site_secret' => $creds['oauth2_client_secret'],
+			),
+		);
+
+		$response = wp_remote_post( $this->url( self::OAUTH2_SITE_URI ), $request_args );
+
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+
+		$raw_body = wp_remote_retrieve_body( $response );
+
+		$response_data = json_decode( $raw_body, true );
+
+		if ( ! $response_data || isset( $response_data['error'] ) ) {
+			return new WP_Error( isset( $response_data['error'] ) ? $response_data['error'] : 'failed_to_parse_response' );
+		}
+
+		return $response_data;
+	}
+
+	/**
+	 * Are site fields synced
+	 *
+	 * @since 1.22.0
+	 *
+	 * @param Credentials $credentials Credentials instance.
+	 *
+	 * @return boolean|WP_Error Boolean do the site fields match or WP_Error on failure.
+	 */
+	public function are_site_fields_synced( Credentials $credentials ) {
+		$fetch_site_fields = $this->fetch_site_fields( $credentials );
+
+		if ( is_wp_error( $fetch_site_fields ) ) {
+			return $fetch_site_fields;
+		}
+
+		$get_site_fields = $this->get_site_fields();
+
+		foreach ( $get_site_fields as $key => $site_field ) {
+			if ( ! array_key_exists( $key, $fetch_site_fields ) || $fetch_site_fields[ $key ] !== $site_field ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Gets user fields.
 	 *
 	 * @since 1.10.0
@@ -112,6 +180,50 @@ class Google_Proxy {
 		return array(
 			'user_roles' => implode( ',', $user_roles ),
 		);
+	}
+
+	/**
+	 * Unregisters the site on the proxy.
+	 *
+	 * @since 1.20.0
+	 *
+	 * @param Credentials $credentials Credentials instance.
+	 * @return array Response data.
+	 *
+	 * @throws Exception Thrown when the request resulted in an error response,
+	 *                   or when credentials are not set.
+	 */
+	public function unregister_site( Credentials $credentials ) {
+		if ( ! $credentials->has() ) {
+			throw new Exception( 'oauth_credentials_not_exist' );
+		}
+
+		$creds = $credentials->get();
+
+		$response = wp_remote_post(
+			$this->url( self::OAUTH2_DELETE_SITE_URI ),
+			array(
+				'body' => array(
+					'site_id'     => $creds['oauth2_client_id'],
+					'site_secret' => $creds['oauth2_client_secret'],
+				),
+			)
+		);
+
+		if ( is_wp_error( $response ) ) {
+			throw new Exception( $response->get_error_code() );
+		}
+
+		$raw_body      = wp_remote_retrieve_body( $response );
+		$response_data = json_decode( $raw_body, true );
+
+		if ( ! $response_data || isset( $response_data['error'] ) ) {
+			throw new Exception(
+				isset( $response_data['error'] ) ? $response_data['error'] : 'failed_to_parse_response'
+			);
+		}
+
+		return $response_data;
 	}
 
 	/**
@@ -134,7 +246,6 @@ class Google_Proxy {
 			'body' => array_merge(
 				$this->get_site_fields(),
 				array(
-					'nonce'       => wp_create_nonce( self::ACTION_SETUP ),
 					'site_id'     => $creds['oauth2_client_id'],
 					'site_secret' => $creds['oauth2_client_secret'],
 				)

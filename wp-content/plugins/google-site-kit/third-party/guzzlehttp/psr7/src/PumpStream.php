@@ -45,7 +45,7 @@ class PumpStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Strea
     public function __toString()
     {
         try {
-            return copy_to_string($this);
+            return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::copyToString($this);
         } catch (\Exception $e) {
             return '';
         }
@@ -58,6 +58,7 @@ class PumpStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Strea
     {
         $this->tellPos = \false;
         $this->source = null;
+        return null;
     }
     public function getSize()
     {

@@ -482,17 +482,6 @@ class WPSEO_Utils {
 	}
 
 	/**
-	 * Flush W3TC cache after succesfull update/add of taxonomy meta option.
-	 *
-	 * @since 1.8.0
-	 */
-	public static function flush_w3tc_cache() {
-		if ( defined( 'W3TC_DIR' ) && function_exists( 'w3tc_objectcache_flush' ) ) {
-			w3tc_objectcache_flush();
-		}
-	}
-
-	/**
 	 * Clear rewrite rules.
 	 *
 	 * @since 1.8.0
@@ -966,15 +955,6 @@ SVG;
 	}
 
 	/**
-	 * Determines whether or not WooCommerce is active.
-	 *
-	 * @return bool Whether or not WooCommerce is active.
-	 */
-	public static function is_woocommerce_active() {
-		return class_exists( 'Woocommerce' );
-	}
-
-	/**
 	 * Determines whether the plugin is active for the entire network.
 	 *
 	 * @return bool Whether or not the plugin is network-active.
@@ -1420,25 +1400,34 @@ SVG;
 	 * @return string
 	 */
 	public static function get_title_separator() {
-		_deprecated_function( __METHOD__, 'WPSEO 15.2' );
+		_deprecated_function( __METHOD__, 'WPSEO 15.2', 'Yoast\WP\SEO\Helpers\Options_Helper::get_title_separator' );
 
-		$replacement = WPSEO_Options::get_default( 'wpseo_titles', 'separator' );
+		return YoastSEO()->helpers->options->get_title_separator();
+	}
 
-		// Get the titles option and the separator options.
-		$separator         = WPSEO_Options::get( 'separator' );
-		$seperator_options = WPSEO_Option_Titles::get_instance()->get_separator_options();
+	/**
+	 * Flush W3TC cache after successful update/add of taxonomy meta option.
+	 *
+	 * @deprecated 15.3
+	 * @codeCoverageIgnore
+	 *
+	 * @since 1.8.0
+	 */
+	public static function flush_w3tc_cache() {
+		_deprecated_function( __METHOD__, 'WPSEO 15.3' );
+	}
 
-		// This should always be set, but just to be sure.
-		if ( isset( $seperator_options[ $separator ] ) ) {
-			// Set the new replacement.
-			$replacement = $seperator_options[ $separator ];
-		}
+	/**
+	 * Determines whether or not WooCommerce is active.
+	 *
+	 * @deprecated 15.3
+	 * @codeCoverageIgnore
+	 *
+	 * @return bool Whether or not WooCommerce is active.
+	 */
+	public static function is_woocommerce_active() {
+		_deprecated_function( __METHOD__, 'WPSEO 15.3' );
 
-		/**
-		 * Filter: 'wpseo_replacements_filter_sep' - Allow customization of the separator character(s).
-		 *
-		 * @api string $replacement The current separator.
-		 */
-		return apply_filters( 'wpseo_replacements_filter_sep', $replacement );
+		return YoastSEO()->helpers->woocommerce->is_active();
 	}
 }

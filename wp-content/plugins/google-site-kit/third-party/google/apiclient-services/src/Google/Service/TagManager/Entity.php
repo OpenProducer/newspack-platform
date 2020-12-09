@@ -20,6 +20,8 @@ namespace Google\Site_Kit_Dependencies;
 class Google_Service_TagManager_Entity extends \Google\Site_Kit_Dependencies\Google_Model
 {
     public $changeStatus;
+    protected $clientType = 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Client';
+    protected $clientDataType = '';
     protected $folderType = 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Folder';
     protected $folderDataType = '';
     protected $tagType = 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Tag';
@@ -35,6 +37,20 @@ class Google_Service_TagManager_Entity extends \Google\Site_Kit_Dependencies\Goo
     public function getChangeStatus()
     {
         return $this->changeStatus;
+    }
+    /**
+     * @param Google_Service_TagManager_Client
+     */
+    public function setClient(\Google\Site_Kit_Dependencies\Google_Service_TagManager_Client $client)
+    {
+        $this->client = $client;
+    }
+    /**
+     * @return Google_Service_TagManager_Client
+     */
+    public function getClient()
+    {
+        return $this->client;
     }
     /**
      * @param Google_Service_TagManager_Folder

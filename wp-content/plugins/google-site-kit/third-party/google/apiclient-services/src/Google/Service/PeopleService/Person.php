@@ -31,6 +31,10 @@ class Google_Service_PeopleService_Person extends \Google\Site_Kit_Dependencies\
     protected $birthdaysDataType = 'array';
     protected $braggingRightsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_BraggingRights';
     protected $braggingRightsDataType = 'array';
+    protected $calendarUrlsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_CalendarUrl';
+    protected $calendarUrlsDataType = 'array';
+    protected $clientDataType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ClientData';
+    protected $clientDataDataType = 'array';
     protected $coverPhotosType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_CoverPhoto';
     protected $coverPhotosDataType = 'array';
     protected $emailAddressesType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_EmailAddress';
@@ -38,6 +42,10 @@ class Google_Service_PeopleService_Person extends \Google\Site_Kit_Dependencies\
     public $etag;
     protected $eventsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Event';
     protected $eventsDataType = 'array';
+    protected $externalIdsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ExternalId';
+    protected $externalIdsDataType = 'array';
+    protected $fileAsesType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_FileAs';
+    protected $fileAsesDataType = 'array';
     protected $gendersType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Gender';
     protected $gendersDataType = 'array';
     protected $imClientsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ImClient';
@@ -46,10 +54,14 @@ class Google_Service_PeopleService_Person extends \Google\Site_Kit_Dependencies\
     protected $interestsDataType = 'array';
     protected $localesType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Locale';
     protected $localesDataType = 'array';
+    protected $locationsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Location';
+    protected $locationsDataType = 'array';
     protected $membershipsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Membership';
     protected $membershipsDataType = 'array';
     protected $metadataType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_PersonMetadata';
     protected $metadataDataType = '';
+    protected $miscKeywordsType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_MiscKeyword';
+    protected $miscKeywordsDataType = 'array';
     protected $namesType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Name';
     protected $namesDataType = 'array';
     protected $nicknamesType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_Nickname';
@@ -160,6 +172,34 @@ class Google_Service_PeopleService_Person extends \Google\Site_Kit_Dependencies\
         return $this->braggingRights;
     }
     /**
+     * @param Google_Service_PeopleService_CalendarUrl
+     */
+    public function setCalendarUrls($calendarUrls)
+    {
+        $this->calendarUrls = $calendarUrls;
+    }
+    /**
+     * @return Google_Service_PeopleService_CalendarUrl
+     */
+    public function getCalendarUrls()
+    {
+        return $this->calendarUrls;
+    }
+    /**
+     * @param Google_Service_PeopleService_ClientData
+     */
+    public function setClientData($clientData)
+    {
+        $this->clientData = $clientData;
+    }
+    /**
+     * @return Google_Service_PeopleService_ClientData
+     */
+    public function getClientData()
+    {
+        return $this->clientData;
+    }
+    /**
      * @param Google_Service_PeopleService_CoverPhoto
      */
     public function setCoverPhotos($coverPhotos)
@@ -208,6 +248,34 @@ class Google_Service_PeopleService_Person extends \Google\Site_Kit_Dependencies\
     public function getEvents()
     {
         return $this->events;
+    }
+    /**
+     * @param Google_Service_PeopleService_ExternalId
+     */
+    public function setExternalIds($externalIds)
+    {
+        $this->externalIds = $externalIds;
+    }
+    /**
+     * @return Google_Service_PeopleService_ExternalId
+     */
+    public function getExternalIds()
+    {
+        return $this->externalIds;
+    }
+    /**
+     * @param Google_Service_PeopleService_FileAs
+     */
+    public function setFileAses($fileAses)
+    {
+        $this->fileAses = $fileAses;
+    }
+    /**
+     * @return Google_Service_PeopleService_FileAs
+     */
+    public function getFileAses()
+    {
+        return $this->fileAses;
     }
     /**
      * @param Google_Service_PeopleService_Gender
@@ -266,6 +334,20 @@ class Google_Service_PeopleService_Person extends \Google\Site_Kit_Dependencies\
         return $this->locales;
     }
     /**
+     * @param Google_Service_PeopleService_Location
+     */
+    public function setLocations($locations)
+    {
+        $this->locations = $locations;
+    }
+    /**
+     * @return Google_Service_PeopleService_Location
+     */
+    public function getLocations()
+    {
+        return $this->locations;
+    }
+    /**
      * @param Google_Service_PeopleService_Membership
      */
     public function setMemberships($memberships)
@@ -292,6 +374,20 @@ class Google_Service_PeopleService_Person extends \Google\Site_Kit_Dependencies\
     public function getMetadata()
     {
         return $this->metadata;
+    }
+    /**
+     * @param Google_Service_PeopleService_MiscKeyword
+     */
+    public function setMiscKeywords($miscKeywords)
+    {
+        $this->miscKeywords = $miscKeywords;
+    }
+    /**
+     * @return Google_Service_PeopleService_MiscKeyword
+     */
+    public function getMiscKeywords()
+    {
+        return $this->miscKeywords;
     }
     /**
      * @param Google_Service_PeopleService_Name

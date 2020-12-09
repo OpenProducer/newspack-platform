@@ -27,6 +27,7 @@ class Google_Service_TagManager_Client extends \Google\Site_Kit_Dependencies\Goo
     public $name;
     protected $parameterType = 'Google\Site_Kit_Dependencies\Google_Service_TagManager_Parameter';
     protected $parameterDataType = 'array';
+    public $parentFolderId;
     public $path;
     public $priority;
     public $tagManagerUrl;
@@ -85,6 +86,14 @@ class Google_Service_TagManager_Client extends \Google\Site_Kit_Dependencies\Goo
     public function getParameter()
     {
         return $this->parameter;
+    }
+    public function setParentFolderId($parentFolderId)
+    {
+        $this->parentFolderId = $parentFolderId;
+    }
+    public function getParentFolderId()
+    {
+        return $this->parentFolderId;
     }
     public function setPath($path)
     {

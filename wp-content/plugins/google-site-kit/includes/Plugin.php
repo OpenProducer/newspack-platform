@@ -10,6 +10,9 @@
 
 namespace Google\Site_Kit;
 
+use Google\Site_Kit\Core\Util\Feature_Flags;
+use Google\Site_Kit\Core\Util\JSON_File;
+
 /**
  * Main class for the plugin.
  *
@@ -138,6 +141,11 @@ final class Plugin {
 		$activation_flag = new Core\Util\Activation_Flag( $this->context, $options );
 		$activation_flag->register();
 
+		// Register uninstallation logic outside of 'init' since it hooks into
+		// plugin uninstallation.
+		$uninstallation = new Core\Util\Uninstallation( $this->context, $options );
+		$uninstallation->register();
+
 		// Initiate the plugin on 'init' for relying on current user being set.
 		add_action(
 			'init',
@@ -233,6 +241,12 @@ final class Plugin {
 		if ( null !== static::$instance ) {
 			return false;
 		}
+
+		$config = new JSON_File( GOOGLESITEKIT_PLUGIN_DIR_PATH . 'dist/config.json' );
+		Feature_Flags::set_mode( $config['flagMode'] );
+		Feature_Flags::set_features(
+			new JSON_File( GOOGLESITEKIT_PLUGIN_DIR_PATH . 'feature-flags.json' )
+		);
 
 		static::$instance = new static( $main_file );
 		static::$instance->register();

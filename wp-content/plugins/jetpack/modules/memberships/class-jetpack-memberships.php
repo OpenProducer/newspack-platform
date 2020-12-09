@@ -6,6 +6,8 @@
  * @since      7.3.0
  */
 
+use Automattic\Jetpack\Blocks;
+
 /**
  * Class Jetpack_Memberships
  * This class represents the Memberships functionality.
@@ -63,6 +65,34 @@ class Jetpack_Memberships {
 	 * @var Jetpack_Memberships
 	 */
 	private static $instance;
+
+	/**
+	 * Currencies we support and Stripe's minimum amount for a transaction in that currency.
+	 *
+	 * @link https://stripe.com/docs/currencies#minimum-and-maximum-charge-amounts
+	 *
+	 * List has to be in with `SUPPORTED_CURRENCIES` in extensions/shared/currencies.js and
+	 * `Memberships_Product::SUPPORTED_CURRENCIES` in the WP.com memberships library.
+	 */
+	const SUPPORTED_CURRENCIES = array(
+		'USD' => 0.5,
+		'AUD' => 0.5,
+		'BRL' => 0.5,
+		'CAD' => 0.5,
+		'CHF' => 0.5,
+		'DKK' => 2.5,
+		'EUR' => 0.5,
+		'GBP' => 0.3,
+		'HKD' => 4.0,
+		'INR' => 0.5,
+		'JPY' => 50,
+		'MXN' => 10,
+		'NOK' => 3.0,
+		'NZD' => 0.5,
+		'PLN' => 2.0,
+		'SEK' => 3.0,
+		'SGD' => 0.5,
+	);
 
 	/**
 	 * Jetpack_Memberships constructor.
@@ -211,7 +241,7 @@ class Jetpack_Memberships {
 		if ( empty( $attrs['planId'] ) ) {
 			return;
 		}
-		$plan_id = intval( $attrs['planId'] );
+		$plan_id = (int) $attrs['planId'];
 		$product = get_post( $plan_id );
 		if ( ! $product || is_wp_error( $product ) ) {
 			return;
@@ -359,7 +389,7 @@ class Jetpack_Memberships {
 		}
 
 		if ( self::is_enabled_jetpack_recurring_payments() ) {
-			jetpack_register_block(
+			Blocks::jetpack_register_block(
 				'jetpack/recurring-payments',
 				array(
 					'render_callback' => array( $this, 'render_button' ),

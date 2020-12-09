@@ -7,13 +7,12 @@
 
 use Automattic\Jetpack\Connection\Client;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
-use Automattic\Jetpack\Status;
-use Automattic\Jetpack\Connection\Utils as Connection_Utils;
-use Automattic\Jetpack\Sync\Modules;
-use Automattic\Jetpack\Sync\Settings as Sync_Settings;
-use Automattic\Jetpack\Sync\Health as Sync_Health;
-use Automattic\Jetpack\Sync\Sender as Sync_Sender;
 use Automattic\Jetpack\Redirect;
+use Automattic\Jetpack\Status;
+use Automattic\Jetpack\Sync\Health as Sync_Health;
+use Automattic\Jetpack\Sync\Modules;
+use Automattic\Jetpack\Sync\Sender as Sync_Sender;
+use Automattic\Jetpack\Sync\Settings as Sync_Settings;
 
 /**
  * Class Jetpack_Cxn_Tests contains all of the actual tests.
@@ -379,7 +378,7 @@ class Jetpack_Cxn_Tests extends Jetpack_Cxn_Test_Base {
 		$request = wp_remote_get( preg_replace( '/^https:/', 'http:', JETPACK__API_BASE ) . 'test/1/' );
 		$code    = wp_remote_retrieve_response_code( $request );
 
-		if ( 200 === intval( $code ) ) {
+		if ( 200 === (int) $code ) {
 			$result = self::passing_test( array( 'name' => $name ) );
 		} else {
 			$result = self::failing_test(
@@ -403,7 +402,7 @@ class Jetpack_Cxn_Tests extends Jetpack_Cxn_Test_Base {
 		$request = wp_remote_get( preg_replace( '/^http:/', 'https:', JETPACK__API_BASE ) . 'test/1/' );
 		$code    = wp_remote_retrieve_response_code( $request );
 
-		if ( 200 === intval( $code ) ) {
+		if ( 200 === (int) $code ) {
 			$result = self::passing_test( array( 'name' => $name ) );
 		} else {
 			$result = self::failing_test(
@@ -747,7 +746,7 @@ class Jetpack_Cxn_Tests extends Jetpack_Cxn_Test_Base {
 					esc_html__( 'Error', 'jetpack' )
 				);
 				$description .= wp_kses(
-					__( 'Jetpack has detected an error while syncing your site. <strong>We recommend <a id="full_sync_request_link" href="#">a full sync</a> to align Jetpack with your site data.</strong>', 'jetpack' ),
+					__( 'Jetpack has detected that data is not properly in sync which may be impacting some of your site’s functionality. <strong>Click <a id="full_sync_request_link" href="#">here</a> to start a full sync</strong> to align Jetpack with your site data. If you still notice this error after running a full sync, please contact support for additional assistance.', 'jetpack' ),
 					array(
 						'a'      => array(
 							'id'   => array(),
@@ -765,7 +764,7 @@ class Jetpack_Cxn_Tests extends Jetpack_Cxn_Test_Base {
 						'severity'          => 'critical',
 						'action'            => Redirect::get_url( 'jetpack-contact-support' ),
 						'action_label'      => __( 'Contact Jetpack Support', 'jetpack' ),
-						'short_description' => __( 'Jetpack has detected an error while syncing your site. We recommend a full sync to align Jetpack with your site data.', 'jetpack' ),
+						'short_description' => __( 'Jetpack has detected that data is not properly in sync which may be impacting some of your site’s functionality. We recommend a full sync to align Jetpack with your site data. If you still notice this error after running a full sync, please contact support for additional assistance.', 'jetpack' ),
 						'long_description'  => $description,
 					)
 				);
@@ -793,7 +792,7 @@ class Jetpack_Cxn_Tests extends Jetpack_Cxn_Test_Base {
 							_n(
 								'Jetpack has identified a delay while syncing individual content updates. Certain features might be slower than usual, but this is only temporary while sync catches up with recent changes to your site. <strong>We’re seeing a current delay of %1$d minute.</strong>',
 								'Jetpack has identified a delay while syncing individual content updates. Certain features might be slower than usual, but this is only temporary while sync catches up with recent changes to your site. <strong>We’re seeing a current delay of %1$d minutes.</strong>',
-								intval( $sync_queue->lag() / MINUTE_IN_SECONDS ),
+								(int) ( $sync_queue->lag() / MINUTE_IN_SECONDS ),
 								'jetpack'
 							),
 							number_format_i18n( $sync_queue->lag() / MINUTE_IN_SECONDS )
@@ -879,7 +878,7 @@ class Jetpack_Cxn_Tests extends Jetpack_Cxn_Test_Base {
 
 		$self_xml_rpc_url = site_url( 'xmlrpc.php' );
 
-		$testsite_url = Connection_Utils::fix_url_for_bad_hosts( JETPACK__API_BASE . 'testsite/1/?url=' );
+		$testsite_url = JETPACK__API_BASE . 'testsite/1/?url=';
 
 		// Using PHP_INT_MAX - 1 so that there is still a way to override this if needed and since it only impacts this one call.
 		add_filter( 'http_request_timeout', array( 'Jetpack_Cxn_Tests', 'increase_timeout' ), PHP_INT_MAX - 1 );

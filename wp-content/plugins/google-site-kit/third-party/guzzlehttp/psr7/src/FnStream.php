@@ -28,6 +28,7 @@ class FnStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamI
     }
     /**
      * Lazily determine which methods are not implemented.
+     *
      * @throws \BadMethodCallException
      */
     public function __get($name)

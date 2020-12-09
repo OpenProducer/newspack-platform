@@ -30,6 +30,6 @@ class LazyOpenStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\S
      */
     protected function createStream()
     {
-        return stream_for(try_fopen($this->filename, $this->mode));
+        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::tryFopen($this->filename, $this->mode));
     }
 }

@@ -706,7 +706,7 @@ class Jetpack {
 		 * They check for external files or plugins, so they need to run as late as possible.
 		 */
 		add_action( 'wp_head', array( $this, 'check_open_graph' ), 1 );
-		add_action( 'amp_story_head', array( $this, 'check_open_graph' ), 1 );
+		add_action( 'web_stories_story_head', array( $this, 'check_open_graph' ), 1 );
 		add_action( 'plugins_loaded', array( $this, 'check_twitter_tags' ), 999 );
 		add_action( 'plugins_loaded', array( $this, 'check_rest_api_compat' ), 1000 );
 
@@ -3567,18 +3567,13 @@ p {
 		} elseif ( false === Jetpack_Options::get_option( 'fallback_no_verify_ssl_certs' ) ) {
 			// Upgrade: 1.1 -> 1.1.1
 			// Check and see if host can verify the Jetpack servers' SSL certificate
-			$args       = array();
-			$connection = self::connection();
-			Client::_wp_remote_request(
-				Connection_Utils::fix_url_for_bad_hosts( $connection->api_url( 'test' ) ),
-				$args,
-				true
-			);
+			$args = array();
+			Client::_wp_remote_request( self::connection()->api_url( 'test' ), $args, true );
 		}
 
 		Jetpack_Wizard_Banner::init();
 
-		if ( current_user_can( 'manage_options' ) && 'AUTO' == JETPACK_CLIENT__HTTPS && ! self::permit_ssl() ) {
+		if ( current_user_can( 'manage_options' ) && ! self::permit_ssl() ) {
 			add_action( 'jetpack_notices', array( $this, 'alert_auto_ssl_fail' ) );
 		}
 
@@ -4752,7 +4747,7 @@ endif;
 
 			// Let's check the existing blog token to see if we need to re-register. We only check once per minute
 			// because otherwise this logic can get us in to a loop.
-			$last_connect_url_check = intval( Jetpack_Options::get_raw_option( 'jetpack_last_connect_url_check' ) );
+			$last_connect_url_check = (int) Jetpack_Options::get_raw_option( 'jetpack_last_connect_url_check' );
 			if ( ! $last_connect_url_check || ( time() - $last_connect_url_check ) > MINUTE_IN_SECONDS ) {
 				Jetpack_Options::update_raw_option( 'jetpack_last_connect_url_check', time() );
 
@@ -5058,13 +5053,14 @@ endif;
 	}
 
 	/**
-	 * @deprecated 8.0 Use Automattic\Jetpack\Connection\Utils::fix_url_for_bad_hosts() instead.
+	 * @deprecated 8.0
 	 *
-	 * Some hosts disable the OpenSSL extension and so cannot make outgoing HTTPS requsets
+	 * Some hosts disable the OpenSSL extension and so cannot make outgoing HTTPS requests.
+	 * But we no longer fix "bad hosts" anyway, outbound HTTPS is required for Jetpack to function.
 	 */
 	public static function fix_url_for_bad_hosts( $url ) {
-		_deprecated_function( __METHOD__, 'jetpack-8.0', 'Automattic\\Jetpack\\Connection\\Utils::fix_url_for_bad_hosts' );
-		return Connection_Utils::fix_url_for_bad_hosts( $url );
+		_deprecated_function( __METHOD__, 'jetpack-8.0' );
+		return $url;
 	}
 
 	public static function verify_onboarding_token( $token_data, $token, $request_data ) {
@@ -5173,32 +5169,19 @@ endif;
 			if ( 'https' !== substr( JETPACK__API_BASE, 0, 5 ) ) {
 				$ssl = 0;
 			} else {
-				switch ( JETPACK_CLIENT__HTTPS ) {
-					case 'NEVER':
-						$ssl     = 0;
-						$message = __( 'JETPACK_CLIENT__HTTPS is set to NEVER', 'jetpack' );
-						break;
-					case 'ALWAYS':
-					case 'AUTO':
-					default:
-						$ssl = 1;
-						break;
-				}
+				$ssl = 1;
 
-				// If it's not 'NEVER', test to see
-				if ( $ssl ) {
-					if ( ! wp_http_supports( array( 'ssl' => true ) ) ) {
+				if ( ! wp_http_supports( array( 'ssl' => true ) ) ) {
+					$ssl     = 0;
+					$message = __( 'WordPress reports no SSL support', 'jetpack' );
+				} else {
+					$response = wp_remote_get( JETPACK__API_BASE . 'test/1/' );
+					if ( is_wp_error( $response ) ) {
 						$ssl     = 0;
 						$message = __( 'WordPress reports no SSL support', 'jetpack' );
-					} else {
-						$response = wp_remote_get( JETPACK__API_BASE . 'test/1/' );
-						if ( is_wp_error( $response ) ) {
-							$ssl     = 0;
-							$message = __( 'WordPress reports no SSL support', 'jetpack' );
-						} elseif ( 'OK' !== wp_remote_retrieve_body( $response ) ) {
-							$ssl     = 0;
-							$message = __( 'Response was not OK: ', 'jetpack' ) . wp_remote_retrieve_body( $response );
-						}
+					} elseif ( 'OK' !== wp_remote_retrieve_body( $response ) ) {
+						$ssl     = 0;
+						$message = __( 'Response was not OK: ', 'jetpack' ) . wp_remote_retrieve_body( $response );
 					}
 				}
 			}
@@ -5210,7 +5193,7 @@ endif;
 	}
 
 	/*
-	 * Displays an admin_notice, alerting the user to their JETPACK_CLIENT__HTTPS constant being 'AUTO' but SSL isn't working.
+	 * Displays an admin_notice, alerting the user that outbound SSL isn't working.
 	 */
 	public function alert_auto_ssl_fail() {
 		if ( ! current_user_can( 'manage_options' ) ) {
@@ -6507,6 +6490,8 @@ endif;
 			'jetpack_mobile_theme_menu'                    => null,
 			'minileven_show_featured_images'               => null,
 			'minileven_attachment_size'                    => null,
+			// Removed in Jetpack 9.1.0.
+			'instagram_cache_oembed_api_response_body'     => null,
 		);
 
 		// This is a silly loop depth. Better way?
@@ -6541,6 +6526,10 @@ endif;
 			'atd_load_scripts'                  => array(
 				'replacement' => null,
 				'version'     => 'jetpack-7.3.0',
+			),
+			'jetpack_can_make_outbound_https'   => array(
+				'replacement' => null,
+				'version'     => 'jetpack-9.1.0',
 			),
 		);
 
@@ -6813,14 +6802,15 @@ endif;
 	 * Strip http:// or https:// from a url, replaces forward slash with ::,
 	 * so we can bring them directly to their site in calypso.
 	 *
+	 * @deprecated 9.2.0 Use Automattic\Jetpack\Status::get_site_suffix
+	 *
 	 * @param string | url
 	 * @return string | url without the guff
 	 */
 	public static function build_raw_urls( $url ) {
-		$strip_http = '/.*?:\/\//i';
-		$url        = preg_replace( $strip_http, '', $url );
-		$url        = str_replace( '/', '::', $url );
-		return $url;
+		_deprecated_function( __METHOD__, 'jetpack-9.2.0', 'Automattic\Jetpack\Status::get_site_suffix' );
+
+		return ( new Status() )->get_site_suffix( $url );
 	}
 
 	/**

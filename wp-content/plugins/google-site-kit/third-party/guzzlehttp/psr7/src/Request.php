@@ -39,7 +39,7 @@ class Request implements \Google\Site_Kit_Dependencies\Psr\Http\Message\RequestI
             $this->updateHostFromUri();
         }
         if ($body !== '' && $body !== null) {
-            $this->stream = stream_for($body);
+            $this->stream = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($body);
         }
     }
     public function getRequestTarget()
