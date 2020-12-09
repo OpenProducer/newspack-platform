@@ -1,8 +1,73 @@
-.newspack_support_loading{align-items:center;display:flex;justify-content:center;margin:32px 0}
+.newspack_support_loading {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 32px 0; }
 
-#newspack-happychat{margin:32px 0}#newspack-happychat iframe{display:block;min-height:330px}
+#newspack-happychat {
+  margin: 32px 0; }
+  #newspack-happychat iframe {
+    display: block;
+    min-height: 330px; }
 
-.newspack-support__files{margin-bottom:-24px}.newspack-support__files:empty{display:none}.newspack-support__files__item{align-items:center;display:flex;margin-bottom:8px}.newspack-support__files__item .newspack-button{border:0;box-shadow:none;padding:0}.newspack-support__files__item span{padding-left:4px}.newspack-support__dropzone{background:#f8f9f9;border:1px dashed #e2e4e7;border-radius:3px;color:#40464d;cursor:pointer;margin:32px 0;transition:all 125ms ease-in-out}.newspack-support__dropzone:hover{border-color:#a2aab2}.newspack-support__dropzone--active{background:white;border:1px solid #2240d5;box-shadow:0 0 0 2px #36f}.newspack-support__dropzone__text{text-align:center;padding:24px}.newspack-support__dropzone__text svg{display:block;fill:#191e23;height:48px;margin:0 auto;width:48px}
+/**
+ * Colors
+ */
+.newspack-support__files {
+  margin-bottom: -24px; }
+  .newspack-support__files:empty {
+    display: none; }
+  .newspack-support__files__item {
+    align-items: center;
+    display: flex;
+    margin-bottom: 8px; }
+    .newspack-support__files__item .newspack-button {
+      border: 0;
+      box-shadow: none;
+      padding: 0; }
+    .newspack-support__files__item span {
+      padding-left: 4px; }
 
-.newspack-ticket-list:not(:last-child){margin-bottom:20px}.newspack-ticket-list h2{margin-top:0;margin-bottom:1em}.newspack-ticket-list summary{font-weight:bold;font-size:1.1em;color:#191e23;cursor:pointer}.newspack-ticket-list__single i{opacity:0.5}details .newspack-ticket-list__single{margin-top:10px}
+.newspack-support__dropzone {
+  background: #f8f9f9;
+  border: 1px dashed #e2e4e7;
+  border-radius: 3px;
+  color: #40464d;
+  cursor: pointer;
+  margin: 32px 0;
+  transition: all 125ms ease-in-out; }
+  .newspack-support__dropzone:hover {
+    border-color: #a2aab2; }
+  .newspack-support__dropzone--active {
+    background: white;
+    border: 1px solid #2240d5;
+    box-shadow: 0 0 0 2px #36f; }
+  .newspack-support__dropzone__text {
+    text-align: center;
+    padding: 24px; }
+    .newspack-support__dropzone__text svg {
+      display: block;
+      fill: #191e23;
+      height: 48px;
+      margin: 0 auto;
+      width: 48px; }
+
+.newspack-ticket-list:not(:last-child) {
+  margin-bottom: 20px; }
+
+.newspack-ticket-list h2 {
+  margin-top: 0;
+  margin-bottom: 1em; }
+
+.newspack-ticket-list summary {
+  font-weight: bold;
+  font-size: 1.1em;
+  color: #191e23;
+  cursor: pointer; }
+
+.newspack-ticket-list__single i {
+  opacity: 0.5; }
+
+details .newspack-ticket-list__single {
+  margin-top: 10px; }
 

@@ -365,6 +365,7 @@ class Newspack_Ads_Model {
 		$sizes        = $ad_unit['sizes'];
 		$code         = $ad_unit['code'];
 		$network_code = self::get_network_code( 'google_ad_manager' );
+		$targeting    = self::get_ad_targeting( $ad_unit );
 		$unique_id    = uniqid();
 
 		if ( ! is_array( $sizes ) ) {
@@ -378,11 +379,12 @@ class Newspack_Ads_Model {
 		$largest = self::largest_ad_size( $sizes );
 
 		$code = sprintf(
-			'<amp-ad width=%s height=%s type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views"></amp-ad>',
+			'<amp-ad width=%s height=%s type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\'></amp-ad>',
 			$largest[0],
 			$largest[1],
 			$network_code,
-			$code
+			$code,
+			wp_json_encode( $targeting )
 		);
 
 		return $code;
@@ -399,6 +401,7 @@ class Newspack_Ads_Model {
 		$network_code = self::get_network_code( 'google_ad_manager' );
 		$code         = $ad_unit['code'];
 		$sizes        = $ad_unit['sizes'];
+		$targeting    = self::get_ad_targeting( $ad_unit );
 
 		array_multisort( $sizes );
 
@@ -467,12 +470,13 @@ class Newspack_Ads_Model {
 
 			if ( $is_amp ) {
 				$markup[] = sprintf(
-					'<div id="%s"><amp-ad width="%dpx" height="%dpx" type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views"></amp-ad></div>',
+					'<div id="%s"><amp-ad width="%dpx" height="%dpx" type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\'></amp-ad></div>',
 					$div_id,
 					$width,
 					$height,
 					$network_code,
-					$code
+					$code,
+					wp_json_encode( $targeting )
 				);
 			} else {
 				$markup[] = sprintf(
@@ -507,6 +511,42 @@ class Newspack_Ads_Model {
 			},
 			[ 0, 0 ]
 		);
+	}
+
+	/**
+	 * Get ad targeting params for the current post or archive.
+	 *
+	 * @param array $ad_unit Ad unit to get targeting for.
+	 * @return array Associative array of targeting keyvals.
+	 */
+	public static function get_ad_targeting( $ad_unit ) {
+		$targeting = [];
+
+		if ( is_singular() ) {
+			// Add the post slug to targeting.
+			$slug = get_post_field( 'post_name' );
+			if ( $slug ) {
+				$targeting['slug'] = sanitize_text_field( $slug );
+			}
+
+			// Add the category slugs to targeting.
+			$categories = wp_get_post_categories( get_the_ID(), [ 'fields' => 'slugs' ] );
+			if ( ! empty( $categories ) ) {
+				$targeting['category'] = array_map( 'sanitize_text_field', $categories );
+			}
+
+			// Add the post ID to targeting.
+			$targeting['ID'] = get_the_ID();
+
+			// Add the category slugs to targeting on category archives.
+		} elseif ( get_queried_object() ) {
+			$queried_object = get_queried_object();
+			if ( 'WP_Term' === get_class( $queried_object ) && 'category' === $queried_object->taxonomy ) {
+				$targeting['category'] = [ sanitize_text_field( $queried_object->slug ) ];
+			}
+		}
+
+		return apply_filters( 'newspack_ads_ad_targeting', $targeting, $ad_unit );
 	}
 }
 Newspack_Ads_Model::init();

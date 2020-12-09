@@ -121,14 +121,13 @@ class Newspack_Ads_Blocks {
 			return;
 		}
 
-		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
-		if ( $is_amp ) {
+		if ( Newspack_Ads::is_amp() ) {
 			return;
 		}
 		ob_start();
 		?>
-		<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
-		<script>
+		<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" data-amp-plus-gam></script>
+		<script data-amp-plus-gam>
 			window.googletag = window.googletag || {cmd: []};
 		</script>
 		<?php
@@ -144,8 +143,7 @@ class Newspack_Ads_Blocks {
 			return;
 		}
 
-		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
-		if ( $is_amp ) {
+		if ( Newspack_Ads::is_amp() ) {
 			return;
 		}
 
@@ -153,7 +151,7 @@ class Newspack_Ads_Blocks {
 
 		$prepared_unit_data = [];
 		foreach ( Newspack_Ads_Model::$ad_ids as $unique_id => $ad_unit ) {
-			$ad_targeting = apply_filters( 'newspack_ads_ad_targeting', [], $ad_unit );
+			$ad_targeting = Newspack_Ads_Model::get_ad_targeting( $ad_unit );
 
 			$container_id = esc_attr( 'div-gpt-ad-' . $unique_id . '-0' );
 
@@ -172,7 +170,7 @@ class Newspack_Ads_Blocks {
 
 		ob_start();
 		?>
-		<script>
+		<script data-amp-plus-gam>
 			googletag.cmd.push(function() {
 				var ad_config        = <?php echo wp_json_encode( $ad_config ); ?>;
 				var all_ad_units     = <?php echo wp_json_encode( $prepared_unit_data ); ?>;
@@ -196,7 +194,7 @@ class Newspack_Ads_Blocks {
 						defined_ad_units[ container_id ].setTargeting( target_key, ad_unit['targeting'][ target_key ] );
 					}
 
-					/** 
+					/**
 					 * Configure responsive ads.
 					 * Ads wider than the viewport should not show.
 					 */
@@ -207,7 +205,7 @@ class Newspack_Ads_Blocks {
 						unique_widths[ size[0] ] = [];
 					} );
 
-					// For each width, get all of the sizes equal-to-or-smaller than it. 
+					// For each width, get all of the sizes equal-to-or-smaller than it.
 					for ( width in unique_widths ) {
 						ad_unit['sizes'].forEach( function( size ) {
 							if ( size[0] <= width ) {

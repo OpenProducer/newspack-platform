@@ -37,9 +37,7 @@ function newspack_ads_render_block_ad_unit( $attributes ) {
 		return '';
 	}
 
-	$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
-
-	$code = $is_amp ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
+	$code = Newspack_Ads::is_amp() ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
 
 	if ( empty( $code ) ) {
 		return '';

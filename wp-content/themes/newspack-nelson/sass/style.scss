@@ -5,12 +5,13 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.22.0
+Version: 1.24.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
 Text Domain: newspack-nelson
 Tags:
+AMP: true
 This theme, like WordPress, is licensed under the GPL.
 Use it to make something cool, have fun, and share what you've learned with others.
 Newspack Theme is based on Underscores https://underscores.me/, (C) 2012-2018 Automattic, Inc.
@@ -218,17 +219,16 @@ h4,
 // Accent headers
 
 .accent-header,
-.site-content .wpnbha .article-section-title,
+div.wpnbha .article-section-title,
 .cat-links {
 	color: $color__text-light;
-	font-family: $font__heading;
 	font-size: $font__size-xs;
 	font-weight: bold;
 }
 
 .accent-header,
 .wp-block-columns .wp-block-column > .accent-header,
-.entry-content .wpnbha .article-section-title {
+div.wpnbha .article-section-title {
 	margin-bottom: $size__spacing-unit;
 	@include media( tablet ) {
 		margin-bottom: #{1.5 * $size__spacing-unit};
@@ -406,17 +406,15 @@ blockquote {
 	}
 }
 
-.entry .entry-content {
-	.wp-block-separator {
-		border-top: 2px solid $color__text-main;
+.wp-block-separator {
+	border-top: 2px solid $color__text-main;
 
-		&:not( .is-style-dots ):not( .is-style-wide ) {
-			border-top: 5px solid $color__text-main;
-		}
+	&:not( .is-style-dots ):not( .is-style-wide ) {
+		border-top: 5px solid $color__text-main;
+	}
 
-		&.is-style-dots::before {
-			color: $color__text-main;
-		}
+	&.is-style-dots::before {
+		color: $color__text-main;
 	}
 }
 

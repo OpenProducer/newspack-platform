@@ -1,24 +1,17 @@
 /**
  * External dependencies
  */
-import { G, Path, SVG } from '@wordpress/components';
-import classNames from 'classnames';
+import { Path, SVG } from '@wordpress/components';
 
-export default ( { size = 24, className } ) => (
-	<SVG
-		className={ classNames( 'jetpack-logo', className ) }
-		width={ size }
-		height={ size }
-		viewBox="0 0 32 32"
-	>
-		<G stroke="none" strokeWidth="1" fill="none" fillRule="evenodd">
-			<G fill="#2A7DE1" fillRule="nonzero">
-				<Path
-					d="M16,0 C24.8365823,0 32,7.16345853 32,16.0000911 C32,24.8367237 24.8365823,32 16,32 C7.16341774,32 0,24.8367237 0,16.0000911 C0,7.16345853 7.16341774,0 16,0 Z M9.00970874,8.85436893 L9.00970874,13.6011058 L9.076,13.669 L9.00970874,13.6699029 L9.00970874,23.0938511 L12.4789644,23.0938511 L12.478,17.134 L18.3297326,23.0938511 L22.9902913,23.0938511 L9.00970874,8.85436893 Z M22.9902913,15.4822006 L20.1423948,15.4822006 L21.2545041,16.6213592 L22.9902913,16.6213592 L22.9902913,15.4822006 Z M22.9902913,12.1682848 L16.9320388,12.1682848 L18.0321512,13.3074434 L22.9902913,13.3074434 L22.9902913,12.1682848 Z M22.9902913,8.85436893 L13.6699029,8.85436893 L14.7723242,9.99352751 L22.9902913,9.99352751 L22.9902913,8.85436893 Z"
-					id="Combined-Shape-Copy"
-					fill="#2A7DE1"
-				/>
-			</G>
-		</G>
+export default ( { size = 24 } ) => (
+	<SVG className="newspack-logo" width={ size } height={ size } viewBox="0 0 32 32">
+		<Path
+			d="M16 32c8.836 0 16-7.164 16-16S24.836 0 16 0 0 7.164 0 16s7.163 16 16 16z"
+			fill="#36f"
+		/>
+		<Path
+			d="M22.988 16.622h-1.72l-1.103-1.124h2.823v1.124zm0-3.31H18.02l-1.102-1.124h6.071v1.124zm0-3.31h-8.217l-1.103-1.125h9.32v1.125zm0 13.12L9.012 8.878v4.749l.069.071h-.07v9.426h3.451v-5.98l5.867 5.98h4.66z"
+			fill="#fff"
+		/>
 	</SVG>
 );

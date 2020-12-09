@@ -29,6 +29,34 @@ class AMP_Enhancements {
 				return $gtag_opt;
 			}
 		);
+		add_filter( 'amp_content_sanitizers', [ __CLASS__, 'amp_content_sanitizers' ] );
+	}
+
+	/**
+	 * AMP plus mode.
+	 *
+	 * @param  string $context The context for which AMP plus should be assessed.
+	 * @return bool Should AMP plus be applied.
+	 */
+	public static function should_use_amp_plus( $context = null ) {
+		$should = false;
+		if ( isset( $_GET['ampplus'] ) && defined( 'NEWSPACK_AMP_PLUS_CONFIG' ) && is_array( NEWSPACK_AMP_PLUS_CONFIG ) && in_array( $context, NEWSPACK_AMP_PLUS_CONFIG ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$should = true;
+		}
+		return apply_filters( 'should_use_amp_plus', $should, $context );
+	}
+
+	/**
+	 * Allow certain scripts to be included in AMP pages.
+	 *
+	 * @param array $sanitizers The array of sanitizers, 'MyClassName' => [] // array of constructor params for class.
+	 */
+	public static function amp_content_sanitizers( $sanitizers ) {
+		if ( self::should_use_amp_plus( 'gam' ) ) {
+			require_once NEWSPACK_ABSPATH . 'includes/amp-sanitizers/class-amp-sanitizer-gam.php';
+			$sanitizers['AMP_Sanitizer_GAM'] = [];
+		}
+		return $sanitizers;
 	}
 }
 AMP_Enhancements::init();

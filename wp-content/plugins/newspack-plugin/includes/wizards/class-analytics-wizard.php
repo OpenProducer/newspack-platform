@@ -27,14 +27,6 @@ require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
 class Analytics_Wizard extends Wizard {
 
 	/**
-	 * Custom dimensions options names.
-	 */ // phpcs:ignore Squiz.Commenting.VariableComment.Missing
-	public static $category_dimension_option_name     = 'newspack_analytics_category_custom_dimension_id'; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
-	public static $author_dimension_option_name       = 'newspack_analytics_author_custom_dimension_id'; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
-	public static $word_count_dimension_option_name   = 'newspack_analytics_word_count_custom_dimension_id'; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
-	public static $publish_date_dimension_option_name = 'newspack_analytics_publish_date_custom_dimension_id'; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
-
-	/**
 	 * Name of the option storing site's custom events (serialised).
 	 *
 	 * @var string
@@ -221,6 +213,20 @@ class Analytics_Wizard extends Wizard {
 				'customEvents'             => json_decode( $custom_events ),
 				'customDimensions'         => $custom_dimensions,
 				'analyticsConnectionError' => $analytics_connection_error,
+				'customDimensionsOptions'  => array_merge(
+					[
+						[
+							'value' => '',
+							'label' => __( 'none', 'newspack' ),
+						],
+					],
+					array_map(
+						function ( $item ) {
+							return $item['option'];
+						},
+						self::get_custom_dimensions_config()
+					)
+				),
 			]
 		);
 
@@ -232,7 +238,65 @@ class Analytics_Wizard extends Wizard {
 		);
 		\wp_style_add_data( 'newspack-analytics-wizard', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-analytics-wizard' );
+	}
 
+	/**
+	 * Get custom dimension option name.
+	 *
+	 * @param string $role Custom dimensions's role.
+	 */
+	public static function get_custom_dimensions_option_name( $role ) {
+		if ( empty( $role ) ) {
+			return null;
+		}
+		return 'newspack_analytics_' . $role . '_custom_dimension_id';
+	}
+
+	/**
+	 * Get extendable custom dimensions configuration.
+	 */
+	public static function get_custom_dimensions_config() {
+		$default_dimensions = [
+			[
+				'role'   => 'category',
+				'option' => [
+					'value' => 'category',
+					'label' => __( 'Category', 'newspack' ),
+				],
+			],
+			[
+				'role'   => 'author',
+				'option' => [
+					'value' => 'author',
+					'label' => __( 'Author', 'newspack' ),
+				],
+			],
+			[
+				'role'   => 'word_count',
+				'option' => [
+					'value' => 'word_count',
+					'label' => __( 'Word count', 'newspack' ),
+				],
+			],
+			[
+				'role'   => 'publish_date',
+				'option' => [
+					'value' => 'publish_date',
+					'label' => __( 'Publish date', 'newspack' ),
+				],
+			],
+		];
+		$custom_dimensions  = apply_filters(
+			'newspack_custom_dimensions',
+			$default_dimensions
+		);
+		return array_map(
+			function ( $item ) {
+				$item['gaID'] = get_option( self::get_custom_dimensions_option_name( $item['role'] ) );
+				return $item;
+			},
+			$custom_dimensions
+		);
 	}
 
 	/**
@@ -302,17 +366,13 @@ class Analytics_Wizard extends Wizard {
 		if ( isset( $custom_dimensions['items'] ) ) {
 			return array_map(
 				function ( &$dimension ) {
-					if ( get_option( self::$category_dimension_option_name ) === $dimension['id'] ) { // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.SelfInsideClosure
-						$dimension->role = 'category';
-					}
-					if ( get_option( self::$author_dimension_option_name ) === $dimension['id'] ) { // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.SelfInsideClosure
-						$dimension->role = 'author';
-					}
-					if ( get_option( self::$word_count_dimension_option_name ) === $dimension['id'] ) { // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.SelfInsideClosure
-						$dimension->role = 'word_count';
-					}
-					if ( get_option( self::$publish_date_dimension_option_name ) === $dimension['id'] ) { // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.SelfInsideClosure
-						$dimension->role = 'publish_date';
+					// Assign role to custom dimension if it's found as a saved option.
+					foreach ( self::get_custom_dimensions_config() as $config_item ) {
+						$saved_dimension_id = get_option( self::get_custom_dimensions_option_name( $config_item['role'] ) );
+						if ( $saved_dimension_id === $dimension['id'] ) {
+							// Assign role if it's found as saved in option.
+							$dimension->role = $config_item['role'];
+						}
 					}
 					return $dimension;
 				},
@@ -329,26 +389,9 @@ class Analytics_Wizard extends Wizard {
 	 */
 	public static function list_configured_custom_dimensions() {
 		return array_filter(
-			[
-				[
-					'role' => 'category',
-					'id'   => get_option( self::$category_dimension_option_name ),
-				],
-				[
-					'role' => 'author',
-					'id'   => get_option( self::$author_dimension_option_name ),
-				],
-				[
-					'role' => 'word_count',
-					'id'   => get_option( self::$word_count_dimension_option_name ),
-				],
-				[
-					'role' => 'publish_date',
-					'id'   => get_option( self::$publish_date_dimension_option_name ),
-				],
-			],
+			self::get_custom_dimensions_config(),
 			function( $item ) {
-				return $item['id'];
+				return $item['gaID'];
 			}
 		);
 	}
@@ -359,7 +402,14 @@ class Analytics_Wizard extends Wizard {
 	 * @param String $name Name.
 	 */
 	public static function validate_custom_dimension_name( $name ) {
-		return in_array( $name, [ 'author', 'category', 'word_count', 'publish_date', '' ] );
+		$valid_roles   = array_map(
+			function ( $item ) {
+				return $item['role'];
+			},
+			self::get_custom_dimensions_config()
+		);
+		$valid_roles[] = '';
+		return in_array( $name, $valid_roles );
 	}
 
 	/**
@@ -397,22 +447,7 @@ class Analytics_Wizard extends Wizard {
 	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
 	 */
 	public static function api_set_custom_dimensions( $request ) {
-		switch ( $request['role'] ) {
-			case 'category':
-				self::set_custom_dimension( $request['id'], self::$category_dimension_option_name );
-				break;
-			case 'author':
-				self::set_custom_dimension( $request['id'], self::$author_dimension_option_name );
-				break;
-			case 'word_count':
-				self::set_custom_dimension( $request['id'], self::$word_count_dimension_option_name );
-				break;
-			case 'publish_date':
-				self::set_custom_dimension( $request['id'], self::$publish_date_dimension_option_name );
-				break;
-			default:
-				self::set_custom_dimension( $request['id'] );
-		}
+		self::set_custom_dimension( $request['id'], self::get_custom_dimensions_option_name( $request['role'] ) );
 		return self::list_custom_dimensions();
 	}
 

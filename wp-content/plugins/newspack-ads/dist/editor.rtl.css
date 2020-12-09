@@ -29,20 +29,15 @@
     top: 50%; }
   .newspack-ads-ad-unit .components-base-control {
     bottom: 1.5384615385em;
-    display: -webkit-box;
     display: flex;
     right: 1.5384615385em;
     position: absolute;
     left: 1.5384615385em;
     top: 1.5384615385em; }
     .newspack-ads-ad-unit .components-base-control__field {
-      display: -webkit-box;
       display: flex;
-      -webkit-box-orient: vertical;
-      -webkit-box-direction: normal;
-              flex-direction: column;
-      -webkit-box-pack: center;
-              justify-content: center;
+      flex-direction: column;
+      justify-content: center;
       margin: 0;
       width: 100%; }
     .newspack-ads-ad-unit .components-base-control__label {

@@ -565,7 +565,7 @@ class Advertising_Wizard extends Wizard {
 			return;
 		}
 
-		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+		$is_amp = ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) && ! AMP_Enhancements::should_use_amp_plus( 'gam' );
 		$code   = $is_amp ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
 		if ( empty( $code ) ) {
 			return;
@@ -573,7 +573,7 @@ class Advertising_Wizard extends Wizard {
 
 		?>
 		<div class='newspack_global_ad <?php echo esc_attr( $placement_slug ); ?>'>
-			<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?> 
+			<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		</div>
 		<?php
 	}

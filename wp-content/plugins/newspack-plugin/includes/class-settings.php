@@ -52,7 +52,7 @@ class Settings {
 				printf(
 					wp_kses(
 						/* translators: %2$s: Set Up Wizard, %4$s: Components Demo */
-						__( '<p><a href="%1$s">%2$s</a> | <a href="%3$s">%4$s</a></p>', 'newspack' ),
+						'<p><a href="%1$s">%2$s</a> | <a href="%3$s">%4$s</a></p>',
 						array(
 							'p' => array(),
 							'a' => array(
@@ -99,15 +99,6 @@ class Settings {
 			'newspack-settings-admin',
 			'newspack_settings'
 		);
-		if ( Payment_Wizard::configured() ) {
-			add_settings_field(
-				'newspack_reset_subscription',
-				__( 'Reset Managed Newspack Subscription', 'newspack' ),
-				[ __CLASS__, 'newspack_reset_subscription_callback' ],
-				'newspack-settings-admin',
-				'newspack_settings'
-			);
-		}
 		if ( Support_Wizard::get_wpcom_access_token() ) {
 			add_settings_field(
 				'newspack_remove_wpcom_token',

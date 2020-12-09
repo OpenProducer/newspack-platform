@@ -56,10 +56,6 @@ class Configuration_Managers {
 			'filename'   => 'class-publish-to-apple-news-configuration-manager.php',
 			'class_name' => 'Publish_To_Apple_News_Configuration_Manager',
 		],
-		'laterpay'              => [
-			'filename'   => 'class-laterpay-configuration-manager.php',
-			'class_name' => 'LaterPay_Configuration_Manager',
-		],
 		'wordpress_seo'         => [
 			'filename'   => 'class-wordpress-seo-configuration-manager.php',
 			'class_name' => 'WordPress_SEO_Configuration_Manager',

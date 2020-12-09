@@ -20,7 +20,7 @@ final class Newspack_Popups_API {
 	}
 
 	/**
-	 * Register the 'reader' endpoint used by amp-access.
+	 * Register API endpoints.
 	 */
 	public function register_api_endpoints() {
 		\register_rest_route(

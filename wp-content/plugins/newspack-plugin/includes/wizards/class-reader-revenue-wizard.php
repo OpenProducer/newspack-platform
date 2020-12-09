@@ -17,7 +17,6 @@ require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
  * Easy interface for setting up general store info.
  */
 class Reader_Revenue_Wizard extends Wizard {
-
 	/**
 	 * The slug of this wizard.
 	 *
@@ -71,7 +70,6 @@ class Reader_Revenue_Wizard extends Wizard {
 	 * Register the endpoints needed for the wizard screens.
 	 */
 	public function register_api_endpoints() {
-
 		// Get all data required to render the Wizard.
 		\register_rest_route(
 			NEWSPACK_API_NAMESPACE,
@@ -80,6 +78,31 @@ class Reader_Revenue_Wizard extends Wizard {
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_fetch' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+
+		// Save basic data about reader revenue platform.
+		\register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug,
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'platform'                   => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
+						'validate_callback' => [ $this, 'api_validate_platform' ],
+					],
+					'nrh_organization_id'        => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
+						'validate_callback' => [ $this, 'api_validate_not_empty' ],
+					],
+					'nrh_salesforce_campaign_id' => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
+						'validate_callback' => [ $this, 'api_validate_not_empty' ],
+					],
+				],
 			]
 		);
 
@@ -268,9 +291,28 @@ class Reader_Revenue_Wizard extends Wizard {
 	 * @return WP_REST_Response containing ad units info.
 	 */
 	public function api_fetch() {
-		$required_plugins_installed = $this->check_required_plugins_installed();
-		if ( is_wp_error( $required_plugins_installed ) ) {
-			return rest_ensure_response( $required_plugins_installed );
+		return \rest_ensure_response( $this->fetch_all_data() );
+	}
+
+	/**
+	 * Save top-level data.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response Boolean success.
+	 */
+	public function api_update( $request ) {
+		$params   = $request->get_params();
+		$platform = $params['platform'];
+		if ( in_array( $platform, [ 'wc', 'nrh' ] ) ) {
+			delete_option( NEWSPACK_READER_REVENUE_PLATFORM );
+			update_option( NEWSPACK_READER_REVENUE_PLATFORM, $platform, true );
+		}
+		if ( 'nrh' === $platform && isset( $params['nrh_organization_id'], $params['nrh_salesforce_campaign_id'] ) ) {
+			$nrh_config = [
+				'nrh_organization_id'        => $params['nrh_organization_id'],
+				'nrh_salesforce_campaign_id' => $params['nrh_salesforce_campaign_id'],
+			];
+			update_option( NEWSPACK_NRH_CONFIG, $nrh_config );
 		}
 		return \rest_ensure_response( $this->fetch_all_data() );
 	}
@@ -508,16 +550,55 @@ class Reader_Revenue_Wizard extends Wizard {
 	 * @return Array
 	 */
 	protected function fetch_all_data() {
+		$platform                 = get_option( NEWSPACK_READER_REVENUE_PLATFORM, null );
 		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
-		return [
-			'country_state_fields' => $wc_configuration_manager->country_state_fields(),
-			'currency_fields'      => $wc_configuration_manager->currency_fields(),
-			'location_data'        => $wc_configuration_manager->location_data(),
-			'stripe_data'          => $wc_configuration_manager->stripe_data(),
-			'donation_data'        => Donations::get_donation_settings(),
-			'donation_page'        => Donations::get_donation_page_info(),
-			'salesforce_settings'  => Salesforce::get_salesforce_settings(),
+		$wc_installed             = $wc_configuration_manager->is_active();
+
+		$args = [
+			'country_state_fields' => [],
+			'currency_fields'      => [],
+			'location_data'        => [],
+			'stripe_data'          => [],
+			'donation_data'        => [],
+			'donation_page'        => [],
+			'salesforce_settings'  => [],
+			'platform_data'        => [
+				'platform' => $platform,
+			],
 		];
+		if ( 'wc' === $platform && $wc_installed ) {
+			$plugin_status    = true;
+			$managed_plugins  = Plugin_Manager::get_managed_plugins();
+			$required_plugins = [
+				'woocommerce',
+				'woocommerce-gateway-stripe',
+				'woocommerce-name-your-price',
+				'woocommerce-subscriptions',
+			];
+			foreach ( $required_plugins as $required_plugin ) {
+				if ( 'active' !== $managed_plugins[ $required_plugin ]['Status'] ) {
+					$plugin_status = false;
+				}
+			}
+			$args = wp_parse_args(
+				[
+					'country_state_fields' => $wc_configuration_manager->country_state_fields(),
+					'currency_fields'      => $wc_configuration_manager->currency_fields(),
+					'location_data'        => $wc_configuration_manager->location_data(),
+					'stripe_data'          => $wc_configuration_manager->stripe_data(),
+					'donation_data'        => Donations::get_donation_settings(),
+					'donation_page'        => Donations::get_donation_page_info(),
+					'salesforce_settings'  => Salesforce::get_salesforce_settings(),
+					'plugin_status'        => $plugin_status,
+				],
+				$args
+			);
+		} elseif ( 'nrh' === $platform ) {
+			$nrh_config = get_option( NEWSPACK_NRH_CONFIG, [] );
+
+			$args['platform_data'] = wp_parse_args( $nrh_config, $args['platform_data'] );
+		}
+		return $args;
 	}
 
 	/**
@@ -526,6 +607,14 @@ class Reader_Revenue_Wizard extends Wizard {
 	 * @return WP_REST_Response containing info.
 	 */
 	public function api_get_donation_settings() {
+		if ( 'nrh' === get_option( NEWSPACK_READER_REVENUE_PLATFORM ) ) {
+			return rest_ensure_response(
+				array_merge(
+					Donations::get_donation_settings(),
+					[ 'force_manual' => true ]
+				)
+			);
+		}
 		$required_plugins_installed = $this->check_required_plugins_installed();
 		if ( is_wp_error( $required_plugins_installed ) ) {
 			return rest_ensure_response( $required_plugins_installed );
@@ -579,5 +668,15 @@ class Reader_Revenue_Wizard extends Wizard {
 		);
 		\wp_style_add_data( 'newspack-reader-revenue-wizard', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-reader-revenue-wizard' );
+	}
+
+	/**
+	 * Validate platform ID. Must be 'wc' or 'nrh.'
+	 *
+	 * @param mixed $value A param value.
+	 * @return bool
+	 */
+	public function api_validate_platform( $value ) {
+		return in_array( $value, [ 'nrh', 'wc' ] );
 	}
 }

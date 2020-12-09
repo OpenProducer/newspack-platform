@@ -81,7 +81,7 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Set Popup options/
+	 * Set Popup options.
 	 *
 	 * @param integer $id ID of sitewide popup.
 	 * @param array   $options Array of categories to be set.
@@ -89,6 +89,79 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	public function set_popup_options( $id, $options ) {
 		return $this->is_configured() ?
 			\Newspack_Popups_Model::set_popup_options( $id, $options ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get plugin settings.
+	 */
+	public function get_settings() {
+		return $this->is_configured() ?
+			\Newspack_Popups_Settings::get_settings() :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get segments.
+	 */
+	public function get_segments() {
+		return $this->is_configured() ?
+			\Newspack_Popups_Segmentation::get_segments() :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Set plugin settings.
+	 *
+	 * @param object $options options.
+	 */
+	public function set_settings( $options ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Settings::set_settings( $options ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Create a segment.
+	 *
+	 * @param object $segment Segment configuration.
+	 */
+	public function create_segment( $segment ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Segmentation::create_segment( $segment ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Update a segment.
+	 *
+	 * @param object $segment Segment configuration.
+	 */
+	public function update_segment( $segment ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Segmentation::update_segment( $segment ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Delete a segment.
+	 *
+	 * @param string $id A segment ID.
+	 */
+	public function delete_segment( $id ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Segmentation::delete_segment( $id ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get segment's potential reacj.
+	 *
+	 * @param object $config Segment configuration.
+	 */
+	public function get_segment_reach( $config ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Segmentation::get_segment_reach( $config ) :
 			$this->unconfigured_error();
 	}
 

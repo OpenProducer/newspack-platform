@@ -54,8 +54,7 @@ class Newspack_Ads_Widget extends WP_Widget {
 			return;
 		}
 
-		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
-		$code   = $is_amp ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
+		$code = Newspack_Ads::is_amp() ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
 
 		echo $args['before_widget']; // phpcs:ignore
 		echo '<div class="textwidget">';

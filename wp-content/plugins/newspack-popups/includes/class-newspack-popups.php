@@ -454,9 +454,9 @@ final class Newspack_Popups {
 	 * Create the config file for the API, unless it exists.
 	 */
 	public static function create_lightweight_api_config() {
-		// Don't create a config file on Newspack's Atomic platform, or if there is a file already.
+		// Don't create a config file if not on Newspack's Atomic platform, or if there is a file already.
 		if (
-			defined( 'ATOMIC_SITE_ID' ) ||
+			! ( defined( 'ATOMIC_SITE_ID' ) && ATOMIC_SITE_ID ) ||
 			( file_exists( self::LIGHTWEIGHT_API_CONFIG_FILE_PATH_LEGACY ) || file_exists( self::LIGHTWEIGHT_API_CONFIG_FILE_PATH ) )
 		) {
 			return;

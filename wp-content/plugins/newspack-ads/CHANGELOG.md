@@ -1,3 +1,31 @@
+# [1.10.0](https://github.com/Automattic/newspack-ads/compare/v1.9.0...v1.10.0) (2020-12-08)
+
+
+### Features
+
+* add Gutenberg icon and replace Material ([#88](https://github.com/Automattic/newspack-ads/issues/88)) ([2e7ddc9](https://github.com/Automattic/newspack-ads/commit/2e7ddc9b4359114315ad581651da855d52bdbf44))
+
+# [1.9.0](https://github.com/Automattic/newspack-ads/compare/v1.8.0...v1.9.0) (2020-11-11)
+
+
+### Features
+
+* check for amp plus status ([7168e03](https://github.com/Automattic/newspack-ads/commit/7168e038a0da83ae34d24dd088667cca36d51747))
+* data attributes on gam scripts for amp sanitization ([484fc82](https://github.com/Automattic/newspack-ads/commit/484fc820c052565827ac0962c43036c56e909e6f))
+* update block icon style and colour ([#82](https://github.com/Automattic/newspack-ads/issues/82)) ([a31297f](https://github.com/Automattic/newspack-ads/commit/a31297f81ac9915fdb63b734dd0a9c9be8300c64))
+
+# [1.8.0](https://github.com/Automattic/newspack-ads/compare/v1.7.0...v1.8.0) (2020-09-29)
+
+
+### Bug Fixes
+
+* harden queried object check logic ([dced583](https://github.com/Automattic/newspack-ads/commit/dced583614bac06459f07a2f5683ba51981304b1))
+
+
+### Features
+
+* add common ad targeting to ad units ([18dca0b](https://github.com/Automattic/newspack-ads/commit/18dca0b0213d70075ba3d834a651bab965ad55eb))
+
 # [1.7.0](https://github.com/Automattic/newspack-ads/compare/v1.6.1...v1.7.0) (2020-09-15)
 
 

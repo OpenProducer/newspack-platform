@@ -11,6 +11,7 @@
 require_once dirname( __FILE__ ) . '/../classes/class-lightweight-api.php';
 
 require_once dirname( __FILE__ ) . '/../segmentation/class-segmentation-report.php';
+require_once dirname( __FILE__ ) . '/class-campaign-data-utils.php';
 
 /**
  * GET endpoint to determine if campaign is shown or not.
@@ -121,7 +122,7 @@ class Maybe_Show_Campaign extends Lightweight_API {
 
 		$has_newsletter_prompt = $campaign->n;
 		// Suppressing based on UTM Medium parameter in the URL.
-		$has_utm_medium_in_url = stripos( $referer_url, 'utm_medium=email' );
+		$has_utm_medium_in_url = Campaign_Data_Utils::is_url_from_email( $referer_url );
 
 		// Handle referer-based conditions.
 		if ( ! empty( $referer_url ) ) {
@@ -171,34 +172,31 @@ class Maybe_Show_Campaign extends Lightweight_API {
 		// Handle segmentation.
 		$campaign_segment = isset( $settings->all_segments->{$campaign->s} ) ? $settings->all_segments->{$campaign->s} : false;
 		if ( ! empty( $campaign_segment ) ) {
-			$posts_read_count = count( $client_data['posts_read'] );
-			// If coming from email, assume it's a subscriber.
-			$is_subscriber = ! empty( $client_data['email_subscriptions'] ) || $has_utm_medium_in_url;
-			$is_donor      = ! empty( $client_data['donations'] );
+			$should_display = Campaign_Data_Utils::should_display_campaign(
+				$campaign_segment,
+				$client_data,
+				$referer_url
+			);
+
 			if (
-				$campaign_segment->min_posts > 0 && $campaign_segment->min_posts > $posts_read_count
+				$campaign_segment->is_not_subscribed &&
+				$has_utm_medium_in_url &&
+				! empty( $client_data['email_subscriptions'] )
 			) {
-				$should_display = false;
+				// Save suppression for this campaign.
+				$campaign_data['suppress_forever'] = true;
 			}
-			if (
-				$campaign_segment->max_posts > 0 && $campaign_segment->max_posts < $posts_read_count
-			) {
-				$should_display = false;
-			}
-			if ( $campaign_segment->is_subscribed && ! $is_subscriber ) {
-				$should_display = false;
-			}
-			if ( $campaign_segment->is_not_subscribed && $is_subscriber ) {
-				$should_display = false;
-				if ( $has_utm_medium_in_url ) { // Save suppression for this campaign.
-					$campaign_data['suppress_forever'] = true;
+			if ( isset( $campaign_segment->referrers ) && $campaign_segment->referrers && ! empty( $campaign_segment->referrers ) && isset( $_REQUEST['ref'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$referer_domain = parse_url( $_REQUEST['ref'], PHP_URL_HOST ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+				// Handle the 'www' prefix – assume `www.example.com` and `example.com` referrers are the same.
+				$referer_domain_alternative = strpos( $referer_domain, 'www.' ) === 0 ? substr( $referer_domain, 4 ) : "www.$referer_domain";
+				$referrer_matches           = array_intersect(
+					[ $referer_domain, $referer_domain_alternative ],
+					array_map( 'trim', explode( ',', $campaign_segment->referrers ) )
+				);
+				if ( empty( $referrer_matches ) ) {
+					$should_display = false;
 				}
-			}
-			if ( $campaign_segment->is_donor && ! $is_donor ) {
-				$should_display = false;
-			}
-			if ( $campaign_segment->is_not_donor && $is_donor ) {
-				$should_display = false;
 			}
 		}
 

@@ -370,6 +370,10 @@ figcaption,
   text-align: left;
 }
 
+.wp-block-video video {
+  width: 100%;
+}
+
 /** === Group === */
 .wp-block[data-align='left'] .wp-block-group,
 .wp-block[data-align='right'] .wp-block-group {
@@ -564,6 +568,7 @@ figcaption,
 /** === File === */
 .wp-block-file {
   font-family: "Barlow", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-size: 0.8em;
 }
 
 .wp-block-file .wp-block-file__textlink {
@@ -579,7 +584,7 @@ figcaption,
 .wp-block-file .wp-block-file__button {
   display: table;
   line-height: 1.8;
-  font-size: 0.8em;
+  font-size: inherit;
   font-weight: bold;
   background-color: #555;
   border-radius: 5px;

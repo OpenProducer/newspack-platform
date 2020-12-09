@@ -22,7 +22,7 @@ class Segmentation_Report {
 				[
 					'post_read',
 					$payload['clientId'],
-					isset( $payload['date'] ) ? $payload['date'] : gmdate( 'Y-m-d', time() ),
+					isset( $payload['date'] ) ? $payload['date'] : gmdate( 'Y-m-d H:i:s', time() ),
 					$payload['post_id'],
 					$payload['categories'],
 				]

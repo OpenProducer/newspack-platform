@@ -1,2 +1,46 @@
-.newspack__analytics-configuration>p:first-child{margin-top:-25px}.newspack__analytics-configuration th{padding:6px 0;text-align:left;border-bottom:1px solid #e2e4e7}.newspack__analytics-configuration table{width:100%;margin-bottom:4em;border-spacing:0}.newspack__analytics-configuration tbody td{padding:4px 0;border-top:1px solid #e2e4e7}.newspack__analytics-configuration tbody .newspack-checkbox-control{margin:0}.newspack__analytics-configuration__form{display:flex;align-items:flex-end}@media screen and (max-width: 600px){.newspack__analytics-configuration__form{flex-wrap:wrap}}.newspack__analytics-configuration__form .newspack-text-control{flex:1}.newspack__analytics-configuration__form .components-select-control{margin:0}.newspack__analytics-configuration__form>*{margin:0 !important}.newspack__analytics-configuration__form>*:not(:last-child){margin-right:20px !important}.newspack__analytics-configuration__form button{overflow:visible}@media screen and (max-width: 600px){.newspack__analytics-configuration__form button{margin-top:10px !important}}.newspack__analytics-configuration__code input{font-family:monospace !important}.newspack__analytics-configuration__select{margin:0}
+/**
+ * Colors
+ */
+.newspack__analytics-configuration th {
+  padding: 6px 0;
+  text-align: left;
+  border-bottom: 1px solid #e2e4e7; }
+
+.newspack__analytics-configuration table {
+  width: 100%;
+  margin-bottom: 4em;
+  border-spacing: 0; }
+
+.newspack__analytics-configuration tbody td {
+  padding: 4px 0;
+  border-top: 1px solid #e2e4e7; }
+
+.newspack__analytics-configuration tbody .newspack-checkbox-control {
+  margin: 0; }
+
+.newspack__analytics-configuration__form {
+  display: flex;
+  align-items: flex-end; }
+  @media screen and (max-width: 600px) {
+    .newspack__analytics-configuration__form {
+      flex-wrap: wrap; } }
+  .newspack__analytics-configuration__form .newspack-text-control {
+    flex: 1; }
+  .newspack__analytics-configuration__form .components-select-control {
+    margin: 0; }
+  .newspack__analytics-configuration__form > * {
+    margin: 0 !important; }
+    .newspack__analytics-configuration__form > *:not(:last-child) {
+      margin-right: 20px !important; }
+  .newspack__analytics-configuration__form button {
+    overflow: visible; }
+    @media screen and (max-width: 600px) {
+      .newspack__analytics-configuration__form button {
+        margin-top: 10px !important; } }
+
+.newspack__analytics-configuration__code input {
+  font-family: monospace !important; }
+
+.newspack__analytics-configuration__select {
+  margin: 0; }
 

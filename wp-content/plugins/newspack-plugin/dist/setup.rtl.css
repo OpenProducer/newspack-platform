@@ -1,6 +1,37 @@
-.newspack-setup-wizard__form_element_row{display:flex;margin-bottom:32px;margin-top:-16px}.newspack-setup-wizard__form_element_row>div{margin:0 0 0 16px}.newspack-setup-wizard__form_element_row>div:last-child{margin-left:0}.newspack-setup-wizard__form_element_row>div .newspack-text-control{margin:0}.newspack-setup-wizard__form_element_row+.newspack-select-control{margin-bottom:32px;margin-top:-16px}
+/**
+ * About
+ */
+.newspack-setup-wizard__form_element_row {
+  display: flex;
+  margin-bottom: 32px;
+  margin-top: -16px; }
+  .newspack-setup-wizard__form_element_row > div {
+    margin: 0 0 0 16px; }
+    .newspack-setup-wizard__form_element_row > div:last-child {
+      margin-left: 0; }
+    .newspack-setup-wizard__form_element_row > div .newspack-text-control {
+      margin: 0; }
+  .newspack-setup-wizard__form_element_row + .newspack-select-control {
+    margin-bottom: 32px;
+    margin-top: -16px; }
 
-.newspack-card .newspack-setup-wizard_newsroom_audience_title{margin:-16px 0 0}.newspack-card .newspack-setup-wizard_newsroom_audience_checkboxes{display:flex;flex-wrap:wrap;margin:-8px 0 32px}.newspack-card .newspack-setup-wizard_newsroom_audience_checkboxes .newspack-checkbox-control{flex:0 0 50%;margin:8px 0 0}
+/**
+ * Newsroom
+ */
+.newspack-card .newspack-setup-wizard_newsroom_audience_title {
+  margin: -16px 0 0; }
 
-#newspack-setup-wizard{position:relative}
+.newspack-card .newspack-setup-wizard_newsroom_audience_checkboxes {
+  display: flex;
+  flex-wrap: wrap;
+  margin: -8px 0 32px; }
+  .newspack-card .newspack-setup-wizard_newsroom_audience_checkboxes .newspack-checkbox-control {
+    flex: 0 0 50%;
+    margin: 8px 0 0; }
+
+/**
+ * Setup
+ */
+#newspack-setup-wizard {
+  position: relative; }
 

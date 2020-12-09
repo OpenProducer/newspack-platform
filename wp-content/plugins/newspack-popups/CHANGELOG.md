@@ -1,3 +1,43 @@
+# [1.20.0](https://github.com/Automattic/newspack-popups/compare/v1.19.0...v1.20.0) (2020-12-08)
+
+
+### Bug Fixes
+
+* do create config file on the atomic platform ([14120a8](https://github.com/Automattic/newspack-popups/commit/14120a8d677dea5912cc0a6224d0de5f623aae89))
+
+
+### Features
+
+* move custom GA config endpoint to lightweight API ([326fb10](https://github.com/Automattic/newspack-popups/commit/326fb103d0eb9f05321c5598eac47ced378dcc34))
+
+# [1.19.0](https://github.com/Automattic/newspack-popups/compare/v1.18.0...v1.19.0) (2020-12-02)
+
+
+### Bug Fixes
+
+* do not render popups with 'never' frequency ([f1c80f3](https://github.com/Automattic/newspack-popups/commit/f1c80f30da73f40750aec54ba80b143899f47ae7))
+
+
+### Features
+
+* report segmentation-related data as custom dimension to GA ([#325](https://github.com/Automattic/newspack-popups/issues/325)) ([648b70b](https://github.com/Automattic/newspack-popups/commit/648b70ba4155dc7f74b7485c3d5fbf98b2e2a482)), closes [#259](https://github.com/Automattic/newspack-popups/issues/259)
+* **segmentation:** segment size computation ([#324](https://github.com/Automattic/newspack-popups/issues/324)) ([c152cd9](https://github.com/Automattic/newspack-popups/commit/c152cd9889140e6bfd6731e14ba8a279e84087bc))
+* prune segmentation data ([c11c686](https://github.com/Automattic/newspack-popups/commit/c11c686ffd30940d042f354576ec3bc160d20db1)), closes [#251](https://github.com/Automattic/newspack-popups/issues/251)
+
+# [1.19.0](https://github.com/Automattic/newspack-popups/compare/v1.18.0...v1.19.0) (2020-12-02)
+
+
+### Bug Fixes
+
+* do not render popups with 'never' frequency ([f1c80f3](https://github.com/Automattic/newspack-popups/commit/f1c80f30da73f40750aec54ba80b143899f47ae7))
+
+
+### Features
+
+* report segmentation-related data as custom dimension to GA ([#325](https://github.com/Automattic/newspack-popups/issues/325)) ([648b70b](https://github.com/Automattic/newspack-popups/commit/648b70ba4155dc7f74b7485c3d5fbf98b2e2a482)), closes [#259](https://github.com/Automattic/newspack-popups/issues/259)
+* **segmentation:** segment size computation ([#324](https://github.com/Automattic/newspack-popups/issues/324)) ([c152cd9](https://github.com/Automattic/newspack-popups/commit/c152cd9889140e6bfd6731e14ba8a279e84087bc))
+* prune segmentation data ([c11c686](https://github.com/Automattic/newspack-popups/commit/c11c686ffd30940d042f354576ec3bc160d20db1)), closes [#251](https://github.com/Automattic/newspack-popups/issues/251)
+
 # [1.18.0](https://github.com/Automattic/newspack-popups/compare/v1.17.0...v1.18.0) (2020-11-24)
 
 

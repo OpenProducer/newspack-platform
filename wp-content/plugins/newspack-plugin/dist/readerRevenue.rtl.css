@@ -1,8 +1,55 @@
-.newspack-donations-wizard__money-input{align-items:flex-end;display:flex}.newspack-donations-wizard__money-input .currency{background:#e2e4e7;border-radius:0 3px 3px 0;color:#191e23;display:block;flex:0 0 32px;font-weight:bold;height:48px;line-height:48px;margin:32px 0;text-align:center}.newspack-donations-wizard__money-input .newspack-text-control label{margin-right:-32px}.newspack-donations-wizard__money-input .newspack-text-control input[type='number']{border-radius:3px 0 0 3px}
+/**
+ * Money Input
+ */
+/**
+ * Colors
+ */
+.newspack-donations-wizard__money-input {
+  align-items: flex-end;
+  display: flex; }
+  .newspack-donations-wizard__money-input .currency {
+    background: #e2e4e7;
+    border-radius: 0 3px 3px 0;
+    color: #191e23;
+    display: block;
+    flex: 0 0 32px;
+    font-weight: bold;
+    height: 48px;
+    line-height: 48px;
+    margin: 32px 0;
+    text-align: center; }
+  .newspack-donations-wizard__money-input .newspack-text-control label {
+    margin-right: -32px; }
+  .newspack-donations-wizard__money-input .newspack-text-control input[type='number'] {
+    border-radius: 3px 0 0 3px; }
 
-.newspack-donations-wizard__tier-suggested-prices{display:flex;justify-content:space-between;margin-bottom:-32px}.newspack-donations-wizard__tier-suggested-prices>div{width:calc( 33.333% - 32px)}.newspack-donations-wizard__suggested-price{margin-bottom:-32px;max-width:300px}.newspack-donations-wizard__edit-page{display:flex;justify-content:flex-end;margin-top:-16px}
+/**
+ * Donation
+ */
+.newspack-donations-wizard__tier-suggested-prices {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: -32px; }
+  .newspack-donations-wizard__tier-suggested-prices > div {
+    width: calc( 33.333% - 32px); }
 
-.newspack-payment-setup-screen{margin-top:32px}
+.newspack-donations-wizard__suggested-price {
+  margin-bottom: -32px;
+  max-width: 300px; }
 
-.newspack_salesforce_loading{align-items:center;display:flex;margin:32px 0}
+.newspack-donations-wizard__edit-page {
+  display: flex;
+  justify-content: flex-end;
+  margin-top: -16px; }
+
+/**
+ * Stripe Setup
+ */
+.newspack-payment-setup-screen {
+  margin-top: 32px; }
+
+.newspack_salesforce_loading {
+  align-items: center;
+  display: flex;
+  margin: 32px 0; }
 

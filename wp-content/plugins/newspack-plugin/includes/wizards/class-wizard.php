@@ -108,8 +108,6 @@ abstract class Wizard {
 		wp_register_script( 'newspack_data', '', [], '1.0', false );
 
 		$urls = [
-			'checklists'  => Checklists::get_urls(),
-			'wizards'     => Wizards::get_urls(),
 			'dashboard'   => Wizards::get_url( 'dashboard' ),
 			'public_path' => Newspack::plugin_url() . '/dist/',
 			'bloginfo'    => [

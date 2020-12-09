@@ -191,5 +191,37 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 		// Disable coupons and reviews.
 		update_option( 'woocommerce_enable_coupons', 'no' );
 		update_option( 'woocommerce_enable_reviews', 'no' );
+
+		// Enables checkout without login.
+		update_option( 'woocommerce_enable_guest_checkout', 'yes' );
+		update_option( 'woocommerce_enable_signup_and_login_from_checkout', 'yes' );
+
+		$this->disable_amp_for_woocomm_checkout_page();
+	}
+
+	/**
+	 * Disables AMP for the WooCommerce Checkout page.
+	 */
+	public function disable_amp_for_woocomm_checkout_page() {
+		$checkout_page_id = get_option( 'woocommerce_checkout_page_id' );
+		if ( ! $checkout_page_id ) {
+			return;
+		}
+
+		$this->disable_amp_for_post( $checkout_page_id );
+	}
+
+	/**
+	 * Disables AMP for a specific Post/Page.
+	 *
+	 * @param int $post_id Post ID.
+	 */
+	public function disable_amp_for_post( $post_id ) {
+		$post = get_post( $post_id );
+		if ( ! $post ) {
+			return;
+		}
+
+		update_post_meta( $post_id, 'amp_status', 'disabled' );
 	}
 }

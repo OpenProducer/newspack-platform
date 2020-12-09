@@ -48,7 +48,7 @@ class Dashboard extends Wizard {
 	/**
 	 * Get the information required to build the dashboard.
 	 * Each tier of the dashboard is an array.
-	 * Each card within the tier is an array of [slug, name, url, description, status].
+	 * Each card within the tier is an array of [slug, name, url, description].
 	 *
 	 * @return array
 	 */
@@ -59,35 +59,30 @@ class Dashboard extends Wizard {
 				'name'        => Wizards::get_name( 'site-design' ),
 				'url'         => Wizards::get_url( 'site-design' ),
 				'description' => esc_html__( 'Branding, color, typography, layouts', 'newspack' ),
-				'status'      => 'enabled',
 			],
 			[
 				'slug'        => 'reader-revenue',
 				'name'        => Wizards::get_name( 'reader-revenue' ),
 				'url'         => Wizards::get_url( 'reader-revenue' ),
 				'description' => esc_html__( 'Membership, paywall, subscriptions', 'newspack' ),
-				'status'      => Checklists::get_status( 'reader-revenue' ),
 			],
 			[
 				'slug'        => 'advertising',
 				'name'        => Wizards::get_name( 'advertising' ),
 				'url'         => Wizards::get_url( 'advertising' ),
 				'description' => esc_html__( 'Content monetization', 'newspack' ),
-				'status'      => Checklists::get_status( 'advertising' ),
 			],
 			[
 				'slug'        => 'syndication',
 				'name'        => Wizards::get_name( 'syndication' ),
 				'url'         => Wizards::get_url( 'syndication' ),
 				'description' => esc_html__( 'Distribute your content across multiple websites', 'newspack' ),
-				'status'      => Checklists::get_status( 'syndication' ),
 			],
 			[
 				'slug'        => 'analytics',
 				'name'        => Wizards::get_name( 'analytics' ),
 				'url'         => Wizards::get_url( 'analytics' ),
 				'description' => esc_html__( 'Track traffic and activity', 'newspack' ),
-				'status'      => 'enabled',
 			],
 			[
 				'slug'        => 'seo',
@@ -100,28 +95,24 @@ class Dashboard extends Wizard {
 				'name'        => Wizards::get_name( 'health-check' ),
 				'url'         => Wizards::get_url( 'health-check' ),
 				'description' => esc_html__( 'Verify and correct site health issues', 'newspack' ),
-				'status'      => 'enabled',
 			],
 			[
 				'slug'        => 'engagement',
 				'name'        => Wizards::get_name( 'engagement' ),
 				'url'         => Wizards::get_url( 'engagement' ),
 				'description' => Wizards::get_description( 'engagement' ),
-				'status'      => 'enabled',
 			],
 			[
 				'slug'        => 'popups',
 				'name'        => Wizards::get_name( 'popups' ),
 				'url'         => Wizards::get_url( 'popups' ),
 				'description' => Wizards::get_description( 'popups' ),
-				'status'      => 'enabled',
 			],
 			[
 				'slug'        => 'updates',
 				'name'        => Wizards::get_name( 'updates' ),
 				'url'         => Wizards::get_url( 'updates' ),
 				'description' => Wizards::get_description( 'updates' ),
-				'status'      => 'enabled',
 			],
 		];
 

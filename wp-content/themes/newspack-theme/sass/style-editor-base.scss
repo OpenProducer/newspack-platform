@@ -372,6 +372,10 @@ figcaption,
 	text-align: left;
 }
 
+.wp-block-video video {
+	width: 100%;
+}
+
 /** === Group === */
 .wp-block[data-align='left'] .wp-block-group,
 .wp-block[data-align='right'] .wp-block-group {
@@ -555,6 +559,7 @@ figcaption,
 
 .wp-block-file {
 	font-family: $font__heading;
+	font-size: $font__size-sm;
 
 	.wp-block-file__textlink {
 		text-decoration: underline;
@@ -569,7 +574,7 @@ figcaption,
 	.wp-block-file__button {
 		display: table;
 		line-height: 1.8;
-		font-size: $font__size-sm;
+		font-size: inherit;
 		font-weight: bold;
 		background-color: $color__link;
 		border-radius: 5px;

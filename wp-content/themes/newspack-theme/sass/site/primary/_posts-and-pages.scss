@@ -6,6 +6,10 @@
 	display: none;
 }
 
+.show-updated .entry-header .updated:not( .published ) {
+	display: inline-block;
+}
+
 .page-links {
 	clear: both;
 	margin: 0 0 calc( 1.5 * #{$size__spacing-unit} );
@@ -125,6 +129,10 @@ amp-script .cat-links {
 			color: $color__text-light;
 		}
 	}
+
+	.updated-label {
+		margin-left: 1em;
+	}
 }
 
 .entry-footer {
@@ -201,12 +209,7 @@ amp-script .cat-links {
 	}
 
 	a {
-		color: $color__link;
 		text-decoration: underline;
-
-		&:visited {
-			color: $color__link-visited;
-		}
 
 		&:hover,
 		&:active {

@@ -1,3 +1,15 @@
+# [1.17.0](https://github.com/Automattic/newspack-blocks/compare/v1.16.0...v1.17.0) (2020-12-09)
+
+
+### Bug Fixes
+
+* disable paging in specific posts mode ([#640](https://github.com/Automattic/newspack-blocks/issues/640)) ([9ea01e5](https://github.com/Automattic/newspack-blocks/commit/9ea01e55d0621687c26bf044331bfcaa4eb59b87))
+
+
+### Features
+
+* control to select default tab in donate block ([#643](https://github.com/Automattic/newspack-blocks/issues/643)) ([46c730b](https://github.com/Automattic/newspack-blocks/commit/46c730b1f5af5732876cb66236993b2800b43199))
+
 # [1.16.0](https://github.com/Automattic/newspack-blocks/compare/v1.15.0...v1.16.0) (2020-11-24)
 
 

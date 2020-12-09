@@ -208,7 +208,7 @@ class Salesforce {
 					'CloseDate'   => $transaction_date,
 					'Description' => 'WooCommerce Order Number: ' . $data['id'],
 					'Name'        => $transaction['name'],
-					'StageName'   => 'New',
+					'StageName'   => 'Closed Won',
 					'LeadSource'  => 'Post categories: ' . $referer_categories . ', tags: ' . $referer_tags,
 				];
 			}
@@ -240,6 +240,7 @@ class Salesforce {
 				'headers' => [
 					'Authorization' => 'Bearer ' . $salesforce_settings['access_token'],
 				],
+				'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 			]
 		);
 
@@ -252,6 +253,7 @@ class Salesforce {
 					'headers' => [
 						'Authorization' => 'Bearer ' . $access_token,
 					],
+					'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 				]
 			);
 		}
@@ -280,6 +282,7 @@ class Salesforce {
 					'Content-Type'  => 'application/json',
 				],
 				'body'    => wp_json_encode( $data ),
+				'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 			]
 		);
 
@@ -295,6 +298,7 @@ class Salesforce {
 						'Content-Type'  => 'application/json',
 					],
 					'body'    => wp_json_encode( $data ),
+					'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 				]
 			);
 		}
@@ -306,7 +310,7 @@ class Salesforce {
 	 * Create a new contact record in Salesforce.
 	 *
 	 * @param array $data Data to use in creating the new contact. Keys must be valid Salesforce field names.
-	 * @return array Response from Salesforce API.
+	 * @return array|WP_Error Response from Salesforce API.
 	 */
 	public static function create_contact( $data ) {
 		$salesforce_settings = self::get_salesforce_settings();
@@ -321,6 +325,7 @@ class Salesforce {
 					'Content-Type'  => 'application/json',
 				],
 				'body'    => wp_json_encode( $data ),
+				'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 			]
 		);
 
@@ -335,7 +340,15 @@ class Salesforce {
 						'Content-Type'  => 'application/json',
 					],
 					'body'    => wp_json_encode( $data ),
+					'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 				]
+			);
+		}
+
+		if ( is_wp_error( $response ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_contact_failure',
+				$response->get_error_message()
 			);
 		}
 
@@ -343,10 +356,96 @@ class Salesforce {
 	}
 
 	/**
+	 * Get available fields for sObject type in Salesforce.
+	 * This will let us know whether the Salesforce instance has certain fields that can be set.
+	 *
+	 * @param string $sobject_name Name of the Salesforce sObject type to look up.
+	 * @return array|WP_Error Response from Salesforce API.
+	 */
+	public static function describe_sobject( $sobject_name = null ) {
+		if ( empty( $sobject_name ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_sobject_describe_failure',
+				__( 'No sObject type given.', 'newspack' )
+			);
+		}
+
+		$salesforce_settings = self::get_salesforce_settings();
+		$url                 = $salesforce_settings['instance_url'] . '/services/data/v48.0/sobjects/' . $sobject_name . '/describe';
+
+		// Describe sObject record via Salesforce API, using cached access_token.
+		$response = wp_safe_remote_get(
+			$url,
+			[
+				'headers' => [
+					'Authorization' => 'Bearer ' . $salesforce_settings['access_token'],
+					'timeout'       => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
+				],
+			]
+		);
+
+		// If our access token has expired, refresh it and re-send the request.
+		if ( wp_remote_retrieve_response_code( $response ) === 401 ) {
+			$access_token = self::refresh_salesforce_token();
+			$response     = wp_safe_remote_get(
+				$url,
+				[
+					'headers' => [
+						'Authorization' => 'Bearer ' . $access_token,
+						'timeout'       => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
+					],
+				]
+			);
+		}
+
+		if ( is_wp_error( $response ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_sobject_describe_failure',
+				$response->get_error_message()
+			);
+		}
+
+		return json_decode( $response['body'] );
+	}
+
+	/**
+	 * Does the given sObject type have the given field name?
+	 *
+	 * @param string $field_name   Name of the field.
+	 * @param string $sobject_name Name of the Salesforce sObject to check for the field.
+	 * @return boolean Whether or not the field exists.
+	 */
+	public static function has_field( $field_name = null, $sobject_name = null ) {
+		$has_field = false;
+
+		if ( empty( $field_name ) || empty( $sobject_name ) ) {
+			return $has_field;
+		}
+		$sobject = self::describe_sobject( $sobject_name );
+
+		if ( is_wp_error( $sobject ) || ! is_array( $sobject->fields ) ) {
+			return $has_field;
+		}
+
+		$primary_content_field = array_filter(
+			$sobject->fields,
+			function( $field ) use ( $field_name ) {
+				return $field_name === $field->name;
+			}
+		);
+
+		if ( count( $primary_content_field ) > 0 ) {
+			$has_field = true;
+		}
+
+		return $has_field;
+	}
+
+	/**
 	 * Create a new opportunity record in Salesforce.
 	 *
 	 * @param array $data Data to use in creating the new opportunity. Keys must be valid Salesforce field names.
-	 * @return array Response from Salesforce API.
+	 * @return array|WP_Error Response from Salesforce API.
 	 */
 	public static function create_opportunity( $data ) {
 		$salesforce_settings = self::get_salesforce_settings();
@@ -361,6 +460,7 @@ class Salesforce {
 					'Content-Type'  => 'application/json',
 				],
 				'body'    => wp_json_encode( $data ),
+				'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 			]
 		);
 
@@ -375,7 +475,15 @@ class Salesforce {
 						'Content-Type'  => 'application/json',
 					],
 					'body'    => wp_json_encode( $data ),
+					'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 				]
+			);
+		}
+
+		if ( is_wp_error( $response ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_opportunity_failure',
+				$response->get_error_message()
 			);
 		}
 
@@ -388,7 +496,7 @@ class Salesforce {
 	 *
 	 * @param string $opportunity_id Unique ID for the opportunity to link.
 	 * @param string $contact_id Unique ID for the contact to link.
-	 * @return array Response from Salesforce API.
+	 * @return array|WP_Error Response from Salesforce API.
 	 */
 	public static function create_opportunity_contact_role( $opportunity_id, $contact_id ) {
 		$salesforce_settings = self::get_salesforce_settings();
@@ -397,6 +505,7 @@ class Salesforce {
 			'ContactId'     => $contact_id,
 			'IsPrimary'     => true,
 			'OpportunityId' => $opportunity_id,
+			'Role'          => 'Hard Credit',
 		];
 
 		// Create opportunity contact role record via Salesforce API, using cached access_token.
@@ -408,6 +517,7 @@ class Salesforce {
 					'Content-Type'  => 'application/json',
 				],
 				'body'    => wp_json_encode( $data ),
+				'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 			]
 		);
 
@@ -422,7 +532,15 @@ class Salesforce {
 						'Content-Type'  => 'application/json',
 					],
 					'body'    => wp_json_encode( $data ),
+					'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 				]
+			);
+		}
+
+		if ( is_wp_error( $response ) ) {
+			return new \WP_Error(
+				'newspack_salesforce_opportunity_contact_role_failure',
+				$response->get_error_message()
 			);
 		}
 
@@ -458,7 +576,10 @@ class Salesforce {
 					'grant_type'    => 'refresh_token',
 					'format'        => 'json',
 				]
-			)
+			),
+			[
+				'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
+			]
 		);
 
 		$response_body = json_decode( $salesforce_response['body'] );

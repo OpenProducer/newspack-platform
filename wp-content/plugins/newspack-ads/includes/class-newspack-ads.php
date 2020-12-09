@@ -72,5 +72,20 @@ final class Newspack_Ads {
 		}
 		return untrailingslashit( plugins_url( '/', NEWSPACK_ADS_PLUGIN_FILE ) ) . $path;
 	}
+
+	/**
+	 * Should current request be treated as an AMP endpoint.
+	 *
+	 * @return bool AMP or not
+	 */
+	public static function is_amp() {
+		if ( class_exists( 'Newspack\AMP_Enhancements' ) && method_exists( 'Newspack\AMP_Enhancements', 'should_use_amp_plus' ) && Newspack\AMP_Enhancements::should_use_amp_plus( 'gam' ) ) {
+			return false;
+		}
+		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+			return true;
+		}
+		return false;
+	}
 }
 Newspack_Ads::instance();

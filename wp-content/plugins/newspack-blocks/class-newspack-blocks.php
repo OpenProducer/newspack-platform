@@ -360,6 +360,7 @@ class Newspack_Blocks {
 			'has_password'        => false,
 		);
 		if ( $specific_mode && $specific_posts ) {
+			$args['nopaging'] = true;
 			$args['post__in'] = $specific_posts;
 			$args['orderby']  = 'post__in';
 		} else {

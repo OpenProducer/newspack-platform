@@ -25,7 +25,6 @@ class Plugin_Manager {
 		'jetpack',
 		'amp',
 		'pwa',
-		'gutenberg',
 		'wordpress-seo',
 		'google-site-kit',
 		'newspack-blocks',
@@ -137,12 +136,6 @@ class Plugin_Manager {
 					'class_name' => 'Site_Kit_Configuration_Manager',
 				],
 			],
-			'gutenberg'                     => [
-				'Name'        => 'Gutenberg',
-				'Description' => 'Printing since 1440. This is the development plugin for the new block editor in core.',
-				'Author'      => 'Gutenberg Team',
-				'Download'    => 'wporg',
-			],
 			'jetpack'                       => [
 				'Name'        => __( 'Jetpack', 'newspack' ),
 				'Description' => esc_html__( 'Bring the power of the WordPress.com cloud to your self-hosted WordPress. Jetpack enables you to connect your blog to a WordPress.com account to use the powerful features normally only available to WordPress.com users.', 'newspack' ),
@@ -151,19 +144,6 @@ class Plugin_Manager {
 				'AuthorURI'   => 'https://automattic.com/',
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=jetpack',
-			],
-			'laterpay'                      => [
-				'Name'        => 'LaterPay',
-				'Description' => 'A frictionless monetization solution to convert your readers into paying customers.',
-				'Author'      => 'LaterPay',
-				'PluginURI'   => 'https://wordpress.org/plugins/laterpay/',
-				'AuthorURI'   => 'https://www.laterpay.net/',
-				'Download'    => 'wporg',
-				'EditPath'    => 'admin.php?page=laterpay-pricing-tab',
-				'Configurer'  => [
-					'filename'   => 'class-laterpay-configuration-manager.php',
-					'class_name' => 'LaterPay_Configuration_Manager',
-				],
 			],
 			'mailchimp-for-woocommerce'     => [
 				'Name'        => 'Mailchimp for WooCommerce',

@@ -65,6 +65,10 @@ export const settings = {
 			type: 'string',
 			default: __( 'Donate now!', 'newspack-blocks' ),
 		},
+		defaultFrequency: {
+			type: 'string',
+			default: 'month',
+		},
 	},
 	supports: {
 		html: false,
