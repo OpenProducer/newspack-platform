@@ -128,7 +128,7 @@ final class Newspack {
 		global $menu;
 		foreach ( $menu as $key => $value ) {
 			if (
-				class_exists( 'Newspack_Popups' ) && 'edit.php?post_type=' . \Newspack_Popups::NEWSPACK_PLUGINS_CPT === $value[2]
+				class_exists( 'Newspack_Popups' ) && 'edit.php?post_type=' . \Newspack_Popups::NEWSPACK_POPUPS_CPT === $value[2]
 			) {
 				unset( $menu[ $key ] );
 			}
@@ -184,6 +184,13 @@ final class Newspack {
 		delete_transient( NEWSPACK_ACTIVATION_TRANSIENT );
 		wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
 		exit;
+	}
+
+	/**
+	 * Is the site in Newspack debug mode?
+	 */
+	public static function is_debug_mode() {
+		return ( defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG ) || get_option( 'newspack_debug', false );
 	}
 }
 Newspack::instance();

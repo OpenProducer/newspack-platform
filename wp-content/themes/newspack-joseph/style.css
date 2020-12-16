@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.24.0
+Version: 1.25.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -1372,7 +1372,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 .single-featured-image-beside .highlight-menu-contain.desktop-only,
-.single-featured-image-behind .highlight-menu-contain.desktop-only {
+.single-featured-image-behind .highlight-menu-contain.desktop-only,
+.single-featured-image-above .highlight-menu-contain.desktop-only {
   display: none;
 }
 
@@ -3462,6 +3463,36 @@ div.sharedaddy .sd-social h3.sd-title,
   }
 }
 
+/* Featured Image Above */
+.single-featured-image-above .site-content {
+  margin-top: 0;
+}
+
+.featured-image-above {
+  width: 100%;
+}
+
+.featured-image-above .post-thumbnail {
+  margin: 0 calc( 50% - 50vw) 1rem;
+  width: 100vw;
+}
+
+@media only screen and (min-width: 782px) {
+  .featured-image-above .post-thumbnail {
+    margin-bottom: 2rem;
+  }
+}
+
+.featured-image-above img {
+  width: 100%;
+}
+
+.featured-image-above figcaption {
+  margin: 0.25rem auto 0;
+  max-width: 90%;
+  width: 1200px;
+}
+
 /* Aside */
 .single-format-aside .author-avatar,
 .single-format-aside .byline,
@@ -5287,6 +5318,7 @@ hr {
   height: 1px;
   margin: 2rem auto;
   max-width: 5rem;
+  opacity: 1;
 }
 
 .wp-block-separator.is-style-wide,

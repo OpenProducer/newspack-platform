@@ -79,6 +79,8 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 		$ids      = [];
 		$next_url = '';
 
+		Newspack_Blocks::filter_excerpt_length( $attributes );
+
 		// The Loop.
 		while ( $article_query->have_posts() ) {
 			$article_query->the_post();
@@ -95,6 +97,8 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 			$items[]['html'] = $html;
 			$ids[]           = get_the_ID();
 		}
+
+		Newspack_Blocks::remove_excerpt_length_filter();
 
 		// Provide next URL if there are more pages.
 		if ( $next_page <= $article_query->max_num_pages ) {

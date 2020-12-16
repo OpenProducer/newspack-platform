@@ -95,7 +95,8 @@
   .newspack-card.newspack-action-card .newspack_plugin-installer__icon {
     margin: 0; }
   .newspack-card.newspack-action-card .components-toggle-control {
-    margin-bottom: 24px; }
+    margin-bottom: 24px;
+    margin-top: 0; }
     @media screen and (min-width: 744px) {
       .newspack-card.newspack-action-card .components-toggle-control {
         margin-bottom: 0;
@@ -151,42 +152,37 @@
   color: #6c7781;
   font-size: 14px;
   line-height: 24px;
-  margin: 32px 0;
-  flex-direction: row !important;
-  align-items: center !important; }
-  .newspack-select-control label {
-    color: #191e23;
-    font-size: inherit;
-    font-weight: bold;
-    line-height: inherit;
-    padding-bottom: 0 !important; }
-  .newspack-select-control select {
-    background: white url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath xmlns='http://www.w3.org/2000/svg' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z' fill='%23191e23'/%3E%3C/svg%3E") no-repeat left 8px top 50%;
-    background-size: 24px 24px;
-    border: 1px solid #e2e4e7;
+  margin: 32px 0; }
+  .newspack-select-control .components-base-control__field {
+    margin: 0; }
+  .newspack-select-control .components-select-control {
     border-radius: 3px;
-    box-shadow: none;
-    color: inherit;
-    font-size: 16px;
-    line-height: inherit;
-    margin: 0;
-    max-width: 100%;
-    min-height: 48px;
-    padding: 0 8px;
-    transition: border-color 125ms ease-in-out, box-shadow 125ms ease-in-out;
-    width: 100%; }
-    @media screen and (min-width: 768px) {
-      .newspack-select-control select {
-        font-size: inherit; } }
-    .newspack-select-control select:focus {
-      border-color: #2240d5;
-      box-shadow: 0 0 0 2px #36f;
-      color: #36f; }
-    .newspack-select-control select:disabled, .newspack-select-control select.disabled {
-      background: #f8f9f9 url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='24' height='24' viewBox='0 0 24 24'%3E%3Cpath xmlns='http://www.w3.org/2000/svg' d='M16.59 8.59L12 13.17 7.41 8.59 6 10l6 6 6-6z' fill='%23a2aab2'/%3E%3C/svg%3E") no-repeat left 8px top 50%;
-      color: #a2aab2;
-      cursor: not-allowed;
-      text-shadow: none; }
+    font-size: 14px;
+    line-height: 24px; }
+    .newspack-select-control .components-select-control label.components-input-control__label {
+      color: #191e23;
+      font-size: 14px;
+      font-weight: bold;
+      line-height: 24px;
+      padding-bottom: 0 !important; }
+    .newspack-select-control .components-select-control div.components-input-control__backdrop {
+      border-color: #e2e4e7; }
+    .newspack-select-control .components-select-control select.components-select-control__input {
+      color: #6c7781;
+      font-size: 16px;
+      height: 48px;
+      line-height: 24px;
+      max-width: 100%;
+      min-height: 48px; }
+      @media screen and (min-width: 600px) {
+        .newspack-select-control .components-select-control select.components-select-control__input {
+          font-size: 16px; } }
+      @media screen and (min-width: 768px) {
+        .newspack-select-control .components-select-control select.components-select-control__input {
+          font-size: 14px; } }
+      .newspack-select-control .components-select-control select.components-select-control__input:focus ~ div.components-input-control__backdrop {
+        border-color: #36f;
+        box-shadow: inset 0 0 0 2px #36f; }
   .newspack-select-control + .newspack-select-control {
     margin-bottom: 32px;
     margin-top: -16px; }
@@ -194,9 +190,6 @@
   .newspack-select-control + .newspack-textarea-control {
     margin-bottom: 32px;
     margin-top: -16px; }
-  .newspack-select-control .components-base-control__field,
-  .newspack-select-control .components-base-control__label {
-    margin: 0; }
 
 /**
  * Popup group
@@ -205,32 +198,17 @@
  * Colors
  */
 .newspack-action-card-sections__group-wrapper {
-  margin-top: 20px;
-  margin-bottom: -31px;
+  margin-bottom: -32px;
   display: flex;
   justify-content: space-between;
   align-items: baseline; }
   .newspack-action-card-sections__group-wrapper h2 {
     margin: 0 !important; }
-
-.newspack-action-card-sections__group-select {
-  margin: 0; }
-  .newspack-action-card-sections__group-select .components-base-control__field {
-    margin-bottom: 0;
-    align-items: center;
-    display: flex; }
-  .newspack-action-card-sections__group-select .components-base-control__label {
-    margin-left: 4px; }
-  .newspack-action-card-sections__group-select select {
-    background-position: left;
-    border: 0;
-    border-radius: 1px;
-    display: block;
-    height: 24px;
-    min-height: 24px;
-    padding: 0 0 0 24px; }
-    .newspack-action-card-sections__group-select select:focus {
-      box-shadow: 0 0 0 2px white, 0 0 0 4px #36f; }
+  .newspack-action-card-sections__group-wrapper .newspack-select-control .components-select-control div.components-input-control__backdrop {
+    border-color: white; }
+  .newspack-action-card-sections__group-wrapper .newspack-select-control .components-select-control select.components-select-control__input {
+    height: 32px;
+    min-height: 32px; }
 
 .newspack-action-card-sections__group-type {
   align-items: center;
@@ -565,7 +543,6 @@ body[class*='admin-color-'] .newspack-button {
   color: #6c7781;
   display: flex;
   font-size: 14px;
-  justify-content: space-between;
   line-height: 24px;
   margin: 32px 0; }
   .newspack-checkbox-control label {
@@ -597,7 +574,7 @@ body[class*='admin-color-'] .newspack-button {
     margin: 0;
     margin-right: 28px; }
   .newspack-checkbox-control + .newspack-checkbox-control {
-    margin-top: -16px; }
+    margin-top: -24px; }
   .newspack-checkbox-control .components-base-control {
     font-size: inherit;
     line-height: inherit; }
@@ -765,7 +742,7 @@ body[class*='admin-color-'] .newspack-button {
         font-size: inherit; } }
     .newspack-form-token-field .newspack-form-token-field__input-container.is-active {
       border-color: #36f;
-      box-shadow: 0 0 0 2px #36f; }
+      box-shadow: inset 0 0 0 2px #36f; }
     .newspack-form-token-field .newspack-form-token-field__input-container input[type='text'] {
       border: 0;
       line-height: inherit;
@@ -815,7 +792,7 @@ body[class*='admin-color-'] .newspack-button {
   width: 24px; }
   .newspack-info-button svg {
     display: block;
-    fill: #191e23; }
+    fill: currentColor; }
 
 /**
  * Image Upload
@@ -1089,21 +1066,18 @@ body[class*='admin-color-'] .newspack-button {
       fill: #191e23; }
   .newspack-popover .components-popover__content .newspack-select-control {
     margin: 0;
-    transition: color 125ms ease-in-out; }
-    .newspack-popover .components-popover__content .newspack-select-control:hover {
-      color: #36f; }
-    .newspack-popover .components-popover__content .newspack-select-control select {
-      background-position: left;
-      border: 0;
-      border-radius: 1px;
-      display: block;
-      height: 24px;
-      min-height: 24px;
+    width: 100%; }
+    .newspack-popover .components-popover__content .newspack-select-control .components-select-control select.components-select-control__input {
+      height: 40px;
+      min-height: 40px; }
+      .newspack-popover .components-popover__content .newspack-select-control .components-select-control select.components-select-control__input:focus ~ div.components-input-control__backdrop {
+        border-color: #36f;
+        box-shadow: inset 0 0 0 1px #36f; }
+    .newspack-popover .components-popover__content .newspack-select-control .components-select-control div.components-input-control__backdrop {
+      border-color: white;
       padding: 0; }
-      .newspack-popover .components-popover__content .newspack-select-control select:focus {
-        box-shadow: 0 0 0 2px white, 0 0 0 4px #36f; }
   .newspack-popover .components-popover__content .newspack-toggle-control {
-    margin: 0 8px; }
+    margin: 0; }
     .newspack-popover .components-popover__content .newspack-toggle-control .components-form-toggle {
       border-top: 0; }
 
@@ -1223,8 +1197,8 @@ body[class*='admin-color-'] .newspack-button {
     background: transparent;
     opacity: 1; }
   .newspack-style-card.newspack-style-card__is-active {
-    border-color: #2240d5;
-    box-shadow: 0 0 0 2px #36f; }
+    border-color: #36f;
+    box-shadow: inset 0 0 0 2px #36f; }
     .newspack-style-card.newspack-style-card__is-active .newspack-style-card__actions {
       display: none; }
     .newspack-style-card.newspack-style-card__is-active .newspack-style-card__content {
@@ -1354,9 +1328,9 @@ body[class*='admin-color-'] .newspack-button {
       width: 100%; }
   .newspack-text-control label {
     color: #191e23;
-    font-size: inherit;
+    font-size: 14px;
     font-weight: bold;
-    line-height: inherit;
+    line-height: 24px;
     margin: 0; }
     .newspack-text-control label[data-required-text]::after {
       content: attr(data-required-text);
@@ -1402,7 +1376,7 @@ body[class*='admin-color-'] .newspack-button {
       .newspack-text-control input[type='time'],
       .newspack-text-control input[type='url'],
       .newspack-text-control input[type='week'] {
-        font-size: inherit; } }
+        font-size: 14px; } }
     .newspack-text-control input[type='date']::placeholder,
     .newspack-text-control input[type='datetime-local']::placeholder,
     .newspack-text-control input[type='datetime']::placeholder,
@@ -1431,7 +1405,7 @@ body[class*='admin-color-'] .newspack-button {
     .newspack-text-control input[type='url']:focus,
     .newspack-text-control input[type='week']:focus {
       border-color: #36f;
-      box-shadow: 0 0 0 2px #36f; }
+      box-shadow: inset 0 0 0 2px #36f; }
     .newspack-text-control input[type='date']:disabled, .newspack-text-control input[type='date'].disabled,
     .newspack-text-control input[type='datetime-local']:disabled,
     .newspack-text-control input[type='datetime-local'].disabled,
@@ -1462,11 +1436,11 @@ body[class*='admin-color-'] .newspack-button {
       cursor: not-allowed; }
   .newspack-text-control + .newspack-text-control {
     margin-bottom: 32px;
-    margin-top: -16px; }
+    margin-top: -24px; }
   .newspack-text-control + .newspack-select-control,
   .newspack-text-control + .newspack-textarea-control {
     margin-bottom: 32px;
-    margin-top: -16px; }
+    margin-top: -24px; }
   .newspack-text-control .components-base-control__field,
   .newspack-text-control .components-base-control__label,
   .newspack-text-control .components-base-control__help {
@@ -1486,9 +1460,9 @@ body[class*='admin-color-'] .newspack-button {
   margin: 32px 0; }
   .newspack-textarea-control label {
     color: #191e23;
-    font-size: inherit;
+    font-size: 12px;
     font-weight: bold;
-    line-height: inherit;
+    line-height: 24px;
     margin: 0; }
   .newspack-textarea-control textarea {
     background: white;
@@ -1506,21 +1480,21 @@ body[class*='admin-color-'] .newspack-button {
     width: 100%; }
     @media screen and (min-width: 768px) {
       .newspack-textarea-control textarea {
-        font-size: inherit; } }
+        font-size: 14px; } }
     .newspack-textarea-control textarea:focus {
       border-color: #36f;
-      box-shadow: 0 0 0 2px #36f; }
+      box-shadow: inset 0 0 0 2px #36f; }
     .newspack-textarea-control textarea:disabled, .newspack-textarea-control textarea.disabled {
       background: #f8f9f9;
       color: #a2aab2;
       cursor: not-allowed; }
   .newspack-textarea-control + .newspack-textarea-control {
     margin-bottom: 32px;
-    margin-top: -16px; }
+    margin-top: -24px; }
   .newspack-textarea-control + .newspack-select-control,
   .newspack-textarea-control + .newspack-text-control {
     margin-bottom: 32px;
-    margin-top: -16px; }
+    margin-top: -24px; }
   .newspack-textarea-control .components-base-control__field,
   .newspack-textarea-control .components-base-control__label {
     display: block;
@@ -1532,33 +1506,33 @@ body[class*='admin-color-'] .newspack-button {
 /**
  * Colors
  */
-.newspack-toggle-control .components-base-control__field {
-  margin: 0;
-  height: 24px; }
-  .newspack-toggle-control .components-base-control__field .components-toggle-control__label {
-    color: #6c7781;
-    font-size: 14px;
-    line-height: 24px;
+.newspack-toggle-control {
+  margin: 32px 0; }
+  .newspack-toggle-control .components-base-control__field {
+    align-items: flex-start;
     margin: 0; }
-  .newspack-toggle-control .components-base-control__field .components-form-toggle {
-    border-top: 3px solid transparent;
-    margin-left: 8px; }
-    .newspack-toggle-control .components-base-control__field .components-form-toggle.is-checked .components-form-toggle__track {
-      background: #36f;
-      border-color: transparent; }
-
-.newspack-toggle-control.newspack-toggle-control__is-dark .components-base-control__field label {
-  color: #191e23;
-  font-weight: bold; }
-
-.newspack-toggle-control.newspack-toggle-control__is-dark .components-base-control__help {
-  font-style: normal; }
-
-.newspack-toggle-control .components-form-toggle__input:focus + .components-form-toggle__track {
-  box-shadow: 0 0 0 2px white, 0 0 0 4px #36f; }
-
-.newspack-toggle-control .components-base-control__help {
-  margin: 0 44px 0 0; }
+    .newspack-toggle-control .components-base-control__field .components-toggle-control__label {
+      color: #6c7781;
+      font-size: 14px;
+      line-height: 24px;
+      margin: 0; }
+    .newspack-toggle-control .components-base-control__field .components-form-toggle {
+      margin: 3px 0 3px 8px; }
+      .newspack-toggle-control .components-base-control__field .components-form-toggle.is-checked .components-form-toggle__track {
+        background: #36f;
+        border-color: transparent; }
+  .newspack-toggle-control.newspack-toggle-control__is-dark .components-base-control__field label {
+    color: #191e23;
+    font-weight: bold; }
+  .newspack-toggle-control.newspack-toggle-control__is-dark .components-base-control__help {
+    font-style: normal; }
+  .newspack-toggle-control .components-form-toggle__input:focus + .components-form-toggle__track {
+    box-shadow: 0 0 0 2px white, 0 0 0 4px #36f; }
+  .newspack-toggle-control + .newspack-toggle-control {
+    margin-bottom: 32px;
+    margin-top: -24px; }
+  .newspack-toggle-control .components-base-control__help {
+    margin: 0 44px 0 0; }
 
 /**
  * Toggle Group
@@ -1567,10 +1541,13 @@ body[class*='admin-color-'] .newspack-button {
   display: flex;
   margin: 32px 0; }
   .newspack-toggle-group .newspack-toggle-group__description p {
+    margin-bottom: 0;
+    margin-top: 0; }
+  .newspack-toggle-group .newspack-toggle-control {
     margin: 0; }
   .newspack-toggle-group + .newspack-toggle-group {
     margin-bottom: 32px;
-    margin-top: -16px; }
+    margin-top: -24px; }
 
 /**
  * Waiting
@@ -1756,26 +1733,32 @@ body[class*='admin_page_newspack-'] {
     .newspack_page_newspack-setup-wizard__welcome #wpfooter a:active, .newspack_page_newspack-setup-wizard__welcome #wpfooter a:focus, .newspack_page_newspack-setup-wizard__welcome #wpfooter a:hover {
       opacity: 0.75; }
 
-.newspack-logo-wrapper {
+.newspack-logo__wrapper {
   background: #36f;
   color: white;
-  display: flex;
-  justify-content: center;
   margin: 0 0 64px;
-  padding: 32px;
+  padding: 32px 0;
   position: relative; }
-  .newspack-logo-wrapper a {
+  .newspack-logo__wrapper a {
     color: inherit; }
-    .newspack-logo-wrapper a:active, .newspack-logo-wrapper a:focus, .newspack-logo-wrapper a:hover {
+    .newspack-logo__wrapper a:active, .newspack-logo__wrapper a:focus, .newspack-logo__wrapper a:hover {
       color: #b4e4ff; }
-    .newspack-logo-wrapper a:focus {
+    .newspack-logo__wrapper a:focus {
       box-shadow: none;
       outline: 2px solid white;
       outline-offset: 4px; }
-  .newspack-logo-wrapper svg {
+  .newspack-logo__wrapper .newspack-logo__svg {
     display: block;
     fill: currentColor;
-    transition: color 125ms ease-in-out; }
+    height: 56px;
+    transition: color 125ms ease-in-out;
+    width: auto; }
+
+.newspack-logo__grid.newspack-grid {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin: 0 auto; }
 
 .newspack-wizard__is-loading .newspack-wizard {
   cursor: wait;
@@ -1890,6 +1873,10 @@ body[class*='admin_page_newspack-'] {
       box-shadow: none;
       outline: 2px solid #36f;
       outline-offset: 2px; }
+
+.newspack-wizard__debug-mode-notice {
+  padding: 5px 20px;
+  background: #ffa500; }
 
 .newspack-buttons-card {
   display: flex;

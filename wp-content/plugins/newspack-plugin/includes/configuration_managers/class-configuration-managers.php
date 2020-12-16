@@ -104,6 +104,9 @@ class Configuration_Managers {
 	 * @var bool
 	 */
 	public static function is_configured( $slug ) {
+		if ( Newspack::is_debug_mode() ) {
+			return true;
+		}
 		$configuration_manager = self::configuration_manager_class_for_plugin_slug( $slug );
 		if ( is_wp_error( $configuration_manager ) ) {
 			return false;

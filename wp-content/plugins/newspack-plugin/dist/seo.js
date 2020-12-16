@@ -1191,6 +1191,17 @@ eval("(function() { module.exports = this[\"wp\"][\"i18n\"]; }());\n\n//# source
 
 /***/ }),
 
+/***/ "@wordpress/primitives":
+/*!*********************************************!*\
+  !*** external {"this":["wp","primitives"]} ***!
+  \*********************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("(function() { module.exports = this[\"wp\"][\"primitives\"]; }());\n\n//# sourceURL=webpack:///external_%7B%22this%22:%5B%22wp%22,%22primitives%22%5D%7D?");
+
+/***/ }),
+
 /***/ "@wordpress/url":
 /*!**************************************!*\
   !*** external {"this":["wp","url"]} ***!
@@ -1221,6 +1232,17 @@ eval("(function() { module.exports = this[\"lodash\"]; }());\n\n//# sourceURL=we
 /***/ (function(module, exports) {
 
 eval("(function() { module.exports = this[\"React\"]; }());\n\n//# sourceURL=webpack:///external_%7B%22this%22:%22React%22%7D?");
+
+/***/ }),
+
+/***/ "react-dom":
+/*!************************************!*\
+  !*** external {"this":"ReactDOM"} ***!
+  \************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("(function() { module.exports = this[\"ReactDOM\"]; }());\n\n//# sourceURL=webpack:///external_%7B%22this%22:%22ReactDOM%22%7D?");
 
 /***/ })
 

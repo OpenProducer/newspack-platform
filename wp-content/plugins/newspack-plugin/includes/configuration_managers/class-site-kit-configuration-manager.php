@@ -136,10 +136,6 @@ class Site_Kit_Configuration_Manager extends Configuration_Manager {
 	public function is_configured() {
 		global $wpdb;
 
-		if ( ( defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG ) || get_option( 'newspack_debug', false ) ) {
-			return true;
-		}
-
 		$user     = get_current_user_id();
 		$meta_key = $wpdb->get_blog_prefix() . 'googlesitekit_access_token';
 		$token    = get_user_meta( $user, $meta_key, true );

@@ -60,12 +60,12 @@ export const queryCriteriaFromAttributes = attributes => {
 		tagExclusions,
 	} = pick( attributes, POST_QUERY_ATTRIBUTES );
 
-	const isSpecificPostModeActive = specificMode && specificPosts && specificPosts.length;
-
+	const cleanPosts = sanitizePostList( specificPosts );
+	const isSpecificPostModeActive = specificMode && cleanPosts && cleanPosts.length;
 	const criteria = pickBy(
 		isSpecificPostModeActive
 			? {
-					include: specificPosts,
+					include: cleanPosts,
 					orderby: 'include',
 					per_page: specificPosts.length,
 			  }
@@ -81,6 +81,9 @@ export const queryCriteriaFromAttributes = attributes => {
 	criteria.suppress_password_protected_posts = true;
 	return criteria;
 };
+
+export const sanitizePostList = postList =>
+	postList.map( id => parseInt( id ) ).filter( id => id > 0 );
 
 export const getBlockQueries = ( blocks, blockName ) =>
 	blocks.flatMap( block => {

@@ -17,7 +17,7 @@ import { addQueryArgs } from '@wordpress/url';
  * Internal dependencies
  */
 import metadata from './block.json';
-import { getBlockQueries } from './utils';
+import { getBlockQueries, sanitizePostList } from './utils';
 
 const { name } = metadata;
 export const STORE_NAMESPACE = `newspack-blocks/${ name }`;
@@ -131,7 +131,7 @@ const createFetchPostsSaga = blockName => {
 			return acc;
 		}, [] );
 
-		let exclude = [ ...specificPostsId, getCurrentPostId() ];
+		let exclude = sanitizePostList( [ ...specificPostsId, getCurrentPostId() ] );
 		while ( blockQueries.length ) {
 			const nextBlock = blockQueries.shift();
 			nextBlock.postsQuery.exclude = exclude;

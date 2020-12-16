@@ -40,8 +40,8 @@
     border-color: #a2aab2; }
   .newspack-support__dropzone--active {
     background: white;
-    border: 1px solid #2240d5;
-    box-shadow: 0 0 0 2px #36f; }
+    border: 1px solid #36f;
+    box-shadow: inset 0 0 0 2px #36f; }
   .newspack-support__dropzone__text {
     text-align: center;
     padding: 24px; }

@@ -353,7 +353,7 @@ class Newspack_Blocks_API {
 	 */
 	public static function newspack_blocks_post_format( $object ) {
 		$post_format = get_post_format( $object['id'] );
-		return $post_format;
+		return $post_format ? $post_format : 'standard';
 	}
 
 	/**

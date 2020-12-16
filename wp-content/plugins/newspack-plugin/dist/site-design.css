@@ -1,11 +1,6 @@
 /**
  * Theme Selection Screen
  */
-.newspack-toggle-control {
-  margin: 32px 0; }
-  .newspack-toggle-control + .newspack-toggle-control {
-    margin: -16px 0 32px 0; }
-
 .newspack-toggle-group + .newspack-text-control {
   margin-top: -16px; }
 
@@ -14,5 +9,5 @@
 
 .newspack-toggle-group .newspack-toggle-group__description .newspack-toggle-control,
 .newspack-toggle-group .newspack-toggle-group__description .newspack-text-control {
-  margin: 16px 0 0 -44px; }
+  margin: 8px 0 0 -44px; }
 

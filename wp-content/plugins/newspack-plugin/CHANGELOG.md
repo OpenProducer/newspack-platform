@@ -1,3 +1,21 @@
+# [1.27.0](https://github.com/Automattic/newspack-plugin/compare/v1.26.0...v1.27.0) (2020-12-15)
+
+
+### Bug Fixes
+
+* **campaigns-wizard:** empty section ([33f055b](https://github.com/Automattic/newspack-plugin/commit/33f055bcad7d7d303fe6efddb92f2b9cf0553995))
+* update newspack-popups constant name ([#733](https://github.com/Automattic/newspack-plugin/issues/733)) ([2c800fe](https://github.com/Automattic/newspack-plugin/commit/2c800feac26f0363707bb448ea179fd1ea844ac6))
+
+
+### Features
+
+* improve debug mode ([56992a7](https://github.com/Automattic/newspack-plugin/commit/56992a70cb6abc9e1401948f6a0d5b346ba267bb))
+* update dashboard header style ([#732](https://github.com/Automattic/newspack-plugin/issues/732)) ([a4ac3da](https://github.com/Automattic/newspack-plugin/commit/a4ac3da8c9be6a27ca785f194fb79c4faf6ecded))
+* update info button icon to use Gutenberg ([#735](https://github.com/Automattic/newspack-plugin/issues/735)) ([5b11ce5](https://github.com/Automattic/newspack-plugin/commit/5b11ce577bea601c0cf5643a856e98001d90c40d))
+* update SelectControl and Popover style since WP 5.6 ([#731](https://github.com/Automattic/newspack-plugin/issues/731)) ([c06d444](https://github.com/Automattic/newspack-plugin/commit/c06d44437b032a992dca15e1be84e9bb0d9de430)), closes [#736](https://github.com/Automattic/newspack-plugin/issues/736)
+* update toggle group and toggle control vertical alignment ([e35bf7f](https://github.com/Automattic/newspack-plugin/commit/e35bf7f2d73f6cad1c8fb7a9844fdebd46c7a7ac))
+* **popups-wizard:** handle above header placement ([#691](https://github.com/Automattic/newspack-plugin/issues/691)) ([a1f2125](https://github.com/Automattic/newspack-plugin/commit/a1f21256a4fd113e3701b8f5db4bd93887b38c53))
+
 # [1.26.0](https://github.com/Automattic/newspack-plugin/compare/v1.25.0...v1.26.0) (2020-12-08)
 
 
