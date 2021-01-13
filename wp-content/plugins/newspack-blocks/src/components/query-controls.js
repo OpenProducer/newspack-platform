@@ -23,10 +23,7 @@ class QueryControls extends Component {
 	};
 
 	fetchPostSuggestions = search => {
-		const basePath =
-			window && window.newspack_blocks_data && window.newspack_blocks_data._experimental
-				? '/newspack-blocks/v1/specific-posts'
-				: '/wp/v2/search';
+		const basePath = '/newspack-blocks/v1/specific-posts';
 		return apiFetch( {
 			path: addQueryArgs( basePath, {
 				search,

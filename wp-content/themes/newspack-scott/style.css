@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.25.0
+Version: 1.26.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -565,8 +565,7 @@ h6 {
 }
 
 .entry-title,
-.comments-title,
-blockquote {
+.comments-title {
   hyphens: auto;
   word-break: break-word;
 }
@@ -2916,20 +2915,11 @@ amp-script .cat-links {
 }
 
 .entry-content .more-link {
-  transition: color 110ms ease-in-out;
-  display: inline;
   color: inherit;
-}
-
-.entry-content .more-link::after {
-  content: '\02192';
-  display: inline-block;
-  margin-left: 0.5em;
-}
-
-.entry-content .more-link:hover {
-  color: #2240d5;
-  text-decoration: none;
+  display: block;
+  font-size: 0.8em;
+  transition: color 110ms ease-in-out;
+  margin: 0.5em 0;
 }
 
 .entry-content a {
@@ -4710,6 +4700,10 @@ p.has-background {
   max-width: 100%;
 }
 
+.wpnbha .more-link + .entry-meta {
+  margin-top: 0.75rem;
+}
+
 .wpnbha article.format-aside .entry-meta > a,
 .wpnbha article.format-aside .entry-meta .byline {
   display: none;
@@ -4873,8 +4867,12 @@ p.has-background {
   padding-left: 0;
 }
 
+.wp-block-pullquote blockquote p,
+.wp-block-pullquote.is-style-solid-color blockquote p {
+  font-size: 1.4em;
+}
+
 .wp-block-pullquote p {
-  font-size: 1.2em;
   font-style: italic;
   line-height: 1.3;
   margin-bottom: 0.5em;
@@ -6284,7 +6282,8 @@ div.wpnbha .article-section-title {
 }
 
 @media only screen and (min-width: 782px) {
-  .wp-block-pullquote p {
+  .wp-block-pullquote.is-style-solid-color blockquote p,
+  .wp-block-pullquote blockquote p {
     font-size: 1.8em;
   }
 }
@@ -6378,12 +6377,14 @@ div.wpnbha .article-section-title {
   display: none;
 }
 
-.wp-block-pullquote.alignleft, .wp-block-pullquote.alignleft.is-style-solid-color, .wp-block-pullquote.alignright, .wp-block-pullquote.alignright.is-style-solid-color {
-  padding-top: 3rem;
+.wp-block-pullquote.alignleft.is-style-solid-color blockquote p,
+.wp-block-pullquote.alignleft blockquote p, .wp-block-pullquote.alignright.is-style-solid-color blockquote p,
+.wp-block-pullquote.alignright blockquote p {
+  font-size: 1.2em;
 }
 
-.wp-block-pullquote.alignleft p, .wp-block-pullquote.alignright p {
-  font-size: 1.2em;
+.wp-block-pullquote.alignleft, .wp-block-pullquote.alignleft.is-style-solid-color, .wp-block-pullquote.alignright, .wp-block-pullquote.alignright.is-style-solid-color {
+  padding-top: 3rem;
 }
 
 .wp-block-pullquote.alignleft p:first-of-type::before, .wp-block-pullquote.alignright p:first-of-type::before {

@@ -43,6 +43,10 @@ class Newspack_Newsletters_Settings {
 						'name'  => __( 'Constant Contact', 'newspack-newsletters' ),
 						'value' => 'constant_contact',
 					),
+					array(
+						'name'  => __( 'Campaign Monitor', 'newspack-newsletters' ),
+						'value' => 'campaign_monitor',
+					),
 				),
 				'type'        => 'select',
 			),
@@ -59,6 +63,16 @@ class Newspack_Newsletters_Settings {
 			array(
 				'description' => __( 'Constant Contact API Access token', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_constant_contact_api_access_token',
+				'type'        => 'text',
+			),
+			array(
+				'description' => __( 'Campaign Monitor API Key', 'newspack-newsletters' ),
+				'key'         => 'newspack_newsletters_campaign_monitor_api_key',
+				'type'        => 'text',
+			),
+			array(
+				'description' => __( 'Campaign Monitor Client ID', 'newspack-newsletters' ),
+				'key'         => 'newspack_newsletters_campaign_monitor_client_id',
 				'type'        => 'text',
 			),
 			array(
@@ -87,6 +101,13 @@ class Newspack_Newsletters_Settings {
 				'type'        => 'checkbox',
 			);
 		}
+
+		$settings_list[] = array(
+			'description' => __( 'Use Mailchimp Tags?', 'newspack-newsletters' ),
+			'key'         => 'newspack_newsletters_use_mailchimp_tags',
+			'type'        => 'checkbox',
+			'provider'    => 'mailchimp',
+		);
 
 		return $settings_list;
 	}
@@ -134,6 +155,9 @@ class Newspack_Newsletters_Settings {
 			'newspack-newsletters-settings-admin'
 		);
 		foreach ( self::get_settings_list() as $setting ) {
+			if ( isset( $setting['provider'] ) && get_option( 'newspack_newsletters_service_provider', null ) !== $setting['provider'] ) {
+				continue;
+			}
 			$args = [
 				'sanitize_callback' => ! empty( $setting['sanitize_callback'] ) ? $setting['sanitize_callback'] : 'sanitize_text_field',
 			];

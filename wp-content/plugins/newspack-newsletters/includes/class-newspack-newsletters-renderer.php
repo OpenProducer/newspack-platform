@@ -161,6 +161,11 @@ final class Newspack_Newsletters_Renderer {
 			$attrs['padding'] = '0';
 		}
 
+		if ( isset( $attrs['textAlign'] ) && ! isset( $attrs['align'] ) ) {
+			$attrs['align'] = $attrs['textAlign'];
+			unset( $attrs['textAlign'] );
+		}
+
 		if ( isset( $attrs['align'] ) && 'full' == $attrs['align'] ) {
 			$attrs['full-width'] = 'full-width';
 			unset( $attrs['align'] );
@@ -184,13 +189,18 @@ final class Newspack_Newsletters_Renderer {
 		$href_params = $matches[0];
 		$urls        = $matches[1];
 		foreach ( $urls as $index => $url ) {
-			$url_with_params = add_query_arg(
-				[
-					'utm_medium' => 'email',
-				],
+			$url_with_params = apply_filters(
+				'newspack_newsletters_process_link',
+				add_query_arg(
+					[
+						'utm_medium' => 'email',
+					],
+					$url
+				),
 				$url
 			);
-			$html            = str_replace( $href_params[ $index ], 'href="' . $url_with_params . '"', $html );
+
+			$html = str_replace( $href_params[ $index ], 'href="' . $url_with_params . '"', $html );
 		}
 		return $html;
 	}
@@ -302,8 +312,8 @@ final class Newspack_Newsletters_Renderer {
 				if ( isset( $attrs['height'] ) ) {
 					$img_attrs['height'] = $attrs['height'] . 'px';
 				}
-				if ( isset( $attrs['linkDestination'] ) ) {
-					$img_attrs['href'] = $attrs['linkDestination'];
+				if ( isset( $attrs['href'] ) ) {
+					$img_attrs['href'] = $attrs['href'];
 				} else {
 					$maybe_link = $img->parentNode;// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					if ( $maybe_link && 'a' === $maybe_link->nodeName && $maybe_link->getAttribute( 'href' ) ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -772,10 +782,14 @@ final class Newspack_Newsletters_Renderer {
 					'timeout' => 45, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 				)
 			);
-			if ( 401 === intval( $request['response']['code'] ) ) {
-				throw new Exception( __( 'MJML rendering error.', 'newspack_newsletters' ) );
+			if ( is_wp_error( $request ) ) {
+				return $request;
+			} else {
+				if ( 401 === intval( $request['response']['code'] ) ) {
+					throw new Exception( __( 'MJML rendering error.', 'newspack_newsletters' ) );
+				}
+				return json_decode( $request['body'] )->html;
 			}
-			return is_wp_error( $request ) ? $request : json_decode( $request['body'] )->html;
 		}
 	}
 }

@@ -94,7 +94,7 @@ function* getPosts( block ) {
 	const cacheKey = createCacheKey( block.postsQuery );
 	let posts = POSTS_QUERIES_CACHE[ cacheKey ];
 	if ( posts === undefined ) {
-		const path = addQueryArgs( '/wp/v2/posts', {
+		const path = addQueryArgs( '/newspack-blocks/v1/posts', {
 			...block.postsQuery,
 			// `context=edit` is needed, so that custom REST fields are returned.
 			context: 'edit',

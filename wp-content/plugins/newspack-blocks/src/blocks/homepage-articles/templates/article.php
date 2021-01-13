@@ -118,6 +118,13 @@ call_user_func(
 					the_excerpt();
 				endif;
 			endif;
+			if ( ! has_post_format( 'aside' ) && ( $attributes['showReadMore'] ) ) :
+				?>
+				<a class="more-link" href="<?php echo esc_url( get_permalink() ); ?>" rel="bookmark">
+					<?php echo esc_html( $attributes['readMoreLabel'] ); ?>
+				</a>
+				<?php
+			endif;
 			if ( $attributes['showAuthor'] || $attributes['showDate'] || ! empty( $sponsors ) ) :
 				?>
 				<div class="entry-meta">

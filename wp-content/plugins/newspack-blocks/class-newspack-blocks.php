@@ -61,8 +61,7 @@ class Newspack_Blocks {
 				'newspack-blocks-editor',
 				'newspack_blocks_data',
 				[
-					'patterns'      => self::get_patterns_for_post_type( get_post_type() ),
-					'_experimental' => self::use_experimental(),
+					'patterns' => self::get_patterns_for_post_type( get_post_type() ),
 				]
 			);
 
@@ -628,15 +627,6 @@ class Newspack_Blocks {
 	}
 
 	/**
-	 * Whether to use experimental features.
-	 *
-	 * @return bool Experimental status.
-	 */
-	public static function use_experimental() {
-		return defined( 'NEWSPACK_BLOCKS_EXPERIMENTAL' ) && NEWSPACK_BLOCKS_EXPERIMENTAL;
-	}
-
-	/**
 	 * Closure for excerpt filtering that can be added and removed.
 	 *
 	 * @var newspack_blocks_excerpt_length_closure
@@ -675,6 +665,34 @@ class Newspack_Blocks {
 				999
 			);
 		}
+	}
+
+	/**
+	 * Return a excerpt more replacement when using the 'Read More' link.
+	 *
+	 * @param string $more Default excerpt_more value.
+	 */
+	public static function more_excerpt( $more ) {
+		return '…';
+	}
+
+	/**
+	 * Filter for excerpt ellipsis.
+	 *
+	 * @param array $attributes The block's attributes.
+	 */
+	public static function filter_excerpt_more( $attributes ) {
+		// If showing the 'Read More' link, modify the ellipsis.
+		if ( $attributes['showReadMore'] ) {
+			add_filter( 'excerpt_more', [ __CLASS__, 'more_excerpt' ], 999 );
+		}
+	}
+
+	/**
+	 * Remove excerpt ellipsis filter after Homepage Posts block loop.
+	 */
+	public static function remove_excerpt_more_filter() {
+		remove_filter( 'excerpt_more', [ __CLASS__, 'more_excerpt' ], 999 );
 	}
 }
 Newspack_Blocks::init();

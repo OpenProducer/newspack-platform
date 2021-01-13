@@ -24,6 +24,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
 		add_action( 'transition_post_status', [ $this, 'send' ], 10, 3 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
+		add_filter( 'newspack_newsletters_process_link', [ $this, 'process_link' ], 10, 2 );
 
 		parent::__construct( $this );
 	}
@@ -172,8 +173,10 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				}
 			}
 
+			$newspack_newsletters_use_mailchimp_tags = get_option( 'newspack_newsletters_use_mailchimp_tags', false );
+
 			$tags = [];
-			if ( $list_id ) {
+			if ( $list_id && $newspack_newsletters_use_mailchimp_tags ) {
 				$tags_response = $this->validate(
 					$mc->get( "lists/$list_id/segments?count=1000", [], 20 ),
 					__( 'Error retrieving Mailchimp tags.', 'newspack_newsletters' )
@@ -306,7 +309,8 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			$result  = $this->validate(
 				$mc->post(
 					"campaigns/$mc_campaign_id/actions/test",
-					$payload
+					$payload,
+					60
 				),
 				__( 'Error sending test email.', 'newspack_newsletters' )
 			);
@@ -417,6 +421,11 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 */
 	public function send( $new_status, $old_status, $post ) {
 		$post_id = $post->ID;
+
+		// Only run if the current service provider is Mailchimp.
+		if ( 'mailchimp' !== get_option( 'newspack_newsletters_service_provider', false ) ) {
+			return;
+		}
 
 		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
 			return new WP_Error(
@@ -632,5 +641,24 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			throw new Exception( implode( ' ', $messages ) );
 		}
 		return $result;
+	}
+
+	/**
+	 * Special handling for link hrefs containing Mailchimp merge fields.
+	 *
+	 * @param String $processed The processed link, with utm_medium parameter added.
+	 * @param String $original The original, unprocessed link.
+	 * @return The link to use.
+	 */
+	public function process_link( $processed, $original ) {
+		// Match Mailchimp Merge Fields.
+		if ( preg_match( '/\*\|([A-Z_0-9:]+)\|\*/', $original ) ) {
+			// Check if http:// was prepended.
+			if ( 0 === strpos( $original, 'http://*|' ) ) {
+				$original = substr( $original, 7 );
+			}
+			return $original;
+		}
+		return $processed;
 	}
 }

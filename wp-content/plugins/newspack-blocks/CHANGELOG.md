@@ -1,3 +1,11 @@
+# [1.18.0](https://github.com/Automattic/newspack-blocks/compare/v1.17.1...v1.18.0) (2021-01-12)
+
+
+### Features
+
+* add optional 'continue reading' link underneath excerpts ([#656](https://github.com/Automattic/newspack-blocks/issues/656)) ([3c55a69](https://github.com/Automattic/newspack-blocks/commit/3c55a69d23d17c2cfb5e26385ffd27b0e31ba168))
+* custom endpoint for homepage posts in editor ([#661](https://github.com/Automattic/newspack-blocks/issues/661)) ([1f4880a](https://github.com/Automattic/newspack-blocks/commit/1f4880ad57e78098b719dc308f2358d5b84a0d13))
+
 ## [1.17.1](https://github.com/Automattic/newspack-blocks/compare/v1.17.0...v1.17.1) (2020-12-15)
 
 

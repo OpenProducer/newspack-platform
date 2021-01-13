@@ -519,6 +519,16 @@ h6.block-editor-rich-text__editable a {
   .newspack-newsletters__mailchimp-tags + .components-form-token-field__help {
     display: none; }
 
+.newspack-newsletters__list-select {
+  position: relative; }
+  .newspack-newsletters__list-select .components-spinner {
+    float: none;
+    right: 50%;
+    margin: 0;
+    position: absolute;
+    top: 50%;
+    transform: translateX(50%); }
+
 /**
  * Colors
  */
@@ -541,7 +551,7 @@ h6.block-editor-rich-text__editable a {
     padding-top: 8px;
     border-top: 1px solid #e2e4e7; }
 
-.newspack-newsletters__subject-textcontrol .components-base-control__label, .newspack-newsletters__to-selectcontrol .components-base-control__label {
+.newspack-newsletters__subject-textcontrol .components-base-control__label, .newspack-newsletters__to-selectcontrol .components-base-control__label, .newspack-newsletters__sendmode-radiocontrol .components-base-control__label {
   font-weight: 600; }
 
 .newspack-newsletters__send-test .components-button + .components-button {

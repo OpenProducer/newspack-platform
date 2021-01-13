@@ -80,6 +80,7 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 		$next_url = '';
 
 		Newspack_Blocks::filter_excerpt_length( $attributes );
+		Newspack_Blocks::filter_excerpt_more( $attributes );
 
 		// The Loop.
 		while ( $article_query->have_posts() ) {
@@ -99,6 +100,7 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 		}
 
 		Newspack_Blocks::remove_excerpt_length_filter();
+		Newspack_Blocks::remove_excerpt_more_filter();
 
 		// Provide next URL if there are more pages.
 		if ( $next_page <= $article_query->max_num_pages ) {

@@ -6,7 +6,7 @@
  * Author:          Automattic
  * Text Domain:     newspack-newsletters
  * Domain Path:     /languages
- * Version:         1.13.0
+ * Version:         1.16.2
  *
  * @package         Newspack_Newsletters
  */
@@ -28,6 +28,8 @@ require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/service-providers/mai
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-controller.php';
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php';
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-controller.php';
+require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php';
+require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor-controller.php';
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/class-newspack-newsletters-editor.php';
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/class-newspack-newsletters-layouts.php';
 require_once NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/includes/class-newspack-newsletters-settings.php';

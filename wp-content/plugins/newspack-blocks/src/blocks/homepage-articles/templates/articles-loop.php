@@ -18,6 +18,7 @@ call_user_func(
 		do_action( 'newspack_blocks_homepage_posts_before_render' );
 
 		Newspack_Blocks::filter_excerpt_length( $attributes );
+		Newspack_Blocks::filter_excerpt_more( $attributes );
 
 		while ( $article_query->have_posts() ) {
 			$article_query->the_post();
@@ -27,6 +28,7 @@ call_user_func(
 		}
 
 		Newspack_Blocks::remove_excerpt_length_filter();
+		Newspack_Blocks::remove_excerpt_more_filter();
 
 		do_action( 'newspack_blocks_homepage_posts_after_render' );
 		wp_reset_postdata();

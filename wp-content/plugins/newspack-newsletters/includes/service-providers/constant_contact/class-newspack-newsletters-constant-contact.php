@@ -384,6 +384,11 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	public function send( $new_status, $old_status, $post ) {
 		$post_id = $post->ID;
 
+		// Only run if the current service provider is Constant Contact.
+		if ( 'constant_contact' !== get_option( 'newspack_newsletters_service_provider', false ) ) {
+			return;
+		}
+
 		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
 			return new WP_Error(
 				'newspack_newsletters_incorrect_post_type',

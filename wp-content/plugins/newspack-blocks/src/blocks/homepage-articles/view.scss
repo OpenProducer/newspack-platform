@@ -549,7 +549,8 @@ amp-script .wpnbha {
 			font-size: 1em;
 		}
 		.newspack-post-subtitle,
-		.entry-wrapper p {
+		.entry-wrapper p,
+		.entry-wrapper .more-link {
 			font-size: 0.8em;
 		}
 		.entry-meta {
@@ -575,6 +576,7 @@ amp-script .wpnbha {
 			font-size: 0.7em;
 		}
 		.entry-wrapper p,
+		.entry-wrapper .more-link,
 		.entry-meta {
 			font-size: 0.7em;
 		}
@@ -593,7 +595,8 @@ amp-script .wpnbha {
 
 	&.ts-1 article {
 		.entry-title,
-		.entry-wrapper p {
+		.entry-wrapper p,
+		.entry-wrapper .more-link {
 			font-size: 0.7em;
 		}
 		.newspack-post-subtitle {

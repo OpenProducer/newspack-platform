@@ -14,6 +14,14 @@
       "type": "number",
       "default": 55
     },
+    "showReadMore": {
+      "type": "boolean",
+      "default": false
+    },
+    "readMoreLabel": {
+      "type": "string",
+      "default": "Keep reading"
+    },
     "showDate": {
       "type": "boolean",
       "default": true

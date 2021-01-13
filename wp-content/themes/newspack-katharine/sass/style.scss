@@ -5,7 +5,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.25.0
+Version: 1.26.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -254,15 +254,17 @@ figcaption,
 	border-width: 0;
 	position: relative;
 
+	blockquote p,
+	&.is-style-solid-color blockquote p {
+		@include media( tablet ) {
+			font-size: $font__size-xl;
+		}
+	}
+
 	blockquote {
 		font-weight: bold;
 		p {
 			font-style: normal;
-			font-size: $font__size-lg;
-
-			@include media( tablet ) {
-				font-size: $font__size-xl;
-			}
 		}
 	}
 
