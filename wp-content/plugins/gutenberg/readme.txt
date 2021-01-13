@@ -1,9 +1,9 @@
 === Gutenberg ===
 Contributors: matveb, joen, karmatosed
-Requires at least: 5.4.0
+Requires at least: 5.5.0
 Tested up to: 5.5
 Requires PHP: 5.6
-Stable tag: 9.5.1
+Stable tag: 9.7.0
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -57,4 +57,4 @@ View <a href="https://developer.wordpress.org/block-editor/principles/versions-i
 
 == Changelog ==
 
-To read the changelog for Gutenberg 9.5.2, please navigate to the <a href="https://github.com/WordPress/gutenberg/releases/tag/v9.5.2">release page</a>.
+To read the changelog for Gutenberg 9.7.1, please navigate to the <a href="https://github.com/WordPress/gutenberg/releases/tag/v9.7.1">release page</a>.

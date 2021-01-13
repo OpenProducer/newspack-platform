@@ -514,4 +514,8 @@ https://github.com/thoughtbot/bourbon
   fill: #eec74f;
 }
 
+#jp-authenticate-no_user_test_mode {
+  display: none;
+}
+
 /*# sourceMappingURL=jetpack-banners.css.map */

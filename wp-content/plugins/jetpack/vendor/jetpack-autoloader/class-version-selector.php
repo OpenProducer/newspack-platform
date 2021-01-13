@@ -5,7 +5,7 @@
  * @package automattic/jetpack-autoloader
  */
 
-namespace Automattic\Jetpack\Autoloader\jp2aa52323e0b287da03f99e87bcdacaad;
+namespace Automattic\Jetpack\Autoloader\jpa35837708a7acdd1ffb0e38ef898764f;
 
  // phpcs:ignore
 
@@ -23,7 +23,7 @@ class Version_Selector {
 	 * @param String $compare_version The package version that is being evaluated to
 	 *                                determine if the version needs to be updated.
 	 *
-	 * @return Boolean Returns true if the selected package version should be updated,
+	 * @return bool Returns true if the selected package version should be updated,
 	 *                 else false.
 	 */
 	public function is_version_update_required( $selected_version, $compare_version ) {
@@ -57,7 +57,7 @@ class Version_Selector {
 	 *
 	 * @param String $version The package version.
 	 *
-	 * @return Boolean True if the version is a dev version, else false.
+	 * @return bool True if the version is a dev version, else false.
 	 */
 	private function is_package_version_dev( $version ) {
 		if ( 'dev-' === substr( $version, 0, 4 ) || '9999999-dev' === $version ) {
