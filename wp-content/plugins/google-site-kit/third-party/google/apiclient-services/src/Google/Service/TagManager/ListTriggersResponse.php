@@ -32,14 +32,14 @@ class Google_Service_TagManager_ListTriggersResponse extends \Google\Site_Kit_De
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_TagManager_Trigger
+     * @param Google_Service_TagManager_Trigger[]
      */
     public function setTrigger($trigger)
     {
         $this->trigger = $trigger;
     }
     /**
-     * @return Google_Service_TagManager_Trigger
+     * @return Google_Service_TagManager_Trigger[]
      */
     public function getTrigger()
     {

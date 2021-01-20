@@ -29,28 +29,28 @@ class Google_Service_AnalyticsReporting_Pivot extends \Google\Site_Kit_Dependenc
     protected $metricsDataType = 'array';
     public $startGroup;
     /**
-     * @param Google_Service_AnalyticsReporting_DimensionFilterClause
+     * @param Google_Service_AnalyticsReporting_DimensionFilterClause[]
      */
     public function setDimensionFilterClauses($dimensionFilterClauses)
     {
         $this->dimensionFilterClauses = $dimensionFilterClauses;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_DimensionFilterClause
+     * @return Google_Service_AnalyticsReporting_DimensionFilterClause[]
      */
     public function getDimensionFilterClauses()
     {
         return $this->dimensionFilterClauses;
     }
     /**
-     * @param Google_Service_AnalyticsReporting_Dimension
+     * @param Google_Service_AnalyticsReporting_Dimension[]
      */
     public function setDimensions($dimensions)
     {
         $this->dimensions = $dimensions;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_Dimension
+     * @return Google_Service_AnalyticsReporting_Dimension[]
      */
     public function getDimensions()
     {
@@ -65,14 +65,14 @@ class Google_Service_AnalyticsReporting_Pivot extends \Google\Site_Kit_Dependenc
         return $this->maxGroupCount;
     }
     /**
-     * @param Google_Service_AnalyticsReporting_Metric
+     * @param Google_Service_AnalyticsReporting_Metric[]
      */
     public function setMetrics($metrics)
     {
         $this->metrics = $metrics;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_Metric
+     * @return Google_Service_AnalyticsReporting_Metric[]
      */
     public function getMetrics()
     {

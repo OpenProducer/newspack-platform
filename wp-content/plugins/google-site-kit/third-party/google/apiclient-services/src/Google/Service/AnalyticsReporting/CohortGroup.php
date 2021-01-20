@@ -24,14 +24,14 @@ class Google_Service_AnalyticsReporting_CohortGroup extends \Google\Site_Kit_Dep
     protected $cohortsDataType = 'array';
     public $lifetimeValue;
     /**
-     * @param Google_Service_AnalyticsReporting_Cohort
+     * @param Google_Service_AnalyticsReporting_Cohort[]
      */
     public function setCohorts($cohorts)
     {
         $this->cohorts = $cohorts;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_Cohort
+     * @return Google_Service_AnalyticsReporting_Cohort[]
      */
     public function getCohorts()
     {

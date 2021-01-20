@@ -70,14 +70,14 @@ class Google_Service_AdSense_Account extends \Google\Site_Kit_Dependencies\Googl
         return $this->premium;
     }
     /**
-     * @param Google_Service_AdSense_Account
+     * @param Google_Service_AdSense_Account[]
      */
     public function setSubAccounts($subAccounts)
     {
         $this->subAccounts = $subAccounts;
     }
     /**
-     * @return Google_Service_AdSense_Account
+     * @return Google_Service_AdSense_Account[]
      */
     public function getSubAccounts()
     {

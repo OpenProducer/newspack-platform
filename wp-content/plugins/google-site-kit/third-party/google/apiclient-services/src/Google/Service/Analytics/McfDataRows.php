@@ -24,14 +24,14 @@ class Google_Service_Analytics_McfDataRows extends \Google\Site_Kit_Dependencies
     protected $conversionPathValueDataType = 'array';
     public $primitiveValue;
     /**
-     * @param Google_Service_Analytics_McfDataRowsConversionPathValue
+     * @param Google_Service_Analytics_McfDataRowsConversionPathValue[]
      */
     public function setConversionPathValue($conversionPathValue)
     {
         $this->conversionPathValue = $conversionPathValue;
     }
     /**
-     * @return Google_Service_Analytics_McfDataRowsConversionPathValue
+     * @return Google_Service_Analytics_McfDataRowsConversionPathValue[]
      */
     public function getConversionPathValue()
     {

@@ -61,7 +61,7 @@ class FirePHPHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
      *
      * @see createHeader()
      * @param  array  $record
-     * @return string
+     * @return array
      */
     protected function createRecordHeader(array $record)
     {

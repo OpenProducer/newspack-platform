@@ -58,14 +58,14 @@ class Google_Service_TagManager_Zone extends \Google\Site_Kit_Dependencies\Googl
         return $this->boundary;
     }
     /**
-     * @param Google_Service_TagManager_ZoneChildContainer
+     * @param Google_Service_TagManager_ZoneChildContainer[]
      */
     public function setChildContainer($childContainer)
     {
         $this->childContainer = $childContainer;
     }
     /**
-     * @return Google_Service_TagManager_ZoneChildContainer
+     * @return Google_Service_TagManager_ZoneChildContainer[]
      */
     public function getChildContainer()
     {

@@ -47,14 +47,14 @@ class Google_Service_AdSense_AdsenseReportsGenerateResponse extends \Google\Site
         return $this->endDate;
     }
     /**
-     * @param Google_Service_AdSense_AdsenseReportsGenerateResponseHeaders
+     * @param Google_Service_AdSense_AdsenseReportsGenerateResponseHeaders[]
      */
     public function setHeaders($headers)
     {
         $this->headers = $headers;
     }
     /**
-     * @return Google_Service_AdSense_AdsenseReportsGenerateResponseHeaders
+     * @return Google_Service_AdSense_AdsenseReportsGenerateResponseHeaders[]
      */
     public function getHeaders()
     {

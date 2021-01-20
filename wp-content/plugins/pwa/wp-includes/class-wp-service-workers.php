@@ -13,7 +13,7 @@
  *
  * @see WP_Dependencies
  */
-class WP_Service_Workers implements WP_Service_Worker_Registry_Aware {
+final class WP_Service_Workers {
 
 	/**
 	 * Param for service workers.
@@ -51,19 +51,50 @@ class WP_Service_Workers implements WP_Service_Worker_Registry_Aware {
 	protected $scripts;
 
 	/**
+	 * Caching routes.
+	 *
+	 * @since 0.6
+	 * @var WP_Service_Worker_Caching_Routes
+	 */
+	protected $caching_routes;
+
+	/**
+	 * Precaching routes.
+	 *
+	 * @since 0.6
+	 * @var WP_Service_Worker_Precaching_Routes
+	 */
+	protected $precaching_routes;
+
+	/**
 	 * Constructor.
 	 *
 	 * Instantiates the service worker scripts registry.
 	 */
 	public function __construct() {
+		$this->precaching_routes = new WP_Service_Worker_Precaching_Routes();
+		$this->caching_routes    = new WP_Service_Worker_Caching_Routes();
+
 		$components = array(
 			'configuration'      => new WP_Service_Worker_Configuration_Component(),
+			'precaching_routes'  => new WP_Service_Worker_Precaching_Routes_Component( $this->precaching_routes ),
+			'caching_routes'     => new WP_Service_Worker_Caching_Routes_Component( $this->caching_routes ),
 			'navigation_routing' => new WP_Service_Worker_Navigation_Routing_Component(),
-			'precaching_routes'  => new WP_Service_Worker_Precaching_Routes_Component(),
-			'caching_routes'     => new WP_Service_Worker_Caching_Routes_Component(),
 		);
 
-		$this->scripts = new WP_Service_Worker_Scripts( $components );
+		if ( get_option( 'offline_browsing' ) ) {
+			$components = array_merge(
+				$components,
+				array(
+					'core_asset_caching'     => new WP_Service_Worker_Core_Asset_Caching_Component(),
+					'theme_asset_caching'    => new WP_Service_Worker_Theme_Asset_Caching_Component(),
+					'plugin_asset_caching'   => new WP_Service_Worker_Plugin_Asset_Caching_Component(),
+					'uploaded_image_caching' => new WP_Service_Worker_Uploaded_Image_Caching_Component(),
+				)
+			);
+		}
+
+		$this->scripts = new WP_Service_Worker_Scripts( $this->caching_routes, $this->precaching_routes, $components );
 	}
 
 	/**
@@ -113,8 +144,11 @@ class WP_Service_Workers implements WP_Service_Worker_Registry_Aware {
 		 */
 		@header( 'Cache-Control: no-cache' ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged
 
+		@header( 'X-Robots-Tag: noindex, follow' ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged
+
 		@header( 'Content-Type: text/javascript; charset=utf-8' ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged
 
+		ob_start(); // Start guarding against themes/plugins printing anything at wp_enqueue_scripts admin_enqueue_scripts.
 		if ( ! is_admin() ) {
 			wp_enqueue_scripts();
 
@@ -142,18 +176,28 @@ class WP_Service_Workers implements WP_Service_Worker_Registry_Aware {
 			 */
 			do_action( 'wp_admin_service_worker', $this->scripts );
 		}
-
-		printf( "/* PWA v%s-%s */\n\n", esc_html( PWA_VERSION ), is_admin() ? 'admin' : 'front' );
+		ob_end_clean(); // Finish guarding against themes/plugins printing anything at wp_enqueue_scripts admin_enqueue_scripts.
 
 		ob_start();
+		printf( "/* PWA v%s-%s */\n\n", esc_html( PWA_VERSION ), is_admin() ? 'admin' : 'front' );
+		echo '/* ';
+		printf(
+			esc_js(
+				/* translators: %s is the WordPress action hook */
+				__( 'Note: This file is dynamically generated. To manipulate the contents of this file, use the `%s` action in WordPress.', 'pwa' )
+			),
+			is_admin() ? 'wp_admin_service_worker' : 'wp_front_service_worker'
+		);
+		echo " /*\n\n";
 		$this->scripts->do_items( array_keys( $this->scripts->registered ) );
 		$output = ob_get_clean();
 
 		$file_hash = md5( $output );
-		@header( "ETag: $file_hash" ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged
+		$etag      = sprintf( '"%s"', $file_hash );
+		@header( "ETag: $etag" ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged
 
-		$etag_header = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? trim( $_SERVER['HTTP_IF_NONE_MATCH'] ) : false;
-		if ( $file_hash === $etag_header ) {
+		$if_none_match = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? trim( wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) : false;
+		if ( $if_none_match === $etag ) {
 			status_header( 304 );
 			return;
 		}

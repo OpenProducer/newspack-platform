@@ -24,14 +24,14 @@ class Google_Service_TagManager_Condition extends \Google\Site_Kit_Dependencies\
     protected $parameterDataType = 'array';
     public $type;
     /**
-     * @param Google_Service_TagManager_Parameter
+     * @param Google_Service_TagManager_Parameter[]
      */
     public function setParameter($parameter)
     {
         $this->parameter = $parameter;
     }
     /**
-     * @return Google_Service_TagManager_Parameter
+     * @return Google_Service_TagManager_Parameter[]
      */
     public function getParameter()
     {

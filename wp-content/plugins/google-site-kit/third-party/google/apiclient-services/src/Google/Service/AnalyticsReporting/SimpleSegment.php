@@ -23,14 +23,14 @@ class Google_Service_AnalyticsReporting_SimpleSegment extends \Google\Site_Kit_D
     protected $orFiltersForSegmentType = 'Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting_OrFiltersForSegment';
     protected $orFiltersForSegmentDataType = 'array';
     /**
-     * @param Google_Service_AnalyticsReporting_OrFiltersForSegment
+     * @param Google_Service_AnalyticsReporting_OrFiltersForSegment[]
      */
     public function setOrFiltersForSegment($orFiltersForSegment)
     {
         $this->orFiltersForSegment = $orFiltersForSegment;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_OrFiltersForSegment
+     * @return Google_Service_AnalyticsReporting_OrFiltersForSegment[]
      */
     public function getOrFiltersForSegment()
     {

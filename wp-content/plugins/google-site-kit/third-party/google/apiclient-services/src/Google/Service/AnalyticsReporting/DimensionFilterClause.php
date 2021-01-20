@@ -24,14 +24,14 @@ class Google_Service_AnalyticsReporting_DimensionFilterClause extends \Google\Si
     protected $filtersDataType = 'array';
     public $operator;
     /**
-     * @param Google_Service_AnalyticsReporting_DimensionFilter
+     * @param Google_Service_AnalyticsReporting_DimensionFilter[]
      */
     public function setFilters($filters)
     {
         $this->filters = $filters;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_DimensionFilter
+     * @return Google_Service_AnalyticsReporting_DimensionFilter[]
      */
     public function getFilters()
     {

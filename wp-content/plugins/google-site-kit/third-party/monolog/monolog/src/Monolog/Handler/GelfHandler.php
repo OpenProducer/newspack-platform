@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Monolog\Formatter\GelfMessageFormatter;
 class GelfHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
 {
     /**
-     * @var Publisher the publisher object that sends the message to the server
+     * @var Publisher|PublisherInterface|IMessagePublisher the publisher object that sends the message to the server
      */
     protected $publisher;
     /**

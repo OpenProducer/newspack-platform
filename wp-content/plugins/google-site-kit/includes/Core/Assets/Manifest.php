@@ -3,7 +3,7 @@
  * Class Google\Site_Kit\Core\Assets\Manifest
  *
  * @package   GoogleSite_Kit
- * @copyright 2020 Google LLC
+ * @copyright 2021 Google LLC
  * @license   https://www.apache.org/licenses/LICENSE-2.0 Apache License 2.0
  * @link      https://sitekit.withgoogle.com
  */
@@ -20,32 +20,32 @@ namespace Google\Site_Kit\Core\Assets;
 class Manifest {
 
 	public static $assets = array(
-		"googlesitekit-vendor"                     => "googlesitekit-vendor.fe08eacbe1cbf68ebead.js",
+		"googlesitekit-vendor"                     => "googlesitekit-vendor.00eae01e88041675879b.js",
 		"runtime"                                  => "runtime.11204cf5d95ff56353f0.js",
-		"googlesitekit-activation"                 => "googlesitekit-activation.697ed47a813408286704.js",
-		"googlesitekit-adminbar"                   => "googlesitekit-adminbar.0fe0da7e5793386be244.js",
-		"googlesitekit-api"                        => "googlesitekit-api.84e73869829a1d860e4b.js",
-		"googlesitekit-base"                       => "googlesitekit-base.a8fbd8da1ba062106e1c.js",
-		"googlesitekit-dashboard"                  => "googlesitekit-dashboard.44a522d9e3ec22914437.js",
-		"googlesitekit-dashboard-details"          => "googlesitekit-dashboard-details.deb6c9a283fd7a6a9888.js",
-		"googlesitekit-dashboard-splash"           => "googlesitekit-dashboard-splash.2250b6dbdeda1f133b23.js",
-		"googlesitekit-data"                       => "googlesitekit-data.eba68ba48f2ad9aef326.js",
-		"googlesitekit-datastore-forms"            => "googlesitekit-datastore-forms.f102c25c14d2a948f2ea.js",
-		"googlesitekit-datastore-site"             => "googlesitekit-datastore-site.dc9f1acc871dbf0c2b6a.js",
-		"googlesitekit-datastore-user"             => "googlesitekit-datastore-user.2ec7ad1a15056afb5759.js",
-		"googlesitekit-module"                     => "googlesitekit-module.ca5191ed305cdb3a4b41.js",
-		"googlesitekit-modules"                    => "googlesitekit-modules.36f88a3ba46f69e37c9a.js",
-		"googlesitekit-modules-adsense"            => "googlesitekit-modules-adsense.5fa8400879a0568eeb08.js",
-		"googlesitekit-modules-analytics"          => "googlesitekit-modules-analytics.19af34818af0e8ff5af6.js",
-		"googlesitekit-modules-optimize"           => "googlesitekit-modules-optimize.57a53bdee2e9f683c19e.js",
-		"googlesitekit-modules-pagespeed-insights" => "googlesitekit-modules-pagespeed-insights.8adc60d607aa42ad57a3.js",
-		"googlesitekit-modules-search-console"     => "googlesitekit-modules-search-console.948bfe7b780d48ebfb86.js",
-		"googlesitekit-modules-tagmanager"         => "googlesitekit-modules-tagmanager.1a3b0d0ca9ef967f7c59.js",
-		"googlesitekit-settings"                   => "googlesitekit-settings.89ef64bd2e9b9c5ab283.js",
-		"googlesitekit-user-input"                 => "googlesitekit-user-input.b04b387d052f735bf0b8.js",
-		"googlesitekit-widgets"                    => "googlesitekit-widgets.7133ace0bbb350be566d.js",
-		"googlesitekit-wp-dashboard"               => "googlesitekit-wp-dashboard.a5416a9b325950369252.js",
-		"pagead2.ads"                              => "pagead2.ads.a89d9ab7b15a82d7d4af.js",
+		"googlesitekit-activation"                 => "googlesitekit-activation.10c436e743f5e8eebfdf.js",
+		"googlesitekit-adminbar"                   => "googlesitekit-adminbar.a6873c046cb43826502d.js",
+		"googlesitekit-api"                        => "googlesitekit-api.b98d6d5ea6832a1807e6.js",
+		"googlesitekit-base"                       => "googlesitekit-base.ae5234589782dc575627.js",
+		"googlesitekit-dashboard"                  => "googlesitekit-dashboard.b841c7e88a1afb1326ce.js",
+		"googlesitekit-dashboard-details"          => "googlesitekit-dashboard-details.7998f0aa2bba8d2057e0.js",
+		"googlesitekit-dashboard-splash"           => "googlesitekit-dashboard-splash.35417738009744742159.js",
+		"googlesitekit-data"                       => "googlesitekit-data.59e9f606f3db20032314.js",
+		"googlesitekit-datastore-forms"            => "googlesitekit-datastore-forms.d2a64b99a16cbf234cc3.js",
+		"googlesitekit-datastore-site"             => "googlesitekit-datastore-site.7ac12a7598f591db4bf3.js",
+		"googlesitekit-datastore-user"             => "googlesitekit-datastore-user.96b4b7f75febb8cb9297.js",
+		"googlesitekit-module"                     => "googlesitekit-module.54d5c6941ff88d698b7d.js",
+		"googlesitekit-modules"                    => "googlesitekit-modules.b50c8770780699849c05.js",
+		"googlesitekit-modules-adsense"            => "googlesitekit-modules-adsense.cd9f6c5e8c2021d9d321.js",
+		"googlesitekit-modules-analytics"          => "googlesitekit-modules-analytics.da30048956e379e44f92.js",
+		"googlesitekit-modules-optimize"           => "googlesitekit-modules-optimize.9454244dc0a3b16291b8.js",
+		"googlesitekit-modules-pagespeed-insights" => "googlesitekit-modules-pagespeed-insights.957a84a13bcd10316840.js",
+		"googlesitekit-modules-search-console"     => "googlesitekit-modules-search-console.432612068afe1520d64b.js",
+		"googlesitekit-modules-tagmanager"         => "googlesitekit-modules-tagmanager.ccaff723db6a1eab9c55.js",
+		"googlesitekit-settings"                   => "googlesitekit-settings.539682d3332a5b9aae4f.js",
+		"googlesitekit-user-input"                 => "googlesitekit-user-input.c4c93d8308cbd64d7b47.js",
+		"googlesitekit-widgets"                    => "googlesitekit-widgets.96f3ffd6e2d11b2d5630.js",
+		"googlesitekit-wp-dashboard"               => "googlesitekit-wp-dashboard.4dd2d0fc15071023945b.js",
+		"pagead2.ads"                              => "pagead2.ads.e9b2b8b75dd524d50d55.js",
 	);
 
 }

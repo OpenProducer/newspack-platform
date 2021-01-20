@@ -25,28 +25,28 @@ class Google_Service_Analytics_GaDataDataTable extends \Google\Site_Kit_Dependen
     protected $rowsType = 'Google\Site_Kit_Dependencies\Google_Service_Analytics_GaDataDataTableRows';
     protected $rowsDataType = 'array';
     /**
-     * @param Google_Service_Analytics_GaDataDataTableCols
+     * @param Google_Service_Analytics_GaDataDataTableCols[]
      */
     public function setCols($cols)
     {
         $this->cols = $cols;
     }
     /**
-     * @return Google_Service_Analytics_GaDataDataTableCols
+     * @return Google_Service_Analytics_GaDataDataTableCols[]
      */
     public function getCols()
     {
         return $this->cols;
     }
     /**
-     * @param Google_Service_Analytics_GaDataDataTableRows
+     * @param Google_Service_Analytics_GaDataDataTableRows[]
      */
     public function setRows($rows)
     {
         $this->rows = $rows;
     }
     /**
-     * @return Google_Service_Analytics_GaDataDataTableRows
+     * @return Google_Service_Analytics_GaDataDataTableRows[]
      */
     public function getRows()
     {

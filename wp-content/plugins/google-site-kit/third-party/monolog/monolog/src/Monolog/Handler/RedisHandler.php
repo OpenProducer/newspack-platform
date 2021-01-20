@@ -33,7 +33,7 @@ class RedisHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
      * @param string                $key     The key name to push records to
      * @param int                   $level   The minimum logging level at which this handler will be triggered
      * @param bool                  $bubble  Whether the messages that are handled can bubble up the stack or not
-     * @param int                   $capSize Number of entries to limit list size to
+     * @param int|false             $capSize Number of entries to limit list size to
      */
     public function __construct($redis, $key, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, $bubble = \true, $capSize = \false)
     {

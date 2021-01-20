@@ -32,14 +32,14 @@ class Google_Service_TagManager_ListVariablesResponse extends \Google\Site_Kit_D
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_TagManager_Variable
+     * @param Google_Service_TagManager_Variable[]
      */
     public function setVariable($variable)
     {
         $this->variable = $variable;
     }
     /**
-     * @return Google_Service_TagManager_Variable
+     * @return Google_Service_TagManager_Variable[]
      */
     public function getVariable()
     {

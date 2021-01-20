@@ -84,14 +84,21 @@ function wp_register_service_worker_caching_route( $route, $args = array() ) {
  *
  * @param int $scope Scope for which service worker to output. Can be WP_Service_Workers::SCOPE_FRONT (default) or WP_Service_Workers::SCOPE_ADMIN.
  * @return string Service Worker URL.
+ * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
  */
 function wp_get_service_worker_url( $scope = WP_Service_Workers::SCOPE_FRONT ) {
+	global $wp_rewrite;
+
 	if ( WP_Service_Workers::SCOPE_FRONT !== $scope && WP_Service_Workers::SCOPE_ADMIN !== $scope ) {
 		_doing_it_wrong( __FUNCTION__, esc_html__( 'Scope must be either WP_Service_Workers::SCOPE_FRONT or WP_Service_Workers::SCOPE_ADMIN.', 'pwa' ), '?' );
 		$scope = WP_Service_Workers::SCOPE_FRONT;
 	}
 
 	if ( WP_Service_Workers::SCOPE_FRONT === $scope ) {
+		if ( $wp_rewrite->using_permalinks() ) {
+			return home_url( '/wp.serviceworker' );
+		}
+
 		return add_query_arg(
 			array( WP_Service_Workers::QUERY_VAR => $scope ),
 			home_url( '/', 'relative' )
@@ -181,9 +188,20 @@ function wp_print_service_workers() {
  * @see wp_ajax_wp_service_worker()
  *
  * @param WP_Query $query Query.
+ * @global WP $wp
  */
 function wp_service_worker_loaded( WP_Query $query ) {
-	if ( $query->is_main_query() && $query->get( WP_Service_Workers::QUERY_VAR ) ) {
+	global $wp;
+	if ( ! $query->is_main_query() ) {
+		return;
+	}
+
+	// Handle case where rewrite rules have not yet been flushed.
+	if ( 'wp.serviceworker' === $wp->request ) {
+		$query->set( WP_Service_Workers::QUERY_VAR, 1 );
+	}
+
+	if ( $query->get( WP_Service_Workers::QUERY_VAR ) ) {
 		wp_service_workers()->serve_request();
 		die();
 	}
@@ -200,18 +218,6 @@ function wp_service_worker_loaded( WP_Query $query ) {
 function wp_ajax_wp_service_worker() {
 	wp_service_workers()->serve_request();
 	die();
-}
-
-/**
- * JSON-encodes with pretty printing.
- *
- * @since 0.2
- *
- * @param mixed $data Data.
- * @return string JSON.
- */
-function wp_service_worker_json_encode( $data ) {
-	return wp_json_encode( $data, 128 | 64 /* JSON_PRETTY_PRINT | JSON_UNESCAPED_SLASHES */ );
 }
 
 /**

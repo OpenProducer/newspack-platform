@@ -40,14 +40,14 @@ class Google_Service_Analytics_McfData extends \Google\Site_Kit_Dependencies\Goo
     public $totalResults;
     public $totalsForAllResults;
     /**
-     * @param Google_Service_Analytics_McfDataColumnHeaders
+     * @param Google_Service_Analytics_McfDataColumnHeaders[]
      */
     public function setColumnHeaders($columnHeaders)
     {
         $this->columnHeaders = $columnHeaders;
     }
     /**
-     * @return Google_Service_Analytics_McfDataColumnHeaders
+     * @return Google_Service_Analytics_McfDataColumnHeaders[]
      */
     public function getColumnHeaders()
     {
@@ -130,14 +130,14 @@ class Google_Service_Analytics_McfData extends \Google\Site_Kit_Dependencies\Goo
         return $this->query;
     }
     /**
-     * @param Google_Service_Analytics_McfDataRows
+     * @param Google_Service_Analytics_McfDataRows[]
      */
     public function setRows($rows)
     {
         $this->rows = $rows;
     }
     /**
-     * @return Google_Service_Analytics_McfDataRows
+     * @return Google_Service_Analytics_McfDataRows[]
      */
     public function getRows()
     {

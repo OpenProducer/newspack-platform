@@ -88,14 +88,14 @@ class Google_Service_AnalyticsReporting_Activity extends \Google\Site_Kit_Depend
         return $this->channelGrouping;
     }
     /**
-     * @param Google_Service_AnalyticsReporting_CustomDimension
+     * @param Google_Service_AnalyticsReporting_CustomDimension[]
      */
     public function setCustomDimension($customDimension)
     {
         $this->customDimension = $customDimension;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_CustomDimension
+     * @return Google_Service_AnalyticsReporting_CustomDimension[]
      */
     public function getCustomDimension()
     {

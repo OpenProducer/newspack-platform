@@ -59,14 +59,14 @@ class Google_Service_PeopleService_PersonMetadata extends \Google\Site_Kit_Depen
         return $this->previousResourceNames;
     }
     /**
-     * @param Google_Service_PeopleService_Source
+     * @param Google_Service_PeopleService_Source[]
      */
     public function setSources($sources)
     {
         $this->sources = $sources;
     }
     /**
-     * @return Google_Service_PeopleService_Source
+     * @return Google_Service_PeopleService_Source[]
      */
     public function getSources()
     {

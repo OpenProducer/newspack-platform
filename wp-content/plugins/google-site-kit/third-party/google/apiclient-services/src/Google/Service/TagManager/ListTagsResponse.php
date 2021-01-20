@@ -32,14 +32,14 @@ class Google_Service_TagManager_ListTagsResponse extends \Google\Site_Kit_Depend
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_TagManager_Tag
+     * @param Google_Service_TagManager_Tag[]
      */
     public function setTag($tag)
     {
         $this->tag = $tag;
     }
     /**
-     * @return Google_Service_TagManager_Tag
+     * @return Google_Service_TagManager_Tag[]
      */
     public function getTag()
     {

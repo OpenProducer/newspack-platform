@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 4.9.0\n"
+"Project-Id-Version: WooCommerce 4.9.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2021-01-11T17:55:52+00:00\n"
+"POT-Creation-Date: 2021-01-19T10:15:41+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.4.0\n"
 "X-Domain: woocommerce\n"
@@ -11090,7 +11090,7 @@ msgstr ""
 #. translators: %d: downloads count
 #: includes/admin/helper/class-wc-helper.php:367
 #: includes/admin/helper/views/html-main.php:109
-#: includes/class-wc-emails.php:458
+#: includes/class-wc-emails.php:449
 #: includes/legacy/abstract-wc-legacy-order.php:508
 #: includes/wc-account-functions.php:221
 #: includes/wc-template-functions.php:3335
@@ -11919,7 +11919,7 @@ msgstr ""
 #: includes/admin/reports/class-wc-report-downloads.php:84
 #: includes/admin/reports/class-wc-report-downloads.php:219
 #: includes/admin/reports/class-wc-report-stock.php:173
-#: includes/class-wc-emails.php:456
+#: includes/class-wc-emails.php:447
 #: includes/class-wc-post-types.php:315
 #: includes/class-wc-privacy-exporters.php:353
 #: includes/data-stores/class-wc-product-data-store-cpt.php:121
@@ -18341,7 +18341,7 @@ msgstr ""
 msgid "Go to shop"
 msgstr ""
 
-#: includes/class-wc-emails.php:457
+#: includes/class-wc-emails.php:448
 #: includes/wc-account-functions.php:220
 #: includes/wc-account-functions.php:244
 #: packages/woocommerce-admin/src/API/Reports/Coupons/Controller.php:303
@@ -18349,30 +18349,30 @@ msgstr ""
 msgid "Expires"
 msgstr ""
 
-#: includes/class-wc-emails.php:634
+#: includes/class-wc-emails.php:625
 msgid "Product low in stock"
 msgstr ""
 
 #. translators: 1: product name 2: items in stock
-#: includes/class-wc-emails.php:637
+#: includes/class-wc-emails.php:628
 msgid "%1$s is low in stock. There are %2$d left."
 msgstr ""
 
-#: includes/class-wc-emails.php:672
+#: includes/class-wc-emails.php:663
 msgid "Product out of stock"
 msgstr ""
 
 #. translators: %s: product name
-#: includes/class-wc-emails.php:674
+#: includes/class-wc-emails.php:665
 msgid "%s is out of stock."
 msgstr ""
 
-#: includes/class-wc-emails.php:710
+#: includes/class-wc-emails.php:701
 msgid "Product backorder"
 msgstr ""
 
 #. translators: 1: product quantity 2: product name 3: order number
-#: includes/class-wc-emails.php:712
+#: includes/class-wc-emails.php:703
 msgid "%1$s units of %2$s have been backordered in order #%3$s."
 msgstr ""
 

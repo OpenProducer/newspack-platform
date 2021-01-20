@@ -34,14 +34,14 @@ class Google_Service_AnalyticsReporting_GetReportsResponse extends \Google\Site_
         return $this->queryCost;
     }
     /**
-     * @param Google_Service_AnalyticsReporting_Report
+     * @param Google_Service_AnalyticsReporting_Report[]
      */
     public function setReports($reports)
     {
         $this->reports = $reports;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_Report
+     * @return Google_Service_AnalyticsReporting_Report[]
      */
     public function getReports()
     {

@@ -34,14 +34,14 @@ class Google_Service_AdSense_SavedReports extends \Google\Site_Kit_Dependencies\
         return $this->etag;
     }
     /**
-     * @param Google_Service_AdSense_SavedReport
+     * @param Google_Service_AdSense_SavedReport[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_AdSense_SavedReport
+     * @return Google_Service_AdSense_SavedReport[]
      */
     public function getItems()
     {

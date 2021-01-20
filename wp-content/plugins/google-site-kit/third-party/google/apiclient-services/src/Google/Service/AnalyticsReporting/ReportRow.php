@@ -32,14 +32,14 @@ class Google_Service_AnalyticsReporting_ReportRow extends \Google\Site_Kit_Depen
         return $this->dimensions;
     }
     /**
-     * @param Google_Service_AnalyticsReporting_DateRangeValues
+     * @param Google_Service_AnalyticsReporting_DateRangeValues[]
      */
     public function setMetrics($metrics)
     {
         $this->metrics = $metrics;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_DateRangeValues
+     * @return Google_Service_AnalyticsReporting_DateRangeValues[]
      */
     public function getMetrics()
     {

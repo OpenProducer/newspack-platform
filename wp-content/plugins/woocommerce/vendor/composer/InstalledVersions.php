@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => 'a6947d2f85c38e5b2a2f6c951a0dc79aaf4ee978',
+    'reference' => 'ad3c0383c1fa2f10ee150e60de65b537de5a5464',
     'name' => 'woocommerce/woocommerce',
   ),
   'versions' => 
@@ -127,7 +127,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => 'a6947d2f85c38e5b2a2f6c951a0dc79aaf4ee978',
+      'reference' => 'ad3c0383c1fa2f10ee150e60de65b537de5a5464',
     ),
     'woocommerce/woocommerce-admin' => 
     array (

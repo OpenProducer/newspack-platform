@@ -249,14 +249,14 @@ class Google_Service_Analytics_Experiment extends \Google\Site_Kit_Dependencies\
         return $this->updated;
     }
     /**
-     * @param Google_Service_Analytics_ExperimentVariations
+     * @param Google_Service_Analytics_ExperimentVariations[]
      */
     public function setVariations($variations)
     {
         $this->variations = $variations;
     }
     /**
-     * @return Google_Service_Analytics_ExperimentVariations
+     * @return Google_Service_Analytics_ExperimentVariations[]
      */
     public function getVariations()
     {

@@ -8,7 +8,7 @@
 /**
  * WP_HTTPS_Detection class.
  */
-class WP_HTTPS_Detection {
+final class WP_HTTPS_Detection {
 
 	/**
 	 * The cron hook to check HTTPS support.
@@ -57,6 +57,16 @@ class WP_HTTPS_Detection {
 	 * Initializes the object.
 	 */
 	public function init() {
+		/**
+		 * Filter tag to disable HTTPS detection and UI, such as when redirection
+		 * is handled outside of WordPress.
+		 *
+		 * @param bool $disabled Disable detection and UI.
+		 */
+		if ( apply_filters( 'wp_https_detection_ui_disabled', false ) ) {
+			return;
+		}
+
 		add_action( 'init', array( $this, 'schedule_cron' ) );
 		add_action( self::CRON_HOOK, array( $this, 'update_https_support_options' ) );
 		add_filter( 'cron_request', array( $this, 'conditionally_prevent_sslverify' ), PHP_INT_MAX );

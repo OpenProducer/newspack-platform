@@ -32,14 +32,14 @@ class Google_Service_TagManager_ListUserPermissionsResponse extends \Google\Site
         return $this->nextPageToken;
     }
     /**
-     * @param Google_Service_TagManager_UserPermission
+     * @param Google_Service_TagManager_UserPermission[]
      */
     public function setUserPermission($userPermission)
     {
         $this->userPermission = $userPermission;
     }
     /**
-     * @return Google_Service_TagManager_UserPermission
+     * @return Google_Service_TagManager_UserPermission[]
      */
     public function getUserPermission()
     {

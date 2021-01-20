@@ -30,14 +30,14 @@ class Google_Service_Analytics_Experiments extends \Google\Site_Kit_Dependencies
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_Experiment
+     * @param Google_Service_Analytics_Experiment[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_Experiment
+     * @return Google_Service_Analytics_Experiment[]
      */
     public function getItems()
     {

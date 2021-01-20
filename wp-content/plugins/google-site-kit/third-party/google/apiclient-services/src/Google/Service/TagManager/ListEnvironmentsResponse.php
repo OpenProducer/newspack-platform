@@ -24,14 +24,14 @@ class Google_Service_TagManager_ListEnvironmentsResponse extends \Google\Site_Ki
     protected $environmentDataType = 'array';
     public $nextPageToken;
     /**
-     * @param Google_Service_TagManager_Environment
+     * @param Google_Service_TagManager_Environment[]
      */
     public function setEnvironment($environment)
     {
         $this->environment = $environment;
     }
     /**
-     * @return Google_Service_TagManager_Environment
+     * @return Google_Service_TagManager_Environment[]
      */
     public function getEnvironment()
     {

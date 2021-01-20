@@ -32,14 +32,14 @@ class Google_Service_AnalyticsReporting_SegmentSequenceStep extends \Google\Site
         return $this->matchType;
     }
     /**
-     * @param Google_Service_AnalyticsReporting_OrFiltersForSegment
+     * @param Google_Service_AnalyticsReporting_OrFiltersForSegment[]
      */
     public function setOrFiltersForSegment($orFiltersForSegment)
     {
         $this->orFiltersForSegment = $orFiltersForSegment;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_OrFiltersForSegment
+     * @return Google_Service_AnalyticsReporting_OrFiltersForSegment[]
      */
     public function getOrFiltersForSegment()
     {

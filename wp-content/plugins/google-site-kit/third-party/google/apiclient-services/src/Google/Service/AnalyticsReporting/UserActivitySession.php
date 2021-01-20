@@ -28,14 +28,14 @@ class Google_Service_AnalyticsReporting_UserActivitySession extends \Google\Site
     public $sessionDate;
     public $sessionId;
     /**
-     * @param Google_Service_AnalyticsReporting_Activity
+     * @param Google_Service_AnalyticsReporting_Activity[]
      */
     public function setActivities($activities)
     {
         $this->activities = $activities;
     }
     /**
-     * @return Google_Service_AnalyticsReporting_Activity
+     * @return Google_Service_AnalyticsReporting_Activity[]
      */
     public function getActivities()
     {

@@ -30,14 +30,14 @@ class Google_Service_Analytics_AccountSummaries extends \Google\Site_Kit_Depende
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_AccountSummary
+     * @param Google_Service_Analytics_AccountSummary[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_AccountSummary
+     * @return Google_Service_Analytics_AccountSummary[]
      */
     public function getItems()
     {

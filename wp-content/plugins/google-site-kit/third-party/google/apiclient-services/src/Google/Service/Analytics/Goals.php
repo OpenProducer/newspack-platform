@@ -30,14 +30,14 @@ class Google_Service_Analytics_Goals extends \Google\Site_Kit_Dependencies\Googl
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_Goal
+     * @param Google_Service_Analytics_Goal[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_Goal
+     * @return Google_Service_Analytics_Goal[]
      */
     public function getItems()
     {

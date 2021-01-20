@@ -56,28 +56,28 @@ class Google_Service_TagManager_ContainerVersion extends \Google\Site_Kit_Depend
         return $this->accountId;
     }
     /**
-     * @param Google_Service_TagManager_BuiltInVariable
+     * @param Google_Service_TagManager_BuiltInVariable[]
      */
     public function setBuiltInVariable($builtInVariable)
     {
         $this->builtInVariable = $builtInVariable;
     }
     /**
-     * @return Google_Service_TagManager_BuiltInVariable
+     * @return Google_Service_TagManager_BuiltInVariable[]
      */
     public function getBuiltInVariable()
     {
         return $this->builtInVariable;
     }
     /**
-     * @param Google_Service_TagManager_Client
+     * @param Google_Service_TagManager_Client[]
      */
     public function setClient($client)
     {
         $this->client = $client;
     }
     /**
-     * @return Google_Service_TagManager_Client
+     * @return Google_Service_TagManager_Client[]
      */
     public function getClient()
     {
@@ -114,14 +114,14 @@ class Google_Service_TagManager_ContainerVersion extends \Google\Site_Kit_Depend
         return $this->containerVersionId;
     }
     /**
-     * @param Google_Service_TagManager_CustomTemplate
+     * @param Google_Service_TagManager_CustomTemplate[]
      */
     public function setCustomTemplate($customTemplate)
     {
         $this->customTemplate = $customTemplate;
     }
     /**
-     * @return Google_Service_TagManager_CustomTemplate
+     * @return Google_Service_TagManager_CustomTemplate[]
      */
     public function getCustomTemplate()
     {
@@ -152,14 +152,14 @@ class Google_Service_TagManager_ContainerVersion extends \Google\Site_Kit_Depend
         return $this->fingerprint;
     }
     /**
-     * @param Google_Service_TagManager_Folder
+     * @param Google_Service_TagManager_Folder[]
      */
     public function setFolder($folder)
     {
         $this->folder = $folder;
     }
     /**
-     * @return Google_Service_TagManager_Folder
+     * @return Google_Service_TagManager_Folder[]
      */
     public function getFolder()
     {
@@ -182,14 +182,14 @@ class Google_Service_TagManager_ContainerVersion extends \Google\Site_Kit_Depend
         return $this->path;
     }
     /**
-     * @param Google_Service_TagManager_Tag
+     * @param Google_Service_TagManager_Tag[]
      */
     public function setTag($tag)
     {
         $this->tag = $tag;
     }
     /**
-     * @return Google_Service_TagManager_Tag
+     * @return Google_Service_TagManager_Tag[]
      */
     public function getTag()
     {
@@ -204,42 +204,42 @@ class Google_Service_TagManager_ContainerVersion extends \Google\Site_Kit_Depend
         return $this->tagManagerUrl;
     }
     /**
-     * @param Google_Service_TagManager_Trigger
+     * @param Google_Service_TagManager_Trigger[]
      */
     public function setTrigger($trigger)
     {
         $this->trigger = $trigger;
     }
     /**
-     * @return Google_Service_TagManager_Trigger
+     * @return Google_Service_TagManager_Trigger[]
      */
     public function getTrigger()
     {
         return $this->trigger;
     }
     /**
-     * @param Google_Service_TagManager_Variable
+     * @param Google_Service_TagManager_Variable[]
      */
     public function setVariable($variable)
     {
         $this->variable = $variable;
     }
     /**
-     * @return Google_Service_TagManager_Variable
+     * @return Google_Service_TagManager_Variable[]
      */
     public function getVariable()
     {
         return $this->variable;
     }
     /**
-     * @param Google_Service_TagManager_Zone
+     * @param Google_Service_TagManager_Zone[]
      */
     public function setZone($zone)
     {
         $this->zone = $zone;
     }
     /**
-     * @return Google_Service_TagManager_Zone
+     * @return Google_Service_TagManager_Zone[]
      */
     public function getZone()
     {

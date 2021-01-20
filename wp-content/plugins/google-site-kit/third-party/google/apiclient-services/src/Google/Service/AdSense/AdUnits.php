@@ -34,14 +34,14 @@ class Google_Service_AdSense_AdUnits extends \Google\Site_Kit_Dependencies\Googl
         return $this->etag;
     }
     /**
-     * @param Google_Service_AdSense_AdUnit
+     * @param Google_Service_AdSense_AdUnit[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_AdSense_AdUnit
+     * @return Google_Service_AdSense_AdUnit[]
      */
     public function getItems()
     {

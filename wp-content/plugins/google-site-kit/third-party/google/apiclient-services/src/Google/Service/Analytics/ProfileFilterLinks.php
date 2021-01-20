@@ -30,14 +30,14 @@ class Google_Service_Analytics_ProfileFilterLinks extends \Google\Site_Kit_Depen
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_ProfileFilterLink
+     * @param Google_Service_Analytics_ProfileFilterLink[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_ProfileFilterLink
+     * @return Google_Service_Analytics_ProfileFilterLink[]
      */
     public function getItems()
     {

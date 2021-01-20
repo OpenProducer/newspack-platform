@@ -9,7 +9,7 @@
  * Plugin Name: PWA
  * Plugin URI:  https://github.com/GoogleChromeLabs/pwa-wp
  * Description: Feature plugin to bring Progressive Web App (PWA) capabilities to Core
- * Version:     0.5.0
+ * Version:     0.6.0
  * Author:      PWA Plugin Contributors
  * Author URI:  https://github.com/GoogleChromeLabs/pwa-wp/graphs/contributors
  * Text Domain: pwa
@@ -17,10 +17,10 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-define( 'PWA_VERSION', '0.5.0' );
+define( 'PWA_VERSION', '0.6.0' );
 define( 'PWA_PLUGIN_FILE', __FILE__ );
 define( 'PWA_PLUGIN_DIR', dirname( __FILE__ ) );
-define( 'PWA_WORKBOX_VERSION', '5.1.3' );
+define( 'PWA_WORKBOX_VERSION', '5.1.4' );
 define( 'PWA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
@@ -96,7 +96,7 @@ function _pwa_print_build_needed_notice() {
 	</div>
 	<?php
 }
-if ( ! file_exists( __DIR__ . '/wp-includes/js/workbox-v' . PWA_WORKBOX_VERSION ) || ! file_exists( __DIR__ . '/wp-includes/js/workbox-v' . PWA_WORKBOX_VERSION . '/workbox-sw.js' ) ) {
+if ( ! file_exists( PWA_PLUGIN_DIR . '/wp-includes/js/workbox-v' . PWA_WORKBOX_VERSION ) || ! file_exists( PWA_PLUGIN_DIR . '/wp-includes/js/workbox-v' . PWA_WORKBOX_VERSION . '/workbox-sw.js' ) ) {
 	add_action( 'admin_notices', '_pwa_print_build_needed_notice' );
 	return;
 }
@@ -197,12 +197,6 @@ require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-https-detection.php';
 /** WP_HTTPS_UI Class */
 require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-https-ui.php';
 
-/** WP_Service_Worker_Registry Interface */
-require_once PWA_PLUGIN_DIR . '/wp-includes/interface-wp-service-worker-registry.php';
-
-/** WP_Service_Worker_Registry_Aware Interface */
-require_once PWA_PLUGIN_DIR . '/wp-includes/interface-wp-service-worker-registry-aware.php';
-
 /** WP_Service_Workers Class */
 require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-service-workers.php';
 
@@ -215,6 +209,10 @@ require_once PWA_PLUGIN_DIR . '/wp-includes/components/interface-wp-service-work
 /** WP_Service_Worker_Component Implementation Classes */
 require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-configuration-component.php';
 require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-navigation-routing-component.php';
+require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-core-asset-caching-component.php';
+require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-theme-asset-caching-component.php';
+require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-plugin-asset-caching-component.php';
+require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-uploaded-image-caching-component.php';
 require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-precaching-routes-component.php';
 require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-precaching-routes.php';
 require_once PWA_PLUGIN_DIR . '/wp-includes/components/class-wp-service-worker-caching-routes-component.php';
@@ -254,6 +252,29 @@ require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-query.php';
 require_once PWA_PLUGIN_DIR . '/wp-admin/admin.php';
 
 /**
+ * Plugin activation hook.
+ */
+function _pwa_activate_plugin() {
+	pwa_add_rewrite_rules();
+	flush_rewrite_rules( false );
+}
+
+register_activation_hook( PWA_PLUGIN_FILE, '_pwa_activate_plugin' );
+
+/**
+ * Plugin deactivation hook.
+ *
+ * @global WP_Rewrite $wp_rewrite WordPress rewrite component.
+ */
+function _pwa_deactivate_plugin() {
+	global $wp_rewrite;
+	unset( $wp_rewrite->extra_rules_top['^wp\.serviceworker$'] );
+	flush_rewrite_rules( false );
+}
+
+register_deactivation_hook( PWA_PLUGIN_FILE, '_pwa_deactivate_plugin' );
+
+/**
  * Load service worker integrations.
  *
  * @since 0.2.0
@@ -277,3 +298,5 @@ $wp_web_app_manifest->init();
 
 $wp_https_detection = new WP_HTTPS_Detection();
 $wp_https_detection->init();
+
+require_once PWA_PLUGIN_DIR . '/wp-admin/options-reading-offline-browsing.php';

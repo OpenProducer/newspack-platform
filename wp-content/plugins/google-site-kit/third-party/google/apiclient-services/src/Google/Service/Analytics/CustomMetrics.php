@@ -30,14 +30,14 @@ class Google_Service_Analytics_CustomMetrics extends \Google\Site_Kit_Dependenci
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_CustomMetric
+     * @param Google_Service_Analytics_CustomMetric[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_CustomMetric
+     * @return Google_Service_Analytics_CustomMetric[]
      */
     public function getItems()
     {

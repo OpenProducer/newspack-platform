@@ -24,14 +24,14 @@ class Google_Service_Analytics_GoalEventDetails extends \Google\Site_Kit_Depende
     protected $eventConditionsDataType = 'array';
     public $useEventValue;
     /**
-     * @param Google_Service_Analytics_GoalEventDetailsEventConditions
+     * @param Google_Service_Analytics_GoalEventDetailsEventConditions[]
      */
     public function setEventConditions($eventConditions)
     {
         $this->eventConditions = $eventConditions;
     }
     /**
-     * @return Google_Service_Analytics_GoalEventDetailsEventConditions
+     * @return Google_Service_Analytics_GoalEventDetailsEventConditions[]
      */
     public function getEventConditions()
     {

@@ -32,14 +32,14 @@ class Google_Service_Webmasters_SearchAnalyticsQueryResponse extends \Google\Sit
         return $this->responseAggregationType;
     }
     /**
-     * @param Google_Service_Webmasters_ApiDataRow
+     * @param Google_Service_Webmasters_ApiDataRow[]
      */
     public function setRows($rows)
     {
         $this->rows = $rows;
     }
     /**
-     * @return Google_Service_Webmasters_ApiDataRow
+     * @return Google_Service_Webmasters_ApiDataRow[]
      */
     public function getRows()
     {

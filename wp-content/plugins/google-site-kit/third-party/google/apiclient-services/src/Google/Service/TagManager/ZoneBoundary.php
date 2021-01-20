@@ -24,14 +24,14 @@ class Google_Service_TagManager_ZoneBoundary extends \Google\Site_Kit_Dependenci
     protected $conditionDataType = 'array';
     public $customEvaluationTriggerId;
     /**
-     * @param Google_Service_TagManager_Condition
+     * @param Google_Service_TagManager_Condition[]
      */
     public function setCondition($condition)
     {
         $this->condition = $condition;
     }
     /**
-     * @return Google_Service_TagManager_Condition
+     * @return Google_Service_TagManager_Condition[]
      */
     public function getCondition()
     {

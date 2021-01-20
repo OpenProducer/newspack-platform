@@ -51,14 +51,14 @@ class Google_Service_Analytics_GoalUrlDestinationDetails extends \Google\Site_Ki
         return $this->matchType;
     }
     /**
-     * @param Google_Service_Analytics_GoalUrlDestinationDetailsSteps
+     * @param Google_Service_Analytics_GoalUrlDestinationDetailsSteps[]
      */
     public function setSteps($steps)
     {
         $this->steps = $steps;
     }
     /**
-     * @return Google_Service_Analytics_GoalUrlDestinationDetailsSteps
+     * @return Google_Service_Analytics_GoalUrlDestinationDetailsSteps[]
      */
     public function getSteps()
     {

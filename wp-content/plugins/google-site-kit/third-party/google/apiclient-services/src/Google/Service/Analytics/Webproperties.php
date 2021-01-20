@@ -30,14 +30,14 @@ class Google_Service_Analytics_Webproperties extends \Google\Site_Kit_Dependenci
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_Webproperty
+     * @param Google_Service_Analytics_Webproperty[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_Webproperty
+     * @return Google_Service_Analytics_Webproperty[]
      */
     public function getItems()
     {

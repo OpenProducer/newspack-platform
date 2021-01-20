@@ -444,7 +444,7 @@ class Logger implements \Google\Site_Kit_Dependencies\Psr\Log\LoggerInterface, \
     /**
      * Converts PSR-3 levels to Monolog ones if necessary
      *
-     * @param string|int Level number (monolog) or name (PSR-3)
+     * @param string|int $level Level number (monolog) or name (PSR-3)
      * @return int
      */
     public static function toMonologLevel($level)

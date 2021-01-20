@@ -30,14 +30,14 @@ class Google_Service_Analytics_CustomDimensions extends \Google\Site_Kit_Depende
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_CustomDimension
+     * @param Google_Service_Analytics_CustomDimension[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_CustomDimension
+     * @return Google_Service_Analytics_CustomDimension[]
      */
     public function getItems()
     {

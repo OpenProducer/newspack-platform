@@ -30,14 +30,14 @@ class Google_Service_Analytics_RemarketingAudiences extends \Google\Site_Kit_Dep
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_RemarketingAudience
+     * @param Google_Service_Analytics_RemarketingAudience[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_RemarketingAudience
+     * @return Google_Service_Analytics_RemarketingAudience[]
      */
     public function getItems()
     {

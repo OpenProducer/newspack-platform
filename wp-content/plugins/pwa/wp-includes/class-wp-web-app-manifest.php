@@ -10,7 +10,7 @@
  *
  * Mainly copied from Jetpack_PWA_Manifest and Jetpack_PWA_Helpers.
  */
-class WP_Web_App_Manifest {
+final class WP_Web_App_Manifest {
 
 	/**
 	 * The theme color to use if no dynamic value is present.
@@ -72,7 +72,7 @@ class WP_Web_App_Manifest {
 	public function manifest_link_and_meta() {
 		$manifest = $this->get_manifest();
 		?>
-		<link rel="manifest" href="<?php echo esc_url( rest_url( self::REST_NAMESPACE . self::REST_ROUTE ) ); ?>">
+		<link rel="manifest" href="<?php echo esc_url( static::get_url() ); ?>">
 		<meta name="theme-color" content="<?php echo esc_attr( $manifest['theme_color'] ); ?>">
 		<meta name="apple-mobile-web-app-capable" content="yes">
 		<meta name="mobile-web-app-capable" content="yes">
@@ -279,10 +279,24 @@ class WP_Web_App_Manifest {
 			self::REST_ROUTE,
 			array(
 				'methods'             => 'GET',
-				'callback'            => array( $this, 'get_manifest' ),
+				'callback'            => array( $this, 'rest_serve_manifest' ),
 				'permission_callback' => array( $this, 'rest_permission' ),
 			)
 		);
+	}
+
+	/**
+	 * Serve the manifest file.
+	 *
+	 * This serves our manifest file and sets the content type to `application/manifest+json`.
+	 *
+	 * @return WP_REST_Response Response containing the manifest and the right content-type header.
+	 */
+	public function rest_serve_manifest() {
+		$response = rest_ensure_response( $this->get_manifest() );
+		$response->header( 'Content-Type', 'application/manifest+json' );
+
+		return $response;
 	}
 
 	/**
@@ -337,5 +351,14 @@ class WP_Web_App_Manifest {
 	 */
 	public function sort_icons_callback( $a, $b ) {
 		return (int) strtok( $a['sizes'], 'x' ) - (int) strtok( $b['sizes'], 'x' );
+	}
+
+	/**
+	 * Return manifest URL.
+	 *
+	 * @return string
+	 */
+	public static function get_url() {
+		return rest_url( self::REST_NAMESPACE . self::REST_ROUTE );
 	}
 }

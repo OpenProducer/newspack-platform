@@ -34,14 +34,14 @@ class Google_Service_AdSense_CustomChannels extends \Google\Site_Kit_Dependencie
         return $this->etag;
     }
     /**
-     * @param Google_Service_AdSense_CustomChannel
+     * @param Google_Service_AdSense_CustomChannel[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_AdSense_CustomChannel
+     * @return Google_Service_AdSense_CustomChannel[]
      */
     public function getItems()
     {

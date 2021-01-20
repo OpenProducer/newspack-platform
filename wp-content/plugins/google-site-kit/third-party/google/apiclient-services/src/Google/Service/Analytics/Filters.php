@@ -30,14 +30,14 @@ class Google_Service_Analytics_Filters extends \Google\Site_Kit_Dependencies\Goo
     public $totalResults;
     public $username;
     /**
-     * @param Google_Service_Analytics_Filter
+     * @param Google_Service_Analytics_Filter[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_Filter
+     * @return Google_Service_Analytics_Filter[]
      */
     public function getItems()
     {

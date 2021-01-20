@@ -34,14 +34,14 @@ class Google_Service_AdSense_Accounts extends \Google\Site_Kit_Dependencies\Goog
         return $this->etag;
     }
     /**
-     * @param Google_Service_AdSense_Account
+     * @param Google_Service_AdSense_Account[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_AdSense_Account
+     * @return Google_Service_AdSense_Account[]
      */
     public function getItems()
     {

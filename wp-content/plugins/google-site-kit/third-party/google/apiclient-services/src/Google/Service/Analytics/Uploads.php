@@ -29,14 +29,14 @@ class Google_Service_Analytics_Uploads extends \Google\Site_Kit_Dependencies\Goo
     public $startIndex;
     public $totalResults;
     /**
-     * @param Google_Service_Analytics_Upload
+     * @param Google_Service_Analytics_Upload[]
      */
     public function setItems($items)
     {
         $this->items = $items;
     }
     /**
-     * @return Google_Service_Analytics_Upload
+     * @return Google_Service_Analytics_Upload[]
      */
     public function getItems()
     {
