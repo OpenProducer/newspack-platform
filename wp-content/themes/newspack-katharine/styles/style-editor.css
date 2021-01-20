@@ -1114,6 +1114,10 @@ figure.wp-block-pullquote {
   font-weight: bold;
 }
 
+.wp-block-pullquote em {
+  font-style: italic;
+}
+
 .wp-block-pullquote .wp-block-pullquote__citation {
   font-weight: bold;
   opacity: 0.6;

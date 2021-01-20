@@ -25,6 +25,7 @@ const POST_QUERY_ATTRIBUTES = [
 	'specificPosts',
 	'specificMode',
 	'tagExclusions',
+	'postType',
 ];
 
 /**
@@ -54,6 +55,7 @@ export const queryCriteriaFromAttributes = attributes => {
 		postsToShow,
 		authors,
 		categories,
+		postType,
 		tags,
 		specificPosts,
 		specificMode,
@@ -68,6 +70,7 @@ export const queryCriteriaFromAttributes = attributes => {
 					include: cleanPosts,
 					orderby: 'include',
 					per_page: specificPosts.length,
+					post_type: postType,
 			  }
 			: {
 					per_page: postsToShow,
@@ -75,6 +78,7 @@ export const queryCriteriaFromAttributes = attributes => {
 					author: authors,
 					tags,
 					tags_exclude: tagExclusions,
+					post_type: postType,
 			  },
 		value => ! isUndefined( value )
 	);

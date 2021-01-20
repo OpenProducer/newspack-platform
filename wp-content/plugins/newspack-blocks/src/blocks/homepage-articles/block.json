@@ -138,6 +138,11 @@
     "showSubtitle": {
       "type": "boolean",
       "default": false
+    },
+    "postType": {
+      "type": "array",
+      "default": [ "post" ],
+      "items": { "type": "string" }
     }
   }
 }

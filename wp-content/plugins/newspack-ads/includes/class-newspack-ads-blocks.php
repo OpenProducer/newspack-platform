@@ -217,9 +217,41 @@ class Newspack_Ads_Blocks {
 					// Build and set the responsive mapping.
 					// @see https://developers.google.com/doubleclick-gpt/guides/ad-sizes#responsive_ads
 					var mapping = googletag.sizeMapping();
-					for ( width in unique_widths ) {
-						mapping.addSize( [ parseInt( width ), 0 ], unique_widths[ width ] );
+
+					var mobile_cutoff = 500; // As a rule of thumb, let's say mobile ads are <500px wide and desktop ads are >=500px wide.
+
+					var smallest_ad_width = Math.min.apply( Math, Object.keys( unique_widths ).map( Number ) );
+					var largest_ad_width  = Math.max.apply( Math, Object.keys( unique_widths ).map( Number ) );
+
+					// If the smallest width is mobile size and the largest width is desktop size,
+					// we want to use some logic to prevent displaying mobile ads on desktop.
+					if ( smallest_ad_width < mobile_cutoff && largest_ad_width >= mobile_cutoff ) {
+						for ( width in unique_widths ) {
+							// On viewports < 500px wide, include all ads smaller than the viewport.
+							if ( parseInt( width ) < mobile_cutoff ) {
+								mapping.addSize( [ parseInt( width ), 0 ], unique_widths[ width ] );
+
+								// On viewports >= 500px wide, only include ads with widths >= 500px.
+							} else {
+								var desktopAds = [];
+								for ( array_index in unique_widths[ width ] ) {
+									ad_size = unique_widths[ width ][ array_index ];
+									if ( ad_size[0] >= mobile_cutoff ) {
+										desktopAds.push( ad_size );
+									}
+								}
+								mapping.addSize( [ parseInt( width ), 0 ], desktopAds );
+							}
+						}
+
+						// If the sizes don't contain both mobile and desktop ad sizes,
+						// we can just display any ad that is smaller than the viewport.
+					} else {
+						for ( width in unique_widths ) {
+							mapping.addSize( [ parseInt( width ), 0 ], unique_widths[ width ] );
+						}
 					}
+
 					// On viewports smaller than the smallest ad size, don't show any ads.
 					mapping.addSize( [0, 0], [] );
 					defined_ad_units[ container_id ].defineSizeMapping( mapping.build() );

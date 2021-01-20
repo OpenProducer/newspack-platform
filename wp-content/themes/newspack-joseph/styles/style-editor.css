@@ -1,6 +1,6 @@
 @charset "UTF-8";
 /*!
-Newspack Sacha Editor Styles
+Newspack Joseph Editor Styles
 */
 /** === Includes === */
 /** === Includes === */
@@ -1050,17 +1050,21 @@ ul.wp-block-archives li,
   font-weight: bold;
 }
 
-.wp-block-pullquote blockquote {
-  border-color: inherit;
-  text-align: center;
+.wp-block-pullquote p {
+  font-style: inherit;
 }
 
-.wp-block-pullquote p {
-  font-style: normal;
+.wp-block-pullquote p em {
+  font-style: italic;
 }
 
 .wp-block-pullquote.is-style-solid-color {
   border: 0;
+}
+
+.wp-block-pullquote blockquote {
+  border-color: inherit;
+  text-align: center;
 }
 
 .wp-block-pullquote .wp-block-pullquote__citation {

@@ -373,7 +373,7 @@ class Newspack_Ads_Model {
 		}
 
 		if ( $ad_unit['responsive'] ) {
-			return self::ad_elements_for_sizes( $ad_unit, $unique_id, true );
+			return self::ad_elements_for_sizes( $ad_unit, $unique_id );
 		}
 
 		$largest = self::largest_ad_size( $sizes );
@@ -391,39 +391,59 @@ class Newspack_Ads_Model {
 	}
 
 	/**
-	 * Generate divs for a series of ad sizes.
+	 * Generate responsive AMP ads for a series of ad sizes.
 	 *
-	 * @param array   $ad_unit The ad unit to generate code for.
-	 * @param string  $unique_id Unique ID for this ad unit instance.
-	 * @param boolean $is_amp Are these AMP units or not.
+	 * @param array  $ad_unit The ad unit to generate code for.
+	 * @param string $unique_id Unique ID for this ad unit instance.
 	 */
-	public static function ad_elements_for_sizes( $ad_unit, $unique_id, $is_amp = false ) {
+	public static function ad_elements_for_sizes( $ad_unit, $unique_id ) {
 		$network_code = self::get_network_code( 'google_ad_manager' );
 		$code         = $ad_unit['code'];
 		$sizes        = $ad_unit['sizes'];
 		$targeting    = self::get_ad_targeting( $ad_unit );
 
 		array_multisort( $sizes );
+		$widths = array_unique( array_column( $sizes, 0 ) );
 
 		$markup = [];
 		$styles = [];
-		$widths = array_map(
-			function ( $item ) {
-				return $item[0];
-			},
-			$sizes
-		);
+
+		// Gather up all of the ad sizes which should be displayed on the same viewports.
+		// As a heuristic, each ad slot can safely display ads 200px narrower or less than the slot's width.
+		// e.g. for the following setup: [[900,200], [750,200]], 
+		// We can display [[900,200], [750,200]] on viewports >= 900px and [[750,200]] on viewports < 900px.
+		$width_difference_max = apply_filters( 'newspack_ads_multisize_size_difference_max', 200, $ad_unit );
+		$all_ad_sizes         = [];
+		foreach ( $widths as $ad_width ) {
+			$valid_ad_sizes = [];
+
+			foreach ( $sizes as $size ) {
+				if ( $size[0] <= $ad_width && $ad_width - $width_difference_max <= $size[0] ) {
+					$valid_ad_sizes[] = $size;
+				}
+			}
+
+			$all_ad_sizes[] = $valid_ad_sizes;
+		}
+		$all_ad_sizes = apply_filters( 'newspack_ads_multisize_ad_sizes', $all_ad_sizes, $ad_unit );
 
 		// Generate an array of media query data, with a likely min and max width for each size.
 		$media_queries = [];
-		foreach ( $sizes as $index => $size ) {
-			$width           = absint( $size[0] );
-			$height          = absint( $size[1] );
+		foreach ( $all_ad_sizes as $index => $ad_size ) {
+			$width = absint( max( array_column( $ad_size, 0 ) ) );
+
+			// If there are ad sizes larger than the current size, the max_width is 1 less than the next ad's size.
+			// If it's the largest ad size, there is no max width.
+			$max_width = null;
+			if ( count( $all_ad_sizes ) > $index + 1 ) {
+				$max_width = absint( max( array_column( $all_ad_sizes[ $index + 1 ], 0 ) ) ) - 1;
+			}
+
 			$media_queries[] = [
 				'width'     => $width,
-				'height'    => $height,
-				'min_width' => ( $width > 0 ) ? $width : null,
-				'max_width' => ( count( $widths ) > $index + 1 ) ? ( $widths[ $index + 1 ] - 1 ) : null,
+				'height'    => absint( max( array_column( $ad_size, 1 ) ) ),
+				'min_width' => $width,
+				'max_width' => $max_width,
 			];
 		}
 
@@ -435,20 +455,59 @@ class Newspack_Ads_Model {
 			$ad_unit['context']
 		);
 
-		foreach ( $sizes as $index => $size ) {
-			$media_query = $media_queries[ $index ];
-			$width       = absint( $size[0] );
-			$height      = absint( $size[1] );
-			$prefix      = $is_amp ? 'div-gpt-amp-' : 'div-gpt-';
-			$div_id      = sprintf(
+		// Build the amp-ad units.
+		foreach ( $all_ad_sizes as $index => $ad_sizes ) {
+
+			// The size of the ad container should be equal to the largest width and height among all the sizes available.
+			$width  = absint( max( array_column( $ad_sizes, 0 ) ) );
+			$height = absint( max( array_column( $ad_sizes, 1 ) ) );
+
+			$multisizes = array_map(
+				function( $size ) { 
+					return $size[0] . 'x' . $size[1];
+				}, 
+				$ad_sizes 
+			);
+
+			// If there is a multisize that's equal to the width and height of the container, remove it from the multisizes. 
+			// The container size is included by default, and should not also be included in the multisize.
+			$container_multisize          = $width . 'x' . $height;
+			$container_multisize_location = array_search( $container_multisize, $multisizes );
+			if ( false !== $container_multisize_location ) {
+				unset( $multisizes[ $container_multisize_location ] );
+			}
+
+			$multisize_attribute = '';
+			if ( count( $multisizes ) ) {
+				$multisize_attribute = sprintf( 
+					'data-multi-size=\'%s\' data-multi-size-validation=\'false\'', 
+					implode( ',', $multisizes ) 
+				);
+			}
+
+			$div_prefix = 'div-gpt-amp-';
+			$div_id     = sprintf(
 				'%s%s-%s-%dx%d',
-				$prefix,
+				$div_prefix,
 				sanitize_title( $ad_unit['code'] ),
 				$unique_id,
 				$width,
 				$height
 			);
 
+			$markup[] = sprintf(
+				'<div id="%s"><amp-ad width="%dpx" height="%dpx" type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\' %s></amp-ad></div>',
+				$div_id,
+				$width,
+				$height,
+				$network_code,
+				$code,
+				wp_json_encode( $targeting ),
+				$multisize_attribute
+			);
+
+			// Generate styles for hiding/showing ads at different viewports out of the media queries.
+			$media_query          = $media_queries[ $index ];
 			$media_query_elements = [];
 			if ( $media_query['min_width'] ) {
 				$media_query_elements[] = sprintf( '(min-width:%dpx)', $media_query['min_width'] );
@@ -467,29 +526,7 @@ class Newspack_Ads_Model {
 					$div_id
 				);
 			}
-
-			if ( $is_amp ) {
-				$markup[] = sprintf(
-					'<div id="%s"><amp-ad width="%dpx" height="%dpx" type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\'></amp-ad></div>',
-					$div_id,
-					$width,
-					$height,
-					$network_code,
-					$code,
-					wp_json_encode( $targeting )
-				);
-			} else {
-				$markup[] = sprintf(
-					'<!-- /%s/%s --><div id="%s" style="width:%dpx;height:%dpx;"></div>',
-					$network_code,
-					$code,
-					$div_id,
-					$width,
-					$height
-				);
-			}
 		}
-
 		return sprintf(
 			'<style>%s</style>%s',
 			implode( ' ', $styles ),

@@ -443,6 +443,13 @@ class Newspack_Blocks_API {
 						),
 						'default' => array(),
 					],
+					'post_type'    => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'string',
+						),
+						'default' => array(),
+					],
 				],
 				'permission_callback' => function( $request ) {
 					return current_user_can( 'edit_posts' );
@@ -467,6 +474,13 @@ class Newspack_Blocks_API {
 					],
 					'per_page' => [
 						'sanitize_callback' => 'absint',
+					],
+					'post_type' => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'string',
+						),
+						'default' => array(),
 					],
 				],
 				'permission_callback' => function( $request ) {
@@ -522,6 +536,9 @@ class Newspack_Blocks_API {
 		}
 		if ( $params['exclude'] && count( $params['exclude'] ) ) {
 			$args['post__not_in'] = $params['exclude'];
+		}
+		if ( $params['post_type'] && count( $params['post_type'] ) ) {
+			$args['post_type'] = $params['post_type'];
 		}
 
 		$query        = new WP_Query();
@@ -589,11 +606,16 @@ class Newspack_Blocks_API {
 		add_filter( 'posts_where', [ 'Newspack_Blocks_API', 'add_post_title_wildcard_search' ], 10, 2 );
 
 		$args = [
-			'post_type'             => 'post',
 			'post_status'           => 'publish',
 			'title_wildcard_search' => esc_sql( $params['search'] ),
 			'posts_per_page'        => $params['per_page'],
 		];
+
+		if ( $params['post_type'] && count( $params['post_type'] ) ) {
+			$args['post_type'] = $params['post_type'];
+		} else {
+			$args['post_type'] = 'post';
+		}
 
 		$query = new WP_Query( $args );
 		remove_filter( 'posts_where', [ 'Newspack_Blocks_API', 'add_post_title_wildcard_search' ], 10, 2 );

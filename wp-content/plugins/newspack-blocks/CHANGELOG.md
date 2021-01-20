@@ -1,3 +1,11 @@
+## [1.18.1](https://github.com/Automattic/newspack-blocks/compare/v1.18.0...v1.18.1) (2021-01-19)
+
+
+### Bug Fixes
+
+* load more button functionality ([#672](https://github.com/Automattic/newspack-blocks/issues/672)) ([4116df5](https://github.com/Automattic/newspack-blocks/commit/4116df5f3bbe303866a7b0dde8807f838c374b15))
+* **homepage-post:** handle duplicated categories ([57b6323](https://github.com/Automattic/newspack-blocks/commit/57b6323d32dd6aa96c83f07cc4e96598c009ec7e)), closes [#669](https://github.com/Automattic/newspack-blocks/issues/669)
+
 # [1.18.0](https://github.com/Automattic/newspack-blocks/compare/v1.17.1...v1.18.0) (2021-01-12)
 
 

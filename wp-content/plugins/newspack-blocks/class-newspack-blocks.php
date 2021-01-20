@@ -15,6 +15,8 @@ class Newspack_Blocks {
 	 */
 	public static function init() {
 		add_action( 'after_setup_theme', [ __CLASS__, 'add_image_sizes' ] );
+		add_post_type_support( 'post', 'newspack_blocks' );
+		add_post_type_support( 'page', 'newspack_blocks' );
 	}
 
 	/**
@@ -345,6 +347,7 @@ class Newspack_Blocks {
 			);
 		}
 
+		$post_type      = isset( $attributes['postType'] ) ? $attributes['postType'] : [ 'post' ];
 		$authors        = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
 		$categories     = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
 		$tags           = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
@@ -353,6 +356,7 @@ class Newspack_Blocks {
 		$posts_to_show  = intval( $attributes['postsToShow'] );
 		$specific_mode  = intval( $attributes['specificMode'] );
 		$args           = array(
+			'post_type'           => $post_type,
 			'post_status'         => 'publish',
 			'suppress_filters'    => false,
 			'ignore_sticky_posts' => true,

@@ -1,3 +1,4 @@
+/* eslint-disable */
 let isFetching = false;
 let isEndOfData = false;
 buildLoadMoreHandler( document.querySelector( '.wp-block-newspack-blocks-homepage-articles' ) );
@@ -7,7 +8,7 @@ function buildLoadMoreHandler( blockWrapperEl ) {
 		return;
 	}
 	const postsContainerEl = blockWrapperEl.querySelector( '[data-posts]' );
-	btnEl.addEventListener( 'click', function( e ) {
+	btnEl.addEventListener( 'click', function() {
 		if ( isFetching || isEndOfData ) {
 			return false;
 		}
@@ -15,9 +16,9 @@ function buildLoadMoreHandler( blockWrapperEl ) {
 		blockWrapperEl.classList.remove( 'is-error' );
 		blockWrapperEl.classList.add( 'is-loading' );
 		AMP.getState( 'newspackHomepagePosts.exclude_ids' ).then( function( exclude_ids ) {
-			const requestURL = new URL( btnEl.getAttribute( 'data-next' ) );
-			requestURL.searchParams.set( 'exclude_ids', JSON.parse( exclude_ids ).join( ',' ) );
-			apiFetchWithRetry( { url: requestURL.toString(), onSuccess, onError }, 3 );
+			const requestURL =
+				btnEl.getAttribute( 'data-next' ) + '&exclude_ids=' + JSON.parse( exclude_ids ).join( ',' );
+			apiFetchWithRetry( { url: requestURL, onSuccess, onError }, 3 );
 		} );
 		function onSuccess( data ) {
 			AMP.getState( 'newspackHomepagePosts.exclude_ids' ).then( function( exclude_ids ) {

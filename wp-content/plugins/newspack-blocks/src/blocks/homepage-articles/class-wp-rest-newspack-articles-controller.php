@@ -64,12 +64,20 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 
 		$article_query_args = Newspack_Blocks::build_articles_query( $attributes );
 
-		$query = array_merge(
-			$article_query_args,
-			[
-				'post__not_in' => $exclude_ids,
-			]
-		);
+		// If using exclude_ids, don't worry about pagination. Just get the next postsToShow number of results without the excluded posts. Otherwise, use standard WP pagination.
+		$query = ! empty( $exclude_ids ) ?
+			array_merge(
+				$article_query_args,
+				[
+					'post__not_in' => $exclude_ids,
+				]
+			) :
+			array_merge(
+				$article_query_args,
+				[
+					'paged' => $page,
+				]
+			);
 
 		// Run Query.
 		$article_query = new WP_Query( $query );
@@ -103,7 +111,8 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 		Newspack_Blocks::remove_excerpt_more_filter();
 
 		// Provide next URL if there are more pages.
-		if ( $next_page <= $article_query->max_num_pages ) {
+		$show_next_button = ! empty( $exclude_ids ) ? $article_query->max_num_pages > 1 : $article_query->max_num_pages > $next_page;
+		if ( $show_next_button ) {
 			$next_url = add_query_arg(
 				array_merge(
 					array_map(
@@ -116,6 +125,7 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 						'exclude_ids' => false,
 						'page'        => $next_page,
 						'amp'         => $request->get_param( 'amp' ),
+
 					]
 				),
 				rest_url( '/newspack-blocks/v1/articles' )

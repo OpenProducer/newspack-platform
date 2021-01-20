@@ -1089,6 +1089,10 @@ blockquote {
   font-weight: bold;
 }
 
+.wp-block-pullquote em {
+  font-style: italic;
+}
+
 .wp-block-pullquote .wp-block-pullquote__citation {
   font-weight: bold;
   letter-spacing: 0.05em;

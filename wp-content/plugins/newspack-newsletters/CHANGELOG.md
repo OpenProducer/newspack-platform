@@ -1,3 +1,10 @@
+# [1.17.0](https://github.com/Automattic/newspack-newsletters/compare/v1.16.2...v1.17.0) (2021-01-19)
+
+
+### Features
+
+* add support for homepage posts block ([#393](https://github.com/Automattic/newspack-newsletters/issues/393)) ([710b674](https://github.com/Automattic/newspack-newsletters/commit/710b674e9e326079d113c54b87d1acf938224b78))
+
 ## [1.16.2](https://github.com/Automattic/newspack-newsletters/compare/v1.16.1...v1.16.2) (2021-01-12)
 
 
