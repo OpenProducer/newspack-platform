@@ -57,7 +57,7 @@ class Advertising_Wizard extends Wizard {
 	 *
 	 * @var array
 	 */
-	protected $placements = array( 'global_above_header', 'global_below_header', 'global_above_footer', 'archives', 'search_results' );
+	protected $placements = array( 'global_above_header', 'global_below_header', 'global_above_footer', 'archives', 'search_results', 'sticky' );
 
 	/**
 	 * Constructor.
@@ -68,6 +68,7 @@ class Advertising_Wizard extends Wizard {
 		add_action( 'before_header', [ $this, 'inject_above_header_ad' ] );
 		add_action( 'after_header', [ $this, 'inject_below_header_ad' ] );
 		add_action( 'before_footer', [ $this, 'inject_above_footer_ad' ] );
+		add_action( 'before_footer', [ $this, 'inject_sticky_ad' ] );
 		add_filter( 'newspack_ads_should_show_ads', [ $this, 'maybe_disable_gam_ads' ] );
 	}
 
@@ -517,6 +518,20 @@ class Advertising_Wizard extends Wizard {
 	}
 
 	/**
+	 * Inject a global sticky ad above the header.
+	 */
+	public function inject_sticky_ad() {
+		$placement = $this->get_placement_data( 'sticky' );
+		if ( ! $placement['enabled'] ) {
+			return;
+		}
+
+		if ( 'google_ad_manager' === $placement['service'] && ! empty( $placement['ad_unit'] ) ) {
+			$this->inject_ad_manager_global_ad( 'sticky' );
+		}
+	}
+
+	/**
 	 * Inject a global ad below the header.
 	 */
 	public function inject_below_header_ad() {
@@ -571,11 +586,19 @@ class Advertising_Wizard extends Wizard {
 			return;
 		}
 
-		?>
-		<div class='newspack_global_ad <?php echo esc_attr( $placement_slug ); ?>'>
-			<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-		</div>
-		<?php
+		if ( 'sticky' === $placement_slug && $is_amp ) : ?>
+			<amp-sticky-ad class='newspack_amp_sticky_ad <?php echo esc_attr( $placement_slug ); ?>' layout="nodisplay">
+				<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</amp-sticky-ad>
+		<?php else : ?>
+			<div class='newspack_global_ad <?php echo esc_attr( $placement_slug ); ?>'>
+				<?php if ( 'sticky' === $placement_slug ) : ?>
+					<button class='newspack_sticky_ad__close'></button>
+				<?php endif; ?>
+				<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+			</div>
+			<?php
+		endif;
 	}
 
 	/**

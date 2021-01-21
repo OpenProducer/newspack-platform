@@ -149,23 +149,34 @@
   .newspack-inline-popup:focus {
     outline: none; }
 
+.newspack-above-header-popup {
+  display: block;
+  clear: both;
+  padding: 0.75em 0; }
+  .newspack-above-header-popup:focus {
+    outline: none; }
+
 .newspack-lightbox .popup-not-interested-form,
-.newspack-inline-popup .popup-not-interested-form {
+.newspack-inline-popup .popup-not-interested-form,
+.newspack-above-header-popup .popup-not-interested-form {
   display: -webkit-box;
   display: flex;
   -webkit-box-pack: center;
           justify-content: center;
   margin-top: 1.5em; }
   .newspack-lightbox .popup-not-interested-form.align-left,
-  .newspack-inline-popup .popup-not-interested-form.align-left {
+  .newspack-inline-popup .popup-not-interested-form.align-left,
+  .newspack-above-header-popup .popup-not-interested-form.align-left {
     -webkit-box-pack: start;
             justify-content: flex-start; }
   .newspack-lightbox .popup-not-interested-form.align-right,
-  .newspack-inline-popup .popup-not-interested-form.align-right {
+  .newspack-inline-popup .popup-not-interested-form.align-right,
+  .newspack-above-header-popup .popup-not-interested-form.align-right {
     -webkit-box-pack: end;
             justify-content: flex-end; }
   .newspack-lightbox .popup-not-interested-form button,
-  .newspack-inline-popup .popup-not-interested-form button {
+  .newspack-inline-popup .popup-not-interested-form button,
+  .newspack-above-header-popup .popup-not-interested-form button {
     background: transparent;
     border: 0;
     border-radius: 0;
@@ -179,7 +190,10 @@
     .newspack-lightbox .popup-not-interested-form button:active, .newspack-lightbox .popup-not-interested-form button:focus, .newspack-lightbox .popup-not-interested-form button:hover,
     .newspack-inline-popup .popup-not-interested-form button:active,
     .newspack-inline-popup .popup-not-interested-form button:focus,
-    .newspack-inline-popup .popup-not-interested-form button:hover {
+    .newspack-inline-popup .popup-not-interested-form button:hover,
+    .newspack-above-header-popup .popup-not-interested-form button:active,
+    .newspack-above-header-popup .popup-not-interested-form button:focus,
+    .newspack-above-header-popup .popup-not-interested-form button:hover {
       color: #3c3c3c;
       outline-offset: 2px;
       text-decoration: none; }

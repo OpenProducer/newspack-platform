@@ -230,6 +230,7 @@ class Lightweight_API {
 						return [
 							'post_id'      => $item->post_id,
 							'category_ids' => $item->category_ids,
+							'created_at'   => $item->created_at,
 						];
 					},
 					$client_post_read_events

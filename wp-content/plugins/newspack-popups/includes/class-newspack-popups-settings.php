@@ -26,7 +26,7 @@ class Newspack_Popups_Settings {
 	 */
 	public static function add_plugin_page() {
 		add_submenu_page(
-			'edit.php?post_type=' . Newspack_Popups::NEWSPACK_PLUGINS_CPT,
+			'edit.php?post_type=' . Newspack_Popups::NEWSPACK_POPUPS_CPT,
 			__( 'Campaigns Settings', 'newspack-popups' ),
 			__( 'Settings', 'newspack-popups' ),
 			'manage_options',
@@ -121,6 +121,10 @@ class Newspack_Popups_Settings {
 					[]
 				),
 			],
+			[
+				'key'   => Newspack_Popups::NEWSPACK_POPUPS_ACTIVE_CAMPAIGN_GROUP,
+				'value' => get_option( Newspack_Popups::NEWSPACK_POPUPS_ACTIVE_CAMPAIGN_GROUP ),
+			],
 		];
 	}
 
@@ -137,7 +141,7 @@ class Newspack_Popups_Settings {
 	public static function admin_enqueue_scripts() {
 		$screen = get_current_screen();
 
-		if ( Newspack_Popups::NEWSPACK_PLUGINS_CPT . '_page_' . self::NEWSPACK_POPUPS_SETTINGS_PAGE !== $screen->base ) {
+		if ( Newspack_Popups::NEWSPACK_POPUPS_CPT . '_page_' . self::NEWSPACK_POPUPS_SETTINGS_PAGE !== $screen->base ) {
 			return;
 		}
 
@@ -162,6 +166,79 @@ class Newspack_Popups_Settings {
 		);
 		\wp_style_add_data( 'newspack-popups-settings', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-popups-settings' );
+	}
+
+	/**
+	 * Activate campaigns by group.
+	 *
+	 * @param int $ids Campaign IDs to publish.
+	 * @return bool Whether operation was successful.
+	 */
+	public static function batch_publish( $ids ) {
+		if ( empty( $ids ) ) {
+			return new \WP_Error(
+				'newspack_popups_settings_error',
+				esc_html__( 'Invalid campaign IDs.', 'newspack' )
+			);
+		}
+
+		$all_campaigns = new \WP_Query(
+			[
+				'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
+				'post_status'    => [ 'draft', 'pending', 'future', 'publish' ],
+				'posts_per_page' => 100,
+			]
+		);
+
+		if ( $all_campaigns->have_posts() ) {
+			foreach ( $all_campaigns->posts as $campaign ) {
+				if ( in_array( $campaign->ID, $ids ) ) {
+					if ( 'publish' !== $campaign->post_status ) {
+						wp_publish_post( $campaign );
+					}
+				} else {
+					if ( 'publish' === $campaign->post_status ) {
+						$campaign->post_status = 'draft';
+						wp_update_post( $campaign );
+					}
+				}
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Unpublish campaigns by group.
+	 *
+	 * @param int $ids Campaign IDs to unpublish.
+	 * @return bool Whether operation was successful.
+	 */
+	public static function batch_unpublish( $ids ) {
+		if ( empty( $ids ) ) {
+			return new \WP_Error(
+				'newspack_popups_settings_error',
+				esc_html__( 'Invalid campaign IDs.', 'newspack' )
+			);
+		}
+
+		$campaigns_to_unpublish = new \WP_Query(
+			[
+				'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
+				'post_status'    => [ 'publish' ],
+				'post__in'       => $ids,
+				'posts_per_page' => 100,
+			]
+		);
+
+		if ( $campaigns_to_unpublish->have_posts() ) {
+			foreach ( $campaigns_to_unpublish->posts as $campaign ) {
+				$campaign->post_status = 'draft';
+				wp_update_post( $campaign );
+			}
+		}
+
+		return true;
 	}
 }
 

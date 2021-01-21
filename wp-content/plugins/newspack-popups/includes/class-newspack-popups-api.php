@@ -20,7 +20,7 @@ final class Newspack_Popups_API {
 	}
 
 	/**
-	 * Register API endpoints.
+	 * Register REST API endpoints.
 	 */
 	public function register_api_endpoints() {
 		\register_rest_route(

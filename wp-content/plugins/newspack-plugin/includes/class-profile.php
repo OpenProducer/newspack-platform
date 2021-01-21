@@ -31,16 +31,6 @@ class Profile {
 		'state',
 		'zip',
 		'currency',
-		'newsroom_size',
-		'medium',
-		'audience',
-		'content_focus',
-		'publication_volume',
-		'monthly_uniques',
-		'engagement_newsletters',
-		'engagement_social_media',
-		'engagement_ugc',
-		'engagement_subscriptions',
 	];
 
 	/**

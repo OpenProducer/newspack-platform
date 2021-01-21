@@ -234,6 +234,14 @@ class Plugin_Manager {
 				'AuthorURI'   => 'https://automattic.com',
 				'Download'    => 'https://github.com/Automattic/newspack-sponsors/releases/latest/download/newspack-sponsors.zip',
 			],
+			'newspack-listings'             => [
+				'Name'        => 'Newspack Listings',
+				'Description' => 'Create reusable content in list form using the Gutenberg editor.',
+				'Author'      => 'Automattic',
+				'PluginURI'   => 'https://newspack.blog',
+				'AuthorURI'   => 'https://automattic.com',
+				'Download'    => 'https://github.com/Automattic/newspack-listings/releases/latest/download/newspack-listings.zip',
+			],
 			'newspack-rename-comments'      => [
 				'Name'        => 'Newspack Rename Comments',
 				'Description' => 'Provides the Newspack theme with the ability to allow users to rename comments.',

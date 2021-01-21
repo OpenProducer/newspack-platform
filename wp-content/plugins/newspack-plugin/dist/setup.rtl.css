@@ -16,20 +16,6 @@
     margin-top: -16px; }
 
 /**
- * Newsroom
- */
-.newspack-card .newspack-setup-wizard_newsroom_audience_title {
-  margin: -16px 0 0; }
-
-.newspack-card .newspack-setup-wizard_newsroom_audience_checkboxes {
-  display: flex;
-  flex-wrap: wrap;
-  margin: -8px 0 32px; }
-  .newspack-card .newspack-setup-wizard_newsroom_audience_checkboxes .newspack-checkbox-control {
-    flex: 0 0 50%;
-    margin: 8px 0 0; }
-
-/**
  * Setup
  */
 #newspack-setup-wizard {

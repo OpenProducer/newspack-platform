@@ -190,14 +190,18 @@ class Salesforce {
 			$contact['MailingCountry'] = $billing['country'];
 		}
 
-		$referer_tags       = 'none';
-		$referer_categories = 'none';
+		$lead_source = '';
+
 		foreach ( $data['meta_data'] as $meta_field ) {
-			if ( 'referer_tags' === $meta_field['key'] ) {
-				$referer_tags = $meta_field['value'];
-			}
-			if ( 'referer_categories' === $meta_field['key'] ) {
-				$referer_categories = $meta_field['value'];
+			if ( in_array( $meta_field['key'], array_keys( Donations::DONATION_ORDER_META_KEYS ) ) ) {
+				$meta_label = Donations::DONATION_ORDER_META_KEYS[ $meta_field['key'] ]['label'];
+				$meta_value = ! empty( $meta_field['value'] ) ? $meta_field['value'] : 'none';
+
+				if ( ! empty( $lead_source ) ) {
+					$lead_source .= '; ';
+				}
+
+				$lead_source .= $meta_label . ': ' . $meta_value;
 			}
 		}
 
@@ -209,7 +213,7 @@ class Salesforce {
 					'Description' => 'WooCommerce Order Number: ' . $data['id'],
 					'Name'        => $transaction['name'],
 					'StageName'   => 'Closed Won',
-					'LeadSource'  => 'Post categories: ' . $referer_categories . ', tags: ' . $referer_tags,
+					'LeadSource'  => $lead_source,
 				];
 			}
 		}

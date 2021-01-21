@@ -69,14 +69,15 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Set categories for a Popup.
+	 * Set taxonomy terms for a Popup.
 	 *
 	 * @param integer $id ID of sitewide popup.
-	 * @param array   $categories Array of categories to be set.
+	 * @param array   $terms Array of terms to be set.
+	 * @param string  $taxonomy Taxonomy slug.
 	 */
-	public function set_popup_categories( $id, $categories ) {
+	public function set_popup_terms( $id, $terms, $taxonomy ) {
 		return $this->is_configured() ?
-			\Newspack_Popups_Model::set_popup_categories( $id, $categories ) :
+			\Newspack_Popups_Model::set_popup_terms( $id, $terms, $taxonomy ) :
 			$this->unconfigured_error();
 	}
 
@@ -162,6 +163,28 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	public function get_segment_reach( $config ) {
 		return $this->is_configured() ?
 			\Newspack_Popups_Segmentation::get_segment_reach( $config ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Activate campaign group.
+	 *
+	 * @param int $id Campaign group ID.
+	 */
+	public function batch_publish( $id ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Settings::batch_publish( $id ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Deactivate campaign group.
+	 *
+	 * @param int $id Campaign group ID.
+	 */
+	public function batch_unpublish( $id ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Settings::batch_unpublish( $id ) :
 			$this->unconfigured_error();
 	}
 

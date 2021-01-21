@@ -33,4 +33,29 @@ class Segmentation {
 		global $wpdb;
 		return $wpdb->prefix . 'newspack_campaigns_events';
 	}
+
+	/**
+	 * Parse "view as" spec.
+	 *
+	 * @param string $raw_spec Raw spec.
+	 * @return object Parsed spac.
+	 */
+	public static function parse_view_as( $raw_spec ) {
+		if ( empty( $raw_spec ) ) {
+			return [];
+		}
+		return array_reduce(
+			explode( ';', $raw_spec ),
+			function( $acc, $item ) {
+				$parts = explode( ':', $item );
+				if ( 1 === count( $parts ) ) {
+					$acc[ $parts[0] ] = true;
+				} else {
+					$acc[ $parts[0] ] = $parts[1];
+				}
+				return $acc;
+			},
+			[]
+		);
+	}
 }

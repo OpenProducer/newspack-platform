@@ -20,6 +20,29 @@ class Donations {
 	const DONATION_UNTIERED_SUGGESTED_AMOUNT_META = 'newspack_donation_untiered_suggested_amount';
 	const DONATION_TIERED_META                    = 'newspack_donation_is_tiered';
 	const DONATION_PAGE_ID_OPTION                 = 'newspack_donation_page_id';
+	const DONATION_ORDER_META_KEYS                = [
+		'referer_tags'       => [
+			'label' => 'Post Tags',
+		],
+		'referer_categories' => [
+			'label' => 'Post Categories',
+		],
+		'utm_source'         => [
+			'label' => 'Campaign Source',
+		],
+		'utm_medium'         => [
+			'label' => 'Campaign Medium',
+		],
+		'utm_campaign'       => [
+			'label' => 'Campaign Name',
+		],
+		'utm_term'           => [
+			'label' => 'Campaign Term',
+		],
+		'utm_content'        => [
+			'label' => 'Campaign Content',
+		],
+	];
 
 	/**
 	 * Initialize hooks/filters/etc.
@@ -384,10 +407,19 @@ class Donations {
 			}
 		}
 
+		$referer    = wp_get_referer();
+		$params     = [];
+		$parsed_url = wp_parse_url( $referer );
+
+		// Get URL params appended to the referer URL.
+		if ( ! empty( $parsed_url['query'] ) ) {
+			wp_parse_str( $parsed_url['query'], $params );
+		}
+
 		if ( function_exists( 'wpcom_vip_url_to_postid' ) ) {
-			$referer_post_id = wpcom_vip_url_to_postid( wp_get_referer() );
+			$referer_post_id = wpcom_vip_url_to_postid( $referer );
 		} else {
-			$referer_post_id = url_to_postid( wp_get_referer() ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.url_to_postid_url_to_postid
+			$referer_post_id = url_to_postid( $referer ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.url_to_postid_url_to_postid
 		}
 		$referer_tags       = [];
 		$referer_categories = [];
@@ -430,11 +462,25 @@ class Donations {
 			);
 		}
 
+		$query_args = [];
+
+		if ( ! empty( $referer_tags ) ) {
+			$query_args['referer_tags'] = implode( ',', $referer_tags );
+		}
+		if ( ! empty( $referer_categories ) ) {
+			$query_args['referer_categories'] = implode( ',', $referer_categories );
+		}
+
+		// Pass through UTM params so they can be forwarded to the WooCommerce checkout flow.
+		foreach ( $params as $param => $value ) {
+			if ( 'utm' === substr( $param, 0, 3 ) ) {
+				$param                = sanitize_text_field( $param );
+				$query_args[ $param ] = sanitize_text_field( $value );
+			}
+		}
+
 		$checkout_url = add_query_arg(
-			[
-				'referer_tags'       => implode( ',', $referer_tags ),
-				'referer_categories' => implode( ',', $referer_categories ),
-			],
+			$query_args,
 			$is_wc ? \wc_get_page_permalink( 'checkout' ) : ''
 		);
 
@@ -571,22 +617,18 @@ class Donations {
 	 * @param Array $form_fields WC form fields.
 	 */
 	public static function woocommerce_billing_fields( $form_fields ) {
-		$referer_tags       = filter_input( INPUT_GET, 'referer_tags', FILTER_SANITIZE_STRING );
-		$referer_categories = filter_input( INPUT_GET, 'referer_categories', FILTER_SANITIZE_STRING );
+		$params = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
 
-		if ( $referer_tags ) {
-			$form_fields['referer_tags'] = [
-				'type'    => 'text',
-				'default' => $referer_tags,
-				'class'   => [ 'hide' ],
-			];
-		}
-		if ( $referer_categories ) {
-			$form_fields['referer_categories'] = [
-				'type'    => 'text',
-				'default' => $referer_categories,
-				'class'   => [ 'hide' ],
-			];
+		if ( is_array( $params ) ) {
+			foreach ( $params as $param => $value ) {
+				if ( $value && in_array( $param, array_keys( self::DONATION_ORDER_META_KEYS ) ) ) {
+					$form_fields[ sanitize_text_field( $param ) ] = [
+						'type'    => 'text',
+						'default' => sanitize_text_field( $value ),
+						'class'   => [ 'hide' ],
+					];
+				}
+			}
 		}
 
 		return $form_fields;
@@ -598,11 +640,14 @@ class Donations {
 	 * @param String $order_id WC order id.
 	 */
 	public static function woocommerce_checkout_update_order_meta( $order_id ) {
-		if ( ! empty( $_POST['referer_tags'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			update_post_meta( $order_id, 'referer_tags', sanitize_text_field( $_POST['referer_tags'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
-		}
-		if ( ! empty( $_POST['referer_categories'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
-			update_post_meta( $order_id, 'referer_categories', sanitize_text_field( $_POST['referer_categories'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		$params = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+
+		if ( is_array( $params ) ) {
+			foreach ( $params as $param => $value ) {
+				if ( in_array( $param, array_keys( self::DONATION_ORDER_META_KEYS ) ) ) {
+					update_post_meta( $order_id, sanitize_text_field( $param ), sanitize_text_field( $value ) );
+				}
+			}
 		}
 	}
 }
