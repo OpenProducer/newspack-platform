@@ -148,10 +148,10 @@ class Support_Wizard extends Wizard {
 	 */
 	public function api_create_support_ticket( $request ) {
 		if ( empty( $request['subject'] ) ) {
-			return new WP_Error( 'newspack_invalid_support', __( 'Please provide a subject.' ) );
+			return new WP_Error( 'newspack_invalid_support', __( 'Please provide a subject.', 'newspack' ) );
 		}
 		if ( empty( $request['message'] ) ) {
-			return new WP_Error( 'newspack_invalid_support', __( 'Please provide a message.' ) );
+			return new WP_Error( 'newspack_invalid_support', __( 'Please provide a message.', 'newspack' ) );
 		}
 
 		try {
@@ -212,7 +212,7 @@ class Support_Wizard extends Wizard {
 		if ( is_wp_error( $response ) ) {
 			return new WP_Error(
 				'newspack_invalid_support',
-				__( 'Something went wrong. Please contact us directly at ' ) . '<a href="mailto:' . self::support_email() . '">' . self::support_email() . '</a>'
+				__( 'Something went wrong. Please contact us directly at ', 'newspack' ) . '<a href="mailto:' . self::support_email() . '">' . self::support_email() . '</a>'
 			);
 		} else {
 			return \rest_ensure_response(

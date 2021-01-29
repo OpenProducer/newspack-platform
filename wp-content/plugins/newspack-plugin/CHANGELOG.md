@@ -1,3 +1,19 @@
+# [1.29.0](https://github.com/Automattic/newspack-plugin/compare/v1.28.0...v1.29.0) (2021-01-28)
+
+
+### Bug Fixes
+
+* hide footer while loading to prevent overlap ([#835](https://github.com/Automattic/newspack-plugin/issues/835)) ([98ae903](https://github.com/Automattic/newspack-plugin/commit/98ae903630459e74344b4ada04502462312512b1))
+* show campaigns with pending and future status in UI ([#757](https://github.com/Automattic/newspack-plugin/issues/757)) ([e8528a6](https://github.com/Automattic/newspack-plugin/commit/e8528a6580242ba8c48a02919b8be4eb93dcabaa))
+
+
+### Features
+
+* **campaigns-wizard:** donor landing page setting ([#829](https://github.com/Automattic/newspack-plugin/issues/829)) ([8829c00](https://github.com/Automattic/newspack-plugin/commit/8829c003612f5cebdb87d4c5649663f58e4e80d9))
+* hide "Uncategorized" category from Campaigns UI ([#836](https://github.com/Automattic/newspack-plugin/issues/836)) ([63912c9](https://github.com/Automattic/newspack-plugin/commit/63912c98feebc529d4b1dd126b6334faea948b8b))
+* new onboarding menu UI (v3) ([#739](https://github.com/Automattic/newspack-plugin/issues/739)) ([dcb191b](https://github.com/Automattic/newspack-plugin/commit/dcb191b32b6af93afa908927f28456a3934b90a1))
+* **campaigns-wizard:** support referrer exclusion segmentation ([a164fa8](https://github.com/Automattic/newspack-plugin/commit/a164fa83fb993cd1ed0052ded35d4250ccfed79c))
+
 # [1.28.0](https://github.com/Automattic/newspack-plugin/compare/v1.27.0...v1.28.0) (2021-01-21)
 
 

@@ -1,3 +1,25 @@
+# [1.23.0](https://github.com/Automattic/newspack-popups/compare/v1.22.2...v1.23.0) (2021-01-28)
+
+
+### Features
+
+* add donor landing page setting ([#408](https://github.com/Automattic/newspack-popups/issues/408)) ([a3be6ca](https://github.com/Automattic/newspack-popups/commit/a3be6caacf51f464c904aa42e8d6b61da17daf5e))
+* **segmentation:** handle referrer exclusion segmentation ([#415](https://github.com/Automattic/newspack-popups/issues/415)) ([011e0eb](https://github.com/Automattic/newspack-popups/commit/011e0eb3fc629ed907bccd3da38eed9e99a42b41)), closes [#386](https://github.com/Automattic/newspack-popups/issues/386)
+
+## [1.22.2](https://github.com/Automattic/newspack-popups/compare/v1.22.1...v1.22.2) (2021-01-22)
+
+
+### Bug Fixes
+
+* admin bar shown on front end logged out ([#411](https://github.com/Automattic/newspack-popups/issues/411)) ([e9c53fa](https://github.com/Automattic/newspack-popups/commit/e9c53fa1693cc936ca2ce2b202c8ae069905284e))
+
+## [1.22.1](https://github.com/Automattic/newspack-popups/compare/v1.22.0...v1.22.1) (2021-01-21)
+
+
+### Bug Fixes
+
+* bug that causes admin bar to be hidden ([#409](https://github.com/Automattic/newspack-popups/issues/409)) ([4b67894](https://github.com/Automattic/newspack-popups/commit/4b67894f911cd2e7dc7ec4ecb967c696b32a1e20))
+
 # [1.22.0](https://github.com/Automattic/newspack-popups/compare/v1.21.0...v1.22.0) (2021-01-21)
 
 

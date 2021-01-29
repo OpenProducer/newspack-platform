@@ -107,13 +107,42 @@ abstract class Wizard {
 		// It should not actually load a JS file.
 		wp_register_script( 'newspack_data', '', [], '1.0', false );
 
+		$plugin_data = get_plugin_data( NEWSPACK_PLUGIN_FILE );
+
 		$urls = [
-			'dashboard'   => Wizards::get_url( 'dashboard' ),
-			'public_path' => Newspack::plugin_url() . '/dist/',
-			'bloginfo'    => [
+			'dashboard'      => Wizards::get_url( 'dashboard' ),
+			'public_path'    => Newspack::plugin_url() . '/dist/',
+			'bloginfo'       => [
 				'name' => get_bloginfo( 'name' ),
 			],
+			'plugin_version' => [
+				'label' => $plugin_data['Name'] . ' ' . $plugin_data['Version'],
+				'url'   => esc_url( admin_url( 'admin.php?page=newspack-updates-wizard' ) ),
+			],
 		];
+
+		$screen = get_current_screen();
+
+		if ( Newspack::is_debug_mode() ) {
+			$urls['components_demo'] = esc_url( admin_url( 'admin.php?page=newspack-components-demo' ) );
+			$urls['setup_wizard']    = esc_url( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
+			$urls['reset_url']       = esc_url(
+				add_query_arg(
+					array(
+						'newspack_reset' => 'reset',
+					),
+					Wizards::get_url( 'dashboard' )
+				)
+			);
+			$urls['reset_wpcom_url'] = esc_url(
+				add_query_arg(
+					array(
+						'newspack_reset' => 'reset-wpcom',
+					),
+					Wizards::get_url( 'dashboard' )
+				)
+			);
+		}
 
 		$aux_data = [
 			'is_e2e'        => Starter_Content::is_e2e(),

@@ -1,3 +1,16 @@
+# [1.19.0](https://github.com/Automattic/newspack-blocks/compare/v1.18.1...v1.19.0) (2021-01-28)
+
+
+### Bug Fixes
+
+* carousel block renders authors like homepage articles ([#680](https://github.com/Automattic/newspack-blocks/issues/680)) ([0b574c7](https://github.com/Automattic/newspack-blocks/commit/0b574c7da03a91262c2cd529139db74a32f9dad0))
+* in specific posts mode, post order should match input order ([#681](https://github.com/Automattic/newspack-blocks/issues/681)) ([1cfea8d](https://github.com/Automattic/newspack-blocks/commit/1cfea8de49bb80d7abce05b60240792fcc67a587))
+
+
+### Features
+
+* add article class for post types ([#679](https://github.com/Automattic/newspack-blocks/issues/679)) ([f493a01](https://github.com/Automattic/newspack-blocks/commit/f493a017796c9573ca8f70925e9f4c97ca740727))
+
 ## [1.18.1](https://github.com/Automattic/newspack-blocks/compare/v1.18.0...v1.18.1) (2021-01-19)
 
 

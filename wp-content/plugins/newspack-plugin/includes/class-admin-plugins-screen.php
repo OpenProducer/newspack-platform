@@ -116,7 +116,7 @@ class Admin_Plugins_Screen {
 						wp_nonce_url( 'plugins.php?action=newspack_install_plugin&plugin=' . urlencode( $plugin_slug ), 'newspack-install-plugin_' . $plugin_slug, 'install_nonce' ) .
 						'" class="edit" aria-label="' .
 						/* translators: %s - plugin name */
-						esc_attr( sprintf( __( 'Install %s', 'newspack' ), $plugin_data['Name'] ) ) .
+						esc_attr( sprintf( __( 'Install %s', 'newspack' ), 'newspack' ) ) .
 						'">' .
 						__( 'Install', 'newspack' ) .
 						'</a>';
@@ -261,17 +261,17 @@ class Admin_Plugins_Screen {
 		/* Assemble messages for all three scenarios. */
 		$messages = [];
 		if ( count( $missing_plugins ) ) {
-			$messages[] = __( 'The following plugins are required by Newspack but are not active: ' ) . '<strong>' . implode( $missing_plugins_names, ', ' ) . '.</strong>'; // phpcs:ignore PHPCompatibility.ParameterValues.RemovedImplodeFlexibleParamOrder.Deprecated
+			$messages[] = __( 'The following plugins are required by Newspack but are not active: ', 'newspack' ) . '<strong>' . implode( $missing_plugins_names, ', ' ) . '.</strong>'; // phpcs:ignore PHPCompatibility.ParameterValues.RemovedImplodeFlexibleParamOrder.Deprecated
 		}
 		if ( count( $unsupported_plugins ) ) {
-			$messages[] = __( 'The following plugins are not supported by Newspack: ' ) . '<strong>' . implode( $unsupported_plugin_names, ', ' ) . '.</strong>'; // phpcs:ignore PHPCompatibility.ParameterValues.RemovedImplodeFlexibleParamOrder.Deprecated
+			$messages[] = __( 'The following plugins are not supported by Newspack: ', 'newspack' ) . '<strong>' . implode( $unsupported_plugin_names, ', ' ) . '.</strong>'; // phpcs:ignore PHPCompatibility.ParameterValues.RemovedImplodeFlexibleParamOrder.Deprecated
 		}
 		if ( ! $newspack_theme_active ) {
-			$messages[] = __( 'The Newspack Theme is not currently active.' );
+			$messages[] = __( 'The Newspack Theme is not currently active.', 'newspack' );
 		}
 
 		if ( $disqus_notification ) {
-			$messages[] = __( 'You are using the Disqus comment system without the Newspack Disqus AMP plugin. The comments form will not display on AMP pages. Correct this ' ) . '<a href="/wp-admin/admin.php?page=newspack-engagement-wizard#/commenting/disqus">' . __( 'here' ) . '.</a>';
+			$messages[] = __( 'You are using the Disqus comment system without the Newspack Disqus AMP plugin. The comments form will not display on AMP pages. Correct this ', 'newspack' ) . '<a href="/wp-admin/admin.php?page=newspack-engagement-wizard#/commenting/disqus">' . __( 'here' ) . '.</a>';
 		}
 
 		/* Error notification only if required plugins are missing. */

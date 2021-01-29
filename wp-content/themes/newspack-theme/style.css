@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.27.0
+Version: 1.28.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -525,7 +525,7 @@ h1,
 .not-found .page-title,
 .error-404 .page-title,
 .has-larger-font-size,
-.archive:not(.paged) article.entry:first-of-type .entry-title,
+.archive:not(.paged).feature-latest article.entry:first-of-type .entry-title,
 h2 {
   font-size: 1.4em;
 }
@@ -535,7 +535,7 @@ h2 {
   .not-found .page-title,
   .error-404 .page-title,
   .has-larger-font-size,
-  .archive:not(.paged) article.entry:first-of-type .entry-title,
+  .archive:not(.paged).feature-latest article.entry:first-of-type .entry-title,
   h2 {
     font-size: 1.8em;
   }
@@ -2235,6 +2235,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 
 .post-template-single-feature .main-content,
 .page-template-single-feature .main-content,
+.archive-one-column #main,
 .newspack-front-page.page-template-single-feature .site-main {
   margin-left: auto;
   margin-right: auto;
@@ -2243,12 +2244,17 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 @media only screen and (min-width: 782px) {
-  .page-template-single-feature .entry-header {
+  .page-template-single-feature .entry-header,
+  .archive.archive-one-column .page-header {
     margin-left: auto;
     margin-right: auto;
     max-width: 780px;
     width: 100%;
   }
+}
+
+.archive-one-column-wide #main {
+  width: 100%;
 }
 
 .newspack-front-page .main-content,
@@ -2943,10 +2949,6 @@ amp-script .cat-links {
   width: 100%;
 }
 
-.page .post-thumbnail {
-  text-align: center;
-}
-
 .entry-content p {
   word-wrap: break-word;
 }
@@ -3138,7 +3140,7 @@ div.sharedaddy .sd-social h3.sd-title,
   }
 }
 
-/* Page */
+/* Pages */
 .page .entry-header + .post-thumbnail,
 .page .main-content > .post-thumbnail:first-child {
   margin-top: 1.5rem;
@@ -3146,6 +3148,16 @@ div.sharedaddy .sd-social h3.sd-title,
 
 .page.home .entry .entry-content {
   max-width: 100%;
+}
+
+.hide-page-title .site-content {
+  margin-top: 0;
+}
+
+@media only screen and (min-width: 782px) {
+  .hide-page-title .site-content {
+    margin-top: 0.5rem;
+  }
 }
 
 /* Static Front Page. */
@@ -4192,10 +4204,10 @@ div.sharedaddy .sd-social h3.sd-title,
 }
 
 @media only screen and (min-width: 782px) {
-  .archive:not(.paged) article.has-post-thumbnail:first-of-type {
+  .archive:not(.paged).feature-latest article.has-post-thumbnail:first-of-type {
     display: block;
   }
-  .archive:not(.paged) article.has-post-thumbnail:first-of-type .post-thumbnail {
+  .archive:not(.paged).feature-latest article.has-post-thumbnail:first-of-type .post-thumbnail {
     margin-bottom: 1rem;
     max-width: 100%;
   }
@@ -4225,6 +4237,10 @@ div.sharedaddy .sd-social h3.sd-title,
     height: 120px;
     width: 120px;
   }
+}
+
+.archive .cat-links:not(.sponsor-label) {
+  display: none;
 }
 
 .page-description {
@@ -6468,12 +6484,16 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
 
 /* Archives */
 .blog .cat-links,
-.search .cat-links {
+.search .cat-links,
+.archive .cat-links {
   margin-bottom: 0.5rem;
 }
 
 .blog .cat-links a,
-.search .cat-links a {
+.search .cat-links a,
+.archive .cat-links a {
+  font-size: 0.65rem;
+  margin-bottom: 0;
   padding: 0.25em 0.5em;
 }
 

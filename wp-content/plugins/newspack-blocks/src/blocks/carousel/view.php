@@ -65,6 +65,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	if ( $article_query->have_posts() ) :
 		while ( $article_query->have_posts() ) :
 			$article_query->the_post();
+			$authors = Newspack_Blocks::prepare_authors();
 			if ( ! has_post_thumbnail() ) {
 				continue;
 			}
@@ -174,18 +175,29 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 							<?php
 						else :
 							if ( $attributes['showAuthor'] ) :
-								if ( $attributes['showAvatar'] ) {
-									echo get_avatar( get_the_author_meta( 'ID' ) );
-								}
+								if ( $attributes['showAvatar'] ) :
+									echo wp_kses(
+										newspack_blocks_format_avatars( $authors ),
+										array(
+											'img'      => array(
+												'class'  => true,
+												'src'    => true,
+												'alt'    => true,
+												'width'  => true,
+												'height' => true,
+												'data-*' => true,
+												'srcset' => true,
+											),
+											'noscript' => array(),
+											'a'        => array(
+												'href' => true,
+											),
+										)
+									);
+								endif;
 								?>
 								<span class="byline">
-									<?php
-									printf(
-										/* translators: %s: post author. */
-										esc_html_x( 'by %s', 'post author', 'newspack-blocks' ),
-										'<span class="author vcard"><a class="url fn n" href="' . esc_url( get_author_posts_url( get_the_author_meta( 'ID' ) ) ) . '">' . esc_html( get_the_author() ) . '</a></span>'
-									);
-									?>
+									<?php echo wp_kses_post( newspack_blocks_format_byline( $authors ) ); ?>
 								</span><!-- .author-name -->
 								<?php
 							endif;

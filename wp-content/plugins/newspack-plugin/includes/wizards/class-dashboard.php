@@ -108,12 +108,6 @@ class Dashboard extends Wizard {
 				'url'         => Wizards::get_url( 'popups' ),
 				'description' => Wizards::get_description( 'popups' ),
 			],
-			[
-				'slug'        => 'updates',
-				'name'        => Wizards::get_name( 'updates' ),
-				'url'         => Wizards::get_url( 'updates' ),
-				'description' => Wizards::get_description( 'updates' ),
-			],
 		];
 
 		if ( Support_Wizard::configured() ) {
@@ -170,7 +164,7 @@ class Dashboard extends Wizard {
 			$icon,
 			3
 		);
-		$first_subnav_title = get_option( NEWSPACK_SETUP_COMPLETE ) ? __( 'Dashboard' ) : __( 'Setup' );
+		$first_subnav_title = get_option( NEWSPACK_SETUP_COMPLETE ) ? __( 'Dashboard', 'newspack' ) : __( 'Setup', 'newspack' );
 		add_submenu_page(
 			$this->slug,
 			$first_subnav_title,

@@ -68,7 +68,6 @@ export const queryCriteriaFromAttributes = attributes => {
 		isSpecificPostModeActive
 			? {
 					include: cleanPosts,
-					orderby: 'include',
 					per_page: specificPosts.length,
 					post_type: postType,
 			  }

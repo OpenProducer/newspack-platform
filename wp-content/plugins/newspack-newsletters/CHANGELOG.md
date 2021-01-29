@@ -1,3 +1,10 @@
+# [1.18.0](https://github.com/Automattic/newspack-newsletters/compare/v1.17.0...v1.18.0) (2021-01-28)
+
+
+### Features
+
+* make Newsletters use post categories + tags ([#398](https://github.com/Automattic/newspack-newsletters/issues/398)) ([23b97d4](https://github.com/Automattic/newspack-newsletters/commit/23b97d47a4bde471e34cd50447792f662963c2f1))
+
 # [1.17.0](https://github.com/Automattic/newspack-newsletters/compare/v1.16.2...v1.17.0) (2021-01-19)
 
 

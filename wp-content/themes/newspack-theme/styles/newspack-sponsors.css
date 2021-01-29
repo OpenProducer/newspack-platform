@@ -171,6 +171,7 @@ amp-script .sponsor-label .flag {
 .search article .sponsor-label,
 .archive article .sponsor-label,
 .blog article .sponsor-label {
+  display: flex;
   font-size: 65%;
 }
 

@@ -45,6 +45,74 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 				],
 			]
 		);
+		register_rest_route(
+			$this->namespace,
+			'/newspack-blocks-posts',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ 'Newspack_Blocks_API', 'posts_endpoint' ],
+				'args'                => [
+					'author'       => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'integer',
+						),
+						'default' => array(),
+					],
+					'categories'   => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'integer',
+						),
+						'default' => array(),
+					],
+					'exclude'      => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'integer',
+						),
+						'default' => array(),
+					],
+					'include'      => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'integer',
+						),
+						'default' => array(),
+					],
+					'orderby'      => [
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'per_page'     => [
+						'sanitize_callback' => 'absint',
+					],
+					'tags'         => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'integer',
+						),
+						'default' => array(),
+					],
+					'tags_exclude' => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'integer',
+						),
+						'default' => array(),
+					],
+					'post_type'    => [
+						'type'    => 'array',
+						'items'   => array(
+							'type' => 'string',
+						),
+						'default' => array(),
+					],
+				],
+				'permission_callback' => function( $request ) {
+					return current_user_can( 'edit_posts' );
+				},
+			]
+		);
 	}
 
 	/**

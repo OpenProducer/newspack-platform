@@ -228,18 +228,35 @@ final class Newspack_Popups_Segmentation {
 			],
 		];
 
+		$client_data_endpoint             = self::get_client_data_endpoint();
+		$amp_analytics_config['requests'] = [
+			'event' => esc_url( $client_data_endpoint ),
+		];
+
 		// Handle Mailchimp URL parameters.
 		if ( isset( $_GET['mc_cid'], $_GET['mc_eid'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$endpoint                         = self::get_client_data_endpoint();
-			$amp_analytics_config['requests'] = [
-				'event' => esc_url( $endpoint ),
-			];
 			$amp_analytics_config['triggers']['trackMailchimpData'] = [
 				'on'             => 'ini-load',
 				'request'        => 'event',
 				'extraUrlParams' => [
 					'mc_cid'    => sanitize_text_field( $_GET['mc_cid'] ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 					'mc_eid'    => sanitize_text_field( $_GET['mc_eid'] ), // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+					'client_id' => 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
+				],
+			];
+		}
+
+		$donor_landing_page = Newspack_Popups_Settings::donor_landing_page();
+		if ( $donor_landing_page && intval( $donor_landing_page ) === get_queried_object_id() ) {
+			$amp_analytics_config['triggers']['reportDonor'] = [
+				'on'             => 'ini-load',
+				'request'        => 'event',
+				'extraUrlParams' => [
+					'donation'  => wp_json_encode(
+						[
+							'offsite_has_donated' => true,
+						]
+					),
 					'client_id' => 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
 				],
 			];

@@ -33,6 +33,13 @@ class Updates_Wizard extends Wizard {
 	protected $capability = 'manage_options';
 
 	/**
+	 * Whether the wizard should be displayed in the Newspack submenu.
+	 *
+	 * @var bool.
+	 */
+	protected $hidden = true;
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {

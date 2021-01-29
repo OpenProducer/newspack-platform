@@ -73,6 +73,25 @@ class Newspack_Popups_Settings {
 	 * Return all settings.
 	 */
 	public static function get_settings() {
+		$donor_landing_options       = [];
+		$donor_landing_options_query = new \WP_Query(
+			[
+				'post_type'      => [ 'page' ],
+				'post_status'    => [ 'publish' ],
+				'post_parent'    => 0,
+				'posts_per_page' => 100,
+			]
+		);
+
+		if ( $donor_landing_options_query->have_posts() ) {
+			foreach ( $donor_landing_options_query->posts as $page ) {
+				$donor_landing_options[] = [
+					'label' => $page->post_title,
+					'value' => $page->ID,
+				];
+			}
+		}
+
 		return [
 			[
 				'key'   => 'suppress_newsletter_campaigns',
@@ -99,7 +118,7 @@ class Newspack_Popups_Settings {
 				),
 			],
 			[
-				'key'   => 'newspack_newsletters_non_interative_mode',
+				'key'   => 'newspack_popups_non_interative_mode',
 				'value' => self::is_non_interactive(),
 				'label' => __(
 					'Enable non-interactive mode.',
@@ -109,6 +128,21 @@ class Newspack_Popups_Settings {
 					'Use this setting in high traffic scenarios. No API requests will be made, reducing server load. Inline campaigns will be shown to all users without dismissal buttons, and overlay campaigns will be suppressed.',
 					'newspack-popups'
 				),
+			],
+			[
+				'key'            => 'newspack_popups_donor_landing_page',
+				'value'          => self::donor_landing_page(),
+				'label'          => __(
+					'Donor landing page',
+					'newspack-popups'
+				),
+				'help'           => __(
+					"Set a page on your site as a donation landing page. Once a reader views this page, they will be considered a donor. This is helpful if you're using an off-site donation platform but still want to target donors as an audience segment.",
+					'newspack-popups'
+				),
+				'type'           => 'select',
+				'options'        => $donor_landing_options,
+				'no_option_text' => __( '-- None --', 'newspack-popups' ),
 			],
 			[
 				'key'   => 'all_segments',
@@ -132,7 +166,15 @@ class Newspack_Popups_Settings {
 	 * Is the non-interactive setting on?
 	 */
 	public static function is_non_interactive() {
-		return get_option( 'newspack_newsletters_non_interative_mode', false );
+		// Handle legacy option name.
+		return get_option( 'newspack_newsletters_non_interative_mode', false ) || get_option( 'newspack_popups_non_interative_mode', false );
+	}
+
+	/**
+	 * Donor landing page.
+	 */
+	public static function donor_landing_page() {
+		return get_option( 'newspack_popups_donor_landing_page', '' );
 	}
 
 	/**

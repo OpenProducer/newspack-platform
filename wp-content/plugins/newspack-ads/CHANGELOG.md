@@ -1,3 +1,10 @@
+## [1.11.1](https://github.com/Automattic/newspack-ads/compare/v1.11.0...v1.11.1) (2021-01-28)
+
+
+### Bug Fixes
+
+* for sticky ads, use smallest ad unit size available ([#101](https://github.com/Automattic/newspack-ads/issues/101)) ([8b4da54](https://github.com/Automattic/newspack-ads/commit/8b4da54235c0fa15fad3d8ef67791a332f65a5be))
+
 # [1.11.0](https://github.com/Automattic/newspack-ads/compare/v1.10.1...v1.11.0) (2021-01-19)
 
 

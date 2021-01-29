@@ -107,8 +107,6 @@ final class Newspack {
 			include_once NEWSPACK_ABSPATH . 'includes/class-nrh.php';
 		}
 
-		include_once NEWSPACK_ABSPATH . 'includes/class-settings.php';
-
 		include_once NEWSPACK_ABSPATH . 'includes/configuration_managers/class-configuration-managers.php';
 	}
 
@@ -139,7 +137,11 @@ final class Newspack {
 	 * Reset Newspack by removing all newspack prefixed options. Triggered by the query param reset_newspack_settings=1
 	 */
 	public function remove_all_newspack_options() {
-		if ( filter_input( INPUT_POST, 'newspack_reset', FILTER_SANITIZE_STRING ) === 'on' ) {
+		if ( ! self::is_debug_mode() ) {
+			return;
+		}
+		$newspack_reset = filter_input( INPUT_GET, 'newspack_reset', FILTER_SANITIZE_STRING );
+		if ( 'reset' === $newspack_reset ) {
 			$all_options = wp_load_alloptions();
 			foreach ( $all_options as $key => $value ) {
 				if ( strpos( $key, 'newspack' ) === 0 || strpos( $key, '_newspack' ) === 0 ) {
@@ -149,7 +151,7 @@ final class Newspack {
 			wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
 			exit;
 		}
-		if ( Support_Wizard::get_wpcom_access_token() && filter_input( INPUT_POST, 'newspack_remove_wpcom_token', FILTER_SANITIZE_STRING ) === 'on' ) {
+		if ( Support_Wizard::get_wpcom_access_token() && 'reset-wpcom' === $newspack_reset ) {
 			delete_user_meta( get_current_user_id(), Support_Wizard::NEWSPACK_WPCOM_ACCESS_TOKEN );
 		}
 	}
@@ -190,7 +192,7 @@ final class Newspack {
 	 * Is the site in Newspack debug mode?
 	 */
 	public static function is_debug_mode() {
-		return ( defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG ) || get_option( 'newspack_debug', false );
+		return defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG;
 	}
 }
 Newspack::instance();

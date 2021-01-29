@@ -28,6 +28,22 @@ class Campaign_Data_Utils {
 	}
 
 	/**
+	 * Compare page referrer to a list of referrers.
+	 *
+	 * @param string $page_referrer_url Referrer to compare to.
+	 * @param string $referrers_list_string Comma-separated referrer domains list.
+	 */
+	public static function does_referrer_match( $page_referrer_url, $referrers_list_string ) {
+		$referer_domain      = parse_url( $page_referrer_url, PHP_URL_HOST ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$referer_domain_root = implode( '.', array_slice( explode( '.', $referer_domain ), -2 ) );
+		$referrer_matches    = in_array(
+			$referer_domain_root,
+			array_map( 'trim', explode( ',', $referrers_list_string ) )
+		);
+		return $referrer_matches;
+	}
+
+	/**
 	 * Is client a subscriber?
 	 *
 	 * @param object $client_data Client data.
@@ -185,16 +201,16 @@ class Campaign_Data_Utils {
 			if ( empty( $page_referrer_url ) ) {
 				$should_display = false;
 			}
-			$referer_domain = parse_url( $page_referrer_url, PHP_URL_HOST ); // phpcs:ignore WordPress.WP.AlternativeFunctions.parse_url_parse_url, WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-			// Handle the 'www' prefix – assume `www.example.com` and `example.com` referrers are the same.
-			$referer_domain_alternative = strpos( $referer_domain, 'www.' ) === 0 ? substr( $referer_domain, 4 ) : "www.$referer_domain";
-			$referrer_matches           = array_intersect(
-				[ $referer_domain, $referer_domain_alternative ],
-				array_map( 'trim', explode( ',', $campaign_segment->referrers ) )
-			);
-			if ( empty( $referrer_matches ) ) {
+			if ( empty( self::does_referrer_match( $page_referrer_url, $campaign_segment->referrers ) ) ) {
 				$should_display = false;
 			}
+		}
+
+		/**
+		 * By referrer domain - negative.
+		 */
+		if ( ! empty( $campaign_segment->referrers_not ) && ! empty( self::does_referrer_match( $page_referrer_url, $campaign_segment->referrers_not ) ) ) {
+			$should_display = false;
 		}
 
 		/**

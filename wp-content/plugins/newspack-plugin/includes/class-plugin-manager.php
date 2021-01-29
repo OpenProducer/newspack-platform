@@ -163,7 +163,7 @@ class Plugin_Manager {
 			],
 			'newspack-ads'                  => [
 				'Name'        => esc_html__( 'Newspack Ads', 'newspack' ),
-				'Description' => esc_html__( 'Ads integration.' ),
+				'Description' => esc_html__( 'Ads integration.', 'newspack' ),
 				'Author'      => 'Automattic',
 				'PluginURI'   => 'https://newspack.blog',
 				'AuthorURI'   => 'https://automattic.com',
@@ -171,7 +171,7 @@ class Plugin_Manager {
 			],
 			'newspack-blocks'               => [
 				'Name'        => esc_html__( 'Newspack Blocks', 'newspack' ),
-				'Description' => esc_html__( 'A collection of blocks for news publishers.' ),
+				'Description' => esc_html__( 'A collection of blocks for news publishers.', 'newspack' ),
 				'Author'      => 'Automattic',
 				'PluginURI'   => 'https://newspack.blog',
 				'AuthorURI'   => 'https://automattic.com',
@@ -179,7 +179,7 @@ class Plugin_Manager {
 			],
 			'newspack-content-converter'    => [
 				'Name'        => esc_html__( 'Newspack Content Converter', 'newspack' ),
-				'Description' => esc_html__( 'Batch conversion of Classic->Gutenberg post conversion.' ),
+				'Description' => esc_html__( 'Batch conversion of Classic->Gutenberg post conversion.', 'newspack' ),
 				'Author'      => 'Automattic',
 				'PluginURI'   => 'https://newspack.blog',
 				'AuthorURI'   => 'https://automattic.com',

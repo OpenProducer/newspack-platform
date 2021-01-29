@@ -92,14 +92,15 @@ const createCacheKey = JSON.stringify;
  */
 function* getPosts( block ) {
 	const cacheKey = createCacheKey( block.postsQuery );
+	const restUrl = window.newspack_blocks_data.posts_rest_url;
 	let posts = POSTS_QUERIES_CACHE[ cacheKey ];
 	if ( posts === undefined ) {
-		const path = addQueryArgs( '/newspack-blocks/v1/posts', {
+		const url = addQueryArgs( restUrl, {
 			...block.postsQuery,
 			// `context=edit` is needed, so that custom REST fields are returned.
 			context: 'edit',
 		} );
-		posts = yield call( apiFetch, { path } );
+		posts = yield call( apiFetch, { url } );
 		POSTS_QUERIES_CACHE[ cacheKey ] = posts;
 	}
 

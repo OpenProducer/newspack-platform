@@ -393,10 +393,14 @@ final class Newspack_Popups {
 	/**
 	 * Should admin bar be shown.
 	 *
+	 * @param bool $show Whether to show admin bar.
 	 * @return boolean Whether admin bar should be shown.
 	 */
-	public static function show_admin_bar() {
-		return ! self::is_preview_request();
+	public static function show_admin_bar( $show ) {
+		if ( $show ) {
+			return ! self::is_preview_request();
+		}
+		return $show;
 	}
 
 	/**
@@ -406,7 +410,7 @@ final class Newspack_Popups {
 	 */
 	public static function is_preview_request() {
 		$view_as_spec = Newspack_Popups_View_As::viewing_as_spec();
-		return self::previewed_popup_id() || false !== $view_as_spec;
+		return self::previewed_popup_id() || false != $view_as_spec;
 	}
 
 	/**
