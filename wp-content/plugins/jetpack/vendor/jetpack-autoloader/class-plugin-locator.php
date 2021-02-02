@@ -5,7 +5,7 @@
  * @package automattic/jetpack-autoloader
  */
 
-namespace Automattic\Jetpack\Autoloader\jp0c2a830fc5e83fd354fddd8ce525ab7d;
+namespace Automattic\Jetpack\Autoloader\jp84939e330244e4e15279abc789e679bf;
 
  // phpcs:ignore
 
@@ -34,6 +34,7 @@ class Plugin_Locator {
 	 * Finds the path to the current plugin.
 	 *
 	 * @return string $path The path to the current plugin.
+	 *
 	 * @throws \RuntimeException If the current plugin does not have an autoloader.
 	 */
 	public function find_current_plugin() {
@@ -67,11 +68,13 @@ class Plugin_Locator {
 	}
 
 	/**
-	 * Checks for plugins that are being activated in this request and returns all that it finds.
+	 * Checks for plugins in the `action` request parameter.
+	 *
+	 * @param string[] $allowed_actions The actions that we're allowed to return plugins for.
 	 *
 	 * @return array $plugin_paths The list of absolute paths we've found.
 	 */
-	public function find_activating_this_request() {
+	public function find_using_request_action( $allowed_actions ) {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 
 		/**
@@ -85,11 +88,15 @@ class Plugin_Locator {
 			return array();
 		}
 
-		$plugin_slugs = array();
-
 		$action = isset( $_REQUEST['action'] ) ? wp_unslash( $_REQUEST['action'] ) : false;
+		if ( ! in_array( $action, $allowed_actions, true ) ) {
+			return array();
+		}
+
+		$plugin_slugs = array();
 		switch ( $action ) {
 			case 'activate':
+			case 'deactivate':
 				if ( empty( $_REQUEST['plugin'] ) ) {
 					break;
 				}
@@ -98,6 +105,7 @@ class Plugin_Locator {
 				break;
 
 			case 'activate-selected':
+			case 'deactivate-selected':
 				if ( empty( $_REQUEST['checked'] ) ) {
 					break;
 				}
@@ -106,6 +114,7 @@ class Plugin_Locator {
 				break;
 		}
 
+		// phpcs:enable WordPress.Security.NonceVerification.Recommended
 		return $this->convert_plugins_to_paths( $plugin_slugs );
 	}
 

@@ -263,6 +263,12 @@ class Sender {
 		if ( ! Settings::get_setting( 'full_sync_sender_enabled' ) ) {
 			return;
 		}
+
+		// Don't sync if request is marked as read only.
+		if ( Constants::is_true( 'JETPACK_SYNC_READ_ONLY' ) ) {
+			return new \WP_Error( 'jetpack_sync_read_only' );
+		}
+
 		$this->continue_full_sync_enqueue();
 		// immediate full sync sends data in continue_full_sync_enqueue.
 		if ( false === strpos( get_class( $sync_module ), 'Full_Sync_Immediately' ) ) {
@@ -334,6 +340,16 @@ class Sender {
 
 		if ( ! Settings::is_sender_enabled( $queue->id ) ) {
 			return new \WP_Error( 'sender_disabled_for_queue_' . $queue->id );
+		}
+
+		// Return early if we've gotten a retry-after header response.
+		$retry_time = get_option( Actions::RETRY_AFTER_PREFIX . $queue->id );
+		if ( $retry_time ) {
+			// If expired delete but don't send. Send will occurr in new request to avoid race conditions.
+			if ( microtime( true ) > $retry_time ) {
+				delete_option( Actions::RETRY_AFTER_PREFIX . $queue->id );
+			}
+			return new \WP_Error( 'retry_after' );
 		}
 
 		// Don't sync if we are throttled.

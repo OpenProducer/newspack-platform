@@ -269,15 +269,18 @@ class Table_Checksum {
 	private function validate_fields_against_table( $fields ) {
 		global $wpdb;
 
+		$valid_fields = array();
+
 		// phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		$result = $wpdb->get_row( "SELECT * FROM {$this->table} LIMIT 1", ARRAY_A );
-		if ( ! is_array( $result ) ) {
-			throw new Exception( 'Unexpected $wpdb->query output: not array' );
+		$result = $wpdb->get_results( "SHOW COLUMNS FROM {$this->table}", ARRAY_A );
+
+		foreach ( $result as $result_row ) {
+			$valid_fields[] = $result_row['Field'];
 		}
 
 		// Check if the fields are actually contained in the table.
 		foreach ( $fields as $field_to_check ) {
-			if ( ! array_key_exists( $field_to_check, $result ) ) {
+			if ( ! in_array( $field_to_check, $valid_fields, true ) ) {
 				throw new Exception( "Invalid field name: field '{$field_to_check}' doesn't exist in table {$this->table}" );
 			}
 		}
@@ -422,7 +425,14 @@ class Table_Checksum {
 		$salt = $wpdb->prepare( '%s', $this->salt ); // TODO escape or prepare statement.
 
 		// Prepare the compound key.
-		$key_fields = implode( ',', $this->key_fields );
+		$key_fields = array();
+
+		// Prefix the fields with the table name, to avoid clashes in queries with sub-queries (e.g. meta tables).
+		foreach ( $this->key_fields as $field ) {
+			$key_fields[] = $this->table . '.' . $field;
+		}
+
+		$key_fields = implode( ',', $key_fields );
 
 		// Prepare the checksum fields.
 		$checksum_fields_string = implode( ',', array_merge( $this->checksum_fields, array( $salt ) ) );
@@ -431,7 +441,7 @@ class Table_Checksum {
 		if ( $granular_result ) {
 			// TODO uniq the fields as sometimes(most) range_index is the key and there's no need to select the same field twice.
 			$additional_fields = "
-				{$this->range_field} as range_index,
+				{$this->table}.{$this->range_field} as range_index,
 			    {$key_fields},
 			";
 		}
@@ -469,6 +479,7 @@ class Table_Checksum {
 		if ( $granular_result ) {
 			$query .= "
 				GROUP BY {$key_fields}
+				LIMIT 9999999
 			";
 		}
 

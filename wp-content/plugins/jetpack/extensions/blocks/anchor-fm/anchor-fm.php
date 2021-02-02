@@ -80,14 +80,23 @@ function process_anchor_params() {
 	}
 
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
-	$podcast_id       = isset( $_GET['anchor_podcast'] ) ? sanitize_text_field( wp_unslash( $_GET['anchor_podcast'] ) ) : null;
-	$episode_id       = isset( $_GET['anchor_episode'] ) ? sanitize_text_field( wp_unslash( $_GET['anchor_episode'] ) ) : null;
-	$spotify_show_url = isset( $_GET['spotify_show_url'] ) ? esc_url_raw( wp_unslash( $_GET['spotify_show_url'] ) ) : null;
+	$podcast_id  = isset( $_GET['anchor_podcast'] ) ? sanitize_text_field( wp_unslash( $_GET['anchor_podcast'] ) ) : null;
+	$episode_id  = isset( $_GET['anchor_episode'] ) ? sanitize_text_field( wp_unslash( $_GET['anchor_episode'] ) ) : null;
+	$spotify_url = isset( $_GET['spotify_url'] ) ? wp_unslash( $_GET['spotify_url'] ) : null;
 	// phpcs:enable WordPress.Security.NonceVerification.Recommended
 
 	$data = array(
 		'actions' => array(),
 	);
+
+	// add / update Spotify Badge URL.
+	$valid_spotify_url = \Jetpack_Gutenberg::validate_block_embed_url( $spotify_url, array( 'open.spotify.com' ) );
+	if ( $valid_spotify_url ) {
+		$data['spotifyShowUrl'] = $valid_spotify_url;
+		if ( get_post_meta( $post->ID, 'jetpack_anchor_spotify_show', true ) !== $valid_spotify_url ) {
+			update_post_meta( $post->ID, 'jetpack_anchor_spotify_show', $valid_spotify_url );
+		}
+	}
 
 	if ( ! empty( $podcast_id ) ) {
 		$feed           = 'https://anchor.fm/s/' . $podcast_id . '/podcast/rss';
@@ -96,10 +105,18 @@ function process_anchor_params() {
 		if ( ! \is_wp_error( $rss ) ) {
 			update_post_meta( $post->ID, 'jetpack_anchor_podcast', $podcast_id );
 
+			// If we haven't got an episode ID, try and get the latest episode.
+			if ( empty( $episode_id ) && $rss->get_item_quantity() ) {
+				$latest_episode = $rss->get_item( 0 );
+				if ( $latest_episode ) {
+					$episode_id = $latest_episode->get_id();
+				}
+			}
+
 			if ( ! empty( $episode_id ) ) {
 				$track = $podcast_helper->get_track_data( $episode_id );
 				if ( ! \is_wp_error( $track ) ) {
-					update_post_meta( $post->ID, 'jetpack_anchor_episode', $episode_id );
+					update_post_meta( $post->ID, 'jetpack_anchor_episode', $track['guid'] );
 
 					if ( 'post-new.php' === $GLOBALS['pagenow'] ) {
 						$data['actions'][] = array(
@@ -108,24 +125,40 @@ function process_anchor_params() {
 								'title' => $track['title'],
 							),
 						);
+
+						$self_links = $rss->get_links( 'self' );
+						$cover      = $rss->get_image_url();
+
+						// Add insert basic template action.
+						$data['actions'][] = array(
+							'insert-episode-template',
+							array(
+								'feedUrl'         => ! empty( $self_links ) ? esc_url_raw( $self_links[0] ) : $feed,
+								'coverImage'      => ! empty( $cover ) ? esc_url( $cover ) : null,
+								'episodeTrack'    => $track,
+								'spotifyImageUrl' => Assets::staticize_subdomain( 'https://wordpress.com/i/spotify-badge.svg' ),
+								'spotifyShowUrl'  => esc_url_raw( $valid_spotify_url ),
+							),
+						);
 					}
 				}
 			}
 		}
 	}
 
-	if ( ! empty( $spotify_show_url ) ) {
-		$data['spotifyShowUrl'] = $spotify_show_url;
-		if ( get_post_meta( $post->ID, 'jetpack_anchor_spotify_show', true ) !== $spotify_show_url ) {
-			update_post_meta( $post->ID, 'jetpack_anchor_spotify_show', $spotify_show_url );
-			$data['actions'][] = array(
-				'insert-spotify-badge',
-				array(
-					'image' => Assets::staticize_subdomain( 'https://wordpress.com/i/spotify-badge.svg' ),
-					'url'   => $spotify_show_url,
-				),
-			);
-		}
+	// Add Spotify Badge template action.
+	if (
+		$valid_spotify_url && (
+			'post-new.php' !== $GLOBALS['pagenow'] // Delegate badge insertion to podcast template.
+		)
+	) {
+		$data['actions'][] = array(
+			'insert-spotify-badge',
+			array(
+				'spotifyImageUrl' => Assets::staticize_subdomain( 'https://wordpress.com/i/spotify-badge.svg' ),
+				'spotifyShowUrl'  => esc_url_raw( $valid_spotify_url ),
+			),
+		);
 	}
 
 	// Display an outbound link after publishing a post (only to English-speaking users since Anchor

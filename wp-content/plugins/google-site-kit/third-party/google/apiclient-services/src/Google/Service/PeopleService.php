@@ -42,7 +42,7 @@ class Google_Service_PeopleService extends \Google\Site_Kit_Dependencies\Google_
     const DIRECTORY_READONLY = "https://www.googleapis.com/auth/directory.readonly";
     /** View your street addresses. */
     const USER_ADDRESSES_READ = "https://www.googleapis.com/auth/user.addresses.read";
-    /** View your complete date of birth. */
+    /** See and download your exact date of birth. */
     const USER_BIRTHDAY_READ = "https://www.googleapis.com/auth/user.birthday.read";
     /** View your email addresses. */
     const USER_EMAILS_READ = "https://www.googleapis.com/auth/user.emails.read";
@@ -50,7 +50,7 @@ class Google_Service_PeopleService extends \Google\Site_Kit_Dependencies\Google_
     const USER_GENDER_READ = "https://www.googleapis.com/auth/user.gender.read";
     /** See your education, work history and org info. */
     const USER_ORGANIZATION_READ = "https://www.googleapis.com/auth/user.organization.read";
-    /** View your phone numbers. */
+    /** See and download your personal phone numbers. */
     const USER_PHONENUMBERS_READ = "https://www.googleapis.com/auth/user.phonenumbers.read";
     /** View your email address. */
     const USERINFO_EMAIL = "https://www.googleapis.com/auth/userinfo.email";

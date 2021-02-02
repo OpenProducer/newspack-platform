@@ -34,6 +34,7 @@ return array(
     'Google\\Site_Kit\\Core\\Authentication\\Exception\\Insufficient_Scopes_Exception' => $baseDir . '/Core/Authentication/Exception/Insufficient_Scopes_Exception.php',
     'Google\\Site_Kit\\Core\\Authentication\\Google_Proxy' => $baseDir . '/Core/Authentication/Google_Proxy.php',
     'Google\\Site_Kit\\Core\\Authentication\\Has_Connected_Admins' => $baseDir . '/Core/Authentication/Has_Connected_Admins.php',
+    'Google\\Site_Kit\\Core\\Authentication\\Initial_Version' => $baseDir . '/Core/Authentication/Initial_Version.php',
     'Google\\Site_Kit\\Core\\Authentication\\Owner_ID' => $baseDir . '/Core/Authentication/Owner_ID.php',
     'Google\\Site_Kit\\Core\\Authentication\\Profile' => $baseDir . '/Core/Authentication/Profile.php',
     'Google\\Site_Kit\\Core\\Authentication\\User_Input_State' => $baseDir . '/Core/Authentication/User_Input_State.php',
