@@ -99,7 +99,7 @@ call_user_func(
 				if ( has_post_format( 'aside' ) ) :
 					the_title( '<h3 class="entry-title">', '</h3>' );
 				else :
-				the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' );
+					the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' );
 				endif;
 			endif;
 			?>
@@ -164,7 +164,7 @@ call_user_func(
 						}
 						?>
 					</span>
-					<?php
+						<?php
 					else :
 						if ( $attributes['showAuthor'] ) :
 							if ( $attributes['showAvatar'] ) :

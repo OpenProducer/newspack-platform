@@ -123,7 +123,7 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 					</h2>
 				<?php endif; ?>
 				<?php
-				echo Newspack_Blocks::template_inc(
+				echo Newspack_Blocks::template_inc( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					__DIR__ . '/templates/articles-list.php',
 					[
 						'articles_rest_url' => $articles_rest_url,
@@ -147,10 +147,10 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 				?>
 				</button>
 				<p class="loading">
-					<?php _e( 'Loading...', 'newspack-blocks' ); ?>
+					<?php esc_html_e( 'Loading...', 'newspack-blocks' ); ?>
 				</p>
 				<p class="error">
-					<?php _e( 'Something went wrong. Please refresh the page and/or try again.', 'newspack-blocks' ); ?>
+					<?php esc_html_e( 'Something went wrong. Please refresh the page and/or try again.', 'newspack-blocks' ); ?>
 				</p>
 
 			<?php endif; ?>

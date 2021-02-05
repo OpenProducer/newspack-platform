@@ -63,8 +63,9 @@ class Newspack_Blocks {
 				'newspack-blocks-editor',
 				'newspack_blocks_data',
 				[
-					'patterns'       => self::get_patterns_for_post_type( get_post_type() ),
-					'posts_rest_url' => rest_url( 'newspack-blocks/v1/newspack-blocks-posts' ),
+					'patterns'                => self::get_patterns_for_post_type( get_post_type() ),
+					'posts_rest_url'          => rest_url( 'newspack-blocks/v1/newspack-blocks-posts' ),
+					'specific_posts_rest_url' => rest_url( 'newspack-blocks/v1/newspack-blocks-specific-posts' ),
 				]
 			);
 
@@ -521,7 +522,19 @@ class Newspack_Blocks {
 	/**
 	 * Function to check if plugin is enabled, and if there are sponsors.
 	 *
-	 * @param string $id Post ID.
+	 * @see https://github.com/Automattic/newspack-sponsors/blob/8ebf72ec4fe744bca405a1f6fe8cd5bce3a29e6a/includes/newspack-sponsors-theme-helpers.php#L35
+	 *
+	 * @param int|null    $id    ID of the post or archive term to get sponsors for.
+	 *                           If not provided, we will try to guess based on context.
+	 * @param string|null $scope Scope of the sponsors to get. Can be 'native' or
+	 *                           'underwritten'. If provided, only sponsors with the
+	 *                           matching scope will be returned. If not, all sponsors
+	 *                           will be returned regardless of scope.
+	 * @param string|null $type  Type of the $id given: 'post' or 'archive'. If not
+	 *                           provided, we will try to guess based on context.
+	 * @param array       $logo_options Optional array of logo options. Valid options:
+	 *                                  maxwidth: max width of the logo image, in pixels.
+	 *                                  maxheight: max height of the logo image, in pixels.
 	 * @return array Array of sponsors.
 	 */
 	public static function get_all_sponsors( $id = null, $scope = 'native', $type = 'post', $logo_options = array(

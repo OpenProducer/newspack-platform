@@ -27,9 +27,9 @@ class QueryControls extends Component {
 
 	fetchPostSuggestions = search => {
 		const { postType } = this.props;
-		const basePath = '/newspack-blocks/v1/specific-posts';
+		const restUrl = window.newspack_blocks_data.specific_posts_rest_url;
 		return apiFetch( {
-			path: addQueryArgs( basePath, {
+			url: addQueryArgs( restUrl, {
 				search,
 				per_page: 20,
 				_fields: 'id,title',

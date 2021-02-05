@@ -7,14 +7,14 @@
  * Author URI:      https://newspack.blog/
  * Text Domain:     newspack-blocks
  * Domain Path:     /languages
- * Version:         1.19.0
+ * Version:         1.20.0
  *
  * @package         Newspack_Blocks
  */
 
 define( 'NEWSPACK_BLOCKS__BLOCKS_DIRECTORY', 'dist/' );
 define( 'NEWSPACK_BLOCKS__PLUGIN_DIR', plugin_dir_path( __FILE__ ) );
-define( 'NEWSPACK_BLOCKS__VERSION', '1.19.0' );
+define( 'NEWSPACK_BLOCKS__VERSION', '1.20.0' );
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'class-newspack-blocks.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'class-newspack-blocks-api.php';
@@ -26,7 +26,7 @@ require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/homepage-articles/class-w
 /**
  * Registers Articles block routes.
  */
-function newspack_articles_block_register_rest_routes() {
+function newspack_articles_block_register_rest_routes() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
 	$articles_controller = new WP_REST_Newspack_Articles_Controller();
 	$articles_controller->register_routes();
 }

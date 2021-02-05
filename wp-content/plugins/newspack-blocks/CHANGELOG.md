@@ -1,3 +1,10 @@
+# [1.20.0](https://github.com/Automattic/newspack-blocks/compare/v1.19.0...v1.20.0) (2021-02-05)
+
+
+### Features
+
+* pass attributes to donate block render hook ([#671](https://github.com/Automattic/newspack-blocks/issues/671)) ([2d1ae81](https://github.com/Automattic/newspack-blocks/commit/2d1ae8115b911aab54b7aa692d7c873e55d69a25))
+
 # [1.19.0](https://github.com/Automattic/newspack-blocks/compare/v1.18.1...v1.19.0) (2021-01-28)
 
 

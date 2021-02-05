@@ -377,11 +377,13 @@ class Edit extends Component {
 							) }
 						</i>
 					) : (
-						<ToggleControl
-							label={ __( 'Show "Load more posts" Button', 'newspack-blocks' ) }
-							checked={ moreButton }
-							onChange={ () => setAttributes( { moreButton: ! moreButton } ) }
-						/>
+						! specificMode && (
+							<ToggleControl
+								label={ __( 'Show "Load more posts" Button', 'newspack-blocks' ) }
+								checked={ moreButton }
+								onChange={ () => setAttributes( { moreButton: ! moreButton } ) }
+							/>
+						)
 					) }
 				</PanelBody>
 				<PanelBody title={ __( 'Featured Image Settings', 'newspack-blocks' ) }>

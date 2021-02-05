@@ -118,7 +118,6 @@ function newspack_blocks_render_block_donate( $attributes ) {
 			</form>
 		</div>
 		<?php
-
 	else :
 
 		?>
@@ -196,7 +195,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 												type='number'
 												name='donation_value_<?php echo esc_attr( $frequency_slug ); ?>_other'
 												value='<?php echo esc_attr( $amount ); ?>'
-												id='newspack-tier-<?php echo esc_attr( $frequency_slug . '-' . $uid  ); ?>-other-input'
+												id='newspack-tier-<?php echo esc_attr( $frequency_slug . '-' . $uid ); ?>-other-input'
 											/>
 										</div>
 									</div>
@@ -220,7 +219,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 		<?php
 	endif;
 
-	return apply_filters( 'newspack_blocks_donate_block_html', ob_get_clean() );
+	return apply_filters( 'newspack_blocks_donate_block_html', ob_get_clean(), $attributes );
 }
 
 /**

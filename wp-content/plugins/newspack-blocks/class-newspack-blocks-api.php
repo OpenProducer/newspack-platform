@@ -276,7 +276,7 @@ class Newspack_Blocks_API {
 		// Use Yoast primary category if set.
 		if ( class_exists( 'WPSEO_Primary_Term' ) ) {
 			$primary_term = new WPSEO_Primary_Term( 'category', $object['id'] );
-			$category_id = $primary_term->get_primary_term();
+			$category_id  = $primary_term->get_primary_term();
 			if ( $category_id ) {
 				$category = get_term( $category_id );
 			}
@@ -323,6 +323,7 @@ class Newspack_Blocks_API {
 			)
 		);
 		if ( ! empty( $sponsors ) ) {
+			$sponsor_info = [];
 			foreach ( $sponsors as $sponsor ) {
 				$sponsor_info_item = [
 					'flag'          => $sponsor['sponsor_flag'],
@@ -377,38 +378,6 @@ class Newspack_Blocks_API {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ 'Newspack_Blocks_API', 'video_playlist_endpoint' ],
-				'permission_callback' => function( $request ) {
-					return current_user_can( 'edit_posts' );
-				},
-			]
-		);
-	}
-
-	/**
-	 * Register specific posts endpoint.
-	 */
-	public static function register_post_lookup_endpoint() {
-		register_rest_route(
-			'newspack-blocks/v1',
-			'/specific-posts',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ 'Newspack_Blocks_API', 'specific_posts_endpoint' ],
-				'args'                => [
-					'search'   => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'per_page' => [
-						'sanitize_callback' => 'absint',
-					],
-					'post_type' => [
-						'type'    => 'array',
-						'items'   => array(
-							'type' => 'string',
-						),
-						'default' => array(),
-					],
-				],
 				'permission_callback' => function( $request ) {
 					return current_user_can( 'edit_posts' );
 				},
@@ -607,5 +576,4 @@ class Newspack_Blocks_API {
 
 add_action( 'rest_api_init', array( 'Newspack_Blocks_API', 'register_rest_fields' ) );
 add_action( 'rest_api_init', array( 'Newspack_Blocks_API', 'register_video_playlist_endpoint' ) );
-add_action( 'rest_api_init', array( 'Newspack_Blocks_API', 'register_post_lookup_endpoint' ) );
 add_filter( 'rest_post_query', array( 'Newspack_Blocks_API', 'post_meta_request_params' ), 10, 2 );
