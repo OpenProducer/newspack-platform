@@ -1,19 +1,13 @@
-/**
- * About
- */
-.newspack-setup-wizard__form_element_row {
-  display: flex;
-  margin-bottom: 32px;
-  margin-top: -16px; }
-  .newspack-setup-wizard__form_element_row > div {
-    margin: 0 16px 0 0; }
-    .newspack-setup-wizard__form_element_row > div:last-child {
-      margin-right: 0; }
-    .newspack-setup-wizard__form_element_row > div .newspack-text-control {
-      margin: 0; }
-  .newspack-setup-wizard__form_element_row + .newspack-select-control {
-    margin-bottom: 32px;
-    margin-top: -16px; }
+.newspack__integration__card {
+  transition: opacity 200ms; }
+  .newspack__integration__card h2 {
+    margin-bottom: 0; }
+  .newspack__integration__card__status {
+    color: #36f; }
+  .newspack__integration__card__logo svg {
+    max-width: 260px;
+    margin: auto;
+    display: block; }
 
 /**
  * Setup

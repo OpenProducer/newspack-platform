@@ -127,7 +127,7 @@ class Popups_Analytics_Utils {
 				$label_dimension->setName( 'ga:eventLabel' );
 
 				// Create the ReportRequest object.
-				$profile_id = $analytics->get_data( 'profile-id' );
+				$profile_id = $analytics->get_settings()->get()['profileID'];
 				$request    = new Google_Service_AnalyticsReporting_ReportRequest();
 				$request->setViewId( $profile_id );
 				$request->setDateRanges( $date_range );

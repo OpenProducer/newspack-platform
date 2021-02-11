@@ -1,3 +1,24 @@
+# [1.30.0](https://github.com/Automattic/newspack-plugin/compare/v1.29.0...v1.30.0) (2021-02-11)
+
+
+### Bug Fixes
+
+* button group style ([#843](https://github.com/Automattic/newspack-plugin/issues/843)) ([8c4b056](https://github.com/Automattic/newspack-plugin/commit/8c4b05660f105ca17a43d5166f9bdb0fe90e447f))
+* change in how to retrieve property id from site kit ([#849](https://github.com/Automattic/newspack-plugin/issues/849)) ([fd117f8](https://github.com/Automattic/newspack-plugin/commit/fd117f8613b449e029df094abc3061d901cfbfe0))
+* patrons logo rename DOM properties ([#841](https://github.com/Automattic/newspack-plugin/issues/841)) ([3f897c3](https://github.com/Automattic/newspack-plugin/commit/3f897c3c87e51d9b56b0778fdad65ff7eefa9c5b))
+* preview functionality by campaign/group ([#856](https://github.com/Automattic/newspack-plugin/issues/856)) ([4eae456](https://github.com/Automattic/newspack-plugin/commit/4eae456db8f114eb7bad6920b1a518873ddaf9d6))
+* **campaigns-wizard:** fix site kit connection ([83fd493](https://github.com/Automattic/newspack-plugin/commit/83fd493ca5555c1ee2084cf20747394aff2fc254))
+
+
+### Features
+
+* add segment descriptions to Campaigns and Segments tabs ([#847](https://github.com/Automattic/newspack-plugin/issues/847)) ([0317d1f](https://github.com/Automattic/newspack-plugin/commit/0317d1fde45517bc562f4c16487db1b01cc7e003))
+* campaigns wizard overhaul ([#833](https://github.com/Automattic/newspack-plugin/issues/833)) ([39f495e](https://github.com/Automattic/newspack-plugin/commit/39f495e8301d9cfbd8f513d74a2f3ea510633a03))
+* increase segment border color and increase add prompt button width ([#857](https://github.com/Automattic/newspack-plugin/issues/857)) ([a03635f](https://github.com/Automattic/newspack-plugin/commit/a03635f04ae315e54098d0cdb65a5837cf90bc3e))
+* onboarding overhaul ([#851](https://github.com/Automattic/newspack-plugin/issues/851)) ([2704728](https://github.com/Automattic/newspack-plugin/commit/27047288c376fa71a7c0fdca57bfd36976e60d78))
+* segment priority UI and logic ([#832](https://github.com/Automattic/newspack-plugin/issues/832)) ([ad5692d](https://github.com/Automattic/newspack-plugin/commit/ad5692dff44469e653a9b554220d8ac922d44fb5))
+* Update header actions wizards (Campaigns and Segments) ([#845](https://github.com/Automattic/newspack-plugin/issues/845)) ([ed3bc73](https://github.com/Automattic/newspack-plugin/commit/ed3bc73220644239c227e4dd9e83bab0ee7bed1b))
+
 # [1.29.0](https://github.com/Automattic/newspack-plugin/compare/v1.28.0...v1.29.0) (2021-01-28)
 
 

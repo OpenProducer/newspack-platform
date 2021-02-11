@@ -64,6 +64,14 @@ class Plugin_Manager {
 				'PluginURI'   => 'https://github.com/westonruter/amp-tablepress',
 				'Download'    => 'https://github.com/westonruter/amp-tablepress/releases/latest/download/amp-tablepress.zip',
 			],
+			'bing-webmaster-tools'          => [
+				'Name'        => 'Bing URL Submissions',
+				'Description' => 'Detects page creation/update in WordPress and automatically submits the URL behind the scenes to Bing, ensuring that the site pages are always fresh in the Bing index.',
+				'Author'      => 'Bing Webmaster',
+				'AuthorURI'   => 'https://www.bing.com/webmasters/homepage',
+				'PluginURI'   => 'https://wordpress.org/plugins/bing-webmaster-tools/',
+				'Download'    => 'wporg',
+			],
 			'broadstreet'                   => [
 				'Name'        => 'Broadstreet',
 				'Description' => 'Integrate Broadstreet business directory and adserving power into your site.',

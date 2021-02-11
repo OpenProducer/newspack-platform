@@ -35,43 +35,21 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Retrieve all Pop-up CPTs
+	 * Retrieve all prompt CPTs
 	 *
 	 * @param  boolean $include_unpublished Whether to include unpublished posts.
-	 * @return array All Pop-ups
+	 * @return array All prompts
 	 */
-	public function get_popups( $include_unpublished = false ) {
+	public function get_prompts( $include_unpublished = false ) {
 		return $this->is_configured() ?
 			\Newspack_Popups_Model::retrieve_popups( $include_unpublished ) :
 			$this->unconfigured_error();
 	}
 
 	/**
-	 * Set the sitewide Popup.
-	 *
-	 * @param integer $id ID of sitewide popup.
-	 */
-	public function set_sitewide_popup( $id ) {
-		return $this->is_configured() ?
-			\Newspack_Popups_Model::set_sitewide_popup( $id ) :
-			$this->unconfigured_error();
-	}
-
-	/**
-	 * Unset the sitewide Popup.
-	 *
-	 * @param integer $id ID of sitewide popup.
-	 */
-	public function unset_sitewide_popup( $id ) {
-		return $this->is_configured() ?
-			\Newspack_Popups_Model::unset_sitewide_popup( $id ) :
-			$this->unconfigured_error();
-	}
-
-	/**
 	 * Set taxonomy terms for a Popup.
 	 *
-	 * @param integer $id ID of sitewide popup.
+	 * @param integer $id ID of popup.
 	 * @param array   $terms Array of terms to be set.
 	 * @param string  $taxonomy Taxonomy slug.
 	 */
@@ -84,7 +62,7 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	/**
 	 * Set Popup options.
 	 *
-	 * @param integer $id ID of sitewide popup.
+	 * @param integer $id ID of popup.
 	 * @param array   $options Array of categories to be set.
 	 */
 	public function set_popup_options( $id, $options ) {
@@ -156,13 +134,24 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Get segment's potential reacj.
+	 * Get segment's potential reach.
 	 *
 	 * @param object $config Segment configuration.
 	 */
 	public function get_segment_reach( $config ) {
 		return $this->is_configured() ?
 			\Newspack_Popups_Segmentation::get_segment_reach( $config ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Sort all segments.
+	 *
+	 * @param object $segments Sorted array of segments.
+	 */
+	public function sort_segments( $segments ) {
+		return $this->is_configured() ?
+			\Newspack_Popups_Segmentation::sort_segments( $segments ) :
 			$this->unconfigured_error();
 	}
 
@@ -185,6 +174,73 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	public function batch_unpublish( $id ) {
 		return $this->is_configured() ?
 			\Newspack_Popups_Settings::batch_unpublish( $id ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Create campaign.
+	 *
+	 * @param string $name Campaign name.
+	 */
+	public function create_campaign( $name ) {
+		return $this->is_configured() ?
+			\Newspack_Popups::create_campaign( $name ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Duplicate campaign.
+	 *
+	 * @param int    $id Campaign group ID.
+	 * @param string $name Campaign name.
+	 */
+	public function duplicate_campaign( $id, $name ) {
+		return $this->is_configured() ?
+			\Newspack_Popups::duplicate_campaign( $id, $name ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Rename campaign.
+	 *
+	 * @param int    $id Campaign group ID.
+	 * @param string $name Campaign name.
+	 */
+	public function rename_campaign( $id, $name ) {
+		return $this->is_configured() ?
+			\Newspack_Popups::rename_campaign( $id, $name ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Archive campaign.
+	 *
+	 * @param int  $id Campaign group ID.
+	 * @param bool $status Whether to archive or unarchive (true = archive, false = unarchive).
+	 */
+	public function archive_campaign( $id, $status ) {
+		return $this->is_configured() ?
+			\Newspack_Popups::archive_campaign( $id, $status ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Delete campaign
+	 *
+	 * @param int $id Campaign group ID.
+	 */
+	public function delete_campaign( $id ) {
+		return $this->is_configured() ?
+			\Newspack_Popups::delete_campaign( $id ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get campaigns.
+	 */
+	public function get_campaigns() {
+		return $this->is_configured() ?
+			\Newspack_Popups::get_groups() :
 			$this->unconfigured_error();
 	}
 

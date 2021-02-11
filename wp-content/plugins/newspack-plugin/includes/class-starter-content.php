@@ -13,20 +13,24 @@ use \WP_Error, \WP_Query, Newspack\Theme_Manager;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEWSPACK_STARTER_CONTENT_CATEGORIES', '_newspack_starter_content_categories' );
-define( 'NEWSPACK_STARTER_CONTENT_POSTS', '_newspack_starter_content_posts' );
-
 /**
  * Manages settings for PWA.
  */
 class Starter_Content {
 
 	/**
-	 * Starter categories;
+	 * Starter categories.
 	 *
 	 * @var array A set of starter categories.
 	 */
 	protected static $starter_categories = [ 'Featured', 'Sports', 'Entertainment', 'Opinion', 'News', 'Events', 'Longform', 'Arts', 'Politics', 'Science', 'Tech', 'Health' ];
+
+	// phpcs:ignore Squiz.Commenting.VariableComment.Missing
+	private static $starter_categories_meta = '_newspack_starter_content_categories';
+	// phpcs:ignore Squiz.Commenting.VariableComment.Missing
+	private static $starter_post_meta_prefix = '_newspack_starter_content_post_';
+	// phpcs:ignore Squiz.Commenting.VariableComment.Missing
+	private static $starter_homepage_meta = '_newspack_starter_content_homepage';
 
 	/**
 	 * Create a single post.
@@ -35,6 +39,12 @@ class Starter_Content {
 	 * @return int Post ID
 	 */
 	public static function create_post( $post_index ) {
+		global $wpdb;
+		$meta_key         = self::$starter_post_meta_prefix . $post_index;
+		$existing_post_id = $wpdb->get_row( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key=%s;", $meta_key ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( $existing_post_id ) {
+			return $existing_post_id['post_id'];
+		}
 		if ( ! function_exists( 'wp_insert_post' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/post.php';
 		}
@@ -99,11 +109,12 @@ class Starter_Content {
 			]
 		);
 
-		$category_ids = get_option( NEWSPACK_STARTER_CONTENT_CATEGORIES );
+		$category_ids = get_option( self::$starter_categories_meta );
 		$category_id  = self::is_e2e() ? $category_ids[ $post_index ] : $categories[0];
 
 		wp_set_post_categories( $post_id, $category_id );
 		wp_publish_post( $post_id );
+		update_post_meta( $post_id, $meta_key, true );
 
 		return $post_id;
 	}
@@ -121,7 +132,7 @@ class Starter_Content {
 			},
 			self::$starter_categories
 		);
-		update_option( NEWSPACK_STARTER_CONTENT_CATEGORIES, $category_ids );
+		update_option( self::$starter_categories_meta, $category_ids );
 		return $category_ids;
 	}
 
@@ -129,6 +140,12 @@ class Starter_Content {
 	 * Create a homepage, populated with blocks;
 	 */
 	public static function create_homepage() {
+		global $wpdb;
+		$meta_key         = self::$starter_homepage_meta;
+		$existing_post_id = $wpdb->get_row( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key=%s;", $meta_key ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( $existing_post_id ) {
+			return $existing_post_id;
+		}
 		if ( ! function_exists( 'wp_insert_post' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/post.php';
 		}
@@ -200,6 +217,8 @@ class Starter_Content {
 		update_option( 'show_on_front', 'page' );
 		update_option( 'page_on_front', $page_id );
 		set_theme_mod( 'hide_front_page_title', true );
+		update_post_meta( $page_id, $meta_key, true );
+
 		return true;
 	}
 

@@ -24,13 +24,19 @@ class Profile {
 	 * @var $fieldnames
 	 */
 	protected static $fieldnames = [
-		'country',
-		'address',
-		'address2',
-		'city',
-		'state',
-		'zip',
-		'currency',
+		[
+			'name'    => 'country',
+			'default' => 'US',
+		],
+		[ 'name' => 'address' ],
+		[ 'name' => 'address2' ],
+		[ 'name' => 'city' ],
+		[ 'name' => 'state' ],
+		[ 'name' => 'zip' ],
+		[
+			'name'    => 'currency',
+			'default' => 'USD',
+		],
 	];
 
 	/**
@@ -106,7 +112,10 @@ class Profile {
 	public function newspack_get_profile() {
 		$profile = [];
 		foreach ( self::$fieldnames as $fieldname ) {
-			$profile[ $fieldname ] = self::newspack_get_option( $fieldname );
+			$profile[ $fieldname['name'] ] = self::newspack_get_option( $fieldname['name'] );
+			if ( empty( $profile[ $fieldname['name'] ] ) && isset( $fieldname['default'] ) ) {
+				$profile[ $fieldname['name'] ] = $fieldname['default'];
+			}
 		}
 		return $profile;
 	}
@@ -133,11 +142,10 @@ class Profile {
 	 * @return object|WP_Error
 	 */
 	public function api_update_profile( $request ) {
-
 		$updates = $request['profile'];
 		foreach ( self::$fieldnames as $fieldname ) {
-			if ( isset( $updates[ $fieldname ] ) ) {
-				self::newspack_update_option( $fieldname, $updates[ $fieldname ] );
+			if ( isset( $updates[ $fieldname['name'] ] ) ) {
+				self::newspack_update_option( $fieldname['name'], $updates[ $fieldname['name'] ] );
 			}
 		}
 		$response = [

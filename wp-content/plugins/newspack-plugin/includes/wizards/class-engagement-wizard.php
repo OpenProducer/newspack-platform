@@ -120,7 +120,7 @@ class Engagement_Wizard extends Wizard {
 
 		$jetpack_mailchimp_status     = $jetpack_configuration_manager->get_mailchimp_connection_status();
 		$jetpack_related_posts_status = $jetpack_configuration_manager->is_related_posts_enabled();
-		if ( ! is_wp_error( $jetpack_mailchimp_status ) ) {
+		if ( ! is_wp_error( $jetpack_mailchimp_status ) && $jetpack_configuration_manager->is_configured() ) {
 			$response['connected']           = $jetpack_mailchimp_status['connected'];
 			$response['connectURL']          = $jetpack_mailchimp_status['connectURL'];
 			$response['wcConnected']         = $wc_configuration_manager->is_active();
