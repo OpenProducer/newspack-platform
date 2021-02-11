@@ -447,16 +447,16 @@ $generated_i18n_strings = array(
 	// Reference: js/src/components/modals/SeoAnalysisModal.js:25
 	__( 'Close', 'wordpress-seo' ),
 
-	// Reference: js/src/components/modals/editorModals/EditorModal.js:68
+	// Reference: js/src/components/modals/editorModals/EditorModal.js:65
 	/* translators: %s translates to the Post Label in singular form */
 	__( 'Make sure to save your %s for changes to take effect', 'wordpress-seo' ),
 
-	// Reference: js/src/components/modals/editorModals/EditorModal.js:78
+	// Reference: js/src/components/modals/editorModals/EditorModal.js:75
 	/* translators: %s translates to the Post Label in singular form */
 	__( 'Return to your %s', 'wordpress-seo' ),
 
-	// Reference: js/src/components/modals/editorModals/FacebookPreviewModal.js:15
-	// Reference: js/src/elementor/components/modals/editorModals/FacebookPreviewModal.js:15
+	// Reference: js/src/components/modals/editorModals/FacebookPreviewModal.js:16
+	// Reference: js/src/elementor/components/modals/editorModals/FacebookPreviewModal.js:16
 	__( 'Facebook preview', 'wordpress-seo' ),
 
 	// Reference: js/src/components/modals/editorModals/TwitterPreviewModal.js:16
@@ -529,7 +529,7 @@ $generated_i18n_strings = array(
 	// Reference: js/src/elementor/initializers/introduction.js:40
 	__( 'Got it', 'wordpress-seo' ),
 
-	// Reference: js/src/help-scout-beacon.js:208
+	// Reference: js/src/help-scout-beacon.js:231
 	__( 'When you click OK we will open our HelpScout beacon where you can find answers to your questions. This beacon will load our support data and also potentially set cookies.', 'wordpress-seo' ),
 
 	// Reference: js/src/initializers/block-editor-integration.js:151
