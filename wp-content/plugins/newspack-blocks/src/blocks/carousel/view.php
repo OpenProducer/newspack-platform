@@ -285,11 +285,9 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 /**
  * Generate autoplay play/pause UI for non-AMP requests.
  *
- * @param int $block_ordinal The ordinal number of the block, used in unique ID.
- *
  * @return string Autoplay UI markup.
  */
-function newspack_blocks_carousel_block_autoplay_ui( $block_ordinal = 0 ) {
+function newspack_blocks_carousel_block_autoplay_ui() {
 	return sprintf(
 		'<button aria-label="%s" class="swiper-button swiper-button-pause"></button><button aria-label="%s" class="swiper-button swiper-button-play"></button>',
 		esc_attr__( 'Pause Slideshow', 'newspack-blocks' ),

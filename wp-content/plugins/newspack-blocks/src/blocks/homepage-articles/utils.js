@@ -1,7 +1,12 @@
 /**
  * External dependencies
  */
-import { isEqual, isUndefined, pick, pickBy } from 'lodash';
+import { debounce, isEqual, isUndefined, pick, pickBy } from 'lodash';
+
+/**
+ * External dependencies
+ */
+import { select as globalSelect } from '@wordpress/data';
 
 /**
  * Based global WP.com blog_public option, checks whether current blog is
@@ -21,7 +26,9 @@ const POST_QUERY_ATTRIBUTES = [
 	'postsToShow',
 	'authors',
 	'categories',
+	'excerptLength',
 	'tags',
+	'showExcerpt',
 	'specificPosts',
 	'specificMode',
 	'tagExclusions',
@@ -55,7 +62,9 @@ export const queryCriteriaFromAttributes = attributes => {
 		postsToShow,
 		authors,
 		categories,
+		excerptLength,
 		postType,
+		showExcerpt,
 		tags,
 		specificPosts,
 		specificMode,
@@ -82,6 +91,8 @@ export const queryCriteriaFromAttributes = attributes => {
 		value => ! isUndefined( value )
 	);
 	criteria.suppress_password_protected_posts = true;
+	criteria.excerpt_length = excerptLength;
+	criteria.show_excerpt = showExcerpt;
 	return criteria;
 };
 
@@ -104,3 +115,13 @@ export const getEditorBlocksIds = blocks =>
 		homepageArticleBlocks.push( block.clientId );
 		return homepageArticleBlocks.concat( getEditorBlocksIds( block.innerBlocks ) );
 	} );
+
+export const getCoreStorePosts = debounce(
+	attributes =>
+		globalSelect( 'core' ).getEntityRecords(
+			'postType',
+			'post',
+			queryCriteriaFromAttributes( attributes )
+		),
+	500
+);

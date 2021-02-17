@@ -1,3 +1,17 @@
+# [1.21.0](https://github.com/Automattic/newspack-blocks/compare/v1.20.1...v1.21.0) (2021-02-16)
+
+
+### Features
+
+* add Portuguese translation to the blocks ([#698](https://github.com/Automattic/newspack-blocks/issues/698)) ([dedf0a3](https://github.com/Automattic/newspack-blocks/commit/dedf0a3bb2d9e898203c9a6c489aa550d7c66635))
+
+## [1.20.1](https://github.com/Automattic/newspack-blocks/compare/v1.20.0...v1.20.1) (2021-02-11)
+
+
+### Bug Fixes
+
+* override WooCommerce Memberships excerpt length in block ([#694](https://github.com/Automattic/newspack-blocks/issues/694)) ([5695de6](https://github.com/Automattic/newspack-blocks/commit/5695de651fe6abda90506315d0a4eceb6091234c))
+
 # [1.20.0](https://github.com/Automattic/newspack-blocks/compare/v1.19.0...v1.20.0) (2021-02-05)
 
 

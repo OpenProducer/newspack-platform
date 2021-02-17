@@ -1,3 +1,10 @@
+## [1.30.1](https://github.com/Automattic/newspack-plugin/compare/v1.30.0...v1.30.1) (2021-02-16)
+
+
+### Bug Fixes
+
+* display uncategorized category in campaigns wizard ([#865](https://github.com/Automattic/newspack-plugin/issues/865)) ([df59340](https://github.com/Automattic/newspack-plugin/commit/df5934084060bf50ffdc95f25ba18d6bac49cf56))
+
 # [1.30.0](https://github.com/Automattic/newspack-plugin/compare/v1.29.0...v1.30.0) (2021-02-11)
 
 

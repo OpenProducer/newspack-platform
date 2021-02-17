@@ -378,7 +378,7 @@ class Newspack_Blocks_API {
 			[
 				'methods'             => 'GET',
 				'callback'            => [ 'Newspack_Blocks_API', 'video_playlist_endpoint' ],
-				'permission_callback' => function( $request ) {
+				'permission_callback' => function() {
 					return current_user_can( 'edit_posts' );
 				},
 			]
@@ -438,6 +438,12 @@ class Newspack_Blocks_API {
 			$args['post_type'] = $params['post_type'];
 		}
 
+		$block_attributes = [
+			'showExcerpt'   => $params['show_excerpt'],
+			'excerptLength' => $params['excerpt_length'],
+		];
+		Newspack_Blocks::filter_excerpt_length( $block_attributes );
+
 		$query        = new WP_Query();
 		$query_result = $query->query( $args );
 		$posts        = [];
@@ -486,6 +492,9 @@ class Newspack_Blocks_API {
 
 			$posts[] = array_merge( $data, $add_ons );
 		}
+
+		Newspack_Blocks::remove_excerpt_length_filter();
+
 		return new \WP_REST_Response( $posts );
 	}
 

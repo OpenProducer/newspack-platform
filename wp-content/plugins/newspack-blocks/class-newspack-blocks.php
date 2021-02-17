@@ -401,7 +401,7 @@ class Newspack_Blocks {
 	 * @param array  $data          Data to be passed into the template to be included.
 	 * @return string
 	 */
-	public static function template_inc( $template, $data = array() ) {
+	public static function template_inc( $template, $data = array() ) { //phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
 		if ( ! strpos( $template, '.php' ) ) {
 			$template = $template . '.php';
 		}
@@ -657,6 +657,16 @@ class Newspack_Blocks {
 	public static $newspack_blocks_excerpt_length_closure = null;
 
 	/**
+	 * Function to override WooCommerce Membership's Excerpt Length filter.
+	 *
+	 * @return string Current post's original excerpt.
+	 */
+	public static function remove_wc_memberships_excerpt_limit() {
+		$excerpt = get_the_excerpt( get_the_id() );
+		return $excerpt;
+	}
+
+	/**
 	 * Filter for excerpt length.
 	 *
 	 * @param array $attributes The block's attributes.
@@ -666,7 +676,7 @@ class Newspack_Blocks {
 		if ( $attributes['showExcerpt'] ) {
 			self::$newspack_blocks_excerpt_length_closure = add_filter(
 				'excerpt_length',
-				function( $length ) use ( $attributes ) {
+				function() use ( $attributes ) {
 					if ( $attributes['excerptLength'] ) {
 						return $attributes['excerptLength'];
 					}
@@ -674,6 +684,7 @@ class Newspack_Blocks {
 				},
 				999
 			);
+			add_filter( 'wc_memberships_trimmed_restricted_excerpt', [ 'Newspack_Blocks', 'remove_wc_memberships_excerpt_limit' ], 999 );
 		}
 	}
 
@@ -687,15 +698,14 @@ class Newspack_Blocks {
 				self::$newspack_blocks_excerpt_length_closure,
 				999
 			);
+			remove_filter( 'wc_memberships_trimmed_restricted_excerpt', [ 'Newspack_Blocks', 'remove_wc_memberships_excerpt_limit' ] );
 		}
 	}
 
 	/**
 	 * Return a excerpt more replacement when using the 'Read More' link.
-	 *
-	 * @param string $more Default excerpt_more value.
 	 */
-	public static function more_excerpt( $more ) {
+	public static function more_excerpt() {
 		return '…';
 	}
 
