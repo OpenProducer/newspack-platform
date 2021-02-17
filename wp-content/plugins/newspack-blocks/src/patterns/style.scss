@@ -1,0 +1,65 @@
+@import '../shared/sass/colors';
+@import '~@wordpress/base-styles/colors';
+
+/**
+ * Patterns
+ */
+
+.newspack-block-patterns {
+	&__item {
+		cursor: pointer;
+		margin: 0 0 16px;
+		width: 100%;
+
+		&:hover {
+			.newspack-block-patterns__item-preview {
+				border-color: $blue-medium-focus;
+			}
+		}
+
+		&:focus {
+			.newspack-block-patterns__item-preview {
+				box-shadow: inset 0 0 0 1px #fff, 0 0 0 1.5px $blue-medium-focus;
+			}
+		}
+
+		&:last-of-type {
+			margin-bottom: 0;
+		}
+	}
+
+	&__item-preview {
+		background: white;
+		border: 1px solid $light-gray-500;
+		border-radius: 2px;
+		padding: 2px;
+		width: 100%;
+
+		img {
+			display: block;
+		}
+	}
+
+	&__item-label {
+		padding: 4px 2px;
+		text-align: center;
+	}
+}
+
+.edit-post-pinned-plugins {
+	.components-button.has-icon,
+	.components-icon-button {
+		&.is-toggled,
+		&.is-toggled:hover,
+		&.has-icon:hover,
+		&.has-icon:not( .is-toggled ) {
+			.newspack-icon__circle {
+				fill: $color__primary !important;
+			}
+
+			.newspack-icon__n {
+				fill: white !important;
+			}
+		}
+	}
+}

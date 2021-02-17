@@ -1,0 +1,18 @@
+@import '../../shared/sass/colors';
+@import '../../shared/sass/variables';
+
+.wp-block-newspack-blocks-donate {
+	button[type='submit'] {
+		background: $color__secondary;
+		border: none;
+		border-radius: 5px;
+		box-sizing: border-box;
+		color: $color__background-body;
+		font-size: $font__size-sm;
+		font-weight: bold;
+		outline: none;
+		line-height: 3em;
+		padding-left: 20px;
+		padding-right: 20px;
+	}
+}
