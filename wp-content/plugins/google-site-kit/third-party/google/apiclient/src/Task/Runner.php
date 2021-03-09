@@ -80,6 +80,8 @@ class Runner
         35 => self::TASK_RETRY_ALWAYS,
         // CURLE_SSL_CONNECT_ERROR
         52 => self::TASK_RETRY_ALWAYS,
+        // CURLE_GOT_NOTHING
+        'lighthouseError' => self::TASK_RETRY_NEVER,
     ];
     /**
      * Creates a new task runner with exponential backoff support.
