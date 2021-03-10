@@ -34,6 +34,13 @@ class Analytics_Wizard extends Wizard {
 	public static $custom_events_option_name = 'newspack_analytics_custom_events';
 
 	/**
+	 * NTG eabling option name.
+	 *
+	 * @var string
+	 */
+	public static $ntg_events_option_name = 'newspack_analytics_ntg_events';
+
+	/**
 	 * The slug of this wizard.
 	 *
 	 * @var string
@@ -179,6 +186,35 @@ class Analytics_Wizard extends Wizard {
 						],
 					],
 				],
+			]
+		);
+
+		// NTG Events.
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/analytics/ntg',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'api_ntg_events_status' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/analytics/ntg',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_enable_ntg_events' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/analytics/ntg',
+			[
+				'methods'             => \WP_REST_Server::DELETABLE,
+				'callback'            => [ $this, 'api_disable_ntg_events' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
 	}
@@ -492,6 +528,54 @@ class Analytics_Wizard extends Wizard {
 			return [ 'events' => $custom_events ];
 		} else {
 			return new WP_Error( 'newspack_analytics', __( 'Error when setting custom events.', 'newspack' ) );
+		}
+	}
+
+	/**
+	 * NTG events status.
+	 *
+	 * @return bool Status of NTG events.
+	 */
+	public static function ntg_events_enabled() {
+		return 'enabled' === get_option( self::$ntg_events_option_name, 'enabled' );
+	}
+
+	/**
+	 * NTG events status.
+	 *
+	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
+	 */
+	public static function api_ntg_events_status() {
+		return rest_ensure_response(
+			[
+				'enabled' => self::ntg_events_enabled(),
+			]
+		);
+	}
+
+	/**
+	 * Enable NTG events.
+	 *
+	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
+	 */
+	public static function api_enable_ntg_events() {
+		if ( update_option( self::$ntg_events_option_name, 'enabled' ) ) {
+			return self::api_ntg_events_status();
+		} else {
+			return new WP_Error( 'newspack_analytics', __( 'Error when setting NTG events status.', 'newspack' ) );
+		}
+	}
+
+	/**
+	 * Disable NTG events.
+	 *
+	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
+	 */
+	public static function api_disable_ntg_events() {
+		if ( update_option( self::$ntg_events_option_name, 'disabled' ) ) {
+			return self::api_ntg_events_status();
+		} else {
+			return new WP_Error( 'newspack_analytics', __( 'Error when setting NTG events status.', 'newspack' ) );
 		}
 	}
 }

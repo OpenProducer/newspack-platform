@@ -57,7 +57,6 @@ class NRH {
 		if ( ! isset( $gtag_opt['linker']['domains'] ) ) {
 			$gtag_opt['linker']['domains'] = [];
 		}
-		$gtag_opt['linker']['domains'][]      = self::get_clean_site_url();
 		$gtag_opt['linker']['domains'][]      = 'checkout.fundjournalism.org';
 		$gtag_opt['linker']['decorate_forms'] = true;
 		return $gtag_opt;
@@ -85,7 +84,6 @@ class NRH {
 			$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'] = [];
 		}
 
-		$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'][]      = self::get_clean_site_url();
 		$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'][]      = 'checkout.fundjournalism.org';
 		$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['decorate_forms'] = true;
 		return $gtag_amp_opt;

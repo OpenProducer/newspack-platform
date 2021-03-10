@@ -431,6 +431,54 @@ class Starter_Content {
 	}
 
 	/**
+	 * If there is starter content in the DB.
+	 *
+	 * @return bool True if there is starter content in the DB.
+	 */
+	public static function starter_content_data() {
+		$starter_content_data = [];
+		global $wpdb;
+		$category_ids = get_option( self::$starter_categories_meta );
+		if ( ! empty( $category_ids ) ) {
+			$starter_content_data['category_ids'] = $category_ids;
+		}
+		$post_ids = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key LIKE '%%%s%%';", self::$starter_post_meta_prefix ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQueryWithPlaceholder
+		if ( ! empty( $post_ids ) ) {
+			$starter_content_data['post_ids'] = [];
+			foreach ( $post_ids as $result ) {
+				$starter_content_data['post_ids'][] = $result['post_id'];
+			}
+		}
+		$homepage_id = $wpdb->get_row( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key=%s;", self::$starter_homepage_meta ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+		if ( ! empty( $homepage_id ) ) {
+			$starter_content_data['homepage_id'] = $homepage_id['post_id'];
+		}
+
+		return $starter_content_data;
+	}
+
+	/**
+	 * Removes all starter content.
+	 */
+	public static function remove_starter_content() {
+		$starter_content_data = self::starter_content_data();
+		if ( ! empty( $starter_content_data['category_ids'] ) ) {
+			foreach ( $starter_content_data['category_ids'] as $category_id ) {
+				wp_delete_category( $category_id );
+			}
+			delete_option( self::$starter_categories_meta );
+		}
+		if ( ! empty( $starter_content_data['post_ids'] ) ) {
+			foreach ( $starter_content_data['post_ids'] as $post_index => $post_id ) {
+				wp_delete_post( $post_id, true );
+			}
+		}
+		if ( ! empty( $starter_content_data['homepage_id'] ) ) {
+			wp_delete_post( $starter_content_data['homepage_id'], true );
+		}
+	}
+
+	/**
 	 * Is this an E2E testing environment?
 	 *
 	 * @return bool E2E testing environment?

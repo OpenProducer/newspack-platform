@@ -158,6 +158,24 @@ class Setup_Wizard extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/services',
+			[
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'api_get_services' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/services',
+			[
+				'methods'             => WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_services' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
 	}
 
 	/**
@@ -263,6 +281,56 @@ class Setup_Wizard extends Wizard {
 			set_theme_mod( $key, $value );
 		}
 		return self::api_retrieve_theme();
+	}
+
+	/**
+	 * Get Services step initial data.
+	 *
+	 * @return WP_REST_Response containing info.
+	 */
+	public function api_get_services() {
+		$rr_wizard                         = new Reader_Revenue_Wizard();
+		$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
+		$ads_configuration_manager         = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
+		$sitekit_configuration_manager     = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
+
+		$response = [
+			'reader-revenue'    => [ 'configuration' => [ 'is_service_enabled' => isset( $rr_wizard->fetch_all_data()['platform_data']['platform'] ) ] ],
+			'newsletters'       => [ 'configuration' => [ 'is_service_enabled' => $newsletters_configuration_manager->is_set_up() ] ],
+			'google-ad-sense'   => [ 'configuration' => [ 'is_service_enabled' => $ads_configuration_manager->is_service_enabled( 'google_adsense' ) ] ],
+			'google-ad-manager' => [ 'configuration' => [ 'is_service_enabled' => $ads_configuration_manager->is_service_enabled( 'google_ad_manager' ) ] ],
+		];
+
+		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * Update Services step.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response containing info.
+	 */
+	public function api_update_services( $request ) {
+		if ( isset( $request['newsletters']['is_service_enabled'] ) ) {
+			$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
+			$newsletters_configuration_manager->update_settings( $request['newsletters'] );
+		}
+		if ( isset( $request['reader-revenue']['is_service_enabled'] ) ) {
+			$rr_wizard = new Reader_Revenue_Wizard();
+			$rr_wizard->update_donation_settings( $request['reader-revenue'] );
+		}
+		if ( isset( $request['google-ad-manager']['is_service_enabled'], $request['google-ad-manager']['network_code'] ) ) {
+			$ads_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
+			$ads_configuration_manager->set_network_code( 'google_ad_manager', $request['google-ad-manager']['network_code'] );
+		}
+		if ( isset( $request['google-ad-sense']['is_service_enabled'] ) ) {
+			$sitekit_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
+			if ( $request['google-ad-sense']['is_service_enabled'] ) {
+				$sitekit_configuration_manager->activate_module( 'adsense' );
+			}
+		}
+
+		return rest_ensure_response( [] );
 	}
 
 	/**

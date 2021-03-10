@@ -375,6 +375,11 @@ figcaption,
   margin-bottom: 0;
 }
 
+.wp-block-gallery figcaption a,
+.wp-block-gallery figcaption a:hover {
+  color: #fff;
+}
+
 /** === Audio & Video === */
 .wp-block-audio figcaption,
 .wp-block-video figcaption {
@@ -851,6 +856,13 @@ ul.wp-block-archives li,
   color: inherit;
 }
 
+/** === Donate Block === */
+.wpbnbd .freq-label,
+.wpbnbd .tier-label,
+.wpbnbd button {
+  font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
+}
+
 /** === Classic Editor === */
 /* Properly center-align captions in the classic-editor block */
 .wp-caption dd {
@@ -1014,32 +1026,34 @@ ul.wp-block-archives li,
 
 .accent-header,
 .article-section-title {
+  align-items: center;
   color: #36f;
+  display: flex;
   font-size: 0.7em;
-  text-align: center;
-}
-
-.article-section-title {
   margin-bottom: 1.5rem;
-  position: relative;
   overflow: hidden;
+  text-align: center;
+  width: 100%;
 }
 
-.article-section-title::before, .article-section-title::after {
-  border-top: 1px solid #ccc;
-  content: '';
-  display: block;
-  position: absolute;
-  top: 50%;
-  width: 25%;
-}
-
-.article-section-title::before {
-  right: 0;
-}
-
+.accent-header::before, .accent-header::after,
+.article-section-title::before,
 .article-section-title::after {
-  left: 0;
+  background: #ccc;
+  content: '';
+  flex: 1 0 0.5rem;
+  height: 1px;
+  position: static;
+}
+
+.accent-header::before,
+.article-section-title::before {
+  margin-right: 0.5rem;
+}
+
+.accent-header::after,
+.article-section-title::after {
+  margin-left: 0.5rem;
 }
 
 .has-drop-cap:not(:focus)::first-letter {

@@ -73,6 +73,7 @@ class Campaign_Data_Utils {
 				'is_not_donor'        => false,
 				'referrers'           => '',
 				'favorite_categories' => [],
+				'priority'            => PHP_INT_MAX,
 			],
 			(array) $segment
 		);
@@ -85,10 +86,9 @@ class Campaign_Data_Utils {
 	 * @param object $client_data Client data.
 	 * @param string $referer_url URL of the page performing the API request.
 	 * @param string $page_referrer_url URL of the referrer of the frontend page that is making the API request.
-	 * @param object $view_as_segment If using the "view as" feature, this is a segment to conform to.
 	 * @return bool Whether the prompt should be shown.
 	 */
-	public static function should_display_campaign( $campaign_segment, $client_data, $referer_url = '', $page_referrer_url = '', $view_as_segment = false ) {
+	public static function does_client_match_segment( $campaign_segment, $client_data, $referer_url = '', $page_referrer_url = '' ) {
 		$should_display = true;
 		// Posts read.
 		$posts_read_count = count( $client_data['posts_read'] );
@@ -126,33 +126,6 @@ class Campaign_Data_Utils {
 		);
 		arsort( $categories_read_counts );
 		$favorite_category_matches_segment = in_array( key( $categories_read_counts ), $campaign_segment->favorite_categories );
-
-		/**
-		 * When viewing as a segment, spoof the relevant data to match it.
-		 */
-		if ( $view_as_segment ) {
-			$view_as_segment = self::canonize_segment( $view_as_segment );
-
-			$posts_read_count = intval( $view_as_segment->min_posts );
-
-			$posts_read_count_session = intval( $view_as_segment->min_session_posts );
-
-			$is_subscriber = $view_as_segment->is_subscribed;
-			$is_donor      = $view_as_segment->is_donor;
-			if ( ! empty( $view_as_segment->referrers ) ) {
-				$first_referrer = array_map( 'trim', explode( ',', $view_as_segment->referrers ) )[0];
-				if ( strpos( $first_referrer, 'http' ) !== 0 ) {
-					$first_referrer = 'https://' . $first_referrer;
-				}
-				$page_referrer_url = $first_referrer;
-			}
-			if ( count( $view_as_segment->favorite_categories ) ) {
-				$diff_count                        = count( array_diff( $view_as_segment->favorite_categories, $campaign_segment->favorite_categories ) );
-				$favorite_category_matches_segment = 0 === $diff_count;
-			} else {
-				$favorite_category_matches_segment = false;
-			}
-		}
 
 		/**
 		 * By posts read count.

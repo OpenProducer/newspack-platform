@@ -1,3 +1,55 @@
+## [1.33.1](https://github.com/Automattic/newspack-plugin/compare/v1.33.0...v1.33.1) (2021-03-09)
+
+
+### Bug Fixes
+
+* draggable ActionCard styling ([16820e3](https://github.com/Automattic/newspack-plugin/commit/16820e337b9184f9985f1daa9ee58d0ac9adf48a))
+* **campaigns-wizard:** settings reading ([29b7020](https://github.com/Automattic/newspack-plugin/commit/29b702096c063f031b96fcc0ee87937e3b379586))
+
+# [1.33.0](https://github.com/Automattic/newspack-plugin/compare/v1.32.0...v1.33.0) (2021-03-03)
+
+
+### Features
+
+* allow disabling NTG events reporting ([1f8a1ea](https://github.com/Automattic/newspack-plugin/commit/1f8a1eaf755d8e0e8a6211516d8535690f640c4a))
+* non-cascading segment logic; multiple segments per prompt ([#853](https://github.com/Automattic/newspack-plugin/issues/853), [#874](https://github.com/Automattic/newspack-plugin/issues/874)) ([8ed836a](https://github.com/Automattic/newspack-plugin/commit/8ed836ad0c41a51694ffa0266b1614c193881812))
+* remove all cookies prior to setting preview cookie ([57748ee](https://github.com/Automattic/newspack-plugin/commit/57748ee1706fdd71316a835576e753da41a0b51f))
+* remove cookie on preview close ([6082910](https://github.com/Automattic/newspack-plugin/commit/6082910153a4f31d5d014b7b11ea25c5cdc982f9))
+* replace CID cookie on preview triggering ([c1d1561](https://github.com/Automattic/newspack-plugin/commit/c1d1561ed842618e860c96cce12b5e5256c1b49b))
+* replace CID cookie on preview triggering ([#891](https://github.com/Automattic/newspack-plugin/issues/891)) ([3dc451b](https://github.com/Automattic/newspack-plugin/commit/3dc451bb75348777a0ffe79f2229fa1706319d1d))
+* update footer to support simple style ([#885](https://github.com/Automattic/newspack-plugin/issues/885)) ([0b2c3f2](https://github.com/Automattic/newspack-plugin/commit/0b2c3f2705224c81bff3f489dfda31db72480eb2))
+* use timestamp as a unique CID suffix ([b70abe6](https://github.com/Automattic/newspack-plugin/commit/b70abe6d3a0657ca955d616545f76845ae925974))
+* **onboarding:** Services step; Newsletters wizard ([#870](https://github.com/Automattic/newspack-plugin/issues/870)) ([b82bd0a](https://github.com/Automattic/newspack-plugin/commit/b82bd0a52d44c1afaf0808ba200bcdd28cda763b))
+* **web-preview:** update design ([#890](https://github.com/Automattic/newspack-plugin/issues/890)) ([eceaf28](https://github.com/Automattic/newspack-plugin/commit/eceaf282442326cfacde59b9ac6e8de440e7e805))
+
+# [1.32.0](https://github.com/Automattic/newspack-plugin/compare/v1.31.0...v1.32.0) (2021-02-25)
+
+
+### Bug Fixes
+
+* duplication of segments when dragging while re-sorting ([#881](https://github.com/Automattic/newspack-plugin/issues/881)) ([5f9a760](https://github.com/Automattic/newspack-plugin/commit/5f9a760f258eac0d6f80ccb7241ceee582036811))
+* only show sticky ad at mobile viewports ([#873](https://github.com/Automattic/newspack-plugin/issues/873)) ([a0fed02](https://github.com/Automattic/newspack-plugin/commit/a0fed02176dbd01ccd546a6020e6911de2d9f4b2))
+
+
+### Features
+
+* update style of the segments and prompts ([#860](https://github.com/Automattic/newspack-plugin/issues/860)) ([4b66384](https://github.com/Automattic/newspack-plugin/commit/4b6638444bd6e7fa6db4f2479172ffffdeebb6c0))
+* validated segmentation sort and error handling ([#886](https://github.com/Automattic/newspack-plugin/issues/886)) ([275fb71](https://github.com/Automattic/newspack-plugin/commit/275fb71f8697b8d03df4f96e883a92efaf04a7b9))
+* visually update integrations step ([#877](https://github.com/Automattic/newspack-plugin/issues/877)) ([9b82fdb](https://github.com/Automattic/newspack-plugin/commit/9b82fdb55195d6b9af6076d803294c22c38a7395))
+
+# [1.31.0](https://github.com/Automattic/newspack-plugin/compare/v1.30.1...v1.31.0) (2021-02-19)
+
+
+### Bug Fixes
+
+* don't include site domain in linker ([#868](https://github.com/Automattic/newspack-plugin/issues/868)) ([ee435cd](https://github.com/Automattic/newspack-plugin/commit/ee435cd2e4831bb2cc75a014291dd6d8241f2f42))
+
+
+### Features
+
+* starter content removal ([#864](https://github.com/Automattic/newspack-plugin/issues/864)) ([3516cde](https://github.com/Automattic/newspack-plugin/commit/3516cde6a4095c7f0608095e3eb8f550947294ae))
+* **setup-wizard:** settings step ([#863](https://github.com/Automattic/newspack-plugin/issues/863)) ([fff2ec5](https://github.com/Automattic/newspack-plugin/commit/fff2ec537382e38ac7c78db4d2dcd177bb588c77))
+
 ## [1.30.1](https://github.com/Automattic/newspack-plugin/compare/v1.30.0...v1.30.1) (2021-02-16)
 
 

@@ -143,6 +143,16 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Check if a service is enabled.
+	 *
+	 * @param string $service Service name.
+	 * @return bool Is the service enabled.
+	 */
+	public function is_service_enabled( $service ) {
+		return get_option( Advertising_Wizard::NEWSPACK_ADVERTISING_SERVICE_PREFIX . $service, false );
+	}
+
+	/**
 	 * Configure Newspack Ads for Newspack use.
 	 *
 	 * @return bool || WP_Error Return true if successful, or WP_Error if not.

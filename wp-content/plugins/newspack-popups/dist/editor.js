@@ -86,14 +86,14 @@
 /************************************************************************/
 /******/ ({
 
-/***/ "./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js ***!
-  \******************************************************************/
+/***/ "./node_modules/@babel/runtime/helpers/arrayWithHoles.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/arrayWithHoles.js ***!
+  \***************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("function _arrayWithoutHoles(arr) {\n  if (Array.isArray(arr)) {\n    for (var i = 0, arr2 = new Array(arr.length); i < arr.length; i++) {\n      arr2[i] = arr[i];\n    }\n\n    return arr2;\n  }\n}\n\nmodule.exports = _arrayWithoutHoles;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js?");
+eval("function _arrayWithHoles(arr) {\n  if (Array.isArray(arr)) return arr;\n}\n\nmodule.exports = _arrayWithHoles;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/arrayWithHoles.js?");
 
 /***/ }),
 
@@ -411,25 +411,25 @@ eval("function _getRequireWildcardCache() {\n  if (typeof WeakMap !== \"function
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/helpers/iterableToArray.js":
+/***/ "./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js":
+/*!*********************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js ***!
+  \*********************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("function _iterableToArrayLimit(arr, i) {\n  if (!(Symbol.iterator in Object(arr) || Object.prototype.toString.call(arr) === \"[object Arguments]\")) {\n    return;\n  }\n\n  var _arr = [];\n  var _n = true;\n  var _d = false;\n  var _e = undefined;\n\n  try {\n    for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) {\n      _arr.push(_s.value);\n\n      if (i && _arr.length === i) break;\n    }\n  } catch (err) {\n    _d = true;\n    _e = err;\n  } finally {\n    try {\n      if (!_n && _i[\"return\"] != null) _i[\"return\"]();\n    } finally {\n      if (_d) throw _e;\n    }\n  }\n\n  return _arr;\n}\n\nmodule.exports = _iterableToArrayLimit;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js?");
+
+/***/ }),
+
+/***/ "./node_modules/@babel/runtime/helpers/nonIterableRest.js":
 /*!****************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/iterableToArray.js ***!
+  !*** ./node_modules/@babel/runtime/helpers/nonIterableRest.js ***!
   \****************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports) {
 
-eval("function _iterableToArray(iter) {\n  if (Symbol.iterator in Object(iter) || Object.prototype.toString.call(iter) === \"[object Arguments]\") return Array.from(iter);\n}\n\nmodule.exports = _iterableToArray;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/iterableToArray.js?");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime/helpers/nonIterableSpread.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/nonIterableSpread.js ***!
-  \******************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("function _nonIterableSpread() {\n  throw new TypeError(\"Invalid attempt to spread non-iterable instance\");\n}\n\nmodule.exports = _nonIterableSpread;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/nonIterableSpread.js?");
+eval("function _nonIterableRest() {\n  throw new TypeError(\"Invalid attempt to destructure non-iterable instance\");\n}\n\nmodule.exports = _nonIterableRest;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/nonIterableRest.js?");
 
 /***/ }),
 
@@ -488,14 +488,14 @@ eval("function _setPrototypeOf(o, p) {\n  module.exports = _setPrototypeOf = Obj
 
 /***/ }),
 
-/***/ "./node_modules/@babel/runtime/helpers/toConsumableArray.js":
-/*!******************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/toConsumableArray.js ***!
-  \******************************************************************/
+/***/ "./node_modules/@babel/runtime/helpers/slicedToArray.js":
+/*!**************************************************************!*\
+  !*** ./node_modules/@babel/runtime/helpers/slicedToArray.js ***!
+  \**************************************************************/
 /*! no static exports found */
 /***/ (function(module, exports, __webpack_require__) {
 
-eval("var arrayWithoutHoles = __webpack_require__(/*! ./arrayWithoutHoles */ \"./node_modules/@babel/runtime/helpers/arrayWithoutHoles.js\");\n\nvar iterableToArray = __webpack_require__(/*! ./iterableToArray */ \"./node_modules/@babel/runtime/helpers/iterableToArray.js\");\n\nvar nonIterableSpread = __webpack_require__(/*! ./nonIterableSpread */ \"./node_modules/@babel/runtime/helpers/nonIterableSpread.js\");\n\nfunction _toConsumableArray(arr) {\n  return arrayWithoutHoles(arr) || iterableToArray(arr) || nonIterableSpread();\n}\n\nmodule.exports = _toConsumableArray;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/toConsumableArray.js?");
+eval("var arrayWithHoles = __webpack_require__(/*! ./arrayWithHoles */ \"./node_modules/@babel/runtime/helpers/arrayWithHoles.js\");\n\nvar iterableToArrayLimit = __webpack_require__(/*! ./iterableToArrayLimit */ \"./node_modules/@babel/runtime/helpers/iterableToArrayLimit.js\");\n\nvar nonIterableRest = __webpack_require__(/*! ./nonIterableRest */ \"./node_modules/@babel/runtime/helpers/nonIterableRest.js\");\n\nfunction _slicedToArray(arr, i) {\n  return arrayWithHoles(arr) || iterableToArrayLimit(arr, i) || nonIterableRest();\n}\n\nmodule.exports = _slicedToArray;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/slicedToArray.js?");
 
 /***/ }),
 
@@ -3067,7 +3067,7 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bab
 /***/ (function(module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/toConsumableArray */ \"./node_modules/@babel/runtime/helpers/toConsumableArray.js\");\n/* harmony import */ var _babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ \"@wordpress/components\");\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);\n\n\n\n/**\n * Popup segmentation options.\n */\n\n/**\n * WordPress dependencies\n */\n\n\n\nvar segmentsList = window && window.newspack_popups_data && window.newspack_popups_data.segments || [];\n\nvar SegmentationSidebar = function SegmentationSidebar(_ref) {\n  var onMetaFieldChange = _ref.onMetaFieldChange,\n      selected_segment_id = _ref.selected_segment_id;\n  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__[\"SelectControl\"], {\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Segment'),\n    help: !selected_segment_id ? Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('The prompt will be shown to all readers.', 'newspack-popups') : Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('The prompt will be shown only to readers who match the selected segment.', 'newspack-popups'),\n    value: selected_segment_id,\n    onChange: function onChange(value) {\n      return onMetaFieldChange('selected_segment_id', value);\n    },\n    options: [{\n      value: '',\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Default (no segment)', 'newspack-popups')\n    }].concat(_babel_runtime_helpers_toConsumableArray__WEBPACK_IMPORTED_MODULE_0___default()(segmentsList.map(function (segment) {\n      return {\n        value: segment.id,\n        label: segment.name\n      };\n    })))\n  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__[\"ExternalLink\"], {\n    href: \"/wp-admin/admin.php?page=newspack-popups-wizard#/segments\",\n    key: \"segmentation-link\"\n  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Manage segments')));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (SegmentationSidebar);\n\n//# sourceURL=webpack:///./src/editor/SegmentationSidebar.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ \"./node_modules/@babel/runtime/helpers/slicedToArray.js\");\n/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ \"@wordpress/components\");\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);\n\n\n\n/**\n * Popup segmentation options.\n */\n\n/**\n * WordPress dependencies\n */\n\n\n\nvar defaultSegment = [{\n  id: '',\n  name: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Everyone', 'newspack-popups')\n}];\nvar segmentsList = window && window.newspack_popups_data && window.newspack_popups_data.segments.concat(defaultSegment) || defaultSegment;\n\nvar SegmentationSidebar = function SegmentationSidebar(_ref) {\n  var onMetaFieldChange = _ref.onMetaFieldChange,\n      selected_segment_id = _ref.selected_segment_id;\n\n  var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"useState\"])([]),\n      _useState2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState, 2),\n      assignedSegments = _useState2[0],\n      setAssignedSegments = _useState2[1];\n\n  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"useEffect\"])(function () {\n    if (selected_segment_id) {\n      setAssignedSegments(selected_segment_id.split(','));\n    } else {\n      setAssignedSegments([]);\n    }\n  }, [selected_segment_id]);\n  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__[\"BaseControl\"], {\n    className: \"newspack-popups__segmentation-sidebar\",\n    help: !selected_segment_id ? Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('The prompt will be shown to all readers.', 'newspack-popups') : Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"sprintf\"])(Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('The prompt will be shown only to readers who match the selected segment%s.', 'newspack-popups'), 1 === assignedSegments.length ? '' : Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"_x\"])('s', 'plural modifier for segment', 'newspack-popups'))\n  }, 0 < segmentsList.length && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__[\"FormTokenField\"], {\n    value: [],\n    onChange: function onChange(_segment) {\n      var segmentToAssign = segmentsList.find(function (segment) {\n        return segment.name === _segment[0];\n      });\n\n      if (!segmentToAssign) {\n        return;\n      }\n\n      if (!segmentToAssign.id) {\n        return onMetaFieldChange('selected_segment_id', '');\n      }\n\n      assignedSegments.push(segmentToAssign.id);\n      return onMetaFieldChange('selected_segment_id', assignedSegments.join(','));\n    },\n    suggestions: segmentsList.filter(function (segment) {\n      return -1 === assignedSegments.indexOf(segment.id);\n    }).map(function (segment) {\n      return segment.name;\n    }),\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Search Segments', 'newspack-popups')\n  }), segmentsList.map(function (segment) {\n    var segmentIndex = assignedSegments.indexOf(segment.id);\n    var segmentIsAssigned = segmentIndex > -1;\n    return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__[\"CheckboxControl\"], {\n      key: segment.id,\n      value: segment.id,\n      label: segment.name,\n      onChange: function onChange() {\n        if (!segment.id) {\n          return onMetaFieldChange('selected_segment_id', '');\n        }\n\n        if (segmentIsAssigned) {\n          assignedSegments.splice(segmentIndex, 1);\n        } else {\n          assignedSegments.push(segment.id);\n        }\n\n        return onMetaFieldChange('selected_segment_id', assignedSegments.join(','));\n      },\n      checked: segment.id ? segmentIsAssigned : 0 === assignedSegments.length\n    });\n  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__[\"ExternalLink\"], {\n    href: \"/wp-admin/admin.php?page=newspack-popups-wizard#/segments\",\n    key: \"segmentation-link\"\n  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Manage segments')));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (SegmentationSidebar);\n\n//# sourceURL=webpack:///./src/editor/SegmentationSidebar.js?");
 
 /***/ }),
 

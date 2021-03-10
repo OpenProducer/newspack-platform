@@ -434,7 +434,9 @@ final class Newspack_Popups_Model {
 				]
 			),
 		];
-		if ( $popup['options']['selected_segment_id'] && ! in_array( $popup['options']['selected_segment_id'], Newspack_Popups_Segmentation::get_segment_ids() ) ) {
+
+		$assigned_segments = explode( ',', $popup['options']['selected_segment_id'] );
+		if ( $popup['options']['selected_segment_id'] && 0 === count( array_intersect( $assigned_segments, Newspack_Popups_Segmentation::get_segment_ids() ) ) ) {
 			$popup['options']['selected_segment_id'] = null;
 		}
 		if ( $include_categories ) {

@@ -111,6 +111,8 @@ function newspack_custom_typography_css() {
 		.wp-block-latest-posts time,
 		.wp-block-file,
 		.wp-block-file .wp-block-file__button,
+		.wpbnbd .freq-label,
+		.wpbnbd .tier-label,
 
 		/* _widgets.scss */
 		.widget,
@@ -122,7 +124,6 @@ function newspack_custom_typography_css() {
 		.widget_recent_comments ul li,
 		.widget_recent_entries ul li,
 		.widget_rss ul li,
-
 		.widget_tag_cloud .tagcloud,
 
 		/* _copy.scss */
@@ -135,7 +136,26 @@ function newspack_custom_typography_css() {
 		#jp-relatedposts.jp-relatedposts .jp-relatedposts-headline,
 
 		/* Yoast Breadcrumbs */
-		.site-breadcrumb .wrapper > span
+		.site-breadcrumb .wrapper > span,
+
+		/* WooCommerce */
+		.woocommerce-breadcrumb,
+		.woocommerce-pagination,
+		.woocommerce .onsale,
+		.woocommerce .price,
+		.woocommerce .product_meta,
+		.woocommerce-review-link,
+		.woocommerce-grouped-product-list,
+		.woocommerce .first-payment-date,
+		.woocommerce-message,
+		.woocommerce-error,
+		.woocommerce-info,
+		ul.products .added_to_cart,
+		.woocommerce-tabs ul,
+		.woocommerce-MyAccount-navigation,
+		.woocommerce-Reviews .comment-reply-title,
+		.woocommerce-results-wrapper,
+		.product .nyp
 		{
 			font-family: ' . wp_kses( $font_header, null ) . ';
 		}';
@@ -192,6 +212,11 @@ function newspack_custom_typography_css() {
 		.block-editor-block-list__layout .block-editor-block-list__block .jp-relatedposts-i2 strong,
 		.block-editor-block-list__layout .block-editor-block-list__block .jp-relatedposts-i2 .jp-related-posts-i2__post-date,
 		.block-editor-block-list__layout .block-editor-block-list__block .jp-relatedposts-i2 .jp-related-posts-i2__post-context,
+
+		/* Donate block */
+		.block-editor-block-list__layout .block-editor-block-list__block .wpbnbd .freq-label,
+		.block-editor-block-list__layout .block-editor-block-list__block .wpbnbd .tier-label,
+		.block-editor-block-list__layout .block-editor-block-list__block .wpbnbd button,
 
 		/* Classic Editor */
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-caption dd,
@@ -298,7 +323,7 @@ function newspack_custom_typography_link( $theme_mod ) {
 function newspack_get_font_stacks() {
 	return array(
 		'serif'      => array(
-			'name'  => __( 'Serif' ),
+			'name'  => __( 'Serif', 'newspack' ),
 			'fonts' => array(
 				'Georgia',
 				'Garamond',
@@ -307,7 +332,7 @@ function newspack_get_font_stacks() {
 			),
 		),
 		'sans_serif' => array(
-			'name'  => __( 'Sans Serif' ),
+			'name'  => __( 'Sans Serif', 'newspack' ),
 			'fonts' => array(
 				'-apple-system',
 				'BlinkMacSystemFont',
@@ -320,6 +345,37 @@ function newspack_get_font_stacks() {
 				'Droid Sans',
 				'Helvetica Neue',
 				'sans-serif',
+			),
+		),
+		'display'    => array(
+			'name'  => __( 'Display', 'newspack' ),
+			'fonts' => array(
+				'Impact',
+				'Haettenschweiler',
+				'Franklin Gothic Bold',
+				'Charcoal',
+				'Helvetica Inserat',
+				'Bitstream Vera Sans Bold',
+				'Arial Black',
+				'sans-serif',
+			),
+		),
+		'monospace'  => array(
+			'name'  => __( 'Monospace', 'newspack' ),
+			'fonts' => array(
+				'Consolas',
+				'Andale Mono WT',
+				'Andale Mono',
+				'Lucida Console',
+				'Lucida Sans Typewriter',
+				'DejaVu Sans Mono',
+				'Bitstream Vera Sans Mono',
+				'Liberation Mono',
+				'Nimbus Mono L',
+				'Monaco',
+				'Courier New',
+				'Courier',
+				'monospace'
 			),
 		),
 	);

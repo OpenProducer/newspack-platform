@@ -375,6 +375,11 @@ figcaption,
   margin-bottom: 0;
 }
 
+.wp-block-gallery figcaption a,
+.wp-block-gallery figcaption a:hover {
+  color: #fff;
+}
+
 /** === Audio & Video === */
 .wp-block-audio figcaption,
 .wp-block-video figcaption {
@@ -849,6 +854,13 @@ ul.wp-block-archives li,
 
 .wp-block-organic-profile-block .organic-profile-social .social-link:active, .wp-block-organic-profile-block .organic-profile-social .social-link:focus, .wp-block-organic-profile-block .organic-profile-social .social-link:hover {
   color: inherit;
+}
+
+/** === Donate Block === */
+.wpbnbd .freq-label,
+.wpbnbd .tier-label,
+.wpbnbd button {
+  font-family: "Montserrat", "Helvetica Neue", "Helvetica", "Arial Black", "Arial", sans-serif;
 }
 
 /** === Classic Editor === */

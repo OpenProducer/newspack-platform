@@ -85,6 +85,3 @@ class WordPress_SEO_Configuration_Manager extends Configuration_Manager {
 		);
 	}
 }
-
-
-

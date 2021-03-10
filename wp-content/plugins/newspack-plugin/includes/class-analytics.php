@@ -19,7 +19,7 @@ class Analytics {
 	 *
 	 * @var array
 	 */
-	public static $block_events = [];
+	public static $ntg_block_events = [];
 
 	/**
 	 * An integer to indicate the context a block is rendered in, e.g. content|overlay campaign|inline campaign.
@@ -180,87 +180,90 @@ class Analytics {
 	 * There can also be other fields specific for certain events (e.g. 'scrollSpec' for 'scroll' event listener).
 	 */
 	public static function get_events() {
-		$events = [
-			[
-				'id'             => 'socialShareClickedFacebook',
-				'on'             => 'click',
-				'element'        => 'a.share-facebook',
-				'amp_element'    => 'amp-social-share[type="facebook"]',
-				'event_name'     => 'social share',
-				'event_label'    => 'facebook',
-				'event_category' => 'NTG social',
-			],
-			[
-				'id'             => 'socialShareClickedTwitter',
-				'on'             => 'click',
-				'element'        => 'a.share-twitter',
-				'amp_element'    => 'amp-social-share[type="twitter"]',
-				'event_name'     => 'social share',
-				'event_label'    => 'twitter',
-				'event_category' => 'NTG social',
-			],
-			[
-				'id'             => 'socialShareClickedWhatsApp',
-				'on'             => 'click',
-				'element'        => 'a.share-jetpack-whatsapp',
-				'amp_element'    => 'amp-social-share[type="whatsapp"]',
-				'event_name'     => 'social share',
-				'event_label'    => 'whatsapp',
-				'event_category' => 'NTG social',
-			],
-			[
-				'id'             => 'socialShareClickedLinkedIn',
-				'on'             => 'click',
-				'element'        => 'a.share-linkedin',
-				'amp_element'    => 'amp-social-share[type="linkedin"]',
-				'event_name'     => 'social share',
-				'event_label'    => 'linkedin',
-				'event_category' => 'NTG social',
-			],
-		];
-
-		if ( ! is_front_page() && ! is_archive() ) {
-			$events = array_merge(
-				$events,
+		$events = [];
+		if ( Analytics_Wizard::ntg_events_enabled() ) {
+			$events = [
 				[
+					'id'             => 'socialShareClickedFacebook',
+					'on'             => 'click',
+					'element'        => 'a.share-facebook',
+					'amp_element'    => 'amp-social-share[type="facebook"]',
+					'event_name'     => 'social share',
+					'event_label'    => 'facebook',
+					'event_category' => 'NTG social',
+				],
+				[
+					'id'             => 'socialShareClickedTwitter',
+					'on'             => 'click',
+					'element'        => 'a.share-twitter',
+					'amp_element'    => 'amp-social-share[type="twitter"]',
+					'event_name'     => 'social share',
+					'event_label'    => 'twitter',
+					'event_category' => 'NTG social',
+				],
+				[
+					'id'             => 'socialShareClickedWhatsApp',
+					'on'             => 'click',
+					'element'        => 'a.share-jetpack-whatsapp',
+					'amp_element'    => 'amp-social-share[type="whatsapp"]',
+					'event_name'     => 'social share',
+					'event_label'    => 'whatsapp',
+					'event_category' => 'NTG social',
+				],
+				[
+					'id'             => 'socialShareClickedLinkedIn',
+					'on'             => 'click',
+					'element'        => 'a.share-linkedin',
+					'amp_element'    => 'amp-social-share[type="linkedin"]',
+					'event_name'     => 'social share',
+					'event_label'    => 'linkedin',
+					'event_category' => 'NTG social',
+				],
+			];
+
+			if ( ! is_front_page() && ! is_archive() ) {
+				$events = array_merge(
+					$events,
 					[
-						'id'              => 'articleRead25',
-						'on'              => 'scroll',
-						'event_name'      => '25%',
-						'event_value'     => 25,
-						'event_label'     => get_the_title(),
-						'event_category'  => 'NTG article milestone',
-						'non_interaction' => true,
-						'scrollSpec'      => [
-							'verticalBoundaries' => [ 25 ],
+						[
+							'id'              => 'articleRead25',
+							'on'              => 'scroll',
+							'event_name'      => '25%',
+							'event_value'     => 25,
+							'event_label'     => get_the_title(),
+							'event_category'  => 'NTG article milestone',
+							'non_interaction' => true,
+							'scrollSpec'      => [
+								'verticalBoundaries' => [ 25 ],
+							],
 						],
-					],
-					[
-						'id'              => 'articleRead50',
-						'on'              => 'scroll',
-						'event_name'      => '50%',
-						'event_value'     => 50,
-						'event_label'     => get_the_title(),
-						'event_category'  => 'NTG article milestone',
-						'non_interaction' => true,
-						'scrollSpec'      => [
-							'verticalBoundaries' => [ 50 ],
+						[
+							'id'              => 'articleRead50',
+							'on'              => 'scroll',
+							'event_name'      => '50%',
+							'event_value'     => 50,
+							'event_label'     => get_the_title(),
+							'event_category'  => 'NTG article milestone',
+							'non_interaction' => true,
+							'scrollSpec'      => [
+								'verticalBoundaries' => [ 50 ],
+							],
 						],
-					],
-					[
-						'id'              => 'articleRead100',
-						'on'              => 'scroll',
-						'event_name'      => '100%',
-						'event_value'     => 100,
-						'event_label'     => get_the_title(),
-						'event_category'  => 'NTG article milestone',
-						'non_interaction' => true,
-						'scrollSpec'      => [
-							'verticalBoundaries' => [ 100 ],
+						[
+							'id'              => 'articleRead100',
+							'on'              => 'scroll',
+							'event_name'      => '100%',
+							'event_value'     => 100,
+							'event_label'     => get_the_title(),
+							'event_category'  => 'NTG article milestone',
+							'non_interaction' => true,
+							'scrollSpec'      => [
+								'verticalBoundaries' => [ 100 ],
+							],
 						],
-					],
-				]
-			);
+					]
+				);
+			}
 		}
 
 		$custom_events = array_reduce(
@@ -318,7 +321,7 @@ class Analytics {
 		// Wrap the block in amp-layout to enable visibility tracking. Sugggested here: https://github.com/ampproject/amphtml/issues/11678.
 		$content = sprintf( '<amp-layout id="%s">%s</amp-layout>', $block_unique_id, $content );
 
-		self::$block_events[] = [
+		self::$ntg_block_events[] = [
 			'id'             => 'newsletterSignup-' . $block_unique_id,
 			'amp_on'         => 'amp-form-submit-success',
 			'on'             => 'submit',
@@ -330,7 +333,7 @@ class Analytics {
 				'totalTimeMin' => 500,
 			],
 		];
-		self::$block_events[] = [
+		self::$ntg_block_events[] = [
 			'id'              => 'newsletterImpression-' . $block_unique_id,
 			'on'              => 'visible',
 			'element'         => '#' . $block_unique_id,
@@ -349,7 +352,7 @@ class Analytics {
 	 * Prepare event triggers on user commenting.
 	 */
 	public static function prepare_comment_events() {
-		self::$block_events[] = [
+		self::$ntg_block_events[] = [
 			'id'             => 'addComment',
 			'amp_on'         => 'amp-form-submit-success',
 			'on'             => 'submit',
@@ -364,7 +367,7 @@ class Analytics {
 	 * Add login event triggers for the WooCommerce My Account and Checkout pages.
 	 */
 	public static function prepare_login_events() {
-		self::$block_events[] = [
+		self::$ntg_block_events[] = [
 			'id'             => 'loginSuccess',
 			'amp-on'         => 'amp-form-submit-success',
 			'on'             => 'submit',
@@ -379,7 +382,7 @@ class Analytics {
 	 * Add registration event triggers for the WooCommerce My Account page.
 	 */
 	public static function prepare_registration_events() {
-		self::$block_events[] = [
+		self::$ntg_block_events[] = [
 			'id'             => 'registrationSuccess',
 			'amp-on'         => 'amp-form-submit-success',
 			'on'             => 'submit',
@@ -394,7 +397,7 @@ class Analytics {
 	 * Add a registration event trigger for the WooCommerce Checkout page.
 	 */
 	public static function prepare_checkout_registration_events() {
-		self::$block_events[] = [
+		self::$ntg_block_events[] = [
 			'id'             => 'registrationSuccess',
 			'amp-on'         => 'amp-form-submit-success',
 			'on'             => 'submit',
@@ -415,7 +418,10 @@ class Analytics {
 		if ( is_user_logged_in() ) {
 			$config['vars']['user_id'] = get_current_user_id();
 		}
-		$all_events = array_merge( self::get_events(), self::$block_events );
+		$all_events = self::get_events();
+		if ( Analytics_Wizard::ntg_events_enabled() ) {
+			$all_events = array_merge( $all_events, self::$ntg_block_events );
+		}
 		foreach ( $all_events as $event ) {
 			$event_config = [
 				'request' => 'event',
@@ -467,7 +473,7 @@ class Analytics {
 		}
 
 		// Discard events with duplicate ids.
-		$all_events   = array_merge( self::get_events(), self::$block_events );
+		$all_events   = array_merge( self::get_events(), self::$ntg_block_events );
 		$unique_array = [];
 		foreach ( $all_events as $element ) {
 			$hash                  = $element['id'];

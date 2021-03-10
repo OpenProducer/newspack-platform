@@ -41,7 +41,7 @@ final class Newspack {
 		$this->define_constants();
 		$this->includes();
 		add_action( 'admin_init', [ $this, 'admin_redirects' ] );
-		add_action( 'admin_menu', [ $this, 'remove_all_newspack_options' ], 1 );
+		add_action( 'admin_menu', [ $this, 'handle_resets' ], 1 );
 		add_action( 'admin_menu', [ $this, 'remove_newspack_suite_plugin_links' ], 1 );
 		add_action( 'admin_notices', [ $this, 'remove_notifications' ], -9999 );
 		add_action( 'network_admin_notices', [ $this, 'remove_notifications' ], -9999 );
@@ -134,25 +134,36 @@ final class Newspack {
 	}
 
 	/**
-	 * Reset Newspack by removing all newspack prefixed options. Triggered by the query param reset_newspack_settings=1
+	 * Handle resetting of various options and content.
 	 */
-	public function remove_all_newspack_options() {
-		if ( ! self::is_debug_mode() ) {
-			return;
-		}
+	public function handle_resets() {
+		$redirect_url   = admin_url( 'admin.php?page=newspack' );
 		$newspack_reset = filter_input( INPUT_GET, 'newspack_reset', FILTER_SANITIZE_STRING );
-		if ( 'reset' === $newspack_reset ) {
-			$all_options = wp_load_alloptions();
-			foreach ( $all_options as $key => $value ) {
-				if ( strpos( $key, 'newspack' ) === 0 || strpos( $key, '_newspack' ) === 0 ) {
-					delete_option( $key );
-				}
-			}
-			wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
-			exit;
+		if ( 'starter-content' === $newspack_reset ) {
+			Starter_Content::remove_starter_content();
+			$redirect_url = add_query_arg( 'newspack-notice', __( 'Starter content removed.', 'newspack' ), $redirect_url );
 		}
-		if ( Support_Wizard::get_wpcom_access_token() && 'reset-wpcom' === $newspack_reset ) {
-			delete_user_meta( get_current_user_id(), Support_Wizard::NEWSPACK_WPCOM_ACCESS_TOKEN );
+
+		if ( self::is_debug_mode() ) {
+			if ( 'reset' === $newspack_reset ) {
+				$all_options = wp_load_alloptions();
+				foreach ( $all_options as $key => $value ) {
+					if ( strpos( $key, 'newspack' ) === 0 || strpos( $key, '_newspack' ) === 0 ) {
+						delete_option( $key );
+					}
+				}
+				wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
+				exit;
+			}
+			if ( Support_Wizard::get_wpcom_access_token() && 'reset-wpcom' === $newspack_reset ) {
+				delete_user_meta( get_current_user_id(), Support_Wizard::NEWSPACK_WPCOM_ACCESS_TOKEN );
+				$redirect_url = add_query_arg( 'newspack-notice', __( 'Removed WPCOM Access Token', 'newspack' ), $redirect_url );
+			}
+		}
+
+		if ( $newspack_reset ) {
+			wp_safe_redirect( $redirect_url );
+			exit;
 		}
 	}
 

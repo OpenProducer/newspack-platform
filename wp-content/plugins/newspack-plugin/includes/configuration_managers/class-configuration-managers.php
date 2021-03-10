@@ -44,6 +44,10 @@ class Configuration_Managers {
 			'filename'   => 'class-newspack-popups-configuration-manager.php',
 			'class_name' => 'Newspack_Popups_Configuration_Manager',
 		],
+		'newspack-newsletters'  => [
+			'filename'   => 'class-newspack-newsletters-configuration-manager.php',
+			'class_name' => 'Newspack_Newsletters_Configuration_Manager',
+		],
 		'woocommerce'           => [
 			'filename'   => 'class-woocommerce-configuration-manager.php',
 			'class_name' => 'WooCommerce_Configuration_Manager',

@@ -11,33 +11,18 @@ use WP_REST_Server;
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEWSPACK_PROFILE_OPTION_PREFIX', '_newspack_profile_' );
-
+require_once NEWSPACK_ABSPATH . 'includes/configuration_managers/class-configuration-managers.php';
 /**
  * Manages user profile data.
  */
 class Profile {
 
 	/**
-	 * List of fieldnames
+	 * Profile fields.
 	 *
-	 * @var $fieldnames
+	 * @var $profile_fields
 	 */
-	protected static $fieldnames = [
-		[
-			'name'    => 'country',
-			'default' => 'US',
-		],
-		[ 'name' => 'address' ],
-		[ 'name' => 'address2' ],
-		[ 'name' => 'city' ],
-		[ 'name' => 'state' ],
-		[ 'name' => 'zip' ],
-		[
-			'name'    => 'currency',
-			'default' => 'USD',
-		],
-	];
+	protected static $profile_fields = [];
 
 	/**
 	 * The capability required to access this wizard.
@@ -47,30 +32,116 @@ class Profile {
 	protected $capability = 'manage_options';
 
 	/**
+	 * Fields to fetch from WP SEO (Yoast) plugin.
+	 *
+	 * @var array
+	 */
+	protected static $wpseo_fields = [];
+
+	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		add_action( 'rest_api_init', [ $this, 'register_api_endpoints' ] );
+		add_action( 'init', [ $this, 'set_profile_fields' ] );
 	}
 
 	/**
-	 * Retrieve one option, prefixing the option name for Newspack profile.
-	 *
-	 * @param string $key The unprefixed option name.
-	 * @return string The option value.
+	 * Register the endpoints needed for the wizard screens.
 	 */
-	public static function newspack_get_option( $key ) {
-		return get_option( NEWSPACK_PROFILE_OPTION_PREFIX . $key, '' );
-	}
+	public function set_profile_fields() {
+		$site_icon = get_site_icon_url();
 
-	/**
-	 * Update one option, prefixing the option name for Newspack profile.
-	 *
-	 * @param string $key The unprefixed option name.
-	 * @param string $value The option value.
-	 */
-	public static function newspack_update_option( $key, $value ) {
-		update_option( NEWSPACK_PROFILE_OPTION_PREFIX . $key, $value );
+		self::$wpseo_fields = [
+			[
+				'key'         => 'facebook_site',
+				'label'       => __( 'Facebook Page', 'newspack' ),
+				'placeholder' => __( 'https://facebook.com/page', 'newspack' ),
+			],
+			[
+				'key'         => 'twitter_site',
+				'label'       => __( 'Twitter Username', 'newspack' ),
+				'placeholder' => __( 'username', 'newspack' ),
+			],
+			[
+				'key'         => 'instagram_url',
+				'label'       => __( 'Instagram', 'newspack' ),
+				'placeholder' => __( 'https://instagram.com/user', 'newspack' ),
+			],
+			[
+				'key'         => 'linkedin_url',
+				'label'       => __( 'Linkedin', 'newspack' ),
+				'placeholder' => __( 'https://linkedin.com/user', 'newspack' ),
+			],
+			[
+				'key'         => 'youtube_url',
+				'label'       => __( 'YouTube', 'newspack' ),
+				'placeholder' => __( 'https://youtube.com/c/channel', 'newspack' ),
+			],
+			[
+				'key'         => 'pinterest_url',
+				'label'       => __( 'Pinterest', 'newspack' ),
+				'placeholder' => __( 'https://pinterest.com/user', 'newspack' ),
+			],
+		];
+
+		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
+		$wc_location_data         = $wc_configuration_manager->location_data();
+		self::$profile_fields     = [
+			[
+				'name'    => 'site_icon',
+				'value'   => ! empty( $site_icon ) ? [
+					'url' => $site_icon,
+					'id'  => get_option( 'site_icon' ),
+				] : false,
+				'updater' => function( $value ) {
+					update_option( 'site_icon', isset( $value['id'] ) ? $value['id'] : '' );
+					update_option( 'sitelogo', isset( $value['id'] ) ? $value['id'] : '' );
+				},
+			],
+			[
+				'name'    => 'site_title',
+				'value'   => get_option( 'blogname' ),
+				'updater' => function( $value ) {
+					update_option( 'blogname', $value );
+				},
+			],
+			[
+				'name'    => 'tagline',
+				'value'   => get_option( 'blogdescription' ),
+				'updater' => function( $value ) {
+					update_option( 'blogdescription', $value );
+				},
+			],
+			[
+				'name'    => 'countrystate',
+				'value'   => $wc_location_data['countrystate'],
+				'updater' => function( $value ) {
+					$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
+					$wc_configuration_manager->update_location( [ 'countrystate' => $value ] );
+				},
+			],
+			[
+				'name'    => 'currency',
+				'value'   => $wc_location_data['currency'],
+				'updater' => function( $value ) {
+					$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
+					$wc_configuration_manager->update_location( [ 'currency' => $value ] );
+				},
+			],
+		];
+
+		$wpseo_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'wordpress_seo' );
+		foreach ( self::$wpseo_fields as $field ) {
+			self::$profile_fields[] = [
+				'name'    => $field['key'],
+				'value'   => $wpseo_manager->get_option( $field['key'], '' ),
+				'updater' => function( $value ) use ( $field ) {
+					$wpseo_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'wordpress_seo' );
+					$wpseo_manager->set_option( $field['key'], $value );
+				},
+			];
+		}
 	}
 
 	/**
@@ -111,11 +182,8 @@ class Profile {
 	 */
 	public function newspack_get_profile() {
 		$profile = [];
-		foreach ( self::$fieldnames as $fieldname ) {
-			$profile[ $fieldname['name'] ] = self::newspack_get_option( $fieldname['name'] );
-			if ( empty( $profile[ $fieldname['name'] ] ) && isset( $fieldname['default'] ) ) {
-				$profile[ $fieldname['name'] ] = $fieldname['default'];
-			}
+		foreach ( self::$profile_fields as $field ) {
+			$profile[ $field['name'] ] = $field['value'];
 		}
 		return $profile;
 	}
@@ -127,10 +195,12 @@ class Profile {
 	 * @return object|WP_Error
 	 */
 	public function api_get_profile( $request ) {
-		$response = [
-			'profile'    => $this->newspack_get_profile(),
-			'currencies' => newspack_select_prepare( newspack_currencies() ),
-			'countries'  => newspack_select_prepare( newspack_countries() ),
+		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
+		$response                 = [
+			'profile'      => $this->newspack_get_profile(),
+			'currencies'   => $wc_configuration_manager->currency_fields(),
+			'countries'    => $wc_configuration_manager->country_state_fields(),
+			'wpseo_fields' => self::$wpseo_fields,
 		];
 		return rest_ensure_response( $response );
 	}
@@ -143,10 +213,9 @@ class Profile {
 	 */
 	public function api_update_profile( $request ) {
 		$updates = $request['profile'];
-		foreach ( self::$fieldnames as $fieldname ) {
-			if ( isset( $updates[ $fieldname['name'] ] ) ) {
-				self::newspack_update_option( $fieldname['name'], $updates[ $fieldname['name'] ] );
-			}
+		foreach ( self::$profile_fields as $field ) {
+			$updater = $field['updater'];
+			$updater( $updates[ $field['name'] ] );
 		}
 		$response = [
 			'profile' => $this->newspack_get_profile(),

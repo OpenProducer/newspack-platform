@@ -51,6 +51,9 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 * @return Array Array of objects formatted for use in a SelectControl.
 	 */
 	public function country_state_fields() {
+		if ( ! function_exists( 'WC' ) ) {
+			return [];
+		}
 		$countries     = WC()->countries->get_countries();
 		$states        = WC()->countries->get_states();
 		$location_info = [];
@@ -78,6 +81,9 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 * @return Array Array of objects formatted for use in a SelectControl.
 	 */
 	public function currency_fields() {
+		if ( ! function_exists( 'WC' ) ) {
+			return [];
+		}
 		$currencies    = get_woocommerce_currencies();
 		$currency_info = [];
 		foreach ( $currencies as $code => $currency ) {
@@ -123,6 +129,16 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 * @return Array Array of data.
 	 */
 	public function location_data() {
+		if ( ! function_exists( 'WC' ) ) {
+			return [
+				'countrystate' => '',
+				'address1'     => '',
+				'address2'     => '',
+				'city'         => '',
+				'postcode'     => '',
+				'currency'     => '',
+			];
+		}
 		$countrystate_raw = wc_get_base_location();
 		return [
 			'countrystate' => ( empty( $countrystate_raw['state'] ) || '*' === $countrystate_raw['state'] ) ? $countrystate_raw['country'] : $countrystate_raw['country'] . ':' . $countrystate_raw['state'],
@@ -141,12 +157,12 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 * @return Array The data that was updated.
 	 */
 	public function update_location( $args ) {
-		update_option( 'woocommerce_store_address', $args['address1'] );
-		update_option( 'woocommerce_store_address_2', $args['address2'] );
-		update_option( 'woocommerce_store_city', $args['city'] );
-		update_option( 'woocommerce_default_country', $args['countrystate'] );
-		update_option( 'woocommerce_store_postcode', $args['postcode'] );
-		update_option( 'woocommerce_currency', $args['currency'] );
+		isset( $args['address1'] ) ? update_option( 'woocommerce_store_address', $args['address1'] ) : null;
+		isset( $args['address2'] ) ? update_option( 'woocommerce_store_address_2', $args['address2'] ) : null;
+		isset( $args['city'] ) ? update_option( 'woocommerce_store_city', $args['city'] ) : null;
+		isset( $args['countrystate'] ) ? update_option( 'woocommerce_default_country', $args['countrystate'] ) : null;
+		isset( $args['postcode'] ) ? update_option( 'woocommerce_store_postcode', $args['postcode'] ) : null;
+		isset( $args['currency'] ) ? update_option( 'woocommerce_currency', $args['currency'] ) : null;
 		return true;
 	}
 

@@ -19,6 +19,8 @@
         margin-bottom: 8px; }
       .newspack-popover__campaigns__secondary-popover .components-popover__content > div > *:last-child {
         margin-bottom: 0; }
+  .newspack-popover__campaigns__secondary-popover .components-form-token-field__help {
+    display: none; }
 
 .newspack-popover__campaigns__info {
   background: #f8f9f9;
@@ -41,7 +43,7 @@
   min-height: 40px; }
   .newspack-popups-wizard .newspack-action-card .newspack-popover .components-menu-group + .components-menu-group {
     border-top: 1px solid #e2e4e7; }
-  .newspack-popups-wizard .newspack-action-card__container .newspack-button + .newspack-button {
+  .newspack-popups-wizard .newspack-action-card__container > .newspack-button + .newspack-button {
     margin-left: 2px; }
 
 /**
@@ -64,39 +66,48 @@
   line-height: 16px; }
 
 .newspack-campaigns__segment-group__card {
-  border-color: #e2e4e7; }
+  border-color: #e2e4e7;
+  overflow: hidden; }
   .newspack-campaigns__segment-group__card > .newspack-campaigns__segment-group__card__segment {
-    margin: -16px -16px 16px !important;
-    padding: 8px 16px; }
+    margin: -16px -16px 0 !important; }
   .newspack-campaigns__segment-group__card__segment {
     align-items: center;
     background: #f8f9f9;
     border-bottom: 1px solid #e2e4e7;
     display: flex;
     justify-content: space-between; }
-    .newspack-campaigns__segment-group__card__segment a {
-      color: inherit;
-      text-decoration: none; }
-      .newspack-campaigns__segment-group__card__segment a:focus, .newspack-campaigns__segment-group__card__segment a:hover {
-        color: #36f; }
-  body[class*='admin-color-'] .newspack-campaigns__segment-group__card > .newspack-button.has-icon:not(.has-text) {
-    display: flex;
-    margin-top: 16px;
-    width: 100%; }
+    .newspack-campaigns__segment-group__card__segment-title {
+      flex: 1;
+      padding: 8px 16px; }
+      .newspack-campaigns__segment-group__card__segment-title h3 {
+        margin: 0; }
+        .newspack-campaigns__segment-group__card__segment-title h3 .newspack-button.is-link:not(.is-destructive) {
+          color: inherit;
+          font-weight: inherit;
+          text-decoration: none; }
+    .newspack-campaigns__segment-group__card__segment-actions {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: flex-end;
+      padding: 9px 15px; }
+      .newspack-campaigns__segment-group__card__segment-actions .newspack-button:not(.components-menu-item__button) {
+        margin: 1px; }
+      .newspack-campaigns__segment-group__card__segment-actions .newspack-popover {
+        margin-left: calc( -25px + 36px / 2); }
 
 .newspack-campaigns__segment-group__action-cards {
-  margin: 0; }
-  .newspack-campaigns__segment-group__action-cards .newspack-action-card {
+  margin: 0 -16px; }
+  .newspack-campaigns__segment-group__action-cards .newspack-card.newspack-action-card {
+    border-bottom: 0;
+    border-left: 0;
     border-radius: 0;
-    margin-bottom: 23px; }
-    .newspack-campaigns__segment-group__action-cards .newspack-action-card:first-child {
-      border-top-left-radius: 3px;
-      border-top-right-radius: 3px;
+    border-right: 0;
+    margin-bottom: 16px; }
+    .newspack-campaigns__segment-group__action-cards .newspack-card.newspack-action-card:first-child {
+      border-top: 0;
       margin-top: 0; }
-    .newspack-campaigns__segment-group__action-cards .newspack-action-card:last-child {
-      border-bottom-left-radius: 3px;
-      border-bottom-right-radius: 3px;
-      margin-bottom: 0; }
+    .newspack-campaigns__segment-group__action-cards .newspack-card.newspack-action-card:last-child {
+      margin-bottom: -16px; }
 
 .newspack-campaigns__segment-group__add-new-button__modal {
   max-width: 384px;
@@ -261,6 +272,8 @@
  */
 .newspack-campaigns-wizard-segments__list {
   margin: 32px 0; }
+  .newspack-campaigns-wizard-segments__list.is-loading {
+    pointer-events: none; }
 
 .newspack-campaigns-wizard-segments__title {
   margin: 32px 0 64px; }
@@ -291,7 +304,7 @@
   display: block; }
 
 .newspack-campaigns__draggable {
-  margin: 8px 0; }
+  margin: 16px 0; }
   .newspack-campaigns__draggable.is-dragging {
     display: none; }
   .newspack-campaigns__draggable.is-drop-target::before, .newspack-campaigns__draggable.drop-target-after::after {
@@ -299,8 +312,8 @@
     content: '';
     display: block;
     height: 2px;
-    margin-bottom: 8px;
-    margin-top: 8px;
+    margin-bottom: 16px;
+    margin-top: 16px;
     width: 100%; }
   .newspack-campaigns__draggable .newspack-campaigns__segment-priority-controls {
     align-items: center;
@@ -340,7 +353,10 @@
   .newspack-campaigns__draggable .newspack-action-card {
     background: white;
     flex-direction: row; }
+    .newspack-campaigns__draggable .newspack-action-card .newspack-action-card__region-children {
+      padding: 0 0 0 16px; }
     .newspack-campaigns__draggable .newspack-action-card .newspack-action-card__region-top {
+      padding: 8px 16px 8px 0 !important;
       flex: 1;
       order: 2; }
 

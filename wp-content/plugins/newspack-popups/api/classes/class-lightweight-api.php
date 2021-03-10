@@ -253,11 +253,16 @@ class Lightweight_API {
 		$events_table_name   = Segmentation::get_events_table_name();
 		$all_client_ids_rows = $wpdb->get_results( "SELECT DISTINCT client_id FROM $events_table_name" ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		$api                 = new Lightweight_API();
-		return array_map(
-			function ( $row ) use ( $api ) {
-				return $api->get_client_data( $row->client_id, true );
+		return array_reduce(
+			$all_client_ids_rows,
+			function ( $acc, $row ) use ( $api ) {
+				// Disregard client data created during previewing.
+				if ( false === strpos( $row->client_id, 'preview' ) ) {
+					$acc[] = $api->get_client_data( $row->client_id, true );
+				}
+				return $acc;
 			},
-			$all_client_ids_rows
+			[]
 		);
 	}
 

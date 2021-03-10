@@ -216,9 +216,6 @@ class Donations {
 		// Parent product.
 		$parent_product = new \WC_Product_Grouped();
 		$parent_product->set_name( $args['name'] );
-		if ( $args['imageID'] ) {
-			$parent_product->set_image_id( $args['imageID'] );
-		}
 		$suggested_amounts = array_map( 'wc_format_decimal', $args['suggestedAmounts'] );
 		sort( $suggested_amounts, SORT_NUMERIC );
 		$parent_product->update_meta_data( self::DONATION_SUGGESTED_AMOUNT_META, $suggested_amounts );
@@ -234,9 +231,6 @@ class Donations {
 		$monthly_product = new \WC_Product_Subscription();
 		/* translators: %s: Product name */
 		$monthly_product->set_name( sprintf( __( '%s: Monthly', 'newspack' ), $args['name'] ) );
-		if ( $args['imageID'] ) {
-			$monthly_product->set_image_id( $args['imageID'] );
-		}
 		$monthly_product->set_regular_price( $default_price );
 		$monthly_product->update_meta_data( '_suggested_price', $default_price );
 		$monthly_product->update_meta_data( '_hide_nyp_minimum', 'yes' );
@@ -254,9 +248,6 @@ class Donations {
 		$yearly_product = new \WC_Product_Subscription();
 		/* translators: %s: Product name */
 		$yearly_product->set_name( sprintf( __( '%s: Yearly', 'newspack' ), $args['name'] ) );
-		if ( $args['imageID'] ) {
-			$yearly_product->set_image_id( $args['imageID'] );
-		}
 		$yearly_product->set_regular_price( 12 * $default_price );
 		$yearly_product->update_meta_data( '_suggested_price', 12 * $default_price );
 		$yearly_product->update_meta_data( '_hide_nyp_minimum', 'yes' );
@@ -274,9 +265,6 @@ class Donations {
 		$once_product = new \WC_Product_Simple();
 		/* translators: %s: Product name */
 		$once_product->set_name( sprintf( __( '%s: One-Time', 'newspack' ), $args['name'] ) );
-		if ( $args['imageID'] ) {
-			$once_product->set_image_id( $args['imageID'] );
-		}
 		$once_product->set_regular_price( 12 * $default_price );
 		$once_product->update_meta_data( '_suggested_price', 12 * $default_price );
 		$once_product->update_meta_data( '_hide_nyp_minimum', 'yes' );
@@ -310,7 +298,6 @@ class Donations {
 
 		$parent_product = \wc_get_product( $product_id );
 		$parent_product->set_name( $args['name'] );
-		$parent_product->set_image_id( $args['imageID'] );
 		$suggested_amounts = array_map( 'wc_format_decimal', $args['suggestedAmounts'] );
 		sort( $suggested_amounts, SORT_NUMERIC );
 		$parent_product->update_meta_data( self::DONATION_SUGGESTED_AMOUNT_META, $suggested_amounts );
@@ -329,7 +316,6 @@ class Donations {
 
 			$yearly_price = 12 * $default_price;
 			$child_product->set_status( 'publish' );
-			$child_product->set_image_id( $args['imageID'] );
 			$child_product->set_regular_price( $default_price );
 			$child_product->update_meta_data( '_suggested_price', $default_price );
 			if ( 'subscription' === $child_product->get_type() ) {

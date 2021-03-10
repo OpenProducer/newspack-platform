@@ -5,6 +5,7 @@
  * Colors
  */
 .newspack-dashboard-card {
+  border-color: #e2e4e7;
   margin: 0;
   padding: 0; }
   .newspack-dashboard-card.disabled > * {
@@ -21,42 +22,34 @@
     .newspack-dashboard-card a:active, .newspack-dashboard-card a:focus, .newspack-dashboard-card a:hover {
       background-color: #f8f9f9;
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); }
-      @media screen and (min-width: 744px) {
-        .newspack-dashboard-card a:active > svg, .newspack-dashboard-card a:focus > svg, .newspack-dashboard-card a:hover > svg {
-          transform: translateX(-8px); } }
       .newspack-dashboard-card a:active h2, .newspack-dashboard-card a:focus h2, .newspack-dashboard-card a:hover h2 {
         color: inherit; }
       .newspack-dashboard-card a:active svg, .newspack-dashboard-card a:focus svg, .newspack-dashboard-card a:hover svg {
         fill: currentColor; }
     .newspack-dashboard-card a:focus {
       outline: none; }
-    .newspack-dashboard-card a > svg {
-      margin: 24px 0 24px 24px; }
   .newspack-dashboard-card h2,
   .newspack-dashboard-card p {
     margin: 0;
     transition: color 125ms ease-in-out; }
-  .newspack-dashboard-card p {
-    margin-top: 8px; }
   .newspack-dashboard-card svg {
     display: block;
     flex-shrink: 0;
     fill: #36f;
-    height: 24px;
-    margin: 0;
-    transition: fill 125ms ease-in-out, transform 125ms ease-in-out;
-    width: 24px; }
+    height: 48px;
+    margin: 0 0 0 8px;
+    transition: fill 125ms ease-in-out;
+    width: 48px; }
     .newspack-dashboard-card svg.icon-completed {
       fill: #4ab866; }
   .newspack-dashboard-card__contents {
     align-items: center;
     display: flex;
     justify-content: flex-start;
-    padding: 24px; }
-    .newspack-dashboard-card__contents svg {
-      height: 32px;
-      margin-left: 12px;
-      width: 32px; }
+    padding: 32px; }
+    @media screen and (min-width: 744px) {
+      .newspack-dashboard-card__contents {
+        min-height: 136px; } }
     .newspack-dashboard-card__contents .newspack-dashboard-card__header {
-      margin-right: 12px; }
+      margin-right: 8px; }
 

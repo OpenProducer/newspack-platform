@@ -1673,3 +1673,6 @@ body[class*="admin_page_newspack-"] #wpfooter:before {
   font-size: 0.7em;
   text-decoration: underline; }
 
+.newspack-popups__segmentation-sidebar .components-form-token-field__help {
+  display: none; }
+

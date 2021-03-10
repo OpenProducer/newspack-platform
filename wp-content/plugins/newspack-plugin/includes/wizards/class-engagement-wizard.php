@@ -81,10 +81,10 @@ class Engagement_Wizard extends Wizard {
 	public function register_api_endpoints() {
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug,
+			'/wizard/' . $this->slug . '/related-content',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'api_get_engagement_settings' ],
+				'callback'            => [ $this, 'api_get_related_content_settings' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
@@ -98,36 +98,52 @@ class Engagement_Wizard extends Wizard {
 				'sanitize_callback'   => 'sanitize_text_field',
 			]
 		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/newsletters',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'api_get_newsletters_settings' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/newsletters',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_newsletters_settings' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
 	}
 
 	/**
-	 * Get the Jetpack-Mailchimp connection settings.
+	 * Get Newspack Newsletters setttings.
 	 *
-	 * @see jetpack/_inc/lib/core-api/wpcom-endpoints/class-wpcom-rest-api-v2-endpoint-mailchimp.php
 	 * @return WP_REST_Response with the info.
 	 */
-	public function api_get_engagement_settings() {
-		$jetpack_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'jetpack' );
-		$wc_configuration_manager      = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
-
-		$response = array(
-			'connected'   => false,
-			'connectURL'  => null,
-			'wcConnected' => false,
+	public function api_get_newsletters_settings() {
+		$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
+		return rest_ensure_response(
+			[
+				'configured' => $newsletters_configuration_manager->is_configured(),
+				'settings'   => $newsletters_configuration_manager->get_settings(),
+			]
 		);
+	}
 
-		$related_posts_max_age = get_option( $this->related_posts_option, 0 );
-
-		$jetpack_mailchimp_status     = $jetpack_configuration_manager->get_mailchimp_connection_status();
-		$jetpack_related_posts_status = $jetpack_configuration_manager->is_related_posts_enabled();
-		if ( ! is_wp_error( $jetpack_mailchimp_status ) && $jetpack_configuration_manager->is_configured() ) {
-			$response['connected']           = $jetpack_mailchimp_status['connected'];
-			$response['connectURL']          = $jetpack_mailchimp_status['connectURL'];
-			$response['wcConnected']         = $wc_configuration_manager->is_active();
-			$response['relatedPostsEnabled'] = $jetpack_related_posts_status;
-			$response['relatedPostsMaxAge']  = $related_posts_max_age;
-		}
-		return rest_ensure_response( $response );
+	/**
+	 * Get Newspack Newsletters setttings.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response with the info.
+	 */
+	public function api_update_newsletters_settings( $request ) {
+		$args                              = $request->get_params();
+		$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
+		$newsletters_configuration_manager->update_settings( $args );
+		return $this->api_get_newsletters_settings();
 	}
 
 	/**
@@ -174,6 +190,21 @@ class Engagement_Wizard extends Wizard {
 		}
 
 		return $date_range;
+	}
+
+	/**
+	 * Get the Jetpack-Mailchimp connection settings.
+	 *
+	 * @return WP_REST_Response with the info.
+	 */
+	public function api_get_related_content_settings() {
+		$jetpack_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'jetpack' );
+		return rest_ensure_response(
+			[
+				'relatedPostsEnabled' => $jetpack_configuration_manager->is_related_posts_enabled(),
+				'relatedPostsMaxAge'  => get_option( $this->related_posts_option, 0 ),
+			]
+		);
 	}
 
 	/**

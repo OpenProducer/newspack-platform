@@ -221,7 +221,13 @@ final class Newspack_Popups_Inserter {
 			$content = scaip_maybe_insert_shortcode( $content );
 		}
 
-		$total_length = strlen( $content );
+		// Dynamic blocks might render an arbitrary amount of content, so the length of the content string is
+		// not an accurate representation of the content length.
+		$total_length = 0;
+		foreach ( parse_blocks( $content ) as $block ) {
+			$block_content = render_block( $block );
+			$total_length += strlen( wp_strip_all_tags( $block_content ) );
+		}
 
 		// 1. Separate prompts into inline and overlay.
 		$inline_popups  = [];
@@ -247,7 +253,7 @@ final class Newspack_Popups_Inserter {
 		$output = '';
 		foreach ( parse_blocks( $content ) as $block ) {
 			$block_content = render_block( $block );
-			$pos          += strlen( $block_content );
+			$pos          += strlen( wp_strip_all_tags( $block_content ) );
 			foreach ( $inline_popups as &$inline_popup ) {
 				if ( ! $inline_popup['is_inserted'] && $pos > $inline_popup['precise_position'] ) {
 					$output .= '<!-- wp:shortcode -->[newspack-popup id="' . $inline_popup['id'] . '"]<!-- /wp:shortcode -->';
@@ -417,7 +423,7 @@ final class Newspack_Popups_Inserter {
 				$popup_post = get_post( $id );
 				if ( $popup_post ) {
 					$popup_object = Newspack_Popups_Model::create_popup_object( $popup_post );
-					if ( $popup_object ) {
+					if ( $popup_object && 'publish' === $popup_object['status'] ) {
 						$acc[] = $popup_object;
 					}
 				}
@@ -640,7 +646,7 @@ final class Newspack_Popups_Inserter {
 
 		// When using "view as" feature, discard test mode popups.
 		if ( Newspack_Popups_View_As::viewing_as_spec() ) {
-			return $general_conditions;
+			return $skip_context_checks ? true : $general_conditions;
 		}
 		// Hide prompts for logged-in users.
 		if ( Newspack_Popups::is_user_admin() ) {
