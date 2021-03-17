@@ -107,6 +107,7 @@ return array(
     'Google\\Site_Kit\\Core\\Util\\Entity_Factory' => $baseDir . '/Core/Util/Entity_Factory.php',
     'Google\\Site_Kit\\Core\\Util\\Exit_Handler' => $baseDir . '/Core/Util/Exit_Handler.php',
     'Google\\Site_Kit\\Core\\Util\\Feature_Flags' => $baseDir . '/Core/Util/Feature_Flags.php',
+    'Google\\Site_Kit\\Core\\Util\\Google_Icon' => $baseDir . '/Core/Util/Google_Icon.php',
     'Google\\Site_Kit\\Core\\Util\\Google_URL_Matcher_Trait' => $baseDir . '/Core/Util/Google_URL_Matcher_Trait.php',
     'Google\\Site_Kit\\Core\\Util\\Google_URL_Normalizer' => $baseDir . '/Core/Util/Google_URL_Normalizer.php',
     'Google\\Site_Kit\\Core\\Util\\Health_Checks' => $baseDir . '/Core/Util/Health_Checks.php',
