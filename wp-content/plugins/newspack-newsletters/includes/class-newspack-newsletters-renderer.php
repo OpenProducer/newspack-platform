@@ -652,11 +652,14 @@ final class Newspack_Newsletters_Renderer {
 				array(
 					'post_type'      => Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
 					'posts_per_page' => -1,
-					'posts_status'   => 'publish',
 				)
 			);
 
 			foreach ( $ads_query->get_posts() as $ad ) {
+				// For some reason the 'post_status' param in WP_Query sometimes seems to be disregarded.
+				if ( 'publish' !== $ad->post_status ) {
+					continue;
+				}
 				$expiry_date = new DateTime( get_post_meta( $ad->ID, 'expiry_date', true ) );
 
 				// Ad is active if it has no expiry date (a peristent ad) or the date is equal to or after today.

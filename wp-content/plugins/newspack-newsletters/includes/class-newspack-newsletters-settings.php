@@ -54,26 +54,31 @@ class Newspack_Newsletters_Settings {
 				'description' => __( 'Mailchimp API Key', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_mailchimp_api_key',
 				'type'        => 'text',
+				'provider'    => 'mailchimp',
 			),
 			array(
 				'description' => __( 'Constant Contact API Key', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_constant_contact_api_key',
 				'type'        => 'text',
+				'provider'    => 'constant_contact',
 			),
 			array(
 				'description' => __( 'Constant Contact API Access token', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_constant_contact_api_access_token',
 				'type'        => 'text',
+				'provider'    => 'constant_contact',
 			),
 			array(
 				'description' => __( 'Campaign Monitor API Key', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_campaign_monitor_api_key',
 				'type'        => 'text',
+				'provider'    => 'campaign_monitor',
 			),
 			array(
 				'description' => __( 'Campaign Monitor Client ID', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_campaign_monitor_client_id',
 				'type'        => 'text',
+				'provider'    => 'campaign_monitor',
 			),
 			array(
 				'description' => __( 'MJML Application ID', 'newspack-newsletters' ),
@@ -107,6 +112,15 @@ class Newspack_Newsletters_Settings {
 			'key'         => 'newspack_newsletters_use_mailchimp_tags',
 			'type'        => 'checkbox',
 			'provider'    => 'mailchimp',
+		);
+
+		$settings_list = array_map(
+			function ( $item ) {
+				$default       = ! empty( $item['default'] ) ? $item['default'] : false;
+				$item['value'] = get_option( $item['key'], $default );
+				return $item;
+			},
+			$settings_list
 		);
 
 		return $settings_list;
@@ -155,9 +169,6 @@ class Newspack_Newsletters_Settings {
 			'newspack-newsletters-settings-admin'
 		);
 		foreach ( self::get_settings_list() as $setting ) {
-			if ( isset( $setting['provider'] ) && get_option( 'newspack_newsletters_service_provider', null ) !== $setting['provider'] ) {
-				continue;
-			}
 			$args = [
 				'sanitize_callback' => ! empty( $setting['sanitize_callback'] ) ? $setting['sanitize_callback'] : 'sanitize_text_field',
 			];
@@ -186,8 +197,7 @@ class Newspack_Newsletters_Settings {
 		$key         = $setting['key'];
 		$type        = $setting['type'];
 		$description = $setting['description'];
-		$default     = ! empty( $setting['default'] ) ? $setting['default'] : false;
-		$value       = get_option( $key, $default );
+		$value       = empty( $setting['value'] ) && ! empty( $setting['default'] ) ? $setting['default'] : $setting['value'];
 
 		if ( 'select' === $type ) {
 			$options     = $setting['options'];
@@ -239,8 +249,24 @@ class Newspack_Newsletters_Settings {
 	 * @param string $new_value The new value.
 	 */
 	public static function update_option_newspack_newsletters_public_posts_slug( $old_value, $new_value ) {
+		// Prevent empty slug value.
+		if ( empty( $new_value ) ) {
+			return update_option( 'newspack_newsletters_public_posts_slug', 'newsletter' ); // Return early to prevent flushing rewrite rules twice.
+		}
+
 		Newspack_Newsletters::register_cpt();
 		flush_rewrite_rules(); // phpcs:ignore
+	}
+
+	/**
+	 * Update settings.
+	 *
+	 * @param string $settings Update.
+	 */
+	public static function update_settings( $settings ) {
+		foreach ( $settings as $key => $value ) {
+			update_option( $key, $value );
+		}
 	}
 }
 

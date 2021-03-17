@@ -20,7 +20,7 @@
 
 			/* Link */
 			a {
-				color: inherit;
+				color: inherit !important;
 				text-decoration: underline;
 			}
 			a:active, a:focus, a:hover {

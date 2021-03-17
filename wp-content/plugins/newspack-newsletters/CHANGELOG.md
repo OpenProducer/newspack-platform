@@ -1,3 +1,30 @@
+# [1.20.0](https://github.com/Automattic/newspack-newsletters/compare/v1.19.0...v1.20.0) (2021-03-16)
+
+
+### Bug Fixes
+
+* colors of headings with links; top block space in editor ([3a720a6](https://github.com/Automattic/newspack-newsletters/commit/3a720a6b4a4a73edbb62df701bf24ea8f8a4bab7))
+* editor colors ([02e2057](https://github.com/Automattic/newspack-newsletters/commit/02e205706beca8d759c6ccb3f22ad83a91e2b8a6))
+* only show public newsletters on CPT archive pages ([#406](https://github.com/Automattic/newspack-newsletters/issues/406)) ([ec42ceb](https://github.com/Automattic/newspack-newsletters/commit/ec42ceb479ad1073aaba54ee5655966fcfe98621))
+
+
+### Features
+
+* add revisions support for newsletter CPTs ([#420](https://github.com/Automattic/newspack-newsletters/issues/420)) ([3e51831](https://github.com/Automattic/newspack-newsletters/commit/3e518315f92b0b6fde38ddac66e918ab2e8c00cf))
+
+# [1.19.0](https://github.com/Automattic/newspack-newsletters/compare/v1.18.0...v1.19.0) (2021-03-03)
+
+
+### Bug Fixes
+
+* **ads:** prevent draft ads insertion ([#410](https://github.com/Automattic/newspack-newsletters/issues/410)) ([381dc51](https://github.com/Automattic/newspack-newsletters/commit/381dc5174806118d50da07d7bb89d40f073146a1))
+
+
+### Features
+
+* add settings update method ([#407](https://github.com/Automattic/newspack-newsletters/issues/407)) ([158a2dc](https://github.com/Automattic/newspack-newsletters/commit/158a2dccd05ff37b100aa1b5619a31a21f10571e))
+* provide settings values early ([e5e078d](https://github.com/Automattic/newspack-newsletters/commit/e5e078dd53825e003fd3fc1ce3224960ade4e314))
+
 # [1.18.0](https://github.com/Automattic/newspack-newsletters/compare/v1.17.0...v1.18.0) (2021-01-28)
 
 

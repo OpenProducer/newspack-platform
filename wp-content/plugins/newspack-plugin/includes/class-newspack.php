@@ -103,6 +103,8 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-amp-enhancements.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-webhooks.php';
 
+		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
+
 		if ( 'nrh' === get_option( NEWSPACK_READER_REVENUE_PLATFORM ) ) {
 			include_once NEWSPACK_ABSPATH . 'includes/class-nrh.php';
 		}

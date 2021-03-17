@@ -1,3 +1,11 @@
+## [1.33.2](https://github.com/Automattic/newspack-plugin/compare/v1.33.1...v1.33.2) (2021-03-16)
+
+
+### Bug Fixes
+
+* categories handling in segment settings ([#902](https://github.com/Automattic/newspack-plugin/issues/902)) ([ab77f70](https://github.com/Automattic/newspack-plugin/commit/ab77f7066a147af076dd6f4f9fb43f44283fb7ed))
+* redirect loop when plug sign in url ([#842](https://github.com/Automattic/newspack-plugin/issues/842)) ([c9d2c3c](https://github.com/Automattic/newspack-plugin/commit/c9d2c3cca43f04988e4a4c38af4e20462da5970b))
+
 ## [1.33.1](https://github.com/Automattic/newspack-plugin/compare/v1.33.0...v1.33.1) (2021-03-09)
 
 

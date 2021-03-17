@@ -421,6 +421,11 @@ final class Newspack_Newsletters {
 	public static function register_cpt() {
 		$public_slug = get_option( 'newspack_newsletters_public_posts_slug', 'newsletter' );
 
+		// Prevent empty slug value.
+		if ( empty( $public_slug ) ) {
+			$public_slug = 'newsletter';
+		}
+
 		$labels = [
 			'name'               => _x( 'Newsletters', 'post type general name', 'newspack-newsletters' ),
 			'singular_name'      => _x( 'Newsletter', 'post type singular name', 'newspack-newsletters' ),
@@ -447,7 +452,7 @@ final class Newspack_Newsletters {
 			'rewrite'          => [ 'slug' => $public_slug ],
 			'show_ui'          => true,
 			'show_in_rest'     => true,
-			'supports'         => [ 'author', 'editor', 'title', 'custom-fields', 'newspack_blocks' ],
+			'supports'         => [ 'author', 'editor', 'title', 'custom-fields', 'newspack_blocks', 'revisions' ],
 			'taxonomies'       => [ 'category', 'post_tag' ],
 			'menu_icon'        => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0yMS45OSA4YzAtLjcyLS4zNy0xLjM1LS45NC0xLjdMMTIgMSAyLjk1IDYuM0MyLjM4IDYuNjUgMiA3LjI4IDIgOHYxMGMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0ybC0uMDEtMTB6TTEyIDEzTDMuNzQgNy44NCAxMiAzbDguMjYgNC44NEwxMiAxM3oiIGZpbGw9IiNhMGE1YWEiLz48L3N2Zz4K',
 		];
@@ -530,8 +535,16 @@ final class Newspack_Newsletters {
 	 * @param array $query The WP query object.
 	 */
 	public static function maybe_display_public_archive_posts( $query ) {
-		// Only run on the main front-end query for post category and tag archives.
-		if ( is_admin() || ! $query->is_main_query() || ( ! is_category() && ! is_tag() ) ) {
+		// Only run on the main front-end query for post category and tag archives, or newsletter CPT archives.
+		if (
+			is_admin() ||
+			! $query->is_main_query() ||
+			(
+				! is_category() &&
+				! is_tag() &&
+				! is_post_type_archive( self::NEWSPACK_NEWSLETTERS_CPT )
+			)
+		) {
 			return;
 		}
 
@@ -541,7 +554,7 @@ final class Newspack_Newsletters {
 		}
 
 		// Filter out non-public Newsletter posts.
-		if ( self::NEWSPACK_NEWSLETTERS_CPT === get_post_type() ) {
+		if ( is_post_type_archive( self::NEWSPACK_NEWSLETTERS_CPT ) || self::NEWSPACK_NEWSLETTERS_CPT === get_post_type() ) {
 			$meta_query = $query->get( 'meta_query' );
 
 			if ( empty( $meta_query ) || ! is_array( $meta_query ) ) {

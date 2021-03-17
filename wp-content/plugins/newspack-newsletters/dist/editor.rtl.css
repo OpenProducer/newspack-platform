@@ -588,8 +588,10 @@ h6.block-editor-rich-text__editable a {
     list-style-type: disc;
     margin-right: 1.3em; }
 
-.post-type-newspack_nl_cpt .editor-post-title {
-  display: none; }
+.post-type-newspack_nl_cpt .editor-post-title.newspack-newsletters-post-title-hidden {
+  height: 0;
+  opacity: 0;
+  pointer-events: none; }
 
 .post-type-newspack_nl_cpt .components-button.editor-post-publish-button__button.is-primary {
   display: none; }
