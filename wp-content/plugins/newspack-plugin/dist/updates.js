@@ -292,6 +292,17 @@ eval("(function() { module.exports = this[\"wp\"][\"i18n\"]; }());\n\n//# source
 
 /***/ }),
 
+/***/ "@wordpress/keycodes":
+/*!*******************************************!*\
+  !*** external {"this":["wp","keycodes"]} ***!
+  \*******************************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("(function() { module.exports = this[\"wp\"][\"keycodes\"]; }());\n\n//# sourceURL=webpack:///external_%7B%22this%22:%5B%22wp%22,%22keycodes%22%5D%7D?");
+
+/***/ }),
+
 /***/ "@wordpress/primitives":
 /*!*********************************************!*\
   !*** external {"this":["wp","primitives"]} ***!

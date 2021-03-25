@@ -358,6 +358,18 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			];
 
 			$mc_campaign_id = get_post_meta( $post->ID, 'mc_campaign_id', true );
+
+			/**
+			 * Filter the metadata payload sent to Mailchimp when syncing.
+			 *
+			 * Allows custom tracking codes to be sent.
+			 *
+			 * @param array  $payload        Mailchimp payload.
+			 * @param object $post           Post object.
+			 * @param string $mc_campaign_id Mailchimp campaign ID, if defined.
+			 */
+			$payload = apply_filters( 'newspack_newsletters_mc_payload_sync', $payload, $post, $mc_campaign_id );
+
 			if ( $mc_campaign_id ) {
 				$campaign_result = $this->validate(
 					$mc->patch( "campaigns/$mc_campaign_id", $payload ),

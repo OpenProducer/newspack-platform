@@ -391,13 +391,6 @@ class Plugin_Manager {
 				'PluginURI'   => 'https://www.woocommerce.com/products/name-your-price/',
 				'AuthorURI'   => 'https://kathyisawesome.com',
 			],
-			'woocommerce-one-page-checkout' => [
-				'Name'        => __( 'WooCommerce One Page Checkout', 'newspack' ),
-				'Description' => esc_html__( 'Super fast sales with WooCommerce. Add to cart, checkout & pay all on the one page!', 'newspack' ),
-				'Author'      => 'WooCommerce',
-				'PluginURI'   => 'https://woocommerce.com/products/woocommerce-one-page-checkout/',
-				'AuthorURI'   => 'https://woocommerce.com/',
-			],
 			'woocommerce-subscriptions'     => [
 				'Name'        => __( 'WooCommerce Subscriptions', 'newspack' ),
 				'Description' => esc_html__( 'An eCommerce toolkit that helps you sell anything. Beautifully.', 'newspack' ),

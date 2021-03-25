@@ -35,6 +35,14 @@ class Segmentation {
 	}
 
 	/**
+	 * Get transients table name.
+	 */
+	public static function get_transients_table_name() {
+		global $wpdb;
+		return $wpdb->prefix . 'newspack_campaigns_transients';
+	}
+
+	/**
 	 * Parse "view as" spec.
 	 *
 	 * @param string $raw_spec Raw spec.

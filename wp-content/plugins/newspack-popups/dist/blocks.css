@@ -1,0 +1,19 @@
+.newspack-popups__custom-placement-prompts {
+  margin-top: 1rem;
+  width: 100%; }
+  .newspack-popups__custom-placement-prompts .components-external-link svg {
+    display: none; }
+  .newspack-popups__custom-placement-prompts .components-notice {
+    margin-left: 0;
+    margin-right: 0; }
+  .editor-styles-wrapper .newspack-popups__custom-placement-prompts h4 {
+    margin-bottom: 0; }
+  .editor-styles-wrapper .newspack-popups__custom-placement-prompts p {
+    font-size: inherit;
+    margin-bottom: 1rem;
+    margin-top: 0; }
+  .editor-styles-wrapper .newspack-popups__custom-placement-prompts ul {
+    list-style: none;
+    margin: 0;
+    padding: 0; }
+

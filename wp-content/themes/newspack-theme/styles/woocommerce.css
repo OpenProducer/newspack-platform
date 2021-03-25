@@ -68,6 +68,10 @@ a.button:hover, a.button:visited {
   clear: left;
 }
 
+.woocommerce form .form-row.form-row-first:last-child {
+  width: 100%;
+}
+
 .woocommerce-breadcrumb {
   display: none;
 }
@@ -1125,10 +1129,10 @@ table.variations select {
 }
 
 #ship-to-different-address label span {
-  position: relative;
-  display: block;
-  text-align: right;
+  font-weight: bold;
+  display: inline-block;
   padding-right: 45px;
+  position: relative;
 }
 
 #ship-to-different-address label span::before {
@@ -1142,7 +1146,7 @@ table.variations select {
   box-sizing: content-box;
   transition: all ease-in-out 0.3s;
   position: absolute;
-  top: 4px;
+  top: 2px;
   right: 0;
 }
 
@@ -1153,7 +1157,7 @@ table.variations select {
   height: 14px;
   background: white;
   position: absolute;
-  top: 7px;
+  top: 5px;
   right: 17px;
   border-radius: 13rem;
   transition: all ease-in-out 0.3s;
@@ -1168,8 +1172,8 @@ table.variations select {
 }
 
 #ship-to-different-address label input[type='checkbox']:checked + span::before {
-  border-color: #000;
-  background: #000;
+  border-color: #3c3c3c;
+  background: #3c3c3c;
 }
 
 /**
@@ -1244,7 +1248,8 @@ table.variations select {
 
 .woocommerce-checkout .woocommerce-billing-fields label,
 .woocommerce-checkout .woocommerce-account-fields label,
-.woocommerce-checkout .woocommerce-shipping-fields label {
+.woocommerce-checkout .woocommerce-shipping-fields label,
+.woocommerce-checkout .woocommerce-additional-fields label {
   font-size: 0.8em;
 }
 

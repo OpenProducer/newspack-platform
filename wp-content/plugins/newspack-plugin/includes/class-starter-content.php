@@ -126,9 +126,11 @@ class Starter_Content {
 		if ( ! function_exists( 'wp_create_category' ) ) {
 			require_once ABSPATH . 'wp-admin/includes/taxonomy.php';
 		}
+		self::remove_starter_categories();
 		$category_ids = array_map(
 			function( $category ) {
-				return wp_create_category( $category );
+				$created_category = wp_insert_term( $category, 'category', [ 'slug' => '_newspack_' . $category ] );
+				return $created_category['term_id'];
 			},
 			self::$starter_categories
 		);
@@ -226,10 +228,12 @@ class Starter_Content {
 	 * Set up theme.
 	 */
 	public static function initialize_theme() {
-		$logo_id = self::upload_logo();
-		if ( $logo_id ) {
-			set_theme_mod( 'custom_logo', $logo_id );
-			set_theme_mod( 'logo_size', 0 );
+		if ( false === get_theme_mod( 'custom_logo' ) ) {
+			$logo_id = self::upload_logo();
+			if ( $logo_id ) {
+				set_theme_mod( 'custom_logo', $logo_id );
+				set_theme_mod( 'logo_size', 0 );
+			}
 		}
 		set_theme_mod( 'header_solid_background', true );
 		set_theme_mod( 'header_simplified', true );
@@ -458,16 +462,24 @@ class Starter_Content {
 	}
 
 	/**
-	 * Removes all starter content.
+	 * Removes starter categories.
 	 */
-	public static function remove_starter_content() {
-		$starter_content_data = self::starter_content_data();
-		if ( ! empty( $starter_content_data['category_ids'] ) ) {
-			foreach ( $starter_content_data['category_ids'] as $category_id ) {
+	public static function remove_starter_categories() {
+		$category_ids = get_option( self::$starter_categories_meta, [] );
+		if ( ! empty( $category_ids ) ) {
+			foreach ( $category_ids as $category_id ) {
 				wp_delete_category( $category_id );
 			}
 			delete_option( self::$starter_categories_meta );
 		}
+	}
+
+	/**
+	 * Removes all starter content.
+	 */
+	public static function remove_starter_content() {
+		self::remove_starter_categories();
+		$starter_content_data = self::starter_content_data();
 		if ( ! empty( $starter_content_data['post_ids'] ) ) {
 			foreach ( $starter_content_data['post_ids'] as $post_index => $post_id ) {
 				wp_delete_post( $post_id, true );

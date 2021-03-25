@@ -1,0 +1,30 @@
+.newspack-popups {
+	&__custom-placement-prompts {
+		margin-top: 1rem;
+		width: 100%;
+
+		.components-external-link svg {
+			display: none;
+		}
+
+		.components-notice {
+			margin-left: 0;
+			margin-right: 0;
+		}
+
+		.editor-styles-wrapper & h4 {
+			margin-bottom: 0;
+		}
+
+		.editor-styles-wrapper & p {
+			font-size: inherit;
+			margin-bottom: 1rem;
+			margin-top: 0;
+		}
+		.editor-styles-wrapper & ul {
+			list-style: none;
+			margin: 0;
+			padding: 0;
+		}
+	}
+}

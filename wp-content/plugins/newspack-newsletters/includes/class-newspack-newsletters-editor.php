@@ -55,7 +55,7 @@ final class Newspack_Newsletters_Editor {
 		foreach ( $enqueue_block_editor_assets_filters as $index => $filter ) {
 			$action_handlers = array_keys( $filter );
 			foreach ( $action_handlers as $handler ) {
-				if ( __CLASS__ . '::enqueue_block_editor_assets' != $handler ) {
+				if ( __CLASS__ . '::enqueue_block_editor_assets' != $handler && 'newspack_enqueue_scripts' !== $handler ) {
 					remove_action( 'enqueue_block_editor_assets', $handler, $index );
 				}
 			}

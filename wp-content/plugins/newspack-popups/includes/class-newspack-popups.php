@@ -53,6 +53,7 @@ final class Newspack_Popups {
 		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 		add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
 		add_action( 'save_post_' . self::NEWSPACK_POPUPS_CPT, [ __CLASS__, 'popup_default_fields' ], 10, 3 );
+		add_action( 'transition_post_status', [ __CLASS__, 'remove_default_category' ], 10, 3 );
 
 		add_filter( 'show_admin_bar', [ __CLASS__, 'show_admin_bar' ], 10, 2 ); // phpcs:ignore WordPressVIPMinimum.UserExperience.AdminBarRemoval.RemovalDetected
 
@@ -61,6 +62,7 @@ final class Newspack_Popups {
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-api.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-settings.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-segmentation.php';
+		include_once dirname( __FILE__ ) . '/class-newspack-popups-custom-placements.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-parse-logs.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-donations.php';
 		include_once dirname( __FILE__ ) . '/class-newspack-popups-view-as.php';
@@ -356,9 +358,11 @@ final class Newspack_Popups {
 			'newspack-popups',
 			'newspack_popups_data',
 			[
-				'preview_post' => self::preview_post_permalink(),
-				'segments'     => Newspack_Popups_Segmentation::get_segments(),
-				'taxonomy'     => self::NEWSPACK_POPUPS_TAXONOMY,
+				'preview_post'      => self::preview_post_permalink(),
+				'segments'          => Newspack_Popups_Segmentation::get_segments(),
+				'custom_placements' => Newspack_Popups_Custom_Placements::get_custom_placements(),
+				'taxonomy'          => self::NEWSPACK_POPUPS_TAXONOMY,
+				'is_prompt'         => self::NEWSPACK_POPUPS_CPT == get_post_type(),
 			]
 		);
 		\wp_enqueue_style(
@@ -459,9 +463,9 @@ final class Newspack_Popups {
 				$placement = 'above_header';
 				$frequency = 'always';
 				break;
-			case 'manual':
-				$placement = 'inline';
-				$frequency = 'manual';
+			case 'custom':
+				$placement = 'custom1';
+				$frequency = 'always';
 				break;
 			default:
 				$placement = 'inline';
@@ -477,7 +481,7 @@ final class Newspack_Popups {
 				$trigger_type = 'time';
 				break;
 			case 'above-header':
-			case 'manual':
+			case 'custom':
 			default:
 				$dismiss_text = null;
 				$trigger_type = 'scroll';
@@ -638,6 +642,23 @@ final class Newspack_Popups {
 	 */
 	public static function archive_campaign( $id, $status ) {
 		update_term_meta( $id, self::NEWSPACK_POPUPS_TAXONOMY_STATUS, $status ? 'archive' : '' );
+	}
+
+	/**
+	 * Prevent setting the default category when publishing.
+	 *
+	 * @param string $new_status New status.
+	 * @param string $old_status Old status.
+	 * @param bool   $post Post.
+	 */
+	public static function remove_default_category( $new_status, $old_status, $post ) {
+		if ( self::NEWSPACK_POPUPS_CPT === $post->post_type && 'publish' !== $old_status && 'publish' === $new_status ) {
+			$default_category_id = (int) get_option( 'default_category', false );
+			$popup_has_category  = has_category( $default_category_id, $post->ID );
+			if ( $popup_has_category ) {
+				wp_remove_object_terms( $post->ID, $default_category_id, 'category' );
+			}
+		}
 	}
 
 	/**

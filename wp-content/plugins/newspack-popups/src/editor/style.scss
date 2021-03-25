@@ -1,0 +1,30 @@
+.block-editor-post-preview__button-toggle,
+.edit-post-post-visibility {
+	display: none;
+}
+
+.editor-post-title__input::placeholder {
+	color: var( --newspack-popups-editor-placeholder-color, #7d7d7d ) !important;
+}
+
+.newspack-popups {
+	&__status-options {
+		margin: 1rem 0;
+
+		.components-base-control .components-base-control__help {
+			margin-top: 4px;
+		}
+	}
+
+	&__not-interested-button-preview {
+		cursor: not-allowed;
+		font-size: 0.7em;
+		text-decoration: underline;
+	}
+
+	&__segmentation-sidebar {
+		.components-form-token-field__help {
+			display: none;
+		}
+	}
+}

@@ -36,6 +36,7 @@ class Lightweight_API {
 		'donations'                      => [],
 		'email_subscriptions'            => [],
 		'user_id'                        => false,
+		'prompts'                        => [],
 	];
 
 	/**
@@ -50,9 +51,9 @@ class Lightweight_API {
 		$this->debug = [
 			'read_query_count'       => 0,
 			'write_query_count'      => 0,
+			'delete_query_count'     => 0,
 			'cache_count'            => 0,
 			'read_empty_transients'  => 0,
-			'write_empty_transients' => 0,
 			'write_read_query_count' => 0,
 			'start_time'             => microtime( true ),
 			'end_time'               => null,
@@ -77,12 +78,13 @@ class Lightweight_API {
 	}
 
 	/**
+	 * LEGACY FORMAT - one transient per reader per prompt.
 	 * Get transient name.
 	 *
 	 * @param string $client_id Client ID.
 	 * @param string $popup_id Popup ID.
 	 */
-	public function get_transient_name( $client_id, $popup_id = null ) {
+	public function get_transient_name_legacy( $client_id, $popup_id = null ) {
 		if ( null === $popup_id ) {
 			// For data about popups in general.
 			return sprintf( '%s-popups', $client_id );
@@ -130,25 +132,25 @@ class Lightweight_API {
 	 */
 	public function get_transient( $name ) {
 		global $wpdb;
-		$name = '_transient_' . $name;
+		$name       = '_transient_' . $name;
+		$table_name = Segmentation::get_transients_table_name();
+		$value      = wp_cache_get( $name, 'newspack-popups' );
 
-		$value = wp_cache_get( $name, 'newspack-popups' );
-		if ( -1 === $value ) {
-			$this->debug['read_empty_transients'] += 1;
-			$this->debug['cache_count']           += 1;
-			return null;
-		} elseif ( false === $value ) {
+		if ( false === $value ) {
 			$this->debug['read_query_count'] += 1;
-			$value                            = $this->get_option( $name );
+
+			$value = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM `$table_name` WHERE option_name = %s LIMIT 1", $name ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 			if ( $value ) {
+				// Transient found; cache value.
 				wp_cache_set( $name, $value, 'newspack-popups' );
 			} else {
-				$this->debug['write_empty_transients'] += 1;
-				wp_cache_set( $name, -1, 'newspack-popups' );
+				// No transient and no DB entry found.
+				return null;
 			}
 		} else {
 			$this->debug['cache_count'] += 1;
 		}
+
 		return maybe_unserialize( $value );
 	}
 
@@ -160,13 +162,44 @@ class Lightweight_API {
 	 */
 	public function set_transient( $name, $value ) {
 		global $wpdb;
+		$table_name       = Segmentation::get_transients_table_name();
 		$name             = '_transient_' . $name;
 		$serialized_value = maybe_serialize( $value );
-		$autoload         = 'no';
 		wp_cache_set( $name, $serialized_value, 'newspack-popups' );
-		$result           = $wpdb->query( $wpdb->prepare( "INSERT INTO `$wpdb->options` (`option_name`, `option_value`, `autoload`) VALUES (%s, %s, %s) ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `autoload` = VALUES(`autoload`)", $name, $serialized_value, $autoload ) ); // phpcs:ignore
+		$result           = $wpdb->query( $wpdb->prepare( "INSERT INTO `$table_name` (`option_name`, `option_value`) VALUES (%s, %s) ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`)", $name, $serialized_value ) ); // phpcs:ignore
 
 		$this->debug['write_query_count'] += 1;
+	}
+
+	/**
+	 * Delete transient.
+	 *
+	 * @param string $name The transient's name.
+	 */
+	public function delete_transient( $name ) {
+		global $wpdb;
+		$name       = '_transient_' . $name;
+		$table_name = Segmentation::get_transients_table_name();
+
+		wp_cache_delete( $name );
+		$wpdb->delete( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery
+			$table_name,
+			[ 'option_name' => $name ]
+		);
+
+		$this->debug['delete_query_count'] += 1;
+	}
+
+	/**
+	 * LEGACY FORMAT - one row per reader per prompt.
+	 * Retrieve prompt data.
+	 *
+	 * @param string $client_id Client ID.
+	 * @param string $campaign_id Prompt ID.
+	 * @return object Prompt data.
+	 */
+	public function get_campaign_data_legacy( $client_id, $campaign_id ) {
+		return $this->get_transient( $this->get_transient_name_legacy( $client_id, $campaign_id ) );
 	}
 
 	/**
@@ -177,25 +210,25 @@ class Lightweight_API {
 	 * @return object Prompt data.
 	 */
 	public function get_campaign_data( $client_id, $campaign_id ) {
-		$data = $this->get_transient( $this->get_transient_name( $client_id, $campaign_id ) );
+		$prompt = [];
+		$data   = $this->get_transient( $client_id );
+
+		if ( $data && isset( $data['prompts'] ) && isset( $data['prompts'][ $campaign_id ] ) ) {
+			// NEW FORMAT - one row per reader.
+			$prompt = $data['prompts'][ $campaign_id ];
+		} else {
+			// LEGACY FORMAT - one row per reader per prompt.
+			$prompt = $this->get_campaign_data_legacy( $client_id, $campaign_id );
+			$this->delete_transient( $this->get_transient_name_legacy( $client_id, $campaign_id ) ); // Clean up legacy data.
+		}
+
 		return [
-			'count'            => ! empty( $data['count'] ) ? (int) $data['count'] : 0,
-			'last_viewed'      => ! empty( $data['last_viewed'] ) ? (int) $data['last_viewed'] : 0,
+			'count'            => ! empty( $prompt['count'] ) ? (int) $prompt['count'] : 0,
+			'last_viewed'      => ! empty( $prompt['last_viewed'] ) ? (int) $prompt['last_viewed'] : 0,
 			// Primarily caused by permanent dismissal, but also by email signup
 			// (on a newsletter prompt) or a UTM param suppression.
-			'suppress_forever' => ! empty( $data['suppress_forever'] ) ? (int) $data['suppress_forever'] : false,
+			'suppress_forever' => ! empty( $prompt['suppress_forever'] ) ? (int) $prompt['suppress_forever'] : false,
 		];
-	}
-
-	/**
-	 * Save prompt data.
-	 *
-	 * @param string $client_id Client ID.
-	 * @param string $campaign_id Prompt ID.
-	 * @param string $campaign_data Prompt data.
-	 */
-	public function save_campaign_data( $client_id, $campaign_id, $campaign_data ) {
-		return $this->set_transient( $this->get_transient_name( $client_id, $campaign_id ), $campaign_data );
 	}
 
 	/**
@@ -205,7 +238,14 @@ class Lightweight_API {
 	 * @param bool   $do_not_rebuild Whether to rebuild cache if not found.
 	 */
 	public function get_client_data( $client_id, $do_not_rebuild = false ) {
-		$data = $this->get_transient( $this->get_transient_name( $client_id ) );
+		$data = $this->get_transient( $client_id );
+
+		// If no client data found, try the legacy transient name.
+		if ( empty( $data ) ) {
+			$data = $this->get_transient( $this->get_transient_name_legacy( $client_id ) );
+			$this->delete_transient( $this->get_transient_name_legacy( $client_id ) );
+		}
+
 		if ( $data ) {
 			// Handle legacy data which might not have some default keys.
 			return array_merge(
@@ -213,6 +253,7 @@ class Lightweight_API {
 				$data
 			);
 		}
+
 		if ( $do_not_rebuild ) {
 			return $this->client_data_blueprint;
 		}
@@ -223,6 +264,11 @@ class Lightweight_API {
 		$client_post_read_events = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
 			$wpdb->prepare( "SELECT * FROM $events_table_name WHERE client_id = %s AND type = 'post_read'", $client_id ) // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 		);
+
+		// If there is no relevant client data in the events table, do not save any data.
+		if ( 0 === count( $client_post_read_events ) ) {
+			return $this->client_data_blueprint;
+		}
 
 		$this->save_client_data(
 			$client_id,
@@ -240,7 +286,7 @@ class Lightweight_API {
 			]
 		);
 
-		return $this->get_transient( $this->get_transient_name( $client_id ) );
+		return $this->get_transient( $client_id );
 	}
 
 	/**
@@ -273,7 +319,18 @@ class Lightweight_API {
 	 * @param string $client_data_update Client data.
 	 */
 	public function save_client_data( $client_id, $client_data_update ) {
-		$existing_client_data                       = $this->get_client_data( $client_id, true );
+		$existing_client_data = $this->get_client_data( $client_id, true );
+
+		// Update prompts data: new data should replace existing data.
+		if ( isset( $client_data_update['prompts'] ) && ! empty( $existing_client_data['prompts'] ) ) {
+			$client_data_update['prompts']   = array_replace_recursive(
+				$existing_client_data['prompts'],
+				$client_data_update['prompts']
+			);
+			$existing_client_data['prompts'] = []; // Unset old client data to avoid data duplication on array_merge_recursive below.
+		}
+
+		// Update client data: merge data so we don't lose historical read, subscription, or donation data.
 		$updated_client_data                        = array_merge_recursive(
 			$existing_client_data,
 			$client_data_update
@@ -285,7 +342,7 @@ class Lightweight_API {
 			$updated_client_data['user_id'] = $client_data_update['user_id'];
 		}
 		return $this->set_transient(
-			$this->get_transient_name( $client_id ),
+			$client_id,
 			$updated_client_data
 		);
 	}

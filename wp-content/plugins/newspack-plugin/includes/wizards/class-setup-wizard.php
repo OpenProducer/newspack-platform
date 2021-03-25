@@ -35,7 +35,7 @@ class Setup_Wizard extends Wizard {
 	 *
 	 * @var array
 	 */
-	protected $media_theme_mods = [ 'newspack_footer_logo' ];
+	protected $media_theme_mods = [ 'newspack_footer_logo', 'custom_logo' ];
 
 	/**
 	 * Constructor.
@@ -46,8 +46,8 @@ class Setup_Wizard extends Wizard {
 		if ( ! get_option( NEWSPACK_SETUP_COMPLETE ) ) {
 			add_action( 'current_screen', [ $this, 'redirect_to_setup' ] );
 			add_action( 'admin_menu', [ $this, 'hide_non_setup_menu_items' ], 1000 );
-
 		}
+		add_filter( 'show_admin_bar', [ $this, 'show_admin_bar' ], 10, 2 ); // phpcs:ignore WordPressVIPMinimum.UserExperience.AdminBarRemoval.RemovalDetected
 		$this->hidden = get_option( NEWSPACK_SETUP_COMPLETE, false );
 	}
 
@@ -95,29 +95,23 @@ class Setup_Wizard extends Wizard {
 			'/wizard/' . $this->slug . '/theme',
 			[
 				'methods'             => WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'api_retrieve_theme' ],
+				'callback'            => [ $this, 'api_retrieve_theme_and_set_defaults' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/theme/(?P<theme>[\a-z]+)',
+			'/wizard/' . $this->slug . '/theme',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_update_theme' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/theme-mods',
-			[
-				'methods'             => WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_update_theme_mods' ],
+				'callback'            => [ $this, 'api_update_theme_with_mods' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
 					'theme_mods' => [
 						'sanitize_callback' => [ $this, 'sanitize_theme_mods' ],
+					],
+					'theme'      => [
+						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
 			]
@@ -231,21 +225,58 @@ class Setup_Wizard extends Wizard {
 	}
 
 	/**
-	 * Get current theme
+	 * Get current theme & mods.
 	 *
 	 * @return WP_REST_Response containing info.
 	 */
-	public function api_retrieve_theme() {
+	public function api_retrieve_theme_and_set_defaults() {
 		$theme_mods = get_theme_mods();
+
+		$theme_mods['header_color'] = get_theme_mod( 'header_color', 'default' );
+		// Force custom header color, since the default depends on the theme.
+		if ( 'default' === $theme_mods['header_color'] ) {
+			set_theme_mod( 'header_color', 'custom' );
+			$theme_mods['header_color'] = get_theme_mod( 'header_color' );
+		}
 
 		foreach ( $theme_mods as $key => &$theme_mod ) {
 			if ( in_array( $key, $this->media_theme_mods ) ) {
-				$attachment = wp_get_attachment_image_src( $theme_mod )[0];
-				$theme_mod  = [
-					'url' => is_array( $attachment ) ? $attachment[0] : null,
-				];
+				$attachment = wp_get_attachment_image_src( $theme_mod, 'full' );
+				if ( $attachment ) {
+					$theme_mod = [
+						'id'  => $theme_mod,
+						'url' => is_array( $attachment ) ? $attachment[0] : null,
+					];
+				}
 			}
 		}
+		$theme_mods['theme_colors'] = get_theme_mod( 'theme_colors', 'default' );
+		if ( 'default' === $theme_mods['theme_colors'] ) {
+			$theme_mods['primary_color_hex']   = newspack_get_primary_color();
+			$theme_mods['secondary_color_hex'] = newspack_get_secondary_color();
+		} else {
+			$theme_mods['primary_color_hex']   = get_theme_mod( 'primary_color_hex', newspack_get_primary_color() );
+			$theme_mods['secondary_color_hex'] = get_theme_mod( 'secondary_color_hex', newspack_get_secondary_color() );
+		}
+
+		if ( ! isset( $theme_mods['header_color_hex'] ) ) {
+			set_theme_mod( 'header_color_hex', $theme_mods['primary_color_hex'] );
+			$theme_mods['header_color_hex'] = get_theme_mod( 'header_color_hex' );
+		}
+		// Set custom header color to primary, if not set.
+
+		$theme_mods['accent_allcaps'] = get_theme_mod( 'accent_allcaps', true );
+
+		// Footer.
+		$theme_mods['footer_color']     = get_theme_mod( 'footer_color', 'default' );
+		$theme_mods['footer_copyright'] = get_theme_mod( 'footer_copyright', false );
+		if ( false === $theme_mods['footer_copyright'] ) {
+			set_theme_mod( 'footer_copyright', get_option( 'blogdescription', '' ) );
+			$theme_mods['footer_copyright'] = get_theme_mod( 'footer_copyright' );
+		}
+
+		$theme_mods['header_text']            = get_theme_mod( 'header_text', '' );
+		$theme_mods['header_display_tagline'] = get_theme_mod( 'header_display_tagline', '' );
 		return rest_ensure_response(
 			[
 				'theme'      => Starter_Content::get_theme(),
@@ -260,19 +291,11 @@ class Setup_Wizard extends Wizard {
 	 * @param WP_REST_Request $request Full details about the request.
 	 * @return WP_REST_Response containing info.
 	 */
-	public function api_update_theme( $request ) {
+	public function api_update_theme_with_mods( $request ) {
+		// Set theme before updating theme mods, since a theme might be setting theme mod defaults.
 		$theme = $request['theme'];
 		Starter_Content::set_theme( $theme );
-		return self::api_retrieve_theme();
-	}
 
-	/**
-	 * Update theme mods
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response containing info.
-	 */
-	public function api_update_theme_mods( $request ) {
 		$theme_mods = $request['theme_mods'];
 		foreach ( $theme_mods as $key => $value ) {
 			if ( in_array( $key, $this->media_theme_mods ) ) {
@@ -280,7 +303,7 @@ class Setup_Wizard extends Wizard {
 			}
 			set_theme_mod( $key, $value );
 		}
-		return self::api_retrieve_theme();
+		return self::api_retrieve_theme_and_set_defaults();
 	}
 
 	/**
@@ -383,6 +406,19 @@ class Setup_Wizard extends Wizard {
 			wp_safe_redirect( esc_url( $setup_url ) );
 			exit;
 		}
+	}
+
+	/**
+	 * Should admin bar be shown.
+	 *
+	 * @param bool $show Whether to show admin bar.
+	 * @return boolean Whether admin bar should be shown.
+	 */
+	public static function show_admin_bar( $show ) {
+		if ( $show && isset( $_GET['newspack_design_preview'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return false;
+		}
+		return $show;
 	}
 
 	/**

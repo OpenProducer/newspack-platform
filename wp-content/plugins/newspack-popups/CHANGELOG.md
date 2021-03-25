@@ -1,3 +1,38 @@
+# [1.28.0](https://github.com/Automattic/newspack-popups/compare/v1.27.0...v1.28.0) (2021-03-24)
+
+
+### Bug Fixes
+
+* allow filters to suppress popups better ([#487](https://github.com/Automattic/newspack-popups/issues/487)) ([12030e3](https://github.com/Automattic/newspack-popups/commit/12030e3790e4d5e1c0d37ad5135888046ab2f684))
+* give blacklisted blocks a nominal length for 0% insertion logic ([2f66203](https://github.com/Automattic/newspack-popups/commit/2f66203ce31e01eba2bcc05934f2199e185c81cb))
+* introduce override blocks to ignore when inserting prompts ([14c82b4](https://github.com/Automattic/newspack-popups/commit/14c82b493a9aa649c01effc028e0407f7687c0ea))
+* remove default category on prompt activation ([#482](https://github.com/Automattic/newspack-popups/issues/482)) ([84d96db](https://github.com/Automattic/newspack-popups/commit/84d96db0c73cc4fb1f86044286cc663bb86a0525))
+
+
+### Features
+
+* custom placements ([#467](https://github.com/Automattic/newspack-popups/issues/467)) ([c51ff62](https://github.com/Automattic/newspack-popups/commit/c51ff628dea0022b22599209058b5e927777018e))
+* leaner GA config ([fb30333](https://github.com/Automattic/newspack-popups/commit/fb303337ed9cfa07f1b2978950bc0bcdd4a2a672))
+
+# [1.27.0](https://github.com/Automattic/newspack-popups/compare/v1.26.2...v1.27.0) (2021-03-17)
+
+
+### Bug Fixes
+
+* process custom dimensions as strings ([7443e67](https://github.com/Automattic/newspack-popups/commit/7443e673c33303876a511f54a9b8d29c98592f3a)), closes [#461](https://github.com/Automattic/newspack-popups/issues/461)
+
+
+### Features
+
+* add timestamp column to custom transients table ([fd2bc0b](https://github.com/Automattic/newspack-popups/commit/fd2bc0b6790105ce1d186f515aa8fca6b8aaf042))
+
+## [1.26.2](https://github.com/Automattic/newspack-popups/compare/v1.26.1...v1.26.2) (2021-03-12)
+
+
+### Bug Fixes
+
+* render_block causes Homepage Posts to render wrong post ([#484](https://github.com/Automattic/newspack-popups/issues/484)) ([239368f](https://github.com/Automattic/newspack-popups/commit/239368f64456676dee753febc4012cccf5f6c4f3))
+
 ## [1.26.1](https://github.com/Automattic/newspack-popups/compare/v1.26.0...v1.26.1) (2021-03-09)
 
 

@@ -67,10 +67,10 @@ class Segmentation_Custom_GA_Config extends Lightweight_API {
 					$custom_dimensions_values[ $dimension_id ] = $read_count_tier;
 					break;
 				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER:
-					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_subscriber( $client_data, wp_get_referer() );
+					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_subscriber( $client_data, wp_get_referer() ) ? 'true' : 'false';
 					break;
 				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR:
-					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_donor( $client_data );
+					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_donor( $client_data ) ? 'true' : 'false';
 					break;
 			}
 		}

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => 'f9818811154df11194f5bdc31e8f0d4953c1b7ec',
+    'reference' => 'b55da788c31b1271669ba7a9debe8f110501bc35',
     'name' => 'automattic/newspack-plugin',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => 'f9818811154df11194f5bdc31e8f0d4953c1b7ec',
+      'reference' => 'b55da788c31b1271669ba7a9debe8f110501bc35',
     ),
     'composer/installers' => 
     array (

@@ -1,3 +1,11 @@
+# [1.21.0](https://github.com/Automattic/newspack-newsletters/compare/v1.20.0...v1.21.0) (2021-03-23)
+
+
+### Features
+
+* add filter for Mailchimp campaign sync payload ([#394](https://github.com/Automattic/newspack-newsletters/issues/394)) ([aac44bb](https://github.com/Automattic/newspack-newsletters/commit/aac44bb333222f88c84e3e0b6015b26fcf3c778a))
+* featured images and pre_get_posts refactor ([#425](https://github.com/Automattic/newspack-newsletters/issues/425)) ([1a1f912](https://github.com/Automattic/newspack-newsletters/commit/1a1f91206227cb58b478b102ed2d456ff4a0ccda))
+
 # [1.20.0](https://github.com/Automattic/newspack-newsletters/compare/v1.19.0...v1.20.0) (2021-03-16)
 
 

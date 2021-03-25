@@ -68,8 +68,9 @@ class Report_Campaign_Data extends Lightweight_API {
 			];
 		}
 
+		// Update prompts data.
+		$client_data_update['prompts'] = [ "$campaign_id" => $campaign_data ];
 		$this->save_client_data( $client_id, $client_data_update );
-		$this->save_campaign_data( $client_id, $campaign_id, $campaign_data );
 	}
 }
 new Report_Campaign_Data();

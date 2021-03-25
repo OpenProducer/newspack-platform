@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.32.0
+Version: 1.33.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -4311,23 +4311,6 @@ div.sharedaddy .sd-social h3.sd-title,
   transition: opacity 110ms ease-in-out;
 }
 
-.site-footer .footer-branding .wrapper {
-  padding-top: 1rem;
-}
-
-.site-footer .footer-branding .custom-logo-link,
-.site-footer .footer-branding .footer-logo-link {
-  margin-bottom: 1rem;
-  max-height: 75px;
-  max-width: 200px;
-}
-
-.site-footer .footer-branding .custom-logo-link img,
-.site-footer .footer-branding .footer-logo-link img {
-  max-height: inherit;
-  width: auto;
-}
-
 .site-footer .footer-widgets {
   padding: 1rem 0 2rem;
 }
@@ -4362,6 +4345,52 @@ div.sharedaddy .sd-social h3.sd-title,
 .site-footer .widget-title {
   color: #515151;
   font-size: inherit;
+}
+
+.footer-branding .wrapper {
+  padding-top: 1rem;
+}
+
+.footer-branding .custom-logo-link,
+.footer-branding .footer-logo-link {
+  margin-bottom: 1rem;
+  max-height: 76px;
+  max-width: 200px;
+  /* stylelint-disable selector-type-no-unknown  */
+  /* stylelint-enable */
+}
+
+.footer-branding .custom-logo-link img,
+.footer-branding .footer-logo-link img {
+  max-height: inherit;
+  width: auto;
+}
+
+.footer-branding .custom-logo-link amp-img.amp-wp-enforced-sizes[layout='intrinsic'] > img,
+.footer-branding .footer-logo-link amp-img.amp-wp-enforced-sizes[layout='intrinsic'] > img {
+  object-position: left center;
+}
+
+.footer-logo-xsmall .footer-branding .custom-logo-link,
+.footer-logo-xsmall .footer-branding .footer-logo-link {
+  max-height: 48px;
+  max-width: 160px;
+}
+
+@media only screen and (min-width: 782px) {
+  .footer-logo-large .footer-branding .custom-logo-link,
+  .footer-logo-large .footer-branding .footer-logo-link {
+    max-height: 120px;
+    max-width: 304px;
+  }
+}
+
+@media only screen and (min-width: 782px) {
+  .footer-logo-xlarge .footer-branding .custom-logo-link,
+  .footer-logo-xlarge .footer-branding .footer-logo-link {
+    max-height: 160px;
+    max-width: 368px;
+  }
 }
 
 .site-info {

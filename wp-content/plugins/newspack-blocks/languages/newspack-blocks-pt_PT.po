@@ -10,7 +10,7 @@ msgstr ""
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
 "POT-Creation-Date: 2020-02-20T12:23:39+00:00\n"
-"PO-Revision-Date: 2021-02-11 10:34-0800\n"
+"PO-Revision-Date: 2021-02-17 11:47-0800\n"
 "X-Generator: Poedit 2.4.2\n"
 "X-Domain: newspack-blocks\n"
 "Last-Translator: \n"
@@ -81,7 +81,7 @@ msgstr "Valor da Doação"
 #: src/blocks/donate/view.php:102 src/blocks/donate/view.php:202
 #: dist/editor.js:2
 msgid "Your contribution is appreciated."
-msgstr "Sua contribuição é apreciada. "
+msgstr "A sua contribuição é fundamental."
 
 #: src/blocks/donate/view.php:105 src/blocks/donate/view.php:205
 #: dist/editor.js:2

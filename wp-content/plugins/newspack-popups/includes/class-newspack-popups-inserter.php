@@ -84,14 +84,6 @@ final class Newspack_Popups_Inserter {
 			);
 		}
 
-		// 5. Remove manual placement prompts.
-		$popups_to_maybe_display = array_filter(
-			$popups_to_maybe_display,
-			function( $popup ) {
-				return 'manual' !== $popup['options']['frequency'];
-			}
-		);
-
 		return array_filter(
 			$popups_to_maybe_display,
 			[ __CLASS__, 'should_display' ]
@@ -121,20 +113,37 @@ final class Newspack_Popups_Inserter {
 		add_action( 'delete_widget', [ $this, 'remove_widgets_shortcoded_popup_ids' ] );
 
 		add_filter(
-			'newspack_newsletters_assess_has_disabled_popups',
-			function () {
-				return get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true );
+			'newspack_popups_assess_has_disabled_popups',
+			function ( $disabled ) {
+				if ( get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true ) ) {
+					return true;
+				}
+
+				return $disabled;
 			}
 		);
 
 		// Suppress popups on product pages.
 		// Until the popups non-AMP refactoring happens, they will break Add to Cart buttons.
 		add_filter(
-			'newspack_newsletters_assess_has_disabled_popups',
+			'newspack_popups_assess_has_disabled_popups',
 			function( $disabled ) {
 				if ( function_exists( 'is_product' ) && is_product() ) {
 					return true;
 				}
+				return $disabled;
+			}
+		);
+
+		// The suppress filter used to be named 'newspack_newsletters_assess_has_disabled_popups'.
+		// Maintain that filter for backwards compatibility.
+		add_filter(
+			'newspack_popups_assess_has_disabled_popups',
+			function( $disabled ) {
+				if ( apply_filters( 'newspack_newsletters_assess_has_disabled_popups', false ) ) {
+					return true;
+				}
+
 				return $disabled;
 			}
 		);
@@ -221,12 +230,21 @@ final class Newspack_Popups_Inserter {
 			$content = scaip_maybe_insert_shortcode( $content );
 		}
 
-		// Dynamic blocks might render an arbitrary amount of content, so the length of the content string is
-		// not an accurate representation of the content length.
-		$total_length = 0;
-		foreach ( parse_blocks( $content ) as $block ) {
-			$block_content = render_block( $block );
-			$total_length += strlen( wp_strip_all_tags( $block_content ) );
+		// For certain types of blocks, their innerHTML is not a good representation of the length of their content.
+		// For example, slideshows may have an arbitrary amount of slide content, but only show one slide at a time.
+		// For these blocks, let's ignore their length for purposes of inserting prompts.
+		$blacklisted_blocks = [ 'jetpack/slideshow', 'newspack-blocks/carousel' ];
+		$parsed_blocks      = parse_blocks( $content );
+		$total_length       = 0;
+
+		foreach ( $parsed_blocks as $block ) {
+			if ( ! in_array( $block['blockName'], $blacklisted_blocks ) ) {
+				$block_content = $block['innerHTML'];
+				$total_length += strlen( wp_strip_all_tags( $block_content ) );
+			} else {
+				// Give blacklisted blocks a length so that prompts at 0% can still be inserted before them.
+				$total_length++;
+			}
 		}
 
 		// 1. Separate prompts into inline and overlay.
@@ -251,17 +269,24 @@ final class Newspack_Popups_Inserter {
 		// 2. Iterate over all blocks and insert inline prompts.
 		$pos    = 0;
 		$output = '';
-		foreach ( parse_blocks( $content ) as $block ) {
-			$block_content = render_block( $block );
-			$pos          += strlen( wp_strip_all_tags( $block_content ) );
-			foreach ( $inline_popups as &$inline_popup ) {
-				if ( ! $inline_popup['is_inserted'] && $pos > $inline_popup['precise_position'] ) {
-					$output .= '<!-- wp:shortcode -->[newspack-popup id="' . $inline_popup['id'] . '"]<!-- /wp:shortcode -->';
 
+		foreach ( $parsed_blocks as $block ) {
+			if ( ! in_array( $block['blockName'], $blacklisted_blocks ) ) {
+				$pos += strlen( wp_strip_all_tags( $block['innerHTML'] ) );
+			} else {
+				$pos++;
+			}
+			foreach ( $inline_popups as &$inline_popup ) {
+				if (
+					! $inline_popup['is_inserted'] &&
+					$pos > $inline_popup['precise_position']
+				) {
+					$output                     .= '<!-- wp:shortcode -->[newspack-popup id="' . $inline_popup['id'] . '"]<!-- /wp:shortcode -->';
 					$inline_popup['is_inserted'] = true;
 				}
 			}
-			$output .= $block_content;
+			$block_content = render_block( $block );
+			$output       .= $block_content;
 		}
 
 		// 3. Insert any remaining inline prompts at the end.
@@ -354,7 +379,7 @@ final class Newspack_Popups_Inserter {
 			! $found_popup ||
 			// Bail if it's a non-preview popup which should not be displayed.
 			( ! self::should_display( $found_popup, true ) && ! Newspack_Popups::previewed_popup_id() ) ||
-			// Only inline popups can be inserted via the  shortcode.
+			// Only inline popups can be inserted via the shortcode.
 			! Newspack_Popups_Model::is_inline( $found_popup )
 		) {
 			return;
@@ -389,7 +414,7 @@ final class Newspack_Popups_Inserter {
 			$type = 'a';
 		}
 
-		return [
+		$popup_payload = [
 			'id'  => $popup_id_string,
 			'f'   => $frequency,
 			'utm' => $popup['options']['utm_suppression'],
@@ -398,6 +423,12 @@ final class Newspack_Popups_Inserter {
 			'd'   => \Newspack_Popups_Model::has_donation_block( $popup ),
 			't'   => $type,
 		];
+
+		if ( Newspack_Popups_Custom_Placements::is_custom_placement( $popup ) ) {
+			$popup_payload['c'] = $popup['options']['placement'];
+		}
+
+		return $popup_payload;
 	}
 
 	/**
@@ -417,7 +448,9 @@ final class Newspack_Popups_Inserter {
 				self::get_all_widget_shortcoded_popups_ids()
 			)
 		);
-		$shortcoded_popups    = array_reduce(
+
+		// Get shortcoded prompts.
+		$shortcoded_popups = array_reduce(
 			$shortcoded_popup_ids,
 			function ( $acc, $id ) {
 				$popup_post = get_post( $id );
@@ -432,9 +465,27 @@ final class Newspack_Popups_Inserter {
 			[]
 		);
 
+		// Get prompts for custom placements.
+		$custom_placement_ids    = self::get_custom_placement_ids( get_the_content() );
+		$custom_placement_popups = array_reduce(
+			Newspack_Popups_Custom_Placements::get_prompts_for_custom_placement( $custom_placement_ids ),
+			function ( $acc, $custom_placement_popup ) {
+				if ( $custom_placement_popup ) {
+					$popup_object = Newspack_Popups_Model::create_popup_object( $custom_placement_popup );
+
+					if ( $popup_object ) {
+						$acc[] = $popup_object;
+					}
+				}
+				return $acc;
+			},
+			[]
+		);
+
 		$popups = array_merge(
 			self::popups_for_post(),
-			$shortcoded_popups
+			$shortcoded_popups,
+			$custom_placement_popups
 		);
 
 		// "Escape hatch" if there's a need to block adding amp-access for pages that have no prompts.
@@ -503,7 +554,7 @@ final class Newspack_Popups_Inserter {
 	 * @return bool True if popups should be disabled for current page.
 	 */
 	public static function assess_has_disabled_popups() {
-		return apply_filters( 'newspack_newsletters_assess_has_disabled_popups', [] );
+		return apply_filters( 'newspack_popups_assess_has_disabled_popups', false );
 	}
 
 	/**
@@ -568,6 +619,35 @@ final class Newspack_Popups_Inserter {
 	}
 
 	/**
+	 * Get custom placement IDs from a string.
+	 *
+	 * @param string $string String to assess.
+	 * @return array Found custom placement IDs.
+	 */
+	public static function get_custom_placement_ids( $string ) {
+		preg_match_all( '/<!-- wp:newspack-popups\/custom-placement {"customPlacement":".*"} \/-->/', $string, $custom_placement_ids );
+		if ( empty( $custom_placement_ids ) ) {
+			return [];
+		} else {
+			return array_unique(
+				array_map(
+					function ( $item ) {
+						preg_match( '/"customPlacement":"(.*)"/', $item, $matches );
+						if ( empty( $matches ) ) {
+							return null;
+						} else {
+							return $matches[1];
+						}
+					},
+					$custom_placement_ids[0]
+				)
+			);
+		}
+
+		return [];
+	}
+
+	/**
 	 * Some popups can only appear on Posts.
 	 *
 	 * @param object $popup The popup to assess.
@@ -592,14 +672,6 @@ final class Newspack_Popups_Inserter {
 	public static function assess_categories_filter( $popup ) {
 		$post_categories  = get_the_category();
 		$popup_categories = get_the_category( $popup['id'] );
-
-		// Filter out "Uncategorized" category which is automatically added to uncategorized posts on publish.
-		$popup_categories = array_filter(
-			$popup_categories,
-			function( $popup_category ) {
-				return 'uncategorized' !== $popup_category->slug;
-			}
-		);
 
 		if ( $post_categories && count( $post_categories ) && $popup_categories && count( $popup_categories ) ) {
 			return array_intersect(
@@ -636,7 +708,7 @@ final class Newspack_Popups_Inserter {
 	 * @return bool Should popup be shown.
 	 */
 	public static function should_display( $popup, $skip_context_checks = false ) {
-		if ( 'manual' === $popup['options']['frequency'] ) {
+		if ( Newspack_Popups_Custom_Placements::is_custom_placement( $popup ) ) {
 			return true;
 		}
 

@@ -1,3 +1,21 @@
+# [1.34.0](https://github.com/Automattic/newspack-plugin/compare/v1.33.2...v1.34.0) (2021-03-24)
+
+
+### Bug Fixes
+
+* apply correct color to jetpack logo ([#910](https://github.com/Automattic/newspack-plugin/issues/910)) ([686362c](https://github.com/Automattic/newspack-plugin/commit/686362c308432b5df2071de64817d82ed51575af))
+* redirect after setup complete ([#908](https://github.com/Automattic/newspack-plugin/issues/908)) ([5624822](https://github.com/Automattic/newspack-plugin/commit/5624822a9318802f58ad3a7a36db012fb7a70e79))
+* starter content issues ([#905](https://github.com/Automattic/newspack-plugin/issues/905)) ([6cbc40d](https://github.com/Automattic/newspack-plugin/commit/6cbc40d83f46ed6423f3f122783f9e65194d90d8)), closes [#899](https://github.com/Automattic/newspack-plugin/issues/899) [#904](https://github.com/Automattic/newspack-plugin/issues/904) [#903](https://github.com/Automattic/newspack-plugin/issues/903)
+
+
+### Features
+
+* custom placements ([#898](https://github.com/Automattic/newspack-plugin/issues/898)) ([2cadb45](https://github.com/Automattic/newspack-plugin/commit/2cadb45b0a0897b282de34a8e4eb5137a7b7f617))
+* leaner GA config ([#914](https://github.com/Automattic/newspack-plugin/issues/914)) ([81cdff6](https://github.com/Automattic/newspack-plugin/commit/81cdff6c46089f3db66f6794528d0c4927c4b7db)), closes [#911](https://github.com/Automattic/newspack-plugin/issues/911)
+* remove woocommerce-one-page-checkout from supported plugins list  ([#913](https://github.com/Automattic/newspack-plugin/issues/913)) ([7fa2e31](https://github.com/Automattic/newspack-plugin/commit/7fa2e315bd5fbbd60b250324232e70df53fc9653))
+* update welcome wizard card footer ([#909](https://github.com/Automattic/newspack-plugin/issues/909)) ([134a0e9](https://github.com/Automattic/newspack-plugin/commit/134a0e9cff782e6b68125e5551e697048e47e470))
+* **setup:** design step ([#892](https://github.com/Automattic/newspack-plugin/issues/892)) ([254f08b](https://github.com/Automattic/newspack-plugin/commit/254f08b14f2f2d85bd559ca904f89e816c96d86f))
+
 ## [1.33.2](https://github.com/Automattic/newspack-plugin/compare/v1.33.1...v1.33.2) (2021-03-16)
 
 
