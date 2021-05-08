@@ -29,10 +29,19 @@ class Analytics {
 	public static $block_render_context = 3;
 
 	/**
+	 * Config for the injected amp-analytics tag.
+	 *
+	 * @var array
+	 */
+	public static $amp_analytics_config_base = [];
+
+	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		add_filter( 'googlesitekit_amp_gtag_opt', [ __CLASS__, 'inject_amp_events' ] );
+		add_filter( 'googlesitekit_amp_gtag_opt', [ __CLASS__, 'read_amp_analytics_config' ] );
+		add_action( 'wp_footer', [ __CLASS__, 'insert_gtag_amp_analytics' ], 99 ); // This has to be run after the filter above steals the analytics config.
+
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'handle_custom_dimensions_reporting' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'inject_non_amp_events' ] );
 		add_filter( 'render_block', [ __CLASS__, 'prepare_blocks_for_events' ], 10, 2 );
@@ -418,19 +427,40 @@ class Analytics {
 	}
 
 	/**
-	 * Inject event listeners on AMP pages.
+	 * Read the amp-analytics config that Site Kit will insert on the page.
+	 * Site Kit will place its amp-analytics tag on the page, and this
+	 * plugin will place other amp-analytics tags.
 	 *
 	 * @param array $config AMP Analytics config from Site Kit.
 	 * @return array Modified $config.
 	 */
-	public static function inject_amp_events( $config ) {
+	public static function read_amp_analytics_config( $config ) {
 		if ( is_user_logged_in() ) {
 			$config['vars']['user_id'] = get_current_user_id();
 		}
+		self::$amp_analytics_config_base = $config;
+		return $config;
+	}
+
+	/**
+	 * Insert amp-analytics tag/s into the footer of the page.
+	 * The tag/s will contain the custom events to be sent to GA.
+	 * This is to avoid the gtag endpoint limitation occuring with a single large config.
+	 * More: https://github.com/ampproject/amphtml/issues/32911.
+	 */
+	public static function insert_gtag_amp_analytics() {
+		$config = self::$amp_analytics_config_base;
+		if ( empty( $config ) ) {
+			// Apparently not a page-rendering request - the Site Kit filter (googlesitekit_amp_gtag_opt) was not executed.
+			return;
+		}
+
+		// Gather all custom events.
 		$all_events = self::get_events();
 		if ( Analytics_Wizard::ntg_events_enabled() ) {
 			$all_events = array_merge( $all_events, self::$ntg_block_events );
 		}
+		$custom_events = [];
 		foreach ( $all_events as $event ) {
 			$event_config = [
 				'request' => 'event',
@@ -461,15 +491,39 @@ class Analytics {
 				}
 			}
 
-			if ( ! isset( $config['triggers'] ) ) {
-				$config['triggers'] = [];
-			}
-
 			// Other integrations can use this filter if they need to modify the AMP-specific event config.
-			$config['triggers'][ $event['id'] ] = apply_filters( 'newspack_analytics_amp_event_config', $event_config, $event );
+			$custom_events[] = [
+				'id'     => $event['id'],
+				'config' => apply_filters( 'newspack_analytics_amp_event_config', $event_config, $event ),
+			];
 		}
 
-		return $config;
+		if ( 0 === count( $custom_events ) ) {
+			// Nothing to do here if no custom events are defined.
+			return;
+		}
+
+		// Disable pageview reporting in this tag. Pageview is already handled by the tag
+		// inserted by Site Kit.
+		$tracking_id = $config['vars']['gtag_id'];
+		$config['vars']['config'][ $tracking_id ]['send_page_view'] = false;
+
+		// Divide the custom events into batches.
+		$custom_events_batches = array_chunk( $custom_events, 10 );
+
+		foreach ( $custom_events_batches as $events_batch ) {
+			$config['triggers'] = [];
+			foreach ( $events_batch as $event ) {
+				$config['triggers'][ $event['id'] ] = $event['config'];
+			}
+			?>
+				<amp-analytics type="gtag">
+					<script type="application/json">
+						<?php echo wp_json_encode( $config ); ?>
+					</script>
+				</amp-analytics>
+			<?php
+		}
 	}
 
 	/**

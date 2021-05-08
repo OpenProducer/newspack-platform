@@ -3,25 +3,27 @@
 /**
  * External dependencies
  */
-import { isEqual, isUndefined, pickBy } from 'lodash';
+import { isEqual } from 'lodash';
 import classnames from 'classnames';
 
 /**
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { InspectorControls } from '@wordpress/block-editor';
 import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
 import { Component, createRef, Fragment } from '@wordpress/element';
-import { InspectorControls } from '@wordpress/editor';
 import {
+	CheckboxControl,
 	PanelBody,
 	PanelRow,
 	Placeholder,
+	RadioControl,
 	RangeControl,
 	Spinner,
 	ToggleControl,
 } from '@wordpress/components';
-import { withSelect } from '@wordpress/data';
+import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { decodeEntities } from '@wordpress/html-entities';
 
@@ -36,6 +38,8 @@ import {
 	formatSponsorLogos,
 	formatSponsorByline,
 } from '../../shared/js/utils';
+// Use same posts store as Homepage Posts block.
+import { postsBlockSelector, postsBlockDispatch, shouldReflow } from '../homepage-articles/utils';
 
 class Edit extends Component {
 	constructor( props ) {
@@ -51,9 +55,14 @@ class Edit extends Component {
 
 	componentDidMount() {
 		this.initializeSwiper( 0 );
+		this.props.triggerReflow();
 	}
 
 	componentDidUpdate( prevProps ) {
+		if ( shouldReflow( prevProps, this.props ) ) {
+			this.props.triggerReflow();
+		}
+
 		const { attributes, latestPosts } = this.props;
 
 		if (
@@ -74,6 +83,10 @@ class Edit extends Component {
 
 			this.initializeSwiper( initialSlide );
 		}
+	}
+
+	componentWillUnmount() {
+		this.props.triggerReflow();
 	}
 
 	initializeSwiper( initialSlide ) {
@@ -102,31 +115,50 @@ class Edit extends Component {
 	}
 
 	render() {
-		const { attributes, className, setAttributes, latestPosts } = this.props;
+		const {
+			attributes,
+			availablePostTypes,
+			className,
+			setAttributes,
+			latestPosts,
+			isUIDisabled,
+		} = this.props;
 		const {
 			authors,
 			autoplay,
 			categories,
 			delay,
+			imageFit,
 			postsToShow,
+			postType,
 			showCategory,
 			showDate,
 			showAuthor,
 			showAvatar,
+			showTitle,
+			specificMode,
+			specificPosts,
 			tags,
 		} = attributes;
 		const classes = classnames(
 			className,
 			'wp-block-newspack-blocks-carousel', // Default to make styles work for third-party consumers.
 			'swiper-container',
-			autoplay && 'wp-block-newspack-blocks-carousel__autoplay-playing'
+			{
+				'wp-block-newspack-blocks-carousel__autoplay-playing': autoplay,
+				'newspack-block--disabled': isUIDisabled,
+			}
 		);
 		const dateFormat = __experimentalGetSettings().formats.date;
+		const hasNoPosts = latestPosts && ! latestPosts.length;
+		const hasOnePost = latestPosts && latestPosts.length === 1;
 		return (
 			<Fragment>
 				<div className={ classes } ref={ this.carouselRef }>
-					{ latestPosts && ! latestPosts.length && (
-						<Placeholder>{ __( 'Sorry, no posts were found.' ) }</Placeholder>
+					{ hasNoPosts && (
+						<Placeholder className="component-placeholder__align-center">
+							<div style={ { margin: 'auto' } }>{ __( 'Sorry, no posts were found.' ) }</div>
+						</Placeholder>
 					) }
 					{ ! latestPosts && (
 						<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
@@ -146,70 +178,86 @@ class Edit extends Component {
 								</Fragment>
 							) }
 							<div className="swiper-wrapper">
-								{ latestPosts.map(
-									post =>
-										post.newspack_featured_image_src && (
-											<article className="post-has-image swiper-slide" key={ post.id }>
-												<figure className="post-thumbnail">
-													{ post.newspack_featured_image_src && (
-														<a href="#" rel="bookmark">
-															<img src={ post.newspack_featured_image_src.large } alt="" />
-														</a>
+								{ latestPosts.map( post => (
+									<article
+										className={ `post-has-image swiper-slide ${ post.post_type }` }
+										key={ post.id }
+									>
+										<figure className="post-thumbnail">
+											<a href="#" rel="bookmark">
+												{ post.newspack_featured_image_src ? (
+													<img
+														className={ `image-fit-${ imageFit }` }
+														src={ post.newspack_featured_image_src.large }
+														alt=""
+													/>
+												) : (
+													<div className="wp-block-newspack-blocks-carousel__placeholder"></div>
+												) }
+											</a>
+										</figure>
+										{ ( post.newspack_post_sponsors ||
+											showCategory ||
+											showTitle ||
+											showAuthor ||
+											showDate ) && (
+											<div className="entry-wrapper">
+												{ post.newspack_post_sponsors && (
+													<span className="cat-links sponsor-label">
+														<span className="flag">{ post.newspack_post_sponsors[ 0 ].flag }</span>
+													</span>
+												) }
+												{ showCategory &&
+													post.newspack_category_info.length &&
+													! post.newspack_post_sponsors && (
+														<div className="cat-links">
+															<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
+														</div>
 													) }
-												</figure>
-												<div className="entry-wrapper">
-													{ post.newspack_post_sponsors && (
-														<span className="cat-links sponsor-label">
-															<span className="flag">
-																{ post.newspack_post_sponsors[ 0 ].flag }
-															</span>
-														</span>
-													) }
-													{ showCategory &&
-														post.newspack_category_info.length &&
-														! post.newspack_post_sponsors && (
-															<div className="cat-links">
-																<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
-															</div>
-														) }
+												{ showTitle && (
 													<h3 className="entry-title">
 														<a href="#">{ decodeEntities( post.title.rendered.trim() ) }</a>
 													</h3>
-													<div className="entry-meta">
-														{ post.newspack_post_sponsors &&
-															formatSponsorLogos( post.newspack_post_sponsors ) }
-														{ post.newspack_post_sponsors &&
-															formatSponsorByline( post.newspack_post_sponsors ) }
-														{ showAuthor &&
-															showAvatar &&
-															! post.newspack_post_sponsors &&
-															formatAvatars( post.newspack_author_info ) }
-														{ showAuthor &&
-															! post.newspack_post_sponsors &&
-															formatByline( post.newspack_author_info ) }
-														{ showDate && (
-															<time className="entry-date published" key="pub-date">
-																{ dateI18n( dateFormat, post.date_gmt ) }
-															</time>
-														) }
-													</div>
+												) }
+												<div className="entry-meta">
+													{ post.newspack_post_sponsors &&
+														formatSponsorLogos( post.newspack_post_sponsors ) }
+													{ post.newspack_post_sponsors &&
+														formatSponsorByline( post.newspack_post_sponsors ) }
+													{ showAuthor &&
+														showAvatar &&
+														! post.newspack_post_sponsors &&
+														formatAvatars( post.newspack_author_info ) }
+													{ showAuthor &&
+														! post.newspack_post_sponsors &&
+														formatByline( post.newspack_author_info ) }
+													{ showDate && (
+														<time className="entry-date published" key="pub-date">
+															{ dateI18n( dateFormat, post.date_gmt ) }
+														</time>
+													) }
 												</div>
-											</article>
-										)
-								) }
+											</div>
+										) }
+									</article>
+								) ) }
 							</div>
-							<button
-								className="amp-carousel-button amp-carousel-button-prev swiper-button-prev"
-								ref={ this.btnPrevRef }
-							/>
-							<button
-								className="amp-carousel-button amp-carousel-button-next swiper-button-next"
-								ref={ this.btnNextRef }
-							/>
-							<div
-								className="swiper-pagination-bullets amp-pagination"
-								ref={ this.paginationRef }
-							/>
+							{ ! hasNoPosts && ! hasOnePost && (
+								<>
+									<button
+										className="amp-carousel-button amp-carousel-button-prev swiper-button-prev"
+										ref={ this.btnPrevRef }
+									/>
+									<button
+										className="amp-carousel-button amp-carousel-button-next swiper-button-next"
+										ref={ this.btnNextRef }
+									/>
+									<div
+										className="swiper-pagination-bullets amp-pagination"
+										ref={ this.paginationRef }
+									/>
+								</>
+							) }
 						</Fragment>
 					) }
 				</div>
@@ -217,7 +265,6 @@ class Edit extends Component {
 					<PanelBody title={ __( 'Display Settings' ) } initialOpen={ true }>
 						{ postsToShow && (
 							<QueryControls
-								enableSpecific={ false }
 								numberOfItems={ postsToShow }
 								onNumberOfItemsChange={ value =>
 									setAttributes( { postsToShow: value ? value : 1 } )
@@ -228,10 +275,28 @@ class Edit extends Component {
 								onCategoriesChange={ value => setAttributes( { categories: value } ) }
 								tags={ tags }
 								onTagsChange={ value => setAttributes( { tags: value } ) }
+								specificMode={ specificMode }
+								onSpecificModeChange={ _specificMode =>
+									setAttributes( { specificMode: _specificMode } )
+								}
+								specificPosts={ specificPosts }
+								onSpecificPostsChange={ _specificPosts =>
+									setAttributes( { specificPosts: _specificPosts } )
+								}
+								postType={ postType }
 							/>
 						) }
 					</PanelBody>
 					<PanelBody title={ __( 'Slideshow Settings' ) } initialOpen={ true }>
+						<RadioControl
+							label={ __( 'Image Fit Style', 'newspack-blocks' ) }
+							selected={ imageFit }
+							onChange={ value => setAttributes( { imageFit: value } ) }
+							options={ [
+								{ label: __( 'Cover', 'newspack-blocks' ), value: 'cover' },
+								{ label: __( 'Contain', 'newspack-blocks' ), value: 'contain' },
+							] }
+						/>
 						<ToggleControl
 							label={ __( 'Autoplay' ) }
 							help={ __( 'Autoplay between slides' ) }
@@ -253,6 +318,13 @@ class Edit extends Component {
 						) }
 					</PanelBody>
 					<PanelBody title={ __( 'Article Meta Settings', 'newspack-blocks' ) }>
+						<PanelRow>
+							<ToggleControl
+								label={ __( 'Show Title', 'newspack-blocks' ) }
+								checked={ showTitle }
+								onChange={ () => setAttributes( { showTitle: ! showTitle } ) }
+							/>
+						</PanelRow>
 						<PanelRow>
 							<ToggleControl
 								label={ __( 'Show Date', 'newspack-blocks' ) }
@@ -284,30 +356,34 @@ class Edit extends Component {
 							</PanelRow>
 						) }
 					</PanelBody>
+					<PanelBody title={ __( 'Post Types', 'newspack-blocks' ) }>
+						{ availablePostTypes &&
+							availablePostTypes.map( ( { name, slug } ) => (
+								<PanelRow key={ slug }>
+									<CheckboxControl
+										label={ name }
+										checked={ postType.indexOf( slug ) > -1 }
+										onChange={ value => {
+											const cleanPostType = [ ...new Set( postType ) ];
+											if ( value && cleanPostType.indexOf( slug ) === -1 ) {
+												cleanPostType.push( slug );
+											} else if ( ! value && cleanPostType.indexOf( slug ) > -1 ) {
+												cleanPostType.splice( cleanPostType.indexOf( slug ), 1 );
+											}
+											setAttributes( {
+												postType: cleanPostType,
+											} );
+										} }
+									/>
+								</PanelRow>
+							) ) }
+					</PanelBody>
 				</InspectorControls>
 			</Fragment>
 		);
 	}
 }
 
-export default compose( [
-	withSelect( ( select, props ) => {
-		const { postsToShow, authors, categories, tags } = props.attributes;
-		const { getEntityRecords } = select( 'core' );
-		const latestPostsQuery = pickBy(
-			{
-				per_page: postsToShow,
-				categories,
-				author: authors,
-				tags,
-				meta_key: '_thumbnail_id',
-				meta_value_num: 0,
-				meta_compare: '>',
-			},
-			value => ! isUndefined( value )
-		);
-		return {
-			latestPosts: getEntityRecords( 'postType', 'post', latestPostsQuery ),
-		};
-	} ),
-] )( Edit );
+export default compose( [ withSelect( postsBlockSelector ), withDispatch( postsBlockDispatch ) ] )(
+	Edit
+);

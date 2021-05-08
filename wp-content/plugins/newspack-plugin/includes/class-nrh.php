@@ -68,25 +68,23 @@ class NRH {
 	 * @param array $gtag_amp_opt gtag config options for AMP.
 	 */
 	public static function googlesitekit_amp_gtag_opt( $gtag_amp_opt ) {
+		$analytics = \Newspack\Google_Services_Connection::get_site_kit_analytics_module();
+		if ( $analytics ) {
+			$ga_property_code = $analytics->get_settings()->get()['propertyID'];
 
-		if ( ! defined( 'GOOGLESITEKIT_PLUGIN_MAIN_FILE' ) ) {
+			if ( ! isset( $gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker'] ) ) {
+				$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker'] = [];
+			}
+			if ( ! isset( $gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'] ) ) {
+				$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'] = [];
+			}
+
+			$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'][]      = 'checkout.fundjournalism.org';
+			$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['decorate_forms'] = true;
+			return $gtag_amp_opt;
+		} else {
 			return $gtag_amp_opt; // If Site Kit isn't installed, bail early.
 		}
-
-		$context          = new \Google\Site_Kit\Context( GOOGLESITEKIT_PLUGIN_MAIN_FILE );
-		$analytics        = new \Google\Site_Kit\Modules\Analytics( $context );
-		$ga_property_code = $analytics->get_settings()->get()['propertyID'];
-
-		if ( ! isset( $gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker'] ) ) {
-			$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker'] = [];
-		}
-		if ( ! isset( $gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'] ) ) {
-			$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'] = [];
-		}
-
-		$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['domains'][]      = 'checkout.fundjournalism.org';
-		$gtag_amp_opt['vars']['config'][ $ga_property_code ]['linker']['decorate_forms'] = true;
-		return $gtag_amp_opt;
 	}
 
 	/**

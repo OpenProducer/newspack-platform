@@ -313,7 +313,7 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 
 		$post     = get_post( $post_id );
 		$renderer = new Newspack_Newsletters_Renderer();
-		$html     = $renderer->render_html_email( $post );
+		$html     = $renderer->retrieve_email_html( $post );
 
 		return $html;
 	}

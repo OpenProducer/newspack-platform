@@ -22,10 +22,12 @@
 		display: none;
 		position: fixed;
 		width: 100%;
-		z-index: 1;
+		z-index: 11;
 
 		&.active {
-			display: flex;
+			@include media( mobileonly ) {
+				display: flex;
+			}
 		}
 
 		button {

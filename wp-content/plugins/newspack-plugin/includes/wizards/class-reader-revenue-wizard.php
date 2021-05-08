@@ -351,21 +351,18 @@ class Reader_Revenue_Wizard extends Wizard {
 	}
 
 	/**
-	 * Save Stripe settings.
+	 * Handler for setting Stripe settings.
 	 *
-	 * @param WP_REST_Request $request Request object.
-	 * @return WP_REST_Response Boolean success.
+	 * @param object $settings Stripe settings.
+	 * @return WP_REST_Response with the latest settings.
 	 */
-	public function api_update_stripe_settings( $request ) {
+	public function update_stripe_settings( $settings ) {
 		$required_plugins_installed = $this->check_required_plugins_installed();
 		if ( is_wp_error( $required_plugins_installed ) ) {
 			return rest_ensure_response( $required_plugins_installed );
 		}
 		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
-
-		$params = $request->get_params();
-
-		$defaults = [
+		$defaults                 = [
 			'enabled'            => false,
 			'testMode'           => false,
 			'publishableKey'     => '',
@@ -373,8 +370,7 @@ class Reader_Revenue_Wizard extends Wizard {
 			'testPublishableKey' => '',
 			'testSecretKey'      => '',
 		];
-		$args     = wp_parse_args( $params, $defaults );
-
+		$args                     = wp_parse_args( $settings, $defaults );
 		// If Stripe is enabled, make sure the API key fields are non-empty.
 		if ( $args['enabled'] ) {
 			if ( $args['testMode'] && ( ! $this->api_validate_not_empty( $args['testPublishableKey'] ) || ! $this->api_validate_not_empty( $args['testSecretKey'] ) ) ) {
@@ -402,7 +398,19 @@ class Reader_Revenue_Wizard extends Wizard {
 		// @todo when is the best time to do this?
 		$wc_configuration_manager->set_smart_defaults();
 
-		return \rest_ensure_response( $this->fetch_all_data() );
+		return $this->fetch_all_data();
+	}
+
+	/**
+	 * Save Stripe settings.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response Response.
+	 */
+	public function api_update_stripe_settings( $request ) {
+		$params = $request->get_params();
+		$result = $this->update_stripe_settings( $params );
+		return \rest_ensure_response( $result );
 	}
 
 	/**

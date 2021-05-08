@@ -269,6 +269,7 @@ class Setup_Wizard extends Wizard {
 
 		// Footer.
 		$theme_mods['footer_color']     = get_theme_mod( 'footer_color', 'default' );
+		$theme_mods['footer_logo_size'] = get_theme_mod( 'footer_logo_size', 'medium' );
 		$theme_mods['footer_copyright'] = get_theme_mod( 'footer_copyright', false );
 		if ( false === $theme_mods['footer_copyright'] ) {
 			set_theme_mod( 'footer_copyright', get_option( 'blogdescription', '' ) );
@@ -277,12 +278,99 @@ class Setup_Wizard extends Wizard {
 
 		$theme_mods['header_text']            = get_theme_mod( 'header_text', '' );
 		$theme_mods['header_display_tagline'] = get_theme_mod( 'header_display_tagline', '' );
+
 		return rest_ensure_response(
 			[
-				'theme'      => Starter_Content::get_theme(),
-				'theme_mods' => $theme_mods,
+				'theme'             => Starter_Content::get_theme(),
+				'theme_mods'        => $theme_mods,
+				'homepage_patterns' => $this->get_homepage_patterns(),
 			]
 		);
+	}
+
+	/**
+	 * Load homepage pattern.
+	 *
+	 * @param string $file_path File path of the pattern.
+	 * @return string The pattern markup.
+	 */
+	private function load_homepage_pattern( $file_path ) {
+		$has_donations   = $this->check_service_enabled( 'reader-revenue' );
+		$has_newsletters = $this->check_service_enabled( 'newsletters' );
+		$donate_block    = $has_donations ? '
+		<!-- wp:group {"align":"full","backgroundColor":"primary","className":"has-white-color has-text-color"} -->
+		<div class="wp-block-group alignfull has-white-color has-text-color has-primary-background-color has-background"><div class="wp-block-group__inner-container"><!-- wp:spacer {"height":20} -->
+		<div style="height:20px" aria-hidden="true" class="wp-block-spacer"></div>
+		<!-- /wp:spacer -->
+
+		<!-- wp:columns -->
+		<div class="wp-block-columns"><!-- wp:column {"verticalAlignment":"center","width":"25%"} -->
+		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:25%"><!-- wp:heading -->
+		<h2>' . __( 'Support our publication', 'newspack' ) . '</h2>
+		<!-- /wp:heading --></div>
+		<!-- /wp:column -->
+
+		<!-- wp:column {"width":"75%"} -->
+		<div class="wp-block-column" style="flex-basis:75%"><!-- wp:newspack-blocks/donate /--></div>
+		<!-- /wp:column --></div>
+
+		<!-- wp:spacer {"height":20} -->
+		<div style="height:20px" aria-hidden="true" class="wp-block-spacer"></div>
+		<!-- /wp:spacer --></div></div>
+		<!-- /wp:group -->
+		' : '';
+		$image_url       = 'https://picsum.photos/id/424/600/400	';
+		$subscribe_block = $has_newsletters ? '<!-- wp:group {"className":"newspack-pattern subscribe__style-1"} -->
+		<div class="wp-block-group newspack-pattern subscribe__style-1"><div class="wp-block-group__inner-container"><!-- wp:media-text {"align":"","mediaPosition":"right","mediaId":131,"mediaType":"image","verticalAlignment":"center","imageFill":true,"backgroundColor":"light-gray"} -->
+		<div class="wp-block-media-text has-media-on-the-right is-stacked-on-mobile is-vertically-aligned-center is-image-fill has-light-gray-background-color has-background"><figure class="wp-block-media-text__media" style="background-image:url(' . $image_url . ');background-position:50% 50%"><img src="' . $image_url . '" alt="" class="wp-image-131 size-full"/></figure><div class="wp-block-media-text__content"><!-- wp:spacer {"height":32} -->
+		<div style="height:32px" aria-hidden="true" class="wp-block-spacer"></div>
+		<!-- /wp:spacer -->
+
+		<!-- wp:heading -->
+		<h2>' . __( 'Subscribe', 'newspack' ) . '</h2>
+		<!-- /wp:heading -->
+
+		<!-- wp:jetpack/mailchimp {"interests":[]} -->
+		<!-- wp:jetpack/button {"element":"button","uniqueId":"mailchimp-widget-id","text":"Join my email list"} /-->
+		<!-- /wp:jetpack/mailchimp -->
+
+		<!-- wp:spacer {"height":32} -->
+		<div style="height:32px" aria-hidden="true" class="wp-block-spacer"></div>
+		<!-- /wp:spacer --></div></div>
+		<!-- /wp:media-text --></div></div>
+		<!-- /wp:group -->' : '';
+		return require $file_path;
+	}
+
+	/**
+	 * Get homepage patterns registered by the Newspack Blocks plugin.
+	 *
+	 * @param int $index Pattern ID.
+	 * @return array|object|bool Homepage pattern (false if not found) or all patterns.
+	 */
+	private function get_homepage_patterns( $index = null ) {
+		$patterns_directory = dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/block-patterns/homepage/';
+
+		// Load a single homepage pattern.
+		if ( null !== $index ) {
+			$index_padded = str_pad( $index + 1, 2, '0', STR_PAD_LEFT );
+			$file_path    = $patterns_directory . $index_padded . '.php';
+			if ( file_exists( $file_path ) ) {
+				return $this->load_homepage_pattern( $file_path );
+			} else {
+				return false;
+			}
+		}
+
+		// Load all homepage patterns.
+		foreach ( scandir( $patterns_directory ) as $file_name ) {
+			if ( '.' !== $file_name && '..' !== $file_name ) {
+				$file_path           = $patterns_directory . $file_name;
+				$homepage_patterns[] = $this->load_homepage_pattern( $file_path );
+			}
+		}
+
+		return $homepage_patterns;
 	}
 
 	/**
@@ -296,9 +384,26 @@ class Setup_Wizard extends Wizard {
 		$theme = $request['theme'];
 		Starter_Content::set_theme( $theme );
 
+		// Set homepage pattern.
+		if ( isset( $request['theme_mods']['homepage_pattern_index'] ) ) {
+			$homepage_pattern_index = (int) $request['theme_mods']['homepage_pattern_index'];
+			$homepage_pattern       = $this->get_homepage_patterns( $homepage_pattern_index );
+			if ( false !== $homepage_pattern ) {
+				$homepage_id = get_option( 'page_on_front', false );
+				if ( $homepage_id ) {
+					wp_update_post(
+						[
+							'ID'           => $homepage_id,
+							'post_content' => $homepage_pattern['content'],
+						]
+					);
+				}
+			}
+		}
+
 		$theme_mods = $request['theme_mods'];
 		foreach ( $theme_mods as $key => $value ) {
-			if ( in_array( $key, $this->media_theme_mods ) ) {
+			if ( null !== $value && in_array( $key, $this->media_theme_mods ) ) {
 				$value = $value['id'];
 			}
 			set_theme_mod( $key, $value );
@@ -307,23 +412,42 @@ class Setup_Wizard extends Wizard {
 	}
 
 	/**
+	 * Check if a particular service is enabled.
+	 *
+	 * @param string $service_name Name of the service.
+	 * @return bool True if the service is enabled.
+	 */
+	private function check_service_enabled( $service_name ) {
+		switch ( $service_name ) {
+			case 'reader-revenue':
+				$rr_wizard = new Reader_Revenue_Wizard();
+				return isset( $rr_wizard->fetch_all_data()['platform_data']['platform'] );
+			case 'newsletters':
+				$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
+				return $newsletters_configuration_manager->is_esp_set_up();
+			case 'google-ad-sense':
+				$ads_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
+				return $ads_configuration_manager->is_service_enabled( 'google_adsense' );
+			case 'google-ad-manager':
+				$ads_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
+				return $ads_configuration_manager->is_service_enabled( 'google_ad_manager' );
+			default:
+				return false;
+		}
+	}
+
+	/**
 	 * Get Services step initial data.
 	 *
 	 * @return WP_REST_Response containing info.
 	 */
 	public function api_get_services() {
-		$rr_wizard                         = new Reader_Revenue_Wizard();
-		$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
-		$ads_configuration_manager         = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-		$sitekit_configuration_manager     = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
-
 		$response = [
-			'reader-revenue'    => [ 'configuration' => [ 'is_service_enabled' => isset( $rr_wizard->fetch_all_data()['platform_data']['platform'] ) ] ],
-			'newsletters'       => [ 'configuration' => [ 'is_service_enabled' => $newsletters_configuration_manager->is_set_up() ] ],
-			'google-ad-sense'   => [ 'configuration' => [ 'is_service_enabled' => $ads_configuration_manager->is_service_enabled( 'google_adsense' ) ] ],
-			'google-ad-manager' => [ 'configuration' => [ 'is_service_enabled' => $ads_configuration_manager->is_service_enabled( 'google_ad_manager' ) ] ],
+			'reader-revenue'    => [ 'configuration' => [ 'is_service_enabled' => $this->check_service_enabled( 'reader-revenue' ) ] ],
+			'newsletters'       => [ 'configuration' => [ 'is_service_enabled' => $this->check_service_enabled( 'newsletters' ) ] ],
+			'google-ad-sense'   => [ 'configuration' => [ 'is_service_enabled' => $this->check_service_enabled( 'google-ad-sense' ) ] ],
+			'google-ad-manager' => [ 'configuration' => [ 'is_service_enabled' => $this->check_service_enabled( 'google-ad-manager' ) ] ],
 		];
-
 		return rest_ensure_response( $response );
 	}
 
@@ -340,7 +464,14 @@ class Setup_Wizard extends Wizard {
 		}
 		if ( isset( $request['reader-revenue']['is_service_enabled'] ) ) {
 			$rr_wizard = new Reader_Revenue_Wizard();
-			$rr_wizard->update_donation_settings( $request['reader-revenue'] );
+			if ( $request['reader-revenue']['donation_data'] ) {
+				$rr_wizard->update_donation_settings( $request['reader-revenue']['donation_data'] );
+			}
+			if ( $request['reader-revenue']['stripe_data'] ) {
+				$stripe_settings            = $request['reader-revenue']['stripe_data'];
+				$stripe_settings['enabled'] = true;
+				$rr_wizard->update_stripe_settings( $stripe_settings );
+			}
 		}
 		if ( isset( $request['google-ad-manager']['is_service_enabled'], $request['google-ad-manager']['network_code'] ) ) {
 			$ads_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );

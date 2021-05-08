@@ -75,6 +75,8 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
+		include_once NEWSPACK_ABSPATH . 'includes/google/class-google-oauth.php';
+		include_once NEWSPACK_ABSPATH . 'includes/google/class-google-services-connection.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-setup-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-dashboard.php';
@@ -110,6 +112,9 @@ final class Newspack {
 		}
 
 		include_once NEWSPACK_ABSPATH . 'includes/configuration_managers/class-configuration-managers.php';
+
+		// Scheduled post checker cron job.
+		include_once NEWSPACK_ABSPATH . 'includes/scheduled-post-checker/scheduled-post-checker.php';
 	}
 
 	/**

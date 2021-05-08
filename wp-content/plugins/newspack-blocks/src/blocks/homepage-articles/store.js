@@ -109,7 +109,7 @@ function* getPostsForBlock( block ) {
 	return postsIds;
 }
 
-const createFetchPostsSaga = blockName => {
+const createFetchPostsSaga = blockNames => {
 	/**
 	 * "worker" Saga: will be fired on REFLOW actions
 	 */
@@ -122,7 +122,7 @@ const createFetchPostsSaga = blockName => {
 
 		yield put( { type: 'DISABLE_UI' } );
 
-		const blockQueries = getBlockQueries( getBlocks(), blockName );
+		const blockQueries = getBlockQueries( getBlocks(), blockNames );
 
 		// Use requested specific posts ids as the starting state of exclusion list.
 		const specificPostsId = blockQueries.reduce( ( acc, { postsQuery } ) => {
@@ -160,9 +160,9 @@ const createFetchPostsSaga = blockName => {
 	};
 };
 
-export const registerQueryStore = blockName => {
+export const registerQueryStore = blockNames => {
 	registerGenericStore( STORE_NAMESPACE, genericStore );
 
 	// Run the saga ✨
-	sagaMiddleware.run( createFetchPostsSaga( blockName ) );
+	sagaMiddleware.run( createFetchPostsSaga( blockNames ) );
 };

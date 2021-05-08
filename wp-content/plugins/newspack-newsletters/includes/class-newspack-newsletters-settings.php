@@ -81,16 +81,6 @@ class Newspack_Newsletters_Settings {
 				'provider'    => 'campaign_monitor',
 			),
 			array(
-				'description' => __( 'MJML Application ID', 'newspack-newsletters' ),
-				'key'         => 'newspack_newsletters_mjml_api_key',
-				'type'        => 'text',
-			),
-			array(
-				'description' => __( 'MJML Secret Key', 'newspack-newsletters' ),
-				'key'         => 'newspack_newsletters_mjml_api_secret',
-				'type'        => 'text',
-			),
-			array(
 				'default'           => 'newsletter',
 				'description'       => __( 'Public Newsletter Posts Slug', 'newspack-newsletters' ),
 				'key'               => 'newspack_newsletters_public_posts_slug',

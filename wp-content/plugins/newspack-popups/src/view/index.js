@@ -181,11 +181,8 @@ if ( typeof window !== 'undefined' ) {
 		// But don't manage analytics events until the client ID is available.
 		waitUntil( getClientIDValue, manageAnalyticsEvents );
 
-		const campaignArray = [
-			...document.querySelectorAll( '.newspack-lightbox' ),
-			...document.querySelectorAll( '.newspack-inline-popup' ),
-		];
-		campaignArray.forEach( campaign => {
+		const popupsElements = [ ...document.querySelectorAll( '.newspack-popup' ) ];
+		popupsElements.forEach( campaign => {
 			manageForms( campaign );
 		} );
 	} );

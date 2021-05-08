@@ -1,5 +1,5 @@
 /**
- * External dependencies
+ * WordPress dependencies
  */
 import { Path, SVG } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
@@ -17,20 +17,24 @@ import './editor.scss';
 export const name = 'youtube-video-playlist';
 export const title = __( 'YouTube Video Playlist', 'newspack-blocks' );
 
-/* From https://material.io/tools/icons */
 export const icon = (
-	<SVG xmlns="http://www.w3.org/2000/svg" height="24" viewBox="0 0 24 24" width="24">
-		<Path d="M0 0h24v24H0z" fill="none" />
+	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
+		<Path d="M13 10.5L8.833 8v5z" />
 		<Path
-			d="M20 8H4V6h16v2zm-2-6H6v2h12V2zm4 10v8c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2v-8c0-1.1.9-2 2-2h16c1.1 0 2 .9 2 2zm-6 4l-6-3.27v6.53L16 16z"
-			fill="#36f"
+			clipRule="evenodd"
+			d="M4.625 3C3.728 3 3 3.728 3 4.625v11.75C3 17.272 3.728 18 4.625 18h11.75c.897 0 1.625-.728 1.625-1.625V4.625C18 3.728 17.272 3 16.375 3zm11.75 1.5H4.625a.125.125 0 00-.125.125v11.75c0 .069.056.125.125.125h11.75a.125.125 0 00.125-.125V4.625a.125.125 0 00-.125-.125z"
+			fillRule="evenodd"
 		/>
+		<Path d="M20.25 8v11c0 .69-.56 1.25-1.249 1.25H6v1.5h13.001A2.749 2.749 0 0021.75 19V8z" />
 	</SVG>
 );
 
 export const settings = {
 	title,
-	icon,
+	icon: {
+		src: icon,
+		foreground: '#36f',
+	},
 	category: 'newspack',
 	keywords: [
 		__( 'video', 'newspack-blocks' ),

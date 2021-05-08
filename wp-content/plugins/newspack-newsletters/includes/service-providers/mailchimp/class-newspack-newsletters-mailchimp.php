@@ -391,7 +391,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 			$renderer        = new Newspack_Newsletters_Renderer();
 			$content_payload = [
-				'html' => $renderer->render_html_email( $post ),
+				'html' => $renderer->retrieve_email_html( $post ),
 			];
 
 			$content_result = $this->validate(

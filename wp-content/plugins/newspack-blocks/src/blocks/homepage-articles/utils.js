@@ -1,12 +1,14 @@
 /**
  * External dependencies
  */
-import { debounce, isEqual, isUndefined, pick, pickBy } from 'lodash';
+import { uniqueId, times, isEqual, isUndefined, pick, pickBy } from 'lodash';
 
 /**
- * External dependencies
+ * WordPress dependencies
  */
-import { select as globalSelect } from '@wordpress/data';
+import { __ } from '@wordpress/i18n';
+
+import { STORE_NAMESPACE } from './store';
 
 /**
  * Based global WP.com blog_public option, checks whether current blog is
@@ -66,7 +68,7 @@ export const queryCriteriaFromAttributes = attributes => {
 		postType,
 		showExcerpt,
 		tags,
-		specificPosts,
+		specificPosts = [],
 		specificMode,
 		tagExclusions,
 	} = pick( attributes, POST_QUERY_ATTRIBUTES );
@@ -90,7 +92,6 @@ export const queryCriteriaFromAttributes = attributes => {
 			  },
 		value => ! isUndefined( value )
 	);
-	criteria.suppress_password_protected_posts = true;
 	criteria.excerpt_length = excerptLength;
 	criteria.show_excerpt = showExcerpt;
 	return criteria;
@@ -99,14 +100,14 @@ export const queryCriteriaFromAttributes = attributes => {
 export const sanitizePostList = postList =>
 	postList.map( id => parseInt( id ) ).filter( id => id > 0 );
 
-export const getBlockQueries = ( blocks, blockName ) =>
+export const getBlockQueries = ( blocks, blockNames ) =>
 	blocks.flatMap( block => {
 		const homepageArticleBlocks = [];
-		if ( block.name === blockName ) {
+		if ( blockNames.indexOf( block.name ) >= 0 ) {
 			const postsQuery = queryCriteriaFromAttributes( block.attributes );
 			homepageArticleBlocks.push( { postsQuery, clientId: block.clientId } );
 		}
-		return homepageArticleBlocks.concat( getBlockQueries( block.innerBlocks, blockName ) );
+		return homepageArticleBlocks.concat( getBlockQueries( block.innerBlocks, blockNames ) );
 	} );
 
 export const getEditorBlocksIds = blocks =>
@@ -116,12 +117,80 @@ export const getEditorBlocksIds = blocks =>
 		return homepageArticleBlocks.concat( getEditorBlocksIds( block.innerBlocks ) );
 	} );
 
-export const getCoreStorePosts = debounce(
-	attributes =>
-		globalSelect( 'core' ).getEntityRecords(
-			'postType',
-			'post',
-			queryCriteriaFromAttributes( attributes )
+const PREVIEW_IMAGE_BASE = window.newspack_blocks_data.assets_path;
+const generatePreviewPost = () => ( {
+	author: 1,
+	content: {
+		rendered: __( 'The post content.', 'newspack' ),
+	},
+	date_gmt: new Date().toISOString(),
+	excerpt: {
+		rendered: __( 'The post excerpt.', 'newspack' ),
+	},
+	featured_media: uniqueId(),
+	id: uniqueId(),
+	meta: {
+		newspack_post_subtitle: __( 'Post Subtitle', 'newspack' ),
+	},
+	title: {
+		rendered: __( 'Post Title', 'newspack' ),
+	},
+	newspack_article_classes: 'type-post',
+	newspack_author_info: [
+		{
+			display_name: __( 'Author Name', 'newspack' ),
+			avatar: `<div style="background: #36f;width: 40px;height: 40px;display: block;overflow: hidden;border-radius: 50%;"></div>`,
+			id: 1,
+			author_link: '/',
+		},
+	],
+	newspack_category_info: __( 'Category', 'newspack' ),
+	newspack_featured_image_caption: __( 'Featured image caption', 'newspack' ),
+	newspack_featured_image_src: {
+		large: `${ PREVIEW_IMAGE_BASE }/newspack-1024x683.jpg`,
+		landscape: `${ PREVIEW_IMAGE_BASE }/newspack-800x600.jpg`,
+		portrait: `${ PREVIEW_IMAGE_BASE }/newspack-600x800.jpg`,
+		square: `${ PREVIEW_IMAGE_BASE }/newspack-800x800.jpg`,
+		uncropped: `${ PREVIEW_IMAGE_BASE }/newspack-1024x683.jpg`,
+	},
+	newspack_has_custom_excerpt: false,
+	newspack_post_format: 'standard',
+	newspack_post_sponsors: false,
+} );
+
+const getPreviewPosts = attributes => times( attributes.postsToShow, generatePreviewPost );
+
+export const postsBlockSelector = ( select, { clientId, attributes } ) => {
+	const { getPostTypes } = select( 'core' );
+	const { getEditorBlocks, getBlocks } = select( 'core/editor' );
+	const editorBlocksIds = getEditorBlocksIds( getEditorBlocks() );
+	// The block might be rendered in the block styles preview, not in the editor.
+	const isEditorBlock = editorBlocksIds.indexOf( clientId ) >= 0;
+
+	const { getPosts, getError, isUIDisabled } = select( STORE_NAMESPACE );
+	const props = {
+		isEditorBlock,
+		isUIDisabled: isUIDisabled(),
+		error: getError( { clientId } ),
+		topBlocksClientIdsInOrder: getBlocks().map( block => block.clientId ),
+		availablePostTypes: getPostTypes( { per_page: -1 } )?.filter(
+			( { supports: { newspack_blocks: newspackBlocks } } ) => newspackBlocks
 		),
-	500
-);
+	};
+
+	if ( isEditorBlock ) {
+		props.latestPosts = getPosts( { clientId } );
+	} else {
+		// For block preview, display static content.
+		props.latestPosts = getPreviewPosts( attributes );
+	}
+
+	return props;
+};
+
+export const postsBlockDispatch = ( dispatch, { isEditorBlock } ) => {
+	return {
+		// Only editor blocks can trigger reflows.
+		triggerReflow: isEditorBlock ? dispatch( STORE_NAMESPACE ).reflow : () => {},
+	};
+};

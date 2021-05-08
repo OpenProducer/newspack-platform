@@ -1,0 +1,14 @@
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[83],{
+
+/***/ "./node_modules/codemirror/mode/properties/properties.js":
+/*!***************************************************************!*\
+  !*** ./node_modules/codemirror/mode/properties/properties.js ***!
+  \***************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// CodeMirror, copyright (c) by Marijn Haverbeke and others\n// Distributed under an MIT license: https://codemirror.net/LICENSE\n\n(function(mod) {\n  if (true) // CommonJS\n    mod(__webpack_require__(/*! ../../lib/codemirror */ \"./node_modules/codemirror/lib/codemirror.js\"));\n  else {}\n})(function(CodeMirror) {\n\"use strict\";\n\nCodeMirror.defineMode(\"properties\", function() {\n  return {\n    token: function(stream, state) {\n      var sol = stream.sol() || state.afterSection;\n      var eol = stream.eol();\n\n      state.afterSection = false;\n\n      if (sol) {\n        if (state.nextMultiline) {\n          state.inMultiline = true;\n          state.nextMultiline = false;\n        } else {\n          state.position = \"def\";\n        }\n      }\n\n      if (eol && ! state.nextMultiline) {\n        state.inMultiline = false;\n        state.position = \"def\";\n      }\n\n      if (sol) {\n        while(stream.eatSpace()) {}\n      }\n\n      var ch = stream.next();\n\n      if (sol && (ch === \"#\" || ch === \"!\" || ch === \";\")) {\n        state.position = \"comment\";\n        stream.skipToEnd();\n        return \"comment\";\n      } else if (sol && ch === \"[\") {\n        state.afterSection = true;\n        stream.skipTo(\"]\"); stream.eat(\"]\");\n        return \"header\";\n      } else if (ch === \"=\" || ch === \":\") {\n        state.position = \"quote\";\n        return null;\n      } else if (ch === \"\\\\\" && state.position === \"quote\") {\n        if (stream.eol()) {  // end of line?\n          // Multiline value\n          state.nextMultiline = true;\n        }\n      }\n\n      return state.position;\n    },\n\n    startState: function() {\n      return {\n        position : \"def\",       // Current position, \"def\", \"quote\" or \"comment\"\n        nextMultiline : false,  // Is the next line multiline value\n        inMultiline : false,    // Is the current line a multiline value\n        afterSection : false    // Did we just open a section\n      };\n    }\n\n  };\n});\n\nCodeMirror.defineMIME(\"text/x-properties\", \"properties\");\nCodeMirror.defineMIME(\"text/x-ini\", \"properties\");\n\n});\n\n\n//# sourceURL=webpack:///./node_modules/codemirror/mode/properties/properties.js?");
+
+/***/ })
+
+}]);

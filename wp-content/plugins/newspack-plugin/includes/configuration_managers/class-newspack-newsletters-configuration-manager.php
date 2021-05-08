@@ -58,15 +58,10 @@ class Newspack_Newsletters_Configuration_Manager extends Configuration_Manager {
 	 *
 	 * @return bool Plugin set up state.
 	 */
-	public function is_set_up() {
-		$settings = $this->get_settings();
-		foreach ( $settings as $setting ) {
-			// Assume the plugin has been set up if the MJML API key is present.
-			if ( 'newspack_newsletters_mjml_api_key' === $setting['key'] && ! empty( $setting['value'] ) ) {
-				return true;
-			}
+	public function is_esp_set_up() {
+		if ( $this->is_configured() ) {
+			return \Newspack_Newsletters::is_service_provider_configured();
 		}
-		return false;
 	}
 
 	/**

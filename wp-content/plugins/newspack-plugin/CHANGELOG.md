@@ -1,3 +1,69 @@
+## [1.38.1](https://github.com/Automattic/newspack-plugin/compare/v1.38.0...v1.38.1) (2021-05-07)
+
+
+### Bug Fixes
+
+* trigger release build ([95d0c54](https://github.com/Automattic/newspack-plugin/commit/95d0c54a2f36ec6cd2275e4cfbfc2ab8859ba06f))
+
+# [1.38.0](https://github.com/Automattic/newspack-plugin/compare/v1.37.0...v1.38.0) (2021-05-04)
+
+
+### Bug Fixes
+
+* use guest authors in Slack preview when needed ([#947](https://github.com/Automattic/newspack-plugin/issues/947)) ([e42680e](https://github.com/Automattic/newspack-plugin/commit/e42680e0705f56d78b88c5da7fa20a2750c82442))
+
+
+### Features
+
+* batch amp-analytics events ([481dc97](https://github.com/Automattic/newspack-plugin/commit/481dc9778ca0288b295d4c011f912e604dbe99bb)), closes [#914](https://github.com/Automattic/newspack-plugin/issues/914)
+* integrate Newspack Scheduled Post Checker into main plugin ([#940](https://github.com/Automattic/newspack-plugin/issues/940)) ([c6adc1b](https://github.com/Automattic/newspack-plugin/commit/c6adc1b6fc4904e38b410b71a7c3ee1e2f7a68b8))
+
+# [1.37.0](https://github.com/Automattic/newspack-plugin/compare/v1.36.0...v1.37.0) (2021-04-28)
+
+
+### Bug Fixes
+
+* **google-oauth:** credentials refreshment ([92c4fce](https://github.com/Automattic/newspack-plugin/commit/92c4fce2f02ae3a45e9c55737534f55baaa471f4))
+
+
+### Features
+
+* reorganize segment UI ([#862](https://github.com/Automattic/newspack-plugin/issues/862)) ([bbf2d35](https://github.com/Automattic/newspack-plugin/commit/bbf2d35c2f6f22506e09c8a663cc52013b57132d))
+* **google:** set up OAuth2 authentication ([#935](https://github.com/Automattic/newspack-plugin/issues/935)) ([98ee47b](https://github.com/Automattic/newspack-plugin/commit/98ee47bdee1222b3985bfde9f5f9f20021d088a8))
+
+# [1.36.0](https://github.com/Automattic/newspack-plugin/compare/v1.35.0...v1.36.0) (2021-04-21)
+
+
+### Bug Fixes
+
+* **onboarding:** flow issues ([#931](https://github.com/Automattic/newspack-plugin/issues/931)) ([794a5f0](https://github.com/Automattic/newspack-plugin/commit/794a5f04034b7ce94164d8bc82c088096a746966))
+
+
+### Features
+
+* **engagement:** remove MJML settings ([#934](https://github.com/Automattic/newspack-plugin/issues/934)) ([fbf5f7d](https://github.com/Automattic/newspack-plugin/commit/fbf5f7d34bd8d20422eb88279dc6e0e00ef3a0e5)), closes [Automattic/newspack-newsletters#443](https://github.com/Automattic/newspack-newsletters/issues/443)
+* **onboarding:** homepage patterns ([#932](https://github.com/Automattic/newspack-plugin/issues/932)) ([4c42f54](https://github.com/Automattic/newspack-plugin/commit/4c42f541ad716c7d1a3a6083ae5ce4a711ad0e69))
+
+# [1.35.0](https://github.com/Automattic/newspack-plugin/compare/v1.34.1...v1.35.0) (2021-04-06)
+
+
+### Bug Fixes
+
+* **campaigns-analytics:** fetch next pages of analytics reports ([e95bbe7](https://github.com/Automattic/newspack-plugin/commit/e95bbe74038db3f7b6b5ee81641624e71d2a6367))
+
+
+### Features
+
+* add web stories to supported plugin list ([#927](https://github.com/Automattic/newspack-plugin/issues/927)) ([d7250f5](https://github.com/Automattic/newspack-plugin/commit/d7250f5784a80e85c59dade3dbc7ad9dda01ebd4))
+* **analytics:** make NTG events reporting disabled by default ([19a8682](https://github.com/Automattic/newspack-plugin/commit/19a868212361fddaa4b33b28db550f50fbd1e560))
+
+## [1.34.1](https://github.com/Automattic/newspack-plugin/compare/v1.34.0...v1.34.1) (2021-03-30)
+
+
+### Bug Fixes
+
+* **campaigns-wizard:** analytics reporting ([4ad398c](https://github.com/Automattic/newspack-plugin/commit/4ad398c31d2b117dbf56bd6fa7c14fffc9c0a4c1))
+
 # [1.34.0](https://github.com/Automattic/newspack-plugin/compare/v1.33.2...v1.34.0) (2021-03-24)
 
 

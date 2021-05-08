@@ -133,9 +133,13 @@ class Profile {
 
 		$wpseo_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'wordpress_seo' );
 		foreach ( self::$wpseo_fields as $field ) {
+			$value = $wpseo_manager->get_option( $field['key'], '' );
+			if ( is_wp_error( $value ) ) {
+				$value = '';
+			}
 			self::$profile_fields[] = [
 				'name'    => $field['key'],
-				'value'   => $wpseo_manager->get_option( $field['key'], '' ),
+				'value'   => $value,
 				'updater' => function( $value ) use ( $field ) {
 					$wpseo_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'wordpress_seo' );
 					$wpseo_manager->set_option( $field['key'], $value );
@@ -206,7 +210,7 @@ class Profile {
 	}
 
 	/**
-	 * Check capabilities for using API.
+	 * Update the site profile.
 	 *
 	 * @param WP_REST_Request $request API request object.
 	 * @return object|WP_Error
@@ -217,8 +221,57 @@ class Profile {
 			$updater = $field['updater'];
 			$updater( $updates[ $field['name'] ] );
 		}
+		self::set_profile_fields();
+
+		$profile               = $this->newspack_get_profile();
+		$social_menu_name      = __( 'Social Links', 'newspack' );
+		$social_menu_placement = 'social';
+
+		// Create social menu if there is none and social links are set.
+		if (
+			// No menu assigned to 'social' placement (defined by Newspack Theme).
+			! has_nav_menu( $social_menu_placement ) &&
+			// No menu called "Social Links".
+			! wp_get_nav_menu_object( $social_menu_name )
+		) {
+			$social_menu_items = [];
+			foreach ( self::$wpseo_fields as $social_field ) {
+				if ( ! empty( $profile[ $social_field['key'] ] ) ) {
+					$social_menu_items[] = [
+						'key'   => $social_field['key'],
+						'label' => $social_field['label'],
+						'value' => $profile[ $social_field['key'] ],
+					];
+				}
+			}
+			if ( ! empty( $social_menu_items ) ) {
+				// Create the menu.
+				$social_menu_id = wp_create_nav_menu( $social_menu_name );
+				// Set nav menu location.
+				$locations                           = get_theme_mod( 'nav_menu_locations' );
+				$locations[ $social_menu_placement ] = $social_menu_id;
+				set_theme_mod( 'nav_menu_locations', $locations );
+				// Set the menu items.
+				foreach ( $social_menu_items as $social_item ) {
+					if ( 'twitter_site' === $social_item['key'] ) {
+						// Twitter is the only one stored (by Yoast) as a username, not full URL.
+						$social_item['value'] = 'https://twitter.com/' . $social_item['value'];
+					}
+					wp_update_nav_menu_item(
+						$social_menu_id,
+						0,
+						[
+							'menu-item-title'  => $social_item['label'],
+							'menu-item-url'    => $social_item['value'],
+							'menu-item-status' => 'publish',
+						]
+					);
+				}
+			}
+		}
+
 		$response = [
-			'profile' => $this->newspack_get_profile(),
+			'profile' => $profile,
 		];
 		return rest_ensure_response( $response );
 	}

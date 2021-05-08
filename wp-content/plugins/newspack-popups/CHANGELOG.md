@@ -1,3 +1,74 @@
+# [1.32.0](https://github.com/Automattic/newspack-popups/compare/v1.31.1...v1.32.0) (2021-05-05)
+
+
+### Bug Fixes
+
+* bump query limit up to 100 for eligible prompts ([#536](https://github.com/Automattic/newspack-popups/issues/536)) ([bebf6ec](https://github.com/Automattic/newspack-popups/commit/bebf6ec3a6f1066c124af9313f2abca9eaeebac2))
+* use filter to decide which post types to insert ads into content ([#537](https://github.com/Automattic/newspack-popups/issues/537)) ([dafa550](https://github.com/Automattic/newspack-popups/commit/dafa550b4381e5790863fd4f21ad81ca8777dadd))
+
+
+### Features
+
+* **analytics:** revert event encoding ([#535](https://github.com/Automattic/newspack-popups/issues/535)) ([f54a872](https://github.com/Automattic/newspack-popups/commit/f54a8721247c4e3809ed1983b3c0d0ffbc24dfb0)), closes [#479](https://github.com/Automattic/newspack-popups/issues/479)
+* **api:** debugging parameter ([#539](https://github.com/Automattic/newspack-popups/issues/539)) ([e8fd529](https://github.com/Automattic/newspack-popups/commit/e8fd529b296b850ff0707af4d93dc9dae1511c0b))
+
+## [1.31.1](https://github.com/Automattic/newspack-popups/compare/v1.31.0...v1.31.1) (2021-04-28)
+
+
+### Bug Fixes
+
+* interaction of above-header prompts in non-AMP mode ([0c3a7c5](https://github.com/Automattic/newspack-popups/commit/0c3a7c5ba1411b6f02f7b36e4a5193b03d476d7d))
+* **segments:** filter out non-existing categories ([#529](https://github.com/Automattic/newspack-popups/issues/529)) ([d0160ef](https://github.com/Automattic/newspack-popups/commit/d0160eff6718d763910d27d1a941e1121796299f)), closes [#491](https://github.com/Automattic/newspack-popups/issues/491)
+* deduplicate popups for amp-access ([9aaf006](https://github.com/Automattic/newspack-popups/commit/9aaf0063792b3ac3b71fd9e41522c465db304cd4))
+* empty blocks handling ([#524](https://github.com/Automattic/newspack-popups/issues/524)) ([fba0154](https://github.com/Automattic/newspack-popups/commit/fba0154ed9878aae60da77a7cf2bacc1d4eabd3d))
+* hide WC client ID field even if not on Newspack theme ([4c1ebe6](https://github.com/Automattic/newspack-popups/commit/4c1ebe65af6ff2716c506319e9c01df2e72ed225))
+* prevent overlay prompts animation conflicts ([a8af34b](https://github.com/Automattic/newspack-popups/commit/a8af34b40228ad29945658514556935c8f583db9)), closes [#526](https://github.com/Automattic/newspack-popups/issues/526)
+
+# [1.31.0](https://github.com/Automattic/newspack-popups/compare/v1.30.1...v1.31.0) (2021-04-13)
+
+
+### Bug Fixes
+
+* previewing drafts ([3673e20](https://github.com/Automattic/newspack-popups/commit/3673e20715f25ac57f378fdefb32e33d962fe0fe))
+* single-prompt placement logic ([2690ed3](https://github.com/Automattic/newspack-popups/commit/2690ed34f47b492b95e6ae5745cc87ff333c60ce))
+
+
+### Features
+
+* handle classic content for inline prompt insertion ([#521](https://github.com/Automattic/newspack-popups/issues/521)) ([d361d5c](https://github.com/Automattic/newspack-popups/commit/d361d5c4e078ee9d4e6d4a5882fb476998e2aa48))
+* new option to show border for inline prompts ([#513](https://github.com/Automattic/newspack-popups/issues/513)) ([78647ca](https://github.com/Automattic/newspack-popups/commit/78647ca8b5b65c2a040a8b3f72b398052449e0a8))
+
+## [1.30.1](https://github.com/Automattic/newspack-popups/compare/v1.30.0...v1.30.1) (2021-04-09)
+
+
+### Bug Fixes
+
+* tags criterion for displaying popups ([#515](https://github.com/Automattic/newspack-popups/issues/515)) ([13d2be7](https://github.com/Automattic/newspack-popups/commit/13d2be7e4de7ae2c49a39e7d96c3d9faf7d24505))
+
+# [1.30.0](https://github.com/Automattic/newspack-popups/compare/v1.29.0...v1.30.0) (2021-04-06)
+
+
+### Bug Fixes
+
+* shortcode, amp-access fixes ([#505](https://github.com/Automattic/newspack-popups/issues/505)) ([b17cb94](https://github.com/Automattic/newspack-popups/commit/b17cb94e9b312d473601817c56282e4c20547a46))
+* tag filtering ([#506](https://github.com/Automattic/newspack-popups/issues/506)) ([e88e7c7](https://github.com/Automattic/newspack-popups/commit/e88e7c750c74e05985a6d65729e4c2ab7ae3d8f3))
+* when previewing "everyone" segment, show only prompts with no segments ([#507](https://github.com/Automattic/newspack-popups/issues/507)) ([8c800d8](https://github.com/Automattic/newspack-popups/commit/8c800d8151b1615e0a8e9a1b79845a356633a39c))
+
+
+### Features
+
+* **api:** ignore web crawler traffic ([#509](https://github.com/Automattic/newspack-popups/issues/509)) ([95ada9d](https://github.com/Automattic/newspack-popups/commit/95ada9d205bad1224a914979a35d571e4aa09743))
+* remove preview sessions data from DB daily; save last update date ([f0dea91](https://github.com/Automattic/newspack-popups/commit/f0dea918163b440bb9212f3144471ff35d349f03))
+* retrieve widget popups ids from options ([ba0ad47](https://github.com/Automattic/newspack-popups/commit/ba0ad47261e92895eab746f7c4c55e4eb7d680cd)), closes [#470](https://github.com/Automattic/newspack-popups/issues/470)
+* simplify retrieval ([b3299b2](https://github.com/Automattic/newspack-popups/commit/b3299b2f57f0f5adc7463df55d1496494becd612)), closes [#416](https://github.com/Automattic/newspack-popups/issues/416)
+
+# [1.29.0](https://github.com/Automattic/newspack-popups/compare/v1.28.0...v1.29.0) (2021-03-30)
+
+
+### Features
+
+* use RadioControls for prompt type selection ([#501](https://github.com/Automattic/newspack-popups/issues/501)) ([ebb6776](https://github.com/Automattic/newspack-popups/commit/ebb6776788d0a9cda4bad92349d28fe9cbeefb4f))
+
 # [1.28.0](https://github.com/Automattic/newspack-popups/compare/v1.27.0...v1.28.0) (2021-03-24)
 
 

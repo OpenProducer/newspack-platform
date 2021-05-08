@@ -12,6 +12,7 @@ export const optionsFieldsSelector = select => {
 		dismiss_text,
 		dismiss_text_alignment,
 		display_title,
+		hide_border,
 		overlay_color,
 		overlay_opacity,
 		placement,
@@ -31,6 +32,7 @@ export const optionsFieldsSelector = select => {
 		dismiss_text,
 		dismiss_text_alignment,
 		display_title,
+		hide_border,
 		frequency,
 		overlay_color,
 		overlay_opacity,
@@ -103,4 +105,15 @@ export const updateEditorColors = backgroundColor => {
 			`${ foregroundColor }80`
 		);
 	}
+};
+
+/**
+ * Is the given placement value a custom placement?
+ *
+ * @param {string} placementValue Placement of the prompt.
+ * @return {boolean} Whether or not the prompt has a custom placement.
+ */
+export const isCustomPlacement = placementValue => {
+	const customPlacements = window.newspack_popups_data?.custom_placements || {};
+	return -1 < Object.keys( customPlacements ).indexOf( placementValue );
 };

@@ -18,6 +18,7 @@ class Patches {
 	 */
 	public static function init() {
 		add_filter( 'redirect_canonical', [ __CLASS__, 'patch_redirect_canonical' ], 10, 2 );
+		add_filter( 'wpseo_enhanced_slack_data', [ __CLASS__, 'use_cap_for_slack_preview' ] );
 	}
 
 	/**
@@ -67,6 +68,20 @@ class Patches {
 
 		// Otherwise, do redirect.
 		return $redirect_url;
+	}
+
+	/**
+	 * Use the Co-Author in Slack preview metadata instead of the regular post author if needed.
+	 *
+	 * @param array $slack_data Array of data which will be output in twitter:data tags.
+	 * @return array Modified $slack_data
+	 */
+	public static function use_cap_for_slack_preview( $slack_data ) {
+		if ( function_exists( 'coauthors' ) && is_single() && isset( $slack_data[ __( 'Written by', 'wordpress-seo' ) ] ) ) {
+			$slack_data[ __( 'Written by', 'wordpress-seo' ) ] = coauthors( null, null, null, null, false );
+		}
+
+		return $slack_data;
 	}
 }
 Patches::init();

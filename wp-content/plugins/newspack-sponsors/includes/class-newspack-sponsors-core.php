@@ -88,7 +88,7 @@ final class Newspack_Sponsors_Core {
 			'public'       => false,
 			'show_ui'      => true,
 			'show_in_rest' => true,
-			'supports'     => [ 'editor', 'title', 'custom-fields', 'thumbnail' ],
+			'supports'     => [ 'editor', 'title', 'custom-fields', 'thumbnail', 'newspack_blocks' ],
 			'taxonomies'   => [ 'category', 'post_tag' ], // Regular post categories and tags.
 			'menu_icon'    => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0xMiAyQzYuNDggMiAyIDYuNDggMiAxMnM0LjQ4IDEwIDEwIDEwIDEwLTQuNDggMTAtMTBTMTcuNTIgMiAxMiAyem0xLjQxIDE2LjA5VjIwaC0yLjY3di0xLjkzYy0xLjcxLS4zNi0zLjE2LTEuNDYtMy4yNy0zLjRoMS45NmMuMSAxLjA1LjgyIDEuODcgMi42NSAxLjg3IDEuOTYgMCAyLjQtLjk4IDIuNC0xLjU5IDAtLjgzLS40NC0xLjYxLTIuNjctMi4xNC0yLjQ4LS42LTQuMTgtMS42Mi00LjE4LTMuNjcgMC0xLjcyIDEuMzktMi44NCAzLjExLTMuMjFWNGgyLjY3djEuOTVjMS44Ni40NSAyLjc5IDEuODYgMi44NSAzLjM5SDE0LjNjLS4wNS0xLjExLS42NC0xLjg3LTIuMjItMS44Ny0xLjUgMC0yLjQuNjgtMi40IDEuNjQgMCAuODQuNjUgMS4zOSAyLjY3IDEuOTFzNC4xOCAxLjM5IDQuMTggMy45MWMtLjAxIDEuODMtMS4zOCAyLjgzLTMuMTIgMy4xNnoiIGZpbGw9IiNhMGE1YWEiLz48L3N2Zz4K',
 		];

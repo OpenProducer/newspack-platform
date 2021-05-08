@@ -1,3 +1,55 @@
+# [1.25.0](https://github.com/Automattic/newspack-newsletters/compare/v1.24.1...v1.25.0) (2021-05-04)
+
+
+### Features
+
+* custom CSS ([#454](https://github.com/Automattic/newspack-newsletters/issues/454)) ([748247c](https://github.com/Automattic/newspack-newsletters/commit/748247c14a1c3ca22bdf5d041162f00ddbda9f0a))
+
+## [1.24.1](https://github.com/Automattic/newspack-newsletters/compare/v1.24.0...v1.24.1) (2021-04-28)
+
+
+### Bug Fixes
+
+* handle reusable blocks ([56c6d87](https://github.com/Automattic/newspack-newsletters/commit/56c6d87ab9c0c282d6628d0b35f99a5259e446dc)), closes [#344](https://github.com/Automattic/newspack-newsletters/issues/344)
+
+# [1.24.0](https://github.com/Automattic/newspack-newsletters/compare/v1.23.1...v1.24.0) (2021-04-20)
+
+
+### Bug Fixes
+
+* minor bugfixes ([#447](https://github.com/Automattic/newspack-newsletters/issues/447)) ([0b1e976](https://github.com/Automattic/newspack-newsletters/commit/0b1e9767f37918b4a05ab0e2d62a86bec0e18f16))
+
+
+### Features
+
+* convert MJML using the browser ([#443](https://github.com/Automattic/newspack-newsletters/issues/443)) ([9171e49](https://github.com/Automattic/newspack-newsletters/commit/9171e498edcddd946d716e96dba93bcf259590a5)), closes [#400](https://github.com/Automattic/newspack-newsletters/issues/400)
+
+## [1.23.1](https://github.com/Automattic/newspack-newsletters/compare/v1.23.0...v1.23.1) (2021-04-13)
+
+
+### Bug Fixes
+
+* avoid potentially undefined nested property ([#441](https://github.com/Automattic/newspack-newsletters/issues/441)) ([b6d12c9](https://github.com/Automattic/newspack-newsletters/commit/b6d12c9c28cf34d1d429551a9dfd99c22fd7c612))
+
+# [1.23.0](https://github.com/Automattic/newspack-newsletters/compare/v1.22.0...v1.23.0) (2021-04-06)
+
+
+### Features
+
+* **ci:** releasing on WPORG ([b84dbc5](https://github.com/Automattic/newspack-newsletters/commit/b84dbc5a9fe4c9f50d9d42c716de2f1d087c84f2))
+
+# [1.22.0](https://github.com/Automattic/newspack-newsletters/compare/v1.21.0...v1.22.0) (2021-03-30)
+
+
+### Bug Fixes
+
+* respect excerpt length setting while not messing up site excerpts ([#428](https://github.com/Automattic/newspack-newsletters/issues/428)) ([2c8d674](https://github.com/Automattic/newspack-newsletters/commit/2c8d6745b8be790deb5b5626a2fd769d1d17f676))
+
+
+### Features
+
+* add support for excerpts for newsletter CPTs ([#433](https://github.com/Automattic/newspack-newsletters/issues/433)) ([09f1800](https://github.com/Automattic/newspack-newsletters/commit/09f1800442e03aab2900dbfa74092a84a19e2f48))
+
 # [1.21.0](https://github.com/Automattic/newspack-newsletters/compare/v1.20.0...v1.21.0) (2021-03-23)
 
 

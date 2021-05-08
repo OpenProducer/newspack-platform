@@ -7,11 +7,6 @@
 
 namespace Newspack;
 
-use Google\Site_Kit\Modules\Analytics as SiteKitAnalytics;
-use Google\Site_Kit\Context;
-use Google\Site_Kit\Core\Storage\Options;
-use Google\Site_Kit\Core\Storage\User_Options;
-use Google\Site_Kit\Core\Authentication\Authentication;
 use Google\Site_Kit_Dependencies\Google_Service_Analytics;
 use Google\Site_Kit_Dependencies\Google_Service_Analytics_CustomDimension;
 
@@ -341,44 +336,38 @@ class Analytics_Wizard extends Wizard {
 	 * @return object authenticated Google_Service_Analytics service and Site Kit settings
 	 */
 	public static function get_ga_utils() {
-		if ( defined( 'GOOGLESITEKIT_PLUGIN_MAIN_FILE' ) ) {
-			$context            = new Context( GOOGLESITEKIT_PLUGIN_MAIN_FILE );
-			$site_kit_analytics = new SiteKitAnalytics( $context );
+		$analytics = \Newspack\Google_Services_Connection::get_site_kit_analytics_module();
 
-			if ( $site_kit_analytics->is_connected() ) {
-				$ga_options     = new Options( $context );
-				$user_options   = new User_Options( $context );
-				$authentication = new Authentication( $context, $ga_options, $user_options );
+		if ( $analytics && $analytics->is_connected() ) {
+			$authentication = \Newspack\Google_Services_Connection::get_site_kit_authentication();
 
-				if ( false === $authentication->is_authenticated() ) {
-					return new WP_Error( 'newspack_analytics_sitekit_authentication', __( 'Please authenticate with the Site Kit plugin.', 'newspack' ) );
-				}
-
-				// A user might have authenticated with Site Kit before this version of the plugin,
-				// which updated authorization scopes, was deployed.
-				$unsatisfied_scopes = $authentication->get_oauth_client()->get_unsatisfied_scopes();
-				if ( 0 !== count( $unsatisfied_scopes ) ) {
-					return new WP_Error(
-						'newspack_analytics_sitekit_unsatisfied_scopes',
-						__( 'Please re-authorize', 'newspack' ) .
-						' <a href="' . get_admin_url() . 'admin.php?page=googlesitekit-dashboard">' .
-						__( 'Site Kit plugin', 'newspack' ) .
-						'</a> ' .
-						__( 'to allow updating Google Analytics settings.', 'newspack' )
-					);
-				}
-
-				$client = $authentication->get_oauth_client()->get_client();
-
-				return [
-					'analytics_service' => new Google_Service_Analytics( $client ),
-					'settings'          => $site_kit_analytics->get_settings()->get(),
-				];
-			} else {
-				return new WP_Error( 'newspack_analytics_sitekit_disconnected', __( 'Please connect Analytics in the Site Kit plugin.', 'newspack' ) );
+			if ( false === $authentication->is_authenticated() ) {
+				return new WP_Error( 'newspack_analytics_sitekit_authentication', __( 'Please authenticate with the Site Kit plugin.', 'newspack' ) );
 			}
+
+			// A user might have authenticated with Site Kit before this version of the plugin,
+			// which updated authorization scopes, was deployed.
+			$unsatisfied_scopes = $authentication->get_oauth_client()->get_unsatisfied_scopes();
+			if ( 0 !== count( $unsatisfied_scopes ) ) {
+				return new WP_Error(
+					'newspack_analytics_sitekit_unsatisfied_scopes',
+					__( 'Please re-authorize', 'newspack' ) .
+					' <a href="' . get_admin_url() . 'admin.php?page=googlesitekit-dashboard">' .
+					__( 'Site Kit plugin', 'newspack' ) .
+					'</a> ' .
+					__( 'to allow updating Google Analytics settings.', 'newspack' )
+				);
+			}
+
+			$client = $authentication->get_oauth_client()->get_client();
+
+			return [
+				'analytics_service' => new Google_Service_Analytics( $client ),
+				'settings'          => $analytics->get_settings()->get(),
+			];
+		} else {
+			return new WP_Error( 'newspack_analytics_sitekit_disconnected', __( 'Please connect Analytics in the Site Kit plugin.', 'newspack' ) );
 		}
-		return new WP_Error( 'newspack_analytics_sitekit_undefined', __( 'Please install the Site Kit plugin.', 'newspack' ) );
 	}
 
 	/**
@@ -537,7 +526,7 @@ class Analytics_Wizard extends Wizard {
 	 * @return bool Status of NTG events.
 	 */
 	public static function ntg_events_enabled() {
-		return 'enabled' === get_option( self::$ntg_events_option_name, 'enabled' );
+		return 'enabled' === get_option( self::$ntg_events_option_name, '' );
 	}
 
 	/**

@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.33.0
+Version: 1.36.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -4371,8 +4371,8 @@ div.sharedaddy .sd-social h3.sd-title,
   object-position: left center;
 }
 
-.footer-logo-xsmall .footer-branding .custom-logo-link,
-.footer-logo-xsmall .footer-branding .footer-logo-link {
+.footer-logo-small .footer-branding .custom-logo-link,
+.footer-logo-small .footer-branding .footer-logo-link {
   max-height: 48px;
   max-width: 160px;
 }
@@ -5597,8 +5597,83 @@ hr.is-style-dots::before {
   width: 100%;
 }
 
+.wp-block-jetpack-mailchimp p {
+  margin: 0;
+}
+
 .wp-block-jetpack-mailchimp p[id^='wp-block-jetpack-mailchimp'] {
   font-size: 0.8em;
+}
+
+.wp-block-jetpack-mailchimp .wp-block-jetpack-button.wp-block-button {
+  margin: 0.5rem 0;
+}
+
+.wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
+  font-size: 0.8em;
+  margin-top: 0.5rem;
+}
+
+.wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.is-visible {
+  margin-bottom: 0;
+}
+
+.wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.wp-block-jetpack-mailchimp__is-amp {
+  margin: 0;
+}
+
+.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .wp-block-button__link,
+.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .wp-block-button__link {
+  width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+  .newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .wp-block-button__link,
+  .newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .wp-block-button__link {
+    width: auto;
+  }
+}
+
+@media only screen and (min-width: 782px) {
+  .newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp form,
+  .newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp form {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+  }
+  .newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp form > *,
+  .newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp form > * {
+    flex: 0 0 100%;
+  }
+  .newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp form > p:first-child,
+  .newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp form > p:first-child {
+    flex: 1 1 auto;
+    margin-bottom: 0.5rem;
+    margin-left: 0.5rem;
+  }
+  .newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp form > .wp-block-jetpack-button.wp-block-button,
+  .newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp form > .wp-block-jetpack-button.wp-block-button {
+    flex: 0 0 auto;
+    margin-right: auto;
+    margin-top: 0;
+  }
+}
+
+@media only screen and (min-width: 782px) {
+  .newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp form {
+    margin-right: auto;
+    margin-left: auto;
+    max-width: 65%;
+  }
+}
+
+.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp form p,
+.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp form .wp-block-jetpack-button {
+  text-align: center;
+}
+
+.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
+  text-align: center;
 }
 
 .wp-block-organic-profile-block {
@@ -6287,11 +6362,13 @@ figcaption,
   display: none;
   position: fixed;
   width: 100%;
-  z-index: 1;
+  z-index: 11;
 }
 
-.newspack_global_ad.sticky.active {
-  display: flex;
+@media only screen and (max-width: 599px) {
+  .newspack_global_ad.sticky.active {
+    display: flex;
+  }
 }
 
 .newspack_global_ad.sticky button {

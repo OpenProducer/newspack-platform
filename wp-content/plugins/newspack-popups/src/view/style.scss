@@ -209,6 +209,11 @@ $font__system: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ub
 	&:focus {
 		outline: none;
 	}
+
+	&.newspack-lightbox-no-border {
+		border: none;
+		padding: 0;
+	}
 }
 
 .newspack-inactive-popup-status {
@@ -283,4 +288,8 @@ $font__system: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ub
 /* stylelint-disable-next-line no-duplicate-selectors */
 .entry-content {
 	position: relative !important;
+}
+
+.hide {
+	display: none;
 }

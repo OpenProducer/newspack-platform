@@ -12,17 +12,22 @@ call_user_func(
 		$authors    = Newspack_Blocks::prepare_authors();
 		$classes    = array();
 		$styles     = '';
+		$post_id    = get_the_ID();
 
 		// Get sponsors for this post.
-		$sponsors = Newspack_Blocks::get_all_sponsors( get_the_id() );
+		$sponsors = Newspack_Blocks::get_all_sponsors( $post_id );
 
 		// Add classes based on the post's assigned categories and tags.
-		$classes[] = Newspack_Blocks::get_term_classes( get_the_ID() );
+		$classes[] = Newspack_Blocks::get_term_classes( $post_id );
 
 		// Add class if post has a featured image.
 		if ( has_post_thumbnail() ) {
 			$classes[] = 'post-has-image';
 		}
+
+		// If the post is a sponsor, it won't have a working permalink, but it will have an external URL.
+		$external_url = get_post_meta( $post_id, 'newspack_sponsor_url', true );
+		$link         = ! empty( $external_url ) ? $external_url : get_permalink();
 
 		if ( 'behind' === $attributes['mediaPosition'] && $attributes['showImage'] && has_post_thumbnail() ) {
 			$styles = 'min-height: ' . $attributes['minHeight'] . 'vh; padding-top: ' . ( $attributes['minHeight'] / 5 ) . 'vh;';
@@ -39,7 +44,7 @@ call_user_func(
 		$category = false;
 		// Use Yoast primary category if set.
 		if ( class_exists( 'WPSEO_Primary_Term' ) ) {
-			$primary_term = new WPSEO_Primary_Term( 'category', get_the_ID() );
+			$primary_term = new WPSEO_Primary_Term( 'category', $post_id );
 			$category_id  = $primary_term->get_primary_term();
 			if ( $category_id ) {
 				$category = get_term( $category_id );
@@ -61,7 +66,7 @@ call_user_func(
 		>
 		<?php if ( has_post_thumbnail() && $attributes['showImage'] && $attributes['imageShape'] ) : ?>
 			<figure class="post-thumbnail">
-				<a href="<?php the_permalink(); ?>" rel="bookmark">
+				<a href="<?php echo esc_url( $link ); ?>" rel="bookmark">
 					<?php the_post_thumbnail( $image_size, $thumbnail_args ); ?>
 				</a>
 
@@ -92,14 +97,14 @@ call_user_func(
 				if ( has_post_format( 'aside' ) ) :
 					the_title( '<h2 class="entry-title">', '</h2>' );
 				else :
-					the_title( '<h2 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h2>' );
+					the_title( '<h2 class="entry-title"><a href="' . esc_url( $link ) . '" rel="bookmark">', '</a></h2>' );
 				endif;
 			else :
 				// Don't link the title if using the post format aside.
 				if ( has_post_format( 'aside' ) ) :
 					the_title( '<h3 class="entry-title">', '</h3>' );
 				else :
-					the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' );
+					the_title( '<h3 class="entry-title"><a href="' . esc_url( $link ) . '" rel="bookmark">', '</a></h3>' );
 				endif;
 			endif;
 			?>
@@ -107,7 +112,7 @@ call_user_func(
 			if ( $attributes['showSubtitle'] ) :
 				?>
 				<div class="newspack-post-subtitle newspack-post-subtitle--in-homepage-block">
-					<?php echo esc_html( get_post_meta( get_the_ID(), 'newspack_post_subtitle', true ) ); ?>
+					<?php echo esc_html( get_post_meta( $post_id, 'newspack_post_subtitle', true ) ); ?>
 				</div>
 			<?php endif; ?>
 			<?php
@@ -120,7 +125,7 @@ call_user_func(
 			endif;
 			if ( ! has_post_format( 'aside' ) && ( $attributes['showReadMore'] ) ) :
 				?>
-				<a class="more-link" href="<?php echo esc_url( get_permalink() ); ?>" rel="bookmark">
+				<a class="more-link" href="<?php echo esc_url( $link ); ?>" rel="bookmark">
 					<?php echo esc_html( $attributes['readMoreLabel'] ); ?>
 				</a>
 				<?php

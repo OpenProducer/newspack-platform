@@ -14,18 +14,16 @@
  */
 function newspack_blocks_render_block_carousel( $attributes ) {
 	static $newspack_blocks_carousel_id = 0;
+	global $newspack_blocks_post_id;
 
 	// This will let the FSE plugin know we need CSS/JS now.
 	do_action( 'newspack_blocks_render_post_carousel' );
 
 	$newspack_blocks_carousel_id++;
-	$autoplay      = isset( $attributes['autoplay'] ) ? $attributes['autoplay'] : false;
-	$delay         = isset( $attributes['delay'] ) ? absint( $attributes['delay'] ) : 3;
-	$posts_to_show = intval( $attributes['postsToShow'] );
-	$authors       = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
-	$categories    = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
-	$tags          = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
-	$is_amp        = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+	$autoplay = isset( $attributes['autoplay'] ) ? $attributes['autoplay'] : false;
+	$delay    = isset( $attributes['delay'] ) ? absint( $attributes['delay'] ) : 3;
+	$authors  = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
+	$is_amp   = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
 
 	$other = array();
 	if ( $autoplay ) {
@@ -33,27 +31,10 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	}
 	$classes = Newspack_Blocks::block_classes( 'carousel', $attributes, $other );
 
-	$args = array(
-		'posts_per_page'      => $posts_to_show,
-		'post_status'         => 'publish',
-		'suppress_filters'    => false,
-		'ignore_sticky_posts' => true,
-		'meta_key'            => '_thumbnail_id', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
-		'meta_value_num'      => 0,
-		'meta_compare'        => '>',
-	);
-
-	if ( $authors ) {
-		$args['author__in'] = $authors;
+	$article_query = new WP_Query( Newspack_Blocks::build_articles_query( $attributes, apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/carousel' ) ) );
+	if ( false === $article_query->have_posts() ) {
+		return;
 	}
-	if ( $categories ) {
-		$args['category__in'] = $categories;
-	}
-	if ( $tags ) {
-		$args['tag__in'] = $tags;
-	}
-
-	$article_query   = new WP_Query( $args );
 	$counter         = 0;
 	$article_classes = [
 		'post-has-image',
@@ -65,153 +46,164 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	if ( $article_query->have_posts() ) :
 		while ( $article_query->have_posts() ) :
 			$article_query->the_post();
-			$authors = Newspack_Blocks::prepare_authors();
-			if ( ! has_post_thumbnail() ) {
-				continue;
-			}
+			$post_id                             = get_the_ID();
+			$authors                             = Newspack_Blocks::prepare_authors();
+			$newspack_blocks_post_id[ $post_id ] = true;
 
 			// Get sponsors for this post.
-			$sponsors = Newspack_Blocks::get_all_sponsors( get_the_id() );
+			$sponsors = Newspack_Blocks::get_all_sponsors( $post_id );
 
 			$counter++;
+			$has_featured_image = has_post_thumbnail();
+			$post_type          = get_post_type();
+			$external_url       = get_post_meta( $post_id, 'newspack_sponsor_url', true );
+			$link               = ! empty( $external_url ) ? $external_url : get_permalink();
 			?>
 
-			<article class="<?php echo esc_attr( implode( ' ', $article_classes ) ); ?>">
+			<article data-post-id="<?php echo esc_attr( $post_id ); ?>" class="<?php echo esc_attr( implode( ' ', $article_classes ) . ' ' . $post_type ); ?>">
 				<figure class="post-thumbnail">
-					<a href="<?php echo esc_url( get_permalink() ); ?>" rel="bookmark">
-						<?php
-							the_post_thumbnail(
-								'large',
-								array(
-									'object-fit' => 'cover',
-									'layout'     => 'fill',
-								)
-							);
-						?>
+					<a href="<?php echo esc_url( $link ); ?>" rel="bookmark">
+						<?php if ( $has_featured_image ) : ?>
+							<?php
+								the_post_thumbnail(
+									'large',
+									array(
+										'object-fit' => $attributes['imageFit'],
+										'layout'     => 'fill',
+									)
+								);
+							?>
+						<?php else : ?>
+							<div class="wp-block-newspack-blocks-carousel__placeholder"></div>
+						<?php endif; ?>
 					</a>
 				</figure>
-				<div class="entry-wrapper">
 
-				<?php if ( ! empty( $sponsors ) ) : ?>
-					<span class="cat-links sponsor-label">
-						<span class="flag">
-							<?php echo esc_html( Newspack_Blocks::get_sponsor_label( $sponsors ) ); ?>
+				<?php if ( ! empty( $sponsors ) || $attributes['showCategory'] || $attributes['showTitle'] || $attributes['showAuthor'] || $attributes['showDate'] ) : ?>
+					<div class="entry-wrapper">
+						<?php if ( ! empty( $sponsors ) ) : ?>
+						<span class="cat-links sponsor-label">
+							<span class="flag">
+								<?php echo esc_html( Newspack_Blocks::get_sponsor_label( $sponsors ) ); ?>
+							</span>
 						</span>
-					</span>
-					<?php
-					else :
-						$category = false;
-
-						// Use Yoast primary category if set.
-						if ( class_exists( 'WPSEO_Primary_Term' ) ) {
-							$primary_term = new WPSEO_Primary_Term( 'category', get_the_ID() );
-							$category_id  = $primary_term->get_primary_term();
-							if ( $category_id ) {
-								$category = get_term( $category_id );
-							}
-						}
-
-						if ( ! $category ) {
-							$categories_list = get_the_category();
-							if ( ! empty( $categories_list ) ) {
-								$category = $categories_list[0];
-							}
-						}
-
-						if ( $attributes['showCategory'] && $category ) :
-							?>
-							<div class="cat-links">
-								<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>">
-									<?php echo esc_html( $category->name ); ?>
-								</a>
-							</div>
-							<?php
-						endif;
-					endif;
-					?>
-
-					<?php
-						the_title( '<h3 class="entry-title"><a href="' . esc_url( get_permalink() ) . '" rel="bookmark">', '</a></h3>' );
-					?>
-
-					<div class="entry-meta">
-						<?php
-						if ( ! empty( $sponsors ) ) :
-							$logos = Newspack_Blocks::get_sponsor_logos( $sponsors );
-							if ( ! empty( $logos ) ) :
-								?>
-							<span class="sponsor-logos">
-								<?php
-								foreach ( $logos as $logo ) {
-									if ( '' !== $logo['url'] ) {
-										echo '<a href="' . esc_url( $logo['url'] ) . '" target="_blank">';
-									}
-									echo '<img src="' . esc_url( $logo['src'] ) . '" width="' . esc_attr( $logo['width'] ) . '" height="' . esc_attr( $logo['height'] ) . '">';
-									if ( '' !== $logo['url'] ) {
-										echo '</a>';
-									}
-								}
-								?>
-							</span>
-							<?php endif; ?>
-
-							<span class="byline sponsor-byline">
-								<?php
-								$bylines = Newspack_Blocks::get_sponsor_byline( $sponsors );
-								echo esc_html( $bylines[0]['byline'] ) . ' ';
-								foreach ( $bylines as $byline ) {
-									echo '<span class="author">';
-									if ( '' !== $byline['url'] ) {
-										echo '<a target="_blank" href="' . esc_url( $byline['url'] ) . '">';
-									}
-									echo esc_html( $byline['name'] );
-									if ( '' !== $byline['url'] ) {
-										'</a>';
-									}
-									echo '</span>' . esc_html( $byline['sep'] );
-								}
-								?>
-							</span>
 							<?php
 						else :
-							if ( $attributes['showAuthor'] ) :
-								if ( $attributes['showAvatar'] ) :
-									echo wp_kses(
-										newspack_blocks_format_avatars( $authors ),
-										array(
-											'img'      => array(
-												'class'  => true,
-												'src'    => true,
-												'alt'    => true,
-												'width'  => true,
-												'height' => true,
-												'data-*' => true,
-												'srcset' => true,
-											),
-											'noscript' => array(),
-											'a'        => array(
-												'href' => true,
-											),
-										)
-									);
-								endif;
+							$category = false;
+
+							// Use Yoast primary category if set.
+							if ( class_exists( 'WPSEO_Primary_Term' ) ) {
+								$primary_term = new WPSEO_Primary_Term( 'category', $post_id );
+								$category_id  = $primary_term->get_primary_term();
+								if ( $category_id ) {
+									$category = get_term( $category_id );
+								}
+							}
+
+							if ( ! $category ) {
+								$categories_list = get_the_category();
+								if ( ! empty( $categories_list ) ) {
+									$category = $categories_list[0];
+								}
+							}
+
+							if ( $attributes['showCategory'] && $category ) :
 								?>
-								<span class="byline">
-									<?php echo wp_kses_post( newspack_blocks_format_byline( $authors ) ); ?>
-								</span><!-- .author-name -->
+								<div class="cat-links">
+									<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>">
+										<?php echo esc_html( $category->name ); ?>
+									</a>
+								</div>
 								<?php
 							endif;
 						endif;
-						if ( $attributes['showDate'] ) :
-							printf(
-								'<time class="entry-date published" datetime="%1$s">%2$s</time>',
-								esc_attr( get_the_date( DATE_W3C ) ),
-								esc_html( get_the_date() )
-							);
-						endif;
 						?>
-					</div><!-- .entry-meta -->
-				</div><!-- .entry-wrapper -->
+
+						<?php
+						if ( $attributes['showTitle'] ) {
+							the_title( '<h3 class="entry-title"><a href="' . esc_url( $link ) . '" rel="bookmark">', '</a></h3>' );
+						}
+						?>
+
+						<div class="entry-meta">
+							<?php
+							if ( ! empty( $sponsors ) ) :
+								$logos = Newspack_Blocks::get_sponsor_logos( $sponsors );
+								if ( ! empty( $logos ) ) :
+									?>
+								<span class="sponsor-logos">
+									<?php
+									foreach ( $logos as $logo ) {
+										if ( '' !== $logo['url'] ) {
+											echo '<a href="' . esc_url( $logo['url'] ) . '" target="_blank">';
+										}
+										echo '<img src="' . esc_url( $logo['src'] ) . '" width="' . esc_attr( $logo['width'] ) . '" height="' . esc_attr( $logo['height'] ) . '">';
+										if ( '' !== $logo['url'] ) {
+											echo '</a>';
+										}
+									}
+									?>
+								</span>
+								<?php endif; ?>
+
+								<span class="byline sponsor-byline">
+									<?php
+									$bylines = Newspack_Blocks::get_sponsor_byline( $sponsors );
+									echo esc_html( $bylines[0]['byline'] ) . ' ';
+									foreach ( $bylines as $byline ) {
+										echo '<span class="author">';
+										if ( '' !== $byline['url'] ) {
+											echo '<a target="_blank" href="' . esc_url( $byline['url'] ) . '">';
+										}
+										echo esc_html( $byline['name'] );
+										if ( '' !== $byline['url'] ) {
+											'</a>';
+										}
+										echo '</span>' . esc_html( $byline['sep'] );
+									}
+									?>
+								</span>
+								<?php
+							else :
+								if ( $attributes['showAuthor'] ) :
+									if ( $attributes['showAvatar'] ) :
+										echo wp_kses(
+											newspack_blocks_format_avatars( $authors ),
+											array(
+												'img'      => array(
+													'class' => true,
+													'src' => true,
+													'alt' => true,
+													'width' => true,
+													'height' => true,
+													'data-*' => true,
+													'srcset' => true,
+												),
+												'noscript' => array(),
+												'a'        => array(
+													'href' => true,
+												),
+											)
+										);
+									endif;
+									?>
+									<span class="byline">
+										<?php echo wp_kses_post( newspack_blocks_format_byline( $authors ) ); ?>
+									</span><!-- .author-name -->
+									<?php
+								endif;
+							endif;
+							if ( $attributes['showDate'] ) :
+								printf(
+									'<time class="entry-date published" datetime="%1$s">%2$s</time>',
+									esc_attr( get_the_date( DATE_W3C ) ),
+									esc_html( get_the_date() )
+								);
+							endif;
+							?>
+						</div><!-- .entry-meta -->
+					</div><!-- .entry-wrapper -->
+				<?php endif; ?>
 			</article>
 			<?php
 		endwhile;
@@ -252,7 +244,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			'<div class="swiper-pagination-bullets amp-pagination">%s</div>',
 			implode( '', $buttons )
 		);
-		$navigation  = sprintf(
+		$navigation  = 1 === $counter ? '' : sprintf(
 			'<button class="swiper-button swiper-button-prev" aria-label="%s"></button><button class="swiper-button swiper-button-next" aria-label="%s"></button>',
 			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
 			esc_attr__( 'Next Slide', 'newspack-blocks' )
@@ -264,13 +256,18 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 		);
 		$autoplay_ui = $autoplay ? newspack_blocks_carousel_block_autoplay_ui( $newspack_blocks_carousel_id ) : '';
 	}
-	$data_attributes = [];
+	$data_attributes = [
+		'data-current-post-id=' . $post_id,
+	];
 
 	if ( $autoplay && ! $is_amp ) {
 		$data_attributes[] = 'data-autoplay=1';
 		$data_attributes[] = sprintf( 'data-autoplay_delay=%s', esc_attr( $delay ) );
 	}
 	Newspack_Blocks::enqueue_view_assets( 'carousel' );
+	if ( 1 === $counter ) {
+		$selector = '';
+	}
 	return sprintf(
 		'<div class="%1$s" id="wp-block-newspack-carousel__%2$d" %3$s>%4$s%5$s%6$s</div>',
 		esc_attr( $classes ),
@@ -387,6 +384,14 @@ function newspack_blocks_register_carousel() {
 					'showDate'     => array(
 						'type'    => 'boolean',
 						'default' => true,
+					),
+					'showTitle'    => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
+					'imageFit'     => array(
+						'type'    => 'string',
+						'default' => 'cover',
 					),
 				),
 				'render_callback' => 'newspack_blocks_render_block_carousel',

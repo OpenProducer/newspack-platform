@@ -1,5 +1,6 @@
 @import '../../shared/sass/variables';
 @import '../../shared/sass/mixins';
+@import '../../shared/sass/colors';
 
 .wp-block-newspack-blocks-carousel {
 	position: relative;
@@ -86,6 +87,10 @@
 			height: 100%;
 			width: 100%;
 		}
+	}
+	&__placeholder {
+		height: 420px;
+		background: $color__background-screen;
 	}
 	p {
 		white-space: normal;
@@ -199,6 +204,10 @@
 
 		.post-thumbnail img {
 			object-fit: cover;
+
+			&.image-fit-contain {
+				object-fit: contain;
+			}
 		}
 	}
 

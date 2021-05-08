@@ -45,6 +45,9 @@ class Lightweight_API {
 	 * @codeCoverageIgnore
 	 */
 	public function __construct() {
+		if ( $this->is_a_web_crawler() ) {
+			$this->error( 'invalid_referer' );
+		}
 		if ( ! $this->verify_referer() ) {
 			$this->error( 'invalid_referer' );
 		}
@@ -58,7 +61,35 @@ class Lightweight_API {
 			'start_time'             => microtime( true ),
 			'end_time'               => null,
 			'duration'               => null,
+			'suppression'            => [],
 		];
+	}
+
+	/**
+	 * Is the request coming from a common web crawler?
+	 */
+	public function is_a_web_crawler() {
+		if ( ! isset( $_SERVER['HTTP_USER_AGENT'] ) ) { // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+			return false;
+		}
+		$user_agent = $_SERVER['HTTP_USER_AGENT']; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized, WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___SERVER__HTTP_USER_AGENT__
+		// https://www.keycdn.com/blog/web-crawlers.
+		$common_web_crawlers_user_agents = [
+			'Googlebot',
+			'Bingbot',
+			'Slurp',
+			'DuckDuckBot',
+			'Baiduspider',
+			'YandexBot',
+			'facebot',
+			'ia_archiver',
+		];
+		foreach ( $common_web_crawlers_user_agents as $crawler_agent ) {
+			if ( stristr( $user_agent, $crawler_agent ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**
@@ -103,7 +134,7 @@ class Lightweight_API {
 		}
 		$this->debug['end_time'] = microtime( true );
 		$this->debug['duration'] = $this->debug['end_time'] - $this->debug['start_time'];
-		if ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ) {
+		if ( isset( $_REQUEST['debug'] ) || ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$this->response['debug'] = $this->debug;
 		}
 		header( 'Access-Control-Allow-Origin: https://' . parse_url( $_SERVER['HTTP_REFERER'] )['host'], false ); // phpcs:ignore
@@ -120,6 +151,11 @@ class Lightweight_API {
 	 * @param string $code The error code.
 	 */
 	public function error( $code ) {
+		// Exiting in test env would report the test as passed.
+		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
+			return;
+		}
+
 		http_response_code( 400 );
 		print json_encode( [ 'error' => $code ] ); // phpcs:ignore
 		exit;
@@ -166,7 +202,7 @@ class Lightweight_API {
 		$name             = '_transient_' . $name;
 		$serialized_value = maybe_serialize( $value );
 		wp_cache_set( $name, $serialized_value, 'newspack-popups' );
-		$result           = $wpdb->query( $wpdb->prepare( "INSERT INTO `$table_name` (`option_name`, `option_value`) VALUES (%s, %s) ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`)", $name, $serialized_value ) ); // phpcs:ignore
+		$result           = $wpdb->query( $wpdb->prepare( "INSERT INTO `$table_name` (`option_name`, `option_value`, `date`) VALUES (%s, %s, current_timestamp()) ON DUPLICATE KEY UPDATE `option_name` = VALUES(`option_name`), `option_value` = VALUES(`option_value`), `date` = VALUES(`date`)", $name, $serialized_value ) ); // phpcs:ignore
 
 		$this->debug['write_query_count'] += 1;
 	}

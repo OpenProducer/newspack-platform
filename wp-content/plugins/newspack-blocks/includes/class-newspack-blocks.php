@@ -66,6 +66,8 @@ class Newspack_Blocks {
 					'patterns'                => self::get_patterns_for_post_type( get_post_type() ),
 					'posts_rest_url'          => rest_url( 'newspack-blocks/v1/newspack-blocks-posts' ),
 					'specific_posts_rest_url' => rest_url( 'newspack-blocks/v1/newspack-blocks-specific-posts' ),
+					'assets_path'             => plugins_url( '/src/assets', NEWSPACK_BLOCKS__PLUGIN_FILE ),
+					'post_subtitle'           => get_theme_support( 'post-subtitle' ),
 				]
 			);
 
@@ -282,7 +284,7 @@ class Newspack_Blocks {
 				get_post_thumbnail_id( get_the_ID() ),
 				'newspack-article-block-' . $orientation . '-' . $key
 			);
-			if ( $dimensions[0] === $attachment[1] && $dimensions[1] === $attachment[2] ) {
+			if ( ! empty( $attachment ) && $dimensions[0] === $attachment[1] && $dimensions[1] === $attachment[2] ) {
 				return 'newspack-article-block-' . $orientation . '-' . $key;
 			}
 		}
@@ -317,20 +319,20 @@ class Newspack_Blocks {
 	 * Builds and returns query args based on block attributes.
 	 *
 	 * @param array $attributes An array of block attributes.
+	 * @param array $block_name Name of the block requesting the query.
 	 *
 	 * @return array
 	 */
-	public static function build_articles_query( $attributes ) {
+	public static function build_articles_query( $attributes, $block_name ) {
 		global $newspack_blocks_post_id;
 		if ( ! $newspack_blocks_post_id ) {
 			$newspack_blocks_post_id = array();
 		}
 
-		// Get all blocks and gather specificPosts ids of all Homepage Articles blocks.
+		// Get all blocks and gather specificPosts ids of all eligible blocks.
 		global $newspack_blocks_all_specific_posts_ids;
 		if ( ! is_array( $newspack_blocks_all_specific_posts_ids ) ) {
 			$blocks                                 = parse_blocks( get_the_content() );
-			$block_name                             = apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/homepage-articles' );
 			$newspack_blocks_all_specific_posts_ids = array_reduce(
 				$blocks,
 				function ( $acc, $block ) use ( $block_name ) {
@@ -357,7 +359,7 @@ class Newspack_Blocks {
 		$tag_exclusions = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
 		$specific_posts = isset( $attributes['specificPosts'] ) ? $attributes['specificPosts'] : array();
 		$posts_to_show  = intval( $attributes['postsToShow'] );
-		$specific_mode  = intval( $attributes['specificMode'] );
+		$specific_mode  = isset( $attributes['specificMode'] ) ? intval( $attributes['specificMode'] ) : false;
 		$args           = array(
 			'post_type'           => $post_type,
 			'post_status'         => 'publish',
@@ -674,7 +676,7 @@ class Newspack_Blocks {
 	 */
 	public static function filter_excerpt_length( $attributes ) {
 		// If showing excerpt, filter the length using the block attribute.
-		if ( $attributes['showExcerpt'] ) {
+		if ( isset( $attributes['excerptLength'] ) && $attributes['showExcerpt'] ) {
 			self::$newspack_blocks_excerpt_length_closure = add_filter(
 				'excerpt_length',
 				function() use ( $attributes ) {

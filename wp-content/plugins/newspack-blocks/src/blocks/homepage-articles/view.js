@@ -103,15 +103,11 @@ function buildLoadMoreHandler( blockWrapperEl ) {
  * Returns unique IDs for posts that are currently in the DOM.
  */
 function getRenderedPostsIds() {
-	const postEls = document.querySelectorAll(
-		'.wp-block-newspack-blocks-homepage-articles [data-post-id]'
-	);
+	const postEls = document.querySelectorAll( "[class^='wp-block-newspack-blocks'] [data-post-id]" );
 	const postIds = Array.from( postEls ).map( el => el.getAttribute( 'data-post-id' ) );
 
 	postIds.push(
-		document
-			.querySelector( '.wp-block-newspack-blocks-homepage-articles > div[data-current-post-id]' )
-			.getAttribute( 'data-current-post-id' )
+		document.querySelector( 'div[data-current-post-id]' ).getAttribute( 'data-current-post-id' )
 	);
 
 	return [ ...new Set( postIds ) ]; // Make values unique with Set

@@ -7,7 +7,7 @@
  * Author URI:      https://newspack.blog/
  * Text Domain:     newspack-blocks
  * Domain Path:     /languages
- * Version:         1.22.0
+ * Version:         1.25.1
  *
  * @package         Newspack_Blocks
  */
@@ -15,7 +15,7 @@
 define( 'NEWSPACK_BLOCKS__PLUGIN_FILE', __FILE__ );
 define( 'NEWSPACK_BLOCKS__BLOCKS_DIRECTORY', 'dist/' );
 define( 'NEWSPACK_BLOCKS__PLUGIN_DIR', plugin_dir_path( NEWSPACK_BLOCKS__PLUGIN_FILE ) );
-define( 'NEWSPACK_BLOCKS__VERSION', '1.22.0' );
+define( 'NEWSPACK_BLOCKS__VERSION', '1.25.1' );
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-api.php';
@@ -46,20 +46,3 @@ function newspack_blocks_plugin_textdomain() {
 	load_plugin_textdomain( 'newspack-blocks', false, dirname( plugin_basename( NEWSPACK_BLOCKS__PLUGIN_FILE ) ) . '/languages' );
 }
 add_action( 'plugins_loaded', 'newspack_blocks_plugin_textdomain' );
-
-
-/**
- * Add global variable for theme supports detection.
- *
- * @action enqueue_block_editor_assets
- */
-function newspack_blocks_post_subtitle_detection() {
-	wp_localize_script(
-		'newspack-blocks-editor',
-		'newspackIsPostSubtitleSupported',
-		array(
-			'post_subtitle' => get_theme_support( 'post-subtitle' ),
-		)
-	);
-}
-add_action( 'enqueue_block_editor_assets', 'newspack_blocks_post_subtitle_detection' );

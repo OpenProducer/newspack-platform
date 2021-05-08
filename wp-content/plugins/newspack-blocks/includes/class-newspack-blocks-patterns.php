@@ -67,7 +67,8 @@ class Newspack_Blocks_Patterns {
 					$block_patterns,
 					'donations-1',
 					'donations-2',
-					'donations-3'
+					'donations-3',
+					'donations-4'
 				);
 			}
 
@@ -115,7 +116,9 @@ class Newspack_Blocks_Patterns {
 					'subscribe-1',
 					'subscribe-2',
 					'subscribe-3',
-					'subscribe-4'
+					'subscribe-4',
+					'subscribe-5',
+					'subscribe-6'
 				);
 			}
 

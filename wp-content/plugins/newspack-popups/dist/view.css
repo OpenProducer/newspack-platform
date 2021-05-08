@@ -148,6 +148,9 @@
   padding: 0.75em; }
   .newspack-inline-popup:focus {
     outline: none; }
+  .newspack-inline-popup.newspack-lightbox-no-border {
+    border: none;
+    padding: 0; }
 
 .newspack-inactive-popup-status::before {
   background: black;
@@ -216,6 +219,9 @@
 /* stylelint-disable-next-line no-duplicate-selectors */
 .entry-content {
   position: relative !important; }
+
+.hide {
+  display: none; }
 
 .newspack-inline-popup .newspack-pattern.subscribe__style-1,
 .newspack-lightbox-placement-center .newspack-pattern.subscribe__style-1 {

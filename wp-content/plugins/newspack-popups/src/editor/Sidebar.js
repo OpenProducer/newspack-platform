@@ -7,10 +7,16 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
-import { RangeControl, SelectControl, ToggleControl } from '@wordpress/components';
+import { RadioControl, RangeControl, SelectControl, ToggleControl } from '@wordpress/components';
+
+/**
+ * Internal dependencies
+ */
+import { isCustomPlacement } from '../editor/utils';
 
 const Sidebar = ( {
 	display_title,
+	hide_border,
 	frequency,
 	onMetaFieldChange,
 	placement,
@@ -30,10 +36,15 @@ const Sidebar = ( {
 
 	return (
 		<Fragment>
-			<ToggleControl
-				label={ __( 'Inline Prompt', 'newspack-popups' ) }
-				checked={ ! isOverlay }
-				onChange={ value => updatePlacement( value ? 'inline' : 'center' ) }
+			<RadioControl
+				className="newspack-popups__prompt-type-control"
+				label={ __( 'Prompt type', 'newspack-popups' ) }
+				selected={ isOverlay ? 'center' : 'inline' }
+				options={ [
+					{ label: __( 'Inline', 'newspack-popups' ), value: 'inline' },
+					{ label: __( 'Overlay', 'newspack-popups' ), value: 'center' },
+				] }
+				onChange={ value => updatePlacement( value ) }
 			/>
 			<SelectControl
 				label={ __( 'Placement' ) }
@@ -108,6 +119,13 @@ const Sidebar = ( {
 				checked={ display_title }
 				onChange={ value => onMetaFieldChange( 'display_title', value ) }
 			/>
+			{ ( placement === 'inline' || isCustomPlacement( placement ) ) && (
+				<ToggleControl
+					label={ __( 'Hide Prompt Border', 'newspack-popups' ) }
+					checked={ hide_border }
+					onChange={ value => onMetaFieldChange( 'hide_border', value ) }
+				/>
+			) }
 		</Fragment>
 	);
 };

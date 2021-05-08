@@ -351,7 +351,7 @@ final class Newspack_Newsletters_Renderer {
 					$anchor        = $xpath->query( '//a' )[0];
 					$attrs         = $button_block['attrs'];
 					$text          = $anchor->textContent; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-					$border_radius = isset( $attrs['borderRadius'] ) ? $attrs['borderRadius'] : 28;
+					$border_radius = isset( $attrs['borderRadius'] ) ? $attrs['borderRadius'] : 5;
 					$is_outlined   = isset( $attrs['className'] ) && 'is-style-outline' == $attrs['className'];
 
 					$default_button_attrs = array(
@@ -362,8 +362,9 @@ final class Newspack_Newsletters_Renderer {
 						'border-radius' => $border_radius . 'px',
 						'font-size'     => '18px',
 						'font-family'   => $font_family,
+						'font-weight'   => 'bold',
 						// Default color - will be replaced by get_colors if there are colors set.
-						'color'         => $is_outlined ? '#32373c' : '#fff',
+						'color'         => $is_outlined ? '#32373c' : '#fff !important',
 					);
 					if ( $is_outlined ) {
 						$default_button_attrs['background-color'] = 'transparent';
@@ -491,7 +492,7 @@ final class Newspack_Newsletters_Renderer {
 				}
 
 				if ( isset( $attrs['width'] ) ) {
-					$column_attrs['width']     = $attrs['width'] . '%';
+					$column_attrs['width']     = $attrs['width'];
 					$column_attrs['css-class'] = 'mj-column-has-width';
 				}
 
@@ -517,7 +518,7 @@ final class Newspack_Newsletters_Renderer {
 					}
 				};
 				foreach ( $no_width_cols_indexes as $no_width_cols_index ) {
-					$inner_blocks[ $no_width_cols_index ]['attrs']['width'] = ( 100 - $widths_sum ) / count( $no_width_cols_indexes );
+					$inner_blocks[ $no_width_cols_index ]['attrs']['width'] = ( 100 - $widths_sum ) / count( $no_width_cols_indexes ) . '%';
 				};
 
 				if ( isset( $attrs['color'] ) ) {
@@ -630,20 +631,30 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
+	 * Convert a WP post to an array of non-empty blocks.
+	 *
+	 * @param WP_Post $post The post.
+	 * @return object[] Blocks.
+	 */
+	private static function get_valid_post_blocks( $post ) {
+		return array_filter(
+			parse_blocks( $post->post_content ),
+			function ( $block ) {
+				return null !== $block['blockName'];
+			}
+		);
+	}
+
+	/**
 	 * Convert a WP post to MJML components.
 	 *
 	 * @param WP_Post $post The post.
 	 * @param Boolean $include_ads Whether to include ads.
 	 * @return string MJML markup to be injected into the template.
 	 */
-	private static function post_to_mjml_components( $post, $include_ads ) {
+	public static function post_to_mjml_components( $post, $include_ads = false ) {
 		$body         = '';
-		$valid_blocks = array_filter(
-			parse_blocks( $post->post_content ),
-			function ( $block ) {
-				return null !== $block['blockName'];
-			}
-		);
+		$valid_blocks = self::get_valid_post_blocks( $post );
 		$total_length = self::get_total_newsletter_character_length( $valid_blocks );
 
 		// Gather ads.
@@ -668,7 +679,7 @@ final class Newspack_Newsletters_Renderer {
 					self::$ads_to_insert[] = [
 						'precise_position' => $total_length * $percentage,
 						'percentage'       => $percentage,
-						'markup'           => self::post_to_mjml_components( $ad, false ),
+						'markup'           => self::post_to_mjml_components( $ad ),
 						'is_inserted'      => false,
 					];
 				}
@@ -679,6 +690,18 @@ final class Newspack_Newsletters_Renderer {
 		$current_position = 0;
 		foreach ( $valid_blocks as $block ) {
 			$block_content = '';
+
+			// Convert reusable block to group block.
+			// Reusable blocks are CPTs, where the block's ref attribute is the post ID.
+			if ( 'core/block' === $block['blockName'] && isset( $block['attrs']['ref'] ) ) {
+				$reusable_block_post = get_post( $block['attrs']['ref'] );
+				if ( ! empty( $reusable_block_post ) ) {
+					$block['blockName']    = 'core/group';
+					$block['innerBlocks']  = self::get_valid_post_blocks( $reusable_block_post );
+					$block['innerHTML']    = $reusable_block_post->post_content;
+					$block['innerContent'] = $reusable_block_post->post_content;
+				}
+			}
 
 			// Insert ads between top-level group blocks' inner blocks.
 			if ( 'core/group' === $block['blockName'] ) {
@@ -723,7 +746,7 @@ final class Newspack_Newsletters_Renderer {
 	 * @param WP_Post $post The post.
 	 * @return string MJML markup.
 	 */
-	private static function render_mjml( $post ) {
+	public static function render_post_to_mjml( $post ) {
 		self::$color_palette = json_decode( get_option( 'newspack_newsletters_color_palette', false ), true );
 		self::$font_header   = get_post_meta( $post->ID, 'font_header', true );
 		self::$font_body     = get_post_meta( $post->ID, 'font_body', true );
@@ -738,6 +761,7 @@ final class Newspack_Newsletters_Renderer {
 		$body             = self::post_to_mjml_components( $post, true ); // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 		$background_color = get_post_meta( $post->ID, 'background_color', true );
 		$preview_text     = get_post_meta( $post->ID, 'preview_text', true );
+		$custom_css       = get_post_meta( $post->ID, 'custom_css', true );
 		if ( ! $background_color ) {
 			$background_color = '#ffffff';
 		}
@@ -747,52 +771,12 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
-	 * Return MJML API credentials.
-	 *
-	 * @return string API key and API secret as a key:secret string.
-	 */
-	public static function mjml_api_credentials() {
-		$key    = get_option( 'newspack_newsletters_mjml_api_key', false );
-		$secret = get_option( 'newspack_newsletters_mjml_api_secret', false );
-		if ( isset( $key, $secret ) ) {
-			return "$key:$secret";
-		}
-		return false;
-	}
-
-	/**
-	 * Convert a WP Post to email-compliant HTML.
+	 * Retrieve email-compliant HTML for a newsletter CPT.
 	 *
 	 * @param WP_Post $post The post.
 	 * @return string email-compliant HTML.
-	 * @throws Exception Error message.
 	 */
-	public static function render_html_email( $post ) {
-		$mjml_creds = self::mjml_api_credentials();
-		if ( $mjml_creds ) {
-			$mjml_api_url = 'https://api.mjml.io/v1/render';
-			$request      = wp_remote_post(
-				$mjml_api_url,
-				array(
-					'body'    => wp_json_encode(
-						array(
-							'mjml' => self::render_mjml( $post ),
-						)
-					),
-					'headers' => array(
-						'Authorization' => 'Basic ' . base64_encode( $mjml_creds ),
-					),
-					'timeout' => 45, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
-				)
-			);
-			if ( is_wp_error( $request ) ) {
-				return $request;
-			} else {
-				if ( 401 === intval( $request['response']['code'] ) ) {
-					throw new Exception( __( 'MJML rendering error.', 'newspack_newsletters' ) );
-				}
-				return json_decode( $request['body'] )->html;
-			}
-		}
+	public static function retrieve_email_html( $post ) {
+		return get_post_meta( $post->ID, Newspack_Newsletters::EMAIL_HTML_META, true );
 	}
 }

@@ -1,3 +1,10 @@
+# [1.4.0](https://github.com/Automattic/newspack-sponsors/compare/v1.3.0...v1.4.0) (2021-05-04)
+
+
+### Features
+
+* add support for Newspack Blocks ([#52](https://github.com/Automattic/newspack-sponsors/issues/52)) ([2817220](https://github.com/Automattic/newspack-sponsors/commit/2817220c89c74c9c16a46895d8f30326f46b4778))
+
 # [1.3.0](https://github.com/Automattic/newspack-sponsors/compare/v1.2.1...v1.3.0) (2020-11-24)
 
 

@@ -1668,6 +1668,15 @@ body[class*="admin_page_newspack-"] #wpfooter:before {
   .newspack-popups__status-options .components-base-control .components-base-control__help {
     margin-top: 4px; }
 
+.newspack-popups__prompt-type-control {
+  margin-bottom: 1rem; }
+  .newspack-popups__prompt-type-control .components-base-control__label {
+    display: block; }
+  .newspack-popups__prompt-type-control .components-radio-control__option {
+    display: inline-block; }
+    .newspack-popups__prompt-type-control .components-radio-control__option:first-of-type {
+      margin-right: 1rem; }
+
 .newspack-popups__not-interested-button-preview {
   cursor: not-allowed;
   font-size: 0.7em;

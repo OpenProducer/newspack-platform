@@ -15,6 +15,7 @@ use \DrewM\MailChimp\MailChimp;
 final class Newspack_Newsletters {
 
 	const NEWSPACK_NEWSLETTERS_CPT = 'newspack_nl_cpt';
+	const EMAIL_HTML_META          = 'newspack_email_html';
 
 	/**
 	 * Supported fonts.
@@ -399,6 +400,22 @@ final class Newspack_Newsletters {
 				'auth_callback'  => '__return_true',
 			]
 		);
+		\register_meta(
+			'post',
+			'custom_css',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
+				'show_in_rest'   => [
+					'schema' => [
+						'context' => [ 'edit' ],
+					],
+				],
+				'type'           => 'string',
+				'single'         => true,
+				'default'        => '',
+				'auth_callback'  => '__return_true',
+			]
+		);
 	}
 
 	/**
@@ -452,7 +469,7 @@ final class Newspack_Newsletters {
 			'rewrite'          => [ 'slug' => $public_slug ],
 			'show_ui'          => true,
 			'show_in_rest'     => true,
-			'supports'         => [ 'author', 'editor', 'title', 'custom-fields', 'newspack_blocks', 'revisions', 'thumbnail' ],
+			'supports'         => [ 'author', 'editor', 'title', 'custom-fields', 'newspack_blocks', 'revisions', 'thumbnail', 'excerpt' ],
 			'taxonomies'       => [ 'category', 'post_tag' ],
 			'menu_icon'        => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0yMS45OSA4YzAtLjcyLS4zNy0xLjM1LS45NC0xLjdMMTIgMSAyLjk1IDYuM0MyLjM4IDYuNjUgMiA3LjI4IDIgOHYxMGMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0ybC0uMDEtMTB6TTEyIDEzTDMuNzQgNy44NCAxMiAzbDguMjYgNC44NEwxMiAxM3oiIGZpbGw9IiNhMGE1YWEiLz48L3N2Zz4K',
 		];
@@ -690,13 +707,7 @@ final class Newspack_Newsletters {
 				'callback'            => [ __CLASS__, 'api_set_settings' ],
 				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
 				'args'                => [
-					'mailchimp_api_key'   => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'mjml_application_id' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'mjml_api_secret'     => [
+					'mailchimp_api_key' => [
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
@@ -719,7 +730,7 @@ final class Newspack_Newsletters {
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 					'value' => [
-						'sanitize_callback' => 'sanitize_text_field',
+						'required' => true,
 					],
 				],
 			]
@@ -731,6 +742,25 @@ final class Newspack_Newsletters {
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ __CLASS__, 'api_set_color_palette' ],
 				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
+			]
+		);
+		\register_rest_route(
+			'newspack-newsletters/v1',
+			'post-mjml',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ __CLASS__, 'api_get_mjml' ],
+				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
+				'args'                => [
+					'id'      => [
+						'required'          => true,
+						'validate_callback' => [ __CLASS__, 'validate_newsletter_id' ],
+						'sanitize_callback' => 'absint',
+					],
+					'content' => [
+						'required' => true,
+					],
+				],
 			]
 		);
 	}
@@ -745,6 +775,25 @@ final class Newspack_Newsletters {
 	public static function api_set_color_palette( $request ) {
 		update_option( 'newspack_newsletters_color_palette', $request->get_body() );
 		return \rest_ensure_response( [] );
+	}
+
+	/**
+	 * The default color palette lives in the editor frontend and is not
+	 * retrievable on the backend. The workaround is to set it as an option
+	 * so that it's available to the email renderer.
+	 *
+	 * @param WP_REST_Request $request API request object.
+	 */
+	public static function api_get_mjml( $request ) {
+		if ( empty( $request['title'] ) ) {
+			$request['title'] = get_the_title( $request['id'] );
+		}
+		$post = (object) [
+			'post_title'   => $request['title'],
+			'post_content' => $request['content'],
+			'ID'           => $request['id'],
+		];
+		return \rest_ensure_response( [ 'mjml' => Newspack_Newsletters_Renderer::render_post_to_mjml( $post ) ] );
 	}
 
 	/**
@@ -793,6 +842,8 @@ final class Newspack_Newsletters {
 				'cm_from_name',
 				'cm_from_email',
 				'cm_preview_text',
+				'custom_css',
+				self::EMAIL_HTML_META,
 			]
 		);
 	}
@@ -842,8 +893,6 @@ final class Newspack_Newsletters {
 	public static function api_set_settings( $request ) {
 		$service_provider = $request['service_provider'];
 		$credentials      = $request['credentials'];
-		$mjml_api_key     = $request['mjml_api_key'];
-		$mjml_api_secret  = $request['mjml_api_secret'];
 		$wp_error         = new WP_Error();
 
 		// Service Provider slug.
@@ -871,40 +920,6 @@ final class Newspack_Newsletters {
 			}
 		}
 
-		// MJML credentials.
-		if ( empty( $mjml_api_key ) || empty( $mjml_api_secret ) ) {
-			$wp_error->add(
-				'newspack_newsletters_invalid_keys_mjml',
-				__( 'Please input MJML application ID and secret key.', 'newspack-newsletters' )
-			);
-		} else {
-			$credentials = "$mjml_api_key:$mjml_api_secret";
-			$url         = 'https://api.mjml.io/v1/render';
-			$mjml_test   = wp_remote_post(
-				$url,
-				[
-					'body'    => wp_json_encode(
-						[
-							'mjml' => '<h1>test</h1>',
-						]
-					),
-					'headers' => array(
-						'Authorization' => 'Basic ' . base64_encode( $credentials ),
-					),
-					'timeout' => 10, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
-				]
-			);
-			if ( 200 === $mjml_test['response']['code'] ) {
-				update_option( 'newspack_newsletters_mjml_api_key', $mjml_api_key );
-				update_option( 'newspack_newsletters_mjml_api_secret', $mjml_api_secret );
-			} else {
-				$wp_error->add(
-					'newspack_newsletters_invalid_keys_mjml',
-					__( 'Please input valid MJML application ID and secret key.', 'newspack-newsletters' )
-				);
-			}
-		}
-
 		return $wp_error->has_errors() ? $wp_error : self::api_get_settings();
 	}
 
@@ -912,14 +927,10 @@ final class Newspack_Newsletters {
 	 * Retrieve settings.
 	 */
 	public static function api_settings() {
-		$mjml_api_key     = get_option( 'newspack_newsletters_mjml_api_key', false );
-		$mjml_api_secret  = get_option( 'newspack_newsletters_mjml_api_secret', false );
 		$service_provider = self::service_provider();
 		$response         = [
 			'service_provider' => $service_provider ? $service_provider : '',
 			'status'           => false,
-			'mjml_api_key'     => $mjml_api_key ? $mjml_api_key : '',
-			'mjml_api_secret'  => $mjml_api_secret ? $mjml_api_secret : '',
 		];
 
 		if ( ! self::$provider && get_option( 'newspack_newsletters_mailchimp_api_key', false ) ) {
@@ -931,7 +942,7 @@ final class Newspack_Newsletters {
 			$response['credentials'] = self::$provider->api_credentials();
 		}
 
-		if ( self::$provider && self::$provider->has_api_credentials() && $mjml_api_key && $mjml_api_secret ) {
+		if ( self::$provider && self::$provider->has_api_credentials() ) {
 			$response['status'] = true;
 		}
 

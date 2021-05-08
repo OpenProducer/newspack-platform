@@ -1,3 +1,40 @@
+## [1.25.1](https://github.com/Automattic/newspack-blocks/compare/v1.25.0...v1.25.1) (2021-05-05)
+
+
+### Bug Fixes
+
+* **carousel:** add missing block attribute ([#754](https://github.com/Automattic/newspack-blocks/issues/754)) ([2fcbec4](https://github.com/Automattic/newspack-blocks/commit/2fcbec469fe0df7db2afd39a7cba54ff9079d494))
+
+# [1.25.0](https://github.com/Automattic/newspack-blocks/compare/v1.24.0...v1.25.0) (2021-05-05)
+
+
+### Features
+
+* allow different post types in carousel; plus new block options ([#746](https://github.com/Automattic/newspack-blocks/issues/746)) ([f30a5a5](https://github.com/Automattic/newspack-blocks/commit/f30a5a5a33560de4385cf0a1e6724da11f744564))
+
+# [1.24.0](https://github.com/Automattic/newspack-blocks/compare/v1.23.0...v1.24.0) (2021-04-13)
+
+
+### Features
+
+* update block icons to use Gutenberg style instead of Material ([#724](https://github.com/Automattic/newspack-blocks/issues/724)) ([e8a0eae](https://github.com/Automattic/newspack-blocks/commit/e8a0eae31f2a4ecae2ca6bee62986fa4dc419d27))
+
+# [1.23.0](https://github.com/Automattic/newspack-blocks/compare/v1.22.1...v1.23.0) (2021-04-06)
+
+
+### Features
+
+* add new patterns for donation and subscribe ([#730](https://github.com/Automattic/newspack-blocks/issues/730)) ([a00cfd6](https://github.com/Automattic/newspack-blocks/commit/a00cfd6e54258afacdb8c5bb68152f38dbc04761))
+* deduplication across homepage posts & carousel ([#725](https://github.com/Automattic/newspack-blocks/issues/725)) ([427c4e0](https://github.com/Automattic/newspack-blocks/commit/427c4e087d57dee1fba9f4d81ffc8486f735d2c0)), closes [#664](https://github.com/Automattic/newspack-blocks/issues/664)
+* handle posts with no featured image ([#731](https://github.com/Automattic/newspack-blocks/issues/731)) ([0db34be](https://github.com/Automattic/newspack-blocks/commit/0db34be070f842acdc69f4b64212dcc2df4be2d8)), closes [#443](https://github.com/Automattic/newspack-blocks/issues/443)
+
+## [1.22.1](https://github.com/Automattic/newspack-blocks/compare/v1.22.0...v1.22.1) (2021-03-30)
+
+
+### Bug Fixes
+
+* a PHP warning when editing newsletters ([#722](https://github.com/Automattic/newspack-blocks/issues/722)) ([41ce40e](https://github.com/Automattic/newspack-blocks/commit/41ce40e2e7843bb8a9bc58db7a37886eb86f84cc))
+
 # [1.22.0](https://github.com/Automattic/newspack-blocks/compare/v1.21.1...v1.22.0) (2021-03-23)
 
 

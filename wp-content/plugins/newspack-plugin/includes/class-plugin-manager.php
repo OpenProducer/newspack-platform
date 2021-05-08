@@ -449,6 +449,14 @@ class Plugin_Manager {
 				'PluginURI'   => 'https://wordpress.org/plugins/wp-user-avatar/',
 				'Download'    => 'wporg',
 			],
+			'web-stories'                   => [
+				'Name'        => 'Web Stories',
+				'Description' => 'Visual storytelling for WordPress.',
+				'Author'      => 'Google',
+				'AuthorURI'   => 'https://opensource.google.com/',
+				'PluginURI'   => 'https://wp.stories.google/',
+				'Download'    => 'wporg',
+			],
 		];
 
 		$default_info = [

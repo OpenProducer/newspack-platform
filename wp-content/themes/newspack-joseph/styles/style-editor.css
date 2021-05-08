@@ -800,6 +800,10 @@ ul.wp-block-archives li,
   font-size: 0.8em;
 }
 
+.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp p {
+  text-align: center;
+}
+
 /** === Organic Profile Block === */
 .wp-block-organic-profile-block {
   box-shadow: none;
@@ -858,6 +862,46 @@ ul.wp-block-archives li,
 
 .wp-block-organic-profile-block .organic-profile-social .social-link:active, .wp-block-organic-profile-block .organic-profile-social .social-link:focus, .wp-block-organic-profile-block .organic-profile-social .social-link:hover {
   color: inherit;
+}
+
+/** === Subscribe Patterns === */
+.wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp {
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_text-input, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_text-input {
+  flex: 1 1 auto;
+}
+
+.wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_text-input .components-base-control__field, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_text-input .components-base-control__field {
+  margin-bottom: 0;
+}
+
+.wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .block-editor-inner-blocks, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .block-editor-inner-blocks {
+  flex: 1 1 100%;
+}
+
+@media only screen and (min-width: 600px) {
+  .wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .block-editor-inner-blocks, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .block-editor-inner-blocks {
+    flex: 0 0 auto;
+    margin-left: 0.5rem;
+  }
+}
+
+.wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .block-editor-inner-blocks .wp-block-button__link, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .block-editor-inner-blocks .wp-block-button__link {
+  width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+  .wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .block-editor-inner-blocks .wp-block-button__link, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .block-editor-inner-blocks .wp-block-button__link {
+    width: auto;
+  }
+}
+
+.wp-block-group.newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp .block-editor-rich-text__editable, .wp-block-group.newspack-pattern.subscribe__style-6 .wp-block-jetpack-mailchimp .block-editor-rich-text__editable {
+  flex: 0 0 100%;
 }
 
 /** === Donate Block === */

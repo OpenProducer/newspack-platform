@@ -19,8 +19,7 @@ const PreviewSetting = ( { autosavePost, isSavingPost, postId, metaFields } ) =>
 		...metaFields,
 	} );
 
-	const previewURL =
-		( window && window.newspack_popups_data && window.newspack_popups_data.preview_post ) || '/';
+	const previewURL = window.newspack_popups_data?.preview_post || '/';
 
 	return (
 		<WebPreview

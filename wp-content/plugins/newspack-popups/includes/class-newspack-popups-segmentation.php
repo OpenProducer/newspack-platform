@@ -339,6 +339,7 @@ final class Newspack_Popups_Segmentation {
 				option_name varchar(191) NOT NULL default '',
 				option_value longtext NOT NULL,
 				date datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
+				-- Date of the last update.
 				PRIMARY KEY  (option_id),
 				UNIQUE KEY option_name (option_name)
 			) $charset_collate;";
@@ -368,6 +369,27 @@ final class Newspack_Popups_Segmentation {
 			$segments = self::reindex_segments( $segments );
 		}
 
+		// Filter out non-existing categories.
+		$existing_categories_ids = get_categories(
+			[
+				'hide_empty' => false, 
+				'fields'     => 'ids',
+			] 
+		);
+		foreach ( $segments as &$segment ) {
+			if ( ! isset( $segment['configuration']['favorite_categories'] ) ) {
+				continue;
+			}
+			$fav_categories = $segment['configuration']['favorite_categories'];
+			if ( ! empty( $fav_categories ) ) {
+				$segment['configuration']['favorite_categories'] = array_values(
+					array_intersect(
+						$existing_categories_ids,
+						$fav_categories
+					)
+				);
+			}
+		}
 		return $segments;
 	}
 
@@ -603,13 +625,20 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
-	 * Only last month's worth of posts-read data is needed for segmentation features.
+	 * Remove unneeded data so the DB does not blow up.
 	 */
 	public static function prune_data() {
 		global $wpdb;
+
+		// Events, like post read, don't need to stick around for more than 30 days.
 		$events_table_name         = Segmentation::get_events_table_name();
 		$removed_rows_count_events = $wpdb->query( $wpdb->prepare( "DELETE FROM $events_table_name WHERE type = %s AND created_at < now() - interval 30 DAY", 'post_read' ) ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
 		error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_rows_count_events . ' rows from ' . $events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+
+		// Remove all preview sessions data.
+		$transients_table_name         = Segmentation::get_transients_table_name();
+		$removed_rows_count_transients = $wpdb->query( "DELETE FROM $transients_table_name WHERE option_name LIKE '%preview%'" ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
+		error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_rows_count_transients . ' preview sessions  rows from ' . $transients_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 	}
 }
 Newspack_Popups_Segmentation::instance();

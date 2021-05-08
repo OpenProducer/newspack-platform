@@ -16,6 +16,22 @@
 		}
 	}
 
+	&__prompt-type-control {
+		margin-bottom: 1rem;
+
+		.components-base-control__label {
+			display: block;
+		}
+
+		.components-radio-control__option {
+			display: inline-block;
+
+			&:first-of-type {
+				margin-right: 1rem;
+			}
+		}
+	}
+
 	&__not-interested-button-preview {
 		cursor: not-allowed;
 		font-size: 0.7em;

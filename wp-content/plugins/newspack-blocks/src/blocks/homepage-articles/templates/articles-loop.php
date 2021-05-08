@@ -14,7 +14,6 @@ call_user_func(
 		$article_query = $data['article_query'];
 
 		global $newspack_blocks_post_id;
-		$post_counter = 0;
 		do_action( 'newspack_blocks_homepage_posts_before_render' );
 
 		Newspack_Blocks::filter_excerpt_length( $attributes );
@@ -23,7 +22,6 @@ call_user_func(
 		while ( $article_query->have_posts() ) {
 			$article_query->the_post();
 			$newspack_blocks_post_id[ get_the_ID() ] = true;
-			$post_counter++;
 			echo Newspack_Blocks::template_inc( __DIR__ . '/article.php', array( 'attributes' => $attributes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 

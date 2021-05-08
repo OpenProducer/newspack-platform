@@ -4,7 +4,7 @@
 import apiFetch from '@wordpress/api-fetch';
 import { __, sprintf } from '@wordpress/i18n';
 import { ExternalLink, Notice, Placeholder, SelectControl, Spinner } from '@wordpress/components';
-import { useEffect, useState } from '@wordpress/element';
+import { Fragment, useEffect, useState } from '@wordpress/element';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
@@ -125,42 +125,45 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 									1 < prompts.length ? 's' : ''
 								) }
 							</p>
-							{ Object.keys( segments ).map( segmentName => (
-								<>
-									<h4>
-										{ segments[ segmentName ].id && (
-											<ExternalLink
-												href={ `/wp-admin/admin.php?page=newspack-popups-wizard#/segments/${
-													segments[ segmentName ].id
-												}` }
-											>
-												{ sprintf( __( 'Segment: %s', 'newspack-popup' ), segmentName ) }
-											</ExternalLink>
-										) }
-										{ ! segments[ segmentName ].id && (
-											<>
-												{ sprintf(
-													__( '%s%s%s', 'newspack-popup' ),
-													'Everyone' !== segmentName ? 'Segment: ' : '',
-													segmentName,
-													'Everyone' === segmentName && 1 < Object.keys( segments ).length
-														? __( ' else', 'newspack-popups' )
-														: ''
-												) }
-											</>
-										) }
-									</h4>
-									<ul>
-										{ segments[ segmentName ].prompts.map( prompt => (
-											<li key={ prompt.id }>
-												<ExternalLink href={ `/wp-admin/post.php?post=${ prompt.id }&action=edit` }>
-													{ prompt.title }
+							{ Object.keys( segments ).map( segmentName => {
+								const segmentId = segments[ segmentName ].id;
+								return (
+									<Fragment key={ segmentId }>
+										<h4>
+											{ segmentId && (
+												<ExternalLink
+													href={ `/wp-admin/admin.php?page=newspack-popups-wizard#/segments/${ segmentId }` }
+												>
+													{ sprintf( __( 'Segment: %s', 'newspack-popup' ), segmentName ) }
 												</ExternalLink>
-											</li>
-										) ) }
-									</ul>
-								</>
-							) ) }
+											) }
+											{ ! segmentId && (
+												<>
+													{ sprintf(
+														__( '%s%s%s', 'newspack-popup' ),
+														'Everyone' !== segmentName ? 'Segment: ' : '',
+														segmentName,
+														'Everyone' === segmentName && 1 < Object.keys( segments ).length
+															? __( ' else', 'newspack-popups' )
+															: ''
+													) }
+												</>
+											) }
+										</h4>
+										<ul>
+											{ segments[ segmentName ].prompts.map( prompt => (
+												<li key={ prompt.id }>
+													<ExternalLink
+														href={ `/wp-admin/post.php?post=${ prompt.id }&action=edit` }
+													>
+														{ prompt.title }
+													</ExternalLink>
+												</li>
+											) ) }
+										</ul>
+									</Fragment>
+								);
+							} ) }
 						</>
 					) }
 				</div>

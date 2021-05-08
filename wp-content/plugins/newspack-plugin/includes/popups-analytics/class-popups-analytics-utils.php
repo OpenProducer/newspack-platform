@@ -5,8 +5,6 @@
  * @package Newspack
  */
 
-use Google\Site_Kit\Modules\Analytics;
-use Google\Site_Kit\Context;
 use Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting_DateRange;
 use Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting_Metric;
 use Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting_ReportRequest;
@@ -15,9 +13,6 @@ use Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting_GetReportsReq
 use Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting;
 use Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting_SegmentDimensionFilter;
 use Google\Site_Kit_Dependencies\Google_Service_AnalyticsReporting_DimensionFilterClause;
-use Google\Site_Kit\Core\Storage\Options;
-use Google\Site_Kit\Core\Storage\User_Options;
-use Google\Site_Kit\Core\Authentication\Authentication;
 
 /**
  * Popup Analytics Utilities.
@@ -85,6 +80,68 @@ class Popups_Analytics_Utils {
 	}
 
 	/**
+	 * Get results of a GA report, taking page token into account.
+	 *
+	 * @param Analytics                                   $analytics The Analytics.
+	 * @param Google_Service_AnalyticsReporting_DateRange $date_range Date range.
+	 * @param string                                      $page_token Page token for the report.
+	 * @return object GA report.
+	 */
+	private static function create_ga_report_result( $analytics, $date_range, $page_token = null ) {
+		// Create the Metrics object.
+		$metrics = new Google_Service_AnalyticsReporting_Metric();
+		$metrics->setExpression( 'ga:totalEvents' );
+		$metrics->setAlias( 'events' );
+
+		// Filter just the popups custom event category.
+		$dimension_category_filter = new Google_Service_AnalyticsReporting_SegmentDimensionFilter();
+		$dimension_category_filter->setDimensionName( 'ga:eventCategory' );
+		$dimension_category_filter->setOperator( 'IN_LIST' );
+		$dimension_category_filter->setExpressions( self::EVENT_CATEGORIES );
+
+		// Create the DimensionFilterClauses.
+		$dimension_filter_clause = new Google_Service_AnalyticsReporting_DimensionFilterClause();
+		$dimension_filter_clause->setFilters( array( $dimension_category_filter ) );
+
+		// Create the Dimension objects.
+		$date_dimension = new Google_Service_AnalyticsReporting_Dimension();
+		$date_dimension->setName( 'ga:date' );
+		$action_dimension = new Google_Service_AnalyticsReporting_Dimension();
+		$action_dimension->setName( 'ga:eventAction' );
+		$label_dimension = new Google_Service_AnalyticsReporting_Dimension();
+		$label_dimension->setName( 'ga:eventLabel' );
+
+		// Create the ReportRequest object.
+		$profile_id = $analytics->get_settings()->get()['profileID'];
+		$request    = new Google_Service_AnalyticsReporting_ReportRequest();
+		$request->setViewId( $profile_id );
+		$request->setDateRanges( $date_range );
+		$request->setDimensions(
+			array(
+				$date_dimension,
+				$action_dimension,
+				$label_dimension,
+			)
+		);
+		$request->setMetrics( array( $metrics ) );
+		$request->setDimensionFilterClauses( array( $dimension_filter_clause ) );
+		if ( null !== $page_token ) {
+			$request->setPageToken( $page_token );
+		}
+
+		$body = new Google_Service_AnalyticsReporting_GetReportsRequest();
+		$body->setReportRequests( array( $request ) );
+		$client = \Newspack\Google_Services_Connection::get_site_kit_oauth_client()->get_client();
+
+		$analyticsreporting = new Google_Service_AnalyticsReporting( $client );
+		// https://developers.google.com/analytics/devguides/reporting/core/v4/rest/v4/reports/batchGet.
+		$report_results = $analyticsreporting->reports->batchGet( $body );
+		if ( isset( $report_results->reports[0] ) ) {
+			return $report_results->reports[0];
+		}
+	}
+
+	/**
 	 * Get GA report.
 	 *
 	 * @param Object $options options.
@@ -94,79 +151,34 @@ class Popups_Analytics_Utils {
 		$offset = $options['offset'];
 
 		// Load and query analytics.
-		if ( defined( 'GOOGLESITEKIT_PLUGIN_MAIN_FILE' ) ) {
-			$context   = new Context( GOOGLESITEKIT_PLUGIN_MAIN_FILE );
-			$analytics = new Analytics( $context );
+		$analytics = \Newspack\Google_Services_Connection::get_site_kit_analytics_module();
 
-			if ( $analytics->is_connected() ) {
-				// Create the DateRange object.
-				$date_range = new Google_Service_AnalyticsReporting_DateRange();
-				$start_date = gmdate( 'Y-m-d', strtotime( $offset . ' days ago' ) );
-				$end_date   = gmdate( 'Y-m-d', strtotime( '1 days ago' ) );
-				$date_range->setStartDate( $start_date );
-				$date_range->setEndDate( $end_date );
+		if ( $analytics && $analytics->is_connected() ) {
+			// Create the DateRange object.
+			$date_range = new Google_Service_AnalyticsReporting_DateRange();
+			$start_date = gmdate( 'Y-m-d', strtotime( $offset . ' days ago' ) );
+			$end_date   = gmdate( 'Y-m-d', strtotime( '1 days ago' ) );
+			$date_range->setStartDate( $start_date );
+			$date_range->setEndDate( $end_date );
 
-				// Create the Metrics object.
-				$metrics = new Google_Service_AnalyticsReporting_Metric();
-				$metrics->setExpression( 'ga:totalEvents' );
-				$metrics->setAlias( 'events' );
-
-				// Filter just the popups custom event category.
-				$dimension_category_filter = new Google_Service_AnalyticsReporting_SegmentDimensionFilter();
-				$dimension_category_filter->setDimensionName( 'ga:eventCategory' );
-				$dimension_category_filter->setOperator( 'EXACT' );
-				$dimension_category_filter->setExpressions( self::EVENT_CATEGORIES );
-
-				// Create the DimensionFilterClauses.
-				$dimension_filter_clause = new Google_Service_AnalyticsReporting_DimensionFilterClause();
-				$dimension_filter_clause->setFilters( array( $dimension_category_filter ) );
-
-				// Create the Dimension objects.
-				$date_dimension = new Google_Service_AnalyticsReporting_Dimension();
-				$date_dimension->setName( 'ga:date' );
-				$action_dimension = new Google_Service_AnalyticsReporting_Dimension();
-				$action_dimension->setName( 'ga:eventAction' );
-				$label_dimension = new Google_Service_AnalyticsReporting_Dimension();
-				$label_dimension->setName( 'ga:eventLabel' );
-
-				// Create the ReportRequest object.
-				$profile_id = $analytics->get_settings()->get()['profileID'];
-				$request    = new Google_Service_AnalyticsReporting_ReportRequest();
-				$request->setViewId( $profile_id );
-				$request->setDateRanges( $date_range );
-				$request->setDimensions(
-					array(
-						$date_dimension,
-						$action_dimension,
-						$label_dimension,
-					)
-				);
-				$request->setMetrics( array( $metrics ) );
-				$request->setDimensionFilterClauses( array( $dimension_filter_clause ) );
-
-				$body = new Google_Service_AnalyticsReporting_GetReportsRequest();
-				$body->setReportRequests( array( $request ) );
-				$ga_options     = new Options( $context );
-				$user_options   = new User_Options( $context );
-				$authentication = new Authentication( $context, $ga_options, $user_options );
-				$client         = $authentication->get_oauth_client()->get_client();
-
-				try {
-					$analyticsreporting = new Google_Service_AnalyticsReporting( $client );
-					$report_results     = $analyticsreporting->reports->batchGet( $body );
-					if ( isset( $report_results->reports[0] ) ) {
-						return $report_results->reports[0]->data->rows;
-					}
-				} catch ( \Exception $error ) {
-					$error_data = json_decode( $error->getMessage() );
-					if ( isset( $error_data ) && 'UNAUTHENTICATED' === $error_data->error->status ) {
-						return new WP_Error( 'newspack_campaign_analytics_sitekit_auth', __( 'Please authenticate with Google Analytics to view Campaign analytics.', 'newspack' ) );
-					}
-					return new WP_Error( 'newspack_campaign_analytics', __( 'Google Analytics data fetching error.', 'newspack' ), $error_data );
+			try {
+				$rows   = [];
+				$report = self::create_ga_report_result( $analytics, $date_range );
+				$rows   = array_merge( $rows, $report->data->rows );
+				while ( $report->nextPageToken ) { // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					$report = self::create_ga_report_result( $analytics, $date_range, $report->nextPageToken ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					$rows   = array_merge( $rows, $report->data->rows );
 				}
-			} else {
-				return new WP_Error( 'newspack_campaign_analytics_sitekit_disconnected', __( 'Connect Site Kit plugin to view Campaign Analytics.', 'newspack' ) );
+				return $rows;
+			} catch ( \Exception $error ) {
+				$error_data = json_decode( $error->getMessage() );
+				if ( isset( $error_data ) && 'UNAUTHENTICATED' === $error_data->error->status ) {
+					return new WP_Error( 'newspack_campaign_analytics_sitekit_auth', __( 'Please authenticate with Google Analytics to view Campaign analytics.', 'newspack' ) );
+				}
+				return new WP_Error( 'newspack_campaign_analytics', __( 'Google Analytics data fetching error.', 'newspack' ), $error_data );
 			}
+		} else {
+			return new WP_Error( 'newspack_campaign_analytics_sitekit_disconnected', __( 'Connect Site Kit plugin to view Campaign Analytics.', 'newspack' ) );
 		}
 	}
 
@@ -278,7 +290,8 @@ class Popups_Analytics_Utils {
 		$ga_data_days = array_reduce(
 			$ga_data_rows,
 			function ( $days, $row ) use ( $event_label_id, $event_action, &$all_actions, &$all_labels, &$aggregate_seen_events, &$aggregate_form_submission_events, &$aggregate_link_click_events, &$post_edit_link ) {
-				if ( isset( $row['dimensions'][2] ) && strpos( $row['dimensions'][2], 'Newspack Announcement' ) !== false ) {
+				$label = $row['dimensions'][2];
+				if ( '(not set)' !== $label ) {
 					$item          = self::process_legacy_item( $row );
 					$label_object  = $item['label'];
 					$action_object = $item['action'];

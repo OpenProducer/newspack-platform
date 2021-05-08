@@ -61,7 +61,7 @@ final class Newspack_Popups_Model {
 				]
 			);
 		}
-		if ( ! in_array( $taxonomy, [ 'category', Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY ] ) ) {
+		if ( ! in_array( $taxonomy, [ 'category', 'post_tag', Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY ] ) ) {
 			return new \WP_Error(
 				'newspack_popups_invalid_taxonomy',
 				esc_html__( 'Invalid taxonomy.', 'newspack-popups' ),
@@ -152,67 +152,25 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Retrieve all overlay popups.
+	 * Retrieve all popups eligible to be programmatically inserted (not shortcoded or custom placement).
 	 *
 	 * @param  boolean     $include_unpublished Whether to include unpublished prompts.
 	 * @param  int|boolean $campaign_id Campaign term ID, or false to ignore campaign.
-	 * @return array Overlay popup objects.
+	 * @return array Eligible popup objects.
 	 */
-	public static function retrieve_overlay_popups( $include_unpublished = false, $campaign_id = false ) {
-		$args = [
+	public static function retrieve_eligible_popups( $include_unpublished = false, $campaign_id = false ) {
+		$valid_placements = array_merge(
+			self::$overlay_placements,
+			self::$inline_placements
+		);
+		$args             = [
 			'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
 			'post_status'    => $include_unpublished ? [ 'draft', 'pending', 'future', 'publish' ] : 'publish',
+			'posts_per_page' => 100,
 			'meta_key'       => 'placement',
 			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-			'meta_value'     => self::$overlay_placements,
+			'meta_value'     => $valid_placements,
 			'meta_compare'   => 'IN',
-			'posts_per_page' => 100,
-		];
-
-		$tax_query = [
-			'taxonomy' => 'category',
-			'operator' => 'NOT EXISTS',
-		];
-
-		$args['tax_query'] = [ $tax_query ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-
-		// If previewing specific campaign.
-		if ( ! empty( $campaign_id ) ) {
-			$campaign_tax_query = [ 'taxonomy' => Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY ];
-
-			if ( -1 === (int) $campaign_id ) {
-				$campaign_tax_query['operator'] = 'NOT EXISTS';
-			} else {
-				$campaign_tax_query['field'] = 'term_id';
-				$campaign_tax_query['terms'] = [ $campaign_id ];
-			}
-
-			$args['tax_query'][] = $campaign_tax_query;
-		}
-
-		if ( ! empty( $campaign_id ) ) {
-			$args['tax_query']['relation'] = 'AND';
-		}
-
-		return self::retrieve_popups_with_query( new WP_Query( $args ) );
-	}
-
-	/**
-	 * Retrieve all inline prompts.
-	 *
-	 * @param  boolean     $include_unpublished Whether to include unpublished prompts.
-	 * @param  int|boolean $campaign_id Campaign term ID, or false to ignore campaign.
-	 * @return array Inline popup objects.
-	 */
-	public static function retrieve_inline_popups( $include_unpublished = false, $campaign_id = false ) {
-		$args = [
-			'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
-			'post_status'    => $include_unpublished ? [ 'draft', 'pending', 'future', 'publish' ] : 'publish',
-			'meta_key'       => 'placement',
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-			'meta_value'     => self::$inline_placements,
-			'meta_compare'   => 'IN',
-			'posts_per_page' => 100,
 		];
 
 		// If previewing specific campaign.
@@ -230,50 +188,6 @@ final class Newspack_Popups_Model {
 		}
 
 		return self::retrieve_popups_with_query( new WP_Query( $args ) );
-	}
-
-	/**
-	 * Retrieve overlay popups matching post categories.
-	 *
-	 * @param  boolean     $include_unpublished Whether to include unpublished prompts.
-	 * @param  int|boolean $campaign_id Campaign term ID, or false to ignore campaign.
-	 * @return array|null Array of popup objects.
-	 */
-	public static function retrieve_category_overlay_popups( $include_unpublished = false, $campaign_id = false ) {
-		$post_categories = get_the_category();
-
-		if ( empty( $post_categories ) ) {
-			return null;
-		}
-
-		$args = [
-			'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
-			'posts_per_page' => 1,
-			'post_status'    => $include_unpublished ? [ 'draft', 'pending', 'future', 'publish' ] : 'publish',
-			'category__in'   => array_column( $post_categories, 'term_id' ),
-			'meta_key'       => 'placement',
-			// phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-			'meta_value'     => self::$overlay_placements,
-			'meta_compare'   => 'IN',
-			'posts_per_page' => 100,
-		];
-
-		// If previewing specific campaign.
-		if ( ! empty( $campaign_id ) ) {
-			$tax_query = [ 'taxonomy' => Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY ];
-
-			if ( -1 === (int) $campaign_id ) {
-				$tax_query['operator'] = 'NOT EXISTS';
-			} else {
-				$tax_query['field'] = 'term_id';
-				$tax_query['terms'] = [ $campaign_id ];
-			}
-
-			$args['tax_query'] = [ $tax_query ]; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-		}
-
-		$popups = self::retrieve_popups_with_query( new WP_Query( $args ) );
-		return count( $popups ) > 0 ? $popups : null;
 	}
 
 	/**
@@ -295,6 +209,7 @@ final class Newspack_Popups_Model {
 			[
 				'background_color'        => filter_input( INPUT_GET, 'background_color', FILTER_SANITIZE_STRING ),
 				'display_title'           => filter_input( INPUT_GET, 'display_title', FILTER_VALIDATE_BOOLEAN ),
+				'hide_border'             => filter_input( INPUT_GET, 'hide_border', FILTER_VALIDATE_BOOLEAN ),
 				'dismiss_text'            => filter_input( INPUT_GET, 'dismiss_text', FILTER_SANITIZE_STRING ),
 				'dismiss_text_alignment'  => filter_input( INPUT_GET, 'dismiss_text_alignment', FILTER_SANITIZE_STRING ),
 				'frequency'               => filter_input( INPUT_GET, 'frequency', FILTER_SANITIZE_STRING ),
@@ -334,17 +249,17 @@ final class Newspack_Popups_Model {
 	 * Retrieve popup CPT posts.
 	 *
 	 * @param WP_Query $query The query to use.
-	 * @param boolean  $include_categories If true, returned objects will include assigned categories.
+	 * @param boolean  $include_taxonomies If true, returned objects will include assigned categories and tags.
 	 * @return array Popup objects array
 	 */
-	protected static function retrieve_popups_with_query( WP_Query $query, $include_categories = false ) {
+	protected static function retrieve_popups_with_query( WP_Query $query, $include_taxonomies = false ) {
 		$popups = [];
 		if ( $query->have_posts() ) {
 			while ( $query->have_posts() ) {
 				$query->the_post();
 				$popup = self::create_popup_object(
 					get_post( get_the_ID() ),
-					$include_categories
+					$include_taxonomies
 				);
 				$popup = self::deprecate_test_never_manual( $popup, 'publish' === $query->get( 'post_status', null ) );
 
@@ -402,11 +317,11 @@ final class Newspack_Popups_Model {
 	 * Create the popup object.
 	 *
 	 * @param WP_Post $campaign_post The prompt post object.
-	 * @param boolean $include_categories If true, returned objects will include assigned categories.
+	 * @param boolean $include_taxonomies If true, returned objects will include assigned categories and tags.
 	 * @param object  $options Popup options to use instead of the options retrieved from the post. Used for popup previews.
 	 * @return object Popup object
 	 */
-	public static function create_popup_object( $campaign_post, $include_categories = false, $options = null ) {
+	public static function create_popup_object( $campaign_post, $include_taxonomies = false, $options = null ) {
 		$id = $campaign_post->ID;
 
 		$post_options = isset( $options ) ? $options : [
@@ -414,6 +329,7 @@ final class Newspack_Popups_Model {
 			'dismiss_text'            => get_post_meta( $id, 'dismiss_text', true ),
 			'dismiss_text_alignment'  => get_post_meta( $id, 'dismiss_text_alignment', true ),
 			'display_title'           => get_post_meta( $id, 'display_title', true ),
+			'hide_border'             => get_post_meta( $id, 'hide_border', true ),
 			'frequency'               => get_post_meta( $id, 'frequency', true ),
 			'overlay_color'           => get_post_meta( $id, 'overlay_color', true ),
 			'overlay_opacity'         => get_post_meta( $id, 'overlay_opacity', true ),
@@ -435,6 +351,7 @@ final class Newspack_Popups_Model {
 				[
 					'background_color'        => '#FFFFFF',
 					'display_title'           => false,
+					'hide_border'             => false,
 					'dismiss_text'            => '',
 					'dismiss_text_alignment'  => 'center',
 					'frequency'               => 'always',
@@ -454,8 +371,9 @@ final class Newspack_Popups_Model {
 		if ( $popup['options']['selected_segment_id'] && 0 === count( array_intersect( $assigned_segments, Newspack_Popups_Segmentation::get_segment_ids() ) ) ) {
 			$popup['options']['selected_segment_id'] = null;
 		}
-		if ( $include_categories ) {
+		if ( $include_taxonomies ) {
 			$popup['categories']      = get_the_category( $id );
+			$popup['tags']            = get_the_tags( $id );
 			$popup['campaign_groups'] = get_the_terms( $id, Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY );
 		}
 
@@ -479,26 +397,6 @@ final class Newspack_Popups_Model {
 		}
 
 		return $popup;
-	}
-
-	/**
-	 * Get the popup dismissal text.
-	 *
-	 * @param object $popup The popup object.
-	 * @return string|null Dismiss popup text.
-	 */
-	protected static function get_dismiss_text( $popup ) {
-		return ! empty( $popup['options']['dismiss_text'] ) && strlen( trim( $popup['options']['dismiss_text'] ) ) > 0 ? $popup['options']['dismiss_text'] : null;
-	}
-
-	/**
-	 * Get the popup dismiss button alignment. Default/empty === center alignment.
-	 *
-	 * @param object $popup The popup object.
-	 * @return string|null Dismiss button alignment.
-	 */
-	protected static function get_dismiss_text_alignment( $popup ) {
-		return ! empty( $popup['options']['dismiss_text_alignment'] ) ? $popup['options']['dismiss_text_alignment'] : 'center';
 	}
 
 	/**
@@ -560,7 +458,7 @@ final class Newspack_Popups_Model {
 	 * @return boolean True if it is an overlay popup.
 	 */
 	public static function is_overlay( $popup ) {
-		if ( ! isset( $popup['options'], $popup['options']['placement'] ) ) {
+		if ( ! $popup || ! isset( $popup['options'], $popup['options']['placement'] ) ) {
 			return false;
 		}
 		return in_array( $popup['options']['placement'], self::$overlay_placements, true );
@@ -686,17 +584,6 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Encode event name to be sent to GA.
-	 *
-	 * @param string $popup_id The popup ID.
-	 * @param int    $event_code The event code.
-	 * @return string Encoded event name.
-	 */
-	private static function encode_event_name( $popup_id, $event_code ) {
-		return $popup_id . $event_code;
-	}
-
-	/**
 	 * Get a shortest possible CSS class name for a form element.
 	 *
 	 * @param string $type Type of the form.
@@ -723,29 +610,27 @@ final class Newspack_Popups_Model {
 			return [];
 		}
 
-		$popup_id       = $popup['id'];
-		$event_category = 'NC';
+		$popup_id            = $popup['id'];
+		$event_category      = 'Newspack Announcement';
+		$formatted_placement = ucwords( str_replace( '_', ' ', $popup['options']['placement'] ) );
+		$event_label         = $formatted_placement . ': ' . $popup['title'] . ' (' . $popup_id . ')';
 
 		$has_link                = preg_match( '/<a\s/', $body ) !== 0;
 		$has_form                = preg_match( '/<form\s/', $body ) !== 0;
 		$has_dismiss_form        = self::is_overlay( $popup );
-		$has_not_interested_form = self::get_dismiss_text( $popup );
+		$has_not_interested_form = $popup['options']['dismiss_text'];
 
 		$analytics_events = [
 			[
-				'id'              => self::get_uniqid(),
 				'on'              => 'ini-load',
 				'element'         => '#' . esc_attr( $element_id ),
-				'event_name'      => self::encode_event_name( $popup_id, 0 ), // Load.
-				'event_category'  => esc_attr( $event_category ),
+				'event_name'      => __( 'Load', 'newspack-popups' ),
 				'non_interaction' => true,
 			],
 			[
-				'id'              => self::get_uniqid(),
 				'on'              => 'visible',
 				'element'         => '#' . esc_attr( $element_id ),
-				'event_name'      => self::encode_event_name( $popup_id, 1 ), // Seen.
-				'event_category'  => esc_attr( $event_category ),
+				'event_name'      => __( 'Seen', 'newspack-popups' ),
 				'non_interaction' => true,
 				'visibilitySpec'  => [
 					'totalTimeMin' => 500,
@@ -755,46 +640,44 @@ final class Newspack_Popups_Model {
 
 		if ( $has_link ) {
 			$analytics_events[] = [
-				'id'             => self::get_uniqid(),
-				'on'             => 'click',
-				'element'        => '#' . esc_attr( $element_id ) . ' a',
-				'amp_element'    => '#' . esc_attr( $element_id ) . ' a',
-				'event_name'     => self::encode_event_name( $popup_id, 2 ), // Link Click.
-				'event_category' => esc_attr( $event_category ),
+				'on'          => 'click',
+				'element'     => '#' . esc_attr( $element_id ) . ' a',
+				'amp_element' => '#' . esc_attr( $element_id ) . ' a',
+				'event_name'  => __( 'Link Click', 'newspack-popups' ),
 			];
 		}
 
 		if ( $has_form ) {
 			$analytics_events[] = [
-				'id'             => self::get_uniqid(),
-				'amp_on'         => 'amp-form-submit-success',
-				'on'             => 'submit',
-				'element'        => 'form:not(.' . self::get_form_class( 'action', $element_id ) . ')',
-				'event_name'     => self::encode_event_name( $popup_id, 3 ), // Form Submission.
-				'event_category' => esc_attr( $event_category ),
+				'amp_on'     => 'amp-form-submit-success',
+				'on'         => 'submit',
+				'element'    => 'form:not(.' . self::get_form_class( 'action', $element_id ) . ')',
+				'event_name' => __( 'Form Submission', 'newspack-popups' ),
 			];
 		}
 		if ( $has_dismiss_form ) {
 			$analytics_events[] = [
-				'id'              => self::get_uniqid(),
 				'amp_on'          => 'amp-form-submit-success',
 				'on'              => 'submit',
 				'element'         => '.' . self::get_form_class( 'dismiss', $element_id ),
-				'event_name'      => self::encode_event_name( $popup_id, 4 ), // Dismissal.
-				'event_category'  => esc_attr( $event_category ),
+				'event_name'      => __( 'Dismissal', 'newspack-popups' ),
 				'non_interaction' => true,
 			];
 		}
 		if ( $has_not_interested_form ) {
 			$analytics_events[] = [
-				'id'              => self::get_uniqid(),
 				'amp_on'          => 'amp-form-submit-success',
 				'on'              => 'submit',
 				'element'         => '.' . self::get_form_class( 'not-interested', $element_id ),
-				'event_name'      => self::encode_event_name( $popup_id, 5 ), // Permanent Dismissal.
-				'event_category'  => esc_attr( $event_category ),
+				'event_name'      => __( 'Permanent Dismissal', 'newspack-popups' ),
 				'non_interaction' => true,
 			];
+		}
+
+		foreach ( $analytics_events as &$event ) {
+			$event['id']             = self::get_uniqid();
+			$event['event_category'] = esc_attr( $event_category );
+			$event['event_label']    = esc_attr( $event_label );
 		}
 
 		return $analytics_events;
@@ -831,13 +714,15 @@ final class Newspack_Popups_Model {
 	 * @param object $popup Popup.
 	 */
 	private static function render_permanent_dismissal_form( $element_id, $popup ) {
-		$dismiss_text = self::get_dismiss_text( $popup );
-		if ( ! $dismiss_text ) {
+		$dismiss_text = $popup['options']['dismiss_text'];
+
+		if ( empty( $dismiss_text ) ) {
 			return '';
 		}
+
 		$endpoint               = self::get_reader_endpoint();
 		$hidden_fields          = self::get_hidden_fields( $popup );
-		$dismiss_text_alignment = self::get_dismiss_text_alignment( $popup );
+		$dismiss_text_alignment = $popup['options']['dismiss_text_alignment'];
 		?>
 			<form class="popup-not-interested-form <?php echo esc_attr( self::get_form_class( 'not-interested', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?> align-<?php echo esc_attr( $dismiss_text_alignment ); ?>"
 				method="POST"
@@ -864,6 +749,7 @@ final class Newspack_Popups_Model {
 			return '';
 		}
 		$status = 'future' === $popup['status'] ? __( 'scheduled', 'newspack-popups' ) : $popup['status'];
+		$status = 'inherit' === $popup['status'] ? __( 'draft', 'newspack-popups' ) : $popup['status']; // Avoid "inherit" status when previewing a single prompt.
 		return 'data-popup-status="' . esc_attr( $status ) . '" ';
 	}
 
@@ -887,15 +773,17 @@ final class Newspack_Popups_Model {
 		$element_id             = self::get_uniqid();
 		$endpoint               = self::get_reader_endpoint();
 		$display_title          = $popup['options']['display_title'];
+		$hide_border            = $popup['options']['hide_border'];
 		$hidden_fields          = self::get_hidden_fields( $popup );
-		$dismiss_text           = self::get_dismiss_text( $popup );
-		$dismiss_text_alignment = self::get_dismiss_text_alignment( $popup );
+		$dismiss_text           = $popup['options']['dismiss_text'];
+		$dismiss_text_alignment = $popup['options']['dismiss_text_alignment'];
 		$is_newsletter_prompt   = self::has_newsletter_prompt( $popup );
-		$classes                = [];
+		$classes                = [ 'newspack-popup' ];
 		$classes[]              = 'above_header' === $popup['options']['placement'] ? 'newspack-above-header-popup' : null;
 		$classes[]              = ! self::is_above_header( $popup ) ? 'newspack-inline-popup' : null;
 		$classes[]              = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
 		$classes[]              = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
+		$classes[]              = $hide_border ? 'newspack-lightbox-no-border' : null;
 		$classes[]              = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
 
 		$analytics_events = self::get_analytics_events( $popup, $body, $element_id );
@@ -939,6 +827,11 @@ final class Newspack_Popups_Model {
 	 * @return string The generated markup.
 	 */
 	public static function generate_popup( $popup ) {
+		// If previewing a single prompt, override saved settings with preview settings.
+		if ( Newspack_Popups::previewed_popup_id() ) {
+			$popup = self::retrieve_preview_popup( Newspack_Popups::previewed_popup_id() );
+		}
+
 		if ( ! self::is_overlay( $popup ) ) {
 			return self::generate_inline_popup( $popup );
 		}
@@ -953,15 +846,17 @@ final class Newspack_Popups_Model {
 
 		$element_id             = self::get_uniqid();
 		$endpoint               = self::get_reader_endpoint();
-		$dismiss_text           = self::get_dismiss_text( $popup );
-		$dismiss_text_alignment = self::get_dismiss_text_alignment( $popup );
+		$dismiss_text           = $popup['options']['dismiss_text'];
+		$dismiss_text_alignment = $popup['options']['dismiss_text_alignment'];
 		$display_title          = $popup['options']['display_title'];
+		$hide_border            = $popup['options']['hide_border'];
 		$overlay_opacity        = absint( $popup['options']['overlay_opacity'] ) / 100;
 		$overlay_color          = $popup['options']['overlay_color'];
 		$hidden_fields          = self::get_hidden_fields( $popup );
 		$is_newsletter_prompt   = self::has_newsletter_prompt( $popup );
-		$classes                = array( 'newspack-lightbox', 'newspack-lightbox-placement-' . $popup['options']['placement'] );
+		$classes                = array( 'newspack-lightbox', 'newspack-popup', 'newspack-lightbox-placement-' . $popup['options']['placement'] );
 		$classes[]              = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
+		$classes[]              = $hide_border ? 'newspack-lightbox-no-border' : null;
 		$classes[]              = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;
 		$wrapper_classes        = [ 'newspack-popup-wrapper' ];
 		$wrapper_classes[]      = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
@@ -973,6 +868,8 @@ final class Newspack_Popups_Model {
 				return array_merge( $evts, self::get_analytics_events( $popup, $body, $element_id ) );
 			}
 		);
+
+		$animation_id = 'a_' . $element_id;
 
 		ob_start();
 		?>
@@ -1012,9 +909,14 @@ final class Newspack_Popups_Model {
 		</amp-layout>
 		<?php if ( $is_scroll_triggered ) : ?>
 			<div id="page-position-marker" style="position: absolute; top: <?php echo esc_attr( $popup['options']['trigger_scroll_progress'] ); ?>%"></div>
-			<amp-position-observer target="page-position-marker" on="enter:showAnim.start;" once layout="nodisplay"></amp-position-observer>
+			<amp-position-observer
+				target="page-position-marker"
+				on="enter:<?php echo esc_attr( $animation_id ); ?>.start;"
+				once
+				layout="nodisplay"
+			></amp-position-observer>
 		<?php endif; ?>
-		<amp-animation id="showAnim" layout="nodisplay" <?php echo $is_scroll_triggered ? '' : 'trigger="visibility"'; ?>>
+		<amp-animation id="<?php echo esc_attr( $animation_id ); ?>" layout="nodisplay" <?php echo $is_scroll_triggered ? '' : 'trigger="visibility"'; ?>>
 			<script type="application/json">
 				{
 					"duration": "125ms",
@@ -1023,7 +925,7 @@ final class Newspack_Popups_Model {
 					"direction": "alternate",
 					"animations": [
 						{
-							"selector": ".newspack-lightbox",
+							"selector": "#<?php echo esc_attr( $element_id ); ?>",
 							"delay": "<?php echo esc_html( self::get_delay( $popup ) ); ?>",
 							"keyframes": {
 								"opacity": ["0", "1"],
@@ -1031,14 +933,14 @@ final class Newspack_Popups_Model {
 							}
 						},
 						{
-							"selector": ".newspack-lightbox",
+							"selector": "#<?php echo esc_attr( $element_id ); ?>",
 							"delay": "<?php echo esc_html( self::get_delay( $popup ) - 500 ); ?>",
 							"keyframes": {
 								"transform": ["translateY(100vh)", "translateY(0vh)"]
 							}
 						},
 						{
-								"selector": ".newspack-popup-wrapper",
+								"selector": "#<?php echo esc_attr( $element_id ); ?> .newspack-popup-wrapper",
 								"delay": "<?php echo intval( $popup['options']['trigger_delay'] ) * 1000 + 625; ?>",
 								"keyframes": {
 									<?php if ( 'top' === $popup['options']['placement'] ) : ?>

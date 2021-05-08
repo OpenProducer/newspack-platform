@@ -4,8 +4,7 @@
  * Internal dependencies
  */
 import QueryControls from '../../components/query-controls';
-import { STORE_NAMESPACE } from './store';
-import { getEditorBlocksIds, isBlogPrivate, shouldReflow, getCoreStorePosts } from './utils';
+import { postsBlockSelector, postsBlockDispatch, isBlogPrivate, shouldReflow } from './utils';
 import {
 	formatAvatars,
 	formatByline,
@@ -50,49 +49,53 @@ import {
 import { withDispatch, withSelect } from '@wordpress/data';
 import { compose } from '@wordpress/compose';
 import { decodeEntities } from '@wordpress/html-entities';
+import {
+	Icon,
+	formatListBullets,
+	fullscreen,
+	grid,
+	image,
+	postFeaturedImage,
+	pullLeft,
+	pullRight,
+} from '@wordpress/icons';
 
 let IS_SUBTITLE_SUPPORTED_IN_THEME;
 if (
 	typeof window === 'object' &&
-	window.newspackIsPostSubtitleSupported &&
-	window.newspackIsPostSubtitleSupported.post_subtitle
+	window.newspack_blocks_data &&
+	window.newspack_blocks_data.post_subtitle
 ) {
 	IS_SUBTITLE_SUPPORTED_IN_THEME = true;
 }
 
-/* From https://material.io/tools/icons */
 const landscapeIcon = (
 	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path d="M0 0h24v24H0z" fill="none" />
-		<Path d="M19 5H5c-1.1 0-2 .9-2 2v10c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V7c0-1.1-.9-2-2-2zm0 12H5V7h14v10z" />
+		<Path
+			clipRule="evenodd"
+			d="M18.714 7.5H5.286a.786.786 0 00-.786.786v7.428c0 .434.352.786.786.786h13.428a.786.786 0 00.786-.786V8.286a.786.786 0 00-.786-.786zM5.286 6A2.286 2.286 0 003 8.286v7.428A2.286 2.286 0 005.286 18h13.428A2.286 2.286 0 0021 15.714V8.286A2.286 2.286 0 0018.714 6H5.286z"
+			fillRule="evenodd"
+		/>
 	</SVG>
 );
 
 const portraitIcon = (
 	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path d="M0 0h24v24H0z" fill="none" />
-		<Path d="M17 3H7c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h10c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm0 16H7V5h10v14z" />
+		<Path
+			clipRule="evenodd"
+			d="M15.714 4.5H8.286a.786.786 0 00-.786.786v13.428c0 .434.352.786.786.786h7.428a.786.786 0 00.786-.786V5.286a.786.786 0 00-.786-.786zM8.286 3A2.286 2.286 0 006 5.286v13.428A2.286 2.286 0 008.286 21h7.428A2.286 2.286 0 0018 18.714V5.286A2.286 2.286 0 0015.714 3H8.286z"
+			fillRule="evenodd"
+		/>
 	</SVG>
 );
 
 const squareIcon = (
 	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path d="M0 0h24v24H0z" fill="none" />
-		<Path d="M18 4H6c-1.1 0-2 .9-2 2v12c0 1.1.9 2 2 2h12c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 14H6V6h12v12z" />
-	</SVG>
-);
-
-const uncroppedIcon = (
-	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path d="M0 0h24v24H0z" fill="none" />
-		<Path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z" />
-	</SVG>
-);
-
-const coverIcon = (
-	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
-		<Path d="M0 0h24v24H0z" fill="none" />
-		<Path d="M4 4h7V2H4c-1.1 0-2 .9-2 2v7h2V4zm6 9l-4 5h12l-3-4-2.03 2.71L10 13zm7-4.5c0-.83-.67-1.5-1.5-1.5S14 7.67 14 8.5s.67 1.5 1.5 1.5S17 9.33 17 8.5zM20 2h-7v2h7v7h2V4c0-1.1-.9-2-2-2zm0 18h-7v2h7c1.1 0 2-.9 2-2v-7h-2v7zM4 13H2v7c0 1.1.9 2 2 2h7v-2H4v-7z" />
+		<Path
+			clipRule="evenodd"
+			d="M18.714 4.5H5.286a.786.786 0 00-.786.786v13.428c0 .434.352.786.786.786h13.428a.786.786 0 00.786-.786V5.286a.786.786 0 00-.786-.786zM5.286 3A2.286 2.286 0 003 5.286v13.428A2.286 2.286 0 005.286 21h13.428A2.286 2.286 0 0021 18.714V5.286A2.286 2.286 0 0018.714 3H5.286z"
+			fillRule="evenodd"
+		/>
 	</SVG>
 );
 
@@ -132,7 +135,7 @@ class Edit extends Component {
 		const postClasses = classNames(
 			{
 				'post-has-image': post.newspack_featured_image_src,
-				'homepage-posts-block__post--disabled': isUIDisabled,
+				'newspack-block--disabled': isUIDisabled,
 			},
 			post.newspack_article_classes
 		);
@@ -481,8 +484,6 @@ class Edit extends Component {
 						onChange={ _typeScale => setAttributes( { typeScale: _typeScale } ) }
 						min={ 1 }
 						max={ 10 }
-						beforeIcon="editor-textcolor"
-						afterIcon="editor-textcolor"
 						required
 					/>
 				</PanelBody>
@@ -616,13 +617,13 @@ class Edit extends Component {
 
 		const blockControls = [
 			{
-				icon: 'list-view',
+				icon: <Icon icon={ formatListBullets } />,
 				title: __( 'List View', 'newspack-blocks' ),
 				onClick: () => setAttributes( { postLayout: 'list' } ),
 				isActive: postLayout === 'list',
 			},
 			{
-				icon: 'grid-view',
+				icon: <Icon icon={ grid } />,
 				title: __( 'Grid View', 'newspack-blocks' ),
 				onClick: () => setAttributes( { postLayout: 'grid' } ),
 				isActive: postLayout === 'grid',
@@ -631,25 +632,25 @@ class Edit extends Component {
 
 		const blockControlsImages = [
 			{
-				icon: 'align-none',
+				icon: <Icon icon={ postFeaturedImage } />,
 				title: __( 'Show media on top', 'newspack-blocks' ),
 				isActive: mediaPosition === 'top',
 				onClick: () => setAttributes( { mediaPosition: 'top' } ),
 			},
 			{
-				icon: 'align-pull-left',
+				icon: <Icon icon={ pullLeft } />,
 				title: __( 'Show media on left', 'newspack-blocks' ),
 				isActive: mediaPosition === 'left',
 				onClick: () => setAttributes( { mediaPosition: 'left' } ),
 			},
 			{
-				icon: 'align-pull-right',
+				icon: <Icon icon={ pullRight } />,
 				title: __( 'Show media on right', 'newspack-blocks' ),
 				isActive: mediaPosition === 'right',
 				onClick: () => setAttributes( { mediaPosition: 'right' } ),
 			},
 			{
-				icon: coverIcon,
+				icon: <Icon icon={ image } />,
 				title: __( 'Show media behind', 'newspack-blocks' ),
 				isActive: mediaPosition === 'behind',
 				onClick: () => setAttributes( { mediaPosition: 'behind' } ),
@@ -676,7 +677,7 @@ class Edit extends Component {
 				onClick: () => setAttributes( { imageShape: 'square' } ),
 			},
 			{
-				icon: uncroppedIcon,
+				icon: <Icon icon={ fullscreen } />,
 				title: __( 'Uncropped', 'newspack-blocks' ),
 				isActive: imageShape === 'uncropped',
 				onClick: () => setAttributes( { imageShape: 'uncropped' } ),
@@ -708,7 +709,7 @@ class Edit extends Component {
 							<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
 						) }
 						{ ! latestPosts && error && (
-							<Placeholder className="component-placeholder__align-center homepage-posts-block--error">
+							<Placeholder className="component-placeholder__align-center newspack-block--error">
 								{ error }
 							</Placeholder>
 						) }
@@ -749,38 +750,6 @@ class Edit extends Component {
 
 export default compose( [
 	withColors( { textColor: 'color' } ),
-	withSelect( ( select, { clientId, attributes } ) => {
-		const { getPostTypes } = select( 'core' );
-		const { getEditorBlocks, getBlocks } = select( 'core/editor' );
-		const editorBlocksIds = getEditorBlocksIds( getEditorBlocks() );
-		// The block might be rendered in the block styles preview, not in the editor.
-		const isEditorBlock = editorBlocksIds.indexOf( clientId ) >= 0;
-
-		const { getPosts, getError, isUIDisabled } = select( STORE_NAMESPACE );
-		const props = {
-			isEditorBlock,
-			isUIDisabled: isUIDisabled(),
-			error: getError( { clientId } ),
-			topBlocksClientIdsInOrder: getBlocks().map( block => block.clientId ),
-			availablePostTypes: getPostTypes( { per_page: -1 } )?.filter(
-				( { supports: { newspack_blocks: newspackBlocks } } ) => newspackBlocks
-			),
-		};
-
-		if ( isEditorBlock ) {
-			props.latestPosts = getPosts( { clientId } );
-		} else {
-			// For block preview, display without deduplication. If there would be a way to match the outside-editor's
-			// block clientId to the clientId of the block that's being previewed, the correct posts could be shown here.
-			props.latestPosts = getCoreStorePosts( attributes );
-		}
-
-		return props;
-	} ),
-	withDispatch( ( dispatch, { isEditorBlock } ) => {
-		return {
-			// Only editor blocks can trigger reflows.
-			triggerReflow: isEditorBlock ? dispatch( STORE_NAMESPACE ).reflow : () => {},
-		};
-	} ),
+	withSelect( postsBlockSelector ),
+	withDispatch( postsBlockDispatch ),
 ] )( Edit );

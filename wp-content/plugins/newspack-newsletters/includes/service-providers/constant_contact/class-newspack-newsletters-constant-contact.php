@@ -300,7 +300,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 			$cc             = new ConstantContact( $api_key );
 			$cc_campaign_id = get_post_meta( $post->ID, 'cc_campaign_id', true );
 			$renderer       = new Newspack_Newsletters_Renderer();
-			$content        = $renderer->render_html_email( $post );
+			$content        = $renderer->retrieve_email_html( $post );
 			if ( $cc_campaign_id ) {
 				$campaign = $cc->emailMarketingService->getCampaign( $this->access_token(), $cc_campaign_id ); //phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 

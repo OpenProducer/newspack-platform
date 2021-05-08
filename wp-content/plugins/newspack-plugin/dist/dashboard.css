@@ -10,23 +10,38 @@
   padding: 0; }
   .newspack-dashboard-card.disabled > * {
     opacity: 0.75; }
-  .newspack-dashboard-card a {
+  .newspack-dashboard-card a,
+  body[class*='admin-color-'] .newspack-dashboard-card .newspack-button {
     align-items: center;
     border-radius: inherit;
     color: inherit;
     display: flex;
+    font-weight: inherit;
     height: 100%;
     justify-content: space-between;
+    padding: 0;
+    text-align: inherit;
     text-decoration: none;
     transition: background-color 125ms ease-in-out, box-shadow 125ms ease-in-out; }
-    .newspack-dashboard-card a:active, .newspack-dashboard-card a:focus, .newspack-dashboard-card a:hover {
+    .newspack-dashboard-card a:active, .newspack-dashboard-card a:focus, .newspack-dashboard-card a:hover,
+    body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:active,
+    body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:focus,
+    body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:hover {
       background-color: #f8f9f9;
-      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); }
-      .newspack-dashboard-card a:active h2, .newspack-dashboard-card a:focus h2, .newspack-dashboard-card a:hover h2 {
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08);
+      color: #2240d5; }
+      .newspack-dashboard-card a:active h2, .newspack-dashboard-card a:focus h2, .newspack-dashboard-card a:hover h2,
+      body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:active h2,
+      body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:focus h2,
+      body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:hover h2 {
         color: inherit; }
-      .newspack-dashboard-card a:active svg, .newspack-dashboard-card a:focus svg, .newspack-dashboard-card a:hover svg {
+      .newspack-dashboard-card a:active svg, .newspack-dashboard-card a:focus svg, .newspack-dashboard-card a:hover svg,
+      body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:active svg,
+      body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:focus svg,
+      body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:hover svg {
         fill: currentColor; }
-    .newspack-dashboard-card a:focus {
+    .newspack-dashboard-card a:focus,
+    body[class*='admin-color-'] .newspack-dashboard-card .newspack-button:focus {
       outline: none; }
   .newspack-dashboard-card h2,
   .newspack-dashboard-card p {
@@ -52,4 +67,7 @@
         min-height: 136px; } }
     .newspack-dashboard-card__contents .newspack-dashboard-card__header {
       margin-left: 8px; }
+
+.newspack-notice {
+  margin: 0; }
 

@@ -249,6 +249,18 @@ final class Newspack_Popups {
 
 		\register_meta(
 			'post',
+			'hide_border',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'boolean',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
+		\register_meta(
+			'post',
 			'selected_segment_id',
 			[
 				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
@@ -490,6 +502,7 @@ final class Newspack_Popups {
 
 		update_post_meta( $post_id, 'background_color', '#FFFFFF' );
 		update_post_meta( $post_id, 'display_title', false );
+		update_post_meta( $post_id, 'hide_border', false );
 		update_post_meta( $post_id, 'dismiss_text', $dismiss_text );
 		update_post_meta( $post_id, 'frequency', $frequency );
 		update_post_meta( $post_id, 'overlay_color', '#000000' );
@@ -547,7 +560,7 @@ final class Newspack_Popups {
 			<div class="notice notice-error">
 				<p>
 					<?php _e( 'Newspack Campaigns requires a custom configuration file, which is missing. Please create this file following instructions found ', 'newspack-popups' ); ?>
-					<a href="https://github.com/Automattic/newspack-popups/blob/master/api/README.md">
+					<a href="https://github.com/Automattic/newspack-popups/blob/master/README.md#config-file">
 						<?php _e( 'here.', 'newspack-popups' ); ?>
 					</a>
 				</p>

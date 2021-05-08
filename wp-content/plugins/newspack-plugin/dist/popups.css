@@ -43,6 +43,8 @@
   min-height: 40px; }
   .newspack-popups-wizard .newspack-action-card .newspack-popover .components-menu-group + .components-menu-group {
     border-top: 1px solid #e2e4e7; }
+  .newspack-popups-wizard .newspack-action-card .newspack-grid {
+    margin: 24px 0 0; }
   .newspack-popups-wizard .newspack-action-card__container > .newspack-button + .newspack-button {
     margin-left: 2px; }
 
@@ -142,7 +144,7 @@
 .newspack-campaigns__campaign-group__card__segment {
   align-items: center;
   background: #f8f9f9;
-  border-bottom: 1px solid #f3f4f5;
+  border-bottom: 1px solid #e2e4e7;
   display: flex;
   justify-content: space-between; }
 
@@ -275,18 +277,37 @@
   .newspack-campaigns-wizard-segments__list.is-loading {
     pointer-events: none; }
 
-.newspack-campaigns-wizard-segments__title {
-  margin: 32px 0 64px; }
+.newspack-campaigns-wizard-segments__header {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  margin: 32px 0 -24px; }
+  .newspack-campaigns-wizard-segments__header > * {
+    margin: 0; }
+  .newspack-campaigns-wizard-segments__header .newspack-text-control {
+    flex: 1 1 auto; }
+    .newspack-campaigns-wizard-segments__header .newspack-text-control input[type='text'] {
+      border-color: #f3f4f5;
+      color: #191e23;
+      font-size: 17px;
+      font-weight: bold;
+      min-height: 36px;
+      padding-bottom: 5px;
+      padding-top: 5px; }
+  .newspack-campaigns-wizard-segments__header .newspack-buttons-card .newspack-button {
+    margin-left: 8px; }
 
 .newspack-campaigns-wizard-segments__section h2 {
   margin: 0; }
 
 .newspack-campaigns-wizard-segments__section__title {
   display: flex;
-  margin: 0 0 16px; }
+  margin: 0; }
+  .newspack-campaigns-wizard-segments__section__title h3 {
+    margin: 0; }
 
 .newspack-campaigns-wizard-segments__section__content > div {
-  margin-top: 16px;
+  margin: 0;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -294,14 +315,33 @@
   .newspack-campaigns-wizard-segments__section__content > div > * {
     margin: 0; }
 
-.newspack-campaigns-wizard-segments__section__content > *:last-child {
-  margin-bottom: 0 !important; }
+.newspack-campaigns-wizard-segments__section__content .newspack-category-autocomplete,
+.newspack-campaigns-wizard-segments__section__content .newspack-select-control {
+  margin-top: 16px; }
 
 .newspack-campaigns-wizard-segments__section__content .newspack-form-token-field .components-form-token-field__label {
   display: none; }
 
 .newspack-campaigns-wizard-segments__section__content .newspack-form-token-field .components-form-token-field__help {
   display: block; }
+
+.newspack-campaigns-wizard-segments__section__content .newspack-select-control .components-base-control {
+  width: 100%; }
+
+.newspack-campaigns-wizard-segments__section__min-max + .newspack-campaigns-wizard-segments__section__min-max {
+  margin-top: 8px; }
+
+.newspack-campaigns-wizard-segments__section__min-max .newspack-checkbox-control {
+  flex: 0 0 60px; }
+
+.newspack-campaigns-wizard-segments__section__min-max .newspack-text-control {
+  flex: 1 1 auto;
+  margin-left: 8px; }
+  .newspack-campaigns-wizard-segments__section__min-max .newspack-text-control .components-text-control__input {
+    text-align: right; }
+
+.newspack-campaigns-wizard-segments__recorded-visitors {
+  margin: 32px 0 -24px; }
 
 .newspack-campaigns__draggable {
   margin: 16px 0; }
