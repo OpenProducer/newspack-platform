@@ -103,6 +103,18 @@ export const settings = {
 			default: [],
 			items: { type: 'integer' },
 		},
+		slidesPerView: {
+			type: 'number',
+			default: 1,
+		},
+		hideControls: {
+			type: 'boolean',
+			default: false,
+		},
+		aspectRatio: {
+			type: 'number',
+			default: 0.75,
+		},
 	},
 	supports: {
 		html: false,

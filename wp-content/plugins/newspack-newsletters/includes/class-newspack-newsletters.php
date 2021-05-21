@@ -416,6 +416,21 @@ final class Newspack_Newsletters {
 				'auth_callback'  => '__return_true',
 			]
 		);
+		\register_meta(
+			'post',
+			self::EMAIL_HTML_META,
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
+				'show_in_rest'   => [
+					'schema' => [
+						'context' => [ 'edit' ],
+					],
+				],
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
 	}
 
 	/**
@@ -715,28 +730,6 @@ final class Newspack_Newsletters {
 		);
 		\register_rest_route(
 			'newspack-newsletters/v1',
-			'post-meta/(?P<id>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_set_post_meta' ],
-				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
-				'args'                => [
-					'id'    => [
-						'validate_callback' => [ __CLASS__, 'validate_newsletter_id' ],
-						'sanitize_callback' => 'absint',
-					],
-					'key'   => [
-						'validate_callback' => [ __CLASS__, 'validate_newsletter_post_meta_key' ],
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'value' => [
-						'required' => true,
-					],
-				],
-			]
-		);
-		\register_rest_route(
-			'newspack-newsletters/v1',
 			'color-palette',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
@@ -778,21 +771,18 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * The default color palette lives in the editor frontend and is not
-	 * retrievable on the backend. The workaround is to set it as an option
-	 * so that it's available to the email renderer.
+	 * Get MJML markup for a post.
+	 * Content is sent straight from the editor, because all this happens
+	 * before post is saved in the database.
 	 *
 	 * @param WP_REST_Request $request API request object.
 	 */
 	public static function api_get_mjml( $request ) {
-		if ( empty( $request['title'] ) ) {
-			$request['title'] = get_the_title( $request['id'] );
+		$post = get_post( $request['id'] );
+		if ( ! empty( $request['title'] ) ) {
+			$post->post_title = $request['title'];
 		}
-		$post = (object) [
-			'post_title'   => $request['title'],
-			'post_content' => $request['content'],
-			'ID'           => $request['id'],
-		];
+		$post->post_content = $request['content'];
 		return \rest_ensure_response( [ 'mjml' => Newspack_Newsletters_Renderer::render_post_to_mjml( $post ) ] );
 	}
 
@@ -820,32 +810,6 @@ final class Newspack_Newsletters {
 	 */
 	public static function validate_newsletter_id( $id ) {
 		return self::NEWSPACK_NEWSLETTERS_CPT === get_post_type( $id );
-	}
-
-	/**
-	 * Validate meta key.
-	 *
-	 * @param String $key Meta key.
-	 */
-	public static function validate_newsletter_post_meta_key( $key ) {
-		return in_array(
-			$key,
-			[
-				'font_header',
-				'font_body',
-				'background_color',
-				'preview_text',
-				'diable_ads',
-				'cm_list_id',
-				'cm_segment_id',
-				'cm_send_mode',
-				'cm_from_name',
-				'cm_from_email',
-				'cm_preview_text',
-				'custom_css',
-				self::EMAIL_HTML_META,
-			]
-		);
 	}
 
 	/**

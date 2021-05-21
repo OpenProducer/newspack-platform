@@ -95,7 +95,14 @@ export default function createSwiper( els, config = {} ) {
 		preventClicksPropagation: false, // Necessary for normal block interactions.
 		releaseFormElements: false,
 		setWrapperSize: true,
+		slidesPerView: config.slidesPerView,
+		spaceBetween: 16,
 		touchStartPreventDefault: false,
+		breakpoints: {
+			600: {
+				slidesPerView: config.slidesPerView > 1 ? 2 : 1,
+			},
+		},
 		on: {
 			init() {
 				forEachNode( this.wrapperEl.querySelectorAll( '.swiper-slide' ), slide =>
@@ -119,7 +126,7 @@ export default function createSwiper( els, config = {} ) {
 				if ( ! this.autoplay.running ) {
 					// Announce the contents of the slide.
 					const currentImage = currentSlide.querySelector( 'img' );
-					const alt = currentImage ? currentImage.alt : false;
+					const alt = currentImage ? currentImage?.alt : false;
 
 					const slideInfo = sprintf(
 						/* translators: current slide number and the total number of slides */
@@ -140,6 +147,21 @@ export default function createSwiper( els, config = {} ) {
 			},
 		},
 	} );
+
+	/**
+	 * Forces an aspect ratio for each slide.
+	 */
+	function setAspectRatio() {
+		const { aspectRatio } = config;
+		const slides = Array.from( this.slides );
+
+		slides.forEach( slide => {
+			slide.style.height = `${ slide.clientWidth * aspectRatio }px`;
+		} );
+	}
+
+	swiper.on( 'imagesReady', setAspectRatio );
+	swiper.on( 'resize', setAspectRatio );
 
 	if ( config.autoplay ) {
 		/**

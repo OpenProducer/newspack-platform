@@ -15,6 +15,8 @@ if ( typeof window !== 'undefined' ) {
 			document.querySelectorAll( '.wp-block-newspack-blocks-carousel' )
 		);
 		blocksArray.forEach( block => {
+			const slidesPerView = parseInt( block.dataset.slidesPerView );
+			const slideCount = parseInt( block.dataset.slideCount );
 			createSwiper(
 				{
 					block,
@@ -26,8 +28,11 @@ if ( typeof window !== 'undefined' ) {
 					play: block.querySelector( '.swiper-button-play' ),
 				},
 				{
+					aspectRatio: parseFloat( block.dataset.aspectRatio ),
 					autoplay: !! parseInt( block.dataset.autoplay ),
 					delay: parseInt( block.dataset.autoplay_delay ) * 1000,
+					slidesPerView: slidesPerView <= slideCount ? slidesPerView : slideCount,
+					spaceBetween: 16,
 				}
 			);
 		} );

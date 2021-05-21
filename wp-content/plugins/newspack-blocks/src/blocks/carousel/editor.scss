@@ -1,6 +1,9 @@
 @import '../../shared/sass/placeholder';
 
 .wp-block-newspack-blocks-carousel {
+	.swiper-wrapper {
+		pointer-events: none;
+	}
 	.entry-title {
 		color: white;
 	}
@@ -31,6 +34,14 @@
 		&.amp-carousel-button-next {
 			left: auto;
 			right: 1.5em;
+		}
+	}
+
+	&.hide-controls {
+		button,
+		.amp-pagination {
+			display: none;
+			visibility: hidden;
 		}
 	}
 }

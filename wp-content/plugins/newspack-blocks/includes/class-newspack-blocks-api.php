@@ -367,6 +367,7 @@ class Newspack_Blocks_API {
 				'newspack_post_format'            => self::newspack_blocks_post_format( $data ),
 				'newspack_post_sponsors'          => self::newspack_blocks_sponsor_info( $data ),
 				'post_type'                       => $post->post_type,
+				'post_link'                       => Newspack_Blocks::get_post_link( $post->ID ),
 			];
 
 			$posts[] = array_merge( $data, $add_ons );

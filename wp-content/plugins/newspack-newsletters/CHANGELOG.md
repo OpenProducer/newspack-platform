@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/Automattic/newspack-newsletters/compare/v1.25.0...v1.26.0) (2021-05-13)
+
+
+### Features
+
+* assorted fixes & improvements ([#456](https://github.com/Automattic/newspack-newsletters/issues/456)) ([9716465](https://github.com/Automattic/newspack-newsletters/commit/97164659d3993b89de089a74fdd3d610da51859d)), closes [#296](https://github.com/Automattic/newspack-newsletters/issues/296)
+
 # [1.25.0](https://github.com/Automattic/newspack-newsletters/compare/v1.24.1...v1.25.0) (2021-05-04)
 
 

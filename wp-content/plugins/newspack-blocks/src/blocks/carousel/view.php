@@ -39,7 +39,9 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	$article_classes = [
 		'post-has-image',
 	];
-	if ( ! $is_amp ) {
+	if ( $is_amp ) {
+		$article_classes[] = 'amp-carousel-slide';
+	} else {
 		$article_classes[] = 'swiper-slide';
 	}
 	ob_start();
@@ -56,13 +58,14 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			$counter++;
 			$has_featured_image = has_post_thumbnail();
 			$post_type          = get_post_type();
-			$external_url       = get_post_meta( $post_id, 'newspack_sponsor_url', true );
-			$link               = ! empty( $external_url ) ? $external_url : get_permalink();
+			$post_link          = Newspack_Blocks::get_post_link( $post_id );
 			?>
 
 			<article data-post-id="<?php echo esc_attr( $post_id ); ?>" class="<?php echo esc_attr( implode( ' ', $article_classes ) . ' ' . $post_type ); ?>">
 				<figure class="post-thumbnail">
-					<a href="<?php echo esc_url( $link ); ?>" rel="bookmark">
+					<?php if ( $post_link ) : ?>
+					<a href="<?php echo esc_url( $post_link ); ?>" rel="bookmark">
+					<?php endif; ?>
 						<?php if ( $has_featured_image ) : ?>
 							<?php
 								the_post_thumbnail(
@@ -70,13 +73,16 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 									array(
 										'object-fit' => $attributes['imageFit'],
 										'layout'     => 'fill',
+										'class'      => 'contain' === $attributes['imageFit'] ? 'image-fit-contain' : 'image-fit-cover',
 									)
 								);
 							?>
 						<?php else : ?>
 							<div class="wp-block-newspack-blocks-carousel__placeholder"></div>
 						<?php endif; ?>
+					<?php if ( $post_link ) : ?>
 					</a>
+					<?php endif; ?>
 				</figure>
 
 				<?php if ( ! empty( $sponsors ) || $attributes['showCategory'] || $attributes['showTitle'] || $attributes['showAuthor'] || $attributes['showDate'] ) : ?>
@@ -121,7 +127,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 
 						<?php
 						if ( $attributes['showTitle'] ) {
-							the_title( '<h3 class="entry-title"><a href="' . esc_url( $link ) . '" rel="bookmark">', '</a></h3>' );
+							the_title( '<h3 class="entry-title"><a href="' . esc_url( $post_link ) . '" rel="bookmark">', '</a></h3>' );
 						}
 						?>
 
@@ -224,30 +230,40 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			0 === $x ? 'selected' : ''
 		);
 	}
+
+	$slides_per_view = absint( ! empty( $attributes['slidesPerView'] ) ? $attributes['slidesPerView'] : 1 );
+	$slides_to_show  = $slides_per_view <= $counter ? $slides_per_view : $counter;
+
 	if ( $is_amp ) {
 		$selector    = sprintf(
-			'<amp-selector id="wp-block-newspack-carousel__amp-pagination__%1$d" class="swiper-pagination-bullets amp-pagination" on="select:wp-block-newspack-carousel__amp-carousel__%1$d.goToSlide(index=event.targetOption)" layout="container">%2$s</amp-selector>',
+			'<amp-selector id="wp-block-newspack-carousel__amp-pagination__%1$d" class="swiper-pagination-bullets amp-pagination" on="select:wp-block-newspack-carousel__amp-carousel__%1$d.goToSlide(index=event.targetOption)" layout="container" %2$s>%3$s</amp-selector>',
 			absint( $newspack_blocks_carousel_id ),
+			$attributes['hideControls'] ? 'aria-hidden="true"' : '',
 			implode( '', $buttons )
 		);
 		$carousel    = sprintf(
-			'<amp-carousel width="4" height="3" layout="responsive" type="slides" data-next-button-aria-label="%1$s" data-prev-button-aria-label="%2$s" controls loop %3$s id="wp-block-newspack-carousel__amp-carousel__%4$s" on="slideChange:wp-block-newspack-carousel__amp-pagination__%4$s.toggle(index=event.index, value=true)">%5$s</amp-carousel>',
+			'<amp-base-carousel class="wp-block-newspack-carousel__amp-carousel" width="%1$s" height="%2$s" layout="responsive" snap="true" type="slides" data-next-button-aria-label="%3$s" data-prev-button-aria-label="%4$s" controls loop %5$s id="wp-block-newspack-carousel__amp-carousel__%6$s" on="slideChange:wp-block-newspack-carousel__amp-pagination__%6$s.toggle(index=event.index, value=true)" advance-count="1" visible-count="%7$s">%8$s</amp-base-carousel>',
+			$attributes['slidesPerView'] * 1,
+			$attributes['aspectRatio'],
 			esc_attr__( 'Next Slide', 'newspack-blocks' ),
 			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
-			$autoplay ? 'autoplay delay=' . esc_attr( $delay * 1000 ) : '',
+			$autoplay ? 'auto-advance="true" auto-advance-interval=' . esc_attr( $delay * 1000 ) : '',
 			absint( $newspack_blocks_carousel_id ),
+			'(min-width: 600px) ' . $slides_to_show . ', ' . ( $slides_to_show > 1 ? 2 : 1 ),
 			$slides
 		);
 		$autoplay_ui = $autoplay ? newspack_blocks_carousel_block_autoplay_ui_amp( $newspack_blocks_carousel_id ) : '';
 	} else {
 		$selector    = sprintf(
-			'<div class="swiper-pagination-bullets amp-pagination">%s</div>',
+			'<div class="swiper-pagination-bullets amp-pagination" %1$s>%2$s</div>',
+			$attributes['hideControls'] ? 'aria-hidden="true"' : '',
 			implode( '', $buttons )
 		);
 		$navigation  = 1 === $counter ? '' : sprintf(
-			'<button class="swiper-button swiper-button-prev" aria-label="%s"></button><button class="swiper-button swiper-button-next" aria-label="%s"></button>',
+			'<button class="swiper-button swiper-button-prev" aria-label="%1$s" %3$s></button><button class="swiper-button swiper-button-next" aria-label="%2$s" %3$s></button>',
 			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
-			esc_attr__( 'Next Slide', 'newspack-blocks' )
+			esc_attr__( 'Next Slide', 'newspack-blocks' ),
+			$attributes['hideControls'] ? 'aria-hidden="true"' : ''
 		);
 		$carousel    = sprintf(
 			'<div class="swiper-container"><div class="swiper-wrapper">%s</div>%s</div>',
@@ -258,6 +274,9 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	}
 	$data_attributes = [
 		'data-current-post-id=' . $post_id,
+		'data-slides-per-view=' . $attributes['slidesPerView'],
+		'data-slide-count=' . $counter,
+		'data-aspect-ratio=' . $attributes['aspectRatio'],
 	];
 
 	if ( $autoplay && ! $is_amp ) {
@@ -333,65 +352,77 @@ function newspack_blocks_register_carousel() {
 			'newspack_blocks_block_args',
 			array(
 				'attributes'      => array(
-					'className'    => array(
+					'className'     => array(
 						'type' => 'string',
 					),
-					'postsToShow'  => array(
+					'postsToShow'   => array(
 						'type'    => 'integer',
 						'default' => 3,
 					),
-					'authors'      => array(
+					'authors'       => array(
 						'type'    => 'array',
 						'default' => array(),
 						'items'   => array(
 							'type' => 'integer',
 						),
 					),
-					'categories'   => array(
+					'categories'    => array(
 						'type'    => 'array',
 						'default' => array(),
 						'items'   => array(
 							'type' => 'integer',
 						),
 					),
-					'tags'         => array(
+					'tags'          => array(
 						'type'    => 'array',
 						'default' => array(),
 						'items'   => array(
 							'type' => 'integer',
 						),
 					),
-					'autoplay'     => array(
+					'autoplay'      => array(
 						'type'    => 'boolean',
 						'default' => false,
 					),
-					'delay'        => array(
+					'delay'         => array(
 						'type'    => 'integer',
 						'default' => 5,
 					),
-					'showAuthor'   => array(
+					'showAuthor'    => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'showAvatar'   => array(
+					'showAvatar'    => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'showCategory' => array(
+					'showCategory'  => array(
 						'type'    => 'boolean',
 						'default' => false,
 					),
-					'showDate'     => array(
+					'showDate'      => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'showTitle'    => array(
-						'type'    => 'boolean',
-						'default' => true,
-					),
-					'imageFit'     => array(
+					'imageFit'      => array(
 						'type'    => 'string',
 						'default' => 'cover',
+					),
+					'showTitle'     => array(
+						'type'    => 'boolean',
+						'default' => true,
+					),
+					'slidesPerView' => array(
+						'type'    => 'number',
+						'default' => 1,
+					),
+					'hideControls'  => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
+					'aspectRatio'   => array(
+						'type'    => 'number',
+						'default' => 0.75,
 					),
 				),
 				'render_callback' => 'newspack_blocks_render_block_carousel',

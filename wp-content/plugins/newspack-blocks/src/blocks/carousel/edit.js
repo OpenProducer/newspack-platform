@@ -14,11 +14,13 @@ import { InspectorControls } from '@wordpress/block-editor';
 import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
 import { Component, createRef, Fragment } from '@wordpress/element';
 import {
+	BaseControl,
+	Button,
+	ButtonGroup,
 	CheckboxControl,
 	PanelBody,
 	PanelRow,
 	Placeholder,
-	RadioControl,
 	RangeControl,
 	Spinner,
 	ToggleControl,
@@ -40,6 +42,9 @@ import {
 } from '../../shared/js/utils';
 // Use same posts store as Homepage Posts block.
 import { postsBlockSelector, postsBlockDispatch, shouldReflow } from '../homepage-articles/utils';
+
+// Max number of slides that can be shown at once.
+const MAX_NUMBER_OF_SLIDES = 6;
 
 class Edit extends Component {
 	constructor( props ) {
@@ -93,7 +98,7 @@ class Edit extends Component {
 		const { latestPosts } = this.props;
 
 		if ( latestPosts && latestPosts.length ) {
-			const { autoplay, delay } = this.props.attributes;
+			const { aspectRatio, autoplay, delay, slidesPerView } = this.props.attributes;
 
 			this.swiperInstance = createSwiper(
 				{
@@ -106,9 +111,11 @@ class Edit extends Component {
 					pagination: this.paginationRef.current,
 				},
 				{
+					aspectRatio,
 					autoplay,
 					delay: delay * 1000,
 					initialSlide,
+					slidesPerView: slidesPerView <= latestPosts.length ? slidesPerView : latestPosts.length,
 				}
 			);
 		}
@@ -124,10 +131,12 @@ class Edit extends Component {
 			isUIDisabled,
 		} = this.props;
 		const {
+			aspectRatio,
 			authors,
 			autoplay,
 			categories,
 			delay,
+			hideControls,
 			imageFit,
 			postsToShow,
 			postType,
@@ -136,6 +145,7 @@ class Edit extends Component {
 			showAuthor,
 			showAvatar,
 			showTitle,
+			slidesPerView,
 			specificMode,
 			specificPosts,
 			tags,
@@ -147,11 +157,64 @@ class Edit extends Component {
 			{
 				'wp-block-newspack-blocks-carousel__autoplay-playing': autoplay,
 				'newspack-block--disabled': isUIDisabled,
+				'hide-controls': hideControls,
 			}
 		);
 		const dateFormat = __experimentalGetSettings().formats.date;
 		const hasNoPosts = latestPosts && ! latestPosts.length;
 		const hasOnePost = latestPosts && latestPosts.length === 1;
+		const maxPosts = latestPosts ? Math.min( postsToShow, latestPosts.length ) : postsToShow;
+		const aspectRatioOptions = [
+			{
+				value: 1,
+				label: /* translators: label for square aspect ratio option */ __(
+					'Square',
+					'newspack-blocks'
+				),
+				shortName: /* translators: abbreviation for 1:1 aspect ratio */ __(
+					'1:1',
+					'newspack-blocks'
+				),
+			},
+			{
+				value: 0.75,
+				label: /* translators: label for 4:3 aspect ratio option */ __( '4:3', 'newspack-blocks' ),
+				shortName: /* translators: abbreviation for 4:3 aspect ratio */ __(
+					'4:3',
+					'newspack-blocks'
+				),
+			},
+			{
+				value: 0.5625,
+				label: /* translators: label for 16:9 aspect ratio option */ __(
+					'16:9',
+					'newspack-blocks'
+				),
+				shortName: /* translators: abbreviation for 16:9 aspect ratio */ __(
+					'16:9',
+					'newspack-blocks'
+				),
+			},
+			{
+				value: 4 / 3,
+				label: /* translators: label for 3:4 aspect ratio option */ __( '3:4', 'newspack-blocks' ),
+				shortName: /* translators: abbreviation for 3:4 aspect ratio */ __(
+					'3:4',
+					'newspack-blocks'
+				),
+			},
+			{
+				value: 16 / 9,
+				label: /* translators: label for 9:16 aspect ratio option */ __(
+					'9:16',
+					'newspack-blocks'
+				),
+				shortName: /* translators: abbreviation for 9:16 aspect ratio */ __(
+					'9:16',
+					'newspack-blocks'
+				),
+			},
+		];
 		return (
 			<Fragment>
 				<div className={ classes } ref={ this.carouselRef }>
@@ -288,14 +351,85 @@ class Edit extends Component {
 						) }
 					</PanelBody>
 					<PanelBody title={ __( 'Slideshow Settings' ) } initialOpen={ true }>
-						<RadioControl
-							label={ __( 'Image Fit Style', 'newspack-blocks' ) }
-							selected={ imageFit }
-							onChange={ value => setAttributes( { imageFit: value } ) }
-							options={ [
-								{ label: __( 'Cover', 'newspack-blocks' ), value: 'cover' },
-								{ label: __( 'Contain', 'newspack-blocks' ), value: 'contain' },
-							] }
+						<BaseControl
+							label={ __( 'Slide Aspect Ratio', 'newspack-blocks' ) }
+							help={ __(
+								'All slides will share the same aspect ratio, for consistency.',
+								'newspack-popups'
+							) }
+							id="newspack-blocks__aspect-ratio-control"
+						>
+							<PanelRow>
+								<ButtonGroup
+									id="newspack-blocks__aspect-ratio-control-buttons"
+									aria-label={ __( 'Slide Aspect Ratio', 'newspack-blocks' ) }
+								>
+									{ aspectRatioOptions.map( option => {
+										const isCurrent = aspectRatio === option.value;
+										return (
+											<Button
+												isLarge
+												isPrimary={ isCurrent }
+												aria-pressed={ isCurrent }
+												aria-label={ option.label }
+												key={ option.value }
+												onClick={ () => setAttributes( { aspectRatio: option.value } ) }
+											>
+												{ option.shortName }
+											</Button>
+										);
+									} ) }
+								</ButtonGroup>
+							</PanelRow>
+						</BaseControl>
+						<BaseControl
+							label={ __( 'Image Fit', 'newspack-blocks' ) }
+							help={
+								'cover' === imageFit
+									? __(
+											'The image will fill the entire slide and will be cropped if necessary.',
+											'newspack-popups'
+									  )
+									: __(
+											'The image will be resized to fit inside the slide without being cropped.',
+											'newspack-popups'
+									  )
+							}
+							id="newspack-blocks__blocks__image-fit-control"
+						>
+							<PanelRow>
+								<ButtonGroup
+									id="newspack-blocks__image-fit-buttons"
+									aria-label={ __( 'Image Fit', 'newspack-blocks' ) }
+								>
+									<Button
+										isLarge
+										isPrimary={ 'cover' === imageFit }
+										aria-pressed={ 'cover' === imageFit }
+										aria-label={ __( 'Cover', 'newspack-blocks' ) }
+										onClick={ () => setAttributes( { imageFit: 'cover' } ) }
+									>
+										{ __( 'Cover', 'newspack-blocks' ) }
+									</Button>
+									<Button
+										isLarge
+										isPrimary={ 'contain' === imageFit }
+										aria-pressed={ 'contain' === imageFit }
+										aria-label={ __( 'Contain', 'newspack-blocks' ) }
+										onClick={ () => setAttributes( { imageFit: 'contain' } ) }
+									>
+										{ __( 'Contain', 'newspack-blocks' ) }
+									</Button>
+								</ButtonGroup>
+							</PanelRow>
+						</BaseControl>
+						<ToggleControl
+							label={ __( 'Hide Controls' ) }
+							help={ __( 'Hide the slideshow UI. Useful when used with Autoplay.' ) }
+							checked={ hideControls }
+							onChange={ _hideControls => {
+								setAttributes( { hideControls: _hideControls } );
+							} }
 						/>
 						<ToggleControl
 							label={ __( 'Autoplay' ) }
@@ -314,6 +448,21 @@ class Edit extends Component {
 								} }
 								min={ 1 }
 								max={ 20 }
+							/>
+						) }
+						{ latestPosts && 1 < latestPosts.length && (
+							<RangeControl
+								label={ __( 'Number of slides to show at once' ) }
+								value={ slidesPerView <= latestPosts.length ? slidesPerView : latestPosts.length }
+								onChange={ _slidesPerView => {
+									setAttributes( { slidesPerView: _slidesPerView } );
+								} }
+								min={ 1 }
+								max={
+									specificMode
+										? Math.min( MAX_NUMBER_OF_SLIDES, latestPosts.length )
+										: Math.min( MAX_NUMBER_OF_SLIDES, maxPosts )
+								}
 							/>
 						) }
 					</PanelBody>

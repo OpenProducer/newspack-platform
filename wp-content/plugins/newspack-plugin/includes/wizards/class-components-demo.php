@@ -85,7 +85,7 @@ class Components_Demo extends Wizard {
 		wp_enqueue_script(
 			'newspack-components-demo',
 			Newspack::plugin_url() . '/dist/componentsDemo.js',
-			$this->get_script_dependencies(),
+			$this->get_script_dependencies( [ 'wp-html-entities' ] ),
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/componentsDemo.js' ),
 			true
 		);

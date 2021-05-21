@@ -1,3 +1,10 @@
+# [1.26.0](https://github.com/Automattic/newspack-blocks/compare/v1.25.1...v1.26.0) (2021-05-13)
+
+
+### Features
+
+* add carousel block attribute for slidesPerView ([#750](https://github.com/Automattic/newspack-blocks/issues/750)) ([fd41ab9](https://github.com/Automattic/newspack-blocks/commit/fd41ab9a4716a2d555eb9393f3b11ba94d9e686f))
+
 ## [1.25.1](https://github.com/Automattic/newspack-blocks/compare/v1.25.0...v1.25.1) (2021-05-05)
 
 

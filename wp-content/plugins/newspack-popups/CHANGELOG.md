@@ -1,3 +1,10 @@
+## [1.32.1](https://github.com/Automattic/newspack-popups/compare/v1.32.0...v1.32.1) (2021-05-13)
+
+
+### Bug Fixes
+
+* **analytics:** form selector ([9ba35b6](https://github.com/Automattic/newspack-popups/commit/9ba35b69309d739e181ee6b7ce6d159dc2ffba66))
+
 # [1.32.0](https://github.com/Automattic/newspack-popups/compare/v1.31.1...v1.32.0) (2021-05-05)
 
 

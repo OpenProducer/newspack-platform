@@ -129,7 +129,15 @@ class Support_Wizard extends Wizard {
 	public function api_wpcom_access_token( $request ) {
 		if ( isset( $request['access_token'], $request['expires_in'] ) ) {
 			$user_id = get_current_user_id();
-			update_user_meta( $user_id, self::NEWSPACK_WPCOM_ACCESS_TOKEN, sanitize_text_field( $request['access_token'] ) );
+			update_user_meta(
+				$user_id,
+				self::NEWSPACK_WPCOM_ACCESS_TOKEN,
+				sanitize_meta(
+					self::NEWSPACK_WPCOM_ACCESS_TOKEN,
+					$request['access_token'],
+					'user'
+				) 
+			);
 			update_user_meta( $user_id, self::NEWSPACK_WPCOM_EXPIRES_IN, sanitize_text_field( $request['expires_in'] ) );
 			return \rest_ensure_response(
 				array(

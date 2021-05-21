@@ -1,3 +1,27 @@
+# [1.40.0](https://github.com/Automattic/newspack-plugin/compare/v1.39.0...v1.40.0) (2021-05-18)
+
+
+### Bug Fixes
+
+* replace WP User Avatar with Simple Local Avatars ([#966](https://github.com/Automattic/newspack-plugin/issues/966)) ([f980412](https://github.com/Automattic/newspack-plugin/commit/f98041216d857d72bd373b1377b97aa7e4c68b23))
+* **oauth:** wpcom token saving ([24052d6](https://github.com/Automattic/newspack-plugin/commit/24052d65ba9e15635b4f21d9d6e02d0433351ada))
+* **progress-bar:** radius when having headings ([#963](https://github.com/Automattic/newspack-plugin/issues/963)) ([8347362](https://github.com/Automattic/newspack-plugin/commit/8347362c1a9918d729187d28214d91687c8065b8))
+* loading quiet anim time/height and margin when admin menu is folded ([#958](https://github.com/Automattic/newspack-plugin/issues/958)) ([f297780](https://github.com/Automattic/newspack-plugin/commit/f297780803c05dc86eb2ff63e18a559d1eb144a9))
+
+
+### Features
+
+* add an AutocompleteWithSuggestions component for reusability ([#952](https://github.com/Automattic/newspack-plugin/issues/952)) ([460728d](https://github.com/Automattic/newspack-plugin/commit/460728da79ceffd3d8b53f44d8772f5d1223617b))
+* add new ButtonCard component ([#961](https://github.com/Automattic/newspack-plugin/issues/961)) ([eff9edf](https://github.com/Automattic/newspack-plugin/commit/eff9edfd8e8a054ab304543f5e3d7397de9a6f4e))
+* add reusable blocks extended as supported plugin ([#968](https://github.com/Automattic/newspack-plugin/issues/968)) ([10f9758](https://github.com/Automattic/newspack-plugin/commit/10f97585930eb66f88deb2708bd8301b5a68286c))
+
+# [1.39.0](https://github.com/Automattic/newspack-plugin/compare/v1.38.1...v1.39.0) (2021-05-13)
+
+
+### Features
+
+* add link to manage reusable blocks ([#949](https://github.com/Automattic/newspack-plugin/issues/949)) ([101baa2](https://github.com/Automattic/newspack-plugin/commit/101baa2245696d535a09a77fd5dc2d9987826d8a))
+
 ## [1.38.1](https://github.com/Automattic/newspack-plugin/compare/v1.38.0...v1.38.1) (2021-05-07)
 
 

@@ -651,7 +651,7 @@ final class Newspack_Popups_Model {
 			$analytics_events[] = [
 				'amp_on'     => 'amp-form-submit-success',
 				'on'         => 'submit',
-				'element'    => 'form:not(.' . self::get_form_class( 'action', $element_id ) . ')',
+				'element'    => '#' . esc_attr( $element_id ) . ' form:not(.' . self::get_form_class( 'action', $element_id ) . ')', // Not an 'action' (dismissal) form.
 				'event_name' => __( 'Form Submission', 'newspack-popups' ),
 			];
 		}

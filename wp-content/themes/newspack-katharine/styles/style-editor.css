@@ -946,6 +946,11 @@ ul.wp-block-archives li,
   font-style: italic;
 }
 
+#newspack-post-subtitle-element em,
+#newspack-post-subtitle-element i {
+  font-style: normal;
+}
+
 /** === Custom Colors === */
 .has-primary-background-color,
 .is-style-outline .wp-block-button__link.has-primary-background-color,

@@ -19,6 +19,7 @@ class Patches {
 	public static function init() {
 		add_filter( 'redirect_canonical', [ __CLASS__, 'patch_redirect_canonical' ], 10, 2 );
 		add_filter( 'wpseo_enhanced_slack_data', [ __CLASS__, 'use_cap_for_slack_preview' ] );
+		add_action( 'admin_menu', [ __CLASS__, 'add_reusable_blocks_menu_link' ] );
 	}
 
 	/**
@@ -82,6 +83,13 @@ class Patches {
 		}
 
 		return $slack_data;
+	}
+
+	/**
+	 * Add a menu link in WP Admin to easily edit and manage reusable blocks.
+	 */
+	public static function add_reusable_blocks_menu_link() {
+		add_submenu_page( 'edit.php', 'manage_reusable_blocks', __( 'Reusable Blocks' ), 'read', 'edit.php?post_type=wp_block', '', 2 );  
 	}
 }
 Patches::init();
