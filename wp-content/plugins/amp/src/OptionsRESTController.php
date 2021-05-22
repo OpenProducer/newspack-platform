@@ -188,11 +188,26 @@ final class OptionsRESTController extends WP_REST_Controller implements Delayed,
 
 		$options[ Option::SUPPRESSED_PLUGINS ] = $this->plugin_suppression->prepare_suppressed_plugins_for_response( $options[ Option::SUPPRESSED_PLUGINS ] );
 
-		$options[ self::ONBOARDING_WIZARD_LINK ] = amp_should_use_new_onboarding()
-			? get_admin_url( null, add_query_arg( [ 'page' => OnboardingWizardSubmenu::SCREEN_ID ], 'admin.php' ) )
-			: null;
+		$options[ self::ONBOARDING_WIZARD_LINK ] = get_admin_url( null, add_query_arg( [ 'page' => OnboardingWizardSubmenu::SCREEN_ID ], 'admin.php' ) );
 
 		$options[ self::CUSTOMIZER_LINK ] = amp_get_customizer_url();
+
+		/**
+		 * Filters options for services to add additional REST items.
+		 *
+		 * @internal
+		 *
+		 * @param array $service_options REST Options for Services.
+		 */
+		$service_options = apply_filters( 'amp_rest_options', [] );
+		if ( ! is_array( $service_options ) ) {
+			$service_options = [];
+		}
+
+		$options = array_merge(
+			$options,
+			$service_options
+		);
 
 		return rest_ensure_response( $options );
 	}
@@ -338,6 +353,23 @@ final class OptionsRESTController extends WP_REST_Controller implements Delayed,
 					],
 				],
 			];
+
+			/**
+			 * Filters schema for services to add additional items.
+			 *
+			 * @internal
+			 *
+			 * @param array $schema Schema.
+			 */
+			$services_schema = apply_filters( 'amp_rest_options_schema', [] );
+			if ( ! is_array( $services_schema ) ) {
+				$services_schema = [];
+			}
+
+			$this->schema['properties'] = array_merge(
+				$this->schema['properties'],
+				$services_schema
+			);
 		}
 
 		return $this->schema;

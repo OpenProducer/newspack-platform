@@ -21,14 +21,14 @@ class MC4WP_Form_Asset_Manager {
 		add_action( 'wp_enqueue_scripts', array( $this, 'load_stylesheets' ) );
 		add_action( 'wp_footer', array( $this, 'load_scripts' ) );
 		add_action( 'mc4wp_output_form', array( $this, 'before_output_form' ) );
+		add_action( 'script_loader_tag', array( $this, 'add_defer_attribute'), 10, 2 );
 	}
 
 	/**
 	 * Register scripts to be enqueued later.
 	 */
 	public function register_scripts() {
-		$filename_suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-		wp_register_script( 'mc4wp-forms-api', mc4wp_plugin_url( 'assets/js/forms' . $filename_suffix . '.js' ), array(), MC4WP_VERSION, true );
+		wp_register_script( 'mc4wp-forms-api', mc4wp_plugin_url( 'assets/js/forms.js' ), array(), MC4WP_VERSION, true );
 	}
 
 	/**
@@ -61,7 +61,7 @@ class MC4WP_Form_Asset_Manager {
 			return '';
 		}
 
-		return mc4wp_plugin_url( 'assets/css/form-' . $stylesheet . '.min.css' );
+		return mc4wp_plugin_url( 'assets/css/form-' . $stylesheet . '.css' );
 	}
 
 	/**
@@ -183,8 +183,7 @@ class MC4WP_Form_Asset_Manager {
 		// maybe load JS file for when a form was submitted over HTTP POST
 		$submitted_form_data = $this->get_submitted_form_data();
 		if ( $submitted_form_data !== null ) {
-			$filename_suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
-			wp_enqueue_script( 'mc4wp-forms-submitted', mc4wp_plugin_url( 'assets/js/forms-submitted' . $filename_suffix . '.js' ), array( 'mc4wp-forms-api' ), MC4WP_VERSION, true );
+			wp_enqueue_script( 'mc4wp-forms-submitted', mc4wp_plugin_url( 'assets/js/forms-submitted.js' ), array( 'mc4wp-forms-api' ), MC4WP_VERSION, true );
 			wp_localize_script( 'mc4wp-forms-submitted', 'mc4wp_submitted_form', $submitted_form_data );
 		}
 
@@ -197,5 +196,20 @@ class MC4WP_Form_Asset_Manager {
 
 		/** @ignore */
 		do_action( 'mc4wp_load_form_scripts' );
+	}
+
+	/**
+	 * Adds `defer` attribute to all form-related `<script>` elements so they do not block page rendering.
+	 *
+	 * @param string $tag
+	 * @param string $handle
+	 * @return string
+	 */
+	public function add_defer_attribute( $tag, $handle ) {
+		if ( ! in_array( $handle, array( 'mc4wp-forms-api', 'mc4wp-forms-submitted' ), true ) || stripos( $tag, ' defer') !== false ) {
+			return $tag;
+		}
+
+		return str_replace( ' src=', ' defer src=', $tag );
 	}
 }

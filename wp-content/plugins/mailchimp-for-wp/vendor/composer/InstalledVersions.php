@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '64f936eb6a27ec15812ea8175b24bcfafec7907b',
+    'reference' => '87f6c9087654e26ff60b061bc50ecf51043e5af9',
     'name' => 'ibericode/mailchimp-for-wordpress',
   ),
   'versions' => 
@@ -41,7 +41,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '64f936eb6a27ec15812ea8175b24bcfafec7907b',
+      'reference' => '87f6c9087654e26ff60b061bc50ecf51043e5af9',
     ),
   ),
 );

@@ -40,6 +40,9 @@ final class Authentication {
 
 	use Method_Proxy_Trait;
 
+	const ACTION_CONNECT    = 'googlesitekit_connect';
+	const ACTION_DISCONNECT = 'googlesitekit_disconnect';
+
 	/**
 	 * Plugin context.
 	 *
@@ -159,6 +162,14 @@ final class Authentication {
 	protected $has_connected_admins;
 
 	/**
+	 * Has_Multiple_Admins instance.
+	 *
+	 * @since 1.29.0
+	 * @var Has_Multiple_Admins
+	 */
+	protected $has_multiple_admins;
+
+	/**
 	 * Connected_Proxy_URL instance.
 	 *
 	 * @since 1.17.0
@@ -227,6 +238,7 @@ final class Authentication {
 		$this->profile              = new Profile( $this->user_options );
 		$this->owner_id             = new Owner_ID( $this->options );
 		$this->has_connected_admins = new Has_Connected_Admins( $this->options, $this->user_options );
+		$this->has_multiple_admins  = new Has_Multiple_Admins( $this->transients );
 		$this->connected_proxy_url  = new Connected_Proxy_URL( $this->options );
 		$this->disconnected_reason  = new Disconnected_Reason( $this->user_options );
 		$this->initial_version      = new Initial_Version( $this->user_options );
@@ -256,7 +268,7 @@ final class Authentication {
 		add_filter( 'googlesitekit_setup_data', $this->get_method_proxy( 'inline_js_setup_data' ) );
 		add_filter( 'googlesitekit_is_feature_enabled', $this->get_method_proxy( 'filter_features_via_proxy' ), 10, 2 );
 
-		add_action( 'init', $this->get_method_proxy( 'handle_oauth' ) );
+		add_action( 'admin_init', $this->get_method_proxy( 'handle_oauth' ) );
 		add_action( 'admin_init', $this->get_method_proxy( 'check_connected_proxy_url' ) );
 		add_action( 'admin_init', $this->get_method_proxy( 'verify_user_input_settings' ) );
 		add_action(
@@ -271,6 +283,8 @@ final class Authentication {
 				}
 			}
 		);
+		add_action( 'admin_action_' . self::ACTION_CONNECT, $this->get_method_proxy( 'handle_connect' ) );
+		add_action( 'admin_action_' . self::ACTION_DISCONNECT, $this->get_method_proxy( 'handle_disconnect' ) );
 		// Google_Proxy::ACTION_SETUP is called from the proxy as an intermediate step.
 		add_action( 'admin_action_' . Google_Proxy::ACTION_SETUP, $this->get_method_proxy( 'verify_proxy_setup_nonce' ), -1 );
 		// Google_Proxy::ACTION_SETUP is called from Site Kit to redirect to the proxy initially.
@@ -295,13 +309,19 @@ final class Authentication {
 
 		add_action(
 			'googlesitekit_authorize_user',
-			function () {
+			function ( $token_response, $scopes, $previous_scopes ) {
 				if ( ! $this->credentials->using_proxy() ) {
 					return;
 				}
+
 				$this->set_connected_proxy_url();
-				$this->require_user_input();
-			}
+
+				if ( empty( $previous_scopes ) ) {
+					$this->require_user_input();
+				}
+			},
+			10,
+			3
 		);
 
 		add_filter(
@@ -509,16 +529,17 @@ final class Authentication {
 	 * Gets the URL for connecting to Site Kit.
 	 *
 	 * @since 1.0.0
+	 * @since 1.32.0 Updated to use dedicated action URL.
 	 *
 	 * @return string Connect URL.
 	 */
 	public function get_connect_url() {
-		return $this->context->admin_url(
-			'splash',
+		return add_query_arg(
 			array(
-				'googlesitekit_connect' => 1,
-				'nonce'                 => wp_create_nonce( 'connect' ),
-			)
+				'action' => self::ACTION_CONNECT,
+				'nonce'  => wp_create_nonce( self::ACTION_CONNECT ),
+			),
+			admin_url( 'index.php' )
 		);
 	}
 
@@ -526,16 +547,17 @@ final class Authentication {
 	 * Gets the URL for disconnecting from Site Kit.
 	 *
 	 * @since 1.0.0
+	 * @since 1.32.0 Updated to use dedicated action URL.
 	 *
 	 * @return string Disconnect URL.
 	 */
 	public function get_disconnect_url() {
-		return $this->context->admin_url(
-			'splash',
+		return add_query_arg(
 			array(
-				'googlesitekit_disconnect' => 1,
-				'nonce'                    => wp_create_nonce( 'disconnect' ),
-			)
+				'action' => self::ACTION_DISCONNECT,
+				'nonce'  => wp_create_nonce( self::ACTION_DISCONNECT ),
+			),
+			admin_url( 'index.php' )
 		);
 	}
 
@@ -603,75 +625,79 @@ final class Authentication {
 	 * Handles receiving a temporary OAuth code.
 	 *
 	 * @since 1.0.0
+	 * @since 1.32.0 Moved connect and disconnect actions to dedicated handlers.
 	 */
 	private function handle_oauth() {
 		if ( defined( 'WP_CLI' ) && WP_CLI ) {
 			return;
 		}
 
-		$auth_client = $this->get_oauth_client();
-		$input       = $this->context->input();
-
 		// Handles Direct OAuth client request.
-		if ( $input->filter( INPUT_GET, 'oauth2callback' ) ) {
+		if ( $this->context->input()->filter( INPUT_GET, 'oauth2callback' ) ) {
 			if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
 				wp_die( esc_html__( 'You don\'t have permissions to authenticate with Site Kit.', 'google-site-kit' ), 403 );
 			}
 
-			$auth_client->authorize_user();
+			$this->get_oauth_client()->authorize_user();
+		}
+	}
+
+	/**
+	 * Handles request to connect via oAuth.
+	 *
+	 * @since 1.32.0
+	 */
+	private function handle_connect() {
+		$input = $this->context->input();
+		$nonce = $input->filter( INPUT_GET, 'nonce' );
+		if ( ! wp_verify_nonce( $nonce, self::ACTION_CONNECT ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
 		}
 
-		if ( ! is_admin() ) {
-			return;
+		if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
+			wp_die( esc_html__( 'You don\'t have permissions to authenticate with Site Kit.', 'google-site-kit' ), 403 );
 		}
 
-		if ( $input->filter( INPUT_GET, 'googlesitekit_disconnect' ) ) {
-			$nonce = $input->filter( INPUT_GET, 'nonce' );
-			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'disconnect' ) ) {
-				wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
-			}
-
-			if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
-				wp_die( esc_html__( 'You don\'t have permissions to authenticate with Site Kit.', 'google-site-kit' ), 403 );
-			}
-
-			$this->disconnect();
-
-			$redirect_url = $this->context->admin_url(
-				'splash',
-				array(
-					'googlesitekit_reset_session' => 1,
-				)
-			);
-
-			wp_safe_redirect( $redirect_url );
-			exit();
+		$redirect_url = $input->filter( INPUT_GET, 'redirect', FILTER_VALIDATE_URL );
+		if ( $redirect_url ) {
+			$redirect_url = esc_url_raw( wp_unslash( $redirect_url ) );
 		}
 
-		if ( $input->filter( INPUT_GET, 'googlesitekit_connect' ) ) {
-			$nonce = $input->filter( INPUT_GET, 'nonce' );
-			if ( empty( $nonce ) || ! wp_verify_nonce( $nonce, 'connect' ) ) {
-				wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
-			}
+		// User is trying to authenticate, but access token hasn't been set.
+		$additional_scopes = $input->filter( INPUT_GET, 'additional_scopes', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
 
-			if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
-				wp_die( esc_html__( 'You don\'t have permissions to authenticate with Site Kit.', 'google-site-kit' ), 403 );
-			}
+		wp_safe_redirect(
+			$this->get_oauth_client()->get_authentication_url( $redirect_url, $additional_scopes )
+		);
+		exit();
+	}
 
-			$redirect_url = $input->filter( INPUT_GET, 'redirect', FILTER_VALIDATE_URL );
-			if ( $redirect_url ) {
-				$redirect_url = esc_url_raw( wp_unslash( $redirect_url ) );
-			}
-
-			// User is trying to authenticate, but access token hasn't been set.
-			$additional_scopes = $input->filter( INPUT_GET, 'additional_scopes', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY );
-			wp_safe_redirect(
-				esc_url_raw(
-					$auth_client->get_authentication_url( $redirect_url, $additional_scopes )
-				)
-			);
-			exit();
+	/**
+	 * Handles request to disconnect via oAuth.
+	 *
+	 * @since 1.32.0
+	 */
+	private function handle_disconnect() {
+		$nonce = $this->context->input()->filter( INPUT_GET, 'nonce' );
+		if ( ! wp_verify_nonce( $nonce, self::ACTION_DISCONNECT ) ) {
+			wp_die( esc_html__( 'Invalid nonce.', 'google-site-kit' ), 400 );
 		}
+
+		if ( ! current_user_can( Permissions::AUTHENTICATE ) ) {
+			wp_die( esc_html__( 'You don\'t have permissions to authenticate with Site Kit.', 'google-site-kit' ), 403 );
+		}
+
+		$this->disconnect();
+
+		$redirect_url = $this->context->admin_url(
+			'splash',
+			array(
+				'googlesitekit_reset_session' => 1,
+			)
+		);
+
+		wp_safe_redirect( $redirect_url );
+		exit();
 	}
 
 	/**
@@ -813,6 +839,7 @@ final class Authentication {
 								'resettable'         => $this->options->has( Credentials::OPTION ),
 								'setupCompleted'     => $this->is_setup_completed(),
 								'hasConnectedAdmins' => $this->has_connected_admins->get(),
+								'hasMultipleAdmins'  => $this->has_multiple_admins->get(),
 								'ownerID'            => $this->owner_id->get(),
 							);
 

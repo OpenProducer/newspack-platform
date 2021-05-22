@@ -40,6 +40,10 @@ class WPSEO_Tracking_Settings_Data implements WPSEO_Collection {
 		'og_frontpage_desc',
 		'og_frontpage_image',
 		'og_frontpage_image_id',
+		'open_graph_frontpage_title',
+		'open_graph_frontpage_desc',
+		'open_graph_frontpage_image',
+		'open_graph_frontpage_image_id',
 		'pinterest_url',
 		'pinterestverify',
 		'twitter_site',
@@ -148,6 +152,10 @@ class WPSEO_Tracking_Settings_Data implements WPSEO_Collection {
 		'og_frontpage_desc',
 		'og_frontpage_image',
 		'og_frontpage_image_id',
+		'open_graph_frontpage_title',
+		'open_graph_frontpage_desc',
+		'open_graph_frontpage_image',
+		'open_graph_frontpage_image_id',
 		'opengraph',
 		'pinterest_url',
 		'pinterestverify',
@@ -163,6 +171,8 @@ class WPSEO_Tracking_Settings_Data implements WPSEO_Collection {
 		'enable_enhanced_slack_sharing',
 		'zapier_integration_active',
 		'zapier_api_key',
+		'enable_metabox_insights',
+		'enable_link_suggestions',
 	];
 
 	/**

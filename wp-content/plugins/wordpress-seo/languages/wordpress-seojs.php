@@ -5,7 +5,7 @@ $generated_i18n_strings = array(
 	__( 'Feedback', 'wordpress-seo' ),
 
 	// Reference: js/src/analysis/getIndicatorForScore.js:24
-	// Reference: js/src/helpers/addCheckToChecklist.js:108
+	// Reference: js/src/helpers/addCheckToChecklist.js:107
 	__( 'Needs improvement', 'wordpress-seo' ),
 
 	// Reference: js/src/analysis/getIndicatorForScore.js:29
@@ -18,7 +18,7 @@ $generated_i18n_strings = array(
 	__( 'Good SEO score', 'wordpress-seo' ),
 
 	// Reference: js/src/analysis/getIndicatorForScore.js:36
-	// Reference: js/src/helpers/addCheckToChecklist.js:108
+	// Reference: js/src/helpers/addCheckToChecklist.js:107
 	__( 'Good', 'wordpress-seo' ),
 
 	// Reference: js/src/components/AdvancedSettings.js:127
@@ -136,6 +136,15 @@ $generated_i18n_strings = array(
 	// Reference: js/src/components/PostPublish.js:17
 	__( 'Share your post!', 'wordpress-seo' ),
 
+	// Reference: js/src/components/PostPublish.js:23
+	__( 'Facebook', 'wordpress-seo' ),
+
+	// Reference: js/src/components/PostPublish.js:30
+	__( 'Twitter', 'wordpress-seo' ),
+
+	// Reference: js/src/components/PostPublish.js:31
+	__( '(Opens in a new browser tab)', 'wordpress-seo' ),
+
 	// Reference: js/src/components/PrePublish.js:21
 	__( 'We\'ve analyzed your post. Everything looks good. Well done!', 'wordpress-seo' ),
 
@@ -210,7 +219,7 @@ $generated_i18n_strings = array(
 	// Reference: js/src/containers/SchemaTab.js:54
 	__( 'Page type', 'wordpress-seo' ),
 
-	// Reference: js/src/components/SettingsReplacementVariableEditor.js:39
+	// Reference: js/src/components/SettingsReplacementVariableEditor.js:37
 	__( 'Modify your meta description by editing it right here', 'wordpress-seo' ),
 
 	// Reference: js/src/components/WordPressUserSelector.js:113
@@ -232,24 +241,24 @@ $generated_i18n_strings = array(
 	// Reference: js/src/components/WordPressUserSelectorSearchAppearance.js:85
 	__( 'You have selected the user %1$s as the person this site represents. Their user profile information will now be used in search results. %2$sUpdate their profile to make sure the information is correct.%3$s', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/KeywordInput.js:52
+	// Reference: js/src/components/contentAnalysis/KeywordInput.js:47
 	__( 'Help on choosing the perfect focus keyphrase', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/KeywordInput.js:67
+	// Reference: js/src/components/contentAnalysis/KeywordInput.js:62
 	__( 'Please enter a focus keyphrase first to get related keyphrases', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/KeywordInput.js:71
+	// Reference: js/src/components/contentAnalysis/KeywordInput.js:66
 	__( 'Are you trying to use multiple keyphrases? You should add them separately below.', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/KeywordInput.js:75
+	// Reference: js/src/components/contentAnalysis/KeywordInput.js:70
 	__( 'Your keyphrase is too long. It can be a maximum of 191 characters.', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/KeywordInput.js:97
+	// Reference: js/src/components/contentAnalysis/KeywordInput.js:92
 	// Reference: js/src/values/defaultReplaceVariables.js:50
 	__( 'Focus keyphrase', 'wordpress-seo' ),
 
 	// Reference: js/src/components/contentAnalysis/ReadabilityAnalysis.js:48
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:244
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:241
 	__( 'Analysis results', 'wordpress-seo' ),
 
 	// Reference: js/src/components/contentAnalysis/ReadabilityAnalysis.js:54
@@ -258,28 +267,28 @@ $generated_i18n_strings = array(
 	// Reference: js/src/components/contentAnalysis/ReadabilityAnalysis.js:85
 	__( 'Readability analysis', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:106
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:103
 	// Reference: js/src/components/modals/KeywordSynonyms.js:61
 	// Reference: js/src/components/modals/MultipleKeywords.js:60
 	/* translators: %s expands to 'Yoast SEO Premium'. */
 	__( 'Get %s', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:125
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:122
 	__( 'Would you like to add a related keyphrase?', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:158
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:155
 	__( 'Add related keyphrase', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:219
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:216
 	__( 'Enter a focus keyphrase to calculate the SEO score', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:230
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:227
 	__( 'SEO analysis', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:50
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:47
 	__( 'Add synonyms', 'wordpress-seo' ),
 
-	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:77
+	// Reference: js/src/components/contentAnalysis/SeoAnalysis.js:74
 	__( 'Would you like to add keyphrase synonyms?', 'wordpress-seo' ),
 
 	// Reference: js/src/components/fills/MetaboxFill.js:47
@@ -365,7 +374,7 @@ $generated_i18n_strings = array(
 	__( 'Keyphrase volume in the last 12 months on a scale from 0 to 100.', 'wordpress-seo' ),
 
 	// Reference: js/src/components/modals/SEMrushKeyphrasesTable.js:173
-	/* translators: %s expands to SEMrush */
+	/* translators: %s expands to Semrush */
 	__( 'Get more insights at %s', 'wordpress-seo' ),
 
 	// Reference: js/src/components/modals/SEMrushKeyphrasesTable.js:55
@@ -405,15 +414,15 @@ $generated_i18n_strings = array(
 	__( 'Last month', 'wordpress-seo' ),
 
 	// Reference: js/src/components/modals/SEMrushLimitReached.js:22
-	/* translators: %s : Expands to "SEMrush". */
+	/* translators: %s : Expands to "Semrush". */
 	__( 'You\'ve reached your request limit for today. Check back tomorrow or upgrade your plan over at %s.', 'wordpress-seo' ),
 
 	// Reference: js/src/components/modals/SEMrushLimitReached.js:34
-	/* translators: %s : Expands to "SEMrush". */
+	/* translators: %s : Expands to "Semrush". */
 	__( 'Upgrade your %s plan', 'wordpress-seo' ),
 
 	// Reference: js/src/components/modals/SEMrushLoading.js:18
-	/* translators: %1$s expands to "Yoast SEO", %2$s expands to "SEMrush". */
+	/* translators: %1$s expands to "Yoast SEO", %2$s expands to "Semrush". */
 	__( 'Please wait while %1$s connects to %2$s to get related keyphrases...', 'wordpress-seo' ),
 
 	// Reference: js/src/components/modals/SEMrushMaxRelatedKeyphrases.js:18
@@ -488,7 +497,7 @@ $generated_i18n_strings = array(
 	// Reference: js/src/containers/SchemaTab.js:57
 	__( 'This helps search engines understand your website and your content. You can change some of your settings for this page below.', 'wordpress-seo' ),
 
-	// Reference: js/src/containers/SnippetEditor.js:64
+	// Reference: js/src/containers/SnippetEditor.js:58
 	// Reference: js/src/elementor/containers/SnippetEditor.js:90
 	__( 'Please provide a meta description by editing the snippet below.', 'wordpress-seo' ),
 
@@ -522,7 +531,7 @@ $generated_i18n_strings = array(
 	// Reference: js/src/help-scout-beacon.js:231
 	__( 'When you click OK we will open our HelpScout beacon where you can find answers to your questions. This beacon will load our support data and also potentially set cookies.', 'wordpress-seo' ),
 
-	// Reference: js/src/helpers/addCheckToChecklist.js:106
+	// Reference: js/src/helpers/addCheckToChecklist.js:105
 	__( 'Schema analysis:', 'wordpress-seo' ),
 
 	// Reference: js/src/helpers/addCheckToChecklist.js:18
@@ -546,6 +555,18 @@ $generated_i18n_strings = array(
 	// Reference: js/src/initializers/elementor-editor-integration.js:55
 	/* translators: %1$s translates to the Post Label in singular form */
 	__( 'Unfortunately we cannot save changes to your SEO settings while you are working on a draft of an already-published %1$s. If you want to save your SEO changes, make sure to click \'Update\', or wait to make your SEO changes until you are ready to update the %1$s.', 'wordpress-seo' ),
+
+	// Reference: js/src/initializers/search-appearance.js:55
+	__( 'Organization logo', 'wordpress-seo' ),
+
+	// Reference: js/src/initializers/search-appearance.js:65
+	__( 'Person logo / avatar', 'wordpress-seo' ),
+
+	// Reference: js/src/initializers/search-appearance.js:78
+	__( 'Social default image', 'wordpress-seo' ),
+
+	// Reference: js/src/initializers/social-settings.js:26
+	__( 'Image', 'wordpress-seo' ),
 
 	// Reference: js/src/inline-links/edit-link.js:106
 	__( 'Link removed.', 'wordpress-seo' ),

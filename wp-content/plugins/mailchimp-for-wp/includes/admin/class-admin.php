@@ -275,15 +275,14 @@ class MC4WP_Admin {
 
 		$opts      = mc4wp_get_options();
 		$page      = $this->tools->get_plugin_page();
-		$suffix    = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 		$mailchimp = new MC4WP_MailChimp();
 
 		// css
-		wp_register_style( 'mc4wp-admin', mc4wp_plugin_url( 'assets/css/admin-styles' . $suffix . '.css' ), array(), MC4WP_VERSION );
+		wp_register_style( 'mc4wp-admin', mc4wp_plugin_url( 'assets/css/admin.css' ), array(), MC4WP_VERSION );
 		wp_enqueue_style( 'mc4wp-admin' );
 
 		// js
-		wp_register_script( 'mc4wp-admin', mc4wp_plugin_url( 'assets/js/admin' . $suffix . '.js' ), array(), MC4WP_VERSION, true );
+		wp_register_script( 'mc4wp-admin', mc4wp_plugin_url( 'assets/js/admin.js' ), array(), MC4WP_VERSION, true );
 		wp_enqueue_script( 'mc4wp-admin' );
 		$connected = ! empty( $opts['api_key'] );
 		$mailchimp_lists = $connected ? $mailchimp->get_lists() : array();
@@ -316,7 +315,7 @@ class MC4WP_Admin {
 		* @param string $suffix
 		* @param string $page
 		*/
-		do_action( 'mc4wp_admin_enqueue_assets', $suffix, $page );
+		do_action( 'mc4wp_admin_enqueue_assets', '', $page );
 
 		return true;
 	}
@@ -366,7 +365,7 @@ class MC4WP_Admin {
 		$menu_items = (array) apply_filters( 'mc4wp_admin_menu_items', $menu_items );
 
 		// add top menu item
-		$icon = file_get_contents( MC4WP_PLUGIN_DIR . 'assets/img/icon.svg' );
+		$icon = file_get_contents( MC4WP_PLUGIN_DIR . '/assets/img/icon.svg' );
 		add_menu_page( 'Mailchimp for WP', 'MC4WP', $required_cap, 'mailchimp-for-wp', array( $this, 'show_generals_setting_page' ), 'data:image/svg+xml;base64,' . base64_encode( $icon ), '99.68491' );
 
 		// sort submenu items by 'position'
@@ -435,7 +434,7 @@ class MC4WP_Admin {
 		}
 
 		$obfuscated_api_key = mc4wp_obfuscate_string( $api_key );
-		require MC4WP_PLUGIN_DIR . 'includes/views/general-settings.php';
+		require MC4WP_PLUGIN_DIR . '/includes/views/general-settings.php';
 	}
 
 	/**
@@ -445,7 +444,7 @@ class MC4WP_Admin {
 		$opts       = mc4wp_get_options();
 		$log        = $this->get_log();
 		$log_reader = new MC4WP_Debug_Log_Reader( $log->file );
-		require MC4WP_PLUGIN_DIR . 'includes/views/other-settings.php';
+		require MC4WP_PLUGIN_DIR . '/includes/views/other-settings.php';
 	}
 
 	/**

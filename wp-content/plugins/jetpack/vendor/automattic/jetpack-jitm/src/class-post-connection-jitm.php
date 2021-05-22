@@ -7,6 +7,7 @@
 
 namespace Automattic\Jetpack\JITMS;
 
+use Automattic\Jetpack\A8c_Mc_Stats;
 use Automattic\Jetpack\Connection\Client;
 use Automattic\Jetpack\Connection\Manager;
 use Automattic\Jetpack\Partner;
@@ -283,7 +284,8 @@ class Post_Connection_JITM extends JITM {
 			<?php
 		} else {
 			echo '<p>' . esc_html__( 'Every Jetpack site needs at least one connected admin for the features to work properly. Please connect to your WordPress.com account via the button below. Once you connect, you may refresh this page to see an option to change the connection owner.', 'jetpack' ) . '</p>';
-			$connect_url = \Jetpack::init()->build_connect_url( false, false, 'delete_connection_owner_notice' );
+			$connect_url = $connection_manager->get_authorization_url();
+			$connect_url = add_query_arg( 'from', 'delete_connection_owner_notice', $connect_url );
 			echo "<a href='" . esc_url( $connect_url ) . "' target='_blank' rel='noopener noreferrer' class='button-primary'>" . esc_html__( 'Connect to WordPress.com', 'jetpack' ) . '</a>';
 		}
 
@@ -478,9 +480,16 @@ class Post_Connection_JITM extends JITM {
 				$url_params['aff'] = $aff;
 			}
 
+			// Check if the current user has connected their WP.com account
+			// and if not add this information to the the array of URL parameters.
+			if ( ! ( new Manager() )->is_user_connected( $user->ID ) ) {
+				$url_params['unlinked'] = 1;
+			}
 			$envelope->url = add_query_arg( $url_params, 'https://jetpack.com/redirect/' );
 
-			$envelope->jitm_stats_url = \Jetpack::build_stats_url( array( 'x_jetpack-jitm' => $envelope->id ) );
+			$stats = new A8c_Mc_Stats();
+
+			$envelope->jitm_stats_url = $stats->build_stats_url( array( 'x_jetpack-jitm' => $envelope->id ) );
 
 			// phpcs:disable WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			// $CTA is not valid per PHPCS, but it is part of the return from WordPress.com, so allowing.
@@ -503,9 +512,8 @@ class Post_Connection_JITM extends JITM {
 
 			$envelope->content->icon = $this->generate_icon( $envelope->content->icon, $full_jp_logo_exists );
 
-			$jetpack = \Jetpack::init();
-			$jetpack->stat( 'jitm', $envelope->id . '-viewed-' . JETPACK__VERSION );
-			$jetpack->do_stats( 'server_side' );
+			$stats->add( 'jitm', $envelope->id . '-viewed' );
+			$stats->do_server_side_stats();
 		}
 
 		return $envelopes;
