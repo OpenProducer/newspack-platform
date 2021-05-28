@@ -213,7 +213,7 @@ final class Newspack_Popups_Inserter {
 		// For certain types of blocks, their innerHTML is not a good representation of the length of their content.
 		// For example, slideshows may have an arbitrary amount of slide content, but only show one slide at a time.
 		// For these blocks, let's ignore their length for purposes of inserting prompts.
-		$blacklisted_blocks = [ 'jetpack/slideshow', 'newspack-blocks/carousel' ];
+		$blacklisted_blocks = [ 'jetpack/slideshow', 'newspack-blocks/carousel', 'newspack-popups/single-prompt' ];
 		$parsed_blocks      = parse_blocks( $content );
 		$total_length       = 0;
 
@@ -428,8 +428,8 @@ final class Newspack_Popups_Inserter {
 		if (
 			// Bail if it's a non-preview popup which should not be displayed.
 			( ! self::should_display( $found_popup, true ) && ! Newspack_Popups::previewed_popup_id() ) ||
-			// Only inline popups can be inserted via the shortcode.
-			! Newspack_Popups_Model::is_inline( $found_popup )
+			// Only inline or manual-only popups can be inserted via the shortcode.
+			( ! Newspack_Popups_Model::is_inline( $found_popup ) && ! Newspack_Popups_Model::is_manual_only( $found_popup ) )
 		) {
 			return;
 		}
@@ -680,21 +680,44 @@ final class Newspack_Popups_Inserter {
 	 * @return array Found shortcoded popups IDs.
 	 */
 	public static function get_shortcoded_popups_ids( $string ) {
+		$parsed_blocks = parse_blocks( $string );
+
+		$single_prompt_blocks    = array_filter(
+			$parsed_blocks,
+			function( $block ) {
+				return 'newspack-popups/single-prompt' === $block['blockName'];
+			}
+		);
+		$single_prompt_block_ids = array_reduce(
+			$single_prompt_blocks,
+			function( $acc, $popup ) {
+				if ( ! empty( $popup['attrs']['promptId'] ) ) {
+					$acc[] = intval( $popup['attrs']['promptId'] );
+				}
+				return $acc;
+			},
+			[]
+		);
+
 		preg_match_all( '/\[newspack-popup .*\]/', $string, $popup_shortcodes_in_content );
+
 		if ( empty( $popup_shortcodes_in_content ) ) {
 			return [];
 		} else {
 			return array_unique(
-				array_map(
-					function ( $item ) {
-						preg_match( '/id=["|\'](\d*)/', $item, $matches );
-						if ( empty( $matches ) ) {
-							return null;
-						} else {
-							return $matches[1];
-						}
-					},
-					$popup_shortcodes_in_content[0]
+				array_merge(
+					$single_prompt_block_ids,
+					array_map(
+						function ( $item ) {
+							preg_match( '/id=["|\'](\d*)/', $item, $matches );
+							if ( empty( $matches ) ) {
+								return null;
+							} else {
+								return $matches[1];
+							}
+						},
+						$popup_shortcodes_in_content[0]
+					)
 				)
 			);
 		}

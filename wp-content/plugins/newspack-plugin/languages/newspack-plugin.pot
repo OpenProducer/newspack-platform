@@ -2134,7 +2134,7 @@ msgid "Advertising"
 msgstr ""
 
 #: includes/wizards/class-advertising-wizard.php:89
-msgid "Monetize your content through advertising."
+msgid "Monetize your content through advertising"
 msgstr ""
 
 #: includes/wizards/class-advertising-wizard.php:98

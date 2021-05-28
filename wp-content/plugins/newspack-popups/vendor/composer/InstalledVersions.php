@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '23e07b8788a590532284c3b3215471f166032725',
+    'reference' => '19cad7523a83eee8dd3b7d05272ddb426f9f2391',
     'name' => 'automattic/newspack-popups',
   ),
   'versions' => 
@@ -41,7 +41,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '23e07b8788a590532284c3b3215471f166032725',
+      'reference' => '19cad7523a83eee8dd3b7d05272ddb426f9f2391',
     ),
     'drewm/mailchimp-api' => 
     array (

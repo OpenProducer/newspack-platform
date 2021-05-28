@@ -1,15 +1,8 @@
 /**
  * Ad Picker
  */
-.newspack-toggle-group__description {
-  flex: 1; }
-  @media screen and (min-width: 744px) {
-    .newspack-toggle-group__description .newspack-ad-picker {
-      display: flex;
-      justify-content: space-between;
-      width: 100%; } }
-  .newspack-toggle-group__description .newspack-ad-picker .newspack-select-control {
-    margin: 16px 0; }
+.newspack-card.newspack-action-card .newspack-action-card__region-children .newspack-grid {
+  margin: 32px 0 0; }
 
 /**
  * Ad Unit
@@ -18,7 +11,7 @@
  * Colors
  */
 .newspack_ad_unit__sizes {
-  border-bottom: 1px solid #f3f4f5; }
+  border-bottom: 1px solid #e0e0e0; }
   @media screen and (min-width: 744px) {
     .newspack_ad_unit__sizes {
       align-items: flex-end;
@@ -46,7 +39,7 @@
       .newspack_ad_unit__sizes .newspack-button {
         margin-left: 16px; } }
   .newspack-text-control + .newspack_ad_unit__sizes {
-    border-top: 1px solid #f3f4f5; }
+    border-top: 1px solid #e0e0e0; }
   .newspack_ad_unit__sizes + .newspack-button {
     margin-top: 16px; }
 

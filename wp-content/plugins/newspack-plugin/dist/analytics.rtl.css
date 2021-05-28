@@ -4,7 +4,7 @@
 .newspack__analytics-configuration th {
   padding: 6px 0;
   text-align: right;
-  border-bottom: 1px solid #e2e4e7; }
+  border-bottom: 1px solid #ddd; }
 
 .newspack__analytics-configuration table {
   width: 100%;
@@ -13,7 +13,7 @@
 
 .newspack__analytics-configuration tbody td {
   padding: 4px 0;
-  border-top: 1px solid #e2e4e7; }
+  border-top: 1px solid #ddd; }
 
 .newspack__analytics-configuration tbody .newspack-checkbox-control {
   margin: 0; }

@@ -117,7 +117,8 @@ final class Newspack_Popups_Model {
 					$valid_placements = array_merge(
 						self::$overlay_placements,
 						self::$inline_placements,
-						Newspack_Popups_Custom_Placements::get_custom_placement_values()
+						Newspack_Popups_Custom_Placements::get_custom_placement_values(),
+						[ 'manual' ]
 					);
 					if ( ! in_array( $value, $valid_placements ) ) {
 						return new \WP_Error(
@@ -423,6 +424,20 @@ final class Newspack_Popups_Model {
 			$popup['options']['placement'],
 			array_merge( self::$inline_placements, Newspack_Popups_Custom_Placements::get_custom_placement_values() )
 		);
+	}
+
+	/**
+	 * Is it a manual-only popup or not.
+	 *
+	 * @param object $popup The popup object.
+	 * @return boolean True if it is a manual-only popup.
+	 */
+	public static function is_manual_only( $popup ) {
+		if ( ! isset( $popup['options'], $popup['options']['placement'] ) ) {
+			return false;
+		}
+
+		return 'manual' === $popup['options']['placement'];
 	}
 
 	/**

@@ -6,7 +6,7 @@
  */
 .newspack-dashboard-card {
   align-items: center;
-  border-color: #e2e4e7;
+  border-color: #ddd;
   display: grid;
   grid-gap: 16px;
   grid-template-columns: 48px auto;

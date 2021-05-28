@@ -1,3 +1,18 @@
+# [1.41.0](https://github.com/Automattic/newspack-plugin/compare/v1.40.0...v1.41.0) (2021-05-26)
+
+
+### Bug Fixes
+
+* prevent external links from ad dashboard UI ([#976](https://github.com/Automattic/newspack-plugin/issues/976)) ([68b9fbd](https://github.com/Automattic/newspack-plugin/commit/68b9fbd4684ff457826102907728bf431888ab94))
+
+
+### Features
+
+* add more fonts to design options ([#972](https://github.com/Automattic/newspack-plugin/issues/972)) ([70cec4f](https://github.com/Automattic/newspack-plugin/commit/70cec4fef3b88a140dd3794e867e19e4aa9cb7a9))
+* reinstate manual-only placement option ([#960](https://github.com/Automattic/newspack-plugin/issues/960)) ([2438755](https://github.com/Automattic/newspack-plugin/commit/243875506f3ef39bcd8db8dabd363a5da7f6e8f1))
+* update advertizing global settings and use action-card ([#974](https://github.com/Automattic/newspack-plugin/issues/974)) ([c0a4853](https://github.com/Automattic/newspack-plugin/commit/c0a4853ffdc05d4e8185000154d9c92eaa34f5e7))
+* update gray colors using latest WordPress base-style ([#971](https://github.com/Automattic/newspack-plugin/issues/971)) ([dd64f4e](https://github.com/Automattic/newspack-plugin/commit/dd64f4ec1dc98f4ed6cf9e8b72bd8ef1f354a127))
+
 # [1.40.0](https://github.com/Automattic/newspack-plugin/compare/v1.39.0...v1.40.0) (2021-05-18)
 
 

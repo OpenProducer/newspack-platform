@@ -18,7 +18,7 @@ const { attributes, category, name } = metadata;
 import { CustomPlacementEditor } from './edit';
 
 export const registerCustomPlacementBlock = () => {
-	const isPrompt = Boolean( window.newspack_popups_data?.is_prompt );
+	const isPrompt = Boolean( window.newspack_popups_blocks_data?.is_prompt );
 
 	// No prompts inside prompts.
 	if ( isPrompt ) {

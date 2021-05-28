@@ -1,3 +1,5 @@
+import { __, sprintf } from '@wordpress/i18n';
+
 /**
  * Data selector for popup options (stored in post meta)
  *
@@ -116,4 +118,62 @@ export const updateEditorColors = backgroundColor => {
 export const isCustomPlacement = placementValue => {
 	const customPlacements = window.newspack_popups_data?.custom_placements || {};
 	return -1 < Object.keys( customPlacements ).indexOf( placementValue );
+};
+
+/**
+ * Given a placement value, construct a context-sensitive help message to display in the editor sidebar.
+ *
+ * @param {string} placementValue Placement of the prompt.
+ * @param {int|string} triggerPercentage Insertion percentage, for inline prompts.
+ * @returns
+ */
+export const getPlacementHelpMessage = ( placementValue, triggerPercentage = 0 ) => {
+	if ( isCustomPlacement( placementValue ) ) {
+		const customPlacements = window.newspack_popups_data?.custom_placements || {};
+		return sprintf(
+			__(
+				'The prompt will appear where %s is inserted using the Custom Placement block.',
+				'newspack-popups'
+			),
+			customPlacements[ placementValue ] || __( 'this custom placement', 'newspack-popups' )
+		);
+	}
+
+	switch ( placementValue ) {
+		case 'center':
+			return __(
+				'The prompt will be displayed as an overlay at the center of the viewport.',
+				'newspack-popups'
+			);
+		case 'top':
+			return __(
+				'The prompt will be displayed as an overlay at the top of the viewport.',
+				'newspack-popups'
+			);
+		case 'bottom':
+			return __(
+				'The prompt will be displayed as an overlay at the bottom of the viewport.',
+				'newspack-popups'
+			);
+		case 'above_header':
+			return __(
+				'The prompt will be automatically inserted at the very top of the page, above the header.',
+				'newspack-popups'
+			);
+		case 'inline':
+			return sprintf(
+				__(
+					'The prompt will be automatically inserted about %s into article content.',
+					'newspack-popups'
+				),
+				triggerPercentage + '%'
+			);
+		case 'manual':
+			return __(
+				'The prompt will appear only where inserted using the Single Prompt block or a shortcode.',
+				'newspack-popups'
+			);
+		default:
+			return __( 'The placement where the prompt can appear.', 'newspack-popups' );
+	}
 };

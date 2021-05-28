@@ -40,39 +40,8 @@ final class Newspack_Popups_Custom_Placements {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'manage_editor_assets' ] );
 		add_action( 'init', [ __CLASS__, 'manage_view_assets' ] );
 		add_action( 'rest_api_init', [ __CLASS__, 'rest_api_init' ] );
-	}
-
-	/**
-	 * Enqueue editor assets.
-	 */
-	public static function manage_editor_assets() {
-		\wp_enqueue_script(
-			'newspack-popups-blocks',
-			plugins_url( '../dist/blocks.js', __FILE__ ),
-			[],
-			filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/blocks.js' ),
-			true
-		);
-
-		\wp_localize_script(
-			'newspack-popups-blocks',
-			'newspack_popups_blocks_data',
-			[
-				'custom_placements' => self::get_custom_placements(),
-			]
-		);
-
-		\wp_register_style(
-			'newspack-popups-blocks',
-			plugins_url( '../dist/blocks.css', __FILE__ ),
-			[],
-			filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/blocks.css' )
-		);
-		wp_style_add_data( 'newspack-popups-blocks', 'rtl', 'replace' );
-		wp_enqueue_style( 'newspack-popups-blocks' );
 	}
 
 	/**

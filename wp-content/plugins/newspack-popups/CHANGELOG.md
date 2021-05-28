@@ -1,3 +1,10 @@
+# [1.33.0](https://github.com/Automattic/newspack-popups/compare/v1.32.1...v1.33.0) (2021-05-26)
+
+
+### Features
+
+* single prompt block and manual-only placement option ([#547](https://github.com/Automattic/newspack-popups/issues/547)) ([1f1d83b](https://github.com/Automattic/newspack-popups/commit/1f1d83b0ffa5d5ab33344fa510e1b583b45a106e))
+
 ## [1.32.1](https://github.com/Automattic/newspack-popups/compare/v1.32.0...v1.32.1) (2021-05-13)
 
 

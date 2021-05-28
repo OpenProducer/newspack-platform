@@ -631,7 +631,7 @@ class Popups_Wizard extends Wizard {
 					break;
 				case 'placement':
 					$custom_placement_values = $cm->get_custom_placement_values();
-					if ( ! in_array( $value, array_merge( [ 'center', 'top', 'bottom', 'inline', 'above_header' ], $custom_placement_values ) ) ) {
+					if ( ! in_array( $value, array_merge( [ 'center', 'top', 'bottom', 'inline', 'above_header', 'manual' ], $custom_placement_values ) ) ) {
 						return false;
 					}
 					break;

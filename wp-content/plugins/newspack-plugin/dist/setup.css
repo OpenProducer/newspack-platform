@@ -31,7 +31,7 @@
  * Colors
  */
 .newspack-integration {
-  box-shadow: inset 12px 0 0 white, inset 13px 0 0 #f3f4f5;
+  box-shadow: inset 12px 0 0 white, inset 13px 0 0 #e0e0e0;
   grid-template-columns: 24px 1fr;
   margin: 0;
   padding-bottom: 64px;
@@ -47,7 +47,7 @@
   .newspack-integration__status {
     background: white;
     border-radius: 50%;
-    box-shadow: inset 0 0 0 1px #e2e4e7;
+    box-shadow: inset 0 0 0 1px #ddd;
     display: flex;
     height: 24px;
     position: relative;
@@ -64,7 +64,7 @@
   .newspack-integration__description .newspack-section-header {
     margin: 0; }
   .newspack-integration__logo {
-    border: 1px solid #e2e4e7;
+    border: 1px solid #ddd;
     border-radius: 3px;
     display: none;
     padding: 16px; }

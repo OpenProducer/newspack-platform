@@ -343,6 +343,35 @@ final class Newspack_Popups {
 	public static function enqueue_block_editor_assets() {
 		$screen = get_current_screen();
 
+		// Block assets for Custom Placement and Prompt blocks.
+		\wp_enqueue_script(
+			'newspack-popups-blocks',
+			plugins_url( '../dist/blocks.js', __FILE__ ),
+			[],
+			filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/blocks.js' ),
+			true
+		);
+
+		\wp_localize_script(
+			'newspack-popups-blocks',
+			'newspack_popups_blocks_data',
+			[
+				'custom_placements' => Newspack_Popups_Custom_Placements::get_custom_placements(),
+				'endpoint'          => '/newspack-popups/v1/prompts',
+				'post_type'         => self::NEWSPACK_POPUPS_CPT,
+				'is_prompt'         => self::NEWSPACK_POPUPS_CPT == get_post_type(),
+			]
+		);
+
+		\wp_register_style(
+			'newspack-popups-blocks',
+			plugins_url( '../dist/blocks.css', __FILE__ ),
+			[],
+			filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/blocks.css' )
+		);
+		wp_style_add_data( 'newspack-popups-blocks', 'rtl', 'replace' );
+		wp_enqueue_style( 'newspack-popups-blocks' );
+
 		if ( self::NEWSPACK_POPUPS_CPT !== $screen->post_type ) {
 			if ( 'page' !== $screen->post_type || 'post' !== $screen->post_type ) {
 				// Script for global settings.

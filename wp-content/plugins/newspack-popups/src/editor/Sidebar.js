@@ -12,7 +12,7 @@ import { RadioControl, RangeControl, SelectControl, ToggleControl } from '@wordp
 /**
  * Internal dependencies
  */
-import { isCustomPlacement } from '../editor/utils';
+import { isCustomPlacement, getPlacementHelpMessage } from '../editor/utils';
 
 const Sidebar = ( {
 	display_title,
@@ -47,12 +47,8 @@ const Sidebar = ( {
 				onChange={ value => updatePlacement( value ) }
 			/>
 			<SelectControl
-				label={ __( 'Placement' ) }
-				help={
-					isOverlay
-						? __( 'The location to display the overlay prompt.', 'newspack-popups' )
-						: __( 'The location to insert the prompt.', 'newspack-popups' )
-				}
+				label={ isOverlay ? __( 'Position' ) : __( 'Placement' ) }
+				help={ getPlacementHelpMessage( placement, trigger_scroll_progress ) }
 				value={ placement }
 				onChange={ updatePlacement }
 				options={
@@ -65,6 +61,7 @@ const Sidebar = ( {
 						: [
 								{ value: 'inline', label: __( 'In article content' ) },
 								{ value: 'above_header', label: __( 'Above site header' ) },
+								{ value: 'manual', label: __( 'Manual only', 'newspack-popups' ) },
 						  ].concat(
 								Object.keys( customPlacements ).map( key => ( {
 									value: key,

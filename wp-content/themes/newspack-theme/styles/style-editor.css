@@ -911,6 +911,13 @@ ul.wp-block-archives li,
   font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
+/** === Ad Unit Block === */
+.wp-block-newspack-ads-blocks-ad-unit > div {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+}
+
 /** === Classic Editor === */
 /* Properly center-align captions in the classic-editor block */
 .wp-caption dd {

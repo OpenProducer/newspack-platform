@@ -87,7 +87,7 @@ class Advertising_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Monetize your content through advertising.', 'newspack' );
+		return \esc_html__( 'Monetize your content through advertising', 'newspack' );
 	}
 
 	/**

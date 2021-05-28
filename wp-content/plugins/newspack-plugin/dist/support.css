@@ -29,15 +29,15 @@
       padding-left: 4px; }
 
 .newspack-support__dropzone {
-  background: #f8f9f9;
-  border: 1px dashed #e2e4e7;
+  background: #f0f0f0;
+  border: 1px dashed #ddd;
   border-radius: 3px;
-  color: #40464d;
+  color: #1e1e1e;
   cursor: pointer;
   margin: 32px 0;
   transition: all 125ms ease-in-out; }
   .newspack-support__dropzone:hover {
-    border-color: #a2aab2; }
+    border-color: #949494; }
   .newspack-support__dropzone--active {
     background: white;
     border: 1px solid #36f;
@@ -47,7 +47,7 @@
     padding: 24px; }
     .newspack-support__dropzone__text svg {
       display: block;
-      fill: #191e23;
+      fill: #1e1e1e;
       height: 48px;
       margin: 0 auto;
       width: 48px; }
