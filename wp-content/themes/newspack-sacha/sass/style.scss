@@ -5,7 +5,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.38.0
+Version: 1.0.0-alpha.33
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -77,26 +77,31 @@ div.wpnbha .article-section-title,
 	text-align: center;
 }
 
-.accent-header,
-.article-section-title span {
-	align-items: center;
-	display: flex;
-	width: 100%;
+.article-section-title,
+.widget-title.accent-header {
+	overflow: hidden;
 
-	&::before,
-	&::after {
-		background: $color__border;
-		content: '';
-		flex: 1 0 0.5rem;
-		height: 1px;
-	}
+	span {
+		display: inline-block;
+		position: relative;
 
-	&::before {
-		margin-right: #{0.5 * $size__spacing-unit};
-	}
+		&::before,
+		&::after {
+			border-top: 1px solid $color__border;
+			content: '';
+			display: block;
+			position: absolute;
+			top: 50%;
+			width: 600px;
+		}
 
-	&::after {
-		margin-left: #{0.5 * $size__spacing-unit};
+		&::before {
+			right: calc( 100% + #{0.5 * $size__spacing-unit} );
+		}
+
+		&::after {
+			left: calc( 100% + #{0.5 * $size__spacing-unit} );
+		}
 	}
 }
 
@@ -330,14 +335,6 @@ cite {
 	display: block;
 	text-align: center;
 
-	.accent-header {
-		display: block;
-		&::before,
-		&::after {
-			display: none;
-		}
-	}
-
 	h2 {
 		color: $color__text-main;
 		margin: 0;
@@ -381,10 +378,6 @@ cite {
 
 .author-meta {
 	justify-content: center;
-}
-
-.author-meta .author-email {
-	display: inline-flex;
 }
 
 .single .author-social-links {

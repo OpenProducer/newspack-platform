@@ -1,0 +1,46 @@
+.newspack-card.newspack-action-card {
+	&.reader-revenue {
+		h2 + .newspack-card {
+			margin-top: 0;
+		}
+
+		.newspack-grid {
+			&__gutter-8 {
+				grid-gap: 32px;
+				grid-row-gap: 16px;
+			}
+
+			&__gutter-64 {
+				grid-gap: 32px;
+			}
+
+			+ h2 {
+				margin: 32px 0 0;
+			}
+		}
+
+		.newspack-donations-wizard__money-input {
+			.newspack-text-control {
+				margin: 0;
+			}
+		}
+
+		.newspack-toggle-control + .newspack-donations-wizard__money-input {
+			margin: 16px 0 32px;
+
+			@media screen and ( min-width: 744px ) {
+				.newspack-text-control {
+					max-width: calc( 50% - 16px - 48px );
+				}
+			}
+		}
+	}
+
+	@media screen and ( min-width: 744px ) {
+		&.google-ad-manager {
+			.newspack-text-control {
+				max-width: calc( 50% - 16px );
+			}
+		}
+	}
+}

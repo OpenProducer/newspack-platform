@@ -9,7 +9,6 @@ import classNames from 'classnames';
 import { __ } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
 import { Component, Fragment } from '@wordpress/element';
-import { InspectorControls } from '@wordpress/editor';
 import {
 	PanelBody,
 	ExternalLink,
@@ -19,7 +18,7 @@ import {
 	TextControl,
 	ToggleControl,
 } from '@wordpress/components';
-import { RichText } from '@wordpress/block-editor';
+import { InspectorControls, RichText } from '@wordpress/block-editor';
 
 class Edit extends Component {
 	constructor( props ) {

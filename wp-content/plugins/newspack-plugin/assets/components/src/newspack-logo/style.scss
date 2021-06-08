@@ -1,0 +1,30 @@
+/**
+ * Newspack Logo
+ */
+
+@import '../../../shared/scss/colors';
+
+.newspack-logo {
+	&__svg {
+		display: block;
+		fill: currentColor;
+		margin: 0;
+		padding-bottom: 32px;
+		width: auto;
+
+		&.is-centered {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+
+	&__wrapper {
+		background: $primary-500;
+		color: white;
+		position: relative;
+
+		a {
+			color: inherit;
+		}
+	}
+}

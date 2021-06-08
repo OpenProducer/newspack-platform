@@ -65,12 +65,7 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 		add_image_size( 'newspack-featured-image', 1200, 9999 );
 		add_image_size( 'newspack-archive-image', 800, 600, true );
 		add_image_size( 'newspack-archive-image-large', 1200, 900, true );
-		add_image_size( 'newspack-footer-logo', 400, 9999 );
-
-		/**
-		 * Enable feature support for specific post types.
-		 */
-		add_post_type_support( 'page', 'excerpt' ); // Custom excerpts for pages, normally restricted to posts.
+		add_image_size( 'newspack-footer-logo', 400, 9999, true );
 
 		// This theme uses wp_nav_menu() in two locations.
 		register_nav_menus(
@@ -690,7 +685,7 @@ add_action( 'after_switch_theme', 'newspack_migrate_settings', 10, 2 );
 function newspack_colors_css_wrap() {
 
 	// Only bother if we haven't customized the color.
-	if ( ( ! is_customize_preview() && ( 'default' === get_theme_mod( 'theme_colors', 'default' ) && newspack_get_mobile_cta_color() === get_theme_mod( 'header_cta_hex', newspack_get_mobile_cta_color() ) && 'default' === get_theme_mod( 'ads_color', 'default' ) ) ) || is_admin() ) {
+	if ( ( ! is_customize_preview() && ( 'default' === get_theme_mod( 'theme_colors', 'default' ) && newspack_get_mobile_cta_color() === get_theme_mod( 'header_cta_hex', newspack_get_mobile_cta_color() ) ) ) || is_admin() ) {
 		return;
 	}
 
@@ -1022,11 +1017,4 @@ if ( class_exists( 'Trust_Indicators' ) ) {
  */
 if ( function_exists( '\Newspack_Sponsors\get_sponsors_for_post' ) ) {
 	require get_template_directory() . '/inc/newspack-sponsors.php';
-}
-
-/**
- * Load Web Stories compatibility file.
- */
-if ( class_exists( 'Google\Web_Stories\Customizer' ) ) {
-	require get_template_directory() . '/inc/web-stories.php';
 }

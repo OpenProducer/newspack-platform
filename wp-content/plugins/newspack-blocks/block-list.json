@@ -1,3 +1,3 @@
 {
-  "production": [ "carousel", "donate", "homepage-articles", "video-playlist" ]
+  "production": [ "author-profile", "carousel", "donate", "homepage-articles", "video-playlist" ]
 }

@@ -103,6 +103,11 @@ function get_sponsors_for_post( $post_id = null, $scope = null, $logo_options = 
 		return false;
 	}
 
+	// Sponsors can't sponsor other sponsors.
+	if ( Core::NEWSPACK_SPONSORS_CPT === $post->post_type ) {
+		return false;
+	}
+
 	$sponsors        = [];
 	$direct_sponsors = get_the_terms( $post_id, Core::NEWSPACK_SPONSORS_TAX );
 	$categories      = get_the_category( $post_id );

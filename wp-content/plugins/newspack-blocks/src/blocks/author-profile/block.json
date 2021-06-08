@@ -1,0 +1,42 @@
+{
+	"name": "author-profile",
+	"category": "newspack",
+	"attributes": {
+		"className": {
+			"type": "string",
+			"default": ""
+		},
+		"authorId": {
+			"type": "number",
+			"default": 0
+		},
+		"showBio": {
+			"type": "boolean",
+			"default": true
+		},
+		"showSocial": {
+			"type": "boolean",
+			"default": true
+		},
+		"showEmail": {
+			"type": "boolean",
+			"default": true
+		},
+		"showArchiveLink": {
+			"type": "boolean",
+			"default": true
+		},
+		"showAvatar": {
+			"type": "boolean",
+			"default": true
+		},
+		"avatarBorderRadius": {
+			"type": "string",
+			"default": "50%"
+		},
+		"avatarSize": {
+			"type": "number",
+			"default": 128
+		}
+	}
+}

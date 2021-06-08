@@ -1,0 +1,65 @@
+@import '../../shared/sass/variables';
+@import '../../shared/sass/mixins';
+
+.newspack-author-profile {
+	&__author-card {
+		@include media( mobile ) {
+			display: flex;
+		}
+
+		.newspack-author-profile__avatar {
+			@include media( mobile ) {
+				flex: 0 1 auto;
+				margin-right: 1.5em;
+			}
+
+			figure {
+				margin: 0;
+				overflow: hidden;
+			}
+
+			.avatar {
+				border-radius: 0;
+				display: block;
+				height: auto;
+				max-width: none;
+				width: 100%;
+			}
+		}
+
+		.newspack-author-profile__bio {
+			@include media( mobile ) {
+				flex: 4;
+
+				h3 {
+					margin-top: 0;
+				}
+			}
+		}
+	}
+
+	ul.newspack-author-profile__social-links {
+		display: flex;
+		flex-wrap: wrap;
+		list-style: none;
+		margin: -8px;
+		padding: 0;
+
+		li {
+			margin: 8px;
+		}
+
+		a,
+		svg {
+			display: block;
+		}
+
+		svg {
+			fill: currentColor;
+		}
+	}
+
+	.hidden {
+		display: none;
+	}
+}

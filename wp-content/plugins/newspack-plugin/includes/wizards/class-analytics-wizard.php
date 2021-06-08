@@ -81,7 +81,7 @@ class Analytics_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Track traffic and activity.', 'newspack' );
+		return \esc_html__( 'Track traffic and activity', 'newspack' );
 	}
 
 	/**

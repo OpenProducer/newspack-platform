@@ -2158,7 +2158,7 @@ msgstr ""
 
 #: includes/wizards/class-analytics-wizard.php:82
 #: assets/wizards/analytics/index.js:47
-msgid "Track traffic and activity."
+msgid "Track traffic and activity"
 msgstr ""
 
 #: includes/wizards/class-analytics-wizard.php:220
@@ -2969,7 +2969,7 @@ msgid "Loading..."
 msgstr ""
 
 #: assets/wizards/updates/index.js:36
-msgid "Updates to the Newspack plugins and theme."
+msgid "Updates to the Newspack plugins and theme"
 msgstr ""
 
 #: assets/wizards/updates/views/devInfo/index.js:64

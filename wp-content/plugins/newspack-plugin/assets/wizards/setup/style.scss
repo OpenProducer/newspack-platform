@@ -1,0 +1,59 @@
+/**
+ * Setup
+ */
+
+#newspack-setup-wizard {
+	.newspack-wizard__header {
+		h1 {
+			display: none;
+		}
+
+		p {
+			font-size: 21px;
+			font-weight: bold;
+			line-height: 32px;
+		}
+	}
+}
+
+.newspack-site-profile {
+	display: flex;
+	flex-wrap: wrap;
+
+	> div {
+		&:nth-of-type( 2 ) {
+			flex: 1 1 auto;
+		}
+
+		&:last-of-type {
+			flex: 0 0 100%;
+		}
+	}
+
+	@media screen and ( min-width: 744px ) {
+		> div {
+			&:last-of-type {
+				display: grid;
+				grid-gap: 32px;
+				grid-template-columns: repeat( 2, 1fr );
+
+				> * {
+					margin: 0;
+				}
+			}
+		}
+	}
+
+	@media screen and ( min-width: 1128px ) {
+		display: grid;
+		grid-template-columns: 136px auto calc( ( 100% - 64px ) / 3 );
+
+		> div {
+			&:last-of-type {
+				display: grid;
+				grid-gap: 16px;
+				grid-template-columns: repeat( auto-fit, 100% );
+			}
+		}
+	}
+}

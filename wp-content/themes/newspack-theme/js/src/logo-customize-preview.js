@@ -45,7 +45,7 @@
 			resize( to ) {
 				if ( hasLogo ) {
 					const img = new Image();
-					const logo = $( '.site-header .custom-logo' );
+					const logo = $( '.custom-logo' );
 
 					let size = {
 						width: parseInt( logo.attr( 'width' ), 10 ),

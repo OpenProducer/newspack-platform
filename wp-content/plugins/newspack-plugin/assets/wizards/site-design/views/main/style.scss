@@ -1,0 +1,47 @@
+@import '../../../../shared/scss/colors';
+
+.newspack-floating-button {
+	z-index: 1;
+	position: fixed;
+	bottom: 0;
+	right: 16px;
+
+	.newspack-button.is-secondary {
+		border-bottom: 0 !important;
+		border-bottom-left-radius: 0;
+		border-bottom-right-radius: 0;
+		box-shadow: 0 -4px 8px rgba( black, 0.08 ) !important;
+		padding-bottom: 12px;
+
+		&:active,
+		&:hover {
+			box-shadow: 0 -4px 8px rgba( black, 0.16 ) !important;
+		}
+
+		&:focus {
+			box-shadow: 0 -4px 8px rgba( black, 0.16 ), 0 0 0 1px white, 0 0 0 3px $primary-500 !important;
+		}
+	}
+}
+
+.newspack-design {
+	.newspack-section-header {
+		margin-bottom: -16px;
+	}
+
+	&__header,
+	&__footer {
+		&__logo {
+			.newspack-image-upload__image {
+				border-color: rgba( black, 0.125 );
+				height: 88px;
+			}
+		}
+	}
+
+	&__header {
+		&__style-size {
+			grid-template-columns: repeat( 2, min-content );
+		}
+	}
+}

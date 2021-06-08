@@ -495,10 +495,16 @@ final class Newspack_Newsletters {
 	 * Register blocks server-side for front-end rendering.
 	 */
 	public static function register_blocks() {
+		$block_definition = json_decode(
+			file_get_contents( __DIR__ . '/../src/editor/blocks/posts-inserter/block.json' ), // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+			true
+		);
 		register_block_type(
-			'newspack-newsletters/posts-inserter',
+			$block_definition['name'],
 			[
 				'render_callback' => [ __CLASS__, 'render_posts_inserter_block' ],
+				'attributes'      => $block_definition['attributes'],
+				'supports'        => $block_definition['supports'],
 			]
 		);
 	}

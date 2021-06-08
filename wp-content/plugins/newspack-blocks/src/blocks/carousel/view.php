@@ -59,6 +59,12 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			$has_featured_image = has_post_thumbnail();
 			$post_type          = get_post_type();
 			$post_link          = Newspack_Blocks::get_post_link( $post_id );
+
+			// Support Newspack Listings hide author/publish date options.
+			$hide_author       = apply_filters( 'newspack_listings_hide_author', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$hide_publish_date = apply_filters( 'newspack_listings_hide_publish_date', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+			$show_author       = $attributes['showAuthor'] && ! $hide_author;
+			$show_date         = $attributes['showDate'] && ! $hide_publish_date;
 			?>
 
 			<article data-post-id="<?php echo esc_attr( $post_id ); ?>" class="<?php echo esc_attr( implode( ' ', $article_classes ) . ' ' . $post_type ); ?>">
@@ -85,7 +91,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 					<?php endif; ?>
 				</figure>
 
-				<?php if ( ! empty( $sponsors ) || $attributes['showCategory'] || $attributes['showTitle'] || $attributes['showAuthor'] || $attributes['showDate'] ) : ?>
+				<?php if ( ! empty( $sponsors ) || $attributes['showCategory'] || $attributes['showTitle'] || $show_author || $show_date ) : ?>
 					<div class="entry-wrapper">
 						<?php if ( ! empty( $sponsors ) ) : ?>
 						<span class="cat-links sponsor-label">
@@ -171,7 +177,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 								</span>
 								<?php
 							else :
-								if ( $attributes['showAuthor'] ) :
+								if ( $show_author ) :
 									if ( $attributes['showAvatar'] ) :
 										echo wp_kses(
 											newspack_blocks_format_avatars( $authors ),
@@ -199,7 +205,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 									<?php
 								endif;
 							endif;
-							if ( $attributes['showDate'] ) :
+							if ( $show_date ) :
 								printf(
 									'<time class="entry-date published" datetime="%1$s">%2$s</time>',
 									esc_attr( get_the_date( DATE_W3C ) ),

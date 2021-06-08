@@ -111,15 +111,16 @@ class Newspack_Ads_Model {
 
 		$query = new \WP_Query( $args );
 		if ( $query->have_posts() ) {
-			while ( $query->have_posts() ) {
-				$query->the_post();
-				$ad_units[] = array(
-					'id'             => \get_the_ID(),
-					'name'           => html_entity_decode( \get_the_title(), ENT_QUOTES ),
-					self::SIZES      => self::sanitize_sizes( \get_post_meta( get_the_ID(), self::SIZES, true ) ),
-					self::CODE       => esc_html( \get_post_meta( get_the_ID(), self::CODE, true ) ),
-					self::AD_SERVICE => \get_post_meta( get_the_ID(), self::AD_SERVICE, true ),
-				);
+			foreach ( $query->posts as $post ) {
+				if ( self::$custom_post_type === $post->post_type ) {
+					$ad_units[] = [
+						'id'             => $post->ID,
+						'name'           => html_entity_decode( $post->post_title, ENT_QUOTES ),
+						self::SIZES      => self::sanitize_sizes( \get_post_meta( $post->ID, self::SIZES, true ) ),
+						self::CODE       => esc_html( \get_post_meta( $post->ID, self::CODE, true ) ),
+						self::AD_SERVICE => \get_post_meta( $post->ID, self::AD_SERVICE, true ),
+					];
+				}
 			}
 		}
 
@@ -371,20 +372,47 @@ class Newspack_Ads_Model {
 		if ( ! is_array( $sizes ) ) {
 			$sizes = [];
 		}
+		// Remove all ad sizes greater than 600px wide for sticky ads.
+		if ( self::is_sticky( $ad_unit ) ) {
+			$sizes = array_filter(
+				$sizes,
+				function( $size ) {
+					return $size[0] < 600;
+				}
+			);
+		}
 
 		if ( $ad_unit['responsive'] ) {
 			return self::ad_elements_for_sizes( $ad_unit, $unique_id );
 		}
 
-		$size_to_show = self::is_sticky( $ad_unit ) ? self::smallest_ad_size( $sizes ) : self::largest_ad_size( $sizes );
+		$width  = max( array_column( $sizes, 0 ) );
+		$height = max( array_column( $sizes, 1 ) );
+
+		$ad_size_as_multisize = $width . 'x' . $height;
+		$multisizes           = [];
+		foreach ( $sizes as $size ) {
+			$multisize = $size[0] . 'x' . $size[1];
+			if ( $multisize !== $ad_size_as_multisize ) {
+				$multisizes[] = $multisize;
+			}
+		}
+		$multisize_attribute = '';
+		if ( count( $multisizes ) ) {
+			$multisize_attribute = sprintf(
+				'data-multi-size=\'%s\' data-multi-size-validation=\'false\'',
+				implode( ',', $multisizes )
+			);
+		}
 
 		$code = sprintf(
-			'<amp-ad width=%s height=%s type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\'></amp-ad>',
-			$size_to_show[0],
-			$size_to_show[1],
+			'<amp-ad width=%s height=%s type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\' %s></amp-ad>',
+			$width,
+			$height,
 			$network_code,
 			$code,
-			wp_json_encode( $targeting )
+			wp_json_encode( $targeting ),
+			$multisize_attribute
 		);
 
 		return $code;

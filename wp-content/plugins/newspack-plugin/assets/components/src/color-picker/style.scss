@@ -1,0 +1,180 @@
+/**
+ * Color Picker
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-color-picker {
+	position: relative;
+	margin: 32px 0;
+
+	&__main {
+		height: 48px;
+	}
+	&__expander {
+		padding: 11px 3px;
+		justify-content: space-between;
+		&,
+		> div {
+			display: flex;
+			align-items: center;
+		}
+		> div {
+			margin: 0 4px;
+		}
+		div + div {
+			margin-left: 8px;
+		}
+		&:focus {
+			border-color: $primary-500;
+			box-shadow: inset 0 0 0 2px $primary-500;
+		}
+		&--expanded:focus {
+			border-bottom-color: white;
+			box-shadow: inset 2px 2px 0 0 $primary-500, inset -2px 2px 0 0 $primary-500;
+
+			+ .components-color-picker {
+				position: relative;
+				border-bottom-color: $primary-500;
+				border-left-color: $primary-500;
+				border-right-color: $primary-500;
+				box-shadow: inset 2px -2px 0 0 $primary-500, inset -2px -2px 0 0 $primary-500;
+
+				&::before,
+				&::after {
+					background: $primary-500;
+					display: block;
+					content: '';
+					height: 1px;
+					left: -1px;
+					position: absolute;
+					top: -1px;
+					width: 3px;
+				}
+
+				&::after {
+					left: auto;
+					right: -1px;
+				}
+			}
+		}
+	}
+	&__indicator {
+		border: 1px solid rgba( black, 0.125 );
+		border-radius: 50%;
+		height: 24px;
+		overflow: hidden;
+		width: 24px;
+	}
+	&__label {
+		align-items: center;
+		color: $gray-900;
+		display: flex;
+		font-weight: bold;
+	}
+
+	&__expander,
+	.components-color-picker {
+		background-color: white;
+		border: 1px solid $gray-300;
+		border-radius: 3px;
+		&--expanded {
+			border-bottom-color: white;
+			border-bottom-left-radius: 0;
+			border-bottom-right-radius: 0;
+		}
+	}
+	.components-color-picker {
+		padding: 8px;
+		position: relative;
+		z-index: 1;
+		padding-top: 0;
+		border-top: none;
+		border-top-left-radius: 0;
+		border-top-right-radius: 0;
+	}
+
+	// Overrides of @wordpress/components component
+
+	// Inputs
+
+	.components-color-picker__body {
+		padding: 16px 0 0;
+	}
+
+	.components-color-picker__inputs-wrapper {
+		margin: 0;
+	}
+
+	.components-color-picker__inputs-fields {
+		margin-right: 8px;
+	}
+
+	.components-color-picker__inputs-field {
+		color: $gray-700;
+		font-size: 14px;
+		line-height: 24px;
+		margin: 0;
+
+		+ .components-color-picker__inputs-field {
+			margin-left: 8px;
+		}
+
+		label {
+			color: $gray-900;
+			font-size: inherit;
+			font-weight: bold;
+			line-height: inherit;
+			margin: 0;
+		}
+
+		input[type='number'],
+		input[type='text'] {
+			background: white;
+			border: 1px solid $gray-300;
+			border-radius: 3px;
+			box-shadow: none;
+			color: inherit;
+			font-size: 16px;
+			line-height: inherit;
+			margin: 0;
+			min-height: 48px;
+			padding: 11px 8px;
+			transition: border-color 125ms ease-in-out, box-shadow 125ms ease-in-out;
+			width: 100%;
+
+			@media screen and ( min-width: 768px ) {
+				font-size: inherit;
+			}
+
+			&:focus {
+				border-color: $primary-500;
+				box-shadow: 0 0 0 2px $primary-500;
+			}
+		}
+
+		// Reset
+
+		.components-base-control__field,
+		.components-base-control__label {
+			display: block;
+			margin: 0;
+		}
+	}
+
+	.components-color-picker__inputs-toggle {
+		height: 36px;
+		margin-bottom: 6px;
+
+		&:active,
+		&:focus:not( :disabled ),
+		&:hover {
+			color: $primary-500;
+		}
+
+		&:focus:not( :disabled ) {
+			box-shadow: 0 0 0 3px $primary-500;
+		}
+	}
+}

@@ -1,0 +1,94 @@
+version: 2.1
+
+commands:
+  checkout_with_workspace:
+    steps:
+      - checkout
+      - attach_workspace:
+          at: ~/
+
+jobs:
+  build:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+    steps:
+      - checkout_with_workspace
+      - run:
+          name: Install dependencies
+          command: npm ci
+      - persist_to_workspace:
+          root: ~/
+          paths:
+            - project
+
+  # Linting
+  lint:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+    steps:
+      - checkout_with_workspace
+      - run:
+          name: Run SCSS Linter
+          command: npm run lint:js
+      - run:
+          name: Run JS Linter
+          command: npm run lint:js
+      - run:
+          name: Run PHP Linter
+          command: |
+            composer install
+            npm run lint:php
+
+  # Release job
+  release:
+    docker:
+      - image: circleci/php:7.2-node-browsers
+    steps:
+      - checkout_with_workspace
+      - run:
+          name: Install rsync
+          command: sudo apt install rsync
+      - run:
+          name: Install PHP dependencies
+          command: composer install --no-dev --no-scripts
+      - run:
+          name: Release new version
+          command: npm run release
+
+  # Reset alpha branch after a release
+  post_release:
+    docker:
+      - image: circleci/node:12
+    steps:
+      - checkout_with_workspace
+      - run:
+          name: Set tip of alpha branch on top of release and force-push it to remote
+          command: |
+            git pull origin release
+            git checkout alpha
+            git reset --hard release --
+            git push "https://$GITHUB_TOKEN@github.com/$CIRCLE_PROJECT_USERNAME/$CIRCLE_PROJECT_REPONAME.git" --force
+
+workflows:
+  version: 2
+  main:
+    jobs:
+      - build
+      - lint:
+          requires:
+            - build
+      - release:
+          requires:
+            - build
+          filters:
+            branches:
+              only:
+                - release
+                - alpha
+      - post_release:
+          requires:
+            - release
+          filters:
+            branches:
+              only:
+                - release

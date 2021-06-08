@@ -1,0 +1,32 @@
+/**
+ * Category Autocomplete
+ */
+
+@import '../../../shared/scss/colors';
+
+.newspack-category-autocomplete {
+	.components-form-token-field__help {
+		display: none;
+	}
+
+	.components-button:focus:not( :disabled ) {
+		box-shadow: inset 0 0 0 2px $primary-500;
+	}
+
+	// Multiple Select Controls
+
+	& + & {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+
+	// Multiple Controls
+
+	+ .newspack-select-control,
+	+ .newspack-text-control,
+	+ .newspack-textarea-control,
+	+ .newspack-toggle-control {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+}

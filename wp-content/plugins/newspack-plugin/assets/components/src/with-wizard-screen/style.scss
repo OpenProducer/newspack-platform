@@ -1,0 +1,178 @@
+/**
+ * With Wizard Screen
+ */
+
+@import '~@wordpress/base-styles/colors';
+@import '../../../shared/scss/colors';
+
+.newspack-wizard {
+	&__header {
+		background: $primary-500;
+		h1 {
+			font-size: 21px;
+			line-height: 32px;
+			margin: 0;
+		}
+		* {
+			color: white;
+		}
+		&__inner {
+			margin: auto;
+			padding-top: 32px;
+			> * {
+				font-size: 14px;
+				line-height: 24px;
+			}
+			> p {
+				margin: 0;
+				padding-bottom: 32px;
+			}
+		}
+	}
+
+	&__header__inner,
+	&__content {
+		max-width: 1168px;
+		padding-left: 32px;
+		padding-right: 32px;
+
+		@media screen and ( min-width: 744px ) {
+			padding-left: 64px;
+			padding-right: 64px;
+		}
+	}
+
+	&__content {
+		color: $gray-700;
+		font-size: 14px;
+		line-height: 24px;
+		margin: auto;
+		padding-bottom: 32px;
+		padding-top: 32px;
+
+		// Typography
+
+		h1,
+		h2,
+		h3,
+		p {
+			line-height: 24px;
+			margin: 32px 0;
+			padding: 0;
+		}
+
+		h1 {
+			color: $gray-900;
+			font-size: 21px;
+			font-weight: bold;
+			line-height: 32px;
+		}
+
+		h2 {
+			color: $gray-900;
+			font-size: 17px;
+			font-weight: bold;
+		}
+
+		h3 {
+			color: $gray-900;
+			font-size: 14px;
+			font-weight: bold;
+		}
+
+		p {
+			font-size: 14px;
+
+			&.is-dark {
+				color: $gray-900;
+			}
+		}
+
+		strong {
+			font-weight: bold;
+		}
+
+		small {
+			font-size: 12px;
+			line-height: 16px;
+		}
+
+		// Thematic Break
+
+		hr {
+			background: $gray-300;
+			border: 0;
+			height: 1px;
+			margin: 48px 0;
+
+			@media screen and ( min-width: 744px ) {
+				margin: 64px 0;
+			}
+		}
+
+		// Links
+
+		a {
+			color: $primary-500;
+
+			&:active,
+			&:focus,
+			&:hover {
+				color: $primary-600;
+				text-decoration: none;
+			}
+
+			&:focus {
+				box-shadow: none;
+				outline: 2px solid $primary-500;
+				outline-offset: 2px;
+			}
+		}
+	}
+
+	&__debug-mode-notice {
+		margin: 0;
+	}
+}
+
+// Buttons Card
+
+.newspack-buttons-card {
+	display: flex;
+	flex-direction: row-reverse;
+	justify-content: flex-start;
+	align-items: center;
+	margin: 64px 0 32px;
+
+	&:empty {
+		display: none;
+	}
+
+	.newspack-button {
+		margin-left: 16px;
+	}
+}
+
+// Checkbox Icon
+
+.newspack-checkbox-icon {
+	background: white;
+	border-radius: 50%;
+	box-shadow: inset 0 0 0 1px $gray-300;
+	display: block;
+	height: 24px;
+	width: 24px;
+
+	svg {
+		fill: $gray-700;
+	}
+
+	&--checked {
+		background: $alert-green;
+		box-shadow: none;
+
+		svg {
+			fill: white;
+		}
+	}
+}

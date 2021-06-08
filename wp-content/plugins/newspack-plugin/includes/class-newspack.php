@@ -75,8 +75,9 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
-		include_once NEWSPACK_ABSPATH . 'includes/google/class-google-oauth.php';
-		include_once NEWSPACK_ABSPATH . 'includes/google/class-google-services-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-wpcom-oauth.php';
+		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-oauth.php';
+		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-services-connection.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-setup-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-dashboard.php';
@@ -162,8 +163,8 @@ final class Newspack {
 				wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
 				exit;
 			}
-			if ( Support_Wizard::get_wpcom_access_token() && 'reset-wpcom' === $newspack_reset ) {
-				delete_user_meta( get_current_user_id(), Support_Wizard::NEWSPACK_WPCOM_ACCESS_TOKEN );
+			if ( WPCOM_OAuth::get_wpcom_access_token() && 'reset-wpcom' === $newspack_reset ) {
+				delete_user_meta( get_current_user_id(), WPCOM_OAuth::NEWSPACK_WPCOM_ACCESS_TOKEN );
 				$redirect_url = add_query_arg( 'newspack-notice', __( 'Removed WPCOM Access Token', 'newspack' ), $redirect_url );
 			}
 		}

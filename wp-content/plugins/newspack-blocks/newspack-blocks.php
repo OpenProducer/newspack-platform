@@ -7,7 +7,7 @@
  * Author URI:      https://newspack.blog/
  * Text Domain:     newspack-blocks
  * Domain Path:     /languages
- * Version:         1.26.0
+ * Version:         1.0.0-alpha.28
  *
  * @package         Newspack_Blocks
  */
@@ -15,7 +15,7 @@
 define( 'NEWSPACK_BLOCKS__PLUGIN_FILE', __FILE__ );
 define( 'NEWSPACK_BLOCKS__BLOCKS_DIRECTORY', 'dist/' );
 define( 'NEWSPACK_BLOCKS__PLUGIN_DIR', plugin_dir_path( NEWSPACK_BLOCKS__PLUGIN_FILE ) );
-define( 'NEWSPACK_BLOCKS__VERSION', '1.26.0' );
+define( 'NEWSPACK_BLOCKS__VERSION', '1.0.0-alpha.28' );
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-api.php';
@@ -23,6 +23,9 @@ require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-patte
 
 // REST Controller for Articles Block.
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/homepage-articles/class-wp-rest-newspack-articles-controller.php';
+
+// REST Controller for Author Profile Block.
+require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/author-profile/class-wp-rest-newspack-authors-controller.php';
 
 /**
  * Registers Articles block routes.
@@ -32,6 +35,15 @@ function newspack_articles_block_register_rest_routes() { // phpcs:ignore WordPr
 	$articles_controller->register_routes();
 }
 add_action( 'rest_api_init', 'newspack_articles_block_register_rest_routes' );
+
+/**
+ * Registers Authors block routes.
+ */
+function newspack_authors_block_register_rest_routes() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+	$authors_controller = new WP_REST_Newspack_Authors_Controller();
+	$authors_controller->register_routes();
+}
+add_action( 'rest_api_init', 'newspack_authors_block_register_rest_routes' );
 
 Newspack_Blocks::manage_view_scripts();
 add_action( 'enqueue_block_editor_assets', array( 'Newspack_Blocks', 'enqueue_block_editor_assets' ) );

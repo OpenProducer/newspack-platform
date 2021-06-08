@@ -55,6 +55,12 @@ call_user_func(
 				$category = $categories_list[0];
 			}
 		}
+
+		// Support Newspack Listings hide author/publish date options.
+		$hide_author       = apply_filters( 'newspack_listings_hide_author', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$hide_publish_date = apply_filters( 'newspack_listings_hide_publish_date', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
+		$show_author       = $attributes['showAuthor'] && ! $hide_author;
+		$show_date         = $attributes['showDate'] && ! $hide_publish_date;
 		?>
 
 	<article data-post-id="<?php the_id(); ?>"
@@ -133,7 +139,7 @@ call_user_func(
 				</a>
 				<?php
 			endif;
-			if ( $attributes['showAuthor'] || $attributes['showDate'] || ! empty( $sponsors ) ) :
+			if ( $show_author || $show_date || ! empty( $sponsors ) ) :
 				?>
 				<div class="entry-meta">
 					<?php if ( ! empty( $sponsors ) ) : ?>
@@ -174,7 +180,7 @@ call_user_func(
 					</span>
 						<?php
 					else :
-						if ( $attributes['showAuthor'] ) :
+						if ( $show_author ) :
 							if ( $attributes['showAvatar'] ) :
 								echo wp_kses(
 									newspack_blocks_format_avatars( $authors ),
@@ -202,7 +208,7 @@ call_user_func(
 							<?php
 						endif;
 					endif;
-					if ( $attributes['showDate'] ) :
+					if ( $show_date ) :
 						$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';
 						if ( get_the_time( 'U' ) !== get_the_modified_time( 'U' ) ) :
 							$time_string = '<time class="entry-date published" datetime="%1$s">%2$s</time><time class="updated" datetime="%3$s">%4$s</time>';

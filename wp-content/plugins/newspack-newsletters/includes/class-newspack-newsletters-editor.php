@@ -138,9 +138,29 @@ final class Newspack_Newsletters_Editor {
 			wp_enqueue_style( 'newspack-newsletters-ads-page' );
 		}
 
+		// If it's a reusable block, register this plugin's blocks.
+		if ( 'wp_block' === get_post_type() ) {
+			\wp_enqueue_script(
+				'newspack-newsletters-blocks',
+				plugins_url( '../dist/blocks.js', __FILE__ ),
+				[],
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/blocks.js' ),
+				true
+			);
+			wp_register_style(
+				'newspack-newsletters-blocks',
+				plugins_url( '../dist/blocks.css', __FILE__ ),
+				[],
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/blocks.css' )
+			);
+			wp_style_add_data( 'newspack-newsletters-blocks', 'rtl', 'replace' );
+			wp_enqueue_style( 'newspack-newsletters-blocks' );
+		}
+
 		if ( ! self::is_editing_newsletter() ) {
 			return;
 		}
+
 		\wp_enqueue_script(
 			'newspack-newsletters',
 			plugins_url( '../dist/editor.js', __FILE__ ),

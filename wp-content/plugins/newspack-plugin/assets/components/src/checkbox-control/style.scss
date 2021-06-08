@@ -1,0 +1,78 @@
+/**
+ * Checkbox styles.
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-checkbox-control {
+	color: $gray-700;
+	display: flex;
+	font-size: 14px;
+	line-height: 24px;
+	margin: 32px 0;
+
+	label {
+		color: inherit;
+		font-size: inherit;
+		line-height: inherit;
+		margin: 0;
+	}
+
+	.components-checkbox-control__input-container {
+		display: block;
+		margin: 0;
+		margin-right: 8px;
+
+		@media screen and ( min-width: 600px ) {
+			margin-bottom: 2px;
+			margin-top: 2px;
+		}
+	}
+
+	.components-checkbox-control__input[type='checkbox'] {
+		margin: 0;
+
+		&:checked {
+			background-color: $primary-500;
+			border-color: $primary-500;
+		}
+
+		&:focus {
+			border-color: $primary-500;
+			box-shadow: 0 0 0 2px white, 0 0 0 3.5px $primary-500;
+		}
+	}
+
+	.components-base-control__help {
+		color: inherit;
+		font-size: inherit;
+		font-style: italic;
+		line-height: inherit;
+		margin: 0;
+		margin-left: 28px;
+	}
+
+	// Multiple Checkbox Controls
+
+	& + & {
+		margin-top: -16px;
+	}
+
+	// Reset
+
+	.components-base-control {
+		font-size: inherit;
+		line-height: inherit;
+	}
+
+	.components-base-control__field {
+		display: flex;
+		margin: 0;
+	}
+
+	.components-base-control__label {
+		display: block;
+		margin: 0;
+	}
+}

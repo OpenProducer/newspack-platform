@@ -1,0 +1,33 @@
+.autocomplete-tokenfield {
+	position: relative;
+
+	/* Workaround for hard-coded help text in FormTokenField. */
+	.components-form-token-field {
+		> .components-form-token-field__help {
+			display: none;
+		}
+
+		> .components-form-token-field__token-text {
+			align-items: center;
+			display: flex;
+		}
+	}
+
+	.autocomplete-tokenfield__help {
+		font-size: 13px;
+		font-style: italic;
+		line-height: 1.5;
+		margin: -8px 0 8px;
+	}
+
+	.components-form-token-field__suggestions-list {
+		border-top-color: var( --newspack-listings--grey-medium );
+		margin: 0 -4px -4px;
+		max-height: 131px;
+		padding: 4px;
+	}
+
+	.components-form-token-field__suggestion {
+		padding: 10px 12px;
+	}
+}

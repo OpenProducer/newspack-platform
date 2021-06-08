@@ -1,0 +1,168 @@
+/**
+ * Card
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-card {
+	border-radius: 3px;
+	border: 1px solid $gray-300;
+	color: $gray-700;
+	margin: 32px 0;
+	padding: 16px 48px;
+
+	@media screen and ( min-width: 744px ) {
+		padding: 32px 64px;
+	}
+
+	// Buttons Card
+
+	&__buttons-card {
+		margin: 24px -8px;
+
+		.newspack-button {
+			margin: 8px;
+		}
+	}
+
+	// Header Actions Card
+
+	&__header-actions {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		justify-content: space-between;
+		margin-bottom: -16px;
+
+		> * {
+			margin-bottom: 0 !important;
+			margin-top: 0 !important;
+		}
+	}
+
+	// Is Small
+
+	&__is-small {
+		padding: 16px;
+
+		> *:first-child {
+			margin-top: 0 !important;
+		}
+
+		> *:last-child {
+			margin-bottom: 0 !important;
+		}
+
+		> p {
+			margin: 16px 0 !important;
+		}
+
+		& + & {
+			margin-top: -16px;
+		}
+	}
+
+	// Is Medium
+
+	&__is-medium {
+		padding: 32px;
+
+		> *:first-child {
+			margin-top: 0 !important;
+		}
+
+		> *:last-child {
+			margin-bottom: 0 !important;
+		}
+	}
+
+	// No Border
+
+	&__no-border {
+		border-radius: 0;
+		border: 0;
+		padding: 0;
+	}
+
+	// Typography
+
+	h2,
+	h3,
+	p {
+		line-height: 24px;
+		margin: 32px 0;
+		padding: 0;
+	}
+
+	h2 {
+		color: $gray-900;
+		font-size: 17px;
+		font-weight: bold;
+	}
+
+	h3 {
+		color: $gray-900;
+		font-size: 14px;
+		font-weight: bold;
+	}
+
+	p {
+		font-size: 14px;
+
+		&.is-dark {
+			color: $gray-900;
+		}
+	}
+
+	strong {
+		font-weight: bold;
+	}
+
+	small {
+		font-size: 12px;
+		line-height: 16px;
+	}
+
+	// Thematic Break
+
+	hr {
+		background: $gray-300;
+		border: 0;
+		height: 1px;
+		margin: 48px 0;
+
+		@media screen and ( min-width: 744px ) {
+			margin: 64px 0;
+		}
+	}
+
+	// Separator
+
+	.sep {
+		background: $gray-300;
+		height: 1px;
+		margin-left: 8px;
+		margin-right: 8px;
+		width: 12px;
+	}
+
+	// Links
+
+	a {
+		color: $primary-500;
+
+		&:active,
+		&:focus,
+		&:hover {
+			color: $primary-600;
+			text-decoration: none;
+		}
+
+		&:focus {
+			box-shadow: none;
+			outline: 2px solid $primary-500;
+			outline-offset: 2px;
+		}
+	}
+}

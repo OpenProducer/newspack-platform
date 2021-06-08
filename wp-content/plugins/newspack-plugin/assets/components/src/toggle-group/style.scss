@@ -1,0 +1,28 @@
+/**
+ * Toggle Group
+ */
+
+.newspack-toggle-group {
+	display: flex;
+	margin: 32px 0;
+
+	& &__description p {
+		margin-bottom: 0;
+		margin-top: 0;
+	}
+
+	.newspack-toggle-control {
+		margin: 0;
+	}
+
+	&__description {
+		flex: 1;
+	}
+
+	// Multiple Toogle Groups
+
+	& + & {
+		margin-bottom: 32px;
+		margin-top: -16px;
+	}
+}

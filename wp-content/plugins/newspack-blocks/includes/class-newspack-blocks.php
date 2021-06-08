@@ -756,5 +756,32 @@ class Newspack_Blocks {
 
 		return $should_have_link ? $link : false;
 	}
+
+	/**
+	 * Sanitize SVG markup for front-end display.
+	 *
+	 * @param string $svg SVG markup to sanitize.
+	 * @return string Sanitized markup.
+	 */
+	public static function sanitize_svg( $svg = '' ) {
+		$allowed_html = [
+			'svg'  => [
+				'xmlns'       => [],
+				'fill'        => [],
+				'viewbox'     => [],
+				'role'        => [],
+				'aria-hidden' => [],
+				'focusable'   => [],
+				'height'      => [],
+				'width'       => [],
+			],
+			'path' => [
+				'd'    => [],
+				'fill' => [],
+			],
+		];
+
+		return wp_kses( $svg, $allowed_html );
+	}
 }
 Newspack_Blocks::init();

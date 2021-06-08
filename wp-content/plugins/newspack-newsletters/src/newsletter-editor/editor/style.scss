@@ -1,0 +1,17 @@
+.post-type-newspack_nl_cpt {
+	.editor-post-title {
+		&.newspack-newsletters-post-title-hidden {
+			height: 0;
+			opacity: 0;
+			pointer-events: none;
+		}
+	}
+
+	.components-button.editor-post-publish-button__button.is-primary {
+		display: none;
+	}
+
+	.editor-post-switch-to-draft {
+		display: none;
+	}
+}

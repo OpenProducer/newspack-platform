@@ -1,0 +1,59 @@
+/**
+ * Tabbed Navigation
+ */
+
+@import '~@wordpress/base-styles/colors';
+@import '../../../shared/scss/colors';
+
+.newspack-tabbed-navigation {
+	ul {
+		display: flex;
+		flex-wrap: wrap;
+		margin: 0;
+	}
+
+	li {
+		width: 100%;
+		@media screen and ( min-width: 500px ) {
+			width: auto;
+			margin-bottom: 0;
+		}
+
+		&:last-child {
+			> * {
+				margin-right: 0 !important;
+			}
+		}
+	}
+
+	a {
+		border-bottom: 4px solid $primary-500;
+		color: white;
+		display: block;
+		font-weight: bold;
+		text-decoration: none;
+
+		@media screen and ( min-width: 500px ) {
+			margin-right: 32px;
+			padding-bottom: 12px;
+		}
+
+		&:active,
+		&:focus,
+		&:hover {
+			border-color: $primary-200;
+			color: white;
+			outline: none;
+		}
+
+		&:focus {
+			box-shadow: none;
+			outline: 1px solid;
+			outline-offset: 16px;
+		}
+
+		&.selected {
+			border-color: white;
+		}
+	}
+}

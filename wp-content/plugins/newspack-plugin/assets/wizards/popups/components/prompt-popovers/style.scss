@@ -1,0 +1,50 @@
+@import '~@wordpress/base-styles/colors';
+
+.newspack-popover__campaigns {
+	&__toggle-control {
+		width: 100%;
+		display: flex;
+		justify-content: space-between;
+	}
+
+	&__primary-popover {
+		margin-left: calc(
+			-25px + 74px / 2
+		); // 25px is set by Gutenberg, 74px / 2 is half of the container's width
+	}
+
+	&__secondary-popover {
+		margin-left: calc(
+			-25px - 74px / 2 + 36px
+		); // 25px is set by Gutenberg, 74px / 2 is half of the container's width, 36 is the button's width;
+
+		.components-popover__content {
+			min-width: 286px;
+
+			> div > * {
+				margin: 0 0 8px;
+
+				&.newspack-select-control {
+					margin-bottom: 8px;
+				}
+
+				&:last-child {
+					margin-bottom: 0;
+				}
+			}
+		}
+
+		.components-form-token-field__help {
+			display: none;
+		}
+	}
+
+	&__info {
+		background: $gray-100;
+		color: $gray-900;
+		font-size: 12px;
+		line-height: 16px;
+		padding: 4px 8px;
+		text-align: left;
+	}
+}

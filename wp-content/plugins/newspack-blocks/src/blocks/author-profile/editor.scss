@@ -1,0 +1,30 @@
+@import './shared';
+
+.editor-styles-wrapper {
+	.newspack-author-profile {
+		.components-notice {
+			margin: 0 0 2rem 0;
+			width: 100%;
+		}
+
+		&__bio h3 {
+			.components-button,
+			.components-external-link {
+				font-size: 13px;
+				font-weight: normal;
+			}
+		}
+
+		a.no-op {
+			pointer-events: none;
+		}
+	}
+
+	.wp-block-group {
+		&.has-text-color {
+			.newspack-author-profile a {
+				color: inherit;
+			}
+		}
+	}
+}

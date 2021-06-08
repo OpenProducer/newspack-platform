@@ -1,0 +1,35 @@
+{
+  "name": "automattic/newspack-popups",
+  "description": "AMP-compatible popup notifications.",
+  "require-dev": {
+    "automattic/vipwpcs": "^2.0",
+    "wp-coding-standards/wpcs": "^2.1",
+    "phpcompatibility/phpcompatibility-wp": "^2.1",
+    "composer/installers": "^1.7",
+    "brainmaestro/composer-git-hooks": "^2.8",
+    "xwp/wp-dev-lib": "^1.3",
+    "dealerdirect/phpcodesniffer-composer-installer": "^0.7.0"
+  },
+  "license": "GPL-3.0-or-later",
+  "scripts": {
+    "post-install-cmd": [
+      "vendor/bin/cghooks add --no-lock"
+    ],
+    "post-update-cmd": [
+      "vendor/bin/cghooks update"
+    ]
+  },
+  "extra": {
+    "hooks": {
+      "pre-commit": [
+        "./vendor/xwp/wp-dev-lib/scripts/pre-commit && ./node_modules/.bin/lint-staged"
+      ],
+      "commit-msg": [
+        "cat $1 | ./node_modules/.bin/commitlint"
+      ]
+    }
+  },
+  "require": {
+    "drewm/mailchimp-api": "^2.5"
+  }
+}

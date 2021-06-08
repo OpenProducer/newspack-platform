@@ -1,0 +1,330 @@
+/**
+ * Action Card
+ */
+
+@import '~@wordpress/base-styles/colors';
+@import '../../../shared/scss/colors';
+
+.newspack-card.newspack-action-card {
+	padding: 0;
+	border-color: $gray-300;
+
+	// Clickable
+
+	&.newspack-card--is-clickable {
+		transition: box-shadow 125ms ease-in-out;
+
+		&:hover {
+			box-shadow: 0 4px 8px rgba( black, 0.08 );
+		}
+	}
+
+	// Status
+
+	&.newspack-card__is-disabled,
+	&.newspack-card__is-primary,
+	&.newspack-card__is-secondary,
+	&.newspack-card__is-supported,
+	&.newspack-card__is-unsupported {
+		box-shadow: inset 4px 0 0 $gray-200;
+
+		.newspack-action-card__region-top {
+			padding-left: 28px;
+		}
+	}
+
+	&.newspack-card__is-primary {
+		box-shadow: inset 4px 0 0 $primary-500;
+	}
+
+	&.newspack-card__is-secondary {
+		box-shadow: inset 4px 0 0 $alert-yellow;
+	}
+
+	&.newspack-card__is-supported {
+		box-shadow: inset 4px 0 0 $alert-green;
+	}
+
+	&.newspack-card__is-unsupported {
+		box-shadow: inset 4px 0 0 $alert-red;
+	}
+
+	// Small
+	&.is-small {
+		.newspack-action-card__region-top {
+			padding: 8px 16px;
+		}
+
+		h2 {
+			font-size: 14px;
+		}
+
+		p,
+		.newspack-action-card__region-right,
+		.newspack-action-card__primary_button {
+			font-size: 12px;
+			line-height: 16px;
+		}
+
+		& + & {
+			margin-top: -16px;
+		}
+
+		&.newspack-card__is-disabled,
+		&.newspack-card__is-primary,
+		&.newspack-card__is-secondary,
+		&.newspack-card__is-supported,
+		&.newspack-card__is-unsupported {
+			.newspack-action-card__region-top {
+				padding-left: 20px;
+			}
+		}
+	}
+
+	// Medium
+
+	&.is-medium {
+		.newspack-action-card__region-top {
+			padding: 16px;
+
+			.components-toggle-control {
+				@media screen and ( min-width: 744px ) {
+					margin-right: 16px;
+				}
+			}
+		}
+
+		.newspack-action-card__region-children {
+			padding: 0 32px 32px 32px;
+		}
+	}
+
+	// Has grey header
+
+	&.newspack-card--has-grey-header {
+		overflow: hidden;
+		&.newspack-card--has-children {
+			.newspack-action-card__region-top {
+				border-bottom: 1px solid $gray-300;
+			}
+		}
+		.newspack-action-card__region-top {
+			background-color: $gray-100;
+		}
+	}
+
+	// Typography
+
+	h2,
+	p {
+		margin: 0;
+		max-width: 100%;
+		width: 100%;
+	}
+
+	h2 {
+		align-items: center;
+		display: flex;
+		flex-wrap: wrap;
+		margin-right: -8px;
+
+		.newspack-action-card__title {
+			margin-right: 8px;
+		}
+
+		a {
+			color: inherit;
+			text-decoration: none;
+
+			&:active,
+			&:focus,
+			&:hover {
+				color: $primary-500;
+			}
+		}
+	}
+
+	// Regions
+
+	.newspack-action-card__region {
+		align-items: center;
+		display: flex;
+		justify-content: space-between;
+		margin: 0;
+	}
+
+	.newspack-action-card__region-top {
+		padding: 24px;
+		display: block;
+
+		@media screen and ( min-width: 744px ) {
+			display: flex;
+		}
+
+		// Toggle Control
+		.components-toggle-control {
+			margin-bottom: 24px;
+			margin-top: 0;
+
+			@media screen and ( min-width: 744px ) {
+				margin-bottom: 0;
+				margin-right: 24px;
+			}
+
+			.components-base-control__field {
+				margin-bottom: 0;
+			}
+
+			.components-form-toggle {
+				display: flex;
+				margin: 0;
+			}
+		}
+	}
+
+	.newspack-action-card__region-children {
+		padding: 0 24px 24px 24px;
+
+		&__inner {
+			padding-top: 32px;
+
+			> *:first-child {
+				margin-top: 0 !important;
+			}
+
+			> *:last-child {
+				margin-bottom: 0 !important;
+			}
+		}
+
+		.newspack-section-header {
+			margin: 32px 0 16px;
+		}
+
+		.newspack-card,
+		.newspack-checkbox-control,
+		.newspack-grid,
+		.newspack-text-control,
+		.newspack-toggle-control {
+			margin: 16px 0;
+		}
+	}
+
+	.newspack-action-card__region-left {
+		margin-bottom: 24px;
+
+		@media screen and ( min-width: 744px ) {
+			margin-bottom: 0;
+			margin-right: 24px;
+		}
+	}
+
+	.newspack-action-card__region-center {
+		align-items: flex-start;
+		flex: 1 1 auto;
+		flex-wrap: wrap;
+	}
+
+	.newspack-action-card__region-right {
+		align-items: flex-start;
+		flex: 0 0 auto;
+		flex-direction: column;
+		margin-top: 24px;
+		text-align: right;
+
+		@media screen and ( min-width: 744px ) {
+			align-items: flex-end;
+			flex-direction: column;
+			margin-left: 24px;
+			margin-top: 0;
+		}
+
+		> * {
+			text-align: inherit;
+		}
+	}
+
+	// Waiting
+
+	.newspack-action-card__container {
+		display: flex;
+	}
+
+	// Notifications
+
+	.newspack-action-card__notification {
+		.newspack-notice {
+			margin: 0;
+
+			&__heading {
+				margin-top: 0;
+			}
+		}
+	}
+
+	// Image
+
+	.newspack-action-card__image {
+		background-position: center;
+		background-repeat: no-repeat;
+		background-size: cover;
+		border-radius: 50%;
+		height: 48px;
+		width: 48px;
+	}
+
+	// Icon
+
+	.newspack_plugin-installer__icon {
+		margin: 0;
+	}
+
+	// Buttons
+
+	.newspack-button {
+		&.newspack-action-card__secondary_button {
+			&.is-link {
+				color: $alert-red;
+
+				&:active,
+				&:focus,
+				&:hover {
+					color: darken( $alert-red, 20% );
+				}
+			}
+		}
+	}
+
+	// Badge
+
+	.newspack-action-card__badge {
+		border: 1px solid $gray-300;
+		border-radius: 12px;
+		display: block;
+		flex: 0 0 auto;
+		font-size: 12px;
+		font-weight: bold;
+		line-height: 16px;
+		margin: 3px 8px 3px 0;
+		padding: 0 8px;
+		text-transform: uppercase;
+	}
+
+	// Description Card
+
+	&.newspack-description-card {
+		font-style: italic;
+	}
+
+	// Multiple Cards
+
+	& + & {
+		margin-top: -16px;
+	}
+}
+
+.newspack-card {
+	.newspack-card.newspack-action-card {
+		border: 1px solid $gray-200;
+	}
+}

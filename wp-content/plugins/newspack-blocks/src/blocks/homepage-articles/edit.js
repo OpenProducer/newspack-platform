@@ -210,13 +210,15 @@ class Edit extends Component {
 						{ post.newspack_post_sponsors && formatSponsorLogos( post.newspack_post_sponsors ) }
 						{ post.newspack_post_sponsors && formatSponsorByline( post.newspack_post_sponsors ) }
 						{ showAuthor &&
+							! post.newspack_listings_hide_author &&
 							showAvatar &&
 							! post.newspack_post_sponsors &&
 							formatAvatars( post.newspack_author_info ) }
 						{ showAuthor &&
+							! post.newspack_listings_hide_author &&
 							! post.newspack_post_sponsors &&
 							formatByline( post.newspack_author_info ) }
-						{ showDate && (
+						{ showDate && ! post.newspack_listings_hide_publish_date && (
 							<time className="entry-date published" key="pub-date">
 								{ dateI18n( dateFormat, post.date_gmt ) }
 							</time>

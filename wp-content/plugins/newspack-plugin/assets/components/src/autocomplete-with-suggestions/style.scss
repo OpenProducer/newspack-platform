@@ -1,0 +1,147 @@
+/**
+* Styles for AutocompleteWithSuggestions component.
+*/
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-autocomplete-with-suggestions {
+	width: 100%;
+
+	&.hide-help {
+		> .components-base-control,
+		> .newspack-autocomplete-tokenfield,
+		> .newspack-autocomplete-with-suggestions__search-suggestions,
+		> .newspack-autocomplete-with-suggestions__search-suggestions-multiselect {
+			margin-top: 1.5rem;
+		}
+	}
+
+	.components-spinner {
+		right: 0;
+		top: 2em;
+	}
+
+	.components-select-control__input {
+		max-width: none;
+	}
+
+	.components-input-control__backdrop {
+		border-color: $gray-900 !important;
+	}
+
+	.newspack-autocomplete-with-suggestions__label,
+	.components-form-token-field__label,
+	.components-input-control__label,
+	.components-checkbox-control__label {
+		color: $gray-900 !important;
+	}
+
+	&__suggestions-spinner .components-spinner {
+		display: block;
+		margin: 0 auto 1rem;
+		position: relative;
+	}
+
+	.newspack-autocomplete-tokenfield__help {
+		font-size: inherit;
+	}
+
+	.components-form-token-field {
+		&__input-container {
+			border-color: $gray-900;
+		}
+
+		&__suggestions-list {
+			border-top-color: $gray-900;
+			margin: 4px -4px -2px;
+		}
+
+		&__suggestion {
+			padding: 8px;
+		}
+	}
+
+	p.newspack-autocomplete-with-suggestions__label {
+		font-size: inherit;
+		margin-bottom: 4px;
+	}
+
+	&__selected-items {
+		border-bottom: 1px solid $gray-300;
+		margin-bottom: 2rem;
+		padding-bottom: 1.75rem;
+
+		.newspack-autocomplete-with-suggestions__label {
+			font-weight: bold;
+
+			.components-button.is-link {
+				color: $alert-red;
+				font-weight: normal;
+			}
+		}
+	}
+
+	&__selected-item-button.components-button.is-tertiary {
+		background-color: $gray-300;
+		border-radius: 2px;
+		color: #1e1e1e;
+		font-size: 13px;
+		height: auto;
+		margin-bottom: 4px;
+		margin-right: 4px;
+		padding-left: 8px;
+		padding-right: 8px;
+
+		&::after {
+			content: '✕';
+			margin-left: 8px;
+		}
+
+		&:hover {
+			box-shadow: none;
+			color: black;
+		}
+	}
+
+	&__search-suggestions,
+	&__search-suggestions-multiselect {
+		max-height: 166px;
+		overflow-x: visible;
+		overflow-y: auto;
+
+		.components-button.is-link {
+			color: $gray-900;
+			display: block;
+			margin: auto;
+			padding: 8px;
+			text-decoration: none;
+			width: 100%;
+
+			&:active:not( :disabled ),
+			&:hover:not( :disabled ) {
+				background: white;
+				background: var( --wp-admin-theme-color );
+				color: white;
+			}
+		}
+		.components-button.is-secondary {
+			display: block;
+			margin: 1rem auto;
+		}
+	}
+
+	/* Extra space on sides to handle outline styles of focused checkboxes. */
+	&__search-suggestions-multiselect {
+		margin-left: -4px;
+		margin-right: -4px;
+		padding: 0 4px;
+	}
+
+	&__search-suggestions {
+		border-radius: 2px;
+		border: 1px solid $gray-900;
+		max-height: 192px;
+		padding: 4px;
+	}
+}

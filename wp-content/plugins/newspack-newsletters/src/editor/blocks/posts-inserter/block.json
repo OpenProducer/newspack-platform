@@ -1,0 +1,85 @@
+{
+  "name": "newspack-newsletters/posts-inserter",
+  "category": "widgets",
+  "supports": [
+    "align"
+  ],
+  "attributes": {
+		"areBlocksInserted": {
+			"type": "boolean",
+			"default": false
+		},
+		"postsToShow": {
+			"type": "number",
+			"default": 3
+		},
+		"displayPostExcerpt": {
+			"type": "boolean",
+			"default": true
+		},
+		"excerptLength": {
+			"type": "number",
+			"default": 15
+		},
+		"displayPostDate": {
+			"type": "boolean",
+			"default": false
+		},
+		"displayFeaturedImage": {
+			"type": "boolean",
+			"default": true
+		},
+		"displayContinueReading": {
+			"type": "boolean",
+			"default": false
+		},
+		"innerBlocksToInsert": {
+			"type": "array",
+			"default": []
+		},
+		"featuredImageAlignment": {
+			"type": "string",
+			"default": "left"
+		},
+		"isDisplayingSpecificPosts": {
+			"type": "boolean",
+			"default": false
+		},
+		"specificPosts": {
+			"type": "array",
+			"default": []
+		},
+		"textFontSize": {
+			"type": "number",
+			"default": 16
+		},
+		"headingFontSize": {
+			"type": "number",
+			"default": 25
+		},
+		"textColor": {
+			"type": "string",
+			"default": "#000"
+		},
+		"headingColor": {
+			"type": "string",
+			"default": "#000"
+		},
+		"tags": {
+			"type": "array",
+			"default": []
+		},
+		"tagExclusions": {
+			"type": "array",
+			"default": []
+		},
+		"categories": {
+			"type": "array",
+			"default": []
+		},
+		"categoryExclusions": {
+			"type": "array",
+			"default": []
+		}
+  }
+}

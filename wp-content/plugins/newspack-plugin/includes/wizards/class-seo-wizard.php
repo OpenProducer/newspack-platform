@@ -155,7 +155,9 @@ class SEO_Wizard extends Wizard {
 		}
 		if ( isset( $request['under_construction'] ) ) {
 			$environment_type = absint( $request['under_construction'] ) ? 'staging' : 'production';
+			$blog_public      = absint( $request['under_construction'] ) ? 0 : 1;
 			$cm->set_option( 'environment_type', $environment_type );
+			update_option( 'blog_public', $blog_public );
 		}
 		$response = $this->get_seo_settings();
 		return rest_ensure_response( $response );

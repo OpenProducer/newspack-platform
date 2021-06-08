@@ -65,22 +65,22 @@ class Profile {
 			],
 			[
 				'key'         => 'instagram_url',
-				'label'       => __( 'Instagram', 'newspack' ),
+				'label'       => 'Instagram',
 				'placeholder' => __( 'https://instagram.com/user', 'newspack' ),
 			],
 			[
 				'key'         => 'linkedin_url',
-				'label'       => __( 'Linkedin', 'newspack' ),
+				'label'       => 'Linkedin',
 				'placeholder' => __( 'https://linkedin.com/user', 'newspack' ),
 			],
 			[
 				'key'         => 'youtube_url',
-				'label'       => __( 'YouTube', 'newspack' ),
+				'label'       => 'YouTube',
 				'placeholder' => __( 'https://youtube.com/c/channel', 'newspack' ),
 			],
 			[
 				'key'         => 'pinterest_url',
-				'label'       => __( 'Pinterest', 'newspack' ),
+				'label'       => 'Pinterest',
 				'placeholder' => __( 'https://pinterest.com/user', 'newspack' ),
 			],
 		];

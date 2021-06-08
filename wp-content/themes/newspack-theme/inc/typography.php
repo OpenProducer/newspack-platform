@@ -111,8 +111,6 @@ function newspack_custom_typography_css() {
 		.wp-block-latest-posts time,
 		.wp-block-file,
 		.wp-block-file .wp-block-file__button,
-		.wpbnbd .freq-label,
-		.wpbnbd .tier-label,
 
 		/* _widgets.scss */
 		.widget,
@@ -124,6 +122,7 @@ function newspack_custom_typography_css() {
 		.widget_recent_comments ul li,
 		.widget_recent_entries ul li,
 		.widget_rss ul li,
+
 		.widget_tag_cloud .tagcloud,
 
 		/* _copy.scss */
@@ -136,90 +135,54 @@ function newspack_custom_typography_css() {
 		#jp-relatedposts.jp-relatedposts .jp-relatedposts-headline,
 
 		/* Yoast Breadcrumbs */
-		.site-breadcrumb .wrapper > span,
-
-		/* WooCommerce */
-		.woocommerce-breadcrumb,
-		.woocommerce-pagination,
-		.woocommerce .onsale,
-		.woocommerce .price,
-		.woocommerce .product_meta,
-		.woocommerce-review-link,
-		.woocommerce-grouped-product-list,
-		.woocommerce .first-payment-date,
-		.woocommerce-message,
-		.woocommerce-error,
-		.woocommerce-info,
-		ul.products .added_to_cart,
-		.woocommerce-tabs ul,
-		.woocommerce-MyAccount-navigation,
-		.woocommerce-Reviews .comment-reply-title,
-		.woocommerce-results-wrapper,
-		.product .nyp
+		.site-breadcrumb .wrapper > span
 		{
 			font-family: ' . wp_kses( $font_header, null ) . ';
 		}';
 
 		$editor_css_blocks .= '
-		.edit-post-visual-editor.editor-styles-wrapper h1, /* legacy */
+		.edit-post-visual-editor.editor-styles-wrapper h1,
 		.edit-post-visual-editor.editor-styles-wrapper h2,
 		.edit-post-visual-editor.editor-styles-wrapper h3,
 		.edit-post-visual-editor.editor-styles-wrapper h4,
 		.edit-post-visual-editor.editor-styles-wrapper h5,
 		.edit-post-visual-editor.editor-styles-wrapper h6,
-		.edit-post-visual-editor .editor-styles-wrapper h1,
-		.edit-post-visual-editor .editor-styles-wrapper h2,
-		.edit-post-visual-editor .editor-styles-wrapper h3,
-		.edit-post-visual-editor .editor-styles-wrapper h4,
-		.edit-post-visual-editor .editor-styles-wrapper h5,
-		.edit-post-visual-editor .editor-styles-wrapper h6,
 		.block-editor-block-list__layout .block-editor-block-list__block figcaption,
 		.block-editor-block-list__layout .block-editor-block-list__block .gallery-caption,
 		.block-editor-block-list__layout .block-editor-block-list__block .cat-links,
 
 		/* Post Title */
-		.edit-post-visual-editor.editor-styles-wrapper .editor-post-title__block .editor-post-title__input, /* legacy */
-		.edit-post-visual-editor .editor-styles-wrapper .editor-post-title__block .editor-post-title__input,
+		.edit-post-visual-editor.editor-styles-wrapper .editor-post-title__block .editor-post-title__input,
 
 		/* Homepage Posts Block */
 		.block-editor-block-list__layout .wpnbha .entry-title,
 		.block-editor-block-list__layout .wpnbha .entry-meta,
 
 		/* Table Block */
-		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-table th, /* legacy */
-		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-table td, /* legacy */
-		.block-editor-block-list__layout .wp-block-table th,
-		.block-editor-block-list__layout .wp-block-table td,
+		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-table th,
+		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-table td,
 
 		/* Button Block */
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-button__link,
 
 		/* Blockquote Block */
-		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-quote cite, /* legacy */
+		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-quote cite,
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-quote footer,
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-quote .wp-block-quote__citation,
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-quote cite,
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-quote footer,
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-quote .wp-block-quote__citation,
 
 		/* Pullquote Block */
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-block[data-type="core/pullquote"] .wp-block-pullquote__citation,
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-block[data-type="core/pullquote"][data-align="left"] .wp-block-pullquote__citation,
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-block[data-type="core/pullquote"][data-align="right"] .wp-block-pullquote__citation,
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-pullquote .wp-block-pullquote__citation,
 
 		/* File Block */
-		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-file, /* legacy */
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-file,
+		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-file,
 
 		/* Widget blocks */
 		.block-editor-block-list__layout .block-editor-block-list__block ul.wp-block-archives li,
-		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-categories li, /* legacy */
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-categories li,
-		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-latest-posts li > a, /* legacy */
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-latest-posts li > a,
-		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-latest-posts time, /* legacy */
-		.block-editor-block-list__layout .block-editor-block-list__block.wp-block-latest-posts time,
+		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-categories li,
+		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-latest-posts li > a,
+		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-latest-posts time,
 
 		/* Latest Comments blocks */
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-block-latest-comments .wp-block-latest-comments__comment-meta,
@@ -229,11 +192,6 @@ function newspack_custom_typography_css() {
 		.block-editor-block-list__layout .block-editor-block-list__block .jp-relatedposts-i2 strong,
 		.block-editor-block-list__layout .block-editor-block-list__block .jp-relatedposts-i2 .jp-related-posts-i2__post-date,
 		.block-editor-block-list__layout .block-editor-block-list__block .jp-relatedposts-i2 .jp-related-posts-i2__post-context,
-
-		/* Donate block */
-		.block-editor-block-list__layout .block-editor-block-list__block .wpbnbd .freq-label,
-		.block-editor-block-list__layout .block-editor-block-list__block .wpbnbd .tier-label,
-		.block-editor-block-list__layout .block-editor-block-list__block .wpbnbd button,
 
 		/* Classic Editor */
 		.block-editor-block-list__layout .block-editor-block-list__block .wp-caption dd,
@@ -340,7 +298,7 @@ function newspack_custom_typography_link( $theme_mod ) {
 function newspack_get_font_stacks() {
 	return array(
 		'serif'      => array(
-			'name'  => __( 'Serif', 'newspack' ),
+			'name'  => __( 'Serif' ),
 			'fonts' => array(
 				'Georgia',
 				'Garamond',
@@ -349,7 +307,7 @@ function newspack_get_font_stacks() {
 			),
 		),
 		'sans_serif' => array(
-			'name'  => __( 'Sans Serif', 'newspack' ),
+			'name'  => __( 'Sans Serif' ),
 			'fonts' => array(
 				'-apple-system',
 				'BlinkMacSystemFont',
@@ -362,37 +320,6 @@ function newspack_get_font_stacks() {
 				'Droid Sans',
 				'Helvetica Neue',
 				'sans-serif',
-			),
-		),
-		'display'    => array(
-			'name'  => __( 'Display', 'newspack' ),
-			'fonts' => array(
-				'Impact',
-				'Haettenschweiler',
-				'Franklin Gothic Bold',
-				'Charcoal',
-				'Helvetica Inserat',
-				'Bitstream Vera Sans Bold',
-				'Arial Black',
-				'sans-serif',
-			),
-		),
-		'monospace'  => array(
-			'name'  => __( 'Monospace', 'newspack' ),
-			'fonts' => array(
-				'Consolas',
-				'Andale Mono WT',
-				'Andale Mono',
-				'Lucida Console',
-				'Lucida Sans Typewriter',
-				'DejaVu Sans Mono',
-				'Bitstream Vera Sans Mono',
-				'Liberation Mono',
-				'Nimbus Mono L',
-				'Monaco',
-				'Courier New',
-				'Courier',
-				'monospace'
 			),
 		),
 	);

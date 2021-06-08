@@ -1,0 +1,148 @@
+/**
+ * Campaign group
+ */
+
+@import '~@wordpress/base-styles/colors';
+@import '../../../../shared/scss/colors';
+
+.newspack-campaigns__campaign-group {
+	&__card {
+		& > &__segment {
+			margin: -16px -16px 16px !important;
+			padding: 8px 16px;
+		}
+
+		&__segment {
+			align-items: center;
+			background: $gray-100;
+			border-bottom: 1px solid $gray-300;
+			display: flex;
+			justify-content: space-between;
+		}
+	}
+
+	&__filter-group-actions {
+		align-items: center;
+		display: flex;
+
+		.newspack-custom-select-control {
+			margin: 0;
+
+			.components-custom-select-control__button {
+				border-color: $gray-200;
+				color: $gray-900;
+				font-size: 17px;
+				font-weight: bold;
+				min-height: 36px;
+			}
+		}
+
+		&__button {
+			margin-left: 8px;
+
+			.newspack-popover {
+				margin-left: calc(
+					25px - 36px / 2
+				); // 25px is set by Gutenberg, 36px / 2 is half of the button's width
+			}
+		}
+	}
+
+	&__filter-group-segmentation {
+		.components-popover {
+			margin-left: -20px;
+
+			&__content {
+				padding: 8px;
+
+				> div {
+					display: flex;
+					flex-wrap: wrap;
+					justify-content: flex-end;
+				}
+
+				.newspack-toggle-control {
+					margin: 8px 0;
+					width: 100%;
+				}
+
+				.newspack-button.is-link {
+					color: $primary-500;
+					padding: 0;
+					text-decoration: underline;
+
+					&:hover {
+						color: $primary-600;
+					}
+				}
+			}
+		}
+	}
+
+	&__add-new-button {
+		&__modal {
+			max-width: 384px;
+			padding: 0 32px;
+
+			.components-modal__content {
+				margin: 0;
+			}
+
+			.components-modal__header {
+				background: transparent;
+				padding-top: 32px;
+
+				.components-button.has-icon {
+					right: -32px;
+				}
+			}
+
+			.newspack-text-control {
+				margin-top: 0;
+			}
+
+			.newspack-card__buttons-card {
+				display: flex;
+				flex-wrap: wrap;
+				justify-content: flex-end;
+				margin: -8px;
+
+				&.newspack-card__buttons-prompt {
+					justify-content: center;
+				}
+			}
+		}
+	}
+}
+
+.newspack-card__buttons-prompt {
+	.newspack-button {
+		color: $gray-900;
+		display: flex;
+		flex-direction: column;
+		padding: 8px !important;
+		text-align: center;
+		width: 96px;
+
+		&:active,
+		&:focus,
+		&:hover {
+			color: $primary-500;
+
+			svg {
+				background: $gray-100;
+				border-color: $primary-500;
+			}
+		}
+
+		svg {
+			border: 1px solid $gray-300;
+			border-radius: 3px;
+			display: block;
+			fill: $primary-500;
+			margin: 0 0 8px;
+			padding: 15px;
+			transition: background-color 125ms ease-in-out, border-color 125ms ease-in-out;
+		}
+	}
+}

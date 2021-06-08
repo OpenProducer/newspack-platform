@@ -1,0 +1,74 @@
+/**
+ * Toggle Control
+ */
+
+@import '../../../shared/scss/colors';
+@import '~@wordpress/base-styles/colors';
+
+.newspack-toggle-control {
+	margin: 32px 0;
+
+	.components-base-control__field {
+		align-items: flex-start;
+		margin: 0;
+
+		.components-toggle-control__label {
+			color: $gray-700;
+			font-size: 14px;
+			line-height: 24px;
+			margin: 0;
+		}
+
+		.components-form-toggle {
+			margin: 3px 8px 3px 0;
+
+			&.is-checked {
+				.components-form-toggle__track {
+					background: $primary-500;
+					border-color: transparent;
+				}
+			}
+		}
+	}
+
+	// Is Dark
+
+	&.newspack-toggle-control--is-dark {
+		.components-base-control__field label {
+			color: $gray-900;
+			font-weight: bold;
+		}
+
+		.components-base-control__help {
+			font-style: normal;
+		}
+	}
+
+	// Is disabled
+
+	&.newspack-toggle-control--is-disabled {
+		opacity: 0.5;
+		pointer-events: none;
+	}
+
+	// Focus
+
+	.components-form-toggle__input:focus {
+		+ .components-form-toggle__track {
+			box-shadow: 0 0 0 2px white, 0 0 0 4px $primary-500;
+		}
+	}
+
+	// Multiple Toggle Controls
+
+	& + & {
+		margin-bottom: 32px;
+		margin-top: -24px;
+	}
+
+	// Reset
+
+	.components-base-control__help {
+		margin: 0 0 0 44px;
+	}
+}

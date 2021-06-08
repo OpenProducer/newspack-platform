@@ -1,0 +1,14 @@
+// Colors.
+:root {
+	--newspack-listings--grey-dark: #1e1e1e;
+	--newspack-listings--grey-medium: #757575;
+	--newspack-listings--grey-light: #ddd;
+	--newspack-listings--border-dark: rgba( 0, 0, 0, 0.124 );
+	--newspack-listings--border-light: rgba( 255, 255, 255, 0.124 );
+}
+
+// Media queries.
+$mobile_width: 600px;
+$tablet_width: 782px;
+$desktop_width: 1168px;
+$wide_width: 1379px;

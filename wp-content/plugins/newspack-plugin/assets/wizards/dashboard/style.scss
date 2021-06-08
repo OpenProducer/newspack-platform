@@ -1,0 +1,29 @@
+/**
+ * Dashboard
+ */
+
+@import '~@wordpress/base-styles/colors';
+@import '../../shared/scss/colors';
+
+.newspack-dashboard-card {
+	align-items: center;
+	border-color: $gray-300;
+	display: grid;
+	grid-gap: 16px;
+	grid-template-columns: 48px auto;
+	margin: 0;
+	padding: 32px;
+
+	h2,
+	p {
+		margin: 0;
+	}
+
+	svg {
+		fill: $primary-500;
+	}
+}
+
+.newspack-notice {
+	margin: 0;
+}
