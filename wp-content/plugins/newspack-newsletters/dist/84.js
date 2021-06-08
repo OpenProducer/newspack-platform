@@ -1,0 +1,14 @@
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[84],{
+
+/***/ "./node_modules/codemirror/mode/protobuf/protobuf.js":
+/*!***********************************************************!*\
+  !*** ./node_modules/codemirror/mode/protobuf/protobuf.js ***!
+  \***********************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// CodeMirror, copyright (c) by Marijn Haverbeke and others\n// Distributed under an MIT license: https://codemirror.net/LICENSE\n\n(function(mod) {\n  if (true) // CommonJS\n    mod(__webpack_require__(/*! ../../lib/codemirror */ \"./node_modules/codemirror/lib/codemirror.js\"));\n  else {}\n})(function(CodeMirror) {\n  \"use strict\";\n\n  function wordRegexp(words) {\n    return new RegExp(\"^((\" + words.join(\")|(\") + \"))\\\\b\", \"i\");\n  };\n\n  var keywordArray = [\n    \"package\", \"message\", \"import\", \"syntax\",\n    \"required\", \"optional\", \"repeated\", \"reserved\", \"default\", \"extensions\", \"packed\",\n    \"bool\", \"bytes\", \"double\", \"enum\", \"float\", \"string\",\n    \"int32\", \"int64\", \"uint32\", \"uint64\", \"sint32\", \"sint64\", \"fixed32\", \"fixed64\", \"sfixed32\", \"sfixed64\",\n    \"option\", \"service\", \"rpc\", \"returns\"\n  ];\n  var keywords = wordRegexp(keywordArray);\n\n  CodeMirror.registerHelper(\"hintWords\", \"protobuf\", keywordArray);\n\n  var identifiers = new RegExp(\"^[_A-Za-z\\xa1-\\uffff][_A-Za-z0-9\\xa1-\\uffff]*\");\n\n  function tokenBase(stream) {\n    // whitespaces\n    if (stream.eatSpace()) return null;\n\n    // Handle one line Comments\n    if (stream.match(\"//\")) {\n      stream.skipToEnd();\n      return \"comment\";\n    }\n\n    // Handle Number Literals\n    if (stream.match(/^[0-9\\.+-]/, false)) {\n      if (stream.match(/^[+-]?0x[0-9a-fA-F]+/))\n        return \"number\";\n      if (stream.match(/^[+-]?\\d*\\.\\d+([EeDd][+-]?\\d+)?/))\n        return \"number\";\n      if (stream.match(/^[+-]?\\d+([EeDd][+-]?\\d+)?/))\n        return \"number\";\n    }\n\n    // Handle Strings\n    if (stream.match(/^\"([^\"]|(\"\"))*\"/)) { return \"string\"; }\n    if (stream.match(/^'([^']|(''))*'/)) { return \"string\"; }\n\n    // Handle words\n    if (stream.match(keywords)) { return \"keyword\"; }\n    if (stream.match(identifiers)) { return \"variable\"; } ;\n\n    // Handle non-detected items\n    stream.next();\n    return null;\n  };\n\n  CodeMirror.defineMode(\"protobuf\", function() {\n    return {\n      token: tokenBase,\n      fold: \"brace\"\n    };\n  });\n\n  CodeMirror.defineMIME(\"text/x-protobuf\", \"protobuf\");\n});\n\n\n//# sourceURL=webpack:///./node_modules/codemirror/mode/protobuf/protobuf.js?");
+
+/***/ })
+
+}]);

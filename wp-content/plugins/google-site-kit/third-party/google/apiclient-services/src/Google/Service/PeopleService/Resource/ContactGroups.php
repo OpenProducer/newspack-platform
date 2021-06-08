@@ -33,6 +33,10 @@ class Google_Service_PeopleService_Resource_ContactGroups extends \Google\Site_K
      *
      * @param array $optParams Optional parameters.
      *
+     * @opt_param string groupFields Optional. A field mask to restrict which fields
+     * on the group are returned. Defaults to `metadata`, `groupType`,
+     * `memberCount`, and `name` if not set or set to empty. Valid fields are: *
+     * clientData * groupType * memberCount * metadata * name
      * @opt_param int maxMembers Optional. Specifies the maximum number of members
      * to return for each group. Defaults to 0 if not set, which will return zero
      * members.
@@ -86,6 +90,10 @@ class Google_Service_PeopleService_Resource_ContactGroups extends \Google\Site_K
      * to get.
      * @param array $optParams Optional parameters.
      *
+     * @opt_param string groupFields Optional. A field mask to restrict which fields
+     * on the group are returned. Defaults to `metadata`, `groupType`,
+     * `memberCount`, and `name` if not set or set to empty. Valid fields are: *
+     * clientData * groupType * memberCount * metadata * name
      * @opt_param int maxMembers Optional. Specifies the maximum number of members
      * to return. Defaults to 0 if not set, which will return zero members.
      * @return Google_Service_PeopleService_ContactGroup
@@ -102,6 +110,10 @@ class Google_Service_PeopleService_Resource_ContactGroups extends \Google\Site_K
      *
      * @param array $optParams Optional parameters.
      *
+     * @opt_param string groupFields Optional. A field mask to restrict which fields
+     * on the group are returned. Defaults to `metadata`, `groupType`,
+     * `memberCount`, and `name` if not set or set to empty. Valid fields are: *
+     * clientData * groupType * memberCount * metadata * name
      * @opt_param int pageSize Optional. The maximum number of resources to return.
      * Valid values are between 1 and 1000, inclusive. Defaults to 30 if not set or
      * set to 0.

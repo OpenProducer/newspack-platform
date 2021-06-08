@@ -226,9 +226,15 @@ final class Analytics_4 extends Module
 					);
 				}
 
+				$timezone = get_option( 'timezone_string' );
+				if ( empty( $timezone ) ) {
+					$timezone = 'UTC';
+				}
+
 				$property = new Google_Service_GoogleAnalyticsAdmin_GoogleAnalyticsAdminV1alphaProperty();
 				$property->setParent( self::normalize_account_id( $data['accountID'] ) );
 				$property->setDisplayName( wp_parse_url( $this->context->get_reference_site_url(), PHP_URL_HOST ) );
+				$property->setTimeZone( $timezone );
 
 				return $this->get_service( 'analyticsadmin' )->properties->create( $property );
 			case 'POST:create-webdatastream':
@@ -379,10 +385,8 @@ final class Analytics_4 extends Module
 			'slug'        => self::MODULE_SLUG,
 			'name'        => _x( 'Analytics 4 (Alpha)', 'Service name', 'google-site-kit' ),
 			'description' => __( 'Get a deeper understanding of your customers. Google Analytics gives you the free tools you need to analyze data for your business in one place.', 'google-site-kit' ),
-			'cta'         => __( 'Get to know your customers.', 'google-site-kit' ),
 			'order'       => 3,
 			'homepage'    => __( 'https://analytics.google.com/analytics/web', 'google-site-kit' ),
-			'learn_more'  => __( 'https://marketingplatform.google.com/about/analytics/', 'google-site-kit' ),
 			'internal'    => true,
 		);
 	}

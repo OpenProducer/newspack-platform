@@ -20,6 +20,8 @@ namespace Google\Site_Kit_Dependencies;
 class Google_Service_PeopleService_ContactGroup extends \Google\Site_Kit_Dependencies\Google_Collection
 {
     protected $collection_key = 'memberResourceNames';
+    protected $clientDataType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_GroupClientData';
+    protected $clientDataDataType = 'array';
     public $etag;
     public $formattedName;
     public $groupType;
@@ -29,6 +31,20 @@ class Google_Service_PeopleService_ContactGroup extends \Google\Site_Kit_Depende
     protected $metadataDataType = '';
     public $name;
     public $resourceName;
+    /**
+     * @param Google_Service_PeopleService_GroupClientData[]
+     */
+    public function setClientData($clientData)
+    {
+        $this->clientData = $clientData;
+    }
+    /**
+     * @return Google_Service_PeopleService_GroupClientData[]
+     */
+    public function getClientData()
+    {
+        return $this->clientData;
+    }
     public function setEtag($etag)
     {
         $this->etag = $etag;

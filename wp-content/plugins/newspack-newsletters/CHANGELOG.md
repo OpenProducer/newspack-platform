@@ -1,3 +1,10 @@
+# [1.27.0](https://github.com/Automattic/newspack-newsletters/compare/v1.26.0...v1.27.0) (2021-06-08)
+
+
+### Features
+
+* register posts inserter block if editing a reusable block ([99ea55a](https://github.com/Automattic/newspack-newsletters/commit/99ea55a66c3035e34b68e21e40bd88209da064de))
+
 # [1.26.0](https://github.com/Automattic/newspack-newsletters/compare/v1.25.0...v1.26.0) (2021-05-13)
 
 

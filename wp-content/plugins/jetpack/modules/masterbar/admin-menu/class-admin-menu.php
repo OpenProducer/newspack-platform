@@ -105,6 +105,56 @@ class Admin_Menu extends Base_Admin_Menu {
 	}
 
 	/**
+	 * Adds upsell nudge as a menu.
+	 *
+	 * @param object $nudge The $nudge object containing the content, CTA, link and tracks.
+	 */
+	public function add_upsell_nudge( $nudge ) {
+		$message = '
+<div class="upsell_banner">
+	<div class="banner__info">
+		<div class="banner__title">%1$s</div>
+	</div>
+	<div class="banner__action">
+		<button type="button" class="button">%2$s</button>
+	</div>
+</div>';
+
+		$message = sprintf(
+			$message,
+			wp_kses( $nudge['content'], array() ),
+			wp_kses( $nudge['cta'], array() )
+		);
+
+		add_menu_page( 'site-notices', $message, 'read', 'https://wordpress.com' . $nudge['link'], null, null, 1 );
+		add_filter( 'add_menu_classes', array( $this, 'set_site_notices_menu_class' ) );
+	}
+
+	/**
+	 * Adds a custom element class and id for Site Notices's menu item.
+	 *
+	 * @param array $menu Associative array of administration menu items.
+	 * @return array
+	 */
+	public function set_site_notices_menu_class( array $menu ) {
+		foreach ( $menu as $key => $menu_item ) {
+			if ( 'site-notices' !== $menu_item[3] ) {
+				continue;
+			}
+
+			$classes = ' toplevel_page_site-notices';
+
+			if ( isset( $menu_item[4] ) ) {
+				$menu[ $key ][4] = $menu_item[4] . $classes;
+				$menu[ $key ][5] = 'toplevel_page_site-notices';
+				break;
+			}
+		}
+
+		return $menu;
+	}
+
+	/**
 	 * Adds Stats menu.
 	 */
 	public function add_stats_menu() {
@@ -381,11 +431,13 @@ class Admin_Menu extends Base_Admin_Menu {
 	public function add_options_menu( $wp_admin = false ) {
 		$this->hide_submenu_page( 'options-general.php', 'sharing' );
 
+		// There is not complete feature parity between WP Admin and Calypso settings https://github.com/Automattic/wp-calypso/issues/51189.
+		$this->update_submenus( 'options-general.php', array( 'options-general.php' => 'https://wordpress.com/settings/general/' . $this->domain ) );
+		add_submenu_page( 'options-general.php', esc_attr__( 'Advanced General', 'jetpack' ), __( 'Advanced General', 'jetpack' ), 'manage_options', 'options-general.php', null, 1 );
+
 		if ( $wp_admin ) {
 			return;
 		}
-
-		$this->update_submenus( 'options-general.php', array( 'options-general.php' => 'https://wordpress.com/settings/general/' . $this->domain ) );
 
 		$this->hide_submenu_page( 'options-general.php', 'options-discussion.php' );
 		$this->hide_submenu_page( 'options-general.php', 'options-writing.php' );

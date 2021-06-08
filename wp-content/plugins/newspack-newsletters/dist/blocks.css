@@ -1,0 +1,59 @@
+/**
+ * Colors
+ */
+.newspack-posts-inserter {
+  border: 1px solid #1e1e1e;
+  border-radius: 2px;
+  padding: 1em 0; }
+  .newspack-posts-inserter__header {
+    align-items: center;
+    display: flex;
+    padding: 0 1em;
+    position: relative;
+    z-index: 1; }
+    .newspack-posts-inserter__header svg {
+      margin-right: 1ch; }
+    .newspack-posts-inserter__header span {
+      font-size: 18pt; }
+  .newspack-posts-inserter__preview {
+    align-items: center;
+    border: 0 solid #1e1e1e;
+    border-width: 1px 0;
+    display: flex;
+    justify-content: center;
+    margin: 1em 0;
+    min-height: 4rem; }
+    .newspack-posts-inserter__preview:empty {
+      border: 0;
+      min-height: 0; }
+    .newspack-posts-inserter__preview .block-editor-block-preview__container {
+      max-height: 400px;
+      overflow: scroll; }
+    .newspack-posts-inserter__preview .block-editor-block-preview__content {
+      position: relative; }
+  .newspack-posts-inserter .components-button {
+    margin: 0 1em; }
+
+.newspack-newsletters-query-controls .components-form-token-field__help {
+  display: none; }
+
+h1.block-editor-rich-text__editable a,
+h2.block-editor-rich-text__editable a,
+h3.block-editor-rich-text__editable a,
+h4.block-editor-rich-text__editable a,
+h5.block-editor-rich-text__editable a,
+h6.block-editor-rich-text__editable a {
+  color: inherit; }
+
+.autocomplete-tokenfield {
+  position: relative;
+  /* Workaround for hard-coded help text in FormTokenField. */ }
+  .autocomplete-tokenfield .components-spinner {
+    position: absolute;
+    top: 2em;
+    right: 0; }
+  .autocomplete-tokenfield .components-form-token-field > .components-form-token-field__help {
+    display: none; }
+  .autocomplete-tokenfield .autocomplete-tokenfield__help {
+    font-style: italic; }
+

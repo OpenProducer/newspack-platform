@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitde84207702d470af404d73b79dad160b
+class ComposerStaticInitc332de99eac4a916873c53afd21c6a3f
 {
     public static $files = array (
         'fca581ae5268210490253d58378748c5' => __DIR__ . '/../..' . '/includes/functions.php',
@@ -76,7 +76,6 @@ class ComposerStaticInitde84207702d470af404d73b79dad160b
         'MC4WP_Queue_Job' => __DIR__ . '/../..' . '/includes/class-queue-job.php',
         'MC4WP_Registration_Form_Integration' => __DIR__ . '/../..' . '/integrations/wp-registration-form/class-registration-form.php',
         'MC4WP_Tools' => __DIR__ . '/../..' . '/includes/class-tools.php',
-        'MC4WP_Update_Optin' => __DIR__ . '/../..' . '/includes/admin/class-update-optin.php',
         'MC4WP_Upgrade_Routines' => __DIR__ . '/../..' . '/includes/admin/class-upgrade-routines.php',
         'MC4WP_Usage_Tracking' => __DIR__ . '/../..' . '/includes/admin/class-usage-tracking.php',
         'MC4WP_User_Integration' => __DIR__ . '/../..' . '/includes/integrations/class-user-integration.php',
@@ -88,7 +87,7 @@ class ComposerStaticInitde84207702d470af404d73b79dad160b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->classMap = ComposerStaticInitde84207702d470af404d73b79dad160b::$classMap;
+            $loader->classMap = ComposerStaticInitc332de99eac4a916873c53afd21c6a3f::$classMap;
 
         }, null, ClassLoader::class);
     }

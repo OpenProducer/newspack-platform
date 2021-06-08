@@ -21,7 +21,7 @@ class MC4WP_Form_Asset_Manager {
 		add_action( 'wp_enqueue_scripts', array( $this, 'load_stylesheets' ) );
 		add_action( 'wp_footer', array( $this, 'load_scripts' ) );
 		add_action( 'mc4wp_output_form', array( $this, 'before_output_form' ) );
-		add_action( 'script_loader_tag', array( $this, 'add_defer_attribute'), 10, 2 );
+		add_action( 'script_loader_tag', array( $this, 'add_defer_attribute' ), 10, 2 );
 	}
 
 	/**
@@ -57,10 +57,6 @@ class MC4WP_Form_Asset_Manager {
 	 * @return string
 	 */
 	public function get_stylesheet_url( $stylesheet ) {
-		if ( ! $this->is_registered_stylesheet( $stylesheet ) ) {
-			return '';
-		}
-
 		return mc4wp_plugin_url( 'assets/css/form-' . $stylesheet . '.css' );
 	}
 
@@ -99,16 +95,15 @@ class MC4WP_Form_Asset_Manager {
 			}
 
 			$handle = 'mc4wp-form-' . $stylesheet;
-			wp_enqueue_style( $handle, $this->get_stylesheet_url( $stylesheet ), array(), MC4WP_VERSION );
-			add_editor_style( $this->get_stylesheet_url( $stylesheet ) );
+			$url = $this->get_stylesheet_url( $stylesheet );
+			wp_enqueue_style( $handle, $url, array(), MC4WP_VERSION );
+			add_editor_style( $url );
 		}
 
 		/**
 		 * @ignore
 		 */
 		do_action( 'mc4wp_load_form_stylesheets', $stylesheets );
-
-		return true;
 	}
 
 	/**
@@ -206,7 +201,7 @@ class MC4WP_Form_Asset_Manager {
 	 * @return string
 	 */
 	public function add_defer_attribute( $tag, $handle ) {
-		if ( ! in_array( $handle, array( 'mc4wp-forms-api', 'mc4wp-forms-submitted' ), true ) || stripos( $tag, ' defer') !== false ) {
+		if ( ! in_array( $handle, array( 'mc4wp-forms-api', 'mc4wp-forms-submitted' ), true ) || stripos( $tag, ' defer' ) !== false ) {
 			return $tag;
 		}
 

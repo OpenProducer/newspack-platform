@@ -21,6 +21,8 @@ class Google_Service_PeopleService_UpdateContactGroupRequest extends \Google\Sit
 {
     protected $contactGroupType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ContactGroup';
     protected $contactGroupDataType = '';
+    public $readGroupFields;
+    public $updateGroupFields;
     /**
      * @param Google_Service_PeopleService_ContactGroup
      */
@@ -34,5 +36,21 @@ class Google_Service_PeopleService_UpdateContactGroupRequest extends \Google\Sit
     public function getContactGroup()
     {
         return $this->contactGroup;
+    }
+    public function setReadGroupFields($readGroupFields)
+    {
+        $this->readGroupFields = $readGroupFields;
+    }
+    public function getReadGroupFields()
+    {
+        return $this->readGroupFields;
+    }
+    public function setUpdateGroupFields($updateGroupFields)
+    {
+        $this->updateGroupFields = $updateGroupFields;
+    }
+    public function getUpdateGroupFields()
+    {
+        return $this->updateGroupFields;
     }
 }

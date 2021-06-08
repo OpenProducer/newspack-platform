@@ -427,6 +427,7 @@ return array(
     'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_FileAs' => $baseDir . '/google/apiclient-services/src/Google/Service/PeopleService/FileAs.php',
     'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Gender' => $baseDir . '/google/apiclient-services/src/Google/Service/PeopleService/Gender.php',
     'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_GetPeopleResponse' => $baseDir . '/google/apiclient-services/src/Google/Service/PeopleService/GetPeopleResponse.php',
+    'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_GroupClientData' => $baseDir . '/google/apiclient-services/src/Google/Service/PeopleService/GroupClientData.php',
     'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ImClient' => $baseDir . '/google/apiclient-services/src/Google/Service/PeopleService/ImClient.php',
     'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_Interest' => $baseDir . '/google/apiclient-services/src/Google/Service/PeopleService/Interest.php',
     'Google\\Site_Kit_Dependencies\\Google_Service_PeopleService_ListConnectionsResponse' => $baseDir . '/google/apiclient-services/src/Google/Service/PeopleService/ListConnectionsResponse.php',

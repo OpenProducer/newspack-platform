@@ -21,6 +21,7 @@ class Google_Service_PeopleService_CreateContactGroupRequest extends \Google\Sit
 {
     protected $contactGroupType = 'Google\Site_Kit_Dependencies\Google_Service_PeopleService_ContactGroup';
     protected $contactGroupDataType = '';
+    public $readGroupFields;
     /**
      * @param Google_Service_PeopleService_ContactGroup
      */
@@ -34,5 +35,13 @@ class Google_Service_PeopleService_CreateContactGroupRequest extends \Google\Sit
     public function getContactGroup()
     {
         return $this->contactGroup;
+    }
+    public function setReadGroupFields($readGroupFields)
+    {
+        $this->readGroupFields = $readGroupFields;
+    }
+    public function getReadGroupFields()
+    {
+        return $this->readGroupFields;
     }
 }

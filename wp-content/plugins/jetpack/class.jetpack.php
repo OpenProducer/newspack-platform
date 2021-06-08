@@ -723,11 +723,6 @@ class Jetpack {
 		add_filter( 'jetpack_get_default_modules', array( $this, 'filter_default_modules' ) );
 		add_filter( 'jetpack_get_default_modules', array( $this, 'handle_deprecated_modules' ), 99 );
 
-		// A filter to control all just in time messages
-		add_filter( 'jetpack_just_in_time_msgs', '__return_true', 9 );
-
-		add_filter( 'jetpack_just_in_time_msg_cache', '__return_true', 9 );
-
 		require_once JETPACK__PLUGIN_DIR . 'class-jetpack-pre-connection-jitms.php';
 		$jetpack_jitm_messages = ( new Jetpack_Pre_Connection_JITMs() );
 		add_filter( 'jetpack_pre_connection_jitms', array( $jetpack_jitm_messages, 'add_pre_connection_jitms' ) );
@@ -771,11 +766,6 @@ class Jetpack {
 			add_action( 'wp_print_styles', array( $this, 'implode_frontend_css' ), -1 ); // Run first
 			add_action( 'wp_print_footer_scripts', array( $this, 'implode_frontend_css' ), -1 ); // Run first to trigger before `print_late_styles`
 		}
-
-		/**
-		 * These are sync actions that we need to keep track of for jitms
-		 */
-		add_filter( 'jetpack_sync_before_send_updated_option', array( $this, 'jetpack_track_last_sync_callback' ), 99 );
 
 		// Actually push the stats on shutdown.
 		if ( ! has_action( 'shutdown', array( $this, 'push_stats' ) ) ) {
@@ -1097,27 +1087,17 @@ class Jetpack {
 		return $callables;
 	}
 
+	/**
+	 * Deprecated
+	 * Please use Automattic\Jetpack\JITMS\JITM::jetpack_track_last_sync_callback instead.
+	 *
+	 * @param array $params The action parameters.
+	 *
+	 * @deprecated since 9.8.
+	 */
 	function jetpack_track_last_sync_callback( $params ) {
-		/**
-		 * Filter to turn off jitm caching
-		 *
-		 * @since 5.4.0
-		 *
-		 * @param bool false Whether to cache just in time messages
-		 */
-		if ( ! apply_filters( 'jetpack_just_in_time_msg_cache', false ) ) {
-			return $params;
-		}
-
-		if ( is_array( $params ) && isset( $params[0] ) ) {
-			$option = $params[0];
-			if ( 'active_plugins' === $option ) {
-				// use the cache if we can, but not terribly important if it gets evicted
-				set_transient( 'jetpack_last_plugin_sync', time(), HOUR_IN_SECONDS );
-			}
-		}
-
-		return $params;
+		_deprecated_function( __METHOD__, 'jetpack-9.8', '\Automattic\Jetpack\JITMS\JITM->jetpack_track_last_sync_callback' );
+		return Automattic\Jetpack\JITMS\JITM::get_instance()->jetpack_track_last_sync_callback( $params );
 	}
 
 	function jetpack_connection_banner_callback() {
@@ -2043,11 +2023,11 @@ class Jetpack {
 			$modules = array_diff( $modules, $updated_modules );
 		}
 
-		$is_userless = self::connection()->is_userless();
+		$is_site_connection = self::connection()->is_site_connection();
 
 		foreach ( $modules as $index => $module ) {
-			// If we're in offline/user-less mode, disable modules requiring a connection/user connection.
-			if ( $is_offline_mode || $is_userless ) {
+			// If we're in offline/site-connection mode, disable modules requiring a connection/user connection.
+			if ( $is_offline_mode || $is_site_connection ) {
 				// Prime the pump if we need to
 				if ( empty( $modules_data[ $module ] ) ) {
 					$modules_data[ $module ] = self::get_module( $module );
@@ -2057,7 +2037,7 @@ class Jetpack {
 					continue;
 				}
 
-				if ( $is_userless && $modules_data[ $module ]['requires_user_connection'] ) {
+				if ( $is_site_connection && $modules_data[ $module ]['requires_user_connection'] ) {
 					continue;
 				}
 			}
@@ -4072,7 +4052,7 @@ p {
 				'id'      => 'home',
 				'title'   => __( 'Home', 'jetpack' ),
 				'content' =>
-					'<p><strong>' . __( 'Jetpack by WordPress.com', 'jetpack' ) . '</strong></p>' .
+					'<p><strong>' . __( 'Jetpack', 'jetpack' ) . '</strong></p>' .
 					'<p>' . __( 'Jetpack supercharges your self-hosted WordPress site with the awesome cloud power of WordPress.com.', 'jetpack' ) . '</p>' .
 					'<p>' . __( 'On this page, you are able to view the modules available within Jetpack, learn more about them, and activate or deactivate them as needed.', 'jetpack' ) . '</p>',
 			)
@@ -4085,7 +4065,7 @@ p {
 					'id'      => 'settings',
 					'title'   => __( 'Settings', 'jetpack' ),
 					'content' =>
-						'<p><strong>' . __( 'Jetpack by WordPress.com', 'jetpack' ) . '</strong></p>' .
+						'<p><strong>' . __( 'Jetpack', 'jetpack' ) . '</strong></p>' .
 						'<p>' . __( 'You can activate or deactivate individual Jetpack modules to suit your needs.', 'jetpack' ) . '</p>' .
 						'<ol>' .
 							'<li>' . __( 'Each module has an Activate or Deactivate link so you can toggle one individually.', 'jetpack' ) . '</li>' .
@@ -4155,7 +4135,7 @@ p {
 
 	function plugin_action_links( $actions ) {
 
-		$jetpack_home = array( 'jetpack-home' => sprintf( '<a href="%s">%s</a>', self::admin_url( 'page=jetpack' ), 'Jetpack' ) );
+		$jetpack_home = array( 'jetpack-home' => sprintf( '<a href="%s">%s</a>', self::admin_url( 'page=jetpack' ), __( 'My Jetpack', 'jetpack' ) ) );
 
 		if ( current_user_can( 'jetpack_manage_modules' ) && ( self::is_connection_ready() || ( new Status() )->is_offline_mode() ) ) {
 			return array_merge(
@@ -4188,21 +4168,8 @@ p {
 
 				add_thickbox();
 
-				wp_register_script(
-					'jp-tracks',
-					'//stats.wp.com/w.js',
-					array(),
-					gmdate( 'YW' ),
-					true
-				);
-
-				wp_register_script(
-					'jp-tracks-functions',
-					plugins_url( '_inc/lib/tracks/tracks-callables.js', JETPACK__PLUGIN_FILE ),
-					array( 'jp-tracks' ),
-					JETPACK__VERSION,
-					false
-				);
+				// Register jp-tracks-functions dependency.
+				Tracking::register_tracks_functions_scripts();
 
 				wp_enqueue_script(
 					'jetpack-deactivate-dialog-js',
@@ -7463,7 +7430,7 @@ endif;
 			self::activate_default_modules( 999, 1, array_merge( $active_modules, $other_modules ), $redirect_on_activation_error, $send_state_messages );
 		} else {
 			// Default modules that don't require a user were already activated on site_register.
-			// This time let's activate only those that require a user, this assures we don't reactivate manually deactivated modules while the site was user-less.
+			// This time let's activate only those that require a user, this assures we don't reactivate manually deactivated modules while the site was connected only at a site level.
 			self::activate_default_modules( false, false, $other_modules, $redirect_on_activation_error, $send_state_messages, null, true );
 			Jetpack_Options::update_option( 'active_modules_initialized', true );
 		}
