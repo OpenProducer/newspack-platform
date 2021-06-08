@@ -2531,7 +2531,7 @@ msgid "Last 90 days"
 msgstr ""
 
 #: assets/wizards/popups/views/analytics/Filters.js:14
-msgid "All Campaigns"
+msgid "All Prompts"
 msgstr ""
 
 #: assets/wizards/popups/views/analytics/Filters.js:21

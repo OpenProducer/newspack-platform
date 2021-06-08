@@ -1,0 +1,9 @@
+/**
+ * Styles for the WP Admin Plugins screen.
+ */
+/**
+ * Plugins table.
+ */
+table.plugins .newspack-plugin.uninstalled .check-column input[type='checkbox'] {
+  display: none; }
+
