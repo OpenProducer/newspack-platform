@@ -29,7 +29,7 @@ class Analytics_Wizard extends Wizard {
 	public static $custom_events_option_name = 'newspack_analytics_custom_events';
 
 	/**
-	 * NTG eabling option name.
+	 * NTG enabling option name.
 	 *
 	 * @var string
 	 */
@@ -526,7 +526,7 @@ class Analytics_Wizard extends Wizard {
 	 * @return bool Status of NTG events.
 	 */
 	public static function ntg_events_enabled() {
-		return 'enabled' === get_option( self::$ntg_events_option_name, '' );
+		return 'enabled' === get_option( self::$ntg_events_option_name, 'enabled' );
 	}
 
 	/**

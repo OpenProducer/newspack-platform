@@ -65,7 +65,12 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 		add_image_size( 'newspack-featured-image', 1200, 9999 );
 		add_image_size( 'newspack-archive-image', 800, 600, true );
 		add_image_size( 'newspack-archive-image-large', 1200, 900, true );
-		add_image_size( 'newspack-footer-logo', 400, 9999, true );
+		add_image_size( 'newspack-footer-logo', 400, 9999 );
+
+		/**
+		 * Enable feature support for specific post types.
+		 */
+		add_post_type_support( 'page', 'excerpt' ); // Custom excerpts for pages, normally restricted to posts.
 
 		// This theme uses wp_nav_menu() in two locations.
 		register_nav_menus(
@@ -422,6 +427,13 @@ function newspack_enqueue_scripts() {
 	$languages_path = get_parent_theme_file_path( '/languages' );
 	$theme_version  = wp_get_theme()->get( 'Version' );
 	$post_type      = get_post_type();
+	$current_screen = get_current_screen();
+
+	// Add check to see if currently on the widgets screen; none of these files are needed there, but are loaded as of WP 5.8.
+	// See: https://github.com/WordPress/gutenberg/issues/28538.
+	if ( 'widgets' === $current_screen->id ) {
+		return;
+	}
 
 	// Featured Image options.
 	wp_register_script(
@@ -685,7 +697,7 @@ add_action( 'after_switch_theme', 'newspack_migrate_settings', 10, 2 );
 function newspack_colors_css_wrap() {
 
 	// Only bother if we haven't customized the color.
-	if ( ( ! is_customize_preview() && ( 'default' === get_theme_mod( 'theme_colors', 'default' ) && newspack_get_mobile_cta_color() === get_theme_mod( 'header_cta_hex', newspack_get_mobile_cta_color() ) ) ) || is_admin() ) {
+	if ( ( ! is_customize_preview() && ( 'default' === get_theme_mod( 'theme_colors', 'default' ) && newspack_get_mobile_cta_color() === get_theme_mod( 'header_cta_hex', newspack_get_mobile_cta_color() ) && 'default' === get_theme_mod( 'ads_color', 'default' ) ) ) || is_admin() ) {
 		return;
 	}
 
@@ -844,7 +856,7 @@ function newspack_theme_newspack_ads_media_queries( $media_queries, $placement, 
 						$media_query['max_width'] = null;
 					} else {
 						$media_query['min_width'] = ceil( intval( $media_query['width'] ) / 0.9 );
-						if ( $next_media_query['width'] && $next_media_query['width'] <= 1200 ) {
+						if ( $next_media_query && $next_media_query['width'] && $next_media_query['width'] <= 1200 ) {
 							$media_query['max_width'] = ceil( $next_media_query['width'] / 0.9 - 1 );
 						} else {
 							$media_query['max_width'] = null;
@@ -861,14 +873,14 @@ function newspack_theme_newspack_ads_media_queries( $media_queries, $placement, 
 						$media_query['max_width'] = null;
 					} else if ( intval( $media_query['width'] ) > ceil( 782 * 0.585 ) ) {
 						$media_query['min_width'] = ceil( intval( $media_query['width'] ) / 0.585 );
-						if ( $next_media_query['width'] && $next_media_query['width'] <= 780 ) {
+						if ( $next_media_query && $next_media_query['width'] && $next_media_query['width'] <= 780 ) {
 							$media_query['max_width'] = ceil( $next_media_query['width'] / 0.585 - 1 );
 						} else {
 							$media_query['max_width'] = null;
 						}
 					} else {
 						$media_query['min_width'] = ceil( intval( $media_query['width'] ) / 0.9 );
-						if ( $next_media_query['width'] && $next_media_query['width'] <= 780 ) {
+						if ( $next_media_query && $next_media_query['width'] && $next_media_query['width'] <= 780 ) {
 							$media_query['max_width'] = ceil( $next_media_query['width'] / 0.585 - 1 );
 						} else {
 							$media_query['max_width'] = null;
@@ -1018,3 +1030,8 @@ if ( class_exists( 'Trust_Indicators' ) ) {
 if ( function_exists( '\Newspack_Sponsors\get_sponsors_for_post' ) ) {
 	require get_template_directory() . '/inc/newspack-sponsors.php';
 }
+
+/**
+ * Load Web Stories compatibility file.
+ */
+require get_template_directory() . '/inc/web-stories.php';

@@ -144,6 +144,13 @@ function newspack_body_classes( $classes ) {
 		$classes[] = 'has-sidebar';
 	}
 
+	// Add a class for each category assigned to a single post.
+	if ( is_single() ) {
+		foreach ( ( get_the_category( $page_id ) ) as $category ) {
+			$classes[] = 'cat-' . $category->category_nicename;
+		}
+	}
+
 	// Adds class if singular post or page has a featured image.
 	if ( is_singular() && has_post_thumbnail() && 'hidden' !== newspack_featured_image_position() ) {
 		$classes[] = 'has-featured-image';
@@ -185,6 +192,12 @@ function newspack_body_classes( $classes ) {
 	$feature_latest_post = get_theme_mod( 'archive_feature_latest_post', true );
 	if ( is_archive() && true === $feature_latest_post ) {
 		$classes[] = 'feature-latest';
+	}
+
+	// Add a class for the footer logo size.
+	$footer_logo_size = get_theme_mod( 'footer_logo_size', 'medium' );
+	if ( 'medium' !== $footer_logo_size ) {
+		$classes[] = 'footer-logo-' . esc_attr( $footer_logo_size );
 	}
 
 	return $classes;
@@ -406,7 +419,7 @@ function newspack_add_dropdown_icons( $output, $item, $depth, $args ) {
 		$icon = newspack_get_icon_svg( 'keyboard_arrow_down', 24 );
 
 		$output .= sprintf(
-			'<button class="submenu-expand" tabindex="-1">%s</button>',
+			'<button class="submenu-expand" tabindex="-1" role="presentation">%s</button>',
 			$icon
 		);
 	}
@@ -608,7 +621,11 @@ function newspack_math_to_time_ago( $post_time, $format, $post, $updated ) {
  * Apply time ago format to publish dates if enabled.
  */
 function newspack_convert_to_time_ago( $post_time, $format, $post ) {
-	return newspack_math_to_time_ago( $post_time, $format, $post, false );
+	// Don't override specifically requested formats.
+	if ( empty( $format ) ) {
+		$post_time = newspack_math_to_time_ago( $post_time, $format, $post, false );
+	}
+	return $post_time;
 }
 add_filter( 'get_the_date', 'newspack_convert_to_time_ago', 10, 3 );
 

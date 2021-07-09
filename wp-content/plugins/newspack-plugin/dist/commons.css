@@ -12,7 +12,7 @@
     .newspack-card.newspack-action-card.newspack-card--is-clickable:hover {
       box-shadow: 0 4px 8px rgba(0, 0, 0, 0.08); }
   .newspack-card.newspack-action-card.newspack-card__is-disabled, .newspack-card.newspack-action-card.newspack-card__is-primary, .newspack-card.newspack-action-card.newspack-card__is-secondary, .newspack-card.newspack-action-card.newspack-card__is-supported, .newspack-card.newspack-action-card.newspack-card__is-unsupported {
-    box-shadow: inset 4px 0 0 #e0e0e0; }
+    box-shadow: inset 4px 0 0 #f0f0f0; }
     .newspack-card.newspack-action-card.newspack-card__is-disabled .newspack-action-card__region-top, .newspack-card.newspack-action-card.newspack-card__is-primary .newspack-action-card__region-top, .newspack-card.newspack-action-card.newspack-card__is-secondary .newspack-action-card__region-top, .newspack-card.newspack-action-card.newspack-card__is-supported .newspack-action-card__region-top, .newspack-card.newspack-action-card.newspack-card__is-unsupported .newspack-action-card__region-top {
       padding-left: 28px; }
   .newspack-card.newspack-action-card.newspack-card__is-primary {
@@ -25,6 +25,12 @@
     box-shadow: inset 4px 0 0 #cc1818; }
   .newspack-card.newspack-action-card.is-small .newspack-action-card__region-top {
     padding: 8px 16px; }
+    .newspack-card.newspack-action-card.is-small .newspack-action-card__region-top .components-toggle-control {
+      margin-bottom: 16px; }
+      @media screen and (min-width: 744px) {
+        .newspack-card.newspack-action-card.is-small .newspack-action-card__region-top .components-toggle-control {
+          margin-bottom: 0;
+          margin-right: 16px; } }
   .newspack-card.newspack-action-card.is-small h2 {
     font-size: 14px; }
   .newspack-card.newspack-action-card.is-small p,
@@ -32,14 +38,39 @@
   .newspack-card.newspack-action-card.is-small .newspack-action-card__primary_button {
     font-size: 12px;
     line-height: 16px; }
+  .newspack-card.newspack-action-card.is-small code {
+    padding: 0 4px; }
   .newspack-card.newspack-action-card.is-small + .newspack-card.newspack-action-card.is-small {
     margin-top: -16px; }
+  .newspack-card.newspack-action-card.is-small.mv0 {
+    border-left-color: #ddd;
+    border-radius: 0;
+    border-right-color: #ddd; }
+    .newspack-card.newspack-action-card.is-small.mv0:first-of-type {
+      border-top-color: #ddd;
+      border-top-left-radius: 3px;
+      border-top-right-radius: 3px; }
+    .newspack-card.newspack-action-card.is-small.mv0:last-of-type {
+      border-bottom-color: #ddd;
+      border-bottom-left-radius: 3px;
+      border-bottom-right-radius: 3px; }
+    .newspack-card.newspack-action-card.is-small.mv0 + .newspack-card.newspack-action-card.is-small.mv0 {
+      margin-top: -1px; }
   .newspack-card.newspack-action-card.is-small.newspack-card__is-disabled .newspack-action-card__region-top, .newspack-card.newspack-action-card.is-small.newspack-card__is-primary .newspack-action-card__region-top, .newspack-card.newspack-action-card.is-small.newspack-card__is-secondary .newspack-action-card__region-top, .newspack-card.newspack-action-card.is-small.newspack-card__is-supported .newspack-action-card__region-top, .newspack-card.newspack-action-card.is-small.newspack-card__is-unsupported .newspack-action-card__region-top {
     padding-left: 20px; }
   .newspack-card.newspack-action-card.is-medium .newspack-action-card__region-top {
     padding: 16px; }
+    .newspack-card.newspack-action-card.is-medium .newspack-action-card__region-top .components-toggle-control {
+      margin-bottom: 16px; }
+      @media screen and (min-width: 744px) {
+        .newspack-card.newspack-action-card.is-medium .newspack-action-card__region-top .components-toggle-control {
+          margin-bottom: 0;
+          margin-right: 16px; } }
+  .newspack-card.newspack-action-card.is-medium .newspack-action-card__region-left {
+    margin-bottom: 16px; }
     @media screen and (min-width: 744px) {
-      .newspack-card.newspack-action-card.is-medium .newspack-action-card__region-top .components-toggle-control {
+      .newspack-card.newspack-action-card.is-medium .newspack-action-card__region-left {
+        margin-bottom: 0;
         margin-right: 16px; } }
   .newspack-card.newspack-action-card.is-medium .newspack-action-card__region-children {
     padding: 0 32px 32px 32px; }
@@ -438,12 +469,15 @@ body[class*='admin-color-'] .newspack-button {
     border-color: transparent;
     color: #1e1e1e;
     border-style: solid;
-    border-width: 1px; }
+    border-width: 1px;
+    color: #1e1e1e; }
     body[class*='admin-color-'] .newspack-button.is-quaternary:hover {
-      border-color: #e0e0e0; }
+      border-color: #e0e0e0;
+      color: #36f; }
     body[class*='admin-color-'] .newspack-button.is-quaternary:focus {
       border-color: #36f;
-      box-shadow: inset 0 0 0 1px #36f; }
+      box-shadow: inset 0 0 0 1px #36f;
+      color: #36f; }
     body[class*='admin-color-'] .newspack-button.is-quaternary:disabled, body[class*='admin-color-'] .newspack-button.is-quaternary:disabled:active:enabled, body[class*='admin-color-'] .newspack-button.is-quaternary[aria-disabled='true'], body[class*='admin-color-'] .newspack-button.is-quaternary[aria-disabled='true']:active:enabled {
       background: transparent;
       border-color: transparent;
@@ -632,9 +666,11 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
     .newspack-card {
       padding: 32px 64px; } }
   .newspack-card__buttons-card {
-    margin: 24px -8px; }
+    display: flex;
+    flex-wrap: wrap;
+    margin: 32px -8px 16px; }
     .newspack-card__buttons-card .newspack-button {
-      margin: 8px; }
+      margin: 0 8px 16px; }
   .newspack-card__header-actions {
     align-items: center;
     display: flex;
@@ -687,6 +723,12 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
   .newspack-card small {
     font-size: 12px;
     line-height: 16px; }
+  .newspack-card code {
+    background: #f0f0f0;
+    color: #757575;
+    font-size: 12px;
+    line-height: 16px;
+    padding: 4px 8px; }
   .newspack-card hr {
     background: #ddd;
     border: 0;
@@ -1211,8 +1253,11 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
       .newspack-image-upload__image--has-image:focus-within button, .newspack-image-upload__image--has-image:focus-within::after, .newspack-image-upload__image--has-image:hover button, .newspack-image-upload__image--has-image:hover::after {
         opacity: 1; }
       .newspack-image-upload__image--has-image .sep {
+        background: transparent;
         display: block;
-        height: 8px; }
+        height: 8px;
+        margin: 0;
+        width: 100%; }
 
 /**
  * Grid
@@ -1278,11 +1323,12 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
   font-size: 14px;
   line-height: 24px;
   margin: 0;
-  padding: 0 48px;
+  max-height: 100%;
+  padding: 0 32px;
   width: 100%; }
   @media screen and (min-width: 600px) {
     .newspack-modal {
-      border-radius: 4px;
+      border-radius: 3px;
       max-width: 80%;
       max-width: calc( 100% - 64px); } }
   @media screen and (min-width: 744px) {
@@ -1292,25 +1338,26 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
       .newspack-modal--wide {
         max-width: 1168px; } }
   .newspack-modal .components-modal__header {
+    align-items: flex-start;
     background: white;
-    border: none;
+    border: 0;
     height: auto;
-    margin: 0;
-    padding: 64px 0 32px; }
+    justify-content: flex-end;
+    margin: 0 -32px;
+    padding: 64px 32px 32px; }
+    @media screen and (min-width: 744px) {
+      .newspack-modal .components-modal__header {
+        margin-left: -64px;
+        margin-right: -64px;
+        padding-left: 64px;
+        padding-right: 64px; } }
     .newspack-modal .components-modal__header .components-modal__header-heading-container {
-      display: block; }
+      display: block;
+      margin-right: 16px; }
     .newspack-modal .components-modal__header .components-button.has-icon {
-      height: 48px;
-      justify-content: center;
-      left: auto;
-      padding: 0;
-      position: absolute;
-      right: -40px;
-      top: 8px;
-      width: 48px; }
-      @media screen and (min-width: 744px) {
-        .newspack-modal .components-modal__header .components-button.has-icon {
-          right: -56px; } }
+      flex: 0 0 36px;
+      left: 0;
+      margin: -2px 0; }
       .newspack-modal .components-modal__header .components-button.has-icon:hover, .newspack-modal .components-modal__header .components-button.has-icon[aria-expended='true'] {
         color: #36f; }
       .newspack-modal .components-modal__header .components-button.has-icon:focus:not(:disabled) {
@@ -1322,16 +1369,12 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
           display: none; }
     .newspack-modal .components-modal__header .components-modal__header-heading {
       color: #1e1e1e;
-      font-size: 20px;
+      font-size: 21px;
       font-weight: bold;
-      line-height: 24px;
-      text-align: center; }
+      line-height: 32px; }
   .newspack-modal .components-modal__content {
     margin: -32px 0 0;
-    padding: 0 0 16px; }
-    @media screen and (min-width: 744px) {
-      .newspack-modal .components-modal__content {
-        padding-bottom: 32px; } }
+    padding: 0 0 32px; }
   .newspack-modal h2,
   .newspack-modal p {
     line-height: 24px;
@@ -1434,6 +1477,8 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
       transform: rotate(180deg); }
   .newspack-notice__content > div > * {
     margin: 0; }
+  .newspack-notice + .newspack-notice {
+    margin-top: -16px; }
 
 /**
  * Plugin Installer
@@ -1468,7 +1513,7 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
   box-shadow: inset 4px 0 0 #cc1818; }
 
 .newspack-card.newspack-plugin-installer__status-installing {
-  box-shadow: inset 4px 0 0 #e0e0e0; }
+  box-shadow: inset 4px 0 0 #f0f0f0; }
 
 .newspack-card.is-small .newspack-plugin-installer__status .newspack-checkbox-icon {
   height: 16px;
@@ -1514,13 +1559,14 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
       z-index: 1; }
     .newspack-popover .components-popover__content .newspack-button.is-link {
       border-radius: 3px;
-      color: #757575;
       padding: 6px 8px;
       text-decoration: none; }
-      .newspack-popover .components-popover__content .newspack-button.is-link:active, .newspack-popover .components-popover__content .newspack-button.is-link:active:enabled, .newspack-popover .components-popover__content .newspack-button.is-link:hover, .newspack-popover .components-popover__content .newspack-button.is-link:not(:disabled):not([aria-disabled='true']):not(.is-default):hover {
-        color: #36f; }
+      .newspack-popover .components-popover__content .newspack-button.is-link:not(.is-destructive) {
+        color: #757575; }
+        .newspack-popover .components-popover__content .newspack-button.is-link:not(.is-destructive):active, .newspack-popover .components-popover__content .newspack-button.is-link:not(.is-destructive):active:enabled, .newspack-popover .components-popover__content .newspack-button.is-link:not(.is-destructive):focus,
+        .newspack-popover .components-popover__content .newspack-button.is-link:not(.is-destructive):focus:enabled .newspack-popover .components-popover__content .newspack-button.is-link:not(.is-destructive):hover, .newspack-popover .components-popover__content .newspack-button.is-link:not(.is-destructive):not(:disabled):not([aria-disabled='true']):not(.is-default):hover {
+          color: #36f; }
       .newspack-popover .components-popover__content .newspack-button.is-link:focus, .newspack-popover .components-popover__content .newspack-button.is-link:focus:enabled {
-        color: #757575;
         outline: none; }
     .newspack-popover .components-popover__content .newspack-button .components-menu-items__item-icon {
       fill: #1e1e1e; }
@@ -1651,6 +1697,8 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
     .newspack-radio-control input[type='radio']:checked {
       background-color: #36f;
       border-color: #36f; }
+      .newspack-radio-control input[type='radio']:checked::before {
+        border: none; }
     .newspack-radio-control input[type='radio']:focus {
       border-color: #36f;
       box-shadow: 0 0 0 2px white, 0 0 0 3.5px #36f; }
@@ -1695,6 +1743,7 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
   .newspack-select-control .components-input-control__label,
   .newspack-select-control .components-base-control__label {
     color: #1e1e1e !important;
+    display: flex;
     font-size: 14px;
     font-weight: bold;
     line-height: 24px;
@@ -2044,7 +2093,7 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
   margin: 32px 0; }
   .newspack-textarea-control label {
     color: #1e1e1e;
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     line-height: 24px;
     margin: 0; }
@@ -2758,4 +2807,12 @@ svg.newspack--success {
 
 .newspack-design__header__style-size {
   grid-template-columns: repeat(2, min-content); }
+
+.newspack-design .newspack-radio-control .components-base-control__field {
+  display: flex;
+  flex-wrap: wrap; }
+  .newspack-design .newspack-radio-control .components-base-control__field .components-radio-control__option {
+    margin: 0; }
+    .newspack-design .newspack-radio-control .components-base-control__field .components-radio-control__option:first-of-type {
+      margin-right: 32px; }
 

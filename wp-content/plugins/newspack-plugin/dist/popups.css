@@ -111,26 +111,6 @@
     .newspack-campaigns__segment-group__action-cards .newspack-card.newspack-action-card:last-child {
       margin-bottom: -16px; }
 
-.newspack-campaigns__segment-group__add-new-button__modal {
-  max-width: 384px;
-  padding: 0 32px; }
-  .newspack-campaigns__segment-group__add-new-button__modal .components-modal__content {
-    margin: 0; }
-  .newspack-campaigns__segment-group__add-new-button__modal .components-modal__header {
-    background: transparent;
-    padding-top: 32px; }
-    .newspack-campaigns__segment-group__add-new-button__modal .components-modal__header .components-button.has-icon {
-      right: -32px; }
-  .newspack-campaigns__segment-group__add-new-button__modal .newspack-text-control {
-    margin-top: 0; }
-  .newspack-campaigns__segment-group__add-new-button__modal .newspack-card__buttons-card {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    margin: -8px; }
-    .newspack-campaigns__segment-group__add-new-button__modal .newspack-card__buttons-card.newspack-card__buttons-prompt {
-      justify-content: center; }
-
 /**
  * Campaign group
  */
@@ -182,31 +162,11 @@
       .newspack-campaigns__campaign-group__filter-group-segmentation .components-popover__content .newspack-button.is-link:hover {
         color: #2240d5; }
 
-.newspack-campaigns__campaign-group__add-new-button__modal {
-  max-width: 384px;
-  padding: 0 32px; }
-  .newspack-campaigns__campaign-group__add-new-button__modal .components-modal__content {
-    margin: 0; }
-  .newspack-campaigns__campaign-group__add-new-button__modal .components-modal__header {
-    background: transparent;
-    padding-top: 32px; }
-    .newspack-campaigns__campaign-group__add-new-button__modal .components-modal__header .components-button.has-icon {
-      right: -32px; }
-  .newspack-campaigns__campaign-group__add-new-button__modal .newspack-text-control {
-    margin-top: 0; }
-  .newspack-campaigns__campaign-group__add-new-button__modal .newspack-card__buttons-card {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: flex-end;
-    margin: -8px; }
-    .newspack-campaigns__campaign-group__add-new-button__modal .newspack-card__buttons-card.newspack-card__buttons-prompt {
-      justify-content: center; }
-
 .newspack-card__buttons-prompt .newspack-button {
   color: #1e1e1e;
   display: flex;
   flex-direction: column;
-  padding: 8px !important;
+  padding: 0 !important;
   text-align: center;
   width: 96px; }
   .newspack-card__buttons-prompt .newspack-button:active, .newspack-card__buttons-prompt .newspack-button:focus, .newspack-card__buttons-prompt .newspack-button:hover {
@@ -220,53 +180,59 @@
     display: block;
     fill: #36f;
     margin: 0 0 8px;
-    padding: 15px;
+    padding: 23px;
     transition: background-color 125ms ease-in-out, border-color 125ms ease-in-out; }
 
 /**
  * Popups Analytics
  */
+/**
+ * Colors
+ */
 .newspack-campaigns-wizard-analytics__wrapper {
-  transition: opacity 200ms; }
+  transition: opacity 125ms; }
   .newspack-campaigns-wizard-analytics__wrapper--loading {
     opacity: 0.5; }
 
 .newspack-campaigns-wizard-analytics__filters {
-  margin: 20px 0; }
+  margin: 32px 0; }
   .newspack-campaigns-wizard-analytics__filters, .newspack-campaigns-wizard-analytics__filters__group {
     display: flex;
     justify-content: space-between; }
+  .newspack-campaigns-wizard-analytics__filters .newspack-select-control {
+    margin: 0 !important; }
 
-.newspack-campaigns-wizard-analytics__filters__group > div {
-  margin-left: 10px; }
+.newspack-campaigns-wizard-analytics__filters__group .newspack-select-control {
+  margin-right: 8px !important; }
 
 .newspack-campaigns-wizard-analytics__info__sections {
   display: flex;
-  margin: 40px 0; }
+  margin: 32px 0; }
   .newspack-campaigns-wizard-analytics__info__sections__section {
     display: flex;
     flex: 1;
     justify-content: center;
     align-items: center;
     flex-direction: column;
-    transition: opacity 200ms; }
+    transition: opacity 125ms; }
     .newspack-campaigns-wizard-analytics__info__sections__section h2 {
       margin: 0;
-      padding-bottom: 20px;
-      font-size: 40px; }
+      font-size: 36px;
+      line-height: 48px; }
     .newspack-campaigns-wizard-analytics__info__sections__section--with-separator {
       position: relative; }
       .newspack-campaigns-wizard-analytics__info__sections__section--with-separator::after {
         content: '';
         position: absolute;
-        height: 80%;
+        height: 100%;
         width: 1px;
-        background-color: #cecece;
+        background-color: #ddd;
         right: 0;
-        top: 10%; }
+        top: 0; }
     .newspack-campaigns-wizard-analytics__info__sections__section--dimmed {
-      opacity: 0.3; }
+      color: #949494; }
       .newspack-campaigns-wizard-analytics__info__sections__section--dimmed h2 {
+        color: inherit;
         font-weight: normal; }
 
 /**
@@ -281,7 +247,7 @@
   align-items: center;
   display: flex;
   justify-content: center;
-  margin: 32px 0 -24px; }
+  margin: 32px 0 -16px; }
   .newspack-campaigns-wizard-segments__header > * {
     margin: 0; }
   .newspack-campaigns-wizard-segments__header .newspack-text-control {
@@ -294,8 +260,6 @@
       min-height: 36px;
       padding-bottom: 5px;
       padding-top: 5px; }
-  .newspack-campaigns-wizard-segments__header .newspack-buttons-card .newspack-button {
-    margin-left: 8px; }
 
 .newspack-campaigns-wizard-segments__section h2 {
   margin: 0; }

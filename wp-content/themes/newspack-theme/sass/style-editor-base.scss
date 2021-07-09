@@ -372,8 +372,15 @@ figcaption,
 
 /** === Gallery === */
 
-.wp-block-gallery figcaption {
-	margin-bottom: 0;
+.wp-block-gallery {
+	figcaption {
+		margin-bottom: 0;
+
+		a,
+		a:hover {
+			color: #fff;
+		}
+	}
 }
 
 /** === Audio & Video === */
@@ -580,6 +587,7 @@ figcaption,
 		font-weight: bold;
 		background-color: $color__link;
 		border-radius: 5px;
+		padding: 10px 20px;
 	}
 
 	.wp-block-file__button-richtext-wrapper {
@@ -629,14 +637,14 @@ figcaption,
 
 /** === Latest Posts, Archives, Categories === */
 
-ul.wp-block-archives,
+.wp-block-archives,
 .wp-block-categories,
 .wp-block-latest-posts {
 	padding: 0;
-	list-style-type: none;
 
 	ul {
 		padding: 0;
+		margin-left: 0;
 		list-style-type: none;
 	}
 
@@ -721,8 +729,11 @@ ul.wp-block-archives,
 /** === Latest Comments === */
 
 .wp-block-latest-comments {
-	margin-left: 0;
 	padding-left: 0;
+
+	ol {
+		margin-left: 0;
+	}
 
 	.wp-block-latest-comments__comment {
 		font-size: $font__size-sm;
@@ -780,6 +791,12 @@ ul.wp-block-archives,
 .wp-block-jetpack-mailchimp {
 	.block-editor-rich-text__editable {
 		font-size: $font__size-sm;
+	}
+
+	.newspack-pattern.subscribe__style-5 & {
+		p {
+			text-align: center;
+		}
 	}
 }
 
@@ -845,6 +862,63 @@ ul.wp-block-archives,
 	}
 }
 
+/** === Subscribe Patterns === */
+.wp-block-group.newspack-pattern {
+	&.subscribe__style-5,
+	&.subscribe__style-6 {
+		.wp-block-jetpack-mailchimp {
+			align-items: center;
+			display: flex;
+			flex-wrap: wrap;
+
+			.wp-block-jetpack-mailchimp_text-input {
+				flex: 1 1 auto;
+
+				.components-base-control__field {
+					margin-bottom: 0;
+				}
+			}
+
+			.block-editor-inner-blocks {
+				flex: 1 1 100%;
+
+				@include media( mobile ) {
+					flex: 0 0 auto;
+					margin-left: $size__spacing-unit / 2;
+				}
+
+				.wp-block-button__link {
+					width: 100%;
+
+					@include media( mobile ) {
+						width: auto;
+					}
+				}
+			}
+
+			.block-editor-rich-text__editable {
+				flex: 0 0 100%;
+			}
+		}
+	}
+}
+
+/** === Donate Block === */
+.wpbnbd .freq-label,
+.wpbnbd .tier-label,
+.wpbnbd button {
+	font-family: $font__heading;
+}
+
+/** === Ad Unit Block === */
+.wp-block-newspack-ads-blocks-ad-unit {
+	> div {
+		align-items: center;
+		display: flex;
+		justify-content: center;
+	}
+}
+
 /** === Classic Editor === */
 
 /* Properly center-align captions in the classic-editor block */
@@ -881,6 +955,11 @@ ul.wp-block-archives,
 
 #newspack-post-subtitle-element {
 	font-style: italic;
+
+	em,
+	i {
+		font-style: normal;
+	}
 }
 
 /** === Custom Colors === */

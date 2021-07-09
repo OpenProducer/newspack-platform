@@ -1,0 +1,154 @@
+/*!
+ * Newspack Theme Editor Overrides
+ *
+ * This CSS files contains Gutenberg editor styles that need to reference classes on the body tag.
+ */
+/** === Includes === */
+/* If we add the border using a regular CSS border, it won't look good on non-retina devices,
+ * since its edges can look jagged due to lack of antialiasing. In this case, we are several
+ * layers of box-shadow to add the border visually, which will render the border smoother. */
+/* Calculates maximum width for post content */
+/* Nested sub-menu padding: 10 levels deep */
+/** === Default Template === */
+@media only screen and (min-width: 600px) {
+  body.newspack-default-template
+.block-editor-block-list__layout.is-root-container
+> .wp-block[data-align='full'] {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
+/** === One Column Templates === */
+@media only screen and (min-width: 1168px) {
+  body.newspack-single-column-template .wp-block[data-align='wide'] {
+    max-width: 1230px;
+  }
+}
+
+/** === Wide Templates === */
+body.newspack-static-front-page .wp-block,
+body.newspack-single-wide-template .wp-block {
+  max-width: 1230px;
+}
+
+body.newspack-static-front-page .wp-block[data-align='wide'],
+body.newspack-single-wide-template .wp-block[data-align='wide'] {
+  max-width: 1430px;
+}
+
+body.newspack-static-front-page .wp-block[data-type='core/group'][data-align='wide'] .wp-block:not([data-align='wide']):not([data-align='full']),
+body.newspack-static-front-page .wp-block[data-type='core/group'][data-align='full'] .wp-block:not([data-align='wide']):not([data-align='full']),
+body.newspack-single-wide-template .wp-block[data-type='core/group'][data-align='wide'] .wp-block:not([data-align='wide']):not([data-align='full']),
+body.newspack-single-wide-template .wp-block[data-type='core/group'][data-align='full'] .wp-block:not([data-align='wide']):not([data-align='full']) {
+  max-width: 1230px;
+}
+
+body.newspack-static-front-page .wp-block[data-type='core/group'][data-align='wide'] .wp-block[data-align='wide'],
+body.newspack-static-front-page .wp-block[data-type='core/group'][data-align='full'] .wp-block[data-align='wide'],
+body.newspack-single-wide-template .wp-block[data-type='core/group'][data-align='wide'] .wp-block[data-align='wide'],
+body.newspack-single-wide-template .wp-block[data-type='core/group'][data-align='full'] .wp-block[data-align='wide'] {
+  max-width: 1430px;
+}
+
+body.newspack-static-front-page figcaption,
+body.newspack-single-wide-template figcaption {
+  max-width: 1230px;
+}
+
+/** === Wide Blocks === */
+body.newspack-static-front-page .wp-block[data-align='full'],
+body.newspack-single-wide-template .wp-block[data-align='full'],
+body.newspack-single-column-template .wp-block[data-align='full'] {
+  max-width: 100vw;
+  width: auto;
+}
+
+body.newspack-static-front-page .wp-block[data-align='full'] figcaption,
+body.newspack-single-wide-template .wp-block[data-align='full'] figcaption,
+body.newspack-single-column-template .wp-block[data-align='full'] figcaption {
+  padding: 0 1rem;
+}
+
+body.newspack-static-front-page .wp-block[data-align='left'],
+body.newspack-single-wide-template .wp-block[data-align='left'],
+body.newspack-single-column-template .wp-block[data-align='left'] {
+  position: relative;
+}
+
+@media only screen and (min-width: 1168px) {
+  body.newspack-static-front-page .wp-block[data-align='left'],
+  body.newspack-single-wide-template .wp-block[data-align='left'],
+  body.newspack-single-column-template .wp-block[data-align='left'] {
+    left: -2rem;
+  }
+}
+
+@media only screen and (min-width: 1379px) {
+  body.newspack-static-front-page .wp-block[data-align='left'],
+  body.newspack-single-wide-template .wp-block[data-align='left'],
+  body.newspack-single-column-template .wp-block[data-align='left'] {
+    left: -4rem;
+  }
+}
+
+body.newspack-static-front-page .block-editor-inner-blocks .wp-block[data-align='left'],
+body.newspack-single-wide-template .block-editor-inner-blocks .wp-block[data-align='left'],
+body.newspack-single-column-template .block-editor-inner-blocks .wp-block[data-align='left'] {
+  left: auto;
+}
+
+body.newspack-static-front-page .wp-block[data-align='right'],
+body.newspack-single-wide-template .wp-block[data-align='right'],
+body.newspack-single-column-template .wp-block[data-align='right'] {
+  position: relative;
+}
+
+@media only screen and (min-width: 1168px) {
+  body.newspack-static-front-page .wp-block[data-align='right'],
+  body.newspack-single-wide-template .wp-block[data-align='right'],
+  body.newspack-single-column-template .wp-block[data-align='right'] {
+    right: -2rem;
+  }
+}
+
+@media only screen and (min-width: 1379px) {
+  body.newspack-static-front-page .wp-block[data-align='right'],
+  body.newspack-single-wide-template .wp-block[data-align='right'],
+  body.newspack-single-column-template .wp-block[data-align='right'] {
+    right: -4rem;
+  }
+}
+
+body.newspack-static-front-page .block-editor-inner-blocks .wp-block[data-align='right'],
+body.newspack-single-wide-template .block-editor-inner-blocks .wp-block[data-align='right'],
+body.newspack-single-column-template .block-editor-inner-blocks .wp-block[data-align='right'] {
+  right: auto;
+}
+
+/** === Single Posts === */
+body.post-type-post .editor-post-title__block {
+  max-width: 1200px;
+}
+
+body.post-type-post .editor-post-title__block .editor-post-title__input {
+  font-size: 1.8em;
+}
+
+@media only screen and (min-width: 600px) {
+  body.post-type-post .editor-post-title__block .editor-post-title__input {
+    font-size: 2.2em;
+  }
+}
+
+@media only screen and (min-width: 782px) {
+  body.post-type-post .editor-post-title__block .editor-post-title__input {
+    font-size: 2.8em;
+  }
+}
+
+@media only screen and (min-width: 1168px) {
+  body.post-type-post .editor-post-title__block .editor-post-title__input {
+    font-size: 3.2em;
+  }
+}

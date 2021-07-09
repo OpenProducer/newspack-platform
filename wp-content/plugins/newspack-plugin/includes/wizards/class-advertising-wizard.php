@@ -57,7 +57,7 @@ class Advertising_Wizard extends Wizard {
 	 *
 	 * @var array
 	 */
-	protected $placements = array( 'global_above_header', 'global_below_header', 'global_above_footer', 'archives', 'search_results', 'sticky' );
+	protected $placements = array( 'global_above_header', 'global_below_header', 'global_above_footer', 'sticky' );
 
 	/**
 	 * Constructor.
@@ -112,25 +112,6 @@ class Advertising_Wizard extends Wizard {
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_advertising' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
-			]
-		);
-
-		// Update header code.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/advertising/service/(?P<service>[\a-z]+)/network_code',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_update_network_code' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'service'      => [
-						'sanitize_callback' => [ $this, 'sanitize_service' ],
-					],
-					'network_code' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
 			]
 		);
 
@@ -213,10 +194,6 @@ class Advertising_Wizard extends Wizard {
 					'name'       => [
 						'sanitize_callback' => 'sanitize_text_field',
 					],
-					'code'       => [
-						'sanitize_callback' => 'sanitize_text_field',
-						'validate_callback' => [ $this, 'api_validate_not_empty' ],
-					],
 					'sizes'      => [
 						'sanitize_callback' => [ $this, 'sanitize_sizes' ],
 					],
@@ -232,7 +209,7 @@ class Advertising_Wizard extends Wizard {
 			NEWSPACK_API_NAMESPACE,
 			'/wizard/advertising/ad_unit/(?P<id>\d+)',
 			[
-				'methods'             => 'DELETE',
+				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ $this, 'api_delete_adunit' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
@@ -242,6 +219,33 @@ class Advertising_Wizard extends Wizard {
 				],
 			]
 		);
+
+		// Update network code.
+		\register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/network_code',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_network_code' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'network_code' => [
+						'sanitize_callback' => 'absint',
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Update network code.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response containing ad units info.
+	 */
+	public function api_update_network_code( $request ) {
+		update_option( \Newspack_Ads_Model::OPTION_NAME_NETWORK_CODE, $request['network_code'] );
+		return \rest_ensure_response( [] );
 	}
 
 	/**
@@ -343,7 +347,6 @@ class Advertising_Wizard extends Wizard {
 		$params = $request->get_params();
 		$adunit = [
 			'id'         => 0,
-			'code'       => '',
 			'name'       => '',
 			'sizes'      => [],
 			'ad_service' => '',
@@ -375,22 +378,6 @@ class Advertising_Wizard extends Wizard {
 	}
 
 	/**
-	 * Update/create the header code for a service.
-	 *
-	 * @param WP_REST_Request $request Request with ID of ad unit to delete.
-	 * @return WP_REST_Response Boolean Delete success.
-	 */
-	public function api_update_network_code( $request ) {
-		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-
-		$service      = $request['service'];
-		$network_code = $request['network_code'];
-		$configuration_manager->set_network_code( $service, $network_code );
-
-		return \rest_ensure_response( $this->retrieve_data() );
-	}
-
-	/**
 	 * Retrieve all advertising data.
 	 *
 	 * @return array Advertising data.
@@ -400,7 +387,12 @@ class Advertising_Wizard extends Wizard {
 
 		$services   = $this->get_services();
 		$placements = $this->get_placements();
-		$ad_units   = $configuration_manager->get_ad_units();
+		try {
+			$ad_units = $configuration_manager->get_ad_units();
+		} catch ( \Exception $error ) {
+			$message = $error->getMessage();
+			return new WP_Error( 'newspack_ad_units', $message ? $message : __( 'Ad Units failed to fetch.', 'newspack' ) );
+		}
 
 		/* If there is only one enabled service, select it for all placements */
 		$enabled_services = array_filter(
@@ -417,9 +409,10 @@ class Advertising_Wizard extends Wizard {
 			}
 		}
 		return array(
-			'services'   => $services,
-			'placements' => $placements,
-			'ad_units'   => $ad_units,
+			'services'              => $services,
+			'placements'            => $placements,
+			'ad_units'              => $ad_units,
+			'gam_connection_status' => $configuration_manager->get_gam_connection_status(),
 		);
 	}
 
@@ -434,9 +427,8 @@ class Advertising_Wizard extends Wizard {
 		$services = array();
 		foreach ( $this->services as $service => $data ) {
 			$services[ $service ] = array(
-				'label'        => $data['label'],
-				'enabled'      => $configuration_manager->is_service_enabled( $service ),
-				'network_code' => $configuration_manager->get_network_code( $service ),
+				'label'   => $data['label'],
+				'enabled' => $configuration_manager->is_service_enabled( $service ),
 			);
 		}
 		/* Check availability of WordAds based on current Jetpack plan */
@@ -575,7 +567,7 @@ class Advertising_Wizard extends Wizard {
 			return;
 		}
 
-		$ad_unit = $configuration_manager->get_ad_unit( $placement['ad_unit'], $placement_slug );
+		$ad_unit = $configuration_manager->get_ad_unit_for_display( $placement['ad_unit'], $placement_slug );
 		if ( is_wp_error( $ad_unit ) ) {
 			return;
 		}

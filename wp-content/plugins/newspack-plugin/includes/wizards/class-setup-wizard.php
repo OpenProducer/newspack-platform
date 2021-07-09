@@ -464,24 +464,24 @@ class Setup_Wizard extends Wizard {
 		}
 		if ( isset( $request['reader-revenue']['is_service_enabled'] ) ) {
 			$rr_wizard = new Reader_Revenue_Wizard();
-			if ( $request['reader-revenue']['donation_data'] ) {
+			if ( isset( $request['reader-revenue']['donation_data'] ) ) {
 				$rr_wizard->update_donation_settings( $request['reader-revenue']['donation_data'] );
 			}
-			if ( $request['reader-revenue']['stripe_data'] ) {
+			if ( isset( $request['reader-revenue']['stripe_data'] ) ) {
 				$stripe_settings            = $request['reader-revenue']['stripe_data'];
 				$stripe_settings['enabled'] = true;
 				$rr_wizard->update_stripe_settings( $stripe_settings );
 			}
-		}
-		if ( isset( $request['google-ad-manager']['is_service_enabled'], $request['google-ad-manager']['network_code'] ) ) {
-			$ads_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-			$ads_configuration_manager->set_network_code( 'google_ad_manager', $request['google-ad-manager']['network_code'] );
 		}
 		if ( isset( $request['google-ad-sense']['is_service_enabled'] ) ) {
 			$sitekit_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
 			if ( $request['google-ad-sense']['is_service_enabled'] ) {
 				$sitekit_configuration_manager->activate_module( 'adsense' );
 			}
+		}
+		if ( isset( $request['google-ad-manager']['is_service_enabled'] ) ) {
+			$service = 'google_ad_manager';
+			update_option( Advertising_Wizard::NEWSPACK_ADVERTISING_SERVICE_PREFIX . $service, true );
 		}
 
 		return rest_ensure_response( [] );

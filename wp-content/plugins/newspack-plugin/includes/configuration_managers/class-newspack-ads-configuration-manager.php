@@ -33,31 +33,6 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Get Network Code for ad service.
-	 *
-	 * @param string $service The service to retrieve.
-	 * @return string | WP_Error Array of ad units or WP_Error if Newspack Ads isn't installed and activated.
-	 */
-	public function get_network_code( $service ) {
-		return $this->is_configured() ?
-			\Newspack_Ads_Model::get_network_code( $service ) :
-			$this->unconfigured_error();
-	}
-
-	/**
-	 * Create/update header code for ad service.
-	 *
-	 * @param string $service The service to retrieve.
-	 * @param string $network_code The code.
-	 * @return bool | WP_Error Array of ad units or WP_Error if Newspack Ads isn't installed and activated.
-	 */
-	public function set_network_code( $service, $network_code ) {
-		return $this->is_configured() ?
-			\Newspack_Ads_Model::set_network_code( $service, $network_code ) :
-			$this->unconfigured_error();
-	}
-
-	/**
 	 * Get the ad units from our saved option.
 	 *
 	 * @return array | WP_Error Array of ad units or WP_Error if Newspack Ads isn't installed and activated.
@@ -75,9 +50,9 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 * @param string $placement The id of the placement region.
 	 * @return array | WP_Error Returns ad unit or error if the plugin is not active or the ad unit doesn't exist.
 	 */
-	public function get_ad_unit( $id, $placement = null ) {
+	public function get_ad_unit_for_display( $id, $placement = null ) {
 		return $this->is_configured() ?
-			\Newspack_Ads_Model::get_ad_unit( $id, $placement ) :
+			\Newspack_Ads_Model::get_ad_unit_for_display( $id, $placement ) :
 			$this->unconfigured_error();
 	}
 
@@ -109,11 +84,33 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 * Delete an ad unit
 	 *
 	 * @param integer $id The id of the ad unit to delete.
-	 * @return bool | WP_Error Returns true if deletion is successful, of error if the plugin is not active or the ad unit doesn't exist.
+	 * @return bool | WP_Error Returns true if deletion is successful, or error if the plugin is not active or the ad unit doesn't exist.
 	 */
 	public function delete_ad_unit( $id ) {
 		return $this->is_configured() ?
 			\Newspack_Ads_Model::delete_ad_unit( $id ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Is GAM connected?
+	 *
+	 * @return bool | WP_Error Returns true if GAM is not connected, or error if the plugin is not active.
+	 */
+	public function is_gam_connected() {
+		return $this->is_configured() ?
+			\Newspack_Ads_Model::is_gam_connected() :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get GAM connection status.
+	 *
+	 * @return bool | WP_Error Returns object, or error if the plugin is not active.
+	 */
+	public function get_gam_connection_status() {
+		return $this->is_configured() ?
+			\Newspack_Ads_Model::get_gam_connection_status() :
 			$this->unconfigured_error();
 	}
 

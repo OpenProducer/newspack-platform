@@ -1,0 +1,125 @@
+/* If we add the border using a regular CSS border, it won't look good on non-retina devices,
+ * since its edges can look jagged due to lack of antialiasing. In this case, we are several
+ * layers of box-shadow to add the border visually, which will render the border smoother. */
+/* Calculates maximum width for post content */
+/* Nested sub-menu padding: 10 levels deep */
+.trust-label {
+  display: block;
+  font-size: 90%;
+}
+
+@media only screen and (min-width: 600px) {
+  .trust-label {
+    display: inline;
+    margin-right: 1rem;
+  }
+}
+
+.trust-label svg {
+  margin-left: 0.1rem;
+  position: relative;
+  top: 5px;
+}
+
+.single .cat-links {
+  vertical-align: middle;
+}
+
+.single .cat-links .type-of-work {
+  color: #111;
+  margin-left: 0.5em;
+}
+
+.author-expanded-social-link {
+  display: flex;
+  align-items: center;
+  margin: 0 0 0.5rem 1rem;
+  width: 100%;
+}
+
+.author-expanded-social-link svg {
+  margin-left: 0.25rem;
+}
+
+/* Author archives */
+.archive.author {
+  /* Hide small Twitter icon, because a bigger one is present */
+}
+
+.archive.author .page-subtitle,
+.archive.author .page-title::before,
+.archive.author .author-meta {
+  display: none;
+}
+
+.archive.author .author-job-title {
+  display: block;
+  margin-top: 0.25rem;
+}
+
+.archive.author .author-meta.trust-indicators {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.archive.author .author-social-links {
+  border-right: none;
+  margin-right: 0;
+  padding-right: 0;
+}
+
+.archive.author .author-social-links .twitter {
+  display: none;
+}
+
+.author-additional-infos {
+  display: flex;
+  flex-wrap: wrap;
+  font-size: 0.8em;
+}
+
+.author-additional-info {
+  width: 100%;
+}
+
+.author-additional-info h4 {
+  margin-bottom: 0;
+}
+
+.author-additional-info p {
+  margin-top: 0;
+}
+
+.featured-image-behind .cat-links .type-of-work,
+.featured-image-behind .trust-label:hover,
+.featured-image-beside .cat-links .type-of-work,
+.featured-image-beside .trust-label:hover {
+  color: inherit;
+}
+
+.featured-image-behind svg.trust-label__icon path,
+.featured-image-beside svg.trust-label__icon path {
+  fill: inherit;
+}
+
+.featured-image-behind .trust-label {
+  color: #fff;
+}
+
+.featured-image-beside .trust-label {
+  display: block;
+  margin: 0.25rem 0 0;
+  width: 100%;
+}
+
+@media only screen and (min-width: 600px) {
+  .author-additional-info {
+    width: 50%;
+  }
+  .author-expanded-social-link {
+    width: inherit;
+  }
+  .archive.author .author-meta.trust-indicators .author-social-links {
+    margin: 0 0 0.33rem;
+  }
+}

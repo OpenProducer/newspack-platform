@@ -223,6 +223,7 @@ class Donations {
 		$parent_product->update_meta_data( self::DONATION_TIERED_META, (bool) $args['tiered'] );
 		$parent_product->set_catalog_visibility( 'hidden' );
 		$parent_product->set_virtual( true );
+		$parent_product->set_downloadable( true );
 		$parent_product->set_sold_individually( true );
 
 		$default_price = $args['tiered'] ? wc_format_decimal( $args['suggestedAmounts'][ floor( count( $args['suggestedAmounts'] ) / 2 ) ] ) : wc_format_decimal( $args['suggestedAmountUntiered'] );
@@ -240,6 +241,7 @@ class Donations {
 		$monthly_product->update_meta_data( '_subscription_period', 'month' );
 		$monthly_product->update_meta_data( '_subscription_period_interval', 1 );
 		$monthly_product->set_virtual( true );
+		$monthly_product->set_downloadable( true );
 		$monthly_product->set_catalog_visibility( 'hidden' );
 		$monthly_product->set_sold_individually( true );
 		$monthly_product->save();
@@ -257,6 +259,7 @@ class Donations {
 		$yearly_product->update_meta_data( '_subscription_period', 'year' );
 		$yearly_product->update_meta_data( '_subscription_period_interval', 1 );
 		$yearly_product->set_virtual( true );
+		$yearly_product->set_downloadable( true );
 		$yearly_product->set_catalog_visibility( 'hidden' );
 		$yearly_product->set_sold_individually( true );
 		$yearly_product->save();
@@ -271,6 +274,7 @@ class Donations {
 		$once_product->update_meta_data( '_min_price', wc_format_decimal( 1.0 ) );
 		$once_product->update_meta_data( '_nyp', 'yes' );
 		$once_product->set_virtual( true );
+		$once_product->set_downloadable( true );
 		$once_product->set_catalog_visibility( 'hidden' );
 		$once_product->set_sold_individually( true );
 		$once_product->save();

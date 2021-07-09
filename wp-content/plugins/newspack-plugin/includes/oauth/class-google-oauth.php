@@ -276,7 +276,7 @@ class Google_OAuth {
 	 * is used for authorisation on another site, only access token will be issued.
 	 * More at https://stackoverflow.com/a/10857806/3772847.
 	 *
-	 * @return OAuth2|bool The credentials, or false of the user has not authenticated.
+	 * @return OAuth2|bool The credentials, or false of the user has not authenticated or credentials are not usable.
 	 */
 	public static function get_oauth2_credentials() {
 		$auth_data = self::get_google_auth_saved_data();
@@ -300,6 +300,7 @@ class Google_OAuth {
 				);
 				if ( isset( $response->data->access_token ) ) {
 					self::save_auth_credentials( $response->data );
+					$auth_data = self::get_google_auth_saved_data();
 				}
 			} catch ( \Exception $e ) {
 				// Credentials might be broken, remove them.

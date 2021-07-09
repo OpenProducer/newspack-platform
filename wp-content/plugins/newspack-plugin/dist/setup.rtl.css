@@ -25,60 +25,6 @@
     max-width: calc( 50% - 16px); } }
 
 /**
- * Integrations
- */
-/**
- * Colors
- */
-.newspack-integration {
-  box-shadow: inset -12px 0 0 white, inset -13px 0 0 #e0e0e0;
-  grid-template-columns: 24px 1fr;
-  margin: 0;
-  padding-bottom: 64px;
-  position: relative;
-  transition: opacity 125ms ease-in-out; }
-  @media screen and (min-width: 744px) {
-    .newspack-integration {
-      column-gap: 16px 32px;
-      grid-template-columns: 24px auto calc( ( 100% - 64px ) / 3); } }
-  .newspack-integration:last-of-type {
-    box-shadow: none;
-    padding-bottom: 0; }
-  .newspack-integration__status {
-    background: white;
-    border-radius: 50%;
-    box-shadow: inset 0 0 0 1px #ddd;
-    display: flex;
-    height: 24px;
-    position: relative;
-    width: 24px; }
-    .newspack-integration__status.done {
-      background: #4ab866;
-      box-shadow: none;
-      color: white; }
-    .newspack-integration__status svg {
-      fill: currentColor; }
-  @media screen and (min-width: 744px) {
-    .newspack-integration__description {
-      padding-left: 16px; } }
-  .newspack-integration__description .newspack-section-header {
-    margin: 0; }
-  .newspack-integration__logo {
-    border: 1px solid #ddd;
-    border-radius: 3px;
-    display: none;
-    padding: 16px; }
-    @media screen and (min-width: 744px) {
-      .newspack-integration__logo {
-        display: flex; } }
-    @media screen and (min-width: 1128px) {
-      .newspack-integration__logo {
-        padding: 32px; } }
-    .newspack-integration__logo svg {
-      margin: 0;
-      display: block; }
-
-/**
  * Setup
  */
 #newspack-setup-wizard .newspack-wizard__header h1 {

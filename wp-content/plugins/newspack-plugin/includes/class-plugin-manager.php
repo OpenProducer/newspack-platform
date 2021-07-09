@@ -122,13 +122,13 @@ class Plugin_Manager {
 				'Download'    => 'wporg',
 				'EditPath'    => 'admin.php?page=instant-articles-wizard',
 			],
-			'distributor'                   => [
+			'distributor-stable'            => [
 				'Name'        => 'Distributor',
 				'Description' => 'Makes it easy to distribute and reuse content across your websites, whether inside of a multisite or across the web.',
 				'Author'      => '10up Inc.',
 				'AuthorURI'   => 'https://distributorplugin.com/',
 				'PluginURI'   => 'https://distributorplugin.com/',
-				'Download'    => 'https://github.com/10up/distributor/releases/latest/download/distributor.zip',
+				'Download'    => 'https://github.com/10up/distributor/archive/stable.zip',
 				'EditPath'    => 'admin.php?page=pull',
 			],
 			'google-site-kit'               => [
@@ -270,14 +270,6 @@ class Plugin_Manager {
 				'Name'        => 'Newspack Theme',
 				'Description' => 'The Newspack theme.',
 				'Author'      => 'Newspack',
-			],
-			'organic-profile-block'         => [
-				'Name'        => 'Organic Profile Block',
-				'Description' => "The Profile Block is created for the Gutenberg content editor. It displays a profile section with an image, name, subtitle, bio and personal social media links. It's perfect for author biographies, personal profiles, or staff pages.",
-				'Author'      => 'Organic Themes',
-				'PluginURI'   => 'https://organicthemes.com/',
-				'AuthorURI'   => 'https://organicthemes.com/',
-				'Download'    => 'wporg',
 			],
 			'wp-parsely'                    => [
 				'Name'        => 'Parse.ly',
@@ -518,10 +510,9 @@ class Plugin_Manager {
 	public static function get_unmanaged_plugins() {
 		$plugins_info      = self::get_installed_plugins_info();
 		$managed_plugins   = self::get_managed_plugins();
-		$ignore            = [ 'newspack-plugin' ];
 		$unmanaged_plugins = [];
 		foreach ( $plugins_info as $slug => $info ) {
-			if ( ! isset( $managed_plugins[ $slug ] ) && ! in_array( $slug, $ignore ) && is_plugin_active( $info['Path'] ) ) {
+			if ( ! isset( $managed_plugins[ $slug ] ) && 0 !== strpos( $slug, 'newspack-' ) && is_plugin_active( $info['Path'] ) ) {
 				$unmanaged_plugins[ $slug ] = $info;
 			}
 		}

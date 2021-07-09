@@ -529,6 +529,50 @@ function newspack_customize_register( $wp_customize ) {
 		)
 	);
 
+	/**
+	 * Ads background_color
+	 */
+	$wp_customize->add_setting(
+		'ads_color',
+		array(
+			'default'           => 'default',
+			'sanitize_callback' => 'newspack_sanitize_color_option',
+		)
+	);
+
+	$wp_customize->add_control(
+		'ads_color',
+		array(
+			'type'    => 'radio',
+			'label'   => __( 'Ads Background Color', 'newspack' ),
+			'choices'   => array(
+				'default' => _x( 'Default', 'primary color', 'newspack' ),
+				'custom'  => _x( 'Custom', 'primary color', 'newspack' ),
+			),
+			'section' => 'colors',
+		)
+	);
+
+	// Add ads color hexidecimal setting and control.
+	$wp_customize->add_setting(
+		'ads_color_hex',
+		array(
+			'default'           => '#ffffff',
+			'sanitize_callback' => 'sanitize_hex_color',
+		)
+	);
+
+	$wp_customize->add_control(
+		new WP_Customize_Color_Control(
+			$wp_customize,
+			'ads_color_hex',
+			array(
+				'description' => __( 'Apply a background color to the ads.', 'newspack' ),
+				'section'     => 'colors',
+			)
+		)
+	);
+
 	// Header - add option to hide tagline.
 	$wp_customize->add_setting(
 		'header_display_tagline',
@@ -584,16 +628,41 @@ function newspack_customize_register( $wp_customize ) {
 			$wp_customize,
 			'newspack_footer_logo',
 			array(
-				'label'       => esc_html__( 'Footer logo', 'newspack' ),
+				'label'       => esc_html__( 'Footer Logo', 'newspack' ),
 				'description' => esc_html__( 'Optional alternative logo to be displayed in the footer.', 'newspack' ),
 				'section'     => 'title_tagline',
 				'settings'    => 'newspack_footer_logo',
 				'priority'    => 9,
-				'flex_width'  => false,
+				'flex_width'  => true,
 				'flex_height' => true,
 				'width'       => 400,
 				'height'      => 300,
 			)
+		)
+	);
+
+	$wp_customize->add_setting(
+		'footer_logo_size',
+		array(
+			'default'           => 'medium',
+			'sanitize_callback' => 'newspack_sanitize_footer_logo_size',
+		)
+	);
+
+	$wp_customize->add_control(
+		'footer_logo_size',
+		array(
+			'label'    => esc_html__( 'Footer Logo Size', 'newspack' ),
+			'section'  => 'title_tagline',
+			'priority' => 9,
+			'type'     => 'select',
+			'settings' => 'footer_logo_size',
+			'choices'  => array(
+				'small'  => esc_html__( 'Small', 'newspack' ),
+				'medium' => esc_html__( 'Medium', 'newspack' ),
+				'large'  => esc_html__( 'Large', 'newspack' ),
+				'xlarge' => esc_html__( 'Extra Large', 'newspack' ),
+			),
 		)
 	);
 
@@ -1331,6 +1400,28 @@ function newspack_panels_js() {
 add_action( 'customize_controls_enqueue_scripts', 'newspack_panels_js' );
 
 /**
+ * Sanitize footer logo size.
+ *
+ * @param string $choice Whether the footer logo is small or large.
+ *
+ * @return string
+ */
+function newspack_sanitize_footer_logo_size( $choice ) {
+	$valid = array(
+		'small',
+		'medium',
+		'large',
+		'xlarge',
+	);
+
+	if ( in_array( $choice, $valid, true ) ) {
+		return $choice;
+	}
+
+	return 'medium';
+}
+
+/**
  * Sanitize custom color choice.
  *
  * @param string $choice Whether image filter is active.
@@ -1393,6 +1484,7 @@ function newspack_sanitize_post_template( $choice ) {
 
 	return 'default';
 }
+
 
 /**
  * Sanitize slide-out sidebar side
