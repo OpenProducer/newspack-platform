@@ -75,6 +75,12 @@ class AMP_Enhancements {
 		if ( false === self::should_use_amp_plus() ) {
 			return $is_sanitized;
 		}
+		if ( isset( $error, $error['node_attributes'], $error['node_attributes']['id'] ) ) {
+			// Allow WP scripts.
+			if ( 0 === strpos( $error['node_attributes']['id'], 'wp-' ) ) {
+				return false;
+			}
+		}
 		// Explicitly allowed scripts - with a 'data-amp-plus-allowed' attribute.
 		if ( isset( $error, $error['node_attributes'], $error['node_attributes']['data-amp-plus-allowed'] ) ) {
 			return false;

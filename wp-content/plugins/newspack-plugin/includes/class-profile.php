@@ -202,7 +202,7 @@ class Profile {
 		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
 		$response                 = [
 			'profile'      => $this->newspack_get_profile(),
-			'currencies'   => $wc_configuration_manager->currency_fields(),
+			'currencies'   => newspack_get_currencies_options(),
 			'countries'    => $wc_configuration_manager->country_state_fields(),
 			'wpseo_fields' => self::$wpseo_fields,
 		];

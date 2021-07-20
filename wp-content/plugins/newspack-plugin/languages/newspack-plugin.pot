@@ -207,7 +207,7 @@ msgid "Join"
 msgstr ""
 
 #: includes/class-handoff-banner.php:71
-msgid "Click to return to Newspack after completing configuration."
+msgid "Return to Newspack after completing configuration"
 msgstr ""
 
 #: includes/class-handoff-banner.php:72

@@ -6,7 +6,7 @@
     'aliases' => 
     array (
     ),
-    'reference' => '80a5ca5239898655486fe31a9661a22b5c826019',
+    'reference' => 'ab7e46bcedde9115c091caac1697df3e8dc8eeeb',
     'name' => 'automattic/newspack-plugin',
   ),
   'versions' => 
@@ -18,7 +18,7 @@
       'aliases' => 
       array (
       ),
-      'reference' => '80a5ca5239898655486fe31a9661a22b5c826019',
+      'reference' => 'ab7e46bcedde9115c091caac1697df3e8dc8eeeb',
     ),
     'composer/installers' => 
     array (
@@ -146,6 +146,15 @@
       array (
         0 => '*',
       ),
+    ),
+    'stripe/stripe-php' => 
+    array (
+      'pretty_version' => 'v7.87.0',
+      'version' => '7.87.0.0',
+      'aliases' => 
+      array (
+      ),
+      'reference' => '9392f03cb8d8803bf8273378ce42d5cbbf1e24fc',
     ),
   ),
 );

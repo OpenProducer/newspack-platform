@@ -252,6 +252,9 @@ if ( ! function_exists( 'newspack_setup' ) ) :
 			)
 		);
 
+		// Add block custom spacing support.
+		add_theme_support( 'custom-spacing' );
+
 		// Add support for responsive embedded content.
 		add_theme_support( 'responsive-embeds' );
 
@@ -295,11 +298,7 @@ function newspack_widgets_init() {
 		array(
 			'name'          => __( 'Slide-out Sidebar', 'newspack' ),
 			'id'            => 'header-1',
-			'description'   => sprintf(
-				/* translators: %s: link to Header Settings panel in Customizer. */
-				__( 'Add widgets here to appear in an off-screen sidebar when it is enabled under %s.', 'newspack' ),
-				'<a rel="goto-control" href="#header_show_slideout">' . __( 'Header Settings', 'newspack' ) . '</a>'
-			),
+			'description'   => esc_html__( 'Add widgets here to appear in an off-screen sidebar when it is enabled under the Customizer Header Settings.', 'newspack' ),
 			'before_widget' => '<section id="%1$s" class="below-content widget %2$s">',
 			'after_widget'  => '</section>',
 			'before_title'  => '<h2 class="widget-title">',
@@ -667,6 +666,17 @@ function newspack_register_meta() {
 			'type'         => 'boolean',
 		)
 	);
+
+	register_post_meta(
+		'page',
+		'newspack_show_share_buttons',
+		array(
+			'show_in_rest' => true,
+			'single'       => true,
+			'type'         => 'boolean',
+			'default'      => false,
+		)
+	);
 }
 add_action( 'init', 'newspack_register_meta' );
 
@@ -819,8 +829,9 @@ function newspack_get_post_toggle_post_types() {
 	}
 
 	return array(
-		'hide_date'  => $hide_date_post_types,
-		'hide_title' => [ 'page' ],
+		'hide_date'          => $hide_date_post_types,
+		'hide_title'         => [ 'page' ],
+		'show_share_buttons' => function_exists( 'sharing_display' ) ? [ 'page' ] : [],
 	);
 }
 

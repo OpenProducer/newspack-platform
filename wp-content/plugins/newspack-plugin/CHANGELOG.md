@@ -1,3 +1,28 @@
+# [1.49.0](https://github.com/Automattic/newspack-plugin/compare/v1.48.1...v1.49.0) (2021-07-19)
+
+
+### Bug Fixes
+
+* **design-wizard:** correct path to update theme mods ([63ffe7d](https://github.com/Automattic/newspack-plugin/commit/63ffe7d31b63518de314955cd62433cd46cdd8cc))
+* **donations:** nrh tweaks ([#1046](https://github.com/Automattic/newspack-plugin/issues/1046)) ([f0e8c13](https://github.com/Automattic/newspack-plugin/commit/f0e8c13ff9c0b3b084d622f17140c18f21e4b1b9))
+* **reader-revenue:** don't require Salesforce Campaign ID in NRH settings ([#1050](https://github.com/Automattic/newspack-plugin/issues/1050)) ([4206262](https://github.com/Automattic/newspack-plugin/commit/4206262d29b36ec37aa9be248ddf36e9b51f757d)), closes [#753](https://github.com/Automattic/newspack-plugin/issues/753) [#1051](https://github.com/Automattic/newspack-plugin/issues/1051)
+* modal style in WordPress 5.8 ([#1037](https://github.com/Automattic/newspack-plugin/issues/1037)) ([2633162](https://github.com/Automattic/newspack-plugin/commit/2633162a00784d2e3d8e87a8ac45e03fbcb1bad1))
+* remove missing wizard CSS ([#1045](https://github.com/Automattic/newspack-plugin/issues/1045)) ([bd96b95](https://github.com/Automattic/newspack-plugin/commit/bd96b95b8e1ced322a217d2e0c0d6e714ecf2312))
+
+
+### Features
+
+* add Stripe connection - for streamlined Donate block ([#1029](https://github.com/Automattic/newspack-plugin/issues/1029)) ([7c9c396](https://github.com/Automattic/newspack-plugin/commit/7c9c3962f1477cc3337a175fd5a0b00295d5b5e6))
+* simplify handoff banner style ([#1041](https://github.com/Automattic/newspack-plugin/issues/1041)) ([d74d045](https://github.com/Automattic/newspack-plugin/commit/d74d045035e871c53fe51ee5ae72ba54cbabe1ce))
+* update style of the autocomplete with suggestions component ([#1048](https://github.com/Automattic/newspack-plugin/issues/1048)) ([94815d1](https://github.com/Automattic/newspack-plugin/commit/94815d1b5a089fce4e978639efd08af62d041f22))
+
+## [1.48.1](https://github.com/Automattic/newspack-plugin/compare/v1.48.0...v1.48.1) (2021-07-13)
+
+
+### Bug Fixes
+
+* apply correct plugin slug for Distributor in the Syndication Wizard ([#1038](https://github.com/Automattic/newspack-plugin/issues/1038)) ([32adb6d](https://github.com/Automattic/newspack-plugin/commit/32adb6de9ade47d80d446263dfdf40851d1a9ef6))
+
 # [1.48.0](https://github.com/Automattic/newspack-plugin/compare/v1.47.0...v1.48.0) (2021-07-06)
 
 

@@ -68,7 +68,7 @@ class Handoff_Banner {
 		);
 
 		$script_info = [
-			'text'       => __( 'Click to return to Newspack after completing configuration.', 'newspack' ),
+			'text'       => __( 'Return to Newspack after completing configuration', 'newspack' ),
 			'buttonText' => __( 'Back to Newspack', 'newspack' ),
 			'returnURL'  => esc_url( get_option( NEWSPACK_HANDOFF_RETURN_URL, '' ) ),
 		];

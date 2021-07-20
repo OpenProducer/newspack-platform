@@ -201,6 +201,9 @@
 /**
  * Autocomplete Token Field
  */
+/**
+ * Colors
+ */
 .newspack-autocomplete-tokenfield {
   position: relative;
   /* Workaround for hard-coded help text in FormTokenField. */ }
@@ -214,8 +217,8 @@
     align-items: center;
     display: flex; }
   .newspack-autocomplete-tokenfield .newspack-autocomplete-tokenfield__help {
-    font-size: 1rem;
-    font-style: italic;
+    color: #757575;
+    font-size: inherit;
     margin-top: 0; }
   .newspack-autocomplete-tokenfield .components-form-token-field__suggestions-list {
     margin-right: 0;
@@ -231,13 +234,12 @@
  * Colors
  */
 .newspack-autocomplete-with-suggestions {
-  width: 100%;
-  /* Extra space on sides to handle outline styles of focused checkboxes. */ }
+  width: 100%; }
   .newspack-autocomplete-with-suggestions.hide-help > .components-base-control,
   .newspack-autocomplete-with-suggestions.hide-help > .newspack-autocomplete-tokenfield,
   .newspack-autocomplete-with-suggestions.hide-help > .newspack-autocomplete-with-suggestions__search-suggestions,
   .newspack-autocomplete-with-suggestions.hide-help > .newspack-autocomplete-with-suggestions__search-suggestions-multiselect {
-    margin-top: 1.5rem; }
+    margin-top: 16px; }
   .newspack-autocomplete-with-suggestions .components-spinner {
     left: 0;
     top: 2em; }
@@ -250,10 +252,18 @@
   .newspack-autocomplete-with-suggestions .components-input-control__label,
   .newspack-autocomplete-with-suggestions .components-checkbox-control__label {
     color: #1e1e1e !important; }
-  .newspack-autocomplete-with-suggestions__suggestions-spinner .components-spinner {
-    display: block;
-    margin: 0 auto 1rem;
-    position: relative; }
+  .newspack-autocomplete-with-suggestions__suggestions-spinner {
+    background: #f0f0f0;
+    border: 1px solid #1e1e1e;
+    border-radius: 2px;
+    cursor: progress;
+    margin: 16px 0;
+    padding: 32px; }
+    .newspack-autocomplete-with-suggestions__suggestions-spinner .components-spinner {
+      display: block;
+      margin: 0 auto;
+      position: relative;
+      top: 0; }
   .newspack-autocomplete-with-suggestions .newspack-autocomplete-tokenfield__help {
     font-size: inherit; }
   .newspack-autocomplete-with-suggestions .components-form-token-field__input-container {
@@ -268,8 +278,8 @@
     margin-bottom: 4px; }
   .newspack-autocomplete-with-suggestions__selected-items {
     border-bottom: 1px solid #ddd;
-    margin-bottom: 2rem;
-    padding-bottom: 1.75rem; }
+    margin-bottom: 16px;
+    padding-bottom: 12px; }
     .newspack-autocomplete-with-suggestions__selected-items .newspack-autocomplete-with-suggestions__label {
       font-weight: bold; }
       .newspack-autocomplete-with-suggestions__selected-items .newspack-autocomplete-with-suggestions__label .components-button.is-link {
@@ -292,32 +302,41 @@
       box-shadow: none;
       color: black; }
   .newspack-autocomplete-with-suggestions__search-suggestions, .newspack-autocomplete-with-suggestions__search-suggestions-multiselect {
-    max-height: 166px;
+    border-radius: 2px;
+    border: 1px solid #1e1e1e;
+    max-height: 178px;
     overflow-x: visible;
-    overflow-y: auto; }
-    .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-link, .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-link {
-      color: #1e1e1e;
+    overflow-y: auto;
+    padding: 8px 8px 0; }
+    .newspack-autocomplete-with-suggestions__search-suggestions .components-button, .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button {
       display: block;
-      margin: auto;
-      padding: 8px;
-      text-decoration: none;
-      width: 100%; }
-      .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-link:active:not(:disabled), .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-link:hover:not(:disabled), .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-link:active:not(:disabled), .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-link:hover:not(:disabled) {
-        background: white;
-        background: var(--wp-admin-theme-color);
-        color: white; }
-    .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-secondary, .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-secondary {
-      display: block;
-      margin: 1rem auto; }
-  .newspack-autocomplete-with-suggestions__search-suggestions-multiselect {
-    margin-right: -4px;
-    margin-left: -4px;
-    padding: 0 4px; }
+      line-height: normal;
+      margin: auto; }
+      .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-link, .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-link {
+        color: #1e1e1e;
+        padding: 8px;
+        text-decoration: none;
+        width: 100%; }
+        .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-link:active:not(:disabled), .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-link:hover:not(:disabled), .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-link:active:not(:disabled), .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-link:hover:not(:disabled) {
+          background: #1e1e1e;
+          background: var(--wp-admin-theme-color);
+          color: white; }
+      .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-secondary, .newspack-autocomplete-with-suggestions__search-suggestions-multiselect .components-button.is-secondary {
+        margin-bottom: 8px;
+        margin-top: 8px;
+        width: 100%; }
   .newspack-autocomplete-with-suggestions__search-suggestions {
     border-radius: 2px;
     border: 1px solid #1e1e1e;
-    max-height: 192px;
-    padding: 4px; }
+    padding: 0; }
+    .newspack-autocomplete-with-suggestions__search-suggestions .components-button {
+      line-height: normal; }
+      .newspack-autocomplete-with-suggestions__search-suggestions .components-button:focus:not(:disabled) {
+        border-radius: 0;
+        box-shadow: inset 0 0 0 1.5px #1e1e1e;
+        box-shadow: inset 0 0 0 var(--wp-admin-border-width-focus) var(--wp-admin-theme-color); }
+      .newspack-autocomplete-with-suggestions__search-suggestions .components-button.is-secondary {
+        width: calc( 100% - 16px); }
 
 /**
  * Button
@@ -1322,9 +1341,8 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
   color: #757575;
   font-size: 14px;
   line-height: 24px;
-  margin: 0;
+  margin: auto;
   max-height: 100%;
-  padding: 0 32px;
   width: 100%; }
   @media screen and (min-width: 600px) {
     .newspack-modal {
@@ -1333,8 +1351,7 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
       max-width: calc( 100% - 64px); } }
   @media screen and (min-width: 744px) {
     .newspack-modal {
-      max-width: 680px;
-      padding: 0 64px; }
+      max-width: 680px; }
       .newspack-modal--wide {
         max-width: 1168px; } }
   .newspack-modal .components-modal__header {
@@ -1343,14 +1360,8 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
     border: 0;
     height: auto;
     justify-content: flex-end;
-    margin: 0 -32px;
-    padding: 64px 32px 32px; }
-    @media screen and (min-width: 744px) {
-      .newspack-modal .components-modal__header {
-        margin-right: -64px;
-        margin-left: -64px;
-        padding-right: 64px;
-        padding-left: 64px; } }
+    padding: 32px 32px 0;
+    position: relative; }
     .newspack-modal .components-modal__header .components-modal__header-heading-container {
       display: block;
       margin-left: 16px; }
@@ -1373,8 +1384,13 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
       font-weight: bold;
       line-height: 32px; }
   .newspack-modal .components-modal__content {
-    margin: -32px 0 0;
-    padding: 0 0 32px; }
+    margin: 0;
+    padding: 0 32px; }
+    @media screen and (min-width: 744px) {
+      .newspack-modal .components-modal__content {
+        padding: 32px 64px; } }
+    .newspack-modal .components-modal__content::before {
+      display: none; }
   .newspack-modal h2,
   .newspack-modal p {
     line-height: 24px;

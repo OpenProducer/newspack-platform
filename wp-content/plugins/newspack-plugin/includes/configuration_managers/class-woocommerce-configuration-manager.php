@@ -76,26 +76,6 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Retrieve WooCommerce currency fields to populate Select
-	 *
-	 * @return Array Array of objects formatted for use in a SelectControl.
-	 */
-	public function currency_fields() {
-		if ( ! function_exists( 'WC' ) ) {
-			return [];
-		}
-		$currencies    = get_woocommerce_currencies();
-		$currency_info = [];
-		foreach ( $currencies as $code => $currency ) {
-			$currency_info[] = [
-				'value' => $code,
-				'label' => html_entity_decode( $currency ),
-			];
-		}
-		return $currency_info;
-	}
-
-	/**
 	 * Retrieve Stripe data
 	 *
 	 * @return Array Array of Stripe data.
@@ -103,17 +83,10 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	public function stripe_data() {
 		$gateways = WC_Payment_Gateways::instance()->payment_gateways();
 		if ( ! isset( $gateways['stripe'] ) ) {
-			return [
-				'enabled'            => false,
-				'testMode'           => false,
-				'publishableKey'     => '',
-				'secretKey'          => '',
-				'testPublishableKey' => '',
-				'testSecretKey'      => '',
-			];
+			return Stripe_Connection::get_default_stripe_data();
 		}
-		$stripe = $gateways['stripe'];
-		return [
+		$stripe      = $gateways['stripe'];
+		$stripe_data = [
 			'enabled'            => 'yes' === $stripe->get_option( 'enabled', false ) ? true : false,
 			'testMode'           => 'yes' === $stripe->get_option( 'testmode', false ) ? true : false,
 			'publishableKey'     => $stripe->get_option( 'publishable_key', '' ),
@@ -121,6 +94,7 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 			'testPublishableKey' => $stripe->get_option( 'test_publishable_key', '' ),
 			'testSecretKey'      => $stripe->get_option( 'test_secret_key', '' ),
 		];
+		return $stripe_data;
 	}
 
 	/**
@@ -194,6 +168,10 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 		$stripe->update_option( 'secret_key', $args['secretKey'] );
 		$stripe->update_option( 'test_publishable_key', $args['testPublishableKey'] );
 		$stripe->update_option( 'test_secret_key', $args['testSecretKey'] );
+
+		// @todo when is the best time to do this?
+		$this->set_smart_defaults();
+
 		return true;
 	}
 

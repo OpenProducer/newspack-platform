@@ -207,15 +207,6 @@ class SEO_Wizard extends Wizard {
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/seo.js' ),
 			true
 		);
-
-		\wp_register_style(
-			'newspack-seo-wizard',
-			Newspack::plugin_url() . '/dist/seo.css',
-			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/seo.css' )
-		);
-		\wp_style_add_data( 'newspack-seo-wizard', 'rtl', 'replace' );
-		\wp_enqueue_style( 'newspack-seo-wizard' );
 	}
 
 	/**

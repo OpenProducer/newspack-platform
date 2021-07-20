@@ -152,3 +152,18 @@ body.post-type-post .editor-post-title__block .editor-post-title__input {
     font-size: 3.2em;
   }
 }
+
+/** === Post Meta Toggles === */
+.components-panel__row.newspack__post-meta-toggles {
+  flex-direction: column;
+}
+
+.components-panel__row.newspack__post-meta-toggles > div {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.components-panel__row.newspack__post-meta-toggles > div + div {
+  margin-top: 1rem;
+}

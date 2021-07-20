@@ -220,6 +220,28 @@ p.has-background {
 	}
 }
 
+.mobile-sidebar,
+.desktop-sidebar,
+.subpage-sidebar {
+	@include media( desktop ) {
+		.wpnbha.image-alignbehind .post-has-image .entry-wrapper {
+			padding: 1.5em 1em;
+		}
+	}
+}
+
+.mobile-sidebar,
+.site-footer {
+	.wpnbha {
+		.entry-meta,
+		.entry-meta a,
+		.entry-meta a:visited,
+		.entry-meta a:hover {
+			color: inherit;
+		}
+	}
+}
+
 //! Newspack Carousel Block
 .wp-block-newspack-blocks-carousel {
 	h3 a,
@@ -229,6 +251,62 @@ p.has-background {
 	.cat-links a,
 	.cat-links a:visited {
 		color: inherit;
+	}
+}
+
+#secondary,
+.desktop-sidebar,
+.mobile-sidebar,
+.subpage-sidebar {
+	.wp-block-newspack-blocks-carousel {
+		article {
+			.entry-title {
+				font-size: 0.9rem;
+			}
+			.entry-meta {
+				font-size: $font__size-xs;
+			}
+			.entry-wrapper {
+				padding: 20px 36px;
+			}
+			.avatar {
+				height: 30px;
+				width: 30px;
+			}
+		}
+
+		.swiper-button,
+		.amp-carousel-button,
+		.wp-block-newspack-carousel__amp-carousel button {
+			width: 24px;
+			height: 24px;
+		}
+
+		.amp-carousel-button-next,
+		.swiper-button-next,
+		.amp-carousel-button-prev,
+		.swiper-button-prev,
+		.amp-carousel-button-pause,
+		.amp-carousel-button-play {
+			background-size: 20px 20px;
+		}
+
+		.amp-carousel-button-next,
+		.swiper-button-next,
+		.amp-carousel-button-pause,
+		.amp-carousel-button-play {
+			right: 4px;
+		}
+
+		.amp-carousel-button-pause,
+		.amp-carousel-button-play {
+			top: 4px;
+		}
+
+		.amp-carousel-button-prev,
+		.swiper-button-prev {
+			left: 4px;
+		}
 	}
 }
 

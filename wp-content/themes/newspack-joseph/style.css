@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.39.3
+Version: 1.41.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -444,6 +444,9 @@ ul.products .added_to_cart,
 .woocommerce-results-wrapper,
 .wpbnbd .freq-label,
 .wpbnbd .tier-label,
+.wp-block-post-date,
+.wp-block-post-terms,
+.wp-block-query-pagination,
 h1,
 h2,
 h3,
@@ -463,6 +466,7 @@ amp-script .cat-links {
 .not-found .page-title,
 .error-404 .page-title,
 .pagination .nav-links,
+.wp-block-query-pagination,
 .comments-title,
 .cat-links,
 .comment-author .fn,
@@ -560,6 +564,9 @@ h4 {
 
 .entry-meta,
 .nav-links,
+.wp-block-post-date,
+.wp-block-post-terms,
+.wp-block-query-pagination,
 .comment-content,
 h5 {
   font-size: 0.8em;
@@ -1603,7 +1610,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .mobile-sidebar,
 .desktop-sidebar,
 .subpage-sidebar {
-  font-size: 0.8em;
   padding: 1rem;
   width: 90vw;
 }
@@ -1612,7 +1618,16 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .desktop-sidebar > *,
 .subpage-sidebar > * {
   clear: both;
-  margin-bottom: 1rem;
+  margin-bottom: 0.75rem;
+}
+
+.mobile-sidebar nav,
+.mobile-sidebar .widget:not(.widget_block),
+.desktop-sidebar nav,
+.desktop-sidebar .widget:not(.widget_block),
+.subpage-sidebar nav,
+.subpage-sidebar .widget:not(.widget_block) {
+  font-size: 0.8em;
 }
 
 .mobile-sidebar .mobile-menu-toggle,
@@ -1624,7 +1639,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .subpage-sidebar .mobile-menu-toggle,
 .subpage-sidebar .desktop-menu-toggle,
 .subpage-sidebar .subpage-toggle {
-  font-size: 1em;
+  font-size: 0.8em;
   float: right;
   margin: 0 0 1rem;
   padding: 0;
@@ -1641,9 +1656,12 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   padding: 0;
 }
 
-.mobile-sidebar a,
-.desktop-sidebar a,
-.subpage-sidebar a {
+.mobile-sidebar nav a,
+.mobile-sidebar .widget_nav_menu a,
+.desktop-sidebar nav a,
+.desktop-sidebar .widget_nav_menu a,
+.subpage-sidebar nav a,
+.subpage-sidebar .widget_nav_menu a {
   display: inline-block;
   margin: 0.125rem 0;
   padding: 0.125rem 0.25rem;
@@ -1654,6 +1672,12 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .subpage-sidebar a:hover {
   background: transparent;
   text-decoration: underline;
+}
+
+.mobile-sidebar .social-links-menu li a,
+.desktop-sidebar .social-links-menu li a,
+.subpage-sidebar .social-links-menu li a {
+  display: block;
 }
 
 .mobile-sidebar .widget-title,
@@ -1807,7 +1831,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 #desktop-sidebar-fallback > *,
 #mobile-sidebar-fallback > *,
 #subpage-sidebar-fallback > * {
-  display: none;
+  visibility: hidden;
 }
 
 #desktop-sidebar-fallback,
@@ -1836,19 +1860,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .mobile-menu-opened #mobile-sidebar-fallback > *,
 .desktop-menu-opened #desktop-sidebar-fallback > *,
 .subpage-menu-opened #subpage-sidebar-fallback > * {
-  display: block;
-}
-
-.mobile-menu-opened #mobile-sidebar-fallback > .desktop-menu-toggle,
-.mobile-menu-opened #mobile-sidebar-fallback > .mobile-menu-toggle,
-.mobile-menu-opened #mobile-sidebar-fallback > .subpage-toggle,
-.desktop-menu-opened #desktop-sidebar-fallback > .desktop-menu-toggle,
-.desktop-menu-opened #desktop-sidebar-fallback > .mobile-menu-toggle,
-.desktop-menu-opened #desktop-sidebar-fallback > .subpage-toggle,
-.subpage-menu-opened #subpage-sidebar-fallback > .desktop-menu-toggle,
-.subpage-menu-opened #subpage-sidebar-fallback > .mobile-menu-toggle,
-.subpage-menu-opened #subpage-sidebar-fallback > .subpage-toggle {
-  display: flex;
+  visibility: visible;
 }
 
 .overlay-mask {
@@ -1927,6 +1939,48 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
     margin-left: 0 auto;
     padding: 0;
   }
+}
+
+.wp-block-query-pagination {
+  margin: 3rem 0;
+}
+
+.wp-block-query-pagination,
+.wp-block-query-pagination .wp-block-query-pagination-numbers {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.wp-block-query-pagination span,
+.wp-block-query-pagination a {
+  margin-right: 0.25rem;
+  padding: 0.5rem 0.75rem;
+  text-decoration: none;
+}
+
+.wp-block-query-pagination span:last-child,
+.wp-block-query-pagination a:last-child {
+  margin-right: 0;
+}
+
+.wp-block-query-pagination .page-numbers {
+  background-color: #eee;
+}
+
+.wp-block-query-pagination .dots {
+  background: transparent;
+  padding-left: 0;
+  padding-right: 0;
+}
+
+.wp-block-query-pagination .current {
+  background-color: #444444;
+  color: #fff;
+}
+
+.entry-content .wp-block-query-pagination a {
+  text-decoration: none;
 }
 
 .comment-navigation .nav-links {
@@ -4324,6 +4378,11 @@ div.sharedaddy .sd-social h3.sd-title,
   font-size: inherit;
 }
 
+/* When the Customizer option is enabled, override the footer columns layout */
+.fw-stacked .footer-widgets .wrapper {
+  display: block;
+}
+
 .footer-branding .wrapper {
   padding-top: 1rem;
 }
@@ -4445,12 +4504,12 @@ div.sharedaddy .sd-social h3.sd-title,
 }
 
 .site-info .widget-area a {
+  display: inline;
   margin: 0;
 }
 
 @media only screen and (min-width: 600px) {
-  .site-info .widget-area ul,
-  .site-info .widget-area li a {
+  .site-info .widget-area ul {
     display: inline;
   }
   .site-info .widget-area li {
@@ -4868,6 +4927,25 @@ p.has-background {
   font-size: 0.7em;
 }
 
+@media only screen and (min-width: 1168px) {
+  .mobile-sidebar .wpnbha.image-alignbehind .post-has-image .entry-wrapper,
+  .desktop-sidebar .wpnbha.image-alignbehind .post-has-image .entry-wrapper,
+  .subpage-sidebar .wpnbha.image-alignbehind .post-has-image .entry-wrapper {
+    padding: 1.5em 1em;
+  }
+}
+
+.mobile-sidebar .wpnbha .entry-meta,
+.mobile-sidebar .wpnbha .entry-meta a,
+.mobile-sidebar .wpnbha .entry-meta a:visited,
+.mobile-sidebar .wpnbha .entry-meta a:hover,
+.site-footer .wpnbha .entry-meta,
+.site-footer .wpnbha .entry-meta a,
+.site-footer .wpnbha .entry-meta a:visited,
+.site-footer .wpnbha .entry-meta a:hover {
+  color: inherit;
+}
+
 .wp-block-newspack-blocks-carousel h3 a,
 .wp-block-newspack-blocks-carousel h3 a:visited,
 .wp-block-newspack-blocks-carousel .entry-meta .byline a,
@@ -4875,6 +4953,119 @@ p.has-background {
 .wp-block-newspack-blocks-carousel .cat-links a,
 .wp-block-newspack-blocks-carousel .cat-links a:visited {
   color: inherit;
+}
+
+#secondary .wp-block-newspack-blocks-carousel article .entry-title,
+.desktop-sidebar .wp-block-newspack-blocks-carousel article .entry-title,
+.mobile-sidebar .wp-block-newspack-blocks-carousel article .entry-title,
+.subpage-sidebar .wp-block-newspack-blocks-carousel article .entry-title {
+  font-size: 0.9rem;
+}
+
+#secondary .wp-block-newspack-blocks-carousel article .entry-meta,
+.desktop-sidebar .wp-block-newspack-blocks-carousel article .entry-meta,
+.mobile-sidebar .wp-block-newspack-blocks-carousel article .entry-meta,
+.subpage-sidebar .wp-block-newspack-blocks-carousel article .entry-meta {
+  font-size: 0.7em;
+}
+
+#secondary .wp-block-newspack-blocks-carousel article .entry-wrapper,
+.desktop-sidebar .wp-block-newspack-blocks-carousel article .entry-wrapper,
+.mobile-sidebar .wp-block-newspack-blocks-carousel article .entry-wrapper,
+.subpage-sidebar .wp-block-newspack-blocks-carousel article .entry-wrapper {
+  padding: 20px 36px;
+}
+
+#secondary .wp-block-newspack-blocks-carousel article .avatar,
+.desktop-sidebar .wp-block-newspack-blocks-carousel article .avatar,
+.mobile-sidebar .wp-block-newspack-blocks-carousel article .avatar,
+.subpage-sidebar .wp-block-newspack-blocks-carousel article .avatar {
+  height: 30px;
+  width: 30px;
+}
+
+#secondary .wp-block-newspack-blocks-carousel .swiper-button,
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button,
+#secondary .wp-block-newspack-blocks-carousel .wp-block-newspack-carousel__amp-carousel button,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .swiper-button,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .wp-block-newspack-carousel__amp-carousel button,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .swiper-button,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .wp-block-newspack-carousel__amp-carousel button,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .swiper-button,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .wp-block-newspack-carousel__amp-carousel button {
+  width: 24px;
+  height: 24px;
+}
+
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+#secondary .wp-block-newspack-blocks-carousel .swiper-button-next,
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+#secondary .wp-block-newspack-blocks-carousel .swiper-button-prev,
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .swiper-button-next,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .swiper-button-prev,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .swiper-button-next,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .swiper-button-prev,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .swiper-button-next,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .swiper-button-prev,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play {
+  background-size: 20px 20px;
+}
+
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+#secondary .wp-block-newspack-blocks-carousel .swiper-button-next,
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .swiper-button-next,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .swiper-button-next,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-next,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .swiper-button-next,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play {
+  right: 4px;
+}
+
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-pause,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-play {
+  top: 4px;
+}
+
+#secondary .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+#secondary .wp-block-newspack-blocks-carousel .swiper-button-prev,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+.desktop-sidebar .wp-block-newspack-blocks-carousel .swiper-button-prev,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+.mobile-sidebar .wp-block-newspack-blocks-carousel .swiper-button-prev,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .amp-carousel-button-prev,
+.subpage-sidebar .wp-block-newspack-blocks-carousel .swiper-button-prev {
+  left: 4px;
 }
 
 #secondary .wpbnbd.tiered .tiers,
@@ -6590,7 +6781,7 @@ input[type='submit'] {
 /* Accent headers */
 .accent-header,
 .wp-block-columns .wp-block-column > .accent-header,
-.site-content .wpnbha .article-section-title,
+div.wpnbha .article-section-title,
 .cat-links {
   font-size: 20px;
   margin-bottom: 1rem;

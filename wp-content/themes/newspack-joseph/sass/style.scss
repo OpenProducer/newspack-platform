@@ -5,7 +5,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.39.3
+Version: 1.41.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -119,7 +119,7 @@ input[type='submit'] {
 /* Accent headers */
 .accent-header,
 .wp-block-columns .wp-block-column > .accent-header,
-.site-content .wpnbha .article-section-title,
+div.wpnbha .article-section-title,
 .cat-links {
 	font-size: $font__size-base;
 	margin-bottom: $size__spacing-unit;
