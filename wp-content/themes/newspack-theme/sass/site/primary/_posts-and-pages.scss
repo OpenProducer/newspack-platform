@@ -187,6 +187,10 @@ amp-script .cat-links {
 	}
 }
 
+.widget + .post-thumbnail {
+	margin-top: 32px;
+}
+
 .entry-content {
 	p {
 		word-wrap: break-word;
@@ -295,16 +299,6 @@ amp-script .cat-links {
 		}
 	}
 
-	.avatar {
-		height: #{1.75 * $size__spacing-unit};
-		width: #{1.75 * $size__spacing-unit};
-
-		@include media( tablet ) {
-			height: #{2.25 * $size__spacing-unit};
-			width: #{2.25 * $size__spacing-unit};
-		}
-	}
-
 	.main-content > .post-thumbnail:first-child {
 		margin-top: #{2 * $size__spacing-unit};
 	}
@@ -319,6 +313,19 @@ amp-script .cat-links {
 			.entry-meta {
 				flex-grow: 2;
 			}
+		}
+	}
+}
+
+.entry-subhead,
+.comment-list {
+	.avatar {
+		height: #{1.75 * $size__spacing-unit};
+		width: #{1.75 * $size__spacing-unit};
+
+		@include media( tablet ) {
+			height: #{2.25 * $size__spacing-unit};
+			width: #{2.25 * $size__spacing-unit};
 		}
 	}
 }
@@ -864,8 +871,10 @@ div.sharedaddy .sd-social h3.sd-title,
 	color: $color__text-main;
 }
 
-.jp-related-posts-i2__row {
-	margin: 0 -10px;
+@include media( mobile ) {
+	.jp-related-posts-i2__row {
+		margin: 0 -10px;
+	}
 }
 
 .jp-relatedposts-i2,
@@ -883,6 +892,11 @@ div.sharedaddy .sd-social h3.sd-title,
 #jp-relatedposts.jp-relatedposts {
 	.jp-relatedposts-items-visual .jp-relatedposts-post {
 		opacity: 1;
+		width: 100%;
+
+		@include media( tablet ) {
+			width: 33.3%;
+		}
 
 		.jp-relatedposts-post-img {
 			margin-bottom: #{0.5 * $size__spacing-unit};

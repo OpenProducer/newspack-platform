@@ -31,12 +31,17 @@ p {
   font-size: 20px;
 }
 
+p.has-background {
+  padding: 20px 30px;
+}
+
 h1,
 h2,
 h3,
 h4,
 h5,
 h6 {
+  font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
   font-weight: 700;
   line-height: 1.2;
 }
@@ -58,6 +63,15 @@ h4 a:visited,
 h5 a:visited,
 h6 a:visited {
   color: #111;
+}
+
+h1.has-background,
+h2.has-background,
+h3.has-background,
+h4.has-background,
+h5.has-background,
+h6.has-background {
+  padding: 20px 30px;
 }
 
 h1 {
@@ -604,6 +618,42 @@ figcaption,
   padding: 0;
 }
 
+/** === Search === */
+.wp-block-search .wp-block-search__button {
+  border-radius: 5px;
+  line-height: 1.8;
+  font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
+  font-size: 0.8em;
+  font-weight: bold;
+  padding: 0.55rem 1rem !important;
+}
+
+.wp-block-search .wp-block-search__button svg {
+  height: 32px;
+  width: 32px;
+}
+
+.wp-block-search .wp-block-search__button.has-icon {
+  padding: 0.3rem 0.5rem !important;
+}
+
+.wp-block-search.wp-block-search__button-outside .wp-block-search__button {
+  border: 0;
+}
+
+.wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper .wp-block-search__button {
+  padding: 0.25rem 0.5rem !important;
+}
+
+.wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper .wp-block-search__button.has-icon {
+  padding: 0.125rem 0.25rem !important;
+}
+
+.wp-block-search.wp-block-search__button-inside .has-icon {
+  background: transparent;
+  border: 0;
+}
+
 /** === Code === */
 .wp-block-code {
   border-radius: 0;
@@ -857,6 +907,16 @@ ul.wp-block-archives li,
 
 .newspack-pattern.subscribe__style-5 .wp-block-jetpack-mailchimp p {
   text-align: center;
+}
+
+/** === Login/out block === */
+.wp-block-loginout {
+  font-family: "IBM Plex Serif", georgia, garamond, "Times New Roman", serif;
+}
+
+.wp-block-loginout label,
+.wp-block-loginout a {
+  font-size: 0.8em;
 }
 
 /** === Organic Profile Block === */

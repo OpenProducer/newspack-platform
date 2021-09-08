@@ -308,6 +308,42 @@ function newspack_widgets_init() {
 
 	register_sidebar(
 		array(
+			'name'          => __( 'Above Header', 'newspack' ),
+			'id'            => 'header-2',
+			'description'   => esc_html__( 'Add widgets here to appear above the site header.', 'newspack' ),
+			'before_widget' => '<section id="%1$s" class="below-content widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
+
+	register_sidebar(
+		array(
+			'name'          => __( 'Below Header', 'newspack' ),
+			'id'            => 'header-3',
+			'description'   => esc_html__( 'Add widgets here to appear below the site header.', 'newspack' ),
+			'before_widget' => '<section id="%1$s" class="below-content widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
+
+	register_sidebar(
+		array(
+			'name'          => __( 'Above Footer', 'newspack' ),
+			'id'            => 'footer-3',
+			'description'   => esc_html__( 'Add widgets here to appear above the site footer.', 'newspack' ),
+			'before_widget' => '<section id="%1$s" class="above-footer widget %2$s">',
+			'after_widget'  => '</section>',
+			'before_title'  => '<h2 class="widget-title">',
+			'after_title'   => '</h2>',
+		)
+	);
+
+	register_sidebar(
+		array(
 			'name'          => __( 'Footer', 'newspack' ),
 			'id'            => 'footer-1',
 			'description'   => __( 'Add widgets here to appear in your footer.', 'newspack' ),
@@ -965,10 +1001,17 @@ add_filter( 'get_the_archive_title', 'newspack_update_the_archive_title', 11, 1 
  * @param boolean $update Whether this is an existing post being updated or not.
  */
 function newspack_maybe_set_default_post_template( $post_ID, $post, $update ) {
-	if ( ! $update && 'post' === $post->post_type ) {
-		$post_template_default = get_theme_mod( 'post_template_default' );
-		if ( 'default' !== $post_template_default ) {
-			update_post_meta( $post_ID, '_wp_page_template', $post_template_default );
+	if ( ! $update ) {
+		if ( 'post' === $post->post_type ) {
+			$post_template_default = get_theme_mod( 'post_template_default' );
+			if ( 'default' !== $post_template_default ) {
+				update_post_meta( $post_ID, '_wp_page_template', $post_template_default );
+			}
+		} elseif ( 'page' === $post->post_type ) {
+			$page_template_default = get_theme_mod( 'page_template_default' );
+			if ( 'default' !== $page_template_default ) {
+				update_post_meta( $post_ID, '_wp_page_template', $page_template_default );
+			}
 		}
 	}
 }
@@ -1015,6 +1058,11 @@ require get_template_directory() . '/inc/customizer.php';
 require get_template_directory() . '/inc/logo-resizer.php';
 
 /**
+ * Custom Login Screen.
+ */
+require get_template_directory() . '/inc/login-screen.php';
+
+/**
  * Load Jetpack compatibility file.
  */
 if ( defined( 'JETPACK__VERSION' ) ) {
@@ -1046,3 +1094,10 @@ if ( function_exists( '\Newspack_Sponsors\get_sponsors_for_post' ) ) {
  * Load Web Stories compatibility file.
  */
 require get_template_directory() . '/inc/web-stories.php';
+
+/**
+ * Load The Events Calendar compatibility file.
+ */
+if ( class_exists( 'Tribe__Main' ) ) {
+	require get_template_directory() . '/inc/the-events-calendar.php';
+}

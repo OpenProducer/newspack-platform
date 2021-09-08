@@ -17,7 +17,7 @@
 	<?php wp_head(); ?>
 </head>
 
-<body <?php body_class(); ?>>
+<body <?php body_class(); ?> data-amp-auto-lightbox-disable>
 <?php
 
 do_action( 'wp_body_open' );
@@ -45,6 +45,14 @@ endif;
 
 <div id="page" class="site">
 	<a class="skip-link screen-reader-text" href="#content"><?php _e( 'Skip to content', 'newspack' ); ?></a>
+
+	<?php if ( is_active_sidebar( 'header-2' ) ) : ?>
+		<div class="header-widget above-header-widgets">
+			<div class="wrapper">
+				<?php dynamic_sidebar( 'header-2' ); ?>
+			</div><!-- .wrapper -->
+		</div><!-- .above-header-widgets -->
+	<?php endif; ?>
 
 	<header id="masthead" class="site-header hide-header-search" [class]="searchVisible ? 'show-header-search site-header ' : 'hide-header-search site-header'">
 
@@ -280,5 +288,13 @@ endif;
 	?>
 
 	<?php do_action( 'after_header' ); ?>
+
+	<?php if ( is_active_sidebar( 'header-3' ) ) : ?>
+		<div class="header-widget below-header-widgets">
+			<div class="wrapper">
+				<?php dynamic_sidebar( 'header-3' ); ?>
+			</div><!-- .wrapper -->
+		</div><!-- .above-header-widgets -->
+	<?php endif; ?>
 
 	<div id="content" class="site-content">
