@@ -1,3 +1,113 @@
+# [1.56.0](https://github.com/Automattic/newspack-plugin/compare/v1.55.0...v1.56.0) (2021-09-08)
+
+
+### Bug Fixes
+
+* stricter plugin area restriction ([#1127](https://github.com/Automattic/newspack-plugin/issues/1127)) ([37fc1ea](https://github.com/Automattic/newspack-plugin/commit/37fc1eaa6126286b2c1df551b32efe9a982e04b1))
+* **campaigns-wizard:** prompt duplication ([8927ef4](https://github.com/Automattic/newspack-plugin/commit/8927ef4d6e5b62447d4abf2581bf467e6a731611))
+
+
+### Features
+
+* **stripe:** handle subscriber status in campaigns data update ([f939bb6](https://github.com/Automattic/newspack-plugin/commit/f939bb66eec0467f1f9e4a61656a51644a6a95a0))
+* allow multiple GAM network codes ([#1123](https://github.com/Automattic/newspack-plugin/issues/1123)) ([12cccca](https://github.com/Automattic/newspack-plugin/commit/12ccccaa859715448e3c8f4878cf4a05f5b7099c))
+* plugin screen access restriction ([61d3f59](https://github.com/Automattic/newspack-plugin/commit/61d3f5982f4bbf63bc2251661bc89a13303bc25b))
+
+# [1.55.0](https://github.com/Automattic/newspack-plugin/compare/v1.54.0...v1.55.0) (2021-08-31)
+
+
+### Features
+
+* **stripe:** handle adding subscriber when donating ([#1098](https://github.com/Automattic/newspack-plugin/issues/1098)) ([1a2de16](https://github.com/Automattic/newspack-plugin/commit/1a2de16efdaff472708dca2f5e89d43b148e63b8))
+* **stripe:** handle donor name ([d7cbc20](https://github.com/Automattic/newspack-plugin/commit/d7cbc2081ac782a09e4ed0c8b0fbbd97eebd2b89))
+
+# [1.54.0](https://github.com/Automattic/newspack-plugin/compare/v1.53.0...v1.54.0) (2021-08-25)
+
+
+### Bug Fixes
+
+* disable WooCommerce image regeneration ([#1105](https://github.com/Automattic/newspack-plugin/issues/1105)) ([e4f9f7d](https://github.com/Automattic/newspack-plugin/commit/e4f9f7d834456b088c28574afec4106235550fea))
+* increase pwa network timeout limit ([#1107](https://github.com/Automattic/newspack-plugin/issues/1107)) ([cc32462](https://github.com/Automattic/newspack-plugin/commit/cc32462057f620a8407caba88f7326c49d518087))
+
+
+### Features
+
+* **ads:** global ad suppression settings ([#1100](https://github.com/Automattic/newspack-plugin/issues/1100)) ([8725392](https://github.com/Automattic/newspack-plugin/commit/8725392031b8230cd11e1f137dd39402e790a60f))
+* revert redirect patch ([558b9d2](https://github.com/Automattic/newspack-plugin/commit/558b9d2a1abc43ee2537d2f9b27c86f6ee4316cd))
+* **donations:** stripe as platform ([#1095](https://github.com/Automattic/newspack-plugin/issues/1095)) ([7df2371](https://github.com/Automattic/newspack-plugin/commit/7df2371090506252e31c5204222038f9868070b9))
+* update focus/focus-visible on buttons ([#1101](https://github.com/Automattic/newspack-plugin/issues/1101)) ([c944c76](https://github.com/Automattic/newspack-plugin/commit/c944c76d3a1ab40316762ca3b1e0d8743ea247eb))
+
+# [1.53.0](https://github.com/Automattic/newspack-plugin/compare/v1.52.0...v1.53.0) (2021-08-17)
+
+
+### Bug Fixes
+
+* handoff banner style when admin has meta links ([#1088](https://github.com/Automattic/newspack-plugin/issues/1088)) ([dacc554](https://github.com/Automattic/newspack-plugin/commit/dacc5549bc1d93a12ed1c0d4d81f4f752eae6e83))
+* remove missing CSS from Engagement wizard ([#1092](https://github.com/Automattic/newspack-plugin/issues/1092)) ([4342026](https://github.com/Automattic/newspack-plugin/commit/4342026b20206d4eae72af95589309b50b454ca6))
+
+
+### Features
+
+* **stripe:** handle recurring donations ([#1087](https://github.com/Automattic/newspack-plugin/issues/1087)) ([4437a79](https://github.com/Automattic/newspack-plugin/commit/4437a7976167de8162c850010f1403e6bd91a24d))
+
+# [1.52.0](https://github.com/Automattic/newspack-plugin/compare/v1.51.1...v1.52.0) (2021-08-10)
+
+
+### Features
+
+* update campaigns analytics style ([#1085](https://github.com/Automattic/newspack-plugin/issues/1085)) ([d32d583](https://github.com/Automattic/newspack-plugin/commit/d32d583a7b1e6786d91ce8524cf2c48277bcb540))
+
+## [1.51.1](https://github.com/Automattic/newspack-plugin/compare/v1.51.0...v1.51.1) (2021-08-04)
+
+
+### Bug Fixes
+
+* update Google imports namespaces ([#1081](https://github.com/Automattic/newspack-plugin/issues/1081)) ([2d1e2ab](https://github.com/Automattic/newspack-plugin/commit/2d1e2ab2c2aab03ecd21cabd0d02165d8ba9bd6e))
+
+# [1.51.0](https://github.com/Automattic/newspack-plugin/compare/v1.50.1...v1.51.0) (2021-08-03)
+
+
+### Bug Fixes
+
+* **stripe:** error namespace, listing webhooks condition ([5cd841b](https://github.com/Automattic/newspack-plugin/commit/5cd841ba035655be6a9f84458772f458ce2178f7))
+* namespace wp_error correctly ([ea2a528](https://github.com/Automattic/newspack-plugin/commit/ea2a528b66cb56af51bd42b777fd554484d972d3))
+
+
+### Features
+
+* **campaigns-wizard:** analytics - enable setting precise date range ([#1062](https://github.com/Automattic/newspack-plugin/issues/1062)) ([c08ad8d](https://github.com/Automattic/newspack-plugin/commit/c08ad8d60804f7d224508f978d79643e56310d39)), closes [#991](https://github.com/Automattic/newspack-plugin/issues/991)
+* add RSS Enhancement to Syndication Wizard ([#1068](https://github.com/Automattic/newspack-plugin/issues/1068)) ([d5fd533](https://github.com/Automattic/newspack-plugin/commit/d5fd5333c30646115c3a9113d10445f710ff6d84))
+* reorganize campaigns settings modal ([#1073](https://github.com/Automattic/newspack-plugin/issues/1073)) ([1ff9147](https://github.com/Automattic/newspack-plugin/commit/1ff91473d27a9a656686c29f8c55a32bbc4efc32))
+* update engagement wizard, reorganize recirculation and remove UGC ([#1074](https://github.com/Automattic/newspack-plugin/issues/1074)) ([68b3a26](https://github.com/Automattic/newspack-plugin/commit/68b3a263fe41aee8963aca0ae8e5b806138afa2f))
+* **campaigns-wizard:** manage prompt settings in a modal ([#1065](https://github.com/Automattic/newspack-plugin/issues/1065)) ([2bb3d19](https://github.com/Automattic/newspack-plugin/commit/2bb3d194e3433c8814f9157dfc34f8c86252684d)), closes [#926](https://github.com/Automattic/newspack-plugin/issues/926)
+* **reader-revenue-wizard:** clarify donation tiers description ([3ab4dc7](https://github.com/Automattic/newspack-plugin/commit/3ab4dc790a3642f676e4bf156e4437d2ae843ded)), closes [#457](https://github.com/Automattic/newspack-plugin/issues/457)
+
+## [1.50.1](https://github.com/Automattic/newspack-plugin/compare/v1.50.0...v1.50.1) (2021-07-27)
+
+
+### Bug Fixes
+
+* namespace wp_error correctly ([#1071](https://github.com/Automattic/newspack-plugin/issues/1071)) ([80028f0](https://github.com/Automattic/newspack-plugin/commit/80028f05e4fbdfe7e571f23889b4cec821674924))
+
+# [1.50.0](https://github.com/Automattic/newspack-plugin/compare/v1.49.0...v1.50.0) (2021-07-27)
+
+
+### Bug Fixes
+
+* **engagement-wizard:** grid columns and provider selector ([#1055](https://github.com/Automattic/newspack-plugin/issues/1055)) ([03a0fc8](https://github.com/Automattic/newspack-plugin/commit/03a0fc8d710f778773792ee5e1c3263bb02e0b82))
+
+
+### Features
+
+* add isSmall prop to text-control and select-control ([#1064](https://github.com/Automattic/newspack-plugin/issues/1064)) ([e180bd0](https://github.com/Automattic/newspack-plugin/commit/e180bd0fa75c8cd7436d2f42063c0c3929f40785))
+* update campaigns action card style for analytics data ([#1063](https://github.com/Automattic/newspack-plugin/issues/1063)) ([f1eb89e](https://github.com/Automattic/newspack-plugin/commit/f1eb89e544605a1f125fd401a24e98d41838e313))
+* **amp:** skip AMP on WC pages ([dcb0a38](https://github.com/Automattic/newspack-plugin/commit/dcb0a3831c2b87befdfdbe75b57bb133611458bd)), closes [#967](https://github.com/Automattic/newspack-plugin/issues/967)
+* **campaigns-wizard:** all prompts view, trash handling ([#1052](https://github.com/Automattic/newspack-plugin/issues/1052)) ([5d4af0f](https://github.com/Automattic/newspack-plugin/commit/5d4af0f61cff0179c0b8509f4c591e1f62b910ae)), closes [#784](https://github.com/Automattic/newspack-plugin/issues/784) [#869](https://github.com/Automattic/newspack-plugin/issues/869)
+* **campaigns-wizard:** display GA insights in prompts list ([#1057](https://github.com/Automattic/newspack-plugin/issues/1057)) ([4fe84dc](https://github.com/Automattic/newspack-plugin/commit/4fe84dcab594b55b67442c1f805e49758e42efff)), closes [#993](https://github.com/Automattic/newspack-plugin/issues/993)
+* **setup-wizard:** prevent installation on non-HTTPS sites ([cb8eab2](https://github.com/Automattic/newspack-plugin/commit/cb8eab24076029ceb25c2a14eb0057c99c6db1ee)), closes [#186](https://github.com/Automattic/newspack-plugin/issues/186)
+* **starter-content:** set primary category on posts ([dbdbd36](https://github.com/Automattic/newspack-plugin/commit/dbdbd3674076e4198e83f0ec05169a45e72d805c)), closes [#682](https://github.com/Automattic/newspack-plugin/issues/682)
+* **stripe:** handle webhooks; update Campaigns, GA data ([#1047](https://github.com/Automattic/newspack-plugin/issues/1047)) ([a78c6d4](https://github.com/Automattic/newspack-plugin/commit/a78c6d4d8ecd0ace8c4f2abd670254bd44c8c5ad))
+
 # [1.49.0](https://github.com/Automattic/newspack-plugin/compare/v1.48.1...v1.49.0) (2021-07-19)
 
 

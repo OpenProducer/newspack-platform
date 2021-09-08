@@ -34,18 +34,11 @@ class Handoff_Banner {
 	 * @return void.
 	 */
 	public function insert_handoff_banner() {
-		$classes        = [];
-		$screen         = get_current_screen();
-		$help_tab_count = count( $screen->get_help_tabs() );
-		$is_jetpack     = strrpos( $screen->base, 'jetpack' );
-		if ( $help_tab_count > 0 && false === $is_jetpack ) {
-			$classes[] = 'has-help-tabs';
-		}
 		if ( ! self::needs_handoff_return_ui() ) {
 			return;
 		}
-		$newspack_handoff_return_url = get_option( NEWSPACK_HANDOFF_RETURN_URL );
-		echo sprintf( "<div id='newspack-handoff-banner' data-primary_button_url='%s' class='%s'></div>", esc_attr( $newspack_handoff_return_url ), esc_attr( implode( ' ', $classes ) ) );
+
+		echo sprintf( "<div id='newspack-handoff-banner' data-primary_button_url='%s'></div>", esc_url( get_option( NEWSPACK_HANDOFF_RETURN_URL ) ) );
 	}
 
 	/**

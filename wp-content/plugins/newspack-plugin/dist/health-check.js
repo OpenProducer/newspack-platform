@@ -302,6 +302,17 @@ eval("(function() { module.exports = window[\"lodash\"]; }());\n\n//# sourceURL=
 
 /***/ }),
 
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+/*! no static exports found */
+/***/ (function(module, exports) {
+
+eval("(function() { module.exports = window[\"moment\"]; }());\n\n//# sourceURL=webpack:///external_%22moment%22?");
+
+/***/ }),
+
 /***/ "react":
 /*!************************!*\
   !*** external "React" ***!

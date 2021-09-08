@@ -80,6 +80,15 @@ class Setup_Wizard extends Wizard {
 	 * Register the endpoints needed for the wizard screens.
 	 */
 	public function register_api_endpoints() {
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/initial-check',
+			[
+				'methods'             => WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'api_initial_check' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
 		// Update option when setup is complete.
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
@@ -168,6 +177,41 @@ class Setup_Wizard extends Wizard {
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_services' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+	}
+
+	/**
+	 * Perform an initial check before starting setup.
+	 *
+	 * @return WP_REST_Response containing info.
+	 */
+	public function api_initial_check() {
+		$required_plugins_slugs = [
+			'jetpack',
+			'amp',
+			'pwa',
+			'wordpress-seo',
+			'woocommerce',
+			'google-site-kit',
+			'newspack-blocks',
+			'newspack-newsletters',
+			'newspack-theme',
+		];
+
+		// Gather information about required plugins.
+		$managed_plugins = Plugin_Manager::get_managed_plugins();
+		$plugin_info     = [];
+		foreach ( $required_plugins_slugs as $slug ) {
+			$plugin               = $managed_plugins[ $slug ];
+			$plugin['Configured'] = \Newspack\Configuration_Managers::is_configured( $slug );
+			$plugin_info[]        = $plugin;
+		}
+
+		return rest_ensure_response(
+			[
+				'plugins' => $plugin_info,
+				'is_ssl'  => is_ssl(),
 			]
 		);
 	}

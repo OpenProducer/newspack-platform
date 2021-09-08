@@ -113,6 +113,10 @@ class Starter_Content {
 		$category_id  = self::is_e2e() ? $category_ids[ $post_index ] : $categories[0];
 
 		wp_set_post_categories( $post_id, $category_id );
+
+		// Set Yoast primary category.
+		update_post_meta( $post_id, '_yoast_wpseo_primary_category', $category_id->term_id );
+
 		wp_publish_post( $post_id );
 		update_post_meta( $post_id, $meta_key, true );
 

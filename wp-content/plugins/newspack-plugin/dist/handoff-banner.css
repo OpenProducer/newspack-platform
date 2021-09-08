@@ -8,28 +8,13 @@
   background: #36f;
   display: block;
   margin: 0 0 0 -10px;
-  padding: 4px;
+  padding: 4px 16px;
   position: relative; }
   @media screen and (min-width: 783px) {
     #newspack-handoff-banner {
       margin-left: -20px; } }
   #newspack-handoff-banner:empty {
     display: none; }
-  #newspack-handoff-banner.has-help-tabs {
-    margin-top: 40px; }
-    @media screen and (min-width: 783px) {
-      #newspack-handoff-banner.has-help-tabs {
-        margin-top: 30px; } }
-    #newspack-handoff-banner.has-help-tabs::before {
-      background: #36f;
-      content: '';
-      display: block;
-      height: 100vh;
-      left: 0;
-      position: absolute;
-      right: 0;
-      top: -100vh;
-      z-index: -1; }
   .jetpack-pagestyles #newspack-handoff-banner {
     margin-left: 0; }
   .site-kit_page_googlesitekit-splash #newspack-handoff-banner {
@@ -68,6 +53,7 @@
       .newspack-handoff-banner .newspack-handoff-banner__buttons {
         justify-content: flex-end; } }
     .newspack-handoff-banner .newspack-handoff-banner__buttons .newspack-button {
+      font-family: inherit;
       margin: 4px; }
       .newspack-handoff-banner .newspack-handoff-banner__buttons .newspack-button.is-primary {
         flex: 0 0 auto;
@@ -78,4 +64,20 @@
             order: 0; } }
       .newspack-handoff-banner .newspack-handoff-banner__buttons .newspack-button.is-secondary:active, .newspack-handoff-banner .newspack-handoff-banner__buttons .newspack-button.is-secondary:focus, .newspack-handoff-banner .newspack-handoff-banner__buttons .newspack-button.is-secondary:hover {
         border-color: #2240d5 !important; }
+
+#screen-meta-links {
+  margin-bottom: 4px;
+  position: relative;
+  z-index: 2; }
+
+#screen-meta::before {
+  background: #36f;
+  bottom: 0;
+  content: '';
+  display: block;
+  left: -100vw;
+  position: absolute;
+  right: -100vw;
+  top: 0;
+  z-index: -1; }
 

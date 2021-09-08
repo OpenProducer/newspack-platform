@@ -89,11 +89,8 @@ class Popups_Wizard extends Wizard {
 				'callback'            => [ $this, 'api_update_popup' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
-					'id'      => [
+					'id' => [
 						'sanitize_callback' => 'absint',
-					],
-					'options' => [
-						'validate_callback' => [ $this, 'api_validate_options' ],
 					],
 				],
 			]
@@ -104,6 +101,20 @@ class Popups_Wizard extends Wizard {
 			[
 				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ $this, 'api_delete_popup' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'id' => [
+						'sanitize_callback' => 'absint',
+					],
+				],
+			]
+		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/(?P<id>\d+)/restore',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_restore_popup' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
 					'id' => [
@@ -145,37 +156,14 @@ class Popups_Wizard extends Wizard {
 		);
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/popup-terms/(?P<id>\d+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_set_popup_terms' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'id'       => [
-						'sanitize_callback' => 'absint',
-					],
-					'taxonomy' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'terms'    => [
-						'sanitize_callback' => [ $this, 'sanitize_terms' ],
-					],
-				],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
 			'/wizard/' . $this->slug . '/(?P<id>\d+)/publish',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_publish_popup' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
-					'id'      => [
+					'id' => [
 						'sanitize_callback' => 'absint',
-					],
-					'options' => [
-						'validate_callback' => [ $this, 'api_validate_options' ],
 					],
 				],
 			]
@@ -188,11 +176,8 @@ class Popups_Wizard extends Wizard {
 				'callback'            => [ $this, 'api_unpublish_popup' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
-					'id'      => [
+					'id' => [
 						'sanitize_callback' => 'absint',
-					],
-					'options' => [
-						'validate_callback' => [ $this, 'api_validate_options' ],
 					],
 				],
 			]
@@ -307,14 +292,20 @@ class Popups_Wizard extends Wizard {
 					'callback'            => [ $this, 'get_popups_analytics_report' ],
 					'permission_callback' => [ $this, 'api_permissions_check' ],
 					'args'                => [
-						'offset'         => [
+						'start_date'        => [
 							'sanitize_callback' => 'sanitize_text_field',
 						],
-						'event_label_id' => [
+						'end_date'          => [
 							'sanitize_callback' => 'sanitize_text_field',
 						],
-						'event_action'   => [
+						'event_label_id'    => [
 							'sanitize_callback' => 'sanitize_text_field',
+						],
+						'event_action'      => [
+							'sanitize_callback' => 'sanitize_text_field',
+						],
+						'with_report_by_id' => [
+							'sanitize_callback' => 'rest_sanitize_boolean',
 						],
 					],
 				],
@@ -523,7 +514,7 @@ class Popups_Wizard extends Wizard {
 					$prompt['edit_link'] = get_edit_post_link( $prompt['id'] );
 					return $prompt;
 				},
-				$newspack_popups_configuration_manager->get_prompts( true )
+				$newspack_popups_configuration_manager->get_prompts( true, true )
 			);
 			$response['segments']  = $newspack_popups_configuration_manager->get_segments( true );
 			$response['settings']  = $newspack_popups_configuration_manager->get_settings();
@@ -562,12 +553,23 @@ class Popups_Wizard extends Wizard {
 	 * @return WP_REST_Response with the info.
 	 */
 	public function api_update_popup( $request ) {
-		$id      = $request['id'];
-		$options = $request['options'];
+		$id     = $request['id'];
+		$config = $request['config'];
 
 		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
-
-		$response = $newspack_popups_configuration_manager->set_popup_options( $id, $options );
+		$response                              = $newspack_popups_configuration_manager->set_popup_options( $id, $config['options'] );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+		$response = $newspack_popups_configuration_manager->set_popup_terms( $id, self::sanitize_terms( $config['campaign_groups'] ), 'newspack_popups_taxonomy' );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+		$response = $newspack_popups_configuration_manager->set_popup_terms( $id, self::sanitize_terms( $config['categories'] ), 'category' );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+		$response = $newspack_popups_configuration_manager->set_popup_terms( $id, self::sanitize_terms( $config['tags'] ), 'post_tag' );
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
@@ -586,7 +588,28 @@ class Popups_Wizard extends Wizard {
 
 		$popup = get_post( $id );
 		if ( is_a( $popup, 'WP_Post' ) && 'newspack_popups_cpt' === $popup->post_type ) {
-			wp_delete_post( $id );
+			if ( 'trash' === $popup->post_status ) {
+				wp_delete_post( $id, true );
+			} else {
+				wp_trash_post( $id );
+			}
+		}
+
+		return $this->api_get_settings();
+	}
+
+	/**
+	 * Restore a deleted a Pop-up.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response with complete info to render the Engagement Wizard.
+	 */
+	public function api_restore_popup( $request ) {
+		$id = $request['id'];
+
+		$popup = get_post( $id );
+		if ( is_a( $popup, 'WP_Post' ) && 'newspack_popups_cpt' === $popup->post_type ) {
+			wp_untrash_post( $id );
 		}
 
 		return $this->api_get_settings();
@@ -660,54 +683,20 @@ class Popups_Wizard extends Wizard {
 	 * @return array Sanitized array.
 	 */
 	public static function sanitize_terms( $terms ) {
+		if ( ! $terms ) {
+			$terms = [];
+		}
 		$categories = is_array( $terms ) ? $terms : [];
 		$sanitized  = [];
 		foreach ( $terms as $term ) {
+			if ( ! isset( $term['id'] ) && isset( $term['term_id'] ) ) {
+				$term['id'] = $term['term_id'];
+			}
 			$term['id']   = isset( $term['id'] ) ? absint( $term['id'] ) : null;
 			$term['name'] = isset( $term['name'] ) ? sanitize_title( $term['name'] ) : null;
 			$sanitized[]  = $term;
 		}
 		return $sanitized;
-	}
-
-	/**
-	 * Validate Pop-up option updates.
-	 *
-	 * @param array $options Array of options to validate.
-	 */
-	public static function api_validate_options( $options ) {
-		$cm = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
-
-		foreach ( $options as $key => $value ) {
-			switch ( $key ) {
-				case 'frequency':
-					if ( ! in_array( $value, [ 'once', 'daily', 'always', 'manual' ] ) ) {
-						return false;
-					}
-					break;
-				case 'placement':
-					$custom_placement_values = $cm->get_custom_placement_values();
-					if ( ! in_array( $value, array_merge( [ 'center', 'top', 'bottom', 'inline', 'above_header', 'manual' ], $custom_placement_values ) ) ) {
-						return false;
-					}
-					break;
-				case 'selected_segment_id':
-					$segments          = array_map(
-						function( $segment ) {
-							return $segment['id'];
-						},
-						$cm->get_segments()
-					);
-					$assigned_segments = explode( ',', $value );
-					if ( strlen( $value ) > 0 && 0 === count( array_intersect( $segments, $assigned_segments ) ) ) {
-						return false;
-					}
-					break;
-				default:
-					return false;
-			}
-		}
-		return true;
 	}
 
 	/**
@@ -758,9 +747,11 @@ class Popups_Wizard extends Wizard {
 	 */
 	public function get_popups_analytics_report( $request ) {
 		$options = array(
-			'offset'         => $request['offset'],
-			'event_label_id' => $request['event_label_id'],
-			'event_action'   => $request['event_action'],
+			'start_date'        => $request['start_date'],
+			'end_date'          => $request['end_date'],
+			'event_label_id'    => $request['event_label_id'],
+			'event_action'      => $request['event_action'],
+			'with_report_by_id' => $request['with_report_by_id'],
 		);
 		return rest_ensure_response( \Popups_Analytics_Utils::get_report( $options ) );
 	}

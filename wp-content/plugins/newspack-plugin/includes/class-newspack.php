@@ -41,6 +41,7 @@ final class Newspack {
 		$this->define_constants();
 		$this->includes();
 		add_action( 'admin_init', [ $this, 'admin_redirects' ] );
+		add_action( 'current_screen', [ $this, 'restrict_user_access' ] );
 		add_action( 'admin_menu', [ $this, 'handle_resets' ], 1 );
 		add_action( 'admin_menu', [ $this, 'remove_newspack_suite_plugin_links' ], 1 );
 		add_action( 'admin_notices', [ $this, 'remove_notifications' ], -9999 );
@@ -59,7 +60,6 @@ final class Newspack {
 			define( 'NEWSPACK_COMPOSER_ABSPATH', dirname( NEWSPACK_PLUGIN_FILE ) . '/vendor/' );
 		}
 		define( 'NEWSPACK_ACTIVATION_TRANSIENT', '_newspack_activation_redirect' );
-		define( 'NEWSPACK_READER_REVENUE_PLATFORM', 'newspack_reader_revenue_platform' );
 		define( 'NEWSPACK_NRH_CONFIG', 'newspack_nrh_config' );
 	}
 
@@ -109,7 +109,7 @@ final class Newspack {
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 
-		if ( 'nrh' === get_option( NEWSPACK_READER_REVENUE_PLATFORM ) ) {
+		if ( Donations::is_platform_nrh() ) {
 			include_once NEWSPACK_ABSPATH . 'includes/class-nrh.php';
 		}
 
@@ -194,6 +194,35 @@ final class Newspack {
 	 */
 	public function activation_hook() {
 		set_transient( NEWSPACK_ACTIVATION_TRANSIENT, 1, 30 );
+	}
+
+	/**
+	 * Restrict access to certain pages for non-whitelisted users.
+	 *
+	 * @param WP_Screen $current_screen Current WP_Screen object.
+	 */
+	public static function restrict_user_access( $current_screen ) {
+		if ( ! defined( 'NEWSPACK_ALLOWED_PLUGIN_EDITORS' ) ) {
+			return;
+		}
+		if ( ! is_user_logged_in() ) {
+			return;
+		}
+
+		$plugin_screens = [
+			'plugins',
+			'plugin-install',
+			'plugin-editor',
+		];
+
+		$current_user = wp_get_current_user();
+		if ( 0 !== $current_user->ID && ! in_array( $current_user->user_login, NEWSPACK_ALLOWED_PLUGIN_EDITORS ) ) {
+			if ( in_array( $current_screen->base, $plugin_screens ) ) {
+				wp_safe_redirect( get_admin_url() );
+				exit;
+			}
+			remove_menu_page( 'plugins.php' );
+		}
 	}
 
 	/**

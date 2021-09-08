@@ -38,11 +38,12 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	 * Retrieve all prompt CPTs
 	 *
 	 * @param  boolean $include_unpublished Whether to include unpublished posts.
+	 * @param  boolean $include_trash Whether to include trashed posts.
 	 * @return array All prompts
 	 */
-	public function get_prompts( $include_unpublished = false ) {
+	public function get_prompts( $include_unpublished = false, $include_trash = false ) {
 		return $this->is_configured() ?
-			\Newspack_Popups_Model::retrieve_popups( $include_unpublished ) :
+			\Newspack_Popups_Model::retrieve_popups( $include_unpublished, $include_trash ) :
 			$this->unconfigured_error();
 	}
 

@@ -31,10 +31,6 @@ class NRH {
 	 * @return string modified $html.
 	 */
 	public static function handle_custom_campaign_id( $html, $attributes ) {
-		if ( isset( $attributes['isStreamlined'] ) && true === $attributes['isStreamlined'] ) {
-			// The streamlined block communicates directly with Stripe, no need to handle linking.
-			return $html;
-		}
 		// Don't add a global campaign ID if there is already a campaign ID.
 		if ( stripos( $html, "name='campaign'" ) || stripos( $html, 'name="campaign"' ) ) {
 			return $html;
@@ -101,6 +97,13 @@ class NRH {
 	}
 
 	/**
+	 * Get NRH config.
+	 */
+	public static function get_nrh_config() {
+		return get_option( NEWSPACK_NRH_CONFIG, [] );
+	}
+
+	/**
 	 * Rewrite Donate block for News Revenue Hub submission.
 	 *
 	 * @param string $html The donate form html.
@@ -109,11 +112,6 @@ class NRH {
 	 * @return string modified $html.
 	 */
 	public static function render_nrh_donate_block( $html, $attributes ) {
-		if ( isset( $attributes['isStreamlined'] ) && true === $attributes['isStreamlined'] ) {
-			// The streamlined block communicates directly with Stripe, no need to handle linking.
-			return $html;
-		}
-
 		$settings = Donations::get_donation_settings();
 		if ( isset( $attributes['manual'] ) && true === $attributes['manual'] ) {
 			$settings['suggestedAmounts']        = $attributes['suggestedAmounts'];
@@ -143,7 +141,7 @@ class NRH {
 
 			$button_text = $attributes['buttonText'];
 
-			$nrh_config = get_option( NEWSPACK_NRH_CONFIG );
+			$nrh_config = self::get_nrh_config();
 			if ( ! isset( $nrh_config['nrh_organization_id'] ) ) {
 				// The Organisation ID is crucial.
 				return '';
