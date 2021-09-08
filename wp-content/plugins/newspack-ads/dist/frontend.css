@@ -1,0 +1,11 @@
+.stick-to-top:last-child {
+  position: -webkit-sticky;
+  position: sticky;
+  top: 1rem; }
+
+.widget_newspack-ads-widget {
+  overflow: hidden; }
+
+#page {
+  overflow: initial !important; }
+

@@ -1,0 +1,14 @@
+(window["webpackJsonp"] = window["webpackJsonp"] || []).push([[33],{
+
+/***/ "./node_modules/codemirror/mode/brainfuck/brainfuck.js":
+/*!*************************************************************!*\
+  !*** ./node_modules/codemirror/mode/brainfuck/brainfuck.js ***!
+  \*************************************************************/
+/*! no static exports found */
+/***/ (function(module, exports, __webpack_require__) {
+
+eval("// CodeMirror, copyright (c) by Marijn Haverbeke and others\n// Distributed under an MIT license: https://codemirror.net/LICENSE\n\n// Brainfuck mode created by Michael Kaminsky https://github.com/mkaminsky11\n\n(function(mod) {\n  if (true)\n    mod(__webpack_require__(/*! ../../lib/codemirror */ \"./node_modules/codemirror/lib/codemirror.js\"))\n  else {}\n})(function(CodeMirror) {\n  \"use strict\"\n  var reserve = \"><+-.,[]\".split(\"\");\n  /*\n  comments can be either:\n  placed behind lines\n\n        +++    this is a comment\n\n  where reserved characters cannot be used\n  or in a loop\n  [\n    this is ok to use [ ] and stuff\n  ]\n  or preceded by #\n  */\n  CodeMirror.defineMode(\"brainfuck\", function() {\n    return {\n      startState: function() {\n        return {\n          commentLine: false,\n          left: 0,\n          right: 0,\n          commentLoop: false\n        }\n      },\n      token: function(stream, state) {\n        if (stream.eatSpace()) return null\n        if(stream.sol()){\n          state.commentLine = false;\n        }\n        var ch = stream.next().toString();\n        if(reserve.indexOf(ch) !== -1){\n          if(state.commentLine === true){\n            if(stream.eol()){\n              state.commentLine = false;\n            }\n            return \"comment\";\n          }\n          if(ch === \"]\" || ch === \"[\"){\n            if(ch === \"[\"){\n              state.left++;\n            }\n            else{\n              state.right++;\n            }\n            return \"bracket\";\n          }\n          else if(ch === \"+\" || ch === \"-\"){\n            return \"keyword\";\n          }\n          else if(ch === \"<\" || ch === \">\"){\n            return \"atom\";\n          }\n          else if(ch === \".\" || ch === \",\"){\n            return \"def\";\n          }\n        }\n        else{\n          state.commentLine = true;\n          if(stream.eol()){\n            state.commentLine = false;\n          }\n          return \"comment\";\n        }\n        if(stream.eol()){\n          state.commentLine = false;\n        }\n      }\n    };\n  });\nCodeMirror.defineMIME(\"text/x-brainfuck\",\"brainfuck\")\n});\n\n\n//# sourceURL=webpack:///./node_modules/codemirror/mode/brainfuck/brainfuck.js?");
+
+/***/ })
+
+}]);

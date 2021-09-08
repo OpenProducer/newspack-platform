@@ -1,0 +1,55 @@
+@import '~@wordpress/base-styles/colors';
+
+.newspack-ads-ad-unit {
+	margin: 0 0 28px;
+	max-width: 100%;
+	overflow-x: hidden;
+	position: relative;
+	width: 100%;
+
+	.components-placeholder {
+		border: 1px solid $gray-900;
+		border-radius: 0;
+		box-shadow: none;
+		margin: 0;
+		min-height: 100px;
+		padding: 0;
+
+		&__fieldset {
+			justify-content: center;
+			align-items: center;
+			flex-direction: row !important;
+		}
+		&__label {
+			display: none;
+		}
+	}
+
+	.components-spinner {
+		margin: -9px 0 0 -9px;
+		position: absolute;
+		top: 50%;
+		left: 50%;
+	}
+
+	.components-base-control {
+		position: absolute;
+		padding: 10px;
+		label {
+			font-weight: 600;
+		}
+	}
+	.components-select-control {
+		align-items: center;
+	}
+}
+
+// Align center
+.wp-block[data-type='newspack-ads/ad-unit'] {
+	&[data-align='center'] {
+		.components-placeholder {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+}
