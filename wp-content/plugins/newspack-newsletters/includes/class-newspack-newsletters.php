@@ -842,8 +842,9 @@ final class Newspack_Newsletters {
 			'service_provider' => $service_provider ? $service_provider : '',
 			'status'           => false,
 		];
+		$is_esp_manual    = 'manual' === $service_provider;
 
-		if ( ! self::$provider && get_option( 'newspack_newsletters_mailchimp_api_key', false ) ) {
+		if ( ! $is_esp_manual && ! self::$provider && get_option( 'newspack_newsletters_mailchimp_api_key', false ) ) {
 			// Legacy – Mailchimp provider set before multi-provider handling was set up.
 			self::set_service_provider( 'mailchimp' );
 		}
@@ -853,7 +854,7 @@ final class Newspack_Newsletters {
 		}
 
 		if (
-			'manual' === $service_provider ||
+			$is_esp_manual ||
 			( self::$provider && self::$provider->has_api_credentials() )
 		) {
 			$response['status'] = true;
@@ -1098,6 +1099,18 @@ final class Newspack_Newsletters {
 	 */
 	public static function get_esp_lists() {
 		if ( self::is_service_provider_configured() ) {
+			if ( 'manual' === self::service_provider() ) {
+				return new WP_Error(
+					'newspack_newsletters_manual_lists',
+					__( 'Lists not available while using manual configuration.', 'newspack-newsletters' )
+				);
+			}
+			if ( ! self::$provider ) {
+				return new WP_Error(
+					'newspack_newsletters_esp_not_a_provider',
+					__( 'Lists not available for the current Newsletters setup.', 'newspack-newsletters' )
+				);
+			}
 			try {
 				return self::$provider->get_lists();
 			} catch ( \Exception $e ) {

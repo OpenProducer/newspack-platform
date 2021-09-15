@@ -1,3 +1,11 @@
+## [1.33.1](https://github.com/Automattic/newspack-newsletters/compare/v1.33.0...v1.33.1) (2021-09-14)
+
+
+### Bug Fixes
+
+* handle unavailable lists ([#585](https://github.com/Automattic/newspack-newsletters/issues/585)) ([c84cc77](https://github.com/Automattic/newspack-newsletters/commit/c84cc779d4d55deb5a26fbe6b3a224dd414e2533))
+* manual provider setting ([1c8811a](https://github.com/Automattic/newspack-newsletters/commit/1c8811a03635ed166007635af6086d8885a9f141))
+
 # [1.33.0](https://github.com/Automattic/newspack-newsletters/compare/v1.32.1...v1.33.0) (2021-09-08)
 
 

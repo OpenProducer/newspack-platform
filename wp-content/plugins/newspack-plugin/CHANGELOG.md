@@ -1,3 +1,10 @@
+## [1.56.1](https://github.com/Automattic/newspack-plugin/compare/v1.56.0...v1.56.1) (2021-09-14)
+
+
+### Bug Fixes
+
+* **stripe:** error handling ([#1128](https://github.com/Automattic/newspack-plugin/issues/1128)) ([3ce5378](https://github.com/Automattic/newspack-plugin/commit/3ce5378da41498c65b8663dc1cdc7469e3f89d5b)), closes [#1116](https://github.com/Automattic/newspack-plugin/issues/1116)
+
 # [1.56.0](https://github.com/Automattic/newspack-plugin/compare/v1.55.0...v1.56.0) (2021-09-08)
 
 

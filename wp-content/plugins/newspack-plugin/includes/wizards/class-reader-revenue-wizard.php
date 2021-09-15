@@ -636,7 +636,8 @@ class Reader_Revenue_Wizard extends Wizard {
 			$nrh_config            = get_option( NEWSPACK_NRH_CONFIG, [] );
 			$args['platform_data'] = wp_parse_args( $nrh_config, $args['platform_data'] );
 		} elseif ( Donations::is_platform_stripe() ) {
-			$args['stripe_data']['webhooks'] = Stripe_Connection::list_webhooks();
+			$args['stripe_data']['webhooks']         = Stripe_Connection::list_webhooks();
+			$args['stripe_data']['connection_error'] = Stripe_Connection::get_connection_error();
 		}
 		return $args;
 	}

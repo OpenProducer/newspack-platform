@@ -119,7 +119,7 @@ class Stripe_Connection {
 		$stripe = self::get_stripe_client();
 		try {
 			return $stripe->webhookEndpoints->all()['data']; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'stripe_webhooks', __( 'Could not fetch webhooks.', 'newspack' ), $e->getMessage() );
 		}
 	}
@@ -133,7 +133,7 @@ class Stripe_Connection {
 		$stripe = self::get_stripe_client();
 		try {
 			return $stripe->customers->retrieve( $customer_id, [] ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'stripe_webhooks', __( 'Could not fetch customer.', 'newspack' ), $e->getMessage() );
 		}
 	}
@@ -147,7 +147,7 @@ class Stripe_Connection {
 		$stripe = self::get_stripe_client();
 		try {
 			return $stripe->invoices->retrieve( $invoice_id, [] ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'stripe_webhooks', __( 'Could not fetch invoice.', 'newspack' ), $e->getMessage() );
 		}
 	}
@@ -171,7 +171,7 @@ class Stripe_Connection {
 				$sig_header,
 				$webhook['secret']
 			);
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'newspack_webhook_error' );
 		}
 
@@ -300,7 +300,7 @@ class Stripe_Connection {
 					'secret' => $webhook->secret,
 				]
 			);
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'newspack_plugin_stripe', __( 'Webhook creation failed.', 'newspack' ), $e->getMessage() );
 		}
 		return self::list_webhooks();
@@ -399,7 +399,7 @@ class Stripe_Connection {
 				$prices_mapped['year'] = self::create_donation_product( __( 'Newspack Annual Donation', 'newspack' ), 'year' );
 			}
 			return $prices_mapped;
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'newspack_plugin_stripe', __( 'Products retrieval failed.', 'newspack' ), $e->getMessage() );
 		}
 	}
@@ -411,6 +411,22 @@ class Stripe_Connection {
 		$secret_key = self::get_stripe_secret_key();
 		if ( $secret_key ) {
 			return new \Stripe\StripeClient( $secret_key );
+		}
+	}
+
+	/**
+	 * Check connection to Stripe.
+	 */
+	public static function get_connection_error() {
+		if ( ! self::get_stripe_secret_key() ) {
+			return __( 'Stripe secret key not provided.', 'newspack' );
+		}
+		$stripe = self::get_stripe_client();
+		try {
+			$products = $stripe->products->all( [ 'limit' => 1 ] );
+			return false;
+		} catch ( \Throwable $e ) {
+			return $e->getMessage();
 		}
 	}
 
@@ -556,7 +572,7 @@ class Stripe_Connection {
 					$response['status'] = 'success';
 				}
 			}
-		} catch ( \Exception $e ) {
+		} catch ( \Throwable $e ) {
 			$response['error'] = $e->getMessage();
 		}
 		return $response;
