@@ -512,16 +512,35 @@ class Plugin_Manager {
 	}
 
 	/**
+	 * Get the list of plugins which are supported, but not managed.
+	 * These plugins will not be added to the WP Admin plugins screen,
+	 * but installing them will not raise any issues in Health Check.
+	 */
+	private static function get_supported_plugins_slugs() {
+		return [
+			'gutenberg',
+			'classic-widgets',
+			'republication-tracker-tool',
+			'the-events-calendar',
+		];
+	}
+
+	/**
 	 * Get info about all the unmanaged plugins that are installed.
 	 *
 	 * @return array of plugin info.
 	 */
-	public static function get_unmanaged_plugins() {
-		$plugins_info      = self::get_installed_plugins_info();
-		$managed_plugins   = self::get_managed_plugins();
-		$unmanaged_plugins = [];
+	public static function get_unsupported_plugins() {
+		$plugins_info            = self::get_installed_plugins_info();
+		$managed_plugins         = self::get_managed_plugins();
+		$supported_plugins_slugs = self::get_supported_plugins_slugs();
+		$unmanaged_plugins       = [];
 		foreach ( $plugins_info as $slug => $info ) {
-			if ( ! isset( $managed_plugins[ $slug ] ) && 0 !== strpos( $slug, 'newspack-' ) && is_plugin_active( $info['Path'] ) ) {
+			$is_managed      = ! isset( $managed_plugins[ $slug ] );
+			$is_not_newspack = 0 !== strpos( $slug, 'newspack-' );
+			$is_active       = is_plugin_active( $info['Path'] );
+			$is_supported    = in_array( $slug, $supported_plugins_slugs );
+			if ( ! $is_supported && $is_managed && $is_not_newspack && $is_active ) {
 				$unmanaged_plugins[ $slug ] = $info;
 			}
 		}

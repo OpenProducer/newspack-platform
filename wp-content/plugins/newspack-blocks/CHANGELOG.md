@@ -1,3 +1,19 @@
+# [1.38.0](https://github.com/Automattic/newspack-blocks/compare/v1.37.1...v1.38.0) (2021-09-21)
+
+
+### Features
+
+* add a filter on terms so other plugins can add classes ([#872](https://github.com/Automattic/newspack-blocks/issues/872)) ([28c0fde](https://github.com/Automattic/newspack-blocks/commit/28c0fde9a7b8875acee247e7f2e59a872f5d1d39))
+* allow some html in the homepage posts subtitle ([#869](https://github.com/Automattic/newspack-blocks/issues/869)) ([82cea66](https://github.com/Automattic/newspack-blocks/commit/82cea66f948f6197b322c1783c3fc02e0230915d))
+* disable Jetpack donations when using Newspack donations ([#875](https://github.com/Automattic/newspack-blocks/issues/875)) ([54ad5b7](https://github.com/Automattic/newspack-blocks/commit/54ad5b70d224725d268a57b48dff80e9ff80ff18))
+
+## [1.37.1](https://github.com/Automattic/newspack-blocks/compare/v1.37.0...v1.37.1) (2021-09-09)
+
+
+### Bug Fixes
+
+* specify whitespace between author prefix and byline ([#866](https://github.com/Automattic/newspack-blocks/issues/866)) ([a91ffb7](https://github.com/Automattic/newspack-blocks/commit/a91ffb7050bd2089b48bc3e7d7e16f7d0dcac7db))
+
 # [1.37.0](https://github.com/Automattic/newspack-blocks/compare/v1.36.0...v1.37.0) (2021-09-08)
 
 

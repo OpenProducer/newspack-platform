@@ -7,6 +7,8 @@
 
 namespace Newspack;
 
+use \WP_Error;
+
 defined( 'ABSPATH' ) || exit;
 
 require_once NEWSPACK_ABSPATH . '/includes/configuration_managers/class-configuration-manager.php';
@@ -30,6 +32,41 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function is_configured() {
 		return class_exists( 'Newspack_Ads_Model' );
+	}
+
+	/**
+	 * Initial GAM setup
+	 *
+	 * @return object|WP_Error Setup results or error if it fails.
+	 */
+	public function setup_gam() {
+		return $this->is_configured() ?
+			\Newspack_Ads_Model::setup_gam() :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Update GAM credentials.
+	 *
+	 * @param array $credentials Credentials to update.
+	 *
+	 * @return object|WP_Error Connection status or error if it fails.
+	 */
+	public function update_gam_credentials( $credentials ) {
+		return $this->is_configured() ?
+			\Newspack_Ads_Model::update_gam_credentials( $credentials ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Remove GAM credentials.
+	 *
+	 * @return object|WP_Error Connection status or error if it fails.
+	 */
+	public function remove_gam_credentials() {
+		return $this->is_configured() ?
+			\Newspack_Ads_Model::remove_gam_credentials() :
+			$this->unconfigured_error();
 	}
 
 	/**

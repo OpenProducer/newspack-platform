@@ -5,11 +5,15 @@
  * @package Newspack
  */
 
+use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\AdsApi\Common\Configuration;
-use Google\AdsApi\Common\OAuth2TokenBuilder;
-use Google\AdsApi\AdManager\AdManagerServices;
 use Google\AdsApi\AdManager\AdManagerSessionBuilder;
 use Google\AdsApi\AdManager\Util\v202102\StatementBuilder;
+use Google\AdsApi\AdManager\v202102\Statement;
+use Google\AdsApi\AdManager\v202102\String_ValueMapEntry;
+use Google\AdsApi\AdManager\v202102\TextValue;
+use Google\AdsApi\AdManager\v202102\SetValue;
+use Google\AdsApi\AdManager\v202102\CustomTargetingKey;
 use Google\AdsApi\AdManager\v202102\ServiceFactory;
 use Google\AdsApi\AdManager\v202102\ArchiveAdUnits as ArchiveAdUnitsAction;
 use Google\AdsApi\AdManager\v202102\ActivateAdUnits as ActivateAdUnitsAction;
@@ -29,6 +33,8 @@ class Newspack_Ads_GAM {
 	// https://developers.google.com/ad-manager/api/soap_xml: An arbitrary string name identifying your application. This will be shown in Google's log files.
 	const GAM_APP_NAME_FOR_LOGS = 'Newspack';
 
+	const CREDENTIALS_OPTION_NAME = '_newspack_ads_gam_credentials';
+
 	/**
 	 * Codes of networks that the user has access to.
 	 *
@@ -44,29 +50,44 @@ class Newspack_Ads_GAM {
 	private static $session = null;
 
 	/**
-	 * Get service account credentials file path.
+	 * Custom targeting keys.
+	 *
+	 * @var string[]
 	 */
-	private static function service_account_credentials_file_path() {
-		return WP_CONTENT_DIR . '/google-service-account-creds.json';
+	public static $custom_targeting_keys = [
+		'ID',
+		'slug',
+		'category',
+		'post_type',
+	];
+
+	/**
+	 * Get service account credentials file path.
+	 * 
+	 * @return array|bool Associate array or false if not found.
+	 */
+	private static function get_service_account_credentials() {
+		$credentials = get_option( self::CREDENTIALS_OPTION_NAME, false );
+		return $credentials;
 	}
 
 	/**
 	 * Get OAuth2 credentials.
+	 * 
+	 * @param array $credentials (optional) Credentials array.
 	 *
 	 * @throws \Exception If the user is not authenticated.
 	 * @return object OAuth2 credentials.
 	 */
-	private static function get_google_oauth2_credentials() {
+	public static function get_google_oauth2_credentials( $credentials = false ) {
+		if ( false === $credentials ) {
+			$credentials = self::get_service_account_credentials();
+		}
+		if ( ! $credentials ) {
+			throw new \Exception( __( 'Credentials not found.', 'newspack-ads' ) );
+		}
 		try {
-			$oauth2_config = new Configuration(
-				[
-					'OAUTH2' => [
-						'scopes'          => 'https://www.googleapis.com/auth/dfp', // Google Ad Manager.
-						'jsonKeyFilePath' => self::service_account_credentials_file_path(),
-					],
-				]
-			);
-			return ( new OAuth2TokenBuilder() )->from( $oauth2_config )->build();
+			return new ServiceAccountCredentials( 'https://www.googleapis.com/auth/dfp', $credentials );
 		} catch ( \Exception $e ) {
 			throw new \Exception( $e->getMessage(), 1 );
 		}
@@ -407,15 +428,104 @@ class Newspack_Ads_GAM {
 	}
 
 	/**
+	 * Update custom targeting keys with predefined values if necessary.
+	 *
+	 * @return string[] Created custom targeting keys names or empty array if none was created.
+	 *
+	 * @throws \Exception If there is an error while communicating with the API.
+	 */
+	public static function update_custom_targeting_keys() {
+		$session = self::get_gam_session();
+		$service = ( new ServiceFactory() )->createCustomTargetingService( $session );
+
+		// Find existing keys.
+		$key_map   = [
+			new String_ValueMapEntry(
+				'name',
+				new SetValue(
+					array_map(
+						function ( $key ) {
+							return new TextValue( $key );
+						},
+						self::$custom_targeting_keys
+					)
+				)
+			),
+		];
+		$statement = new Statement( "WHERE name = :name AND status = 'ACTIVE'", $key_map );
+		try {
+			$keys = $service->getCustomTargetingKeysByStatement( $statement );
+		} catch ( \Exception $e ) {
+			throw new \Exception( __( 'Unable to find existing targeting keys', 'newspack-ads' ) );
+		}
+
+		$keys_to_create = array_values(
+			array_diff(
+				self::$custom_targeting_keys,
+				array_map(
+					function ( $key ) {
+						return $key->getName();
+					},
+					(array) $keys->getResults()
+				)
+			)
+		);
+
+		// Create custom targeting keys.
+		if ( ! empty( $keys_to_create ) ) {
+			try {
+				$created_keys = $service->createCustomTargetingKeys(
+					array_map(
+						function ( $key ) {
+								return ( new CustomTargetingKey() )->setName( $key )->setType( 'FREEFORM' );
+						},
+						$keys_to_create
+					)
+				);
+			} catch ( \Exception $e ) {
+				throw new \Exception( __( 'Unable to create custom targeting keys', 'newspack-ads' ) );
+			}
+			return array_map(
+				function( $key ) {
+					return $key->getName();
+				},
+				$created_keys
+			);
+		}
+		return [];
+	}
+
+	/**
+	 * Verify WP environment to make sure it's safe to use GAM.
+	 * 
+	 * @return bool Whether it's safe to use GAM.
+	 */
+	public static function is_environment_compatible() {
+		// Constant Contact Form plugin loads an old version of Guzzle that breaks the SDK.
+		if ( class_exists( 'Constant_Contact' ) ) {
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Get GAM connection status.
 	 *
 	 * @return object Object with status information.
 	 */
 	public static function connection_status() {
-		$response = [ 'can_connect' => file_exists( self::service_account_credentials_file_path() ) ];
+		if ( false === self::is_environment_compatible() ) {
+			return [
+				'incompatible' => true,
+				'can_connect'  => false,
+				'connected'    => false,
+				'error'        => __( 'Cannot connect to Google Ad Manager. This WordPress instance is not compatible with this feature.', 'newspack-ads' ),
+			];
+		}
+		$response = [ 'can_connect' => false !== self::get_service_account_credentials() ];
 		try {
-			$network_code          = self::get_gam_network_code();
-			$response['connected'] = true;
+			$response['network_code'] = self::get_gam_network_code();
+			$response['connected']    = true;
 		} catch ( \Exception $e ) {
 			$response['connected'] = false;
 			$response['error']     = $e->getMessage();

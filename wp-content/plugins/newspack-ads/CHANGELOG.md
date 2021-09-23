@@ -1,3 +1,17 @@
+# [1.17.0](https://github.com/Automattic/newspack-ads/compare/v1.16.0...v1.17.0) (2021-09-22)
+
+
+### Bug Fixes
+
+* handle legacy network code and incompatible plugin ([#184](https://github.com/Automattic/newspack-ads/issues/184)) ([a9a17e4](https://github.com/Automattic/newspack-ads/commit/a9a17e45effa2a72ae53086d3ea87996d8e90b52))
+
+
+### Features
+
+* **gam:** custom targeting key-values on setup ([#172](https://github.com/Automattic/newspack-ads/issues/172)) ([c520aa3](https://github.com/Automattic/newspack-ads/commit/c520aa34e51de03dd5fa8335e87c18ae41a788bc))
+* **gam:** service account credential options ([#181](https://github.com/Automattic/newspack-ads/issues/181)) ([4c7d6fd](https://github.com/Automattic/newspack-ads/commit/4c7d6fdf5f07b607323e6b88c229042b618d8a05))
+* **targeting:** add slug back ([f3095d0](https://github.com/Automattic/newspack-ads/commit/f3095d0e386af79f1752ec78beef230d7234927d))
+
 # [1.16.0](https://github.com/Automattic/newspack-ads/compare/v1.15.0...v1.16.0) (2021-09-08)
 
 

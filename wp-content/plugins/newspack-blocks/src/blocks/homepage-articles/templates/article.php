@@ -124,9 +124,31 @@ call_user_func(
 			?>
 			<?php
 			if ( $attributes['showSubtitle'] ) :
+				$subtitle = get_post_meta( $post_id, 'newspack_post_subtitle', true );
+
 				?>
 				<div class="newspack-post-subtitle newspack-post-subtitle--in-homepage-block">
-					<?php echo esc_html( get_post_meta( $post_id, 'newspack_post_subtitle', true ) ); ?>
+					<?php
+					echo wp_kses(
+						$subtitle,
+						[
+							'b'      => true,
+							'strong' => true,
+							'i'      => true,
+							'em'     => true,
+							'mark'   => true,
+							'u'      => true,
+							'small'  => true,
+							'sub'    => true,
+							'sup'    => true,
+							'a'      => array(
+								'href'   => true,
+								'target' => true,
+								'rel'    => true,
+							),
+						]
+					);
+					?>
 				</div>
 			<?php endif; ?>
 			<?php

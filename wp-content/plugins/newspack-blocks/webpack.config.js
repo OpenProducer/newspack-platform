@@ -17,7 +17,6 @@ const blockList = JSON.parse( fs.readFileSync( blockListFile ) );
  * Internal variables
  */
 const editorSetup = path.join( __dirname, 'src', 'setup', 'editor' );
-const viewSetup = path.join( __dirname, 'src', 'setup', 'view' );
 
 function blockScripts( type, inputDir, blocks ) {
 	return blocks
@@ -35,7 +34,7 @@ const blocks = fs
 const viewBlocksScripts = blocks.reduce( ( viewBlocks, block ) => {
 	const viewScriptPath = path.join( __dirname, 'src', 'blocks', block, 'view.js' );
 	if ( fs.existsSync( viewScriptPath ) ) {
-		viewBlocks[ block + '/view' ] = [ viewSetup, ...[ viewScriptPath ] ];
+		viewBlocks[ block + '/view' ] = viewScriptPath;
 	}
 	return viewBlocks;
 }, {} );

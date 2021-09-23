@@ -1243,6 +1243,7 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
     display: flex;
     justify-content: center;
     max-width: 100%;
+    min-height: 48px;
     position: relative; }
     .newspack-image-upload__image--covering {
       background-size: cover; }
@@ -1255,7 +1256,8 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
       .newspack-image-upload__image:not(.newspack-image-upload__image--has-image) .newspack-button:focus {
         outline-offset: -3px !important; }
     .newspack-image-upload__image--has-image {
-      border: none; }
+      border: none;
+      overflow: hidden; }
       .newspack-image-upload__image--has-image::before, .newspack-image-upload__image--has-image::after {
         border: 1px solid rgba(0, 0, 0, 0.125);
         border-radius: 3px;
@@ -1279,12 +1281,22 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
         opacity: 1; }
       .newspack-image-upload__image--has-image:focus-within button, .newspack-image-upload__image--has-image:focus-within::after, .newspack-image-upload__image--has-image:hover button, .newspack-image-upload__image--has-image:hover::after {
         opacity: 1; }
+      .newspack-image-upload__image--has-image img {
+        max-height: 100%;
+        max-width: 100%; }
       .newspack-image-upload__image--has-image .sep {
         background: transparent;
         display: block;
         height: 8px;
         margin: 0;
         width: 100%; }
+  .newspack-image-upload__image + .newspack-image-upload__help {
+    margin: 0; }
+  .newspack-image-upload__controls {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    position: absolute; }
 
 /**
  * Grid

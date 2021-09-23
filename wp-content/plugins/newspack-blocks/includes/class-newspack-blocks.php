@@ -23,6 +23,7 @@ class Newspack_Blocks {
 		add_post_type_support( 'post', 'newspack_blocks' );
 		add_post_type_support( 'page', 'newspack_blocks' );
 		add_filter( 'script_loader_tag', [ __CLASS__, 'mark_view_script_as_amp_plus_allowed' ], 10, 2 );
+		add_action( 'jetpack_register_gutenberg_extensions', [ __CLASS__, 'disable_jetpack_donate' ], 99 );
 	}
 
 	/**
@@ -565,6 +566,15 @@ class Newspack_Blocks {
 			$classes[] = 'type-' . $post_type;
 		}
 
+		/**
+		 * Filter the array of class names before applying them to the HTML.
+		 *
+		 * @param array $classes Array of term class names.
+		 *
+		 * @return array Filtered array of term class names.
+		 */
+		$classes = apply_filters( 'newspack_blocks_term_classes', $classes );
+
 		return implode( ' ', $classes );
 	}
 
@@ -935,6 +945,29 @@ class Newspack_Blocks {
 		];
 
 		return wp_kses( $svg, $allowed_html );
+	}
+
+	/**
+	 * Disable Jetpack's donate block when using Newspack donations.
+	 */
+	public static function disable_jetpack_donate() {
+
+		// Do nothing if Jetpack's blocks aren't being used.
+		if ( ! class_exists( 'Jetpack_Gutenberg' ) ) {
+			return;
+		}
+
+		// Allow Jetpack donations if Newspack donations isn't set up.
+		$donate_settings = Newspack\Donations::get_donation_settings();
+		if ( is_wp_error( $donate_settings ) || ! $donate_settings['created'] ) {
+			return;
+		}
+
+		// Tell Jetpack to mark the donations feature as unavailable.
+		Jetpack_Gutenberg::set_extension_unavailable(
+			'jetpack/donations',
+			esc_html__( 'Jetpack donations is disabled in favour of Newspack donations.', 'newspack-blocks' )
+		);
 	}
 }
 Newspack_Blocks::init();

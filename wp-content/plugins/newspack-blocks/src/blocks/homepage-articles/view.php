@@ -221,7 +221,7 @@ function newspack_blocks_format_byline( $author_info ) {
 	$index    = -1;
 	$elements = array_merge(
 		[
-			'<span class="author-prefix">' . esc_html_x( 'by', 'post author', 'newspack-blocks' ) . ' </span>',
+			'<span class="author-prefix">' . esc_html_x( 'by', 'post author', 'newspack-blocks' ) . '</span> ',
 		],
 		array_reduce(
 			$author_info,

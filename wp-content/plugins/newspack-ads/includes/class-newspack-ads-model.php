@@ -12,7 +12,12 @@ class Newspack_Ads_Model {
 	const SIZES = 'sizes';
 	const CODE  = 'code';
 
-	const OPTION_NAME_NETWORK_CODE          = '_newspack_ads_service_google_ad_manager_network_code';
+	// Legacy network code manually inserted.
+	const OPTION_NAME_LEGACY_NETWORK_CODE = '_newspack_ads_service_google_ad_manager_network_code';
+
+	// GAM network code pulled from user credentials.
+	const OPTION_NAME_GAM_NETWORK_CODE = '_newspack_ads_gam_network_code';
+
 	const OPTION_NAME_GAM_ITEMS             = '_newspack_ads_gam_items';
 	const OPTION_NAME_GLOBAL_AD_SUPPRESSION = '_newspack_global_ad_suppression';
 
@@ -54,6 +59,21 @@ class Newspack_Ads_Model {
 				'show_in_rest'       => true,
 			)
 		);
+	}
+
+	/**
+	 * Initial GAM setup.
+	 *
+	 * @return object|WP_Error Setup results or error if setup fails.
+	 */
+	public static function setup_gam() {
+		$setup_results = array();
+		try {
+			$setup_results['created_targeting_keys'] = Newspack_Ads_GAM::update_custom_targeting_keys();
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_ads_setup_gam', $e->getMessage() );
+		}
+		return $setup_results;
 	}
 
 	/**
@@ -171,8 +191,11 @@ class Newspack_Ads_Model {
 		if ( ! self::is_gam_connected() ) {
 			return $legacy_ad_units;
 		}
-		$ad_units = Newspack_Ads_GAM::get_serialised_gam_ad_units();
-		self::sync_gam_settings( $ad_units );
+		$ad_units    = Newspack_Ads_GAM::get_serialised_gam_ad_units();
+		$sync_result = self::sync_gam_settings( $ad_units );
+		if ( \is_wp_error( $sync_result ) ) {
+			return $sync_result;
+		}
 		return array_merge( $ad_units, $legacy_ad_units );
 	}
 
@@ -308,8 +331,9 @@ class Newspack_Ads_Model {
 	 * @return string The network code.
 	 */
 	public static function get_active_network_code() {
-		$network_code = get_option( self::OPTION_NAME_NETWORK_CODE, '' );
-		return sanitize_text_field( $network_code );
+		$gam_network_code    = get_option( self::OPTION_NAME_GAM_NETWORK_CODE, '' );
+		$legacy_network_code = get_option( self::OPTION_NAME_LEGACY_NETWORK_CODE, '' );
+		return sanitize_text_field( ! empty( $gam_network_code ) ? $gam_network_code : $legacy_network_code );
 	}
 
 	/**
@@ -327,8 +351,15 @@ class Newspack_Ads_Model {
 			$serialised_ad_units = Newspack_Ads_GAM::get_serialised_gam_ad_units();
 		}
 		if ( null === $settings ) {
-			$settings             = Newspack_Ads_GAM::get_gam_settings();
-			$network_code_matches = self::is_network_code_matched();
+			try {
+				$settings             = Newspack_Ads_GAM::get_gam_settings();
+				$network_code_matches = self::is_network_code_matched();
+			} catch ( \Exception $e ) {
+				return new WP_Error(
+					'newspack_ads_failed_gam_sync',
+					__( 'Unable to synchronize with GAM', 'newspack-ads' )
+				);
+			}
 		} else {
 			$network_code_matches = true;
 		}
@@ -340,7 +371,7 @@ class Newspack_Ads_Model {
 			$synced_gam_items                              = get_option( self::OPTION_NAME_GAM_ITEMS, [] );
 			$network_code                                  = sanitize_text_field( $settings['network_code'] );
 			$synced_gam_items[ $network_code ]['ad_units'] = $serialised_ad_units;
-			update_option( self::OPTION_NAME_NETWORK_CODE, $network_code );
+			update_option( self::OPTION_NAME_LEGACY_NETWORK_CODE, $network_code );
 			update_option( self::OPTION_NAME_GAM_ITEMS, $synced_gam_items );
 		}
 	}
@@ -352,19 +383,19 @@ class Newspack_Ads_Model {
 	 * @return boolean True if there is a network code mismatch.
 	 */
 	private static function is_network_code_matched() {
-		$active_network_code = self::get_active_network_code();
-		if ( 0 === $active_network_code ) {
+		$legacy_network_code = get_option( self::OPTION_NAME_LEGACY_NETWORK_CODE, '' );
+		if ( empty( $legacy_network_code ) ) {
 			// No network code set yet.
 			return true;
 		}
 		try {
-			$user_network_code = Newspack_Ads_GAM::get_gam_network_code();
+			$gam_network_code = get_option( self::OPTION_NAME_GAM_NETWORK_CODE, '' );
 
 			// Active Network Code might be a comma-delimited list of codes.
 			return array_reduce(
-				explode( ',', $active_network_code ),
-				function( $valid_code, $code ) use ( $user_network_code ) {
-					if ( absint( $code ) === absint( $user_network_code ) ) {
+				explode( ',', $legacy_network_code ),
+				function( $valid_code, $code ) use ( $gam_network_code ) {
+					if ( absint( $code ) === absint( $gam_network_code ) ) {
 						$valid_code = true;
 					}
 					return $valid_code;
@@ -706,6 +737,12 @@ class Newspack_Ads_Model {
 		$targeting = [];
 
 		if ( is_singular() ) {
+			// Add the post slug to targeting.
+			$slug = get_post_field( 'post_name' );
+			if ( $slug ) {
+				$targeting['slug'] = sanitize_text_field( $slug );
+			}
+
 			// Add the category slugs to targeting.
 			$categories = wp_get_post_categories( get_the_ID(), [ 'fields' => 'slugs' ] );
 			if ( ! empty( $categories ) ) {
@@ -755,8 +792,12 @@ class Newspack_Ads_Model {
 	 * @return object Object with status information.
 	 */
 	public static function get_gam_connection_status() {
-		$status                 = Newspack_Ads_GAM::connection_status();
-		$status['network_code'] = self::get_active_network_code();
+		$status = Newspack_Ads_GAM::connection_status();
+		if ( isset( $status['network_code'] ) ) {
+			update_option( self::OPTION_NAME_GAM_NETWORK_CODE, $status['network_code'] );
+		} else {
+			$status['network_code'] = self::get_active_network_code();
+		}
 		if ( true === $status['connected'] ) {
 			$status['is_network_code_matched'] = self::is_network_code_matched();
 		}
@@ -777,6 +818,40 @@ class Newspack_Ads_Model {
 				'author_archive_pages'            => false,
 			]
 		);
+	}
+
+	/**
+	 * Update GAM credentials.
+	 * 
+	 * @param array $credentials Credentials to update.
+	 * 
+	 * @return object Object with status information.
+	 */
+	public static function update_gam_credentials( $credentials ) {
+		try {
+			Newspack_Ads_GAM::get_google_oauth2_credentials( $credentials );
+		} catch ( \Exception $e ) {
+			return new WP_Error( 'newspack_ads_gam_credentials', $e->getMessage() );
+		}
+		$updated = update_option( Newspack_Ads_GAM::CREDENTIALS_OPTION_NAME, $credentials );
+		if ( ! $updated ) {
+			return new WP_Error( 'newspack_ads_gam_credentials', __( 'Unable to update GAM credentials', 'newspack-ads' ) );
+		}
+		return self::get_gam_connection_status();
+	}
+
+	/**
+	 * Clear existing GAM credentials.
+	 *
+	 * @return object Object with status information.
+	 */
+	public static function remove_gam_credentials() {
+		$deleted_credentials  = delete_option( Newspack_Ads_GAM::CREDENTIALS_OPTION_NAME );
+		$deleted_network_code = delete_option( self::OPTION_NAME_GAM_NETWORK_CODE );
+		if ( ! $deleted_credentials || ! $deleted_network_code ) {
+			return new WP_Error( 'newspack_ads_gam_credentials', __( 'Unable to remove GAM credentials', 'newspack-ads' ) );
+		}
+		return self::get_gam_connection_status();
 	}
 
 	/**

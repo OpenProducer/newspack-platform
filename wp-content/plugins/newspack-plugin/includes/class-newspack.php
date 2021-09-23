@@ -48,6 +48,13 @@ final class Newspack {
 		add_action( 'network_admin_notices', [ $this, 'remove_notifications' ], -9999 );
 		add_action( 'all_admin_notices', [ $this, 'remove_notifications' ], -9999 );
 		register_activation_hook( NEWSPACK_PLUGIN_FILE, [ $this, 'activation_hook' ] );
+
+		// Disable the block-based widget editing altogether until further notice.
+		// See https://github.com/Automattic/newspack-plugin/issues/1124.
+		// Disables the block editor from managing widgets in the Gutenberg plugin.
+		add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
+		// Disables the block editor from managing widgets.
+		add_filter( 'use_widgets_block_editor', '__return_false' );
 	}
 
 	/**
@@ -106,6 +113,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-starter-content.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-amp-enhancements.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-webhooks.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-newspack-image-credits.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 

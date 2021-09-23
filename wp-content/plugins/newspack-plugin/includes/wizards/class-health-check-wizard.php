@@ -134,7 +134,7 @@ class Health_Check_Wizard extends Wizard {
 	 * Delete all unsupported plugins
 	 */
 	public function api_delete_unsupported_plugins() {
-		$unsupported_plugins = Plugin_Manager::get_unmanaged_plugins();
+		$unsupported_plugins = Plugin_Manager::get_unsupported_plugins();
 		foreach ( $unsupported_plugins as $slug => $data ) {
 			Plugin_Manager::deactivate( $slug );
 		}
@@ -152,7 +152,8 @@ class Health_Check_Wizard extends Wizard {
 		$sitekit_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
 
 		return array(
-			'unsupported_plugins'  => Plugin_Manager::get_unmanaged_plugins(),
+			'unsupported_plugins'  => Plugin_Manager::get_unsupported_plugins(),
+			'missing_plugins'      => Plugin_Manager::get_missing_plugins(),
 			'configuration_status' => [
 				'amp'     => $amp_manager->is_standard_mode(),
 				'jetpack' => $jetpack_manager->is_configured(),

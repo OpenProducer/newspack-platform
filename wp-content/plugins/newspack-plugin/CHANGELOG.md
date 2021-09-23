@@ -1,3 +1,22 @@
+# [1.57.0](https://github.com/Automattic/newspack-plugin/compare/v1.56.1...v1.57.0) (2021-09-22)
+
+
+### Bug Fixes
+
+* **ads:** network code and credentials control ([#1151](https://github.com/Automattic/newspack-plugin/issues/1151)) ([cd911a5](https://github.com/Automattic/newspack-plugin/commit/cd911a5a01ebf2f001acadaac3c2a5aa8c394879))
+* **setup:** install WC only if Reader Revenue is enabled ([9953c30](https://github.com/Automattic/newspack-plugin/commit/9953c3091ce1d652c58c6752a01d3bf2a520c703)), closes [#1106](https://github.com/Automattic/newspack-plugin/issues/1106)
+
+
+### Features
+
+* integrate newspack-image-credits into main plugin and wizard UI ([#1147](https://github.com/Automattic/newspack-plugin/issues/1147)) ([3244c07](https://github.com/Automattic/newspack-plugin/commit/3244c070eeaf31e15b3302cec47359b454899a43))
+* **ads:** gam service account credentials upload ([#1149](https://github.com/Automattic/newspack-plugin/issues/1149)) ([66c440d](https://github.com/Automattic/newspack-plugin/commit/66c440d0ec9447787cc2f79bce2196e728adcb53))
+* **Ads:** Custom targeting keys integration ([#1146](https://github.com/Automattic/newspack-plugin/issues/1146)) ([e561381](https://github.com/Automattic/newspack-plugin/commit/e5613811ac513f814c2ff489f23044e28b334dbc))
+* **ads-wizard:** sanitize ads suppression config ([7526ea9](https://github.com/Automattic/newspack-plugin/commit/7526ea9918a67d31a632d9c311057de606b421f1)), closes [#1112](https://github.com/Automattic/newspack-plugin/issues/1112)
+* **health-check:** supported yet unmanaged plugins ([#1139](https://github.com/Automattic/newspack-plugin/issues/1139)) ([f392d25](https://github.com/Automattic/newspack-plugin/commit/f392d25de6eef6465a33b5022ed4b9b27d08357b))
+* **oauth:** use a self-hosted proxy for authenication ([#1122](https://github.com/Automattic/newspack-plugin/issues/1122)) ([9afb4ab](https://github.com/Automattic/newspack-plugin/commit/9afb4ab4a059dc6f3389f71d93670be3349a5aa6))
+* disable block-based widget editing ([804cc29](https://github.com/Automattic/newspack-plugin/commit/804cc29ae8441b3543e9ec043e63f533b02f71b5)), closes [#1124](https://github.com/Automattic/newspack-plugin/issues/1124)
+
 ## [1.56.1](https://github.com/Automattic/newspack-plugin/compare/v1.56.0...v1.56.1) (2021-09-14)
 
 

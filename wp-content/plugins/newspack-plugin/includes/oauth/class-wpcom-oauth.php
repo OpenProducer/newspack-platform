@@ -195,17 +195,5 @@ class WPCOM_OAuth {
 	public static function wpcom_client_id() {
 		return ( defined( 'NEWSPACK_WPCOM_CLIENT_ID' ) && NEWSPACK_WPCOM_CLIENT_ID ) ? NEWSPACK_WPCOM_CLIENT_ID : false;
 	}
-
-	/**
-	 * Is the authenticated user a Newspack customer?
-	 */
-	public static function is_newspack_customer() {
-		try {
-			$response = self::perform_wpcom_api_request( 'rest/v1.1/newspack/is-customer' );
-			return 200 === $response->status;
-		} catch ( \Exception $e ) {
-			return false;
-		}
-	}
 }
 new WPCOM_OAuth();
