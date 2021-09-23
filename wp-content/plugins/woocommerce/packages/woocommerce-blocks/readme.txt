@@ -1,10 +1,10 @@
 === WooCommerce Blocks ===
 Contributors: automattic, woocommerce, claudiulodro, tiagonoronha, jameskoster, ryelle, levinmedia, aljullu, mikejolley, nerrad, joshuawold, assassinateur, haszari
 Tags: gutenberg, woocommerce, woo commerce, products, blocks, woocommerce blocks
-Requires at least: 5.5
+Requires at least: 5.8
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 5.5.1
+Stable tag: 5.7.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -20,7 +20,7 @@ Use this plugin if you want access to the bleeding edge of available blocks for 
 
 - **Featured Product Block**
 - **Featured Category Block**
-- **Hand-Picked products Block**
+- **Hand-picked Products Block**
 - **Best Selling Products Block**
 - **Top Rated Products Block**
 - **Newest Products Block**
@@ -44,8 +44,7 @@ Use this plugin if you want access to the bleeding edge of available blocks for 
 
 = Minimum Requirements =
 
-* WordPress 5.5 or greater
-* WooCommerce 4.3 or greater
+* Latest release versions of WordPress and WooCommerce ([read more here](https://developer.woocommerce.com/?p=9998))
 * PHP version 7.0 or greater (PHP 7.4 or greater is recommended)
 * MySQL version 5.6 or greater
 
@@ -79,11 +78,63 @@ Release and roadmap notes available on the [WooCommerce Developers Blog](https:/
 
 1. The Featured Product Block
 2. Selecting a product for the Featured Product Block
-3. Selecting Products for the Hand-Picked Products Block
+3. Selecting Products for the Hand-picked Products Block
 4. Selecting categories in the Products By Category block
 5. WooCommerce Product Blocks in the block inserter menu
 
 == Changelog ==
+
+= 5.7.1 - 2021-08-30 =
+
+#### Bug Fixes
+
+- Disable Cart, Checkout, All Products & filters blocks from the widgets screen
+
+= 5.7.0 - 2021-08-16 =
+
+#### Enhancements
+
+- Featured Category Block:  Allow user to re-select categories using the edit icon. ([4559](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4559))
+- Checkout: Switch from select element to combobox for country and state inputs so contents are searchable. ([4369](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4369))
+
+#### Bug Fixes
+
+- Adjusted store notice class names so that error notices show the correct icons. ([4568](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4568))
+- Fix autofill triggering validation errors for valid values in Checkout block. ([4561](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4561))
+- Reviews by Category: Show review count instead of product count. ([4552](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4552))
+- Add server side rendering to search block so the block can be used by non-admins. ([4551](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4551))
+- Twenty Twenty: Fix broken sale badge left alignment. ([4549](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4549))
+- Twenty Twenty-One: Adjust removable chip background color. ([4547](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4547))
+- Fix handpicked product selections when a store has over 100 products. ([4534](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4534))
+- Replace .screen-reader-text with .hidden for elements that are not relevant to screen readers. ([4530](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4530))
+
+#### Various
+
+- Performance improvements in the Cart and Checkout block extensibility points. ([4570](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4570))
+
+= 5.6.0 - 2021-08-01 =
+
+#### Enhancements
+
+- Ensure payment method icons are constrained to a reasonable size in the Cart and Checkout blocks. ([4427](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4427))
+- Update pagination arrows to match core. ([4364](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4364))
+
+#### Bug Fixes
+
+- Remove unnecessary margin from Cart block loading skeleton to avoid content jump. ([4498](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4498))
+- Fixed the SKU search on the /wc/store/products endpoint. ([4469](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4469))
+- Ensure cart totals displayed within a Panel component are aligned well and do not have extra padding. ([4435](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4435))
+- Fix memory leak when previewing transform options for the All reviews block. ([4428](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4428))
+
+#### Various
+
+- Deprecate snackbarNotices filter in favour of snackbarNoticeVisibility to allow extensions to hide snackbar notices in the Cart and Checkout blocks. ([4417](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4417))
+
+= 5.5.1, 5.4.1, 5.3.2, 5.2.1, 5.1.1, 5.0.1, 4.9.2, 4.8.1, 4.7.1, 4.6.1, 4.5.3, 4.4.3, 4.3.1, 4.2.1, 4.1.1, 4.0.1, 3.9.1, 3.8.1, 3.7.2, 3.6.1, 3.5.1, 3.4.1, 3.3.1, 3.2.1, 3.1.1, 3.0.1, 2.9.1, 2.8.1, 2.7.2, 2.6.2, 2.5.16 - 2021-07-14 =
+
+#### Security fix
+
+- This release fixes a critical vulnerability. More information about this can be found here: https://woocommerce.com/posts/critical-vulnerability-detected-july-2021/
 
 = 5.5.0 - 2021-07-21 =
 
@@ -117,7 +168,7 @@ Release and roadmap notes available on the [WooCommerce Developers Blog](https:/
 
 #### Various
 
-- Allow products to be added by SKU in the Hand-Picked Products block. ([4366](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4366))
+- Allow products to be added by SKU in the Hand-picked Products block. ([4366](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4366))
 - Add Slot in the Discounts section of the Checkout sidebar to allow third party extensions to render their own components there. ([4310](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4310))
 
 = 5.3.2 - 2021-06-28 =
@@ -721,7 +772,7 @@ You can read [more about the release here](https://woocommerce.wordpress.com/?p=
 - Add `getAdminLink()` utility method. #1244
 
 = 2.5.1 - 2019-11-26 =
-- Fix Products by Tag, Products by Attribute and Handpicked products blocks showing an invalid attributes error. #1254
+- Fix Products by Tag, Products by Attribute and Hand-picked Products blocks showing an invalid attributes error. #1254
 - Fix the price slider updating instantly even when filter button was enabled. #1228
 - Honor CSS classes in the editor for blocks added in 2.5. #1227
 - Fix variable products price format in All Products block. #1210
@@ -758,7 +809,7 @@ You can read [more about the release here](https://woocommerce.wordpress.com/?p=
 - Feature: Added Reviews by Category block.
 - Feature: Added a new product search block to insert a product search field on a page.
 - Enhancement: Add error handling for API requests to the featured product block.
-- Enhancement: Allow hidden products in handpicked products block.
+- Enhancement: Allow hidden products in Hand-picked Products block.
 - Fix: Prevented block settings being output on every route.  Now they are only needed when the route has blocks requiring them.
 - Dev: Introduced higher order components, global data handlers, and refactored some blocks.
 - Dev: Created new HOCs for retrieving data: `withProduct`, `withComponentId`, `withCategory`.
@@ -790,7 +841,7 @@ You can read [more about the release here](https://woocommerce.wordpress.com/?p=
 - Fix: Disable HTML editing on dynamic blocks which have no content.
 - Fix: Hide background opacity control in Featured Product settings if there is no background image.
 - Fix: Reduce CSS specificity to make styling easier.
-- Fix: Fix author access to API for handpicked products block.
+- Fix: Fix author access to API for Hand-picked Products block.
 
 = 2.2.1 - 2019-07-04 =
 

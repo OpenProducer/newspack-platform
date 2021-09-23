@@ -577,7 +577,7 @@ return array(
     'Yoast\\WP\\SEO\\Conditionals\\Admin_Conditional' => $baseDir . '/src/conditionals/admin-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Conditional' => $baseDir . '/src/conditionals/conditional-interface.php',
     'Yoast\\WP\\SEO\\Conditionals\\Development_Conditional' => $baseDir . '/src/conditionals/development-conditional.php',
-    'Yoast\\WP\\SEO\\Conditionals\\Farsi_Support_Conditional' => $baseDir . '/src/conditionals/farsi-support-conditional.php',
+    'Yoast\\WP\\SEO\\Conditionals\\Farsi_Support_Conditional' => $baseDir . '/src/deprecated/src/conditionals/farsi-support-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Feature_Flag_Conditional' => $baseDir . '/src/conditionals/feature-flag-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Front_End_Conditional' => $baseDir . '/src/conditionals/front-end-conditional.php',
     'Yoast\\WP\\SEO\\Conditionals\\Get_Request_Conditional' => $baseDir . '/src/conditionals/get-request-conditional.php',

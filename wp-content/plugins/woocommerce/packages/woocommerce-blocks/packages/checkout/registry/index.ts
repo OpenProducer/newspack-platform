@@ -36,6 +36,20 @@ export const __experimentalRegisterCheckoutFilters = (
 	filters: Record< string, CheckoutFilterFunction >
 ): void => {
 	/**
+	 * Let developers know snackbarNotices is no longer available as a filter.
+	 *
+	 * See: https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4417
+	 */
+	if ( Object.keys( filters ).includes( 'couponName' ) ) {
+		deprecated( 'snackbarNotices', {
+			alternative: 'snackbarNoticeVisibility',
+			plugin: 'WooCommerce Blocks',
+			link:
+				'https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4417',
+		} );
+	}
+
+	/**
 	 * Let the user know couponName is no longer available as a filter.
 	 *
 	 * See https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/4312
@@ -76,7 +90,7 @@ const getCheckoutFilters = ( filterName: string ): CheckoutFilterFunction[] => {
 export const __experimentalApplyCheckoutFilter = < T >( {
 	filterName,
 	defaultValue,
-	extensions = {},
+	extensions = null,
 	arg = null,
 	validation = returnTrue,
 }: {
@@ -85,7 +99,7 @@ export const __experimentalApplyCheckoutFilter = < T >( {
 	/** Default value to filter. */
 	defaultValue: T;
 	/** Values extend to REST API response. */
-	extensions?: Record< string, unknown >;
+	extensions?: Record< string, unknown > | null;
 	/** Object containing arguments for the filter function. */
 	arg?: CheckoutFilterArguments;
 	/** Function that needs to return true when the filtered value is passed in order for the filter to be applied. */
@@ -97,7 +111,7 @@ export const __experimentalApplyCheckoutFilter = < T >( {
 		let value = defaultValue;
 		filters.forEach( ( filter ) => {
 			try {
-				const newValue = filter( value, extensions, arg );
+				const newValue = filter( value, extensions || {}, arg );
 				if ( typeof newValue !== typeof value ) {
 					throw new Error(
 						sprintf(

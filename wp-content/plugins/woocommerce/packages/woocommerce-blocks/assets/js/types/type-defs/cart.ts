@@ -1,5 +1,3 @@
-/* eslint-disable camelcase -- API responses have camelcase properties */
-
 /**
  * Internal dependencies
  */
@@ -67,10 +65,10 @@ export interface CartShippingRate {
 
 export interface CartShippingAddress extends BaseAddress, FirstNameLastName {
 	company: string;
+	phone: string;
 }
 
 export interface CartBillingAddress extends CartShippingAddress {
-	phone: string;
 	email: string;
 }
 

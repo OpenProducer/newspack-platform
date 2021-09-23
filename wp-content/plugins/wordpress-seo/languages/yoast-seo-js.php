@@ -98,22 +98,22 @@ $generated_i18n_strings = array(
 	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/ParagraphTooLongAssessment.js:105
 	_n_noop( '%1$sParagraph length%2$s: %3$d of the paragraphs contains more than the recommended maximum of %4$d words. %5$sShorten your paragraphs%2$s!', '%1$sParagraph length%2$s: %3$d of the paragraphs contain more than the recommended maximum of %4$d words. %5$sShorten your paragraphs%2$s!', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/PassiveVoiceAssessment.js:79
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/PassiveVoiceAssessment.js:78
 	__( '%1$sPassive voice%2$s: You\'re using enough active voice. That\'s great!', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/PassiveVoiceAssessment.js:93
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/PassiveVoiceAssessment.js:92
 	__( '%1$sPassive voice%2$s: %3$s of the sentences contain passive voice, which is more than the recommended maximum of %4$s. %5$sTry to use their active counterparts%2$s.', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceBeginningsAssessment.js:78
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceBeginningsAssessment.js:77
 	_n_noop( '%1$sConsecutive sentences%2$s: The text contains %3$d consecutive sentences starting with the same word. %5$sTry to mix things up%2$s!', '%1$sConsecutive sentences%2$s: The text contains %4$d instances where %3$d or more consecutive sentences start with the same word. %5$sTry to mix things up%2$s!', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceBeginningsAssessment.js:97
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceBeginningsAssessment.js:96
 	__( '%1$sConsecutive sentences%2$s: There is enough variety in your sentences. That\'s great!', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceLengthInTextAssessment.js:151
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceLengthInTextAssessment.js:147
 	__( '%1$sSentence length%2$s: Great!', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceLengthInTextAssessment.js:162
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SentenceLengthInTextAssessment.js:158
 	__( '%1$sSentence length%2$s: %3$s of the sentences contain more than %4$s words, which is more than the recommended maximum of %5$s. %6$sTry to shorten the sentences%2$s.', 'wordpress-seo' ),
 
 	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/SubheadingDistributionTooLongAssessment.js:134
@@ -133,13 +133,13 @@ $generated_i18n_strings = array(
 	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/TextPresenceAssessment.js:50
 	__( '%1$sNot enough content%2$s: %3$sPlease add some content to enable a good analysis%2$s.', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/TransitionWordsAssessment.js:95
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/TransitionWordsAssessment.js:94
 	__( '%1$sTransition words%2$s: None of the sentences contain transition words. %3$sUse some%2$s.', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/TransitionWordsAssessment.js:111
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/TransitionWordsAssessment.js:110
 	__( '%1$sTransition words%2$s: Only %3$s of the sentences contain transition words, which is not enough. %4$sUse more of them%2$s.', 'wordpress-seo' ),
 
-	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/TransitionWordsAssessment.js:127
+	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/TransitionWordsAssessment.js:126
 	__( '%1$sTransition words%2$s: Well done!', 'wordpress-seo' ),
 
 	// Reference: node_modules/yoastseo/src/scoring/assessments/readability/wordComplexityAssessment.js:64

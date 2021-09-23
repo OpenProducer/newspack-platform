@@ -111,12 +111,7 @@ const CheckoutProcessor = () => {
 
 	const checkValidation = useCallback( () => {
 		if ( hasValidationErrors ) {
-			return {
-				errorMessage: __(
-					'Some input fields are invalid.',
-					'woocommerce'
-				),
-			};
+			return false;
 		}
 		if ( currentPaymentStatus.hasError ) {
 			return {
