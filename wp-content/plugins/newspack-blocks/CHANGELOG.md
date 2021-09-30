@@ -1,3 +1,16 @@
+# [1.39.0](https://github.com/Automattic/newspack-blocks/compare/v1.38.0...v1.39.0) (2021-09-28)
+
+
+### Bug Fixes
+
+* if a post has a custom excerpt, use it ([#880](https://github.com/Automattic/newspack-blocks/issues/880)) ([57b5cdd](https://github.com/Automattic/newspack-blocks/commit/57b5cdd4fe29c72103d247afd1f7b1830586e4f7))
+* limit excerpt lengths even for custom excerpts ([#874](https://github.com/Automattic/newspack-blocks/issues/874)) ([85f5bf4](https://github.com/Automattic/newspack-blocks/commit/85f5bf47bd18e8493fbfd96d168e518f63f808c3))
+
+
+### Features
+
+* **donate:** remove NRH metadata ([080430c](https://github.com/Automattic/newspack-blocks/commit/080430ccf87f98f85595b4ede74af5e3821c5ca4))
+
 # [1.38.0](https://github.com/Automattic/newspack-blocks/compare/v1.37.1...v1.38.0) (2021-09-21)
 
 

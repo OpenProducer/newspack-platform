@@ -30,14 +30,7 @@ class AMP_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function is_standard_mode() {
 		if ( ! $this->is_configured() ) {
-			return new \WP_Error(
-				'newspack_amp_not_configured',
-				esc_html__( 'The AMP plugin is not configured properly.', 'newspack' ),
-				[
-					'status' => 400,
-					'level'  => 'fatal',
-				]
-			);
+			return false;
 		}
 		return \AMP_Theme_Support::STANDARD_MODE_SLUG === \AMP_Options_Manager::get_option( 'theme_support' );
 	}

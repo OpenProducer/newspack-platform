@@ -342,7 +342,7 @@ class Newspack_Blocks_API {
 				'showExcerpt'   => $params['show_excerpt'],
 				'excerptLength' => $params['excerpt_length'],
 			];
-			Newspack_Blocks::filter_excerpt_length( $block_attributes );
+			Newspack_Blocks::filter_excerpt( $block_attributes );
 		}
 
 		$query        = new WP_Query();
@@ -402,7 +402,7 @@ class Newspack_Blocks_API {
 			$posts[] = array_merge( $data, $add_ons );
 		}
 
-		Newspack_Blocks::remove_excerpt_length_filter();
+		Newspack_Blocks::remove_excerpt_filter();
 		Newspack_Blocks::remove_filter_posts_clauses_when_co_authors_filter();
 
 		return new \WP_REST_Response( $posts );

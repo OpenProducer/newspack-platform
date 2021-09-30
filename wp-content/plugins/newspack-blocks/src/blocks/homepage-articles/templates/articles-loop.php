@@ -16,8 +16,7 @@ call_user_func(
 		global $newspack_blocks_post_id;
 		do_action( 'newspack_blocks_homepage_posts_before_render' );
 
-		Newspack_Blocks::filter_excerpt_length( $attributes );
-		Newspack_Blocks::filter_excerpt_more( $attributes );
+		Newspack_Blocks::filter_excerpt( $attributes );
 
 		while ( $article_query->have_posts() ) {
 			$article_query->the_post();
@@ -25,8 +24,7 @@ call_user_func(
 			echo Newspack_Blocks::template_inc( __DIR__ . '/article.php', array( 'attributes' => $attributes ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
-		Newspack_Blocks::remove_excerpt_length_filter();
-		Newspack_Blocks::remove_excerpt_more_filter();
+		Newspack_Blocks::remove_excerpt_filter();
 
 		do_action( 'newspack_blocks_homepage_posts_after_render' );
 		wp_reset_postdata();

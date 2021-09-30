@@ -86,11 +86,7 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 	 */
 	public function process_donation( $request ) {
 		$payment_metadata = [
-			'referer'            => wp_get_referer(),
-			// Experimental NRH integration metadata.
-			'schema_version'     => '1.0',
-			'source'             => 'newspack',
-			'agreed_to_pay_fees' => false,
+			'referer' => wp_get_referer(),
 		];
 		if ( class_exists( 'Newspack\NRH' ) && method_exists( 'Newspack\NRH', 'get_nrh_config' ) ) {
 			$nrh_config = \Newspack\NRH::get_nrh_config();

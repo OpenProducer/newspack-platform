@@ -29,7 +29,7 @@ private static $installed = array (
     'aliases' => 
     array (
     ),
-    'reference' => '0217c9bd17a5d7e6840892105a20f28ec4a6645c',
+    'reference' => '955a22c22a1a03749fd9fd746bba9b92521f6c35',
     'name' => 'automattic/newspack-plugin',
   ),
   'versions' => 
@@ -41,7 +41,7 @@ private static $installed = array (
       'aliases' => 
       array (
       ),
-      'reference' => '0217c9bd17a5d7e6840892105a20f28ec4a6645c',
+      'reference' => '955a22c22a1a03749fd9fd746bba9b92521f6c35',
     ),
     'composer/installers' => 
     array (

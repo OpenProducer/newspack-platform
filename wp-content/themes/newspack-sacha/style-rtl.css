@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.47.0
+Version: 1.48.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -1848,6 +1848,10 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   border-color: #ccc;
 }
 
+.h-sb.h-sh .subpage-sidebar .nav1 ul.main-menu > li > a {
+  color: #111;
+}
+
 #desktop-sidebar-fallback,
 #mobile-sidebar-fallback,
 #subpage-sidebar-fallback {
@@ -2232,14 +2236,10 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   }
 }
 
-#page {
-  overflow: hidden;
-  width: 100%;
-}
-
 .site-content {
   min-height: 30vh;
   margin-top: 1.5rem;
+  overflow: hidden;
 }
 
 @media only screen and (min-width: 782px) {
@@ -2580,7 +2580,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .h-cl .site-header .custom-logo-link {
     margin-left: 0;
   }
-  .h-cl .site-header .custom-logo-link img {
+  .h-cl .site-header .custom-logo {
     height: auto;
     max-width: 100%;
     margin: auto;
@@ -2620,7 +2620,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .h-cl .site-header .middle-header-contain .wrapper > div.site-branding {
     width: auto;
   }
-  .h-cl .site-header .custom-logo-link img {
+  .h-cl .site-header .custom-logo {
     max-width: inherit;
   }
 }
@@ -2790,7 +2790,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .h-sub.h-sh .featured-image-behind,
   .h-sub.h-sh .featured-image-beside, .h-sub.h-dh .featured-image-behind,
   .h-sub.h-dh .featured-image-beside {
-    min-height: 100vh;
+    min-height: 101vh;
   }
   .h-sub.h-sb.single-featured-image-beside .middle-header-contain, .h-sub.h-sb.single-featured-image-behind .middle-header-contain {
     background: transparent;
@@ -2820,6 +2820,91 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
     max-width: 50%;
     padding-left: 1rem;
   }
+}
+
+.h-stk .site-header {
+  background: #fff;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+  position: sticky;
+  top: 0;
+  z-index: 999;
+}
+
+@media only screen and (min-width: 600px) {
+  .h-stk.admin-bar .site-header {
+    top: 46px;
+  }
+}
+
+@media only screen and (min-width: 782px) {
+  .h-stk.admin-bar .site-header {
+    top: 32px;
+  }
+}
+
+@media only screen and (min-width: 782px) {
+  .h-stk.h-dh:not(.h-sub) .middle-header-contain .wrapper {
+    padding: 0.75rem 0;
+  }
+  .h-stk.h-db .bottom-header-contain {
+    border-bottom: 1px solid #ccc;
+    border-top: 1px solid #ccc;
+  }
+  .h-stk.h-db .bottom-header-contain .wrapper {
+    border: 0;
+  }
+}
+
+.h-stk.h-sub.single-featured-image-behind .site-header, .h-stk.h-sub.single-featured-image-beside .site-header {
+  box-shadow: none;
+  position: sticky;
+}
+
+@media only screen and (min-width: 782px) {
+  .h-stk.h-sub.single-featured-image-behind .site-header, .h-stk.h-sub.single-featured-image-beside .site-header {
+    display: flex;
+    align-items: center;
+    height: 80px;
+    margin-bottom: -80px;
+    background: transparent;
+  }
+  .h-stk.h-sub.single-featured-image-behind .site-header .sticky-bg, .h-stk.h-sub.single-featured-image-beside .site-header .sticky-bg {
+    bottom: 0;
+    content: '';
+    background: #000;
+    display: block;
+    right: 0;
+    opacity: 0;
+    position: absolute;
+    left: 0;
+    top: 0;
+    z-index: -1;
+    transition: opacity 0.5s ease-in;
+  }
+  .h-stk.h-sub.single-featured-image-behind .site-header.head-scroll .sticky-bg, .h-stk.h-sub.single-featured-image-beside .site-header.head-scroll .sticky-bg {
+    opacity: 0.7;
+  }
+}
+
+@media only screen and (min-width: 782px) {
+  .h-stk.h-sub.single-featured-image-behind .middle-header-contain {
+    width: 100%;
+  }
+  .h-stk.h-sub.single-featured-image-beside div.middle-header-contain {
+    background: rgba(0, 0, 0, 0.5);
+    background: linear-gradient(-180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
+    max-width: 100%;
+    width: 100%;
+  }
+  .h-stk.h-sub.single-featured-image-beside div.middle-header-contain .wrapper {
+    margin: auto;
+    max-width: 90%;
+    width: 1200px;
+  }
+}
+
+.h-stk .highlight-menu-contain.desktop-only {
+  display: none;
 }
 
 .desktop-only {
@@ -6837,8 +6922,21 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   display: none;
 }
 
-.h-sub.single-featured-image-beside:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header + .site-content, .h-sub.single-featured-image-behind:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header + .site-content {
+.h-sub.single-featured-image-beside.h-stk .global_above_header, .h-sub.single-featured-image-behind.h-stk .global_above_header {
+  position: relative;
+  z-index: 1;
+}
+
+.h-sub.single-featured-image-behind:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header
++ .site-content {
   margin-top: 0;
+}
+
+@media only screen and (min-width: 782px) {
+  .h-sub.single-featured-image-beside:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header
++ .site-content {
+    margin-top: 0;
+  }
 }
 
 /* Yoast Breadcrumb support */
@@ -6902,6 +7000,11 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   .h-sub.h-sb.single-featured-image-beside .alternative-logo ~ .custom-logo-link {
     display: inline-block;
   }
+}
+
+.h-stk.h-sub.h-sb.single-featured-image-beside .middle-header-contain {
+  background: linear-gradient(-180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
+  color: #fff;
 }
 
 .button.mb-cta {

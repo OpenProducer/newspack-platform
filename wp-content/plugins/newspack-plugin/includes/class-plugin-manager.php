@@ -202,14 +202,6 @@ class Plugin_Manager {
 				'AuthorURI'   => 'https://automattic.com',
 				'Download'    => 'https://github.com/Automattic/newspack-disqus-amp/releases/latest/download/newspack-disqus-amp.zip',
 			],
-			'newspack-image-credits'        => [
-				'Name'        => 'Newspack Image Credits',
-				'Description' => 'Add photo credit info to images.',
-				'Author'      => 'Automattic, INN Labs, Project Argo',
-				'PluginURI'   => 'https://newspack.pub',
-				'AuthorURI'   => 'https://automattic.com',
-				'Download'    => 'https://github.com/Automattic/newspack-image-credits/releases/latest/download/newspack-image-credits.zip',
-			],
 			'newspack-media-partners'       => [
 				'Name'        => 'Newspack Media Partners',
 				'Description' => 'Add media partners and their logos to posts. Intended for posts published in conjunction with other outlets.',

@@ -743,7 +743,15 @@ class Newspack_Blocks {
 	/**
 	 * Closure for excerpt filtering that can be added and removed.
 	 *
-	 * @var newspack_blocks_excerpt_length_closure
+	 * @var Closure
+	 */
+	public static $newspack_blocks_excerpt_closure = null;
+
+	/**
+	 * Closure for excerpt length filtering that can be added and removed.
+	 *
+	 * @var Closure
+	 * @deprecated
 	 */
 	public static $newspack_blocks_excerpt_length_closure = null;
 
@@ -760,6 +768,49 @@ class Newspack_Blocks {
 	/**
 	 * Filter for excerpt length.
 	 *
+	 * @param array $attributes The block's attributes.
+	 */
+	public static function filter_excerpt( $attributes ) {
+		if ( empty( $attributes['excerptLength'] ) || ! $attributes['showExcerpt'] ) {
+			return;
+		}
+
+		self::$newspack_blocks_excerpt_closure = function( $text = '', $post = null ) use ( $attributes ) {
+			$post        = get_post( $post );
+			$text        = $post->post_excerpt;
+			$raw_excerpt = $text;
+
+			if ( empty( $text ) ) {
+				$text = get_the_content( '', false, $post );
+				$text = strip_shortcodes( $text );
+				$text = excerpt_remove_blocks( $text );
+			}
+
+			/** This filter is documented in wp-includes/post-template.php */
+			$text = apply_filters( 'the_content', $text ); // phpcs:ignore
+			$text = str_replace( ']]>', ']]&gt;', $text );
+			$text = wp_trim_words( $text, $attributes['excerptLength'], static::more_excerpt() );
+
+			/** This filter is documented in wp-includes/post-template.php */
+			return apply_filters( 'wp_trim_excerpt', $text, $raw_excerpt ); // phpcs:ignore
+		};
+
+		add_filter( 'get_the_excerpt', self::$newspack_blocks_excerpt_closure, 11, 2 );
+	}
+
+	/**
+	 * Remove excerpt filter after Homepage Posts block loop.
+	 */
+	public static function remove_excerpt_filter() {
+		if ( static::$newspack_blocks_excerpt_closure ) {
+			remove_filter( 'get_the_excerpt', static::$newspack_blocks_excerpt_closure, 11 );
+		}
+	}
+
+	/**
+	 * Filter for excerpt length.
+	 *
+	 * @deprecated
 	 * @param array $attributes The block's attributes.
 	 */
 	public static function filter_excerpt_length( $attributes ) {
@@ -781,6 +832,8 @@ class Newspack_Blocks {
 
 	/**
 	 * Remove excerpt length filter after Homepage Posts block loop.
+	 *
+	 * @deprecated
 	 */
 	public static function remove_excerpt_length_filter() {
 		if ( self::$newspack_blocks_excerpt_length_closure ) {
@@ -803,6 +856,7 @@ class Newspack_Blocks {
 	/**
 	 * Filter for excerpt ellipsis.
 	 *
+	 * @deprecated
 	 * @param array $attributes The block's attributes.
 	 */
 	public static function filter_excerpt_more( $attributes ) {
@@ -814,6 +868,8 @@ class Newspack_Blocks {
 
 	/**
 	 * Remove excerpt ellipsis filter after Homepage Posts block loop.
+	 *
+	 * @deprecated
 	 */
 	public static function remove_excerpt_more_filter() {
 		remove_filter( 'excerpt_more', [ __CLASS__, 'more_excerpt' ], 999 );

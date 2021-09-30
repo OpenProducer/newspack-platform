@@ -1,3 +1,10 @@
+# [1.40.0](https://github.com/Automattic/newspack-popups/compare/v1.39.1...v1.40.0) (2021-09-28)
+
+
+### Features
+
+* **segmentation:** improve how Mailchimp merge fields are handled ([f76db06](https://github.com/Automattic/newspack-popups/commit/f76db06ecdf5293ea0641bbeb9d862a99b36e5ee))
+
 ## [1.39.1](https://github.com/Automattic/newspack-popups/compare/v1.39.0...v1.39.1) (2021-09-08)
 
 

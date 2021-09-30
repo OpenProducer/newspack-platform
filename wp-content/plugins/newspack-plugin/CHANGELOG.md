@@ -1,3 +1,18 @@
+# [1.58.0](https://github.com/Automattic/newspack-plugin/compare/v1.57.0...v1.58.0) (2021-09-28)
+
+
+### Bug Fixes
+
+* react router crash from useLocation in HOC ([#1165](https://github.com/Automattic/newspack-plugin/issues/1165)) ([c954fe2](https://github.com/Automattic/newspack-plugin/commit/c954fe266d622d3eba1509191a98bff9ec395cc0))
+* **health-check:** AMP status ([3345261](https://github.com/Automattic/newspack-plugin/commit/3345261e035fced18f64d07e137805700b146a6c))
+* restore scroll for wizard screens navigation ([#1157](https://github.com/Automattic/newspack-plugin/issues/1157)) ([315a47b](https://github.com/Automattic/newspack-plugin/commit/315a47ba0415075507ab1e0a6cac262d26418e1c))
+
+
+### Features
+
+* **engagement:** simplify commenting settings ([#1159](https://github.com/Automattic/newspack-plugin/issues/1159)) ([bf79e26](https://github.com/Automattic/newspack-plugin/commit/bf79e26aa968287696329a5753b6ff531d10e6ec))
+* **supported-plugins:** remove Newspack Image Credits ([#1158](https://github.com/Automattic/newspack-plugin/issues/1158)) ([e5c1faa](https://github.com/Automattic/newspack-plugin/commit/e5c1faa3f7eb868fa76bc38e268bc189a94a973a))
+
 # [1.57.0](https://github.com/Automattic/newspack-plugin/compare/v1.56.1...v1.57.0) (2021-09-22)
 
 
