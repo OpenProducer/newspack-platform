@@ -190,6 +190,8 @@
     margin: 3px 8px 3px 0;
     padding: 0 8px;
     text-transform: uppercase; }
+    .newspack-card.newspack-action-card .newspack-action-card__badge + .newspack-action-card__badge {
+      margin-left: -4px; }
   .newspack-card.newspack-action-card.newspack-description-card {
     font-style: italic; }
   .newspack-card.newspack-action-card + .newspack-card.newspack-action-card {
@@ -2680,6 +2682,8 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
         margin-left: 4px;
         margin-right: 0;
         order: 1; } }
+  .newspack-is-waiting.newspack-is-waiting__is-center {
+    margin: auto; }
 
 @keyframes newspack-is-waiting__animation {
   from {

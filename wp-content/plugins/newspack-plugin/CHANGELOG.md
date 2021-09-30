@@ -1,3 +1,16 @@
+# [1.59.0](https://github.com/Automattic/newspack-plugin/compare/v1.58.0...v1.59.0) (2021-09-30)
+
+
+### Bug Fixes
+
+* revert scroll restoration in wizards ([#1170](https://github.com/Automattic/newspack-plugin/issues/1170)) ([8f28012](https://github.com/Automattic/newspack-plugin/commit/8f2801290aeb68db3bfb236c0ff1ac0c6ed20a5b)), closes [#1165](https://github.com/Automattic/newspack-plugin/issues/1165) [#1157](https://github.com/Automattic/newspack-plugin/issues/1157)
+
+
+### Features
+
+* connections wizard ([#1145](https://github.com/Automattic/newspack-plugin/issues/1145)) ([577eee4](https://github.com/Automattic/newspack-plugin/commit/577eee4bd88b4ac0acaf22a7ee0231407150b91a))
+* multiple badges for action card ([#1163](https://github.com/Automattic/newspack-plugin/issues/1163)) ([fa45f45](https://github.com/Automattic/newspack-plugin/commit/fa45f45e4cd58e7d79cc88b018f4cc55a923c844))
+
 # [1.58.0](https://github.com/Automattic/newspack-plugin/compare/v1.57.0...v1.58.0) (2021-09-28)
 
 

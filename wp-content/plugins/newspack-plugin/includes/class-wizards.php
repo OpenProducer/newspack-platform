@@ -41,6 +41,9 @@ class Wizards {
 			'popups'          => new Popups_Wizard(),
 			'updates'         => new Updates_Wizard(),
 		];
+		if ( Connections_Wizard::configured() ) {
+			self::$wizards['connections'] = new Connections_Wizard();
+		}
 		if ( Support_Wizard::configured() ) {
 			self::$wizards['support'] = new Support_Wizard();
 		}

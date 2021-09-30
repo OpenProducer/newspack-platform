@@ -135,9 +135,13 @@ class Support_Wizard extends Wizard {
 		}
 
 		if ( is_wp_error( $response ) ) {
+			$message = __( 'Something went wrong.', 'newspack' );
+			if ( self::support_email() ) {
+				$message = __( 'Something went wrong. Please contact us directly at ', 'newspack' ) . '<a href="mailto:' . self::support_email() . '">' . self::support_email() . '</a>';
+			}
 			return new WP_Error(
 				'newspack_invalid_support',
-				__( 'Something went wrong. Please contact us directly at ', 'newspack' ) . '<a href="mailto:' . self::support_email() . '">' . self::support_email() . '</a>'
+				$message
 			);
 		} else {
 			return \rest_ensure_response(
@@ -260,21 +264,12 @@ class Support_Wizard extends Wizard {
 			true
 		);
 
-		$client_id    = WPCOM_OAuth::wpcom_client_id();
-		$redirect_uri = admin_url() . 'admin.php?page=' . $this->slug;
-		$access_token = WPCOM_OAuth::get_access_token();
-		$access_token = $access_token ? $access_token : '';
-		if ( is_wp_error( $access_token ) ) {
-			$access_token = '';
-		}
 		wp_localize_script(
 			'newspack-support-wizard',
 			'newspack_support_data',
 			array(
-				'API_URL'            => self::support_api_url(),
-				'WPCOM_AUTH_URL'     => 'https://public-api.wordpress.com/oauth2/authorize?client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&response_type=token&scope=global',
-				'WPCOM_ACCESS_TOKEN' => $access_token,
-				'IS_PRE_LAUNCH'      => false !== self::is_pre_launch(),
+				'API_URL'       => self::support_api_url(),
+				'IS_PRE_LAUNCH' => false !== self::is_pre_launch(),
 			)
 		);
 		wp_enqueue_script( 'newspack-support-wizard' );
@@ -313,7 +308,7 @@ class Support_Wizard extends Wizard {
 	 * @return bool True if necessary variables are present.
 	 */
 	public static function configured() {
-		return self::support_api_url() && self::support_email() && WPCOM_OAuth::wpcom_client_id();
+		return WPCOM_OAuth::wpcom_client_id();
 	}
 
 	/**

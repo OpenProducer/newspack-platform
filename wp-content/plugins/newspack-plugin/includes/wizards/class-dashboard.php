@@ -109,6 +109,14 @@ class Dashboard extends Wizard {
 				'description' => Wizards::get_description( 'popups' ),
 			],
 		];
+		if ( Connections_Wizard::configured() ) {
+			$dashboard[] = [
+				'slug'        => 'connections',
+				'name'        => Wizards::get_name( 'connections' ),
+				'url'         => Wizards::get_url( 'connections' ),
+				'description' => esc_html__( 'Connections to third-party services', 'newspack' ),
+			];
+		}
 
 		if ( Support_Wizard::configured() ) {
 			$dashboard[] = [
