@@ -23,6 +23,8 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     public $accountId;
     public $blockingRuleId;
     public $blockingTriggerId;
+    protected $consentSettingsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\TagConsentSetting::class;
+    protected $consentSettingsDataType = '';
     public $containerId;
     public $fingerprint;
     public $firingRuleId;
@@ -74,6 +76,20 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getBlockingTriggerId()
     {
         return $this->blockingTriggerId;
+    }
+    /**
+     * @param TagConsentSetting
+     */
+    public function setConsentSettings(\Google\Site_Kit_Dependencies\Google\Service\TagManager\TagConsentSetting $consentSettings)
+    {
+        $this->consentSettings = $consentSettings;
+    }
+    /**
+     * @return TagConsentSetting
+     */
+    public function getConsentSettings()
+    {
+        return $this->consentSettings;
     }
     public function setContainerId($containerId)
     {

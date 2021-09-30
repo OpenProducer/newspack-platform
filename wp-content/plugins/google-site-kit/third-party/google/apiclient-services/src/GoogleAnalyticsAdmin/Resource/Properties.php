@@ -17,6 +17,7 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataRetentionSettings;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListPropertiesResponse;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty;
@@ -77,6 +78,22 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
         return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class);
+    }
+    /**
+     * Returns the singleton data retention settings for this property.
+     * (properties.getDataRetentionSettings)
+     *
+     * @param string $name Required. The name of the settings to lookup. Format:
+     * properties/{property}/dataRetentionSettings Example:
+     * "properties/1000/dataRetentionSettings"
+     * @param array $optParams Optional parameters.
+     * @return GoogleAnalyticsAdminV1alphaDataRetentionSettings
+     */
+    public function getDataRetentionSettings($name, $optParams = [])
+    {
+        $params = ['name' => $name];
+        $params = \array_merge($params, $optParams);
+        return $this->call('getDataRetentionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataRetentionSettings::class);
     }
     /**
      * Lookup for Google Signals settings for a property.
@@ -148,6 +165,27 @@ class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
         return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class);
+    }
+    /**
+     * Updates the singleton data retention settings for this property.
+     * (properties.updateDataRetentionSettings)
+     *
+     * @param string $name Output only. Resource name for this DataRetentionSetting
+     * resource. Format: properties/{property}/dataRetentionSettings
+     * @param GoogleAnalyticsAdminV1alphaDataRetentionSettings $postBody
+     * @param array $optParams Optional parameters.
+     *
+     * @opt_param string updateMask Required. The list of fields to be updated.
+     * Field names must be in snake case (e.g., "field_to_update"). Omitted fields
+     * will not be updated. To replace the entire entity, use one path with the
+     * string "*" to match all fields.
+     * @return GoogleAnalyticsAdminV1alphaDataRetentionSettings
+     */
+    public function updateDataRetentionSettings($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataRetentionSettings $postBody, $optParams = [])
+    {
+        $params = ['name' => $name, 'postBody' => $postBody];
+        $params = \array_merge($params, $optParams);
+        return $this->call('updateDataRetentionSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataRetentionSettings::class);
     }
     /**
      * Updates Google Signals settings for a property.

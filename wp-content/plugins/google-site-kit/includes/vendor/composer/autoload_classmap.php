@@ -173,6 +173,7 @@ return array(
     'Google\\Site_Kit\\Modules\\Analytics_4\\Tag_Guard' => $baseDir . '/Modules/Analytics_4/Tag_Guard.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\Web_Tag' => $baseDir . '/Modules/Analytics_4/Web_Tag.php',
     'Google\\Site_Kit\\Modules\\Idea_Hub' => $baseDir . '/Modules/Idea_Hub.php',
+    'Google\\Site_Kit\\Modules\\Idea_Hub\\Idea_Interaction_Count' => $baseDir . '/Modules/Idea_Hub/Idea_Interaction_Count.php',
     'Google\\Site_Kit\\Modules\\Idea_Hub\\Post_Idea_Name' => $baseDir . '/Modules/Idea_Hub/Post_Idea_Name.php',
     'Google\\Site_Kit\\Modules\\Idea_Hub\\Post_Idea_Text' => $baseDir . '/Modules/Idea_Hub/Post_Idea_Text.php',
     'Google\\Site_Kit\\Modules\\Idea_Hub\\Post_Idea_Topics' => $baseDir . '/Modules/Idea_Hub/Post_Idea_Topics.php',

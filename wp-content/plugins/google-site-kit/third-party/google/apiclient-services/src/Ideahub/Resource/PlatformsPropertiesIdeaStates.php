@@ -17,7 +17,7 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1alphaIdeaState;
+use Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaIdeaState;
 /**
  * The "ideaStates" collection of methods.
  * Typical usage is:
@@ -33,17 +33,17 @@ class PlatformsPropertiesIdeaStates extends \Google\Site_Kit_Dependencies\Google
      *
      * @param string $name Unique identifier for the idea state. Format:
      * platforms/{platform}/properties/{property}/ideaStates/{idea_state}
-     * @param GoogleSearchIdeahubV1alphaIdeaState $postBody
+     * @param GoogleSearchIdeahubV1betaIdeaState $postBody
      * @param array $optParams Optional parameters.
      *
      * @opt_param string updateMask The list of fields to be updated.
-     * @return GoogleSearchIdeahubV1alphaIdeaState
+     * @return GoogleSearchIdeahubV1betaIdeaState
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1alphaIdeaState $postBody, $optParams = [])
+    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaIdeaState $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1alphaIdeaState::class);
+        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaIdeaState::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

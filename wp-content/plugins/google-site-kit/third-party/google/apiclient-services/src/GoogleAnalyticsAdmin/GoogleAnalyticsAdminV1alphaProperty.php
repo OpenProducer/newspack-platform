@@ -27,6 +27,7 @@ class GoogleAnalyticsAdminV1alphaProperty extends \Google\Site_Kit_Dependencies\
     public $industryCategory;
     public $name;
     public $parent;
+    public $serviceLevel;
     public $timeZone;
     public $updateTime;
     public function setCreateTime($createTime)
@@ -92,6 +93,14 @@ class GoogleAnalyticsAdminV1alphaProperty extends \Google\Site_Kit_Dependencies\
     public function getParent()
     {
         return $this->parent;
+    }
+    public function setServiceLevel($serviceLevel)
+    {
+        $this->serviceLevel = $serviceLevel;
+    }
+    public function getServiceLevel()
+    {
+        return $this->serviceLevel;
     }
     public function setTimeZone($timeZone)
     {

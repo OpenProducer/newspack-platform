@@ -17,7 +17,7 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1alphaListIdeasResponse;
+use Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaListIdeasResponse;
 /**
  * The "ideas" collection of methods.
  * Typical usage is:
@@ -32,27 +32,32 @@ class PlatformsPropertiesIdeas extends \Google\Site_Kit_Dependencies\Google\Serv
      * List ideas for a given Creator and filter and sort options.
      * (ideas.listPlatformsPropertiesIdeas)
      *
-     * @param string $parent If defined, specifies the creator for which to filter
-     * by. Format: publishers/{publisher}/properties/{property}
+     * @param string $parent Required. If defined, specifies the creator for which
+     * to filter by. Format: publishers/{publisher}/properties/{property}
      * @param array $optParams Optional parameters.
      *
-     * @opt_param string creator.platform Identifies the platform from which this
-     * user is accessing Idea Hub.
-     * @opt_param string creator.platformId Identifies the platform account
-     * (blog/site/etc.) for which to fetch Ideas.
-     * @opt_param string filter Filter semantics described below.
+     * @opt_param string filter Allows filtering. Supported syntax: * Filter
+     * expressions are made up of one or more restrictions. * Restrictions are
+     * implicitly combined, as if the `AND` operator was always used. The `OR`
+     * operator is currently unsupported. * Supported functions: - `saved(bool)`: If
+     * set to true, fetches only saved ideas. If set to false, fetches all except
+     * saved ideas. Can't be simultaneously used with `dismissed(bool)`. -
+     * `dismissed(bool)`: If set to true, fetches only dismissed ideas. Can't be
+     * simultaneously used with `saved(bool)`. The `false` value is currently
+     * unsupported. Examples: * `saved(true)` * `saved(false)` * `dismissed(true)`
+     * The length of this field should be no more than 500 characters.
      * @opt_param string orderBy Order semantics described below.
      * @opt_param int pageSize The maximum number of ideas per page. If unspecified,
      * at most 10 ideas will be returned. The maximum value is 2000; values above
      * 2000 will be coerced to 2000.
      * @opt_param string pageToken Used to fetch next page.
-     * @return GoogleSearchIdeahubV1alphaListIdeasResponse
+     * @return GoogleSearchIdeahubV1betaListIdeasResponse
      */
     public function listPlatformsPropertiesIdeas($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1alphaListIdeasResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaListIdeasResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

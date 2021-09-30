@@ -49,7 +49,20 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
     }
     /**
      * List all "Other contacts", that is contacts that are not in a contact group.
-     * "Other contacts" are typically auto created contacts from interactions.
+     * "Other contacts" are typically auto created contacts from interactions. Sync
+     * tokens expire 7 days after the full sync. A request with an expired sync
+     * token will result in a 410 error. In the case of such an error clients should
+     * make a full sync request without a `sync_token`. The first page of a full
+     * sync request has an additional quota. If the quota is exceeded, a 429 error
+     * will be returned. This quota is fixed and can not be increased. When the
+     * `sync_token` is specified, resources deleted since the last sync will be
+     * returned as a person with `PersonMetadata.deleted` set to true. When the
+     * `page_token` or `sync_token` is specified, all other request parameters must
+     * match the first call. Writes may have a propagation delay of several minutes
+     * for sync requests. Incremental syncs are not intended for read-after-write
+     * use cases. See example usage at [List the user's other contacts that have
+     * changed](/people/v1/other-
+     * contacts#list_the_users_other_contacts_that_have_changed).
      * (otherContacts.listOtherContacts)
      *
      * @param array $optParams Optional parameters.
@@ -58,26 +71,31 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * in the response. Valid values are between 1 and 1000, inclusive. Defaults to
      * 100 if not set or set to 0.
      * @opt_param string pageToken Optional. A page token, received from a previous
-     * `ListOtherContacts` call. Provide this to retrieve the subsequent page. When
-     * paginating, all other parameters provided to `ListOtherContacts` must match
-     * the call that provided the page token.
+     * response `next_page_token`. Provide this to retrieve the subsequent page.
+     * When paginating, all other parameters provided to `otherContacts.list` must
+     * match the first call that provided the page token.
      * @opt_param string readMask Required. A field mask to restrict which fields on
      * each person are returned. Multiple fields can be specified by separating them
-     * with commas. Valid values are: * emailAddresses * metadata * names *
-     * phoneNumbers
-     * @opt_param bool requestSyncToken Optional. Whether the response should
-     * include `next_sync_token`, which can be used to get all changes since the
-     * last request. For subsequent sync requests use the `sync_token` param
-     * instead. Initial sync requests that specify `request_sync_token` have an
-     * additional rate limit.
+     * with commas. What values are valid depend on what ReadSourceType is used. If
+     * READ_SOURCE_TYPE_CONTACT is used, valid values are: * emailAddresses *
+     * metadata * names * phoneNumbers * photos If READ_SOURCE_TYPE_PROFILE is used,
+     * valid values are: * addresses * ageRanges * biographies * birthdays *
+     * calendarUrls * clientData * coverPhotos * emailAddresses * events *
+     * externalIds * genders * imClients * interests * locales * locations *
+     * memberships * metadata * miscKeywords * names * nicknames * occupations *
+     * organizations * phoneNumbers * photos * relations * sipAddresses * skills *
+     * urls * userDefined
+     * @opt_param bool requestSyncToken Optional. Whether the response should return
+     * `next_sync_token` on the last page of results. It can be used to get
+     * incremental changes since the last request by setting it on the request
+     * `sync_token`. More details about sync behavior at `otherContacts.list`.
+     * @opt_param string sources Optional. A mask of what source types to return.
+     * Defaults to READ_SOURCE_TYPE_CONTACT if not set.
      * @opt_param string syncToken Optional. A sync token, received from a previous
-     * `ListOtherContacts` call. Provide this to retrieve only the resources changed
-     * since the last request. Sync requests that specify `sync_token` have an
-     * additional rate limit. When the `syncToken` is specified, resources deleted
-     * since the last sync will be returned as a person with [`PersonMetadata.delete
-     * d`](/people/api/rest/v1/people#Person.PersonMetadata.FIELDS.deleted) set to
-     * true. When the `syncToken` is specified, all other parameters provided to
-     * `ListOtherContacts` must match the call that provided the sync token.
+     * response `next_sync_token` Provide this to retrieve only the resources
+     * changed since the last request. When syncing, all other parameters provided
+     * to `otherContacts.list` must match the first call that provided the sync
+     * token. More details about sync behavior at `otherContacts.list`.
      * @return ListOtherContactsResponse
      */
     public function listOtherContacts($optParams = [])
@@ -98,8 +116,8 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * @param array $optParams Optional parameters.
      *
      * @opt_param int pageSize Optional. The number of results to return. Defaults
-     * to 10 if field is not set, or set to 0. Values greater than 10 will be capped
-     * to 10.
+     * to 10 if field is not set, or set to 0. Values greater than 30 will be capped
+     * to 30.
      * @opt_param string query Required. The plain-text query for the request. The
      * query is used to match prefix phrases of the fields on a person. For example,
      * a person with name "foo name" matches queries such as "f", "fo", "foo", "foo

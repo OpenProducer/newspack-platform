@@ -4,7 +4,7 @@ Tags: gutenberg, woocommerce, woo commerce, products, blocks, woocommerce blocks
 Requires at least: 5.8
 Tested up to: 5.8
 Requires PHP: 7.0
-Stable tag: 5.7.1
+Stable tag: 5.7.2
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -83,6 +83,13 @@ Release and roadmap notes available on the [WooCommerce Developers Blog](https:/
 5. WooCommerce Product Blocks in the block inserter menu
 
 == Changelog ==
+
+= 5.7.2 - 2021-09-23 =
+
+#### Bug Fixes
+
+- Fix infinite recursion when removing an attribute filter from the Active filters block. #4816
+- Fix Product Search block displaying incorrectly. #4740
 
 = 5.7.1 - 2021-08-30 =
 

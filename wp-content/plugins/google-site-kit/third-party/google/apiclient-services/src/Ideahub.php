@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service;
 
 use Google\Site_Kit_Dependencies\Google\Client;
 /**
-* Service definition for Ideahub (v1alpha).
+* Service definition for Ideahub (v1beta).
 *
 * <p>
 </p>
@@ -33,10 +33,11 @@ use Google\Site_Kit_Dependencies\Google\Client;
 */
 class Ideahub extends \Google\Site_Kit_Dependencies\Google\Service
 {
-    public $ideas;
+    public $platforms_properties_ideaActivities;
     public $platforms_properties_ideaStates;
     public $platforms_properties_ideas;
     public $platforms_properties_locales;
+    public $platforms_properties_topicStates;
     /**
      * Constructs the internal representation of the Ideahub service.
      *
@@ -50,12 +51,13 @@ class Ideahub extends \Google\Site_Kit_Dependencies\Google\Service
         $this->rootUrl = $rootUrl ?: 'https://ideahub.googleapis.com/';
         $this->servicePath = '';
         $this->batchPath = 'batch';
-        $this->version = 'v1alpha';
+        $this->version = 'v1beta';
         $this->serviceName = 'ideahub';
-        $this->ideas = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\Ideas($this, $this->serviceName, 'ideas', ['methods' => ['list' => ['path' => 'v1alpha/ideas', 'httpMethod' => 'GET', 'parameters' => ['creator.platform' => ['location' => 'query', 'type' => 'string'], 'creator.platformId' => ['location' => 'query', 'type' => 'string'], 'filter' => ['location' => 'query', 'type' => 'string'], 'orderBy' => ['location' => 'query', 'type' => 'string'], 'pageSize' => ['location' => 'query', 'type' => 'integer'], 'pageToken' => ['location' => 'query', 'type' => 'string'], 'parent' => ['location' => 'query', 'type' => 'string']]]]]);
-        $this->platforms_properties_ideaStates = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesIdeaStates($this, $this->serviceName, 'ideaStates', ['methods' => ['patch' => ['path' => 'v1alpha/{+name}', 'httpMethod' => 'PATCH', 'parameters' => ['name' => ['location' => 'path', 'type' => 'string', 'required' => \true], 'updateMask' => ['location' => 'query', 'type' => 'string']]]]]);
-        $this->platforms_properties_ideas = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesIdeas($this, $this->serviceName, 'ideas', ['methods' => ['list' => ['path' => 'v1alpha/{+parent}/ideas', 'httpMethod' => 'GET', 'parameters' => ['parent' => ['location' => 'path', 'type' => 'string', 'required' => \true], 'creator.platform' => ['location' => 'query', 'type' => 'string'], 'creator.platformId' => ['location' => 'query', 'type' => 'string'], 'filter' => ['location' => 'query', 'type' => 'string'], 'orderBy' => ['location' => 'query', 'type' => 'string'], 'pageSize' => ['location' => 'query', 'type' => 'integer'], 'pageToken' => ['location' => 'query', 'type' => 'string']]]]]);
-        $this->platforms_properties_locales = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesLocales($this, $this->serviceName, 'locales', ['methods' => ['list' => ['path' => 'v1alpha/{+parent}/locales', 'httpMethod' => 'GET', 'parameters' => ['parent' => ['location' => 'path', 'type' => 'string', 'required' => \true], 'pageSize' => ['location' => 'query', 'type' => 'integer'], 'pageToken' => ['location' => 'query', 'type' => 'string']]]]]);
+        $this->platforms_properties_ideaActivities = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesIdeaActivities($this, $this->serviceName, 'ideaActivities', ['methods' => ['create' => ['path' => 'v1beta/{+parent}/ideaActivities', 'httpMethod' => 'POST', 'parameters' => ['parent' => ['location' => 'path', 'type' => 'string', 'required' => \true]]]]]);
+        $this->platforms_properties_ideaStates = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesIdeaStates($this, $this->serviceName, 'ideaStates', ['methods' => ['patch' => ['path' => 'v1beta/{+name}', 'httpMethod' => 'PATCH', 'parameters' => ['name' => ['location' => 'path', 'type' => 'string', 'required' => \true], 'updateMask' => ['location' => 'query', 'type' => 'string']]]]]);
+        $this->platforms_properties_ideas = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesIdeas($this, $this->serviceName, 'ideas', ['methods' => ['list' => ['path' => 'v1beta/{+parent}/ideas', 'httpMethod' => 'GET', 'parameters' => ['parent' => ['location' => 'path', 'type' => 'string', 'required' => \true], 'filter' => ['location' => 'query', 'type' => 'string'], 'orderBy' => ['location' => 'query', 'type' => 'string'], 'pageSize' => ['location' => 'query', 'type' => 'integer'], 'pageToken' => ['location' => 'query', 'type' => 'string']]]]]);
+        $this->platforms_properties_locales = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesLocales($this, $this->serviceName, 'locales', ['methods' => ['list' => ['path' => 'v1beta/{+parent}/locales', 'httpMethod' => 'GET', 'parameters' => ['parent' => ['location' => 'path', 'type' => 'string', 'required' => \true], 'pageSize' => ['location' => 'query', 'type' => 'integer'], 'pageToken' => ['location' => 'query', 'type' => 'string']]]]]);
+        $this->platforms_properties_topicStates = new \Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource\PlatformsPropertiesTopicStates($this, $this->serviceName, 'topicStates', ['methods' => ['patch' => ['path' => 'v1beta/{+name}', 'httpMethod' => 'PATCH', 'parameters' => ['name' => ['location' => 'path', 'type' => 'string', 'required' => \true], 'updateMask' => ['location' => 'query', 'type' => 'string']]]]]);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

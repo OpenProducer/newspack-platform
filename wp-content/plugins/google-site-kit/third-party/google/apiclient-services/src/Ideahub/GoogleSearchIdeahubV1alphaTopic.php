@@ -21,6 +21,7 @@ class GoogleSearchIdeahubV1alphaTopic extends \Google\Site_Kit_Dependencies\Goog
 {
     public $displayName;
     public $mid;
+    public $name;
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
@@ -36,6 +37,14 @@ class GoogleSearchIdeahubV1alphaTopic extends \Google\Site_Kit_Dependencies\Goog
     public function getMid()
     {
         return $this->mid;
+    }
+    public function setName($name)
+    {
+        $this->name = $name;
+    }
+    public function getName()
+    {
+        return $this->name;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

@@ -17,7 +17,7 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\Ideahub\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1alphaListAvailableLocalesResponse;
+use Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaListAvailableLocalesResponse;
 /**
  * The "locales" collection of methods.
  * Typical usage is:
@@ -43,13 +43,13 @@ class PlatformsPropertiesLocales extends \Google\Site_Kit_Dependencies\Google\Se
      * `ListAvailableLocales` call. Provide this to retrieve the subsequent page.
      * When paginating, all other parameters provided to `ListAvailableLocales` must
      * match the call that provided the page token.
-     * @return GoogleSearchIdeahubV1alphaListAvailableLocalesResponse
+     * @return GoogleSearchIdeahubV1betaListAvailableLocalesResponse
      */
     public function listPlatformsPropertiesLocales($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1alphaListAvailableLocalesResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaListAvailableLocalesResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

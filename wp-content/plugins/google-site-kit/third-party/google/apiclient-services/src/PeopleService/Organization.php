@@ -19,12 +19,14 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class Organization extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    public $costCenter;
     public $current;
     public $department;
     public $domain;
     protected $endDateType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Date::class;
     protected $endDateDataType = '';
     public $formattedType;
+    public $fullTimeEquivalentMillipercent;
     public $jobDescription;
     public $location;
     protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
@@ -36,6 +38,14 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
     public $symbol;
     public $title;
     public $type;
+    public function setCostCenter($costCenter)
+    {
+        $this->costCenter = $costCenter;
+    }
+    public function getCostCenter()
+    {
+        return $this->costCenter;
+    }
     public function setCurrent($current)
     {
         $this->current = $current;
@@ -81,6 +91,14 @@ class Organization extends \Google\Site_Kit_Dependencies\Google\Model
     public function getFormattedType()
     {
         return $this->formattedType;
+    }
+    public function setFullTimeEquivalentMillipercent($fullTimeEquivalentMillipercent)
+    {
+        $this->fullTimeEquivalentMillipercent = $fullTimeEquivalentMillipercent;
+    }
+    public function getFullTimeEquivalentMillipercent()
+    {
+        return $this->fullTimeEquivalentMillipercent;
     }
     public function setJobDescription($jobDescription)
     {

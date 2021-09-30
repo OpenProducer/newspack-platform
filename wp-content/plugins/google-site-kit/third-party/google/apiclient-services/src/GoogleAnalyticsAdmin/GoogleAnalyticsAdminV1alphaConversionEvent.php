@@ -21,8 +21,8 @@ class GoogleAnalyticsAdminV1alphaConversionEvent extends \Google\Site_Kit_Depend
 {
     public $createTime;
     public $custom;
+    public $deletable;
     public $eventName;
-    public $isDeletable;
     public $name;
     public function setCreateTime($createTime)
     {
@@ -40,6 +40,14 @@ class GoogleAnalyticsAdminV1alphaConversionEvent extends \Google\Site_Kit_Depend
     {
         return $this->custom;
     }
+    public function setDeletable($deletable)
+    {
+        $this->deletable = $deletable;
+    }
+    public function getDeletable()
+    {
+        return $this->deletable;
+    }
     public function setEventName($eventName)
     {
         $this->eventName = $eventName;
@@ -47,14 +55,6 @@ class GoogleAnalyticsAdminV1alphaConversionEvent extends \Google\Site_Kit_Depend
     public function getEventName()
     {
         return $this->eventName;
-    }
-    public function setIsDeletable($isDeletable)
-    {
-        $this->isDeletable = $isDeletable;
-    }
-    public function getIsDeletable()
-    {
-        return $this->isDeletable;
     }
     public function setName($name)
     {
