@@ -19,11 +19,14 @@ export const optionsFieldsSelector = select => {
 		overlay_opacity,
 		placement,
 		trigger_scroll_progress,
+		archive_insertion_posts_count,
+		archive_insertion_is_repeating,
 		trigger_delay,
 		trigger_type,
 		utm_suppression,
 		selected_segment_id,
 		post_types,
+		archive_page_types,
 	} = meta || {};
 
 	const isInlinePlacement = placementValue =>
@@ -41,6 +44,8 @@ export const optionsFieldsSelector = select => {
 		overlay_opacity,
 		placement,
 		trigger_scroll_progress,
+		archive_insertion_posts_count,
+		archive_insertion_is_repeating,
 		trigger_delay,
 		trigger_type,
 		utm_suppression,
@@ -48,6 +53,7 @@ export const optionsFieldsSelector = select => {
 		isInlinePlacement,
 		isOverlay,
 		post_types,
+		archive_page_types,
 	};
 };
 
@@ -127,9 +133,16 @@ export const isCustomPlacement = placementValue => {
  *
  * @param {string} placementValue Placement of the prompt.
  * @param {number|string} triggerPercentage Insertion percentage, for inline prompts.
+ * @param {number|string} triggerCount Insertion posts count, for archives prompts.
+ * @param {boolean} archive_insertion_is_repeating Repeat prompt every {triggerCount}, for archives prompts.
  * @return {string} An appropriate help message.
  */
-export const getPlacementHelpMessage = ( placementValue, triggerPercentage = 0 ) => {
+export const getPlacementHelpMessage = (
+	placementValue,
+	triggerPercentage = 0,
+	triggerCount = 0,
+	archive_insertion_is_repeating = false
+) => {
 	if ( isCustomPlacement( placementValue ) ) {
 		const customPlacements = window.newspack_popups_data?.custom_placements || {};
 		return sprintf(
@@ -170,6 +183,22 @@ export const getPlacementHelpMessage = ( placementValue, triggerPercentage = 0 )
 				),
 				triggerPercentage + '%'
 			);
+		case 'archives':
+			return archive_insertion_is_repeating
+				? sprintf(
+						__(
+							'The prompt will be automatically inserted every %d articles in the archive pages.',
+							'newspack-popups'
+						),
+						triggerCount
+				  )
+				: sprintf(
+						__(
+							'The prompt will be automatically inserted after %d articles in the archive pages.',
+							'newspack-popups'
+						),
+						triggerCount
+				  );
 		case 'manual':
 			return __(
 				'The prompt will appear only where inserted using the Single Prompt block or a shortcode.',

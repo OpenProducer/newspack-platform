@@ -14,6 +14,7 @@ const PostTypesPanel = ( { post_types = [], onMetaFieldChange } ) => {
 		{ name: 'page', label: 'Pages' },
 		...window.newspack_popups_data.available_post_types,
 	];
+
 	return availablePostTypes.map( ( { name, label } ) => (
 		<PanelRow key={ name }>
 			<CheckboxControl

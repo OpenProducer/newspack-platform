@@ -7,3 +7,24 @@
 .newspack-advertising-wizard .newspack-button-card .newspack-notice {
   margin: 24px 0 0; }
 
+.newspack-advertising-wizard__network-code {
+  align-items: flex-end;
+  display: flex;
+  flex-wrap: wrap;
+  margin-bottom: -32px; }
+  .newspack-button-card + .newspack-advertising-wizard__network-code {
+    margin-top: -32px; }
+  .newspack-advertising-wizard__network-code .newspack-text-control {
+    flex: 1 1 100%;
+    margin-bottom: 8px; }
+    @media screen and (min-width: 768px) {
+      .newspack-advertising-wizard__network-code .newspack-text-control {
+        flex-basis: auto;
+        margin-bottom: 32px;
+        margin-right: 8px; } }
+  .newspack-advertising-wizard__network-code .newspack-card__buttons-card {
+    flex: 0 0 auto;
+    margin-top: 0; }
+    .newspack-advertising-wizard__network-code .newspack-card__buttons-card .newspack-button + .newspack-button {
+      margin-left: 0; }
+

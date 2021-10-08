@@ -1,3 +1,16 @@
+# [1.60.0](https://github.com/Automattic/newspack-plugin/compare/v1.59.0...v1.60.0) (2021-10-05)
+
+
+### Bug Fixes
+
+* **campaigns-wizard:** segmentation configuration ([fbb5f1b](https://github.com/Automattic/newspack-plugin/commit/fbb5f1b71239cdbb287d24096744d2eb85d04203))
+
+
+### Features
+
+* update GAM wizard design ([#1177](https://github.com/Automattic/newspack-plugin/issues/1177)) ([5635f9e](https://github.com/Automattic/newspack-plugin/commit/5635f9e5fe39093351bb808725c98f99b75785b0))
+* update header and footer style ([#1161](https://github.com/Automattic/newspack-plugin/issues/1161)) ([bbab72f](https://github.com/Automattic/newspack-plugin/commit/bbab72f46d356d596a2f111f090a577bbc3345e2))
+
 # [1.59.0](https://github.com/Automattic/newspack-plugin/compare/v1.58.0...v1.59.0) (2021-09-30)
 
 

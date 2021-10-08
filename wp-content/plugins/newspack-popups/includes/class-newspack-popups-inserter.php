@@ -73,6 +73,7 @@ final class Newspack_Popups_Inserter {
 		add_action( 'wp_head', [ $this, 'insert_popups_amp_access' ] );
 		add_action( 'wp_head', [ $this, 'register_amp_scripts' ] );
 		add_action( 'before_header', [ $this, 'insert_before_header' ] );
+		add_action( 'after_archive_post', [ $this, 'insert_inline_prompt_in_archive_pages' ] );
 
 		// Always enqueue scripts, since this plugin's scripts are handling pageview sending via GTAG.
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
@@ -356,6 +357,42 @@ final class Newspack_Popups_Inserter {
 		$before_header_popups = array_filter( self::popups_for_post(), [ 'Newspack_Popups_Model', 'should_be_inserted_above_page_header' ] );
 		foreach ( $before_header_popups as $popup ) {
 			echo Newspack_Popups_Model::generate_popup( $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
+	}
+
+	/**
+	 * Insert popup after posts in archive pages. Called in the custom hook after_archive_post
+	 * The hook is add inside the posts loop in the archive template.
+	 *
+	 * @param integer $post_count order of the post in the posts loop.
+	 * @return void
+	 */
+	public static function insert_inline_prompt_in_archive_pages( $post_count ) {
+		global $wp_query;
+
+		$archives_popups = array_filter( self::popups_for_post(), [ 'Newspack_Popups_Model', 'should_be_inserted_in_archive_pages' ] );
+		foreach ( $archives_popups as $popup ) {
+			// insert popup only on selected archive page types.
+			if ( is_category() && ! in_array( 'category', $popup['options']['archive_page_types'] )
+				|| ( is_tag() && ! in_array( 'tag', $popup['options']['archive_page_types'] ) )
+				|| ( is_author() && ! in_array( 'author', $popup['options']['archive_page_types'] ) )
+				|| ( is_date() && ! in_array( 'date', $popup['options']['archive_page_types'] ) )
+				|| ( is_post_type_archive() && ! in_array( 'post-type', $popup['options']['archive_page_types'] ) )
+				|| ( is_tax() && ! in_array( 'taxonomy', $popup['options']['archive_page_types'] ) )
+			) {
+					return;
+			}
+
+			$archive_insertion_posts_count = intval( $popup['options']['archive_insertion_posts_count'] );
+			// insert after archive_insertion_posts_count articles
+			// or every archive_insertion_posts_count posts if prompt set to repeated
+			// or at the end if the total posts count is less than the trigger count.
+			if ( $post_count === $archive_insertion_posts_count
+				|| ( $popup['options']['archive_insertion_is_repeating'] && 0 === $post_count % $archive_insertion_posts_count )
+				|| ( $archive_insertion_posts_count >= $wp_query->post_count && $post_count === $wp_query->post_count )
+			) {
+				echo Newspack_Popups_Model::generate_popup( $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			}
 		}
 	}
 

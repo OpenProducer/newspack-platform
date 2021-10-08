@@ -530,6 +530,11 @@ body[class*='admin-color-'] .newspack-button {
       outline-offset: 2px; }
     body[class*='admin-color-'] .newspack-button.is-link.is-small, body[class*='admin-color-'] .newspack-button.is-link.is-large {
       padding: 0; }
+  body[class*='admin-color-'] .newspack-button.is-destructive:active, body[class*='admin-color-'] .newspack-button.is-destructive:active:enabled, body[class*='admin-color-'] .newspack-button.is-destructive:focus, body[class*='admin-color-'] .newspack-button.is-destructive:focus:enabled, body[class*='admin-color-'] .newspack-button.is-destructive:hover, body[class*='admin-color-'] .newspack-button.is-destructive:not(:disabled):not([aria-disabled='true']):not(.is-default):hover {
+    background: #f0f0f0; }
+  body[class*='admin-color-'] .newspack-button.is-destructive:focus, body[class*='admin-color-'] .newspack-button.is-destructive:focus:enabled, body[class*='admin-color-'] .newspack-button.is-destructive:focus:not(:disabled) {
+    box-shadow: inset 0 0 0 1px #cc1818, 0 0 0 1px white, 0 0 0 3px #cc1818;
+    color: #cc1818; }
   body[class*='admin-color-'] .newspack-button .components-tooltip {
     font-weight: normal; }
   body[class*='admin-color-'] .newspack-button.popover-active {
@@ -1163,44 +1168,61 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
  * Colors
  */
 .newspack-footer {
+  align-items: stretch;
+  background: white;
+  border: 0 solid #ddd;
+  border-width: 1px 0;
   bottom: 0;
   color: #757575;
+  display: flex;
+  flex-wrap: wrap;
   font-size: 12px;
+  justify-content: space-between;
   right: 0;
   line-height: 16px;
   position: absolute;
   left: 0; }
   @media screen and (min-width: 783px) {
     .newspack-footer {
-      bottom: 46px; } }
+      bottom: 40px;
+      flex-wrap: nowrap; } }
   .newspack-footer__inner {
-    border: 0 solid #ddd;
-    border-width: 1px 0;
-    margin-top: 16px; }
+    align-items: center;
+    display: flex;
+    flex: 0 0 100%; }
+    @media screen and (min-width: 783px) {
+      .newspack-footer__inner {
+        flex: 1 1 auto; } }
   .newspack-footer ul {
     display: flex;
     flex-wrap: wrap;
-    justify-content: center;
-    margin: 8px auto;
-    max-width: 1040px;
-    padding: 0 32px; }
-    @media screen and (min-width: 744px) {
-      .newspack-footer ul {
-        padding: 0 64px; } }
+    margin: 0;
+    padding: 7px 8px; }
   .newspack-footer li {
-    display: block;
     margin: 8px; }
   .newspack-footer a {
-    color: inherit; }
+    align-items: flex-end;
+    color: inherit;
+    display: flex; }
     .newspack-footer a:active, .newspack-footer a:focus, .newspack-footer a:hover {
       color: #1e1e1e; }
-  .newspack-footer .patrons-logo {
-    display: block;
-    fill: currentColor;
-    margin: 0 auto;
-    max-height: 24px;
-    max-width: calc( 100% - 64px);
-    width: auto; }
+  .newspack-footer__logo {
+    align-items: center;
+    background: #1e1e1e;
+    display: flex;
+    margin: 0 0 -1px;
+    padding: 16px;
+    width: 100%; }
+    @media screen and (min-width: 783px) {
+      .newspack-footer__logo {
+        margin: -1px 8px -1px 0;
+        max-width: 33.33%;
+        width: auto; } }
+    .newspack-footer__logo .patrons-logo {
+      display: block;
+      fill: white;
+      max-height: 16px;
+      width: auto; }
 
 /**
  * Info Button
@@ -1452,6 +1474,14 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
     top: auto; }
     .newspack-modal .components-modal__content {
       height: auto; } }
+
+/**
+ * Newspack Icon
+ */
+.newspack-icon {
+  background: #36f;
+  fill: white;
+  padding: 12px; }
 
 /**
  * Newspack Logo
@@ -2357,40 +2387,46 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
  * Colors
  */
 .newspack-tabbed-navigation ul {
+  box-shadow: 0 -1px 0 inset #ddd;
   display: flex;
   flex-wrap: wrap;
+  font-size: 14px;
+  line-height: 24px;
   margin: 0; }
 
 .newspack-tabbed-navigation li {
+  margin-bottom: 0;
   width: 100%; }
-  @media screen and (min-width: 500px) {
+  @media screen and (min-width: 600px) {
     .newspack-tabbed-navigation li {
-      width: auto;
-      margin-bottom: 0; } }
-  .newspack-tabbed-navigation li:last-child > * {
-    margin-left: 0 !important; }
+      width: auto; } }
 
 .newspack-tabbed-navigation a {
-  border-bottom: 4px solid #36f;
-  color: white;
+  border-bottom: 4px solid transparent;
+  color: #1e1e1e;
   display: block;
   font-weight: bold;
+  padding: 12px 16px 8px;
   text-decoration: none; }
-  @media screen and (min-width: 500px) {
-    .newspack-tabbed-navigation a {
-      margin-left: 32px;
-      padding-bottom: 12px; } }
   .newspack-tabbed-navigation a:active, .newspack-tabbed-navigation a:focus, .newspack-tabbed-navigation a:hover {
-    border-color: #93ccfd;
-    color: white;
+    color: #36f;
     outline: none; }
   .newspack-tabbed-navigation a:focus {
     box-shadow: none; }
   .newspack-tabbed-navigation a:focus-visible {
-    outline: 1px solid;
-    outline-offset: 16px; }
+    outline: 3px solid;
+    outline-offset: -3px; }
   .newspack-tabbed-navigation a.selected {
-    border-color: white; }
+    border-bottom-width: 0;
+    border-right: 4px solid #36f;
+    padding-bottom: 12px; }
+    @media screen and (min-width: 600px) {
+      .newspack-tabbed-navigation a.selected {
+        border-bottom-width: 4px;
+        border-color: #36f;
+        border-right-width: 0;
+        padding-bottom: 8px;
+        padding-right: 16px; } }
 
 /**
  * Text Control
@@ -2835,6 +2871,9 @@ svg.newspack--success {
 .newspack_page_newspack-setup-wizard__welcome #wpwrap {
   background: #36f; }
 
+.newspack_page_newspack-setup-wizard__welcome .newspack-wizard__header {
+  display: none; }
+
 .newspack_page_newspack-setup-wizard__welcome .newspack-card {
   background: white;
   border: 0;
@@ -2859,13 +2898,17 @@ svg.newspack--success {
       margin-left: 8px; }
 
 .newspack_page_newspack-setup-wizard__welcome .newspack-logo__wrapper {
-  margin-top: -32px; }
+  margin-bottom: 32px; }
 
 .newspack_page_newspack-setup-wizard__welcome .newspack-buttons-card {
   margin: 0; }
 
 .newspack_page_newspack-setup-wizard__welcome .newspack-footer {
-  color: white; }
+  background: #36f;
+  border-color: #36f;
+  justify-content: center; }
+  .newspack_page_newspack-setup-wizard__welcome .newspack-footer__logo {
+    background: inherit; }
 
 .newspack_page_newspack-setup-wizard__welcome #wpfooter {
   color: white; }
@@ -2885,14 +2928,15 @@ svg.newspack--success {
   .newspack-wizard__is-loading > * {
     display: none !important; }
   .newspack-wizard__is-loading::before, .newspack-wizard__is-loading::after {
+    animation: loading 2s ease-in-out infinite;
     content: '';
     display: block; }
   .newspack-wizard__is-loading::before {
     background: #36f;
-    height: 160px;
-    width: 100%; }
+    box-shadow: -24px 0 0 white, -69px 0 0 -15px #1e1e1e, -99px 0 0 -15px #1e1e1e, -129px 0 0 -15px #1e1e1e, -159px 0 0 -15px #1e1e1e, -189px 0 0 -15px #1e1e1e;
+    height: 60px;
+    width: 60px; }
   .newspack-wizard__is-loading::after {
-    animation: loading 2s ease-in-out infinite;
     background: #1e1e1e;
     box-shadow: inset 40vw 0 0 0 white, 0 64px 0 0 #757575, -40vw 96px 0 0 white, 0 96px 0 0 #757575;
     height: 24px;
@@ -2982,39 +3026,59 @@ svg.newspack--success {
  * Colors
  */
 .newspack-wizard__header {
-  background: #36f; }
-  .newspack-wizard__header h1 {
-    font-size: 21px;
-    line-height: 32px;
-    margin: 0; }
-  .newspack-wizard__header * {
-    color: white; }
-  .newspack-wizard__header__inner {
-    margin: auto;
-    padding-top: 32px; }
-    .newspack-wizard__header__inner > * {
-      font-size: 14px;
-      line-height: 24px; }
-    .newspack-wizard__header__inner > p {
-      margin: 0;
-      padding-bottom: 32px; }
+  background: white; }
 
-.newspack-wizard__header__inner, .newspack-wizard__content {
-  max-width: 1168px;
-  padding-right: 32px;
-  padding-left: 32px; }
-  @media screen and (min-width: 744px) {
-    .newspack-wizard__header__inner, .newspack-wizard__content {
-      padding-right: 64px;
-      padding-left: 64px; } }
+.newspack-wizard__title {
+  align-items: center;
+  border-bottom: 1px solid #ddd;
+  display: flex; }
+  .newspack-wizard__title h1 {
+    color: #1e1e1e;
+    font-size: 21px;
+    line-height: 30px;
+    margin: 0;
+    padding: 0 24px; }
+  .newspack-wizard__title svg {
+    fill: white;
+    margin: 0 !important; }
+    .newspack-wizard__title svg.newspack-icon {
+      flex: 0 0 36px;
+      margin-bottom: -1px !important; }
+    .newspack-wizard__title svg:not(.newspack-icon) {
+      background: #36f;
+      right: 50%;
+      margin: -18px -18px 0 0 !important;
+      opacity: 0;
+      position: absolute;
+      top: 50%;
+      transition: opacity 125ms ease-in-out; }
+  .newspack-wizard__title a {
+    position: relative; }
+    .newspack-wizard__title a:hover svg {
+      opacity: 1; }
+  .newspack-wizard__title a:focus-visible {
+    outline: none !important; }
+    .newspack-wizard__title a:focus-visible::before {
+      border: 2px solid white;
+      border-radius: 3px;
+      bottom: 5px;
+      content: '';
+      display: block;
+      right: 6px;
+      position: absolute;
+      left: 6px;
+      top: 6px; }
 
 .newspack-wizard__content {
   color: #757575;
   font-size: 14px;
   line-height: 24px;
-  margin: auto;
-  padding-bottom: 32px;
-  padding-top: 32px; }
+  margin: 0 auto;
+  max-width: 1208px;
+  padding: 0 16px; }
+  @media screen and (min-width: 744px) {
+    .newspack-wizard__content {
+      padding: 32px 84px; } }
   .newspack-wizard__content h1,
   .newspack-wizard__content h2,
   .newspack-wizard__content h3,
@@ -3062,7 +3126,7 @@ svg.newspack--success {
       outline: 2px solid #36f;
       outline-offset: 2px; }
 
-.newspack-wizard__debug-mode-notice {
+.newspack-wizard__above-header {
   margin: 0; }
 
 .newspack-buttons-card {
@@ -3094,140 +3158,55 @@ svg.newspack--success {
 /**
  * Wizard Pagination
  */
-.newspack-wizard-pagination {
-  align-items: center;
-  color: white;
+/**
+ * Colors
+ */
+.newspack-wizard-pagination ul {
+  box-shadow: 0 -1px 0 inset #ddd;
   display: flex;
-  flex-direction: row-reverse;
+  flex-wrap: wrap;
   font-size: 14px;
-  justify-content: space-between;
   line-height: 24px;
-  position: relative; }
-  .newspack-wizard-pagination.newspack-wizard__header__inner {
-    flex-direction: column;
-    padding-bottom: 32px;
-    padding-top: 0; }
-    @media screen and (min-width: 940px) {
-      .newspack-wizard-pagination.newspack-wizard__header__inner {
-        padding-bottom: 0; } }
-  .newspack-wizard-pagination__show-steps.newspack-button,
-  body[class*='admin-color-'] .newspack-wizard-pagination .newspack-wizard-pagination__show-steps.newspack-button {
-    border: 1px solid white;
-    flex-direction: row-reverse;
-    padding-right: 12px;
-    padding-left: 12px;
-    position: relative;
-    width: 100%; }
-    .newspack-wizard-pagination__show-steps.newspack-button:hover, .newspack-wizard-pagination__show-steps.newspack-button:focus,
-    body[class*='admin-color-'] .newspack-wizard-pagination .newspack-wizard-pagination__show-steps.newspack-button:hover,
-    body[class*='admin-color-'] .newspack-wizard-pagination .newspack-wizard-pagination__show-steps.newspack-button:focus {
-      color: currentColor; }
-    .newspack-wizard-pagination__show-steps.newspack-button:focus,
-    body[class*='admin-color-'] .newspack-wizard-pagination .newspack-wizard-pagination__show-steps.newspack-button:focus {
-      box-shadow: 0 0 0 1px #36f, 0 0 0 3px white;
-      position: relative;
-      z-index: 1; }
-    .newspack-wizard-pagination__show-steps.newspack-button svg,
-    body[class*='admin-color-'] .newspack-wizard-pagination .newspack-wizard-pagination__show-steps.newspack-button svg {
-      margin: 0 auto 0 0;
-      padding-right: 12px; }
-    @media screen and (min-width: 940px) {
-      .newspack-wizard-pagination__show-steps.newspack-button,
-      body[class*='admin-color-'] .newspack-wizard-pagination .newspack-wizard-pagination__show-steps.newspack-button {
-        display: none; } }
-  .newspack-wizard-pagination__steps {
-    border-top-width: 0;
-    margin-top: -1px;
-    padding-top: 0;
-    width: 100%; }
-    @media screen and (min-width: 940px) {
-      .newspack-wizard-pagination__steps {
-        align-items: center;
-        display: flex;
-        margin: 0;
-        padding: 0;
-        position: relative;
-        width: 100%; }
-        .newspack-wizard-pagination__steps.hidden {
-          display: flex; } }
-  .newspack-wizard-pagination__step {
-    background-color: #36f;
-    border-right: 1px solid white;
-    border-left: 1px solid white;
-    margin: 0;
-    position: relative; }
-    .newspack-wizard-pagination__step:first-child {
-      border-top: 1px solid white;
-      padding-top: 6px; }
-    .newspack-wizard-pagination__step:last-child {
-      border-bottom: 1px solid white;
-      border-bottom-right-radius: 3px;
-      border-bottom-left-radius: 3px;
-      padding-bottom: 6px; }
-    .newspack-wizard-pagination__step .newspack-button.is-link,
-    body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link {
-      border-radius: 3px;
-      color: #0e0052;
-      display: flex;
-      font-weight: bold;
-      padding: 6px 12px;
-      text-decoration: none;
-      transition: box-shadow 125ms ease-in-out, color 125ms ease-in-out;
-      width: 100%; }
-      .newspack-wizard-pagination__step .newspack-button.is-link.active, .newspack-wizard-pagination__step .newspack-button.is-link.complete,
-      body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link.active,
-      body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link.complete {
-        color: white !important; }
-      .newspack-wizard-pagination__step .newspack-button.is-link:disabled,
-      body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:disabled {
-        opacity: 1; }
-      .newspack-wizard-pagination__step .newspack-button.is-link:active, .newspack-wizard-pagination__step .newspack-button.is-link:focus, .newspack-wizard-pagination__step .newspack-button.is-link:hover:not(:disabled),
-      body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:active,
-      body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:focus,
-      body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:hover:not(:disabled) {
-        outline: none; }
-      .newspack-wizard-pagination__step .newspack-button.is-link:focus,
-      body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:focus {
-        box-shadow: 0 0 0 1px white, 0 0 0 2px #36f, 0 0 0 4px white;
-        position: relative;
-        z-index: 1; }
-    @media screen and (min-width: 940px) {
-      .newspack-wizard-pagination__step {
-        border: 0;
-        flex: 0 0 auto;
-        margin-left: 32px;
-        padding: 0; }
-        .newspack-wizard-pagination__step:last-child {
-          margin-left: 0; }
-        .newspack-wizard-pagination__step:first-child, .newspack-wizard-pagination__step:last-child {
-          border: none;
-          padding-bottom: 0;
-          padding-top: 0; }
-        .newspack-wizard-pagination__step .newspack-button.is-link,
-        body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link {
-          border-bottom: 4px solid #36f;
-          border-radius: 0;
-          font-weight: bold;
-          padding: 0 0 12px; }
-          .newspack-wizard-pagination__step .newspack-button.is-link:active, .newspack-wizard-pagination__step .newspack-button.is-link:focus, .newspack-wizard-pagination__step .newspack-button.is-link:hover:not(:disabled),
-          body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:active,
-          body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:focus,
-          body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:hover:not(:disabled) {
-            border-color: #93ccfd;
-            color: white;
-            outline: none; }
-          .newspack-wizard-pagination__step .newspack-button.is-link:focus,
-          body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link:focus {
-            box-shadow: none;
-            outline: 1px solid;
-            outline-offset: 16px; }
-          .newspack-wizard-pagination__step .newspack-button.is-link.active,
-          body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link.active {
-            border-color: white;
-            text-decoration: none; }
-          .newspack-wizard-pagination__step .newspack-button.is-link svg,
-          body[class*='admin-color-'] .newspack-wizard-pagination__step .newspack-button.is-link svg {
-            display: none; } }
+  margin: 0; }
+
+.newspack-wizard-pagination li {
+  margin-bottom: 0;
+  width: 100%; }
+  @media screen and (min-width: 600px) {
+    .newspack-wizard-pagination li {
+      width: auto; } }
+
+.newspack-wizard-pagination a {
+  border-bottom: 4px solid transparent;
+  color: #1e1e1e;
+  display: block;
+  font-weight: bold;
+  padding: 12px 16px 8px;
+  text-decoration: none; }
+  .newspack-wizard-pagination a:active, .newspack-wizard-pagination a:focus, .newspack-wizard-pagination a:hover {
+    color: #36f;
+    outline: none; }
+  .newspack-wizard-pagination a:focus {
+    box-shadow: none; }
+  .newspack-wizard-pagination a:focus-visible {
+    outline: 3px solid;
+    outline-offset: -3px; }
+  .newspack-wizard-pagination a.active {
+    border-bottom-width: 0;
+    border-right: 4px solid #36f;
+    padding-bottom: 12px; }
+    @media screen and (min-width: 600px) {
+      .newspack-wizard-pagination a.active {
+        border-bottom-width: 4px;
+        border-color: #36f;
+        border-right-width: 0;
+        padding-bottom: 8px;
+        padding-right: 16px; } }
+  .newspack-wizard-pagination a.disabled {
+    cursor: not-allowed;
+    opacity: 0.3; }
+    .newspack-wizard-pagination a.disabled:hover {
+      color: inherit; }
 
 /**
  * Money Input

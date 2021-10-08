@@ -787,7 +787,6 @@ class Newspack_Blocks {
 			}
 
 			/** This filter is documented in wp-includes/post-template.php */
-			$text = apply_filters( 'the_content', $text ); // phpcs:ignore
 			$text = str_replace( ']]>', ']]&gt;', $text );
 			$text = wp_trim_words( $text, $attributes['excerptLength'], static::more_excerpt() );
 

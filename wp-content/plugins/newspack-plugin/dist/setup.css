@@ -27,14 +27,6 @@
 /**
  * Setup
  */
-#newspack-setup-wizard .newspack-wizard__header h1 {
-  display: none; }
-
-#newspack-setup-wizard .newspack-wizard__header p {
-  font-size: 21px;
-  font-weight: bold;
-  line-height: 32px; }
-
 .newspack-site-profile {
   display: flex;
   flex-wrap: wrap; }
@@ -57,4 +49,15 @@
         display: grid;
         grid-gap: 16px;
         grid-template-columns: repeat(auto-fit, 100%); } }
+
+.newspack-wizard__title a {
+  pointer-events: none; }
+
+.newspack-wizard__title svg:not(.newspack-icon) {
+  display: none; }
+
+.newspack-footer {
+  flex-direction: row-reverse; }
+  .newspack-footer__logo {
+    margin-left: 0; }
 

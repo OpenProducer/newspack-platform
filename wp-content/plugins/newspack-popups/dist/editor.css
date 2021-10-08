@@ -2767,6 +2767,8 @@ svg.newspack--success {
     display: inline-block; }
     .newspack-popups__prompt-type-control .components-radio-control__option:first-of-type {
       margin-right: 1rem; }
+  .newspack-popups__prompt-type-control .components-base-control__legend {
+    padding-bottom: 4px; }
 
 .newspack-popups__not-interested-button-preview {
   cursor: not-allowed;

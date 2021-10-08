@@ -148,6 +148,10 @@
       "type": "array",
       "default": [ "post" ],
       "items": { "type": "string" }
-    }
+    },
+    "textAlign": {
+      "type": "string",
+	  "default": "left"
+	}
   }
 }

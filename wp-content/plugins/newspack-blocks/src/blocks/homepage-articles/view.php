@@ -58,6 +58,9 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 	if ( isset( $attributes['className'] ) ) {
 		$classes .= ' ' . $attributes['className'];
 	}
+	if ( $attributes['textAlign'] ) {
+		$classes .= ' has-text-align-' . $attributes['textAlign'];
+	}
 
 	if ( '' !== $attributes['textColor'] || '' !== $attributes['customTextColor'] ) {
 		$classes .= ' has-text-color';

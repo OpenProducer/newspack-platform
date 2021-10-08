@@ -120,6 +120,7 @@ final class Newspack_Popups {
 				'auth_callback'  => '__return_true',
 			]
 		);
+
 		\register_meta(
 			'post',
 			'trigger_scroll_progress',
@@ -131,6 +132,31 @@ final class Newspack_Popups {
 				'auth_callback'  => '__return_true',
 			]
 		);
+
+		\register_meta(
+			'post',
+			'archive_insertion_posts_count',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'integer',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
+		\register_meta(
+			'post',
+			'archive_insertion_is_repeating',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'boolean',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
 		\register_meta(
 			'post',
 			'trigger_delay',
@@ -310,6 +336,25 @@ final class Newspack_Popups {
 			]
 		);
 
+		\register_meta(
+			'post',
+			'archive_page_types',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => [
+					'schema' => [
+						'items' => [
+							'type' => 'string',
+						],
+					],
+				],
+				'type'           => 'array',
+				'default'        => Newspack_Popups_Model::get_default_popup_archive_page_types(),
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
 		// Meta field for all post types.
 		\register_meta(
 			'post',
@@ -374,6 +419,17 @@ final class Newspack_Popups {
 		);
 		$recent_posts = $query->get_posts();
 		return $recent_posts && count( $recent_posts ) > 0 ? get_the_permalink( $recent_posts[0] ) : '';
+	}
+
+	/**
+	 * Get preview archive permalink. Used to preview prompts in archive pages in the popup wizard.
+	 *
+	 * @return string
+	 */
+	public static function preview_archive_permalink() {
+		$categories = array_values( get_categories() );
+
+		return count( $categories ) > 0 ? get_category_link( $categories[0] ) : '';
 	}
 
 	/**
@@ -444,12 +500,14 @@ final class Newspack_Popups {
 			'newspack-popups',
 			'newspack_popups_data',
 			[
-				'preview_post'         => self::preview_post_permalink(),
-				'segments'             => Newspack_Popups_Segmentation::get_segments(),
-				'custom_placements'    => Newspack_Popups_Custom_Placements::get_custom_placements(),
-				'taxonomy'             => self::NEWSPACK_POPUPS_TAXONOMY,
-				'is_prompt'            => self::NEWSPACK_POPUPS_CPT == get_post_type(),
-				'available_post_types' => array_values(
+				'preview_post'                 => self::preview_post_permalink(),
+				'preview_archive'              => self::preview_archive_permalink(),
+				'segments'                     => Newspack_Popups_Segmentation::get_segments(),
+				'custom_placements'            => Newspack_Popups_Custom_Placements::get_custom_placements(),
+				'available_archive_page_types' => self::get_available_archive_page_types(),
+				'taxonomy'                     => self::NEWSPACK_POPUPS_TAXONOMY,
+				'is_prompt'                    => self::NEWSPACK_POPUPS_CPT == get_post_type(),
+				'available_post_types'         => array_values(
 					get_post_types(
 						[
 							'public'       => true,
@@ -583,6 +641,10 @@ final class Newspack_Popups {
 			case 'overlay-bottom':
 				$placement = 'bottom';
 				break;
+			case 'archives':
+				$placement = 'archives';
+				$frequency = 'always';
+				break;
 			case 'above-header':
 				$placement = 'above_header';
 				$frequency = 'always';
@@ -623,6 +685,8 @@ final class Newspack_Popups {
 		update_post_meta( $post_id, 'trigger_type', $trigger_type );
 		update_post_meta( $post_id, 'trigger_delay', 3 );
 		update_post_meta( $post_id, 'trigger_scroll_progress', 30 );
+		update_post_meta( $post_id, 'archive_insertion_posts_count', 0 );
+		update_post_meta( $post_id, 'archive_insertion_is_repeating', false );
 		update_post_meta( $post_id, 'utm_suppression', '' );
 		update_post_meta( $post_id, 'selected_segment_id', $segment );
 
@@ -899,6 +963,44 @@ final class Newspack_Popups {
 		}
 
 		return $new_popup_id;
+	}
+
+	/**
+	 * Get available archive page types where to display prompts
+	 */
+	public static function get_available_archive_page_types() {
+		return [
+			[
+				'name'  => 'category',
+				/* translators: archive page */
+				'label' => __( 'Categories' ),
+			],
+			[
+				'name'  => 'tag',
+				/* translators: archive page */
+				'label' => __( 'Tags' ),
+			],
+			[
+				'name'  => 'author',
+				/* translators: archive page */
+				'label' => __( 'Authors' ),
+			],
+			[
+				'name'  => 'date',
+				/* translators: archive page */
+				'label' => __( 'Date' ),
+			],
+			[
+				'name'  => 'post-type',
+				/* translators: archive page */
+				'label' => __( 'Custom Post Types' ),
+			],
+			[
+				'name'  => 'taxonomy',
+				/* translators: archive page */
+				'label' => __( 'Taxonomies' ),
+			],
+		];
 	}
 }
 Newspack_Popups::instance();

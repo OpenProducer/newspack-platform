@@ -23,7 +23,7 @@ final class Newspack_Popups_Model {
 	 *
 	 * @var array
 	 */
-	protected static $inline_placements = [ 'inline', 'above_header' ];
+	protected static $inline_placements = [ 'inline', 'above_header', 'archives' ];
 
 	/**
 	 * Retrieve all Popups (first 100).
@@ -153,6 +153,7 @@ final class Newspack_Popups_Model {
 					update_post_meta( $id, $key, $value );
 					break;
 				case 'post_types':
+				case 'archive_page_types':
 					update_post_meta( $id, $key, $value );
 					break;
 				default:
@@ -219,19 +220,21 @@ final class Newspack_Popups_Model {
 			$post_object,
 			false,
 			[
-				'background_color'        => filter_input( INPUT_GET, 'background_color', FILTER_SANITIZE_STRING ),
-				'display_title'           => filter_input( INPUT_GET, 'display_title', FILTER_VALIDATE_BOOLEAN ),
-				'hide_border'             => filter_input( INPUT_GET, 'hide_border', FILTER_VALIDATE_BOOLEAN ),
-				'dismiss_text'            => filter_input( INPUT_GET, 'dismiss_text', FILTER_SANITIZE_STRING ),
-				'dismiss_text_alignment'  => filter_input( INPUT_GET, 'dismiss_text_alignment', FILTER_SANITIZE_STRING ),
-				'frequency'               => filter_input( INPUT_GET, 'frequency', FILTER_SANITIZE_STRING ),
-				'overlay_color'           => filter_input( INPUT_GET, 'overlay_color', FILTER_SANITIZE_STRING ),
-				'overlay_opacity'         => filter_input( INPUT_GET, 'overlay_opacity', FILTER_SANITIZE_STRING ),
-				'placement'               => filter_input( INPUT_GET, 'placement', FILTER_SANITIZE_STRING ),
-				'trigger_type'            => filter_input( INPUT_GET, 'trigger_type', FILTER_SANITIZE_STRING ),
-				'trigger_delay'           => filter_input( INPUT_GET, 'trigger_delay', FILTER_SANITIZE_STRING ),
-				'trigger_scroll_progress' => filter_input( INPUT_GET, 'trigger_scroll_progress', FILTER_SANITIZE_STRING ),
-				'utm_suppression'         => filter_input( INPUT_GET, 'utm_suppression', FILTER_SANITIZE_STRING ),
+				'background_color'               => filter_input( INPUT_GET, 'background_color', FILTER_SANITIZE_STRING ),
+				'display_title'                  => filter_input( INPUT_GET, 'display_title', FILTER_VALIDATE_BOOLEAN ),
+				'hide_border'                    => filter_input( INPUT_GET, 'hide_border', FILTER_VALIDATE_BOOLEAN ),
+				'dismiss_text'                   => filter_input( INPUT_GET, 'dismiss_text', FILTER_SANITIZE_STRING ),
+				'dismiss_text_alignment'         => filter_input( INPUT_GET, 'dismiss_text_alignment', FILTER_SANITIZE_STRING ),
+				'frequency'                      => filter_input( INPUT_GET, 'frequency', FILTER_SANITIZE_STRING ),
+				'overlay_color'                  => filter_input( INPUT_GET, 'overlay_color', FILTER_SANITIZE_STRING ),
+				'overlay_opacity'                => filter_input( INPUT_GET, 'overlay_opacity', FILTER_SANITIZE_STRING ),
+				'placement'                      => filter_input( INPUT_GET, 'placement', FILTER_SANITIZE_STRING ),
+				'trigger_type'                   => filter_input( INPUT_GET, 'trigger_type', FILTER_SANITIZE_STRING ),
+				'trigger_delay'                  => filter_input( INPUT_GET, 'trigger_delay', FILTER_SANITIZE_STRING ),
+				'trigger_scroll_progress'        => filter_input( INPUT_GET, 'trigger_scroll_progress', FILTER_SANITIZE_STRING ),
+				'archive_insertion_posts_count'  => filter_input( INPUT_GET, 'archive_insertion_posts_count', FILTER_SANITIZE_STRING ),
+				'archive_insertion_is_repeating' => filter_input( INPUT_GET, 'archive_insertion_is_repeating', FILTER_VALIDATE_BOOLEAN ),
+				'utm_suppression'                => filter_input( INPUT_GET, 'utm_suppression', FILTER_SANITIZE_STRING ),
 			]
 		);
 	}
@@ -337,41 +340,47 @@ final class Newspack_Popups_Model {
 	 */
 	public static function get_popup_options( $id, $options = null ) {
 		$post_options = isset( $options ) ? $options : [
-			'background_color'        => get_post_meta( $id, 'background_color', true ),
-			'dismiss_text'            => get_post_meta( $id, 'dismiss_text', true ),
-			'dismiss_text_alignment'  => get_post_meta( $id, 'dismiss_text_alignment', true ),
-			'display_title'           => get_post_meta( $id, 'display_title', true ),
-			'hide_border'             => get_post_meta( $id, 'hide_border', true ),
-			'frequency'               => get_post_meta( $id, 'frequency', true ),
-			'overlay_color'           => get_post_meta( $id, 'overlay_color', true ),
-			'overlay_opacity'         => get_post_meta( $id, 'overlay_opacity', true ),
-			'placement'               => get_post_meta( $id, 'placement', true ),
-			'trigger_type'            => get_post_meta( $id, 'trigger_type', true ),
-			'trigger_delay'           => get_post_meta( $id, 'trigger_delay', true ),
-			'trigger_scroll_progress' => get_post_meta( $id, 'trigger_scroll_progress', true ),
-			'utm_suppression'         => get_post_meta( $id, 'utm_suppression', true ),
-			'selected_segment_id'     => get_post_meta( $id, 'selected_segment_id', true ),
-			'post_types'              => get_post_meta( $id, 'post_types', true ),
+			'background_color'               => get_post_meta( $id, 'background_color', true ),
+			'dismiss_text'                   => get_post_meta( $id, 'dismiss_text', true ),
+			'dismiss_text_alignment'         => get_post_meta( $id, 'dismiss_text_alignment', true ),
+			'display_title'                  => get_post_meta( $id, 'display_title', true ),
+			'hide_border'                    => get_post_meta( $id, 'hide_border', true ),
+			'frequency'                      => get_post_meta( $id, 'frequency', true ),
+			'overlay_color'                  => get_post_meta( $id, 'overlay_color', true ),
+			'overlay_opacity'                => get_post_meta( $id, 'overlay_opacity', true ),
+			'placement'                      => get_post_meta( $id, 'placement', true ),
+			'trigger_type'                   => get_post_meta( $id, 'trigger_type', true ),
+			'trigger_delay'                  => get_post_meta( $id, 'trigger_delay', true ),
+			'trigger_scroll_progress'        => get_post_meta( $id, 'trigger_scroll_progress', true ),
+			'archive_insertion_posts_count'  => get_post_meta( $id, 'archive_insertion_posts_count', true ),
+			'archive_insertion_is_repeating' => get_post_meta( $id, 'archive_insertion_is_repeating', true ),
+			'utm_suppression'                => get_post_meta( $id, 'utm_suppression', true ),
+			'selected_segment_id'            => get_post_meta( $id, 'selected_segment_id', true ),
+			'post_types'                     => get_post_meta( $id, 'post_types', true ),
+			'archive_page_types'             => get_post_meta( $id, 'archive_page_types', true ),
 		];
 
 		return wp_parse_args(
 			array_filter( $post_options ),
 			[
-				'background_color'        => '#FFFFFF',
-				'display_title'           => false,
-				'hide_border'             => false,
-				'dismiss_text'            => '',
-				'dismiss_text_alignment'  => 'center',
-				'frequency'               => 'always',
-				'overlay_color'           => '#000000',
-				'overlay_opacity'         => 30,
-				'placement'               => 'inline',
-				'trigger_type'            => 'time',
-				'trigger_delay'           => 0,
-				'trigger_scroll_progress' => 0,
-				'utm_suppression'         => null,
-				'selected_segment_id'     => '',
-				'post_types'              => self::get_globally_supported_post_types(),
+				'background_color'               => '#FFFFFF',
+				'display_title'                  => false,
+				'hide_border'                    => false,
+				'dismiss_text'                   => '',
+				'dismiss_text_alignment'         => 'center',
+				'frequency'                      => 'always',
+				'overlay_color'                  => '#000000',
+				'overlay_opacity'                => 30,
+				'placement'                      => 'inline',
+				'trigger_type'                   => 'time',
+				'trigger_delay'                  => 0,
+				'trigger_scroll_progress'        => 0,
+				'archive_insertion_posts_count'  => 1,
+				'archive_insertion_is_repeating' => false,
+				'utm_suppression'                => null,
+				'selected_segment_id'            => '',
+				'post_types'                     => self::get_globally_supported_post_types(),
+				'archive_page_types'             => self::get_supported_archive_page_types(),
 			]
 		);
 	}
@@ -387,10 +396,27 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
+	 * Get the supported archive page types.
+	 */
+	public static function get_supported_archive_page_types() {
+		return apply_filters(
+			'newspack_campaigns_archive_page_types_for_campaigns',
+			self::get_default_popup_archive_page_types()
+		);
+	}
+
+	/**
 	 * Get the default supported post types.
 	 */
 	public static function get_default_popup_post_types() {
 		return [ 'post', 'page' ];
+	}
+
+	/**
+	 * Get the default supported archive page types.
+	 */
+	public static function get_default_popup_archive_page_types() {
+		return [ 'category', 'tag', 'author', 'date', 'post-type', 'taxonomy' ];
 	}
 
 	/**
@@ -507,13 +533,24 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
+	 * Get popups which should be inserted above page header.
+	 *
+	 * @param object $popup The popup object.
+	 * @return boolean True if the popup should be inserted above page header.
+	 */
+	public static function should_be_inserted_in_archive_pages( $popup ) {
+		return self::is_inline( $popup ) && 'archives' === $popup['options']['placement'];
+	}
+
+	/**
 	 * Get popups which should be inserted in page content.
 	 *
 	 * @param object $popup The popup object.
 	 * @return boolean True if the popup should be inserted in page content.
 	 */
 	public static function should_be_inserted_in_page_content( $popup ) {
-		return self::should_be_inserted_above_page_header( $popup ) === false;
+		return self::should_be_inserted_above_page_header( $popup ) === false
+			&& self::should_be_inserted_in_archive_pages( $popup ) === false;
 	}
 
 	/**

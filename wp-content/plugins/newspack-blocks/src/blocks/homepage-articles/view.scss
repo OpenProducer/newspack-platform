@@ -256,26 +256,6 @@
 					width: 100% !important;
 				}
 
-				figcaption {
-					bottom: 1em;
-					/* autoprefixer: ignore next */
-					-webkit-box-orient: vertical;
-					color: rgba( white, 0.9 );
-					display: -webkit-box;
-					font-style: italic;
-					left: 0;
-					-webkit-line-clamp: 1;
-					margin: 0;
-					max-height: 1.6em;
-					overflow: hidden;
-					padding: 0 1em;
-					position: absolute;
-					right: 0;
-					text-align: right;
-					text-overflow: ellipsis;
-					z-index: 2;
-				}
-
 				&::after {
 					background: rgba( 0, 0, 0, 0.5 );
 					bottom: 0;
@@ -289,12 +269,12 @@
 			}
 
 			.entry-wrapper {
-				padding: 2em 1em;
+				padding: 2rem 1rem;
 				position: relative;
 				z-index: 2;
 
 				@include media( desktop ) {
-					padding: 2em 1.5em;
+					padding: 2rem 1.5rem;
 				}
 			}
 
@@ -304,6 +284,30 @@
 			.entry-meta .byline a,
 			.cat-links a {
 				color: #fff;
+			}
+		}
+
+		figcaption {
+			bottom: 1em;
+			/* autoprefixer: ignore next */
+			-webkit-box-orient: vertical;
+			color: rgba( white, 0.9 );
+			display: -webkit-box;
+			font-style: italic;
+			left: 0;
+			-webkit-line-clamp: 1;
+			margin: 0;
+			max-height: 1.6em;
+			overflow: hidden;
+			padding: 0 1rem;
+			position: absolute;
+			right: 0;
+			text-align: right;
+			text-overflow: ellipsis;
+			z-index: 2;
+
+			@include media( desktop ) {
+				padding: 0 1.5rem;
 			}
 		}
 	}
@@ -351,6 +355,46 @@
 		height: auto;
 		position: relative;
 		width: auto;
+	}
+
+	// Ensure centre alignment when selected.
+	&.has-text-align-center {
+		.cat-links,
+		.entry-meta,
+		.sponsor-logos {
+			justify-content: center;
+		}
+
+		.sponsor-logos > * {
+			margin: 0;
+		}
+
+		&.image-alignbehind figcaption,
+		figcaption {
+			text-align: inherit;
+		}
+	}
+
+	// Ensure right alignment when selected.
+	&.has-text-align-right {
+		.cat-links,
+		.entry-meta,
+		.sponsor-logos {
+			justify-content: flex-end;
+		}
+
+		figcaption {
+			text-align: inherit;
+		}
+
+		.entry-date:not( :first-child ) {
+			margin-left: 1.5em;
+		}
+
+		.entry-meta .byline:not( :last-child ),
+		.sponsor-logos > * {
+			margin: 0;
+		}
 	}
 }
 
