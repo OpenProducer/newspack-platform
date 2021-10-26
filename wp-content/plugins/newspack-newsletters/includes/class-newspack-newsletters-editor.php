@@ -44,6 +44,7 @@ final class Newspack_Newsletters_Editor {
 	 * Constructor.
 	 */
 	public function __construct() {
+		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'the_post', [ __CLASS__, 'strip_editor_modifications' ] );
 		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 		add_filter( 'allowed_block_types_all', [ __CLASS__, 'newsletters_allowed_block_types' ], 10, 2 );
@@ -53,11 +54,52 @@ final class Newspack_Newsletters_Editor {
 	}
 
 	/**
+	 * Register custom fields.
+	 */
+	public static function register_meta() {
+		foreach ( self::get_email_editor_cpts() as $cpt ) {
+			\register_meta(
+				'post',
+				Newspack_Newsletters::EMAIL_HTML_META,
+				[
+					'object_subtype' => $cpt,
+					'show_in_rest'   => [
+						'schema' => [
+							'context' => [ 'edit' ],
+						],
+					],
+					'type'           => 'string',
+					'single'         => true,
+					'auth_callback'  => '__return_true',
+				]
+			);
+		}
+	}
+
+	/**
+	 * Get post types which should be edited using the email editor.
+	 */
+	private static function get_email_editor_cpts() {
+		$email_cpts = [
+			Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
+			Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
+		];
+		return apply_filters( 'newspack_newsletters_email_editor_cpts', $email_cpts );
+	}
+
+	/**
+	 * Is the editor editing an email?
+	 */
+	private static function is_editing_email() {
+		return in_array( get_post_type(), self::get_email_editor_cpts() );
+	}
+
+	/**
 	 * Remove all editor enqueued assets besides this plugins' and disable some editor features.
 	 * This is to prevent theme styles being loaded in the editor.
 	 */
 	public static function strip_editor_modifications() {
-		if ( ! self::is_editing_newsletter() && ! self::is_editing_newsletter_ad() ) {
+		if ( ! self::is_editing_email() ) {
 			return;
 		}
 
@@ -89,7 +131,7 @@ final class Newspack_Newsletters_Editor {
 	 * @param WP_Post $post the post to consider.
 	 */
 	public static function newsletters_allowed_block_types( $allowed_block_types, $post ) {
-		if ( ! self::is_editing_newsletter() && ! self::is_editing_newsletter_ad() ) {
+		if ( ! self::is_editing_email() ) {
 			return $allowed_block_types;
 		}
 		return array(
@@ -114,10 +156,10 @@ final class Newspack_Newsletters_Editor {
 	}
 
 	/**
-	 * Load up common JS/CSS for wizards.
+	 * Load up common JS/CSS for newsletter editor.
 	 */
 	public static function enqueue_block_editor_assets() {
-		if ( self::is_editing_newsletter() || self::is_editing_newsletter_ad() ) {
+		if ( self::is_editing_email() ) {
 			wp_register_style(
 				'newspack-newsletters',
 				plugins_url( '../dist/editor.css', __FILE__ ),
@@ -126,6 +168,26 @@ final class Newspack_Newsletters_Editor {
 			);
 			wp_style_add_data( 'newspack-newsletters', 'rtl', 'replace' );
 			wp_enqueue_style( 'newspack-newsletters' );
+
+			\wp_enqueue_script(
+				'newspack-newsletters-editor',
+				plugins_url( '../dist/editor.js', __FILE__ ),
+				[],
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/editor.js' ),
+				true
+			);
+
+			// Remove the Ads CPT - it does not need MJML handling since ads
+			// will be injected into email content before it's converted to MJML.
+			$mjml_handling_post_types = array_values( array_diff( self::get_email_editor_cpts(), [ Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT ] ) );
+			wp_localize_script(
+				'newspack-newsletters-editor',
+				'newspack_email_editor_data',
+				[
+					'email_html_meta'          => Newspack_Newsletters::EMAIL_HTML_META,
+					'mjml_handling_post_types' => $mjml_handling_post_types,
+				]
+			);
 		}
 
 		if ( self::is_editing_newsletter_ad() ) {
@@ -135,6 +197,33 @@ final class Newspack_Newsletters_Editor {
 				[ 'wp-components', 'wp-api-fetch' ],
 				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/adsEditor.js' ),
 				true
+			);
+		}
+
+		if ( self::is_editing_newsletter() ) {
+			wp_register_style(
+				'newspack-newsletters-newsletter-editor',
+				plugins_url( '../dist/newsletterEditor.css', __FILE__ ),
+				[],
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/newsletterEditor.css' )
+			);
+			wp_style_add_data( 'newspack-newsletters-newsletter-editor', 'rtl', 'replace' );
+			wp_enqueue_style( 'newspack-newsletters-newsletter-editor' );
+			\wp_enqueue_script(
+				'newspack-newsletters-newsletter-editor',
+				plugins_url( '../dist/newsletterEditor.js', __FILE__ ),
+				[],
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/newsletterEditor.js' ),
+				true
+			);
+			wp_localize_script(
+				'newspack-newsletters-newsletter-editor',
+				'newspack_newsletters_data',
+				[
+					'is_service_provider_configured' => Newspack_Newsletters::is_service_provider_configured(),
+					'service_provider'               => Newspack_Newsletters::service_provider(),
+					'user_test_emails'               => self::get_current_user_test_emails(),
+				]
 			);
 		}
 
@@ -156,42 +245,19 @@ final class Newspack_Newsletters_Editor {
 			wp_style_add_data( 'newspack-newsletters-blocks', 'rtl', 'replace' );
 			wp_enqueue_style( 'newspack-newsletters-blocks' );
 		}
-
-		if ( ! self::is_editing_newsletter() ) {
-			return;
-		}
-
-		\wp_enqueue_script(
-			'newspack-newsletters',
-			plugins_url( '../dist/editor.js', __FILE__ ),
-			[],
-			filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/editor.js' ),
-			true
-		);
-		wp_localize_script(
-			'newspack-newsletters',
-			'newspack_newsletters_data',
-			[
-				'is_service_provider_configured' => Newspack_Newsletters::is_service_provider_configured(),
-				'service_provider'               => Newspack_Newsletters::service_provider(),
-				'email_html_meta'                => Newspack_Newsletters::EMAIL_HTML_META,
-				'newsletter_cpt'                 => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-				'user_test_emails'               => self::get_current_user_test_emails(),
-			]
-		);
 	}
 
 	/**
 	 * Is editing a newsletter?
 	 */
-	public static function is_editing_newsletter() {
+	private static function is_editing_newsletter() {
 		return Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT === get_post_type();
 	}
 
 	/**
 	 * Is editing a newsletter ad?
 	 */
-	public static function is_editing_newsletter_ad() {
+	private static function is_editing_newsletter_ad() {
 		return Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT === get_post_type();
 	}
 

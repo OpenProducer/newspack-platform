@@ -83,6 +83,7 @@ final class Newspack_Newsletters {
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'branding_scripts' ] );
 		add_filter( 'newspack_theme_featured_image_post_types', [ __CLASS__, 'support_featured_image_options' ] );
 		add_filter( 'gform_force_hooks_js_output', [ __CLASS__, 'suppress_gravityforms_js_on_newsletters' ] );
+		add_filter( 'render_block', [ __CLASS__, 'remove_email_only_block' ], 10, 2 );
 		self::set_service_provider( self::service_provider() );
 
 		$needs_nag = is_admin() && ! self::is_service_provider_configured() && ! get_option( 'newspack_newsletters_activation_nag_viewed', false );
@@ -310,21 +311,6 @@ final class Newspack_Newsletters {
 				'type'           => 'string',
 				'single'         => true,
 				'default'        => '',
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			self::EMAIL_HTML_META,
-			[
-				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'string',
-				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
 		);
@@ -688,9 +674,8 @@ final class Newspack_Newsletters {
 				'callback'            => [ __CLASS__, 'api_get_mjml' ],
 				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
 				'args'                => [
-					'id'      => [
+					'post_id' => [
 						'required'          => true,
-						'validate_callback' => [ __CLASS__, 'validate_newsletter_id' ],
 						'sanitize_callback' => 'absint',
 					],
 					'content' => [
@@ -721,7 +706,7 @@ final class Newspack_Newsletters {
 	 * @param WP_REST_Request $request API request object.
 	 */
 	public static function api_get_mjml( $request ) {
-		$post = get_post( $request['id'] );
+		$post = get_post( $request['post_id'] );
 		if ( ! empty( $request['title'] ) ) {
 			$post->post_title = $request['title'];
 		}
@@ -1092,6 +1077,25 @@ final class Newspack_Newsletters {
 		}
 
 		return $force_js;
+	}
+
+	/**
+	 * Do not display blocks that are configured to be email-only.
+	 *
+	 * @param string $block_content The block content about to be appended.
+	 * @param array  $block         The full block, including name and attributes.
+	 *
+	 * @return string Transformed block content to be apppended.
+	 */
+	public static function remove_email_only_block( $block_content, $block ) {
+		if (
+			self::NEWSPACK_NEWSLETTERS_CPT === get_post_type() &&
+			isset( $block['attrs']['newsletterVisibility'] ) &&
+			'email' === $block['attrs']['newsletterVisibility']
+		) {
+			return '';
+		}
+		return $block_content;
 	}
 
 	/**

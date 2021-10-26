@@ -308,7 +308,7 @@ class Support_Wizard extends Wizard {
 	 * @return bool True if necessary variables are present.
 	 */
 	public static function configured() {
-		return WPCOM_OAuth::wpcom_client_id();
+		return WPCOM_OAuth::wpcom_client_id() && self::support_api_url() && self::support_email();
 	}
 
 	/**

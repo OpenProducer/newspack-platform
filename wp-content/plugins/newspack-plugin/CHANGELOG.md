@@ -1,3 +1,47 @@
+# [1.63.0](https://github.com/Automattic/newspack-plugin/compare/v1.62.0...v1.63.0) (2021-10-26)
+
+
+### Bug Fixes
+
+* ensure support variables are configured ([#1201](https://github.com/Automattic/newspack-plugin/issues/1201)) ([ba44c58](https://github.com/Automattic/newspack-plugin/commit/ba44c5892729d5e30fd1fa4bb07bf0871a365353))
+
+
+### Features
+
+* update the edit ad unit design ([#1199](https://github.com/Automattic/newspack-plugin/issues/1199)) ([1999878](https://github.com/Automattic/newspack-plugin/commit/19998780cae3aa9723284dffe2378081c4e574df))
+
+# [1.62.0](https://github.com/Automattic/newspack-plugin/compare/v1.61.0...v1.62.0) (2021-10-19)
+
+
+### Bug Fixes
+
+* google oauth ([#1191](https://github.com/Automattic/newspack-plugin/issues/1191)) ([502f156](https://github.com/Automattic/newspack-plugin/commit/502f1564af115478f02537631adc6fcc089ebba5))
+
+
+### Features
+
+* **ads:** fluid ad unit sizing ([#1181](https://github.com/Automattic/newspack-plugin/issues/1181)) ([8c7f57e](https://github.com/Automattic/newspack-plugin/commit/8c7f57ef327be7fbeaf6924e3187eb75fd6b890f))
+* **connections:** add Fivetran connection via a proxy ([#1173](https://github.com/Automattic/newspack-plugin/issues/1173)) ([883bad4](https://github.com/Automattic/newspack-plugin/commit/883bad40844632c1c1c167ca82ec8f1c77c84d74))
+* **gam:** use oauth; remove service account flow ([#1188](https://github.com/Automattic/newspack-plugin/issues/1188)) ([a15c385](https://github.com/Automattic/newspack-plugin/commit/a15c385809e2fbfce5ee0d77f7a8c54fc7fe129d))
+* **oauth:** store oauth as option, available to admin users ([caf81a2](https://github.com/Automattic/newspack-plugin/commit/caf81a2836a7ba337a4015cd4e4c4aa28ac70134))
+
+
+### Performance Improvements
+
+* optimize maybe disable ads verification ([#1185](https://github.com/Automattic/newspack-plugin/issues/1185)) ([1cc6c74](https://github.com/Automattic/newspack-plugin/commit/1cc6c74ddc089d03462f5b3bc6bd44fd85905664))
+
+# [1.61.0](https://github.com/Automattic/newspack-plugin/compare/v1.60.0...v1.61.0) (2021-10-12)
+
+
+### Bug Fixes
+
+* **donations:** error handling ([#1176](https://github.com/Automattic/newspack-plugin/issues/1176)) ([a03a45e](https://github.com/Automattic/newspack-plugin/commit/a03a45eaa0870e99a0fb63ee0b3ef2004e570552))
+
+
+### Features
+
+* **ads:** standardize ad unit sizes ([#1174](https://github.com/Automattic/newspack-plugin/issues/1174)) ([89af48c](https://github.com/Automattic/newspack-plugin/commit/89af48c4a5ce8f8007a63f23b6bf26468ac7a79d))
+
 # [1.60.0](https://github.com/Automattic/newspack-plugin/compare/v1.59.0...v1.60.0) (2021-10-05)
 
 

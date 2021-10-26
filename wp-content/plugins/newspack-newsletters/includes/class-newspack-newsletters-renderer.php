@@ -241,6 +241,11 @@ final class Newspack_Newsletters_Renderer {
 			return '';
 		}
 
+		// Verify if block is configured to be web-only.
+		if ( isset( $attrs['newsletterVisibility'] ) && 'web' === $attrs['newsletterVisibility'] ) {
+			return '';
+		}
+
 		$block_mjml_markup = '';
 		$attrs             = self::process_attributes( array_merge( $default_attrs, $attrs ) );
 
@@ -300,7 +305,8 @@ final class Newspack_Newsletters_Renderer {
 			case 'core/image':
 				// Parse block content.
 				$dom = new DomDocument();
-				@$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', 'UTF-8' ) ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				libxml_use_internal_errors( true );
+				$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
 				$xpath      = new DOMXpath( $dom );
 				$img        = $xpath->query( '//img' )[0];
 				$img_src    = $img->getAttribute( 'src' );
@@ -365,15 +371,25 @@ final class Newspack_Newsletters_Renderer {
 			 */
 			case 'core/buttons':
 				foreach ( $inner_blocks as $button_block ) {
+
+					if ( empty( $button_block['innerHTML'] ) ) {
+						break;
+					}
+
 					// Parse block content.
 					$dom = new DomDocument();
-					@$dom->loadHTML( mb_convert_encoding( $button_block['innerHTML'], 'HTML-ENTITIES', 'UTF-8' ) ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+					libxml_use_internal_errors( true );
+					$dom->loadHTML( mb_convert_encoding( $button_block['innerHTML'], 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
 					$xpath         = new DOMXpath( $dom );
 					$anchor        = $xpath->query( '//a' )[0];
 					$attrs         = $button_block['attrs'];
 					$text          = $anchor->textContent; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					$border_radius = isset( $attrs['borderRadius'] ) ? $attrs['borderRadius'] : 999;
 					$is_outlined   = isset( $attrs['className'] ) && 'is-style-outline' == $attrs['className'];
+
+					if ( ! $anchor ) {
+						break;
+					}
 
 					$default_button_attrs = array(
 						'padding'       => '0',
@@ -606,7 +622,8 @@ final class Newspack_Newsletters_Renderer {
 
 				// Parse block caption.
 				$dom = new DomDocument();
-				@$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', 'UTF-8' ) ); // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged
+				libxml_use_internal_errors( true );
+				$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
 				$xpath      = new DOMXpath( $dom );
 				$figcaption = $xpath->query( '//figcaption/text()' )[0];
 				// phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
@@ -771,7 +788,8 @@ final class Newspack_Newsletters_Renderer {
 		$total_length = self::get_total_newsletter_character_length( $valid_blocks );
 
 		// Gather ads.
-		if ( $include_ads && ! get_post_meta( $post->ID, 'diable_ads', true ) ) {
+		$is_newsletter = Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT === get_post_type( $post->ID );
+		if ( $include_ads && $is_newsletter && ! get_post_meta( $post->ID, 'diable_ads', true ) ) {
 			$ads_query = new WP_Query(
 				array(
 					'post_type'      => Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,

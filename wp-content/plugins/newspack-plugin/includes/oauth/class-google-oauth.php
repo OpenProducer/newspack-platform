@@ -17,7 +17,7 @@ defined( 'ABSPATH' ) || exit;
  * Google OAuth2 flow.
  */
 class Google_OAuth {
-	const AUTH_DATA_USERMETA_NAME        = '_newspack_google_oauth';
+	const AUTH_DATA_META_NAME            = '_newspack_google_oauth';
 	const CSRF_TOKEN_TRANSIENT_NAME_BASE = '_newspack_google_oauth_csrf_';
 
 	/**
@@ -42,7 +42,7 @@ class Google_OAuth {
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ __CLASS__, 'api_google_auth_status' ],
-				'permission_callback' => [ __CLASS__, 'api_permissions_check' ],
+				'permission_callback' => [ __CLASS__, 'permissions_check' ],
 			]
 		);
 		// Start Google OAuth2 flow.
@@ -52,7 +52,7 @@ class Google_OAuth {
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ __CLASS__, 'api_google_auth_start' ],
-				'permission_callback' => [ __CLASS__, 'api_permissions_check' ],
+				'permission_callback' => [ __CLASS__, 'permissions_check' ],
 			]
 		);
 		// Save Google OAuth2 details.
@@ -62,7 +62,7 @@ class Google_OAuth {
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ __CLASS__, 'api_google_auth_save_details' ],
-				'permission_callback' => [ __CLASS__, 'api_permissions_check' ],
+				'permission_callback' => [ __CLASS__, 'permissions_check' ],
 				'args'                => [
 					'access_token'  => [
 						'sanitize_callback' => 'sanitize_text_field',
@@ -86,7 +86,7 @@ class Google_OAuth {
 			[
 				'methods'             => \WP_REST_Server::DELETABLE,
 				'callback'            => [ __CLASS__, 'api_google_auth_revoke' ],
-				'permission_callback' => [ __CLASS__, 'api_permissions_check' ],
+				'permission_callback' => [ __CLASS__, 'permissions_check' ],
 			]
 		);
 	}
@@ -95,10 +95,9 @@ class Google_OAuth {
 	 * Check capabilities for using API.
 	 *
 	 * @codeCoverageIgnore
-	 * @param WP_REST_Request $request API request object.
 	 * @return bool|WP_Error
 	 */
-	public static function api_permissions_check( $request ) {
+	public static function permissions_check() {
 		if ( ! current_user_can( 'manage_options' ) || ! self::is_oauth_configured() ) {
 			return new \WP_Error(
 				'newspack_rest_forbidden',
@@ -145,7 +144,8 @@ class Google_OAuth {
 		if ( isset( $tokens['refresh_token'] ) ) {
 			$auth['refresh_token'] = $tokens['refresh_token'];
 		}
-		return update_user_meta( get_current_user_id(), self::AUTH_DATA_USERMETA_NAME, $auth );
+		self::remove_credentials();
+		return add_option( self::AUTH_DATA_META_NAME, $auth );
 	}
 
 	/**
@@ -154,7 +154,6 @@ class Google_OAuth {
 	public static function get_google_auth_url_params() {
 		$scopes         = [
 			'https://www.googleapis.com/auth/userinfo.email', // User's email address.
-			'https://www.googleapis.com/auth/analytics.edit', // Google Analytics.
 			'https://www.googleapis.com/auth/dfp', // Google Ad Manager.
 		];
 		$redirect_after = admin_url( 'admin.php?page=newspack-connections-wizard' );
@@ -292,7 +291,11 @@ class Google_OAuth {
 	 * Get Google authentication details.
 	 */
 	public static function get_google_auth_saved_data() {
-		$auth_data = get_user_meta( get_current_user_id(), self::AUTH_DATA_USERMETA_NAME, true );
+		$is_permitted = self::permissions_check();
+		if ( true !== $is_permitted ) {
+			return false;
+		}
+		$auth_data = get_option( self::AUTH_DATA_META_NAME, false );
 		if ( $auth_data ) {
 			return $auth_data;
 		}
@@ -335,9 +338,6 @@ class Google_OAuth {
 					'email' => $user_info->email,
 				];
 			}
-		} else {
-			// Credentials are invalid, remove them.
-			self::remove_credentials();
 		}
 
 		return false;
@@ -386,8 +386,6 @@ class Google_OAuth {
 					$auth_data = self::get_google_auth_saved_data();
 				}
 			} catch ( \Exception $e ) {
-				// Credentials might be broken, remove them.
-				self::remove_credentials();
 				return false;
 			}
 		}
@@ -401,7 +399,7 @@ class Google_OAuth {
 	 * Remove saved credentials.
 	 */
 	public static function remove_credentials() {
-		delete_user_meta( get_current_user_id(), self::AUTH_DATA_USERMETA_NAME );
+		delete_option( self::AUTH_DATA_META_NAME );
 	}
 
 	/**

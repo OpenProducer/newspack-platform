@@ -114,7 +114,11 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				__( 'Error setting Mailchimp list.', 'newspack_newsletters' )
 			);
 
-			$data           = $this->retrieve( $post_id );
+			$data = $this->retrieve( $post_id );
+			if ( is_wp_error( $data ) ) {
+				return \rest_ensure_response( $data );
+			}
+
 			$data['result'] = $result;
 
 			return \rest_ensure_response( $data );
@@ -173,17 +177,29 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 			$segments = [];
 			if ( $list_id ) {
-				$segments_response = $this->validate(
+				$saved_segments_response  = $this->validate(
 					$mc->get(
 						"lists/$list_id/segments",
 						[
+							'type'  => 'saved',
 							'count' => 1000,
 						],
-						20
+						60
 					),
 					__( 'Error retrieving Mailchimp segments.', 'newspack_newsletters' )
 				);
-				$segments          = $segments_response['segments'];
+				$static_segments_response = $this->validate(
+					$mc->get(
+						"lists/$list_id/segments",
+						[
+							'type'  => 'static',
+							'count' => 1000,
+						],
+						60
+					),
+					__( 'Error retrieving Mailchimp segments.', 'newspack_newsletters' )
+				);
+				$segments                 = array_merge( $saved_segments_response['segments'], $static_segments_response['segments'] );
 			}
 
 			return [

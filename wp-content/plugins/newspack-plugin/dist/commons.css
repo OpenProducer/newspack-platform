@@ -1325,6 +1325,9 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
 /**
  * Grid
  */
+/**
+ * Colors
+ */
 .newspack-grid {
   display: grid;
   grid-gap: 32px;
@@ -1372,6 +1375,19 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
     margin-top: 0 !important; }
   .newspack-grid > .newspack-card > *:last-child {
     margin-bottom: 0 !important; }
+  .newspack-grid__thead {
+    background: #f0f0f0;
+    border-bottom: 1px solid #ddd;
+    border-top: 1px solid #ddd;
+    color: #1e1e1e; }
+    .newspack-grid__thead > *:not(.screen-reader-text) {
+      padding: 8px; }
+  .newspack-grid__tbody {
+    border-bottom: 1px solid #ddd;
+    padding: 8px 0; }
+  .newspack-grid__thead + .newspack-grid__tbody,
+  .newspack-grid__tbody + .newspack-grid__tbody {
+    margin-top: -32px; }
 
 /**
  * Modal
@@ -2437,8 +2453,9 @@ body[class*='admin-color-'] .newspack-button-group .newspack-button {
 .newspack-text-control {
   color: #757575;
   font-size: 14px;
-  line-height: 24px;
-  margin: 32px 0; }
+  line-height: 24px; }
+  .newspack-text-control--with-margin {
+    margin: 32px 0; }
   .newspack-text-control--wide {
     flex-wrap: wrap; }
     .newspack-text-control--wide .components-base-control__field {

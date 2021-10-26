@@ -1,0 +1,22 @@
+{
+	"name": "newspack-listings/event-dates",
+	"category": "newspack",
+	"attributes": {
+		"startDate": {
+			"type": "string",
+			"default": false
+		},
+		"endDate": {
+			"type": "string",
+			"default": false
+		},
+		"showTime": {
+			"type": "boolean",
+			"default": false
+		},
+		"showEnd": {
+			"type": "boolean",
+			"default": false
+		}
+	}
+}

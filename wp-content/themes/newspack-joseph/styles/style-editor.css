@@ -404,8 +404,8 @@ figcaption,
 }
 
 /** === Group === */
-.wp-block[data-align='left'] .wp-block-group,
-.wp-block[data-align='right'] .wp-block-group {
+.wp-block[data-align='left'] > .wp-block-group,
+.wp-block[data-align='right'] > .wp-block-group {
   max-width: 50%;
 }
 
@@ -681,6 +681,14 @@ figcaption,
   font-size: 1.4em;
   letter-spacing: calc( 2 * 1rem);
   padding-left: calc( 2 * 1rem);
+}
+
+.wp-block-separator.has-background {
+  border: 0;
+}
+
+.wp-block-separator.has-background.is-style-dots::before {
+  color: inherit;
 }
 
 /** === Latest Posts, Archives, Categories === */

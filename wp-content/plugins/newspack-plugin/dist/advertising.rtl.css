@@ -4,27 +4,26 @@
 .newspack-card.newspack-action-card .newspack-action-card__region-children .newspack-grid {
   margin: 32px 0 0; }
 
+/**
+ * Colors
+ */
 .newspack-advertising-wizard .newspack-button-card .newspack-notice {
   margin: 24px 0 0; }
 
-.newspack-advertising-wizard__network-code {
-  align-items: flex-end;
-  display: flex;
-  flex-wrap: wrap;
-  margin-bottom: -32px; }
-  .newspack-button-card + .newspack-advertising-wizard__network-code {
-    margin-top: -32px; }
-  .newspack-advertising-wizard__network-code .newspack-text-control {
-    flex: 1 1 100%;
-    margin-bottom: 8px; }
-    @media screen and (min-width: 768px) {
-      .newspack-advertising-wizard__network-code .newspack-text-control {
-        flex-basis: auto;
-        margin-bottom: 32px;
-        margin-left: 8px; } }
-  .newspack-advertising-wizard__network-code .newspack-card__buttons-card {
-    flex: 0 0 auto;
-    margin-top: 0; }
-    .newspack-advertising-wizard__network-code .newspack-card__buttons-card .newspack-button + .newspack-button {
-      margin-right: 0; }
+.newspack-advertising-wizard__ad-unit-size {
+  margin: 64px 0 16px; }
+  .newspack-advertising-wizard__ad-unit-size h2,
+  .newspack-advertising-wizard__ad-unit-size .newspack-grid {
+    margin: 0; }
+
+.newspack-advertising-wizard .newspack-grid__thead, .newspack-advertising-wizard .newspack-grid__tbody {
+  grid-template-columns: repeat(3, calc( 33.33% - 24px)) 48px; }
+
+.newspack-advertising-wizard .newspack-grid .newspack-button.has-icon:not(.has-text) {
+  height: 48px;
+  min-width: 48px;
+  width: 48px; }
+
+.newspack-advertising-wizard .newspack-grid + .newspack-card__header-actions {
+  margin-top: 64px; }
 

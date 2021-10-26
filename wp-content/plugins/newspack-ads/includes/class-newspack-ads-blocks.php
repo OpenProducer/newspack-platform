@@ -174,6 +174,7 @@ class Newspack_Ads_Blocks {
 				'name'      => esc_attr( $ad_unit['name'] ),
 				'code'      => esc_attr( $ad_unit['code'] ),
 				'sizes'     => array_values( $sizes ),
+				'fluid'     => (bool) $ad_unit['fluid'],
 				'targeting' => $ad_targeting,
 				'sticky'    => Newspack_Ads_Model::is_sticky( $ad_unit ),
 			];
@@ -200,9 +201,14 @@ class Newspack_Ads_Blocks {
 						continue;
 					}
 
+					var slotSizes = ad_unit['sizes'];
+					if ( ad_unit['fluid'] ) {
+						slotSizes = slotSizes.concat( 'fluid' );
+					}
+
 					defined_ad_units[ container_id ] = googletag.defineSlot(
 						'/' + ad_config['network_code'] + '/' + ad_unit['code'],
-						ad_unit['sizes'],
+						slotSizes,
 						container_id
 					).addService( googletag.pubads() );
 
@@ -239,13 +245,20 @@ class Newspack_Ads_Blocks {
 					var smallest_ad_width = Math.min.apply( Math, Object.keys( unique_widths ).map( Number ) );
 					var largest_ad_width  = Math.max.apply( Math, Object.keys( unique_widths ).map( Number ) );
 
+					// Default base is to not show ads.
+					var baseSizes = [];
+					// If the ad unit is fluid, base includes fluid.
+					if( ad_unit['fluid'] ) {
+						baseSizes = baseSizes.concat( 'fluid' );
+					}
+
 					// If the smallest width is mobile size and the largest width is desktop size,
 					// we want to use some logic to prevent displaying mobile ads on desktop.
 					if ( smallest_ad_width < mobile_cutoff && largest_ad_width >= mobile_cutoff ) {
 						for ( width in unique_widths ) {
 							// On viewports < 500px wide, include all ads smaller than the viewport.
 							if ( parseInt( width ) < mobile_cutoff ) {
-								mapping.addSize( [ parseInt( width ), 0 ], unique_widths[ width ] );
+								mapping.addSize( [ parseInt( width ), 0 ], baseSizes.concat( unique_widths[ width ] ) );
 
 								// On viewports >= 500px wide, only include ads with widths >= 500px.
 							} else {
@@ -256,7 +269,7 @@ class Newspack_Ads_Blocks {
 										desktopAds.push( ad_size );
 									}
 								}
-								mapping.addSize( [ parseInt( width ), 0 ], desktopAds );
+								mapping.addSize( [ parseInt( width ), 0 ], baseSizes.concat( desktopAds ) );
 							}
 						}
 
@@ -264,17 +277,17 @@ class Newspack_Ads_Blocks {
 						// we can just display any ad that is smaller than the viewport.
 					} else {
 						for ( width in unique_widths ) {
-							mapping.addSize( [ parseInt( width ), 0 ], unique_widths[ width ] );
+							mapping.addSize( [ parseInt( width ), 0 ], baseSizes.concat( unique_widths[ width ] ) );
 						}
 					}
 
 					// Sticky ads should only be shown on mobile (screen width <=600px).
 					if ( ad_unit['sticky'] ) {
-						mapping.addSize( [600, 0], [] );
+						mapping.addSize( [600, 0], baseSizes );
 					}
 
 					// On viewports smaller than the smallest ad size, don't show any ads.
-					mapping.addSize( [0, 0], [] );
+					mapping.addSize( [0, 0], baseSizes );
 					defined_ad_units[ container_id ].defineSizeMapping( mapping.build() );
 				}
 
@@ -293,6 +306,24 @@ class Newspack_Ads_Blocks {
 				for ( var container_id in defined_ad_units ) {
 					googletag.display( container_id );
 				}
+				// Identify fluid rendered ad and fix iframe width.
+				// GPT currently sets the iframe with `min-width` set to 100% and property `width` set to 0.
+				// This causes the iframe to be rendered with 0 width.
+				googletag.pubads().addEventListener( 'slotRenderEnded', function(event) {
+					var sizes = event.slot.getSizes();
+					if (
+						( event.size === null || event.size[0] === 0 ) &&
+						Array.isArray( sizes ) && sizes.indexOf( 'fluid' ) !== -1
+					) {
+						var container = document.getElementById( event.slot.getSlotElementId() );
+						if ( container ) {
+							var iframe = container.querySelector( 'iframe' );
+							if ( iframe ) {
+								iframe.style.width = '100%';
+							}
+						}
+					}
+				} );
 			} );
 		</script>
 		<?php

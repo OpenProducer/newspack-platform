@@ -33,7 +33,7 @@ class Newspack_Ads_GAM {
 	// https://developers.google.com/ad-manager/api/soap_xml: An arbitrary string name identifying your application. This will be shown in Google's log files.
 	const GAM_APP_NAME_FOR_LOGS = 'Newspack';
 
-	const CREDENTIALS_OPTION_NAME = '_newspack_ads_gam_credentials';
+	const SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME = '_newspack_ads_gam_credentials';
 
 	/**
 	 * Codes of networks that the user has access to.
@@ -62,32 +62,52 @@ class Newspack_Ads_GAM {
 	];
 
 	/**
-	 * Get service account credentials file path.
-	 * 
-	 * @return array|bool Associate array or false if not found.
+	 * Get credentials for connecting to GAM.
+	 *
+	 * @throws \Exception If using legacy mode.
 	 */
-	private static function get_service_account_credentials() {
-		$credentials = get_option( self::CREDENTIALS_OPTION_NAME, false );
-		return $credentials;
+	private static function get_credentials() {
+		switch ( self::get_connection_mode() ) {
+			case 'oauth':
+				return self::get_google_oauth2_credentials();
+			case 'service_account':
+				return self::get_service_account_credentials();
+			case 'legacy':
+				throw new \Exception( __( 'Credentials not found.', 'newspack-ads' ) );
+		}
 	}
 
 	/**
 	 * Get OAuth2 credentials.
-	 * 
-	 * @param array $credentials (optional) Credentials array.
 	 *
 	 * @throws \Exception If the user is not authenticated.
 	 * @return object OAuth2 credentials.
 	 */
-	public static function get_google_oauth2_credentials( $credentials = false ) {
-		if ( false === $credentials ) {
-			$credentials = self::get_service_account_credentials();
+	private static function get_google_oauth2_credentials() {
+		if ( class_exists( 'Newspack\Google_Services_Connection' ) ) {
+			$oauth2_credentials = \Newspack\Google_Services_Connection::get_oauth2_credentials();
+			if ( false === $oauth2_credentials ) {
+				throw new \Exception( __( 'Please authenticate Newspack with Google.', 'newspack-ads' ), 1 );
+			}
+			return $oauth2_credentials;
+		} else {
+			throw new \Exception( __( 'Please activate the Newspack Plugin.', 'newspack-ads' ), 1 );
 		}
-		if ( ! $credentials ) {
+	}
+
+	/**
+	 * Get Service Account credentials.
+	 *
+	 * @throws \Exception If the user is not authenticated.
+	 * @return object OAuth2 credentials.
+	 */
+	private static function get_service_account_credentials() {
+		$service_account_credentials = get_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, false );
+		if ( ! $service_account_credentials ) {
 			throw new \Exception( __( 'Credentials not found.', 'newspack-ads' ) );
 		}
 		try {
-			return new ServiceAccountCredentials( 'https://www.googleapis.com/auth/dfp', $credentials );
+			return new ServiceAccountCredentials( 'https://www.googleapis.com/auth/dfp', $service_account_credentials );
 		} catch ( \Exception $e ) {
 			throw new \Exception( $e->getMessage(), 1 );
 		}
@@ -110,7 +130,7 @@ class Newspack_Ads_GAM {
 				]
 			);
 
-			$oauth2_credentials = self::get_google_oauth2_credentials();
+			$oauth2_credentials = self::get_credentials();
 			$session            = ( new AdManagerSessionBuilder() )->from( $config )->withOAuth2Credential( $oauth2_credentials )->build();
 			$service_factory    = new ServiceFactory();
 			self::$networks     = $service_factory->createNetworkService( $session )->getAllNetworks();
@@ -137,7 +157,7 @@ class Newspack_Ads_GAM {
 	 *
 	 * @return int GAM network code.
 	 */
-	public static function get_gam_network_code() {
+	private static function get_gam_network_code() {
 		return self::get_gam_network()->getNetworkCode();
 	}
 
@@ -150,7 +170,7 @@ class Newspack_Ads_GAM {
 		if ( self::$session ) {
 			return self::$session;
 		}
-		$oauth2_credentials = self::get_google_oauth2_credentials();
+		$oauth2_credentials = self::get_credentials();
 		$service_factory    = new ServiceFactory();
 
 		// Create a new configuration and session, with a network code.
@@ -283,6 +303,7 @@ class Newspack_Ads_GAM {
 			'code'   => $gam_ad_unit->getAdUnitCode(),
 			'status' => $gam_ad_unit->getStatus(),
 			'name'   => $gam_ad_unit->getName(),
+			'fluid'  => $gam_ad_unit->getIsFluid(),
 			'sizes'  => [],
 		];
 		$sizes   = $gam_ad_unit->getAdUnitSizes();
@@ -305,9 +326,10 @@ class Newspack_Ads_GAM {
 	 * @return AdUnit Ad Unit.
 	 */
 	private static function modify_ad_unit( $ad_unit_config, $ad_unit = null ) {
-		$name  = $ad_unit_config['name'];
-		$sizes = $ad_unit_config['sizes'];
-		$slug  = substr( sanitize_title( $name ), 0, 80 ); // Ad unit code can have 100 characters at most.
+		$name     = $ad_unit_config['name'];
+		$sizes    = $ad_unit_config['sizes'];
+		$is_fluid = isset( $ad_unit_config['fluid'] ) && $ad_unit_config['fluid'];
+		$slug     = substr( sanitize_title( $name ), 0, 80 ); // Ad unit code can have 100 characters at most.
 
 		if ( null === $ad_unit ) {
 			$ad_unit = new AdUnit();
@@ -318,6 +340,7 @@ class Newspack_Ads_GAM {
 		}
 
 		$ad_unit->setName( $name );
+		$ad_unit->setIsFluid( $is_fluid );
 
 		$ad_unit_sizes = [];
 		foreach ( $sizes as $size_spec ) {
@@ -497,10 +520,10 @@ class Newspack_Ads_GAM {
 
 	/**
 	 * Verify WP environment to make sure it's safe to use GAM.
-	 * 
+	 *
 	 * @return bool Whether it's safe to use GAM.
 	 */
-	public static function is_environment_compatible() {
+	private static function is_environment_compatible() {
 		// Constant Contact Form plugin loads an old version of Guzzle that breaks the SDK.
 		if ( class_exists( 'Constant_Contact' ) ) {
 			return false;
@@ -509,26 +532,50 @@ class Newspack_Ads_GAM {
 	}
 
 	/**
+	 * Can this instance use OAuth for authentication?
+	 */
+	public static function can_use_oauth() {
+		return class_exists( 'Newspack\Google_OAuth' ) && \Newspack\Google_OAuth::is_oauth_configured();
+	}
+
+	/**
+	 * How does this instance connect to GAM?
+	 */
+	private static function get_connection_mode() {
+		$has_service_account_credentials = false !== get_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, false );
+		if ( $has_service_account_credentials ) {
+			return 'service_account';
+		}
+		if ( self::can_use_oauth() ) {
+			return 'oauth';
+		}
+		return 'legacy'; // Manual connection.
+	}
+
+	/**
 	 * Get GAM connection status.
 	 *
 	 * @return object Object with status information.
 	 */
 	public static function connection_status() {
+		$connection_mode = self::get_connection_mode();
+		$response        = [
+			'can_connect'   => false,
+			'connected'     => false,
+			'mode'          => $connection_mode,
+			'can_use_oauth' => self::can_use_oauth(),
+		];
 		if ( false === self::is_environment_compatible() ) {
-			return [
-				'incompatible' => true,
-				'can_connect'  => false,
-				'connected'    => false,
-				'error'        => __( 'Cannot connect to Google Ad Manager. This WordPress instance is not compatible with this feature.', 'newspack-ads' ),
-			];
+			$response['incompatible'] = true;
+			$response['error']        = __( 'Cannot connect to Google Ad Manager. This WordPress instance is not compatible with this feature.', 'newspack-ads' );
+			return $response;
 		}
-		$response = [ 'can_connect' => false !== self::get_service_account_credentials() ];
+		$response['can_connect'] = 'legacy' !== $connection_mode;
 		try {
 			$response['network_code'] = self::get_gam_network_code();
 			$response['connected']    = true;
 		} catch ( \Exception $e ) {
-			$response['connected'] = false;
-			$response['error']     = $e->getMessage();
+			$response['error'] = $e->getMessage();
 		}
 		return $response;
 	}

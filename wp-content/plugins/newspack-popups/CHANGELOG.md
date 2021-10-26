@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/Automattic/newspack-popups/compare/v1.41.0...v1.42.0) (2021-10-19)
+
+
+### Features
+
+* initialize prompt creation by manual placement ([#639](https://github.com/Automattic/newspack-popups/issues/639)) ([9e45159](https://github.com/Automattic/newspack-popups/commit/9e45159741643c4c32932060c70fd346c52c8cbc))
+
 # [1.41.0](https://github.com/Automattic/newspack-popups/compare/v1.40.0...v1.41.0) (2021-10-05)
 
 

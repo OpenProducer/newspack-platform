@@ -11,6 +11,7 @@
 class Newspack_Ads_Model {
 	const SIZES = 'sizes';
 	const CODE  = 'code';
+	const FLUID = 'fluid';
 
 	// Legacy network code manually inserted.
 	const OPTION_NAME_LEGACY_NETWORK_CODE = '_newspack_ads_service_google_ad_manager_network_code';
@@ -34,6 +35,13 @@ class Newspack_Ads_Model {
 	 * @var array
 	 */
 	public static $ad_ids = [];
+
+	/**
+	 * Array of all ad units configurations.
+	 * 
+	 * @var array|null Array or null if not yet initialized.
+	 */
+	public static $ad_units = null;
 
 	/**
 	 * Initialize Google Ads Model
@@ -105,8 +113,9 @@ class Newspack_Ads_Model {
 			$prepared_ad_unit = [
 				'id'    => $ad_unit->ID,
 				'name'  => $ad_unit->post_title,
-				'sizes' => self::sanitize_sizes( \get_post_meta( $ad_unit->ID, 'sizes', true ) ),
-				'code'  => \get_post_meta( $ad_unit->ID, 'code', true ),
+				'code'  => \get_post_meta( $ad_unit->ID, self::CODE, true ),
+				'sizes' => self::sanitize_sizes( \get_post_meta( $ad_unit->ID, self::SIZES, true ) ),
+				'fluid' => (bool) \get_post_meta( $ad_unit->ID, self::FLUID, true ),
 			];
 		} else {
 			// Ad units saved in options table. Ad unit ID is the GAM Ad Unit ID.
@@ -122,8 +131,9 @@ class Newspack_Ads_Model {
 				$prepared_ad_unit = [
 					'id'    => $ad_unit['id'],
 					'name'  => $ad_unit['name'],
-					'sizes' => self::sanitize_sizes( $ad_unit['sizes'] ),
 					'code'  => $ad_unit['code'],
+					'sizes' => self::sanitize_sizes( $ad_unit['sizes'] ),
+					'fluid' => isset( $ad_unit['fluid'] ) ? (bool) $ad_unit['fluid'] : false,
 				];
 			}
 		}
@@ -172,8 +182,9 @@ class Newspack_Ads_Model {
 					$legacy_ad_units[] = [
 						'id'        => $post->ID,
 						'name'      => html_entity_decode( $post->post_title, ENT_QUOTES ),
-						'sizes'     => self::sanitize_sizes( \get_post_meta( $post->ID, 'sizes', true ) ),
-						'code'      => esc_html( \get_post_meta( $post->ID, 'code', true ) ),
+						'sizes'     => self::sanitize_sizes( \get_post_meta( $post->ID, self::SIZES, true ) ),
+						'code'      => esc_html( \get_post_meta( $post->ID, self::CODE, true ) ),
+						'fluid'     => (bool) \get_post_meta( $post->ID, self::FLUID, true ),
 						'status'    => 'ACTIVE',
 						'is_legacy' => true,
 					];
@@ -187,16 +198,20 @@ class Newspack_Ads_Model {
 	 * Get the ad units.
 	 */
 	public static function get_ad_units() {
-		$legacy_ad_units = self::get_legacy_ad_units();
-		if ( ! self::is_gam_connected() ) {
-			return $legacy_ad_units;
+		if ( null !== self::$ad_units ) {
+			return self::$ad_units;
 		}
-		$ad_units    = Newspack_Ads_GAM::get_serialised_gam_ad_units();
-		$sync_result = self::sync_gam_settings( $ad_units );
-		if ( \is_wp_error( $sync_result ) ) {
-			return $sync_result;
+		$ad_units = self::get_legacy_ad_units();
+		if ( self::is_gam_connected() ) {
+			$gam_ad_units = Newspack_Ads_GAM::get_serialised_gam_ad_units();
+			$sync_result  = self::sync_gam_settings( $gam_ad_units );
+			if ( \is_wp_error( $sync_result ) ) {
+				return $sync_result;
+			}
+			$ad_units = array_merge( $ad_units, $gam_ad_units );
 		}
-		return array_merge( $ad_units, $legacy_ad_units );
+		self::$ad_units = $ad_units;
+		return self::$ad_units;
 	}
 
 	/**
@@ -244,12 +259,14 @@ class Newspack_Ads_Model {
 		// Add the code to our new post.
 		\add_post_meta( $ad_unit_post, self::SIZES, $ad_unit[ self::SIZES ] );
 		\add_post_meta( $ad_unit_post, self::CODE, $ad_unit[ self::CODE ] );
+		\add_post_meta( $ad_unit_post, self::FLUID, (bool) $ad_unit[ self::FLUID ] );
 
 		return array(
 			'id'        => $ad_unit_post,
 			'name'      => $ad_unit['name'],
 			self::SIZES => $ad_unit[ self::SIZES ],
 			self::CODE  => $ad_unit[ self::CODE ],
+			self::FLUID => $ad_unit[ self::FLUID ],
 		);
 	}
 
@@ -280,11 +297,13 @@ class Newspack_Ads_Model {
 		);
 		\update_post_meta( $ad_unit['id'], self::SIZES, $ad_unit[ self::SIZES ] );
 		\update_post_meta( $ad_unit['id'], self::CODE, $ad_unit[ self::CODE ] );
+		\update_post_meta( $ad_unit['id'], self::FLUID, (bool) $ad_unit[ self::FLUID ] );
 		return array(
 			'id'        => $ad_unit['id'],
 			'name'      => $ad_unit['name'],
 			self::SIZES => $ad_unit[ self::SIZES ],
 			self::CODE  => $ad_unit[ self::CODE ],
+			self::FLUID => $ad_unit[ self::FLUID ],
 		);
 	}
 
@@ -352,22 +371,16 @@ class Newspack_Ads_Model {
 		}
 		if ( null === $settings ) {
 			try {
-				$settings             = Newspack_Ads_GAM::get_gam_settings();
-				$network_code_matches = self::is_network_code_matched();
+				$settings = Newspack_Ads_GAM::get_gam_settings();
 			} catch ( \Exception $e ) {
 				return new WP_Error(
 					'newspack_ads_failed_gam_sync',
 					__( 'Unable to synchronize with GAM', 'newspack-ads' )
 				);
 			}
-		} else {
-			$network_code_matches = true;
 		}
 
-		if (
-			$network_code_matches &&
-			isset( $settings['network_code'] ) && $serialised_ad_units && ! empty( $serialised_ad_units )
-		) {
+		if ( isset( $settings['network_code'] ) && $serialised_ad_units && ! empty( $serialised_ad_units ) ) {
 			$synced_gam_items                              = get_option( self::OPTION_NAME_GAM_ITEMS, [] );
 			$network_code                                  = sanitize_text_field( $settings['network_code'] );
 			$synced_gam_items[ $network_code ]['ad_units'] = $serialised_ad_units;
@@ -519,33 +532,48 @@ class Newspack_Ads_Model {
 			return self::ad_elements_for_sizes( $ad_unit, $unique_id );
 		}
 
-		$width  = max( array_column( $sizes, 0 ) );
-		$height = max( array_column( $sizes, 1 ) );
+		$attrs      = [];
+		$multisizes = [];
 
-		$ad_size_as_multisize = $width . 'x' . $height;
-		$multisizes           = [];
-		foreach ( $sizes as $size ) {
-			$multisize = $size[0] . 'x' . $size[1];
-			if ( $multisize !== $ad_size_as_multisize ) {
-				$multisizes[] = $multisize;
+		if ( true === $ad_unit['fluid'] ) {
+			$attrs['height'] = 'fluid';
+			$attrs['layout'] = 'fluid';
+			$multisizes[]    = 'fluid';
+		}
+
+		if ( count( $sizes ) ) {
+			if ( ! isset( $attrs['layout'] ) ) {
+				$attrs['width']  = max( array_column( $sizes, 0 ) );
+				$attrs['height'] = max( array_column( $sizes, 1 ) );
+				$attrs['layout'] = 'fixed';
+			}
+			foreach ( $sizes as $size ) {
+				$multisizes[] = $size[0] . 'x' . $size[1];
 			}
 		}
-		$multisize_attribute = '';
-		if ( count( $multisizes ) ) {
-			$multisize_attribute = sprintf(
-				'data-multi-size=\'%s\' data-multi-size-validation=\'false\'',
-				implode( ',', $multisizes )
-			);
+
+		if ( 1 < count( $multisizes ) ) {
+			$attrs['data-multi-size']            = implode( ',', $multisizes );
+			$attrs['data-multi-size-validation'] = 'true';
 		}
 
+		$attrs['type']                  = 'doubleclick';
+		$attrs['data-slot']             = sprintf( '/%s/%s', $network_code, $code );
+		$attrs['data-loading-strategy'] = 'prefer-viewability-over-views';
+		$attrs['json']                  = sprintf( '{"targeting": %s}', wp_json_encode( $targeting ) );
+
 		$code = sprintf(
-			'<amp-ad width=%s height=%s type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\' %s></amp-ad>',
-			$width,
-			$height,
-			$network_code,
-			$code,
-			wp_json_encode( $targeting ),
-			$multisize_attribute
+			'<amp-ad %s></amp-ad>',
+			implode(
+				' ',
+				array_map(
+					function( $key, $value ) {
+						return sprintf( "%s='%s'", $key, $value );
+					},
+					array_keys( $attrs ),
+					array_values( $attrs )
+				)
+			)
 		);
 
 		return $code;
@@ -818,40 +846,6 @@ class Newspack_Ads_Model {
 				'author_archive_pages'            => false,
 			]
 		);
-	}
-
-	/**
-	 * Update GAM credentials.
-	 * 
-	 * @param array $credentials Credentials to update.
-	 * 
-	 * @return object Object with status information.
-	 */
-	public static function update_gam_credentials( $credentials ) {
-		try {
-			Newspack_Ads_GAM::get_google_oauth2_credentials( $credentials );
-		} catch ( \Exception $e ) {
-			return new WP_Error( 'newspack_ads_gam_credentials', $e->getMessage() );
-		}
-		$updated = update_option( Newspack_Ads_GAM::CREDENTIALS_OPTION_NAME, $credentials );
-		if ( ! $updated ) {
-			return new WP_Error( 'newspack_ads_gam_credentials', __( 'Unable to update GAM credentials', 'newspack-ads' ) );
-		}
-		return self::get_gam_connection_status();
-	}
-
-	/**
-	 * Clear existing GAM credentials.
-	 *
-	 * @return object Object with status information.
-	 */
-	public static function remove_gam_credentials() {
-		$deleted_credentials  = delete_option( Newspack_Ads_GAM::CREDENTIALS_OPTION_NAME );
-		$deleted_network_code = delete_option( self::OPTION_NAME_GAM_NETWORK_CODE );
-		if ( ! $deleted_credentials || ! $deleted_network_code ) {
-			return new WP_Error( 'newspack_ads_gam_credentials', __( 'Unable to remove GAM credentials', 'newspack-ads' ) );
-		}
-		return self::get_gam_connection_status();
 	}
 
 	/**

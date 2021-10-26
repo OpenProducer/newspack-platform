@@ -1,3 +1,18 @@
+## [1.41.1](https://github.com/Automattic/newspack-blocks/compare/v1.41.0...v1.41.1) (2021-10-26)
+
+
+### Bug Fixes
+
+* correct clash between centered text and image behind alignment ([ff50346](https://github.com/Automattic/newspack-blocks/commit/ff503461fbb607193228e60a3efe0c9561f81c50))
+
+# [1.41.0](https://github.com/Automattic/newspack-blocks/compare/v1.40.0...v1.41.0) (2021-10-19)
+
+
+### Features
+
+* add iframe block ([#859](https://github.com/Automattic/newspack-blocks/issues/859)) ([08a2712](https://github.com/Automattic/newspack-blocks/commit/08a271202a6f3c0dd6b9c0ce1975b8b2c779776c))
+* **homepage-posts:** add a filter to enable duplicating posts ([#886](https://github.com/Automattic/newspack-blocks/issues/886)) ([4daf27d](https://github.com/Automattic/newspack-blocks/commit/4daf27d286379521ad4e96bce4618a7d90d3d8d0))
+
 # [1.40.0](https://github.com/Automattic/newspack-blocks/compare/v1.39.1...v1.40.0) (2021-10-05)
 
 

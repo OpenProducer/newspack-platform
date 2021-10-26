@@ -1,3 +1,23 @@
+# [1.18.0](https://github.com/Automattic/newspack-ads/compare/v1.17.1...v1.18.0) (2021-10-19)
+
+
+### Features
+
+* **gam:** oauth connection ([#203](https://github.com/Automattic/newspack-ads/issues/203)) ([ad5a5ac](https://github.com/Automattic/newspack-ads/commit/ad5a5ac4dc6c59602f9b71f4ea78c337e3c55507))
+* **gam:** support fluid ad unit sizing ([#196](https://github.com/Automattic/newspack-ads/issues/196)) ([cf80344](https://github.com/Automattic/newspack-ads/commit/cf80344c6679427b335f1fd59c0473aa474ee34b))
+
+
+### Performance Improvements
+
+* cache ad units ([#202](https://github.com/Automattic/newspack-ads/issues/202)) ([e36d2cb](https://github.com/Automattic/newspack-ads/commit/e36d2cb05c4d1bf45e6d19ac2ad82e69cefd56f1))
+
+## [1.17.1](https://github.com/Automattic/newspack-ads/compare/v1.17.0...v1.17.1) (2021-10-12)
+
+
+### Bug Fixes
+
+* remove network code restriction on sync ([#197](https://github.com/Automattic/newspack-ads/issues/197)) ([d7ebc9b](https://github.com/Automattic/newspack-ads/commit/d7ebc9be6ed61269d4cdb7a75c6716bd78d31838))
+
 # [1.17.0](https://github.com/Automattic/newspack-ads/compare/v1.16.0...v1.17.0) (2021-09-22)
 
 

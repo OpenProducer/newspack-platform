@@ -653,6 +653,10 @@ final class Newspack_Popups {
 				$placement = 'custom1';
 				$frequency = 'always';
 				break;
+			case 'manual':
+				$placement = 'manual';
+				$frequency = 'always';
+				break;
 			default:
 				$placement = 'inline';
 				$frequency = 'always';

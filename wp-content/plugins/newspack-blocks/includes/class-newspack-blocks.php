@@ -24,6 +24,7 @@ class Newspack_Blocks {
 		add_post_type_support( 'page', 'newspack_blocks' );
 		add_filter( 'script_loader_tag', [ __CLASS__, 'mark_view_script_as_amp_plus_allowed' ], 10, 2 );
 		add_action( 'jetpack_register_gutenberg_extensions', [ __CLASS__, 'disable_jetpack_donate' ], 99 );
+		add_filter( 'the_content', [ __CLASS__, 'hide_post_content_when_iframe_block_is_fullscreen' ] );
 	}
 
 	/**
@@ -37,6 +38,41 @@ class Newspack_Blocks {
 			return str_replace( '<script', '<script data-amp-plus-allowed', $tag );
 		}
 		return $tag;
+	}
+
+	/**
+	 * Hide the post content when it contains an iframe block that is set to fullscreen mode.
+	 *
+	 * @param string $content post content from the_content hook.
+	 * @return string the post content.
+	 */
+	public static function hide_post_content_when_iframe_block_is_fullscreen( $content ) {
+		if ( has_block( 'newspack-blocks/iframe' ) ) {
+			$blocks = parse_blocks( get_post()->post_content );
+
+			foreach ( $blocks as $block ) {
+				if ( 'newspack-blocks/iframe' === $block['blockName']
+					&& array_key_exists( 'isFullScreen', $block['attrs'] )
+					&& $block['attrs']['isFullScreen']
+					) {
+					// we don't need the post content since the iframe will be fullscreen.
+					$content = render_block( $block );
+
+					add_filter(
+						'body_class',
+						function( $classes ) {
+							$classes[] = 'newspack-post-with-fullscreen-iframe';
+							return $classes;
+						}
+					);
+
+					// we don't need to show Newspack popups since the iframe will take over them.
+					add_filter( 'newspack_popups_assess_has_disabled_popups', '__return_true' );
+				}
+			}
+		}
+
+		return $content;
 	}
 
 	/**
