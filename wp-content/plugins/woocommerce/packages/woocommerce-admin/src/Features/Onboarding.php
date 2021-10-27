@@ -9,6 +9,7 @@ namespace Automattic\WooCommerce\Admin\Features;
 use \Automattic\WooCommerce\Admin\Loader;
 use Automattic\WooCommerce\Admin\PageController;
 use Automattic\WooCommerce\Admin\WCAdminHelper;
+use Automattic\WooCommerce\Admin\Schedulers\MailchimpScheduler;
 
 /**
  * Contains backend logic for the onboarding profile and checklist feature.
@@ -96,6 +97,8 @@ class Onboarding {
 
 		// Always hook into Jetpack connection even if outside of admin.
 		add_action( 'jetpack_site_registered', array( $this, 'set_woocommerce_setup_jetpack_opted_in' ) );
+
+		add_action( 'woocommerce_onboarding_profile_data_updated', array( $this, 'on_profile_data_updated' ), 10, 2 );
 
 		if ( ! is_admin() ) {
 			return;
@@ -213,8 +216,7 @@ class Onboarding {
 		// Run after Automattic\WooCommerce\Admin\Loader.
 		add_filter( 'woocommerce_components_settings', array( $this, 'component_settings' ), 20 );
 		// New settings injection.
-		add_filter( 'woocommerce_shared_settings', array( $this, 'component_settings' ), 20 );
-		add_filter( 'woocommerce_admin_preload_options', array( $this, 'preload_options' ) );
+		add_filter( 'woocommerce_admin_shared_settings', array( $this, 'component_settings' ), 20 );
 		add_filter( 'woocommerce_admin_preload_settings', array( $this, 'preload_settings' ) );
 		add_filter( 'woocommerce_admin_is_loading', array( $this, 'is_loading' ) );
 		add_filter( 'woocommerce_show_admin_notice', array( $this, 'remove_install_notice' ), 10, 2 );
@@ -690,53 +692,6 @@ class Onboarding {
 	}
 
 	/**
-	 * Preload options to prime state of the application.
-	 *
-	 * @param array $options Array of options to preload.
-	 * @return array
-	 */
-	public function preload_options( $options ) {
-		$options[] = 'woocommerce_task_list_complete';
-		$options[] = 'woocommerce_task_list_do_this_later';
-		$options[] = 'woocommerce_task_list_hidden';
-		$options[] = 'woocommerce_extended_task_list_complete';
-		$options[] = 'woocommerce_extended_task_list_hidden';
-		$options[] = 'woocommerce_task_list_remind_me_later_tasks';
-
-		if ( ! self::should_show_tasks() && ! self::should_show_profiler() ) {
-			return $options;
-		}
-
-		$options[] = 'wc_connect_options';
-		$options[] = 'woocommerce_task_list_welcome_modal_dismissed';
-		$options[] = 'woocommerce_welcome_from_calypso_modal_dismissed';
-		$options[] = 'woocommerce_task_list_prompt_shown';
-		$options[] = 'woocommerce_task_list_tracked_completed_tasks';
-		$options[] = 'woocommerce_task_list_dismissed_tasks';
-		$options[] = 'woocommerce_allow_tracking';
-		$options[] = 'woocommerce_woo-mercado-pago-basic_settings';
-		$options[] = 'woocommerce_stripe_settings';
-		$options[] = 'woocommerce-ppcp-settings';
-		$options[] = 'woocommerce_ppcp-gateway_settings';
-		$options[] = 'wc_square_refresh_tokens';
-		$options[] = 'woocommerce_square_credit_card_settings';
-		$options[] = 'woocommerce_payfast_settings';
-		$options[] = 'woocommerce_paystack_settings';
-		$options[] = 'woocommerce_kco_settings';
-		$options[] = 'woocommerce_klarna_payments_settings';
-		$options[] = 'woocommerce_cod_settings';
-		$options[] = 'woocommerce_bacs_settings';
-		$options[] = 'woocommerce_bacs_accounts';
-		$options[] = 'woocommerce_woocommerce_payments_settings';
-		$options[] = 'woocommerce_eway_settings';
-		$options[] = 'woocommerce_razorpay_settings';
-		$options[] = 'woocommerce_payubiz_settings';
-		$options[] = 'woocommerce_mollie_payments_settings';
-
-		return $options;
-	}
-
-	/**
 	 * Preload WC setting options to prime state of the application.
 	 *
 	 * @param array $options Array of options to preload.
@@ -1024,5 +979,21 @@ class Onboarding {
 			$plugins = array_unique( $plugins );
 		}
 		return $plugins;
+	}
+
+	/**
+	 * Delete MailchimpScheduler::SUBSCRIBED_OPTION_NAME option if profile data is being updated with a new email.
+	 *
+	 * @param array $existing_data Existing option data.
+	 * @param array $updating_data Updating option data.
+	 */
+	public function on_profile_data_updated( $existing_data, $updating_data ) {
+		if (
+			isset( $existing_data['store_email'] ) &&
+			isset( $updating_data['store_email'] ) &&
+			$existing_data['store_email'] !== $updating_data['store_email']
+		) {
+			delete_option( MailchimpScheduler::SUBSCRIBED_OPTION_NAME );
+		}
 	}
 }

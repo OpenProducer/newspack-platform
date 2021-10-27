@@ -20,6 +20,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'settings' => false,
 			'shipping-label-banner' => true,
 			'store-alerts' => true,
+			'tasks' => false,
 			'transient-notices' => true,
 		);
 	}

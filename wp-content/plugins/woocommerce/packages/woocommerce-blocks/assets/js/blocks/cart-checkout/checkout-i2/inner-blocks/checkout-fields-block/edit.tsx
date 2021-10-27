@@ -3,41 +3,34 @@
  */
 import { useBlockProps, InnerBlocks } from '@wordpress/block-editor';
 import { Main } from '@woocommerce/base-components/sidebar-layout';
-import { getRegisteredBlocks } from '@woocommerce/blocks-checkout';
+import { innerBlockAreas } from '@woocommerce/blocks-checkout';
 
 /**
  * Internal dependencies
  */
 import { useCheckoutBlockControlsContext } from '../../context';
+import { useForcedLayout } from '../../use-forced-layout';
+import { getAllowedBlocks } from '../../editor-utils';
 
-const ALLOWED_BLOCKS = [
-	'woocommerce/checkout-express-payment-block',
-	'woocommerce/checkout-shipping-address-block',
-	'woocommerce/checkout-shipping-methods-block',
-	'woocommerce/checkout-contact-information-block',
-	'woocommerce/checkout-billing-address-block',
-	'woocommerce/checkout-payment-block',
-	'woocommerce/checkout-order-note-block',
-	'woocommerce/checkout-actions-block',
-	'woocommerce/checkout-terms-block',
-	'core/paragraph',
-	'core/heading',
-	'core/separator',
-	...getRegisteredBlocks( 'fields' ),
-];
-
-export const Edit = (): JSX.Element => {
+export const Edit = ( { clientId }: { clientId: string } ): JSX.Element => {
 	const blockProps = useBlockProps();
+	const allowedBlocks = getAllowedBlocks( innerBlockAreas.CHECKOUT_FIELDS );
+
 	const {
 		addressFieldControls: Controls,
 	} = useCheckoutBlockControlsContext();
+
+	useForcedLayout( {
+		clientId,
+		template: allowedBlocks,
+	} );
 	return (
 		<Main className="wc-block-checkout__main">
 			<div { ...blockProps }>
 				<Controls />
 				<form className="wc-block-components-form wc-block-checkout__form">
 					<InnerBlocks
-						allowedBlocks={ ALLOWED_BLOCKS }
+						allowedBlocks={ allowedBlocks }
 						templateLock={ false }
 						renderAppender={ InnerBlocks.ButtonBlockAppender }
 					/>

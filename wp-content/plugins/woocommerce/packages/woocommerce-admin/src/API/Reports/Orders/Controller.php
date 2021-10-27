@@ -532,12 +532,12 @@ class Controller extends ReportsController implements ExportableInterface {
 		$export_columns = array(
 			'date_created'    => __( 'Date', 'woocommerce' ),
 			'order_number'    => __( 'Order #', 'woocommerce' ),
-			'total_formatted' => __( 'N. Revenue (Formatted)', 'woocommerce' ),
+			'total_formatted' => __( 'N. Revenue (formatted)', 'woocommerce' ),
 			'status'          => __( 'Status', 'woocommerce' ),
 			'customer_name'   => __( 'Customer', 'woocommerce' ),
-			'customer_type'   => __( 'Customer Type', 'woocommerce' ),
+			'customer_type'   => __( 'Customer type', 'woocommerce' ),
 			'products'        => __( 'Product(s)', 'woocommerce' ),
-			'num_items_sold'  => __( 'Items Sold', 'woocommerce' ),
+			'num_items_sold'  => __( 'Items sold', 'woocommerce' ),
 			'coupons'         => __( 'Coupon(s)', 'woocommerce' ),
 			'net_total'       => __( 'N. Revenue', 'woocommerce' ),
 		);

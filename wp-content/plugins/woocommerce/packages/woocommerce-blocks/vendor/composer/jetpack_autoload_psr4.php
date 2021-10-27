@@ -10,12 +10,16 @@ return array(
 		'version' => '1.11.0.0',
 		'path'    => array( $vendorDir . '/composer/installers/src/Composer/Installers' )
 	),
+	'Automattic\\WooCommerce\\Blocks\\Tests\\' => array(
+		'version' => '5.9.1.0',
+		'path'    => array( $baseDir . '/tests/php' )
+	),
 	'Automattic\\WooCommerce\\Blocks\\' => array(
-		'version' => '5.7.2.0',
+		'version' => '5.9.1.0',
 		'path'    => array( $baseDir . '/src' )
 	),
 	'Automattic\\Jetpack\\Autoloader\\' => array(
-		'version' => '2.10.3.0',
+		'version' => '2.10.4.0',
 		'path'    => array( $vendorDir . '/automattic/jetpack-autoloader/src' )
 	),
 );

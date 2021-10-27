@@ -24,7 +24,7 @@ class DefaultPaymentGateways {
 			array(
 				'id'         => 'payfast',
 				'title'      => __( 'PayFast', 'woocommerce' ),
-				'content'    => __( 'The PayFast extension for WooCommerce enables you to accept payments by Credit Card and EFT via one of South Africa’s most popular payment gateways. No setup fees or monthly subscription costs.  Selecting this extension will configure your store to use South African rands as the selected currency.', 'woocommerce' ),
+				'content'    => __( 'The PayFast extension for WooCommerce enables you to accept payments by Credit Card and EFT via one of South Africa’s most popular payment gateways. No setup fees or monthly subscription costs. Selecting this extension will configure your store to use South African rands as the selected currency.', 'woocommerce' ),
 				'image'      => WC()->plugin_url() . '/assets/images/payfast.png',
 				'plugins'    => array( 'woocommerce-payfast-gateway' ),
 				'is_visible' => array(
@@ -214,7 +214,7 @@ class DefaultPaymentGateways {
 				'id'         => 'eway',
 				'title'      => __( 'eWAY', 'woocommerce' ),
 				'content'    => __( 'The eWAY extension for WooCommerce allows you to take credit card payments directly on your store without redirecting your customers to a third party site to make payment.', 'woocommerce' ),
-				'image'      => WC()->plugin_url() . '/assets/images/eway-logo.jpg',
+				'image'      => plugins_url( 'images/onboarding/eway.png', WC_ADMIN_PLUGIN_FILE ),
 				'plugins'    => array( 'woocommerce-gateway-eway' ),
 				'is_visible' => array(
 					self::get_rules_for_countries( array( 'AU', 'NZ' ) ),
@@ -252,7 +252,7 @@ class DefaultPaymentGateways {
 	 * @return array Array of countries.
 	 */
 	public static function get_wcpay_countries() {
-		return array( 'US', 'PR', 'AU', 'CA', 'DE', 'ES', 'FR', 'GB', 'IE', 'IT', 'NZ', 'AT', 'BE', 'NL', 'PL', 'PT', 'CH' );
+		return array( 'US', 'PR', 'AU', 'CA', 'DE', 'ES', 'FR', 'GB', 'IE', 'IT', 'NZ', 'AT', 'BE', 'NL', 'PL', 'PT', 'CH', 'HK', 'SG' );
 	}
 
 	/**

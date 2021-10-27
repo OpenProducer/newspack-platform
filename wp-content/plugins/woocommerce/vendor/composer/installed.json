@@ -501,17 +501,17 @@
     },
     {
         "name": "woocommerce/action-scheduler",
-        "version": "3.2.1",
-        "version_normalized": "3.2.1.0",
+        "version": "3.3.0",
+        "version_normalized": "3.3.0.0",
         "source": {
             "type": "git",
             "url": "https://github.com/woocommerce/action-scheduler.git",
-            "reference": "3c24064f115cd55e972d73d5d48f14133ac60b0d"
+            "reference": "5588a831cd2453ecf7d4803f3a81063e13cde93d"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/3c24064f115cd55e972d73d5d48f14133ac60b0d",
-            "reference": "3c24064f115cd55e972d73d5d48f14133ac60b0d",
+            "url": "https://api.github.com/repos/woocommerce/action-scheduler/zipball/5588a831cd2453ecf7d4803f3a81063e13cde93d",
+            "reference": "5588a831cd2453ecf7d4803f3a81063e13cde93d",
             "shasum": ""
         },
         "require-dev": {
@@ -519,7 +519,7 @@
             "woocommerce/woocommerce-sniffs": "0.1.0",
             "wp-cli/wp-cli": "~2.5.0"
         },
-        "time": "2021-06-21T20:21:35+00:00",
+        "time": "2021-09-15T21:08:48+00:00",
         "type": "wordpress-plugin",
         "extra": {
             "scripts-description": {
@@ -537,22 +537,22 @@
         "homepage": "https://actionscheduler.org/",
         "support": {
             "issues": "https://github.com/woocommerce/action-scheduler/issues",
-            "source": "https://github.com/woocommerce/action-scheduler/tree/3.2.1"
+            "source": "https://github.com/woocommerce/action-scheduler/tree/3.3.0"
         }
     },
     {
         "name": "woocommerce/woocommerce-admin",
-        "version": "2.6.5",
-        "version_normalized": "2.6.5.0",
+        "version": "2.7.2",
+        "version_normalized": "2.7.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/woocommerce/woocommerce-admin.git",
-            "reference": "03d45390fb555d3a649f87c2b3385257c9d7ac02"
+            "reference": "9ce54862556815e74cfe2476fae0eb30fcfd65d6"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/woocommerce/woocommerce-admin/zipball/03d45390fb555d3a649f87c2b3385257c9d7ac02",
-            "reference": "03d45390fb555d3a649f87c2b3385257c9d7ac02",
+            "url": "https://api.github.com/repos/woocommerce/woocommerce-admin/zipball/9ce54862556815e74cfe2476fae0eb30fcfd65d6",
+            "reference": "9ce54862556815e74cfe2476fae0eb30fcfd65d6",
             "shasum": ""
         },
         "require": {
@@ -566,7 +566,7 @@
             "suin/phpcs-psr4-sniff": "^2.2",
             "woocommerce/woocommerce-sniffs": "0.1.0"
         },
-        "time": "2021-09-22T22:45:59+00:00",
+        "time": "2021-10-11T21:11:02+00:00",
         "type": "wordpress-plugin",
         "extra": {
             "scripts-description": {
@@ -609,22 +609,22 @@
         "homepage": "https://github.com/woocommerce/woocommerce-admin",
         "support": {
             "issues": "https://github.com/woocommerce/woocommerce-admin/issues",
-            "source": "https://github.com/woocommerce/woocommerce-admin/tree/v2.6.5"
+            "source": "https://github.com/woocommerce/woocommerce-admin/tree/v2.7.2"
         }
     },
     {
         "name": "woocommerce/woocommerce-blocks",
-        "version": "v5.7.2",
-        "version_normalized": "5.7.2.0",
+        "version": "v5.9.1",
+        "version_normalized": "5.9.1.0",
         "source": {
             "type": "git",
             "url": "https://github.com/woocommerce/woocommerce-gutenberg-products-block.git",
-            "reference": "ac5c4219ac1848f1425befe980d25dcf64f064a9"
+            "reference": "edfe8e40307f6f48236a066aade02a580d1b74fd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/woocommerce/woocommerce-gutenberg-products-block/zipball/ac5c4219ac1848f1425befe980d25dcf64f064a9",
-            "reference": "ac5c4219ac1848f1425befe980d25dcf64f064a9",
+            "url": "https://api.github.com/repos/woocommerce/woocommerce-gutenberg-products-block/zipball/edfe8e40307f6f48236a066aade02a580d1b74fd",
+            "reference": "edfe8e40307f6f48236a066aade02a580d1b74fd",
             "shasum": ""
         },
         "require": {
@@ -632,10 +632,11 @@
             "composer/installers": "^1.7.0"
         },
         "require-dev": {
-            "phpunit/phpunit": "7.5.20",
-            "woocommerce/woocommerce-sniffs": "0.1.0"
+            "woocommerce/woocommerce-sniffs": "0.1.0",
+            "wp-phpunit/wp-phpunit": "^5.4",
+            "yoast/phpunit-polyfills": "^1.0"
         },
-        "time": "2021-09-23T13:58:57+00:00",
+        "time": "2021-09-24T08:17:10+00:00",
         "type": "wordpress-plugin",
         "extra": {
             "scripts-description": {
@@ -662,7 +663,7 @@
         ],
         "support": {
             "issues": "https://github.com/woocommerce/woocommerce-gutenberg-products-block/issues",
-            "source": "https://github.com/woocommerce/woocommerce-gutenberg-products-block/tree/v5.7.2"
+            "source": "https://github.com/woocommerce/woocommerce-gutenberg-products-block/tree/v5.9.1"
         }
     }
 ]

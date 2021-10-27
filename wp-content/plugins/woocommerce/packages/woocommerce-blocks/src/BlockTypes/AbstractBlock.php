@@ -81,7 +81,9 @@ abstract class AbstractBlock {
 	 */
 	public function render_callback( $attributes = [], $content = '' ) {
 		$render_callback_attributes = $this->parse_render_callback_attributes( $attributes );
-		$this->enqueue_assets( $render_callback_attributes );
+		if ( ! is_admin() ) {
+			$this->enqueue_assets( $render_callback_attributes );
+		}
 		return $this->render( $render_callback_attributes, $content );
 	}
 
@@ -121,23 +123,31 @@ abstract class AbstractBlock {
 	 */
 	protected function register_block_type_assets() {
 		if ( null !== $this->get_block_type_editor_script() ) {
+			$data     = $this->asset_api->get_script_data( $this->get_block_type_editor_script( 'path' ) );
+			$has_i18n = in_array( 'wp-i18n', $data['dependencies'], true );
+
 			$this->asset_api->register_script(
 				$this->get_block_type_editor_script( 'handle' ),
 				$this->get_block_type_editor_script( 'path' ),
 				array_merge(
 					$this->get_block_type_editor_script( 'dependencies' ),
 					$this->integration_registry->get_all_registered_editor_script_handles()
-				)
+				),
+				$has_i18n
 			);
 		}
 		if ( null !== $this->get_block_type_script() ) {
+			$data     = $this->asset_api->get_script_data( $this->get_block_type_script( 'path' ) );
+			$has_i18n = in_array( 'wp-i18n', $data['dependencies'], true );
+
 			$this->asset_api->register_script(
 				$this->get_block_type_script( 'handle' ),
 				$this->get_block_type_script( 'path' ),
 				array_merge(
 					$this->get_block_type_script( 'dependencies' ),
 					$this->integration_registry->get_all_registered_script_handles()
-				)
+				),
+				$has_i18n
 			);
 		}
 	}
@@ -245,10 +255,10 @@ abstract class AbstractBlock {
 	/**
 	 * Get block attributes.
 	 *
-	 * @return array|null;
+	 * @return array;
 	 */
 	protected function get_block_type_attributes() {
-		return null;
+		return [];
 	}
 
 	/**
