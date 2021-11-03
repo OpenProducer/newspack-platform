@@ -64,6 +64,10 @@ class Configuration_Managers {
 			'filename'   => 'class-wordpress-seo-configuration-manager.php',
 			'class_name' => 'WordPress_SEO_Configuration_Manager',
 		],
+		'wp-parsely'            => [
+			'filename'   => 'class-parsely-configuration-manager.php',
+			'class_name' => 'Parsely_Configuration_Manager',
+		],
 	];
 
 	/**

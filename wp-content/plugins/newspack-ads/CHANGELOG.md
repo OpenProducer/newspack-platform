@@ -1,3 +1,10 @@
+## [1.18.1](https://github.com/Automattic/newspack-ads/compare/v1.18.0...v1.18.1) (2021-11-03)
+
+
+### Bug Fixes
+
+* update circleci build images ([#214](https://github.com/Automattic/newspack-ads/issues/214)) ([78da65e](https://github.com/Automattic/newspack-ads/commit/78da65e9234d0c3c64ae5b148e213cb313ccf57d))
+
 # [1.18.0](https://github.com/Automattic/newspack-ads/compare/v1.17.1...v1.18.0) (2021-10-19)
 
 

@@ -237,6 +237,24 @@ class Analytics {
 					'event_label'    => 'linkedin',
 					'event_category' => 'NTG social',
 				],
+				[
+					'id'             => self::get_uniqid(),
+					'on'             => 'click',
+					'element'        => 'a.share-reddit',
+					'amp_element'    => 'amp-social-share[type="reddit"]',
+					'event_name'     => 'social share',
+					'event_label'    => 'reddit',
+					'event_category' => 'NTG social',
+				],
+				[
+					'id'             => self::get_uniqid(),
+					'on'             => 'click',
+					'element'        => 'a.share-telegram',
+					'amp_element'    => 'amp-social-share[type="telegram"]',
+					'event_name'     => 'social share',
+					'event_label'    => 'telegram',
+					'event_category' => 'NTG social',
+				],
 			];
 
 			if ( ! is_front_page() && ! is_archive() ) {

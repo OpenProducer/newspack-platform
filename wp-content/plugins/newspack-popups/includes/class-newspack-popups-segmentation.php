@@ -256,6 +256,15 @@ final class Newspack_Popups_Segmentation {
 			$initial_client_report_url_params['user_id'] = get_current_user_id();
 		}
 
+		// If visiting the donor landing page, mark the visitor as donor.
+		if ( intval( Newspack_Popups_Settings::donor_landing_page() ) === get_queried_object_id() ) {
+			$initial_client_report_url_params['donation'] = wp_json_encode(
+				[
+					'offsite_has_donated' => true,
+				]
+			);
+		}
+
 		if ( ! empty( $initial_client_report_url_params ) ) {
 			$amp_analytics_config['requests']                            = [
 				'initialClientDataReport' => esc_url( self::get_client_data_endpoint() ),
@@ -269,22 +278,6 @@ final class Newspack_Popups_Segmentation {
 						'client_id' => 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
 					]
 				),
-			];
-		}
-
-		$donor_landing_page = Newspack_Popups_Settings::donor_landing_page();
-		if ( $donor_landing_page && intval( $donor_landing_page ) === get_queried_object_id() ) {
-			$amp_analytics_config['triggers']['reportDonor'] = [
-				'on'             => 'ini-load',
-				'request'        => 'event',
-				'extraUrlParams' => [
-					'donation'  => wp_json_encode(
-						[
-							'offsite_has_donated' => true,
-						]
-					),
-					'client_id' => 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
-				],
 			];
 		}
 

@@ -1,3 +1,12 @@
+## [1.42.1](https://github.com/Automattic/newspack-popups/compare/v1.42.0...v1.42.1) (2021-11-03)
+
+
+### Bug Fixes
+
+* displaying on custom post types ([05f6f8c](https://github.com/Automattic/newspack-popups/commit/05f6f8cd8111ca4c12ed4f6f1a3ac8f1e4464a0f))
+* donor landing page ([bedcb4c](https://github.com/Automattic/newspack-popups/commit/bedcb4c47be7c3ea570543bf466bd3b0d7aad590))
+* update ci images ([#648](https://github.com/Automattic/newspack-popups/issues/648)) ([7a05ed4](https://github.com/Automattic/newspack-popups/commit/7a05ed4d33451aec0eec2dc3cdb6c513f002fa5a))
+
 # [1.42.0](https://github.com/Automattic/newspack-popups/compare/v1.41.0...v1.42.0) (2021-10-19)
 
 

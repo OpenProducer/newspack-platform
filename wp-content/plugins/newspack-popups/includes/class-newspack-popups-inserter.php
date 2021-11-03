@@ -763,7 +763,12 @@ final class Newspack_Popups_Inserter {
 		// - the type of the post supported by this popup, if different than the global setting.
 		$popup_post_types = $popup['options']['post_types'];
 
-		if ( 0 === count( array_diff( $global_post_types, $popup_post_types ) ) ) {
+		if (
+			// PHP's array_diff "returns the values in [first argument] that are not present in any of the other arrays",
+			// to get a diff between arrays, the arrays have to be compared twice, with reversed argument order.
+			0 === count( array_diff( $popup_post_types, $global_post_types ) )
+			&& 0 === count( array_diff( $global_post_types, $popup_post_types ) )
+		) {
 			// Popup post types are same as globally-set post types - no need to check the former.
 			$is_post_type_matching_global_post_types = in_array( $post_type, $global_post_types );
 			$is_post_context_matching                = $is_taxonomy_matching && $is_post_type_matching_global_post_types;

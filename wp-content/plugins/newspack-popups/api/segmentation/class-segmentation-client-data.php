@@ -45,8 +45,8 @@ class Segmentation_Client_Data extends Lightweight_API {
 		// Add a donation to client.
 		$donation = $this->get_request_param( 'donation', $request );
 		if ( $donation ) {
-			if ( 'string' === $donation ) {
-				$donation = json_decode( $donation );
+			if ( 'string' === gettype( $donation ) ) {
+				$donation = (array) json_decode( $donation );
 			}
 			$client_data_update['donations'][] = $donation;
 		}

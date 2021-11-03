@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.51.0
+Version: 1.52.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -454,12 +454,12 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 /* stylelint-disable selector-type-no-unknown  */
 amp-script .cat-links {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 /* stylelint-enable */
@@ -638,7 +638,7 @@ i {
 }
 
 blockquote cite {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.7em;
   font-style: normal;
 }
@@ -796,7 +796,7 @@ input[type='submit'],
   box-sizing: border-box;
   display: inline-block;
   color: #fff;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.8em;
   font-weight: 700;
   line-height: 1.2;
@@ -987,7 +987,7 @@ a:focus {
   border: none;
   padding: 0;
   margin: 0;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   line-height: 1.2;
   text-decoration: none;
   background: transparent;
@@ -1384,7 +1384,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 .highlight-menu-contain .wrapper {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.7em;
   height: 1.5em;
   overflow: hidden;
@@ -1640,6 +1640,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .h-sub-cta.h-sub.h-cl .mb-cta {
     left: 2.25rem;
     position: absolute;
+    z-index: 1;
   }
   .h-sub-cta.h-sub.h-cl:not(.h-stk).single-featured-image-beside .mb-cta {
     left: 2.75rem;
@@ -2055,7 +2056,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .comment-navigation .nav-next {
   min-width: 50%;
   width: 100%;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: bold;
   padding: 0.5rem 0;
 }
@@ -2127,7 +2128,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   transition: background 150ms ease-in-out;
   background: #555;
   color: #fff;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: 700;
   line-height: 1.2;
   padding: 0.76rem 1rem;
@@ -3033,6 +3034,24 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   font-style: normal;
 }
 
+.article-summary {
+  background: #eee;
+  font-size: 0.9rem;
+  padding: 1.5rem;
+}
+
+.article-summary .article-summary-title {
+  font-size: 1rem;
+}
+
+.article-summary > *:first-child {
+  margin-top: 0;
+}
+
+.article-summary > *:last-child {
+  margin-bottom: 0;
+}
+
 body.page .entry-title {
   font-size: 1.8em;
   margin: 0;
@@ -3804,7 +3823,7 @@ div.sharedaddy .sd-social h3.sd-title,
 }
 
 .jp-relatedposts-i2 a {
-  font: bold 20px "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font: bold 20px "Fira Sans Condensed", "Helvetica", sans-serif;
   text-decoration: none;
 }
 
@@ -3827,12 +3846,12 @@ div.sharedaddy .sd-social h3.sd-title,
 .jp-relatedposts-i2,
 #jp-relatedposts.jp-relatedposts {
   clear: both;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 .jp-relatedposts-i2 .jp-relatedposts-headline,
 #jp-relatedposts.jp-relatedposts .jp-relatedposts-headline {
-  font: bold 0.7em "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font: bold 0.7em "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 .jp-relatedposts-i2 .jp-relatedposts-headline em::before,
@@ -3872,7 +3891,7 @@ div.sharedaddy .sd-social h3.sd-title,
 }
 
 #jp-relatedposts.jp-relatedposts .jp-reltaedposts-post-title {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 /*--------------------------------------------------------------
@@ -4016,7 +4035,7 @@ div.sharedaddy .sd-social h3.sd-title,
 .comment-list .pingback .comment-body,
 .comment-list .trackback .comment-body {
   color: #515151;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.7em;
   font-weight: 500;
   margin-top: 1rem;
@@ -4034,7 +4053,7 @@ div.sharedaddy .sd-social h3.sd-title,
 .comment-list .pingback .comment-body .comment-edit-link,
 .comment-list .trackback .comment-body .comment-edit-link {
   color: #515151;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: 500;
 }
 
@@ -4252,7 +4271,7 @@ div.sharedaddy .sd-social h3.sd-title,
 
 .comment-form .comment-notes,
 .comment-form label {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.7em;
   color: #515151;
 }
@@ -4732,7 +4751,7 @@ div.sharedaddy .sd-social h3.sd-title,
 
 /* Widgets */
 .widget {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.8em;
   margin: 0 0 1rem;
   word-wrap: break-word;
@@ -4785,7 +4804,7 @@ div.sharedaddy .sd-social h3.sd-title,
 .widget_recent_comments ul li,
 .widget_recent_entries ul li,
 .widget_rss ul li {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 .widget_archive ul li ul,
@@ -5516,7 +5535,7 @@ p.has-background {
 .wp-block-pullquote cite {
   display: inline-block;
   color: inherit;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.7em;
   opacity: 0.8;
   line-height: 1.6;
@@ -5617,7 +5636,7 @@ p.has-background {
 }
 
 .wp-block-latest-comments .wp-block-latest-comments__comment-meta {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: bold;
 }
 
@@ -5688,7 +5707,7 @@ p.has-background {
   transition: background 150ms ease-in-out;
   border: none;
   border-radius: 5px;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.8em;
   line-height: 1.2;
   box-sizing: border-box;
@@ -5773,7 +5792,7 @@ p.has-background {
 
 .wp-block-archives li,
 .wp-block-categories li {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: bold;
   line-height: 1.2;
 }
@@ -5815,14 +5834,14 @@ p.has-background {
 }
 
 .wp-block-latest-posts li > a {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: bold;
   line-height: 1.2;
 }
 
 .wp-block-latest-posts time {
   color: #515151;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 .wp-block-latest-posts .wp-block-latest-posts__post-excerpt {
@@ -6002,7 +6021,7 @@ hr.has-background.is-style-dots::before {
 }
 
 .wp-block-file {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.8em;
 }
 
@@ -6012,7 +6031,7 @@ hr.has-background.is-style-dots::before {
   border: none;
   border-radius: 5px;
   background: #555;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: inherit;
   line-height: 1.2;
   text-decoration: none;
@@ -6723,7 +6742,7 @@ figcaption,
 .wp-caption-text,
 .amp-image-lightbox-caption {
   font-size: 0.7em;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   line-height: 1.6;
 }
 
@@ -6837,7 +6856,7 @@ figcaption,
 
 .gallery-caption {
   display: block;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.7em;
   line-height: 1.6;
   margin: 0;
@@ -7001,7 +7020,7 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
 }
 
 .site-breadcrumb .wrapper > span {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.6em;
   line-height: 1.2;
 }
@@ -7061,7 +7080,7 @@ div.wpnbha .article-section-title {
 }
 
 .cat-links {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-size: 0.8em;
 }
 
@@ -7130,14 +7149,14 @@ div.wpnbha .article-section-title {
 
 /* Blocks */
 .has-drop-cap:not(:focus)::first-letter {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: bold;
 }
 
 .wp-block-pullquote {
   border-width: 0;
   border-color: #36f;
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
   font-weight: bold;
   padding-top: 4rem;
   position: relative;
@@ -7305,7 +7324,7 @@ div.wpnbha .article-section-title {
 }
 
 .site-info {
-  font-family: "Fira Sans Condensed", -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
 /* Yoast Breadcrumbs */
