@@ -1,3 +1,13 @@
+## [1.35.1](https://github.com/Automattic/newspack-newsletters/compare/v1.35.0...v1.35.1) (2021-11-03)
+
+
+### Bug Fixes
+
+* allow social-link inner block ([#603](https://github.com/Automattic/newspack-newsletters/issues/603)) ([ab2f892](https://github.com/Automattic/newspack-newsletters/commit/ab2f8926765ff6216bf87ef7be15ddad9159d7c2))
+* **mailchimp:** segment selection and saved segments ([#605](https://github.com/Automattic/newspack-newsletters/issues/605)) ([e0b62e3](https://github.com/Automattic/newspack-newsletters/commit/e0b62e329ce83da7e7815d1c34a635e34d0038c3))
+* enable prompts on public newsletters ([7e2290b](https://github.com/Automattic/newspack-newsletters/commit/7e2290b66bd85bae4d47a784fdc5a873c4ba1374))
+* merge color palette values ([#608](https://github.com/Automattic/newspack-newsletters/issues/608)) ([9ba2bae](https://github.com/Automattic/newspack-newsletters/commit/9ba2bae41babf161ac89244946633cf116caf029))
+
 # [1.35.0](https://github.com/Automattic/newspack-newsletters/compare/v1.34.0...v1.35.0) (2021-10-26)
 
 

@@ -150,6 +150,7 @@ final class Newspack_Newsletters_Editor {
 			'core/list',
 			'core/quote',
 			'core/social-links',
+			'core/social-link',
 			'newspack-newsletters/posts-inserter',
 			'newspack-newsletters/share',
 		);

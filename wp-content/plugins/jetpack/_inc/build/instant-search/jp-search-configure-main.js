@@ -52,7 +52,7 @@ module.exports.default = module.exports, module.exports.__esModule = true;
 
 /***/ }),
 
-/***/ 808:
+/***/ 306:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -91,32 +91,7 @@ function Icon({
 
 /***/ }),
 
-/***/ 3477:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3027);
-/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2418);
-/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__);
-
-
-/**
- * WordPress dependencies
- */
-
-const closeSmall = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24"
-}, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
-  d: "M12 13.06l3.712 3.713 1.061-1.06L13.061 12l3.712-3.712-1.06-1.06L12 10.938 8.288 7.227l-1.061 1.06L10.939 12l-3.712 3.712 1.06 1.061L12 13.061z"
-}));
-/* harmony default export */ __webpack_exports__["Z"] = (closeSmall);
-//# sourceMappingURL=close-small.js.map
-
-/***/ }),
-
-/***/ 634:
+/***/ 9304:
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
@@ -140,6 +115,31 @@ const cog = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_w
 }));
 /* harmony default export */ __webpack_exports__["Z"] = (cog);
 //# sourceMappingURL=cog.js.map
+
+/***/ }),
+
+/***/ 7694:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(3027);
+/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2418);
+/* harmony import */ var _wordpress_primitives__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__);
+
+
+/**
+ * WordPress dependencies
+ */
+
+const image = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg"
+}, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_primitives__WEBPACK_IMPORTED_MODULE_1__.Path, {
+  d: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"
+}));
+/* harmony default export */ __webpack_exports__["Z"] = (image);
+//# sourceMappingURL=image.js.map
 
 /***/ }),
 
@@ -3748,7 +3748,11 @@ function AppWrapper() {
     isLoading
   } = (0,_hooks_use_loading_state__WEBPACK_IMPORTED_MODULE_8__/* .default */ .Z)();
   return /*#__PURE__*/React.createElement("div", {
-    className: "jp-search-configure-app-wrapper"
+    /* translators: accessibility text for the widgets screen content landmark region. */
+    "aria-label": __('Jetpack Search customization preview', 'jetpack'),
+    className: "jp-search-configure-app-wrapper",
+    role: "region",
+    tabIndex: "-1"
   }, isLoading ? /*#__PURE__*/React.createElement("img", {
     className: "jp-search-configure-loading-spinner",
     width: "32",
@@ -3778,9 +3782,9 @@ function AppWrapper() {
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3163);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(808);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(634);
-/* harmony import */ var _save_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8194);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(306);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9304);
+/* harmony import */ var _save_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4971);
 /**
  * WordPress dependencies
  */
@@ -3828,72 +3832,6 @@ function Header({
 }
 
 /* harmony default export */ __webpack_exports__["Z"] = (Header);
-
-/***/ }),
-
-/***/ 8194:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
-
-"use strict";
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "Z": function() { return /* binding */ SaveButton; }
-/* harmony export */ });
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7997);
-/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3163);
-/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _lib_analytics__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3369);
-/* harmony import */ var _hooks_use_entity_record_state__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(232);
-/* harmony import */ var _instant_search_lib_constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9379);
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-const alias__ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__;
-const __ = alias__;
-
-
-
-/**
- * Component for saving pending entity record changes.
- *
- * @returns {Element} component instance
- */
-
-function SaveButton() {
-  const {
-    editedEntities: editedSettings,
-    isSaving,
-    hasUnsavedEdits,
-    saveRecords
-  } = (0,_hooks_use_entity_record_state__WEBPACK_IMPORTED_MODULE_3__/* .default */ .Z)();
-
-  const onClick = (...args) => {
-    if (isSaving) {
-      return;
-    }
-
-    (0,_lib_analytics__WEBPACK_IMPORTED_MODULE_2__/* .recordEvent */ .Ny)(`${_lib_analytics__WEBPACK_IMPORTED_MODULE_2__/* .eventPrefix */ .q0}_save_button_click`, {
-      initialSettings: JSON.stringify(window[_instant_search_lib_constants__WEBPACK_IMPORTED_MODULE_4__/* .SERVER_OBJECT_NAME */ .W1].overlayOptions),
-      changedSettings: JSON.stringify(editedSettings),
-      changedSettingNames: Object.keys(editedSettings).join(',')
-    });
-    saveRecords(...args);
-  };
-
-  return /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-    "aria-disabled": isSaving,
-    disabled: !hasUnsavedEdits,
-    isBusy: isSaving,
-    isPrimary: true,
-    onClick: onClick
-  }, isSaving ? __('Saving…', 'jetpack') : __('Save', 'jetpack'));
-}
 
 /***/ }),
 
@@ -4019,14 +3957,8 @@ function Interface(props) {
   }, /*#__PURE__*/React.createElement(_header__WEBPACK_IMPORTED_MODULE_2__/* .default */ .Z, {
     enableSidebar: enableSidebar
   })), /*#__PURE__*/React.createElement("div", {
-    className: "interface-interface-skeleton__body"
-  }, /*#__PURE__*/React.createElement("div", {
-    /* translators: accessibility text for the widgets screen content landmark region. */
-    "aria-label": __('Jetpack Search customization preview', 'jetpack'),
-    className: "interface-interface-skeleton__content",
-    role: "region",
-    tabIndex: "-1"
-  }, /*#__PURE__*/React.createElement(_app_wrapper__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z, null)), !!enabledSidebarName && /*#__PURE__*/React.createElement("div", {
+    className: "jp-search-configure-layout__body"
+  }, /*#__PURE__*/React.createElement(_app_wrapper__WEBPACK_IMPORTED_MODULE_1__/* .default */ .Z, null), !!enabledSidebarName && /*#__PURE__*/React.createElement("div", {
     /* translators: accessibility text for the widgets screen settings landmark region. */
     "aria-label": __('Jetpack Search customization settings', 'jetpack'),
     className: "interface-interface-skeleton__sidebar",
@@ -4037,6 +3969,74 @@ function Interface(props) {
     enabledSidebarName: enabledSidebarName,
     enableSidebar: enableSidebar
   })))));
+}
+
+/***/ }),
+
+/***/ 4971:
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+"use strict";
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "Z": function() { return /* binding */ SaveButton; }
+/* harmony export */ });
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7997);
+/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3163);
+/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
+/* harmony import */ var _lib_analytics__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(3369);
+/* harmony import */ var _hooks_use_entity_record_state__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(232);
+/* harmony import */ var _instant_search_lib_constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(9379);
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+const alias__ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__;
+const __ = alias__;
+
+
+
+
+/**
+ * Component for saving pending entity record changes.
+ *
+ * @returns {Element} component instance
+ */
+
+function SaveButton() {
+  const {
+    editedEntities: editedSettings,
+    isSaving,
+    hasUnsavedEdits,
+    saveRecords
+  } = (0,_hooks_use_entity_record_state__WEBPACK_IMPORTED_MODULE_3__/* .default */ .Z)();
+
+  const onClick = (...args) => {
+    if (isSaving) {
+      return;
+    }
+
+    (0,_lib_analytics__WEBPACK_IMPORTED_MODULE_2__/* .recordEvent */ .Ny)(`${_lib_analytics__WEBPACK_IMPORTED_MODULE_2__/* .eventPrefix */ .q0}_save_button_click`, {
+      initialSettings: JSON.stringify(window[_instant_search_lib_constants__WEBPACK_IMPORTED_MODULE_4__/* .SERVER_OBJECT_NAME */ .W1].overlayOptions),
+      changedSettings: JSON.stringify(editedSettings),
+      changedSettingNames: Object.keys(editedSettings).join(',')
+    });
+    saveRecords(...args);
+  };
+
+  return /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+    "aria-disabled": isSaving,
+    className: "jp-search-configure-save-button",
+    disabled: !hasUnsavedEdits,
+    isBusy: isSaving,
+    isPrimary: true,
+    onClick: onClick
+  }, isSaving ? __('Saving…', 'jetpack') : __('Save', 'jetpack'));
 }
 
 /***/ }),
@@ -4208,12 +4208,13 @@ function ExcludedPostTypesControl({
 /* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(3163);
 /* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(808);
-/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(3477);
-/* harmony import */ var _lib_constants__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(3920);
-/* harmony import */ var _sidebar_description__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(233);
-/* harmony import */ var _sidebar_options__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(7222);
-/* harmony import */ var _tabs__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(1086);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(306);
+/* harmony import */ var _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(7694);
+/* harmony import */ var _lib_constants__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(3920);
+/* harmony import */ var _save_button__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4971);
+/* harmony import */ var _sidebar_description__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(233);
+/* harmony import */ var _sidebar_options__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(7222);
+/* harmony import */ var _tabs__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(1086);
 /**
  * WordPress dependencies
  */
@@ -4225,6 +4226,7 @@ const __ = alias__;
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -4249,19 +4251,19 @@ function Sidebar(props) {
   }, /*#__PURE__*/React.createElement("div", {
     className: "components-panel__header interface-complementary-area-header jp-search-configure-sidebar__panel-tabs",
     tabindex: "-1"
-  }, /*#__PURE__*/React.createElement(_tabs__WEBPACK_IMPORTED_MODULE_4__/* .default */ .Z, {
+  }, /*#__PURE__*/React.createElement(_tabs__WEBPACK_IMPORTED_MODULE_5__/* .default */ .Z, {
     enabledSidebarName: enabledSidebarName,
     enableSidebar: enableSidebar
-  }), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
-    "aria-label": __('Close settings', 'jetpack'),
+  }), /*#__PURE__*/React.createElement(_save_button__WEBPACK_IMPORTED_MODULE_2__/* .default */ .Z, null), /*#__PURE__*/React.createElement(_wordpress_components__WEBPACK_IMPORTED_MODULE_0__.Button, {
+    "aria-label": __('Show preview', 'jetpack'),
     className: "jp-search-configure-sidebar__hide-settings-button",
     isSecondary: true,
     onClick: disableSidebar
-  }, /*#__PURE__*/React.createElement(_wordpress_icons__WEBPACK_IMPORTED_MODULE_5__/* .default */ .Z, {
-    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_6__/* .default */ .Z
+  }, /*#__PURE__*/React.createElement(_wordpress_icons__WEBPACK_IMPORTED_MODULE_6__/* .default */ .Z, {
+    icon: _wordpress_icons__WEBPACK_IMPORTED_MODULE_7__/* .default */ .Z
   }))), /*#__PURE__*/React.createElement("div", {
     className: "components-panel"
-  }, enabledSidebarName === _lib_constants__WEBPACK_IMPORTED_MODULE_7__/* .JP_SEARCH_TAB_IDENTIFIER */ .m && /*#__PURE__*/React.createElement(_sidebar_description__WEBPACK_IMPORTED_MODULE_2__/* .default */ .Z, null), enabledSidebarName === _lib_constants__WEBPACK_IMPORTED_MODULE_7__/* .OPTIONS_TAB_IDENTIFIER */ .E && /*#__PURE__*/React.createElement(_sidebar_options__WEBPACK_IMPORTED_MODULE_3__/* .default */ .Z, null)));
+  }, enabledSidebarName === _lib_constants__WEBPACK_IMPORTED_MODULE_8__/* .JP_SEARCH_TAB_IDENTIFIER */ .m && /*#__PURE__*/React.createElement(_sidebar_description__WEBPACK_IMPORTED_MODULE_3__/* .default */ .Z, null), enabledSidebarName === _lib_constants__WEBPACK_IMPORTED_MODULE_8__/* .OPTIONS_TAB_IDENTIFIER */ .E && /*#__PURE__*/React.createElement(_sidebar_options__WEBPACK_IMPORTED_MODULE_4__/* .default */ .Z, null)));
 }
 
 /***/ }),
@@ -6003,7 +6005,7 @@ class ScrollButton extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
     _home_runner_work_jetpack_jetpack_node_modules_pnpm_babel_runtime_7_15_3_node_modules_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "overlayElement", document.getElementsByClassName(_lib_constants__WEBPACK_IMPORTED_MODULE_4__/* .OVERLAY_CLASS_NAME */ .zg)[0]);
 
     _home_runner_work_jetpack_jetpack_node_modules_pnpm_babel_runtime_7_15_3_node_modules_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()(this, "checkScroll", lodash_debounce__WEBPACK_IMPORTED_MODULE_3___default()(() => {
-      if (this.props.enableLoadOnScroll && window.innerHeight + this.overlayElement.scrollTop === this.overlayElement.scrollHeight) {
+      if (this.props.enableLoadOnScroll && window.innerHeight + this.overlayElement.scrollTop >= this.overlayElement.scrollHeight) {
         this.props.onLoadNextPage();
       }
     }, 100));
@@ -6546,6 +6548,7 @@ class SearchFilter extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       } = this.props;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("input", {
         checked: this.isChecked(key),
+        disabled: !this.isChecked(key) && count === 0,
         id: `${this.idPrefix}-dates-${this.getIdentifier()}-${key}`,
         name: key,
         onChange: this.toggleFilter,
@@ -6564,6 +6567,7 @@ class SearchFilter extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       const name = key in this.props.postTypes ? this.props.postTypes[key].singular_name : key;
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("input", {
         checked: this.isChecked(key),
+        disabled: !this.isChecked(key) && count === 0,
         id: `${this.idPrefix}-post-types-${key}`,
         name: key,
         onChange: this.toggleFilter,
@@ -6583,6 +6587,7 @@ class SearchFilter extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
       const [slug, name] = key && key.split(/\/(.+)/);
       return /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("div", null, /*#__PURE__*/react__WEBPACK_IMPORTED_MODULE_1___default().createElement("input", {
         checked: this.isChecked(slug),
+        disabled: !this.isChecked(slug) && count === 0,
         id: `${this.idPrefix}-taxonomies-${slug}`,
         name: slug,
         onChange: this.toggleFilter,
@@ -6631,8 +6636,7 @@ class SearchFilter extends react__WEBPACK_IMPORTED_MODULE_1__.Component {
   }
 
   renderDates() {
-    return [...this.props.aggregation.buckets // TODO: Remove this filter; API should only be sending buckets with document counts.
-    .filter(bucket => !!bucket && bucket.doc_count > 0).map(this.renderDate)] // TODO: Remove this reverse & slice when API adds filter count support
+    return [...this.props.aggregation.buckets.filter(bucket => !!bucket).map(this.renderDate)] // TODO: Remove this reverse & slice when API adds filter count support
     .reverse().slice(0, this.props.configuration.count);
   }
 
@@ -7882,6 +7886,7 @@ function decode(str, tcBools, tcNumbers) {
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "a5": function() { return /* binding */ buildFilterAggregations; },
+/* harmony export */   "Wb": function() { return /* binding */ setDocumentCountsToZero; },
 /* harmony export */   "yC": function() { return /* binding */ search; }
 /* harmony export */ });
 /* unused harmony export generateDateRangeFilter */
@@ -7929,6 +7934,31 @@ function buildFilterAggregations(widgets = []) {
     aggregation[filter.filter_id] = generateAggregation(filter);
   }));
   return aggregation;
+}
+/**
+ * The function set the aggregation count to zero which is just meant for users to uncheck.
+ * Tried to merge the buckets, but which ended up showing too many filters.
+ *
+ * @param {object} newAggregations - New aggregations to operate on.
+ * @returns {object} - Aggregations with doc_count set to 0.
+ */
+
+function setDocumentCountsToZero(newAggregations) {
+  var _newAggregations;
+
+  newAggregations = (_newAggregations = newAggregations) !== null && _newAggregations !== void 0 ? _newAggregations : {};
+  return Object.fromEntries(Object.entries(newAggregations).filter(([, aggregation]) => {
+    var _aggregation$buckets;
+
+    return (aggregation === null || aggregation === void 0 ? void 0 : (_aggregation$buckets = aggregation.buckets) === null || _aggregation$buckets === void 0 ? void 0 : _aggregation$buckets.length) > 0;
+  }).map(([aggregationKey, aggregation]) => {
+    const buckets = aggregation.buckets.map(bucket => ({ ...bucket,
+      doc_count: 0
+    }));
+    return [aggregationKey, { ...aggregation,
+      buckets
+    }];
+  }));
 }
 /**
  * Builds ElasticSearch aggregations for a given filter.
@@ -8396,6 +8426,7 @@ function getConstrastingColor(input) {
 /* harmony export */   "LI": function() { return /* binding */ RESULT_FORMAT_PRODUCT; },
 /* harmony export */   "AG": function() { return /* binding */ MINUTE_IN_MILLISECONDS; },
 /* harmony export */   "PP": function() { return /* binding */ RELEVANCE_SORT_KEY; },
+/* harmony export */   "yb": function() { return /* binding */ DEBOUNCED_TIME_TO_SET_QUERY_MILLISECONDS; },
 /* harmony export */   "kQ": function() { return /* binding */ VALID_SORT_KEYS; },
 /* harmony export */   "bk": function() { return /* binding */ VALID_RESULT_FORMAT_KEYS; },
 /* harmony export */   "aP": function() { return /* binding */ SORT_OPTIONS; },
@@ -8419,7 +8450,8 @@ const RESULT_FORMAT_EXPANDED = 'expanded';
 const RESULT_FORMAT_MINIMAL = 'minimal';
 const RESULT_FORMAT_PRODUCT = 'product';
 const MINUTE_IN_MILLISECONDS = 60 * 1000;
-const RELEVANCE_SORT_KEY = 'relevance'; // @todo extract this to a function that uses SORT_OPTIONS and PRODUCT_SORT_OPTIONS to avoid duplication
+const RELEVANCE_SORT_KEY = 'relevance';
+const DEBOUNCED_TIME_TO_SET_QUERY_MILLISECONDS = 1000; // @todo extract this to a function that uses SORT_OPTIONS and PRODUCT_SORT_OPTIONS to avoid duplication
 
 const VALID_SORT_KEYS = ['newest', 'oldest', RELEVANCE_SORT_KEY, 'price_asc', 'price_desc', 'rating_desc'];
 const VALID_RESULT_FORMAT_KEYS = [RESULT_FORMAT_EXPANDED, RESULT_FORMAT_MINIMAL, RESULT_FORMAT_PRODUCT];
@@ -8800,17 +8832,22 @@ function usePhoton(initialSrc, width, height, isPhotonEnabled = true) {
 "use strict";
 /* harmony export */ __webpack_require__.d(__webpack_exports__, {
 /* harmony export */   "pm": function() { return /* binding */ getQuery; },
-/* harmony export */   "_L": function() { return /* binding */ setQuery; },
+/* harmony export */   "_L": function() { return /* binding */ setQueryDebounced; },
 /* harmony export */   "ug": function() { return /* binding */ getResultFormatQuery; },
 /* harmony export */   "Q0": function() { return /* binding */ restorePreviousHref; }
 /* harmony export */ });
-/* harmony import */ var qss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4090);
-/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(9379);
-/* harmony import */ var _filters__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(8033);
-/* harmony import */ var _external_query_string_decode__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(6241);
+/* harmony import */ var qss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(4090);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5034);
+/* harmony import */ var lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(lodash_debounce__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(9379);
+/* harmony import */ var _filters__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(8033);
+/* harmony import */ var _external_query_string_decode__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(6241);
 /**
  * External dependencies
  */
+
+/*eslint lodash/import-scope: [2, "method"]*/
+
 
 /**
  * Internal dependencies
@@ -8827,17 +8864,23 @@ function usePhoton(initialSrc, width, height, isPhotonEnabled = true) {
  */
 
 function getQuery(search = window.location.search) {
-  return (0,_external_query_string_decode__WEBPACK_IMPORTED_MODULE_2__/* .decode */ .J)(search.substring(1), false, false);
+  return (0,_external_query_string_decode__WEBPACK_IMPORTED_MODULE_3__/* .decode */ .J)(search.substring(1), false, false);
 }
 /**
- * Updates the browser's query string via a query object.
+ * Change the query string.
  *
- * @param {object} queryObject - a query object.
+ * @param {object|null} queryObject - a query object.
  */
 
 function setQuery(queryObject) {
-  pushQueryString((0,qss__WEBPACK_IMPORTED_MODULE_3__/* .encode */ .c)(queryObject));
-}
+  pushQueryString((0,qss__WEBPACK_IMPORTED_MODULE_4__/* .encode */ .c)(queryObject));
+} // Create debounced function.
+// Uses a longer delay to ensure we're not filling up the user's browser history with part-typed queries.
+
+
+const setQueryDebounced = lodash_debounce__WEBPACK_IMPORTED_MODULE_0___default()(setQuery, _constants__WEBPACK_IMPORTED_MODULE_1__/* .DEBOUNCED_TIME_TO_SET_QUERY_MILLISECONDS */ .yb); // Export debounced function with original function name.
+
+
 /**
  * Updates the browser's query string via an encoded query string.
  *
@@ -8848,8 +8891,8 @@ function pushQueryString(queryString) {
   if (history.pushState) {
     const url = new window.URL(window.location.href);
 
-    if (window[_constants__WEBPACK_IMPORTED_MODULE_0__/* .SERVER_OBJECT_NAME */ .W1] && 'homeUrl' in window[_constants__WEBPACK_IMPORTED_MODULE_0__/* .SERVER_OBJECT_NAME */ .W1]) {
-      url.href = window[_constants__WEBPACK_IMPORTED_MODULE_0__/* .SERVER_OBJECT_NAME */ .W1].homeUrl;
+    if (window[_constants__WEBPACK_IMPORTED_MODULE_1__/* .SERVER_OBJECT_NAME */ .W1] && 'homeUrl' in window[_constants__WEBPACK_IMPORTED_MODULE_1__/* .SERVER_OBJECT_NAME */ .W1]) {
+      url.href = window[_constants__WEBPACK_IMPORTED_MODULE_1__/* .SERVER_OBJECT_NAME */ .W1].homeUrl;
     }
 
     url.search = queryString;
@@ -8866,7 +8909,7 @@ function pushQueryString(queryString) {
 function getResultFormatQuery() {
   const query = getQuery();
 
-  if (!_constants__WEBPACK_IMPORTED_MODULE_0__/* .VALID_RESULT_FORMAT_KEYS.includes */ .bk.includes(query.result_format)) {
+  if (!_constants__WEBPACK_IMPORTED_MODULE_1__/* .VALID_RESULT_FORMAT_KEYS.includes */ .bk.includes(query.result_format)) {
     return null;
   }
 
@@ -8884,7 +8927,7 @@ function restorePreviousHref(initialHref, callback, replaceState = false) {
   if (history.pushState && history.replaceState) {
     const url = new URL(initialHref);
     const queryObject = getQuery(url.search);
-    const keys = [...(0,_filters__WEBPACK_IMPORTED_MODULE_1__/* .getFilterKeys */ .wP)(), ...(0,_filters__WEBPACK_IMPORTED_MODULE_1__/* .getStaticFilterKeys */ .i3)(), 's', 'sort']; // If initialHref has search or filter query values, clear them.
+    const keys = [...(0,_filters__WEBPACK_IMPORTED_MODULE_2__/* .getFilterKeys */ .wP)(), ...(0,_filters__WEBPACK_IMPORTED_MODULE_2__/* .getStaticFilterKeys */ .i3)(), 's', 'sort']; // If initialHref has search or filter query values, clear them.
 
     const initialHasSearchQueries = Object.keys(queryObject).some(key => keys.includes(key));
 
@@ -8892,7 +8935,7 @@ function restorePreviousHref(initialHref, callback, replaceState = false) {
       keys.forEach(key => delete queryObject[key]);
     }
 
-    url.search = (0,qss__WEBPACK_IMPORTED_MODULE_3__/* .encode */ .c)(queryObject);
+    url.search = (0,qss__WEBPACK_IMPORTED_MODULE_4__/* .encode */ .c)(queryObject);
     replaceState ? window.history.replaceState(null, null, url.toString()) : window.history.pushState(null, null, url.toString()); // If initialHref had search queries, then the page rendered beneath the search modal is WordPress's default search page.
     // We want to strip these search queries from the URL and direct the user to the root if possible.
 
@@ -9469,6 +9512,12 @@ const store = (0,redux__WEBPACK_IMPORTED_MODULE_3__/* .createStore */ .MT)(_redu
 /* harmony export */   "hg": function() { return /* binding */ isLoading; },
 /* harmony export */   "p": function() { return /* binding */ response; }
 /* harmony export */ });
+/* harmony import */ var _lib_api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(7722);
+/**
+ * Internal dependencies
+ */
+
+let cachedAggregations = {};
 /**
  * Reducer for recording if the previous search request yielded an error.
  *
@@ -9476,6 +9525,7 @@ const store = (0,redux__WEBPACK_IMPORTED_MODULE_3__/* .createStore */ .MT)(_redu
  * @param {object} action - Dispatched action.
  * @returns {object} Updated state.
  */
+
 function hasError(state = false, action) {
   switch (action.type) {
     case 'MAKE_SEARCH_REQUEST':
@@ -9533,12 +9583,28 @@ function response(state = {}, action) {
             ...(!Array.isArray(newState.aggregations) ? newState.aggregations : {})
           };
           newState.results = [...('results' in state ? state.results : []), ...newState.results];
+          cachedAggregations = {};
         } // To prevent our interface from erroneously rendering a "no result" search results page when
         // we actually have results, override the total if the size of our results exceed the `response.total` value.
 
 
         if (Array.isArray(newState.results) && newState.results.length > newState.total) {
           newState.total = newState.results.length;
+        } // For a new search requests (i.e. not pagination requests):
+        // - Cache aggregations if query yields results
+        // - Show previously cached aggregations if query does not yield any results
+
+
+        if (!action.options.pageHandle) {
+          var _newState$results;
+
+          if (((_newState$results = newState.results) === null || _newState$results === void 0 ? void 0 : _newState$results.length) > 0) {
+            // cachedAggregations is used to cache the most recent aggregations object when results is not empty.
+            cachedAggregations = (0,_lib_api__WEBPACK_IMPORTED_MODULE_0__/* .setDocumentCountsToZero */ .Wb)(newState.aggregations);
+          } else {
+            // If there is no result to show, we show the cached aggregations.
+            newState.aggregations = cachedAggregations;
+          }
         }
 
         return newState;
@@ -9589,10 +9655,10 @@ function isHistoryNavigation(state = false, action) {
 /***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
 "use strict";
-/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(4978);
-/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(2742);
-/* harmony import */ var _query_string__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2);
-/* harmony import */ var _server_options__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(7946);
+/* harmony import */ var redux__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(4978);
+/* harmony import */ var _api__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(2742);
+/* harmony import */ var _query_string__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(2);
+/* harmony import */ var _server_options__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(7946);
 /* harmony import */ var _history__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(3714);
 /**
  * External dependencies
@@ -9607,16 +9673,16 @@ function isHistoryNavigation(state = false, action) {
 
 
 
-/* harmony default export */ __webpack_exports__["ZP"] = ((0,redux__WEBPACK_IMPORTED_MODULE_2__/* .combineReducers */ .UY)({
-  filters: _query_string__WEBPACK_IMPORTED_MODULE_0__/* .filters */ .u8,
-  staticFilters: _query_string__WEBPACK_IMPORTED_MODULE_0__/* .staticFilters */ .OY,
-  hasError: _api__WEBPACK_IMPORTED_MODULE_3__/* .hasError */ .xT,
-  isLoading: _api__WEBPACK_IMPORTED_MODULE_3__/* .isLoading */ .hg,
+/* harmony default export */ __webpack_exports__["ZP"] = ((0,redux__WEBPACK_IMPORTED_MODULE_3__/* .combineReducers */ .UY)({
+  filters: _query_string__WEBPACK_IMPORTED_MODULE_1__/* .filters */ .u8,
+  staticFilters: _query_string__WEBPACK_IMPORTED_MODULE_1__/* .staticFilters */ .OY,
+  hasError: _api__WEBPACK_IMPORTED_MODULE_0__/* .hasError */ .xT,
+  isLoading: _api__WEBPACK_IMPORTED_MODULE_0__/* .isLoading */ .hg,
   isHistoryNavigation: _history__WEBPACK_IMPORTED_MODULE_4__/* .isHistoryNavigation */ .w,
-  response: _api__WEBPACK_IMPORTED_MODULE_3__/* .response */ .p,
-  searchQuery: _query_string__WEBPACK_IMPORTED_MODULE_0__/* .searchQuery */ .w4,
-  serverOptions: _server_options__WEBPACK_IMPORTED_MODULE_1__/* .serverOptions */ .M,
-  sort: _query_string__WEBPACK_IMPORTED_MODULE_0__/* .sort */ .DY
+  response: _api__WEBPACK_IMPORTED_MODULE_0__/* .response */ .p,
+  searchQuery: _query_string__WEBPACK_IMPORTED_MODULE_1__/* .searchQuery */ .w4,
+  serverOptions: _server_options__WEBPACK_IMPORTED_MODULE_2__/* .serverOptions */ .M,
+  sort: _query_string__WEBPACK_IMPORTED_MODULE_1__/* .sort */ .DY
 }));
 
 /***/ }),

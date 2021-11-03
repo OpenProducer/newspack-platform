@@ -703,7 +703,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 			// Add saved segment ID to payload if present.
 			if ( $segment_data && 'saved' === $segment_data['type'] ) {
-				$payload['recipients']['saved_segment_id'] = $segment_id;
+				$payload['recipients']['segment_opts']['saved_segment_id'] = (int) $segment_id;
 			}
 
 			$result = $this->validate(

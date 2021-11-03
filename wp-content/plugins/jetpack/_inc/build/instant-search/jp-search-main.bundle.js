@@ -15,6 +15,7 @@
 /* harmony export */   "LI": function() { return /* binding */ RESULT_FORMAT_PRODUCT; },
 /* harmony export */   "AG": function() { return /* binding */ MINUTE_IN_MILLISECONDS; },
 /* harmony export */   "PP": function() { return /* binding */ RELEVANCE_SORT_KEY; },
+/* harmony export */   "yb": function() { return /* binding */ DEBOUNCED_TIME_TO_SET_QUERY_MILLISECONDS; },
 /* harmony export */   "kQ": function() { return /* binding */ VALID_SORT_KEYS; },
 /* harmony export */   "bk": function() { return /* binding */ VALID_RESULT_FORMAT_KEYS; },
 /* harmony export */   "aP": function() { return /* binding */ SORT_OPTIONS; },
@@ -38,7 +39,8 @@ const RESULT_FORMAT_EXPANDED = 'expanded';
 const RESULT_FORMAT_MINIMAL = 'minimal';
 const RESULT_FORMAT_PRODUCT = 'product';
 const MINUTE_IN_MILLISECONDS = 60 * 1000;
-const RELEVANCE_SORT_KEY = 'relevance'; // @todo extract this to a function that uses SORT_OPTIONS and PRODUCT_SORT_OPTIONS to avoid duplication
+const RELEVANCE_SORT_KEY = 'relevance';
+const DEBOUNCED_TIME_TO_SET_QUERY_MILLISECONDS = 1000; // @todo extract this to a function that uses SORT_OPTIONS and PRODUCT_SORT_OPTIONS to avoid duplication
 
 const VALID_SORT_KEYS = ['newest', 'oldest', RELEVANCE_SORT_KEY, 'price_asc', 'price_desc', 'rating_desc'];
 const VALID_RESULT_FORMAT_KEYS = [RESULT_FORMAT_EXPANDED, RESULT_FORMAT_MINIMAL, RESULT_FORMAT_PRODUCT];
@@ -226,7 +228,7 @@ module.exports = window["wp"]["i18n"];
 /******/ 		// This function allow to reference async chunks
 /******/ 		__webpack_require__.u = function(chunkId) {
 /******/ 			// return url for filenames based on template
-/******/ 			return "jp-search.chunk-" + (chunkId === 161 ? "main-payload" : chunkId) + "." + {"161":"bb0b04f99d42866e0cbf","270":"5debd14194f6d84d0307"}[chunkId] + ".min.js";
+/******/ 			return "jp-search.chunk-" + (chunkId === 161 ? "main-payload" : chunkId) + "." + {"161":"35ff1c0ca3706ba8b5b0","270":"5debd14194f6d84d0307"}[chunkId] + ".min.js";
 /******/ 		};
 /******/ 	}();
 /******/ 	
@@ -235,7 +237,7 @@ module.exports = window["wp"]["i18n"];
 /******/ 		// This function allow to reference all chunks
 /******/ 		__webpack_require__.miniCssF = function(chunkId) {
 /******/ 			// return url for filenames based on template
-/******/ 			return "jp-search.chunk-" + "main-payload" + "." + "0c8aded5c0164479ce63" + ".min.css";
+/******/ 			return "jp-search.chunk-" + "main-payload" + "." + "ff81368e518f79bc1b4b" + ".min.css";
 /******/ 		};
 /******/ 	}();
 /******/ 	
