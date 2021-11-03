@@ -1,32 +1,42 @@
-# WordPress
+Newspack is an open-source publishing platform built on WordPress for small to medium sized news organizations. It is an “opinionated” platform that stakes out clear, best-practice positions on technology, design, and business practice for news publishers.
 
-This is a WordPress repository configured to run on the [Pantheon platform](https://pantheon.io).
+## How to install Newspack on your site
 
-Pantheon is website platform optimized and configured to run high performance sites with an amazing developer workflow. There is built-in support for features such as Varnish, Redis, Apache Solr, New Relic, Nginx, PHP-FPM, MySQL, PhantomJS and more. 
+If you'd like to install Newspack on your self-hosted site or want to try Newspack out, the easiest way to do so is to [enable the Newspack plugin](https://github.com/Automattic/newspack-plugin/) and [the latest theme release](https://github.com/Automattic/newspack-theme/). To take full advantage of Newspack, the plugin and theme should be run together, but each should also work fine individually.
 
-## Getting Started
+## Reporting Security Issues
 
-### 1. Spin-up a site
+To disclose a security issue to our team, [please submit a report via HackerOne here](https://hackerone.com/automattic/).
 
-If you do not yet have a Pantheon account, you can create one for free. Once you've verified your email address, you will be able to add sites from your dashboard. Choose "WordPress" to use this distribution.
+## Contributing to Newspack
 
-### 2. Load up the site
+If you have a patch or have stumbled upon an issue with the Newspack plugin/theme, you can contribute this back to the code. [Please read the Newspack contributor guidelines for more information on how you can do this.](https://github.com/Automattic/newspack-plugin/blob/master/.github/CONTRIBUTING.md)
 
-When the spin-up process is complete, you will be redirected to the site's dashboard. Click on the link under the site's name to access the Dev environment.
+### Development
 
-![alt](http://i.imgur.com/2wjCj9j.png?1, '')
+- Run `npm start` to compile the SCSS and JS files, and start file watcher.
+- Run `npm run build` to perform a single compilation run.
 
-### 3. Run the WordPress installer
+#### Environment variables
 
-How about the WordPress database config screen? No need to worry about database connection information as that is taken care of in the background. The only step that you need to complete is the site information and the installation process will be complete.
+Some features require environment variables to be set (e.g. in `wp-config.php`):
 
-We will post more information about how this works but we recommend developers take a look at `wp-config.php` to get an understanding.
+```php
+// Support
+define( 'NEWSPACK_SUPPORT_API_URL', 'https://super-tech-support.zendesk.com/api/v2' );
+define( 'NEWSPACK_SUPPORT_EMAIL', 'support@company.com' );
+define( 'NEWSPACK_WPCOM_CLIENT_ID', '12345' );
 
-![alt](http://i.imgur.com/4EOcqYN.png, '')
+// Optional
+define( 'NEWSPACK_SUPPORT_IS_PRE_LAUNCH', true );
+```
 
-If you would like to keep a separate set of configuration for local development, you can use a file called `wp-config-local.php`, which is already in our .gitignore file.
+## Support or Questions
 
-### 4. Enjoy!
+This repository is not suitable for support or general questions about Newspack. Please only use the Newspack issue trackers for bug reports and feature requests, following [the contribution guidelines](https://github.com/Automattic/newspack-plugin/blob/master/.github/CONTRIBUTING.md).
 
-![alt](http://i.imgur.com/fzIeQBP.png, '')
+Support requests in issues on the Newspack repository will be closed on sight.
 
+## License
+
+Newspack is licensed under [GNU General Public License v2 (or later)](https://github.com/Automattic/newspack-plugin/blob/master/LICENSE.md).
