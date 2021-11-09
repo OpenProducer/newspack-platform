@@ -1,3 +1,15 @@
+# [1.43.0](https://github.com/Automattic/newspack-popups/compare/v1.42.1...v1.43.0) (2021-11-09)
+
+
+### Bug Fixes
+
+* check if gtm exists ([ef265c7](https://github.com/Automattic/newspack-popups/commit/ef265c7f8617a00775313f13ec1a1f5df81ba32c))
+
+
+### Features
+
+* **editor:** handle archive placement in preview ([ac67699](https://github.com/Automattic/newspack-popups/commit/ac6769991d2685b5ffe678768da54f3bbb2b5064))
+
 ## [1.42.1](https://github.com/Automattic/newspack-popups/compare/v1.42.0...v1.42.1) (2021-11-03)
 
 

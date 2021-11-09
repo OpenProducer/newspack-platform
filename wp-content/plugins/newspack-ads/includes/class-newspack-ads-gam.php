@@ -64,52 +64,48 @@ class Newspack_Ads_GAM {
 	/**
 	 * Get credentials for connecting to GAM.
 	 *
-	 * @throws \Exception If using legacy mode.
+	 * @throws \Exception If credentials are not found.
 	 */
 	private static function get_credentials() {
-		switch ( self::get_connection_mode() ) {
-			case 'oauth':
-				return self::get_google_oauth2_credentials();
-			case 'service_account':
-				return self::get_service_account_credentials();
-			case 'legacy':
-				throw new \Exception( __( 'Credentials not found.', 'newspack-ads' ) );
+		$mode = self::get_connection_details();
+		if ( $mode['credentials'] ) {
+			return $mode['credentials'];
 		}
+		throw new \Exception( __( 'Credentials not found.', 'newspack-ads' ) );
 	}
 
 	/**
 	 * Get OAuth2 credentials.
 	 *
-	 * @throws \Exception If the user is not authenticated.
 	 * @return object OAuth2 credentials.
 	 */
 	private static function get_google_oauth2_credentials() {
 		if ( class_exists( 'Newspack\Google_Services_Connection' ) ) {
 			$oauth2_credentials = \Newspack\Google_Services_Connection::get_oauth2_credentials();
-			if ( false === $oauth2_credentials ) {
-				throw new \Exception( __( 'Please authenticate Newspack with Google.', 'newspack-ads' ), 1 );
+			if ( false !== $oauth2_credentials ) {
+				return $oauth2_credentials;
 			}
-			return $oauth2_credentials;
-		} else {
-			throw new \Exception( __( 'Please activate the Newspack Plugin.', 'newspack-ads' ), 1 );
 		}
+		return false;
 	}
 
 	/**
 	 * Get Service Account credentials.
 	 *
-	 * @throws \Exception If the user is not authenticated.
+	 * @param array $service_account_credentials_config Service Account Credentials.
 	 * @return object OAuth2 credentials.
 	 */
-	private static function get_service_account_credentials() {
-		$service_account_credentials = get_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, false );
-		if ( ! $service_account_credentials ) {
-			throw new \Exception( __( 'Credentials not found.', 'newspack-ads' ) );
+	private static function get_service_account_credentials( $service_account_credentials_config = false ) {
+		if ( false === $service_account_credentials_config ) {
+			$service_account_credentials_config = self::service_account_credentials_config();
+		}
+		if ( ! $service_account_credentials_config ) {
+			return false;
 		}
 		try {
-			return new ServiceAccountCredentials( 'https://www.googleapis.com/auth/dfp', $service_account_credentials );
+			return new ServiceAccountCredentials( 'https://www.googleapis.com/auth/dfp', $service_account_credentials_config );
 		} catch ( \Exception $e ) {
-			throw new \Exception( $e->getMessage(), 1 );
+			return false;
 		}
 	}
 
@@ -534,22 +530,48 @@ class Newspack_Ads_GAM {
 	/**
 	 * Can this instance use OAuth for authentication?
 	 */
-	public static function can_use_oauth() {
+	private static function can_use_oauth() {
 		return class_exists( 'Newspack\Google_OAuth' ) && \Newspack\Google_OAuth::is_oauth_configured();
+	}
+
+	/**
+	 * Can this instance use Service Account for authentication?
+	 * OAuth is the preferred method, but if it's not available, a fallback to Service
+	 * Account is handy.
+	 */
+	private static function can_use_service_account() {
+		return ! self::can_use_oauth();
+	}
+
+	/**
+	 * Get saved Service Account credentials config.
+	 */
+	private static function service_account_credentials_config() {
+		return get_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, false );
 	}
 
 	/**
 	 * How does this instance connect to GAM?
 	 */
-	private static function get_connection_mode() {
-		$has_service_account_credentials = false !== get_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, false );
-		if ( $has_service_account_credentials ) {
-			return 'service_account';
+	private static function get_connection_details() {
+		$credentials = self::get_google_oauth2_credentials();
+		if ( false !== $credentials ) {
+			return [
+				'credentials' => $credentials,
+				'mode'        => 'oauth',
+			];
 		}
-		if ( self::can_use_oauth() ) {
-			return 'oauth';
+			$credentials = self::get_service_account_credentials();
+		if ( false !== $credentials ) {
+			return [
+				'credentials' => $credentials,
+				'mode'        => 'service_account',
+			];
 		}
-		return 'legacy'; // Manual connection.
+		return [
+			'credentials' => null,
+			'mode'        => 'legacy', // Manual connection.
+		];
 	}
 
 	/**
@@ -558,19 +580,23 @@ class Newspack_Ads_GAM {
 	 * @return object Object with status information.
 	 */
 	public static function connection_status() {
-		$connection_mode = self::get_connection_mode();
-		$response        = [
-			'can_connect'   => false,
-			'connected'     => false,
-			'mode'          => $connection_mode,
-			'can_use_oauth' => self::can_use_oauth(),
+		$connection_details      = self::get_connection_details();
+		$can_use_oauth           = self::can_use_oauth();
+		$can_use_service_account = self::can_use_service_account();
+		$response                = [
+			'connected'               => false,
+			'connection_details'      => $connection_details['mode'],
+			'can_use_oauth'           => $can_use_oauth,
+			'can_use_service_account' => $can_use_service_account,
 		];
 		if ( false === self::is_environment_compatible() ) {
 			$response['incompatible'] = true;
 			$response['error']        = __( 'Cannot connect to Google Ad Manager. This WordPress instance is not compatible with this feature.', 'newspack-ads' );
 			return $response;
 		}
-		$response['can_connect'] = 'legacy' !== $connection_mode;
+		if ( ! $can_use_oauth && ! $can_use_service_account ) {
+			return $response;
+		}
 		try {
 			$response['network_code'] = self::get_gam_network_code();
 			$response['connected']    = true;
@@ -578,5 +604,39 @@ class Newspack_Ads_GAM {
 			$response['error'] = $e->getMessage();
 		}
 		return $response;
+	}
+
+	/**
+	 * Update GAM credentials.
+	 *
+	 * @param array $credentials_config Credentials to update.
+	 *
+	 * @return object Object with status information.
+	 */
+	public static function update_gam_credentials( $credentials_config ) {
+		try {
+			self::get_service_account_credentials( $credentials_config );
+		} catch ( \Exception $e ) {
+			return new WP_Error( 'newspack_ads_gam_credentials', $e->getMessage() );
+		}
+		$update_result = update_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, $credentials_config );
+		if ( ! $update_result ) {
+			return new WP_Error( 'newspack_ads_gam_credentials', __( 'Unable to update GAM credentials', 'newspack-ads' ) );
+		}
+		return Newspack_Ads_Model::get_gam_connection_status();
+	}
+
+	/**
+	 * Clear existing GAM credentials.
+	 *
+	 * @return object Object with status information.
+	 */
+	public static function remove_gam_credentials() {
+		$deleted_credentials_result  = delete_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME );
+		$deleted_network_code_result = delete_option( Newspack_Ads_Model::OPTION_NAME_GAM_NETWORK_CODE );
+		if ( ! $deleted_credentials_result || ! $deleted_network_code_result ) {
+			return new WP_Error( 'newspack_ads_gam_credentials', __( 'Unable to remove GAM credentials', 'newspack-ads' ) );
+		}
+		return Newspack_Ads_Model::get_gam_connection_status();
 	}
 }

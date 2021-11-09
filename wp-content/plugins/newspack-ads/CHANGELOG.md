@@ -1,3 +1,11 @@
+# [1.19.0](https://github.com/Automattic/newspack-ads/compare/v1.18.1...v1.19.0) (2021-11-09)
+
+
+### Features
+
+* **gam:** service account credentials managing ([#216](https://github.com/Automattic/newspack-ads/issues/216)) ([8d03870](https://github.com/Automattic/newspack-ads/commit/8d0387041c0713e607332fdc1951a3376f9360bd))
+* customizable settings ([#213](https://github.com/Automattic/newspack-ads/issues/213)) ([166e76c](https://github.com/Automattic/newspack-ads/commit/166e76c0262740c50529dc379e9850f3981b98e9))
+
 ## [1.18.1](https://github.com/Automattic/newspack-ads/compare/v1.18.0...v1.18.1) (2021-11-03)
 
 

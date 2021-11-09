@@ -545,6 +545,17 @@ class Analytics {
 	}
 
 	/**
+	 * Can we rely on Site Kit's Analytics module?
+	 */
+	private static function can_use_site_kits_analytics() {
+		$sitekit_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
+		return $sitekit_manager->is_module_active( 'analytics' )
+		// If Google Tag Manager module is active, it supersedes the Analytics module.
+		// This means that effectively GTM module being active equals Analytics module being inactive.
+		&& false === $sitekit_manager->is_module_active( 'tagmanager' );
+	}
+
+	/**
 	 * Inject event listeners on non-AMP pages.
 	 */
 	public static function inject_non_amp_events() {
@@ -552,8 +563,7 @@ class Analytics {
 			return;
 		}
 
-		$sitekit_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
-		if ( ! $sitekit_manager->is_module_active( 'analytics' ) ) {
+		if ( ! self::can_use_site_kits_analytics() ) {
 			return;
 		}
 

@@ -1,3 +1,10 @@
+# [1.42.0](https://github.com/Automattic/newspack-blocks/compare/v1.41.1...v1.42.0) (2021-11-09)
+
+
+### Features
+
+* **homepage-posts:** enable showing previously rendered posts too ([#896](https://github.com/Automattic/newspack-blocks/issues/896)) ([c8528fc](https://github.com/Automattic/newspack-blocks/commit/c8528fc6631d2c52195f8fb4928b3bd5033328a3))
+
 ## [1.41.1](https://github.com/Automattic/newspack-blocks/compare/v1.41.0...v1.41.1) (2021-10-26)
 
 

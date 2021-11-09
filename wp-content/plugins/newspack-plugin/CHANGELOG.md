@@ -1,3 +1,17 @@
+# [1.65.0](https://github.com/Automattic/newspack-plugin/compare/v1.64.0...v1.65.0) (2021-11-09)
+
+
+### Bug Fixes
+
+* disable Newspack events if Site Kit's GTM module is active ([ea11629](https://github.com/Automattic/newspack-plugin/commit/ea1162910d5f3b7399058cb53824f36360ca5562))
+
+
+### Features
+
+* **popups wizard:** add archive page permalink as preview URL ([#1133](https://github.com/Automattic/newspack-plugin/issues/1133)) ([3b3ae9c](https://github.com/Automattic/newspack-plugin/commit/3b3ae9ccde43b64284b9ba10624d107dc0432658))
+* newspack plugin settings component ([#1208](https://github.com/Automattic/newspack-plugin/issues/1208)) ([5ab1676](https://github.com/Automattic/newspack-plugin/commit/5ab1676d764a06a8ed37e7ecd504c97f12729bf8))
+* **ads:** service account connection ([#1212](https://github.com/Automattic/newspack-plugin/issues/1212)) ([00bddb5](https://github.com/Automattic/newspack-plugin/commit/00bddb5c1d1ed516baef78f1206d626151b1feb8))
+
 # [1.64.0](https://github.com/Automattic/newspack-plugin/compare/v1.63.0...v1.64.0) (2021-11-03)
 
 

@@ -19,7 +19,9 @@ const PreviewSetting = ( { autosavePost, isSavingPost, postId, metaFields } ) =>
 		...metaFields,
 	} );
 
-	const previewURL = window.newspack_popups_data?.preview_post || '/';
+	const isArchivePagesPrompt = metaFields.placement === 'archives';
+	const previewURL =
+		window.newspack_popups_data[ isArchivePagesPrompt ? 'preview_archive' : 'preview_post' ] || '/';
 
 	return (
 		<WebPreview

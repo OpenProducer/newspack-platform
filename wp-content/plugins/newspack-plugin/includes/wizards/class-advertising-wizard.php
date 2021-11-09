@@ -179,6 +179,75 @@ class Advertising_Wizard extends Wizard {
 			]
 		);
 
+		// Update GAM credentials.
+		\register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/credentials',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_gam_credentials' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'credentials' => [
+						'type'       => 'object',
+						'properties' => [
+							'type'                        => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'project_id'                  => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'private_key_id'              => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'private_key'                 => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'client_email'                => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'client_id'                   => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'auth_uri'                    => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'token_uri'                   => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'auth_provider_x509_cert_url' => [
+								'required' => true,
+								'type'     => 'string',
+							],
+							'client_x509_cert_url'        => [
+								'required' => true,
+								'type'     => 'string',
+							],
+						],
+					],
+				],
+			]
+		);
+
+		// Remove GAM credentials.
+		\register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/advertising/credentials',
+			[
+				'methods'             => \WP_REST_Server::DELETABLE,
+				'callback'            => [ $this, 'api_remove_gam_credentials' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+
 		// Save a ad unit.
 		\register_rest_route(
 			NEWSPACK_API_NAMESPACE,
@@ -386,6 +455,39 @@ class Advertising_Wizard extends Wizard {
 			$sitekit_manager->deactivate_module( 'adsense' );
 		}
 
+		return \rest_ensure_response( $this->retrieve_data() );
+	}
+
+	/**
+	 * Update GAM credentials.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response containing current GAM status.
+	 */
+	public function api_update_gam_credentials( $request ) {
+		$params                = $request->get_params();
+		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
+		$response              = $configuration_manager->update_gam_credentials( $params['credentials'] );
+
+		if ( \is_wp_error( $response ) ) {
+			return \rest_ensure_response( $response );
+		}
+		return \rest_ensure_response( $this->retrieve_data() );
+	}
+
+	/**
+	 * Remove GAM credentials.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response containing current GAM status.
+	 */
+	public function api_remove_gam_credentials( $request ) {
+		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
+		$response              = $configuration_manager->remove_gam_credentials();
+
+		if ( \is_wp_error( $response ) ) {
+			return \rest_ensure_response( $response );
+		}
 		return \rest_ensure_response( $this->retrieve_data() );
 	}
 

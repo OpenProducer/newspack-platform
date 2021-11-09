@@ -38,7 +38,7 @@ class Newspack_Ads_Model {
 
 	/**
 	 * Array of all ad units configurations.
-	 * 
+	 *
 	 * @var array|null Array or null if not yet initialized.
 	 */
 	public static $ad_units = null;

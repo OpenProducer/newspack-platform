@@ -465,14 +465,21 @@ class Newspack_Blocks {
 			$args['orderby']  = 'post__in';
 		} else {
 			$args['posts_per_page'] = $posts_to_show;
-			if ( count( $newspack_blocks_all_specific_posts_ids ) ) {
-				$args['post__not_in'] = $newspack_blocks_all_specific_posts_ids;
+
+			$show_rendered_posts = apply_filters( 'newspack_blocks_homepage_shown_rendered_posts', false );
+			if ( $show_rendered_posts ) {
+				$args['post__not_in'] = [ get_the_ID() ];
+			} else {
+				if ( count( $newspack_blocks_all_specific_posts_ids ) ) {
+					$args['post__not_in'] = $newspack_blocks_all_specific_posts_ids;
+				}
+				$args['post__not_in'] = array_merge(
+					$args['post__not_in'] ?? [],
+					array_keys( $newspack_blocks_post_id ),
+					get_the_ID() ? [ get_the_ID() ] : []
+				);
 			}
-			$args['post__not_in'] = array_merge(
-				$args['post__not_in'] ?? [],
-				array_keys( $newspack_blocks_post_id ),
-				get_the_ID() ? [ get_the_ID() ] : []
-			);
+
 			if ( $authors && count( $authors ) ) {
 				$co_authors_names = [];
 

@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.52.0
+Version: 1.53.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -2923,6 +2923,12 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   }
   .h-stk.h-db .bottom-header-contain .wrapper {
     border: 0;
+  }
+  .h-stk.h-cl .site-header .middle-header-contain .wrapper > div {
+    width: 31%;
+  }
+  .h-stk.h-cl .site-header .middle-header-contain .wrapper > div.site-branding {
+    width: 38%;
   }
 }
 

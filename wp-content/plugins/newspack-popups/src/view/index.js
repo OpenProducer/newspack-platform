@@ -57,7 +57,7 @@ const manageAnalyticsEvents = () => {
 		/**
 		 * Fetch remote GTAG config and trigger GTAG reporting using it.
 		 */
-		if ( type === 'gtag' && config ) {
+		if ( typeof gtag !== 'undefined' && type === 'gtag' && config ) {
 			fetch( parseDynamicURL( config ) )
 				.then( response => response.json() )
 				.then( remoteConfig => {
