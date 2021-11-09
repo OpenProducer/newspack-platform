@@ -108,7 +108,7 @@ const renderInnerBlocks = ( {
 	// Wrapper for inner components.
 	blockWrapper?: React.ElementType;
 	// Elements from the DOM being converted to components.
-	children: HTMLCollection;
+	children: HTMLCollection | NodeList;
 	// Depth within the DOM hierarchy.
 	depth?: number;
 } ): ( JSX.Element | null )[] | null => {
@@ -133,30 +133,41 @@ const renderInnerBlocks = ( {
 		/**
 		 * If the component cannot be found, or blockName is missing, return the original element. This also ensures
 		 * that children within the element are processed also, since it may be an element containing block markup.
+		 *
+		 * Note we use childNodes rather than children so that text nodes are also rendered.
 		 */
 		if ( ! InnerBlockComponent ) {
-			const parsedElement = parse( element.outerHTML );
+			const parsedElement = parse(
+				element?.outerHTML || element?.textContent || ''
+			);
 
-			if ( isValidElement( parsedElement ) ) {
-				const elementChildren =
-					element.children && element.children.length
-						? renderInnerBlocks( {
-								block,
-								blockMap,
-								children: element.children,
-								depth: depth + 1,
-								blockWrapper,
-						  } )
-						: null;
-				return elementChildren
-					? cloneElement(
-							parsedElement,
-							componentProps,
-							elementChildren
-					  )
-					: cloneElement( parsedElement, componentProps );
+			// Returns text nodes without manipulation.
+			if ( typeof parsedElement === 'string' && !! parsedElement ) {
+				return parsedElement;
 			}
-			return null;
+
+			// Do not render invalid elements.
+			if ( ! isValidElement( parsedElement ) ) {
+				return null;
+			}
+
+			const renderedChildren = element.childNodes.length
+				? renderInnerBlocks( {
+						block,
+						blockMap,
+						children: element.childNodes,
+						depth: depth + 1,
+						blockWrapper,
+				  } )
+				: undefined;
+
+			return renderedChildren
+				? cloneElement(
+						parsedElement,
+						componentProps,
+						renderedChildren
+				  )
+				: cloneElement( parsedElement, componentProps );
 		}
 
 		// This will wrap inner blocks with the provided wrapper. If no wrapper is provided, we default to Fragment.
@@ -243,15 +254,12 @@ export const renderParentBlock = ( {
 	 * In addition to getProps, we need to render and return the children. This adds children to props.
 	 */
 	const getPropsWithChildren = ( element: Element, i: number ) => {
-		const children =
-			element.children && element.children.length
-				? renderInnerBlocks( {
-						block: blockName,
-						blockMap,
-						children: element.children,
-						blockWrapper,
-				  } )
-				: null;
+		const children = renderInnerBlocks( {
+			block: blockName,
+			blockMap,
+			children: element.children || [],
+			blockWrapper,
+		} );
 		return { ...getProps( element, i ), children };
 	};
 	/**
