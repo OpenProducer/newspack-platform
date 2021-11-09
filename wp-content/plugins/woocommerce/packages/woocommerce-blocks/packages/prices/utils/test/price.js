@@ -25,20 +25,4 @@ describe( 'formatPrice', () => {
 			expect( formattedPrice ).toEqual( expected );
 		}
 	);
-
-	test.each`
-		value          | expected
-		${ 1000 }      | ${ '$10' }
-		${ 0 }         | ${ '$0' }
-		${ '' }        | ${ '' }
-		${ null }      | ${ '' }
-		${ undefined } | ${ '' }
-	`(
-		'correctly formats price given "$value" only',
-		( { value, expected } ) => {
-			const formattedPrice = formatPrice( value );
-
-			expect( formattedPrice ).toEqual( expected );
-		}
-	);
 } );

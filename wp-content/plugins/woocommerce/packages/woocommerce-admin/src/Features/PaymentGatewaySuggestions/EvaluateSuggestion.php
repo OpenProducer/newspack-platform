@@ -16,12 +16,12 @@ class EvaluateSuggestion {
 	/**
 	 * Evaluates the spec and returns the suggestion.
 	 *
-	 * @param object|array $spec The suggestion to evaluate.
-	 * @return object The evaluated suggestion.
+	 * @param array $spec The suggestion to evaluate.
+	 * @return array The evaluated suggestion.
 	 */
 	public static function evaluate( $spec ) {
 		$rule_evaluator = new RuleEvaluator();
-		$suggestion     = is_array( $spec ) ? (object) $spec : clone $spec;
+		$suggestion     = (object) $spec;
 
 		if ( isset( $suggestion->is_visible ) ) {
 			$is_visible             = $rule_evaluator->evaluate( $suggestion->is_visible );

@@ -7,7 +7,7 @@ namespace Automattic\WooCommerce\Admin\Features\RemoteFreeExtensions;
 
 defined( 'ABSPATH' ) || exit;
 
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Init as OnboardingTasks;
+use Automattic\WooCommerce\Admin\Features\OnboardingTasks;
 
 /**
  * Default Free Extensions
@@ -90,46 +90,6 @@ class DefaultFreeExtensions {
 									[
 										'type'      => 'base_location_country',
 										'value'     => 'NZ',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'AT',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'BE',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'NL',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'PL',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'PT',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'CH',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'HK',
-										'operation' => '=',
-									],
-									[
-										'type'      => 'base_location_country',
-										'value'     => 'SG',
 										'operation' => '=',
 									],
 								],
@@ -333,6 +293,7 @@ class DefaultFreeExtensions {
 					[
 						'key'         => 'mailpoet',
 						'name'        => __( 'MailPoet', 'woocommerce' ),
+						'description' => __( 'Level up your email marketing with {{link}}MailPoet{{/link}}', 'woocommerce' ),
 						'description' => sprintf(
 							/* translators: 1: opening product link tag. 2: closing link tag */
 							__( 'Level up your email marketing with %1$sMailPoet%2$s', 'woocommerce' ),
@@ -387,8 +348,8 @@ class DefaultFreeExtensions {
 				'plugins' => [
 					[
 						'key'         => 'google-listings-and-ads',
-						'name'        => __( 'Google Listings & Ads', 'woocommerce' ),
-						'description' => __( 'Reach more shoppers and drive sales for your store. Integrate with Google to list your products for free and launch paid ad campaigns.', 'woocommerce' ),
+						'name'        => __( 'Google Ads & Marketing by Kliken', 'woocommerce' ),
+						'description' => __( 'Get in front of shoppers and drive traffic so you can grow your business with Smart Shopping Campaigns and free listings.', 'woocommerce' ),
 						'image_url'   => plugins_url( 'images/onboarding/google-listings-and-ads.png', WC_ADMIN_PLUGIN_FILE ),
 						'manage_url'  => 'admin.php?page=wc-admin&path=%2Fgoogle%2Fstart',
 					],

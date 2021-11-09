@@ -158,7 +158,6 @@ export default function ( { attributes, setAttributes } ) {
 				<div className={ className }>
 					{ getInspectorControls() }
 					<BlockTitle
-						className="wc-block-price-filter__title"
 						headingLevel={ headingLevel }
 						heading={ heading }
 						onChange={ ( value ) =>

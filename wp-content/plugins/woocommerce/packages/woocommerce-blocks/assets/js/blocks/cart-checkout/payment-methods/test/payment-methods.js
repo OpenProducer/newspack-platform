@@ -14,16 +14,6 @@ import {
 /**
  * Internal dependencies
  */
-import * as useStoreCartHook from '../../../../base/context/hooks/cart/use-store-cart';
-
-// Somewhere in your test case or test suite
-useStoreCartHook.useStoreCart = jest
-	.fn()
-	.mockReturnValue( useStoreCartHook.defaultCartData );
-
-/**
- * Internal dependencies
- */
 import PaymentMethods from '../payment-methods';
 
 jest.mock( '../saved-payment-method-options', () => ( { onChange } ) => {

@@ -544,7 +544,7 @@ class DataStore extends ReportsDataStore implements DataStoreInterface {
 			$parent_order = wc_get_order( $order->get_parent_id() );
 			if ( $parent_order ) {
 				$data['parent_id'] = $parent_order->get_id();
-				$data['status']    = self::normalize_order_status( $parent_order->get_status() );
+				$format[]          = '%d';
 			}
 		} else {
 			$data['returning_customer'] = self::is_returning_customer( $order );

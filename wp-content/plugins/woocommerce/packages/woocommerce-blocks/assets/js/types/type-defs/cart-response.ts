@@ -26,8 +26,6 @@ export interface CartResponseCouponItemWithLabel
 	label: string;
 }
 
-export type CartResponseCoupons = CartResponseCouponItemWithLabel[];
-
 export interface ResponseFirstNameLastName {
 	first_name: string;
 	last_name: string;

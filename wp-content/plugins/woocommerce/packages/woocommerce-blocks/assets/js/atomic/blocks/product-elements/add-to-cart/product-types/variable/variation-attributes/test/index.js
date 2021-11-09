@@ -7,7 +7,6 @@ import {
 	getVariationsMatchingSelectedAttributes,
 	getVariationMatchingSelectedAttributes,
 	getActiveSelectControlOptions,
-	getDefaultAttributes,
 } from '../utils';
 
 const rawAttributeData = [
@@ -21,19 +20,16 @@ const rawAttributeData = [
 				id: 22,
 				name: 'Blue',
 				slug: 'blue',
-				default: true,
 			},
 			{
 				id: 23,
 				name: 'Green',
 				slug: 'green',
-				default: false,
 			},
 			{
 				id: 24,
 				name: 'Red',
 				slug: 'red',
-				default: false,
 			},
 		],
 	},
@@ -47,13 +43,11 @@ const rawAttributeData = [
 				id: 0,
 				name: 'Yes',
 				slug: 'Yes',
-				default: true,
 			},
 			{
 				id: 0,
 				name: 'No',
 				slug: 'No',
-				default: false,
 			},
 		],
 	},
@@ -67,13 +61,11 @@ const rawAttributeData = [
 				id: 0,
 				name: 'Test',
 				slug: 'Test',
-				default: false,
 			},
 			{
 				id: 0,
 				name: 'Test 2',
 				slug: 'Test 2',
-				default: false,
 			},
 		],
 	},
@@ -134,61 +126,6 @@ const rawVariations = [
 	},
 ];
 
-const formattedAttributes = {
-	Color: {
-		id: 1,
-		name: 'Color',
-		taxonomy: 'pa_color',
-		has_variations: true,
-		terms: [
-			{
-				id: 22,
-				name: 'Blue',
-				slug: 'blue',
-				default: true,
-			},
-			{
-				id: 23,
-				name: 'Green',
-				slug: 'green',
-				default: false,
-			},
-			{
-				id: 24,
-				name: 'Red',
-				slug: 'red',
-				default: false,
-			},
-		],
-	},
-	Size: {
-		id: 2,
-		name: 'Size',
-		taxonomy: 'pa_size',
-		has_variations: true,
-		terms: [
-			{
-				id: 25,
-				name: 'Large',
-				slug: 'large',
-				default: false,
-			},
-			{
-				id: 26,
-				name: 'Medium',
-				slug: 'medium',
-				default: true,
-			},
-			{
-				id: 27,
-				name: 'Small',
-				slug: 'small',
-				default: false,
-			},
-		],
-	},
-};
-
 describe( 'Testing utils', () => {
 	describe( 'Testing getAttributes()', () => {
 		it( 'returns empty object if there are no attributes', () => {
@@ -208,19 +145,16 @@ describe( 'Testing utils', () => {
 							id: 22,
 							name: 'Blue',
 							slug: 'blue',
-							default: true,
 						},
 						{
 							id: 23,
 							name: 'Green',
 							slug: 'green',
-							default: false,
 						},
 						{
 							id: 24,
 							name: 'Red',
 							slug: 'red',
-							default: false,
 						},
 					],
 				},
@@ -234,13 +168,11 @@ describe( 'Testing utils', () => {
 							id: 0,
 							name: 'Yes',
 							slug: 'Yes',
-							default: true,
 						},
 						{
 							id: 0,
 							name: 'No',
 							slug: 'No',
-							default: false,
 						},
 					],
 				},
@@ -458,22 +390,6 @@ describe( 'Testing utils', () => {
 					},
 				],
 			} );
-		} );
-	} );
-	describe( 'Testing getDefaultAttributes()', () => {
-		const defaultAttributes = getDefaultAttributes( formattedAttributes );
-
-		it( 'should return default attributes in the format that is ready for setting state', () => {
-			expect( defaultAttributes ).toStrictEqual( {
-				Color: 'blue',
-				Size: 'medium',
-			} );
-		} );
-
-		it( 'should return an empty object if given unexpected values', () => {
-			expect( getDefaultAttributes( [] ) ).toStrictEqual( {} );
-			expect( getDefaultAttributes( null ) ).toStrictEqual( {} );
-			expect( getDefaultAttributes( undefined ) ).toStrictEqual( {} );
 		} );
 	} );
 } );

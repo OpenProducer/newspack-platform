@@ -125,9 +125,7 @@ const ActiveFiltersBlock = ( {
 	return (
 		<>
 			{ ! isEditor && blockAttributes.heading && (
-				<TagName className="wc-block-active-filters__title">
-					{ blockAttributes.heading }
-				</TagName>
+				<TagName>{ blockAttributes.heading }</TagName>
 			) }
 			<div className="wc-block-active-filters">
 				<ul className={ listClasses }>

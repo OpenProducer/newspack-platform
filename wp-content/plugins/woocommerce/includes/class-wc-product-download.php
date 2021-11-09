@@ -7,8 +7,6 @@
  * @since   3.0.0
  */
 
-use Automattic\Jetpack\Constants;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -100,28 +98,18 @@ class WC_Product_Download implements ArrayAccess {
 		$file_path = $this->get_file();
 
 		// File types for URL-based files located on the server should get validated.
-		$parsed_file_path  = WC_Download_Handler::parse_file_path( $file_path );
-		$is_file_on_server = ! $parsed_file_path['remote_file'];
-		$file_path_type    = $this->get_type_of_file_path( $file_path );
+		$is_file_on_server = false;
+		if ( false !== stripos( $file_path, network_site_url( '/', 'https' ) ) ||
+			false !== stripos( $file_path, network_site_url( '/', 'http' ) ) ||
+			false !== stripos( $file_path, site_url( '/', 'https' ) ) ||
+			false !== stripos( $file_path, site_url( '/', 'http' ) )
+		) {
+			$is_file_on_server = true;
+		}
 
-		// Shortcodes are allowed, validations should be done by the shortcode provider in this case.
-		if ( 'shortcode' === $file_path_type ) {
+		if ( ! $is_file_on_server && 'relative' !== $this->get_type_of_file_path() ) {
 			return true;
 		}
-
-		// Remote paths are allowed.
-		if ( ! $is_file_on_server && 'relative' !== $file_path_type ) {
-			return true;
-		}
-
-		// On windows system, local files ending with `.` are not allowed.
-		// @link https://docs.microsoft.com/en-us/windows/win32/fileio/naming-a-file?redirectedfrom=MSDN#naming-conventions.
-		if ( $is_file_on_server && ! $this->get_file_extension() && 'WIN' === strtoupper( substr( Constants::get_constant( 'PHP_OS' ), 0, 3 ) ) ) {
-			if ( '.' === substr( $file_path, -1 ) ) {
-				return false;
-			}
-		}
-
 		return ! $this->get_file_extension() || in_array( $this->get_file_type(), $this->get_allowed_mime_types(), true );
 	}
 

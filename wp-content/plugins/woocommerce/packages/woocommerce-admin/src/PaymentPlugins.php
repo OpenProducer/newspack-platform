@@ -10,10 +10,6 @@ namespace Automattic\WooCommerce\Admin;
  * Contains backend logic for retrieving payment plugin recommendations.
  */
 class PaymentPlugins {
-	/**
-	 * Name of recommended plugins filter.
-	 */
-	const FILTER_NAME = 'woocommerce_admin_recommended_payment_plugins';
 
 	/**
 	 * Name of recommended plugins transient.
@@ -93,7 +89,7 @@ class PaymentPlugins {
 			);
 		}
 
-		return apply_filters( self::FILTER_NAME, array_values( $plugins_data['recommendations'] ) );
+		return array_values( $plugins_data['recommendations'] );
 	}
 
 	/**

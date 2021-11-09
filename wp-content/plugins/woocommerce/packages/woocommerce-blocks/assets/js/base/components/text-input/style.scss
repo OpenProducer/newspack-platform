@@ -59,8 +59,6 @@
 		&:focus {
 			background-color: #fff;
 			color: $input-text-active;
-			outline: 0;
-			box-shadow: 0 0 0 1px $input-border-gray;
 		}
 
 		.has-dark-controls & {
@@ -71,7 +69,6 @@
 			&:focus {
 				background-color: $input-background-dark;
 				color: $input-text-dark;
-				box-shadow: 0 0 0 1px $input-border-dark;
 			}
 		}
 	}
@@ -102,7 +99,8 @@
 			border-color: $alert-red;
 		}
 		&:focus {
-			box-shadow: 0 0 0 1px $alert-red;
+			outline: 1px dotted $alert-red;
+			outline-offset: 2px;
 		}
 	}
 

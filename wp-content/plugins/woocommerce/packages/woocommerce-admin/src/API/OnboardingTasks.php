@@ -7,9 +7,9 @@
 
 namespace Automattic\WooCommerce\Admin\API;
 
+use Automattic\WooCommerce\Admin\Features\Features;
 use Automattic\WooCommerce\Admin\Features\Onboarding;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Init as OnboardingTasksFeature;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\TaskLists;
+use Automattic\WooCommerce\Admin\Features\OnboardingTasks as OnboardingTasksFeature;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -118,19 +118,6 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 					'methods'             => \WP_REST_Server::READABLE,
 					'callback'            => array( $this, 'get_tasks' ),
 					'permission_callback' => array( $this, 'get_tasks_permission_check' ),
-				),
-				'schema' => array( $this, 'get_public_item_schema' ),
-			)
-		);
-
-		register_rest_route(
-			$this->namespace,
-			'/' . $this->rest_base . '/(?P<id>[a-z0-9_\-]+)/hide',
-			array(
-				array(
-					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => array( $this, 'hide_task_list' ),
-					'permission_callback' => array( $this, 'hide_task_list_permission_check' ),
 				),
 				'schema' => array( $this, 'get_public_item_schema' ),
 			)
@@ -253,20 +240,6 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 	public function get_tasks_permission_check( $request ) {
 		if ( ! current_user_can( 'manage_woocommerce' ) ) {
 			return new \WP_Error( 'woocommerce_rest_cannot_create', __( 'Sorry, you are not allowed to retrieve onboarding tasks.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
-		}
-
-		return true;
-	}
-
-	/**
-	 * Check if a given request has permission to hide task lists.
-	 *
-	 * @param  WP_REST_Request $request Full details about the request.
-	 * @return WP_Error|boolean
-	 */
-	public function hide_task_list_permission_check( $request ) {
-		if ( ! current_user_can( 'manage_woocommerce' ) ) {
-			return new \WP_Error( 'woocommerce_rest_cannot_update', __( 'Sorry, you are not allowed to hide task lists.', 'woocommerce' ), array( 'status' => rest_authorization_required_code() ) );
 		}
 
 		return true;
@@ -712,6 +685,15 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 					'context'     => array( 'view' ),
 					'readonly'    => true,
 				),
+				'stripeSupportedCountries'       => array(
+					'type'        => 'array',
+					'description' => __( 'Country codes that are supported by Stripe.', 'woocommerce' ),
+					'context'     => array( 'view' ),
+					'readonly'    => true,
+					'items'       => array(
+						'type' => 'string',
+					),
+				),
 				'taxJarActivated'                => array(
 					'type'        => 'boolean',
 					'description' => __( 'If the store has the TaxJar extension active.', 'woocommerce' ),
@@ -753,14 +735,8 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 	 * @return WP_REST_Response|WP_Error
 	 */
 	public function get_tasks() {
-		$lists = TaskLists::get_lists();
-		$json  = array_map(
-			function( $list ) {
-				return $list->get_json();
-			},
-			$lists
-		);
-		return rest_ensure_response( array_values( apply_filters( 'woocommerce_admin_onboarding_tasks', $json ) ) );
+		$task_lists = OnboardingTasksFeature::get_task_lists();
+		return rest_ensure_response( $task_lists );
 	}
 
 	/**
@@ -774,7 +750,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 
 		$is_dismissable = false;
 
-		$task = TaskLists::get_task( $id );
+		$task = OnboardingTasksFeature::get_task_by_id( $id );
 
 		if ( $task && isset( $task['isDismissable'] ) && $task['isDismissable'] ) {
 			$is_dismissable = true;
@@ -798,7 +774,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 			wc_admin_record_tracks_event( 'tasklist_dismiss_task', array( 'task_name' => $id ) );
 		}
 
-		$task = TaskLists::get_task( $id );
+		$task = OnboardingTasksFeature::get_task_by_id( $id );
 
 		return rest_ensure_response( $task );
 	}
@@ -820,7 +796,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 			wc_admin_record_tracks_event( 'tasklist_undo_dismiss_task', array( 'task_name' => $id ) );
 		}
 
-		$task = TaskLists::get_task( $id );
+		$task = OnboardingTasksFeature::get_task_by_id( $id );
 
 		return rest_ensure_response( $task );
 	}
@@ -839,7 +815,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 
 		$is_snoozeable = false;
 
-		$snooze_task = TaskLists::get_task( $task_id, $task_list_id );
+		$snooze_task = OnboardingTasksFeature::get_task_by_id( $task_id, $task_list_id );
 
 		if ( $snooze_task && isset( $snooze_task['isSnoozeable'] ) && $snooze_task['isSnoozeable'] ) {
 			$is_snoozeable = true;
@@ -900,53 +876,7 @@ class OnboardingTasks extends \WC_REST_Data_Controller {
 			wc_admin_record_tracks_event( 'tasklist_undo_remindmelater_task', array( 'task_name' => $id ) );
 		}
 
-		return rest_ensure_response( TaskLists::get_task( $id ) );
-	}
-
-	/**
-	 * Hide a task list.
-	 *
-	 * @param WP_REST_Request $request Request data.
-	 *
-	 * @return WP_REST_Response|WP_Error
-	 */
-	public function hide_task_list( $request ) {
-		$id        = $request->get_param( 'id' );
-		$task_list = TaskLists::get_list( $id );
-
-		if ( ! $task_list ) {
-			return new \WP_Error(
-				'woocommerce_tasks_invalid_task_list',
-				__( 'Sorry, that task list was not found', 'woocommerce' ),
-				array(
-					'status' => 404,
-				)
-			);
-		}
-
-		$update = $task_list->hide();
-		$json   = $task_list->get_json();
-
-		if ( $update ) {
-			$completed_task_count = array_reduce(
-				$json['tasks'],
-				function( $total, $task ) {
-					return $task['isComplete'] ? $total + 1 : $total;
-				},
-				0
-			);
-
-			wc_admin_record_tracks_event(
-				$id . '_completed',
-				array(
-					'action'                => 'remove_card',
-					'completed_task_count'  => $completed_task_count,
-					'incomplete_task_count' => count( $json['tasks'] ) - $completed_task_count,
-				)
-			);
-		}
-
-		return rest_ensure_response( $json );
+		return rest_ensure_response( OnboardingTasksFeature::get_task_by_id( $id ) );
 	}
 
 }

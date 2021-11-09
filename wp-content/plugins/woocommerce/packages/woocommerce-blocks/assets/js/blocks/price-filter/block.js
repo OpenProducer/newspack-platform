@@ -151,9 +151,7 @@ const PriceFilterBlock = ( { attributes, isEditor = false } ) => {
 	return (
 		<>
 			{ ! isEditor && attributes.heading && (
-				<TagName className="wc-block-price-filter__title">
-					{ attributes.heading }
-				</TagName>
+				<TagName>{ attributes.heading }</TagName>
 			) }
 			<div className="wc-block-price-slider">
 				<PriceSlider

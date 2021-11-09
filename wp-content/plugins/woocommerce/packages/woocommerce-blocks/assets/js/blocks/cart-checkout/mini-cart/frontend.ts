@@ -91,9 +91,6 @@ window.onload = () => {
 		}
 
 		const showContents = () => {
-			if ( ! wasLoadScriptsCalled ) {
-				loadScripts();
-			}
 			document.body.removeEventListener(
 				'wc-blocks_added_to_cart',
 				// eslint-disable-next-line @typescript-eslint/no-use-before-define

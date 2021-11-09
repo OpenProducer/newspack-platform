@@ -179,17 +179,16 @@ class CategoryLookup {
 	protected function update( $category_id ) {
 		global $wpdb;
 
-		$ancestors    = get_ancestors( $category_id, 'product_cat', 'taxonomy' );
-		$children     = get_term_children( $category_id, 'product_cat' );
-		$inserts      = array();
-		$inserts[]    = $this->get_insert_sql( $category_id, $category_id );
-		$children_ids = array_map( 'intval', array_unique( array_filter( $children ) ) );
+		$ancestors = get_ancestors( $category_id, 'product_cat', 'taxonomy' );
+		$children  = get_term_children( $category_id, 'product_cat' );
+		$inserts   = array();
+		$inserts[] = $this->get_insert_sql( $category_id, $category_id );
 
 		foreach ( $ancestors as $ancestor ) {
 			$inserts[] = $this->get_insert_sql( $category_id, $ancestor );
 
-			foreach ( $children_ids as $child_category_id ) {
-				$inserts[] = $this->get_insert_sql( $child_category_id, $ancestor );
+			foreach ( $children as $child ) {
+				$inserts[] = $this->get_insert_sql( $child->category_id, $ancestor );
 			}
 		}
 

@@ -11,7 +11,6 @@ import AttributeSelectControl from './attribute-select-control';
 import {
 	getVariationMatchingSelectedAttributes,
 	getActiveSelectControlOptions,
-	getDefaultAttributes,
 } from './utils';
 
 /**
@@ -28,7 +27,6 @@ const AttributePicker = ( {
 	const currentVariationAttributes = useShallowEqual( variationAttributes );
 	const [ variationId, setVariationId ] = useState( 0 );
 	const [ selectedAttributes, setSelectedAttributes ] = useState( {} );
-	const [ hasSetDefaults, setHasSetDefaults ] = useState( false );
 
 	// Get options for each attribute picker.
 	const filteredAttributeOptions = useMemo( () => {
@@ -38,19 +36,6 @@ const AttributePicker = ( {
 			selectedAttributes
 		);
 	}, [ selectedAttributes, currentAttributes, currentVariationAttributes ] );
-
-	// Set default attributes as selected.
-	useEffect( () => {
-		if ( ! hasSetDefaults ) {
-			const defaultAttributes = getDefaultAttributes( attributes );
-			if ( defaultAttributes ) {
-				setSelectedAttributes( {
-					...defaultAttributes,
-				} );
-			}
-			setHasSetDefaults( true );
-		}
-	}, [ selectedAttributes, attributes, hasSetDefaults ] );
 
 	// Select variations when selections are change.
 	useEffect( () => {
