@@ -195,5 +195,14 @@ class WPCOM_OAuth {
 	public static function wpcom_client_id() {
 		return ( defined( 'NEWSPACK_WPCOM_CLIENT_ID' ) && NEWSPACK_WPCOM_CLIENT_ID ) ? NEWSPACK_WPCOM_CLIENT_ID : false;
 	}
+
+	/**
+	 * Check if wizard is configured and should be displayed.
+	 *
+	 * @return bool True if necessary variables are present.
+	 */
+	public static function is_wpcom_configured() {
+		return self::wpcom_client_id();
+	}
 }
 new WPCOM_OAuth();

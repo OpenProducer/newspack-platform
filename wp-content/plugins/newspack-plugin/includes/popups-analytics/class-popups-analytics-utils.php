@@ -52,17 +52,16 @@ class Popups_Analytics_Utils {
 	private static function fill_in_dates( $input, $start_date, $end_date ) {
 		$all_days = self::get_dates_in_range( $start_date, $end_date );
 
+		$chart_axes  = [ [ __( 'Date', 'newspack' ), __( 'Views', 'newspack' ) ] ];
 		$days_filled = array_map(
 			function ( $day ) use ( $input ) {
-				return array(
-					'date'  => $day,
-					'value' => isset( $input[ $day ] ) ? intval( $input[ $day ] ) : 0,
-				);
+				$date = new \DateTime( $day );
+				return [ $date->format( 'M j' ), isset( $input[ $day ] ) ? intval( $input[ $day ] ) : 0 ];
 			},
 			$all_days
 		);
 
-		return $days_filled;
+		return array_merge( $chart_axes, $days_filled );
 	}
 
 	/**

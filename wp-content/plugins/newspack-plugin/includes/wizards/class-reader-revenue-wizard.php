@@ -279,12 +279,11 @@ class Reader_Revenue_Wizard extends Wizard {
 			NEWSPACK_API_NAMESPACE,
 			'/wizard/newspack-donations-wizard/donation/',
 			[
-				'methods'             => 'GET',
+				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_donation_settings' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
-
 	}
 
 	/**
@@ -687,13 +686,21 @@ class Reader_Revenue_Wizard extends Wizard {
 			return;
 		}
 		\wp_enqueue_media();
-		\wp_enqueue_script(
+		\wp_register_script(
 			'newspack-reader-revenue-wizard',
 			Newspack::plugin_url() . '/dist/readerRevenue.js',
 			$this->get_script_dependencies(),
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/readerRevenue.js' ),
 			true
 		);
+		\wp_localize_script(
+			'newspack-reader-revenue-wizard',
+			'newspack_reader_revenue',
+			[
+				'emails' => Reader_Revenue_Emails::get_emails(),
+			]
+		);
+		\wp_enqueue_script( 'newspack-reader-revenue-wizard' );
 	}
 
 	/**

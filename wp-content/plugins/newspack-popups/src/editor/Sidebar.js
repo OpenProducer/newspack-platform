@@ -24,6 +24,7 @@ import { without } from 'lodash';
  * Internal dependencies
  */
 import { isCustomPlacement, getPlacementHelpMessage } from '../editor/utils';
+import PositionPlacementControl from './PositionPlacementControl';
 
 const Sidebar = ( {
 	display_title,
@@ -31,6 +32,7 @@ const Sidebar = ( {
 	frequency,
 	onMetaFieldChange,
 	placement,
+	overlay_size,
 	trigger_scroll_progress,
 	archive_insertion_posts_count,
 	archive_insertion_is_repeating,
@@ -46,11 +48,34 @@ const Sidebar = ( {
 			onMetaFieldChange( 'frequency', 'once' );
 		}
 	};
+	const updatePlacementWhenPopupIsFullWidth = () => {
+		switch ( placement ) {
+			case 'top_left':
+			case 'top_right':
+				onMetaFieldChange( 'placement', 'top' );
+				break;
+			case 'center_left':
+			case 'center_right':
+				onMetaFieldChange( 'placement', 'center' );
+				break;
+			case 'bottom_left':
+			case 'bottom_right':
+				onMetaFieldChange( 'placement', 'bottom' );
+				break;
+		}
+	};
+	const updateSize = size => {
+		onMetaFieldChange( 'overlay_size', size );
+		if ( 'full-width' === size ) {
+			updatePlacementWhenPopupIsFullWidth();
+		}
+	};
 	const customPlacements = window.newspack_popups_data?.custom_placements || {};
+	const popupSizeOptions = window.newspack_popups_data?.popup_size_options || {};
 	const availableArchivePageTypes = window.newspack_popups_data?.available_archive_page_types || [];
 
 	return (
-		<Fragment>
+		<>
 			<RadioControl
 				className="newspack-popups__prompt-type-control"
 				label={ __( 'Prompt type', 'newspack-popups' ) }
@@ -59,53 +84,60 @@ const Sidebar = ( {
 					{ label: __( 'Inline', 'newspack-popups' ), value: 'inline' },
 					{ label: __( 'Overlay', 'newspack-popups' ), value: 'center' },
 				] }
-				onChange={ value => updatePlacement( value ) }
-			/>
-			<SelectControl
-				label={ isOverlay ? __( 'Position' ) : __( 'Placement' ) }
-				help={ getPlacementHelpMessage(
-					placement,
-					trigger_scroll_progress,
-					archive_insertion_posts_count,
-					archive_insertion_is_repeating
-				) }
-				value={ placement }
 				onChange={ updatePlacement }
-				options={
-					isOverlay
-						? [
-								{ value: 'center', label: __( 'Center' ) },
-								{ value: 'top', label: __( 'Top' ) },
-								{ value: 'bottom', label: __( 'Bottom' ) },
-						  ]
-						: [
-								{ value: 'inline', label: __( 'In article content' ) },
-								{ value: 'archives', label: __( 'In archive pages' ) },
-								{ value: 'above_header', label: __( 'Above site header' ) },
-								{ value: 'manual', label: __( 'Manual only', 'newspack-popups' ) },
-						  ].concat(
-								Object.keys( customPlacements ).map( key => ( {
-									value: key,
-									label: customPlacements[ key ],
-								} ) )
-						  )
-				}
 			/>
-			{ isOverlay && (
-				<Fragment>
+			{ isOverlay ? (
+				<>
 					<SelectControl
-						label={ __( 'Trigger' ) }
+						label={ __( 'Size', 'newspack-popups' ) }
+						value={ overlay_size }
+						onChange={ updateSize }
+						options={ popupSizeOptions }
+					/>
+					<PositionPlacementControl
+						layout={ placement }
+						label={ __( 'Position', 'newspack-popups' ) }
+						help={ getPlacementHelpMessage( placement, trigger_scroll_progress ) }
+						value={ placement }
+						onChange={ updatePlacement }
+						size={ overlay_size }
+					/>
+				</>
+			) : (
+				<SelectControl
+					label={ __( 'Placement' ) }
+					help={ getPlacementHelpMessage( placement, trigger_scroll_progress ) }
+					value={ placement }
+					onChange={ updatePlacement }
+					options={ [
+						{ value: 'inline', label: __( 'In article content', 'newspack-popups' ) },
+						{ value: 'archives', label: __( 'In archive pages' ) },
+						{ value: 'above_header', label: __( 'Above site header', 'newspack-popups' ) },
+						{ value: 'manual', label: __( 'Manual only', 'newspack-popups' ) },
+					].concat(
+						Object.keys( customPlacements ).map( key => ( {
+							value: key,
+							label: customPlacements[ key ],
+						} ) )
+					) }
+				/>
+			) }
+
+			{ isOverlay && (
+				<>
+					<SelectControl
+						label={ __( 'Trigger', 'newspack-popups' ) }
 						help={ __( 'The event to trigger the prompt.', 'newspack-popups' ) }
 						selected={ trigger_type }
 						options={ [
-							{ label: __( 'Timer' ), value: 'time' },
-							{ label: __( 'Scroll Progress' ), value: 'scroll' },
+							{ label: __( 'Timer', 'newspack-popups' ), value: 'time' },
+							{ label: __( 'Scroll Progress', 'newspack-popups' ), value: 'scroll' },
 						] }
 						onChange={ value => onMetaFieldChange( 'trigger_type', value ) }
 					/>
 					{ 'time' === trigger_type && (
 						<RangeControl
-							label={ __( 'Delay (seconds)' ) }
+							label={ __( 'Delay (seconds)', 'newspack-popups' ) }
 							value={ trigger_delay }
 							onChange={ value => onMetaFieldChange( 'trigger_delay', value ) }
 							min={ 0 }
@@ -121,7 +153,7 @@ const Sidebar = ( {
 							max={ 100 }
 						/>
 					) }
-				</Fragment>
+				</>
 			) }
 			{ placement === 'inline' && (
 				<RangeControl
@@ -182,7 +214,7 @@ const Sidebar = ( {
 					onChange={ value => onMetaFieldChange( 'hide_border', value ) }
 				/>
 			) }
-		</Fragment>
+		</>
 	);
 };
 

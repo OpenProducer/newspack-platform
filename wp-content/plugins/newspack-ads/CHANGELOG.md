@@ -1,3 +1,19 @@
+# [1.20.0](https://github.com/Automattic/newspack-ads/compare/v1.19.0...v1.20.0) (2021-11-18)
+
+
+### Features
+
+* handle missing API access error ([#226](https://github.com/Automattic/newspack-ads/issues/226)) ([c08236f](https://github.com/Automattic/newspack-ads/commit/c08236f2e74fc85237d5c3c6ee23ae9d051ae39a))
+* integrate SCAIP settings ([#224](https://github.com/Automattic/newspack-ads/issues/224)) ([b0e3b46](https://github.com/Automattic/newspack-ads/commit/b0e3b466c50defd8bd77e7b1edaaa49641f4706b))
+
+# [1.20.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.19.0...v1.20.0-alpha.1) (2021-11-16)
+
+
+### Features
+
+* handle missing API access error ([#226](https://github.com/Automattic/newspack-ads/issues/226)) ([c08236f](https://github.com/Automattic/newspack-ads/commit/c08236f2e74fc85237d5c3c6ee23ae9d051ae39a))
+* integrate SCAIP settings ([#224](https://github.com/Automattic/newspack-ads/issues/224)) ([b0e3b46](https://github.com/Automattic/newspack-ads/commit/b0e3b466c50defd8bd77e7b1edaaa49641f4706b))
+
 # [1.19.0](https://github.com/Automattic/newspack-ads/compare/v1.18.1...v1.19.0) (2021-11-09)
 
 

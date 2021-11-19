@@ -1,3 +1,31 @@
+# [1.44.0](https://github.com/Automattic/newspack-popups/compare/v1.43.0...v1.44.0) (2021-11-18)
+
+
+### Bug Fixes
+
+* **segmentation:** change MC API key option name ([#638](https://github.com/Automattic/newspack-popups/issues/638)) ([fcf8161](https://github.com/Automattic/newspack-popups/commit/fcf81615d3d438a9adaf9dddbf20f6ec7beeb40f))
+* post type support conditions ([dfea3da](https://github.com/Automattic/newspack-popups/commit/dfea3da2f7e456d74aa19effc140dac02fdf0971))
+
+
+### Features
+
+* **popup:** add more placements ([#624](https://github.com/Automattic/newspack-popups/issues/624)) ([4ca4710](https://github.com/Automattic/newspack-popups/commit/4ca47100c144a78be36fb9d78fa25d8886e44378)), closes [#114](https://github.com/Automattic/newspack-popups/issues/114) [#114](https://github.com/Automattic/newspack-popups/issues/114)
+* enable excluding categories per prompt ([#641](https://github.com/Automattic/newspack-popups/issues/641)) ([b5b65b2](https://github.com/Automattic/newspack-popups/commit/b5b65b2ee8c9503a4fb6d6ace36950591bba1de2))
+
+# [1.44.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v1.43.0...v1.44.0-alpha.1) (2021-11-16)
+
+
+### Bug Fixes
+
+* **segmentation:** change MC API key option name ([#638](https://github.com/Automattic/newspack-popups/issues/638)) ([fcf8161](https://github.com/Automattic/newspack-popups/commit/fcf81615d3d438a9adaf9dddbf20f6ec7beeb40f))
+* post type support conditions ([dfea3da](https://github.com/Automattic/newspack-popups/commit/dfea3da2f7e456d74aa19effc140dac02fdf0971))
+
+
+### Features
+
+* **popup:** add more placements ([#624](https://github.com/Automattic/newspack-popups/issues/624)) ([4ca4710](https://github.com/Automattic/newspack-popups/commit/4ca47100c144a78be36fb9d78fa25d8886e44378)), closes [#114](https://github.com/Automattic/newspack-popups/issues/114) [#114](https://github.com/Automattic/newspack-popups/issues/114)
+* enable excluding categories per prompt ([#641](https://github.com/Automattic/newspack-popups/issues/641)) ([b5b65b2](https://github.com/Automattic/newspack-popups/commit/b5b65b2ee8c9503a4fb6d6ace36950591bba1de2))
+
 # [1.43.0](https://github.com/Automattic/newspack-popups/compare/v1.42.1...v1.43.0) (2021-11-09)
 
 

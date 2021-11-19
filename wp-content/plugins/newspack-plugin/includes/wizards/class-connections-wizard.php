@@ -80,19 +80,11 @@ class Connections_Wizard extends Wizard {
 			'newspack-connections-wizard',
 			'newspack_connections_data',
 			[
+				'can_connect_wpcom'    => WPCOM_OAuth::is_wpcom_configured(),
 				'can_connect_google'   => Google_OAuth::is_oauth_configured(),
 				'can_connect_fivetran' => Fivetran_Connection::is_fivetran_configured(),
 			]
 		);
 		\wp_enqueue_script( 'newspack-connections-wizard' );
-	}
-
-	/**
-	 * Check if wizard is configured and should be displayed.
-	 *
-	 * @return bool True if necessary variables are present.
-	 */
-	public static function configured() {
-		return WPCOM_OAuth::wpcom_client_id();
 	}
 }

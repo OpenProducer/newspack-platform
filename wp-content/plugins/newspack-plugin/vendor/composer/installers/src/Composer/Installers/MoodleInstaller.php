@@ -1,8 +1,10 @@
 <?php
+
 namespace Composer\Installers;
 
 class MoodleInstaller extends BaseInstaller
 {
+    /** @var array<string, string> */
     protected $locations = array(
         'mod'                => 'mod/{$name}/',
         'admin_report'       => 'admin/report/{$name}/',
@@ -18,6 +20,7 @@ class MoodleInstaller extends BaseInstaller
         'cachestore'         => 'cache/stores/{$name}/',
         'cachelock'          => 'cache/locks/{$name}/',
         'calendartype'       => 'calendar/type/{$name}/',
+        'fileconverter'      => 'files/converter/{$name}/',
         'format'             => 'course/format/{$name}/',
         'coursereport'       => 'course/report/{$name}/',
         'customcertelement'  => 'mod/customcert/element/{$name}/',

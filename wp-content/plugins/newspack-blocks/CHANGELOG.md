@@ -1,3 +1,17 @@
+## [1.42.1](https://github.com/Automattic/newspack-blocks/compare/v1.42.0...v1.42.1) (2021-11-18)
+
+
+### Bug Fixes
+
+* **iframe-block:** add a trailing slash to iframe URL ([#906](https://github.com/Automattic/newspack-blocks/issues/906)) ([e4b7b7d](https://github.com/Automattic/newspack-blocks/commit/e4b7b7d1de767ffc1d09af448974f4c2362a5299))
+
+## [1.42.1-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.42.0...v1.42.1-alpha.1) (2021-11-16)
+
+
+### Bug Fixes
+
+* **iframe-block:** add a trailing slash to iframe URL ([#906](https://github.com/Automattic/newspack-blocks/issues/906)) ([e4b7b7d](https://github.com/Automattic/newspack-blocks/commit/e4b7b7d1de767ffc1d09af448974f4c2362a5299))
+
 # [1.42.0](https://github.com/Automattic/newspack-blocks/compare/v1.41.1...v1.42.0) (2021-11-09)
 
 

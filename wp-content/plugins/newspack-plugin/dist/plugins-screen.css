@@ -4,6 +4,6 @@
 /**
  * Plugins table.
  */
-table.plugins .newspack-plugin.uninstalled .check-column input[type='checkbox'] {
-  display: none; }
-
+table.plugins .newspack-plugin.uninstalled .check-column input[type=checkbox] {
+  display: none;
+}

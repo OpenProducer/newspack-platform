@@ -2,28 +2,29 @@
  * Ad Picker
  */
 .newspack-card.newspack-action-card .newspack-action-card__region-children .newspack-grid {
-  margin: 32px 0 0; }
-
+  margin: 32px 0 0;
+}
 /**
  * Colors
  */
 .newspack-advertising-wizard .newspack-button-card .newspack-notice {
-  margin: 24px 0 0; }
-
-.newspack-advertising-wizard__ad-unit-size {
-  margin: 64px 0 16px; }
-  .newspack-advertising-wizard__ad-unit-size h2,
-  .newspack-advertising-wizard__ad-unit-size .newspack-grid {
-    margin: 0; }
-
+  margin: 24px 0 0;
+}
+.newspack-advertising-wizard__ad-unit-fluid {
+  align-items: center;
+  display: flex;
+  font-size: 12px;
+  grid-column: 2/4;
+  line-height: 16px;
+}
 .newspack-advertising-wizard .newspack-grid__thead, .newspack-advertising-wizard .newspack-grid__tbody {
-  grid-template-columns: repeat(3, calc( 33.33% - 24px)) 48px; }
-
+  grid-template-columns: repeat(3, calc(33.33% - 24px)) 48px;
+}
 .newspack-advertising-wizard .newspack-grid .newspack-button.has-icon:not(.has-text) {
   height: 48px;
   min-width: 48px;
-  width: 48px; }
-
+  width: 48px;
+}
 .newspack-advertising-wizard .newspack-grid + .newspack-card__header-actions {
-  margin-top: 64px; }
-
+  margin-top: 64px;
+}

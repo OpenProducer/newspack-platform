@@ -246,6 +246,18 @@ final class Newspack_Popups {
 
 		\register_meta(
 			'post',
+			'overlay_size',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
+		\register_meta(
+			'post',
 			'dismiss_text',
 			[
 				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
@@ -350,6 +362,44 @@ final class Newspack_Popups {
 				],
 				'type'           => 'array',
 				'default'        => Newspack_Popups_Model::get_default_popup_archive_page_types(),
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
+		\register_meta(
+			'post',
+			'excluded_categories',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => [
+					'schema' => [
+						'items' => [
+							'type' => 'integer',
+						],
+					],
+				],
+				'type'           => 'array',
+				'default'        => [],
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
+		\register_meta(
+			'post',
+			'excluded_tags',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => [
+					'schema' => [
+						'items' => [
+							'type' => 'integer',
+						],
+					],
+				],
+				'type'           => 'array',
+				'default'        => [],
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
@@ -504,7 +554,9 @@ final class Newspack_Popups {
 				'preview_archive'              => self::preview_archive_permalink(),
 				'segments'                     => Newspack_Popups_Segmentation::get_segments(),
 				'custom_placements'            => Newspack_Popups_Custom_Placements::get_custom_placements(),
-				'available_archive_page_types' => self::get_available_archive_page_types(),
+				'overlay_placements'           => Newspack_Popups_Model::get_overlay_placements(),
+				'popup_size_options'           => Newspack_Popups_Model::get_popup_size_options(),
+				'available_archive_page_types' => Newspack_Popups_Model::get_available_archive_page_types(),
 				'taxonomy'                     => self::NEWSPACK_POPUPS_TAXONOMY,
 				'is_prompt'                    => self::NEWSPACK_POPUPS_CPT == get_post_type(),
 				'available_post_types'         => array_values(
@@ -629,17 +681,20 @@ final class Newspack_Popups {
 		$type      = isset( $_GET['placement'] ) ? sanitize_text_field( $_GET['placement'] ) : null; //phpcs:ignore
 		$segment   = isset( $_GET['segment'] ) ? sanitize_text_field( $_GET['segment'] ) : ''; //phpcs:ignore
 		$group     = isset( $_GET['group'] ) ? absint( $_GET['group'] ) : null; //phpcs:ignore
-		$frequency = 'daily';
+		$frequency    = 'daily';
+		$overlay_size = 'medium';
 
 		switch ( $type ) {
 			case 'overlay-center':
 				$placement = 'center';
 				break;
 			case 'overlay-top':
-				$placement = 'top';
+				$placement    = 'top';
+				$overlay_size = 'full';
 				break;
 			case 'overlay-bottom':
-				$placement = 'bottom';
+				$placement    = 'bottom';
+				$overlay_size = 'full';
 				break;
 			case 'archives':
 				$placement = 'archives';
@@ -685,6 +740,7 @@ final class Newspack_Popups {
 		update_post_meta( $post_id, 'frequency', $frequency );
 		update_post_meta( $post_id, 'overlay_color', '#000000' );
 		update_post_meta( $post_id, 'overlay_opacity', 30 );
+		update_post_meta( $post_id, 'overlay_size', $overlay_size );
 		update_post_meta( $post_id, 'placement', $placement );
 		update_post_meta( $post_id, 'trigger_type', $trigger_type );
 		update_post_meta( $post_id, 'trigger_delay', 3 );
@@ -967,44 +1023,6 @@ final class Newspack_Popups {
 		}
 
 		return $new_popup_id;
-	}
-
-	/**
-	 * Get available archive page types where to display prompts
-	 */
-	public static function get_available_archive_page_types() {
-		return [
-			[
-				'name'  => 'category',
-				/* translators: archive page */
-				'label' => __( 'Categories' ),
-			],
-			[
-				'name'  => 'tag',
-				/* translators: archive page */
-				'label' => __( 'Tags' ),
-			],
-			[
-				'name'  => 'author',
-				/* translators: archive page */
-				'label' => __( 'Authors' ),
-			],
-			[
-				'name'  => 'date',
-				/* translators: archive page */
-				'label' => __( 'Date' ),
-			],
-			[
-				'name'  => 'post-type',
-				/* translators: archive page */
-				'label' => __( 'Custom Post Types' ),
-			],
-			[
-				'name'  => 'taxonomy',
-				/* translators: archive page */
-				'label' => __( 'Taxonomies' ),
-			],
-		];
 	}
 }
 Newspack_Popups::instance();

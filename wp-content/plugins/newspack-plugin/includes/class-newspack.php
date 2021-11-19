@@ -82,10 +82,12 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
-		include_once NEWSPACK_ABSPATH . 'includes/class-stripe-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-wpcom-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-services-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-mailchimp-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-fivetran-connection.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-setup-wizard.php';
@@ -253,6 +255,29 @@ final class Newspack {
 	 */
 	public static function is_debug_mode() {
 		return defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG;
+	}
+
+	/**
+	 * Load the common assets.
+	 */
+	public static function load_common_assets() {
+		wp_register_script(
+			'newspack_commons',
+			self::plugin_url() . '/dist/commons.js',
+			[],
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/commons.js' ),
+			true
+		);
+		wp_enqueue_script( 'newspack_commons' );
+
+		wp_register_style(
+			'newspack-commons',
+			self::plugin_url() . '/dist/commons.css',
+			[ 'wp-components' ],
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/commons.css' )
+		);
+		wp_style_add_data( 'newspack-commons', 'rtl', 'replace' );
+		wp_enqueue_style( 'newspack-commons' );
 	}
 }
 Newspack::instance();

@@ -153,6 +153,57 @@ class Stripe_Connection {
 	}
 
 	/**
+	 * Format an amount with currency symbol.
+	 *
+	 * @param number $amount Amount.
+	 * @param string $currency Currency code.
+	 */
+	private static function format_amount( $amount, $currency ) {
+		$symbol = newspack_get_currency_symbol( strtoupper( $currency ) );
+		if ( 'USD' === strtoupper( $currency ) ) {
+			return $symbol . $amount;
+		} else {
+			return $amount . $symbol;
+		}
+	}
+
+	/**
+	 * Send an email to customer.
+	 *
+	 * @param object $customer Stripe customer.
+	 * @param object $payment Stripe payment.
+	 */
+	private static function send_email_to_customer( $customer, $payment ) {
+		$amount_normalised = self::normalise_amount( $payment['amount'], $payment['currency'] );
+
+		// Replace content placeholders.
+		$placeholders = [
+			[
+				'template' => Reader_Revenue_Emails::DYNAMIC_CONTENT_PLACEHOLDERS['AMOUNT'],
+				'value'    => self::format_amount( $amount_normalised, $payment['currency'] ),
+			],
+			[
+				'template' => Reader_Revenue_Emails::DYNAMIC_CONTENT_PLACEHOLDERS['DATE'],
+				'value'    => gmdate( 'Y-m-d', $payment['created'] ),
+			],
+			[
+				'template' => Reader_Revenue_Emails::DYNAMIC_CONTENT_PLACEHOLDERS['PAYMENT_METHOD'],
+				'value'    => __( 'Card', 'newspack' ) . ' – ' . $payment['payment_method_details']['card']['last4'],
+			],
+			[
+				'template' => Reader_Revenue_Emails::DYNAMIC_CONTENT_PLACEHOLDERS['RECEIPT_URL'],
+				'value'    => sprintf( '<a href="%s">%s</a>', $payment['receipt_url'], 'stripe.com' ),
+			],
+		];
+
+		Reader_Revenue_Emails::send_email(
+			Reader_Revenue_Emails::EMAIL_TYPE_RECEIPT,
+			$customer['email'],
+			$placeholders
+		);
+	}
+
+	/**
 	 * Receive Stripe webhook.
 	 *
 	 * @param WP_REST_Request $request Full details about the request.
@@ -199,6 +250,9 @@ class Stripe_Connection {
 						$referer = $invoice['metadata']['referer'];
 					}
 				}
+
+				// Send email to the donor.
+				self::send_email_to_customer( $customer, $payment );
 
 				// Update data in Newsletters provider.
 				$was_customer_added_to_mailing_list = false;
@@ -380,14 +434,17 @@ class Stripe_Connection {
 			$stripe        = self::get_stripe_client();
 			$all_prices    = $stripe->prices->all()['data'];
 			$prices_mapped = [];
+			$payment_data  = self::get_stripe_data();
+
 			foreach ( $all_prices as $price ) {
 				$has_metadata_field = isset( $price['metadata'][ self::STRIPE_DONATION_PRICE_METADATA ] );
 				if ( $has_metadata_field ) {
 					$metadata_field_value = $price['metadata'][ self::STRIPE_DONATION_PRICE_METADATA ];
-					if ( 'month' === $metadata_field_value && 'month' === $price['recurring']['interval'] ) {
+					$currency_matches     = strtolower( $payment_data['currency'] ) === strtolower( $price['currency'] );
+					if ( $does_currency_match && 'month' === $metadata_field_value && 'month' === $price['recurring']['interval'] ) {
 						$prices_mapped['month'] = $price;
 					}
-					if ( 'year' === $metadata_field_value && 'year' === $price['recurring']['interval'] ) {
+					if ( $does_currency_match && 'year' === $metadata_field_value && 'year' === $price['recurring']['interval'] ) {
 						$prices_mapped['year'] = $price;
 					}
 				}
@@ -523,18 +580,21 @@ class Stripe_Connection {
 
 			if ( 'once' === $frequency ) {
 				// Create a Payment Intent on Stripe.
-				$payment_data              = self::get_stripe_data();
-				$intent                    = $stripe->paymentIntents->create( // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+				$payment_data = self::get_stripe_data();
+				$intent       = $stripe->paymentIntents->create( // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					[
 						'amount'               => self::get_amount( $amount_raw, $payment_data['currency'] ),
 						'currency'             => $payment_data['currency'],
-						'receipt_email'        => $email_address,
 						'customer'             => $customer['id'],
 						'metadata'             => $payment_metadata,
 						'description'          => __( 'Newspack One-Time Donation', 'newspack-blocks' ),
 						'payment_method_types' => [ 'card' ],
 					]
 				);
+				if ( ! Reader_Revenue_Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPE_RECEIPT ) ) {
+					// If this instance can't send the receipt email, make Stripe send the email.
+					$intent['receipt_email'] = $email_address;
+				}
 				$response['client_secret'] = $intent['client_secret'];
 			} else {
 				// Create a Subscription on Stripe.

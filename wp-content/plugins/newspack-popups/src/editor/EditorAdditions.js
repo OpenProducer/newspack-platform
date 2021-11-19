@@ -11,11 +11,11 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { updateEditorColors } from './utils';
+import { isOverlay, updateEditorColors } from './utils';
 
 const EditorAdditions = () => {
 	const meta = useSelect( select => select( 'core/editor' ).getEditedPostAttribute( 'meta' ) );
-	const { dismiss_text, dismiss_text_alignment, background_color } = meta;
+	const { dismiss_text, dismiss_text_alignment, background_color, overlay_size, placement } = meta;
 
 	// Update editor colors to match popup colors.
 	useEffect(() => {
@@ -54,6 +54,22 @@ const EditorAdditions = () => {
 			dismissButtonPreview.textContent = dismiss_text;
 		}
 	}, [ dismiss_text, dismiss_text_alignment ]);
+
+	// Setting editor size as per the popup size.
+	useEffect(() => {
+		const blockEditor = document.querySelector( '.block-editor-block-list__layout' );
+		if ( blockEditor ) {
+			blockEditor.classList.forEach( className => {
+				if ( className.startsWith( 'is-size-' ) ) {
+					blockEditor.classList.remove( className );
+				}
+			} );
+
+			if ( isOverlay( placement ) ) {
+				blockEditor.classList.add( `is-size-${ overlay_size }` );
+			}
+		}
+	}, [ overlay_size, placement ]);
 	return null;
 };
 

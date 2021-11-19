@@ -1,3 +1,41 @@
+# [1.66.0](https://github.com/Automattic/newspack-plugin/compare/v1.65.0...v1.66.0) (2021-11-18)
+
+
+### Bug Fixes
+
+* **ads:** network code visibility ([#1253](https://github.com/Automattic/newspack-plugin/issues/1253)) ([cb4e263](https://github.com/Automattic/newspack-plugin/commit/cb4e263acf1e3fc7e51593a74a25be22c99fe5cb))
+* use greyHeader and fix toggle on null active ([#1248](https://github.com/Automattic/newspack-plugin/issues/1248)) ([03aa4f1](https://github.com/Automattic/newspack-plugin/commit/03aa4f10ed20ce0f349e0a71e2c65ba30fcf188b))
+
+
+### Features
+
+* **connections:** add MailChimp API key setting in connection screen ([#1168](https://github.com/Automattic/newspack-plugin/issues/1168)) ([a58f415](https://github.com/Automattic/newspack-plugin/commit/a58f41598f83b1e16394a1e14aa5009099b011fb))
+* **google-oauth:** handle invalid token; add GA scopes ([#1227](https://github.com/Automattic/newspack-plugin/issues/1227)) ([479a6f2](https://github.com/Automattic/newspack-plugin/commit/479a6f2a2d25752a570ab2ceb050b68b1c99b903))
+* integrate fluid to ad unit size control ([#1202](https://github.com/Automattic/newspack-plugin/issues/1202)) ([d2c299e](https://github.com/Automattic/newspack-plugin/commit/d2c299eeb2c0164760ac359e853e434c08556c23))
+* **prompt settings:** add prompt new placements and size options ([#1192](https://github.com/Automattic/newspack-plugin/issues/1192)) ([b1ba88d](https://github.com/Automattic/newspack-plugin/commit/b1ba88dfe06b701dbd967d805dfdedef166d619e))
+* **reader-revenue:** donations mailing ([#1187](https://github.com/Automattic/newspack-plugin/issues/1187)) ([7163a4b](https://github.com/Automattic/newspack-plugin/commit/7163a4b23d66a8b0a45db3a5d93c879bf5ad89a1))
+* update ad suppression layout ([#1256](https://github.com/Automattic/newspack-plugin/issues/1256)) ([c1bb929](https://github.com/Automattic/newspack-plugin/commit/c1bb929a9f16d718be4f207fa6e0956a9edb6ca4))
+* update button-card and button-group focus/pressed style ([#1221](https://github.com/Automattic/newspack-plugin/issues/1221)) ([2940d60](https://github.com/Automattic/newspack-plugin/commit/2940d60095e7a897bb57c126cc9d25306e43582e))
+
+# [1.66.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v1.65.0...v1.66.0-alpha.1) (2021-11-16)
+
+
+### Bug Fixes
+
+* **ads:** network code visibility ([#1253](https://github.com/Automattic/newspack-plugin/issues/1253)) ([cb4e263](https://github.com/Automattic/newspack-plugin/commit/cb4e263acf1e3fc7e51593a74a25be22c99fe5cb))
+* use greyHeader and fix toggle on null active ([#1248](https://github.com/Automattic/newspack-plugin/issues/1248)) ([03aa4f1](https://github.com/Automattic/newspack-plugin/commit/03aa4f10ed20ce0f349e0a71e2c65ba30fcf188b))
+
+
+### Features
+
+* **connections:** add MailChimp API key setting in connection screen ([#1168](https://github.com/Automattic/newspack-plugin/issues/1168)) ([a58f415](https://github.com/Automattic/newspack-plugin/commit/a58f41598f83b1e16394a1e14aa5009099b011fb))
+* **google-oauth:** handle invalid token; add GA scopes ([#1227](https://github.com/Automattic/newspack-plugin/issues/1227)) ([479a6f2](https://github.com/Automattic/newspack-plugin/commit/479a6f2a2d25752a570ab2ceb050b68b1c99b903))
+* integrate fluid to ad unit size control ([#1202](https://github.com/Automattic/newspack-plugin/issues/1202)) ([d2c299e](https://github.com/Automattic/newspack-plugin/commit/d2c299eeb2c0164760ac359e853e434c08556c23))
+* **prompt settings:** add prompt new placements and size options ([#1192](https://github.com/Automattic/newspack-plugin/issues/1192)) ([b1ba88d](https://github.com/Automattic/newspack-plugin/commit/b1ba88dfe06b701dbd967d805dfdedef166d619e))
+* **reader-revenue:** donations mailing ([#1187](https://github.com/Automattic/newspack-plugin/issues/1187)) ([7163a4b](https://github.com/Automattic/newspack-plugin/commit/7163a4b23d66a8b0a45db3a5d93c879bf5ad89a1))
+* update ad suppression layout ([#1256](https://github.com/Automattic/newspack-plugin/issues/1256)) ([c1bb929](https://github.com/Automattic/newspack-plugin/commit/c1bb929a9f16d718be4f207fa6e0956a9edb6ca4))
+* update button-card and button-group focus/pressed style ([#1221](https://github.com/Automattic/newspack-plugin/issues/1221)) ([2940d60](https://github.com/Automattic/newspack-plugin/commit/2940d60095e7a897bb57c126cc9d25306e43582e))
+
 # [1.65.0](https://github.com/Automattic/newspack-plugin/compare/v1.64.0...v1.65.0) (2021-11-09)
 
 

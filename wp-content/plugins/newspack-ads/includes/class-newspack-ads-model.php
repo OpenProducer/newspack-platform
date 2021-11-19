@@ -204,7 +204,10 @@ class Newspack_Ads_Model {
 		$ad_units = self::get_legacy_ad_units();
 		if ( self::is_gam_connected() ) {
 			$gam_ad_units = Newspack_Ads_GAM::get_serialised_gam_ad_units();
-			$sync_result  = self::sync_gam_settings( $gam_ad_units );
+			if ( \is_wp_error( $gam_ad_units ) ) {
+				return $gam_ad_units;
+			}
+			$sync_result = self::sync_gam_settings( $gam_ad_units );
 			if ( \is_wp_error( $sync_result ) ) {
 				return $sync_result;
 			}

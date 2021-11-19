@@ -203,7 +203,7 @@ class Admin_Plugins_Screen {
 		wp_register_script(
 			'newspack_plugins_screen',
 			Newspack::plugin_url() . '/dist/plugins-screen.js',
-			[ 'jquery' ],
+			[ 'jquery', 'mediaelement-core' ],
 			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/plugins-screen.js' ),
 			true
 		);

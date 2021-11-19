@@ -1,169 +1,32 @@
-(function(e, a) { for(var i in a) e[i] = a[i]; }(window, /******/ (function(modules) { // webpackBootstrap
-/******/ 	// install a JSONP callback for chunk loading
-/******/ 	function webpackJsonpCallback(data) {
-/******/ 		var chunkIds = data[0];
-/******/ 		var moreModules = data[1];
-/******/ 		var executeModules = data[2];
-/******/
-/******/ 		// add "moreModules" to the modules object,
-/******/ 		// then flag all "chunkIds" as loaded and fire callback
-/******/ 		var moduleId, chunkId, i = 0, resolves = [];
-/******/ 		for(;i < chunkIds.length; i++) {
-/******/ 			chunkId = chunkIds[i];
-/******/ 			if(Object.prototype.hasOwnProperty.call(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 				resolves.push(installedChunks[chunkId][0]);
-/******/ 			}
-/******/ 			installedChunks[chunkId] = 0;
-/******/ 		}
-/******/ 		for(moduleId in moreModules) {
-/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				modules[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
-/******/
-/******/ 		while(resolves.length) {
-/******/ 			resolves.shift()();
-/******/ 		}
-/******/
-/******/ 		// add entry modules from loaded chunk to deferred list
-/******/ 		deferredModules.push.apply(deferredModules, executeModules || []);
-/******/
-/******/ 		// run deferred modules when all chunks ready
-/******/ 		return checkDeferredModules();
-/******/ 	};
-/******/ 	function checkDeferredModules() {
-/******/ 		var result;
-/******/ 		for(var i = 0; i < deferredModules.length; i++) {
-/******/ 			var deferredModule = deferredModules[i];
-/******/ 			var fulfilled = true;
-/******/ 			for(var j = 1; j < deferredModule.length; j++) {
-/******/ 				var depId = deferredModule[j];
-/******/ 				if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 			}
-/******/ 			if(fulfilled) {
-/******/ 				deferredModules.splice(i--, 1);
-/******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		return result;
-/******/ 	}
-/******/
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// object to store loaded and loading chunks
-/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 	// Promise = chunk loading, 0 = chunk loaded
-/******/ 	var installedChunks = {
-/******/ 		"site-design": 0
-/******/ 	};
-/******/
-/******/ 	var deferredModules = [];
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
-/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
-/******/ 	jsonpArray.push = webpackJsonpCallback;
-/******/ 	jsonpArray = jsonpArray.slice();
-/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
-/******/ 	var parentJsonpFunction = oldJsonpFunction;
-/******/
-/******/
-/******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push(["./assets/wizards/site-design/index.js","commons"]);
-/******/ 	// run deferred modules when ready
-/******/ 	return checkDeferredModules();
-/******/ })
-/************************************************************************/
-/******/ ({
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
+
+/***/ "./assets/wizards/site-design/views/theme-settings/style.scss":
+/*!********************************************************************!*\
+  !*** ./assets/wizards/site-design/views/theme-settings/style.scss ***!
+  \********************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("__webpack_require__.r(__webpack_exports__);\n// extracted by mini-css-extract-plugin\n\n\n//# sourceURL=webpack://newspack/./assets/wizards/site-design/views/theme-settings/style.scss?");
+
+/***/ }),
 
 /***/ "./assets/wizards/site-design/index.js":
 /*!*********************************************!*\
   !*** ./assets/wizards/site-design/index.js ***!
   \*********************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread2 */ \"./node_modules/@babel/runtime/helpers/objectSpread2.js\");\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ \"./node_modules/@babel/runtime/helpers/classCallCheck.js\");\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ \"./node_modules/@babel/runtime/helpers/createClass.js\");\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ \"./node_modules/@babel/runtime/helpers/assertThisInitialized.js\");\n/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ \"./node_modules/@babel/runtime/helpers/inherits.js\");\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/createSuper */ \"./node_modules/@babel/runtime/helpers/createSuper.js\");\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ \"./node_modules/@babel/runtime/helpers/defineProperty.js\");\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../shared/js/public-path */ \"./assets/shared/js/public-path.js\");\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_shared_js_public_path__WEBPACK_IMPORTED_MODULE_7__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! ../../components/src/proxied-imports/router */ \"./assets/components/src/proxied-imports/router.js\");\n/* harmony import */ var _views__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! ./views */ \"./assets/wizards/site-design/views/index.js\");\n\n\n\n\n\n\n\n\n/**\n * WordPress dependencies.\n */\n\n\n\n/**\n * Internal dependencies.\n */\n\n\n\n\nvar HashRouter = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_11__[\"default\"].HashRouter,\n    Redirect = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_11__[\"default\"].Redirect,\n    Route = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_11__[\"default\"].Route,\n    Switch = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_11__[\"default\"].Switch;\n/**\n * Site Design Wizard.\n */\n\nvar SiteDesignWizard = /*#__PURE__*/function (_Component) {\n  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(SiteDesignWizard, _Component);\n\n  var _super = _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5___default()(SiteDesignWizard);\n\n  function SiteDesignWizard() {\n    var _this;\n\n    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, SiteDesignWizard);\n\n    for (var _len = arguments.length, args = new Array(_len), _key = 0; _key < _len; _key++) {\n      args[_key] = arguments[_key];\n    }\n\n    _this = _super.call.apply(_super, [this].concat(args));\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3___default()(_this), \"componentDidMount\", function () {\n      var _this$props = _this.props,\n          setError = _this$props.setError,\n          wizardApiFetch = _this$props.wizardApiFetch;\n      var params = {\n        path: '/newspack/v1/wizard/newspack-setup-wizard/theme',\n        method: 'GET'\n      };\n      wizardApiFetch(params).then(function (response) {\n        return _this.setState({\n          themeMods: response.theme_mods\n        });\n      }).catch(setError);\n    });\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3___default()(_this), \"setThemeMods\", function (themeModUpdates) {\n      return _this.setState({\n        themeMods: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, _this.state.themeMods), themeModUpdates)\n      });\n    });\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3___default()(_this), \"updateThemeMods\", function () {\n      var _this$props2 = _this.props,\n          setError = _this$props2.setError,\n          wizardApiFetch = _this$props2.wizardApiFetch;\n      var themeMods = _this.state.themeMods;\n      var params = {\n        path: '/newspack/v1/wizard/newspack-setup-wizard/theme/',\n        method: 'POST',\n        data: {\n          theme_mods: themeMods\n        },\n        quiet: true\n      };\n      wizardApiFetch(params).then(function (response) {\n        var theme = response.theme,\n            theme_mods = response.theme_mods;\n\n        _this.setState({\n          theme: theme,\n          themeMods: theme_mods\n        });\n      }).catch(function (error) {\n        console.log('[Theme Update Error]', error);\n        setError({\n          error: error\n        });\n      });\n    });\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_6___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_3___default()(_this), \"state\", {});\n\n    return _this;\n  }\n\n  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(SiteDesignWizard, [{\n    key: \"render\",\n    value:\n    /**\n     * Render\n     */\n    function render() {\n      var _this2 = this;\n\n      var _this$props3 = this.props,\n          pluginRequirements = _this$props3.pluginRequirements,\n          wizardApiFetch = _this$props3.wizardApiFetch,\n          setError = _this$props3.setError;\n      var tabbedNavigation = [{\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Design'),\n        path: '/',\n        exact: true\n      }, {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Settings'),\n        path: '/settings',\n        exact: true\n      }];\n      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(HashRouter, {\n        hashType: \"slash\"\n      }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(Switch, null, pluginRequirements, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(Route, {\n        path: \"/\",\n        exact: true,\n        render: function render() {\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_12__[\"Main\"], {\n            headerText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Site Design', 'newspack'),\n            subHeaderText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Configure your Newspack theme', 'newspack'),\n            tabbedNavigation: tabbedNavigation,\n            wizardApiFetch: wizardApiFetch,\n            setError: setError,\n            isPartOfSetup: false\n          });\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(Route, {\n        path: \"/settings\",\n        exact: true,\n        render: function render() {\n          var themeMods = _this2.state.themeMods;\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_12__[\"ThemeSettings\"], {\n            headerText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Site Design', 'newspack'),\n            subHeaderText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Configure your Newspack theme', 'newspack'),\n            tabbedNavigation: tabbedNavigation,\n            themeMods: themeMods,\n            setThemeMods: _this2.setThemeMods,\n            buttonText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Save', 'newspack'),\n            buttonAction: _this2.updateThemeMods,\n            secondaryButtonText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_9__[\"__\"])('Advanced settings', 'newspack'),\n            secondaryButtonAction: \"/wp-admin/customize.php\"\n          });\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(Redirect, {\n        to: \"/\"\n      }))));\n    }\n  }]);\n\n  return SiteDesignWizard;\n}(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"Component\"]);\n\nObject(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"render\"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_8__[\"createElement\"])(Object(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"withWizard\"])(SiteDesignWizard)), document.getElementById('newspack-site-design-wizard'));\n\n//# sourceURL=webpack:///./assets/wizards/site-design/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ \"./node_modules/@babel/runtime/helpers/esm/defineProperty.js\");\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ../../shared/js/public-path */ \"./assets/shared/js/public-path.js\");\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_shared_js_public_path__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../components/src/proxied-imports/router */ \"./assets/components/src/proxied-imports/router.js\");\n/* harmony import */ var _views__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./views */ \"./assets/wizards/site-design/views/index.js\");\n\n\n/**\n * WordPress dependencies.\n */\n\n\n\n/**\n * Internal dependencies.\n */\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_3__.__;\n\n\n\nconst {\n  HashRouter,\n  Redirect,\n  Route,\n  Switch\n} = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_5__[\"default\"];\n/**\n * Site Design Wizard.\n */\n\nclass SiteDesignWizard extends _wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Component {\n  constructor() {\n    super(...arguments);\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(this, \"componentDidMount\", () => {\n      const {\n        setError,\n        wizardApiFetch\n      } = this.props;\n      const params = {\n        path: '/newspack/v1/wizard/newspack-setup-wizard/theme',\n        method: 'GET'\n      };\n      wizardApiFetch(params).then(response => this.setState({\n        themeMods: response.theme_mods\n      })).catch(setError);\n    });\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(this, \"setThemeMods\", themeModUpdates => this.setState({\n      themeMods: { ...this.state.themeMods,\n        ...themeModUpdates\n      }\n    }));\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(this, \"updateThemeMods\", () => {\n      const {\n        setError,\n        wizardApiFetch\n      } = this.props;\n      const {\n        themeMods\n      } = this.state;\n      const params = {\n        path: '/newspack/v1/wizard/newspack-setup-wizard/theme/',\n        method: 'POST',\n        data: {\n          theme_mods: themeMods\n        },\n        quiet: true\n      };\n      wizardApiFetch(params).then(response => {\n        const {\n          theme,\n          theme_mods\n        } = response;\n        this.setState({\n          theme,\n          themeMods: theme_mods\n        });\n      }).catch(error => {\n        console.log('[Theme Update Error]', error);\n        setError({\n          error\n        });\n      });\n    });\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__[\"default\"])(this, \"state\", {});\n  }\n\n  /**\n   * Render\n   */\n  render() {\n    const {\n      pluginRequirements,\n      wizardApiFetch,\n      setError\n    } = this.props;\n    const tabbedNavigation = [{\n      label: __('Design'),\n      path: '/',\n      exact: true\n    }, {\n      label: __('Settings'),\n      path: '/settings',\n      exact: true\n    }];\n    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(HashRouter, {\n      hashType: \"slash\"\n    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(Switch, null, pluginRequirements, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(Route, {\n      path: \"/\",\n      exact: true,\n      render: () => {\n        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_views__WEBPACK_IMPORTED_MODULE_6__.Main, {\n          headerText: __('Site Design', 'newspack'),\n          subHeaderText: __('Configure your Newspack theme', 'newspack'),\n          tabbedNavigation: tabbedNavigation,\n          wizardApiFetch: wizardApiFetch,\n          setError: setError,\n          isPartOfSetup: false\n        });\n      }\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(Route, {\n      path: \"/settings\",\n      exact: true,\n      render: () => {\n        const {\n          themeMods\n        } = this.state;\n        return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(_views__WEBPACK_IMPORTED_MODULE_6__.ThemeSettings, {\n          headerText: __('Site Design', 'newspack'),\n          subHeaderText: __('Configure your Newspack theme', 'newspack'),\n          tabbedNavigation: tabbedNavigation,\n          themeMods: themeMods,\n          setThemeMods: this.setThemeMods,\n          buttonText: __('Save', 'newspack'),\n          buttonAction: this.updateThemeMods,\n          secondaryButtonText: __('Advanced settings', 'newspack'),\n          secondaryButtonAction: \"/wp-admin/customize.php\"\n        });\n      }\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)(Redirect, {\n      to: \"/\"\n    }))));\n  }\n\n}\n\n(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.render)((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_2__.createElement)((0,_components_src__WEBPACK_IMPORTED_MODULE_4__.withWizard)(SiteDesignWizard)), document.getElementById('newspack-site-design-wizard'));\n\n//# sourceURL=webpack://newspack/./assets/wizards/site-design/index.js?");
 
 /***/ }),
 
@@ -171,11 +34,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bab
 /*!***************************************************!*\
   !*** ./assets/wizards/site-design/views/index.js ***!
   \***************************************************/
-/*! exports provided: Main, ThemeSettings */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./main */ \"./assets/wizards/site-design/views/main/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"Main\", function() { return _main__WEBPACK_IMPORTED_MODULE_0__[\"default\"]; });\n\n/* harmony import */ var _theme_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./theme-settings */ \"./assets/wizards/site-design/views/theme-settings/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"ThemeSettings\", function() { return _theme_settings__WEBPACK_IMPORTED_MODULE_1__[\"default\"]; });\n\n\n\n\n//# sourceURL=webpack:///./assets/wizards/site-design/views/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"Main\": function() { return /* reexport safe */ _main__WEBPACK_IMPORTED_MODULE_0__[\"default\"]; },\n/* harmony export */   \"ThemeSettings\": function() { return /* reexport safe */ _theme_settings__WEBPACK_IMPORTED_MODULE_1__[\"default\"]; }\n/* harmony export */ });\n/* harmony import */ var _main__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./main */ \"./assets/wizards/site-design/views/main/index.js\");\n/* harmony import */ var _theme_settings__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./theme-settings */ \"./assets/wizards/site-design/views/theme-settings/index.js\");\n\n\n\n//# sourceURL=webpack://newspack/./assets/wizards/site-design/views/index.js?");
 
 /***/ }),
 
@@ -183,132 +44,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _mai
 /*!******************************************************************!*\
   !*** ./assets/wizards/site-design/views/theme-settings/index.js ***!
   \******************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/slicedToArray */ \"./node_modules/@babel/runtime/helpers/slicedToArray.js\");\n/* harmony import */ var _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./style.scss */ \"./assets/wizards/site-design/views/theme-settings/style.scss\");\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_style_scss__WEBPACK_IMPORTED_MODULE_4__);\n\n\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * Internal dependencies\n */\n\n\n\n/**\n * Theme Settings Screen.\n */\n\nvar ThemeSettings = function ThemeSettings(props) {\n  var _useState = Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"useState\"])(null),\n      _useState2 = _babel_runtime_helpers_slicedToArray__WEBPACK_IMPORTED_MODULE_0___default()(_useState, 2),\n      imageThumbnail = _useState2[0],\n      setImageThumbnail = _useState2[1];\n\n  var themeMods = props.themeMods,\n      setThemeMods = props.setThemeMods;\n  var _themeMods$show_autho = themeMods.show_author_bio,\n      authorBio = _themeMods$show_autho === void 0 ? true : _themeMods$show_autho,\n      _themeMods$show_autho2 = themeMods.show_author_email,\n      authorEmail = _themeMods$show_autho2 === void 0 ? false : _themeMods$show_autho2,\n      _themeMods$author_bio = themeMods.author_bio_length,\n      authorBioLength = _themeMods$author_bio === void 0 ? 200 : _themeMods$author_bio,\n      featuredImageDefault = themeMods.featured_image_default,\n      imageCreditsPlaceholderUrl = themeMods.newspack_image_credits_placeholder_url,\n      _themeMods$newspack_i = themeMods.newspack_image_credits_class_name,\n      imageCreditsClassName = _themeMods$newspack_i === void 0 ? '' : _themeMods$newspack_i,\n      _themeMods$newspack_i2 = themeMods.newspack_image_credits_prefix_label,\n      imageCreditsPrefix = _themeMods$newspack_i2 === void 0 ? '' : _themeMods$newspack_i2;\n  Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"useEffect\"])(function () {\n    if (imageCreditsPlaceholderUrl) {\n      setImageThumbnail(imageCreditsPlaceholderUrl);\n    }\n  }, [imageCreditsPlaceholderUrl]);\n  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"SectionHeader\"], {\n    title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Author Bio', 'newspack'),\n    description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Control how author bios are displayed on posts.', 'newspack')\n  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"Grid\"], {\n    gutter: 32\n  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"Grid\"], {\n    columns: 1,\n    gutter: 16\n  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"ToggleGroup\"], {\n    title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Author bio', 'newspack'),\n    description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Display an author bio under individual posts.', 'newspack'),\n    checked: authorBio,\n    onChange: function onChange(value) {\n      return setThemeMods({\n        show_author_bio: value\n      });\n    }\n  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"ToggleControl\"], {\n    isDark: true,\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Author email', 'newspack'),\n    help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Display the author email with bio on individual posts.', 'newspack'),\n    checked: authorEmail,\n    onChange: function onChange(value) {\n      return setThemeMods({\n        show_author_email: value\n      });\n    }\n  }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"Grid\"], {\n    columns: 1,\n    gutter: 16\n  }, authorBio && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"TextControl\"], {\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Length', 'newspack'),\n    help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Truncates the author bio on single posts to this approximate character length, but without breaking a word. The full bio appears on the author archive page.', 'newspack'),\n    type: \"number\",\n    value: authorBioLength,\n    onChange: function onChange(value) {\n      return setThemeMods({\n        author_bio_length: value\n      });\n    }\n  }))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"SectionHeader\"], {\n    title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Featured Image', 'newspack'),\n    description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Set a default featured image position for new posts.', 'newspack')\n  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"RadioControl\"], {\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Default position', 'newspack'),\n    selected: featuredImageDefault || 'large',\n    options: [{\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Large', 'newspack'),\n      value: 'large'\n    }, {\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Small', 'newspack'),\n      value: 'small'\n    }, {\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Behind article title', 'newspack'),\n      value: 'behind'\n    }, {\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Beside article title', 'newspack'),\n      value: 'beside'\n    }, {\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Hidden', 'newspack'),\n      value: 'hidden'\n    }],\n    onChange: function onChange(value) {\n      return setThemeMods({\n        featured_image_default: value\n      });\n    }\n  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"SectionHeader\"], {\n    title: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Media Credits', 'newspack'),\n    description: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Control how credits are displayed alongside media attachments.', 'newspack')\n  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"Grid\"], {\n    gutter: 32\n  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"Grid\"], {\n    columns: 1,\n    gutter: 16\n  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"TextControl\"], {\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Credit Class Name', 'newspack'),\n    help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('A CSS class name to be applied to all image credit elements. Leave blank to display no class name.', 'newspack'),\n    value: imageCreditsClassName,\n    onChange: function onChange(value) {\n      return setThemeMods({\n        newspack_image_credits_class_name: value\n      });\n    }\n  }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"TextControl\"], {\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Credit Label', 'newspack'),\n    help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('A label to prefix all media credits. Leave blank to display no prefix.', 'newspack'),\n    value: imageCreditsPrefix,\n    onChange: function onChange(value) {\n      return setThemeMods({\n        newspack_image_credits_prefix_label: value\n      });\n    }\n  })), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"Grid\"], {\n    columns: 1,\n    gutter: 16\n  }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"ImageUpload\"], {\n    image: imageThumbnail ? {\n      url: imageThumbnail\n    } : null,\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Placeholder Image', 'newspack'),\n    buttonLabel: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Select', 'newspack'),\n    onChange: function onChange(image) {\n      setImageThumbnail((image === null || image === void 0 ? void 0 : image.url) || null);\n      setThemeMods({\n        newspack_image_credits_placeholder: (image === null || image === void 0 ? void 0 : image.id) || null\n      });\n    },\n    help: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('A placeholder image to be displayed in place of images without credits. If none is chosen, the image will be displayed normally whether or not it has a credit.', 'newspack')\n  }))));\n};\n\nThemeSettings.defaultProps = {\n  themeMods: {},\n  setThemeMods: function setThemeMods() {\n    return null;\n  }\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (Object(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"withWizardScreen\"])(ThemeSettings));\n\n//# sourceURL=webpack:///./assets/wizards/site-design/views/theme-settings/index.js?");
-
-/***/ }),
-
-/***/ "./assets/wizards/site-design/views/theme-settings/style.scss":
-/*!********************************************************************!*\
-  !*** ./assets/wizards/site-design/views/theme-settings/style.scss ***!
-  \********************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports, __webpack_require__) {
-
-eval("// extracted by mini-css-extract-plugin\n\n//# sourceURL=webpack:///./assets/wizards/site-design/views/theme-settings/style.scss?");
-
-/***/ }),
-
-/***/ "@wordpress/api-fetch":
-/*!**********************************!*\
-  !*** external ["wp","apiFetch"] ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"apiFetch\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22apiFetch%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/components":
-/*!************************************!*\
-  !*** external ["wp","components"] ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"components\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22components%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/element":
-/*!*********************************!*\
-  !*** external ["wp","element"] ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"element\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22element%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/html-entities":
-/*!**************************************!*\
-  !*** external ["wp","htmlEntities"] ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"htmlEntities\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22htmlEntities%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/i18n":
-/*!******************************!*\
-  !*** external ["wp","i18n"] ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"i18n\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22i18n%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/keycodes":
-/*!**********************************!*\
-  !*** external ["wp","keycodes"] ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"keycodes\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22keycodes%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/primitives":
-/*!************************************!*\
-  !*** external ["wp","primitives"] ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"primitives\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22primitives%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/url":
-/*!*****************************!*\
-  !*** external ["wp","url"] ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"url\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22url%22%5D?");
-
-/***/ }),
-
-/***/ "lodash":
-/*!*************************!*\
-  !*** external "lodash" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"lodash\"]; }());\n\n//# sourceURL=webpack:///external_%22lodash%22?");
-
-/***/ }),
-
-/***/ "moment":
-/*!*************************!*\
-  !*** external "moment" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"moment\"]; }());\n\n//# sourceURL=webpack:///external_%22moment%22?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _style_scss__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./style.scss */ \"./assets/wizards/site-design/views/theme-settings/style.scss\");\n\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * Internal dependencies\n */\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__;\n\n\n/**\n * Theme Settings Screen.\n */\n\nconst ThemeSettings = props => {\n  const [imageThumbnail, setImageThumbnail] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useState)(null);\n  const {\n    themeMods,\n    setThemeMods\n  } = props;\n  const {\n    show_author_bio: authorBio = true,\n    show_author_email: authorEmail = false,\n    author_bio_length: authorBioLength = 200,\n    featured_image_default: featuredImageDefault,\n    newspack_image_credits_placeholder_url: imageCreditsPlaceholderUrl,\n    newspack_image_credits_class_name: imageCreditsClassName = '',\n    newspack_image_credits_prefix_label: imageCreditsPrefix = ''\n  } = themeMods;\n  (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.useEffect)(() => {\n    if (imageCreditsPlaceholderUrl) {\n      setImageThumbnail(imageCreditsPlaceholderUrl);\n    }\n  }, [imageCreditsPlaceholderUrl]);\n  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.SectionHeader, {\n    title: __('Author Bio', 'newspack'),\n    description: __('Control how author bios are displayed on posts.', 'newspack')\n  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, {\n    gutter: 32\n  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, {\n    columns: 1,\n    gutter: 16\n  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.ToggleGroup, {\n    title: __('Author bio', 'newspack'),\n    description: __('Display an author bio under individual posts.', 'newspack'),\n    checked: authorBio,\n    onChange: value => setThemeMods({\n      show_author_bio: value\n    })\n  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.ToggleControl, {\n    isDark: true,\n    label: __('Author email', 'newspack'),\n    help: __('Display the author email with bio on individual posts.', 'newspack'),\n    checked: authorEmail,\n    onChange: value => setThemeMods({\n      show_author_email: value\n    })\n  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, {\n    columns: 1,\n    gutter: 16\n  }, authorBio && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n    label: __('Length', 'newspack'),\n    help: __('Truncates the author bio on single posts to this approximate character length, but without breaking a word. The full bio appears on the author archive page.', 'newspack'),\n    type: \"number\",\n    value: authorBioLength,\n    onChange: value => setThemeMods({\n      author_bio_length: value\n    })\n  }))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.SectionHeader, {\n    title: __('Featured Image', 'newspack'),\n    description: __('Set a default featured image position for new posts.', 'newspack')\n  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.RadioControl, {\n    label: __('Default position', 'newspack'),\n    selected: featuredImageDefault || 'large',\n    options: [{\n      label: __('Large', 'newspack'),\n      value: 'large'\n    }, {\n      label: __('Small', 'newspack'),\n      value: 'small'\n    }, {\n      label: __('Behind article title', 'newspack'),\n      value: 'behind'\n    }, {\n      label: __('Beside article title', 'newspack'),\n      value: 'beside'\n    }, {\n      label: __('Hidden', 'newspack'),\n      value: 'hidden'\n    }],\n    onChange: value => setThemeMods({\n      featured_image_default: value\n    })\n  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.SectionHeader, {\n    title: __('Media Credits', 'newspack'),\n    description: __('Control how credits are displayed alongside media attachments.', 'newspack')\n  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, {\n    gutter: 32\n  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, {\n    columns: 1,\n    gutter: 16\n  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n    label: __('Credit Class Name', 'newspack'),\n    help: __('A CSS class name to be applied to all image credit elements. Leave blank to display no class name.', 'newspack'),\n    value: imageCreditsClassName,\n    onChange: value => setThemeMods({\n      newspack_image_credits_class_name: value\n    })\n  }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n    label: __('Credit Label', 'newspack'),\n    help: __('A label to prefix all media credits. Leave blank to display no prefix.', 'newspack'),\n    value: imageCreditsPrefix,\n    onChange: value => setThemeMods({\n      newspack_image_credits_prefix_label: value\n    })\n  })), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, {\n    columns: 1,\n    gutter: 16\n  }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.ImageUpload, {\n    image: imageThumbnail ? {\n      url: imageThumbnail\n    } : null,\n    label: __('Placeholder Image', 'newspack'),\n    buttonLabel: __('Select', 'newspack'),\n    onChange: image => {\n      setImageThumbnail((image === null || image === void 0 ? void 0 : image.url) || null);\n      setThemeMods({\n        newspack_image_credits_placeholder: (image === null || image === void 0 ? void 0 : image.id) || null\n      });\n    },\n    help: __('A placeholder image to be displayed in place of images without credits. If none is chosen, the image will be displayed normally whether or not it has a credit.', 'newspack')\n  }))));\n};\n\nThemeSettings.defaultProps = {\n  themeMods: {},\n  setThemeMods: () => null\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = ((0,_components_src__WEBPACK_IMPORTED_MODULE_2__.withWizardScreen)(ThemeSettings));\n\n//# sourceURL=webpack://newspack/./assets/wizards/site-design/views/theme-settings/index.js?");
 
 /***/ }),
 
@@ -316,11 +54,313 @@ eval("(function() { module.exports = window[\"moment\"]; }());\n\n//# sourceURL=
 /*!************************!*\
   !*** external "React" ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"React\"]; }());\n\n//# sourceURL=webpack:///external_%22React%22?");
+module.exports = window["React"];
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/***/ (function(module) {
+
+module.exports = window["lodash"];
+
+/***/ }),
+
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+/***/ (function(module) {
+
+module.exports = window["moment"];
+
+/***/ }),
+
+/***/ "@wordpress/api-fetch":
+/*!**********************************!*\
+  !*** external ["wp","apiFetch"] ***!
+  \**********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["apiFetch"];
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
+/***/ "@wordpress/html-entities":
+/*!**************************************!*\
+  !*** external ["wp","htmlEntities"] ***!
+  \**************************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["htmlEntities"];
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ }),
+
+/***/ "@wordpress/keycodes":
+/*!**********************************!*\
+  !*** external ["wp","keycodes"] ***!
+  \**********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["keycodes"];
+
+/***/ }),
+
+/***/ "@wordpress/primitives":
+/*!************************************!*\
+  !*** external ["wp","primitives"] ***!
+  \************************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["primitives"];
+
+/***/ }),
+
+/***/ "@wordpress/url":
+/*!*****************************!*\
+  !*** external ["wp","url"] ***!
+  \*****************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["url"];
 
 /***/ })
 
-/******/ })));
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	!function() {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = function(result, chunkIds, fn, priority) {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var chunkIds = deferred[i][0];
+/******/ 				var fn = deferred[i][1];
+/******/ 				var priority = deferred[i][2];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every(function(key) { return __webpack_require__.O[key](chunkIds[j]); })) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	!function() {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	!function() {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	!function() {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"site-design": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = function(chunkId) { return installedChunks[chunkId] === 0; };
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
+/******/ 			var chunkIds = data[0];
+/******/ 			var moreModules = data[1];
+/******/ 			var runtime = data[2];
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some(function(id) { return installedChunks[id] !== 0; })) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkwebpack"] = self["webpackChunkwebpack"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["commons"], function() { return __webpack_require__("./assets/wizards/site-design/index.js"); })
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	var __webpack_export_target__ = window;
+/******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
+/******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
+/******/ 	
+/******/ })()
+;

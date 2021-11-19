@@ -20,6 +20,7 @@ import FrequencySidebar from './FrequencySidebar';
 import SegmentationSidebar from './SegmentationSidebar';
 import DismissSidebar from './DismissSidebar';
 import ColorsSidebar from './ColorsSidebar';
+import AdvancedSidebar from './AdvancedSidebar';
 import Preview from './Preview';
 import Duplicate from './Duplicate';
 import EditorAdditions from './EditorAdditions';
@@ -50,6 +51,7 @@ const SegmentationSidebarWithData = connectData( SegmentationSidebar );
 const DismissSidebarWithData = connectData( DismissSidebar );
 const ColorsSidebarWithData = connectData( ColorsSidebar );
 const PostTypesPanelWithData = connectData( PostTypesPanel );
+const AdvancedSidebarWithData = connectData( AdvancedSidebar );
 
 // Register components.
 registerPlugin( 'newspack-popups', {
@@ -119,6 +121,18 @@ registerPlugin( 'newspack-popups-post-types', {
 			title={ __( 'Post Types', 'newspack-popups' ) }
 		>
 			<PostTypesPanelWithData />
+		</PluginDocumentSettingPanel>
+	),
+	icon: null,
+} );
+
+registerPlugin( 'newspack-popups-advanced', {
+	render: () => (
+		<PluginDocumentSettingPanel
+			name="popup-advanced-panel"
+			title={ __( 'Advanced Settings', 'newspack-popups' ) }
+		>
+			<AdvancedSidebarWithData />
 		</PluginDocumentSettingPanel>
 	),
 	icon: null,

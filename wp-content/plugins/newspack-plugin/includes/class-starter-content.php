@@ -104,7 +104,8 @@ class Starter_Content {
 				'orderby'    => 'count',
 				'order'      => 'ASC',
 				'hide_empty' => false,
-				'exclude'    => '1', // Exclude 'Uncategorized' which has ID of 1.
+				// Exclude 'Uncategorized' which has ID of 1.
+				'exclude'    => '1', // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 				'number'     => 1,
 			]
 		);

@@ -2791,3 +2791,55 @@ svg.newspack--success {
 .newspack-popups__duplicate-modal .components-flex {
   margin-top: 24px; }
 
+.newspack-popups-css-grid-selector {
+  margin-bottom: 1em; }
+  .newspack-popups-css-grid-selector .components-base-control__label {
+    margin-bottom: 0;
+    margin-top: 1em; }
+  .newspack-popups-css-grid-selector .components-button-group {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr); }
+    .newspack-popups-css-grid-selector .components-button-group div {
+      padding: 1px; }
+    .newspack-popups-css-grid-selector .components-button-group .components-button {
+      border-radius: 0 !important;
+      height: 100%;
+      padding: 20px;
+      width: 100%; }
+    .newspack-popups-css-grid-selector .components-button-group div:nth-of-type(1) .components-button {
+      border-radius: 4px 0 0 0 !important; }
+    .newspack-popups-css-grid-selector .components-button-group div:nth-of-type(3) .components-button {
+      border-radius: 0 4px 0 0 !important; }
+    .newspack-popups-css-grid-selector .components-button-group div:nth-last-of-type(1) .components-button {
+      border-radius: 0 0 4px 0 !important; }
+    .newspack-popups-css-grid-selector .components-button-group div:nth-last-of-type(3) .components-button {
+      border-radius: 0 0 0 4px !important; }
+  .newspack-popups-css-grid-selector.size-full-width .components-button-group {
+    grid-template-columns: 1fr; }
+    .newspack-popups-css-grid-selector.size-full-width .components-button-group div:first-of-type .components-button {
+      border-radius: 4px 4px 0 0 !important; }
+    .newspack-popups-css-grid-selector.size-full-width .components-button-group div:nth-of-type(2) .components-button {
+      border-radius: 0 !important; }
+    .newspack-popups-css-grid-selector.size-full-width .components-button-group div:last-of-type .components-button {
+      border-radius: 0 0 4px 4px !important; }
+  .newspack-popups-css-grid-selector .components-base-control__help {
+    font-size: 12px;
+    font-style: normal;
+    color: #757575; }
+
+.block-editor-block-list__layout {
+  margin-left: auto;
+  margin-right: auto; }
+  .block-editor-block-list__layout[class*='is-size-'] {
+    max-width: 1264px;
+    padding: 32px; }
+  .block-editor-block-list__layout.is-size-x-small {
+    max-width: 380px; }
+  .block-editor-block-list__layout.is-size-small {
+    max-width: 544px; }
+  .block-editor-block-list__layout.is-size-medium {
+    max-width: 784px; }
+  .editor-styles-wrapper .block-editor-block-list__layout[class*='is-size-'] .wp-block {
+    max-width: 100%; }
+

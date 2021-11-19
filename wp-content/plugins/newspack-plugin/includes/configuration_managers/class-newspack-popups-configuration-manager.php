@@ -109,6 +109,24 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Get overlay placements.
+	 */
+	public function get_overlay_placements() {
+		return $this->is_configured() ?
+			\Newspack_Popups_Model::get_overlay_placements() :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get overlay sizes.
+	 */
+	public function get_overlay_sizes() {
+		return $this->is_configured() ?
+			\Newspack_Popups_Model::get_popup_size_options() :
+			$this->unconfigured_error();
+	}
+
+	/**
 	 * Set plugin settings.
 	 *
 	 * @param object $options options.

@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'c2ca4d81457f3b1310540279aa833628301d11a5',
+        'reference' => '39479a508977964a6f26a5fccf730e577c5df716',
         'name' => 'automattic/newspack-plugin',
         'dev' => false,
     ),
@@ -16,16 +16,16 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'c2ca4d81457f3b1310540279aa833628301d11a5',
+            'reference' => '39479a508977964a6f26a5fccf730e577c5df716',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
-            'pretty_version' => 'v1.9.0',
-            'version' => '1.9.0.0',
+            'pretty_version' => 'v2.0.1',
+            'version' => '2.0.1.0',
             'type' => 'composer-plugin',
             'install_path' => __DIR__ . '/./installers',
             'aliases' => array(),
-            'reference' => 'b93bcf0fa1fccb0b7d176b0967d969691cd74cca',
+            'reference' => 'a241e78aaeb09781f5f5b92ac01ffd13ab43e5e8',
             'dev_requirement' => false,
         ),
         'firebase/php-jwt' => array(
@@ -129,18 +129,6 @@
             'aliases' => array(),
             'reference' => '120b605dfeb996808c31b6477290a714d356e822',
             'dev_requirement' => false,
-        ),
-        'roundcube/plugin-installer' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => '*',
-            ),
-        ),
-        'shama/baton' => array(
-            'dev_requirement' => false,
-            'replaced' => array(
-                0 => '*',
-            ),
         ),
         'stripe/stripe-php' => array(
             'pretty_version' => 'v7.87.0',

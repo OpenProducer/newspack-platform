@@ -1,169 +1,22 @@
-(function(e, a) { for(var i in a) e[i] = a[i]; }(window, /******/ (function(modules) { // webpackBootstrap
-/******/ 	// install a JSONP callback for chunk loading
-/******/ 	function webpackJsonpCallback(data) {
-/******/ 		var chunkIds = data[0];
-/******/ 		var moreModules = data[1];
-/******/ 		var executeModules = data[2];
-/******/
-/******/ 		// add "moreModules" to the modules object,
-/******/ 		// then flag all "chunkIds" as loaded and fire callback
-/******/ 		var moduleId, chunkId, i = 0, resolves = [];
-/******/ 		for(;i < chunkIds.length; i++) {
-/******/ 			chunkId = chunkIds[i];
-/******/ 			if(Object.prototype.hasOwnProperty.call(installedChunks, chunkId) && installedChunks[chunkId]) {
-/******/ 				resolves.push(installedChunks[chunkId][0]);
-/******/ 			}
-/******/ 			installedChunks[chunkId] = 0;
-/******/ 		}
-/******/ 		for(moduleId in moreModules) {
-/******/ 			if(Object.prototype.hasOwnProperty.call(moreModules, moduleId)) {
-/******/ 				modules[moduleId] = moreModules[moduleId];
-/******/ 			}
-/******/ 		}
-/******/ 		if(parentJsonpFunction) parentJsonpFunction(data);
-/******/
-/******/ 		while(resolves.length) {
-/******/ 			resolves.shift()();
-/******/ 		}
-/******/
-/******/ 		// add entry modules from loaded chunk to deferred list
-/******/ 		deferredModules.push.apply(deferredModules, executeModules || []);
-/******/
-/******/ 		// run deferred modules when all chunks ready
-/******/ 		return checkDeferredModules();
-/******/ 	};
-/******/ 	function checkDeferredModules() {
-/******/ 		var result;
-/******/ 		for(var i = 0; i < deferredModules.length; i++) {
-/******/ 			var deferredModule = deferredModules[i];
-/******/ 			var fulfilled = true;
-/******/ 			for(var j = 1; j < deferredModule.length; j++) {
-/******/ 				var depId = deferredModule[j];
-/******/ 				if(installedChunks[depId] !== 0) fulfilled = false;
-/******/ 			}
-/******/ 			if(fulfilled) {
-/******/ 				deferredModules.splice(i--, 1);
-/******/ 				result = __webpack_require__(__webpack_require__.s = deferredModule[0]);
-/******/ 			}
-/******/ 		}
-/******/
-/******/ 		return result;
-/******/ 	}
-/******/
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// object to store loaded and loading chunks
-/******/ 	// undefined = chunk not loaded, null = chunk preloaded/prefetched
-/******/ 	// Promise = chunk loading, 0 = chunk loaded
-/******/ 	var installedChunks = {
-/******/ 		"readerRevenue": 0
-/******/ 	};
-/******/
-/******/ 	var deferredModules = [];
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/ 	var jsonpArray = window["webpackJsonp"] = window["webpackJsonp"] || [];
-/******/ 	var oldJsonpFunction = jsonpArray.push.bind(jsonpArray);
-/******/ 	jsonpArray.push = webpackJsonpCallback;
-/******/ 	jsonpArray = jsonpArray.slice();
-/******/ 	for(var i = 0; i < jsonpArray.length; i++) webpackJsonpCallback(jsonpArray[i]);
-/******/ 	var parentJsonpFunction = oldJsonpFunction;
-/******/
-/******/
-/******/ 	// add entry module to deferred list
-/******/ 	deferredModules.push(["./assets/wizards/readerRevenue/index.js","commons"]);
-/******/ 	// run deferred modules when ready
-/******/ 	return checkDeferredModules();
-/******/ })
-/************************************************************************/
-/******/ ({
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./assets/wizards/readerRevenue/constants.js":
 /*!***************************************************!*\
   !*** ./assets/wizards/readerRevenue/constants.js ***!
   \***************************************************/
-/*! exports provided: NRH, NEWSPACK, STRIPE */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"NRH\", function() { return NRH; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"NEWSPACK\", function() { return NEWSPACK; });\n/* harmony export (binding) */ __webpack_require__.d(__webpack_exports__, \"STRIPE\", function() { return STRIPE; });\n/**\n * Reader Revenue constants.\n */\nvar NRH = 'nrh';\nvar NEWSPACK = 'wc';\nvar STRIPE = 'stripe';\n\n//# sourceURL=webpack:///./assets/wizards/readerRevenue/constants.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"NRH\": function() { return /* binding */ NRH; },\n/* harmony export */   \"NEWSPACK\": function() { return /* binding */ NEWSPACK; },\n/* harmony export */   \"STRIPE\": function() { return /* binding */ STRIPE; }\n/* harmony export */ });\n/**\n * Reader Revenue constants.\n */\nconst NRH = 'nrh';\nconst NEWSPACK = 'wc';\nconst STRIPE = 'stripe';\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/constants.js?");
 
 /***/ }),
 
@@ -171,11 +24,19 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export (binding) *
 /*!***********************************************!*\
   !*** ./assets/wizards/readerRevenue/index.js ***!
   \***********************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ \"./node_modules/@babel/runtime/helpers/extends.js\");\n/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread2 */ \"./node_modules/@babel/runtime/helpers/objectSpread2.js\");\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ \"./node_modules/@babel/runtime/helpers/asyncToGenerator.js\");\n/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ \"./node_modules/@babel/runtime/helpers/classCallCheck.js\");\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ \"./node_modules/@babel/runtime/helpers/createClass.js\");\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/assertThisInitialized */ \"./node_modules/@babel/runtime/helpers/assertThisInitialized.js\");\n/* harmony import */ var _babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ \"./node_modules/@babel/runtime/helpers/inherits.js\");\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @babel/runtime/helpers/createSuper */ \"./node_modules/@babel/runtime/helpers/createSuper.js\");\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_7__);\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ \"./node_modules/@babel/runtime/helpers/defineProperty.js\");\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8__);\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ../../shared/js/public-path */ \"./assets/shared/js/public-path.js\");\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_shared_js_public_path__WEBPACK_IMPORTED_MODULE_9__);\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! lodash */ \"lodash\");\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_10___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_10__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_11___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_12___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__);\n/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_13__ = __webpack_require__(/*! @wordpress/url */ \"@wordpress/url\");\n/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_13___default = /*#__PURE__*/__webpack_require__.n(_wordpress_url__WEBPACK_IMPORTED_MODULE_13__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_14__ = __webpack_require__(/*! ../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_15__ = __webpack_require__(/*! ../../components/src/proxied-imports/router */ \"./assets/components/src/proxied-imports/router.js\");\n/* harmony import */ var _views__WEBPACK_IMPORTED_MODULE_16__ = __webpack_require__(/*! ./views */ \"./assets/wizards/readerRevenue/views/index.js\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_17__ = __webpack_require__(/*! ./constants */ \"./assets/wizards/readerRevenue/constants.js\");\n\n\n\n\n\n\n\n\n\n\n/**\n * Reader Revenue\n */\n\n/**\n * External dependencies.\n */\n\n\n/**\n * WordPress dependencies.\n */\n\n\n\n\n/**\n * Internal dependencies.\n */\n\n\n\n\n\nvar HashRouter = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_15__[\"default\"].HashRouter,\n    Redirect = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_15__[\"default\"].Redirect,\n    Route = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_15__[\"default\"].Route,\n    Switch = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_15__[\"default\"].Switch;\n\nvar headerText = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Reader revenue', 'newspack');\n\nvar subHeaderText = Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Generate revenue from your customers.', 'newspack');\n\nvar ReaderRevenueWizard = /*#__PURE__*/function (_Component) {\n  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_6___default()(ReaderRevenueWizard, _Component);\n\n  var _super = _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_7___default()(ReaderRevenueWizard);\n\n  /**\n   * Constructor.\n   */\n  function ReaderRevenueWizard() {\n    var _this;\n\n    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_3___default()(this, ReaderRevenueWizard);\n\n    _this = _super.apply(this, arguments);\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), \"onWizardReady\", function () {\n      return _this.fetch();\n    });\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), \"handleDataUpdate\", function (data) {\n      _this.setState({\n        errorMessages: data.donation_data.errors,\n        data: {\n          locationData: data.location_data,\n          stripeData: data.stripe_data,\n          donationData: data.donation_data,\n          countryStateFields: data.country_state_fields,\n          currencyFields: data.currency_fields,\n          donationPage: data.donation_page,\n          salesforceData: data.salesforce_settings,\n          platformData: data.platform_data,\n          pluginStatus: data.plugin_status,\n          isSSL: data.is_ssl\n        }\n      }, function () {\n        _this.props.setError();\n      });\n    });\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), \"fetch\", function () {\n      var _this$props = _this.props,\n          setError = _this$props.setError,\n          wizardApiFetch = _this$props.wizardApiFetch;\n      return wizardApiFetch({\n        path: '/newspack/v1/wizard/newspack-reader-revenue-wizard'\n      }).then(_this.handleDataUpdate).catch(setError);\n    });\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), \"update\", function (screen, data) {\n      var _this$props2 = _this.props,\n          setError = _this$props2.setError,\n          wizardApiFetch = _this$props2.wizardApiFetch;\n      return wizardApiFetch({\n        path: '/newspack/v1/wizard/newspack-reader-revenue-wizard/' + screen,\n        method: 'POST',\n        data: data\n      }).then(_this.handleDataUpdate).catch(setError);\n    });\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), \"handleSalesforce\", /*#__PURE__*/_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_2___default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee() {\n      var wizardApiFetch, data, salesforceData, salesforceIsConnected, defaultSettings, client_id, client_secret, loginUrl, valid;\n      return regeneratorRuntime.wrap(function _callee$(_context) {\n        while (1) {\n          switch (_context.prev = _context.next) {\n            case 0:\n              wizardApiFetch = _this.props.wizardApiFetch;\n              data = _this.state.data;\n              salesforceData = data.salesforceData;\n              salesforceIsConnected = !!salesforceData.refresh_token; // If Salesforce is already connected, button should reset settings.\n\n              if (!salesforceIsConnected) {\n                _context.next = 8;\n                break;\n              }\n\n              defaultSettings = {\n                client_id: '',\n                client_secret: '',\n                access_token: '',\n                refresh_token: '',\n                instance_url: ''\n              };\n\n              _this.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  salesforceData: defaultSettings\n                })\n              });\n\n              return _context.abrupt(\"return\", _this.update('salesforce', defaultSettings));\n\n            case 8:\n              // Otherwise, attempt to establish a connection with Salesforce.\n              client_id = salesforceData.client_id, client_secret = salesforceData.client_secret;\n\n              if (!(client_id && client_secret)) {\n                _context.next = 19;\n                break;\n              }\n\n              loginUrl = Object(_wordpress_url__WEBPACK_IMPORTED_MODULE_13__[\"addQueryArgs\"])('https://login.salesforce.com/services/oauth2/authorize', {\n                response_type: 'code',\n                client_id: encodeURIComponent(client_id),\n                client_secret: encodeURIComponent(client_secret),\n                redirect_uri: encodeURI(window.location.href)\n              }); // Save credentials to options table.\n\n              _context.next = 13;\n              return _this.update('salesforce', salesforceData);\n\n            case 13:\n              _context.next = 15;\n              return wizardApiFetch({\n                path: '/newspack/v1/wizard/salesforce/validate',\n                method: 'POST',\n                data: {\n                  client_id: client_id,\n                  client_secret: client_secret,\n                  redirect_uri: window.location.href\n                }\n              });\n\n            case 15:\n              valid = _context.sent;\n\n              if (!valid) {\n                _context.next = 18;\n                break;\n              }\n\n              return _context.abrupt(\"return\", window.location.assign(loginUrl));\n\n            case 18:\n              _this.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  salesforceData: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, salesforceData), {}, {\n                    error: 'invalid_credentials'\n                  })\n                })\n              });\n\n            case 19:\n            case \"end\":\n              return _context.stop();\n          }\n        }\n      }, _callee);\n    })));\n\n    _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_8___default()(_babel_runtime_helpers_assertThisInitialized__WEBPACK_IMPORTED_MODULE_5___default()(_this), \"navigationForPlatform\", function (platform, data) {\n      var platformField = {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Platform', 'newspack'),\n        path: '/',\n        exact: true\n      };\n\n      if (!platform) {\n        return [platformField];\n      }\n\n      var donationField = {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Donations', 'newspack'),\n        path: '/donations',\n        exact: true\n      };\n\n      if (_constants__WEBPACK_IMPORTED_MODULE_17__[\"NEWSPACK\"] === platform) {\n        var pluginStatus = data.pluginStatus;\n\n        if (!pluginStatus) {\n          return [];\n        }\n\n        return [donationField, {\n          label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Stripe Gateway', 'newspack'),\n          path: '/stripe-setup'\n        }, {\n          label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Salesforce', 'newspack'),\n          path: '/salesforce',\n          exact: true\n        }, {\n          label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Address', 'newspack'),\n          path: '/location-setup'\n        }, platformField];\n      } else if (_constants__WEBPACK_IMPORTED_MODULE_17__[\"NRH\"] === platform) {\n        return [donationField, {\n          label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('NRH Settings', 'newspack'),\n          path: '/settings',\n          exact: true\n        }, platformField];\n      } else if (_constants__WEBPACK_IMPORTED_MODULE_17__[\"STRIPE\"] === platform) {\n        return [donationField, {\n          label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Stripe Settings', 'newspack'),\n          path: '/stripe-setup'\n        }, platformField];\n      }\n\n      return [];\n    });\n\n    _this.state = {\n      errorMessages: [],\n      data: {\n        locationData: {},\n        stripeData: {},\n        donationData: {},\n        salesforceData: {},\n        platformData: {},\n        pluginStatus: false\n      }\n    };\n    return _this;\n  }\n  /**\n   * wizardReady will be called when all plugin requirements are met.\n   */\n\n\n  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_4___default()(ReaderRevenueWizard, [{\n    key: \"render\",\n    value:\n    /**\n     * Render\n     */\n    function render() {\n      var _this2 = this;\n\n      var _this$props3 = this.props,\n          pluginRequirements = _this$props3.pluginRequirements,\n          wizardApiFetch = _this$props3.wizardApiFetch;\n      var _this$state = this.state,\n          data = _this$state.data,\n          errorMessages = _this$state.errorMessages;\n      var countryStateFields = data.countryStateFields,\n          currencyFields = data.currencyFields,\n          locationData = data.locationData,\n          stripeData = data.stripeData,\n          donationData = data.donationData,\n          donationPage = data.donationPage,\n          salesforceData = data.salesforceData,\n          platformData = data.platformData,\n          pluginStatus = data.pluginStatus;\n      var platform = platformData.platform;\n      var salesforceIsConnected = !!salesforceData.refresh_token;\n      var tabbedNavigation = this.navigationForPlatform(platform, data);\n      var sharedProps = {\n        headerText: headerText,\n        subHeaderText: subHeaderText,\n        tabbedNavigation: tabbedNavigation\n      };\n\n      if (errorMessages) {\n        sharedProps.renderAboveContent = function () {\n          return Object(lodash__WEBPACK_IMPORTED_MODULE_10__[\"values\"])(errorMessages).map(function (error, i) {\n            return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_14__[\"Notice\"], {\n              key: i,\n              isError: true,\n              noticeText: error\n            });\n          });\n        };\n      }\n\n      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(HashRouter, {\n        hashType: \"slash\"\n      }, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Switch, null, pluginRequirements, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Route, {\n        path: \"/\",\n        exact: true,\n        render: function render() {\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_16__[\"Platform\"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({\n            data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, platformData), {}, {\n              stripeData: stripeData\n            }),\n            pluginStatus: pluginStatus,\n            onChange: function onChange(_platformData) {\n              return _this2.update('', _platformData);\n            },\n            onReady: function onReady() {\n              _this2.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  pluginStatus: true\n                })\n              });\n            }\n          }, sharedProps));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Route, {\n        path: \"/settings\",\n        exact: true,\n        render: function render() {\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_16__[\"NRHSettings\"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({\n            data: platformData,\n            buttonText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Update', 'newspack'),\n            buttonAction: function buttonAction() {\n              return _this2.update('', platformData);\n            },\n            onChange: function onChange(_platformData) {\n              return _this2.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  platformData: _platformData\n                })\n              });\n            }\n          }, sharedProps));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Route, {\n        path: \"/location-setup\",\n        render: function render() {\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_16__[\"LocationSetup\"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({\n            data: locationData,\n            countryStateFields: countryStateFields,\n            currencyFields: currencyFields,\n            buttonText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Save Settings', 'newspack'),\n            buttonAction: function buttonAction() {\n              return _this2.update('location', locationData);\n            },\n            onChange: function onChange(_locationData) {\n              return _this2.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  locationData: _locationData\n                })\n              });\n            }\n          }, sharedProps));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Route, {\n        path: \"/stripe-setup\",\n        render: function render() {\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_16__[\"StripeSetup\"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({\n            displayStripeSettingsOnly: _constants__WEBPACK_IMPORTED_MODULE_17__[\"STRIPE\"] === platform,\n            data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, stripeData), {}, {\n              isSSL: data.isSSL\n            }),\n            currencyFields: currencyFields,\n            buttonText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Save Settings', 'newspack'),\n            buttonAction: function buttonAction() {\n              return _this2.update('stripe', stripeData);\n            },\n            onChange: function onChange(_stripeData) {\n              return _this2.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  stripeData: _stripeData\n                })\n              });\n            }\n          }, sharedProps));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Route, {\n        path: \"/donations\",\n        render: function render() {\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_16__[\"Donation\"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({\n            data: donationData,\n            headerText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Set up donations'),\n            subHeaderText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Configure your landing page and your suggested donation presets.'),\n            donationPage: donationPage,\n            buttonText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Save Settings'),\n            buttonAction: function buttonAction() {\n              return _this2.update('donations', donationData);\n            },\n            onChange: function onChange(_donationData) {\n              return _this2.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  donationData: _donationData\n                })\n              });\n            }\n          }, sharedProps));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Route, {\n        path: \"/salesforce\",\n        render: function render(routeProps) {\n          return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(_views__WEBPACK_IMPORTED_MODULE_16__[\"Salesforce\"], _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0___default()({\n            routeProps: routeProps,\n            data: salesforceData,\n            headerText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Configure Salesforce', 'newspack'),\n            isConnected: salesforceIsConnected,\n            subHeaderText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Connect your site with a Salesforce account to capture donor contact information.', 'newspack'),\n            buttonText: salesforceIsConnected ? Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Reset', 'newspack') : Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_12__[\"__\"])('Connect', 'newspack'),\n            buttonAction: _this2.handleSalesforce,\n            buttonDisabled: !salesforceIsConnected && (!salesforceData.client_id || !salesforceData.client_secret),\n            onChange: function onChange(_salesforceData) {\n              return _this2.setState({\n                data: _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_1___default()({}, data), {}, {\n                  salesforceData: _salesforceData\n                })\n              });\n            },\n            wizardApiFetch: wizardApiFetch\n          }, sharedProps));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Redirect, {\n        to: \"/\"\n      }))));\n    }\n  }]);\n\n  return ReaderRevenueWizard;\n}(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"Component\"]);\n\nObject(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"render\"])(Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_11__[\"createElement\"])(Object(_components_src__WEBPACK_IMPORTED_MODULE_14__[\"withWizard\"])(ReaderRevenueWizard, ['newspack-blocks'])), document.getElementById('newspack-reader-revenue-wizard'));\n\n//# sourceURL=webpack:///./assets/wizards/readerRevenue/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ \"./node_modules/@babel/runtime/helpers/esm/extends.js\");\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ \"./node_modules/@babel/runtime/helpers/esm/defineProperty.js\");\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../shared/js/public-path */ \"./assets/shared/js/public-path.js\");\n/* harmony import */ var _shared_js_public_path__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_shared_js_public_path__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ \"lodash\");\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/url */ \"@wordpress/url\");\n/* harmony import */ var _wordpress_url__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_url__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! ../../components/src/proxied-imports/router */ \"./assets/components/src/proxied-imports/router.js\");\n/* harmony import */ var _views__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! ./views */ \"./assets/wizards/readerRevenue/views/index.js\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ./constants */ \"./assets/wizards/readerRevenue/constants.js\");\n\n\n\n/**\n * Reader Revenue\n */\n\n/**\n * External dependencies.\n */\n\n\n/**\n * WordPress dependencies.\n */\n\n\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_5__.__;\n\n/**\n * Internal dependencies.\n */\n\n\n\n\n\nconst {\n  HashRouter,\n  Redirect,\n  Route,\n  Switch\n} = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_8__[\"default\"];\n\nconst headerText = __('Reader revenue', 'newspack');\n\nconst subHeaderText = __('Generate revenue from your customers.', 'newspack');\n\nclass ReaderRevenueWizard extends _wordpress_element__WEBPACK_IMPORTED_MODULE_4__.Component {\n  /**\n   * Constructor.\n   */\n  constructor() {\n    super(...arguments);\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(this, \"onWizardReady\", () => this.fetch());\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(this, \"handleDataUpdate\", data => {\n      this.setState({\n        errorMessages: data.donation_data.errors,\n        data: {\n          locationData: data.location_data,\n          stripeData: data.stripe_data,\n          donationData: data.donation_data,\n          countryStateFields: data.country_state_fields,\n          currencyFields: data.currency_fields,\n          donationPage: data.donation_page,\n          salesforceData: data.salesforce_settings,\n          platformData: data.platform_data,\n          pluginStatus: data.plugin_status,\n          isSSL: data.is_ssl\n        }\n      }, () => {\n        this.props.setError();\n      });\n    });\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(this, \"fetch\", () => {\n      const {\n        setError,\n        wizardApiFetch\n      } = this.props;\n      return wizardApiFetch({\n        path: '/newspack/v1/wizard/newspack-reader-revenue-wizard'\n      }).then(this.handleDataUpdate).catch(setError);\n    });\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(this, \"update\", (screen, data) => {\n      const {\n        setError,\n        wizardApiFetch\n      } = this.props;\n      return wizardApiFetch({\n        path: '/newspack/v1/wizard/newspack-reader-revenue-wizard/' + screen,\n        method: 'POST',\n        data\n      }).then(this.handleDataUpdate).catch(setError);\n    });\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(this, \"handleSalesforce\", async () => {\n      const {\n        wizardApiFetch\n      } = this.props;\n      const {\n        data\n      } = this.state;\n      const {\n        salesforceData\n      } = data;\n      const salesforceIsConnected = !!salesforceData.refresh_token; // If Salesforce is already connected, button should reset settings.\n\n      if (salesforceIsConnected) {\n        const defaultSettings = {\n          client_id: '',\n          client_secret: '',\n          access_token: '',\n          refresh_token: '',\n          instance_url: ''\n        };\n        this.setState({\n          data: { ...data,\n            salesforceData: defaultSettings\n          }\n        });\n        return this.update('salesforce', defaultSettings);\n      } // Otherwise, attempt to establish a connection with Salesforce.\n\n\n      const {\n        client_id,\n        client_secret\n      } = salesforceData;\n\n      if (client_id && client_secret) {\n        const loginUrl = (0,_wordpress_url__WEBPACK_IMPORTED_MODULE_6__.addQueryArgs)('https://login.salesforce.com/services/oauth2/authorize', {\n          response_type: 'code',\n          client_id: encodeURIComponent(client_id),\n          client_secret: encodeURIComponent(client_secret),\n          redirect_uri: encodeURI(window.location.href)\n        }); // Save credentials to options table.\n\n        await this.update('salesforce', salesforceData); // Validate credentials before redirecting.\n\n        const valid = await wizardApiFetch({\n          path: '/newspack/v1/wizard/salesforce/validate',\n          method: 'POST',\n          data: {\n            client_id,\n            client_secret,\n            redirect_uri: window.location.href\n          }\n        });\n\n        if (valid) {\n          return window.location.assign(loginUrl);\n        }\n\n        this.setState({\n          data: { ...data,\n            salesforceData: { ...salesforceData,\n              error: 'invalid_credentials'\n            }\n          }\n        });\n      }\n    });\n\n    (0,_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_1__[\"default\"])(this, \"navigationForPlatform\", (platform, data) => {\n      const platformField = {\n        label: __('Platform', 'newspack'),\n        path: '/',\n        exact: true\n      };\n\n      if (!platform) {\n        return [platformField];\n      }\n\n      const donationField = {\n        label: __('Donations', 'newspack'),\n        path: '/donations',\n        exact: true\n      };\n\n      if (_constants__WEBPACK_IMPORTED_MODULE_10__.NEWSPACK === platform) {\n        const {\n          pluginStatus\n        } = data;\n\n        if (!pluginStatus) {\n          return [];\n        }\n\n        return [donationField, {\n          label: __('Stripe Gateway', 'newspack'),\n          path: '/stripe-setup'\n        }, {\n          label: __('Salesforce', 'newspack'),\n          path: '/salesforce',\n          exact: true\n        }, {\n          label: __('Address', 'newspack'),\n          path: '/location-setup'\n        }, platformField];\n      } else if (_constants__WEBPACK_IMPORTED_MODULE_10__.NRH === platform) {\n        return [donationField, {\n          label: __('NRH Settings', 'newspack'),\n          path: '/settings',\n          exact: true\n        }, platformField];\n      } else if (_constants__WEBPACK_IMPORTED_MODULE_10__.STRIPE === platform) {\n        return [donationField, {\n          label: __('Stripe Settings', 'newspack'),\n          path: '/stripe-setup'\n        }, {\n          label: __('Emails', 'newspack'),\n          path: '/emails'\n        }, platformField];\n      }\n\n      return [];\n    });\n\n    this.state = {\n      errorMessages: [],\n      data: {\n        locationData: {},\n        stripeData: {},\n        donationData: {},\n        salesforceData: {},\n        platformData: {},\n        pluginStatus: false\n      }\n    };\n  }\n  /**\n   * wizardReady will be called when all plugin requirements are met.\n   */\n\n\n  /**\n   * Render\n   */\n  render() {\n    const {\n      pluginRequirements,\n      wizardApiFetch\n    } = this.props;\n    const {\n      data,\n      errorMessages\n    } = this.state;\n    const {\n      countryStateFields,\n      currencyFields,\n      locationData,\n      stripeData,\n      donationData,\n      donationPage,\n      salesforceData,\n      platformData,\n      pluginStatus\n    } = data;\n    const {\n      platform\n    } = platformData;\n    const salesforceIsConnected = !!salesforceData.refresh_token;\n    const tabbedNavigation = this.navigationForPlatform(platform, data);\n    const sharedProps = {\n      headerText,\n      subHeaderText,\n      tabbedNavigation\n    };\n\n    if (errorMessages) {\n      sharedProps.renderAboveContent = () => (0,lodash__WEBPACK_IMPORTED_MODULE_3__.values)(errorMessages).map((error, i) => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_7__.Notice, {\n        key: i,\n        isError: true,\n        noticeText: error\n      }));\n    }\n\n    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(HashRouter, {\n      hashType: \"slash\"\n    }, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Switch, null, pluginRequirements, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Route, {\n      path: \"/\",\n      exact: true,\n      render: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_views__WEBPACK_IMPORTED_MODULE_9__.Platform, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n        data: { ...platformData,\n          stripeData\n        },\n        pluginStatus: pluginStatus,\n        onChange: _platformData => this.update('', _platformData),\n        onReady: () => {\n          this.setState({\n            data: { ...data,\n              pluginStatus: true\n            }\n          });\n        }\n      }, sharedProps))\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Route, {\n      path: \"/settings\",\n      exact: true,\n      render: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_views__WEBPACK_IMPORTED_MODULE_9__.NRHSettings, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n        data: platformData,\n        buttonText: __('Update', 'newspack'),\n        buttonAction: () => this.update('', platformData),\n        onChange: _platformData => this.setState({\n          data: { ...data,\n            platformData: _platformData\n          }\n        })\n      }, sharedProps))\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Route, {\n      path: \"/location-setup\",\n      render: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_views__WEBPACK_IMPORTED_MODULE_9__.LocationSetup, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n        data: locationData,\n        countryStateFields: countryStateFields,\n        currencyFields: currencyFields,\n        buttonText: __('Save Settings', 'newspack'),\n        buttonAction: () => this.update('location', locationData),\n        onChange: _locationData => this.setState({\n          data: { ...data,\n            locationData: _locationData\n          }\n        })\n      }, sharedProps))\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Route, {\n      path: \"/stripe-setup\",\n      render: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_views__WEBPACK_IMPORTED_MODULE_9__.StripeSetup, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n        displayStripeSettingsOnly: _constants__WEBPACK_IMPORTED_MODULE_10__.STRIPE === platform,\n        data: { ...stripeData,\n          isSSL: data.isSSL\n        },\n        currencyFields: currencyFields,\n        buttonText: __('Save Settings', 'newspack'),\n        buttonAction: () => this.update('stripe', stripeData),\n        onChange: _stripeData => this.setState({\n          data: { ...data,\n            stripeData: _stripeData\n          }\n        })\n      }, sharedProps))\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Route, {\n      path: \"/emails\",\n      render: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_views__WEBPACK_IMPORTED_MODULE_9__.Emails, sharedProps)\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Route, {\n      path: \"/donations\",\n      render: () => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_views__WEBPACK_IMPORTED_MODULE_9__.Donation, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n        data: donationData,\n        headerText: __('Set up donations'),\n        subHeaderText: __('Configure your landing page and your suggested donation presets.'),\n        donationPage: donationPage,\n        buttonText: __('Save Settings'),\n        buttonAction: () => this.update('donations', donationData),\n        onChange: _donationData => this.setState({\n          data: { ...data,\n            donationData: _donationData\n          }\n        })\n      }, sharedProps))\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Route, {\n      path: \"/salesforce\",\n      render: routeProps => (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(_views__WEBPACK_IMPORTED_MODULE_9__.Salesforce, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n        routeProps: routeProps,\n        data: salesforceData,\n        headerText: __('Configure Salesforce', 'newspack'),\n        isConnected: salesforceIsConnected,\n        subHeaderText: __('Connect your site with a Salesforce account to capture donor contact information.', 'newspack'),\n        buttonText: salesforceIsConnected ? __('Reset', 'newspack') : __('Connect', 'newspack'),\n        buttonAction: this.handleSalesforce,\n        buttonDisabled: !salesforceIsConnected && (!salesforceData.client_id || !salesforceData.client_secret),\n        onChange: _salesforceData => this.setState({\n          data: { ...data,\n            salesforceData: _salesforceData\n          }\n        }),\n        wizardApiFetch: wizardApiFetch\n      }, sharedProps))\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)(Redirect, {\n      to: \"/\"\n    }))));\n  }\n\n}\n\n(0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.render)((0,_wordpress_element__WEBPACK_IMPORTED_MODULE_4__.createElement)((0,_components_src__WEBPACK_IMPORTED_MODULE_7__.withWizard)(ReaderRevenueWizard, ['newspack-blocks'])), document.getElementById('newspack-reader-revenue-wizard'));\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/index.js?");
+
+/***/ }),
+
+/***/ "./assets/wizards/readerRevenue/views/emails/index.js":
+/*!************************************************************!*\
+  !*** ./assets/wizards/readerRevenue/views/emails/index.js ***!
+  \************************************************************/
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
+
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/extends */ \"./node_modules/@babel/runtime/helpers/esm/extends.js\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! lodash */ \"lodash\");\n/* harmony import */ var lodash__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(lodash__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n\n\n\n/* globals newspack_reader_revenue*/\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * External dependencies\n */\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__;\n\n/**\n * Internal dependencies\n */\n\n\nconst EMAILS = (0,lodash__WEBPACK_IMPORTED_MODULE_3__.values)(newspack_reader_revenue.emails);\n\nconst Emails = () => {\n  const [pluginsReady, setPluginsReady] = (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.useState)(null);\n\n  if (false === pluginsReady) {\n    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Notice, {\n      isError: true\n    }, __('Newspack uses Newspack Newsletters to handle editing email-type content. Please activate this plugin to proceed.', 'newspack')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Notice, {\n      isError: true\n    }, __('Until this feature is configured, default Stripe receipts will be used.', 'newspack')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.PluginInstaller, {\n      style: pluginsReady ? {\n        display: 'none'\n      } : {},\n      plugins: ['newspack-newsletters'],\n      onStatus: res => setPluginsReady(res.complete),\n      onInstalled: () => window.location.reload(),\n      withoutFooterButton: true\n    }));\n  }\n\n  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.Fragment, null, EMAILS.map(email => {\n    const isActive = email.status === 'publish';\n    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_1__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.ActionCard, (0,_babel_runtime_helpers_extends__WEBPACK_IMPORTED_MODULE_0__[\"default\"])({\n      key: email.post_id,\n      title: email.label,\n      titleLink: email.edit_link,\n      href: email.edit_link,\n      description: email.description,\n      actionText: __('Edit', 'newspack')\n    }, isActive ? {} : {\n      notification: __('This email is not active – the default Stripe receipt will be used. Edit and publish the email to activate it.', 'newspack'),\n      notificationLevel: 'error'\n    }, {\n      secondaryActionText: __('Send a test email', 'newspack')\n    }));\n  }));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ((0,_components_src__WEBPACK_IMPORTED_MODULE_4__.withWizardScreen)(Emails));\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/views/emails/index.js?");
 
 /***/ }),
 
@@ -183,11 +44,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bab
 /*!*****************************************************!*\
   !*** ./assets/wizards/readerRevenue/views/index.js ***!
   \*****************************************************/
-/*! exports provided: Donation, LocationSetup, NRHSettings, Platform, StripeSetup, Salesforce */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _donation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./donation */ \"./assets/wizards/readerRevenue/views/donation/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"Donation\", function() { return _donation__WEBPACK_IMPORTED_MODULE_0__[\"default\"]; });\n\n/* harmony import */ var _location_setup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./location-setup */ \"./assets/wizards/readerRevenue/views/location-setup/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"LocationSetup\", function() { return _location_setup__WEBPACK_IMPORTED_MODULE_1__[\"default\"]; });\n\n/* harmony import */ var _nrh_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./nrh-settings */ \"./assets/wizards/readerRevenue/views/nrh-settings/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"NRHSettings\", function() { return _nrh_settings__WEBPACK_IMPORTED_MODULE_2__[\"default\"]; });\n\n/* harmony import */ var _platform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./platform */ \"./assets/wizards/readerRevenue/views/platform/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"Platform\", function() { return _platform__WEBPACK_IMPORTED_MODULE_3__[\"default\"]; });\n\n/* harmony import */ var _stripe_setup__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./stripe-setup */ \"./assets/wizards/readerRevenue/views/stripe-setup/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"StripeSetup\", function() { return _stripe_setup__WEBPACK_IMPORTED_MODULE_4__[\"default\"]; });\n\n/* harmony import */ var _salesforce__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./salesforce */ \"./assets/wizards/readerRevenue/views/salesforce/index.js\");\n/* harmony reexport (safe) */ __webpack_require__.d(__webpack_exports__, \"Salesforce\", function() { return _salesforce__WEBPACK_IMPORTED_MODULE_5__[\"default\"]; });\n\n\n\n\n\n\n\n\n//# sourceURL=webpack:///./assets/wizards/readerRevenue/views/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony export */ __webpack_require__.d(__webpack_exports__, {\n/* harmony export */   \"Donation\": function() { return /* reexport safe */ _donation__WEBPACK_IMPORTED_MODULE_0__[\"default\"]; },\n/* harmony export */   \"LocationSetup\": function() { return /* reexport safe */ _location_setup__WEBPACK_IMPORTED_MODULE_1__[\"default\"]; },\n/* harmony export */   \"NRHSettings\": function() { return /* reexport safe */ _nrh_settings__WEBPACK_IMPORTED_MODULE_2__[\"default\"]; },\n/* harmony export */   \"Platform\": function() { return /* reexport safe */ _platform__WEBPACK_IMPORTED_MODULE_3__[\"default\"]; },\n/* harmony export */   \"StripeSetup\": function() { return /* reexport safe */ _stripe_setup__WEBPACK_IMPORTED_MODULE_4__[\"default\"]; },\n/* harmony export */   \"Emails\": function() { return /* reexport safe */ _emails__WEBPACK_IMPORTED_MODULE_5__[\"default\"]; },\n/* harmony export */   \"Salesforce\": function() { return /* reexport safe */ _salesforce__WEBPACK_IMPORTED_MODULE_6__[\"default\"]; }\n/* harmony export */ });\n/* harmony import */ var _donation__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! ./donation */ \"./assets/wizards/readerRevenue/views/donation/index.js\");\n/* harmony import */ var _location_setup__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./location-setup */ \"./assets/wizards/readerRevenue/views/location-setup/index.js\");\n/* harmony import */ var _nrh_settings__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ./nrh-settings */ \"./assets/wizards/readerRevenue/views/nrh-settings/index.js\");\n/* harmony import */ var _platform__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ./platform */ \"./assets/wizards/readerRevenue/views/platform/index.js\");\n/* harmony import */ var _stripe_setup__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ./stripe-setup */ \"./assets/wizards/readerRevenue/views/stripe-setup/index.js\");\n/* harmony import */ var _emails__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ./emails */ \"./assets/wizards/readerRevenue/views/emails/index.js\");\n/* harmony import */ var _salesforce__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! ./salesforce */ \"./assets/wizards/readerRevenue/views/salesforce/index.js\");\n\n\n\n\n\n\n\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/views/index.js?");
 
 /***/ }),
 
@@ -195,11 +54,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _don
 /*!********************************************************************!*\
   !*** ./assets/wizards/readerRevenue/views/location-setup/index.js ***!
   \********************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread2 */ \"./node_modules/@babel/runtime/helpers/objectSpread2.js\");\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ \"./node_modules/@babel/runtime/helpers/classCallCheck.js\");\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ \"./node_modules/@babel/runtime/helpers/createClass.js\");\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ \"./node_modules/@babel/runtime/helpers/inherits.js\");\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/createSuper */ \"./node_modules/@babel/runtime/helpers/createSuper.js\");\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n\n\n\n\n\n\n\n/**\n * Location Setup Screen\n */\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * Internal dependencies\n */\n\n\n/**\n * Location Setup Screen Component\n */\n\nvar LocationSetup = /*#__PURE__*/function (_Component) {\n  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(LocationSetup, _Component);\n\n  var _super = _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4___default()(LocationSetup);\n\n  function LocationSetup() {\n    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, LocationSetup);\n\n    return _super.apply(this, arguments);\n  }\n\n  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(LocationSetup, [{\n    key: \"render\",\n    value:\n    /**\n     * Render.\n     */\n    function render() {\n      var _this$props = this.props,\n          countryStateFields = _this$props.countryStateFields,\n          currencyFields = _this$props.currencyFields,\n          data = _this$props.data,\n          _onChange = _this$props.onChange;\n      var _data$address = data.address1,\n          address1 = _data$address === void 0 ? '' : _data$address,\n          _data$address2 = data.address2,\n          address2 = _data$address2 === void 0 ? '' : _data$address2,\n          _data$city = data.city,\n          city = _data$city === void 0 ? '' : _data$city,\n          _data$countrystate = data.countrystate,\n          countrystate = _data$countrystate === void 0 ? '' : _data$countrystate,\n          _data$currency = data.currency,\n          currency = _data$currency === void 0 ? '' : _data$currency,\n          _data$postcode = data.postcode,\n          postcode = _data$postcode === void 0 ? '' : _data$postcode;\n      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"SelectControl\"], {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__[\"__\"])('Where is your business based?'),\n        value: countrystate,\n        options: countryStateFields,\n        onChange: function onChange(_countrystate) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            countrystate: _countrystate\n          }));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"TextControl\"], {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__[\"__\"])('Address'),\n        value: address1,\n        onChange: function onChange(_address1) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            address1: _address1\n          }));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"TextControl\"], {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__[\"__\"])('Address line 2'),\n        value: address2,\n        onChange: function onChange(_address2) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            address2: _address2\n          }));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"TextControl\"], {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__[\"__\"])('City'),\n        value: city,\n        onChange: function onChange(_city) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            city: _city\n          }));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"TextControl\"], {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__[\"__\"])('Postcode / Zip'),\n        value: postcode,\n        onChange: function onChange(_postcode) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            postcode: _postcode\n          }));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"SelectControl\"], {\n        label: 'Which currency does your business use?',\n        value: currency,\n        options: currencyFields,\n        onChange: function onChange(_currency) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            currency: _currency\n          }));\n        }\n      }));\n    }\n  }]);\n\n  return LocationSetup;\n}(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"Component\"]);\n\nLocationSetup.defaultProps = {\n  countryStateFields: [{}],\n  currencyFields: [{}],\n  data: {},\n  onChange: function onChange() {\n    return null;\n  }\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (Object(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"withWizardScreen\"])(LocationSetup));\n\n//# sourceURL=webpack:///./assets/wizards/readerRevenue/views/location-setup/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n\n\n/**\n * Location Setup Screen\n */\n\n/**\n * WordPress dependencies\n */\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__;\n\n/**\n * Internal dependencies\n */\n\n\n/**\n * Location Setup Screen Component\n */\n\nclass LocationSetup extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {\n  /**\n   * Render.\n   */\n  render() {\n    const {\n      countryStateFields,\n      currencyFields,\n      data,\n      onChange\n    } = this.props;\n    const {\n      address1 = '',\n      address2 = '',\n      city = '',\n      countrystate = '',\n      currency = '',\n      postcode = ''\n    } = data;\n    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {\n      label: __('Where is your business based?'),\n      value: countrystate,\n      options: countryStateFields,\n      onChange: _countrystate => onChange({ ...data,\n        countrystate: _countrystate\n      })\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n      label: __('Address'),\n      value: address1,\n      onChange: _address1 => onChange({ ...data,\n        address1: _address1\n      })\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n      label: __('Address line 2'),\n      value: address2,\n      onChange: _address2 => onChange({ ...data,\n        address2: _address2\n      })\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n      label: __('City'),\n      value: city,\n      onChange: _city => onChange({ ...data,\n        city: _city\n      })\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n      label: __('Postcode / Zip'),\n      value: postcode,\n      onChange: _postcode => onChange({ ...data,\n        postcode: _postcode\n      })\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {\n      label: 'Which currency does your business use?',\n      value: currency,\n      options: currencyFields,\n      onChange: _currency => onChange({ ...data,\n        currency: _currency\n      })\n    }));\n  }\n\n}\n\nLocationSetup.defaultProps = {\n  countryStateFields: [{}],\n  currencyFields: [{}],\n  data: {},\n  onChange: () => null\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = ((0,_components_src__WEBPACK_IMPORTED_MODULE_2__.withWizardScreen)(LocationSetup));\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/views/location-setup/index.js?");
 
 /***/ }),
 
@@ -207,11 +64,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bab
 /*!******************************************************************!*\
   !*** ./assets/wizards/readerRevenue/views/nrh-settings/index.js ***!
   \******************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread2 */ \"./node_modules/@babel/runtime/helpers/objectSpread2.js\");\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ \"./node_modules/@babel/runtime/helpers/classCallCheck.js\");\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ \"./node_modules/@babel/runtime/helpers/createClass.js\");\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ \"./node_modules/@babel/runtime/helpers/inherits.js\");\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/createSuper */ \"./node_modules/@babel/runtime/helpers/createSuper.js\");\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n\n\n\n\n\n\n\n/**\n * News Revenue Hub Settings Screen\n */\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * Internal dependencies\n */\n\n\n/**\n * News Revenue Hub Settings Screen Component\n */\n\nvar NRHSettings = /*#__PURE__*/function (_Component) {\n  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_3___default()(NRHSettings, _Component);\n\n  var _super = _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_4___default()(NRHSettings);\n\n  function NRHSettings() {\n    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_1___default()(this, NRHSettings);\n\n    return _super.apply(this, arguments);\n  }\n\n  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_2___default()(NRHSettings, [{\n    key: \"render\",\n    value:\n    /**\n     * Render.\n     */\n    function render() {\n      var _this$props = this.props,\n          data = _this$props.data,\n          _onChange = _this$props.onChange;\n      var nrh_organization_id = data.nrh_organization_id,\n          nrh_salesforce_campaign_id = data.nrh_salesforce_campaign_id;\n      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"Grid\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"TextControl\"], {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__[\"__\"])('NRH Organization ID (required)', 'newspack'),\n        value: nrh_organization_id || '',\n        onChange: function onChange(_nrh_organization_id) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            nrh_organization_id: _nrh_organization_id\n          }));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"TextControl\"], {\n        label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__[\"__\"])('NRH Salesforce Campaign ID', 'newspack'),\n        value: nrh_salesforce_campaign_id || '',\n        onChange: function onChange(_nrh_salesforce_campaign_id) {\n          return _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            nrh_salesforce_campaign_id: _nrh_salesforce_campaign_id\n          }));\n        }\n      }));\n    }\n  }]);\n\n  return NRHSettings;\n}(_wordpress_element__WEBPACK_IMPORTED_MODULE_5__[\"Component\"]);\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Object(_components_src__WEBPACK_IMPORTED_MODULE_7__[\"withWizardScreen\"])(NRHSettings));\n\n//# sourceURL=webpack:///./assets/wizards/readerRevenue/views/nrh-settings/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n\n\n/**\n * News Revenue Hub Settings Screen\n */\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * Internal dependencies\n */\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__;\n\n/**\n * News Revenue Hub Settings Screen Component\n */\n\nclass NRHSettings extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {\n  /**\n   * Render.\n   */\n  render() {\n    const {\n      data,\n      onChange\n    } = this.props;\n    const {\n      nrh_organization_id,\n      nrh_salesforce_campaign_id\n    } = data;\n    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n      label: __('NRH Organization ID (required)', 'newspack'),\n      value: nrh_organization_id || '',\n      onChange: _nrh_organization_id => onChange({ ...data,\n        nrh_organization_id: _nrh_organization_id\n      })\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.TextControl, {\n      label: __('NRH Salesforce Campaign ID', 'newspack'),\n      value: nrh_salesforce_campaign_id || '',\n      onChange: _nrh_salesforce_campaign_id => onChange({ ...data,\n        nrh_salesforce_campaign_id: _nrh_salesforce_campaign_id\n      })\n    }));\n  }\n\n}\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ((0,_components_src__WEBPACK_IMPORTED_MODULE_2__.withWizardScreen)(NRHSettings));\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/views/nrh-settings/index.js?");
 
 /***/ }),
 
@@ -219,11 +74,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bab
 /*!**************************************************************!*\
   !*** ./assets/wizards/readerRevenue/views/platform/index.js ***!
   \**************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread2 */ \"./node_modules/@babel/runtime/helpers/objectSpread2.js\");\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/src/proxied-imports/router */ \"./assets/components/src/proxied-imports/router.js\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! ../../constants */ \"./assets/wizards/readerRevenue/constants.js\");\n\n\n\n/**\n * Platform Selection Screen\n */\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * Internal dependencies\n */\n\n\n\n\nvar withRouter = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_4__[\"default\"].withRouter;\n/**\n * Platform Selection  Screen Component\n */\n\nvar Platform = function Platform(_ref) {\n  var data = _ref.data,\n      _onChange = _ref.onChange,\n      onReady = _ref.onReady,\n      pluginStatus = _ref.pluginStatus;\n  var platform = data.platform;\n  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"Grid\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"SelectControl\"], {\n    label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Select Reader Revenue Platform', 'newspack'),\n    value: platform,\n    options: [{\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('-- Select Your Platform --', 'newspack'),\n      value: ''\n    }, {\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Newspack', 'newspack'),\n      value: _constants__WEBPACK_IMPORTED_MODULE_5__[\"NEWSPACK\"]\n    }, {\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('News Revenue Hub', 'newspack'),\n      value: _constants__WEBPACK_IMPORTED_MODULE_5__[\"NRH\"]\n    }, {\n      label: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__[\"__\"])('Stripe', 'newspack'),\n      value: _constants__WEBPACK_IMPORTED_MODULE_5__[\"STRIPE\"],\n      disabled: data.stripeData.can_use_stripe_platform === false\n    }],\n    onChange: function onChange(_platform) {\n      if (_platform.length) {\n        _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n          platform: _platform\n        }));\n      }\n    }\n  })), _constants__WEBPACK_IMPORTED_MODULE_5__[\"NEWSPACK\"] === platform && !pluginStatus && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"PluginInstaller\"], {\n    plugins: ['woocommerce', 'woocommerce-subscriptions', 'woocommerce-name-your-price', 'woocommerce-gateway-stripe'],\n    onStatus: function onStatus(_ref2) {\n      var complete = _ref2.complete;\n\n      if (complete) {\n        onReady();\n      }\n    },\n    withoutFooterButton: true\n  }));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = (Object(_components_src__WEBPACK_IMPORTED_MODULE_3__[\"withWizardScreen\"])(withRouter(Platform)));\n\n//# sourceURL=webpack:///./assets/wizards/readerRevenue/views/platform/index.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n/* harmony import */ var _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! ../../../../components/src/proxied-imports/router */ \"./assets/components/src/proxied-imports/router.js\");\n/* harmony import */ var _constants__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../constants */ \"./assets/wizards/readerRevenue/constants.js\");\n\n\n/**\n * Platform Selection Screen\n */\n\n/**\n * WordPress dependencies\n */\n\n\n/**\n * Internal dependencies\n */\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_1__.__;\n\n\n\nconst {\n  withRouter\n} = _components_src_proxied_imports_router__WEBPACK_IMPORTED_MODULE_3__[\"default\"];\n/**\n * Platform Selection  Screen Component\n */\n\nconst Platform = _ref => {\n  let {\n    data,\n    onChange,\n    onReady,\n    pluginStatus\n  } = _ref;\n  const {\n    platform\n  } = data;\n  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.Grid, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.SelectControl, {\n    label: __('Select Reader Revenue Platform', 'newspack'),\n    value: platform,\n    options: [{\n      label: __('-- Select Your Platform --', 'newspack'),\n      value: ''\n    }, {\n      label: __('Newspack', 'newspack'),\n      value: _constants__WEBPACK_IMPORTED_MODULE_4__.NEWSPACK\n    }, {\n      label: __('News Revenue Hub', 'newspack'),\n      value: _constants__WEBPACK_IMPORTED_MODULE_4__.NRH\n    }, {\n      label: __('Stripe', 'newspack'),\n      value: _constants__WEBPACK_IMPORTED_MODULE_4__.STRIPE,\n      disabled: data.stripeData.can_use_stripe_platform === false\n    }],\n    onChange: _platform => {\n      if (_platform.length) {\n        onChange({ ...data,\n          platform: _platform\n        });\n      }\n    }\n  })), _constants__WEBPACK_IMPORTED_MODULE_4__.NEWSPACK === platform && !pluginStatus && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_2__.PluginInstaller, {\n    plugins: ['woocommerce', 'woocommerce-subscriptions', 'woocommerce-name-your-price', 'woocommerce-gateway-stripe'],\n    onStatus: _ref2 => {\n      let {\n        complete\n      } = _ref2;\n\n      if (complete) {\n        onReady();\n      }\n    },\n    withoutFooterButton: true\n  }));\n};\n\n/* harmony default export */ __webpack_exports__[\"default\"] = ((0,_components_src__WEBPACK_IMPORTED_MODULE_2__.withWizardScreen)(withRouter(Platform)));\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/views/platform/index.js?");
 
 /***/ }),
 
@@ -231,121 +84,9 @@ eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _bab
 /*!****************************************************************!*\
   !*** ./assets/wizards/readerRevenue/views/salesforce/index.js ***!
   \****************************************************************/
-/*! exports provided: default */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/objectSpread2 */ \"./node_modules/@babel/runtime/helpers/objectSpread2.js\");\n/* harmony import */ var _babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @babel/runtime/helpers/asyncToGenerator */ \"./node_modules/@babel/runtime/helpers/asyncToGenerator.js\");\n/* harmony import */ var _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @babel/runtime/helpers/classCallCheck */ \"./node_modules/@babel/runtime/helpers/classCallCheck.js\");\n/* harmony import */ var _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @babel/runtime/helpers/createClass */ \"./node_modules/@babel/runtime/helpers/createClass.js\");\n/* harmony import */ var _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @babel/runtime/helpers/inherits */ \"./node_modules/@babel/runtime/helpers/inherits.js\");\n/* harmony import */ var _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @babel/runtime/helpers/createSuper */ \"./node_modules/@babel/runtime/helpers/createSuper.js\");\n/* harmony import */ var _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! qs */ \"./node_modules/qs/lib/index.js\");\n/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_7__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_8___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__);\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! @wordpress/components */ \"@wordpress/components\");\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_9___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n\n\n\n\n\n\n\n\n/**\n * Salesforce Settings Screen\n */\n\n/**\n * External dependencies\n */\n\n/**\n * WordPress dependencies.\n */\n\n\n\n\n/**\n * Internal dependencies.\n */\n\n\n/**\n * Salesforce Settings Screen Component\n */\n\nvar Salesforce = /*#__PURE__*/function (_Component) {\n  _babel_runtime_helpers_inherits__WEBPACK_IMPORTED_MODULE_4___default()(Salesforce, _Component);\n\n  var _super = _babel_runtime_helpers_createSuper__WEBPACK_IMPORTED_MODULE_5___default()(Salesforce);\n\n  function Salesforce() {\n    var _this;\n\n    _babel_runtime_helpers_classCallCheck__WEBPACK_IMPORTED_MODULE_2___default()(this, Salesforce);\n\n    _this = _super.apply(this, arguments);\n    _this.state = {\n      error: null\n    };\n    return _this;\n  }\n  /**\n   * On component mount.\n   */\n\n\n  _babel_runtime_helpers_createClass__WEBPACK_IMPORTED_MODULE_3___default()(Salesforce, [{\n    key: \"componentDidMount\",\n    value: function componentDidMount() {\n      var query = Object(qs__WEBPACK_IMPORTED_MODULE_7__[\"parse\"])(window.location.search);\n      var authorizationCode = query.code;\n      var redirectURI = window.location.origin + window.location.pathname + '?page=' + query['?page'] + window.location.hash;\n\n      if (authorizationCode) {\n        // Remove `code` param from URL without adding history.\n        window.history.replaceState({}, '', redirectURI);\n        this.getTokens(authorizationCode, redirectURI);\n      }\n    }\n    /**\n     * On component update.\n     */\n\n  }, {\n    key: \"componentDidUpdate\",\n    value: function componentDidUpdate(prevProps) {\n      var isConnected = this.props.isConnected; // Clear any state errors on reset.\n\n      if (prevProps.isConnected && !isConnected) {\n        return this.setState({\n          error: null\n        });\n      } // If we're already connected, check status of refresh token.\n\n\n      if (!prevProps.isConnected && isConnected) {\n        return this.checkConnectionStatus();\n      }\n    }\n    /**\n     * Use auth code to request access and refresh tokens for Salesforce API.\n     * Saves tokens to options table.\n     * https://help.salesforce.com/articleView?id=remoteaccess_oauth_web_server_flow.htm&type=5\n     *\n     * @param {string} authorizationCode Auth code fetched from Salesforce.\n     * @return {void}\n     */\n\n  }, {\n    key: \"getTokens\",\n    value: function () {\n      var _getTokens = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee(authorizationCode, redirectURI) {\n        var _this$props, data, onChange, wizardApiFetch, response, access_token, client_id, client_secret, instance_url, refresh_token;\n\n        return regeneratorRuntime.wrap(function _callee$(_context) {\n          while (1) {\n            switch (_context.prev = _context.next) {\n              case 0:\n                _this$props = this.props, data = _this$props.data, onChange = _this$props.onChange, wizardApiFetch = _this$props.wizardApiFetch;\n                _context.prev = 1;\n                _context.next = 4;\n                return wizardApiFetch({\n                  path: '/newspack/v1/wizard/salesforce/tokens',\n                  method: 'POST',\n                  data: {\n                    code: authorizationCode,\n                    redirect_uri: redirectURI\n                  }\n                });\n\n              case 4:\n                response = _context.sent;\n                access_token = response.access_token, client_id = response.client_id, client_secret = response.client_secret, instance_url = response.instance_url, refresh_token = response.refresh_token; // Update values in parent state.\n\n                if (!(access_token && refresh_token)) {\n                  _context.next = 8;\n                  break;\n                }\n\n                return _context.abrupt(\"return\", onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n                  access_token: access_token,\n                  client_id: client_id,\n                  client_secret: client_secret,\n                  instance_url: instance_url,\n                  refresh_token: refresh_token\n                })));\n\n              case 8:\n                _context.next = 13;\n                break;\n\n              case 10:\n                _context.prev = 10;\n                _context.t0 = _context[\"catch\"](1);\n                this.setState({\n                  error: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('We couldn’t establish a connection to Salesforce. Please verify your Consumer Key and Secret and try connecting again.', 'newspack')\n                });\n\n              case 13:\n              case \"end\":\n                return _context.stop();\n            }\n          }\n        }, _callee, this, [[1, 10]]);\n      }));\n\n      function getTokens(_x, _x2) {\n        return _getTokens.apply(this, arguments);\n      }\n\n      return getTokens;\n    }()\n    /**\n     * Check validity of refresh token and show an error message if it's no longer active.\n     * The refresh token is valid until it's manually revoked in the Salesforce dashboard,\n     * or the Connected App is deleted there.\n     */\n\n  }, {\n    key: \"checkConnectionStatus\",\n    value: function () {\n      var _checkConnectionStatus = _babel_runtime_helpers_asyncToGenerator__WEBPACK_IMPORTED_MODULE_1___default()( /*#__PURE__*/regeneratorRuntime.mark(function _callee2() {\n        var wizardApiFetch, response;\n        return regeneratorRuntime.wrap(function _callee2$(_context2) {\n          while (1) {\n            switch (_context2.prev = _context2.next) {\n              case 0:\n                wizardApiFetch = this.props.wizardApiFetch;\n                _context2.next = 3;\n                return wizardApiFetch({\n                  path: '/newspack/v1/wizard/salesforce/connection-status',\n                  method: 'POST'\n                });\n\n              case 3:\n                response = _context2.sent;\n\n                if (response.error) {\n                  this.setState({\n                    error: response.error\n                  });\n                }\n\n              case 5:\n              case \"end\":\n                return _context2.stop();\n            }\n          }\n        }, _callee2, this);\n      }));\n\n      function checkConnectionStatus() {\n        return _checkConnectionStatus.apply(this, arguments);\n      }\n\n      return checkConnectionStatus;\n    }()\n    /**\n     * Render.\n     */\n\n  }, {\n    key: \"render\",\n    value: function render() {\n      var _this$props2 = this.props,\n          data = _this$props2.data,\n          isConnected = _this$props2.isConnected,\n          _onChange = _this$props2.onChange;\n      var _data$client_id = data.client_id,\n          client_id = _data$client_id === void 0 ? '' : _data$client_id,\n          _data$client_secret = data.client_secret,\n          client_secret = _data$client_secret === void 0 ? '' : _data$client_secret,\n          error = data.error;\n      return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"Grid\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"Card\"], {\n        noBorder: true\n      }, this.state.error && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"Notice\"], {\n        noticeText: this.state.error,\n        isWarning: true\n      }), isConnected && !this.state.error && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"Notice\"], {\n        noticeText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('Your site is connected to Salesforce.', 'newspack'),\n        isSuccess: true\n      }), !isConnected && !this.state.error && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"Fragment\"], null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(\"p\", null, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('To connect with Salesforce, create or choose a Connected App for this site in your Salesforce dashboard. Make sure to paste the the full URL for this page into the “Callback URL” field in the Connected App’s settings. ', 'newspack'), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_9__[\"ExternalLink\"], {\n        href: \"https://help.salesforce.com/articleView?id=connected_app_create.htm\"\n      }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('Learn how to create a Connected App', 'newspack'))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(\"p\", null, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('Enter your Consumer Key and Secret, then click “Connect” to authorize access to your Salesforce account.', 'newspack'))), isConnected && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(\"p\", null, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('To reconnect your site in case of issues, or to connect to a different Salesforce account, click “Reset\". You will need to re-enter your Consumer Key and Secret before you can re-connect to Salesforce.', 'newspack'))), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"Card\"], {\n        noBorder: true\n      }, error && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"Notice\"], {\n        noticeText: Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('We couldn’t connect to Salesforce. Please verify that you entered the correct Consumer Key and Secret and try again. If you just created your Connected App or edited the Callback URL settings, it may take up to an hour before we can establish a connection.', 'newspack'),\n        isError: true\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"TextControl\"], {\n        disabled: isConnected,\n        label: (isConnected ? Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('Your', 'newspack') : Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('Enter your', 'newspack')) + Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])(' Salesforce Consumer Key', 'newspack'),\n        value: client_id,\n        onChange: function onChange(value) {\n          if (isConnected) {\n            return;\n          }\n\n          _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            client_id: value\n          }));\n        }\n      }), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"createElement\"])(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"TextControl\"], {\n        disabled: isConnected,\n        label: (isConnected ? Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('Your', 'newspack') : Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])('Enter your', 'newspack')) + Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_8__[\"__\"])(' Salesforce Consumer Secret', 'newspack'),\n        value: client_secret,\n        onChange: function onChange(value) {\n          if (isConnected) {\n            return;\n          }\n\n          _onChange(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()(_babel_runtime_helpers_objectSpread2__WEBPACK_IMPORTED_MODULE_0___default()({}, data), {}, {\n            client_secret: value\n          }));\n        }\n      })));\n    }\n  }]);\n\n  return Salesforce;\n}(_wordpress_element__WEBPACK_IMPORTED_MODULE_6__[\"Component\"]);\n\nSalesforce.defaultProps = {\n  data: {},\n  onChange: function onChange() {\n    return null;\n  }\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = (Object(_components_src__WEBPACK_IMPORTED_MODULE_10__[\"withWizardScreen\"])(Salesforce));\n\n//# sourceURL=webpack:///./assets/wizards/readerRevenue/views/salesforce/index.js?");
-
-/***/ }),
-
-/***/ "@wordpress/api-fetch":
-/*!**********************************!*\
-  !*** external ["wp","apiFetch"] ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"apiFetch\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22apiFetch%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/components":
-/*!************************************!*\
-  !*** external ["wp","components"] ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"components\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22components%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/element":
-/*!*********************************!*\
-  !*** external ["wp","element"] ***!
-  \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"element\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22element%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/html-entities":
-/*!**************************************!*\
-  !*** external ["wp","htmlEntities"] ***!
-  \**************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"htmlEntities\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22htmlEntities%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/i18n":
-/*!******************************!*\
-  !*** external ["wp","i18n"] ***!
-  \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"i18n\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22i18n%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/keycodes":
-/*!**********************************!*\
-  !*** external ["wp","keycodes"] ***!
-  \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"keycodes\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22keycodes%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/primitives":
-/*!************************************!*\
-  !*** external ["wp","primitives"] ***!
-  \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"primitives\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22primitives%22%5D?");
-
-/***/ }),
-
-/***/ "@wordpress/url":
-/*!*****************************!*\
-  !*** external ["wp","url"] ***!
-  \*****************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"wp\"][\"url\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22url%22%5D?");
-
-/***/ }),
-
-/***/ "lodash":
-/*!*************************!*\
-  !*** external "lodash" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"lodash\"]; }());\n\n//# sourceURL=webpack:///external_%22lodash%22?");
-
-/***/ }),
-
-/***/ "moment":
-/*!*************************!*\
-  !*** external "moment" ***!
-  \*************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("(function() { module.exports = window[\"moment\"]; }());\n\n//# sourceURL=webpack:///external_%22moment%22?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! qs */ \"./node_modules/qs/lib/index.js\");\n/* harmony import */ var qs__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(qs__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/components */ \"@wordpress/components\");\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _components_src__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! ../../../../components/src */ \"./assets/components/src/index.js\");\n\n\n/**\n * Salesforce Settings Screen\n */\n\n/**\n * External dependencies\n */\n\n/**\n * WordPress dependencies.\n */\n\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_2__.__;\n\n\n/**\n * Internal dependencies.\n */\n\n\n/**\n * Salesforce Settings Screen Component\n */\n\nclass Salesforce extends _wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Component {\n  constructor() {\n    super(...arguments);\n    this.state = {\n      error: null\n    };\n  }\n  /**\n   * On component mount.\n   */\n\n\n  componentDidMount() {\n    const query = (0,qs__WEBPACK_IMPORTED_MODULE_1__.parse)(window.location.search);\n    const authorizationCode = query.code;\n    const redirectURI = window.location.origin + window.location.pathname + '?page=' + query['?page'] + window.location.hash;\n\n    if (authorizationCode) {\n      // Remove `code` param from URL without adding history.\n      window.history.replaceState({}, '', redirectURI);\n      this.getTokens(authorizationCode, redirectURI);\n    }\n  }\n  /**\n   * On component update.\n   */\n\n\n  componentDidUpdate(prevProps) {\n    const {\n      isConnected\n    } = this.props; // Clear any state errors on reset.\n\n    if (prevProps.isConnected && !isConnected) {\n      return this.setState({\n        error: null\n      });\n    } // If we're already connected, check status of refresh token.\n\n\n    if (!prevProps.isConnected && isConnected) {\n      return this.checkConnectionStatus();\n    }\n  }\n  /**\n   * Use auth code to request access and refresh tokens for Salesforce API.\n   * Saves tokens to options table.\n   * https://help.salesforce.com/articleView?id=remoteaccess_oauth_web_server_flow.htm&type=5\n   *\n   * @param {string} authorizationCode Auth code fetched from Salesforce.\n   * @return {void}\n   */\n\n\n  async getTokens(authorizationCode, redirectURI) {\n    const {\n      data,\n      onChange,\n      wizardApiFetch\n    } = this.props;\n\n    try {\n      // Get the tokens.\n      const response = await wizardApiFetch({\n        path: '/newspack/v1/wizard/salesforce/tokens',\n        method: 'POST',\n        data: {\n          code: authorizationCode,\n          redirect_uri: redirectURI\n        }\n      });\n      const {\n        access_token,\n        client_id,\n        client_secret,\n        instance_url,\n        refresh_token\n      } = response; // Update values in parent state.\n\n      if (access_token && refresh_token) {\n        return onChange({ ...data,\n          access_token,\n          client_id,\n          client_secret,\n          instance_url,\n          refresh_token\n        });\n      }\n    } catch (e) {\n      this.setState({\n        error: __('We couldn’t establish a connection to Salesforce. Please verify your Consumer Key and Secret and try connecting again.', 'newspack')\n      });\n    }\n  }\n  /**\n   * Check validity of refresh token and show an error message if it's no longer active.\n   * The refresh token is valid until it's manually revoked in the Salesforce dashboard,\n   * or the Connected App is deleted there.\n   */\n\n\n  async checkConnectionStatus() {\n    const {\n      wizardApiFetch\n    } = this.props;\n    const response = await wizardApiFetch({\n      path: '/newspack/v1/wizard/salesforce/connection-status',\n      method: 'POST'\n    });\n\n    if (response.error) {\n      this.setState({\n        error: response.error\n      });\n    }\n  }\n  /**\n   * Render.\n   */\n\n\n  render() {\n    const {\n      data,\n      isConnected,\n      onChange\n    } = this.props;\n    const {\n      client_id = '',\n      client_secret = '',\n      error\n    } = data;\n    return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Grid, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Card, {\n      noBorder: true\n    }, this.state.error && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Notice, {\n      noticeText: this.state.error,\n      isWarning: true\n    }), isConnected && !this.state.error && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Notice, {\n      noticeText: __('Your site is connected to Salesforce.', 'newspack'),\n      isSuccess: true\n    }), !isConnected && !this.state.error && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"p\", null, __('To connect with Salesforce, create or choose a Connected App for this site in your Salesforce dashboard. Make sure to paste the the full URL for this page into the “Callback URL” field in the Connected App’s settings. ', 'newspack'), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_3__.ExternalLink, {\n      href: \"https://help.salesforce.com/articleView?id=connected_app_create.htm\"\n    }, __('Learn how to create a Connected App', 'newspack'))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"p\", null, __('Enter your Consumer Key and Secret, then click “Connect” to authorize access to your Salesforce account.', 'newspack'))), isConnected && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"p\", null, __('To reconnect your site in case of issues, or to connect to a different Salesforce account, click “Reset\". You will need to re-enter your Consumer Key and Secret before you can re-connect to Salesforce.', 'newspack'))), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Card, {\n      noBorder: true\n    }, error && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.Notice, {\n      noticeText: __('We couldn’t connect to Salesforce. Please verify that you entered the correct Consumer Key and Secret and try again. If you just created your Connected App or edited the Callback URL settings, it may take up to an hour before we can establish a connection.', 'newspack'),\n      isError: true\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.TextControl, {\n      disabled: isConnected,\n      label: (isConnected ? __('Your', 'newspack') : __('Enter your', 'newspack')) + __(' Salesforce Consumer Key', 'newspack'),\n      value: client_id,\n      onChange: value => {\n        if (isConnected) {\n          return;\n        }\n\n        onChange({ ...data,\n          client_id: value\n        });\n      }\n    }), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_components_src__WEBPACK_IMPORTED_MODULE_4__.TextControl, {\n      disabled: isConnected,\n      label: (isConnected ? __('Your', 'newspack') : __('Enter your', 'newspack')) + __(' Salesforce Consumer Secret', 'newspack'),\n      value: client_secret,\n      onChange: value => {\n        if (isConnected) {\n          return;\n        }\n\n        onChange({ ...data,\n          client_secret: value\n        });\n      }\n    })));\n  }\n\n}\n\nSalesforce.defaultProps = {\n  data: {},\n  onChange: () => null\n};\n/* harmony default export */ __webpack_exports__[\"default\"] = ((0,_components_src__WEBPACK_IMPORTED_MODULE_4__.withWizardScreen)(Salesforce));\n\n//# sourceURL=webpack://newspack/./assets/wizards/readerRevenue/views/salesforce/index.js?");
 
 /***/ }),
 
@@ -353,11 +94,313 @@ eval("(function() { module.exports = window[\"moment\"]; }());\n\n//# sourceURL=
 /*!************************!*\
   !*** external "React" ***!
   \************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"React\"]; }());\n\n//# sourceURL=webpack:///external_%22React%22?");
+module.exports = window["React"];
+
+/***/ }),
+
+/***/ "lodash":
+/*!*************************!*\
+  !*** external "lodash" ***!
+  \*************************/
+/***/ (function(module) {
+
+module.exports = window["lodash"];
+
+/***/ }),
+
+/***/ "moment":
+/*!*************************!*\
+  !*** external "moment" ***!
+  \*************************/
+/***/ (function(module) {
+
+module.exports = window["moment"];
+
+/***/ }),
+
+/***/ "@wordpress/api-fetch":
+/*!**********************************!*\
+  !*** external ["wp","apiFetch"] ***!
+  \**********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["apiFetch"];
+
+/***/ }),
+
+/***/ "@wordpress/components":
+/*!************************************!*\
+  !*** external ["wp","components"] ***!
+  \************************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["components"];
+
+/***/ }),
+
+/***/ "@wordpress/element":
+/*!*********************************!*\
+  !*** external ["wp","element"] ***!
+  \*********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["element"];
+
+/***/ }),
+
+/***/ "@wordpress/html-entities":
+/*!**************************************!*\
+  !*** external ["wp","htmlEntities"] ***!
+  \**************************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["htmlEntities"];
+
+/***/ }),
+
+/***/ "@wordpress/i18n":
+/*!******************************!*\
+  !*** external ["wp","i18n"] ***!
+  \******************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["i18n"];
+
+/***/ }),
+
+/***/ "@wordpress/keycodes":
+/*!**********************************!*\
+  !*** external ["wp","keycodes"] ***!
+  \**********************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["keycodes"];
+
+/***/ }),
+
+/***/ "@wordpress/primitives":
+/*!************************************!*\
+  !*** external ["wp","primitives"] ***!
+  \************************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["primitives"];
+
+/***/ }),
+
+/***/ "@wordpress/url":
+/*!*****************************!*\
+  !*** external ["wp","url"] ***!
+  \*****************************/
+/***/ (function(module) {
+
+module.exports = window["wp"]["url"];
 
 /***/ })
 
-/******/ })));
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId].call(module.exports, module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/******/ 	// expose the modules object (__webpack_modules__)
+/******/ 	__webpack_require__.m = __webpack_modules__;
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/chunk loaded */
+/******/ 	!function() {
+/******/ 		var deferred = [];
+/******/ 		__webpack_require__.O = function(result, chunkIds, fn, priority) {
+/******/ 			if(chunkIds) {
+/******/ 				priority = priority || 0;
+/******/ 				for(var i = deferred.length; i > 0 && deferred[i - 1][2] > priority; i--) deferred[i] = deferred[i - 1];
+/******/ 				deferred[i] = [chunkIds, fn, priority];
+/******/ 				return;
+/******/ 			}
+/******/ 			var notFulfilled = Infinity;
+/******/ 			for (var i = 0; i < deferred.length; i++) {
+/******/ 				var chunkIds = deferred[i][0];
+/******/ 				var fn = deferred[i][1];
+/******/ 				var priority = deferred[i][2];
+/******/ 				var fulfilled = true;
+/******/ 				for (var j = 0; j < chunkIds.length; j++) {
+/******/ 					if ((priority & 1 === 0 || notFulfilled >= priority) && Object.keys(__webpack_require__.O).every(function(key) { return __webpack_require__.O[key](chunkIds[j]); })) {
+/******/ 						chunkIds.splice(j--, 1);
+/******/ 					} else {
+/******/ 						fulfilled = false;
+/******/ 						if(priority < notFulfilled) notFulfilled = priority;
+/******/ 					}
+/******/ 				}
+/******/ 				if(fulfilled) {
+/******/ 					deferred.splice(i--, 1)
+/******/ 					var r = fn();
+/******/ 					if (r !== undefined) result = r;
+/******/ 				}
+/******/ 			}
+/******/ 			return result;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/global */
+/******/ 	!function() {
+/******/ 		__webpack_require__.g = (function() {
+/******/ 			if (typeof globalThis === 'object') return globalThis;
+/******/ 			try {
+/******/ 				return this || new Function('return this')();
+/******/ 			} catch (e) {
+/******/ 				if (typeof window === 'object') return window;
+/******/ 			}
+/******/ 		})();
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/publicPath */
+/******/ 	!function() {
+/******/ 		var scriptUrl;
+/******/ 		if (__webpack_require__.g.importScripts) scriptUrl = __webpack_require__.g.location + "";
+/******/ 		var document = __webpack_require__.g.document;
+/******/ 		if (!scriptUrl && document) {
+/******/ 			if (document.currentScript)
+/******/ 				scriptUrl = document.currentScript.src
+/******/ 			if (!scriptUrl) {
+/******/ 				var scripts = document.getElementsByTagName("script");
+/******/ 				if(scripts.length) scriptUrl = scripts[scripts.length - 1].src
+/******/ 			}
+/******/ 		}
+/******/ 		// When supporting browsers where an automatic publicPath is not supported you must specify an output.publicPath manually via configuration
+/******/ 		// or pass an empty string ("") and set the __webpack_public_path__ variable from your code to use your own logic.
+/******/ 		if (!scriptUrl) throw new Error("Automatic publicPath is not supported in this browser");
+/******/ 		scriptUrl = scriptUrl.replace(/#.*$/, "").replace(/\?.*$/, "").replace(/\/[^\/]+$/, "/");
+/******/ 		__webpack_require__.p = scriptUrl;
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/jsonp chunk loading */
+/******/ 	!function() {
+/******/ 		// no baseURI
+/******/ 		
+/******/ 		// object to store loaded and loading chunks
+/******/ 		// undefined = chunk not loaded, null = chunk preloaded/prefetched
+/******/ 		// [resolve, reject, Promise] = chunk loading, 0 = chunk loaded
+/******/ 		var installedChunks = {
+/******/ 			"readerRevenue": 0
+/******/ 		};
+/******/ 		
+/******/ 		// no chunk on demand loading
+/******/ 		
+/******/ 		// no prefetching
+/******/ 		
+/******/ 		// no preloaded
+/******/ 		
+/******/ 		// no HMR
+/******/ 		
+/******/ 		// no HMR manifest
+/******/ 		
+/******/ 		__webpack_require__.O.j = function(chunkId) { return installedChunks[chunkId] === 0; };
+/******/ 		
+/******/ 		// install a JSONP callback for chunk loading
+/******/ 		var webpackJsonpCallback = function(parentChunkLoadingFunction, data) {
+/******/ 			var chunkIds = data[0];
+/******/ 			var moreModules = data[1];
+/******/ 			var runtime = data[2];
+/******/ 			// add "moreModules" to the modules object,
+/******/ 			// then flag all "chunkIds" as loaded and fire callback
+/******/ 			var moduleId, chunkId, i = 0;
+/******/ 			if(chunkIds.some(function(id) { return installedChunks[id] !== 0; })) {
+/******/ 				for(moduleId in moreModules) {
+/******/ 					if(__webpack_require__.o(moreModules, moduleId)) {
+/******/ 						__webpack_require__.m[moduleId] = moreModules[moduleId];
+/******/ 					}
+/******/ 				}
+/******/ 				if(runtime) var result = runtime(__webpack_require__);
+/******/ 			}
+/******/ 			if(parentChunkLoadingFunction) parentChunkLoadingFunction(data);
+/******/ 			for(;i < chunkIds.length; i++) {
+/******/ 				chunkId = chunkIds[i];
+/******/ 				if(__webpack_require__.o(installedChunks, chunkId) && installedChunks[chunkId]) {
+/******/ 					installedChunks[chunkId][0]();
+/******/ 				}
+/******/ 				installedChunks[chunkIds[i]] = 0;
+/******/ 			}
+/******/ 			return __webpack_require__.O(result);
+/******/ 		}
+/******/ 		
+/******/ 		var chunkLoadingGlobal = self["webpackChunkwebpack"] = self["webpackChunkwebpack"] || [];
+/******/ 		chunkLoadingGlobal.forEach(webpackJsonpCallback.bind(null, 0));
+/******/ 		chunkLoadingGlobal.push = webpackJsonpCallback.bind(null, chunkLoadingGlobal.push.bind(chunkLoadingGlobal));
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module depends on other loaded chunks and execution need to be delayed
+/******/ 	var __webpack_exports__ = __webpack_require__.O(undefined, ["commons"], function() { return __webpack_require__("./assets/wizards/readerRevenue/index.js"); })
+/******/ 	__webpack_exports__ = __webpack_require__.O(__webpack_exports__);
+/******/ 	var __webpack_export_target__ = window;
+/******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
+/******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
+/******/ 	
+/******/ })()
+;

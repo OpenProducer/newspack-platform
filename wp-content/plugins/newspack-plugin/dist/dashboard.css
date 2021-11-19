@@ -11,13 +11,16 @@
   grid-gap: 16px;
   grid-template-columns: 48px auto;
   margin: 0;
-  padding: 32px; }
-  .newspack-dashboard-card h2,
-  .newspack-dashboard-card p {
-    margin: 0; }
-  .newspack-dashboard-card svg {
-    fill: #36f; }
+  padding: 32px;
+}
+.newspack-dashboard-card h2,
+.newspack-dashboard-card p {
+  margin: 0;
+}
+.newspack-dashboard-card svg {
+  fill: #36f;
+}
 
 .newspack-notice {
-  margin: 0; }
-
+  margin: 0;
+}
