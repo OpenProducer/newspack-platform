@@ -36,7 +36,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 */
 	public function api_credentials() {
 		return [
-			'api_key' => get_option( 'newspack_newsletters_mailchimp_api_key', '' ),
+			// 'newspack_mailchimp_api_key' is a new option introduced to manage MC API key accross Newspack plugins.
+			// Keeping the old option for backwards compatibility.
+			'api_key' => get_option( 'newspack_mailchimp_api_key', get_option( 'newspack_newsletters_mailchimp_api_key', '' ) ),
 		];
 	}
 
@@ -79,7 +81,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			$ping = null;
 		}
 		return $ping ?
-			update_option( 'newspack_newsletters_mailchimp_api_key', $api_key ) :
+			update_option( 'newspack_mailchimp_api_key', $api_key ) :
 			new WP_Error(
 				'newspack_newsletters_invalid_keys',
 				__( 'Please input a valid Mailchimp API key.', 'newspack-newsletters' )
