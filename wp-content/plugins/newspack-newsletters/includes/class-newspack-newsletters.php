@@ -22,7 +22,7 @@ final class Newspack_Newsletters {
 	 *
 	 * @var array
 	 */
-	public static $supported_fonts = [
+	public static $supported_fonts = array(
 		'Arial, Helvetica, sans-serif',
 		'Tahoma, sans-serif',
 		'Trebuchet MS, sans-serif',
@@ -31,7 +31,7 @@ final class Newspack_Newsletters {
 		'Palatino, serif',
 		'Times New Roman, serif',
 		'Courier, monospace',
-	];
+	);
 
 	/**
 	 * The single instance of the class.
@@ -64,32 +64,34 @@ final class Newspack_Newsletters {
 	 * Constructor.
 	 */
 	public function __construct() {
-		add_action( 'init', [ __CLASS__, 'register_cpt' ] );
-		add_action( 'init', [ __CLASS__, 'register_meta' ] );
-		add_action( 'init', [ __CLASS__, 'register_editor_only_meta' ] );
-		add_action( 'init', [ __CLASS__, 'register_blocks' ] );
-		add_action( 'rest_api_init', [ __CLASS__, 'rest_api_init' ] );
-		add_action( 'default_title', [ __CLASS__, 'default_title' ], 10, 2 );
-		add_action( 'wp_head', [ __CLASS__, 'public_newsletter_custom_style' ], 10, 2 );
-		add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
-		add_action( 'pre_get_posts', [ __CLASS__, 'maybe_display_public_archive_posts' ] );
-		add_action( 'template_redirect', [ __CLASS__, 'maybe_display_public_post' ] );
-		add_filter( 'manage_' . self::NEWSPACK_NEWSLETTERS_CPT . '_posts_columns', [ __CLASS__, 'add_public_page_column' ] );
-		add_action( 'manage_' . self::NEWSPACK_NEWSLETTERS_CPT . '_posts_custom_column', [ __CLASS__, 'public_page_column_content' ], 10, 2 );
-		add_filter( 'post_row_actions', [ __CLASS__, 'display_view_or_preview_link_in_admin' ] );
-		add_filter( 'jetpack_relatedposts_filter_options', [ __CLASS__, 'disable_jetpack_related_posts' ] );
-		add_action( 'save_post_' . self::NEWSPACK_NEWSLETTERS_CPT, [ __CLASS__, 'save' ], 10, 3 );
-		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'branding_scripts' ] );
-		add_filter( 'newspack_theme_featured_image_post_types', [ __CLASS__, 'support_featured_image_options' ] );
-		add_filter( 'gform_force_hooks_js_output', [ __CLASS__, 'suppress_gravityforms_js_on_newsletters' ] );
-		add_filter( 'render_block', [ __CLASS__, 'remove_email_only_block' ], 10, 2 );
+		add_action( 'init', array( __CLASS__, 'register_cpt' ) );
+		add_action( 'init', array( __CLASS__, 'register_meta' ) );
+		add_action( 'init', array( __CLASS__, 'register_editor_only_meta' ) );
+		add_action( 'init', array( __CLASS__, 'register_blocks' ) );
+		add_action( 'rest_api_init', array( __CLASS__, 'rest_api_init' ) );
+		add_action( 'default_title', array( __CLASS__, 'default_title' ), 10, 2 );
+		add_action( 'wp_head', array( __CLASS__, 'public_newsletter_custom_style' ), 10, 2 );
+		add_filter( 'display_post_states', array( __CLASS__, 'display_post_states' ), 10, 2 );
+		add_action( 'pre_get_posts', array( __CLASS__, 'maybe_display_public_archive_posts' ) );
+		add_filter( 'posts_join', array( __CLASS__, 'filter_non_public_newsletters_join' ), 10, 2 );
+		add_filter( 'posts_where', array( __CLASS__, 'filter_non_public_newsletters_where' ), 10, 2 );
+		add_action( 'template_redirect', array( __CLASS__, 'maybe_display_public_post' ) );
+		add_filter( 'manage_' . self::NEWSPACK_NEWSLETTERS_CPT . '_posts_columns', array( __CLASS__, 'add_public_page_column' ) );
+		add_action( 'manage_' . self::NEWSPACK_NEWSLETTERS_CPT . '_posts_custom_column', array( __CLASS__, 'public_page_column_content' ), 10, 2 );
+		add_filter( 'post_row_actions', array( __CLASS__, 'display_view_or_preview_link_in_admin' ) );
+		add_filter( 'jetpack_relatedposts_filter_options', array( __CLASS__, 'disable_jetpack_related_posts' ) );
+		add_action( 'save_post_' . self::NEWSPACK_NEWSLETTERS_CPT, array( __CLASS__, 'save' ), 10, 3 );
+		add_action( 'admin_enqueue_scripts', array( __CLASS__, 'branding_scripts' ) );
+		add_filter( 'newspack_theme_featured_image_post_types', array( __CLASS__, 'support_featured_image_options' ) );
+		add_filter( 'gform_force_hooks_js_output', array( __CLASS__, 'suppress_gravityforms_js_on_newsletters' ) );
+		add_filter( 'render_block', array( __CLASS__, 'remove_email_only_block' ), 10, 2 );
 		self::set_service_provider( self::service_provider() );
 
 		$needs_nag = is_admin() && ! self::is_service_provider_configured() && ! get_option( 'newspack_newsletters_activation_nag_viewed', false );
 		if ( $needs_nag ) {
-			add_action( 'admin_notices', [ __CLASS__, 'activation_nag' ] );
-			add_action( 'admin_enqueue_scripts', [ __CLASS__, 'activation_nag_dismissal_script' ] );
-			add_action( 'wp_ajax_newspack_newsletters_activation_nag_dismissal', [ __CLASS__, 'activation_nag_dismissal_ajax' ] );
+			add_action( 'admin_notices', array( __CLASS__, 'activation_nag' ) );
+			add_action( 'admin_enqueue_scripts', array( __CLASS__, 'activation_nag_dismissal_script' ) );
+			add_action( 'wp_ajax_newspack_newsletters_activation_nag_dismissal', array( __CLASS__, 'activation_nag_dismissal_ajax' ) );
 		}
 	}
 
@@ -118,70 +120,70 @@ final class Newspack_Newsletters {
 	 * These have to be registered so the updates are handles correctly.
 	 */
 	public static function register_editor_only_meta() {
-		$fields = [
-			[
+		$fields = array(
+			array(
 				'name'               => 'newsletterData',
-				'register_meta_args' => [
-					'show_in_rest' => [
-						'schema' => [
+				'register_meta_args' => array(
+					'show_in_rest' => array(
+						'schema' => array(
 							'type'                 => 'object',
-							'context'              => [ 'edit' ],
+							'context'              => array( 'edit' ),
 							'additionalProperties' => true,
-							'properties'           => [],
-						],
-					],
+							'properties'           => array(),
+						),
+					),
 					'type'         => 'object',
-				],
-			],
-			[
+				),
+			),
+			array(
 				'name'               => 'newsletterValidationErrors',
-				'register_meta_args' => [
-					'show_in_rest' => [
-						'schema' => [
+				'register_meta_args' => array(
+					'show_in_rest' => array(
+						'schema' => array(
 							'type'    => 'array',
-							'context' => [ 'edit' ],
-							'items'   => [
+							'context' => array( 'edit' ),
+							'items'   => array(
 								'type' => 'string',
-							],
-						],
-					],
+							),
+						),
+					),
 					'type'         => 'array',
-				],
-			],
-			[
+				),
+			),
+			array(
 				'name'               => 'senderName',
-				'register_meta_args' => [
-					'show_in_rest' => [
-						'schema' => [
-							'context' => [ 'edit' ],
-						],
-					],
+				'register_meta_args' => array(
+					'show_in_rest' => array(
+						'schema' => array(
+							'context' => array( 'edit' ),
+						),
+					),
 					'type'         => 'string',
-				],
-			],
-			[
+				),
+			),
+			array(
 				'name'               => 'senderEmail',
-				'register_meta_args' => [
-					'show_in_rest' => [
-						'schema' => [
-							'context' => [ 'edit' ],
-						],
-					],
+				'register_meta_args' => array(
+					'show_in_rest' => array(
+						'schema' => array(
+							'context' => array( 'edit' ),
+						),
+					),
 					'type'         => 'string',
-				],
-			],
-		];
+				),
+			),
+		);
 		foreach ( $fields as $field ) {
 			\register_meta(
 				'post',
 				$field['name'],
 				array_merge(
 					$field['register_meta_args'],
-					[
+					array(
 						'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
 						'single'         => true,
 						'auth_callback'  => '__return_true',
-					]
+					)
 				)
 			);
 		}
@@ -194,124 +196,124 @@ final class Newspack_Newsletters {
 		\register_meta(
 			'post',
 			'template_id',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'integer',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 				'default'        => -1,
-			]
+			)
 		);
 		\register_meta(
 			'post',
 			'font_header',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'string',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
-			]
+			)
 		);
 		\register_meta(
 			'post',
 			'font_body',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'string',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
-			]
+			)
 		);
 		\register_meta(
 			'post',
 			'background_color',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'string',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
-			]
+			)
 		);
 		\register_meta(
 			'post',
 			'preview_text',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'string',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
-			]
+			)
 		);
 		\register_meta(
 			'post',
 			'diable_ads',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'boolean',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
-			]
+			)
 		);
 		\register_meta(
 			'post',
 			'is_public',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'boolean',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
-			]
+			)
 		);
 		\register_meta(
 			'post',
 			'custom_css',
-			[
+			array(
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
+				'show_in_rest'   => array(
+					'schema' => array(
+						'context' => array( 'edit' ),
+					),
+				),
 				'type'           => 'string',
 				'single'         => true,
 				'default'        => '',
 				'auth_callback'  => '__return_true',
-			]
+			)
 		);
 	}
 
@@ -340,7 +342,7 @@ final class Newspack_Newsletters {
 			$public_slug = 'newsletter';
 		}
 
-		$labels = [
+		$labels = array(
 			'name'               => _x( 'Newsletters', 'post type general name', 'newspack-newsletters' ),
 			'singular_name'      => _x( 'Newsletter', 'post type singular name', 'newspack-newsletters' ),
 			'menu_name'          => _x( 'Newsletters', 'admin menu', 'newspack-newsletters' ),
@@ -355,21 +357,21 @@ final class Newspack_Newsletters {
 			'parent_item_colon'  => __( 'Parent Newsletters:', 'newspack-newsletters' ),
 			'not_found'          => __( 'No newsletters found.', 'newspack-newsletters' ),
 			'not_found_in_trash' => __( 'No newsletters found in Trash.', 'newspack-newsletters' ),
-		];
+		);
 
-		$cpt_args = [
+		$cpt_args = array(
 			'has_archive'      => $public_slug,
 			'labels'           => $labels,
 			'public'           => true,
 			'public_queryable' => true,
 			'query_var'        => true,
-			'rewrite'          => [ 'slug' => $public_slug ],
+			'rewrite'          => array( 'slug' => $public_slug ),
 			'show_ui'          => true,
 			'show_in_rest'     => true,
-			'supports'         => [ 'author', 'editor', 'title', 'custom-fields', 'newspack_blocks', 'revisions', 'thumbnail', 'excerpt' ],
-			'taxonomies'       => [ 'category', 'post_tag' ],
+			'supports'         => array( 'author', 'editor', 'title', 'custom-fields', 'newspack_blocks', 'revisions', 'thumbnail', 'excerpt' ),
+			'taxonomies'       => array( 'category', 'post_tag' ),
 			'menu_icon'        => 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGhlaWdodD0iMjQiIHZpZXdCb3g9IjAgMCAyNCAyNCIgd2lkdGg9IjI0Ij48cGF0aCB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIGQ9Ik0yMS45OSA4YzAtLjcyLS4zNy0xLjM1LS45NC0xLjdMMTIgMSAyLjk1IDYuM0MyLjM4IDYuNjUgMiA3LjI4IDIgOHYxMGMwIDEuMS45IDIgMiAyaDE2YzEuMSAwIDItLjkgMi0ybC0uMDEtMTB6TTEyIDEzTDMuNzQgNy44NCAxMiAzbDguMjYgNC44NEwxMiAxM3oiIGZpbGw9IiNhMGE1YWEiLz48L3N2Zz4K',
-		];
+		);
 		\register_post_type( self::NEWSPACK_NEWSLETTERS_CPT, $cpt_args );
 	}
 
@@ -383,17 +385,17 @@ final class Newspack_Newsletters {
 		);
 		register_block_type(
 			$block_definition['name'],
-			[
-				'render_callback' => [ __CLASS__, 'render_posts_inserter_block' ],
+			array(
+				'render_callback' => array( __CLASS__, 'render_posts_inserter_block' ),
 				'attributes'      => $block_definition['attributes'],
 				'supports'        => $block_definition['supports'],
-			]
+			)
 		);
 		register_block_type(
 			'newspack-newsletters/share',
-			[
-				'render_callback' => [ __CLASS__, 'render_share_block' ],
-			]
+			array(
+				'render_callback' => array( __CLASS__, 'render_share_block' ),
+			)
 		);
 	}
 
@@ -461,46 +463,49 @@ final class Newspack_Newsletters {
 	}
 
 	/**
+	 * Convenience function to determine whether a Newspack specific filter should be applied to a query.
+	 *
+	 * @param WP_Query $query The WP query object.
+	 *
+	 * @return bool
+	 */
+	public static function should_apply_filter_to_query( $query ) {
+		return ! is_admin() && $query->is_main_query() && ( $query->is_archive() || $query->is_search() );
+	}
+
+	/**
 	 * Allow newsletter posts to appear in archive pages, but only if set to be public.
 	 *
 	 * @param array $query The WP query object.
 	 */
 	public static function maybe_display_public_archive_posts( $query ) {
 		// Only run on the main front-end query for post category and tag archives, or newsletter CPT archives.
-		if (
-			is_admin() ||
-			! $query->is_main_query() ||
-			(
-				! is_category() &&
-				! is_tag() &&
-				! is_post_type_archive( self::NEWSPACK_NEWSLETTERS_CPT )
-			)
-		) {
+		if ( ! self::should_apply_filter_to_query( $query ) ) {
 			return;
 		}
 
 		// Allow Newsletter posts to appear in post category and tag archives.
-		if ( is_category() || is_tag() || empty( $query->get( 'post_type' ) ) ) {
-			$query->set( 'post_type', [ 'post', self::NEWSPACK_NEWSLETTERS_CPT ] );
+		if ( $query->is_category() || $query->is_tag() || empty( $query->get( 'post_type' ) ) ) {
+			$query->set( 'post_type', array( 'post', self::NEWSPACK_NEWSLETTERS_CPT ) ); // phpcs:ignore
 		}
 
 		// Filter out non-public Newsletter posts.
-		$meta_query        = $query->get( 'meta_query', [] ); // phpcs:ignore WordPressVIPMinimum.Hooks.PreGetPosts.PreGetPosts
-		$meta_query_params = [
-			[
+		$meta_query        = $query->get( 'meta_query', array() ); // phpcs:ignore WordPressVIPMinimum.Hooks.PreGetPosts.PreGetPosts
+		$meta_query_params = array(
+			array(
 				'key'     => 'is_public',
 				'value'   => true,
 				'compare' => '=',
-			],
-		];
+			),
+		);
 
 		// If a regular post archive, also allow posts that don't have the is_public meta field.
-		if ( is_category() || is_tag() ) {
+		if ( $query->is_category() || $query->is_tag() || $query->is_search() ) {
 			$meta_query_params['relation'] = 'OR';
-			$meta_query_params[]           = [
+			$meta_query_params[]           = array(
 				'key'     => 'is_public',
 				'compare' => 'NOT EXISTS',
-			];
+			);
 		}
 
 		$meta_query[] = $meta_query_params;
@@ -548,7 +553,7 @@ final class Newspack_Newsletters {
 	 * @return array
 	 */
 	public static function add_public_page_column( $columns ) {
-		return array_merge( $columns, [ 'public_page' => __( 'Public page', 'newspack-newsletters' ) ] );
+		return array_merge( $columns, array( 'public_page' => __( 'Public page', 'newspack-newsletters' ) ) );
 	}
 
 	/**
@@ -613,61 +618,61 @@ final class Newspack_Newsletters {
 		\register_rest_route(
 			'newspack-newsletters/v1',
 			'layouts',
-			[
+			array(
 				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ __CLASS__, 'api_get_layouts' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-			]
+				'callback'            => array( __CLASS__, 'api_get_layouts' ),
+				'permission_callback' => array( __CLASS__, 'api_authoring_permissions_check' ),
+			)
 		);
 		\register_rest_route(
 			'newspack-newsletters/v1',
 			'settings',
-			[
+			array(
 				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ __CLASS__, 'api_get_settings' ],
-				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
-			]
+				'callback'            => array( __CLASS__, 'api_get_settings' ),
+				'permission_callback' => array( __CLASS__, 'api_administration_permissions_check' ),
+			)
 		);
 		\register_rest_route(
 			'newspack-newsletters/v1',
 			'settings',
-			[
+			array(
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_set_settings' ],
-				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
-				'args'                => [
-					'mailchimp_api_key' => [
+				'callback'            => array( __CLASS__, 'api_set_settings' ),
+				'permission_callback' => array( __CLASS__, 'api_administration_permissions_check' ),
+				'args'                => array(
+					'mailchimp_api_key' => array(
 						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
+					),
+				),
+			)
 		);
 		\register_rest_route(
 			'newspack-newsletters/v1',
 			'color-palette',
-			[
+			array(
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_set_color_palette' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-			]
+				'callback'            => array( __CLASS__, 'api_set_color_palette' ),
+				'permission_callback' => array( __CLASS__, 'api_authoring_permissions_check' ),
+			)
 		);
 		\register_rest_route(
 			'newspack-newsletters/v1',
 			'post-mjml',
-			[
+			array(
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ __CLASS__, 'api_get_mjml' ],
-				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-				'args'                => [
-					'post_id' => [
+				'callback'            => array( __CLASS__, 'api_get_mjml' ),
+				'permission_callback' => array( __CLASS__, 'api_authoring_permissions_check' ),
+				'args'                => array(
+					'post_id' => array(
 						'required'          => true,
 						'sanitize_callback' => 'absint',
-					],
-					'content' => [
+					),
+					'content' => array(
 						'required' => true,
-					],
-				],
-			]
+					),
+				),
+			)
 		);
 	}
 
@@ -685,12 +690,12 @@ final class Newspack_Newsletters {
 			'newspack_newsletters_color_palette',
 			wp_json_encode(
 				array_merge(
-					json_decode( (string) get_option( 'newspack_newsletters_color_palette', '{}' ), true ) ?? [],
+					json_decode( (string) get_option( 'newspack_newsletters_color_palette', '{}' ), true ) ?? array(),
 					json_decode( $request->get_body(), true )
 				)
 			)
 		);
-		return \rest_ensure_response( [] );
+		return \rest_ensure_response( array() );
 	}
 
 	/**
@@ -706,7 +711,7 @@ final class Newspack_Newsletters {
 			$post->post_title = $request['title'];
 		}
 		$post->post_content = $request['content'];
-		return \rest_ensure_response( [ 'mjml' => Newspack_Newsletters_Renderer::render_post_to_mjml( $post ) ] );
+		return \rest_ensure_response( array( 'mjml' => Newspack_Newsletters_Renderer::render_post_to_mjml( $post ) ) );
 	}
 
 	/**
@@ -723,7 +728,7 @@ final class Newspack_Newsletters {
 		$key   = $request['key'];
 		$value = $request['value'];
 		update_post_meta( $id, $key, $value );
-		return [];
+		return array();
 	}
 
 	/**
@@ -747,12 +752,12 @@ final class Newspack_Newsletters {
 		);
 		$user_layouts  = array_map(
 			function ( $post ) {
-				$post->meta = [
+				$post->meta = array(
 					'background_color' => get_post_meta( $post->ID, 'background_color', true ),
 					'font_body'        => get_post_meta( $post->ID, 'font_body', true ),
 					'font_header'      => get_post_meta( $post->ID, 'font_header', true ),
 					'custom_css'       => get_post_meta( $post->ID, 'custom_css', true ),
-				];
+				);
 				return $post;
 			},
 			$layouts_query->get_posts()
@@ -760,7 +765,7 @@ final class Newspack_Newsletters {
 		$layouts       = array_merge(
 			$user_layouts,
 			Newspack_Newsletters_Layouts::get_default_layouts(),
-			apply_filters( 'newspack_newsletters_templates', [] )
+			apply_filters( 'newspack_newsletters_templates', array() )
 		);
 
 		return \rest_ensure_response( $layouts );
@@ -818,13 +823,15 @@ final class Newspack_Newsletters {
 	 */
 	public static function api_settings() {
 		$service_provider = self::service_provider();
-		$response         = [
+		$response         = array(
 			'service_provider' => $service_provider ? $service_provider : '',
 			'status'           => false,
-		];
+		);
 		$is_esp_manual    = 'manual' === $service_provider;
 
-		if ( ! $is_esp_manual && ! self::$provider && get_option( 'newspack_newsletters_mailchimp_api_key', false ) ) {
+		// 'newspack_mailchimp_api_key' is a new option introduced to manage MC API key accross Newspack plugins.
+		// Keeping the old option for backwards compatibility.
+		if ( ! $is_esp_manual && ! self::$provider && get_option( 'newspack_mailchimp_api_key', get_option( 'newspack_newsletters_mailchimp_api_key' ) ) ) {
 			// Legacy – Mailchimp provider set before multi-provider handling was set up.
 			self::set_service_provider( 'mailchimp' );
 		}
@@ -864,9 +871,9 @@ final class Newspack_Newsletters {
 			return new \WP_Error(
 				'newspack_rest_forbidden',
 				esc_html__( 'You cannot use this resource.', 'newspack-newsletters' ),
-				[
+				array(
 					'status' => 403,
-				]
+				)
 			);
 		}
 		return true;
@@ -883,9 +890,9 @@ final class Newspack_Newsletters {
 			return new \WP_Error(
 				'newspack_rest_forbidden',
 				esc_html__( 'You cannot use this resource.', 'newspack-newsletters' ),
-				[
+				array(
 					'status' => 403,
-				]
+				)
 			);
 		}
 		return true;
@@ -987,14 +994,14 @@ final class Newspack_Newsletters {
 		wp_enqueue_script(
 			$script,
 			plugins_url( '../dist/branding.js', __FILE__ ),
-			[ 'jquery' ],
+			array( 'jquery' ),
 			'1.0',
 			false
 		);
 		wp_enqueue_style(
 			$script,
 			plugins_url( '../dist/branding.css', __FILE__ ),
-			[],
+			array(),
 			'1.0',
 			'screen'
 		);
@@ -1008,16 +1015,16 @@ final class Newspack_Newsletters {
 		wp_register_script(
 			$script,
 			plugins_url( '../dist/admin.js', __FILE__ ),
-			[ 'jquery' ],
+			array( 'jquery' ),
 			'1.0',
 			false
 		);
 		wp_localize_script(
 			$script,
 			'newspack_newsletters_activation_nag_dismissal_params',
-			[
+			array(
 				'ajaxurl' => get_admin_url() . 'admin-ajax.php',
-			]
+			)
 		);
 		wp_enqueue_script( $script );
 	}
@@ -1056,7 +1063,7 @@ final class Newspack_Newsletters {
 	public static function support_featured_image_options( $post_types ) {
 		return array_merge(
 			$post_types,
-			[ self::NEWSPACK_NEWSLETTERS_CPT ]
+			array( self::NEWSPACK_NEWSLETTERS_CPT )
 		);
 	}
 
@@ -1119,7 +1126,7 @@ final class Newspack_Newsletters {
 				);
 			}
 		}
-		return [];
+		return array();
 	}
 
 	/**
@@ -1139,6 +1146,50 @@ final class Newspack_Newsletters {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Custom join to be used in conjunction with filter_non_public_newsletters_where
+	 * so that only public newsletters which are published are displayed in search.
+	 *
+	 * @param string   $join Join SQL statement.
+	 * @param WP_Query $query WP Query object.
+	 *
+	 * @return string
+	 */
+	public static function filter_non_public_newsletters_join( $join, $query ) {
+		global $wpdb;
+
+		if ( self::should_apply_filter_to_query( $query ) ) {
+			$join .= "LEFT JOIN {$wpdb->postmeta} AS cj1 ON (
+                        {$wpdb->posts}.ID = cj1.post_id 
+                        AND {$wpdb->posts}.post_type = 'newspack_nl_cpt' 
+                        AND cj1.meta_key = 'is_public' 
+                        AND cj1.meta_value = '1' ) ";
+			$join .= "LEFT JOIN {$wpdb->postmeta} AS cj2 
+                        ON ( {$wpdb->posts}.ID = cj2.post_id AND cj2.meta_key = 'is_public' ) ";
+		}
+
+		return $join;
+	}
+
+	/**
+	 * Custom where to be used in conjunction with filter_non_public_newsletters_join
+	 * so that only public newsletters which are published are displayed in search.
+	 *
+	 * @param string   $where SQL constraints making up the WHERE statement.
+	 * @param WP_Query $query WP Query object.
+	 *
+	 * @return string
+	 */
+	public static function filter_non_public_newsletters_where( $where, $query ) {
+		global $wpdb;
+
+		if ( self::should_apply_filter_to_query( $query ) ) {
+			$where .= 'AND ( ( cj1.post_id IS NOT NULL ) OR ( cj2.post_id IS NULL ) )';
+		}
+
+		return $where;
 	}
 }
 Newspack_Newsletters::instance();

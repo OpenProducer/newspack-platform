@@ -3,6 +3,7 @@
 	align-items: flex-start;
 	display: flex;
 	position: relative;
+	margin-top: em($gap-large);
 
 	.wc-block-components-checkbox__input[type="checkbox"] {
 		font-size: 1em;
@@ -25,6 +26,11 @@
 			border-color: $input-border-gray;
 		}
 
+		&:focus {
+			outline: 2px solid $input-border-gray;
+			outline-offset: 2px;
+		}
+
 		&::before,
 		&::after {
 			content: "";
@@ -41,6 +47,11 @@
 			&:checked {
 				background: $input-background-dark;
 				border-color: $controls-border-dark;
+			}
+
+			&:focus {
+				outline: 2px solid $controls-border-dark;
+				outline-offset: 2px;
 			}
 		}
 	}
@@ -59,7 +70,7 @@
 				border-color: $alert-red;
 			}
 			&:focus {
-				outline: 1px dotted $alert-red;
+				outline: 2px solid $alert-red;
 				outline-offset: 2px;
 			}
 		}

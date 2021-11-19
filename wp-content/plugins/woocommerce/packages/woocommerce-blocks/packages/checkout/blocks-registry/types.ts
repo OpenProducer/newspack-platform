@@ -5,6 +5,7 @@ import type { LazyExoticComponent } from 'react';
 import type { BlockConfiguration } from '@wordpress/blocks';
 
 export enum innerBlockAreas {
+	CHECKOUT = 'woocommerce/checkout',
 	CHECKOUT_FIELDS = 'woocommerce/checkout-fields-block',
 	CHECKOUT_TOTALS = 'woocommerce/checkout-totals-block',
 	CONTACT_INFORMATION = 'woocommerce/checkout-contact-information-block',
@@ -12,6 +13,11 @@ export enum innerBlockAreas {
 	BILLING_ADDRESS = 'woocommerce/checkout-billing-address-block',
 	SHIPPING_METHODS = 'woocommerce/checkout-shipping-methods-block',
 	PAYMENT_METHODS = 'woocommerce/checkout-payment-methods-block',
+	CART = 'woocommerce/cart-i2',
+	EMPTY_CART = 'woocommerce/empty-cart-block',
+	FILLED_CART = 'woocommerce/filled-cart-block',
+	CART_ITEMS = 'woocommerce/cart-items-block',
+	CART_TOTALS = 'woocommerce/cart-totals-block',
 }
 
 interface CheckoutBlockOptionsMetadata extends Partial< BlockConfiguration > {

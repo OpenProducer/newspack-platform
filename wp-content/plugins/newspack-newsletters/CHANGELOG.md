@@ -1,3 +1,29 @@
+# [1.36.0](https://github.com/Automattic/newspack-newsletters/compare/v1.35.1...v1.36.0) (2021-11-18)
+
+
+### Bug Fixes
+
+* change MC API key option name ([#597](https://github.com/Automattic/newspack-newsletters/issues/597)) ([76275e8](https://github.com/Automattic/newspack-newsletters/commit/76275e8c540696eba342b473e8a1c1107d5f073b))
+* non-public newsletters should not surface in search results ([7de9262](https://github.com/Automattic/newspack-newsletters/commit/7de92624ce117b78ac7785376fb13ad8d83596d8))
+
+
+### Features
+
+* allow custom hooks in the email editor ([21e5034](https://github.com/Automattic/newspack-newsletters/commit/21e5034693ddf7129b513c67e6a46477d8ad671a))
+
+# [1.36.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.35.1...v1.36.0-alpha.1) (2021-11-16)
+
+
+### Bug Fixes
+
+* change MC API key option name ([#597](https://github.com/Automattic/newspack-newsletters/issues/597)) ([76275e8](https://github.com/Automattic/newspack-newsletters/commit/76275e8c540696eba342b473e8a1c1107d5f073b))
+* non-public newsletters should not surface in search results ([7de9262](https://github.com/Automattic/newspack-newsletters/commit/7de92624ce117b78ac7785376fb13ad8d83596d8))
+
+
+### Features
+
+* allow custom hooks in the email editor ([21e5034](https://github.com/Automattic/newspack-newsletters/commit/21e5034693ddf7129b513c67e6a46477d8ad671a))
+
 ## [1.35.1](https://github.com/Automattic/newspack-newsletters/compare/v1.35.0...v1.35.1) (2021-11-03)
 
 

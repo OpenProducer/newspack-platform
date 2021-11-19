@@ -56,8 +56,9 @@ class Newspack_Newsletters_Settings {
 			),
 			array(
 				'description' => __( 'Mailchimp API Key', 'newspack-newsletters' ),
-				'key'         => 'newspack_newsletters_mailchimp_api_key',
+				'key'         => 'newspack_mailchimp_api_key',
 				'type'        => 'text',
+				'default'     => get_option( 'newspack_newsletters_mailchimp_api_key', '' ),
 				'provider'    => 'mailchimp',
 			),
 			array(

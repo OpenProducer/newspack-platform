@@ -103,11 +103,14 @@ final class Newspack_Newsletters_Editor {
 			return;
 		}
 
-		$allowed_actions = [
-			__CLASS__ . '::enqueue_block_editor_assets',
-			'newspack_enqueue_scripts',
-			'wp_enqueue_editor_format_library_assets',
-		];
+		$allowed_actions = apply_filters(
+			'newspack_newsletters_allowed_editor_actions', 
+			[
+				__CLASS__ . '::enqueue_block_editor_assets',
+				'newspack_enqueue_scripts',
+				'wp_enqueue_editor_format_library_assets',
+			]
+		);
 
 		$enqueue_block_editor_assets_filters = $GLOBALS['wp_filter']['enqueue_block_editor_assets']->callbacks;
 		foreach ( $enqueue_block_editor_assets_filters as $index => $filter ) {

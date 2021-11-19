@@ -7,7 +7,7 @@ namespace Automattic\WooCommerce\Admin\Features\PaymentGatewaySuggestions;
 
 defined( 'ABSPATH' ) || exit;
 
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks;
+use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Init as OnboardingTasks;
 
 /**
  * Default Payment Gateways
@@ -43,7 +43,51 @@ class DefaultPaymentGateways {
 				'image'                   => WC()->plugin_url() . '/assets/images/stripe.png',
 				'plugins'                 => array( 'woocommerce-gateway-stripe' ),
 				'is_visible'              => array(
-					self::get_rules_for_countries( OnboardingTasks::get_stripe_supported_countries() ),
+					// https://stripe.com/global.
+					self::get_rules_for_countries(
+						array(
+							'AU',
+							'AT',
+							'BE',
+							'BG',
+							'BR',
+							'CA',
+							'CY',
+							'CZ',
+							'DK',
+							'EE',
+							'FI',
+							'FR',
+							'DE',
+							'GR',
+							'HK',
+							'IN',
+							'IE',
+							'IT',
+							'JP',
+							'LV',
+							'LT',
+							'LU',
+							'MY',
+							'MT',
+							'MX',
+							'NL',
+							'NZ',
+							'NO',
+							'PL',
+							'PT',
+							'RO',
+							'SG',
+							'SK',
+							'SI',
+							'ES',
+							'SE',
+							'CH',
+							'GB',
+							'US',
+							'PR',
+						)
+					),
 					self::get_rules_for_cbd( false ),
 				),
 				'recommendation_priority' => 3,
@@ -212,8 +256,8 @@ class DefaultPaymentGateways {
 			),
 			array(
 				'id'         => 'eway',
-				'title'      => __( 'eWAY', 'woocommerce' ),
-				'content'    => __( 'The eWAY extension for WooCommerce allows you to take credit card payments directly on your store without redirecting your customers to a third party site to make payment.', 'woocommerce' ),
+				'title'      => __( 'Eway', 'woocommerce' ),
+				'content'    => __( 'The Eway extension for WooCommerce allows you to take credit card payments directly on your store without redirecting your customers to a third party site to make payment.', 'woocommerce' ),
 				'image'      => plugins_url( 'images/onboarding/eway.png', WC_ADMIN_PLUGIN_FILE ),
 				'plugins'    => array( 'woocommerce-gateway-eway' ),
 				'is_visible' => array(
@@ -236,7 +280,7 @@ class DefaultPaymentGateways {
 								self::get_rules_for_cbd( true ),
 							),
 							array(
-								self::get_rules_for_countries( array( 'US', 'CA', 'JP', 'GB', 'AU', 'IE' ) ),
+								self::get_rules_for_countries( array( 'US', 'CA', 'JP', 'GB', 'AU', 'IE', 'FR' ) ),
 								self::get_rules_for_selling_venues( array( 'brick-mortar', 'brick-mortar-other' ) ),
 							),
 						),
