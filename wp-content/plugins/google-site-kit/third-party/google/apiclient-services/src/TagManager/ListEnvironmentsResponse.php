@@ -22,6 +22,9 @@ class ListEnvironmentsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     protected $collection_key = 'environment';
     protected $environmentType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment::class;
     protected $environmentDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param Environment[]
@@ -37,10 +40,16 @@ class ListEnvironmentsResponse extends \Google\Site_Kit_Dependencies\Google\Coll
     {
         return $this->environment;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

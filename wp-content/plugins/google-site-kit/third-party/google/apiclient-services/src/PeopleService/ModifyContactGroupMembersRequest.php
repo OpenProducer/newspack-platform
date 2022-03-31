@@ -20,20 +20,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class ModifyContactGroupMembersRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'resourceNamesToRemove';
+    /**
+     * @var string[]
+     */
     public $resourceNamesToAdd;
+    /**
+     * @var string[]
+     */
     public $resourceNamesToRemove;
+    /**
+     * @param string[]
+     */
     public function setResourceNamesToAdd($resourceNamesToAdd)
     {
         $this->resourceNamesToAdd = $resourceNamesToAdd;
     }
+    /**
+     * @return string[]
+     */
     public function getResourceNamesToAdd()
     {
         return $this->resourceNamesToAdd;
     }
+    /**
+     * @param string[]
+     */
     public function setResourceNamesToRemove($resourceNamesToRemove)
     {
         $this->resourceNamesToRemove = $resourceNamesToRemove;
     }
+    /**
+     * @return string[]
+     */
     public function getResourceNamesToRemove()
     {
         return $this->resourceNamesToRemove;

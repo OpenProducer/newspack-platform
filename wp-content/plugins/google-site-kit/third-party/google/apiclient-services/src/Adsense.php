@@ -27,7 +27,7 @@ use Google\Site_Kit_Dependencies\Google\Client;
  *
  * <p>
  * For more information about this service, see the API
- * <a href="http://code.google.com/apis/adsense/management/" target="_blank">Documentation</a>
+ * <a href="https://developers.google.com/adsense/management/" target="_blank">Documentation</a>
  * </p>
  *
  * @author Google, Inc.

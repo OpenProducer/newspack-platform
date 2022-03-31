@@ -19,15 +19,30 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class Relation extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $formattedType;
     protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
     protected $metadataDataType = '';
+    /**
+     * @var string
+     */
     public $person;
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @param string
+     */
     public function setFormattedType($formattedType)
     {
         $this->formattedType = $formattedType;
     }
+    /**
+     * @return string
+     */
     public function getFormattedType()
     {
         return $this->formattedType;
@@ -46,18 +61,30 @@ class Relation extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->metadata;
     }
+    /**
+     * @param string
+     */
     public function setPerson($person)
     {
         $this->person = $person;
     }
+    /**
+     * @return string
+     */
     public function getPerson()
     {
         return $this->person;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;

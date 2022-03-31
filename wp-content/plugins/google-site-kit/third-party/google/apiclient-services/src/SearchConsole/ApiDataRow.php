@@ -23,6 +23,9 @@ class ApiDataRow extends \Google\Site_Kit_Dependencies\Google\Collection
     public $clicks;
     public $ctr;
     public $impressions;
+    /**
+     * @var string[]
+     */
     public $keys;
     public $position;
     public function setClicks($clicks)
@@ -49,10 +52,16 @@ class ApiDataRow extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->impressions;
     }
+    /**
+     * @param string[]
+     */
     public function setKeys($keys)
     {
         $this->keys = $keys;
     }
+    /**
+     * @return string[]
+     */
     public function getKeys()
     {
         return $this->keys;

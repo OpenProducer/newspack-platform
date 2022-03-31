@@ -20,18 +20,36 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 class SearchUserActivityRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'activityTypes';
+    /**
+     * @var string[]
+     */
     public $activityTypes;
     protected $dateRangeType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\DateRange::class;
     protected $dateRangeDataType = '';
+    /**
+     * @var int
+     */
     public $pageSize;
+    /**
+     * @var string
+     */
     public $pageToken;
     protected $userType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\User::class;
     protected $userDataType = '';
+    /**
+     * @var string
+     */
     public $viewId;
+    /**
+     * @param string[]
+     */
     public function setActivityTypes($activityTypes)
     {
         $this->activityTypes = $activityTypes;
     }
+    /**
+     * @return string[]
+     */
     public function getActivityTypes()
     {
         return $this->activityTypes;
@@ -50,18 +68,30 @@ class SearchUserActivityRequest extends \Google\Site_Kit_Dependencies\Google\Col
     {
         return $this->dateRange;
     }
+    /**
+     * @param int
+     */
     public function setPageSize($pageSize)
     {
         $this->pageSize = $pageSize;
     }
+    /**
+     * @return int
+     */
     public function getPageSize()
     {
         return $this->pageSize;
     }
+    /**
+     * @param string
+     */
     public function setPageToken($pageToken)
     {
         $this->pageToken = $pageToken;
     }
+    /**
+     * @return string
+     */
     public function getPageToken()
     {
         return $this->pageToken;
@@ -80,10 +110,16 @@ class SearchUserActivityRequest extends \Google\Site_Kit_Dependencies\Google\Col
     {
         return $this->user;
     }
+    /**
+     * @param string
+     */
     public function setViewId($viewId)
     {
         $this->viewId = $viewId;
     }
+    /**
+     * @return string
+     */
     public function getViewId()
     {
         return $this->viewId;

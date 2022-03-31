@@ -20,24 +20,42 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 class EcommerceData extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'products';
+    /**
+     * @var string
+     */
     public $actionType;
+    /**
+     * @var string
+     */
     public $ecommerceType;
     protected $productsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\ProductData::class;
     protected $productsDataType = 'array';
     protected $transactionType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\TransactionData::class;
     protected $transactionDataType = '';
+    /**
+     * @param string
+     */
     public function setActionType($actionType)
     {
         $this->actionType = $actionType;
     }
+    /**
+     * @return string
+     */
     public function getActionType()
     {
         return $this->actionType;
     }
+    /**
+     * @param string
+     */
     public function setEcommerceType($ecommerceType)
     {
         $this->ecommerceType = $ecommerceType;
     }
+    /**
+     * @return string
+     */
     public function getEcommerceType()
     {
         return $this->ecommerceType;

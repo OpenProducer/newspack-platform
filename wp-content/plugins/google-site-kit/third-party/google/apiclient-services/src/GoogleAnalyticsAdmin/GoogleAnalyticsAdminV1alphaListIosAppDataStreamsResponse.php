@@ -22,6 +22,9 @@ class GoogleAnalyticsAdminV1alphaListIosAppDataStreamsResponse extends \Google\S
     protected $collection_key = 'iosAppDataStreams';
     protected $iosAppDataStreamsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaIosAppDataStream::class;
     protected $iosAppDataStreamsDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param GoogleAnalyticsAdminV1alphaIosAppDataStream[]
@@ -37,10 +40,16 @@ class GoogleAnalyticsAdminV1alphaListIosAppDataStreamsResponse extends \Google\S
     {
         return $this->iosAppDataStreams;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

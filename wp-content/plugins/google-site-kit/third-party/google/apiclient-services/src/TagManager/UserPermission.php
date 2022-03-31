@@ -22,10 +22,19 @@ class UserPermission extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'containerAccess';
     protected $accountAccessType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\AccountAccess::class;
     protected $accountAccessDataType = '';
+    /**
+     * @var string
+     */
     public $accountId;
     protected $containerAccessType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerAccess::class;
     protected $containerAccessDataType = 'array';
+    /**
+     * @var string
+     */
     public $emailAddress;
+    /**
+     * @var string
+     */
     public $path;
     /**
      * @param AccountAccess
@@ -41,10 +50,16 @@ class UserPermission extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->accountAccess;
     }
+    /**
+     * @param string
+     */
     public function setAccountId($accountId)
     {
         $this->accountId = $accountId;
     }
+    /**
+     * @return string
+     */
     public function getAccountId()
     {
         return $this->accountId;
@@ -63,18 +78,30 @@ class UserPermission extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->containerAccess;
     }
+    /**
+     * @param string
+     */
     public function setEmailAddress($emailAddress)
     {
         $this->emailAddress = $emailAddress;
     }
+    /**
+     * @return string
+     */
     public function getEmailAddress()
     {
         return $this->emailAddress;
     }
+    /**
+     * @param string
+     */
     public function setPath($path)
     {
         $this->path = $path;
     }
+    /**
+     * @return string
+     */
     public function getPath()
     {
         return $this->path;

@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListTagsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'tag';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     protected $tagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag::class;
     protected $tagDataType = 'array';
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { withRestApiHydration } from '@woocommerce/block-hocs';
 import { renderFrontend } from '@woocommerce/base-utils';
 
 /**
@@ -17,11 +16,12 @@ const getProps = ( el ) => {
 			headingLevel: el.dataset.headingLevel || 3,
 			showFilterButton: el.dataset.showFilterButton === 'true',
 		},
+		isEditor: false,
 	};
 };
 
 renderFrontend( {
 	selector: '.wp-block-woocommerce-stock-filter',
-	Block: withRestApiHydration( Block ),
+	Block,
 	getProps,
 } );

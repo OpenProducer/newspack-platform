@@ -47,6 +47,29 @@ final class Newspack_Newsletters_Renderer {
 	protected static $post_permalink = null;
 
 	/**
+	 * Inline tags that are allowed to be rendered in a text block.
+	 * 
+	 * @var bool[]|array[] Associative array of tag names to allowed attributes.
+	 */
+	public static $allowed_inline_tags = [
+		's'      => true,
+		'b'      => true,
+		'strong' => true,
+		'i'      => true,
+		'em'     => true,
+		'span'   => true,
+		'u'      => true,
+		'small'  => true,
+		'sub'    => true,
+		'sup'    => true,
+		'a'      => [
+			'href'   => true,
+			'target' => true,
+			'rel'    => true,
+		],
+	];
+
+	/**
 	 * Convert a list to HTML attributes.
 	 *
 	 * @param array $attributes Array of attributes.
@@ -57,7 +80,10 @@ final class Newspack_Newsletters_Renderer {
 			' ',
 			array_map(
 				function( $key ) use ( $attributes ) {
-					if ( isset( $attributes[ $key ] ) ) {
+					if (
+						isset( $attributes[ $key ] ) &&
+						( is_string( $attributes[ $key ] ) || is_numeric( $attributes[ $key ] ) ) // Don't convert values that can't be expressed as a string.
+					) {
 						return $key . '="' . $attributes[ $key ] . '"';
 					} else {
 						return '';
@@ -79,14 +105,13 @@ final class Newspack_Newsletters_Renderer {
 			return $block_attrs['customFontSize'] . 'px';
 		}
 		if ( isset( $block_attrs['fontSize'] ) ) {
-			// Gutenberg's default font size presets.
-			// https://github.com/WordPress/gutenberg/blob/359858da0675943d8a759a0a7c03e7b3846536f5/packages/block-editor/src/store/defaults.js#L87-L113 .
 			$sizes = array(
-				'small'  => '13px',
-				'normal' => '16px',
-				'medium' => '20px',
-				'large'  => '36px',
-				'huge'   => '48px',
+				'small'   => '12px',
+				'normal'  => '16px',
+				'medium'  => '16px',
+				'large'   => '24px',
+				'huge'    => '36px',
+				'x-large' => '36px',
 			);
 			return $sizes[ $block_attrs['fontSize'] ];
 		}
@@ -162,6 +187,11 @@ final class Newspack_Newsletters_Renderer {
 			$attrs['font-size'] = $font_size;
 		}
 
+		if ( isset( $attrs['style']['spacing']['padding'] ) ) {
+			$padding          = $attrs['style']['spacing']['padding'];
+			$attrs['padding'] = sprintf( '%s %s %s %s', $padding['top'], $padding['right'], $padding['bottom'], $padding['left'] );
+		}
+
 		// Remove block-only attributes.
 		array_map(
 			function ( $key ) use ( &$attrs ) {
@@ -172,7 +202,7 @@ final class Newspack_Newsletters_Renderer {
 			[ 'customBackgroundColor', 'customTextColor', 'customFontSize', 'fontSize', 'backgroundColor', 'style' ]
 		);
 
-		if ( isset( $attrs['background-color'] ) ) {
+		if ( ! isset( $attrs['padding'] ) && isset( $attrs['background-color'] ) ) {
 			$attrs['padding'] = '0';
 		}
 
@@ -186,7 +216,7 @@ final class Newspack_Newsletters_Renderer {
 			unset( $attrs['align'] );
 		}
 
-		if ( isset( $attrs['full-width'] ) && 'full-width' == $attrs['full-width'] && isset( $attrs['background-color'] ) ) {
+		if ( ! isset( $attrs['padding'] ) && isset( $attrs['full-width'] ) && 'full-width' == $attrs['full-width'] && isset( $attrs['background-color'] ) ) {
 			$attrs['padding'] = '12px 0';
 		}
 
@@ -266,6 +296,11 @@ final class Newspack_Newsletters_Renderer {
 
 		$font_family = 'core/heading' === $block_name ? self::$font_header : self::$font_body;
 
+		if ( ! empty( $inner_html ) ) {
+			// Replace <mark /> with <span />.
+			$inner_html = preg_replace( '/<mark\s(.+?)>(.+?)<\/mark>/is', '<span $1>$2</span>', $inner_html );
+		}
+
 		switch ( $block_name ) {
 			/**
 			 * Text-based blocks.
@@ -278,7 +313,7 @@ final class Newspack_Newsletters_Renderer {
 				$text_attrs = array_merge(
 					array(
 						'padding'     => '0',
-						'line-height' => '1.8',
+						'line-height' => '1.5',
 						'font-size'   => '16px',
 						'font-family' => $font_family,
 					),
@@ -306,11 +341,10 @@ final class Newspack_Newsletters_Renderer {
 				// Parse block content.
 				$dom = new DomDocument();
 				libxml_use_internal_errors( true );
-				$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ) );
-				$xpath      = new DOMXpath( $dom );
-				$img        = $xpath->query( '//img' )[0];
+				$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
+				$img        = $dom->getElementsByTagName( 'img' )->item( 0 );
 				$img_src    = $img->getAttribute( 'src' );
-				$figcaption = $xpath->query( '//figcaption/text()' )[0];
+				$figcaption = $dom->getElementsByTagName( 'figcaption' )->item( 0 );
 
 				$img_attrs = array(
 					'padding' => '0',
@@ -353,14 +387,22 @@ final class Newspack_Newsletters_Renderer {
 				$markup = '<mj-image ' . self::array_to_attributes( $img_attrs ) . ' />';
 
 				if ( $figcaption ) {
+					$caption_html  = '';
+					$caption_nodes = $figcaption->childNodes; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+					foreach ( $caption_nodes as $caption_node ) {
+						$caption_html .= $dom->saveHTML( $caption_node );
+					}
 					$caption_attrs = array(
 						'align'       => 'center',
 						'color'       => '#555d66',
+						'line-height' => '1.56',
 						'font-size'   => '13px',
 						'font-family' => $font_family,
 					);
-					 // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-					$markup .= '<mj-text ' . self::array_to_attributes( $caption_attrs ) . '>' . $figcaption->wholeText . '</mj-text>';
+					$markup       .= '<mj-text ' . self::array_to_attributes( $caption_attrs ) . '>' . wp_kses(
+						$caption_html,
+						self::$allowed_inline_tags
+					) . '</mj-text>';
 				}
 
 				$block_mjml_markup = $markup;
@@ -394,10 +436,10 @@ final class Newspack_Newsletters_Renderer {
 					$default_button_attrs = array(
 						'padding'       => '0',
 						'inner-padding' => '12px 24px',
-						'line-height'   => '1.8',
+						'line-height'   => '1.5',
 						'href'          => $anchor->getAttribute( 'href' ),
 						'border-radius' => $border_radius . 'px',
-						'font-size'     => '18px',
+						'font-size'     => '16px',
 						'font-family'   => $font_family,
 						'font-weight'   => 'bold',
 						// Default color - will be replaced by get_colors if there are colors set.
@@ -431,10 +473,8 @@ final class Newspack_Newsletters_Renderer {
 				$divider_attrs      = array_merge(
 					array(
 						'padding'      => '0',
-						'border-width' => $is_style_default ? '2px' : '1px',
-						'width'        => $is_style_default ? '100px' : '100%',
-						// Default color - will be replaced by get_colors if there are colors set.
-						'border-color' => '#8f98a1',
+						'border-width' => '1px',
+						'width'        => $is_style_default ? '128px' : '100%',
 					),
 					self::get_colors( $attrs )
 				);
@@ -482,11 +522,11 @@ final class Newspack_Newsletters_Renderer {
 				);
 
 				$social_wrapper_attrs = array(
-					'icon-size'     => '22px',
+					'icon-size'     => '24px',
 					'mode'          => 'horizontal',
 					'padding'       => '0',
 					'border-radius' => '999px',
-					'icon-padding'  => '8px',
+					'icon-padding'  => '7px',
 				);
 				if ( isset( $attrs['align'] ) ) {
 					$social_wrapper_attrs['align'] = $attrs['align'];
@@ -608,7 +648,7 @@ final class Newspack_Newsletters_Renderer {
 
 				$text_attrs = array(
 					'padding'     => '0',
-					'line-height' => '1.8',
+					'line-height' => '1.5',
 					'font-size'   => '16px',
 					'font-family' => $font_family,
 				);
@@ -616,6 +656,7 @@ final class Newspack_Newsletters_Renderer {
 				$caption_attrs = array(
 					'align'       => 'center',
 					'color'       => '#555d66',
+					'line-height' => '1.56',
 					'font-size'   => '13px',
 					'font-family' => $font_family,
 				);
@@ -761,10 +802,182 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
-	 * Convert a WP post to an array of non-empty blocks.
+	 * Return an array of Newspack-native ads.
+	 *
+	 * @param int $total_length_of_content The total length of content.
+	 * @return array
+	 */
+	private static function generate_array_of_newspack_native_ads_to_insert( $total_length_of_content ) {
+		$ad_post_type          = Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT;
+		$all_ads_no_pagination = -1;
+
+		$query_to_fetch_published_ads = new WP_Query(
+			[
+				'post_type'      => $ad_post_type,
+				'posts_per_page' => $all_ads_no_pagination,
+			]
+		);
+
+		$ads = $query_to_fetch_published_ads->get_posts();
+
+		$published_ads_to_insert = [];
+
+		foreach ( $ads as $ad ) {
+			$ad_post_status      = $ad->post_status;
+			$ad_is_not_published = 'publish' !== $ad_post_status;
+
+			if ( $ad_is_not_published ) {
+				continue;
+			}
+
+			$ad_prepared_for_insertion = self::get_ad_prepared_for_insertion( $ad, $total_length_of_content );
+			if ( ! empty( $ad_prepared_for_insertion ) ) {
+				$published_ads_to_insert[] = $ad_prepared_for_insertion;
+			}
+		}
+
+		return $published_ads_to_insert;
+	}
+
+	/**
+	 * Return an array of ads prepared to be inserted into the email template. If the Newspack
+	 * author has Letterhead enabled, we'll prefer fetching ads from that API. If not, we'll
+	 * prefer Newspack ad types.
+	 *
+	 * @param string $post_date The WP Post date.
+	 * @param int    $total_length The total length of the content.
+	 * @return array
+	 */
+	public static function get_ads( $post_date, $total_length ) {
+		/**
+		 * The Letterhead API just likes dates that look like this.
+		 *
+		 * @example '2021-04-12'
+		 * @var string $publication_date_formatted_for_letterhead_api
+		 */
+		$publication_date_formatted_for_letterhead_api = gmdate( 'Y-m-d', strtotime( $post_date ) );
+		$letterhead                                    = new Newspack_Newsletters_Letterhead();
+
+		/**
+		 * Whether when getting ads we should load Newspack's ad post type.
+		 *
+		 * @var bool $prefer_newspack_native_ads
+		 */
+		$prefer_newspack_native_ads = ! $letterhead->has_api_credentials();
+
+		/**
+		 * If our Newspack user isn't connected to Letterhead, no worries. We will return
+		 * any native ads they might have.
+		 */
+		if ( $prefer_newspack_native_ads ) {
+			return self::generate_array_of_newspack_native_ads_to_insert( $total_length );
+		}
+
+		/**
+		 * Otherwise, we will fetch Letterhead ads ("promotions") from that API.
+		 */
+		return $letterhead->get_and_prepare_promotions_for_insertion( $publication_date_formatted_for_letterhead_api, $total_length );
+	}
+
+	/**
+	 * Gets a newspack ad and formats it for insertion.
+	 *
+	 * @param WP_Post $ad The Ad newsletter post.
+	 * @param int     $total_length_of_content The length of content.
+	 * @return array|null
+	 */
+	private static function get_ad_prepared_for_insertion( $ad, $total_length_of_content ) {
+		$ad_id                  = $ad->ID;
+		$is_published_ad_active = self::is_published_ad_active( $ad_id );
+
+		if ( $is_published_ad_active ) {
+			$positioning      = self::get_ad_position_percentage( $ad_id );
+			$precise_position = self::get_ad_placement_precise_position( $positioning, $total_length_of_content );
+
+			return [
+				'is_inserted'      => false,
+				'markup'           => self::post_to_mjml_components( $ad, false ),
+				'percentage'       => $positioning,
+				'precise_position' => $precise_position,
+			];
+		}
+
+		return null;
+	}
+
+	/**
+	 * Given the position preference on the ad object and the total length of newsletter content, we'll return
+	 * a specific number to indicate where the ad should be inserted in the body of the newsletter.
+	 *
+	 * @param int $position_percentage The position preference on an ad.
+	 * @param int $total_length_of_newsletter_content The total length of newsletter content.
+	 * @return float|int
+	 */
+	public static function get_ad_placement_precise_position( $position_percentage, $total_length_of_newsletter_content ) {
+		return $total_length_of_newsletter_content * $position_percentage;
+	}
+
+	/**
+	 * Gets the position preference of a newspack native ad from post meta.
+	 *
+	 * @param int $ad_id The id of the ad post type.
+	 * @return float|int
+	 */
+	private static function get_ad_position_percentage( $ad_id ) {
+		$position_key   = 'position_in_content';
+		$position_value = get_post_meta( $ad_id, $position_key, true );
+
+		return intval( $position_value ) / 100;
+	}
+
+
+	/**
+	 * Whether the newspack native ad is active or expired.
+	 *
+	 * @param int $ad_id ID of the Ad post type.
+	 * @return bool
+	 */
+	private static function is_published_ad_active( $ad_id ) {
+		$expiration_date = self::get_ad_expiration_date( $ad_id );
+
+		if ( ! $expiration_date ) {
+			return true;
+		}
+
+		return self::is_ad_unexpired( $expiration_date );
+	}
+
+	/**
+	 * Determines whetherthe newspack native ad is expired.
+	 *
+	 * @param string $expiration_date_as_datetime The expiration date as datetime.
+	 * @return bool
+	 */
+	private static function is_ad_unexpired( $expiration_date_as_datetime ) {
+		$date_format               = 'Y-m-d';
+		$formatted_expiration_date = $expiration_date_as_datetime->format( $date_format );
+		$today                     = gmdate( $date_format );
+
+		return $formatted_expiration_date >= $today;
+	}
+
+	/**
+	 * Returns the ad expiration date of a native Ad post type from the post meta.
+	 *
+	 * @param int $ad_id The ad id.
+	 * @return DateTime
+	 */
+	private static function get_ad_expiration_date( $ad_id ) {
+		$expiration_date_meta_key   = 'expiry_date';
+		$expiration_date_meta_value = get_post_meta( $ad_id, $expiration_date_meta_key, true );
+
+		return new DateTime( $expiration_date_meta_value );
+	}
+
+	/** Convert a WP post to an array of non-empty blocks.
 	 *
 	 * @param WP_Post $post The post.
-	 * @return object[] Blocks.
+	 * @return array[] Blocks.
 	 */
 	private static function get_valid_post_blocks( $post ) {
 		return array_filter(
@@ -783,38 +996,18 @@ final class Newspack_Newsletters_Renderer {
 	 * @return string MJML markup to be injected into the template.
 	 */
 	public static function post_to_mjml_components( $post, $include_ads = false ) {
-		$body         = '';
-		$valid_blocks = self::get_valid_post_blocks( $post );
-		$total_length = self::get_total_newsletter_character_length( $valid_blocks );
-
-		// Gather ads.
+		$body          = '';
+		$valid_blocks  = self::get_valid_post_blocks( $post );
+		$total_length  = self::get_total_newsletter_character_length( $valid_blocks );
 		$is_newsletter = Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT === get_post_type( $post->ID );
+
+		/**
+		 * When ads are enabled, we fetch and format them for insertion.
+		 *
+		 * @note "diable_ads" is a typo that's been in production for awhile.
+		 */
 		if ( $include_ads && $is_newsletter && ! get_post_meta( $post->ID, 'diable_ads', true ) ) {
-			$ads_query = new WP_Query(
-				array(
-					'post_type'      => Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
-					'posts_per_page' => -1,
-				)
-			);
-
-			foreach ( $ads_query->get_posts() as $ad ) {
-				// For some reason the 'post_status' param in WP_Query sometimes seems to be disregarded.
-				if ( 'publish' !== $ad->post_status ) {
-					continue;
-				}
-				$expiry_date = new DateTime( get_post_meta( $ad->ID, 'expiry_date', true ) );
-
-				// Ad is active if it has no expiry date (a peristent ad) or the date is equal to or after today.
-				if ( ! $expiry_date || $expiry_date->format( 'Y-m-d' ) >= gmdate( 'Y-m-d' ) ) {
-					$percentage            = intval( get_post_meta( $ad->ID, 'position_in_content', true ) ) / 100;
-					self::$ads_to_insert[] = [
-						'precise_position' => $total_length * $percentage,
-						'percentage'       => $percentage,
-						'markup'           => self::post_to_mjml_components( $ad ),
-						'is_inserted'      => false,
-					];
-				}
-			}
+			self::$ads_to_insert = self::get_ads( $post->post_date, $total_length );
 		}
 
 		// Build MJML body and insert ads.
@@ -893,7 +1086,11 @@ final class Newspack_Newsletters_Renderer {
 			self::$font_body = 'Georgia';
 		}
 
-		$title            = $post->post_title; // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
+		$title = $post->post_title; // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
+
+		/**
+		 * Generate a string of MJML as the body of the email. We include ads at this stage.
+		 */
 		$body             = self::post_to_mjml_components( $post, true ); // phpcs:ignore WordPressVIPMinimum.Variables.VariableAnalysis.UnusedVariable
 		$background_color = get_post_meta( $post->ID, 'background_color', true );
 		$preview_text     = get_post_meta( $post->ID, 'preview_text', true );

@@ -19,13 +19,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class AgeRangeType extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $ageRange;
     protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
     protected $metadataDataType = '';
+    /**
+     * @param string
+     */
     public function setAgeRange($ageRange)
     {
         $this->ageRange = $ageRange;
     }
+    /**
+     * @return string
+     */
     public function getAgeRange()
     {
         return $this->ageRange;

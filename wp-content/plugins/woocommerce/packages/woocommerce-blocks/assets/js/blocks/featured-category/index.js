@@ -6,23 +6,29 @@ import { InnerBlocks } from '@wordpress/block-editor';
 import { registerBlockType } from '@wordpress/blocks';
 import { getSetting } from '@woocommerce/settings';
 import { Icon, folderStarred } from '@woocommerce/icons';
+import { isFeaturePluginBuild } from '@woocommerce/block-settings';
 
 /**
  * Internal dependencies
  */
 import './style.scss';
 import './editor.scss';
-import Block from './block';
 import { example } from './example';
+import { Edit } from './edit';
 
 /**
  * Register and run the "Featured Category" block.
  */
 registerBlockType( 'woocommerce/featured-category', {
+	apiVersion: 2,
 	title: __( 'Featured Category', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ folderStarred } />,
-		foreground: '#96588a',
+		src: (
+			<Icon
+				srcElement={ folderStarred }
+				className="wc-block-editor-components-block-icon"
+			/>
+		),
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],
@@ -33,6 +39,15 @@ registerBlockType( 'woocommerce/featured-category', {
 	supports: {
 		align: [ 'wide', 'full' ],
 		html: false,
+		color: true,
+		...( isFeaturePluginBuild() && {
+			__experimentalBorder: {
+				color: true,
+				radius: true,
+				width: true,
+				__experimentalSkipSerialization: false,
+			},
+		} ),
 	},
 	example,
 	attributes: {
@@ -142,14 +157,12 @@ registerBlockType( 'woocommerce/featured-category', {
 	 *
 	 * @param {Object} props Props to pass to block.
 	 */
-	edit( props ) {
-		return <Block { ...props } />;
-	},
+	edit: Edit,
 
 	/**
 	 * Block content is rendered in PHP, not via save function.
 	 */
-	save() {
+	save: () => {
 		return <InnerBlocks.Content />;
 	},
 } );

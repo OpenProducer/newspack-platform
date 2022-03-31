@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 class ColumnHeader extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'dimensions';
+    /**
+     * @var string[]
+     */
     public $dimensions;
     protected $metricHeaderType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\MetricHeader::class;
     protected $metricHeaderDataType = '';
+    /**
+     * @param string[]
+     */
     public function setDimensions($dimensions)
     {
         $this->dimensions = $dimensions;
     }
+    /**
+     * @return string[]
+     */
     public function getDimensions()
     {
         return $this->dimensions;

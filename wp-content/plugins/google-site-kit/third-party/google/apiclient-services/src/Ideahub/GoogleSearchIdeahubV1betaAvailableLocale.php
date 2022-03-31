@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Ideahub;
 
 class GoogleSearchIdeahubV1betaAvailableLocale extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $locale;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @param string
+     */
     public function setLocale($locale)
     {
         $this->locale = $locale;
     }
+    /**
+     * @return string
+     */
     public function getLocale()
     {
         return $this->locale;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;

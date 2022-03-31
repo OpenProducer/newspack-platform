@@ -19,18 +19,18 @@ namespace Google\Site_Kit_Dependencies\Google\Service;
 
 use Google\Site_Kit_Dependencies\Google\Client;
 /**
-* Service definition for Ideahub (v1beta).
-*
-* <p>
-</p>
-*
-* <p>
-* For more information about this service, see the API
-* <a href="https://console.cloud.google.com/apis/library/ideahub.googleapis.com" target="_blank">Documentation</a>
-* </p>
-*
-* @author Google, Inc.
-*/
+ * Service definition for Ideahub (v1beta).
+ *
+ * <p>
+ * This is an invitation-only API.</p>
+ *
+ * <p>
+ * For more information about this service, see the API
+ * <a href="https://console.cloud.google.com/apis/library/ideahub.googleapis.com" target="_blank">Documentation</a>
+ * </p>
+ *
+ * @author Google, Inc.
+ */
 class Ideahub extends \Google\Site_Kit_Dependencies\Google\Service
 {
     public $platforms_properties_ideaActivities;

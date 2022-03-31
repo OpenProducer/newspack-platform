@@ -20,22 +20,40 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Ideahub;
 class GoogleSearchIdeahubV1betaIdea extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'topics';
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $text;
     protected $topicsType = \Google\Site_Kit_Dependencies\Google\Service\Ideahub\GoogleSearchIdeahubV1betaTopic::class;
     protected $topicsDataType = 'array';
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setText($text)
     {
         $this->text = $text;
     }
+    /**
+     * @return string
+     */
     public function getText()
     {
         return $this->text;

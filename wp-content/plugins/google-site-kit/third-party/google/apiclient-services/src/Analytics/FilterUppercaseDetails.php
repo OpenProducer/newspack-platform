@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 
 class FilterUppercaseDetails extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $field;
+    /**
+     * @var int
+     */
     public $fieldIndex;
+    /**
+     * @param string
+     */
     public function setField($field)
     {
         $this->field = $field;
     }
+    /**
+     * @return string
+     */
     public function getField()
     {
         return $this->field;
     }
+    /**
+     * @param int
+     */
     public function setFieldIndex($fieldIndex)
     {
         $this->fieldIndex = $fieldIndex;
     }
+    /**
+     * @return int
+     */
     public function getFieldIndex()
     {
         return $this->fieldIndex;

@@ -20,29 +20,56 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class CopyOtherContactToMyContactsGroupRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'sources';
+    /**
+     * @var string
+     */
     public $copyMask;
+    /**
+     * @var string
+     */
     public $readMask;
+    /**
+     * @var string[]
+     */
     public $sources;
+    /**
+     * @param string
+     */
     public function setCopyMask($copyMask)
     {
         $this->copyMask = $copyMask;
     }
+    /**
+     * @return string
+     */
     public function getCopyMask()
     {
         return $this->copyMask;
     }
+    /**
+     * @param string
+     */
     public function setReadMask($readMask)
     {
         $this->readMask = $readMask;
     }
+    /**
+     * @return string
+     */
     public function getReadMask()
     {
         return $this->readMask;
     }
+    /**
+     * @param string[]
+     */
     public function setSources($sources)
     {
         $this->sources = $sources;
     }
+    /**
+     * @return string[]
+     */
     public function getSources()
     {
         return $this->sources;

@@ -23,6 +23,9 @@ class Birthday extends \Google\Site_Kit_Dependencies\Google\Model
     protected $dateDataType = '';
     protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
     protected $metadataDataType = '';
+    /**
+     * @var string
+     */
     public $text;
     /**
      * @param Date
@@ -52,10 +55,16 @@ class Birthday extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->metadata;
     }
+    /**
+     * @param string
+     */
     public function setText($text)
     {
         $this->text = $text;
     }
+    /**
+     * @return string
+     */
     public function getText()
     {
         return $this->text;

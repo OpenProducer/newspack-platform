@@ -22,8 +22,17 @@ class BatchUpdateContactsRequest extends \Google\Site_Kit_Dependencies\Google\Co
     protected $collection_key = 'sources';
     protected $contactsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
     protected $contactsDataType = 'map';
+    /**
+     * @var string
+     */
     public $readMask;
+    /**
+     * @var string[]
+     */
     public $sources;
+    /**
+     * @var string
+     */
     public $updateMask;
     /**
      * @param Person[]
@@ -39,26 +48,44 @@ class BatchUpdateContactsRequest extends \Google\Site_Kit_Dependencies\Google\Co
     {
         return $this->contacts;
     }
+    /**
+     * @param string
+     */
     public function setReadMask($readMask)
     {
         $this->readMask = $readMask;
     }
+    /**
+     * @return string
+     */
     public function getReadMask()
     {
         return $this->readMask;
     }
+    /**
+     * @param string[]
+     */
     public function setSources($sources)
     {
         $this->sources = $sources;
     }
+    /**
+     * @return string[]
+     */
     public function getSources()
     {
         return $this->sources;
     }
+    /**
+     * @param string
+     */
     public function setUpdateMask($updateMask)
     {
         $this->updateMask = $updateMask;
     }
+    /**
+     * @return string
+     */
     public function getUpdateMask()
     {
         return $this->updateMask;

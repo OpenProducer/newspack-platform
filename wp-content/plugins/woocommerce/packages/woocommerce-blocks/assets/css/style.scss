@@ -22,10 +22,15 @@
 
 	img {
 		height: auto;
-		width: 100%;
+		width: auto;
+		max-width: 100%;
 
 		&[hidden] {
 			display: none;
+		}
+
+		&[alt=""] {
+			border: 1px solid $image-placeholder-border-color;
 		}
 	}
 }

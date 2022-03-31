@@ -19,11 +19,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1alphaProvisionAccountTicketResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $accountTicketId;
+    /**
+     * @param string
+     */
     public function setAccountTicketId($accountTicketId)
     {
         $this->accountTicketId = $accountTicketId;
     }
+    /**
+     * @return string
+     */
     public function getAccountTicketId()
     {
         return $this->accountTicketId;

@@ -19,11 +19,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 
 class MobileFriendlyIssue extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $rule;
+    /**
+     * @param string
+     */
     public function setRule($rule)
     {
         $this->rule = $rule;
     }
+    /**
+     * @return string
+     */
     public function getRule()
     {
         return $this->rule;

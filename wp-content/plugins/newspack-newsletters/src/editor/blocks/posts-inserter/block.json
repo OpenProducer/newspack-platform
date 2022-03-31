@@ -45,6 +45,10 @@
 			"type": "string",
 			"default": "left"
 		},
+		"featuredImageSize": {
+			"type": "string",
+			"default": "large"
+		},
 		"isDisplayingSpecificPosts": {
 			"type": "boolean",
 			"default": false

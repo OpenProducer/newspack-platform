@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 
 class GoalVisitTimeOnSiteDetails extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $comparisonType;
+    /**
+     * @var string
+     */
     public $comparisonValue;
+    /**
+     * @param string
+     */
     public function setComparisonType($comparisonType)
     {
         $this->comparisonType = $comparisonType;
     }
+    /**
+     * @return string
+     */
     public function getComparisonType()
     {
         return $this->comparisonType;
     }
+    /**
+     * @param string
+     */
     public function setComparisonValue($comparisonValue)
     {
         $this->comparisonValue = $comparisonValue;
     }
+    /**
+     * @return string
+     */
     public function getComparisonValue()
     {
         return $this->comparisonValue;

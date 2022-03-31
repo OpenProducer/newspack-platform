@@ -17,6 +17,8 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAcknowledgeUserDataCollectionRequest;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAcknowledgeUserDataCollectionResponse;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataRetentionSettings;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListPropertiesResponse;
@@ -31,6 +33,24 @@ use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnaly
  */
 class Properties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
 {
+    /**
+     * Acknowledges the terms of user data collection for the specified property.
+     * This acknowledgement must be completed (either in the Google Analytics UI or
+     * via this API) before MeasurementProtocolSecret resources may be created.
+     * (properties.acknowledgeUserDataCollection)
+     *
+     * @param string $property Required. The property for which to acknowledge user
+     * data collection.
+     * @param GoogleAnalyticsAdminV1alphaAcknowledgeUserDataCollectionRequest $postBody
+     * @param array $optParams Optional parameters.
+     * @return GoogleAnalyticsAdminV1alphaAcknowledgeUserDataCollectionResponse
+     */
+    public function acknowledgeUserDataCollection($property, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAcknowledgeUserDataCollectionRequest $postBody, $optParams = [])
+    {
+        $params = ['property' => $property, 'postBody' => $postBody];
+        $params = \array_merge($params, $optParams);
+        return $this->call('acknowledgeUserDataCollection', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAcknowledgeUserDataCollectionResponse::class);
+    }
     /**
      * Creates an "GA4" property with the specified location and attributes.
      * (properties.create)

@@ -24,13 +24,40 @@ a:focus {
 }
 
 /* Heading */
-h1 { font-size: 2.44em; line-height: 1.4; }
-h2 { font-size: 1.95em; line-height: 1.4; }
-h3 { font-size: 1.56em; line-height: 1.4; }
-h4 { font-size: 1.25em; line-height: 1.5; }
-h5 { font-size: 1em; line-height: 1.8; }
-h6 { font-size: 0.8em; line-height: 1.8; }
-h1, h2, h3, h4, h5, h6 { margin-top: 0; margin-bottom: 0; }
+h1, h2, h3, h4, h5, h6 {
+	margin-top: 0;
+	margin-bottom: 0;
+}
+
+h1 {
+	font-size: 2.44em;
+	line-height: 1.24;
+}
+
+h2 {
+	font-size: 1.95em;
+	line-height: 1.36;
+}
+
+h3 {
+	font-size: 1.56em;
+	line-height: 1.44;
+}
+
+h4 {
+	font-size: 1.25em;
+	line-height: 1.6;
+}
+
+h5 {
+	font-size: 1em;
+	line-height: 1.5em;
+}
+
+h6 {
+	font-size: 0.8em;
+	line-height: 1.56;
+}
 
 /* List */
 ul, ol {
@@ -42,9 +69,10 @@ ul, ol {
 /* Quote */
 blockquote,
 .wp-block-quote {
-	border-left: 4px solid #000;
+	background: transparent;
+	border-left: 0.25em solid;
 	margin: 0;
-	padding-left: 20px;
+	padding-left: 24px;
 }
 blockquote cite,
 .wp-block-quote cite {
@@ -54,6 +82,7 @@ blockquote p,
 .wp-block-quote p {
 	padding-bottom: 12px;
 }
+.wp-block-quote.is-style-plain,
 .wp-block-quote.is-style-large {
 	border-left: 0;
 	padding-left: 0;

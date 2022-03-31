@@ -140,10 +140,6 @@ class WC_AJAX {
 			'remove_order_coupon',
 			'remove_order_item',
 			'remove_order_tax',
-			'reduce_order_item_stock',
-			'increase_order_item_stock',
-			'add_order_item_meta',
-			'remove_order_item_meta',
 			'calc_line_taxes',
 			'save_order_items',
 			'load_order_items',
@@ -2129,6 +2125,10 @@ class WC_AJAX {
 						'%s',
 					)
 				);
+
+				if ( 0 === $wpdb->insert_id ) {
+					throw new Exception( __( 'There was an error generating your API Key.', 'woocommerce' ) );
+				}
 
 				$key_id                      = $wpdb->insert_id;
 				$response                    = $data;

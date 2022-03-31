@@ -2,26 +2,142 @@
 
 namespace Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks;
 
+use Automattic\WooCommerce\Admin\Loader;
+use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Task;
+
 /**
  * Products Task
  */
-class Products {
+class Products extends Task {
 	/**
-	 * Get the task arguments.
+	 * Initialize.
+	 */
+	public function __construct() {
+		add_action( 'admin_enqueue_scripts', array( $this, 'possibly_add_manual_return_notice_script' ) );
+		add_action( 'admin_enqueue_scripts', array( $this, 'possibly_add_import_return_notice_script' ) );
+	}
+
+	/**
+	 * ID.
+	 *
+	 * @return string
+	 */
+	public function get_id() {
+		return 'products';
+	}
+
+	/**
+	 * Parent ID.
+	 *
+	 * @return string
+	 */
+	public function get_parent_id() {
+		return 'setup';
+	}
+
+	/**
+	 * Title.
+	 *
+	 * @return string
+	 */
+	public function get_title() {
+		return __( 'Add my products', 'woocommerce' );
+	}
+
+	/**
+	 * Content.
+	 *
+	 * @return string
+	 */
+	public function get_content() {
+		return __(
+			'Start by adding the first product to your store. You can add your products manually, via CSV, or import them from another service.',
+			'woocommerce'
+		);
+	}
+
+	/**
+	 * Time.
+	 *
+	 * @return string
+	 */
+	public function get_time() {
+		return __( '1 minute per product', 'woocommerce' );
+	}
+
+	/**
+	 * Task completion.
+	 *
+	 * @return bool
+	 */
+	public function is_complete() {
+		return self::has_products();
+	}
+
+	/**
+	 * Addtional data.
 	 *
 	 * @return array
 	 */
-	public static function get_task() {
+	public function get_additional_data() {
 		return array(
-			'id'          => 'products',
-			'title'       => __( 'Add my products', 'woocommerce' ),
-			'content'     => __(
-				'Start by adding the first product to your store. You can add your products manually, via CSV, or import them from another service.',
-				'woocommerce'
-			),
-			'is_complete' => self::has_products(),
-			'can_view'    => true,
-			'time'        => __( '1 minute per product', 'woocommerce' ),
+			'has_products' => self::has_products(),
+		);
+	}
+
+
+	/**
+	 * Adds a return to task list notice when completing the manual product task.
+	 *
+	 * @param string $hook Page hook.
+	 */
+	public function possibly_add_manual_return_notice_script( $hook ) {
+		global $post;
+		if ( 'post.php' !== $hook || 'product' !== $post->post_type ) {
+			return;
+		}
+
+		if ( ! $this->is_active() || $this->is_complete() ) {
+			return;
+		}
+
+		$script_assets_filename = Loader::get_script_asset_filename( 'wp-admin-scripts', 'onboarding-product-notice' );
+		$script_assets          = require WC_ADMIN_ABSPATH . WC_ADMIN_DIST_JS_FOLDER . 'wp-admin-scripts/' . $script_assets_filename;
+
+		wp_enqueue_script(
+			'onboarding-product-notice',
+			Loader::get_url( 'wp-admin-scripts/onboarding-product-notice', 'js' ),
+			array_merge( array( WC_ADMIN_APP ), $script_assets ['dependencies'] ),
+			WC_ADMIN_VERSION_NUMBER,
+			true
+		);
+	}
+
+	/**
+	 * Adds a return to task list notice when completing the import product task.
+	 *
+	 * @param string $hook Page hook.
+	 */
+	public function possibly_add_import_return_notice_script( $hook ) {
+		$step = isset( $_GET['step'] ) ? $_GET['step'] : ''; // phpcs:ignore csrf ok, sanitization ok.
+
+		if ( 'product_page_product_importer' !== $hook || 'done' !== $step ) {
+			return;
+		}
+
+		if ( ! $this->is_active() || $this->is_complete() ) {
+			return;
+		}
+
+		$script_assets_filename = Loader::get_script_asset_filename( 'wp-admin-scripts', 'onboarding-product-import-notice' );
+		$script_assets          = require WC_ADMIN_ABSPATH . WC_ADMIN_DIST_JS_FOLDER . 'wp-admin-scripts/' . $script_assets_filename;
+
+		wp_enqueue_script(
+			'onboarding-product-import-notice',
+			Loader::get_url( 'wp-admin-scripts/onboarding-product-import-notice', 'js' ),
+			array_merge( array( WC_ADMIN_APP ), $script_assets ['dependencies'] ),
+			WC_ADMIN_VERSION_NUMBER,
+			true
 		);
 	}
 

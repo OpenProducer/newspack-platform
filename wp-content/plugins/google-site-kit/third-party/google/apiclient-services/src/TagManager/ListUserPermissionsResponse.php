@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListUserPermissionsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'userPermission';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     protected $userPermissionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission::class;
     protected $userPermissionDataType = 'array';
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

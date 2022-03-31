@@ -23,6 +23,9 @@ class SegmentFilterClause extends \Google\Site_Kit_Dependencies\Google\Model
     protected $dimensionFilterDataType = '';
     protected $metricFilterType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\SegmentMetricFilter::class;
     protected $metricFilterDataType = '';
+    /**
+     * @var bool
+     */
     public $not;
     /**
      * @param SegmentDimensionFilter
@@ -52,10 +55,16 @@ class SegmentFilterClause extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->metricFilter;
     }
+    /**
+     * @param bool
+     */
     public function setNot($not)
     {
         $this->not = $not;
     }
+    /**
+     * @return bool
+     */
     public function getNot()
     {
         return $this->not;

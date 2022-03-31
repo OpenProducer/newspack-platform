@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights;
 
 class CategoryGroupV5 extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $description;
+    /**
+     * @var string
+     */
     public $title;
+    /**
+     * @param string
+     */
     public function setDescription($description)
     {
         $this->description = $description;
     }
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
     }
+    /**
+     * @param string
+     */
     public function setTitle($title)
     {
         $this->title = $title;
     }
+    /**
+     * @return string
+     */
     public function getTitle()
     {
         return $this->title;

@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 
 class RunMobileFriendlyTestRequest extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
     public $requestScreenshot;
+    /**
+     * @var string
+     */
     public $url;
+    /**
+     * @param bool
+     */
     public function setRequestScreenshot($requestScreenshot)
     {
         $this->requestScreenshot = $requestScreenshot;
     }
+    /**
+     * @return bool
+     */
     public function getRequestScreenshot()
     {
         return $this->requestScreenshot;
     }
+    /**
+     * @param string
+     */
     public function setUrl($url)
     {
         $this->url = $url;
     }
+    /**
+     * @return string
+     */
     public function getUrl()
     {
         return $this->url;

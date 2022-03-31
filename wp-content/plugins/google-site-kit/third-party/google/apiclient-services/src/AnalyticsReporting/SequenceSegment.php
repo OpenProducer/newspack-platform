@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 class SequenceSegment extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'segmentSequenceSteps';
+    /**
+     * @var bool
+     */
     public $firstStepShouldMatchFirstHit;
     protected $segmentSequenceStepsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\SegmentSequenceStep::class;
     protected $segmentSequenceStepsDataType = 'array';
+    /**
+     * @param bool
+     */
     public function setFirstStepShouldMatchFirstHit($firstStepShouldMatchFirstHit)
     {
         $this->firstStepShouldMatchFirstHit = $firstStepShouldMatchFirstHit;
     }
+    /**
+     * @return bool
+     */
     public function getFirstStepShouldMatchFirstHit()
     {
         return $this->firstStepShouldMatchFirstHit;

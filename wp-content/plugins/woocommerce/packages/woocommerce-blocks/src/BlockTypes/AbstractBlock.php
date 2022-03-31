@@ -81,7 +81,7 @@ abstract class AbstractBlock {
 	 */
 	public function render_callback( $attributes = [], $content = '' ) {
 		$render_callback_attributes = $this->parse_render_callback_attributes( $attributes );
-		if ( ! is_admin() ) {
+		if ( ! is_admin() && ! WC()->is_rest_api_request() ) {
 			$this->enqueue_assets( $render_callback_attributes );
 		}
 		return $this->render( $render_callback_attributes, $content );
@@ -107,7 +107,7 @@ abstract class AbstractBlock {
 	 */
 	protected function initialize() {
 		if ( empty( $this->block_name ) ) {
-			_doing_it_wrong( __METHOD__, esc_html( __( 'Block name is required.', 'woocommerce' ) ), '4.5.0' );
+			_doing_it_wrong( __METHOD__, esc_html__( 'Block name is required.', 'woocommerce' ), '4.5.0' );
 			return false;
 		}
 		$this->integration_registry->initialize( $this->block_name . '_block' );
@@ -176,16 +176,38 @@ abstract class AbstractBlock {
 	 * Registers the block type with WordPress.
 	 */
 	protected function register_block_type() {
+		$block_settings = [
+			'render_callback' => $this->get_block_type_render_callback(),
+			'editor_script'   => $this->get_block_type_editor_script( 'handle' ),
+			'editor_style'    => $this->get_block_type_editor_style(),
+			'style'           => $this->get_block_type_style(),
+		];
+
+		if ( isset( $this->api_version ) && '2' === $this->api_version ) {
+			$block_settings['api_version'] = 2;
+		}
+
+		$metadata_path = $this->asset_api->get_block_metadata_path( $this->block_name );
+		// Prefer to register with metadata if the path is set in the block's class.
+		if ( ! empty( $metadata_path ) ) {
+			register_block_type(
+				$metadata_path,
+				$block_settings
+			);
+			return;
+		}
+
+		/*
+		 * Insert attributes and supports if we're not registering the block using metadata.
+		 * These are left unset until now and only added here because if they were set when registering with metadata,
+		 * the attributes and supports from $block_settings would override the values from metadata.
+		 */
+		$block_settings['attributes'] = $this->get_block_type_attributes();
+		$block_settings['supports']   = $this->get_block_type_supports();
+
 		register_block_type(
 			$this->get_block_type(),
-			array(
-				'render_callback' => $this->get_block_type_render_callback(),
-				'editor_script'   => $this->get_block_type_editor_script( 'handle' ),
-				'editor_style'    => $this->get_block_type_editor_style(),
-				'style'           => $this->get_block_type_style(),
-				'attributes'      => $this->get_block_type_attributes(),
-				'supports'        => $this->get_block_type_supports(),
-			)
+			$block_settings
 		);
 	}
 
@@ -320,39 +342,6 @@ abstract class AbstractBlock {
 	}
 
 	/**
-	 * Injects block attributes into the block.
-	 *
-	 * @param string $content HTML content to inject into.
-	 * @param array  $attributes Key value pairs of attributes.
-	 * @return string Rendered block with data attributes.
-	 */
-	protected function inject_html_data_attributes( $content, array $attributes ) {
-		return preg_replace( '/<div /', '<div ' . $this->get_html_data_attributes( $attributes ) . ' ', $content, 1 );
-	}
-
-	/**
-	 * Converts block attributes to HTML data attributes.
-	 *
-	 * @param array $attributes Key value pairs of attributes.
-	 * @return string Rendered HTML attributes.
-	 */
-	protected function get_html_data_attributes( array $attributes ) {
-		$data = [];
-
-		foreach ( $attributes as $key => $value ) {
-			if ( is_bool( $value ) ) {
-				$value = $value ? 'true' : 'false';
-			}
-			if ( ! is_scalar( $value ) ) {
-				$value = wp_json_encode( $value );
-			}
-			$data[] = 'data-' . esc_attr( strtolower( preg_replace( '/(?<!\ )[A-Z]/', '-$0', $key ) ) ) . '="' . esc_attr( $value ) . '"';
-		}
-
-		return implode( ' ', $data );
-	}
-
-	/**
 	 * Data passed through from server to client for block.
 	 *
 	 * @param array $attributes  Any attributes that currently are available from the block.
@@ -400,38 +389,5 @@ abstract class AbstractBlock {
 		if ( null !== $this->get_block_type_script() ) {
 			wp_enqueue_script( $this->get_block_type_script( 'handle' ) );
 		}
-	}
-
-	/**
-	 * Script to append the correct sizing class to a block skeleton.
-	 *
-	 * @return string
-	 */
-	protected function get_skeleton_inline_script() {
-		return "<script>
-			var containers = document.querySelectorAll( 'div.wc-block-skeleton' );
-
-			if ( containers.length ) {
-				Array.prototype.forEach.call( containers, function( el, i ) {
-					var w = el.offsetWidth;
-					var classname = '';
-
-					if ( w > 700 )
-						classname = 'is-large';
-					else if ( w > 520 )
-						classname = 'is-medium';
-					else if ( w > 400 )
-						classname = 'is-small';
-					else
-						classname = 'is-mobile';
-
-					if ( ! el.classList.contains( classname ) )  {
-						el.classList.add( classname );
-					}
-
-					el.classList.remove( 'hidden' );
-				} );
-			}
-		</script>";
 	}
 }

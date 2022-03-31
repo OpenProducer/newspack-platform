@@ -22,6 +22,9 @@ class CohortGroup extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'cohorts';
     protected $cohortsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\Cohort::class;
     protected $cohortsDataType = 'array';
+    /**
+     * @var bool
+     */
     public $lifetimeValue;
     /**
      * @param Cohort[]
@@ -37,10 +40,16 @@ class CohortGroup extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->cohorts;
     }
+    /**
+     * @param bool
+     */
     public function setLifetimeValue($lifetimeValue)
     {
         $this->lifetimeValue = $lifetimeValue;
     }
+    /**
+     * @return bool
+     */
     public function getLifetimeValue()
     {
         return $this->lifetimeValue;

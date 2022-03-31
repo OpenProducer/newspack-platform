@@ -19,56 +19,110 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1alphaCustomDimension extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $description;
+    /**
+     * @var bool
+     */
     public $disallowAdsPersonalization;
+    /**
+     * @var string
+     */
     public $displayName;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $parameterName;
+    /**
+     * @var string
+     */
     public $scope;
+    /**
+     * @param string
+     */
     public function setDescription($description)
     {
         $this->description = $description;
     }
+    /**
+     * @return string
+     */
     public function getDescription()
     {
         return $this->description;
     }
+    /**
+     * @param bool
+     */
     public function setDisallowAdsPersonalization($disallowAdsPersonalization)
     {
         $this->disallowAdsPersonalization = $disallowAdsPersonalization;
     }
+    /**
+     * @return bool
+     */
     public function getDisallowAdsPersonalization()
     {
         return $this->disallowAdsPersonalization;
     }
+    /**
+     * @param string
+     */
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
     }
+    /**
+     * @return string
+     */
     public function getDisplayName()
     {
         return $this->displayName;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setParameterName($parameterName)
     {
         $this->parameterName = $parameterName;
     }
+    /**
+     * @return string
+     */
     public function getParameterName()
     {
         return $this->parameterName;
     }
+    /**
+     * @param string
+     */
     public function setScope($scope)
     {
         $this->scope = $scope;
     }
+    /**
+     * @return string
+     */
     public function getScope()
     {
         return $this->scope;

@@ -20,11 +20,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 class AnalyticsDataimportDeleteUploadDataRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'customDataImportUids';
+    /**
+     * @var string[]
+     */
     public $customDataImportUids;
+    /**
+     * @param string[]
+     */
     public function setCustomDataImportUids($customDataImportUids)
     {
         $this->customDataImportUids = $customDataImportUids;
     }
+    /**
+     * @return string[]
+     */
     public function getCustomDataImportUids()
     {
         return $this->customDataImportUids;

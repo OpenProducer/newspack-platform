@@ -19,56 +19,110 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1alphaIosAppDataStream extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $bundleId;
+    /**
+     * @var string
+     */
     public $createTime;
+    /**
+     * @var string
+     */
     public $displayName;
+    /**
+     * @var string
+     */
     public $firebaseAppId;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $updateTime;
+    /**
+     * @param string
+     */
     public function setBundleId($bundleId)
     {
         $this->bundleId = $bundleId;
     }
+    /**
+     * @return string
+     */
     public function getBundleId()
     {
         return $this->bundleId;
     }
+    /**
+     * @param string
+     */
     public function setCreateTime($createTime)
     {
         $this->createTime = $createTime;
     }
+    /**
+     * @return string
+     */
     public function getCreateTime()
     {
         return $this->createTime;
     }
+    /**
+     * @param string
+     */
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
     }
+    /**
+     * @return string
+     */
     public function getDisplayName()
     {
         return $this->displayName;
     }
+    /**
+     * @param string
+     */
     public function setFirebaseAppId($firebaseAppId)
     {
         $this->firebaseAppId = $firebaseAppId;
     }
+    /**
+     * @return string
+     */
     public function getFirebaseAppId()
     {
         return $this->firebaseAppId;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setUpdateTime($updateTime)
     {
         $this->updateTime = $updateTime;
     }
+    /**
+     * @return string
+     */
     public function getUpdateTime()
     {
         return $this->updateTime;

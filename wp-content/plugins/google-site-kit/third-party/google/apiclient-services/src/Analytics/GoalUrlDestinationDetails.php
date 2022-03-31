@@ -20,32 +20,62 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 class GoalUrlDestinationDetails extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'steps';
+    /**
+     * @var bool
+     */
     public $caseSensitive;
+    /**
+     * @var bool
+     */
     public $firstStepRequired;
+    /**
+     * @var string
+     */
     public $matchType;
     protected $stepsType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\GoalUrlDestinationDetailsSteps::class;
     protected $stepsDataType = 'array';
+    /**
+     * @var string
+     */
     public $url;
+    /**
+     * @param bool
+     */
     public function setCaseSensitive($caseSensitive)
     {
         $this->caseSensitive = $caseSensitive;
     }
+    /**
+     * @return bool
+     */
     public function getCaseSensitive()
     {
         return $this->caseSensitive;
     }
+    /**
+     * @param bool
+     */
     public function setFirstStepRequired($firstStepRequired)
     {
         $this->firstStepRequired = $firstStepRequired;
     }
+    /**
+     * @return bool
+     */
     public function getFirstStepRequired()
     {
         return $this->firstStepRequired;
     }
+    /**
+     * @param string
+     */
     public function setMatchType($matchType)
     {
         $this->matchType = $matchType;
     }
+    /**
+     * @return string
+     */
     public function getMatchType()
     {
         return $this->matchType;
@@ -64,10 +94,16 @@ class GoalUrlDestinationDetails extends \Google\Site_Kit_Dependencies\Google\Col
     {
         return $this->steps;
     }
+    /**
+     * @param string
+     */
     public function setUrl($url)
     {
         $this->url = $url;
     }
+    /**
+     * @return string
+     */
     public function getUrl()
     {
         return $this->url;

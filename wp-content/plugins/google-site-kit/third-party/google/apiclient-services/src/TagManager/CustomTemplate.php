@@ -19,37 +19,82 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class CustomTemplate extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $accountId;
+    /**
+     * @var string
+     */
     public $containerId;
+    /**
+     * @var string
+     */
     public $fingerprint;
     protected $galleryReferenceType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\GalleryReference::class;
     protected $galleryReferenceDataType = '';
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $path;
+    /**
+     * @var string
+     */
     public $tagManagerUrl;
+    /**
+     * @var string
+     */
     public $templateData;
+    /**
+     * @var string
+     */
     public $templateId;
+    /**
+     * @var string
+     */
     public $workspaceId;
+    /**
+     * @param string
+     */
     public function setAccountId($accountId)
     {
         $this->accountId = $accountId;
     }
+    /**
+     * @return string
+     */
     public function getAccountId()
     {
         return $this->accountId;
     }
+    /**
+     * @param string
+     */
     public function setContainerId($containerId)
     {
         $this->containerId = $containerId;
     }
+    /**
+     * @return string
+     */
     public function getContainerId()
     {
         return $this->containerId;
     }
+    /**
+     * @param string
+     */
     public function setFingerprint($fingerprint)
     {
         $this->fingerprint = $fingerprint;
     }
+    /**
+     * @return string
+     */
     public function getFingerprint()
     {
         return $this->fingerprint;
@@ -68,50 +113,86 @@ class CustomTemplate extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->galleryReference;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setPath($path)
     {
         $this->path = $path;
     }
+    /**
+     * @return string
+     */
     public function getPath()
     {
         return $this->path;
     }
+    /**
+     * @param string
+     */
     public function setTagManagerUrl($tagManagerUrl)
     {
         $this->tagManagerUrl = $tagManagerUrl;
     }
+    /**
+     * @return string
+     */
     public function getTagManagerUrl()
     {
         return $this->tagManagerUrl;
     }
+    /**
+     * @param string
+     */
     public function setTemplateData($templateData)
     {
         $this->templateData = $templateData;
     }
+    /**
+     * @return string
+     */
     public function getTemplateData()
     {
         return $this->templateData;
     }
+    /**
+     * @param string
+     */
     public function setTemplateId($templateId)
     {
         $this->templateId = $templateId;
     }
+    /**
+     * @return string
+     */
     public function getTemplateId()
     {
         return $this->templateId;
     }
+    /**
+     * @param string
+     */
     public function setWorkspaceId($workspaceId)
     {
         $this->workspaceId = $workspaceId;
     }
+    /**
+     * @return string
+     */
     public function getWorkspaceId()
     {
         return $this->workspaceId;

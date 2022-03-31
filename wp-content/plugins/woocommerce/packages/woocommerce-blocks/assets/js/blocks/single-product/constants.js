@@ -10,7 +10,12 @@ export const BLOCK_TITLE = __(
 	'Single Product',
 	'woocommerce'
 );
-export const BLOCK_ICON = <Icon srcElement={ reader } />;
+export const BLOCK_ICON = (
+	<Icon
+		srcElement={ reader }
+		className="wc-block-editor-components-block-icon"
+	/>
+);
 export const BLOCK_DESCRIPTION = __(
 	'Display a single product.',
 	'woocommerce'

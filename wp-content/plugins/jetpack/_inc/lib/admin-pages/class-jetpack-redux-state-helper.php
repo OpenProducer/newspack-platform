@@ -7,12 +7,14 @@
  */
 
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
+use Automattic\Jetpack\Connection\Plugin_Storage as Connection_Plugin_Storage;
 use Automattic\Jetpack\Connection\REST_Connector;
 use Automattic\Jetpack\Constants;
 use Automattic\Jetpack\Device_Detection\User_Agent_Info;
 use Automattic\Jetpack\Identity_Crisis;
 use Automattic\Jetpack\Licensing;
 use Automattic\Jetpack\Partner;
+use Automattic\Jetpack\Partner_Coupon as Jetpack_Partner_Coupon;
 use Automattic\Jetpack\Status;
 use Automattic\Jetpack\Status\Host;
 
@@ -20,6 +22,16 @@ use Automattic\Jetpack\Status\Host;
  * Responsible for populating the initial Redux state.
  */
 class Jetpack_Redux_State_Helper {
+	/**
+	 * Generate minimal state for React to fetch its own data
+	 */
+	public static function get_minimal_state() {
+		return array(
+			'WP_API_root'  => esc_url_raw( rest_url() ),
+			'WP_API_nonce' => wp_create_nonce( 'wp_rest' ),
+		);
+	}
+
 	/**
 	 * Generate the initial state array to be used by the Redux store.
 	 */
@@ -29,6 +41,8 @@ class Jetpack_Redux_State_Helper {
 		// Load API endpoint base classes and endpoints for getting the module list fed into the JS Admin Page.
 		require_once JETPACK__PLUGIN_DIR . '_inc/lib/core-api/class.jetpack-core-api-xmlrpc-consumer-endpoint.php';
 		require_once JETPACK__PLUGIN_DIR . '_inc/lib/core-api/class.jetpack-core-api-module-endpoints.php';
+		require_once JETPACK__PLUGIN_DIR . '_inc/lib/core-api/class.jetpack-core-api-site-endpoints.php';
+
 		$module_list_endpoint = new Jetpack_Core_API_Module_List_Endpoint();
 		$modules              = $module_list_endpoint->get_modules();
 
@@ -96,14 +110,20 @@ class Jetpack_Redux_State_Helper {
 
 		$host = new Host();
 
+		// Get Jetpack benefits for this site.
+		$jetpack_benefits_response = Jetpack_Core_API_Site_Endpoint::get_benefits();
+		$jetpack_benefits          = 200 === $jetpack_benefits_response->status ? json_decode( $jetpack_benefits_response->data['data'] ) : array();
+
 		return array(
 			'WP_API_root'                 => esc_url_raw( rest_url() ),
 			'WP_API_nonce'                => wp_create_nonce( 'wp_rest' ),
 			'registrationNonce'           => wp_create_nonce( 'jetpack-registration-nonce' ),
 			'purchaseToken'               => self::get_purchase_token(),
+			'partnerCoupon'               => Jetpack_Partner_Coupon::get_coupon(),
 			'pluginBaseUrl'               => plugins_url( '', JETPACK__PLUGIN_FILE ),
 			'connectionStatus'            => $connection_status,
-			'connectUrl'                  => false == $current_user_data['isConnected'] // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+			'connectedPlugins'            => Connection_Plugin_Storage::get_all(),
+			'connectUrl'                  => false == $current_user_data['isConnected'] // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 				? Jetpack::init()->build_connect_url( true, false, false )
 				: '',
 			'dismissedNotices'            => self::get_dismissed_jetpack_notices(),
@@ -131,10 +151,11 @@ class Jetpack_Redux_State_Helper {
 				'currentUser' => $current_user_data,
 			),
 			'siteData'                    => array(
+				'blog_id'                    => Jetpack_Options::get_option( 'id', 0 ),
 				'icon'                       => has_site_icon()
 					? apply_filters( 'jetpack_photon_url', get_site_icon_url(), array( 'w' => 64 ) )
 					: '',
-				'siteVisibleToSearchEngines' => '1' == get_option( 'blog_public' ), // phpcs:ignore WordPress.PHP.StrictComparisons.LooseComparison
+				'siteVisibleToSearchEngines' => '1' == get_option( 'blog_public' ), // phpcs:ignore Universal.Operators.StrictComparisons.LooseEqual
 				/**
 				 * Whether promotions are visible or not.
 				 *
@@ -159,6 +180,7 @@ class Jetpack_Redux_State_Helper {
 					'infinite-scroll' => current_theme_supports( 'infinite-scroll' ) || in_array( $current_theme->get_stylesheet(), $inf_scr_support_themes, true ),
 				),
 			),
+			'jetpackBenefits'             => $jetpack_benefits,
 			'jetpackStateNotices'         => array(
 				'messageCode'      => Jetpack::state( 'message' ),
 				'errorCode'        => Jetpack::state( 'error' ),
@@ -175,9 +197,14 @@ class Jetpack_Redux_State_Helper {
 			'isSafari'                    => $is_safari || User_Agent_Info::is_opera_desktop(), // @todo Rename isSafari everywhere.
 			'doNotUseConnectionIframe'    => Constants::is_true( 'JETPACK_SHOULD_NOT_USE_CONNECTION_IFRAME' ),
 			'licensing'                   => array(
-				'error'           => Licensing::instance()->last_error(),
-				'showLicensingUi' => Licensing::instance()->is_licensing_input_enabled(),
+				'error'                   => Licensing::instance()->last_error(),
+				'showLicensingUi'         => Licensing::instance()->is_licensing_input_enabled(),
+				'userCounts'              => Jetpack_Core_Json_Api_Endpoints::get_user_license_counts(),
+				'activationNoticeDismiss' => Licensing::instance()->get_license_activation_notice_dismiss(),
 			),
+			'hasSeenWCConnectionModal'    => Jetpack_Options::get_option( 'has_seen_wc_connection_modal', false ),
+			// Check if WooCommerce plugin is active (based on https://docs.woocommerce.com/document/create-a-plugin/).
+			'isWooCommerceActive'         => in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', Jetpack::get_active_plugins() ), true ),
 		);
 	}
 
@@ -363,6 +390,7 @@ class Jetpack_Redux_State_Helper {
 	public static function generate_purchase_token() {
 		return wp_generate_password( 12, false );
 	}
+
 }
 
 /**
@@ -381,6 +409,11 @@ function jetpack_current_user_data() {
 	$dotcom_data       = $jetpack_connection->get_connected_user_data();
 
 	// Add connected user gravatar to the returned dotcom_data.
+	// Probably we shouldn't do this when $dotcom_data is false, but we have been since 2016 so
+	// clients probably expect that by now.
+	if ( false === $dotcom_data ) {
+		$dotcom_data = array();
+	}
 	$dotcom_data['avatar'] = ( ! empty( $dotcom_data['email'] ) ?
 		get_avatar_url(
 			$dotcom_data['email'],

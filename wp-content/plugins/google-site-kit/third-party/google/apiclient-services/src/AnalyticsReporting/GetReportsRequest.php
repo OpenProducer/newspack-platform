@@ -22,6 +22,9 @@ class GetReportsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'reportRequests';
     protected $reportRequestsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\ReportRequest::class;
     protected $reportRequestsDataType = 'array';
+    /**
+     * @var bool
+     */
     public $useResourceQuotas;
     /**
      * @param ReportRequest[]
@@ -37,10 +40,16 @@ class GetReportsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->reportRequests;
     }
+    /**
+     * @param bool
+     */
     public function setUseResourceQuotas($useResourceQuotas)
     {
         $this->useResourceQuotas = $useResourceQuotas;
     }
+    /**
+     * @return bool
+     */
     public function getUseResourceQuotas()
     {
         return $this->useResourceQuotas;

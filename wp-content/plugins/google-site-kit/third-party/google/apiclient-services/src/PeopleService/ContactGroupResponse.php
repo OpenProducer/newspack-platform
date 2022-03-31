@@ -21,6 +21,9 @@ class ContactGroupResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
     protected $contactGroupType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class;
     protected $contactGroupDataType = '';
+    /**
+     * @var string
+     */
     public $requestedResourceName;
     protected $statusType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Status::class;
     protected $statusDataType = '';
@@ -38,10 +41,16 @@ class ContactGroupResponse extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->contactGroup;
     }
+    /**
+     * @param string
+     */
     public function setRequestedResourceName($requestedResourceName)
     {
         $this->requestedResourceName = $requestedResourceName;
     }
+    /**
+     * @return string
+     */
     public function getRequestedResourceName()
     {
         return $this->requestedResourceName;

@@ -19,14 +19,26 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class Biography extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $contentType;
     protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
     protected $metadataDataType = '';
+    /**
+     * @var string
+     */
     public $value;
+    /**
+     * @param string
+     */
     public function setContentType($contentType)
     {
         $this->contentType = $contentType;
     }
+    /**
+     * @return string
+     */
     public function getContentType()
     {
         return $this->contentType;
@@ -45,10 +57,16 @@ class Biography extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->metadata;
     }
+    /**
+     * @param string
+     */
     public function setValue($value)
     {
         $this->value = $value;
     }
+    /**
+     * @return string
+     */
     public function getValue()
     {
         return $this->value;

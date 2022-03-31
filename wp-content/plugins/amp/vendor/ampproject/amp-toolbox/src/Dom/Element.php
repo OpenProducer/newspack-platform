@@ -2,7 +2,7 @@
 
 namespace AmpProject\Dom;
 
-use AmpProject\Attribute;
+use AmpProject\Html\Attribute;
 use AmpProject\Exception\MaxCssByteCountExceeded;
 use AmpProject\Optimizer\CssRule;
 use DOMAttr;
@@ -18,7 +18,6 @@ use DOMElement;
  */
 final class Element extends DOMElement
 {
-
     /**
      * Regular expression pattern to match events and actions within an 'on' attribute.
      *
@@ -43,11 +42,12 @@ final class Element extends DOMElement
     /**
      * Add CSS styles to the element as an inline style attribute.
      *
-     * @param string $style CSS style(s) to add to the inline style attribute.
+     * @param string $style   CSS style(s) to add to the inline style attribute.
+     * @param bool   $prepend Optional. Whether to prepend the new style to existing styles or not. Defaults to false.
      * @return DOMAttr|false The new or modified DOMAttr or false if an error occurred.
      * @throws MaxCssByteCountExceeded If the allowed max byte count is exceeded.
      */
-    public function addInlineStyle($style)
+    public function addInlineStyle($style, $prepend = false)
     {
         $style = trim($style, CssRule::CSS_TRIM_CHARACTERS);
 
@@ -56,7 +56,7 @@ final class Element extends DOMElement
             $existingStyle = rtrim($existingStyle, ';') . ';';
         }
 
-        $newStyle = $existingStyle . $style;
+        $newStyle = $prepend ? ($style . ';' . $existingStyle) : ($existingStyle . $style);
 
         return $this->setAttribute(Attribute::STYLE, $newStyle);
     }
@@ -72,6 +72,9 @@ final class Element extends DOMElement
      */
     public function setAttribute($name, $value)
     {
+        // Make sure $value is always a string and not null.
+        $value = strval($value);
+
         if (
             $name === Attribute::STYLE
             && $this->ownerDocument->isCssMaxByteCountEnforced()

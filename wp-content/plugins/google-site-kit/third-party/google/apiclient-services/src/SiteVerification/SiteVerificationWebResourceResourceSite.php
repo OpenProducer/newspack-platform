@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SiteVerification;
 
 class SiteVerificationWebResourceResourceSite extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $identifier;
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @param string
+     */
     public function setIdentifier($identifier)
     {
         $this->identifier = $identifier;
     }
+    /**
+     * @return string
+     */
     public function getIdentifier()
     {
         return $this->identifier;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;

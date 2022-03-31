@@ -46,11 +46,14 @@ final class Newspack_Newsletters_Editor {
 	public function __construct() {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'the_post', [ __CLASS__, 'strip_editor_modifications' ] );
+		add_action( 'after_setup_theme', [ __CLASS__, 'newspack_font_sizes' ], 11 );
 		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 		add_filter( 'allowed_block_types_all', [ __CLASS__, 'newsletters_allowed_block_types' ], 10, 2 );
 		add_action( 'rest_post_query', [ __CLASS__, 'maybe_filter_excerpt_length' ], 10, 2 );
 		add_action( 'rest_api_init', [ __CLASS__, 'add_newspack_author_info' ] );
 		add_filter( 'the_posts', [ __CLASS__, 'maybe_reset_excerpt_length' ] );
+		add_filter( 'should_load_remote_block_patterns', [ __CLASS__, 'strip_block_patterns' ] );
+		add_filter( 'enter_title_here', [ __CLASS__, 'placeholder_editor_title' ] );
 	}
 
 	/**
@@ -95,6 +98,34 @@ final class Newspack_Newsletters_Editor {
 	}
 
 	/**
+	 * Get CSS rules for color palette.
+	 *
+	 * @param string $container_selector Optional selector to prefix as a container to every rule.
+	 * 
+	 * @return string CSS rules.
+	 */
+	public static function get_color_palette_css( $container_selector = '' ) {
+		$rules = [];
+		// Add `.has-{color-name}-color` rules for each palette color.
+		$color_palette = json_decode( get_option( 'newspack_newsletters_color_palette', false ), true );
+		if ( ! empty( $color_palette ) ) {
+			foreach ( $color_palette as $color_name => $color_value ) {
+				$rules[] = '.has-' . esc_html( $color_name ) . '-color { color: ' . esc_html( $color_value ) . '; }';
+			}
+		}
+		if ( $container_selector ) {
+			$container_selector = esc_html( $container_selector );
+			$rules              = array_map(
+				function( $rule ) use ( $container_selector ) {
+					return $container_selector . ' ' . $rule;
+				},
+				$rules 
+			);
+		}
+		return implode( "\n", $rules );
+	}
+
+	/**
 	 * Remove all editor enqueued assets besides this plugins' and disable some editor features.
 	 * This is to prevent theme styles being loaded in the editor.
 	 */
@@ -104,7 +135,7 @@ final class Newspack_Newsletters_Editor {
 		}
 
 		$allowed_actions = apply_filters(
-			'newspack_newsletters_allowed_editor_actions', 
+			'newspack_newsletters_allowed_editor_actions',
 			[
 				__CLASS__ . '::enqueue_block_editor_assets',
 				'newspack_enqueue_scripts',
@@ -125,6 +156,72 @@ final class Newspack_Newsletters_Editor {
 		remove_editor_styles();
 		add_theme_support( 'editor-gradient-presets', array() );
 		add_theme_support( 'disable-custom-gradients' );
+
+		$block_patterns_registry = \WP_Block_Patterns_Registry::get_instance();
+		if ( $block_patterns_registry->is_registered( 'core/social-links-shared-background-color' ) ) {
+			unregister_block_pattern( 'core/social-links-shared-background-color' );
+		}
+	}
+
+	/**
+	 * Remove Core's Remote Block patterns.
+	 *
+	 * @param boolean $should_load_remote Whether to load remote block patterns.
+	 *
+	 * @return boolean Whether to load remote block patterns.
+	 */
+	public static function strip_block_patterns( $should_load_remote ) {
+		if ( self::is_editing_email() ) {
+			return false;
+		}
+
+		return $should_load_remote;
+	}
+
+	/**
+	 * Placeholder text for the editor title.
+	 *
+	 * @param string $title_placeholder Placeholder text for the title.
+	 *
+	 * @return string Placeholder text for the title.
+	 */
+	public static function placeholder_editor_title( $title_placeholder ) {
+		if ( self::is_editing_email() ) {
+			return __( 'Subject', 'newspack-newsletters' );
+		}
+
+		return $title_placeholder;
+	}
+
+	/**
+	 * Define Editor Font Sizes.
+	 */
+	public static function newspack_font_sizes() {
+		add_theme_support(
+			'editor-font-sizes',
+			[
+				[
+					'name' => _x( 'Small', 'font size name', 'newspack-newsletters' ),
+					'size' => 12,
+					'slug' => 'small',
+				],
+				[
+					'name' => _x( 'Normal', 'font size name', 'newspack-newsletters' ),
+					'size' => 16,
+					'slug' => 'normal',
+				],
+				[
+					'name' => _x( 'Large', 'font size name', 'newspack-newsletters' ),
+					'size' => 24,
+					'slug' => 'large',
+				],
+				[
+					'name' => _x( 'Extra Large', 'font size name', 'newspack-newsletters' ),
+					'size' => 36,
+					'slug' => 'x-large',
+				],
+			]
+		);
 	}
 
 	/**
@@ -173,6 +270,8 @@ final class Newspack_Newsletters_Editor {
 			wp_style_add_data( 'newspack-newsletters', 'rtl', 'replace' );
 			wp_enqueue_style( 'newspack-newsletters' );
 
+			wp_add_inline_style( 'newspack-newsletters', self::get_color_palette_css( '.editor-styles-wrapper' ) );
+
 			\wp_enqueue_script(
 				'newspack-newsletters-editor',
 				plugins_url( '../dist/editor.js', __FILE__ ),
@@ -205,6 +304,15 @@ final class Newspack_Newsletters_Editor {
 		}
 
 		if ( self::is_editing_newsletter() ) {
+			wp_localize_script(
+				'newspack-newsletters-editor',
+				'newspack_newsletters_data',
+				[
+					'is_service_provider_configured' => Newspack_Newsletters::is_service_provider_configured(),
+					'service_provider'               => Newspack_Newsletters::service_provider(),
+					'user_test_emails'               => self::get_current_user_test_emails(),
+				]
+			);
 			wp_register_style(
 				'newspack-newsletters-newsletter-editor',
 				plugins_url( '../dist/newsletterEditor.css', __FILE__ ),
@@ -219,15 +327,6 @@ final class Newspack_Newsletters_Editor {
 				[],
 				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/newsletterEditor.js' ),
 				true
-			);
-			wp_localize_script(
-				'newspack-newsletters-newsletter-editor',
-				'newspack_newsletters_data',
-				[
-					'is_service_provider_configured' => Newspack_Newsletters::is_service_provider_configured(),
-					'service_provider'               => Newspack_Newsletters::service_provider(),
-					'user_test_emails'               => self::get_current_user_test_emails(),
-				]
 			);
 		}
 

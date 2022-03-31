@@ -5,15 +5,8 @@
 
 namespace Automattic\WooCommerce\Admin\Features\OnboardingTasks;
 
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\Appearance;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\Marketing;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\Payments;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\Products;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\Purchase;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\Shipping;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\StoreDetails;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\Tax;
-use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\WooCommercePayments;
+use Automattic\WooCommerce\Admin\Features\OnboardingTasks\DeprecatedExtendedTask;
+use Automattic\WooCommerce\Admin\Features\OnboardingTasks\Task;
 use Automattic\WooCommerce\Admin\Loader;
 
 /**
@@ -35,6 +28,31 @@ class TaskLists {
 	protected static $lists = array();
 
 	/**
+	 * Boolean value to indicate if default tasks have been added.
+	 *
+	 * @var boolean
+	 */
+	protected static $default_tasks_loaded = false;
+
+	/**
+	 * Array of default tasks.
+	 *
+	 * @var array
+	 */
+	const DEFAULT_TASKS = array(
+		'StoreDetails',
+		'Purchase',
+		'Products',
+		'WooCommercePayments',
+		'Payments',
+		'Tax',
+		'Shipping',
+		'Marketing',
+		'Appearance',
+		'AdditionalPayments',
+	);
+
+	/**
 	 * Get class instance.
 	 */
 	final public static function instance() {
@@ -49,7 +67,9 @@ class TaskLists {
 	 */
 	public static function init() {
 		self::init_default_lists();
-		add_action( 'rest_api_init', array( __CLASS__, 'maybe_add_default_tasks' ) );
+		self::maybe_add_default_tasks();
+		add_action( 'admin_init', array( __CLASS__, 'set_active_task' ), 5 );
+		add_action( 'init', array( __CLASS__, 'init_tasks' ) );
 	}
 
 	/**
@@ -65,10 +85,57 @@ class TaskLists {
 
 		self::add_list(
 			array(
-				'id'    => 'extended',
-				'title' => __( 'Things to do next', 'woocommerce' ),
+				'id'      => 'extended',
+				'title'   => __( 'Things to do next', 'woocommerce' ),
+				'sort_by' => array(
+					array(
+						'key'   => 'is_complete',
+						'order' => 'asc',
+					),
+					array(
+						'key'   => 'level',
+						'order' => 'asc',
+					),
+				),
 			)
 		);
+	}
+
+	/**
+	 * Initialize tasks.
+	 */
+	public static function init_tasks() {
+		foreach ( self::DEFAULT_TASKS as $task ) {
+			$class = 'Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\\' . $task;
+			if ( ! method_exists( $class, 'init' ) ) {
+				continue;
+			}
+			$class::init();
+		}
+	}
+
+	/**
+	 * Temporarily store the active task to persist across page loads when neccessary.
+	 * Most tasks do not need this.
+	 */
+	public static function set_active_task() {
+		if ( ! isset( $_GET[ Task::ACTIVE_TASK_TRANSIENT ] ) || ! current_user_can( 'manage_woocommerce' ) ) { // phpcs:ignore csrf ok.
+			return;
+		}
+		$referer = wp_get_referer();
+		if ( ! $referer || 0 !== strpos( $referer, wc_admin_url() ) ) {
+			return;
+		}
+
+		$task_id = sanitize_title_with_dashes( wp_unslash( $_GET[ Task::ACTIVE_TASK_TRANSIENT ] ) ); // phpcs:ignore csrf ok.
+
+		$task = self::get_task( $task_id );
+
+		if ( ! $task ) {
+			return;
+		}
+
+		$task->set_active();
 	}
 
 	/**
@@ -110,25 +177,31 @@ class TaskLists {
 	 * Add default task lists.
 	 */
 	public static function maybe_add_default_tasks() {
-		global $wp;
-
-		if ( substr( $wp->request, 0, 34 ) !== 'wp-json/wc-admin/onboarding/tasks' ) {
+		if ( ! apply_filters( 'woocommerce_admin_onboarding_tasks_add_default_tasks', ! self::$default_tasks_loaded ) ) {
 			return;
 		}
 
-		if ( ! apply_filters( 'woocommerce_admin_onboarding_tasks_add_default_tasks', true ) ) {
-			return;
-		}
+		self::$default_tasks_loaded = true;
 
-		self::add_task( 'setup', StoreDetails::get_task() );
-		self::add_task( 'setup', Purchase::get_task() );
-		self::add_task( 'setup', Products::get_task() );
-		self::add_task( 'setup', WooCommercePayments::get_task() );
-		self::add_task( 'setup', Payments::get_task() );
-		self::add_task( 'setup', Tax::get_task() );
-		self::add_task( 'setup', Shipping::get_task() );
-		self::add_task( 'setup', Marketing::get_task() );
-		self::add_task( 'setup', Appearance::get_task() );
+		foreach ( self::DEFAULT_TASKS as $task_name ) {
+			$class = 'Automattic\WooCommerce\Admin\Features\OnboardingTasks\Tasks\\' . $task_name;
+			$task  = new $class();
+			self::add_task( $task->get_parent_id(), $task );
+		}
+	}
+
+	/**
+	 * Add default extended task lists.
+	 *
+	 * @param array $extended_tasks list of extended tasks.
+	 */
+	public static function maybe_add_extended_tasks( $extended_tasks ) {
+		$tasks = $extended_tasks ? $extended_tasks : array();
+
+		foreach ( $tasks as $args ) {
+			$task = new DeprecatedExtendedTask( $args );
+			self::add_task( $task->get_parent_id(), $task );
+		}
 	}
 
 	/**
@@ -137,6 +210,14 @@ class TaskLists {
 	 * @return array
 	 */
 	public static function get_lists() {
+		return self::$lists;
+	}
+
+	/**
+	 * Clear all task lists.
+	 */
+	public static function clear_lists() {
+		self::$lists = array();
 		return self::$lists;
 	}
 
@@ -179,22 +260,22 @@ class TaskLists {
 	 * @return Object
 	 */
 	public static function get_task( $id, $task_list_id = null ) {
-		$task_list = $task_list_id ? self::get_task_list_by_id( $task_list_id ) : null;
+		$task_list = $task_list_id ? self::get_list( $task_list_id ) : null;
 
 		if ( $task_list_id && ! $task_list ) {
 			return null;
 		}
 
-		$tasks_to_search = $task_list ? $task_list['tasks'] : array_reduce(
+		$tasks_to_search = $task_list ? $task_list->tasks : array_reduce(
 			self::get_lists(),
 			function ( $all, $curr ) {
-				return array_merge( $all, $curr['tasks'] );
+				return array_merge( $all, $curr->tasks );
 			},
 			array()
 		);
 
 		foreach ( $tasks_to_search as $task ) {
-			if ( $id === $task['id'] ) {
+			if ( $id === $task->get_id() ) {
 				return $task;
 			}
 		}

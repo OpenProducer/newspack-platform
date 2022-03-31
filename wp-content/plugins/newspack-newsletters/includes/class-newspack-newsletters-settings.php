@@ -28,77 +28,107 @@ class Newspack_Newsletters_Settings {
 	public static function get_settings_list() {
 		$settings_list = array(
 			array(
-				'description' => __( 'Service Provider', 'newspack-newsletters' ),
+				'description' => esc_html__( 'Service Provider', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_service_provider',
 				'options'     => array(
 					array(
-						'name'  => __( 'Select service provider', 'newspack-newsletter' ),
+						'name'  => esc_html__( 'Select service provider', 'newspack-newsletter' ),
 						'value' => '',
 					),
 					array(
-						'name'  => __( 'Manual', 'newspack-newsletters' ),
-						'value' => 'manual',
-					),
-					array(
-						'name'  => __( 'Mailchimp', 'newspack-newsletters' ),
+						'name'  => esc_html__( 'Mailchimp', 'newspack-newsletters' ),
 						'value' => 'mailchimp',
 					),
 					array(
-						'name'  => __( 'Constant Contact', 'newspack-newsletters' ),
+						'name'  => esc_html__( 'Constant Contact', 'newspack-newsletters' ),
 						'value' => 'constant_contact',
 					),
 					array(
-						'name'  => __( 'Campaign Monitor', 'newspack-newsletters' ),
+						'name'  => esc_html__( 'Campaign Monitor', 'newspack-newsletters' ),
 						'value' => 'campaign_monitor',
+					),
+					array(
+						'name'  => esc_html__( 'Manual / Other', 'newspack-newsletters' ),
+						'value' => 'manual',
 					),
 				),
 				'type'        => 'select',
+				'onboarding'  => true,
 			),
 			array(
-				'description' => __( 'Mailchimp API Key', 'newspack-newsletters' ),
+				'description' => esc_html__( 'Mailchimp API Key', 'newspack-newsletters' ),
 				'key'         => 'newspack_mailchimp_api_key',
 				'type'        => 'text',
 				'default'     => get_option( 'newspack_newsletters_mailchimp_api_key', '' ),
 				'provider'    => 'mailchimp',
+				'placeholder' => esc_attr( '123457103961b1f4dc0b2b2fd59c137b-us1' ),
+				'help'        => esc_html__( 'Find or generate your API key', 'newspack-newsletter' ),
+				'helpURL'     => esc_url( 'https://mailchimp.com/help/about-api-keys/#Find_or_generate_your_API_key' ),
+				'onboarding'  => true,
 			),
 			array(
-				'description' => __( 'Constant Contact API Key', 'newspack-newsletters' ),
+				'description' => esc_html__( 'Constant Contact API Key', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_constant_contact_api_key',
 				'type'        => 'text',
 				'provider'    => 'constant_contact',
+				'onboarding'  => true,
 			),
 			array(
-				'description' => __( 'Constant Contact API Secret', 'newspack-newsletters' ),
+				'description' => esc_html__( 'Constant Contact API Secret', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_constant_contact_api_secret',
 				'type'        => 'text',
 				'provider'    => 'constant_contact',
+				'onboarding'  => true,
 			),
 			array(
-				'description' => __( 'Campaign Monitor API Key', 'newspack-newsletters' ),
+				'description' => esc_html__( 'Campaign Monitor API Key', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_campaign_monitor_api_key',
 				'type'        => 'text',
 				'provider'    => 'campaign_monitor',
+				'onboarding'  => true,
 			),
 			array(
-				'description' => __( 'Campaign Monitor Client ID', 'newspack-newsletters' ),
+				'description' => esc_html__( 'Campaign Monitor Client ID', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_campaign_monitor_client_id',
 				'type'        => 'text',
 				'provider'    => 'campaign_monitor',
+				'onboarding'  => true,
 			),
 			array(
 				'default'           => 'newsletter',
-				'description'       => __( 'Public Newsletter Posts Slug', 'newspack-newsletters' ),
+				'description'       => esc_html__( 'Public Newsletter Posts Slug', 'newspack-newsletters' ),
 				'key'               => 'newspack_newsletters_public_posts_slug',
 				'sanitize_callback' => 'sanitize_title',
 				'type'              => 'text',
+				'onboarding'        => false,
+			),
+
+			/**
+			 * Letterhead Creator key
+			 *
+			 * This key is required for folks who want to integrate promotions served through
+			 * Letterhead into their newsletters. It's generally passed as a bearer token against LH
+			 * API.
+			 *
+			 * @see https://help.tryletterhead.com/promotions-api-reference
+			 */
+			array(
+				'default'     => '',
+				'description' => esc_html__( 'Letterhead API Key', 'newspack-newsletters' ),
+				'key'         => Newspack_Newsletters_Letterhead::LETTERHEAD_WP_OPTION_KEY,
+				'type'        => 'text',
+				'help'        => esc_html__( 'Promotions API reference', 'newspack-newsletter' ),
+				'helpURL'     => esc_url( 'https://help.tryletterhead.com/promotions-api-reference' ),
+				'onboarding'  => false,
 			),
 		);
 
 		if ( class_exists( 'Jetpack' ) && \Jetpack::is_module_active( 'related-posts' ) ) {
 			$settings_list[] = array(
-				'description' => __( 'Disable Related Posts on public newsletter posts?', 'newspack-newsletters' ),
+				'description' => esc_html__( 'Disable Related Posts on public newsletter posts?', 'newspack-newsletters' ),
 				'key'         => 'newspack_newsletters_disable_related_posts',
 				'type'        => 'checkbox',
+				'onboarding'  => false,
 			);
 		}
 
@@ -120,8 +150,8 @@ class Newspack_Newsletters_Settings {
 	public static function add_plugin_page() {
 		add_submenu_page(
 			'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-			__( 'Newsletters Settings', 'newspack-newsletters' ),
-			__( 'Settings', 'newspack-newsletters' ),
+			esc_html__( 'Newsletters Settings', 'newspack-newsletters' ),
+			esc_html__( 'Settings', 'newspack-newsletters' ),
 			'manage_options',
 			'newspack-newsletters-settings-admin',
 			[ __CLASS__, 'create_admin_page' ]

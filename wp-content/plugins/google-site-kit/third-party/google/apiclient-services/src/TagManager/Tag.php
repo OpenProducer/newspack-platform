@@ -20,59 +20,140 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'teardownTag';
+    /**
+     * @var string
+     */
     public $accountId;
+    /**
+     * @var string[]
+     */
     public $blockingRuleId;
+    /**
+     * @var string[]
+     */
     public $blockingTriggerId;
     protected $consentSettingsType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\TagConsentSetting::class;
     protected $consentSettingsDataType = '';
+    /**
+     * @var string
+     */
     public $containerId;
+    /**
+     * @var string
+     */
     public $fingerprint;
+    /**
+     * @var string[]
+     */
     public $firingRuleId;
+    /**
+     * @var string[]
+     */
     public $firingTriggerId;
+    /**
+     * @var bool
+     */
     public $liveOnly;
     protected $monitoringMetadataType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
     protected $monitoringMetadataDataType = '';
+    /**
+     * @var string
+     */
     public $monitoringMetadataTagNameKey;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $notes;
     protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
     protected $parameterDataType = 'array';
+    /**
+     * @var string
+     */
     public $parentFolderId;
+    /**
+     * @var string
+     */
     public $path;
+    /**
+     * @var bool
+     */
     public $paused;
     protected $priorityType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
     protected $priorityDataType = '';
+    /**
+     * @var string
+     */
     public $scheduleEndMs;
+    /**
+     * @var string
+     */
     public $scheduleStartMs;
     protected $setupTagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\SetupTag::class;
     protected $setupTagDataType = 'array';
+    /**
+     * @var string
+     */
     public $tagFiringOption;
+    /**
+     * @var string
+     */
     public $tagId;
+    /**
+     * @var string
+     */
     public $tagManagerUrl;
     protected $teardownTagType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\TeardownTag::class;
     protected $teardownTagDataType = 'array';
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @var string
+     */
     public $workspaceId;
+    /**
+     * @param string
+     */
     public function setAccountId($accountId)
     {
         $this->accountId = $accountId;
     }
+    /**
+     * @return string
+     */
     public function getAccountId()
     {
         return $this->accountId;
     }
+    /**
+     * @param string[]
+     */
     public function setBlockingRuleId($blockingRuleId)
     {
         $this->blockingRuleId = $blockingRuleId;
     }
+    /**
+     * @return string[]
+     */
     public function getBlockingRuleId()
     {
         return $this->blockingRuleId;
     }
+    /**
+     * @param string[]
+     */
     public function setBlockingTriggerId($blockingTriggerId)
     {
         $this->blockingTriggerId = $blockingTriggerId;
     }
+    /**
+     * @return string[]
+     */
     public function getBlockingTriggerId()
     {
         return $this->blockingTriggerId;
@@ -91,42 +172,72 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->consentSettings;
     }
+    /**
+     * @param string
+     */
     public function setContainerId($containerId)
     {
         $this->containerId = $containerId;
     }
+    /**
+     * @return string
+     */
     public function getContainerId()
     {
         return $this->containerId;
     }
+    /**
+     * @param string
+     */
     public function setFingerprint($fingerprint)
     {
         $this->fingerprint = $fingerprint;
     }
+    /**
+     * @return string
+     */
     public function getFingerprint()
     {
         return $this->fingerprint;
     }
+    /**
+     * @param string[]
+     */
     public function setFiringRuleId($firingRuleId)
     {
         $this->firingRuleId = $firingRuleId;
     }
+    /**
+     * @return string[]
+     */
     public function getFiringRuleId()
     {
         return $this->firingRuleId;
     }
+    /**
+     * @param string[]
+     */
     public function setFiringTriggerId($firingTriggerId)
     {
         $this->firingTriggerId = $firingTriggerId;
     }
+    /**
+     * @return string[]
+     */
     public function getFiringTriggerId()
     {
         return $this->firingTriggerId;
     }
+    /**
+     * @param bool
+     */
     public function setLiveOnly($liveOnly)
     {
         $this->liveOnly = $liveOnly;
     }
+    /**
+     * @return bool
+     */
     public function getLiveOnly()
     {
         return $this->liveOnly;
@@ -145,26 +256,44 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->monitoringMetadata;
     }
+    /**
+     * @param string
+     */
     public function setMonitoringMetadataTagNameKey($monitoringMetadataTagNameKey)
     {
         $this->monitoringMetadataTagNameKey = $monitoringMetadataTagNameKey;
     }
+    /**
+     * @return string
+     */
     public function getMonitoringMetadataTagNameKey()
     {
         return $this->monitoringMetadataTagNameKey;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setNotes($notes)
     {
         $this->notes = $notes;
     }
+    /**
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;
@@ -183,26 +312,44 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->parameter;
     }
+    /**
+     * @param string
+     */
     public function setParentFolderId($parentFolderId)
     {
         $this->parentFolderId = $parentFolderId;
     }
+    /**
+     * @return string
+     */
     public function getParentFolderId()
     {
         return $this->parentFolderId;
     }
+    /**
+     * @param string
+     */
     public function setPath($path)
     {
         $this->path = $path;
     }
+    /**
+     * @return string
+     */
     public function getPath()
     {
         return $this->path;
     }
+    /**
+     * @param bool
+     */
     public function setPaused($paused)
     {
         $this->paused = $paused;
     }
+    /**
+     * @return bool
+     */
     public function getPaused()
     {
         return $this->paused;
@@ -221,18 +368,30 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->priority;
     }
+    /**
+     * @param string
+     */
     public function setScheduleEndMs($scheduleEndMs)
     {
         $this->scheduleEndMs = $scheduleEndMs;
     }
+    /**
+     * @return string
+     */
     public function getScheduleEndMs()
     {
         return $this->scheduleEndMs;
     }
+    /**
+     * @param string
+     */
     public function setScheduleStartMs($scheduleStartMs)
     {
         $this->scheduleStartMs = $scheduleStartMs;
     }
+    /**
+     * @return string
+     */
     public function getScheduleStartMs()
     {
         return $this->scheduleStartMs;
@@ -251,26 +410,44 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->setupTag;
     }
+    /**
+     * @param string
+     */
     public function setTagFiringOption($tagFiringOption)
     {
         $this->tagFiringOption = $tagFiringOption;
     }
+    /**
+     * @return string
+     */
     public function getTagFiringOption()
     {
         return $this->tagFiringOption;
     }
+    /**
+     * @param string
+     */
     public function setTagId($tagId)
     {
         $this->tagId = $tagId;
     }
+    /**
+     * @return string
+     */
     public function getTagId()
     {
         return $this->tagId;
     }
+    /**
+     * @param string
+     */
     public function setTagManagerUrl($tagManagerUrl)
     {
         $this->tagManagerUrl = $tagManagerUrl;
     }
+    /**
+     * @return string
+     */
     public function getTagManagerUrl()
     {
         return $this->tagManagerUrl;
@@ -289,18 +466,30 @@ class Tag extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->teardownTag;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
+    /**
+     * @param string
+     */
     public function setWorkspaceId($workspaceId)
     {
         $this->workspaceId = $workspaceId;
     }
+    /**
+     * @return string
+     */
     public function getWorkspaceId()
     {
         return $this->workspaceId;

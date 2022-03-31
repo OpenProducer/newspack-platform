@@ -1,8 +1,8 @@
 <?php
 namespace Automattic\WooCommerce\Blocks\StoreApi\Schemas;
 
-use Automattic\WooCommerce\Blocks\Package;
 use Automattic\WooCommerce\Blocks\Domain\Services\ExtendRestApi;
+
 /**
  * AbstractSchema class.
  *
@@ -57,6 +57,13 @@ abstract class AbstractSchema {
 	}
 
 	/**
+	 * Return schema properties.
+	 *
+	 * @return array
+	 */
+	abstract public function get_properties();
+
+	/**
 	 * Recursive removal of arg_options.
 	 *
 	 * @param array $properties Schema properties.
@@ -94,7 +101,7 @@ abstract class AbstractSchema {
 	/**
 	 * Returns extended data for a specific endpoint.
 	 *
-	 * @param string $endpoint The endpoint identifer.
+	 * @param string $endpoint The endpoint identifier.
 	 * @param array  ...$passed_args An array of arguments to be passed to callbacks.
 	 * @return object the data that will get added.
 	 */
@@ -178,6 +185,8 @@ abstract class AbstractSchema {
 		 * @return true|\WP_Error
 		 */
 		return function ( $values, $request, $param ) use ( $properties ) {
+			$sanitized_values = [];
+
 			foreach ( $properties as $property_key => $property_value ) {
 				$current_value = isset( $values[ $property_key ] ) ? $values[ $property_key ] : null;
 
@@ -188,17 +197,20 @@ abstract class AbstractSchema {
 					$current_value = rest_sanitize_value_from_schema( $current_value, $property_value, $param . ' > ' . $property_key );
 				}
 
+				// If sanitization failed, return the WP_Error object straight away.
 				if ( is_wp_error( $current_value ) ) {
 					return $current_value;
 				}
 
 				if ( isset( $property_value['properties'] ) ) {
-					$sanitize_callback = $this->get_recursive_sanitize_callback( $property_value['properties'] );
-					return $sanitize_callback( $current_value, $request, $param . ' > ' . $property_key );
+					$sanitize_callback                 = $this->get_recursive_sanitize_callback( $property_value['properties'] );
+					$sanitized_values[ $property_key ] = $sanitize_callback( $current_value, $request, $param . ' > ' . $property_key );
+				} else {
+					$sanitized_values[ $property_key ] = $current_value;
 				}
 			}
 
-			return true;
+			return $sanitized_values;
 		};
 	}
 

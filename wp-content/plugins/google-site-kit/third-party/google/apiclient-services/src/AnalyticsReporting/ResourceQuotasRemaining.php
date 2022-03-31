@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 
 class ResourceQuotasRemaining extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var int
+     */
     public $dailyQuotaTokensRemaining;
+    /**
+     * @var int
+     */
     public $hourlyQuotaTokensRemaining;
+    /**
+     * @param int
+     */
     public function setDailyQuotaTokensRemaining($dailyQuotaTokensRemaining)
     {
         $this->dailyQuotaTokensRemaining = $dailyQuotaTokensRemaining;
     }
+    /**
+     * @return int
+     */
     public function getDailyQuotaTokensRemaining()
     {
         return $this->dailyQuotaTokensRemaining;
     }
+    /**
+     * @param int
+     */
     public function setHourlyQuotaTokensRemaining($hourlyQuotaTokensRemaining)
     {
         $this->hourlyQuotaTokensRemaining = $hourlyQuotaTokensRemaining;
     }
+    /**
+     * @return int
+     */
     public function getHourlyQuotaTokensRemaining()
     {
         return $this->hourlyQuotaTokensRemaining;

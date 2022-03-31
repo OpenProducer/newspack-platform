@@ -20,15 +20,24 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 class GetReportsResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'reports';
+    /**
+     * @var int
+     */
     public $queryCost;
     protected $reportsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\Report::class;
     protected $reportsDataType = 'array';
     protected $resourceQuotasRemainingType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\ResourceQuotasRemaining::class;
     protected $resourceQuotasRemainingDataType = '';
+    /**
+     * @param int
+     */
     public function setQueryCost($queryCost)
     {
         $this->queryCost = $queryCost;
     }
+    /**
+     * @return int
+     */
     public function getQueryCost()
     {
         return $this->queryCost;

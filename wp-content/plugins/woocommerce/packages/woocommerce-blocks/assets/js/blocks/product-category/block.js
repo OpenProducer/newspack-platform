@@ -18,6 +18,7 @@ import GridContentControl from '@woocommerce/editor-components/grid-content-cont
 import GridLayoutControl from '@woocommerce/editor-components/grid-layout-control';
 import ProductCategoryControl from '@woocommerce/editor-components/product-category-control';
 import ProductOrderbyControl from '@woocommerce/editor-components/product-orderby-control';
+import ProductStockControl from '@woocommerce/editor-components/product-stock-control';
 import { gridBlockPreview } from '@woocommerce/resource-previews';
 import { Icon, folder } from '@woocommerce/icons';
 import { getSetting } from '@woocommerce/settings';
@@ -119,6 +120,7 @@ class ProductByCategoryBlock extends Component {
 			orderby,
 			rows,
 			alignButtons,
+			stockStatus,
 		} = attributes;
 
 		return (
@@ -184,6 +186,18 @@ class ProductByCategoryBlock extends Component {
 					<ProductOrderbyControl
 						setAttributes={ setAttributes }
 						value={ orderby }
+					/>
+				</PanelBody>
+				<PanelBody
+					title={ __(
+						'Filter by stock status',
+						'woocommerce'
+					) }
+					initialOpen={ false }
+				>
+					<ProductStockControl
+						setAttributes={ setAttributes }
+						value={ stockStatus }
 					/>
 				</PanelBody>
 			</InspectorControls>
@@ -290,7 +304,10 @@ class ProductByCategoryBlock extends Component {
 						controls={ [
 							{
 								icon: 'edit',
-								title: __( 'Edit' ),
+								title: __(
+									'Edit selected categories',
+									'woocommerce'
+								),
 								onClick: () =>
 									isEditing
 										? this.stopEditing()

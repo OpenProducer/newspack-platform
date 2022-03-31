@@ -21,11 +21,23 @@ class ProfileFilterLink extends \Google\Site_Kit_Dependencies\Google\Model
 {
     protected $filterRefType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\FilterRef::class;
     protected $filterRefDataType = '';
+    /**
+     * @var string
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $kind;
     protected $profileRefType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\ProfileRef::class;
     protected $profileRefDataType = '';
+    /**
+     * @var int
+     */
     public $rank;
+    /**
+     * @var string
+     */
     public $selfLink;
     /**
      * @param FilterRef
@@ -41,18 +53,30 @@ class ProfileFilterLink extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->filterRef;
     }
+    /**
+     * @param string
+     */
     public function setId($id)
     {
         $this->id = $id;
     }
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
     }
+    /**
+     * @param string
+     */
     public function setKind($kind)
     {
         $this->kind = $kind;
     }
+    /**
+     * @return string
+     */
     public function getKind()
     {
         return $this->kind;
@@ -71,18 +95,30 @@ class ProfileFilterLink extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->profileRef;
     }
+    /**
+     * @param int
+     */
     public function setRank($rank)
     {
         $this->rank = $rank;
     }
+    /**
+     * @return int
+     */
     public function getRank()
     {
         return $this->rank;
     }
+    /**
+     * @param string
+     */
     public function setSelfLink($selfLink)
     {
         $this->selfLink = $selfLink;
     }
+    /**
+     * @return string
+     */
     public function getSelfLink()
     {
         return $this->selfLink;

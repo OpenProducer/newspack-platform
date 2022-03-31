@@ -22,6 +22,9 @@ class DateRangeValues extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'values';
     protected $pivotValueRegionsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\PivotValueRegion::class;
     protected $pivotValueRegionsDataType = 'array';
+    /**
+     * @var string[]
+     */
     public $values;
     /**
      * @param PivotValueRegion[]
@@ -37,10 +40,16 @@ class DateRangeValues extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->pivotValueRegions;
     }
+    /**
+     * @param string[]
+     */
     public function setValues($values)
     {
         $this->values = $values;
     }
+    /**
+     * @return string[]
+     */
     public function getValues()
     {
         return $this->values;

@@ -11,6 +11,8 @@
 defined( 'ABSPATH' ) || exit;
 
 use Automattic\WooCommerce\Internal\AssignDefaultCategory;
+use Automattic\WooCommerce\Internal\ProductAttributesLookup\DataRegenerator;
+use Automattic\WooCommerce\Internal\ProductAttributesLookup\LookupDataStore;
 
 /**
  * Update file paths for 2.0
@@ -2296,4 +2298,71 @@ function wc_update_560_create_refund_returns_page() {
  */
 function wc_update_560_db_version() {
 	WC_Install::update_db_version( '5.6.0' );
+}
+
+/**
+ * Migrate rate limit options to the new table.
+ *
+ * See @link https://github.com/woocommerce/woocommerce/issues/27103.
+ */
+function wc_update_600_migrate_rate_limit_options() {
+	global $wpdb;
+
+	$rate_limits   = $wpdb->get_results(
+		"
+			SELECT option_name, option_value
+			FROM $wpdb->options
+			WHERE option_name LIKE 'woocommerce_rate_limit_add_payment_method_%'
+		",
+		ARRAY_A
+	);
+	$prefix_length = strlen( 'woocommerce_rate_limit_' );
+
+	foreach ( $rate_limits as $rate_limit ) {
+		$new_delay = (int) $rate_limit['option_value'] - time();
+
+		// Migrate the limit if it hasn't expired yet.
+		if ( 0 < $new_delay ) {
+			$action_id = substr( $rate_limit['option_name'], $prefix_length );
+			WC_Rate_Limiter::set_rate_limit( $action_id, $new_delay );
+		}
+
+		delete_option( $rate_limit['option_name'] );
+	}
+}
+
+/**
+ * Update DB version to 6.0.0.
+ */
+function wc_update_600_db_version() {
+	WC_Install::update_db_version( '6.0.0' );
+}
+
+/**
+ * Create the product attributes lookup table and initiate its filling,
+ * unless the table had been already created manually (via the tools page).
+ *
+ * @return false Always false, since the LookupDataStore class handles all the data filling process.
+ */
+function wc_update_630_create_product_attributes_lookup_table() {
+	$data_store       = wc_get_container()->get( LookupDataStore::class );
+	$data_regenerator = wc_get_container()->get( DataRegenerator::class );
+
+	/**
+	 * If the table exists and contains data, it was manually created by user before the migration ran.
+	 * If the table exists but is empty, it was likely created right now via dbDelta, so a table regenerations is needed.
+	 */
+	if ( ! $data_store->check_lookup_table_exists() || ! $data_store->lookup_table_has_data() ) {
+		$data_regenerator->initiate_regeneration();
+	}
+
+	return false;
+}
+
+/**
+ *
+ * Update DB version to 6.3.0.
+ */
+function wc_update_630_db_version() {
+	WC_Install::update_db_version( '6.3.0' );
 }

@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class GroupClientData extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $key;
+    /**
+     * @var string
+     */
     public $value;
+    /**
+     * @param string
+     */
     public function setKey($key)
     {
         $this->key = $key;
     }
+    /**
+     * @return string
+     */
     public function getKey()
     {
         return $this->key;
     }
+    /**
+     * @param string
+     */
     public function setValue($value)
     {
         $this->value = $value;
     }
+    /**
+     * @return string
+     */
     public function getValue()
     {
         return $this->value;

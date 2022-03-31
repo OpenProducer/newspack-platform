@@ -22,6 +22,9 @@ class ListAccountsResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
     protected $collection_key = 'account';
     protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Account::class;
     protected $accountDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param Account[]
@@ -37,10 +40,16 @@ class ListAccountsResponse extends \Google\Site_Kit_Dependencies\Google\Collecti
     {
         return $this->account;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

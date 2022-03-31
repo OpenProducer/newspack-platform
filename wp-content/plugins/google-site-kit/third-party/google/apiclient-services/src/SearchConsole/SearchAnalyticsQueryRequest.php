@@ -20,28 +20,68 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 class SearchAnalyticsQueryRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'dimensions';
+    /**
+     * @var string
+     */
     public $aggregationType;
+    /**
+     * @var string
+     */
     public $dataState;
     protected $dimensionFilterGroupsType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ApiDimensionFilterGroup::class;
     protected $dimensionFilterGroupsDataType = 'array';
+    /**
+     * @var string[]
+     */
     public $dimensions;
+    /**
+     * @var string
+     */
     public $endDate;
+    /**
+     * @var int
+     */
     public $rowLimit;
+    /**
+     * @var string
+     */
     public $searchType;
+    /**
+     * @var string
+     */
     public $startDate;
+    /**
+     * @var int
+     */
     public $startRow;
+    /**
+     * @var string
+     */
+    public $type;
+    /**
+     * @param string
+     */
     public function setAggregationType($aggregationType)
     {
         $this->aggregationType = $aggregationType;
     }
+    /**
+     * @return string
+     */
     public function getAggregationType()
     {
         return $this->aggregationType;
     }
+    /**
+     * @param string
+     */
     public function setDataState($dataState)
     {
         $this->dataState = $dataState;
     }
+    /**
+     * @return string
+     */
     public function getDataState()
     {
         return $this->dataState;
@@ -60,53 +100,103 @@ class SearchAnalyticsQueryRequest extends \Google\Site_Kit_Dependencies\Google\C
     {
         return $this->dimensionFilterGroups;
     }
+    /**
+     * @param string[]
+     */
     public function setDimensions($dimensions)
     {
         $this->dimensions = $dimensions;
     }
+    /**
+     * @return string[]
+     */
     public function getDimensions()
     {
         return $this->dimensions;
     }
+    /**
+     * @param string
+     */
     public function setEndDate($endDate)
     {
         $this->endDate = $endDate;
     }
+    /**
+     * @return string
+     */
     public function getEndDate()
     {
         return $this->endDate;
     }
+    /**
+     * @param int
+     */
     public function setRowLimit($rowLimit)
     {
         $this->rowLimit = $rowLimit;
     }
+    /**
+     * @return int
+     */
     public function getRowLimit()
     {
         return $this->rowLimit;
     }
+    /**
+     * @param string
+     */
     public function setSearchType($searchType)
     {
         $this->searchType = $searchType;
     }
+    /**
+     * @return string
+     */
     public function getSearchType()
     {
         return $this->searchType;
     }
+    /**
+     * @param string
+     */
     public function setStartDate($startDate)
     {
         $this->startDate = $startDate;
     }
+    /**
+     * @return string
+     */
     public function getStartDate()
     {
         return $this->startDate;
     }
+    /**
+     * @param int
+     */
     public function setStartRow($startRow)
     {
         $this->startRow = $startRow;
     }
+    /**
+     * @return int
+     */
     public function getStartRow()
     {
         return $this->startRow;
+    }
+    /**
+     * @param string
+     */
+    public function setType($type)
+    {
+        $this->type = $type;
+    }
+    /**
+     * @return string
+     */
+    public function getType()
+    {
+        return $this->type;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

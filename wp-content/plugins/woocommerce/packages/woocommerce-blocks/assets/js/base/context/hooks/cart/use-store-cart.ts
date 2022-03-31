@@ -37,6 +37,7 @@ import {
  * Internal dependencies
  */
 import { useEditorContext } from '../../providers/editor-context';
+import { useStoreCartEventListeners } from './use-store-cart-event-listeners';
 
 declare module '@wordpress/html-entities' {
 	// eslint-disable-next-line @typescript-eslint/no-shadow
@@ -137,6 +138,11 @@ export const useStoreCart = (
 	const previewCart = previewData?.previewCart;
 	const { shouldSelect } = options;
 	const currentResults = useRef();
+
+	// This will keep track of jQuery and DOM events triggered by other blocks
+	// or components and will invalidate the store resolution accordingly.
+	useStoreCartEventListeners();
+
 	const results: StoreCart = useSelect(
 		( select, { dispatch } ) => {
 			if ( ! shouldSelect ) {
@@ -178,6 +184,7 @@ export const useStoreCart = (
 			const cartIsLoading = ! store.hasFinishedResolution(
 				'getCartData'
 			);
+
 			const shippingRatesLoading = store.isCustomerDataUpdating();
 			const { receiveCart } = dispatch( storeKey );
 			const billingAddress = decodeValues( cartData.billingAddress );

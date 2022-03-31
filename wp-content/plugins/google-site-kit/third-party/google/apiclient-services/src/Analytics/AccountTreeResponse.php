@@ -21,6 +21,9 @@ class AccountTreeResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
     protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\Account::class;
     protected $accountDataType = '';
+    /**
+     * @var string
+     */
     public $kind;
     protected $profileType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\Profile::class;
     protected $profileDataType = '';
@@ -40,10 +43,16 @@ class AccountTreeResponse extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->account;
     }
+    /**
+     * @param string
+     */
     public function setKind($kind)
     {
         $this->kind = $kind;
     }
+    /**
+     * @return string
+     */
     public function getKind()
     {
         return $this->kind;

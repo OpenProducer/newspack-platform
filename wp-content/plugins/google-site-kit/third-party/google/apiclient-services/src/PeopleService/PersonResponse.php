@@ -19,16 +19,28 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class PersonResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var int
+     */
     public $httpStatusCode;
     protected $personType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
     protected $personDataType = '';
+    /**
+     * @var string
+     */
     public $requestedResourceName;
     protected $statusType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Status::class;
     protected $statusDataType = '';
+    /**
+     * @param int
+     */
     public function setHttpStatusCode($httpStatusCode)
     {
         $this->httpStatusCode = $httpStatusCode;
     }
+    /**
+     * @return int
+     */
     public function getHttpStatusCode()
     {
         return $this->httpStatusCode;
@@ -47,10 +59,16 @@ class PersonResponse extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->person;
     }
+    /**
+     * @param string
+     */
     public function setRequestedResourceName($requestedResourceName)
     {
         $this->requestedResourceName = $requestedResourceName;
     }
+    /**
+     * @return string
+     */
     public function getRequestedResourceName()
     {
         return $this->requestedResourceName;

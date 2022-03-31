@@ -22,6 +22,9 @@ class ListLinkedAdUnitsResponse extends \Google\Site_Kit_Dependencies\Google\Col
     protected $collection_key = 'adUnits';
     protected $adUnitsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit::class;
     protected $adUnitsDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param AdUnit[]
@@ -37,10 +40,16 @@ class ListLinkedAdUnitsResponse extends \Google\Site_Kit_Dependencies\Google\Col
     {
         return $this->adUnits;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

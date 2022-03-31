@@ -22,6 +22,9 @@ class ListContainersResponse extends \Google\Site_Kit_Dependencies\Google\Collec
     protected $collection_key = 'container';
     protected $containerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container::class;
     protected $containerDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param Container[]
@@ -37,10 +40,16 @@ class ListContainersResponse extends \Google\Site_Kit_Dependencies\Google\Collec
     {
         return $this->container;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

@@ -20,11 +20,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 class WebpropertyPermissions extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'effective';
+    /**
+     * @var string[]
+     */
     public $effective;
+    /**
+     * @param string[]
+     */
     public function setEffective($effective)
     {
         $this->effective = $effective;
     }
+    /**
+     * @return string[]
+     */
     public function getEffective()
     {
         return $this->effective;

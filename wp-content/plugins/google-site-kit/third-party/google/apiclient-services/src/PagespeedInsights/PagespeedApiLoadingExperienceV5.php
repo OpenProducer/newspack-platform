@@ -20,24 +20,48 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights;
 class PagespeedApiLoadingExperienceV5 extends \Google\Site_Kit_Dependencies\Google\Model
 {
     protected $internal_gapi_mappings = ["initialUrl" => "initial_url", "originFallback" => "origin_fallback", "overallCategory" => "overall_category"];
+    /**
+     * @var string
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $initialUrl;
     protected $metricsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\UserPageLoadMetricV5::class;
     protected $metricsDataType = 'map';
+    /**
+     * @var bool
+     */
     public $originFallback;
+    /**
+     * @var string
+     */
     public $overallCategory;
+    /**
+     * @param string
+     */
     public function setId($id)
     {
         $this->id = $id;
     }
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
     }
+    /**
+     * @param string
+     */
     public function setInitialUrl($initialUrl)
     {
         $this->initialUrl = $initialUrl;
     }
+    /**
+     * @return string
+     */
     public function getInitialUrl()
     {
         return $this->initialUrl;
@@ -56,18 +80,30 @@ class PagespeedApiLoadingExperienceV5 extends \Google\Site_Kit_Dependencies\Goog
     {
         return $this->metrics;
     }
+    /**
+     * @param bool
+     */
     public function setOriginFallback($originFallback)
     {
         $this->originFallback = $originFallback;
     }
+    /**
+     * @return bool
+     */
     public function getOriginFallback()
     {
         return $this->originFallback;
     }
+    /**
+     * @param string
+     */
     public function setOverallCategory($overallCategory)
     {
         $this->overallCategory = $overallCategory;
     }
+    /**
+     * @return string
+     */
     public function getOverallCategory()
     {
         return $this->overallCategory;

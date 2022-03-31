@@ -22,6 +22,9 @@ class ListLinkedCustomChannelsResponse extends \Google\Site_Kit_Dependencies\Goo
     protected $collection_key = 'customChannels';
     protected $customChannelsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel::class;
     protected $customChannelsDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param CustomChannel[]
@@ -37,10 +40,16 @@ class ListLinkedCustomChannelsResponse extends \Google\Site_Kit_Dependencies\Goo
     {
         return $this->customChannels;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

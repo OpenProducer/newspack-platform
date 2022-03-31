@@ -20,6 +20,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 class RunMobileFriendlyTestResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'resourceIssues';
+    /**
+     * @var string
+     */
     public $mobileFriendliness;
     protected $mobileFriendlyIssuesType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\MobileFriendlyIssue::class;
     protected $mobileFriendlyIssuesDataType = 'array';
@@ -29,10 +32,16 @@ class RunMobileFriendlyTestResponse extends \Google\Site_Kit_Dependencies\Google
     protected $screenshotDataType = '';
     protected $testStatusType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\TestStatus::class;
     protected $testStatusDataType = '';
+    /**
+     * @param string
+     */
     public function setMobileFriendliness($mobileFriendliness)
     {
         $this->mobileFriendliness = $mobileFriendliness;
     }
+    /**
+     * @return string
+     */
     public function getMobileFriendliness()
     {
         return $this->mobileFriendliness;

@@ -17,8 +17,12 @@ import sharedAttributes, {
 registerBlockType( 'woocommerce/product-best-sellers', {
 	title: __( 'Best Selling Products', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ stonks } />,
-		foreground: '#96588a',
+		src: (
+			<Icon
+				srcElement={ stonks }
+				className="wc-block-editor-components-block-icon"
+			/>
+		),
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],

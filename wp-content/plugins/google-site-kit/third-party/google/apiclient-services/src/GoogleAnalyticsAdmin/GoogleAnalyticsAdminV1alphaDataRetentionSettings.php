@@ -19,29 +19,56 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1alphaDataRetentionSettings extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $eventDataRetention;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var bool
+     */
     public $resetUserDataOnNewActivity;
+    /**
+     * @param string
+     */
     public function setEventDataRetention($eventDataRetention)
     {
         $this->eventDataRetention = $eventDataRetention;
     }
+    /**
+     * @return string
+     */
     public function getEventDataRetention()
     {
         return $this->eventDataRetention;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param bool
+     */
     public function setResetUserDataOnNewActivity($resetUserDataOnNewActivity)
     {
         $this->resetUserDataOnNewActivity = $resetUserDataOnNewActivity;
     }
+    /**
+     * @return bool
+     */
     public function getResetUserDataOnNewActivity()
     {
         return $this->resetUserDataOnNewActivity;

@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 class ListSitesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'sites';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     protected $sitesType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Site::class;
     protected $sitesDataType = 'array';
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

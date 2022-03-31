@@ -22,6 +22,9 @@ class ZoneBoundary extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'customEvaluationTriggerId';
     protected $conditionType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Condition::class;
     protected $conditionDataType = 'array';
+    /**
+     * @var string[]
+     */
     public $customEvaluationTriggerId;
     /**
      * @param Condition[]
@@ -37,10 +40,16 @@ class ZoneBoundary extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->condition;
     }
+    /**
+     * @param string[]
+     */
     public function setCustomEvaluationTriggerId($customEvaluationTriggerId)
     {
         $this->customEvaluationTriggerId = $customEvaluationTriggerId;
     }
+    /**
+     * @return string[]
+     */
     public function getCustomEvaluationTriggerId()
     {
         return $this->customEvaluationTriggerId;

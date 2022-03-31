@@ -22,6 +22,9 @@ class GoogleAnalyticsAdminV1alphaListFirebaseLinksResponse extends \Google\Site_
     protected $collection_key = 'firebaseLinks';
     protected $firebaseLinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaFirebaseLink::class;
     protected $firebaseLinksDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param GoogleAnalyticsAdminV1alphaFirebaseLink[]
@@ -37,10 +40,16 @@ class GoogleAnalyticsAdminV1alphaListFirebaseLinksResponse extends \Google\Site_
     {
         return $this->firebaseLinks;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

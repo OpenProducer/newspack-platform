@@ -20,31 +20,76 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 class ReportData extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'totals';
+    /**
+     * @var string
+     */
     public $dataLastRefreshed;
+    /**
+     * @var string
+     */
+    public $emptyReason;
+    /**
+     * @var bool
+     */
     public $isDataGolden;
     protected $maximumsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\DateRangeValues::class;
     protected $maximumsDataType = 'array';
     protected $minimumsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\DateRangeValues::class;
     protected $minimumsDataType = 'array';
+    /**
+     * @var int
+     */
     public $rowCount;
     protected $rowsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\ReportRow::class;
     protected $rowsDataType = 'array';
+    /**
+     * @var string[]
+     */
     public $samplesReadCounts;
+    /**
+     * @var string[]
+     */
     public $samplingSpaceSizes;
     protected $totalsType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\DateRangeValues::class;
     protected $totalsDataType = 'array';
+    /**
+     * @param string
+     */
     public function setDataLastRefreshed($dataLastRefreshed)
     {
         $this->dataLastRefreshed = $dataLastRefreshed;
     }
+    /**
+     * @return string
+     */
     public function getDataLastRefreshed()
     {
         return $this->dataLastRefreshed;
     }
+    /**
+     * @param string
+     */
+    public function setEmptyReason($emptyReason)
+    {
+        $this->emptyReason = $emptyReason;
+    }
+    /**
+     * @return string
+     */
+    public function getEmptyReason()
+    {
+        return $this->emptyReason;
+    }
+    /**
+     * @param bool
+     */
     public function setIsDataGolden($isDataGolden)
     {
         $this->isDataGolden = $isDataGolden;
     }
+    /**
+     * @return bool
+     */
     public function getIsDataGolden()
     {
         return $this->isDataGolden;
@@ -77,10 +122,16 @@ class ReportData extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->minimums;
     }
+    /**
+     * @param int
+     */
     public function setRowCount($rowCount)
     {
         $this->rowCount = $rowCount;
     }
+    /**
+     * @return int
+     */
     public function getRowCount()
     {
         return $this->rowCount;
@@ -99,18 +150,30 @@ class ReportData extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->rows;
     }
+    /**
+     * @param string[]
+     */
     public function setSamplesReadCounts($samplesReadCounts)
     {
         $this->samplesReadCounts = $samplesReadCounts;
     }
+    /**
+     * @return string[]
+     */
     public function getSamplesReadCounts()
     {
         return $this->samplesReadCounts;
     }
+    /**
+     * @param string[]
+     */
     public function setSamplingSpaceSizes($samplingSpaceSizes)
     {
         $this->samplingSpaceSizes = $samplingSpaceSizes;
     }
+    /**
+     * @return string[]
+     */
     public function getSamplingSpaceSizes()
     {
         return $this->samplingSpaceSizes;

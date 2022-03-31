@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 
 class ContentAdsSettings extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $size;
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @param string
+     */
     public function setSize($size)
     {
         $this->size = $size;
     }
+    /**
+     * @return string
+     */
     public function getSize()
     {
         return $this->size;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;

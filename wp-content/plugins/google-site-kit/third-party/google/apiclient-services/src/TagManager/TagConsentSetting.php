@@ -19,13 +19,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class TagConsentSetting extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $consentStatus;
     protected $consentTypeType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
     protected $consentTypeDataType = '';
+    /**
+     * @param string
+     */
     public function setConsentStatus($consentStatus)
     {
         $this->consentStatus = $consentStatus;
     }
+    /**
+     * @return string
+     */
     public function getConsentStatus()
     {
         return $this->consentStatus;

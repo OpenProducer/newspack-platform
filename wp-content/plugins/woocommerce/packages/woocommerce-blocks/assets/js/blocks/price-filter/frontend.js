@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { withRestApiHydration } from '@woocommerce/block-hocs';
 import { renderFrontend } from '@woocommerce/base-utils';
 
 /**
@@ -15,11 +14,12 @@ const getProps = ( el ) => {
 			showInputFields: el.dataset.showinputfields === 'true',
 			showFilterButton: el.dataset.showfilterbutton === 'true',
 		},
+		isEditor: false,
 	};
 };
 
 renderFrontend( {
 	selector: '.wp-block-woocommerce-price-filter',
-	Block: withRestApiHydration( Block ),
+	Block,
 	getProps,
 } );

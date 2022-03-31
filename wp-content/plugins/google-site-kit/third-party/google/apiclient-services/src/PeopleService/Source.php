@@ -19,24 +19,48 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class Source extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $etag;
+    /**
+     * @var string
+     */
     public $id;
     protected $profileMetadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ProfileMetadata::class;
     protected $profileMetadataDataType = '';
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @var string
+     */
     public $updateTime;
+    /**
+     * @param string
+     */
     public function setEtag($etag)
     {
         $this->etag = $etag;
     }
+    /**
+     * @return string
+     */
     public function getEtag()
     {
         return $this->etag;
     }
+    /**
+     * @param string
+     */
     public function setId($id)
     {
         $this->id = $id;
     }
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
@@ -55,18 +79,30 @@ class Source extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->profileMetadata;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
+    /**
+     * @param string
+     */
     public function setUpdateTime($updateTime)
     {
         $this->updateTime = $updateTime;
     }
+    /**
+     * @return string
+     */
     public function getUpdateTime()
     {
         return $this->updateTime;

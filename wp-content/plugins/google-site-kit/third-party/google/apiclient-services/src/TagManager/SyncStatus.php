@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class SyncStatus extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
     public $mergeConflict;
+    /**
+     * @var bool
+     */
     public $syncError;
+    /**
+     * @param bool
+     */
     public function setMergeConflict($mergeConflict)
     {
         $this->mergeConflict = $mergeConflict;
     }
+    /**
+     * @return bool
+     */
     public function getMergeConflict()
     {
         return $this->mergeConflict;
     }
+    /**
+     * @param bool
+     */
     public function setSyncError($syncError)
     {
         $this->syncError = $syncError;
     }
+    /**
+     * @return bool
+     */
     public function getSyncError()
     {
         return $this->syncError;

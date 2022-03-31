@@ -105,11 +105,9 @@ class Onboarding {
 
 		add_action( 'admin_init', array( $this, 'admin_redirects' ) );
 		add_action( 'current_screen', array( $this, 'add_help_tab' ), 60 );
-		add_action( 'current_screen', array( $this, 'reset_profiler' ) );
 		add_action( 'current_screen', array( $this, 'reset_task_list' ) );
 		add_action( 'current_screen', array( $this, 'reset_extended_task_list' ) );
 		add_action( 'current_screen', array( $this, 'redirect_wccom_install' ) );
-		add_action( 'current_screen', array( $this, 'redirect_old_onboarding' ) );
 	}
 
 	/**
@@ -262,6 +260,7 @@ class Onboarding {
 			'product_types'       => array(),
 			'product_count'       => '0',
 			'selling_venues'      => 'no',
+			'number_employees'    => '1',
 			'revenue'             => 'none',
 			'other_platform'      => 'none',
 			'business_extensions' => array(),
@@ -317,18 +316,6 @@ class Onboarding {
 		}
 
 		self::send_profile_data();
-	}
-
-	/**
-	 * Redirect the old onboarding wizard to the profiler.
-	 */
-	public static function redirect_old_onboarding() {
-		$current_page = isset( $_GET['page'] ) ? wc_clean( wp_unslash( $_GET['page'] ) ) : false; // phpcs:ignore csrf okay.
-
-		if ( 'wc-setup' === $current_page ) {
-			delete_transient( '_wc_activation_redirect' );
-			wp_safe_redirect( wc_admin_url( '&reset_profiler=1' ) );
-		}
 	}
 
 	/**
@@ -433,7 +420,7 @@ class Onboarding {
 	 * @return array
 	 */
 	public static function get_allowed_product_types() {
-		$products      = array(
+		$products         = array(
 			'physical'        => array(
 				'label'   => __( 'Physical products', 'woocommerce' ),
 				'default' => true,
@@ -461,8 +448,15 @@ class Onboarding {
 				'product' => 18618,
 			),
 		);
-		$base_location = wc_get_base_location();
-		if ( ! Features::is_enabled( 'subscriptions' ) || 'US' !== $base_location['country'] ) {
+		$base_location    = wc_get_base_location();
+		$has_cbd_industry = false;
+		if ( 'US' === $base_location['country'] ) {
+			$profile = get_option( self::PROFILE_DATA_OPTION, array() );
+			if ( ! empty( $profile['industry'] ) ) {
+				$has_cbd_industry = in_array( 'cbd-other-hemp-derived-products', array_column( $profile['industry'], 'slug' ), true );
+			}
+		}
+		if ( ! Features::is_enabled( 'subscriptions' ) || 'US' !== $base_location['country'] || $has_cbd_industry ) {
 			$products['subscriptions']['product'] = 27147;
 		}
 		$product_types = self::append_product_data( $products );
@@ -826,43 +820,6 @@ class Onboarding {
 	}
 
 	/**
-	 * Reset the onboarding profiler and redirect to the profiler.
-	 */
-	public static function reset_profiler() {
-		if (
-			! Loader::is_admin_page() ||
-			! isset( $_GET['reset_profiler'] ) // phpcs:ignore CSRF ok.
-		) {
-			return;
-		}
-
-		$previous  = 1 === absint( $_GET['reset_profiler'] ); // phpcs:ignore CSRF ok.
-		$new_value = ! $previous;
-
-		wc_admin_record_tracks_event(
-			'storeprofiler_toggled',
-			array(
-				'previous'  => $previous,
-				'new_value' => $new_value,
-			)
-		);
-
-		$request = new \WP_REST_Request( 'POST', '/wc-admin/onboarding/profile' );
-		$request->set_headers( array( 'content-type' => 'application/json' ) );
-		$request->set_body(
-			wp_json_encode(
-				array(
-					'completed' => $new_value,
-					'skipped'   => $new_value,
-				)
-			)
-		);
-		$response = rest_do_request( $request );
-		wp_safe_redirect( wc_admin_url() );
-		exit;
-	}
-
-	/**
 	 * Reset the onboarding task list and redirect to the dashboard.
 	 */
 	public static function reset_task_list() {
@@ -879,13 +836,13 @@ class Onboarding {
 			return;
 		}
 		$show   = 1 === absint( $_GET['reset_task_list'] );
-		$update = $show ? $task_list->show() : $task_list->hide(); // phpcs:ignore CSRF ok.
+		$update = $show ? $task_list->unhide() : $task_list->hide(); // phpcs:ignore CSRF ok.
 
 		if ( $update ) {
 			wc_admin_record_tracks_event(
 				'tasklist_toggled',
 				array(
-					'status' => $show ? 'disabled' : 'enabled',
+					'status' => $show ? 'enabled' : 'disabled',
 				)
 			);
 		}
@@ -911,7 +868,7 @@ class Onboarding {
 			return;
 		}
 		$show   = 1 === absint( $_GET['reset_extended_task_list'] );
-		$update = $show ? $task_list->show() : $task_list->hide(); // phpcs:ignore CSRF ok.
+		$update = $show ? $task_list->unhide() : $task_list->hide(); // phpcs:ignore CSRF ok.
 
 		if ( $update ) {
 			wc_admin_record_tracks_event(

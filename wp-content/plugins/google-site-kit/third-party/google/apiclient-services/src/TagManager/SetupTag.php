@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class SetupTag extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
     public $stopOnSetupFailure;
+    /**
+     * @var string
+     */
     public $tagName;
+    /**
+     * @param bool
+     */
     public function setStopOnSetupFailure($stopOnSetupFailure)
     {
         $this->stopOnSetupFailure = $stopOnSetupFailure;
     }
+    /**
+     * @return bool
+     */
     public function getStopOnSetupFailure()
     {
         return $this->stopOnSetupFailure;
     }
+    /**
+     * @param string
+     */
     public function setTagName($tagName)
     {
         $this->tagName = $tagName;
     }
+    /**
+     * @return string
+     */
     public function getTagName()
     {
         return $this->tagName;

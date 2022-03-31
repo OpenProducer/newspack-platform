@@ -21,7 +21,13 @@ class Nickname extends \Google\Site_Kit_Dependencies\Google\Model
 {
     protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
     protected $metadataDataType = '';
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @var string
+     */
     public $value;
     /**
      * @param FieldMetadata
@@ -37,18 +43,30 @@ class Nickname extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->metadata;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
+    /**
+     * @param string
+     */
     public function setValue($value)
     {
         $this->value = $value;
     }
+    /**
+     * @return string
+     */
     public function getValue()
     {
         return $this->value;

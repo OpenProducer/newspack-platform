@@ -19,29 +19,56 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 
 class GaDataDataTableCols extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $label;
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @param string
+     */
     public function setId($id)
     {
         $this->id = $id;
     }
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
     }
+    /**
+     * @param string
+     */
     public function setLabel($label)
     {
         $this->label = $label;
     }
+    /**
+     * @return string
+     */
     public function getLabel()
     {
         return $this->label;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;

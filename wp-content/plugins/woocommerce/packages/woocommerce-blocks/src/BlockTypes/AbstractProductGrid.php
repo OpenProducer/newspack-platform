@@ -32,6 +32,13 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	protected $query_args = array();
 
 	/**
+	 * Meta query args.
+	 *
+	 * @var array
+	 */
+	protected $meta_query = array();
+
+	/**
 	 * Get a set of attributes shared across most of the grid blocks.
 	 *
 	 * @return array List of block attributes with type and defaults.
@@ -50,6 +57,10 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'align'             => $this->get_schema_align(),
 			'alignButtons'      => $this->get_schema_boolean( false ),
 			'isPreview'         => $this->get_schema_boolean( false ),
+			'stockStatus'       => array(
+				'type'    => 'array',
+				'default' => array_keys( wc_get_product_stock_status_options() ),
+			),
 		);
 	}
 
@@ -161,6 +172,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 				'rating' => true,
 				'button' => true,
 			),
+			'stockStatus'       => array_keys( wc_get_product_stock_status_options() ),
 		);
 
 		return wp_parse_args( $attributes, $defaults );
@@ -172,6 +184,9 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	 * @return array
 	 */
 	protected function parse_query_args() {
+		// Store the original meta query.
+		$this->meta_query = WC()->query->get_meta_query();
+
 		$query_args = array(
 			'post_type'           => 'product',
 			'post_status'         => 'publish',
@@ -180,7 +195,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'no_found_rows'       => false,
 			'orderby'             => '',
 			'order'               => '',
-			'meta_query'          => WC()->query->get_meta_query(), // phpcs:ignore WordPress.DB.SlowDBQuery
+			'meta_query'          => $this->meta_query, // phpcs:ignore WordPress.DB.SlowDBQuery
 			'tax_query'           => array(), // phpcs:ignore WordPress.DB.SlowDBQuery
 			'posts_per_page'      => $this->get_products_limit(),
 		);
@@ -189,6 +204,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		$this->set_ordering_query_args( $query_args );
 		$this->set_categories_query_args( $query_args );
 		$this->set_visibility_query_args( $query_args );
+		$this->set_stock_status_query_args( $query_args );
 
 		return $query_args;
 	}
@@ -273,6 +289,30 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	}
 
 	/**
+	 * Set which stock status to use when displaying products.
+	 *
+	 * @param array $query_args Query args.
+	 * @return void
+	 */
+	protected function set_stock_status_query_args( &$query_args ) {
+		$stock_statuses = array_keys( wc_get_product_stock_status_options() );
+
+		// phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+		if ( isset( $this->attributes['stockStatus'] ) && $stock_statuses !== $this->attributes['stockStatus'] ) {
+			// Reset meta_query then update with our stock status.
+			$query_args['meta_query']   = $this->meta_query;
+			$query_args['meta_query'][] = array(
+				'key'     => '_stock_status',
+				'value'   => array_merge( [ '' ], $this->attributes['stockStatus'] ),
+				'compare' => 'IN',
+			);
+		} else {
+			$query_args['meta_query'] = $this->meta_query;
+		}
+		// phpcs:enable WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+	}
+
+	/**
 	 * Works out the item limit based on rows and columns, or returns default.
 	 *
 	 * @return int
@@ -290,6 +330,13 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	 * @return array List of product IDs
 	 */
 	protected function get_products() {
+		/**
+		 * Filters whether or not the product grid is cacheable.
+		 *
+		 * @param boolean $is_cacheable The list of script dependencies.
+		 * @param array $query_args Query args for the products query passed to BlocksWpQuery.
+		 * @return array True to enable cache, false to disable cache.
+		 */
 		$is_cacheable      = (bool) apply_filters( 'woocommerce_blocks_product_grid_is_cacheable', true, $this->query_args );
 		$transient_version = \WC_Cache_Helper::get_transient_version( 'product_query' );
 
@@ -299,12 +346,94 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		// Remove ordering query arguments which may have been added by get_catalog_ordering_args.
 		WC()->query->remove_ordering_args();
 
-		// Prime caches to reduce future queries.
+		// Prime caches to reduce future queries. Note _prime_post_caches is private--we could replace this with our own
+		// query if it becomes unavailable.
 		if ( is_callable( '_prime_post_caches' ) ) {
 			_prime_post_caches( $results );
 		}
 
+		$this->prime_product_variations( $results );
+
 		return $results;
+	}
+
+	/**
+	 * Retrieve IDs that are not already present in the cache.
+	 *
+	 * Based on WordPress function: _get_non_cached_ids
+	 *
+	 * @param int[]  $product_ids Array of IDs.
+	 * @param string $cache_key  The cache bucket to check against.
+	 * @return int[] Array of IDs not present in the cache.
+	 */
+	protected function get_non_cached_ids( $product_ids, $cache_key ) {
+		$non_cached_ids = array();
+		$cache_values   = wp_cache_get_multiple( $product_ids, $cache_key );
+
+		foreach ( $cache_values as $id => $value ) {
+			if ( ! $value ) {
+				$non_cached_ids[] = (int) $id;
+			}
+		}
+
+		return $non_cached_ids;
+	}
+
+	/**
+	 * Prime query cache of product variation meta data.
+	 *
+	 * Prepares values in the product_ID_variation_meta_data cache for later use in the ProductSchema::get_variations()
+	 * method. Doing so here reduces the total number of queries needed.
+	 *
+	 * @param int[] $product_ids Product ids to prime variation cache for.
+	 */
+	protected function prime_product_variations( $product_ids ) {
+		$cache_group       = 'product_variation_meta_data';
+		$prime_product_ids = $this->get_non_cached_ids( wp_parse_id_list( $product_ids ), $cache_group );
+
+		if ( ! $prime_product_ids ) {
+			return;
+		}
+
+		global $wpdb;
+
+		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+		$product_variations      = $wpdb->get_results( "SELECT ID as variation_id, post_parent as product_id from {$wpdb->posts} WHERE post_parent IN ( " . implode( ',', $prime_product_ids ) . ' )', ARRAY_A );
+		$prime_variation_ids     = array_column( $product_variations, 'variation_id' );
+		$variation_ids_by_parent = array_column( $product_variations, 'product_id', 'variation_id' );
+
+		if ( empty( $prime_variation_ids ) ) {
+			return;
+		}
+
+		$all_variation_meta_data = $wpdb->get_results(
+			$wpdb->prepare(
+				"SELECT post_id as variation_id, meta_key as attribute_key, meta_value as attribute_value FROM {$wpdb->postmeta} WHERE post_id IN (" . implode( ',', array_map( 'esc_sql', $prime_variation_ids ) ) . ') AND meta_key LIKE %s',
+				$wpdb->esc_like( 'attribute_' ) . '%'
+			)
+		);
+		// phpcs:enable
+		// Prepare the data to cache by indexing by the parent product.
+		$primed_data = array_reduce(
+			$all_variation_meta_data,
+			function( $values, $data ) use ( $variation_ids_by_parent ) {
+				$values[ $variation_ids_by_parent[ $data->variation_id ] ?? 0 ][] = $data;
+				return $values;
+			},
+			array_fill_keys( $prime_product_ids, [] )
+		);
+
+		// Cache everything.
+		foreach ( $primed_data as $product_id => $variation_meta_data ) {
+			wp_cache_set(
+				$product_id,
+				[
+					'last_modified' => get_the_modified_date( 'U', $product_id ),
+					'data'          => $variation_meta_data,
+				],
+				$cache_group
+			);
+		}
 	}
 
 	/**
@@ -356,6 +485,14 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 			'button'    => $this->get_button_html( $product ),
 		);
 
+		/**
+		 * Filters the HTML for products in the grid.
+		 *
+		 * @param string $html Product grid item HTML.
+		 * @param array $data Product data passed to the template.
+		 * @param \WC_Product $product Product object.
+		 * @return string Updated product grid item HTML.
+		 */
 		return apply_filters(
 			'woocommerce_blocks_product_grid_item_html',
 			"<li class=\"wc-block-grid__product\">
@@ -380,7 +517,19 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 	 * @return string
 	 */
 	protected function get_image_html( $product ) {
-		return '<div class="wc-block-grid__product-image">' . $product->get_image( 'woocommerce_thumbnail' ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+
+		$attr = array(
+			'alt' => '',
+		);
+
+		if ( $product->get_image_id() ) {
+			$image_alt = get_post_meta( $product->get_image_id(), '_wp_attachment_image_alt', true );
+			$attr      = array(
+				'alt' => ( $image_alt ? $image_alt : $product->get_name() ),
+			);
+		}
+
+		return '<div class="wc-block-grid__product-image">' . $product->get_image( 'woocommerce_thumbnail', $attr ) . '</div>'; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 
 	/**
@@ -393,6 +542,7 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		if ( empty( $this->attributes['contentVisibility']['title'] ) ) {
 			return '';
 		}
+
 		return '<div class="wc-block-grid__product-title">' . wp_kses_post( $product->get_title() ) . '</div>';
 	}
 
@@ -516,5 +666,6 @@ abstract class AbstractProductGrid extends AbstractDynamicBlock {
 		$this->asset_data_registry->add( 'min_rows', wc_get_theme_support( 'product_blocks::min_rows', 1 ), true );
 		$this->asset_data_registry->add( 'max_rows', wc_get_theme_support( 'product_blocks::max_rows', 6 ), true );
 		$this->asset_data_registry->add( 'default_rows', wc_get_theme_support( 'product_blocks::default_rows', 3 ), true );
+		$this->asset_data_registry->add( 'stock_status_options', wc_get_product_stock_status_options(), true );
 	}
 }

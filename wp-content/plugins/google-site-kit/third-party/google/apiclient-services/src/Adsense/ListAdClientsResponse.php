@@ -22,6 +22,9 @@ class ListAdClientsResponse extends \Google\Site_Kit_Dependencies\Google\Collect
     protected $collection_key = 'adClients';
     protected $adClientsType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdClient::class;
     protected $adClientsDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param AdClient[]
@@ -37,10 +40,16 @@ class ListAdClientsResponse extends \Google\Site_Kit_Dependencies\Google\Collect
     {
         return $this->adClients;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

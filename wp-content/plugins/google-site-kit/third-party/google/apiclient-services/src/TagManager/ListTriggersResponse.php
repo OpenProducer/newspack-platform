@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListTriggersResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'trigger';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     protected $triggerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class;
     protected $triggerDataType = 'array';
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

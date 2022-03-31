@@ -20,22 +20,40 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class ListDirectoryPeopleResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'people';
+    /**
+     * @var string
+     */
     public $nextPageToken;
+    /**
+     * @var string
+     */
     public $nextSyncToken;
     protected $peopleType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
     protected $peopleDataType = 'array';
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;
     }
+    /**
+     * @param string
+     */
     public function setNextSyncToken($nextSyncToken)
     {
         $this->nextSyncToken = $nextSyncToken;
     }
+    /**
+     * @return string
+     */
     public function getNextSyncToken()
     {
         return $this->nextSyncToken;

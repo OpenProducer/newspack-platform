@@ -19,11 +19,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class RevertBuiltInVariableResponse extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
     public $enabled;
+    /**
+     * @param bool
+     */
     public function setEnabled($enabled)
     {
         $this->enabled = $enabled;
     }
+    /**
+     * @return bool
+     */
     public function getEnabled()
     {
         return $this->enabled;

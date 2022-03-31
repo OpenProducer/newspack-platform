@@ -22,9 +22,21 @@ class ListConnectionsResponse extends \Google\Site_Kit_Dependencies\Google\Colle
     protected $collection_key = 'connections';
     protected $connectionsType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
     protected $connectionsDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
+    /**
+     * @var string
+     */
     public $nextSyncToken;
+    /**
+     * @var int
+     */
     public $totalItems;
+    /**
+     * @var int
+     */
     public $totalPeople;
     /**
      * @param Person[]
@@ -40,34 +52,58 @@ class ListConnectionsResponse extends \Google\Site_Kit_Dependencies\Google\Colle
     {
         return $this->connections;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;
     }
+    /**
+     * @param string
+     */
     public function setNextSyncToken($nextSyncToken)
     {
         $this->nextSyncToken = $nextSyncToken;
     }
+    /**
+     * @return string
+     */
     public function getNextSyncToken()
     {
         return $this->nextSyncToken;
     }
+    /**
+     * @param int
+     */
     public function setTotalItems($totalItems)
     {
         $this->totalItems = $totalItems;
     }
+    /**
+     * @return int
+     */
     public function getTotalItems()
     {
         return $this->totalItems;
     }
+    /**
+     * @param int
+     */
     public function setTotalPeople($totalPeople)
     {
         $this->totalPeople = $totalPeople;
     }
+    /**
+     * @return int
+     */
     public function getTotalPeople()
     {
         return $this->totalPeople;

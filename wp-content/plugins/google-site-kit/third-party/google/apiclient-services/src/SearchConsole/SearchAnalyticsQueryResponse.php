@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 class SearchAnalyticsQueryResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'rows';
+    /**
+     * @var string
+     */
     public $responseAggregationType;
     protected $rowsType = \Google\Site_Kit_Dependencies\Google\Service\SearchConsole\ApiDataRow::class;
     protected $rowsDataType = 'array';
+    /**
+     * @param string
+     */
     public function setResponseAggregationType($responseAggregationType)
     {
         $this->responseAggregationType = $responseAggregationType;
     }
+    /**
+     * @return string
+     */
     public function getResponseAggregationType()
     {
         return $this->responseAggregationType;

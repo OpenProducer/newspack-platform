@@ -22,6 +22,9 @@ class MetricFilterClause extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'filters';
     protected $filtersType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\MetricFilter::class;
     protected $filtersDataType = 'array';
+    /**
+     * @var string
+     */
     public $operator;
     /**
      * @param MetricFilter[]
@@ -37,10 +40,16 @@ class MetricFilterClause extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->filters;
     }
+    /**
+     * @param string
+     */
     public function setOperator($operator)
     {
         $this->operator = $operator;
     }
+    /**
+     * @return string
+     */
     public function getOperator()
     {
         return $this->operator;

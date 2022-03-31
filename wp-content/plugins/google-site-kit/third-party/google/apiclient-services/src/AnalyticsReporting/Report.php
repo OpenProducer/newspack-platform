@@ -23,6 +23,9 @@ class Report extends \Google\Site_Kit_Dependencies\Google\Model
     protected $columnHeaderDataType = '';
     protected $dataType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\ReportData::class;
     protected $dataDataType = '';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param ColumnHeader
@@ -52,10 +55,16 @@ class Report extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->data;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

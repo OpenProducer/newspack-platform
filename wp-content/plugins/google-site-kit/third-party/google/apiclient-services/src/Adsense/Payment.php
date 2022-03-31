@@ -19,14 +19,26 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 
 class Payment extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $amount;
     protected $dateType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\Date::class;
     protected $dateDataType = '';
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @param string
+     */
     public function setAmount($amount)
     {
         $this->amount = $amount;
     }
+    /**
+     * @return string
+     */
     public function getAmount()
     {
         return $this->amount;
@@ -45,10 +57,16 @@ class Payment extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->date;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;

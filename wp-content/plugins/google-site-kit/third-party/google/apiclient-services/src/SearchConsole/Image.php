@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\SearchConsole;
 
 class Image extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $data;
+    /**
+     * @var string
+     */
     public $mimeType;
+    /**
+     * @param string
+     */
     public function setData($data)
     {
         $this->data = $data;
     }
+    /**
+     * @return string
+     */
     public function getData()
     {
         return $this->data;
     }
+    /**
+     * @param string
+     */
     public function setMimeType($mimeType)
     {
         $this->mimeType = $mimeType;
     }
+    /**
+     * @return string
+     */
     public function getMimeType()
     {
         return $this->mimeType;

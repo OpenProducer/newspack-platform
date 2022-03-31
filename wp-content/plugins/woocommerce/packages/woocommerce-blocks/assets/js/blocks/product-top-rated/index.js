@@ -19,8 +19,12 @@ const blockTypeName = 'woocommerce/product-top-rated';
 registerBlockType( blockTypeName, {
 	title: __( 'Top Rated Products', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ thumbUp } />,
-		foreground: '#96588a',
+		src: (
+			<Icon
+				srcElement={ thumbUp }
+				className="wc-block-editor-components-block-icon"
+			/>
+		),
 	},
 	category: 'woocommerce',
 	keywords: [ __( 'WooCommerce', 'woocommerce' ) ],

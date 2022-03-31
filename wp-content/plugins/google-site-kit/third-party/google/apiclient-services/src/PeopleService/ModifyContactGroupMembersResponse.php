@@ -20,20 +20,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class ModifyContactGroupMembersResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'notFoundResourceNames';
+    /**
+     * @var string[]
+     */
     public $canNotRemoveLastContactGroupResourceNames;
+    /**
+     * @var string[]
+     */
     public $notFoundResourceNames;
+    /**
+     * @param string[]
+     */
     public function setCanNotRemoveLastContactGroupResourceNames($canNotRemoveLastContactGroupResourceNames)
     {
         $this->canNotRemoveLastContactGroupResourceNames = $canNotRemoveLastContactGroupResourceNames;
     }
+    /**
+     * @return string[]
+     */
     public function getCanNotRemoveLastContactGroupResourceNames()
     {
         return $this->canNotRemoveLastContactGroupResourceNames;
     }
+    /**
+     * @param string[]
+     */
     public function setNotFoundResourceNames($notFoundResourceNames)
     {
         $this->notFoundResourceNames = $notFoundResourceNames;
     }
+    /**
+     * @return string[]
+     */
     public function getNotFoundResourceNames()
     {
         return $this->notFoundResourceNames;

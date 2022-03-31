@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class CreateContainerVersionRequestVersionOptions extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $notes;
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setNotes($notes)
     {
         $this->notes = $notes;
     }
+    /**
+     * @return string
+     */
     public function getNotes()
     {
         return $this->notes;

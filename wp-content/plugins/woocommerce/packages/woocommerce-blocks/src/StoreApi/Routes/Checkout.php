@@ -1,53 +1,28 @@
 <?php
 namespace Automattic\WooCommerce\Blocks\StoreApi\Routes;
 
-use Automattic\WooCommerce\Blocks\StoreApi\Utilities\InvalidStockLevelsInCartException;
-use Automattic\WooCommerce\Blocks\Package;
 use Automattic\WooCommerce\Blocks\Domain\Services\CreateAccount;
-use Automattic\WooCommerce\Blocks\StoreApi\Schemas\AbstractSchema;
-use Automattic\WooCommerce\Blocks\StoreApi\Schemas\CartSchema;
-use Automattic\WooCommerce\Blocks\StoreApi\Utilities\CartController;
-use Automattic\WooCommerce\Blocks\StoreApi\Utilities\OrderController;
+use Automattic\WooCommerce\Blocks\Package;
+use Automattic\WooCommerce\Blocks\Payments\PaymentContext;
+use Automattic\WooCommerce\Blocks\Payments\PaymentResult;
+use Automattic\WooCommerce\Blocks\StoreApi\Utilities\DraftOrderTrait;
+use Automattic\WooCommerce\Blocks\StoreApi\Utilities\InvalidStockLevelsInCartException;
 use Automattic\WooCommerce\Checkout\Helpers\ReserveStock;
 use Automattic\WooCommerce\Checkout\Helpers\ReserveStockException;
-use Automattic\WooCommerce\Blocks\Payments\PaymentResult;
-use Automattic\WooCommerce\Blocks\Payments\PaymentContext;
-
 /**
  * Checkout class.
  *
  * @internal This API is used internally by Blocks--it is still in flux and may be subject to revisions.
  */
 class Checkout extends AbstractCartRoute {
+	use DraftOrderTrait;
+
 	/**
 	 * Holds the current order being processed.
 	 *
 	 * @var \WC_Order
 	 */
 	private $order = null;
-
-	/**
-	 * Order controller class instance.
-	 *
-	 * @var OrderController
-	 */
-	protected $order_controller;
-
-	/**
-	 * Constructor accepts two types of schema; one for the item being returned, and one for the cart as a whole. These
-	 * may be the same depending on the route.
-	 *
-	 * @param CartSchema      $cart_schema Schema class for the cart.
-	 * @param AbstractSchema  $item_schema Schema class for this route's items if it differs from the cart schema.
-	 * @param CartController  $cart_controller Cart controller class.
-	 * @param OrderController $order_controller Order controller class.
-	 */
-	public function __construct( CartSchema $cart_schema, AbstractSchema $item_schema = null, CartController $cart_controller, OrderController $order_controller ) {
-		$this->schema           = is_null( $item_schema ) ? $cart_schema : $item_schema;
-		$this->cart_schema      = $cart_schema;
-		$this->cart_controller  = $cart_controller;
-		$this->order_controller = $order_controller;
-	}
 
 	/**
 	 * Get the path of this REST route.
@@ -108,12 +83,6 @@ class Checkout extends AbstractCartRoute {
 					$this->schema->get_endpoint_args_for_item_schema( \WP_REST_Server::CREATABLE )
 				),
 			],
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => array( $this, 'get_response' ),
-				'permission_callback' => '__return_true',
-				'args'                => $this->schema->get_endpoint_args_for_item_schema( \WP_REST_Server::EDITABLE ),
-			],
 			'schema'      => [ $this->schema, 'get_public_item_schema' ],
 			'allow_batch' => [ 'v1' => true ],
 		];
@@ -150,7 +119,7 @@ class Checkout extends AbstractCartRoute {
 	 * @return \WP_REST_Response
 	 */
 	protected function get_route_response( \WP_REST_Request $request ) {
-		$this->create_or_update_draft_order();
+		$this->create_or_update_draft_order( $request );
 
 		return $this->prepare_item_for_response(
 			(object) [
@@ -162,30 +131,7 @@ class Checkout extends AbstractCartRoute {
 	}
 
 	/**
-	 * Update the current order.
-	 *
-	 * @internal Customer data is updated first so OrderController::update_addresses_from_cart uses up to date data.
-	 *
-	 * @throws RouteException On error.
-	 * @param \WP_REST_Request $request Request object.
-	 * @return \WP_REST_Response
-	 */
-	protected function get_route_update_response( \WP_REST_Request $request ) {
-		$this->update_customer_from_request( $request );
-		$this->create_or_update_draft_order();
-		$this->update_order_from_request( $request );
-
-		return $this->prepare_item_for_response(
-			(object) [
-				'order'          => $this->order,
-				'payment_result' => new PaymentResult(),
-			],
-			$request
-		);
-	}
-
-	/**
-	 * Update and process an order.
+	 * Process an order.
 	 *
 	 * 1. Obtain Draft Order
 	 * 2. Process Request
@@ -215,7 +161,7 @@ class Checkout extends AbstractCartRoute {
 		 * uses the up to date customer address.
 		 */
 		$this->update_customer_from_request( $request );
-		$this->create_or_update_draft_order();
+		$this->create_or_update_draft_order( $request );
 		$this->update_order_from_request( $request );
 
 		/**
@@ -233,7 +179,7 @@ class Checkout extends AbstractCartRoute {
 		$this->order_controller->validate_order_before_payment( $this->order );
 
 		/**
-		 * WooCommerce Blocks Checkout Order Processed (experimental).
+		 * Fires before an order is processed by the Checkout Block/Store API.
 		 *
 		 * This hook informs extensions that $order has completed processing and is ready for payment.
 		 *
@@ -242,11 +188,37 @@ class Checkout extends AbstractCartRoute {
 		 * - This also explicitly indicates these orders are from checkout block/StoreAPI.
 		 *
 		 * @see https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/3238
+		 * @example See docs/examples/checkout-order-processed.md
 		 * @internal This Hook is experimental and may change or be removed.
+
+		 * @param \WC_Order $order Order object.
+		 * @deprecated 6.3.0 Use woocommerce_blocks_checkout_order_processed instead.
+		 */
+		wc_do_deprecated_action(
+			'__experimental_woocommerce_blocks_checkout_order_processed',
+			array(
+				$this->order,
+			),
+			'6.3.0',
+			'woocommerce_blocks_checkout_order_processed',
+			'This action was deprecated in WooCommerce Blocks version 6.3.0. Please use woocommerce_blocks_checkout_order_processed instead.'
+		);
+
+		/**
+		 * Fires before an order is processed by the Checkout Block/Store API.
 		 *
+		 * This hook informs extensions that $order has completed processing and is ready for payment.
+		 *
+		 * This is similar to existing core hook woocommerce_checkout_order_processed. We're using a new action:
+		 * - To keep the interface focused (only pass $order, not passing request data).
+		 * - This also explicitly indicates these orders are from checkout block/StoreAPI.
+		 *
+		 * @see https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/3238
+		 * @example See docs/examples/checkout-order-processed.md
+
 		 * @param \WC_Order $order Order object.
 		 */
-		do_action( '__experimental_woocommerce_blocks_checkout_order_processed', $this->order );
+		do_action( 'woocommerce_blocks_checkout_order_processed', $this->order );
 
 		/**
 		 * Process the payment and return the results.
@@ -324,64 +296,22 @@ class Checkout extends AbstractCartRoute {
 	}
 
 	/**
-	 * Gets draft order data from the customer session.
-	 *
-	 * @return array
-	 */
-	private function get_draft_order_id() {
-		return wc()->session->get( 'store_api_draft_order', 0 );
-	}
-
-	/**
-	 * Updates draft order data in the customer session.
-	 *
-	 * @param integer $order_id Draft order ID.
-	 */
-	private function set_draft_order_id( $order_id ) {
-		wc()->session->set( 'store_api_draft_order', $order_id );
-	}
-
-	/**
-	 * Whether the passed argument is a draft order or an order that is
-	 * pending/failed and the cart hasn't changed.
-	 *
-	 * @param \WC_Order $order_object Order object to check.
-	 * @return boolean Whether the order is valid as a draft order.
-	 */
-	private function is_valid_draft_order( $order_object ) {
-		if ( ! $order_object instanceof \WC_Order ) {
-			return false;
-		}
-
-		// Draft orders are okay.
-		if ( $order_object->has_status( 'checkout-draft' ) ) {
-			return true;
-		}
-
-		// Pending and failed orders can be retried if the cart hasn't changed.
-		if ( $order_object->needs_payment() && $order_object->has_cart_hash( wc()->cart->get_cart_hash() ) ) {
-			return true;
-		}
-
-		return false;
-	}
-
-	/**
 	 * Create or update a draft order based on the cart.
 	 *
+	 * @param \WP_REST_Request $request Full details about the request.
 	 * @throws RouteException On error.
 	 */
-	private function create_or_update_draft_order() {
-		$this->order = $this->get_draft_order_id() ? wc_get_order( $this->get_draft_order_id() ) : null;
+	private function create_or_update_draft_order( \WP_REST_Request $request ) {
+		$this->order = $this->get_draft_order();
 
-		if ( ! $this->is_valid_draft_order( $this->order ) ) {
+		if ( ! $this->order ) {
 			$this->order = $this->order_controller->create_order_from_cart();
 		} else {
 			$this->order_controller->update_order_from_cart( $this->order );
 		}
 
 		/**
-		 * WooCommerce Blocks Checkout Update Order Meta (experimental).
+		 * Fires when the Checkout Block/Store API updates an order's meta data.
 		 *
 		 * This hook gives extensions the chance to add or update meta data on the $order.
 		 *
@@ -394,8 +324,34 @@ class Checkout extends AbstractCartRoute {
 		 * @internal This Hook is experimental and may change or be removed.
 		 *
 		 * @param \WC_Order $order Order object.
+		 *
+		 * @deprecated 6.3.0 Use woocommerce_blocks_checkout_update_order_meta instead.
 		 */
-		do_action( '__experimental_woocommerce_blocks_checkout_update_order_meta', $this->order );
+		wc_do_deprecated_action(
+			'__experimental_woocommerce_blocks_checkout_update_order_meta',
+			array(
+				$this->order,
+			),
+			'6.3.0',
+			'woocommerce_blocks_checkout_update_order_meta',
+			'This action was deprecated in WooCommerce Blocks version 6.3.0. Please use woocommerce_blocks_checkout_update_order_meta instead.'
+		);
+
+		/**
+		 * Fires when the Checkout Block/Store API updates an order's meta data.
+		 *
+		 * This hook gives extensions the chance to add or update meta data on the $order.
+		 *
+		 * This is similar to existing core hook woocommerce_checkout_update_order_meta.
+		 * We're using a new action:
+		 * - To keep the interface focused (only pass $order, not passing request data).
+		 * - This also explicitly indicates these orders are from checkout block/StoreAPI.
+		 *
+		 * @see https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/3686
+		 *
+		 * @param \WC_Order $order Order object.
+		 */
+		do_action( 'woocommerce_blocks_checkout_update_order_meta', $this->order );
 
 		// Confirm order is valid before proceeding further.
 		if ( ! $this->order instanceof \WC_Order ) {
@@ -409,12 +365,17 @@ class Checkout extends AbstractCartRoute {
 		// Store order ID to session.
 		$this->set_draft_order_id( $this->order->get_id() );
 
-		// Try to reserve stock for 10 mins, if available.
+		/**
+		 * Try to reserve stock for the order.
+		 *
+		 * If creating a draft order on checkout entry, set the timeout to 10 mins.
+		 * If POSTing to the checkout (attempting to pay), set the timeout to 60 mins (using the woocommerce_hold_stock_minutes option).
+		 */
 		try {
 			$reserve_stock = new ReserveStock();
-			$reserve_stock->reserve_stock_for_order( $this->order, 10 );
+			$duration      = $request->get_method() === 'POST' ? (int) get_option( 'woocommerce_hold_stock_minutes', 60 ) : 10;
+			$reserve_stock->reserve_stock_for_order( $this->order, $duration );
 		} catch ( ReserveStockException $e ) {
-			$error_data = $e->getErrorData();
 			throw new RouteException(
 				$e->getErrorCode(),
 				$e->getMessage(),
@@ -461,10 +422,10 @@ class Checkout extends AbstractCartRoute {
 	 */
 	private function update_order_from_request( \WP_REST_Request $request ) {
 		$this->order->set_customer_note( $request['customer_note'] ?? '' );
-		$this->order->set_payment_method( $this->get_request_payment_method( $request ) );
+		$this->order->set_payment_method( $this->get_request_payment_method_id( $request ) );
 
 		/**
-		 * WooCommerce Blocks Checkout Update Order From Request (experimental).
+		 * Fires when the Checkout Block/Store API updates an order's from the API request data.
 		 *
 		 * This hook gives extensions the chance to update orders based on the data in the request. This can be used in
 		 * conjunction with the ExtendRestAPI class to post custom data and then process it.
@@ -473,8 +434,30 @@ class Checkout extends AbstractCartRoute {
 		 *
 		 * @param \WC_Order $order Order object.
 		 * @param \WP_REST_Request $request Full details about the request.
+		 *
+		 * @deprecated 6.3.0 Use woocommerce_blocks_checkout_update_order_from_request instead.
 		 */
-		do_action( '__experimental_woocommerce_blocks_checkout_update_order_from_request', $this->order, $request );
+		wc_do_deprecated_action(
+			'__experimental_woocommerce_blocks_checkout_update_order_from_request',
+			array(
+				$this->order,
+				$request,
+			),
+			'6.3.0',
+			'woocommerce_blocks_checkout_update_order_from_request',
+			'This action was deprecated in WooCommerce Blocks version 6.3.0. Please use woocommerce_blocks_checkout_update_order_from_request instead.'
+		);
+
+		/**
+		 * Fires when the Checkout Block/Store API updates an order's from the API request data.
+		 *
+		 * This hook gives extensions the chance to update orders based on the data in the request. This can be used in
+		 * conjunction with the ExtendRestAPI class to post custom data and then process it.
+		 *
+		 * @param \WC_Order $order Order object.
+		 * @param \WP_REST_Request $request Full details about the request.
+		 */
+		do_action( 'woocommerce_blocks_checkout_update_order_from_request', $this->order, $request );
 
 		$this->order->save();
 	}
@@ -542,17 +525,7 @@ class Checkout extends AbstractCartRoute {
 	 * @return string
 	 */
 	private function get_request_payment_method_id( \WP_REST_Request $request ) {
-		$payment_method_id = wc_clean( wp_unslash( $request['payment_method'] ?? '' ) );
-
-		if ( empty( $payment_method_id ) ) {
-			throw new RouteException(
-				'woocommerce_rest_checkout_missing_payment_method',
-				__( 'No payment method provided.', 'woocommerce' ),
-				400
-			);
-		}
-
-		return $payment_method_id;
+		return $this->get_request_payment_method( $request )->id;
 	}
 
 	/**
@@ -563,18 +536,30 @@ class Checkout extends AbstractCartRoute {
 	 * @return \WC_Payment_Gateway
 	 */
 	private function get_request_payment_method( \WP_REST_Request $request ) {
-		$payment_method_id  = $this->get_request_payment_method_id( $request );
-		$available_gateways = WC()->payment_gateways->get_available_payment_gateways();
+		$available_gateways     = WC()->payment_gateways->get_available_payment_gateways();
+		$request_payment_method = wc_clean( wp_unslash( $request['payment_method'] ?? '' ) );
 
-		if ( ! isset( $available_gateways[ $payment_method_id ] ) ) {
+		if ( empty( $request_payment_method ) ) {
 			throw new RouteException(
-				'woocommerce_rest_checkout_payment_method_disabled',
-				__( 'This payment gateway is not available.', 'woocommerce' ),
+				'woocommerce_rest_checkout_missing_payment_method',
+				__( 'No payment method provided.', 'woocommerce' ),
 				400
 			);
 		}
 
-		return $available_gateways[ $payment_method_id ];
+		if ( ! isset( $available_gateways[ $request_payment_method ] ) ) {
+			throw new RouteException(
+				'woocommerce_rest_checkout_payment_method_disabled',
+				sprintf(
+					// Translators: %s Payment method ID.
+					__( 'The %s payment gateway is not available.', 'woocommerce' ),
+					esc_html( $request_payment_method )
+				),
+				400
+			);
+		}
+
+		return $available_gateways[ $request_payment_method ];
 	}
 
 	/**

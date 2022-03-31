@@ -29,6 +29,11 @@ setCategories( [
 			'WooCommerce Product Elements',
 			'woocommerce'
 		),
-		icon: <Icon srcElement={ atom } style={ { fill: '#874FB9' } } />,
+		icon: (
+			<Icon
+				srcElement={ atom }
+				className="wc-block-editor-components-block-icon"
+			/>
+		),
 	},
 ] );

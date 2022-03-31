@@ -22,15 +22,33 @@ class RealtimeData extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'rows';
     protected $columnHeadersType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\RealtimeDataColumnHeaders::class;
     protected $columnHeadersDataType = 'array';
+    /**
+     * @var string
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $kind;
     protected $profileInfoType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\RealtimeDataProfileInfo::class;
     protected $profileInfoDataType = '';
     protected $queryType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\RealtimeDataQuery::class;
     protected $queryDataType = '';
+    /**
+     * @var string[]
+     */
     public $rows;
+    /**
+     * @var string
+     */
     public $selfLink;
+    /**
+     * @var int
+     */
     public $totalResults;
+    /**
+     * @var string[]
+     */
     public $totalsForAllResults;
     /**
      * @param RealtimeDataColumnHeaders[]
@@ -46,18 +64,30 @@ class RealtimeData extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->columnHeaders;
     }
+    /**
+     * @param string
+     */
     public function setId($id)
     {
         $this->id = $id;
     }
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
     }
+    /**
+     * @param string
+     */
     public function setKind($kind)
     {
         $this->kind = $kind;
     }
+    /**
+     * @return string
+     */
     public function getKind()
     {
         return $this->kind;
@@ -90,34 +120,58 @@ class RealtimeData extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->query;
     }
+    /**
+     * @param string[]
+     */
     public function setRows($rows)
     {
         $this->rows = $rows;
     }
+    /**
+     * @return string[]
+     */
     public function getRows()
     {
         return $this->rows;
     }
+    /**
+     * @param string
+     */
     public function setSelfLink($selfLink)
     {
         $this->selfLink = $selfLink;
     }
+    /**
+     * @return string
+     */
     public function getSelfLink()
     {
         return $this->selfLink;
     }
+    /**
+     * @param int
+     */
     public function setTotalResults($totalResults)
     {
         $this->totalResults = $totalResults;
     }
+    /**
+     * @return int
+     */
     public function getTotalResults()
     {
         return $this->totalResults;
     }
+    /**
+     * @param string[]
+     */
     public function setTotalsForAllResults($totalsForAllResults)
     {
         $this->totalsForAllResults = $totalsForAllResults;
     }
+    /**
+     * @return string[]
+     */
     public function getTotalsForAllResults()
     {
         return $this->totalsForAllResults;

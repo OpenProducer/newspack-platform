@@ -19,24 +19,48 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 
 class EmailAddress extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $displayName;
+    /**
+     * @var string
+     */
     public $formattedType;
     protected $metadataType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\FieldMetadata::class;
     protected $metadataDataType = '';
+    /**
+     * @var string
+     */
     public $type;
+    /**
+     * @var string
+     */
     public $value;
+    /**
+     * @param string
+     */
     public function setDisplayName($displayName)
     {
         $this->displayName = $displayName;
     }
+    /**
+     * @return string
+     */
     public function getDisplayName()
     {
         return $this->displayName;
     }
+    /**
+     * @param string
+     */
     public function setFormattedType($formattedType)
     {
         $this->formattedType = $formattedType;
     }
+    /**
+     * @return string
+     */
     public function getFormattedType()
     {
         return $this->formattedType;
@@ -55,18 +79,30 @@ class EmailAddress extends \Google\Site_Kit_Dependencies\Google\Model
     {
         return $this->metadata;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;
     }
+    /**
+     * @param string
+     */
     public function setValue($value)
     {
         $this->value = $value;
     }
+    /**
+     * @return string
+     */
     public function getValue()
     {
         return $this->value;

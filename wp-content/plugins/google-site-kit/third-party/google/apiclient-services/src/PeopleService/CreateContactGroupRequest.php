@@ -21,6 +21,9 @@ class CreateContactGroupRequest extends \Google\Site_Kit_Dependencies\Google\Mod
 {
     protected $contactGroupType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ContactGroup::class;
     protected $contactGroupDataType = '';
+    /**
+     * @var string
+     */
     public $readGroupFields;
     /**
      * @param ContactGroup
@@ -36,10 +39,16 @@ class CreateContactGroupRequest extends \Google\Site_Kit_Dependencies\Google\Mod
     {
         return $this->contactGroup;
     }
+    /**
+     * @param string
+     */
     public function setReadGroupFields($readGroupFields)
     {
         $this->readGroupFields = $readGroupFields;
     }
+    /**
+     * @return string
+     */
     public function getReadGroupFields()
     {
         return $this->readGroupFields;

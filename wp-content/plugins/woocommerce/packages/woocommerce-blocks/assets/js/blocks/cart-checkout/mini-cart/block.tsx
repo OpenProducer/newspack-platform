@@ -1,53 +1,95 @@
 /**
  * External dependencies
  */
-import classNames from 'classnames';
-import { __, _n, sprintf } from '@wordpress/i18n';
-import { useState, useEffect, useRef } from '@wordpress/element';
-import { dispatch } from '@wordpress/data';
-import { translateJQueryEventToNative } from '@woocommerce/base-utils';
-import { useStoreCart } from '@woocommerce/base-context/hooks';
+import { renderParentBlock } from '@woocommerce/atomic-utils';
 import Drawer from '@woocommerce/base-components/drawer';
-import { CART_STORE_KEY as storeKey } from '@woocommerce/block-data';
+import { useStoreCart } from '@woocommerce/base-context/hooks';
+import { translateJQueryEventToNative } from '@woocommerce/base-utils';
+import { getRegisteredBlockComponents } from '@woocommerce/blocks-registry';
 import {
 	formatPrice,
 	getCurrencyFromPriceResponse,
 } from '@woocommerce/price-format';
-import { getSetting } from '@woocommerce/settings';
-
+import { getSettingWithCoercion } from '@woocommerce/settings';
+import { isBoolean, isString } from '@woocommerce/types';
+import {
+	RawHTML,
+	unmountComponentAtNode,
+	useCallback,
+	useEffect,
+	useState,
+} from '@wordpress/element';
+import { sprintf, _n } from '@wordpress/i18n';
+import classnames from 'classnames';
 /**
  * Internal dependencies
  */
-import CartLineItemsTable from '../cart/full-cart/cart-line-items-table';
+import QuantityBadge from './quantity-badge';
+import { MiniCartContentsBlock } from '../mini-cart-contents/block';
 import './style.scss';
+import { blockName } from '../mini-cart-contents/attributes';
 
-interface MiniCartBlockProps {
-	isPlaceholderOpen?: boolean;
+interface Props {
+	isInitiallyOpen?: boolean;
+	transparentButton: boolean;
+	colorClassNames?: string;
+	style?: Record< string, Record< string, string > >;
+	contents: string;
 }
 
 const MiniCartBlock = ( {
-	isPlaceholderOpen = false,
-}: MiniCartBlockProps ): JSX.Element => {
-	const {
-		cartItems,
-		cartItemsCount,
-		cartIsLoading,
-		cartTotals,
-	} = useStoreCart();
-	const [ isOpen, setIsOpen ] = useState< boolean >( isPlaceholderOpen );
-	const emptyCartRef = useRef< HTMLDivElement | null >( null );
+	isInitiallyOpen = false,
+	colorClassNames,
+	style,
+	contents = '',
+}: Props ): JSX.Element => {
+	const { cartItemsCount, cartIsLoading, cartTotals } = useStoreCart();
+	const [ isOpen, setIsOpen ] = useState< boolean >( isInitiallyOpen );
 	// We already rendered the HTML drawer placeholder, so we want to skip the
 	// slide in animation.
 	const [ skipSlideIn, setSkipSlideIn ] = useState< boolean >(
-		isPlaceholderOpen
+		isInitiallyOpen
+	);
+	const [ contentsNode, setContentsNode ] = useState< HTMLDivElement | null >(
+		null
 	);
 
+	const contentsRef = useCallback( ( node ) => {
+		setContentsNode( node );
+	}, [] );
+
 	useEffect( () => {
-		const openMiniCartAndRefreshData = ( e ) => {
-			const eventDetail = e.detail;
-			if ( ! eventDetail || ! eventDetail.preserveCartData ) {
-				dispatch( storeKey ).invalidateResolutionForStore();
+		if ( contentsNode instanceof Element ) {
+			const container = contentsNode.querySelector(
+				'.wp-block-woocommerce-mini-cart-contents'
+			);
+			if ( ! container ) {
+				return;
 			}
+			if ( isOpen ) {
+				renderParentBlock( {
+					Block: MiniCartContentsBlock,
+					blockName,
+					selector: '.wp-block-woocommerce-mini-cart-contents',
+					blockMap: getRegisteredBlockComponents( blockName ),
+				} );
+			}
+		}
+
+		return () => {
+			if ( contentsNode instanceof Element && isOpen ) {
+				const container = contentsNode.querySelector(
+					'.wp-block-woocommerce-mini-cart-contents'
+				);
+				if ( container ) {
+					unmountComponentAtNode( container );
+				}
+			}
+		};
+	}, [ isOpen, contentsNode ] );
+
+	useEffect( () => {
+		const openMiniCart = () => {
 			setSkipSlideIn( false );
 			setIsOpen( true );
 		};
@@ -60,7 +102,7 @@ const MiniCartBlock = ( {
 
 		document.body.addEventListener(
 			'wc-blocks_added_to_cart',
-			openMiniCartAndRefreshData
+			openMiniCart
 		);
 
 		return () => {
@@ -68,25 +110,23 @@ const MiniCartBlock = ( {
 
 			document.body.removeEventListener(
 				'wc-blocks_added_to_cart',
-				openMiniCartAndRefreshData
+				openMiniCart
 			);
 		};
 	}, [] );
 
-	useEffect( () => {
-		// If the cart has been completely emptied, move focus to empty cart
-		// element.
-		if ( isOpen && ! cartIsLoading && cartItems.length === 0 ) {
-			if ( emptyCartRef.current instanceof HTMLElement ) {
-				emptyCartRef.current.focus();
-			}
-		}
-	}, [ isOpen, cartIsLoading, cartItems.length, emptyCartRef ] );
+	const showIncludingTax = getSettingWithCoercion(
+		'displayCartPricesIncludingTax',
+		false,
+		isBoolean
+	);
 
-	const subTotal = getSetting( 'displayCartPricesIncludingTax', false )
+	const taxLabel = getSettingWithCoercion( 'taxLabel', '', isString );
+
+	const subTotal = showIncludingTax
 		? parseInt( cartTotals.total_items, 10 ) +
 		  parseInt( cartTotals.total_items_tax, 10 )
-		: cartTotals.total_items;
+		: parseInt( cartTotals.total_items, 10 );
 
 	const ariaLabel = sprintf(
 		/* translators: %1$d is the number of products in the cart. %2$s is the cart total */
@@ -100,26 +140,16 @@ const MiniCartBlock = ( {
 		formatPrice( subTotal, getCurrencyFromPriceResponse( cartTotals ) )
 	);
 
-	const contents =
-		! cartIsLoading && cartItems.length === 0 ? (
-			<div
-				className="wc-block-mini-cart__empty-cart"
-				tabIndex={ -1 }
-				ref={ emptyCartRef }
-			>
-				{ __( 'Cart is empty', 'woo-gutenberg-products-block' ) }
-			</div>
-		) : (
-			<CartLineItemsTable
-				lineItems={ cartItems }
-				isLoading={ cartIsLoading }
-			/>
-		);
+	const colorStyle = {
+		backgroundColor: style?.color?.background,
+		color: style?.color?.text,
+	};
 
 	return (
 		<>
 			<button
-				className="wc-block-mini-cart__button"
+				className={ `wc-block-mini-cart__button ${ colorClassNames }` }
+				style={ colorStyle }
 				onClick={ () => {
 					if ( ! isOpen ) {
 						setIsOpen( true );
@@ -128,46 +158,45 @@ const MiniCartBlock = ( {
 				} }
 				aria-label={ ariaLabel }
 			>
-				{ sprintf(
-					/* translators: %d is the count of items in the cart. */
-					_n(
-						'%d item',
-						'%d items',
-						cartItemsCount,
-						'woo-gutenberg-products-block'
-					),
-					cartItemsCount
+				<span className="wc-block-mini-cart__amount">
+					{ formatPrice(
+						subTotal,
+						getCurrencyFromPriceResponse( cartTotals )
+					) }
+				</span>
+				{ taxLabel !== '' && subTotal !== 0 && (
+					<small className="wc-block-mini-cart__tax-label">
+						{ taxLabel }
+					</small>
 				) }
+				<QuantityBadge
+					count={ cartItemsCount }
+					colorClassNames={ colorClassNames }
+					style={ colorStyle }
+				/>
 			</button>
 			<Drawer
-				className={ classNames(
+				className={ classnames(
 					'wc-block-mini-cart__drawer',
 					'is-mobile',
 					{
 						'is-loading': cartIsLoading,
 					}
 				) }
-				title={
-					cartIsLoading
-						? __( 'Your cart', 'woo-gutenberg-products-block' )
-						: sprintf(
-								/* translators: %d is the count of items in the cart. */
-								_n(
-									'Your cart (%d item)',
-									'Your cart (%d items)',
-									cartItemsCount,
-									'woo-gutenberg-products-block'
-								),
-								cartItemsCount
-						  )
-				}
+				title=""
 				isOpen={ isOpen }
 				onClose={ () => {
 					setIsOpen( false );
 				} }
 				slideIn={ ! skipSlideIn }
 			>
-				{ contents }
+				<div
+					className="wc-block-mini-cart__template-part"
+					ref={ contentsRef }
+				>
+					{ /* @todo The `div` wrapper of RawHTML isn't removed on the front end. */ }
+					<RawHTML>{ contents }</RawHTML>
+				</div>
 			</Drawer>
 		</>
 	);

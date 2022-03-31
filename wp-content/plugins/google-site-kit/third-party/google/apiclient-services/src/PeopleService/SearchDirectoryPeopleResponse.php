@@ -20,14 +20,26 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class SearchDirectoryPeopleResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'people';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     protected $peopleType = \Google\Site_Kit_Dependencies\Google\Service\PeopleService\Person::class;
     protected $peopleDataType = 'array';
+    /**
+     * @var int
+     */
     public $totalSize;
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;
@@ -46,10 +58,16 @@ class SearchDirectoryPeopleResponse extends \Google\Site_Kit_Dependencies\Google
     {
         return $this->people;
     }
+    /**
+     * @param int
+     */
     public function setTotalSize($totalSize)
     {
         $this->totalSize = $totalSize;
     }
+    /**
+     * @return int
+     */
     public function getTotalSize()
     {
         return $this->totalSize;

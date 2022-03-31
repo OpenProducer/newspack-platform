@@ -15,8 +15,12 @@ import Block from './block';
 registerBlockType( 'woocommerce/handpicked-products', {
 	title: __( 'Hand-picked Products', 'woocommerce' ),
 	icon: {
-		src: <Icon srcElement={ widgets } />,
-		foreground: '#96588a',
+		src: (
+			<Icon
+				srcElement={ widgets }
+				className="wc-block-editor-components-block-icon"
+			/>
+		),
 	},
 	category: 'woocommerce',
 	keywords: [

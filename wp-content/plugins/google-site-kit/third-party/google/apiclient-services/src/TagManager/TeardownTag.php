@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class TeardownTag extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
     public $stopTeardownOnFailure;
+    /**
+     * @var string
+     */
     public $tagName;
+    /**
+     * @param bool
+     */
     public function setStopTeardownOnFailure($stopTeardownOnFailure)
     {
         $this->stopTeardownOnFailure = $stopTeardownOnFailure;
     }
+    /**
+     * @return bool
+     */
     public function getStopTeardownOnFailure()
     {
         return $this->stopTeardownOnFailure;
     }
+    /**
+     * @param string
+     */
     public function setTagName($tagName)
     {
         $this->tagName = $tagName;
     }
+    /**
+     * @return string
+     */
     public function getTagName()
     {
         return $this->tagName;

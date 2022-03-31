@@ -18,10 +18,7 @@ import {
 const blockConfig = {
 	title,
 	description,
-	icon: {
-		src: icon,
-		foreground: '#874FB9',
-	},
+	icon: { src: icon },
 	attributes,
 	edit,
 };

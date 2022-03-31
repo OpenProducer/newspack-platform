@@ -19,51 +19,102 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 
 class GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
     public $adsPersonalizationEnabled;
+    /**
+     * @var string
+     */
     public $advertiserDisplayName;
+    /**
+     * @var string
+     */
     public $advertiserId;
+    /**
+     * @var bool
+     */
     public $campaignDataSharingEnabled;
+    /**
+     * @var bool
+     */
     public $costDataSharingEnabled;
     protected $linkProposalStatusDetailsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaLinkProposalStatusDetails::class;
     protected $linkProposalStatusDetailsDataType = '';
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var string
+     */
     public $validationEmail;
+    /**
+     * @param bool
+     */
     public function setAdsPersonalizationEnabled($adsPersonalizationEnabled)
     {
         $this->adsPersonalizationEnabled = $adsPersonalizationEnabled;
     }
+    /**
+     * @return bool
+     */
     public function getAdsPersonalizationEnabled()
     {
         return $this->adsPersonalizationEnabled;
     }
+    /**
+     * @param string
+     */
     public function setAdvertiserDisplayName($advertiserDisplayName)
     {
         $this->advertiserDisplayName = $advertiserDisplayName;
     }
+    /**
+     * @return string
+     */
     public function getAdvertiserDisplayName()
     {
         return $this->advertiserDisplayName;
     }
+    /**
+     * @param string
+     */
     public function setAdvertiserId($advertiserId)
     {
         $this->advertiserId = $advertiserId;
     }
+    /**
+     * @return string
+     */
     public function getAdvertiserId()
     {
         return $this->advertiserId;
     }
+    /**
+     * @param bool
+     */
     public function setCampaignDataSharingEnabled($campaignDataSharingEnabled)
     {
         $this->campaignDataSharingEnabled = $campaignDataSharingEnabled;
     }
+    /**
+     * @return bool
+     */
     public function getCampaignDataSharingEnabled()
     {
         return $this->campaignDataSharingEnabled;
     }
+    /**
+     * @param bool
+     */
     public function setCostDataSharingEnabled($costDataSharingEnabled)
     {
         $this->costDataSharingEnabled = $costDataSharingEnabled;
     }
+    /**
+     * @return bool
+     */
     public function getCostDataSharingEnabled()
     {
         return $this->costDataSharingEnabled;
@@ -82,18 +133,30 @@ class GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal extends \
     {
         return $this->linkProposalStatusDetails;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param string
+     */
     public function setValidationEmail($validationEmail)
     {
         $this->validationEmail = $validationEmail;
     }
+    /**
+     * @return string
+     */
     public function getValidationEmail()
     {
         return $this->validationEmail;

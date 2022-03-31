@@ -20,11 +20,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class BatchDeleteContactsRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'resourceNames';
+    /**
+     * @var string[]
+     */
     public $resourceNames;
+    /**
+     * @param string[]
+     */
     public function setResourceNames($resourceNames)
     {
         $this->resourceNames = $resourceNames;
     }
+    /**
+     * @return string[]
+     */
     public function getResourceNames()
     {
         return $this->resourceNames;

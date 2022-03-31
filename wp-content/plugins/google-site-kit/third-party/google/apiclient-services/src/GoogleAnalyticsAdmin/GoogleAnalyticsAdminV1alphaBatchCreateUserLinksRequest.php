@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin;
 class GoogleAnalyticsAdminV1alphaBatchCreateUserLinksRequest extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'requests';
+    /**
+     * @var bool
+     */
     public $notifyNewUsers;
     protected $requestsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaCreateUserLinkRequest::class;
     protected $requestsDataType = 'array';
+    /**
+     * @param bool
+     */
     public function setNotifyNewUsers($notifyNewUsers)
     {
         $this->notifyNewUsers = $notifyNewUsers;
     }
+    /**
+     * @return bool
+     */
     public function getNotifyNewUsers()
     {
         return $this->notifyNewUsers;

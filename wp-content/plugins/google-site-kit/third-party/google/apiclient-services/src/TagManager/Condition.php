@@ -22,6 +22,9 @@ class Condition extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'parameter';
     protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
     protected $parameterDataType = 'array';
+    /**
+     * @var string
+     */
     public $type;
     /**
      * @param Parameter[]
@@ -37,10 +40,16 @@ class Condition extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->parameter;
     }
+    /**
+     * @param string
+     */
     public function setType($type)
     {
         $this->type = $type;
     }
+    /**
+     * @return string
+     */
     public function getType()
     {
         return $this->type;

@@ -536,6 +536,16 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
 			try {
+				// Check if campaign has already been sent and if so, don't attempt to
+				// send again.
+				$campaign_data = $this->retrieve( $post_id );
+				if (
+					isset( $campaign_data['campaign']['status'] ) &&
+					in_array( $campaign_data['campaign']['status'], [ 'sent', 'sending' ], true )
+				) {
+					return;
+				}
+
 				$sync_result = $this->sync( $post );
 
 				if ( ! $sync_result || is_wp_error( $sync_result ) ) {

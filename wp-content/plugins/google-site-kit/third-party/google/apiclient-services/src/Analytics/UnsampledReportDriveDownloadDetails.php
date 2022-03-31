@@ -19,11 +19,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 
 class UnsampledReportDriveDownloadDetails extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $documentId;
+    /**
+     * @param string
+     */
     public function setDocumentId($documentId)
     {
         $this->documentId = $documentId;
     }
+    /**
+     * @return string
+     */
     public function getDocumentId()
     {
         return $this->documentId;

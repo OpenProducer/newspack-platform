@@ -20,20 +20,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PeopleService;
 class ProfileMetadata extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'userTypes';
+    /**
+     * @var string
+     */
     public $objectType;
+    /**
+     * @var string[]
+     */
     public $userTypes;
+    /**
+     * @param string
+     */
     public function setObjectType($objectType)
     {
         $this->objectType = $objectType;
     }
+    /**
+     * @return string
+     */
     public function getObjectType()
     {
         return $this->objectType;
     }
+    /**
+     * @param string[]
+     */
     public function setUserTypes($userTypes)
     {
         $this->userTypes = $userTypes;
     }
+    /**
+     * @return string[]
+     */
     public function getUserTypes()
     {
         return $this->userTypes;

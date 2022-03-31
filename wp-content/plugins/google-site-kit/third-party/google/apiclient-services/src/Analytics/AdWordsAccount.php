@@ -19,29 +19,56 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 
 class AdWordsAccount extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var bool
+     */
     public $autoTaggingEnabled;
+    /**
+     * @var string
+     */
     public $customerId;
+    /**
+     * @var string
+     */
     public $kind;
+    /**
+     * @param bool
+     */
     public function setAutoTaggingEnabled($autoTaggingEnabled)
     {
         $this->autoTaggingEnabled = $autoTaggingEnabled;
     }
+    /**
+     * @return bool
+     */
     public function getAutoTaggingEnabled()
     {
         return $this->autoTaggingEnabled;
     }
+    /**
+     * @param string
+     */
     public function setCustomerId($customerId)
     {
         $this->customerId = $customerId;
     }
+    /**
+     * @return string
+     */
     public function getCustomerId()
     {
         return $this->customerId;
     }
+    /**
+     * @param string
+     */
     public function setKind($kind)
     {
         $this->kind = $kind;
     }
+    /**
+     * @return string
+     */
     public function getKind()
     {
         return $this->kind;

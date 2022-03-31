@@ -2,9 +2,9 @@
 
 Contributors:      google
 Requires at least: 4.7
-Tested up to:      5.8
+Tested up to:      5.9
 Requires PHP:      5.6
-Stable tag:        1.45.0
+Stable tag:        1.71.0
 License:           Apache License 2.0
 License URI:       https://www.apache.org/licenses/LICENSE-2.0
 Tags:              google, search-console, analytics, adsense, pagespeed-insights, optimize, tag-manager, site-kit
@@ -105,6 +105,226 @@ By default, Site Kit does anonymize IP addresses upon activation of the Google A
 Please create a new topic on our [WordPress.org support forum](https://wordpress.org/support/plugin/google-site-kit/). Be sure to follow the [support forum guidelines](https://wordpress.org/support/guidelines/) when posting.
 
 == Changelog ==
+
+= 1.71.0 =
+
+**Enhanced**
+
+* Update gathering data UI in WordPress Dashboard widget. See [#4908](https://github.com/google/site-kit-wp/issues/4908).
+* Update the Analytics Signup CTA on the WordPress Dashboard. See [#4868](https://github.com/google/site-kit-wp/issues/4868).
+* Store remote features as a persistent option, ensuring features remain enabled when Site Kit is disconnected or reset. See [#4861](https://github.com/google/site-kit-wp/issues/4861).
+* Add additional context to remote feature request. See [#4858](https://github.com/google/site-kit-wp/issues/4858).
+* Prevent surveys from triggering for non-authenticated users on a shared dashboard. See [#4806](https://github.com/google/site-kit-wp/issues/4806).
+* Add notifications to site header when Analytics and/or Search Console are still gathering data. See [#4698](https://github.com/google/site-kit-wp/issues/4698).
+* Update widgets to pass gathering data state to components. See [#4697](https://github.com/google/site-kit-wp/issues/4697).
+* Update CTA placement for the Search Funnel widget on mobile. See [#4695](https://github.com/google/site-kit-wp/issues/4695).
+* Improve the zero state design in the All Traffic Widget. See [#4675](https://github.com/google/site-kit-wp/issues/4675).
+
+**Fixed**
+
+* Ensure request for remote features is made on site connection. See [#4957](https://github.com/google/site-kit-wp/issues/4957).
+
+= 1.70.0 =
+
+**Enhanced**
+
+* Change remote-controlled features request to be cron-based, running twice daily. See [#4856](https://github.com/google/site-kit-wp/issues/4856).
+* Enable client to check meta-capabilities for Dashboard Sharing permissions. See [#4804](https://github.com/google/site-kit-wp/issues/4804).
+* Add the `hasModuleAccess` selector to the `core/modules` datastore. See [#4802](https://github.com/google/site-kit-wp/issues/4802).
+* Add `sharedOwnershipModules` to Site Kit module sharing data. See [#4790](https://github.com/google/site-kit-wp/issues/4790).
+* Update the WordPress Dashboard and Admin Bar with new "gathering data" UI for new sites. See [#4711](https://github.com/google/site-kit-wp/issues/4711).
+* Add the gathering data state to the `ReportTable` component. See [#4700](https://github.com/google/site-kit-wp/issues/4700).
+* Add the gathering data state to the GoogleChart component. See [#4696](https://github.com/google/site-kit-wp/issues/4696).
+* Update the CTA notices in the Search Funnel widget. See [#4694](https://github.com/google/site-kit-wp/issues/4694).
+* Add a notification for zero data to the Site Kit dashboard. See [#4693](https://github.com/google/site-kit-wp/issues/4693).
+* Update DataBlock component to display the new gathering state. See [#4692](https://github.com/google/site-kit-wp/issues/4692).
+* Extend some modules with service entity awareness and access checks. See [#4579](https://github.com/google/site-kit-wp/issues/4579).
+* Proactively refresh tokens for shared modules when Dashboard Sharing is enabled. See [#4524](https://github.com/google/site-kit-wp/issues/4524).
+* Provide client with Dashboard Sharing permissions when Dashboard Sharing is enabled. See [#4523](https://github.com/google/site-kit-wp/issues/4523).
+* Add `check-access` endpoint to modules for Dashboard Sharing. See [#4478](https://github.com/google/site-kit-wp/issues/4478).
+* Update the `View draft` button on the Idea Hub widget to display an icon instead of the text. See [#4266](https://github.com/google/site-kit-wp/issues/4266).
+
+**Fixed**
+
+* Fix OAuth setup loop when creating a new Analytics account. See [#4874](https://github.com/google/site-kit-wp/issues/4874).
+* Show only one notification at a time on the Site Kit dashboard. See [#4689](https://github.com/google/site-kit-wp/issues/4689).
+* Show error message when landing on module setup URL when the module is not active, or for an invalid module. See [#4654](https://github.com/google/site-kit-wp/issues/4654).
+* Update errors handling to correctly process `Forbidden` errors. See [#4543](https://github.com/google/site-kit-wp/issues/4543).
+
+= 1.69.0 =
+
+**Enhanced**
+
+* Persist `serviceSetupV2` feature flag also on reset, and redirect legacy module page URLs to the dashboard when the `unifiedDashboard` feature is active. See [#4865](https://github.com/google/site-kit-wp/issues/4865).
+* Remove legacy Analytics event for AdSense users. See [#4766](https://github.com/google/site-kit-wp/issues/4766).
+* Add AdSense site status to Site Kit's Site Health output. See [#4757](https://github.com/google/site-kit-wp/issues/4757).
+* Add a new datapoint to the AdSense module that returns information about sites associated with the current accountID. See [#4754](https://github.com/google/site-kit-wp/issues/4754).
+* Enhance lazy loading of sections on the unified dashboard to reduce layout shifts. See [#4641](https://github.com/google/site-kit-wp/issues/4641).
+* Update Idea Hub prompt banner notification with new design. See [#4514](https://github.com/google/site-kit-wp/issues/4514).
+* Simplify success banner notification for the unified dashboard. See [#1148](https://github.com/google/site-kit-wp/issues/1148).
+
+= 1.68.0 =
+
+**Enhanced**
+
+* Update plugin version to align with the current sprint. See [#4778](https://github.com/google/site-kit-wp/issues/4778).
+* Remove Module sharing settings on module disconnect. See [#4526](https://github.com/google/site-kit-wp/issues/4526).
+* Update sizing of input helper text to be consistent with Material styles. See [#4510](https://github.com/google/site-kit-wp/issues/4510).
+* Include all relevant query parameters in OAuth authentication URL. See [#2045](https://github.com/google/site-kit-wp/issues/2045).
+* Register site on the proxy before redirecting to it, in support for V2 setup flow. See [#2044](https://github.com/google/site-kit-wp/issues/2044).
+* Add support for paginated content to entity detection. See [#1911](https://github.com/google/site-kit-wp/issues/1911).
+* Support pages that don't resolve to a specific post on the Dashboard Search. See [#1592](https://github.com/google/site-kit-wp/issues/1592).
+
+**Fixed**
+
+* Fix scroll position when using header links on the Entity Dashboard page. See [#4741](https://github.com/google/site-kit-wp/issues/4741).
+
+= 1.50.0 =
+
+**Enhanced**
+
+* Improve post search autocomplete behaviour when typing during autocomplete API requests. See [#4665](https://github.com/google/site-kit-wp/issues/4665).
+* Update wording for AdSense CTA dismissal button. See [#4647](https://github.com/google/site-kit-wp/issues/4647).
+* Expose recoverable modules information to clients. See [#4527](https://github.com/google/site-kit-wp/issues/4527).
+* Update module classes to be sharing-aware. See [#4521](https://github.com/google/site-kit-wp/issues/4521).
+* Add support for automatically configuring Analytics with data from the service. See [#4208](https://github.com/google/site-kit-wp/issues/4208).
+* Add a new feature tour for the unified dashboard. See [#3947](https://github.com/google/site-kit-wp/issues/3947).
+* Update the cancel button on the module setup form to have a `Back` label when the setup process can't proceed. See [#1045](https://github.com/google/site-kit-wp/issues/1045).
+
+**Fixed**
+
+* Fix potential fatal error on PHP 8 with Idea Hub integration. See [#4738](https://github.com/google/site-kit-wp/issues/4738).
+* Fix a javascript error on the Analytics Unique Visitors tab of the Search Funnel widget. See [#4660](https://github.com/google/site-kit-wp/issues/4660).
+* Update the URL search input box to work correctly when HOME or END keys are pressed. See [#4584](https://github.com/google/site-kit-wp/issues/4584).
+* Update plugin header to avoid obstructing feature tours. See [#4453](https://github.com/google/site-kit-wp/issues/4453).
+
+= 1.49.1 =
+
+**Fixed**
+
+* Update Google Analytics 4 integration to use new `dataStreams` endpoint after breaking change in alpha API. See [#4677](https://github.com/google/site-kit-wp/issues/4677).
+
+= 1.49.0 =
+
+**Enhanced**
+
+* Update source links on unified dashboard widgets to be consistent across all widgets. See [#4570](https://github.com/google/site-kit-wp/issues/4570).
+* Annotate module endpoints which can be used with dashboard sharing. See [#4474](https://github.com/google/site-kit-wp/issues/4474).
+* Add `_googlesitekitDashboardSharingData` global data. See [#4473](https://github.com/google/site-kit-wp/issues/4473).
+* Update styling of items in the Site Kit header for consistency. See [#4457](https://github.com/google/site-kit-wp/issues/4457).
+* Implement new UI for entity dashboard header containing title and URL. See [#4428](https://github.com/google/site-kit-wp/issues/4428).
+* Update entity search field to only show a valid result when unfocused. See [#4427](https://github.com/google/site-kit-wp/issues/4427).
+* Update the help menu to include the AdSense help menu item in all places when the AdSense module is active. See [#4423](https://github.com/google/site-kit-wp/issues/4423).
+* Update Tag Manager setup and settings edit views with loading indicator while tags are being checked. See [#4311](https://github.com/google/site-kit-wp/issues/4311).
+* Update widgets to use the `useInViewSelect` hook to fetch reports. See [#4121](https://github.com/google/site-kit-wp/issues/4121).
+* Use only WordPress core's bundled dependencies instead of Site Kit's when integrating with the block editor. See [#4107](https://github.com/google/site-kit-wp/issues/4107).
+* Add the ability to programmatically disable modules using the `googlesitekit_available_modules` filter. Props henrywright. See [#3993](https://github.com/google/site-kit-wp/issues/3993).
+* Update the Idea Hub widget to display a spinner when saving, unsaving or dismissing an idea. See [#3907](https://github.com/google/site-kit-wp/issues/3907).
+
+**Fixed**
+
+* Fix potential off-screen widget rendering error when using `useInViewSelect`. See [#4642](https://github.com/google/site-kit-wp/issues/4642).
+* Fix incorrect URL search states when selecting an item from the autocomplete list. See [#4562](https://github.com/google/site-kit-wp/issues/4562).
+* Fix styling on "No results found" autocomplete message in Unified Dashboard. See [#4503](https://github.com/google/site-kit-wp/issues/4503).
+* Improve the spacing between section titles/subtitles in the Unified Dashboard. See [#4501](https://github.com/google/site-kit-wp/issues/4501).
+* Update the Overview widget to display Goals CTA when no goals are set yet. See [#4489](https://github.com/google/site-kit-wp/issues/4489).
+* Update unified dashboard to update the active navigation chip on scroll. See [#4488](https://github.com/google/site-kit-wp/issues/4488).
+* Update the PageSpeed widget to display the currently loaded data and the progress bar when the user clicks on the `Run test again` button. See [#4467](https://github.com/google/site-kit-wp/issues/4467).
+* Update jump links in the setup success banner notification to scroll to the appropriate location instead of jumping to it using the hash. See [#4410](https://github.com/google/site-kit-wp/issues/4410).
+
+= 1.48.1 =
+
+**Fixed**
+
+* Revert fix to prevent minification of already minified JS files by other plugins as it caused JS translations to no longer be delivered by wordpress.org. Props kebbet. See [#4592](https://github.com/google/site-kit-wp/issues/4592).
+
+= 1.48.0 =
+
+**Enhanced**
+
+* Add title to the overall page metrics widget. See [#4454](https://github.com/google/site-kit-wp/issues/4454).
+* Add icons to Unified Dashboard navigation. See [#4438](https://github.com/google/site-kit-wp/issues/4438).
+* Update production assets to include a `.min` suffix in the filename. See [#4436](https://github.com/google/site-kit-wp/issues/4436).
+* Update the URL search component to display the current entity title by default. See [#4426](https://github.com/google/site-kit-wp/issues/4426).
+* Update the plugin activation banner to be a simple CTA link instead of replicating the splash screen. See [#4403](https://github.com/google/site-kit-wp/issues/4403).
+* Update the behaviour of the PageSpeed's `visit the dashboard` link to scroll to the PSI widget when the user lands on the dashboard page. See [#4380](https://github.com/google/site-kit-wp/issues/4380).
+* Include query parameter for custom Analytics step in the service setup flow URLs. See [#4342](https://github.com/google/site-kit-wp/issues/4342).
+* Fix issue when AdSense module in the Connect More Services list briefly flashed grey. See [#4257](https://github.com/google/site-kit-wp/issues/4257).
+* Fix the incorrect difference for chart values when the current and the previous values equal zero. See [#4255](https://github.com/google/site-kit-wp/issues/4255).
+* Add information about old and new site URLs to the splash screen when URL mismatch is detected. See [#4247](https://github.com/google/site-kit-wp/issues/4247).
+* Add dismissible AdSense CTA widget for monetization section in the unified dashboard. See [#4145](https://github.com/google/site-kit-wp/issues/4145).
+* Update the IdeaHub widget to not display "Draft created" message on the draft tab. See [#3902](https://github.com/google/site-kit-wp/issues/3902).
+
+**Fixed**
+
+* Fix browser console errors related to Idea Hub on the Appearance > Widgets page in the WordPress Admin. See [#4466](https://github.com/google/site-kit-wp/issues/4466).
+* Fix visual gap on AdSense dashboard added by adblocker warning widget when no adblocker is detected. See [#4407](https://github.com/google/site-kit-wp/issues/4407).
+* Update the URL search to abort the current search request when the user changes the query. See [#4402](https://github.com/google/site-kit-wp/issues/4402).
+* Update the PageSpeed Insights links to go to the `pagespeed.web.dev` domain. See [#4381](https://github.com/google/site-kit-wp/issues/4381).
+* Fix the incorrect CSS class issue in the widget area renderer component. Props shayannosrat. See [#4329](https://github.com/google/site-kit-wp/issues/4329).
+* Update the "Learn More" links of Analytics and AdSense CTAs to open in a new window. See [#4286](https://github.com/google/site-kit-wp/issues/4286).
+* Fix missing unit characters issue on zero data widgets. See [#4238](https://github.com/google/site-kit-wp/issues/4238).
+* Add full stops to the insufficient permissions error description. See [#4160](https://github.com/google/site-kit-wp/issues/4160).
+* Fix styles for errors on Optimize setup and settings forms. See [#4028](https://github.com/google/site-kit-wp/issues/4028).
+* Fix bug where error for an Analytics property in Tag Manager without access would not show up. See [#3948](https://github.com/google/site-kit-wp/issues/3948).
+
+= 1.47.0 =
+
+**Added**
+
+* Add a new `useInViewSelect` hook that allows to call a specific selector only when in view. See [#4096](https://github.com/google/site-kit-wp/issues/4096).
+
+**Enhanced**
+
+* Remove chevron from date range select dropdown button in the header. See [#4377](https://github.com/google/site-kit-wp/issues/4377).
+* Show Idea Hub surveys after fewer Idea Hub interactions. See [#4368](https://github.com/google/site-kit-wp/issues/4368).
+* Update Unified Dashboard navigation chips to scroll to an area instead of relying on anchor targets. See [#4367](https://github.com/google/site-kit-wp/issues/4367).
+* Implement splash UI for activating Analytics as part of the initial setup flow. See [#4341](https://github.com/google/site-kit-wp/issues/4341).
+* Add title and subtitle to Widget Contexts for Unified Dashboard pages. See [#4340](https://github.com/google/site-kit-wp/issues/4340).
+* Update dashboard navigation to hide navigation chips for empty areas. See [#4289](https://github.com/google/site-kit-wp/issues/4289).
+* Add an error message for unknown pages to the Unified Dashboard. See [#4287](https://github.com/google/site-kit-wp/issues/4287).
+* Add a link to the Idea Hub CTA to jump to the Idea Hub widget. See [#4275](https://github.com/google/site-kit-wp/issues/4275).
+* Add entity header content area to the Unified Dashboard. See [#4146](https://github.com/google/site-kit-wp/issues/4146).
+* Update dashboard layout to hide sections that have no widgets. See [#4136](https://github.com/google/site-kit-wp/issues/4136).
+* Revise wording when no entity can be determined based on the given URL in the entity dashboard. See [#4097](https://github.com/google/site-kit-wp/issues/4097).
+* Implement Unified Dashboard tab bar with chip/pill links to widget areas. See [#4053](https://github.com/google/site-kit-wp/issues/4053).
+
+**Changed**
+
+* Remove HTML tags from report errors. Props oscarssanchez. See [#4169](https://github.com/google/site-kit-wp/issues/4169).
+
+**Fixed**
+
+* Update the frontend AdSense code to load asynchronously. See [#4398](https://github.com/google/site-kit-wp/issues/4398).
+* Fix missing monetization widgets on the Unified Dashboard issue. See [#4348](https://github.com/google/site-kit-wp/issues/4348).
+* Add unit characters to the Overall Page Metrics widget in the Unified Dashboard. See [#4312](https://github.com/google/site-kit-wp/issues/4312).
+* Fix missing Unique Visitors From Search sparkline issue for zero data state. See [#4237](https://github.com/google/site-kit-wp/issues/4237).
+* Update Tag Manager to pre-select account and containers only when the user has just one account. See [#4209](https://github.com/google/site-kit-wp/issues/4209).
+
+= 1.46.0 =
+
+**Enhanced**
+
+* Update WordPress dashboard widget and admin bar stats to display zero states for Search Console/Analytics only when the respective service is gathering data. See [#4270](https://github.com/google/site-kit-wp/issues/4270).
+* Update the Idea Hub widget to clear errors when switching tabs. See [#4207](https://github.com/google/site-kit-wp/issues/4207).
+* Hide individual module pages when the `unifiedDashboard` flag is enabled. See [#4134](https://github.com/google/site-kit-wp/issues/4134).
+* Update PageSpeed Insights to be active by default for new installs and remove CTAs. See [#4133](https://github.com/google/site-kit-wp/issues/4133).
+* Improve loading state for GA4 Analytics dropdown in settings. See [#4106](https://github.com/google/site-kit-wp/issues/4106).
+* Add a generic content area for the Header in the Unified Dashboard. See [#4050](https://github.com/google/site-kit-wp/issues/4050).
+* Add Entity search to Unified Dashboard Header. See [#4049](https://github.com/google/site-kit-wp/issues/4049).
+* Add the Optimize snippet notice to settings and setup forms. See [#3822](https://github.com/google/site-kit-wp/issues/3822).
+* Introduce a new filter that allows for persistent data to be deleted during reset. See [#3201](https://github.com/google/site-kit-wp/issues/3201).
+
+**Changed**
+
+* Implement the new `useInView` hook. See [#4120](https://github.com/google/site-kit-wp/issues/4120).
+
+**Fixed**
+
+* Fix issue with the Idea Hub notification banner that was blocked by the setup success banner. See [#4274](https://github.com/google/site-kit-wp/issues/4274).
+* Fix a potential conflict with `google` global when loading Google charts. See [#4074](https://github.com/google/site-kit-wp/issues/4074).
+* Fix extra padding around Search Console widgets. See [#4023](https://github.com/google/site-kit-wp/issues/4023).
+* Fix a bug that could cause the wrong module to show that it's being connected during module setup. See [#2796](https://github.com/google/site-kit-wp/issues/2796).
 
 = 1.45.0 =
 

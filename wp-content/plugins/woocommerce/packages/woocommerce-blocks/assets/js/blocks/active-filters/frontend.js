@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { withRestApiHydration } from '@woocommerce/block-hocs';
 import { renderFrontend } from '@woocommerce/base-utils';
 
 /**
@@ -16,11 +15,12 @@ const getProps = ( el ) => {
 			heading: el.dataset.heading,
 			headingLevel: el.dataset.headingLevel || 3,
 		},
+		isEditor: false,
 	};
 };
 
 renderFrontend( {
 	selector: '.wp-block-woocommerce-active-filters',
-	Block: withRestApiHydration( Block ),
+	Block,
 	getProps,
 } );

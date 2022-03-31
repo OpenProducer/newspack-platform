@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights;
 
 class PagespeedVersion extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $major;
+    /**
+     * @var string
+     */
     public $minor;
+    /**
+     * @param string
+     */
     public function setMajor($major)
     {
         $this->major = $major;
     }
+    /**
+     * @return string
+     */
     public function getMajor()
     {
         return $this->major;
     }
+    /**
+     * @param string
+     */
     public function setMinor($minor)
     {
         $this->minor = $minor;
     }
+    /**
+     * @return string
+     */
     public function getMinor()
     {
         return $this->minor;

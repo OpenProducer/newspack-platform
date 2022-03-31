@@ -2,7 +2,7 @@
 namespace Automattic\WooCommerce\Blocks\StoreApi\Schemas;
 
 use Automattic\WooCommerce\Blocks\Domain\Services\ExtendRestApi;
-
+use Automattic\WooCommerce\Blocks\StoreApi\Utilities\QuantityLimits;
 
 /**
  * ProductSchema class.
@@ -392,12 +392,6 @@ class ProductSchema extends AbstractSchema {
 				'context'     => [ 'view', 'edit' ],
 				'readonly'    => true,
 			],
-			'quantity_limit'      => [
-				'description' => __( 'The maximum quantity than can be added to the cart at once.', 'woocommerce' ),
-				'type'        => 'integer',
-				'context'     => [ 'view', 'edit' ],
-				'readonly'    => true,
-			],
 			'add_to_cart'         => [
 				'description' => __( 'Add to cart button parameters.', 'woocommerce' ),
 				'type'        => 'object',
@@ -421,6 +415,25 @@ class ProductSchema extends AbstractSchema {
 						'type'        => 'string',
 						'context'     => [ 'view', 'edit' ],
 						'readonly'    => true,
+					],
+					'minimum'     => [
+						'description' => __( 'The minimum quantity that can be added to the cart.', 'woocommerce' ),
+						'type'        => 'integer',
+						'context'     => [ 'view', 'edit' ],
+						'readonly'    => true,
+					],
+					'maximum'     => [
+						'description' => __( 'The maximum quantity that can be added to the cart.', 'woocommerce' ),
+						'type'        => 'integer',
+						'context'     => [ 'view', 'edit' ],
+						'readonly'    => true,
+					],
+					'multiple_of' => [
+						'description' => __( 'The amount that quantities increment by. Quantity must be an multiple of this value.', 'woocommerce' ),
+						'type'        => 'integer',
+						'context'     => [ 'view', 'edit' ],
+						'readonly'    => true,
+						'default'     => 1,
 					],
 				],
 			],
@@ -460,13 +473,13 @@ class ProductSchema extends AbstractSchema {
 			'is_on_backorder'     => 'onbackorder' === $product->get_stock_status(),
 			'low_stock_remaining' => $this->get_low_stock_remaining( $product ),
 			'sold_individually'   => $product->is_sold_individually(),
-			'quantity_limit'      => $this->get_product_quantity_limit( $product ),
-			'add_to_cart'         => (object) $this->prepare_html_response(
+			'add_to_cart'         => (object) array_merge(
 				[
-					'text'        => $product->add_to_cart_text(),
-					'description' => $product->add_to_cart_description(),
-					'url'         => $product->add_to_cart_url(),
-				]
+					'text'        => $this->prepare_html_response( $product->add_to_cart_text() ),
+					'description' => $this->prepare_html_response( $product->add_to_cart_description() ),
+					'url'         => $this->prepare_html_response( $product->add_to_cart_url() ),
+				],
+				( new QuantityLimits() )->get_add_to_cart_limits( $product )
 			),
 		];
 	}
@@ -513,24 +526,6 @@ class ProductSchema extends AbstractSchema {
 	}
 
 	/**
-	 * Get the quantity limit for an item in the cart.
-	 *
-	 * @param \WC_Product $product Product instance.
-	 * @return int
-	 */
-	protected function get_product_quantity_limit( \WC_Product $product ) {
-		$limits = [ 99 ];
-
-		if ( $product->is_sold_individually() ) {
-			$limits[] = 1;
-		} elseif ( ! $product->backorders_allowed() ) {
-			$limits[] = $this->get_remaining_stock( $product );
-		}
-
-		return apply_filters( 'woocommerce_store_api_product_quantity_limit', max( min( array_filter( $limits ) ), 1 ), $product );
-	}
-
-	/**
 	 * Returns true if the given attribute is valid.
 	 *
 	 * @param mixed $attribute Object or variable to check.
@@ -557,17 +552,15 @@ class ProductSchema extends AbstractSchema {
 	 * @returns array
 	 */
 	protected function get_variations( \WC_Product $product ) {
-		if ( ! $product->is_type( 'variable' ) ) {
-			return [];
-		}
-		global $wpdb;
-
-		$variation_ids = $product->get_visible_children();
+		$variation_ids = $product->is_type( 'variable' ) ? $product->get_visible_children() : [];
 
 		if ( ! count( $variation_ids ) ) {
 			return [];
 		}
 
+		/**
+		 * Gets default variation data which applies to all of this products variations.
+		 */
 		$attributes                  = array_filter( $product->get_attributes(), [ $this, 'filter_variation_attribute' ] );
 		$default_variation_meta_data = array_reduce(
 			$attributes,
@@ -581,22 +574,53 @@ class ProductSchema extends AbstractSchema {
 			},
 			[]
 		);
+		$default_variation_meta_keys = array_keys( $default_variation_meta_data );
 
-		// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
-		$variation_meta_data = $wpdb->get_results(
+		/**
+		 * Gets individual variation data from the database, using cache where possible.
+		 */
+		$cache_group   = 'product_variation_meta_data';
+		$cache_value   = wp_cache_get( $product->get_id(), $cache_group );
+		$last_modified = get_the_modified_date( 'U', $product->get_id() );
+
+		if ( false === $cache_value || $last_modified !== $cache_value['last_modified'] ) {
+			global $wpdb;
+			// phpcs:disable WordPress.DB.PreparedSQL.NotPrepared
+			$variation_meta_data = $wpdb->get_results(
+				"
+				SELECT post_id as variation_id, meta_key as attribute_key, meta_value as attribute_value
+				FROM {$wpdb->postmeta}
+				WHERE post_id IN (" . implode( ',', array_map( 'esc_sql', $variation_ids ) ) . ")
+				AND meta_key IN ('" . implode( "','", array_map( 'esc_sql', $default_variation_meta_keys ) ) . "')
 			"
-			SELECT post_id as variation_id, meta_key as attribute_key, meta_value as attribute_value
-			FROM {$wpdb->postmeta}
-			WHERE post_id IN (" . implode( ',', array_map( 'esc_sql', $variation_ids ) ) . ")
-			AND meta_key IN ('" . implode( "','", array_map( 'esc_sql', array_keys( $default_variation_meta_data ) ) ) . "')
-		"
-		);
-		// phpcs:enable
+			);
+			// phpcs:enable
 
+			wp_cache_set(
+				$product->get_id(),
+				[
+					'last_modified' => $last_modified,
+					'data'          => $variation_meta_data,
+				],
+				$cache_group
+			);
+		} else {
+			$variation_meta_data = $cache_value['data'];
+		}
+
+		/**
+		 * Merges and formats default variation data with individual variation data.
+		 */
 		$attributes_by_variation = array_reduce(
 			$variation_meta_data,
-			function( $values, $data ) {
-				$values[ $data->variation_id ][ $data->attribute_key ] = $data->attribute_value;
+			function( $values, $data ) use ( $default_variation_meta_keys ) {
+				// The query above only includes the keys of $default_variation_meta_data so we know all of the attributes
+				// being processed here apply to this product. However, we need an additional check here because the
+				// cache may have been primed elsewhere and include keys from other products.
+				// @see AbstractProductGrid::prime_product_variations.
+				if ( in_array( $data->attribute_key, $default_variation_meta_keys, true ) ) {
+					$values[ $data->variation_id ][ $data->attribute_key ] = $data->attribute_value;
+				}
 				return $values;
 			},
 			array_fill_keys( $variation_ids, [] )

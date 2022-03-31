@@ -21,6 +21,9 @@ class GoogleAnalyticsAdminV1alphaProvisionAccountTicketRequest extends \Google\S
 {
     protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAccount::class;
     protected $accountDataType = '';
+    /**
+     * @var string
+     */
     public $redirectUri;
     /**
      * @param GoogleAnalyticsAdminV1alphaAccount
@@ -36,10 +39,16 @@ class GoogleAnalyticsAdminV1alphaProvisionAccountTicketRequest extends \Google\S
     {
         return $this->account;
     }
+    /**
+     * @param string
+     */
     public function setRedirectUri($redirectUri)
     {
         $this->redirectUri = $redirectUri;
     }
+    /**
+     * @return string
+     */
     public function getRedirectUri()
     {
         return $this->redirectUri;

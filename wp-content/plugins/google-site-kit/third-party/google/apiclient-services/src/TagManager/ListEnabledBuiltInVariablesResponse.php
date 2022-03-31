@@ -22,6 +22,9 @@ class ListEnabledBuiltInVariablesResponse extends \Google\Site_Kit_Dependencies\
     protected $collection_key = 'builtInVariable';
     protected $builtInVariableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\BuiltInVariable::class;
     protected $builtInVariableDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param BuiltInVariable[]
@@ -37,10 +40,16 @@ class ListEnabledBuiltInVariablesResponse extends \Google\Site_Kit_Dependencies\
     {
         return $this->builtInVariable;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

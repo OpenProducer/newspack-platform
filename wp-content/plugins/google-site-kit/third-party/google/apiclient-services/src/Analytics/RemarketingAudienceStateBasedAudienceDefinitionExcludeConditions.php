@@ -19,20 +19,38 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 
 class RemarketingAudienceStateBasedAudienceDefinitionExcludeConditions extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $exclusionDuration;
+    /**
+     * @var string
+     */
     public $segment;
+    /**
+     * @param string
+     */
     public function setExclusionDuration($exclusionDuration)
     {
         $this->exclusionDuration = $exclusionDuration;
     }
+    /**
+     * @return string
+     */
     public function getExclusionDuration()
     {
         return $this->exclusionDuration;
     }
+    /**
+     * @param string
+     */
     public function setSegment($segment)
     {
         $this->segment = $segment;
     }
+    /**
+     * @return string
+     */
     public function getSegment()
     {
         return $this->segment;

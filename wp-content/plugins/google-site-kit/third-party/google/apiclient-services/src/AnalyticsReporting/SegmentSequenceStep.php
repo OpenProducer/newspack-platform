@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting;
 class SegmentSequenceStep extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'orFiltersForSegment';
+    /**
+     * @var string
+     */
     public $matchType;
     protected $orFiltersForSegmentType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\OrFiltersForSegment::class;
     protected $orFiltersForSegmentDataType = 'array';
+    /**
+     * @param string
+     */
     public function setMatchType($matchType)
     {
         $this->matchType = $matchType;
     }
+    /**
+     * @return string
+     */
     public function getMatchType()
     {
         return $this->matchType;

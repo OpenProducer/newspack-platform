@@ -19,11 +19,20 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Adsense;
 
 class AdUnitAdCode extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $adCode;
+    /**
+     * @param string
+     */
     public function setAdCode($adCode)
     {
         $this->adCode = $adCode;
     }
+    /**
+     * @return string
+     */
     public function getAdCode()
     {
         return $this->adCode;

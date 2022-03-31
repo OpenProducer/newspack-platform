@@ -15,6 +15,7 @@ use Google\Site_Kit\Core\Assets\Assets;
 use Google\Site_Kit\Core\Authentication\Authentication;
 use Google\Site_Kit\Core\Modules\Modules;
 use Google\Site_Kit\Core\Permissions\Permissions;
+use Google\Site_Kit\Core\Util\Feature_Flags;
 
 /**
  * Class managing admin screens.
@@ -107,11 +108,16 @@ final class Screens {
 			}
 		);
 
-		// Redirect dashboard to splash if no dashboard access (yet).
 		add_action(
 			'admin_page_access_denied',
 			function() {
+				// Redirect dashboard to splash if no dashboard access (yet).
 				$this->no_access_redirect_dashboard_to_splash();
+
+				// Redirect module pages to dashboard if unifiedDashboard is enabled.
+				if ( Feature_Flags::enabled( 'unifiedDashboard' ) ) {
+					$this->no_access_redirect_module_to_dashboard();
+				}
 			}
 		);
 
@@ -267,6 +273,41 @@ final class Screens {
 	}
 
 	/**
+	 * Redirects module pages to the dashboard or splash based on user capability.
+	 *
+	 * @since 1.69.0
+	 */
+	private function no_access_redirect_module_to_dashboard() {
+		global $plugin_page;
+
+		$legacy_module_pages = array(
+			self::PREFIX . 'module-adsense',
+			self::PREFIX . 'module-analytics',
+			self::PREFIX . 'module-search-console',
+		);
+
+		if ( ! in_array( $plugin_page, $legacy_module_pages, true ) ) {
+			return;
+		}
+
+		// Note: the use of add_query_arg is intentional below because it preserves
+		// the current query parameters in the URL.
+		if ( current_user_can( Permissions::VIEW_DASHBOARD ) ) {
+			wp_safe_redirect(
+				add_query_arg( 'page', self::PREFIX . 'dashboard' )
+			);
+			exit;
+		}
+
+		if ( current_user_can( Permissions::AUTHENTICATE ) ) {
+			wp_safe_redirect(
+				add_query_arg( 'page', self::PREFIX . 'splash' )
+			);
+			exit;
+		}
+	}
+
+	/**
 	 * Gets available admin screens.
 	 *
 	 * @since 1.0.0
@@ -296,6 +337,22 @@ final class Screens {
 							<?php
 						} else {
 							$setup_module_slug = $setup_slug && $reauth ? $setup_slug : '';
+
+							if ( $setup_module_slug ) {
+								$active_modules = $this->modules->get_active_modules();
+
+								if ( ! array_key_exists( $setup_module_slug, $active_modules ) ) {
+									try {
+										$module_details = $this->modules->get_module( $setup_module_slug );
+										/* translators: %s: The module name */
+										$message        = sprintf( __( 'The %s module cannot be set up as it has not been activated yet.', 'google-site-kit' ), $module_details->name );
+									} catch ( \Exception $e ) {
+										$message = $e->getMessage();
+									}
+
+									wp_die( sprintf( '<span class="googlesitekit-notice">%s</span>', esc_html( $message ) ), 403 );
+								}
+							}
 							?>
 							<div id="js-googlesitekit-dashboard" data-setup-module-slug="<?php echo esc_attr( $setup_module_slug ); ?>" class="googlesitekit-page"></div>
 							<?php

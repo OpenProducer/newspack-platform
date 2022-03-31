@@ -22,6 +22,9 @@ class GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse exte
     protected $collection_key = 'displayVideo360AdvertiserLinks';
     protected $displayVideo360AdvertiserLinksType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class;
     protected $displayVideo360AdvertiserLinksDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink[]
@@ -37,10 +40,16 @@ class GoogleAnalyticsAdminV1alphaListDisplayVideo360AdvertiserLinksResponse exte
     {
         return $this->displayVideo360AdvertiserLinks;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

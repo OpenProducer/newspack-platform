@@ -19,6 +19,9 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
 {
+    /**
+     * @var string
+     */
     public $caseConversionType;
     protected $convertFalseToValueType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
     protected $convertFalseToValueDataType = '';
@@ -28,10 +31,16 @@ class VariableFormatValue extends \Google\Site_Kit_Dependencies\Google\Model
     protected $convertTrueToValueDataType = '';
     protected $convertUndefinedToValueType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
     protected $convertUndefinedToValueDataType = '';
+    /**
+     * @param string
+     */
     public function setCaseConversionType($caseConversionType)
     {
         $this->caseConversionType = $caseConversionType;
     }
+    /**
+     * @return string
+     */
     public function getCaseConversionType()
     {
         return $this->caseConversionType;

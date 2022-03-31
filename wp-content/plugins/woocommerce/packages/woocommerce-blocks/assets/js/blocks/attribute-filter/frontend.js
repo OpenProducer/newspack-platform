@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { withRestApiHydration } from '@woocommerce/block-hocs';
 import { renderFrontend } from '@woocommerce/base-utils';
 
 /**
@@ -11,6 +10,7 @@ import Block from './block.js';
 
 const getProps = ( el ) => {
 	return {
+		isEditor: false,
 		attributes: {
 			attributeId: parseInt( el.dataset.attributeId || 0, 10 ),
 			showCounts: el.dataset.showCounts === 'true',
@@ -25,6 +25,6 @@ const getProps = ( el ) => {
 
 renderFrontend( {
 	selector: '.wp-block-woocommerce-attribute-filter',
-	Block: withRestApiHydration( Block ),
+	Block,
 	getProps,
 } );

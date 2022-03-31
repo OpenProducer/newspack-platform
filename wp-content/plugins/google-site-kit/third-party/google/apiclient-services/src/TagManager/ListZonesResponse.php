@@ -20,13 +20,22 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 class ListZonesResponse extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'zone';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     protected $zoneType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Zone::class;
     protected $zoneDataType = 'array';
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

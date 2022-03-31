@@ -22,6 +22,9 @@ class ListContainerVersionsResponse extends \Google\Site_Kit_Dependencies\Google
     protected $collection_key = 'containerVersionHeader';
     protected $containerVersionHeaderType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersionHeader::class;
     protected $containerVersionHeaderDataType = 'array';
+    /**
+     * @var string
+     */
     public $nextPageToken;
     /**
      * @param ContainerVersionHeader[]
@@ -37,10 +40,16 @@ class ListContainerVersionsResponse extends \Google\Site_Kit_Dependencies\Google
     {
         return $this->containerVersionHeader;
     }
+    /**
+     * @param string
+     */
     public function setNextPageToken($nextPageToken)
     {
         $this->nextPageToken = $nextPageToken;
     }
+    /**
+     * @return string
+     */
     public function getNextPageToken()
     {
         return $this->nextPageToken;

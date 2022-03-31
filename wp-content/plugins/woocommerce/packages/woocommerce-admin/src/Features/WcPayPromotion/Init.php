@@ -7,15 +7,15 @@ namespace Automattic\WooCommerce\Admin\Features\WcPayPromotion;
 
 defined( 'ABSPATH' ) || exit;
 
+use Automattic\WooCommerce\Admin\DataSourcePoller;
 use Automattic\WooCommerce\Admin\Loader;
-use Automattic\WooCommerce\Admin\PaymentPlugins;
 use Automattic\WooCommerce\Admin\Features\PaymentGatewaySuggestions\EvaluateSuggestion;
+use Automattic\WooCommerce\Admin\PaymentMethodSuggestionsDataSourcePoller;
 
 /**
  * WC Pay Promotion engine.
  */
 class Init {
-	const SPECS_TRANSIENT_NAME    = 'woocommerce_admin_payment_method_promotion_specs';
 	const EXPLAT_VARIATION_PREFIX = 'woocommerce_wc_pay_promotion_payment_methods_table_';
 
 	/**
@@ -25,9 +25,10 @@ class Init {
 		include_once __DIR__ . '/WCPaymentGatewayPreInstallWCPayPromotion.php';
 
 		add_action( 'change_locale', array( __CLASS__, 'delete_specs_transient' ) );
-		add_filter( PaymentPlugins::FILTER_NAME, array( __CLASS__, 'possibly_filter_recommended_payment_gateways' ) );
+		add_filter( DataSourcePoller::FILTER_NAME_SPECS, array( __CLASS__, 'possibly_filter_recommended_payment_gateways' ), 10, 2 );
 
-		if ( ! isset( $_GET['page'] ) || 'wc-settings' !== $_GET['page'] || ! isset( $_GET['tab'] ) || 'checkout' !== $_GET['tab'] ) { // phpcs:ignore WordPress.Security.NonceVerification
+		$is_payments_page = isset( $_GET['page'] ) && 'wc-settings' === $_GET['page'] && isset( $_GET['tab'] ) && 'checkout' === $_GET['tab']; // phpcs:ignore WordPress.Security.NonceVerification
+		if ( ! wp_is_json_request() && ! $is_payments_page ) {
 			return;
 		}
 
@@ -63,7 +64,7 @@ class Init {
 	 * @return array list of gateway classes.
 	 */
 	public static function possibly_register_pre_install_wc_pay_promotion_gateway( $gateways ) {
-		if ( self::should_register_pre_install_wc_pay_promoted_gateway() ) {
+		if ( self::can_show_promotion() && ! WCPaymentGatewayPreInstallWCPayPromotion::is_dismissed() ) {
 			$gateways[] = 'Automattic\WooCommerce\Admin\Features\WCPayPromotion\WCPaymentGatewayPreInstallWCPayPromotion';
 		}
 		return $gateways;
@@ -72,27 +73,28 @@ class Init {
 	/**
 	 * Possibly filters out woocommerce-payments from recommended payment methods.
 	 *
-	 * @param array $payment_methods list of payment methods.
+	 * @param array  $specs list of payment methods.
+	 * @param string $datasource_poller_id id of data source poller.
 	 * @return array list of payment method.
 	 */
-	public static function possibly_filter_recommended_payment_gateways( $payment_methods ) {
-		if ( self::should_register_pre_install_wc_pay_promoted_gateway() ) {
+	public static function possibly_filter_recommended_payment_gateways( $specs, $datasource_poller_id ) {
+		if ( PaymentMethodSuggestionsDataSourcePoller::ID === $datasource_poller_id && self::can_show_promotion() ) {
 			return array_filter(
-				$payment_methods,
-				function( $payment_method ) {
-					return 'woocommerce-payments' !== $payment_method['product'];
+				$specs,
+				function( $spec ) {
+					return 'woocommerce-payments' !== $spec->plugins[0];
 				}
 			);
 		}
-		return $payment_methods;
+		return $specs;
 	}
 
 	/**
-	 * Checks if promoted gateway should be registered.
+	 * Checks if promoted gateway can be registered.
 	 *
 	 * @return boolean if promoted gateway should be registered.
 	 */
-	public static function should_register_pre_install_wc_pay_promoted_gateway() {
+	public static function can_show_promotion() {
 		// Check if WC Pay is enabled.
 		if ( class_exists( '\WC_Payments' ) ) {
 			return false;
@@ -100,27 +102,15 @@ class Init {
 		if ( 'no' === get_option( 'woocommerce_show_marketplace_suggestions', 'yes' ) ) {
 			return false;
 		}
-		$wc_pay_spec = self::get_wc_pay_promotion_spec();
-
-		if ( ! $wc_pay_spec || ! isset( $wc_pay_spec->additional_info ) || ! isset( $wc_pay_spec->additional_info->experiment_version ) ) {
+		if ( ! apply_filters( 'woocommerce_allow_marketplace_suggestions', true ) ) {
 			return false;
 		}
 
-		$anon_id        = isset( $_COOKIE['tk_ai'] ) ? sanitize_text_field( wp_unslash( $_COOKIE['tk_ai'] ) ) : '';
-		$allow_tracking = 'yes' === get_option( 'woocommerce_allow_tracking' );
-		$abtest         = new \WooCommerce\Admin\Experimental_Abtest(
-			$anon_id,
-			'woocommerce',
-			$allow_tracking
-		);
-
-		$variation_name = $abtest->get_variation( self::EXPLAT_VARIATION_PREFIX . $wc_pay_spec->additional_info->experiment_version );
-
-		if ( 'treatment' === $variation_name ) {
-			return true;
+		$wc_pay_spec = self::get_wc_pay_promotion_spec();
+		if ( ! $wc_pay_spec ) {
+			return false;
 		}
-
-		return false;
+		return true;
 	}
 
 	/**
@@ -136,7 +126,7 @@ class Init {
 		$id       = WCPaymentGatewayPreInstallWCPayPromotion::GATEWAY_ID;
 		// Only tweak the ordering if the list hasn't been reordered with WooCommerce Payments in it already.
 		if ( ! isset( $ordering[ $id ] ) || ! is_numeric( $ordering[ $id ] ) ) {
-			$is_empty        = empty( $ordering ) || empty( $ordering[0] );
+			$is_empty        = empty( $ordering ) || ( 1 === count( $ordering ) && false === $ordering[0] );
 			$ordering[ $id ] = $is_empty ? 0 : ( min( $ordering ) - 1 );
 		}
 		return $ordering;
@@ -186,32 +176,17 @@ class Init {
 	 * Delete the specs transient.
 	 */
 	public static function delete_specs_transient() {
-		delete_transient( self::SPECS_TRANSIENT_NAME );
+		WcPayPromotionDataSourcePoller::get_instance()->delete_specs_transient();
 	}
 
 	/**
 	 * Get specs or fetch remotely if they don't exist.
 	 */
 	public static function get_specs() {
-		$specs = get_transient( self::SPECS_TRANSIENT_NAME );
-
-		// Fetch specs if they don't yet exist.
-		if ( false === $specs || ! is_array( $specs ) || 0 === count( $specs ) ) {
-			if ( 'no' === get_option( 'woocommerce_show_marketplace_suggestions', 'yes' ) ) {
-				return array();
-			}
-
-			$specs = DataSourcePoller::read_specs_from_data_sources();
-
-			// Fall back to default specs if polling failed.
-			if ( ! $specs ) {
-				return array();
-			}
-
-			set_transient( self::SPECS_TRANSIENT_NAME, $specs, 7 * DAY_IN_SECONDS );
+		if ( 'no' === get_option( 'woocommerce_show_marketplace_suggestions', 'yes' ) ) {
+			return array();
 		}
-
-		return $specs;
+		return WcPayPromotionDataSourcePoller::get_instance()->get_specs_from_data_sources();
 	}
 }
 

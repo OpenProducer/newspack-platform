@@ -22,6 +22,9 @@ class PivotHeader extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $collection_key = 'pivotHeaderEntries';
     protected $pivotHeaderEntriesType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\PivotHeaderEntry::class;
     protected $pivotHeaderEntriesDataType = 'array';
+    /**
+     * @var int
+     */
     public $totalPivotGroupsCount;
     /**
      * @param PivotHeaderEntry[]
@@ -37,10 +40,16 @@ class PivotHeader extends \Google\Site_Kit_Dependencies\Google\Collection
     {
         return $this->pivotHeaderEntries;
     }
+    /**
+     * @param int
+     */
     public function setTotalPivotGroupsCount($totalPivotGroupsCount)
     {
         $this->totalPivotGroupsCount = $totalPivotGroupsCount;
     }
+    /**
+     * @return int
+     */
     public function getTotalPivotGroupsCount()
     {
         return $this->totalPivotGroupsCount;

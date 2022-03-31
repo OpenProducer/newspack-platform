@@ -20,40 +20,76 @@ namespace Google\Site_Kit_Dependencies\Google\Service\Analytics;
 class AccountSummary extends \Google\Site_Kit_Dependencies\Google\Collection
 {
     protected $collection_key = 'webProperties';
+    /**
+     * @var string
+     */
     public $id;
+    /**
+     * @var string
+     */
     public $kind;
+    /**
+     * @var string
+     */
     public $name;
+    /**
+     * @var bool
+     */
     public $starred;
     protected $webPropertiesType = \Google\Site_Kit_Dependencies\Google\Service\Analytics\WebPropertySummary::class;
     protected $webPropertiesDataType = 'array';
+    /**
+     * @param string
+     */
     public function setId($id)
     {
         $this->id = $id;
     }
+    /**
+     * @return string
+     */
     public function getId()
     {
         return $this->id;
     }
+    /**
+     * @param string
+     */
     public function setKind($kind)
     {
         $this->kind = $kind;
     }
+    /**
+     * @return string
+     */
     public function getKind()
     {
         return $this->kind;
     }
+    /**
+     * @param string
+     */
     public function setName($name)
     {
         $this->name = $name;
     }
+    /**
+     * @return string
+     */
     public function getName()
     {
         return $this->name;
     }
+    /**
+     * @param bool
+     */
     public function setStarred($starred)
     {
         $this->starred = $starred;
     }
+    /**
+     * @return bool
+     */
     public function getStarred()
     {
         return $this->starred;
