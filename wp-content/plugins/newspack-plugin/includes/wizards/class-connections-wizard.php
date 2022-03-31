@@ -81,8 +81,8 @@ class Connections_Wizard extends Wizard {
 			'newspack_connections_data',
 			[
 				'can_connect_wpcom'    => WPCOM_OAuth::is_wpcom_configured(),
-				'can_connect_google'   => Google_OAuth::is_oauth_configured(),
-				'can_connect_fivetran' => Fivetran_Connection::is_fivetran_configured(),
+				'can_connect_google'   => OAuth::is_proxy_configured( 'google' ),
+				'can_connect_fivetran' => OAuth::is_proxy_configured( 'fivetran' ),
 			]
 		);
 		\wp_enqueue_script( 'newspack-connections-wizard' );

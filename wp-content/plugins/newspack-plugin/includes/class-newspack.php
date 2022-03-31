@@ -42,6 +42,7 @@ final class Newspack {
 		$this->includes();
 		add_action( 'admin_init', [ $this, 'admin_redirects' ] );
 		add_action( 'current_screen', [ $this, 'restrict_user_access' ] );
+		add_action( 'current_screen', [ $this, 'wizard_redirect' ] );
 		add_action( 'admin_menu', [ $this, 'handle_resets' ], 1 );
 		add_action( 'admin_menu', [ $this, 'remove_newspack_suite_plugin_links' ], 1 );
 		add_action( 'admin_notices', [ $this, 'remove_notifications' ], -9999 );
@@ -75,6 +76,8 @@ final class Newspack {
 	 * e.g. include_once NEWSPACK_ABSPATH . 'includes/foo.php';
 	 */
 	private function includes() {
+		include_once NEWSPACK_ABSPATH . 'includes/class-logger.php';
+
 		include_once NEWSPACK_ABSPATH . 'includes/util.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-plugin-manager.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-theme-manager.php';
@@ -84,11 +87,16 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
+		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-wpcom-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-services-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-mailchimp-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-fivetran-connection.php';
+
+		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-provider.php';
+		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-generated.php';
+		include_once NEWSPACK_ABSPATH . 'includes/starter_content/class-starter-content-wordpress.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-setup-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-dashboard.php';
@@ -105,7 +113,6 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-health-check-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-support-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-popups-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-updates-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-connections-wizard.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-wizards.php';
@@ -116,8 +123,8 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-pwa.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-starter-content.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-amp-enhancements.php';
-		include_once NEWSPACK_ABSPATH . 'includes/class-webhooks.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-newspack-image-credits.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-jetpack.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 
@@ -235,6 +242,33 @@ final class Newspack {
 				exit;
 			}
 			remove_menu_page( 'plugins.php' );
+		}
+	}
+
+	/**
+	 * Redirect "hidden" admin screens to the corresponding wizard screen.
+	 *
+	 * @param WP_Screen $current_screen Current WP_Screen object.
+	 */
+	public function wizard_redirect( $current_screen ) {
+		$post_type_mapping = [];
+
+		// Map custom post types to their wizard screen URLs.
+		if ( class_exists( '\Newspack_Popups' ) ) {
+			$post_type_mapping[ \Newspack_Popups::NEWSPACK_POPUPS_CPT ] = [
+				'base' => 'edit',
+				'url'  => esc_url( admin_url( 'admin.php?page=newspack-popups-wizard' ) ),
+			];
+		}
+
+		$current_screen_base = $current_screen->base;
+		$current_post_type   = $current_screen->post_type;
+		if (
+			in_array( $current_post_type, array_keys( $post_type_mapping ), true ) &&
+			$post_type_mapping[ $current_post_type ]['base'] === $current_screen_base
+		) {
+			wp_safe_redirect( $post_type_mapping[ $current_post_type ]['url'] );
+			exit;
 		}
 	}
 

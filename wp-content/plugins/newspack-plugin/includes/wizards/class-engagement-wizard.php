@@ -63,7 +63,7 @@ class Engagement_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Newsletters, social, commenting, UGC', 'newspack' );
+		return \esc_html__( 'Newsletters, commenting, social, recirculation', 'newspack' );
 	}
 
 	/**

@@ -2,7 +2,7 @@
 @import '../../shared/sass/mixins';
 @import '../../shared/sass/colors';
 
-.wp-block-newspack-blocks-carousel {
+.wpnbpc {
 	position: relative;
 	margin-top: 0;
 
@@ -80,6 +80,7 @@
 	.post-thumbnail {
 		margin: 0;
 		height: 100%;
+		width: 100%;
 		padding: 0;
 		position: relative;
 		a,
@@ -177,11 +178,11 @@
 		margin-top: -24px;
 	}
 	.swiper-button-prev::after,
-	.swiper-container-rtl .swiper-button-next::after {
+	.swiper-rtl .swiper-button-next::after {
 		content: none;
 	}
 	.swiper-button-next::after,
-	.swiper-container-rtl .swiper-button-prev::after {
+	.swiper-rtl .swiper-button-prev::after {
 		content: none;
 	}
 	.amp-carousel-button-next,
@@ -303,6 +304,31 @@
 		button {
 			display: none;
 			visibility: hidden;
+		}
+	}
+
+	&[data-slides-per-view='2'] article {
+		.entry-title {
+			@include media( tablet ) {
+				font-size: 1.4em;
+			}
+		}
+	}
+
+	&.slides-per-view-3 article,
+	&.slides-per-view-4 article {
+		.entry-title {
+			@include media( tablet ) {
+				font-size: 1.2em;
+			}
+			@include media( desktop ) {
+				font-size: 1em;
+			}
+		}
+		.entry-meta {
+			@include media( tablet ) {
+				font-size: 0.7em;
+			}
 		}
 	}
 }

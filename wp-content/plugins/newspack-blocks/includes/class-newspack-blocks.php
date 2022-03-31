@@ -25,6 +25,19 @@ class Newspack_Blocks {
 		add_filter( 'script_loader_tag', [ __CLASS__, 'mark_view_script_as_amp_plus_allowed' ], 10, 2 );
 		add_action( 'jetpack_register_gutenberg_extensions', [ __CLASS__, 'disable_jetpack_donate' ], 99 );
 		add_filter( 'the_content', [ __CLASS__, 'hide_post_content_when_iframe_block_is_fullscreen' ] );
+
+		/**
+		 * Disable NextGEN's `C_NextGen_Shortcode_Manager`.
+		 *
+		 * The way it currently parses `the_content` conflicts with the REST API
+		 * request to save a post containing a Homepage Posts block. This is due to
+		 * how it uses output buffering through `ob_start()` on REST requests.
+		 *
+		 * @link https://plugins.trac.wordpress.org/browser/nextgen-gallery/tags/3.23/non_pope/class.nextgen_shortcode_manager.php#L193.
+		 */
+		if ( ! defined( 'NGG_DISABLE_SHORTCODE_MANAGER' ) ) {
+			define( 'NGG_DISABLE_SHORTCODE_MANAGER', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
+		}
 	}
 
 	/**
@@ -109,6 +122,39 @@ class Newspack_Blocks {
 	}
 
 	/**
+	 * Possible mimes for iframe archive source file.
+	 */
+	public static function iframe_archive_accepted_file_mimes() {
+		return [ 'application/zip' => 'zip' ];
+	}
+
+	/**
+	 * Possible mimes for iframe document source file.
+	 */
+	public static function iframe_document_accepted_file_mimes() {
+		$mimes = get_allowed_mime_types();
+		return [
+			$mimes['pdf']             => 'pdf',
+			$mimes['doc']             => 'doc',
+			$mimes['docx']            => 'docx',
+			$mimes['xla|xls|xlt|xlw'] => 'xls',
+			$mimes['xlsx']            => 'xlsx',
+			$mimes['pot|pps|ppt']     => 'ppt',
+			$mimes['pptx']            => 'pptx',
+		];
+	}
+
+	/**
+	 * Possible mimes for iframe source file.
+	 */
+	public static function iframe_accepted_file_mimes() {
+		return array_merge(
+			array_values( self::iframe_archive_accepted_file_mimes() ),
+			array_values( self::iframe_document_accepted_file_mimes() )
+		);
+	}
+
+	/**
 	 * Enqueue block scripts and styles for editor.
 	 */
 	public static function enqueue_block_editor_assets() {
@@ -122,19 +168,29 @@ class Newspack_Blocks {
 				$script_data['version'],
 				true
 			);
+
+			$localized_data = [
+				'patterns'                       => self::get_patterns_for_post_type( get_post_type() ),
+				'posts_rest_url'                 => rest_url( 'newspack-blocks/v1/newspack-blocks-posts' ),
+				'specific_posts_rest_url'        => rest_url( 'newspack-blocks/v1/newspack-blocks-specific-posts' ),
+				'authors_rest_url'               => rest_url( 'newspack-blocks/v1/authors' ),
+				'assets_path'                    => plugins_url( '/src/assets', NEWSPACK_BLOCKS__PLUGIN_FILE ),
+				'post_subtitle'                  => get_theme_support( 'post-subtitle' ),
+				'is_rendering_streamlined_block' => self::is_rendering_streamlined_block(),
+				'streamlined_block_stripe_badge' => self::streamlined_block_stripe_badge(),
+				'iframe_accepted_file_mimes'     => self::iframe_accepted_file_mimes(),
+			];
+
+			if ( class_exists( 'WP_REST_Newspack_Author_List_Controller' ) ) {
+				$localized_data['can_use_cap']    = class_exists( 'CoAuthors_Guest_Authors' );
+				$author_list_controller           = new WP_REST_Newspack_Author_List_Controller();
+				$localized_data['editable_roles'] = $author_list_controller->get_editable_roles();
+			}
+
 			wp_localize_script(
 				'newspack-blocks-editor',
 				'newspack_blocks_data',
-				[
-					'patterns'                       => self::get_patterns_for_post_type( get_post_type() ),
-					'posts_rest_url'                 => rest_url( 'newspack-blocks/v1/newspack-blocks-posts' ),
-					'specific_posts_rest_url'        => rest_url( 'newspack-blocks/v1/newspack-blocks-specific-posts' ),
-					'authors_rest_url'               => rest_url( 'newspack-blocks/v1/authors' ),
-					'assets_path'                    => plugins_url( '/src/assets', NEWSPACK_BLOCKS__PLUGIN_FILE ),
-					'post_subtitle'                  => get_theme_support( 'post-subtitle' ),
-					'is_rendering_streamlined_block' => self::is_rendering_streamlined_block(),
-					'streamlined_block_stripe_badge' => self::streamlined_block_stripe_badge(),
-				]
+				$localized_data
 			);
 
 			wp_set_script_translations(
@@ -296,9 +352,6 @@ class Newspack_Blocks {
 	 * @return bool True if AMP, false otherwise.
 	 */
 	public static function is_amp() {
-		if ( class_exists( 'Newspack\AMP_Enhancements' ) && method_exists( 'Newspack\AMP_Enhancements', 'should_use_amp_plus' ) && Newspack\AMP_Enhancements::should_use_amp_plus( 'gam' ) ) {
-			return false;
-		}
 		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
 			return true;
 		}
@@ -1049,9 +1102,8 @@ class Newspack_Blocks {
 	 * Disable Jetpack's donate block when using Newspack donations.
 	 */
 	public static function disable_jetpack_donate() {
-
-		// Do nothing if Jetpack's blocks aren't being used.
-		if ( ! class_exists( 'Jetpack_Gutenberg' ) ) {
+		// Do nothing if Jetpack's blocks or Newspack aren't being used.
+		if ( ! class_exists( 'Jetpack_Gutenberg' ) || ! class_exists( 'Newspack' ) ) {
 			return;
 		}
 
@@ -1066,6 +1118,29 @@ class Newspack_Blocks {
 			'jetpack/donations',
 			esc_html__( 'Jetpack donations is disabled in favour of Newspack donations.', 'newspack-blocks' )
 		);
+	}
+
+	/**
+	 * Loads a template with given data in scope.
+	 *
+	 * @param string $template Name of the template to be included.
+	 * @param array  $data     Data to be passed into the template to be included.
+	 * @param string $path     (Optional) Path to the folder containing the template.
+	 * @return string
+	 */
+	public static function template_include( $template, $data = [], $path = NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/templates/' ) {
+		if ( ! strpos( $template, '.php' ) ) {
+			$template = $template . '.php';
+		}
+		$path .= $template;
+		if ( ! is_file( $path ) ) {
+			return '';
+		}
+		ob_start();
+		include $path;
+		$contents = ob_get_contents();
+		ob_end_clean();
+		return $contents;
 	}
 }
 Newspack_Blocks::init();

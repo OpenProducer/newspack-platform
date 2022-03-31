@@ -7,14 +7,12 @@
   display: block;
   font-size: 90%;
 }
-
 @media only screen and (min-width: 600px) {
   .trust-label {
     display: inline;
     margin-left: 1rem;
   }
 }
-
 .trust-label svg {
   margin-right: 0.1rem;
   position: relative;
@@ -24,7 +22,6 @@
 .single .cat-links {
   vertical-align: middle;
 }
-
 .single .cat-links .type-of-work {
   color: #111;
   margin-right: 0.5em;
@@ -36,7 +33,6 @@
   margin: 0 1rem 0.5rem 0;
   width: 100%;
 }
-
 .author-expanded-social-link svg {
   margin-right: 0.25rem;
 }
@@ -45,29 +41,24 @@
 .archive.author {
   /* Hide small Twitter icon, because a bigger one is present */
 }
-
 .archive.author .page-subtitle,
 .archive.author .page-title::before,
 .archive.author .author-meta {
   display: none;
 }
-
 .archive.author .author-job-title {
   display: block;
   margin-top: 0.25rem;
 }
-
 .archive.author .author-meta.trust-indicators {
   display: flex;
   flex-wrap: wrap;
 }
-
 .archive.author .author-social-links {
   border-left: none;
   margin-left: 0;
   padding-left: 0;
 }
-
 .archive.author .author-social-links .twitter {
   display: none;
 }
@@ -81,11 +72,9 @@
 .author-additional-info {
   width: 100%;
 }
-
 .author-additional-info h4 {
   margin-bottom: 0;
 }
-
 .author-additional-info p {
   margin-top: 0;
 }
@@ -96,7 +85,6 @@
 .featured-image-beside .trust-label:hover {
   color: inherit;
 }
-
 .featured-image-behind svg.trust-label__icon path,
 .featured-image-beside svg.trust-label__icon path {
   fill: inherit;
@@ -116,9 +104,11 @@
   .author-additional-info {
     width: 50%;
   }
+
   .author-expanded-social-link {
     width: inherit;
   }
+
   .archive.author .author-meta.trust-indicators .author-social-links {
     margin: 0 0 0.33rem;
   }

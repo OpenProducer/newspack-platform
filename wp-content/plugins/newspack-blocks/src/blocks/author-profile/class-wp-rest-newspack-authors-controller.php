@@ -66,11 +66,12 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_authors( $request ) {
-		$author_id = ! empty( $request->get_param( 'author_id' ) ) ? $request->get_param( 'author_id' ) : 0; // Fetch a specific user or guest author by ID.
-		$search    = ! empty( $request->get_param( 'search' ) ) ? $request->get_param( 'search' ) : null; // Fetch authors by search string.
-		$offset    = ! empty( $request->get_param( 'offset' ) ) ? $request->get_param( 'offset' ) : 0; // Offset results (for pagination).
-		$per_page  = ! empty( $request->get_param( 'per_page' ) ) ? $request->get_param( 'per_page' ) : 10; // Number of results to return per page. This is applied to each query, so the actual number of results returned may be up to 2x this number.
-		$fields    = ! empty( $request->get_param( 'fields' ) ) ? explode( ',', $request->get_param( 'fields' ) ) : [ 'id' ]; // Fields to get. Will return at least id.
+		$author_id           = ! empty( $request->get_param( 'authorId' ) ) ? $request->get_param( 'authorId' ) : 0; // Fetch a specific user or guest author by ID.
+		$search              = ! empty( $request->get_param( 'search' ) ) ? $request->get_param( 'search' ) : null; // Fetch authors by search string.
+		$offset              = ! empty( $request->get_param( 'offset' ) ) ? $request->get_param( 'offset' ) : 0; // Offset results (for pagination).
+		$per_page            = ! empty( $request->get_param( 'perPage' ) ) ? $request->get_param( 'perPage' ) : 10; // Number of results to return per page. This is applied to each query, so the actual number of results returned may be up to 2x this number.
+		$avatar_hide_default = ! empty( $request->get_param( 'avatarHideDefault' ) ) ? true : false; // Hide the default avatar if the user has no custom avatar.
+		$fields              = ! empty( $request->get_param( 'fields' ) ) ? explode( ',', $request->get_param( 'fields' ) ) : [ 'id' ]; // Fields to get. Will return at least id.
 
 		// Total number of users and guest authors.
 		$guest_author_total = 0;
@@ -90,12 +91,28 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 			$guest_author_args['p'] = $author_id;
 		}
 
-		$guest_authors      = new \WP_Query( $guest_author_args );
-		$guest_author_total = $guest_authors->found_posts;
+		$guest_authors      = get_posts( $guest_author_args );
+		$guest_author_total = count( $guest_authors );
+		$users              = []; // We'll only get standard WP users if no guest authors were found.
 
-		// Get standard WP users.
+		// If passed an author ID.
 		if ( $author_id ) {
-			$users = 0 === $guest_author_total ? [ get_user_by( 'id', $author_id ) ] : []; // If passed an author_id and we already found it as guest author, no need to run this query.
+			if ( 0 === $guest_author_total ) {
+				$user = get_user_by( 'id', $author_id ); // Get the WP user.
+
+				// We have a WP user, let's use it.
+				if ( $user ) {
+					// But wait, there's more! Let's see if this user is linked to a guest author.
+					$linked_guest_author = self::get_linked_guest_author( $user->user_login );
+
+					// If it is, let's use that instead.
+					if ( $linked_guest_author ) {
+						$guest_authors = [ $linked_guest_author ];
+					} else {
+						$users = [ $user ];
+					}
+				}
+			}
 		} else {
 			$user_args = [
 				'role__in' => [ 'Administrator', 'Editor', 'Author', 'Contributor' ],
@@ -118,8 +135,8 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 		// Format and combine results.
 		$combined_authors = array_merge(
 			array_reduce(
-				! empty( $guest_authors->posts ) ? $guest_authors->posts : [],
-				function( $acc, $guest_author ) use ( $fields ) {
+				! empty( $guest_authors ) ? $guest_authors : [],
+				function( $acc, $guest_author ) use ( $fields, $avatar_hide_default ) {
 					if ( $guest_author ) {
 						if ( class_exists( 'CoAuthors_Guest_Authors' ) ) {
 							$guest_author_data = [
@@ -147,7 +164,11 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 								}
 							}
 							if ( in_array( 'avatar', $fields, true ) && function_exists( 'coauthors_get_avatar' ) ) {
-								$guest_author_data['avatar'] = coauthors_get_avatar( $guest_author, 256 );
+								$avatar = coauthors_get_avatar( $guest_author, 256 );
+
+								if ( $avatar && ( false === strpos( $avatar, 'avatar-default' ) || ! $avatar_hide_default ) ) {
+									$guest_author_data['avatar'] = $avatar;
+								}
 							}
 							if ( in_array( 'url', $fields, true ) ) {
 								$guest_author_data['url'] = esc_urL(
@@ -167,7 +188,7 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 			),
 			array_reduce(
 				$users,
-				function( $acc, $user ) use ( $fields ) {
+				function( $acc, $user ) use ( $fields, $avatar_hide_default ) {
 					if ( $user ) {
 						$user_data = [
 							'id'         => intval( $user->data->ID ),
@@ -192,7 +213,11 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 							}
 						}
 						if ( in_array( 'avatar', $fields, true ) ) {
-							$user_data['avatar'] = get_avatar( $user->data->ID, 256 );
+							$avatar = get_avatar( $user->data->ID, 256 );
+
+							if ( $avatar && ( false === strpos( $avatar, 'avatar-default' ) || ! $avatar_hide_default ) ) {
+								$user_data['avatar'] = $avatar;
+							}
 						}
 						if ( in_array( 'url', $fields, true ) ) {
 							$user_data['url'] = esc_urL( get_author_posts_url( $user->data->ID ) );
@@ -221,6 +246,26 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 		$response->header( 'x-wp-total', $user_total + $guest_author_total );
 
 		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * Given a WP user login, get the linked guest author, if any.
+	 *
+	 * @param string $user_login WP user login name.
+	 *
+	 * @return WP_Post|boolean Linked guest author in post form, or false if none.
+	 */
+	public static function get_linked_guest_author( $user_login ) {
+		$linked_guest_authors = get_posts(
+			[
+				'post_type'      => 'guest-author',
+				'posts_per_page' => 1,
+				'meta_key'       => 'cap-linked_account', // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_key
+				'meta_value'     => $user_login, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+			]
+		);
+
+		return 0 < count( $linked_guest_authors ) ? reset( $linked_guest_authors ) : false;
 	}
 
 	/**

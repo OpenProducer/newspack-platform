@@ -2647,8 +2647,8 @@
       <complexType name="LineItem">
         <annotation>
           <documentation>
-            {@code LineItem} is an advertiser's commitment to purchase a specific number
-            of ad impressions, clicks, or time.
+            {@link LineItem} is an advertiser's commitment to purchase a specific number of ad impressions,
+            clicks, or time.
           </documentation>
         </annotation>
         <complexContent>
@@ -2657,8 +2657,7 @@
               <element maxOccurs="1" minOccurs="0" name="targeting" type="tns:Targeting">
                 <annotation>
                   <documentation>
-                    Contains the targeting criteria for the ad campaign. This attribute is
-                    required.
+                    Contains the targeting criteria for the ad campaign. This attribute is required.
                   </documentation>
                 </annotation>
               </element>
@@ -2668,10 +2667,10 @@
                   <documentation>
                     A list of {@link CreativeTargeting} objects that can be used to specify creative level
                     targeting for this line item. Creative level targeting is specified in a creative placeholder's
-                    {@link CreativePlaceholder#targetingName} field by referencing the creative targeting's
-                    {@link CreativeTargeting#name name}. It also needs to be re-specified in the
-                    {@link LineItemCreativeAssociation#targetingName} field when associating a line item with a
-                    creative that fits into that placeholder.
+                    {@link CreativePlaceholder#targetingName} field by referencing the creative targeting's {@link
+                    CreativeTargeting#name name}. It also needs to be re-specified in the {@link
+                    LineItemCreativeAssociation#targetingName} field when associating a line item with a creative
+                    that fits into that placeholder.
                   </documentation>
                 </annotation>
               </element>
@@ -4353,7 +4352,6 @@
               <documentation>
                 The marketplace info if this proposal line item is programmatic, null otherwise.
                 &lt;span class="constraint Applicable"&gt;This attribute is applicable when:&lt;ul&gt;&lt;li&gt;using programmatic guaranteed, using sales management.&lt;/li&gt;&lt;li&gt;using programmatic guaranteed, not using sales management.&lt;/li&gt;&lt;/ul&gt;&lt;/span&gt;
-                &lt;span class="constraint Required"&gt;This attribute is required when:&lt;ul&gt;&lt;li&gt;using programmatic guaranteed, using sales management.&lt;/li&gt;&lt;li&gt;using programmatic guaranteed, not using sales management.&lt;/li&gt;&lt;/ul&gt;&lt;/span&gt;
               </documentation>
             </annotation>
           </element>
@@ -4462,9 +4460,11 @@
               <documentation>
                 The {@link AdExchangeEnvironment} of the marketplace web property that is associated with this
                 line item.
-                This is only for {@link ProposalLineItem proposal line items} with a corresponding deal in
-                Marketplace.
-                &lt;span class="constraint Required"&gt;This attribute is required.&lt;/span&gt;
+                
+                &lt;p&gt;The last API version in which this field will be available is v202105. Starting with
+                v202108, this field will no longer be available. To control which platforms your proposal line
+                item will serve on from v202108 onward, please use request platform targeting in the targeting
+                expression.
               </documentation>
             </annotation>
           </element>
@@ -6932,7 +6932,7 @@
           <enumeration value="CONTENT_PROVIDER_NETWORK_MISSING_PUBLISHER_FEATURE">
             <annotation>
               <documentation>
-                The cross-sell content provider publisher feature must be enabled on the partner's network.
+                The cross-sell publisher features must be enabled on the partner's network.
               </documentation>
             </annotation>
           </enumeration>
@@ -9903,8 +9903,7 @@
           <enumeration value="STANDARD">
             <annotation>
               <documentation>
-                The type of {@link LineItem} for which a fixed quantity of impressions or
-                clicks are reserved.
+                The type of {@link LineItem} for which a fixed quantity of impressions or clicks are reserved.
               </documentation>
             </annotation>
           </enumeration>
@@ -11804,9 +11803,27 @@
               </documentation>
             </annotation>
           </enumeration>
-          <enumeration value="NONE"/>
-          <enumeration value="KANTAR_MILLWARD_BROWN"/>
-          <enumeration value="DYNATA"/>
+          <enumeration value="NONE">
+            <annotation>
+              <documentation>
+                Indicates there's no third-party brand lift integration partner.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="KANTAR_MILLWARD_BROWN">
+            <annotation>
+              <documentation>
+                Indicates third-party brand lift integration partner Kantar.
+              </documentation>
+            </annotation>
+          </enumeration>
+          <enumeration value="DYNATA">
+            <annotation>
+              <documentation>
+                Indicates third-party brand lift integration partner Dynata.
+              </documentation>
+            </annotation>
+          </enumeration>
         </restriction>
       </simpleType>
       <simpleType name="ThirdPartyReachIntegrationPartner">

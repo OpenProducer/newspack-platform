@@ -36,6 +36,7 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 			if ( 0 === response.length ) {
 				setError(
 					sprintf(
+						// Translators: An id of a popup.
 						__(
 							'No active prompts found with ID %s. Try choosing another prompt.',
 							'newspack-popups'
@@ -52,6 +53,7 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 			setError(
 				e.message ||
 					sprintf(
+						// Translators: An id of a popup.
 						__( 'There was an error fetching prompt with ID %s.', 'newspack-popups' ),
 						promptId
 					)
@@ -60,17 +62,17 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 		}
 	};
 
-	useEffect(() => {
+	useEffect( () => {
 		if ( promptId ) {
 			getPrompt();
 		}
-	}, [ promptId ]);
+	}, [ promptId ] );
 
 	if ( ! loading && promptId && prompt ) {
 		return (
 			<div className="newspack-popups__single-prompt">
 				<h4 className="newspack-popups__single-prompt-title">
-					{ prompt.title || __( '(no title)', 'newspack-popups' ) }{' '}
+					{ prompt.title || __( '(no title)', 'newspack-popups' ) }{ ' ' }
 					<ExternalLink href={ `/wp-admin/post.php?post=${ promptId }&action=edit` }>
 						{ __( 'edit', 'newspack-popups' ) }
 					</ExternalLink>
@@ -100,7 +102,11 @@ export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 		>
 			{ loading && (
 				<div className="is-loading">
-					{ sprintf( __( 'Loading prompt with ID %s...', 'newspack-popups' ), promptId ) }
+					{ sprintf(
+						// Translators: An id of a popup.
+						__( 'Loading prompt with ID %s…', 'newspack-popups' ),
+						promptId
+					) }
 					<Spinner />
 				</div>
 			) }

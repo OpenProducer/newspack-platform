@@ -455,7 +455,7 @@ amp-script .wpnbha {
 	&.ts-9,
 	&.ts-8 {
 		.entry-title {
-			line-height: 1.1em;
+			line-height: 1.1;
 		}
 		@include media( tablet ) {
 			article .avatar {
@@ -736,7 +736,7 @@ amp-script .wpnbha {
 	&--in-homepage-block {
 		margin-top: 0.3em;
 		margin-bottom: 0;
-		line-height: 1.4em;
+		line-height: 1.4;
 		font-style: italic;
 	}
 }

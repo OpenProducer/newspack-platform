@@ -1,100 +1,35 @@
-(function(e, a) { for(var i in a) e[i] = a[i]; }(window, /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./newspack-theme/js/src/amp-plus.js");
-/******/ })
-/************************************************************************/
-/******/ ({
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (function() { // webpackBootstrap
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./newspack-theme/js/src/amp-plus.js":
 /*!*******************************************!*\
   !*** ./newspack-theme/js/src/amp-plus.js ***!
   \*******************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function() {
 
-eval("/**\n * Sticky header & sticky ad handling.\n *\n * If the site uses sticky header and a sticky ad, the ad should\n * be offset by the header height in order to stack the sticky\n * elements on top of each other.\n */\nvar stickyAd = document.querySelector('.h-stk .stick-to-top:last-child');\nvar siteHeader = document.querySelector('.h-stk .site-header');\n\nif (stickyAd && siteHeader) {\n  stickyAd.style.top = \"calc(\".concat(siteHeader.offsetHeight, \"px + 1rem)\");\n}\n\n//# sourceURL=webpack:///./newspack-theme/js/src/amp-plus.js?");
+eval("/**\n * Sticky header & sticky ad handling.\n *\n * If the site uses sticky header and a sticky ad, the ad should\n * be offset by the header height in order to stack the sticky\n * elements on top of each other.\n */\n(function () {\n  const stickyAd = document.querySelector('.h-stk .stick-to-top:last-child');\n  const siteHeader = document.querySelector('.h-stk .site-header');\n\n  if (stickyAd && siteHeader) {\n    stickyAd.style.top = `calc(${siteHeader.offsetHeight}px + 1rem)`;\n  }\n})(); // AMP sticky ad polyfills.\n\n\n(function () {\n  const body = document.body;\n  const stickyAdClose = document.querySelector('.newspack_sticky_ad__close');\n  const stickyAd = document.querySelector('.newspack_global_ad.sticky');\n\n  if (stickyAdClose && stickyAd) {\n    window.googletag = window.googletag || {\n      cmd: []\n    };\n    window.googletag.cmd.push(function () {\n      const initialBodyPadding = body.style.paddingBottom; // Add padding to body to accommodate the sticky ad.\n\n      window.googletag.pubads().addEventListener('slotRenderEnded', event => {\n        const renderedSlotId = event.slot.getSlotElementId();\n        const stickyAdSlot = stickyAd.querySelector('#' + renderedSlotId);\n\n        if (stickyAdSlot && body.clientWidth <= 600) {\n          stickyAd.style.display = 'flex';\n          body.style.paddingBottom = stickyAd.clientHeight + 'px';\n        }\n      });\n      stickyAdClose.addEventListener('click', () => {\n        stickyAd.parentElement.removeChild(stickyAd); // Reset body padding.\n\n        body.style.paddingBottom = initialBodyPadding;\n      });\n    });\n  }\n})();\n\n//# sourceURL=webpack://newspack/./newspack-theme/js/src/amp-plus.js?");
 
 /***/ })
 
-/******/ })));
+/******/ 	});
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = {};
+/******/ 	__webpack_modules__["./newspack-theme/js/src/amp-plus.js"]();
+/******/ 	var __webpack_export_target__ = window;
+/******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
+/******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
+/******/ 	
+/******/ })()
+;

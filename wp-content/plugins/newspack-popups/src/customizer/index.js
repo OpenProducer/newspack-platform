@@ -23,8 +23,8 @@ const resetCIDCookie = () => {
 	}
 };
 
-( function() {
-	wp.customize.bind( 'ready', function() {
+( function () {
+	wp.customize.bind( 'ready', function () {
 		resetCIDCookie();
 	} );
 } )( jQuery );

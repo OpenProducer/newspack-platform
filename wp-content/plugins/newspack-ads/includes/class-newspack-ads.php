@@ -69,10 +69,24 @@ final class Newspack_Ads {
 	 * e.g. include_once NEWSPACK_ADS_ABSPATH . 'includes/foo.php';
 	 */
 	private function includes() {
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/interface-newspack-ads-provider.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/class-newspack-ads-provider.php';
+		require_once NEWSPACK_ADS_ABSPATH . '/includes/providers/broadstreet/class-newspack-ads-broadstreet-provider.php';
+		require_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-newspack-ads-gam-provider.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-newspack-ads-gam.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-settings.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-custom-label.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-providers.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-bidding.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/bidders/class-newspack-ads-bidder-medianet.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/bidders/class-newspack-ads-bidder-openx.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/bidders/class-newspack-ads-bidder-pubmatic.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/bidders/class-newspack-ads-bidder-sovrn.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-bidding-gam.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-placements.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-sidebar-placements.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-scaip.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-blocks.php';
-		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-gam.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-model.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-newspack-ads-widget.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/suppress-ads.php';

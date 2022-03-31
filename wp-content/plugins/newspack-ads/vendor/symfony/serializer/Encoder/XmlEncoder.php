@@ -111,7 +111,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
     public function decode(string $data, string $format, array $context = [])
     {
         if ('' === trim($data)) {
-            throw new NotEncodableValueException('Invalid XML data, it can not be empty.');
+            throw new NotEncodableValueException('Invalid XML data, it cannot be empty.');
         }
 
         $internalErrors = libxml_use_internal_errors(true);
@@ -250,7 +250,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
     final protected function isElementNameValid(string $name): bool
     {
         return $name &&
-            false === strpos($name, ' ') &&
+            !str_contains($name, ' ') &&
             preg_match('#^[\pL_][\pL0-9._:-]*$#ui', $name);
     }
 
@@ -376,7 +376,7 @@ class XmlEncoder implements EncoderInterface, DecoderInterface, NormalizationAwa
         if (\is_array($data) || ($data instanceof \Traversable && (null === $this->serializer || !$this->serializer->supportsNormalization($data, $this->format)))) {
             foreach ($data as $key => $data) {
                 //Ah this is the magic @ attribute types.
-                if (0 === strpos($key, '@') && $this->isElementNameValid($attributeName = substr($key, 1))) {
+                if (str_starts_with($key, '@') && $this->isElementNameValid($attributeName = substr($key, 1))) {
                     if (!is_scalar($data)) {
                         $data = $this->serializer->normalize($data, $this->format, $this->context);
                     }

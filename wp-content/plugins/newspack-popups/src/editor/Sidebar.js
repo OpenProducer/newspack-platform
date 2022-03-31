@@ -26,22 +26,24 @@ import { without } from 'lodash';
 import { isCustomPlacement, getPlacementHelpMessage } from '../editor/utils';
 import PositionPlacementControl from './PositionPlacementControl';
 
-const Sidebar = ( {
-	display_title,
-	hide_border,
-	frequency,
-	onMetaFieldChange,
-	placement,
-	overlay_size,
-	trigger_scroll_progress,
-	archive_insertion_posts_count,
-	archive_insertion_is_repeating,
-	trigger_delay,
-	trigger_type,
-	isOverlay,
-	isInlinePlacement,
-	archive_page_types = [],
-} ) => {
+const Sidebar = props => {
+	const {
+		display_title,
+		hide_border,
+		frequency,
+		onMetaFieldChange,
+		placement,
+		overlay_size,
+		trigger_type,
+		trigger_delay,
+		trigger_scroll_progress,
+		trigger_blocks_count,
+		archive_insertion_posts_count,
+		archive_insertion_is_repeating,
+		isOverlay,
+		isInlinePlacement,
+		archive_page_types = [],
+	} = props;
 	const updatePlacement = value => {
 		onMetaFieldChange( 'placement', value );
 		if ( ! isInlinePlacement( value ) && frequency === 'always' ) {
@@ -74,6 +76,8 @@ const Sidebar = ( {
 	const popupSizeOptions = window.newspack_popups_data?.popup_size_options || {};
 	const availableArchivePageTypes = window.newspack_popups_data?.available_archive_page_types || [];
 
+	const helpMessage = getPlacementHelpMessage( props );
+
 	return (
 		<>
 			<RadioControl
@@ -97,7 +101,7 @@ const Sidebar = ( {
 					<PositionPlacementControl
 						layout={ placement }
 						label={ __( 'Position', 'newspack-popups' ) }
-						help={ getPlacementHelpMessage( placement, trigger_scroll_progress ) }
+						help={ helpMessage }
 						value={ placement }
 						onChange={ updatePlacement }
 						size={ overlay_size }
@@ -106,7 +110,7 @@ const Sidebar = ( {
 			) : (
 				<SelectControl
 					label={ __( 'Placement' ) }
-					help={ getPlacementHelpMessage( placement, trigger_scroll_progress ) }
+					help={ helpMessage }
 					value={ placement }
 					onChange={ updatePlacement }
 					options={ [
@@ -128,7 +132,7 @@ const Sidebar = ( {
 					<SelectControl
 						label={ __( 'Trigger', 'newspack-popups' ) }
 						help={ __( 'The event to trigger the prompt.', 'newspack-popups' ) }
-						selected={ trigger_type }
+						value={ trigger_type }
 						options={ [
 							{ label: __( 'Timer', 'newspack-popups' ), value: 'time' },
 							{ label: __( 'Scroll Progress', 'newspack-popups' ), value: 'scroll' },
@@ -156,13 +160,35 @@ const Sidebar = ( {
 				</>
 			) }
 			{ placement === 'inline' && (
-				<RangeControl
-					label={ __( 'Approximate Position (in percent)', 'newspack-popups' ) }
-					value={ trigger_scroll_progress }
-					onChange={ value => onMetaFieldChange( 'trigger_scroll_progress', value ) }
-					min={ 0 }
-					max={ 100 }
-				/>
+				<>
+					<SelectControl
+						label={ __( 'Insertion position', 'newspack-popups' ) }
+						help={ __( 'The position at which to insert the prompt.', 'newspack-popups' ) }
+						value={ trigger_type }
+						options={ [
+							{ label: __( 'Percentage', 'newspack-popups' ), value: 'scroll' },
+							{ label: __( 'Blocks Count', 'newspack-popups' ), value: 'blocks_count' },
+						] }
+						onChange={ value => onMetaFieldChange( 'trigger_type', value ) }
+					/>
+					{ 'scroll' === trigger_type && (
+						<RangeControl
+							label={ __( 'Approximate Position (in percent)', 'newspack-popups' ) }
+							value={ trigger_scroll_progress }
+							onChange={ value => onMetaFieldChange( 'trigger_scroll_progress', value ) }
+							min={ 0 }
+							max={ 100 }
+						/>
+					) }
+					{ 'blocks_count' === trigger_type && (
+						<RangeControl
+							label={ __( 'Number of blocks before the prompt', 'newspack-popups' ) }
+							value={ trigger_blocks_count }
+							onChange={ value => onMetaFieldChange( 'trigger_blocks_count', value ) }
+							min={ 0 }
+						/>
+					) }
+				</>
 			) }
 			{ placement === 'archives' && (
 				<Fragment>

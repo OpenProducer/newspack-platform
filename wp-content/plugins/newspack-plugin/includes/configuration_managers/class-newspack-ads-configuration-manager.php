@@ -152,6 +152,17 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Get GAM available networks.
+	 *
+	 * @return bool | WP_Error Returns object, or error if the plugin is not active.
+	 */
+	public function get_gam_available_networks() {
+		return $this->is_configured() ?
+			\Newspack_Ads_Model::get_gam_available_networks() :
+			$this->unconfigured_error();
+	}
+
+	/**
 	 * Get ad suppression config.
 	 *
 	 * @return bool | WP_Error Returns object, or error if the plugin is not active.
@@ -172,15 +183,6 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 		return $this->is_configured() ?
 			\Newspack_Ads_Model::update_suppression_config( $config ) :
 			$this->unconfigured_error();
-	}
-
-	/**
-	 * Check whether the current screen should show ads.
-	 *
-	 * @return bool Returns true if ads should be shown.
-	 */
-	public function should_show_ads() {
-		return $this->is_configured() && function_exists( 'newspack_ads_should_show_ads' ) ? newspack_ads_should_show_ads() : false;
 	}
 
 	/**

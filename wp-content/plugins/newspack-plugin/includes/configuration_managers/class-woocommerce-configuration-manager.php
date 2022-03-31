@@ -54,8 +54,12 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 		if ( ! function_exists( 'WC' ) ) {
 			return [];
 		}
-		$countries     = WC()->countries->get_countries();
-		$states        = WC()->countries->get_states();
+		$wc_countries = WC()->countries;
+		if ( null == $wc_countries ) {
+			return [];
+		}
+		$countries     = $wc_countries->get_countries();
+		$states        = $wc_countries->get_states();
 		$location_info = [];
 		foreach ( $countries as $country_code => $country ) {
 			if ( ! empty( $states[ $country_code ] ) ) {
@@ -106,23 +110,28 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 * @return Array Array of data.
 	 */
 	public function location_data() {
+		$default = [
+			'countrystate' => '',
+			'address1'     => '',
+			'address2'     => '',
+			'city'         => '',
+			'postcode'     => '',
+			'currency'     => '',
+		];
 		if ( ! function_exists( 'WC' ) ) {
-			return [
-				'countrystate' => '',
-				'address1'     => '',
-				'address2'     => '',
-				'city'         => '',
-				'postcode'     => '',
-				'currency'     => '',
-			];
+			return $default;
+		}
+		$wc_countries = WC()->countries;
+		if ( null == $wc_countries ) {
+			return $default;
 		}
 		$countrystate_raw = wc_get_base_location();
 		return [
 			'countrystate' => ( empty( $countrystate_raw['state'] ) || '*' === $countrystate_raw['state'] ) ? $countrystate_raw['country'] : $countrystate_raw['country'] . ':' . $countrystate_raw['state'],
-			'address1'     => WC()->countries->get_base_address(),
-			'address2'     => WC()->countries->get_base_address_2(),
-			'city'         => WC()->countries->get_base_city(),
-			'postcode'     => WC()->countries->get_base_postcode(),
+			'address1'     => $wc_countries->get_base_address(),
+			'address2'     => $wc_countries->get_base_address_2(),
+			'city'         => $wc_countries->get_base_city(),
+			'postcode'     => $wc_countries->get_base_postcode(),
 			'currency'     => get_woocommerce_currency(),
 		];
 	}

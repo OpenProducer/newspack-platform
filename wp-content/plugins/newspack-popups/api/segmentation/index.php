@@ -15,5 +15,7 @@ switch ( $_SERVER['REQUEST_METHOD'] ) { //phpcs:ignore
 		include './class-segmentation-client-data.php';
 		break;
 	default:
+		header( 'HTTP/1.0 404 Not Found' );
+		header( 'Content-Type: application/json' );
 		die( "{ error: 'unsupported_method' }" );
 }

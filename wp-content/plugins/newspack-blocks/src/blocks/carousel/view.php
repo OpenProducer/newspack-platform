@@ -23,12 +23,14 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	$autoplay = isset( $attributes['autoplay'] ) ? $attributes['autoplay'] : false;
 	$delay    = isset( $attributes['delay'] ) ? absint( $attributes['delay'] ) : 3;
 	$authors  = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
-	$is_amp   = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+	$is_amp   = Newspack_Blocks::is_amp();
 
 	$other = array();
 	if ( $autoplay ) {
 		$other[] = 'wp-block-newspack-blocks-carousel__autoplay-playing';
 	}
+	$other[] = 'slides-per-view-' . $attributes['slidesPerView'];
+	$other[] = 'wpnbpc';
 	$classes = Newspack_Blocks::block_classes( 'carousel', $attributes, $other );
 
 	$article_query = new WP_Query( Newspack_Blocks::build_articles_query( $attributes, apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/carousel' ) ) );
@@ -252,21 +254,23 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	$slides_to_show  = $slides_per_view <= $counter ? $slides_per_view : $counter;
 
 	if ( $is_amp ) {
-		$selector    = sprintf(
+		$selector = sprintf(
 			'<amp-selector id="wp-block-newspack-carousel__amp-pagination__%1$d" class="swiper-pagination-bullets amp-pagination" on="select:wp-block-newspack-carousel__amp-carousel__%1$d.goToSlide(index=event.targetOption)" layout="container" %2$s>%3$s</amp-selector>',
 			absint( $newspack_blocks_carousel_id ),
 			$attributes['hideControls'] ? 'aria-hidden="true"' : '',
 			implode( '', $buttons )
 		);
+
 		$carousel    = sprintf(
-			'<amp-base-carousel class="wp-block-newspack-carousel__amp-carousel" width="%1$s" height="%2$s" layout="responsive" snap="true" type="slides" data-next-button-aria-label="%3$s" data-prev-button-aria-label="%4$s" controls loop %5$s id="wp-block-newspack-carousel__amp-carousel__%6$s" on="slideChange:wp-block-newspack-carousel__amp-pagination__%6$s.toggle(index=event.index, value=true)" advance-count="1" visible-count="%7$s">%8$s</amp-base-carousel>',
+			'<amp-base-carousel class="wp-block-newspack-carousel__amp-carousel" width="%1$s" height="%2$s" heights="%3$s" layout="responsive" snap="true" data-next-button-aria-label="%4$s" data-prev-button-aria-label="%5$s" controls="auto" loop="true" %6$s id="wp-block-newspack-carousel__amp-carousel__%7$s" on="slideChange:wp-block-newspack-carousel__amp-pagination__%7$s.toggle(index=event.index, value=true)" advance-count="1" visible-count="%8$s">%9$s</amp-base-carousel>',
 			$attributes['slidesPerView'] * 1,
 			$attributes['aspectRatio'],
+			'(min-width: 1168px) ' . ( $attributes['aspectRatio'] / $slides_to_show * 100 ) . '% !important, (min-width: 782px) ' . ( $slides_to_show > 1 ? ( $attributes['aspectRatio'] / 2 * 100 ) . '% !important' : ( $attributes['aspectRatio'] * 100 ) . '% !important' ) . ', ' . ( $attributes['aspectRatio'] * 100 ) . '% !important',
 			esc_attr__( 'Next Slide', 'newspack-blocks' ),
 			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
 			$autoplay ? 'auto-advance="true" auto-advance-interval=' . esc_attr( $delay * 1000 ) : '',
 			absint( $newspack_blocks_carousel_id ),
-			'(min-width: 600px) ' . $slides_to_show . ', ' . ( $slides_to_show > 1 ? 2 : 1 ),
+			'(min-width: 1168px) ' . $slides_to_show . ', (min-width: 782px) ' . ( $slides_to_show > 1 ? 2 : 1 ) . ', ' . 1,
 			$slides
 		);
 		$autoplay_ui = $autoplay ? newspack_blocks_carousel_block_autoplay_ui_amp( $newspack_blocks_carousel_id ) : '';
@@ -283,7 +287,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			$attributes['hideControls'] ? 'aria-hidden="true"' : ''
 		);
 		$carousel    = sprintf(
-			'<div class="swiper-container"><div class="swiper-wrapper">%s</div>%s</div>',
+			'<div class="swiper"><div class="swiper-wrapper">%s</div>%s</div>',
 			$slides,
 			$navigation
 		);

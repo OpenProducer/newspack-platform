@@ -18,12 +18,12 @@ const EditorAdditions = () => {
 	const { dismiss_text, dismiss_text_alignment, background_color, overlay_size, placement } = meta;
 
 	// Update editor colors to match popup colors.
-	useEffect(() => {
+	useEffect( () => {
 		updateEditorColors( background_color );
-	}, [ background_color ]);
+	}, [ background_color ] );
 
 	// Render a preview of the dismiss button at the end of the block content area.
-	useEffect(() => {
+	useEffect( () => {
 		let dismissButtonPreview = document.querySelector(
 			'.newspack-popups__not-interested-button-preview'
 		);
@@ -53,10 +53,10 @@ const EditorAdditions = () => {
 				'newspack-popups__not-interested-button-preview wp-block ' + alignClass;
 			dismissButtonPreview.textContent = dismiss_text;
 		}
-	}, [ dismiss_text, dismiss_text_alignment ]);
+	}, [ dismiss_text, dismiss_text_alignment ] );
 
 	// Setting editor size as per the popup size.
-	useEffect(() => {
+	useEffect( () => {
 		const blockEditor = document.querySelector( '.block-editor-block-list__layout' );
 		if ( blockEditor ) {
 			blockEditor.classList.forEach( className => {
@@ -69,7 +69,7 @@ const EditorAdditions = () => {
 				blockEditor.classList.add( `is-size-${ overlay_size }` );
 			}
 		}
-	}, [ overlay_size, placement ]);
+	}, [ overlay_size, placement ] );
 	return null;
 };
 

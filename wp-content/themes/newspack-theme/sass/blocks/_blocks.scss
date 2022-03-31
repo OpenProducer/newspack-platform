@@ -1,7 +1,8 @@
 /* !Block styles */
 
 .entry .entry-content > *,
-.newspack-inline-popup > * {
+.newspack-inline-popup > *,
+[id='pico'] > * {
 	margin: 32px 0;
 	max-width: 100%;
 
@@ -112,10 +113,6 @@
 			}
 
 			&.wp-block-columns {
-				margin-left: 0;
-				margin-right: 0;
-				max-width: 100%;
-
 				@include media( mobile ) {
 					margin-left: calc( 50% - 50vw - 16px );
 					margin-right: calc( 50% - 50vw - 16px );
@@ -377,9 +374,17 @@ p.has-background {
 }
 
 // Temporarily make some column styles more specific
-.entry .entry-content > .wp-block-columns {
+.entry .entry-content > .wp-block-columns,
+[id='pico'] > .wp-block-columns {
+	&.is-not-stacked-on-mobile {
+		margin-left: -16px;
+		margin-right: -16px;
+		max-width: calc( 100% + 32px );
+	}
+
 	@include media( mobile ) {
 		margin-left: -16px;
+		margin-right: -16px;
 		max-width: calc( 100% + 32px );
 	}
 
@@ -489,6 +494,16 @@ p.has-background {
 		}
 	}
 
+	&.has-text-align-right:not( .alignleft ):not( .alignright ),
+	&.has-text-align-left:not( .alignleft ):not( .alignright ) {
+		p {
+			font-size: $font__size-lg;
+			@include media( tablet ) {
+				font-size: $font__size-lg;
+			}
+		}
+	}
+
 	cite {
 		display: inline-block;
 		color: inherit;
@@ -507,6 +522,7 @@ p.has-background {
 	&.alignleft,
 	&.alignright {
 		padding: 0;
+		text-align: left;
 		width: 100%;
 
 		@include media( mobile ) {
@@ -514,10 +530,13 @@ p.has-background {
 			width: 50%;
 		}
 
+		&.has-background blockquote,
 		blockquote {
 			margin: $size__spacing-unit 0;
+		}
+
+		blockquote {
 			padding: 0;
-			text-align: left;
 			max-width: 100%;
 
 			p {
@@ -538,11 +557,6 @@ p.has-background {
 		background-color: $color__primary;
 		padding-left: 0;
 		padding-right: 0;
-
-		@include media( tablet ) {
-			padding-left: #{1.5 * $size__spacing-unit};
-			padding-right: #{1.5 * $size__spacing-unit};
-		}
 
 		a {
 			color: $color__background-body;
@@ -580,6 +594,32 @@ p.has-background {
 				padding: $size__spacing-unit calc( 2 * #{$size__spacing-unit} );
 			}
 		}
+	}
+
+	&.is-style-solid-color,
+	&.has-background,
+	&[style*='border-style'][style*='border-width'] {
+		@include media( tablet ) {
+			padding-left: #{1.5 * $size__spacing-unit};
+			padding-right: #{1.5 * $size__spacing-unit};
+		}
+	}
+
+	&.has-background {
+		blockquote {
+			margin-left: 1rem;
+			margin-right: 1rem;
+		}
+
+		&.alignleft,
+		&.alignright {
+			padding-bottom: 1rem;
+			padding-top: 1rem;
+		}
+	}
+
+	&.has-text-align-center {
+		text-align: center;
 	}
 }
 
@@ -677,6 +717,14 @@ p.has-background {
 	&:visited {
 		color: #fff;
 	}
+}
+
+.wp-block-jetpack-button button.wp-block-button__link {
+	font-family: $font__heading;
+	font-size: $font__size-sm;
+	font-weight: bold;
+	line-height: $font__line-height-heading;
+	padding: ( $size__spacing-unit * 0.76 ) $size__spacing-unit;
 }
 
 .entry-content .wp-block-button__link {
@@ -964,9 +1012,12 @@ hr {
 	}
 }
 
-.entry .entry-content > .wp-block-separator,
-.entry .entry-content > hr {
-	margin: ( 2 * $size__spacing-unit ) auto;
+.entry .entry-content,
+[id='pico'] {
+	> .wp-block-separator,
+	> hr {
+		margin: ( 2 * $size__spacing-unit ) auto;
+	}
 }
 
 //! Twitter Embed
@@ -1074,14 +1125,16 @@ hr {
 			margin-bottom: 0;
 		}
 	}
+}
 
-	&.has-background + .wp-block-group.has-background {
-		margin-top: -32px;
-	}
+.wp-block-group.has-background + .wp-block-group.has-background,
+[id='pico'] > .wp-block-group.has-background + .wp-block-group.has-background {
+	margin-top: -32px;
 }
 
 // Remove space between full-width group block and header on homepage.
-.newspack-front-page.hide-homepage-title .entry-content > .wp-block-group.alignfull:first-child {
+.newspack-front-page.hide-homepage-title .entry-content > .wp-block-group.alignfull:first-child,
+.newspack-front-page.hide-homepage-title [id='pico'] > .wp-block-group.alignfull:first-child {
 	margin-top: 0;
 	@include media( tablet ) {
 		margin-top: calc(
@@ -1112,12 +1165,12 @@ hr {
 	}
 
 	.wp-block-jetpack-button.wp-block-button {
-		margin: $size__spacing-unit / 2 0;
+		margin: calc( $size__spacing-unit / 2 ) 0;
 	}
 
 	.wp-block-jetpack-mailchimp_notification {
 		font-size: $font__size-sm;
-		margin-top: $size__spacing-unit / 2;
+		margin-top: calc( $size__spacing-unit / 2 );
 
 		&.is-visible {
 			margin-bottom: 0;
@@ -1150,8 +1203,8 @@ hr {
 
 				> p:first-child {
 					flex: 1 1 auto;
-					margin-bottom: $size__spacing-unit / 2;
-					margin-right: $size__spacing-unit / 2;
+					margin-bottom: calc( $size__spacing-unit / 2 );
+					margin-right: calc( $size__spacing-unit / 2 );
 				}
 
 				> .wp-block-jetpack-button.wp-block-button {
@@ -1253,7 +1306,8 @@ hr {
 	font-size: $font__size-lg;
 }
 
-.has-huge-font-size {
+.has-huge-font-size,
+.has-x-large-font-size {
 	font-size: $font__size-xl;
 }
 
@@ -1262,7 +1316,8 @@ hr {
 		font-size: $font__size-xl;
 	}
 
-	.has-huge-font-size {
+	.has-huge-font-size,
+	.has-x-large-font-size {
 		font-size: $font__size-xxl;
 	}
 }
@@ -1401,6 +1456,47 @@ hr {
 	color: #fff;
 }
 
+//! Custom border colors
+.has-primary-border-color,
+.wp-block-pullquote.has-primary-border-color {
+	border-color: $color__primary;
+}
+
+.has-primary-variation-border-color,
+.wp-block-pullquote.has-primary-variation-border-color {
+	border-color: $color__primary-variation;
+}
+
+.has-secondary-border-color,
+.wp-block-pullquote.has-secondary-border-color {
+	border-color: $color__secondary;
+}
+
+.has-secondary-variation-border-color,
+.wp-block-pullquote.has-secondary-variation-border-color {
+	border-color: $color__secondary-variation;
+}
+
+.has-dark-gray-border-color,
+.wp-block-pullquote.has-dark-gray-border-color {
+	border-color: #111;
+}
+
+.has-medium-gray-border-color,
+.wp-block-pullquote.has-medium-gray-border-color {
+	border-color: #767676;
+}
+
+.has-light-gray-border-color,
+.wp-block-pullquote.has-light-gray-border-color {
+	border-color: #eee;
+}
+
+.has-white-border-color,
+.wp-block-pullquote.has-white-border-color {
+	border-color: #fff;
+}
+
 // Gradients
 .has-grad-1-gradient-background {
 	background-image: linear-gradient( 135deg, $color__primary 0%, $color__primary-variation 100% );
@@ -1434,7 +1530,8 @@ hr {
 //! 'Feature' alignments
 .post-template-single-feature,
 .page-template-single-feature {
-	.entry .entry-content > * {
+	.entry .entry-content > *,
+	[id='pico'] > * {
 		&.alignwide {
 			@include media( tablet ) {
 				margin-left: calc( 25% - 25vw );
@@ -1549,19 +1646,22 @@ hr {
 	}
 
 	//! Group & Cover Block
-	.entry .entry-content > .wp-block-cover,
-	.entry .entry-content > .wp-block-group {
-		&.alignfull,
-		&.alignwide {
-			> div > .alignwide {
-				margin-left: auto;
-				margin-right: auto;
-				max-width: 1200px;
-			}
-			> div > *:not( .alignfull ):not( .alignwide ) {
-				margin-left: auto;
-				margin-right: auto;
-				max-width: 780px;
+	.entry .entry-content,
+	[id='pico'] {
+		> .wp-block-cover,
+		> .wp-block-group {
+			&.alignfull,
+			&.alignwide {
+				> div > .alignwide {
+					margin-left: auto;
+					margin-right: auto;
+					max-width: 1200px;
+				}
+				> div > *:not( .alignfull ):not( .alignwide ) {
+					margin-left: auto;
+					margin-right: auto;
+					max-width: 780px;
+				}
 			}
 		}
 	}
@@ -1585,12 +1685,28 @@ hr {
 .page-template-single-feature {
 	//! Add padding to some fullalign blocks to prevent text cut-offs.
 	.wp-block-pullquote,
-	.wp-block-columns,
 	.wp-block-table,
+	.wp-block-columns:not( .is-not-stacked-on-mobile ),
 	.wpnbha {
 		&.alignfull {
 			padding-left: $size__spacing-unit;
 			padding-right: $size__spacing-unit;
+		}
+	}
+
+	@include media( mobile ) {
+		.wp-block-columns.is-not-stacked-on-mobile.alignfull {
+			padding-left: $size__spacing-unit;
+			padding-right: $size__spacing-unit;
+		}
+	}
+
+	// Make sure content in a full-width group block doesn't touch edges
+	.entry .entry-content > .wp-block-group,
+	[id='pico'] > .wp-block-group {
+		&.alignfull:not( .has-background ):not( .is-style-border ) {
+			padding-left: 5.5%;
+			padding-right: 5.5%;
 		}
 	}
 
@@ -1605,6 +1721,24 @@ hr {
 				margin-right: 0;
 				padding-left: 0;
 				padding-right: 0;
+			}
+		}
+	}
+
+	// Make SCAIP placements full-width.
+	.entry .entry-content .scaip {
+		.newspack_global_ad,
+		.widget_newspack-ads-widget {
+			background-color: $color__background-pre;
+			margin-left: calc( 50% - 50vw );
+			margin-right: calc( 50% - 50vw );
+			max-width: 100vw;
+			> * {
+				margin-top: $size__vertical-rhythm * 2;
+				margin-bottom: $size__vertical-rhythm * 2;
+			}
+			amp-ad {
+				display: block;
 			}
 		}
 	}

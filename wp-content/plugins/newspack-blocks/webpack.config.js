@@ -7,7 +7,7 @@
  * External dependencies
  */
 const fs = require( 'fs' );
-const getBaseWebpackConfig = require( '@automattic/calypso-build/webpack.config.js' );
+const getBaseWebpackConfig = require( 'newspack-scripts/config/getWebpackConfig' );
 const path = require( 'path' );
 const isDevelopment = process.env.NODE_ENV !== 'production';
 const blockListFile = process.env.npm_config_block_list || 'block-list.json';

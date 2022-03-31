@@ -56,7 +56,7 @@ class SEO_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Search engine and social optimization.', 'newspack' );
+		return \esc_html__( 'Configure basic SEO settings.', 'newspack' );
 	}
 
 	/**

@@ -18,8 +18,8 @@ class Newspack_Ads_Blocks {
 	public static function init() {
 		require_once NEWSPACK_ADS_ABSPATH . 'src/blocks/ad-unit/view.php';
 		add_action( 'enqueue_block_editor_assets', array( __CLASS__, 'enqueue_block_editor_assets' ) );
-		add_action( 'wp_head', array( __CLASS__, 'insert_google_ad_manager_header_code' ), 30 );
-		add_action( 'wp_footer', array( __CLASS__, 'insert_google_ad_manager_footer_code' ), 30 );
+		add_action( 'wp_head', array( __CLASS__, 'insert_gpt_header_script' ) );
+		add_action( 'wp_footer', array( __CLASS__, 'insert_gpt_footer_script' ) );
 	}
 
 	/**
@@ -114,35 +114,33 @@ class Newspack_Ads_Blocks {
 	}
 
 	/**
-	 * Google Ad Manager header code
+	 * Google Publisher Tag header script.
 	 */
-	public static function insert_google_ad_manager_header_code() {
+	public static function insert_gpt_header_script() {
 		if ( ! newspack_ads_should_show_ads() ) {
 			return;
 		}
-
+		if ( ! Newspack_Ads_Providers::is_provider_active( 'gam' ) ) {
+			return;
+		}
 		if ( Newspack_Ads::is_amp() ) {
 			return;
 		}
-		ob_start();
 		?>
 		<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" data-amp-plus-allowed></script>
-		<script data-amp-plus-allowed>
-			window.googletag = window.googletag || {cmd: []};
-		</script>
 		<?php
-		$code = ob_get_clean();
-		echo $code; //phpcs:ignore
 	}
 
 	/**
-	 * Google Ad Manager footer code
+	 * Google Publisher Tag configuration script.
 	 */
-	public static function insert_google_ad_manager_footer_code() {
+	public static function insert_gpt_footer_script() {
 		if ( ! newspack_ads_should_show_ads() ) {
 			return;
 		}
-
+		if ( ! Newspack_Ads_Providers::is_provider_active( 'gam' ) ) {
+			return;
+		}
 		if ( Newspack_Ads::is_amp() ) {
 			return;
 		}
@@ -171,6 +169,7 @@ class Newspack_Ads_Blocks {
 			}
 
 			$prepared_unit_data[ $container_id ] = [
+				'unique_id' => $unique_id,
 				'name'      => esc_attr( $ad_unit['name'] ),
 				'code'      => esc_attr( $ad_unit['code'] ),
 				'sizes'     => array_values( $sizes ),
@@ -184,10 +183,28 @@ class Newspack_Ads_Blocks {
 			'network_code'         => esc_attr( $network_code ),
 			'disable_initial_load' => (bool) apply_filters( 'newspack_ads_disable_gtag_initial_load', false ),
 		];
+	
+		/**
+		 * Filters the ads data parsed for gtag.
+		 *
+		 * @param array $data {
+		 *   Ads data parsed for gtag inline script.
+		 *
+		 *   @type string $unique_id Unique ID for the ad unit.
+		 *   @type string $name      Ad name.
+		 *   @type string $code      Ad code.
+		 *   @type array  $sizes     Ad sizes.
+		 *   @type bool   $fluid     Whether the ad is fluid.
+		 *   @type array  $targeting Ad targeting.
+		 *   @type bool   $sticky    Whether the ad is sticky.
+		 * }
+		 */
+		$prepared_unit_data = apply_filters( 'newspack_ads_gtag_ads_data', $prepared_unit_data );
 
-		ob_start();
+		do_action( 'newspack_ads_gtag_before_script', $ad_config, $prepared_unit_data );
 		?>
 		<script data-amp-plus-allowed>
+			window.googletag = window.googletag || { cmd: [] };
 			googletag.cmd.push(function() {
 				var ad_config        = <?php echo wp_json_encode( $ad_config ); ?>;
 				var all_ad_units     = <?php echo wp_json_encode( $prepared_unit_data ); ?>;
@@ -330,8 +347,7 @@ class Newspack_Ads_Blocks {
 			} );
 		</script>
 		<?php
-		$code = ob_get_clean();
-		echo $code; // phpcs:ignore
+		do_action( 'newspack_ads_gtag_after_script', $ad_config, $prepared_unit_data );
 	}
 }
 Newspack_Ads_Blocks::init();

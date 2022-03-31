@@ -94,12 +94,24 @@ class Segmentation_Client_Data extends Lightweight_API {
 						if ( ! isset( $subscriber['merge_fields'] ) ) {
 							return;
 						}
+
+						$donor_merge_field_option_name      = 'newspack_popups_mc_donor_merge_field';
+						$donor_merge_fields                 = $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+							$wpdb->prepare( "SELECT option_value FROM `$wpdb->options` WHERE option_name = %s LIMIT 1", $donor_merge_field_option_name )
+						);
+						$donor_merge_fields                 = isset( $donor_merge_fields->option_value ) ? explode( ',', $donor_merge_fields->option_value ) : [ 'DONAT' ];
 						$has_donated_according_to_mailchimp = array_reduce(
-							// Get all merge fields' names that start with `DONAT` (e.g. `DONATION`, `DONATED`).
+							// Get all merge fields whose name contains one of the Donor Merge Field option strings.
 							array_filter(
 								array_keys( $subscriber['merge_fields'] ),
-								function ( $merge_field ) {
-									return strpos( $merge_field, 'DONAT' ) !== false;
+								function ( $merge_field ) use ( $donor_merge_fields ) {
+									$matches = false;
+									foreach ( $donor_merge_fields as $donor_merge_field ) {
+										if ( strpos( $merge_field, trim( $donor_merge_field ) ) !== false ) {
+											$matches = true;
+										}
+									}
+									return $matches;
 								}
 							),
 							// If any of these fields is "true", the subscriber has donated.

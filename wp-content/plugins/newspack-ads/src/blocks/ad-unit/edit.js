@@ -34,7 +34,7 @@ class Edit extends Component {
 		const { activeAd } = attributes;
 		if ( activeAd !== prevProps.attributes.activeAd ) {
 			const { code, width, height } = this.activeAdDataForActiveAd( activeAd );
-			if ( code && ( ! width && ! height ) ) {
+			if ( code && ! width && ! height ) {
 				noticeOperations.createErrorNotice( __( 'Invalid ad unit code. No dimensions available' ) );
 			} else {
 				noticeOperations.removeAllNotices();

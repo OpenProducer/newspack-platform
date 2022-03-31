@@ -1,4 +1,4 @@
-import { __, sprintf } from '@wordpress/i18n';
+import { __, sprintf, _n } from '@wordpress/i18n';
 
 /**
  * Data selector for popup options (stored in post meta)
@@ -19,11 +19,12 @@ export const optionsFieldsSelector = select => {
 		overlay_opacity,
 		overlay_size,
 		placement,
+		trigger_type,
+		trigger_delay,
 		trigger_scroll_progress,
+		trigger_blocks_count,
 		archive_insertion_posts_count,
 		archive_insertion_is_repeating,
-		trigger_delay,
-		trigger_type,
 		utm_suppression,
 		selected_segment_id,
 		post_types,
@@ -58,11 +59,12 @@ export const optionsFieldsSelector = select => {
 		overlay_opacity,
 		overlay_size,
 		placement,
+		trigger_type,
+		trigger_delay,
 		trigger_scroll_progress,
+		trigger_blocks_count,
 		archive_insertion_posts_count,
 		archive_insertion_is_repeating,
-		trigger_delay,
-		trigger_type,
 		utm_suppression,
 		selected_segment_id,
 		isInlinePlacement,
@@ -159,30 +161,22 @@ export const isOverlay = placementValue => {
 /**
  * Given a placement value, construct a context-sensitive help message to display in the editor sidebar.
  *
- * @param {string} placementValue Placement of the prompt.
- * @param {number|string} triggerPercentage Insertion percentage, for inline prompts.
- * @param {number|string} triggerCount Insertion posts count, for archives prompts.
- * @param {boolean} archive_insertion_is_repeating Repeat prompt every {triggerCount}, for archives prompts.
  * @return {string} An appropriate help message.
  */
-export const getPlacementHelpMessage = (
-	placementValue,
-	triggerPercentage = 0,
-	triggerCount = 0,
-	archive_insertion_is_repeating = false
-) => {
-	if ( isCustomPlacement( placementValue ) ) {
+export const getPlacementHelpMessage = props => {
+	if ( isCustomPlacement( props.placement ) ) {
 		const customPlacements = window.newspack_popups_data?.custom_placements || {};
 		return sprintf(
+			// Translators: Custom placement name.
 			__(
 				'The prompt will appear where %s is inserted using the Custom Placement block.',
 				'newspack-popups'
 			),
-			customPlacements[ placementValue ] || __( 'this custom placement', 'newspack-popups' )
+			customPlacements[ props.placement ] || __( 'this custom placement', 'newspack-popups' )
 		);
 	}
 
-	switch ( placementValue ) {
+	switch ( props.placement ) {
 		case 'center':
 			return __(
 				'The prompt will be displayed as an overlay at the center of the viewport.',
@@ -234,28 +228,42 @@ export const getPlacementHelpMessage = (
 				'newspack-popups'
 			);
 		case 'inline':
-			return sprintf(
-				__(
-					'The prompt will be automatically inserted about %s into article content.',
-					'newspack-popups'
-				),
-				triggerPercentage + '%'
-			);
-		case 'archives':
-			return archive_insertion_is_repeating
+			return props.trigger_type === 'blocks_count'
 				? sprintf(
+						// Translators: Blocks count until insertion.
+						_n(
+							'The prompt will be automatically inserted after %s block of content.',
+							'The prompt will be automatically inserted after %s blocks of content.',
+							props.trigger_blocks_count,
+							'newspack-popups'
+						),
+						props.trigger_blocks_count
+				  )
+				: sprintf(
+						// Translators: Article percentage count until insertion.
+						__(
+							'The prompt will be automatically inserted about %s into article content.',
+							'newspack-popups'
+						),
+						props.trigger_scroll_progress + '%'
+				  );
+		case 'archives':
+			return props.archive_insertion_is_repeating
+				? sprintf(
+						// Translators: Insertion period.
 						__(
 							'The prompt will be automatically inserted every %d articles in the archive pages.',
 							'newspack-popups'
 						),
-						triggerCount
+						props.archive_insertion_posts_count
 				  )
 				: sprintf(
+						// Translators: Insertion period articles count.
 						__(
 							'The prompt will be automatically inserted after %d articles in the archive pages.',
 							'newspack-popups'
 						),
-						triggerCount
+						props.archive_insertion_posts_count
 				  );
 		case 'manual':
 			return __(

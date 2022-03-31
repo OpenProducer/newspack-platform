@@ -28,15 +28,12 @@ final class Newspack_Popups_API {
 			'settings',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'update_settings' ],
+				'callback'            => [ $this, 'update_settings_standalone' ],
 				'permission_callback' => [ $this, 'permission_callback' ],
 				'args'                => [
-					'option_name'  => [
-						'validate_callback' => [ __CLASS__, 'validate_settings_option_name' ],
-						'sanitize_callback' => 'esc_attr',
-					],
-					'option_value' => [
-						'sanitize_callback' => 'esc_attr',
+					'settingsToUpdate' => [
+						'validate_callback' => [ __CLASS__, 'validate_settings' ],
+						'sanitize_callback' => [ __CLASS__, 'sanitize_array' ],
 					],
 				],
 			]
@@ -70,13 +67,16 @@ final class Newspack_Popups_API {
 
 		\register_rest_route(
 			'newspack-popups/v1',
-			'/(?P<id>\d+)/duplicate',
+			'/(?P<original_id>\d+)/(?P<id>\d+)/duplicate',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_get_duplicate_title' ],
 				'permission_callback' => [ $this, 'permission_callback' ],
 				'args'                => [
-					'id' => [
+					'original_id' => [
+						'sanitize_callback' => 'absint',
+					],
+					'id'          => [
 						'sanitize_callback' => 'absint',
 					],
 				],
@@ -100,6 +100,47 @@ final class Newspack_Popups_API {
 				],
 			]
 		);
+	}
+
+	/**
+	 * Recursively sanitize an array of arbitrary values.
+	 *
+	 * @param array $array Array to be sanitized.
+	 * @return array Sanitized array.
+	 */
+	public static function sanitize_array( $array ) {
+		foreach ( $array as $key => $value ) {
+			if ( is_array( $value ) ) {
+				$value = self::sanitize_array( $value );
+			} elseif ( is_string( $value ) ) {
+					$value = sanitize_text_field( $value );
+			} elseif ( is_numeric( $value ) ) {
+				$value = intval( $value );
+			} else {
+				$value = boolval( $value );
+			}
+
+			$array[ $key ] = $value;
+		}
+
+		return $array;
+	}
+
+	/**
+	 * Validate settings to be updated.
+	 *
+	 * @param String $settings_to_update Associative array of settings to be updated.
+	 */
+	public static function validate_settings( $settings_to_update ) {
+		$valid = true;
+
+		foreach ( $settings_to_update as $key => $value ) {
+			if ( ! self::validate_settings_option_name( $key ) ) {
+				$valid = false;
+			}
+		}
+
+		return $valid;
 	}
 
 	/**
@@ -139,16 +180,28 @@ final class Newspack_Popups_API {
 
 	/**
 	 * Handler for API settings update endpoint.
+	 * This endpoint is used by the standlone Settings page, which
+	 * is only used if the main Newspack plugin UI isn't available.
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 */
-	public static function update_settings( $request ) {
-		return \Newspack_Popups_Settings::set_settings(
-			[
-				'option_name'  => $request['option_name'],
-				'option_value' => $request['option_value'],
-			]
-		);
+	public static function update_settings_standalone( $request ) {
+		$settings_to_update = $request['settingsToUpdate'];
+
+		foreach ( $settings_to_update as $key => $value ) {
+			$result = \Newspack_Popups_Settings::set_settings_standalone(
+				[
+					'option_value' => $value,
+					'option_name'  => $key,
+				]
+			);
+
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+		}
+
+		return \rest_ensure_response( \Newspack_Popups_Settings::get_settings() );
 	}
 
 	/**
@@ -215,7 +268,7 @@ final class Newspack_Popups_API {
 	 * @return WP_REST_Response with complete info to render the Engagement Wizard.
 	 */
 	public function api_get_duplicate_title( $request ) {
-		$response = Newspack_Popups::get_duplicate_title( $request['id'] );
+		$response = Newspack_Popups::get_duplicate_title( $request['original_id'], $request['id'] );
 		return rest_ensure_response( $response );
 	}
 

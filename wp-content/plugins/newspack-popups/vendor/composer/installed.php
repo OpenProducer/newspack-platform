@@ -5,7 +5,7 @@
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '23e3db23c90792638a32a2dfa677e685db7b0215',
+        'reference' => 'd1639b40f761aff7ea6b2678aba8e112a2e44400',
         'name' => 'automattic/newspack-popups',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '23e3db23c90792638a32a2dfa677e685db7b0215',
+            'reference' => 'd1639b40f761aff7ea6b2678aba8e112a2e44400',
             'dev_requirement' => false,
         ),
         'drewm/mailchimp-api' => array(

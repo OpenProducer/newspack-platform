@@ -35,7 +35,8 @@
 		}
 	}
 
-	.widget-title {
+	.widget-title,
+	.widgettitle {
 		color: $color__text-light;
 		font-size: inherit;
 	}
@@ -164,9 +165,15 @@
 			}
 		}
 
-		.widget-title {
+		.widget-title,
+		.widgettitle {
 			display: inline-block;
 			margin: 0 $size__spacing-unit 0 0;
+		}
+
+		a {
+			display: inline;
+			margin: 0;
 		}
 
 		ul,
@@ -176,27 +183,35 @@
 			padding: 0;
 		}
 
-		a {
-			display: inline;
-			margin: 0;
-		}
-
-		@include media( mobile ) {
-			ul {
+		ul {
+			@include media( mobile ) {
 				display: inline;
 			}
 
 			li {
-				display: inline-block;
-				margin: 0 $size__spacing-unit 0 0;
+				margin: #{0.3 * $size__spacing-unit} 0;
 
-				ul {
+				@include media( mobile ) {
 					display: inline-block;
-					margin-left: $size__spacing-unit;
-				}
+					margin: 0 $size__spacing-unit 0 0;
 
-				&:last-child {
-					margin-right: 0;
+					ul {
+						display: inline-block;
+						margin-left: $size__spacing-unit;
+					}
+
+					&:last-child {
+						margin-right: 0;
+					}
+				}
+			}
+
+			a {
+				display: inline-block;
+				padding: #{0.25 * $size__spacing-unit} 0;
+
+				@include media( mobile ) {
+					padding: #{0.125 * $size__spacing-unit} 0;
 				}
 			}
 		}
@@ -207,7 +222,8 @@
 	}
 }
 
-#colophon .site-info .widget-title {
+#colophon .site-info .widget-title,
+#colophon .site-info .widgettitle {
 	color: inherit;
 	font-size: 1em;
 }

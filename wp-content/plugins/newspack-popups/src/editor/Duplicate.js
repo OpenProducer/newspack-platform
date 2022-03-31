@@ -22,7 +22,7 @@ const DuplicateButton = ( {
 	const [ duplicateTitle, setDuplicateTitle ] = useState( null );
 	const [ duplicated, setDuplicated ] = useState( null );
 
-	useEffect(() => {
+	useEffect( () => {
 		setError( null );
 		if ( modalVisible && ! duplicateTitle ) {
 			getDefaultDupicateTitle();
@@ -31,13 +31,13 @@ const DuplicateButton = ( {
 			setDuplicated( null );
 			setDuplicateTitle( null );
 		}
-	}, [ modalVisible ]);
+	}, [ modalVisible ] );
 
 	const getDefaultDupicateTitle = async () => {
 		const promptToDuplicate = parseInt( duplicateOf || postId );
 		try {
 			const defaultTitle = await apiFetch( {
-				path: `/newspack-popups/v1/${ promptToDuplicate }/duplicate`,
+				path: `/newspack-popups/v1/${ promptToDuplicate }/${ postId }/duplicate`,
 			} );
 
 			setDuplicateTitle( defaultTitle );
@@ -80,6 +80,7 @@ const DuplicateButton = ( {
 			{ modalVisible && (
 				<Modal
 					className="newspack-popups__duplicate-modal"
+					// Translators: Title of the duplicated popup.
 					title={ sprintf( __( 'Duplicate “%s”', 'newspack-popups' ), title ) }
 					onRequestClose={ () => setModalVisible( false ) }
 				>
@@ -92,6 +93,7 @@ const DuplicateButton = ( {
 						<>
 							<Notice status="success" isDismissible={ false }>
 								{ sprintf(
+									// Translators: Title of the duplicated popup.
 									__( 'Duplicate of “%s” created as a draft.', 'newspack-popups' ),
 									title
 								) }

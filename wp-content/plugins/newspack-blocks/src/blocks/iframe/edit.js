@@ -33,7 +33,7 @@ const iconPreview = (
 
 const IframeEdit = ( { attributes, setAttributes } ) => {
 	const label = __( 'Iframe', 'block title' );
-	const { src, archiveFolder, isFullScreen, height, width } = attributes;
+	const { mode, src, archiveFolder, isFullScreen, height, width } = attributes;
 	const [ showPreview, setShowPreview ] = useState( true );
 	const [ isUploadingArchive, setIsUploadingArchive ] = useState();
 	const [ error, setError ] = useState();
@@ -44,15 +44,37 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 		{ value: 'em', label: 'em' },
 	];
 
-	const embedURL = url => {
+	const embedURL = async url => {
 		setError( null );
-		setAttributes( { src: url } );
-		setShowPreview( true );
+		setIsUploadingArchive( true );
 
-		// remove current archive folder if exists.
-		if ( archiveFolder ) {
-			deleteIframeArchive();
+		try {
+			const formData = new FormData();
+			formData.append( 'iframe_url', url );
+
+			const { mode: iframeMode } = await apiFetch( {
+				path: '/newspack-blocks/v1/newspack-blocks-iframe-mode-from-url',
+				method: 'POST',
+				body: formData,
+			} );
+
+			setAttributes( {
+				mode: iframeMode,
+				src: url,
+			} );
+			setShowPreview( true );
+
+			// remove current archive folder if exists.
+			if ( archiveFolder ) {
+				deleteIframeArchive();
+			}
+		} catch ( e ) {
+			setError(
+				e.message || __( 'An error occured when uploading the iframe archive.', 'newspack-blocks' )
+			);
 		}
+
+		setIsUploadingArchive( false );
 	};
 
 	const uploadIframeArchive = async archiveFile => {
@@ -62,15 +84,21 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 		try {
 			const formData = new FormData();
 			formData.append( 'archive_folder', archiveFolder );
-			formData.append( 'archive_file', archiveFile );
+			formData.append( 'iframe_file', archiveFile );
 
-			const { src: iframeArchiveSrc, dir: iframeArchiveFolder } = await apiFetch( {
-				path: '/newspack-blocks/v1/newspack-blocks-iframe-archive',
-				method: 'POST',
-				body: formData,
+			const { src: iframeArchiveSrc, dir: iframeArchiveFolder, mode: iframeMode } = await apiFetch(
+				{
+					path: '/newspack-blocks/v1/newspack-blocks-iframe-archive',
+					method: 'POST',
+					body: formData,
+				}
+			);
+
+			setAttributes( {
+				mode: iframeMode,
+				src: iframeArchiveSrc,
+				archiveFolder: iframeArchiveFolder,
 			} );
-
-			setAttributes( { src: iframeArchiveSrc, archiveFolder: iframeArchiveFolder } );
 			setShowPreview( true );
 		} catch ( e ) {
 			setError(
@@ -89,13 +117,19 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 			const formData = new FormData();
 			formData.append( 'media_id', mediaId );
 
-			const { src: iframeArchiveSrc, dir: iframeArchiveFolder } = await apiFetch( {
-				path: '/newspack-blocks/v1/newspack-blocks-iframe-archive-from-media',
-				method: 'POST',
-				body: formData,
-			} );
+			const { src: iframeArchiveSrc, dir: iframeArchiveFolder, mode: iframeMode } = await apiFetch(
+				{
+					path: '/newspack-blocks/v1/newspack-blocks-iframe-archive-from-media',
+					method: 'POST',
+					body: formData,
+				}
+			);
 
-			setAttributes( { src: iframeArchiveSrc, archiveFolder: iframeArchiveFolder } );
+			setAttributes( {
+				mode: iframeMode,
+				src: iframeArchiveSrc,
+				archiveFolder: iframeArchiveFolder,
+			} );
 			setShowPreview( true );
 		} catch ( e ) {
 			setError(
@@ -147,7 +181,11 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 				<div className="iframe-container">
 					<FocusableIframe
 						title={ __( 'Newspack embedded iframe', 'newspack-blocks' ) }
-						src={ src }
+						src={
+							'document' === mode
+								? `https://docs.google.com/gview?embedded=true&url=${ encodeURIComponent( src ) }`
+								: src
+						}
 						style={ {
 							width: isFullScreen ? '100vw' : width,
 							height: isFullScreen ? '100vh' : height,

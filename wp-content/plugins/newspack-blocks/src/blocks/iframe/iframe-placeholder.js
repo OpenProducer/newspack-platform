@@ -12,6 +12,8 @@ import { keyboardReturn } from '@wordpress/icons';
  */
 import classnames from 'classnames';
 
+const allowedTypes = window.newspack_blocks_data?.iframe_accepted_file_mimes || [];
+
 const InsertFromURLPopover = ( { src, onChange, onSubmit, onClose } ) => (
 	<URLPopover onClose={ onClose }>
 		<form className="wp-block-newspack-blocks-iframe__url-input-form" onSubmit={ onSubmit }>
@@ -83,7 +85,7 @@ const IframePlaceholder = ( {
 		return (
 			<MediaUpload
 				onSelect={ onSelect }
-				allowedTypes="application/zip"
+				allowedTypes={ allowedTypes }
 				render={ ( { open } ) => {
 					return (
 						<Button variant="tertiary" onClick={ open }>
@@ -128,7 +130,7 @@ const IframePlaceholder = ( {
 			label={ label }
 			className="wp-block-newspack-blocks-iframe"
 			instructions={ __(
-				'Upload an asset folder (.zip), pick one from your media library, or add one with a URL.',
+				'Upload an asset folder (.zip), a document (PDF, Word, Excel sheet, or a PPT), pick one from your media library, or add one with a URL.',
 				'newspack-blocks'
 			) }
 		>
@@ -147,7 +149,7 @@ const IframePlaceholder = ( {
 					<Spinner />
 				) : (
 					<FormFileUpload
-						accept="application/zip"
+						accept={ allowedTypes.join( ',' ) }
 						onChange={ onUpload }
 						multiple={ false }
 						render={ ( { openFileDialog } ) => (

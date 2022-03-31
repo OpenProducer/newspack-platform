@@ -99,7 +99,7 @@ function newspack_blocks_get_video_playlist_videos( $args ) {
 	$query_args = array(
 		'post_type'      => 'post',
 		'post_status'    => 'publish',
-		's'              => 'core-embed/youtube',
+		's'              => 'youtube',
 		'posts_per_page' => $args['videosToShow'],
 	);
 
@@ -113,8 +113,9 @@ function newspack_blocks_get_video_playlist_videos( $args ) {
 		$blocks         = parse_blocks( $post->post_content );
 		$youtube_blocks = array_filter(
 			$blocks,
-			function( $blocks ) {
-				return 'core-embed/youtube' === $blocks['blockName'];
+			function( $block ) {
+				return ( 'core/embed' === $block['blockName'] && 'youtube' === $block['attrs']['providerNameSlug'] )
+					|| 'core-embed/youtube' === $block['blockName'];
 			}
 		);
 		foreach ( $youtube_blocks as $youtube_block ) {

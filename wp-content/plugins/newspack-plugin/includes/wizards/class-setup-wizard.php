@@ -17,6 +17,18 @@ define( 'NEWSPACK_SETUP_COMPLETE', 'newspack_setup_complete' );
  * Setup Newspack.
  */
 class Setup_Wizard extends Wizard {
+	const SERVICE_ENABLED_OPTION_PREFIX = 'newspack_service_enabled_';
+
+	const SERVICE_ENDPOINT_SCHEMA_BASE = [
+		'type'       => 'object',
+		'properties' => [
+			'is_service_enabled' => [
+				'type'     => 'boolean',
+				'required' => true,
+			],
+		],
+	];
+
 	/**
 	 * The slug of this wizard.
 	 *
@@ -127,10 +139,10 @@ class Setup_Wizard extends Wizard {
 		);
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/starter-content/categories',
+			'/wizard/' . $this->slug . '/starter-content/init',
 			[
 				'methods'             => WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_starter_content_categories' ],
+				'callback'            => [ $this, 'api_starter_content_init' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
@@ -177,6 +189,12 @@ class Setup_Wizard extends Wizard {
 				'methods'             => WP_REST_Server::EDITABLE,
 				'callback'            => [ $this, 'api_update_services' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'reader-revenue'    => self::SERVICE_ENDPOINT_SCHEMA_BASE,
+					'newsletters'       => self::SERVICE_ENDPOINT_SCHEMA_BASE,
+					'google-ad-sense'   => self::SERVICE_ENDPOINT_SCHEMA_BASE,
+					'google-ad-manager' => self::SERVICE_ENDPOINT_SCHEMA_BASE,
+				],
 			]
 		);
 	}
@@ -210,7 +228,7 @@ class Setup_Wizard extends Wizard {
 		return rest_ensure_response(
 			[
 				'plugins' => $plugin_info,
-				'is_ssl'  => is_ssl(),
+				'is_ssl'  => is_ssl() || Starter_Content::is_e2e(),
 			]
 		);
 	}
@@ -226,13 +244,37 @@ class Setup_Wizard extends Wizard {
 	}
 
 	/**
-	 * Install starter content categories
+	 * Initialize a starter content generator.
 	 *
-	 * @return WP_REST_Response containing info.
+	 * @param WP_REST_Request $request API request object.
+	 * @return WP_REST_Response|WP_Error
 	 */
-	public function api_starter_content_categories() {
-		$status = Starter_Content::create_categories();
-		return rest_ensure_response( [ 'status' => $status ] );
+	public function api_starter_content_init( $request ) {
+		$request_params = $request->get_params();
+		if ( empty( $request_params ) || empty( $request_params['type'] ) ) {
+			return new WP_Error( 'newspack_setup', __( 'Missing starter content initialization info', 'newspack' ) );
+		}
+
+		$starter_content_type = 'import' === $request_params['type'] ? 'import' : 'generated';
+		$existing_site_url    = ! empty( $request_params['site'] ) && wp_http_validate_url( $request_params['site'] ) ? esc_url_raw( $request_params['site'] ) : '';
+
+		if ( 'import' === $starter_content_type && ! $existing_site_url ) {
+			return new WP_Error(
+				'newspack_setup',
+				sprintf(
+					/* translators: %s - Site URL */
+					__( 'Invalid site URL: "%s".', 'newspack' ),
+					sanitize_text_field( $request_params['site'] )
+				)
+			);
+		}
+
+		$result = Starter_Content::initialize( $starter_content_type, $existing_site_url );
+		if ( is_wp_error( $result ) ) {
+			return $result;
+		}
+
+		return rest_ensure_response( [ 'status' => 200 ] );
 	}
 
 	/**
@@ -244,6 +286,10 @@ class Setup_Wizard extends Wizard {
 	public function api_starter_content_post( $request ) {
 		$id     = $request['id'];
 		$status = Starter_Content::create_post( $id );
+		if ( is_wp_error( $status ) ) {
+			return $status;
+		}
+
 		return rest_ensure_response( [ 'status' => $status ] );
 	}
 
@@ -302,11 +348,14 @@ class Setup_Wizard extends Wizard {
 			$theme_mods['secondary_color_hex'] = get_theme_mod( 'secondary_color_hex', newspack_get_secondary_color() );
 		}
 
+		// Set custom header color to primary, if not set.
 		if ( ! isset( $theme_mods['header_color_hex'] ) ) {
 			set_theme_mod( 'header_color_hex', $theme_mods['primary_color_hex'] );
 			$theme_mods['header_color_hex'] = get_theme_mod( 'header_color_hex' );
 		}
-		// Set custom header color to primary, if not set.
+		if ( ! isset( $theme_mods['homepage_pattern_index'] ) ) {
+			$theme_mods['homepage_pattern_index'] = 0;
+		}
 
 		$theme_mods['accent_allcaps'] = get_theme_mod( 'accent_allcaps', true );
 
@@ -315,8 +364,7 @@ class Setup_Wizard extends Wizard {
 		$theme_mods['footer_logo_size'] = get_theme_mod( 'footer_logo_size', 'medium' );
 		$theme_mods['footer_copyright'] = get_theme_mod( 'footer_copyright', false );
 		if ( false === $theme_mods['footer_copyright'] ) {
-			set_theme_mod( 'footer_copyright', get_option( 'blogdescription', '' ) );
-			$theme_mods['footer_copyright'] = get_theme_mod( 'footer_copyright' );
+			$theme_mods['footer_copyright'] = get_theme_mod( 'footer_copyright', '' );
 		}
 
 		$theme_mods['header_text']            = get_theme_mod( 'header_text', '' );
@@ -438,7 +486,11 @@ class Setup_Wizard extends Wizard {
 	public function api_update_theme_with_mods( $request ) {
 		// Set theme before updating theme mods, since a theme might be setting theme mod defaults.
 		$theme = $request['theme'];
-		Starter_Content::set_theme( $theme );
+		Theme_Manager::install_activate_theme( $theme );
+		// If the theme has to be installed, the set_theme_mod calls below will – for some reason – have no effect
+		// If there's a switch_theme call here, even though it's already called in Theme_Manager::install_activate_theme,
+		// correct mods will be saved.
+		switch_theme( $theme );
 
 		// Set homepage pattern.
 		if ( isset( $request['theme_mods']['homepage_pattern_index'] ) ) {
@@ -480,22 +532,7 @@ class Setup_Wizard extends Wizard {
 	 * @return bool True if the service is enabled.
 	 */
 	private function check_service_enabled( $service_name ) {
-		switch ( $service_name ) {
-			case 'reader-revenue':
-				$rr_wizard = new Reader_Revenue_Wizard();
-				return isset( $rr_wizard->fetch_all_data()['plugin_status'] ) && true === $rr_wizard->fetch_all_data()['plugin_status'];
-			case 'newsletters':
-				$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
-				return $newsletters_configuration_manager->is_esp_set_up();
-			case 'google-ad-sense':
-				$ads_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-				return $ads_configuration_manager->is_service_enabled( 'google_adsense' );
-			case 'google-ad-manager':
-				$ads_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-				return $ads_configuration_manager->is_service_enabled( 'google_ad_manager' );
-			default:
-				return false;
-		}
+		return (bool) get_option( self::SERVICE_ENABLED_OPTION_PREFIX . $service_name, false );
 	}
 
 	/**
@@ -545,6 +582,13 @@ class Setup_Wizard extends Wizard {
 		if ( true === $request['google-ad-manager']['is_service_enabled'] ) {
 			$service = 'google_ad_manager';
 			update_option( Advertising_Wizard::NEWSPACK_ADVERTISING_SERVICE_PREFIX . $service, true );
+		}
+
+		$available_services = [ 'newsletters', 'reader-revenue', 'google-ad-sense', 'google-ad-manager' ];
+		foreach ( $available_services as $service_name ) {
+			if ( isset( $request[ $service_name ] ) ) {
+				update_option( self::SERVICE_ENABLED_OPTION_PREFIX . $service_name, $request[ $service_name ]['is_service_enabled'] );
+			}
 		}
 
 		return rest_ensure_response( [] );

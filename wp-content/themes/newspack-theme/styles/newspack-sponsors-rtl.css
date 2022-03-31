@@ -8,7 +8,6 @@
   display: inline-flex;
   position: relative;
 }
-
 .sponsor-label button {
   align-items: center;
   background: transparent;
@@ -18,20 +17,18 @@
   padding: 0;
   position: relative;
 }
-
 .sponsor-label button::after {
   border-color: transparent transparent rgba(0, 0, 0, 0.8);
   border-style: solid;
   border-width: 0 8px 8px 8px;
   display: block;
-  content: '';
+  content: "";
   height: 0;
   opacity: 0;
   position: absolute;
-  top: calc( 100% - 3px);
+  top: calc(100% - 3px);
   width: 0;
 }
-
 .sponsor-label::before, .sponsor-label::after {
   display: none;
 }
@@ -61,7 +58,7 @@ amp-script .sponsor-label .flag {
   position: absolute;
   transition: opacity 0.2s;
   text-transform: none;
-  top: calc( 100% + 5px);
+  top: calc(100% + 5px);
   width: 300px;
   z-index: 5;
 }
@@ -71,7 +68,6 @@ amp-script .sponsor-label .flag {
   color: #fff;
   text-decoration: underline;
 }
-
 .sponsor-label .sponsor-info a:hover {
   opacity: 0.8;
 }
@@ -87,14 +83,12 @@ amp-script .sponsor-label .flag {
   display: inline-flex;
   line-height: 1;
 }
-
 @media only screen and (min-width: 600px) {
   .sponsor-logos {
     border-left: 1px solid #ccc;
     margin: 0 0 0 0.75rem;
   }
 }
-
 .sponsor-logos > * {
   margin-left: 0.75rem;
 }
@@ -112,25 +106,21 @@ amp-script .sponsor-label .flag {
 .featured-image-behind .entry-sponsor {
   align-items: center;
 }
-
 .featured-image-beside .sponsor-label button,
 .featured-image-behind .sponsor-label button {
   color: inherit;
 }
-
 .featured-image-beside .sponsor-logos,
 .featured-image-behind .sponsor-logos {
   margin-left: 0;
 }
-
 @media only screen and (min-width: 600px) {
   .featured-image-beside .sponsor-logos,
-  .featured-image-behind .sponsor-logos {
+.featured-image-behind .sponsor-logos {
     border: 0;
     padding-left: 0;
   }
 }
-
 .featured-image-beside .sponsor-byline,
 .featured-image-behind .sponsor-byline {
   color: inherit;
@@ -139,11 +129,9 @@ amp-script .sponsor-label .flag {
 .featured-image-behind .sponsor-info {
   background: rgba(0, 0, 0, 0.95);
 }
-
 .featured-image-behind .sponsor-label button::after {
   border-bottom-color: rgba(0, 0, 0, 0.95);
 }
-
 .featured-image-behind .sponsor-logos {
   margin: 0;
 }
@@ -153,11 +141,9 @@ amp-script .sponsor-label .flag {
   text-align: center;
   width: 20%;
 }
-
 .sponsor-bio h2 {
   margin-top: 0;
 }
-
 .sponsor-bio h2 a {
   text-decoration: none;
 }
@@ -167,7 +153,6 @@ amp-script .sponsor-label .flag {
 .blog article .sponsor-logos {
   display: none;
 }
-
 .search article .sponsor-label,
 .archive article .sponsor-label,
 .blog article .sponsor-label {
@@ -185,22 +170,19 @@ amp-script .sponsor-label .flag {
     display: flex;
   }
   .sponsor-archive .entry-meta,
-  .sponsor-archive .author {
+.sponsor-archive .author {
     display: block;
   }
 }
-
 @media only screen and (min-width: 1168px) {
   .sponsor-archive {
     align-items: center;
   }
 }
-
 .sponsor-archive .details {
   align-items: center;
   display: flex;
 }
-
 @media only screen and (min-width: 600px) {
   .sponsor-archive .details {
     display: block;
@@ -208,30 +190,24 @@ amp-script .sponsor-label .flag {
     margin-left: 1.5rem;
   }
 }
-
 .sponsor-archive .details img {
   margin: 0 0 1rem 1rem;
 }
-
 @media only screen and (min-width: 600px) {
   .sponsor-archive .details img {
     margin: 0;
   }
 }
-
 .sponsor-archive .info {
   font-size: 90%;
   text-align: right;
 }
-
 .sponsor-archive .info > *:first-child {
   margin-top: 0;
 }
-
 .sponsor-archive .info > *:last-child {
   margin-bottom: 0;
 }
-
 .sponsor-archive + .sponsor-archive {
   margin-top: 1.5rem;
 }
@@ -249,20 +225,16 @@ amp-script .sponsor-label .flag {
   font-size: 80%;
   padding: 1rem;
 }
-
 .sponsor-uw-info .logo {
   flex-shrink: 0;
   margin-left: 1.5rem;
 }
-
 .sponsor-uw-info .info {
   font-style: italic;
 }
-
 .sponsor-uw-info .info > *:first-child {
   margin-top: 0;
 }
-
 .sponsor-uw-info .info > *:last-child {
   margin-bottom: 0;
 }
@@ -274,7 +246,6 @@ amp-script .wpnbha .sponsor-label,
 amp-script .wp-block-newspack-blocks-carousel .sponsor-label {
   display: flex;
 }
-
 .wpnbha .sponsor-logos,
 amp-script .wpnbha .sponsor-logos,
 .wp-block-newspack-blocks-carousel .sponsor-logos,
@@ -293,7 +264,6 @@ amp-script .wpnbha .sponsor-logos {
 .wp-block-newspack-blocks-carousel .sponsor-byline {
   color: #fff;
 }
-
 .wp-block-newspack-blocks-carousel .sponsor-logos {
   margin: 0;
 }

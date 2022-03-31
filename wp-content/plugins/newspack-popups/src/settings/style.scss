@@ -11,6 +11,25 @@
 	}
 }
 
+.components-text-control__input {
+	width: 100%;
+}
+
+.components-notice {
+	color: #f00;
+	margin-top: 2rem;
+}
+
+.newspack-popups-save {
+	text-align: right;
+
+	.components-button {
+		font-size: 1.25rem;
+		margin-top: 2rem;
+		padding: 0.5rem 1rem;
+	}
+}
+
 .newspack-logo {
 	&__svg {
 		display: block;

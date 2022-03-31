@@ -1,5 +1,3 @@
-/* eslint-disable jsx-a11y/anchor-is-valid */
-
 /**
  * WordPress dependencies
  */
@@ -26,12 +24,114 @@ import { __, sprintf } from '@wordpress/i18n';
 import { addQueryArgs } from '@wordpress/url';
 
 /**
+ * Internal dependencies
+ */
+import { SingleAuthor } from './single-author';
+
+/**
  * External dependencies
  */
 import { AutocompleteWithSuggestions } from 'newspack-components';
-import classnames from 'classnames';
 
-export default ( { attributes, setAttributes } ) => {
+// Available units for avatarBorderRadius option.
+export const units = [
+	{
+		value: '%',
+		label: '%',
+	},
+	{
+		value: 'px',
+		label: 'px',
+	},
+	{
+		value: 'em',
+		label: 'em',
+	},
+	{
+		value: 'rem',
+		label: 'rem',
+	},
+];
+
+// Textsize options.
+export const textSizeOptions = [
+	{
+		value: 'small',
+		label: /* translators: label for small text size option */ __( 'Small', 'newspack-blocks' ),
+		shortName: /* translators: abbreviation for small text size option */ __(
+			'S',
+			'newspack-blocks'
+		),
+	},
+	{
+		value: 'medium',
+		label: /* translators: label for medium text size option */ __( 'Medium', 'newspack-blocks' ),
+		shortName: /* translators: abbreviation for medium text size option */ __(
+			'M',
+			'newspack-blocks'
+		),
+	},
+	{
+		value: 'large',
+		label: /* translators: label for small text size option */ __( 'Large', 'newspack-blocks' ),
+		shortName: /* translators: abbreviation for large text size option */ __(
+			'L',
+			'newspack-blocks'
+		),
+	},
+	{
+		value: 'extra-large',
+		label: /* translators: label for extra-large text size option */ __(
+			'Extra Large',
+			'newspack-blocks'
+		),
+		shortName: /* translators: abbreviation for small text size option */ __(
+			'XL',
+			'newspack-blocks'
+		),
+	},
+];
+
+// Avatar size options.
+export const avatarSizeOptions = [
+	{
+		value: 72,
+		label: /* translators: label for small avatar size option */ __( 'Small', 'newspack-blocks' ),
+		shortName: /* translators: abbreviation for small avatar size option */ __(
+			'S',
+			'newspack-blocks'
+		),
+	},
+	{
+		value: 128,
+		label: /* translators: label for medium avatar size option */ __( 'Medium', 'newspack-blocks' ),
+		shortName: /* translators: abbreviation for medium avatar size option */ __(
+			'M',
+			'newspack-blocks'
+		),
+	},
+	{
+		value: 192,
+		label: /* translators: label for large avatar size option */ __( 'Large', 'newspack-blocks' ),
+		shortName: /* translators: abbreviation for large avatar size option */ __(
+			'L',
+			'newspack-blocks'
+		),
+	},
+	{
+		value: 256,
+		label: /* translators: label for extra-large avatar size option */ __(
+			'Extra-large',
+			'newspack-blocks'
+		),
+		shortName: /* translators: abbreviation for extra-large avatar size option  */ __(
+			'XL',
+			'newspack-blocks'
+		),
+	},
+];
+
+const AuthorProfile = ( { attributes, setAttributes } ) => {
 	const [ author, setAuthor ] = useState( null );
 	const [ error, setError ] = useState( null );
 	const [ isLoading, setIsLoading ] = useState( false );
@@ -42,27 +142,35 @@ export default ( { attributes, setAttributes } ) => {
 		showSocial,
 		showEmail,
 		showArchiveLink,
+		textSize,
 		showAvatar,
 		avatarAlignment,
 		avatarBorderRadius,
 		avatarSize,
+		avatarHideDefault,
 	} = attributes;
 
 	useEffect( () => {
 		if ( 0 !== authorId ) {
 			getAuthorById();
 		}
-	}, [ authorId ] );
+	}, [ authorId, avatarHideDefault ] );
 
 	const getAuthorById = async () => {
 		setError( null );
 		setIsLoading( true );
 		try {
+			const params = {
+				authorId,
+				fields: 'id,name,bio,email,social,avatar,url',
+			};
+
+			if ( avatarHideDefault ) {
+				params.avatarHideDefault = 1;
+			}
+
 			const response = await apiFetch( {
-				path: addQueryArgs( '/newspack-blocks/v1/authors', {
-					author_id: authorId,
-					fields: 'id,name,bio,email,social,avatar,url',
-				} ),
+				path: addQueryArgs( '/newspack-blocks/v1/authors', params ),
 			} );
 
 			const _author = response.pop();
@@ -97,82 +205,37 @@ export default ( { attributes, setAttributes } ) => {
 		delete socialLinks.email;
 	}
 
-	// Show a link to the author's post archive page, if available.
-	const MaybeLink = ( { children } ) =>
-		showArchiveLink && author && author.url ? (
-			<a href="#" className="no-op">
-				{ children }
-			</a>
-		) : (
-			<>{ children }</>
-		);
-
-	// Available units for avatarBorderRadius option.
-	const units = [
-		{
-			value: '%',
-			label: '%',
-		},
-		{
-			value: 'px',
-			label: 'px',
-		},
-		{
-			value: 'em',
-			label: 'em',
-		},
-		{
-			value: 'rem',
-			label: 'rem',
-		},
-	];
-
-	// Avatar size options.
-	const avatarSizeOptions = [
-		{
-			value: 72,
-			label: /* translators: label for small avatar size option */ __( 'Small', 'newspack-blocks' ),
-			shortName: /* translators: abbreviation for small avatar size option */ __(
-				'S',
-				'newspack-blocks'
-			),
-		},
-		{
-			value: 128,
-			label: /* translators: label for medium avatar size option */ __(
-				'Medium',
-				'newspack-blocks'
-			),
-			shortName: /* translators: abbreviation for medium avatar size option */ __(
-				'M',
-				'newspack-blocks'
-			),
-		},
-		{
-			value: 192,
-			label: /* translators: label for large avatar size option */ __( 'Large', 'newspack-blocks' ),
-			shortName: /* translators: abbreviation for large avatar size option */ __(
-				'L',
-				'newspack-blocks'
-			),
-		},
-		{
-			value: 256,
-			label: /* translators: label for extra-large avatar size option */ __(
-				'Extra-large',
-				'newspack-blocks'
-			),
-			shortName: /* translators: abbreviation for extra-large avatar size option  */ __(
-				'XL',
-				'newspack-blocks'
-			),
-		},
-	];
-
 	return (
 		<>
 			<InspectorControls>
 				<PanelBody title={ __( 'Author Profile Settings', 'newspack-blocks' ) }>
+					<BaseControl
+						label={ __( 'Text Size', 'newspack-blocks' ) }
+						id="newspack-blocks__text-size-control"
+					>
+						<PanelRow>
+							<ButtonGroup
+								id="newspack-blocks__text-size-control-buttons"
+								aria-label={ __( 'Text Size', 'newspack-blocks' ) }
+							>
+								{ textSizeOptions.map( option => {
+									const isCurrent = textSize === option.value;
+									return (
+										<Button
+											isLarge
+											isPrimary={ isCurrent }
+											aria-pressed={ isCurrent }
+											aria-label={ option.label }
+											key={ option.value }
+											onClick={ () => setAttributes( { textSize: option.value } ) }
+										>
+											{ option.shortName }
+										</Button>
+									);
+								} ) }
+							</ButtonGroup>
+						</PanelRow>
+					</BaseControl>
 					<PanelRow>
 						<ToggleControl
 							label={ __( 'Display biographical info', 'newspack-blocks' ) }
@@ -210,6 +273,15 @@ export default ( { attributes, setAttributes } ) => {
 							onChange={ () => setAttributes( { showAvatar: ! showAvatar } ) }
 						/>
 					</PanelRow>
+					{ showAvatar && (
+						<PanelRow>
+							<ToggleControl
+								label={ __( 'Hide default avatar', 'newspack-blocks' ) }
+								checked={ avatarHideDefault }
+								onChange={ () => setAttributes( { avatarHideDefault: ! avatarHideDefault } ) }
+							/>
+						</PanelRow>
+					) }
 					{ showAvatar && (
 						<BaseControl
 							label={ __( 'Avatar size', 'newspack-blocks' ) }
@@ -289,119 +361,70 @@ export default ( { attributes, setAttributes } ) => {
 					/>
 				</BlockControls>
 			) }
-			<div
-				className={ classnames(
-					'wp-block-newspack-blocks-author-profile',
-					'avatar-' + avatarAlignment,
-					attributes.className
-				) }
-			>
-				{ ! isLoading && ! error && author && (
-					<>
-						{ showAvatar && author.avatar && (
-							<div className="wp-block-newspack-blocks-author-profile__avatar">
-								<figure
-									style={ { borderRadius: avatarBorderRadius, width: `${ avatarSize }px` } }
-									dangerouslySetInnerHTML={ { __html: author.avatar } }
-								/>
-							</div>
-						) }
-						<div className="wp-block-newspack-blocks-author-profile__bio">
-							<h3>
-								<MaybeLink>{ author.name }</MaybeLink>
-							</h3>
-							{ showBio && author.bio && (
-								<p>
-									{ author.bio }{ ' ' }
-									{ showArchiveLink && (
-										<a href="#" className="no-op">
-											{ __( 'More by', 'newspack-blocks' ) + ' ' + author.name }
-										</a>
-									) }
-								</p>
-							) }
-							{ ( showEmail || showSocial ) && (
-								<ul className="wp-block-newspack-blocks-author-profile__social-links">
-									{ Object.keys( socialLinks ).map( service => (
-										<li key={ service }>
-											<a href="#" className="no-op">
-												{ socialLinks[ service ].svg && (
-													<span
-														dangerouslySetInnerHTML={ { __html: socialLinks[ service ].svg } }
-													/>
-												) }
-												<span className={ socialLinks[ service ].svg ? 'hidden' : 'visible' }>
-													{ service }
-												</span>
-											</a>
-										</li>
-									) ) }
-								</ul>
-							) }
+			{ author ? (
+				<SingleAuthor author={ author } attributes={ attributes } />
+			) : (
+				<Placeholder
+					icon={ <Icon icon={ postAuthor } /> }
+					label={ __( 'Author Profile', 'newspack-blocks' ) }
+				>
+					{ error && (
+						<Notice status="error" isDismissible={ false }>
+							{ error }
+						</Notice>
+					) }
+					{ isLoading && (
+						<div className="is-loading">
+							{ __( 'Fetching author info…', 'newspack-blocks' ) }
+							<Spinner />
 						</div>
-					</>
-				) }
-				{ ! author && (
-					<Placeholder
-						icon={ <Icon icon={ postAuthor } /> }
-						label={ __( 'Author Profile', 'newspack-blocks' ) }
-					>
-						{ error && (
-							<Notice status="error" isDismissible={ false }>
-								{ error }
-							</Notice>
-						) }
-						{ isLoading && (
-							<div className="is-loading">
-								{ __( 'Fetching author info…', 'newspack-blocks' ) }
-								<Spinner />
-							</div>
-						) }
-						{ ! isLoading && (
-							<AutocompleteWithSuggestions
-								label={ __( 'Search for an author to display', 'newspack-blocks' ) }
-								help={ __(
-									'Begin typing name, click autocomplete result to select.',
-									'newspack=blocks'
-								) }
-								fetchSuggestions={ async ( search = null, offset = 0 ) => {
-									// If we already have a selected author, no need to fetch suggestions.
-									if ( authorId ) {
-										return [];
-									}
+					) }
+					{ ! isLoading && (
+						<AutocompleteWithSuggestions
+							label={ __( 'Search for an author to display', 'newspack-blocks' ) }
+							help={ __(
+								'Begin typing name, click autocomplete result to select.',
+								'newspack-blocks'
+							) }
+							fetchSuggestions={ async ( search = null, offset = 0 ) => {
+								// If we already have a selected author, no need to fetch suggestions.
+								if ( authorId ) {
+									return [];
+								}
 
-									const response = await apiFetch( {
-										parse: false,
-										path: addQueryArgs( '/newspack-blocks/v1/authors', {
-											search,
-											offset,
-											fields: 'id,name',
-										} ),
-									} );
+								const response = await apiFetch( {
+									parse: false,
+									path: addQueryArgs( '/newspack-blocks/v1/authors', {
+										search,
+										offset,
+										fields: 'id,name',
+									} ),
+								} );
 
-									const total = parseInt( response.headers.get( 'x-wp-total' ) || 0 );
-									const authors = await response.json();
+								const total = parseInt( response.headers.get( 'x-wp-total' ) || 0 );
+								const authors = await response.json();
 
-									// Set max items for "load more" functionality in suggestions list.
-									if ( ! maxItemsToSuggest && ! search ) {
-										setMaxItemsToSuggest( total );
-									}
+								// Set max items for "load more" functionality in suggestions list.
+								if ( ! maxItemsToSuggest && ! search ) {
+									setMaxItemsToSuggest( total );
+								}
 
-									return authors.map( _author => ( {
-										value: _author.id,
-										label: decodeEntities( _author.name ) || __( '(no name)', 'newspack' ),
-									} ) );
-								} }
-								maxItemsToSuggest={ maxItemsToSuggest }
-								onChange={ items => setAttributes( { authorId: parseInt( items[ 0 ].value ) } ) }
-								postTypeLabel={ __( 'author', 'newspack-blocks' ) }
-								postTypeLabelPlural={ __( 'authors', 'newspack-blocks' ) }
-								selectedItems={ [] }
-							/>
-						) }
-					</Placeholder>
-				) }
-			</div>
+								return authors.map( _author => ( {
+									value: _author.id,
+									label: decodeEntities( _author.name ) || __( '(no name)', 'newspack' ),
+								} ) );
+							} }
+							maxItemsToSuggest={ maxItemsToSuggest }
+							onChange={ items => setAttributes( { authorId: parseInt( items[ 0 ].value ) } ) }
+							postTypeLabel={ __( 'author', 'newspack-blocks' ) }
+							postTypeLabelPlural={ __( 'authors', 'newspack-blocks' ) }
+							selectedItems={ [] }
+						/>
+					) }
+				</Placeholder>
+			) }
 		</>
 	);
 };
+
+export default AuthorProfile;

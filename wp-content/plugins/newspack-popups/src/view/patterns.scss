@@ -1,8 +1,7 @@
 .newspack-pattern {
 	&.subscribe__style-1 {
-		.newspack-inline-popup &,
 		.newspack-lightbox-placement-center & {
-			margin: -0.75em -0.75em 0;
+			margin: -1.5em -1.5em 0;
 
 			p:empty {
 				display: none;
@@ -14,18 +13,10 @@
 
 			+ .popup-not-interested-form {
 				margin-top: 0.75rem;
-			}
-		}
-
-		.newspack-lightbox-placement-center & {
-			margin: -1.5em -1.5em 0;
-
-			+ .popup-not-interested-form {
 				margin-bottom: -0.75rem;
 			}
 		}
 
-		.newspack-lightbox-has-title.newspack-inline-popup &,
 		.newspack-lightbox-has-title.newspack-lightbox-placement-center & {
 			margin-top: 0;
 		}

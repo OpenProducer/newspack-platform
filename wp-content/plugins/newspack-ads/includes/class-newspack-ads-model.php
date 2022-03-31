@@ -51,6 +51,7 @@ class Newspack_Ads_Model {
 	 */
 	public static function init() {
 		add_action( 'init', array( __CLASS__, 'register_ad_post_type' ) );
+		Newspack_Ads_GAM::set_network_code( get_option( self::OPTION_NAME_GAM_NETWORK_CODE, null ) );
 	}
 
 	/**
@@ -87,12 +88,18 @@ class Newspack_Ads_Model {
 	/**
 	 * Get a single ad unit to display on the page.
 	 *
-	 * @param number $id The id of the ad unit to retrieve.
-	 * @param string $placement The id of the placement region.
-	 * @param string $context An optional parameter to describe the context of the ad. For example, in the Widget, the widget ID.
+	 * @param number $id     The id of the ad unit to retrieve.
+	 * @param array  $config {
+	 *   Optional additional configuration parameters for the ad unit.
+	 *
+	 *   @type string $unique_id The unique ID for this ad displayment.
+	 *   @type string $placement The id of the placement region.
+	 *   @type string $context   An optional parameter to describe the context of the ad. For example, in the Widget, the widget ID.
+	 * }
+	 *
 	 * @return object Prepared ad unit, with markup for injecting on a page.
 	 */
-	public static function get_ad_unit_for_display( $id, $placement = null, $context = null ) {
+	public static function get_ad_unit_for_display( $id, $config = array() ) {
 		if ( 0 === (int) $id ) {
 			return new WP_Error(
 				'newspack_no_adspot_found',
@@ -103,8 +110,11 @@ class Newspack_Ads_Model {
 			);
 		}
 
-		$ad_unit               = \get_post( $id );
-		$responsive_placements = [ 'global_above_header', 'global_below_header', 'global_above_footer' ];
+		$unique_id = $config['unique_id'] ?? uniqid();
+		$placement = $config['placement'] ?? '';
+		$context   = $config['context'] ?? '';
+
+		$ad_unit = \get_post( $id );
 
 		$prepared_ad_unit = [];
 
@@ -149,18 +159,11 @@ class Newspack_Ads_Model {
 			);
 		}
 
-		$responsive                     = apply_filters(
-			'newspack_ads_maybe_use_responsive_placement',
-			in_array( $placement, $responsive_placements ),
-			$placement,
-			$context
-		);
-		$prepared_ad_unit['responsive'] = $responsive;
-		$prepared_ad_unit['placement']  = $placement;
-		$prepared_ad_unit['context']    = $context;
+		$prepared_ad_unit['placement'] = $placement;
+		$prepared_ad_unit['context']   = $context;
 
-		$prepared_ad_unit['ad_code']     = self::code_for_ad_unit( $prepared_ad_unit );
-		$prepared_ad_unit['amp_ad_code'] = self::amp_code_for_ad_unit( $prepared_ad_unit );
+		$prepared_ad_unit['ad_code']     = self::get_code_for_ad_unit( $prepared_ad_unit, $unique_id );
+		$prepared_ad_unit['amp_ad_code'] = self::get_amp_code_for_ad_unit( $prepared_ad_unit, $unique_id );
 		return $prepared_ad_unit;
 	}
 
@@ -427,7 +430,7 @@ class Newspack_Ads_Model {
 	/**
 	 * Retrieve the synced GAM items.
 	 *
-	 * @return object GAM items.
+	 * @return array[] GAM items.
 	 */
 	private static function get_synced_gam_items() {
 		$network_code     = self::get_active_network_code();
@@ -441,7 +444,7 @@ class Newspack_Ads_Model {
 	/**
 	 * Retrieve the synced GAM items.
 	 *
-	 * @return object GAM items.
+	 * @return array[] GAM items.
 	 */
 	private static function get_synced_gam_ad_units() {
 		$gam_items = self::get_synced_gam_items();
@@ -473,13 +476,14 @@ class Newspack_Ads_Model {
 	/**
 	 * Code for ad unit.
 	 *
-	 * @param array $ad_unit The ad unit to generate code for.
+	 * @param array  $ad_unit   The ad unit to generate code for.
+	 * @param string $unique_id The unique ID for this ad displayment.
 	 */
-	public static function code_for_ad_unit( $ad_unit ) {
+	public static function get_code_for_ad_unit( $ad_unit, $unique_id = '' ) {
 		$sizes        = $ad_unit['sizes'];
 		$code         = $ad_unit['code'];
 		$network_code = self::get_active_network_code();
-		$unique_id    = uniqid();
+		$unique_id    = $unique_id ?? uniqid();
 		if ( ! is_array( $sizes ) ) {
 			$sizes = [];
 		}
@@ -508,14 +512,15 @@ class Newspack_Ads_Model {
 	/**
 	 * AMP code for ad unit.
 	 *
-	 * @param array $ad_unit The ad unit to generate AMP code for.
+	 * @param array  $ad_unit   The ad unit to generate AMP code for.
+	 * @param string $unique_id Optional pre-defined unique ID for this ad displayment.
 	 */
-	public static function amp_code_for_ad_unit( $ad_unit ) {
+	public static function get_amp_code_for_ad_unit( $ad_unit, $unique_id = '' ) {
 		$sizes        = $ad_unit['sizes'];
 		$code         = $ad_unit['code'];
 		$network_code = self::get_active_network_code();
 		$targeting    = self::get_ad_targeting( $ad_unit );
-		$unique_id    = uniqid();
+		$unique_id    = $unique_id ?? uniqid();
 
 		if ( ! is_array( $sizes ) ) {
 			$sizes = [];
@@ -531,8 +536,8 @@ class Newspack_Ads_Model {
 			);
 		}
 
-		if ( $ad_unit['responsive'] ) {
-			return self::ad_elements_for_sizes( $ad_unit, $unique_id );
+		if ( 1 < count( $sizes ) && false === $ad_unit['fluid'] ) {
+			return self::get_responsive_amp_code_for_ad_unit( $ad_unit, $unique_id );
 		}
 
 		$attrs      = [];
@@ -545,6 +550,13 @@ class Newspack_Ads_Model {
 		}
 
 		if ( count( $sizes ) ) {
+			// Sort sizes by squareness.
+			usort(
+				$sizes,
+				function( $a, $b ) {
+					return $a[0] * $a[1] < $b[0] * $b[1];
+				}
+			);
 			if ( ! isset( $attrs['layout'] ) ) {
 				$attrs['width']  = max( array_column( $sizes, 0 ) );
 				$attrs['height'] = max( array_column( $sizes, 1 ) );
@@ -557,7 +569,7 @@ class Newspack_Ads_Model {
 
 		if ( 1 < count( $multisizes ) ) {
 			$attrs['data-multi-size']            = implode( ',', $multisizes );
-			$attrs['data-multi-size-validation'] = 'true';
+			$attrs['data-multi-size-validation'] = 'false';
 		}
 
 		$attrs['type']                  = 'doubleclick';
@@ -588,7 +600,7 @@ class Newspack_Ads_Model {
 	 * @param array  $ad_unit The ad unit to generate code for.
 	 * @param string $unique_id Unique ID for this ad unit instance.
 	 */
-	public static function ad_elements_for_sizes( $ad_unit, $unique_id ) {
+	public static function get_responsive_amp_code_for_ad_unit( $ad_unit, $unique_id ) {
 		$network_code = self::get_active_network_code();
 		$code         = $ad_unit['code'];
 		$sizes        = $ad_unit['sizes'];
@@ -601,16 +613,17 @@ class Newspack_Ads_Model {
 		$styles = [];
 
 		// Gather up all of the ad sizes which should be displayed on the same viewports.
-		// As a heuristic, each ad slot can safely display ads 200px narrower or less than the slot's width.
+		// As a heuristic, each ad slot can safely display ads with a 30% difference from slot's width.
 		// e.g. for the following setup: [[900,200], [750,200]],
 		// We can display [[900,200], [750,200]] on viewports >= 900px and [[750,200]] on viewports < 900px.
-		$width_difference_max = apply_filters( 'newspack_ads_multisize_size_difference_max', 200, $ad_unit );
-		$all_ad_sizes         = [];
+		$width_ratio_min = apply_filters( 'newspack_ads_multisize_size_ratio_max', 0.7, $ad_unit );
+		$all_ad_sizes    = [];
 		foreach ( $widths as $ad_width ) {
 			$valid_ad_sizes = [];
 
 			foreach ( $sizes as $size ) {
-				if ( $size[0] <= $ad_width && $ad_width - $width_difference_max <= $size[0] ) {
+				$width_ratio = min( $ad_width, $size[0] ) / max( $ad_width, $size[0] );
+				if ( $size[0] <= $ad_width && $width_ratio_min < $width_ratio ) {
 					$valid_ad_sizes[] = $size;
 				}
 			}
@@ -663,9 +676,9 @@ class Newspack_Ads_Model {
 
 			// If there is a multisize that's equal to the width and height of the container, remove it from the multisizes.
 			// The container size is included by default, and should not also be included in the multisize.
-			$container_multisize          = $width . 'x' . $height;
-			$container_multisize_location = array_search( $container_multisize, $multisizes );
-			if ( false !== $container_multisize_location ) {
+			$container_multisize           = $width . 'x' . $height;
+			$container_multisize_locations = array_keys( $multisizes, $container_multisize );
+			foreach ( $container_multisize_locations as $container_multisize_location ) {
 				unset( $multisizes[ $container_multisize_location ] );
 			}
 
@@ -774,6 +787,11 @@ class Newspack_Ads_Model {
 				$targeting['slug'] = sanitize_text_field( $slug );
 			}
 
+			$template_slug = get_page_template_slug();
+			if ( ! empty( $template_slug ) ) {
+				$targeting['template'] = sanitize_title( $template_slug );
+			}
+
 			// Add the category slugs to targeting.
 			$categories = wp_get_post_categories( get_the_ID(), [ 'fields' => 'slugs' ] );
 			if ( ! empty( $categories ) ) {
@@ -833,6 +851,20 @@ class Newspack_Ads_Model {
 			$status['is_network_code_matched'] = self::is_network_code_matched();
 		}
 		return $status;
+	}
+
+	/**
+	 * Get GAM available networks.
+	 *
+	 * @return array[] Array of available networks. Empty array if no networks found or unable to fetch.
+	 */
+	public static function get_gam_available_networks() {
+		try {
+			$networks = Newspack_Ads_GAM::get_serialized_gam_networks();
+		} catch ( Exception $e ) {
+			$networks = [];
+		}
+		return $networks;
 	}
 
 	/**

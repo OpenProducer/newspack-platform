@@ -199,11 +199,10 @@ class Profile {
 	 * @return object|WP_Error
 	 */
 	public function api_get_profile( $request ) {
-		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
-		$response                 = [
+		$response = [
 			'profile'      => $this->newspack_get_profile(),
 			'currencies'   => newspack_get_currencies_options(),
-			'countries'    => $wc_configuration_manager->country_state_fields(),
+			'countries'    => newspack_get_countries(),
 			'wpseo_fields' => self::$wpseo_fields,
 		];
 		return rest_ensure_response( $response );

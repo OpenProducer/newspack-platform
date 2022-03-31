@@ -9,10 +9,14 @@ export const META_FIELD_NAME = 'newspack_post_subtitle';
 /**
  * Appends subtitle to DOM, below the Title in the Editor.
  *
- * @param  {string} subtitle Subtitle text
+ * @param {string} subtitle Subtitle text
  */
 export const appendSubtitleToTitleDOMElement = ( subtitle, isInCodeEditor ) => {
-	const titleEl = document.querySelector( '.editor-post-title__block' );
+	let titleEl = document.querySelector( '.editor-post-title__block' ); // Legacy selector
+	if ( ! titleEl ) {
+		titleEl = document.querySelector( '.edit-post-visual-editor__post-title-wrapper' );
+	}
+
 	if ( titleEl && typeof subtitle === 'string' ) {
 		let subtitleEl = document.getElementById( SUBTITLE_ID );
 		if ( ! subtitleEl ) {

@@ -4,8 +4,10 @@
 import { speak } from '@wordpress/a11y';
 import { escapeHTML } from '@wordpress/escape-html';
 import { __, sprintf } from '@wordpress/i18n';
-import Swiper from 'swiper';
-import 'swiper/dist/css/swiper.css';
+// eslint-disable-next-line import/no-unresolved
+import Swiper from 'swiper/bundle';
+// eslint-disable-next-line import/no-unresolved
+import 'swiper/css/bundle';
 
 const autoplayClassName = 'wp-block-newspack-blocks-carousel__autoplay-playing';
 
@@ -104,6 +106,7 @@ export default function createSwiper( els, config = {} ) {
 				) }</span></button>`;
 			},
 		},
+		watchSlidesProgress: config.slidesPerView > 1,
 		preventClicksPropagation: false, // Necessary for normal block interactions.
 		releaseFormElements: false,
 		setWrapperSize: true,
@@ -111,8 +114,14 @@ export default function createSwiper( els, config = {} ) {
 		spaceBetween: 16,
 		touchStartPreventDefault: false,
 		breakpoints: {
-			600: {
+			320: {
+				slidesPerView: 1,
+			},
+			782: {
 				slidesPerView: config.slidesPerView > 1 ? 2 : 1,
+			},
+			1168: {
+				slidesPerView: config.slidesPerView,
 			},
 		},
 		on: {
@@ -135,7 +144,7 @@ export default function createSwiper( els, config = {} ) {
 				 * If we're autoplaying, don't announce the slide change, as that would
 				 * be supremely annoying.
 				 */
-				if ( ! this.autoplay.running ) {
+				if ( ! this.autoplay?.running ) {
 					// Announce the contents of the slide.
 					const currentImage = currentSlide.querySelector( 'img' );
 					const alt = currentImage ? currentImage?.alt : false;
@@ -144,7 +153,7 @@ export default function createSwiper( els, config = {} ) {
 						/* translators: 1: current slide number and 2: total number of slides */
 						__( 'Slide %1$s of %2$s', 'newspack-blocks' ),
 						this.realIndex + 1,
-						this.pagination.bullets.length
+						this.pagination?.bullets?.length || 0
 					);
 
 					speak(

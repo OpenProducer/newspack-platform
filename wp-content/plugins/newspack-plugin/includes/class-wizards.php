@@ -39,7 +39,6 @@ class Wizards {
 			'health-check'    => new Health_Check_Wizard(),
 			'engagement'      => new Engagement_Wizard(),
 			'popups'          => new Popups_Wizard(),
-			'updates'         => new Updates_Wizard(),
 			'connections'     => new Connections_Wizard(),
 		];
 

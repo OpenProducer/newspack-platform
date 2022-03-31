@@ -58,19 +58,19 @@ class Dashboard extends Wizard {
 				'slug'        => 'site-design',
 				'name'        => Wizards::get_name( 'site-design' ),
 				'url'         => Wizards::get_url( 'site-design' ),
-				'description' => esc_html__( 'Branding, color, typography, layouts', 'newspack' ),
+				'description' => esc_html__( 'Customize the look and feel of your site', 'newspack' ),
 			],
 			[
 				'slug'        => 'reader-revenue',
 				'name'        => Wizards::get_name( 'reader-revenue' ),
 				'url'         => Wizards::get_url( 'reader-revenue' ),
-				'description' => esc_html__( 'Membership, paywall, subscriptions', 'newspack' ),
+				'description' => esc_html__( 'Generate revenue from your customers', 'newspack' ),
 			],
 			[
 				'slug'        => 'advertising',
 				'name'        => Wizards::get_name( 'advertising' ),
 				'url'         => Wizards::get_url( 'advertising' ),
-				'description' => esc_html__( 'Content monetization', 'newspack' ),
+				'description' => esc_html__( 'Monetize your content through ads', 'newspack' ),
 			],
 			[
 				'slug'        => 'syndication',
@@ -88,7 +88,7 @@ class Dashboard extends Wizard {
 				'slug'        => 'seo',
 				'name'        => Wizards::get_name( 'seo' ),
 				'url'         => Wizards::get_url( 'seo' ),
-				'description' => esc_html__( 'Search engine and social optimization', 'newspack' ),
+				'description' => esc_html__( 'Configure basic SEO settings', 'newspack' ),
 			],
 			[
 				'slug'        => 'health-check',

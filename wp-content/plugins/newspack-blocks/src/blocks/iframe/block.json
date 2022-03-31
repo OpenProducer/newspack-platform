@@ -2,6 +2,10 @@
 	"name": "iframe",
 	"category": "newspack",
 	"attributes": {
+		"className": {
+			"type": "string",
+			"default": ""
+		},
 		"src": {
 			"type": "string",
 			"default": ""
@@ -21,6 +25,10 @@
 		"isFullScreen": {
 			"type": "boolean",
 			"default": false
+		},
+		"mode": {
+			"type": "string",
+			"default": "iframe"
 		}
 	}
 }

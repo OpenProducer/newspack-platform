@@ -1,3 +1,5 @@
+/* globals jQuery */
+
 /**
  * File customize-preview.js.
  *
@@ -5,23 +7,22 @@
  *
  * Contains handlers to make Customizer preview changes asynchronously.
  */
-( function( $ ) {
+( function ( $ ) {
 	const api = wp.customize;
 	const Logo = new NewspackLogo();
 	let resizeTimer;
 
-	api( 'custom_logo', function( value ) {
+	api( 'custom_logo', function ( value ) {
 		handleLogoDetection( value() );
 		value.bind( handleLogoDetection );
 	} );
 
-	api( 'logo_size', function( value ) {
+	api( 'logo_size', function ( value ) {
 		Logo.resize( value() );
 		value.bind( Logo.resize );
 	} );
 
 	/**
-	 *
 	 */
 	function handleLogoDetection( to, initial ) {
 		if ( '' === to ) {
@@ -35,7 +36,6 @@
 	}
 
 	/**
-	 *
 	 */
 	function NewspackLogo() {
 		let hasLogo = null;
@@ -61,7 +61,7 @@
 					max.width = $.isNumeric( cssMax.width ) ? cssMax.width : 600;
 					max.height = $.isNumeric( cssMax.height ) ? cssMax.height : size.height;
 
-					img.onload = function() {
+					img.onload = function () {
 						let output = new Object();
 
 						if ( size.width >= size.height ) {
@@ -89,14 +89,14 @@
 					img.src = logo.attr( 'src' );
 
 					clearTimeout( resizeTimer );
-					resizeTimer = setTimeout( function() {
+					resizeTimer = setTimeout( function () {
 						$( document.body ).resize();
 					}, 500 );
 				}
 			},
 
 			add() {
-				const intId = setInterval( function() {
+				const intId = setInterval( function () {
 					const logo = $( '.custom-logo[src]' );
 					if ( logo.length ) {
 						clearInterval( intId );
@@ -107,7 +107,7 @@
 
 			change() {
 				const oldlogo = $( '.custom-logo' ).attr( 'src' );
-				const intId = setInterval( function() {
+				const intId = setInterval( function () {
 					const logo = $( '.custom-logo' ).attr( 'src' );
 					if ( logo !== oldlogo ) {
 						clearInterval( intId );
@@ -128,12 +128,12 @@
 	/**
 	 * Get logo size
 	 *
-	 * @param {number} a short side,
-	 * @param {number} b long side
+	 * @param {number} a    short side,
+	 * @param {number} b    long side
 	 * @param {number} amax short css max
 	 * @param {number} bmax long css max
-	 * @param {number} p percent
-	 * @param {number} m minimum short side
+	 * @param {number} p    percent
+	 * @param {number} m    minimum short side
 	 */
 	function logo_min_max( a, b, amax, bmax, p, m ) {
 		const max = new Object();

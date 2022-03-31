@@ -150,10 +150,6 @@
 	margin-left: #{0.75 * $size__spacing-unit};
 	position: relative;
 
-	@include media( tablet ) {
-		display: block;
-	}
-
 	#header-search {
 		position: absolute;
 		top: calc( 100% + 4px );
@@ -163,6 +159,18 @@
 		@include media( tablet ) {
 			right: 0;
 		}
+	}
+}
+
+@include media( tablet ) {
+	.h-dh .header-search-contain {
+		display: block;
+	}
+}
+
+@include media( narrowdesktop ) {
+	.h-sh .header-search-contain {
+		display: block;
 	}
 }
 
@@ -240,8 +248,7 @@
 			margin: auto;
 		}
 
-		&.h-dh,
-		&.h-sub {
+		&.h-dh {
 			.site-header .middle-header-contain .wrapper .site-branding {
 				display: flex;
 				justify-content: center;
@@ -416,7 +423,7 @@
 
 // h-sub
 .h-sub {
-	.site-title,
+	&.wp-custom-logo .site-title,
 	.site-description,
 	.alternative-logo {
 		display: none;
@@ -568,6 +575,24 @@
 
 			&.site-branding {
 				width: 38%;
+			}
+		}
+	}
+
+	&.h-cl .site-header .custom-logo {
+		object-position: left center;
+	}
+
+	&.h-cl {
+		&.h-dh .site-header .custom-logo {
+			@include media( tablet ) {
+				object-position: center center;
+			}
+		}
+
+		&.h-sh .site-header .custom-logo {
+			@include media( narrowdesktop ) {
+				object-position: center center;
 			}
 		}
 	}

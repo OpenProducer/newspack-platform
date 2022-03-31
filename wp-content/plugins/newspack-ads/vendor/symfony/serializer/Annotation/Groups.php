@@ -17,6 +17,7 @@ use Symfony\Component\Serializer\Exception\InvalidArgumentException;
  * Annotation class for @Groups().
  *
  * @Annotation
+ * @NamedArgumentConstructor
  * @Target({"PROPERTY", "METHOD"})
  *
  * @author Kévin Dunglas <dunglas@gmail.com>
@@ -30,11 +31,17 @@ class Groups
     private $groups;
 
     /**
-     * @throws InvalidArgumentException
+     * @param string|string[] $groups
      */
-    public function __construct(array $groups)
+    public function __construct($groups)
     {
-        if (isset($groups['value'])) {
+        if (\is_string($groups)) {
+            $groups = (array) $groups;
+        } elseif (!\is_array($groups)) {
+            throw new \TypeError(sprintf('"%s": Parameter $groups is expected to be a string or an array of strings, got "%s".', __METHOD__, get_debug_type($groups)));
+        } elseif (isset($groups['value'])) {
+            trigger_deprecation('symfony/serializer', '5.3', 'Passing an array of properties as first argument to "%s" is deprecated. Use named arguments instead.', __METHOD__);
+
             $groups = (array) $groups['value'];
         }
         if (empty($groups)) {
@@ -42,8 +49,8 @@ class Groups
         }
 
         foreach ($groups as $group) {
-            if (!\is_string($group)) {
-                throw new InvalidArgumentException(sprintf('Parameter of annotation "%s" must be a string or an array of strings.', static::class));
+            if (!\is_string($group) || '' === $group) {
+                throw new InvalidArgumentException(sprintf('Parameter of annotation "%s" must be a string or an array of non-empty strings.', static::class));
             }
         }
 
@@ -51,8 +58,6 @@ class Groups
     }
 
     /**
-     * Gets groups.
-     *
      * @return string[]
      */
     public function getGroups()

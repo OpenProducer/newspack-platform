@@ -320,12 +320,16 @@ class Edit extends Component {
 		const { buttonText } = attributes;
 		return (
 			<button type="submit" onClick={ evt => evt.preventDefault() }>
-				<RichText
-					onChange={ value => setAttributes( { buttonText: value } ) }
-					placeholder={ __( 'Button text…', 'newspack-blocks' ) }
-					value={ buttonText }
-					tagName="span"
-				/>
+				{ this.isRenderingStreamlinedBlock() ? (
+					__( 'Donate with card', 'newspack-blocks' )
+				) : (
+					<RichText
+						onChange={ value => setAttributes( { buttonText: value } ) }
+						placeholder={ __( 'Button text…', 'newspack-blocks' ) }
+						value={ buttonText }
+						tagName="span"
+					/>
+				) }
 			</button>
 		);
 	}
@@ -346,7 +350,12 @@ class Edit extends Component {
 				{ this.isRenderingStreamlinedBlock() ? (
 					<div className="wp-block-newspack-blocks-donate__stripe stripe-payment">
 						<div className="stripe-payment__row stripe-payment__row--flex stripe-payment__footer">
-							{ this.renderButton() }
+							<div className="stripe-payment__methods">
+								<div className="stripe-payment__request-button">
+									{ __( 'Apple/Google Pay Button', 'newspack-blocks' ) }
+								</div>
+								{ this.renderButton() }
+							</div>
 							<a
 								target="_blank"
 								rel="noreferrer"

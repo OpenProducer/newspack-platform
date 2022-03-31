@@ -7,7 +7,7 @@
  * Author URI:      https://newspack.blog/
  * Text Domain:     newspack-blocks
  * Domain Path:     /languages
- * Version:         1.42.1
+ * Version:         1.46.1
  *
  * @package         Newspack_Blocks
  */
@@ -15,7 +15,7 @@
 define( 'NEWSPACK_BLOCKS__PLUGIN_FILE', __FILE__ );
 define( 'NEWSPACK_BLOCKS__BLOCKS_DIRECTORY', 'dist/' );
 define( 'NEWSPACK_BLOCKS__PLUGIN_DIR', plugin_dir_path( NEWSPACK_BLOCKS__PLUGIN_FILE ) );
-define( 'NEWSPACK_BLOCKS__VERSION', '1.42.1' );
+define( 'NEWSPACK_BLOCKS__VERSION', '1.46.1' );
 
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks.php';
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'includes/class-newspack-blocks-api.php';
@@ -26,6 +26,9 @@ require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/homepage-articles/class-w
 
 // REST Controller for Author Profile Block.
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/author-profile/class-wp-rest-newspack-authors-controller.php';
+
+// REST Controller for Author List Block.
+require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/author-list/class-wp-rest-newspack-author-list-controller.php';
 
 // REST Controller for Donate Block.
 require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/donate/class-wp-rest-newspack-donate-controller.php';
@@ -50,6 +53,15 @@ function newspack_authors_block_register_rest_routes() { // phpcs:ignore WordPre
 	$authors_controller->register_routes();
 }
 add_action( 'rest_api_init', 'newspack_authors_block_register_rest_routes' );
+
+/**
+ * Registers Author List block routes.
+ */
+function newspack_author_list_block_register_rest_routes() { // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedFunctionFound
+	$author_list_controller = new WP_REST_Newspack_Author_List_Controller();
+	$author_list_controller->register_routes();
+}
+add_action( 'rest_api_init', 'newspack_author_list_block_register_rest_routes' );
 
 /**
  * Registers Donate block routes.

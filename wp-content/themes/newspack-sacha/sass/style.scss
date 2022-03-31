@@ -5,7 +5,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.53.1
+Version: 1.56.2
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -72,20 +72,22 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 
 // Accent headers
 .accent-header,
+#secondary .widgettitle,
 .article-section-title,
 .cat-links {
 	color: $color__primary;
+	margin-bottom: $size__spacing-unit;
+	text-align: center;
 }
 
 .accent-header,
 div.wpnbha .article-section-title,
 .cat-links {
 	font-size: $font__size-xs;
-	margin-bottom: $size__spacing-unit;
-	text-align: center;
 }
 
 .accent-header,
+#secondary .widgettitle,
 .article-section-title > span {
 	align-items: center;
 	display: flex;
@@ -156,7 +158,6 @@ blockquote,
 cite {
 	font-family: $font__heading;
 	font-style: italic;
-	text-align: center;
 
 	em,
 	i {
@@ -178,6 +179,7 @@ cite {
 
 .wp-block-pullquote {
 	border-width: 2px 0;
+	text-align: center;
 
 	blockquote p,
 	&.is-style-solid-color blockquote p {
@@ -186,22 +188,25 @@ cite {
 		}
 	}
 
+	&.has-text-align-right:not( .alignleft ):not( .alignright ),
+	&.has-text-align-left:not( .alignleft ):not( .alignright ) {
+		@include media( tablet ) {
+			p {
+				font-size: $font__size-xl;
+			}
+		}
+	}
+
 	&.is-style-solid-color blockquote cite,
 	cite {
 		font-style: italic;
-	}
-
-	&.is-style-solid-color blockquote {
-		text-align: center;
 	}
 
 	&.alignleft,
 	&.alignright {
 		margin-top: #{1.5 * $size__spacing-unit};
 		margin-bottom: #{1.5 * $size__spacing-unit};
-		blockquote {
-			text-align: left;
-		}
+		text-align: left;
 
 		@include media( tablet ) {
 			blockquote p,
@@ -484,7 +489,8 @@ cite {
 	background-color: #f1f1f1;
 	color: $color__text-main;
 
-	.widget .widget-title {
+	.widget .widget-title,
+	.widget .widgettitle {
 		color: $color__primary;
 		font-weight: bold;
 	}

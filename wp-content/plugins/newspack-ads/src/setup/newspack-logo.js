@@ -3,7 +3,7 @@
  */
 import { Path, SVG } from '@wordpress/components';
 
-export default ( { size = 24 } ) => (
+const NewspackLogo = ( { size = 24 } ) => (
 	<SVG className="newspack-logo" width={ size } height={ size } viewBox="0 0 32 32">
 		<Path
 			d="M16 32c8.836 0 16-7.164 16-16S24.836 0 16 0 0 7.164 0 16s7.163 16 16 16z"
@@ -15,3 +15,5 @@ export default ( { size = 24 } ) => (
 		/>
 	</SVG>
 );
+
+export default NewspackLogo;

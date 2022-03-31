@@ -15,11 +15,31 @@ final class Newspack_Popups {
 	const NEWSPACK_POPUPS_CPT                   = 'newspack_popups_cpt';
 	const NEWSPACK_POPUPS_TAXONOMY              = 'newspack_popups_taxonomy';
 	const NEWSPACK_POPUPS_ACTIVE_CAMPAIGN_GROUP = 'newspack_popups_active_campaign_group';
-	const NEWSPACK_POPUP_PREVIEW_QUERY_PARAM    = 'newspack_popups_preview_id';
+	const NEWSPACK_POPUP_PREVIEW_QUERY_PARAM    = 'pid';
 	const NEWSPACK_POPUPS_TAXONOMY_STATUS       = 'newspack_popups_taxonomy_status';
 
 	const LIGHTWEIGHT_API_CONFIG_FILE_PATH_LEGACY = WP_CONTENT_DIR . '/../newspack-popups-config.php';
 	const LIGHTWEIGHT_API_CONFIG_FILE_PATH        = WP_CONTENT_DIR . '/newspack-popups-config.php';
+
+	const PREVIEW_QUERY_KEYS = [
+		'background_color'               => 'n_bc',
+		'display_title'                  => 'n_ti',
+		'hide_border'                    => 'n_hb',
+		'dismiss_text'                   => 'n_dt',
+		'dismiss_text_alignment'         => 'n_da',
+		'frequency'                      => 'n_fr',
+		'overlay_color'                  => 'n_oc',
+		'overlay_opacity'                => 'n_oo',
+		'overlay_size'                   => 'n_os',
+		'placement'                      => 'n_pl',
+		'trigger_type'                   => 'n_tt',
+		'trigger_delay'                  => 'n_td',
+		'trigger_scroll_progress'        => 'n_ts',
+		'trigger_blocks_count'           => 'n_tb',
+		'archive_insertion_posts_count'  => 'n_ac',
+		'archive_insertion_is_repeating' => 'n_ar',
+		'utm_suppression'                => 'n_ut',
+	];
 
 	/**
 	 * The single instance of the class.
@@ -56,8 +76,8 @@ final class Newspack_Popups {
 			add_action( 'customize_controls_enqueue_scripts', [ __CLASS__, 'enqueue_customizer_assets' ] );
 			add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
 			add_action( 'save_post_' . self::NEWSPACK_POPUPS_CPT, [ __CLASS__, 'popup_default_fields' ], 10, 3 );
-			add_action( 'transition_post_status', [ __CLASS__, 'remove_default_category' ], 10, 3 );
-
+			add_action( 'transition_post_status', [ __CLASS__, 'prevent_default_category_on_publish' ], 10, 3 );
+			add_action( 'pre_delete_term', [ __CLASS__, 'prevent_default_category_on_term_delete' ], 10, 2 );
 			add_filter( 'show_admin_bar', [ __CLASS__, 'show_admin_bar' ], 10, 2 ); // phpcs:ignore WordPressVIPMinimum.UserExperience.AdminBarRemoval.RemovalDetected
 
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-model.php';
@@ -124,6 +144,19 @@ final class Newspack_Popups {
 		\register_meta(
 			'post',
 			'trigger_scroll_progress',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'integer',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
+		\register_meta(
+			'post',
+			// Not really a "trigger", since this meta applies only to inline prompts. Keeping the "trigger"-based naming for consistency.
+			'trigger_blocks_count',
 			[
 				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
 				'show_in_rest'   => true,
@@ -550,6 +583,7 @@ final class Newspack_Popups {
 			'newspack-popups',
 			'newspack_popups_data',
 			[
+				'frontend_url'                 => get_site_url(),
 				'preview_post'                 => self::preview_post_permalink(),
 				'preview_archive'              => self::preview_archive_permalink(),
 				'segments'                     => Newspack_Popups_Segmentation::get_segments(),
@@ -569,7 +603,7 @@ final class Newspack_Popups {
 						'objects'
 					)
 				),
-
+				'preview_query_keys'           => self::PREVIEW_QUERY_KEYS,
 			]
 		);
 		\wp_enqueue_style(
@@ -643,7 +677,7 @@ final class Newspack_Popups {
 		$is_customizer_preview = is_customize_preview();
 		// Used by the Newspack Plugin's Campaigns Wizard.
 		$is_view_as_preview = false != Newspack_Popups_View_As::viewing_as_spec();
-		return self::previewed_popup_id() || $is_view_as_preview || $is_customizer_preview;
+		return ! empty( self::previewed_popup_id() ) || $is_view_as_preview || $is_customizer_preview;
 	}
 
 	/**
@@ -745,6 +779,7 @@ final class Newspack_Popups {
 		update_post_meta( $post_id, 'trigger_type', $trigger_type );
 		update_post_meta( $post_id, 'trigger_delay', 3 );
 		update_post_meta( $post_id, 'trigger_scroll_progress', 30 );
+		update_post_meta( $post_id, 'trigger_blocks_count', 3 );
 		update_post_meta( $post_id, 'archive_insertion_posts_count', 0 );
 		update_post_meta( $post_id, 'archive_insertion_is_repeating', false );
 		update_post_meta( $post_id, 'utm_suppression', '' );
@@ -799,9 +834,9 @@ final class Newspack_Popups {
 		?>
 			<div class="notice notice-error">
 				<p>
-					<?php _e( 'Newspack Campaigns requires a custom configuration file, which is missing. Please create this file following instructions found ', 'newspack-popups' ); ?>
+					<?php _e( 'Newspack Campaigns requires a custom configuration file, which is missing. Please create this file by following ', 'newspack-popups' ); ?>
 					<a href="https://github.com/Automattic/newspack-popups/blob/master/README.md#config-file">
-						<?php _e( 'here.', 'newspack-popups' ); ?>
+						<?php _e( 'these instructions.', 'newspack-popups' ); ?>
 					</a>
 				</p>
 			</div>
@@ -907,20 +942,89 @@ final class Newspack_Popups {
 	}
 
 	/**
+	 * Remove the default category from the given post, if it's the only category applied to that post.
+	 *
+	 * @param int $post_id ID of the post.
+	 */
+	private static function remove_default_category( $post_id ) {
+		$default_category_id = (int) get_option( 'default_category', 0 );
+		if ( empty( $default_category_id ) ) {
+			return;
+		}
+
+		$post_categories = wp_get_post_categories( $post_id );
+		if ( 1 === count( $post_categories ) && reset( $post_categories ) === $default_category_id ) {
+			wp_remove_object_terms( $post_id, $default_category_id, 'category' );
+		}
+	}
+
+	/**
 	 * Prevent setting the default category when publishing.
 	 *
 	 * @param string $new_status New status.
 	 * @param string $old_status Old status.
 	 * @param bool   $post Post.
 	 */
-	public static function remove_default_category( $new_status, $old_status, $post ) {
+	public static function prevent_default_category_on_publish( $new_status, $old_status, $post ) {
 		if ( self::NEWSPACK_POPUPS_CPT === $post->post_type && 'publish' !== $old_status && 'publish' === $new_status ) {
-			$default_category_id = (int) get_option( 'default_category', false );
-			$popup_has_category  = has_category( $default_category_id, $post->ID );
-			if ( $popup_has_category ) {
-				wp_remove_object_terms( $post->ID, $default_category_id, 'category' );
-			}
+			self::remove_default_category( $post->ID );
 		}
+	}
+
+	/**
+	 * When a category is deleted, any posts that have only that category assigned
+	 * are automatically assigned the site's default category (usually "Uncategorized").
+	 * We want to prevent this behavior for prompts, as prompts with the default
+	 * category will only appear on posts with that category.
+	 *
+	 * @param int    $deleted_term ID of the term being deleted.
+	 * @param string $taxonomy Name of the taxonomy the term belongs to.
+	 *
+	 * @return int The number of prompts affected by this callback.
+	 */
+	public static function prevent_default_category_on_term_delete( $deleted_term, $taxonomy ) {
+		// We only care about categories.
+		if ( 'category' !== $taxonomy ) {
+			return;
+		}
+
+		$default_category_id = (int) get_option( 'default_category', 0 );
+		if ( empty( $default_category_id ) ) {
+			return;
+		}
+
+		$prompts_with_deleted_category = get_posts(
+			[
+				'category__in'     => $deleted_term,
+				'category__not_in' => $default_category_id, // We don't want to remove the default category if it was intentionally added.
+				'fields'           => 'ids',
+				'post_status'      => 'any',
+				'post_type'        => self::NEWSPACK_POPUPS_CPT,
+				'posts_per_page'   => -1,
+			]
+		);
+
+		if ( empty( $prompts_with_deleted_category ) ) {
+			return;
+		}
+
+		// When the default category is assigned to a prompt and it wasn't previously assigned, remove it.
+		add_action(
+			'set_object_terms',
+			// Use an anonymous function that can read the variables above in its closure.
+			function( $post_id, $terms, $tt_ids, $taxonomy ) use ( $default_category_id, $prompts_with_deleted_category ) {
+				if (
+					self::NEWSPACK_POPUPS_CPT === get_post_type( $post_id ) &&
+					in_array( $post_id, $prompts_with_deleted_category, true ) &&
+					in_array( $default_category_id, $terms, true ) &&
+					'category' === $taxonomy
+				) {
+					self::remove_default_category( $post_id );
+				}
+			},
+			10,
+			4
+		);
 	}
 
 	/**
@@ -947,25 +1051,54 @@ final class Newspack_Popups {
 	}
 
 	/**
+	 * Generate the duplicated post title base.
+	 *
+	 * @param string $original_title Original post title.
+	 * @param string $parent_title Post to duplicate title.
+	 * @return string
+	 */
+	private static function get_duplicated_post_base_title( $original_title, $parent_title ) {
+		/* translators: %s: Duplicate prompt title */
+		$original_base_title = sprintf( __( '%s copy', 'newspack-popups' ), $original_title );
+
+		// Prepend ` copy` only if it's not already on the post title.
+		return preg_match( "/^$original_base_title\s*\d*$/", $parent_title )
+		? $original_base_title
+		/* translators: %s: Duplicate prompt title */
+		: sprintf( __( '%s copy', 'newspack-popups' ), $parent_title );
+	}
+
+	/**
 	 * Get a default title for duplicated prompts.
 	 *
-	 * @param int $old_id The ID of the prompt being duplicated.
+	 * @param int $original_id The ID of the original prompt.
+	 * @param int $parent_id The ID of the prompt being duplicated.
 	 * @return string The title for the duplicated prompt.
 	 */
-	public static function get_duplicate_title( $old_id ) {
-		/* translators: %s: Duplicate prompt title */
-		$duplicate_title  = sprintf( __( '%s copy', 'newspack-popups' ), get_the_title( $old_id ) );
+	public static function get_duplicate_title( $original_id, $parent_id ) {
+		$original_title  = get_the_title( $original_id );
+		$duplicate_title = self::get_duplicated_post_base_title( $original_title, get_the_title( $parent_id ) );
+
 		$duplicated_posts = new \WP_Query(
 			[
-				'fields'      => 'ids',
 				'post_status' => [ 'publish', 'draft', 'pending', 'future' ],
 				'post_type'   => self::NEWSPACK_POPUPS_CPT,
 				'meta_key'    => 'duplicate_of', // phpcs:disable WordPress.DB.SlowDBQuery.slow_db_query_meta_value
-				'meta_value'  => $old_id,
+				'meta_value'  => $original_id,
 			]
 		);
 
-		$duplicate_count = $duplicated_posts->found_posts;
+		$duplicated_posts_with_same_title = array_filter(
+			$duplicated_posts->get_posts(),
+			function( $prompt ) use ( $original_title ) {
+				/* translators: %s: Duplicate prompt title */
+				$original_prompt_title = sprintf( __( '%s copy', 'newspack-popups' ), $original_title );
+				// Filter duplicated posts with a duplicate count postponed to the same title.
+				return preg_match( "/^$original_prompt_title\s*\d*$/", $prompt->post_title );
+			}
+		);
+
+		$duplicate_count = count( $duplicated_posts_with_same_title );
 
 		// Append iterator to title if there are already copies.
 		if ( 0 < $duplicate_count ) {
@@ -988,19 +1121,22 @@ final class Newspack_Popups {
 		$new_popup_id = false;
 
 		if ( is_a( $old_popup, 'WP_Post' ) && self::NEWSPACK_POPUPS_CPT === $old_popup->post_type ) {
-			$duplicate_of = get_post_meta( $id, 'duplicate_of', true );
-			$original_id  = 0 < $duplicate_of ? $duplicate_of : $id; // If the post we're duplicating is itself a copy, inherit the 'duplicate_of' value. Otherwise, set the value to the post we're duplicating.
-			$new_popup    = [
+			$duplicate_of        = get_post_meta( $id, 'duplicate_of', true );
+			$original_id         = 0 < $duplicate_of ? $duplicate_of : $id; // If the post we're duplicating is itself a copy, inherit the 'duplicate_of' value. Otherwise, set the value to the post we're duplicating.
+			$original_title_base = self::get_duplicated_post_base_title( get_the_title( $original_id ), $title );
+			$new_popup           = [
 				'post_type'     => self::NEWSPACK_POPUPS_CPT,
 				'post_status'   => 'draft',
-				'post_title'    => ! empty( $title ) ? $title : self::get_duplicate_title( $original_id ),
+				'post_title'    => ! empty( $title ) ? $title : self::get_duplicate_title( $duplicate_of, $id ),
 				'post_author'   => $old_popup->post_author,
 				'post_content'  => $old_popup->post_content,
 				'post_excerpt'  => $old_popup->post_excerpt,
 				'post_category' => wp_get_post_categories( $id, [ 'fields' => 'ids' ] ),
 				'tags_input'    => wp_get_post_tags( $id, [ 'fields' => 'ids' ] ),
 				'meta_input'    => [
-					'duplicate_of' => $original_id,
+					// A campaign is set as the origin of another one, if the later have the same title with the count of occurences suffixed (e.g. my prompt 3).
+					'duplicate_of' => empty( $title ) || preg_match( "/^$original_title_base\s*\d*$/", $title )
+									? $original_id : 0,
 				],
 			];
 

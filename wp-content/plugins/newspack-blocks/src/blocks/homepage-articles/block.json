@@ -34,6 +34,10 @@
       "type": "boolean",
       "default": false
     },
+    "disableImageLazyLoad": {
+      "type": "boolean",
+      "default": false
+    },
     "imageShape": {
       "type": "string",
       "default": "landscape"

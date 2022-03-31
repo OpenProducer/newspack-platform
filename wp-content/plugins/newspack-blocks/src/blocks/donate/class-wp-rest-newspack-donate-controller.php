@@ -35,7 +35,7 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 			[
 				[
 					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'process_donation' ],
+					'callback'            => [ $this, 'api_process_donation' ],
 					'args'                => [
 						'tokenData'         => [
 							'type'       => 'object',
@@ -71,6 +71,12 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 						'newsletter_opt_in' => [
 							'sanitize_callback' => 'rest_sanitize_boolean',
 						],
+						'agree_to_pay_fees' => [
+							'sanitize_callback' => 'rest_sanitize_boolean',
+						],
+						'payment_method_id' => [
+							'sanitize_callback' => 'sanitize_text_field',
+						],
 					],
 					'permission_callback' => '__return_true',
 				],
@@ -84,7 +90,7 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response
 	 */
-	public function process_donation( $request ) {
+	public function api_process_donation( $request ) {
 		$payment_metadata = [
 			'referer' => wp_get_referer(),
 		];
@@ -97,29 +103,20 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 
 		$response = \Newspack\Stripe_Connection::handle_donation(
 			[
-				'frequency'        => $request->get_param( 'frequency' ),
-				'token_data'       => $request->get_param( 'tokenData' ),
-				'email_address'    => $request->get_param( 'email' ),
-				'full_name'        => $request->get_param( 'full_name' ),
-				'amount'           => $request->get_param( 'amount' ),
-				'client_metadata'  => [
+				'frequency'         => $request->get_param( 'frequency' ),
+				'token_data'        => $request->get_param( 'tokenData' ),
+				'email_address'     => $request->get_param( 'email' ),
+				'full_name'         => $request->get_param( 'full_name' ),
+				'amount'            => $request->get_param( 'amount' ),
+				'client_metadata'   => [
 					'clientId'        => $request->get_param( 'clientId' ),
 					'newsletterOptIn' => $request->get_param( 'newsletter_opt_in' ),
 				],
-				'payment_metadata' => $payment_metadata,
+				'payment_metadata'  => $payment_metadata,
+				'payment_method_id' => $request->get_param( 'payment_method_id' ),
 			]
 		);
 
 		return rest_ensure_response( $response );
-	}
-
-	/**
-	 * Retrieve Stripe data.
-	 */
-	public static function get_payment_data() {
-		if ( ! Newspack_Blocks::is_rendering_streamlined_block() ) {
-			return [];
-		}
-		return \Newspack\Stripe_Connection::get_stripe_data();
 	}
 }

@@ -68,6 +68,11 @@ body.newspack-single-column-template {
 		figcaption {
 			padding: 0 $size__spacing-unit;
 		}
+
+		.wp-block-group:not( .has-background ):not( .is-style-border ) {
+			padding-left: #{0.5 * $size__spacing-unit};
+			padding-right: #{0.5 * $size__spacing-unit};
+		}
 	}
 
 	.wp-block[data-align='left'] {
@@ -104,22 +109,31 @@ body.newspack-single-column-template {
 /** === Single Posts === */
 
 body.post-type-post {
-	.editor-post-title__block {
+	.editor-post-title__block,
+	.edit-post-visual-editor__post-title-wrapper,
+	.editor-styles-wrapper h1.wp-block-post-title {
 		max-width: 1200px;
-		.editor-post-title__input {
-			font-size: $font__size-xl;
+	}
 
-			@include media( mobile ) {
-				font-size: $font__size-xxl;
-			}
+	.edit-post-visual-editor__post-title-wrapper {
+		margin-left: auto;
+		margin-right: auto;
+	}
 
-			@include media( tablet ) {
-				font-size: $font__size-xxxl;
-			}
+	.editor-post-title__block .editor-post-title__input,
+	.editor-styles-wrapper h1.wp-block-post-title {
+		font-size: $font__size-xl;
 
-			@include media( desktop ) {
-				font-size: $font__size-xxxxl;
-			}
+		@include media( mobile ) {
+			font-size: $font__size-xxl;
+		}
+
+		@include media( tablet ) {
+			font-size: $font__size-xxxl;
+		}
+
+		@include media( desktop ) {
+			font-size: $font__size-xxxxl;
 		}
 	}
 }

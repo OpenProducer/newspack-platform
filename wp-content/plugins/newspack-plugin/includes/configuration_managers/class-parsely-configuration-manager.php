@@ -34,7 +34,7 @@ class Parsely_Configuration_Manager extends Configuration_Manager {
 			return $active;
 		}
 
-		if ( ! class_exists( 'Parsely' ) ) {
+		if ( ! is_plugin_active( 'wp-parsely/wp-parsely.php' ) ) {
 			return new \WP_Error(
 				'newspack_missing_required_plugin',
 				esc_html__( 'Parse.ly plugin is not installed and activated. Install and/or activate it to access this feature.', 'newspack' ),
@@ -74,13 +74,23 @@ class Parsely_Configuration_Manager extends Configuration_Manager {
 		// The Site ID field is confusingly stored in the 'apikey' field and is the site's domain.
 		// This is the only non-default field we need to auto-populate.
 		if ( empty( $parsely_settings['apikey'] ) ) {
-			$site_url                   = get_site_url();
-			$site_host                  = wp_parse_url( $site_url, PHP_URL_HOST );
-			$parsely_settings['apikey'] = sanitize_text_field( $site_host );
+			$parsely_settings['apikey'] = $this->get_parsely_api_key();
 			update_option( 'parsely', $parsely_settings );
 		}
 
 		$this->set_newspack_has_configured( true );
 		return true;
+	}
+
+	/**
+	 * Get the appropriate API key for Parse.ly.
+	 * On Newspack-hosted sites, this will be the host without 'http(s)' or 'www' or slashes.
+	 *
+	 * @return string API key.
+	 */
+	public function get_parsely_api_key() {
+		$site_url  = get_site_url();
+		$site_host = wp_parse_url( $site_url, PHP_URL_HOST );
+		return sanitize_text_field( str_replace( 'www.', '', $site_host ) );
 	}
 }

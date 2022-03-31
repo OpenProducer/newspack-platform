@@ -18,8 +18,7 @@ require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
  */
 class Advertising_Wizard extends Wizard {
 
-	const NEWSPACK_ADVERTISING_SERVICE_PREFIX   = '_newspack_advertising_service_';
-	const NEWSPACK_ADVERTISING_PLACEMENT_PREFIX = '_newspack_advertising_placement_';
+	const NEWSPACK_ADVERTISING_SERVICE_PREFIX = '_newspack_advertising_service_';
 
 	/**
 	 * The slug of this wizard.
@@ -53,23 +52,11 @@ class Advertising_Wizard extends Wizard {
 	);
 
 	/**
-	 * Placements.
-	 *
-	 * @var array
-	 */
-	protected $placements = array( 'global_above_header', 'global_below_header', 'global_above_footer', 'sticky' );
-
-	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		parent::__construct();
 		add_action( 'rest_api_init', [ $this, 'register_api_endpoints' ] );
-		add_action( 'before_header', [ $this, 'inject_above_header_ad' ] );
-		add_action( 'after_header', [ $this, 'inject_below_header_ad' ] );
-		add_action( 'before_footer', [ $this, 'inject_above_footer_ad' ] );
-		add_action( 'before_footer', [ $this, 'inject_sticky_ad' ] );
-		add_filter( 'newspack_ads_should_show_ads', [ $this, 'maybe_disable_gam_ads' ] );
 	}
 
 	/**
@@ -87,7 +74,7 @@ class Advertising_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Monetize your content through advertising', 'newspack' );
+		return \esc_html__( 'Monetize your content through ads', 'newspack' );
 	}
 
 	/**
@@ -142,38 +129,6 @@ class Advertising_Wizard extends Wizard {
 				'args'                => [
 					'service' => [
 						'sanitize_callback' => [ $this, 'sanitize_service' ],
-					],
-				],
-			]
-		);
-
-		// Update placement.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/advertising/placement/(?P<placement>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_update_placement' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'placement' => [
-						'sanitize_callback' => [ $this, 'sanitize_placement' ],
-					],
-				],
-			]
-		);
-
-		// Disable placement.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/advertising/placement/(?P<placement>[\a-z]+)',
-			[
-				'methods'             => \WP_REST_Server::DELETABLE,
-				'callback'            => [ $this, 'api_disable_placement' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'placement' => [
-						'sanitize_callback' => [ $this, 'sanitize_placement' ],
 					],
 				],
 			]
@@ -319,6 +274,10 @@ class Advertising_Wizard extends Wizard {
 							return implode( ',', $sanitized_codes );
 						},
 					],
+					'is_gam'       => [
+						'sanitize_callback' => 'rest_sanitize_boolean',
+						'default'           => false,
+					],
 				],
 			]
 		);
@@ -387,7 +346,12 @@ class Advertising_Wizard extends Wizard {
 	 * @return WP_REST_Response containing ad units info.
 	 */
 	public function api_update_network_code( $request ) {
-		update_option( \Newspack_Ads_Model::OPTION_NAME_LEGACY_NETWORK_CODE, $request['network_code'] );
+		// Update GAM or legacy network code.
+		if ( $request['is_gam'] ) {
+			update_option( \Newspack_Ads_Model::OPTION_NAME_GAM_NETWORK_CODE, $request['network_code'] );
+		} else {
+			update_option( \Newspack_Ads_Model::OPTION_NAME_LEGACY_NETWORK_CODE, $request['network_code'] );
+		}
 		return \rest_ensure_response( [] );
 	}
 
@@ -492,38 +456,6 @@ class Advertising_Wizard extends Wizard {
 	}
 
 	/**
-	 * Create/update a placement
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response containing ad units info.
-	 */
-	public function api_update_placement( $request ) {
-		$placement      = $request['placement'];
-		$ad_unit        = $request['ad_unit'];
-		$service        = $request['service'];
-		$placement_data = self::get_placement_data( $placement );
-
-		$placement_data['enabled'] = true;
-		$placement_data['ad_unit'] = $ad_unit;
-		$placement_data['service'] = $service;
-
-		update_option( self::NEWSPACK_ADVERTISING_PLACEMENT_PREFIX . $placement, wp_json_encode( $placement_data ) );
-		return \rest_ensure_response( $this->retrieve_data() );
-	}
-
-	/**
-	 * Disable one placement
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response containing ad units info.
-	 */
-	public function api_disable_placement( $request ) {
-		$placement = $request['placement'];
-		update_option( self::NEWSPACK_ADVERTISING_PLACEMENT_PREFIX . $placement, null );
-		return \rest_ensure_response( $this->retrieve_data() );
-	}
-
-	/**
 	 * Update or create an ad unit.
 	 *
 	 * @param WP_REST_Request $request Ad unit info.
@@ -544,6 +476,10 @@ class Advertising_Wizard extends Wizard {
 		$adunit = ( 0 === $args['id'] )
 			? $configuration_manager->add_ad_unit( $args )
 			: $configuration_manager->update_ad_unit( $args );
+
+		if ( \is_wp_error( $adunit ) ) {
+			return \rest_ensure_response( $adunit );
+		}
 
 		return \rest_ensure_response( $this->retrieve_data() );
 	}
@@ -573,38 +509,24 @@ class Advertising_Wizard extends Wizard {
 	private function retrieve_data() {
 		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
 
-		$services   = $this->get_services();
-		$placements = $this->get_placements();
+		$services = $this->get_services();
+		$error    = false;
 		try {
 			$ad_units = $configuration_manager->get_ad_units();
 		} catch ( \Exception $error ) {
 			$message = $error->getMessage();
-			return new WP_Error( 'newspack_ad_units', $message ? $message : __( 'Ad Units failed to fetch.', 'newspack' ) );
+			$error   = new WP_Error( 'newspack_ad_units', $message ? $message : __( 'Ad Units failed to fetch.', 'newspack' ) );
 		}
 
 		if ( \is_wp_error( $ad_units ) ) {
-			return $ad_units;
+			$error = $ad_units;
 		}
 
-		/* If there is only one enabled service, select it for all placements */
-		$enabled_services = array_filter(
-			$services,
-			function ( $service ) {
-				return ! empty( $service['enabled'] ) && $service['enabled'];
-			}
-		);
-
-		if ( 1 === count( $enabled_services ) ) {
-			$only_service = array_keys( $enabled_services )[0];
-			foreach ( $placements as &$placement ) {
-				$placement['service'] = $only_service;
-			}
-		}
 		return array(
 			'services'    => $services,
-			'placements'  => $placements,
-			'ad_units'    => $ad_units,
+			'ad_units'    => \is_wp_error( $ad_units ) ? [] : $ad_units,
 			'suppression' => $configuration_manager->get_suppression_config(),
+			'error'       => $error,
 		);
 	}
 
@@ -635,8 +557,9 @@ class Advertising_Wizard extends Wizard {
 		$services['google_adsense']['enabled'] = $sitekit_manager->is_module_active( 'adsense' );
 
 		// Verify GAM connection and run initial setup.
-		$gam_connection_status                   = $configuration_manager->get_gam_connection_status();
-		$services['google_ad_manager']['status'] = $gam_connection_status;
+		$gam_connection_status                               = $configuration_manager->get_gam_connection_status();
+		$services['google_ad_manager']['status']             = $gam_connection_status;
+		$services['google_ad_manager']['available_networks'] = $configuration_manager->get_gam_available_networks();
 		if ( true === $gam_connection_status['connected'] && ! isset( $gam_connection_status['error'] ) ) {
 			$services['google_ad_manager']['network_code'] = $gam_connection_status['network_code'];
 			$gam_setup_results                             = $configuration_manager->setup_gam();
@@ -651,37 +574,6 @@ class Advertising_Wizard extends Wizard {
 	}
 
 	/**
-	 * Retrieve state and ad unit for each placement.
-	 *
-	 * @return array Information about placements.
-	 */
-	private function get_placements() {
-		$placements = array();
-		foreach ( $this->placements as $placement ) {
-			$placements[ $placement ] = self::get_placement_data( $placement );
-		}
-		return $placements;
-	}
-
-	/**
-	 * Retrieve and decode data for one placement.
-	 *
-	 * @param string $placement Placement id.
-	 * @return array adUnit, service, and enabled for the placement.
-	 */
-	private function get_placement_data( $placement ) {
-		$option_value = json_decode( get_option( self::NEWSPACK_ADVERTISING_PLACEMENT_PREFIX . $placement, '' ) );
-
-		$defaults = array(
-			'ad_unit' => '',
-			'enabled' => false,
-			'service' => '',
-		);
-
-		return wp_parse_args( $option_value, $defaults );
-	}
-
-	/**
 	 * Sanitize the service name.
 	 *
 	 * @param string $service The service name.
@@ -689,135 +581,6 @@ class Advertising_Wizard extends Wizard {
 	 */
 	public function sanitize_service( $service ) {
 		return sanitize_title( $service );
-	}
-
-	/**
-	 * Sanitize placement.
-	 *
-	 * @param string $placement The placement name.
-	 * @return string
-	 */
-	public function sanitize_placement( $placement ) {
-		return sanitize_title( $placement );
-	}
-
-	/**
-	 * Inject a global ad above the header.
-	 */
-	public function inject_above_header_ad() {
-		$placement = $this->get_placement_data( 'global_above_header' );
-		if ( ! $placement['enabled'] ) {
-			return;
-		}
-
-		if ( 'google_ad_manager' === $placement['service'] && ! empty( $placement['ad_unit'] ) ) {
-			$this->inject_ad_manager_global_ad( 'global_above_header' );
-		}
-	}
-
-	/**
-	 * Inject a global sticky ad above the header.
-	 */
-	public function inject_sticky_ad() {
-		$placement = $this->get_placement_data( 'sticky' );
-		if ( ! $placement['enabled'] ) {
-			return;
-		}
-
-		if ( 'google_ad_manager' === $placement['service'] && ! empty( $placement['ad_unit'] ) ) {
-			$this->inject_ad_manager_global_ad( 'sticky' );
-		}
-	}
-
-	/**
-	 * Inject a global ad below the header.
-	 */
-	public function inject_below_header_ad() {
-		$placement = $this->get_placement_data( 'global_below_header' );
-		if ( ! $placement['enabled'] ) {
-			return;
-		}
-
-		if ( 'google_ad_manager' === $placement['service'] && ! empty( $placement['ad_unit'] ) ) {
-			$this->inject_ad_manager_global_ad( 'global_below_header' );
-		}
-	}
-
-	/**
-	 * Inject a global ad above the footer.
-	 */
-	public function inject_above_footer_ad() {
-		$placement = $this->get_placement_data( 'global_above_footer' );
-		if ( ! $placement['enabled'] ) {
-			return;
-		}
-
-		if ( 'google_ad_manager' === $placement['service'] && ! empty( $placement['ad_unit'] ) ) {
-			$this->inject_ad_manager_global_ad( 'global_above_footer' );
-		}
-	}
-
-	/**
-	 * Inject a global ad in an arbitrary placement.
-	 *
-	 * @param string $placement_slug Placement slug.
-	 */
-	protected function inject_ad_manager_global_ad( $placement_slug ) {
-		$placement = $this->get_placement_data( $placement_slug );
-		if ( ! $placement['enabled'] || empty( $placement['ad_unit'] ) ) {
-			return;
-		}
-
-		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-		if ( ! $configuration_manager->should_show_ads() ) {
-			return;
-		}
-
-		$ad_unit = $configuration_manager->get_ad_unit_for_display( $placement['ad_unit'], $placement_slug );
-		if ( is_wp_error( $ad_unit ) ) {
-			return;
-		}
-
-		$is_amp = ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) && ! AMP_Enhancements::should_use_amp_plus( 'gam' );
-		$code   = $is_amp ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
-		if ( empty( $code ) ) {
-			return;
-		}
-
-		if ( 'sticky' === $placement_slug && $is_amp ) : ?>
-			<div class="newspack_amp_sticky_ad__container">
-				<amp-sticky-ad class='newspack_amp_sticky_ad <?php echo esc_attr( $placement_slug ); ?>' layout="nodisplay">
-					<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				</amp-sticky-ad>
-			</div>
-		<?php else : ?>
-			<div class='newspack_global_ad <?php echo esc_attr( $placement_slug ); ?>'>
-				<?php if ( 'sticky' === $placement_slug ) : ?>
-					<button class='newspack_sticky_ad__close'></button>
-				<?php endif; ?>
-				<?php echo $code; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			</div>
-			<?php
-		endif;
-	}
-
-	/**
-	 * If the Ad Manager integration is toggled off, don't show ads on the frontend.
-	 *
-	 * @param bool $should_show_ads Whether Newspack Ads should display ads or not.
-	 * @return bool Modified $should_show_ads.
-	 */
-	public function maybe_disable_gam_ads( $should_show_ads ) {
-		if ( is_admin() ) {
-			return $should_show_ads;
-		}
-
-		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-		if ( ! $configuration_manager->is_service_enabled( 'google_ad_manager' ) ) {
-			return false;
-		}
-
-		return $should_show_ads;
 	}
 
 	/**

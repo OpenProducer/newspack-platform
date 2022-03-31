@@ -1,6 +1,6 @@
 @import '../../shared/sass/placeholder';
 
-.wp-block-newspack-blocks-carousel {
+.wpnbpc {
 	.swiper-wrapper {
 		height: auto;
 		pointer-events: none;
@@ -47,16 +47,7 @@
 		}
 	}
 }
-.editor-block-list__layout
-	.editor-block-list__block
-	.wp-block-newspack-blocks-carousel
-	.entry-title
-	a,
-.editor-block-list__layout
-	.editor-block-list__block
-	.wp-block-newspack-blocks-carousel
-	.entry-meta
-	.byline
-	a {
+.editor-block-list__layout .editor-block-list__block .wpnbpc .entry-title a,
+.editor-block-list__layout .editor-block-list__block .wpnbpc .entry-meta .byline a {
 	color: inherit;
 }

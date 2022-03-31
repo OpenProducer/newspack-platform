@@ -240,9 +240,11 @@ class Donations {
 		$currency_symbol = html_entity_decode( self::get_currency_symbol() );
 
 		if ( ! self::is_platform_wc() ) {
-			$saved_settings             = get_option( self::DONATION_NON_WC_SETTINGS_OPTION, [] );
-			$defaults                   = self::get_donation_default_settings( true );
-			$settings                   = wp_parse_args( $saved_settings, $defaults );
+			$saved_settings = get_option( self::DONATION_NON_WC_SETTINGS_OPTION, [] );
+			$defaults       = self::get_donation_default_settings( true );
+			// Get only the saved settings matching keys from default settings.
+			$valid_saved_settings       = array_intersect_key( $saved_settings, $defaults );
+			$settings                   = wp_parse_args( $valid_saved_settings, $defaults );
 			$settings['currencySymbol'] = $currency_symbol;
 			return $settings;
 		}
@@ -294,6 +296,9 @@ class Donations {
 	 * @return array Updated settings.
 	 */
 	public static function set_donation_settings( $args ) {
+		$defaults = self::get_donation_default_settings();
+		// Filter incoming object, so that is contains only valid keys.
+		$args = array_intersect_key( $args, $defaults );
 		if ( ! self::is_platform_wc() ) {
 			update_option( self::DONATION_NON_WC_SETTINGS_OPTION, $args );
 			return self::get_donation_settings();

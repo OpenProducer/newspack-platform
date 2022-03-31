@@ -77,7 +77,7 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function get_settings() {
 		return $this->is_configured() ?
-			\Newspack_Popups_Settings::get_settings() :
+			\Newspack_Popups_Settings::get_settings( true ) :
 			$this->unconfigured_error();
 	}
 
@@ -127,13 +127,13 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Set plugin settings.
+	 * Update plugin settings section.
 	 *
 	 * @param object $options options.
 	 */
-	public function set_settings( $options ) {
+	public function update_settings_section( $options ) {
 		return $this->is_configured() ?
-			\Newspack_Popups_Settings::set_settings( $options ) :
+			\Newspack_Popups_Settings::update_section( $options ) :
 			$this->unconfigured_error();
 	}
 
@@ -284,11 +284,12 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	/**
 	 * Get default title for a duplicated prompt.
 	 *
+	 * @param int $original_id Original Prompt ID.
 	 * @param int $id Prompt ID to duplicate.
 	 */
-	public function get_duplicate_title( $id ) {
+	public function get_duplicate_title( $original_id, $id ) {
 		return $this->is_configured() ?
-			\Newspack_Popups::get_duplicate_title( $id ) :
+			\Newspack_Popups::get_duplicate_title( $original_id, $id ) :
 			$this->unconfigured_error();
 	}
 
@@ -301,6 +302,15 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	public function duplicate_popup( $id, $title ) {
 		return $this->is_configured() ?
 			\Newspack_Popups::duplicate_popup( $id, $title ) :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get abbreviated query keys for preview requests.
+	 */
+	public function preview_query_keys() {
+		return $this->is_configured() ?
+			\Newspack_Popups::PREVIEW_QUERY_KEYS :
 			$this->unconfigured_error();
 	}
 

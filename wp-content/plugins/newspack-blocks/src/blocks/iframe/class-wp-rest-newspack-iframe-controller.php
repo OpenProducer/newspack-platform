@@ -36,7 +36,7 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 			[
 				[
 					'methods'             => WP_REST_Server::EDITABLE,
-					'callback'            => [ $this, 'import_iframe_archive_from_uploaded_file' ],
+					'callback'            => [ $this, 'import_iframe_from_uploaded_file' ],
 					'permission_callback' => function() {
 						return current_user_can( 'edit_posts' );
 					},
@@ -60,6 +60,20 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 
 		register_rest_route(
 			$this->namespace,
+			'/newspack-blocks-iframe-mode-from-url',
+			[
+				[
+					'methods'             => WP_REST_Server::EDITABLE,
+					'callback'            => [ $this, 'get_iframe_mode_from_url' ],
+					'permission_callback' => function() {
+						return current_user_can( 'edit_posts' );
+					},
+				],
+			]
+		);
+
+		register_rest_route(
+			$this->namespace,
 			'/newspack-blocks-remove-iframe-archive',
 			[
 				[
@@ -74,24 +88,35 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 	}
 
 	/**
-	 * Receive the iframe archive, unzip it, and returns the URL and the folder name.
+	 * Receive the iframe content, handle it, and returns the URL and the folder name.
 	 *
 	 * @param WP_REST_Request $request Request object.
 	 * @return WP_REST_Response
 	 */
-	public function import_iframe_archive_from_uploaded_file( $request ) {
+	public function import_iframe_from_uploaded_file( $request ) {
 		$response = [];
 		$files    = $request->get_file_params();
 
-		if ( count( $files ) > 0 && array_key_exists( 'archive_file', $files ) ) {
-			$archive_file  = $files['archive_file'];
-			$iframe_folder = pathinfo( $archive_file['name'] )['filename'] . '-' . wp_generate_password( 8, false );
+		if ( count( $files ) > 0 && array_key_exists( 'iframe_file', $files ) ) {
+			$iframe_file   = $files['iframe_file'];
+			$iframe_folder = pathinfo( $iframe_file['name'] )['filename'] . '-' . wp_generate_password( 8, false );
 
-			$response = $this->process_iframe_archive( $request, $iframe_folder, $archive_file['tmp_name'] );
+			if ( in_array( $iframe_file['type'], array_keys( Newspack_Blocks::iframe_document_accepted_file_mimes() ), true ) ) {
+				$file_extension = pathinfo( $iframe_file['name'], PATHINFO_EXTENSION );
+				$response       = $this->process_iframe_document( $request, "$iframe_folder.$file_extension", $iframe_file['tmp_name'] );
+			} elseif ( in_array( $iframe_file['type'], array_keys( Newspack_Blocks::iframe_archive_accepted_file_mimes() ), true ) ) {
+				$response = $this->process_iframe_archive( $request, $iframe_folder, $iframe_file['tmp_name'] );
+			} else {
+				$response = new WP_Error(
+					'newspack_blocks',
+					__( 'Could not find the iframe file on your request.', 'newspack-blocks' ),
+					[ 'status' => '400' ]
+				);
+			}
 		} else {
 			$response = new WP_Error(
 				'newspack_blocks',
-				__( 'Could not find the iframe archive on your request.', 'newspack-blocks' ),
+				__( 'Could not find the iframe file on your request.', 'newspack-blocks' ),
 				[ 'status' => '400' ]
 			);
 		}
@@ -113,7 +138,12 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 			$media      = get_post( $data['media_id'] );
 			$media_path = get_attached_file( $data['media_id'] );
 
-			if ( $media_path && 'application/zip' === $media->post_mime_type ) {
+			if ( $media_path && in_array( $media->post_mime_type, array_keys( Newspack_Blocks::iframe_document_accepted_file_mimes() ), true ) ) {
+				$iframe_folder  = $media->post_title . '-' . wp_generate_password( 8, false );
+				$file_extension = Newspack_Blocks::iframe_document_accepted_file_mimes()[ $media->post_mime_type ];
+
+				$response = $this->process_iframe_document( $request, "$iframe_folder.$file_extension", $media_path );
+			} elseif ( $media_path && in_array( $media->post_mime_type, array_keys( Newspack_Blocks::iframe_archive_accepted_file_mimes() ), true ) ) {
 				$iframe_folder = $media->post_title . '-' . wp_generate_password( 8, false );
 
 				$response = $this->process_iframe_archive( $request, $iframe_folder, $media_path );
@@ -133,6 +163,67 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 		}
 
 		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * Receive the iframe content, handle it, and returns the URL and the folder name.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 * @return WP_REST_Response
+	 */
+	public function get_iframe_mode_from_url( $request ) {
+		$data = $request->get_body_params();
+		$mode = 'iframe';
+
+		// If we need to remove the previous document, it's a good place to do it here.
+		if ( array_key_exists( 'iframe_url', $data ) && ! empty( $data['iframe_url'] ) ) {
+			$content_type = wp_remote_head( $data['iframe_url'] )['headers']->offsetGet( 'content-type' );
+			if ( in_array( $content_type, array_keys( Newspack_Blocks::iframe_document_accepted_file_mimes() ), true ) ) {
+				$mode = 'document';
+			}
+		}
+
+		return rest_ensure_response( [ 'mode' => $mode ] );
+	}
+
+	/**
+	 * Process iframe source from uploaded document file or from media file.
+	 *
+	 * @param WP_REST_REQUEST $request Request object.
+	 * @param string          $document_filename Document filename.
+	 * @param string          $media_source_path iframe assets zip file path.
+	 * @return WP_REST_Response
+	 */
+	private function process_iframe_document( $request, $document_filename, $media_source_path ) {
+		$wp_upload_dir     = wp_upload_dir();
+		$iframe_upload_dir = $wp_upload_dir['path'] . self::IFRAME_UPLOAD_DIR;
+		$iframe_path       = $iframe_upload_dir . $document_filename;
+		$data              = $request->get_body_params();
+
+		// Create iframe directory if not existing.
+		if ( ! file_exists( $iframe_upload_dir ) ) {
+			wp_mkdir_p( $iframe_upload_dir );
+		}
+
+		// If we need to remove the previous document, it's a good place to do it here.
+		if ( array_key_exists( 'archive_folder', $data ) && ! empty( $data['archive_folder'] ) ) {
+			$this->remove_folder( $wp_upload_dir['basedir'] . $data['archive_folder'] );
+		}
+
+		// Copy uploaded document file to destination.
+		if ( copy( $media_source_path, $iframe_path ) ) {
+			return [
+				'mode' => 'document',
+				'src'  => $wp_upload_dir['url'] . self::IFRAME_UPLOAD_DIR . $document_filename,
+				'dir'  => path_join( $wp_upload_dir['subdir'] . self::IFRAME_UPLOAD_DIR, $document_filename ),
+			];
+		}
+
+		return new WP_Error(
+			'newspack_blocks',
+			__( 'Could not upload your document.', 'newspack-blocks' ),
+			[ 'status' => '400' ]
+		);
 	}
 
 	/**
@@ -165,8 +256,9 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 			// check if iframe entry file is there.
 			if ( file_exists( path_join( $iframe_path, self::IFRAME_ENTRY_FILE ) ) ) {
 				$response = [
-					'src' => $wp_upload_dir['url'] . self::IFRAME_UPLOAD_DIR . $iframe_folder . DIRECTORY_SEPARATOR,
-					'dir' => path_join( $wp_upload_dir['subdir'] . self::IFRAME_UPLOAD_DIR, $iframe_folder ),
+					'mode' => 'iframe',
+					'src'  => $wp_upload_dir['url'] . self::IFRAME_UPLOAD_DIR . $iframe_folder . DIRECTORY_SEPARATOR,
+					'dir'  => path_join( $wp_upload_dir['subdir'] . self::IFRAME_UPLOAD_DIR, $iframe_folder ),
 				];
 
 				// if we need to remove the previous archive, it's a good place to do it here.
@@ -186,8 +278,9 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 
 				if ( 1 === count( $archive_folders ) && file_exists( path_join( $archive_folders[0], self::IFRAME_ENTRY_FILE ) ) ) {
 					$response = [
-						'src' => $wp_upload_dir['url'] . self::IFRAME_UPLOAD_DIR . $iframe_folder . DIRECTORY_SEPARATOR . basename( $archive_folders[0] ) . DIRECTORY_SEPARATOR,
-						'dir' => path_join( $wp_upload_dir['subdir'] . self::IFRAME_UPLOAD_DIR, $iframe_folder . DIRECTORY_SEPARATOR ),
+						'mode' => 'iframe',
+						'src'  => $wp_upload_dir['url'] . self::IFRAME_UPLOAD_DIR . $iframe_folder . DIRECTORY_SEPARATOR . basename( $archive_folders[0] ) . DIRECTORY_SEPARATOR,
+						'dir'  => path_join( $wp_upload_dir['subdir'] . self::IFRAME_UPLOAD_DIR, $iframe_folder . DIRECTORY_SEPARATOR ),
 					];
 
 					// if we need to remove the previous archive, it's a good place to do it here.

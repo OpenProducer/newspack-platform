@@ -50,11 +50,11 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 		}
 	};
 
-	useEffect(() => {
+	useEffect( () => {
 		if ( customPlacement ) {
 			getPrompts();
 		}
-	}, [ customPlacement ]);
+	}, [ customPlacement ] );
 
 	const segments = {};
 
@@ -113,8 +113,9 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 						<>
 							<p>
 								{ sprintf(
+									// Translators: Max. number of popups displayed; plural modifier.
 									__(
-										'This custom placement will display at most %sthe following active prompt%s, depending on the reader’s top-priority segment:',
+										'This custom placement will display at most %1$sthe following active prompt%2$s, depending on the reader’s top-priority segment:',
 										'newspack-popups'
 									),
 									1 < prompts.length ? 'one of ' : '',
@@ -126,24 +127,24 @@ export const CustomPlacementEditor = ( { attributes, setAttributes } ) => {
 								return (
 									<Fragment key={ segmentId }>
 										<strong>
-											{ segmentId && (
+											{ segmentId ? (
 												<ExternalLink
 													href={ `/wp-admin/admin.php?page=newspack-popups-wizard#/segments/${ segmentId }` }
 												>
-													{ sprintf( __( 'Segment: %s', 'newspack-popup' ), segmentName ) }
-												</ExternalLink>
-											) }
-											{ ! segmentId && (
-												<>
 													{ sprintf(
-														__( '%s%s%s', 'newspack-popup' ),
-														'Everyone' !== segmentName ? 'Segment: ' : '',
-														segmentName,
-														'Everyone' === segmentName && 1 < Object.keys( segments ).length
-															? __( ' else', 'newspack-popups' )
-															: ''
+														// Translators: Segment name.
+														__( 'Segment: %s', 'newspack-popups' ),
+														segmentName
 													) }
-												</>
+												</ExternalLink>
+											) : (
+												[
+													'Everyone' !== segmentName ? __( 'Segment: ', 'newspack-popups' ) : '',
+													segmentName || '',
+													'Everyone' === segmentName && 1 < Object.keys( segments ).length
+														? __( ' else', 'newspack-popups' )
+														: '',
+												]
 											) }
 										</strong>
 										<ul>

@@ -1,111 +1,22 @@
-(function(e, a) { for(var i in a) e[i] = a[i]; }(window, /******/ (function(modules) { // webpackBootstrap
-/******/ 	// The module cache
-/******/ 	var installedModules = {};
-/******/
-/******/ 	// The require function
-/******/ 	function __webpack_require__(moduleId) {
-/******/
-/******/ 		// Check if module is in cache
-/******/ 		if(installedModules[moduleId]) {
-/******/ 			return installedModules[moduleId].exports;
-/******/ 		}
-/******/ 		// Create a new module (and put it into the cache)
-/******/ 		var module = installedModules[moduleId] = {
-/******/ 			i: moduleId,
-/******/ 			l: false,
-/******/ 			exports: {}
-/******/ 		};
-/******/
-/******/ 		// Execute the module function
-/******/ 		modules[moduleId].call(module.exports, module, module.exports, __webpack_require__);
-/******/
-/******/ 		// Flag the module as loaded
-/******/ 		module.l = true;
-/******/
-/******/ 		// Return the exports of the module
-/******/ 		return module.exports;
-/******/ 	}
-/******/
-/******/
-/******/ 	// expose the modules object (__webpack_modules__)
-/******/ 	__webpack_require__.m = modules;
-/******/
-/******/ 	// expose the module cache
-/******/ 	__webpack_require__.c = installedModules;
-/******/
-/******/ 	// define getter function for harmony exports
-/******/ 	__webpack_require__.d = function(exports, name, getter) {
-/******/ 		if(!__webpack_require__.o(exports, name)) {
-/******/ 			Object.defineProperty(exports, name, { enumerable: true, get: getter });
-/******/ 		}
-/******/ 	};
-/******/
-/******/ 	// define __esModule on exports
-/******/ 	__webpack_require__.r = function(exports) {
-/******/ 		if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
-/******/ 			Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
-/******/ 		}
-/******/ 		Object.defineProperty(exports, '__esModule', { value: true });
-/******/ 	};
-/******/
-/******/ 	// create a fake namespace object
-/******/ 	// mode & 1: value is a module id, require it
-/******/ 	// mode & 2: merge all properties of value into the ns
-/******/ 	// mode & 4: return value when already ns object
-/******/ 	// mode & 8|1: behave like require
-/******/ 	__webpack_require__.t = function(value, mode) {
-/******/ 		if(mode & 1) value = __webpack_require__(value);
-/******/ 		if(mode & 8) return value;
-/******/ 		if((mode & 4) && typeof value === 'object' && value && value.__esModule) return value;
-/******/ 		var ns = Object.create(null);
-/******/ 		__webpack_require__.r(ns);
-/******/ 		Object.defineProperty(ns, 'default', { enumerable: true, value: value });
-/******/ 		if(mode & 2 && typeof value != 'string') for(var key in value) __webpack_require__.d(ns, key, function(key) { return value[key]; }.bind(null, key));
-/******/ 		return ns;
-/******/ 	};
-/******/
-/******/ 	// getDefaultExport function for compatibility with non-harmony modules
-/******/ 	__webpack_require__.n = function(module) {
-/******/ 		var getter = module && module.__esModule ?
-/******/ 			function getDefault() { return module['default']; } :
-/******/ 			function getModuleExports() { return module; };
-/******/ 		__webpack_require__.d(getter, 'a', getter);
-/******/ 		return getter;
-/******/ 	};
-/******/
-/******/ 	// Object.prototype.hasOwnProperty.call
-/******/ 	__webpack_require__.o = function(object, property) { return Object.prototype.hasOwnProperty.call(object, property); };
-/******/
-/******/ 	// __webpack_public_path__
-/******/ 	__webpack_require__.p = "";
-/******/
-/******/
-/******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = "./newspack-theme/js/src/post-meta-toggles.js");
-/******/ })
-/************************************************************************/
-/******/ ({
+/*
+ * ATTENTION: The "eval" devtool has been used (maybe by default in mode: "development").
+ * This devtool is neither made for production nor for readable output files.
+ * It uses "eval()" calls to create a separate source file in the browser devtools.
+ * If you are trying to read the output file, select a different devtool (https://webpack.js.org/configuration/devtool/)
+ * or disable the default devtool with "devtool: false".
+ * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
+ */
+/******/ (function() { // webpackBootstrap
+/******/ 	"use strict";
+/******/ 	var __webpack_modules__ = ({
 
 /***/ "./newspack-theme/js/src/post-meta-toggles.js":
 /*!****************************************************!*\
   !*** ./newspack-theme/js/src/post-meta-toggles.js ***!
   \****************************************************/
-/*! no exports provided */
-/***/ (function(module, __webpack_exports__, __webpack_require__) {
+/***/ (function(__unused_webpack_module, __webpack_exports__, __webpack_require__) {
 
-"use strict";
-eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @babel/runtime/helpers/defineProperty */ \"./node_modules/@babel/runtime/helpers/defineProperty.js\");\n/* harmony import */ var _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/components */ \"@wordpress/components\");\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/data */ \"@wordpress/data\");\n/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/plugins */ \"@wordpress/plugins\");\n/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _wordpress_edit_post__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/edit-post */ \"@wordpress/edit-post\");\n/* harmony import */ var _wordpress_edit_post__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/compose */ \"@wordpress/compose\");\n/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_6__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_7___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__);\n\n\n\n\n\n\n\n\n\n\n/**\n * Hide updated date\n */\n\nvar PostStatusExtensions = function PostStatusExtensions(_ref) {\n  var meta = _ref.meta,\n      postType = _ref.postType,\n      updateMetaValue = _ref.updateMetaValue;\n\n  if (!meta) {\n    return null;\n  }\n\n  var newspack_hide_page_title = meta.newspack_hide_page_title,\n      newspack_hide_updated_date = meta.newspack_hide_updated_date,\n      newspack_show_share_buttons = meta.newspack_show_share_buttons;\n  var _window$newspack_post = window.newspack_post_meta_post_types,\n      _window$newspack_post2 = _window$newspack_post.hide_date,\n      hide_date = _window$newspack_post2 === void 0 ? [] : _window$newspack_post2,\n      _window$newspack_post3 = _window$newspack_post.hide_title,\n      hide_title = _window$newspack_post3 === void 0 ? [] : _window$newspack_post3,\n      _window$newspack_post4 = _window$newspack_post.show_share_buttons,\n      show_share_buttons = _window$newspack_post4 === void 0 ? [] : _window$newspack_post4;\n  var hideDate = 0 <= hide_date.indexOf(postType);\n  var hideTitle = 0 <= hide_title.indexOf(postType);\n  var showShareButtons = 0 <= show_share_buttons.indexOf(postType);\n\n  if (!hideDate && !hideTitle && !showShareButtons) {\n    return null;\n  }\n\n  return Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_5__[\"PluginPostStatusInfo\"], {\n    className: \"newspack__post-meta-toggles\"\n  }, hideDate && 'post' === postType && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(\"div\", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(\"label\", {\n    htmlFor: \"hide_updated_date\"\n  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__[\"__\"])('Hide updated date', 'newspack')), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__[\"FormToggle\"], {\n    checked: newspack_hide_updated_date,\n    onChange: function onChange() {\n      return updateMetaValue('newspack_hide_updated_date', !newspack_hide_updated_date);\n    },\n    id: \"hide_updated_date\"\n  })), hideTitle && 'page' === postType && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(\"div\", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(\"label\", {\n    htmlFor: \"hide_page_title\"\n  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__[\"__\"])('Hide page title', 'newspack')), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__[\"FormToggle\"], {\n    checked: newspack_hide_page_title,\n    onChange: function onChange() {\n      return updateMetaValue('newspack_hide_page_title', !newspack_hide_page_title);\n    },\n    id: \"hide_page_title\"\n  })), showShareButtons && 'page' === postType && Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(\"div\", null, Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(\"label\", {\n    htmlFor: \"newspack_show_share_buttons\"\n  }, Object(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_7__[\"__\"])('Show Jetpack share buttons', 'newspack')), Object(_wordpress_element__WEBPACK_IMPORTED_MODULE_1__[\"createElement\"])(_wordpress_components__WEBPACK_IMPORTED_MODULE_2__[\"FormToggle\"], {\n    checked: newspack_show_share_buttons,\n    onChange: function onChange() {\n      return updateMetaValue('newspack_show_share_buttons', !newspack_show_share_buttons);\n    },\n    id: \"hide_page_title\"\n  })));\n};\n/**\n * Map state to props\n */\n\n\nvar mapStateToProps = function mapStateToProps(select) {\n  var _select = select('core/editor'),\n      getCurrentPostType = _select.getCurrentPostType,\n      getEditedPostAttribute = _select.getEditedPostAttribute;\n\n  return {\n    meta: getEditedPostAttribute('meta'),\n    postType: getCurrentPostType()\n  };\n};\n\nvar mapDispatchToProps = function mapDispatchToProps(dispatch) {\n  var _dispatch = dispatch('core/editor'),\n      editPost = _dispatch.editPost;\n\n  return {\n    updateMetaValue: function updateMetaValue(key, value) {\n      return editPost({\n        meta: _babel_runtime_helpers_defineProperty__WEBPACK_IMPORTED_MODULE_0___default()({}, key, value)\n      });\n    }\n  };\n};\n/**\n * Register plugins\n */\n\n\nvar postStatusSidebar = Object(_wordpress_compose__WEBPACK_IMPORTED_MODULE_6__[\"compose\"])([Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__[\"withSelect\"])(mapStateToProps), Object(_wordpress_data__WEBPACK_IMPORTED_MODULE_3__[\"withDispatch\"])(mapDispatchToProps)])(PostStatusExtensions);\nObject(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_4__[\"registerPlugin\"])('post-status-sidebar', {\n  render: postStatusSidebar\n});\n\n//# sourceURL=webpack:///./newspack-theme/js/src/post-meta-toggles.js?");
-
-/***/ }),
-
-/***/ "./node_modules/@babel/runtime/helpers/defineProperty.js":
-/*!***************************************************************!*\
-  !*** ./node_modules/@babel/runtime/helpers/defineProperty.js ***!
-  \***************************************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
-
-eval("function _defineProperty(obj, key, value) {\n  if (key in obj) {\n    Object.defineProperty(obj, key, {\n      value: value,\n      enumerable: true,\n      configurable: true,\n      writable: true\n    });\n  } else {\n    obj[key] = value;\n  }\n\n  return obj;\n}\n\nmodule.exports = _defineProperty;\nmodule.exports[\"default\"] = module.exports, module.exports.__esModule = true;\n\n//# sourceURL=webpack:///./node_modules/@babel/runtime/helpers/defineProperty.js?");
+eval("__webpack_require__.r(__webpack_exports__);\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! @wordpress/element */ \"@wordpress/element\");\n/* harmony import */ var _wordpress_element__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_wordpress_element__WEBPACK_IMPORTED_MODULE_0__);\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! @wordpress/components */ \"@wordpress/components\");\n/* harmony import */ var _wordpress_components__WEBPACK_IMPORTED_MODULE_1___default = /*#__PURE__*/__webpack_require__.n(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__);\n/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2__ = __webpack_require__(/*! @wordpress/data */ \"@wordpress/data\");\n/* harmony import */ var _wordpress_data__WEBPACK_IMPORTED_MODULE_2___default = /*#__PURE__*/__webpack_require__.n(_wordpress_data__WEBPACK_IMPORTED_MODULE_2__);\n/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__ = __webpack_require__(/*! @wordpress/plugins */ \"@wordpress/plugins\");\n/* harmony import */ var _wordpress_plugins__WEBPACK_IMPORTED_MODULE_3___default = /*#__PURE__*/__webpack_require__.n(_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__);\n/* harmony import */ var _wordpress_edit_post__WEBPACK_IMPORTED_MODULE_4__ = __webpack_require__(/*! @wordpress/edit-post */ \"@wordpress/edit-post\");\n/* harmony import */ var _wordpress_edit_post__WEBPACK_IMPORTED_MODULE_4___default = /*#__PURE__*/__webpack_require__.n(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_4__);\n/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_5__ = __webpack_require__(/*! @wordpress/compose */ \"@wordpress/compose\");\n/* harmony import */ var _wordpress_compose__WEBPACK_IMPORTED_MODULE_5___default = /*#__PURE__*/__webpack_require__.n(_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__);\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__ = __webpack_require__(/*! @wordpress/i18n */ \"@wordpress/i18n\");\n/* harmony import */ var _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(_wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__);\n\n\n\n\n\n\n\n\n\n/**\n * Hide updated date\n */\n\nconst __ = _wordpress_i18n__WEBPACK_IMPORTED_MODULE_6__.__;\n\nconst PostStatusExtensions = _ref => {\n  let {\n    meta,\n    postType,\n    updateMetaValue\n  } = _ref;\n\n  if (!meta) {\n    return null;\n  }\n\n  const {\n    newspack_hide_page_title,\n    newspack_hide_updated_date,\n    newspack_show_share_buttons\n  } = meta;\n  const {\n    hide_date = [],\n    hide_title = [],\n    show_share_buttons = []\n  } = window.newspack_post_meta_post_types;\n  const hideDate = 0 <= hide_date.indexOf(postType);\n  const hideTitle = 0 <= hide_title.indexOf(postType);\n  const showShareButtons = 0 <= show_share_buttons.indexOf(postType);\n\n  if (!hideDate && !hideTitle && !showShareButtons) {\n    return null;\n  }\n\n  return (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_edit_post__WEBPACK_IMPORTED_MODULE_4__.PluginPostStatusInfo, {\n    className: \"newspack__post-meta-toggles\"\n  }, hideDate && 'post' === postType && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"div\", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"label\", {\n    htmlFor: \"hide_updated_date\"\n  }, __('Hide updated date', 'newspack')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.FormToggle, {\n    checked: newspack_hide_updated_date,\n    onChange: () => updateMetaValue('newspack_hide_updated_date', !newspack_hide_updated_date),\n    id: \"hide_updated_date\"\n  })), hideTitle && 'page' === postType && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"div\", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"label\", {\n    htmlFor: \"hide_page_title\"\n  }, __('Hide page title', 'newspack')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.FormToggle, {\n    checked: newspack_hide_page_title,\n    onChange: () => updateMetaValue('newspack_hide_page_title', !newspack_hide_page_title),\n    id: \"hide_page_title\"\n  })), showShareButtons && 'page' === postType && (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"div\", null, (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(\"label\", {\n    htmlFor: \"newspack_show_share_buttons\"\n  }, __('Show Jetpack share buttons', 'newspack')), (0,_wordpress_element__WEBPACK_IMPORTED_MODULE_0__.createElement)(_wordpress_components__WEBPACK_IMPORTED_MODULE_1__.FormToggle, {\n    checked: newspack_show_share_buttons,\n    onChange: () => updateMetaValue('newspack_show_share_buttons', !newspack_show_share_buttons),\n    id: \"hide_page_title\"\n  })));\n};\n/**\n * Map state to props\n */\n\n\nconst mapStateToProps = select => {\n  const {\n    getCurrentPostType,\n    getEditedPostAttribute\n  } = select('core/editor');\n  return {\n    meta: getEditedPostAttribute('meta'),\n    postType: getCurrentPostType()\n  };\n};\n\nconst mapDispatchToProps = dispatch => {\n  const {\n    editPost\n  } = dispatch('core/editor');\n  return {\n    updateMetaValue: (key, value) => editPost({\n      meta: {\n        [key]: value\n      }\n    })\n  };\n};\n/**\n * Register plugins\n */\n\n\nconst postStatusSidebar = (0,_wordpress_compose__WEBPACK_IMPORTED_MODULE_5__.compose)([(0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.withSelect)(mapStateToProps), (0,_wordpress_data__WEBPACK_IMPORTED_MODULE_2__.withDispatch)(mapDispatchToProps)])(PostStatusExtensions);\n(0,_wordpress_plugins__WEBPACK_IMPORTED_MODULE_3__.registerPlugin)('post-status-sidebar', {\n  render: postStatusSidebar\n});\n\n//# sourceURL=webpack://newspack/./newspack-theme/js/src/post-meta-toggles.js?");
 
 /***/ }),
 
@@ -113,10 +24,9 @@ eval("function _defineProperty(obj, key, value) {\n  if (key in obj) {\n    Obje
 /*!************************************!*\
   !*** external ["wp","components"] ***!
   \************************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"wp\"][\"components\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22components%22%5D?");
+module.exports = window["wp"]["components"];
 
 /***/ }),
 
@@ -124,10 +34,9 @@ eval("(function() { module.exports = window[\"wp\"][\"components\"]; }());\n\n//
 /*!*********************************!*\
   !*** external ["wp","compose"] ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"wp\"][\"compose\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22compose%22%5D?");
+module.exports = window["wp"]["compose"];
 
 /***/ }),
 
@@ -135,10 +44,9 @@ eval("(function() { module.exports = window[\"wp\"][\"compose\"]; }());\n\n//# s
 /*!******************************!*\
   !*** external ["wp","data"] ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"wp\"][\"data\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22data%22%5D?");
+module.exports = window["wp"]["data"];
 
 /***/ }),
 
@@ -146,10 +54,9 @@ eval("(function() { module.exports = window[\"wp\"][\"data\"]; }());\n\n//# sour
 /*!**********************************!*\
   !*** external ["wp","editPost"] ***!
   \**********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"wp\"][\"editPost\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22editPost%22%5D?");
+module.exports = window["wp"]["editPost"];
 
 /***/ }),
 
@@ -157,10 +64,9 @@ eval("(function() { module.exports = window[\"wp\"][\"editPost\"]; }());\n\n//# 
 /*!*********************************!*\
   !*** external ["wp","element"] ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"wp\"][\"element\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22element%22%5D?");
+module.exports = window["wp"]["element"];
 
 /***/ }),
 
@@ -168,10 +74,9 @@ eval("(function() { module.exports = window[\"wp\"][\"element\"]; }());\n\n//# s
 /*!******************************!*\
   !*** external ["wp","i18n"] ***!
   \******************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"wp\"][\"i18n\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22i18n%22%5D?");
+module.exports = window["wp"]["i18n"];
 
 /***/ }),
 
@@ -179,11 +84,88 @@ eval("(function() { module.exports = window[\"wp\"][\"i18n\"]; }());\n\n//# sour
 /*!*********************************!*\
   !*** external ["wp","plugins"] ***!
   \*********************************/
-/*! no static exports found */
-/***/ (function(module, exports) {
+/***/ (function(module) {
 
-eval("(function() { module.exports = window[\"wp\"][\"plugins\"]; }());\n\n//# sourceURL=webpack:///external_%5B%22wp%22,%22plugins%22%5D?");
+module.exports = window["wp"]["plugins"];
 
 /***/ })
 
-/******/ })));
+/******/ 	});
+/************************************************************************/
+/******/ 	// The module cache
+/******/ 	var __webpack_module_cache__ = {};
+/******/ 	
+/******/ 	// The require function
+/******/ 	function __webpack_require__(moduleId) {
+/******/ 		// Check if module is in cache
+/******/ 		var cachedModule = __webpack_module_cache__[moduleId];
+/******/ 		if (cachedModule !== undefined) {
+/******/ 			return cachedModule.exports;
+/******/ 		}
+/******/ 		// Create a new module (and put it into the cache)
+/******/ 		var module = __webpack_module_cache__[moduleId] = {
+/******/ 			// no module.id needed
+/******/ 			// no module.loaded needed
+/******/ 			exports: {}
+/******/ 		};
+/******/ 	
+/******/ 		// Execute the module function
+/******/ 		__webpack_modules__[moduleId](module, module.exports, __webpack_require__);
+/******/ 	
+/******/ 		// Return the exports of the module
+/******/ 		return module.exports;
+/******/ 	}
+/******/ 	
+/************************************************************************/
+/******/ 	/* webpack/runtime/compat get default export */
+/******/ 	!function() {
+/******/ 		// getDefaultExport function for compatibility with non-harmony modules
+/******/ 		__webpack_require__.n = function(module) {
+/******/ 			var getter = module && module.__esModule ?
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
+/******/ 			__webpack_require__.d(getter, { a: getter });
+/******/ 			return getter;
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/define property getters */
+/******/ 	!function() {
+/******/ 		// define getter functions for harmony exports
+/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 			for(var key in definition) {
+/******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
+/******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
+/******/ 				}
+/******/ 			}
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/hasOwnProperty shorthand */
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
+/******/ 	
+/******/ 	/* webpack/runtime/make namespace object */
+/******/ 	!function() {
+/******/ 		// define __esModule on exports
+/******/ 		__webpack_require__.r = function(exports) {
+/******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
+/******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
+/******/ 			}
+/******/ 			Object.defineProperty(exports, '__esModule', { value: true });
+/******/ 		};
+/******/ 	}();
+/******/ 	
+/************************************************************************/
+/******/ 	
+/******/ 	// startup
+/******/ 	// Load entry module and return exports
+/******/ 	// This entry module can't be inlined because the eval devtool is used.
+/******/ 	var __webpack_exports__ = __webpack_require__("./newspack-theme/js/src/post-meta-toggles.js");
+/******/ 	var __webpack_export_target__ = window;
+/******/ 	for(var i in __webpack_exports__) __webpack_export_target__[i] = __webpack_exports__[i];
+/******/ 	if(__webpack_exports__.__esModule) Object.defineProperty(__webpack_export_target__, "__esModule", { value: true });
+/******/ 	
+/******/ })()
+;

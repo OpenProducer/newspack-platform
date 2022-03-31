@@ -16,6 +16,9 @@ function newspack_ads_render_block_ad_unit( $attributes ) {
 	if ( ! newspack_ads_should_show_ads() ) {
 		return '';
 	}
+	if ( ! Newspack_Ads_Providers::is_provider_active( 'gam' ) ) {
+		return '';
+	}
 
 	$active_ad = isset( $attributes['activeAd'] ) ? (int) $attributes['activeAd'] : 0;
 

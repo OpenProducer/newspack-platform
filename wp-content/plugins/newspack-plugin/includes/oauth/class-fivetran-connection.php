@@ -15,6 +15,8 @@ defined( 'ABSPATH' ) || exit;
  * Main class.
  */
 class Fivetran_Connection {
+	const NEWSPACK_FIVETRAN_TOS_CONSENT_USER_META = '_newspack_fivetran_tos_consent';
+
 	/**
 	 * Constructor.
 	 *
@@ -30,24 +32,6 @@ class Fivetran_Connection {
 	 * @codeCoverageIgnore
 	 */
 	public function register_api_endpoints() {
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/oauth/fivetran',
-			[
-				'methods'             => \WP_REST_Server::CREATABLE,
-				'callback'            => [ $this, 'api_modify_connector' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'connector_id' => [
-						'required'          => true,
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'paused'       => [
-						'sanitize_callback' => 'rest_sanitize_boolean',
-					],
-				],
-			]
-		);
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
 			'/oauth/fivetran',
@@ -72,26 +56,20 @@ class Fivetran_Connection {
 				],
 			]
 		);
-	}
-
-	/**
-	 * Get the Fivetran proxy URL.
-	 *
-	 * @param string $path Path to append to base URL.
-	 */
-	private static function get_proxy_url( $path = '' ) {
-		if ( ! self::is_fivetran_configured() ) {
-			return false;
-		}
-		$wpcom_token = WPCOM_OAuth::get_access_token();
-		if ( is_wp_error( $wpcom_token ) ) {
-			return false;
-		}
-		return add_query_arg(
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/oauth/fivetran-tos',
 			[
-				'wpcom_access_token' => urlencode( base64_encode( $wpcom_token ) ),
-			],
-			NEWSPACK_FIVETRAN_PROXY . $path
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_post_fivetran_tos' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+				'args'                => [
+					'has_accepted' => [
+						'required'          => true,
+						'sanitize_callback' => 'rest_sanitize_boolean',
+					],
+				],
+			]
 		);
 	}
 
@@ -99,14 +77,25 @@ class Fivetran_Connection {
 	 * Get Fivetran connections status.
 	 */
 	public static function api_get_fivetran_connection_status() {
-		$url      = self::get_proxy_url( '/wp-json/newspack-fivetran/v1/connections-status' );
-		$response = self::process_proxy_response( \wp_safe_remote_get( $url ) );
-		if ( is_wp_error( $response ) ) {
+		$url                  = OAuth::authenticate_proxy_url( 'fivetran', '/wp-json/newspack-fivetran/v1/connections-status' );
+		$connections_statuses = self::process_proxy_response(
+			\wp_safe_remote_get(
+				$url,
+				[
+					'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
+				]
+			)
+		);
+		if ( is_wp_error( $connections_statuses ) ) {
 			return new WP_Error(
 				'newspack_connections_fivetran',
-				$response->get_error_message()
+				$connections_statuses->get_error_message()
 			);
 		}
+		$response = [
+			'connections_statuses' => $connections_statuses,
+			'has_accepted_tos'     => (bool) get_user_meta( get_current_user_id(), self::NEWSPACK_FIVETRAN_TOS_CONSENT_USER_META, true ),
+		];
 		return $response;
 	}
 
@@ -119,8 +108,7 @@ class Fivetran_Connection {
 		$service      = $request->get_param( 'service' );
 		$service_data = [];
 
-		// For Google Ad Manager (aka double_click_publishers) - if Newspack Ads knows the network code,
-		// let's use it.
+		// For Google Ad Manager (aka double_click_publishers) - if Newspack Ads knows the network code, let's use it.
 		if (
 			'double_click_publishers' === $service &&
 			method_exists( 'Newspack_Ads_Model', 'get_active_network_code' )
@@ -133,13 +121,14 @@ class Fivetran_Connection {
 			}
 		}
 
-		$url      = add_query_arg(
+		$url      = OAuth::authenticate_proxy_url(
+			'fivetran',
+			'/wp-json/newspack-fivetran/v1/connect-card',
 			[
 				'service'        => $service,
 				'service_data'   => $service_data,
 				'redirect_after' => admin_url( 'admin.php?page=newspack-connections-wizard' ),
-			],
-			self::get_proxy_url( '/wp-json/newspack-fivetran/v1/connect-card' )
+			]
 		);
 		$response = self::process_proxy_response( \wp_safe_remote_post( $url, [ 'timeout' => 30 ] ) ); // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 		if ( is_wp_error( $response ) ) {
@@ -149,40 +138,21 @@ class Fivetran_Connection {
 	}
 
 	/**
-	 * Modify a Fivetran connector.
+	 * Update the user's consent for the TOS.
 	 *
 	 * @param WP_REST_Request $request Request.
 	 */
-	public static function api_modify_connector( $request ) {
-		$payload = [];
-		if ( null !== $request->get_param( 'paused' ) ) {
-			$payload['paused'] = $request->get_param( 'paused' );
-		}
-		if ( ! empty( $payload ) ) {
-			$url      = add_query_arg(
-				[
-					'connector_id' => $request->get_param( 'connector_id' ),
-				],
-				self::get_proxy_url( '/wp-json/newspack-fivetran/v1/connector' )
-			);
-			$response = self::process_proxy_response(
-				\wp_safe_remote_post(
-					$url,
-					[
-						'timeout' => 30, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
-						'headers' => [
-							'Content-Type' => 'application/json',
-						],
-						'body'    => wp_json_encode( $payload ),
-					]
-				)
-			);
-			if ( is_wp_error( $response ) ) {
-				return $response;
-			}
-			return \rest_ensure_response( $response );
-		}
-		\rest_ensure_response( [] );
+	public static function api_post_fivetran_tos( $request ) {
+		update_user_meta(
+			get_current_user_id(),
+			self::NEWSPACK_FIVETRAN_TOS_CONSENT_USER_META,
+			sanitize_meta(
+				self::NEWSPACK_FIVETRAN_TOS_CONSENT_USER_META,
+				$request->get_param( 'has_accepted' ),
+				'user'
+			)
+		);
+		return rest_ensure_response( [] );
 	}
 
 	/**
@@ -198,8 +168,10 @@ class Fivetran_Connection {
 		if ( 400 <= $result['response']['code'] ) {
 			$error_body   = json_decode( $result['body'] );
 			$error_prefix = __( 'Fivetran proxy error', 'newspack' );
-			if ( property_exists( $error_body, 'message' ) ) {
+			if ( null !== $error_body && property_exists( $error_body, 'message' ) ) {
 				$error_message = $error_prefix . ': ' . $error_body->message;
+			} elseif ( null !== $error_body && property_exists( $error_body, 'data' ) ) {
+				$error_message = $error_prefix . ': ' . wp_json_encode( $error_body->data );
 			} else {
 				$error_message = $error_prefix;
 			}
@@ -229,13 +201,6 @@ class Fivetran_Connection {
 			);
 		}
 		return true;
-	}
-
-	/**
-	 * Is Fivetran configured for this instance?
-	 */
-	public static function is_fivetran_configured() {
-		return defined( 'NEWSPACK_FIVETRAN_PROXY' );
 	}
 }
 new Fivetran_Connection();

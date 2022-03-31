@@ -41,7 +41,7 @@ export const settings = {
 	attributes,
 	supports: {
 		html: false,
-		align: true,
+		align: [ 'wide', 'full' ],
 	},
 	edit,
 	save: () => null, // to use view.php

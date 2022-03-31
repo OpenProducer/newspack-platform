@@ -47,7 +47,7 @@ class Site_Design_Wizard extends Wizard {
 	 * @return string The wizard description.
 	 */
 	public function get_description() {
-		return \esc_html__( 'Branding, color, typography, layouts.', 'newspack' );
+		return \esc_html__( 'Customize the look and feel of your site.', 'newspack' );
 	}
 
 	/**

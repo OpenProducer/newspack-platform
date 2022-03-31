@@ -15,6 +15,7 @@ use Symfony\Component\Serializer\Exception\CircularReferenceException;
 use Symfony\Component\Serializer\Exception\InvalidArgumentException;
 use Symfony\Component\Serializer\Exception\LogicException;
 use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
+use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Exception\RuntimeException;
 use Symfony\Component\Serializer\Mapping\AttributeMetadataInterface;
 use Symfony\Component\Serializer\Mapping\Factory\ClassMetadataFactoryInterface;
@@ -237,8 +238,7 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
             return false;
         }
 
-        $tmpGroups = $context[self::GROUPS] ?? $this->defaultContext[self::GROUPS] ?? null;
-        $groups = (\is_array($tmpGroups) || is_scalar($tmpGroups)) ? (array) $tmpGroups : false;
+        $groups = $this->getGroups($context);
 
         $allowedAttributes = [];
         $ignoreUsed = false;
@@ -250,19 +250,26 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
             // If you update this check, update accordingly the one in Symfony\Component\PropertyInfo\Extractor\SerializerExtractor::getProperties()
             if (
                 !$ignore &&
-                (false === $groups || array_intersect(array_merge($attributeMetadata->getGroups(), ['*']), $groups)) &&
+                ([] === $groups || array_intersect(array_merge($attributeMetadata->getGroups(), ['*']), $groups)) &&
                 $this->isAllowedAttribute($classOrObject, $name = $attributeMetadata->getName(), null, $context)
             ) {
                 $allowedAttributes[] = $attributesAsString ? $name : $attributeMetadata;
             }
         }
 
-        if (!$ignoreUsed && false === $groups && $allowExtraAttributes) {
+        if (!$ignoreUsed && [] === $groups && $allowExtraAttributes) {
             // Backward Compatibility with the code using this method written before the introduction of @Ignore
             return false;
         }
 
         return $allowedAttributes;
+    }
+
+    protected function getGroups(array $context): array
+    {
+        $groups = $context[self::GROUPS] ?? $this->defaultContext[self::GROUPS] ?? [];
+
+        return is_scalar($groups) ? (array) $groups : $groups;
     }
 
     /**
@@ -382,7 +389,16 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
                     }
 
                     // Don't run set for a parameter passed to the constructor
-                    $params[] = $this->denormalizeParameter($reflectionClass, $constructorParameter, $paramName, $parameterData, $context, $format);
+                    try {
+                        $params[] = $this->denormalizeParameter($reflectionClass, $constructorParameter, $paramName, $parameterData, $context, $format);
+                    } catch (NotNormalizableValueException $exception) {
+                        if (!isset($context['not_normalizable_value_exceptions'])) {
+                            throw $exception;
+                        }
+
+                        $context['not_normalizable_value_exceptions'][] = $exception;
+                        $params[] = $parameterData;
+                    }
                     unset($data[$key]);
                 } elseif (\array_key_exists($key, $context[static::DEFAULT_CONSTRUCTOR_ARGUMENTS][$class] ?? [])) {
                     $params[] = $context[static::DEFAULT_CONSTRUCTOR_ARGUMENTS][$class][$key];
@@ -390,8 +406,23 @@ abstract class AbstractNormalizer implements NormalizerInterface, DenormalizerIn
                     $params[] = $this->defaultContext[self::DEFAULT_CONSTRUCTOR_ARGUMENTS][$class][$key];
                 } elseif ($constructorParameter->isDefaultValueAvailable()) {
                     $params[] = $constructorParameter->getDefaultValue();
+                } elseif ($constructorParameter->hasType() && $constructorParameter->getType()->allowsNull()) {
+                    $params[] = null;
                 } else {
-                    throw new MissingConstructorArgumentsException(sprintf('Cannot create an instance of "%s" from serialized data because its constructor requires parameter "%s" to be present.', $class, $constructorParameter->name));
+                    if (!isset($context['not_normalizable_value_exceptions'])) {
+                        throw new MissingConstructorArgumentsException(sprintf('Cannot create an instance of "%s" from serialized data because its constructor requires parameter "%s" to be present.', $class, $constructorParameter->name), 0, null, [$constructorParameter->name]);
+                    }
+
+                    $exception = NotNormalizableValueException::createForUnexpectedDataType(
+                        sprintf('Failed to create object because the object miss the "%s" property.', $constructorParameter->name),
+                        $data,
+                        ['unknown'],
+                        $context['deserialization_path'] ?? null,
+                        true
+                    );
+                    $context['not_normalizable_value_exceptions'][] = $exception;
+
+                    return $reflectionClass->newInstanceWithoutConstructor();
                 }
             }
 

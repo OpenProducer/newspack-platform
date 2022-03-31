@@ -26,6 +26,10 @@
 			"type": "boolean",
 			"default": true
 		},
+		"textSize": {
+			"type": "string",
+			"default": "medium"
+		},
 		"showAvatar": {
 			"type": "boolean",
 			"default": true
@@ -41,6 +45,10 @@
 		"avatarSize": {
 			"type": "number",
 			"default": 128
+		},
+		"avatarHideDefault": {
+			"type": "boolean",
+			"default": false
 		}
 	}
 }

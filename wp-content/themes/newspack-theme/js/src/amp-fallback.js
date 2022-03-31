@@ -1,10 +1,12 @@
+/* globals newspackScreenReaderText */
+
 /**
  * File amp-fallback.js.
  *
  * AMP fallback JavaScript.
  */
 
-( function() {
+( function () {
 	// Shared variables
 	const headerContain = document.getElementById( 'masthead' ),
 		searchToggle = document.getElementById( 'search-toggle' );
@@ -17,7 +19,7 @@
 
 		searchToggle.addEventListener(
 			'click',
-			function() {
+			function () {
 				// Toggle the search visibility.
 				headerContain.classList.toggle( 'hide-header-search' );
 
@@ -82,7 +84,7 @@
 	 * @description Closes specifed slide-out menu.
 	 * @param {string} menuClass  The class to remove from the body to toggle menu visibility.
 	 * @param {string} openButton The button used to open the menu.
-	 * @param {string} maskId The ID to use for the overlay.
+	 * @param {string} maskId     The ID to use for the overlay.
 	 */
 	function closeMenu( menuClass, openButton, maskId ) {
 		body.classList.remove( menuClass );
@@ -97,7 +99,7 @@
 
 		mobileToggle[ i ].addEventListener(
 			'click',
-			function() {
+			function () {
 				if ( body.classList.contains( 'mobile-menu-opened' ) ) {
 					closeMenu( 'mobile-menu-opened', mobileOpenButton, 'mask-mobile' );
 				} else {
@@ -115,7 +117,7 @@
 
 		desktopToggle[ i ].addEventListener(
 			'click',
-			function() {
+			function () {
 				if ( body.classList.contains( 'desktop-menu-opened' ) ) {
 					closeMenu( 'desktop-menu-opened', desktopOpenButton, 'mask-desktop' );
 				} else {
@@ -135,7 +137,7 @@
 		for ( let i = 0; i < subpageToggle.length; i++ ) {
 			subpageToggle[ i ].addEventListener(
 				'click',
-				function() {
+				function () {
 					if ( body.classList.contains( 'subpage-menu-opened' ) ) {
 						closeMenu( 'subpage-menu-opened', subpageOpenButton, 'mask-subpage' );
 					} else {
@@ -148,7 +150,7 @@
 	}
 
 	// Add listener to the menu overlays, so they can be closed on click.
-	document.addEventListener( 'click', function( e ) {
+	document.addEventListener( 'click', function ( e ) {
 		if ( e.target && e.target.className === 'overlay-mask' ) {
 			const maskId = e.target.id;
 			const menu = maskId.split( '-' );
@@ -168,7 +170,7 @@
 		let scrollTimer,
 			lastScrollFireTime = 0;
 
-		window.onscroll = function() {
+		window.onscroll = function () {
 			toggleHeaderClass();
 		};
 
@@ -184,7 +186,7 @@
 				if ( now - lastScrollFireTime > 3 * minScrollTime ) {
 					lastScrollFireTime = now;
 				}
-				scrollTimer = setTimeout( function() {
+				scrollTimer = setTimeout( function () {
 					scrollTimer = null;
 					lastScrollFireTime = new Date().getTime();
 				}, minScrollTime );
@@ -209,7 +211,7 @@
 
 		commentsToggle.addEventListener(
 			'click',
-			function() {
+			function () {
 				if ( commentsWrapper.classList.contains( 'comments-hide' ) ) {
 					commentsWrapper.classList.remove( 'comments-hide' );
 					commentsToggleTextContain.innerText = newspackScreenReaderText.collapse_comments;
@@ -234,7 +236,7 @@
 
 		orderDetailToggle.addEventListener(
 			'click',
-			function() {
+			function () {
 				if ( orderDetailWrapper.classList.contains( 'order-details-hidden' ) ) {
 					orderDetailWrapper.classList.remove( 'order-details-hidden' );
 					orderDetailToggle.classList.remove( 'order-details-hidden' );
@@ -247,34 +249,5 @@
 			},
 			false
 		);
-	}
-
-	// AMP sticky ad polyfills.
-	const stickyAdClose = document.querySelector( '.newspack_sticky_ad__close' );
-	const stickyAd = document.querySelector( '.newspack_global_ad.sticky' );
-
-	if ( stickyAdClose && stickyAd ) {
-		window.googletag = window.googletag || { cmd: [] };
-		window.googletag.cmd.push( function() {
-			const initialBodyPadding = body.style.paddingBottom;
-
-			// Add padding to body to accommodate the sticky ad.
-			window.googletag.pubads().addEventListener( 'slotRenderEnded', event => {
-				const renderedSlotId = event.slot.getSlotElementId();
-				const stickyAdSlot = stickyAd.querySelector( '#' + renderedSlotId );
-
-				if ( stickyAdSlot ) {
-					stickyAd.classList.add( 'active' );
-					body.style.paddingBottom = stickyAd.clientHeight + 'px';
-				}
-			} );
-
-			stickyAdClose.addEventListener( 'click', () => {
-				stickyAd.parentElement.removeChild( stickyAd );
-
-				// Reset body padding.
-				body.style.paddingBottom = initialBodyPadding;
-			} );
-		} );
 	}
 } )();

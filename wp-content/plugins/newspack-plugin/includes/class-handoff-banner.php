@@ -25,7 +25,7 @@ class Handoff_Banner {
 		add_action( 'current_screen', [ $this, 'clear_handoff_url' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'enqueue_styles' ], 1 );
 		add_action( 'enqueue_block_editor_assets', [ $this, 'insert_block_editor_handoff_banner' ] );
-		add_action( 'admin_notices', [ $this, 'insert_handoff_banner' ], -10000 );
+		add_action( 'admin_notices', [ $this, 'insert_handoff_banner' ], -9998 );
 	}
 
 	/**

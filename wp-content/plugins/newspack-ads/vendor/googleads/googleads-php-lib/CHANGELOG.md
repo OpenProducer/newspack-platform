@@ -1,3 +1,69 @@
+### 55.0.0
+
+##### AdWords
+
+*   No changes.
+
+##### Ad Manager
+
+* Added support for v202111.
+* Removed support for v202011.
+* Removed examples for v202102.
+
+##### Common
+
+*   No changes.
+
+### 54.0.0
+
+##### AdWords
+
+*   No changes.
+
+##### Ad Manager
+
+* Added support for v202108.
+* Removed support for v202008.
+* Removed examples for v202011.
+* Added RunReachReportWithAdUnitDimensions for v202108.
+
+##### Common
+
+*   No changes.
+
+### 53.1.0
+
+##### AdWords
+
+*   Upgrade laravel/framework to version 6.20.26 in examples/AdWords/LaravelSampleApp/composer.json.
+
+##### Ad Manager
+
+*   No changes.
+
+##### Common
+
+*   Restore Guzzle 6 support.
+
+### 53.0.0
+
+##### AdWords
+
+*   No changes.
+
+##### Ad Manager
+
+*   Added support for v202105.
+*   Removed support for v202005.
+*   Removed examples for v202008.
+*   Updated the CreateProposalLineItems example to use RequestPlatformTargeting
+    instead of marketplace info for v202105.
+*   Added a new example for v202105: `PushCreativeToDevices`.
+
+##### Common
+
+*   No changes.
+
 ### 52.0.0
 
 ##### AdWords

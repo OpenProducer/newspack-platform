@@ -171,11 +171,29 @@ class Reader_Revenue_Wizard extends Wizard {
 					'newsletter_list_id' => [
 						'sanitize_callback' => 'Newspack\newspack_clean',
 					],
+					'fee_multiplier'     => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
+						'validate_callback' => function ( $value ) {
+							if ( (float) $value > 10 ) {
+								return new WP_Error(
+									'newspack_invalid_param',
+									__( 'Fee multiplier must be smaller than 10.', 'newspack' )
+								);
+							};
+							return true;
+						},
+					],
+					'fee_static'         => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
+					],
+					'location_code'      => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
+					],
 				],
 			]
 		);
 
-		// Save a subscription.
+		// Update Donations settings.
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
 			'/wizard/' . $this->slug . '/donations/',
@@ -228,50 +246,6 @@ class Reader_Revenue_Wizard extends Wizard {
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
-			]
-		);
-
-		// Validate Salesforce client_id and client_secret credentials.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/salesforce/validate',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_validate_salesforce_creds' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-			]
-		);
-
-		// Get access and refresh tokens from Salesforce.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/salesforce/tokens',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_get_salesforce_tokens' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'client_id'     => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'client_secret' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'redirect_uri'  => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
-		);
-
-		// Check validity of refresh token with Salesforce.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/salesforce/connection-status',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_check_salesforce_connection_status' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
 
@@ -444,144 +418,6 @@ class Reader_Revenue_Wizard extends Wizard {
 	}
 
 	/**
-	 * API endpoint for validating Salesforce client id/secret credentials.
-	 *
-	 * @param WP_REST_Request $request Request containing settings.
-	 * @return WP_REST_Response with the latest settings.
-	 */
-	public function api_validate_salesforce_creds( $request ) {
-		$args  = $request->get_params();
-		$valid = false;
-
-		// Must have a valid API key and secret.
-		if ( ! empty( $args['client_id'] ) && ! empty( $args['client_secret'] ) ) {
-			$url = 'https://login.salesforce.com/services/oauth2/authorize?response_type=code&' . http_build_query(
-				[
-					'client_id'     => $args['client_id'],
-					'client_secret' => $args['client_secret'],
-					'redirect_uri'  => $args['redirect_uri'],
-				]
-			);
-
-			$response = wp_safe_remote_get( $url );
-			$valid    = wp_remote_retrieve_response_code( $response ) === 200;
-		}
-
-		return \rest_ensure_response( $valid );
-	}
-
-	/**
-	 * API endpoint for getting Salesforce API tokens.
-	 *
-	 * @param WP_REST_Request $request Request containing settings.
-	 * @throws \Exception Error message.
-	 * @return WP_REST_Response with the latest settings.
-	 */
-	public function api_get_salesforce_tokens( $request ) {
-		$args                = $request->get_params();
-		$salesforce_settings = Salesforce::get_salesforce_settings();
-
-		// Must have a valid API key and secret.
-		if ( empty( $salesforce_settings['client_id'] ) || empty( $salesforce_settings['client_secret'] ) ) {
-			throw new \Exception( 'Invalid Consumer Key or Secret.' );
-		}
-
-		// Hit Salesforce OAuth endpoint to request API tokens.
-		$salesforce_response = wp_safe_remote_post(
-			'https://login.salesforce.com/services/oauth2/token?' . http_build_query(
-				array(
-					'client_id'     => $salesforce_settings['client_id'],
-					'client_secret' => $salesforce_settings['client_secret'],
-					'code'          => $args['code'],
-					'redirect_uri'  => $args['redirect_uri'],
-					'grant_type'    => 'authorization_code',
-					'format'        => 'json',
-				)
-			)
-		);
-
-		$response_body = json_decode( $salesforce_response['body'] );
-
-		if ( ! empty( $response_body->access_token ) && ! empty( $response_body->refresh_token ) ) {
-			$update_args = wp_parse_args( $response_body, $salesforce_settings );
-
-			// Save tokens.
-			$update_response = Salesforce::set_salesforce_settings( $update_args );
-			if ( is_wp_error( $update_response ) ) {
-				return \rest_ensure_response( $update_response );
-			}
-
-			return \rest_ensure_response( $update_args );
-		}
-	}
-
-	/**
-	 * API endpoint for checking validity of a Salesforce refresh token.
-	 *
-	 * @throws \Exception Error message.
-	 * @return WP_REST_Response with the active status.
-	 */
-	public function api_check_salesforce_connection_status() {
-		$salesforce_settings = Salesforce::get_salesforce_settings();
-
-		// Check if the webhook is configured.
-		$webhook_id = get_option( Salesforce::SALESFORCE_WEBHOOK_ID, 0 );
-		$webhook    = wc_get_webhook( $webhook_id );
-		if ( null == $webhook ) {
-			return \rest_ensure_response(
-				[
-					'error' => __(
-						'Webhook is not configured. Please try resetting your Salesforce connection and reconnecting.',
-						'newspack'
-					),
-				]
-			);
-		}
-
-		// Must have a valid API key and secret.
-		if (
-			empty( $salesforce_settings['client_id'] ) ||
-			empty( $salesforce_settings['client_secret'] ) ||
-			empty( $salesforce_settings['refresh_token'] )
-		) {
-			return \rest_ensure_response(
-				[
-					'error' => __(
-						'Invalid Consumer Key, Secret, or Refresh Token.',
-						'newspack'
-					),
-				]
-			);
-		}
-
-		// Hit Salesforce OAuth endpoint to introspect refresh token.
-		$salesforce_response = wp_safe_remote_post(
-			'https://login.salesforce.com/services/oauth2/introspect?' . http_build_query(
-				array(
-					'client_id'     => $salesforce_settings['client_id'],
-					'client_secret' => $salesforce_settings['client_secret'],
-					'token'         => $salesforce_settings['refresh_token'],
-				)
-			)
-		);
-
-		$response_body = json_decode( $salesforce_response['body'] );
-
-		if ( true !== $response_body->active ) {
-			return \rest_ensure_response(
-				[
-					'error' => __(
-						'We couldn’t validate the connection with Salesforce. Please verify the status of the Connected App in Salesforce.',
-						'newspack'
-					),
-				]
-			);
-		}
-
-		return \rest_ensure_response( $response_body );
-	}
-
-	/**
 	 * Fetch all data needed to render the Wizard
 	 *
 	 * @return Array
@@ -596,7 +432,7 @@ class Reader_Revenue_Wizard extends Wizard {
 		$stripe_data['can_use_stripe_platform'] = Donations::can_use_stripe_platform();
 
 		$args = [
-			'country_state_fields' => [],
+			'country_state_fields' => newspack_get_countries(),
 			'currency_fields'      => newspack_get_currencies_options(),
 			'location_data'        => [],
 			'stripe_data'          => $stripe_data,
@@ -624,6 +460,7 @@ class Reader_Revenue_Wizard extends Wizard {
 			}
 			$args = wp_parse_args(
 				[
+					// A more complete list, with states for each country.
 					'country_state_fields' => $wc_configuration_manager->country_state_fields(),
 					'location_data'        => $wc_configuration_manager->location_data(),
 					'salesforce_settings'  => Salesforce::get_salesforce_settings(),
@@ -697,7 +534,8 @@ class Reader_Revenue_Wizard extends Wizard {
 			'newspack-reader-revenue-wizard',
 			'newspack_reader_revenue',
 			[
-				'emails' => Reader_Revenue_Emails::get_emails(),
+				'emails'                  => Reader_Revenue_Emails::get_emails(),
+				'salesforce_redirect_url' => Salesforce::get_redirect_url(),
 			]
 		);
 		\wp_enqueue_script( 'newspack-reader-revenue-wizard' );

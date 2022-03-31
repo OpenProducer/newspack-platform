@@ -1,11 +1,10 @@
 @import '../../shared/sass/colors';
 @import '../../shared/sass/variables';
 
-@import './streamlined.scss';
+@import './streamlined/style.scss';
 
 .wp-block-newspack-blocks-donate {
 	button[type='submit'] {
-		background: $color__secondary;
 		border: none;
 		border-radius: 5px;
 		box-sizing: border-box;
@@ -13,8 +12,23 @@
 		font-size: $font__size-sm;
 		font-weight: bold;
 		outline: none;
-		line-height: 3em;
+		line-height: 3;
 		padding-left: 20px;
 		padding-right: 20px;
+	}
+	.stripe-payment {
+		&__methods {
+			> * {
+				line-height: 46px !important;
+			}
+		}
+		&__request-button {
+			font-size: 0.8em;
+			border-radius: 5px;
+			color: $color__secondary;
+			border: $color__secondary 1px dashed;
+			padding: 0 20px;
+			opacity: 0.5;
+		}
 	}
 }
