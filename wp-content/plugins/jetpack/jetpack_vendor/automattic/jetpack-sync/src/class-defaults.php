@@ -95,6 +95,7 @@ class Defaults {
 		'jetpack_sync_settings_post_meta_whitelist',
 		'jetpack_sync_settings_post_types_blacklist',
 		'jetpack_sync_settings_taxonomies_blacklist',
+		'jetpack_sync_settings_dedicated_sync_enabled', // is Dedicated Sync flow enabled.
 		'jetpack_testimonial',
 		'jetpack_testimonial_posts_per_page',
 		'jetpack_wga',
@@ -375,6 +376,7 @@ class Defaults {
 	 * @var array Blacklisted post types.
 	 */
 	public static $blacklisted_post_types = array(
+		'_term_meta',
 		'ai1ec_event',
 		'ai_log', // Logger - https://github.com/alleyinteractive/logger.
 		'amp_validated_url', // AMP Validation Errors.

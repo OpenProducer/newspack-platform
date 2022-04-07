@@ -76,6 +76,7 @@ final class Newspack_Newsletters_Renderer {
 	 * @return string HTML attributes as a string.
 	 */
 	private static function array_to_attributes( $attributes ) {
+		$attributes = apply_filters( 'newspack_newsletters_mjml_component_attributes', $attributes );
 		return join(
 			' ',
 			array_map(
@@ -393,6 +394,7 @@ final class Newspack_Newsletters_Renderer {
 						$caption_html .= $dom->saveHTML( $caption_node );
 					}
 					$caption_attrs = array(
+						'css-class'   => 'image-caption',
 						'align'       => 'center',
 						'color'       => '#555d66',
 						'line-height' => '1.56',

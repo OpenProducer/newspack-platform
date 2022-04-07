@@ -1,3 +1,31 @@
+# [1.43.0](https://github.com/Automattic/newspack-newsletters/compare/v1.42.1...v1.43.0) (2022-04-05)
+
+
+### Bug Fixes
+
+* disable row group block variation ([#772](https://github.com/Automattic/newspack-newsletters/issues/772)) ([82224ff](https://github.com/Automattic/newspack-newsletters/commit/82224ff1e372ac6cc0e585f9fd774cf86e245e33))
+* move subject back to the sidebar ([#773](https://github.com/Automattic/newspack-newsletters/issues/773)) ([46aad75](https://github.com/Automattic/newspack-newsletters/commit/46aad752ba45f4b36ba9eaf7530a3a5952c57a2b))
+
+
+### Features
+
+* allow theme customization ([#766](https://github.com/Automattic/newspack-newsletters/issues/766)) ([ebf3cca](https://github.com/Automattic/newspack-newsletters/commit/ebf3ccaac14a0df5e8641ce03d9404141c939793))
+* minify and notify clipable email body ([#764](https://github.com/Automattic/newspack-newsletters/issues/764)) ([2c1c6a3](https://github.com/Automattic/newspack-newsletters/commit/2c1c6a32c3437b447324b4b33c26121668c5801e))
+
+# [1.43.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.42.1...v1.43.0-alpha.1) (2022-03-31)
+
+
+### Bug Fixes
+
+* disable row group block variation ([#772](https://github.com/Automattic/newspack-newsletters/issues/772)) ([82224ff](https://github.com/Automattic/newspack-newsletters/commit/82224ff1e372ac6cc0e585f9fd774cf86e245e33))
+* move subject back to the sidebar ([#773](https://github.com/Automattic/newspack-newsletters/issues/773)) ([46aad75](https://github.com/Automattic/newspack-newsletters/commit/46aad752ba45f4b36ba9eaf7530a3a5952c57a2b))
+
+
+### Features
+
+* allow theme customization ([#766](https://github.com/Automattic/newspack-newsletters/issues/766)) ([ebf3cca](https://github.com/Automattic/newspack-newsletters/commit/ebf3ccaac14a0df5e8641ce03d9404141c939793))
+* minify and notify clipable email body ([#764](https://github.com/Automattic/newspack-newsletters/issues/764)) ([2c1c6a3](https://github.com/Automattic/newspack-newsletters/commit/2c1c6a32c3437b447324b4b33c26121668c5801e))
+
 ## [1.42.1](https://github.com/Automattic/newspack-newsletters/compare/v1.42.0...v1.42.1) (2022-03-22)
 
 
