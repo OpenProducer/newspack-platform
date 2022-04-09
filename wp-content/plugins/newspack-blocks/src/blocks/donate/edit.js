@@ -8,7 +8,7 @@ import classNames from 'classnames';
  */
 import { __, sprintf } from '@wordpress/i18n';
 import apiFetch from '@wordpress/api-fetch';
-import { Component, Fragment } from '@wordpress/element';
+import { Component } from '@wordpress/element';
 import {
 	PanelBody,
 	ExternalLink,
@@ -430,7 +430,7 @@ class Edit extends Component {
 		const { setAttributes } = this.props;
 		const { currencySymbol, suggestedAmounts, suggestedAmountUntiered, tiered } = this.blockData();
 		return (
-			<Fragment>
+			<>
 				<ToggleControl
 					key="tiered"
 					checked={ tiered }
@@ -438,7 +438,7 @@ class Edit extends Component {
 					label={ __( 'Tiered', 'newspack-blocks' ) }
 				/>
 				{ tiered && (
-					<Fragment>
+					<>
 						<TextControl
 							key="low-tier"
 							/* Translators: %s: the symbol for the current currency */
@@ -489,7 +489,7 @@ class Edit extends Component {
 								} )
 							}
 						/>
-					</Fragment>
+					</>
 				) }
 				{ ! tiered && (
 					<TextControl
@@ -505,7 +505,7 @@ class Edit extends Component {
 						}
 					/>
 				) }
-			</Fragment>
+			</>
 		);
 	}
 
@@ -513,38 +513,11 @@ class Edit extends Component {
 		const { setAttributes } = this.props;
 		const { manual, campaign, defaultFrequency } = this.blockData();
 		return (
-			<Fragment>
+			<>
 				{ this.renderPlaceholder() }
 				{ this.renderForm() }
 				<InspectorControls>
-					<PanelBody>
-						<ToggleControl
-							key="manual"
-							checked={ manual }
-							onChange={ this.manualChanged }
-							label={ __( 'Configure manually', 'newspack-blocks' ) }
-						/>
-						{ ! manual && (
-							<Fragment>
-								<p>
-									{ __(
-										'The Donate Block allows you to collect donations from readers. The fields are automatically defined based on your donation settings.',
-										'newspack-blocks'
-									) }
-								</p>
-
-								<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
-									{ __( 'Edit donation settings.', 'newspack-blocks' ) }
-								</ExternalLink>
-							</Fragment>
-						) }
-					</PanelBody>
-					{ manual && (
-						<PanelBody title={ __( 'Manual Settings', 'newspack-blocks' ) }>
-							{ this.renderManualControls() }
-						</PanelBody>
-					) }
-					<PanelBody>
+					<PanelBody title={ __( 'Donate Settings', 'newspack-blocks' ) }>
 						<SelectControl
 							label={ __( 'Default Tab', 'newspack' ) }
 							value={ defaultFrequency }
@@ -568,7 +541,32 @@ class Edit extends Component {
 								} );
 							} }
 						/>
+						<ToggleControl
+							key="manual"
+							checked={ manual }
+							onChange={ this.manualChanged }
+							label={ __( 'Configure manually', 'newspack-blocks' ) }
+						/>
+						{ ! manual && (
+							<>
+								<p>
+									{ __(
+										'The Donate Block allows you to collect donations from readers. The fields are automatically defined based on your donation settings.',
+										'newspack-blocks'
+									) }
+								</p>
+
+								<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
+									{ __( 'Edit donation setting', 'newspack-blocks' ) }
+								</ExternalLink>
+							</>
+						) }
 					</PanelBody>
+					{ manual && (
+						<PanelBody title={ __( 'Donation Amount', 'newspack-blocks' ) }>
+							{ this.renderManualControls() }
+						</PanelBody>
+					) }
 					<PanelBody title={ __( 'Campaign', 'newspack-blocks' ) } initialOpen={ false }>
 						<TextControl
 							label={ __( 'Campaign ID', 'newspack-blocks' ) }
@@ -581,7 +579,7 @@ class Edit extends Component {
 						/>
 					</PanelBody>
 				</InspectorControls>
-			</Fragment>
+			</>
 		);
 	}
 }

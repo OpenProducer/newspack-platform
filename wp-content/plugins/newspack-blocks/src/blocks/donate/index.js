@@ -1,8 +1,10 @@
 /**
  * WordPress dependencies
  */
+import { ExternalLink } from '@wordpress/components';
 import { __ } from '@wordpress/i18n';
-import { Icon, payment } from '@wordpress/icons';
+import { registerBlockStyle } from '@wordpress/blocks';
+import { payment } from '@wordpress/icons';
 
 /**
  * Internal dependencies
@@ -21,7 +23,7 @@ export const title = __( 'Donate', 'newspack-blocks' );
 export const settings = {
 	title,
 	icon: {
-		src: <Icon icon={ payment } />,
+		src: payment,
 		foreground: '#36f',
 	},
 	category: 'newspack',
@@ -30,7 +32,19 @@ export const settings = {
 		__( 'memberships', 'newspack-blocks' ),
 		__( 'subscriptions', 'newspack-blocks' ),
 	],
-	description: __( 'Enable donations.', 'newspack-blocks' ),
+	description: (
+		<>
+			<p>
+				{ __(
+					'Manually place a donation block on any post or page on your site.',
+					'newspack-blocks'
+				) }
+			</p>
+			<ExternalLink href={ __( 'https://newspack.pub/support/blocks/donate-block/' ) }>
+				{ __( 'Support reference', 'newspack-blocks' ) }
+			</ExternalLink>
+		</>
+	),
 	attributes: {
 		className: {
 			type: 'string',
@@ -59,7 +73,7 @@ export const settings = {
 		},
 		buttonText: {
 			type: 'string',
-			default: __( 'Donate now!', 'newspack-blocks' ),
+			default: __( 'Donate Now', 'newspack-blocks' ),
 		},
 		defaultFrequency: {
 			type: 'string',
@@ -73,3 +87,16 @@ export const settings = {
 	edit,
 	save: () => null, // to use view.php
 };
+
+/**
+ * Block Styles
+ */
+registerBlockStyle( 'newspack-blocks/donate', {
+	name: 'alternate',
+	label: __( 'Alternate', 'newapack-blocks' ),
+} );
+
+registerBlockStyle( 'newspack-blocks/donate', {
+	name: 'minimal',
+	label: __( 'Minimal', 'newapack-blocks' ),
+} );

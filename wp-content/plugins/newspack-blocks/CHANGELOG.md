@@ -1,3 +1,70 @@
+## [1.47.2](https://github.com/Automattic/newspack-blocks/compare/v1.47.1...v1.47.2) (2022-04-07)
+
+
+### Bug Fixes
+
+* force release ([af2c2ba](https://github.com/Automattic/newspack-blocks/commit/af2c2ba7279a6aa083deb2ed41dd00c50ae2b5ea))
+* restore post__in sort order for specific posts mode ([#1093](https://github.com/Automattic/newspack-blocks/issues/1093)) ([84dfa8f](https://github.com/Automattic/newspack-blocks/commit/84dfa8f637e12ff6c9cd31ee13cfe727715c308a))
+
+## [1.47.2-hotfix.1](https://github.com/Automattic/newspack-blocks/compare/v1.47.1...v1.47.2-hotfix.1) (2022-04-07)
+
+
+### Bug Fixes
+
+* restore post__in sort order for specific posts mode ([a7e52e7](https://github.com/Automattic/newspack-blocks/commit/a7e52e757d0aec56e3300995ad0f5fdd4a199959))
+
+## [1.47.1](https://github.com/Automattic/newspack-blocks/compare/v1.47.0...v1.47.1) (2022-04-07)
+
+
+### Bug Fixes
+
+* **posts-query:** specific posts getting ([#1090](https://github.com/Automattic/newspack-blocks/issues/1090)) ([231d62d](https://github.com/Automattic/newspack-blocks/commit/231d62d95a66986ad8f6e1490ee9324045b3416e))
+
+## [1.47.1-hotfix.1](https://github.com/Automattic/newspack-blocks/compare/v1.47.0...v1.47.1-hotfix.1) (2022-04-07)
+
+
+### Bug Fixes
+
+* **posts-query:** specific posts getting ([f9326db](https://github.com/Automattic/newspack-blocks/commit/f9326dbe931522f4e7c66b44d8aee3ed095a378a))
+
+# [1.47.0](https://github.com/Automattic/newspack-blocks/compare/v1.46.1...v1.47.0) (2022-04-05)
+
+
+### Bug Fixes
+
+* **author-list:** handle alphabetizing last names containing spaces ([#1057](https://github.com/Automattic/newspack-blocks/issues/1057)) ([1af7e19](https://github.com/Automattic/newspack-blocks/commit/1af7e198fcd2abe189ef61f7d206451a8ca0512d))
+* authors and guest authors in homepage posts ([#1083](https://github.com/Automattic/newspack-blocks/issues/1083)) ([038d9a4](https://github.com/Automattic/newspack-blocks/commit/038d9a42a59a84d30dbba5f6d7f4036113bbc2e8))
+* donate block non-default styles grid breakpoint ([#1078](https://github.com/Automattic/newspack-blocks/issues/1078)) ([5450e57](https://github.com/Automattic/newspack-blocks/commit/5450e5775dbadb28020a49090533c3dd4ddc82da))
+* **homepage-posts:** post fetch for widget blocks ([#1066](https://github.com/Automattic/newspack-blocks/issues/1066)) ([3734a3f](https://github.com/Automattic/newspack-blocks/commit/3734a3f2e8db788dc493b84100fcc7aaf7db1733))
+* incorrect nesting of tax_query args ([#1087](https://github.com/Automattic/newspack-blocks/issues/1087)) ([a613874](https://github.com/Automattic/newspack-blocks/commit/a613874a398ffed6cfbeb699a3d49c95bb559a5a))
+
+
+### Features
+
+* add alternate and minimal styles to donate block ([#1068](https://github.com/Automattic/newspack-blocks/issues/1068)) ([3c914d2](https://github.com/Automattic/newspack-blocks/commit/3c914d2a5e95b62834fd27670f449d7c34686ab2))
+
+# [1.47.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v1.47.0-alpha.1...v1.47.0-alpha.2) (2022-04-05)
+
+
+### Bug Fixes
+
+* incorrect nesting of tax_query args ([#1087](https://github.com/Automattic/newspack-blocks/issues/1087)) ([a613874](https://github.com/Automattic/newspack-blocks/commit/a613874a398ffed6cfbeb699a3d49c95bb559a5a))
+
+# [1.47.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.46.1...v1.47.0-alpha.1) (2022-03-31)
+
+
+### Bug Fixes
+
+* **author-list:** handle alphabetizing last names containing spaces ([#1057](https://github.com/Automattic/newspack-blocks/issues/1057)) ([1af7e19](https://github.com/Automattic/newspack-blocks/commit/1af7e198fcd2abe189ef61f7d206451a8ca0512d))
+* authors and guest authors in homepage posts ([#1083](https://github.com/Automattic/newspack-blocks/issues/1083)) ([038d9a4](https://github.com/Automattic/newspack-blocks/commit/038d9a42a59a84d30dbba5f6d7f4036113bbc2e8))
+* donate block non-default styles grid breakpoint ([#1078](https://github.com/Automattic/newspack-blocks/issues/1078)) ([5450e57](https://github.com/Automattic/newspack-blocks/commit/5450e5775dbadb28020a49090533c3dd4ddc82da))
+* **homepage-posts:** post fetch for widget blocks ([#1066](https://github.com/Automattic/newspack-blocks/issues/1066)) ([3734a3f](https://github.com/Automattic/newspack-blocks/commit/3734a3f2e8db788dc493b84100fcc7aaf7db1733))
+
+
+### Features
+
+* add alternate and minimal styles to donate block ([#1068](https://github.com/Automattic/newspack-blocks/issues/1068)) ([3c914d2](https://github.com/Automattic/newspack-blocks/commit/3c914d2a5e95b62834fd27670f449d7c34686ab2))
+
 ## [1.46.1](https://github.com/Automattic/newspack-blocks/compare/v1.46.0...v1.46.1) (2022-03-22)
 
 

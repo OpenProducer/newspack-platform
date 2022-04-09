@@ -125,7 +125,17 @@ const createFetchPostsSaga = blockNames => {
 
 		yield put( { type: 'DISABLE_UI' } );
 
-		const blockQueries = getBlockQueries( getBlocks(), blockNames );
+		// Ensure innerBlocks are populated for widget area blocks.
+		// See https://github.com/WordPress/gutenberg/issues/32607#issuecomment-890728216.
+		const blocks = getBlocks().map( block => {
+			const innerBlocks = select( 'core/block-editor' ).getBlocks( block.clientId );
+			return {
+				...block,
+				innerBlocks,
+			};
+		} );
+
+		const blockQueries = getBlockQueries( blocks, blockNames );
 
 		// Use requested specific posts ids as the starting state of exclusion list.
 		const specificPostsId = blockQueries.reduce( ( acc, { postsQuery } ) => {

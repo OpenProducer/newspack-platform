@@ -72,6 +72,7 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 		$per_page            = ! empty( $request->get_param( 'perPage' ) ) ? $request->get_param( 'perPage' ) : 10; // Number of results to return per page. This is applied to each query, so the actual number of results returned may be up to 2x this number.
 		$avatar_hide_default = ! empty( $request->get_param( 'avatarHideDefault' ) ) ? true : false; // Hide the default avatar if the user has no custom avatar.
 		$fields              = ! empty( $request->get_param( 'fields' ) ) ? explode( ',', $request->get_param( 'fields' ) ) : [ 'id' ]; // Fields to get. Will return at least id.
+		$include             = ! empty( $request->get_param( 'include' ) ) ? explode( ',', $request->get_param( 'include' ) ) : null; // Fetch authors by multiple IDs.
 
 		// Total number of users and guest authors.
 		$guest_author_total = 0;
@@ -90,10 +91,14 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 		if ( $author_id ) {
 			$guest_author_args['p'] = $author_id;
 		}
+		if ( $include ) {
+			$guest_author_args['post__in']            = $include;
+			$guest_author_args['ignore_sticky_posts'] = true;
+		}
 
 		$guest_authors      = get_posts( $guest_author_args );
 		$guest_author_total = count( $guest_authors );
-		$users              = []; // We'll only get standard WP users if no guest authors were found.
+		$users              = [];
 
 		// If passed an author ID.
 		if ( $author_id ) {
@@ -125,6 +130,11 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 			// If passed a search string.
 			if ( $search && ! $author_id ) {
 				$user_args['search'] = '*' . $search . '*';
+			}
+
+			// If passed an array of IDs.
+			if ( $include ) {
+				$user_args['include'] = $include;
 			}
 
 			$user_query = new \WP_User_Query( $user_args );

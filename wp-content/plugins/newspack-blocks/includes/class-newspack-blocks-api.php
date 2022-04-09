@@ -279,77 +279,23 @@ class Newspack_Blocks_API {
 	 * @return WP_REST_Response.
 	 */
 	public static function posts_endpoint( $request ) {
-		$params   = $request->get_params();
-		$per_page = $request['per_page'];
-		$args     = [
-			'post_type'           => 'post',
-			'post_status'         => 'publish',
-			'posts_per_page'      => $per_page,
-			'suppress_filters'    => false,
-			'ignore_sticky_posts' => true,
-			'has_password'        => false,
-		];
+		$attributes = $request->get_params();
+		$args       = Newspack_Blocks::build_articles_query( $attributes, apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/homepage-articles' ) );
 
-		if ( $params['categories'] && count( $params['categories'] ) ) {
-			$args['category__in'] = $params['categories'];
+		if ( $attributes['exclude'] && count( $attributes['exclude'] ) ) {
+			$args['post__not_in'] = $attributes['exclude'];
 		}
-		if ( $params['categories_exclude'] && count( $params['categories_exclude'] ) ) {
-			$args['category__not_in'] = $params['categories_exclude'];
-		}
-		if ( $params['tags'] && count( $params['tags'] ) ) {
-			$args['tag__in'] = $params['tags'];
-		}
-		if ( $params['tags_exclude'] && count( $params['tags_exclude'] ) ) {
-			$args['tag__not_in'] = $params['tags_exclude'];
-		}
-		if ( $params['author'] && count( $params['author'] ) ) {
-			$authors_ids      = $params['author'];
-			$co_authors_names = [];
 
-			if ( class_exists( 'CoAuthors_Guest_Authors' ) ) {
-				$co_authors_guest_authors = new CoAuthors_Guest_Authors();
-
-				foreach ( $authors_ids as $index => $author_id ) {
-					$co_author = $co_authors_guest_authors->get_guest_author_by( 'id', $author_id );
-					if ( $co_author ) {
-						$co_authors_names[] = $co_author->user_nicename;
-						unset( $authors_ids[ $index ] );
-					}
-				}
-			}
-
-			if ( count( $co_authors_names ) ) {
-				// look for authors and co-authors posts.
-				Newspack_Blocks::filter_posts_clauses_when_co_authors( $authors_ids, $co_authors_names );
-			} else {
-				$args['author__in'] = $authors_ids;
-			}
-		}
-		if ( $params['include'] && count( $params['include'] ) ) {
-			$args['post__in'] = $params['include'];
+		if ( $attributes['include'] && count( $attributes['include'] ) ) {
+			$args['post__in'] = $attributes['include'];
 			$args['orderby']  = 'post__in';
 			$args['order']    = 'ASC';
 		}
-		if ( $params['exclude'] && count( $params['exclude'] ) ) {
-			$args['post__not_in'] = $params['exclude'];
-		}
-		if ( $params['post_type'] && count( $params['post_type'] ) ) {
-			$args['post_type'] = $params['post_type'];
-		}
 
-		if ( isset( $params['show_excerpt'], $params['excerpt_length'] ) ) {
-			$block_attributes = [
-				'showExcerpt'   => $params['show_excerpt'],
-				'excerptLength' => $params['excerpt_length'],
-			];
-			Newspack_Blocks::filter_excerpt( $block_attributes );
-		}
+		$query = new WP_Query( $args );
+		$posts = [];
 
-		$query        = new WP_Query();
-		$query_result = $query->query( $args );
-		$posts        = [];
-
-		foreach ( $query_result as $post ) {
+		foreach ( $query->posts as $post ) {
 			$GLOBALS['post'] = $post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			setup_postdata( $post );
 
@@ -403,7 +349,6 @@ class Newspack_Blocks_API {
 		}
 
 		Newspack_Blocks::remove_excerpt_filter();
-		Newspack_Blocks::remove_filter_posts_clauses_when_co_authors_filter();
 
 		return new \WP_REST_Response( $posts );
 	}
@@ -424,11 +369,11 @@ class Newspack_Blocks_API {
 		$args = [
 			'post_status'           => 'publish',
 			'title_wildcard_search' => esc_sql( $params['search'] ),
-			'posts_per_page'        => $params['per_page'],
+			'posts_per_page'        => $params['postsToShow'],
 		];
 
-		if ( $params['post_type'] && count( $params['post_type'] ) ) {
-			$args['post_type'] = $params['post_type'];
+		if ( $params['postType'] && count( $params['postType'] ) ) {
+			$args['post_type'] = $params['postType'];
 		} else {
 			$args['post_type'] = 'post';
 		}

@@ -240,7 +240,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 							'id'         => intval( $guest_author->ID ),
 							'registered' => $guest_author->post_date,
 							'is_guest'   => true,
-							'last_name'  => ! empty( $last_name ) && in_array( $last_name, explode( ' ', $guest_author->post_title ), true ) ? $last_name : $guest_author->post_title,
+							'last_name'  => ! empty( $last_name ) && false !== strpos( $guest_author->post_title, $last_name ) ? $last_name : $guest_author->post_title,
 						];
 
 						$guest_author   = ( new CoAuthors_Guest_Authors() )->get_guest_author_by( 'id', $guest_author->ID );
@@ -329,7 +329,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 							'id'         => intval( $user->data->ID ),
 							'registered' => $user->data->user_registered,
 							'is_guest'   => false,
-							'last_name'  => ! empty( $last_name ) && in_array( $last_name, explode( ' ', $fallback_name ), true ) ? $last_name : $fallback_name,
+							'last_name'  => ! empty( $last_name ) && false !== strpos( $fallback_name, $last_name ) ? $last_name : $fallback_name,
 						];
 
 						if ( in_array( 'login', $fields, true ) ) {

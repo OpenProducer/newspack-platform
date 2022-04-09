@@ -149,6 +149,13 @@ function newspack_blocks_render_block_donate( $attributes ) {
 		return '';
 	}
 
+	/* If block has additional CSS class(es)  */
+	if ( isset( $attributes['className'] ) ) {
+		$classname = $attributes['className'];
+	} else {
+		$classname = 'is-style-default';
+	}
+
 	/* If block is in "manual" mode, override certain state properties with values stored in attributes */
 	if ( $attributes['manual'] ?? false ) {
 		$settings = array_merge( $settings, $attributes );
@@ -195,7 +202,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 	if ( ! $settings['tiered'] ) :
 
 		?>
-		<div class='wp-block-newspack-blocks-donate wpbnbd untiered'>
+		<div class="wp-block-newspack-blocks-donate wpbnbd untiered <?php echo esc_html( $classname ); ?>">
 			<form data-settings="<?php echo esc_html( htmlspecialchars( wp_json_encode( $settings_for_frontend ), ENT_QUOTES, 'UTF-8' ) ); ?>">
 				<input type='hidden' name='newspack_donate' value='1' />
 				<div class='wp-block-newspack-blocks-donate__options'>
@@ -248,7 +255,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 	else :
 
 		?>
-		<div class='wp-block-newspack-blocks-donate wpbnbd tiered'>
+		<div class="wp-block-newspack-blocks-donate wpbnbd tiered <?php echo esc_html( $classname ); ?>">
 			<form data-settings="<?php echo esc_html( htmlspecialchars( wp_json_encode( $settings_for_frontend ), ENT_QUOTES, 'UTF-8' ) ); ?>">
 				<input type='hidden' name='newspack_donate' value='1' />
 				<div class='wp-block-newspack-blocks-donate__options'>
@@ -378,7 +385,7 @@ function newspack_blocks_register_donate() {
 				],
 				'buttonText'              => [
 					'type'    => 'string',
-					'default' => __( 'Donate now!', 'newspack-blocks' ),
+					'default' => __( 'Donate Now', 'newspack-blocks' ),
 				],
 				'defaultFrequency'        => [
 					'type'    => 'string',

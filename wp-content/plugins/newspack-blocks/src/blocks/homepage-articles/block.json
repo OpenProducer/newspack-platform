@@ -155,7 +155,7 @@
     },
     "textAlign": {
       "type": "string",
-	  "default": "left"
-	}
+      "default": "left"
+    }
   }
 }

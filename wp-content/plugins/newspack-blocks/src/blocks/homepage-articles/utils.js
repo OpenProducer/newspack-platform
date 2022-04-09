@@ -81,22 +81,22 @@ export const queryCriteriaFromAttributes = attributes => {
 		isSpecificPostModeActive
 			? {
 					include: cleanPosts,
-					per_page: specificPosts.length,
-					post_type: postType,
+					postsToShow: specificPosts.length,
+					postType,
 			  }
 			: {
-					per_page: postsToShow,
+					postsToShow,
 					categories,
-					author: authors,
+					authors,
 					tags,
-					tags_exclude: tagExclusions,
-					categories_exclude: categoryExclusions,
-					post_type: postType,
+					tagExclusions,
+					categoryExclusions,
+					postType,
 			  },
 		value => ! isUndefined( value )
 	);
-	criteria.excerpt_length = excerptLength;
-	criteria.show_excerpt = showExcerpt;
+	criteria.excerptLength = excerptLength;
+	criteria.showExcerpt = showExcerpt;
 	return criteria;
 };
 
@@ -173,7 +173,8 @@ export const postsBlockSelector = ( select, { clientId, attributes } ) => {
 	const { getBlocks } = select( 'core/block-editor' );
 	const editorBlocksIds = getEditorBlocksIds( getEditorBlocks() );
 	// The block might be rendered in the block styles preview, not in the editor.
-	const isEditorBlock = editorBlocksIds.indexOf( clientId ) >= 0;
+	const isWidgetEditor = getBlocks().some( block => block.name === 'core/widget-area' );
+	const isEditorBlock = editorBlocksIds.indexOf( clientId ) >= 0 || isWidgetEditor;
 
 	const { getPosts, getError, isUIDisabled } = select( STORE_NAMESPACE );
 	const props = {

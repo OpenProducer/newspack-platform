@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.56.2-alpha.1
+Version: 1.57.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -2308,6 +2308,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   }
   .h-cta .site-header .custom-logo-link .custom-logo {
     max-width: 100%;
+    object-position: right center;
   }
 }
 @media only screen and (max-width: 781px) {
@@ -5125,20 +5126,18 @@ p.has-background {
 .wp-block-cover.alignright .wp-block-pullquote:not(.is-style-solid-color) blockquote {
   padding-right: 0;
 }
-.wp-block-cover-image.alignleft .wp-block-cover__inner-container [class*=wp-block-]:first-child, .wp-block-cover-image.alignright .wp-block-cover__inner-container [class*=wp-block-]:first-child,
-.wp-block-cover.alignleft .wp-block-cover__inner-container [class*=wp-block-]:first-child,
-.wp-block-cover.alignright .wp-block-cover__inner-container [class*=wp-block-]:first-child {
+.wp-block-cover-image .wp-block-cover__inner-container > *:first-child,
+.wp-block-cover .wp-block-cover__inner-container > *:first-child {
   margin-top: 0;
 }
-.wp-block-cover-image.alignleft .wp-block-cover__inner-container [class*=wp-block-]:last-child, .wp-block-cover-image.alignright .wp-block-cover__inner-container [class*=wp-block-]:last-child,
-.wp-block-cover.alignleft .wp-block-cover__inner-container [class*=wp-block-]:last-child,
-.wp-block-cover.alignright .wp-block-cover__inner-container [class*=wp-block-]:last-child {
+.wp-block-cover-image .wp-block-cover__inner-container > *:last-child,
+.wp-block-cover .wp-block-cover__inner-container > *:last-child {
   margin-bottom: 0;
 }
 
-.wp-block-cover .wp-block-cover__inner-container a,
-.wp-block-cover .wp-block-cover__inner-container a:hover,
-.wp-block-cover .wp-block-cover__inner-container a:visited {
+.wp-block-cover .wp-block-cover__inner-container a:not(.wp-block-button__link),
+.wp-block-cover .wp-block-cover__inner-container a:not(.wp-block-button__link):hover,
+.wp-block-cover .wp-block-cover__inner-container a:not(.wp-block-button__link):visited {
   color: inherit;
 }
 
@@ -5330,6 +5329,10 @@ p.has-background {
 }
 .wp-block-video figcaption {
   text-align: right;
+}
+
+.wp-block-buttons {
+  --wp--style--block-gap: 0.5rem;
 }
 
 .wp-block-button__link {
@@ -6671,6 +6674,25 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   .h-sub.single-featured-image-beside:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header + .site-content {
     margin-top: 0;
   }
+}
+
+.single-featured-image-behind .newspack_global_ad.global_below_header {
+  margin-bottom: -1.5rem;
+}
+
+.custom-ad-bg:not(.af-widget) .newspack_global_ad.global_above_footer {
+  margin-top: 2rem;
+}
+.custom-ad-bg.ad-above-footer .site-footer {
+  margin-top: 0;
+}
+.custom-ad-bg .newspack_global_ad > * {
+  margin-bottom: 8px;
+  margin-top: 8px;
+}
+.custom-ad-bg .widget_newspack-ads-widget .textwidget,
+.custom-ad-bg div[class*=newspack-ads-blocks-ad-unit] {
+  padding: 8px;
 }
 
 /* Yoast Breadcrumb support */
