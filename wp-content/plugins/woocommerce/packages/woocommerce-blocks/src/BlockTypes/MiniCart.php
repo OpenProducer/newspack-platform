@@ -2,7 +2,7 @@
 namespace Automattic\WooCommerce\Blocks\BlockTypes;
 
 use Automattic\WooCommerce\Blocks\Package;
-use Automattic\WooCommerce\Blocks\StoreApi\Utilities\CartController;
+use Automattic\WooCommerce\StoreApi\Utilities\CartController;
 use Automattic\WooCommerce\Blocks\Payments\PaymentMethodRegistry;
 use Automattic\WooCommerce\Blocks\Assets\AssetDataRegistry;
 use Automattic\WooCommerce\Blocks\Assets\Api as AssetApi;
@@ -107,8 +107,6 @@ class MiniCart extends AbstractBlock {
 
 		// Hydrate the following data depending on admin or frontend context.
 		if ( ! is_admin() && ! WC()->is_rest_api_request() ) {
-			$this->hydrate_from_api();
-
 			$label_info = $this->get_tax_label();
 
 			$this->tax_label                         = $label_info['tax_label'];
@@ -120,10 +118,18 @@ class MiniCart extends AbstractBlock {
 				''
 			);
 
+			$cart_payload = $this->get_cart_payload();
+
 			$this->asset_data_registry->add(
-				'displayCartPricesIncludingTax',
-				$this->display_cart_prices_including_tax,
-				false
+				'cartTotals',
+				isset( $cart_payload['totals'] ) ? $cart_payload['totals'] : null,
+				null
+			);
+
+			$this->asset_data_registry->add(
+				'cartItemsCount',
+				isset( $cart_payload['items_count'] ) ? $cart_payload['items_count'] : null,
+				null
 			);
 		}
 
@@ -207,13 +213,6 @@ class MiniCart extends AbstractBlock {
 		 * Fires after cart block data is registered.
 		 */
 		do_action( 'woocommerce_blocks_cart_enqueue_data' );
-	}
-
-	/**
-	 * Hydrate the cart block with data from the API.
-	 */
-	protected function hydrate_from_api() {
-		$this->asset_data_registry->hydrate_api_request( '/wc/store/cart' );
 	}
 
 	/**
@@ -378,7 +377,11 @@ class MiniCart extends AbstractBlock {
 		}
 
 		$template_part_contents = '';
-		$template_part          = BlockTemplateUtils::get_block_template( get_stylesheet() . '//mini-cart', 'wp_template_part' );
+
+		// Determine if we need to load the template part from the theme, or WooCommerce in that order.
+		$theme_has_mini_cart   = BlockTemplateUtils::theme_has_template_part( 'mini-cart' );
+		$template_slug_to_load = $theme_has_mini_cart ? get_stylesheet() : BlockTemplateUtils::PLUGIN_SLUG;
+		$template_part         = BlockTemplateUtils::get_block_template( $template_slug_to_load . '//mini-cart', 'wp_template_part' );
 
 		if ( $template_part && ! empty( $template_part->content ) ) {
 			$template_part_contents = do_blocks( $template_part->content );
@@ -455,6 +458,17 @@ class MiniCart extends AbstractBlock {
 			'display_cart_prices_including_tax' => false,
 		);
 	}
+
+
+	/**
+	 * Get Cart Payload.
+	 *
+	 * @return object;
+	 */
+	protected function get_cart_payload() {
+		return WC()->api->get_endpoint_data( '/wc/store/cart' );
+	}
+
 
 	/**
 	 * Get the supports array for this block type.

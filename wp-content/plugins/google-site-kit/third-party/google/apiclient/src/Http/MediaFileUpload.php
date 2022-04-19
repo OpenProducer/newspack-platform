@@ -107,7 +107,7 @@ class MediaFileUpload
         }
         $lastBytePos = $this->progress + \strlen($chunk) - 1;
         $headers = array('content-range' => "bytes {$this->progress}-{$lastBytePos}/{$this->size}", 'content-length' => \strlen($chunk), 'expect' => '');
-        $request = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('PUT', $resumeUri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\stream_for($chunk));
+        $request = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('PUT', $resumeUri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($chunk));
         return $this->makePutRequest($request);
     }
     /**
@@ -199,7 +199,7 @@ class MediaFileUpload
                 }
             }
         }
-        $request = $request->withBody(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\stream_for($postBody));
+        $request = $request->withBody(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($postBody));
         if (isset($contentType) && $contentType) {
             $request = $request->withHeader('content-type', $contentType);
         }

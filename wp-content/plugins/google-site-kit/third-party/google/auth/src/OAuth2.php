@@ -19,8 +19,9 @@ namespace Google\Site_Kit_Dependencies\Google\Auth;
 
 use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache;
 use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
+use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request;
+use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
@@ -360,14 +361,20 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
         }
         $now = \time();
         $opts = \array_merge(['skew' => self::DEFAULT_SKEW_SECONDS], $config);
-        $assertion = ['iss' => $this->getIssuer(), 'aud' => $this->getAudience(), 'exp' => $now + $this->getExpiry(), 'iat' => $now - $opts['skew']];
+        $assertion = ['iss' => $this->getIssuer(), 'exp' => $now + $this->getExpiry(), 'iat' => $now - $opts['skew']];
         foreach ($assertion as $k => $v) {
             if (\is_null($v)) {
                 throw new \DomainException($k . ' should not be null');
             }
         }
+        if (!\is_null($this->getAudience())) {
+            $assertion['aud'] = $this->getAudience();
+        }
         if (!\is_null($this->getScope())) {
             $assertion['scope'] = $this->getScope();
+        }
+        if (empty($assertion['scope']) && empty($assertion['aud'])) {
+            throw new \DomainException('one of scope or aud should not be null');
         }
         if (!\is_null($this->getSub())) {
             $assertion['sub'] = $this->getSub();
@@ -419,7 +426,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
                 $params = \array_merge($params, $this->getExtensionParams());
         }
         $headers = ['Cache-Control' => 'no-store', 'Content-Type' => 'application/x-www-form-urlencoded'];
-        return new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('POST', $uri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\build_query($params));
+        return new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('POST', $uri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::build($params));
     }
     /**
      * Fetches the auth tokens based on the current state.
@@ -554,8 +561,8 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
         }
         // Construct the uri object; return it if it is valid.
         $result = clone $this->authorizationUri;
-        $existingParams = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\parse_query($result->getQuery());
-        $result = $result->withQuery(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\build_query(\array_merge($existingParams, $params)));
+        $existingParams = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::parse($result->getQuery());
+        $result = $result->withQuery(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::build(\array_merge($existingParams, $params)));
         if ($result->getScheme() != 'https') {
             throw new \InvalidArgumentException('Authorization endpoint must be protected by TLS');
         }
@@ -1143,7 +1150,7 @@ class OAuth2 implements \Google\Site_Kit_Dependencies\Google\Auth\FetchAuthToken
         if (\is_null($uri)) {
             return;
         }
-        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\uri_for($uri);
+        return \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::uriFor($uri);
     }
     /**
      * @param string $idToken

@@ -70,7 +70,7 @@ if (\false) {
     class Google_Task_Exception extends \Google\Site_Kit_Dependencies\Google\Task\Exception
     {
     }
-    class Google_Task_Retryable extends \Google\Site_Kit_Dependencies\Google\Task\Retryable
+    interface Google_Task_Retryable extends \Google\Site_Kit_Dependencies\Google\Task\Retryable
     {
     }
     class Google_Task_Runner extends \Google\Site_Kit_Dependencies\Google\Task\Runner

@@ -7,6 +7,8 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
  * Reads from multiple streams, one after the other.
  *
  * This is a read-only stream decorator.
+ *
+ * @final
  */
 class AppendStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
 {

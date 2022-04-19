@@ -21,6 +21,13 @@ class WC_Install {
 	/**
 	 * DB updates and callbacks that need to be run per version.
 	 *
+	 * Please note that these functions are invoked when WooCommerce is updated from a previous version,
+	 * but NOT when WooCommerce is newly installed.
+	 *
+	 * Database schema changes must be incorporated to the SQL returned by get_schema, which is applied
+	 * via dbDelta at both install and update time. If any other kind of database change is required
+	 * at install time (e.g. populating tables), use the 'woocommerce_installed' hook.
+	 *
 	 * @var array
 	 */
 	private static $db_updates = array(
@@ -174,6 +181,10 @@ class WC_Install {
 		'6.3.0' => array(
 			'wc_update_630_create_product_attributes_lookup_table',
 			'wc_update_630_db_version',
+		),
+		'6.4.0' => array(
+			'wc_update_640_add_primary_key_to_product_attributes_lookup_table',
+			'wc_update_640_db_version',
 		),
 	);
 
@@ -343,21 +354,16 @@ class WC_Install {
 	 * @param bool $modify_notice Whether to modify notice based on if all tables are present.
 	 * @param bool $execute       Whether to execute get_schema queries as well.
 	 *
-	 * @return array List of querues.
+	 * @return array List of queries.
 	 */
 	public static function verify_base_tables( $modify_notice = true, $execute = false ) {
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
 		if ( $execute ) {
 			self::create_tables();
 		}
-		$queries        = dbDelta( self::get_schema(), false );
-		$missing_tables = array();
-		foreach ( $queries as $table_name => $result ) {
-			if ( "Created table $table_name" === $result ) {
-				$missing_tables[] = $table_name;
-			}
-		}
+
+		$missing_tables = wc_get_container()
+			->get( DatabaseUtil::class )
+			->get_missing_tables( self::get_schema() );
 
 		if ( 0 < count( $missing_tables ) ) {
 			if ( $modify_notice ) {
@@ -1073,6 +1079,7 @@ CREATE TABLE {$wpdb->prefix}wc_rate_limits (
   rate_limit_id BIGINT UNSIGNED NOT NULL AUTO_INCREMENT,
   rate_limit_key varchar(200) NOT NULL,
   rate_limit_expiry BIGINT UNSIGNED NOT NULL,
+  rate_limit_remaining smallint(10) NOT NULL DEFAULT '0',
   PRIMARY KEY  (rate_limit_id),
   UNIQUE KEY rate_limit_key (rate_limit_key($max_index_length))
 ) $collate;
@@ -1711,7 +1718,7 @@ $product_attributes_lookup_table_creation_sql
 	 * Gets the content of the sample refunds and return policy page.
 	 *
 	 * @since 5.6.0
-	 * @return HTML The content for the page
+	 * @return string The content for the page
 	 */
 	private static function get_refunds_return_policy_page_content() {
 		return <<<EOT

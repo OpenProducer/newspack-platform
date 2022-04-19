@@ -14,7 +14,7 @@ defined( 'ABSPATH' ) || exit;
 use Automattic\WooCommerce\Admin\Notes\DeactivatePlugin;
 use Automattic\WooCommerce\Admin\Notes\Notes;
 use Automattic\WooCommerce\Admin\Notes\NotesUnavailableException;
-use Automattic\WooCommerce\Admin\FeaturePlugin;
+use Automattic\WooCommerce\Internal\Admin\FeaturePlugin;
 
 /**
  * Main package class.
@@ -26,7 +26,7 @@ class Package {
 	 *
 	 * @var string
 	 */
-	const VERSION = '3.2.1';
+	const VERSION = '3.3.2';
 
 	/**
 	 * Package active.

@@ -6,13 +6,15 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
  * Lazily reads or writes to a file that is opened only after an IO operation
  * take place on the stream.
+ *
+ * @final
  */
 class LazyOpenStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
 {
     use StreamDecoratorTrait;
     /** @var string File to open */
     private $filename;
-    /** @var string $mode */
+    /** @var string */
     private $mode;
     /**
      * @param string $filename File to lazily open

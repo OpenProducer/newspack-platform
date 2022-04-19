@@ -237,14 +237,20 @@ class Model implements \ArrayAccess
             throw new \Google\Site_Kit_Dependencies\Google\Exception("Incorrect parameter type passed to {$method}(). Expected an array.");
         }
     }
+    /** @return bool */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         return isset($this->{$offset}) || isset($this->modelData[$offset]);
     }
+    /** @return mixed */
+    #[\ReturnTypeWillChange]
     public function offsetGet($offset)
     {
         return isset($this->{$offset}) ? $this->{$offset} : $this->__get($offset);
     }
+    /** @return void */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (\property_exists($this, $offset)) {
@@ -254,6 +260,8 @@ class Model implements \ArrayAccess
             $this->processed[$offset] = \true;
         }
     }
+    /** @return void */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         unset($this->modelData[$offset]);

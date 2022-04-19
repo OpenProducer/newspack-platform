@@ -5,6 +5,7 @@ namespace Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
  * Stream decorator trait
+ *
  * @property StreamInterface stream
  */
 trait StreamDecoratorTrait

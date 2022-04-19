@@ -25,8 +25,8 @@ use Google\Site_Kit_Dependencies\Firebase\JWT\SignatureInvalidException;
 use Google\Site_Kit_Dependencies\Google\Auth\Cache\MemoryCacheItemPool;
 use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache;
 use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory;
-use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request;
+use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils;
 use InvalidArgumentException;
 use Google\Site_Kit_Dependencies\phpseclib\Crypt\RSA;
 use Google\Site_Kit_Dependencies\phpseclib\Math\BigInteger;
@@ -248,7 +248,7 @@ class AccessToken
                 $token = $token['access_token'];
             }
         }
-        $body = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\stream_for(\http_build_query(['token' => $token]));
+        $body = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor(\http_build_query(['token' => $token]));
         $request = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('POST', self::OAUTH2_REVOKE_URI, ['Cache-Control' => 'no-store', 'Content-Type' => 'application/x-www-form-urlencoded'], $body);
         $httpHandler = $this->httpHandler;
         $response = $httpHandler($request, $options);

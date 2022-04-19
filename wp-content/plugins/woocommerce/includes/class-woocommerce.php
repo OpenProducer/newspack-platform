@@ -9,6 +9,7 @@
 defined( 'ABSPATH' ) || exit;
 
 use Automattic\WooCommerce\Internal\AssignDefaultCategory;
+use Automattic\WooCommerce\Internal\DataStores\Orders\CustomOrdersTableController;
 use Automattic\WooCommerce\Internal\DownloadPermissionsAdjuster;
 use Automattic\WooCommerce\Internal\ProductAttributesLookup\DataRegenerator;
 use Automattic\WooCommerce\Internal\ProductAttributesLookup\LookupDataStore;
@@ -27,7 +28,7 @@ final class WooCommerce {
 	 *
 	 * @var string
 	 */
-	public $version = '6.3.1';
+	public $version = '6.4.1';
 
 	/**
 	 * WooCommerce Schema version.
@@ -216,6 +217,7 @@ final class WooCommerce {
 		wc_get_container()->get( DataRegenerator::class );
 		wc_get_container()->get( LookupDataStore::class );
 		wc_get_container()->get( RestockRefundedItemsAdjuster::class );
+		wc_get_container()->get( CustomOrdersTableController::class );
 	}
 
 	/**

@@ -119,7 +119,7 @@ EOF;
                     $status = \explode(" ", $status);
                     $status = $status[1];
                     list($partHeaders, $partBody) = $this->parseHttpResponse($part, \false);
-                    $response = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Response($status, $partHeaders, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\stream_for($partBody));
+                    $response = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Response($status, $partHeaders, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor($partBody));
                     // Need content id.
                     $key = $headers['content-id'];
                     try {
@@ -145,7 +145,7 @@ EOF;
                 list($header, $value) = \explode(': ', $headerLine, 2);
                 $header = \strtolower($header);
                 if (isset($headers[$header])) {
-                    $headers[$header] .= "\n" . $value;
+                    $headers[$header] = \array_merge((array) $headers[$header], (array) $value);
                 } else {
                     $headers[$header] = $value;
                 }

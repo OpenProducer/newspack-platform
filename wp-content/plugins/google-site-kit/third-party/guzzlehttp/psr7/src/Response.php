@@ -19,7 +19,7 @@ class Response implements \Google\Site_Kit_Dependencies\Psr\Http\Message\Respons
     /**
      * @param int                                  $status  Status code
      * @param array                                $headers Response headers
-     * @param string|null|resource|StreamInterface $body    Response body
+     * @param string|resource|StreamInterface|null $body    Response body
      * @param string                               $version Protocol version
      * @param string|null                          $reason  Reason phrase (when empty a default will be used based on the status code)
      */

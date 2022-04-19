@@ -367,17 +367,22 @@ class GCECredentials extends \Google\Site_Kit_Dependencies\Google\Auth\Credentia
      * @param string $stringToSign The string to sign.
      * @param bool $forceOpenSsl [optional] Does not apply to this credentials
      *        type.
+     * @param string $accessToken The access token to use to sign the blob. If
+     *        provided, saves a call to the metadata server for a new access
+     *        token. **Defaults to** `null`.
      * @return string
      */
-    public function signBlob($stringToSign, $forceOpenSsl = \false)
+    public function signBlob($stringToSign, $forceOpenSsl = \false, $accessToken = null)
     {
         $httpHandler = \Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory::build(\Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache::getHttpClient());
         // Providing a signer is useful for testing, but it's undocumented
         // because it's not something a user would generally need to do.
         $signer = $this->iam ?: new \Google\Site_Kit_Dependencies\Google\Auth\Iam($httpHandler);
         $email = $this->getClientName($httpHandler);
-        $previousToken = $this->getLastReceivedToken();
-        $accessToken = $previousToken ? $previousToken['access_token'] : $this->fetchAuthToken($httpHandler)['access_token'];
+        if (\is_null($accessToken)) {
+            $previousToken = $this->getLastReceivedToken();
+            $accessToken = $previousToken ? $previousToken['access_token'] : $this->fetchAuthToken($httpHandler)['access_token'];
+        }
         return $signer->signBlob($email, $accessToken, $stringToSign);
     }
     /**

@@ -12,7 +12,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'marketing' => true,
 			'minified-js' => false,
 			'mobile-app-banner' => true,
-			'navigation' => false,
+			'navigation' => true,
 			'onboarding' => true,
 			'remote-inbox-notifications' => true,
 			'remote-free-extensions' => true,

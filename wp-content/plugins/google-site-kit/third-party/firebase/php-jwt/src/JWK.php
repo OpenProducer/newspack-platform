@@ -3,6 +3,7 @@
 namespace Google\Site_Kit_Dependencies\Firebase\JWT;
 
 use DomainException;
+use InvalidArgumentException;
 use UnexpectedValueException;
 /**
  * JSON Web Key implementation, based on this spec:
@@ -38,7 +39,7 @@ class JWK
             throw new \UnexpectedValueException('"keys" member must exist in the JWK Set');
         }
         if (empty($jwks['keys'])) {
-            throw new \Google\Site_Kit_Dependencies\Firebase\JWT\InvalidArgumentException('JWK Set did not contain any keys');
+            throw new \InvalidArgumentException('JWK Set did not contain any keys');
         }
         foreach ($jwks['keys'] as $k => $v) {
             $kid = isset($v['kid']) ? $v['kid'] : $k;
@@ -64,17 +65,17 @@ class JWK
      *
      * @uses createPemFromModulusAndExponent
      */
-    private static function parseKey(array $jwk)
+    public static function parseKey(array $jwk)
     {
         if (empty($jwk)) {
-            throw new \Google\Site_Kit_Dependencies\Firebase\JWT\InvalidArgumentException('JWK must not be empty');
+            throw new \InvalidArgumentException('JWK must not be empty');
         }
         if (!isset($jwk['kty'])) {
             throw new \UnexpectedValueException('JWK must contain a "kty" parameter');
         }
         switch ($jwk['kty']) {
             case 'RSA':
-                if (\array_key_exists('d', $jwk)) {
+                if (!empty($jwk['d'])) {
                     throw new \UnexpectedValueException('RSA private keys are not supported');
                 }
                 if (!isset($jwk['n']) || !isset($jwk['e'])) {

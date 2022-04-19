@@ -8,7 +8,8 @@ import {
 	BlockControls,
 } from '@wordpress/block-editor';
 import { __ } from '@wordpress/i18n';
-import { Icon, filledCart, removeCart } from '@woocommerce/icons';
+import { filledCart, removeCart } from '@woocommerce/icons';
+import { Icon } from '@wordpress/icons';
 import { EditorProvider } from '@woocommerce/base-context';
 import type { TemplateArray } from '@wordpress/blocks';
 
@@ -28,12 +29,12 @@ const views = [
 	{
 		view: 'woocommerce/filled-mini-cart-contents-block',
 		label: __( 'Filled Mini Cart', 'woo-gutenberg-products-block' ),
-		icon: <Icon srcElement={ filledCart } />,
+		icon: <Icon icon={ filledCart } />,
 	},
 	{
 		view: 'woocommerce/empty-mini-cart-contents-block',
 		label: __( 'Empty Mini Cart', 'woo-gutenberg-products-block' ),
-		icon: <Icon srcElement={ removeCart } />,
+		icon: <Icon icon={ removeCart } />,
 	},
 ];
 
@@ -42,7 +43,17 @@ interface Props {
 }
 
 const Edit = ( { clientId }: Props ): ReactElement => {
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps( {
+		/**
+		 * This is a workaround for the Site Editor to calculate the
+		 * correct height of the Mini Cart template part on the first load.
+		 *
+		 * @see https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/5825
+		 */
+		style: {
+			minHeight: '100vh',
+		},
+	} );
 
 	const defaultTemplate = [
 		[ 'woocommerce/filled-mini-cart-contents-block', {}, [] ],

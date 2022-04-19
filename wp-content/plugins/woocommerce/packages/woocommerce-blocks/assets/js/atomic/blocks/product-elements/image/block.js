@@ -18,6 +18,11 @@ import { useStoreEvents } from '@woocommerce/base-context/hooks';
  */
 import ProductSaleBadge from './../sale-badge/block';
 import './style.scss';
+import {
+	useBorderProps,
+	useSpacingProps,
+	useTypographyProps,
+} from '../../../../hooks/style-attributes';
 
 /**
  * Product Image Block Component.
@@ -30,17 +35,23 @@ import './style.scss';
  * @param {string} [props.saleBadgeAlign] How should the sale badge be aligned if displayed.
  * @return {*} The component.
  */
-export const Block = ( {
-	className,
-	imageSizing = 'full-size',
-	showProductLink = true,
-	showSaleBadge,
-	saleBadgeAlign = 'right',
-} ) => {
+export const Block = ( props ) => {
+	const {
+		className,
+		imageSizing = 'full-size',
+		showProductLink = true,
+		showSaleBadge,
+		saleBadgeAlign = 'right',
+	} = props;
+
 	const { parentClassName } = useInnerBlockLayoutContext();
 	const { product } = useProductDataContext();
 	const [ imageLoaded, setImageLoaded ] = useState( false );
 	const { dispatchStoreEvent } = useStoreEvents();
+
+	const typographyProps = useTypographyProps( props );
+	const borderProps = useBorderProps( props );
+	const spacingProps = useSpacingProps( props );
 
 	if ( ! product.id ) {
 		return (
@@ -48,11 +59,16 @@ export const Block = ( {
 				className={ classnames(
 					className,
 					'wc-block-components-product-image',
-					'wc-block-components-product-image--placeholder',
 					{
 						[ `${ parentClassName }__product-image` ]: parentClassName,
-					}
+					},
+					borderProps.className
 				) }
+				style={ {
+					...typographyProps.style,
+					...borderProps.style,
+					...spacingProps.style,
+				} }
 			>
 				<ImagePlaceholder />
 			</div>
@@ -84,8 +100,14 @@ export const Block = ( {
 				'wc-block-components-product-image',
 				{
 					[ `${ parentClassName }__product-image` ]: parentClassName,
-				}
+				},
+				borderProps.className
 			) }
+			style={ {
+				...typographyProps.style,
+				...borderProps.style,
+				...spacingProps.style,
+			} }
 		>
 			<ParentComponent { ...( showProductLink && anchorProps ) }>
 				{ !! showSaleBadge && (

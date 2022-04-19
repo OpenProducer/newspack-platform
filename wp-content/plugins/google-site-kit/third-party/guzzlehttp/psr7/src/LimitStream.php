@@ -4,7 +4,9 @@ namespace Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 
 use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
- * Decorator used to return only a subset of a stream
+ * Decorator used to return only a subset of a stream.
+ *
+ * @final
  */
 class LimitStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
 {

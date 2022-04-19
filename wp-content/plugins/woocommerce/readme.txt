@@ -4,7 +4,7 @@ Tags: e-commerce, store, sales, sell, woo, shop, cart, checkout, downloadable, d
 Requires at least: 5.7
 Tested up to: 5.9
 Requires PHP: 7.0
-Stable tag: 6.3.1
+Stable tag: 6.4.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,6 +160,14 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 6.3.0 2022-03-08 =
+= 6.4.1 2022-04-15 =
+
+**WooCommerce**
+
+- Revert - incorrect position value for registering menu pages. ([#32623](https://github.com/woocommerce/woocommerce/pull/32623))
+
+**WooCommerce Blocks - 7.2.2**
+
+- Fix - page load problem due to incorrect URL to certain assets. ([#6260](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/6260))
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

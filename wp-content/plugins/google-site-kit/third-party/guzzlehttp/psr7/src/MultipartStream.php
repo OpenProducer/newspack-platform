@@ -6,6 +6,8 @@ use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
  * Stream that when read returns bytes for a streaming multipart or
  * multipart/form-data stream.
+ *
+ * @final
  */
 class MultipartStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
 {

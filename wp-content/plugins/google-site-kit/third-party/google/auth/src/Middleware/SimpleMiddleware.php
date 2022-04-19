@@ -17,7 +17,7 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Auth\Middleware;
 
-use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
+use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
 /**
  * SimpleMiddleware is a Guzzle Middleware that implements Google's Simple API
@@ -76,9 +76,9 @@ class SimpleMiddleware
             if (!isset($options['auth']) || $options['auth'] !== 'simple') {
                 return $handler($request, $options);
             }
-            $query = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\parse_query($request->getUri()->getQuery());
+            $query = \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::parse($request->getUri()->getQuery());
             $params = \array_merge($query, $this->config);
-            $uri = $request->getUri()->withQuery(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\build_query($params));
+            $uri = $request->getUri()->withQuery(\Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Query::build($params));
             $request = $request->withUri($uri);
             return $handler($request, $options);
         };

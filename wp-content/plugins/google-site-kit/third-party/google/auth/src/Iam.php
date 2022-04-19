@@ -20,6 +20,7 @@ namespace Google\Site_Kit_Dependencies\Google\Auth;
 use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpClientCache;
 use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
+use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils;
 /**
  * Tools for using the IAM API.
  *
@@ -70,7 +71,7 @@ class Iam
         }
         $body = ['delegates' => $delegates, 'payload' => \base64_encode($stringToSign)];
         $headers = ['Authorization' => 'Bearer ' . $accessToken];
-        $request = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('POST', $uri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\stream_for(\json_encode($body)));
+        $request = new \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Request('POST', $uri, $headers, \Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Utils::streamFor(\json_encode($body)));
         $res = $httpHandler($request);
         $body = \json_decode((string) $res->getBody(), \true);
         return $body['signedBlob'];

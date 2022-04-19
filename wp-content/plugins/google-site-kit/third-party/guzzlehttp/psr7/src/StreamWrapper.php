@@ -5,6 +5,8 @@ namespace Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
  * Converts Guzzle streams into PHP stream resources.
+ *
+ * @final
  */
 class StreamWrapper
 {

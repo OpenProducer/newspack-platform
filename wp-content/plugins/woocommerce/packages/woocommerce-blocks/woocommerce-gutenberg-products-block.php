@@ -3,7 +3,7 @@
  * Plugin Name: WooCommerce Blocks
  * Plugin URI: https://github.com/woocommerce/woocommerce-gutenberg-products-block
  * Description: WooCommerce blocks for the Gutenberg editor.
- * Version: 6.9.0
+ * Version: 7.2.2
  * Author: Automattic
  * Author URI: https://woocommerce.com
  * Text Domain:  woo-gutenberg-products-block
@@ -172,7 +172,8 @@ function woocommerce_blocks_get_i18n_data_json( $translations, $file, $handle, $
 		return $translations;
 	}
 
-	$handle_filename = basename( $wp_scripts->registered[ $handle ]->src );
+	$handle_src      = explode( '/build/', $wp_scripts->registered[ $handle ]->src );
+	$handle_filename = $handle_src[1];
 	$locale          = determine_locale();
 	$lang_dir        = WP_LANG_DIR . '/plugins';
 
@@ -203,7 +204,22 @@ function woocommerce_blocks_get_i18n_data_json( $translations, $file, $handle, $
 	} )( "{$domain}", {$json_translations} );
 JS;
 
-	printf( "<script type='text/javascript'>\n%s\n</script>\n", $output ); // phpcs:ignore
+	if ( empty( $wp_scripts->done ) ) {
+		// If we hadn't printed any script into the page, let's enqueue the translations.
+		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.NoExplicitVersion
+		wp_register_script( $handle_filename, '', array( 'wp-i18n' ), false, true );
+		wp_enqueue_script( $handle_filename );
+		wp_add_inline_script(
+			$handle_filename,
+			$output
+		);
+	} else {
+		// If we have already printed scripts into the page, there is a chance that
+		// scripts have finished being printed. That means that if we enqueued them here,
+		// they would never be printed. Instead of enqueuing, then, let's print directly
+		// the script tag.
+		printf( "<script type='text/javascript'>\n%s\n</script>\n", $output ); // phpcs:ignore
+	}
 
 	// Finally, short circuit the pre_load_script_translations hook by returning
 	// the translation JSON from the feature plugin, if it exists so this hook

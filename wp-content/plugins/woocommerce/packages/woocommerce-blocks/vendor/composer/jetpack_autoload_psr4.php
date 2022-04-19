@@ -10,12 +10,16 @@ return array(
 		'version' => '1.12.0.0',
 		'path'    => array( $vendorDir . '/composer/installers/src/Composer/Installers' )
 	),
+	'Automattic\\WooCommerce\\StoreApi\\' => array(
+		'version' => '7.2.2.0',
+		'path'    => array( $baseDir . '/src/StoreApi' )
+	),
 	'Automattic\\WooCommerce\\Blocks\\Tests\\' => array(
-		'version' => '6.9.0.0',
+		'version' => '7.2.2.0',
 		'path'    => array( $baseDir . '/tests/php' )
 	),
 	'Automattic\\WooCommerce\\Blocks\\' => array(
-		'version' => '6.9.0.0',
+		'version' => '7.2.2.0',
 		'path'    => array( $baseDir . '/src' )
 	),
 	'Automattic\\Jetpack\\Autoloader\\' => array(

@@ -4,7 +4,9 @@ namespace Google\Site_Kit_Dependencies\GuzzleHttp\Psr7;
 
 use Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface;
 /**
- * Stream decorator that prevents a stream from being seeked
+ * Stream decorator that prevents a stream from being seeked.
+ *
+ * @final
  */
 class NoSeekStream implements \Google\Site_Kit_Dependencies\Psr\Http\Message\StreamInterface
 {
