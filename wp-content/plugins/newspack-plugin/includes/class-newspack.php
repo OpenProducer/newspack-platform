@@ -49,13 +49,6 @@ final class Newspack {
 		add_action( 'network_admin_notices', [ $this, 'remove_notifications' ], -9999 );
 		add_action( 'all_admin_notices', [ $this, 'remove_notifications' ], -9999 );
 		register_activation_hook( NEWSPACK_PLUGIN_FILE, [ $this, 'activation_hook' ] );
-
-		// Disable the block-based widget editing altogether until further notice.
-		// See https://github.com/Automattic/newspack-plugin/issues/1124.
-		// Disables the block editor from managing widgets in the Gutenberg plugin.
-		add_filter( 'gutenberg_use_widgets_block_editor', '__return_false' );
-		// Disables the block editor from managing widgets.
-		add_filter( 'use_widgets_block_editor', '__return_false' );
 	}
 
 	/**
@@ -86,9 +79,9 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-woocommerce-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth.php';
-		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-wpcom-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-services-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-mailchimp-api.php';
@@ -111,7 +104,6 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-site-design-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-syndication-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-health-check-wizard.php';
-		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-support-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-popups-wizard.php';
 		include_once NEWSPACK_ABSPATH . 'includes/wizards/class-connections-wizard.php';
 
@@ -124,7 +116,10 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-starter-content.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-amp-enhancements.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-newspack-image-credits.php';
-		include_once NEWSPACK_ABSPATH . 'includes/class-jetpack.php';
+
+		// Integrations w/ third-party plugins.
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-jetpack.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-gravityforms.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 
@@ -183,11 +178,6 @@ final class Newspack {
 				wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
 				exit;
 			}
-		}
-		if ( WPCOM_OAuth::get_wpcom_access_token() && 'reset-wpcom' === $newspack_reset ) {
-			delete_user_meta( get_current_user_id(), WPCOM_OAuth::NEWSPACK_WPCOM_ACCESS_TOKEN );
-			delete_user_meta( get_current_user_id(), WPCOM_OAuth::NEWSPACK_WPCOM_EXPIRES_IN );
-			$redirect_url = Wizards::get_url( 'connections' );
 		}
 
 		if ( $newspack_reset ) {

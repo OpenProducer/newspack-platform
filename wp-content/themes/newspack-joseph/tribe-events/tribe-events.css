@@ -3,9 +3,14 @@
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
-#tribe-events-pg-template,
+main#tribe-events-pg-template,
 .tribe-common--breakpoint-medium.tribe-events .tribe-events-l-container {
   padding-top: 0;
+}
+
+main#tribe-events-pg-template {
+  padding-left: 0;
+  padding-right: 0;
 }
 
 .single-tribe_events .site-content {
@@ -52,7 +57,7 @@
 
 .tec-wrapper {
   margin: auto;
-  max-width: 90%;
+  max-width: 90vw;
   width: 1200px;
 }
 

@@ -111,9 +111,9 @@ class Fivetran_Connection {
 		// For Google Ad Manager (aka double_click_publishers) - if Newspack Ads knows the network code, let's use it.
 		if (
 			'double_click_publishers' === $service &&
-			method_exists( 'Newspack_Ads_Model', 'get_active_network_code' )
+			method_exists( 'Newspack_Ads\Providers\GAM_Model', 'get_active_network_code' )
 		) {
-			$network_code = \Newspack_Ads_Model::get_active_network_code();
+			$network_code = \Newspack_Ads\Providers\GAM_Model::get_active_network_code();
 			if ( ! empty( $network_code ) ) {
 				$service_data['double_click_publishers'] = [
 					'network_code' => $network_code,

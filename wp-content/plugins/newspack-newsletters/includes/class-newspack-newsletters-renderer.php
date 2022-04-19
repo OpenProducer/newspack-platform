@@ -252,6 +252,26 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
+	 * Whether the block is empty.
+	 *
+	 * @param WP_Block $block The block.
+	 *
+	 * @return bool Whether the block is empty.
+	 */
+	public static function is_empty_block( $block ) {
+		$blocks_without_inner_html = [
+			'core/site-logo',
+			'core/site-title',
+			'core/site-tagline',
+		];
+
+		$empty_block_name = empty( $block['blockName'] );
+		$empty_html       = ! in_array( $block['blockName'], $blocks_without_inner_html, true ) && empty( $block['innerHTML'] );
+
+		return $empty_block_name || $empty_html;
+	}
+
+	/**
 	 * Convert a Gutenberg block to an MJML component.
 	 * MJML component will be put in an mj-column in an mj-section for consistent layout,
 	 * unless it's a group or a columns block.
@@ -268,7 +288,7 @@ final class Newspack_Newsletters_Renderer {
 		$inner_blocks = $block['innerBlocks'];
 		$inner_html   = $block['innerHTML'];
 
-		if ( ! isset( $attrs['innerBlocksToInsert'] ) && ( empty( $block_name ) || empty( $inner_html ) ) ) {
+		if ( ! isset( $attrs['innerBlocksToInsert'] ) && self::is_empty_block( $block ) ) {
 			return '';
 		}
 
@@ -310,6 +330,8 @@ final class Newspack_Newsletters_Renderer {
 			case 'core/list':
 			case 'core/heading':
 			case 'core/quote':
+			case 'core/site-title':
+			case 'core/site-tagline':
 			case 'newspack-newsletters/share':
 				$text_attrs = array_merge(
 					array(
@@ -326,6 +348,28 @@ final class Newspack_Newsletters_Renderer {
 					return '';
 				}
 
+				if ( 'core/site-tagline' === $block_name ) {
+					$inner_html = get_bloginfo( 'description' );
+				}
+
+				if ( 'core/site-title' === $block_name ) {
+					$inner_html = get_bloginfo( 'name' );
+					$tag_name   = 'h1';
+					if ( isset( $attrs['level'] ) ) {
+						$tag_name = 0 === $attrs['level'] ? 'p' : 'h' . (int) $attrs['level'];
+					}
+					if ( ! ( isset( $attrs['isLink'] ) && ! $attrs['isLink'] ) ) {
+						$link_attrs = array(
+							'href="' . esc_url( get_bloginfo( 'url' ) ) . '"',
+						);
+						if ( isset( $attrs['linkTarget'] ) && '_blank' === $attrs['linkTarget'] ) {
+							$link_attrs[] = 'target="_blank"';
+						}
+						$inner_html = sprintf( '<a %1$s>%2$s</a>', implode( ' ', $link_attrs ), esc_html( $inner_html ) );
+					}
+					$inner_html = sprintf( '<%1$s>%2$s</%1$s>', $tag_name, $inner_html );
+				}
+
 				// Only mj-text has to use container-background-color attr for background color.
 				if ( isset( $text_attrs['background-color'] ) ) {
 					$text_attrs['container-background-color'] = $text_attrs['background-color'];
@@ -333,6 +377,27 @@ final class Newspack_Newsletters_Renderer {
 				}
 
 				$block_mjml_markup = '<mj-text ' . self::array_to_attributes( $text_attrs ) . '>' . $inner_html . '</mj-text>';
+				break;
+
+			/**
+			 * Site logo block.
+			 */
+			case 'core/site-logo':
+				$custom_logo_id = get_theme_mod( 'custom_logo' );
+				$image          = wp_get_attachment_image_src( $custom_logo_id, 'full' );
+				$markup         = '';
+				if ( ! empty( $image ) ) {
+					$img_attrs = array(
+						'padding' => '0',
+						'width'   => sprintf( '%spx', isset( $attrs['width'] ) ? $attrs['width'] : '125' ),
+						'align'   => isset( $attrs['align'] ) ? $attrs['align'] : 'left',
+						'src'     => $image[0],
+						'href'    => isset( $attrs['isLink'] ) && ! $attrs['isLink'] ? '' : esc_url( home_url( '/' ) ),
+						'target'  => isset( $attrs['linkTarget'] ) && '_blank' === $attrs['linkTarget'] ? '_blank' : '',
+					);
+					$markup   .= '<mj-image ' . self::array_to_attributes( $img_attrs ) . ' />';
+				}
+				$block_mjml_markup = $markup;
 				break;
 
 			/**

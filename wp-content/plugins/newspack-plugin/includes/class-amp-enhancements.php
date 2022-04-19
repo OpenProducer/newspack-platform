@@ -90,5 +90,57 @@ class AMP_Enhancements {
 		}
 		return apply_filters( 'newspack_amp_plus_sanitized', $is_sanitized, $error );
 	}
+
+	/**
+	 * Check if a script body is matching any of the provided strings.
+	 *
+	 * @param string[] $strings Strings to look for.
+	 * @param array    $amp_error AMP error.
+	 */
+	public static function is_script_body_matching_strings( $strings, $amp_error ) {
+		if ( ! isset( $amp_error, $amp_error['text'] ) ) {
+			return false;
+		}
+		return array_reduce(
+			$strings,
+			function( $carry, $text ) use ( $amp_error ) {
+				return $carry || false !== strpos( $amp_error['text'], $text );
+			},
+			false
+		);
+	}
+
+	/**
+	 * Check if an attribute is matching a string.
+	 *
+	 * @param attribute $attribute Attribute to look for.
+	 * @param string    $string String to look for.
+	 * @param array     $amp_error AMP error.
+	 */
+	public static function is_error_attribute_matching_string( $attribute, $string, $amp_error ) {
+		if ( ! isset( $amp_error, $amp_error['element_attributes'], $amp_error['element_attributes'][ $attribute ] ) ) {
+			return false;
+		}
+		return false !== strpos( $amp_error['element_attributes'][ $attribute ], $string );
+	}
+
+	/**
+	 * Check if a script id is matching any of the provided strings.
+	 *
+	 * @param string[] $strings Strings to look for.
+	 * @param array    $amp_error AMP error.
+	 */
+	public static function is_script_id_matching_strings( $strings, $amp_error ) {
+		if ( ! isset( $amp_error, $amp_error['node_attributes'], $amp_error['node_attributes']['id'] ) ) {
+			return false;
+		}
+		return array_reduce(
+			$strings,
+			function( $carry, $text ) use ( $amp_error ) {
+				return $carry || false !== strpos( $amp_error['node_attributes']['id'], $text );
+			},
+			false
+		);
+	}
 }
 AMP_Enhancements::init();

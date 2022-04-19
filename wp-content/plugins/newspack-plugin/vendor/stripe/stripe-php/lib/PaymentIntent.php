@@ -64,6 +64,7 @@ class PaymentIntent extends ApiResource
     use ApiOperations\All;
     use ApiOperations\Create;
     use ApiOperations\Retrieve;
+    use ApiOperations\Search;
     use ApiOperations\Update;
 
     const STATUS_CANCELED = 'canceled';
@@ -73,6 +74,23 @@ class PaymentIntent extends ApiResource
     const STATUS_REQUIRES_CONFIRMATION = 'requires_confirmation';
     const STATUS_REQUIRES_PAYMENT_METHOD = 'requires_payment_method';
     const STATUS_SUCCEEDED = 'succeeded';
+
+    /**
+     * @param null|array $params
+     * @param null|array|string $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     *
+     * @return \Stripe\PaymentIntent the applied payment intent
+     */
+    public function applyCustomerBalance($params = null, $opts = null)
+    {
+        $url = $this->instanceUrl() . '/apply_customer_balance';
+        list($response, $opts) = $this->_request('post', $url, $params, $opts);
+        $this->refreshFrom($response, $opts);
+
+        return $this;
+    }
 
     /**
      * @param null|array $params
@@ -140,5 +158,20 @@ class PaymentIntent extends ApiResource
         $this->refreshFrom($response, $opts);
 
         return $this;
+    }
+
+    /**
+     * @param null|array $params
+     * @param null|array|string $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     *
+     * @return \Stripe\SearchResult<PaymentIntent> the payment intent search results
+     */
+    public static function search($params = null, $opts = null)
+    {
+        $url = '/v1/payment_intents/search';
+
+        return self::_searchResource($url, $params, $opts);
     }
 }

@@ -1,55 +1,68 @@
 @import '~@wordpress/base-styles/colors';
 
-.newspack-ads-ad-unit {
-	margin: 0 0 28px;
-	max-width: 100%;
-	overflow-x: hidden;
-	position: relative;
-	width: 100%;
-
-	.components-placeholder {
-		border: 1px solid $gray-900;
-		border-radius: 0;
-		box-shadow: none;
-		margin: 0;
-		min-height: 100px;
-		padding: 0;
-
-		&__fieldset {
-			justify-content: center;
-			align-items: center;
-			flex-direction: row !important;
-		}
-		&__label {
-			display: none;
-		}
-	}
-
-	.components-spinner {
-		margin: -9px 0 0 -9px;
-		position: absolute;
-		top: 50%;
-		left: 50%;
-	}
-
-	.components-base-control {
-		position: absolute;
-		padding: 10px;
-		label {
-			font-weight: 600;
-		}
-	}
-	.components-select-control {
+.editor-styles-wrapper {
+	.newspack-ads-ad-block {
 		align-items: center;
+		display: flex;
+		justify-content: center;
 	}
-}
+	.newspack-ads-ad-block-placeholder {
+		align-items: center;
+		box-sizing: content-box;
+		display: flex;
+		font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen-Sans, Ubuntu,
+			Cantarell, 'Helvetica Neue', sans-serif;
+		justify-content: center;
+		margin: auto;
+		padding: 16px;
+		position: relative;
+		width: 100%;
 
-// Align center
-.wp-block[data-type='newspack-ads/ad-unit'] {
-	&[data-align='center'] {
-		.components-placeholder {
-			margin-left: auto;
-			margin-right: auto;
+		svg.newspack-ads-ad-block-mock {
+			display: block;
+			pointer-events: none;
+			position: absolute;
+			rect {
+				fill: white;
+				stroke: rgba( $gray-900, 0.4 );
+				stroke-width: 1px;
+			}
+			line {
+				stroke: rgba( $gray-900, 0.4 );
+				stroke-width: 1px;
+			}
+		}
+		.newspack-ads-ad-block-ad-label {
+			background: white;
+			border: 1px dashed rgba( $gray-900, 0.4 );
+			color: $gray-900;
+			font-size: 10px;
+			line-height: 1.6;
+			padding: 4px 8px;
+			pointer-events: none;
+			position: absolute;
+			text-align: center;
+		}
+	}
+	.newspack-ads-ad-block-edit {
+		display: flex;
+		flex-direction: column;
+		width: 100%;
+		.components-spinner {
+			margin: 0;
+		}
+		.newspack-ads-ad-block-edit-fields {
+			align-items: baseline;
+			column-gap: 1em;
+			display: grid;
+			grid-template-columns: repeat( 2, 1fr );
+			row-gap: calc( 1em - 8px );
+			&.one-column {
+				grid-template-columns: repeat( 1, minmax( max-content, 50% ) );
+			}
+		}
+		.newspack-ads-ad-block-save-button {
+			margin-top: calc( 1em - 8px );
 		}
 	}
 }

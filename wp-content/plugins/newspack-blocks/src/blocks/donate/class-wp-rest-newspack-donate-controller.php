@@ -13,6 +13,8 @@
 class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 // phpcs:enable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedClassFound
 
+	private static $current_user_id = 0; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
+
 	/**
 	 * Constructs the controller.
 	 *
@@ -29,6 +31,8 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 	 * @access public
 	 */
 	public function register_routes() {
+		self::$current_user_id = get_current_user_id();
+
 		register_rest_route(
 			$this->namespace,
 			'/' . $this->rest_base,
@@ -111,6 +115,7 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 				'client_metadata'   => [
 					'clientId'        => $request->get_param( 'clientId' ),
 					'newsletterOptIn' => $request->get_param( 'newsletter_opt_in' ),
+					'userId'          => self::$current_user_id,
 				],
 				'payment_metadata'  => $payment_metadata,
 				'payment_method_id' => $request->get_param( 'payment_method_id' ),

@@ -1,3 +1,21 @@
+# [1.48.0](https://github.com/Automattic/newspack-blocks/compare/v1.47.2...v1.48.0) (2022-04-18)
+
+
+### Features
+
+* add 3 new subscribe patterns ([#1091](https://github.com/Automattic/newspack-blocks/issues/1091)) ([1d7f688](https://github.com/Automattic/newspack-blocks/commit/1d7f688bec956381c3395ee429d2c85c4a670620))
+* **donate-streamlined:** set user ID on Stripe client ([#1095](https://github.com/Automattic/newspack-blocks/issues/1095)) ([e9f4bd5](https://github.com/Automattic/newspack-blocks/commit/e9f4bd54fd577e2afb7bdf1456be48eeb9a95ac8))
+* publish on npm when releasing ([e77fdf6](https://github.com/Automattic/newspack-blocks/commit/e77fdf618fd9cbfba1285952e52a89044edc93a2)), closes [#849](https://github.com/Automattic/newspack-blocks/issues/849)
+
+# [1.48.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.47.2...v1.48.0-alpha.1) (2022-04-14)
+
+
+### Features
+
+* add 3 new subscribe patterns ([#1091](https://github.com/Automattic/newspack-blocks/issues/1091)) ([1d7f688](https://github.com/Automattic/newspack-blocks/commit/1d7f688bec956381c3395ee429d2c85c4a670620))
+* **donate-streamlined:** set user ID on Stripe client ([#1095](https://github.com/Automattic/newspack-blocks/issues/1095)) ([e9f4bd5](https://github.com/Automattic/newspack-blocks/commit/e9f4bd54fd577e2afb7bdf1456be48eeb9a95ac8))
+* publish on npm when releasing ([e77fdf6](https://github.com/Automattic/newspack-blocks/commit/e77fdf618fd9cbfba1285952e52a89044edc93a2)), closes [#849](https://github.com/Automattic/newspack-blocks/issues/849)
+
 ## [1.47.2](https://github.com/Automattic/newspack-blocks/compare/v1.47.1...v1.47.2) (2022-04-07)
 
 

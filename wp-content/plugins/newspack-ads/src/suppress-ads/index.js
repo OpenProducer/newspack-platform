@@ -20,7 +20,7 @@ class NewspackSuppressAdsPanel extends Component {
 		return (
 			<PluginDocumentSettingPanel
 				name="newspack-ad-free"
-				title={ __( 'Newspack Ad Settings', 'newspack' ) }
+				title={ __( 'Newspack Ads Settings', 'newspack' ) }
 				className="newspack-subtitle"
 			>
 				<ToggleControl

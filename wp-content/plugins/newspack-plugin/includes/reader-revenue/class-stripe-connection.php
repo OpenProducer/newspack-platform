@@ -190,7 +190,7 @@ class Stripe_Connection {
 	/**
 	 * Get Stripe invoice.
 	 *
-	 * @param string $invoice_id Customer ID.
+	 * @param string $invoice_id Invoice ID.
 	 */
 	private static function get_invoice( $invoice_id ) {
 		$stripe = self::get_stripe_client();
@@ -198,6 +198,20 @@ class Stripe_Connection {
 			return $stripe->invoices->retrieve( $invoice_id, [] );
 		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'stripe_webhooks', __( 'Could not fetch invoice.', 'newspack' ), $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Get balance transaction.
+	 *
+	 * @param string $transaction_id Transaction ID.
+	 */
+	private static function get_balance_transaction( $transaction_id ) {
+		$stripe = self::get_stripe_client();
+		try {
+			return $stripe->balanceTransactions->retrieve( $transaction_id, [] );
+		} catch ( \Throwable $e ) {
+			return new \WP_Error( 'stripe_webhooks', __( 'Could not fetch balance transaction.', 'newspack' ), $e->getMessage() );
 		}
 	}
 
@@ -374,6 +388,28 @@ class Stripe_Connection {
 					);
 
 					wp_remote_post( $analytics_ping_url . '&' . http_build_query( $analytics_ping_params ) );
+				}
+
+
+				// Add a transaction to WooCommerce.
+				if ( function_exists( 'WC' ) ) {
+					$balance_transaction    = self::get_balance_transaction( $payment['balance_transaction'] );
+					$wc_transaction_payload = [
+						'email'              => $customer['email'],
+						'name'               => $customer['name'],
+						'stripe_id'          => $payment['id'],
+						'stripe_customer_id' => $customer['id'],
+						'stripe_fee'         => self::normalise_amount( $balance_transaction['fee'], $payment['currency'] ),
+						'stripe_net'         => self::normalise_amount( $balance_transaction['net'], $payment['currency'] ),
+						'date'               => $payment['created'],
+						'amount'             => $amount_normalised,
+						'frequency'          => $frequency,
+						'currency'           => $stripe_data['currency'],
+						'client_id'          => $customer['metadata']['clientId'],
+						'user_id'            => $customer['metadata']['userId'],
+						'subscribed'         => $was_customer_added_to_mailing_list,
+					];
+					WooCommerce_Connection::create_transaction( $wc_transaction_payload );
 				}
 
 				break;

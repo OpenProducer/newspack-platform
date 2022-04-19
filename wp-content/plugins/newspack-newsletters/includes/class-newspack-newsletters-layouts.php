@@ -120,39 +120,23 @@ final class Newspack_Newsletters_Layouts {
 	 * @return string Content.
 	 */
 	public static function layout_token_replacement( $content, $extra = [] ) {
-		$sitename       = get_bloginfo( 'name' );
-		$custom_logo_id = get_theme_mod( 'custom_logo' );
-		$logo           = $custom_logo_id ? wp_get_attachment_image_src( $custom_logo_id, 'medium' )[0] : null;
+		$sitename_block = '<!-- wp:site-title {"textAlign":"center","newsletterVisibility":"email"} /-->';
+		$logo_block     = '<!-- wp:site-logo {"align":"center","width":200,"newsletterVisibility":"email"} /-->';
 
-		$sitename_block = sprintf(
-			'<!-- wp:heading {"align":"center","level":1} --><h1 class="has-text-align-center">%s</h1><!-- /wp:heading -->',
-			$sitename
-		);
-
-		$logo_block = $logo ? sprintf(
-			'<!-- wp:image {"align":"center","id":%s,"sizeSlug":"medium"} --><figure class="wp-block-image aligncenter size-medium"><img src="%s" alt="%s" class="wp-image-%s" /></figure><!-- /wp:image -->',
-			$custom_logo_id,
-			$logo,
-			$sitename,
-			$custom_logo_id
-		) : null;
-
-		$search  = array_merge(
+		$search = array_merge(
 			[
-				'__SITENAME__',
-				'__LOGO__',
 				'__LOGO_OR_SITENAME__',
 			],
 			array_keys( $extra )
 		);
+
 		$replace = array_merge(
 			[
-				$sitename,
-				$logo,
-				$logo ? $logo_block : $sitename_block,
+				has_custom_logo() ? $logo_block : $sitename_block,
 			],
 			array_values( $extra )
 		);
+
 		return str_replace( $search, $replace, $content );
 	}
 

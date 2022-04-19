@@ -2145,7 +2145,6 @@ msgstr ""
 #: includes/wizards/class-reader-revenue-wizard.php:58
 #: includes/wizards/class-seo-wizard.php:68
 #: includes/wizards/class-setup-wizard.php:76
-#: includes/wizards/class-support-wizard.php:312
 #: includes/wizards/class-syndication-wizard.php:67
 msgid "10 minutes"
 msgstr ""
@@ -2344,38 +2343,6 @@ msgstr ""
 
 #: includes/wizards/class-site-design-wizard.php:59
 msgid "5 minutes"
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:119
-msgid "Invalid WPCOM token."
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:140
-msgid "Missing parameters in request."
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:151
-msgid "Please provide a subject."
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:154
-msgid "Please provide a message."
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:215
-msgid "Something went wrong. Please contact us directly at "
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:234
-msgid "Missing WPCOM access token."
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:294
-msgid "Support"
-msgstr ""
-
-#: includes/wizards/class-support-wizard.php:303
-msgid "Contact customer support"
 msgstr ""
 
 #: includes/wizards/class-syndication-wizard.php:49

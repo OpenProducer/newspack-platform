@@ -1,0 +1,61 @@
+{
+	"name": "@automattic/newspack-blocks",
+	"version": "1.48.0",
+	"author": "Automattic",
+	"devDependencies": {
+		"@rushstack/eslint-patch": "^1.1.2",
+		"@testing-library/dom": "^8.13.0",
+		"@testing-library/user-event": "^14.1.0",
+		"eslint": "^7.32.0",
+		"fetch-mock-jest": "^1.5.1",
+		"html-entities": "^2.3.3",
+		"identity-obj-proxy": "^3.0.0",
+		"lint-staged": "^12.3.7",
+		"newspack-scripts": "^3.3.0",
+		"prettier": "npm:wp-prettier@^2.2.1-beta-1",
+		"stylelint": "^13.3.1"
+	},
+	"description": "=== Newspack Blocks === Contributors: (this should be a list of wordpress.org userid's) Donate link: https://example.com/ Tags: comments, spam Requires at least: 4.5 Tested up to: 5.1.1 Stable tag: 0.1.0 License: GPLv2 or later License URI: https://www.gnu.org/licenses/gpl-2.0.html",
+	"dependencies": {
+		"@stripe/stripe-js": "^1.27.0",
+		"classnames": "^2.3.1",
+		"lodash": "^4.17.21",
+		"newspack-components": "^2.0.3",
+		"react": "^17.0.2",
+		"redux": "^4.1.2",
+		"redux-saga": "^1.1.3",
+		"regenerator-runtime": "^0.13.9",
+		"swiper": "7.4.1"
+	},
+	"scripts": {
+		"cm": "newspack-scripts commit",
+		"semantic-release": "newspack-scripts release --files=newspack-blocks.php",
+		"build": "newspack-scripts build",
+		"start": "npm ci && newspack-scripts watch",
+		"watch": "newspack-scripts watch",
+		"test": "newspack-scripts test",
+		"lint": "npm run lint:scss && npm run lint:js",
+		"lint:js": "prettier 'src/**/*.{js,jsx}' --write",
+		"lint:js:staged": "eslint --ext .js,.jsx",
+		"format:js": "prettier 'src/**/*.{js,jsx}' --write",
+		"lint:scss": "stylelint '**/*.scss' --syntax scss --config=./node_modules/newspack-scripts/config/stylelint.config.js",
+		"format:scss": "prettier --write 'src/**/*.scss'",
+		"lint:scss:staged": "stylelint --syntax scss --config=./node_modules/newspack-scripts/config/stylelint.config.js",
+		"i18n": "NODE_ENV=production npm run build; bash ./bin/update-translations.sh",
+		"release": "npm run build && npm run semantic-release",
+		"release:archive": "rm -rf release && mkdir -p release && rsync -r . ./release/newspack-blocks --exclude-from='./.distignore' && cd release && zip -r newspack-blocks.zip newspack-blocks",
+		"postinstall": "rm -rf node_modules/newspack-scripts/node_modules/prettier"
+	},
+	"lint-staged": {
+		"*.scss": "npm run lint:scss:staged",
+		"*.js": "npm run lint:js:staged"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Automattic/newspack-blocks.git"
+	},
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/Automattic/newspack-blocks/issues"
+	}
+}

@@ -93,42 +93,6 @@ class Jetpack_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Is WordAds enabled
-	 *
-	 * @return bool Whether WordAds is enabled.
-	 */
-	public function is_wordads_enabled() {
-		return class_exists( 'Jetpack' ) && \Jetpack::is_module_active( 'wordads' );
-	}
-
-	/**
-	 * Is WordAds available at the current plan level.
-	 *
-	 * @return bool Returns true if the customer is in a paid Jetpack plan.
-	 */
-	public function is_wordads_available_at_plan_level() {
-		return class_exists( 'Jetpack_Plan' ) && \Jetpack_Plan::supports( 'wordads' );
-	}
-
-	/**
-	 * Activate the Jetpack WordAds module
-	 *
-	 * @return bool Returns true if the module was successfully activated.
-	 */
-	public function activate_wordads() {
-		return class_exists( 'Jetpack' ) && \Jetpack::activate_module( 'wordads', false, false );
-	}
-
-	/**
-	 * Deactivate the Jetpack WordAds module
-	 *
-	 * @return bool Returns true if the module was successfully deactivated.
-	 */
-	public function deactivate_wordads() {
-		return class_exists( 'Jetpack' ) && \Jetpack::deactivate_module( 'wordads' );
-	}
-
-	/**
 	 * Is Related Posts module active?
 	 *
 	 * @return bool Returns true if the module is currently active.

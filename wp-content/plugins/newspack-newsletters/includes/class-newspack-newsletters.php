@@ -112,6 +112,9 @@ final class Newspack_Newsletters {
 			case 'campaign_monitor':
 				self::$provider = Newspack_Newsletters_Campaign_Monitor::instance();
 				break;
+			case 'active_campaign':
+				self::$provider = Newspack_Newsletters_Active_Campaign::instance();
+				break;
 		}
 	}
 

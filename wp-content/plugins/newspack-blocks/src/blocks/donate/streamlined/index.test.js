@@ -60,14 +60,14 @@ describe( 'Streamlined Donate block processing', () => {
 	const emailInput = testingLibrary.getByPlaceholderText( container, 'Email' );
 	const nameInput = testingLibrary.getByPlaceholderText( container, 'Full Name' );
 
-	it( 'additional inputs are initially hidden and displayed after user clicks the button', () => {
+	it( 'additional inputs are initially hidden and displayed after user clicks the button', async () => {
 		expect( emailInput ).not.toBeVisible();
-		userEvent.click( button );
+		await userEvent.click( button );
 		expect( emailInput ).toBeVisible();
 	} );
 
-	it( 'form submission with invalid values triggers validation errors', () => {
-		userEvent.click( button );
+	it( 'form submission with invalid values triggers validation errors', async () => {
+		await userEvent.click( button );
 		expect(
 			testingLibrary.getByText( container, 'Email address is invalid.' )
 		).toBeInTheDocument();
@@ -75,8 +75,8 @@ describe( 'Streamlined Donate block processing', () => {
 			testingLibrary.getByText( container, 'Full name should be provided.' )
 		).toBeInTheDocument();
 
-		userEvent.type( emailInput, 'foo@bar.com' );
-		userEvent.click( button );
+		await userEvent.type( emailInput, 'foo@bar.com' );
+		await userEvent.click( button );
 		expect(
 			testingLibrary.queryByText( container, 'Email address is invalid.' )
 		).not.toBeInTheDocument();
@@ -86,9 +86,9 @@ describe( 'Streamlined Donate block processing', () => {
 		expect( testingLibrary.getByText( container, '($0.52 monthly)' ) ).toBeInTheDocument();
 	} );
 
-	it( 'form can be submitted after validation passes', () => {
-		userEvent.type( nameInput, 'Bax' );
-		userEvent.click( button );
+	it( 'form can be submitted after validation passes', async () => {
+		await userEvent.type( nameInput, 'Bax' );
+		await userEvent.click( button );
 		expect(
 			testingLibrary.queryByText( container, 'Full name should be provided.' )
 		).not.toBeInTheDocument();

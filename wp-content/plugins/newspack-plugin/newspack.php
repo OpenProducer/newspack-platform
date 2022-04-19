@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Newspack
  * Description: An advanced open-source publishing and revenue-generating platform for news organizations.
- * Version: 1.79.0
+ * Version: 1.81.0
  * Author: Automattic
  * Author URI: https://newspack.pub/
  * License: GPL2

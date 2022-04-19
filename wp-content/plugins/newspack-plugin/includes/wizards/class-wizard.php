@@ -97,7 +97,8 @@ abstract class Wizard {
 		// It should not actually load a JS file.
 		wp_register_script( 'newspack_data', '', [], '1.0', false );
 
-		$plugin_data = get_plugin_data( NEWSPACK_PLUGIN_FILE );
+		$plugin_data   = get_plugin_data( NEWSPACK_PLUGIN_FILE );
+		$support_email = ( defined( 'NEWSPACK_SUPPORT_EMAIL' ) && NEWSPACK_SUPPORT_EMAIL ) ? NEWSPACK_SUPPORT_EMAIL : false;
 
 		$urls = [
 			'dashboard'      => Wizards::get_url( 'dashboard' ),
@@ -111,6 +112,7 @@ abstract class Wizard {
 			'homepage'       => get_edit_post_link( get_option( 'page_on_front', false ) ),
 			'site'           => get_site_url(),
 			'support'        => esc_url( 'https://newspack.pub/support/' ),
+			'support_email'  => $support_email,
 		];
 
 		$screen = get_current_screen();
@@ -139,23 +141,10 @@ abstract class Wizard {
 			);
 		}
 
-		$client_id = WPCOM_OAuth::wpcom_client_id();
-		// For legacy-support reasons, the redirect URI is to the Support wizard.
-		$redirect_uri = admin_url() . 'admin.php?page=newspack-support-wizard';
-		$aux_data     = [
-			'is_e2e'               => Starter_Content::is_e2e(),
-			'is_debug_mode'        => Newspack::is_debug_mode(),
-			'site_title'           => get_option( 'blogname' ),
-			'wpcom_auth_url'       => 'https://public-api.wordpress.com/oauth2/authorize?client_id=' . $client_id . '&redirect_uri=' . $redirect_uri . '&response_type=token&scope=global',
-			'wpcom_disconnect_url' => esc_url(
-				add_query_arg(
-					array(
-						'newspack_reset' => 'reset-wpcom',
-					),
-					Wizards::get_url( 'dashboard' )
-				)
-			),
-			'WPCOM_ACCESS_TOKEN'   => WPCOM_OAuth::get_access_token(),
+		$aux_data = [
+			'is_e2e'        => Starter_Content::is_e2e(),
+			'is_debug_mode' => Newspack::is_debug_mode(),
+			'site_title'    => get_option( 'blogname' ),
 		];
 
 		if ( class_exists( 'Newspack_Popups_Segmentation' ) ) {

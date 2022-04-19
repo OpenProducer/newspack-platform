@@ -153,7 +153,7 @@ class Google_OAuth {
 	}
 
 	/**
-	 * Start the Google OAuth2 flow, which will use WPCOM as a proxy to issue credentials.
+	 * Start the Google OAuth2 flow.
 	 *
 	 * @return WP_REST_Response Response with the URL.
 	 */

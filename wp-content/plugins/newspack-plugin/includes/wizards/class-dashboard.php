@@ -116,16 +116,6 @@ class Dashboard extends Wizard {
 			],
 		];
 
-		if ( Support_Wizard::configured() ) {
-			$dashboard[] = [
-				'slug'        => 'support',
-				'name'        => Wizards::get_name( 'support' ),
-				'url'         => Wizards::get_url( 'support' ),
-				'description' => Wizards::get_description( 'support' ),
-				'status'      => 'enabled',
-			];
-		}
-
 		return $dashboard;
 	}
 

@@ -295,6 +295,30 @@ class Plugin_Manager {
 				'PluginURI'   => esc_url( 'https://distributorplugin.com/' ),
 				'Download'    => esc_url( 'https://github.com/10up/distributor/archive/stable.zip' ),
 			],
+			'super-cool-ad-inserter'        => [
+				'Name'        => esc_html__( 'Super Cool Ad Inserter Plugin', 'newspack' ),
+				'Description' => esc_html__( 'Display ads within your article content.', 'newspack' ),
+				'Author'      => esc_html__( 'INN Labs, Automattic', 'newspack' ),
+				'AuthorURI'   => esc_url( 'https://automattic.com' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/super-cool-ad-inserter/' ),
+				'Download'    => 'wporg',
+			],
+			'ad-refresh-control'            => [
+				'Name'        => esc_html__( 'Ad Refresh Control', 'newspack' ),
+				'Description' => esc_html__( 'Enable Active View refresh for Google Ad Manager ads without needing to modify any code.', 'newspack' ),
+				'Author'      => esc_html__( 'Gary Thayer, David Green, 10up', 'newspack' ),
+				'AuthorURI'   => esc_url( 'https://10up.com' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/ad-refresh-control/' ),
+				'Download'    => 'wporg',
+			],
+			'broadstreet'                   => [
+				'Name'        => esc_html__( 'Broadstreet', 'newspack' ),
+				'Description' => esc_html__( 'Integrate Broadstreet’s business directory and ad-serving features into your site.', 'newspack' ),
+				'Author'      => 'Broadstreet',
+				'AuthorURI'   => esc_url( 'https://broadstreetads.com/' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/broadstreet/' ),
+				'Download'    => 'wporg',
+			],
 		];
 
 		$default_info = [

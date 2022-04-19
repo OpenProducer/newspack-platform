@@ -48,6 +48,10 @@ class Newspack_Newsletters_Settings {
 						'value' => 'campaign_monitor',
 					),
 					array(
+						'name'  => esc_html__( 'ActiveCampaign', 'newspack-newsletters' ),
+						'value' => 'active_campaign',
+					),
+					array(
 						'name'  => esc_html__( 'Manual / Other', 'newspack-newsletters' ),
 						'value' => 'manual',
 					),
@@ -92,6 +96,20 @@ class Newspack_Newsletters_Settings {
 				'key'         => 'newspack_newsletters_campaign_monitor_client_id',
 				'type'        => 'text',
 				'provider'    => 'campaign_monitor',
+				'onboarding'  => true,
+			),
+			array(
+				'description' => esc_html__( 'ActiveCampaign API URL', 'newspack-newsletters' ),
+				'key'         => 'newspack_newsletters_active_campaign_url',
+				'type'        => 'text',
+				'provider'    => 'active_campaign',
+				'onboarding'  => true,
+			),
+			array(
+				'description' => esc_html__( 'ActiveCampaign API Key', 'newspack-newsletters' ),
+				'key'         => 'newspack_newsletters_active_campaign_key',
+				'type'        => 'text',
+				'provider'    => 'active_campaign',
 				'onboarding'  => true,
 			),
 			array(

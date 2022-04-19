@@ -202,11 +202,11 @@ class Popups_Analytics_Utils {
 		$label         = str_replace( 'Newspack Announcement: ', '', $row['dimensions'][2] );
 		// Extract post id from the label.
 		preg_match(
-			'/\(([0-9]*)\)$/',
+			'/\(([0-9]*)\)/',
 			$label,
 			$id_matches
 		);
-		$post_id      = isset( $id_matches[1] ) ? $id_matches[1] : '';
+		$post_id      = array_pop( $id_matches ) ?? '';
 		$label_object = [
 			// Remove post id in parens.
 			'label' => str_replace( " ($post_id)", '', $label ),
