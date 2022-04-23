@@ -179,33 +179,19 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
-	 * Should tracking code be inserted?
-	 */
-	public static function is_tracking() {
-		if ( Newspack_Popups::is_preview_request() ) {
-			return true;
-		}
-		if ( is_admin() || self::is_admin_user() || Newspack_Popups_Settings::is_non_interactive() ) {
-			return false;
-		}
-		return true;
-	}
-
-	/**
 	 * Insert amp-analytics tracking code.
 	 * Has to be included on every page to set the cookie.
 	 *
 	 * This amp-analytics tag will not report any analytics, it's only responsible for settings the cookie
 	 * bearing the client ID, as well as handling the linker paramerer when navigating from a proxy site.
 	 *
+	 * Because this tag doesn't report any analytics but is used to look up the reader's activity, it
+	 * should be included in preview requests and logged-in admin/editor sessions.
+	 *
 	 * There is a known issue with amp-analytics & amp-access interoperation – more on that at
 	 * https://github.com/Automattic/newspack-popups/pull/224#discussion_r496655085.
 	 */
 	public static function insert_amp_analytics() {
-		if ( ! self::is_tracking() ) {
-			return;
-		}
-
 		$linker_id            = 'cid';
 		$amp_analytics_config = [
 			// Linker will append a query param to all internal links.

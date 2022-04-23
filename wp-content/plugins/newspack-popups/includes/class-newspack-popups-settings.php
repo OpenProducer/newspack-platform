@@ -246,7 +246,7 @@ class Newspack_Popups_Settings {
 				'value'       => get_option( 'suppress_newsletter_campaigns', true ),
 				'default'     => true,
 				'description' => __( 'Suppress newsletter prompts for subscribers', 'newspack-popups' ),
-				'help'        => __( 'Automatically suppress any prompt that contains a newsletter signup block for readers coming from a newsletter email.', 'newspack-popups' ),
+				'help'        => __( 'Automatically suppress any dismissible prompt that contains a newsletter signup block for readers coming from a newsletter email.', 'newspack-popups' ),
 				'public'      => false,
 			],
 			[
@@ -255,9 +255,9 @@ class Newspack_Popups_Settings {
 				'type'        => 'boolean',
 				'value'       => get_option( 'suppress_all_newsletter_campaigns_if_one_dismissed', true ),
 				'default'     => true,
-				'description' => __( 'Suppress newsletter prompts if dismissed', 'newspack-popups' ),
+				'description' => __( 'Suppress newsletter prompts if permanently dismissed', 'newspack-popups' ),
 				'help'        => __(
-					'Automatically suppress any prompt that contains a newsletter signup block if at least one prompt with a signup block has been dismissed.',
+					'Automatically suppress any dismissible prompt that contains a newsletter signup block if at least one prompt with a signup block has been permanently dismissed.',
 					'newspack-popups'
 				),
 			],
@@ -269,7 +269,7 @@ class Newspack_Popups_Settings {
 				'default'     => false,
 				'description' => __( 'Suppress donation prompts for donors', 'newspack-popups' ),
 				'help'        => __(
-					'Automatically suppress all prompts containing a Donate block if the reader has already donated.',
+					'Automatically suppress any dismissible prompt containing a Donate block if the reader has already donated.',
 					'newspack-popups'
 				),
 			],
@@ -285,8 +285,7 @@ class Newspack_Popups_Settings {
 			[
 				'section'     => 'donor_settings',
 				'key'         => 'newspack_popups_donor_landing_page',
-				'type'        => 'select',
-				'options'     => $donor_landing_options,
+				'type'        => 'string',
 				'value'       => self::donor_landing_page(),
 				'default'     => '',
 				'description' => __( 'Donor landing page', 'newspack-popups' ),
@@ -294,7 +293,6 @@ class Newspack_Popups_Settings {
 					"Set a page on your site as a donation landing page. Once a reader views this page, they will be considered a donor. This is helpful if you're using an off-site donation platform but still want to target donors as an audience segment.",
 					'newspack-popups'
 				),
-				'type'        => 'select',
 				'options'     => $donor_landing_options,
 			],
 			[
@@ -346,9 +344,8 @@ class Newspack_Popups_Settings {
 				$item          = wp_parse_args( $item, $default_setting );
 				$default_value = isset( $item['default'] ) ? $item['default'] : false;
 				$value         = isset( $item['value'] ) ? $item['value'] : $default_value;
-				$type          = 'select' === $item['type'] ? 'string' : $item['type'];
 				if ( false !== $value ) {
-					settype( $value, $type );
+					settype( $value, $item['type'] );
 					$item['value'] = $value;
 				}
 				return $item;

@@ -1,3 +1,89 @@
+## [1.52.1](https://github.com/Automattic/newspack-popups/compare/v1.52.0...v1.52.1) (2022-04-20)
+
+
+### Bug Fixes
+
+* revert group insertion fix ([#858](https://github.com/Automattic/newspack-popups/issues/858)) ([15af041](https://github.com/Automattic/newspack-popups/commit/15af04192c74d832423c226b031321fc7bac0c7b)), closes [#855](https://github.com/Automattic/newspack-popups/issues/855)
+
+## [1.52.1-hotfix.1](https://github.com/Automattic/newspack-popups/compare/v1.52.0...v1.52.1-hotfix.1) (2022-04-20)
+
+
+### Reverts
+
+* Revert "fix: insertion of prompts around Group blocks (#855)" ([b9917f2](https://github.com/Automattic/newspack-popups/commit/b9917f2f7e9c17bad96c8bb0385dbf144d10344b)), closes [#855](https://github.com/Automattic/newspack-popups/issues/855)
+
+# [1.52.0](https://github.com/Automattic/newspack-popups/compare/v1.51.0...v1.52.0) (2022-04-20)
+
+
+### Bug Fixes
+
+* insertion of prompts around Group blocks ([#855](https://github.com/Automattic/newspack-popups/issues/855)) ([6ae5ea9](https://github.com/Automattic/newspack-popups/commit/6ae5ea90c664e359d80e116253a2a675fe200b69))
+* make "scroll" the default inline trigger_type ([#846](https://github.com/Automattic/newspack-popups/issues/846)) ([a2ffee4](https://github.com/Automattic/newspack-popups/commit/a2ffee42bdc44bec33f8769407f1d5c4344fbeb0))
+
+
+### Features
+
+* support other newsletter signup forms ([#836](https://github.com/Automattic/newspack-popups/issues/836)) ([c30702d](https://github.com/Automattic/newspack-popups/commit/c30702de0995204c9eea5bc02f1ad6066e20a796))
+
+# [1.52.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v1.51.1-alpha.1...v1.52.0-alpha.1) (2022-04-20)
+
+
+### Bug Fixes
+
+* insertion of prompts around Group blocks ([#855](https://github.com/Automattic/newspack-popups/issues/855)) ([6ae5ea9](https://github.com/Automattic/newspack-popups/commit/6ae5ea90c664e359d80e116253a2a675fe200b69))
+
+
+### Features
+
+* support other newsletter signup forms ([#836](https://github.com/Automattic/newspack-popups/issues/836)) ([c30702d](https://github.com/Automattic/newspack-popups/commit/c30702de0995204c9eea5bc02f1ad6066e20a796))
+
+## [1.51.1-alpha.1](https://github.com/Automattic/newspack-popups/compare/v1.51.0...v1.51.1-alpha.1) (2022-04-18)
+
+
+### Bug Fixes
+
+* make "scroll" the default inline trigger_type ([#846](https://github.com/Automattic/newspack-popups/issues/846)) ([a2ffee4](https://github.com/Automattic/newspack-popups/commit/a2ffee42bdc44bec33f8769407f1d5c4344fbeb0))
+
+# [1.51.0](https://github.com/Automattic/newspack-popups/compare/v1.50.0...v1.51.0) (2022-04-05)
+
+
+### Bug Fixes
+
+* donation landing page setting ([#826](https://github.com/Automattic/newspack-popups/issues/826)) ([9b057b8](https://github.com/Automattic/newspack-popups/commit/9b057b805c728b3e29ff51426ff09393f6130f31))
+* restore "Announcements" category and move segments to label ([9c429a6](https://github.com/Automattic/newspack-popups/commit/9c429a67478988845082a3ad300b09781acbbe5d))
+* track logged-in users interactions ([#839](https://github.com/Automattic/newspack-popups/issues/839)) ([82f1296](https://github.com/Automattic/newspack-popups/commit/82f12966505dd9b11a77205d8b01bcd3f60a0098)), closes [#838](https://github.com/Automattic/newspack-popups/issues/838)
+
+
+### Features
+
+* add "undismissible" option for inline prompts ([#832](https://github.com/Automattic/newspack-popups/issues/832)) ([f766dac](https://github.com/Automattic/newspack-popups/commit/f766dac3d0e15b89a1d2d92dc0827654bb1d70b6))
+* allow segmentation by user login status ([#825](https://github.com/Automattic/newspack-popups/issues/825)) ([affdbea](https://github.com/Automattic/newspack-popups/commit/affdbeae0de92c908e244cb20fb0658d4ee8f412))
+* **analytics:** add segment name to event_category ([5a9f7c3](https://github.com/Automattic/newspack-popups/commit/5a9f7c3ac8d6c0c52b3e1e8a2faceddd126f52d4))
+* show prompts to logged-in admin and editor users ([#824](https://github.com/Automattic/newspack-popups/issues/824)) ([cba27f5](https://github.com/Automattic/newspack-popups/commit/cba27f52c7114e8df3d92dfd74f4f5ab449b21d2))
+
+# [1.51.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v1.51.0-alpha.1...v1.51.0-alpha.2) (2022-04-05)
+
+
+### Bug Fixes
+
+* track logged-in users interactions ([#839](https://github.com/Automattic/newspack-popups/issues/839)) ([82f1296](https://github.com/Automattic/newspack-popups/commit/82f12966505dd9b11a77205d8b01bcd3f60a0098)), closes [#838](https://github.com/Automattic/newspack-popups/issues/838)
+
+# [1.51.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v1.50.0...v1.51.0-alpha.1) (2022-03-31)
+
+
+### Bug Fixes
+
+* donation landing page setting ([#826](https://github.com/Automattic/newspack-popups/issues/826)) ([9b057b8](https://github.com/Automattic/newspack-popups/commit/9b057b805c728b3e29ff51426ff09393f6130f31))
+* restore "Announcements" category and move segments to label ([9c429a6](https://github.com/Automattic/newspack-popups/commit/9c429a67478988845082a3ad300b09781acbbe5d))
+
+
+### Features
+
+* add "undismissible" option for inline prompts ([#832](https://github.com/Automattic/newspack-popups/issues/832)) ([f766dac](https://github.com/Automattic/newspack-popups/commit/f766dac3d0e15b89a1d2d92dc0827654bb1d70b6))
+* allow segmentation by user login status ([#825](https://github.com/Automattic/newspack-popups/issues/825)) ([affdbea](https://github.com/Automattic/newspack-popups/commit/affdbeae0de92c908e244cb20fb0658d4ee8f412))
+* **analytics:** add segment name to event_category ([5a9f7c3](https://github.com/Automattic/newspack-popups/commit/5a9f7c3ac8d6c0c52b3e1e8a2faceddd126f52d4))
+* show prompts to logged-in admin and editor users ([#824](https://github.com/Automattic/newspack-popups/issues/824)) ([cba27f5](https://github.com/Automattic/newspack-popups/commit/cba27f52c7114e8df3d92dfd74f4f5ab449b21d2))
+
 # [1.50.0](https://github.com/Automattic/newspack-popups/compare/v1.49.1...v1.50.0) (2022-03-22)
 
 

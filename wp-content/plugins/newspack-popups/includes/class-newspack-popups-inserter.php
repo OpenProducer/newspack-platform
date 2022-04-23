@@ -380,7 +380,7 @@ final class Newspack_Popups_Inserter {
 				$position          = $inline_popup['precise_position'];
 				$trigger_type      = $inline_popup['options']['trigger_type'];
 				$insert_at_zero    = 0 === $position; // If the position is 0, the prompt should always appear first.
-				$insert_for_scroll = 'scroll' === $trigger_type && $pos > $position;
+				$insert_for_scroll = 'blocks_count' !== $trigger_type && $pos > $position;
 				$insert_for_blocks = 'blocks_count' === $trigger_type && $block_index >= $position;
 
 				if ( $insert_at_zero || $insert_for_scroll || $insert_for_blocks ) {
@@ -623,8 +623,12 @@ final class Newspack_Popups_Inserter {
 			't'   => $type,
 		];
 
-		if ( Newspack_Popups_Custom_Placements::is_custom_placement_or_manual( $popup ) ) {
+		if ( \Newspack_Popups_Custom_Placements::is_custom_placement_or_manual( $popup ) ) {
 			$popup_payload['c'] = $popup['options']['placement'];
+		}
+
+		if ( \Newspack_Popups_Model::is_undismissible_prompt( $popup ) ) {
+			$popup_payload['u'] = true;
 		}
 
 		return $popup_payload;
@@ -642,9 +646,6 @@ final class Newspack_Popups_Inserter {
 	 * make reliable retrieval problematic.
 	 */
 	public static function insert_popups_amp_access() {
-		if ( ! Newspack_Popups_Segmentation::is_tracking() ) {
-			return;
-		}
 		$popups = array_filter(
 			Newspack_Popups_Model::retrieve_popups(
 				// Include drafts if it's a preview request.
@@ -924,12 +925,8 @@ final class Newspack_Popups_Inserter {
 
 		// Unless it's a preview request, perform some additional checks.
 		if ( ! Newspack_Popups::is_preview_request() ) {
-			// Hide prompts for admin users.
-			if ( Newspack_Popups::is_user_admin() ) {
-				return false;
-			}
-			// Hide overlay prompts in non-interactive mode, for non-admin users.
-			if ( ! Newspack_Popups::is_user_admin() && Newspack_Popups_Settings::is_non_interactive() && ! Newspack_Popups_Model::is_inline( $popup ) ) {
+			// Hide overlay prompts in non-interactive mode.
+			if ( Newspack_Popups_Settings::is_non_interactive() && ! Newspack_Popups_Model::is_inline( $popup ) ) {
 				return false;
 			}
 		}

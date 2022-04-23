@@ -25,6 +25,7 @@ final class Newspack_Popups {
 		'background_color'               => 'n_bc',
 		'display_title'                  => 'n_ti',
 		'hide_border'                    => 'n_hb',
+		'undismissible_prompt'           => 'n_u',
 		'dismiss_text'                   => 'n_dt',
 		'dismiss_text_alignment'         => 'n_da',
 		'frequency'                      => 'n_fr',
@@ -284,6 +285,19 @@ final class Newspack_Popups {
 				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
 				'show_in_rest'   => true,
 				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+
+		\register_meta(
+			'post',
+			'undismissible_prompt',
+			[
+				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
+				'show_in_rest'   => true,
+				'type'           => 'boolean',
+				'default'        => false,
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
@@ -844,10 +858,20 @@ final class Newspack_Popups {
 	}
 
 	/**
-	 * Is the user an admin user?
+	 * Is the user an admin or editor user?
+	 * If so, prompts will be shown to these users while logged in, but analytics
+	 * will not be fired for them.
 	 */
 	public static function is_user_admin() {
-		return is_user_logged_in() && current_user_can( 'edit_others_pages' );
+		/**
+		 * Filter to allow other plugins to decide which capability should be checked
+		 * to determine whether a user's activity should be tracked via Google Analytics.
+		 *
+		 * @param string $capability Capability to check. Default: edit_others_pages.
+		 * @return string Filtered capability string.
+		 */
+		$capability = apply_filters( 'newspack_popups_admin_user_capability', 'edit_others_pages' );
+		return is_user_logged_in() && current_user_can( $capability );
 	}
 
 	/**
@@ -857,6 +881,17 @@ final class Newspack_Popups {
 	 */
 	public static function is_account_related_post( $post ) {
 		return has_shortcode( $post->post_content, 'woocommerce_my_account' );
+	}
+
+	/**
+	 * Should tracking code be inserted?
+	 * We shouldn't be tracking analytics in the dashboard or on the front-end by admin/editor users.
+	 */
+	public static function is_tracking() {
+		if ( is_admin() || self::is_user_admin() || Newspack_Popups_Settings::is_non_interactive() ) {
+			return false;
+		}
+		return true;
 	}
 
 	/**

@@ -11,11 +11,18 @@ import { useEffect } from '@wordpress/element';
 /**
  * Internal dependencies
  */
-import { isOverlay, updateEditorColors } from './utils';
+import { isOverlayPlacement, updateEditorColors } from './utils';
 
 const EditorAdditions = () => {
 	const meta = useSelect( select => select( 'core/editor' ).getEditedPostAttribute( 'meta' ) );
-	const { dismiss_text, dismiss_text_alignment, background_color, overlay_size, placement } = meta;
+	const {
+		undismissible_prompt,
+		dismiss_text,
+		dismiss_text_alignment,
+		background_color,
+		overlay_size,
+		placement,
+	} = meta;
 
 	// Update editor colors to match popup colors.
 	useEffect( () => {
@@ -28,7 +35,7 @@ const EditorAdditions = () => {
 			'.newspack-popups__not-interested-button-preview'
 		);
 
-		if ( ! dismiss_text ) {
+		if ( undismissible_prompt || ! dismiss_text ) {
 			if ( dismissButtonPreview ) {
 				dismissButtonPreview.parentNode.removeChild( dismissButtonPreview );
 			}
@@ -53,7 +60,7 @@ const EditorAdditions = () => {
 				'newspack-popups__not-interested-button-preview wp-block ' + alignClass;
 			dismissButtonPreview.textContent = dismiss_text;
 		}
-	}, [ dismiss_text, dismiss_text_alignment ] );
+	}, [ undismissible_prompt, dismiss_text, dismiss_text_alignment ] );
 
 	// Setting editor size as per the popup size.
 	useEffect( () => {
@@ -65,7 +72,7 @@ const EditorAdditions = () => {
 				}
 			} );
 
-			if ( isOverlay( placement ) ) {
+			if ( isOverlayPlacement( placement ) ) {
 				blockEditor.classList.add( `is-size-${ overlay_size }` );
 			}
 		}

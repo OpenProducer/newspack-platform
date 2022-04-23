@@ -229,22 +229,25 @@ class Maybe_Show_Campaign extends Lightweight_API {
 		if ( false === $now ) {
 			$now = time();
 		}
+
 		$campaign_data      = $this->get_campaign_data( $client_id, $campaign->id );
 		$init_campaign_data = $campaign_data;
 
-		if ( $campaign_data['suppress_forever'] ) {
+		// Undismissible prompts are never automatically suppressed except by frequency settings.
+		$is_undismissible = isset( $campaign->u ) && $campaign->u;
+
+		if ( ! $is_undismissible && $campaign_data['suppress_forever'] ) {
 			self::add_suppression_reason( $campaign->id, __( 'Prompt dismissed permanently.', 'newspack-popups' ) );
 			return false;
 		}
 
-		$should_display = true;
-
-		$has_newsletter_prompt = $campaign->n;
+		$should_display        = true;
+		$has_newsletter_prompt = ! $is_undismissible && $campaign->n;
 		// Suppressing based on UTM Medium parameter in the URL.
 		$has_utm_medium_in_url = Campaign_Data_Utils::is_url_from_email( $referer_url );
 
 		// Handle referer-based conditions.
-		if ( ! empty( $referer_url ) ) {
+		if ( ! $is_undismissible && ! empty( $referer_url ) ) {
 			// Suppressing based on UTM Source parameter in the URL.
 			$utm_suppression = ! empty( $campaign->utm ) ? urldecode( $campaign->utm ) : null;
 			if ( $utm_suppression && stripos( urldecode( $referer_url ), 'utm_source=' . $utm_suppression ) ) {
@@ -270,6 +273,7 @@ class Maybe_Show_Campaign extends Lightweight_API {
 
 		// Handle suppressing a newsletter prompt if any newsletter prompt was dismissed.
 		if (
+			! $is_undismissible &&
 			$has_newsletter_prompt &&
 			$settings->suppress_all_newsletter_campaigns_if_one_dismissed &&
 			$has_suppressed_newsletter_campaign
@@ -284,6 +288,7 @@ class Maybe_Show_Campaign extends Lightweight_API {
 
 		// Handle suppressing a donation prompt if reader is a donor and appropriate setting is active.
 		if (
+			! $is_undismissible &&
 			$has_donation_block &&
 			$settings->suppress_donation_campaigns_if_donor &&
 			$has_donated

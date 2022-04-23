@@ -11,6 +11,7 @@ export const optionsFieldsSelector = select => {
 	const {
 		background_color,
 		frequency,
+		undismissible_prompt,
 		dismiss_text,
 		dismiss_text_alignment,
 		display_title,
@@ -33,23 +34,11 @@ export const optionsFieldsSelector = select => {
 		excluded_tags,
 	} = meta || {};
 
-	const isInlinePlacement = placementValue =>
-		-1 ===
-		[
-			'top_left',
-			'top',
-			'top_right',
-			'center_left',
-			'center',
-			'center_right',
-			'bottom_left',
-			'bottom',
-			'bottom_right',
-		].indexOf( placementValue );
-	const isOverlay = ! isInlinePlacement( placement );
+	const isOverlay = isOverlayPlacement( placement );
 
 	return {
 		background_color,
+		undismissible_prompt,
 		dismiss_text,
 		dismiss_text_alignment,
 		display_title,
@@ -67,7 +56,6 @@ export const optionsFieldsSelector = select => {
 		archive_insertion_is_repeating,
 		utm_suppression,
 		selected_segment_id,
-		isInlinePlacement,
 		isOverlay,
 		post_types,
 		archive_page_types,
@@ -137,6 +125,27 @@ export const updateEditorColors = backgroundColor => {
 };
 
 /**
+ * Is the given placement value an overlay placement?
+ *
+ * @param {string} placementValue Placement of the prompt.
+ * @return {boolean} Whether or not the prompt has an overlay placement.
+ */
+export const isOverlayPlacement = placementValue => {
+	const overlayPlacements = window.newspack_popups_data?.overlay_placements || [];
+	return -1 < overlayPlacements.indexOf( placementValue );
+};
+
+/**
+ * Is the placement inline?
+ * Not including Custom Placement or Manual-Only prompts.
+ *
+ * @param {string} placementValue Placement value of the prompt.
+ * @return {boolean} True if placementValue is an inline placement.
+ */
+export const isInlinePlacement = placementValue =>
+	-1 < [ 'inline', 'above_header', 'archives' ].indexOf( placementValue );
+
+/**
  * Is the given placement value a custom placement?
  *
  * @param {string} placementValue Placement of the prompt.
@@ -148,15 +157,12 @@ export const isCustomPlacement = placementValue => {
 };
 
 /**
- * Is the given placement value an overlay placement?
+ * Is the given placement value a manual-only placement?
  *
  * @param {string} placementValue Placement of the prompt.
- * @return {boolean} Whether or not the prompt has an overlay placement.
+ * @return {boolean} Whether or not the prompt is manual-only.
  */
-export const isOverlay = placementValue => {
-	const overlayPlacements = window.newspack_popups_data?.overlay_placements || [];
-	return -1 < overlayPlacements.indexOf( placementValue );
-};
+export const isManualOnlyPlacement = placementValue => 'manual' === placementValue;
 
 /**
  * Given a placement value, construct a context-sensitive help message to display in the editor sidebar.
