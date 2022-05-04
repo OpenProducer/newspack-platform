@@ -9,6 +9,7 @@
  * Base class representing a service worker integration.
  *
  * @since 0.2
+ * @deprecated 0.7 Integrations will not be proposed for WordPress core merge.
  */
 abstract class WP_Service_Worker_Base_Integration implements WP_Service_Worker_Integration {
 
@@ -67,8 +68,8 @@ abstract class WP_Service_Worker_Base_Integration implements WP_Service_Worker_I
 	 * @since 0.2
 	 *
 	 * @param int          $attachment_id Attachment ID.
-	 * @param string|array $image_size    Image size.
-	 * @return array Image URLs.
+	 * @param string|int[] $image_size    Image size.
+	 * @return string[] Image URLs.
 	 */
 	protected function get_attachment_image_urls( $attachment_id, $image_size ) {
 		if ( preg_match_all( '#(?:^|\s)(https://\S+)#', (string) wp_get_attachment_image_srcset( $attachment_id, $image_size ), $matches ) ) {

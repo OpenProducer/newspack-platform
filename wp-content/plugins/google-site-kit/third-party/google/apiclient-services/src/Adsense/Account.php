@@ -40,6 +40,10 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var bool
      */
     public $premium;
+    /**
+     * @var string
+     */
+    public $state;
     protected $timeZoneType = \Google\Site_Kit_Dependencies\Google\Service\Adsense\TimeZone::class;
     protected $timeZoneDataType = '';
     /**
@@ -111,6 +115,20 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getPremium()
     {
         return $this->premium;
+    }
+    /**
+     * @param string
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
     }
     /**
      * @param TimeZone

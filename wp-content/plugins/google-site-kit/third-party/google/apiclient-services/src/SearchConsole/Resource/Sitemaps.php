@@ -30,7 +30,9 @@ use Google\Site_Kit_Dependencies\Google\Service\SearchConsole\WmxSitemap;
 class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
 {
     /**
-     * Deletes a sitemap from this site. (sitemaps.delete)
+     * Deletes a sitemap from the Sitemaps report. Does not stop Google from
+     * crawling this sitemap or the URLs that were previously crawled in the deleted
+     * sitemap. (sitemaps.delete)
      *
      * @param string $siteUrl The site's URL, including protocol. For example:
      * `http://www.example.com/`.

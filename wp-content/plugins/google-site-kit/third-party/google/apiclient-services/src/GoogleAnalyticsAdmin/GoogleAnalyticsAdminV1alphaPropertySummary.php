@@ -26,7 +26,15 @@ class GoogleAnalyticsAdminV1alphaPropertySummary extends \Google\Site_Kit_Depend
     /**
      * @var string
      */
+    public $parent;
+    /**
+     * @var string
+     */
     public $property;
+    /**
+     * @var string
+     */
+    public $propertyType;
     /**
      * @param string
      */
@@ -44,6 +52,20 @@ class GoogleAnalyticsAdminV1alphaPropertySummary extends \Google\Site_Kit_Depend
     /**
      * @param string
      */
+    public function setParent($parent)
+    {
+        $this->parent = $parent;
+    }
+    /**
+     * @return string
+     */
+    public function getParent()
+    {
+        return $this->parent;
+    }
+    /**
+     * @param string
+     */
     public function setProperty($property)
     {
         $this->property = $property;
@@ -54,6 +76,20 @@ class GoogleAnalyticsAdminV1alphaPropertySummary extends \Google\Site_Kit_Depend
     public function getProperty()
     {
         return $this->property;
+    }
+    /**
+     * @param string
+     */
+    public function setPropertyType($propertyType)
+    {
+        $this->propertyType = $propertyType;
+    }
+    /**
+     * @return string
+     */
+    public function getPropertyType()
+    {
+        return $this->propertyType;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

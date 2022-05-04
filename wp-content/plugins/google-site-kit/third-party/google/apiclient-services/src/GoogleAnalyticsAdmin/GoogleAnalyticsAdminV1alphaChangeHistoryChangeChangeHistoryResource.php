@@ -21,8 +21,6 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
 {
     protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAccount::class;
     protected $accountDataType = '';
-    protected $androidAppDataStreamType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAndroidAppDataStream::class;
-    protected $androidAppDataStreamDataType = '';
     protected $conversionEventType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaConversionEvent::class;
     protected $conversionEventDataType = '';
     protected $customDimensionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaCustomDimension::class;
@@ -31,6 +29,8 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     protected $customMetricDataType = '';
     protected $dataRetentionSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataRetentionSettings::class;
     protected $dataRetentionSettingsDataType = '';
+    protected $dataStreamType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream::class;
+    protected $dataStreamDataType = '';
     protected $displayVideo360AdvertiserLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink::class;
     protected $displayVideo360AdvertiserLinkDataType = '';
     protected $displayVideo360AdvertiserLinkProposalType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class;
@@ -41,14 +41,10 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     protected $googleAdsLinkDataType = '';
     protected $googleSignalsSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleSignalsSettings::class;
     protected $googleSignalsSettingsDataType = '';
-    protected $iosAppDataStreamType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaIosAppDataStream::class;
-    protected $iosAppDataStreamDataType = '';
     protected $measurementProtocolSecretType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class;
     protected $measurementProtocolSecretDataType = '';
     protected $propertyType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class;
     protected $propertyDataType = '';
-    protected $webDataStreamType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaWebDataStream::class;
-    protected $webDataStreamDataType = '';
     /**
      * @param GoogleAnalyticsAdminV1alphaAccount
      */
@@ -62,20 +58,6 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     public function getAccount()
     {
         return $this->account;
-    }
-    /**
-     * @param GoogleAnalyticsAdminV1alphaAndroidAppDataStream
-     */
-    public function setAndroidAppDataStream(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAndroidAppDataStream $androidAppDataStream)
-    {
-        $this->androidAppDataStream = $androidAppDataStream;
-    }
-    /**
-     * @return GoogleAnalyticsAdminV1alphaAndroidAppDataStream
-     */
-    public function getAndroidAppDataStream()
-    {
-        return $this->androidAppDataStream;
     }
     /**
      * @param GoogleAnalyticsAdminV1alphaConversionEvent
@@ -132,6 +114,20 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     public function getDataRetentionSettings()
     {
         return $this->dataRetentionSettings;
+    }
+    /**
+     * @param GoogleAnalyticsAdminV1alphaDataStream
+     */
+    public function setDataStream(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream $dataStream)
+    {
+        $this->dataStream = $dataStream;
+    }
+    /**
+     * @return GoogleAnalyticsAdminV1alphaDataStream
+     */
+    public function getDataStream()
+    {
+        return $this->dataStream;
     }
     /**
      * @param GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLink
@@ -204,20 +200,6 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
         return $this->googleSignalsSettings;
     }
     /**
-     * @param GoogleAnalyticsAdminV1alphaIosAppDataStream
-     */
-    public function setIosAppDataStream(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaIosAppDataStream $iosAppDataStream)
-    {
-        $this->iosAppDataStream = $iosAppDataStream;
-    }
-    /**
-     * @return GoogleAnalyticsAdminV1alphaIosAppDataStream
-     */
-    public function getIosAppDataStream()
-    {
-        return $this->iosAppDataStream;
-    }
-    /**
      * @param GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret
      */
     public function setMeasurementProtocolSecret(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $measurementProtocolSecret)
@@ -244,20 +226,6 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     public function getProperty()
     {
         return $this->property;
-    }
-    /**
-     * @param GoogleAnalyticsAdminV1alphaWebDataStream
-     */
-    public function setWebDataStream(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaWebDataStream $webDataStream)
-    {
-        $this->webDataStream = $webDataStream;
-    }
-    /**
-     * @return GoogleAnalyticsAdminV1alphaWebDataStream
-     */
-    public function getWebDataStream()
-    {
-        return $this->webDataStream;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

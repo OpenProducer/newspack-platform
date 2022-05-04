@@ -9,7 +9,7 @@
  * Plugin Name: PWA
  * Plugin URI:  https://github.com/GoogleChromeLabs/pwa-wp
  * Description: Feature plugin to bring Progressive Web App (PWA) capabilities to Core
- * Version:     0.6.0
+ * Version:     0.7.0
  * Author:      PWA Plugin Contributors
  * Author URI:  https://github.com/GoogleChromeLabs/pwa-wp/graphs/contributors
  * Text Domain: pwa
@@ -17,10 +17,10 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-define( 'PWA_VERSION', '0.6.0' );
+define( 'PWA_VERSION', '0.7.0' );
 define( 'PWA_PLUGIN_FILE', __FILE__ );
 define( 'PWA_PLUGIN_DIR', dirname( __FILE__ ) );
-define( 'PWA_WORKBOX_VERSION', '5.1.4' );
+define( 'PWA_WORKBOX_VERSION', '6.5.3' );
 define( 'PWA_PLUGIN_URL', plugin_dir_url( __FILE__ ) );
 
 /**
@@ -191,12 +191,6 @@ function _pwa_check_disabled_navigation_preload() {
 /** WP_Web_App_Manifest Class */
 require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-web-app-manifest.php';
 
-/** WP_HTTPS_Detection Class */
-require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-https-detection.php';
-
-/** WP_HTTPS_UI Class */
-require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-https-ui.php';
-
 /** WP_Service_Workers Class */
 require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-service-workers.php';
 
@@ -248,6 +242,9 @@ require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp.php';
 /** Patch behavior in class-wp-query.php */
 require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-query.php';
 
+/** Function to register maskable icon setting in customizer */
+require_once PWA_PLUGIN_DIR . '/wp-includes/class-wp-customize-manager.php';
+
 /** Hooks to add for when accessing admin. */
 require_once PWA_PLUGIN_DIR . '/wp-admin/admin.php';
 
@@ -256,7 +253,7 @@ require_once PWA_PLUGIN_DIR . '/wp-admin/admin.php';
  */
 function _pwa_activate_plugin() {
 	pwa_add_rewrite_rules();
-	flush_rewrite_rules( false );
+	flush_rewrite_rules( false ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules -- Not theme code.
 }
 
 register_activation_hook( PWA_PLUGIN_FILE, '_pwa_activate_plugin' );
@@ -269,34 +266,12 @@ register_activation_hook( PWA_PLUGIN_FILE, '_pwa_activate_plugin' );
 function _pwa_deactivate_plugin() {
 	global $wp_rewrite;
 	unset( $wp_rewrite->extra_rules_top['^wp\.serviceworker$'] );
-	flush_rewrite_rules( false );
+	flush_rewrite_rules( false ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules -- Not theme code.
 }
 
 register_deactivation_hook( PWA_PLUGIN_FILE, '_pwa_deactivate_plugin' );
 
-/**
- * Load service worker integrations.
- *
- * @since 0.2.0
- *
- * @param WP_Service_Worker_Scripts $scripts Instance to register service worker behavior with.
- */
-function pwa_load_service_worker_integrations( WP_Service_Worker_Scripts $scripts ) {
-	if ( ! current_theme_supports( 'service_worker' ) ) {
-		return;
-	}
-
-	/** WordPress Service Worker Integration Functions */
-	require_once PWA_PLUGIN_DIR . '/integrations/functions.php';
-
-	pwa_register_service_worker_integrations( $scripts );
-}
-add_action( 'wp_default_service_workers', 'pwa_load_service_worker_integrations', -1 );
-
 $wp_web_app_manifest = new WP_Web_App_Manifest();
 $wp_web_app_manifest->init();
-
-$wp_https_detection = new WP_HTTPS_Detection();
-$wp_https_detection->init();
 
 require_once PWA_PLUGIN_DIR . '/wp-admin/options-reading-offline-browsing.php';

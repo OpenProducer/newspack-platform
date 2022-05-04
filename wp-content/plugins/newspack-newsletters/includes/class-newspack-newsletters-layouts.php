@@ -120,12 +120,58 @@ final class Newspack_Newsletters_Layouts {
 	 * @return string Content.
 	 */
 	public static function layout_token_replacement( $content, $extra = [] ) {
-		$sitename_block = '<!-- wp:site-title {"textAlign":"center","newsletterVisibility":"email"} /-->';
-		$logo_block     = '<!-- wp:site-logo {"align":"center","width":200,"newsletterVisibility":"email"} /-->';
+		$date       = gmdate( get_option( 'date_format' ) );
+		$bg_color   = '#ffffff';
+		$text_color = '#000000';
+
+		// Check if service provider is Mailchimp.
+		if ( 'mailchimp' === Newspack_Newsletters::service_provider() ) {
+			$date = '*|DATE:' . get_option( 'date_format' ) . '|*';
+		}
+
+		// Check if current theme is a Newspack teme.
+		if ( function_exists( 'newspack_setup' ) ) {
+			$solid_bg          = get_theme_mod( 'header_solid_background' );
+			$header_status     = get_theme_mod( 'header_color' );
+			$primary_color_hex = get_theme_mod( 'primary_color_hex' );
+			$header_color_hex  = get_theme_mod( 'header_color_hex' );
+			$header_color      = 'default' === $header_status ? $primary_color_hex : $header_color_hex;
+			$bg_color          = $solid_bg ? $header_color : '#ffffff';
+			$text_color        = newspack_get_color_contrast( $bg_color );
+		}
+
+		$sitename_block = '<!-- wp:site-title {"newsletterVisibility":"email"} /-->';
+
+		$sitename_block_center = '<!-- wp:site-title {"textAlign":"center","newsletterVisibility":"email"} /-->';
+
+		$logo_block = '<!-- wp:site-logo {"width":192,"newsletterVisibility":"email"} /-->';
+
+		$logo_block_center = '<!-- wp:site-logo {"align":"center","width":192,"newsletterVisibility":"email"} /-->';
+
+		$date_block = sprintf(
+			'<!-- wp:paragraph --><p>%s</p><!-- /wp:paragraph -->',
+			$date
+		);
+
+		$date_block_right = sprintf(
+			'<!-- wp:paragraph {"align":"right","newsletterVisibility":"email"} --><p class="has-text-align-right">%s</p><!-- /wp:paragraph -->',
+			$date
+		);
+
+		$date_block_center = sprintf(
+			'<!-- wp:paragraph {"align":"center","newsletterVisibility":"email"} --><p class="has-text-align-center">%s</p><!-- /wp:paragraph -->',
+			$date
+		);
 
 		$search = array_merge(
 			[
 				'__LOGO_OR_SITENAME__',
+				'__LOGO_OR_SITENAME_CENTER__',
+				'__DATE__',
+				'__DATE_RIGHT__',
+				'__DATE_CENTER__',
+				'__BG_COLOR__',
+				'__TEXT_COLOR__',
 			],
 			array_keys( $extra )
 		);
@@ -133,6 +179,12 @@ final class Newspack_Newsletters_Layouts {
 		$replace = array_merge(
 			[
 				has_custom_logo() ? $logo_block : $sitename_block,
+				has_custom_logo() ? $logo_block_center : $sitename_block_center,
+				$date_block,
+				$date_block_right,
+				$date_block_center,
+				'#ffffff' === $bg_color ? '#fafafa' : $bg_color,
+				'#ffffff' === $bg_color ? '#000000' : $text_color,
 			],
 			array_values( $extra )
 		);

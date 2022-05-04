@@ -133,7 +133,7 @@ final class WP_Service_Workers {
 		wp_set_current_user( 0 );
 
 		// See wp_debug_mode() for how this is also done for REST API responses.
-		@ini_set( 'display_errors', 0 ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_ini_set, WordPress.PHP.IniSet.display_errors_Blacklisted
+		@ini_set( 'display_errors', '0' ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.DiscouragedPHPFunctions.runtime_configuration_ini_set, WordPress.PHP.IniSet.display_errors_Blacklisted
 
 		/*
 		 * Per Workbox <https://developers.google.com/web/tools/workbox/guides/service-worker-checklist#cache-control_of_your_service_worker_file>:
@@ -196,7 +196,7 @@ final class WP_Service_Workers {
 		$etag      = sprintf( '"%s"', $file_hash );
 		@header( "ETag: $etag" ); // phpcs:ignore Generic.PHP.NoSilencedErrors.Discouraged, WordPress.PHP.NoSilencedErrors.Discouraged
 
-		$if_none_match = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? trim( wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) : false;
+		$if_none_match = isset( $_SERVER['HTTP_IF_NONE_MATCH'] ) ? trim( wp_unslash( $_SERVER['HTTP_IF_NONE_MATCH'] ) ) : false; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized -- Value used in equality check; not sanitized in core.
 		if ( $if_none_match === $etag ) {
 			status_header( 304 );
 			return;

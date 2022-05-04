@@ -1,3 +1,35 @@
+# [1.45.0](https://github.com/Automattic/newspack-newsletters/compare/v1.44.0...v1.45.0) (2022-05-03)
+
+
+### Bug Fixes
+
+* add all accepted keys to get_post_type_labels() ([#743](https://github.com/Automattic/newspack-newsletters/issues/743)) ([5b64218](https://github.com/Automattic/newspack-newsletters/commit/5b64218cf3dc96cb08967d40d29d599371bae513))
+* height of block visibility when using floats ([#789](https://github.com/Automattic/newspack-newsletters/issues/789)) ([4bab9da](https://github.com/Automattic/newspack-newsletters/commit/4bab9da3561d339e7b85b9216f642f71d076bd1c))
+* **layouts:** updating layouts ([e75dbcc](https://github.com/Automattic/newspack-newsletters/commit/e75dbcc01dd90d3396737f510e3bc58b3e33a3d8)), closes [#607](https://github.com/Automattic/newspack-newsletters/issues/607)
+
+
+### Features
+
+* add 2 new layouts ([#788](https://github.com/Automattic/newspack-newsletters/issues/788)) ([3af1f2f](https://github.com/Automattic/newspack-newsletters/commit/3af1f2fb66c5013babec04c2a9a8c47a4050fa84))
+* add new layout ([#795](https://github.com/Automattic/newspack-newsletters/issues/795)) ([d941c87](https://github.com/Automattic/newspack-newsletters/commit/d941c8752201cc0230505edfed8eeaab31cba9da))
+* reorganise layouts and add header group to all of them ([#796](https://github.com/Automattic/newspack-newsletters/issues/796)) ([385294c](https://github.com/Automattic/newspack-newsletters/commit/385294c49a40d9f9cfce52519623f48b6433006d))
+
+# [1.45.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.44.0...v1.45.0-alpha.1) (2022-05-02)
+
+
+### Bug Fixes
+
+* add all accepted keys to get_post_type_labels() ([#743](https://github.com/Automattic/newspack-newsletters/issues/743)) ([5b64218](https://github.com/Automattic/newspack-newsletters/commit/5b64218cf3dc96cb08967d40d29d599371bae513))
+* height of block visibility when using floats ([#789](https://github.com/Automattic/newspack-newsletters/issues/789)) ([4bab9da](https://github.com/Automattic/newspack-newsletters/commit/4bab9da3561d339e7b85b9216f642f71d076bd1c))
+* **layouts:** updating layouts ([e75dbcc](https://github.com/Automattic/newspack-newsletters/commit/e75dbcc01dd90d3396737f510e3bc58b3e33a3d8)), closes [#607](https://github.com/Automattic/newspack-newsletters/issues/607)
+
+
+### Features
+
+* add 2 new layouts ([#788](https://github.com/Automattic/newspack-newsletters/issues/788)) ([3af1f2f](https://github.com/Automattic/newspack-newsletters/commit/3af1f2fb66c5013babec04c2a9a8c47a4050fa84))
+* add new layout ([#795](https://github.com/Automattic/newspack-newsletters/issues/795)) ([d941c87](https://github.com/Automattic/newspack-newsletters/commit/d941c8752201cc0230505edfed8eeaab31cba9da))
+* reorganise layouts and add header group to all of them ([#796](https://github.com/Automattic/newspack-newsletters/issues/796)) ([385294c](https://github.com/Automattic/newspack-newsletters/commit/385294c49a40d9f9cfce52519623f48b6433006d))
+
 # [1.44.0](https://github.com/Automattic/newspack-newsletters/compare/v1.43.0...v1.44.0) (2022-04-18)
 
 

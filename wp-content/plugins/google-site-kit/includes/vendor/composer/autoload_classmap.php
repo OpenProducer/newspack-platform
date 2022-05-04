@@ -124,6 +124,8 @@ return array(
     'Google\\Site_Kit\\Core\\Tracking\\Tracking' => $baseDir . '/Core/Tracking/Tracking.php',
     'Google\\Site_Kit\\Core\\Tracking\\Tracking_Consent' => $baseDir . '/Core/Tracking/Tracking_Consent.php',
     'Google\\Site_Kit\\Core\\User_Surveys\\REST_User_Surveys_Controller' => $baseDir . '/Core/User_Surveys/REST_User_Surveys_Controller.php',
+    'Google\\Site_Kit\\Core\\User_Surveys\\Survey_Timeouts' => $baseDir . '/Core/User_Surveys/Survey_Timeouts.php',
+    'Google\\Site_Kit\\Core\\User_Surveys\\User_Surveys' => $baseDir . '/Core/User_Surveys/User_Surveys.php',
     'Google\\Site_Kit\\Core\\Util\\Activation_Flag' => $baseDir . '/Core/Util/Activation_Flag.php',
     'Google\\Site_Kit\\Core\\Util\\Activation_Notice' => $baseDir . '/Core/Util/Activation_Notice.php',
     'Google\\Site_Kit\\Core\\Util\\BC_Functions' => $baseDir . '/Core/Util/BC_Functions.php',

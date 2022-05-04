@@ -9,6 +9,7 @@
  * Class representing the Custom Header service worker integration.
  *
  * @since 0.2
+ * @deprecated 0.7 Integrations will not be proposed for WordPress core merge.
  */
 final class WP_Service_Worker_Custom_Header_Integration extends WP_Service_Worker_Base_Integration {
 
@@ -20,7 +21,7 @@ final class WP_Service_Worker_Custom_Header_Integration extends WP_Service_Worke
 	 * @param WP_Service_Worker_Scripts $scripts Instance to register service worker behavior with.
 	 */
 	public function register( WP_Service_Worker_Scripts $scripts ) {
-		if ( ! current_theme_supports( 'custom-header' ) || ! get_custom_header() ) {
+		if ( ! current_theme_supports( 'custom-header' ) || ! get_custom_header()->url ) {
 			return;
 		}
 
@@ -47,9 +48,9 @@ final class WP_Service_Worker_Custom_Header_Integration extends WP_Service_Worke
 				$file     = $scripts->get_validated_file_path( get_header_image() );
 				$revision = null;
 				if ( is_string( $file ) ) {
-					$revision = md5( file_get_contents( $file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+					$revision = md5( file_get_contents( $file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
 				}
-				$scripts->precaching_routes()->register( $url, $revision );
+				$scripts->precaching_routes()->register( $url, compact( 'revision' ) );
 			}
 			return;
 		}
@@ -60,16 +61,36 @@ final class WP_Service_Worker_Custom_Header_Integration extends WP_Service_Worke
 
 		if ( $attachment ) {
 			foreach ( $this->get_attachment_image_urls( $attachment->ID, array( $header->width, $header->height ) ) as $image_url ) {
-				$scripts->precaching_routes()->register( $image_url, $attachment->post_modified );
+				$scripts->precaching_routes()->register( $image_url, array( 'revision' => $attachment->post_modified ) );
 			}
 		} elseif ( is_string( $header_image ) ) {
 			$file     = $scripts->get_validated_file_path( $header_image );
 			$revision = null;
 			if ( is_string( $file ) ) {
-				$revision = md5( file_get_contents( $file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents
+				$revision = md5( file_get_contents( $file ) ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_get_contents_file_get_contents, WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
 			}
-			$scripts->precaching_routes()->register( $header_image, $revision );
+			$scripts->precaching_routes()->register( $header_image, compact( 'revision' ) );
 		}
+
+		// Add deprecation warning in user's console when service worker is installed.
+		$scripts->register(
+			__CLASS__ . '-deprecation',
+			array(
+				'src' => static function () {
+					return sprintf(
+						'console.warn( %s );',
+						wp_json_encode(
+							sprintf(
+								/* translators: %1$s: integration class name, %2$s: issue url */
+								__( 'The %1$s integration in the PWA plugin is no longer being considered WordPress core merge. See %2$s', 'pwa' ),
+								__CLASS__,
+								'https://github.com/GoogleChromeLabs/pwa-wp/issues/403'
+							)
+						)
+					);
+				},
+			)
+		);
 	}
 
 	/**

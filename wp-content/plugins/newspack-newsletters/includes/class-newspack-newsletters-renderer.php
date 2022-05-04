@@ -48,7 +48,7 @@ final class Newspack_Newsletters_Renderer {
 
 	/**
 	 * Inline tags that are allowed to be rendered in a text block.
-	 * 
+	 *
 	 * @var bool[]|array[] Associative array of tag names to allowed attributes.
 	 */
 	public static $allowed_inline_tags = [
@@ -553,7 +553,7 @@ final class Newspack_Newsletters_Renderer {
 			 * Spacer block.
 			 */
 			case 'core/spacer':
-				$attrs['height']    = $attrs['height'] . 'px';
+				$attrs['height']    = $attrs['height'];
 				$block_mjml_markup .= '<mj-spacer ' . self::array_to_attributes( $attrs ) . '/>';
 				break;
 

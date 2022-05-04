@@ -32,6 +32,10 @@ class AdClient extends \Google\Site_Kit_Dependencies\Google\Model
      */
     public $reportingDimensionId;
     /**
+     * @var string
+     */
+    public $state;
+    /**
      * @param string
      */
     public function setName($name)
@@ -72,6 +76,20 @@ class AdClient extends \Google\Site_Kit_Dependencies\Google\Model
     public function getReportingDimensionId()
     {
         return $this->reportingDimensionId;
+    }
+    /**
+     * @param string
+     */
+    public function setState($state)
+    {
+        $this->state = $state;
+    }
+    /**
+     * @return string
+     */
+    public function getState()
+    {
+        return $this->state;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

@@ -17,7 +17,6 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGlobalSiteTag;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListWebDataStreamsResponse;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaWebDataStream;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
@@ -76,23 +75,6 @@ class PropertiesWebDataStreams extends \Google\Site_Kit_Dependencies\Google\Serv
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
         return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaWebDataStream::class);
-    }
-    /**
-     * Returns the Site Tag for the specified web stream. Site Tags are immutable
-     * singletons. (webDataStreams.getGlobalSiteTag)
-     *
-     * @param string $name Required. The name of the site tag to lookup. Note that
-     * site tags are singletons and do not have unique IDs. Format:
-     * properties/{property_id}/webDataStreams/{stream_id}/globalSiteTag Example:
-     * "properties/123/webDataStreams/456/globalSiteTag"
-     * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaGlobalSiteTag
-     */
-    public function getGlobalSiteTag($name, $optParams = [])
-    {
-        $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getGlobalSiteTag', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGlobalSiteTag::class);
     }
     /**
      * Returns child web data streams under the specified parent property. Web data

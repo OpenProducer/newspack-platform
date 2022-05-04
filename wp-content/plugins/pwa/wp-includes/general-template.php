@@ -88,8 +88,24 @@ function pwa_get_footer( $name = null ) {
 }
 
 /**
+ * Filter wp_robots to prevent the error template from being indexed.
+ *
+ * @since 0.7
+ *
+ * @param array<string, true|string> $robots Robots.
+ * @return array<string, true|string> Robots.
+ */
+function wp_filter_robots_for_error_template( $robots ) {
+	if ( is_offline() || is_500() ) {
+		$robots['noindex'] = true;
+	}
+	return $robots;
+}
+
+/**
  * Add no-robots meta tag to error template.
  *
+ * @deprecated Only relevant to WordPress < 5.6.
  * @todo Is this right? Should we add_action when we find out that the filter is present?
  * @see wp_no_robots()
  * @since 0.2
@@ -107,9 +123,11 @@ function wp_add_error_template_no_robots() {
  * will persist even after they have authenticated.
  *
  * @since 0.5
+ *
+ * @param WP_Query $query Query.
  */
-function wp_unauthenticate_error_template_requests() {
-	if ( is_offline() || is_500() ) {
+function wp_unauthenticate_error_template_requests( WP_Query $query ) {
+	if ( $query->is_main_query() && ( is_offline() || is_500() ) ) {
 		wp_set_current_user( 0 );
 	}
 }
@@ -130,7 +148,7 @@ function wp_unauthenticate_error_template_requests() {
  *     @type string $tagline Optional. Site description when on home page.
  *     @type string $site    Optional. Site title when not on home page.
  * }
- * @return array $title Filtered title.
+ * @return array<string, string> $title Filtered title.
  */
 function pwa_filter_document_title_parts( $parts ) {
 	if ( ! empty( $parts['title'] ) ) {

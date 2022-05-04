@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d
+class ComposerStaticInit0518a20db0ba676a758a46dd1caa3725
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -623,6 +623,8 @@ class ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d
         'Yoast\\WP\\SEO\\Conditionals\\Schema_Blocks_Conditional' => __DIR__ . '/../..' . '/src/conditionals/schema-blocks-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Should_Index_Links_Conditional' => __DIR__ . '/../..' . '/src/conditionals/should-index-links-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\The_Events_Calendar_Conditional' => __DIR__ . '/../..' . '/src/conditionals/the-events-calendar-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\CoAuthors_Plus_Activated_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/coauthors-plus-activated-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\CoAuthors_Plus_Flag_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/coauthors-plus-flag-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Activated_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/elementor-activated-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Elementor_Edit_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/elementor-edit-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Third_Party\\W3_Total_Cache_Conditional' => __DIR__ . '/../..' . '/src/conditionals/third-party/w3-total-cache-conditional.php',
@@ -705,6 +707,7 @@ class ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d
         'Yoast\\WP\\SEO\\Generators\\Schema\\Main_Image' => __DIR__ . '/../..' . '/src/generators/schema/main-image.php',
         'Yoast\\WP\\SEO\\Generators\\Schema\\Organization' => __DIR__ . '/../..' . '/src/generators/schema/organization.php',
         'Yoast\\WP\\SEO\\Generators\\Schema\\Person' => __DIR__ . '/../..' . '/src/generators/schema/person.php',
+        'Yoast\\WP\\SEO\\Generators\\Schema\\Third_Party\\CoAuthor' => __DIR__ . '/../..' . '/src/generators/schema/third-party/coauthor.php',
         'Yoast\\WP\\SEO\\Generators\\Schema\\Third_Party\\Events_Calendar_Schema' => __DIR__ . '/../..' . '/src/generators/schema/third-party/events-calendar-schema.php',
         'Yoast\\WP\\SEO\\Generators\\Schema\\WebPage' => __DIR__ . '/../..' . '/src/generators/schema/webpage.php',
         'Yoast\\WP\\SEO\\Generators\\Schema\\Website' => __DIR__ . '/../..' . '/src/generators/schema/website.php',
@@ -818,6 +821,7 @@ class ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d
         'Yoast\\WP\\SEO\\Integrations\\Schema_Blocks' => __DIR__ . '/../..' . '/src/integrations/schema-blocks.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\AMP' => __DIR__ . '/../..' . '/src/integrations/third-party/amp.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\BbPress' => __DIR__ . '/../..' . '/src/integrations/third-party/bbpress.php',
+        'Yoast\\WP\\SEO\\Integrations\\Third_Party\\CoAuthors_Plus' => __DIR__ . '/../..' . '/src/integrations/third-party/coauthors-plus.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Elementor' => __DIR__ . '/../..' . '/src/integrations/third-party/elementor.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Elementor_Exclude_Post_Types' => __DIR__ . '/../..' . '/src/deprecated/src/integrations/third-party/elementor.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Exclude_Elementor_Post_Types' => __DIR__ . '/../..' . '/src/integrations/third-party/exclude-elementor-post-types.php',
@@ -1027,9 +1031,9 @@ class ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit3fbf5de63aebd76d5182a4e9c6e4f30d::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0518a20db0ba676a758a46dd1caa3725::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0518a20db0ba676a758a46dd1caa3725::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0518a20db0ba676a758a46dd1caa3725::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -7,6 +7,24 @@ ERROR_OFFLINE_URL, ERROR_500_URL, NAVIGATION_DENYLIST_PATTERNS, ERROR_MESSAGES *
 	const errorMessages = ERROR_MESSAGES;
 	const navigationRouteEntry = NAVIGATION_ROUTE_ENTRY;
 
+	/**
+	 * Inject navigation request properties.
+	 *
+	 * @param {string}   body
+	 * @param {Request}  request
+	 * @param {Response} response
+	 * @return {string} Modified body.
+	 */
+	const injectNavigationRequestProperties = (body, request, response) => {
+		return body.replace(
+			'{{{WP_NAVIGATION_REQUEST_PROPERTIES}}}',
+			JSON.stringify({
+				method: request.method,
+				status: response.status,
+			})
+		);
+	};
+
 	// Configure navigation preload.
 	if (false !== navigationPreload) {
 		if (typeof navigationPreload === 'string') {
@@ -32,7 +50,7 @@ ERROR_OFFLINE_URL, ERROR_500_URL, NAVIGATION_DENYLIST_PATTERNS, ERROR_MESSAGES *
 	/**
 	 * Handle navigation request.
 	 *
-	 * @param {Object} args Args.
+	 * @param {Object}     args       Args.
 	 * @param {FetchEvent} args.event Event.
 	 * @return {Promise<Response>} Response.
 	 */
@@ -68,11 +86,18 @@ ERROR_OFFLINE_URL, ERROR_500_URL, NAVIGATION_DENYLIST_PATTERNS, ERROR_MESSAGES *
 							};
 
 							let body = text.replace(
-								/[<]!--WP_SERVICE_WORKER_ERROR_MESSAGE-->/,
+								'{{{WP_SERVICE_WORKER_ERROR_MESSAGE}}}',
 								errorMessages.error
 							);
+
+							body = injectNavigationRequestProperties(
+								body,
+								event.request,
+								response
+							);
+
 							body = body.replace(
-								/([<]!--WP_SERVICE_WORKER_ERROR_TEMPLATE_BEGIN-->)((?:.|\n)+?)([<]!--WP_SERVICE_WORKER_ERROR_TEMPLATE_END-->)/,
+								/({{{WP_SERVICE_WORKER_ERROR_TEMPLATE_BEGIN}}})((?:.|\n)+?)({{{WP_SERVICE_WORKER_ERROR_TEMPLATE_END}}})/,
 								(details) => {
 									if (!responseBody) {
 										return ''; // Remove the details from the document entirely.
@@ -103,13 +128,11 @@ ERROR_OFFLINE_URL, ERROR_500_URL, NAVIGATION_DENYLIST_PATTERNS, ERROR_MESSAGES *
 
 									// Replace the comments.
 									details = details.replace(
-										'<' +
-											'!--WP_SERVICE_WORKER_ERROR_TEMPLATE_BEGIN-->',
+										'{{{WP_SERVICE_WORKER_ERROR_TEMPLATE_BEGIN}}}',
 										''
 									);
 									details = details.replace(
-										'<' +
-											'!--WP_SERVICE_WORKER_ERROR_TEMPLATE_END-->',
+										'{{{WP_SERVICE_WORKER_ERROR_TEMPLATE_END}}}',
 										''
 									);
 									return details;
@@ -136,11 +159,17 @@ ERROR_OFFLINE_URL, ERROR_500_URL, NAVIGATION_DENYLIST_PATTERNS, ERROR_MESSAGES *
 							headers: response.headers,
 						};
 
-						const body = text.replace(
-							/[<]!--WP_SERVICE_WORKER_ERROR_MESSAGE-->/,
+						let body = text.replace(
+							'{{{WP_SERVICE_WORKER_ERROR_MESSAGE}}}',
 							navigator.onLine
 								? errorMessages.serverOffline
 								: errorMessages.clientOffline
+						);
+
+						body = injectNavigationRequestProperties(
+							body,
+							event.request,
+							response
 						);
 
 						return new Response(body, init);
@@ -188,11 +217,10 @@ ERROR_OFFLINE_URL, ERROR_500_URL, NAVIGATION_DENYLIST_PATTERNS, ERROR_MESSAGES *
 			/**
 			 * Routes match handler.
 			 *
-			 * @param {Object} options
-			 * @param {URL} options.url
+			 * @param {Object}  options
+			 * @param {URL}     options.url
 			 * @param {Request} options.request
 			 * @return {boolean} Whether there is a match or not.
-			 *
 			 * @private
 			 */
 			_match({ url, request }) {

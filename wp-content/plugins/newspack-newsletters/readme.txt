@@ -1,17 +1,17 @@
 === Newspack Newsletters ===
 Contributors: automattic, rabberson, adamboro, thomasguillot, dkoo, laurelfulford, claudiulodro, iuravic, jboydston
 Requires at least: 5.3
-Tested up to: 5.8.0
+Tested up to: 5.9.0
 Requires PHP: 5.6
 Stable tag: trunk
 Tags: newsletters, Newspack, WordPress.com, Mailchimp, Constant Contact, Campaign Monitor
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
-Create email newsletters with the Gutenberg editor and distribute them with your Mailchimp or Constant Contact mailing lists.
+Create email newsletters with the Gutenberg editor and distribute them with your ActiveCampaign, Campaign Monitor, Constant Contact, or Mailchimp mailing lists.
 
 == Description ==
-Create email newsletters with the Gutenberg editor and send them via Mailchimp or Constant Contact, all without leaving WP Admin! Newspack Newsletters lets you build eye-catching newsletters using the WordPress editing tools you’re already familiar with, and lets you save drafts, create reusable layouts, send to your existing mailing list, and also publish them to your website.
+Create email newsletters with the Gutenberg editor and send them via ActiveCampaign, Campaign Monitor, Constant Contact, or Mailchimp, all without leaving WP Admin! Newspack Newsletters lets you build eye-catching newsletters using the WordPress editing tools you’re already familiar with, and lets you save drafts, create reusable layouts, send to your existing mailing list, and also publish them to your website.
 
 = Use and create newsletter layouts =
 
@@ -37,7 +37,7 @@ Monetize your newsletters by including advertising. The Newspack Newsletters plu
 
 = Send with ease =
 
-Newspack Newsletters connects to your Mailchimp or Constant Contact accounts to send emails using the mailing lists you’ve collected there, all without leaving the WordPress Admin.
+Newspack Newsletters connects to your ActiveCampaign, Campaign Monitor, Constant Contact, or Mailchimp accounts to send emails using the mailing lists you’ve collected there, all without leaving the WordPress Admin.
 
 Before sending your campaign, you can send test emails to one or more email addresses at a time from the newsletter editor, to make sure everything is pixel perfect before sharing with the world.
 
@@ -51,14 +51,14 @@ The [beach photograph](https://www.pexels.com/photo/wind-grass-beach-sea-7763/) 
 
 == Installation ==
 1. Upload the Newspack Newsletters plugin to your website, and activate it.
-2. Visit the Newsletters > Settings page, or go to Newsletters > Add New to be prompted to select your service provider (MailChimp or Constant Contact). For Mailchimp, you will need an [API key](https://us1.admin.mailchimp.com/account/api/), for Constant Contact, you will need an [API Key](https://constantcontact.mashery.com/) and an [Access Token](https://constantcontact.mashery.com/io-docs).
+2. Visit the Newsletters > Settings page, or go to Newsletters > Add New to be prompted to select your service provider (ActiveCampaign, Campaign Monitor, Constant Contact, or Mailchimp).
 3. Start creating newsletters!
 
 == Frequently Asked Questions ==
 
 = What newsletter providers are supported? =
 
-Mailchimp, Constant Contact and Campaign Monitor are currently supported.
+ActiveCampaign, Campaign Monitor, Constant Contact, and Mailchimp are currently supported.
 
 == Screenshots ==
 

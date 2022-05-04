@@ -6,6 +6,9 @@ $vendorDir = dirname(dirname(__FILE__));
 $baseDir = dirname($vendorDir);
 
 return array(
+    'TEC\\Events\\Editor\\Full_Site\\Hooks' => $baseDir . '/src/Events/Editor/Full_Site/Hooks.php',
+    'TEC\\Events\\Editor\\Full_Site\\Provider' => $baseDir . '/src/Events/Editor/Full_Site/Provider.php',
+    'TEC\\Events\\Editor\\Full_Site\\Templates' => $baseDir . '/src/Events/Editor/Full_Site/Templates.php',
     'TEC\\Events\\Legacy\\Views\\V1\\Provider' => $baseDir . '/src/Events/Legacy/Views/V1/Provider.php',
     'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => $baseDir . '/src/Tribe/Admin/Filter_Bar/Provider.php',
     'Tribe\\Events\\Admin\\Notice\\Full_Site_Editor' => $baseDir . '/src/Tribe/Admin/Notice/Full_Site_Editor.php',
@@ -13,6 +16,7 @@ return array(
     'Tribe\\Events\\Aggregator\\Processes\\Batch_Imports' => $baseDir . '/src/Tribe/Aggregator/Processes/Batch_Imports.php',
     'Tribe\\Events\\Aggregator\\Record\\Batch_Queue' => $baseDir . '/src/Tribe/Aggregator/Record/Batch_Queue.php',
     'Tribe\\Events\\Collections\\Lazy_Post_Collection' => $baseDir . '/src/Tribe/Collections/Lazy_Post_Collection.php',
+    'Tribe\\Events\\Editor\\Blocks\\Archive_Events' => $baseDir . '/src/Tribe/Editor/Blocks/Archive_Events.php',
     'Tribe\\Events\\Editor\\Hooks' => $baseDir . '/src/Tribe/Editor/Hooks.php',
     'Tribe\\Events\\Editor\\Objects\\Editor_Object_Interface' => $baseDir . '/src/Tribe/Editor/Objects/Editor_Object_Interface.php',
     'Tribe\\Events\\Editor\\Objects\\Event' => $baseDir . '/src/Tribe/Editor/Objects/Event.php',
