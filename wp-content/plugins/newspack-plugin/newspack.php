@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Newspack
  * Description: An advanced open-source publishing and revenue-generating platform for news organizations.
- * Version: 1.81.0
+ * Version: 1.82.0
  * Author: Automattic
  * Author URI: https://newspack.pub/
  * License: GPL2
@@ -13,6 +13,8 @@
  */
 
 defined( 'ABSPATH' ) || exit;
+
+define( 'NEWSPACK_PLUGIN_VERSION', '1.80.0' );
 
 // Load language files.
 load_plugin_textdomain( 'newspack-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );

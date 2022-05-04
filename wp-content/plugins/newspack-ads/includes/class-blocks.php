@@ -16,13 +16,6 @@ use Newspack_Ads\Placements;
 final class Blocks {
 
 	/**
-	 * Amount of blocks rendered in the page.
-	 *
-	 * @var int
-	 */
-	private static $block_count = 0;
-
-	/**
 	 * Initialize blocks
 	 *
 	 * @return void
@@ -42,9 +35,6 @@ final class Blocks {
 			'newspack-ads/ad-unit',
 			[
 				'attributes'      => [
-					'id'          => [
-						'type' => 'string',
-					],
 					'provider'    => [
 						'type'    => 'string',
 						'default' => 'gam',
@@ -68,20 +58,6 @@ final class Blocks {
 	}
 
 	/**
-	 * Generate a block ID in case the block doesn't have the ID attribute.
-	 *
-	 * @param array[] $data Block placement data.
-	 *
-	 * @return string Block ID.
-	 */
-	private static function get_block_id( $data ) {
-		if ( isset( $data['id'] ) && ! empty( $data['id'] ) ) {
-			return $data['id'];
-		}
-		return sprintf( '%1$s_%2$s_%3$s', get_the_ID(), $data['ad_unit'], self::$block_count );
-	}
-
-	/**
 	 * Get block placement data.
 	 *
 	 * @param array[] $attrs Block attributes.
@@ -89,15 +65,15 @@ final class Blocks {
 	 * @return array[] Placement data.
 	 */
 	private static function get_block_placement_data( $attrs ) {
-		$data       = wp_parse_args(
+		$data = wp_parse_args(
 			$attrs,
 			[
+				'id'       => uniqid(),
 				'enabled'  => true,
 				'provider' => 'gam',
 				'ad_unit'  => isset( $attrs['activeAd'] ) ? $attrs['activeAd'] : '',
 			]
 		);
-		$data['id'] = self::get_block_id( $data );
 		return $data;
 	}
 
@@ -160,7 +136,6 @@ final class Blocks {
 		if ( empty( $content ) ) {
 			return '';
 		}
-		self::$block_count++;
 		return sprintf( '<div class="%1$s" style="text-align:%2$s">%3$s</div>', $classes, $align, $content );
 	}
 

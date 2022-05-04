@@ -35,12 +35,13 @@ class Setup_Wizard extends Wizard {
 	 * @var string
 	 */
 	protected $slug = 'newspack-setup-wizard';
+
 	/**
 	 * The capability required to access this wizard.
 	 *
 	 * @var string
 	 */
-	protected $capability = 'install_plugins';
+	protected $capability = 'manage_options';
 
 	/**
 	 * An array of theme mods that are media library IDs.
@@ -599,14 +600,14 @@ class Setup_Wizard extends Wizard {
 			'newspack-setup-wizard',
 			Newspack::plugin_url() . '/dist/setup.js',
 			$this->get_script_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/setup.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 		wp_register_style(
 			'newspack-setup-wizard',
 			Newspack::plugin_url() . '/dist/setup.css',
 			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/setup.css' )
+			NEWSPACK_PLUGIN_VERSION
 		);
 		wp_style_add_data( 'newspack-setup-wizard', 'rtl', 'replace' );
 		wp_enqueue_style( 'newspack-setup-wizard' );

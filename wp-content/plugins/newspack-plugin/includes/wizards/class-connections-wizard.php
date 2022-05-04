@@ -73,7 +73,7 @@ class Connections_Wizard extends Wizard {
 			'newspack-connections-wizard',
 			Newspack::plugin_url() . '/dist/connections.js',
 			$this->get_script_dependencies( [] ),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/connections.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 		\wp_localize_script(

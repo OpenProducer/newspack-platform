@@ -204,7 +204,7 @@ class SEO_Wizard extends Wizard {
 			'newspack-seo-wizard',
 			Newspack::plugin_url() . '/dist/seo.js',
 			$this->get_script_dependencies( [ 'wp-html-entities' ] ),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/seo.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 	}

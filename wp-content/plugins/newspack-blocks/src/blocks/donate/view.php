@@ -31,6 +31,14 @@ function newspack_blocks_render_block_donate_footer( $attributes ) {
 		$client_id = Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME;
 	}
 
+	$current_user      = wp_get_current_user();
+	$user_email        = '';
+	$user_display_name = '';
+	if ( 0 !== $current_user->ID ) {
+		$user_email        = $current_user->user_email;
+		$user_display_name = $current_user->display_name;
+	}
+
 	ob_start();
 
 	?>
@@ -45,8 +53,23 @@ function newspack_blocks_render_block_donate_footer( $attributes ) {
 						<div class="stripe-payment__element stripe-payment__card"></div>
 					</div>
 					<div class="stripe-payment__row stripe-payment__row--flex">
-						<input required placeholder="<?php echo esc_html__( 'Email', 'newspack-blocks' ); ?>" type="email" name="email" value="">
-						<input required placeholder="<?php echo esc_html__( 'Full Name', 'newspack-blocks' ); ?>" type="text" name="full_name" value="">
+						<input
+							required
+							placeholder="<?php echo esc_html__( 'Email', 'newspack-blocks' ); ?>"
+							type="email"
+							name="email"
+							value="<?php echo esc_attr( $user_email ); ?>"
+							<?php if ( '' !== $user_email ) : ?>
+								readonly
+							<?php endif; ?>
+						>
+						<input
+							required
+							placeholder="<?php echo esc_html__( 'Full Name', 'newspack-blocks' ); ?>"
+							type="text"
+							name="full_name"
+							value="<?php echo esc_attr( $user_display_name ); ?>"
+						>
 					</div>
 				</div>
 				<?php if ( $is_rendering_fee_checkbox ) : ?>

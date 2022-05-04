@@ -106,22 +106,70 @@ final class Placements {
 	}
 
 	/**
+	 * Sanitize placement data.
+	 *
+	 * @param array $data Placement data.
+	 *
+	 * @return array Sanitized placement data.
+	 */
+	public static function sanitize_placement( $data ) {
+
+		$sanitized_data = [];
+
+		if ( ! is_array( $data ) ) {
+			return $sanitized_data;
+		}
+
+		if ( isset( $data['enabled'] ) ) {
+			$sanitized_data['enabled'] = rest_sanitize_boolean( $data['enabled'] );
+		}
+
+		if ( isset( $data['provider'] ) ) {
+			$sanitized_data['provider'] = sanitize_text_field( $data['provider'] );
+		}
+
+		if ( isset( $data['ad_unit'] ) ) {
+			$sanitized_data['ad_unit'] = sanitize_text_field( $data['ad_unit'] );
+		}
+
+		if ( isset( $data['bidders_ids'] ) ) {
+			$sanitized_data['bidders_ids'] = self::sanitize_bidders_ids( $data['bidders_ids'] );
+		}
+
+		if ( isset( $data['hooks'] ) ) {
+			$sanitized_data['hooks'] = self::sanitize_hooks_data( $data['hooks'] );
+		}
+
+		if ( isset( $data['stick_to_top'] ) ) {
+			$sanitized_data['stick_to_top'] = rest_sanitize_boolean( $data['stick_to_top'] );
+		}
+
+		return $sanitized_data;
+	}
+
+	/**
 	 * Sanitize hooks data.
 	 *
-	 * @param array           $hooks   Hooks data.
-	 * @param WP_REST_Request $request Full details about the request.
+	 * @param array                  $hooks                    Hooks data.
+	 * @param WP_REST_Request|string $request_or_placement_key Full details about the request or placement key.
 	 *
 	 * @return array Sanitized hooks data.
 	 */
-	public static function sanitize_hooks_data( $hooks, $request ) {
-		$placement_key   = (string) $request->get_param( 'placement' );
-		$placements      = self::get_placements();
-		$placement       = $placements[ $placement_key ];
+	public static function sanitize_hooks_data( $hooks, $request_or_placement_key = '' ) {
+		if ( is_string( $request_or_placement_key ) ) {
+			$placement_key = $request_or_placement_key;
+		} else {
+			$placement_key = (string) $request_or_placement_key->get_param( 'placement' );
+		}
+		if ( $placement_key ) {
+			$placements = self::get_placements();
+			$placement  = $placements[ $placement_key ];
+		}
 		$sanitized_hooks = [];
 		if ( is_array( $hooks ) ) {
 			foreach ( $hooks as $key => $hook ) {
-				// Check if hook is valid.
-				if ( isset( $placement['hooks'][ $key ] ) ) {
+				// If placement is available, check if hook is valid.
+				if ( ! $placement_key || ( $placement && isset( $placement['hooks'][ $key ] ) ) ) {
 					// Sanitize bidders IDs data.
 					if ( isset( $hooks['bidders_ids'] ) ) {
 						$hook['bidders_ids'] = self::sanitize_bidders_ids( $hook['bidders_ids'] );
@@ -211,7 +259,7 @@ final class Placements {
 	 * 
 	 * @return string Option name. 
 	 */
-	private static function get_option_name( $placement_key ) {
+	public static function get_option_name( $placement_key ) {
 		return Settings::OPTION_NAME_PREFIX . 'placement_' . $placement_key;
 	}
 
@@ -223,7 +271,7 @@ final class Placements {
 	 *
 	 * @return object Placement ad unit data.
 	 */
-	private static function get_placement_data( $placement_key, $config = array() ) {
+	public static function get_placement_data( $placement_key, $config = array() ) {
 		/**
 		 * Default placement data to return if not configured or stored yet.
 		 */
@@ -394,14 +442,12 @@ final class Placements {
 		}
 		if ( isset( $config['hooks'] ) && ! empty( $config['hooks'] ) ) {
 			foreach ( $config['hooks'] as $hook_key => $hook ) {
-				if ( ! has_action( $hook['hook_name'] ) ) {
-					add_action(
-						$hook['hook_name'],
-						function () use ( $key, $hook_key ) {
-							self::inject_placement_ad( $key, $hook_key );
-						}
-					);
-				}
+				add_action(
+					$hook['hook_name'],
+					function () use ( $key, $hook_key ) {
+						self::inject_placement_ad( $key, $hook_key );
+					}
+				);
 			}
 		}
 		return true;
@@ -601,11 +647,12 @@ final class Placements {
 	/**
 	 * Render ad unit mock with dimensions.
 	 *
-	 * @param string   $provider_id Provider.
-	 * @param string   $ad_unit     Ad unit.
-	 * @param string[] $classes     List of additional classes. Optional.
+	 * @param string   $provider_id    Provider.
+	 * @param string   $ad_unit        Ad unit.
+	 * @param array    $placement_data Optional placement data to be serialized into the element.
+	 * @param string[] $classes        Optional list of additional classes.
 	 */
-	public static function render_ad_unit_mock( $provider_id, $ad_unit, $classes = [] ) {
+	public static function render_ad_unit_mock( $provider_id, $ad_unit, $placement_data = [], $classes = [] ) {
 		$provider     = Providers::get_provider( $provider_id );
 		$ad_unit_data = Providers::get_provider_unit_data( $provider_id, $ad_unit );
 		if ( ! $ad_unit_data ) {
@@ -620,25 +667,30 @@ final class Placements {
 		?>
 		<div
 			class="newspack-ads__ad-placement-mock <?php echo esc_attr( implode( ' ', $classes ) ); ?>"
-			style="width:<?php echo esc_attr( $width ); ?>px;height:<?php echo esc_attr( $height ); ?>px;"
+			<?php ( ! empty( $placement_data ) ) ? printf( 'data-placement="%s"', esc_attr( wp_json_encode( $placement_data ) ) ) : ''; ?>
 		>
-			<svg
-				class="newspack-ads__ad-placement-mock__svg"
-				width="<?php echo esc_attr( $width ); ?>"
-				viewbox="0 0 <?php echo esc_attr( $width ); ?> <?php echo esc_attr( $height ); ?>"
+			<div
+				class="newspack-ads__ad-placement-mock__content"
+				style="width:<?php echo esc_attr( $width ); ?>px;height:<?php echo esc_attr( $height ); ?>px;"
 			>
-				<rect
+				<svg
+					class="newspack-ads__ad-placement-mock__svg"
 					width="<?php echo esc_attr( $width ); ?>"
-					height="<?php echo esc_attr( $height ); ?>"
-					strokeDasharray="2"
-				/>
-				<line x1="0" y1="0" x2="100%" y2="100%" strokeDasharray="2" />
-			</svg>
-			<span class="newspack-ads__ad-placement-mock__label">
-				<?php printf( '%s - %s', esc_html( $provider->get_provider_name() ), esc_html( $ad_unit_data['name'] ) ); ?>
-				<br />
-				<?php echo esc_html( implode( ', ', array_map( 'Newspack_Ads\get_size_string', $sizes ) ) ); ?>
-			</span>
+					viewbox="0 0 <?php echo esc_attr( $width ); ?> <?php echo esc_attr( $height ); ?>"
+				>
+					<rect
+						width="<?php echo esc_attr( $width ); ?>"
+						height="<?php echo esc_attr( $height ); ?>"
+						strokeDasharray="2"
+					/>
+					<line x1="0" y1="0" x2="100%" y2="100%" strokeDasharray="2" />
+				</svg>
+				<span class="newspack-ads__ad-placement-mock__label">
+					<?php printf( '%s - %s', esc_html( $provider->get_provider_name() ), esc_html( $ad_unit_data['name'] ) ); ?>
+					<br />
+					<?php echo esc_html( implode( ', ', array_map( 'Newspack_Ads\get_size_string', $sizes ) ) ); ?>
+				</span>
+			</div>
 		</div>
 		<?php
 	}
@@ -716,7 +768,7 @@ final class Placements {
 			 * Render ad unit mock when in WordPress Customizer.
 			 */
 			if ( ! empty( $GLOBALS['wp_customize'] ) ) {
-				self::render_ad_unit_mock( $provider_id, $ad_unit );
+				self::render_ad_unit_mock( $provider_id, $ad_unit, $placement['data'] );
 			} else {
 				Providers::render_placement_ad_code(
 					$ad_unit,

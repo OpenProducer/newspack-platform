@@ -86,7 +86,7 @@ class Components_Demo extends Wizard {
 			'newspack-components-demo',
 			Newspack::plugin_url() . '/dist/componentsDemo.js',
 			$this->get_script_dependencies( [ 'wp-html-entities' ] ),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/componentsDemo.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 	}

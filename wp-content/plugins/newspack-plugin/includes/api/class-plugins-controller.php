@@ -496,7 +496,7 @@ class Plugins_Controller extends WP_REST_Controller {
 	 * @return bool|WP_Error
 	 */
 	public function handoff_item_permissions_check( $request ) {
-		if ( ! current_user_can( 'install_plugins' ) ) {
+		if ( ! current_user_can( 'manage_options' ) ) {
 			return new WP_Error(
 				'newspack_rest_forbidden',
 				esc_html__( 'You cannot use this resource.', 'newspack' ),

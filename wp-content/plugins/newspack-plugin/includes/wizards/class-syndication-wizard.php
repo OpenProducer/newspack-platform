@@ -86,7 +86,7 @@ class Syndication_Wizard extends Wizard {
 			'newspack-syndication-wizard',
 			Newspack::plugin_url() . '/dist/syndication.js',
 			$this->get_script_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/syndication.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 	}

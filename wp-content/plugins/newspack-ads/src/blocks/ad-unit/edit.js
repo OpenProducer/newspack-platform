@@ -1,7 +1,6 @@
 /**
  * External dependencies
  */
-import { v4 as uuid } from 'uuid';
 import classNames from 'classnames';
 
 /**
@@ -128,10 +127,7 @@ function Edit( { attributes, setAttributes } ) {
 										value={ attributes }
 										onChange={ value => {
 											setIsEditing( true );
-											setAttributes( {
-												...value,
-												id: uuid(),
-											} );
+											setAttributes( value );
 										} }
 									/>
 								</div>

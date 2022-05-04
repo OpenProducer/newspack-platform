@@ -134,7 +134,7 @@ class Newspack_Blocks {
 		$script_data = file_exists( $asset_path )
 			? require $asset_path
 			: array(
-				'dependencies' => [ 'wp-a11y', 'wp-escape-html', 'wp-i18n' ],
+				'dependencies' => [ 'wp-a11y', 'wp-escape-html', 'wp-i18n', 'wp-polyfill' ],
 				'version'      => filemtime( $local_path ),
 			);
 

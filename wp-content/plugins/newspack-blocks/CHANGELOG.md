@@ -1,3 +1,17 @@
+# [1.49.0](https://github.com/Automattic/newspack-blocks/compare/v1.48.0...v1.49.0) (2022-05-03)
+
+
+### Features
+
+* **donate:** handle woocommerce-memberships ([#1096](https://github.com/Automattic/newspack-blocks/issues/1096)) ([22afbbf](https://github.com/Automattic/newspack-blocks/commit/22afbbfe9658c1b8510f33f48d444b5f0270ebc3))
+
+# [1.49.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.48.0...v1.49.0-alpha.1) (2022-05-02)
+
+
+### Features
+
+* **donate:** handle woocommerce-memberships ([#1096](https://github.com/Automattic/newspack-blocks/issues/1096)) ([22afbbf](https://github.com/Automattic/newspack-blocks/commit/22afbbfe9658c1b8510f33f48d444b5f0270ebc3))
+
 # [1.48.0](https://github.com/Automattic/newspack-blocks/compare/v1.47.2...v1.48.0) (2022-04-18)
 
 

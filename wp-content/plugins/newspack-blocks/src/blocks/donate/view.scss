@@ -12,6 +12,10 @@
 	input[type='radio'] {
 		display: none;
 	}
+	input[readonly] {
+		background-color: $color__background-screen;
+		color: #666;
+	}
 
 	.freq-label,
 	.tier-label {

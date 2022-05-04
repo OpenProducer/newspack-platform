@@ -456,7 +456,7 @@ class Popups_Wizard extends Wizard {
 			'newspack-popups-wizard',
 			Newspack::plugin_url() . '/dist/popups.js',
 			$this->get_script_dependencies( [ 'wp-html-entities', 'wp-date' ] ),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/popups.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 
@@ -494,7 +494,7 @@ class Popups_Wizard extends Wizard {
 			'newspack-popups-wizard',
 			Newspack::plugin_url() . '/dist/popups.css',
 			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/popups.css' )
+			NEWSPACK_PLUGIN_VERSION
 		);
 		\wp_style_add_data( 'newspack-popups-wizard', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-popups-wizard' );

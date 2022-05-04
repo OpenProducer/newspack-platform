@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "composer/installers",
-            "version": "v2.1.0",
-            "version_normalized": "2.1.0.0",
+            "version": "v2.1.1",
+            "version_normalized": "2.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/composer/installers.git",
-                "reference": "75e5ef05436c90ac565a48176cc7465991908352"
+                "reference": "af93ba6e52236418f07a278033eba6959ee5b983"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/composer/installers/zipball/75e5ef05436c90ac565a48176cc7465991908352",
-                "reference": "75e5ef05436c90ac565a48176cc7465991908352",
+                "url": "https://api.github.com/repos/composer/installers/zipball/af93ba6e52236418f07a278033eba6959ee5b983",
+                "reference": "af93ba6e52236418f07a278033eba6959ee5b983",
                 "shasum": ""
             },
             "require": {
@@ -27,7 +27,7 @@
                 "symfony/phpunit-bridge": "^5.3",
                 "symfony/process": "^5"
             },
-            "time": "2022-03-18T12:27:54+00:00",
+            "time": "2022-04-13T09:13:00+00:00",
             "type": "composer-plugin",
             "extra": {
                 "class": "Composer\\Installers\\Plugin",
@@ -129,7 +129,7 @@
             ],
             "support": {
                 "issues": "https://github.com/composer/installers/issues",
-                "source": "https://github.com/composer/installers/tree/v2.1.0"
+                "source": "https://github.com/composer/installers/tree/v2.1.1"
             },
             "funding": [
                 {
@@ -149,29 +149,29 @@
         },
         {
             "name": "firebase/php-jwt",
-            "version": "v5.5.1",
-            "version_normalized": "5.5.1.0",
+            "version": "v6.1.1",
+            "version_normalized": "6.1.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/firebase/php-jwt.git",
-                "reference": "83b609028194aa042ea33b5af2d41a7427de80e6"
+                "reference": "e67638d067a537731e3f9c03e097c7c1b1f31fe8"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/83b609028194aa042ea33b5af2d41a7427de80e6",
-                "reference": "83b609028194aa042ea33b5af2d41a7427de80e6",
+                "url": "https://api.github.com/repos/firebase/php-jwt/zipball/e67638d067a537731e3f9c03e097c7c1b1f31fe8",
+                "reference": "e67638d067a537731e3f9c03e097c7c1b1f31fe8",
                 "shasum": ""
             },
             "require": {
-                "php": ">=5.3.0"
+                "php": "^7.1||^8.0"
             },
             "require-dev": {
-                "phpunit/phpunit": ">=4.8 <=9"
+                "phpunit/phpunit": "^7.5||9.5"
             },
             "suggest": {
                 "paragonie/sodium_compat": "Support EdDSA (Ed25519) signatures when libsodium is not present"
             },
-            "time": "2021-11-08T20:18:51+00:00",
+            "time": "2022-04-13T23:27:14+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -203,31 +203,31 @@
             ],
             "support": {
                 "issues": "https://github.com/firebase/php-jwt/issues",
-                "source": "https://github.com/firebase/php-jwt/tree/v5.5.1"
+                "source": "https://github.com/firebase/php-jwt/tree/v6.1.1"
             },
             "install-path": "../firebase/php-jwt"
         },
         {
             "name": "google/auth",
-            "version": "v1.19.0",
-            "version_normalized": "1.19.0.0",
+            "version": "v1.21.0",
+            "version_normalized": "1.21.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleapis/google-auth-library-php.git",
-                "reference": "31e5d24d5fa0eaf6adc7e596292dc4732f4b60c5"
+                "reference": "73392bad2eb6852eea9084b6bbdec752515cb849"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/31e5d24d5fa0eaf6adc7e596292dc4732f4b60c5",
-                "reference": "31e5d24d5fa0eaf6adc7e596292dc4732f4b60c5",
+                "url": "https://api.github.com/repos/googleapis/google-auth-library-php/zipball/73392bad2eb6852eea9084b6bbdec752515cb849",
+                "reference": "73392bad2eb6852eea9084b6bbdec752515cb849",
                 "shasum": ""
             },
             "require": {
-                "firebase/php-jwt": "~5.0",
+                "firebase/php-jwt": "^5.5||^6.0",
                 "guzzlehttp/guzzle": "^6.2.1|^7.0",
                 "guzzlehttp/psr7": "^1.7|^2.0",
-                "php": ">=5.6",
-                "psr/cache": "^1.0|^2.0",
+                "php": "^7.1||^8.0",
+                "psr/cache": "^1.0|^2.0|^3.0",
                 "psr/http-message": "^1.0"
             },
             "require-dev": {
@@ -235,14 +235,14 @@
                 "kelvinmo/simplejwt": "^0.2.5|^0.5.1",
                 "phpseclib/phpseclib": "^2.0.31",
                 "phpspec/prophecy-phpunit": "^1.1",
-                "phpunit/phpunit": "^5.7||^8.5.13",
+                "phpunit/phpunit": "^7.5||^8.5",
                 "sebastian/comparator": ">=1.2.3",
                 "squizlabs/php_codesniffer": "^3.5"
             },
             "suggest": {
                 "phpseclib/phpseclib": "May be used in place of OpenSSL for signing strings or for token management. Please require version ^2."
             },
-            "time": "2022-03-24T21:22:45+00:00",
+            "time": "2022-04-13T20:35:52+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -264,7 +264,7 @@
             "support": {
                 "docs": "https://googleapis.github.io/google-auth-library-php/main/",
                 "issues": "https://github.com/googleapis/google-auth-library-php/issues",
-                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.19.0"
+                "source": "https://github.com/googleapis/google-auth-library-php/tree/v1.21.0"
             },
             "install-path": "../google/auth"
         },
@@ -923,17 +923,17 @@
         },
         {
             "name": "stripe/stripe-php",
-            "version": "v7.122.0",
-            "version_normalized": "7.122.0.0",
+            "version": "v7.123.0",
+            "version_normalized": "7.123.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/stripe/stripe-php.git",
-                "reference": "c58179aa4cad16240a6e65dbf29c2bfd4ae0c033"
+                "reference": "4e44559275eb66dc44f14c4c8dd3fedf9ed33ef9"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/c58179aa4cad16240a6e65dbf29c2bfd4ae0c033",
-                "reference": "c58179aa4cad16240a6e65dbf29c2bfd4ae0c033",
+                "url": "https://api.github.com/repos/stripe/stripe-php/zipball/4e44559275eb66dc44f14c4c8dd3fedf9ed33ef9",
+                "reference": "4e44559275eb66dc44f14c4c8dd3fedf9ed33ef9",
                 "shasum": ""
             },
             "require": {
@@ -948,7 +948,7 @@
                 "phpunit/phpunit": "^5.7 || ^9.0",
                 "squizlabs/php_codesniffer": "^3.3"
             },
-            "time": "2022-04-08T16:57:33+00:00",
+            "time": "2022-04-13T23:12:59+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -980,29 +980,29 @@
             ],
             "support": {
                 "issues": "https://github.com/stripe/stripe-php/issues",
-                "source": "https://github.com/stripe/stripe-php/tree/v7.122.0"
+                "source": "https://github.com/stripe/stripe-php/tree/v7.123.0"
             },
             "install-path": "../stripe/stripe-php"
         },
         {
             "name": "symfony/deprecation-contracts",
-            "version": "v2.5.0",
-            "version_normalized": "2.5.0.0",
+            "version": "v2.5.1",
+            "version_normalized": "2.5.1.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/deprecation-contracts.git",
-                "reference": "6f981ee24cf69ee7ce9736146d1c57c2780598a8"
+                "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/6f981ee24cf69ee7ce9736146d1c57c2780598a8",
-                "reference": "6f981ee24cf69ee7ce9736146d1c57c2780598a8",
+                "url": "https://api.github.com/repos/symfony/deprecation-contracts/zipball/e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
+                "reference": "e8b495ea28c1d97b5e0c121748d6f9b53d075c66",
                 "shasum": ""
             },
             "require": {
                 "php": ">=7.1"
             },
-            "time": "2021-07-12T14:48:14+00:00",
+            "time": "2022-01-02T09:53:40+00:00",
             "type": "library",
             "extra": {
                 "branch-alias": {
@@ -1036,7 +1036,7 @@
             "description": "A generic function and convention to trigger deprecation notices",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/deprecation-contracts/tree/v2.5.0"
+                "source": "https://github.com/symfony/deprecation-contracts/tree/v2.5.1"
             },
             "funding": [
                 {

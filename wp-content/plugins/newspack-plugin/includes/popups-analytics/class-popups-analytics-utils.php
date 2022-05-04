@@ -186,15 +186,14 @@ class Popups_Analytics_Utils {
 	}
 
 	/**
-	 * Legacy event format handling - where:
-	 * - category was `Newspack Announcement`
-	 * - label - `Newspack Announcement: <title> <popup-id>`
+	 * GA custom event format handling - where:
+	 * - label - `<type>: <title> (<id>) - <segment>` or `Newspack Announcement: <title> <id>` (old times)
 	 * - action - plain text action (e.g. `Dismissal`, `Seen`)
 	 *
 	 * @param object $row Report result row.
 	 * @return object Action & label objects.
 	 */
-	private static function process_legacy_item( $row ) {
+	private static function process_ga_event_row( $row ) {
 		$action_object = [
 			'label' => $row['dimensions'][1],
 			'value' => $row['dimensions'][1],
@@ -295,10 +294,10 @@ class Popups_Analytics_Utils {
 			$ga_data_rows,
 			function ( $days, $row ) use ( $event_label_id, $options, &$all_actions, &$all_labels, &$aggregate_seen_events, &$aggregate_form_submission_events, &$aggregate_link_click_events, &$post_edit_link, &$report_by_id ) {
 				$label_dimension_value = $row['dimensions'][2];
-				$has_no_label          = '(not set)' !== $label_dimension_value;
+				$has_label             = '(not set)' !== $label_dimension_value;
 
-				if ( $has_no_label ) {
-					$item          = self::process_legacy_item( $row );
+				if ( $has_label ) {
+					$item          = self::process_ga_event_row( $row );
 					$label_object  = $item['label'];
 					$action_object = $item['action'];
 				} else {

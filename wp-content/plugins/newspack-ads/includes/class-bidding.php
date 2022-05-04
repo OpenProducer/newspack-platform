@@ -23,7 +23,12 @@ final class Bidding {
 
 	const PREBID_SCRIPT_HANDLE = 'newspack-ads-prebid';
 
-	// Standard sizes accepted by partners.
+	/**
+	 * Standard sizes accepted by partners.
+	 *
+	 * This is a subset of \Newspack_Ads\get_iab_sizes(). Not all IAB sizes are
+	 * accepted by partners.
+	 */
 	const ACCEPTED_AD_SIZES = [
 		[ 728, 90 ],
 		[ 970, 90 ],
@@ -230,28 +235,6 @@ final class Bidding {
 			}
 		}
 		return $data;
-	}
-
-	/**
-	 * Return a string from a size array.
-	 *
-	 * @param array $size Size array.
-	 *
-	 * @return string Size string.
-	 */
-	private static function get_size_string( $size ) {
-		return $size[0] . 'x' . $size[1];
-	}
-
-	/**
-	 * Return an array from a size string.
-	 *
-	 * @param string $size Size string.
-	 *
-	 * @return array Size array.
-	 */
-	private static function get_size_array( $size ) {
-		return array_map( 'intval', explode( 'x', $size ) );
 	}
 
 	/**

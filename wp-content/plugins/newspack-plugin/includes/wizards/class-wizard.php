@@ -142,9 +142,10 @@ abstract class Wizard {
 		}
 
 		$aux_data = [
-			'is_e2e'        => Starter_Content::is_e2e(),
-			'is_debug_mode' => Newspack::is_debug_mode(),
-			'site_title'    => get_option( 'blogname' ),
+			'is_e2e'              => Starter_Content::is_e2e(),
+			'is_debug_mode'       => Newspack::is_debug_mode(),
+			'has_completed_setup' => get_option( NEWSPACK_SETUP_COMPLETE ),
+			'site_title'          => get_option( 'blogname' ),
 		];
 
 		if ( class_exists( 'Newspack_Popups_Segmentation' ) ) {

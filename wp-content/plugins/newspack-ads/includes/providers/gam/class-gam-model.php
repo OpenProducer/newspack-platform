@@ -721,12 +721,7 @@ final class GAM_Model {
 			$width  = $viewport_width;
 			$height = absint( max( array_column( $ad_sizes, 1 ) ) );
 
-			$multisizes = array_map(
-				function( $size ) {
-					return $size[0] . 'x' . $size[1];
-				},
-				$ad_sizes
-			);
+			$multisizes = array_map( '\Newspack_Ads\get_size_string', $ad_sizes );
 
 			// If there is a multisize that's equal to the width and height of the container, remove it from the multisizes.
 			// The container size is included by default, and should not also be included in the multisize.

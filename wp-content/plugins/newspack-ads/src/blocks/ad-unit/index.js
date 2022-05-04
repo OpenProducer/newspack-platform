@@ -32,9 +32,6 @@ export const settings = {
 	],
 	description: __( 'Render an ad unit from your inventory.', 'newspack-ads' ),
 	attributes: {
-		id: {
-			type: 'string',
-		},
 		provider: {
 			type: 'string',
 			default: 'gam',

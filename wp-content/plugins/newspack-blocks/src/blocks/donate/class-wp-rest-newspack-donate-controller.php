@@ -105,17 +105,40 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 			}
 		}
 
+		$frequency = $request->get_param( 'frequency' );
+		$full_name = $request->get_param( 'full_name' );
+
+		$user_id = self::$current_user_id;
+
+		if ( 0 === $user_id ) {
+			$email_address = $request->get_param( 'email' );
+
+			if ( class_exists( 'Newspack\WooCommerce_Connection' ) && method_exists( 'Newspack\WooCommerce_Connection', 'set_up_membership' ) ) {
+				// Handle woocommerce-memberships integration, if there's no user logged in.
+				$user_id = \Newspack\WooCommerce_Connection::set_up_membership(
+					$email_address,
+					$full_name,
+					$frequency
+				);
+				if ( is_wp_error( $user_id ) ) {
+					return [ 'error' => wp_strip_all_tags( $user_id->get_error_message() ) ];
+				}
+			}
+		} else {
+			$email_address = get_userdata( $user_id )->user_email;
+		}
+
 		$response = \Newspack\Stripe_Connection::handle_donation(
 			[
-				'frequency'         => $request->get_param( 'frequency' ),
+				'frequency'         => $frequency,
 				'token_data'        => $request->get_param( 'tokenData' ),
-				'email_address'     => $request->get_param( 'email' ),
-				'full_name'         => $request->get_param( 'full_name' ),
+				'email_address'     => $email_address,
+				'full_name'         => $full_name,
 				'amount'            => $request->get_param( 'amount' ),
 				'client_metadata'   => [
 					'clientId'        => $request->get_param( 'clientId' ),
 					'newsletterOptIn' => $request->get_param( 'newsletter_opt_in' ),
-					'userId'          => self::$current_user_id,
+					'userId'          => $user_id,
 				],
 				'payment_metadata'  => $payment_metadata,
 				'payment_method_id' => $request->get_param( 'payment_method_id' ),

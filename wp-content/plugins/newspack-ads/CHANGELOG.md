@@ -1,3 +1,55 @@
+## [1.32.1](https://github.com/Automattic/newspack-ads/compare/v1.32.0...v1.32.1) (2022-05-04)
+
+
+### Bug Fixes
+
+* **gam:** common targeting array ([#396](https://github.com/Automattic/newspack-ads/issues/396)) ([9633174](https://github.com/Automattic/newspack-ads/commit/96331748254e62ff407c2650c5757afb380b7403))
+
+## [1.32.1-hotfix.1](https://github.com/Automattic/newspack-ads/compare/v1.32.0...v1.32.1-hotfix.1) (2022-05-03)
+
+
+### Bug Fixes
+
+* **gam:** common targeting array ([56d028e](https://github.com/Automattic/newspack-ads/commit/56d028eab2a11792bd403dd35626604844a95991))
+
+# [1.32.0](https://github.com/Automattic/newspack-ads/compare/v1.31.0...v1.32.0) (2022-05-03)
+
+
+### Bug Fixes
+
+* **blocks:** simplify block placement id ([#385](https://github.com/Automattic/newspack-ads/issues/385)) ([4a71d6a](https://github.com/Automattic/newspack-ads/commit/4a71d6a3528a2835f41fef2d0390a75e5034254d))
+
+
+### Features
+
+* enable suppression for any viewable post type ([#386](https://github.com/Automattic/newspack-ads/issues/386)) ([104866e](https://github.com/Automattic/newspack-ads/commit/104866ee34b98d9b50f516131b2d7191cd998307))
+* **placements:** customize control ([#287](https://github.com/Automattic/newspack-ads/issues/287)) ([8a54214](https://github.com/Automattic/newspack-ads/commit/8a54214ddbee60ad3027a62662e8377c93edbcf4))
+* unify standard ad sizes ([#355](https://github.com/Automattic/newspack-ads/issues/355)) ([bdc730a](https://github.com/Automattic/newspack-ads/commit/bdc730a4d4e770e66d497553e1d2199846070365))
+
+
+### Performance Improvements
+
+* **providers:** optimize data cache ([#376](https://github.com/Automattic/newspack-ads/issues/376)) ([432d380](https://github.com/Automattic/newspack-ads/commit/432d380b338c316499df615b3943359b95a96468))
+
+# [1.32.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.31.0...v1.32.0-alpha.1) (2022-05-02)
+
+
+### Bug Fixes
+
+* **blocks:** simplify block placement id ([#385](https://github.com/Automattic/newspack-ads/issues/385)) ([4a71d6a](https://github.com/Automattic/newspack-ads/commit/4a71d6a3528a2835f41fef2d0390a75e5034254d))
+
+
+### Features
+
+* enable suppression for any viewable post type ([#386](https://github.com/Automattic/newspack-ads/issues/386)) ([104866e](https://github.com/Automattic/newspack-ads/commit/104866ee34b98d9b50f516131b2d7191cd998307))
+* **placements:** customize control ([#287](https://github.com/Automattic/newspack-ads/issues/287)) ([8a54214](https://github.com/Automattic/newspack-ads/commit/8a54214ddbee60ad3027a62662e8377c93edbcf4))
+* unify standard ad sizes ([#355](https://github.com/Automattic/newspack-ads/issues/355)) ([bdc730a](https://github.com/Automattic/newspack-ads/commit/bdc730a4d4e770e66d497553e1d2199846070365))
+
+
+### Performance Improvements
+
+* **providers:** optimize data cache ([#376](https://github.com/Automattic/newspack-ads/issues/376)) ([432d380](https://github.com/Automattic/newspack-ads/commit/432d380b338c316499df615b3943359b95a96468))
+
 # [1.31.0](https://github.com/Automattic/newspack-ads/compare/v1.30.1...v1.31.0) (2022-04-18)
 
 

@@ -94,6 +94,7 @@ final class Core {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/integrations/class-ad-refresh-control.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-blocks.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-widget.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/customizer/class-customizer.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-suppression.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/functions.php';
 	}

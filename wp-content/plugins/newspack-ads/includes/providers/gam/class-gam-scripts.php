@@ -176,7 +176,7 @@ final class GAM_Scripts {
 				var ad_config        = <?php echo wp_json_encode( $ad_config ); ?>;
 				var all_ad_units     = <?php echo wp_json_encode( $prepared_unit_data ); ?>;
 				var lazy_load        = <?php echo wp_json_encode( Settings::get_settings( 'lazy_load', true ), JSON_FORCE_OBJECT ); ?>;
-				var common_targeting = <?php echo wp_json_encode( $common_targeting, JSON_FORCE_OBJECT ); ?>;
+				var common_targeting = <?php echo wp_json_encode( $common_targeting ); ?>;
 				var defined_ad_units = {};
 
 				var boundsContainers = {};

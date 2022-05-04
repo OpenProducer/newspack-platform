@@ -527,7 +527,7 @@ class Reader_Revenue_Wizard extends Wizard {
 			'newspack-reader-revenue-wizard',
 			Newspack::plugin_url() . '/dist/readerRevenue.js',
 			$this->get_script_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/readerRevenue.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 		\wp_localize_script(

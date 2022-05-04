@@ -335,16 +335,9 @@ class Plugin_Manager {
 		];
 
 		// Add plugin status info and fill in defaults.
-		$installed_plugins = self::get_installed_plugins();
 		foreach ( $managed_plugins as $plugin_slug => $managed_plugin ) {
-			$status = 'uninstalled';
-			if ( isset( $installed_plugins[ $plugin_slug ] ) ) {
-				if ( is_plugin_active( $installed_plugins[ $plugin_slug ] ) ) {
-					$status = 'active';
-				} else {
-					$status = 'inactive';
-				}
-			}
+			$status = self::get_managed_plugin_status( $plugin_slug );
+
 			if ( 'newspack-theme' === $plugin_slug ) {
 				if ( 'newspack-theme' === get_stylesheet() ) {
 					$status = 'active';
@@ -353,15 +346,42 @@ class Plugin_Manager {
 			if ( isset( $managed_plugin['WPCore'] ) ) {
 				$status = 'active';
 			}
-			if ( Newspack::is_debug_mode() ) {
-				$status = 'active';
-			}
+
 			$managed_plugins[ $plugin_slug ]['Status']      = $status;
 			$managed_plugins[ $plugin_slug ]['Slug']        = $plugin_slug;
 			$managed_plugins[ $plugin_slug ]['HandoffLink'] = isset( $managed_plugins[ $plugin_slug ]['EditPath'] ) ? admin_url( $managed_plugins[ $plugin_slug ]['EditPath'] ) : null;
 			$managed_plugins[ $plugin_slug ]                = wp_parse_args( $managed_plugins[ $plugin_slug ], $default_info );
 		}
 		return $managed_plugins;
+	}
+
+	/**
+	 * Determine a managed plugin status.
+	 *
+	 * @param string $plugin_slug Plugin slug.
+	 */
+	private static function get_managed_plugin_status( $plugin_slug ) {
+		if ( Newspack::is_debug_mode() ) {
+			return 'active';
+		}
+		$status            = 'uninstalled';
+		$installed_plugins = self::get_installed_plugins();
+		if ( isset( $installed_plugins[ $plugin_slug ] ) ) {
+			if ( is_plugin_active( $installed_plugins[ $plugin_slug ] ) ) {
+				$status = 'active';
+			} else {
+				$status = 'inactive';
+			}
+		}
+
+		// Yoast Premium can be used as a replacement for regular Yoast.
+		if ( 'wordpress-seo' === $plugin_slug && 'active' !== $status && isset( $installed_plugins['wordpress-seo-premium'] ) && $installed_plugins['wordpress-seo-premium'] ) {
+			if ( is_plugin_active( $installed_plugins['wordpress-seo-premium'] ) ) {
+				$status = 'active';
+			};
+		}
+
+		return $status;
 	}
 
 	/**
@@ -375,6 +395,9 @@ class Plugin_Manager {
 			'classic-widgets',
 			'republication-tracker-tool',
 			'the-events-calendar',
+			'wordpress-seo-premium',
+			'gravityformspolls',
+			'gravityformsmailchimp',
 		];
 	}
 
@@ -410,7 +433,7 @@ class Plugin_Manager {
 		$plugins_info    = self::get_installed_plugins_info();
 		$missing_plugins = array();
 		foreach ( self::$required_plugins as $slug ) {
-			if ( ! isset( $plugins_info[ $slug ] ) || ! is_plugin_active( $plugins_info[ $slug ]['Path'] ) ) {
+			if ( 'active' !== self::get_managed_plugin_status( $slug ) ) {
 				$missing_plugins[ $slug ] = $managed_plugins[ $slug ];
 			}
 		}

@@ -75,6 +75,10 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 					)
 				)
 			),
+			'post_excerpt' => ucfirst( self::get_lipsum( 'words', wp_rand( 20, 30 ) ) ) . '.',
+			'meta_input'   => [
+				'newspack_post_subtitle' => self::generate_title() . '.',
+			],
 		];
 
 		if ( Starter_Content::is_e2e() ) {

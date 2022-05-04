@@ -7,7 +7,9 @@
 
 namespace Newspack;
 
-use \WP_Error, \WP_Query;
+use \WP_Error;
+
+use \Newspack_Ads\Providers\GAM_Model;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -341,11 +343,8 @@ class Advertising_Wizard extends Wizard {
 	 */
 	public function api_update_network_code( $request ) {
 		// Update GAM or legacy network code.
-		if ( $request['is_gam'] ) {
-			update_option( \Newspack_Ads\Providers\GAM_Model::OPTION_NAME_GAM_NETWORK_CODE, $request['network_code'] );
-		} else {
-			update_option( \Newspack_Ads\Providers\GAM_Model::OPTION_NAME_LEGACY_NETWORK_CODE, $request['network_code'] );
-		}
+		$option_name = $request['is_gam'] ? GAM_Model::OPTION_NAME_GAM_NETWORK_CODE : GAM_Model::OPTION_NAME_LEGACY_NETWORK_CODE;
+		update_option( $option_name, $request['network_code'] );
 		return \rest_ensure_response( [] );
 	}
 
@@ -563,7 +562,7 @@ class Advertising_Wizard extends Wizard {
 			'newspack-advertising-wizard',
 			Newspack::plugin_url() . '/dist/advertising.js',
 			$this->get_script_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/advertising.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 
@@ -571,10 +570,18 @@ class Advertising_Wizard extends Wizard {
 			'newspack-advertising-wizard',
 			Newspack::plugin_url() . '/dist/advertising.css',
 			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/advertising.css' )
+			NEWSPACK_PLUGIN_VERSION
 		);
 		\wp_style_add_data( 'newspack-advertising-wizard', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-advertising-wizard' );
+
+		\wp_localize_script(
+			'newspack-advertising-wizard',
+			'newspack_ads_wizard',
+			array(
+				'iab_sizes' => \Newspack_Ads\get_iab_sizes(),
+			)
+		);
 	}
 
 	/**

@@ -185,7 +185,7 @@ class Dashboard extends Wizard {
 			'newspack-dashboard',
 			Newspack::plugin_url() . '/dist/dashboard.js',
 			$this->get_script_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/dashboard.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 		wp_localize_script( 'newspack-dashboard', 'newspack_dashboard', $this->get_dashboard() );
@@ -195,7 +195,7 @@ class Dashboard extends Wizard {
 			'newspack-dashboard',
 			Newspack::plugin_url() . '/dist/dashboard.css',
 			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/dashboard.css' )
+			NEWSPACK_PLUGIN_VERSION
 		);
 		wp_style_add_data( 'newspack-dashboard', 'rtl', 'replace' );
 		wp_enqueue_style( 'newspack-dashboard' );

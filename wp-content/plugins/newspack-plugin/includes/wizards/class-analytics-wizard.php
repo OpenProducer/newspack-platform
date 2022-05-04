@@ -228,7 +228,7 @@ class Analytics_Wizard extends Wizard {
 			'newspack-analytics-wizard',
 			Newspack::plugin_url() . '/dist/analytics.js',
 			[ 'wp-components', 'wp-api-fetch' ],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/analytics.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 		$custom_dimensions          = self::list_custom_dimensions();
@@ -265,7 +265,7 @@ class Analytics_Wizard extends Wizard {
 			'newspack-analytics-wizard',
 			Newspack::plugin_url() . '/dist/analytics.css',
 			$this->get_style_dependencies(),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/analytics.css' )
+			NEWSPACK_PLUGIN_VERSION
 		);
 		\wp_style_add_data( 'newspack-analytics-wizard', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-analytics-wizard' );

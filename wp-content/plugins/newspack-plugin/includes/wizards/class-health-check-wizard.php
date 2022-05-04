@@ -176,7 +176,7 @@ class Health_Check_Wizard extends Wizard {
 			'newspack-health-check-wizard',
 			Newspack::plugin_url() . '/dist/health-check.js',
 			[ 'wp-components', 'wp-api-fetch' ],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/health-check.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 	}

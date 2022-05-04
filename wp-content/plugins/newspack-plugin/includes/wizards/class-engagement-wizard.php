@@ -253,7 +253,7 @@ class Engagement_Wizard extends Wizard {
 			'newspack-engagement-wizard',
 			Newspack::plugin_url() . '/dist/engagement.js',
 			$this->get_script_dependencies( array( 'wp-html-entities' ) ),
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/engagement.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 	}

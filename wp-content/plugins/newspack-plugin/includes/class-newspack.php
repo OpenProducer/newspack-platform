@@ -289,7 +289,7 @@ final class Newspack {
 			'newspack_commons',
 			self::plugin_url() . '/dist/commons.js',
 			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/commons.js' ),
+			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
 		wp_enqueue_script( 'newspack_commons' );
@@ -298,7 +298,7 @@ final class Newspack {
 			'newspack-commons',
 			self::plugin_url() . '/dist/commons.css',
 			[ 'wp-components' ],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/commons.css' )
+			NEWSPACK_PLUGIN_VERSION
 		);
 		wp_style_add_data( 'newspack-commons', 'rtl', 'replace' );
 		wp_enqueue_style( 'newspack-commons' );
