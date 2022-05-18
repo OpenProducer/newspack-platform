@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '3a2fedee1998206832c826407d11011ff54aac6b',
+        'reference' => 'f31fdd2d0374e015b7554265ef05793ee1a87634',
         'name' => 'automattic/newspack-plugin',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '3a2fedee1998206832c826407d11011ff54aac6b',
+            'reference' => 'f31fdd2d0374e015b7554265ef05793ee1a87634',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
@@ -146,12 +146,12 @@
             'dev_requirement' => false,
         ),
         'stripe/stripe-php' => array(
-            'pretty_version' => 'v7.123.0',
-            'version' => '7.123.0.0',
+            'pretty_version' => 'v7.128.0',
+            'version' => '7.128.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../stripe/stripe-php',
             'aliases' => array(),
-            'reference' => '4e44559275eb66dc44f14c4c8dd3fedf9ed33ef9',
+            'reference' => 'c704949c49b72985c76cc61063aa26fefbd2724e',
             'dev_requirement' => false,
         ),
         'symfony/deprecation-contracts' => array(

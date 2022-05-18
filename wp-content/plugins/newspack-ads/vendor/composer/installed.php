@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '96331748254e62ff407c2650c5757afb380b7403',
+        'reference' => 'cbd1a75f1635f9f654bf7d43d5efc5a8097a29ec',
         'name' => 'automattic/newspack-ads',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '96331748254e62ff407c2650c5757afb380b7403',
+            'reference' => 'cbd1a75f1635f9f654bf7d43d5efc5a8097a29ec',
             'dev_requirement' => false,
         ),
         'firebase/php-jwt' => array(

@@ -1,5 +1,43 @@
 # Changelog
 
+## 7.128.0 - 2022-05-05
+* [#1282](https://github.com/stripe/stripe-php/pull/1282) API Updates
+  * Add support for `default_price` on `Product`
+  * Add support for `instructions_email` on `Refund`
+  
+
+## 7.127.0 - 2022-05-05
+* [#1281](https://github.com/stripe/stripe-php/pull/1281) API Updates
+  * Add support for new resources `FinancialConnections.AccountOwner`, `FinancialConnections.AccountOwnership`, `FinancialConnections.Account`, and `FinancialConnections.Session`
+  
+* [#1278](https://github.com/stripe/stripe-php/pull/1278) Pin setup-php action version.
+* [#1277](https://github.com/stripe/stripe-php/pull/1277) API Updates
+  * Add support for `registered_address` on `Person`
+
+## 7.126.0 - 2022-05-03
+* [#1276](https://github.com/stripe/stripe-php/pull/1276) API Updates
+  * Add support for new resource `CashBalance`
+  * Change type of `BillingPortal.Configuration.application` from `$Application` to `deletable($Application)`
+  * Add support for `cash_balance` on `Customer`
+  * Add support for `application` on `Invoice`, `Quote`, `SubscriptionSchedule`, and `Subscription`
+  * Add support for new value `eu_oss_vat` on enum `TaxId.type`
+* [#1274](https://github.com/stripe/stripe-php/pull/1274) Fix PHPDoc on Discount for nullable properties
+* [#1272](https://github.com/stripe/stripe-php/pull/1272) Allow users to pass a custom IPRESOLVE cURL option.
+
+## 7.125.0 - 2022-04-21
+* [#1270](https://github.com/stripe/stripe-php/pull/1270) API Updates
+  * Add support for `expire` test helper method on resource `Refund`
+
+## 7.124.0 - 2022-04-18
+* [#1265](https://github.com/stripe/stripe-php/pull/1265) API Updates
+  * Add support for new resources `FundingInstructions` and `Terminal.Configuration`
+  * Add support for `create_funding_instructions` method on resource `Customer`
+  * Add support for `amount_details` on `PaymentIntent`
+  * Add support for `customer_balance` on `PaymentMethod`
+  * Add support for new value `customer_balance` on enum `PaymentMethod.type`
+  * Add support for `configuration_overrides` on `Terminal.Location`
+
+
 ## 7.123.0 - 2022-04-13
 * [#1263](https://github.com/stripe/stripe-php/pull/1263) API Updates
   * Add support for `increment_authorization` method on resource `PaymentIntent`

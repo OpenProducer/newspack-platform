@@ -1,3 +1,19 @@
+# [1.50.0](https://github.com/Automattic/newspack-blocks/compare/v1.49.0...v1.50.0) (2022-05-18)
+
+
+### Features
+
+* improve alt text on images linked to posts ([#1118](https://github.com/Automattic/newspack-blocks/issues/1118)) ([d98f8ad](https://github.com/Automattic/newspack-blocks/commit/d98f8adc3a18b34cecd0e9d1c8b8bcf938c0e2d1))
+* update donate block styles to support keyboard navigation ([#1117](https://github.com/Automattic/newspack-blocks/issues/1117)) ([0f65dd7](https://github.com/Automattic/newspack-blocks/commit/0f65dd7e8293f611aa6d2d81e663b72ae7317931))
+
+# [1.50.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.49.0...v1.50.0-alpha.1) (2022-05-05)
+
+
+### Features
+
+* improve alt text on images linked to posts ([#1118](https://github.com/Automattic/newspack-blocks/issues/1118)) ([d98f8ad](https://github.com/Automattic/newspack-blocks/commit/d98f8adc3a18b34cecd0e9d1c8b8bcf938c0e2d1))
+* update donate block styles to support keyboard navigation ([#1117](https://github.com/Automattic/newspack-blocks/issues/1117)) ([0f65dd7](https://github.com/Automattic/newspack-blocks/commit/0f65dd7e8293f611aa6d2d81e663b72ae7317931))
+
 # [1.49.0](https://github.com/Automattic/newspack-blocks/compare/v1.48.0...v1.49.0) (2022-05-03)
 
 

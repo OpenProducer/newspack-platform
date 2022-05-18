@@ -579,7 +579,7 @@ class Advertising_Wizard extends Wizard {
 			'newspack-advertising-wizard',
 			'newspack_ads_wizard',
 			array(
-				'iab_sizes' => \Newspack_Ads\get_iab_sizes(),
+				'iab_sizes' => function_exists( '\Newspack_Ads\get_iab_sizes' ) ? \Newspack_Ads\get_iab_sizes() : [],
 			)
 		);
 	}

@@ -88,6 +88,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 										'object-fit' => $attributes['imageFit'],
 										'layout'     => 'fill',
 										'class'      => 'contain' === $attributes['imageFit'] ? 'image-fit-contain' : 'image-fit-cover',
+										'alt'        => trim( wp_strip_all_tags( get_the_title( $post_id ) ) ),
 									)
 								);
 							?>

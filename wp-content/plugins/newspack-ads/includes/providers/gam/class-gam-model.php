@@ -816,6 +816,27 @@ final class GAM_Model {
 				$targeting['category'] = array_map( 'sanitize_text_field', $categories );
 			}
 
+			// Add tags slugs to targeting.
+			$tags = wp_get_post_tags( get_the_ID(), [ 'fields' => 'slugs' ] );
+			if ( ! empty( $tags ) ) {
+				$targeting['tag'] = array_map( 'sanitize_text_field', $tags );
+			}
+
+			// Add the post authors to targeting.
+			if ( function_exists( 'get_coauthors' ) ) {
+				$authors = array_map(
+					function( $user ) {
+						return $user->user_login;
+					},
+					get_coauthors() 
+				);
+			} else {
+				$authors = [ get_the_author_meta( 'user_login' ) ];
+			}
+			if ( ! empty( $authors ) ) {
+				$targeting['author'] = array_map( 'sanitize_text_field', $authors );
+			}
+					
 			// Add post type to targeting.
 			$targeting['post_type'] = get_post_type();
 

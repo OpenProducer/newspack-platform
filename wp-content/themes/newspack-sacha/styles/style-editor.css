@@ -453,6 +453,18 @@ div[data-align=full] > .wp-block-image figcaption {
   line-height: 1.6;
   color: #515151;
 }
+.wp-block-quote p {
+  font-size: 1em;
+  font-style: normal;
+  margin-bottom: 0.5em;
+}
+.wp-block-quote.has-background {
+  padding: 30px;
+}
+.wp-block-quote.has-text-color cite,
+.wp-block-quote.has-text-color footer {
+  color: inherit;
+}
 
 /** === Pullquote === */
 .wp-block-pullquote {
@@ -637,7 +649,6 @@ div[data-align=full] > .wp-block-image figcaption {
 .wp-block-separator:not(.is-style-dots) {
   border: 0;
   border-top: 1px solid #ccc;
-  background-color: transparent;
 }
 .wp-block-separator:not(.is-style-wide):not(.is-style-dots) {
   max-width: 5rem;
@@ -650,10 +661,10 @@ div[data-align=full] > .wp-block-image figcaption {
   letter-spacing: calc( 2 * 1rem );
   padding-left: calc( 2 * 1rem );
 }
-.wp-block-separator.has-background {
-  border: 0;
+.wp-block-separator.has-background, .wp-block-separator.has-text-color {
+  border-color: currentColor;
 }
-.wp-block-separator.has-background.is-style-dots::before {
+.wp-block-separator.has-background.is-style-dots::before, .wp-block-separator.has-text-color.is-style-dots::before {
   color: inherit;
 }
 

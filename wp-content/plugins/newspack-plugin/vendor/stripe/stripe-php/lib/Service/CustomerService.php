@@ -120,6 +120,26 @@ class CustomerService extends \Stripe\Service\AbstractService
     }
 
     /**
+     * Retrieve funding instructions for a customer cash balance. If funding
+     * instructions do not yet exist for the customer, new funding instructions will be
+     * created. If funding instructions have already been created for a given customer,
+     * the same funding instructions will be retrieved. In other words, we will return
+     * the same funding instructions each time.
+     *
+     * @param string $id
+     * @param null|array $params
+     * @param null|array|\Stripe\Util\RequestOptions $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     *
+     * @return \Stripe\Customer
+     */
+    public function createFundingInstructions($id, $params = null, $opts = null)
+    {
+        return $this->request('post', $this->buildPath('/v1/customers/%s/funding_instructions', $id), $params, $opts);
+    }
+
+    /**
      * When you create a new credit card, you must specify a customer or recipient on
      * which to create it.
      *
@@ -257,6 +277,22 @@ class CustomerService extends \Stripe\Service\AbstractService
     }
 
     /**
+     * Retrieves a customer’s cash balance.
+     *
+     * @param string $parentId
+     * @param null|array $params
+     * @param null|array|\Stripe\Util\RequestOptions $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     *
+     * @return \Stripe\cash_balance
+     */
+    public function retrieveCashBalance($parentId, $params = null, $opts = null)
+    {
+        return $this->request('get', $this->buildPath('/v1/customers/%s/cash_balance', $parentId), $params, $opts);
+    }
+
+    /**
      * Retrieve a specified source for a given customer.
      *
      * @param string $parentId
@@ -354,6 +390,22 @@ class CustomerService extends \Stripe\Service\AbstractService
     public function updateBalanceTransaction($parentId, $id, $params = null, $opts = null)
     {
         return $this->request('post', $this->buildPath('/v1/customers/%s/balance_transactions/%s', $parentId, $id), $params, $opts);
+    }
+
+    /**
+     * Updates a customer’s cash balance.
+     *
+     * @param string $parentId
+     * @param null|array $params
+     * @param null|array|\Stripe\Util\RequestOptions $opts
+     *
+     * @throws \Stripe\Exception\ApiErrorException if the request fails
+     *
+     * @return \Stripe\cash_balance
+     */
+    public function updateCashBalance($parentId, $params = null, $opts = null)
+    {
+        return $this->request('post', $this->buildPath('/v1/customers/%s/cash_balance', $parentId), $params, $opts);
     }
 
     /**

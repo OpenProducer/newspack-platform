@@ -30,7 +30,9 @@ class WooCommerce_Connection {
 	public static function disable_woocommerce_setup() {
 		if ( class_exists( '\Automattic\WooCommerce\Admin\Features\OnboardingTasks\TaskLists' ) ) {
 			$task_list = \Automattic\WooCommerce\Admin\Features\OnboardingTasks\TaskLists::get_list( 'setup' );
-			$task_list->hide();
+			if ( $task_list ) {
+				$task_list->hide();
+			}
 		}
 	}
 

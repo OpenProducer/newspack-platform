@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.58.0-alpha.1
+Version: 1.58.1-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -3106,6 +3106,10 @@ amp-script .cat-links {
     margin-bottom: 0;
   }
 }
+.single.date-hidden .entry-header .entry-meta {
+  align-items: center;
+  display: flex;
+}
 .single .main-content > .post-thumbnail:first-child {
   margin-top: 2rem;
 }
@@ -5518,7 +5522,7 @@ p.has-background {
 .wp-block-quote p {
   font-size: 1em;
   font-style: normal;
-  line-height: 1.8;
+  margin-bottom: 0.5em;
 }
 .wp-block-quote cite {
   /*
@@ -5534,8 +5538,8 @@ p.has-background {
 }
 .wp-block-quote.is-large p, .wp-block-quote.is-style-large p {
   font-size: 1.4em;
-  line-height: 1.4;
   font-style: italic;
+  line-height: 1.4;
 }
 .wp-block-quote.is-large cite,
 .wp-block-quote.is-large footer, .wp-block-quote.is-style-large cite,
@@ -5554,6 +5558,9 @@ p.has-background {
   .wp-block-quote.is-large p, .wp-block-quote.is-style-large p {
     font-size: 1.4em;
   }
+}
+.wp-block-quote.has-background {
+  padding: 1.5rem;
 }
 
 .wp-block-image img {

@@ -53,7 +53,7 @@ final class Customizer {
 		\wp_enqueue_script(
 			'newspack-ads-customizer-control',
 			\plugins_url( '../../dist/customizer-control.js', __FILE__ ),
-			[ 'customize-controls', 'jquery' ],
+			[ 'customize-controls', 'jquery', 'lodash' ],
 			filemtime( dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/dist/customizer-control.js' ),
 			true
 		);
