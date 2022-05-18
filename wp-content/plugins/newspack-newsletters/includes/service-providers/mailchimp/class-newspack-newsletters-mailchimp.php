@@ -22,7 +22,6 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		$this->controller = new Newspack_Newsletters_Mailchimp_Controller( $this );
 
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
-		add_action( 'transition_post_status', [ $this, 'send' ], 10, 3 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
 		add_filter( 'newspack_newsletters_process_link', [ $this, 'process_link' ], 10, 2 );
 
@@ -513,77 +512,61 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	/**
 	 * Send a campaign.
 	 *
-	 * @param string  $new_status New status of the post.
-	 * @param string  $old_status Old status of the post.
-	 * @param WP_Post $post       Post to send.
+	 * @param WP_Post $post Post to send.
 	 *
-	 * @throws Exception Error message if sending fails.
+	 * @return true|WP_Error True if the campaign was sent or error if failed.
 	 */
-	public function send( $new_status, $old_status, $post ) {
+	public function send( $post ) {
 		$post_id = $post->ID;
 
-		// Only run if the current service provider is Mailchimp.
-		if ( 'mailchimp' !== get_option( 'newspack_newsletters_service_provider', false ) ) {
-			return;
+		// Check if campaign has already been sent and if so, don't attempt to
+		// send again.
+		$campaign_data = $this->retrieve( $post_id );
+		if ( is_wp_error( $campaign_data ) ) {
+			return $campaign_data;
+		}
+		if (
+				isset( $campaign_data['campaign']['status'] ) &&
+				in_array( $campaign_data['campaign']['status'], [ 'sent', 'sending' ], true )
+			) {
+			return true;
 		}
 
-		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
+		$sync_result = $this->sync( $post );
+
+		if ( ! $sync_result || is_wp_error( $sync_result ) ) {
 			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Post is not a Newsletter.', 'newspack-newsletters' )
+				'newspack_newsletters_error',
+				__( 'Unable to synchronize with Mailchimp.', 'newspack-newsletters' )
 			);
 		}
 
-		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
-			try {
-				// Check if campaign has already been sent and if so, don't attempt to
-				// send again.
-				$campaign_data = $this->retrieve( $post_id );
-				if (
-					isset( $campaign_data['campaign']['status'] ) &&
-					in_array( $campaign_data['campaign']['status'], [ 'sent', 'sending' ], true )
-				) {
-					return;
-				}
-
-				$sync_result = $this->sync( $post );
-
-				if ( ! $sync_result || is_wp_error( $sync_result ) ) {
-					throw new Exception(
-						__( 'Unable to synchronize with Mailchimp.', 'newspack-newsletters' )
-					);
-				}
-
-				$mc_campaign_id = get_post_meta( $post_id, 'mc_campaign_id', true );
-				if ( ! $mc_campaign_id ) {
-					throw new Exception(
-						__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
-					);
-				}
-
-				$mc = new Mailchimp( $this->api_key() );
-
-				$payload = [
-					'send_type' => 'html',
-				];
-				$this->validate(
-					$mc->post( "campaigns/$mc_campaign_id/actions/send", $payload ),
-					__( 'Error sending campaign.', 'newspack_newsletters' )
-				);
-			} catch ( Exception $e ) {
-				$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-				set_transient( $transient, $e->getMessage(), 45 );
-				// Reset publish status.
-				wp_update_post(
-					[
-						'ID'          => $post_id,
-						'post_status' => 'draft',
-					],
-					true
-				);
-				wp_die( esc_html( $e->getMessage() ) );
-			}
+		$mc_campaign_id = get_post_meta( $post_id, 'mc_campaign_id', true );
+		if ( ! $mc_campaign_id ) {
+			return new WP_Error(
+				'newspack_newsletters_error',
+				__( 'Mailchimp campaign ID not found.', 'newspack-newsletters' )
+			);
 		}
+
+		$mc = new Mailchimp( $this->api_key() );
+
+		$payload = [
+			'send_type' => 'html',
+		];
+		try {
+			$this->validate(
+				$mc->post( "campaigns/$mc_campaign_id/actions/send", $payload ),
+				__( 'Error sending campaign.', 'newspack_newsletters' )
+			);  
+		} catch ( Exception $e ) {
+			return new WP_Error(
+				'newspack_newsletters_error',
+				$e->getMessage()
+			);
+		}
+
+		return true;
 	}
 
 	/**

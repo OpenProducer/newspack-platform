@@ -199,11 +199,9 @@ final class Newspack_Newsletters_Letterhead extends \Newspack_Newsletters_Servic
 	/**
 	 * `send` will send the email - 🤞 one day.
 	 *
-	 * @param string  $new_status The new status.
-	 * @param string  $old_status The old status :(.
-	 * @param WP_POST $post The WP Post.
+	 * @param WP_Post $post The WP Post.
 	 */
-	public function send( $new_status, $old_status, $post ) {}
+	public function send( $post ) {}
 
 	/**
 	 * `sender` is set aside to set an email's sender information - that is, the

@@ -1,3 +1,43 @@
+# [1.46.0](https://github.com/Automattic/newspack-newsletters/compare/v1.45.0...v1.46.0) (2022-05-18)
+
+
+### Bug Fixes
+
+* api middleware execution logic ([#817](https://github.com/Automattic/newspack-newsletters/issues/817)) ([089c319](https://github.com/Automattic/newspack-newsletters/commit/089c31981ccf20fceca50826ce005cd7bc9ece4f))
+* ensure layout update has ID ([#797](https://github.com/Automattic/newspack-newsletters/issues/797)) ([2a099e9](https://github.com/Automattic/newspack-newsletters/commit/2a099e9ccc85177198ace23f63450e1a97933af9))
+
+
+### Features
+
+* add another layout and add scroll effect to layout picker ([#801](https://github.com/Automattic/newspack-newsletters/issues/801)) ([a17ad0d](https://github.com/Automattic/newspack-newsletters/commit/a17ad0d460924cf211f4bbf75ce29ec9aeccf651))
+* update all layouts with block visibility ([#800](https://github.com/Automattic/newspack-newsletters/issues/800)) ([744aad1](https://github.com/Automattic/newspack-newsletters/commit/744aad1bfa379bf2ec4a852fc47900567a10c80a))
+* update social links and add new block styles ([#806](https://github.com/Automattic/newspack-newsletters/issues/806)) ([59ff8b6](https://github.com/Automattic/newspack-newsletters/commit/59ff8b6cbba1c12a87beaddf8cbc9bdc6d6c814d))
+
+# [1.46.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v1.46.0-alpha.1...v1.46.0-alpha.2) (2022-05-11)
+
+
+### Bug Fixes
+
+* api middleware execution logic ([#817](https://github.com/Automattic/newspack-newsletters/issues/817)) ([089c319](https://github.com/Automattic/newspack-newsletters/commit/089c31981ccf20fceca50826ce005cd7bc9ece4f))
+
+
+### Features
+
+* update social links and add new block styles ([#806](https://github.com/Automattic/newspack-newsletters/issues/806)) ([59ff8b6](https://github.com/Automattic/newspack-newsletters/commit/59ff8b6cbba1c12a87beaddf8cbc9bdc6d6c814d))
+
+# [1.46.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.45.0...v1.46.0-alpha.1) (2022-05-05)
+
+
+### Bug Fixes
+
+* ensure layout update has ID ([#797](https://github.com/Automattic/newspack-newsletters/issues/797)) ([2a099e9](https://github.com/Automattic/newspack-newsletters/commit/2a099e9ccc85177198ace23f63450e1a97933af9))
+
+
+### Features
+
+* add another layout and add scroll effect to layout picker ([#801](https://github.com/Automattic/newspack-newsletters/issues/801)) ([a17ad0d](https://github.com/Automattic/newspack-newsletters/commit/a17ad0d460924cf211f4bbf75ce29ec9aeccf651))
+* update all layouts with block visibility ([#800](https://github.com/Automattic/newspack-newsletters/issues/800)) ([744aad1](https://github.com/Automattic/newspack-newsletters/commit/744aad1bfa379bf2ec4a852fc47900567a10c80a))
+
 # [1.45.0](https://github.com/Automattic/newspack-newsletters/compare/v1.44.0...v1.45.0) (2022-05-03)
 
 

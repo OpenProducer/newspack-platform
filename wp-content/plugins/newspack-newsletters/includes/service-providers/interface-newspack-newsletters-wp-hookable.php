@@ -22,11 +22,9 @@ interface Newspack_Newsletters_WP_Hookable_Interface {
 	/**
 	 * Send a campaign.
 	 *
-	 * @param string   $new_status New status of the post.
-	 * @param string   $old_status Old status of the post.
-	 * @param \WP_POST $post Post to send.
+	 * @param \WP_Post $post Post to send.
 	 */
-	public function send( $new_status, $old_status, $post );
+	public function send( $post );
 
 	/**
 	 * After Newsletter post is deleted, clean up by deleting corresponding ESP campaign.

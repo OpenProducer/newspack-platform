@@ -23,7 +23,6 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 		$this->controller = new Newspack_Newsletters_Campaign_Monitor_Controller( $this );
 
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
-		add_action( 'transition_post_status', [ $this, 'send' ], 10, 3 );
 
 		parent::__construct( $this );
 	}
@@ -328,75 +327,63 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 	/**
 	 * Send a campaign.
 	 *
-	 * @param string  $new_status New status of the post.
-	 * @param string  $old_status Old status of the post.
-	 * @param WP_POST $post Post to send.
+	 * @param WP_Post $post Post to send.
 	 *
-	 * @throws Exception Error message if sending fails.
+	 * @return true|WP_Error True if the campaign was sent or error if failed.
 	 */
-	public function send( $new_status, $old_status, $post ) {
+	public function send( $post ) {
 		$post_id = $post->ID;
 
-		// Only run if the current post is a newsletter.
-		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
-			return;
+		$api_key   = $this->api_key();
+		$client_id = $this->client_id();
+
+		if ( ! $api_key ) {
+			return new WP_Error(
+				'newspack_newsletter_error',
+				__( 'No Campaign Monitor API key available.', 'newspack-newsletters' )
+			);
+		}
+		if ( ! $client_id ) {
+			return new WP_Error(
+				'newspack_newsletter_error',
+				__( 'No Campaign Monitor Client ID available.', 'newspack-newsletters' ) 
+			);
 		}
 
-		// Only run if the current service provider is Campaign Monitor.
-		if ( 'campaign_monitor' !== get_option( 'newspack_newsletters_service_provider', false ) ) {
-			return;
+		$cm_campaigns = new CS_REST_Campaigns( null, [ 'api_key' => $api_key ] );
+		$args         = $this->format_campaign_args( $post_id );
+
+		// Set the current user's email address as the email to receive sent confirmation.
+		$current_user       = wp_get_current_user();
+		$confirmation_email = $current_user->user_email;
+
+		// Create a draft campaign and get the ID from the response.
+		$new_campaign = $cm_campaigns->create( $client_id, $args );
+
+		if ( ! $new_campaign->was_successful() ) {
+			return new WP_Error(
+				'newspack_newsletter_error',
+				__( 'Failed creating Campaign Monitor campaign: ', 'newspack-newsletters' ) . $new_campaign->response->Message
+			);
 		}
 
-		if ( ( 'publish' === $new_status && 'publish' !== $old_status ) || ( 'future' === $new_status && 'future' !== $old_status ) ) {
-			try {
-				$api_key   = $this->api_key();
-				$client_id = $this->client_id();
-
-				if ( ! $api_key ) {
-					throw new Exception( __( 'No Campaign Monitor API key available.', 'newspack-newsletters' ) );
-				}
-				if ( ! $client_id ) {
-					throw new Exception( __( 'No Campaign Monitor Client ID available.', 'newspack-newsletters' ) );
-				}
-
-				$cm_campaigns = new CS_REST_Campaigns( null, [ 'api_key' => $api_key ] );
-				$args         = $this->format_campaign_args( $post_id );
-				$send_date    = 'future' === $new_status ? $post->post_date : 'Immediately';
-
-				// Set the current user's email address as the email to receive sent confirmation.
-				$current_user       = wp_get_current_user();
-				$confirmation_email = $current_user->user_email;
-
-				// Create a draft campaign and get the ID from the response.
-				$new_campaign = $cm_campaigns->create( $client_id, $args );
-
-				if ( ! $new_campaign->was_successful() ) {
-					throw new Exception(
-						__( 'Failed sending Campaign Monitor test campaign: ', 'newspack-newsletters' ) . $new_campaign->response->Message
-					);
-				}
-
-				// Send the draft campaign.
-				$campaign_to_send = new CS_REST_Campaigns( $new_campaign->response, [ 'api_key' => $api_key ] );
-				$campaign_to_send->send(
-					[
-						'ConfirmationEmail' => $confirmation_email,
-						'SendDate'          => $send_date,
-					]
-				);
-			} catch ( Exception $e ) {
-				// Reset publish status.
-				wp_update_post(
-					[
-						'ID'          => $post_id,
-						'post_status' => 'draft',
-					],
-					true
-				);
-
-				wp_die( esc_html( $e->getMessage() ) );
-			}
+		try {
+			// Send the draft campaign.
+			$campaign_to_send = new CS_REST_Campaigns( $new_campaign->response, [ 'api_key' => $api_key ] );
+			$campaign_to_send->send(
+				[
+					'ConfirmationEmail' => $confirmation_email,
+					'SendDate'          => 'Immediately',
+				]
+			);
+		} catch ( Exception $e ) {
+			return new WP_Error(
+				'newspack_newsletters_campaign_monitor_error',
+				$e->getMessage()
+			);
 		}
+
+		return true;
 	}
 
 	/**

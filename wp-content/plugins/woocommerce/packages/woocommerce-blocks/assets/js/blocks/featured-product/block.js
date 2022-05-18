@@ -47,16 +47,16 @@ import {
 /**
  * Component to handle edit mode of "Featured Product".
  *
- * @param {Object} props Incoming props for the component.
- * @param {Object} props.attributes Incoming block attributes.
- * @param {function(any):any} props.debouncedSpeak Function for delayed speak.
- * @param {string} props.error Error message.
- * @param {function(any):any} props.getProduct Function for getting the product.
- * @param {boolean} props.isLoading Whether product is loading or not.
- * @param {boolean} props.isSelected Whether block is selected or not.
- * @param {Object} props.product Product object.
- * @param {function(any):any} props.setAttributes Setter for attributes.
- * @param {function():any} props.triggerUrlUpdate Function for triggering a url update for product.
+ * @param {Object}            props                  Incoming props for the component.
+ * @param {Object}            props.attributes       Incoming block attributes.
+ * @param {function(any):any} props.debouncedSpeak   Function for delayed speak.
+ * @param {string}            props.error            Error message.
+ * @param {function(any):any} props.getProduct       Function for getting the product.
+ * @param {boolean}           props.isLoading        Whether product is loading or not.
+ * @param {boolean}           props.isSelected       Whether block is selected or not.
+ * @param {Object}            props.product          Product object.
+ * @param {function(any):any} props.setAttributes    Setter for attributes.
+ * @param {function():any}    props.triggerUrlUpdate Function for triggering a url update for product.
  */
 const FeaturedProduct = ( {
 	attributes,
@@ -368,7 +368,9 @@ const FeaturedProduct = ( {
 				template={ [
 					[
 						'core/buttons',
-						{},
+						{
+							layout: { type: 'flex', justifyContent: 'center' },
+						},
 						[
 							[
 								'core/button',
@@ -378,7 +380,6 @@ const FeaturedProduct = ( {
 										'woocommerce'
 									),
 									url: product.permalink,
-									align: 'center',
 								},
 							],
 						],

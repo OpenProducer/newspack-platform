@@ -120,9 +120,10 @@ final class Newspack_Newsletters_Layouts {
 	 * @return string Content.
 	 */
 	public static function layout_token_replacement( $content, $extra = [] ) {
-		$date       = gmdate( get_option( 'date_format' ) );
-		$bg_color   = '#ffffff';
-		$text_color = '#000000';
+		$date               = gmdate( get_option( 'date_format' ) );
+		$bg_color           = '#ffffff';
+		$text_color         = '#000000';
+		$social_links_color = 'black';
 
 		// Check if service provider is Mailchimp.
 		if ( 'mailchimp' === Newspack_Newsletters::service_provider() ) {
@@ -131,13 +132,14 @@ final class Newspack_Newsletters_Layouts {
 
 		// Check if current theme is a Newspack teme.
 		if ( function_exists( 'newspack_setup' ) ) {
-			$solid_bg          = get_theme_mod( 'header_solid_background' );
-			$header_status     = get_theme_mod( 'header_color' );
-			$primary_color_hex = get_theme_mod( 'primary_color_hex' );
-			$header_color_hex  = get_theme_mod( 'header_color_hex' );
-			$header_color      = 'default' === $header_status ? $primary_color_hex : $header_color_hex;
-			$bg_color          = $solid_bg ? $header_color : '#ffffff';
-			$text_color        = newspack_get_color_contrast( $bg_color );
+			$solid_bg           = get_theme_mod( 'header_solid_background' );
+			$header_status      = get_theme_mod( 'header_color' );
+			$primary_color_hex  = get_theme_mod( 'primary_color_hex' );
+			$header_color_hex   = get_theme_mod( 'header_color_hex' );
+			$header_color       = 'default' === $header_status ? $primary_color_hex : $header_color_hex;
+			$bg_color           = $solid_bg ? $header_color : '#ffffff';
+			$text_color         = newspack_get_color_contrast( $bg_color );
+			$social_links_color = '#fff' === $text_color ? 'white' : 'black';
 		}
 
 		$sitename_block = '<!-- wp:site-title {"newsletterVisibility":"email"} /-->';
@@ -163,6 +165,8 @@ final class Newspack_Newsletters_Layouts {
 			$date
 		);
 
+		$social_links_block = '<!-- wp:social-links {"newsletterVisibility":"email","className":"is-style-filled-' . $social_links_color . '","layout":{"type":"flex","justifyContent":"right"}} --><ul class="wp-block-social-links is-style-filled-' . $social_links_color . '"><!-- wp:social-link {"url":"#","service":"facebook"} /--><!-- wp:social-link {"url":"#","service":"twitter"} /--><!-- wp:social-link {"url":"#","service":"instagram"} /--><!-- wp:social-link {"url":"#","service":"youtube"} /--></ul><!-- /wp:social-links -->';
+
 		$search = array_merge(
 			[
 				'__LOGO_OR_SITENAME__',
@@ -170,6 +174,7 @@ final class Newspack_Newsletters_Layouts {
 				'__DATE__',
 				'__DATE_RIGHT__',
 				'__DATE_CENTER__',
+				'__SOCIAL_LINKS__',
 				'__BG_COLOR__',
 				'__TEXT_COLOR__',
 			],
@@ -183,6 +188,7 @@ final class Newspack_Newsletters_Layouts {
 				$date_block,
 				$date_block_right,
 				$date_block_center,
+				$social_links_block,
 				'#ffffff' === $bg_color ? '#fafafa' : $bg_color,
 				'#ffffff' === $bg_color ? '#000000' : $text_color,
 			],

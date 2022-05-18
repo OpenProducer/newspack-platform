@@ -96,7 +96,7 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Register custom fields.
+	 * Set service provider.
 	 *
 	 * @param string $service_provider Service provider slug.
 	 */
@@ -210,6 +210,22 @@ final class Newspack_Newsletters {
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 				'default'        => -1,
+			]
+		);
+		\register_meta(
+			'post',
+			'newsletter_sent',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
+				'show_in_rest'   => [
+					'schema' => [
+						'context' => [ 'edit' ],
+					],
+				],
+				'type'           => 'integer',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+				'default'        => 0,
 			]
 		);
 		\register_meta(
@@ -459,21 +475,20 @@ final class Newspack_Newsletters {
 		}
 
 		$post_status = get_post_status_object( $post->post_status );
-		$is_sent     = 'publish' === $post_status->name;
+		$sent        = self::is_newsletter_sent( $post->ID );
 		$is_public   = get_post_meta( $post->ID, 'is_public', true );
 
-		if ( $is_sent ) {
-			$sent_date = get_the_time( 'U', $post );
-			$time_diff = time() - $sent_date;
-			$sent_date = human_time_diff( $sent_date, time() );
+		if ( $sent ) {
+			$time_diff = time() - $sent;
 
 			// Show relative date if sent within the past 24 hours.
 			if ( $time_diff < 86400 ) {
+				$sent_from_now = human_time_diff( $sent, time() );
 				/* translators: Relative time stamp of sent/published date */
-				$post_states[ $post_status->name ] = sprintf( __( 'Sent %1$s ago', 'newspack-newsletters' ), $sent_date );
+				$post_states[ $post_status->name ] = sprintf( __( 'Sent %1$s ago', 'newspack-newsletters' ), $sent_from_now );
 			} else {
 				/* translators:  Absolute time stamp of sent/published date */
-				$post_states[ $post_status->name ] = sprintf( __( 'Sent %1$s', 'newspack-newsletters' ), get_the_time( get_option( 'date_format' ), $post ) );
+				$post_states[ $post_status->name ] = sprintf( __( 'Sent %1$s', 'newspack-newsletters' ), ( new DateTime( '@' . $sent ) )->format( get_option( 'date_format' ) ) );
 			}
 		}
 
@@ -1265,6 +1280,38 @@ final class Newspack_Newsletters {
 				);
 			}
 		}
+	}
+
+	/**
+	 * Mark newsletter as sent.
+	 *
+	 * @param int $post_id Post ID.
+	 * @param int $time    Optional timestamp to mark as sent. Default is now.
+	 */
+	public static function set_newsletter_sent( $post_id, $time = 0 ) {
+		update_post_meta( $post_id, 'newsletter_sent', 0 < $time ? $time : time() );
+	}
+
+	/**
+	 * Whether the newsletter has been marked as sent.
+	 *
+	 * @param int $post_id Post ID.
+	 *
+	 * @return false|int False if not sent, or timestamp of when it was sent.
+	 */
+	public static function is_newsletter_sent( $post_id ) {
+		$sent = get_post_meta( $post_id, 'newsletter_sent', true );
+		if ( 0 < $sent ) {
+			return $sent;
+		}
+		// Legacy for sent newsletters without meta.
+		if ( 'publish' === get_post_status( $post_id ) ) {
+			$post = get_post( $post_id );
+			$sent = strtotime( $post->post_date );
+			self::set_newsletter_sent( $post_id, $sent );
+			return $sent;
+		}
+		return false;
 	}
 }
 Newspack_Newsletters::instance();

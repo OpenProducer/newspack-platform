@@ -2,9 +2,9 @@
 Contributors: automattic, mikejolley, jameskoster, claudiosanches, rodrigosprimo, peterfabian1000, vedjain, jamosova, obliviousharmony, konamiman, sadowski, wpmuguru, royho, barryhughes-1
 Tags: e-commerce, store, sales, sell, woo, shop, cart, checkout, downloadable, downloads, payments, paypal, storefront, stripe, woo commerce
 Requires at least: 5.7
-Tested up to: 5.9
+Tested up to: 6.0
 Requires PHP: 7.0
-Stable tag: 6.4.1
+Stable tag: 6.5.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -160,14 +160,11 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 6.4.1 2022-04-15 =
+= 6.5.1 2022-05-12 =
 
 **WooCommerce**
 
-- Revert - incorrect position value for registering menu pages. ([#32623](https://github.com/woocommerce/woocommerce/pull/32623))
-
-**WooCommerce Blocks - 7.2.2**
-
-- Fix - page load problem due to incorrect URL to certain assets. ([#6260](https://github.com/woocommerce/woocommerce-gutenberg-products-block/pull/6260))
+* Fix - Specify a maximum index size for the URL column in the Download Directories table. ([#32968](https://github.com/woocommerce/woocommerce/pull/32968))
+* Fix - Fix issue where FeaturePlugin class caused a conflict with older WooCommerce Admin versions. ([#32966](https://github.com/woocommerce/woocommerce/pull/32966))
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

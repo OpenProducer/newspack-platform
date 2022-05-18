@@ -8,6 +8,13 @@ import {
 	BlockControls,
 	useBlockProps,
 } from '@wordpress/block-editor';
+import { Icon, category, external } from '@wordpress/icons';
+import { SearchListControl } from '@woocommerce/editor-components/search-list-control';
+import { mapValues, toArray, sortBy } from 'lodash';
+import { getAdminLink, getSetting } from '@woocommerce/settings';
+import HeadingToolbar from '@woocommerce/editor-components/heading-toolbar';
+import BlockTitle from '@woocommerce/editor-components/block-title';
+import classnames from 'classnames';
 import {
 	Placeholder,
 	Disabled,
@@ -16,15 +23,11 @@ import {
 	Button,
 	ToolbarGroup,
 	withSpokenMessages,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
 } from '@wordpress/components';
-import { Icon, category, external } from '@wordpress/icons';
-import { SearchListControl } from '@woocommerce/editor-components/search-list-control';
-import { mapValues, toArray, sortBy } from 'lodash';
-import { getAdminLink, getSetting } from '@woocommerce/settings';
-import HeadingToolbar from '@woocommerce/editor-components/heading-toolbar';
-import BlockTitle from '@woocommerce/editor-components/block-title';
-import ToggleButtonControl from '@woocommerce/editor-components/toggle-button-control';
-import classnames from 'classnames';
 
 /**
  * Internal dependencies
@@ -121,7 +124,7 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 						'woocommerce'
 					) }
 				>
-					<ToggleButtonControl
+					<ToggleGroupControl
 						label={ __(
 							'Query Type',
 							'woocommerce'
@@ -138,56 +141,51 @@ const Edit = ( { attributes, setAttributes, debouncedSpeak } ) => {
 								  )
 						}
 						value={ queryType }
-						options={ [
-							{
-								label: __(
-									'And',
-									'woocommerce'
-								),
-								value: 'and',
-							},
-							{
-								label: __(
-									'Or',
-									'woocommerce'
-								),
-								value: 'or',
-							},
-						] }
 						onChange={ ( value ) =>
 							setAttributes( {
 								queryType: value,
 							} )
 						}
-					/>
-					<ToggleButtonControl
+					>
+						<ToggleGroupControlOption
+							value="and"
+							label={ __(
+								'And',
+								'woocommerce'
+							) }
+						/>
+						<ToggleGroupControlOption
+							value="or"
+							label={ __( 'Or', 'woocommerce' ) }
+						/>
+					</ToggleGroupControl>
+					<ToggleGroupControl
 						label={ __(
 							'Display Style',
 							'woocommerce'
 						) }
 						value={ displayStyle }
-						options={ [
-							{
-								label: __(
-									'List',
-									'woocommerce'
-								),
-								value: 'list',
-							},
-							{
-								label: __(
-									'Dropdown',
-									'woocommerce'
-								),
-								value: 'dropdown',
-							},
-						] }
 						onChange={ ( value ) =>
 							setAttributes( {
 								displayStyle: value,
 							} )
 						}
-					/>
+					>
+						<ToggleGroupControlOption
+							value="list"
+							label={ __(
+								'List',
+								'woocommerce'
+							) }
+						/>
+						<ToggleGroupControlOption
+							value="dropdown"
+							label={ __(
+								'Dropdown',
+								'woocommerce'
+							) }
+						/>
+					</ToggleGroupControl>
 					<ToggleControl
 						label={ __(
 							'Filter button',

@@ -150,7 +150,6 @@ final class BlockTypesController {
 	protected function get_block_types() {
 		global $wp_version, $pagenow;
 
-		// @todo Add a comment why some atomic blocks are included in this array.
 		$block_types = [
 			'AllReviews',
 			'FeaturedCategory',
@@ -172,7 +171,7 @@ final class BlockTypesController {
 			'AttributeFilter',
 			'StockFilter',
 			'ActiveFilters',
-			'LegacyTemplate',
+			'ClassicTemplate',
 			'ProductAddToCart',
 			'ProductButton',
 			'ProductCategoryList',
@@ -187,6 +186,18 @@ final class BlockTypesController {
 			'ProductTitle',
 		];
 
+		/**
+		 * Mini Cart blocks should be available in Site Editor, Widgets and frontend (is_admin function checks this) only.
+		 */
+		if (
+			! is_admin() ||
+			in_array( $pagenow, [ 'widgets.php', 'customize.php', 'site-editor.php' ], true ) ||
+			! empty( $_GET['page'] ) && 'gutenberg-edit-site' === $_GET['page'] // phpcs:ignore WordPress.Security.NonceVerification
+		) {
+			$block_types[] = 'MiniCart';
+			$block_types[] = 'MiniCartContents';
+		}
+
 		if ( Package::feature()->is_feature_plugin_build() ) {
 			$block_types[] = 'Checkout';
 			$block_types[] = 'Cart';
@@ -194,18 +205,6 @@ final class BlockTypesController {
 
 		if ( Package::feature()->is_experimental_build() ) {
 			$block_types[] = 'SingleProduct';
-
-			/**
-			 * Mini Cart blocks should be available in Site Editor, Widgets and frontend (is_admin function checks this) only.
-			 */
-			if (
-				'widgets.php' === $pagenow ||
-				'site-editor.php' === $pagenow || ! is_admin() ||
-				! empty( $_GET['page'] ) && 'gutenberg-edit-site' === $_GET['page'] // phpcs:ignore WordPress.Security.NonceVerification
-			) {
-				$block_types[] = 'MiniCart';
-				$block_types[] = 'MiniCartContents';
-			}
 		}
 
 		/**

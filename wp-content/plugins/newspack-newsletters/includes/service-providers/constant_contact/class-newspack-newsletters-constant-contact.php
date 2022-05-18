@@ -23,7 +23,6 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		add_action( 'update_option_newspack_newsletters_constant_contact_api_key', [ $this, 'clear_tokens' ], 10, 2 );
 		add_action( 'update_option_newspack_newsletters_constant_contact_api_secret', [ $this, 'clear_tokens' ], 10, 2 );
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
-		add_action( 'transition_post_status', [ $this, 'send' ], 10, 3 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
 
 		parent::__construct( $this );
@@ -589,58 +588,45 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	/**
 	 * Send a campaign.
 	 *
-	 * @param string  $new_status New status of the post.
-	 * @param string  $old_status Old status of the post.
-	 * @param WP_Post $post       Post to send.
+	 * @param WP_Post $post Post to send.
 	 *
-	 * @throws Exception Error message if sending fails.
+	 * @return true|WP_Error True if the campaign was sent or error if failed.
 	 */
-	public function send( $new_status, $old_status, $post ) {
+	public function send( $post ) {
 		$post_id = $post->ID;
 
-		// Only run if the current service provider is Constant Contact.
-		if ( 'constant_contact' !== get_option( 'newspack_newsletters_service_provider', false ) ) {
-			return;
+		try {
+			$sync_result = $this->sync( $post );
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletters_error', $e->getMessage() );
 		}
 
-		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
-			return;
+		if ( ! $sync_result ) {
+			return new WP_Error(
+				'newspack_newsletters_error',
+				__( 'Unable to synchronize with Constant Contact.', 'newspack-newsletters' )
+			);
 		}
 
-		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
-			try {
-				$sync_result = $this->sync( $post );
-
-				if ( ! $sync_result ) {
-					throw new Exception(
-						__( 'Unable to synchronize with Constant Contact.', 'newspack-newsletters' )
-					);
-				}
-
-				$cc_campaign_id = get_post_meta( $post_id, 'cc_campaign_id', true );
-				if ( ! $cc_campaign_id ) {
-					throw new Exception(
-						__( 'Constant Contact campaign ID not found.', 'newspack-newsletters' )
-					);
-				}
-
-				$cc = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
-
-				$cc->create_schedule( $sync_result->activity->campaign_activity_id );
-			} catch ( Exception $e ) {
-				$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-				set_transient( $transient, $e->getMessage(), 45 );
-				// Reset publish status.
-				wp_update_post(
-					[
-						'ID'          => $post_id,
-						'post_status' => 'draft',
-					],
-					true
-				);
-				wp_die( esc_html( $e->getMessage() ) );
-			}
+		$cc_campaign_id = get_post_meta( $post_id, 'cc_campaign_id', true );
+		if ( ! $cc_campaign_id ) {
+			return new WP_Error(
+				'newspack_newsletters_error',
+				__( 'Constant Contact campaign ID not found.', 'newspack-newsletters' )
+			);
 		}
+
+		try {
+			$cc = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+			$cc->create_schedule( $sync_result->activity->campaign_activity_id );
+		} catch ( Exception $e ) {
+			return new WP_Error(
+				'newspack_newsletters_error',
+				$e->getMessage()
+			);
+		}
+
+		return true;
 	}
 
 	/**

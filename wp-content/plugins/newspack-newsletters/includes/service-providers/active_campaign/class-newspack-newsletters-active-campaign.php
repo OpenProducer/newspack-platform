@@ -403,29 +403,12 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	/**
 	 * Send a campaign.
 	 *
-	 * @param string  $new_status New status of the post.
-	 * @param string  $old_status Old status of the post.
-	 * @param WP_Post $post       Post to send.
+	 * @param WP_Post $post Post to send.
 	 *
-	 * @throws Exception Error message if sending fails.
+	 * @return true|WP_Error True if the campaign was sent or error if failed.
 	 */
-	public function send( $new_status, $old_status, $post ) {
-
+	public function send( $post ) {
 		$post_id = $post->ID;
-		
-		// Only run if the current service provider is ActiveCampaign.
-		if ( 'active_campaign' !== Newspack_Newsletters::service_provider() ) {
-			return;
-		}
-
-		// Only run if changing to publish.
-		if ( 'publish' !== $new_status || 'publish' === $old_status ) {
-			return;
-		}
-
-		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
-			return;
-		}
 
 		$error = null;
 
@@ -463,19 +446,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			}
 		}
 
-		if ( $error ) {
-			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post_id, get_current_user_id() );
-			set_transient( $transient, $error->get_error_message(), 45 );
-			// Reset publish status.
-			wp_update_post(
-				[
-					'ID'          => $post_id,
-					'post_status' => 'draft',
-				],
-				true
-			);
-			wp_die( esc_html( $error->get_error_message() ) );
-		}
+		return $error ?? true;
 	}
 
 	/**

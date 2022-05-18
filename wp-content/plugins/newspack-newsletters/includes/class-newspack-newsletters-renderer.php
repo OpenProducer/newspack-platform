@@ -119,6 +119,51 @@ final class Newspack_Newsletters_Renderer {
 	}
 
 	/**
+	 * Get the social icon and color based on the block attributes.
+	 *
+	 * @param string $service_name The service name.
+	 * @param array  $block_attrs  Block attributes.
+	 *
+	 * @return array[
+	 *   'icon'  => string,
+	 *   'color' => string,
+	 * ] The icon and color or empty array if service not found.
+	 */
+	private static function get_social_icon( $service_name, $block_attrs ) {
+		$services_colors = [
+			'facebook'  => '#1977f2',
+			'instagram' => '#f00075',
+			'linkedin'  => '#0577b5',
+			'tiktok'    => '#000000',
+			'tumblr'    => '#011835',
+			'twitter'   => '#21a1f3',
+			'wordpress' => '#3499cd',
+			'youtube'   => '#ff0100',
+		];
+		if ( ! isset( $services_colors[ $service_name ] ) ) {
+			return [];
+		}
+		$icon  = 'white';
+		$color = $services_colors[ $service_name ];
+		if ( isset( $block_attrs['className'] ) ) {
+			if ( 'is-style-filled-black' === $block_attrs['className'] || 'is-style-circle-white' === $block_attrs['className'] ) {
+				$icon = 'black';
+			}
+			if ( 'is-style-filled-black' === $block_attrs['className'] || 'is-style-filled-white' === $block_attrs['className'] ) {
+				$color = 'transparent';
+			} elseif ( 'is-style-circle-black' === $block_attrs['className'] ) {
+				$color = '#000';
+			} elseif ( 'is-style-circle-white' === $block_attrs['className'] ) {
+				$color = '#fff';
+			}
+		}
+		return [
+			'icon'  => sprintf( '%s-%s.png', $icon, $service_name ),
+			'color' => $color,
+		];
+	}
+
+	/**
 	 * Get colors based on block attributes.
 	 *
 	 * @param array $block_attrs Block attributes.
@@ -561,33 +606,6 @@ final class Newspack_Newsletters_Renderer {
 			 * Social links block.
 			 */
 			case 'core/social-links':
-				$social_icons = array(
-					'wordpress' => array(
-						'color' => '#3499cd',
-						'icon'  => 'wordpress.png',
-					),
-					'facebook'  => array(
-						'color' => '#1977f2',
-						'icon'  => 'facebook.png',
-					),
-					'twitter'   => array(
-						'color' => '#21a1f3',
-						'icon'  => 'twitter.png',
-					),
-					'instagram' => array(
-						'color' => '#f00075',
-						'icon'  => 'instagram.png',
-					),
-					'linkedin'  => array(
-						'color' => '#0577b5',
-						'icon'  => 'linkedin.png',
-					),
-					'youtube'   => array(
-						'color' => '#ff0100',
-						'icon'  => 'youtube.png',
-					),
-				);
-
 				$social_wrapper_attrs = array(
 					'icon-size'     => '24px',
 					'mode'          => 'horizontal',
@@ -606,12 +624,13 @@ final class Newspack_Newsletters_Renderer {
 						$url = $link_block['attrs']['url'];
 						// Handle older version of the block, where innner blocks we named `core/social-link-<service>`.
 						$service_name = isset( $link_block['attrs']['service'] ) ? $link_block['attrs']['service'] : str_replace( 'core/social-link-', '', $link_block['blockName'] );
+						$social_icon  = self::get_social_icon( $service_name, $attrs );
 
-						if ( isset( $social_icons[ $service_name ] ) ) {
+						if ( ! empty( $social_icon ) ) {
 							$img_attrs = array(
 								'href'             => $url,
-								'src'              => plugins_url( 'assets/' . $social_icons[ $service_name ]['icon'], dirname( __FILE__ ) ),
-								'background-color' => $social_icons[ $service_name ]['color'],
+								'src'              => plugins_url( 'assets/' . $social_icon['icon'], dirname( __FILE__ ) ),
+								'background-color' => $social_icon['color'],
 								'css-class'        => 'social-element',
 							);
 
