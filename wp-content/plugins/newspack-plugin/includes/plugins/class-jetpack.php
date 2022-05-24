@@ -32,6 +32,20 @@ class Jetpack {
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'jetpack_async_scripts' ], 20 );
 		add_filter( 'newspack_amp_plus_sanitized', [ __CLASS__, 'jetpack_modules_amp_plus' ], 10, 2 );
 		add_action( 'wp_head', [ __CLASS__, 'fix_instant_search_sidebar_display' ], 10 );
+		add_filter( 'jetpack_lazy_images_skip_image_with_attributes', [ __CLASS__, 'skip_lazy_loading_on_feeds' ], 10 );
+	}
+
+	/**
+	 * Skip image lazy-loading on RSS feeds.
+	 *
+	 * @param bool $skip_lazy_loading Whether to skip lazy-loading.
+	 * @return @bool Whether to skip lazy-loading.
+	 */
+	public static function skip_lazy_loading_on_feeds( $skip_lazy_loading ) {
+		if ( is_feed() ) {
+			return true;
+		}
+		return $skip_lazy_loading;
 	}
 
 	/**
