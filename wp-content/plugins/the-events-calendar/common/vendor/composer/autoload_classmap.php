@@ -125,6 +125,7 @@ return array(
     'Tribe\\Admin\\Notice\\Marketing\\Stellar_Sale' => $baseDir . '/src/Tribe/Admin/Notice/Marketing/Stellar_Sale.php',
     'Tribe\\Admin\\Notice\\Service_Provider' => $baseDir . '/src/Tribe/Admin/Notice/Service_Provider.php',
     'Tribe\\Admin\\Notice\\WP_Version' => $baseDir . '/src/Tribe/Admin/Notice/WP_Version.php',
+    'Tribe\\Admin\\Pages' => $baseDir . '/src/Tribe/Admin/Pages.php',
     'Tribe\\Admin\\Troubleshooting' => $baseDir . '/src/Tribe/Admin/Troubleshooting.php',
     'Tribe\\Admin\\Upsell_Notice\\Main' => $baseDir . '/src/Tribe/Admin/Upsell_Notice/Main.php',
     'Tribe\\Customizer\\Control' => $baseDir . '/src/Tribe/Customizer/Control.php',

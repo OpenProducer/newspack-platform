@@ -13,6 +13,8 @@ return array(
     'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => $baseDir . '/src/Tribe/Admin/Filter_Bar/Provider.php',
     'Tribe\\Events\\Admin\\Notice\\Full_Site_Editor' => $baseDir . '/src/Tribe/Admin/Notice/Full_Site_Editor.php',
     'Tribe\\Events\\Admin\\Notice\\Legacy_Views_Deprecation' => $baseDir . '/src/Tribe/Admin/Notice/Legacy_Views_Deprecation.php',
+    'Tribe\\Events\\Admin\\Provider' => $baseDir . '/src/Tribe/Admin/Provider.php',
+    'Tribe\\Events\\Admin\\Settings' => $baseDir . '/src/Tribe/Admin/Settings.php',
     'Tribe\\Events\\Aggregator\\Processes\\Batch_Imports' => $baseDir . '/src/Tribe/Aggregator/Processes/Batch_Imports.php',
     'Tribe\\Events\\Aggregator\\Record\\Batch_Queue' => $baseDir . '/src/Tribe/Aggregator/Record/Batch_Queue.php',
     'Tribe\\Events\\Collections\\Lazy_Post_Collection' => $baseDir . '/src/Tribe/Collections/Lazy_Post_Collection.php',

@@ -83,6 +83,7 @@ return array(
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Settings' => $baseDir . '/Core/Modules/Module_With_Settings.php',
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Settings_Trait' => $baseDir . '/Core/Modules/Module_With_Settings_Trait.php',
     'Google\\Site_Kit\\Core\\Modules\\Modules' => $baseDir . '/Core/Modules/Modules.php',
+    'Google\\Site_Kit\\Core\\Modules\\REST_Dashboard_Sharing_Controller' => $baseDir . '/Core/Modules/REST_Dashboard_Sharing_Controller.php',
     'Google\\Site_Kit\\Core\\Modules\\Tags\\Module_AMP_Tag' => $baseDir . '/Core/Modules/Tags/Module_AMP_Tag.php',
     'Google\\Site_Kit\\Core\\Modules\\Tags\\Module_Tag' => $baseDir . '/Core/Modules/Tags/Module_Tag.php',
     'Google\\Site_Kit\\Core\\Modules\\Tags\\Module_Tag_Guard' => $baseDir . '/Core/Modules/Tags/Module_Tag_Guard.php',
