@@ -133,13 +133,25 @@ final class Newspack_Newsletters_Editor {
 			return;
 		}
 
+		$allowed_actions = [
+			__CLASS__ . '::enqueue_block_editor_assets',
+			'newspack_enqueue_scripts',
+			'wp_enqueue_editor_format_library_assets',
+		];
+
+		if ( isset( $GLOBALS['coauthors_plus'] ) ) {
+			$hash              = spl_object_hash( $GLOBALS['coauthors_plus'] );
+			$allowed_actions[] = $hash . 'enqueue_sidebar_plugin_assets';
+		}
+
+		/**
+		 * Filters allowed 'enqueue_block_editor_assets' actions inside a newsletter editor.
+		 *
+		 * @param string[] $allowed_actions Array of allowed actions.
+		 */
 		$allowed_actions = apply_filters(
 			'newspack_newsletters_allowed_editor_actions',
-			[
-				__CLASS__ . '::enqueue_block_editor_assets',
-				'newspack_enqueue_scripts',
-				'wp_enqueue_editor_format_library_assets',
-			]
+			$allowed_actions
 		);
 
 		$enqueue_block_editor_assets_filters = $GLOBALS['wp_filter']['enqueue_block_editor_assets']->callbacks;

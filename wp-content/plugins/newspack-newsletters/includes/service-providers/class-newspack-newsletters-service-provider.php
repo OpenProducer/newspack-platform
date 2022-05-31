@@ -43,6 +43,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 			add_action( 'rest_api_init', [ $this->controller, 'register_routes' ] );
 		}
 		add_action( 'pre_post_update', [ $this, 'pre_post_update' ], 10, 2 );
+		add_action( 'transition_post_status', [ $this, 'transition_post_status' ], 10, 3 );
 		add_filter( 'wp_insert_post_data', [ $this, 'insert_post_data' ], 10, 2 );
 	}
 
@@ -110,13 +111,59 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		}
 
 		// Send if changing from any status to publish.
-		if ( 'publish' === $new_status && 'publish' !== $old_status ) {
+		if ( ! $sent && 'publish' === $new_status && 'publish' !== $old_status ) {
 			$result = $this->send_newsletter( $post );
 			if ( is_wp_error( $result ) ) {
 				$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
 				set_transient( $transient, $result->get_error_message(), 45 );
 				wp_die( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			}
+		}
+	}
+
+	/**
+	 * Handle post status transition for scheduled newsletters.
+	 *
+	 * This is executed after the post is updated.
+	 *
+	 * Scheduling a post (future -> publish) does not trigger the
+	 * `pre_post_update` action hook because it uses the `wp_publish_post()`
+	 * function. Unfortunately, this function does not fire any action hook prior
+	 * to updating the post, so, for this case, we need to handle sending after
+	 * the post is published.
+	 *
+	 * @param string  $new_status New post status.
+	 * @param string  $old_status Old post status.
+	 * @param WP_Post $post       Post object.
+	 */
+	public function transition_post_status( $new_status, $old_status, $post ) {
+		// Only run if it's a newsletter post.
+		if ( ! Newspack_Newsletters::validate_newsletter_id( $post->ID ) ) {
+			return;
+		}
+
+		// Only run if this is the active provider.
+		if ( Newspack_Newsletters::service_provider() !== $this->service ) {
+			return;
+		}
+
+		if ( 'publish' === $new_status && 'future' === $old_status ) {
+			update_post_meta( $post->ID, 'sending_scheduled', true );
+			$result              = $this->send_newsletter( $post );
+			$error_transient_key = sprintf( 'newspack_newsletters_scheduling_error_%s', $post->ID );
+			if ( is_wp_error( $result ) ) {
+				set_transient( $error_transient_key, $result->get_error_message() );
+				wp_update_post(
+					[
+						'ID'          => $post->ID,
+						'post_status' => 'draft',
+					] 
+				);
+				wp_die( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			} else {
+				delete_transient( $error_transient_key );
+			}
+			delete_post_meta( $post->ID, 'sending_scheduled' );
 		}
 	}
 

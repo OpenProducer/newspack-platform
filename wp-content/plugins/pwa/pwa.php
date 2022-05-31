@@ -9,7 +9,7 @@
  * Plugin Name: PWA
  * Plugin URI:  https://github.com/GoogleChromeLabs/pwa-wp
  * Description: Feature plugin to bring Progressive Web App (PWA) capabilities to Core
- * Version:     0.7.0
+ * Version:     0.7.1
  * Author:      PWA Plugin Contributors
  * Author URI:  https://github.com/GoogleChromeLabs/pwa-wp/graphs/contributors
  * Text Domain: pwa
@@ -17,7 +17,7 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
 
-define( 'PWA_VERSION', '0.7.0' );
+define( 'PWA_VERSION', '0.7.1' );
 define( 'PWA_PLUGIN_FILE', __FILE__ );
 define( 'PWA_PLUGIN_DIR', dirname( __FILE__ ) );
 define( 'PWA_WORKBOX_VERSION', '6.5.3' );

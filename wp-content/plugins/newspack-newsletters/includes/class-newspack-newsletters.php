@@ -1300,17 +1300,32 @@ final class Newspack_Newsletters {
 	 * @return false|int False if not sent, or timestamp of when it was sent.
 	 */
 	public static function is_newsletter_sent( $post_id ) {
+		/** Handle scheduled newsletter state. */
+		$sending_scheduled = get_post_meta( $post_id, 'sending_scheduled', true );
+		if ( $sending_scheduled ) {
+			return false;
+		}
+
+		/** Handle scheduled newsletter error. */
+		$scheduling_error = get_transient( sprintf( 'newspack_newsletters_scheduling_error_%s', $post_id ) );
+		if ( $scheduling_error ) {
+			return false;
+		}
+
+		/** Detect meta that determines the sent state */
 		$sent = get_post_meta( $post_id, 'newsletter_sent', true );
 		if ( 0 < $sent ) {
 			return $sent;
 		}
-		// Legacy for sent newsletters without meta.
+
+		/** Legacy check for sent/publish newsletters without meta. */
 		if ( 'publish' === get_post_status( $post_id ) ) {
 			$post = get_post( $post_id );
 			$sent = strtotime( $post->post_date );
 			self::set_newsletter_sent( $post_id, $sent );
 			return $sent;
 		}
+
 		return false;
 	}
 }

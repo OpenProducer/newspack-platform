@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
+class ComposerStaticInit654002643e467df00eb8708ac77efa91
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -438,6 +438,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'YoastSEO_Vendor\\GuzzleHttp\\RetryMiddleware' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/RetryMiddleware.php',
         'YoastSEO_Vendor\\GuzzleHttp\\TransferStats' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/TransferStats.php',
         'YoastSEO_Vendor\\GuzzleHttp\\UriTemplate' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/UriTemplate.php',
+        'YoastSEO_Vendor\\GuzzleHttp\\Utils' => __DIR__ . '/../..' . '/vendor_prefixed/guzzlehttp/guzzle/src/Utils.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Grant\\AbstractGrant' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Grant/AbstractGrant.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Grant\\AuthorizationCode' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Grant/AuthorizationCode.php',
         'YoastSEO_Vendor\\League\\OAuth2\\Client\\Grant\\ClientCredentials' => __DIR__ . '/../..' . '/vendor_prefixed/league/oauth2-client/src/Grant/ClientCredentials.php',
@@ -532,7 +533,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'Yoast\\WP\\SEO\\Actions\\Addon_Installation\\Addon_Activate_Action' => __DIR__ . '/../..' . '/src/actions/addon-installation/addon-activate-action.php',
         'Yoast\\WP\\SEO\\Actions\\Addon_Installation\\Addon_Install_Action' => __DIR__ . '/../..' . '/src/actions/addon-installation/addon-install-action.php',
         'Yoast\\WP\\SEO\\Actions\\Alert_Dismissal_Action' => __DIR__ . '/../..' . '/src/actions/alert-dismissal-action.php',
-        'Yoast\\WP\\SEO\\Actions\\Configuration\\Configuration_Workout_Action' => __DIR__ . '/../..' . '/src/actions/configuration/configuration-workout-action.php',
+        'Yoast\\WP\\SEO\\Actions\\Configuration\\Configuration_Workout_Action' => __DIR__ . '/../..' . '/src/deprecated/src/actions/configuration/configuration-workout-action.php',
         'Yoast\\WP\\SEO\\Actions\\Configuration\\First_Time_Configuration_Action' => __DIR__ . '/../..' . '/src/actions/configuration/first-time-configuration-action.php',
         'Yoast\\WP\\SEO\\Actions\\Importing\\Abstract_Aioseo_Importing_Action' => __DIR__ . '/../..' . '/src/actions/importing/abstract-aioseo-importing-action.php',
         'Yoast\\WP\\SEO\\Actions\\Importing\\Aioseo\\Abstract_Aioseo_Settings_Importing_Action' => __DIR__ . '/../..' . '/src/actions/importing/aioseo/abstract-aioseo-settings-importing-action.php',
@@ -619,6 +620,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'Yoast\\WP\\SEO\\Conditionals\\Open_Graph_Conditional' => __DIR__ . '/../..' . '/src/conditionals/open-graph-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Premium_Inactive_Conditional' => __DIR__ . '/../..' . '/src/conditionals/premium-inactive-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Primary_Category_Conditional' => __DIR__ . '/../..' . '/src/conditionals/primary-category-conditional.php',
+        'Yoast\\WP\\SEO\\Conditionals\\Robots_Txt_Conditional' => __DIR__ . '/../..' . '/src/conditionals/robots-txt-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\SEMrush_Enabled_Conditional' => __DIR__ . '/../..' . '/src/conditionals/semrush-enabled-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Schema_Blocks_Conditional' => __DIR__ . '/../..' . '/src/conditionals/schema-blocks-conditional.php',
         'Yoast\\WP\\SEO\\Conditionals\\Should_Index_Links_Conditional' => __DIR__ . '/../..' . '/src/conditionals/should-index-links-conditional.php',
@@ -772,7 +774,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Addon_Installation\\Installation_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/addon-installation/installation-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Admin_Columns_Cache_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/admin-columns-cache-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Background_Indexing_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/background-indexing-integration.php',
-        'Yoast\\WP\\SEO\\Integrations\\Admin\\Configuration_Workout_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/configuration-workout-integration.php',
+        'Yoast\\WP\\SEO\\Integrations\\Admin\\Crawl_Settings_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/crawl-settings-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Cron_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/cron-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Disable_Concatenate_Scripts_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/disable-concatenate-scripts-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\First_Time_Configuration_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/first-time-configuration-integration.php',
@@ -791,6 +793,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Menu_Badge_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/menu-badge-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Migration_Error_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/migration-error-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Old_Configuration_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/old-configuration-integration.php',
+        'Yoast\\WP\\SEO\\Integrations\\Admin\\Redirects_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/redirects-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Ryte_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/ryte-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Social_Profiles_Helper' => __DIR__ . '/../..' . '/src/integrations/admin/social-profiles-helper.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Social_Templates_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/social-templates-integration.php',
@@ -815,6 +818,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Open_Graph_OEmbed' => __DIR__ . '/../..' . '/src/integrations/front-end/open-graph-oembed.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\RSS_Footer_Embed' => __DIR__ . '/../..' . '/src/integrations/front-end/rss-footer-embed.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Redirects' => __DIR__ . '/../..' . '/src/integrations/front-end/redirects.php',
+        'Yoast\\WP\\SEO\\Integrations\\Front_End\\Robots_Txt_Integration' => __DIR__ . '/../..' . '/src/integrations/front-end/robots-txt-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Schema_Accessibility_Feature' => __DIR__ . '/../..' . '/src/integrations/front-end/schema-accessibility-feature.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\Theme_Titles' => __DIR__ . '/../..' . '/src/integrations/front-end/theme-titles.php',
         'Yoast\\WP\\SEO\\Integrations\\Front_End\\WP_Robots_Integration' => __DIR__ . '/../..' . '/src/integrations/front-end/wp-robots-integration.php',
@@ -891,6 +895,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'Yoast\\WP\\SEO\\Presenters\\Admin\\Alert_Presenter' => __DIR__ . '/../..' . '/src/presenters/admin/alert-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Admin\\Auto_Update_Notification_Presenter' => __DIR__ . '/../..' . '/src/presenters/admin/auto-update-notification-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Admin\\Badge_Presenter' => __DIR__ . '/../..' . '/src/presenters/admin/badge-presenter.php',
+        'Yoast\\WP\\SEO\\Presenters\\Admin\\Beta_Badge_Presenter' => __DIR__ . '/../..' . '/src/presenters/admin/beta-badge-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Admin\\Help_Link_Presenter' => __DIR__ . '/../..' . '/src/presenters/admin/help-link-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Admin\\Indexation_List_Item_Presenter' => __DIR__ . '/../..' . '/src/deprecated/src/presenters/admin/indexation-list-item-presenter.php',
         'Yoast\\WP\\SEO\\Presenters\\Admin\\Indexation_Modal_Presenter' => __DIR__ . '/../..' . '/src/deprecated/src/presenters/admin/indexation-modal-presenter.php',
@@ -952,7 +957,7 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
         'Yoast\\WP\\SEO\\Routes\\Abstract_Action_Route' => __DIR__ . '/../..' . '/src/routes/abstract-action-route.php',
         'Yoast\\WP\\SEO\\Routes\\Abstract_Indexation_Route' => __DIR__ . '/../..' . '/src/routes/abstract-indexation-route.php',
         'Yoast\\WP\\SEO\\Routes\\Alert_Dismissal_Route' => __DIR__ . '/../..' . '/src/routes/alert-dismissal-route.php',
-        'Yoast\\WP\\SEO\\Routes\\Configuration_Workout_Route' => __DIR__ . '/../..' . '/src/routes/configuration-workout-route.php',
+        'Yoast\\WP\\SEO\\Routes\\Configuration_Workout_Route' => __DIR__ . '/../..' . '/src/deprecated/src/routes/configuration-workout-route.php',
         'Yoast\\WP\\SEO\\Routes\\First_Time_Configuration_Route' => __DIR__ . '/../..' . '/src/routes/first-time-configuration-route.php',
         'Yoast\\WP\\SEO\\Routes\\Importing_Route' => __DIR__ . '/../..' . '/src/routes/importing-route.php',
         'Yoast\\WP\\SEO\\Routes\\Indexables_Head_Route' => __DIR__ . '/../..' . '/src/routes/indexables-head-route.php',
@@ -1035,9 +1040,9 @@ class ComposerStaticInita3d10406d86d50aeff9ced1c55062df7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita3d10406d86d50aeff9ced1c55062df7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita3d10406d86d50aeff9ced1c55062df7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita3d10406d86d50aeff9ced1c55062df7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit654002643e467df00eb8708ac77efa91::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit654002643e467df00eb8708ac77efa91::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit654002643e467df00eb8708ac77efa91::$classMap;
 
         }, null, ClassLoader::class);
     }

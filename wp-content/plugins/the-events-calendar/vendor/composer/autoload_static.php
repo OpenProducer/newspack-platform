@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfe0e88ff7fca8e711f93ab3b9b4cdf1b
+class ComposerStaticInite94e8bd186eaaf92f6e28dc9adaada28
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -69,6 +69,8 @@ class ComposerStaticInitfe0e88ff7fca8e711f93ab3b9b4cdf1b
         'Tribe\\Events\\Models\\Post_Types\\Venue' => __DIR__ . '/../..' . '/src/Tribe/Models/Post_Types/Venue.php',
         'Tribe\\Events\\Service_Providers\\Context' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/Context.php',
         'Tribe\\Events\\Service_Providers\\First_Boot' => __DIR__ . '/../..' . '/src/Tribe/Service_Providers/First_Boot.php',
+        'Tribe\\Events\\Taxonomy\\Event_Tag' => __DIR__ . '/../..' . '/src/Tribe/Taxonomy/Event_Tag.php',
+        'Tribe\\Events\\Taxonomy\\Taxonomy_Provider' => __DIR__ . '/../..' . '/src/Tribe/Taxonomy/Taxonomy_Provider.php',
         'Tribe\\Events\\Views\\V2\\Assets' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Assets.php',
         'Tribe\\Events\\Views\\V2\\Customizer' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer.php',
         'Tribe\\Events\\Views\\V2\\Customizer\\Configuration' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Customizer/Configuration.php',
@@ -138,18 +140,24 @@ class ComposerStaticInitfe0e88ff7fca8e711f93ab3b9b4cdf1b
         'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Google_Calendar' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Google_Calendar.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Link_Abstract' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Link_Abstract.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Link_Interface' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Link_Interface.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Outlook_365' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Outlook_365.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Outlook_Export' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Outlook_Export.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\Outlook_Live' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/Outlook_Live.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\iCal' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/iCal.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\Links\\iCalendar_Export' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Links/iCalendar_Export.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\Request' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Request.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Single_Events' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Single_Events.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Template' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Template.php',
+        'Tribe\\Events\\Views\\V2\\iCalendar\\Traits\\Outlook_Methods' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Traits/Outlook_Methods.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\iCalendar_Handler' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/iCalendar_Handler.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfe0e88ff7fca8e711f93ab3b9b4cdf1b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfe0e88ff7fca8e711f93ab3b9b4cdf1b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitfe0e88ff7fca8e711f93ab3b9b4cdf1b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite94e8bd186eaaf92f6e28dc9adaada28::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite94e8bd186eaaf92f6e28dc9adaada28::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite94e8bd186eaaf92f6e28dc9adaada28::$classMap;
 
         }, null, ClassLoader::class);
     }
