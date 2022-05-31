@@ -77,6 +77,7 @@ call_user_func(
 		style="<?php echo esc_attr( $styles ); ?>"
 		<?php endif; ?>
 		>
+		<?php echo Newspack_Blocks::get_post_status_label(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 		<?php if ( has_post_thumbnail() && $attributes['showImage'] && $attributes['imageShape'] ) : ?>
 			<figure class="post-thumbnail">
 				<?php if ( $post_link ) : ?>

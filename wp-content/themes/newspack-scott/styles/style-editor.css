@@ -325,18 +325,15 @@ h1.wp-block-post-title {
 .wp-block-columns .wp-block-cover__inner-container {
   width: 100%;
 }
-
-/** === Columns === */
-@media only screen and (min-width: 782px) {
-  .wp-block-columns.is-style-borders [data-type="core/column"] {
-    flex-basis: calc(50% - 32px);
-  }
-  .wp-block-columns.is-style-borders [data-type="core/column"]:not(:first-child) {
-    margin-left: 64px;
-  }
-  .wp-block-columns.is-style-borders [data-type="core/column"]::after {
-    right: -32px;
-  }
+.wp-block-columns .wp-block-column > * {
+  margin-bottom: 0;
+  margin-top: 0;
+}
+.wp-block-columns .wp-block-column > *:not(:first-child) {
+  margin-top: 32px;
+}
+.wp-block-columns .wp-block-column > *:not(:last-child) {
+  margin-bottom: 32px;
 }
 
 /** === Image === */

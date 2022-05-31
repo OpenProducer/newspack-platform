@@ -10,7 +10,9 @@ import {
 	formatByline,
 	formatSponsorLogos,
 	formatSponsorByline,
+	getPostStatusLabel,
 } from '../../shared/js/utils';
+import { PostTypesPanel, PostStatusesPanel } from '../../components/editor-panels';
 
 /**
  * External dependencies
@@ -35,7 +37,6 @@ import {
 import {
 	Button,
 	ButtonGroup,
-	CheckboxControl,
 	PanelBody,
 	PanelRow,
 	RangeControl,
@@ -134,6 +135,8 @@ class Edit extends Component {
 				minHeight / 5 + 'vh',
 		};
 
+		const isNotPublished = post.post_status !== 'publish';
+
 		const postClasses = classNames(
 			{
 				'post-has-image': post.newspack_featured_image_src,
@@ -146,6 +149,7 @@ class Edit extends Component {
 		const dateFormat = __experimentalGetSettings().formats.date;
 		return (
 			<article className={ postClasses } key={ post.id } style={ styles }>
+				{ getPostStatusLabel( post ) }
 				{ showImage && post.newspack_featured_image_src && (
 					<figure className="post-thumbnail" key="thumbnail">
 						<a href="#">
@@ -246,7 +250,7 @@ class Edit extends Component {
 	};
 
 	renderInspectorControls = () => {
-		const { attributes, availablePostTypes, setAttributes, textColor, setTextColor } = this.props;
+		const { attributes, setAttributes, textColor, setTextColor } = this.props;
 
 		const {
 			authors,
@@ -556,28 +560,8 @@ class Edit extends Component {
 						</PanelRow>
 					) }
 				</PanelBody>
-				<PanelBody title={ __( 'Post Types', 'newspack-blocks' ) }>
-					{ availablePostTypes &&
-						availablePostTypes.map( ( { name, slug } ) => (
-							<PanelRow key={ slug }>
-								<CheckboxControl
-									label={ name }
-									checked={ postType.indexOf( slug ) > -1 }
-									onChange={ value => {
-										const cleanPostType = [ ...new Set( postType ) ];
-										if ( value && cleanPostType.indexOf( slug ) === -1 ) {
-											cleanPostType.push( slug );
-										} else if ( ! value && cleanPostType.indexOf( slug ) > -1 ) {
-											cleanPostType.splice( cleanPostType.indexOf( slug ), 1 );
-										}
-										setAttributes( {
-											postType: cleanPostType,
-										} );
-									} }
-								/>
-							</PanelRow>
-						) ) }
-				</PanelBody>
+				<PostTypesPanel attributes={ attributes } setAttributes={ setAttributes } />
+				<PostStatusesPanel attributes={ attributes } setAttributes={ setAttributes } />
 			</Fragment>
 		);
 	};
@@ -758,7 +742,6 @@ class Edit extends Component {
 								value={ moreButtonText }
 								onChange={ value => setAttributes( { moreButtonText: value } ) }
 								className="wp-block-button__link"
-								keepPlaceholderOnFocus
 								allowedFormats={ [] }
 							/>
 						</div>

@@ -1,3 +1,33 @@
+# [1.51.0](https://github.com/Automattic/newspack-blocks/compare/v1.50.1...v1.51.0) (2022-05-30)
+
+
+### Features
+
+* **homepage-posts:** query by post statuses ([#1114](https://github.com/Automattic/newspack-blocks/issues/1114)) ([7ec20a3](https://github.com/Automattic/newspack-blocks/commit/7ec20a39a562c9bdc90e4d10008f0b20113b9cf6)), closes [#38](https://github.com/Automattic/newspack-blocks/issues/38)
+
+# [1.51.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v1.51.0-alpha.1...v1.51.0-alpha.2) (2022-05-25)
+
+
+### Bug Fixes
+
+* force release build ([f58a2ed](https://github.com/Automattic/newspack-blocks/commit/f58a2ed069e8f1f1a0521e502180671fc6d19e58))
+* update columns block styles for WP 6.0 ([#1141](https://github.com/Automattic/newspack-blocks/issues/1141)) ([0d9583e](https://github.com/Automattic/newspack-blocks/commit/0d9583e0e7dd6f185f2fbb921af249a2252bfe94))
+
+## [1.50.1](https://github.com/Automattic/newspack-blocks/compare/v1.50.0...v1.50.1) (2022-05-25)
+
+
+### Bug Fixes
+
+* force release build ([f58a2ed](https://github.com/Automattic/newspack-blocks/commit/f58a2ed069e8f1f1a0521e502180671fc6d19e58))
+* update columns block styles for WP 6.0 ([#1141](https://github.com/Automattic/newspack-blocks/issues/1141)) ([0d9583e](https://github.com/Automattic/newspack-blocks/commit/0d9583e0e7dd6f185f2fbb921af249a2252bfe94))
+
+## [1.50.1-hotfix.1](https://github.com/Automattic/newspack-blocks/compare/v1.50.0...v1.50.1-hotfix.1) (2022-05-25)
+
+
+### Bug Fixes
+
+* remove custom column block styles ([e08db2a](https://github.com/Automattic/newspack-blocks/commit/e08db2a7ea5eb73d454c53db5ed42f75b260ca86))
+
 # [1.50.0](https://github.com/Automattic/newspack-blocks/compare/v1.49.0...v1.50.0) (2022-05-18)
 
 

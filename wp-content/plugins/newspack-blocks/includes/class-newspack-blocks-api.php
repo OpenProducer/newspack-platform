@@ -335,6 +335,7 @@ class Newspack_Blocks_API {
 				'newspack_has_custom_excerpt'     => self::newspack_blocks_has_custom_excerpt( $data ),
 				'newspack_post_format'            => self::newspack_blocks_post_format( $data ),
 				'newspack_post_sponsors'          => self::newspack_blocks_sponsor_info( $data ),
+				'post_status'                     => $post->post_status,
 				'post_type'                       => $post->post_type,
 				'post_link'                       => Newspack_Blocks::get_post_link( $post->ID ),
 			];

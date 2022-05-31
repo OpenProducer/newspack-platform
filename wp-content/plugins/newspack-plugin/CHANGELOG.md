@@ -1,3 +1,17 @@
+## [1.83.1](https://github.com/Automattic/newspack-plugin/compare/v1.83.0...v1.83.1) (2022-05-30)
+
+
+### Bug Fixes
+
+* force alpha release ([34971d8](https://github.com/Automattic/newspack-plugin/commit/34971d807e19641388ebbf65216ce0a9e7fede92))
+
+## [1.83.1-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v1.83.0...v1.83.1-alpha.1) (2022-05-27)
+
+
+### Bug Fixes
+
+* force alpha release ([34971d8](https://github.com/Automattic/newspack-plugin/commit/34971d807e19641388ebbf65216ce0a9e7fede92))
+
 # [1.83.0](https://github.com/Automattic/newspack-plugin/compare/v1.82.2...v1.83.0) (2022-05-24)
 
 

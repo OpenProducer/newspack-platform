@@ -156,6 +156,11 @@
     "textAlign": {
       "type": "string",
       "default": "left"
+    },
+    "includedPostStatuses": {
+      "type": "array",
+      "default": [ "publish" ],
+      "items": { "type": "string" }
     }
   }
 }

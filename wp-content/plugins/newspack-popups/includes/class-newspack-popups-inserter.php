@@ -618,17 +618,11 @@ final class Newspack_Popups_Inserter {
 			'f'   => $frequency,
 			'utm' => $popup['options']['utm_suppression'],
 			's'   => $popup['options']['selected_segment_id'],
-			'n'   => \Newspack_Popups_Model::has_newsletter_prompt( $popup ),
-			'd'   => \Newspack_Popups_Model::has_donation_block( $popup ),
 			't'   => $type,
 		];
 
 		if ( \Newspack_Popups_Custom_Placements::is_custom_placement_or_manual( $popup ) ) {
 			$popup_payload['c'] = $popup['options']['placement'];
-		}
-
-		if ( \Newspack_Popups_Model::is_undismissible_prompt( $popup ) ) {
-			$popup_payload['u'] = true;
 		}
 
 		return $popup_payload;

@@ -76,6 +76,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			?>
 
 			<article data-post-id="<?php echo esc_attr( $post_id ); ?>" class="<?php echo esc_attr( implode( ' ', $article_classes ) . ' ' . $post_type ); ?>">
+				<?php echo Newspack_Blocks::get_post_status_label(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				<figure class="post-thumbnail">
 					<?php if ( $post_link ) : ?>
 					<a href="<?php echo esc_url( $post_link ); ?>" rel="bookmark">

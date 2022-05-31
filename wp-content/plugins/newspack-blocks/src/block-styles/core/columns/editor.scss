@@ -1,16 +1,16 @@
 @import '../../../shared/sass/variables';
 @import '../../../shared/sass/mixins';
 
+.editor-styles-wrapper div.wp-block-columns {
+	gap: 32px;
+
+	&.is-style-borders {
+		gap: 64px;
+	}
+}
+
 .wp-block-columns {
-	@include media( mobile ) {
-		&[class*='is-style-first-col-to'] [data-type='core/column'] {
-			margin-left: 2em;
-		}
-
-		&[class*='is-style-first-col-to'] [data-type='core/column']:nth-child( 2 ) {
-			margin-left: 0;
-		}
-
+	@include media( tablet ) {
 		&.is-style-first-col-to-second [data-type='core/column']:nth-child( 2 ),
 		&.is-style-first-col-to-third [data-type='core/column']:nth-child( 2 ),
 		&.is-style-first-col-to-third [data-type='core/column']:nth-child( 3 ) {
@@ -19,7 +19,7 @@
 	}
 
 	&.is-style-borders {
-		[data-type='core/column'] {
+		> [data-type='core/column'] {
 			border-bottom: 1px solid $color__border;
 			position: relative;
 
@@ -29,16 +29,16 @@
 				border-bottom: 0;
 			}
 
-			@include media( mobile ) {
+			@include media( tablet ) {
 				border-bottom: 0;
 
 				&::after {
 					border-right: 1px solid $color__border;
-					bottom: 15px;
+					bottom: 12px;
 					content: '';
 					position: absolute;
-					right: -18px;
-					top: 15px;
+					right: -32px;
+					top: 12px;
 				}
 
 				&:nth-child( odd )::after {
@@ -56,6 +56,35 @@
 				&::after {
 					border-color: $color__border;
 				}
+			}
+		}
+
+		@include media( tablet ) {
+			&.is-style-first-col-to-second,
+			&.is-style-first-col-to-third {
+				> [data-type='core/column']:first-child::after {
+					display: none;
+				}
+			}
+
+			&.is-style-first-col-to-second > [data-type='core/column']:nth-child( 2 )::after,
+			&.is-style-first-col-to-third > [data-type='core/column']:nth-child( 3 )::after {
+				display: block;
+			}
+		}
+	}
+}
+
+/**
+ * Temporary WP<6.0 styles
+ * TODO: These styles can be removed once WP 6.0 is released.
+ */
+.editor-styles-wrapper {
+	.wp-block-columns {
+		&.is-not-stacked-on-mobile,
+		&:not( .is-not-stacked-on-mobile ) {
+			> .wp-block-column:not( :first-child ) {
+				margin-left: 0;
 			}
 		}
 	}

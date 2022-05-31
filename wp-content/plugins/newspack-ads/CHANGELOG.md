@@ -1,3 +1,17 @@
+# [1.35.0](https://github.com/Automattic/newspack-ads/compare/v1.34.0...v1.35.0) (2022-05-30)
+
+
+### Features
+
+* **gam:** block column as a bounds container ([#405](https://github.com/Automattic/newspack-ads/issues/405)) ([807ade2](https://github.com/Automattic/newspack-ads/commit/807ade2e9f66f83274b4db72cae7b0ddcf45ffda))
+
+# [1.35.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.34.0...v1.35.0-alpha.1) (2022-05-19)
+
+
+### Features
+
+* **gam:** block column as a bounds container ([#405](https://github.com/Automattic/newspack-ads/issues/405)) ([807ade2](https://github.com/Automattic/newspack-ads/commit/807ade2e9f66f83274b4db72cae7b0ddcf45ffda))
+
 # [1.34.0](https://github.com/Automattic/newspack-ads/compare/v1.33.0...v1.34.0) (2022-05-18)
 
 

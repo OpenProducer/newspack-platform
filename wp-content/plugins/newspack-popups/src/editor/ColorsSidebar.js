@@ -7,7 +7,7 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Fragment } from '@wordpress/element';
-import { RangeControl } from '@wordpress/components';
+import { RangeControl, ToggleControl } from '@wordpress/components';
 import { ColorPaletteControl } from '@wordpress/block-editor';
 
 const ColorsSidebar = ( {
@@ -15,28 +15,40 @@ const ColorsSidebar = ( {
 	onMetaFieldChange,
 	overlay_opacity,
 	overlay_color,
+	no_overlay_background,
 	isOverlay,
 } ) => (
 	<Fragment>
 		<ColorPaletteControl
 			value={ background_color }
 			onChange={ value => onMetaFieldChange( 'background_color', value || '#FFFFFF' ) }
-			label={ __( 'Background Color' ) }
+			label={ __( 'Content Background Color', 'newspack-popups' ) }
 		/>
 		{ isOverlay && (
 			<Fragment>
-				<ColorPaletteControl
-					value={ overlay_color }
-					onChange={ value => onMetaFieldChange( 'overlay_color', value || '#000000' ) }
-					label={ __( 'Overlay Color' ) }
+				<ToggleControl
+					label={ __( 'Display overlay background', 'newspack-popups' ) }
+					checked={ ! no_overlay_background }
+					value={ ! no_overlay_background }
+					onChange={ value => onMetaFieldChange( 'no_overlay_background', ! value ) }
 				/>
-				<RangeControl
-					label={ __( 'Overlay opacity' ) }
-					value={ overlay_opacity }
-					onChange={ value => onMetaFieldChange( 'overlay_opacity', value ) }
-					min={ 0 }
-					max={ 100 }
-				/>
+
+				{ ! no_overlay_background && (
+					<>
+						<ColorPaletteControl
+							value={ overlay_color }
+							onChange={ value => onMetaFieldChange( 'overlay_color', value || '#000000' ) }
+							label={ __( 'Overlay Background Color', 'newspack-popups' ) }
+						/>
+						<RangeControl
+							label={ __( 'Overlay Background Opacity', 'newspack-popups' ) }
+							value={ overlay_opacity }
+							onChange={ value => onMetaFieldChange( 'overlay_opacity', value ) }
+							min={ 0 }
+							max={ 100 }
+						/>
+					</>
+				) }
 			</Fragment>
 		) }
 	</Fragment>

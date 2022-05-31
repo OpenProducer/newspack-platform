@@ -230,72 +230,19 @@ class Maybe_Show_Campaign extends Lightweight_API {
 			$now = time();
 		}
 
+		$client_data        = $this->get_client_data( $client_id );
 		$campaign_data      = $this->get_campaign_data( $client_id, $campaign->id );
 		$init_campaign_data = $campaign_data;
-
-		// Undismissible prompts are never automatically suppressed except by frequency settings.
-		$is_undismissible = isset( $campaign->u ) && $campaign->u;
-
-		if ( ! $is_undismissible && $campaign_data['suppress_forever'] ) {
-			self::add_suppression_reason( $campaign->id, __( 'Prompt dismissed permanently.', 'newspack-popups' ) );
-			return false;
-		}
-
-		$should_display        = true;
-		$has_newsletter_prompt = ! $is_undismissible && $campaign->n;
-		// Suppressing based on UTM Medium parameter in the URL.
-		$has_utm_medium_in_url = Campaign_Data_Utils::is_url_from_email( $referer_url );
+		$should_display     = true;
 
 		// Handle referer-based conditions.
-		if ( ! $is_undismissible && ! empty( $referer_url ) ) {
+		if ( ! empty( $referer_url ) ) {
 			// Suppressing based on UTM Source parameter in the URL.
 			$utm_suppression = ! empty( $campaign->utm ) ? urldecode( $campaign->utm ) : null;
 			if ( $utm_suppression && stripos( urldecode( $referer_url ), 'utm_source=' . $utm_suppression ) ) {
 				$should_display = false;
 				self::add_suppression_reason( $campaign->id, __( 'utm_source from prompt settings matched.', 'newspack-popups' ) );
-				$campaign_data['suppress_forever'] = true;
 			}
-
-			if (
-				$has_utm_medium_in_url &&
-				$settings->suppress_newsletter_campaigns &&
-				$has_newsletter_prompt
-			) {
-				$should_display = false;
-				self::add_suppression_reason( $campaign->id, __( 'utm_medium in URL and this is a newsletter prompt.', 'newspack-popups' ) );
-				$campaign_data['suppress_forever'] = true;
-			}
-		}
-
-		$client_data = $this->get_client_data( $client_id );
-
-		$has_suppressed_newsletter_campaign = $client_data['suppressed_newsletter_campaign'];
-
-		// Handle suppressing a newsletter prompt if any newsletter prompt was dismissed.
-		if (
-			! $is_undismissible &&
-			$has_newsletter_prompt &&
-			$settings->suppress_all_newsletter_campaigns_if_one_dismissed &&
-			$has_suppressed_newsletter_campaign
-		) {
-			$should_display = false;
-			self::add_suppression_reason( $campaign->id, __( 'A newsletter prompt was dismissed and this is a newsletter prompt.', 'newspack-popups' ) );
-			$campaign_data['suppress_forever'] = true;
-		}
-
-		$has_donated        = count( $client_data['donations'] ) > 0;
-		$has_donation_block = $campaign->d;
-
-		// Handle suppressing a donation prompt if reader is a donor and appropriate setting is active.
-		if (
-			! $is_undismissible &&
-			$has_donation_block &&
-			$settings->suppress_donation_campaigns_if_donor &&
-			$has_donated
-		) {
-			$should_display = false;
-			self::add_suppression_reason( $campaign->id, __( 'Has donated and this is a donation prompt.', 'newspack-popups' ) );
-			$campaign_data['suppress_forever'] = true;
 		}
 
 		// Handle segmentation.
@@ -343,15 +290,6 @@ class Maybe_Show_Campaign extends Lightweight_API {
 				} else {
 					self::add_suppression_reason( $campaign->id, __( 'Segment does not match.', 'newspack-popups' ) );
 				}
-			}
-
-			if (
-				$campaign_segment->is_not_subscribed &&
-				$has_utm_medium_in_url &&
-				! empty( $client_data['email_subscriptions'] )
-			) {
-				// Save suppression for this prompt.
-				$campaign_data['suppress_forever'] = true;
 			}
 		}
 

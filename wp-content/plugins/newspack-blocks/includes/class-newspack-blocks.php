@@ -527,7 +527,11 @@ class Newspack_Blocks {
 			);
 		}
 
-		$post_type           = isset( $attributes['postType'] ) ? $attributes['postType'] : [ 'post' ];
+		$post_type              = isset( $attributes['postType'] ) ? $attributes['postType'] : [ 'post' ];
+		$included_post_statuses = [ 'publish' ];
+		if ( current_user_can( 'edit_others_posts' ) && isset( $attributes['includedPostStatuses'] ) ) {
+			$included_post_statuses = $attributes['includedPostStatuses'];
+		}
 		$authors             = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
 		$categories          = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
 		$tags                = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
@@ -538,7 +542,7 @@ class Newspack_Blocks {
 		$specific_mode       = isset( $attributes['specificMode'] ) ? intval( $attributes['specificMode'] ) : false;
 		$args                = array(
 			'post_type'           => $post_type,
-			'post_status'         => 'publish',
+			'post_status'         => $included_post_statuses,
 			'suppress_filters'    => false,
 			'ignore_sticky_posts' => true,
 			'has_password'        => false,
@@ -1261,6 +1265,24 @@ class Newspack_Blocks {
 		$contents = ob_get_contents();
 		ob_end_clean();
 		return $contents;
+	}
+
+	/**
+	 * Get post status label.
+	 */
+	public static function get_post_status_label() {
+		$post_status          = get_post_status();
+		$post_statuses_labels = [
+			'draft'  => __( 'Draft', 'newspack-blocks' ),
+			'future' => __( 'Scheduled', 'newspack-blocks' ),
+		];
+		if ( 'publish' !== $post_status ) {
+			ob_start();
+			?>
+				<div class="newspack-preview-label"><?php echo esc_html( $post_statuses_labels[ $post_status ] ); ?></div>
+			<?php
+			return ob_get_clean();
+		}
 	}
 }
 Newspack_Blocks::init();

@@ -25,13 +25,11 @@ final class Newspack_Popups {
 		'background_color'               => 'n_bc',
 		'display_title'                  => 'n_ti',
 		'hide_border'                    => 'n_hb',
-		'undismissible_prompt'           => 'n_u',
-		'dismiss_text'                   => 'n_dt',
-		'dismiss_text_alignment'         => 'n_da',
 		'frequency'                      => 'n_fr',
 		'overlay_color'                  => 'n_oc',
 		'overlay_opacity'                => 'n_oo',
 		'overlay_size'                   => 'n_os',
+		'no_overlay_background'          => 'n_bg',
 		'placement'                      => 'n_pl',
 		'trigger_type'                   => 'n_tt',
 		'trigger_delay'                  => 'n_td',
@@ -292,36 +290,12 @@ final class Newspack_Popups {
 
 		\register_meta(
 			'post',
-			'undismissible_prompt',
+			'no_overlay_background',
 			[
 				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
 				'show_in_rest'   => true,
 				'type'           => 'boolean',
 				'default'        => false,
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-
-		\register_meta(
-			'post',
-			'dismiss_text',
-			[
-				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
-				'show_in_rest'   => true,
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-
-		\register_meta(
-			'post',
-			'dismiss_text_alignment',
-			[
-				'object_subtype' => self::NEWSPACK_POPUPS_CPT,
-				'show_in_rest'   => true,
-				'type'           => 'string',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
@@ -708,13 +682,6 @@ final class Newspack_Popups {
 	}
 
 	/**
-	 * Get the default dismiss text.
-	 */
-	public static function get_default_dismiss_text() {
-		return __( "I'm not interested", 'newspack' );
-	}
-
-	/**
 	 * Set default fields when Pop-up is created.
 	 *
 	 * @param int     $post_id ID of post being saved.
@@ -770,13 +737,11 @@ final class Newspack_Popups {
 			case 'overlay-center':
 			case 'overlay-top':
 			case 'overlay-bottom':
-				$dismiss_text = self::get_default_dismiss_text();
 				$trigger_type = 'time';
 				break;
 			case 'above-header':
 			case 'custom':
 			default:
-				$dismiss_text = null;
 				$trigger_type = 'scroll';
 				break;
 		}
@@ -784,11 +749,11 @@ final class Newspack_Popups {
 		update_post_meta( $post_id, 'background_color', '#FFFFFF' );
 		update_post_meta( $post_id, 'display_title', false );
 		update_post_meta( $post_id, 'hide_border', false );
-		update_post_meta( $post_id, 'dismiss_text', $dismiss_text );
 		update_post_meta( $post_id, 'frequency', $frequency );
 		update_post_meta( $post_id, 'overlay_color', '#000000' );
 		update_post_meta( $post_id, 'overlay_opacity', 30 );
 		update_post_meta( $post_id, 'overlay_size', $overlay_size );
+		update_post_meta( $post_id, 'no_overlay_background', false );
 		update_post_meta( $post_id, 'placement', $placement );
 		update_post_meta( $post_id, 'trigger_type', $trigger_type );
 		update_post_meta( $post_id, 'trigger_delay', 3 );

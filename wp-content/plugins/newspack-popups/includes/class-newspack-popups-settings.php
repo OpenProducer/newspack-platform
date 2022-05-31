@@ -231,49 +231,6 @@ class Newspack_Popups_Settings {
 
 		$settings_list = [
 			[
-				'description' => __( 'Prompt Suppression', 'newspack-ads' ),
-				'help'        => __( 'Configure when newsletter prompts are automatically suppressed.', 'newspack-ads' ),
-				'section'     => 'prompt_suppression',
-				'key'         => 'active',
-				'type'        => 'boolean',
-				'public'      => true,
-				'value'       => null,
-			],
-			[
-				'section'     => 'prompt_suppression',
-				'key'         => 'suppress_newsletter_campaigns',
-				'type'        => 'boolean',
-				'value'       => get_option( 'suppress_newsletter_campaigns', true ),
-				'default'     => true,
-				'description' => __( 'Suppress newsletter prompts for subscribers', 'newspack-popups' ),
-				'help'        => __( 'Automatically suppress any dismissible prompt that contains a newsletter signup block for readers coming from a newsletter email.', 'newspack-popups' ),
-				'public'      => false,
-			],
-			[
-				'section'     => 'prompt_suppression',
-				'key'         => 'suppress_all_newsletter_campaigns_if_one_dismissed',
-				'type'        => 'boolean',
-				'value'       => get_option( 'suppress_all_newsletter_campaigns_if_one_dismissed', true ),
-				'default'     => true,
-				'description' => __( 'Suppress newsletter prompts if permanently dismissed', 'newspack-popups' ),
-				'help'        => __(
-					'Automatically suppress any dismissible prompt that contains a newsletter signup block if at least one prompt with a signup block has been permanently dismissed.',
-					'newspack-popups'
-				),
-			],
-			[
-				'section'     => 'prompt_suppression',
-				'key'         => 'suppress_donation_campaigns_if_donor',
-				'type'        => 'boolean',
-				'value'       => get_option( 'suppress_donation_campaigns_if_donor', false ),
-				'default'     => false,
-				'description' => __( 'Suppress donation prompts for donors', 'newspack-popups' ),
-				'help'        => __(
-					'Automatically suppress any dismissible prompt containing a Donate block if the reader has already donated.',
-					'newspack-popups'
-				),
-			],
-			[
 				'description' => __( 'Donor Settings', 'newspack-ads' ),
 				'help'        => __( 'Configure when readers are considered donors.', 'newspack-ads' ),
 				'section'     => 'donor_settings',
@@ -323,7 +280,7 @@ class Newspack_Popups_Settings {
 				'value'       => self::is_non_interactive(),
 				'default'     => false,
 				'description' => __( 'Non-interactive mode', 'newspack-popups' ),
-				'help'        => __( 'Use this setting in high traffic scenarios. No API requests will be made, reducing server load. Inline prompts will be shown to all users without dismissal buttons, and overlay prompts will be suppressed.', 'newspack-popups' ),
+				'help'        => __( 'Use this setting in high traffic scenarios. No API requests will be made, reducing server load. Inline prompts will be shown to all users, and overlay prompts will be suppressed.', 'newspack-popups' ),
 				'public'      => false,
 			],
 		];

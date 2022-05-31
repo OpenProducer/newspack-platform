@@ -31,12 +31,11 @@ class Lightweight_API {
 	 * @var client_data_blueprint
 	 */
 	private $client_data_blueprint = [
-		'suppressed_newsletter_campaign' => false,
-		'posts_read'                     => [],
-		'donations'                      => [],
-		'email_subscriptions'            => [],
-		'user_id'                        => false,
-		'prompts'                        => [],
+		'posts_read'          => [],
+		'donations'           => [],
+		'email_subscriptions' => [],
+		'user_id'             => false,
+		'prompts'             => [],
 	];
 
 	/**
@@ -46,7 +45,8 @@ class Lightweight_API {
 	 */
 	public function __construct() {
 		if ( $this->is_a_web_crawler() ) {
-			$this->error( 'invalid_referer' );
+			header( 'X-Robots-Tag: noindex' );
+			exit;
 		}
 		if ( ! $this->verify_referer() ) {
 			$this->error( 'invalid_referer' );
@@ -259,11 +259,8 @@ class Lightweight_API {
 		}
 
 		return [
-			'count'            => ! empty( $prompt['count'] ) ? (int) $prompt['count'] : 0,
-			'last_viewed'      => ! empty( $prompt['last_viewed'] ) ? (int) $prompt['last_viewed'] : 0,
-			// Primarily caused by permanent dismissal, but also by email signup
-			// (on a newsletter prompt) or a UTM param suppression.
-			'suppress_forever' => ! empty( $prompt['suppress_forever'] ) ? (int) $prompt['suppress_forever'] : false,
+			'count'       => ! empty( $prompt['count'] ) ? (int) $prompt['count'] : 0,
+			'last_viewed' => ! empty( $prompt['last_viewed'] ) ? (int) $prompt['last_viewed'] : 0,
 		];
 	}
 

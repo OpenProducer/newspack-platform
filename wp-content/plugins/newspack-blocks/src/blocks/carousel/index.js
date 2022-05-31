@@ -115,6 +115,11 @@ export const settings = {
 			type: 'number',
 			default: 0.75,
 		},
+		includedPostStatuses: {
+			type: 'array',
+			default: [ 'publish' ],
+			items: { type: 'string' },
+		},
 	},
 	supports: {
 		html: false,

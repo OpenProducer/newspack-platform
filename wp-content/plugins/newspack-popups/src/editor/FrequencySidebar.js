@@ -21,7 +21,7 @@ const FrequencySidebar = ( { frequency, onMetaFieldChange, isOverlay, utm_suppre
 					{ value: 'daily', label: __( 'Once a day', 'newspack-popups' ) },
 					{
 						value: 'always',
-						label: __( 'Until dismissed', 'newspack-popups' ),
+						label: __( 'Every page view', 'newspack-popups' ),
 						disabled: isOverlay,
 					},
 				] }

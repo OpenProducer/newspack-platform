@@ -27,6 +27,10 @@ import {
 	parseDynamicURL,
 } from './utils';
 
+// If amp-analytics was loaded anyway (e.g. via another plugin, or a custom header script),
+// it should not be polyfilled.
+const shouldPolyfillAMPAnalytics = () => undefined === customElements.get( 'amp-analytics' );
+
 const getAnalyticsConfigs = () =>
 	[ ...document.querySelectorAll( 'amp-analytics' ) ].map( ampAnalyticsElement => ( {
 		type: ( ampAnalyticsElement.getAttribute( 'type' ) || '' ).trim(),
@@ -39,6 +43,9 @@ const getAnalyticsConfigs = () =>
 	} ) );
 
 const manageAnalyticsLinkers = () => {
+	if ( ! shouldPolyfillAMPAnalytics() ) {
+		return;
+	}
 	getAnalyticsConfigs().forEach( config => {
 		// Linker reader – if incoming from AMP Cache, read linker param and set cookie and a linker-less URL.
 		// https://github.com/ampproject/amphtml/blob/master/extensions/amp-analytics/linker-id-receiving.md
@@ -53,6 +60,9 @@ const manageAnalyticsLinkers = () => {
 };
 
 const manageAnalyticsEvents = () => {
+	if ( ! shouldPolyfillAMPAnalytics() ) {
+		return;
+	}
 	getAnalyticsConfigs().forEach( ( { type, config, requests, triggers } ) => {
 		/**
 		 * Fetch remote GTAG config and trigger GTAG reporting using it.

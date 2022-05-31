@@ -1,37 +1,41 @@
 @import '../../../shared/sass/variables';
 @import '../../../shared/sass/mixins';
 
-.wp-block-columns {
-	&.is-not-stack-on-mobile {
-		margin-left: -16px;
-		max-width: calc( 100% + 32px );
-		width: calc( 100% + 32px );
+div.wp-block-columns {
+	gap: 32px;
+
+	&.is-style-borders {
+		gap: 64px;
 	}
 
-	@include media( mobile ) {
-		flex-wrap: nowrap;
-		margin-left: -16px;
-		max-width: calc( 100% + 32px );
-		width: calc( 100% + 32px );
+	@include media( tabletonly ) {
+		&.is-not-stacked-on-mobile {
+			gap: 20px;
 
+			&.is-style-borders {
+				gap: 40px;
+			}
+		}
+	}
+}
+
+.wp-block-columns {
+	@include media( tablet ) {
 		&.is-style-first-col-to-second .wp-block-column:nth-child( 2 ) {
 			order: -1;
 		}
 
-		&.is-style-first-col-to-third .wp-block-column:nth-child( 2 ),
-		&.is-style-first-col-to-third .wp-block-column:nth-child( 3 ) {
-			order: -1;
+		&.is-style-first-col-to-third {
+			.wp-block-column:nth-child( 2 ),
+			.wp-block-column:nth-child( 3 ) {
+				order: -1;
+			}
 		}
 	}
 
 	&.is-style-borders {
 		> .wp-block-column {
 			position: relative;
-			margin-bottom: 64px;
-
-			&:last-child {
-				margin-bottom: 0;
-			}
 
 			&::after {
 				border: 0 solid $color__border;
@@ -47,7 +51,7 @@
 				display: none;
 			}
 
-			@include media( mobile ) {
+			@include media( tablet ) {
 				margin-bottom: 0;
 
 				&::after {
@@ -55,97 +59,78 @@
 					border-top-width: 0;
 					bottom: 0;
 					left: auto;
-					right: -16px;
+					right: -32px;
 					top: 0;
 				}
 			}
 		}
+
+		@include media( tablet ) {
+			&.is-style-first-col-to-second,
+			&.is-style-first-col-to-third {
+				.wp-block-column:first-child::after {
+					display: none;
+				}
+			}
+
+			&.is-style-first-col-to-second .wp-block-column:nth-child( 2 )::after,
+			&.is-style-first-col-to-third .wp-block-column:nth-child( 3 )::after {
+				display: block;
+			}
+		}
 	}
 
 	&.is-not-stacked-on-mobile {
-		> .wp-block-column,
-		> .wp-block-column:not( :first-child ),
-		> .wp-block-column:nth-child( 2n ) {
-			margin: 0 16px;
-		}
-
-		&.is-style-borders > .wp-block-column {
-			&::after {
-				border-right-width: 1px;
-				border-top-width: 0;
-				bottom: 0;
-				left: auto;
-				right: -16px;
-				top: 0;
-			}
-		}
-	}
-
-	&:not( .is-not-stacked-on-mobile ) {
-		> .wp-block-column {
-			margin-bottom: 32px;
-
-			&:last-child {
-				margin-bottom: 0;
-			}
-		}
-
 		&.is-style-borders {
 			> .wp-block-column {
-				margin-bottom: 64px;
+				&::after {
+					border-right-width: 1px;
+					border-top-width: 0;
+					bottom: 0;
+					left: auto;
+					right: -20px;
+					top: 0;
 
-				&:last-child {
-					margin-bottom: 0;
-				}
-			}
-		}
-
-		@include media( mobile ) {
-			&.is-style-borders > .wp-block-column,
-			> .wp-block-column,
-			> .wp-block-column:not( :first-child ),
-			> .wp-block-column:nth-child( 2n ) {
-				margin: 0 16px;
-			}
-		}
-	}
-
-	&:not( .is-not-stacked-on-mobile ),
-	&.is-not-stacked-on-mobile {
-		&.is-style-borders {
-			@include media( tablet ) {
-				margin-left: -24px;
-				max-width: calc( 100% + 48px );
-				width: calc( 100% + 48px );
-
-				> .wp-block-column,
-				> .wp-block-column:not( :first-child ),
-				> .wp-block-column:nth-child( 2n ) {
-					margin-left: 24px;
-					margin-right: 24px;
-
-					&::after {
-						right: -24px;
-					}
-				}
-			}
-
-			@include media( desktop ) {
-				margin-left: -32px;
-				max-width: calc( 100% + 64px );
-				width: calc( 100% + 64px );
-
-				> .wp-block-column,
-				> .wp-block-column:not( :first-child ),
-				> .wp-block-column:nth-child( 2n ) {
-					margin-left: 32px;
-					margin-right: 32px;
-
-					&::after {
+					@include media( tablet ) {
 						right: -32px;
 					}
 				}
 			}
+
+			&.is-style-first-col-to-second,
+			&.is-style-first-col-to-third {
+				> .wp-block-column:first-child::after {
+					display: none;
+				}
+			}
+
+			&.is-style-first-col-to-second > .wp-block-column:nth-child( 2 )::after,
+			&.is-style-first-col-to-third > .wp-block-column:nth-child( 3 )::after {
+				display: block;
+			}
 		}
+	}
+}
+
+/**
+ * Temporary WP<6.0 styles
+ * TODO: These styles can be removed once WP 6.0 is released.
+ */
+
+/* stylelint-disable no-duplicate-selectors  */
+.wp-block-columns {
+	&.is-not-stacked-on-mobile,
+	&:not( .is-not-stacked-on-mobile ) {
+		> .wp-block-column:not( :first-child ) {
+			margin-left: 0;
+		}
+	}
+}
+/* stylelint-enable */
+
+@media ( min-width: 600px ) and ( max-width: 781px ) {
+	.wp-block-columns:not( .is-not-stacked-on-mobile ) > .wp-block-column:not( :only-child ) {
+		flex-basis: unset !important;
+		flex-grow: 1;
 	}
 }

@@ -225,13 +225,11 @@ final class Newspack_Popups_Model {
 				'background_color'               => filter_input( INPUT_GET, 'n_bc', FILTER_SANITIZE_STRING ),
 				'display_title'                  => filter_input( INPUT_GET, 'n_ti', FILTER_VALIDATE_BOOLEAN ),
 				'hide_border'                    => filter_input( INPUT_GET, 'n_hb', FILTER_VALIDATE_BOOLEAN ),
-				'undismissible_prompt'           => filter_input( INPUT_GET, 'n_u', FILTER_VALIDATE_BOOLEAN ),
-				'dismiss_text'                   => filter_input( INPUT_GET, 'n_dt', FILTER_SANITIZE_STRING ),
-				'dismiss_text_alignment'         => filter_input( INPUT_GET, 'n_da', FILTER_SANITIZE_STRING ),
 				'frequency'                      => filter_input( INPUT_GET, 'n_fr', FILTER_SANITIZE_STRING ),
 				'overlay_color'                  => filter_input( INPUT_GET, 'n_oc', FILTER_SANITIZE_STRING ),
 				'overlay_opacity'                => filter_input( INPUT_GET, 'n_oo', FILTER_SANITIZE_STRING ),
 				'overlay_size'                   => filter_input( INPUT_GET, 'n_os', FILTER_SANITIZE_STRING ),
+				'no_overlay_background'          => filter_input( INPUT_GET, 'n_bg', FILTER_VALIDATE_BOOLEAN ),
 				'placement'                      => filter_input( INPUT_GET, 'n_pl', FILTER_SANITIZE_STRING ),
 				'trigger_type'                   => filter_input( INPUT_GET, 'n_tt', FILTER_SANITIZE_STRING ),
 				'trigger_delay'                  => filter_input( INPUT_GET, 'n_td', FILTER_SANITIZE_STRING ),
@@ -346,15 +344,13 @@ final class Newspack_Popups_Model {
 	public static function get_popup_options( $id, $options = null ) {
 		$post_options = isset( $options ) ? $options : [
 			'background_color'               => get_post_meta( $id, 'background_color', true ),
-			'undismissible_prompt'           => get_post_meta( $id, 'undismissible_prompt', true ),
-			'dismiss_text'                   => get_post_meta( $id, 'dismiss_text', true ),
-			'dismiss_text_alignment'         => get_post_meta( $id, 'dismiss_text_alignment', true ),
 			'display_title'                  => get_post_meta( $id, 'display_title', true ),
 			'hide_border'                    => get_post_meta( $id, 'hide_border', true ),
 			'frequency'                      => get_post_meta( $id, 'frequency', true ),
 			'overlay_color'                  => get_post_meta( $id, 'overlay_color', true ),
 			'overlay_opacity'                => get_post_meta( $id, 'overlay_opacity', true ),
 			'overlay_size'                   => get_post_meta( $id, 'overlay_size', true ),
+			'no_overlay_background'          => get_post_meta( $id, 'no_overlay_background', true ),
 			'placement'                      => get_post_meta( $id, 'placement', true ),
 			'trigger_type'                   => get_post_meta( $id, 'trigger_type', true ),
 			'trigger_delay'                  => get_post_meta( $id, 'trigger_delay', true ),
@@ -389,13 +385,11 @@ final class Newspack_Popups_Model {
 				'background_color'               => '#FFFFFF',
 				'display_title'                  => false,
 				'hide_border'                    => false,
-				'undismissible_prompt'           => false,
-				'dismiss_text'                   => '',
-				'dismiss_text_alignment'         => 'center',
 				'frequency'                      => 'always',
 				'overlay_color'                  => '#000000',
 				'overlay_opacity'                => 30,
 				'overlay_size'                   => 'medium',
+				'no_overlay_background'          => false,
 				'placement'                      => 'inline',
 				'trigger_type'                   => 'time',
 				'trigger_delay'                  => 0,
@@ -737,31 +731,6 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Does the popup have a donation block?
-	 *
-	 * @param object $popup The popup object.
-	 * @return boolean True if popup has a donation block.
-	 */
-	public static function has_donation_block( $popup ) {
-		return false !== strpos( $popup['content'], 'wp:newspack-blocks/donate' );
-	}
-
-	/**
-	 * Is the prompt undismissible?
-	 * Only inline, custom placement, and manual-only prompts can be undismissible.
-	 *
-	 * @param object $popup The popup object.
-	 * @return boolean True if popup is undismissible.
-	 */
-	public static function is_undismissible_prompt( $popup ) {
-		if ( self::is_overlay( $popup ) ) {
-			return false;
-		}
-
-		return isset( $popup['options'] ) && isset( $popup['options']['undismissible_prompt'] ) && $popup['options']['undismissible_prompt'];
-	}
-
-	/**
 	 * Insert amp-analytics tracking code.
 	 *
 	 * @param object $popup The popup object.
@@ -903,7 +872,7 @@ final class Newspack_Popups_Model {
 		if ( 'action' === $type ) {
 			return $element_id; // Just use the id, since this class will be shared.
 		}
-		$types      = [ 'dismiss', 'not-interested' ];
+		$types      = [ 'dismiss' ];
 		$type_index = array_search( $type, $types );
 		return $element_id . $type_index; // Use a unique class name.
 	}
@@ -945,12 +914,11 @@ final class Newspack_Popups_Model {
 			$popup_id,
 			0 < count( $segments ) ? implode( '; ', $segments ) : __( 'Everyone', 'newspack-popups' )
 		);
-		$has_link                = preg_match( '/<a\s/', $body ) !== 0;
-		$newspack_form_class     = apply_filters( 'newspack_campaigns_form_class', '.newspack-subscribe-form' );
-		$newspack_form_class     = '.' === substr( $newspack_form_class, 0, 1 ) ? substr( $newspack_form_class, 1 ) : $newspack_form_class; // Strip the "." class selector.
-		$has_form                = preg_match( '/<form\s|mc4wp-form|\[gravityforms\s|' . $newspack_form_class . '/', $body ) !== 0;
-		$has_dismiss_form        = self::is_overlay( $popup );
-		$has_not_interested_form = $popup['options']['dismiss_text'];
+		$has_link            = preg_match( '/<a\s/', $body ) !== 0;
+		$newspack_form_class = apply_filters( 'newspack_campaigns_form_class', '.newspack-subscribe-form' );
+		$newspack_form_class = '.' === substr( $newspack_form_class, 0, 1 ) ? substr( $newspack_form_class, 1 ) : $newspack_form_class; // Strip the "." class selector.
+		$has_form            = preg_match( '/<form\s|mc4wp-form|\[gravityforms\s|' . $newspack_form_class . '/', $body ) !== 0;
+		$has_dismiss_form    = self::is_overlay( $popup );
 
 		$analytics_events = [
 			[
@@ -996,15 +964,6 @@ final class Newspack_Popups_Model {
 				'non_interaction' => true,
 			];
 		}
-		if ( $has_not_interested_form ) {
-			$analytics_events[] = [
-				'amp_on'          => 'amp-form-submit-success',
-				'on'              => 'submit',
-				'element'         => '.' . self::get_form_class( 'not-interested', $element_id ),
-				'event_name'      => __( 'Permanent Dismissal', 'newspack-popups' ),
-				'non_interaction' => true,
-			];
-		}
 
 		foreach ( $analytics_events as &$event ) {
 			$event['id']             = self::get_uniqid();
@@ -1043,38 +1002,6 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Get permanent dismissal form markup.
-	 *
-	 * @param string $element_id Element ID.
-	 * @param object $popup Popup.
-	 */
-	private static function render_permanent_dismissal_form( $element_id, $popup ) {
-		$dismiss_text = $popup['options']['dismiss_text'];
-
-		if ( empty( $dismiss_text ) ) {
-			return '';
-		}
-
-		$endpoint               = self::get_reader_endpoint();
-		$hidden_fields          = self::get_hidden_fields( $popup );
-		$dismiss_text_alignment = $popup['options']['dismiss_text_alignment'];
-		?>
-			<form class="popup-not-interested-form <?php echo esc_attr( self::get_form_class( 'not-interested', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?> align-<?php echo esc_attr( $dismiss_text_alignment ); ?>"
-				method="POST"
-				action-xhr="<?php echo esc_url( $endpoint ); ?>"
-				target="_top">
-					<?php echo $hidden_fields; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				<input
-					name="suppress_forever"
-					type="hidden"
-					value="1"
-				/>
-				<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" aria-label="<?php esc_attr( $dismiss_text ); ?>" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>"><?php echo esc_html( $dismiss_text ); ?></button>
-			</form>
-		<?php
-	}
-
-	/**
 	 * Get data-popup-status attribute for use in previews, if viewing as an admin.
 	 *
 	 * @param object $popup Popup.
@@ -1105,21 +1032,19 @@ final class Newspack_Popups_Model {
 		}
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 
-		$element_id             = self::get_uniqid();
-		$endpoint               = self::get_reader_endpoint();
-		$display_title          = $popup['options']['display_title'];
-		$hide_border            = $popup['options']['hide_border'];
-		$hidden_fields          = self::get_hidden_fields( $popup );
-		$dismiss_text           = $popup['options']['dismiss_text'];
-		$dismiss_text_alignment = $popup['options']['dismiss_text_alignment'];
-		$is_newsletter_prompt   = self::has_newsletter_prompt( $popup );
-		$classes                = [ 'newspack-popup' ];
-		$classes[]              = 'above_header' === $popup['options']['placement'] ? 'newspack-above-header-popup' : null;
-		$classes[]              = ! self::is_above_header( $popup ) ? 'newspack-inline-popup' : null;
-		$classes[]              = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
-		$classes[]              = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
-		$classes[]              = $hide_border ? 'newspack-lightbox-no-border' : null;
-		$classes[]              = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
+		$element_id           = self::get_uniqid();
+		$endpoint             = self::get_reader_endpoint();
+		$display_title        = $popup['options']['display_title'];
+		$hide_border          = $popup['options']['hide_border'];
+		$hidden_fields        = self::get_hidden_fields( $popup );
+		$is_newsletter_prompt = self::has_newsletter_prompt( $popup );
+		$classes              = [ 'newspack-popup' ];
+		$classes[]            = 'above_header' === $popup['options']['placement'] ? 'newspack-above-header-popup' : null;
+		$classes[]            = ! self::is_above_header( $popup ) ? 'newspack-inline-popup' : null;
+		$classes[]            = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
+		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
+		$classes[]            = $hide_border ? 'newspack-lightbox-no-border' : null;
+		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
 
 		$analytics_events = self::get_analytics_events( $popup, $body, $element_id );
 		if ( ! empty( $analytics_events ) ) {
@@ -1147,9 +1072,6 @@ final class Newspack_Popups_Model {
 					<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
 				<?php endif; ?>
 				<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				<?php if ( ! self::is_undismissible_prompt( $popup ) && ! Newspack_Popups_Settings::is_non_interactive() ) : ?>
-					<?php echo self::render_permanent_dismissal_form( $element_id, $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				<?php endif; ?>
 			</amp-layout>
 		<?php
 		return ob_get_clean();
@@ -1184,24 +1106,24 @@ final class Newspack_Popups_Model {
 		}
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 
-		$element_id             = self::get_uniqid();
-		$endpoint               = self::get_reader_endpoint();
-		$dismiss_text           = $popup['options']['dismiss_text'];
-		$dismiss_text_alignment = $popup['options']['dismiss_text_alignment'];
-		$display_title          = $popup['options']['display_title'];
-		$hide_border            = $popup['options']['hide_border'];
-		$overlay_opacity        = absint( $popup['options']['overlay_opacity'] ) / 100;
-		$overlay_color          = $popup['options']['overlay_color'];
-		$overlay_size           = $popup['options']['overlay_size'];
-		$hidden_fields          = self::get_hidden_fields( $popup );
-		$is_newsletter_prompt   = self::has_newsletter_prompt( $popup );
-		$classes                = array( 'newspack-lightbox', 'newspack-popup', 'newspack-lightbox-placement-' . $popup['options']['placement'], 'newspack-lightbox-size-' . $overlay_size );
-		$classes[]              = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
-		$classes[]              = $hide_border ? 'newspack-lightbox-no-border' : null;
-		$classes[]              = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;
-		$wrapper_classes        = [ 'newspack-popup-wrapper' ];
-		$wrapper_classes[]      = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
-		$is_scroll_triggered    = 'scroll' === $popup['options']['trigger_type'];
+		$element_id            = self::get_uniqid();
+		$endpoint              = self::get_reader_endpoint();
+		$display_title         = $popup['options']['display_title'];
+		$hide_border           = $popup['options']['hide_border'];
+		$overlay_opacity       = absint( $popup['options']['overlay_opacity'] ) / 100;
+		$overlay_color         = $popup['options']['overlay_color'];
+		$overlay_size          = $popup['options']['overlay_size'];
+		$no_overlay_background = $popup['options']['no_overlay_background'];
+		$hidden_fields         = self::get_hidden_fields( $popup );
+		$is_newsletter_prompt  = self::has_newsletter_prompt( $popup );
+		$classes               = array( 'newspack-lightbox', 'newspack-popup', 'newspack-lightbox-placement-' . $popup['options']['placement'], 'newspack-lightbox-size-' . $overlay_size );
+		$classes[]             = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
+		$classes[]             = $hide_border ? 'newspack-lightbox-no-border' : null;
+		$classes[]             = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;
+		$classes[]             = $no_overlay_background ? 'newspack-lightbox-no-overlay' : null;
+		$wrapper_classes       = [ 'newspack-popup-wrapper' ];
+		$wrapper_classes[]     = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
+		$is_scroll_triggered   = 'scroll' === $popup['options']['trigger_type'];
 
 		add_filter(
 			'newspack_analytics_events',
@@ -1228,8 +1150,7 @@ final class Newspack_Popups_Model {
 						<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
 					<?php endif; ?>
 					<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					<?php echo self::render_permanent_dismissal_form( $element_id, $popup ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					<form class="popup-dismiss-form <?php echo esc_attr( self::get_form_class( 'dismiss', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?> align-<?php echo esc_attr( $dismiss_text_alignment ); ?>"
+					<form class="popup-dismiss-form <?php echo esc_attr( self::get_form_class( 'dismiss', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?>"
 						method="POST"
 						action-xhr="<?php echo esc_url( $endpoint ); ?>"
 						target="_top">
@@ -1240,13 +1161,15 @@ final class Newspack_Popups_Model {
 					</form>
 				</div>
 			</div>
-			<form class="popup-dismiss-form <?php echo esc_attr( self::get_form_class( 'dismiss', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?>"
-				method="POST"
-				action-xhr="<?php echo esc_url( $endpoint ); ?>"
-				target="_top">
-				<?php echo $hidden_fields; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-				<button style="opacity: <?php echo floatval( $overlay_opacity ); ?>;background-color:<?php echo esc_attr( $overlay_color ); ?>;" class="newspack-lightbox-shim" on="tap:<?php echo esc_attr( $element_id ); ?>.hide"></button>
-			</form>
+			<?php if ( ! $no_overlay_background ) : ?>
+				<form class="popup-dismiss-form <?php echo esc_attr( self::get_form_class( 'dismiss', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?>"
+					method="POST"
+					action-xhr="<?php echo esc_url( $endpoint ); ?>"
+					target="_top">
+					<?php echo $hidden_fields; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<button style="opacity: <?php echo floatval( $overlay_opacity ); ?>;background-color:<?php echo esc_attr( $overlay_color ); ?>;" class="newspack-lightbox-shim" on="tap:<?php echo esc_attr( $element_id ); ?>.hide"></button>
+				</form>
+			<?php endif; ?>
 		</amp-layout>
 		<?php if ( $is_scroll_triggered ) : ?>
 			<div id="page-position-marker" style="position: absolute; top: <?php echo esc_attr( $popup['options']['trigger_scroll_progress'] ); ?>%"></div>

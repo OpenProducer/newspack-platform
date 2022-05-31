@@ -99,6 +99,7 @@ final class GAM_Scripts {
 			$bounds_selectors = apply_filters(
 				'newspack_ads_gam_bounds_selectors',
 				[
+					'.wp-block-column',
 					'.entry-content',
 					'.sidebar',
 					'.widget-area',

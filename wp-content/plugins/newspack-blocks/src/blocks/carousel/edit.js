@@ -18,7 +18,6 @@ import {
 	BaseControl,
 	Button,
 	ButtonGroup,
-	CheckboxControl,
 	PanelBody,
 	PanelRow,
 	Placeholder,
@@ -34,12 +33,14 @@ import { decodeEntities } from '@wordpress/html-entities';
  * Internal dependencies
  */
 import QueryControls from '../../components/query-controls';
+import { PostTypesPanel, PostStatusesPanel } from '../../components/editor-panels';
 import createSwiper from './create-swiper';
 import {
 	formatAvatars,
 	formatByline,
 	formatSponsorLogos,
 	formatSponsorByline,
+	getPostStatusLabel,
 } from '../../shared/js/utils';
 // Use same posts store as Homepage Posts block.
 import { postsBlockSelector, postsBlockDispatch, shouldReflow } from '../homepage-articles/utils';
@@ -143,14 +144,7 @@ class Edit extends Component {
 	}
 
 	render() {
-		const {
-			attributes,
-			availablePostTypes,
-			className,
-			setAttributes,
-			latestPosts,
-			isUIDisabled,
-		} = this.props;
+		const { attributes, className, setAttributes, latestPosts, isUIDisabled } = this.props;
 		const {
 			aspectRatio,
 			authors,
@@ -271,6 +265,7 @@ class Edit extends Component {
 										}` }
 										key={ post.id }
 									>
+										{ getPostStatusLabel( post ) }
 										<figure className="post-thumbnail">
 											<a href="#" rel="bookmark">
 												{ post.newspack_featured_image_src ? (
@@ -280,7 +275,7 @@ class Edit extends Component {
 														alt=""
 													/>
 												) : (
-													<div className="wp-block-newspack-blocks-carousel__placeholder"></div>
+													<div className="wp-block-newspack-blocks-carousel__placeholder" />
 												) }
 											</a>
 										</figure>
@@ -393,7 +388,6 @@ class Edit extends Component {
 										const isCurrent = aspectRatio === option.value;
 										return (
 											<Button
-												isLarge
 												isPrimary={ isCurrent }
 												aria-pressed={ isCurrent }
 												aria-label={ option.label }
@@ -428,7 +422,6 @@ class Edit extends Component {
 									aria-label={ __( 'Image Fit', 'newspack-blocks' ) }
 								>
 									<Button
-										isLarge
 										isPrimary={ 'cover' === imageFit }
 										aria-pressed={ 'cover' === imageFit }
 										aria-label={ __( 'Cover', 'newspack-blocks' ) }
@@ -437,7 +430,6 @@ class Edit extends Component {
 										{ __( 'Cover', 'newspack-blocks' ) }
 									</Button>
 									<Button
-										isLarge
 										isPrimary={ 'contain' === imageFit }
 										aria-pressed={ 'contain' === imageFit }
 										aria-label={ __( 'Contain', 'newspack-blocks' ) }
@@ -530,28 +522,8 @@ class Edit extends Component {
 							</PanelRow>
 						) }
 					</PanelBody>
-					<PanelBody title={ __( 'Post Types', 'newspack-blocks' ) }>
-						{ availablePostTypes &&
-							availablePostTypes.map( ( { name, slug } ) => (
-								<PanelRow key={ slug }>
-									<CheckboxControl
-										label={ name }
-										checked={ postType.indexOf( slug ) > -1 }
-										onChange={ value => {
-											const cleanPostType = [ ...new Set( postType ) ];
-											if ( value && cleanPostType.indexOf( slug ) === -1 ) {
-												cleanPostType.push( slug );
-											} else if ( ! value && cleanPostType.indexOf( slug ) > -1 ) {
-												cleanPostType.splice( cleanPostType.indexOf( slug ), 1 );
-											}
-											setAttributes( {
-												postType: cleanPostType,
-											} );
-										} }
-									/>
-								</PanelRow>
-							) ) }
-					</PanelBody>
+					<PostTypesPanel attributes={ attributes } setAttributes={ setAttributes } />
+					<PostStatusesPanel attributes={ attributes } setAttributes={ setAttributes } />
 				</InspectorControls>
 			</Fragment>
 		);

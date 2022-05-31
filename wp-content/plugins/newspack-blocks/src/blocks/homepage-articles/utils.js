@@ -36,6 +36,7 @@ const POST_QUERY_ATTRIBUTES = [
 	'tagExclusions',
 	'categoryExclusions',
 	'postType',
+	'includedPostStatuses',
 ];
 
 /**
@@ -73,6 +74,7 @@ export const queryCriteriaFromAttributes = attributes => {
 		specificMode,
 		tagExclusions,
 		categoryExclusions,
+		includedPostStatuses,
 	} = pick( attributes, POST_QUERY_ATTRIBUTES );
 
 	const cleanPosts = sanitizePostList( specificPosts );
@@ -92,6 +94,7 @@ export const queryCriteriaFromAttributes = attributes => {
 					tagExclusions,
 					categoryExclusions,
 					postType,
+					includedPostStatuses,
 			  },
 		value => ! isUndefined( value )
 	);
@@ -168,7 +171,6 @@ const generatePreviewPost = id => {
 const getPreviewPosts = attributes => times( attributes.postsToShow, generatePreviewPost );
 
 export const postsBlockSelector = ( select, { clientId, attributes } ) => {
-	const { getPostTypes } = select( 'core' );
 	const { getEditorBlocks } = select( 'core/editor' );
 	const { getBlocks } = select( 'core/block-editor' );
 	const editorBlocksIds = getEditorBlocksIds( getEditorBlocks() );
@@ -182,9 +184,6 @@ export const postsBlockSelector = ( select, { clientId, attributes } ) => {
 		isUIDisabled: isUIDisabled(),
 		error: getError( { clientId } ),
 		topBlocksClientIdsInOrder: getBlocks().map( block => block.clientId ),
-		availablePostTypes: getPostTypes( { per_page: -1 } )?.filter(
-			( { supports: { newspack_blocks: newspackBlocks } } ) => newspackBlocks
-		),
 	};
 
 	if ( isEditorBlock ) {

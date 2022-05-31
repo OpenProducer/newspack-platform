@@ -9,7 +9,7 @@ import { set } from 'lodash';
 /**
  * WordPress dependencies
  */
-import { registerGenericStore, select } from '@wordpress/data';
+import { register, select } from '@wordpress/data';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 
@@ -176,7 +176,7 @@ const createFetchPostsSaga = blockNames => {
 };
 
 export const registerQueryStore = blockNames => {
-	registerGenericStore( STORE_NAMESPACE, genericStore );
+	register( { name: STORE_NAMESPACE, instantiate: () => genericStore } );
 
 	// Run the saga ✨
 	sagaMiddleware.run( createFetchPostsSaga( blockNames ) );

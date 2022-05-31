@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.58.1
+Version: 1.58.3
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -4708,30 +4708,6 @@ div.sharedaddy .sd-social h3.sd-title,
 .page-template-single-wide .entry .entry-content .alignwide.wp-block-cover {
     width: auto;
   }
-  .newspack-front-page .entry .entry-content .alignwide.wp-block-columns,
-.post-template-single-wide .entry .entry-content .alignwide.wp-block-columns,
-.page-template-single-wide .entry .entry-content .alignwide.wp-block-columns {
-    margin-left: calc(25% - 25vw - 16px);
-    margin-right: calc(25% - 25vw - 16px);
-    max-width: calc(100vw + 32px);
-    width: auto;
-  }
-  .newspack-front-page .entry .entry-content .alignwide.wp-block-columns.is-style-borders,
-.post-template-single-wide .entry .entry-content .alignwide.wp-block-columns.is-style-borders,
-.page-template-single-wide .entry .entry-content .alignwide.wp-block-columns.is-style-borders {
-    margin-left: calc(25% - 25vw - 24px);
-    margin-right: calc(25% - 25vw - 24px);
-    max-width: calc(100vw + 48px);
-  }
-}
-@media only screen and (min-width: 1168px) {
-  .newspack-front-page .entry .entry-content .alignwide.wp-block-columns.is-style-borders,
-.post-template-single-wide .entry .entry-content .alignwide.wp-block-columns.is-style-borders,
-.page-template-single-wide .entry .entry-content .alignwide.wp-block-columns.is-style-borders {
-    margin-left: calc(25% - 25vw - 32px);
-    margin-right: calc(25% - 25vw - 32px);
-    max-width: calc(100vw + 64px);
-  }
 }
 .newspack-front-page .entry .entry-content .alignfull,
 .post-template-single-wide .entry .entry-content .alignfull,
@@ -4744,36 +4720,6 @@ div.sharedaddy .sd-social h3.sd-title,
 .post-template-single-wide .entry .entry-content .alignfull.wp-block-cover,
 .page-template-single-wide .entry .entry-content .alignfull.wp-block-cover {
   width: 100vw;
-}
-@media only screen and (min-width: 600px) {
-  .newspack-front-page .entry .entry-content .alignfull.wp-block-columns,
-.post-template-single-wide .entry .entry-content .alignfull.wp-block-columns,
-.page-template-single-wide .entry .entry-content .alignfull.wp-block-columns {
-    margin-left: calc(50% - 50vw - 16px);
-    margin-right: calc(50% - 50vw - 16px);
-    max-width: calc(100vw + 32px);
-    width: calc(100vw + 32px);
-  }
-}
-@media only screen and (min-width: 782px) {
-  .newspack-front-page .entry .entry-content .alignfull.wp-block-columns.is-style-borders,
-.post-template-single-wide .entry .entry-content .alignfull.wp-block-columns.is-style-borders,
-.page-template-single-wide .entry .entry-content .alignfull.wp-block-columns.is-style-borders {
-    margin-left: calc(50% - 50vw - 24px);
-    margin-right: calc(50% - 50vw - 24px);
-    max-width: calc(100vw + 48px);
-    width: calc(100vw + 48px);
-  }
-}
-@media only screen and (min-width: 1168px) {
-  .newspack-front-page .entry .entry-content .alignfull.wp-block-columns.is-style-borders,
-.post-template-single-wide .entry .entry-content .alignfull.wp-block-columns.is-style-borders,
-.page-template-single-wide .entry .entry-content .alignfull.wp-block-columns.is-style-borders {
-    margin-left: calc(50% - 50vw - 32px);
-    margin-right: calc(50% - 50vw - 32px);
-    max-width: calc(100vw + 64px);
-    width: calc(100vw + 64px);
-  }
 }
 .newspack-front-page .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .newspack-front-page .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
 .newspack-front-page .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
@@ -5026,35 +4972,6 @@ p.has-background {
 }
 .wp-block-columns .wp-block-column > *:last-child {
   margin-bottom: 0;
-}
-
-.entry .entry-content > .wp-block-columns.is-not-stacked-on-mobile,
-[id=pico] > .wp-block-columns.is-not-stacked-on-mobile {
-  margin-left: -16px;
-  margin-right: -16px;
-  max-width: calc(100% + 32px);
-}
-@media only screen and (min-width: 600px) {
-  .entry .entry-content > .wp-block-columns,
-[id=pico] > .wp-block-columns {
-    margin-left: -16px;
-    margin-right: -16px;
-    max-width: calc(100% + 32px);
-  }
-}
-@media only screen and (min-width: 782px) {
-  .entry .entry-content > .wp-block-columns.is-style-borders,
-[id=pico] > .wp-block-columns.is-style-borders {
-    margin-left: -24px;
-    max-width: calc(100% + 48px);
-  }
-}
-@media only screen and (min-width: 1168px) {
-  .entry .entry-content > .wp-block-columns.is-style-borders,
-[id=pico] > .wp-block-columns.is-style-borders {
-    margin-left: -32px;
-    max-width: calc(100% + 64px);
-  }
 }
 
 .wp-block-cover-image,
@@ -6349,35 +6266,6 @@ hr.has-background.is-style-dots::before {
     max-width: 100vw;
   }
 }
-@media only screen and (min-width: 782px) {
-  .post-template-single-feature .entry .entry-content > *.alignwide.wp-block-columns,
-.post-template-single-feature [id=pico] > *.alignwide.wp-block-columns,
-.page-template-single-feature .entry .entry-content > *.alignwide.wp-block-columns,
-.page-template-single-feature [id=pico] > *.alignwide.wp-block-columns {
-    margin-left: calc(25% - 25vw - 16px);
-    margin-right: calc(25% - 25vw - 16px);
-    max-width: calc(100vw + 32px);
-    width: auto;
-  }
-  .post-template-single-feature .entry .entry-content > *.alignwide.wp-block-columns.is-style-borders,
-.post-template-single-feature [id=pico] > *.alignwide.wp-block-columns.is-style-borders,
-.page-template-single-feature .entry .entry-content > *.alignwide.wp-block-columns.is-style-borders,
-.page-template-single-feature [id=pico] > *.alignwide.wp-block-columns.is-style-borders {
-    margin-left: calc(25% - 25vw - 24px);
-    margin-right: calc(25% - 25vw - 24px);
-    max-width: calc(100vw + 48px);
-  }
-}
-@media only screen and (min-width: 1168px) {
-  .post-template-single-feature .entry .entry-content > *.alignwide.wp-block-columns.is-style-borders,
-.post-template-single-feature [id=pico] > *.alignwide.wp-block-columns.is-style-borders,
-.page-template-single-feature .entry .entry-content > *.alignwide.wp-block-columns.is-style-borders,
-.page-template-single-feature [id=pico] > *.alignwide.wp-block-columns.is-style-borders {
-    margin-left: calc(25% - 25vw - 32px);
-    margin-right: calc(25% - 25vw - 32px);
-    max-width: calc(100vw + 64px);
-  }
-}
 .post-template-single-feature .entry .entry-content > *.alignfull,
 .post-template-single-feature [id=pico] > *.alignfull,
 .page-template-single-feature .entry .entry-content > *.alignfull,
@@ -6538,14 +6426,6 @@ hr.has-background.is-style-dots::before {
   margin-left: auto;
   margin-right: auto;
   max-width: 780px;
-}
-@media only screen and (min-width: 782px) {
-  .post-template-single-feature .wp-block-columns.alignfull, .post-template-single-feature .wp-block-columns.alignfull .wp-block-column,
-.page-template-single-feature .wp-block-columns.alignfull,
-.page-template-single-feature .wp-block-columns.alignfull .wp-block-column {
-    padding-left: calc( 2 * 1rem );
-    padding-right: calc( 2 * 1rem );
-  }
 }
 
 .newspack-front-page .wp-block-pullquote.alignfull,
@@ -6856,22 +6736,10 @@ hr.has-background.is-style-dots::before {
   margin: 0;
   padding: 0;
 }
-@media only screen and (min-width: 600px) {
-  .newspack-pattern.subscribe__style-9 .wp-block-columns {
-    margin-left: -16px;
-    margin-right: -16px;
+@media only screen and (max-width: 781px) {
+  .newspack-pattern.subscribe__style-9 .wp-block-columns:not(.is-not-stacked-on-mobile) {
+    gap: 16px;
   }
-}
-.newspack-pattern.subscribe__style-9 .wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column {
-  margin-bottom: 16px;
-}
-@media only screen and (min-width: 600px) {
-  .newspack-pattern.subscribe__style-9 .wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column {
-    margin-bottom: 0;
-  }
-}
-.newspack-pattern.subscribe__style-9 .wp-block-columns:not(.is-not-stacked-on-mobile) > .wp-block-column:last-child {
-  margin-bottom: 0;
 }
 .newspack-pattern.subscribe__style-9 .wp-block-columns .wp-block-column > * {
   margin-bottom: 16px;
