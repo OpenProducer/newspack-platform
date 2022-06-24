@@ -7,9 +7,9 @@
 
 namespace Newspack_Listings\Curated_List_Block;
 
-use \Newspack_Listings\Newspack_Listings_Core as Core;
-use \Newspack_Listings\Newspack_Listings_Api as Api;
-use \Newspack_Listings\Utils as Utils;
+use \Newspack_Listings\Core;
+use \Newspack_Listings\Api;
+use \Newspack_Listings\Utils;
 
 /**
  * Dynamic block registration.

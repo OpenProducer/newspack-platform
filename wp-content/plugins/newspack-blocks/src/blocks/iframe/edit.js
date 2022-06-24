@@ -192,7 +192,7 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 							'max-width': '100%',
 							'max-height': '100%',
 						} }
-					></FocusableIframe>
+					/>
 				</div>
 			) : (
 				<IframePlaceholder

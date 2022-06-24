@@ -1,8 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { _x } from '@wordpress/i18n';
-import { __ } from '@wordpress/i18n';
+import { _x, __ } from '@wordpress/i18n';
 import { RawHTML, Fragment } from '@wordpress/element';
 
 export const formatAvatars = authorInfo =>

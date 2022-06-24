@@ -75,9 +75,9 @@ final class Newspack_Popups_Segmentation {
 	/**
 	 * Remove pageview reporting from non-AMP Analytics GTAG config.
 	 *
-	 * @param array $gtag_amp GTAG Analytics config.
+	 * @param array $gtag_opt GTAG Analytics config.
 	 */
-	public static function remove_pageview_reporting( $gtag_amp ) {
+	public static function remove_pageview_reporting( $gtag_opt ) {
 		$gtag_opt['send_page_view'] = false;
 		return $gtag_opt;
 	}

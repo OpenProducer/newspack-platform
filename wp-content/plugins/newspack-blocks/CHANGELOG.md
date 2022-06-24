@@ -1,3 +1,37 @@
+# [1.52.0](https://github.com/Automattic/newspack-blocks/compare/v1.51.0...v1.52.0) (2022-06-13)
+
+
+### Bug Fixes
+
+* correct donate block tab spacing in editor ([#1153](https://github.com/Automattic/newspack-blocks/issues/1153)) ([c17221f](https://github.com/Automattic/newspack-blocks/commit/c17221fae28e651189893e6536471772b7b73a55))
+* disambiguate WP users vs. guest authors with same ID ([#1143](https://github.com/Automattic/newspack-blocks/issues/1143)) ([d3c5920](https://github.com/Automattic/newspack-blocks/commit/d3c5920ad0520976b2ff7b0b2ad9f89ab028bc3a))
+* echo closing link tags on sponsor bylines ([#1152](https://github.com/Automattic/newspack-blocks/issues/1152)) ([f80893f](https://github.com/Automattic/newspack-blocks/commit/f80893f271dfdf91a359278d5b2365f619bdad4b))
+* remove custom column block styles ([#1133](https://github.com/Automattic/newspack-blocks/issues/1133)) ([bd79783](https://github.com/Automattic/newspack-blocks/commit/bd797830364c2db88375a9239bd18a9c1145d98f))
+* skipped linked images when navigating blocks by keyboard ([#1144](https://github.com/Automattic/newspack-blocks/issues/1144)) ([8975787](https://github.com/Automattic/newspack-blocks/commit/8975787776e4aef4c14b2ae26ac37fb2fb6e0dd0))
+
+
+### Features
+
+* add new subscribe pattern ([#1142](https://github.com/Automattic/newspack-blocks/issues/1142)) ([97d632e](https://github.com/Automattic/newspack-blocks/commit/97d632e3ed815d402bf1876d269cad87a572332b))
+* remove support for the Aside post format ([#1139](https://github.com/Automattic/newspack-blocks/issues/1139)) ([9f9cdf4](https://github.com/Automattic/newspack-blocks/commit/9f9cdf4a9f2119faf4cd698f305d58a4f0e4bcd3))
+
+# [1.52.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.51.0...v1.52.0-alpha.1) (2022-06-02)
+
+
+### Bug Fixes
+
+* correct donate block tab spacing in editor ([#1153](https://github.com/Automattic/newspack-blocks/issues/1153)) ([c17221f](https://github.com/Automattic/newspack-blocks/commit/c17221fae28e651189893e6536471772b7b73a55))
+* disambiguate WP users vs. guest authors with same ID ([#1143](https://github.com/Automattic/newspack-blocks/issues/1143)) ([d3c5920](https://github.com/Automattic/newspack-blocks/commit/d3c5920ad0520976b2ff7b0b2ad9f89ab028bc3a))
+* echo closing link tags on sponsor bylines ([#1152](https://github.com/Automattic/newspack-blocks/issues/1152)) ([f80893f](https://github.com/Automattic/newspack-blocks/commit/f80893f271dfdf91a359278d5b2365f619bdad4b))
+* remove custom column block styles ([#1133](https://github.com/Automattic/newspack-blocks/issues/1133)) ([bd79783](https://github.com/Automattic/newspack-blocks/commit/bd797830364c2db88375a9239bd18a9c1145d98f))
+* skipped linked images when navigating blocks by keyboard ([#1144](https://github.com/Automattic/newspack-blocks/issues/1144)) ([8975787](https://github.com/Automattic/newspack-blocks/commit/8975787776e4aef4c14b2ae26ac37fb2fb6e0dd0))
+
+
+### Features
+
+* add new subscribe pattern ([#1142](https://github.com/Automattic/newspack-blocks/issues/1142)) ([97d632e](https://github.com/Automattic/newspack-blocks/commit/97d632e3ed815d402bf1876d269cad87a572332b))
+* remove support for the Aside post format ([#1139](https://github.com/Automattic/newspack-blocks/issues/1139)) ([9f9cdf4](https://github.com/Automattic/newspack-blocks/commit/9f9cdf4a9f2119faf4cd698f305d58a4f0e4bcd3))
+
 # [1.51.0](https://github.com/Automattic/newspack-blocks/compare/v1.50.1...v1.51.0) (2022-05-30)
 
 

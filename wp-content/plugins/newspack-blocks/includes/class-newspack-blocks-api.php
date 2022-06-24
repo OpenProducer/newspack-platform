@@ -223,17 +223,6 @@ class Newspack_Blocks_API {
 	}
 
 	/**
-	 * Pass post format to editor.
-	 *
-	 * @param array $object The object info.
-	 * @return string post format.
-	 */
-	public static function newspack_blocks_post_format( $object ) {
-		$post_format = get_post_format( $object['id'] );
-		return $post_format ? $post_format : 'standard';
-	}
-
-	/**
 	 * Pass whether there is a custom excerpt to the editor.
 	 *
 	 * @param array $object The object info.
@@ -333,7 +322,6 @@ class Newspack_Blocks_API {
 				'newspack_featured_image_caption' => self::newspack_blocks_get_image_caption( $data ),
 				'newspack_featured_image_src'     => self::newspack_blocks_get_image_src( $data ),
 				'newspack_has_custom_excerpt'     => self::newspack_blocks_has_custom_excerpt( $data ),
-				'newspack_post_format'            => self::newspack_blocks_post_format( $data ),
 				'newspack_post_sponsors'          => self::newspack_blocks_sponsor_info( $data ),
 				'post_status'                     => $post->post_status,
 				'post_type'                       => $post->post_type,

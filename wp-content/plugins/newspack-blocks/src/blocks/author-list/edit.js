@@ -84,17 +84,17 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 		setIsLoading( true );
 		try {
 			const params = {
-				authorType,
-				authorRoles,
+				author_type: authorType,
+				author_roles: authorRoles,
 				exclude: exclude.map( exclusion => parseInt( exclusion.value ) ),
 			};
 
 			if ( excludeEmpty ) {
-				params.excludeEmpty = 1;
+				params.exclude_empty = 1;
 			}
 
 			if ( avatarHideDefault ) {
-				params.avatarHideDefault = 1;
+				params.avatar_hide_default = 1;
 			}
 
 			const response = await apiFetch( {

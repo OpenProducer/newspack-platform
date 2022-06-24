@@ -80,16 +80,26 @@ class WooCommerce_Connection {
 			}
 		}
 		if ( $should_create_account ) {
-			Logger::log( 'This order will result in a membership, creating account for user.' );
-			$user_login = sanitize_title( $full_name );
-			$user_id    = wc_create_new_customer( $email_address, $user_login, '', [ 'display_name' => $full_name ] );
-			if ( is_wp_error( $user_id ) ) {
-				return $user_id;
-			}
+			if ( Reader_Activation::is_enabled() ) {
+				$user_id = Reader_Activation::register_reader( $email_address, $full_name );
+				if ( is_wp_error( $user_id ) ) {
+					return $user_id;
+				}
+				if ( ! absint( $user_id ) ) {
+					$user_id = null;
+				}
+			} else {
+				Logger::log( 'This order will result in a membership, creating account for user.' );
+				$user_login = sanitize_title( $full_name );
+				$user_id    = wc_create_new_customer( $email_address, $user_login, '', [ 'display_name' => $full_name ] );
+				if ( is_wp_error( $user_id ) ) {
+					return $user_id;
+				}
 
-			// Log the new user in.
-			wp_set_current_user( $user_id, $user_login );
-			wp_set_auth_cookie( $user_id );
+				// Log the new user in.
+				wp_set_current_user( $user_id, $user_login );
+				wp_set_auth_cookie( $user_id );
+			}
 			return $user_id;
 		}
 	}
@@ -102,7 +112,6 @@ class WooCommerce_Connection {
 	public static function create_transaction( $order_data ) {
 		Logger::log( 'Creating an order' );
 
-		$order     = wc_create_order( [ 'status' => 'completed' ] );
 		$frequency = $order_data['frequency'];
 
 		$item = self::get_donation_order_item( $frequency, $order_data['amount'] );
@@ -110,6 +119,7 @@ class WooCommerce_Connection {
 			return new WP_Error( 'newspack_woocommerce', __( 'Missing donation product.', 'newspack' ) );
 		}
 
+		$order = wc_create_order();
 		$order->add_item( $item );
 		$order->calculate_totals();
 		$order->set_currency( $order_data['currency'] );
@@ -148,6 +158,7 @@ class WooCommerce_Connection {
 		}
 
 		$order->set_created_via( 'newspack-stripe' );
+		$order->set_status( 'completed' );
 		$order->save();
 
 		if ( class_exists( 'WC_Memberships_Membership_Plans' ) ) {

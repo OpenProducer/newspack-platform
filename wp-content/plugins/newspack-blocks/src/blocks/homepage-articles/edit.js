@@ -135,8 +135,6 @@ class Edit extends Component {
 				minHeight / 5 + 'vh',
 		};
 
-		const isNotPublished = post.post_status !== 'publish';
-
 		const postClasses = classNames(
 			{
 				'post-has-image': post.newspack_featured_image_src,
@@ -187,11 +185,11 @@ class Edit extends Component {
 						) }
 					{ RichText.isEmpty( sectionHeader ) ? (
 						<h2 className="entry-title" key="title">
-							{ post.newspack_post_format === 'aside' ? postTitle : <a href="#">{ postTitle }</a> }
+							<a href="#">{ postTitle }</a>
 						</h2>
 					) : (
 						<h3 className="entry-title" key="title">
-							{ post.newspack_post_format === 'aside' ? postTitle : <a href="#">{ postTitle }</a> }
+							<a href="#">{ postTitle }</a>
 						</h3>
 					) }
 					{ IS_SUBTITLE_SUPPORTED_IN_THEME && showSubtitle && (
@@ -204,9 +202,7 @@ class Edit extends Component {
 					) }
 					{ showExcerpt && (
 						<RawHTML key="excerpt" className="excerpt-contain">
-							{ post.newspack_post_format === 'aside'
-								? post.content.rendered
-								: post.excerpt.rendered }
+							{ post.excerpt.rendered }
 						</RawHTML>
 					) }
 					{ showReadMore && post.post_link && (

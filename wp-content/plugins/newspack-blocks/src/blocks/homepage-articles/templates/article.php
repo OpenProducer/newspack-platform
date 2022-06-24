@@ -81,7 +81,7 @@ call_user_func(
 		<?php if ( has_post_thumbnail() && $attributes['showImage'] && $attributes['imageShape'] ) : ?>
 			<figure class="post-thumbnail">
 				<?php if ( $post_link ) : ?>
-				<a href="<?php echo esc_url( $post_link ); ?>" rel="bookmark">
+				<a href="<?php echo esc_url( $post_link ); ?>" rel="bookmark" tabindex="-1" aria-hidden="true">
 				<?php endif; ?>
 					<?php the_post_thumbnail( $image_size, $thumbnail_args ); ?>
 				<?php if ( $post_link ) : ?>
@@ -116,15 +116,15 @@ call_user_func(
 			endif;
 
 			if ( '' === $attributes['sectionHeader'] ) :
-				// Don't link the title if using the post format aside, or if the post lacks a valid URL.
-				if ( has_post_format( 'aside' ) || ! $post_link ) :
+				// Don't link the title if the post lacks a valid URL.
+				if ( ! $post_link ) :
 					the_title( '<h2 class="entry-title">', '</h2>' );
 				else :
 					the_title( '<h2 class="entry-title"><a href="' . esc_url( $post_link ) . '" rel="bookmark">', '</a></h2>' );
 				endif;
 			else :
-				// Don't link the title if using the post format aside, or if the post lacks a valid URL.
-				if ( has_post_format( 'aside' ) || ! $post_link ) :
+				// Don't link the title if the post lacks a valid URL.
+				if ( ! $post_link ) :
 					the_title( '<h3 class="entry-title">', '</h3>' );
 				else :
 					the_title( '<h3 class="entry-title"><a href="' . esc_url( $post_link ) . '" rel="bookmark">', '</a></h3>' );
@@ -161,13 +161,9 @@ call_user_func(
 			<?php endif; ?>
 			<?php
 			if ( $attributes['showExcerpt'] ) :
-				if ( has_post_format( 'aside' ) ) :
-					the_content();
-				else :
-					the_excerpt();
-				endif;
+				the_excerpt();
 			endif;
-			if ( ! has_post_format( 'aside' ) && $post_link && ( $attributes['showReadMore'] ) ) :
+			if ( $post_link && ( $attributes['showReadMore'] ) ) :
 				?>
 				<a class="more-link" href="<?php echo esc_url( $post_link ); ?>" rel="bookmark">
 					<?php echo esc_html( $attributes['readMoreLabel'] ); ?>
@@ -207,7 +203,7 @@ call_user_func(
 							}
 							echo esc_html( $byline['name'] );
 							if ( '' !== $byline['url'] ) {
-								'</a>';
+								echo '</a>';
 							}
 							echo '</span>' . esc_html( $byline['sep'] );
 						}

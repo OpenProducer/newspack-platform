@@ -744,11 +744,6 @@ class Newspack_Blocks {
 			}
 		}
 
-		$post_format = get_post_format( $post_id );
-		if ( false !== $post_format ) {
-			$classes[] = 'format-' . $post_format;
-		}
-
 		$post_type = get_post_type( $post_id );
 		if ( false !== $post_type ) {
 			$classes[] = 'type-' . $post_type;

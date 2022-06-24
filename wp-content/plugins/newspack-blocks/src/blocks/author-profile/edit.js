@@ -138,6 +138,7 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 	const [ maxItemsToSuggest, setMaxItemsToSuggest ] = useState( 0 );
 	const {
 		authorId,
+		isGuestAuthor,
 		showBio,
 		showSocial,
 		showEmail,
@@ -161,12 +162,13 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 		setIsLoading( true );
 		try {
 			const params = {
-				authorId,
+				author_id: authorId,
+				is_guest_author: isGuestAuthor ? 1 : 0,
 				fields: 'id,name,bio,email,social,avatar,url',
 			};
 
 			if ( avatarHideDefault ) {
-				params.avatarHideDefault = 1;
+				params.avatar_hide_default = 1;
 			}
 
 			const response = await apiFetch( {
@@ -397,6 +399,7 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 									path: addQueryArgs( '/newspack-blocks/v1/authors', {
 										search,
 										offset,
+										isGuestAuthor: true,
 										fields: 'id,name',
 									} ),
 								} );
@@ -412,10 +415,16 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 								return authors.map( _author => ( {
 									value: _author.id,
 									label: decodeEntities( _author.name ) || __( '(no name)', 'newspack' ),
+									isGuestAuthor: _author.is_guest,
 								} ) );
 							} }
 							maxItemsToSuggest={ maxItemsToSuggest }
-							onChange={ items => setAttributes( { authorId: parseInt( items[ 0 ].value ) } ) }
+							onChange={ items => {
+								setAttributes( {
+									authorId: parseInt( items[ 0 ]?.value || 0 ),
+									isGuestAuthor: items[ 0 ]?.isGuestAuthor || false,
+								} );
+							} }
 							postTypeLabel={ __( 'author', 'newspack-blocks' ) }
 							postTypeLabelPlural={ __( 'authors', 'newspack-blocks' ) }
 							selectedItems={ [] }

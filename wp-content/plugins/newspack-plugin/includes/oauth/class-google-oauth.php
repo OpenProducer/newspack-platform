@@ -73,15 +73,18 @@ class Google_OAuth {
 				'args'                => [
 					'access_token'  => [
 						'sanitize_callback' => 'sanitize_text_field',
+						'required'          => true,
 					],
 					'refresh_token' => [
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 					'csrf_token'    => [
 						'sanitize_callback' => 'sanitize_text_field',
+						'required'          => true,
 					],
 					'expires_at'    => [
 						'sanitize_callback' => 'sanitize_text_field',
+						'required'          => true,
 					],
 				],
 			]
@@ -106,6 +109,7 @@ class Google_OAuth {
 	 */
 	public static function permissions_check() {
 		if ( ! current_user_can( 'manage_options' ) || ! self::is_oauth_configured() ) {
+			Logger::log( 'Fail: user failed permissions check.' );
 			return new \WP_Error(
 				'newspack_rest_forbidden',
 				esc_html__( 'You cannot use this resource.', 'newspack' ),
@@ -128,7 +132,24 @@ class Google_OAuth {
 		$saved_csrf_token = OAuth::retrieve_csrf_token( self::CSRF_TOKEN_NAMESPACE );
 
 		if ( $tokens['csrf_token'] !== $saved_csrf_token ) {
-			return new \WP_Error( 'newspack_google_oauth', __( 'Session token mismatch.', 'newspack' ) );
+			Logger::log( 'Failed saving credentials - CSRF token mismatch.' );
+			return new \WP_Error(
+				'newspack_google_oauth',
+				__( 'Session token mismatch.', 'newspack' ),
+				[
+					'status' => 403,
+				]
+			);
+		}
+		if ( ! isset( $tokens['access_token'], $tokens['expires_at'] ) ) {
+			Logger::log( 'Failed saving credentials - missing data.' );
+			return new \WP_Error(
+				'newspack_google_oauth',
+				__( 'Missing data.', 'newspack' ),
+				[
+					'status' => 403,
+				]
+			);
 		}
 
 		$auth                 = self::get_google_auth_saved_data();
@@ -138,6 +159,7 @@ class Google_OAuth {
 			$auth['refresh_token'] = $tokens['refresh_token'];
 		}
 		self::remove_credentials();
+		Logger::log( 'Saving credentials to WP option ' . self::AUTH_DATA_META_NAME );
 		return add_option( self::AUTH_DATA_META_NAME, $auth );
 	}
 
@@ -196,6 +218,7 @@ class Google_OAuth {
 	 * @return WP_REST_Response Response.
 	 */
 	public static function api_google_auth_save_details( $request ) {
+		Logger::log( 'Attempting to save credentials…' );
 		$auth_save_data = [
 			'access_token' => $request['access_token'],
 			'csrf_token'   => $request['csrf_token'],
@@ -204,9 +227,15 @@ class Google_OAuth {
 		if ( isset( $request['refresh_token'] ) ) {
 			$auth_save_data['refresh_token'] = $request['refresh_token'];
 		}
-		if ( self::save_auth_credentials( $auth_save_data ) ) {
+		$auth_save_result = self::save_auth_credentials( $auth_save_data );
+		if ( is_wp_error( $auth_save_result ) ) {
+			return $auth_save_result;
+		}
+		if ( $auth_save_result ) {
+			Logger::log( 'Credentials saved.' );
 			return \rest_ensure_response( [ 'status' => 'ok' ] );
 		} else {
+			Logger::log( 'Failed saving credentials.' );
 			return new \WP_Error( 'newspack_google_oauth', __( 'Could not save auth data for user.', 'newspack' ) );
 		}
 	}
@@ -217,24 +246,22 @@ class Google_OAuth {
 	 * @return WP_REST_Response Response.
 	 */
 	public static function api_google_auth_revoke() {
+		Logger::log( 'Revoking credentials…' );
 		$auth_data = self::get_google_auth_saved_data();
-		if ( ! isset( $auth_data['access_token'] ) ) {
+		if ( ! isset( $auth_data['refresh_token'] ) ) {
 			return new \WP_Error( 'newspack_google_oauth', __( 'Missing token for user.', 'newspack' ) );
 		}
-		if ( isset( $auth_data['refresh_token'] ) ) {
-			$token = $auth_data['refresh_token'];
-		} else {
-			$token = $auth_data['access_token'];
-		}
-
+		$token  = $auth_data['refresh_token'];
 		$result = \wp_safe_remote_post(
 			add_query_arg( [ 'token' => $token ], 'https://oauth2.googleapis.com/revoke' )
 		);
 		if ( 200 === $result['response']['code'] ) {
+			Logger::log( 'Revoking credentials success.' );
 			self::remove_credentials();
 			return \rest_ensure_response( [ 'status' => 'ok' ] );
 		} else {
-			return new \WP_Error( 'newspack_google_oauth', __( 'Could not save auth data for user.', 'newspack' ) );
+			Logger::log( 'Failed revoking credentials.' );
+			return new \WP_Error( 'newspack_google_oauth', __( 'Could not revoke credentials.', 'newspack' ) );
 		}
 	}
 
@@ -252,26 +279,18 @@ class Google_OAuth {
 		if ( is_wp_error( $user_info_data ) ) {
 			return $user_info_data;
 		}
-		return \rest_ensure_response(
-			[
-				'user_basic_info' => $user_info_data,
-			]
-		);
+		$response['user_basic_info'] = $user_info_data;
+		return \rest_ensure_response( $response );
 	}
 
 	/**
 	 * Get Google authentication details.
 	 */
 	public static function get_google_auth_saved_data() {
-		$is_permitted = self::permissions_check();
-		if ( true !== $is_permitted ) {
-			return false;
+		if ( ! self::permissions_check() ) {
+			return [];
 		}
-		$auth_data = get_option( self::AUTH_DATA_META_NAME, false );
-		if ( $auth_data ) {
-			return $auth_data;
-		}
-		return [];
+		return get_option( self::AUTH_DATA_META_NAME, [] );
 	}
 
 	/**
@@ -319,6 +338,7 @@ class Google_OAuth {
 				];
 			}
 		} else {
+			Logger::log( 'Failed retrieving user info – invalid credentials.' );
 			return new \WP_Error( 'newspack_google_oauth', __( 'Invalid Google credentials. Please reconnect.', 'newspack' ) );
 		}
 
@@ -333,6 +353,10 @@ class Google_OAuth {
 	 */
 	public static function get_oauth2_credentials() {
 		$auth_data = self::get_google_auth_saved_data();
+		if ( empty( $auth_data ) ) {
+			Logger::log( 'No credentials saved, OAuth credentials will not be returned.' );
+			return false;
+		}
 		if ( ! isset( $auth_data['access_token'] ) ) {
 			Logger::log( 'Access token is not set, OAuth credentials will not be returned.' );
 			return false;
@@ -364,7 +388,11 @@ class Google_OAuth {
 
 				if ( isset( $response_body->access_token ) ) {
 					Logger::log( 'Refreshed the token.' );
-					self::save_auth_credentials( $response_body );
+					$auth_save_result = self::save_auth_credentials( $response_body );
+					if ( is_wp_error( $auth_save_result ) ) {
+						Logger::log( 'Credentials saving resulted in an error: ' . $auth_save_result->get_error_message() );
+						return false;
+					}
 					$auth_data = self::get_google_auth_saved_data();
 				} else {
 					Logger::log( 'Access token missing from the response.' );
@@ -379,6 +407,8 @@ class Google_OAuth {
 		$oauth_object->setAccessToken( $auth_data['access_token'] );
 		if ( isset( $auth_data['refresh_token'] ) ) {
 			$oauth_object->setRefreshToken( $auth_data['refresh_token'] );
+		} else {
+			Logger::log( 'Refresh token missing in the credentials – the authorisation will have to be refreshed in an hour.' );
 		}
 		return $oauth_object;
 	}
@@ -387,6 +417,7 @@ class Google_OAuth {
 	 * Remove saved credentials.
 	 */
 	public static function remove_credentials() {
+		Logger::log( 'Removing stored credentials.' );
 		delete_option( self::AUTH_DATA_META_NAME );
 	}
 

@@ -29,14 +29,15 @@ function newspack_blocks_register_author_profile() {
  * @param int     $author_id Author ID to look up.
  * @param int     $avatar_size Size of the avatar image to fetch.
  * @param boolean $hide_default If true, don't show default avatars.
+ * @param boolean $is_guest_author If true, search for guest authors. If false, only search for WP users.
  * @return object|boolean Author object in standardized format, or false if none exists.
  */
-function newspack_blocks_get_author_or_guest_author( $author_id, $avatar_size = 128, $hide_default = false ) {
+function newspack_blocks_get_author_or_guest_author( $author_id, $avatar_size = 128, $hide_default = false, $is_guest_author = true ) {
 	$wp_user = get_user_by( 'id', $author_id );
 	$author  = false;
 
 	// First, see if the $author_id is a guest author.
-	if ( class_exists( 'CoAuthors_Guest_Authors' ) ) {
+	if ( class_exists( 'CoAuthors_Guest_Authors' ) && $is_guest_author ) {
 		// Check if the ID given is a WP user with linked guest author.
 		$linked_guest_author = false;
 
@@ -107,7 +108,7 @@ function newspack_blocks_render_block_author_profile( $attributes ) {
 	}
 
 	// Get the author by ID.
-	$author = newspack_blocks_get_author_or_guest_author( intval( $attributes['authorId'] ), intval( $attributes['avatarSize'] ), $attributes['avatarHideDefault'] );
+	$author = newspack_blocks_get_author_or_guest_author( intval( $attributes['authorId'] ), intval( $attributes['avatarSize'] ), $attributes['avatarHideDefault'], $attributes['isGuestAuthor'] );
 
 	// Bail if there's no author or guest author with the saved ID.
 	if ( empty( $author ) ) {

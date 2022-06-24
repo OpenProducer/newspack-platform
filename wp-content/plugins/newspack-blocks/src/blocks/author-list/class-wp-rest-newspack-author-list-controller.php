@@ -37,19 +37,28 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'api_get_all_authors' ],
 					'args'                => [
-						'author_id' => [
+						'author_id'     => [
 							'sanitize_callback' => 'absint',
 						],
-						'offset'    => [
+						'author_roles'  => [
+							'sanitize_callback' => 'WP_REST_Newspack_Author_List_Controller::sanitize_array',
+						],
+						'author_types'  => [
+							'sanitize_callback' => 'WP_REST_Newspack_Author_List_Controller::sanitize_array',
+						],
+						'exclude_empty' => [
 							'sanitize_callback' => 'absint',
 						],
-						'per_page'  => [
+						'offset'        => [
 							'sanitize_callback' => 'absint',
 						],
-						'search'    => [
+						'per_page'      => [
+							'sanitize_callback' => 'absint',
+						],
+						'search'        => [
 							'sanitize_callback' => 'sanitize_text_field',
 						],
-						'fields'    => [
+						'fields'        => [
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 					],
@@ -57,6 +66,28 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 				],
 			]
 		);
+	}
+
+	/**
+	 * Sanitize an array of text or number values.
+	 *
+	 * @param array $array Array of text or float values to be sanitized.
+	 * @return array Sanitized array.
+	 */
+	public static function sanitize_array( $array ) {
+		foreach ( $array as $value ) {
+			if ( is_array( $value ) ) {
+				$value = sanitize_array( $value );
+			} else {
+				if ( is_string( $value ) ) {
+					$value = sanitize_text_field( $value );
+				} else {
+					$value = floatval( $value );
+				}
+			}
+		}
+
+		return $array;
 	}
 
 	/**
@@ -99,23 +130,23 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 	public function api_get_all_authors( $request ) {
 		$options = [];
 
-		if ( ! empty( $request->get_param( 'authorType' ) ) ) {
-			$options['author_type'] = $request->get_param( 'authorType' );
+		if ( ! empty( $request->get_param( 'author_type' ) ) ) {
+			$options['author_type'] = $request->get_param( 'author_type' );
 		}
 
-		if ( ! empty( $request->get_param( 'authorRoles' ) ) ) {
-			$options['author_roles'] = $request->get_param( 'authorRoles' );
+		if ( ! empty( $request->get_param( 'author_roles' ) ) ) {
+			$options['author_roles'] = $request->get_param( 'author_roles' );
 		}
 
 		if ( ! empty( $request->get_param( 'exclude' ) ) && is_array( $request->get_param( 'exclude' ) ) ) {
 			$options['exclude'] = $request->get_param( 'exclude' ); // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 		}
 
-		if ( ! empty( $request->get_param( 'excludeEmpty' ) ) ) {
+		if ( ! empty( $request->get_param( 'exclude_empty' ) ) ) {
 			$options['exclude_empty'] = true;
 		}
 
-		if ( ! empty( $request->get_param( 'avatarHideDefault' ) ) ) {
+		if ( ! empty( $request->get_param( 'avatar_hide_default' ) ) ) {
 			$options['avatar_hide_default'] = true;
 		}
 

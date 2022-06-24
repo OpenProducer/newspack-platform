@@ -78,6 +78,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-reader-activation.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-woocommerce-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
@@ -120,6 +121,7 @@ final class Newspack {
 		// Integrations w/ third-party plugins.
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-jetpack.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-gravityforms.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/google-site-kit/class-googlesitekit.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 

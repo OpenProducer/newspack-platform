@@ -1,24 +1,23 @@
-<?php return array (
-  'root' => 
-  array (
-    'pretty_version' => 'dev-master',
-    'version' => 'dev-master',
-    'aliases' => 
-    array (
+<?php return array(
+    'root' => array(
+        'pretty_version' => 'dev-master',
+        'version' => 'dev-master',
+        'type' => 'wordpress-plugin',
+        'install_path' => __DIR__ . '/../../',
+        'aliases' => array(),
+        'reference' => 'ba865dfd1edf553536aedf993006ed242bfb0806',
+        'name' => 'automattic/newspack-listings',
+        'dev' => false,
     ),
-    'reference' => '7c80db7144cf43656a8fac3354e95d8341a15cc1',
-    'name' => 'automattic/newspack-listings',
-  ),
-  'versions' => 
-  array (
-    'automattic/newspack-listings' => 
-    array (
-      'pretty_version' => 'dev-master',
-      'version' => 'dev-master',
-      'aliases' => 
-      array (
-      ),
-      'reference' => '7c80db7144cf43656a8fac3354e95d8341a15cc1',
+    'versions' => array(
+        'automattic/newspack-listings' => array(
+            'pretty_version' => 'dev-master',
+            'version' => 'dev-master',
+            'type' => 'wordpress-plugin',
+            'install_path' => __DIR__ . '/../../',
+            'aliases' => array(),
+            'reference' => 'ba865dfd1edf553536aedf993006ed242bfb0806',
+            'dev_requirement' => false,
+        ),
     ),
-  ),
 );

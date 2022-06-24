@@ -4,7 +4,7 @@
 import { Path, SVG } from '@wordpress/components';
 import classNames from 'classnames';
 
-export default ( { size = 24, className } ) => (
+const NewspackLogo = ( { size = 24, className } ) => (
 	<SVG
 		className={ classNames( 'newspack-logo', className ) }
 		width={ size }
@@ -21,3 +21,5 @@ export default ( { size = 24, className } ) => (
 		/>
 	</SVG>
 );
+
+export default NewspackLogo;

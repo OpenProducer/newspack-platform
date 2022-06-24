@@ -383,28 +383,24 @@ final class Placements {
 	private static function register_default_placements() {
 		$placements = array(
 			'global_above_header' => array(
-				'name'            => __( 'Global: Above Header', 'newspack-ads' ),
-				'description'     => __( 'Choose an ad unit to display above the header.', 'newspack-ads' ),
-				'default_enabled' => true,
-				'hook_name'       => 'before_header',
+				'name'        => __( 'Global: Above Header', 'newspack-ads' ),
+				'description' => __( 'Choose an ad unit to display above the header.', 'newspack-ads' ),
+				'hook_name'   => 'before_header',
 			),
 			'global_below_header' => array(
-				'name'            => __( 'Global: Below Header', 'newspack-ads' ),
-				'description'     => __( 'Choose an ad unit to display below the header.', 'newspack-ads' ),
-				'default_enabled' => true,
-				'hook_name'       => 'after_header',
+				'name'        => __( 'Global: Below Header', 'newspack-ads' ),
+				'description' => __( 'Choose an ad unit to display below the header.', 'newspack-ads' ),
+				'hook_name'   => 'after_header',
 			),
 			'global_above_footer' => array(
-				'name'            => __( 'Global: Above Footer', 'newspack-ads' ),
-				'description'     => __( 'Choose an ad unit to display above the footer.', 'newspack-ads' ),
-				'default_enabled' => true,
-				'hook_name'       => 'before_footer',
+				'name'        => __( 'Global: Above Footer', 'newspack-ads' ),
+				'description' => __( 'Choose an ad unit to display above the footer.', 'newspack-ads' ),
+				'hook_name'   => 'before_footer',
 			),
 			'sticky'              => array(
-				'name'            => __( 'Mobile Sticky Footer', 'newspack-ads' ),
-				'description'     => __( 'Choose a sticky ad unit to display at the bottom of the viewport on mobile devices (recommended sizes are 320x50, 300x50)', 'newspack-ads' ),
-				'default_enabled' => true,
-				'hook_name'       => 'before_footer',
+				'name'        => __( 'Mobile Sticky Footer', 'newspack-ads' ),
+				'description' => __( 'Choose a sticky ad unit to display at the bottom of the viewport on mobile devices (recommended sizes are 320x50, 300x50)', 'newspack-ads' ),
+				'hook_name'   => 'before_footer',
 			),
 		);
 		foreach ( $placements as $placement_key => $placement_config ) {
@@ -500,7 +496,10 @@ final class Placements {
 	 */
 	private static function is_stick_to_top( $placement_key ) {
 		$placements = self::get_placements();
-		$placement  = $placements[ $placement_key ];
+		if ( ! isset( $placements[ $placement_key ] ) ) {
+			return false;
+		}
+		$placement = $placements[ $placement_key ];
 		if ( in_array( 'stick_to_top', $placement['supports'], true ) ) {
 			return true;
 		}
@@ -522,11 +521,6 @@ final class Placements {
 	 * @return bool Whether the placement has been updated or not.
 	 */
 	public static function update_placement( $placement_key, $data ) {
-		$placements = self::get_placements();
-		if ( ! isset( $placements[ $placement_key ] ) ) {
-			return new \WP_Error( 'newspack_ads_invalid_placement', __( 'This placement does not exist.', 'newspack-ads' ) );
-		}
-
 		// Updates always enables the placement.
 		$data['enabled'] = true;
 

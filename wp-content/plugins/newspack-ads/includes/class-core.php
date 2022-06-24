@@ -42,6 +42,14 @@ final class Core {
 		$this->includes();
 
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
+		register_activation_hook( NEWSPACK_ADS_PLUGIN_FILE, [ __CLASS__, 'activation_hook' ] );
+	}
+
+	/**
+	 * Activation Hook
+	 */
+	public static function activation_hook() {
+		do_action( 'newspack_ads_activation_hook' );
 	}
 
 	/**

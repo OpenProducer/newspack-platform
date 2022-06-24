@@ -46,6 +46,9 @@ final class SCAIP {
 		add_action( 'init', array( __CLASS__, 'register_placements' ) );
 		add_action( 'scaip_shortcode', [ __CLASS__, 'create_placement_action' ] );
 
+		// Setup Newspack Ads defaults on activation.
+		add_action( 'newspack_ads_activation_hook', array( __CLASS__, 'register_defaults' ) );
+
 		// Deprecate sidebar.
 		if ( ! self::is_legacy_widgets() ) {
 			remove_action( 'scaip_shortcode', 'scaip_shortcode_do_sidebar' );
@@ -144,6 +147,25 @@ final class SCAIP {
 	 */
 	public static function create_placement_action( $atts ) {
 		do_action( sprintf( self::HOOK_NAME, $atts['number'] ), $atts );
+	}
+
+	/**
+	 * Setup Newspack Ads defaults on activation.
+	 */
+	public static function register_defaults() {
+		$defaults = [
+			'repetitions'    => 3,
+			'legacy_widgets' => 0,
+		];
+		foreach ( $defaults as $key => $value ) {
+			$option_name = sprintf( '%s%s_%s', Settings::OPTION_NAME_PREFIX, 'scaip', $key );
+			if ( isset( self::OPTIONS_MAP[ $key ] ) ) {
+				$option_name = self::OPTIONS_MAP[ $key ];
+			}
+			if ( false === get_option( $option_name ) ) {
+				update_option( $option_name, $value );
+			}
+		}
 	}
 
 	/**

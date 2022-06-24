@@ -6,8 +6,8 @@
  * @package WordPress
  */
 
-use \Newspack_Listings\Newspack_Listings_Core as Core;
-use \Newspack_Listings\Utils as Utils;
+use \Newspack_Listings\Core;
+use \Newspack_Listings\Utils;
 
 call_user_func(
 	function( $data ) {

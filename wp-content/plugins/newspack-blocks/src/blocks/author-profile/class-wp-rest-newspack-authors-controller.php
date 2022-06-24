@@ -37,19 +37,25 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::READABLE,
 					'callback'            => [ $this, 'get_authors' ],
 					'args'                => [
-						'author_id' => [
+						'author_id'           => [
 							'sanitize_callback' => 'absint',
 						],
-						'offset'    => [
+						'is_guest_author'     => [
 							'sanitize_callback' => 'absint',
 						],
-						'per_page'  => [
+						'avatar_hide_default' => [
 							'sanitize_callback' => 'absint',
 						],
-						'search'    => [
+						'offset'              => [
+							'sanitize_callback' => 'absint',
+						],
+						'per_page'            => [
+							'sanitize_callback' => 'absint',
+						],
+						'search'              => [
 							'sanitize_callback' => 'sanitize_text_field',
 						],
-						'fields'    => [
+						'fields'              => [
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 					],
@@ -66,7 +72,8 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function get_authors( $request ) {
-		$author_id           = ! empty( $request->get_param( 'authorId' ) ) ? $request->get_param( 'authorId' ) : 0; // Fetch a specific user or guest author by ID.
+		$author_id           = ! empty( $request->get_param( 'author_id' ) ) ? $request->get_param( 'author_id' ) : 0; // Fetch a specific user or guest author by ID.
+		$is_guest_author     = null !== $request->get_param( 'is_guest_author' ) ? $request->get_param( 'is_guest_author' ) : true; // If $author_id is known to be a regular WP user, not a guest author, this will be `false`.
 		$search              = ! empty( $request->get_param( 'search' ) ) ? $request->get_param( 'search' ) : null; // Fetch authors by search string.
 		$offset              = ! empty( $request->get_param( 'offset' ) ) ? $request->get_param( 'offset' ) : 0; // Offset results (for pagination).
 		$per_page            = ! empty( $request->get_param( 'perPage' ) ) ? $request->get_param( 'perPage' ) : 10; // Number of results to return per page. This is applied to each query, so the actual number of results returned may be up to 2x this number.
@@ -79,26 +86,29 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 		$user_total         = 0;
 
 		// Get Co-authors guest authors.
-		$guest_author_args = [
-			'post_type'      => 'guest-author',
-			'posts_per_page' => $per_page,
-			'offset'         => $offset,
-		];
+		if ( $is_guest_author ) {
+			$guest_author_args = [
+				'post_type'      => 'guest-author',
+				'posts_per_page' => $per_page,
+				'offset'         => $offset,
+			];
 
-		if ( $search && ! $author_id ) {
-			$guest_author_args['s'] = $search;
-		}
-		if ( $author_id ) {
-			$guest_author_args['p'] = $author_id;
-		}
-		if ( $include ) {
-			$guest_author_args['post__in']            = $include;
-			$guest_author_args['ignore_sticky_posts'] = true;
+			if ( $search && ! $author_id ) {
+				$guest_author_args['s'] = $search;
+			}
+			if ( $author_id ) {
+				$guest_author_args['p'] = $author_id;
+			}
+			if ( $include ) {
+				$guest_author_args['post__in']            = $include;
+				$guest_author_args['ignore_sticky_posts'] = true;
+			}
+
+			$guest_authors      = get_posts( $guest_author_args );
+			$guest_author_total = count( $guest_authors );
 		}
 
-		$guest_authors      = get_posts( $guest_author_args );
-		$guest_author_total = count( $guest_authors );
-		$users              = [];
+		$users = [];
 
 		// If passed an author ID.
 		if ( $author_id ) {
@@ -153,6 +163,7 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 								'id'         => intval( $guest_author->ID ),
 								'registered' => $guest_author->post_date,
 								'is_guest'   => true,
+								'slug'       => $guest_author->post_name,
 							];
 
 							$guest_author = ( new CoAuthors_Guest_Authors() )->get_guest_author_by( 'id', $guest_author->ID );
@@ -204,6 +215,7 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 							'id'         => intval( $user->data->ID ),
 							'registered' => $user->data->user_registered,
 							'is_guest'   => false,
+							'slug'       => $user->data->user_login,
 						];
 
 						if ( in_array( 'login', $fields, true ) ) {

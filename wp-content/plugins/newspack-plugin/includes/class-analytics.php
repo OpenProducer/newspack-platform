@@ -40,8 +40,8 @@ class Analytics {
 	 */
 	public function __construct() {
 		add_filter( 'googlesitekit_amp_gtag_opt', [ __CLASS__, 'read_amp_analytics_config' ] );
+		add_filter( 'googlesitekit_gtag_opt', [ __CLASS__, 'set_extra_analytics_config_options' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'insert_gtag_amp_analytics' ], 99 ); // This has to be run after the filter above steals the analytics config.
-		add_action( 'wp_footer', [ __CLASS__, 'insert_ga4_analytics' ] );
 
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'handle_custom_dimensions_reporting' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'inject_non_amp_events' ] );
@@ -462,6 +462,30 @@ class Analytics {
 	}
 
 	/**
+	 * Filter the Google Analytics config options via Site Kit.
+	 * Allows us to update or set additional config options for GA.
+	 *
+	 * @param array $gtag_opt gtag config options.
+	 *
+	 * @return array Filtered config options.
+	 */
+	public static function set_extra_analytics_config_options( $gtag_opt ) {
+		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
+			return $gtag_opt;
+		}
+
+		if ( ! self::can_use_site_kits_analytics() ) {
+			return $gtag_opt;
+		}
+
+		// Set transport type to 'beacon' to allow async requests to complete after a new page is loaded.
+		// See: https://developers.google.com/analytics/devguides/collection/gtagjs/sending-data#specify_different_transport_mechanisms.
+		$gtag_opt['transport_type'] = 'beacon';
+
+		return $gtag_opt;
+	}
+
+	/**
 	 * Insert amp-analytics tag/s into the footer of the page.
 	 * The tag/s will contain the custom events to be sent to GA.
 	 * This is to avoid the gtag endpoint limitation occuring with a single large config.
@@ -837,42 +861,6 @@ class Analytics {
 				}
 			} )();
 		</script>
-		<?php
-	}
-
-	/**
-	 * Add GA4 analytics support to AMP pages.
-	 */
-	public static function insert_ga4_analytics() {
-		if ( ! function_exists( 'is_amp_endpoint' ) || ! is_amp_endpoint() ) {
-			return;
-		}
-		$sitekit_ga4_settings = false;
-		if ( class_exists( '\Google\Site_Kit\Modules\Analytics_4\Settings' ) ) {
-			$sitekit_ga4_settings = get_option( \Google\Site_Kit\Modules\Analytics_4\Settings::OPTION, false );
-		}
-		if ( false === $sitekit_ga4_settings ) {
-			return;
-		}
-		if ( ! $sitekit_ga4_settings['useSnippet'] || ! isset( $sitekit_ga4_settings['measurementID'] ) ) {
-			return;
-		}
-		$ga4_measurement_id = $sitekit_ga4_settings['measurementID'];
-		// See https://github.com/analytics-debugger/google-analytics-4-for-amp.
-		$config_path = Newspack::plugin_url() . '/includes/raw_assets/ga4.json';
-
-		?>
-			<amp-analytics type="googleanalytics" config="<?php echo esc_attr( $config_path ); ?>" data-credentials="include">
-				<script type="application/json">
-					{
-						"vars": {
-							"GA4_MEASUREMENT_ID": "<?php echo esc_attr( $ga4_measurement_id ); ?>",
-							"DEFAULT_PAGEVIEW_ENABLED": true,
-							"GOOGLE_CONSENT_ENABLED": false
-						}
-					}
-				</script>
-			</amp-analytics>
 		<?php
 	}
 }

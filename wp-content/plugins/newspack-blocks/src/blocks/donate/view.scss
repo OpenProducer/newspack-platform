@@ -28,6 +28,7 @@
 
 	.freq-label {
 		background: $color__background-body;
+		box-sizing: border-box;
 		color: $color__text-light;
 		line-height: $font__line-height-body;
 		overflow: hidden;

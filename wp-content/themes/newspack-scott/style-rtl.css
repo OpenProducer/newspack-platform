@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.58.3-alpha.1
+Version: 1.59.0-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -26,6 +26,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
+/* Jetpack Mailchimp Block */
 /* Normalize */
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
 /* Document
@@ -533,9 +534,17 @@ h2 {
 .comments-title,
 .archive .entry-title,
 .search .entry-title,
-.blog .entry-title,
-h3 {
+.blog .entry-title {
   font-size: 1.4em;
+}
+
+h3 {
+  font-size: 1.3em;
+}
+@media only screen and (min-width: 782px) {
+  h3 {
+    font-size: 1.4em;
+  }
 }
 
 .site-title,
@@ -3224,6 +3233,7 @@ div.sharedaddy .sd-social h3.sd-title,
   color: #515151;
   display: block;
   font-size: 0.8em;
+  margin: 0.25em 0 0 0;
   text-transform: none;
 }
 @media only screen and (min-width: 600px) {
@@ -3558,13 +3568,6 @@ div.sharedaddy .sd-social h3.sd-title,
   margin: 0.25rem auto 0;
   max-width: 90vw;
   width: 1200px;
-}
-
-/* Aside */
-.single-format-aside .author-avatar,
-.single-format-aside .byline,
-.single-format-aside .author-bio {
-  display: none;
 }
 
 /* Related Posts */
@@ -4112,11 +4115,6 @@ div.sharedaddy .sd-social h3.sd-title,
 .search .byline {
     margin-left: 1rem;
   }
-}
-.archive .format-aside .byline,
-.blog .format-aside .byline,
-.search .format-aside .byline {
-  display: none;
 }
 
 .archive .page-title {
@@ -4775,22 +4773,6 @@ p.has-background {
 .wpnbha .more-link + .entry-meta {
   margin-top: 0.75rem;
 }
-.wpnbha article.format-aside .entry-meta > a,
-.wpnbha article.format-aside .entry-meta .byline {
-  display: none;
-}
-.wpnbha.ts-4 article.format-aside .entry-title, .wpnbha.ts-5 article.format-aside .entry-title, .wpnbha.ts-6 article.format-aside .entry-title, .wpnbha.ts-7 article.format-aside .entry-title, .wpnbha.ts-8 article.format-aside .entry-title, .wpnbha.ts-9 article.format-aside .entry-title, .wpnbha.ts-10 article.format-aside .entry-title {
-  font-size: 1em;
-}
-.wpnbha.ts-4 article.format-aside .entry-wrapper, .wpnbha.ts-5 article.format-aside .entry-wrapper, .wpnbha.ts-6 article.format-aside .entry-wrapper, .wpnbha.ts-7 article.format-aside .entry-wrapper, .wpnbha.ts-8 article.format-aside .entry-wrapper, .wpnbha.ts-9 article.format-aside .entry-wrapper, .wpnbha.ts-10 article.format-aside .entry-wrapper {
-  font-size: 90%;
-}
-.wpnbha.ts-3 article.format-aside .entry-title {
-  font-size: 0.8em;
-}
-.wpnbha.ts-2 article.format-aside .entry-title {
-  font-size: 0.7em;
-}
 
 .mobile-sidebar .wpnbha .entry-meta,
 .mobile-sidebar .wpnbha .entry-meta a,
@@ -5218,6 +5200,9 @@ p.has-background {
 }
 .wp-block-video figcaption {
   text-align: right;
+}
+.wp-block-video amp-video button:hover {
+  background: transparent;
 }
 
 .wp-block-buttons {
@@ -6544,6 +6529,12 @@ hr.has-background.is-style-dots::before {
 /*--------------------------------------------------------------
 ## Patterns
 --------------------------------------------------------------*/
+/* If we add the border using a regular CSS border, it won't look good on non-retina devices,
+ * since its edges can look jagged due to lack of antialiasing. In this case, we are several
+ * layers of box-shadow to add the border visually, which will render the border smoother. */
+/* Calculates maximum width for post content */
+/* Nested sub-menu padding: 10 levels deep */
+/* Jetpack Mailchimp Block */
 /* Subscribe Style 7 */
 .newspack-pattern.subscribe__style-7 .wp-block-media-text {
   display: block;
@@ -6657,6 +6648,7 @@ hr.has-background.is-style-dots::before {
 }
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp form {
+    align-items: center;
     gap: 16px 8px;
     grid-template-areas: "input button" "content content";
     grid-template-columns: 1fr auto;
@@ -6744,6 +6736,7 @@ hr.has-background.is-style-dots::before {
 }
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp form {
+    align-items: center;
     gap: 16px 8px;
     grid-template-areas: "input button" "content content";
     grid-template-columns: 1fr auto;
@@ -6795,6 +6788,70 @@ hr.has-background.is-style-dots::before {
 }
 .newspack-lightbox .newspack-pattern.subscribe__style-9 + p:empty {
   display: none;
+}
+
+/* Subscribe Style 10 */
+.newspack-pattern.subscribe__style-10 {
+  margin: 0 auto;
+  max-width: 90vw;
+  width: 1200px;
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form {
+  display: grid;
+  gap: 8px;
+}
+@media only screen and (min-width: 600px) {
+  .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form {
+    align-items: center;
+    gap: 0;
+    grid-template-areas: "input button" "content content";
+    grid-template-columns: 1fr auto;
+  }
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > * {
+  margin: 0;
+}
+@media only screen and (min-width: 600px) {
+  .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > * {
+    grid-area: content;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > p:first-of-type {
+    grid-area: input;
+  }
+}
+@media only screen and (min-width: 600px) {
+  .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > .wp-block-button {
+    grid-area: button;
+  }
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > .wp-block-button .wp-block-button__link {
+  width: 100%;
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > .wp-block-button + p {
+  font-size: 0.7em;
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
+  margin: 8px 0 0;
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.wp-block-jetpack-mailchimp__is-amp {
+  margin: 0;
+}
+.newspack-pattern.subscribe__style-10 #wp-block-jetpack-mailchimp_consent-text {
+  /* stylelint-disable-line */
+  display: none;
+}
+.newspack-pattern.subscribe__style-10 .wp-block-column:first-of-type p {
+  padding-bottom: calc(1px + 0.36rem);
+  padding-top: calc(1px + 0.36rem);
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-button {
+  align-self: stretch;
+}
+.newspack-pattern.subscribe__style-10 .wp-block-jetpack-button button.wp-block-button__link {
+  line-height: 1;
+  height: 100%;
 }
 
 /* Media */
@@ -6994,6 +7051,7 @@ figcaption,
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
+/* Jetpack Mailchimp Block */
 .newspack_global_ad {
   display: flex;
   justify-content: center;
