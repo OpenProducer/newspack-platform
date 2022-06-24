@@ -5,6 +5,69 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.14.2] - 2022-05-30
+### Changed
+- Updated package dependencies
+- Updated package dependencies.
+- Use the Checkout workflow to establish the connection and make the purchase
+
+### Fixed
+- Avoid filter from being added multiple times
+
+## [0.14.1] - 2022-05-24
+### Added
+- Allow plugins to filter the list of available modules. Only activate and consider active modules that are available [#24454]
+
+### Changed
+- Search: Use Modules methods for activating and deactivating the Search module. [#24385]
+- Updated package dependencies. [#24449]
+
+## [0.14.0] - 2022-05-19
+### Removed
+- Search: Disable auto-collapsing the wp-admin sidebar within Customberg [#24399]
+
+## [0.13.4] - 2022-05-18
+### Changed
+- Adjust translatable string [#24357]
+- Record Meter: switch noticebox persistence storage from localStorage to sessionStorage [#24348]
+- Record Meter design updates [#24225]
+- Search package: search dashboard refactoring [#24266]
+- Updated package dependencies. [#23795] [#24153] [#24306] [#24372]
+
+## [0.13.3] - 2022-05-10
+### Added
+- Add missing JS dep on `core-js`. [#24288]
+
+### Changed
+- Search: refactored Settings to expose the settings array for sync [#24167]
+- Updated package dependencies. [#24189]
+- Updated package dependencies. [#24204]
+- Updated package dependencies. [#24302]
+- Updated package dependencies [#24276]
+- Updated package dependencies [#24296]
+- Updated package dependencies [#24301]
+
+### Fixed
+- Search: Fix left padding for upsell page [#24285]
+- Search: handle tiers without a record limit in Record Meter [#24264]
+
+## [0.13.2] - 2022-05-04
+### Added
+- Add missing JavaScript dependencies. [#24096]
+
+### Changed
+- Remove use of `pnpx` in preparation for pnpm 7.0. [#24210]
+- Updated package dependencies. [#24095] [#24230] [#24198] [#24228]
+
+### Deprecated
+- Moved the options class into Connection. [#24095]
+
+### Fixed
+- Adapt Record Meter to change in API response format [#24107]
+- Search: Bundle vendor assets within the main chunk [#24068]
+- Search: Fix search for private WoA sites [#24099]
+- Search: reset border-radius for search buttons [#24100]
+
 ## [0.13.1] - 2022-04-26
 ### Added
 - Search: added upsell page
@@ -242,6 +305,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Updated package dependencies.
 - Update PHPUnit configs to include just what needs coverage rather than include everything then try to exclude stuff that doesn't.
 
+[0.14.2]: https://github.com/Automattic/jetpack-search/compare/v0.14.1...v0.14.2
+[0.14.1]: https://github.com/Automattic/jetpack-search/compare/v0.14.0...v0.14.1
+[0.14.0]: https://github.com/Automattic/jetpack-search/compare/v0.13.4...v0.14.0
+[0.13.4]: https://github.com/Automattic/jetpack-search/compare/v0.13.3...v0.13.4
+[0.13.3]: https://github.com/Automattic/jetpack-search/compare/v0.13.2...v0.13.3
+[0.13.2]: https://github.com/Automattic/jetpack-search/compare/v0.13.1...v0.13.2
 [0.13.1]: https://github.com/Automattic/jetpack-search/compare/v0.13.0...v0.13.1
 [0.13.0]: https://github.com/Automattic/jetpack-search/compare/v0.12.3...v0.13.0
 [0.12.3]: https://github.com/Automattic/jetpack-search/compare/v0.12.2...v0.12.3

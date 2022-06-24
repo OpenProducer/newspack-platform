@@ -1,3 +1,38 @@
+## [1.47.1](https://github.com/Automattic/newspack-newsletters/compare/v1.47.0...v1.47.1) (2022-06-14)
+
+
+### Bug Fixes
+
+* remove reminiscent action hook; handle layouts without titles([#860](https://github.com/Automattic/newspack-newsletters/issues/860)) ([29d777f](https://github.com/Automattic/newspack-newsletters/commit/29d777f78dac0e48ab38b1d71aba3b2f3804313a))
+
+# [1.47.0](https://github.com/Automattic/newspack-newsletters/compare/v1.46.4...v1.47.0) (2022-06-13)
+
+
+### Bug Fixes
+
+* ensure controlled statuses after a post update ([#835](https://github.com/Automattic/newspack-newsletters/issues/835)) ([cbfd642](https://github.com/Automattic/newspack-newsletters/commit/cbfd64225375a55e47d192722681e54ed678e3a6))
+* migrate newsletters post status ([#825](https://github.com/Automattic/newspack-newsletters/issues/825)) ([d59792d](https://github.com/Automattic/newspack-newsletters/commit/d59792d22f3e3e339ba0c050d9fd7cde60ed313f))
+
+
+### Features
+
+* handle post status through `is_public` meta ([#824](https://github.com/Automattic/newspack-newsletters/issues/824)) ([20065ae](https://github.com/Automattic/newspack-newsletters/commit/20065ae1a390da73f8fb7fb692bb027136e12bd8))
+* update init modal sidebar design ([#828](https://github.com/Automattic/newspack-newsletters/issues/828)) ([3246ed6](https://github.com/Automattic/newspack-newsletters/commit/3246ed6a0fa25d39e0800fdc77196c559dc45bf1))
+
+# [1.47.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.46.4...v1.47.0-alpha.1) (2022-06-02)
+
+
+### Bug Fixes
+
+* ensure controlled statuses after a post update ([#835](https://github.com/Automattic/newspack-newsletters/issues/835)) ([cbfd642](https://github.com/Automattic/newspack-newsletters/commit/cbfd64225375a55e47d192722681e54ed678e3a6))
+* migrate newsletters post status ([#825](https://github.com/Automattic/newspack-newsletters/issues/825)) ([d59792d](https://github.com/Automattic/newspack-newsletters/commit/d59792d22f3e3e339ba0c050d9fd7cde60ed313f))
+
+
+### Features
+
+* handle post status through `is_public` meta ([#824](https://github.com/Automattic/newspack-newsletters/issues/824)) ([20065ae](https://github.com/Automattic/newspack-newsletters/commit/20065ae1a390da73f8fb7fb692bb027136e12bd8))
+* update init modal sidebar design ([#828](https://github.com/Automattic/newspack-newsletters/issues/828)) ([3246ed6](https://github.com/Automattic/newspack-newsletters/commit/3246ed6a0fa25d39e0800fdc77196c559dc45bf1))
+
 ## [1.46.4](https://github.com/Automattic/newspack-newsletters/compare/v1.46.3...v1.46.4) (2022-05-30)
 
 

@@ -784,6 +784,7 @@ return array(
     'Yoast\\WP\\SEO\\Integrations\\Admin\\Social_Templates_Integration' => $baseDir . '/src/integrations/admin/social-templates-integration.php',
     'Yoast\\WP\\SEO\\Integrations\\Admin\\Workouts_Integration' => $baseDir . '/src/integrations/admin/workouts-integration.php',
     'Yoast\\WP\\SEO\\Integrations\\Alerts\\Abstract_Dismissable_Alert' => $baseDir . '/src/integrations/alerts/abstract-dismissable-alert.php',
+    'Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification' => $baseDir . '/src/integrations/alerts/webinar-promo-notification.php',
     'Yoast\\WP\\SEO\\Integrations\\Blocks\\Breadcrumbs_Block' => $baseDir . '/src/integrations/blocks/breadcrumbs-block.php',
     'Yoast\\WP\\SEO\\Integrations\\Blocks\\Dynamic_Block' => $baseDir . '/src/integrations/blocks/abstract-dynamic-block.php',
     'Yoast\\WP\\SEO\\Integrations\\Blocks\\Internal_Linking_Category' => $baseDir . '/src/integrations/blocks/block-categories.php',

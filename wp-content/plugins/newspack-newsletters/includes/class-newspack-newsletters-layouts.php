@@ -209,9 +209,13 @@ final class Newspack_Newsletters_Layouts {
 		foreach ( scandir( $layouts_base_path ) as $layout ) {
 			if ( strpos( $layout, '.json' ) !== false ) {
 				$decoded_layout  = json_decode( file_get_contents( $layouts_base_path . $layout, true ) ); //phpcs:ignore
-				$layouts[]      = array(
+				$title          = '';
+				if ( property_exists( $decoded_layout, 'title' ) ) {
+					$title = $decoded_layout->title;
+				}
+				$layouts[] = array(
 					'ID'           => $layout_id,
-					'post_title'   => $decoded_layout->title,
+					'post_title'   => $title,
 					'post_content' => self::layout_token_replacement( $decoded_layout->content ),
 				);
 				$layout_id++;

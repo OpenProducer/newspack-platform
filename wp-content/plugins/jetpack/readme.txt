@@ -1,7 +1,7 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, azaozz, batmoo, barry, beaulebens, biskobe, blobaugh, bjorsch, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, robertbpugh, roccotripaldi, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
 Tags: Security, backup, Woo, malware, scan, spam, CDN, search, social
-Stable tag: 10.9.1
+Stable tag: 11.0
 Requires at least: 5.9
 Requires PHP: 5.6
 Tested up to: 6.0
@@ -242,58 +242,39 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 4. Promote your newest posts, pages, and products across your social media channels.
 
 == Changelog ==
-### 10.9.1 - 2022-05-19
-#### Improved compatibility
-- Contact Form: ensure the option to export forms to a CSV file works with the upcoming version of WordPress, 6.0. [#24173]
-- General: Jetpack is now fully compatible with the upcoming version of WordPress, 6.0. [#24083]
-- General: Jetpack now requires a more recent version of WordPress (5.9). [#24083]
-- General: remove backwards compatibility code now that Jetpack requires WordPress 5.9. [#24086]
-
-#### Bug fixes
-- Publicize: ensure that Publicize works when publishing posts via AJAX requests, like when using the Elementor plugin. [#24387]
-- Secure Sign On: add the secure and httponly attribute to cookie used to log in. [#24418]
-
-### 10.9 - 2022-05-03
-#### Major Enhancements
-- VideoPress: add settings for controlling VideoPress video privacy.
-
+### 11.0 - 2022-06-07
 #### Enhancements
-- Connection: preventing other Jetpack-connected plugins from disconnecting when deactivating Jetpack from the plugins screen.
-- Dashboard: update the recommendation flow to include recommendations for VideoPress as well as discounts.
-- Google Fonts: update the Google Fonts module to be compatible with the most recent version of the WP_Webfonts API.
-- Payments Block: add additional features to the payment management control block (ability to mark as donation, and enabling customers to pick own amount).
-- Payments Block: add new property that establishes if the membership is editable by the site editor.
-- Payments Block: improves block selection behavior.
-- Payments Block: re-loading the page will not cause payment form to open again.
-- Protect: renamed to 'Brute Force Protection' in the UI.
-- Recommendations: add recommendation for anti-spam.
-- VideoPress: enable the resumable uploader.
-- VideoPress: improve upload speed, by increasing chunk size to 10MB for resumable uploads.
+- Custom CSS: add support for CSS properties: accent-color, aspect-ratio, gap, text-underline-offset.
+- Custom CSS: ensure the Additional CSS sub-menu link is more prominent.
+- Email subscriptions: update the default body of the "Confirmation request" email.
+- Google Fonts: add additional fonts to the list of available fonts.
+- Latest Instagram Posts Block: improve performance of the block by adding lazy load for the images.
+- Publicize: load Publicize only if the Publicize module is active.
+- Payments Block: refactor the donation block by unifying Stripe Nudge component.
+- Payments Block: reset form data to default values after creating a subscription.
+- Payments Block: refactor the product memberships store to reduce complexity and improve speed.
+- Sharing: update the email sharing button to use mailto links instead of server submissions.
+- VideoPress: add support for automatic seekbar color.
+- VideoPress: improve Extensibility of Privacy Setting filter by adding the embedded post id.
+- VideoPress: improve help message of VideoPress Privacy Setting at the block level.
+- WAF: add settings UI for Jetpack Firewall.
 
 #### Improved compatibility
-- Custom CSS: improve saving for legacy Custom CSS.
-- Dashboard: display block settings even when the Classic Editor plugin is active.
-- Improvements to backwards compatibility with other Jetpack plugins.
-- Mailchimp Popup widget: widget deprecation.
-- WordAds: change Jetpack Ads wording to be WordAds.
-- WordAds: remove the suggestion to use the ad widget from the dashboard.
+- General: improve connection sharing between Jetpack and Jetpack standalone plugins.
+- Stats: remove unnecessary type attribute from style element.
 
 #### Bug fixes
-- Assistant: style and CTA changes plus introductory offer fixes.
-- Button Block: remove default CSS that would overwrite core and theme styles.
-- Comments: check that Jetpack comments are supported before requiring nonce verification.
-- Contact Form: ensure the form's input fields inherit a default font size.
-- Payments Block: change the sidebar display when clicking 'add new subscription', as well as using an external link in the Customizer.
-- Payments Block: fix bug regarding creation of new Payment blocks.
-- Payments Block: make the 'one time' subscription recurrence always available.
-- Payments Block: remove the dropdown icon from the product management control subscription selector.
-- Pay with PayPal: fix issue with saving widget in Customizer.
-- Publicize: ensure bulk publishing posts won’t publicize those posts.
-- Random Redirect: fix 'set author name' functionality on author archives.
-- Slideshow Block: fix grid blowout when Slideshow block is inserted inside a Layout Grid block (in editor).
-- Subscribe Block: fix default styles block setting selection to 'Split'.
-- Top Posts Widget: ensure hooks retain existing behavior when adding extra data before or after each post.
-- VideoPress: fix issue adding video descriptions and metadata via the WordPress.com dashboard.
+- Assistant: fix unclickable banner dismiss button.
+- Comments: update UI to reflect that Google accounts are no longer a sign-in option.
+- Custom CSS: avoid PHP notice when using the Sass preprocessor on PHP 7.4+.
+- Payments Block: ensure Payments Block can only auto-select an existing product.
+- VideoPress: remove strict comparison to fix average color parameter.
+- Stats: ensure the Stats column can always be displayed, even when the post type does not support comments.
+- Subscriptions: fix typo in confirmation message.
+- VaultPress: fix a bug that caused certain cards in the Dashboard to flicker in some circumstances when VaultPress is active.
+- VideoPress: fix validation errors for core video block usage.
+- WAF: add activation/deactivation hooks for WAF feature.
+- Widget Visibility: avoid PHP warnings when loading widgets in some scenarios.
 
 --------
 

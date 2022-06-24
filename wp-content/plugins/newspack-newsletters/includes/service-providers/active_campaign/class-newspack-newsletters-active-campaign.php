@@ -20,7 +20,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		$this->controller = new Newspack_Newsletters_Active_Campaign_Controller( $this );
 
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
-		add_action( 'transition_post_status', [ $this, 'send' ], 10, 3 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
 
 		parent::__construct( $this );
@@ -184,7 +183,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		$from_email  = get_post_meta( $post_id, 'ac_from_email', true );
 		$list_id     = get_post_meta( $post_id, 'ac_list_id', true );
 		$result      = [
-			'campaign'    => (bool) $campaign_id, // Whether campaign exists, to satisfy the JS API. 
+			'campaign'    => (bool) $campaign_id, // Whether campaign exists, to satisfy the JS API.
 			'campaign_id' => $campaign_id,
 			'from_name'   => $from_name,
 			'from_email'  => $from_email,
@@ -243,7 +242,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 					'messageid'  => $sync_result['message_id'],
 					'email'      => implode( ',', $emails ),
 				],
-			] 
+			]
 		);
 		return $test_result;
 	}
@@ -438,7 +437,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 							'status' => 1,
 							'sdate'  => $schedule_date->format( 'Y-m-d H:i:s' ),
 						],
-					] 
+					]
 				);
 				if ( is_wp_error( $send_result ) ) {
 					$error = $send_result;

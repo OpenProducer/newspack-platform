@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit654002643e467df00eb8708ac77efa91
+class ComposerStaticInit5039f06f93a5f7b6d2cb19a55bcfd618
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -799,6 +799,7 @@ class ComposerStaticInit654002643e467df00eb8708ac77efa91
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Social_Templates_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/social-templates-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Workouts_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/workouts-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Abstract_Dismissable_Alert' => __DIR__ . '/../..' . '/src/integrations/alerts/abstract-dismissable-alert.php',
+        'Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/webinar-promo-notification.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Breadcrumbs_Block' => __DIR__ . '/../..' . '/src/integrations/blocks/breadcrumbs-block.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Dynamic_Block' => __DIR__ . '/../..' . '/src/integrations/blocks/abstract-dynamic-block.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Internal_Linking_Category' => __DIR__ . '/../..' . '/src/integrations/blocks/block-categories.php',
@@ -1040,9 +1041,9 @@ class ComposerStaticInit654002643e467df00eb8708ac77efa91
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit654002643e467df00eb8708ac77efa91::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit654002643e467df00eb8708ac77efa91::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit654002643e467df00eb8708ac77efa91::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5039f06f93a5f7b6d2cb19a55bcfd618::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5039f06f93a5f7b6d2cb19a55bcfd618::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5039f06f93a5f7b6d2cb19a55bcfd618::$classMap;
 
         }, null, ClassLoader::class);
     }

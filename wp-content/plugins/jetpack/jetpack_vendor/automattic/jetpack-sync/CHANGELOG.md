@@ -5,9 +5,34 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/)
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [1.31.0.1] - 2022-05-19
+## [1.35.0] - 2022-05-30
 ### Changed
-- WordPress 6.1 Compatibilty
+- Sync: Add '_jetpack_blogging_prompt_key' to default post meta whitelist
+
+## [1.34.0] - 2022-05-24
+### Changed
+- Dedicated Sync - Introduce custom endpoint for spawning Sync requests [#24468]
+- Sync: Add 'active_modules' to default whitelisted callables. [#24453]
+
+## [1.33.1] - 2022-05-19
+### Removed
+- Removed dedicated sync custom endpoints pending error investigation [#24419]
+
+## [1.33.0] - 2022-05-18
+### Changed
+- Dedicated Sync: Introduce custom endpoint for spawning Sync requests [#24344]
+
+## [1.32.0] - 2022-05-10
+### Added
+- Search: add search options to option whitelist [#24167]
+
+## [1.31.1] - 2022-05-04
+### Changed
+- Updated package dependencies. [#24095]
+- WordPress 6.1 Compatibilty [#24083]
+
+### Deprecated
+- Moved the options class into Connection. [#24095]
 
 ## [1.31.0] - 2022-04-26
 ### Added
@@ -634,7 +659,12 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 - Packages: Move sync to a classmapped package
 
-[1.31.0.1]: https://github.com/Automattic/jetpack-sync/compare/v1.31.0...v1.31.1
+[1.35.0]: https://github.com/Automattic/jetpack-sync/compare/v1.34.0...v1.35.0
+[1.34.0]: https://github.com/Automattic/jetpack-sync/compare/v1.33.1...v1.34.0
+[1.33.1]: https://github.com/Automattic/jetpack-sync/compare/v1.33.0...v1.33.1
+[1.33.0]: https://github.com/Automattic/jetpack-sync/compare/v1.32.0...v1.33.0
+[1.32.0]: https://github.com/Automattic/jetpack-sync/compare/v1.31.1...v1.32.0
+[1.31.1]: https://github.com/Automattic/jetpack-sync/compare/v1.31.0...v1.31.1
 [1.31.0]: https://github.com/Automattic/jetpack-sync/compare/v1.30.8...v1.31.0
 [1.30.8]: https://github.com/Automattic/jetpack-sync/compare/v1.30.7...v1.30.8
 [1.30.7]: https://github.com/Automattic/jetpack-sync/compare/v1.30.6...v1.30.7

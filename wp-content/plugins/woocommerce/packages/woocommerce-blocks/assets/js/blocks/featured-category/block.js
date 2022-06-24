@@ -1,6 +1,9 @@
+/* eslint-disable @wordpress/no-unsafe-wp-apis */
+
 /**
  * External dependencies
  */
+import { useCallback, useEffect, useState } from 'react';
 import { __ } from '@wordpress/i18n';
 import {
 	AlignmentToolbar,
@@ -9,6 +12,11 @@ import {
 	InspectorControls,
 	MediaReplaceFlow,
 	RichText,
+	__experimentalGetSpacingClassesAndStyles as getSpacingClassesAndStyles,
+	__experimentalImageEditingProvider as ImageEditingProvider,
+	__experimentalImageEditor as ImageEditor,
+	__experimentalPanelColorGradientSettings as PanelColorGradientSettings,
+	__experimentalUseGradient as useGradient,
 } from '@wordpress/block-editor';
 import {
 	Button,
@@ -16,20 +24,23 @@ import {
 	PanelBody,
 	Placeholder,
 	RangeControl,
-	ResizableBox,
 	Spinner,
 	ToggleControl,
+	ToolbarButton,
 	ToolbarGroup,
 	withSpokenMessages,
+	__experimentalToggleGroupControl as ToggleGroupControl,
+	__experimentalToggleGroupControlOption as ToggleGroupControlOption,
+	TextareaControl,
+	ExternalLink,
 } from '@wordpress/components';
 import classnames from 'classnames';
 import { Component } from '@wordpress/element';
 import { withSelect } from '@wordpress/data';
 import { compose, createHigherOrderComponent } from '@wordpress/compose';
 import PropTypes from 'prop-types';
-import { getSetting } from '@woocommerce/settings';
 import { folderStarred } from '@woocommerce/icons';
-import { Icon } from '@wordpress/icons';
+import { crop, Icon } from '@wordpress/icons';
 import ProductCategoryControl from '@woocommerce/editor-components/product-category-control';
 import ErrorPlaceholder from '@woocommerce/editor-components/error-placeholder';
 import TextToolbarButton from '@woocommerce/editor-components/text-toolbar-button';
@@ -39,11 +50,17 @@ import TextToolbarButton from '@woocommerce/editor-components/text-toolbar-butto
  */
 import {
 	dimRatioToClass,
-	getBackgroundImageStyles,
 	getCategoryImageId,
 	getCategoryImageSrc,
 } from './utils';
 import { withCategory } from '../../hocs';
+import { calculateBackgroundImagePosition } from '../featured-product/utils';
+import { ConstrainedResizable } from '../featured-product/block';
+
+const DEFAULT_EDITOR_SIZE = {
+	height: 500,
+	width: 500,
+};
 
 /**
  * Component to handle edit mode of "Featured Category".
@@ -70,6 +87,29 @@ const FeaturedCategory = ( {
 	debouncedSpeak,
 	triggerUrlUpdate = () => void null,
 } ) => {
+	const { mediaId, mediaSrc } = attributes;
+
+	const [ isEditingImage, setIsEditingImage ] = useState( false );
+	const [ backgroundImageSize, setBackgroundImageSize ] = useState( {} );
+	const { setGradient } = useGradient( {
+		gradientAttribute: 'overlayGradient',
+		customGradientAttribute: 'overlayGradient',
+	} );
+
+	const backgroundImageSrc = mediaSrc || getCategoryImageSrc( category );
+	const backgroundImageId = mediaId || getCategoryImageId( category );
+
+	const onResize = useCallback(
+		( _event, _direction, elt ) => {
+			setAttributes( { minHeight: parseInt( elt.style.height, 10 ) } );
+		},
+		[ setAttributes ]
+	);
+
+	useEffect( () => {
+		setIsEditingImage( false );
+	}, [ isSelected ] );
+
 	const renderApiError = () => (
 		<ErrorPlaceholder
 			className="wc-block-featured-category-error"
@@ -80,8 +120,7 @@ const FeaturedCategory = ( {
 	);
 
 	const getBlockControls = () => {
-		const { contentAlign, mediaSrc } = attributes;
-		const mediaId = attributes.mediaId || getCategoryImageId( category );
+		const { contentAlign, editMode } = attributes;
 
 		return (
 			<BlockControls>
@@ -92,8 +131,18 @@ const FeaturedCategory = ( {
 					} }
 				/>
 				<ToolbarGroup>
+					{ backgroundImageSrc && ! isEditingImage && (
+						<ToolbarButton
+							onClick={ () => setIsEditingImage( true ) }
+							icon={ crop }
+							label={ __(
+								'Edit category image',
+								'woocommerce'
+							) }
+						/>
+					) }
 					<MediaReplaceFlow
-						mediaId={ mediaId }
+						mediaId={ backgroundImageId }
 						mediaURL={ mediaSrc }
 						accept="image/*"
 						onSelect={ ( media ) => {
@@ -104,7 +153,7 @@ const FeaturedCategory = ( {
 						} }
 						allowedTypes={ [ 'image' ] }
 					/>
-					{ mediaId && mediaSrc ? (
+					{ backgroundImageId && mediaSrc ? (
 						<TextToolbarButton
 							onClick={ () =>
 								setAttributes( { mediaId: 0, mediaSrc: '' } )
@@ -133,7 +182,6 @@ const FeaturedCategory = ( {
 	};
 
 	const getInspectorControls = () => {
-		const url = attributes.mediaSrc || getCategoryImageSrc( category );
 		const { focalPoint = { x: 0.5, y: 0.5 } } = attributes;
 		// FocalPointPicker was introduced in Gutenberg 5.0 (WordPress 5.2),
 		// so we need to check if it exists before using it.
@@ -155,41 +203,140 @@ const FeaturedCategory = ( {
 						}
 					/>
 				</PanelBody>
-				{ !! url && (
+				{ !! backgroundImageSrc && (
 					<>
-						<PanelBody
-							title={ __(
-								'Overlay',
-								'woocommerce'
-							) }
-						>
-							<RangeControl
-								label={ __(
-									'Background Opacity',
+						{ focalPointPickerExists && (
+							<PanelBody
+								title={ __(
+									'Media settings',
 									'woocommerce'
 								) }
-								value={ attributes.dimRatio }
-								onChange={ ( ratio ) =>
-									setAttributes( { dimRatio: ratio } )
-								}
-								min={ 0 }
-								max={ 100 }
-								step={ 10 }
-							/>
-							{ focalPointPickerExists && (
+							>
+								<ToggleGroupControl
+									help={
+										<>
+											<p>
+												{ __(
+													'Choose “Cover” if you want the image to scale automatically to always fit its container.',
+													'woocommerce'
+												) }
+											</p>
+											<p>
+												{ __(
+													'Note: by choosing “Cover” you will lose the ability to freely move the focal point precisely.',
+													'woocommerce'
+												) }
+											</p>
+										</>
+									}
+									label={ __(
+										'Image fit',
+										'woocommerce'
+									) }
+									value={ attributes.imageFit }
+									onChange={ ( value ) =>
+										setAttributes( {
+											imageFit: value,
+										} )
+									}
+								>
+									<ToggleGroupControlOption
+										label={ __(
+											'None',
+											'woocommerce'
+										) }
+										value="none"
+									/>
+									<ToggleGroupControlOption
+										/* translators: "Cover" is a verb that indicates an image covering the entire container. */
+										label={ __(
+											'Cover',
+											'woocommerce'
+										) }
+										value="cover"
+									/>
+								</ToggleGroupControl>
 								<FocalPointPicker
 									label={ __(
 										'Focal Point Picker',
 										'woocommerce'
 									) }
-									url={ url }
+									url={ backgroundImageSrc }
 									value={ focalPoint }
 									onChange={ ( value ) =>
-										setAttributes( { focalPoint: value } )
+										setAttributes( {
+											focalPoint: value,
+										} )
 									}
 								/>
+								<TextareaControl
+									label={ __(
+										'Alt text (alternative text)',
+										'woocommerce'
+									) }
+									value={ attributes.alt }
+									onChange={ ( alt ) => {
+										setAttributes( { alt } );
+									} }
+									help={
+										<>
+											<ExternalLink href="https://www.w3.org/WAI/tutorials/images/decision-tree">
+												{ __(
+													'Describe the purpose of the image',
+													'woocommerce'
+												) }
+											</ExternalLink>
+											{ __(
+												'Leaving it empty will use the category name.',
+												'woocommerce'
+											) }
+										</>
+									}
+								/>
+							</PanelBody>
+						) }
+						<PanelColorGradientSettings
+							__experimentalHasMultipleOrigins
+							__experimentalIsRenderedInSidebar
+							title={ __(
+								'Overlay',
+								'woocommerce'
 							) }
-						</PanelBody>
+							initialOpen={ true }
+							settings={ [
+								{
+									colorValue: attributes.overlayColor,
+									gradientValue: attributes.overlayGradient,
+									onColorChange: ( overlayColor ) =>
+										setAttributes( { overlayColor } ),
+									onGradientChange: ( overlayGradient ) => {
+										setGradient( overlayGradient );
+										setAttributes( {
+											overlayGradient,
+										} );
+									},
+									label: __(
+										'Color',
+										'woocommerce'
+									),
+								},
+							] }
+						>
+							<RangeControl
+								label={ __(
+									'Opacity',
+									'woocommerce'
+								) }
+								value={ attributes.dimRatio }
+								onChange={ ( dimRatio ) =>
+									setAttributes( { dimRatio } )
+								}
+								min={ 0 }
+								max={ 100 }
+								step={ 10 }
+								required
+							/>
+						</PanelColorGradientSettings>
 					</>
 				) }
 			</InspectorControls>
@@ -295,11 +442,15 @@ const FeaturedCategory = ( {
 
 	const renderCategory = () => {
 		const {
-			height,
 			contentAlign,
 			dimRatio,
 			focalPoint,
+			imageFit,
+			minHeight,
+			overlayColor,
+			overlayGradient,
 			showDesc,
+			style,
 		} = attributes;
 
 		const classes = classnames(
@@ -313,47 +464,77 @@ const FeaturedCategory = ( {
 			dimRatioToClass( dimRatio ),
 			contentAlign !== 'center' && `has-${ contentAlign }-content`
 		);
-		const mediaSrc = attributes.mediaSrc || getCategoryImageSrc( category );
-		const style = !! category ? getBackgroundImageStyles( mediaSrc ) : {};
-		if ( focalPoint ) {
-			const bgPosX = focalPoint.x * 100;
-			const bgPosY = focalPoint.y * 100;
-			style.backgroundPosition = `${ bgPosX }% ${ bgPosY }%`;
-		}
 
-		const onResizeStop = ( event, direction, elt ) => {
-			setAttributes( { height: parseInt( elt.style.height, 10 ) } );
+		const containerStyle = {
+			borderRadius: style?.border?.radius,
+		};
+
+		const wrapperStyle = {
+			...getSpacingClassesAndStyles( attributes ).style,
+			minHeight,
+		};
+
+		const backgroundImageStyle = {
+			...calculateBackgroundImagePosition( focalPoint ),
+			objectFit: imageFit,
+		};
+
+		const overlayStyle = {
+			background: overlayGradient,
+			backgroundColor: overlayColor,
 		};
 
 		return (
-			<ResizableBox
-				className={ classes }
-				size={ { height } }
-				minHeight={ getSetting( 'min_height', 500 ) }
-				enable={ { bottom: true } }
-				onResizeStop={ onResizeStop }
-				style={ style }
-			>
-				<div className="wc-block-featured-category__wrapper">
-					<h2
-						className="wc-block-featured-category__title"
-						dangerouslySetInnerHTML={ {
-							__html: category.name,
-						} }
-					/>
-					{ showDesc && (
+			<>
+				<ConstrainedResizable
+					enable={ { bottom: true } }
+					onResize={ onResize }
+					showHandle={ isSelected }
+					style={ { minHeight } }
+				/>
+				<div className={ classes } style={ containerStyle }>
+					<div
+						className="wc-block-featured-category__wrapper"
+						style={ wrapperStyle }
+					>
 						<div
-							className="wc-block-featured-category__description"
+							className="wc-block-featured-category__overlay"
+							style={ overlayStyle }
+						/>
+						{ backgroundImageSrc && (
+							<img
+								alt={ category.description }
+								className="wc-block-featured-category__background-image"
+								src={ backgroundImageSrc }
+								style={ backgroundImageStyle }
+								onLoad={ ( e ) => {
+									setBackgroundImageSize( {
+										height: e.target?.naturalHeight,
+										width: e.target?.naturalWidth,
+									} );
+								} }
+							/>
+						) }
+						<h2
+							className="wc-block-featured-category__title"
 							dangerouslySetInnerHTML={ {
-								__html: category.description,
+								__html: category.name,
 							} }
 						/>
-					) }
-					<div className="wc-block-featured-category__link">
-						{ renderButton() }
+						{ showDesc && (
+							<div
+								className="wc-block-featured-category__description"
+								dangerouslySetInnerHTML={ {
+									__html: category.description,
+								} }
+							/>
+						) }
+						<div className="wc-block-featured-category__link">
+							{ renderButton() }
+						</div>
 					</div>
 				</div>
-			</ResizableBox>
+			</>
 		);
 	};
 
@@ -382,6 +563,40 @@ const FeaturedCategory = ( {
 
 	if ( editMode ) {
 		return renderEditMode();
+	}
+
+	if ( isEditingImage ) {
+		return (
+			<>
+				<ImageEditingProvider
+					id={ backgroundImageId }
+					url={ backgroundImageSrc }
+					naturalHeight={
+						backgroundImageSize.height || DEFAULT_EDITOR_SIZE.height
+					}
+					naturalWidth={
+						backgroundImageSize.width || DEFAULT_EDITOR_SIZE.width
+					}
+					onSaveImage={ ( { id, url } ) => {
+						setAttributes( { mediaId: id, mediaSrc: url } );
+					} }
+					isEditing={ isEditingImage }
+					onFinishEditing={ () => setIsEditingImage( false ) }
+				>
+					<ImageEditor
+						url={ backgroundImageSrc }
+						height={
+							backgroundImageSize.height ||
+							DEFAULT_EDITOR_SIZE.height
+						}
+						width={
+							backgroundImageSize.width ||
+							DEFAULT_EDITOR_SIZE.width
+						}
+					/>
+				</ImageEditingProvider>
+			</>
+		);
 	}
 
 	return (

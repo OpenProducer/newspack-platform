@@ -8,6 +8,9 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'analytics' => true,
 			'coupons' => true,
 			'customer-effort-score-tracks' => true,
+			'experimental-products-task' => true,
+			'experimental-import-products-task' => true,
+			'experimental-fashion-sample-products' => true,
 			'homescreen' => true,
 			'marketing' => true,
 			'minified-js' => false,
@@ -25,6 +28,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'transient-notices' => true,
 			'wc-pay-promotion' => true,
 			'wc-pay-welcome-page' => true,
+			'wc-pay-subscriptions-page' => true,
 		);
 	}
 }
