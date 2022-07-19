@@ -344,7 +344,7 @@ final class Bidding_GAM {
 		);
 		\wp_register_style(
 			'newspack-ads-bidding-gam',
-			plugins_url( '../dist/header-bidding-gam.css', __FILE__ ),
+			plugins_url( '../../dist/header-bidding-gam.css', __FILE__ ),
 			null,
 			filemtime( dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/dist/header-bidding-gam.css' )
 		);

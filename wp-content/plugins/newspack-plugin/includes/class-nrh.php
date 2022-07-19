@@ -129,7 +129,6 @@ class NRH {
 				'once'  => 'once',
 				'month' => 'monthly',
 				'year'  => 'yearly',
-
 			];
 
 			$selected_frequency = isset( $attributes['defaultFrequency'] ) ? $attributes['defaultFrequency'] : 'month';
@@ -237,8 +236,7 @@ class NRH {
 						<div class='wp-block-newspack-blocks-donate__options'>
 							<?php foreach ( $frequencies as $frequency_slug => $frequency_name ) : ?>
 								<?php
-									$amount           = 'year' === $frequency_slug || 'once' === $frequency_slug ? 12 * $settings['suggestedAmountUntiered'] : $settings['suggestedAmountUntiered'];
-									$formatted_amount = number_format( $amount, floatval( $amount ) - intval( $amount ) ? 2 : 0 );
+									$formatted_amount = 'year' === $frequency_slug || 'once' === $frequency_slug ? 12 * $settings['suggestedAmountUntiered'] : $settings['suggestedAmountUntiered'];
 								?>
 
 								<div class='wp-block-newspack-blocks-donate__frequency frequency'>
@@ -370,7 +368,7 @@ class NRH {
 											<div class='wp-block-newspack-blocks-donate__tier'>
 												<?php
 													$amount           = 'year' === $frequency_slug || 'once' === $frequency_slug ? 12 * $suggested_amount : $suggested_amount;
-													$formatted_amount = $settings['currencySymbol'] . number_format( $amount, floatval( $amount ) - intval( $amount ) ? 2 : 0 );
+													$formatted_amount = $settings['currencySymbol'] . $amount;
 												?>
 												<input
 													type='radio'

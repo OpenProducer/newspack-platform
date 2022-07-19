@@ -99,6 +99,86 @@ class Patches {
 	}
 
 	/**
+	 * Dynamically look up post IDs for protected pages.
+	 *
+	 * @return array Array of post IDs for "special" pages.
+	 */
+	public static function get_protected_page_ids() {
+		$protected_page_ids = [];
+
+		// Homepage.
+		$front_page = intval( get_option( 'page_on_front', -1 ) );
+		if ( 0 < $front_page ) {
+			$protected_page_ids[] = $front_page;
+		}
+
+		// Blog posts page.
+		$posts_page = intval( get_option( 'page_for_posts', -1 ) );
+		if ( 0 < $posts_page ) {
+			$protected_page_ids[] = $posts_page;
+		}
+
+		// Privacy policy page.
+		$privacy_policy = intval( get_option( 'wp_page_for_privacy_policy', -1 ) );
+		if ( 0 < $privacy_policy ) {
+			$protected_page_ids[] = $privacy_policy;
+		}
+
+		// Donate page.
+		$donate_page = intval( get_option( Donations::DONATION_PAGE_ID_OPTION, -1 ) );
+		if ( 0 < $donate_page ) {
+			$protected_page_ids[] = $donate_page;
+		}
+
+		// WooCommerce pages.
+		if ( function_exists( 'wc_get_page_id' ) && function_exists( 'wc_privacy_policy_page_id' ) ) {
+			// WooCommerce myaccount page.
+			$account_page = wc_get_page_id( 'myaccount' );
+			if ( 0 < $account_page ) {
+				$protected_page_ids[] = $account_page;
+			}
+
+			// WooCommerce shop page.
+			$shop = wc_get_page_id( 'shop' );
+			if ( 0 < $shop ) {
+				$protected_page_ids[] = $shop;
+			}
+
+			// WooCommerce cart page.
+			$cart = wc_get_page_id( 'cart' );
+			if ( 0 < $cart ) {
+				$protected_page_ids[] = $cart;
+			}
+
+			// WooCommerce checkout page.
+			$checkout = wc_get_page_id( 'checkout' );
+			if ( 0 < $checkout ) {
+				$protected_page_ids[] = $checkout;
+			}
+
+			// WooCommerce view_order page.
+			$view_order = wc_get_page_id( 'view_order' );
+			if ( 0 < $view_order ) {
+				$protected_page_ids[] = $view_order;
+			}
+
+			// WooCommerce terms page.
+			$terms = wc_get_page_id( 'terms' );
+			if ( 0 < $terms ) {
+				$protected_page_ids[] = $terms;
+			}
+
+			// WooCommerce privacy policy page.
+			$wc_privacy_policy = wc_privacy_policy_page_id();
+			if ( 0 < $wc_privacy_policy ) {
+				$protected_page_ids[] = $wc_privacy_policy;
+			}
+		}
+
+		return $protected_page_ids;
+	}
+
+	/**
 	 * Prevent deletion of essential pages such as the homepage, blog posts page, and WooCommerce pages.
 	 *
 	 * @param array  $caps Primitive capabilities required of the user.
@@ -114,80 +194,15 @@ class Patches {
 			return $caps;
 		}
 
-		$protected_post_ids = [];
-		$post_id            = $args[0]; // First item is usually the post ID.
+		$post_id = $args[0]; // First item is usually the post ID.
 
 		// If $post_id isn't a valid post, bail early.
 		if ( false === get_post_type( $post_id ) ) {
 			return $caps;
 		}
 
-		// Dynamically look up post IDs for protected pages.
-		// Homepage.
-		$front_page = intval( get_option( 'page_on_front', -1 ) );
-		if ( 0 < $front_page ) {
-			$protected_post_ids[] = $front_page;
-		}
-
-		// Blog posts page.
-		$posts_page = intval( get_option( 'page_for_posts', -1 ) );
-		if ( 0 < $posts_page ) {
-			$protected_post_ids[] = $posts_page;
-		}
-
-		// Privacy policy page.
-		$privacy_policy = intval( get_option( 'wp_page_for_privacy_policy', -1 ) );
-		if ( 0 < $privacy_policy ) {
-			$protected_post_ids[] = $privacy_policy;
-		}
-
-		// WooCommerce pages.
-		if ( function_exists( 'wc_get_page_id' ) && function_exists( 'wc_privacy_policy_page_id' ) ) {
-			// WooCommerce myaccount page.
-			$account_page = wc_get_page_id( 'myaccount' );
-			if ( 0 < $account_page ) {
-				$protected_post_ids[] = $account_page;
-			}
-
-			// WooCommerce shop page.
-			$shop = wc_get_page_id( 'shop' );
-			if ( 0 < $shop ) {
-				$protected_post_ids[] = $shop;
-			}
-
-			// WooCommerce cart page.
-			$cart = wc_get_page_id( 'cart' );
-			if ( 0 < $cart ) {
-				$protected_post_ids[] = $cart;
-			}
-
-			// WooCommerce checkout page.
-			$checkout = wc_get_page_id( 'checkout' );
-			if ( 0 < $checkout ) {
-				$protected_post_ids[] = $checkout;
-			}
-
-			// WooCommerce view_order page.
-			$view_order = wc_get_page_id( 'view_order' );
-			if ( 0 < $view_order ) {
-				$protected_post_ids[] = $view_order;
-			}
-
-			// WooCommerce terms page.
-			$terms = wc_get_page_id( 'terms' );
-			if ( 0 < $terms ) {
-				$protected_post_ids[] = $terms;
-			}
-
-			// WooCommerce privacy policy page.
-			$wc_privacy_policy = wc_privacy_policy_page_id();
-			if ( 0 < $wc_privacy_policy ) {
-				$protected_post_ids[] = $wc_privacy_policy;
-			}
-		}
-
 		// If the current page ID is protected, and the capability being checked is for deletion, do not allow.
-		if ( 'delete_post' === $cap && in_array( $post_id, $protected_post_ids, true ) ) {
+		if ( 'delete_post' === $cap && in_array( $post_id, self::get_protected_page_ids(), true ) ) {
 			$caps[] = 'do_not_allow';
 		}
 

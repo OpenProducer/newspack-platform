@@ -1,7 +1,7 @@
 <?php
 /**
  * Newspack Ads Placement Customize Control.
- * 
+ *
  * @package Newspack
  */
 
@@ -41,7 +41,7 @@ final class Placement_Customize_Control extends \WP_Customize_Control {
 
 	/**
 	 * Placement configuration.
-	 * 
+	 *
 	 * @var array
 	 */
 	private $placement = null;
@@ -95,11 +95,11 @@ final class Placement_Customize_Control extends \WP_Customize_Control {
 	 *
 	 * @param string $hook_key Optional hook key, will look root placement otherwise.
 	 *
-	 * @return string Provider ID or \Newspack_Ads\Providers::DEFAULT_PROVIDER if not found.
+	 * @return string Provider ID or empty string.
 	 */
 	private function get_provider_value( $hook_key = '' ) {
 		$value   = json_decode( $this->value(), true );
-		$default = Providers::DEFAULT_PROVIDER;
+		$default = '';
 		$data    = $value;
 		if ( ! empty( $hook_key ) && isset( $value['hooks'], $value['hooks'][ $hook_key ] ) ) {
 			$data = $value['hooks'][ $hook_key ];
@@ -121,6 +121,22 @@ final class Placement_Customize_Control extends \WP_Customize_Control {
 			$data = $value['hooks'][ $hook_key ];
 		}
 		return isset( $data['ad_unit'] ) ? $data['ad_unit'] : '';
+	}
+
+	/**
+	 * Get the value of "fixed height" feature given its hook key.
+	 *
+	 * @param string $hook_key Optional hook key, will look root placement otherwise.
+	 *
+	 * @return string Ad unit ID or empty string if not found.
+	 */
+	private function get_fixed_height_value( $hook_key = '' ) {
+		$value = json_decode( $this->value(), true );
+		$data  = $value;
+		if ( ! empty( $hook_key ) && isset( $value['hooks'], $value['hooks'][ $hook_key ] ) ) {
+			$data = $value['hooks'][ $hook_key ];
+		}
+		return isset( $data['fixed_height'] ) ? (bool) $data['fixed_height'] : false;
 	}
 
 	/**
@@ -263,6 +279,29 @@ final class Placement_Customize_Control extends \WP_Customize_Control {
 	}
 
 	/**
+	 * Render the control's "fixed height" checkbox.
+	 *
+	 * @param bool   $value    The current value of the control.
+	 * @param string $hook_key The hook key.
+	 */
+	private function render_fixed_height_checkbox( $value = false, $hook_key = '' ) {
+		$id_args = [ 'fixed-height' ];
+		if ( $hook_key ) {
+			$id_args[] = $hook_key;
+		}
+		$label    = __( 'Fixed height', 'newspack-ads' );
+		$input_id = $this->get_element_id( 'input', $id_args );
+		$desc_id  = $this->get_element_id( 'description', $id_args );
+		?>
+		<span class="customize-control fixed-height-checkbox">
+			<input id="<?php echo esc_attr( $input_id ); ?>" type="checkbox" value="1" <?php checked( $value, '1' ); ?> />
+			<label for="<?php echo esc_attr( $input_id ); ?>"><?php echo esc_html( $label ); ?></label>
+			<span id="<?php echo esc_attr( $desc_id ); ?>" class="description customize-control-description"><?php esc_html_e( 'Avoid content layout shift by using the ad unit height as fixed height for this placement. This is recommended if an ad is guaranteed to be shown across all devices.', 'newspack-ads' ); ?></span>
+		</span>
+		<?php
+	}
+
+	/**
 	 * Render the control's "stick to top" checkbox.
 	 *
 	 * @param bool   $value    The current value of the control.
@@ -341,6 +380,7 @@ final class Placement_Customize_Control extends \WP_Customize_Control {
 					$this->render_placement_hook_control( $hook_key, $this->placement );
 				}
 			}
+			$this->render_fixed_height_checkbox( $this->get_fixed_height_value() );
 			if ( in_array( 'stick_to_top', $this->placement['supports'], true ) ) {
 				$this->render_stick_to_top_checkbox( $this->get_stick_to_top_value() );
 			}

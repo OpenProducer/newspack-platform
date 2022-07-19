@@ -38,12 +38,14 @@ interface Provider_Interface {
 	/**
 	 * The provider available units for placement.
 	 *
+	 * @param bool $refresh Whether refresh provider units data.
+	 *
 	 * @return array[
 	 *  'name'  => string,
 	 *  'value' => string
 	 * ] The provider available units for placement.
 	 */
-	public function get_units();
+	public function get_units( $refresh = false );
 
 	/**
 	 * The ad code for rendering.

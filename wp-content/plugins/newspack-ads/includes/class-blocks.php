@@ -9,6 +9,7 @@ namespace Newspack_Ads;
 
 use Newspack_Ads\Core;
 use Newspack_Ads\Placements;
+use Newspack_Ads\Providers;
 
 /**
  * Newspack Ads Blocks Management
@@ -35,19 +36,22 @@ final class Blocks {
 			'newspack-ads/ad-unit',
 			[
 				'attributes'      => [
-					'provider'    => [
-						'type'    => 'string',
-						'default' => 'gam',
-					],
-					'ad_unit'     => [
+					'provider'     => [
 						'type' => 'string',
 					],
-					'bidders_ids' => [
+					'ad_unit'      => [
+						'type' => 'string',
+					],
+					'bidders_ids'  => [
 						'type'    => 'object',
 						'default' => [],
 					],
+					'fixed_height' => [
+						'type'    => 'boolean',
+						'default' => false,
+					],
 					// Legacy attribute.
-					'activeAd'    => [
+					'activeAd'     => [
 						'type' => 'string',
 					],
 				],
@@ -70,7 +74,7 @@ final class Blocks {
 			[
 				'id'       => uniqid(),
 				'enabled'  => true,
-				'provider' => 'gam',
+				'provider' => Providers::get_default_provider(),
 				'ad_unit'  => isset( $attrs['activeAd'] ) ? $attrs['activeAd'] : '',
 			]
 		);
@@ -115,7 +119,7 @@ final class Blocks {
 
 	/**
 	 * Render block.
-	 * 
+	 *
 	 * @param array[] $attrs Block attributes.
 	 *
 	 * @return string Block HTML.

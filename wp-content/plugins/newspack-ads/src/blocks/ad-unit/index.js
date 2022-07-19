@@ -34,7 +34,6 @@ export const settings = {
 	attributes: {
 		provider: {
 			type: 'string',
-			default: 'gam',
 		},
 		ad_unit: {
 			type: 'string',
@@ -42,6 +41,10 @@ export const settings = {
 		bidders_ids: {
 			type: 'object',
 			default: {},
+		},
+		fixed_height: {
+			type: 'boolean',
+			default: false,
 		},
 		// Legacy attribute.
 		activeAd: {

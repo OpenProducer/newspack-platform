@@ -68,19 +68,16 @@ main#tribe-events-pg-template {
     flex-wrap: wrap;
     justify-content: space-between;
   }
-
   .tec-wrapper #secondary {
     margin-top: 2rem;
     width: calc( 35% - 2rem );
   }
-
   .tec-sidebar #tribe-events-pg-template {
     margin: 0;
     padding-right: 0;
     padding-left: 0;
     width: 65%;
   }
-
   .tribe-common--breakpoint-medium.tribe-common .tribe-common-l-container {
     padding-left: 0;
     padding-right: 0;

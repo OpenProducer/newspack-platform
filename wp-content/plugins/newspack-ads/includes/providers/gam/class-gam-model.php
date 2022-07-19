@@ -35,11 +35,11 @@ final class GAM_Model {
 	public static $custom_post_type = 'newspack_ad_codes';
 
 	/**
-	 * Array of all unique div IDs used for ads.
+	 * Associative array of all ad slots that will be rendered on the page.
 	 *
 	 * @var array
 	 */
-	public static $ad_ids = [];
+	public static $slots = [];
 
 	/**
 	 * Whether GAM units were already synced.
@@ -55,8 +55,8 @@ final class GAM_Model {
 	 * @return void
 	 */
 	public static function init() {
-		add_action( 'init', array( __CLASS__, 'register_ad_post_type' ) );
-		add_action( 'newspack_ads_activation_hook', array( __CLASS__, 'register_default_placements_units' ) );
+		add_action( 'init', [ __CLASS__, 'register_ad_post_type' ] );
+		add_action( 'newspack_ads_activation_hook', [ __CLASS__, 'register_default_placements_units' ] );
 		GAM_API::set_network_code( get_option( self::OPTION_NAME_GAM_NETWORK_CODE, null ) );
 	}
 
@@ -160,9 +160,10 @@ final class GAM_Model {
 			);
 		}
 
-		$unique_id = $config['unique_id'] ?? uniqid();
-		$placement = $config['placement'] ?? '';
-		$context   = $config['context'] ?? '';
+		$unique_id    = $config['unique_id'] ?? uniqid();
+		$placement    = $config['placement'] ?? '';
+		$context      = $config['context'] ?? '';
+		$fixed_height = $config['fixed_height'] ?? false;
 
 		$ad_units = self::get_ad_units( false );
 
@@ -178,8 +179,9 @@ final class GAM_Model {
 		}
 		$ad_unit = $ad_units[ $index ];
 
-		$ad_unit['placement'] = $placement;
-		$ad_unit['context']   = $context;
+		$ad_unit['placement']    = $placement;
+		$ad_unit['context']      = $context;
+		$ad_unit['fixed_height'] = $fixed_height;
 
 		$ad_unit['ad_code']     = self::get_ad_unit_code( $ad_unit, $unique_id );
 		$ad_unit['amp_ad_code'] = self::get_ad_unit_amp_code( $ad_unit, $unique_id );
@@ -304,7 +306,6 @@ final class GAM_Model {
 	 * @return array Array of ad units.
 	 */
 	public static function get_ad_units( $sync = true ) {
-		$ad_units = self::get_legacy_ad_units();
 		if ( $sync && ! self::$synced ) {
 			// Only sync once per execution.
 			if ( self::is_gam_connected() ) {
@@ -316,7 +317,7 @@ final class GAM_Model {
 			}
 		}
 		$ad_units = array_merge(
-			$ad_units,
+			self::get_legacy_ad_units(),
 			self::get_synced_ad_units(),
 			self::get_default_ad_units()
 		);
@@ -583,25 +584,25 @@ final class GAM_Model {
 	 * @param string $unique_id The unique ID for this ad displayment.
 	 */
 	public static function get_ad_unit_code( $ad_unit, $unique_id = '' ) {
-		$sizes        = $ad_unit['sizes'];
 		$code         = $ad_unit['code'];
 		$network_code = self::get_active_network_code();
 		$unique_id    = $unique_id ?? uniqid();
-		if ( ! is_array( $sizes ) ) {
-			$sizes = [];
+
+		if ( ! is_array( $ad_unit['sizes'] ) ) {
+			$ad_unit['sizes'] = [];
 		}
 
 		// Remove all ad sizes greater than 600px wide for sticky ads.
 		if ( self::is_sticky( $ad_unit ) ) {
-			$sizes = array_filter(
-				$sizes,
+			$ad_unit['sizes'] = array_filter(
+				$ad_unit['sizes'],
 				function( $size ) {
 					return $size[0] < 600;
 				}
 			);
 		}
 
-		self::$ad_ids[ $unique_id ] = $ad_unit;
+		self::$slots[ $unique_id ] = $ad_unit;
 
 		$code = sprintf(
 			"<!-- /%s/%s --><div id='div-gpt-ad-%s-0'></div>",
@@ -619,25 +620,26 @@ final class GAM_Model {
 	 * @param string $unique_id Optional pre-defined unique ID for this ad displayment.
 	 */
 	public static function get_ad_unit_amp_code( $ad_unit, $unique_id = '' ) {
-		$sizes        = $ad_unit['sizes'];
 		$code         = $ad_unit['code'];
 		$network_code = self::get_active_network_code();
 		$targeting    = self::get_ad_targeting( $ad_unit );
 		$unique_id    = $unique_id ?? uniqid();
 
-		if ( ! is_array( $sizes ) ) {
-			$sizes = [];
+		if ( ! is_array( $ad_unit['sizes'] ) ) {
+			$ad_unit['sizes'] = [];
 		}
 
 		// Remove all ad sizes greater than 600px wide for sticky ads.
 		if ( self::is_sticky( $ad_unit ) ) {
-			$sizes = array_filter(
-				$sizes,
+			$ad_unit['sizes'] = array_filter(
+				$ad_unit['sizes'],
 				function( $size ) {
 					return $size[0] < 600;
 				}
 			);
 		}
+
+		$sizes = $ad_unit['sizes'];
 
 		$size_map = self::get_ad_unit_size_map( $ad_unit, $sizes );
 
@@ -707,7 +709,7 @@ final class GAM_Model {
 
 	/**
 	 * Get size map for responsive ads.
-	 * 
+	 *
 	 * Gather up all of the ad sizes which should be displayed on the same
 	 * viewports. As a heuristic, each ad slot can safely display ads with a 30%
 	 * difference from slot's width. e.g. for the following setup: [[300,200],
@@ -729,7 +731,7 @@ final class GAM_Model {
 	public static function get_responsive_size_map( $sizes, $width_diff_ratio = 0.3, $width_threshold = 600 ) {
 
 		array_multisort( $sizes );
-	
+
 		// Each existing size's width is size map viewport.
 		$viewports = array_unique( array_column( $sizes, 0 ) );
 
@@ -927,7 +929,7 @@ final class GAM_Model {
 					function( $user ) {
 						return $user->user_login;
 					},
-					get_coauthors() 
+					get_coauthors()
 				);
 			} else {
 				$authors = [ get_the_author_meta( 'user_login' ) ];
@@ -935,7 +937,7 @@ final class GAM_Model {
 			if ( ! empty( $authors ) ) {
 				$targeting['author'] = array_map( 'sanitize_text_field', $authors );
 			}
-					
+
 			// Add post type to targeting.
 			$targeting['post_type'] = get_post_type();
 

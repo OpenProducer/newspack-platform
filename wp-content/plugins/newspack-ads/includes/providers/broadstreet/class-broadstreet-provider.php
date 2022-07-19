@@ -8,6 +8,7 @@
 namespace Newspack_Ads\Providers;
 
 use Newspack_Ads\Providers\Provider;
+use Newspack_Ads\Core;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -15,6 +16,8 @@ defined( 'ABSPATH' ) || exit;
  * Broadstreet.
  */
 final class Broadstreet_Provider extends Provider {
+
+	const CACHE = 'newspack_ads_broadstreet_zones';
 
 	/**
 	 * Constructor.
@@ -54,17 +57,27 @@ final class Broadstreet_Provider extends Provider {
 	/**
 	 * The provider available units for placement.
 	 *
+	 * @param bool $refresh Whether refresh provider units data.
+	 *
 	 * @return array[
 	 *  'name'  => string,
 	 *  'value' => string,
 	 *  'sizes' => array[]
 	 * ] The provider available units for placement.
 	 */
-	public function get_units() {
+	public function get_units( $refresh = false ) {
 		if ( ! self::is_plugin_active() || ! method_exists( '\Broadstreet_Utility', 'getZoneCache' ) ) {
 			return [];
 		}
-		$zones = \Broadstreet_Utility::getZoneCache();
+		$zones = \get_option( self::CACHE, [] );
+		/**
+		 * If getting through the dashboard, fetch from plugin utility and update
+		 * local cache.
+		 */
+		if ( true === $refresh ) {
+			$zones = \Broadstreet_Utility::getZoneCache();
+			\update_option( self::CACHE, $zones );
+		}
 		return array_map(
 			function( $zone ) {
 				$unit = [
@@ -98,9 +111,34 @@ final class Broadstreet_Provider extends Provider {
 		if ( ! self::is_plugin_active() || ! method_exists( '\Broadstreet_Utility', 'getZoneCode' ) ) {
 			return '';
 		}
-		$attrs = [
-			'layout' => 'fixed', // Apply fixed layout for AMP ads.
-		];
-		return \Broadstreet_Utility::getZoneCode( $unit_id, $attrs );
+		$fixed_height = isset( $placement_data['fixed_height'] ) ? (bool) $placement_data['fixed_height'] : false;
+		$attrs        = [];
+		if ( $fixed_height ) {
+			$zones    = $this->get_units();
+			$zone_idx = array_search( $unit_id, array_column( $zones, 'value' ) );
+			if ( false !== $zone_idx ) {
+				$height         = $zones[ $zone_idx ]['sizes'][0][1];
+				$attrs['style'] = sprintf( 'height: %dpx;', $height );
+			}
+		}
+		$code_attrs = [];
+		// Apply fixed layout for AMP ads.
+		if ( Core::is_amp() ) {
+			$code_attrs['layout'] = 'fixed';
+		}
+		return sprintf(
+			'<div %s>%s</div>',
+			implode(
+				' ',
+				array_map(
+					function( $key, $value ) {
+						return sprintf( "%s='%s'", $key, $value );
+					},
+					array_keys( $attrs ),
+					array_values( $attrs )
+				)
+			),
+			\Broadstreet_Utility::getZoneCode( $unit_id, $code_attrs )
+		);
 	}
 }

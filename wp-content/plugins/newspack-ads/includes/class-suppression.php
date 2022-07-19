@@ -8,6 +8,7 @@
 namespace Newspack_Ads;
 
 use Newspack_Ads\Core;
+use Newspack_Ads\Placements;
 use Newspack_Ads\Providers\GAM_Model;
 
 defined( 'ABSPATH' ) || exit;
@@ -38,6 +39,24 @@ final class Suppression {
 				'type'         => 'boolean',
 			]
 		);
+		\register_post_meta(
+			'',
+			'newspack_ads_suppress_ads_placements',
+			[
+				'show_in_rest' => [
+					'schema' => [
+						'type'    => 'array',
+						'context' => [ 'edit' ],
+						'items'   => [
+							'type' => 'string',
+						],
+					],
+				],
+				'single'       => true,
+				'type'         => 'array',
+				'default'      => [],
+			]
+		);
 	}
 
 	/**
@@ -48,6 +67,19 @@ final class Suppression {
 		$post_type = \get_current_screen()->post_type;
 		if ( ! empty( $post_type ) && \is_post_type_viewable( $post_type ) ) {
 			wp_enqueue_script( 'newspack-ads-suppress-ads', Core::plugin_url( 'dist/suppress-ads.js' ), [], NEWSPACK_ADS_VERSION, true );
+			$placements = Placements::get_placements();
+			wp_localize_script(
+				'newspack-ads-suppress-ads',
+				'newspackAdsSuppressAds',
+				[
+					'placements' => array_filter(
+						$placements,
+						function( $placement ) {
+							return true === $placement['show_ui'];
+						}
+					),
+				]
+			);
 		}
 	}
 
@@ -64,17 +96,17 @@ final class Suppression {
 		if ( is_404() ) {
 			$should_show = false;
 		}
-  
+
 		if ( is_singular() ) {
 			if ( null === $post_id ) {
 				$post_id = get_the_ID();
 			}
-  
+
 			if ( get_post_meta( $post_id, 'newspack_ads_suppress_ads', true ) ) {
 				$should_show = false;
 			}
 		}
-  
+
 		$global_suppression_config = GAM_Model::get_suppression_config();
 		if ( true === $global_suppression_config['tag_archive_pages'] ) {
 			if ( is_tag() ) {
@@ -88,7 +120,7 @@ final class Suppression {
 				}
 			}
 		}
-  
+
 		if ( true === $global_suppression_config['category_archive_pages'] ) {
 			if ( is_category() ) {
 				$should_show = false;
@@ -104,7 +136,7 @@ final class Suppression {
 		if ( is_author() && true === $global_suppression_config['author_archive_pages'] ) {
 			$should_show = false;
 		}
-  
+
 		return apply_filters( 'newspack_ads_should_show_ads', $should_show, $post_id );
 	}
 }

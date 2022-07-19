@@ -1,15 +1,85 @@
 # Changelog
 
+## 8.8.0 - 2022-06-23
+* [#1302](https://github.com/stripe/stripe-php/pull/1302) API Updates
+  * Add support for `custom_unit_amount` on `Price`
+* [#1301](https://github.com/stripe/stripe-php/pull/1301) API Updates
+  
+  Documentation updates.
+
+## 8.7.0 - 2022-06-17
+* [#1306](https://github.com/stripe/stripe-php/pull/1306) API Updates
+  * Add support for `fund_cash_balance` test helper method on resource `Customer`
+  * Add support for `total_excluding_tax` on `CreditNote`
+  * Add support for `rendering_options` on `Invoice`
+* [#1307](https://github.com/stripe/stripe-php/pull/1307) Support updating pre-release versions
+* [#1305](https://github.com/stripe/stripe-php/pull/1305) Trigger workflows on beta branches
+* [#1302](https://github.com/stripe/stripe-php/pull/1302) API Updates
+  * Add support for `custom_unit_amount` on `Price`
+* [#1301](https://github.com/stripe/stripe-php/pull/1301) API Updates
+  
+  Documentation updates.
+
+## 8.6.0 - 2022-06-08
+* [#1300](https://github.com/stripe/stripe-php/pull/1300) API Updates
+  * Add support for `attach_to_self` and `flow_directions` on `SetupAttempt`
+
+## 8.5.0 - 2022-06-01
+* [#1298](https://github.com/stripe/stripe-php/pull/1298) API Updates
+  * Add support for `radar_options` on `Charge` and `PaymentMethod`
+  * Add support for new value `simulated_wisepos_e` on enum `Terminal.Reader.device_type`
+
+## 8.4.0 - 2022-05-26
+* [#1296](https://github.com/stripe/stripe-php/pull/1296) API Updates
+  * Add support for `persons` method on resource `Account`
+  * Add support for `balance_transactions` method on resource `Customer`
+  * Add support for `id_number_secondary_provided` on `Person`
+* [#1295](https://github.com/stripe/stripe-php/pull/1295) API Updates
+
+
+## 8.3.0 - 2022-05-23
+* [#1294](https://github.com/stripe/stripe-php/pull/1294) API Updates
+  * Add support for new resource `Apps.Secret`
+  * Add support for `affirm` and `link` on `PaymentMethod`
+  * Add support for new values `affirm` and `link` on enum `PaymentMethod.type`
+* [#1289](https://github.com/stripe/stripe-php/pull/1289) fix: Update RequestOptions#redactedApiKey to stop exploding null.
+
+## 8.2.0 - 2022-05-19
+* [#1286](https://github.com/stripe/stripe-php/pull/1286) API Updates
+  * Add support for new resources `Treasury.CreditReversal`, `Treasury.DebitReversal`, `Treasury.FinancialAccountFeatures`, `Treasury.FinancialAccount`, `Treasury.FlowDetails`, `Treasury.InboundTransfer`, `Treasury.OutboundPayment`, `Treasury.OutboundTransfer`, `Treasury.ReceivedCredit`, `Treasury.ReceivedDebit`, `Treasury.TransactionEntry`, and `Treasury.Transaction`
+  * Add support for `retrieve_payment_method` method on resource `Customer`
+  * Add support for `all` and `list_owners` methods on resource `FinancialConnections.Account`
+  * Add support for `treasury` on `Issuing.Authorization`, `Issuing.Dispute`, and `Issuing.Transaction`
+  * Add support for `financial_account` on `Issuing.Card`
+  * Add support for `client_secret` on `Order`
+  * Add support for `attach_to_self` and `flow_directions` on `SetupIntent`
+
+## 8.1.0 - 2022-05-11
+* [#1284](https://github.com/stripe/stripe-php/pull/1284) API Updates
+  * Add support for `consent_collection`, `customer_creation`, `payment_intent_data`, `shipping_options`, `submit_type`, and `tax_id_collection` on `PaymentLink`
+  * Add support for `description` on `Subscription`
+
+## 8.0.0 - 2022-05-09
+* [#1283](https://github.com/stripe/stripe-php/pull/1283) Major version release of v8.0.0. The [migration guide](https://github.com/stripe/stripe-php/wiki/Migration-Guide-for-v8) contains more information.
+  (⚠️ = breaking changes):
+  * ⚠️ Replace the legacy `Order` API with the new `Order` API.
+    * Resource modified: `Order`.
+    * New methods: `cancel`, `list_line_items`, `reopen`, and `submit`
+    * Removed methods: `pay` and `return_order`
+    * Removed resources: `OrderItem` and `OrderReturn`
+    * Removed references from other resources: `Charge.order`
+  * ⚠️ Rename `\FinancialConnections\Account.refresh` method to `\FinancialConnections\Account.refresh_account`
+  * Add support for `amount_discount`, `amount_tax`, and `product` on `LineItem`
+
 ## 7.128.0 - 2022-05-05
 * [#1282](https://github.com/stripe/stripe-php/pull/1282) API Updates
   * Add support for `default_price` on `Product`
   * Add support for `instructions_email` on `Refund`
-  
+
 
 ## 7.127.0 - 2022-05-05
 * [#1281](https://github.com/stripe/stripe-php/pull/1281) API Updates
   * Add support for new resources `FinancialConnections.AccountOwner`, `FinancialConnections.AccountOwnership`, `FinancialConnections.Account`, and `FinancialConnections.Session`
-  
 * [#1278](https://github.com/stripe/stripe-php/pull/1278) Pin setup-php action version.
 * [#1277](https://github.com/stripe/stripe-php/pull/1277) API Updates
   * Add support for `registered_address` on `Person`
@@ -49,7 +119,7 @@
 * [#1261](https://github.com/stripe/stripe-php/pull/1261) API Updates
   * Add support for `apply_customer_balance` method on resource `PaymentIntent`
 * [#1259](https://github.com/stripe/stripe-php/pull/1259) API Updates
-  
+
   * Add `payment_intent.partially_funded`, `terminal.reader.action_failed`, and `terminal.reader.action_succeeded` events.
 
 ## 7.121.0 - 2022-03-30

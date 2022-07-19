@@ -17,7 +17,7 @@
 		padding: 16px;
 		position: relative;
 		width: 100%;
-
+		overflow: hidden;
 		svg.newspack-ads-ad-block-mock {
 			display: block;
 			pointer-events: none;
@@ -52,17 +52,14 @@
 			margin: 0;
 		}
 		.newspack-ads-ad-block-edit-fields {
-			align-items: baseline;
-			column-gap: 1em;
-			display: grid;
-			grid-template-columns: repeat( 2, 1fr );
-			row-gap: calc( 1em - 8px );
-			&.one-column {
-				grid-template-columns: repeat( 1, minmax( max-content, 50% ) );
+			max-width: 500px;
+			margin: 0 auto;
+			.components-base-control {
+				margin-bottom: 16px;
+				p {
+					font-size: 13px;
+				}
 			}
-		}
-		.newspack-ads-ad-block-save-button {
-			margin-top: calc( 1em - 8px );
 		}
 	}
 }

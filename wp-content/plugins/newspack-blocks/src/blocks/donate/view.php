@@ -231,8 +231,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 				<div class='wp-block-newspack-blocks-donate__options'>
 					<?php foreach ( $frequencies as $frequency_slug => $frequency_name ) : ?>
 						<?php
-							$amount           = 'year' === $frequency_slug || 'once' === $frequency_slug ? 12 * $settings['suggestedAmountUntiered'] : $settings['suggestedAmountUntiered'];
-							$formatted_amount = number_format( $amount, floatval( $amount ) - intval( $amount ) ? 2 : 0 );
+							$formatted_amount = 'year' === $frequency_slug || 'once' === $frequency_slug ? 12 * $settings['suggestedAmountUntiered'] : $settings['suggestedAmountUntiered'];
 						?>
 
 						<div class='wp-block-newspack-blocks-donate__frequency frequency'>
@@ -305,7 +304,7 @@ function newspack_blocks_render_block_donate( $attributes ) {
 										<div class='wp-block-newspack-blocks-donate__tier'>
 											<?php
 												$amount           = 'year' === $frequency_slug || 'once' === $frequency_slug ? 12 * $suggested_amount : $suggested_amount;
-												$formatted_amount = $settings['currencySymbol'] . number_format( $amount, floatval( $amount ) - intval( $amount ) ? 2 : 0 );
+												$formatted_amount = $settings['currencySymbol'] . $amount;
 											?>
 											<input
 												type='radio'

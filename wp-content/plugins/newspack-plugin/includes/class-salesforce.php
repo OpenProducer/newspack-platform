@@ -41,11 +41,30 @@ class Salesforce {
 	 * Add hooks.
 	 */
 	public static function init() {
+		add_action( 'init', [ __CLASS__, 'platform_check' ] );
 		add_action( 'rest_api_init', [ __CLASS__, 'register_api_endpoints' ] );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'register_admin_scripts' ] );
 		add_action( 'woocommerce_order_actions_start', [ __CLASS__, 'wc_order_show_sync_status' ] );
 		add_filter( 'woocommerce_order_actions', [ __CLASS__, 'wc_order_manual_sync' ] );
 		add_action( 'woocommerce_order_action_newspack_sync_order_to_salesforce', [ __CLASS__, 'wc_order_manual_sync_action' ] );
+	}
+
+	/**
+	 * Check if Newspack is the current Reader Revenue platform.
+	 * If not, disable syncing. If so and the required webhook
+	 * doesn't exist, create it.
+	 */
+	public static function platform_check() {
+		$is_newspack = Donations::is_platform_wc();
+		$webhook_id  = self::get_webhook();
+
+		if ( ! $is_newspack && $webhook_id ) {
+			self::delete_webhook( $webhook_id );
+		}
+
+		if ( $is_newspack && ! $webhook_id ) {
+			self::create_webhook();
+		}
 	}
 
 	/**
@@ -184,7 +203,7 @@ class Salesforce {
 		$webhook_id = $request->get_header( 'X-WC-Webhook-ID' );
 
 		if ( $webhook_id ) {
-			$is_valid = (int) get_option( self::SALESFORCE_WEBHOOK_ID, 0 ) === (int) $webhook_id;
+			$is_valid = self::get_webhook() === (int) $webhook_id;
 		}
 
 		if ( $is_valid ) {
@@ -204,7 +223,7 @@ class Salesforce {
 	 * Register admin scripts for Salesforce functionality.
 	 */
 	public static function register_admin_scripts() {
-		if ( 'shop_order' !== get_post_type() ) {
+		if ( 'shop_order' !== get_post_type() || ! Donations::is_platform_wc() ) {
 			return;
 		}
 
@@ -352,7 +371,7 @@ class Salesforce {
 		$settings = self::get_salesforce_settings();
 
 		// Check if the webhook is configured.
-		$webhook_id = get_option( self::SALESFORCE_WEBHOOK_ID, 0 );
+		$webhook_id = self::get_webhook();
 		$webhook    = wc_get_webhook( $webhook_id );
 		if ( null == $webhook ) {
 			return \rest_ensure_response(
@@ -612,11 +631,11 @@ class Salesforce {
 			// Create new contact.
 			$contact_response = self::create_contact( $contact );
 
-			if ( is_wp_error( $contact_response ) ) {
+			if ( is_wp_error( $contact_response ) || ! isset( $contact_response->id ) ) {
 				return \rest_ensure_response(
 					new \WP_Error(
 						'newspack_salesforce_contact_failure',
-						$contact_response->get_error_message()
+						isset( $contact_response->get_error_message ) ? $contact_response->get_error_message() : __( 'Error creating contact.', 'newspack' )
 					)
 				);
 			}
@@ -650,11 +669,11 @@ class Salesforce {
 					$opportunity_response = self::create_opportunity( $order_item );
 				}
 
-				if ( is_wp_error( $opportunity_response ) ) {
+				if ( is_wp_error( $opportunity_response ) || ! isset( $opportunity_response->id ) ) {
 					return \rest_ensure_response(
 						new \WP_Error(
 							'newspack_salesforce_opportunity_failure',
-							$opportunity_response->get_error_message()
+							isset( $opportunity_response->get_error_message ) ? $opportunity_response->get_error_message() : __( 'Error creating opportunity.', 'newspack' )
 						)
 					);
 				}
@@ -808,7 +827,7 @@ class Salesforce {
 		}
 
 		// Get webhook id.
-		$webhook_id = get_option( self::SALESFORCE_WEBHOOK_ID, 0 );
+		$webhook_id = self::get_webhook();
 
 		// If we're establishing a new connection and don't have an existing webhook, create a new one.
 		if ( empty( $webhook_id ) && ! empty( $args['refresh_token'] ) ) {
@@ -824,11 +843,25 @@ class Salesforce {
 	}
 
 	/**
+	 * Get ID for the WooCommerce webhook.
+	 *
+	 * @return int ID of the webhook, 0 if none.
+	 */
+	private static function get_webhook() {
+		return (int) get_option( self::SALESFORCE_WEBHOOK_ID, 0 );
+	}
+
+	/**
 	 * Create a WooCommerce webhook.
 	 *
 	 * @return void
 	 */
 	private static function create_webhook() {
+		// Failsafe in case WC isn't active.
+		if ( ! class_exists( 'WC_Webhook' ) ) {
+			return;
+		}
+
 		$webhook = new \WC_Webhook();
 		$webhook->set_name( 'Sync Salesforce on order checkout' );
 		$webhook->set_topic( 'order.created' ); // Trigger on checkout.
@@ -848,7 +881,7 @@ class Salesforce {
 	 * @return void
 	 */
 	private static function delete_webhook( $webhook_id ) {
-		update_option( self::SALESFORCE_WEBHOOK_ID, '' );
+		delete_option( self::SALESFORCE_WEBHOOK_ID );
 		$webhook = wc_get_webhook( $webhook_id );
 		if ( null !== $webhook ) {
 			$webhook->delete( true );
@@ -1225,7 +1258,7 @@ class Salesforce {
 	 * @param int $order_id ID of the order being edited.
 	 */
 	public static function wc_order_show_sync_status( $order_id ) {
-		if ( ! self::is_connected() ) {
+		if ( ! self::is_connected() || ! Donations::is_platform_wc() ) {
 			return;
 		}
 		?>

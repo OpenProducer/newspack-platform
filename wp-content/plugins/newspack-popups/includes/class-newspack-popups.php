@@ -71,6 +71,7 @@ final class Newspack_Popups {
 			add_action( 'init', [ __CLASS__, 'register_cpt' ] );
 			add_action( 'init', [ __CLASS__, 'register_meta' ] );
 			add_action( 'init', [ __CLASS__, 'register_taxonomy' ] );
+			add_action( 'init', [ __CLASS__, 'disable_prompts_for_protected_pages' ] );
 			add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 			add_action( 'customize_controls_enqueue_scripts', [ __CLASS__, 'enqueue_customizer_assets' ] );
 			add_filter( 'display_post_states', [ __CLASS__, 'display_post_states' ], 10, 2 );
@@ -545,8 +546,10 @@ final class Newspack_Popups {
 
 		if ( self::NEWSPACK_POPUPS_CPT !== $screen->post_type ) {
 			// It's not a popup CPT.
-			if ( 'page' === $screen->post_type || 'post' === $screen->post_type ) {
-				// But it's a page or post.
+
+			$supported_post_types = Newspack_Popups_Model::get_default_popup_post_types();
+			if ( in_array( $screen->post_type, $supported_post_types, true ) ) {
+				// But it's a supported post type.
 				\wp_enqueue_script(
 					'newspack-popups',
 					plugins_url( '../dist/documentSettings.js', __FILE__ ),
@@ -1159,6 +1162,28 @@ final class Newspack_Popups {
 		}
 
 		return $new_popup_id;
+	}
+
+	/**
+	 * Disable prompts by default if the given post ID is a protected page,
+	 * e.g. My Account, Donate, Privacy Policy, etc. other than the homepage or blog page.
+	 * Protected pages are defined in the \Newspack\Patches class.
+	 */
+	public static function disable_prompts_for_protected_pages() {
+		if ( class_exists( '\Newspack\Patches' ) ) {
+			$protected_page_ids = \Newspack\Patches::get_protected_page_ids();
+			$front_page_id      = intval( get_option( 'page_on_front', -1 ) );
+			$blog_posts_id      = intval( get_option( 'page_for_posts', -1 ) );
+			foreach ( $protected_page_ids as $page_id ) {
+				if (
+					$page_id !== $front_page_id &&
+					$page_id !== $blog_posts_id &&
+					! in_array( 'newspack_popups_has_disabled_popups', array_keys( get_post_meta( $page_id ) ), true )
+				) {
+					update_post_meta( $page_id, 'newspack_popups_has_disabled_popups', true );
+				}
+			}
+		}
 	}
 }
 Newspack_Popups::instance();

@@ -43,9 +43,13 @@ const createDOM = settings => {
 	return document.body;
 };
 
-fetchMock.post( '/wp-json/newspack-blocks/v1/donate', () => {
-	return { status: 'success', client_secret: 'sec_123' };
-} );
+fetchMock.post(
+	'/wp-json/newspack-blocks/v1/donate',
+	{ status: 'success', client_secret: 'sec_123' },
+	// A slight delay, necessitated by the async behavior of @testing-library/user-event.
+	// See https://github.com/testing-library/user-event/pull/952
+	{ delay: 100 }
+);
 
 const frequencies = { once: 'Once', month: 'Monthly', year: 'Annually' };
 const feeMultiplier = '2.9';
@@ -95,13 +99,15 @@ describe( 'Streamlined Donate block processing', () => {
 		expect( testingLibrary.getByText( container, 'Processing payment…' ) ).toBeInTheDocument();
 	} );
 
-	it( 'final success message is displayed', () => {
-		expect(
-			testingLibrary.getByText(
-				container,
-				'Your payment has been processed. Thank you for your contribution! You will receive a confirmation email at foo@bar.com.'
-			)
-		).toBeInTheDocument();
+	it( 'final success message is displayed', async () => {
+		await testingLibrary.waitFor( () => {
+			expect(
+				testingLibrary.getByText(
+					container,
+					'Your payment has been processed. Thank you for your contribution! You will receive a confirmation email at foo@bar.com.'
+				)
+			).toBeInTheDocument();
+		} );
 	} );
 
 	it( 'correct payload was sent to the API', () => {

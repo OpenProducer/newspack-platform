@@ -22,6 +22,14 @@ class Advertising_Wizard extends Wizard {
 
 	const NEWSPACK_ADVERTISING_SERVICE_PREFIX = '_newspack_advertising_service_';
 
+	const SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME = '_newspack_ads_gam_credentials';
+
+	// Legacy network code manually inserted.
+	const OPTION_NAME_LEGACY_NETWORK_CODE = '_newspack_ads_service_google_ad_manager_network_code';
+
+	// GAM network code pulled from user credentials.
+	const OPTION_NAME_GAM_NETWORK_CODE = '_newspack_ads_gam_network_code';
+
 	/**
 	 * The slug of this wizard.
 	 *
@@ -139,6 +147,11 @@ class Advertising_Wizard extends Wizard {
 				'callback'            => [ $this, 'api_update_gam_credentials' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
+					'onboarding'  => [
+						'type'              => 'boolean',
+						'sanitize_callback' => 'rest_sanitize_boolean',
+						'default'           => false,
+					],
 					'credentials' => [
 						'type'       => 'object',
 						'properties' => [
@@ -400,12 +413,10 @@ class Advertising_Wizard extends Wizard {
 	 * @return WP_REST_Response containing current GAM status.
 	 */
 	public function api_update_gam_credentials( $request ) {
-		$params                = $request->get_params();
-		$configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-ads' );
-		$response              = $configuration_manager->update_gam_credentials( $params['credentials'] );
-
-		if ( \is_wp_error( $response ) ) {
-			return \rest_ensure_response( $response );
+		$params = $request->get_params();
+		update_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, $params['credentials'] );
+		if ( isset( $params['onboarding'] ) && $params['onboarding'] ) {
+			return \rest_ensure_response( true );
 		}
 		return \rest_ensure_response( $this->retrieve_data() );
 	}

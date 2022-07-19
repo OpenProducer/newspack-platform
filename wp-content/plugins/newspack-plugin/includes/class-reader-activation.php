@@ -210,7 +210,7 @@ final class Reader_Activation {
 	 *
 	 * @return \WP_User|\WP_Error The authenticated reader or WP_Error if authentication failed.
 	 */
-	private static function set_current_reader( $user_id ) {
+	public static function set_current_reader( $user_id ) {
 		$user_id = \absint( $user_id );
 		if ( empty( $user_id ) ) {
 			return new \WP_Error( 'newspack_authenticate_invalid_user_id', __( 'Invalid user id.', 'newspack' ) );
@@ -265,7 +265,9 @@ final class Reader_Activation {
 
 		$user_id = false;
 
-		if ( ! $existing_user ) {
+		if ( $existing_user ) {
+			Magic_Link::send_email( $existing_user );
+		} else {
 			/**
 			 * Create new reader.
 			 */

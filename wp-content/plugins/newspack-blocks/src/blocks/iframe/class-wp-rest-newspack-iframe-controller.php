@@ -177,8 +177,12 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 
 		// If we need to remove the previous document, it's a good place to do it here.
 		if ( array_key_exists( 'iframe_url', $data ) && ! empty( $data['iframe_url'] ) ) {
-			$content_type = wp_remote_head( $data['iframe_url'] )['headers']->offsetGet( 'content-type' );
-			if ( in_array( $content_type, array_keys( Newspack_Blocks::iframe_document_accepted_file_mimes() ), true ) ) {
+			$head = wp_safe_remote_head( $data['iframe_url'] );
+			if ( is_wp_error( $head ) ) {
+				return rest_ensure_response( $head );
+			}
+			$content_type = $head['headers']->offsetGet( 'content-type' );
+			if ( ! empty( $content_type ) && in_array( $content_type, array_keys( Newspack_Blocks::iframe_document_accepted_file_mimes() ), true ) ) {
 				$mode = 'document';
 			}
 		}

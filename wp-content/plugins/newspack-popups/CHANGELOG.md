@@ -1,3 +1,23 @@
+# [2.1.0](https://github.com/Automattic/newspack-popups/compare/v2.0.2...v2.1.0) (2022-06-27)
+
+
+### Bug Fixes
+
+* non-AMP signup forms ([#876](https://github.com/Automattic/newspack-popups/issues/876)) ([31e13e3](https://github.com/Automattic/newspack-popups/commit/31e13e36aea95e1407225c7e34d40435c2df3315))
+* overlays should have a background by default ([#875](https://github.com/Automattic/newspack-popups/issues/875)) ([fbc181c](https://github.com/Automattic/newspack-popups/commit/fbc181cf3df50e8fc4fbd65369898243d8c66bc9))
+
+
+### Features
+
+* disable prompts by default for protected pages ([#879](https://github.com/Automattic/newspack-popups/issues/879)) ([410ec3e](https://github.com/Automattic/newspack-popups/commit/410ec3ee2199eb4ed32947813d6c882f26a625bd))
+
+# [2.1.0-alpha.3](https://github.com/Automattic/newspack-popups/compare/v2.1.0-alpha.2...v2.1.0-alpha.3) (2022-06-24)
+
+
+### Bug Fixes
+
+* force release ([9eb0b0f](https://github.com/Automattic/newspack-popups/commit/9eb0b0fcb1e81c6bc19ea592634ab7db14068520))
+
 ## [2.0.2](https://github.com/Automattic/newspack-popups/compare/v2.0.1...v2.0.2) (2022-06-24)
 
 

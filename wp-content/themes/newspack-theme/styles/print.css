@@ -21,22 +21,18 @@ Andreas Hecht in https://www.jotform.com/blog/css-perfect-print-stylesheet-98272
   #primary {
     padding: 0;
   }
-
   .entry {
     margin-top: 1em;
   }
-
   .entry .entry-header,
 .site-footer .site-info {
     margin: 0;
   }
-
   /* Borders */
   #page .site-header,
 #primary {
     border: 0;
   }
-
   /* Fonts */
   body {
     font: 13pt "Times New Roman", Times, Georgia, serif;
@@ -46,11 +42,9 @@ Andreas Hecht in https://www.jotform.com/blog/css-perfect-print-stylesheet-98272
     outline: 0;
     padding: 0;
   }
-
   h1 {
     font-size: 24pt;
   }
-
   h2,
 h3,
 h4,
@@ -62,13 +56,11 @@ p.author-bio,
     font-size: 14pt;
     margin-top: 25px;
   }
-
   /* Page breaks */
   a,
 blockquote {
     page-break-inside: avoid;
   }
-
   h1,
 h2,
 h3,
@@ -78,23 +70,19 @@ h6 {
     page-break-after: avoid;
     page-break-inside: avoid;
   }
-
   img {
     page-break-inside: avoid;
     page-break-after: avoid;
   }
-
   table,
 pre {
     page-break-inside: avoid;
   }
-
   ul,
 ol,
 dl {
     page-break-before: avoid;
   }
-
   /* Links */
   .entry-content a:link,
 .entry-content a:visited,
@@ -104,19 +92,16 @@ dl {
     text-decoration: underline;
     text-align: left;
   }
-
   .entry .entry-content .wp-block-button .wp-block-button__link,
 .entry .entry-content .button {
     color: #000;
     background: transparent;
   }
-
   /* Footer */
   .site-info {
     background: #fff;
     color: #000;
   }
-
   /* Hide */
   .nav1,
 .nav2,
@@ -154,13 +139,11 @@ dl {
 .newspack-inline-popup {
     display: none;
   }
-
   /* AMP */
   /* stylelint-disable selector-type-no-unknown  */
   amp-ads,
 amp-next-page {
     display: none;
   }
-
   /* stylelint-enable */
 }

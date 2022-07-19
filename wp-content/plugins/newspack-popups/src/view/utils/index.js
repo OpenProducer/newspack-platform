@@ -71,8 +71,8 @@ export const parseDynamicURL = url => {
 export const processFormData = ( data, formElement ) => {
 	Object.keys( data ).forEach( key => {
 		let value = data[ key ];
-		if ( value === '${formFields[email]}' ) {
-			const inputEl = formElement.querySelector( '[name="email"]' );
+		if ( -1 < value.indexOf( '${formFields' ) ) {
+			const inputEl = formElement.querySelector( '[name="email"], [type="email"]' );
 			if ( inputEl ) {
 				value = inputEl.value;
 			}

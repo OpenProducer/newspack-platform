@@ -12,44 +12,44 @@ use Newspack_Ads\Providers\GAM_Model;
 use Google\Auth\Credentials\ServiceAccountCredentials;
 use Google\AdsApi\Common\Configuration;
 use Google\AdsApi\AdManager\AdManagerSessionBuilder;
-use Google\AdsApi\AdManager\Util\v202111\StatementBuilder;
+use Google\AdsApi\AdManager\Util\v202205\StatementBuilder;
 use Google\AdsApi\AdManager\AdManagerSession;
-use Google\AdsApi\AdManager\v202111\AdUnitTargeting;
-use Google\AdsApi\AdManager\v202111\LineItemCreativeAssociation;
-use Google\AdsApi\AdManager\v202111\Statement;
-use Google\AdsApi\AdManager\v202111\String_ValueMapEntry;
-use Google\AdsApi\AdManager\v202111\TextValue;
-use Google\AdsApi\AdManager\v202111\SetValue;
-use Google\AdsApi\AdManager\v202111\CustomTargetingKey;
-use Google\AdsApi\AdManager\v202111\CustomTargetingValue;
-use Google\AdsApi\AdManager\v202111\ServiceFactory;
-use Google\AdsApi\AdManager\v202111\ArchiveAdUnits as ArchiveAdUnitsAction;
-use Google\AdsApi\AdManager\v202111\ActivateAdUnits as ActivateAdUnitsAction;
-use Google\AdsApi\AdManager\v202111\DeactivateAdUnits as DeactivateAdUnitsAction;
-use Google\AdsApi\AdManager\v202111\Network;
-use Google\AdsApi\AdManager\v202111\User;
-use Google\AdsApi\AdManager\v202111\AdUnit;
-use Google\AdsApi\AdManager\v202111\AdUnitSize;
-use Google\AdsApi\AdManager\v202111\AdUnitTargetWindow;
-use Google\AdsApi\AdManager\v202111\Order;
-use Google\AdsApi\AdManager\v202111\ArchiveOrders;
-use Google\AdsApi\AdManager\v202111\UpdateResult;
-use Google\AdsApi\AdManager\v202111\Creative;
-use Google\AdsApi\AdManager\v202111\LineItem;
-use Google\AdsApi\AdManager\v202111\EnvironmentType;
-use Google\AdsApi\AdManager\v202111\Size;
-use Google\AdsApi\AdManager\v202111\Company;
-use Google\AdsApi\AdManager\v202111\CompanyType;
+use Google\AdsApi\AdManager\v202205\AdUnitTargeting;
+use Google\AdsApi\AdManager\v202205\LineItemCreativeAssociation;
+use Google\AdsApi\AdManager\v202205\Statement;
+use Google\AdsApi\AdManager\v202205\String_ValueMapEntry;
+use Google\AdsApi\AdManager\v202205\TextValue;
+use Google\AdsApi\AdManager\v202205\SetValue;
+use Google\AdsApi\AdManager\v202205\CustomTargetingKey;
+use Google\AdsApi\AdManager\v202205\CustomTargetingValue;
+use Google\AdsApi\AdManager\v202205\ServiceFactory;
+use Google\AdsApi\AdManager\v202205\ArchiveAdUnits as ArchiveAdUnitsAction;
+use Google\AdsApi\AdManager\v202205\ActivateAdUnits as ActivateAdUnitsAction;
+use Google\AdsApi\AdManager\v202205\DeactivateAdUnits as DeactivateAdUnitsAction;
+use Google\AdsApi\AdManager\v202205\Network;
+use Google\AdsApi\AdManager\v202205\User;
+use Google\AdsApi\AdManager\v202205\AdUnit;
+use Google\AdsApi\AdManager\v202205\AdUnitSize;
+use Google\AdsApi\AdManager\v202205\AdUnitTargetWindow;
+use Google\AdsApi\AdManager\v202205\Order;
+use Google\AdsApi\AdManager\v202205\ArchiveOrders;
+use Google\AdsApi\AdManager\v202205\UpdateResult;
+use Google\AdsApi\AdManager\v202205\Creative;
+use Google\AdsApi\AdManager\v202205\LineItem;
+use Google\AdsApi\AdManager\v202205\EnvironmentType;
+use Google\AdsApi\AdManager\v202205\Size;
+use Google\AdsApi\AdManager\v202205\Company;
+use Google\AdsApi\AdManager\v202205\CompanyType;
 
-use Google\AdsApi\AdManager\v202111\Goal;
-use Google\AdsApi\AdManager\v202111\CreativePlaceholder;
-use Google\AdsApi\AdManager\v202111\Money;
-use Google\AdsApi\AdManager\v202111\Targeting;
-use Google\AdsApi\AdManager\v202111\CustomCriteriaSet;
-use Google\AdsApi\AdManager\v202111\CustomCriteria;
-use Google\AdsApi\AdManager\v202111\InventoryTargeting;
+use Google\AdsApi\AdManager\v202205\Goal;
+use Google\AdsApi\AdManager\v202205\CreativePlaceholder;
+use Google\AdsApi\AdManager\v202205\Money;
+use Google\AdsApi\AdManager\v202205\Targeting;
+use Google\AdsApi\AdManager\v202205\CustomCriteriaSet;
+use Google\AdsApi\AdManager\v202205\CustomCriteria;
+use Google\AdsApi\AdManager\v202205\InventoryTargeting;
 
-use Google\AdsApi\AdManager\v202111\ApiException;
+use Google\AdsApi\AdManager\v202205\ApiException;
 
 require_once NEWSPACK_ADS_COMPOSER_ABSPATH . 'autoload.php';
 
@@ -62,7 +62,7 @@ final class GAM_API {
 
 	const SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME = '_newspack_ads_gam_credentials';
 
-	const GAM_API_VERSION = 'v202111';
+	const GAM_API_VERSION = 'v202205';
 
 	/**
 	 * Codes of networks that the user has access to.
@@ -97,6 +97,13 @@ final class GAM_API {
 		'post_type',
 		'template',
 	];
+
+	/**
+	 * Cached credentials.
+	 *
+	 * @var object|false OAuth2 credentials or false, if none cached.
+	 */
+	private static $oauth2_credentials = false;
 
 	/**
 	 * Get a WP_Error object from an optional ApiException or message.
@@ -159,10 +166,14 @@ final class GAM_API {
 	 * @return object OAuth2 credentials.
 	 */
 	private static function get_google_oauth2_credentials() {
+		if ( self::$oauth2_credentials ) {
+			return self::$oauth2_credentials;
+		}
 		if ( class_exists( 'Newspack\Google_Services_Connection' ) ) {
-			$oauth2_credentials = \Newspack\Google_Services_Connection::get_oauth2_credentials();
-			if ( false !== $oauth2_credentials ) {
-				return $oauth2_credentials;
+			$fresh_oauth2_credentials = \Newspack\Google_Services_Connection::get_oauth2_credentials();
+			if ( false !== $fresh_oauth2_credentials ) {
+				self::$oauth2_credentials = $fresh_oauth2_credentials;
+				return self::$oauth2_credentials;
 			}
 		}
 		return false;
@@ -172,7 +183,8 @@ final class GAM_API {
 	 * Get Service Account credentials.
 	 *
 	 * @param array $service_account_credentials_config Service Account Credentials.
-	 * @return object OAuth2 credentials.
+	 *
+	 * @return ServiceAccountCredentials|false OAuth2 credentials or false otherwise.
 	 */
 	private static function get_service_account_credentials( $service_account_credentials_config = false ) {
 		if ( false === $service_account_credentials_config ) {
@@ -381,7 +393,7 @@ final class GAM_API {
 
 	/**
 	 * Get all GAM Advertisers in the user's network.
-	 * 
+	 *
 	 * @return Company[] Array of Companies of typer Advertiser.
 	 */
 	private static function get_advertisers() {
@@ -407,7 +419,7 @@ final class GAM_API {
 	 * Get all Advertisers in the user's network, serialised.
 	 *
 	 * @param Company[] $companies Optional array of companies to serialise. If empty, return all advertisers.
-	 * 
+	 *
 	 * @return array[] Array of serialised companies.
 	 */
 	public static function get_serialised_advertisers( $companies = null ) {
@@ -444,7 +456,7 @@ final class GAM_API {
 	 * Get all GAM orders in the user's network.
 	 *
 	 * @param StatementBuilder $statement_builder (optional) Statement builder.
-	 * 
+	 *
 	 * @return Order[] Array of Orders.
 	 */
 	private static function get_orders( StatementBuilder $statement_builder = null ) {
@@ -477,7 +489,7 @@ final class GAM_API {
 	 *
 	 * @return Order[] Array of Orders.
 	 */
-	public static function get_orders_by_id( $ids = [] ) { 
+	public static function get_orders_by_id( $ids = [] ) {
 		if ( ! is_array( $ids ) ) {
 			$ids = [ $ids ];
 		}
@@ -492,7 +504,7 @@ final class GAM_API {
 	 *
 	 * @return Order[] Array of Orders.
 	 */
-	public static function get_orders_by_advertiser( $advertiser_id ) { 
+	public static function get_orders_by_advertiser( $advertiser_id ) {
 		$statement_builder = ( new StatementBuilder() )->where( sprintf( 'advertiserId = %d', $advertiser_id ) );
 		return self::get_orders( $statement_builder );
 	}
@@ -553,7 +565,7 @@ final class GAM_API {
 	 *
 	 * @return Creative[] Array of creatives.
 	 */
-	private static function get_creatives_by_advertiser( $advertiser_id ) { 
+	private static function get_creatives_by_advertiser( $advertiser_id ) {
 		$statement_builder = ( new StatementBuilder() )->where( sprintf( 'advertiserId = %d', $advertiser_id ) );
 		return self::get_creatives( $statement_builder );
 	}
@@ -593,7 +605,7 @@ final class GAM_API {
 	 * Get all GAM Line Items in the user's network.
 	 *
 	 * @param StatementBuilder $statement_builder (optional) Statement builder.
-	 * 
+	 *
 	 * @return LineItem[] Array of Orders.
 	 */
 	private static function get_line_items( StatementBuilder $statement_builder = null ) {
@@ -936,7 +948,7 @@ final class GAM_API {
 					$criteria_set->setChildren( $children );
 					$targeting->setCustomTargeting( $criteria_set );
 				}
-				
+
 				// Apply configured targeting to line item.
 				$line_item->setTargeting( $targeting );
 			}
@@ -974,7 +986,7 @@ final class GAM_API {
 							return new Size( $size[0], $size[1] );
 						},
 						$lica_config['sizes']
-					) 
+					)
 				);
 			}
 			$licas[] = $lica;
@@ -1190,7 +1202,7 @@ final class GAM_API {
 				),
 			]
 		);
-		
+
 		$targeting_key = null;
 		$found_keys    = $service->getCustomTargetingKeysByStatement( $statement )->getResults();
 		if ( empty( $found_keys ) ) {
@@ -1342,22 +1354,6 @@ final class GAM_API {
 	}
 
 	/**
-	 * Can this instance use OAuth for authentication?
-	 */
-	private static function can_use_oauth() {
-		return class_exists( 'Newspack\Google_OAuth' ) && \Newspack\Google_OAuth::is_oauth_configured();
-	}
-
-	/**
-	 * Can this instance use Service Account for authentication?
-	 * OAuth is the preferred method, but if it's not available, a fallback to Service
-	 * Account is handy.
-	 */
-	private static function can_use_service_account() {
-		return ! self::can_use_oauth();
-	}
-
-	/**
 	 * Get saved Service Account credentials config.
 	 */
 	private static function service_account_credentials_config() {
@@ -1368,18 +1364,18 @@ final class GAM_API {
 	 * How does this instance connect to GAM?
 	 */
 	private static function get_connection_details() {
+		$credentials = self::get_service_account_credentials();
+		if ( false !== $credentials ) {
+			return [
+				'credentials' => $credentials,
+				'mode'        => 'service_account',
+			];
+		}
 		$credentials = self::get_google_oauth2_credentials();
 		if ( false !== $credentials ) {
 			return [
 				'credentials' => $credentials,
 				'mode'        => 'oauth',
-			];
-		}
-			$credentials = self::get_service_account_credentials();
-		if ( false !== $credentials ) {
-			return [
-				'credentials' => $credentials,
-				'mode'        => 'service_account',
 			];
 		}
 		return [
@@ -1394,21 +1390,14 @@ final class GAM_API {
 	 * @return object Object with status information.
 	 */
 	public static function connection_status() {
-		$connection_details      = self::get_connection_details();
-		$can_use_oauth           = self::can_use_oauth();
-		$can_use_service_account = self::can_use_service_account();
-		$response                = [
-			'connected'               => false,
-			'connection_mode'         => $connection_details['mode'],
-			'can_use_oauth'           => $can_use_oauth,
-			'can_use_service_account' => $can_use_service_account,
+		$connection_details = self::get_connection_details();
+		$response           = [
+			'connected'       => false,
+			'connection_mode' => $connection_details['mode'],
 		];
 		if ( false === self::is_environment_compatible() ) {
 			$response['incompatible'] = true;
 			$response['error']        = __( 'Cannot connect to Google Ad Manager. This WordPress instance is not compatible with this feature.', 'newspack-ads' );
-			return $response;
-		}
-		if ( ! $can_use_oauth && ! $can_use_service_account ) {
 			return $response;
 		}
 		try {

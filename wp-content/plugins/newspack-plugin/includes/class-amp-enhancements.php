@@ -83,6 +83,13 @@ class AMP_Enhancements {
 			if ( 0 === strpos( $error['node_attributes']['id'], 'wp-' ) ) {
 				return false;
 			}
+			// Allow Complianz plugin (complianz-gdpr) scripts, unless its AMP integration is enabled.
+			// If it is enabled, `amp-consent` will be used and allowing the script would duplicate the cookie prompt.
+			if ( function_exists( 'cmplz_is_integration_enabled' ) && ! cmplz_is_integration_enabled( 'amp' ) ) {
+				if ( 0 === strpos( $error['node_attributes']['id'], 'cmplz-' ) ) {
+					return false;
+				}
+			}
 		}
 		// Explicitly allowed scripts - with a 'data-amp-plus-allowed' attribute.
 		if ( isset( $error, $error['node_attributes'], $error['node_attributes']['data-amp-plus-allowed'] ) ) {

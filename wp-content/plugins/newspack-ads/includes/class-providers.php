@@ -97,6 +97,19 @@ final class Providers {
 	}
 
 	/**
+	 * Get the default provider ID.
+	 *
+	 * @return string The default provider ID.
+	 */
+	public static function get_default_provider() {
+		$providers = self::get_active_providers();
+		if ( empty( $providers ) || isset( $providers[ self::DEFAULT_PROVIDER ] ) ) {
+			return self::DEFAULT_PROVIDER;
+		}
+		return array_key_first( $providers );
+	}
+
+	/**
 	 * Get a serialised provider data.
 	 *
 	 * @param Provider $provider The provider to serialise.
@@ -154,7 +167,7 @@ final class Providers {
 			if ( $provider ) {
 				self::$providers_data[ $provider_id ] = array_merge(
 					self::get_serialised_provider( $provider ),
-					[ 'units' => $provider->get_units() ]
+					[ 'units' => $provider->get_units( true ) ]
 				);
 			} else {
 				self::$providers_data[ $provider_id ] = null;
@@ -220,7 +233,7 @@ final class Providers {
 	 * @param array  $placement_data The placement data.
 	 */
 	public static function render_placement_ad_code( $unit_id, $provider_id, $placement_key, $hook_key, $placement_data ) {
-		$provider_id = isset( $provider_id ) && $provider_id ? $provider_id : self::DEFAULT_PROVIDER;
+		$provider_id = isset( $provider_id ) && $provider_id ? $provider_id : self::get_default_provider();
 		$provider    = self::get_provider( $provider_id );
 		if ( ! $provider ) {
 			return;

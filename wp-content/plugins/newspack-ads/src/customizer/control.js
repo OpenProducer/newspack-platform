@@ -16,10 +16,10 @@ import { set, debounce } from 'lodash';
 			try {
 				value = JSON.parse( control.setting.get() || '{}' );
 			} catch ( e ) {
-				value = { enabled: false, provider: 'gam' };
+				value = { enabled: false };
 			}
 			container.find( '[data-provider]' ).hide();
-			container.find( `[data-provider="${ value.provider || 'gam' }"]` ).show();
+			container.find( `[data-provider="${ value.provider }"]` ).show();
 			const _update = debounce( function () {
 				control.setting.set( JSON.stringify( value ) );
 			}, 300 );
@@ -36,6 +36,9 @@ import { set, debounce } from 'lodash';
 			const $toggle = container.find( '.placement-toggle input[type=checkbox]' );
 			$toggle.on( 'change', function () {
 				updateValue( '', 'enabled', $( this ).is( ':checked' ) );
+			} );
+			container.on( 'change', '.fixed-height-checkbox input[type=checkbox]', function () {
+				updateValue( '', 'fixed_height', $( this ).is( ':checked' ) );
 			} );
 			container.on( 'change', '.stick-to-top-checkbox input[type=checkbox]', function () {
 				updateValue( '', 'stick_to_top', $( this ).is( ':checked' ) );

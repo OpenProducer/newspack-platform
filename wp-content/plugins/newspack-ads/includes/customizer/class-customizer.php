@@ -1,7 +1,7 @@
 <?php
 /**
  * Newspack Ads Customizer.
- * 
+ *
  * @package Newspack
  */
 
@@ -112,7 +112,7 @@ final class Customizer {
 				[
 					'title' => $placement['name'],
 					'panel' => 'newspack-ads',
-				] 
+				]
 			);
 			$wp_customize->add_setting(
 				$setting_id,
@@ -121,7 +121,7 @@ final class Customizer {
 					'capability'        => $capability,
 					'transport'         => 'postMessage',
 					'sanitize_callback' => [ __CLASS__, 'sanitize' ],
-				] 
+				]
 			);
 			$wp_customize->add_control(
 				new Placement_Customize_Control(

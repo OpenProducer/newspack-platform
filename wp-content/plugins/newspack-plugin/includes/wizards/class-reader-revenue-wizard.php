@@ -473,6 +473,7 @@ class Reader_Revenue_Wizard extends Wizard {
 			$args['platform_data'] = wp_parse_args( $nrh_config, $args['platform_data'] );
 		} elseif ( Donations::is_platform_stripe() ) {
 			$args['stripe_data']['webhooks']         = Stripe_Connection::list_webhooks();
+			$args['stripe_data']['webhook_url']      = Stripe_Connection::get_webhook_url();
 			$args['stripe_data']['connection_error'] = Stripe_Connection::get_connection_error();
 		}
 		return $args;

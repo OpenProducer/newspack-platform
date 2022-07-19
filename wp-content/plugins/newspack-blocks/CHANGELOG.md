@@ -1,3 +1,40 @@
+## [1.53.1](https://github.com/Automattic/newspack-blocks/compare/v1.53.0...v1.53.1) (2022-07-05)
+
+
+### Bug Fixes
+
+* guest author selection in Author Profile block ([#1188](https://github.com/Automattic/newspack-blocks/issues/1188)) ([085efaf](https://github.com/Automattic/newspack-blocks/commit/085efaf431b70ad15514a0d33c7ad0ce0697387e))
+
+# [1.53.0](https://github.com/Automattic/newspack-blocks/compare/v1.52.0...v1.53.0) (2022-06-27)
+
+
+### Bug Fixes
+
+* **donate:** amount formatting ([c766ce3](https://github.com/Automattic/newspack-blocks/commit/c766ce38fd8aba8fb1c6a688f96f7d6b1ddb05bf))
+* **homepage posts block:** align items when an odd number of items is inserted ([#1173](https://github.com/Automattic/newspack-blocks/issues/1173)) ([7139567](https://github.com/Automattic/newspack-blocks/commit/71395679c60f4ce544d35ced95a97eff0d423539))
+* **iframe-block:** handle errors from server-side fetch ([#1162](https://github.com/Automattic/newspack-blocks/issues/1162)) ([8378b41](https://github.com/Automattic/newspack-blocks/commit/8378b417c279dd03bcaa11d7676248f67a77d812))
+* make sure block exists before unregistering ([#1169](https://github.com/Automattic/newspack-blocks/issues/1169)) ([6d3deed](https://github.com/Automattic/newspack-blocks/commit/6d3deed0918851172560956ab8bc59d918caaae5))
+
+
+### Features
+
+* unregister the Jetpack Donation block ([#1163](https://github.com/Automattic/newspack-blocks/issues/1163)) ([6acbcac](https://github.com/Automattic/newspack-blocks/commit/6acbcac378b267f726efcde06552b9fdd2fb8218))
+
+# [1.53.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.52.0...v1.53.0-alpha.1) (2022-06-16)
+
+
+### Bug Fixes
+
+* **donate:** amount formatting ([c766ce3](https://github.com/Automattic/newspack-blocks/commit/c766ce38fd8aba8fb1c6a688f96f7d6b1ddb05bf))
+* **homepage posts block:** align items when an odd number of items is inserted ([#1173](https://github.com/Automattic/newspack-blocks/issues/1173)) ([7139567](https://github.com/Automattic/newspack-blocks/commit/71395679c60f4ce544d35ced95a97eff0d423539))
+* **iframe-block:** handle errors from server-side fetch ([#1162](https://github.com/Automattic/newspack-blocks/issues/1162)) ([8378b41](https://github.com/Automattic/newspack-blocks/commit/8378b417c279dd03bcaa11d7676248f67a77d812))
+* make sure block exists before unregistering ([#1169](https://github.com/Automattic/newspack-blocks/issues/1169)) ([6d3deed](https://github.com/Automattic/newspack-blocks/commit/6d3deed0918851172560956ab8bc59d918caaae5))
+
+
+### Features
+
+* unregister the Jetpack Donation block ([#1163](https://github.com/Automattic/newspack-blocks/issues/1163)) ([6acbcac](https://github.com/Automattic/newspack-blocks/commit/6acbcac378b267f726efcde06552b9fdd2fb8218))
+
 # [1.52.0](https://github.com/Automattic/newspack-blocks/compare/v1.51.0...v1.52.0) (2022-06-13)
 
 

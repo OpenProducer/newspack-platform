@@ -40,6 +40,7 @@ class Wizards {
 			'engagement'      => new Engagement_Wizard(),
 			'popups'          => new Popups_Wizard(),
 			'connections'     => new Connections_Wizard(),
+			'settings'        => new Settings(),
 		];
 	}
 
