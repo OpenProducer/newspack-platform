@@ -81,6 +81,7 @@ final class Newspack_Newsletters {
 		add_filter( 'newspack_theme_featured_image_post_types', [ __CLASS__, 'support_featured_image_options' ] );
 		add_filter( 'gform_force_hooks_js_output', [ __CLASS__, 'suppress_gravityforms_js_on_newsletters' ] );
 		add_filter( 'render_block', [ __CLASS__, 'remove_email_only_block' ], 10, 2 );
+		add_action( 'pre_get_posts', [ __CLASS__, 'display_newsletters_in_archives' ] );
 		add_action( 'the_post', [ __CLASS__, 'fix_public_status' ] );
 		self::set_service_provider( self::service_provider() );
 
@@ -1195,6 +1196,25 @@ final class Newspack_Newsletters {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Display newsletters in archive pages.
+	 *
+	 * @param WP_Query $query The query.
+	 */
+	public static function display_newsletters_in_archives( $query ) {
+		if ( is_admin() || ! $query->is_main_query() ) {
+			return;
+		}
+		if ( $query->is_archive() && ! $query->is_post_type_archive() ) {
+			$post_type = $query->get( 'post_type' );
+			if ( empty( $post_type ) ) {
+				$post_type = [ 'post' ];
+			}
+			$post_type[] = self::NEWSPACK_NEWSLETTERS_CPT;
+			$query->set( 'post_type', $post_type );
+		}
 	}
 
 	/**

@@ -4,7 +4,7 @@ Contributors:      google
 Requires at least: 4.7
 Tested up to:      6.0
 Requires PHP:      5.6
-Stable tag:        1.77.0
+Stable tag:        1.79.0
 License:           Apache License 2.0
 License URI:       https://www.apache.org/licenses/LICENSE-2.0
 Tags:              google, search-console, analytics, adsense, pagespeed-insights, optimize, tag-manager, site-kit
@@ -106,6 +106,64 @@ Please create a new topic on our [WordPress.org support forum](https://wordpress
 
 == Changelog ==
 
+= 1.79.0 =
+
+**Enhanced**
+
+* Show "Recoverable Modules" component for Analytics section of the Search Funnel widget, when on the view-only Dashboard and the Analytics module is in a recoverable state. See [#5470](https://github.com/google/site-kit-wp/issues/5470).
+* Add "experimental" label to Thank with Google module. See [#5452](https://github.com/google/site-kit-wp/issues/5452).
+* Refine the _Escape_ keyboard shortcut in the Dashboard Sharing modal to exit the "Edit Roles" view when its active, rather than closing the modal. See [#5442](https://github.com/google/site-kit-wp/issues/5442).
+* Update the text on the view-only splash screen. See [#5441](https://github.com/google/site-kit-wp/issues/5441).
+* Extend the Dashboard Sharing feature tour to include steps for the settings interface. See [#5382](https://github.com/google/site-kit-wp/issues/5382).
+* Update design of the dashboard CTA for connecting AdSense. See [#5260](https://github.com/google/site-kit-wp/issues/5260).
+* Update the plugin styling in line with Google Material 3. See [#5254](https://github.com/google/site-kit-wp/issues/5254).
+
+**Fixed**
+
+* Improve "View only" menu icon alignment when viewing shared dashboard. See [#5446](https://github.com/google/site-kit-wp/issues/5446).
+
+= 1.78.0 =
+
+**Added**
+
+* Add a "retry" button for HTTP requests that encountered an error on the dashboard. See [#5236](https://github.com/google/site-kit-wp/issues/5236).
+
+**Enhanced**
+
+* Show the zero-data view of the AdSense Overview widget when the `adsenseSetupV2` feature flag is enabled and there is no data. See [#5385](https://github.com/google/site-kit-wp/issues/5385).
+* Update view-only dashboard to use a new placeholder for widgets that rely on recoverable modules. See [#5376](https://github.com/google/site-kit-wp/issues/5376).
+* Clarify "All admins" wording in Dashboard Sharing settings. See [#5374](https://github.com/google/site-kit-wp/issues/5374).
+* Rollback any unsaved changes to dashboard sharing settings when closing the dialog. See [#5372](https://github.com/google/site-kit-wp/issues/5372).
+* Update the warning notice that appears on the Dashboard Sharing modal when changing settings. See [#5371](https://github.com/google/site-kit-wp/issues/5371).
+* Add foundation for Thank with Google settings. See [#5366](https://github.com/google/site-kit-wp/issues/5366).
+* Add foundation for new Thank with Google feature (JS). See [#5365](https://github.com/google/site-kit-wp/issues/5365).
+* Add foundation for new Thank with Google feature (PHP). See [#5364](https://github.com/google/site-kit-wp/issues/5364).
+* Display a message with tooltip instead of disabled Dashboard Sharing view management dropdown. See [#5352](https://github.com/google/site-kit-wp/issues/5352).
+* Improve the notice first shown to non administrators on the initial splash screen. See [#5347](https://github.com/google/site-kit-wp/issues/5347).
+* Add a feature tour for the dashboard sharing. See [#5328](https://github.com/google/site-kit-wp/issues/5328).
+* Move tracking related data into its own global `_googlesitekitTrackingData` variable. See [#5117](https://github.com/google/site-kit-wp/issues/5117).
+* Update tag placement functionality to allow using tags in non-production environments. See [#4774](https://github.com/google/site-kit-wp/issues/4774).
+* Add Dashboard Sharing's Active Modules and Sharable Modules to Site Health. See [#4534](https://github.com/google/site-kit-wp/issues/4534).
+
+**Fixed**
+
+* Fix default Dashboard Navigation section for the view-only Dashboard. See [#5388](https://github.com/google/site-kit-wp/issues/5388).
+* Do not attempt to make requests for module data where the module is shared and also recoverable. See [#5383](https://github.com/google/site-kit-wp/issues/5383).
+* Fix service information alignment in the view-only menu. See [#5381](https://github.com/google/site-kit-wp/issues/5381).
+* Remove "view limited dashboard" sign-in option when only one admin exists on the site. See [#5380](https://github.com/google/site-kit-wp/issues/5380).
+* Prevent data requests on shared dashboard for connected but non-shared modules. See [#5379](https://github.com/google/site-kit-wp/issues/5379).
+* Fix conditions for showing the notice in the bottom of the Dashboard Sharing modal when sharing settings are changed. See [#5375](https://github.com/google/site-kit-wp/issues/5375).
+* Fix the overlapping of some items in the plugin header in small viewports when dashboard sharing is enabled. See [#5373](https://github.com/google/site-kit-wp/issues/5373).
+* Update the tooltip for the "Managed by..." info icon on the Dashboard Sharing modal, when the module management has been set to "Only me". See [#5370](https://github.com/google/site-kit-wp/issues/5370).
+* Fix bug where a secondary admin would always take ownership of Search Console when connecting Site Kit. See [#5363](https://github.com/google/site-kit-wp/issues/5363).
+* Fix dashboard sharing menu footer visibility issue on iPhone. See [#5360](https://github.com/google/site-kit-wp/issues/5360).
+* Fix Dashboard Sharing modal position on small screens. See [#5358](https://github.com/google/site-kit-wp/issues/5358).
+* Do not show "Create Goals" widget on shared dashboard. See [#5351](https://github.com/google/site-kit-wp/issues/5351).
+* Don't show the "Link Analytics and AdSense" CTA on the view-only Dashboard. See [#5346](https://github.com/google/site-kit-wp/issues/5346).
+* Prevent errors on the view-only dashboard from requesting module settings unnecessarily. See [#5310](https://github.com/google/site-kit-wp/issues/5310).
+* Prevent "Can't access necessary data" notice flicker when activating Analytics via GTM setup. See [#5244](https://github.com/google/site-kit-wp/issues/5244).
+* Fix date range selector sometimes remaining open but hidden after selection. See [#4735](https://github.com/google/site-kit-wp/issues/4735).
+
 = 1.77.0 =
 
 **Enhanced**
@@ -122,6 +180,7 @@ Please create a new topic on our [WordPress.org support forum](https://wordpress
 * Enhance `PreviewBlock` for compatibility with `prefers-reduced-motion`. See [#5055](https://github.com/google/site-kit-wp/issues/5055).
 * Update the setup error screen to include an error message returned from the proxy server. See [#5038](https://github.com/google/site-kit-wp/issues/5038).
 * Fix styles issue for report tables when they are in the gathering state. See [#4981](https://github.com/google/site-kit-wp/issues/4981).
+* Restrict editing module entity settings to users who have access, either by being the module owner or by having the module shared with them. See [#4825](https://github.com/google/site-kit-wp/issues/4825).
 * Implement module recovery alert notification. See [#4823](https://github.com/google/site-kit-wp/issues/4823).
 * Add settings modal to allow admins to configure Dashboard Sharing. See [#4822](https://github.com/google/site-kit-wp/issues/4822).
 * Add a new component that allows selecting user roles. See [#4821](https://github.com/google/site-kit-wp/issues/4821).
@@ -144,7 +203,9 @@ Please create a new topic on our [WordPress.org support forum](https://wordpress
 
 * Fix bug that could cause Analytics properties not to be pre-selected properly during setup. See [#5356](https://github.com/google/site-kit-wp/issues/5356).
 * Show widget area headings/subheadings regardless of number of widgets. See [#5332](https://github.com/google/site-kit-wp/issues/5332).
+* Fix a bug where a shared ownership module's owner was not updated if changed when saving the sharing settings for the first time. See [#5307](https://github.com/google/site-kit-wp/issues/5307).
 * Allow users with shared dashboard access to load assets and access REST endpoints. See [#5299](https://github.com/google/site-kit-wp/issues/5299).
+* Prevent admin-related notifications from appearing on view-only dashboard. See [#5295](https://github.com/google/site-kit-wp/issues/5295).
 * Make view-only menu visible on Shared Dashboard. See [#5255](https://github.com/google/site-kit-wp/issues/5255).
 * Update wording for the Analytics tracking exclusions switch. See [#5243](https://github.com/google/site-kit-wp/issues/5243).
 

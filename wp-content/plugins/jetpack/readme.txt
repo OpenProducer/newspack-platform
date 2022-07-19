@@ -1,7 +1,7 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, azaozz, batmoo, barry, beaulebens, biskobe, blobaugh, bjorsch, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, robertbpugh, roccotripaldi, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, yoavf, zinigor
 Tags: Security, backup, Woo, malware, scan, spam, CDN, search, social
-Stable tag: 11.0
+Stable tag: 11.1.2
 Requires at least: 5.9
 Requires PHP: 5.6
 Tested up to: 6.0
@@ -242,40 +242,45 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 4. Promote your newest posts, pages, and products across your social media channels.
 
 == Changelog ==
-### 11.0 - 2022-06-07
+### 11.1.2 - 2022-07-15
+#### Bug fixes
+- Dashboard: avoid JavaScript errors and layout problems on sites experiencing URL-related connection issues with WordPress.com.
+
+### 11.1 - 2022-07-05
 #### Enhancements
-- Custom CSS: add support for CSS properties: accent-color, aspect-ratio, gap, text-underline-offset.
-- Custom CSS: ensure the Additional CSS sub-menu link is more prominent.
-- Email subscriptions: update the default body of the "Confirmation request" email.
-- Google Fonts: add additional fonts to the list of available fonts.
-- Latest Instagram Posts Block: improve performance of the block by adding lazy load for the images.
-- Publicize: load Publicize only if the Publicize module is active.
-- Payments Block: refactor the donation block by unifying Stripe Nudge component.
-- Payments Block: reset form data to default values after creating a subscription.
-- Payments Block: refactor the product memberships store to reduce complexity and improve speed.
-- Sharing: update the email sharing button to use mailto links instead of server submissions.
-- VideoPress: add support for automatic seekbar color.
-- VideoPress: improve Extensibility of Privacy Setting filter by adding the embedded post id.
-- VideoPress: improve help message of VideoPress Privacy Setting at the block level.
-- WAF: add settings UI for Jetpack Firewall.
+- Dashboard: add "Getting started with Jetpack Backup" video to Assistant and "At a glance" dashboard.
+- Recipe Block (beta): introduce a new Recipe block to display an easy to read recipe anywhere on your site. Currently a JETPACK_BETA_BLOCKS feature.
+- VideoPress: enable blocks with VideoPress markdown to be previewed within the mobile app.
+- VideoPress Block (beta): introduce VideoPress block currently in beta status.
 
 #### Improved compatibility
-- General: improve connection sharing between Jetpack and Jetpack standalone plugins.
-- Stats: remove unnecessary type attribute from style element.
+- Blocks: add Jetpack block elements to WPML configuration so they can be translated.
+- Connection: update connection banner to use updated Emerald styling.
+- Custom Post Types: change Nova functions to public to re-allow hooking.
+- Publicize: configure Publicize only when the module is active.
+- VideoPress: update non-iframe player to latest version for sites using the `jetpack_videopress_player_use_iframe` filter.
 
 #### Bug fixes
-- Assistant: fix unclickable banner dismiss button.
-- Comments: update UI to reflect that Google accounts are no longer a sign-in option.
-- Custom CSS: avoid PHP notice when using the Sass preprocessor on PHP 7.4+.
-- Payments Block: ensure Payments Block can only auto-select an existing product.
-- VideoPress: remove strict comparison to fix average color parameter.
-- Stats: ensure the Stats column can always be displayed, even when the post type does not support comments.
-- Subscriptions: fix typo in confirmation message.
-- VaultPress: fix a bug that caused certain cards in the Dashboard to flicker in some circumstances when VaultPress is active.
-- VideoPress: fix validation errors for core video block usage.
-- WAF: add activation/deactivation hooks for WAF feature.
-- Widget Visibility: avoid PHP warnings when loading widgets in some scenarios.
+- CLI: avoid PHP notice when running connection tests.
+- Connection: move the connection_url_redirect action handling to the connection package.
+- Contact Form: support saving array of data, such as multiple checkboxes.
+- Contact Form Block: display expected success message when used in FSE header or footer.
+- Contact Form Block: radio, select, and multiple checkbox fields can now have option with a value of '0'.
+- Dashboard: fix the link to Anti-spam stats.
+- Dashboard: format anti-spam stats properly, including in languages using a space as thousands separator.
+- Mailchimp Block: center spinner during loading block content.
+- Payment Block: fix issue preventing images in payment buttons.
+- Payments Block: only add PayPal email meta to Payment posts.
+- Payments Block: remove hardcoded recurring-payments button color.
+- Photon: do not return Photonized URLs to the block editor in WordPress 6.0.
+- Search: avoid broken images in search results by preferring the _jetpack_featured_media_url postmeta over the GUID.
+- SEO Tools: allow WooCommerce to use custom SEO description for the shop page.
+- Sharing: avoid fatal errors when email sharing process is called  without clicking on the button.
+- Subscribe Block: fix double-quote breaking the Subscribe block button.
+- VideoPress: fix average color parameter for seekbar.
+- VideoPress: fix embeds in classic editor when theme has no $content_width set.
+- VideoPress Block: fix Cancel button on block and provide better error message when video format is not supported.
 
 --------
 
-[See the previous changelogs here](https://github.com/Automattic/jetpack/blob/master/projects/plugins/jetpack/CHANGELOG.md#changelog)
+[See the previous changelogs here](https://github.com/Automattic/jetpack/blob/trunk/projects/plugins/jetpack/CHANGELOG.md#changelog)

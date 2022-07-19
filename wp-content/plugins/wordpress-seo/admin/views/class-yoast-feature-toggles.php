@@ -104,7 +104,6 @@ class Yoast_Feature_Toggles {
 			],
 			(object) [
 				'name'               => __( 'Insights', 'wordpress-seo' ),
-				'premium'            => true,
 				'setting'            => 'enable_metabox_insights',
 				'label'              => __( 'Find relevant data about your content right in the Insights section in the Yoast SEO metabox. You’ll see what words you use most often and if they’re a match with your keywords! ', 'wordpress-seo' ),
 				'read_more_label'    => __( 'Find out how Insights can help you improve your content.', 'wordpress-seo' ),
@@ -180,6 +179,16 @@ class Yoast_Feature_Toggles {
 				'read_more_label' => __( 'Find out how a rich snippet can improve visibility and click-through-rate.', 'wordpress-seo' ),
 				'read_more_url'   => 'https://yoa.st/help-slack-share',
 				'order'           => 105,
+			],
+			(object) [
+				'name'            => __( 'IndexNow', 'wordpress-seo' ),
+				'premium'         => true,
+				'setting'         => 'enable_index_now',
+				'label'           => __( 'Automatically ping search engines like Bing and Yandex whenever you publish, update or delete a post.', 'wordpress-seo' ),
+				'read_more_label' => __( 'Find out how IndexNow can help your site.', 'wordpress-seo' ),
+				'read_more_url'   => 'https://yoa.st/index-now-read-more',
+				'premium_url'     => 'https://yoa.st/index-now-feature',
+				'order'           => 110,
 			],
 		];
 

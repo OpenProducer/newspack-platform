@@ -461,18 +461,26 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	/**
 	 * Synchronize post with corresponding ESP campaign.
 	 *
-	 * @param WP_POST $post Post to synchronize.
-	 * @return object|null API Response or error.
+	 * @param WP_Post $post Post to synchronize.
+	 *
+	 * @return object|WP_Error API Response or error.
+	 *
 	 * @throws Exception Error message.
 	 */
 	public function sync( $post ) {
-		$api_key = $this->api_key();
-		if ( ! $api_key ) {
-			throw new Exception(
-				__( 'No Constant Contact API key available.', 'newspack-newsletters' )
-			);
-		}
 		try {
+			$api_key = $this->api_key();
+			if ( ! $api_key ) {
+				throw new Exception(
+					__( 'No Constant Contact API key available.', 'newspack-newsletters' )
+				);
+			}
+			if ( empty( $post->post_title ) ) {
+				throw new Exception(
+					__( 'The newsletter subject cannot be empty.', 'newspack-newsletters' )
+				);
+			}
+
 			if ( ! $this->has_valid_connection() ) {
 				return;
 			}

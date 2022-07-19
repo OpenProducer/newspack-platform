@@ -9,6 +9,8 @@ namespace Automattic\WooCommerce\Internal\Admin;
 use Automattic\WooCommerce\Admin\Features\Features;
 use Automattic\WooCommerce\Admin\PageController;
 use Automattic\WooCommerce\Admin\PluginsHelper;
+use Automattic\WooCommerce\Internal\Admin\ProductReviews\Reviews;
+use Automattic\WooCommerce\Internal\Admin\ProductReviews\ReviewsCommentsOverrides;
 use Automattic\WooCommerce\Internal\Admin\Settings;
 
 /**
@@ -67,6 +69,9 @@ class Loader {
 		WCAdminUser::get_instance();
 		Settings::get_instance();
 		SystemStatusReport::get_instance();
+
+		wc_get_container()->get( Reviews::class );
+		wc_get_container()->get( ReviewsCommentsOverrides::class );
 
 		add_filter( 'admin_body_class', array( __CLASS__, 'add_admin_body_classes' ) );
 		add_filter( 'admin_title', array( __CLASS__, 'update_admin_title' ) );
@@ -345,7 +350,9 @@ class Loader {
 				$group_settings   = $setting_options->get_group_settings( $group );
 				$preload_settings = [];
 				foreach ( $group_settings as $option ) {
-					$preload_settings[ $option['id'] ] = $option['value'];
+					if ( array_key_exists( 'id', $option ) && array_key_exists( 'value', $option ) ) {
+						$preload_settings[ $option['id'] ] = $option['value'];
+					}
 				}
 				$settings['preloadSettings'][ $group ] = $preload_settings;
 			}

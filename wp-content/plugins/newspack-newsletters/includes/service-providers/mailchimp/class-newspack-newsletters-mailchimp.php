@@ -417,18 +417,21 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	/**
 	 * Synchronize post with corresponding ESP campaign.
 	 *
-	 * @param WP_POST $post Post to synchronize.
-	 * @return object|null API Response or error.
+	 * @param WP_Post $post Post to synchronize.
+	 *
+	 * @return object|WP_Error API Response or error.
+	 *
+	 * @throws Exception Error message.
 	 */
 	public function sync( $post ) {
-		$api_key = $this->api_key();
-		if ( ! $api_key ) {
-			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'No Mailchimp API key available.', 'newspack-newsletters' )
-			);
-		}
 		try {
+			$api_key = $this->api_key();
+			if ( ! $api_key ) {
+				throw new Exception( __( 'No Mailchimp API key available.', 'newspack-newsletters' ) );
+			}
+			if ( empty( $post->post_title ) ) {
+				throw new Exception( __( 'The newsletter subject cannot be empty.', 'newspack-newsletters' ) );
+			}
 			$mc      = new Mailchimp( $api_key );
 			$payload = [
 				'type'         => 'regular',
@@ -487,7 +490,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		} catch ( Exception $e ) {
 			$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
 			set_transient( $transient, $e->getMessage(), 45 );
-			return;
+			return new WP_Error( 'newspack_newsletters_mailchimp_error', $e->getMessage() );
 		}
 	}
 
@@ -534,7 +537,11 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 		$sync_result = $this->sync( $post );
 
-		if ( ! $sync_result || is_wp_error( $sync_result ) ) {
+		if ( is_wp_error( $sync_result ) ) {
+			return $sync_result;
+		}
+
+		if ( ! $sync_result ) {
 			return new WP_Error(
 				'newspack_newsletters_error',
 				__( 'Unable to synchronize with Mailchimp.', 'newspack-newsletters' )

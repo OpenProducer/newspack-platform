@@ -343,6 +343,12 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 				__( 'No Campaign Monitor API key available.', 'newspack-newsletters' )
 			);
 		}
+		if ( empty( $post->post_title ) ) {
+			return new WP_Error(
+				'newspack_newsletter_error',
+				__( 'The newsletter subject cannot be empty.', 'newspack-newsletters' )
+			);
+		}
 		if ( ! $client_id ) {
 			return new WP_Error(
 				'newspack_newsletter_error',

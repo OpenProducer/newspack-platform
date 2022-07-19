@@ -581,15 +581,20 @@ final class Newspack_Newsletters_Renderer {
 			 * Separator block.
 			 */
 			case 'core/separator':
-				$is_style_default   = isset( $attrs['className'] ) ? 'is-style-default' == $attrs['className'] : true;
-				$divider_attrs      = array_merge(
-					array(
-						'padding'      => '0',
-						'border-width' => '1px',
-						'width'        => $is_style_default ? '128px' : '100%',
-					),
-					self::get_colors( $attrs )
+				$is_wide       = isset( $block['attrs']['className'] ) && 'is-style-wide' === $block['attrs']['className'];
+				$divider_attrs = array(
+					'padding'      => '0',
+					'border-width' => '1px',
+					'width'        => $is_wide ? '100%' : '128px',
 				);
+				// Remove colors from section attrs.
+				unset( $section_attrs['background-color'] );
+				if ( $block['attrs']['backgroundColor'] && isset( self::$color_palette[ $block['attrs']['backgroundColor'] ] ) ) {
+					$divider_attrs['border-color'] = self::$color_palette[ $block['attrs']['backgroundColor'] ];
+				}
+				if ( isset( $block['attrs']['style']['color']['background'] ) ) {
+					$divider_attrs['border-color'] = $block['attrs']['style']['color']['background'];
+				}
 				$block_mjml_markup .= '<mj-divider ' . self::array_to_attributes( $divider_attrs ) . '/>';
 
 				break;
@@ -825,6 +830,7 @@ final class Newspack_Newsletters_Renderer {
 			'core/columns' != $block_name &&
 			'core/column' != $block_name &&
 			'core/buttons' != $block_name &&
+			'core/separator' != $block_name &&
 			! $is_posts_inserter_block
 		) {
 			$column_attrs['width'] = '100%';
