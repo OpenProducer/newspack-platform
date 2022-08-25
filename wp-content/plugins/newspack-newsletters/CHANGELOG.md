@@ -1,3 +1,56 @@
+# [1.50.0](https://github.com/Automattic/newspack-newsletters/compare/v1.49.1...v1.50.0) (2022-08-16)
+
+
+### Bug Fixes
+
+* **active-campaign:** format date fields ([#914](https://github.com/Automattic/newspack-newsletters/issues/914)) ([395606d](https://github.com/Automattic/newspack-newsletters/commit/395606dbc5a83bb30d9f572bb611e79e11cee3f5))
+* **activecampaign:** resubscribe on adding contact ([#925](https://github.com/Automattic/newspack-newsletters/issues/925)) ([4c5ee9d](https://github.com/Automattic/newspack-newsletters/commit/4c5ee9d075a6823481df3c46209c8245f4282ed2))
+* get_contact_data handler default arg ([681078a](https://github.com/Automattic/newspack-newsletters/commit/681078a57e3e5ccf5b70896e5b533d04bc2c1429))
+* **subscribe-block:** empty lists config handling ([bee823e](https://github.com/Automattic/newspack-newsletters/commit/bee823e42fefdbbcf670bad708b36befabdd8124))
+* **subscriptions:** verify email on reader verification ([#922](https://github.com/Automattic/newspack-newsletters/issues/922)) ([1add7d7](https://github.com/Automattic/newspack-newsletters/commit/1add7d77707479793a8d62f25bcaf45696b4294b))
+* trigger release ([38fb836](https://github.com/Automattic/newspack-newsletters/commit/38fb836e05c2226d9cf637a136c3f64e89176c58))
+* updating a list member ([#907](https://github.com/Automattic/newspack-newsletters/issues/907)) ([eb8c9ba](https://github.com/Automattic/newspack-newsletters/commit/eb8c9bad37a77b01ed32b6f964d89e6dd5c744c5))
+* urlencode email addresses passed as URL params to ActiveCampaign API ([#913](https://github.com/Automattic/newspack-newsletters/issues/913)) ([bca4782](https://github.com/Automattic/newspack-newsletters/commit/bca4782a5478a7bf7f649fec0182c169c0246f43))
+
+
+### Features
+
+* **active-campaign:** more date fields ([75ef40b](https://github.com/Automattic/newspack-newsletters/commit/75ef40bf2f6e8f1670415ab72a8222b50e39c1a1))
+* **ActiveCampaign:** optimize and reduce API requests ([#926](https://github.com/Automattic/newspack-newsletters/issues/926)) ([d577c52](https://github.com/Automattic/newspack-newsletters/commit/d577c521ba221dd9d0b426f83d6f58d02eaadb32))
+* add contact on reader activation, if lists selected ([#895](https://github.com/Automattic/newspack-newsletters/issues/895)) ([d4a99a4](https://github.com/Automattic/newspack-newsletters/commit/d4a99a443a47098053e9c1bdcb30e1a9b7ed7792))
+* contact adding improvements ([#897](https://github.com/Automattic/newspack-newsletters/issues/897)) ([0c735c4](https://github.com/Automattic/newspack-newsletters/commit/0c735c4ef661b86022595ee1b587d39362c5f746))
+* copy tweak ([#916](https://github.com/Automattic/newspack-newsletters/issues/916)) ([e71fa85](https://github.com/Automattic/newspack-newsletters/commit/e71fa8581048f32c7cd9e230f999914e975fa632))
+* email verification and subscription management ([#891](https://github.com/Automattic/newspack-newsletters/issues/891)) ([08968dd](https://github.com/Automattic/newspack-newsletters/commit/08968ddefd7df9b0f4333890d02e246232f05baa))
+* enable contact adding w/out lists, as opposed to w/ empty lists ([#900](https://github.com/Automattic/newspack-newsletters/issues/900)) ([9c93941](https://github.com/Automattic/newspack-newsletters/commit/9c9394155a06fa858eaeb1e221e5a8013fa80f10))
+* filter contact lists and small fixes ([#902](https://github.com/Automattic/newspack-newsletters/issues/902)) ([578015b](https://github.com/Automattic/newspack-newsletters/commit/578015b4a13d5078b8832c43882821314799a44c))
+* full contact data fetching ([b7a294e](https://github.com/Automattic/newspack-newsletters/commit/b7a294e0b4005a2b10b7d507f11e8447f0387178))
+* mailchimp subscription management ([#903](https://github.com/Automattic/newspack-newsletters/issues/903)) ([cb3eb43](https://github.com/Automattic/newspack-newsletters/commit/cb3eb436ca0870d3b7721be0ea2e9a87729523b2))
+* pass existing contact data to the add_contact hooks ([449396e](https://github.com/Automattic/newspack-newsletters/commit/449396e7d486c2df48fed1f808fe8b307f37bdb1))
+* return all contact data for the add_contact hooks ([b3cedb8](https://github.com/Automattic/newspack-newsletters/commit/b3cedb81bedbf89984c8b6586af4a2282f57a185))
+* **subscribe-block:** prefill email input ([b5afbdd](https://github.com/Automattic/newspack-newsletters/commit/b5afbdd413ff90ee4b6a3b9fb0c7a5460a7ed52d))
+* use Reader Activation custom sender info for verification emails ([#927](https://github.com/Automattic/newspack-newsletters/issues/927)) ([dc40a8e](https://github.com/Automattic/newspack-newsletters/commit/dc40a8e3d590784f051969e2ce9cf536378e63da))
+
+## [1.49.1](https://github.com/Automattic/newspack-newsletters/compare/v1.49.0...v1.49.1) (2022-08-16)
+
+
+### Bug Fixes
+
+* ensure query post type is an array ([#933](https://github.com/Automattic/newspack-newsletters/issues/933)) ([a179898](https://github.com/Automattic/newspack-newsletters/commit/a179898114e1fc0d0a6e01452e2ca9ec9150d50e))
+
+# [1.49.0](https://github.com/Automattic/newspack-newsletters/compare/v1.48.0...v1.49.0) (2022-07-26)
+
+
+### Features
+
+* subscription lists and subscription block ([#873](https://github.com/Automattic/newspack-newsletters/issues/873)) ([815a630](https://github.com/Automattic/newspack-newsletters/commit/815a63049b8abae75d86864d9def37db18a53fd0))
+
+# [1.49.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.48.0...v1.49.0-alpha.1) (2022-07-14)
+
+
+### Features
+
+* subscription lists and subscription block ([#873](https://github.com/Automattic/newspack-newsletters/issues/873)) ([815a630](https://github.com/Automattic/newspack-newsletters/commit/815a63049b8abae75d86864d9def37db18a53fd0))
+
 # [1.48.0](https://github.com/Automattic/newspack-newsletters/compare/v1.47.2...v1.48.0) (2022-07-11)
 
 

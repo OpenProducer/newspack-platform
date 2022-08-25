@@ -1,0 +1,32 @@
+{
+	"$schema": "https://schemas.wp.org/trunk/block.json",
+	"apiVersion": 2,
+	"name": "newspack-newsletters/subscribe",
+	"title": "Newsletter Subscription Form",
+	"category": "newspack",
+	"description": "Subscribe an email to a newsletter list.",
+	"textdomain": "newspack-newsletters",
+	"attributes": {
+		"placeholder": {
+			"type": "string",
+			"default": "Enter your email address"
+		},
+		"label": {
+			"type": "string",
+			"default": "Subscribe"
+		},
+		"displayDescription": {
+			"type": "boolean",
+			"default": true
+		},
+		"lists": {
+			"type": "array",
+			"default": [],
+			"items": { "type": "string" }
+		}
+	},
+	"supports": {
+		"html": false,
+		"align": true
+	}
+}

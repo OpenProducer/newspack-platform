@@ -100,7 +100,7 @@ final class Newspack_Newsletters_Editor {
 	 * Get CSS rules for color palette.
 	 *
 	 * @param string $container_selector Optional selector to prefix as a container to every rule.
-	 * 
+	 *
 	 * @return string CSS rules.
 	 */
 	public static function get_color_palette_css( $container_selector = '' ) {
@@ -118,7 +118,7 @@ final class Newspack_Newsletters_Editor {
 				function( $rule ) use ( $container_selector ) {
 					return $container_selector . ' ' . $rule;
 				},
-				$rules 
+				$rules
 			);
 		}
 		return implode( "\n", $rules );
@@ -334,20 +334,20 @@ final class Newspack_Newsletters_Editor {
 		// If it's a reusable block, register this plugin's blocks.
 		if ( 'wp_block' === get_post_type() ) {
 			\wp_enqueue_script(
-				'newspack-newsletters-blocks',
-				plugins_url( '../dist/blocks.js', __FILE__ ),
+				'newspack-newsletters-editor-blocks',
+				plugins_url( '../dist/editorBlocks.js', __FILE__ ),
 				[],
-				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/blocks.js' ),
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/editorBlocks.js' ),
 				true
 			);
 			wp_register_style(
-				'newspack-newsletters-blocks',
-				plugins_url( '../dist/blocks.css', __FILE__ ),
+				'newspack-newsletters-editor-blocks',
+				plugins_url( '../dist/editorBlocks.css', __FILE__ ),
 				[],
-				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/blocks.css' )
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/editorBlocks.css' )
 			);
-			wp_style_add_data( 'newspack-newsletters-blocks', 'rtl', 'replace' );
-			wp_enqueue_style( 'newspack-newsletters-blocks' );
+			wp_style_add_data( 'newspack-newsletters-editor-blocks', 'rtl', 'replace' );
+			wp_enqueue_style( 'newspack-newsletters-editor-blocks' );
 		}
 	}
 

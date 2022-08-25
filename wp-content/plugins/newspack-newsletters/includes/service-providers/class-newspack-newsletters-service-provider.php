@@ -122,7 +122,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		if (
 			! $sent &&
 			$old_status !== $new_status &&
-			in_array( $new_status, self::$controlled_statuses, true ) && 
+			in_array( $new_status, self::$controlled_statuses, true ) &&
 			! in_array( $old_status, self::$controlled_statuses, true )
 		) {
 			$result = $this->send_newsletter( $post );
@@ -170,7 +170,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 					[
 						'ID'          => $post->ID,
 						'post_status' => 'draft',
-					] 
+					]
 				);
 				wp_die( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			} else {
@@ -192,7 +192,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
 			return;
 		}
-		
+
 		// Only run if this is the active provider.
 		if ( Newspack_Newsletters::service_provider() !== $this->service ) {
 			return;
@@ -218,7 +218,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 				[
 					'ID'          => $post_id,
 					'post_status' => $target_status,
-				] 
+				]
 			);
 		}
 	}
@@ -304,5 +304,18 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		}
 
 		return $result;
+	}
+
+	/**
+	 * Update a contact lists subscription.
+	 *
+	 * @param string   $email           Contact email address.
+	 * @param string[] $lists_to_add    Array of list IDs to subscribe the contact to.
+	 * @param string[] $lists_to_remove Array of list IDs to remove the contact from.
+	 *
+	 * @return true|WP_Error True if the contact was updated or error.
+	 */
+	public function update_contact_lists( $email, $lists_to_add = [], $lists_to_remove = [] ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ) );
 	}
 }

@@ -703,7 +703,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * Add contact to a list.
 	 *
 	 * @param array  $contact Contact data.
-	 * @param strine $list_id List ID.
+	 * @param string $list_id List ID.
 	 * @throws Exception Error message.
 	 */
 	public function add_contact( $contact, $list_id ) {

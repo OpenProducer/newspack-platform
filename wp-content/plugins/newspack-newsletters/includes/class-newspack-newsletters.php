@@ -117,6 +117,13 @@ final class Newspack_Newsletters {
 	}
 
 	/**
+	 * Get the current service provider instance.
+	 */
+	public static function get_service_provider() {
+		return self::$provider;
+	}
+
+	/**
 	 * Register custom fields for use in the editor only.
 	 * These have to be registered so the updates are handles correctly.
 	 */
@@ -1135,6 +1142,9 @@ final class Newspack_Newsletters {
 	/**
 	 * Add contact to a mailing list of the configured ESP.
 	 *
+	 * This method is soon to be deprecated.
+	 * Use Newspack_Newsletters_Subscription::add_contact() instead.
+	 *
 	 * @param array  $contact The contact to add to the list.
 	 * @param string $list_id ID of the list to add the contact to.
 	 */
@@ -1211,6 +1221,9 @@ final class Newspack_Newsletters {
 			$post_type = $query->get( 'post_type' );
 			if ( empty( $post_type ) ) {
 				$post_type = [ 'post' ];
+			}
+			if ( ! is_array( $post_type ) ) {
+				$post_type = [ $post_type ];
 			}
 			$post_type[] = self::NEWSPACK_NEWSLETTERS_CPT;
 			$query->set( 'post_type', $post_type );

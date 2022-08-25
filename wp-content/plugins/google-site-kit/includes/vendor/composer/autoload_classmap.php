@@ -203,5 +203,7 @@ return array(
     'Google\\Site_Kit\\Modules\\Tag_Manager\\Web_Tag' => $baseDir . '/Modules/Tag_Manager/Web_Tag.php',
     'Google\\Site_Kit\\Modules\\Thank_With_Google' => $baseDir . '/Modules/Thank_With_Google.php',
     'Google\\Site_Kit\\Modules\\Thank_With_Google\\Settings' => $baseDir . '/Modules/Thank_With_Google/Settings.php',
+    'Google\\Site_Kit\\Modules\\Thank_With_Google\\Supporter_Wall_Widget' => $baseDir . '/Modules/Thank_With_Google/Supporter_Wall_Widget.php',
+    'Google\\Site_Kit\\Modules\\Thank_With_Google\\Web_Tag' => $baseDir . '/Modules/Thank_With_Google/Web_Tag.php',
     'Google\\Site_Kit\\Plugin' => $baseDir . '/Plugin.php',
 );

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b
+class ComposerStaticInit225400540d1b8fa2507bcebf7ea0d4ff
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -239,10 +239,12 @@ class ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\TaskTraits' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/TaskTraits.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\AdditionalPayments' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/AdditionalPayments.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Appearance' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/Appearance.php',
+        'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\ExperimentalShippingRecommendation' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/ExperimentalShippingRecommendation.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Marketing' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/Marketing.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Payments' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/Payments.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Products' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/Products.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Purchase' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/Purchase.php',
+        'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\ReviewShippingOptions' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/ReviewShippingOptions.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Shipping' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/Shipping.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\StoreCreation' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/StoreCreation.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\StoreDetails' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/StoreDetails.php',
@@ -394,6 +396,7 @@ class ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b
         'Automattic\\WooCommerce\\Blocks\\Registry\\FactoryType' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Registry/FactoryType.php',
         'Automattic\\WooCommerce\\Blocks\\Registry\\SharedType' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Registry/SharedType.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\ClassicTemplatesCompatibility' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ClassicTemplatesCompatibility.php',
+        'Automattic\\WooCommerce\\Blocks\\Templates\\MiniCartTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/MiniCartTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\ProductSearchResultsTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ProductSearchResultsTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\BlocksWpQuery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/BlocksWpQuery.php',
@@ -474,6 +477,7 @@ class ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b
         'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingSync' => __DIR__ . '/../..' . '/src/Internal/Admin/Onboarding/OnboardingSync.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingThemes' => __DIR__ . '/../..' . '/src/Internal/Admin/Onboarding/OnboardingThemes.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\ListTable' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/ListTable.php',
+        'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/PageController.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\Reviews' => __DIR__ . '/../..' . '/src/Internal/Admin/ProductReviews/Reviews.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\ReviewsCommentsOverrides' => __DIR__ . '/../..' . '/src/Internal/Admin/ProductReviews/ReviewsCommentsOverrides.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\ProductReviews\\ReviewsListTable' => __DIR__ . '/../..' . '/src/Internal/Admin/ProductReviews/ReviewsListTable.php',
@@ -977,10 +981,10 @@ class ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit8e39beabf0b904516e54eae4ce6f8d7b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit225400540d1b8fa2507bcebf7ea0d4ff::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit225400540d1b8fa2507bcebf7ea0d4ff::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit225400540d1b8fa2507bcebf7ea0d4ff::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit225400540d1b8fa2507bcebf7ea0d4ff::$classMap;
 
         }, null, ClassLoader::class);
     }

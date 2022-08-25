@@ -103,7 +103,7 @@ class WC_Order extends WC_Abstract_Order {
 		}
 
 		try {
-			do_action( 'woocommerce_pre_payment_complete', $this->get_id() );
+			do_action( 'woocommerce_pre_payment_complete', $this->get_id(), $transaction_id );
 
 			if ( WC()->session ) {
 				WC()->session->set( 'order_awaiting_payment', false );
@@ -119,9 +119,9 @@ class WC_Order extends WC_Abstract_Order {
 				$this->set_status( apply_filters( 'woocommerce_payment_complete_order_status', $this->needs_processing() ? 'processing' : 'completed', $this->get_id(), $this ) );
 				$this->save();
 
-				do_action( 'woocommerce_payment_complete', $this->get_id() );
+				do_action( 'woocommerce_payment_complete', $this->get_id(), $transaction_id );
 			} else {
-				do_action( 'woocommerce_payment_complete_order_status_' . $this->get_status(), $this->get_id() );
+				do_action( 'woocommerce_payment_complete_order_status_' . $this->get_status(), $this->get_id(), $transaction_id );
 			}
 		} catch ( Exception $e ) {
 			/**
@@ -948,8 +948,8 @@ class WC_Order extends WC_Abstract_Order {
 		 * Filter orders formatted shipping address.
 		 *
 		 * @since 3.8.0
-		 * @param string   $address     Formatted billing address string.
-		 * @param array    $raw_address Raw billing address.
+		 * @param string   $address     Formatted shipping address string.
+		 * @param array    $raw_address Raw shipping address.
 		 * @param WC_Order $order       Order data. @since 3.9.0
 		 */
 		return apply_filters( 'woocommerce_order_get_formatted_shipping_address', $address ? $address : $empty_content, $raw_address, $this );

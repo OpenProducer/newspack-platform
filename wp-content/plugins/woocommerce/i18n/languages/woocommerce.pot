@@ -2,21 +2,21 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 6.7.0\n"
+"Project-Id-Version: WooCommerce 6.8.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-07-10T19:29:27+00:00\n"
+"POT-Creation-Date: 2022-08-22T21:04:43+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: woocommerce\n"
 
 #. Plugin Name of the plugin
 #: includes/admin/class-wc-admin-assets.php:105
-#: includes/admin/class-wc-admin-menus.php:72
+#: includes/admin/class-wc-admin-menus.php:73
 #: includes/admin/class-wc-admin-setup-wizard.php:353
 #: includes/admin/class-wc-admin-setup-wizard.php:446
 #: includes/admin/class-wc-admin.php:241
@@ -31,14 +31,11 @@ msgstr ""
 #: includes/react-admin/connect-existing-pages.php:62
 #: includes/wc-order-functions.php:1000
 #: src/Admin/PageController.php:201
-#: src/Internal/Admin/Homescreen.php:82
+#: src/Internal/Admin/Homescreen.php:173
 #: src/Internal/Admin/Loader.php:388
 #: src/Internal/Admin/Settings.php:207
 #: templates/auth/header.php:32
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/index.js:28
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/index.js:28
 #: packages/woocommerce-blocks/assets/js/blocks/cart/index.js:33
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/index.js:28
 #: packages/woocommerce-blocks/assets/js/blocks/product-best-sellers/index.js:28
 #: packages/woocommerce-blocks/assets/js/blocks/product-categories/index.js:28
 #: packages/woocommerce-blocks/assets/js/blocks/product-category/index.js:32
@@ -51,18 +48,14 @@ msgstr ""
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/reviews-by-category/index.js:31
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/reviews-by-product/index.js:31
 #: packages/woocommerce-blocks/assets/js/blocks/single-product/index.js:26
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/index.js:25
 #: packages/woocommerce-blocks/assets/js/index.js:24
-#: packages/woocommerce-blocks/build/active-filters.js:17
 #: packages/woocommerce-blocks/build/all-products.js:28
 #: packages/woocommerce-blocks/build/all-products.js:36
 #: packages/woocommerce-blocks/build/all-reviews.js:9
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
 #: packages/woocommerce-blocks/build/cart.js:42
-#: packages/woocommerce-blocks/build/legacy-template.js:1
+#: packages/woocommerce-blocks/build/legacy-template.js:3
 #: packages/woocommerce-blocks/build/mini-cart-contents.js:17
 #: packages/woocommerce-blocks/build/mini-cart.js:1
-#: packages/woocommerce-blocks/build/price-filter.js:5
 #: packages/woocommerce-blocks/build/product-best-sellers.js:6
 #: packages/woocommerce-blocks/build/product-categories.js:1
 #: packages/woocommerce-blocks/build/product-category.js:6
@@ -73,7 +66,6 @@ msgstr ""
 #: packages/woocommerce-blocks/build/reviews-by-category.js:14
 #: packages/woocommerce-blocks/build/reviews-by-product.js:20
 #: packages/woocommerce-blocks/build/single-product.js:6
-#: packages/woocommerce-blocks/build/stock-filter.js:15
 #: packages/woocommerce-blocks/build/wc-blocks.js:1
 msgid "WooCommerce"
 msgstr ""
@@ -8703,20 +8695,20 @@ msgstr ""
 #. translators: %s: method
 #. translators: %s: payment method
 #. translators: %s: shipping method
-#: includes/abstracts/abstract-wc-order.php:2032
-#: src/Internal/Admin/Orders/ListTable.php:527
-#: src/Internal/Admin/Orders/ListTable.php:548
-#: src/Internal/Admin/Orders/ListTable.php:565
+#: includes/abstracts/abstract-wc-order.php:2055
+#: src/Internal/Admin/Orders/ListTable.php:529
+#: src/Internal/Admin/Orders/ListTable.php:550
+#: src/Internal/Admin/Orders/ListTable.php:567
 msgid "via %s"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2037
+#: includes/abstracts/abstract-wc-order.php:2060
 #: includes/class-wc-cart.php:1585
 #: includes/class-wc-product-grouped.php:120
 msgid "Free!"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2066
+#: includes/abstracts/abstract-wc-order.php:2089
 #: includes/wc-template-functions.php:2217
 #: packages/woocommerce-blocks/build/cart-blocks/cart-express-payment-frontend.js:5
 #: packages/woocommerce-blocks/build/cart.js:36
@@ -8726,7 +8718,7 @@ msgstr ""
 msgid "Subtotal:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2081
+#: includes/abstracts/abstract-wc-order.php:2104
 #: packages/woocommerce-blocks/build/cart-blocks/cart-express-payment-frontend.js:5
 #: packages/woocommerce-blocks/build/cart.js:36
 #: packages/woocommerce-blocks/build/checkout-blocks/express-payment-frontend.js:5
@@ -8735,7 +8727,7 @@ msgstr ""
 msgid "Discount:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2096
+#: includes/abstracts/abstract-wc-order.php:2119
 #: includes/admin/meta-boxes/views/html-order-items.php:187
 #: packages/woocommerce-blocks/build/cart-blocks/cart-express-payment-frontend.js:5
 #: packages/woocommerce-blocks/build/cart.js:36
@@ -8745,7 +8737,7 @@ msgstr ""
 msgid "Shipping:"
 msgstr ""
 
-#: includes/abstracts/abstract-wc-order.php:2157
+#: includes/abstracts/abstract-wc-order.php:2180
 #: templates/checkout/order-receipt.php:33
 #: templates/checkout/thankyou.php:64
 msgid "Total:"
@@ -8777,8 +8769,8 @@ msgstr ""
 
 #: includes/abstracts/abstract-wc-product.php:1924
 #: includes/class-wc-product-simple.php:60
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/add-to-cart/shared/add-to-cart-button.js:165
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/button/block.js:130
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/add-to-cart/shared/add-to-cart-button.js:166
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/button/block.js:131
 #: packages/woocommerce-blocks/assets/js/previews/products.js:59
 #: packages/woocommerce-blocks/assets/js/previews/products.js:60
 #: packages/woocommerce-blocks/build/all-products.js:20
@@ -8821,7 +8813,7 @@ msgstr ""
 #: includes/abstracts/abstract-wc-product.php:2111
 #: includes/abstracts/abstract-wc-product.php:2113
 #: templates/cart/cart.php:92
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:77
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:82
 #: packages/woocommerce-blocks/build/all-products.js:28
 #: packages/woocommerce-blocks/build/cart-blocks/cart-line-items--mini-cart-contents-block/products-table-frontend.js:3
 #: packages/woocommerce-blocks/build/cart.js:33
@@ -8834,7 +8826,7 @@ msgid "Available on backorder"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-settings-api.php:803
-#: includes/admin/class-wc-admin-menus.php:404
+#: includes/admin/class-wc-admin-menus.php:376
 #: includes/admin/class-wc-admin-settings.php:689
 #: includes/admin/meta-boxes/views/html-product-attribute.php:57
 msgid "Select all"
@@ -8847,7 +8839,7 @@ msgid "Select none"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-shipping-method.php:323
-#: includes/admin/class-wc-admin-meta-boxes.php:152
+#: includes/admin/class-wc-admin-meta-boxes.php:153
 msgid "Items"
 msgstr ""
 
@@ -8892,6 +8884,8 @@ msgid "Need a theme? Try Storefront"
 msgstr ""
 
 #: includes/admin/class-wc-admin-addons.php:530
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/shipping-recommendations.js:1
 msgid "WooCommerce Shipping"
 msgstr ""
 
@@ -8910,9 +8904,9 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-addons.php:627
 #: includes/admin/class-wc-admin-addons.php:1114
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:172
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:215
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:250
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:173
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:216
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:252
 #: src/Internal/Admin/WcPayWelcomePage.php:47
 #: assets/client/admin/app/index.js:2
 #: assets/client/admin/chunks/homescreen.js:1
@@ -8996,7 +8990,7 @@ msgstr ""
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:669
 #: includes/admin/list-tables/class-wc-admin-list-table-coupons.php:85
 #: includes/admin/meta-boxes/views/html-variation-admin.php:386
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:132
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:134
 #: includes/admin/settings/class-wc-settings-shipping.php:398
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:88
 #: includes/admin/settings/views/html-keys-edit.php:21
@@ -9660,7 +9654,6 @@ msgstr ""
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore_PostTypeRegistrar.php:35
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:537
 #: templates/myaccount/my-address.php:63
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:66
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
 msgid "Edit"
 msgstr ""
@@ -9694,7 +9687,6 @@ msgid "No attributes currently exist."
 msgstr ""
 
 #: includes/admin/class-wc-admin-attributes.php:387
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:252
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
 msgid "Add new attribute"
 msgstr ""
@@ -9724,7 +9716,7 @@ msgid "WooCommerce Endpoint"
 msgstr ""
 
 #: includes/admin/class-wc-admin-customize.php:77
-#: includes/admin/class-wc-admin-menus.php:375
+#: includes/admin/class-wc-admin-menus.php:347
 #: includes/admin/settings/class-wc-settings-advanced.php:292
 #: includes/class-wc-query.php:158
 msgid "Lost password"
@@ -9738,82 +9730,82 @@ msgstr ""
 msgid "WooCommerce Setup"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:43
+#: includes/admin/class-wc-admin-dashboard.php:44
 msgid "WooCommerce Recent Reviews"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:45
+#: includes/admin/class-wc-admin-dashboard.php:46
 msgid "WooCommerce Status"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:57
+#: includes/admin/class-wc-admin-dashboard.php:58
 msgid "WooCommerce Network Orders"
 msgstr ""
 
 #. translators: %s: net sales
-#: includes/admin/class-wc-admin-dashboard.php:154
+#: includes/admin/class-wc-admin-dashboard.php:156
 msgid "%s net sales this month"
 msgstr ""
 
 #. translators: 1: top seller product title 2: top seller quantity
-#: includes/admin/class-wc-admin-dashboard.php:172
+#: includes/admin/class-wc-admin-dashboard.php:174
 msgid "%1$s top seller this month (sold %2$d)"
 msgstr ""
 
 #. translators: %s: order count
-#: includes/admin/class-wc-admin-dashboard.php:211
+#: includes/admin/class-wc-admin-dashboard.php:213
 msgid "<strong>%s order</strong> awaiting processing"
 msgid_plural "<strong>%s orders</strong> awaiting processing"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: order count
-#: includes/admin/class-wc-admin-dashboard.php:222
+#: includes/admin/class-wc-admin-dashboard.php:224
 msgid "<strong>%s order</strong> on-hold"
 msgid_plural "<strong>%s orders</strong> on-hold"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: order count
-#: includes/admin/class-wc-admin-dashboard.php:320
+#: includes/admin/class-wc-admin-dashboard.php:322
 msgid "<strong>%s product</strong> low in stock"
 msgid_plural "<strong>%s products</strong> low in stock"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: order count
-#: includes/admin/class-wc-admin-dashboard.php:331
+#: includes/admin/class-wc-admin-dashboard.php:333
 msgid "<strong>%s product</strong> out of stock"
 msgid_plural "<strong>%s products</strong> out of stock"
 msgstr[0] ""
 msgstr[1] ""
 
 #. translators: %s: rating
-#: includes/admin/class-wc-admin-dashboard.php:374
+#: includes/admin/class-wc-admin-dashboard.php:376
 msgid "%s out of 5"
 msgstr ""
 
 #. translators: %s: review author
-#: includes/admin/class-wc-admin-dashboard.php:377
+#: includes/admin/class-wc-admin-dashboard.php:379
 msgid "reviewed by %s"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:383
+#: includes/admin/class-wc-admin-dashboard.php:385
 msgid "There are no product reviews yet."
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:415
+#: includes/admin/class-wc-admin-dashboard.php:417
 msgid "Loading network orders"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:422
+#: includes/admin/class-wc-admin-dashboard.php:424
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:122
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:174
 #: includes/admin/reports/class-wc-report-downloads.php:87
 #: includes/admin/reports/class-wc-report-downloads.php:221
 #: includes/gateways/paypal/includes/class-wc-gateway-paypal-request.php:310
 #: includes/wc-account-functions.php:196
-#: src/Internal/Admin/Orders/ListTable.php:356
+#: src/Internal/Admin/Orders/ListTable.php:358
 #: templates/myaccount/my-orders.php:14
 #: assets/client/admin/chunks/analytics-report-categories.js:1
 #: assets/client/admin/chunks/analytics-report-coupons.js:1
@@ -9823,8 +9815,8 @@ msgid_plural "Orders"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/class-wc-admin-dashboard.php:423
-#: includes/admin/class-wc-admin-menus.php:158
+#: includes/admin/class-wc-admin-dashboard.php:425
+#: includes/admin/class-wc-admin-menus.php:159
 #: includes/admin/class-wc-admin-webhooks-table-list.php:49
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:124
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:58
@@ -9838,7 +9830,7 @@ msgstr[1] ""
 #: src/Admin/API/Reports/Products/Controller.php:405
 #: src/Admin/API/Reports/Stock/Controller.php:546
 #: src/Admin/API/Reports/Variations/Controller.php:438
-#: src/Internal/Admin/Orders/ListTable.php:358
+#: src/Internal/Admin/Orders/ListTable.php:360
 #: templates/myaccount/my-orders.php:16
 #: assets/client/admin/chunks/analytics-report-categories.js:1
 #: assets/client/admin/chunks/analytics-report-orders.js:1
@@ -9848,7 +9840,7 @@ msgstr[1] ""
 msgid "Status"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:424
+#: includes/admin/class-wc-admin-dashboard.php:426
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:127
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:338
 #: includes/admin/meta-boxes/views/html-order-item.php:125
@@ -9856,7 +9848,7 @@ msgstr ""
 #: includes/admin/meta-boxes/views/html-order-items.php:44
 #: includes/admin/reports/class-wc-report-taxes-by-code.php:218
 #: includes/wc-account-functions.php:199
-#: src/Internal/Admin/Orders/ListTable.php:361
+#: src/Internal/Admin/Orders/ListTable.php:363
 #: templates/cart/cart-totals.php:98
 #: templates/cart/cart-totals.php:99
 #: templates/checkout/review-order.php:103
@@ -9875,25 +9867,25 @@ msgstr ""
 msgid "Total"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:433
+#: includes/admin/class-wc-admin-dashboard.php:435
 #: includes/class-wc-post-types.php:402
 msgid "No orders found"
 msgstr ""
 
-#: includes/admin/class-wc-admin-dashboard.php:482
+#: includes/admin/class-wc-admin-dashboard.php:484
 #: src/Admin/API/Reports/PerformanceIndicators/Controller.php:144
 msgid "Sorry, fetching performance indicators failed."
 msgstr ""
 
 #. translators: 1: total income 2: days
-#: includes/admin/class-wc-admin-dashboard.php:550
-#: includes/admin/reports/class-wc-admin-report.php:593
+#: includes/admin/class-wc-admin-dashboard.php:552
+#: includes/admin/reports/class-wc-admin-report.php:616
 msgid "Sold %1$s worth in the last %2$d days"
 msgstr ""
 
 #. translators: 1: total items sold 2: days
-#: includes/admin/class-wc-admin-dashboard.php:553
-#: includes/admin/reports/class-wc-admin-report.php:596
+#: includes/admin/class-wc-admin-dashboard.php:555
+#: includes/admin/reports/class-wc-admin-report.php:619
 msgid "Sold %1$d item in the last %2$d days"
 msgid_plural "Sold %1$d items in the last %2$d days"
 msgstr[0] ""
@@ -10112,7 +10104,7 @@ msgstr ""
 #. translators: Filter: verb "to filter"
 #: includes/admin/class-wc-admin-log-table-list.php:204
 #: packages/action-scheduler/classes/abstracts/ActionScheduler_Abstract_ListTable.php:523
-#: src/Internal/Admin/Orders/ListTable.php:254
+#: src/Internal/Admin/Orders/ListTable.php:256
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:1303
 #: templates/content-widget-price-filter.php:30
 #: assets/client/admin/components/index.js:2
@@ -10127,7 +10119,7 @@ msgstr ""
 msgid "All sources"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:74
+#: includes/admin/class-wc-admin-menus.php:75
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:726
 #: includes/admin/meta-boxes/class-wc-meta-box-product-data.php:111
 #: includes/admin/views/html-admin-page-product-export.php:41
@@ -10136,21 +10128,21 @@ msgstr ""
 msgid "Attributes"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:82
+#: includes/admin/class-wc-admin-menus.php:83
 #: includes/react-admin/connect-existing-pages.php:30
 #: src/Admin/Features/Navigation/CoreMenu.php:115
 msgid "Reports"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:84
+#: includes/admin/class-wc-admin-menus.php:85
 msgid "Sales reports"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:92
+#: includes/admin/class-wc-admin-menus.php:93
 msgid "WooCommerce settings"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:92
+#: includes/admin/class-wc-admin-menus.php:93
 #: includes/admin/views/html-admin-page-status-report.php:690
 #: includes/class-wc-install.php:1792
 #: includes/react-admin/connect-existing-pages.php:34
@@ -10163,130 +10155,87 @@ msgstr ""
 msgid "Settings"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:158
+#: includes/admin/class-wc-admin-menus.php:159
 msgid "WooCommerce status"
 msgstr ""
 
 #. translators: %s: extensions count
-#: includes/admin/class-wc-admin-menus.php:167
+#: includes/admin/class-wc-admin-menus.php:168
 msgid "Extensions %s"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:168
+#: includes/admin/class-wc-admin-menus.php:169
 msgid "WooCommerce extensions"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:208
+#: includes/admin/class-wc-admin-menus.php:209
 #: includes/class-wc-post-types.php:405
 msgctxt "Admin menu name"
 msgid "Orders"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:319
-#: includes/admin/class-wc-admin-reports.php:47
-#: includes/admin/reports/class-wc-report-customer-list.php:219
-#: includes/admin/settings/class-wc-settings-advanced.php:238
-#: includes/class-wc-post-types.php:393
-#: includes/class-wc-privacy-exporters.php:76
-#: includes/class-wc-query.php:131
-#: includes/react-admin/connect-existing-pages.php:132
-#: includes/react-admin/connect-existing-pages.php:142
-#: includes/wc-account-functions.php:100
-#: src/Admin/API/Leaderboards.php:149
-#: src/Admin/API/Leaderboards.php:285
-#: src/Admin/API/Reports/Categories/Controller.php:341
-#: src/Admin/API/Reports/Coupons/Controller.php:308
-#: src/Admin/API/Reports/Customers/Controller.php:610
-#: src/Admin/API/Reports/Orders/Stats/Controller.php:172
-#: src/Admin/API/Reports/Products/Controller.php:399
-#: src/Admin/API/Reports/Revenue/Stats/Controller.php:457
-#: src/Admin/API/Reports/Taxes/Controller.php:315
-#: src/Admin/API/Reports/Variations/Controller.php:434
-#: src/Admin/Features/Navigation/CoreMenu.php:97
-#: src/Admin/Features/Navigation/CoreMenu.php:271
-#: src/Admin/ReportCSVEmail.php:36
-#: src/Internal/Admin/Analytics.php:243
-#: src/Internal/Admin/Orders/ListTable.php:75
-#: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/9198.js:1
-#: assets/client/admin/chunks/analytics-report-categories.js:1
-#: assets/client/admin/chunks/analytics-report-coupons.js:1
-#: assets/client/admin/chunks/analytics-report-customers.js:1
-#: assets/client/admin/chunks/analytics-report-orders.js:1
-#: assets/client/admin/chunks/analytics-report-products.js:1
-#: assets/client/admin/chunks/analytics-report-revenue.js:1
-#: assets/client/admin/chunks/analytics-report-taxes.js:1
-#: assets/client/admin/chunks/analytics-report-variations.js:1
-#: assets/client/admin/chunks/dashboard-charts.js:1
-#: assets/client/admin/chunks/homescreen.js:1
-msgid "Orders"
-msgid_plural "Orders"
-msgstr[0] ""
-msgstr[1] ""
-
-#: includes/admin/class-wc-admin-menus.php:359
+#: includes/admin/class-wc-admin-menus.php:331
 msgid "WooCommerce endpoints"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:407
+#: includes/admin/class-wc-admin-menus.php:379
 msgid "Add to menu"
 msgstr ""
 
-#: includes/admin/class-wc-admin-menus.php:441
+#: includes/admin/class-wc-admin-menus.php:413
 msgid "Visit Store"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:143
+#: includes/admin/class-wc-admin-meta-boxes.php:144
 #: includes/admin/class-wc-admin-pointers.php:207
 msgid "Product short description"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:144
+#: includes/admin/class-wc-admin-meta-boxes.php:145
 #: includes/admin/views/html-bulk-edit-product.php:15
 #: includes/admin/views/html-quick-edit-product.php:14
 msgid "Product data"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:145
+#: includes/admin/class-wc-admin-meta-boxes.php:146
 msgid "Product gallery"
 msgstr ""
 
 #. Translators: %s order type name.
-#: includes/admin/class-wc-admin-meta-boxes.php:151
+#: includes/admin/class-wc-admin-meta-boxes.php:152
 msgid "%s data"
 msgstr ""
 
 #. Translators: %s order type name.
-#: includes/admin/class-wc-admin-meta-boxes.php:154
+#: includes/admin/class-wc-admin-meta-boxes.php:155
 msgid "%s notes"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:155
+#: includes/admin/class-wc-admin-meta-boxes.php:156
 msgid "Downloadable product permissions"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:155
+#: includes/admin/class-wc-admin-meta-boxes.php:156
 msgid "Note: Permissions for order items will automatically be granted when the order status changes to processing/completed."
 msgstr ""
 
 #. Translators: %s order type name.
-#: includes/admin/class-wc-admin-meta-boxes.php:157
+#: includes/admin/class-wc-admin-meta-boxes.php:158
 msgid "%s actions"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:161
+#: includes/admin/class-wc-admin-meta-boxes.php:162
 msgid "Coupon data"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:165
+#: includes/admin/class-wc-admin-meta-boxes.php:166
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:607
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:158
 #: packages/woocommerce-blocks/build/active-filters-frontend.js:13
 #: packages/woocommerce-blocks/build/active-filters.js:15
 msgid "Rating"
 msgstr ""
 
-#: includes/admin/class-wc-admin-meta-boxes.php:200
+#: includes/admin/class-wc-admin-meta-boxes.php:223
 #: includes/admin/settings/class-wc-settings-products.php:147
 #: src/Internal/Admin/ProductReviews/Reviews.php:126
 #: src/Internal/Admin/ProductReviews/Reviews.php:127
@@ -10300,12 +10249,12 @@ msgstr ""
 #: includes/admin/class-wc-admin-status.php:303
 #: includes/admin/class-wc-admin-status.php:322
 #: includes/admin/class-wc-admin-status.php:338
-#: includes/emails/class-wc-email.php:902
+#: includes/emails/class-wc-email.php:924
 msgid "Action failed. Please refresh the page and retry."
 msgstr ""
 
 #: includes/admin/class-wc-admin-notices.php:185
-#: includes/emails/class-wc-email.php:906
+#: includes/emails/class-wc-email.php:928
 msgid "You don&#8217;t have permission to do this."
 msgstr ""
 
@@ -10360,14 +10309,14 @@ msgid "Product attribute base"
 msgstr ""
 
 #: includes/admin/class-wc-admin-permalink-settings.php:74
-#: includes/wc-core-functions.php:2174
+#: includes/wc-core-functions.php:2165
 #: includes/wc-update-functions.php:72
 msgctxt "slug"
 msgid "product-category"
 msgstr ""
 
 #: includes/admin/class-wc-admin-permalink-settings.php:83
-#: includes/wc-core-functions.php:2175
+#: includes/wc-core-functions.php:2166
 #: includes/wc-update-functions.php:73
 msgctxt "slug"
 msgid "product-tag"
@@ -10413,7 +10362,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-permalink-settings.php:193
 #: includes/admin/class-wc-admin-permalink-settings.php:196
-#: includes/wc-core-functions.php:2173
+#: includes/wc-core-functions.php:2164
 #: includes/wc-update-functions.php:82
 msgctxt "slug"
 msgid "product"
@@ -10875,7 +10824,7 @@ msgstr ""
 #: includes/class-wc-countries.php:685
 #: includes/class-wc-form-handler.php:268
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:19
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:315
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:318
 #: templates/myaccount/form-edit-account.php:27
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "First name"
@@ -10888,7 +10837,7 @@ msgstr ""
 #: includes/class-wc-countries.php:692
 #: includes/class-wc-form-handler.php:269
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:25
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:319
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:322
 #: templates/myaccount/form-edit-account.php:31
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Last name"
@@ -10899,7 +10848,7 @@ msgstr ""
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:53
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:105
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:31
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:323
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:326
 #: packages/woocommerce-blocks/build/checkout.js:46
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Company"
@@ -10945,7 +10894,7 @@ msgstr ""
 #: includes/admin/settings/class-wc-settings-tax.php:229
 #: includes/admin/settings/views/html-settings-tax.php:35
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:49
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:339
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:342
 #: src/Admin/API/Reports/Customers/Controller.php:614
 #: templates/cart/shipping-calculator.php:76
 #: assets/client/admin/app/index.js:2
@@ -11047,6 +10996,49 @@ msgstr ""
 #: includes/admin/settings/views/html-keys-edit.php:143
 msgid "Copy"
 msgstr ""
+
+#: includes/admin/class-wc-admin-reports.php:47
+#: includes/admin/reports/class-wc-report-customer-list.php:219
+#: includes/admin/settings/class-wc-settings-advanced.php:238
+#: includes/class-wc-post-types.php:393
+#: includes/class-wc-privacy-exporters.php:76
+#: includes/class-wc-query.php:131
+#: includes/react-admin/connect-existing-pages.php:132
+#: includes/react-admin/connect-existing-pages.php:142
+#: includes/wc-account-functions.php:100
+#: src/Admin/API/Leaderboards.php:149
+#: src/Admin/API/Leaderboards.php:285
+#: src/Admin/API/Reports/Categories/Controller.php:341
+#: src/Admin/API/Reports/Coupons/Controller.php:308
+#: src/Admin/API/Reports/Customers/Controller.php:610
+#: src/Admin/API/Reports/Orders/Stats/Controller.php:172
+#: src/Admin/API/Reports/Products/Controller.php:399
+#: src/Admin/API/Reports/Revenue/Stats/Controller.php:457
+#: src/Admin/API/Reports/Taxes/Controller.php:315
+#: src/Admin/API/Reports/Variations/Controller.php:434
+#: src/Admin/Features/Navigation/CoreMenu.php:97
+#: src/Admin/Features/Navigation/CoreMenu.php:271
+#: src/Admin/ReportCSVEmail.php:36
+#: src/Internal/Admin/Analytics.php:243
+#: src/Internal/Admin/Orders/ListTable.php:77
+#: src/Internal/Admin/Orders/PageController.php:70
+#: src/Internal/Admin/Orders/PageController.php:71
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/9198.js:1
+#: assets/client/admin/chunks/analytics-report-categories.js:1
+#: assets/client/admin/chunks/analytics-report-coupons.js:1
+#: assets/client/admin/chunks/analytics-report-customers.js:1
+#: assets/client/admin/chunks/analytics-report-orders.js:1
+#: assets/client/admin/chunks/analytics-report-products.js:1
+#: assets/client/admin/chunks/analytics-report-revenue.js:1
+#: assets/client/admin/chunks/analytics-report-taxes.js:1
+#: assets/client/admin/chunks/analytics-report-variations.js:1
+#: assets/client/admin/chunks/dashboard-charts.js:1
+#: assets/client/admin/chunks/homescreen.js:1
+msgid "Orders"
+msgid_plural "Orders"
+msgstr[0] ""
+msgstr[1] ""
 
 #: includes/admin/class-wc-admin-reports.php:50
 msgid "Sales by date"
@@ -11251,7 +11243,9 @@ msgid "Recommended"
 msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:251
+#: assets/client/admin/app/index.js:2
 #: assets/client/admin/chunks/marketing-overview.js:1
+#: assets/client/admin/chunks/shipping-recommendations.js:1
 msgid "Activate"
 msgstr ""
 
@@ -11300,7 +11294,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:511
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:37
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:327
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:330
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Address"
 msgstr ""
@@ -12160,65 +12154,65 @@ msgstr[1] ""
 msgid "You do not have permission to edit Webhooks"
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:56
+#: includes/admin/class-wc-admin-webhooks.php:58
 msgid "You do not have permission to update Webhooks"
 msgstr ""
 
 #. translators: %s: date
-#: includes/admin/class-wc-admin-webhooks.php:69
+#: includes/admin/class-wc-admin-webhooks.php:74
 #: includes/legacy/api/v2/class-wc-api-webhooks.php:199
 #: includes/legacy/api/v3/class-wc-api-webhooks.php:199
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:501
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:516
 msgid "Webhook created on %s"
 msgstr ""
 
 #. translators: %s: date
-#: includes/admin/class-wc-admin-webhooks.php:71
+#: includes/admin/class-wc-admin-webhooks.php:76
 #: includes/admin/settings/views/html-webhooks-edit.php:25
 #: includes/legacy/api/v2/class-wc-api-webhooks.php:199
 #: includes/legacy/api/v3/class-wc-api-webhooks.php:199
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:501
-msgctxt "Webhook created on date parsed by strftime"
-msgid "%b %d, %Y @ %I:%M %p"
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:516
+msgctxt "Webhook created on date parsed by DateTime::format"
+msgid "M d, Y @ h:i A"
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:117
+#: includes/admin/class-wc-admin-webhooks.php:129
 msgid "Webhook topic unknown. Please select a valid topic."
 msgstr ""
 
 #. translators: %d: count
-#: includes/admin/class-wc-admin-webhooks.php:226
+#: includes/admin/class-wc-admin-webhooks.php:249
 msgid "%d webhook permanently deleted."
 msgid_plural "%d webhooks permanently deleted."
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/class-wc-admin-webhooks.php:230
+#: includes/admin/class-wc-admin-webhooks.php:254
 msgid "Webhook updated successfully."
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:234
+#: includes/admin/class-wc-admin-webhooks.php:259
 msgid "Webhook created successfully."
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:270
+#: includes/admin/class-wc-admin-webhooks.php:298
 #: includes/admin/settings/class-wc-settings-advanced.php:42
 msgid "Webhooks"
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:270
+#: includes/admin/class-wc-admin-webhooks.php:298
 msgid "Add webhook"
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:286
+#: includes/admin/class-wc-admin-webhooks.php:314
 msgid "Search webhooks"
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:291
+#: includes/admin/class-wc-admin-webhooks.php:319
 msgid "Webhooks are event notifications sent to URLs of your choice. They can be used to integrate with third-party services which support them."
 msgstr ""
 
-#: includes/admin/class-wc-admin-webhooks.php:292
+#: includes/admin/class-wc-admin-webhooks.php:320
 msgid "Create a new webhook"
 msgstr ""
 
@@ -12252,7 +12246,7 @@ msgid "WooCommerce Helper"
 msgstr ""
 
 #. translators: %s: URL of WooCommerce.com subscriptions tab.
-#: includes/admin/helper/class-wc-helper-updater.php:485
+#: includes/admin/helper/class-wc-helper-updater.php:516
 msgid "Please visit the <a href=\"%s\" target=\"_blank\">subscriptions page</a> and renew to continue receiving updates."
 msgstr ""
 
@@ -12313,7 +12307,7 @@ msgstr ""
 
 #: includes/admin/helper/class-wc-helper.php:400
 #: includes/admin/reports/class-wc-report-sales-by-category.php:230
-#: src/Internal/Admin/Orders/ListTable.php:193
+#: src/Internal/Admin/Orders/ListTable.php:195
 #: assets/client/admin/chunks/9198.js:1
 #: assets/client/admin/components/index.js:2
 msgid "All"
@@ -12867,63 +12861,63 @@ msgstr ""
 #. translators: %d: Attribute number
 #. translators: %s: attribute number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:551
-#: includes/export/class-wc-product-csv-exporter.php:636
+#: includes/export/class-wc-product-csv-exporter.php:646
 msgid "Attribute %d name"
 msgstr ""
 
 #. translators: %d: Attribute number
 #. translators: %s: attribute number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:553
-#: includes/export/class-wc-product-csv-exporter.php:638
+#: includes/export/class-wc-product-csv-exporter.php:648
 msgid "Attribute %d value(s)"
 msgstr ""
 
 #. translators: %d: Attribute number
 #. translators: %s: attribute number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:555
-#: includes/export/class-wc-product-csv-exporter.php:640
+#: includes/export/class-wc-product-csv-exporter.php:650
 msgid "Attribute %d visible"
 msgstr ""
 
 #. translators: %d: Attribute number
 #. translators: %s: attribute number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:557
-#: includes/export/class-wc-product-csv-exporter.php:642
+#: includes/export/class-wc-product-csv-exporter.php:652
 msgid "Attribute %d global"
 msgstr ""
 
 #. translators: %d: Attribute number
 #. translators: %s: attribute number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:559
-#: includes/export/class-wc-product-csv-exporter.php:680
+#: includes/export/class-wc-product-csv-exporter.php:690
 msgid "Attribute %d default"
 msgstr ""
 
 #. translators: %d: Download number
 #. translators: %s: download number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:561
-#: includes/export/class-wc-product-csv-exporter.php:605
+#: includes/export/class-wc-product-csv-exporter.php:615
 msgid "Download %d ID"
 msgstr ""
 
 #. translators: %d: Download number
 #. translators: %s: download number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:563
-#: includes/export/class-wc-product-csv-exporter.php:607
+#: includes/export/class-wc-product-csv-exporter.php:617
 msgid "Download %d name"
 msgstr ""
 
 #. translators: %d: Download number
 #. translators: %s: download number
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:565
-#: includes/export/class-wc-product-csv-exporter.php:609
+#: includes/export/class-wc-product-csv-exporter.php:619
 msgid "Download %d URL"
 msgstr ""
 
 #. translators: %d: Meta number
 #. translators: %s: meta data name
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:567
-#: includes/export/class-wc-product-csv-exporter.php:726
+#: includes/export/class-wc-product-csv-exporter.php:736
 msgid "Meta: %s"
 msgstr ""
 
@@ -12936,7 +12930,6 @@ msgstr ""
 #: templates/cart/cart.php:31
 #: templates/cart/cart.php:97
 #: templates/emails/email-order-details.php:44
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:91
 #: packages/woocommerce-blocks/build/active-filters-frontend.js:13
 #: packages/woocommerce-blocks/build/active-filters.js:15
 #: packages/woocommerce-blocks/build/price-filter-frontend.js:1
@@ -13370,7 +13363,7 @@ msgstr ""
 #: src/Admin/API/Reports/Downloads/Controller.php:397
 #: src/Admin/API/Reports/Orders/Controller.php:541
 #: src/Admin/API/Reports/Revenue/Stats/Controller.php:456
-#: src/Internal/Admin/Orders/ListTable.php:357
+#: src/Internal/Admin/Orders/ListTable.php:359
 #: templates/myaccount/my-orders.php:15
 #: assets/client/admin/chunks/analytics-report-downloads.js:1
 #: assets/client/admin/chunks/analytics-report-orders.js:1
@@ -13380,12 +13373,12 @@ msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:125
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:317
-#: src/Internal/Admin/Orders/ListTable.php:359
+#: src/Internal/Admin/Orders/ListTable.php:361
 msgid "Billing"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:126
-#: src/Internal/Admin/Orders/ListTable.php:360
+#: src/Internal/Admin/Orders/ListTable.php:362
 msgid "Ship to"
 msgstr ""
 
@@ -13393,32 +13386,32 @@ msgstr ""
 #: includes/admin/reports/class-wc-report-customer-list.php:222
 #: includes/admin/reports/class-wc-report-stock.php:177
 #: includes/wc-account-functions.php:200
-#: src/Internal/Admin/Orders/ListTable.php:362
+#: src/Internal/Admin/Orders/ListTable.php:364
 msgid "Actions"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:146
-#: src/Internal/Admin/Orders/ListTable.php:135
+#: src/Internal/Admin/Orders/ListTable.php:137
 msgid "Change status to processing"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:147
-#: src/Internal/Admin/Orders/ListTable.php:136
+#: src/Internal/Admin/Orders/ListTable.php:138
 msgid "Change status to on-hold"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:148
-#: src/Internal/Admin/Orders/ListTable.php:137
+#: src/Internal/Admin/Orders/ListTable.php:139
 msgid "Change status to completed"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:149
-#: src/Internal/Admin/Orders/ListTable.php:138
+#: src/Internal/Admin/Orders/ListTable.php:140
 msgid "Change status to cancelled"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:152
-#: src/Internal/Admin/Orders/ListTable.php:142
+#: src/Internal/Admin/Orders/ListTable.php:144
 msgid "Remove personal data"
 msgstr ""
 
@@ -13494,7 +13487,7 @@ msgid "Change order status to on-hold"
 msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:442
-#: src/Internal/Admin/Orders/ListTable.php:594
+#: src/Internal/Admin/Orders/ListTable.php:597
 msgid "Processing"
 msgstr ""
 
@@ -13531,7 +13524,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:282
 #: includes/emails/class-wc-email-failed-order.php:187
 #: includes/emails/class-wc-email-new-order.php:209
-#: includes/emails/class-wc-email.php:713
+#: includes/emails/class-wc-email.php:735
 #: includes/shipping/flat-rate/includes/settings-flat-rate.php:59
 #: includes/shipping/flat-rate/includes/settings-flat-rate.php:70
 #: includes/shipping/free-shipping/class-wc-shipping-free-shipping.php:95
@@ -13594,7 +13587,7 @@ msgstr ""
 #. Translators: %s Payment gateway name.
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:260
 #: includes/admin/settings/class-wc-settings-emails.php:337
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:208
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:211
 #: includes/admin/settings/class-wc-settings-shipping.php:294
 #: includes/admin/views/html-bulk-edit-product.php:206
 #: includes/admin/views/html-bulk-edit-product.php:240
@@ -13606,7 +13599,7 @@ msgstr ""
 
 #. Translators: %s Payment gateway name.
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:262
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:211
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:214
 #: includes/admin/settings/class-wc-settings-shipping.php:295
 #: includes/admin/views/html-bulk-edit-product.php:207
 #: includes/admin/views/html-bulk-edit-product.php:241
@@ -13659,13 +13652,13 @@ msgstr ""
 #: packages/woocommerce-blocks/assets/js/blocks/product-on-sale/block.js:106
 #: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:156
 #: packages/woocommerce-blocks/assets/js/blocks/product-top-rated/block.js:81
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/index.js:42
 #: packages/woocommerce-blocks/build/product-category.js:6
 #: packages/woocommerce-blocks/build/product-new.js:6
 #: packages/woocommerce-blocks/build/product-on-sale.js:6
 #: packages/woocommerce-blocks/build/product-tag.js:10
 #: packages/woocommerce-blocks/build/product-top-rated.js:6
 #: packages/woocommerce-blocks/build/products-by-attribute.js:16
+#: packages/woocommerce-blocks/build/stock-filter-frontend.js:5
 #: packages/woocommerce-blocks/build/stock-filter.js:15
 msgid "Filter by stock status"
 msgstr ""
@@ -13959,7 +13952,7 @@ msgstr ""
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:301
 #: includes/admin/settings/views/html-keys-edit.php:43
 #: includes/class-wc-ajax.php:1731
-#: src/Internal/Admin/Orders/ListTable.php:333
+#: src/Internal/Admin/Orders/ListTable.php:335
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
 
@@ -14660,7 +14653,7 @@ msgid "Manage stock?"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-inventory.php:38
-msgid "Enable stock management at product level"
+msgid "Manage stock level (quantity)"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-inventory.php:50
@@ -14717,7 +14710,11 @@ msgid "Sold individually"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-inventory.php:122
-msgid "Enable this to only allow one of this item to be bought in a single order"
+msgid "Limit purchases to 1 item per order"
+msgstr ""
+
+#: includes/admin/meta-boxes/views/html-product-data-inventory.php:126
+msgid "Check to let customers to purchase only 1 item in a single order. This is particularly useful for items that have limited quantity, for example art or handmade goods."
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-linked-products.php:26
@@ -14817,14 +14814,11 @@ msgstr ""
 #: src/Internal/Admin/Notes/UnsecuredReportFiles.php:50
 #: src/Internal/Admin/Notes/WelcomeToWooCommerceForStoreUsers.php:53
 #: src/Internal/Admin/Notes/WooCommercePayments.php:121
-#: assets/client/admin/app/index.js:2
 #: assets/client/admin/chunks/profile-wizard.js:1
 #: assets/client/admin/chunks/shipping-recommendations.js:1
 #: assets/client/admin/chunks/wc-pay-subscriptions-page.js:1
 #: assets/client/admin/chunks/wcpay-payment-welcome-page.js:1
 #: assets/client/admin/onboarding/index.js:1
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:261
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:151
 #: packages/woocommerce-blocks/assets/js/blocks/products/edit-utils.js:34
 #: packages/woocommerce-blocks/build/all-products.js:36
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
@@ -14837,7 +14831,7 @@ msgid "Default Form Values"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:26
-msgid "These are the attributes that will be pre-selected on the frontend."
+msgid "Choose a default form value if you want a certain variation already selected when a user visits the product page."
 msgstr ""
 
 #. translators: WooCommerce attribute label
@@ -14920,6 +14914,7 @@ msgstr ""
 #. translators: Submit button text for filters.
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:92
 #: includes/admin/views/html-report-by-date.php:58
+#: assets/client/admin/chunks/6232.js:1
 #: packages/woocommerce-blocks/build/attribute-filter-frontend.js:5
 #: packages/woocommerce-blocks/build/attribute-filter.js:8
 #: packages/woocommerce-blocks/build/price-filter-frontend.js:3
@@ -15024,7 +15019,7 @@ msgstr ""
 
 #: includes/admin/meta-boxes/views/html-variation-admin.php:90
 #: includes/admin/settings/class-wc-settings-emails.php:337
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:131
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:133
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:87
 #: src/Internal/ProductDownloads/ApprovedDirectories/Admin/Table.php:202
 msgid "Enabled"
@@ -15211,11 +15206,11 @@ msgid "Update now"
 msgstr ""
 
 #. translators: %1$s: open link, %2$s: close link
-#: includes/admin/reports/class-wc-admin-report.php:758
+#: includes/admin/reports/class-wc-admin-report.php:793
 msgid "This report link has expired. %1$sClick here to view the filtered report%2$s."
 msgstr ""
 
-#: includes/admin/reports/class-wc-admin-report.php:759
+#: includes/admin/reports/class-wc-admin-report.php:794
 msgid "Confirm navigation"
 msgstr ""
 
@@ -15469,8 +15464,7 @@ msgstr ""
 
 #: includes/admin/reports/class-wc-report-downloads.php:123
 #: includes/widgets/class-wc-widget-layered-nav-filters.php:27
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/index.js:51
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/index.js:72
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:13
 #: packages/woocommerce-blocks/build/active-filters.js:17
 msgid "Active filters"
 msgstr ""
@@ -15758,7 +15752,7 @@ msgid "Period"
 msgstr ""
 
 #: includes/admin/reports/class-wc-report-taxes-by-date.php:213
-#: src/Admin/API/Reports/Revenue/Stats/Controller.php:459
+#: src/Admin/API/Reports/Revenue/Stats/Controller.php:464
 #: assets/client/admin/chunks/analytics-report-revenue.js:1
 #: assets/client/admin/chunks/dashboard-charts.js:1
 msgid "Total sales"
@@ -16129,7 +16123,7 @@ msgid "Endpoint for the \"My account &rarr; Addresses\" page."
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-advanced.php:283
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:40
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:42
 #: includes/class-wc-query.php:149
 #: includes/wc-account-functions.php:103
 #: packages/woocommerce-blocks/assets/js/blocks/cart-checkout-shared/payment-methods/no-payment-methods/index.js:36
@@ -16281,7 +16275,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:238
 #: includes/emails/class-wc-email-failed-order.php:150
 #: includes/emails/class-wc-email-new-order.php:172
-#: includes/emails/class-wc-email.php:685
+#: includes/emails/class-wc-email.php:707
 msgid "Available placeholders: %s"
 msgstr ""
 
@@ -16366,7 +16360,7 @@ msgstr ""
 
 #. Translators: %s Payment gateway name.
 #: includes/admin/settings/class-wc-settings-emails.php:351
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:190
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:193
 #: assets/client/admin/app/index.js:2
 msgid "Manage"
 msgstr ""
@@ -16540,13 +16534,13 @@ msgid "This controls the position of the currency symbol."
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-general.php:246
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:86
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:82
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Left"
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-general.php:247
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:100
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:96
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Right"
 msgstr ""
@@ -16590,66 +16584,70 @@ msgstr ""
 msgid "Integration"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:26
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:28
 msgctxt "Settings tab label"
 msgid "Payments"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:130
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:132
 #: includes/wc-account-functions.php:243
 msgid "Method"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:171
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:174
 msgid "Move the \"%s\" payment method up"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:171
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:174
 #: assets/client/admin/chunks/customizable-dashboard.js:1
 msgid "Move up"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:172
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:175
 msgid "Move the \"%s\" payment method down"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:172
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:175
 #: assets/client/admin/chunks/customizable-dashboard.js:1
 msgid "Move down"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:190
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:193
 msgid "Manage the \"%s\" payment method"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:201
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:204
 msgid "Set up the \"%s\" payment method"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:201
-msgid "Set up"
-msgstr ""
-
-#. Translators: %s Payment gateway name.
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:208
-msgid "The \"%s\" payment method is currently enabled"
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:204
+msgid "Finish set up"
 msgstr ""
 
 #. Translators: %s Payment gateway name.
 #: includes/admin/settings/class-wc-settings-payment-gateways.php:211
+msgid "The \"%s\" payment method is currently enabled"
+msgstr ""
+
+#. Translators: %s Payment gateway name.
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:214
 msgid "The \"%s\" payment method is currently disabled"
 msgstr ""
 
-#: includes/admin/settings/class-wc-settings-payment-gateways.php:229
-#: assets/client/admin/app/index.js:2
-msgid "Other payment methods"
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:237
+msgid "Discover additional payment providers"
+msgstr ""
+
+#: includes/admin/settings/class-wc-settings-payment-gateways.php:240
+#: assets/client/admin/chunks/payment-recommendations.js:1
+msgid "Discover other payment providers"
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-products.php:54
@@ -16923,6 +16921,7 @@ msgstr ""
 #: includes/admin/settings/views/html-admin-page-shipping-zones-instance.php:7
 #: includes/admin/settings/views/html-admin-page-shipping-zones.php:8
 #: includes/admin/views/html-notice-legacy-shipping.php:18
+#: assets/client/admin/app/index.js:2
 msgid "Shipping zones"
 msgstr ""
 
@@ -17042,8 +17041,6 @@ msgid "Edit failed. Please try again."
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-shipping.php:399
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:83
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:38
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
 #: packages/woocommerce-blocks/build/stock-filter.js:15
 msgid "Product count"
@@ -17160,6 +17157,7 @@ msgid "Postcodes containing wildcards (e.g. CB23*) or fully numeric ranges (e.g.
 msgstr ""
 
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:77
+#: assets/client/admin/app/index.js:2
 msgid "Shipping methods"
 msgstr ""
 
@@ -19380,7 +19378,7 @@ msgstr ""
 #: includes/class-wc-order.php:898
 #: includes/class-wc-order.php:908
 #: includes/rest-api/Controllers/Version2/class-wc-rest-network-orders-v2-controller.php:149
-#: src/Internal/Admin/Orders/ListTable.php:412
+#: src/Internal/Admin/Orders/ListTable.php:414
 msgctxt "full name"
 msgid "%1$s %2$s"
 msgstr ""
@@ -19471,7 +19469,7 @@ msgstr ""
 
 #: includes/class-wc-countries.php:926
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:61
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:347
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:350
 #: assets/client/admin/chunks/analytics-report-customers.js:1
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Postal code"
@@ -19694,7 +19692,7 @@ msgstr ""
 #: includes/shortcodes/class-wc-shortcode-checkout.php:238
 #: includes/shortcodes/class-wc-shortcode-my-account.php:137
 #: includes/wc-order-functions.php:662
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:610
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:631
 msgid "Invalid order."
 msgstr ""
 
@@ -19794,7 +19792,6 @@ msgstr ""
 #: includes/wc-template-functions.php:3600
 #: includes/widgets/class-wc-widget-layered-nav-filters.php:104
 #: packages/woocommerce-blocks/assets/js/base/components/reviews/review-list-item/index.js:130
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:161
 #: packages/woocommerce-blocks/build/active-filters-frontend.js:15
 #: packages/woocommerce-blocks/build/active-filters.js:17
 #: packages/woocommerce-blocks/build/all-reviews.js:9
@@ -20185,8 +20182,8 @@ msgstr ""
 #: includes/class-wc-order-refund.php:67
 #: includes/data-stores/abstract-wc-order-data-store-cpt.php:264
 #: includes/data-stores/class-wc-order-refund-data-store-cpt.php:119
-msgctxt "Order date parsed by strftime"
-msgid "%b %d, %Y @ %I:%M %p"
+msgctxt "Order date parsed by DateTime::format"
+msgid "M d, Y @ h:i A"
 msgstr ""
 
 #: includes/class-wc-order.php:141
@@ -20475,7 +20472,6 @@ msgid "Add New"
 msgstr ""
 
 #: includes/class-wc-post-types.php:327
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:142
 #: packages/woocommerce-blocks/assets/js/blocks/products/edit-utils.js:26
 #: packages/woocommerce-blocks/build/all-products.js:36
 #: packages/woocommerce-blocks/build/price-filter.js:5
@@ -20597,7 +20593,7 @@ msgid "New order"
 msgstr ""
 
 #: includes/class-wc-post-types.php:401
-#: src/Internal/Admin/Orders/ListTable.php:91
+#: src/Internal/Admin/Orders/ListTable.php:93
 msgid "Search orders"
 msgstr ""
 
@@ -20632,7 +20628,7 @@ msgstr ""
 
 #: includes/class-wc-post-types.php:457
 #: includes/react-admin/connect-existing-pages.php:173
-#: src/Admin/API/Reports/Revenue/Stats/Controller.php:461
+#: src/Admin/API/Reports/Revenue/Stats/Controller.php:460
 #: src/Admin/ReportCSVEmail.php:33
 #: src/Internal/Admin/Analytics.php:273
 #: src/Internal/Admin/Coupons.php:74
@@ -21363,7 +21359,7 @@ msgstr ""
 msgid "Regenerating images for attachment ID: %s"
 msgstr ""
 
-#: includes/class-wc-regenerate-images-request.php:265
+#: includes/class-wc-regenerate-images-request.php:255
 msgid "Completed product image regeneration job."
 msgstr ""
 
@@ -21505,12 +21501,12 @@ msgstr ""
 msgid "%1$s in %2$s on line %3$s"
 msgstr ""
 
-#: includes/class-woocommerce.php:974
+#: includes/class-woocommerce.php:965
 msgid "You have installed a development version of WooCommerce which requires files to be built and minified. From the plugin directory, run <code>pnpm install</code> and then <code>pnpm -- turbo run build --filter=woocommerce</code> to build and minify assets."
 msgstr ""
 
 #. translators: 1: URL of WordPress.org Repository 2: URL of the GitHub Repository release page
-#: includes/class-woocommerce.php:977
+#: includes/class-woocommerce.php:968
 msgid "Or you can download a pre-built version of the plugin from the <a href=\"%1$s\">WordPress.org repository</a> or by visiting <a href=\"%2$s\">the releases page in the GitHub repository</a>."
 msgstr ""
 
@@ -21707,7 +21703,6 @@ msgid "Enable store notice"
 msgstr ""
 
 #: includes/customizer/class-wc-shop-customizer.php:367
-#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:268
 msgid "Product Catalog"
 msgstr ""
 
@@ -21972,7 +21967,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:241
 #: includes/emails/class-wc-email-failed-order.php:153
 #: includes/emails/class-wc-email-new-order.php:175
-#: includes/emails/class-wc-email.php:688
+#: includes/emails/class-wc-email.php:710
 #: includes/gateways/bacs/class-wc-gateway-bacs.php:82
 #: includes/gateways/cheque/class-wc-gateway-cheque.php:58
 #: includes/gateways/cod/class-wc-gateway-cod.php:70
@@ -21986,7 +21981,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:243
 #: includes/emails/class-wc-email-failed-order.php:155
 #: includes/emails/class-wc-email-new-order.php:177
-#: includes/emails/class-wc-email.php:690
+#: includes/emails/class-wc-email.php:712
 msgid "Enable this email notification"
 msgstr ""
 
@@ -22002,7 +21997,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-invoice.php:191
 #: includes/emails/class-wc-email-failed-order.php:168
 #: includes/emails/class-wc-email-new-order.php:190
-#: includes/emails/class-wc-email.php:694
+#: includes/emails/class-wc-email.php:716
 msgid "Subject"
 msgstr ""
 
@@ -22010,7 +22005,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-invoice.php:199
 #: includes/emails/class-wc-email-failed-order.php:176
 #: includes/emails/class-wc-email-new-order.php:198
-#: includes/emails/class-wc-email.php:702
+#: includes/emails/class-wc-email.php:724
 msgid "Email heading"
 msgstr ""
 
@@ -22019,7 +22014,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:279
 #: includes/emails/class-wc-email-failed-order.php:184
 #: includes/emails/class-wc-email-new-order.php:206
-#: includes/emails/class-wc-email.php:710
+#: includes/emails/class-wc-email.php:732
 msgid "Additional content"
 msgstr ""
 
@@ -22028,7 +22023,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:280
 #: includes/emails/class-wc-email-failed-order.php:185
 #: includes/emails/class-wc-email-new-order.php:207
-#: includes/emails/class-wc-email.php:711
+#: includes/emails/class-wc-email.php:733
 msgid "Text to appear below the main email content."
 msgstr ""
 
@@ -22037,7 +22032,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:288
 #: includes/emails/class-wc-email-failed-order.php:193
 #: includes/emails/class-wc-email-new-order.php:215
-#: includes/emails/class-wc-email.php:719
+#: includes/emails/class-wc-email.php:741
 msgid "Email type"
 msgstr ""
 
@@ -22046,7 +22041,7 @@ msgstr ""
 #: includes/emails/class-wc-email-customer-refunded-order.php:290
 #: includes/emails/class-wc-email-failed-order.php:195
 #: includes/emails/class-wc-email-new-order.php:217
-#: includes/emails/class-wc-email.php:721
+#: includes/emails/class-wc-email.php:743
 msgid "Choose which format of email to send."
 msgstr ""
 
@@ -22274,73 +22269,73 @@ msgstr ""
 msgid "Congratulations on the sale."
 msgstr ""
 
-#: includes/emails/class-wc-email.php:736
+#: includes/emails/class-wc-email.php:758
 msgid "Plain text"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:739
+#: includes/emails/class-wc-email.php:761
 msgid "HTML"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:740
+#: includes/emails/class-wc-email.php:762
 msgid "Multipart"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:805
+#: includes/emails/class-wc-email.php:827
 msgid "Could not write to template file."
 msgstr ""
 
-#: includes/emails/class-wc-email.php:852
+#: includes/emails/class-wc-email.php:874
 msgid "Template file copied to theme."
 msgstr ""
 
-#: includes/emails/class-wc-email.php:883
+#: includes/emails/class-wc-email.php:905
 msgid "Template file deleted from theme."
 msgstr ""
 
-#: includes/emails/class-wc-email.php:931
+#: includes/emails/class-wc-email.php:953
 msgid "Return to emails"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:964
+#: includes/emails/class-wc-email.php:986
 msgid "HTML template"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:965
+#: includes/emails/class-wc-email.php:987
 msgid "Plain text template"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:989
+#: includes/emails/class-wc-email.php:1011
 msgid "Delete template file"
 msgstr ""
 
 #. translators: %s: Path to template file
-#: includes/emails/class-wc-email.php:995
+#: includes/emails/class-wc-email.php:1017
 msgid "This template has been overridden by your theme and can be found in: %s."
 msgstr ""
 
-#: includes/emails/class-wc-email.php:1028
+#: includes/emails/class-wc-email.php:1050
 msgid "Copy file to theme"
 msgstr ""
 
 #. translators: 1: Path to template file 2: Path to theme folder
-#: includes/emails/class-wc-email.php:1034
+#: includes/emails/class-wc-email.php:1056
 msgid "To override and edit this email template copy %1$s to your theme folder: %2$s."
 msgstr ""
 
-#: includes/emails/class-wc-email.php:1042
+#: includes/emails/class-wc-email.php:1064
 msgid "File was not found."
 msgstr ""
 
-#: includes/emails/class-wc-email.php:1066
+#: includes/emails/class-wc-email.php:1088
 msgid "View template"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:1067
+#: includes/emails/class-wc-email.php:1089
 msgid "Hide template"
 msgstr ""
 
-#: includes/emails/class-wc-email.php:1081
+#: includes/emails/class-wc-email.php:1103
 msgid "Are you sure you want to delete this template file?"
 msgstr ""
 
@@ -23759,7 +23754,7 @@ msgstr ""
 
 #: includes/legacy/api/v2/class-wc-api-webhooks.php:185
 #: includes/legacy/api/v3/class-wc-api-webhooks.php:185
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:323
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:338
 msgid "Webhook topic is required and must be valid."
 msgstr ""
 
@@ -23772,7 +23767,7 @@ msgstr ""
 
 #: includes/legacy/api/v2/class-wc-api-webhooks.php:265
 #: includes/legacy/api/v3/class-wc-api-webhooks.php:265
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:388
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:403
 msgid "Webhook topic must be valid."
 msgstr ""
 
@@ -24074,8 +24069,8 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:634
 #: includes/rest-api/Controllers/Version1/class-wc-rest-webhook-deliveries-v1-controller.php:67
 #: includes/rest-api/Controllers/Version1/class-wc-rest-webhook-deliveries-v1-controller.php:226
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:78
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:615
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:88
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:630
 #: includes/rest-api/Controllers/Version2/class-wc-rest-coupons-v2-controller.php:76
 #: includes/rest-api/Controllers/Version2/class-wc-rest-customers-v2-controller.php:124
 #: includes/rest-api/Controllers/Version2/class-wc-rest-order-notes-v2-controller.php:129
@@ -24089,7 +24084,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version2/class-wc-rest-product-variations-v2-controller.php:651
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:86
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:1668
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:84
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:90
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-methods-v2-controller.php:54
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zones-v2-controller.php:281
 #: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-tools-v2-controller.php:59
@@ -24135,7 +24130,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-order-refunds-v1-controller.php:281
 #: includes/rest-api/Controllers/Version1/class-wc-rest-orders-v1-controller.php:828
 #: includes/rest-api/Controllers/Version1/class-wc-rest-products-v1-controller.php:739
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:318
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:333
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:188
 #: includes/rest-api/Controllers/Version3/class-wc-rest-order-notes-controller.php:73
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:175
@@ -24145,8 +24140,8 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-coupons-v1-controller.php:351
 #: includes/rest-api/Controllers/Version1/class-wc-rest-orders-v1-controller.php:867
 #: includes/rest-api/Controllers/Version1/class-wc-rest-products-v1-controller.php:784
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:380
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:549
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:395
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:564
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:39
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:260
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:421
@@ -24293,9 +24288,9 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-tax-classes-v1-controller.php:96
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:124
 #: includes/rest-api/Controllers/Version1/class-wc-rest-webhook-deliveries-v1-controller.php:91
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:130
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:145
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:85
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:376
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:383
 #: includes/rest-api/Controllers/Version2/class-wc-rest-settings-v2-controller.php:179
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-methods-v2-controller.php:79
 #: includes/rest-api/Controllers/Version2/class-wc-rest-system-status-tools-v2-controller.php:87
@@ -24399,7 +24394,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-product-attributes-v1-controller.php:116
 #: includes/rest-api/Controllers/Version1/class-wc-rest-tax-classes-v1-controller.php:79
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:93
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:104
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:114
 #: includes/rest-api/Controllers/Version2/class-wc-rest-order-refunds-v2-controller.php:116
 #: includes/rest-api/Controllers/Version2/class-wc-rest-tax-classes-v2-controller.php:75
 #: includes/rest-api/Controllers/Version3/class-wc-rest-terms-controller.php:106
@@ -24415,7 +24410,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-product-reviews-v1-controller.php:162
 #: includes/rest-api/Controllers/Version1/class-wc-rest-tax-classes-v1-controller.php:111
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:139
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:145
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:160
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:71
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:167
 #: includes/rest-api/Controllers/Version3/class-wc-rest-shipping-zones-controller-base.php:83
@@ -24431,7 +24426,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-product-reviews-v1-controller.php:148
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:153
 #: includes/rest-api/Controllers/Version1/class-wc-rest-webhook-deliveries-v1-controller.php:105
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:159
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:174
 #: includes/rest-api/Controllers/Version2/class-wc-rest-orders-v2-controller.php:162
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:98
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-methods-v2-controller.php:92
@@ -24448,7 +24443,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-customers-v1-controller.php:183
 #: includes/rest-api/Controllers/Version1/class-wc-rest-orders-v1-controller.php:935
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:168
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:174
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:189
 #: includes/rest-api/Controllers/Version2/class-wc-rest-orders-v2-controller.php:178
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:111
 #: includes/rest-api/Controllers/Version2/class-wc-rest-product-variations-v2-controller.php:154
@@ -24465,7 +24460,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-product-attributes-v1-controller.php:215
 #: includes/rest-api/Controllers/Version1/class-wc-rest-tax-classes-v1-controller.php:126
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:183
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:189
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:204
 #: includes/rest-api/Controllers/Version2/class-wc-rest-orders-v2-controller.php:194
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:88
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:119
@@ -24477,7 +24472,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-customers-v1-controller.php:215
 #: includes/rest-api/Controllers/Version1/class-wc-rest-product-attributes-v1-controller.php:230
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:198
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:204
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:219
 #: includes/rest-api/Controllers/Version2/class-wc-rest-product-reviews-v2-controller.php:68
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:134
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:209
@@ -24734,7 +24729,7 @@ msgid "List of shipping address data."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version1/class-wc-rest-customers-v1-controller.php:865
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:711
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:726
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:612
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:636
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:948
@@ -24752,7 +24747,7 @@ msgstr ""
 
 #: includes/rest-api/Controllers/Version1/class-wc-rest-customers-v1-controller.php:883
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:733
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:729
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:744
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:630
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:654
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:964
@@ -24764,7 +24759,7 @@ msgstr ""
 
 #: includes/rest-api/Controllers/Version1/class-wc-rest-customers-v1-controller.php:890
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:740
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:735
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:750
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:636
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:660
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:968
@@ -24793,7 +24788,7 @@ msgstr ""
 
 #: includes/rest-api/Controllers/Version1/class-wc-rest-customers-v1-controller.php:898
 #: includes/rest-api/Controllers/Version1/class-wc-rest-taxes-v1-controller.php:748
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:742
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:757
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:643
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:667
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:977
@@ -24859,14 +24854,14 @@ msgid "Invalid order ID."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version1/class-wc-rest-order-notes-v1-controller.php:295
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:455
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:470
 msgid "Webhooks do not support trashing."
 msgstr ""
 
 #. translators: %s: post type
 #: includes/rest-api/Controllers/Version1/class-wc-rest-order-notes-v1-controller.php:316
 #: includes/rest-api/Controllers/Version1/class-wc-rest-products-v1-controller.php:1705
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:470
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:485
 #: includes/rest-api/Controllers/Version2/class-wc-rest-product-variations-v2-controller.php:555
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:1630
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:495
@@ -25637,7 +25632,7 @@ msgid "Email of the reviewer."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version1/class-wc-rest-product-reviews-v1-controller.php:176
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:391
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:398
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:181
 #: includes/rest-api/Controllers/Version3/class-wc-rest-settings-controller.php:51
 #: src/Admin/API/Notes.php:503
@@ -26709,18 +26704,18 @@ msgstr ""
 msgid "The date the webhook delivery was logged, in the site's timezone."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:63
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:633
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:68
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:648
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:116
 msgid "Webhook topic."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:68
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:73
 msgid "Webhook delivery URL."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:300
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:461
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:315
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:476
 #: includes/rest-api/Controllers/Version2/class-wc-rest-product-variations-v2-controller.php:491
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:1530
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:140
@@ -26730,61 +26725,61 @@ msgstr ""
 msgid "Invalid ID."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:328
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:397
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:343
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:412
 msgid "Webhook delivery URL must be a valid URL starting with http:// or https://."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:411
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:426
 msgid "Webhook status must be valid."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:621
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:636
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:104
 msgid "A friendly name for the webhook."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:626
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:641
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:109
 msgid "Webhook status."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:638
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:653
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:121
 msgid "Webhook resource."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:644
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:659
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:127
 msgid "Webhook event."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:650
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:665
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:133
 msgid "WooCommerce action names associated with the webhook."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:659
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:674
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:142
 msgid "The URL where the webhook payload is delivered."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:666
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:681
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:149
 msgid "Secret key used to generate a hash of the delivered webhook and provided in the request headers. This will default to a MD5 hash from the current user's ID|username if not provided."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:671
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:686
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:154
 msgid "The date the webhook was created, in the site's timezone."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:677
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:692
 #: includes/rest-api/Controllers/Version2/class-wc-rest-webhooks-v2-controller.php:166
 msgid "The date the webhook was last modified, in the site's timezone."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:699
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:714
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:582
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:624
 #: includes/rest-api/Controllers/Version3/class-wc-rest-product-reviews-controller.php:938
@@ -26807,7 +26802,7 @@ msgstr ""
 msgid "Limit response to resources published after a given ISO8601 compliant date."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:705
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:720
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:588
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:630
 #: src/Admin/API/Leaderboards.php:508
@@ -26829,7 +26824,7 @@ msgstr ""
 msgid "Limit response to resources published before a given ISO8601 compliant date."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:720
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:735
 #: includes/rest-api/Controllers/Version3/class-wc-rest-crud-controller.php:621
 #: includes/rest-api/Controllers/Version3/class-wc-rest-posts-controller.php:645
 #: includes/rest-api/Controllers/Version3/class-wc-rest-terms-controller.php:718
@@ -26839,7 +26834,7 @@ msgstr ""
 msgid "Limit result set to specific ids."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:754
+#: includes/rest-api/Controllers/Version1/class-wc-rest-webhooks-v1-controller.php:769
 msgid "Limit result set to webhooks assigned a specific status."
 msgstr ""
 
@@ -27085,7 +27080,7 @@ msgid "Payment gateway settings."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:400
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:505
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:516
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:487
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:172
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:165
@@ -27093,7 +27088,7 @@ msgid "A unique identifier for the setting."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:406
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:514
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:525
 #: includes/rest-api/Controllers/Version2/class-wc-rest-settings-v2-controller.php:204
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:493
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:178
@@ -27103,7 +27098,7 @@ msgid "A human readable label for the setting used in interfaces."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:412
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:523
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:534
 #: includes/rest-api/Controllers/Version2/class-wc-rest-settings-v2-controller.php:210
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:499
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:184
@@ -27113,7 +27108,7 @@ msgid "A human readable description for the setting used in interfaces."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:418
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:561
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:572
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:505
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:190
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:230
@@ -27121,7 +27116,7 @@ msgid "Type of setting."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:425
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:532
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:543
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:512
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:197
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:201
@@ -27129,7 +27124,7 @@ msgid "Setting value."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:430
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:537
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:548
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:517
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:202
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:206
@@ -27137,7 +27132,7 @@ msgid "Default value for the setting."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:436
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:543
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:554
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:523
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:208
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:212
@@ -27145,7 +27140,7 @@ msgid "Additional help text shown to the user about the setting."
 msgstr ""
 
 #: includes/rest-api/Controllers/Version2/class-wc-rest-payment-gateways-v2-controller.php:442
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:552
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:563
 #: includes/rest-api/Controllers/Version2/class-wc-rest-shipping-zone-methods-v2-controller.php:529
 #: includes/rest-api/Controllers/Version3/class-wc-rest-payment-gateways-controller.php:214
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:221
@@ -27272,26 +27267,26 @@ msgstr ""
 msgid "Limit result set to products based on a maximum price."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:45
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:62
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:80
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:47
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:66
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:86
 msgid "Settings group ID."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:159
 #: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:165
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:172
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:76
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:82
 msgid "Invalid setting group."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:234
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:246
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:252
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:241
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:253
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:259
 msgid "Invalid setting."
 msgstr ""
 
-#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:571
+#: includes/rest-api/Controllers/Version2/class-wc-rest-setting-options-v2-controller.php:582
 #: includes/rest-api/Controllers/Version3/class-wc-rest-setting-options-controller.php:240
 msgid "Array of options (key value pairs) for inputs such as select, multiselect, and radio buttons."
 msgstr ""
@@ -28849,6 +28844,14 @@ msgstr ""
 msgid "Sorry, the order could not be found. Please contact us if you are having difficulty finding your order details."
 msgstr ""
 
+#: includes/tracks/class-wc-tracks-event.php:96
+msgid "A valid event name must be specified."
+msgstr ""
+
+#: includes/tracks/class-wc-tracks-event.php:101
+msgid "A valid prop name must be specified"
+msgstr ""
+
 #: includes/wc-account-functions.php:66
 msgctxt "edit-address-slug"
 msgid "billing"
@@ -28877,6 +28880,7 @@ msgstr ""
 
 #: includes/wc-attribute-functions.php:254
 #: includes/wc-attribute-functions.php:281
+#: assets/client/admin/components/index.js:2
 msgid "Select"
 msgstr ""
 
@@ -28904,7 +28908,6 @@ msgid "Continue shopping"
 msgstr ""
 
 #: includes/wc-cart-functions.php:155
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/active-attribute-filters.js:77
 #: packages/woocommerce-blocks/build/active-filters-frontend.js:13
 #: packages/woocommerce-blocks/build/active-filters.js:15
 msgid "and"
@@ -29606,37 +29609,37 @@ msgstr ""
 msgid "Zambian kwacha"
 msgstr ""
 
-#: includes/wc-core-functions.php:1572
+#: includes/wc-core-functions.php:1563
 msgid "MasterCard"
 msgstr ""
 
-#: includes/wc-core-functions.php:1573
+#: includes/wc-core-functions.php:1564
 msgid "Visa"
 msgstr ""
 
-#: includes/wc-core-functions.php:1574
+#: includes/wc-core-functions.php:1565
 msgid "Discover"
 msgstr ""
 
-#: includes/wc-core-functions.php:1575
+#: includes/wc-core-functions.php:1566
 msgid "American Express"
 msgstr ""
 
-#: includes/wc-core-functions.php:1576
+#: includes/wc-core-functions.php:1567
 msgid "Diners"
 msgstr ""
 
-#: includes/wc-core-functions.php:1577
+#: includes/wc-core-functions.php:1568
 msgid "JCB"
 msgstr ""
 
 #. translators: 1: class name 2: woocommerce_logging_class 3: WC_Logger_Interface
-#: includes/wc-core-functions.php:2014
+#: includes/wc-core-functions.php:2005
 msgid "The class %1$s provided by %2$s filter must implement %3$s."
 msgstr ""
 
 #. translators: 1: wc_load_cart 2: woocommerce_init
-#: includes/wc-core-functions.php:2554
+#: includes/wc-core-functions.php:2545
 msgid "%1$s should not be called before the %2$s action."
 msgstr ""
 
@@ -30005,7 +30008,6 @@ msgid "Display a list of active product filters."
 msgstr ""
 
 #: includes/widgets/class-wc-widget-layered-nav-filters.php:23
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/index.js:18
 #: packages/woocommerce-blocks/build/active-filters.js:17
 msgid "Active Product Filters"
 msgstr ""
@@ -30035,10 +30037,6 @@ msgid "Display a list of attributes to filter products in your store."
 msgstr ""
 
 #: includes/widgets/class-wc-widget-layered-nav.php:25
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:214
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:230
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:364
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/index.js:18
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
 msgid "Filter Products by Attribute"
 msgstr ""
@@ -30055,9 +30053,7 @@ msgid "Attribute"
 msgstr ""
 
 #: includes/widgets/class-wc-widget-layered-nav.php:90
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/edit.js:53
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:176
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:77
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:72
 #: packages/woocommerce-blocks/build/active-filters.js:17
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
 #: packages/woocommerce-blocks/build/product-categories.js:1
@@ -30065,8 +30061,7 @@ msgid "List"
 msgstr ""
 
 #: includes/widgets/class-wc-widget-layered-nav.php:91
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:183
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:84
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:79
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Dropdown"
@@ -30094,21 +30089,17 @@ msgid "Any %s"
 msgstr ""
 
 #: includes/widgets/class-wc-widget-price-filter.php:25
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:126
 #: packages/woocommerce-blocks/build/price-filter.js:5
 msgid "Display a slider to filter products in your store by price."
 msgstr ""
 
 #: includes/widgets/class-wc-widget-price-filter.php:27
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:122
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/index.js:18
 #: packages/woocommerce-blocks/build/price-filter.js:5
 msgid "Filter Products by Price"
 msgstr ""
 
 #: includes/widgets/class-wc-widget-price-filter.php:31
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/index.js:60
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/index.js:81
+#: packages/woocommerce-blocks/build/price-filter-frontend.js:1
 #: packages/woocommerce-blocks/build/price-filter.js:5
 msgid "Filter by price"
 msgstr ""
@@ -30143,7 +30134,7 @@ msgid "Show product counts"
 msgstr ""
 
 #: includes/widgets/class-wc-widget-product-categories.php:68
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:140
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:135
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Show hierarchy"
 msgstr ""
@@ -30367,7 +30358,7 @@ msgid "ActionScheduler_Action::$args too long. To ensure the args column can be 
 msgstr ""
 
 #: packages/action-scheduler/classes/abstracts/ActionScheduler_Store.php:377
-#: src/Internal/Admin/Orders/ListTable.php:602
+#: src/Internal/Admin/Orders/ListTable.php:605
 msgid "Complete"
 msgstr ""
 
@@ -31008,7 +30999,7 @@ msgstr ""
 
 #. translators: %s number of products in cart.
 #. translators: %d is the count of products.
-#: packages/woocommerce-blocks/src/BlockTypes/ProductCategories.php:375
+#: packages/woocommerce-blocks/src/BlockTypes/ProductCategories.php:378
 #: assets/client/admin/chunks/homescreen.js:1
 #: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:101
 #: packages/woocommerce-blocks/assets/js/editor-components/product-category-control/index.js:76
@@ -31369,7 +31360,7 @@ msgid "Extension data registered by %s"
 msgstr ""
 
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:43
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:331
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:334
 #: packages/woocommerce-blocks/build/checkout.js:46
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Apartment, suite, etc."
@@ -32258,58 +32249,58 @@ msgid "Cannot create order from empty cart."
 msgstr ""
 
 #. translators: %s Coupon codes.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:172
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:175
 msgid "Invalid coupons were removed from the cart: \"%s\""
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:195
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:198
 msgid "A valid email address is required"
 msgstr ""
 
 #. translators: %s provided email.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:205
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:208
 msgid "The provided email address (%s) is not valid—please provide a valid email address"
 msgstr ""
 
 #. translators: %s country code.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:230
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:233
 msgid "Sorry, we do not ship orders to the provided country (%s)"
 msgstr ""
 
 #. translators: %s country code.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:245
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:248
 msgid "Sorry, we do not allow orders from the provided country (%s)"
 msgstr ""
 
 #. translators: %s Address type.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:276
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:279
 msgid "There was a problem with the provided %s:"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:277
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:280
 msgid "shipping address"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:277
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:280
 msgid "billing address"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:335
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:338
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Country/Region"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:343
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:346
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "State/County"
 msgstr ""
 
 #. translators: %s Field label.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:364
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:367
 msgid "%s is required"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:420
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:423
 msgid "Sorry, this order requires a shipping option."
 msgstr ""
 
@@ -32332,31 +32323,62 @@ msgstr ""
 msgid "The quantity added to the cart must be a multiple of %s"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:135
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:137
 msgid "No theme is defined for this template."
 msgstr ""
 
-#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:266
-#: packages/woocommerce-blocks/assets/js/blocks/single-product/constants.js:9
-#: packages/woocommerce-blocks/build/single-product-frontend.js:3
-#: packages/woocommerce-blocks/build/single-product.js:6
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:299
+msgctxt "Template name"
 msgid "Single Product"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:270
-#: packages/woocommerce-blocks/assets/js/blocks/product-category/block.js:29
-#: packages/woocommerce-blocks/assets/js/blocks/product-category/block.js:233
-#: packages/woocommerce-blocks/assets/js/blocks/product-category/index.js:22
-#: packages/woocommerce-blocks/build/product-category.js:6
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:300
+msgid "Template used to display the single product."
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:303
+msgctxt "Template name"
+msgid "Product Catalog"
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:304
+msgid "Template used to display products."
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:307
+msgctxt "Template name"
 msgid "Products by Category"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:272
-#: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:199
-#: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:255
-#: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:307
-#: packages/woocommerce-blocks/build/product-tag.js:10
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:308
+msgid "Template used to display products by category."
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:311
+msgctxt "Template name"
 msgid "Products by Tag"
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:312
+msgid "Template used to display products by tag."
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:315
+msgctxt "Template name"
+msgid "Product Search Results"
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:316
+msgid "Template used to display search results for products."
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:319
+msgctxt "Template name"
+msgid "Mini Cart"
+msgstr ""
+
+#: packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php:320
+msgid "Template used to display the Mini Cart drawer."
 msgstr ""
 
 #. translators: %s: Customer username
@@ -32484,6 +32506,7 @@ msgstr ""
 
 #: src/Admin/API/Leaderboards.php:221
 #: src/Admin/API/Leaderboards.php:357
+#: src/Admin/API/Reports/Revenue/Stats/Controller.php:461
 #: assets/client/admin/chunks/9198.js:1
 #: assets/client/admin/chunks/analytics-report-categories.js:1
 #: assets/client/admin/chunks/analytics-report-orders.js:1
@@ -32917,7 +32940,7 @@ msgstr ""
 msgid "Sorry, you cannot manage these options."
 msgstr ""
 
-#: src/Admin/API/Options.php:252
+#: src/Admin/API/Options.php:254
 msgid "Array of options with associated values."
 msgstr ""
 
@@ -33130,7 +33153,6 @@ msgid "Force retrieval of fresh data instead of from the cache."
 msgstr ""
 
 #: src/Admin/API/Reports/Categories/Controller.php:339
-#: src/Admin/API/Reports/Revenue/Stats/Controller.php:464
 msgid "Net Revenue"
 msgstr ""
 
@@ -33265,6 +33287,8 @@ msgstr ""
 #: src/Admin/API/Reports/Coupons/DataStore.php:173
 #: src/Admin/API/Reports/Products/DataStore.php:227
 #: assets/client/admin/chunks/analytics-report-downloads.js:1
+#: assets/client/admin/chunks/analytics-report-products.js:1
+#: assets/client/admin/chunks/analytics-report-variations.js:1
 msgid "(Deleted)"
 msgstr ""
 
@@ -34126,7 +34150,7 @@ msgid "Total of taxes."
 msgstr ""
 
 #: src/Admin/API/Reports/Revenue/Stats/Controller.php:214
-#: src/Admin/API/Reports/Revenue/Stats/Controller.php:460
+#: src/Admin/API/Reports/Revenue/Stats/Controller.php:459
 #: assets/client/admin/chunks/analytics-report-revenue.js:1
 #: assets/client/admin/chunks/dashboard-charts.js:1
 msgid "Returns"
@@ -34363,7 +34387,7 @@ msgid "Marketing"
 msgstr ""
 
 #: src/Admin/Features/Navigation/CoreMenu.php:198
-#: src/Internal/Admin/Homescreen.php:93
+#: src/Internal/Admin/Homescreen.php:184
 #: assets/client/admin/app/index.js:2
 msgid "Home"
 msgstr ""
@@ -34423,66 +34447,65 @@ msgid "Task is not a subclass of `Task`"
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/TaskLists.php:111
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:133
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:158
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:236
-#: assets/client/admin/chunks/two-column-tasks.js:1
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:132
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:157
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:234
 msgid "Get ready to start selling"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:181
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:179
 msgid "Cover the basics"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:182
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:180
 msgid "Make sure you’ve got everything you need to start selling—from business details to products."
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:191
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:189
 msgid "Get ready to sell"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:192
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:190
 msgid "Easily set up the backbone of your store’s operations and get ready to accept first orders."
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:201
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:199
 msgid "Customize & expand"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:202
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:200
 msgid "Personalize your store’s design and grow your business by enabling new sales channels."
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:216
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:253
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:214
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:251
 #: assets/client/admin/app/index.js:2
 msgid "Things to do next"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:320
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:347
 msgid "Task list ID already exists"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:339
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:366
 msgid "Task list ID does not exist"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/TaskLists.php:507
+#: src/Admin/Features/OnboardingTasks/TaskLists.php:534
 msgctxt "Admin menu name"
 msgid "Home"
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/Tasks/AdditionalPayments.php:30
-msgid "Set up additional payment providers"
+msgid "Set up additional payment options"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/AdditionalPayments.php:39
+#: src/Admin/Features/OnboardingTasks/Tasks/AdditionalPayments.php:42
 #: src/Admin/Features/OnboardingTasks/Tasks/Payments.php:49
 msgid "Choose payment providers and enable payment methods at checkout."
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/AdditionalPayments.php:51
+#: src/Admin/Features/OnboardingTasks/Tasks/AdditionalPayments.php:54
 #: src/Admin/Features/OnboardingTasks/Tasks/Appearance.php:75
 #: src/Admin/Features/OnboardingTasks/Tasks/Marketing.php:61
 #: src/Admin/Features/OnboardingTasks/Tasks/Payments.php:61
@@ -34516,6 +34539,11 @@ msgstr ""
 #: src/Admin/Features/OnboardingTasks/Tasks/Appearance.php:63
 #: assets/client/admin/app/index.js:2
 msgid "Add your logo, create a homepage, and start designing your store."
+msgstr ""
+
+#: src/Admin/Features/OnboardingTasks/Tasks/ExperimentalShippingRecommendation.php:28
+#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:55
+msgid "Set up shipping"
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/Tasks/Marketing.php:29
@@ -34618,31 +34646,31 @@ msgstr ""
 msgid "Purchase & install now"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:28
+#: src/Admin/Features/OnboardingTasks/Tasks/ReviewShippingOptions.php:26
+msgid "Review Shipping Options"
+msgstr ""
+
+#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:47
 msgid "Select how to ship your products"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:32
+#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:51
 msgid "You added shipping costs"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:34
+#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:53
 msgid "Add shipping costs"
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:36
-msgid "Set up shipping"
-msgstr ""
-
-#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:46
+#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:65
 msgid "Set delivery costs and enable extra features, like shipping label printing."
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:48
+#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:67
 msgid "Set your store location and where you'll ship to."
 msgstr ""
 
-#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:60
+#: src/Admin/Features/OnboardingTasks/Tasks/Shipping.php:79
 #: src/Admin/Features/OnboardingTasks/Tasks/Tax.php:106
 msgid "1 minute"
 msgstr ""
@@ -34703,7 +34731,7 @@ msgid "Set your store location and configure tax rate settings."
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/Tasks/WooCommercePayments.php:30
-msgid "Get paid with WooCommerce Payments"
+msgid "Set up WooCommerce Payments"
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/Tasks/WooCommercePayments.php:39
@@ -34718,7 +34746,7 @@ msgid "Finish setup"
 msgstr ""
 
 #: src/Admin/Features/OnboardingTasks/Tasks/WooCommercePayments.php:69
-msgid "By setting up, you are agreeing to the <a href=\"https://wordpress.com/tos/\" target=\"_blank\">Terms of Service</a>"
+msgid "By using WooCommerce Payments you agree to be bound by our <a href=\"https://wordpress.com/tos/\" target=\"_blank\">Terms of Service</a> and acknowledge that you have read our <a href=\"https://automattic.com/privacy/\" target=\"_blank\">Privacy Policy</a>"
 msgstr ""
 
 #: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:26
@@ -34790,67 +34818,67 @@ msgstr ""
 msgid "Take payments via bank transfer."
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:173
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:216
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:251
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:174
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:217
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:253
 msgid "Manage transactions without leaving your WordPress Dashboard. Only with WooCommerce Payments."
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:285
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:287
 #: assets/client/admin/chunks/homescreen.js:1
 #: assets/client/admin/data/index.js:2
 msgid "Razorpay"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:286
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:288
 msgid "The official Razorpay extension for WooCommerce allows you to accept credit cards, debit cards, netbanking, wallet, and UPI payments."
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:303
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:305
 msgid "PayU for WooCommerce"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:304
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:306
 msgid "Enable PayU’s exclusive plugin for WooCommerce to start accepting payments in 100+ payment methods available in India including credit cards, debit cards, UPI, & more!"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:321
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:323
 msgid "Eway"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:322
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:324
 msgid "The Eway extension for WooCommerce allows you to take credit card payments directly on your store without redirecting your customers to a third party site to make payment."
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:335
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:337
 msgid "Square"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:336
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:338
 msgid "Securely accept credit and debit cards with one low rate, no surprise fees (custom rates available). Sell online and in store and track sales and inventory in one place."
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:360
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:362
 msgid "Afterpay"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:361
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:363
 msgid "Afterpay allows customers to receive products immediately and pay for purchases over four installments, always interest-free."
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:373
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:375
 msgid "Amazon Pay"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:374
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:376
 msgid "Enable a familiar, fast checkout for hundreds of millions of active Amazon customers globally."
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:386
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:388
 msgid "Affirm"
 msgstr ""
 
-#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:387
+#: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:389
 msgid "Affirm’s tailored Buy Now Pay Later programs remove price as a barrier, turning browsers into buyers, increasing average order value, and expanding your customer base."
 msgstr ""
 
@@ -35181,7 +35209,7 @@ msgstr ""
 
 #. translators: %s: is referring to the plugin's name.
 #: src/Internal/Admin/Loader.php:111
-msgid "%1$s plugin has been deactivated to avoid conflicts with %2$s plugin."
+msgid "The %1$s plugin has been deactivated as the latest improvements are now included with the %2$s plugin."
 msgstr ""
 
 #. translators: %1$s: updated title, %2$s: blog info name
@@ -35759,55 +35787,73 @@ msgstr ""
 msgid " — %s"
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:76
+#: src/Internal/Admin/Orders/ListTable.php:78
 msgid "Add Order"
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:110
+#: src/Internal/Admin/Orders/ListTable.php:112
 msgid "When you receive a new order, it will appear here."
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:114
+#: src/Internal/Admin/Orders/ListTable.php:116
 msgid "Learn more about orders"
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:258
+#: src/Internal/Admin/Orders/ListTable.php:260
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:1312
 msgid "Empty Trash"
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:295
+#: src/Internal/Admin/Orders/ListTable.php:297
 msgid "All dates"
 msgstr ""
 
 #. translators: 1: Month name, 2: 4-digit year.
-#: src/Internal/Admin/Orders/ListTable.php:301
+#: src/Internal/Admin/Orders/ListTable.php:303
 msgctxt "order dates dropdown"
 msgid "%1$s %2$d"
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:342
+#: src/Internal/Admin/Orders/ListTable.php:344
 msgid "Filter by registered customer"
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:433
+#: src/Internal/Admin/Orders/ListTable.php:435
 msgid "Preview"
 msgstr ""
 
 #. translators: %s: human-readable time difference
-#: src/Internal/Admin/Orders/ListTable.php:457
+#: src/Internal/Admin/Orders/ListTable.php:459
 msgctxt "%s = human-readable time difference"
 msgid "%s ago"
 msgstr ""
 
-#: src/Internal/Admin/Orders/ListTable.php:461
+#: src/Internal/Admin/Orders/ListTable.php:463
 msgid "M j, Y"
 msgstr ""
 
 #. translators: %d: notes count
-#: src/Internal/Admin/Orders/ListTable.php:501
+#: src/Internal/Admin/Orders/ListTable.php:503
 msgid "%d note"
 msgid_plural "%d notes"
+msgstr[0] ""
+msgstr[1] ""
+
+#: src/Internal/Admin/Orders/ListTable.php:764
+msgid "Order status changed by bulk edit."
+msgstr ""
+
+#. translators: %s: orders count
+#: src/Internal/Admin/Orders/ListTable.php:788
+msgid "%s order status changed."
+msgid_plural "%s order statuses changed."
+msgstr[0] ""
+msgstr[1] ""
+
+#. translators: %s: orders count
+#: src/Internal/Admin/Orders/ListTable.php:796
+msgid "Removed personal data from %s order."
+msgid_plural "Removed personal data from %s orders."
 msgstr[0] ""
 msgstr[1] ""
 
@@ -36479,8 +36525,17 @@ msgstr ""
 msgid "Create the tables first by going to %1$sWooCommerce > Status > Tools%2$s and running %1$sCreate the custom orders tables%2$s."
 msgstr ""
 
-#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:605
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:626
 msgid "ID must be set for an order to be read."
+msgstr ""
+
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:845
+msgid "Could not create order in posts table."
+msgstr ""
+
+#. translators: %s is a table name.
+#: src/Internal/DataStores/Orders/OrdersTableDataStore.php:866
+msgid "Could not persist order to database table \"%s\"."
 msgstr ""
 
 #: src/Internal/ProductAttributesLookup/DataRegenerator.php:279
@@ -37577,10 +37632,38 @@ msgid "You may also like&hellip;"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/wc-pay-subscriptions-page.js:1
-#: assets/client/admin/chunks/wcpay-payment-welcome-page.js:1
 #: assets/client/admin/onboarding/index.js:1
-msgid "Accepted payment methods"
+msgid "& more."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/onboarding/index.js:1
+msgid "Accepted payment methods include:"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/onboarding/index.js:1
+msgid "Accept Payments and manage your business."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/onboarding/index.js:1
+msgid "By using WooCommerce Payments you agree to be bound by our {{tosLink}}Terms of Service{{/tosLink}} and acknowledge that you have read our {{privacyLink}}Privacy Policy{{/privacyLink}} "
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/onboarding/index.js:1
+msgid "Offer your customers their preferred way to pay including debit and credit card payments, Apple Pay, Sofort, SEPA, iDeal and many more."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/onboarding/index.js:1
+msgid "Sell to international markets and accept more than 135 currencies with local payment methods."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/onboarding/index.js:1
+msgid "Earn and manage recurring revenue and get automatic deposits into your nominated bank account."
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -37589,7 +37672,6 @@ msgid "Setup required"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/two-column-tasks-extended.js:1
 msgid "Display"
 msgstr ""
 
@@ -37699,19 +37781,26 @@ msgid "Select a default date range. When no range is selected, reports will be v
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "%s — %s per year"
+#: assets/client/admin/chunks/profile-wizard.js:1
+#: assets/client/admin/components/index.js:2
+#: packages/woocommerce-blocks/assets/js/blocks/checkout/checkout-order-error/index.js:121
+#: packages/woocommerce-blocks/build/all-reviews.js:9
+#: packages/woocommerce-blocks/build/checkout-frontend.js:6
+#: packages/woocommerce-blocks/build/featured-category.js:17
+#: packages/woocommerce-blocks/build/featured-product.js:17
+#: packages/woocommerce-blocks/build/reviews-by-category.js:24
+#: packages/woocommerce-blocks/build/reviews-by-product.js:20
+#: packages/woocommerce-blocks/build/single-product.js:6
+msgid "Retry"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "Would you like to add the following paid features to your store now?"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "You won't have access to this functionality until the extensions have been purchased and installed."
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "I'll do it later"
+#: assets/client/admin/chunks/homescreen.js:1
+#: assets/client/admin/chunks/wc-pay-subscriptions-page.js:1
+#: assets/client/admin/chunks/wcpay-payment-welcome-page.js:1
+#: assets/client/admin/components/index.js:2
+#: assets/client/admin/wp-admin-scripts/navigation-opt-out.js:1
+msgid "No thanks"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -37748,6 +37837,10 @@ msgstr ""
 
 #: assets/client/admin/app/index.js:2
 msgid "%1$s &lsaquo; %2$s &#8212; WooCommerce"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Dismiss this notice"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -37801,6 +37894,10 @@ msgid "Install"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+msgid "Site Icon"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
 msgid "Add this item to your favorites."
 msgstr ""
 
@@ -37833,15 +37930,6 @@ msgid "Get improved features and faster fixes by sharing non-sensitive data via 
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/homescreen.js:1
-#: assets/client/admin/chunks/wc-pay-subscriptions-page.js:1
-#: assets/client/admin/chunks/wcpay-payment-welcome-page.js:1
-#: assets/client/admin/components/index.js:2
-#: assets/client/admin/wp-admin-scripts/navigation-opt-out.js:1
-msgid "No thanks"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
 msgid "Yes, count me in!"
 msgstr ""
 
@@ -37863,6 +37951,34 @@ msgstr ""
 
 #: assets/client/admin/app/index.js:2
 msgid "I agree"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Buy postage when you need it"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "No need to wonder where that stampbook went."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Print at home"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Pick up an order, then just pay, print, package and post."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Discounted rates"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Access discounted shipping rates with DHL and USPS."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "There was a problem saving your store location"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -37900,10 +38016,6 @@ msgid "There was an error connecting to WooCommerce Payments. Please try again o
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "Upon clicking \"Get started\", you agree to the {{link}}Terms of service{{/link}}. Next we’ll ask you to share a few details about your business to create your account."
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
 msgid "Please enter an account number or IBAN"
 msgstr ""
 
@@ -37924,25 +38036,27 @@ msgid "Choose a payment provider"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+msgid "To start accepting online payments"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Additional payment options"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Give your customers additional choices in ways to pay."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Other payment providers"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Try one of the alternative payment providers."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
 msgid "Offline payment methods"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/profile-wizard.js:1
-#: assets/client/admin/components/index.js:2
-#: packages/woocommerce-blocks/assets/js/blocks/checkout/checkout-order-error/index.js:121
-#: packages/woocommerce-blocks/build/all-reviews.js:9
-#: packages/woocommerce-blocks/build/checkout-frontend.js:6
-#: packages/woocommerce-blocks/build/featured-category.js:17
-#: packages/woocommerce-blocks/build/featured-product.js:17
-#: packages/woocommerce-blocks/build/reviews-by-category.js:24
-#: packages/woocommerce-blocks/build/reviews-by-product.js:20
-#: packages/woocommerce-blocks/build/single-product.js:6
-msgid "Retry"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "There was a problem saving your store location"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -37958,6 +38072,30 @@ msgid "Shipping rates can not be negative numbers."
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+msgid "Save your time"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Import your orders automatically, no matter where you sell."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Save your money"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Live shipping rates amongst all the carrier choices."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Wow your shoppers"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Customize notification emails, packing slips, shipping labels."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
 msgid "Rest of the world"
 msgstr ""
 
@@ -37966,10 +38104,12 @@ msgid "📦 Shipping is done! Don't worry, you can always change it later"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
 msgid "Set store location"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
 msgid "The address from which your business operates"
 msgstr ""
 
@@ -37982,6 +38122,7 @@ msgid "Define how much customers pay to ship to different destinations"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
 msgid "Complete task"
 msgstr ""
 
@@ -37998,11 +38139,55 @@ msgid "With WooCommerce Shipping you can save time by printing your USPS and DHL
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
 msgid "Connect your store"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
 msgid "Connect your store to WordPress.com to enable label printing"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
+msgid "By installing Jetpack and WooCommerce Shipping you agree to the {{link}}Terms of Service{{/link}}."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
+msgid "By installing Jetpack you agree to the {{link}}Terms of Service{{/link}}."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Review your shipping options"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "We recommend the following shipping options based on your location. You can manage your shipping options again at any time in WooCommerce Shipping settings."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Save shipping options"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
+msgid "Enable shipping label printing and discounted rates"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Save time and fulfill your orders with WooCommerce Shipping. You can manage it at any time in WooCommerce Shipping Settings."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Set your store location"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Add your store location to help us calculate shipping rates and the best shipping options for you. You can manage your store location again at any time in WooCommerce Settings General."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Save store location"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -38228,10 +38413,6 @@ msgid "By installing Jetpack and WooCommerce Tax you agree to the {{link}}Terms 
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "By installing Jetpack you agree to the {{link}}Terms of Service{{/link}}."
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
 msgid "Set up manually"
 msgstr ""
 
@@ -38240,6 +38421,7 @@ msgid "Install Jetpack and WooCommerce Tax"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/6609.js:1
 msgid "Install Jetpack"
 msgstr ""
 
@@ -38256,32 +38438,27 @@ msgid "You're awesome! One less item on your to-do list ✅"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+msgid "%s — %s per year"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Would you like to add the following paid features to your store now?"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "You won't have access to this functionality until the extensions have been purchased and installed."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "I'll do it later"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Task dismissed"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
 msgid "Task postponed until tomorrow"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/two-column-tasks-extended.js:1
-msgid "Show things to do next"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "🎉 Almost there. Only {{strongText}}%1$d step left{{/strongText}} get your store up and running. {{setupLink}}Finish setup{{/setupLink}}"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "🚀 You're doing great! {{strongText}}%1$d steps left{{/strongText}} to get your store up and running. {{setupLink}}Continue setup{{/setupLink}}"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/payment-recommendations.js:1
-#: assets/client/admin/chunks/shipping-recommendations.js:1
-msgid "Task List Options"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-#: assets/client/admin/chunks/payment-recommendations.js:1
-#: assets/client/admin/chunks/shipping-recommendations.js:1
-msgid "Hide this"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -38296,34 +38473,6 @@ msgstr[1] ""
 #: packages/woocommerce-blocks/build/stock-filter-frontend.js:5
 #: packages/woocommerce-blocks/build/stock-filter.js:11
 msgid "Show less"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "You've completed store setup"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "Congratulations! Take a moment to celebrate and look out for the first sale."
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "Show setup task list"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "How was your experience?"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "We appreciate your feedback!"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "Keep list"
-msgstr ""
-
-#: assets/client/admin/app/index.js:2
-msgid "Hide this list"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
@@ -38443,6 +38592,68 @@ msgid "Yes, hide store setup tasks"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
+msgid "You've completed store setup"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Keep list"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Hide this list"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Congratulations! Take a moment to celebrate and look out for the first sale."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/payment-recommendations.js:1
+#: assets/client/admin/chunks/shipping-recommendations.js:1
+msgid "Task List Options"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Show setup task list"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/chunks/payment-recommendations.js:1
+#: assets/client/admin/chunks/shipping-recommendations.js:1
+msgid "Hide this"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "How was your experience?"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "We appreciate your feedback!"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Show things to do next"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "🎉 Almost there. Only {{strongText}}%1$d step left{{/strongText}} get your store up and running. {{setupLink}}Finish setup{{/setupLink}}"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "🚀 You're doing great! {{strongText}}%1$d steps left{{/strongText}} to get your store up and running. {{setupLink}}Continue setup{{/setupLink}}"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+#: assets/client/admin/wp-admin-scripts/marketing-coupons.js:2
+#: assets/client/admin/wp-admin-scripts/print-shipping-label-banner.js:1
+msgid "Mutable settings should be accessed via data store."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Mutable settings should be mutated via data store."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
 msgid "Pencil icon"
 msgstr ""
 
@@ -38451,19 +38662,31 @@ msgid "How easy was it to filter your store analytics?"
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "Accept Payments and manage your business."
+msgid "We added a few shipping zones for you based on your location, but you can manage them at any time."
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "By using WooCommerce Payments you agree to be bound by our {{tosLink}}Terms of Service{{/tosLink}} and acknowledge that you have read our {{privacyLink}}Privacy Policy{{/privacyLink}} "
+msgid "A shipping zone is a geographic area where a certain set of shipping methods are offered."
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "Accepted payment methods include:"
+msgid "We defaulted to some recommended shipping methods based on your store location, but you can manage them at any time within each shipping zone settings."
 msgstr ""
 
 #: assets/client/admin/app/index.js:2
-msgid "& more."
+msgid "Print USPS and DHL labels straight from your WooCommerce dashboard and save on shipping thanks to discounted rates. You can manage WooCommerce Shipping in this section."
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "If you’d like to speed up your process and print your shipping label straight from your WooCommerce dashboard, WooCommerce Shipping may be for you! "
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Payment Methods"
+msgstr ""
+
+#: assets/client/admin/app/index.js:2
+msgid "Installed payment methods are listed below and can be sorted to control their display order on the frontend."
 msgstr ""
 
 #: assets/client/admin/chunks/5531.js:1
@@ -38533,6 +38756,10 @@ msgid "Reload"
 msgstr ""
 
 #: assets/client/admin/chunks/5586.js:1
+msgid "Select All"
+msgstr ""
+
+#: assets/client/admin/chunks/5586.js:1
 msgid "Check at least two items below to compare"
 msgstr ""
 
@@ -38566,6 +38793,16 @@ msgstr ""
 #: assets/client/admin/chunks/6063.js:1
 #: assets/client/admin/chunks/6340.js:1
 msgid "We'll import images from woocommerce.com to set up your sample products."
+msgstr ""
+
+#: assets/client/admin/chunks/6063.js:1
+#: assets/client/admin/chunks/6340.js:1
+msgid "Loading sample products"
+msgstr ""
+
+#: assets/client/admin/chunks/6063.js:1
+#: assets/client/admin/chunks/6340.js:1
+msgid "We are loading 9 sample products into your store"
 msgstr ""
 
 #: assets/client/admin/chunks/6063.js:1
@@ -38619,6 +38856,19 @@ msgstr ""
 #: assets/client/admin/chunks/6063.js:1
 #: assets/client/admin/chunks/6340.js:1
 msgid "can’t decide?"
+msgstr ""
+
+#: assets/client/admin/chunks/6063.js:1
+#: assets/client/admin/chunks/6340.js:1
+msgid "Load sample products and see what they look like in your store."
+msgstr ""
+
+#: assets/client/admin/chunks/6063.js:1
+msgid "{{importCSVLink}}Import your products from a CSV file{{/importCSVLink}} or {{_3rdLink}}use a 3rd party migration plugin{{/_3rdLink}}."
+msgstr ""
+
+#: assets/client/admin/chunks/6063.js:1
+msgid "{{sbLink}}Start blank{{/sbLink}} or select a product type:"
 msgstr ""
 
 #: assets/client/admin/chunks/6063.js:1
@@ -38712,6 +38962,14 @@ msgstr ""
 
 #: assets/client/admin/chunks/6340.js:1
 msgid "Or add your products from scratch"
+msgstr ""
+
+#: assets/client/admin/chunks/6609.js:1
+msgid "Install Jetpack and WooCommerce Shipping"
+msgstr ""
+
+#: assets/client/admin/chunks/6609.js:1
+msgid "Connect your store to WordPress.com to enable WooCommerce Shipping"
 msgstr ""
 
 #: assets/client/admin/chunks/9198.js:1
@@ -40116,6 +40374,10 @@ msgid "Section title"
 msgstr ""
 
 #: assets/client/admin/chunks/customizable-dashboard.js:1
+msgid "Remove block"
+msgstr ""
+
+#: assets/client/admin/chunks/customizable-dashboard.js:1
 msgid "Remove section"
 msgstr ""
 
@@ -40536,16 +40798,11 @@ msgid "There was a problem hiding the \"Additional ways to get paid\" card."
 msgstr ""
 
 #: assets/client/admin/chunks/payment-recommendations.js:1
-msgid "Additional ways to get paid"
+msgid "Recommended payment providers"
 msgstr ""
 
 #: assets/client/admin/chunks/payment-recommendations.js:1
 msgid "We recommend adding one of the following payment extensions to your store. The extension will be installed and activated for you when you click \"Get started\"."
-msgstr ""
-
-#: assets/client/admin/chunks/payment-recommendations.js:1
-#: assets/client/admin/chunks/shipping-recommendations.js:1
-msgid "See more options"
 msgstr ""
 
 #: assets/client/admin/chunks/profile-wizard.js:1
@@ -40628,7 +40885,6 @@ msgstr ""
 
 #. translators: %s max price
 #: assets/client/admin/chunks/profile-wizard.js:1
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/utils.js:36
 #: packages/woocommerce-blocks/build/active-filters-frontend.js:11
 #: packages/woocommerce-blocks/build/active-filters.js:13
 msgid "Up to %s"
@@ -40666,6 +40922,10 @@ msgstr[1] ""
 
 #: assets/client/admin/chunks/profile-wizard.js:1
 msgid "There was a problem updating your business details"
+msgstr ""
+
+#: assets/client/admin/chunks/profile-wizard.js:1
+msgid "There was a problem saving free features state"
 msgstr ""
 
 #: assets/client/admin/chunks/profile-wizard.js:1
@@ -40959,10 +41219,6 @@ msgid "There was a problem skipping the setup wizard"
 msgstr ""
 
 #: assets/client/admin/chunks/shipping-recommendations.js:1
-msgid "Woocommerce Shipping"
-msgstr ""
-
-#: assets/client/admin/chunks/shipping-recommendations.js:1
 msgid "Print USPS and DHL Express labels straight from your WooCommerce dashboard and save on shipping."
 msgstr ""
 
@@ -40980,6 +41236,10 @@ msgstr ""
 
 #: assets/client/admin/chunks/shipping-recommendations.js:1
 msgid "We recommend adding one of the following shipping extensions to your store. The extension will be installed and activated for you when you click \"Get started\"."
+msgstr ""
+
+#: assets/client/admin/chunks/shipping-recommendations.js:1
+msgid "See more options"
 msgstr ""
 
 #. translators: accessibility text
@@ -41042,6 +41302,12 @@ msgstr ""
 
 #: assets/client/admin/chunks/wc-pay-subscriptions-page.js:1
 msgid "With WooCommerce Payments, you can sell subscriptions with no setup costs or monthly fees. Create subscription products, track recurring revenue, and manage subscribers directly from your store’s dashboard."
+msgstr ""
+
+#: assets/client/admin/chunks/wc-pay-subscriptions-page.js:1
+#: assets/client/admin/chunks/wcpay-payment-welcome-page.js:1
+#: assets/client/admin/onboarding/index.js:1
+msgid "Accepted payment methods"
 msgstr ""
 
 #: assets/client/admin/chunks/wc-pay-subscriptions-page.js:1
@@ -41655,6 +41921,10 @@ msgid "filter report to show:"
 msgstr ""
 
 #: assets/client/admin/components/index.js:2
+msgid "Select or upload image"
+msgstr ""
+
+#: assets/client/admin/components/index.js:2
 msgid "Add an image"
 msgstr ""
 
@@ -41870,7 +42140,6 @@ msgstr ""
 
 #: assets/client/admin/components/index.js:2
 #: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/shared/with-product-selector.js:64
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:376
 #: packages/woocommerce-blocks/assets/js/blocks/product-category/block.js:256
 #: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:222
 #: packages/woocommerce-blocks/assets/js/blocks/products/all-products/edit.js:237
@@ -42111,6 +42380,10 @@ msgid "Continue setup."
 msgstr ""
 
 #: assets/client/admin/wp-admin-scripts/onboarding-load-sample-products-notice.js:1
+msgid "Sample products added"
+msgstr ""
+
+#: assets/client/admin/wp-admin-scripts/onboarding-load-sample-products-notice.js:1
 msgid "Continue setting up your store"
 msgstr ""
 
@@ -42315,7 +42588,7 @@ msgstr ""
 msgid "Please select a value."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/add-to-cart/shared/add-to-cart-button.js:94
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/add-to-cart/shared/add-to-cart-button.js:95
 #: packages/woocommerce-blocks/build/all-products.js:20
 #: packages/woocommerce-blocks/build/product-add-to-cart-frontend.js:3
 #: packages/woocommerce-blocks/build/product-add-to-cart.js:3
@@ -42323,8 +42596,8 @@ msgid "View Product"
 msgstr ""
 
 #. translators: %s number of products in cart.
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/add-to-cart/shared/add-to-cart-button.js:157
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/button/block.js:120
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/add-to-cart/shared/add-to-cart-button.js:158
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/button/block.js:121
 #: packages/woocommerce-blocks/build/all-products.js:20
 #: packages/woocommerce-blocks/build/all-products.js:26
 #: packages/woocommerce-blocks/build/product-add-to-cart-frontend.js:3
@@ -42352,7 +42625,7 @@ msgid "Choose a product to display its add to cart button."
 msgstr ""
 
 #. translators: %s is referring to the product name
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/block.js:82
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/block.js:83
 #: packages/woocommerce-blocks/build/all-products.js:18
 #: packages/woocommerce-blocks/build/product-image-frontend.js:3
 #: packages/woocommerce-blocks/build/product-image.js:3
@@ -42369,10 +42642,9 @@ msgstr ""
 msgid "Display the main product image"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:39
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:80
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:35
 #: packages/woocommerce-blocks/assets/js/blocks/product-best-sellers/block.js:49
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:92
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:87
 #: packages/woocommerce-blocks/assets/js/blocks/product-category/block.js:172
 #: packages/woocommerce-blocks/assets/js/blocks/product-new/block.js:51
 #: packages/woocommerce-blocks/assets/js/blocks/product-on-sale/block.js:67
@@ -42382,7 +42654,6 @@ msgstr ""
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/all-reviews/edit.js:32
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/reviews-by-category/edit.js:61
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/reviews-by-product/edit.js:92
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:35
 #: packages/woocommerce-blocks/build/all-products.js:28
 #: packages/woocommerce-blocks/build/all-reviews.js:9
 #: packages/woocommerce-blocks/build/attribute-filter.js:40
@@ -42404,57 +42675,57 @@ msgstr ""
 msgid "Content"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:42
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:38
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Link to Product Page"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:46
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:42
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Links the image to the single product listing."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:58
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:54
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Show On-Sale Badge"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:62
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:58
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Overlay a \"sale\" badge if the product is on-sale."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:75
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:71
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Sale Badge Alignment"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:93
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:89
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Center"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:108
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:104
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Image Sizing"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:113
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:109
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Product image cropping can be modified in the <a>Customizer</a>."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:137
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:133
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Full Size"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:144
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:140
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Cropped"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:162
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/image/edit.js:158
 #: packages/woocommerce-blocks/build/all-products.js:28
 msgid "Choose a product to display its image."
 msgstr ""
@@ -42538,7 +42809,7 @@ msgid "Choose a product to display its SKU."
 msgstr ""
 
 #. translators: %d stock amount (number of items in stock for product)
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:70
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:75
 #: packages/woocommerce-blocks/build/all-products.js:28
 #: packages/woocommerce-blocks/build/cart-blocks/cart-line-items--mini-cart-contents-block/products-table-frontend.js:5
 #: packages/woocommerce-blocks/build/cart.js:35
@@ -42550,14 +42821,14 @@ msgstr ""
 msgid "%d left in stock"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:81
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:86
 #: packages/woocommerce-blocks/build/all-products.js:28
 #: packages/woocommerce-blocks/build/product-stock-indicator-frontend.js:3
 #: packages/woocommerce-blocks/build/product-stock-indicator.js:3
 msgid "In Stock"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:82
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/stock-indicator/block.js:87
 #: packages/woocommerce-blocks/build/all-products.js:28
 #: packages/woocommerce-blocks/build/product-stock-indicator-frontend.js:3
 #: packages/woocommerce-blocks/build/product-stock-indicator.js:3
@@ -42594,7 +42865,7 @@ msgstr ""
 msgid "Choose a product to display its short description."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/tag-list/block.js:53
+#: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/tag-list/block.js:54
 #: packages/woocommerce-blocks/build/all-products.js:26
 #: packages/woocommerce-blocks/build/product-tag-list-frontend.js:1
 #: packages/woocommerce-blocks/build/product-tag-list.js:1
@@ -42635,7 +42906,6 @@ msgstr ""
 #: packages/woocommerce-blocks/assets/js/base/components/dropdown-selector/menu.js:42
 #: packages/woocommerce-blocks/assets/js/base/components/dropdown-selector/selected-chip.js:17
 #: packages/woocommerce-blocks/assets/js/base/components/dropdown-selector/selected-value.js:47
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/utils.js:72
 #: packages/woocommerce-blocks/build/active-filters-frontend.js:13
 #: packages/woocommerce-blocks/build/active-filters.js:15
 #: packages/woocommerce-blocks/build/attribute-filter-frontend.js:15
@@ -42715,15 +42985,15 @@ msgstr ""
 msgid "Tabbed Content"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/base/context/hooks/use-checkout-submit.js:40
+#: packages/woocommerce-blocks/assets/js/base/context/hooks/use-checkout-submit.js:38
 #: packages/woocommerce-blocks/build/checkout-blocks/actions-frontend.js:1
 #: packages/woocommerce-blocks/build/checkout-blocks/terms-frontend.js:1
 #: packages/woocommerce-blocks/build/checkout.js:34
 msgid "Place Order"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/base/context/providers/add-to-cart-form/form-state/index.js:249
-#: packages/woocommerce-blocks/assets/js/base/context/providers/add-to-cart-form/form/submit/index.js:104
+#: packages/woocommerce-blocks/assets/js/base/context/providers/add-to-cart-form/form-state/index.js:247
+#: packages/woocommerce-blocks/assets/js/base/context/providers/add-to-cart-form/form/submit/index.js:103
 #: packages/woocommerce-blocks/assets/js/base/utils/errors.js:54
 #: packages/woocommerce-blocks/build/all-products.js:5
 #: packages/woocommerce-blocks/build/all-products.js:18
@@ -42789,305 +43059,19 @@ msgstr ""
 msgid "Something went wrong."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:59
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:13
-#: packages/woocommerce-blocks/build/active-filters.js:15
-msgid "Stock Status"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:233
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
-#: packages/woocommerce-blocks/build/active-filters.js:17
-#: packages/woocommerce-blocks/build/cart.js:36
-#: packages/woocommerce-blocks/build/checkout.js:26
-#: packages/woocommerce-blocks/build/mini-cart-contents.js:15
-msgid "Size"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:237
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
-#: packages/woocommerce-blocks/build/active-filters.js:17
-#: packages/woocommerce-blocks/build/cart.js:36
-#: packages/woocommerce-blocks/build/checkout.js:26
-#: packages/woocommerce-blocks/build/mini-cart-contents.js:15
-msgid "Small"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:244
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
-#: packages/woocommerce-blocks/build/active-filters.js:17
-#: packages/woocommerce-blocks/build/cart.js:36
-#: packages/woocommerce-blocks/build/checkout.js:26
-#: packages/woocommerce-blocks/build/featured-category.js:3
-#: packages/woocommerce-blocks/build/featured-product.js:3
-#: packages/woocommerce-blocks/build/mini-cart-contents.js:15
-msgid "Color"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:248
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
-#: packages/woocommerce-blocks/build/active-filters.js:17
-msgid "Blue"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:277
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
-#: packages/woocommerce-blocks/build/active-filters.js:17
-msgid "Clear All"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/block.js:281
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
-#: packages/woocommerce-blocks/build/active-filters.js:17
-msgid "Clear All Filters"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/edit.js:34
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:122
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:43
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:77
-#: packages/woocommerce-blocks/build/active-filters.js:17
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/price-filter.js:5
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Block Settings"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/edit.js:40
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:163
-#: packages/woocommerce-blocks/build/active-filters.js:17
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Display Style"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/edit.js:60
-#: packages/woocommerce-blocks/build/active-filters.js:17
-msgid "Chips"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/edit.js:67
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:106
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:99
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:61
-#: packages/woocommerce-blocks/build/active-filters.js:17
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/price-filter.js:5
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Heading Level"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/index.js:29
-#: packages/woocommerce-blocks/build/active-filters.js:17
-msgid "Show the currently active product filters. Works in combination with the All Products and filters blocks."
-msgstr ""
-
-#. translators: %1$s min price, %2$s max price
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/utils.js:20
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:7
-#: packages/woocommerce-blocks/build/active-filters.js:9
-msgid "Between %1$s and %2$s"
-msgstr ""
-
-#. translators: %s min price
-#: packages/woocommerce-blocks/assets/js/blocks/active-filters/utils.js:29
-#: packages/woocommerce-blocks/build/active-filters-frontend.js:9
-#: packages/woocommerce-blocks/build/active-filters.js:11
-msgid "From %s"
-msgstr ""
-
-#. translators: %1$s and %2$s are attribute terms (for example: 'red', 'blue', 'large'...).
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/block.js:374
-#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:25
-#: packages/woocommerce-blocks/build/attribute-filter.js:32
-msgid "%1$s filter replaced with %2$s."
-msgstr ""
-
-#. translators: %s attribute term (for example: 'red', 'blue', 'large'...)
-#. translators: %s stock statuses (for example: 'instock'...)
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/block.js:386
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/block.js:291
-#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:27
-#: packages/woocommerce-blocks/build/attribute-filter.js:34
-#: packages/woocommerce-blocks/build/stock-filter-frontend.js:7
-#: packages/woocommerce-blocks/build/stock-filter.js:13
-msgid "%s filter added."
-msgstr ""
-
-#. translators: %s attribute term (for example: 'red', 'blue', 'large'...)
-#. translators: %s stock statuses (for example:'instock'...)
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/block.js:397
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/block.js:302
-#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:29
-#: packages/woocommerce-blocks/build/attribute-filter.js:36
-#: packages/woocommerce-blocks/build/stock-filter-frontend.js:9
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "%s filter removed."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/block.js:509
-#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:29
-#: packages/woocommerce-blocks/build/attribute-filter.js:36
-msgid "Please select an attribute to use this filter!"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/block.js:525
-#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:29
-#: packages/woocommerce-blocks/build/attribute-filter.js:36
-msgid "The selected attribute does not have any term assigned to products."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:89
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:102
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:44
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/product-categories.js:1
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Product count is visible."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:93
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:106
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:48
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/product-categories.js:1
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Product count is hidden."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:128
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Query Type"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:134
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Products that have all of the selected attributes will be shown."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:138
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Products that have any of the selected attributes will be shown."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:152
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "And"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:159
-#: packages/woocommerce-blocks/assets/js/blocks/cart-checkout-shared/payment-methods/express-payment/cart-express-payment.js:69
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/cart-blocks/cart-express-payment-frontend.js:5
-#: packages/woocommerce-blocks/build/cart.js:40
-msgid "Or"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:190
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:76
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:83
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/price-filter.js:5
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Filter button"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:196
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:82
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:89
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/price-filter.js:5
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Products will only update when the button is pressed."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:200
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/edit.js:93
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Products will update as options are selected."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:234
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:368
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Display a list of filters based on a chosen attribute."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:240
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Attributes are needed for filtering your products. You haven't created any attributes yet."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:269
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Showing Filter Products by Attribute block preview."
-msgstr ""
-
-#. translators: %s attribute name.
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:296
-#: packages/woocommerce-blocks/build/attribute-filter.js:38
-msgid "Filter by %s"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:304
-#: packages/woocommerce-blocks/build/attribute-filter.js:38
-msgid "Clear selected attribute"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:308
-#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:132
-#: packages/woocommerce-blocks/build/attribute-filter.js:38
-#: packages/woocommerce-blocks/build/products-by-attribute.js:6
-msgid "Product Attributes"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:309
-#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:133
-#: packages/woocommerce-blocks/build/attribute-filter.js:38
-#: packages/woocommerce-blocks/build/products-by-attribute.js:6
-msgid "Your store doesn't have any product attributes."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:313
-#: packages/woocommerce-blocks/build/attribute-filter.js:38
-msgid "Search for a product attribute:"
-msgstr ""
-
-#. translators: %d is the number of attributes selected.
-#. translators: %d is the count of attributes selected.
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:320
-#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:144
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/products-by-attribute.js:8
-msgid "%d attribute selected"
-msgid_plural "%d attributes selected"
-msgstr[0] ""
-msgstr[1] ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/edit.js:328
-#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:152
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-#: packages/woocommerce-blocks/build/products-by-attribute.js:8
-msgid "Product attribute search results updated."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/index.js:29
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Allow customers to filter the grid by product attribute, such as color. Works in combination with the All Products block."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/index.js:67
-#: packages/woocommerce-blocks/assets/js/blocks/attribute-filter/index.js:107
-#: packages/woocommerce-blocks/build/attribute-filter.js:40
-msgid "Filter by attribute"
-msgstr ""
-
 #: packages/woocommerce-blocks/assets/js/blocks/cart-checkout-shared/payment-methods/express-payment-methods.js:142
 #: packages/woocommerce-blocks/build/cart-blocks/cart-express-payment-frontend.js:5
 #: packages/woocommerce-blocks/build/cart.js:7
 #: packages/woocommerce-blocks/build/checkout-blocks/express-payment-frontend.js:5
 #: packages/woocommerce-blocks/build/checkout.js:7
 msgid "No registered Payment Methods"
+msgstr ""
+
+#: packages/woocommerce-blocks/assets/js/blocks/cart-checkout-shared/payment-methods/express-payment/cart-express-payment.js:69
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/cart-blocks/cart-express-payment-frontend.js:5
+#: packages/woocommerce-blocks/build/cart.js:40
+msgid "Or"
 msgstr ""
 
 #: packages/woocommerce-blocks/assets/js/blocks/cart-checkout-shared/payment-methods/express-payment/checkout-express-payment.js:77
@@ -43128,7 +43112,7 @@ msgstr ""
 msgid "There are no payment methods available. This may be an error on our side. Please contact us if you need any help placing your order."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/cart-checkout-shared/payment-methods/payment-method-card.js:42
+#: packages/woocommerce-blocks/assets/js/blocks/cart-checkout-shared/payment-methods/payment-method-card.js:40
 #: packages/woocommerce-blocks/build/checkout-blocks/payment-frontend.js:5
 #: packages/woocommerce-blocks/build/checkout.js:36
 msgid "Save payment information to my account for future purchases."
@@ -43337,36 +43321,6 @@ msgstr ""
 msgid "You must accept our %1$s and %2$s to continue with your purchase."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:49
-#: packages/woocommerce-blocks/build/price-filter.js:5
-msgid "Price Range"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:62
-#: packages/woocommerce-blocks/build/price-filter.js:5
-msgid "Editable"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:69
-#: packages/woocommerce-blocks/build/price-filter.js:5
-msgid "Text"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:86
-#: packages/woocommerce-blocks/build/price-filter.js:5
-msgid "Products will update when the slider is moved."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/edit.js:132
-#: packages/woocommerce-blocks/build/price-filter.js:5
-msgid "Products with prices are needed for filtering by price. You haven't created any products yet."
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/price-filter/index.js:29
-#: packages/woocommerce-blocks/build/price-filter.js:5
-msgid "Allow customers to filter the products by choosing a lower or upper price limit. Works in combination with the All Products block."
-msgstr ""
-
 #: packages/woocommerce-blocks/assets/js/blocks/product-best-sellers/block.js:60
 #: packages/woocommerce-blocks/assets/js/blocks/product-new/block.js:74
 #: packages/woocommerce-blocks/assets/js/blocks/product-on-sale/block.js:87
@@ -43399,7 +43353,7 @@ msgstr ""
 msgid "This block shows product categories for your store. To use it, you'll first need to create a product and assign it to a category."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:57
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:52
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/all-reviews/edit.js:52
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/reviews-by-category/edit.js:81
 #: packages/woocommerce-blocks/assets/js/blocks/reviews/reviews-by-product/edit.js:100
@@ -43410,52 +43364,66 @@ msgstr ""
 msgid "List Settings"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:64
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:59
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Display style"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:96
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:91
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Show product count"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:118
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:97
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/product-categories.js:1
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Product count is visible."
+msgstr ""
+
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:101
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/product-categories.js:1
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Product count is hidden."
+msgstr ""
+
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:113
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Show category images"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:124
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:119
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Category images are visible."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:128
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:123
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Category images are hidden."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:146
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:141
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Hierarchy is visible."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:150
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:145
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Hierarchy is hidden."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:163
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:158
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Show empty categories"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:169
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:164
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Empty categories are visible."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:173
+#: packages/woocommerce-blocks/assets/js/blocks/product-categories/block.js:168
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Empty categories are hidden."
 msgstr ""
@@ -43463,6 +43431,13 @@ msgstr ""
 #: packages/woocommerce-blocks/assets/js/blocks/product-categories/index.js:29
 #: packages/woocommerce-blocks/build/product-categories.js:1
 msgid "Show all product categories as a list or dropdown."
+msgstr ""
+
+#: packages/woocommerce-blocks/assets/js/blocks/product-category/block.js:29
+#: packages/woocommerce-blocks/assets/js/blocks/product-category/block.js:233
+#: packages/woocommerce-blocks/assets/js/blocks/product-category/index.js:22
+#: packages/woocommerce-blocks/build/product-category.js:6
+msgid "Products by Category"
 msgstr ""
 
 #: packages/woocommerce-blocks/assets/js/blocks/product-category/block.js:32
@@ -43575,6 +43550,13 @@ msgstr ""
 #: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:187
 #: packages/woocommerce-blocks/build/product-tag.js:10
 msgid "Showing Products by Tag block preview."
+msgstr ""
+
+#: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:199
+#: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:255
+#: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:307
+#: packages/woocommerce-blocks/build/product-tag.js:10
+msgid "Products by Tag"
 msgstr ""
 
 #: packages/woocommerce-blocks/assets/js/blocks/product-tag/block.js:205
@@ -43950,6 +43932,12 @@ msgstr ""
 msgid "This block lists reviews for a selected product. %s doesn't have any reviews yet, but they will show up here when it does."
 msgstr ""
 
+#: packages/woocommerce-blocks/assets/js/blocks/single-product/constants.js:9
+#: packages/woocommerce-blocks/build/single-product-frontend.js:3
+#: packages/woocommerce-blocks/build/single-product.js:6
+msgid "Single Product"
+msgstr ""
+
 #: packages/woocommerce-blocks/assets/js/blocks/single-product/constants.js:19
 #: packages/woocommerce-blocks/build/single-product-frontend.js:3
 #: packages/woocommerce-blocks/build/single-product.js:6
@@ -43964,16 +43952,6 @@ msgstr ""
 #: packages/woocommerce-blocks/assets/js/blocks/single-product/edit/layout-editor.js:69
 #: packages/woocommerce-blocks/build/single-product.js:6
 msgid "Reset layout"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/index.js:15
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Filter Products by Stock"
-msgstr ""
-
-#: packages/woocommerce-blocks/assets/js/blocks/stock-filter/index.js:26
-#: packages/woocommerce-blocks/build/stock-filter.js:15
-msgid "Allow customers to filter the grid by products stock status. Works in combination with the All Products block."
 msgstr ""
 
 #: packages/woocommerce-blocks/assets/js/editor-components/block-title/index.js:28
@@ -44265,14 +44243,42 @@ msgstr[1] ""
 msgid "Clear all product attributes"
 msgstr ""
 
+#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:132
+#: packages/woocommerce-blocks/build/attribute-filter.js:38
+#: packages/woocommerce-blocks/build/products-by-attribute.js:6
+msgid "Product Attributes"
+msgstr ""
+
+#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:133
+#: packages/woocommerce-blocks/build/attribute-filter.js:38
+#: packages/woocommerce-blocks/build/products-by-attribute.js:6
+msgid "Your store doesn't have any product attributes."
+msgstr ""
+
 #: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:137
 #: packages/woocommerce-blocks/build/products-by-attribute.js:6
 msgid "Search for product attributes"
 msgstr ""
 
+#. translators: %d is the count of attributes selected.
+#. translators: %d is the number of attributes selected.
+#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:144
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/products-by-attribute.js:8
+msgid "%d attribute selected"
+msgid_plural "%d attributes selected"
+msgstr[0] ""
+msgstr[1] ""
+
+#: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:152
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/products-by-attribute.js:8
+msgid "Product attribute search results updated."
+msgstr ""
+
 #: packages/woocommerce-blocks/assets/js/editor-components/product-attribute-term-control/index.js:185
 #: packages/woocommerce-blocks/assets/js/editor-components/product-category-control/index.js:158
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:159
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:154
 #: packages/woocommerce-blocks/build/featured-category.js:17
 #: packages/woocommerce-blocks/build/featured-product.js:17
 #: packages/woocommerce-blocks/build/product-best-sellers.js:16
@@ -44535,50 +44541,50 @@ msgid_plural "%1$d products tagged as %2$s"
 msgstr[0] ""
 msgstr[1] ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:105
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:100
 #: packages/woocommerce-blocks/build/product-tag.js:8
 msgid "Clear all product tags"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:109
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:104
 #: packages/woocommerce-blocks/build/product-tag.js:8
 msgid "Product Tags"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:110
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:105
 #: packages/woocommerce-blocks/build/product-tag.js:8
 msgid "Your store doesn't have any product tags."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:114
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:109
 #: packages/woocommerce-blocks/build/product-tag.js:8
 msgid "Search for product tags"
 msgstr ""
 
 #. translators: %d is the count of selected tags.
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:121
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:116
 #: packages/woocommerce-blocks/build/product-tag.js:10
 msgid "%d tag selected"
 msgid_plural "%d tags selected"
 msgstr[0] ""
 msgstr[1] ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:129
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:124
 #: packages/woocommerce-blocks/build/product-tag.js:10
 msgid "Tag search results updated."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:163
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:158
 #: packages/woocommerce-blocks/build/product-tag.js:10
 msgid "Pick at least two tags to use this setting."
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:171
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:166
 #: packages/woocommerce-blocks/build/product-tag.js:10
 msgid "Any selected tags"
 msgstr ""
 
-#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:178
+#: packages/woocommerce-blocks/assets/js/editor-components/product-tag-control/index.js:173
 #: packages/woocommerce-blocks/build/product-tag.js:10
 msgid "All selected tags"
 msgstr ""
@@ -44729,6 +44735,91 @@ msgstr ""
 #: packages/woocommerce-blocks/build/checkout-blocks/order-summary-discount-frontend.js:5
 #: packages/woocommerce-blocks/build/checkout.js:23
 msgid "Remove \"%s\""
+msgstr ""
+
+#. translators: %1$s min price, %2$s max price
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:7
+#: packages/woocommerce-blocks/build/active-filters.js:9
+msgid "Between %1$s and %2$s"
+msgstr ""
+
+#. translators: %s min price
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:9
+#: packages/woocommerce-blocks/build/active-filters.js:11
+msgid "From %s"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:13
+#: packages/woocommerce-blocks/build/active-filters.js:15
+msgid "Stock Status"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
+#: packages/woocommerce-blocks/build/active-filters.js:17
+#: packages/woocommerce-blocks/build/cart.js:36
+#: packages/woocommerce-blocks/build/checkout.js:26
+#: packages/woocommerce-blocks/build/mini-cart-contents.js:15
+msgid "Size"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
+#: packages/woocommerce-blocks/build/active-filters.js:17
+#: packages/woocommerce-blocks/build/cart.js:36
+#: packages/woocommerce-blocks/build/checkout.js:26
+#: packages/woocommerce-blocks/build/mini-cart-contents.js:15
+msgid "Small"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
+#: packages/woocommerce-blocks/build/active-filters.js:17
+#: packages/woocommerce-blocks/build/cart.js:36
+#: packages/woocommerce-blocks/build/checkout.js:26
+#: packages/woocommerce-blocks/build/featured-category.js:3
+#: packages/woocommerce-blocks/build/featured-product.js:3
+#: packages/woocommerce-blocks/build/mini-cart-contents.js:15
+msgid "Color"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
+#: packages/woocommerce-blocks/build/active-filters.js:17
+msgid "Blue"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
+#: packages/woocommerce-blocks/build/active-filters.js:17
+msgid "Clear All"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters-frontend.js:15
+#: packages/woocommerce-blocks/build/active-filters.js:17
+msgid "Clear All Filters"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters.js:17
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/price-filter.js:5
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Block Settings"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters.js:17
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Display Style"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters.js:17
+msgid "Chips"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters.js:17
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/price-filter.js:5
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Heading Level"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/active-filters.js:17
+msgid "Show the currently active product filters. Works in combination with the All Products and filters blocks."
 msgstr ""
 
 #. translators: %s Field label.
@@ -44959,6 +45050,107 @@ msgstr[1] ""
 #: packages/woocommerce-blocks/build/stock-filter-frontend.js:5
 #: packages/woocommerce-blocks/build/stock-filter.js:11
 msgid "Show less options"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:23
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Filter by attribute"
+msgstr ""
+
+#. translators: %1$s and %2$s are attribute terms (for example: 'red', 'blue', 'large'...).
+#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:25
+#: packages/woocommerce-blocks/build/attribute-filter.js:32
+msgid "%1$s filter replaced with %2$s."
+msgstr ""
+
+#. translators: %s attribute term (for example: 'red', 'blue', 'large'...)
+#. translators: %s stock statuses (for example: 'instock'...)
+#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:27
+#: packages/woocommerce-blocks/build/attribute-filter.js:34
+#: packages/woocommerce-blocks/build/stock-filter-frontend.js:7
+#: packages/woocommerce-blocks/build/stock-filter.js:13
+msgid "%s filter added."
+msgstr ""
+
+#. translators: %s attribute term (for example: 'red', 'blue', 'large'...)
+#. translators: %s stock statuses (for example:'instock'...)
+#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:29
+#: packages/woocommerce-blocks/build/attribute-filter.js:36
+#: packages/woocommerce-blocks/build/stock-filter-frontend.js:9
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "%s filter removed."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:29
+#: packages/woocommerce-blocks/build/attribute-filter.js:36
+msgid "Please select an attribute to use this filter!"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter-frontend.js:29
+#: packages/woocommerce-blocks/build/attribute-filter.js:36
+msgid "The selected attribute does not have any term assigned to products."
+msgstr ""
+
+#. translators: %s attribute name.
+#: packages/woocommerce-blocks/build/attribute-filter.js:38
+msgid "Filter by %s"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:38
+msgid "Clear selected attribute"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:38
+msgid "Search for a product attribute:"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Display a list of filters based on a chosen attribute."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Attributes are needed for filtering your products. You haven't created any attributes yet."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Query Type"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Products that have all of the selected attributes will be shown."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Products that have any of the selected attributes will be shown."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "And"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/price-filter.js:5
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Filter button"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/price-filter.js:5
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Products will only update when the button is pressed."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Products will update as options are selected."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Showing Filter Products by Attribute block preview."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/attribute-filter.js:40
+msgid "Allow customers to filter the grid by product attribute, such as color. Works in combination with the All Products block."
 msgstr ""
 
 #. translators: %1$s value passed to filter, %2$s : value that must be included.
@@ -45766,11 +45958,7 @@ msgid "WooCommerce Product Tag Block"
 msgstr ""
 
 #: packages/woocommerce-blocks/build/legacy-template.js:1
-msgid "WooCommerce Classic Template"
-msgstr ""
-
-#: packages/woocommerce-blocks/build/legacy-template.js:1
-msgid "Renders classic WooCommerce PHP templates."
+msgid "WooCommerce Product Search Results Block"
 msgstr ""
 
 #: packages/woocommerce-blocks/build/legacy-template.js:1
@@ -45784,6 +45972,18 @@ msgstr ""
 #. translators: %s is the template title
 #: packages/woocommerce-blocks/build/legacy-template.js:3
 msgid "This is an editor placeholder for the %s. On your store this will be replaced by the template and display with your product image(s), title, price, etc. You can move this placeholder around and add further blocks around it to extend the template."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/legacy-template.js:3
+msgid "Use the blockified Product Grid Block"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/legacy-template.js:3
+msgid "WooCommerce Classic Template"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/legacy-template.js:3
+msgid "Renders classic WooCommerce PHP templates."
 msgstr ""
 
 #: packages/woocommerce-blocks/build/mini-cart-component-frontend.js:3
@@ -45891,6 +46091,30 @@ msgstr ""
 msgid "Apply price filter"
 msgstr ""
 
+#: packages/woocommerce-blocks/build/price-filter.js:5
+msgid "Allow customers to filter the products by choosing a lower or upper price limit. Works in combination with the All Products block."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/price-filter.js:5
+msgid "Products with prices are needed for filtering by price. You haven't created any products yet."
+msgstr ""
+
+#: packages/woocommerce-blocks/build/price-filter.js:5
+msgid "Price Range"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/price-filter.js:5
+msgid "Editable"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/price-filter.js:5
+msgid "Text"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/price-filter.js:5
+msgid "Products will update when the slider is moved."
+msgstr ""
+
 #. translators: %s stock status.
 #: packages/woocommerce-blocks/build/product-category.js:18
 #: packages/woocommerce-blocks/build/product-new.js:18
@@ -45929,6 +46153,14 @@ msgstr ""
 
 #: packages/woocommerce-blocks/build/products-by-attribute.js:16
 msgid "Edit selected attribute"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Filter Products by Stock"
+msgstr ""
+
+#: packages/woocommerce-blocks/build/stock-filter.js:15
+msgid "Allow customers to filter the grid by products stock status. Works in combination with the All Products block."
 msgstr ""
 
 #: packages/woocommerce-blocks/build/wc-blocks-data.js:1

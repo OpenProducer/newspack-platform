@@ -22,12 +22,23 @@ class Tribe__Terms {
 				continue;
 			}
 
+			$is_string = is_string( $term );
+
 			if ( $term instanceof WP_Term ) {
+				// We already have the term object.
 				$term_info = $term->to_array();
+			} elseif ( $is_string && get_term_by( 'slug', $term, $taxonomy ) ) {
+				// We have a matching term slug.
+				$term_info = get_term_by( 'slug', $term, $taxonomy )->to_array();
+			} elseif ( $is_string && get_term_by( 'name', $term, $taxonomy ) ) {
+				// We have a matching term name.
+				$term_info = get_term_by( 'name', $term, $taxonomy )->to_array();
 			} elseif ( is_numeric( $term ) ) {
+				// We have a matching term ID.
 				$term = absint( $term );
 				$term_info = get_term( $term, $taxonomy, ARRAY_A );
 			} else {
+				// Fallback
 				$term_info = term_exists( $term, $taxonomy );
 			}
 
@@ -37,6 +48,7 @@ class Tribe__Terms {
 					continue;
 				}
 
+				// Passed a string - (optionally) create a new term.
 				if ( true == $create_missing ) {
 					$term_info = wp_insert_term( $term, $taxonomy );
 				} else {

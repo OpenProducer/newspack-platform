@@ -12,6 +12,8 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'experimental-import-products-task' => true,
 			'experimental-fashion-sample-products' => true,
 			'experimental-product-tour' => true,
+			'shipping-smart-defaults' => true,
+			'shipping-setting-tour' => true,
 			'homescreen' => true,
 			'marketing' => true,
 			'minified-js' => false,
