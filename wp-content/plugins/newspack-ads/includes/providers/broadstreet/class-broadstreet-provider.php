@@ -113,21 +113,29 @@ final class Broadstreet_Provider extends Provider {
 		}
 		$fixed_height = isset( $placement_data['fixed_height'] ) ? (bool) $placement_data['fixed_height'] : false;
 		$attrs        = [];
-		if ( $fixed_height ) {
-			$zones    = $this->get_units();
-			$zone_idx = array_search( $unit_id, array_column( $zones, 'value' ) );
-			if ( false !== $zone_idx ) {
-				$height         = $zones[ $zone_idx ]['sizes'][0][1];
-				$attrs['style'] = sprintf( 'height: %dpx;', $height );
+		$zones        = $this->get_units();
+		$zone_idx     = array_search( $unit_id, array_column( $zones, 'value' ) );
+		if ( false === $zone_idx ) {
+			return;
+		}
+		$zone = $zones[ $zone_idx ];
+		if ( ! empty( $zone['sizes'] ) ) {
+			$width = $zone['sizes'][0][0];
+			if ( $width && 0 < absint( $width ) ) {
+				$attrs['style'] = sprintf( 'width: %dpx;', $width );
 			}
+			if ( $fixed_height ) {
+				$height = $zone['sizes'][0][1];
+				if ( $height && 0 < absint( $height ) ) {
+					$attrs['style'] = sprintf( '%s height: %dpx;', $attrs['style'], $height );
+				}
+			}
+		} else {
+			$attrs['style'] = 'flex: 1 1 100%; width: 100%; height: auto;';
 		}
 		$code_attrs = [];
-		// Apply fixed layout for AMP ads.
-		if ( Core::is_amp() ) {
-			$code_attrs['layout'] = 'fixed';
-		}
 		return sprintf(
-			'<div %s>%s</div>',
+			'<div class="newspack-broadstreet-ad" %s>%s</div>',
 			implode(
 				' ',
 				array_map(

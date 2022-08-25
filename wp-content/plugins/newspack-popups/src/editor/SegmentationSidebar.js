@@ -60,11 +60,11 @@ const SegmentationSidebar = ( { onMetaFieldChange, selected_segment_id } ) => {
 							}
 
 							if ( ! segmentToAssign.id ) {
-								return onMetaFieldChange( 'selected_segment_id', '' );
+								return onMetaFieldChange( { selected_segment_id: '' } );
 							}
 
 							assignedSegments.push( segmentToAssign.id );
-							return onMetaFieldChange( 'selected_segment_id', assignedSegments.join( ',' ) );
+							return onMetaFieldChange( { selected_segment_id: assignedSegments.join( ',' ) } );
 						} }
 						suggestions={ segmentsList
 							.filter( segment => -1 === assignedSegments.indexOf( segment.id ) )
@@ -82,7 +82,7 @@ const SegmentationSidebar = ( { onMetaFieldChange, selected_segment_id } ) => {
 							label={ segment.name }
 							onChange={ () => {
 								if ( ! segment.id ) {
-									return onMetaFieldChange( 'selected_segment_id', '' );
+									return onMetaFieldChange( { selected_segment_id: '' } );
 								}
 
 								if ( segmentIsAssigned ) {
@@ -91,7 +91,7 @@ const SegmentationSidebar = ( { onMetaFieldChange, selected_segment_id } ) => {
 									assignedSegments.push( segment.id );
 								}
 
-								return onMetaFieldChange( 'selected_segment_id', assignedSegments.join( ',' ) );
+								return onMetaFieldChange( { selected_segment_id: assignedSegments.join( ',' ) } );
 							} }
 							checked={ segment.id ? segmentIsAssigned : 0 === assignedSegments.length }
 						/>

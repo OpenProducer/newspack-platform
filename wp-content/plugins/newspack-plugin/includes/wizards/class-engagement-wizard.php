@@ -46,6 +46,7 @@ class Engagement_Wizard extends Wizard {
 		parent::__construct();
 		add_action( 'rest_api_init', [ $this, 'register_api_endpoints' ] );
 		add_filter( 'jetpack_relatedposts_filter_date_range', [ $this, 'restrict_age_of_related_posts' ] );
+		add_filter( 'newspack_newsletters_settings_url', [ $this, 'newsletters_settings_url' ] );
 	}
 
 	/**
@@ -55,24 +56,6 @@ class Engagement_Wizard extends Wizard {
 	 */
 	public function get_name() {
 		return \esc_html__( 'Engagement', 'newspack' );
-	}
-
-	/**
-	 * Get the description of this wizard.
-	 *
-	 * @return string The wizard description.
-	 */
-	public function get_description() {
-		return \esc_html__( 'Newsletters, commenting, social, recirculation', 'newspack' );
-	}
-
-	/**
-	 * Get the duration of this wizard.
-	 *
-	 * @return string A description of the expected duration (e.g. '10 minutes').
-	 */
-	public function get_length() {
-		return esc_html__( '10 minutes', 'newspack' );
 	}
 
 	/**
@@ -96,6 +79,24 @@ class Engagement_Wizard extends Wizard {
 				'callback'            => [ $this, 'api_update_related_posts_max_age' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'sanitize_callback'   => 'sanitize_text_field',
+			]
+		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/reader-activation',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'api_get_reader_activation_settings' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
+			]
+		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/reader-activation',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_reader_activation_settings' ],
+				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
 		register_rest_route(
@@ -125,6 +126,30 @@ class Engagement_Wizard extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
+	}
+
+	/**
+	 * Get reader activation settings.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function api_get_reader_activation_settings() {
+		return rest_ensure_response( Reader_Activation::get_settings() );
+	}
+
+	/**
+	 * Update reader activation settings.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function api_update_reader_activation_settings( $request ) {
+		$args = $request->get_params();
+		foreach ( $args as $key => $value ) {
+			Reader_Activation::update_setting( $key, $value );
+		}
+		return rest_ensure_response( Reader_Activation::get_settings() );
 	}
 
 	/**
@@ -256,6 +281,14 @@ class Engagement_Wizard extends Wizard {
 			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
+
+		\wp_localize_script(
+			'newspack-engagement-wizard',
+			'newspack_engagement_wizard',
+			[
+				'has_reader_activation' => defined( 'NEWSPACK_EXPERIMENTAL_READER_ACTIVATION' ) && NEWSPACK_EXPERIMENTAL_READER_ACTIVATION,
+			]
+		);
 	}
 
 	/**
@@ -273,5 +306,16 @@ class Engagement_Wizard extends Wizard {
 			$sanitized[]      = $category;
 		}
 		return $sanitized;
+	}
+
+	/**
+	 * Set the newsletters settings url
+	 *
+	 * @param string $url URL to the Newspack Newsletters settings page.
+	 *
+	 * @return string URL to the Newspack Newsletters settings page.
+	 */
+	public function newsletters_settings_url( $url = '' ) {
+		return admin_url( 'admin.php?page=newspack-engagement-wizard#/newsletters' );
 	}
 }

@@ -265,18 +265,4 @@ abstract class Wizard {
 	 * @return string The wizard name.
 	 */
 	abstract public function get_name();
-
-	/**
-	 * Get the description of this wizard.
-	 *
-	 * @return string The wizard description.
-	 */
-	abstract public function get_description();
-
-	/**
-	 * Get the duration of this wizard.
-	 *
-	 * @return string A description of the expected duration (e.g. '10 minutes').
-	 */
-	abstract public function get_length();
 }

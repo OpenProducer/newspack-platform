@@ -21,7 +21,7 @@ const ColorsSidebar = ( {
 	<Fragment>
 		<ColorPaletteControl
 			value={ background_color }
-			onChange={ value => onMetaFieldChange( 'background_color', value || '#FFFFFF' ) }
+			onChange={ value => onMetaFieldChange( { background_color: value || '#FFFFFF' } ) }
 			label={ __( 'Content Background Color', 'newspack-popups' ) }
 		/>
 		{ isOverlay && (
@@ -30,20 +30,20 @@ const ColorsSidebar = ( {
 					label={ __( 'Display overlay background', 'newspack-popups' ) }
 					checked={ ! no_overlay_background }
 					value={ ! no_overlay_background }
-					onChange={ value => onMetaFieldChange( 'no_overlay_background', ! value ) }
+					onChange={ value => onMetaFieldChange( { no_overlay_background: ! value } ) }
 				/>
 
 				{ ! no_overlay_background && (
 					<>
 						<ColorPaletteControl
 							value={ overlay_color }
-							onChange={ value => onMetaFieldChange( 'overlay_color', value || '#000000' ) }
+							onChange={ value => onMetaFieldChange( { overlay_color: value || '#000000' } ) }
 							label={ __( 'Overlay Background Color', 'newspack-popups' ) }
 						/>
 						<RangeControl
 							label={ __( 'Overlay Background Opacity', 'newspack-popups' ) }
 							value={ overlay_opacity }
-							onChange={ value => onMetaFieldChange( 'overlay_opacity', value ) }
+							onChange={ value => onMetaFieldChange( { overlay_opacity: value } ) }
 							min={ 0 }
 							max={ 100 }
 						/>

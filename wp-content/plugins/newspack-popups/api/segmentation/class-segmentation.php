@@ -27,19 +27,35 @@ class Segmentation {
 	}
 
 	/**
-	 * Get events table name.
+	 * Get legacy events table name.
 	 */
-	public static function get_events_table_name() {
+	public static function get_events_table_name_legacy() {
 		global $wpdb;
 		return $wpdb->prefix . 'newspack_campaigns_events';
 	}
 
 	/**
-	 * Get transients table name.
+	 * Get legacy readers table name.
 	 */
-	public static function get_transients_table_name() {
+	public static function get_readers_table_name_legacy() {
 		global $wpdb;
 		return $wpdb->prefix . 'newspack_campaigns_transients';
+	}
+
+	/**
+	 * Get readers table name.
+	 */
+	public static function get_readers_table_name() {
+		global $wpdb;
+		return $wpdb->prefix . 'newspack_campaigns_readers';
+	}
+
+	/**
+	 * Get reader events table name.
+	 */
+	public static function get_reader_events_table_name() {
+		global $wpdb;
+		return $wpdb->prefix . 'newspack_campaigns_reader_events';
 	}
 
 	/**

@@ -103,21 +103,6 @@ class Wizards {
 	}
 
 	/**
-	 * Get a wizard's description.
-	 *
-	 * @param string $wizard_slug The wizard to get description for. Use slug from self::$wizards.
-	 * @return string | bool The description on success, false on failure.
-	 */
-	public static function get_description( $wizard_slug ) {
-		$wizard = self::get_wizard( $wizard_slug );
-		if ( $wizard ) {
-			return $wizard->get_description();
-		}
-
-		return false;
-	}
-
-	/**
 	 * Get whether a wizard is completed.
 	 *
 	 * @param string $wizard_slug The wizard to get completion for. Use slug from self::$wizards.

@@ -1,8 +1,8 @@
-@import '../../shared/sass/variables';
-@import '../../shared/sass/mixins';
+@use '../../shared/sass/variables';
+@use '../../shared/sass/mixins';
 
 .wp-block-newspack-blocks-author-profile {
-	@include media( mobile ) {
+	@include mixins.media( mobile ) {
 		display: flex;
 	}
 
@@ -31,7 +31,7 @@
 	}
 
 	&__avatar {
-		@include media( mobile ) {
+		@include mixins.media( mobile ) {
 			flex: 0 1 auto;
 			margin-right: 1.5em;
 		}
@@ -52,7 +52,7 @@
 	}
 
 	&__bio {
-		@include media( mobile ) {
+		@include mixins.media( mobile ) {
 			flex: 4;
 
 			h3 {
@@ -78,7 +78,7 @@
 		}
 
 		svg {
-			fill: currentColor;
+			fill: currentcolor;
 		}
 	}
 
@@ -86,9 +86,9 @@
 		display: none;
 	}
 
-	// Avatar: Right
+	/* Avatar – Right */
 	&.avatar-right {
-		@include media( mobile ) {
+		@include mixins.media( mobile ) {
 			.wp-block-newspack-blocks-author-profile__avatar {
 				margin-left: 1.5em;
 				margin-right: 0;
@@ -97,7 +97,7 @@
 		}
 	}
 
-	// Style: Center
+	/* Style – Center */
 	&.is-style-center {
 		display: block;
 

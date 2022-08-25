@@ -95,21 +95,18 @@ call_user_func(
 		<?php endif; ?>
 
 		<div class="entry-wrapper">
-			<?php if ( ! empty( $sponsors ) ) : ?>
-				<span class="cat-links sponsor-label">
-					<span class="flag">
-						<?php echo esc_html( Newspack_Blocks::get_sponsor_label( $sponsors ) ); ?>
-					</span>
-				</span>
-			<?php elseif ( $attributes['showCategory'] && $category ) : ?>
+			<?php if ( ! empty( $sponsors ) || ( $attributes['showCategory'] && $category ) ) : ?>
 				<?php $category_link = get_category_link( $category->term_id ); ?>
-				<div class="cat-links">
-					<?php if ( ! empty( $category_link ) ) : ?>
-						<a href="<?php echo esc_url( $category_link ); ?>">
+				<div class="cat-links <?php if ( ! empty( $sponsors ) ) : ?>sponsor-label<?php endif; // phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace ?>">
+					<?php if ( ! empty( $sponsors ) ) : ?>
+						<span class="flag">
+							<?php echo esc_html( Newspack_Blocks::get_sponsor_label( $sponsors ) ); ?>
+						</span>
 					<?php endif; ?>
+					<?php if ( $attributes['showCategory'] && ! empty( $category_link ) && ( empty( $sponsors ) || Newspack_Blocks::newspack_display_sponsors_and_categories( $sponsors ) ) ) : ?>
+					<a href="<?php echo esc_url( $category_link ); ?>">
 						<?php echo esc_html( $category->name ); ?>
-					<?php if ( ! empty( $category_link ) ) : ?>
-						</a>
+					</a>
 					<?php endif; ?>
 				</div>
 				<?php
@@ -173,71 +170,79 @@ call_user_func(
 			if ( $show_author || $show_date || ! empty( $sponsors ) ) :
 				?>
 				<div class="entry-meta">
-					<?php if ( ! empty( $sponsors ) ) : ?>
-						<?php
-						$logos = Newspack_Blocks::get_sponsor_logos( $sponsors );
-						if ( ! empty( $logos ) ) :
-							?>
-						<span class="sponsor-logos">
-							<?php
-							foreach ( $logos as $logo ) {
-								if ( '' !== $logo['url'] ) {
-									echo '<a href="' . esc_url( $logo['url'] ) . '" target="_blank">';
-								}
-								echo '<img src="' . esc_url( $logo['src'] ) . '" alt="' . esc_attr( $logo['alt'] ) . '" width="' . esc_attr( $logo['width'] ) . '" height="' . esc_attr( $logo['height'] ) . '">';
-								if ( '' !== $logo['url'] ) {
-									echo '</a>';
-								}
-							}
-							?>
-						</span>
-					<?php endif; ?>
-					<span class="byline sponsor-byline">
-						<?php
-						$bylines = Newspack_Blocks::get_sponsor_byline( $sponsors );
-						echo esc_html( $bylines[0]['byline'] ) . ' ';
-						foreach ( $bylines as $byline ) {
-							echo '<span class="author">';
-							if ( '' !== $byline['url'] ) {
-								echo '<a target="_blank" href="' . esc_url( $byline['url'] ) . '">';
-							}
-							echo esc_html( $byline['name'] );
-							if ( '' !== $byline['url'] ) {
-								echo '</a>';
-							}
-							echo '</span>' . esc_html( $byline['sep'] );
+					<?php
+					if ( ! empty( $sponsors ) ) :
+						$sponsor_classes[] = 'entry-sponsors';
+						if ( Newspack_Blocks::newspack_display_sponsors_and_authors( $sponsors ) ) {
+							$sponsor_classes[] = 'plus-author';
 						}
 						?>
-					</span>
+						<span class="<?php echo esc_attr( implode( ' ', $sponsor_classes ) ); ?>">
+								<?php
+								$logos = Newspack_Blocks::get_sponsor_logos( $sponsors );
+								if ( ! empty( $logos ) ) :
+									?>
+								<span class="sponsor-logos">
+									<?php
+									foreach ( $logos as $logo ) {
+										if ( '' !== $logo['url'] ) {
+											echo '<a href="' . esc_url( $logo['url'] ) . '" target="_blank">';
+										}
+										echo '<img src="' . esc_url( $logo['src'] ) . '" alt="' . esc_attr( $logo['alt'] ) . '" width="' . esc_attr( $logo['width'] ) . '" height="' . esc_attr( $logo['height'] ) . '">';
+										if ( '' !== $logo['url'] ) {
+											echo '</a>';
+										}
+									}
+									?>
+								</span>
+							<?php endif; ?>
+							<span class="byline sponsor-byline">
+								<?php
+								$bylines = Newspack_Blocks::get_sponsor_byline( $sponsors );
+								echo esc_html( $bylines[0]['byline'] ) . ' ';
+								foreach ( $bylines as $byline ) {
+									echo '<span class="author">';
+									if ( '' !== $byline['url'] ) {
+										echo '<a target="_blank" href="' . esc_url( $byline['url'] ) . '">';
+									}
+									echo esc_html( $byline['name'] );
+									if ( '' !== $byline['url'] ) {
+										echo '</a>';
+									}
+									echo '</span>' . esc_html( $byline['sep'] );
+								}
+								?>
+							</span><!-- /.sponsor-byline -->
+						</span><!-- .entry-sponsors -->
 						<?php
-					else :
-						if ( $show_author ) :
-							if ( $attributes['showAvatar'] ) :
-								echo wp_kses(
-									newspack_blocks_format_avatars( $authors ),
-									array(
-										'img'      => array(
-											'class'  => true,
-											'src'    => true,
-											'alt'    => true,
-											'width'  => true,
-											'height' => true,
-											'data-*' => true,
-											'srcset' => true,
-										),
-										'noscript' => array(),
-										'a'        => array(
-											'href' => true,
-										),
-									)
-								);
-							endif;
-							?>
-							<span class="byline">
-								<?php echo wp_kses_post( newspack_blocks_format_byline( $authors ) ); ?>
-							</span><!-- .author-name -->
-							<?php
+					endif;
+
+					if ( $show_author && ( empty( $sponsors ) || Newspack_Blocks::newspack_display_sponsors_and_authors( $sponsors ) ) ) :
+						if ( $attributes['showAvatar'] ) :
+							echo wp_kses(
+								newspack_blocks_format_avatars( $authors ),
+								array(
+									'img'      => array(
+										'class'  => true,
+										'src'    => true,
+										'alt'    => true,
+										'width'  => true,
+										'height' => true,
+										'data-*' => true,
+										'srcset' => true,
+									),
+									'noscript' => array(),
+									'a'        => array(
+										'href' => true,
+									),
+								)
+							);
 						endif;
+						?>
+						<span class="byline">
+							<?php echo wp_kses_post( newspack_blocks_format_byline( $authors ) ); ?>
+						</span><!-- .author-name -->
+						<?php
 					endif;
 					if ( $show_date ) :
 						$time_string = '<time class="entry-date published updated" datetime="%1$s">%2$s</time>';

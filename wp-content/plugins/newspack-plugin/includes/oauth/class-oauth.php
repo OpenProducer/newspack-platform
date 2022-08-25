@@ -26,6 +26,20 @@ class OAuth {
 	}
 
 	/**
+	 * Get unique ID for user or client.
+	 */
+	public static function get_unique_id() {
+		$id = get_current_user_id();
+		if ( ! $id ) {
+			$id = Reader_Activation::get_client_id();
+		}
+		if ( ! $id ) {
+			$id = session_id(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.session_session_id
+		}
+		return $id;
+	}
+
+	/**
 	 * Generate a CSRF token and save it as transient.
 	 *
 	 * @param string $namespace Namespace for the token.
@@ -33,8 +47,8 @@ class OAuth {
 	 */
 	public static function generate_csrf_token( $namespace ) {
 		$csrf_token     = sha1( openssl_random_pseudo_bytes( 1024 ) );
-		$transient_name = self::CSRF_TOKEN_TRANSIENT_NAME_BASE . $namespace . get_current_user_id();
-		set_transient( $transient_name, $csrf_token, 60 );
+		$transient_name = self::CSRF_TOKEN_TRANSIENT_NAME_BASE . $namespace . self::get_unique_id();
+		set_transient( $transient_name, $csrf_token, 5 * MINUTE_IN_SECONDS );
 		return $csrf_token;
 	}
 
@@ -45,7 +59,7 @@ class OAuth {
 	 * @return string CSRF token.
 	 */
 	public static function retrieve_csrf_token( $namespace ) {
-		$csrf_token_transient_name = self::CSRF_TOKEN_TRANSIENT_NAME_BASE . $namespace . get_current_user_id();
+		$csrf_token_transient_name = self::CSRF_TOKEN_TRANSIENT_NAME_BASE . $namespace . self::get_unique_id();
 		return get_transient( $csrf_token_transient_name );
 	}
 

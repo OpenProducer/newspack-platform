@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.blog
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.61.0-alpha.1
+Version: 1.63.0-alpha.2
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -20,14 +20,12 @@ Underscores is distributed under the terms of the GNU GPL v2 or later.
 Normalizing styles have been helped along thanks to the fine work of
 Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 */
-/* Mixins */
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
-/* Normalize */
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
 /* Document
 	 ========================================================================== */
@@ -332,7 +330,6 @@ template {
   display: none;
 }
 
-/* Typography */
 html {
   font-size: 18px;
 }
@@ -351,7 +348,7 @@ body {
   font-size: 1em;
   line-height: 1.6;
   margin: 0;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
 }
 
 button,
@@ -363,13 +360,19 @@ textarea {
   font-family: georgia, garamond, "Times New Roman", serif;
   font-weight: 400;
   line-height: 1.6;
-  text-rendering: optimizeLegibility;
+  text-rendering: optimizelegibility;
 }
 
 .use-body-font {
   font-family: georgia, garamond, "Times New Roman", serif;
 }
 
+/* If we add the border using a regular CSS border, it won't look good on non-retina devices,
+ * since its edges can look jagged due to lack of antialiasing. In this case, we are several
+ * layers of box-shadow to add the border visually, which will render the border smoother. */
+/* Calculates maximum width for post content */
+/* Nested sub-menu padding: 10 levels deep */
+/* Jetpack Mailchimp Block */
 .comment-metadata,
 .comment-reply-link,
 .comment-reply-login,
@@ -475,13 +478,13 @@ h1,
 .page-description {
   font-size: 2.2em;
 }
+
 @media only screen and (min-width: 782px) {
   h1,
 .page-description {
     font-size: 2.8em;
   }
 }
-
 .entry-title,
 .not-found .page-title,
 .error-404 .page-title,
@@ -490,6 +493,7 @@ h1,
 h2 {
   font-size: 1.4em;
 }
+
 @media only screen and (min-width: 782px) {
   .entry-title,
 .not-found .page-title,
@@ -500,7 +504,6 @@ h2 {
     font-size: 1.8em;
   }
 }
-
 .has-regular-font-size,
 .has-large-font-size,
 .comments-title,
@@ -513,12 +516,12 @@ h2 {
 h3 {
   font-size: 1.3em;
 }
+
 @media only screen and (min-width: 782px) {
   h3 {
     font-size: 1.4em;
   }
 }
-
 .site-title,
 .site-description,
 .comment-author .fn,
@@ -534,12 +537,12 @@ h4 {
   font-size: 0.8em;
   letter-spacing: 0.01em;
 }
+
 @media only screen and (min-width: 782px) {
   .page-title {
     font-size: 20px;
   }
 }
-
 .entry-meta,
 .nav-links,
 .wp-block-post-date,
@@ -585,7 +588,6 @@ h6 {
     hyphens: none;
   }
 }
-
 .page-header {
   width: 100%;
 }
@@ -598,6 +600,7 @@ h6 {
 #secondary .widgettitle {
   margin-bottom: 0.5em;
 }
+
 .accent-header + *,
 #secondary .widgettitle + * {
   margin-top: 0;
@@ -655,14 +658,15 @@ big {
 a {
   text-decoration: none;
 }
+
 a:hover {
   text-decoration: none;
 }
+
 a:focus {
   text-decoration: underline;
 }
 
-/* Elements */
 html {
   box-sizing: border-box;
 }
@@ -700,6 +704,7 @@ ol {
 ul {
   list-style: disc;
 }
+
 ul ul {
   list-style-type: circle;
 }
@@ -748,6 +753,7 @@ table {
   width: 100%;
   font-size: 0.8em;
 }
+
 table td,
 table th {
   padding: 0.5em;
@@ -755,7 +761,6 @@ table th {
   word-break: break-all;
 }
 
-/* Forms */
 .button,
 button,
 input[type=button],
@@ -956,10 +961,6 @@ input[type=checkbox]:disabled {
   background: #a1e789;
 }
 
-/* Navigation */
-/*--------------------------------------------------------------
-## Links
---------------------------------------------------------------*/
 a {
   transition: color 110ms ease-in-out;
   color: #515151;
@@ -977,9 +978,6 @@ a:focus {
   text-decoration: underline;
 }
 
-/*--------------------------------------------------------------
-## Menus
---------------------------------------------------------------*/
 /** === Dropdown menus === */
 .dd-menu button {
   display: inline-block;
@@ -1000,7 +998,7 @@ a:focus {
   background: transparent;
 }
 .dd-menu button:focus {
-  outline: 1px dotted currentColor;
+  outline: 1px dotted currentcolor;
   outline-offset: -4px;
 }
 .dd-menu button:active {
@@ -1256,7 +1254,7 @@ a:focus {
   opacity: 0.75;
 }
 .nav3 .menu-highlight a {
-  border: 1px solid currentColor;
+  border: 1px solid currentcolor;
   font-weight: bold;
   padding-right: 0.5rem;
   padding-left: 0.5rem;
@@ -1369,7 +1367,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 .social-links-menu li a:focus {
   opacity: 1;
-  border-bottom: 1px solid currentColor;
+  border-bottom: 1px solid currentcolor;
 }
 .social-links-menu li a svg {
   display: block;
@@ -1806,9 +1804,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   z-index: 999998;
 }
 
-/*--------------------------------------------------------------
-## Next / Previous
---------------------------------------------------------------*/
 .pagination {
   margin: 3rem 0;
 }
@@ -1820,6 +1815,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .pagination .nav-links > * {
   background-color: #eee;
   margin-left: 0.5rem;
+  /* stylelint-disable-next-line */
   padding: 0.5rem 0.75rem 0.25rem;
 }
 .pagination .nav-links > *:last-child {
@@ -1930,9 +1926,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   text-align: left;
 }
 
-/*--------------------------------------------------------------
-## Infinite Scroll
---------------------------------------------------------------*/
 /* Infinite scroll */
 /* Globally hidden elements when Infinite Scroll is supported and in use. */
 .infinite-scroll .pagination,
@@ -1992,7 +1985,18 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   outline-offset: -4px;
 }
 
-/* Accessibility */
+/*--------------------------------------------------------------
+## Links
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Menus
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Next / Previous
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Infinite Scroll
+--------------------------------------------------------------*/
 /* Text meant only for screen readers. */
 .screen-reader-text {
   border: 0;
@@ -2007,7 +2011,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   word-wrap: normal !important; /* Many screen reader and browser combinations announce broken words as they would appear visually. */
 }
 .screen-reader-text:focus {
-  background-color: #f1f1f1;
+  background-color: #f0f0f0;
   border-radius: 3px;
   box-shadow: 0 0 2px 2px rgba(0, 0, 0, 0.6);
   clip: auto !important;
@@ -2032,7 +2036,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   outline: 0;
 }
 
-/* Alignments */
 .alignleft {
   float: left;
   margin-right: 1rem;
@@ -2060,7 +2063,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin-left: auto;
 }
 
-/* Clearings */
 .clear::before,
 .clear::after,
 .entry-content::before,
@@ -2087,7 +2089,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   clear: both;
 }
 
-/* Layout */
 /** === Layout === */
 .wrapper {
   display: flex;
@@ -2235,10 +2236,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin-top: 1rem;
 }
 
-/* Content */
-/*--------------------------------------------------------------
-## Header
---------------------------------------------------------------*/
 .site-branding {
   align-items: center;
   color: #515151;
@@ -2791,9 +2788,6 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
     display: inherit;
   }
 }
-/*--------------------------------------------------------------
-## Posts and pages
---------------------------------------------------------------*/
 .sticky {
   display: block;
 }
@@ -3103,6 +3097,10 @@ amp-script .cat-links {
 div.sharedaddy .sd-social h3.sd-title,
 .share-customize-link {
   display: none;
+}
+
+div.sharedaddy {
+  min-height: 32px;
 }
 
 .sd-content {
@@ -3621,9 +3619,6 @@ div.sharedaddy .sd-social h3.sd-title,
   font-family: "IBM Plex Serif", georgia, serif;
 }
 
-/*--------------------------------------------------------------
-## Comments
---------------------------------------------------------------*/
 .comment-content a {
   word-wrap: break-word;
 }
@@ -3828,7 +3823,7 @@ div.sharedaddy .sd-social h3.sd-title,
 }
 .comment .comment-author .post-author-badge svg {
   display: inline-block;
-  fill: currentColor;
+  fill: currentcolor;
   height: inherit;
   transform: scale(0.875);
   width: inherit;
@@ -3938,7 +3933,7 @@ div.sharedaddy .sd-social h3.sd-title,
 }
 .discussion-meta .discussion-meta-info .svg-icon {
   vertical-align: middle;
-  fill: currentColor;
+  fill: currentcolor;
   transform: scale(0.6) scaleX(-1) translateY(-0.1em);
   margin-right: -0.25rem;
 }
@@ -4016,9 +4011,6 @@ div.sharedaddy .sd-social h3.sd-title,
   z-index: 2;
 }
 
-/*--------------------------------------------------------------
-## Archives
---------------------------------------------------------------*/
 .archive .page-header,
 .blog .page-header,
 .search .page-header {
@@ -4179,9 +4171,6 @@ div.sharedaddy .sd-social h3.sd-title,
   }
 }
 
-/*--------------------------------------------------------------
-## Footer
---------------------------------------------------------------*/
 /* Site footer */
 .site-footer {
   margin: 2rem 0 0;
@@ -4377,7 +4366,21 @@ div.sharedaddy .sd-social h3.sd-title,
   font-size: 1em;
 }
 
-/* Widgets */
+/*--------------------------------------------------------------
+## Header
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Posts and pages
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Comments
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Archives
+--------------------------------------------------------------*/
+/*--------------------------------------------------------------
+## Footer
+--------------------------------------------------------------*/
 .widget {
   font-family: "IBM Plex Serif", georgia, serif;
   font-size: 0.8em;
@@ -4596,7 +4599,6 @@ div.sharedaddy .sd-social h3.sd-title,
   display: none;
 }
 
-/* Blocks */
 /* !Block styles */
 .entry .entry-content > *,
 .newspack-inline-popup > *,
@@ -5239,7 +5241,7 @@ p.has-background {
   transition: all 150ms ease-in-out;
   border-width: 2px;
   border-style: solid;
-  border-color: currentColor;
+  border-color: currentcolor;
   padding: calc(0.76rem - 2px) calc(1rem - 2px);
 }
 .is-style-outline .wp-block-button__link:not(.has-background),
@@ -6574,7 +6576,7 @@ hr.has-background.is-style-dots::before {
 .entry-content .wp-social-link a:active,
 .entry-content .wp-social-link a:hover,
 .entry-content .wp-social-link a:visited {
-  color: currentColor;
+  color: currentcolor;
 }
 
 /*--------------------------------------------------------------
@@ -6586,10 +6588,18 @@ hr.has-background.is-style-dots::before {
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
-/* Subscribe Style 7 */
+.newspack-pattern {
+  /* Subscribe Style 7 */
+  /* Subscribe Style 8 */
+  /* Subscribe Style 9 */
+  /* Subscribe Style 10 */
+  /* Registration Style 1 */
+}
+
 .newspack-pattern.subscribe__style-7 .wp-block-media-text {
   display: block;
 }
+
 @media only screen and (min-width: 782px) {
   .newspack-pattern.subscribe__style-7 .wp-block-media-text {
     display: grid;
@@ -6598,6 +6608,7 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-7 .wp-block-media-text__media {
   display: none;
 }
+
 @media only screen and (min-width: 782px) {
   .newspack-pattern.subscribe__style-7 .wp-block-media-text__media {
     display: block;
@@ -6608,6 +6619,7 @@ hr.has-background.is-style-dots::before {
   gap: 16px;
   padding: 36px;
 }
+
 @media only screen and (min-width: 782px) {
   .newspack-pattern.subscribe__style-7 .wp-block-media-text__content {
     padding: 64px;
@@ -6617,51 +6629,62 @@ hr.has-background.is-style-dots::before {
   margin-bottom: 0;
   margin-top: 0;
 }
+
 .newspack-pattern.subscribe__style-7 .newspack-pattern__heading + p {
   font-size: 0.8em;
 }
+
 .newspack-pattern.subscribe__style-7 .wp-block-jetpack-mailchimp form {
   display: grid;
   gap: 8px;
 }
+
 .newspack-pattern.subscribe__style-7 .wp-block-jetpack-mailchimp form > * {
   margin: 0;
 }
+
 .newspack-pattern.subscribe__style-7 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
   margin: 8px 0 0;
 }
+
 .newspack-pattern.subscribe__style-7 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.wp-block-jetpack-mailchimp__is-amp {
   margin: 0;
 }
+
 .newspack-pattern.subscribe__style-7 .wp-block-jetpack-mailchimp .wp-block-button + p {
   font-size: 0.7em;
 }
+
 .newspack-pattern.subscribe__style-7.has-background {
   padding: 0;
 }
+
 .newspack-lightbox .newspack-popup > .newspack-pattern.subscribe__style-7 {
   margin: -32px;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-7 ~ .popup-not-interested-form {
   bottom: 0;
   right: 0;
   position: absolute;
   left: 0;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-7 ~ .popup-not-interested-form button {
   display: block;
   font-weight: bold;
   padding: 8px;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-7 + p:empty {
   display: none;
 }
 
-/* Subscribe Style 8 */
 .newspack-pattern.subscribe__style-8 .wp-block-image {
   display: none;
   margin-bottom: 0;
 }
+
 @media only screen and (min-width: 782px) {
   .newspack-pattern.subscribe__style-8 .wp-block-image {
     display: block;
@@ -6670,21 +6693,26 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-8 .wp-block-image figcaption {
   display: none;
 }
+
 .newspack-pattern.subscribe__style-8 .wp-block-group {
   margin-top: 0;
   padding: 0;
 }
+
 .newspack-pattern.subscribe__style-8 .wp-block-group .wp-block-group__inner-container {
   display: grid;
   gap: 16px;
 }
+
 .newspack-pattern.subscribe__style-8 .wp-block-group .wp-block-group__inner-container > * {
   margin-bottom: 0;
   margin-top: 0;
 }
+
 .newspack-pattern.subscribe__style-8 .newspack-pattern__inner .wp-block-group__inner-container {
   padding: 36px;
 }
+
 @media only screen and (min-width: 782px) {
   .newspack-pattern.subscribe__style-8 .newspack-pattern__inner .wp-block-group__inner-container {
     padding: 64px;
@@ -6693,10 +6721,12 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-8 .newspack-pattern__heading + p {
   font-size: 0.8em;
 }
+
 .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp form {
   display: grid;
   gap: 8px;
 }
+
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp form {
     align-items: center;
@@ -6708,6 +6738,7 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp form > * {
   margin: 0;
 }
+
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp form > * {
     grid-area: content;
@@ -6726,25 +6757,32 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp form > .wp-block-button .wp-block-button__link {
   width: 100%;
 }
+
 .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp form > .wp-block-button + p {
   font-size: 0.7em;
 }
+
 .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
   margin: 16px 0 0;
 }
+
 .newspack-pattern.subscribe__style-8 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.wp-block-jetpack-mailchimp__is-amp {
   margin: 0;
 }
+
 .newspack-pattern.subscribe__style-8.has-background {
   padding: 0;
 }
+
 .newspack-lightbox .newspack-popup > .newspack-pattern.subscribe__style-8 {
   margin: -32px;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-8 ~ .popup-not-interested-form {
   margin: 12px 0 0;
   padding: 0 4px 4px;
 }
+
 @media only screen and (min-width: 782px) {
   .newspack-lightbox .newspack-pattern.subscribe__style-8 ~ .popup-not-interested-form {
     margin: -48px 0 0;
@@ -6754,15 +6792,16 @@ hr.has-background.is-style-dots::before {
 .newspack-lightbox .newspack-pattern.subscribe__style-8 ~ .popup-not-interested-form button {
   font-family: inherit;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-8 + p:empty {
   display: none;
 }
 
-/* Subscribe Style 9 */
 .newspack-pattern.subscribe__style-9 .wp-block-columns {
   margin: 0;
   padding: 0;
 }
+
 @media only screen and (max-width: 781px) {
   .newspack-pattern.subscribe__style-9 .wp-block-columns:not(.is-not-stacked-on-mobile) {
     gap: 16px;
@@ -6772,19 +6811,24 @@ hr.has-background.is-style-dots::before {
   margin-bottom: 16px;
   margin-top: 16px;
 }
+
 .newspack-pattern.subscribe__style-9 .wp-block-columns .wp-block-column > *:first-child {
   margin-top: 0;
 }
+
 .newspack-pattern.subscribe__style-9 .wp-block-columns .wp-block-column > *:last-child {
   margin-bottom: 0;
 }
+
 .newspack-pattern.subscribe__style-9 .newspack-pattern__heading + p {
   font-size: 0.8em;
 }
+
 .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp form {
   display: grid;
   gap: 8px;
 }
+
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp form {
     align-items: center;
@@ -6796,6 +6840,7 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp form > * {
   margin: 0;
 }
+
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp form > * {
     grid-area: content;
@@ -6814,43 +6859,53 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp form > .wp-block-button .wp-block-button__link {
   width: 100%;
 }
+
 .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp form > .wp-block-button + p {
   font-size: 0.7em;
 }
+
 .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
   margin: 16px 0 0;
 }
+
 .newspack-pattern.subscribe__style-9 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.wp-block-jetpack-mailchimp__is-amp {
   margin: 0;
 }
+
 .newspack-pattern.subscribe__style-9.has-background {
   padding: 32px;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-9 ~ .popup-dismiss-form .newspack-lightbox__close {
   height: 32px;
   padding: 0;
   width: 32px;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-9 ~ .popup-not-interested-form {
   margin-top: 16px;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-9 ~ .popup-not-interested-form button {
   font-family: inherit;
 }
+
 .newspack-lightbox .newspack-pattern.subscribe__style-9 + p:empty {
   display: none;
 }
 
-/* Subscribe Style 10 */
 .newspack-pattern.subscribe__style-10 {
   margin: 0 auto;
   max-width: 90vw;
   width: 1200px;
+  /* stylelint-disable-next-line */
 }
+
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form {
   display: grid;
   gap: 8px;
 }
+
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form {
     align-items: center;
@@ -6862,6 +6917,7 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > * {
   margin: 0;
 }
+
 @media only screen and (min-width: 600px) {
   .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > * {
     grid-area: content;
@@ -6880,31 +6936,46 @@ hr.has-background.is-style-dots::before {
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > .wp-block-button .wp-block-button__link {
   width: 100%;
 }
+
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp form > .wp-block-button + p {
   font-size: 0.7em;
 }
+
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
   margin: 8px 0 0;
 }
+
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.wp-block-jetpack-mailchimp__is-amp {
   margin: 0;
 }
-.newspack-pattern.subscribe__style-10 #wp-block-jetpack-mailchimp_consent-text { /* stylelint-disable-line */
+
+.newspack-pattern.subscribe__style-10 #wp-block-jetpack-mailchimp_consent-text {
   display: none;
 }
+
 .newspack-pattern.subscribe__style-10 .wp-block-column:first-of-type p {
   padding-bottom: calc(1px + 0.36rem);
   padding-top: calc(1px + 0.36rem);
 }
+
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-button {
   align-self: stretch;
 }
+
 .newspack-pattern.subscribe__style-10 .wp-block-jetpack-button button.wp-block-button__link {
   line-height: 1;
   height: 100%;
 }
 
-/* Media */
+@media only screen and (min-width: 782px) {
+  .newspack-pattern.registration__style-1 {
+    padding: 32px;
+  }
+}
+.newspack-pattern.registration__style-1 .newspack-registration {
+  margin-bottom: 0;
+}
+
 .page-content .wp-smiley,
 .entry-content .wp-smiley,
 .comment-content .wp-smiley {
@@ -6938,7 +7009,7 @@ iframe {
 
 svg {
   transition: fill 120ms ease-in-out;
-  fill: currentColor;
+  fill: currentcolor;
 }
 
 /*--------------------------------------------------------------
@@ -6985,6 +7056,7 @@ figcaption,
 .entry-content figcaption {
   max-width: 780px;
 }
+
 .entry-content .alignfull > figcaption,
 .entry-content .alignwide > figcaption {
   width: min(90vw, 780px);
@@ -6998,6 +7070,7 @@ figcaption,
 .page-template-single-wide .entry-content figcaption {
   max-width: 1200px;
 }
+
 .newspack-front-page .alignfull > figcaption,
 .newspack-front-page .alignwide > figcaption,
 .post-template-single-wide .alignfull > figcaption,
@@ -7025,54 +7098,71 @@ figcaption,
   vertical-align: top;
   width: 100%;
 }
+
 .gallery-columns-2 .gallery-item {
   max-width: calc( ( 100% - 16px * 1 ) / 2 );
 }
+
 .gallery-columns-2 .gallery-item:nth-of-type(2n + 2) {
   margin-left: 0;
 }
+
 .gallery-columns-3 .gallery-item {
   max-width: calc( ( 100% - 16px * 2 ) / 3 );
 }
+
 .gallery-columns-3 .gallery-item:nth-of-type(3n + 3) {
   margin-left: 0;
 }
+
 .gallery-columns-4 .gallery-item {
   max-width: calc( ( 100% - 16px * 3 ) / 4 );
 }
+
 .gallery-columns-4 .gallery-item:nth-of-type(4n + 4) {
   margin-left: 0;
 }
+
 .gallery-columns-5 .gallery-item {
   max-width: calc( ( 100% - 16px * 4 ) / 5 );
 }
+
 .gallery-columns-5 .gallery-item:nth-of-type(5n + 5) {
   margin-left: 0;
 }
+
 .gallery-columns-6 .gallery-item {
   max-width: calc( ( 100% - 16px * 5 ) / 6 );
 }
+
 .gallery-columns-6 .gallery-item:nth-of-type(6n + 6) {
   margin-left: 0;
 }
+
 .gallery-columns-7 .gallery-item {
   max-width: calc( ( 100% - 16px * 6 ) / 7 );
 }
+
 .gallery-columns-7 .gallery-item:nth-of-type(7n + 7) {
   margin-left: 0;
 }
+
 .gallery-columns-8 .gallery-item {
   max-width: calc( ( 100% - 16px * 7 ) / 8 );
 }
+
 .gallery-columns-8 .gallery-item:nth-of-type(8n + 8) {
   margin-left: 0;
 }
+
 .gallery-columns-9 .gallery-item {
   max-width: calc( ( 100% - 16px * 8 ) / 9 );
 }
+
 .gallery-columns-9 .gallery-item:nth-of-type(9n + 9) {
   margin-left: 0;
 }
+
 .gallery-item:last-of-type {
   padding-left: 0;
 }
@@ -7091,17 +7181,11 @@ figcaption,
   line-height: 0;
   box-shadow: 0 0 0 0 transparent;
 }
+
 .gallery-item > div > a:focus {
   box-shadow: 0 0 0 2px #3366ff;
 }
 
-/* Newspack Ads support */
-/* If we add the border using a regular CSS border, it won't look good on non-retina devices,
- * since its edges can look jagged due to lack of antialiasing. In this case, we are several
- * layers of box-shadow to add the border visually, which will render the border smoother. */
-/* Calculates maximum width for post content */
-/* Nested sub-menu padding: 10 levels deep */
-/* Jetpack Mailchimp Block */
 .newspack_global_ad {
   display: flex;
   justify-content: center;
@@ -7229,7 +7313,6 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   padding: 8px;
 }
 
-/* Yoast Breadcrumb support */
 .site-breadcrumb {
   color: #515151;
 }
@@ -7254,11 +7337,46 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   border-top: 1px solid #ccc;
 }
 
-/* Newspack Listings support */
 .newspack-listings.hide-date.hide-author .entry-subhead {
   padding: 0;
 }
 
+.wpnbha .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.wpnbpc .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.archive .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.search .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.blog .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.newspack-listings__curated-list .featured-listing .newspack-listings__listing-title::before {
+  border: calc(0.25em + 1px) solid #36f;
+  border-top: 0;
+  border-bottom-color: transparent;
+  box-sizing: border-box;
+  content: "";
+  display: inline-block;
+  height: 0.8em;
+  margin-left: 0.3em;
+  position: relative;
+  top: 0.05em;
+  width: 0.5em;
+}
+
+/* Mixins */
+/* Normalize */
+/* Typography */
+/* Elements */
+/* Forms */
+/* Navigation */
+/* Accessibility */
+/* Alignments */
+/* Clearings */
+/* Layout */
+/* Content */
+/* Widgets */
+/* Blocks */
+/* Media */
+/* Newspack Ads support */
+/* Yoast Breadcrumb support */
+/* Newspack Listings support */
 .h-sb .top-header-contain,
 .h-sb .middle-header-contain {
   background-color: #333;
@@ -7347,7 +7465,7 @@ div.wpnbha .article-section-title,
 .site-footer .accent-header::after,
 .site-footer .article-section-title > span::before,
 .site-footer .article-section-title > span::after {
-  border-color: currentColor;
+  border-color: currentcolor;
   opacity: 0.2;
 }
 
@@ -7748,13 +7866,48 @@ cite i {
   justify-content: center;
 }
 
-.single .sponsor-label {
+body.single .sponsor-label {
   justify-content: center;
 }
-
-.single .show-info .sponsor-info {
+body.single .show-info .sponsor-info {
   right: 50%;
   margin-right: -150px;
+}
+body.single .entry-meta + .entry-sponsor {
+  text-align: right;
+  justify-content: center;
+}
+@media only screen and (max-width: 599px) {
+  body.single .entry-sponsor {
+    gap: 0.5em;
+    justify-content: center;
+  }
+  body.single .entry-sponsor .sponsor-logos,
+body.single .entry-sponsor .sponsor-logos > *:last-child {
+    margin: 0;
+  }
+  body.single .entry-sponsor .sponsor-logos {
+    justify-content: center;
+    width: 100%;
+  }
+}
+body.single .featured-image-behind .entry-sponsor {
+  justify-content: center;
+}
+@media only screen and (min-width: 782px) {
+  body.single .featured-image-beside .sponsor-byline {
+    margin-left: 0;
+  }
+  body.single .featured-image-beside .sponsor-logos {
+    border-left: 0;
+    padding-left: 0;
+  }
+  body.single .featured-image-beside .entry-sponsor {
+    justify-content: center;
+  }
+  body.single.sponsors-show-authors .featured-image-beside .sponsor-byline > span:first-child {
+    display: inline;
+  }
 }
 
 .sponsor-bio .avatar {

@@ -72,22 +72,6 @@ class Setup_Wizard extends Wizard {
 	public function get_name() {
 		return esc_html__( 'Setup', 'newspack' );
 	}
-	/**
-	 * Get the description of this wizard.
-	 *
-	 * @return string The wizard description.
-	 */
-	public function get_description() {
-		return esc_html__( 'Setup Newspack.', 'newspack' );
-	}
-	/**
-	 * Get the expected duration of this wizard.
-	 *
-	 * @return string The wizard length.
-	 */
-	public function get_length() {
-		return esc_html__( '10 minutes', 'newspack' );
-	}
 
 	/**
 	 * Register the endpoints needed for the wizard screens.

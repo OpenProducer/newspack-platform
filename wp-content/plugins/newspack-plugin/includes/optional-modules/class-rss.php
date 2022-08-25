@@ -28,6 +28,10 @@ class RSS {
 	 * Initialise.
 	 */
 	public static function init() {
+		if ( ! function_exists( 'is_plugin_active' ) ) {
+			include_once ABSPATH . 'wp-admin/includes/plugin.php';
+		}
+
 		// If the standalone plugin is active, deactivate it and activate as a module.
 		if ( is_plugin_active( 'newspack-rss-enhancements/newspack-rss-enhancements.php' ) ) {
 			deactivate_plugins( 'newspack-rss-enhancements/newspack-rss-enhancements.php' );
@@ -82,6 +86,7 @@ class RSS {
 			'use_tags_tags'          => false,
 			'full_content'           => true,
 			'num_items_in_feed'      => 10,
+			'offset'                 => 0,
 			'timeframe'              => false,
 			'content_featured_image' => false,
 			'suppress_yoast'         => false,
@@ -281,6 +286,12 @@ class RSS {
 				</td>
 			</tr>
 			<tr>
+				<th><?php esc_html_e( 'Offset posts by:', 'newspack-plugin' ); ?></th>
+				<td>
+					<input name="offset" type="number" min="0" value="<?php echo esc_attr( $settings['offset'] ); ?>" />
+				</td>
+			</tr>
+			<tr>
 				<th><?php esc_html_e( 'Limit timeframe to last # of hours:', 'newspack-plugin' ); ?></th>
 				<td>
 					<input name="timeframe" type="number" value="<?php echo esc_attr( $settings['timeframe'] ); ?>" />
@@ -438,6 +449,9 @@ class RSS {
 		$num_items_in_feed             = filter_input( INPUT_POST, 'num_items_in_feed', FILTER_SANITIZE_NUMBER_INT );
 		$settings['num_items_in_feed'] = absint( $num_items_in_feed );
 
+		$offset             = filter_input( INPUT_POST, 'offset', FILTER_SANITIZE_NUMBER_INT );
+		$settings['offset'] = absint( $offset );
+
 		$timeframe             = filter_input( INPUT_POST, 'timeframe', FILTER_SANITIZE_NUMBER_INT );
 		$settings['timeframe'] = absint( $timeframe );
 
@@ -494,6 +508,8 @@ class RSS {
 		}
 
 		$query->set( 'posts_per_rss', absint( $settings['num_items_in_feed'] ) );
+		
+		$query->set( 'offset', absint( $settings['offset'] ) );
 
 		if ( ! empty( $settings['timeframe'] ) ) {
 			$query->set( 'date_query', [ 'after' => gmdate( 'Y-m-d H:i:s', strtotime( '- ' . $settings['timeframe'] . ' hours' ) ) ] );

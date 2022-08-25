@@ -1,3 +1,17 @@
+# [1.10.0](https://github.com/Automattic/newspack-sponsors/compare/v1.9.0...v1.10.0) (2022-07-26)
+
+
+### Features
+
+* new options to show authors and categories ([#186](https://github.com/Automattic/newspack-sponsors/issues/186)) ([5103216](https://github.com/Automattic/newspack-sponsors/commit/5103216601b25af50d057d15a52c97ecdaab19a1))
+
+# [1.10.0-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.9.0...v1.10.0-alpha.1) (2022-07-14)
+
+
+### Features
+
+* new options to show authors and categories ([#186](https://github.com/Automattic/newspack-sponsors/issues/186)) ([5103216](https://github.com/Automattic/newspack-sponsors/commit/5103216601b25af50d057d15a52c97ecdaab19a1))
+
 # [1.9.0](https://github.com/Automattic/newspack-sponsors/compare/v1.8.0...v1.9.0) (2022-05-18)
 
 

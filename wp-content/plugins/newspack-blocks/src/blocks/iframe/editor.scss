@@ -1,5 +1,5 @@
-@import '../../shared/sass/variables';
-@import '../../shared/sass/mixins';
+@use '../../shared/sass/variables';
+@use '../../shared/sass/mixins';
 
 .editor-styles-wrapper {
 	.components-form-file-upload {
@@ -44,7 +44,7 @@
 		width: 100%;
 		min-width: 200px;
 
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			width: 300px;
 		}
 

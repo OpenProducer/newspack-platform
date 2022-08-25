@@ -51,24 +51,6 @@ class Popups_Wizard extends Wizard {
 	}
 
 	/**
-	 * Get the description of this wizard.
-	 *
-	 * @return string The wizard description.
-	 */
-	public function get_description() {
-		return \esc_html__( 'Reach your readers with configurable campaigns', 'newspack' );
-	}
-
-	/**
-	 * Get the duration of this wizard.
-	 *
-	 * @return string A description of the expected duration (e.g. '10 minutes').
-	 */
-	public function get_length() {
-		return esc_html__( '10 minutes', 'newspack' );
-	}
-
-	/**
 	 * Register the endpoints needed for the wizard screens.
 	 */
 	public function register_api_endpoints() {
@@ -487,6 +469,7 @@ class Popups_Wizard extends Wizard {
 				'overlay_placements' => $overlay_placements,
 				'overlay_sizes'      => $overlay_sizes,
 				'preview_query_keys' => $preview_query_keys,
+				'experimental'       => Reader_Activation::is_enabled(),
 			]
 		);
 

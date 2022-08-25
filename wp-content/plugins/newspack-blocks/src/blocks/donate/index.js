@@ -10,6 +10,7 @@ import { payment } from '@wordpress/icons';
  * Internal dependencies
  */
 import edit from './edit';
+import metadata from './block.json';
 
 /**
  * Style dependencies - will load in editor
@@ -17,7 +18,10 @@ import edit from './edit';
 import './editor.scss';
 import './view.scss';
 
-export const name = 'donate';
+const { name, attributes, category, supports } = metadata;
+
+// Name must be exported separately.
+export { name };
 export const title = __( 'Donate', 'newspack-blocks' );
 
 export const settings = {
@@ -26,7 +30,7 @@ export const settings = {
 		src: payment,
 		foreground: '#36f',
 	},
-	category: 'newspack',
+	category,
 	keywords: [
 		__( 'donate', 'newspack-blocks' ),
 		__( 'memberships', 'newspack-blocks' ),
@@ -45,45 +49,8 @@ export const settings = {
 			</ExternalLink>
 		</>
 	),
-	attributes: {
-		className: {
-			type: 'string',
-		},
-		manual: {
-			type: 'boolean',
-		},
-		suggestedAmounts: {
-			type: 'array',
-			default: [ 0, 0, 0 ],
-		},
-		suggestedAmountUntiered: {
-			type: 'integer',
-			default: 0,
-		},
-		tiered: {
-			type: 'boolean',
-			default: true,
-		},
-		campaign: {
-			type: 'string',
-		},
-		thanksText: {
-			type: 'string',
-			default: __( 'Your contribution is appreciated.', 'newspack-blocks' ),
-		},
-		buttonText: {
-			type: 'string',
-			default: __( 'Donate Now', 'newspack-blocks' ),
-		},
-		defaultFrequency: {
-			type: 'string',
-			default: 'month',
-		},
-	},
-	supports: {
-		html: false,
-		align: false,
-	},
+	attributes,
+	supports,
 	edit,
 	save: () => null, // to use view.php
 };

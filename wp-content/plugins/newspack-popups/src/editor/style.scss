@@ -65,6 +65,19 @@ $size__large: 1264px;
 			margin-top: 24px;
 		}
 	}
+
+	&__frequency-number-control.components-number-control {
+		align-items: center;
+		display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+		margin-bottom: 8px;
+		width: 100%;
+
+		.components-input-control__container {
+			max-width: 25%;
+		}
+	}
 }
 
 .newspack-popups-css-grid-selector {

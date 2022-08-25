@@ -7,6 +7,7 @@
 .sponsor-label {
   align-items: stretch;
   display: inline-flex;
+  margin-left: 0.5rem;
   position: relative;
 }
 .sponsor-label button {
@@ -14,7 +15,7 @@
   background: transparent;
   color: #515151;
   display: inline-flex;
-  margin-right: 0.25rem;
+  margin-right: 0.15rem;
   padding: 0;
   position: relative;
 }
@@ -30,7 +31,9 @@
   top: calc(100% - 3px);
   width: 0;
 }
-.sponsor-label::before, .sponsor-label::after {
+.sponsor-label::before, .sponsor-label::after,
+.sponsor-label + .cat-links::before,
+.sponsor-label + .cat-links::after {
   display: none;
 }
 
@@ -83,6 +86,7 @@ amp-script .sponsor-label .flag {
   align-items: center;
   display: inline-flex;
   line-height: 1;
+  margin-left: 0.25rem;
 }
 @media only screen and (min-width: 600px) {
   .sponsor-logos {
@@ -95,32 +99,74 @@ amp-script .sponsor-label .flag {
 }
 
 .entry-sponsor {
-  align-items: stretch;
-  display: inline-flex;
+  align-items: center;
+  display: flex;
+  flex-wrap: wrap;
 }
 
 .sponsor-byline .author {
   font-weight: bold;
 }
 
+/* Single Posts */
+.single .sponsor-byline > span:first-child {
+  display: inline;
+}
+.single.sponsors-show-cats .sponsor-label {
+  display: inline-flex;
+}
+.single .sponsor-label + .cat-links {
+  display: inline-block;
+}
+.single.sponsors-show-authors .entry-subhead {
+  flex-wrap: wrap;
+}
+@media only screen and (min-width: 600px) {
+  .single.sponsors-show-authors .entry-subhead .sponsor-logos {
+    border-left: 0;
+    margin-left: 0;
+  }
+}
+.single.sponsors-show-authors .entry-subhead .sponsor-byline {
+  font-size: 0.8em;
+}
+@media only screen and (min-width: 1168px) {
+  .single.sponsors-show-authors .entry-subhead .sponsor-byline > span:first-child {
+    display: block;
+  }
+}
+.single.sponsors-show-authors .entry-subhead .sponsor-byline .author {
+  color: inherit;
+  font-weight: normal;
+}
+.single .entry-meta + .entry-sponsor {
+  flex-grow: 0;
+  margin-left: 1rem;
+}
+@media only screen and (max-width: 1167px) {
+  .single .entry-meta + .entry-sponsor {
+    order: 10;
+    margin-top: 1rem;
+    width: 100%;
+  }
+}
+.single .entry-meta + .entry-sponsor + .sharedaddy {
+  margin-top: 1rem;
+}
+@media only screen and (min-width: 1168px) {
+  .single .entry-meta + .entry-sponsor + .sharedaddy {
+    border-right: 1px solid #ccc;
+    margin-top: 0;
+    padding-right: 1rem;
+  }
+}
+.single.single-featured-image-default .sponsor-byline {
+  margin-left: 0;
+}
+
 .featured-image-beside .entry-sponsor,
 .featured-image-behind .entry-sponsor {
   align-items: center;
-}
-.featured-image-beside .sponsor-label button,
-.featured-image-behind .sponsor-label button {
-  color: inherit;
-}
-.featured-image-beside .sponsor-logos,
-.featured-image-behind .sponsor-logos {
-  margin-left: 0;
-}
-@media only screen and (min-width: 600px) {
-  .featured-image-beside .sponsor-logos,
-.featured-image-behind .sponsor-logos {
-    border: 0;
-    padding-left: 0;
-  }
 }
 .featured-image-beside .sponsor-byline,
 .featured-image-behind .sponsor-byline {
@@ -130,11 +176,31 @@ amp-script .sponsor-label .flag {
 .featured-image-behind .sponsor-info {
   background: rgba(0, 0, 0, 0.95);
 }
-.featured-image-behind .sponsor-label button::after {
+.featured-image-behind .sponsor-label button {
+  color: inherit;
+}
+.featured-image-behind .sponsor-label button ::after {
   border-bottom-color: rgba(0, 0, 0, 0.95);
 }
-.featured-image-behind .sponsor-logos {
-  margin: 0;
+.featured-image-behind .entry-meta + .entry-sponsor .byline {
+  margin-left: 0;
+}
+
+.featured-image-beside .entry-meta + .entry-sponsor + .sharedaddy {
+  border: 0;
+  padding: 0;
+}
+@media only screen and (min-width: 782px) {
+  .featured-image-beside .sponsor-label button {
+    color: inherit;
+  }
+  .featured-image-beside .sponsor-logos {
+    border: 0;
+  }
+}
+
+.single:not(.sponsors-show-authors) .featured-image-beside .posted-on {
+  display: block;
 }
 
 .sponsor-bio .avatar {
@@ -149,6 +215,26 @@ amp-script .sponsor-label .flag {
   text-decoration: none;
 }
 
+.sponsors-show-authors .sponsor-bio {
+  border: solid #ccc;
+  border-width: 2px 0 1px;
+  padding: 1rem 0;
+}
+.sponsors-show-authors .sponsor-bio + .sponsor-bio {
+  border-top: 0;
+  margin-top: -32px;
+}
+.sponsors-show-authors .sponsor-bio h2 {
+  color: inherit;
+  font-size: 0.8em;
+  border: 0;
+  margin: 0;
+  padding: 0;
+}
+.sponsors-show-authors .sponsor-bio h2::before, .sponsors-show-authors .sponsor-bio h2::after {
+  display: none;
+}
+
 .search article .sponsor-logos,
 .archive article .sponsor-logos,
 .blog article .sponsor-logos {
@@ -157,8 +243,12 @@ amp-script .sponsor-label .flag {
 .search article .sponsor-label,
 .archive article .sponsor-label,
 .blog article .sponsor-label {
-  display: flex;
+  display: inline-flex;
   font-size: 65%;
+}
+
+.search article .sponsor-label + .cat-links {
+  display: inline-block;
 }
 
 .sponsor-label + .page-title::before, .sponsor-label + .page-title::after,
@@ -240,31 +330,22 @@ amp-script .sponsor-label .flag {
   margin-bottom: 0;
 }
 
-/* stylelint-disable selector-type-no-unknown  */
-.wpnbha .sponsor-label,
-amp-script .wpnbha .sponsor-label,
-.wp-block-newspack-blocks-carousel .sponsor-label,
-amp-script .wp-block-newspack-blocks-carousel .sponsor-label {
-  display: flex;
-}
+/* stylelint-disable selector-type-no-unknown */
 .wpnbha .sponsor-logos,
 amp-script .wpnbha .sponsor-logos,
-.wp-block-newspack-blocks-carousel .sponsor-logos,
-amp-script .wp-block-newspack-blocks-carousel .sponsor-logos {
+.wpnbpc .sponsor-logos,
+amp-script .wpnbpc .sponsor-logos {
   border: 0;
-  padding: 0;
-}
-
-.wpnbha .sponsor-logos,
-amp-script .wpnbha .sponsor-logos {
-  margin: 0.125rem 0 0.25rem;
-  width: 100%;
-}
-
-/* stylelint-enable  */
-.wp-block-newspack-blocks-carousel .sponsor-byline {
-  color: #fff;
-}
-.wp-block-newspack-blocks-carousel .sponsor-logos {
   margin: 0;
+}
+.wpnbha .sponsor-logos > *,
+amp-script .wpnbha .sponsor-logos > *,
+.wpnbpc .sponsor-logos > *,
+amp-script .wpnbpc .sponsor-logos > * {
+  margin: 0;
+}
+
+/* stylelint-enable */
+.wpnbpc .sponsor-byline {
+  color: #fff;
 }

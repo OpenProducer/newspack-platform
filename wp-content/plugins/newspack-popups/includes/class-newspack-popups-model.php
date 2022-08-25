@@ -121,7 +121,7 @@ final class Newspack_Popups_Model {
 		foreach ( $options as $key => $value ) {
 			switch ( $key ) {
 				case 'frequency':
-					if ( ! in_array( $value, [ 'once', 'daily', 'always' ] ) ) {
+					if ( ! in_array( $value, [ 'once', 'daily', 'always', 'preset_1', 'custom' ] ) ) {
 						return new \WP_Error(
 							'newspack_popups_invalid_option_value',
 							esc_html__( 'Invalid frequency value.', 'newspack-popups' ),
@@ -226,6 +226,10 @@ final class Newspack_Popups_Model {
 				'display_title'                  => filter_input( INPUT_GET, 'n_ti', FILTER_VALIDATE_BOOLEAN ),
 				'hide_border'                    => filter_input( INPUT_GET, 'n_hb', FILTER_VALIDATE_BOOLEAN ),
 				'frequency'                      => filter_input( INPUT_GET, 'n_fr', FILTER_SANITIZE_STRING ),
+				'frequency_max'                  => filter_input( INPUT_GET, 'n_fm', FILTER_SANITIZE_STRING ),
+				'frequency_start'                => filter_input( INPUT_GET, 'n_fs', FILTER_SANITIZE_STRING ),
+				'frequency_between'              => filter_input( INPUT_GET, 'n_fb', FILTER_SANITIZE_STRING ),
+				'frequency_reset'                => filter_input( INPUT_GET, 'n_ft', FILTER_SANITIZE_STRING ),
 				'overlay_color'                  => filter_input( INPUT_GET, 'n_oc', FILTER_SANITIZE_STRING ),
 				'overlay_opacity'                => filter_input( INPUT_GET, 'n_oo', FILTER_SANITIZE_STRING ),
 				'overlay_size'                   => filter_input( INPUT_GET, 'n_os', FILTER_SANITIZE_STRING ),
@@ -347,6 +351,10 @@ final class Newspack_Popups_Model {
 			'display_title'                  => get_post_meta( $id, 'display_title', true ),
 			'hide_border'                    => get_post_meta( $id, 'hide_border', true ),
 			'frequency'                      => get_post_meta( $id, 'frequency', true ),
+			'frequency_max'                  => get_post_meta( $id, 'frequency_max', true ),
+			'frequency_start'                => get_post_meta( $id, 'frequency_start', true ),
+			'frequency_between'              => get_post_meta( $id, 'frequency_between', true ),
+			'frequency_reset'                => get_post_meta( $id, 'frequency_reset', true ),
 			'overlay_color'                  => get_post_meta( $id, 'overlay_color', true ),
 			'overlay_opacity'                => get_post_meta( $id, 'overlay_opacity', true ),
 			'overlay_size'                   => get_post_meta( $id, 'overlay_size', true ),
@@ -386,6 +394,10 @@ final class Newspack_Popups_Model {
 				'display_title'                  => false,
 				'hide_border'                    => false,
 				'frequency'                      => 'always',
+				'frequency_max'                  => 0,
+				'frequency_start'                => 0,
+				'frequency_between'              => 0,
+				'frequency_reset'                => 'month',
 				'overlay_color'                  => '#000000',
 				'overlay_opacity'                => 30,
 				'overlay_size'                   => 'medium',
@@ -761,15 +773,18 @@ final class Newspack_Popups_Model {
 		 * @param string $class_name The class name to look for.
 		 */
 		$newspack_form_class = apply_filters( 'newspack_campaigns_form_class', 'newspack-subscribe-form' );
+		$esp                 = null;
 
 		if ( preg_match( '/wp-block-jetpack-mailchimp/', $body ) !== 0 ) {
 			// Jetpack Mailchimp block.
 			$subscribe_form_selector = apply_filters( 'newspack_campaigns_form_selector', '.wp-block-jetpack-mailchimp form' );
 			$email_form_field_name   = apply_filters( 'newspack_campaigns_email_form_field_name', 'email', $subscribe_form_selector );
+			$esp                     = 'mailchimp';
 		} elseif ( preg_match( '/mc4wp-form/', $body ) !== 0 ) {
 			// MC4WP form.
 			$subscribe_form_selector = apply_filters( 'newspack_campaigns_form_selector', '.mc4wp-form' );
 			$email_form_field_name   = apply_filters( 'newspack_campaigns_email_form_field_name', 'EMAIL', $subscribe_form_selector );
+			$esp                     = 'mailchimp';
 		} elseif ( preg_match( '/\[gravityforms\s(.*)\]/', $body, $gravity_form_attributes ) !== 0 && class_exists( '\GFAPI' ) ) {
 			// Gravity Forms block produces a shortcode. Check for a form ID attribute on the shortcode.
 			$has_id = preg_match( '/id="(\d*)"/', $gravity_form_attributes[1], $id_matches );
@@ -831,16 +846,22 @@ final class Newspack_Popups_Model {
 			],
 		];
 		if ( $subscribe_form_selector && $email_form_field_name ) {
+			$extra_params = [
+				'popup_id'            => esc_attr( self::canonize_popup_id( $popup['id'] ) ),
+				'cid'                 => 'CLIENT_ID(' . esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
+				'mailing_list_status' => 'subscribed',
+				'email'               => '${formFields[' . esc_attr( $email_form_field_name ) . ']}',
+			];
+
+			if ( ! empty( $esp ) ) {
+				$extra_params['esp'] = $esp;
+			}
+
 			$amp_analytics_config['triggers']['formSubmitSuccess'] = [
 				'on'             => 'amp-form-submit-success',
 				'request'        => 'event',
 				'selector'       => '#' . esc_attr( $element_id ) . ' ' . esc_attr( $subscribe_form_selector ),
-				'extraUrlParams' => [
-					'popup_id'            => esc_attr( self::canonize_popup_id( $popup['id'] ) ),
-					'cid'                 => 'CLIENT_ID(' . esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
-					'mailing_list_status' => 'subscribed',
-					'email'               => '${formFields[' . esc_attr( $email_form_field_name ) . ']}',
-				],
+				'extraUrlParams' => $extra_params,
 			];
 		}
 
@@ -1036,7 +1057,6 @@ final class Newspack_Popups_Model {
 		$endpoint             = self::get_reader_endpoint();
 		$display_title        = $popup['options']['display_title'];
 		$hide_border          = $popup['options']['hide_border'];
-		$hidden_fields        = self::get_hidden_fields( $popup );
 		$is_newsletter_prompt = self::has_newsletter_prompt( $popup );
 		$classes              = [ 'newspack-popup' ];
 		$classes[]            = 'above_header' === $popup['options']['placement'] ? 'newspack-above-header-popup' : null;
@@ -1116,11 +1136,13 @@ final class Newspack_Popups_Model {
 		$no_overlay_background = $popup['options']['no_overlay_background'];
 		$hidden_fields         = self::get_hidden_fields( $popup );
 		$is_newsletter_prompt  = self::has_newsletter_prompt( $popup );
+		$has_featured_image    = has_post_thumbnail( $popup['id'] );
 		$classes               = array( 'newspack-lightbox', 'newspack-popup', 'newspack-lightbox-placement-' . $popup['options']['placement'], 'newspack-lightbox-size-' . $overlay_size );
 		$classes[]             = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]             = $hide_border ? 'newspack-lightbox-no-border' : null;
 		$classes[]             = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;
 		$classes[]             = $no_overlay_background ? 'newspack-lightbox-no-overlay' : null;
+		$classes[]             = $has_featured_image ? 'newspack-lightbox-featured-image' : null;
 		$wrapper_classes       = [ 'newspack-popup-wrapper' ];
 		$wrapper_classes[]     = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
 		$is_scroll_triggered   = 'scroll' === $popup['options']['trigger_type'];
@@ -1144,18 +1166,25 @@ final class Newspack_Popups_Model {
 			tabindex="0"
 			id="<?php echo esc_attr( $element_id ); ?>"
 		>
-			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-popup-status="<?php echo esc_attr( $popup['status'] ); ?>" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>">
-				<div class="newspack-popup">
-					<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
-						<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
+			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-popup-status="<?php echo esc_attr( $popup['status'] ); ?>" style="<?php echo ! $hide_border ? esc_attr( self::container_style( $popup ) ) : ''; ?>">
+				<div class="newspack-popup" style="<?php echo $hide_border ? esc_attr( self::container_style( $popup ) ) : ''; ?>">
+					<?php if ( $has_featured_image ) : ?>
+						<div class="newspack-popup__featured-image">
+							<?php echo get_the_post_thumbnail( $popup['id'], 'large' ); ?>
+						</div>
 					<?php endif; ?>
-					<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<div class="newspack-popup__content">
+						<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
+							<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
+						<?php endif; ?>
+						<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					</div>
 					<form class="popup-dismiss-form <?php echo esc_attr( self::get_form_class( 'dismiss', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?>"
 						method="POST"
 						action-xhr="<?php echo esc_url( $endpoint ); ?>"
 						target="_top">
 						<?php echo $hidden_fields; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" class="newspack-lightbox__close" aria-label="<?php esc_html_e( 'Close Pop-up', 'newspack-popups' ); // phpcs:ignore WordPressVIPMinimum.Security.ProperEscapingFunction.htmlAttrNotByEscHTML ?>" style="<?php echo esc_attr( self::container_style( $popup ) ); ?>">
+						<button on="tap:<?php echo esc_attr( $element_id ); ?>.hide" class="newspack-lightbox__close" aria-label="<?php esc_html_e( 'Close Pop-up', 'newspack-popups' ); // phpcs:ignore WordPressVIPMinimum.Security.ProperEscapingFunction.htmlAttrNotByEscHTML ?>">
 							<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false"><path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/></svg>
 						</button>
 					</form>
@@ -1279,6 +1308,7 @@ final class Newspack_Popups_Model {
 	 * @return string Inline styles attribute.
 	 */
 	public static function container_style( $popup ) {
+		$hide_border      = $popup['options']['hide_border'];
 		$background_color = $popup['options']['background_color'];
 		$foreground_color = self::foreground_color_for_background( $background_color );
 		return 'background-color:' . $background_color . ';color:' . $foreground_color;
@@ -1322,6 +1352,11 @@ final class Newspack_Popups_Model {
 			name="is_newsletter_popup"
 			type="hidden"
 			value="<?php echo esc_attr( self::has_newsletter_prompt( $popup ) ); ?>"
+		/>
+		<input
+			name="dismiss"
+			type="hidden"
+			value="1"
 		/>
 		<?php
 		return ob_get_clean();

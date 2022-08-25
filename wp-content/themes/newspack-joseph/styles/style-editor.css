@@ -1,15 +1,11 @@
 @charset "UTF-8";
-/*!
-Newspack Joseph Editor Styles
-*/
-/** === Includes === */
-/** === Includes === */
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
+/** === Includes === */
 /** === Editor Frame === */
 body {
   background-color: #fff;
@@ -645,7 +641,7 @@ div[data-align=full] > .wp-block-image figcaption {
   padding-left: calc( 2 * 1rem );
 }
 .wp-block-separator.has-background, .wp-block-separator.has-text-color {
-  border-color: currentColor;
+  border-color: currentcolor;
 }
 .wp-block-separator.has-background.is-style-dots::before, .wp-block-separator.has-text-color.is-style-dots::before {
   color: inherit;
@@ -1224,11 +1220,33 @@ ul.wp-block-archives li,
   font-family: "Old Standard TT", georgia, serif;
 }
 
+/** === Reader Registration Block === */
+.newspack-registration button {
+  font-family: "Old Standard TT", georgia, serif;
+}
+
 /** === Ad Unit Block === */
 .wp-block-newspack-ads-blocks-ad-unit > div {
   align-items: center;
   display: flex;
   justify-content: center;
+}
+
+/** === Newspack Listings === */
+.wpnbha .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.wpnbpc .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.newspack-listings__curated-list .featured-listing .newspack-listings__listing-title::before {
+  border: calc(0.25em + 1px) solid #36f;
+  border-top: 0;
+  border-bottom-color: transparent;
+  box-sizing: border-box;
+  content: "";
+  display: inline-block;
+  height: 0.8em;
+  margin-right: 0.3em;
+  position: relative;
+  top: 0.05em;
+  width: 0.5em;
 }
 
 /** === Classic Editor === */
@@ -1389,6 +1407,10 @@ ul.wp-block-archives li,
   background-image: linear-gradient(135deg, rgb(221, 221, 221) 0%, rgb(255, 255, 255) 100%);
 }
 
+/*!
+Newspack Joseph Editor Styles
+*/
+/** === Includes === */
 /* Paragraph */
 .has-drop-cap:not(:focus)::first-letter {
   font-family: "Old Standard TT", georgia, serif;
@@ -1397,27 +1419,27 @@ ul.wp-block-archives li,
 
 /* Columns */
 .wp-block .wp-block-columns.is-style-borders [data-type="core/column"] {
-  border-color: currentColor;
+  border-color: currentcolor;
 }
 @media only screen and (min-width: 600px) {
   .wp-block .wp-block-columns.is-style-borders [data-type="core/column"]::after {
-    border-color: currentColor;
+    border-color: currentcolor;
   }
 }
 
 .wp-block-group.is-style-border {
-  border: 3px double currentColor;
+  border: 3px double currentcolor;
 }
 
 /* Separator */
 .wp-block-separator:not(.is-style-dots) {
   background: transparent !important;
-  border-color: currentColor;
+  border-color: currentcolor;
   border-top-style: double;
   border-top-width: 3px;
 }
 .wp-block-separator.is-style-dots::before {
-  color: currentColor;
+  color: currentcolor;
 }
 
 /* Pullquote */
@@ -1472,7 +1494,7 @@ ul.wp-block-archives li,
 }
 .article-section-title::after,
 .accent-header::after {
-  background-color: currentColor;
+  background-color: currentcolor;
   content: "";
   flex: 1 0 0.25rem;
   height: 1px;
@@ -1482,7 +1504,7 @@ ul.wp-block-archives li,
 
 .wpnbha.has-text-align-right .article-section-title::before,
 .wpnbha.has-text-align-center .article-section-title::before {
-  background-color: currentColor;
+  background-color: currentcolor;
   content: "";
   flex: 1 0 0.25rem;
   height: 1px;
@@ -1494,7 +1516,7 @@ ul.wp-block-archives li,
 }
 
 .wp-block-newspack-blocks-homepage-articles.is-style-borders article {
-  border-color: currentColor;
+  border-color: currentcolor;
 }
 .wp-block-newspack-blocks-homepage-articles > .block-editor-rich-text {
   overflow-x: hidden;

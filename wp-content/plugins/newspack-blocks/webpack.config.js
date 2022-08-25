@@ -2,6 +2,7 @@
  **** WARNING: No ES6 modules here. Not transpiled! ****
  */
 /* eslint-disable import/no-nodejs-modules */
+/* eslint-disable @typescript-eslint/no-var-requires */
 
 /**
  * External dependencies
@@ -45,12 +46,15 @@ const editorScript = [
 	...blockScripts( 'editor', path.join( __dirname, 'src' ), blocks ),
 ];
 
+const placeholderBlocksScript = path.join( __dirname, 'src', 'setup', 'placeholder-blocks' );
+
 const blockStylesScript = [ path.join( __dirname, 'src', 'block-styles', 'view' ) ];
 
 const webpackConfig = getBaseWebpackConfig(
 	{ WP: true },
 	{
 		entry: {
+			placeholder_blocks: placeholderBlocksScript,
 			editor: editorScript,
 			block_styles: blockStylesScript,
 			donateStreamlined: path.join( __dirname, 'src/blocks/donate/streamlined' ),

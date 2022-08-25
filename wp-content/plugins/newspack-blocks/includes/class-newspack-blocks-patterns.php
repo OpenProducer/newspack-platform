@@ -45,7 +45,7 @@ class Newspack_Blocks_Patterns {
 			$donations_configured = false;
 			if ( class_exists( 'Newspack\Donations' ) ) {
 				$settings = Newspack\Donations::get_donation_settings();
-				if ( ! is_wp_error( $settings ) && $settings['created'] ) {
+				if ( ! is_wp_error( $settings ) ) {
 					$donations_configured = true;
 				}
 			}
@@ -105,7 +105,8 @@ class Newspack_Blocks_Patterns {
 					'homepage-posts-27',
 					'homepage-posts-28',
 					'homepage-posts-29',
-					'homepage-posts-30'
+					'homepage-posts-30',
+					'homepage-posts-31'
 				);
 			}
 

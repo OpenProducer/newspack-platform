@@ -92,7 +92,6 @@ final class Blocks {
 
 			// Self-serve listings features are gated behind an environment variable.
 			'self_serve_enabled' => Products::is_active(),
-			'featured_enabled'   => Featured::is_active(),
 		];
 
 		if ( Products::is_active() ) {

@@ -411,9 +411,7 @@ function get_term_classes( $post_id = null ) {
 	);
 
 	// If the item is featured, append class names for its featured status and priority level.
-	if ( Featured::is_active() ) {
-		$base_classes = Featured::add_featured_classes( $base_classes );
-	}
+	$base_classes = Featured::add_featured_classes( $base_classes );
 
 	return array_merge(
 		$base_classes,

@@ -54,6 +54,10 @@ class Analytics {
 		add_action( 'woocommerce_login_form_end', [ __CLASS__, 'prepare_login_events' ] );
 		add_action( 'woocommerce_register_form_end', [ __CLASS__, 'prepare_registration_events' ] );
 		add_action( 'woocommerce_after_checkout_registration_form', [ __CLASS__, 'prepare_checkout_registration_events' ] );
+
+		// Reader Activation hooks.
+		add_action( 'newspack_registered_reader', [ __CLASS__, 'newspack_registered_reader' ], 10, 5 );
+		add_action( 'newspack_newsletters_add_contact', [ __CLASS__, 'newspack_newsletters_add_contact' ], 10, 4 );
 	}
 
 	/**
@@ -862,6 +866,91 @@ class Analytics {
 			} )();
 		</script>
 		<?php
+	}
+
+	/**
+	 * When a new reader registers, sent an event to GA.
+	 *
+	 * @param string         $email         Email address.
+	 * @param bool           $authenticate  Whether to authenticate after registering.
+	 * @param false|int      $user_id       The created user id.
+	 * @param false|\WP_User $existing_user The existing user object.
+	 * @param array          $metadata      Metadata.
+	 */
+	public static function newspack_registered_reader( $email, $authenticate, $user_id, $existing_user, $metadata ) {
+		if ( $existing_user ) {
+			return;
+		}
+		$event_spec = [
+			'category' => __( 'Newspack Reader Activation', 'newspack' ),
+			'action'   => __( 'Registration', 'newspack' ),
+		];
+
+		if ( isset( $metadata['registration_method'] ) ) {
+			$event_spec['action'] .= ' (' . $metadata['registration_method'] . ')';
+		}
+
+		if ( isset( $metadata['lists'] ) ) {
+			$event_spec['label'] = __( 'Signed up for lists:', 'newspack' ) . ' ' . implode( ', ', $metadata['lists'] );
+		}
+
+		if ( isset( $metadata['current_page_url'] ) ) {
+			$parsed_url = \wp_parse_url( $metadata['current_page_url'] );
+			if ( $parsed_url ) {
+				if ( isset( $parsed_url['host'] ) ) {
+					$event_spec['host'] = $parsed_url['host'];
+				}
+				if ( isset( $parsed_url['path'] ) ) {
+					$event_spec['path'] = $parsed_url['path'];
+				}
+			}
+		}
+
+		\Newspack\Google_Services_Connection::send_custom_event( $event_spec );
+
+		if ( Analytics_Wizard::ntg_events_enabled() ) {
+			\Newspack\Google_Services_Connection::send_custom_event(
+				[
+					'category' => __( 'NTG account', 'newspack' ),
+					'action'   => __( 'registration', 'newspack' ),
+					'label'    => 'success',
+				]
+			);
+		}
+	}
+
+	/**
+	 * When a reader signs up for the newsletter, send an event to GA.
+	 *
+	 * @param string         $provider The provider name.
+	 * @param array          $contact  {
+	 *    Contact information.
+	 *
+	 *    @type string   $email                 Contact email address.
+	 *    @type string   $name                  Contact name. Optional.
+	 *    @type string   $existing_contact_data Existing contact data, if updating a contact. The hook will be also called when
+	 *    @type string[] $metadata              Contact additional metadata. Optional.
+	 * }
+	 * @param string[]|false $lists    Array of list IDs to subscribe the contact to.
+	 * @param bool|WP_Error  $result   True if the contact was added or error if failed.
+	 */
+	public static function newspack_newsletters_add_contact( $provider, $contact, $lists, $result ) {
+		if (
+			! Analytics_Wizard::ntg_events_enabled()
+			|| ! method_exists( '\Newspack_Newsletters_Subscription', 'get_contact_data' )
+			// Don't send events for updates to a contact.
+			|| $contact['existing_contact_data']
+		) {
+			return;
+		}
+
+		\Newspack\Google_Services_Connection::send_custom_event(
+			[
+				'category' => __( 'NTG newsletter', 'newspack' ),
+				'action'   => __( 'newsletter signup', 'newspack' ),
+				'label'    => 'success',
+			]
+		);
 	}
 }
 new Analytics();

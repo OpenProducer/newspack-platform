@@ -1,5 +1,5 @@
-@import '../../../shared/sass/variables';
-@import '../../../shared/sass/mixins';
+@use '../../../shared/sass/variables';
+@use '../../../shared/sass/mixins';
 
 div.wp-block-columns {
 	gap: 32px;
@@ -8,7 +8,7 @@ div.wp-block-columns {
 		gap: 64px;
 	}
 
-	@include media( tabletonly ) {
+	@include mixins.media( tabletonly ) {
 		&.is-not-stacked-on-mobile {
 			gap: 20px;
 
@@ -20,7 +20,7 @@ div.wp-block-columns {
 }
 
 .wp-block-columns {
-	@include media( tablet ) {
+	@include mixins.media( tablet ) {
 		&.is-style-first-col-to-second .wp-block-column:nth-child( 2 ) {
 			order: -1;
 		}
@@ -38,7 +38,7 @@ div.wp-block-columns {
 			position: relative;
 
 			&::after {
-				border: 0 solid $color__border;
+				border: 0 solid variables.$color__border;
 				border-top-width: 1px;
 				bottom: -32px;
 				content: '';
@@ -51,7 +51,7 @@ div.wp-block-columns {
 				display: none;
 			}
 
-			@include media( tablet ) {
+			@include mixins.media( tablet ) {
 				margin-bottom: 0;
 
 				&::after {
@@ -65,7 +65,7 @@ div.wp-block-columns {
 			}
 		}
 
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			&.is-style-first-col-to-second,
 			&.is-style-first-col-to-third {
 				.wp-block-column:first-child::after {
@@ -91,7 +91,7 @@ div.wp-block-columns {
 					right: -20px;
 					top: 0;
 
-					@include media( tablet ) {
+					@include mixins.media( tablet ) {
 						right: -32px;
 					}
 				}

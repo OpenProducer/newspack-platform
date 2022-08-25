@@ -40,8 +40,8 @@ function Edit( { attributes, setAttributes } ) {
 	const provider = providers.find( p => p.id.toString() === attributes.provider );
 	const unit = provider?.units?.find( u => u.value.toString() === attributes.ad_unit );
 	const sizes = unit?.sizes || [];
-	const containerWidth = Math.max( ...sizes.map( s => s[ 0 ] ) ) || 300;
-	const containerHeight = Math.max( ...sizes.map( s => s[ 1 ] ) ) || 100;
+	const containerWidth = sizes.length ? Math.max( ...sizes.map( s => s[ 0 ] ) ) : 300;
+	const containerHeight = sizes.length ? Math.max( ...sizes.map( s => s[ 1 ] ) ) : 200;
 
 	useEffect( async () => {
 		// Legacy attribute.
@@ -94,23 +94,23 @@ function Edit( { attributes, setAttributes } ) {
 						className="newspack-ads-ad-block-placeholder"
 						style={ { width: containerWidth, height: containerHeight } }
 					>
-						{ sizes?.length > 0 && (
-							<Fragment>
-								<SVG
-									className="newspack-ads-ad-block-mock"
-									width={ containerWidth }
-									viewBox={ '0 0 ' + containerWidth + ' ' + containerHeight }
-								>
-									<rect width={ containerWidth } height={ containerHeight } strokeDasharray="2" />
-									<line x1="0" y1="0" x2="100%" y2="100%" strokeDasharray="2" />
-								</SVG>
-								<span className="newspack-ads-ad-block-ad-label">
-									{ providers.length > 1 && `${ provider.name } - ` } { unit.name }
-									<br />
-									{ sizes.map( size => `${ size[ 0 ] }x${ size[ 1 ] }` ).join( ', ' ) }
-								</span>
-							</Fragment>
-						) }
+						<Fragment>
+							<SVG
+								className="newspack-ads-ad-block-mock"
+								width={ containerWidth }
+								viewBox={ '0 0 ' + containerWidth + ' ' + containerHeight }
+							>
+								<rect width={ containerWidth } height={ containerHeight } strokeDasharray="2" />
+								<line x1="0" y1="0" x2="100%" y2="100%" strokeDasharray="2" />
+							</SVG>
+							<span className="newspack-ads-ad-block-ad-label">
+								{ providers.length > 1 && `${ provider.name } - ` } { unit.name }
+								<br />
+								{ sizes.length
+									? sizes.map( size => `${ size[ 0 ] }x${ size[ 1 ] }` ).join( ', ' )
+									: __( 'Unknown size', 'newspack-ads' ) }
+							</span>
+						</Fragment>
 						{ inFlight && <Spinner /> }
 					</div>
 				</Fragment>

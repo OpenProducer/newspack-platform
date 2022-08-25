@@ -41,6 +41,10 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 					'methods'             => WP_REST_Server::EDITABLE,
 					'callback'            => [ $this, 'api_process_donation' ],
 					'args'                => [
+						'captchaToken'      => [
+							'sanitize_callback' => 'sanitize_text_field',
+							'required'          => false,
+						],
 						'tokenData'         => [
 							'type'       => 'object',
 							'properties' => [
@@ -95,6 +99,65 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 	 * @return WP_REST_Response
 	 */
 	public function api_process_donation( $request ) {
+		// If reCaptcha is available, verify the user action.
+		$use_captcha = \Newspack\Stripe_Connection::can_use_captcha();
+		if ( $use_captcha ) {
+			$captcha_token = $request->get_param( 'captchaToken' );
+			if ( ! $captcha_token ) {
+				return rest_ensure_response(
+					[
+						'error' => __( 'Missing or invalid captcha token.', 'newspack-blocks' ),
+					]
+				);
+			}
+
+			$stripe_settings = \Newspack\Stripe_Connection::get_stripe_data();
+			$captcha_secret  = $stripe_settings['captchaSiteSecret'];
+			$captcha_verify  = wp_safe_remote_post(
+				add_query_arg(
+					[
+						'secret'   => $captcha_secret,
+						'response' => $captcha_token,
+					],
+					'https://www.google.com/recaptcha/api/siteverify'
+				)
+			);
+
+			// If the reCaptcha verification request fails.
+			if ( is_wp_error( $captcha_verify ) ) {
+				return rest_ensure_response(
+					[
+						'error' => wp_strip_all_tags( $captcha_verify->get_error_message() ),
+					]
+				);
+			}
+
+			$captcha_verify = json_decode( $captcha_verify['body'], true );
+
+			// If the reCaptcha verification request succeeds, but with error.
+			if ( ! boolval( $captcha_verify['success'] ) ) {
+				$error = isset( $captcha_verify['error-codes'] ) ? reset( $captcha_verify['error-codes'] ) : __( 'Error validating captcha.', 'newspack-blocks' );
+				return rest_ensure_response(
+					[
+						// Translators: error message for reCaptcha.
+						'error' => sprintf( __( 'reCaptcha error: %s', 'newspack-blocks' ), $error ),
+					]
+				);
+			}
+
+			// If the reCaptcha verification score is below our threshold for valid user input.
+			if (
+				isset( $captcha_verify['score'] ) &&
+				Newspack_Blocks::DONATE_STREAMLINED_CAPTCHA_THRESHOLD > floatval( $captcha_verify['score'] )
+			) {
+				return rest_ensure_response(
+					[
+						'error' => __( 'User action failed captcha challenge.', 'newspack-blocks' ),
+					]
+				);
+			}
+		}
+
 		$payment_metadata = [
 			'referer' => wp_get_referer(),
 		];
@@ -136,9 +199,10 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 				'full_name'         => $full_name,
 				'amount'            => $request->get_param( 'amount' ),
 				'client_metadata'   => [
-					'clientId'        => $request->get_param( 'clientId' ),
-					'newsletterOptIn' => $request->get_param( 'newsletter_opt_in' ),
-					'userId'          => $user_id,
+					'clientId'         => $request->get_param( 'clientId' ),
+					'newsletterOptIn'  => $request->get_param( 'newsletter_opt_in' ),
+					'userId'           => $user_id,
+					'current_page_url' => \wp_get_referer(),
 				],
 				'payment_metadata'  => $payment_metadata,
 				'payment_method_id' => $request->get_param( 'payment_method_id' ),

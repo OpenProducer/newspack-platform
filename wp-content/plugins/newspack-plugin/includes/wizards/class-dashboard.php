@@ -100,13 +100,13 @@ class Dashboard extends Wizard {
 				'slug'        => 'engagement',
 				'name'        => Wizards::get_name( 'engagement' ),
 				'url'         => Wizards::get_url( 'engagement' ),
-				'description' => Wizards::get_description( 'engagement' ),
+				'description' => esc_html__( 'Newsletters, commenting, social, recirculation', 'newspack' ),
 			],
 			[
 				'slug'        => 'popups',
 				'name'        => Wizards::get_name( 'popups' ),
 				'url'         => Wizards::get_url( 'popups' ),
-				'description' => Wizards::get_description( 'popups' ),
+				'description' => esc_html__( 'Reach your readers with configurable campaigns', 'newspack' ),
 			],
 			[
 				'slug'        => 'connections',
@@ -126,24 +126,6 @@ class Dashboard extends Wizard {
 	 */
 	public function get_name() {
 		return esc_html__( 'Newspack', 'newspack' );
-	}
-
-	/**
-	 * Get the description of this wizard.
-	 *
-	 * @return string The wizard description.
-	 */
-	public function get_description() {
-		return esc_html__( 'The Newspack hub', 'newspack' );
-	}
-
-	/**
-	 * Get the duration of this wizard.
-	 *
-	 * @return string A description of the expected duration (e.g. '10 minutes').
-	 */
-	public function get_length() {
-		return esc_html__( '1 day', 'newspack' );
 	}
 
 	/**

@@ -1,6 +1,6 @@
-@import '../../shared/sass/variables';
-@import '../../shared/sass/mixins';
-@import '../../shared/sass/preview';
+@use '../../shared/sass/variables';
+@use '../../shared/sass/mixins';
+@use '../../shared/sass/preview';
 
 .wpnbha {
 	margin-bottom: 1em;
@@ -19,7 +19,7 @@
 
 	/* Section header */
 	.article-section-title {
-		font-size: $font__size-sm;
+		font-size: variables.$font__size-sm;
 		margin-bottom: 0.5em;
 		width: 100%; // make sure this isn't caught up in the flex styles.
 	}
@@ -39,13 +39,13 @@
 		article {
 			flex-basis: 100%;
 
-			@include media( tablet ) {
+			@include mixins.media( tablet ) {
 				margin-bottom: 1em;
 			}
 		}
 	}
 
-	@include media( mobile ) {
+	@include mixins.media( mobile ) {
 		&.columns-3 article,
 		&.columns-6 article {
 			flex-basis: calc( 33.333% - 16px );
@@ -62,7 +62,7 @@
 		}
 	}
 
-	@include media( tablet ) {
+	@include mixins.media( tablet ) {
 		@for $i from 2 through 6 {
 			&.columns-#{ $i } article,
 			&.columns-#{ $i } article:last-of-type {
@@ -87,7 +87,7 @@
 	}
 
 	figcaption {
-		font-size: $font__size-xxs;
+		font-size: variables.$font__size-xxs;
 	}
 
 	&.image-alignleft,
@@ -107,14 +107,14 @@
 			display: block;
 		}
 
-		@include media( mobile ) {
+		@include mixins.media( mobile ) {
 			&.mobile-stack .post-has-image {
 				display: flex;
 			}
 		}
 
 		// Image scale
-		@include media( mobile ) {
+		@include mixins.media( mobile ) {
 			&.is-4 {
 				.post-thumbnail {
 					flex-basis: 75%;
@@ -168,7 +168,7 @@
 		}
 	}
 
-	@include media( mobile ) {
+	@include mixins.media( mobile ) {
 		&.mobile-stack.image-alignleft .post-thumbnail {
 			margin-right: 1em;
 		}
@@ -277,7 +277,7 @@
 				width: 100%;
 				z-index: 2;
 
-				@include media( desktop ) {
+				@include mixins.media( desktop ) {
 					padding: 2rem 1.5rem;
 				}
 			}
@@ -310,7 +310,7 @@
 			text-overflow: ellipsis;
 			z-index: 2;
 
-			@include media( desktop ) {
+			@include mixins.media( desktop ) {
 				padding: 0 1.5rem;
 			}
 		}
@@ -365,12 +365,8 @@
 	&.has-text-align-center {
 		.cat-links,
 		.entry-meta,
-		.sponsor-logos {
+		.entry-sponsors {
 			justify-content: center;
-		}
-
-		.sponsor-logos > * {
-			margin: 0;
 		}
 
 		&.image-alignbehind figcaption,
@@ -383,8 +379,10 @@
 	&.has-text-align-right {
 		.cat-links,
 		.entry-meta,
+		.entry-sponsors,
 		.sponsor-logos {
 			justify-content: flex-end;
+			text-align: right;
 		}
 
 		figcaption {
@@ -395,8 +393,7 @@
 			margin-left: 1.5em;
 		}
 
-		.entry-meta .byline:not( :last-child ),
-		.sponsor-logos > * {
+		.entry-meta .byline:not( :last-child ) {
 			margin: 0;
 		}
 	}
@@ -408,9 +405,16 @@ amp-script .wpnbha {
 	/* Article meta */
 	.cat-links {
 		display: flex;
-		font-size: $font__size-xxs;
+		flex-wrap: wrap;
+		font-size: variables.$font__size-xxs;
 		font-weight: bold;
 		margin: 0 0 0.5em;
+
+		&.sponsor-label {
+			align-items: center;
+			display: flex;
+			gap: 0.5em;
+		}
 
 		a {
 			text-decoration: none;
@@ -419,6 +423,30 @@ amp-script .wpnbha {
 				text-decoration: underline;
 			}
 		}
+	}
+
+	.entry-sponsors {
+		align-items: center;
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.25em;
+		width: 100%;
+
+		&.plus-author {
+			font-size: 0.9em;
+
+			&:not( :last-child ) {
+				margin-bottom: 0.5rem;
+			}
+		}
+	}
+
+	.sponsor-logos {
+		align-items: center;
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		line-height: 1;
 	}
 }
 /* stylelint-enable */
@@ -442,7 +470,7 @@ amp-script .wpnbha {
 			width: 25px;
 		}
 
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.6em;
 			}
@@ -460,7 +488,7 @@ amp-script .wpnbha {
 		.entry-title {
 			line-height: 1.1;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			article .avatar {
 				height: 2.4em;
 				width: 2.4em;
@@ -481,12 +509,12 @@ amp-script .wpnbha {
 		.entry-title {
 			font-size: 2.6em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 3.6em;
 			}
 		}
-		@include media( desktop ) {
+		@include mixins.media( desktop ) {
 			.entry-title {
 				font-size: 4.8em;
 			}
@@ -497,12 +525,12 @@ amp-script .wpnbha {
 		.entry-title {
 			font-size: 2.4em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 3.4em;
 			}
 		}
-		@include media( desktop ) {
+		@include mixins.media( desktop ) {
 			.entry-title {
 				font-size: 4.2em;
 			}
@@ -513,12 +541,12 @@ amp-script .wpnbha {
 		.entry-title {
 			font-size: 2.2em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 3em;
 			}
 		}
-		@include media( desktop ) {
+		@include mixins.media( desktop ) {
 			.entry-title {
 				font-size: 3.6em;
 			}
@@ -529,7 +557,7 @@ amp-script .wpnbha {
 		.entry-title {
 			font-size: 2em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 2.4em;
 			}
@@ -538,7 +566,7 @@ amp-script .wpnbha {
 				width: 48px;
 			}
 		}
-		@include media( desktop ) {
+		@include mixins.media( desktop ) {
 			.entry-title {
 				font-size: 3em;
 			}
@@ -552,7 +580,7 @@ amp-script .wpnbha {
 		.newspack-post-subtitle {
 			font-size: 1.4em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 2em;
 			}
@@ -561,7 +589,7 @@ amp-script .wpnbha {
 				width: 44px;
 			}
 		}
-		@include media( desktop ) {
+		@include mixins.media( desktop ) {
 			.entry-title {
 				font-size: 2.4em;
 			}
@@ -575,7 +603,7 @@ amp-script .wpnbha {
 		.newspack-post-subtitle {
 			font-size: 1.2em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.8em;
 			}
@@ -584,7 +612,7 @@ amp-script .wpnbha {
 				width: 40px;
 			}
 		}
-		@include media( desktop ) {
+		@include mixins.media( desktop ) {
 			.entry-title {
 				font-size: 2em;
 			}
@@ -605,7 +633,7 @@ amp-script .wpnbha {
 		.entry-meta {
 			font-size: 0.7em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.2em;
 			}
@@ -630,7 +658,7 @@ amp-script .wpnbha {
 			font-size: 0.7em;
 		}
 
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 0.9em;
 			}
@@ -654,7 +682,7 @@ amp-script .wpnbha {
 		.entry-meta {
 			font-size: 0.6em;
 		}
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.avatar {
 				height: 24px;
 				width: 24px;
@@ -680,7 +708,7 @@ amp-script .wpnbha {
 		}
 	}
 
-	@include media( mobile ) {
+	@include mixins.media( mobile ) {
 		@for $i from 2 through 6 {
 			&.columns-#{ $i } article {
 				padding-right: calc( ( 16px * #{$i} ) / ( #{$i} - 1 ) );
@@ -715,7 +743,7 @@ amp-script .wpnbha {
 		}
 	}
 
-	@include media( tablet ) {
+	@include mixins.media( tablet ) {
 		&.is-grid {
 			article {
 				border-width: 0 1px 0 0;

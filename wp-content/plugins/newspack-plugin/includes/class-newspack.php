@@ -62,6 +62,7 @@ final class Newspack {
 		}
 		define( 'NEWSPACK_ACTIVATION_TRANSIENT', '_newspack_activation_redirect' );
 		define( 'NEWSPACK_NRH_CONFIG', 'newspack_nrh_config' );
+		define( 'NEWSPACK_CLIENT_ID_COOKIE_NAME', 'newspack-cid' );
 	}
 
 	/**
@@ -82,12 +83,15 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-magic-link.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-woocommerce-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/my-account/class-woocommerce-my-account.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-oauth.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-services-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-mailchimp-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-fivetran-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-login.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-blocks.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-rss.php';
 
@@ -122,10 +126,11 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-amp-enhancements.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-newspack-image-credits.php';
 
-		// Integrations w/ third-party plugins.
+		/* Integrations with other plugins. */
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-jetpack.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-gravityforms.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/google-site-kit/class-googlesitekit.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-newspack-newsletters.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 

@@ -12,7 +12,7 @@ import { megaphone } from '@wordpress/icons';
 /**
  * External dependencies.
  */
-import { AutocompleteWithSuggestions } from 'newspack-components'; // TODO: update newspack-components package once this component lands
+import { AutocompleteWithSuggestions } from 'newspack-components';
 
 export const SinglePromptEditor = ( { attributes, setAttributes } ) => {
 	const [ loading, setLoading ] = useState( false );

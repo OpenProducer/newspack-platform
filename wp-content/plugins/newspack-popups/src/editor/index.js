@@ -30,8 +30,10 @@ import './style.scss';
 const mapDispatchToProps = dispatch => {
 	const { createNotice, removeNotice } = dispatch( 'core/notices' );
 	return {
-		onMetaFieldChange: ( key, value ) => {
-			dispatch( 'core/editor' ).editPost( { meta: { [ key ]: value } } );
+		onMetaFieldChange: ( metaToUpdate = {} ) => {
+			if ( 0 < Object.keys( metaToUpdate ).length ) {
+				dispatch( 'core/editor' ).editPost( { meta: metaToUpdate } );
+			}
 		},
 		createNotice,
 		removeNotice,

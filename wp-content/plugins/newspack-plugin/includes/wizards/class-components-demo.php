@@ -54,24 +54,6 @@ class Components_Demo extends Wizard {
 	}
 
 	/**
-	 * Get the description of this wizard.
-	 *
-	 * @return string The wizard description.
-	 */
-	public function get_description() {
-		return esc_html__( 'A temporary demo of components used to build Newspack', 'newspack' );
-	}
-
-	/**
-	 * Get the duration of this wizard.
-	 *
-	 * @return string A description of the expected duration (e.g. '10 minutes').
-	 */
-	public function get_length() {
-		return esc_html__( '2 minutes', 'newspack' );
-	}
-
-	/**
 	 * Enqueue Subscriptions Wizard scripts and styles.
 	 */
 	public function enqueue_scripts_and_styles() {

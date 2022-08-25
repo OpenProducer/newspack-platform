@@ -64,10 +64,6 @@ final class Featured {
 	 * Constructor.
 	 */
 	public function __construct() {
-		if ( ! self::is_active() ) {
-			return;
-		}
-
 		register_activation_hook( NEWSPACK_LISTINGS_FILE, [ __CLASS__, 'create_custom_table' ] );
 		add_action( 'init', [ __CLASS__, 'check_update_version' ] );
 		add_action( 'init', [ __CLASS__, 'register_featured_meta' ] );
@@ -76,16 +72,7 @@ final class Featured {
 		add_action( self::CRON_HOOK, [ __CLASS__, 'check_expired_featured_items' ] );
 		add_filter( 'posts_clauses', [ __CLASS__, 'sort_featured_listings' ], 10, 2 );
 		add_filter( 'post_class', [ __CLASS__, 'add_featured_classes' ] );
-		add_filter( 'newspack_blocks_term_classes', [ __CLASS__, 'add_featured_classes' ] );
-	}
-
-	/**
-	 * Check whether featured listings should be active on this site.
-	 * Requires either the `NEWSPACK_LISTINGS_SELF_SERVE_ENABLED` or
-	 * `NEWSPACK_LISTINGS_FEATURED_ENABLED` environment constants.
-	 */
-	public static function is_active() {
-		return ( defined( 'NEWSPACK_LISTINGS_SELF_SERVE_ENABLED' ) && NEWSPACK_LISTINGS_SELF_SERVE_ENABLED ) || ( defined( 'NEWSPACK_LISTINGS_FEATURED_ENABLED' ) && NEWSPACK_LISTINGS_FEATURED_ENABLED );
+		add_filter( 'newspack_blocks_term_classes', [ __CLASS__, 'add_featured_classes' ], 10, 3 );
 	}
 
 	/**
@@ -341,7 +328,8 @@ final class Featured {
 		if (
 			$query->is_category() ||
 			$query->is_tag() ||
-			$query->is_post_type_archive( array_values( Core::NEWSPACK_LISTINGS_POST_TYPES ) )
+			$query->is_post_type_archive( array_values( Core::NEWSPACK_LISTINGS_POST_TYPES ) ) ||
+			boolval( $query->get( 'is_curated_list' ) )
 		) {
 			global $wpdb;
 			$table_name = self::get_table_name();
@@ -362,20 +350,25 @@ final class Featured {
 	/**
 	 * Append featured classes to the given array of class names.
 	 *
-	 * @param array $classes Array of class names.
+	 * @param array    $classes Array of class names.
+	 * @param array    $class  An array of additional class names added to the post.
+	 * @param int|null $post_id The post ID. If not given, will get for the current post.
 	 *
 	 * @return array Filtered array of class names.
 	 */
-	public static function add_featured_classes( $classes ) {
-		if ( Core::is_listing() ) {
-			$post_id         = get_the_ID();
+	public static function add_featured_classes( $classes, $class = [], $post_id = null ) {
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+
+		if ( Core::is_listing( get_post_type( $post_id ) ) ) {
 			$feature_classes = [];
 			$is_featured     = self::is_featured( $post_id );
 			if ( $is_featured ) {
 				$feature_priority  = self::get_priority( $post_id );
 				$feature_classes[] = 'featured-listing';
 				$feature_classes[] = 'featured-listing-priority-' . strval( $feature_priority );
-				$classes           = array_merge( $classes, $feature_classes );
+				$classes           = array_merge( $classes, $class, $feature_classes );
 			}
 		}
 
@@ -409,7 +402,7 @@ final class Featured {
 	 * @param WP_Post $post WP_Post object being saved.
 	 */
 	public static function update_featured_status_on_save( $post_id, $post ) {
-		if ( ! Core::is_listing( $post->post_type ) || ! self::is_active() ) {
+		if ( ! Core::is_listing( $post->post_type ) ) {
 			return;
 		}
 

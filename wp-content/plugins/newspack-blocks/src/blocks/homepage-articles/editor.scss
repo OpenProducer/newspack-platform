@@ -1,6 +1,6 @@
-@import '../../shared/sass/variables';
-@import '../../shared/sass/placeholder';
-@import '../../shared/sass/colors';
+@use '../../shared/sass/variables';
+@use '../../shared/sass/placeholder';
+@use '../../shared/sass/colors';
 
 .wpnbha {
 	article {
@@ -15,7 +15,7 @@
 
 	/* Article meta */
 	.cat-links {
-		font-size: $font__size-xs;
+		font-size: variables.$font__size-xs;
 	}
 
 	span.avatar {
@@ -38,7 +38,7 @@
 
 .newspack-block {
 	&--error.components-placeholder {
-		color: $color__error;
+		color: colors.$color__error;
 	}
 	&--disabled {
 		position: relative;

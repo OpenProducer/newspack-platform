@@ -21,10 +21,9 @@ const PostTypesPanel = ( { post_types = [], onMetaFieldChange } ) => {
 				label={ label }
 				checked={ post_types.indexOf( name ) > -1 }
 				onChange={ isIncluded => {
-					onMetaFieldChange(
-						'post_types',
-						isIncluded ? [ ...post_types, name ] : without( post_types, name )
-					);
+					onMetaFieldChange( {
+						post_types: isIncluded ? [ ...post_types, name ] : without( post_types, name ),
+					} );
 				} }
 			/>
 		</PanelRow>

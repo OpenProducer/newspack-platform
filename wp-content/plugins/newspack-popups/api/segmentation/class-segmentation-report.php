@@ -12,27 +12,41 @@ class Segmentation_Report {
 	/**
 	 * Handle visitor.
 	 *
-	 * @param object $payload a payload.
+	 * @param array $events Array of reader events to log.
+	 *              ['client_id'] Client ID associated with the event.
+	 *              ['date_created'] Timestamp of the event. Optional.
+	 *              ['type'] Type of event.
+	 *              ['context'] Context of event.
+	 *              ['value'] Data associated with the event.
 	 */
-	public static function log_single_visit( $payload ) {
-		if ( $payload['is_post'] ) {
+	public static function log_reader_events( $events ) {
+		$lines = '';
+		foreach ( $events as $event ) {
 			// Add line to log file.
-			$line = implode(
-				';',
-				[
-					'post_read',
-					$payload['clientId'],
-					isset( $payload['date'] ) ? $payload['date'] : gmdate( 'Y-m-d H:i:s', time() ),
-					$payload['post_id'],
-					$payload['categories'],
-				]
-			);
+			if ( ! empty( $event['client_id'] ) ) {
+				$value = '';
+				if ( isset( $event['value'] ) ) {
+					$value = is_array( $event['value'] ) ? wp_json_encode( $event['value'] ) : $event['value'];
+				}
+				$line = implode(
+					'|',
+					[
+						$event['client_id'],
+						isset( $event['date_created'] ) ? $event['date_created'] : gmdate( 'Y-m-d H:i:s' ),
+						isset( $event['type'] ) ? $event['type'] : '',
+						isset( $event['context'] ) ? $event['context'] : '',
+						$value,
+					]
+				);
 
-			file_put_contents( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
-				Segmentation::get_log_file_path(),
-				$line . PHP_EOL,
-				FILE_APPEND
-			);
+				$lines .= $line . PHP_EOL;
+			}
 		}
+
+		file_put_contents( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
+			Segmentation::get_log_file_path(),
+			$lines,
+			FILE_APPEND
+		);
 	}
 }

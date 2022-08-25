@@ -127,7 +127,7 @@ export const getCookieValueFromLinker = (
 		}
 
 		if ( linkerParam && ! hasCIDCookie ) {
-			// eslint-disable-next-line no-unused-vars
+			// eslint-disable-next-line @typescript-eslint/no-unused-vars
 			const [ version, checksum, cidName, cidValue ] = linkerParam.split( '*' );
 			try {
 				// Strip dots, not sure why they were in a URL – maybe chrome devtools?

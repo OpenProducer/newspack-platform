@@ -14,9 +14,17 @@
 	overflow: initial !important;
 }
 
-.newspack_global_ad.fixed-height {
-	padding: 16px 0;
-	box-sizing: content-box;
+.newspack_global_ad {
+	max-width: 100%;
+	flex: 1 1 auto;
+	&.fixed-height {
+		padding: 16px 0;
+		box-sizing: content-box;
+	}
+}
+
+.newspack-broadstreet-ad {
+	max-width: 100%;
 }
 
 /**

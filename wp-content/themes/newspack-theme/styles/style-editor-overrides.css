@@ -1,15 +1,15 @@
-/*!
- * Newspack Theme Editor Overrides
- *
- * This CSS files contains Gutenberg editor styles that need to reference classes on the body tag.
- */
-/** === Includes === */
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
+/*!
+ * Newspack Theme Editor Overrides
+ *
+ * This CSS files contains Gutenberg editor styles that need to reference classes on the body tag.
+ */
+/** === Includes === */
 /** === Default Template === */
 @media only screen and (min-width: 600px) {
   body.newspack-default-template .block-editor-block-list__layout.is-root-container > .wp-block[data-align=full] {

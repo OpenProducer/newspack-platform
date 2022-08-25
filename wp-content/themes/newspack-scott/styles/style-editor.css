@@ -1,15 +1,11 @@
 @charset "UTF-8";
-/*!
-Newspack Scott Editor Styles
-*/
-/** === Includes === */
-/** === Includes === */
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
+/** === Includes === */
 /** === Editor Frame === */
 body {
   background-color: #fff;
@@ -645,7 +641,7 @@ div[data-align=full] > .wp-block-image figcaption {
   padding-left: calc( 2 * 1rem );
 }
 .wp-block-separator.has-background, .wp-block-separator.has-text-color {
-  border-color: currentColor;
+  border-color: currentcolor;
 }
 .wp-block-separator.has-background.is-style-dots::before, .wp-block-separator.has-text-color.is-style-dots::before {
   color: inherit;
@@ -1224,11 +1220,33 @@ ul.wp-block-archives li,
   font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
 }
 
+/** === Reader Registration Block === */
+.newspack-registration button {
+  font-family: "Fira Sans Condensed", "Helvetica", sans-serif;
+}
+
 /** === Ad Unit Block === */
 .wp-block-newspack-ads-blocks-ad-unit > div {
   align-items: center;
   display: flex;
   justify-content: center;
+}
+
+/** === Newspack Listings === */
+.wpnbha .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.wpnbpc .featured-listing[class*=type-newspack_lst_] .entry-title a::before,
+.newspack-listings__curated-list .featured-listing .newspack-listings__listing-title::before {
+  border: calc(0.25em + 1px) solid #36f;
+  border-top: 0;
+  border-bottom-color: transparent;
+  box-sizing: border-box;
+  content: "";
+  display: inline-block;
+  height: 0.8em;
+  margin-right: 0.3em;
+  position: relative;
+  top: 0.05em;
+  width: 0.5em;
 }
 
 /** === Classic Editor === */
@@ -1389,6 +1407,10 @@ ul.wp-block-archives li,
   background-image: linear-gradient(135deg, rgb(221, 221, 221) 0%, rgb(255, 255, 255) 100%);
 }
 
+/*!
+Newspack Scott Editor Styles
+*/
+/** === Includes === */
 .accent-header,
 .article-section-title {
   color: #666;
@@ -1485,7 +1507,7 @@ ul.wp-block-archives li,
 .wp-block-pullquote.is-style-solid-color blockquote::before,
 .wp-block-pullquote.is-style-solid-color blockquote::after, .wp-block-pullquote.has-background blockquote::before,
 .wp-block-pullquote.has-background blockquote::after {
-  border-top-color: currentColor;
+  border-top-color: currentcolor;
 }
 .wp-block-pullquote.is-style-solid-color p:first-of-type::before, .wp-block-pullquote.has-background p:first-of-type::before {
   color: inherit;

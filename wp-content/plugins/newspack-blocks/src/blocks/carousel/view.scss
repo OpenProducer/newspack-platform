@@ -1,7 +1,7 @@
-@import '../../shared/sass/variables';
-@import '../../shared/sass/mixins';
-@import '../../shared/sass/colors';
-@import '../../shared/sass/preview';
+@use '../../shared/sass/variables';
+@use '../../shared/sass/mixins';
+@use '../../shared/sass/colors';
+@use '../../shared/sass/preview';
 
 .wpnbpc {
 	position: relative;
@@ -42,7 +42,7 @@
 			width: 1.8em;
 		}
 
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.6em;
 			}
@@ -98,7 +98,7 @@
 	}
 	&__placeholder {
 		height: 420px;
-		background: $color__background-screen;
+		background: colors.$color__background-screen;
 	}
 	p {
 		white-space: normal;
@@ -135,7 +135,7 @@
 		}
 
 		span {
-			@include visuallyHidden;
+			@include mixins.visuallyHidden;
 		}
 	}
 	.swiper-button,
@@ -170,7 +170,7 @@
 		display: none;
 		right: auto;
 
-		@include media( mobile ) {
+		@include mixins.media( mobile ) {
 			display: block;
 		}
 	}
@@ -238,7 +238,7 @@
 
 	/* Image styles */
 	figcaption {
-		font-size: $font__size-xxs;
+		font-size: variables.$font__size-xxs;
 	}
 
 	/* Headings */
@@ -265,6 +265,15 @@
 		font-size: 0.6em;
 		font-weight: bold;
 		margin: 0 0 0.5em;
+
+		&.sponsor-label {
+			align-items: center;
+
+			.flag + a {
+				margin-left: 0.5em;
+			}
+		}
+
 		a {
 			text-decoration: none;
 		}
@@ -274,6 +283,7 @@
 		display: block;
 		margin-right: 0.5em;
 	}
+
 	&.wp-block-newspack-blocks-carousel__autoplay-playing .amp-carousel-button-pause,
 	&.wp-block-newspack-blocks-carousel__autoplay-playing .swiper-button-pause,
 	.amp-carousel-button-play,
@@ -310,7 +320,7 @@
 
 	&[data-slides-per-view='2'] article {
 		.entry-title {
-			@include media( tablet ) {
+			@include mixins.media( tablet ) {
 				font-size: 1.4em;
 			}
 		}
@@ -319,17 +329,46 @@
 	&.slides-per-view-3 article,
 	&.slides-per-view-4 article {
 		.entry-title {
-			@include media( tablet ) {
+			@include mixins.media( tablet ) {
 				font-size: 1.2em;
 			}
-			@include media( desktop ) {
+			@include mixins.media( desktop ) {
 				font-size: 1em;
 			}
 		}
 		.entry-meta {
-			@include media( tablet ) {
+			@include mixins.media( tablet ) {
 				font-size: 0.7em;
 			}
 		}
 	}
 }
+
+/* stylelint-disable selector-type-no-unknown  */
+.wpnbpc,
+amp-script .wpnbpc {
+	.entry-sponsors {
+		align-items: center;
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		width: 100%;
+
+		&.plus-author {
+			font-size: 0.9em;
+
+			&:not( :last-child ) {
+				margin-bottom: 0.5rem;
+			}
+		}
+	}
+
+	.sponsor-logos {
+		align-items: center;
+		display: inline-flex;
+		flex-wrap: wrap;
+		gap: 0.5em;
+		line-height: 1;
+	}
+}
+/* stylelint-enable */

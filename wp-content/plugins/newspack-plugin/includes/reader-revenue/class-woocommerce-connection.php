@@ -15,13 +15,16 @@ defined( 'ABSPATH' ) || exit;
  * Connection with WooCommerce's features.
  */
 class WooCommerce_Connection {
+	const CREATED_VIA_NAME = 'newspack-stripe';
+
 	/**
 	 * Initialize.
 	 *
 	 * @codeCoverageIgnore
 	 */
 	public static function init() {
-		add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
+		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
+		\add_action( 'woocommerce_checkout_order_created', [ __CLASS__, 'register_reader' ] );
 	}
 
 	/**
@@ -56,6 +59,23 @@ class WooCommerce_Connection {
 	}
 
 	/**
+	 * Ensure that donors are registered.
+	 *
+	 * @param WC_Order $order Order object.
+	 */
+	public static function register_reader( $order ) {
+		if ( Reader_Activation::is_enabled() ) {
+			$email_address = $order->get_billing_email();
+			$first_name    = $order->get_billing_first_name();
+			$last_name     = $order->get_billing_last_name();
+			$full_name     = "$first_name $last_name";
+			$metadata      = [ 'registration_method' => 'woocommerce-order' ];
+
+			Reader_Activation::register_reader( $email_address, $full_name, true, $metadata );
+		}
+	}
+
+	/**
 	 * If the site is using woocommerce-memberships, create a new user and a
 	 * membership, if the donation type calls for it.
 	 *
@@ -73,7 +93,7 @@ class WooCommerce_Connection {
 		$membership_plans                = $wc_memberships_membership_plans->get_membership_plans();
 		$order_items                     = [ self::get_donation_order_item( $frequency ) ];
 		foreach ( $membership_plans as $plan ) {
-			$access_granting_product_ids = wc_memberships_get_order_access_granting_product_ids( $plan, '', $order_items );
+			$access_granting_product_ids = \wc_memberships_get_order_access_granting_product_ids( $plan, '', $order_items );
 			if ( ! empty( $access_granting_product_ids ) ) {
 				$should_create_account = true;
 				break;
@@ -81,25 +101,23 @@ class WooCommerce_Connection {
 		}
 		if ( $should_create_account ) {
 			if ( Reader_Activation::is_enabled() ) {
-				$user_id = Reader_Activation::register_reader( $email_address, $full_name );
-				if ( is_wp_error( $user_id ) ) {
-					return $user_id;
-				}
-				if ( ! absint( $user_id ) ) {
-					$user_id = null;
-				}
-			} else {
-				Logger::log( 'This order will result in a membership, creating account for user.' );
-				$user_login = sanitize_title( $full_name );
-				$user_id    = wc_create_new_customer( $email_address, $user_login, '', [ 'display_name' => $full_name ] );
-				if ( is_wp_error( $user_id ) ) {
-					return $user_id;
-				}
-
-				// Log the new user in.
-				wp_set_current_user( $user_id, $user_login );
-				wp_set_auth_cookie( $user_id );
+				$metadata = [ 'registration_method' => 'woocommerce-memberships' ];
+				$user_id  = Reader_Activation::register_reader( $email_address, $full_name, true, $metadata );
+				return $user_id;
 			}
+
+			Logger::log( 'This order will result in a membership, creating account for user.' );
+			$user_login = \sanitize_title( $full_name );
+			$user_id    = \wc_create_new_customer( $email_address, $user_login, '', [ 'display_name' => $full_name ] );
+
+			if ( is_wp_error( $user_id ) ) {
+				return $user_id;
+			}
+
+			// Log the new user in.
+			\wp_set_current_user( $user_id, $user_login );
+			\wp_set_auth_cookie( $user_id );
+
 			return $user_id;
 		}
 	}
@@ -116,7 +134,7 @@ class WooCommerce_Connection {
 
 		$item = self::get_donation_order_item( $frequency, $order_data['amount'] );
 		if ( false === $item ) {
-			return new WP_Error( 'newspack_woocommerce', __( 'Missing donation product.', 'newspack' ) );
+			return new \WP_Error( 'newspack_woocommerce', __( 'Missing donation product.', 'newspack' ) );
 		}
 
 		$order = wc_create_order();
@@ -139,9 +157,9 @@ class WooCommerce_Connection {
 		}
 
 		// Metadata for woocommerce-gateway-stripe plugin.
-		$order->add_meta_data( '_payment_method', 'stripe' );
-		$order->add_meta_data( '_payment_method_title', __( 'Stripe via Newspack', 'newspack' ) );
-		$order->add_meta_data( '_transaction_id', $order_data['stripe_id'] );
+		$order->set_payment_method( 'stripe' );
+		$order->set_payment_method_title( __( 'Stripe via Newspack', 'newspack' ) );
+		$order->set_transaction_id( $order_data['stripe_id'] );
 		$order->add_meta_data( '_stripe_customer_id', $order_data['stripe_customer_id'] );
 		$order->add_meta_data( '_stripe_charge_captured', 'yes' );
 		$order->add_meta_data( '_stripe_fee', $order_data['stripe_fee'] );
@@ -149,7 +167,15 @@ class WooCommerce_Connection {
 		$order->add_meta_data( '_stripe_currency', $order_data['currency'] );
 
 		if ( ! empty( $order_data['client_id'] ) ) {
-			$order->add_meta_data( 'newspack-cid', $order_data['client_id'] );
+			/**
+			 * When a new order is created that can be associated with a client ID,
+			 * fire an action with the client ID and the relevant order info.
+			 *
+			 * @param WC_Order    $order Donation order.
+			 * @param string      $client_id Client ID.
+			 * @param string|null $newsletter_email If the user signed up for a newsletter as part of the transaction, the subscribed email address. Otherwise, null.
+			 */
+			do_action( 'newspack_new_donation_woocommerce', $order, $order_data['client_id'] );
 		}
 
 		$has_user_id = ! empty( $order_data['user_id'] );
@@ -157,7 +183,7 @@ class WooCommerce_Connection {
 			$order->set_customer_id( $order_data['user_id'] );
 		}
 
-		$order->set_created_via( 'newspack-stripe' );
+		$order->set_created_via( self::CREATED_VIA_NAME );
 		$order->set_status( 'completed' );
 		$order->save();
 

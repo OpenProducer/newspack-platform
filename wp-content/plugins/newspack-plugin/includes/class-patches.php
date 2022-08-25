@@ -25,6 +25,7 @@ class Patches {
 		add_action( 'pre_get_posts', [ __CLASS__, 'restrict_others_posts' ] );
 		add_filter( 'ajax_query_attachments_args', [ __CLASS__, 'restrict_media_library_access_ajax' ] );
 		add_filter( 'script_loader_tag', [ __CLASS__, 'add_async_defer_support' ], 10, 2 );
+		add_filter( 'script_loader_tag', [ __CLASS__, 'add_amp_plus_attr_support' ], 10, 2 );
 
 		// Disable WooCommerce image regeneration to prevent regenerating thousands of images.
 		add_filter( 'woocommerce_background_image_regeneration', '__return_false' );
@@ -59,6 +60,27 @@ class Patches {
 			}
 			// Only allow async or defer, not both.
 			break;
+		}
+		return $tag;
+	}
+
+	/**
+	 * Similar to async/defer support from `add_async_defer_support()`, adds
+	 * 'amp-plus' support to `wp_script_add_data()`.
+	 *
+	 * @param string $tag The script tag.
+	 * @param string $handle The script handle.
+	 *
+	 * @return @string Script HTML string.
+	 */
+	public static function add_amp_plus_attr_support( $tag, $handle ) {
+		$data_name = 'amp-plus';
+		$attr      = 'data-amp-plus-allowed';
+		if ( ! wp_scripts()->get_data( $handle, $data_name ) ) {
+			return $tag;
+		}
+		if ( ! preg_match( ":\s$attr(=|>|\s):", $tag ) ) {
+			$tag = preg_replace( ':(?=></script>):', " $attr", $tag, 1 );
 		}
 		return $tag;
 	}

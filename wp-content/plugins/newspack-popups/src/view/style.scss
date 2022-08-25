@@ -1,6 +1,8 @@
+@use 'sass:color';
+
 // Secondary Color
 $color__secondary: #757575;
-$color__secondary-variation: darken( $color__secondary, 10% );
+$color__secondary-variation: color.adjust( $color__secondary, $lightness: -10% );
 
 // System Font
 $font__system: -apple-system, blinkmacsystemfont, 'Segoe UI', roboto, oxygen, ubuntu, cantarell,
@@ -12,6 +14,10 @@ $size__x-small: 380px;
 $size__small: 544px;
 $size__medium: 784px;
 $size__large: 1264px;
+
+// Widths
+$width__mobile: 600px;
+$width__tablet: 782px;
 
 .newspack-lightbox {
 	align-items: center;
@@ -33,11 +39,11 @@ $size__large: 1264px;
 	z-index: 99999;
 
 	.admin-bar & {
-		@media only screen and ( min-width: 601px ) {
+		@media only screen and ( min-width: #{$width__mobile + 1} ) {
 			padding-top: 46px !important;
 		}
 
-		@media only screen and ( min-width: 783px ) {
+		@media only screen and ( min-width: #{$width__tablet + 1} ) {
 			padding-top: 32px !important;
 		}
 	}
@@ -70,12 +76,26 @@ $size__large: 1264px;
 		background: transparent;
 		margin: 0 auto;
 		max-width: $size__medium;
-		padding: 32px;
+		overflow: auto;
 
-		> *:first-child {
-			margin-top: 0;
+		&__content {
+			padding: $overlay__gap;
+			@media only screen and ( min-width: $width__mobile ) {
+				padding: #{2 * $overlay__gap};
+			}
+		}
+		&__featured-image {
+			display: none;
+			max-height: #{13 * $overlay__gap};
+			overflow: hidden;
+			@media only screen and ( min-width: $width__tablet ) {
+				align-items: center;
+				display: flex;
+				justify-content: center;
+			}
 		}
 
+		&__content,
 		.wp-block-column {
 			> *:first-child {
 				margin-top: 0;
@@ -87,9 +107,20 @@ $size__large: 1264px;
 		}
 	}
 
+	&.newspack-lightbox-no-border {
+		.newspack-popup-wrapper {
+			background-color: transparent;
+			box-shadow: none;
+		}
+		.newspack-popup {
+			box-shadow: 0 0 1em 0.5em rgba( black, 0.1 );
+			margin: 32px;
+		}
+	}
+
 	.newspack-lightbox__close {
 		align-items: center;
-		background: white;
+		background-color: transparent;
 		border: none;
 		border-radius: 0;
 		box-shadow: none;
@@ -107,7 +138,7 @@ $size__large: 1264px;
 		width: 36px;
 
 		svg {
-			fill: currentColor;
+			fill: currentcolor;
 			flex: 0 0 24px;
 		}
 
@@ -117,8 +148,31 @@ $size__large: 1264px;
 		}
 
 		&:focus {
-			outline: 1px solid;
+			outline: 1.5px solid;
 			outline-offset: -1px;
+		}
+	}
+
+	&-featured-image {
+		@media only screen and ( min-width: $width__tablet ) {
+			.newspack-lightbox__close {
+				background-color: rgba( black, 0.25 );
+				border-radius: 3px;
+				color: white;
+				height: 48px;
+				margin: 8px;
+				width: 48px;
+
+				&:active,
+				&:hover {
+					background-color: rgba( black, 0.75 );
+					opacity: 1;
+				}
+
+				&:focus {
+					outline-offset: 2px;
+				}
+			}
 		}
 	}
 
@@ -167,6 +221,9 @@ $size__large: 1264px;
 				width: $size__x-small;
 			}
 		}
+		.newspack-popup {
+			max-height: 50vh;
+		}
 	}
 
 	&.newspack-lightbox-size-small {
@@ -176,6 +233,9 @@ $size__large: 1264px;
 				width: $size__small;
 			}
 		}
+		.newspack-popup {
+			max-height: 60vh;
+		}
 	}
 
 	&.newspack-lightbox-size-medium {
@@ -184,6 +244,9 @@ $size__large: 1264px;
 				min-width: $size__medium;
 				width: $size__medium;
 			}
+		}
+		.newspack-popup {
+			max-height: 80vh;
 		}
 	}
 
@@ -266,7 +329,7 @@ $size__large: 1264px;
 				padding-left: 0;
 				padding-right: 0;
 
-				@media only screen and ( min-width: 600px ) {
+				@media only screen and ( min-width: $width__mobile ) {
 					&.wp-block-columns {
 						margin-left: -16px;
 						margin-right: -16px;

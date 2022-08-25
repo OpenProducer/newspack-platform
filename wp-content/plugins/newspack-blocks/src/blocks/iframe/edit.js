@@ -86,13 +86,15 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 			formData.append( 'archive_folder', archiveFolder );
 			formData.append( 'iframe_file', archiveFile );
 
-			const { src: iframeArchiveSrc, dir: iframeArchiveFolder, mode: iframeMode } = await apiFetch(
-				{
-					path: '/newspack-blocks/v1/newspack-blocks-iframe-archive',
-					method: 'POST',
-					body: formData,
-				}
-			);
+			const {
+				src: iframeArchiveSrc,
+				dir: iframeArchiveFolder,
+				mode: iframeMode,
+			} = await apiFetch( {
+				path: '/newspack-blocks/v1/newspack-blocks-iframe-archive',
+				method: 'POST',
+				body: formData,
+			} );
 
 			setAttributes( {
 				mode: iframeMode,
@@ -117,13 +119,15 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 			const formData = new FormData();
 			formData.append( 'media_id', mediaId );
 
-			const { src: iframeArchiveSrc, dir: iframeArchiveFolder, mode: iframeMode } = await apiFetch(
-				{
-					path: '/newspack-blocks/v1/newspack-blocks-iframe-archive-from-media',
-					method: 'POST',
-					body: formData,
-				}
-			);
+			const {
+				src: iframeArchiveSrc,
+				dir: iframeArchiveFolder,
+				mode: iframeMode,
+			} = await apiFetch( {
+				path: '/newspack-blocks/v1/newspack-blocks-iframe-archive-from-media',
+				method: 'POST',
+				body: formData,
+			} );
 
 			setAttributes( {
 				mode: iframeMode,

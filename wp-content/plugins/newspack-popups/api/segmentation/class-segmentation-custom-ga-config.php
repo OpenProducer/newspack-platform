@@ -48,15 +48,16 @@ class Segmentation_Custom_GA_Config extends Lightweight_API {
 
 		$custom_dimensions_values = [];
 
-		$api         = new Lightweight_API();
-		$client_data = $api->get_client_data( $client_id );
+		$api                 = new Lightweight_API();
+		$subscription_events = $api->get_reader_events( $client_id, 'subscription' );
+		$donation_events     = $api->get_reader_events( $client_id, 'donation' );
 
 		foreach ( $custom_dimensions as $custom_dimension ) {
 			// Strip the `ga:` prefix from gaID.
 			$dimension_id = substr( $custom_dimension->gaID, 3 ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			switch ( $custom_dimension->role ) {
 				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY:
-					$read_count = count( $client_data['posts_read'] );
+					$read_count = Campaign_Data_Utils::get_post_view_count( $api->get_reader( $client_id ) );
 					// Tiers mimick NCI's – https://news-consumer-insights.appspot.com.
 					$read_count_tier = 'casual';
 					if ( $read_count > 1 && $read_count <= 14 ) {
@@ -67,10 +68,10 @@ class Segmentation_Custom_GA_Config extends Lightweight_API {
 					$custom_dimensions_values[ $dimension_id ] = $read_count_tier;
 					break;
 				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER:
-					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_subscriber( $client_data ) ? 'true' : 'false';
+					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_subscriber( $subscription_events ) ? 'true' : 'false';
 					break;
 				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR:
-					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_donor( $client_data ) ? 'true' : 'false';
+					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_donor( $donation_events ) ? 'true' : 'false';
 					break;
 			}
 		}

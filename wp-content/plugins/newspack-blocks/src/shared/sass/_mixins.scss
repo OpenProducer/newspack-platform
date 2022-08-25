@@ -1,30 +1,32 @@
+@use './variables';
+
 @mixin media( $res ) {
 	@if mobile == $res {
-		@media only screen and ( min-width: $mobile_width ) {
+		@media only screen and ( min-width: variables.$mobile_width ) {
 			@content;
 		}
 	}
 
 	@if tabletonly == $res {
-		@media only screen and ( max-width: #{ $tablet_width - 1 } ) {
+		@media only screen and ( max-width: #{ variables.$tablet_width - 1 } ) {
 			@content;
 		}
 	}
 
 	@if tablet == $res {
-		@media only screen and ( min-width: $tablet_width ) {
+		@media only screen and ( min-width: variables.$tablet_width ) {
 			@content;
 		}
 	}
 
 	@if desktop == $res {
-		@media only screen and ( min-width: $desktop_width ) {
+		@media only screen and ( min-width: variables.$desktop_width ) {
 			@content;
 		}
 	}
 
 	@if wide == $res {
-		@media only screen and ( min-width: $wide_width ) {
+		@media only screen and ( min-width: variables.$wide_width ) {
 			@content;
 		}
 	}

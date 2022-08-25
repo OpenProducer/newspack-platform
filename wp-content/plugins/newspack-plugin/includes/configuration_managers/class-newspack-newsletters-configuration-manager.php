@@ -93,7 +93,7 @@ class Newspack_Newsletters_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function add_contact( $contact, $list_id ) {
 		if ( $this->is_configured() ) {
-			return \Newspack_Newsletters::add_contact( $contact, $list_id );
+			return \Newspack_Newsletters_Subscription::add_contact( $contact, $list_id );
 		}
 	}
 

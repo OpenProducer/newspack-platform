@@ -698,7 +698,13 @@ final class Placements {
 				<span class="newspack-ads__ad-placement-mock__label">
 					<?php printf( '%s - %s', esc_html( $provider->get_provider_name() ), esc_html( $ad_unit_data['name'] ) ); ?>
 					<br />
-					<?php echo esc_html( implode( ', ', array_map( 'Newspack_Ads\get_size_string', $sizes ) ) ); ?>
+					<?php
+					if ( count( $sizes ) ) {
+						echo esc_html( implode( ', ', array_map( 'Newspack_Ads\get_size_string', $sizes ) ) );
+					} else {
+						esc_html_e( 'Unknown size', 'newspack-ads' );
+					}
+					?>
 				</span>
 			</div>
 		</div>

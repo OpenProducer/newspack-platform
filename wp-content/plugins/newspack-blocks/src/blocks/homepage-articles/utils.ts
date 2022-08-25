@@ -198,9 +198,7 @@ const generatePreviewPost = ( id: PostId ) => {
 const getPreviewPosts = ( attributes: HomepageArticlesAttributes ) =>
 	times( attributes.postsToShow, generatePreviewPost );
 
-type Select = (
-	namespace: string
-) => {
+type Select = ( namespace: string ) => {
 	// core/blocks-editor
 	getBlocks: () => Block[];
 	// core/editor

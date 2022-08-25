@@ -1,6 +1,6 @@
-@import '../../../shared/sass/colors';
-@import '../../../shared/sass/mixins';
-@import '../../../shared/sass/variables';
+@use '../../../shared/sass/colors';
+@use '../../../shared/sass/mixins';
+@use '../../../shared/sass/variables';
 
 @keyframes loader {
 	0% {
@@ -39,7 +39,7 @@
 		}
 
 		&__card {
-			border: 1px solid $color__border;
+			border: 1px solid variables.$color__border;
 			border-radius: 3px;
 			padding: 0.34rem 0.66rem;
 			min-height: 32px;
@@ -60,7 +60,7 @@
 			border-radius: 3px;
 			font-family: sans-serif;
 
-			@include media( tablet ) {
+			@include mixins.media( tablet ) {
 				font-size: 14px;
 				line-height: 1.2;
 			}
@@ -91,10 +91,11 @@
 		}
 
 		&__messages {
+			margin-bottom: 10px;
 			> div {
-				border: 0 solid $color__info;
+				border: 0 solid colors.$color__info;
 				border-left-width: 4px;
-				font-size: $font__size-sm;
+				font-size: variables.$font__size-sm;
 				margin-top: 0.76rem;
 				padding: 0.38rem 0.76rem;
 				&:empty {
@@ -103,12 +104,13 @@
 					padding: 0;
 				}
 				&.type-error {
-					background-color: rgba( $color__error, 0.075 );
-					border-color: $color__error;
+					background-color: rgba( colors.$color__error, 0.075 );
+					border-color: colors.$color__error;
 				}
 				&.type-success {
-					background-color: rgba( $color__success, 0.075 );
-					border-color: $color__success;
+					background-color: rgba( colors.$color__success, 0.075 );
+					border-color: colors.$color__success;
+					margin: 1.12rem;
 				}
 			}
 		}
@@ -136,12 +138,12 @@
 				align-items: flex-end;
 				justify-content: space-between;
 				flex-wrap: wrap;
-				@include media( tablet ) {
+				@include mixins.media( tablet ) {
 					flex-wrap: nowrap;
 				}
 				input {
 					margin-bottom: 0.5rem;
-					@include media( tablet ) {
+					@include mixins.media( tablet ) {
 						margin-bottom: 0;
 						width: 50%;
 						&:last-child {
@@ -153,10 +155,14 @@
 		}
 
 		&__info {
-			color: $color__text-light;
+			color: colors.$color__text-light;
 			font-size: 0.7em;
 			font-style: italic;
 			padding-left: 1.5em;
+			display: none;
+			@include mixins.media( mobile ) {
+				display: block;
+			}
 		}
 
 		&__footer {
@@ -169,20 +175,14 @@
 				padding-right: 10px;
 			}
 		}
-		&__branding {
-			margin-top: 1em;
-			height: 26px;
-			display: block;
-			text-decoration: none;
-
-			img {
-				display: block;
-			}
-		}
 
 		&__methods {
 			display: flex;
 			flex-wrap: wrap;
+			width: 100%;
+			@include mixins.media( mobile ) {
+				width: auto;
+			}
 			button {
 				margin-left: 0;
 				margin-right: 0;
@@ -190,9 +190,11 @@
 				height: 46px;
 			}
 			> * {
-				margin-top: 10px;
+				&:not( :last-child ) {
+					margin-bottom: 10px;
+				}
 				width: 100%;
-				@include media( mobile ) {
+				@include mixins.media( mobile ) {
 					width: auto;
 				}
 			}
@@ -200,7 +202,7 @@
 
 		&__request-button {
 			min-width: 190px;
-			@include media( mobile ) {
+			@include mixins.media( mobile ) {
 				margin-right: 1em;
 			}
 			&--invisible {
@@ -212,7 +214,7 @@
 	&__stripe {
 		margin: 0.38rem 0.76rem 0.76rem;
 
-		@include media( tablet ) {
+		@include mixins.media( tablet ) {
 			margin-left: 1.5rem;
 			margin-right: 1.5rem;
 		}
@@ -250,7 +252,7 @@
 		}
 
 		&__footer {
-			margin: 1.12rem 0;
+			margin: 0 0 1.12rem 0;
 
 			> * {
 				padding: 0;
@@ -266,10 +268,6 @@
 
 		&__request-button {
 			margin: 0;
-		}
-
-		&__branding {
-			margin-top: 1.12rem;
 		}
 	}
 }
@@ -301,7 +299,7 @@
 		}
 
 		&__footer {
-			margin: 1.12rem 0 0;
+			margin: 0 0 1.12rem 0;
 
 			> * {
 				padding: 0;
@@ -315,10 +313,6 @@
 
 		&__request-button {
 			margin: 0;
-		}
-
-		&__branding {
-			margin-top: 1.12rem;
 		}
 	}
 }

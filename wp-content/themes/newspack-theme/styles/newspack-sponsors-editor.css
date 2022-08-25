@@ -4,28 +4,10 @@
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
-.sponsor-label {
-  align-items: center;
-  display: flex;
-}
 .sponsor-label .flag {
   background: #fed850;
   color: #111;
   line-height: 1;
   padding: 0.3em 0.5em;
   text-transform: uppercase;
-}
-
-.sponsor-logos {
-  align-items: center;
-  display: inline-flex;
-  line-height: 1;
-}
-.sponsor-logos img {
-  margin-right: 0.75rem;
-}
-
-.wpnbha .sponsor-logos {
-  margin: 0.125rem 0 0.25rem;
-  width: 100%;
 }

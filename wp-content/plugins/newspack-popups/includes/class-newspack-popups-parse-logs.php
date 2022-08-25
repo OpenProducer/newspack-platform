@@ -8,6 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 require_once dirname( __FILE__ ) . '/../api/segmentation/class-segmentation.php';
+require_once dirname( __FILE__ ) . '/../api/classes/class-lightweight-api.php';
 
 /**
  * Main Newspack Segmentation Plugin Class.
@@ -46,7 +47,6 @@ final class Newspack_Popups_Parse_Logs {
 		}
 	}
 
-
 	/**
 	 * Add a CRON interval of one minute.
 	 *
@@ -61,55 +61,10 @@ final class Newspack_Popups_Parse_Logs {
 	}
 
 	/**
-	 * Insert multiple rows in one DB transaction.
-	 *
-	 * @param string $table_name Table name.
-	 * @param array  $rows Rows to insert.
-	 * @param array  $column_names Names of the columns.
-	 * @param array  $placeholder Row placeholder for wpdb->prepare (e.g. `(%s, %s)`).
-	 */
-	public static function bulk_db_insert( $table_name, $rows, $column_names, $placeholder ) {
-		if ( 0 === count( $rows ) ) {
-			return;
-		}
-
-		global $wpdb;
-
-		$column_names = implode( ', ', $column_names );
-		$query        = "INSERT INTO $table_name ($column_names) VALUES ";
-		$query       .= implode(
-			', ',
-			array_map(
-				function( $row ) use ( $placeholder ) {
-					return $placeholder;
-				},
-				$rows
-			)
-		);
-
-		// Flatten the rows two-dimensional array.
-		$values = array_reduce(
-			$rows,
-			function( $acc, $arr ) {
-				return array_merge( $acc, $arr );
-			},
-			[]
-		);
-
-		$sql = $wpdb->prepare( "$query ", $values ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-
-		// Update the event if a the duplicate has a different date.
-		$sql .= ' ON DUPLICATE KEY UPDATE created_at = VALUES(created_at)';
-
-		$wpdb->query( $sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
-	}
-
-	/**
 	 * Parse the log file, write data to the DB, and remove the file.
 	 */
 	public static function parse_events_logs() {
 		global $wpdb;
-
 
 		if ( ! file_exists( Segmentation::get_log_file_path() ) ) {
 			return;
@@ -127,35 +82,46 @@ final class Newspack_Popups_Parse_Logs {
 				}
 			}
 
-			$lines       = array_unique( $lines );
-			$events_rows = [];
+			$lines  = array_unique( $lines );
+			$events = [];
 
 			foreach ( $lines as $line ) {
-				$result     = explode( ';', $line );
-				$event_type = $result[0];
-				$client_id  = $result[1];
-				$date       = $result[2];
-				$post_id    = $result[3];
-				$categories = $result[4];
+				$result = explode( '|', $line );
+				if ( isset( $result[1] ) ) {
+					$client_id    = $result[0];
+					$date_created = $result[1];
+					$type         = $result[2];
+					$context      = $result[3];
+					$value        = $result[4];
+				} else {
+					// Handle legacy format.
+					$result       = explode( ';', $line );
+					$client_id    = $result[1];
+					$date_created = $result[2];
+					$type         = 'view';
+					$context      = 'post';
+					$value        = wp_json_encode(
+						[
+							'post_id'    => (int) $result[3],
+							'categories' => $result[4],
+						]
+					);
+				}
 
-				$events_rows[] = [ $event_type, $client_id, $date, $post_id, $categories ];
+				$events[] = [
+					'client_id'    => $client_id,
+					'date_created' => $date_created,
+					'type'         => $type,
+					'context'      => $context,
+					'value'        => $value,
+				];
 			}
 
 			try {
-				self::bulk_db_insert(
-					Segmentation::get_events_table_name(),
-					$events_rows,
-					[
-						'type',
-						'client_id',
-						'created_at',
-						'post_id',
-						'category_ids',
-					],
-					'( %s, %s, %s, %s, %s )'
-				);
+				$api = new Lightweight_Api();
+				$api->bulk_db_insert( $events );
 			} catch ( \Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-				// An error will be thrown for rows violating the UNIQUE constraint.
+				error_log( $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 			}
 
 			flock( $log_file, LOCK_UN ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_flock

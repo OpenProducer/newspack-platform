@@ -1,4 +1,5 @@
-@import './view';
+@use 'view';
+@use '../../shared/sass/mixins';
 
 .editor-styles-wrapper {
 	.newspack-blocks-author-profile {
@@ -22,7 +23,7 @@
 		}
 
 		&__bio {
-			@include media( mobile ) {
+			@include mixins.media( mobile ) {
 				flex: 4;
 
 				h3 {
