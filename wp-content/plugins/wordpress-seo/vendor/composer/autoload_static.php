@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61
+class ComposerStaticInitb2953b96025f12b10e0d4e9c72581b20
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -213,7 +213,6 @@ class ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61
         'WPSEO_Import_WPSEO' => __DIR__ . '/../..' . '/admin/import/plugins/class-import-wpseo.php',
         'WPSEO_Import_WP_Meta_SEO' => __DIR__ . '/../..' . '/admin/import/plugins/class-import-wp-meta-seo.php',
         'WPSEO_Import_WooThemes_SEO' => __DIR__ . '/../..' . '/admin/import/plugins/class-import-woothemes-seo.php',
-        'WPSEO_Inclusive_Language_Notice' => __DIR__ . '/../..' . '/admin/class-inclusive-language-notice.php',
         'WPSEO_Installable' => __DIR__ . '/../..' . '/admin/interface-installable.php',
         'WPSEO_Installation' => __DIR__ . '/../..' . '/inc/class-wpseo-installation.php',
         'WPSEO_Keyword_Synonyms_Modal' => __DIR__ . '/../..' . '/src/deprecated/admin/keyword-synonyms-modal.php',
@@ -227,7 +226,7 @@ class ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61
         'WPSEO_Meta_Columns' => __DIR__ . '/../..' . '/admin/class-meta-columns.php',
         'WPSEO_Metabox' => __DIR__ . '/../..' . '/admin/metabox/class-metabox.php',
         'WPSEO_Metabox_Analysis' => __DIR__ . '/../..' . '/admin/metabox/interface-metabox-analysis.php',
-        'WPSEO_Metabox_Analysis_Inclusive_Language' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-analysis-inclusive-language.php',
+        'WPSEO_Metabox_Analysis_Inclusive_Language' => __DIR__ . '/../..' . '/src/deprecated/admin/metabox/class-metabox-analysis-inclusive-language.php',
         'WPSEO_Metabox_Analysis_Readability' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-analysis-readability.php',
         'WPSEO_Metabox_Analysis_SEO' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-analysis-seo.php',
         'WPSEO_Metabox_Collapsible' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-collapsible.php',
@@ -239,7 +238,7 @@ class ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61
         'WPSEO_Metabox_Null_Tab' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-null-tab.php',
         'WPSEO_Metabox_Section' => __DIR__ . '/../..' . '/admin/metabox/interface-metabox-section.php',
         'WPSEO_Metabox_Section_Additional' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-section-additional.php',
-        'WPSEO_Metabox_Section_Inclusive_Language' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-section-inclusive-language.php',
+        'WPSEO_Metabox_Section_Inclusive_Language' => __DIR__ . '/../..' . '/src/deprecated/admin/metabox/class-metabox-section-inclusive-language.php',
         'WPSEO_Metabox_Section_React' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-section-react.php',
         'WPSEO_Metabox_Section_Readability' => __DIR__ . '/../..' . '/admin/metabox/class-metabox-section-readability.php',
         'WPSEO_Metabox_Tab' => __DIR__ . '/../..' . '/admin/metabox/interface-metabox-tab.php',
@@ -1119,9 +1118,9 @@ class ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitec1d9a9ad9d9ab2b7bba1f08c89dae61::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb2953b96025f12b10e0d4e9c72581b20::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb2953b96025f12b10e0d4e9c72581b20::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb2953b96025f12b10e0d4e9c72581b20::$classMap;
 
         }, null, ClassLoader::class);
     }

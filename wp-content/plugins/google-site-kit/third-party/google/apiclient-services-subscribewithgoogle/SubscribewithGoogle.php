@@ -190,7 +190,7 @@ class Google_Service_SubscribewithGoogle_ListEntitlementsResponse extends \Googl
 {
     protected $collection_key = 'entitlements';
     protected $internal_gapi_mappings = array();
-    protected $entitlementsType = 'Google_Service_SubscribewithGoogle_Entitlement';
+    protected $entitlementsType = Google_Service_SubscribewithGoogle_Entitlement::class;
     protected $entitlementsDataType = 'array';
     public $nextPageToken;
     public function setEntitlements($entitlements)
@@ -215,7 +215,7 @@ class Google_Service_SubscribewithGoogle_ListPublicationsResponse extends \Googl
     protected $collection_key = 'publications';
     protected $internal_gapi_mappings = array();
     public $nextPageToken;
-    protected $publicationsType = 'Google_Service_SubscribewithGoogle_Publication';
+    protected $publicationsType = Google_Service_SubscribewithGoogle_Publication::class;
     protected $publicationsDataType = 'array';
     public function setNextPageToken($nextPageToken)
     {
@@ -284,12 +284,12 @@ class Google_Service_SubscribewithGoogle_Publication extends \Google\Site_Kit_De
     protected $internal_gapi_mappings = array();
     public $displayName;
     public $onboardingState;
-    protected $paymentOptionsType = 'Google_Service_SubscribewithGoogle_PaymentOptions';
+    protected $paymentOptionsType = Google_Service_SubscribewithGoogle_PaymentOptions::class;
     protected $paymentOptionsDataType = '';
-    protected $productsType = 'Google_Service_SubscribewithGoogle_Product';
+    protected $productsType = Google_Service_SubscribewithGoogle_Product::class;
     protected $productsDataType = 'array';
     public $publicationId;
-    protected $publicationPredicatesType = 'Google_Service_SubscribewithGoogle_PublicationPredicates';
+    protected $publicationPredicatesType = Google_Service_SubscribewithGoogle_PublicationPredicates::class;
     protected $publicationPredicatesDataType = '';
     public $verifiedDomains;
     public function setDisplayName($displayName)
@@ -352,7 +352,7 @@ class Google_Service_SubscribewithGoogle_Publication extends \Google\Site_Kit_De
 class Google_Service_SubscribewithGoogle_PublicationPredicates extends \Google\Site_Kit_Dependencies\Google_Model
 {
     protected $internal_gapi_mappings = array();
-    protected $businessPredicatesType = 'Google_Service_SubscribewithGoogle_BusinessPredicates';
+    protected $businessPredicatesType = Google_Service_SubscribewithGoogle_BusinessPredicates::class;
     protected $businessPredicatesDataType = '';
     public function setBusinessPredicates(\Google\Site_Kit_Dependencies\Google_Service_SubscribewithGoogle_BusinessPredicates $businessPredicates)
     {
