@@ -281,6 +281,14 @@ class Newspack_Blocks_API {
 			$args['order']    = 'ASC';
 		}
 
+		if ( isset( $attributes['showExcerpt'], $attributes['excerptLength'] ) ) {
+			$block_attributes = [
+				'showExcerpt'   => $attributes['showExcerpt'],
+				'excerptLength' => $attributes['excerptLength'],
+			];
+			Newspack_Blocks::filter_excerpt( $block_attributes );
+		}
+
 		$query = new WP_Query( $args );
 		$posts = [];
 

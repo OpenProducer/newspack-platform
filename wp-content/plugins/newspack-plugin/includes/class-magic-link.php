@@ -28,8 +28,6 @@ final class Magic_Link {
 	const AUTH_ACTION_RESULT = 'np_auth_link_result';
 	const COOKIE             = 'np_auth_link';
 
-	const MAGIC_LINK_PLACEHOLDER = '%MAGIC_LINK_URL%';
-
 	/**
 	 * Current session secret.
 	 *
@@ -291,7 +289,7 @@ final class Magic_Link {
 	 *
 	 * @return string|\WP_Error Magic link url or WP_Error if token generation failed.
 	 */
-	private static function generate_url( $user, $url = '' ) {
+	public static function generate_url( $user, $url = '' ) {
 		$token_data = self::generate_token( $user );
 
 		if ( \is_wp_error( $token_data ) ) {
@@ -309,91 +307,6 @@ final class Magic_Link {
 	}
 
 	/**
-	 * Get a magic link email arguments given a user.
-	 *
-	 * @param \WP_User $user        User to generate the magic link for.
-	 * @param string   $redirect_to Which page to redirect the reader after authenticating.
-	 * @param string   $subject     The subject of the email.
-	 * @param string   $message     Message to show in body of email.
-	 *
-	 * @return array|\WP_Error $email Email arguments or error. {
-	 *   Used to build wp_mail().
-	 *
-	 *   @type string $to      The intended recipient - New user email address.
-	 *   @type string $subject The subject of the email.
-	 *   @type string $message The body of the email.
-	 *   @type string $headers The headers of the email.
-	 * }
-	 */
-	public static function generate_email( $user, $redirect_to = '', $subject, $message = '' ) {
-		if ( ! self::can_magic_link( $user->ID ) ) {
-			return new \WP_Error( 'newspack_magic_link_invalid_user', __( 'Invalid user.', 'newspack' ) );
-		}
-
-		$magic_link_url = self::generate_url( $user, $redirect_to );
-
-		if ( \is_wp_error( $magic_link_url ) ) {
-			return $magic_link_url;
-		}
-
-		$blogname = \wp_specialchars_decode( \get_option( 'blogname' ), ENT_QUOTES );
-
-		$switched_locale = \switch_to_locale( \get_user_locale( $user ) );
-
-		if ( empty( $subject ) ) {
-			$subject = __( 'Authentication link', 'newspack' );
-		}
-
-		if ( empty( $message ) ) {
-			/* translators: %s: Site title. */
-			$message  = sprintf( __( 'Welcome back to %s!', 'newspack' ), $blogname ) . "\r\n\r\n";
-			$message .= __( 'Log into your account by visiting the following URL:', 'newspack' ) . "\r\n\r\n";
-		}
-
-		// If the message contains a magic link placeholder, populate the magic link there.
-		if ( false !== strpos( $message, self::MAGIC_LINK_PLACEHOLDER ) ) {
-			$message = str_replace( self::MAGIC_LINK_PLACEHOLDER, $magic_link_url, $message );
-		} else {
-			// Otherwise, append it to the end of the message.
-			$message .= $magic_link_url . "\r\n";
-		}
-
-		$email = [
-			'to'      => $user->user_email,
-			/* translators: %s Site title. */
-			'subject' => __( '[%s] ', 'newspack' ) . $subject,
-			'message' => $message,
-			'headers' => [
-				sprintf(
-					'From: %1$s <%2$s>',
-					Reader_Activation::get_from_name(),
-					Reader_Activation::get_from_email()
-				),
-			],
-		];
-
-		if ( $switched_locale ) {
-			\restore_previous_locale();
-		}
-
-		/**
-		 * Filters the magic link email.
-		 *
-		 * @param array    $email          Email arguments. {
-		 *   Used to build wp_mail().
-		 *
-		 *   @type string $to      The intended recipient - New user email address.
-		 *   @type string $subject The subject of the email.
-		 *   @type string $message The body of the email.
-		 *   @type string $headers The headers of the email.
-		 * }
-		 * @param \WP_User $user           User to send the magic link to.
-		 * @param string   $magic_link_url Magic link url.
-		 */
-		return \apply_filters( 'newspack_magic_link_email', $email, $user, $magic_link_url );
-	}
-
-	/**
 	 * Send magic link email to reader.
 	 *
 	 * @param \WP_User $user        User to send the magic link to.
@@ -404,24 +317,16 @@ final class Magic_Link {
 	 * @return bool|\WP_Error Whether the email was sent or WP_Error if sending failed.
 	 */
 	public static function send_email( $user, $redirect_to = '', $subject = '', $message = '' ) {
-		$email = self::generate_email( $user, $redirect_to, $subject, $message );
-
-		if ( \is_wp_error( $email ) ) {
-			return $email;
-		}
-
-		$blogname = \wp_specialchars_decode( \get_option( 'blogname' ), ENT_QUOTES );
-
-		// phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail
-		$sent = \wp_mail(
-			$email['to'],
-			\wp_specialchars_decode( sprintf( $email['subject'], $blogname ) ),
-			$email['message'],
-			$email['headers']
+		return Emails::send_email(
+			Reader_Activation_Emails::EMAIL_TYPES['MAGIC_LINK'],
+			$user->user_email,
+			[
+				[
+					'template' => '*MAGIC_LINK_URL*',
+					'value'    => self::generate_url( $user, $redirect_to ),
+				],
+			]
 		);
-		Logger::log( 'Sending magic link to ' . $email['to'] );
-
-		return $sent;
 	}
 
 	/**
@@ -560,7 +465,7 @@ final class Magic_Link {
 						}
 					</style>
 					<div class="newspack-magic-link-error">
-						<?php \esc_html_e( 'We were not able to authenticate your account through this link. Please generate a new one.', 'newspack' ); ?>
+						<?php \esc_html_e( 'We were not able to authenticate your account. Please try logging in again.', 'newspack' ); ?>
 					</div>
 					<?php
 				},

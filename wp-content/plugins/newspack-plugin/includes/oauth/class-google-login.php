@@ -198,7 +198,7 @@ class Google_Login {
 			);
 		} else {
 			Logger::log( 'Missing email for unique id ' . $uid );
-			return new \WP_Error( 'newspack_google_login', __( 'Missing email address.', 'newspack' ) );
+			return new \WP_Error( 'newspack_google_login', __( 'Failed to retrieve email address. Please try again.', 'newspack' ) );
 		}
 	}
 }

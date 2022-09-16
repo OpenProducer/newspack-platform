@@ -12,7 +12,7 @@ use Newspack\WooCommerce_My_Account;
 
 defined( 'ABSPATH' ) || exit;
 
-\do_action( 'woocommerce_before_edit_account_form' );
+\do_action( 'newspack_woocommerce_before_edit_account_form' );
 
 $newspack_reset_password_arg  = WooCommerce_My_Account::RESET_PASSWORD_URL_PARAM;
 $newspack_send_magic_link_arg = WooCommerce_My_Account::SEND_MAGIC_LINK_PARAM;
@@ -65,4 +65,4 @@ $reset_password_url                                  = \add_query_arg(
 	</p>
 </div>
 
-<?php \do_action( 'woocommerce_after_edit_account_form' ); ?>
+<?php \do_action( 'newspack_woocommerce_after_edit_account_form' ); ?>

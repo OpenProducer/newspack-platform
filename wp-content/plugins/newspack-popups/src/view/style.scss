@@ -59,6 +59,7 @@ $width__tablet: 782px;
 		padding: 0;
 		position: absolute;
 		top: 0;
+		user-select: none;
 		width: 100%;
 		z-index: 0;
 	}
@@ -73,10 +74,12 @@ $width__tablet: 782px;
 	}
 
 	.newspack-popup {
-		background: transparent;
-		margin: 0 auto;
-		max-width: $size__medium;
-		overflow: auto;
+		&__content-wrapper {
+			background: transparent;
+			margin: 0 auto;
+			max-width: $size__medium;
+			overflow: auto;
+		}
 
 		&__content {
 			padding: $overlay__gap;
@@ -92,6 +95,11 @@ $width__tablet: 782px;
 				align-items: center;
 				display: flex;
 				justify-content: center;
+			}
+
+			img {
+				height: auto;
+				width: 100%;
 			}
 		}
 
@@ -112,7 +120,7 @@ $width__tablet: 782px;
 			background-color: transparent;
 			box-shadow: none;
 		}
-		.newspack-popup {
+		.newspack-popup__content-wrapper {
 			box-shadow: 0 0 1em 0.5em rgba( black, 0.1 );
 			margin: 32px;
 		}
@@ -156,7 +164,7 @@ $width__tablet: 782px;
 	&-featured-image {
 		@media only screen and ( min-width: $width__tablet ) {
 			.newspack-lightbox__close {
-				background-color: rgba( black, 0.25 );
+				background-color: rgba( black, 0.5 );
 				border-radius: 3px;
 				color: white;
 				height: 48px;
@@ -165,7 +173,7 @@ $width__tablet: 782px;
 
 				&:active,
 				&:hover {
-					background-color: rgba( black, 0.75 );
+					background-color: rgba( black, 0.95 );
 					opacity: 1;
 				}
 
@@ -209,8 +217,13 @@ $width__tablet: 782px;
 			width: calc( 100% - #{$overlay__gap} );
 		}
 
-		.newspack-popup {
+		.newspack-popup__content-wrapper {
+			max-height: 80vh;
 			max-width: 100%;
+
+			@media only screen and ( min-width: $width__tablet ) {
+				max-height: calc( 100vh - #{2 * $overlay__gap} );
+			}
 		}
 	}
 
@@ -221,9 +234,6 @@ $width__tablet: 782px;
 				width: $size__x-small;
 			}
 		}
-		.newspack-popup {
-			max-height: 50vh;
-		}
 	}
 
 	&.newspack-lightbox-size-small {
@@ -233,9 +243,6 @@ $width__tablet: 782px;
 				width: $size__small;
 			}
 		}
-		.newspack-popup {
-			max-height: 60vh;
-		}
 	}
 
 	&.newspack-lightbox-size-medium {
@@ -244,9 +251,6 @@ $width__tablet: 782px;
 				min-width: $size__medium;
 				width: $size__medium;
 			}
-		}
-		.newspack-popup {
-			max-height: 80vh;
 		}
 	}
 
@@ -265,7 +269,7 @@ $width__tablet: 782px;
 			width: 100%;
 		}
 
-		.newspack-popup {
+		.newspack-popup__content-wrapper {
 			max-width: $size__large;
 		}
 	}
@@ -320,7 +324,7 @@ $width__tablet: 782px;
 .entry-content {
 	/* stylelint-disable-next-line no-duplicate-selectors */
 	.newspack-lightbox {
-		.newspack-popup {
+		.newspack-popup__content-wrapper {
 			.alignfull,
 			.alignwide {
 				margin-left: 0;

@@ -24,7 +24,20 @@ class WooCommerce_Connection {
 	 */
 	public static function init() {
 		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
-		\add_action( 'woocommerce_checkout_order_created', [ __CLASS__, 'register_reader' ] );
+
+		// WC Subscriptions hooks in and creates subscription at priority 100, so use priority 101.
+		\add_action( 'woocommerce_checkout_order_processed', [ __CLASS__, 'sync_reader_on_order_complete' ], 101 );
+
+		\add_action( 'wp_login', [ __CLASS__, 'sync_reader_on_customer_login' ], 10, 2 );
+	}
+
+	/**
+	 * Check whether everything is set up to enable customer syncing to ESP.
+	 *
+	 * @return bool True if enabled. False if not.
+	 */
+	protected static function can_sync_customers() {
+		return Reader_Activation::is_enabled() && class_exists( 'WC_Customer' ) && function_exists( 'wcs_get_users_subscriptions' );
 	}
 
 	/**
@@ -59,20 +72,135 @@ class WooCommerce_Connection {
 	}
 
 	/**
-	 * Ensure that donors are registered.
+	 * Sync a reader's info to the ESP when they make an order.
+	 *
+	 * @param int $order_id Order post ID.
+	 */
+	public static function sync_reader_on_order_complete( $order_id ) {
+		if ( ! self::can_sync_customers() ) {
+			return;
+		}
+
+		$order = new \WC_Order( $order_id );
+		if ( ! $order->get_customer_id() ) {
+			return;
+		}
+
+		self::sync_reader_from_order( $order );
+	}
+
+	/**
+	 * Sync a reader's info to the ESP when they log in.
+	 *
+	 * @param string  $user_login User's login name.
+	 * @param WP_User $user User object.
+	 */
+	public static function sync_reader_on_customer_login( $user_login, $user ) {
+		if ( ! self::can_sync_customers() ) {
+			return;
+		}
+
+		$customer = new \WC_Customer( $user->ID );
+
+		// If user is not a Woo customer, don't need to sync them.
+		if ( ! $customer->get_order_count() ) {
+			return;
+		}
+
+		self::sync_reader_from_order( $customer->get_last_order() );
+	}
+
+	/**
+	 * Sync a customer to the ESP from an order.
 	 *
 	 * @param WC_Order $order Order object.
 	 */
-	public static function register_reader( $order ) {
-		if ( Reader_Activation::is_enabled() ) {
-			$email_address = $order->get_billing_email();
-			$first_name    = $order->get_billing_first_name();
-			$last_name     = $order->get_billing_last_name();
-			$full_name     = "$first_name $last_name";
-			$metadata      = [ 'registration_method' => 'woocommerce-order' ];
-
-			Reader_Activation::register_reader( $email_address, $full_name, true, $metadata );
+	public static function sync_reader_from_order( $order ) {
+		if ( ! self::can_sync_customers() ) {
+			return;
 		}
+
+		if ( self::CREATED_VIA_NAME === $order->get_created_via() ) {
+			// Only sync orders not created via the Stripe integration.
+			return;
+		}
+
+		$metadata_keys = Newspack_Newsletters::$metadata_keys;
+		$user_id       = $order->get_customer_id();
+		if ( ! $user_id ) {
+			return;
+		}
+
+		$customer = new \WC_Customer( $user_id );
+		$metadata = [
+			'registration_method' => 'woocommerce-order',
+		];
+
+		$metadata[ $metadata_keys['account'] ]           = $order->get_customer_id();
+		$metadata[ $metadata_keys['registration_date'] ] = $customer->get_date_created()->date( 'Y-m-d' );
+		$metadata[ $metadata_keys['payment_page'] ]      = \wc_get_checkout_url();
+
+		$order_subscriptions = wcs_get_subscriptions_for_order( $order->get_id() );
+
+		// One-time donation.
+		if ( empty( $order_subscriptions ) ) {
+			$metadata[ $metadata_keys['membership_status'] ] = 'Donor';
+			$metadata[ $metadata_keys['total_paid'] ]        = (float) $customer->get_total_spent() ? $customer->get_total_spent() : $order->get_total();
+			$metadata[ $metadata_keys['product_name'] ]      = '';
+			$order_items                                     = $order->get_items();
+			if ( $order_items ) {
+				$metadata[ $metadata_keys['product_name'] ] = reset( $order_items )->get_name();
+			}
+			$metadata[ $metadata_keys['last_payment_amount'] ] = $order->get_total();
+
+			// Subscription donation.
+		} else {
+			$current_subscription = reset( $order_subscriptions );
+
+			$metadata[ $metadata_keys['membership_status'] ] = 'Donor';
+			if ( 'active' === $current_subscription->get_status() || 'pending' === $current_subscription->get_status() ) {
+				if ( 'month' === $current_subscription->get_billing_period() ) {
+					$metadata[ $metadata_keys['membership_status'] ] = 'Monthly Donor';
+				}
+
+				if ( 'year' === $current_subscription->get_billing_period() ) {
+					$metadata[ $metadata_keys['membership_status'] ] = 'Yearly Donor';
+				}
+			} else {
+				if ( 'month' === $current_subscription->get_billing_period() ) {
+					$metadata[ $metadata_keys['membership_status'] ] = 'Ex-Monthly Donor';
+				}
+
+				if ( 'year' === $current_subscription->get_billing_period() ) {
+					$metadata[ $metadata_keys['membership_status'] ] = 'Ex-Yearly Donor';
+				}
+			}
+
+			$metadata[ $metadata_keys['sub_start_date'] ]      = $current_subscription->get_date( 'start' );
+			$metadata[ $metadata_keys['sub_end_date'] ]        = $current_subscription->get_date( 'end' ) ? $current_subscription->get_date( 'end' ) : '';
+			$metadata[ $metadata_keys['billing_cycle'] ]       = $current_subscription->get_billing_period();
+			$metadata[ $metadata_keys['recurring_payment'] ]   = $current_subscription->get_total();
+			$metadata[ $metadata_keys['last_payment_date'] ]   = $current_subscription->get_date( 'last_order_date_paid' ) ? $current_subscription->get_date( 'last_order_date_paid' ) : gmdate( 'Y-m-d' );
+			$metadata[ $metadata_keys['last_payment_amount'] ] = $current_subscription->get_total();
+			$metadata[ $metadata_keys['next_payment_date'] ]   = $current_subscription->get_date( 'next_payment' );
+			$metadata[ $metadata_keys['total_paid'] ]          = (float) $customer->get_total_spent() ? $customer->get_total_spent() : $current_subscription->get_total();
+			$metadata[ $metadata_keys['product_name'] ]        = '';
+			if ( $current_subscription ) {
+				$subscription_order_items = $current_subscription->get_items();
+				if ( $subscription_order_items ) {
+					$metadata[ $metadata_keys['product_name'] ] = reset( $subscription_order_items )->get_name();
+				}
+			}
+		}
+
+		$first_name = $order->get_billing_first_name();
+		$last_name  = $order->get_billing_last_name();
+		$contact    = [
+			'email'    => $order->get_billing_email(),
+			'name'     => "$first_name $last_name",
+			'metadata' => $metadata,
+		];
+		\Newspack_Newsletters_Subscription::add_contact( $contact );
 	}
 
 	/**

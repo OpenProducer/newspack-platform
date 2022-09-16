@@ -150,15 +150,6 @@ class Reader_Revenue_Wizard extends Wizard {
 					'testSecretKey'      => [
 						'sanitize_callback' => 'Newspack\newspack_clean',
 					],
-					'useCaptcha'         => [
-						'sanitize_callback' => 'Newspack\newspack_string_to_bool',
-					],
-					'captchaSiteKey'     => [
-						'sanitize_callback' => 'Newspack\newspack_clean',
-					],
-					'captchaSiteSecret'  => [
-						'sanitize_callback' => 'Newspack\newspack_clean',
-					],
 					'newsletter_list_id' => [
 						'sanitize_callback' => 'Newspack\newspack_clean',
 					],
@@ -275,6 +266,12 @@ class Reader_Revenue_Wizard extends Wizard {
 			}
 			update_option( NEWSPACK_NRH_CONFIG, $nrh_config );
 		}
+
+		// Ensure that any Reader Revenue settings changed while the platform wasn't WC are persisted to WC products.
+		if ( Donations::is_platform_wc() ) {
+			Donations::update_donation_product( Donations::get_donation_settings() );
+		}
+
 		return \rest_ensure_response( $this->fetch_all_data() );
 	}
 
@@ -460,7 +457,7 @@ class Reader_Revenue_Wizard extends Wizard {
 			$nrh_config            = get_option( NEWSPACK_NRH_CONFIG, [] );
 			$args['platform_data'] = wp_parse_args( $nrh_config, $args['platform_data'] );
 		} elseif ( Donations::is_platform_stripe() ) {
-			$are_webhooks_valid = Stripe_Connection::validate_webhooks();
+			$are_webhooks_valid = Stripe_Connection::validate_or_create_webhooks();
 			if ( is_wp_error( $are_webhooks_valid ) ) {
 				$args['errors'][] = [
 					'code'    => $are_webhooks_valid->get_error_code(),
@@ -528,7 +525,7 @@ class Reader_Revenue_Wizard extends Wizard {
 			'newspack-reader-revenue-wizard',
 			'newspack_reader_revenue',
 			[
-				'emails'                  => Reader_Revenue_Emails::get_emails(),
+				'emails'                  => Emails::get_emails( [ Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'] ], false ),
 				'salesforce_redirect_url' => Salesforce::get_redirect_url(),
 			]
 		);

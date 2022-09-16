@@ -46,6 +46,9 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 						'author_types'  => [
 							'sanitize_callback' => 'WP_REST_Newspack_Author_List_Controller::sanitize_array',
 						],
+						'exclude'       => [
+							'sanitize_callback' => 'WP_REST_Newspack_Author_List_Controller::sanitize_array',
+						],
 						'exclude_empty' => [
 							'sanitize_callback' => 'absint',
 						],
@@ -77,7 +80,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 	public static function sanitize_array( $array ) {
 		foreach ( $array as $value ) {
 			if ( is_array( $value ) ) {
-				$value = sanitize_array( $value );
+				$value = self::sanitize_array( $value );
 			} else {
 				if ( is_string( $value ) ) {
 					$value = sanitize_text_field( $value );
@@ -196,7 +199,19 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 			];
 
 			if ( ! empty( $options['exclude'] ) ) {
-				$guest_author_args['post__not_in'] = $options['exclude'];
+				$guest_author_args['post__not_in'] = array_values(
+					array_map(
+						function( $item ) {
+							return isset( $item['value'] ) ? $item['value'] : $item;
+						},
+						array_filter(
+							$options['exclude'],
+							function( $item ) {
+								return isset( $item['isGuest'] ) ? ! empty( $item['isGuest'] ) : true;
+							}
+						)
+					)
+				);
 			}
 
 			$results           = new \WP_Query( $guest_author_args );
@@ -240,7 +255,19 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 			];
 
 			if ( ! empty( $options['exclude'] ) ) {
-				$user_args['exclude'] = $options['exclude']; // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
+				$user_args['exclude'] = array_values( // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
+					array_map(
+						function( $item ) {
+							return isset( $item['value'] ) ? $item['value'] : $item;
+						},
+						array_filter(
+							$options['exclude'],
+							function( $item ) {
+								return isset( $item['isGuest'] ) ? empty( $item['isGuest'] ) : true;
+							}
+						)
+					)
+				);
 			}
 
 			$results         = new \WP_User_Query( $user_args );

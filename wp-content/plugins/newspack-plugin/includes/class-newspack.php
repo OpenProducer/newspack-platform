@@ -73,13 +73,16 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-logger.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/util.php';
+		include_once NEWSPACK_ABSPATH . 'includes/emails/class-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-plugin-manager.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-theme-manager.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-admin-plugins-screen.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-analytics.php';
-		include_once NEWSPACK_ABSPATH . 'includes/class-reader-activation.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/class-reader-activation-emails.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/class-reader-activation.php';
+		include_once NEWSPACK_ABSPATH . 'includes/class-recaptcha.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-magic-link.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-woocommerce-connection.php';
@@ -131,6 +134,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-gravityforms.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/google-site-kit/class-googlesitekit.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-newspack-newsletters.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-mailchimp-for-woocommerce.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 
@@ -252,7 +256,12 @@ final class Newspack {
 	 * @param WP_Screen $current_screen Current WP_Screen object.
 	 */
 	public function wizard_redirect( $current_screen ) {
-		$post_type_mapping = [];
+		$post_type_mapping = [
+			Emails::POST_TYPE => [
+				'base' => 'edit',
+				'url'  => esc_url( admin_url( 'admin.php?page=newspack' ) ),
+			],
+		];
 
 		// Map custom post types to their wizard screen URLs.
 		if ( class_exists( '\Newspack_Popups' ) ) {

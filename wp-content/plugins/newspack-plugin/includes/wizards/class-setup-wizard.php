@@ -475,7 +475,9 @@ class Setup_Wizard extends Wizard {
 		// If the theme has to be installed, the set_theme_mod calls below will – for some reason – have no effect
 		// If there's a switch_theme call here, even though it's already called in Theme_Manager::install_activate_theme,
 		// correct mods will be saved.
-		switch_theme( $theme );
+		if ( ! empty( $theme ) ) {
+			switch_theme( $theme );
+		}
 
 		// Set homepage pattern.
 		if ( isset( $request['theme_mods']['homepage_pattern_index'] ) ) {

@@ -34,12 +34,6 @@ function newspack_blocks_render_block_author_list( $attributes ) {
 	}
 
 	// Gather attributes.
-	$exclude_ids         = array_map(
-		function( $exclusion ) {
-			return (int) $exclusion['value'];
-		},
-		$attributes['exclude']
-	);
 	$exclude_empty       = $attributes['excludeEmpty'];
 	$author_roles        = $attributes['authorRoles'];
 	$author_type         = $attributes['authorType'];
@@ -51,7 +45,7 @@ function newspack_blocks_render_block_author_list( $attributes ) {
 	$params              = [
 		'author_type'  => $author_type,
 		'author_roles' => $author_roles,
-		'exclude'      => $exclude_ids, // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
+		'exclude'      => $attributes['exclude'], // phpcs:ignore WordPressVIPMinimum.Performance.WPQueryParams.PostNotIn_exclude
 		'fields'       => [ 'id', 'name', 'bio', 'email', 'social', 'avatar', 'url' ],
 	];
 

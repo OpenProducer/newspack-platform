@@ -135,6 +135,7 @@ class Donations {
 				'year'  => false,
 			],
 			'platform'            => self::get_platform_slug(),
+			'minimumDonation'     => 5.0,
 		];
 	}
 
@@ -344,6 +345,11 @@ class Donations {
 			$parsed_settings['amounts'][ $frequency ] = array_map( 'floatval', $amounts );
 		}
 
+		// Ensure a minimum donation amount is set.
+		if ( ! isset( $saved_settings['minimumDonation'] ) && self::is_platform_wc() ) {
+			self::update_donation_product( [ 'minimumDonation' => $settings['minimumDonation'] ] );
+		}
+
 		return $parsed_settings;
 	}
 
@@ -376,7 +382,7 @@ class Donations {
 	 *
 	 * @param array $args Info that will be used to create the products.
 	 */
-	private static function update_donation_product( $args = [] ) {
+	public static function update_donation_product( $args = [] ) {
 		$defaults      = self::get_donation_default_settings();
 		$configuration = wp_parse_args( $args, $defaults );
 
@@ -426,7 +432,7 @@ class Donations {
 			$child_product->set_name( $product_name );
 			$child_product->set_regular_price( $price );
 			$child_product->update_meta_data( '_suggested_price', $price );
-			$child_product->update_meta_data( '_min_price', wc_format_decimal( 1.0 ) );
+			$child_product->update_meta_data( '_min_price', wc_format_decimal( $configuration['minimumDonation'] ) );
 			$child_product->update_meta_data( '_hide_nyp_minimum', 'yes' );
 			$child_product->update_meta_data( '_nyp', 'yes' );
 			$child_product->set_virtual( true );

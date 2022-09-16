@@ -123,6 +123,7 @@ describe( 'Streamlined Donate block processing', () => {
 					newsletter_opt_in: false,
 					clientId: 'amp-123',
 					payment_method_id: 'pm_123',
+					origin: null,
 				},
 			},
 			'post'

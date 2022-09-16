@@ -1,3 +1,38 @@
+# [2.4.0](https://github.com/Automattic/newspack-popups/compare/v2.3.1...v2.4.0) (2022-09-15)
+
+
+### Bug Fixes
+
+* force release build ([e25a11e](https://github.com/Automattic/newspack-popups/commit/e25a11ea7fdb5de0df787d15520b5555dee3077c))
+* remove duplicate newspack-popups class name ([#947](https://github.com/Automattic/newspack-popups/issues/947)) ([ff0d82f](https://github.com/Automattic/newspack-popups/commit/ff0d82fc770198185bb5d98157c3dec81da20802))
+
+
+### Features
+
+* allow custom frequencies as long as NEWSPACK_EXPERIMENTAL_READER_ACTIVATION is true ([#953](https://github.com/Automattic/newspack-popups/issues/953)) ([a8cfc42](https://github.com/Automattic/newspack-popups/commit/a8cfc42c4e9b84a79f9e53323e7543270a1b7599))
+* **analytics:** prevent marking client as a subscriber if subscribing to only the master list ([0dd5390](https://github.com/Automattic/newspack-popups/commit/0dd5390adb3ca18067917fdd0c0a4a27c9812bd3))
+* log reg form info to analytics events ([#951](https://github.com/Automattic/newspack-popups/issues/951)) ([026361b](https://github.com/Automattic/newspack-popups/commit/026361be6520b1d5941784384b88ac4fcee4ec80))
+* polyfills for some amp scripts ([#946](https://github.com/Automattic/newspack-popups/issues/946)) ([245fcac](https://github.com/Automattic/newspack-popups/commit/245fcac10cb97de58f0599746b6f3a8c718e914a))
+* simplify overlay max-height ([#950](https://github.com/Automattic/newspack-popups/issues/950)) ([c9c6001](https://github.com/Automattic/newspack-popups/commit/c9c60014ab8e98185d1ccd7f9b42f51a1e31899c))
+* tapping on overlay background no longer dismisses prompt ([#948](https://github.com/Automattic/newspack-popups/issues/948)) ([fe34eef](https://github.com/Automattic/newspack-popups/commit/fe34eef40b0ff80931f5630ccdf59fffe8d6c0e9))
+
+# [2.4.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.3.1...v2.4.0-alpha.1) (2022-09-06)
+
+
+### Bug Fixes
+
+* remove duplicate newspack-popups class name ([#947](https://github.com/Automattic/newspack-popups/issues/947)) ([ff0d82f](https://github.com/Automattic/newspack-popups/commit/ff0d82fc770198185bb5d98157c3dec81da20802))
+
+
+### Features
+
+* allow custom frequencies as long as NEWSPACK_EXPERIMENTAL_READER_ACTIVATION is true ([#953](https://github.com/Automattic/newspack-popups/issues/953)) ([a8cfc42](https://github.com/Automattic/newspack-popups/commit/a8cfc42c4e9b84a79f9e53323e7543270a1b7599))
+* **analytics:** prevent marking client as a subscriber if subscribing to only the master list ([0dd5390](https://github.com/Automattic/newspack-popups/commit/0dd5390adb3ca18067917fdd0c0a4a27c9812bd3))
+* log reg form info to analytics events ([#951](https://github.com/Automattic/newspack-popups/issues/951)) ([026361b](https://github.com/Automattic/newspack-popups/commit/026361be6520b1d5941784384b88ac4fcee4ec80))
+* polyfills for some amp scripts ([#946](https://github.com/Automattic/newspack-popups/issues/946)) ([245fcac](https://github.com/Automattic/newspack-popups/commit/245fcac10cb97de58f0599746b6f3a8c718e914a))
+* simplify overlay max-height ([#950](https://github.com/Automattic/newspack-popups/issues/950)) ([c9c6001](https://github.com/Automattic/newspack-popups/commit/c9c60014ab8e98185d1ccd7f9b42f51a1e31899c))
+* tapping on overlay background no longer dismisses prompt ([#948](https://github.com/Automattic/newspack-popups/issues/948)) ([fe34eef](https://github.com/Automattic/newspack-popups/commit/fe34eef40b0ff80931f5630ccdf59fffe8d6c0e9))
+
 ## [2.3.1](https://github.com/Automattic/newspack-popups/compare/v2.3.0...v2.3.1) (2022-08-18)
 
 

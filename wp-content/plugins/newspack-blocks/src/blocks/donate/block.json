@@ -52,6 +52,9 @@
 		},
 		"suggestedAmountUntiered": {
 			"type": "number"
+		},
+		"minimumDonation": {
+			"type": "number"
 		}
 	},
 	"supports": {

@@ -83,6 +83,16 @@ final class Newspack_Popups_Newsletters {
 		if ( \is_wp_error( $result ) || ! $result || empty( $lists ) ) {
 			return;
 		}
+
+		// If adding to the master list only, don't add a new event. Adding to the master list is
+		// not an explicit action taken by the reader.
+		if ( method_exists( '\Newspack\Newspack_Newsletters', 'get_lists_without_active_campaign_master_list' ) ) {
+			$lists = \Newspack\Newspack_Newsletters::get_lists_without_active_campaign_master_list( $lists );
+			if ( empty( $lists ) ) {
+				return;
+			}
+		}
+
 		$subscription_event = [
 			'type'    => 'subscription',
 			'context' => $contact['email'],

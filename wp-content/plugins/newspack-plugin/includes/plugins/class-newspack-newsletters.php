@@ -29,19 +29,23 @@ class Newspack_Newsletters {
 		'payment_page_utm'     => 'NP_Payment UTM: ',
 		'newsletter_selection' => 'NP_Newsletter Selection',
 		'membership_status'    => 'NP_Membership Status',
+		'sub_start_date'       => 'NP_Current Subscription Start Date',
+		'sub_end_date'         => 'NP_Current Subscription End Date',
 		'billing_cycle'        => 'NP_Billing Cycle',
 		'recurring_payment'    => 'NP_Recurring Payment',
 		'last_payment_date'    => 'NP_Last Payment Date',
 		'last_payment_amount'  => 'NP_Last Payment Amount',
 		'product_name'         => 'NP_Product Name',
 		'next_payment_date'    => 'NP_Next Payment Date',
+		'total_paid'           => 'NP_Total Paid',
+		'connected_account'    => 'NP_Connected Account',
 	];
 
 	/**
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
-		if ( Reader_Activation::is_enabled() ) {
+		if ( Reader_Activation::is_enabled() && Reader_Activation::get_setting( 'sync_esp' ) ) {
 			\add_action( 'newspack_newsletters_update_contact_lists', [ __CLASS__, 'update_contact_lists' ], 10, 5 );
 			\add_filter( 'newspack_newsletters_contact_data', [ __CLASS__, 'contact_data' ], 10, 3 );
 			\add_filter( 'newspack_newsletters_contact_lists', [ __CLASS__, 'add_activecampaign_master_list' ], 10, 3 );
@@ -141,12 +145,21 @@ class Newspack_Newsletters {
 					}
 				}
 
-				if ( isset( $contact['metadata'], $contact['metadata'][ self::$metadata_keys['last_payment_amount'] ] ) ) {
-					$metadata[ self::$metadata_keys['payment_page'] ] = $current_page_url;
-					foreach ( [ 'source', 'medium', 'campaign' ] as $value ) {
-						$param = 'utm_' . $value;
-						if ( isset( $current_page_url_params[ $param ] ) ) {
-							$metadata[ self::$metadata_keys['payment_page_utm'] . $value ] = sanitize_text_field( $current_page_url_params[ $param ] );
+				if ( isset( $contact['metadata'] ) ) {
+					if ( isset( $contact['metadata'][ self::$metadata_keys['last_payment_amount'] ] ) ) {
+						$metadata[ self::$metadata_keys['payment_page'] ] = $current_page_url;
+						foreach ( [ 'source', 'medium', 'campaign' ] as $value ) {
+							$param = 'utm_' . $value;
+							if ( isset( $current_page_url_params[ $param ] ) ) {
+								$metadata[ self::$metadata_keys['payment_page_utm'] . $value ] = sanitize_text_field( $current_page_url_params[ $param ] );
+							}
+						}
+					}
+
+					if ( isset( $contact['metadata']['registration_method'] ) ) {
+						$registration_method = $contact['metadata']['registration_method'];
+						if ( in_array( $registration_method, Reader_Activation::SSO_REGISTRATION_METHODS ) ) {
+							$contact['metadata'][ self::$metadata_keys['connected_account'] ] = $registration_method;
 						}
 					}
 				}
@@ -193,8 +206,27 @@ class Newspack_Newsletters {
 	}
 
 	/**
-	 * Ensure the contact is always added to ActiveCampaign's selected master
-	 * list.
+	 * Get lists without the master list, if set.
+	 *
+	 * @param int[] $list_ids List IDs to filter.
+	 */
+	public static function get_lists_without_active_campaign_master_list( $list_ids ) {
+		$master_list_id = Reader_Activation::get_setting( 'active_campaign_master_list' );
+		if ( is_int( intval( $master_list_id ) ) && is_array( $list_ids ) ) {
+			return array_values( // Reset keys.
+				array_filter(
+					$list_ids,
+					function( $id ) use ( $master_list_id ) {
+						return $id !== $master_list_id;
+					}
+				)
+			);
+		}
+		return $list_ids;
+	}
+
+	/**
+	 * Ensure the contact is always added to ActiveCampaign's selected master list.
 	 *
 	 * @param string[]|false $lists    Array of list IDs the contact will be subscribed to, or false.
 	 * @param array          $contact  {

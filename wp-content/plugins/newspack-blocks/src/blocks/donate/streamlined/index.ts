@@ -15,6 +15,7 @@ import 'regenerator-runtime'; // Required in WP >=5.8.
  */
 import * as utils from './utils';
 import './style.scss';
+import type { DonationSettings } from '../types';
 
 export const processStreamlinedElements = ( parentElement = document ) =>
 	[ ...parentElement.querySelectorAll( '.stripe-payment' ) ].forEach( async el => {
@@ -52,17 +53,20 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 			}
 		};
 
-		const getCaptchaToken = async ( reCaptchaKey: string ) => {
+		const getCaptchaToken = async ( captchaSiteKey: string ) => {
 			return new Promise( ( res, rej ) => {
 				const { grecaptcha } = window;
+				if ( ! grecaptcha ) {
+					return res( '' );
+				}
 
-				if ( ! grecaptcha?.ready ) {
+				if ( ! grecaptcha?.ready || ! captchaSiteKey ) {
 					rej( __( 'Error loading the reCaptcha library.', 'newspack-blocks' ) );
 				}
 
 				grecaptcha.ready( async () => {
 					try {
-						const token = await grecaptcha.execute( reCaptchaKey, { action: 'submit' } );
+						const token = await grecaptcha.execute( captchaSiteKey, { action: 'submit' } );
 						return res( token );
 					} catch ( e ) {
 						rej( e );
@@ -89,11 +93,11 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 			}
 
 			// Add reCaptcha challenge to form submission, if available.
-			const reCaptchaKey = settings?.captchaSiteKey;
-			let reCaptchaToken;
-			if ( reCaptchaKey ) {
+			const captchaSiteKey = settings?.captchaSiteKey;
+			let captchaToken;
+			if ( captchaSiteKey ) {
 				try {
-					reCaptchaToken = await getCaptchaToken( reCaptchaKey );
+					captchaToken = await getCaptchaToken( captchaSiteKey );
 				} catch ( e ) {
 					const errorMessage =
 						e instanceof Error
@@ -104,8 +108,16 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 				}
 			}
 			const formValues = utils.getDonationFormValues( formElement );
+			const promptOrigin = formElement.closest( 'amp-layout.newspack-popup' );
+
+			// If the donation originated from a Campaigns prompt, append the prompt ID to the event label.
+			const origin =
+				promptOrigin && promptOrigin.hasAttribute( 'amp-access' )
+					? promptOrigin.getAttribute( 'amp-access' )
+					: null;
+
 			const apiRequestPayload = {
-				captchaToken: reCaptchaToken,
+				captchaToken,
 				tokenData: token,
 				amount: utils.getTotalAmount( formElement ),
 				email: formValues.email,
@@ -113,8 +125,10 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 				frequency: formValues.donation_frequency,
 				newsletter_opt_in: Boolean( formValues.newsletter_opt_in ),
 				clientId: formValues.cid,
+				origin,
 				...requestPayloadOverrides,
 			};
+
 			const chargeResultData = await utils.sendAPIRequest( '/donate', apiRequestPayload );
 
 			// Error handling.
@@ -292,7 +306,9 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 			);
 
 			const formValues = utils.getDonationFormValues( formElement );
-			const validationErrors = Object.values( utils.validateFormData( formValues ) );
+			const validationErrors = Object.values(
+				utils.validateFormData( formValues, settings as DonationSettings )
+			);
 			if ( validationErrors.length > 0 ) {
 				utils.renderMessages( validationErrors, messagesEl );
 				enableForm();

@@ -7,6 +7,12 @@
 	"description": "Register a reader with their email.",
 	"textdomain": "newspack",
 	"attributes": {
+		"title": {
+			"type": "string"
+		},
+		"description": {
+			"type": "string"
+		},
 		"placeholder": {
 			"type": "string",
 			"default": "Email Address"
@@ -27,6 +33,10 @@
 		"displayListDescription": {
 			"type": "boolean",
 			"default": true
+		},
+		"hideSubscriptionInput": {
+			"type": "boolean",
+			"default": false
 		},
 		"newsletterTitle": {
 			"type": "string",

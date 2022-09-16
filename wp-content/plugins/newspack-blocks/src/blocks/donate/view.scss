@@ -62,7 +62,7 @@
 		display: none;
 
 		@include mixins.media( mobile ) {
-			display: inline;
+			display: block;
 		}
 		@include mixins.media( tablet ) {
 			margin-left: 1.5rem;

@@ -2,6 +2,34 @@
 @use '../../shared/sass/mixins';
 @use '../../shared/sass/preview';
 
+:root {
+	--wpnbha-col-gap: 1em;
+}
+
+@include mixins.media( mobile ) {
+	:root {
+		--wpnbha-col-gap: 16px;
+	}
+}
+
+@include mixins.media( tablet ) {
+	:root {
+		--wpnbha-col-gap: 32px;
+	}
+}
+
+.colgap-2 {
+	@include mixins.media( mobile ) {
+		--wpnbha-col-gap: 16px;
+	}
+}
+
+.colgap-1 {
+	@include mixins.media( mobile ) {
+		--wpnbha-col-gap: 8px;
+	}
+}
+
 .wpnbha {
 	margin-bottom: 1em;
 
@@ -25,49 +53,82 @@
 	}
 
 	/* Column styles */
-	&.is-grid > div {
-		display: flex;
-		flex-wrap: wrap;
-		justify-content: flex-start;
-		flex-direction: row;
-		gap: 16px;
-		padding: 0;
-		list-style: none;
-	}
-
 	&.is-grid {
+		> div {
+			display: flex;
+			flex-wrap: wrap;
+			justify-content: flex-start;
+			flex-direction: row;
+			gap: var( --wpnbha-col-gap );
+			padding: 0;
+			list-style: none;
+		}
+
 		article {
 			flex-basis: 100%;
+			margin-bottom: 0;
+		}
 
-			@include mixins.media( tablet ) {
-				margin-bottom: 1em;
-			}
+		.article-section-title {
+			margin-bottom: calc( 1em - var( --wpnbha-col-gap ) );
 		}
 	}
 
 	@include mixins.media( mobile ) {
+		// width of column - ( column gap / number of columns * number of gaps )
 		&.columns-3 article,
 		&.columns-6 article {
-			flex-basis: calc( 33.333% - 16px );
+			flex-basis: calc( 33.33% - ( var( --wpnbha-col-gap ) / 3 * 2 ) );
+		}
+
+		&.is-style-borders.columns-3 article,
+		&.is-style-borders.columns-6 article {
+			flex-basis: calc( 33.33% - ( 2 * var( --wpnbha-col-gap ) / 3 * 2 ) - 1px );
 		}
 
 		&.columns-2 article,
 		&.columns-4 article,
 		&.columns-5 article {
-			flex-basis: calc( 50% - 16px );
+			flex-basis: calc( 50% - ( var( --wpnbha-col-gap ) / 2 ) );
 		}
 
-		&.columns-5 article:last-of-type {
+		&.is-style-borders.columns-2 article,
+		&.is-style-borders.columns-4 article,
+		&.is-style-borders.columns-5 article {
+			flex-basis: calc( 50% - ( 2 * var( --wpnbha-col-gap ) / 2 ) - 1px );
+		}
+
+		&.columns-5 article:last-of-type,
+		&.is-style-borders.columns-5 article:last-of-type {
 			flex-basis: 100%;
 		}
 	}
 
 	@include mixins.media( tablet ) {
-		@for $i from 2 through 6 {
-			&.columns-#{ $i } article,
-			&.columns-#{ $i } article:last-of-type {
-				flex-basis: calc( ( 100% / #{$i} ) - 16px );
-			}
+		&.columns-4 article {
+			flex-basis: calc( 25% - ( var( --wpnbha-col-gap ) / 4 * 3 ) );
+		}
+
+		&.is-style-borders.columns-4 article {
+			flex-basis: calc( 25% - ( 2 * var( --wpnbha-col-gap ) / 4 * 3 ) - 1px );
+		}
+
+		&.columns-5 article,
+		&.columns-5 article:last-of-type {
+			flex-basis: calc( 20% - ( var( --wpnbha-col-gap ) / 5 * 4 ) );
+		}
+
+		&.is-style-borders.columns-5 article,
+		&.is-style-borders.columns-5 article:last-of-type {
+			flex-basis: calc( 20% - ( 2 * var( --wpnbha-col-gap ) / 5 * 4 ) - 1px );
+		}
+
+		&.columns-6 article {
+			flex-basis: calc( 16.66667% - ( var( --wpnbha-col-gap ) / 6 * 5 ) );
+		}
+
+		&.is-style-borders.columns-6 article {
+			flex-basis: calc( 16.66667% - ( 2 * var( --wpnbha-col-gap ) / 6 * 5 ) - 1px );
 		}
 	}
 
@@ -698,48 +759,41 @@ amp-script .wpnbha {
 	article {
 		border: solid rgba( 0, 0, 0, 0.2 );
 		border-width: 0 0 1px;
-		margin-bottom: 1em;
+		box-sizing: content-box;
 		padding-bottom: 1em;
 
 		&:last-of-type {
 			&:not( :first-of-type ) {
 				border-bottom: 0;
+				padding-right: 0;
 			}
 		}
 	}
 
 	@include mixins.media( mobile ) {
-		@for $i from 2 through 6 {
-			&.columns-#{ $i } article {
-				padding-right: calc( ( 16px * #{$i} ) / ( #{$i} - 1 ) );
-			}
+		&.is-grid article {
+			border-width: 0;
+			padding-right: 0;
 		}
 
 		&.columns-2,
 		&.columns-4,
 		&.columns-5 {
-			article {
-				border-width: 0;
-				&:nth-of-type( odd ) {
-					border-width: 0 1px 0 0;
-				}
+			article:nth-of-type( odd ):not( :last-of-type ) {
+				border-width: 0 1px 0 0;
+				padding-right: var( --wpnbha-col-gap );
 			}
 		}
 
 		&.columns-3,
 		&.columns-6 {
 			article {
-				border-width: 0;
-
-				&:nth-of-type( 3n + 1 ),
-				&:nth-of-type( 3n + 2 ) {
+				&:nth-of-type( 3n + 1 ):not( :last-of-type ),
+				&:nth-of-type( 3n + 2 ):not( :last-of-type ) {
 					border-width: 0 1px 0 0;
+					padding-right: var( --wpnbha-col-gap );
 				}
 			}
-		}
-
-		&.is-grid article:last-of-type {
-			border: 0;
 		}
 	}
 
@@ -747,6 +801,7 @@ amp-script .wpnbha {
 		&.is-grid {
 			article {
 				border-width: 0 1px 0 0;
+				padding-right: var( --wpnbha-col-gap );
 			}
 		}
 
@@ -758,6 +813,7 @@ amp-script .wpnbha {
 		&.columns-5 article:nth-of-type( 5n ),
 		&.columns-6 article:nth-of-type( 6n ) {
 			border: 0;
+			padding-right: 0;
 		}
 	}
 }

@@ -938,6 +938,7 @@ final class Newspack_Popups_Model {
 		$has_link            = preg_match( '/<a\s/', $body ) !== 0;
 		$newspack_form_class = apply_filters( 'newspack_campaigns_form_class', '.newspack-subscribe-form' );
 		$newspack_form_class = '.' === substr( $newspack_form_class, 0, 1 ) ? substr( $newspack_form_class, 1 ) : $newspack_form_class; // Strip the "." class selector.
+		$has_register_form   = preg_match( '/id="newspack-(register|subscribe)-(.+)"/', $body ) !== 0;
 		$has_form            = preg_match( '/<form\s|mc4wp-form|\[gravityforms\s|' . $newspack_form_class . '/', $body ) !== 0;
 		$has_dismiss_form    = self::is_overlay( $popup );
 
@@ -966,6 +967,11 @@ final class Newspack_Popups_Model {
 				'amp_element' => '#' . esc_attr( $element_id ) . ' a',
 				'event_name'  => __( 'Link Click', 'newspack-popups' ),
 			];
+		}
+
+		// If the form contains registration + list info, append that to the event label.
+		if ( $has_register_form ) {
+			$event_label .= __( ' | ${formId} - ${formFields[lists[]]}' );
 		}
 
 		if ( $has_form ) {
@@ -1167,7 +1173,7 @@ final class Newspack_Popups_Model {
 			id="<?php echo esc_attr( $element_id ); ?>"
 		>
 			<div class="<?php echo esc_attr( implode( ' ', $wrapper_classes ) ); ?>" data-popup-status="<?php echo esc_attr( $popup['status'] ); ?>" style="<?php echo ! $hide_border ? esc_attr( self::container_style( $popup ) ) : ''; ?>">
-				<div class="newspack-popup" style="<?php echo $hide_border ? esc_attr( self::container_style( $popup ) ) : ''; ?>">
+				<div class="newspack-popup__content-wrapper" style="<?php echo $hide_border ? esc_attr( self::container_style( $popup ) ) : ''; ?>">
 					<?php if ( $has_featured_image ) : ?>
 						<div class="newspack-popup__featured-image">
 							<?php echo get_the_post_thumbnail( $popup['id'], 'large' ); ?>
@@ -1191,19 +1197,14 @@ final class Newspack_Popups_Model {
 				</div>
 			</div>
 			<?php if ( ! $no_overlay_background ) : ?>
-				<form class="popup-dismiss-form <?php echo esc_attr( self::get_form_class( 'dismiss', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?>"
-					method="POST"
-					action-xhr="<?php echo esc_url( $endpoint ); ?>"
-					target="_top">
-					<?php echo $hidden_fields; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					<button style="opacity: <?php echo floatval( $overlay_opacity ); ?>;background-color:<?php echo esc_attr( $overlay_color ); ?>;" class="newspack-lightbox-shim" on="tap:<?php echo esc_attr( $element_id ); ?>.hide"></button>
+				<div style="opacity: <?php echo floatval( $overlay_opacity ); ?>;background-color:<?php echo esc_attr( $overlay_color ); ?>;" class="newspack-lightbox-shim"></div>
 				</form>
 			<?php endif; ?>
 		</amp-layout>
 		<?php if ( $is_scroll_triggered ) : ?>
-			<div id="page-position-marker" style="position: absolute; top: <?php echo esc_attr( $popup['options']['trigger_scroll_progress'] ); ?>%"></div>
+			<div id="page-position-marker_<?php echo esc_attr( $animation_id ); ?>" style="position: absolute; top: <?php echo esc_attr( $popup['options']['trigger_scroll_progress'] ); ?>%"></div>
 			<amp-position-observer
-				target="page-position-marker"
+				target="page-position-marker_<?php echo esc_attr( $animation_id ); ?>"
 				on="enter:<?php echo esc_attr( $animation_id ); ?>.start;"
 				once
 				layout="nodisplay"

@@ -209,6 +209,13 @@ class Plugin_Manager {
 				'PluginURI'   => esc_url( 'https://github.com/xwp/pwa-wp' ),
 				'Download'    => 'wporg',
 			],
+			'recaptcha-for-woocommerce'     => [
+				'Name'        => esc_html__( 'reCaptcha for WooCommerce', 'newspack' ),
+				'Description' => esc_html__( 'Protect your eCommerce store from malicious and automated attacks by using reCaptcha for WooCommerce.', 'newspack' ),
+				'Author'      => esc_html__( 'I13 Web Solution', 'newspack' ),
+				'PluginURI'   => esc_url( 'https://woocommerce.com/products/recaptcha-for-woocommerce/' ),
+				'AuthorURI'   => esc_url( 'https://woocommerce.com/vendor/i13-web-solution/' ),
+			],
 			'redirection'                   => [
 				'Name'        => esc_html__( 'Redirection', 'newspack' ),
 				'Description' => esc_html__( 'Manage all your 301 redirects and monitor 404 errors.', 'newspack' ),

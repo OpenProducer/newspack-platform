@@ -86,7 +86,10 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 			const params = {
 				author_type: authorType,
 				author_roles: authorRoles,
-				exclude: exclude.map( exclusion => parseInt( exclusion.value ) ),
+				exclude: exclude.map( exclusion => ( {
+					value: exclusion.value,
+					isGuest: exclusion.isGuest,
+				} ) ),
 			};
 
 			if ( excludeEmpty ) {
@@ -253,6 +256,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 								return suggestions.map( _author => ( {
 									value: _author.id,
 									label: decodeEntities( _author.name ) || __( '(no name)', 'newspack' ),
+									isGuest: _author.is_guest,
 								} ) );
 							} }
 							maxItemsToSuggest={ maxItemsToSuggest }

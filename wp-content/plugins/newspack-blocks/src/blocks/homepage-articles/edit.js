@@ -267,6 +267,7 @@ class Edit extends Component {
 			postsToShow,
 			categories,
 			columns,
+			colGap,
 			postType,
 			showImage,
 			showCaption,
@@ -322,6 +323,24 @@ class Edit extends Component {
 			},
 		];
 
+		const colGapOptions = [
+			{
+				value: 1,
+				label: /* translators: label for small size option */ __( 'Small', 'newspack-blocks' ),
+				shortName: /* translators: abbreviation for small size */ __( 'S', 'newspack-blocks' ),
+			},
+			{
+				value: 2,
+				label: /* translators: label for medium size option */ __( 'Medium', 'newspack-blocks' ),
+				shortName: /* translators: abbreviation for medium size */ __( 'M', 'newspack-blocks' ),
+			},
+			{
+				value: 3,
+				label: /* translators: label for large size option */ __( 'Large', 'newspack-blocks' ),
+				shortName: /* translators: abbreviation for large size */ __( 'L', 'newspack-blocks' ),
+			},
+		];
+
 		return (
 			<Fragment>
 				<PanelBody title={ __( 'Display Settings', 'newspack-blocks' ) } initialOpen={ true }>
@@ -357,14 +376,44 @@ class Edit extends Component {
 						postType={ postType }
 					/>
 					{ postLayout === 'grid' && (
-						<RangeControl
-							label={ __( 'Columns', 'newspack-blocks' ) }
-							value={ columns }
-							onChange={ _columns => setAttributes( { columns: _columns } ) }
-							min={ 2 }
-							max={ 6 }
-							required
-						/>
+						<Fragment>
+							<RangeControl
+								label={ __( 'Columns', 'newspack-blocks' ) }
+								value={ columns }
+								onChange={ _columns => setAttributes( { columns: _columns } ) }
+								min={ 2 }
+								max={ 6 }
+								required
+							/>
+
+							<BaseControl
+								label={ __( 'Columns Gap', 'newspack-blocks' ) }
+								id="newspackcolumns-col-gap"
+							>
+								<PanelRow>
+									<ButtonGroup
+										id="newspackcolumns-col-gap"
+										aria-label={ __( 'Columns Gap', 'newspack-blocks' ) }
+									>
+										{ colGapOptions.map( option => {
+											const isCurrent = colGap === option.value;
+											return (
+												<Button
+													isLarge
+													isPrimary={ isCurrent }
+													aria-pressed={ isCurrent }
+													aria-label={ option.label }
+													key={ option.value }
+													onClick={ () => setAttributes( { colGap: option.value } ) }
+												>
+													{ option.shortName }
+												</Button>
+											);
+										} ) }
+									</ButtonGroup>
+								</PanelRow>
+							</BaseControl>
+						</Fragment>
 					) }
 					{ ! specificMode && isBlogPrivate() ? (
 						/*
@@ -603,6 +652,7 @@ class Edit extends Component {
 			moreButton,
 			moreButtonText,
 			columns,
+			colGap,
 			typeScale,
 			imageScale,
 			mobileStack,
@@ -617,6 +667,7 @@ class Edit extends Component {
 			'is-grid': postLayout === 'grid',
 			'show-image': showImage,
 			[ `columns-${ columns }` ]: postLayout === 'grid',
+			[ `colgap-${ colGap }` ]: postLayout === 'grid',
 			[ `ts-${ typeScale }` ]: typeScale !== '5',
 			[ `image-align${ mediaPosition }` ]: showImage,
 			[ `is-${ imageScale }` ]: imageScale !== '1' && showImage,

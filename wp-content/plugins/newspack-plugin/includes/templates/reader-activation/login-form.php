@@ -9,4 +9,12 @@
 
 namespace Newspack;
 
+if ( ! defined( 'ABSPATH' ) ) {
+	exit; // Exit if accessed directly.
+}
+
+\do_action( 'woocommerce_before_customer_login_form' );
+
 Reader_Activation::render_auth_form( true );
+
+\do_action( 'woocommerce_after_customer_login_form' );

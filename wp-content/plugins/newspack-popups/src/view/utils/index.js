@@ -157,3 +157,14 @@ export const waitUntil = ( condition, callback, maxTries = 10 ) => {
 		}
 	}, 200 );
 };
+
+/**
+ * If an AMP module was loaded, e.g. via another plugin or a custom header script, it should not be polyfilled.
+ */
+export const shouldPolyfillAMPModule = name => undefined === customElements.get( `amp-${ name }` );
+
+export const parseOnHandlers = onAttributeValue =>
+	onAttributeValue
+		.split( ';' )
+		.filter( Boolean )
+		.map( onHandler => /(?<action>\w*):(?<id>(\w|-)*)\.(?<method>.*)/.exec( onHandler ).groups );

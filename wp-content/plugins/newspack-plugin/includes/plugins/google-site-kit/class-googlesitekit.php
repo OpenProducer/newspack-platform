@@ -23,6 +23,22 @@ class GoogleSiteKit {
 	public static function init() {
 		add_action( 'admin_init', [ __CLASS__, 'setup_sitekit_ga4' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'insert_ga4_analytics' ] );
+		add_filter( 'option_googlesitekit_analytics_settings', [ __CLASS__, 'filter_ga_settings' ] );
+	}
+
+	/**
+	 * Filter GA settings.
+	 *
+	 * @param array $googlesitekit_analytics_settings GA settings.
+	 */
+	public static function filter_ga_settings( $googlesitekit_analytics_settings ) {
+		if ( Reader_Activation::is_enabled() ) {
+			// If RA is enabled, readers will become logged in users. They should still be tracked in GA.
+			if ( in_array( 'loggedinUsers', $googlesitekit_analytics_settings['trackingDisabled'] ) ) {
+				$googlesitekit_analytics_settings['trackingDisabled'] = [ 'contentCreators' ];
+			}
+		}
+		return $googlesitekit_analytics_settings;
 	}
 
 	/**

@@ -1,3 +1,47 @@
+# [1.57.0](https://github.com/Automattic/newspack-blocks/compare/v1.56.0...v1.57.0) (2022-09-14)
+
+
+### Bug Fixes
+
+* add button block class to the Homepage Posts more button ([#1252](https://github.com/Automattic/newspack-blocks/issues/1252)) ([c4d565c](https://github.com/Automattic/newspack-blocks/commit/c4d565c1dcac3c62d4ce299bc74d422bc2b686cc))
+* correct Donate thank you message alignment ([#1258](https://github.com/Automattic/newspack-blocks/issues/1258)) ([e838e61](https://github.com/Automattic/newspack-blocks/commit/e838e61c58ad8f3aef85b8c6b73ef61526e7bfa0))
+* disambiguate users and guest authors in Author List exclusions ([#1154](https://github.com/Automattic/newspack-blocks/issues/1154)) ([c59056b](https://github.com/Automattic/newspack-blocks/commit/c59056bbd21359b1167998f961f59e607cc3bd67))
+* **donate:** default value not below minimum donation ([#1248](https://github.com/Automattic/newspack-blocks/issues/1248)) ([368e856](https://github.com/Automattic/newspack-blocks/commit/368e85634df97bf011ae2274460695fb6d1b6cc3))
+* **donate:** use first & last name as default name ([#1255](https://github.com/Automattic/newspack-blocks/issues/1255)) ([105d95b](https://github.com/Automattic/newspack-blocks/commit/105d95b7679daae21b204783e25cd6659d787b3e))
+* re-add excerpt length preview in editor ([#1247](https://github.com/Automattic/newspack-blocks/issues/1247)) ([bdbe86e](https://github.com/Automattic/newspack-blocks/commit/bdbe86eb0811152dbac2f621e481bb19403b5837))
+* update Homepage Posts grid spacing and add control  ([#1245](https://github.com/Automattic/newspack-blocks/issues/1245)) ([9fa6972](https://github.com/Automattic/newspack-blocks/commit/9fa6972793d3ae82b008e098736337e4dd332dba))
+
+
+### Features
+
+* handle minimum donation option in Donate block ([#1239](https://github.com/Automattic/newspack-blocks/issues/1239)) ([10dfefe](https://github.com/Automattic/newspack-blocks/commit/10dfefe43d1130490a18aa51e2509a8fae7d12a0))
+* if donation via a prompt, add prompt ID to Stripe payment metadata ([#1253](https://github.com/Automattic/newspack-blocks/issues/1253)) ([b8cb0e9](https://github.com/Automattic/newspack-blocks/commit/b8cb0e9ffa7a42d6d8cf1c7dbcbce824f900e8a3))
+
+# [1.57.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v1.57.0-alpha.1...v1.57.0-alpha.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* correct Donate thank you message alignment ([#1258](https://github.com/Automattic/newspack-blocks/issues/1258)) ([e838e61](https://github.com/Automattic/newspack-blocks/commit/e838e61c58ad8f3aef85b8c6b73ef61526e7bfa0))
+* update Homepage Posts grid spacing and add control  ([#1245](https://github.com/Automattic/newspack-blocks/issues/1245)) ([9fa6972](https://github.com/Automattic/newspack-blocks/commit/9fa6972793d3ae82b008e098736337e4dd332dba))
+
+# [1.57.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.56.0...v1.57.0-alpha.1) (2022-08-26)
+
+
+### Bug Fixes
+
+* add button block class to the Homepage Posts more button ([#1252](https://github.com/Automattic/newspack-blocks/issues/1252)) ([c4d565c](https://github.com/Automattic/newspack-blocks/commit/c4d565c1dcac3c62d4ce299bc74d422bc2b686cc))
+* disambiguate users and guest authors in Author List exclusions ([#1154](https://github.com/Automattic/newspack-blocks/issues/1154)) ([c59056b](https://github.com/Automattic/newspack-blocks/commit/c59056bbd21359b1167998f961f59e607cc3bd67))
+* **donate:** default value not below minimum donation ([#1248](https://github.com/Automattic/newspack-blocks/issues/1248)) ([368e856](https://github.com/Automattic/newspack-blocks/commit/368e85634df97bf011ae2274460695fb6d1b6cc3))
+* **donate:** use first & last name as default name ([#1255](https://github.com/Automattic/newspack-blocks/issues/1255)) ([105d95b](https://github.com/Automattic/newspack-blocks/commit/105d95b7679daae21b204783e25cd6659d787b3e))
+* re-add excerpt length preview in editor ([#1247](https://github.com/Automattic/newspack-blocks/issues/1247)) ([bdbe86e](https://github.com/Automattic/newspack-blocks/commit/bdbe86eb0811152dbac2f621e481bb19403b5837))
+
+
+### Features
+
+* handle minimum donation option in Donate block ([#1239](https://github.com/Automattic/newspack-blocks/issues/1239)) ([10dfefe](https://github.com/Automattic/newspack-blocks/commit/10dfefe43d1130490a18aa51e2509a8fae7d12a0))
+* if donation via a prompt, add prompt ID to Stripe payment metadata ([#1253](https://github.com/Automattic/newspack-blocks/issues/1253)) ([b8cb0e9](https://github.com/Automattic/newspack-blocks/commit/b8cb0e9ffa7a42d6d8cf1c7dbcbce824f900e8a3))
+
 # [1.56.0](https://github.com/Automattic/newspack-blocks/compare/v1.55.0...v1.56.0) (2022-08-16)
 
 

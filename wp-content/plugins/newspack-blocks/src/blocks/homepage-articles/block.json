@@ -74,6 +74,10 @@
       "type": "integer",
       "default": 3
     },
+    "colGap": {
+      "type": "integer",
+      "default": 3
+    },
     "postsToShow": {
       "type": "integer",
       "default": 3

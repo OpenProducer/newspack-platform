@@ -18,13 +18,6 @@ require_once NEWSPACK_ABSPATH . 'includes/configuration_managers/class-configura
 class Profile {
 
 	/**
-	 * Profile fields.
-	 *
-	 * @var $profile_fields
-	 */
-	protected static $profile_fields = [];
-
-	/**
 	 * The capability required to access this wizard.
 	 *
 	 * @var string
@@ -32,27 +25,16 @@ class Profile {
 	protected $capability = 'manage_options';
 
 	/**
-	 * Fields to fetch from WP SEO (Yoast) plugin.
-	 *
-	 * @var array
-	 */
-	protected static $wpseo_fields = [];
-
-	/**
 	 * Constructor.
 	 */
 	public function __construct() {
 		add_action( 'rest_api_init', [ $this, 'register_api_endpoints' ] );
-		add_action( 'init', [ $this, 'set_profile_fields' ] );
 	}
-
 	/**
 	 * Register the endpoints needed for the wizard screens.
 	 */
-	public function set_profile_fields() {
-		$site_icon = get_site_icon_url();
-
-		self::$wpseo_fields = [
+	private function get_wpseo_fields() {
+		return [
 			[
 				'key'         => 'facebook_site',
 				'label'       => __( 'Facebook Page', 'newspack' ),
@@ -84,10 +66,16 @@ class Profile {
 				'placeholder' => __( 'https://pinterest.com/user', 'newspack' ),
 			],
 		];
+	}
 
+	/**
+	 * Register the endpoints needed for the wizard screens.
+	 */
+	private function get_profile_fields() {
+		$site_icon                = get_site_icon_url();
 		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
 		$wc_location_data         = $wc_configuration_manager->location_data();
-		self::$profile_fields     = [
+		$profile_fields           = [
 			[
 				'name'    => 'site_icon',
 				'value'   => ! empty( $site_icon ) ? [
@@ -132,12 +120,12 @@ class Profile {
 		];
 
 		$wpseo_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'wordpress_seo' );
-		foreach ( self::$wpseo_fields as $field ) {
+		foreach ( self::get_wpseo_fields() as $field ) {
 			$value = $wpseo_manager->get_option( $field['key'], '' );
 			if ( is_wp_error( $value ) ) {
 				$value = '';
 			}
-			self::$profile_fields[] = [
+			$profile_fields[] = [
 				'name'    => $field['key'],
 				'value'   => $value,
 				'updater' => function( $value ) use ( $field ) {
@@ -146,6 +134,8 @@ class Profile {
 				},
 			];
 		}
+
+		return $profile_fields;
 	}
 
 	/**
@@ -186,7 +176,7 @@ class Profile {
 	 */
 	public function newspack_get_profile() {
 		$profile = [];
-		foreach ( self::$profile_fields as $field ) {
+		foreach ( self::get_profile_fields() as $field ) {
 			$profile[ $field['name'] ] = $field['value'];
 		}
 		return $profile;
@@ -203,7 +193,7 @@ class Profile {
 			'profile'      => $this->newspack_get_profile(),
 			'currencies'   => newspack_get_currencies_options(),
 			'countries'    => newspack_get_countries(),
-			'wpseo_fields' => self::$wpseo_fields,
+			'wpseo_fields' => self::get_wpseo_fields(),
 		];
 		return rest_ensure_response( $response );
 	}
@@ -216,11 +206,10 @@ class Profile {
 	 */
 	public function api_update_profile( $request ) {
 		$updates = $request['profile'];
-		foreach ( self::$profile_fields as $field ) {
+		foreach ( self::get_profile_fields() as $field ) {
 			$updater = $field['updater'];
 			$updater( $updates[ $field['name'] ] );
 		}
-		self::set_profile_fields();
 
 		$profile               = $this->newspack_get_profile();
 		$social_menu_name      = __( 'Social Links', 'newspack' );
@@ -234,7 +223,7 @@ class Profile {
 			! wp_get_nav_menu_object( $social_menu_name )
 		) {
 			$social_menu_items = [];
-			foreach ( self::$wpseo_fields as $social_field ) {
+			foreach ( self::get_wpseo_fields() as $social_field ) {
 				if ( ! empty( $profile[ $social_field['key'] ] ) ) {
 					$social_menu_items[] = [
 						'key'   => $social_field['key'],
