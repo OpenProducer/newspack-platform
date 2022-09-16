@@ -1,3 +1,59 @@
+# [1.51.0](https://github.com/Automattic/newspack-newsletters/compare/v1.50.0...v1.51.0) (2022-09-14)
+
+
+### Bug Fixes
+
+* **active-campaign:** handle errors when fetching contact data ([5a612e2](https://github.com/Automattic/newspack-newsletters/commit/5a612e28db7fab91e103ca2b8426507ad59a1380))
+* **ActiveCampaing:** handle error on test campaign ([#945](https://github.com/Automattic/newspack-newsletters/issues/945)) ([3a65c82](https://github.com/Automattic/newspack-newsletters/commit/3a65c82bf68e80e2f80a09f02d670cc166c87bf3))
+* only process links with valid url ([#942](https://github.com/Automattic/newspack-newsletters/issues/942)) ([8868fc2](https://github.com/Automattic/newspack-newsletters/commit/8868fc2126e55092b3b8eeb5c0e3f0b703deb679))
+* **subscribe-block:** remove horizontal scroll ([f7a36c4](https://github.com/Automattic/newspack-newsletters/commit/f7a36c4dcd72f646f321d02547fa6ce1c89225e0))
+* tweak Subscribe form styles and behavior ([#937](https://github.com/Automattic/newspack-newsletters/issues/937)) ([48b285c](https://github.com/Automattic/newspack-newsletters/commit/48b285c021dc4b572d1e49ab21bb87246db4eb58))
+
+
+### Features
+
+* delete contact on reader account deletion ([#929](https://github.com/Automattic/newspack-newsletters/issues/929)) ([d0619f7](https://github.com/Automattic/newspack-newsletters/commit/d0619f765614e202c7505a52700140f141b7900f))
+* give each subscribe form a unique ID ([#943](https://github.com/Automattic/newspack-newsletters/issues/943)) ([2b52e1a](https://github.com/Automattic/newspack-newsletters/commit/2b52e1a0890af8680778c080de61eeffff729cc2))
+* handle reCAPTCHA on Subscribe form ([#935](https://github.com/Automattic/newspack-newsletters/issues/935)) ([d527b60](https://github.com/Automattic/newspack-newsletters/commit/d527b600b3d4d3ecdb126e75a0bb77f6ac73ae3f))
+* handle updated from & name settings from Newspack plugin ([#938](https://github.com/Automattic/newspack-newsletters/issues/938)) ([4764a67](https://github.com/Automattic/newspack-newsletters/commit/4764a67024aeb1893deeffba57c0e5cc78652e05))
+* honeypot field for Subscribe block form ([#932](https://github.com/Automattic/newspack-newsletters/issues/932)) ([cb836d0](https://github.com/Automattic/newspack-newsletters/commit/cb836d07e8c9cdbab7b1c1688574ad635d33635b))
+
+# [1.51.0-alpha.3](https://github.com/Automattic/newspack-newsletters/compare/v1.51.0-alpha.2...v1.51.0-alpha.3) (2022-09-07)
+
+
+### Bug Fixes
+
+* **active-campaign:** handle errors when fetching contact data ([5a612e2](https://github.com/Automattic/newspack-newsletters/commit/5a612e28db7fab91e103ca2b8426507ad59a1380))
+* **subscribe-block:** remove horizontal scroll ([f7a36c4](https://github.com/Automattic/newspack-newsletters/commit/f7a36c4dcd72f646f321d02547fa6ce1c89225e0))
+
+# [1.51.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v1.51.0-alpha.1...v1.51.0-alpha.2) (2022-09-06)
+
+
+### Bug Fixes
+
+* **ActiveCampaing:** handle error on test campaign ([#945](https://github.com/Automattic/newspack-newsletters/issues/945)) ([3a65c82](https://github.com/Automattic/newspack-newsletters/commit/3a65c82bf68e80e2f80a09f02d670cc166c87bf3))
+* only process links with valid url ([#942](https://github.com/Automattic/newspack-newsletters/issues/942)) ([8868fc2](https://github.com/Automattic/newspack-newsletters/commit/8868fc2126e55092b3b8eeb5c0e3f0b703deb679))
+
+
+### Features
+
+* give each subscribe form a unique ID ([#943](https://github.com/Automattic/newspack-newsletters/issues/943)) ([2b52e1a](https://github.com/Automattic/newspack-newsletters/commit/2b52e1a0890af8680778c080de61eeffff729cc2))
+* handle updated from & name settings from Newspack plugin ([#938](https://github.com/Automattic/newspack-newsletters/issues/938)) ([4764a67](https://github.com/Automattic/newspack-newsletters/commit/4764a67024aeb1893deeffba57c0e5cc78652e05))
+
+# [1.51.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.50.0...v1.51.0-alpha.1) (2022-08-26)
+
+
+### Bug Fixes
+
+* tweak Subscribe form styles and behavior ([#937](https://github.com/Automattic/newspack-newsletters/issues/937)) ([48b285c](https://github.com/Automattic/newspack-newsletters/commit/48b285c021dc4b572d1e49ab21bb87246db4eb58))
+
+
+### Features
+
+* delete contact on reader account deletion ([#929](https://github.com/Automattic/newspack-newsletters/issues/929)) ([d0619f7](https://github.com/Automattic/newspack-newsletters/commit/d0619f765614e202c7505a52700140f141b7900f))
+* handle reCAPTCHA on Subscribe form ([#935](https://github.com/Automattic/newspack-newsletters/issues/935)) ([d527b60](https://github.com/Automattic/newspack-newsletters/commit/d527b600b3d4d3ecdb126e75a0bb77f6ac73ae3f))
+* honeypot field for Subscribe block form ([#932](https://github.com/Automattic/newspack-newsletters/issues/932)) ([cb836d0](https://github.com/Automattic/newspack-newsletters/commit/cb836d07e8c9cdbab7b1c1688574ad635d33635b))
+
 # [1.50.0](https://github.com/Automattic/newspack-newsletters/compare/v1.49.1...v1.50.0) (2022-08-16)
 
 

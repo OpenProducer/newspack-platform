@@ -280,6 +280,10 @@ final class Newspack_Newsletters_Renderer {
 		$href_params = $matches[0];
 		$urls        = $matches[1];
 		foreach ( $urls as $index => $url ) {
+			/** Link href content can be invalid (placeholder) so we must skip it. */
+			if ( ! wp_http_validate_url( $url ) ) {
+				continue;
+			}
 			$url_with_params = apply_filters(
 				'newspack_newsletters_process_link',
 				add_query_arg(

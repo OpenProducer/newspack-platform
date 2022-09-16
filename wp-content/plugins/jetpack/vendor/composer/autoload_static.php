@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2
+class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_3_1
 {
     public static $files = array (
         '3773ef3f09c37da5478d578e32b03a4b' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-assets/actions.php',
@@ -136,6 +136,8 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2
         'Automattic\\Jetpack\\Plans' => __DIR__ . '/..' . '/automattic/jetpack-plans/src/class-plans.php',
         'Automattic\\Jetpack\\Plugin\\Tracking' => __DIR__ . '/../..' . '/src/class-tracking.php',
         'Automattic\\Jetpack\\Plugins_Installer' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-plugins-installer/src/class-plugins-installer.php',
+        'Automattic\\Jetpack\\Post_List\\Post_List' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-post-list/src/class-post-list.php',
+        'Automattic\\Jetpack\\Post_List\\Post_Thumbnail' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-post-list/src/class-post-thumbnail.php',
         'Automattic\\Jetpack\\Publicize\\Connections_Post_Field' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-connections-post-field.php',
         'Automattic\\Jetpack\\Publicize\\Keyring_Helper' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-keyring-helper.php',
         'Automattic\\Jetpack\\Publicize\\Publicize' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-publicize/src/class-publicize.php',
@@ -226,8 +228,19 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2
         'Automattic\\Jetpack\\Sync\\Utils' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-sync/src/class-utils.php',
         'Automattic\\Jetpack\\Terms_Of_Service' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-terms-of-service.php',
         'Automattic\\Jetpack\\Tracking' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-connection/src/class-tracking.php',
+        'Automattic\\Jetpack\\VideoPress\\AJAX' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-ajax.php',
+        'Automattic\\Jetpack\\VideoPress\\Admin_UI' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-admin-ui.php',
+        'Automattic\\Jetpack\\VideoPress\\Attachment_Handler' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-attachment-handler.php',
         'Automattic\\Jetpack\\VideoPress\\Initializer' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-initializer.php',
+        'Automattic\\Jetpack\\VideoPress\\Jwt_Token_Bridge' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-jwt-token-bridge.php',
+        'Automattic\\Jetpack\\VideoPress\\Module_Control' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-module-control.php',
         'Automattic\\Jetpack\\VideoPress\\Options' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-options.php',
+        'Automattic\\Jetpack\\VideoPress\\Package_Version' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-package-version.php',
+        'Automattic\\Jetpack\\VideoPress\\Status' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-status.php',
+        'Automattic\\Jetpack\\VideoPress\\Upload_Exception' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-upload-exception.php',
+        'Automattic\\Jetpack\\VideoPress\\Uploader' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-uploader.php',
+        'Automattic\\Jetpack\\VideoPress\\Uploader_Rest_Endpoints' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-uploader-rest-endpoints.php',
+        'Automattic\\Jetpack\\VideoPress\\WPCOM_REST_API_V2_Endpoint_VideoPress' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-wpcom-rest-api-v2-endpoint-videopress.php',
         'Automattic\\Jetpack\\VideoPress\\XMLRPC' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/class-xmlrpc.php',
         'Automattic\\Jetpack\\Waf\\CLI' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/class-waf-cli.php',
         'Automattic\\Jetpack\\Waf\\Waf_Constants' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-waf/src/class-waf-constants.php',
@@ -270,15 +283,23 @@ class ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2
         'Twitter\\Text\\StringUtils' => __DIR__ . '/..' . '/nojimage/twitter-text-php/lib/Twitter/Text/StringUtils.php',
         'Twitter\\Text\\TldLists' => __DIR__ . '/..' . '/nojimage/twitter-text-php/lib/Twitter/Text/TldLists.php',
         'Twitter\\Text\\Validator' => __DIR__ . '/..' . '/nojimage/twitter-text-php/lib/Twitter/Text/Validator.php',
+        'VIDEOPRESS_PRIVACY' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/utility-functions.php',
+        'VideoPressUploader\\File_Exception' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/tus/class-file-exception.php',
+        'VideoPressUploader\\Transient_Store' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/tus/class-transient-store.php',
+        'VideoPressUploader\\Tus_Abstract_Cache' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/tus/class-tus-abstract-cache.php',
+        'VideoPressUploader\\Tus_Client' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/tus/class-tus-client.php',
+        'VideoPressUploader\\Tus_Date_Utils' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/tus/class-tus-date-utils.php',
+        'VideoPressUploader\\Tus_Exception' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/tus/class-tus-exception.php',
+        'VideoPressUploader\\Tus_File' => __DIR__ . '/../..' . '/jetpack_vendor/automattic/jetpack-videopress/src/tus/class-tus-file.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_3_1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_3_1::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_3_1::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitf11009ded9fc4592b6a05b61ce272b3c_jetpackⓥ11_3_1::$classMap;
 
         }, null, ClassLoader::class);
     }

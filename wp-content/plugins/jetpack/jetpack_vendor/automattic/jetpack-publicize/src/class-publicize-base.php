@@ -1007,7 +1007,7 @@ abstract class Publicize_Base {
 	public function register_post_meta() {
 		$message_args = array(
 			'type'          => 'string',
-			'description'   => __( 'The message to use instead of the title when sharing to Publicize Services', 'jetpack-publicize-pkg' ),
+			'description'   => __( 'The message to use instead of the title when sharing to Jetpack Social services', 'jetpack-publicize-pkg' ),
 			'single'        => true,
 			'default'       => '',
 			'show_in_rest'  => array(
@@ -1452,6 +1452,26 @@ abstract class Publicize_Base {
 	public function get_publicize_shares_info( $blog_id ) {
 		$response        = Client::wpcom_json_api_request_as_blog(
 			sprintf( 'sites/%d/jetpack-social', absint( $blog_id ) ),
+			'2',
+			array(
+				'headers' => array( 'content-type' => 'application/json' ),
+				'method'  => 'GET',
+			),
+			null,
+			'wpcom'
+		);
+		$rest_controller = new REST_Controller();
+		return $rest_controller->make_proper_response( $response );
+	}
+
+	/**
+	 * Call the WPCOM REST API to calculate the scheduled shares.
+	 *
+	 * @param string $blog_id The blog_id.
+	 */
+	public function calculate_scheduled_shares( $blog_id ) {
+		$response        = Client::wpcom_json_api_request_as_blog(
+			sprintf( 'sites/%d/jetpack-social/count-scheduled-shares', absint( $blog_id ) ),
 			'2',
 			array(
 				'headers' => array( 'content-type' => 'application/json' ),

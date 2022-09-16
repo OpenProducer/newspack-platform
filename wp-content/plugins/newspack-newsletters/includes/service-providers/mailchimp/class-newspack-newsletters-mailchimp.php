@@ -883,6 +883,33 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	}
 
 	/**
+	 * Delete contact from all lists given its email.
+	 *
+	 * @param string $email Email address.
+	 *
+	 * @return bool|WP_Error True if the contact was deleted, error if failed.
+	 */
+	public function delete_contact( $email ) {
+		$contact = $this->get_contact_data( $email );
+		if ( is_wp_error( $contact ) ) {
+			return $contact;
+		}
+		foreach ( $contact['lists'] as $list_id => $list ) {
+			try {
+				$member_id = $list['id'];
+				$mc        = new Mailchimp( $this->api_key() );
+				$mc->delete( "lists/$list_id/members/$member_id" );
+			} catch ( \Exception $e ) {
+				return new \WP_Error(
+					'newspack_newsletters_mailchimp_delete_contact_failed',
+					$e->getMessage()
+				);
+			}
+		}
+		return true;
+	}
+
+	/**
 	 * Get the lists a contact is subscribed to.
 	 *
 	 * @param string $email The contact email.
@@ -975,6 +1002,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				}
 			}
 			$data['lists'][ $contact['list_id'] ] = [
+				'id'         => $contact['id'], // md5 hash of email.
 				'contact_id' => $contact['contact_id'],
 				'status'     => $contact['status'],
 			];

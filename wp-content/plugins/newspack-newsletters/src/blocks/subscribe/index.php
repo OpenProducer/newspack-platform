@@ -35,10 +35,17 @@ function enqueue_scripts() {
 		[],
 		filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/subscribeBlock.css' )
 	);
+
+	$use_captcha  = method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha();
+	$dependencies = [ 'wp-polyfill', 'wp-i18n' ];
+	if ( $use_captcha ) {
+		$dependencies[] = \Newspack\Recaptcha::SCRIPT_HANDLE;
+	}
+
 	\wp_enqueue_script(
 		$handle,
 		plugins_url( '../../../dist/subscribeBlock.js', __FILE__ ),
-		[ 'wp-polyfill' ],
+		$dependencies,
 		filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/subscribeBlock.js' ),
 		true
 	);
@@ -46,6 +53,20 @@ function enqueue_scripts() {
 	\wp_script_add_data( $handle, 'amp-plus', true );
 }
 add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_scripts' );
+
+/**
+ * Generate a unique ID for each subscription form.
+ *
+ * The ID for each form instance is unique only for each page render.
+ * The main intent is to be able to pass this ID to analytics so we
+ * can identify what type of form it is, so the ID doesn't need to be
+ * predictable nor consistent across page renders.
+ *
+ * @return string A unique ID string to identify the form.
+ */
+function get_form_id() {
+	return \wp_unique_id( 'newspack-subscribe-' );
+}
 
 /**
  * Render Registration Block.
@@ -87,8 +108,8 @@ function render_block( $attrs ) {
 		if ( isset( $_REQUEST['message'] ) ) {
 			$message = \sanitize_text_field( $_REQUEST['message'] );
 		}
-		if ( isset( $_REQUEST['email'] ) ) {
-			$email = \sanitize_text_field( $_REQUEST['email'] );
+		if ( isset( $_REQUEST['npe'] ) ) {
+			$email = \sanitize_text_field( $_REQUEST['npe'] );
 		}
 		if ( isset( $_REQUEST['lists'] ) && is_array( $_REQUEST['lists'] ) ) {
 			$list_map = array_flip( array_map( 'sanitize_text_field', $_REQUEST['lists'] ) );
@@ -101,15 +122,25 @@ function render_block( $attrs ) {
 		<?php if ( $subscribed ) : ?>
 			<p class="message"><?php echo \esc_html( $message ); ?></p>
 		<?php else : ?>
-			<form>
+			<form id="<?php echo esc_attr( get_form_id() ); ?>">
 				<?php \wp_nonce_field( FORM_ACTION, FORM_ACTION ); ?>
 				<div class="newspack-newsletters-email-input">
 					<input
 						type="email"
-						name="email"
+						name="npe"
 						autocomplete="email"
 						placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
 						value="<?php echo esc_attr( $email ); ?>"
+					/>
+					<input
+						class="nphp"
+						tabindex="-1"
+						aria-hidden="true"
+						type="email"
+						name="email"
+						autocomplete="email"
+						placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
+						value=""
 					/>
 				</div>
 				<?php if ( 1 < count( $available_lists ) ) : ?>
@@ -226,7 +257,21 @@ function process_form() {
 		return;
 	}
 
-	if ( ! isset( $_REQUEST['email'] ) || empty( $_REQUEST['email'] ) ) {
+	// Honeypot trap.
+	if ( ! empty( $_REQUEST['email'] ) ) {
+		return send_form_response( [ 'email' => \sanitize_email( $_REQUEST['email'] ) ] );
+	}
+
+	// reCAPTCHA test.
+	if ( method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha() ) {
+		$captcha_token  = isset( $_REQUEST['captcha_token'] ) ? \sanitize_text_field( $_REQUEST['captcha_token'] ) : '';
+		$captcha_result = \Newspack\Recaptcha::verify_captcha( $captcha_token );
+		if ( \is_wp_error( $captcha_result ) ) {
+			return send_form_response( $captcha_result );
+		}
+	}
+
+	if ( ! isset( $_REQUEST['npe'] ) || empty( $_REQUEST['npe'] ) ) {
 		return send_form_response( new \WP_Error( 'invalid_email', __( 'You must enter a valid email address.', 'newspack-newsletters' ) ) );
 	}
 
@@ -234,7 +279,8 @@ function process_form() {
 		return send_form_response( new \WP_Error( 'no_lists', __( 'You must select a list.', 'newspack-newsletters' ) ) );
 	}
 
-	$email = \sanitize_email( $_REQUEST['email'] );
+	// The "true" email address field is called `npe` due to the honeypot strategy.
+	$email = \sanitize_email( $_REQUEST['npe'] );
 	$lists = array_map( 'sanitize_text_field', $_REQUEST['lists'] );
 
 	$result = \Newspack_Newsletters_Subscription::add_contact(

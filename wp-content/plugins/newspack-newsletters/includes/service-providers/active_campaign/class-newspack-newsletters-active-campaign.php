@@ -382,7 +382,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		$post        = get_post( $post_id );
 		$sync_result = $this->sync( $post );
 		if ( is_wp_error( $sync_result ) ) {
-			return \rest_ensure_response( $sync_result );
+			return $sync_result;
 		}
 		/** Create disposable campaign for sending a test. */
 		$campaign_name = sprintf( 'Test for %s', $this->get_campaign_name( $post ) );
@@ -404,6 +404,12 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 				],
 			]
 		);
+		if ( is_wp_error( $test_result ) ) {
+			return new WP_Error(
+				'newspack_newsletters_active_campaign_test',
+				sprintf( 'Sending test campaign failed: %s', $test_result->get_error_message() )
+			);
+		}
 		return [
 			'message' => sprintf(
 				// translators: %s are comma-separated emails.
@@ -654,6 +660,16 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		if ( Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT !== get_post_type( $post_id ) ) {
 			return;
 		}
+		/** Clean up existing test campaigns. */
+		$test_campaigns = get_post_meta( $post_id, 'ac_test_campaign' );
+		if ( ! empty( $test_campaigns ) ) {
+			foreach ( $test_campaigns as $test_campaign_id ) {
+				$delete_res = $this->delete_campaign( $test_campaign_id, true );
+				if ( ! is_wp_error( $delete_res ) ) {
+					delete_post_meta( $post_id, 'ac_test_campaign', $test_campaign_id );
+				}
+			}
+		}
 		$campaign_id = get_post_meta( $post_id, 'ac_campaign_id', true );
 		$message_id  = get_post_meta( $post_id, 'ac_message_id', true );
 		if ( $campaign_id ) {
@@ -781,6 +797,22 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	}
 
 	/**
+	 * Delete contact from all lists given its email.
+	 *
+	 * @param string $email Email address.
+	 *
+	 * @return bool|WP_Error True if the contact was deleted, error if failed.
+	 */
+	public function delete_contact( $email ) {
+		$contact = $this->get_contact_data( $email );
+		if ( is_wp_error( $contact ) ) {
+			return $contact;
+		}
+		$result = $this->api_v1_request( 'contact_delete', 'GET', [ 'query' => [ 'id' => $contact['id'] ] ] );
+		return is_wp_error( $result ) ? $result : true;
+	}
+
+	/**
 	 * Get the lists a contact is subscribed to.
 	 *
 	 * @param string $email The contact email.
@@ -897,8 +929,11 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		}
 		$contact_data = $result['contacts'][0];
 		if ( $return_details ) {
-			$fields_result            = $this->api_v3_request( 'fields', 'GET' );
-			$fields                   = array_reduce(
+			$fields_result = $this->api_v3_request( 'fields', 'GET' );
+			if ( \is_wp_error( $fields_result ) ) {
+				return $fields_result;
+			}
+			$fields         = array_reduce(
 				$fields_result['fields'],
 				function( $acc, $field ) {
 					$acc[ $field['id'] ] = $field['perstag'];
@@ -906,7 +941,10 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 				},
 				[]
 			);
-			$contact_result           = $this->api_v3_request( 'contacts/' . $contact_data['id'], 'GET' );
+			$contact_result = $this->api_v3_request( 'contacts/' . $contact_data['id'], 'GET' );
+			if ( \is_wp_error( $contact_result ) ) {
+				return $contact_result;
+			}
 			$contact_fields           = array_reduce(
 				$contact_result['fieldValues'],
 				function( $acc, $field ) use ( $fields ) {

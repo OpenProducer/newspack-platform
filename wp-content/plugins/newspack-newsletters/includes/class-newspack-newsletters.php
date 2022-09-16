@@ -1140,28 +1140,6 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Add contact to a mailing list of the configured ESP.
-	 *
-	 * This method is soon to be deprecated.
-	 * Use Newspack_Newsletters_Subscription::add_contact() instead.
-	 *
-	 * @param array  $contact The contact to add to the list.
-	 * @param string $list_id ID of the list to add the contact to.
-	 */
-	public static function add_contact( $contact, $list_id ) {
-		if ( self::is_service_provider_configured() ) {
-			try {
-				return self::$provider->add_contact( $contact, $list_id );
-			} catch ( \Exception $e ) {
-				return new WP_Error(
-					'newspack_newsletters_get_lists',
-					$e->getMessage()
-				);
-			}
-		}
-	}
-
-	/**
 	 * Mark newsletter as sent.
 	 *
 	 * @param int $post_id Post ID.
