@@ -10,6 +10,7 @@ import { Fragment } from '@wordpress/element';
 import {
 	SelectControl,
 	TextControl,
+	ToggleControl,
 	// eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 	__experimentalNumberControl as NumberControl,
 } from '@wordpress/components';
@@ -19,31 +20,11 @@ const frequencyOptions = [
 	{ value: 'weekly', label: __( 'Once a week', 'newspack-popups' ) },
 	{ value: 'daily', label: __( 'Once a day', 'newspack-popups' ) },
 	{
-		value: 'preset_1',
-		label: __( 'Every 4th pageview, up to 5x per month', 'newspack-popups' ),
-	},
-	{
 		value: 'always',
 		label: __( 'Every pageview', 'newspack-popups' ),
 	},
 	{ value: 'custom', label: __( 'Custom', 'newspack-popups' ) },
 ];
-
-const getFrequencyOptions = isOverlay => {
-	const { experimental } = window.newspack_popups_data;
-	const experimentalKeys = [ 'weekly', 'preset_1', 'custom' ];
-
-	if ( experimental ) {
-		return frequencyOptions;
-	}
-
-	return frequencyOptions
-		.filter( item => 0 > experimentalKeys.indexOf( item.value ) )
-		.map( item => {
-			item.disabled = 'always' === item.value && isOverlay;
-			return item;
-		} );
-};
 
 const FrequencySidebar = ( {
 	frequency,
@@ -51,7 +32,6 @@ const FrequencySidebar = ( {
 	frequency_start,
 	frequency_between,
 	frequency_reset,
-	isOverlay,
 	onMetaFieldChange,
 	utm_suppression,
 } ) => {
@@ -93,40 +73,42 @@ const FrequencySidebar = ( {
 						metaToUpdate.frequency_reset = 'month';
 					}
 
-					if ( 'preset_1' === value ) {
-						metaToUpdate.frequency_max = 5;
-						metaToUpdate.frequency_start = 3;
-						metaToUpdate.frequency_between = 3;
-						metaToUpdate.frequency_reset = 'month';
-					}
-
 					onMetaFieldChange( metaToUpdate );
 				} }
-				options={ getFrequencyOptions( isOverlay ) }
+				options={ frequencyOptions }
 			/>
 			{ 'custom' === frequency && (
 				<>
 					<NumberControl
 						className="newspack-popups__frequency-number-control"
-						label={ __( 'Max number of displays', 'newspack-popups' ) }
-						value={ frequency_max }
-						min={ 0 }
-						onChange={ value => onMetaFieldChange( { frequency_max: value } ) }
+						label={ __( 'Start at pageview', 'newspack-popups' ) }
+						value={ frequency_start + 1 }
+						min={ 1 }
+						onChange={ value => onMetaFieldChange( { frequency_start: value - 1 } ) }
 					/>
 					<NumberControl
 						className="newspack-popups__frequency-number-control"
-						label={ __( 'Start after pageview', 'newspack-popups' ) }
-						value={ frequency_start }
-						min={ 0 }
-						onChange={ value => onMetaFieldChange( { frequency_start: value } ) }
+						label={ __( 'Display every n pageviews', 'newspack-popups' ) }
+						value={ frequency_between + 1 }
+						min={ 1 }
+						onChange={ value => onMetaFieldChange( { frequency_between: value - 1 } ) }
 					/>
-					<NumberControl
-						className="newspack-popups__frequency-number-control"
-						label={ __( 'Pageviews between displays', 'newspack-popups' ) }
-						value={ frequency_between }
-						min={ 0 }
-						onChange={ value => onMetaFieldChange( { frequency_between: value } ) }
+					<ToggleControl
+						className="newspack-popups__frequency-toggle-control"
+						label={ __( 'Limit number of displays', 'newspack-popups' ) }
+						checked={ 0 < frequency_max }
+						onChange={ value => onMetaFieldChange( { frequency_max: value ? 1 : 0 } ) }
 					/>
+					{ 0 < frequency_max && (
+						<NumberControl
+							className="newspack-popups__frequency-number-control"
+							disabled={ 0 === frequency_max }
+							label={ __( 'Max number of displays', 'newspack-popups' ) }
+							value={ frequency_max }
+							min={ 0 }
+							onChange={ value => onMetaFieldChange( { frequency_max: value } ) }
+						/>
+					) }
 					<SelectControl
 						label={ __( 'Reset counter per:', 'newspack-popups' ) }
 						value={ frequency_reset }

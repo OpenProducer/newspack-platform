@@ -29,19 +29,11 @@ class Analytics {
 	public static $block_render_context = 3;
 
 	/**
-	 * Config for the injected amp-analytics tag.
-	 *
-	 * @var array
-	 */
-	public static $amp_analytics_config_base = [];
-
-	/**
 	 * Constructor
 	 */
 	public function __construct() {
-		add_filter( 'googlesitekit_amp_gtag_opt', [ __CLASS__, 'read_amp_analytics_config' ] );
 		add_filter( 'googlesitekit_gtag_opt', [ __CLASS__, 'set_extra_analytics_config_options' ] );
-		add_action( 'wp_footer', [ __CLASS__, 'insert_gtag_amp_analytics' ], 99 ); // This has to be run after the filter above steals the analytics config.
+		add_action( 'wp_footer', [ __CLASS__, 'insert_gtag_amp_analytics' ] );
 
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'handle_custom_dimensions_reporting' ] );
 		add_action( 'wp_footer', [ __CLASS__, 'inject_non_amp_events' ] );
@@ -450,22 +442,6 @@ class Analytics {
 	}
 
 	/**
-	 * Read the amp-analytics config that Site Kit will insert on the page.
-	 * Site Kit will place its amp-analytics tag on the page, and this
-	 * plugin will place other amp-analytics tags.
-	 *
-	 * @param array $config AMP Analytics config from Site Kit.
-	 * @return array Modified $config.
-	 */
-	public static function read_amp_analytics_config( $config ) {
-		if ( is_user_logged_in() ) {
-			$config['vars']['user_id'] = get_current_user_id();
-		}
-		self::$amp_analytics_config_base = $config;
-		return $config;
-	}
-
-	/**
 	 * Filter the Google Analytics config options via Site Kit.
 	 * Allows us to update or set additional config options for GA.
 	 *
@@ -496,10 +472,36 @@ class Analytics {
 	 * More: https://github.com/ampproject/amphtml/issues/32911.
 	 */
 	public static function insert_gtag_amp_analytics() {
-		$config = self::$amp_analytics_config_base;
-		if ( empty( $config ) ) {
-			// Apparently not a page-rendering request - the Site Kit filter (googlesitekit_amp_gtag_opt) was not executed.
+		$analytics = Google_Services_Connection::get_site_kit_analytics_module();
+		if ( ! $analytics || ! $analytics->is_connected() ) {
 			return;
+		}
+		$analytics_settings = $analytics->get_settings()->get();
+		if ( ! isset( $analytics_settings['propertyID'] ) ) {
+			return;
+		}
+		$tracking_id = $analytics_settings['propertyID'];
+
+		// Config for amp-analytics.
+		$config = [
+			'optoutElementId' => '__gaOptOutExtension',
+			'vars'            => [
+				'gtag_id' => $tracking_id,
+				'config'  => [
+					$tracking_id => [
+						'groups' => 'default',
+						'linker' => [
+							'domains' => [ wp_parse_url( home_url(), PHP_URL_HOST ) ],
+						],
+					],
+				],
+			],
+		];
+
+		// The Google Analytics User ID is used to associate multiple user sessions and activities with a unique ID.
+		// See https://support.google.com/tagmanager/answer/4565987.
+		if ( is_user_logged_in() ) {
+			$config['vars']['user_id'] = get_current_user_id();
 		}
 
 		// Gather all custom events.

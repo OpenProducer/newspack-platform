@@ -1,3 +1,10 @@
+# [2.5.0](https://github.com/Automattic/newspack-popups/compare/v2.4.0...v2.5.0) (2022-09-21)
+
+
+### Features
+
+* improved frequency options no longer experimental; clearer UI (v2) ([#966](https://github.com/Automattic/newspack-popups/issues/966)) ([3fea259](https://github.com/Automattic/newspack-popups/commit/3fea259e7f1c790455d40a2b20be931e0131b5c1))
+
 # [2.4.0](https://github.com/Automattic/newspack-popups/compare/v2.3.1...v2.4.0) (2022-09-15)
 
 

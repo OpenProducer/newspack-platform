@@ -1,3 +1,31 @@
+## [1.91.2](https://github.com/Automattic/newspack-plugin/compare/v1.91.1...v1.91.2) (2022-09-23)
+
+
+### Bug Fixes
+
+* **analytics:** improve reliability of custom events reporting in AMP ([#2034](https://github.com/Automattic/newspack-plugin/issues/2034)) ([746fdda](https://github.com/Automattic/newspack-plugin/commit/746fdda6c1e2f7ac07192bf30bbf50c88b6f767e))
+
+## [1.91.2-hotfix.2](https://github.com/Automattic/newspack-plugin/compare/v1.91.2-hotfix.1...v1.91.2-hotfix.2) (2022-09-23)
+
+
+### Bug Fixes
+
+* remove filter priority ([92ad712](https://github.com/Automattic/newspack-plugin/commit/92ad71276e78da40ad96486f0036c3101e00a494))
+
+## [1.91.2-hotfix.1](https://github.com/Automattic/newspack-plugin/compare/v1.91.1...v1.91.2-hotfix.1) (2022-09-23)
+
+
+### Bug Fixes
+
+* **analytics:** improve reliability of custom events reporting in AMP ([a3d5982](https://github.com/Automattic/newspack-plugin/commit/a3d59829ed9c53e81f5ca89899b87e68cb19b43e))
+
+## [1.91.1](https://github.com/Automattic/newspack-plugin/compare/v1.91.0...v1.91.1) (2022-09-21)
+
+
+### Bug Fixes
+
+* move improved frequency options out of experimental state ([45b0fe6](https://github.com/Automattic/newspack-plugin/commit/45b0fe62ae51023a21bf789873fc441d1bbea47d))
+
 # [1.91.0](https://github.com/Automattic/newspack-plugin/compare/v1.90.0...v1.91.0) (2022-09-15)
 
 

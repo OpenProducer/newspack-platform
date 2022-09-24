@@ -66,6 +66,10 @@ $size__large: 1264px;
 		}
 	}
 
+	&__frequency-toggle-control.components-toggle-control {
+		margin-top: 16px;
+	}
+
 	&__frequency-number-control.components-number-control {
 		align-items: center;
 		display: flex;

@@ -653,7 +653,6 @@ final class Newspack_Popups {
 					)
 				),
 				'preview_query_keys'           => self::PREVIEW_QUERY_KEYS,
-				'experimental'                 => class_exists( '\Newspack\Reader_Activation' ) ? \Newspack\Reader_Activation::is_enabled( false ) : false,
 			]
 		);
 		\wp_enqueue_style(

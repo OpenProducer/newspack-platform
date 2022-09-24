@@ -324,12 +324,6 @@ class Maybe_Show_Campaign extends Lightweight_API {
 			$frequency_between = 0;
 			$frequency_reset   = 'month';
 		}
-		if ( 'preset_1' === $frequency ) {
-			$frequency_max     = 5;
-			$frequency_start   = 3;
-			$frequency_between = 3;
-			$frequency_reset   = 'month';
-		}
 
 		if ( false === $now ) {
 			$now = time();
