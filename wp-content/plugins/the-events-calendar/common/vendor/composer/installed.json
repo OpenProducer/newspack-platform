@@ -223,20 +223,20 @@
     },
     {
         "name": "xrstf/composer-php52",
-        "version": "v1.0.20",
-        "version_normalized": "1.0.20.0",
+        "version": "v1.0.21",
+        "version_normalized": "1.0.21.0",
         "source": {
             "type": "git",
             "url": "https://github.com/composer-php52/composer-php52.git",
-            "reference": "bd41459d5e27df8d33057842b32377c39e97a5a8"
+            "reference": "670ac996f93792f8de0427605cfef342b3429ff3"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/composer-php52/composer-php52/zipball/bd41459d5e27df8d33057842b32377c39e97a5a8",
-            "reference": "bd41459d5e27df8d33057842b32377c39e97a5a8",
+            "url": "https://api.github.com/repos/composer-php52/composer-php52/zipball/670ac996f93792f8de0427605cfef342b3429ff3",
+            "reference": "670ac996f93792f8de0427605cfef342b3429ff3",
             "shasum": ""
         },
-        "time": "2016-04-16T21:52:24+00:00",
+        "time": "2022-06-08T03:23:46+00:00",
         "type": "library",
         "extra": {
             "branch-alias": {
