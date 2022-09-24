@@ -9,6 +9,7 @@
 
 namespace TEC\Events\Custom_Tables\V1\Repository;
 
+use Closure;
 use TEC\Events\Custom_Tables\V1\Models\Event;
 use WP_Post;
 use Tribe__Events__Main as TEC;
@@ -23,16 +24,25 @@ use RuntimeException;
  */
 class Events {
 	/**
+	 * A map of the update data per post ID.
+	 *
+	 * @since 6.0.0
+	 *
+	 * @var array<int,array<string,mixed>>
+	 */
+	private $update_data = [];
+
+	/**
 	 * Returns the callback that should be used to update Events in the context of
 	 * the Repository.
 	 *
 	 * @since 6.0.0
 	 *
-	 * @return callable The callback that should be used to upsert the Event data in the custom tables.
+	 * @return Closure The callback that should be used to upsert the Event data in the custom tables.
 	 */
-	public function update_callback( $repository_callback, array $postarr = [] ) {
+	public function update_callback( callable $repository_callback, array $postarr = [] ): Closure {
 		// Run the original callback, then ours.
-		$wrapping_callback = function ( ...$args ) use ( $repository_callback, $postarr ) {
+		return function ( ...$args ) use ( $repository_callback, $postarr ) {
 			$post_id = $repository_callback( ...$args );
 
 			if ( ! $post_id ) {
@@ -41,8 +51,6 @@ class Events {
 
 			return $this->update( $post_id, $postarr );
 		};
-
-		return $wrapping_callback;
 	}
 
 	/**
@@ -50,12 +58,12 @@ class Events {
 	 *
 	 * @since 6.0.0
 	 *
-	 * @param int|\WP_Post        $event_id The Event post ID, or a reference to the Event post object.
+	 * @param int|WP_Post         $event_id The Event post ID, or a reference to the Event post object.
 	 * @param array<string,mixed> $data     The data, all of it, used to upsert the Event.
 	 *
 	 * @return int|null Either the updated Event post ID, or `null` if the Event could not be created.
 	 */
-	public function update( $event_id, $data ) {
+	public function update( $event_id, array $data ): ?int {
 		$event_post = get_post( $event_id );
 
 		if ( ! ( $event_post instanceof WP_Post && TEC::POSTTYPE === $event_post->post_type ) ) {
@@ -64,6 +72,7 @@ class Events {
 		}
 
 		try {
+			$this->update_data[ $event_id ] = $data;
 			$event = $this->upsert_event( $event_id );
 			$this->save_occurrences( $event );
 		} catch ( \Exception $e ) {

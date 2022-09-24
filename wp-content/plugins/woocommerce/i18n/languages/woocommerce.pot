@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 6.9.2\n"
+"Project-Id-Version: WooCommerce 6.9.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2022-09-15T14:12:29+00:00\n"
+"POT-Creation-Date: 2022-09-20T18:34:34+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.6.0\n"
 "X-Domain: woocommerce\n"
@@ -8779,7 +8779,7 @@ msgid "Invalid product tax status."
 msgstr ""
 
 #: includes/abstracts/abstract-wc-product.php:1924
-#: includes/class-wc-product-simple.php:84
+#: includes/class-wc-product-simple.php:60
 #: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/add-to-cart/shared/add-to-cart-button.js:166
 #: packages/woocommerce-blocks/assets/js/atomic/blocks/product-elements/button/block.js:131
 #: packages/woocommerce-blocks/assets/js/previews/products.js:59
@@ -8797,7 +8797,7 @@ msgstr ""
 
 #: includes/abstracts/abstract-wc-product.php:1933
 #: includes/class-wc-embed.php:106
-#: includes/class-wc-product-simple.php:84
+#: includes/class-wc-product-simple.php:60
 #: includes/class-wc-product-variable.php:60
 #: packages/woocommerce-blocks/build/all-reviews.js:5
 #: packages/woocommerce-blocks/build/reviews-by-category.js:5
@@ -8808,7 +8808,7 @@ msgstr ""
 
 #. translators: %s: Product title
 #: includes/abstracts/abstract-wc-product.php:1944
-#: includes/class-wc-product-simple.php:97
+#: includes/class-wc-product-simple.php:73
 msgid "Read more about &ldquo;%s&rdquo;"
 msgstr ""
 
@@ -8816,7 +8816,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-reports.php:108
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:276
 #: includes/admin/reports/class-wc-report-stock.php:118
-#: includes/wc-product-functions.php:875
+#: includes/wc-product-functions.php:906
 #: assets/client/admin/chunks/analytics-report-stock.js:1
 msgid "Out of stock"
 msgstr ""
@@ -13627,7 +13627,7 @@ msgstr ""
 
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:272
 #: includes/admin/reports/class-wc-report-stock.php:114
-#: includes/wc-product-functions.php:876
+#: includes/wc-product-functions.php:907
 #: assets/client/admin/chunks/analytics-report-stock.js:1
 msgid "On backorder"
 msgstr ""
@@ -13635,7 +13635,7 @@ msgstr ""
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:274
 #: includes/admin/reports/class-wc-report-stock.php:116
 #: includes/wc-formatting-functions.php:1231
-#: includes/wc-product-functions.php:874
+#: includes/wc-product-functions.php:905
 #: assets/client/admin/chunks/analytics-report-stock.js:1
 msgid "In stock"
 msgstr ""
@@ -17334,7 +17334,7 @@ msgstr ""
 #: includes/admin/settings/views/html-settings-tax.php:24
 #: includes/admin/views/html-bulk-edit-product.php:95
 #: includes/admin/views/html-quick-edit-product.php:72
-#: includes/wc-product-functions.php:854
+#: includes/wc-product-functions.php:885
 msgid "Standard"
 msgstr ""
 
@@ -18640,7 +18640,7 @@ msgstr ""
 #: includes/admin/views/html-bulk-edit-product.php:190
 #: includes/admin/views/html-quick-edit-product.php:148
 #: includes/customizer/class-wc-shop-customizer.php:710
-#: includes/wc-product-functions.php:840
+#: includes/wc-product-functions.php:871
 msgid "Hidden"
 msgstr ""
 
@@ -21354,16 +21354,8 @@ msgstr ""
 msgid "View products in the &ldquo;%s&rdquo; group"
 msgstr ""
 
-#: includes/class-wc-product-simple.php:43
-msgid "Upload JPEG files that are 1000 x 1000 pixels or larger (max. 2 GB)."
-msgstr ""
-
-#: includes/class-wc-product-simple.php:44
-msgid "How to prepare images?"
-msgstr ""
-
 #. translators: %s: Product title
-#: includes/class-wc-product-simple.php:97
+#: includes/class-wc-product-simple.php:73
 msgid "Add &ldquo;%s&rdquo; to your cart"
 msgstr ""
 
@@ -23212,7 +23204,7 @@ msgstr ""
 #: includes/rest-api/Controllers/Version1/class-wc-rest-products-v1-controller.php:314
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:427
 #: includes/rest-api/Controllers/Version2/class-wc-rest-products-v2-controller.php:428
-#: includes/wc-product-functions.php:324
+#: includes/wc-product-functions.php:355
 msgid "Placeholder"
 msgstr ""
 
@@ -29772,48 +29764,57 @@ msgctxt "slug"
 msgid "uncategorized"
 msgstr ""
 
-#: includes/wc-product-functions.php:600
+#. translators: 1: formatted file size
+#: includes/wc-product-functions.php:295
+msgid "Upload JPEG files that are 1000 x 1000 pixels or larger (max. %1$s)."
+msgstr ""
+
+#: includes/wc-product-functions.php:296
+msgid "How to prepare images?"
+msgstr ""
+
+#: includes/wc-product-functions.php:631
 msgid "Simple product"
 msgstr ""
 
-#: includes/wc-product-functions.php:601
+#: includes/wc-product-functions.php:632
 #: assets/client/admin/chunks/6063.js:1
 #: assets/client/admin/chunks/6340.js:1
 msgid "Grouped product"
 msgstr ""
 
-#: includes/wc-product-functions.php:602
+#: includes/wc-product-functions.php:633
 msgid "External/Affiliate product"
 msgstr ""
 
-#: includes/wc-product-functions.php:603
+#: includes/wc-product-functions.php:634
 #: assets/client/admin/chunks/6063.js:1
 #: assets/client/admin/chunks/6232.js:1
 #: assets/client/admin/chunks/6340.js:1
 msgid "Variable product"
 msgstr ""
 
-#: includes/wc-product-functions.php:837
+#: includes/wc-product-functions.php:868
 msgid "Shop and search results"
 msgstr ""
 
-#: includes/wc-product-functions.php:838
+#: includes/wc-product-functions.php:869
 msgid "Shop only"
 msgstr ""
 
-#: includes/wc-product-functions.php:839
+#: includes/wc-product-functions.php:870
 msgid "Search results only"
 msgstr ""
 
-#: includes/wc-product-functions.php:889
+#: includes/wc-product-functions.php:920
 msgid "Do not allow"
 msgstr ""
 
-#: includes/wc-product-functions.php:890
+#: includes/wc-product-functions.php:921
 msgid "Allow, but notify customer"
 msgstr ""
 
-#: includes/wc-product-functions.php:891
+#: includes/wc-product-functions.php:922
 msgid "Allow"
 msgstr ""
 

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit047571bb9c5b6978ec6fb64db0b7588e
+class ComposerStaticInitb894359d15008797e6ddab61567f70cd
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -77,6 +77,7 @@ class ComposerStaticInit047571bb9c5b6978ec6fb64db0b7588e
         'TEC\\Events\\Custom_Tables\\V1\\Models\\Validators\\End_Date_UTC' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Models/Validators/End_Date_UTC.php',
         'TEC\\Events\\Custom_Tables\\V1\\Models\\Validators\\Ignore_Validator' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Models/Validators/Ignore_Validator.php',
         'TEC\\Events\\Custom_Tables\\V1\\Models\\Validators\\Integer_Key' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Models/Validators/Integer_Key.php',
+        'TEC\\Events\\Custom_Tables\\V1\\Models\\Validators\\Occurrence_Duration' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Models/Validators/Occurrence_Duration.php',
         'TEC\\Events\\Custom_Tables\\V1\\Models\\Validators\\Positive_Integer' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Models/Validators/Positive_Integer.php',
         'TEC\\Events\\Custom_Tables\\V1\\Models\\Validators\\Present' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Models/Validators/Present.php',
         'TEC\\Events\\Custom_Tables\\V1\\Models\\Validators\\Range_Dates' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Models/Validators/Range_Dates.php',
@@ -175,6 +176,7 @@ class ComposerStaticInit047571bb9c5b6978ec6fb64db0b7588e
         'Tribe\\Events\\Event_Status\\Template_Modifications' => __DIR__ . '/../..' . '/src/Tribe/Event_Status/Template_Modifications.php',
         'Tribe\\Events\\I18n' => __DIR__ . '/../..' . '/src/Tribe/I18n.php',
         'Tribe\\Events\\Integrations\\Beaver_Builder' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Beaver_Builder.php',
+        'Tribe\\Events\\Integrations\\Divi\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Divi/Service_Provider.php',
         'Tribe\\Events\\Integrations\\Fusion\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Fusion/Service_Provider.php',
         'Tribe\\Events\\Integrations\\Fusion\\Widget_Shortcode' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Fusion/Widget_Shortcode.php',
         'Tribe\\Events\\Integrations\\Hello_Elementor\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Hello_Elementor/Service_Provider.php',
@@ -270,9 +272,9 @@ class ComposerStaticInit047571bb9c5b6978ec6fb64db0b7588e
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit047571bb9c5b6978ec6fb64db0b7588e::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit047571bb9c5b6978ec6fb64db0b7588e::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit047571bb9c5b6978ec6fb64db0b7588e::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb894359d15008797e6ddab61567f70cd::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb894359d15008797e6ddab61567f70cd::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb894359d15008797e6ddab61567f70cd::$classMap;
 
         }, null, ClassLoader::class);
     }
