@@ -225,6 +225,7 @@ final class Newspack_Popups_Model {
 				'background_color'               => filter_input( INPUT_GET, 'n_bc', FILTER_SANITIZE_STRING ),
 				'display_title'                  => filter_input( INPUT_GET, 'n_ti', FILTER_VALIDATE_BOOLEAN ),
 				'hide_border'                    => filter_input( INPUT_GET, 'n_hb', FILTER_VALIDATE_BOOLEAN ),
+				'large_border'                   => filter_input( INPUT_GET, 'n_lb', FILTER_VALIDATE_BOOLEAN ),
 				'frequency'                      => filter_input( INPUT_GET, 'n_fr', FILTER_SANITIZE_STRING ),
 				'frequency_max'                  => filter_input( INPUT_GET, 'n_fm', FILTER_SANITIZE_STRING ),
 				'frequency_start'                => filter_input( INPUT_GET, 'n_fs', FILTER_SANITIZE_STRING ),
@@ -350,6 +351,7 @@ final class Newspack_Popups_Model {
 			'background_color'               => get_post_meta( $id, 'background_color', true ),
 			'display_title'                  => get_post_meta( $id, 'display_title', true ),
 			'hide_border'                    => get_post_meta( $id, 'hide_border', true ),
+			'large_border'                   => get_post_meta( $id, 'large_border', true ),
 			'frequency'                      => get_post_meta( $id, 'frequency', true ),
 			'frequency_max'                  => get_post_meta( $id, 'frequency_max', true ),
 			'frequency_start'                => get_post_meta( $id, 'frequency_start', true ),
@@ -393,6 +395,7 @@ final class Newspack_Popups_Model {
 				'background_color'               => '#FFFFFF',
 				'display_title'                  => false,
 				'hide_border'                    => false,
+				'large_border'                   => false,
 				'frequency'                      => 'always',
 				'frequency_max'                  => 0,
 				'frequency_start'                => 0,
@@ -1063,6 +1066,7 @@ final class Newspack_Popups_Model {
 		$endpoint             = self::get_reader_endpoint();
 		$display_title        = $popup['options']['display_title'];
 		$hide_border          = $popup['options']['hide_border'];
+		$large_border         = $popup['options']['large_border'];
 		$is_newsletter_prompt = self::has_newsletter_prompt( $popup );
 		$classes              = [ 'newspack-popup' ];
 		$classes[]            = 'above_header' === $popup['options']['placement'] ? 'newspack-above-header-popup' : null;
@@ -1070,6 +1074,7 @@ final class Newspack_Popups_Model {
 		$classes[]            = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
 		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]            = $hide_border ? 'newspack-lightbox-no-border' : null;
+		$classes[]            = $large_border ? 'newspack-lightbox-large-border' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
 
 		$analytics_events = self::get_analytics_events( $popup, $body, $element_id );
@@ -1136,6 +1141,7 @@ final class Newspack_Popups_Model {
 		$endpoint              = self::get_reader_endpoint();
 		$display_title         = $popup['options']['display_title'];
 		$hide_border           = $popup['options']['hide_border'];
+		$large_border          = $popup['options']['large_border'];
 		$overlay_opacity       = absint( $popup['options']['overlay_opacity'] ) / 100;
 		$overlay_color         = $popup['options']['overlay_color'];
 		$overlay_size          = $popup['options']['overlay_size'];
@@ -1146,6 +1152,7 @@ final class Newspack_Popups_Model {
 		$classes               = array( 'newspack-lightbox', 'newspack-popup', 'newspack-lightbox-placement-' . $popup['options']['placement'], 'newspack-lightbox-size-' . $overlay_size );
 		$classes[]             = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]             = $hide_border ? 'newspack-lightbox-no-border' : null;
+		$classes[]             = $large_border ? 'newspack-lightbox-large-border' : null;
 		$classes[]             = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;
 		$classes[]             = $no_overlay_background ? 'newspack-lightbox-no-overlay' : null;
 		$classes[]             = $has_featured_image ? 'newspack-lightbox-featured-image' : null;

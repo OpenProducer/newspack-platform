@@ -1,3 +1,28 @@
+@font-face {
+  font-family: Montserrat;
+  src: url("fonts/montserrat/Montserrat-Medium.ttf");
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: Montserrat;
+  src: url("fonts/montserrat/Montserrat-MediumItalic.ttf");
+  font-style: italic;
+  font-weight: 500;
+  font-display: swap;
+}
+@font-face {
+  font-family: Montserrat;
+  src: url("fonts/montserrat/Montserrat-Bold.ttf");
+  font-weight: 700;
+  font-display: swap;
+}
+@font-face {
+  font-family: Montserrat;
+  src: url("fonts/montserrat/Montserrat-ExtraBold.ttf");
+  font-weight: 800;
+  font-display: swap;
+}
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */

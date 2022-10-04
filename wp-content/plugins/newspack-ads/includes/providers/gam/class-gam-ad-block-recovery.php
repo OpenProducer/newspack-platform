@@ -75,6 +75,9 @@ final class GAM_Ad_Block_Recovery {
 			return;
 		}
 		$settings = Settings::get_settings( self::SECTION, true );
+		if ( empty( $settings ) ) {
+			return;
+		}
 		if ( ! $settings['active'] || empty( $settings['pub'] ) || empty( $settings['nonce'] ) ) {
 			return;
 		}

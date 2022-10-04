@@ -81,6 +81,29 @@ class Campaign_Data_Utils {
 	}
 
 	/**
+	 * Is reader a former donor?
+	 *
+	 * @param object $reader_events Reader data.
+	 */
+	public static function is_former_donor( $reader_events ) {
+		$donation_related_events = array_values(
+			array_filter(
+				$reader_events,
+				function( $event ) {
+					return stripos( $event['type'], 'donation' ) !== false;
+				}
+			)
+		);
+		if ( 0 < count( $donation_related_events ) ) {
+			// The donation cancellation event must be the latest one.
+			// If they've donated again, they're not a former donor.
+			$latest_donation_related_event = $donation_related_events[0];
+			return 'donation_cancelled' === $latest_donation_related_event['type'];
+		}
+		return false;
+	}
+
+	/**
 	 * Does reader have a WP user account?
 	 *
 	 * @param object $reader_events Reader data.
@@ -186,6 +209,7 @@ class Campaign_Data_Utils {
 				'is_not_subscribed'   => false,
 				'is_donor'            => false,
 				'is_not_donor'        => false,
+				'is_former_donor'     => false,
 				'has_user_account'    => false,
 				'no_user_account'     => false,
 				'referrers'           => '',
@@ -210,6 +234,7 @@ class Campaign_Data_Utils {
 		$should_display              = true;
 		$is_subscriber               = self::is_subscriber( $reader_events, $referer_url );
 		$is_donor                    = self::is_donor( $reader_events );
+		$is_former_donor             = self::is_former_donor( $reader_events );
 		$has_user_account            = self::has_user_account( $reader_events );
 		$campaign_segment            = self::canonize_segment( $campaign_segment );
 		$article_views_count         = self::get_post_view_count( $reader );
@@ -260,6 +285,9 @@ class Campaign_Data_Utils {
 			$should_display = false;
 		}
 		if ( $campaign_segment->is_not_donor && $is_donor ) {
+			$should_display = false;
+		}
+		if ( $campaign_segment->is_former_donor && ! $is_former_donor ) {
 			$should_display = false;
 		}
 
@@ -339,5 +367,19 @@ class Campaign_Data_Utils {
 	 */
 	public static function is_above_header( $popup ) {
 		return isset( $popup->t ) && 'a' === $popup->t;
+	}
+
+	/**
+	 * Get all events types.
+	 */
+	public static function get_reader_events_types() {
+		return array_merge( self::get_protected_events_types(), [ 'user_account', 'view' ] );
+	}
+
+	/**
+	 * Get protected events types. These events are not allowed to be deleted when pruning data.
+	 */
+	public static function get_protected_events_types() {
+		return [ 'donation', 'donation_cancelled', 'subscription' ];
 	}
 }

@@ -175,7 +175,12 @@ export const computeFeeAmount = ( amount: number, feeMultiplier: number, feeStat
  */
 export const getFeeAmount = ( formElement: HTMLFormElement ) => {
 	const { feeMultiplier, feeStatic } = getSettings( formElement );
-	if ( ! feeMultiplier || ! feeStatic ) {
+	if (
+		undefined === feeMultiplier ||
+		undefined === feeStatic ||
+		isNaN( feeMultiplier ) ||
+		isNaN( feeStatic )
+	) {
 		return 0;
 	}
 	const { amount } = getDonationFormValues( formElement );

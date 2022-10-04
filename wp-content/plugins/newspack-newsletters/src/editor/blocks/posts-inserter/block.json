@@ -1,10 +1,8 @@
 {
-  "name": "newspack-newsletters/posts-inserter",
-  "category": "widgets",
-  "supports": [
-    "align"
-  ],
-  "attributes": {
+	"name": "newspack-newsletters/posts-inserter",
+	"category": "widgets",
+	"supports": [ "align" ],
+	"attributes": {
 		"areBlocksInserted": {
 			"type": "boolean",
 			"default": false
@@ -75,6 +73,10 @@
 		"subHeadingColor": {
 			"type": "string"
 		},
+		"postType": {
+			"type": "string",
+			"default": "post"
+		},
 		"tags": {
 			"type": "array",
 			"default": []
@@ -91,5 +93,5 @@
 			"type": "array",
 			"default": []
 		}
-  }
+	}
 }

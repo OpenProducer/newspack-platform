@@ -574,7 +574,10 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 	 *
 	 * @return array|WP_Error Contact data if it was added, or error otherwise.
 	 */
-	public function add_contact( $contact, $list_id ) {
+	public function add_contact( $contact, $list_id = false ) {
+		if ( false === $list_id ) {
+			return new WP_Error( 'newspack_newsletters_constant_contact_list_id', __( 'Missing list id.' ) );
+		}
 		try {
 			$api_key   = $this->api_key();
 			$client_id = $this->client_id();

@@ -16,6 +16,7 @@ class Reader_Activation_Emails {
 	const EMAIL_TYPES = [
 		'VERIFICATION'   => 'reader-activation-verification',
 		'MAGIC_LINK'     => 'reader-activation-magic-link',
+		'OTP_AUTH'       => 'reader-activation-otp-authentication',
 		'RESET_PASSWORD' => 'reader-activation-reset-password',
 		'DELETE_ACCOUNT' => 'reader-activation-delete-account',
 	];
@@ -59,6 +60,23 @@ class Reader_Activation_Emails {
 			'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-activation-emails/magic-link.php',
 			'editor_notice'          => __( 'This email will be sent to a reader when they request a login link.', 'newspack' ),
 			'available_placeholders' => [
+				[
+					'label'    => __( 'the one-time password', 'newspack' ),
+					'template' => '*MAGIC_LINK_OTP*',
+				],
+			],
+		];
+		$configs[ self::EMAIL_TYPES['OTP_AUTH'] ]       = [
+			'name'                   => self::EMAIL_TYPES['OTP_AUTH'],
+			'label'                  => __( 'Login one-time password', 'newspack' ),
+			'description'            => __( 'Email with a one-time password and login link.', 'newspack' ),
+			'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-activation-emails/otp.php',
+			'editor_notice'          => __( 'This email will be sent to a reader when they request a login link and a one-time password is available.', 'newspack' ),
+			'available_placeholders' => [
+				[
+					'label'    => __( 'the one-time password', 'newspack' ),
+					'template' => '*MAGIC_LINK_OTP*',
+				],
 				[
 					'label'    => __( 'the login link', 'newspack' ),
 					'template' => '*MAGIC_LINK_URL*',

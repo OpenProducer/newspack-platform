@@ -281,6 +281,14 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 			if ( feesAmountEl ) {
 				const formValues = Object.fromEntries( new FormData( formElement ) );
 				const feeAmount = utils.getFeeAmount( formElement );
+				if ( feeAmount === 0 ) {
+					const feesAmountContainerEl: HTMLElement | null = el.querySelector(
+						'#stripe-fees-amount-container'
+					);
+					if ( feesAmountContainerEl ) {
+						feesAmountContainerEl.style.display = 'none';
+					}
+				}
 				if ( typeof formValues.donation_frequency === 'string' ) {
 					feesAmountEl.innerHTML = `(${ settings.currencySymbol }${ feeAmount.toFixed(
 						2

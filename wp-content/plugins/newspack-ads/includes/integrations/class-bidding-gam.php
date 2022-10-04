@@ -177,7 +177,7 @@ final class Bidding_GAM {
 					'batch'  => [
 						'sanitize_callback' => 'absint',
 					],
-					'fixing' => [ 
+					'fixing' => [
 						'sanitize_callback' => 'rest_sanitize_boolean',
 					],
 				],
@@ -232,7 +232,7 @@ final class Bidding_GAM {
 		);
 	}
 
-	
+
 
 	/**
 	 * Get a sanitized order config.
@@ -332,7 +332,7 @@ final class Bidding_GAM {
 			plugins_url( '../../dist/header-bidding-gam.js', __FILE__ ),
 			[ 'wp-components', 'wp-api-fetch' ],
 			filemtime( dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/dist/header-bidding-gam.js' ),
-			true 
+			true
 		);
 		wp_localize_script(
 			'newspack-ads-bidding-gam',
@@ -580,14 +580,14 @@ final class Bidding_GAM {
 						$orders_configs,
 						function( $order_config ) use ( $order ) {
 							return $order['id'] === $order_config['order_id'];
-						} 
+						}
 					);
 					if ( empty( $order_config ) ) {
 						return $order;
 					}
 					return array_merge( $order, array_shift( $order_config ) );
 				},
-				$orders 
+				$orders
 			);
 		} catch ( \Exception $e ) {
 			return new \WP_Error( 'newspack_ads_bidding_gam_error', $e->getMessage() );
@@ -635,7 +635,7 @@ final class Bidding_GAM {
 	 * @param int   $order_id The GAM Order ID.
 	 * @param array $data     The data to update with.
 	 *
-	 * @return bool|\WP_Error Whether the config was updated or WP_Error if order does not exist. 
+	 * @return bool|\WP_Error Whether the config was updated or WP_Error if order does not exist.
 	 */
 	private static function update_order_local_config( $order_id, $data ) {
 		if ( ! self::get_order_local_config( $order_id ) ) {
@@ -696,7 +696,7 @@ final class Bidding_GAM {
 
 		$config = self::get_order_local_config( $order_id );
 
-		if ( empty( $config ) || true === $fetch_remote ) { 
+		if ( empty( $config ) || true === $fetch_remote ) {
 			try {
 				$order = GAM_API::get_orders_by_id( [ $order_id ] );
 			} catch ( \Exception $e ) {
@@ -870,8 +870,8 @@ final class Bidding_GAM {
 		usort(
 			$buckets,
 			function( $a, $b ) {
-				return $a['max'] > $b['max'];
-			} 
+				return $a['max'] > $b['max'] ? 1 : -1;
+			}
 		);
 
 		// Assume all buckets share the same precision.

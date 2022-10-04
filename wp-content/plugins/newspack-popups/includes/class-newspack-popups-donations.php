@@ -41,7 +41,8 @@ final class Newspack_Popups_Donations {
 		\add_action( 'admin_init', [ __CLASS__, 'delete_legacy_wc_webhook' ] );
 		\add_action( 'woocommerce_checkout_order_created', [ __CLASS__, 'create_donation_event_woocommerce' ] );
 		\add_action( 'newspack_new_donation_woocommerce', [ __CLASS__, 'create_donation_event_woocommerce' ], 10, 2 );
-		\add_action( 'newspack_new_donation_stripe', [ __CLASS__, 'create_donation_event_stripe' ], 10, 3 );
+		\add_action( 'newspack_stripe_new_donation', [ __CLASS__, 'create_donation_event_stripe' ], 10, 3 );
+		\add_action( 'newspack_stripe_donation_cancellation', [ __CLASS__, 'create_donation_cancellation_event_stripe' ], 10, 2 );
 	}
 
 	/**
@@ -171,30 +172,53 @@ final class Newspack_Popups_Donations {
 	}
 
 	/**
-	 * When a new Stripe transaction is completed with a client ID,
-	 * log a new donation event to that client ID.
+	 * Add a new reader events for the segmentation API.
+	 *
+	 * @param string $client_id Client ID.
+	 * @param array  $event Event payload.
+	 * @param string $context Event context.
+	 */
+	private static function add_reader_event( $client_id, $event, $context = 'stripe' ) {
+		$event['context'] = $context;
+		$api              = \Campaign_Data_Utils::get_api( \wp_create_nonce( 'newspack_campaigns_lightweight_api' ) );
+		if ( ! $api ) {
+			return;
+		}
+		$api->save_reader_events( $client_id, [ $event ] );
+	}
+
+	/**
+	 * Add Stripe donation data.
 	 *
 	 * @param string      $client_id Client ID.
 	 * @param array       $donation_data Info about the transaction.
 	 * @param string|null $newsletter_email If the user signed up for a newsletter as part of the transaction, the subscribed email address. Otherwise, null.
 	 */
 	public static function create_donation_event_stripe( $client_id, $donation_data, $newsletter_email ) {
-		$donation_events = [
+		self::add_reader_event(
+			$client_id,
 			[
-				'type'    => 'donation',
-				'context' => 'stripe',
-				'value'   => $donation_data,
-			],
-		];
+				'type'  => 'donation',
+				'value' => $donation_data,
+			]
+		);
 
-		$nonce = \wp_create_nonce( 'newspack_campaigns_lightweight_api' );
-		$api   = \Campaign_Data_Utils::get_api( $nonce );
+	}
 
-		if ( ! $api ) {
-			return;
-		}
-
-		$api->save_reader_events( $client_id, $donation_events );
+	/**
+	 * Cancellation of a recurring donation.
+	 *
+	 * @param string $client_id Client ID.
+	 * @param array  $donation_cancellation_data Info about the transaction.
+	 */
+	public static function create_donation_cancellation_event_stripe( $client_id, $donation_cancellation_data ) {
+		self::add_reader_event(
+			$client_id,
+			[
+				'type'  => 'donation_cancelled',
+				'value' => $donation_cancellation_data,
+			]
+		);
 	}
 }
 Newspack_Popups_Donations::instance();

@@ -128,6 +128,9 @@ final class GAM_API {
 		if ( in_array( 'CommonError.CONCURRENT_MODIFICATION', $errors ) ) {
 			$error_message = __( 'Unexpected API error, please try again in 30 seconds.', 'newspack-ads' );
 		}
+		if ( in_array( 'PermissionError.PERMISSION_DENIED', $errors ) ) {
+			$error_message = __( 'You do not have permission to perform this action. Make sure to connect an account with administrative access.', 'newspack-ads' );
+		}
 		return new \WP_Error(
 			'newspack_ads_gam_error',
 			$error_message ?? __( 'An unexpected error occurred', 'newspack-ads' ),
@@ -311,7 +314,6 @@ final class GAM_API {
 			]
 		);
 		self::$session = ( new AdManagerSessionBuilder() )->from( $config )->withOAuth2Credential( $oauth2_credentials )->build();
-
 		return self::$session;
 	}
 

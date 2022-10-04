@@ -196,7 +196,7 @@ class Admin_Plugins_Screen {
 	 * @param string $hook The current screen.
 	 */
 	public function enqueue_scripts_and_styles( $hook ) {
-		if ( 'plugins.php' !== $hook ) {
+		if ( ! in_array( $hook, array( 'plugins.php', 'plugin-install.php' ) ) ) {
 			return;
 		}
 
@@ -215,8 +215,10 @@ class Admin_Plugins_Screen {
 		$installed_plugins[] = 'newspack';
 
 		$newspack_plugin_info = [
-			'plugins'           => $plugins,
-			'installed_plugins' => $installed_plugins,
+			'plugins'            => $plugins,
+			'installed_plugins'  => $installed_plugins,
+			'screen'             => $hook,
+			'plugin_review_link' => defined( 'NEWSPACK_PLUGIN_REVIEW_FORM_URL' ) ? NEWSPACK_PLUGIN_REVIEW_FORM_URL : null,
 		];
 
 		wp_localize_script( 'newspack_plugins_screen', 'newspack_plugin_info', $newspack_plugin_info );

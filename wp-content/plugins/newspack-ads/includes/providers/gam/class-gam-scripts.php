@@ -163,7 +163,6 @@ final class GAM_Scripts {
 			( function() {
 				var ad_config        = <?php echo wp_json_encode( $ad_config ); ?>;
 				var all_ad_units     = <?php echo wp_json_encode( $prepared_unit_data ); ?>;
-				var lazy_load        = <?php echo wp_json_encode( Settings::get_settings( 'lazy_load', true ), JSON_FORCE_OBJECT ); ?>;
 				var common_targeting = <?php echo wp_json_encode( $common_targeting ); ?>;
 				var defined_ad_units = {};
 
@@ -321,13 +320,6 @@ final class GAM_Scripts {
 					}
 					googletag.pubads().collapseEmptyDivs();
 					googletag.pubads().enableSingleRequest();
-					if ( lazy_load && lazy_load.active ) {
-						googletag.pubads().enableLazyLoad( {
-							fetchMarginPercent: lazy_load.fetch_margin_percent,
-							renderMarginPercent: lazy_load.render_margin_percent,
-							mobileScaling: lazy_load.mobile_scaling
-						} );
-					}
 					googletag.enableServices();
 
 					for ( var container_id in defined_ad_units ) {

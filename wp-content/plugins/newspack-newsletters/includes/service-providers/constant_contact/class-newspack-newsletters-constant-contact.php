@@ -61,21 +61,21 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	public function verify_token( $refresh = true ) {
 		$credentials  = $this->api_credentials();
 		$redirect_uri = $this->get_oauth_redirect_uri();
-		$cc           = new Newspack_Newsletters_Constant_Contact_SDK( $credentials['api_key'], $credentials['api_secret'] );
-
-		if ( ! empty( $credentials['access_token'] ) ) {
-			$cc->set_access_token( $credentials['access_token'] );
-		}
+		$cc           = new Newspack_Newsletters_Constant_Contact_SDK(
+			$credentials['api_key'],
+			$credentials['api_secret'],
+			$credentials['access_token']
+		);
 
 		$response = [
 			'error'    => null,
 			'valid'    => false,
-			'auth_url' => $cc->get_auth_code_url( $redirect_uri ),
+			'auth_url' => $cc->get_auth_code_url( wp_create_nonce( 'constant_contact_oauth2' ), $redirect_uri ),
 		];
 
 		try {
 			// If we have a valid access token, we're connected.
-			if ( ! empty( $credentials['access_token'] ) && $cc->validate_token() ) {
+			if ( $cc->validate_token() ) {
 				$response['valid'] = true;
 				return $response;
 			}
@@ -103,14 +103,12 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	/**
 	 * Get OAuth Redirect URI.
 	 *
-	 * @param string $nonce Optional nonce used for URI identity validation.
-	 *
 	 * @return string OAuth Redirect URI.
 	 */
-	private function get_oauth_redirect_uri( $nonce = '' ) {
+	private function get_oauth_redirect_uri() {
 		return add_query_arg(
-			'cc_oauth2callback',
-			empty( $nonce ) ? wp_create_nonce( 'newspack_newsletters_oauth_nonce' ) : $nonce,
+			'cc_oauth2',
+			1,
 			admin_url( 'index.php' )
 		);
 	}
@@ -122,15 +120,22 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		if ( ! current_user_can( 'edit_others_posts' ) ) {
 			return;
 		}
+		if ( ! isset( $_GET['cc_oauth2'] ) ) {
+			return;
+		}
 		if (
-			! isset( $_GET['cc_oauth2callback'] ) ||
-			! wp_verify_nonce( sanitize_text_field( $_GET['cc_oauth2callback'] ), 'newspack_newsletters_oauth_nonce' ) ||
+			! isset( $_GET['state'] ) ||
+			! wp_verify_nonce( sanitize_text_field( $_GET['state'] ), 'constant_contact_oauth2' ) ||
 			! isset( $_GET['code'] )
 		) {
 			return;
 		}
 
-		$redirect_uri = $this->get_oauth_redirect_uri( sanitize_text_field( $_GET['cc_oauth2callback'] ) );
+		if ( isset( $_GET['error_description'] ) ) {
+			wp_die( esc_html( sanitize_text_field( $_GET['error_description'] ) ) );
+		}
+
+		$redirect_uri = $this->get_oauth_redirect_uri();
 		$code         = sanitize_text_field( $_GET['code'] );
 
 		$this->connect( $redirect_uri, $code );
@@ -156,7 +161,10 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	private function connect( $redirect_uri, $code ) {
 		$cc    = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret() );
 		$token = $cc->get_access_token( $redirect_uri, $code );
-		return $this->set_access_token( $token->access_token, $token->refresh_token );
+		return $this->set_access_token(
+			$token->access_token,
+			isset( $token->refresh_token ) ? $token->refresh_token : ''
+		);
 	}
 
 	/**
@@ -233,14 +241,14 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @throws Exception Error message.
 	 */
 	private function set_access_token( $access_token = '', $refresh_token = '' ) {
-		if ( empty( $access_token ) || empty( $refresh_token ) ) {
+		if ( empty( $access_token ) ) {
 			throw new Exception(
-				__( 'Access and refresh tokens are required.', 'newspack-newsletter' )
+				__( 'Access token is required.', 'newspack-newsletter' )
 			);
 		}
 		$update_access_token  = update_option( 'newspack_newsletters_constant_contact_api_access_token', $access_token );
 		$update_refresh_token = update_option( 'newspack_newsletters_constant_contact_api_refresh_token', $refresh_token );
-		return $update_access_token && $update_refresh_token;
+		return $update_access_token;
 	}
 
 	/**
@@ -706,7 +714,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @param string $list_id List ID.
 	 * @throws Exception Error message.
 	 */
-	public function add_contact( $contact, $list_id ) {
+	public function add_contact( $contact, $list_id = false ) {
 		throw new Exception(
 			__( 'Adding contacts not implemented for Constant Contact.', 'newspack-newsletters' )
 		);

@@ -1,3 +1,78 @@
+# [1.93.0](https://github.com/Automattic/newspack-plugin/compare/v1.92.1...v1.93.0) (2022-09-28)
+
+
+### Features
+
+* custom email sender for reader activation ([#2052](https://github.com/Automattic/newspack-plugin/issues/2052)) ([5fde94f](https://github.com/Automattic/newspack-plugin/commit/5fde94f4afb29dedf4ef735ab1a762e401338d91))
+
+# [1.93.0-hotfix.1](https://github.com/Automattic/newspack-plugin/compare/v1.92.1...v1.93.0-hotfix.1) (2022-09-28)
+
+
+### Features
+
+* custom email sender for reader activation ([3ee10b7](https://github.com/Automattic/newspack-plugin/commit/3ee10b79bafc1eac2e3995f880cc7d80c476efcc))
+* custom from name ([63186d2](https://github.com/Automattic/newspack-plugin/commit/63186d24a47089f3c47b860cad8e6ab7c060b47b))
+* custom receipts sender ([378f944](https://github.com/Automattic/newspack-plugin/commit/378f944622d1c7b27527959c0c2fd18959dbc4bb))
+
+## [1.92.1](https://github.com/Automattic/newspack-plugin/compare/v1.92.0...v1.92.1) (2022-09-28)
+
+
+### Bug Fixes
+
+* disable author filter for co-authors ([#2050](https://github.com/Automattic/newspack-plugin/issues/2050)) ([695e16f](https://github.com/Automattic/newspack-plugin/commit/695e16f24a27310df6ceddbbefd311f8572128d2))
+
+# [1.92.0](https://github.com/Automattic/newspack-plugin/compare/v1.91.2...v1.92.0) (2022-09-27)
+
+
+### Bug Fixes
+
+* **analytics:** remove illegal reference on wizard ([#1996](https://github.com/Automattic/newspack-plugin/issues/1996)) ([bec14a2](https://github.com/Automattic/newspack-plugin/commit/bec14a22ebb6d8c2c37de6bdd920d5fb13e0c440))
+* **reader-activation-auth:** header link color ([6e85ada](https://github.com/Automattic/newspack-plugin/commit/6e85adafa814e0149062e589d24969467d5b53db))
+* **stripe:** handle error if customer LTV is not retrievable ([2f9f4a4](https://github.com/Automattic/newspack-plugin/commit/2f9f4a44e45c80eb01a326baaa78be866e9b55ab))
+* **stripe:** validate webhook existence on donation ([#2026](https://github.com/Automattic/newspack-plugin/issues/2026)) ([c505fbc](https://github.com/Automattic/newspack-plugin/commit/c505fbcc19a98f73e55fbbd421f343e12ac3dd7f))
+* **wc-to-ac-metadata:** add last payment date field for one-time donors ([0106915](https://github.com/Automattic/newspack-plugin/commit/01069153abfd24dc61f01e82aa43dd6ceb6a5d93))
+* **wc-to-ac-metadata:** disregard `0` next payment date ([6e43db1](https://github.com/Automattic/newspack-plugin/commit/6e43db1c52f41e51316aa6b5233e8e445d7a506b))
+
+
+### Features
+
+* Adds a filter by Author in the Posts admin page ([bc49686](https://github.com/Automattic/newspack-plugin/commit/bc496868e9a2d438303699db45972f438ad2ff5c))
+* **auth:** otp embedded to magic links ([#1988](https://github.com/Automattic/newspack-plugin/issues/1988)) ([d6e072c](https://github.com/Automattic/newspack-plugin/commit/d6e072ccd18b2cff2e3dda97e371eedb1187afab))
+* do not redirect resubscribe requests ([#1989](https://github.com/Automattic/newspack-plugin/issues/1989)) ([53da790](https://github.com/Automattic/newspack-plugin/commit/53da790dbc0f4b06fb5a18b15f03e7a121a1909d))
+* enable limit post revisions kept in the database ([#2030](https://github.com/Automattic/newspack-plugin/issues/2030)) ([44680c5](https://github.com/Automattic/newspack-plugin/commit/44680c5c8b43a85de44e8d70d7ffce6a2ef69528))
+* **plugins-screen:** display a plugin review form, if URL supplied ([#2005](https://github.com/Automattic/newspack-plugin/issues/2005)) ([77d3aa0](https://github.com/Automattic/newspack-plugin/commit/77d3aa06054627bd5d6d1d6f2385be6746f02beb))
+* **plugins:** handle missing organic-profile-block plugin ([2475ad0](https://github.com/Automattic/newspack-plugin/commit/2475ad08f5191608401e2f2b486bd670dd82c732))
+* stripe-to-stripe migrator ([a82f326](https://github.com/Automattic/newspack-plugin/commit/a82f326b98bab5b08581dfd347505f7f42f237aa))
+* **stripe:** send data about cancelled subscription to Campaigns ([#1966](https://github.com/Automattic/newspack-plugin/issues/1966)) ([0554487](https://github.com/Automattic/newspack-plugin/commit/055448741cba1e7830fc839bd3a76f5b6521ecf1))
+* sync from Stripe to ESP CLI tool ([#1984](https://github.com/Automattic/newspack-plugin/issues/1984)) ([c10fbc7](https://github.com/Automattic/newspack-plugin/commit/c10fbc7c8d17d11dfbffe1a36dc1e4cfa5e6332c))
+* **woocommerce:** handle metadata when creating a membership ([af75438](https://github.com/Automattic/newspack-plugin/commit/af75438dca6305b77d2d034f67199c5ead34dbce))
+
+# [1.92.0-alpha.4](https://github.com/Automattic/newspack-plugin/compare/v1.92.0-alpha.3...v1.92.0-alpha.4) (2022-09-26)
+
+
+### Bug Fixes
+
+* **reader-activation-auth:** header link color ([6e85ada](https://github.com/Automattic/newspack-plugin/commit/6e85adafa814e0149062e589d24969467d5b53db))
+* **stripe:** handle error if customer LTV is not retrievable ([2f9f4a4](https://github.com/Automattic/newspack-plugin/commit/2f9f4a44e45c80eb01a326baaa78be866e9b55ab))
+* **stripe:** validate webhook existence on donation ([#2026](https://github.com/Automattic/newspack-plugin/issues/2026)) ([c505fbc](https://github.com/Automattic/newspack-plugin/commit/c505fbcc19a98f73e55fbbd421f343e12ac3dd7f))
+* **wc-to-ac-metadata:** add last payment date field for one-time donors ([0106915](https://github.com/Automattic/newspack-plugin/commit/01069153abfd24dc61f01e82aa43dd6ceb6a5d93))
+
+
+### Features
+
+* enable limit post revisions kept in the database ([#2030](https://github.com/Automattic/newspack-plugin/issues/2030)) ([44680c5](https://github.com/Automattic/newspack-plugin/commit/44680c5c8b43a85de44e8d70d7ffce6a2ef69528))
+* **plugins-screen:** display a plugin review form, if URL supplied ([#2005](https://github.com/Automattic/newspack-plugin/issues/2005)) ([77d3aa0](https://github.com/Automattic/newspack-plugin/commit/77d3aa06054627bd5d6d1d6f2385be6746f02beb))
+* stripe-to-stripe migrator ([a82f326](https://github.com/Automattic/newspack-plugin/commit/a82f326b98bab5b08581dfd347505f7f42f237aa))
+* sync from Stripe to ESP CLI tool ([#1984](https://github.com/Automattic/newspack-plugin/issues/1984)) ([c10fbc7](https://github.com/Automattic/newspack-plugin/commit/c10fbc7c8d17d11dfbffe1a36dc1e4cfa5e6332c))
+* **woocommerce:** handle metadata when creating a membership ([af75438](https://github.com/Automattic/newspack-plugin/commit/af75438dca6305b77d2d034f67199c5ead34dbce))
+
+# [1.92.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v1.92.0-alpha.2...v1.92.0-alpha.3) (2022-09-23)
+
+
+### Bug Fixes
+
+* **analytics:** improve reliability of custom events reporting in AMP ([#2034](https://github.com/Automattic/newspack-plugin/issues/2034)) ([746fdda](https://github.com/Automattic/newspack-plugin/commit/746fdda6c1e2f7ac07192bf30bbf50c88b6f767e))
+
 ## [1.91.2](https://github.com/Automattic/newspack-plugin/compare/v1.91.1...v1.91.2) (2022-09-23)
 
 

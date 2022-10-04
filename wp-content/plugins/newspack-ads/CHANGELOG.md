@@ -1,3 +1,25 @@
+## [1.38.1](https://github.com/Automattic/newspack-ads/compare/v1.38.0...v1.38.1) (2022-09-27)
+
+
+### Bug Fixes
+
+* **gam:** identify insufficient permissions ([#521](https://github.com/Automattic/newspack-ads/issues/521)) ([0d71dff](https://github.com/Automattic/newspack-ads/commit/0d71dff888d271cfd302ce63c66bd9d54c39b886))
+* handle empty settings section ([44573ce](https://github.com/Automattic/newspack-ads/commit/44573ce5305331039343a904dee71a03b72add10))
+* handle zero in ad unit size gracefully ([#520](https://github.com/Automattic/newspack-ads/issues/520)) ([c065503](https://github.com/Automattic/newspack-ads/commit/c065503eb9d34424de1055ddac85cb9eb30be7c4))
+* reorganize amp restricted settings ([#501](https://github.com/Automattic/newspack-ads/issues/501)) ([a20e452](https://github.com/Automattic/newspack-ads/commit/a20e452e2af62df15e22ce1d8c6288814a72677c))
+* usort() usage to return int instead of bool ([#500](https://github.com/Automattic/newspack-ads/issues/500)) ([0ca0f31](https://github.com/Automattic/newspack-ads/commit/0ca0f31b79b74593f454b5cda2dddf295bce05cc))
+
+## [1.38.1-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.38.0...v1.38.1-alpha.1) (2022-09-26)
+
+
+### Bug Fixes
+
+* **gam:** identify insufficient permissions ([#521](https://github.com/Automattic/newspack-ads/issues/521)) ([0d71dff](https://github.com/Automattic/newspack-ads/commit/0d71dff888d271cfd302ce63c66bd9d54c39b886))
+* handle empty settings section ([44573ce](https://github.com/Automattic/newspack-ads/commit/44573ce5305331039343a904dee71a03b72add10))
+* handle zero in ad unit size gracefully ([#520](https://github.com/Automattic/newspack-ads/issues/520)) ([c065503](https://github.com/Automattic/newspack-ads/commit/c065503eb9d34424de1055ddac85cb9eb30be7c4))
+* reorganize amp restricted settings ([#501](https://github.com/Automattic/newspack-ads/issues/501)) ([a20e452](https://github.com/Automattic/newspack-ads/commit/a20e452e2af62df15e22ce1d8c6288814a72677c))
+* usort() usage to return int instead of bool ([#500](https://github.com/Automattic/newspack-ads/issues/500)) ([0ca0f31](https://github.com/Automattic/newspack-ads/commit/0ca0f31b79b74593f454b5cda2dddf295bce05cc))
+
 # [1.38.0](https://github.com/Automattic/newspack-ads/compare/v1.37.3...v1.38.0) (2022-09-14)
 
 

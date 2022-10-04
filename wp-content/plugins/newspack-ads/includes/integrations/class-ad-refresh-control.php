@@ -1,7 +1,7 @@
 <?php
 /**
  * Newspack Ads "Ad Refresh Control" Plugin Settings
- * 
+ *
  * @link https://wordpress.org/plugins/ad-refresh-control/
  *
  * @package Newspack
@@ -9,6 +9,7 @@
 
 namespace Newspack_Ads\Integrations;
 
+use Newspack_Ads\Core;
 use Newspack_Ads\Settings;
 
 defined( 'ABSPATH' ) || exit;
@@ -152,9 +153,18 @@ class Ad_Refresh_Control {
 		if ( ! self::is_active() ) {
 			return new \WP_Error(
 				'newspack_ad_refresh_control_not_active',
-				__( 'The "Ad Refresh Control" plugin is not active.', 'newspack' ),
+				__( 'The "Ad Refresh Control" plugin is not active.', 'newspack-ads' ),
 				[
 					'status' => 404,
+				]
+			);
+		}
+		if ( Core::is_amp() ) {
+			return new \WP_Error(
+				'newspack_ad_refresh_control_amp',
+				__( 'AMP not supported', 'newspack-ads' ),
+				[
+					'status' => 400,
 				]
 			);
 		}

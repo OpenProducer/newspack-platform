@@ -29,7 +29,6 @@ import PositionPlacementControl from './PositionPlacementControl';
 const Sidebar = props => {
 	const {
 		display_title,
-		hide_border,
 		frequency,
 		onMetaFieldChange,
 		placement,
@@ -228,11 +227,6 @@ const Sidebar = props => {
 				label={ __( 'Display Prompt Title', 'newspack-popups' ) }
 				checked={ display_title }
 				onChange={ value => onMetaFieldChange( { display_title: value } ) }
-			/>
-			<ToggleControl
-				label={ __( 'Hide Prompt Border', 'newspack-popups' ) }
-				checked={ hide_border }
-				onChange={ value => onMetaFieldChange( { hide_border: value } ) }
 			/>
 		</>
 	);

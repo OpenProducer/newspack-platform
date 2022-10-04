@@ -6,14 +6,14 @@
  * or disable the default devtool with "devtool: false".
  * If you are looking for production-ready output files, see mode: "production" (https://webpack.js.org/configuration/mode/).
  */
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ "./newspack-theme/js/src/customize-preview.js":
 /*!****************************************************!*\
   !*** ./newspack-theme/js/src/customize-preview.js ***!
   \****************************************************/
-/***/ (() => {
+/***/ (function() {
 
 eval("/* globals jQuery */\n\n/**\n * File customizer.js.\n *\n * Theme Customizer enhancements for a better user experience.\n *\n * Contains handlers to make Theme Customizer preview reload changes asynchronously.\n */\n(function ($) {\n  // Hide site tagline\n  wp.customize('header_display_tagline', function (value) {\n    value.bind(function (to) {\n      if (false === to) {\n        $('body').addClass('hide-site-tagline').removeClass('show-site-tagline');\n      } else {\n        $('body').removeClass('hide-site-tagline').addClass('show-site-tagline');\n      }\n    });\n  }); // Hide Front Page Title\n\n  wp.customize('hide_front_page_title', function (value) {\n    value.bind(function (to) {\n      if (true === to) {\n        $('body').addClass('hide-homepage-title');\n      } else {\n        $('body').removeClass('hide-homepage-title');\n      }\n    });\n  }); // Hide Author Bio\n\n  wp.customize('show_author_bio', function (value) {\n    value.bind(function (to) {\n      if (false === to) {\n        $('body').addClass('hide-author-bio');\n      } else {\n        $('body').removeClass('hide-author-bio');\n      }\n    });\n  }); // Hide Author email\n\n  wp.customize('show_author_email', function (value) {\n    value.bind(function (to) {\n      if (false === to) {\n        $('body').addClass('hide-author-email');\n      } else {\n        $('body').removeClass('hide-author-email');\n      }\n    });\n  });\n})(jQuery);\n\n//# sourceURL=webpack://newspack/./newspack-theme/js/src/customize-preview.js?");
 

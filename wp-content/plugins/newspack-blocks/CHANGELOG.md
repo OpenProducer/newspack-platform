@@ -1,3 +1,29 @@
+# [1.58.0](https://github.com/Automattic/newspack-blocks/compare/v1.57.0...v1.58.0) (2022-09-27)
+
+
+### Bug Fixes
+
+* **donate:** handle zero fees ([744fa50](https://github.com/Automattic/newspack-blocks/commit/744fa50eb4b4c1585a078c5cfc773be1f491920a))
+* **donate:** user id handling ([29efec8](https://github.com/Automattic/newspack-blocks/commit/29efec84644b7b1ddcc2b72734b58d03c760f30c))
+
+
+### Features
+
+* **donations:** pass client metadata when creating a WC membership ([764a4e4](https://github.com/Automattic/newspack-blocks/commit/764a4e4bbcb5777ab5be7f17894907c709bf424c))
+
+# [1.58.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.57.0...v1.58.0-alpha.1) (2022-09-26)
+
+
+### Bug Fixes
+
+* **donate:** handle zero fees ([744fa50](https://github.com/Automattic/newspack-blocks/commit/744fa50eb4b4c1585a078c5cfc773be1f491920a))
+* **donate:** user id handling ([29efec8](https://github.com/Automattic/newspack-blocks/commit/29efec84644b7b1ddcc2b72734b58d03c760f30c))
+
+
+### Features
+
+* **donations:** pass client metadata when creating a WC membership ([764a4e4](https://github.com/Automattic/newspack-blocks/commit/764a4e4bbcb5777ab5be7f17894907c709bf424c))
+
 # [1.57.0](https://github.com/Automattic/newspack-blocks/compare/v1.56.0...v1.57.0) (2022-09-14)
 
 

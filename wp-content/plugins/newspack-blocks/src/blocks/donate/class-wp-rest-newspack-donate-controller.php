@@ -130,6 +130,13 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 
 		$user_id = self::$current_user_id;
 
+		$client_metadata = [
+			'clientId'         => $request->get_param( 'clientId' ),
+			'newsletterOptIn'  => $request->get_param( 'newsletter_opt_in' ),
+			'current_page_url' => \wp_get_referer(),
+			'origin'           => $origin,
+		];
+
 		if ( 0 === $user_id ) {
 			$email_address = $request->get_param( 'email' );
 
@@ -138,7 +145,8 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 				$user_id = \Newspack\WooCommerce_Connection::set_up_membership(
 					$email_address,
 					$full_name,
-					$frequency
+					$frequency,
+					$client_metadata
 				);
 				if ( \is_wp_error( $user_id ) ) {
 					return [ 'error' => \esc_html( $user_id->get_error_message() ) ];
@@ -148,6 +156,8 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 			$email_address = \get_userdata( $user_id )->user_email;
 		}
 
+		$client_metadata['userId'] = $user_id;
+
 		$response = \Newspack\Stripe_Connection::handle_donation(
 			[
 				'frequency'         => $frequency,
@@ -155,13 +165,7 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 				'email_address'     => $email_address,
 				'full_name'         => $full_name,
 				'amount'            => $request->get_param( 'amount' ),
-				'client_metadata'   => [
-					'clientId'         => $request->get_param( 'clientId' ),
-					'newsletterOptIn'  => $request->get_param( 'newsletter_opt_in' ),
-					'userId'           => $user_id,
-					'current_page_url' => \wp_get_referer(),
-					'origin'           => $origin,
-				],
+				'client_metadata'   => $client_metadata,
 				'payment_metadata'  => $payment_metadata,
 				'payment_method_id' => $request->get_param( 'payment_method_id' ),
 			]

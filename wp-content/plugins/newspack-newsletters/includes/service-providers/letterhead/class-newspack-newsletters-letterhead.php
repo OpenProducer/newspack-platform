@@ -28,7 +28,7 @@ final class Newspack_Newsletters_Letterhead extends \Newspack_Newsletters_Servic
 	 * @param string $list_id List identifier.
 	 * @return object|void|null API Response or error
 	 */
-	public function add_contact( $contact, $list_id ) {
+	public function add_contact( $contact, $list_id = false ) {
 		// TODO: Implement add_contact() method.
 	}
 

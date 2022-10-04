@@ -907,6 +907,42 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	}
 
 	/**
+	 * Get the list of contact metadata fields.
+	 *
+	 * @param number $offset Offset for pagination.
+	 */
+	private function get_contact_fields( $offset ) {
+		return $this->api_v3_request(
+			'fields',
+			'GET',
+			[
+				'query' => [
+					'limit'  => 100,
+					'offset' => $offset,
+				],
+			]
+		);
+	}
+
+	/**
+	 * Get the list of all available contact metadata fields.
+	 *
+	 * @param number $offset Offset for pagination.
+	 */
+	private function get_all_contact_fields( $offset = 0 ) {
+		$response = $this->get_contact_fields( $offset );
+		if ( \is_wp_error( $response ) ) {
+			return $response;
+		}
+		$result     = $response['fields'];
+		$new_offset = count( $result ) + $offset;
+		if ( $new_offset < $response['meta']['total'] ) {
+			$result = array_merge( $result, $this->get_all_contact_fields( $new_offset ) );
+		}
+		return $result;
+	}
+
+	/**
 	 * Get contact data by email.
 	 *
 	 * @param string $email Email address.
@@ -929,27 +965,27 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		}
 		$contact_data = $result['contacts'][0];
 		if ( $return_details ) {
-			$fields_result = $this->api_v3_request( 'fields', 'GET' );
-			if ( \is_wp_error( $fields_result ) ) {
-				return $fields_result;
+			$contact_fields = $this->get_all_contact_fields();
+			if ( \is_wp_error( $contact_fields ) ) {
+				return $contact_fields;
 			}
-			$fields         = array_reduce(
-				$fields_result['fields'],
+			$fields_perstag_by_id = array_reduce(
+				$contact_fields,
 				function( $acc, $field ) {
 					$acc[ $field['id'] ] = $field['perstag'];
 					return $acc;
 				},
 				[]
 			);
-			$contact_result = $this->api_v3_request( 'contacts/' . $contact_data['id'], 'GET' );
+			$contact_result       = $this->api_v3_request( 'contacts/' . $contact_data['id'], 'GET' );
 			if ( \is_wp_error( $contact_result ) ) {
 				return $contact_result;
 			}
 			$contact_fields           = array_reduce(
 				$contact_result['fieldValues'],
-				function( $acc, $field ) use ( $fields ) {
-					if ( isset( $field['value'] ) && isset( $fields[ $field['field'] ] ) ) {
-						$acc[ $fields[ $field['field'] ] ] = $field['value'];
+				function( $acc, $field ) use ( $fields_perstag_by_id ) {
+					if ( isset( $field['value'] ) && isset( $fields_perstag_by_id[ $field['field'] ] ) ) {
+						$acc[ $fields_perstag_by_id[ $field['field'] ] ] = $field['value'];
 					}
 					return $acc;
 				},

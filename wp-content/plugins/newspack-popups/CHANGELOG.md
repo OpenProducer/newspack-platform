@@ -1,3 +1,39 @@
+# [2.6.0](https://github.com/Automattic/newspack-popups/compare/v2.5.0...v2.6.0) (2022-09-27)
+
+
+### Bug Fixes
+
+* fallback to AMP script polyfills if AMP scripts are blocked ([#961](https://github.com/Automattic/newspack-popups/issues/961)) ([923e4fb](https://github.com/Automattic/newspack-popups/commit/923e4fbcc9ed1eed5984b2a4bfecb0ec2339a1ea))
+
+
+### Features
+
+* add concept of prompt styles and add large style ([0d3ad81](https://github.com/Automattic/newspack-popups/commit/0d3ad8181dff183eb686691e065e80b4ac856b64))
+* polyfill amp-access script ([9271111](https://github.com/Automattic/newspack-popups/commit/92711113be26885aace8ffd7856155c2442b807d)), closes [#193](https://github.com/Automattic/newspack-popups/issues/193)
+* remove wp-dom-ready, medialement dependencies for frontend script ([b4c930c](https://github.com/Automattic/newspack-popups/commit/b4c930cc8ca735f62c0f2cb4660e4da156dd75f8))
+* **segmentation:** by former donor status ([#954](https://github.com/Automattic/newspack-popups/issues/954)) ([0859c54](https://github.com/Automattic/newspack-popups/commit/0859c5473523b7c11cf4b1bad970f4fcfd81ac06))
+
+# [2.6.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.6.0-alpha.1...v2.6.0-alpha.2) (2022-09-26)
+
+
+### Features
+
+* add concept of prompt styles and add large style ([0d3ad81](https://github.com/Automattic/newspack-popups/commit/0d3ad8181dff183eb686691e065e80b4ac856b64))
+
+# [2.6.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.5.0...v2.6.0-alpha.1) (2022-09-21)
+
+
+### Bug Fixes
+
+* fallback to AMP script polyfills if AMP scripts are blocked ([#961](https://github.com/Automattic/newspack-popups/issues/961)) ([923e4fb](https://github.com/Automattic/newspack-popups/commit/923e4fbcc9ed1eed5984b2a4bfecb0ec2339a1ea))
+
+
+### Features
+
+* polyfill amp-access script ([9271111](https://github.com/Automattic/newspack-popups/commit/92711113be26885aace8ffd7856155c2442b807d)), closes [#193](https://github.com/Automattic/newspack-popups/issues/193)
+* remove wp-dom-ready, medialement dependencies for frontend script ([b4c930c](https://github.com/Automattic/newspack-popups/commit/b4c930cc8ca735f62c0f2cb4660e4da156dd75f8))
+* **segmentation:** by former donor status ([#954](https://github.com/Automattic/newspack-popups/issues/954)) ([0859c54](https://github.com/Automattic/newspack-popups/commit/0859c5473523b7c11cf4b1bad970f4fcfd81ac06))
+
 # [2.5.0](https://github.com/Automattic/newspack-popups/compare/v2.4.0...v2.5.0) (2022-09-21)
 
 

@@ -20,11 +20,18 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	private $base_uri = 'https://api.cc.email/v3/';
 
 	/**
+	 * Authorization request URL.
+	 *
+	 * @var string
+	 */
+	private $authorization_url = 'https://authz.constantcontact.com/oauth2/default/v1/authorize';
+
+	/**
 	 * Base URI for Token requests.
 	 *
 	 * @var string
 	 */
-	private $token_base_uri = 'https://idfed.constantcontact.com/as/token.oauth2';
+	private $token_base_uri = 'https://authz.constantcontact.com/oauth2/default/v1/token';
 
 	/**
 	 * Scope for API requests.
@@ -67,7 +74,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 */
 	private function request( $method, $path, $options = [] ) {
 		$url = $this->base_uri . $path;
-		if ( $options['query'] ) {
+		if ( isset( $options['query'] ) ) {
 			$url = add_query_arg( $options['query'], $url );
 			unset( $options['query'] );
 		}
@@ -84,7 +91,17 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			if ( is_wp_error( $response ) ) {
 				throw new Exception( $response->get_error_message() );
 			}
-			return json_decode( $response['body'] );
+			$body = json_decode( $response['body'] );
+			if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+				if ( is_array( $body ) && isset( $body[0], $body[0]->error_message ) ) {
+					throw new Exception( $body[0]->error_message );
+				} elseif ( is_object( $body ) && isset( $body->error_message ) ) {
+					throw new Exception( $body->error_message );
+				} else {
+					throw new Exception( wp_remote_retrieve_response_message( $response ) );
+				}
+			}
+			return $body;
 		} catch ( Exception $e ) {
 			throw new Exception( 'Constant Contact: ' . $e->getMessage() );
 		}
@@ -117,12 +134,22 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	/**
 	 * Get authorization code url
 	 *
+	 * @param string $nonce        Nonce.
 	 * @param string $redirect_uri Redirect URI.
 	 *
 	 * @return string
 	 */
-	public function get_auth_code_url( $redirect_uri = '' ) {
-		return $this->base_uri . 'idfed?client_id=' . $this->api_key . '&scope=' . implode( '+', $this->scope ) . '&response_type=code&redirect_uri=' . urlencode( $redirect_uri );
+	public function get_auth_code_url( $nonce, $redirect_uri = '' ) {
+		return add_query_arg(
+			[
+				'response_type' => 'code',
+				'state'         => $nonce,
+				'client_id'     => $this->api_key,
+				'redirect_uri'  => $redirect_uri,
+				'scope'         => implode( ' ', $this->scope ),
+			],
+			$this->authorization_url
+		);
 	}
 
 	/**
@@ -132,6 +159,25 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	 */
 	public function set_access_token( $access_token ) {
 		$this->access_token = $access_token;
+	}
+
+	/**
+	 * Parse JWT.
+	 *
+	 * @param string $jwt JWT.
+	 *
+	 * @return array Containing JWT payload.
+	 */
+	private static function parse_jwt( $jwt ) {
+		$segments = explode( '.', $jwt );
+		if ( count( $segments ) !== 3 ) {
+			return false;
+		}
+		$data = json_decode( base64_decode( $segments[1] ), true );
+		if ( ! $data ) {
+			return false;
+		}
+		return $data;
 	}
 
 	/**
@@ -146,16 +192,11 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 		if ( ! $access_token ) {
 			return false;
 		}
-		try {
-			$response = $this->request(
-				'POST',
-				'token_info',
-				[ 'body' => wp_json_encode( [ 'token' => $access_token ] ) ]
-			);
-			return [] === array_diff( $this->scope, $response->scopes ?? [] );
-		} catch ( Exception $e ) {
+		$data = self::parse_jwt( $access_token );
+		if ( $data['exp'] < time() ) {
 			return false;
 		}
+		return [] === array_diff( $this->scope, $data['scp'] ?? [] );
 	}
 
 	/**
@@ -177,7 +218,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 		];
 		$args        = [
 			'headers' => [
-				'Content-Type'  => 'application/json',
+				'Content-Type'  => 'application/x-www-form-urlencoded',
 				'Accept'        => 'application/json',
 				'Authorization' => 'Basic ' . $credentials,
 			],
@@ -210,7 +251,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 		];
 		$args        = [
 			'headers' => [
-				'Content-Type'  => 'application/json',
+				'Content-Type'  => 'application/x-www-form-urlencoded',
 				'Accept'        => 'application/json',
 				'Authorization' => 'Basic ' . $credentials,
 			],
@@ -247,8 +288,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	public function get_email_addresses() {
 		return $this->request( 'GET', 'account/emails' );
 	}
-	
-	
+
 	/**
 	 * Get Contact Lists
 	 *

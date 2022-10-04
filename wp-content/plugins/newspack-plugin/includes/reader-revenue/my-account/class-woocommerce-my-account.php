@@ -313,9 +313,13 @@ class WooCommerce_My_Account {
 
 	/**
 	 * Redirect to "Account details" if accessing "My Account" directly.
+	 * Do not redirect if the request is a resubscribe request, as resubscribe
+	 * requests do their own redirect to the cart/checkout page.
 	 */
 	public static function redirect_to_account_details() {
-		if ( \is_user_logged_in() && Reader_Activation::is_enabled() && function_exists( 'wc_get_page_permalink' ) ) {
+		$resubscribe_request = isset( $_REQUEST['resubscribe'] ) ? 'shop_subscription' === get_post_type( absint( $_REQUEST['resubscribe'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+
+		if ( \is_user_logged_in() && Reader_Activation::is_enabled() && function_exists( 'wc_get_page_permalink' ) && ! $resubscribe_request ) {
 			global $wp;
 			$current_url               = \home_url( $wp->request );
 			$my_account_page_permalink = \wc_get_page_permalink( 'myaccount' );

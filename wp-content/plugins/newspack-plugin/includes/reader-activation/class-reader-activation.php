@@ -100,6 +100,7 @@ final class Reader_Activation {
 			'auth_intention_cookie' => self::AUTH_INTENTION_COOKIE,
 			'cid_cookie'            => NEWSPACK_CLIENT_ID_COOKIE_NAME,
 			'authenticated_email'   => $authenticated_email,
+			'otp_auth_action'       => Magic_Link::OTP_AUTH_ACTION,
 			'account_url'           => function_exists( 'wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : '',
 		];
 
@@ -171,6 +172,9 @@ final class Reader_Activation {
 			'sync_esp_delete'             => true,
 			'active_campaign_master_list' => '',
 			'emails'                      => Emails::get_emails( array_values( Reader_Activation_Emails::EMAIL_TYPES ), false ),
+			'sender_name'                 => Emails::get_from_name(),
+			'sender_email_address'        => Emails::get_from_email(),
+			'contact_email_address'       => Emails::get_reply_to_email(),
 		];
 
 		/**
@@ -788,7 +792,7 @@ final class Reader_Activation {
 									sprintf(
 										// Translators: %s is the link to sign in via magic link instead.
 										__( 'Sign in with a password below, or %s.', 'newspack' ),
-										'<a href="#" data-set-action="link">' . __( 'sign in using a link', 'newspack' ) . '</a>'
+										'<a href="#" data-set-action="link">' . __( 'sign in using your email', 'newspack' ) . '</a>'
 									)
 								);
 							?>
@@ -798,7 +802,18 @@ final class Reader_Activation {
 								echo wp_kses_post(
 									sprintf(
 										// Translators: %s is the link to sign in via password instead.
-										__( 'Get a link sent to your email to sign in instantly, or %s.', 'newspack' ),
+										__( 'Get a code sent to your email to sign in, or %s.', 'newspack' ),
+										'<a href="#" data-set-action="pwd">' . __( 'sign in using a password', 'newspack' ) . '</a>'
+									)
+								);
+							?>
+						</p>
+						<p data-action="otp">
+							<?php
+								echo wp_kses_post(
+									sprintf(
+										// Translators: %s is the link to sign in via password instead.
+										__( 'Enter the code you received via email to sign in, or %s.', 'newspack' ),
 										'<a href="#" data-set-action="pwd">' . __( 'sign in using a password', 'newspack' ) . '</a>'
 									)
 								);
@@ -821,9 +836,12 @@ final class Reader_Activation {
 								?>
 							</div>
 						<?php endif; ?>
-						<div class="components-form__field">
+						<div class="components-form__field" data-action="pwd link register">
 							<input name="npe" type="email" placeholder="<?php \esc_attr_e( 'Enter your email address', 'newspack' ); ?>" />
 							<?php self::render_honeypot_field(); ?>
+						</div>
+						<div class="components-form__field" data-action="otp">
+							<input name="otp_code" type="text" placeholder="<?php \esc_attr_e( '6-digit code', 'newspack' ); ?>" />
 						</div>
 						<div class="components-form__field" data-action="pwd">
 							<input name="password" type="password" placeholder="<?php \esc_attr_e( 'Enter your password', 'newspack' ); ?>" />
@@ -847,16 +865,29 @@ final class Reader_Activation {
 							</div>
 							<div class="components-form__help">
 								<p class="small">
-									<a href="#" data-set-action="link"><?php \esc_html_e( 'Sign in with a link', 'newspack' ); ?></a>
+									<a href="#" data-set-action="link"><?php \esc_html_e( 'Sign in with your email', 'newspack' ); ?></a>
 								</p>
 								<p class="small">
 									<a href="<?php echo \esc_url( \wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'newspack' ); ?></a>
 								</p>
 							</div>
 						</div>
+						<div class="<?php echo \esc_attr( $class( 'actions' ) ); ?>" data-action="otp">
+							<div class="components-form__submit">
+								<button type="submit"><?php \esc_html_e( 'Sign in', 'newspack' ); ?></button>
+							</div>
+							<div class="components-form__help">
+								<p class="small">
+									<a href="#" data-set-action="link"><?php \esc_html_e( 'Try a different email', 'newspack' ); ?></a>
+								</p>
+								<p class="small">
+									<a href="#" data-set-action="link"><?php _e( 'Send another code', 'newspack' ); ?></a>
+								</p>
+							</div>
+						</div>
 						<div class="<?php echo \esc_attr( $class( 'actions' ) ); ?>" data-action="link">
 							<div class="components-form__submit">
-								<button type="submit"><?php \esc_html_e( 'Send authentication link', 'newspack' ); ?></button>
+								<button type="submit"><?php \esc_html_e( 'Send authorization code', 'newspack' ); ?></button>
 							</div>
 							<div class="components-form__help">
 								<p class="small">

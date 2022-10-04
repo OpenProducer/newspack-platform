@@ -372,7 +372,7 @@ class Analytics_Wizard extends Wizard {
 		}
 		if ( isset( $custom_dimensions['items'] ) ) {
 			return array_map(
-				function ( &$dimension ) {
+				function ( $dimension ) {
 					// Assign role to custom dimension if it's found as a saved option.
 					foreach ( self::get_custom_dimensions_config() as $config_item ) {
 						$saved_dimension_id = get_option( self::get_custom_dimensions_option_name( $config_item['role'] ) );

@@ -20,9 +20,9 @@ if ( $error_message ) :
 	<?php
 else :
 	?>
-
-	<a href="<?php echo esc_url( $stripe_billing_portal_url ); ?>">
-		<?php echo esc_html__( 'Update payment method, cancel recurring payments, and view billing history', 'newspack' ); ?>
+	<p><?php esc_html_e( 'Visit Stripe to change your payment method, cancel recurring payments, and view billing history.', 'newspack' ); ?></p>
+	<a href="<?php echo esc_url( $stripe_billing_portal_url ); ?>" class="button">
+		<?php echo esc_html__( 'Manage billing information', 'newspack' ); ?>
 	</a>
 
 	<?php

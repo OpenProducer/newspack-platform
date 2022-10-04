@@ -168,44 +168,7 @@ final class Settings {
 	 * @return array Indexed or associative array of configured settings grouped by section name.
 	 */
 	public static function get_settings_list( $assoc = false ) {
-		$settings_list = array(
-			array(
-				'description' => __( 'Lazy Loading', 'newspack-ads' ),
-				'help'        => __( 'Enables pages to load faster, reduces resource consumption and contention, and improves viewability rate.', 'newspack-ads' ),
-				'section'     => 'lazy_load',
-				'key'         => 'active',
-				'type'        => 'boolean',
-				'default'     => true,
-				'public'      => true,
-			),
-			array(
-				'description' => __( 'Fetch margin percent', 'newspack-ads' ),
-				'help'        => __( 'Minimum distance from the current viewport a slot must be before we fetch the ad as a percentage of viewport size.', 'newspack-ads' ),
-				'section'     => 'lazy_load',
-				'key'         => 'fetch_margin_percent',
-				'type'        => 'int',
-				'default'     => 100,
-				'public'      => true,
-			),
-			array(
-				'description' => __( 'Render margin percent', 'newspack-ads' ),
-				'help'        => __( 'Minimum distance from the current viewport a slot must be before we render an ad.', 'newspack-ads' ),
-				'section'     => 'lazy_load',
-				'key'         => 'render_margin_percent',
-				'type'        => 'int',
-				'default'     => 0,
-				'public'      => true,
-			),
-			array(
-				'description' => __( 'Mobile scaling', 'newspack-ads' ),
-				'help'        => __( 'A multiplier applied to margins on mobile devices. This allows varying margins on mobile vs. desktop.', 'newspack-ads' ),
-				'section'     => 'lazy_load',
-				'key'         => 'mobile_scaling',
-				'type'        => 'float',
-				'default'     => 2,
-				'public'      => true,
-			),
-		);
+		$settings_list = [];
 
 		$default_setting = array(
 			'section' => '',

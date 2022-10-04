@@ -126,6 +126,7 @@ class Emails {
 				'email_config_name_meta' => self::EMAIL_CONFIG_NAME_META,
 				'from_name'              => self::get_from_name(),
 				'from_email'             => self::get_from_email(),
+				'reply_to_email'         => self::get_reply_to_email(),
 			]
 		);
 		wp_enqueue_script( $handle );
@@ -166,14 +167,14 @@ class Emails {
 	 * @param array  $placeholders Placeholders to replace in email.
 	 */
 	public static function get_email_payload( $config_name, $placeholders = [] ) {
-		$email_config = self::get_email_config_by_type( $config_name );
-		$html         = $email_config['html_payload'];
-		$from_email   = $email_config['from_email'];
-		$placeholders = array_merge(
+		$email_config   = self::get_email_config_by_type( $config_name );
+		$html           = $email_config['html_payload'];
+		$reply_to_email = $email_config['reply_to_email'];
+		$placeholders   = array_merge(
 			[
 				[
 					'template' => '*CONTACT_EMAIL*',
-					'value'    => sprintf( '<a href="mailto:%s">%s</a>', $from_email, $from_email ),
+					'value'    => sprintf( '<a href="mailto:%s">%s</a>', $reply_to_email, $reply_to_email ),
 				],
 				[
 					'template' => '*SITE_URL*',
@@ -223,14 +224,19 @@ class Emails {
 			return 'text/html';
 		};
 
+		$headers = [
+			sprintf( 'From: %s <%s>', $email_config['from_name'], $email_config['from_email'] ),
+		];
+		if ( $email_config['from_email'] !== $email_config['reply_to_email'] ) {
+			$headers[] = sprintf( 'Reply-To: %s <%s>', $email_config['from_name'], $email_config['reply_to_email'] );
+		}
+
 		add_filter( 'wp_mail_content_type', $email_content_type );
 		$email_send_result = wp_mail( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_mail_wp_mail
 			$to,
 			$email_config['subject'],
 			self::get_email_payload( $config_name, $placeholders ),
-			[
-				sprintf( 'From: %s <%s>', $email_config['from_name'], $email_config['from_email'] ),
-			]
+			$headers
 		);
 		remove_filter( 'wp_mail_content_type', $email_content_type );
 
@@ -320,16 +326,17 @@ class Emails {
 			return false;
 		}
 		$serialized_email = [
-			'label'        => $email_config['label'],
-			'description'  => $email_config['description'],
-			'post_id'      => $post_id,
+			'label'          => $email_config['label'],
+			'description'    => $email_config['description'],
+			'post_id'        => $post_id,
 			// Make the edit link relative.
-			'edit_link'    => str_replace( site_url(), '', get_edit_post_link( $post_id, '' ) ),
-			'subject'      => get_the_title( $post_id ),
-			'from_name'    => isset( $email_config['from_name'] ) ? $email_config['from_name'] : self::get_from_name(),
-			'from_email'   => isset( $email_config['from_email'] ) ? $email_config['from_email'] : self::get_from_email(),
-			'status'       => get_post_status( $post_id ),
-			'html_payload' => $html_payload,
+			'edit_link'      => str_replace( site_url(), '', get_edit_post_link( $post_id, '' ) ),
+			'subject'        => get_the_title( $post_id ),
+			'from_name'      => isset( $email_config['from_name'] ) ? $email_config['from_name'] : self::get_from_name(),
+			'from_email'     => isset( $email_config['from_email'] ) ? $email_config['from_email'] : self::get_from_email(),
+			'reply_to_email' => isset( $email_config['reply_to_email'] ) ? $email_config['reply_to_email'] : self::get_reply_to_email(),
+			'status'         => get_post_status( $post_id ),
+			'html_payload'   => $html_payload,
 		];
 
 		return $serialized_email;
@@ -343,19 +350,32 @@ class Emails {
 	 * @return string Email address used as the sender for Newspack emails.
 	 */
 	public static function get_from_email() {
-		// Get the site domain and get rid of www.
-		$sitename   = wp_parse_url( network_home_url(), PHP_URL_HOST );
-		$from_email = 'no-reply@';
+		$from_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'sender_email_address', '' );
+		if ( empty( $from_email ) ) {
+			// Get the site domain and get rid of www.
+			$sitename   = wp_parse_url( network_home_url(), PHP_URL_HOST );
+			$from_email = 'no-reply@';
 
-		if ( null !== $sitename ) {
-			if ( 'www.' === substr( $sitename, 0, 4 ) ) {
-				$sitename = substr( $sitename, 4 );
+			if ( null !== $sitename ) {
+				if ( 'www.' === substr( $sitename, 0, 4 ) ) {
+					$sitename = substr( $sitename, 4 );
+				}
+
+				$from_email .= $sitename;
 			}
-
-			$from_email .= $sitename;
 		}
 
 		return apply_filters( 'newspack_from_email', $from_email );
+	}
+
+	/**
+	 * Get the "reply-to" email address used to send all transactional emails.
+	 *
+	 * @return string
+	 */
+	public static function get_reply_to_email() {
+		$reply_to_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'contact_email_address', self::get_from_email() );
+		return apply_filters( 'newspack_reply_to_email', $reply_to_email );
 	}
 
 	/**
@@ -366,7 +386,8 @@ class Emails {
 	 * @return string Name used as the sender for Newspack emails.
 	 */
 	public static function get_from_name() {
-		return apply_filters( 'newspack_from_name', get_bloginfo( 'name' ) );
+		$from_name = get_option( Reader_Activation::OPTIONS_PREFIX . 'sender_name', get_bloginfo( 'name' ) );
+		return apply_filters( 'newspack_from_name', $from_name );
 	}
 
 	/**

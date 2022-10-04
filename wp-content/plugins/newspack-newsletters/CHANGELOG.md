@@ -1,3 +1,45 @@
+# [1.52.0](https://github.com/Automattic/newspack-newsletters/compare/v1.51.0...v1.52.0) (2022-09-27)
+
+
+### Bug Fixes
+
+* **active-campaign:** ensure all metadata fields are handled ([aecc577](https://github.com/Automattic/newspack-newsletters/commit/aecc57716e04a9f3d270517c9c1d600d1b666c62))
+* adding contact w/out lists handling ([#949](https://github.com/Automattic/newspack-newsletters/issues/949)) ([f0513b8](https://github.com/Automattic/newspack-newsletters/commit/f0513b8168de76f65615917b3483371aae366d84))
+* **constant-contact:** update api for oauth2 ([#948](https://github.com/Automattic/newspack-newsletters/issues/948)) ([fea9364](https://github.com/Automattic/newspack-newsletters/commit/fea9364c38bfe2e23335a68828528597b0241abc))
+
+
+### Features
+
+* **post-inserter:** post type selection ([#967](https://github.com/Automattic/newspack-newsletters/issues/967)) ([9de26b0](https://github.com/Automattic/newspack-newsletters/commit/9de26b0092a8266ed0f7f28e55a5ec93fd6eb8a4))
+* **subscribe-block:** button text color ([bd67ac0](https://github.com/Automattic/newspack-newsletters/commit/bd67ac09043f6c9d813fe5a93e44b2d414486a98))
+
+# [1.52.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v1.52.0-alpha.1...v1.52.0-alpha.2) (2022-09-26)
+
+
+### Bug Fixes
+
+* **active-campaign:** ensure all metadata fields are handled ([aecc577](https://github.com/Automattic/newspack-newsletters/commit/aecc57716e04a9f3d270517c9c1d600d1b666c62))
+
+# [1.52.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.51.1-alpha.1...v1.52.0-alpha.1) (2022-09-21)
+
+
+### Bug Fixes
+
+* **constant-contact:** update api for oauth2 ([#948](https://github.com/Automattic/newspack-newsletters/issues/948)) ([fea9364](https://github.com/Automattic/newspack-newsletters/commit/fea9364c38bfe2e23335a68828528597b0241abc))
+
+
+### Features
+
+* **post-inserter:** post type selection ([#967](https://github.com/Automattic/newspack-newsletters/issues/967)) ([9de26b0](https://github.com/Automattic/newspack-newsletters/commit/9de26b0092a8266ed0f7f28e55a5ec93fd6eb8a4))
+* **subscribe-block:** button text color ([bd67ac0](https://github.com/Automattic/newspack-newsletters/commit/bd67ac09043f6c9d813fe5a93e44b2d414486a98))
+
+## [1.51.1-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.51.0...v1.51.1-alpha.1) (2022-09-16)
+
+
+### Bug Fixes
+
+* adding contact w/out lists handling ([#949](https://github.com/Automattic/newspack-newsletters/issues/949)) ([f0513b8](https://github.com/Automattic/newspack-newsletters/commit/f0513b8168de76f65615917b3483371aae366d84))
+
 # [1.51.0](https://github.com/Automattic/newspack-newsletters/compare/v1.50.0...v1.51.0) (2022-09-14)
 
 

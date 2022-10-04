@@ -21,6 +21,7 @@ use Symfony\Component\Serializer\Encoder\JsonEncoder;
 use Symfony\Component\Serializer\Encoder\XmlEncoder;
 use Symfony\Component\Serializer\Exception\ExtraAttributesException;
 use Symfony\Component\Serializer\Exception\LogicException;
+use Symfony\Component\Serializer\Exception\MissingConstructorArgumentsException;
 use Symfony\Component\Serializer\Exception\NotNormalizableValueException;
 use Symfony\Component\Serializer\Mapping\AttributeMetadataInterface;
 use Symfony\Component\Serializer\Mapping\ClassDiscriminatorFromClassMetadata;
@@ -197,7 +198,7 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
 
             $attributeValue = $this->applyCallbacks($attributeValue, $object, $attribute, $format, $attributeContext);
 
-            if (null !== $attributeValue && !is_scalar($attributeValue)) {
+            if (null !== $attributeValue && !\is_scalar($attributeValue)) {
                 $stack[$attribute] = $attributeValue;
             }
 
@@ -350,6 +351,10 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
 
         $this->validateCallbackContext($context);
 
+        if (null === $data && isset($context['value_type']) && $context['value_type'] instanceof Type && $context['value_type']->isNullable()) {
+            return null;
+        }
+
         $allowedAttributes = $this->getAllowedAttributes($type, $context, true);
         $normalizedData = $this->prepareForDenormalization($data);
         $extraAttributes = [];
@@ -359,11 +364,11 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
         $resolvedClass = $this->objectClassResolver ? ($this->objectClassResolver)($object) : \get_class($object);
 
         foreach ($normalizedData as $attribute => $value) {
-            $attributeContext = $this->getAttributeDenormalizationContext($resolvedClass, $attribute, $context);
-
             if ($this->nameConverter) {
-                $attribute = $this->nameConverter->denormalize($attribute, $resolvedClass, $format, $attributeContext);
+                $attribute = $this->nameConverter->denormalize($attribute, $resolvedClass, $format, $context);
             }
+
+            $attributeContext = $this->getAttributeDenormalizationContext($resolvedClass, $attribute, $context);
 
             if ((false !== $allowedAttributes && !\in_array($attribute, $allowedAttributes)) || !$this->isAllowedAttribute($resolvedClass, $attribute, $format, $context)) {
                 if (!($context[self::ALLOW_EXTRA_ATTRIBUTES] ?? $this->defaultContext[self::ALLOW_EXTRA_ATTRIBUTES])) {
@@ -416,7 +421,7 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
             }
         }
 
-        if (!empty($extraAttributes)) {
+        if ($extraAttributes) {
             throw new ExtraAttributesException($extraAttributes);
         }
 
@@ -437,12 +442,16 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
      * @return mixed
      *
      * @throws NotNormalizableValueException
+     * @throws ExtraAttributesException
+     * @throws MissingConstructorArgumentsException
      * @throws LogicException
      */
     private function validateAndDenormalize(array $types, string $currentClass, string $attribute, $data, ?string $format, array $context)
     {
         $expectedTypes = [];
         $isUnionType = \count($types) > 1;
+        $extraAttributesException = null;
+        $missingConstructorArgumentException = null;
         foreach ($types as $type) {
             if (null === $data && $type->isNullable()) {
                 return null;
@@ -519,6 +528,8 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
                     if (\count($collectionKeyType = $type->getCollectionKeyTypes()) > 0) {
                         [$context['key_type']] = $collectionKeyType;
                     }
+
+                    $context['value_type'] = $collectionValueType;
                 } elseif ($type->isCollection() && \count($collectionValueType = $type->getCollectionValueTypes()) > 0 && Type::BUILTIN_TYPE_ARRAY === $collectionValueType[0]->getBuiltinType()) {
                     // get inner type for any nested array
                     [$innerType] = $collectionValueType;
@@ -578,7 +589,31 @@ abstract class AbstractObjectNormalizer extends AbstractNormalizer
                 if (!$isUnionType) {
                     throw $e;
                 }
+            } catch (ExtraAttributesException $e) {
+                if (!$isUnionType) {
+                    throw $e;
+                }
+
+                if (!$extraAttributesException) {
+                    $extraAttributesException = $e;
+                }
+            } catch (MissingConstructorArgumentsException $e) {
+                if (!$isUnionType) {
+                    throw $e;
+                }
+
+                if (!$missingConstructorArgumentException) {
+                    $missingConstructorArgumentException = $e;
+                }
             }
+        }
+
+        if ($extraAttributesException) {
+            throw $extraAttributesException;
+        }
+
+        if ($missingConstructorArgumentException) {
+            throw $missingConstructorArgumentException;
         }
 
         if ($context[self::DISABLE_TYPE_ENFORCEMENT] ?? $this->defaultContext[self::DISABLE_TYPE_ENFORCEMENT] ?? false) {

@@ -27,7 +27,7 @@ is performed on changed files before commiting. In other words, is run during `p
 | run manually | `composer lint`                                       | `npm run lint:js`             | `npm run lint:scss`                |
 | autofix ✨   | `./vendor/bin/phpcbf <file>`                          | `npm run lint:js -- --fix`    | `npm run lint:scss -- --fix`       |
 
-### Building new Blocks
+### Building New Blocks
 
 To get started with a new block:
 
@@ -37,3 +37,7 @@ To get started with a new block:
 - Add the block slug to the `production` array in `src/setup/blocks.json`
 - If the block requires server-side code add the slug to the `$newspack_blocks_blocks` array in `newspack-blocks.php`
 - Execute `npm run build`. If all went smoothly, you should see a Newspack category in the block picker, and your block should appear within it.
+
+### Usage
+
+[End-user documentation can be found here](https://newspack.pub/support/blocks/homepage-posts/).

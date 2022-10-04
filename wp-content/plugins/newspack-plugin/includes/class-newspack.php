@@ -86,6 +86,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-magic-link.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-woocommerce-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-sync.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/my-account/class-woocommerce-my-account.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth.php';
@@ -95,6 +96,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-fivetran-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-login.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-blocks.php';
+		include_once NEWSPACK_ABSPATH . 'includes/revisions-control/class-revisions-control.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/optional-modules/class-rss.php';
 
@@ -135,6 +137,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/google-site-kit/class-googlesitekit.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-newspack-newsletters.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-mailchimp-for-woocommerce.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-organic-profile-block.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 
@@ -146,6 +149,9 @@ final class Newspack {
 
 		// Scheduled post checker cron job.
 		include_once NEWSPACK_ABSPATH . 'includes/scheduled-post-checker/scheduled-post-checker.php';
+
+		// Filter by authors in the Posts page.
+		include_once NEWSPACK_ABSPATH . 'includes/author-filter/class-author-filter.php';
 	}
 
 	/**

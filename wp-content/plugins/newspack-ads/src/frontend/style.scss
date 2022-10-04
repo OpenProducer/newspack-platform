@@ -1,4 +1,4 @@
-@import '~@wordpress/base-styles/colors';
+@use '~@wordpress/base-styles/colors' as wp-colors;
 
 .stick-to-top:last-child {
 	position: sticky;
@@ -45,18 +45,18 @@
 		position: absolute;
 		rect {
 			fill: white;
-			stroke: rgba( $gray-900, 0.4 );
+			stroke: rgba( wp-colors.$gray-900, 0.4 );
 			stroke-width: 1px;
 		}
 		line {
-			stroke: rgba( $gray-900, 0.4 );
+			stroke: rgba( wp-colors.$gray-900, 0.4 );
 			stroke-width: 1px;
 		}
 	}
 	&__label {
 		background: white;
-		border: 1px dashed rgba( $gray-900, 0.4 );
-		color: $gray-900;
+		border: 1px dashed rgba( wp-colors.$gray-900, 0.4 );
+		color: wp-colors.$gray-900;
 		font-size: 10px;
 		line-height: 1.6;
 		padding: 4px 8px;

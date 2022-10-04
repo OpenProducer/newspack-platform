@@ -69,9 +69,8 @@ class NewspackSuppressAdsPanel extends Component {
 
 const ComposedPanel = compose( [
 	withSelect( select => {
-		const { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements } = select(
-			'core/editor'
-		).getEditedPostAttribute( 'meta' );
+		const { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements } =
+			select( 'core/editor' ).getEditedPostAttribute( 'meta' );
 		return { newspack_ads_suppress_ads, newspack_ads_suppress_ads_placements };
 	} ),
 	withDispatch( dispatch => ( {

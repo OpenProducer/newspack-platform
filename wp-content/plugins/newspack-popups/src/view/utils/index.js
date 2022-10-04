@@ -39,8 +39,16 @@ export const getClientIDValue = () => getCookies()[ 'newspack-cid' ];
  * @return {string} String with the value replaced.
  */
 export const substituteDynamicValue = value => {
-	if ( value && String( value ).replace( /\s/g, '' ) === 'CLIENT_ID(newspack-cid)' ) {
-		value = getClientIDValue() || '';
+	if ( value ) {
+		const trimmedValue = String( value ).replace( /\s/g, '' );
+		switch ( trimmedValue ) {
+			case 'CLIENT_ID(newspack-cid)':
+				value = getClientIDValue() || '';
+				break;
+			case 'DOCUMENT_REFERRER':
+				value = document.referrer || '';
+				break;
+		}
 	}
 	return value;
 };
@@ -160,8 +168,15 @@ export const waitUntil = ( condition, callback, maxTries = 10 ) => {
 
 /**
  * If an AMP module was loaded, e.g. via another plugin or a custom header script, it should not be polyfilled.
+ * It's possible an AMP module is loaded and the custom element registered, but the module code itself is blocked.
+ * A common scenario is amp-analytics being blocked by ad blockers or privacy browser extensions like uBlock or Ghostery.
+ * In this case the custom element will exist but the service's main class will not exist on the global __AMP_SERVICES object.
+ * Extensions in this object may or may not be prefixed with `amp-`: e.g. `__AMP_SERVICES.access` vs. `__AMP_SERVICES.amp-analytics`.
  */
-export const shouldPolyfillAMPModule = name => undefined === customElements.get( `amp-${ name }` );
+export const shouldPolyfillAMPModule = name =>
+	undefined === customElements.get( `amp-${ name }` ) ||
+	( ! window.__AMP_SERVICES?.hasOwnProperty( `amp-${ name }` ) &&
+		! window.__AMP_SERVICES?.hasOwnProperty( name ) );
 
 export const parseOnHandlers = onAttributeValue =>
 	onAttributeValue

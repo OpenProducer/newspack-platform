@@ -101,6 +101,10 @@ $width__tablet: 782px;
 				height: auto;
 				width: 100%;
 			}
+
+			amp-img.amp-wp-enforced-sizes {
+				object-fit: cover;
+			}
 		}
 
 		&__content,
@@ -123,6 +127,64 @@ $width__tablet: 782px;
 		.newspack-popup__content-wrapper {
 			box-shadow: 0 0 1em 0.5em rgba( black, 0.1 );
 			margin: 32px;
+		}
+
+		&.newspack-lightbox-featured-image {
+			@media only screen and ( min-width: $width__tablet ) {
+				.newspack-lightbox__close {
+					right: #{2 * $overlay__gap};
+					top: #{2 * $overlay__gap};
+				}
+			}
+		}
+	}
+
+	&.newspack-lightbox-large-border {
+		.newspack-popup {
+			&__content {
+				padding-top: #{3.5 * $overlay__gap};
+
+				@media only screen and ( min-width: $width__mobile ) {
+					padding-top: #{2 * $overlay__gap};
+				}
+
+				@media only screen and ( min-width: $width__tablet ) {
+					padding: #{4 * $overlay__gap};
+				}
+			}
+		}
+
+		.newspack-lightbox__close {
+			border-radius: 3px;
+			height: #{2.5 * $overlay__gap};
+			margin: #{0.5 * $overlay__gap};
+			padding: 0;
+			width: #{2.5 * $overlay__gap};
+
+			@media only screen and ( min-width: $width__mobile ) {
+				height: #{1.875 * $overlay__gap};
+				margin: #{0.125 * $overlay__gap};
+				width: #{1.875 * $overlay__gap};
+			}
+
+			@media only screen and ( min-width: $width__tablet ) {
+				height: #{3 * $overlay__gap};
+				margin: #{0.5 * $overlay__gap};
+				width: #{3 * $overlay__gap};
+			}
+
+			&:active,
+			&:focus,
+			&:hover {
+				background: #111;
+				color: white;
+				opacity: 1;
+			}
+
+			&:focus {
+				outline: 1.5px solid #111;
+				outline-offset: 2px;
+			}
 		}
 	}
 
@@ -172,6 +234,7 @@ $width__tablet: 782px;
 				width: 48px;
 
 				&:active,
+				&:focus,
 				&:hover {
 					background-color: rgba( black, 0.95 );
 					opacity: 1;
@@ -349,7 +412,7 @@ $width__tablet: 782px;
 				}
 			}
 
-			@media only screen and ( min-width: 600px ) {
+			@media only screen and ( min-width: $width__mobile ) {
 				.alignfull.wp-block-columns {
 					margin-left: -16px;
 					margin-right: -16px;
@@ -374,6 +437,12 @@ $width__tablet: 782px;
 	&.newspack-lightbox-no-border {
 		border: none;
 		padding: 0;
+	}
+
+	&.newspack-lightbox-large-border {
+		@media only screen and ( min-width: $width__mobile ) {
+			padding: 1.5em;
+		}
 	}
 }
 

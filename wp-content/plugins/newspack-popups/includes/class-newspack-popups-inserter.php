@@ -72,7 +72,6 @@ final class Newspack_Popups_Inserter {
 		add_shortcode( 'newspack-popup', [ $this, 'popup_shortcode' ] );
 		add_action( 'after_header', [ $this, 'insert_popups_after_header' ] ); // This is a Newspack theme hook. When used with other themes, popups won't be inserted on archive pages.
 		add_action( 'wp_head', [ $this, 'insert_popups_amp_access' ] );
-		add_action( 'wp_head', [ $this, 'register_amp_scripts' ] );
 		add_action( 'before_header', [ $this, 'insert_before_header' ] );
 		add_action( 'after_archive_post', [ $this, 'insert_inline_prompt_in_archive_pages' ] );
 
@@ -523,6 +522,24 @@ final class Newspack_Popups_Inserter {
 	}
 
 	/**
+	 * Is the page AMP-enabled?
+	 *
+	 * @return bool True if AMP.
+	 */
+	public static function is_amp() {
+		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+	}
+
+	/**
+	 * Can the site use AMP Plus features?
+	 *
+	 * @return bool Configured or not.
+	 */
+	public static function is_amp_plus() {
+		return method_exists( '\Newspack\AMP_Enhancements', 'should_use_amp_plus' ) && \Newspack\AMP_Enhancements::should_use_amp_plus();
+	}
+
+	/**
 	 * Enqueue the assets needed to display the popups.
 	 */
 	public static function enqueue_scripts() {
@@ -531,26 +548,27 @@ final class Newspack_Popups_Inserter {
 		}
 
 		// Don't enqueue assets if prompts are disabled on this post.
-		$has_disabled_prompts = is_singular() && ! empty( get_post_meta( get_the_ID(), 'newspack_popups_has_disabled_popups', true ) );
+		$has_disabled_prompts = \is_singular() && ! empty( \get_post_meta( \get_the_ID(), 'newspack_popups_has_disabled_popups', true ) );
 		if ( $has_disabled_prompts ) {
 			return;
 		}
 
-		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
-		if ( ! $is_amp ) {
-			wp_register_script(
+		if ( ! self::is_amp() || self::is_amp_plus() ) {
+			\wp_register_script(
 				'newspack-popups-view',
 				plugins_url( '../dist/view.js', __FILE__ ),
-				[ 'wp-dom-ready', 'wp-url', 'mediaelement-core' ],
+				[ 'wp-url' ],
 				filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/view.js' ),
 				true
 			);
-			wp_enqueue_script( 'newspack-popups-view' );
+			\wp_enqueue_script( 'newspack-popups-view' );
+			\wp_script_add_data( 'newspack-popups-view', 'amp-plus', true );
+			\wp_script_add_data( 'newspack-popups-view', 'async', true );
 		}
 
 		\wp_register_style(
 			'newspack-popups-view',
-			plugins_url( '../dist/view.css', __FILE__ ),
+			\plugins_url( '../dist/view.css', __FILE__ ),
 			null,
 			filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/view.css' )
 		);
@@ -816,40 +834,6 @@ final class Newspack_Popups_Inserter {
 	 */
 	public static function assess_has_disabled_popups() {
 		return apply_filters( 'newspack_popups_assess_has_disabled_popups', false );
-	}
-
-	/**
-	 * Register and enqueue all required AMP scripts, if needed.
-	 */
-	public static function register_amp_scripts() {
-		if ( self::assess_has_disabled_popups() ) {
-			return;
-		}
-		if ( ! is_admin() && ! wp_script_is( 'amp-runtime', 'registered' ) ) {
-		// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-			wp_register_script(
-				'amp-runtime',
-				'https://cdn.ampproject.org/v0.js',
-				null,
-				null,
-				true
-			);
-		}
-		$scripts = [ 'amp-access' ];
-		foreach ( $scripts as $script ) {
-			if ( ! wp_script_is( $script, 'registered' ) ) {
-				$path = "https://cdn.ampproject.org/v0/{$script}-latest.js";
-				// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-				wp_register_script(
-					$script,
-					$path,
-					array( 'amp-runtime' ),
-					null,
-					true
-				);
-			}
-			wp_enqueue_script( $script );
-		}
 	}
 
 	/**

@@ -532,7 +532,7 @@ final class Newspack_Popups_Segmentation {
 				return Campaign_Data_Utils::does_reader_match_segment(
 					$segment_config,
 					$api->get_reader( $client_id ),
-					$api->get_reader_events( $client_id, [ 'subscription', 'donation', 'user_account', 'view' ] )
+					$api->get_reader_events( $client_id, Campaign_Data_Utils::get_reader_events_types() )
 				);
 			}
 		);
@@ -656,6 +656,22 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
+	 * Transform an array of strings into a part of an SQL query.
+	 *
+	 * @param string[] $items Array of strings to transform.
+	 * @param string   $column_name Name of the column to include in the query.
+	 */
+	private static function array_to_in_query( $items, $column_name ) {
+		$items = array_map(
+			function( $item ) {
+				return "'$item'";
+			},
+			$items
+		);
+		return $column_name . ' IN (' . implode( ',', $items ) . ')';
+	}
+
+	/**
 	 * Remove unneeded data so the DB does not blow up.
 	 * TODO: Ensure that client IDs on single-prompt previews are tagged as preview sessions.
 	 */
@@ -698,14 +714,13 @@ final class Newspack_Popups_Segmentation {
 		);
 		$old_client_ids_to_delete = [];
 		foreach ( $old_client_ids as $row ) {
-			$subscribe_or_donate_events = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-				$wpdb->prepare(
-					"SELECT SQL_CALC_FOUND_ROWS `client_id` FROM $reader_events_table_name WHERE client_id = %s AND ( type = 'donation' OR type = 'subscription' ) ORDER BY date_created", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-					$row->client_id
-				)
+			$protected_events_types = Campaign_Data_Utils::get_protected_events_types();
+			$sql_query              = $wpdb->prepare(
+				"SELECT SQL_CALC_FOUND_ROWS `client_id` FROM $reader_events_table_name WHERE client_id = %s AND " . self::array_to_in_query( $protected_events_types, 'type' ) . ' ORDER BY date_created', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
+				$row->client_id
 			);
-
-			if ( 0 === count( $subscribe_or_donate_events ) ) {
+			$protected_events       = $wpdb->get_results( $sql_query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
+			if ( 0 === count( $protected_events ) ) {
 				$old_client_ids_to_delete[] = $row->client_id;
 			}
 		}

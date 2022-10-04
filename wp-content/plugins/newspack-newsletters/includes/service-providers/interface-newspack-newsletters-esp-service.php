@@ -101,7 +101,7 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	 *
 	 * @return array|WP_Error Contact data if it was added, or error otherwise.
 	 */
-	public function add_contact( $contact, $list_id );
+	public function add_contact( $contact, $list_id = false );
 
 	/**
 	 * Update a contact lists subscription.
