@@ -158,6 +158,7 @@ return array(
     'Google\\Site_Kit\\Core\\Util\\Reset_Persistent' => $baseDir . '/Core/Util/Reset_Persistent.php',
     'Google\\Site_Kit\\Core\\Util\\Scopes' => $baseDir . '/Core/Util/Scopes.php',
     'Google\\Site_Kit\\Core\\Util\\Synthetic_WP_Query' => $baseDir . '/Core/Util/Synthetic_WP_Query.php',
+    'Google\\Site_Kit\\Core\\Util\\URL' => $baseDir . '/Core/Util/URL.php',
     'Google\\Site_Kit\\Core\\Util\\Uninstallation' => $baseDir . '/Core/Util/Uninstallation.php',
     'Google\\Site_Kit\\Core\\Util\\User_Input_Settings' => $baseDir . '/Core/Util/User_Input_Settings.php',
     'Google\\Site_Kit\\Core\\Util\\WP_Context_Switcher_Trait' => $baseDir . '/Core/Util/WP_Context_Switcher_Trait.php',
