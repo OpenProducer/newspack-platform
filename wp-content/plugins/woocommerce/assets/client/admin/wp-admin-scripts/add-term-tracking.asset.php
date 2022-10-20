@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('wc-tracks'), 'version' => 'c7f461c879be2f24d84c08329da95be4');
+<?php return array('dependencies' => array('wc-tracks'), 'version' => '5b6105e574d0c750d52cb6b77698bfe9');

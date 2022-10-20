@@ -103,7 +103,7 @@ class ProductTagControl extends Component {
 			),
 			list: __( 'Product Tags', 'woocommerce' ),
 			noItems: __(
-				"Your store doesn't have any product tags.",
+				'You have not set up any product tags on your store.',
 				'woocommerce'
 			),
 			search: __(

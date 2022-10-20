@@ -193,7 +193,7 @@ class ProductCollectionData extends AbstractRoute {
 						'readonly'    => true,
 					],
 					'query_type' => [
-						'description' => __( 'Query type being performed which may affect counts. Valid values include "and" and "or".', 'woocommerce' ),
+						'description' => __( 'Filter condition	 being performed which may affect counts. Valid values include "and" and "or".', 'woocommerce' ),
 						'type'        => 'string',
 						'enum'        => [ 'and', 'or' ],
 						'context'     => [ 'view', 'edit' ],

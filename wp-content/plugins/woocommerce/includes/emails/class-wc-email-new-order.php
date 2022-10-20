@@ -47,6 +47,7 @@ if ( ! class_exists( 'WC_Email_New_Order' ) ) :
 			add_action( 'woocommerce_order_status_cancelled_to_processing_notification', array( $this, 'trigger' ), 10, 2 );
 			add_action( 'woocommerce_order_status_cancelled_to_completed_notification', array( $this, 'trigger' ), 10, 2 );
 			add_action( 'woocommerce_order_status_cancelled_to_on-hold_notification', array( $this, 'trigger' ), 10, 2 );
+			add_action( 'woocommerce_email_footer', array( $this, 'mobile_messaging' ), 9 ); // Run before the default email footer.
 
 			// Call parent constructor.
 			parent::__construct();
@@ -221,6 +222,27 @@ if ( ! class_exists( 'WC_Email_New_Order' ) ) :
 					'desc_tip'    => true,
 				),
 			);
+		}
+
+
+		/**
+		 * Add mobile messaging.
+		 *
+		 * @param WC_Email $email that called for mobile messaging. May not contain a WC_Email for legacy reasons.
+		 */
+		public function mobile_messaging( $email ) {
+			if ( $email instanceof WC_Email_New_Order && null !== $this->object ) {
+				$domain = wp_parse_url( home_url(), PHP_URL_HOST );
+				wc_get_template(
+					'emails/email-mobile-messaging.php',
+					array(
+						'order'   => $this->object,
+						'blog_id' => class_exists( 'Jetpack_Options' ) ? Jetpack_Options::get_option( 'id' ) : null,
+						'now'     => new DateTime(),
+						'domain'  => is_string( $domain ) ? $domain : '',
+					)
+				);
+			}
 		}
 	}
 

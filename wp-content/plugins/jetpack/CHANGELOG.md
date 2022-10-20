@@ -2,18 +2,113 @@
 
 ### This is a list detailing changes for all Jetpack releases.
 
-## 11.3.2 - 2022-09-22
-### Improved compatibility
-- WC Pay: resolves issue for WooCommerce Payments that could result in a fatal for some sites on PHP 8+.
+## 11.4 - 2022-10-04
+### Enhancements
+- Editor: update icon sizing in the Jetpack sidebar for consistency. [#26281]
+- Recommendations: update assistant with question for agency managed sites. [#26302]
 
 ### Bug fixes
-- Set the `Automattic\Jetpack\Fonts\Introspectors\Global_Styles::enqueue_global_styles_fonts` callback priority in the `init` hook to 22 to prevent it from causing style issues with sites that have Gutenberg > 13.5 activated. [#26193]
+- Admin: fix JavaScript errors related to the Jetpack disconnect option on multisite networks. [#26308]
+- Payments block: make filtering patterns used for the payments intro more robust. [#26465]
+- Social: prevent the package being initialized without a user connection. [#26543]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Account Connection Card: remove magic mobile link. [#26311]
+- Dashboard: update display of Jetpack app offering. [#26276]
+- Disconnect Dialog: fix prop types to avoid warnings from React. [#26340]
+- E2E tests: use CI build artifacts in e2e tests. [#26278]
+- Masterbar: always load CSS from Jetpack, not Fusioned paths, in preparation for de-Fusioning. [#26444]
+- Mock update API response in sync test. [#26389]
+- Register `pcast.pocketcasts.net` for oEmbed even with WordPress 6.1, they only register `pca.st`. [#26324]
+- Removed connection-ui package dependency. [#26381]
+- SEO: refactor editor sidebar panel to share code. [#26288]
+- Site Accelerator: update image used for site accelerator recommendation. [#26335]
+- Social: align Jetpack and Social to use the connection-test-results endpoint in the block editor. [#26274]
+- Social: move the share limits logic to the social package. [#26294]
+- Sync changes to modules/masterbar/nudges/additional-css/ from wpcom. [#26362]
+- Updated package dependencies.
+- WPcom: always disable WAF on WoA sites. [#26401]
+- WPcom: apply Calypso 'Add new site' styles to wp-admin. [#26290]
+
+## 11.4-a.7 - 2022-09-22
+### Improved compatibility
+- WC Pay: resolves issue for WooCommerce Payments that could result in a fatal for some sites on PHP 8+. [#26304]
+
+## 11.3.2 - 2022-09-22
+### Improved compatibility
+- WC Pay: resolves issue for WooCommerce Payments that could result in a fatal for some sites on PHP 8+. [#26304]
+
+## 11.4-a.5 - 2022-09-20
+### Enhancements
+- Payment Blocks: add core typography settings to the buttons. [#26108]
+- VideoPress Block (beta): various enhancements and fixes for styling, vtt files, and block settings. [#26266, #26182, #26201, #26269, #26286, #26270, #26264, #26225, #26260, #26238, #26209, #26285, #26283]
+
+### Bug fixes
+- Fonts: set the `Automattic\Jetpack\Fonts\Introspectors\Global_Styles::enqueue_global_styles_fonts` callback priority in the `init` hook to 22 to prevent it from causing style issues with sites that have Gutenberg > 13.5 activated. [#26193]
+- Jetpack: fix a typo when selecting the VideoPress attachment info description field. [#26233]
+- Subscriptions: add clearer messaging for past-published posts. [#26085]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Connection: extract Restore Connection functionality into the JS package. [#26034]
+- E2E tests: removed deprecated Slack notification code. [#26215]
+- General: show Jetpack icon in the post publish audio panel. [#26257]
+- Publicize: add `is-healthy` endpoint to post field. [#26216]
+- Updated package dependencies.
+- WAF: add loading of the WAF from Jetpack to avoid use of actions.php [#24730]
+- WPcom: add context-sensitive menu items to sidebar for domain-only sites. [#26102]
+- WPcom: prevent upgrade nudge of paid blocks from being visible on the block list view. [#26237]
+
+## 11.4-a.3 - 2022-09-13
+### Enhancements
+- VideoPress block (beta): register the video-chapters beta feature with basic controls. [#26177]
+
+### Improved compatibility
+- Jetpack: update styling for Jetpack logo shown in pre-publish panels for Jetpack and Jetpack Social plugins. [#26101, #26162]
+- Pay with PayPal block: the `postLinkUrl` attribute now uses the immutable post GUID to ensure correct editor state. [#26063]
+- Subscriptions: do not load Subscriptions block while using Jetpack Offline Mode. [#26179]
+- VideoPress: move jetpack_videopress_guid REST custom field to VideoPress package. [#26140]
+
+### Bug fixes
+- Widgets: add source check for broken image. [#26110]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- SEO Tools: fix a couple of unique key prop warnings. [#26082]
+- QR Post: update post-publish panel to show Jetpack logo. [#26163]
+- Tests: fix factory method calls. [#26109]
+- Updated package dependencies.
+- WordPress.com REST API: expose user interactions attribute within sites API response. [#26130]
+
+## 11.4-a.1 - 2022-09-08
+### Enhancements
+- Blocks: add "BETA" labels for beta extensions used in the block editor context. [#25852, #25938]
+- Jetpack: brand Jetpack features in publishing flows. [#26044, #26064]
+- Payment Buttons: add support for vertical dimensions controls. [#26058]
+- QR Post: remove redundant buttons from the opened modal. [#25929]
+- VideoPress Block (beta): allow editing of some block settings while uploading. [#24556]
+
+### Bug fixes
+- Post Images: avoid PHP notices when fetching images from posts with missing metadata. [#25829]
+- Donations Block: avoid race condition when updating currency. [#26061]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Added E2E tests for the Jetpack WAF. [#25643]
+- Fix an undefined array key access in `WPCOM_JSON_API_List_Post_Formats_Endpoint`. [#25991]
+- Jetpack: add Social Previews components to separate package. [#25931]
+- Jetpack: implement a temporary solution to register VideoPress block v6 in dotcom. [#25902]
+- Jetpack: remove VideoPress v6 block from Jetpack plugin. [#25873]
+- Publicize Connections Post Field: fix tests. [#26084]
+- Related Posts: append original user agent to API requests. [#25946]
+- Remove usage of jetpack_require_lib() for class-jetpack-mapbox-helper. [#25958]
+- Updated package dependencies.
+- VideoPress: migrate pluging features to separate package. [#25877]
+- VideoPress: moved jetpack_videopress_guid REST custom field to VideoPress package. [#26043]
+- WordPress.com toolbar: allow enabling an "Advertising" menu item via a new filter. [#25874]
 
 ## 11.3.1 - 2022-09-08
 ### Improved compatibility
 - Notifications: improve third-party cookie check to work with modsecurity rules. [#26122]
 
-## 11.3 - 2022-09-06
+## [11.3] - 2022-09-06
 ### Enhancements
 - General: enable the Post List package in Jetpack to display extra information alongside each post in wp-admin dashboard Posts screen. [#25301]
 
@@ -6999,6 +7094,7 @@ Other bugfixes and enhancements at https://github.com/Automattic/jetpack/commits
 
 - Initial release
 
+[11.3]: https://wp.me/p1moTy-M5i
 [11.2]: https://wp.me/p1moTy-JYL
 [11.1]: https://wp.me/p1moTy-Juo
 [11.0]: https://wp.me/p1moTy-IbF
