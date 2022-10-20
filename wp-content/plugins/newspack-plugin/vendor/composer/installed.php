@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '5fde94f4afb29dedf4ef735ab1a762e401338d91',
+        'reference' => '400cb063e7a6de3dd1fd90d227d635400c29e1e4',
         'name' => 'automattic/newspack-plugin',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '5fde94f4afb29dedf4ef735ab1a762e401338d91',
+            'reference' => '400cb063e7a6de3dd1fd90d227d635400c29e1e4',
             'dev_requirement' => false,
         ),
         'composer/installers' => array(
@@ -38,12 +38,12 @@
             'dev_requirement' => false,
         ),
         'google/auth' => array(
-            'pretty_version' => 'v1.22.0',
-            'version' => '1.22.0.0',
+            'pretty_version' => 'v1.23.0',
+            'version' => '1.23.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../google/auth',
             'aliases' => array(),
-            'reference' => 'da4037df770027c8f7163595a29ec434f705f8b1',
+            'reference' => '8da16102d2cd1bdc128d97f323553df465ee7701',
             'dev_requirement' => false,
         ),
         'guzzlehttp/guzzle' => array(

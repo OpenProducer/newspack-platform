@@ -1485,6 +1485,68 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
 }
 
 /**
+* Card.
+*/
+.woocommerce-buttons-card {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8em;
+  justify-content: flex-end;
+}
+
+.woocommerce-card a {
+  align-items: center;
+  border: 1px solid #e0e0e0;
+  border-radius: 5px;
+  display: flex;
+  gap: 0.8em;
+  padding: 0.8em;
+  text-decoration: none;
+}
+.woocommerce-card a::after {
+  background-image: url('data:image/svg+xml,%3Csvg width="24" height="24" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"%3E%3Cpath d="M10.6 6L9.4 7l4.6 5-4.6 5 1.2 1 5.4-6z" fill="%23111" /%3E%3C/svg%3E');
+  content: "";
+  display: block;
+  flex: 0 0 24px;
+  height: 24px;
+  transition: all 125ms ease-in-out;
+  width: 24px;
+}
+.woocommerce-card a:hover {
+  border-color: #111;
+}
+.woocommerce-card a:hover::after {
+  transform: translateX(0.4em);
+}
+.woocommerce-card__content {
+  display: flex;
+  flex: 1 1 auto;
+  flex-wrap: wrap;
+  gap: 0.4em;
+}
+.woocommerce-card__content span {
+  display: block;
+  flex: 1 1 100%;
+}
+.woocommerce-card__title {
+  color: #111;
+  font-size: 1em;
+  line-height: 1.6;
+  margin: 0;
+}
+.is-destructive .woocommerce-card__title {
+  color: #cc1818;
+}
+.woocommerce-card__description {
+  color: #515151;
+  font-size: 0.8em;
+  line-height: 1.2;
+}
+.woocommerce-card + .woocommerce-card {
+  margin-top: 1rem;
+}
+
+/**
  * My Account Page.
  */
 .logged-in.page-template-single-wide.woocommerce-account .entry-header,
@@ -1551,15 +1613,15 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
   outline-color: #fff;
   outline-offset: -4px;
 }
-.logged-in.page-template-single-wide.woocommerce-account .woocommerce-EditAccountForm .form-row-first,
-.logged-in.page-template-single-wide.woocommerce-account .woocommerce-EditAccountForm .form-row-last,
-.logged-in.page-template-single-feature.woocommerce-account .woocommerce-EditAccountForm .form-row-first,
-.logged-in.page-template-single-feature.woocommerce-account .woocommerce-EditAccountForm .form-row-last {
-  width: 100%;
-}
-.logged-in.page-template-single-wide.woocommerce-account .woocommerce-EditAccountForm .form-row-first,
-.logged-in.page-template-single-feature.woocommerce-account .woocommerce-EditAccountForm .form-row-first {
+.logged-in.page-template-single-wide.woocommerce-account .woocommerce-form-row.mt0,
+.logged-in.page-template-single-wide.woocommerce-account p.mt0,
+.logged-in.page-template-single-feature.woocommerce-account .woocommerce-form-row.mt0,
+.logged-in.page-template-single-feature.woocommerce-account p.mt0 {
   margin-top: 0;
+}
+.logged-in.page-template-single-wide.woocommerce-account .woocommerce-Button.ma0,
+.logged-in.page-template-single-feature.woocommerce-account .woocommerce-Button.ma0 {
+  margin: 0;
 }
 @media only screen and (min-width: 782px) {
   .logged-in.page-template-single-wide.woocommerce-account .entry-content > .woocommerce,

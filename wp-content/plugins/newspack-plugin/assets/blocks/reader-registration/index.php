@@ -137,10 +137,13 @@ function render_block( $attrs, $content ) {
 		}
 	}
 
+	$is_admin_preview = method_exists( 'Newspack_Popups', 'is_user_admin' ) && \Newspack_Popups::is_user_admin();
+
 	// phpcs:disable WordPress.Security.NonceVerification.Recommended
 	if (
 		! \is_preview() &&
-		( ! method_exists( '\Newspack_Popups', 'is_preview_request' ) || ! \Newspack_Popups::is_preview_request() ) &&
+		! $is_admin_preview &&
+		( ! method_exists( 'Newspack_Popups', 'is_preview_request' ) || ! \Newspack_Popups::is_preview_request() ) &&
 		(
 			\is_user_logged_in() ||
 			( isset( $_GET['newspack_reader'] ) && absint( $_GET['newspack_reader'] ) )
@@ -174,18 +177,16 @@ function render_block( $attrs, $content ) {
 			</div>
 		<?php else : ?>
 			<form id="<?php echo esc_attr( get_form_id() ); ?>">
+				<div class="newspack-registration__have-account">
+					<?php echo \wp_kses_post( $attrs['haveAccountLabel'] ); ?>
+					<a href="<?php echo \esc_url( $sign_in_url ); ?>" data-newspack-reader-account-link>
+						<?php echo \wp_kses_post( $attrs['signInLabel'] ); ?>
+					</a>
+				</div>
 				<div class="newspack-registration__header">
 					<?php if ( ! empty( $attrs['title'] ) ) : ?>
 						<h2 class="newspack-registration__title"><?php echo \wp_kses_post( $attrs['title'] ); ?></h2>
 					<?php endif; ?>
-					<div class="newspack-registration__have-account">
-						<p>
-							<?php echo \wp_kses_post( $attrs['haveAccountLabel'] ); ?>
-							<a href="<?php echo \esc_url( $sign_in_url ); ?>" data-newspack-reader-account-link>
-								<?php echo \wp_kses_post( $attrs['signInLabel'] ); ?>
-							</a>
-						</p>
-					</div>
 				</div>
 				<?php if ( ! empty( $attrs['description'] ) ) : ?>
 					<p class="newspack-registration__description"><?php echo \wp_kses_post( $attrs['description'] ); ?></p>
@@ -196,7 +197,16 @@ function render_block( $attrs, $content ) {
 					if ( ! empty( $lists ) ) {
 						if ( 1 === count( $lists ) && $attrs['hideSubscriptionInput'] ) {
 							?>
-							<input type="hidden" name="lists[]" value="<?php echo \esc_attr( key( $lists ) ); ?>">
+							<input
+							<?php
+							if ( $is_admin_preview ) :
+								?>
+								disabled
+								<?php endif; ?>
+								type="hidden"
+								name="lists[]"
+								value="<?php echo \esc_attr( key( $lists ) ); ?>"
+							/>
 							<?php
 						} else {
 							Reader_Activation::render_subscription_lists_inputs(
@@ -214,9 +224,25 @@ function render_block( $attrs, $content ) {
 					<div class="newspack-registration__main">
 						<div>
 							<div class="newspack-registration__inputs">
-								<input type="email" name="npe" autocomplete="email" placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>" />
+								<input
+								<?php
+								if ( $is_admin_preview ) :
+									?>
+									disabled
+									<?php endif; ?>
+									type="email" name="npe" autocomplete="email"
+									placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
+								/>
 								<?php Reader_Activation::render_honeypot_field( $attrs['placeholder'] ); ?>
-								<input type="submit" value="<?php echo \esc_attr( $attrs['label'] ); ?>" />
+								<input
+								<?php
+								if ( $is_admin_preview ) :
+									?>
+									disabled
+									<?php endif; ?>
+									type="submit"
+									value="<?php echo \esc_attr( $attrs['label'] ); ?>"
+								/>
 							</div>
 							<?php Reader_Activation::render_third_party_auth(); ?>
 							<div class="newspack-registration__response <?php echo ( empty( $message ) ) ? 'newspack-registration--hidden' : null; ?>">

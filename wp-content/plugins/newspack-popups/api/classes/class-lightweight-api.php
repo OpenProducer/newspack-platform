@@ -18,6 +18,13 @@ use \DrewM\MailChimp\MailChimp;
  */
 class Lightweight_API {
 	/**
+	 * Cache version so we can force a cache rebuild for reader data.
+	 *
+	 * @var reader_cache_version
+	 */
+	public $reader_cache_version = '1.0';
+
+	/**
 	 * Response object.
 	 *
 	 * @var response
@@ -77,23 +84,35 @@ class Lightweight_API {
 		if ( ! $this->verify_referer( $nonce ) ) {
 			$this->error( 'invalid_referer' );
 		}
-		$this->debug = [
-			'read_query_count'   => 0,
-			'write_query_count'  => 0,
-			'delete_query_count' => 0,
-			'cache_count'        => 0,
-			'start_time'         => microtime( true ),
-			'end_time'           => null,
-			'duration'           => null,
-			'suppression'        => [],
-			'reader'             => null,
-			'reader_events'      => [],
-		];
+		if ( $this->is_debug_enabled() ) {
+			$this->debug = [
+				'read_query_count'   => 0,
+				'write_query_count'  => 0,
+				'delete_query_count' => 0,
+				'cache_count'        => 0,
+				'start_time'         => microtime( true ),
+				'end_time'           => null,
+				'duration'           => null,
+				'suppression'        => [],
+				'reader'             => null,
+				'reader_events'      => [],
+				'cache_is_valid'     => false,
+			];
+		}
 
 		// If we don't have a persistent object cache, we can't rely on it across page views.
 		if ( ! file_exists( WP_CONTENT_DIR . '/object-cache.php' ) || ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) ) {
 			$this->ignore_cache = true;
 		}
+	}
+
+	/**
+	 * Whether debug mode is enabled via newspack-popups-config.php or URL param.
+	 *
+	 * @return boolean
+	 */
+	public function is_debug_enabled() {
+		return isset( $_REQUEST['debug'] ) || ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -156,9 +175,9 @@ class Lightweight_API {
 		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
 			return;
 		}
-		$this->debug['end_time'] = microtime( true );
-		$this->debug['duration'] = $this->debug['end_time'] - $this->debug['start_time'];
-		if ( isset( $_REQUEST['debug'] ) || ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['end_time'] = microtime( true );
+			$this->debug['duration'] = $this->debug['end_time'] - $this->debug['start_time'];
 			$this->response['debug'] = $this->debug;
 		}
 		header( 'Access-Control-Allow-Origin: https://' . parse_url( $_SERVER['HTTP_REFERER'] )['host'], false ); // phpcs:ignore
@@ -201,7 +220,9 @@ class Lightweight_API {
 			return null;
 		}
 
-		$this->debug['read_query_count'] += 1;
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['read_query_count'] += 1;
+		}
 
 		$value = $wpdb->get_var( $wpdb->prepare( "SELECT option_value FROM `$table_name` WHERE option_name = %s LIMIT 1", $name ) ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.InterpolatedNotPrepared
 
@@ -224,7 +245,9 @@ class Lightweight_API {
 			[ 'option_name' => $name ]
 		);
 
-		$this->debug['delete_query_count'] += 1;
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['delete_query_count'] += 1;
+		}
 	}
 
 	/**
@@ -259,13 +282,87 @@ class Lightweight_API {
 		// Write to the DB.
 		$write_result = $wpdb->query( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
-		$this->debug['write_query_count'] += 1;
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['write_query_count'] += 1;
 
-		if ( ! $write_result ) {
-			$this->debug['write_error'] = "Error writing to $reader_events_table_name.";
+			if ( ! $write_result ) {
+				$this->debug['write_error'] = "Error writing to $reader_events_table_name.";
+			}
 		}
 
 		return $write_result;
+	}
+
+	/**
+	 * Parse event logs to the DB.
+	 */
+	public function parse_event_logs() {
+
+		global $wpdb;
+
+		if ( ! file_exists( Segmentation::get_log_file_path() ) ) {
+			return;
+		}
+
+		$log_file = fopen( Segmentation::get_log_file_path(), 'r+' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
+
+		if ( flock( $log_file, LOCK_EX ) ) { // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_flock
+			$lines = [];
+
+			while ( ! feof( $log_file ) ) {
+				$line = trim( fgets( $log_file ) );
+				if ( ! empty( $line ) ) {
+					$lines[] = $line;
+				}
+			}
+
+			$lines  = array_unique( $lines );
+			$events = [];
+
+			foreach ( $lines as $line ) {
+				$result = explode( '|', $line );
+				if ( isset( $result[1] ) ) {
+					$client_id    = $result[0];
+					$date_created = $result[1];
+					$type         = $result[2];
+					$context      = $result[3];
+					$value        = $result[4];
+				} else {
+					// Handle legacy format.
+					$result       = explode( ';', $line );
+					$client_id    = $result[1];
+					$date_created = $result[2];
+					$type         = 'view';
+					$context      = 'post';
+					$value        = wp_json_encode(
+						[
+							'post_id'    => (int) $result[3],
+							'categories' => $result[4],
+						]
+					);
+				}
+
+				$events[] = [
+					'client_id'    => $client_id,
+					'date_created' => $date_created,
+					'type'         => $type,
+					'context'      => $context,
+					'value'        => $value,
+				];
+			}
+
+			try {
+				$this->bulk_db_insert( $events );
+			} catch ( \Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+				error_log( $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			}
+
+			flock( $log_file, LOCK_UN ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_flock
+
+			// Clear the log file.
+			file_put_contents( Segmentation::get_log_file_path(), '' ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
+			fclose( $log_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+		}
 	}
 
 	/**
@@ -281,10 +378,12 @@ class Lightweight_API {
 		$reader_events       = [];
 
 		// Check the cache first.
-		if ( ! $this->ignore_cache ) {
+		if ( ! $this->ignore_cache || ! $this->validate_cache( $client_id ) ) {
 			$cached_reader = wp_cache_get( 'reader', $client_id );
 			if ( ! empty( $cached_reader ) ) {
-				$this->debug['reader'] = $cached_reader;
+				if ( $this->is_debug_enabled() ) {
+					$this->debug['reader'] = $cached_reader;
+				}
 				return $cached_reader;
 			}
 		}
@@ -299,7 +398,9 @@ class Lightweight_API {
 			)
 		);
 
-		$this->debug['read_query_count'] += 1;
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['read_query_count'] += 1;
+		}
 
 		// If there's no reader for this client ID in the DB, create it.
 		if ( empty( $reader_from_db ) ) {
@@ -308,7 +409,9 @@ class Lightweight_API {
 
 			// If there's data for this reader in the legacy transients table, recreate it in the new table.
 			if ( ! empty( $legacy_reader ) ) {
-				$this->debug['legacy_reader'] = $legacy_reader;
+				if ( $this->is_debug_enabled() ) {
+					$this->debug['legacy_reader'] = $legacy_reader;
+				}
 
 				// Add posts_read data to views count.
 				if ( isset( $legacy_reader['posts_read'] ) && 0 < count( $legacy_reader['posts_read'] ) ) {
@@ -434,7 +537,9 @@ class Lightweight_API {
 		// Rebuild cache.
 		wp_cache_set( 'reader', $reader, $client_id );
 
-		$this->debug['reader'] = $reader;
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['reader'] = $reader;
+		}
 		return $reader;
 	}
 
@@ -537,14 +642,18 @@ class Lightweight_API {
 		// Write to the DB.
 		$write_result = $wpdb->query( $query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
-		$this->debug['write_query_count'] += 1;
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['write_query_count'] += 1;
+		}
 
 		// If DB write was successful, rebuild cache.
 		if ( $write_result ) {
 			return wp_cache_set( 'reader', $reader, $client_id );
 		}
 
-		$this->debug['write_error'] = "Error writing to $readers_table_name.";
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['write_error'] = "Error writing to $readers_table_name.";
+		}
 		return false;
 	}
 
@@ -654,7 +763,9 @@ class Lightweight_API {
 		$events_sql               = "SELECT id, client_id, date_created, type, context, value from $reader_events_table_name WHERE $client_filter $type_filter $context_filter ORDER BY date_created DESC LIMIT 1000";
 		$events                   = $wpdb->get_results( $events_sql ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQL.NotPrepared
 
-		$this->debug['read_query_count'] += 1;
+		if ( $this->is_debug_enabled() ) {
+			$this->debug['read_query_count'] += 1;
+		}
 
 		if ( ! empty( $events ) ) {
 			$events = array_map(
@@ -675,6 +786,36 @@ class Lightweight_API {
 	}
 
 	/**
+	 * Checks whether cached data has a version number that matches the current.
+	 * If the version is missing or doesn't match the current version, the cache
+	 * should be rebuilt from the DB instead.
+	 *
+	 * @param string $client_id Single client ID associated with the current reader.
+	 *
+	 * @return boolean True if cached data is valid, false if we should rebuild from DB.
+	 */
+	public function validate_cache( $client_id ) {
+		$cache_version  = wp_cache_get( 'reader_cache_version', $client_id );
+		$cached_events  = $this->get_reader_events_from_cache( $client_id );
+		$cache_is_valid = false;
+
+		if ( ! empty( $cache_version ) && $cache_version === $this->reader_cache_version && ! empty( $cached_events ) ) {
+			$cache_is_valid = true;
+		}
+
+		// If the cache has been purged, let's parse the cached events to the DB.
+		if ( ! $cache_is_valid ) {
+			$this->parse_event_logs();
+			return $cache_is_valid;
+		}
+
+		$this->debug['cache_version']  = $cache_version;
+		$this->debug['cache_is_valid'] = $cache_is_valid;
+
+		return $cache_is_valid;
+	}
+
+	/**
 	 * Get reader events from the persistent cache, if available.
 	 *
 	 * @param string $client_id Single client ID associated with the current reader.
@@ -683,7 +824,9 @@ class Lightweight_API {
 	 */
 	public function get_reader_events_from_cache( $client_id ) {
 		$events = wp_cache_get( 'reader_events', $client_id );
-		if ( ! $events ) {
+
+		// If there are no cached events.
+		if ( empty( $events ) ) {
 			$events = [];
 		}
 
@@ -691,9 +834,31 @@ class Lightweight_API {
 	}
 
 	/**
+	 * Updates events logged in debug mode.
+	 *
+	 * @param array $events New events to log.
+	 */
+	public function update_debug_events( $events ) {
+		if ( $this->is_debug_enabled() ) {
+			$debug_event_ids              = array_column( $this->debug['reader_events'], 'id' );
+			$this->debug['reader_events'] = array_merge(
+				$this->debug['reader_events'],
+				array_values(
+					array_filter(
+						$events,
+						function( $event ) use ( $debug_event_ids ) {
+							return ! in_array( $event['id'], $debug_event_ids, true );
+						}
+					)
+				)
+			);
+		}
+	}
+
+	/**
 	 * Retrieve data for a specific reader from the cache or DB.
 	 *
-	 * @param string|array      $client_ids Client IDs of the reader.
+	 * @param string            $client_id Client ID of the current reader session.
 	 * @param string|array|null $type Type or types of data to retrieve.
 	 *                                If not given, only return temporary data types.
 	 * @param string|array|null $context Context or contexts of data to retrieve.
@@ -701,10 +866,7 @@ class Lightweight_API {
 	 *
 	 * @return array Array of reader data, optionally filtered by $type and $context.
 	 */
-	public function get_reader_events( $client_ids, $type = null, $context = null, $ignore_cache = false ) {
-		if ( ! is_array( $client_ids ) ) {
-			$client_ids = [ $client_ids ];
-		}
+	public function get_reader_events( $client_id, $type = null, $context = null, $ignore_cache = false ) {
 		if ( ! is_array( $type ) && null !== $type ) {
 			$type = [ $type ];
 		}
@@ -712,38 +874,41 @@ class Lightweight_API {
 			$context = [ $context ];
 		}
 
-		$events = [];
+		$cached_events = [];
 
 		// Check the cache first.
-		if ( ! $ignore_cache ) {
-			$events = $this->get_reader_events_from_cache( $client_ids[0] );
-			if ( ! empty( $events ) ) {
-				return $this->filter_events_by_type( $events, $type, $context );
+		if ( ! $this->ignore_cache && $this->validate_cache( $client_id ) ) {
+			$cached_events   = $this->get_reader_events_from_cache( $client_id );
+			$filtered_events = $this->filter_events_by_type( $cached_events, $type, $context );
+			if ( ! empty( $filtered_events ) ) {
+				$this->update_debug_events( $filtered_events );
+				return $filtered_events;
 			}
 		}
 
-		$events_from_db  = $this->get_reader_events_from_db( $client_ids, $type, $context );
-		$unique_ids      = [];
-		$filtered_events = array_values(
+		$events_from_db     = $this->get_reader_events_from_db( [ $client_id ], $type, $context );
+		$existing_event_ids = array_column( $cached_events, 'id' );
+		$unique_ids         = [];
+		$filtered_events    = array_values(
 			array_filter(
 				$events_from_db,
-				function( $event ) use ( $events ) {
-					// If the event is coming from the persistent cache, fashion a faux-unique ID using the timestamp.
-					if ( ! isset( $event['id'] ) ) {
-						$event['id'] = $event['type'] . $event['context'] . $event['date_created'];
-					}
-
+				function( $event ) use ( $existing_event_ids ) {
 					// Dedupe events from cache.
-					foreach ( $events as $existing_event ) {
-						if ( $event['id'] === $existing_event['id'] ) {
-							return false;
-						}
+					if ( in_array( $event['id'], $existing_event_ids, true ) ) {
+						return false;
 					}
 
 					return true;
 				}
 			)
 		);
+
+		// Rebuild cache.
+		if ( ! $this->ignore_cache ) {
+			wp_cache_set( 'reader_events', array_merge( $cached_events, $filtered_events ), $client_id );
+		}
+
+		$this->update_debug_events( $filtered_events );
 
 		return $filtered_events;
 	}
@@ -851,15 +1016,30 @@ class Lightweight_API {
 		if ( $this->ignore_cache ) {
 			$write_result = $this->bulk_db_insert( $events );
 
-			$this->debug['write_query_count'] += 1;
+			if ( $this->is_debug_enabled() ) {
+				$this->debug['write_query_count'] += 1;
+			}
 
 			return $write_result;
 		} else {
 			// Rebuild cache.
-			$cached_events                = $this->get_reader_events_from_cache( $client_id );
-			$all_events                   = array_merge( $cached_events, $events );
-			$write_result                 = wp_cache_set( 'reader_events', $all_events, $client_id );
-			$this->debug['reader_events'] = $all_events;
+			$cached_events = $this->get_reader_events_from_cache( $client_id );
+			$all_events    = array_merge( $cached_events, $events );
+			$all_events    = array_map(
+				function( $event ) {
+					// If the event is coming from the persistent cache, fashion a faux-unique ID using the timestamp.
+					if ( ! isset( $event['id'] ) ) {
+						$event['id'] = $event['type'] . '_' . $event['context'] . '_' . $event['date_created'];
+					}
+					return $event;
+				},
+				$all_events
+			);
+
+			// Set a cache version for future validation.
+			wp_cache_set( 'reader_events', $all_events, $client_id );
+
+			$this->update_debug_events( $all_events );
 
 			// Write items to the flat file to be parsed to the DB at a later point.
 			Segmentation_Report::log_reader_events( $events );

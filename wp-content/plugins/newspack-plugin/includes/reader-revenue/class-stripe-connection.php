@@ -485,7 +485,7 @@ class Stripe_Connection {
 		// Verify the webhook signature (https://stripe.com/docs/webhooks/signatures).
 		$webhook = get_option( self::STRIPE_WEBHOOK_OPTION_NAME, false );
 		if ( false === $webhook || ! isset( $webhook['secret'], $_SERVER['HTTP_STRIPE_SIGNATURE'] ) ) {
-			return new \WP_Error( 'newspack_webhook_missing_data' );
+			return new \WP_Error( 'newspack_webhook_missing_verification_data' );
 		}
 		try {
 			$sig_header = sanitize_text_field( $_SERVER['HTTP_STRIPE_SIGNATURE'] );
@@ -496,7 +496,7 @@ class Stripe_Connection {
 				$webhook['secret']
 			);
 		} catch ( \Throwable $e ) {
-			return new \WP_Error( 'newspack_webhook_error' );
+			return new \WP_Error( 'newspack_webhook_verification_error' );
 		}
 
 		$payload = $request['data']['object'];
@@ -511,9 +511,12 @@ class Stripe_Connection {
 
 		switch ( $request['type'] ) {
 			case 'charge.succeeded':
-				$payment           = $payload;
-				$metadata          = $payment['metadata'];
-				$customer          = self::get_customer_by_id( $payment['customer'] );
+				$payment  = $payload;
+				$metadata = $payment['metadata'];
+				$customer = self::get_customer_by_id( $payment['customer'] );
+				if ( \is_wp_error( $customer ) ) {
+					return $customer;
+				}
 				$amount_normalised = self::normalise_amount( $payment['amount'], $payment['currency'] );
 				$client_id         = isset( $customer['metadata']['clientId'] ) ? $customer['metadata']['clientId'] : null;
 				$origin            = isset( $customer['metadata']['origin'] ) ? $customer['metadata']['origin'] : null;
@@ -655,6 +658,9 @@ class Stripe_Connection {
 				break;
 			case 'customer.subscription.deleted':
 				$customer = self::get_customer_by_id( $payload['customer'] );
+				if ( \is_wp_error( $customer ) ) {
+					return $customer;
+				}
 
 				if ( Reader_Activation::is_enabled() && method_exists( '\Newspack_Newsletters_Subscription', 'add_contact' ) ) {
 					$sub_end_date = gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $payload['ended_at'] );
@@ -695,7 +701,11 @@ class Stripe_Connection {
 				break;
 			case 'customer.subscription.updated':
 				if ( Reader_Activation::is_enabled() && method_exists( '\Newspack_Newsletters_Subscription', 'add_contact' ) ) {
-					$customer     = self::get_customer_by_id( $payload['customer'] );
+					$customer = self::get_customer_by_id( $payload['customer'] );
+					if ( \is_wp_error( $customer ) ) {
+						return $customer;
+					}
+
 					$sub_end_date = gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $payload['ended_at'] );
 					$contact      = [
 						'email'    => $customer['email'],

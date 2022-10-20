@@ -33,7 +33,7 @@ $width__tablet: 782px;
 	top: 0;
 	// Popup needs to be initially out of the viewport,
 	// so that analytics work when checking visibility.
-	transform: translateY( 100vh );
+	transform: translateY( 90vh );
 	visibility: hidden;
 	width: 100% !important;
 	z-index: 99999;

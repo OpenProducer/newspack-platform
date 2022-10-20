@@ -172,7 +172,7 @@ call_user_func(
 				<div class="entry-meta">
 					<?php
 					if ( ! empty( $sponsors ) ) :
-						$sponsor_classes[] = 'entry-sponsors';
+						$sponsor_classes = [ 'entry-sponsors' ];
 						if ( Newspack_Blocks::newspack_display_sponsors_and_authors( $sponsors ) ) {
 							$sponsor_classes[] = 'plus-author';
 						}

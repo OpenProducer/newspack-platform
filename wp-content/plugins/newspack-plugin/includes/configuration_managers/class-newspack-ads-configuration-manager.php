@@ -166,29 +166,6 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Get ad suppression config.
-	 *
-	 * @return bool | WP_Error Returns object, or error if the plugin is not active.
-	 */
-	public function get_suppression_config() {
-		return $this->is_configured() ?
-			GAM_Model::get_suppression_config() :
-			$this->unconfigured_error();
-	}
-
-	/**
-	 * Update ad suppression config.
-	 *
-	 * @param array $config Updated config.
-	 * @return bool | WP_Error Returns object, or error if the plugin is not active.
-	 */
-	public function update_suppression_config( $config ) {
-		return $this->is_configured() ?
-			GAM_Model::update_suppression_config( $config ) :
-			$this->unconfigured_error();
-	}
-
-	/**
 	 * Error to return if the plugin is not installed and activated.
 	 *
 	 * @return WP_Error

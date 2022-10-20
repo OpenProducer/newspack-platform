@@ -24,8 +24,7 @@ final class GAM_Model {
 	// GAM network code pulled from user credentials.
 	const OPTION_NAME_GAM_NETWORK_CODE = '_newspack_ads_gam_network_code';
 
-	const OPTION_NAME_GAM_ITEMS             = '_newspack_ads_gam_items';
-	const OPTION_NAME_GLOBAL_AD_SUPPRESSION = '_newspack_global_ad_suppression';
+	const OPTION_NAME_GAM_ITEMS = '_newspack_ads_gam_items';
 
 	/**
 	 * Custom post type
@@ -1008,31 +1007,6 @@ final class GAM_Model {
 			$networks = [];
 		}
 		return $networks;
-	}
-
-	/**
-	 * Get global ad suppresion config.
-	 */
-	public static function get_suppression_config() {
-		return get_option(
-			self::OPTION_NAME_GLOBAL_AD_SUPPRESSION,
-			[
-				'tag_archive_pages'               => false,
-				'specific_tag_archive_pages'      => [],
-				'category_archive_pages'          => false,
-				'specific_category_archive_pages' => [],
-				'author_archive_pages'            => false,
-			]
-		);
-	}
-
-	/**
-	 * Update global ad suppresion config.
-	 *
-	 * @param array $config Updated config.
-	 */
-	public static function update_suppression_config( $config ) {
-		update_option( self::OPTION_NAME_GLOBAL_AD_SUPPRESSION, $config );
 	}
 }
 GAM_Model::init();

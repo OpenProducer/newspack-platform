@@ -152,7 +152,10 @@ class WooCommerce_Connection {
 				$metadata[ $metadata_keys['product_name'] ] = reset( $order_items )->get_name();
 			}
 			$metadata[ $metadata_keys['last_payment_amount'] ] = $order->get_total();
-			$metadata[ $metadata_keys['last_payment_date'] ]   = $order->get_date_paid()->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
+			$order_date_paid                                   = $order->get_date_paid();
+			if ( null !== $order_date_paid ) {
+				$metadata[ $metadata_keys['last_payment_date'] ] = $order_date_paid->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
+			}
 
 			// Subscription donation.
 		} else {
@@ -260,12 +263,33 @@ class WooCommerce_Connection {
 	}
 
 	/**
+	 * Find order by Stripe transaction ID.
+	 *
+	 * @param string $transaction_id Transaction ID.
+	 */
+	private static function find_order_by_transaction_id( $transaction_id ) {
+		global $wpdb;
+		return $wpdb->get_row( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key=%s AND meta_value=%s;", '_transaction_id', $transaction_id ), // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+			ARRAY_A
+		);
+	}
+
+	/**
 	 * Add a donation transaction to WooCommerce.
 	 *
 	 * @param object $order_data Order data.
 	 */
 	public static function create_transaction( $order_data ) {
-		Logger::log( 'Creating an order' );
+		$transaction_id = $order_data['stripe_id'];
+
+		$found_order = self::find_order_by_transaction_id( $transaction_id );
+		if ( ! empty( $found_order ) ) {
+			Logger::log( 'NOT creating an order, it was already synced.' );
+			return;
+		}
+
+		Logger::log( 'Creating an order.' );
 
 		$frequency = $order_data['frequency'];
 
@@ -296,7 +320,7 @@ class WooCommerce_Connection {
 		// Metadata for woocommerce-gateway-stripe plugin.
 		$order->set_payment_method( 'stripe' );
 		$order->set_payment_method_title( __( 'Stripe via Newspack', 'newspack' ) );
-		$order->set_transaction_id( $order_data['stripe_id'] );
+		$order->set_transaction_id( $transaction_id );
 		$order->add_meta_data( '_stripe_customer_id', $order_data['stripe_customer_id'] );
 		$order->add_meta_data( '_stripe_charge_captured', 'yes' );
 		$order->add_meta_data( '_stripe_fee', $order_data['stripe_fee'] );

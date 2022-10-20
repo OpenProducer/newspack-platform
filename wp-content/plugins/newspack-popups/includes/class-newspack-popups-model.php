@@ -837,13 +837,13 @@ final class Newspack_Popups_Model {
 					'request'        => 'event',
 					'visibilitySpec' => [
 						'selector'             => '#' . esc_attr( $element_id ),
-						'visiblePercentageMin' => 90,
-						'totalTimeMin'         => 500,
-						'continuousTimeMin'    => 200,
+						'visiblePercentageMin' => 50,
+						'totalTimeMin'         => 250,
+						'continuousTimeMin'    => 100,
 					],
 					'extraUrlParams' => [
 						'popup_id' => esc_attr( self::canonize_popup_id( $popup['id'] ) ),
-						'cid'      => 'CLIENT_ID(' . esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
+						'cid'      => Newspack_Popups_Segmentation::get_cid_param(),
 					],
 				],
 			],
@@ -851,7 +851,7 @@ final class Newspack_Popups_Model {
 		if ( $subscribe_form_selector && $email_form_field_name ) {
 			$extra_params = [
 				'popup_id'            => esc_attr( self::canonize_popup_id( $popup['id'] ) ),
-				'cid'                 => 'CLIENT_ID(' . esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
+				'cid'                 => Newspack_Popups_Segmentation::get_cid_param(),
 				'mailing_list_status' => 'subscribed',
 				'email'               => '${formFields[' . esc_attr( $email_form_field_name ) . ']}',
 			];
@@ -930,7 +930,7 @@ final class Newspack_Popups_Model {
 		);
 		$event_category      = __( 'Newspack Announcement', 'newspack-popups' );
 		$formatted_placement = ucwords( str_replace( '_', ' ', $popup['options']['placement'] ) );
-		$event_label         = sprintf(
+		$default_event_label = sprintf(
 			// Translators: Analytics label with prompt details (placement, title, ID, targeted segments).
 			__( '%1$s: %2$s (%3$s) - %4$s', 'newspack-popups' ),
 			$formatted_placement,
@@ -942,6 +942,7 @@ final class Newspack_Popups_Model {
 		$newspack_form_class = apply_filters( 'newspack_campaigns_form_class', '.newspack-subscribe-form' );
 		$newspack_form_class = '.' === substr( $newspack_form_class, 0, 1 ) ? substr( $newspack_form_class, 1 ) : $newspack_form_class; // Strip the "." class selector.
 		$has_register_form   = preg_match( '/id="newspack-(register|subscribe)-(.+)"/', $body ) !== 0;
+		$has_lists_field     = preg_match( '/name="lists\[\]"/', $body ) !== 0;
 		$has_form            = preg_match( '/<form\s|mc4wp-form|\[gravityforms\s|' . $newspack_form_class . '/', $body ) !== 0;
 		$has_dismiss_form    = self::is_overlay( $popup );
 
@@ -972,16 +973,11 @@ final class Newspack_Popups_Model {
 			];
 		}
 
-		// If the form contains registration + list info, append that to the event label.
-		if ( $has_register_form ) {
-			$event_label .= __( ' | ${formId} - ${formFields[lists[]]}' );
-		}
-
 		if ( $has_form ) {
 			$analytics_events[] = [
 				'amp_on'     => 'amp-form-submit',
 				'on'         => 'submit',
-				'element'    => '#' . esc_attr( $element_id ) . ' form:not(.' . self::get_form_class( 'action', $element_id ) . ')', // Not an 'action' (dismissal) form.
+				'element'    => '#' . esc_attr( $element_id ) . ' form:not(.popup-dismiss-form)', // Not a dismissal form.
 				'event_name' => __( 'Form Submission', 'newspack-popups' ),
 			];
 		}
@@ -989,13 +985,25 @@ final class Newspack_Popups_Model {
 			$analytics_events[] = [
 				'amp_on'          => 'amp-form-submit-success',
 				'on'              => 'submit',
-				'element'         => '.' . self::get_form_class( 'dismiss', $element_id ),
+				'element'         => '#' . esc_attr( $element_id ) . ' .popup-dismiss-form',
 				'event_name'      => __( 'Dismissal', 'newspack-popups' ),
 				'non_interaction' => true,
 			];
 		}
 
 		foreach ( $analytics_events as &$event ) {
+			$event_label = $default_event_label;
+
+			// If a form submission and the form contains registration + list info, append that to the event label.
+			if ( isset( $event['amp_on'] ) && 'amp-form-submit' === $event['amp_on'] && $has_register_form ) {
+				$event_label .= ' | ${formId}';
+
+				// If the reg form has a lists[] field, append the value to the event label.
+				if ( $has_lists_field ) {
+					$event_label .= ' - ${formFields[lists[]]}';
+				}
+			}
+
 			$event['id']             = self::get_uniqid();
 			$event['event_category'] = esc_attr( $event_category );
 			$event['event_label']    = esc_attr( $event_label );
@@ -1237,7 +1245,7 @@ final class Newspack_Popups_Model {
 							"selector": "#<?php echo esc_attr( $element_id ); ?>",
 							"delay": "<?php echo esc_html( self::get_delay( $popup ) - 500 ); ?>",
 							"keyframes": {
-								"transform": ["translateY(100vh)", "translateY(0vh)"]
+								"transform": ["translateY(90vh)", "translateY(0vh)"]
 							}
 						},
 						{
@@ -1348,7 +1356,7 @@ final class Newspack_Popups_Model {
 		<input
 			name="cid"
 			type="hidden"
-			value="CLIENT_ID(<?php echo esc_attr( Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME ); ?>)"
+			value="<?php echo esc_attr( Newspack_Popups_Segmentation::get_cid_param() ); ?>"
 			data-amp-replace="CLIENT_ID"
 		/>
 		<input

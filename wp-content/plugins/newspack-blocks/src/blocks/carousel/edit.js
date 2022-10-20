@@ -285,26 +285,25 @@ class Edit extends Component {
 											showAuthor ||
 											showDate ) && (
 											<div className="entry-wrapper">
-												{ ( post.newspack_post_sponsors || showCategory ) &&
-													0 < post.newspack_category_info.length &&
-													( ! post.newspack_post_sponsors ||
-														post.newspack_sponsors_show_categories ) && (
-														<div
-															className={
-																'cat-links' +
-																( post.newspack_post_sponsors ? ' sponsor-label' : '' )
-															}
-														>
-															{ post.newspack_post_sponsors && (
-																<span className="flag">
-																	{ post.newspack_post_sponsors[ 0 ].flag }
-																</span>
-															) }
-															{ showCategory && (
+												{ ( post.newspack_post_sponsors ||
+													( showCategory && 0 < post.newspack_category_info.length ) ) && (
+													<div
+														className={
+															'cat-links' + ( post.newspack_post_sponsors ? ' sponsor-label' : '' )
+														}
+													>
+														{ post.newspack_post_sponsors && (
+															<span className="flag">
+																{ post.newspack_post_sponsors[ 0 ].flag }
+															</span>
+														) }
+														{ showCategory &&
+															( ! post.newspack_post_sponsors ||
+																post.newspack_sponsors_show_categories ) && (
 																<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
 															) }
-														</div>
-													) }
+													</div>
+												) }
 												{ showTitle && (
 													<h3 className="entry-title">
 														<a href="#">{ decodeEntities( post.title.rendered.trim() ) }</a>

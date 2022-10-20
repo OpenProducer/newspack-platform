@@ -124,27 +124,9 @@ function render_block( $attrs ) {
 		<?php else : ?>
 			<form id="<?php echo esc_attr( get_form_id() ); ?>">
 				<?php \wp_nonce_field( FORM_ACTION, FORM_ACTION ); ?>
-				<div class="newspack-newsletters-email-input">
-					<input
-						type="email"
-						name="npe"
-						autocomplete="email"
-						placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
-						value="<?php echo esc_attr( $email ); ?>"
-					/>
-					<input
-						class="nphp"
-						tabindex="-1"
-						aria-hidden="true"
-						type="email"
-						name="email"
-						autocomplete="email"
-						placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
-						value=""
-					/>
-				</div>
 				<?php if ( 1 < count( $available_lists ) ) : ?>
-					<ul class="newspack-newsletters-lists">
+					<div class="newspack-newsletters-lists">
+						<ul>
 						<?php
 						foreach ( $available_lists as $list_id ) :
 							if ( ! isset( $list_config[ $list_id ] ) ) {
@@ -176,10 +158,30 @@ function render_block( $attrs ) {
 							</li>
 						<?php endforeach; ?>
 					</ul>
+					</div>
 				<?php else : ?>
 					<input type="hidden" name="lists[]" value="<?php echo \esc_attr( $available_lists[0] ); ?>" />
 				<?php endif; ?>
-				<input type="submit" value="<?php echo \esc_attr( $attrs['label'] ); ?>" />
+				<div class="newspack-newsletters-email-input">
+					<input
+						type="email"
+						name="npe"
+						autocomplete="email"
+						placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
+						value="<?php echo esc_attr( $email ); ?>"
+					/>
+					<input
+						class="nphp"
+						tabindex="-1"
+						aria-hidden="true"
+						type="email"
+						name="email"
+						autocomplete="email"
+						placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
+						value=""
+					/>
+					<input type="submit" value="<?php echo \esc_attr( $attrs['label'] ); ?>" />
+				</div>
 			</form>
 			<div class="newspack-newsletters-subscribe-response">
 				<?php if ( ! empty( $message ) ) : ?>

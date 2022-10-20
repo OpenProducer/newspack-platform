@@ -52,4 +52,36 @@
 			}
 		}
 	}
+
+	/* WooCommerce Subscriptions styles. */
+	&.woocommerce-view-subscription {
+		.order_details {
+			border: none;
+			font-weight: normal;
+
+			thead {
+				background-color: #eee;
+			}
+
+			th {
+				border: none;
+				padding: 10px;
+			}
+
+			tr {
+				border-bottom: 1px solid #515151;
+			}
+
+			td {
+				border: none;
+				padding: 10px;
+			}
+		}
+
+		.wcs-switch-link.button {
+			display: inline-block;
+			margin-left: 0.5rem;
+			vertical-align: middle;
+		}
+	}
 }

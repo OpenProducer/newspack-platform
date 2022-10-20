@@ -888,7 +888,7 @@ class Analytics {
 						observer.observe(elements[i], { attributes: true });
 					}
 				} else {
-					window.addEventListener('load', handleEvent)
+					window.addEventListener('DOMContentLoaded', handleEvent)
 				}
 			} )();
 		</script>

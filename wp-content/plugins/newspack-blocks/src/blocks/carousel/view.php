@@ -154,7 +154,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 						<div class="entry-meta">
 							<?php
 							if ( ! empty( $sponsors ) ) :
-								$sponsor_classes[] = 'entry-sponsors';
+								$sponsor_classes = [ 'entry-sponsors' ];
 								if ( Newspack_Blocks::newspack_display_sponsors_and_authors( $sponsors ) ) {
 									$sponsor_classes[] = 'plus-author';
 								}

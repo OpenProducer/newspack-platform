@@ -101,7 +101,7 @@ export const manageAnalyticsEvents = () => {
 						// The threshold should be the value of the visibilitySpec's visiblePercentageMin,
 						// but that would require a separate IntersectionObserver for each trigger.
 						// Since it's value the same for every popup, it can be hardcoded.
-						threshold: 0.9,
+						threshold: 0.5,
 					}
 				);
 			}

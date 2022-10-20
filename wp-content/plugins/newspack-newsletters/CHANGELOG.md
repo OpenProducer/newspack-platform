@@ -1,3 +1,17 @@
+# [1.53.0](https://github.com/Automattic/newspack-newsletters/compare/v1.52.0...v1.53.0) (2022-10-19)
+
+
+### Features
+
+* update subscribe block design to match reader registration ([#977](https://github.com/Automattic/newspack-newsletters/issues/977)) ([f186464](https://github.com/Automattic/newspack-newsletters/commit/f186464457b753fd5566eae7e09e3084506cc63d))
+
+# [1.53.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.52.0...v1.53.0-alpha.1) (2022-10-06)
+
+
+### Features
+
+* update subscribe block design to match reader registration ([#977](https://github.com/Automattic/newspack-newsletters/issues/977)) ([f186464](https://github.com/Automattic/newspack-newsletters/commit/f186464457b753fd5566eae7e09e3084506cc63d))
+
 # [1.52.0](https://github.com/Automattic/newspack-newsletters/compare/v1.51.0...v1.52.0) (2022-09-27)
 
 

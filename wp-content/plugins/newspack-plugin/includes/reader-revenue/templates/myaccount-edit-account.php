@@ -45,15 +45,14 @@ endif;
 
 	<?php \do_action( 'newspack_woocommerce_edit_account_form_start' ); ?>
 
-	<p class="woocommerce-form-row woocommerce-form-row--first form-row form-row-first">
+	<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide mt0">
 		<label for="account_first_name"><?php \esc_html_e( 'First name', 'newspack' ); ?>&nbsp;<span class="required">*</span></label>
 		<input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_first_name" id="account_first_name" autocomplete="given-name" value="<?php echo \esc_attr( $user->first_name ); ?>" />
 	</p>
-	<p class="woocommerce-form-row woocommerce-form-row--last form-row form-row-last">
+	<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 		<label for="account_last_name"><?php \esc_html_e( 'Last name', 'newspack' ); ?>&nbsp;<span class="required">*</span></label>
 		<input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_last_name" id="account_last_name" autocomplete="family-name" value="<?php echo \esc_attr( $user->last_name ); ?>" />
 	</p>
-	<div class="clear"></div>
 
 	<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 		<label for="account_email"><?php \esc_html_e( 'Email address', 'newspack' ); ?>&nbsp;<span class="required">*</span></label>
@@ -62,47 +61,53 @@ endif;
 
 	<?php \do_action( 'newspack_woocommerce_edit_account_form' ); ?>
 
-	<p>
+	<p class="woocommerce-buttons-card">
 		<?php \wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
-		<button type="submit" class="woocommerce-Button button" name="save_account_details" value="<?php \esc_attr_e( 'Save changes', 'newspack' ); ?>"><?php \esc_html_e( 'Save changes', 'newspack' ); ?></button>
+		<button type="submit" class="woocommerce-Button button ma0" name="save_account_details" value="<?php \esc_attr_e( 'Save changes', 'newspack' ); ?>"><?php \esc_html_e( 'Save changes', 'newspack' ); ?></button>
 		<input type="hidden" name="action" value="save_account_details" />
 	</p>
 
 	<?php \do_action( 'newspack_woocommerce_edit_account_form_end' ); ?>
 </form>
 
-<hr />
+<hr class="is-style-wide" />
 
-<h3>
-	<?php
-	if ( $without_password ) {
-		\esc_html_e( 'Create a Password', 'newspack' );
-	} else {
-		\esc_html_e( 'Reset Password', 'newspack' );
-	}
-	?>
-</h3>
-
-<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+<div class="woocommerce-card woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
 	<a href="<?php echo '?' . \esc_attr( $newspack_reset_password_arg ) . '=' . \esc_attr( \wp_create_nonce( $newspack_reset_password_arg ) ); ?>">
-		<?php
-		if ( $without_password ) {
-			\esc_html_e( 'Email me a link to set my password', 'newspack' );
-		} else {
-			\esc_html_e( 'Email me a password reset link', 'newspack' );
-		}
-		?>
+		<span class="woocommerce-card__content">
+			<h4 class="woocommerce-card__title">
+				<?php
+				if ( $without_password ) {
+					\esc_html_e( 'Create a Password', 'newspack' );
+				} else {
+					\esc_html_e( 'Reset Password', 'newspack' );
+				}
+				?>
+			</h4>
+			<span class="woocommerce-card__description">
+				<?php
+				if ( $without_password ) {
+					\esc_html_e( 'Email me a link to set my password', 'newspack' );
+				} else {
+					\esc_html_e( 'Email me a password reset link', 'newspack' );
+				}
+				?>
+			</span>
+		</span>
 	</a>
-</p>
+</div>
 
-<hr />
-
-<h3><?php \esc_html_e( 'Delete Account', 'newspack' ); ?></h3>
-
-<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-	<a href="<?php echo '?' . \esc_attr( $newspack_delete_account_arg ) . '=' . \esc_attr( \wp_create_nonce( $newspack_delete_account_arg ) ); ?>">
-		<?php \esc_html_e( 'Request account deletion', 'newspack' ); ?>
+<div class="woocommerce-card woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
+	<a href="<?php echo '?' . \esc_attr( $newspack_delete_account_arg ) . '=' . \esc_attr( \wp_create_nonce( $newspack_delete_account_arg ) ); ?>" class="is-destructive">
+		<span class="woocommerce-card__content">
+			<h4 class="woocommerce-card__title">
+				<?php \esc_html_e( 'Delete Account', 'newspack' ); ?>
+			</h4>
+			<span class="woocommerce-card__description">
+				<?php \esc_html_e( 'Request account deletion', 'newspack' ); ?>
+			</span>
+		</span>
 	</a>
-</p>
+</div>
 
 <?php \do_action( 'newspack_woocommerce_after_edit_account_form' ); ?>

@@ -177,7 +177,7 @@ final class Newspack_Popups_Segmentation {
 
 		$remote_config_url = add_query_arg(
 			[
-				'client_id'                         => 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
+				'client_id'                         => self::get_cid_param(),
 				'post_id'                           => esc_attr( get_the_ID() ),
 				'custom_dimensions'                 => wp_json_encode( $custom_dimensions ),
 				'custom_dimensions_existing_values' => wp_json_encode( $custom_dimensions_existing_values ),
@@ -223,7 +223,7 @@ final class Newspack_Popups_Segmentation {
 				'enabled' => true,
 				self::NEWSPACK_SEGMENTATION_CID_LINKER_PARAM => [
 					'ids' => [
-						$linker_id => 'CLIENT_ID(' . self::NEWSPACK_SEGMENTATION_CID_NAME . ')',
+						$linker_id => self::get_cid_param(),
 					],
 				],
 			],
@@ -265,7 +265,7 @@ final class Newspack_Popups_Segmentation {
 				'extraUrlParams' => array_merge(
 					$initial_client_report_url_params,
 					[
-						'client_id' => 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')',
+						'client_id' => self::get_cid_param(),
 					]
 				),
 			];
@@ -474,9 +474,33 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
+	 * Mock a preview CID for logged-in admin and editor users.
+	 *
+	 * @return string Preview client ID.
+	 */
+	private static function get_preview_user_cid() {
+		return 'preview-user-' . \get_current_user_id();
+	}
+
+	/**
+	 * Get the client ID placeholder used in AMP Access requests.
+	 */
+	public static function get_cid_param() {
+		if ( Newspack_Popups::is_user_admin() ) {
+			return self::get_preview_user_cid();
+		}
+
+		return 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')';
+	}
+
+	/**
 	 * Get current client's id.
 	 */
 	public static function get_client_id() {
+		if ( Newspack_Popups::is_user_admin() ) {
+			return self::get_preview_user_cid();
+		}
+
 		return isset( $_COOKIE[ self::NEWSPACK_SEGMENTATION_CID_NAME ] ) ? esc_attr( $_COOKIE[ self::NEWSPACK_SEGMENTATION_CID_NAME ] ) : false; // phpcs:ignore WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 	}
 

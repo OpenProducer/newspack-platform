@@ -1,3 +1,19 @@
+## [1.58.1](https://github.com/Automattic/newspack-blocks/compare/v1.58.0...v1.58.1) (2022-10-19)
+
+
+### Bug Fixes
+
+* linter errors caused by $sponsor_classes ([#1286](https://github.com/Automattic/newspack-blocks/issues/1286)) ([21c6545](https://github.com/Automattic/newspack-blocks/commit/21c65453d66c5e279a8f258c83bf4851bb072236))
+* make sure sponsor flag previews in editor ([#1279](https://github.com/Automattic/newspack-blocks/issues/1279)) ([e63c3ab](https://github.com/Automattic/newspack-blocks/commit/e63c3ab04b0b01545f54a6c8df741e3b7f082cd8))
+
+## [1.58.1-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.58.0...v1.58.1-alpha.1) (2022-10-06)
+
+
+### Bug Fixes
+
+* linter errors caused by $sponsor_classes ([#1286](https://github.com/Automattic/newspack-blocks/issues/1286)) ([21c6545](https://github.com/Automattic/newspack-blocks/commit/21c65453d66c5e279a8f258c83bf4851bb072236))
+* make sure sponsor flag previews in editor ([#1279](https://github.com/Automattic/newspack-blocks/issues/1279)) ([e63c3ab](https://github.com/Automattic/newspack-blocks/commit/e63c3ab04b0b01545f54a6c8df741e3b7f082cd8))
+
 # [1.58.0](https://github.com/Automattic/newspack-blocks/compare/v1.57.0...v1.58.0) (2022-09-27)
 
 

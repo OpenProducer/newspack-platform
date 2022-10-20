@@ -9,6 +9,7 @@ defined( 'ABSPATH' ) || exit;
 
 require_once dirname( __FILE__ ) . '/../api/segmentation/class-segmentation.php';
 require_once dirname( __FILE__ ) . '/../api/classes/class-lightweight-api.php';
+require_once dirname( __FILE__ ) . '/../api/campaigns/class-campaign-data-utils.php';
 
 /**
  * Main Newspack Segmentation Plugin Class.
@@ -64,72 +65,9 @@ final class Newspack_Popups_Parse_Logs {
 	 * Parse the log file, write data to the DB, and remove the file.
 	 */
 	public static function parse_events_logs() {
-		global $wpdb;
-
-		if ( ! file_exists( Segmentation::get_log_file_path() ) ) {
-			return;
-		}
-
-		$log_file = fopen( Segmentation::get_log_file_path(), 'r+' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fopen
-
-		if ( flock( $log_file, LOCK_EX ) ) { // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_flock
-			$lines = [];
-
-			while ( ! feof( $log_file ) ) {
-				$line = trim( fgets( $log_file ) );
-				if ( ! empty( $line ) ) {
-					$lines[] = $line;
-				}
-			}
-
-			$lines  = array_unique( $lines );
-			$events = [];
-
-			foreach ( $lines as $line ) {
-				$result = explode( '|', $line );
-				if ( isset( $result[1] ) ) {
-					$client_id    = $result[0];
-					$date_created = $result[1];
-					$type         = $result[2];
-					$context      = $result[3];
-					$value        = $result[4];
-				} else {
-					// Handle legacy format.
-					$result       = explode( ';', $line );
-					$client_id    = $result[1];
-					$date_created = $result[2];
-					$type         = 'view';
-					$context      = 'post';
-					$value        = wp_json_encode(
-						[
-							'post_id'    => (int) $result[3],
-							'categories' => $result[4],
-						]
-					);
-				}
-
-				$events[] = [
-					'client_id'    => $client_id,
-					'date_created' => $date_created,
-					'type'         => $type,
-					'context'      => $context,
-					'value'        => $value,
-				];
-			}
-
-			try {
-				$api = new Lightweight_Api();
-				$api->bulk_db_insert( $events );
-			} catch ( \Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-				error_log( $e->getMessage() ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-			}
-
-			flock( $log_file, LOCK_UN ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_flock
-
-			// Clear the log file.
-			file_put_contents( Segmentation::get_log_file_path(), '' ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
-			fclose( $log_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
-		}
+		$nonce = \wp_create_nonce( 'newspack_campaigns_lightweight_api' );
+		$api   = \Campaign_Data_Utils::get_api( $nonce );
+		$api->parse_event_logs();
 	}
 }
 Newspack_Popups_Parse_Logs::instance();

@@ -1,3 +1,17 @@
+# [1.39.0](https://github.com/Automattic/newspack-ads/compare/v1.38.1...v1.39.0) (2022-10-19)
+
+
+### Features
+
+* **suppression:** refactor and expand options ([#482](https://github.com/Automattic/newspack-ads/issues/482)) ([668dae0](https://github.com/Automattic/newspack-ads/commit/668dae0fb92407f594b8369f6c5de7bf4541c5c7))
+
+# [1.39.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.38.1...v1.39.0-alpha.1) (2022-10-06)
+
+
+### Features
+
+* **suppression:** refactor and expand options ([#482](https://github.com/Automattic/newspack-ads/issues/482)) ([668dae0](https://github.com/Automattic/newspack-ads/commit/668dae0fb92407f594b8369f6c5de7bf4541c5c7))
+
 ## [1.38.1](https://github.com/Automattic/newspack-ads/compare/v1.38.0...v1.38.1) (2022-09-27)
 
 

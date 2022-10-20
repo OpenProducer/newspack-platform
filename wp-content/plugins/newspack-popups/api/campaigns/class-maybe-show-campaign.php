@@ -87,7 +87,10 @@ class Maybe_Show_Campaign extends Lightweight_API {
 
 		if ( $settings ) {
 			$settings->best_priority_segment_id = $this->get_best_priority_segment_id( $all_segments, $client_id, $referer_url, $page_referer_url, $view_as_spec );
-			$this->debug['matching_segment']    = $settings->best_priority_segment_id;
+
+			if ( $this->is_debug_enabled() ) {
+				$this->debug['matching_segment'] = $settings->best_priority_segment_id;
+			}
 		}
 
 		// Check each matching popup against other global factors.
@@ -160,6 +163,10 @@ class Maybe_Show_Campaign extends Lightweight_API {
 			$response[ $popup->id ] = $popup_should_be_shown;
 		}
 
+		if ( ! $this->ignore_cache ) {
+			wp_cache_set( 'reader_cache_version', $this->reader_cache_version, $client_id );
+		}
+
 		$this->response = $response;
 		$this->respond();
 	}
@@ -214,10 +221,12 @@ class Maybe_Show_Campaign extends Lightweight_API {
 	 * @param string $reason The reason.
 	 */
 	private function add_suppression_reason( $id, $reason ) {
-		if ( isset( $this->debug['suppression'][ $id ] ) ) {
-			$this->debug['suppression'][ $id ][] = $reason;
+		if ( $this->is_debug_enabled() ) {
+			if ( isset( $this->debug['suppression'][ $id ] ) ) {
+				$this->debug['suppression'][ $id ][] = $reason;
+			}
+			$this->debug['suppression'][ $id ] = [ $reason ];
 		}
-		$this->debug['suppression'][ $id ] = [ $reason ];
 	}
 
 	/**

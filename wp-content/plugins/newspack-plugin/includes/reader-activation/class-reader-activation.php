@@ -778,10 +778,12 @@ final class Reader_Activation {
 					<form method="post" target="_top">
 						<input type="hidden" name="<?php echo \esc_attr( self::AUTH_FORM_ACTION ); ?>" value="1" />
 						<input type="hidden" name="action" value="pwd" />
-						<div class="<?php echo \esc_attr( $class( 'header' ) ); ?>">
-							<h2><?php _e( 'Sign In', 'newspack' ); ?></h2>
+						<div class="<?php echo \esc_attr( $class( 'have-account' ) ); ?>">
 							<a href="#" data-action="pwd link" data-set-action="register"><?php \esc_html_e( "I don't have an account", 'newspack' ); ?></a>
 							<a href="#" data-action="register" data-set-action="pwd"><?php \esc_html_e( 'I already have an account', 'newspack' ); ?></a>
+						</div>
+						<div class="<?php echo \esc_attr( $class( 'header' ) ); ?>">
+							<h2><?php _e( 'Sign In', 'newspack' ); ?></h2>
 						</div>
 						<p data-has-auth-link>
 							<?php _e( "We've recently sent you an authentication link. Please, check your inbox!", 'newspack' ); ?>

@@ -704,7 +704,7 @@ final class Newspack_Popups_Inserter {
 
 		$popups_access_provider = [
 			'namespace'     => 'popups',
-			'authorization' => esc_url( Newspack_Popups_Model::get_reader_endpoint() ) . '?cid=CLIENT_ID(' . Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME . ')',
+			'authorization' => esc_url( Newspack_Popups_Model::get_reader_endpoint() ) . '?cid=' . Newspack_Popups_Segmentation::get_cid_param(),
 			'noPingback'    => true,
 		];
 
@@ -811,13 +811,14 @@ final class Newspack_Popups_Inserter {
 		$popups_access_provider['authorization'] .= '&visit=' . wp_json_encode( $visit );
 
 		// Handle user accounts.
-		$user_id = get_current_user_id();
+		$user_id = Newspack_Popups::is_user_admin() ? 0 : get_current_user_id();
 		if ( ! empty( $user_id ) ) {
 			$popups_access_provider['authorization'] .= '&uid=' . absint( $user_id );
 		}
 
-		if ( isset( $_GET['newspack-campaigns-debug'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		if ( isset( $_GET['newspack-campaigns-debug'] ) || ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$popups_access_provider['authorization'] .= '&debug';
+			$popups_access_provider['authorization'] .= '&authorizationTimeout=10000';
 		}
 
 		?>
