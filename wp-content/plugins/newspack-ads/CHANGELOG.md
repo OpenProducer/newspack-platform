@@ -1,3 +1,10 @@
+## [1.39.1](https://github.com/Automattic/newspack-ads/compare/v1.39.0...v1.39.1) (2022-10-28)
+
+
+### Bug Fixes
+
+* **placements:** remove deprecated option handling ([#541](https://github.com/Automattic/newspack-ads/issues/541)) ([24ab0ce](https://github.com/Automattic/newspack-ads/commit/24ab0ce97d18b7aaa1a23b21abbef6284b7b2ff8))
+
 # [1.39.0](https://github.com/Automattic/newspack-ads/compare/v1.38.1...v1.39.0) (2022-10-19)
 
 

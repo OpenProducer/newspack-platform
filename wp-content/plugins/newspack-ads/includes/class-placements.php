@@ -292,17 +292,6 @@ final class Placements {
 			]
 		);
 
-		/**
-		 * Handle deprecated option name.
-		 */
-		$deprecated_option_name = '_newspack_advertising_placement_' . $placement_key;
-		$deprecated             = get_option( $deprecated_option_name );
-		if ( $deprecated ) {
-			delete_option( $deprecated_option_name );
-			update_option( self::get_option_name( $placement_key ), $deprecated );
-			return json_decode( $deprecated, true );
-		}
-
 		$data = wp_parse_args(
 			json_decode( get_option( self::get_option_name( $placement_key ) ), true ) ?? [],
 			$default_data

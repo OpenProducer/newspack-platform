@@ -1,3 +1,24 @@
+## [2.7.2](https://github.com/Automattic/newspack-popups/compare/v2.7.1...v2.7.2) (2022-10-25)
+
+
+### Bug Fixes
+
+* invoke wp polyfills for compatibility ([#997](https://github.com/Automattic/newspack-popups/issues/997)) ([3c8f790](https://github.com/Automattic/newspack-popups/commit/3c8f7909e63a93d8ba0b3e8f9335a8d743d71c38))
+
+## [2.7.1](https://github.com/Automattic/newspack-popups/compare/v2.7.0...v2.7.1) (2022-10-20)
+
+
+### Bug Fixes
+
+* enqueue AMP scripts for non-AMP ([e13ecae](https://github.com/Automattic/newspack-popups/commit/e13ecaea25d9eeba0767bfc84f1945f54e229912))
+* remove async attribute from script ([43a677f](https://github.com/Automattic/newspack-popups/commit/43a677f4a6d25eaa69d7a8882df4fb5656be9214))
+
+
+### Reverts
+
+* Revert "feat: polyfill amp-access script" ([7cb2467](https://github.com/Automattic/newspack-popups/commit/7cb246735704722d4a65e734c37398e08a788717))
+* polyfill fallback behavior from PR [#961](https://github.com/Automattic/newspack-popups/issues/961) ([a6d0409](https://github.com/Automattic/newspack-popups/commit/a6d0409573a4ea23a5f7ad40246d12d3ab2d23b5))
+
 # [2.7.0](https://github.com/Automattic/newspack-popups/compare/v2.6.2...v2.7.0) (2022-10-19)
 
 
