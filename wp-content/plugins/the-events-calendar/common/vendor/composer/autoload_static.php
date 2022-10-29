@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit271b7ccdbb8b6bc93b1a122ef7eb45c8
+class ComposerStaticInit056ca7b243d7bf42befa037b52fc996b
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -68,8 +68,11 @@ class ComposerStaticInit271b7ccdbb8b6bc93b1a122ef7eb45c8
 
     public static $classMap = array (
         'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
+        'Firebase\\JWT\\CachedKeySet' => __DIR__ . '/..' . '/firebase/php-jwt/src/CachedKeySet.php',
         'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
+        'Firebase\\JWT\\JWK' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWK.php',
         'Firebase\\JWT\\JWT' => __DIR__ . '/..' . '/firebase/php-jwt/src/JWT.php',
+        'Firebase\\JWT\\Key' => __DIR__ . '/..' . '/firebase/php-jwt/src/Key.php',
         'Firebase\\JWT\\SignatureInvalidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/SignatureInvalidException.php',
         'Monolog\\ErrorHandler' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/ErrorHandler.php',
         'Monolog\\Formatter\\ChromePHPFormatter' => __DIR__ . '/..' . '/monolog/monolog/src/Monolog/Formatter/ChromePHPFormatter.php',
@@ -270,10 +273,10 @@ class ComposerStaticInit271b7ccdbb8b6bc93b1a122ef7eb45c8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit271b7ccdbb8b6bc93b1a122ef7eb45c8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit271b7ccdbb8b6bc93b1a122ef7eb45c8::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit271b7ccdbb8b6bc93b1a122ef7eb45c8::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit271b7ccdbb8b6bc93b1a122ef7eb45c8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit056ca7b243d7bf42befa037b52fc996b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit056ca7b243d7bf42befa037b52fc996b::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit056ca7b243d7bf42befa037b52fc996b::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit056ca7b243d7bf42befa037b52fc996b::$classMap;
 
         }, null, ClassLoader::class);
     }

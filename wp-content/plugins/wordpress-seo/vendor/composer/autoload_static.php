@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitef6a49c18533169ab3f8668edfe7597a
+class ComposerStaticInitdcf33c8ad9259fab45539f919b32d057
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -899,6 +899,7 @@ class ComposerStaticInitef6a49c18533169ab3f8668edfe7597a
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Woocommerce_Permalinks' => __DIR__ . '/../..' . '/src/integrations/third-party/woocommerce-permalinks.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof' => __DIR__ . '/../..' . '/src/integrations/third-party/wordproof.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof_Integration_Toggle' => __DIR__ . '/../..' . '/src/integrations/third-party/wordproof-integration-toggle.php',
+        'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Zapier_Free' => __DIR__ . '/../..' . '/src/integrations/third-party/zapier-free.php',
         'Yoast\\WP\\SEO\\Integrations\\Uninstall_Integration' => __DIR__ . '/../..' . '/src/integrations/uninstall-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Addon_Update_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/addon-update-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Auto_Update_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/auto-update-watcher.php',
@@ -1108,9 +1109,9 @@ class ComposerStaticInitef6a49c18533169ab3f8668edfe7597a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitef6a49c18533169ab3f8668edfe7597a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitef6a49c18533169ab3f8668edfe7597a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitef6a49c18533169ab3f8668edfe7597a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdcf33c8ad9259fab45539f919b32d057::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdcf33c8ad9259fab45539f919b32d057::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdcf33c8ad9259fab45539f919b32d057::$classMap;
 
         }, null, ClassLoader::class);
     }

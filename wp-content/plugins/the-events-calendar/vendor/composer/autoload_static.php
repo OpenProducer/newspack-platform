@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite38f58c5c9438fbc88080ad240dfe756
+class ComposerStaticInit6552effd43c97709ba80e8d54b06b08f
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -34,6 +34,8 @@ class ComposerStaticInite38f58c5c9438fbc88080ad240dfe756
         'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Google_Form_Feedback' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Feedback/Google_Form_Feedback.php',
         'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Feedback/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Full_Activation_Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Full_Activation_Provider.php',
+        'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Dot_Com\\Clear_Event_Cache' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/Dot_Com/Clear_Event_Cache.php',
+        'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Dot_Com\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/Dot_Com/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Phase_View_Renderer' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Migration/Admin/Phase_View_Renderer.php',
         'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Progress_Modal' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Migration/Admin/Progress_Modal.php',
@@ -181,6 +183,7 @@ class ComposerStaticInite38f58c5c9438fbc88080ad240dfe756
         'Tribe\\Events\\Integrations\\Fusion\\Widget_Shortcode' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Fusion/Widget_Shortcode.php',
         'Tribe\\Events\\Integrations\\Hello_Elementor\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Hello_Elementor/Service_Provider.php',
         'Tribe\\Events\\Integrations\\Hello_Elementor\\Templates' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Hello_Elementor/Templates.php',
+        'Tribe\\Events\\Integrations\\Restrict_Content_Pro\\Service_Provider' => __DIR__ . '/../..' . '/src/Tribe/Integrations/Restrict_Content_Pro/Service_Provider.php',
         'Tribe\\Events\\Integrations\\WPML\\Views\\V2\\Filters' => __DIR__ . '/../..' . '/src/Tribe/Integrations/WPML/Views/V2/Filters.php',
         'Tribe\\Events\\Integrations\\WP_Rocket' => __DIR__ . '/../..' . '/src/Tribe/Integrations/WP_Rocket.php',
         'Tribe\\Events\\Models\\Post_Types\\Event' => __DIR__ . '/../..' . '/src/Tribe/Models/Post_Types/Event.php',
@@ -267,14 +270,15 @@ class ComposerStaticInite38f58c5c9438fbc88080ad240dfe756
         'Tribe\\Events\\Views\\V2\\iCalendar\\Template' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Template.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\Traits\\Outlook_Methods' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/Traits/Outlook_Methods.php',
         'Tribe\\Events\\Views\\V2\\iCalendar\\iCalendar_Handler' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/iCalendar/iCalendar_Handler.php',
+        'Tribe__Events__Main_Deprecated' => __DIR__ . '/../..' . '/src/deprecated/Traits/Tribe__Events__Main_Deprecated.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite38f58c5c9438fbc88080ad240dfe756::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite38f58c5c9438fbc88080ad240dfe756::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite38f58c5c9438fbc88080ad240dfe756::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6552effd43c97709ba80e8d54b06b08f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6552effd43c97709ba80e8d54b06b08f::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6552effd43c97709ba80e8d54b06b08f::$classMap;
 
         }, null, ClassLoader::class);
     }

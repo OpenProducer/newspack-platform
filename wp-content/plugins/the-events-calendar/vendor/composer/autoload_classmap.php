@@ -14,6 +14,8 @@ return array(
     'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Google_Form_Feedback' => $baseDir . '/src/Events/Custom_Tables/V1/Feedback/Google_Form_Feedback.php',
     'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Feedback/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Full_Activation_Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Full_Activation_Provider.php',
+    'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Dot_Com\\Clear_Event_Cache' => $baseDir . '/src/Events/Custom_Tables/V1/Integrations/Dot_Com/Clear_Event_Cache.php',
+    'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Dot_Com\\Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Integrations/Dot_Com/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Integrations/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Phase_View_Renderer' => $baseDir . '/src/Events/Custom_Tables/V1/Migration/Admin/Phase_View_Renderer.php',
     'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Progress_Modal' => $baseDir . '/src/Events/Custom_Tables/V1/Migration/Admin/Progress_Modal.php',
@@ -161,6 +163,7 @@ return array(
     'Tribe\\Events\\Integrations\\Fusion\\Widget_Shortcode' => $baseDir . '/src/Tribe/Integrations/Fusion/Widget_Shortcode.php',
     'Tribe\\Events\\Integrations\\Hello_Elementor\\Service_Provider' => $baseDir . '/src/Tribe/Integrations/Hello_Elementor/Service_Provider.php',
     'Tribe\\Events\\Integrations\\Hello_Elementor\\Templates' => $baseDir . '/src/Tribe/Integrations/Hello_Elementor/Templates.php',
+    'Tribe\\Events\\Integrations\\Restrict_Content_Pro\\Service_Provider' => $baseDir . '/src/Tribe/Integrations/Restrict_Content_Pro/Service_Provider.php',
     'Tribe\\Events\\Integrations\\WPML\\Views\\V2\\Filters' => $baseDir . '/src/Tribe/Integrations/WPML/Views/V2/Filters.php',
     'Tribe\\Events\\Integrations\\WP_Rocket' => $baseDir . '/src/Tribe/Integrations/WP_Rocket.php',
     'Tribe\\Events\\Models\\Post_Types\\Event' => $baseDir . '/src/Tribe/Models/Post_Types/Event.php',
@@ -247,4 +250,5 @@ return array(
     'Tribe\\Events\\Views\\V2\\iCalendar\\Template' => $baseDir . '/src/Tribe/Views/V2/iCalendar/Template.php',
     'Tribe\\Events\\Views\\V2\\iCalendar\\Traits\\Outlook_Methods' => $baseDir . '/src/Tribe/Views/V2/iCalendar/Traits/Outlook_Methods.php',
     'Tribe\\Events\\Views\\V2\\iCalendar\\iCalendar_Handler' => $baseDir . '/src/Tribe/Views/V2/iCalendar/iCalendar_Handler.php',
+    'Tribe__Events__Main_Deprecated' => $baseDir . '/src/deprecated/Traits/Tribe__Events__Main_Deprecated.php',
 );

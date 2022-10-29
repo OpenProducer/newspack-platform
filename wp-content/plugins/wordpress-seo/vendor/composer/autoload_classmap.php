@@ -884,6 +884,7 @@ return array(
     'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Woocommerce_Permalinks' => $baseDir . '/src/integrations/third-party/woocommerce-permalinks.php',
     'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof' => $baseDir . '/src/integrations/third-party/wordproof.php',
     'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof_Integration_Toggle' => $baseDir . '/src/integrations/third-party/wordproof-integration-toggle.php',
+    'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Zapier_Free' => $baseDir . '/src/integrations/third-party/zapier-free.php',
     'Yoast\\WP\\SEO\\Integrations\\Uninstall_Integration' => $baseDir . '/src/integrations/uninstall-integration.php',
     'Yoast\\WP\\SEO\\Integrations\\Watchers\\Addon_Update_Watcher' => $baseDir . '/src/integrations/watchers/addon-update-watcher.php',
     'Yoast\\WP\\SEO\\Integrations\\Watchers\\Auto_Update_Watcher' => $baseDir . '/src/integrations/watchers/auto-update-watcher.php',
