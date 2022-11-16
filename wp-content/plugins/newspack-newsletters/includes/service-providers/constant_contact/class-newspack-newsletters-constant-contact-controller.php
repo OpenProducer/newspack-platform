@@ -151,12 +151,12 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 
 	/**
 	 * Verify connection
-	 * 
+	 *
 	 * @return WP_REST_Response|mixed API response or error.
 	 */
 	public function verify_token() {
 		$response = $this->service_provider->verify_token();
-		return \rest_ensure_response( $response );
+		return self::get_api_response( $response );
 	}
 
 	/**
@@ -167,7 +167,7 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 	 */
 	public function api_retrieve( $request ) {
 		$response = $this->service_provider->retrieve( $request['id'] );
-		return \rest_ensure_response( $response );
+		return self::get_api_response( $response );
 	}
 
 	/**
@@ -186,7 +186,7 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 			$request['id'],
 			$emails
 		);
-		return \rest_ensure_response( $response );
+		return self::get_api_response( $response );
 	}
 
 	/**
@@ -201,7 +201,7 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 			$request['from_name'],
 			$request['reply_to']
 		);
-		return \rest_ensure_response( $response );
+		return self::get_api_response( $response );
 	}
 
 	/**
@@ -222,6 +222,6 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 				$request['list_id']
 			);
 		}
-		return \rest_ensure_response( $response );
+		return self::get_api_response( $response );
 	}
 }

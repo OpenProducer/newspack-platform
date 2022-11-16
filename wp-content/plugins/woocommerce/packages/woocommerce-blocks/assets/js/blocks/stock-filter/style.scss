@@ -7,11 +7,6 @@
 	h6 {
 		text-transform: inherit;
 	}
-
-	> .wc-block-stock-filter__title {
-		margin-top: $gap-small;
-		margin-bottom: $gap-small;
-	}
 }
 
 .wc-block-stock-filter {
@@ -38,12 +33,6 @@
 			}
 		}
 	}
-
-	.is-single,
-	.wc-block-dropdown-selector .wc-block-dropdown-selector__list {
-		opacity: 0.6;
-	}
-
 }
 
 .wc-block-stock-filter__actions {

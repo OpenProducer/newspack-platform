@@ -13,6 +13,20 @@ defined( 'ABSPATH' ) || exit;
 final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_Service_Provider {
 
 	/**
+	 * Cached lists.
+	 *
+	 * @var array
+	 */
+	private $lists = null;
+
+	/**
+	 * Cached contact data.
+	 *
+	 * @var array
+	 */
+	private $contact_data = [];
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -699,24 +713,83 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	/**
 	 * Get lists.
 	 *
-	 * @throws Exception Error message.
+	 * @return array|WP_Error List of existing lists or error.
 	 */
 	public function get_lists() {
-		throw new Exception(
-			__( 'Lists listing not implemented for Constant Contact.', 'newspack-newsletters' )
+		if ( null !== $this->lists ) {
+			return $this->lists;
+		}
+		try {
+			$cc          = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+			$this->lists = $cc->get_contact_lists();
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletters_error', $e->getMessage() );
+		}
+		return array_map(
+			function( $list ) {
+				return [
+					'id'   => $list->list_id,
+					'name' => $list->name,
+				];
+			},
+			$this->lists
 		);
 	}
 
 	/**
-	 * Add contact to a list.
+	 * Add contact to a list or update an existing contact.
 	 *
-	 * @param array  $contact Contact data.
-	 * @param string $list_id List ID.
-	 * @throws Exception Error message.
+	 * @param array        $contact      {
+	 *      Contact data.
+	 *
+	 *    @type string   $email    Contact email address.
+	 *    @type string   $name     Contact name. Optional.
+	 *    @type string[] $metadata Contact additional metadata. Optional.
+	 * }
+	 * @param string|false $list_id      List to add the contact to.
+	 *
+	 * @return array|WP_Error Contact data if the contact was added or error if failed.
 	 */
 	public function add_contact( $contact, $list_id = false ) {
-		throw new Exception(
-			__( 'Adding contacts not implemented for Constant Contact.', 'newspack-newsletters' )
-		);
+		$cc   = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		$data = [];
+		if ( $list_id ) {
+			$data['list_ids'] = [ $list_id ];
+		}
+		if ( isset( $contact['name'] ) ) {
+			$name_fragments     = explode( ' ', $contact['name'], 2 );
+			$data['first_name'] = $name_fragments[0];
+			if ( isset( $name_fragments[1] ) ) {
+				$data['last_name'] = $name_fragments[1];
+			}
+		}
+		if ( isset( $contact['metadata'] ) ) {
+			$data['custom_fields'] = [];
+			foreach ( $contact['metadata'] as $key => $value ) {
+				$data['custom_fields'][ strval( $key ) ] = strval( $value );
+			}
+		}
+		return get_object_vars( $cc->upsert_contact( $contact['email'], $data ) );
 	}
+
+	/**
+	 * Get contact data by email.
+	 *
+	 * @param string $email Email address.
+	 * @param bool   $return_details Fetch full contact data.
+	 *
+	 * @return array|WP_Error Response or error if contact was not found.
+	 */
+	public function get_contact_data( $email, $return_details = false ) {
+		$cc      = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		$contact = $cc->get_contact( $email );
+		if ( ! $contact ) {
+			return new WP_Error(
+				'newspack_newsletters_error',
+				__( 'Contact not found.', 'newspack-newsletters' )
+			);
+		}
+		return get_object_vars( $contact );
+	}
+
 }

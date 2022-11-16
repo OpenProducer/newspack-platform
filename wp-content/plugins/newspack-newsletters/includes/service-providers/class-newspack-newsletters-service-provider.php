@@ -114,7 +114,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 
 		// Prevent status change from the controlled status if newsletter has been sent.
 		if ( ! in_array( $new_status, self::$controlled_statuses, true ) && $old_status !== $new_status && $sent ) {
-			$error = new WP_Error( 'newspack_newsletters_error', __( 'You cannot change a sent newsletter status.', 'newspack-newsletters' ) );
+			$error = new WP_Error( 'newspack_newsletters_error', __( 'You cannot change a sent newsletter status.', 'newspack-newsletters' ), [ 'status' => 403 ] );
 			wp_die( $error ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 
@@ -296,7 +296,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		try {
 			$result = $this->send( $post );
 		} catch ( Exception $e ) {
-			$result = new WP_Error( 'newspack_newsletter_error', $e->getMessage() );
+			$result = new WP_Error( 'newspack_newsletter_error', $e->getMessage(), [ 'status' => 400 ] );
 		}
 
 		if ( true === $result ) {
@@ -316,6 +316,6 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 * @return true|WP_Error True if the contact was updated or error.
 	 */
 	public function update_contact_lists( $email, $lists_to_add = [], $lists_to_remove = [] ) {
-		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ) );
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
 	}
 }

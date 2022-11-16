@@ -9,7 +9,23 @@
 	"attributes": {
 		"placeholder": {
 			"type": "string",
-			"default": "Enter your email address"
+			"default": "Email Address"
+		},
+		"displayNameField": {
+			"type": "boolean",
+			"default": false
+		},
+		"displayLastNameField": {
+			"type": "boolean",
+			"default": false
+		},
+		"namePlaceholder": {
+			"type": "string",
+			"default": ""
+		},
+		"lastNamePlaceholder": {
+			"type": "string",
+			"default": "Last Name"
 		},
 		"label": {
 			"type": "string",

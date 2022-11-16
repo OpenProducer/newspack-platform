@@ -62,17 +62,28 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	private $access_token;
 
 	/**
+	 * Cache for "custom fields".
+	 *
+	 * @var array
+	 */
+	private $custom_fields;
+
+	/**
 	 * Perform API requests.
 	 *
 	 * @param string $method  Request method.
 	 * @param string $path    Request path.
-	 * @param array  $options Request options to apply. See \GuzzleHttp\RequestOptions.
+	 * @param array  $options Request options to apply.
 	 *
 	 * @return object Request result.
 	 *
 	 * @throws Exception Error message.
 	 */
 	private function request( $method, $path, $options = [] ) {
+		/** Remove "/v3/" coming from paging cursors. */
+		if ( 0 === strpos( $path, '/v3' ) ) {
+			$path = substr( $path, 4 );
+		}
 		$url = $this->base_uri . $path;
 		if ( isset( $options['query'] ) ) {
 			$url = add_query_arg( $options['query'], $url );
@@ -92,7 +103,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 				throw new Exception( $response->get_error_message() );
 			}
 			$body = json_decode( $response['body'] );
-			if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
+			if ( ! in_array( wp_remote_retrieve_response_code( $response ), [ 200, 201 ] ) ) {
 				if ( is_array( $body ) && isset( $body[0], $body[0]->error_message ) ) {
 					throw new Exception( $body[0]->error_message );
 				} elseif ( is_object( $body ) && isset( $body->error_message ) ) {
@@ -448,4 +459,167 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 		);
 	}
 
+	/**
+	 * Get a contact
+	 *
+	 * @param string $email_address Email address.
+	 *
+	 * @return object|false Contact or false if not found.
+	 */
+	public function get_contact( $email_address ) {
+		$res = $this->request(
+			'GET',
+			'contacts',
+			[
+				'query' => [
+					'email'   => $email_address,
+					'status'  => 'all',
+					'include' => 'custom_fields,list_memberships',
+				],
+			]
+		);
+		if ( empty( $res->contacts ) ) {
+			return false;
+		}
+		if ( 1 !== count( $res->contacts ) ) {
+			return false;
+		}
+		return $res->contacts[0];
+	}
+
+	/**
+	 * Get all custom fields.
+	 *
+	 * @return object[] Custom fields.
+	 */
+	public function get_custom_fields() {
+		if ( $this->custom_fields ) {
+			return $this->custom_fields;
+		}
+		$fields = [];
+		$path   = 'contact_custom_fields';
+		while ( $path ) {
+			$res    = $this->request( 'GET', $path );
+			$fields = array_merge( $fields, $res->custom_fields );
+			$path   = isset( $res->_links ) ? $res->_links->next->href : null;
+		}
+		$this->custom_fields = $fields;
+		return $this->custom_fields;
+	}
+
+	/**
+	 * Create or update a custom field if the type has changed.
+	 *
+	 * @param string $label Custom field label.
+	 * @param string $type  Custom field type. Either 'string' or 'date', defaults
+	 *                      to 'string'. Leave empty to not alter existing type.
+	 *
+	 * @return string Custom field ID.
+	 */
+	public function upsert_custom_field( $label, $type = '' ) {
+		$custom_fields    = $this->get_custom_fields();
+		$custom_field_idx = array_search( $label, array_column( $custom_fields, 'label' ) );
+		if ( false !== $custom_field_idx ) {
+			$custom_field = $custom_fields[ $custom_field_idx ];
+			if ( empty( $type ) || $custom_field->type === $type ) {
+				return $custom_field->custom_field_id;
+			}
+			$this->request(
+				'PUT',
+				'contact_custom_fields/' . $custom_field->custom_field_id,
+				[ 'body' => wp_json_encode( [ 'type' => $type ] ) ]
+			);
+		} else {
+			$custom_field = $this->request(
+				'POST',
+				'contact_custom_fields',
+				[
+					'body' => wp_json_encode(
+						[
+							'label' => $label,
+							'type'  => empty( $type ) ? 'string' : $type,
+						]
+					),
+				]
+			);
+		}
+		return $custom_field->custom_field_id;
+	}
+
+	/**
+	 * Create or update a contact
+	 *
+	 * @param string $email_address Email address.
+	 * @param array  $data          {
+	 *   Contact data.
+	 *
+	 *   @type string   $first_name    First name.
+	 *   @type string   $last_name     Last name.
+	 *   @type string[] $list_ids      List IDs to add the contact to.
+	 *   @type string[] $custom_fields Custom field values keyed by their label.
+	 * }
+	 *
+	 * @return array Created contact data.
+	 */
+	public function upsert_contact( $email_address, $data = [] ) {
+		$contact = $this->get_contact( $email_address );
+		$body    = [];
+		if ( $contact ) {
+			$body = [
+				'email_address'    => get_object_vars( $contact->email_address ),
+				'list_memberships' => $contact->list_memberships,
+				'custom_fields'    => array_map( 'get_object_vars', $contact->custom_fields ),
+				'update_source'    => 'Contact',
+			];
+		} else {
+			$body = [
+				'email_address' => [
+					'address'            => $email_address,
+					'permission_to_send' => 'implicit',
+				],
+				'create_source' => 'Contact',
+			];
+		}
+		if ( ! empty( $data ) ) {
+			if ( isset( $data['first_name'] ) ) {
+				$body['first_name'] = $data['first_name'];
+			}
+			if ( isset( $data['last_name'] ) ) {
+				$body['last_name'] = $data['last_name'];
+			}
+			if ( ! empty( $data['list_ids'] ) ) {
+				if ( ! isset( $body['list_memberships'] ) ) {
+					$body['list_memberships'] = [];
+				}
+				if ( is_string( $data['list_ids'] ) ) {
+					$data['list_ids'] = [ $data['list_ids'] ];
+				}
+				$body['list_memberships'] = array_unique( array_merge( $body['list_memberships'], array_map( 'strval', $data['list_ids'] ) ), SORT_REGULAR );
+			}
+			if ( ! empty( $data['custom_fields'] ) ) {
+				if ( ! isset( $body['custom_fields'] ) ) {
+					$body['custom_fields'] = [];
+				}
+				$keys = array_keys( $data['custom_fields'] );
+				foreach ( $keys as $key ) {
+					$key_id  = $this->upsert_custom_field( $key );
+					$key_idx = array_search( $key_id, array_column( $body['custom_fields'], 'custom_field_id' ) );
+					if ( false !== $key_idx ) {
+						$body['custom_fields'][ $key_idx ]['value'] = $data['custom_fields'][ $key ];
+					} else {
+						$body['custom_fields'][] = [
+							'custom_field_id' => $key_id,
+							'value'           => $data['custom_fields'][ $key ],
+						];
+					}
+				}
+			}
+		}
+		$res = $this->request(
+			$contact ? 'PUT' : 'POST',
+			$contact ? 'contacts/' . $contact->contact_id : 'contacts',
+			[ 'body' => wp_json_encode( $body ) ]
+		);
+		return $this->get_contact( $email_address );
+	}
 }

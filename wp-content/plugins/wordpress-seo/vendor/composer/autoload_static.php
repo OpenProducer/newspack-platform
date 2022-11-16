@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitdcf33c8ad9259fab45539f919b32d057
+class ComposerStaticInita31131447b900c039503fcd6ea7f3a02
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -347,6 +347,7 @@ class ComposerStaticInitdcf33c8ad9259fab45539f919b32d057
         'WPSEO_Taxonomy_Social_Fields' => __DIR__ . '/../..' . '/src/deprecated/admin/taxonomy/class-taxonomy-social-fields.php',
         'WPSEO_Term_Metabox_Formatter' => __DIR__ . '/../..' . '/admin/formatter/class-term-metabox-formatter.php',
         'WPSEO_Tracking' => __DIR__ . '/../..' . '/admin/tracking/class-tracking.php',
+        'WPSEO_Tracking_Addon_Data' => __DIR__ . '/../..' . '/admin/tracking/class-tracking-addon-data.php',
         'WPSEO_Tracking_Default_Data' => __DIR__ . '/../..' . '/admin/tracking/class-tracking-default-data.php',
         'WPSEO_Tracking_Plugin_Data' => __DIR__ . '/../..' . '/admin/tracking/class-tracking-plugin-data.php',
         'WPSEO_Tracking_Server_Data' => __DIR__ . '/../..' . '/admin/tracking/class-tracking-server-data.php',
@@ -816,6 +817,7 @@ class ComposerStaticInitdcf33c8ad9259fab45539f919b32d057
         'Yoast\\WP\\SEO\\Initializers\\Disable_Core_Sitemaps' => __DIR__ . '/../..' . '/src/initializers/disable-core-sitemaps.php',
         'Yoast\\WP\\SEO\\Initializers\\Initializer_Interface' => __DIR__ . '/../..' . '/src/initializers/initializer-interface.php',
         'Yoast\\WP\\SEO\\Initializers\\Migration_Runner' => __DIR__ . '/../..' . '/src/initializers/migration-runner.php',
+        'Yoast\\WP\\SEO\\Initializers\\Woocommerce' => __DIR__ . '/../..' . '/src/initializers/woocommerce.php',
         'Yoast\\WP\\SEO\\Integrations\\Abstract_Exclude_Post_Type' => __DIR__ . '/../..' . '/src/integrations/abstract-exclude-post-type.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Addon_Installation\\Dialog_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/addon-installation/dialog-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Admin\\Addon_Installation\\Installation_Integration' => __DIR__ . '/../..' . '/src/integrations/admin/addon-installation/installation-integration.php',
@@ -899,7 +901,6 @@ class ComposerStaticInitdcf33c8ad9259fab45539f919b32d057
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Woocommerce_Permalinks' => __DIR__ . '/../..' . '/src/integrations/third-party/woocommerce-permalinks.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof' => __DIR__ . '/../..' . '/src/integrations/third-party/wordproof.php',
         'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Wordproof_Integration_Toggle' => __DIR__ . '/../..' . '/src/integrations/third-party/wordproof-integration-toggle.php',
-        'Yoast\\WP\\SEO\\Integrations\\Third_Party\\Zapier_Free' => __DIR__ . '/../..' . '/src/integrations/third-party/zapier-free.php',
         'Yoast\\WP\\SEO\\Integrations\\Uninstall_Integration' => __DIR__ . '/../..' . '/src/integrations/uninstall-integration.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Addon_Update_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/addon-update-watcher.php',
         'Yoast\\WP\\SEO\\Integrations\\Watchers\\Auto_Update_Watcher' => __DIR__ . '/../..' . '/src/integrations/watchers/auto-update-watcher.php',
@@ -1109,9 +1110,9 @@ class ComposerStaticInitdcf33c8ad9259fab45539f919b32d057
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitdcf33c8ad9259fab45539f919b32d057::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitdcf33c8ad9259fab45539f919b32d057::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitdcf33c8ad9259fab45539f919b32d057::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita31131447b900c039503fcd6ea7f3a02::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita31131447b900c039503fcd6ea7f3a02::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita31131447b900c039503fcd6ea7f3a02::$classMap;
 
         }, null, ClassLoader::class);
     }

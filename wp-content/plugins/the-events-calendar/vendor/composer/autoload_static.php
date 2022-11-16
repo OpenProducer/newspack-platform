@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6552effd43c97709ba80e8d54b06b08f
+class ComposerStaticInit9c88f16d322b1b16c8304a39b77ea5c7
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -34,8 +34,6 @@ class ComposerStaticInit6552effd43c97709ba80e8d54b06b08f
         'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Google_Form_Feedback' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Feedback/Google_Form_Feedback.php',
         'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Feedback/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Full_Activation_Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Full_Activation_Provider.php',
-        'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Dot_Com\\Clear_Event_Cache' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/Dot_Com/Clear_Event_Cache.php',
-        'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Dot_Com\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/Dot_Com/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Integrations/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Phase_View_Renderer' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Migration/Admin/Phase_View_Renderer.php',
         'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Progress_Modal' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Migration/Admin/Progress_Modal.php',
@@ -145,6 +143,12 @@ class ComposerStaticInit6552effd43c97709ba80e8d54b06b08f
         'TEC\\Events\\Editor\\Full_Site\\Hooks' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Hooks.php',
         'TEC\\Events\\Editor\\Full_Site\\Provider' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Provider.php',
         'TEC\\Events\\Editor\\Full_Site\\Templates' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Templates.php',
+        'TEC\\Events\\Integrations\\Integration_Abstract' => __DIR__ . '/../..' . '/src/Events/Integrations/Integration_Abstract.php',
+        'TEC\\Events\\Integrations\\Plugins\\Plugin_Integration' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Plugin_Integration.php',
+        'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Events_Schema' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Events_Schema.php',
+        'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
+        'TEC\\Events\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Provider.php',
+        'TEC\\Events\\Integrations\\Themes\\Theme_Integration' => __DIR__ . '/../..' . '/src/Events/Integrations/Themes/Theme_Integration.php',
         'TEC\\Events\\Legacy\\Views\\V1\\Provider' => __DIR__ . '/../..' . '/src/Events/Legacy/Views/V1/Provider.php',
         'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Filter_Bar/Provider.php',
         'Tribe\\Events\\Admin\\Notice\\Full_Site_Editor' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Full_Site_Editor.php',
@@ -276,9 +280,9 @@ class ComposerStaticInit6552effd43c97709ba80e8d54b06b08f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6552effd43c97709ba80e8d54b06b08f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6552effd43c97709ba80e8d54b06b08f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6552effd43c97709ba80e8d54b06b08f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit9c88f16d322b1b16c8304a39b77ea5c7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit9c88f16d322b1b16c8304a39b77ea5c7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit9c88f16d322b1b16c8304a39b77ea5c7::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,3 +1,62 @@
+## [1.54.2](https://github.com/Automattic/newspack-newsletters/compare/v1.54.1...v1.54.2) (2022-11-04)
+
+
+### Bug Fixes
+
+* **ci:** update newspack-scripts to fix CI builds ([#1004](https://github.com/Automattic/newspack-newsletters/issues/1004)) ([ff14763](https://github.com/Automattic/newspack-newsletters/commit/ff14763c8ca0228c6ba8aa54d52da1702bd89913))
+
+## [1.54.2-hotfix.1](https://github.com/Automattic/newspack-newsletters/compare/v1.54.1...v1.54.2-hotfix.1) (2022-11-04)
+
+
+### Bug Fixes
+
+* **ci:** update newspack-scripts to fix CI builds ([af0f6ca](https://github.com/Automattic/newspack-newsletters/commit/af0f6ca8e9af4a7225e5999c9154ae51283362b5))
+
+## [1.54.1](https://github.com/Automattic/newspack-newsletters/compare/v1.54.0...v1.54.1) (2022-11-03)
+
+
+### Bug Fixes
+
+* lists and list item blocks in WP 6.1 ([#1000](https://github.com/Automattic/newspack-newsletters/issues/1000)) ([ec7ef86](https://github.com/Automattic/newspack-newsletters/commit/ec7ef86f429b81f62c9487c58ecf0a914113702c))
+
+# [1.54.0](https://github.com/Automattic/newspack-newsletters/compare/v1.53.0...v1.54.0) (2022-10-31)
+
+
+### Bug Fixes
+
+* register reader with name ([#987](https://github.com/Automattic/newspack-newsletters/issues/987)) ([3315485](https://github.com/Automattic/newspack-newsletters/commit/33154857392b7b4ae86af404dcf546e3f17b49ee))
+* standardize api error status code ([#992](https://github.com/Automattic/newspack-newsletters/issues/992)) ([b05add4](https://github.com/Automattic/newspack-newsletters/commit/b05add45eb12d842ccd0d229f5d5917f06a451fd))
+
+
+### Features
+
+* constant contact support for the subscription block ([#985](https://github.com/Automattic/newspack-newsletters/issues/985)) ([fdb7d7f](https://github.com/Automattic/newspack-newsletters/commit/fdb7d7f09311c7aceef8b5d96694f478b804403b))
+* name fields options for the subscription block ([#986](https://github.com/Automattic/newspack-newsletters/issues/986)) ([c58816b](https://github.com/Automattic/newspack-newsletters/commit/c58816b9d659927db120835ff2f86808cb9ca38d))
+
+# [1.54.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v1.54.0-alpha.1...v1.54.0-alpha.2) (2022-10-24)
+
+
+### Bug Fixes
+
+* standardize api error status code ([#992](https://github.com/Automattic/newspack-newsletters/issues/992)) ([b05add4](https://github.com/Automattic/newspack-newsletters/commit/b05add45eb12d842ccd0d229f5d5917f06a451fd))
+
+
+### Features
+
+* constant contact support for the subscription block ([#985](https://github.com/Automattic/newspack-newsletters/issues/985)) ([fdb7d7f](https://github.com/Automattic/newspack-newsletters/commit/fdb7d7f09311c7aceef8b5d96694f478b804403b))
+
+# [1.54.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.53.0...v1.54.0-alpha.1) (2022-10-21)
+
+
+### Bug Fixes
+
+* register reader with name ([#987](https://github.com/Automattic/newspack-newsletters/issues/987)) ([3315485](https://github.com/Automattic/newspack-newsletters/commit/33154857392b7b4ae86af404dcf546e3f17b49ee))
+
+
+### Features
+
+* name fields options for the subscription block ([#986](https://github.com/Automattic/newspack-newsletters/issues/986)) ([c58816b](https://github.com/Automattic/newspack-newsletters/commit/c58816b9d659927db120835ff2f86808cb9ca38d))
+
 # [1.53.0](https://github.com/Automattic/newspack-newsletters/compare/v1.52.0...v1.53.0) (2022-10-19)
 
 

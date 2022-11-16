@@ -244,6 +244,7 @@ final class Newspack_Newsletters_Editor {
 			'core/image',
 			'core/separator',
 			'core/list',
+			'core/list-item',
 			'core/quote',
 			'core/site-logo',
 			'core/site-tagline',

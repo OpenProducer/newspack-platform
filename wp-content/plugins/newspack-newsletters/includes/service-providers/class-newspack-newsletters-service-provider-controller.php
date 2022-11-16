@@ -36,8 +36,20 @@ abstract class Newspack_Newsletters_Service_Provider_Controller extends \WP_REST
 	}
 
 	/**
+	 * Prepare and return the API response.
+	 *
+	 * @param array|WP_Error|mixed $response Data to return.
+	 */
+	public static function get_api_response( $response ) {
+		if ( is_wp_error( $response ) ) {
+			$response->add_data( [ 'status' => 400 ] );
+		}
+		return \rest_ensure_response( $response );
+	}
+
+	/**
 	 * Update user's default email addresses for test email
-	 * 
+	 *
 	 * @param array $emails Email addresses.
 	 * @return bool Whether the value has been updated or not
 	 */

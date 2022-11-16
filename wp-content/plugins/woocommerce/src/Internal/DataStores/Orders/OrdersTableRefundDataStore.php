@@ -12,6 +12,44 @@ namespace Automattic\WooCommerce\Internal\DataStores\Orders;
 class OrdersTableRefundDataStore extends OrdersTableDataStore {
 
 	/**
+	 * We do not have and use all the getters and setters from OrderTableDataStore, so we only select the props we actually need.
+	 *
+	 * @var \string[][]
+	 */
+	protected $operational_data_column_mapping = array(
+		'id'                        => array( 'type' => 'int' ),
+		'order_id'                  => array( 'type' => 'int' ),
+		'woocommerce_version'       => array(
+			'type' => 'string',
+			'name' => 'version',
+		),
+		'prices_include_tax'        => array(
+			'type' => 'bool',
+			'name' => 'prices_include_tax',
+		),
+		'coupon_usages_are_counted' => array(
+			'type' => 'bool',
+			'name' => 'recorded_coupon_usage_counts',
+		),
+		'shipping_tax_amount'       => array(
+			'type' => 'decimal',
+			'name' => 'shipping_tax',
+		),
+		'shipping_total_amount'     => array(
+			'type' => 'decimal',
+			'name' => 'shipping_total',
+		),
+		'discount_tax_amount'       => array(
+			'type' => 'decimal',
+			'name' => 'discount_tax',
+		),
+		'discount_total_amount'     => array(
+			'type' => 'decimal',
+			'name' => 'discount_total',
+		),
+	);
+
+	/**
 	 * Delete a refund order from database.
 	 *
 	 * @param \WC_Order $refund Refund object to delete.
@@ -41,7 +79,7 @@ class OrdersTableRefundDataStore extends OrdersTableDataStore {
 	/**
 	 * Read a refund object from custom tables.
 	 *
-	 * @param \WC_Order $refund Refund object.
+	 * @param \WC_Abstract_Order $refund Refund object.
 	 *
 	 * @return void
 	 */
@@ -81,7 +119,7 @@ class OrdersTableRefundDataStore extends OrdersTableDataStore {
 	/**
 	 * Method to create a refund in the database.
 	 *
-	 * @param \WC_Order $refund Refund object.
+	 * @param \WC_Abstract_Order $refund Refund object.
 	 */
 	public function create( &$refund ) {
 		$refund->set_status( 'completed' ); // Refund are always marked completed.
@@ -103,8 +141,8 @@ class OrdersTableRefundDataStore extends OrdersTableDataStore {
 	 *
 	 * @param \WC_Order $refund Refund object.
 	 */
-	public function update_post_meta( &$refund ) {
-		parent::update_post_meta( $refund );
+	public function update_order_meta( &$refund ) {
+		parent::update_order_meta( $refund );
 
 		// Update additional props.
 		$updated_props     = array();

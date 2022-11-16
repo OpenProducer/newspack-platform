@@ -31,6 +31,7 @@ return array(
     'Google\\Site_Kit\\Core\\Authentication\\Clients\\Client_Factory' => $baseDir . '/Core/Authentication/Clients/Client_Factory.php',
     'Google\\Site_Kit\\Core\\Authentication\\Clients\\Google_Site_Kit_Client' => $baseDir . '/Core/Authentication/Clients/Google_Site_Kit_Client.php',
     'Google\\Site_Kit\\Core\\Authentication\\Clients\\Google_Site_Kit_Proxy_Client' => $baseDir . '/Core/Authentication/Clients/Google_Site_Kit_Proxy_Client.php',
+    'Google\\Site_Kit\\Core\\Authentication\\Clients\\OAuth2' => $baseDir . '/Core/Authentication/Clients/OAuth2.php',
     'Google\\Site_Kit\\Core\\Authentication\\Clients\\OAuth_Client' => $baseDir . '/Core/Authentication/Clients/OAuth_Client.php',
     'Google\\Site_Kit\\Core\\Authentication\\Clients\\OAuth_Client_Base' => $baseDir . '/Core/Authentication/Clients/OAuth_Client_Base.php',
     'Google\\Site_Kit\\Core\\Authentication\\Connected_Proxy_URL' => $baseDir . '/Core/Authentication/Connected_Proxy_URL.php',

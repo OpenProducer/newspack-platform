@@ -35,7 +35,7 @@ import './style.scss';
  * @param {string} [props.className] CSS Class name for the component.
  * @return {*} The component.
  */
-const Block = ( props ) => {
+export const Block = ( props ) => {
 	const { className } = props;
 
 	const { parentClassName } = useInnerBlockLayoutContext();
@@ -162,6 +162,7 @@ const AddToCartButton = ( {
 			aria-label={ buttonAriaLabel }
 			className={ classnames(
 				'wp-block-button__link',
+				'wp-element-button',
 				'add_to_cart_button',
 				'wc-block-components-product-button__button',
 				colorStyles.className,
@@ -206,6 +207,7 @@ const AddToCartButtonPlaceholder = ( {
 		<button
 			className={ classnames(
 				'wp-block-button__link',
+				'wp-element-button',
 				'add_to_cart_button',
 				'wc-block-components-product-button__button',
 				'wc-block-components-product-button__button--placeholder',

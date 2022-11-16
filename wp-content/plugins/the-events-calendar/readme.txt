@@ -3,9 +3,9 @@
 Contributors: theeventscalendar, borkweb, bordoni, brianjessee, aguseo, camwynsp, GeoffBel, jentheo, leahkoerper, lucatume, neillmcshea, vicskf, zbtirrell, juanfra
 Tags: events, calendar, event, schedule, organizer
 Donate link: https://evnt.is/29
-Requires at least: 5.8.5
-Stable tag: 6.0.2
-Tested up to: 6.0.3
+Requires at least: 5.8.6
+Stable tag: 6.0.4
+Tested up to: 6.1
 Requires PHP: 7.3
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -229,6 +229,39 @@ Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
 
+= [6.0.4] 2022-11-15 =
+
+* Version - The Events Calendar 6.0.4 is only compatible with Events Calendar PRO 6.0.3 and higher
+* Feature - Include Yoast WordPress SEO OpenGraph integration. [TEC-4558][TEC-4561]
+* Fix - Fix for fatal when adding Featured Venue Events widget on Appearance -> Widgets screen. [ECP-1411]
+* Fix - Fix for fatal error on Series page in PHP 7.3. [TEC-4549]
+* Fix - Prevent error around Free regular expression for JSON-LD on updated views. Props @jonkastonka @saleck @randon [TEC-4570]
+* Fix - Avoid fatal error when using PHP version 8.0 or above and the HyperDB plugin. [ECP-1360]
+* Fix - Ensure view labels are translated appropriately. [TEC-4485]
+* Fix - Errors and warnings in WP.com installations due to empty query results. [TEC-4543]
+* Fix - Translation of Event Occurrences URL when using WPML and the Custom Tables V1 implementation. [ECP-1373]
+* Fix - More robust type checking in Builder methods. [ECP-1402]
+* Fix - Avoid `orderby` related database error in Custom Tables V1 context. [TEC-4555]
+* Fix - Prevent error when updating Venue in sites using object cache. [TEC-4348]
+* Fix - Prevent date format error when trying to subscribe to calendar in sites using object cache. [TEC-4459]
+* Tweak - Clean up the Event Website block to make it more intuitive for users. [TEC-4352]
+* Tweak - Update the venue website field to type URL. [TEC-4349]
+* Tweak - Do not add date-based ordering to queries when using `none` or `rand` order. [TEC-4555]
+* Tweak - Added filters: `tec_events_integrations_should_load`, `tec_events_integrations_{$type}_should_load`, `tec_events_integrations_{$type}_{$slug}_should_load`, `tec_events_integrations_{$integration_type}_{$integration_slug}_events_schema_is_needed`, `tec_events_integrations_{$integration_type}_{$integration_slug}_json_ld_{$type}_data`, `tec_events_views_v2_view_label`, `tec_events_views_v2_{$slug}_view_label`
+* Tweak - Removed filters: `tribe_events_views`, `tribe_events_views_v2_manager_view_label_domain`, `tribe_events_views_v2_manager_{$slug}_view_label_domain`, `tribe_events_views_v2_manager_view_label`, `tribe_events_views_v2_manager_{$slug}_view_label`
+* Language - 3 new strings added, 144 updated, 0 fuzzied, and 0 obsoleted.
+
+= [6.0.3.1] 2022-11-03 =
+
+* Fix - Correct issues where early queries can interfere with View template redirects. [TEC-4554]
+* Fix - Serialization and unserialization issues related to caching of post models. [TEC-4379]
+* Fix - Prevent default WordPress occurrence query caching because we cache it ourselves. [TEC-4379]
+* Tweak - Add the `tribe_get_venue_object_after` and `tribe_get_organizer_object_after` filters. [TEC-4379]
+
+= [6.0.3] 2022-10-31 =
+
+* Fix - Handle repository query filters correctly in custom tables context; fix a REST API issue. [ET-1567]
+
 = [6.0.2] 2022-10-20 =
 
 * Feature - Add initial integration with Restrict Content Pro. This hides any events on the calendar views that the user is not allowed to view. [ [TEC-4457]]
@@ -262,6 +295,7 @@ Remember to always make a backup of your database and files before updating!
                          `tec_events_today_button_title` and `tec_events_{view_slug}_view_today_button_title` to filter the link title and aria-label. [TEC-4458]
 * Tweak - Speed up the Custom Tables v1 migration process if a browser window is open on the migration UI. [TEC-4517]
 * Language - 11 new strings added, 149 updated, 2 fuzzied, and 2 obsoleted.
+
 
 = [6.0.1.1] 2022-09-29 =
 
