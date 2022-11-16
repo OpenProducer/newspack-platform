@@ -9,6 +9,9 @@ namespace Newspack;
 
 use DateTime;
 use WP_Post;
+
+require_once 'class-major-revisions.php';
+
 /**
  * Revisions Control class
  */
@@ -30,6 +33,7 @@ class Revisions_Control {
 		if ( ! self::$initiated ) {
 			add_filter( 'wp_revisions_to_keep', [ __CLASS__, 'filter_revisions_to_keep' ] );
 			add_filter( 'pre_delete_post', [ __CLASS__, 'pre_delete_revision' ], 10, 2 );
+			add_action( 'admin_head-revision.php', [ __CLASS__, 'admin_head' ] );
 			self::$initiated = true;
 		}
 	}
@@ -58,6 +62,7 @@ class Revisions_Control {
 		if ( ! empty( $option ) ) {
 			return $option;
 		}
+		// TODO: When we allow users to modify the min_age via UI or hook, we need to make the Help text in self::admin_head dynamic.
 		if ( defined( 'NEWSPACK_LIMIT_REVISIONS_NUMBER' ) && is_int( NEWSPACK_LIMIT_REVISIONS_NUMBER ) ) {
 			return [
 				'active'  => true,
@@ -73,7 +78,7 @@ class Revisions_Control {
 	 *
 	 * @return boolean
 	 */
-	private static function is_active() {
+	public static function is_active() {
 		return self::get_status()['active'];
 	}
 
@@ -122,13 +127,40 @@ class Revisions_Control {
 	 * @return mixed
 	 */
 	public static function pre_delete_revision( $check, WP_Post $post ) {
-		if ( ! self::is_active() || 'revision' !== $post->post_type ) {
+		if ( ! is_null( $check ) || ! self::is_active() || 'revision' !== $post->post_type ) {
 			return $check;
 		}
 		if ( $post->post_date > self::get_min_age() ) {
 			return true; // do not delete.
 		}
+		$revision = new Major_Revision( $post->post_parent, $post->ID );
+		if ( $revision->is_major() ) {
+			return true; // do not delete.
+		}
 		return $check;
+	}
+
+	/**
+	 * Admin head callback. Adds an additional section to the Help tab
+	 *
+	 * @return void
+	 */
+	public static function admin_head() {
+
+		// translators: %d is the maximum number of revisions that will be kept.
+		$help_text  = '<p>' . sprintf( __( '<strong>Newspack</strong> revisions control is active. This means that there is a limit of %d revisions that will be kept.', 'newspack' ), self::get_number() ) . '</p>';
+		$help_text .= '<p>' . __( ' Older revisions that exceed this number will be deleted, except:', 'newspack' ) . '</p>';
+		$help_text .= '<ul><li>' . __( 'Revisions less than one week old', 'newspack' ) . '</li>';
+		$help_text .= '<li>' . __( 'Revisions marked as major. Use the button on the revision title bar to mark/unmark a revision as major', 'newspack' ) . '</li></ul>';
+
+
+
+		$help_tab = get_current_screen()->get_help_tab( 'revisions-overview' );
+
+		$help_tab['content'] .= $help_text;
+
+		get_current_screen()->add_help_tab( $help_tab );
+
 	}
 
 }

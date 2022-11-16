@@ -2,4 +2,4 @@
  * Style dependencies
  */
 
-import './view.scss';
+import './styles/view.scss';

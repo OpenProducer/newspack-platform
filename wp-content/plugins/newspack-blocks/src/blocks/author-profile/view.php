@@ -14,6 +14,16 @@ function newspack_blocks_register_author_profile() {
 		true
 	);
 
+	if ( class_exists( '\Newspack\Authors_Custom_Fields' ) ) {
+		$author_custom_fields = \Newspack\Authors_Custom_Fields::get_custom_fields();
+		foreach ( $author_custom_fields as $field ) {
+			$block_json['attributes'][ 'show' . $field['name'] ] = [
+				'type'    => 'string',
+				'default' => true,
+			];
+		}
+	}
+
 	register_block_type(
 		'newspack-blocks/' . $block_json['name'],
 		[
@@ -54,16 +64,12 @@ function newspack_blocks_get_author_or_guest_author( $author_id, $avatar_size = 
 
 		// Format CAP guest author object to return to the render function.
 		if ( $author && isset( $author->ID ) ) {
-			$author = [
-				'id'     => $author_id,
-				'name'   => $author->display_name,
-				'bio'    => $author->description,
-				'url'    => esc_urL(
-					get_author_posts_url( $author_id, $author->user_nicename )
-				),
-				'email'  => WP_REST_Newspack_Authors_Controller::get_email( $author_id ),
-				'social' => WP_REST_Newspack_Authors_Controller::get_social( $author_id ),
-			];
+			$author = WP_REST_Newspack_Authors_Controller::fill_guest_author_data(
+				[
+					'id' => $author_id,
+				],
+				$author
+			);
 
 			if ( $avatar && ( false === strpos( $avatar, 'avatar-default' ) || ! $hide_default ) ) {
 				$author['avatar'] = $avatar;
@@ -72,24 +78,17 @@ function newspack_blocks_get_author_or_guest_author( $author_id, $avatar_size = 
 	}
 
 	// If $author is still false, see if it's a standard WP User.
-	if ( ! $author ) {
-		$author = $wp_user;
+	if ( ! $author && $wp_user && isset( $wp_user->data ) ) {
+		$author = WP_REST_Newspack_Authors_Controller::fill_user_data(
+			[
+				'id' => $author_id,
+			],
+			$wp_user
+		);
 
-		// Format WP user object to return to the render function.
-		if ( $author && isset( $author->data ) ) {
-			$author = [
-				'id'     => $author_id,
-				'name'   => $author->data->display_name,
-				'bio'    => get_the_author_meta( 'description', $author_id ),
-				'url'    => esc_urL( get_author_posts_url( $author_id ) ),
-				'email'  => WP_REST_Newspack_Authors_Controller::get_email( $author_id, false, $author->data->user_email ),
-				'social' => WP_REST_Newspack_Authors_Controller::get_social( $author_id ),
-			];
-
-			$avatar = get_avatar( $author_id, $avatar_size );
-			if ( $avatar && ( false === strpos( $avatar, 'avatar-default' ) || ! $hide_default ) ) {
-				$author['avatar'] = $avatar;
-			}
+		$avatar = get_avatar( $author_id, $avatar_size );
+		if ( $avatar && ( false === strpos( $avatar, 'avatar-default' ) || ! $hide_default ) ) {
+			$author['avatar'] = $avatar;
 		}
 	}
 

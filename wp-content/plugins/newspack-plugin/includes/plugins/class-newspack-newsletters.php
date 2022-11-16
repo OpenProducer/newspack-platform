@@ -23,12 +23,14 @@ class Newspack_Newsletters {
 	public static $metadata_keys = [
 		'account'              => 'NP_Account',
 		'registration_date'    => 'NP_Registration Date',
+		'connected_account'    => 'NP_Connected Account',
 		'signup_page'          => 'NP_Signup Page',
 		'signup_page_utm'      => 'NP_Signup UTM: ',
+		'newsletter_selection' => 'NP_Newsletter Selection',
+		// Payment-related.
+		'membership_status'    => 'NP_Membership Status',
 		'payment_page'         => 'NP_Payment Page',
 		'payment_page_utm'     => 'NP_Payment UTM: ',
-		'newsletter_selection' => 'NP_Newsletter Selection',
-		'membership_status'    => 'NP_Membership Status',
 		'sub_start_date'       => 'NP_Current Subscription Start Date',
 		'sub_end_date'         => 'NP_Current Subscription End Date',
 		'billing_cycle'        => 'NP_Billing Cycle',
@@ -38,7 +40,6 @@ class Newspack_Newsletters {
 		'product_name'         => 'NP_Product Name',
 		'next_payment_date'    => 'NP_Next Payment Date',
 		'total_paid'           => 'NP_Total Paid',
-		'connected_account'    => 'NP_Connected Account',
 	];
 
 	/**
@@ -142,6 +143,22 @@ class Newspack_Newsletters {
 						if ( isset( $current_page_url_params[ $param ] ) ) {
 							$metadata[ self::$metadata_keys['signup_page_utm'] . $value ] = sanitize_text_field( $current_page_url_params[ $param ] );
 						}
+					}
+				}
+
+				// If the membership status is to be switched from recurring to non-recurring, ignore this change.
+				if ( $contact['existing_contact_data'] && isset( $contact['metadata'][ self::$metadata_keys['membership_status'] ], $existing_metadata[ self::$metadata_keys['membership_status'] ] ) ) {
+					$existing_metadata  = $contact['existing_contact_data']['metadata'];
+					$becomes_once_donor = Stripe_Connection::ESP_METADATA_VALUES['once_donor'] === $contact['metadata'][ self::$metadata_keys['membership_status'] ];
+					$is_recurring_donor = in_array(
+						$existing_metadata[ self::$metadata_keys['membership_status'] ],
+						[
+							Stripe_Connection::ESP_METADATA_VALUES['monthly_donor'],
+							Stripe_Connection::ESP_METADATA_VALUES['yearly_donor'],
+						]
+					);
+					if ( $becomes_once_donor && $is_recurring_donor ) {
+						unset( $contact['metadata'][ self::$metadata_keys['membership_status'] ] );
 					}
 				}
 

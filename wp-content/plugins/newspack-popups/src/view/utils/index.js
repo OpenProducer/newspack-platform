@@ -1,3 +1,5 @@
+/* globals newspack_popups_view */
+
 /**
  * WordPress dependencies
  */
@@ -23,14 +25,20 @@ export const performXHRequest = ( { url, data } ) => {
 	XHR.send( encodedData );
 };
 
-const getCookies = () =>
+export const getCookies = () =>
 	document.cookie.split( '; ' ).reduce( ( acc, cookieStr ) => {
 		const cookie = cookieStr.split( '=' );
 		acc[ cookie[ 0 ] ] = cookie[ 1 ];
 		return acc;
 	}, {} );
 
-export const getClientIDValue = () => getCookies()[ 'newspack-cid' ];
+export const getClientIDValue = () => getCookies()[ newspack_popups_view.cid_cookie_name ];
+
+export const setCookie = ( name, value, expirationDays = 365 ) => {
+	const date = new Date();
+	date.setTime( date.getTime() + expirationDays * 24 * 60 * 60 * 1000 );
+	document.cookie = `${ name }=${ value }; expires=${ date.toUTCString() }; path=/`;
+};
 
 /**
  * Replace a dynamic value, like a client ID, in a string.
@@ -39,8 +47,16 @@ export const getClientIDValue = () => getCookies()[ 'newspack-cid' ];
  * @return {string} String with the value replaced.
  */
 export const substituteDynamicValue = value => {
-	if ( value && String( value ).replace( /\s/g, '' ) === 'CLIENT_ID(newspack-cid)' ) {
-		value = getClientIDValue() || '';
+	if ( value ) {
+		const trimmedValue = String( value ).replace( /\s/g, '' );
+		switch ( trimmedValue ) {
+			case 'CLIENT_ID(newspack-cid)':
+				value = getClientIDValue() || '';
+				break;
+			case 'DOCUMENT_REFERRER':
+				value = document.referrer || '';
+				break;
+		}
 	}
 	return value;
 };

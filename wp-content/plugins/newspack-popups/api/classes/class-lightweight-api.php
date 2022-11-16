@@ -362,6 +362,192 @@ class Lightweight_API {
 			// Clear the log file.
 			file_put_contents( Segmentation::get_log_file_path(), '' ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
 			fclose( $log_file ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_read_fclose
+
+		}
+	}
+
+	/**
+	 * Given an event type and value, find other client IDs with matching type and value
+	 * and reconcile all client IDs so they're considered a single reader.
+	 *
+	 * @param string $current_client_id The client ID of the current reader session.
+	 * @param string $type The type of event to look up.
+	 * @param mixed  $context The context of the event to look up.
+	 *
+	 * @return array Array of all client IDs associated with this reader.
+	 */
+	public function reconcile_readers( $current_client_id, $type, $context ) {
+		global $wpdb;
+		$reader_events_table_name = Segmentation::get_reader_events_table_name();
+		$client_ids               = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"SELECT DISTINCT client_id FROM $reader_events_table_name WHERE type = %s AND context = %s", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
+				$type,
+				$context
+			)
+		);
+
+		if ( ! empty( $client_ids ) ) {
+			$client_ids = array_map(
+				function( $row ) {
+					return $row->client_id;
+				},
+				$client_ids
+			);
+
+			if ( ! in_array( $current_client_id, $client_ids, true ) ) {
+				$client_ids[] = $current_client_id;
+			}
+
+			// Save all client IDs to each reader record.
+			foreach ( $client_ids as $unique_client_id ) {
+				$reader              = $this->get_reader( $unique_client_id );
+				$reader_data         = isset( $reader['reader_data'] ) ? $reader['reader_data'] : [];
+				$original_client_ids = isset( $reader['reader_data']['client_ids'] ) ? $reader['reader_data']['client_ids'] : [];
+
+				$this->debug['readers'][] = $reader;
+
+				if ( isset( $reader_data['client_ids'] ) ) {
+					$reader_data['client_ids'] = array_unique( array_merge( $reader_data['client_ids'], $client_ids ) );
+				} else {
+					$reader_data['client_ids'] = $client_ids;
+				}
+
+				// Only update if there are new client IDs to add.
+				if ( ! empty( array_diff( $reader_data['client_ids'], $original_client_ids ) ) ) {
+					$this->save_reader( $unique_client_id, $reader_data );
+				}
+			}
+
+			return $client_ids;
+		}
+
+		return [ $current_client_id ];
+	}
+
+	/**
+	 * Rebuild legacy reader data in the newer format.
+	 *
+	 * @param string $client_id Client ID of reader session.
+	 * @param array  $reader Reader object to save.
+	 */
+	public function rebuild_legacy_reader( $client_id, $reader ) {
+		// Check the legacy transients table for existing reader.
+		$legacy_reader = $this->get_transient_legacy( $client_id );
+		$reader_events = [];
+
+		// If there's data for this reader in the legacy transients table, recreate it in the new table.
+		if ( ! empty( $legacy_reader ) ) {
+			$this->debug['legacy_reader'] = $legacy_reader;
+
+			// Add posts_read data to views count.
+			if ( isset( $legacy_reader['posts_read'] ) && 0 < count( $legacy_reader['posts_read'] ) ) {
+				$reader['reader_data']['views'] = [ 'post' => count( $legacy_reader['posts_read'] ) ];
+
+				// Add read categories data.
+				$categories_read = ! empty( $reader['reader_data']['category'] ) ? $reader['reader_data']['category'] : [];
+				foreach ( $legacy_reader['posts_read'] as $article_view ) {
+
+					// Rebuild recent views as view events.
+					if ( isset( $article_view['created_at'] ) ) {
+						$hour_ago   = strtotime( '-1 hour', time() );
+						$event_time = strtotime( $article_view['created_at'] );
+
+						if ( $event_time > $hour_ago ) {
+							$view_event = [
+								'date_created' => gmdate( 'Y-m-d H:i:s', $event_time ),
+								'type'         => 'view',
+								'context'      => 'post',
+								'value'        => [],
+							];
+
+							if ( isset( $article_view['post_id'] ) ) {
+								$view_event['value']['post_id'] = $article_view['post_id'];
+							}
+							if ( isset( $article_view['categories'] ) ) {
+								$view_event['value']['categories'] = $article_view['categories'];
+							}
+
+							$reader_events[] = $view_event;
+						}
+					}
+
+					if ( ! empty( $article_view['category_ids'] ) ) {
+						$category_ids = explode( ',', $article_view['category_ids'] );
+
+						foreach ( $category_ids as $category_id ) {
+							if ( ! isset( $categories_read[ $category_id ] ) ) {
+								$categories_read[ $category_id ] = 0;
+							}
+							$categories_read[ $category_id ] ++;
+						}
+					}
+				}
+
+				if ( ! empty( $categories_read ) ) {
+					$reader['reader_data']['category'] = $categories_read;
+				}
+			}
+
+			// Add known user accounts.
+			if ( ! empty( $legacy_reader['user_id'] ) ) {
+				$reader_events[] = [
+					'type'    => 'user_account',
+					'context' => $legacy_reader['user_id'],
+				];
+			}
+
+			// Add prior donations.
+			if ( ! empty( $legacy_reader['donations'] ) ) {
+				// Keep track of logged donations so we don't log duplicate events.
+				$donation_ids = [];
+
+				foreach ( $legacy_reader['donations'] as $donation ) {
+					$create_event  = false;
+					$donation      = (array) $donation;
+					$donation_date = isset( $donation['date'] ) ? strtotime( $donation['date'] ) : time();
+					$donation_data = [
+						'date_created' => gmdate( 'Y-m-d H:i:s', $donation_date ),
+						'type'         => 'donation',
+						'value'        => $donation,
+					];
+
+					if ( isset( $donation['order_id'] ) && ! in_array( (int) $donation['order_id'], $donation_ids, true ) ) {
+						$donation_ids[]           = $donation['order_id'];
+						$donation_data['context'] = 'woocommerce';
+						$create_event             = true;
+					}
+					if ( isset( $donation['stripe_id'] ) && ! in_array( (int) $donation['stripe_id'], $donation_ids, true ) ) {
+						$donation_ids[]           = $donation['stripe_id'];
+						$donation_data['context'] = 'stripe';
+						$create_event             = true;
+					}
+
+					// Only log the event if it hasn't already been logged.
+					if ( $create_event ) {
+						$reader_events[] = $donation_data;
+					}
+				}
+			}
+
+			// Add prior newsletter subscriptions.
+			if ( ! empty( $legacy_reader['email_subscriptions'] ) ) {
+				foreach ( $legacy_reader['email_subscriptions'] as $subscription ) {
+					$reader_events[] = [
+						'type'    => 'subscription',
+						'context' => $subscription['email'] ?? $subscription['address'],
+					];
+				}
+			}
+
+			// If we were able to save the legacy data, clean up old transients data.
+			$this->delete_transient_legacy( $client_id );
+		}
+
+		$this->save_reader( $client_id, $reader['reader_data'] );
+
+		if ( ! empty( $reader_events ) ) {
+			$this->save_reader_events( $client_id, $reader_events );
 		}
 	}
 
@@ -375,7 +561,6 @@ class Lightweight_API {
 	public function get_reader( $client_id ) {
 		$reader              = $this->reader_blueprint;
 		$reader['client_id'] = $client_id;
-		$reader_events       = [];
 
 		// Check the cache first.
 		if ( ! $this->ignore_cache || ! $this->validate_cache( $client_id ) ) {
@@ -404,124 +589,7 @@ class Lightweight_API {
 
 		// If there's no reader for this client ID in the DB, create it.
 		if ( empty( $reader_from_db ) ) {
-			// Check the legacy transients table for existing reader.
-			$legacy_reader = $this->get_transient_legacy( $client_id );
-
-			// If there's data for this reader in the legacy transients table, recreate it in the new table.
-			if ( ! empty( $legacy_reader ) ) {
-				if ( $this->is_debug_enabled() ) {
-					$this->debug['legacy_reader'] = $legacy_reader;
-				}
-
-				// Add posts_read data to views count.
-				if ( isset( $legacy_reader['posts_read'] ) && 0 < count( $legacy_reader['posts_read'] ) ) {
-					$reader['reader_data']['views'] = [ 'post' => count( $legacy_reader['posts_read'] ) ];
-
-					// Add read categories data.
-					$categories_read = ! empty( $reader['reader_data']['category'] ) ? $reader['reader_data']['category'] : [];
-					foreach ( $legacy_reader['posts_read'] as $article_view ) {
-
-						// Rebuild recent views as view events.
-						if ( isset( $article_view['created_at'] ) ) {
-							$hour_ago   = strtotime( '-1 hour', time() );
-							$event_time = strtotime( $article_view['created_at'] );
-
-							if ( $event_time > $hour_ago ) {
-								$view_event = [
-									'date_created' => gmdate( 'Y-m-d H:i:s', $event_time ),
-									'type'         => 'view',
-									'context'      => 'post',
-									'value'        => [],
-								];
-
-								if ( isset( $article_view['post_id'] ) ) {
-									$view_event['value']['post_id'] = $article_view['post_id'];
-								}
-								if ( isset( $article_view['categories'] ) ) {
-									$view_event['value']['categories'] = $article_view['categories'];
-								}
-
-								$reader_events[] = $view_event;
-							}
-						}
-
-						if ( ! empty( $article_view['category_ids'] ) ) {
-							$category_ids = explode( ',', $article_view['category_ids'] );
-
-							foreach ( $category_ids as $category_id ) {
-								if ( ! isset( $categories_read[ $category_id ] ) ) {
-									$categories_read[ $category_id ] = 0;
-								}
-								$categories_read[ $category_id ] ++;
-							}
-						}
-					}
-
-					if ( ! empty( $categories_read ) ) {
-						$reader['reader_data']['category'] = $categories_read;
-					}
-				}
-
-				// Add known user accounts.
-				if ( ! empty( $legacy_reader['user_id'] ) ) {
-					$reader_events[] = [
-						'type'    => 'user_account',
-						'context' => $legacy_reader['user_id'],
-					];
-				}
-
-				// Add prior donations.
-				if ( ! empty( $legacy_reader['donations'] ) ) {
-					// Keep track of logged donations so we don't log duplicate events.
-					$donation_ids = [];
-
-					foreach ( $legacy_reader['donations'] as $donation ) {
-						$create_event  = false;
-						$donation      = (array) $donation;
-						$donation_date = isset( $donation['date'] ) ? strtotime( $donation['date'] ) : time();
-						$donation_data = [
-							'date_created' => gmdate( 'Y-m-d H:i:s', $donation_date ),
-							'type'         => 'donation',
-							'value'        => $donation,
-						];
-
-						if ( isset( $donation['order_id'] ) && ! in_array( (int) $donation['order_id'], $donation_ids, true ) ) {
-							$donation_ids[]           = $donation['order_id'];
-							$donation_data['context'] = 'woocommerce';
-							$create_event             = true;
-						}
-						if ( isset( $donation['stripe_id'] ) && ! in_array( (int) $donation['stripe_id'], $donation_ids, true ) ) {
-							$donation_ids[]           = $donation['stripe_id'];
-							$donation_data['context'] = 'stripe';
-							$create_event             = true;
-						}
-
-						// Only log the event if it hasn't already been logged.
-						if ( $create_event ) {
-							$reader_events[] = $donation_data;
-						}
-					}
-				}
-
-				// Add prior newsletter subscriptions.
-				if ( ! empty( $legacy_reader['email_subscriptions'] ) ) {
-					foreach ( $legacy_reader['email_subscriptions'] as $subscription ) {
-						$reader_events[] = [
-							'type'    => 'subscription',
-							'context' => $subscription['email'] ?? $subscription['address'],
-						];
-					}
-				}
-
-				// If we were able to save the legacy data, clean up old transients data.
-				$this->delete_transient_legacy( $client_id );
-			}
-
-			$this->save_reader( $client_id, $reader['reader_data'] );
-
-			if ( ! empty( $reader_events ) ) {
-				$this->save_reader_events( $client_id, $reader_events );
-			}
+			$this->rebuild_legacy_reader( $client_id, $reader );
 		} else {
 			// Rebuild the cache.
 			$reader_from_db = reset( $reader_from_db );
@@ -541,6 +609,24 @@ class Lightweight_API {
 			$this->debug['reader'] = $reader;
 		}
 		return $reader;
+	}
+
+	/**
+	 * Get all known reader sessions associated with a client ID.
+	 *
+	 * @param string $current_client_id Client ID of the current session.
+	 *
+	 * @return array Array of all known readers associated with the client ID.
+	 */
+	public function get_readers( $current_client_id ) {
+		$all_client_ids = $this->get_reconciled_client_ids( $current_client_id );
+		$all_readers    = [];
+
+		foreach ( $all_client_ids as $client_id ) {
+			$all_readers[] = $this->get_reader( $client_id );
+		}
+
+		return $all_readers;
 	}
 
 	/**
@@ -737,9 +823,21 @@ class Lightweight_API {
 	}
 
 	/**
-	 * Get all reader data from the DB.
+	 * Get all client IDs known to belong to the same reader.
 	 *
-	 * @param string            $client_ids Client ID or IDs associated with the reader.
+	 * @param string $current_client_id Client ID of the current reader session.
+	 *
+	 * @return array All client IDs known to belong to the same reader.
+	 */
+	public function get_reconciled_client_ids( $current_client_id ) {
+		$reader = $this->get_reader( $current_client_id, true );
+		return isset( $reader['reader_data']['client_ids'] ) ? $reader['reader_data']['client_ids'] : [ $current_client_id ];
+	}
+
+	/**
+	 * Get all reader events from the DB.
+	 *
+	 * @param array             $client_ids Array of client IDs to fetch for.
 	 * @param string|array|null $type Type or types of data to retrieve.
 	 * @param string|array|null $context Context or contexts of data to retrieve.
 	 *
@@ -874,7 +972,8 @@ class Lightweight_API {
 			$context = [ $context ];
 		}
 
-		$cached_events = [];
+		$client_id_or_ids = $this->get_reconciled_client_ids( $client_id );
+		$cached_events    = [];
 
 		// Check the cache first.
 		if ( ! $this->ignore_cache && $this->validate_cache( $client_id ) ) {
@@ -886,7 +985,7 @@ class Lightweight_API {
 			}
 		}
 
-		$events_from_db     = $this->get_reader_events_from_db( [ $client_id ], $type, $context );
+		$events_from_db     = $this->get_reader_events_from_db( $client_id_or_ids, $type, $context );
 		$existing_event_ids = array_column( $cached_events, 'id' );
 		$unique_ids         = [];
 		$filtered_events    = array_values(
@@ -962,6 +1061,16 @@ class Lightweight_API {
 	public function save_reader_events( $client_id, $events ) {
 		if ( empty( $client_id ) || empty( $events ) ) {
 			return false;
+		}
+
+		// If the event contains data we can use to link this reader session with others, reconcile those sessions.
+		$identifiable_events = $this->filter_events_by_type( $events, [ 'user_account', 'subscription' ] );
+		if ( ! empty( $identifiable_events ) ) {
+			foreach ( $identifiable_events as $identifiable_event ) {
+				if ( ! empty( $identifiable_event['type'] ) && ! empty( $identifiable_event['context'] ) ) {
+					$this->reconcile_readers( $client_id, $identifiable_event['type'], $identifiable_event['context'] );
+				}
+			}
 		}
 
 		// Rebuild reader_data if there were new views.

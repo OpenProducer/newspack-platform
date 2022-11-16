@@ -126,6 +126,34 @@ class Engagement_Wizard extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/social/meta_pixel',
+			[
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ 'Newspack\Meta_Pixel', 'api_get' ],
+					'permission_callback' => [ $this, 'api_permissions_check' ],
+				],
+				[
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => [ 'Newspack\Meta_Pixel', 'api_save' ],
+					'permission_callback' => [ $this, 'api_permissions_check' ],
+					'args'                => [
+						'active'   => [
+							'type'              => 'boolean',
+							'required'          => true,
+							'validate_callback' => [ 'Newspack\Meta_Pixel', 'validate_active' ],
+						],
+						'pixel_id' => [
+							'type'              => [ 'integer', 'string' ],
+							'required'          => true,
+							'validate_callback' => [ 'Newspack\Meta_Pixel', 'validate_pixel_id' ],
+						],
+					],
+				],
+			]
+		);
 	}
 
 	/**

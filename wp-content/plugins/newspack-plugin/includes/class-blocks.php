@@ -38,11 +38,13 @@ final class Blocks {
 			'newspack-blocks',
 			'newspack_blocks',
 			[
-				'has_newsletters'       => method_exists( 'Newspack_Newsletters_Subscription', 'add_contact' ),
-				'has_reader_activation' => Reader_Activation::is_enabled( false ),
-				'newsletters_url'       => Wizards::get_wizard( 'engagement' )->newsletters_settings_url(),
-				'has_google_oauth'      => Google_OAuth::is_oauth_configured(),
-				'google_logo_svg'       => file_get_contents( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/blocks/reader-registration/icons/google.svg' ),
+				'has_newsletters'         => method_exists( 'Newspack_Newsletters_Subscription', 'add_contact' ),
+				'has_reader_activation'   => Reader_Activation::is_enabled( false ),
+				'newsletters_url'         => Wizards::get_wizard( 'engagement' )->newsletters_settings_url(),
+				'has_google_oauth'        => Google_OAuth::is_oauth_configured(),
+				'google_logo_svg'         => file_get_contents( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/blocks/reader-registration/icons/google.svg' ),
+				'reader_activation_terms' => Reader_Activation::get_setting( 'terms_text' ),
+				'reader_activation_url'   => Reader_Activation::get_setting( 'terms_url' ),
 			]
 		);
 		\wp_enqueue_style(

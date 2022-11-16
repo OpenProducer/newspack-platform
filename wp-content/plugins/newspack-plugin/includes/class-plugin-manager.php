@@ -251,7 +251,7 @@ class Plugin_Manager {
 			],
 			'woocommerce-subscriptions'     => [
 				'Name'        => esc_html__( 'WooCommerce Subscriptions', 'newspack' ),
-				'Description' => esc_html__( 'An eCommerce toolkit that helps you sell anything. Beautifully.', 'newspack' ),
+				'Description' => esc_html__( 'Sell products and services with recurring payments in your WooCommerce Store.', 'newspack' ),
 				'Author'      => esc_html__( 'WooCommerce', 'newspack' ),
 				'PluginURI'   => esc_url( 'https://woocommerce.com/products/woocommerce-subscriptions/' ),
 				'AuthorURI'   => esc_url( 'https://woocommerce.com/' ),
@@ -307,6 +307,14 @@ class Plugin_Manager {
 				'Author'      => esc_html__( 'Gary Thayer, David Green, 10up', 'newspack' ),
 				'AuthorURI'   => esc_url( 'https://10up.com' ),
 				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/ad-refresh-control/' ),
+				'Download'    => 'wporg',
+			],
+			'publisher-media-kit'           => [
+				'Name'        => esc_html__( 'Publisher Media Kit', 'newspack' ),
+				'Description' => esc_html__( 'Quick and easy option for small to medium sized publishers to digitize their media kit.', 'newspack' ),
+				'Author'      => esc_html__( '10up', 'newspack' ),
+				'AuthorURI'   => esc_url( 'https://10up.com' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/publisher-media-kit/' ),
 				'Download'    => 'wporg',
 			],
 			'broadstreet'                   => [

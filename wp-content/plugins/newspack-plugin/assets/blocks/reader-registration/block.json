@@ -24,7 +24,7 @@
 		},
 		"privacyLabel": {
 			"type": "string",
-			"default": "By signing up, you agree to our Terms and Conditions."
+			"default": ""
 		},
 		"newsletterSubscription": {
 			"type": "boolean",

@@ -1,3 +1,29 @@
+# [1.59.0](https://github.com/Automattic/newspack-blocks/compare/v1.58.1...v1.59.0) (2022-11-14)
+
+
+### Bug Fixes
+
+* update newspack-scripts and CI orb ([#1304](https://github.com/Automattic/newspack-blocks/issues/1304)) ([25852a9](https://github.com/Automattic/newspack-blocks/commit/25852a90f121ac588dfe3b892bad433aedd5a20a))
+
+
+### Features
+
+* display newspack's author custom fields ([#1302](https://github.com/Automattic/newspack-blocks/issues/1302)) ([081f228](https://github.com/Automattic/newspack-blocks/commit/081f228f0655b36c7ab5891a7756a4259435239a)), closes [#1166](https://github.com/Automattic/newspack-blocks/issues/1166)
+
+# [1.59.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v1.59.0-alpha.1...v1.59.0-alpha.2) (2022-11-11)
+
+
+### Bug Fixes
+
+* update newspack-scripts and CI orb ([#1304](https://github.com/Automattic/newspack-blocks/issues/1304)) ([25852a9](https://github.com/Automattic/newspack-blocks/commit/25852a90f121ac588dfe3b892bad433aedd5a20a))
+
+# [1.59.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.58.1...v1.59.0-alpha.1) (2022-11-03)
+
+
+### Features
+
+* display newspack's author custom fields ([#1302](https://github.com/Automattic/newspack-blocks/issues/1302)) ([081f228](https://github.com/Automattic/newspack-blocks/commit/081f228f0655b36c7ab5891a7756a4259435239a)), closes [#1166](https://github.com/Automattic/newspack-blocks/issues/1166)
+
 ## [1.58.1](https://github.com/Automattic/newspack-blocks/compare/v1.58.0...v1.58.1) (2022-10-19)
 
 

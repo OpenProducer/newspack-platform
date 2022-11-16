@@ -27,6 +27,7 @@ import { addQueryArgs } from '@wordpress/url';
  * Internal dependencies
  */
 import { SingleAuthor } from './single-author';
+import { AuthorDisplaySettings } from '../shared/author';
 
 /**
  * External dependencies
@@ -140,10 +141,8 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 	const {
 		authorId,
 		isGuestAuthor,
-		showBio,
 		showSocial,
 		showEmail,
-		showArchiveLink,
 		textSize,
 		showAvatar,
 		avatarAlignment,
@@ -239,34 +238,7 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 							</ButtonGroup>
 						</PanelRow>
 					</BaseControl>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Display biographical info', 'newspack-blocks' ) }
-							checked={ showBio }
-							onChange={ () => setAttributes( { showBio: ! showBio } ) }
-						/>
-					</PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Display social links', 'newspack-blocks' ) }
-							checked={ showSocial }
-							onChange={ () => setAttributes( { showSocial: ! showSocial } ) }
-						/>
-					</PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Display email address', 'newspack-blocks' ) }
-							checked={ showEmail }
-							onChange={ () => setAttributes( { showEmail: ! showEmail } ) }
-						/>
-					</PanelRow>
-					<PanelRow>
-						<ToggleControl
-							label={ __( 'Link to author archive', 'newspack-blocks' ) }
-							checked={ showArchiveLink }
-							onChange={ () => setAttributes( { showArchiveLink: ! showArchiveLink } ) }
-						/>
-					</PanelRow>
+					<AuthorDisplaySettings attributes={ attributes } setAttributes={ setAttributes } />
 				</PanelBody>
 				<PanelBody title={ __( 'Avatar Settings', 'newspack-blocks' ) }>
 					<PanelRow>

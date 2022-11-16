@@ -128,17 +128,17 @@
         },
         {
             "name": "googleads/googleads-php-lib",
-            "version": "57.0.0",
-            "version_normalized": "57.0.0.0",
+            "version": "58.0.0",
+            "version_normalized": "58.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/googleads/googleads-php-lib.git",
-                "reference": "49d897dd63957c93c53673fc4b8f4823e76908ac"
+                "reference": "265fbc46cf7349716d8018d7ae76dc2384f59be3"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/googleads/googleads-php-lib/zipball/49d897dd63957c93c53673fc4b8f4823e76908ac",
-                "reference": "49d897dd63957c93c53673fc4b8f4823e76908ac",
+                "url": "https://api.github.com/repos/googleads/googleads-php-lib/zipball/265fbc46cf7349716d8018d7ae76dc2384f59be3",
+                "reference": "265fbc46cf7349716d8018d7ae76dc2384f59be3",
                 "shasum": ""
             },
             "require": {
@@ -158,7 +158,7 @@
                 "phpunit/phpunit": "^9.5.2",
                 "squizlabs/php_codesniffer": "^2.9 || ^3.2"
             },
-            "time": "2022-05-18T14:21:47+00:00",
+            "time": "2022-08-16T16:49:11+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -180,7 +180,7 @@
             "homepage": "https://github.com/googleads/googleads-php-lib",
             "support": {
                 "issues": "https://github.com/googleads/googleads-php-lib/issues",
-                "source": "https://github.com/googleads/googleads-php-lib/tree/57.0.0"
+                "source": "https://github.com/googleads/googleads-php-lib/tree/58.0.0"
             },
             "install-path": "../googleads/googleads-php-lib"
         },

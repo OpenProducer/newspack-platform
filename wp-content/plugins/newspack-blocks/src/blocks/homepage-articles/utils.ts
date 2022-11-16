@@ -115,7 +115,7 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 					postType,
 					includedPostStatuses,
 			  },
-		value => ! isUndefined( value )
+		( value: unknown ) => ! isUndefined( value )
 	);
 	criteria.excerptLength = excerptLength;
 	criteria.showExcerpt = showExcerpt;

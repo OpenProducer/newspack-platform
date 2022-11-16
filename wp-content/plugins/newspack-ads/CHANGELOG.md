@@ -1,3 +1,59 @@
+# [1.40.0](https://github.com/Automattic/newspack-ads/compare/v1.39.4...v1.40.0) (2022-11-14)
+
+
+### Bug Fixes
+
+* **gam:** validate API session ([#551](https://github.com/Automattic/newspack-ads/issues/551)) ([aa801f9](https://github.com/Automattic/newspack-ads/commit/aa801f9ff17e244e20da0e715cc287d52d07e77f))
+* update CI orb ([06fc5c8](https://github.com/Automattic/newspack-ads/commit/06fc5c851e94eb91e084dc9dce4fb63de800085a))
+* update CI orb newspack-scripts ([49dd15f](https://github.com/Automattic/newspack-ads/commit/49dd15fdaf285c53cef5630e561514bb6741d560))
+
+
+### Features
+
+* **gam:** sync default ad units ([#540](https://github.com/Automattic/newspack-ads/issues/540)) ([c0c5f9c](https://github.com/Automattic/newspack-ads/commit/c0c5f9c8e75c5b0d18be4bcd25b14a92922c1f08))
+
+# [1.40.0-alpha.4](https://github.com/Automattic/newspack-ads/compare/v1.40.0-alpha.3...v1.40.0-alpha.4) (2022-11-11)
+
+
+### Bug Fixes
+
+* **gam:** ensure api requests are made with network code ([#557](https://github.com/Automattic/newspack-ads/issues/557)) ([db3d199](https://github.com/Automattic/newspack-ads/commit/db3d199a932e46230527936733bae1440e64b062))
+
+## [1.39.4](https://github.com/Automattic/newspack-ads/compare/v1.39.3...v1.39.4) (2022-11-11)
+
+
+### Bug Fixes
+
+* **gam:** ensure api requests are made with network code ([#557](https://github.com/Automattic/newspack-ads/issues/557)) ([db3d199](https://github.com/Automattic/newspack-ads/commit/db3d199a932e46230527936733bae1440e64b062))
+
+## [1.39.4-hotfix.1](https://github.com/Automattic/newspack-ads/compare/v1.39.3...v1.39.4-hotfix.1) (2022-11-11)
+
+
+### Bug Fixes
+
+* **gam:** ensure api requests are made with network code ([d4a85a3](https://github.com/Automattic/newspack-ads/commit/d4a85a3f122e95dc184ce1fda3ae1f2c20e176c0))
+
+## [1.39.3](https://github.com/Automattic/newspack-ads/compare/v1.39.2...v1.39.3) (2022-11-11)
+
+
+### Bug Fixes
+
+* **gam:** validate API session ([#556](https://github.com/Automattic/newspack-ads/issues/556)) ([851e558](https://github.com/Automattic/newspack-ads/commit/851e5583f19503543436cb1d1d5f472ba54222b2))
+
+## [1.39.2](https://github.com/Automattic/newspack-ads/compare/v1.39.1...v1.39.2) (2022-10-31)
+
+
+### Bug Fixes
+
+* trigger release ([5d0fd4b](https://github.com/Automattic/newspack-ads/commit/5d0fd4b904dd6b3c029446c5a1e78406dd30dbed))
+
+## [1.39.2-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.39.1...v1.39.2-alpha.1) (2022-10-28)
+
+
+### Bug Fixes
+
+* trigger release ([5d0fd4b](https://github.com/Automattic/newspack-ads/commit/5d0fd4b904dd6b3c029446c5a1e78406dd30dbed))
+
 ## [1.39.1](https://github.com/Automattic/newspack-ads/compare/v1.39.0...v1.39.1) (2022-10-28)
 
 

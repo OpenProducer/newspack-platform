@@ -1,6 +1,10 @@
 import { getCookieValueFromLinker, substituteDynamicValue } from '.';
 
 describe( 'amp-analytics linker handling', () => {
+	beforeEach( () => {
+		window.newspack_popups_view = { cid_cookie_name: 'newspack-cid' };
+	} );
+
 	const url =
 		'https://example.com/lorem/?test=42&ref_newspack_cid=1*ab3otu*cid*T2ptZDdJNU9EYndELWV0TlM1N0FwSGVwNHE3S240VkVVU0o3YlNsaFc2YVVPRXJhSWFhaVlsOTgtQXNsc21Eeg..';
 	const ampAnalyticsConfig = {
@@ -63,6 +67,10 @@ describe( 'amp-analytics linker handling', () => {
 } );
 
 describe( 'dynamic value substitution', () => {
+	beforeEach( () => {
+		window.newspack_popups_view = { cid_cookie_name: 'newspack-cid' };
+	} );
+
 	it( 'replaces client id from cookie', () => {
 		const clientId = 'id-42';
 		global.document.cookie = '';

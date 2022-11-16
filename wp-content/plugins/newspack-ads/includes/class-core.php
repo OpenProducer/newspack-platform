@@ -82,12 +82,7 @@ final class Core {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/utils.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/interface-provider.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/class-provider.php';
-		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-gam-api.php';
-		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-gam-model.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-gam-provider.php';
-		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-gam-scripts.php';
-		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-gam-lazy-load.php';
-		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/gam/class-gam-ad-block-recovery.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/broadstreet/class-broadstreet-provider.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-settings.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-custom-label.php';

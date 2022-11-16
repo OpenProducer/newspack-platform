@@ -40,6 +40,19 @@ export const SingleAuthor = ( { author, attributes } ) => {
 	} else {
 		delete socialLinks.email;
 	}
+	if ( attributes.shownewspack_phone_number && author && author.newspack_phone_number ) {
+		socialLinks.newspack_phone_number = author.newspack_phone_number;
+	} else {
+		delete socialLinks.newspack_phone_number;
+	}
+
+	const employment = [
+		attributes.shownewspack_role && author.newspack_role,
+		attributes.shownewspack_employer && author.newspack_employer,
+	]
+		.filter( Boolean )
+		.join( ', ' );
+	const socialLinksItems = Object.keys( socialLinks );
 
 	return (
 		<div
@@ -68,6 +81,14 @@ export const SingleAuthor = ( { author, attributes } ) => {
 						{ author.name }
 					</MaybeLink>
 				</h3>
+				{ attributes.shownewspack_job_title && author.newspack_job_title && (
+					<p className="wp-block-newspack-blocks-author-profile__job-title">
+						{ author.newspack_job_title }
+					</p>
+				) }
+				{ employment && (
+					<p className="wp-block-newspack-blocks-author-profile__employment">{ employment }</p>
+				) }
 				{ showBio && author.bio && (
 					<p>
 						{ author.bio }{ ' ' }
@@ -78,9 +99,9 @@ export const SingleAuthor = ( { author, attributes } ) => {
 						) }
 					</p>
 				) }
-				{ ( showEmail || showSocial ) && (
+				{ socialLinksItems.length !== 0 && (
 					<ul className="wp-block-newspack-blocks-author-profile__social-links">
-						{ Object.keys( socialLinks ).map( service => (
+						{ socialLinksItems.map( service => (
 							<li key={ service }>
 								<a href="#" className="no-op">
 									{ socialLinks[ service ].svg && (

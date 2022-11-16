@@ -11,9 +11,12 @@
 class Newspack_Blocks {
 
 	/**
-	 * Script handle for the streamlined donate block script.
+	 * Script handles.
 	 */
-	const DONATE_STREAMLINED_SCRIPT_HANDLE = 'newspack-blocks-donate-streamlined';
+	const SCRIPT_HANDLES = [
+		'streamlined'     => 'newspack-blocks-donate-streamlined',
+		'frequency-based' => 'newspack-blocks-donate-frequency-based',
+	];
 
 	/**
 	 * Regex pattern we can use to search for and remove custom SQL statements.
@@ -75,7 +78,7 @@ class Newspack_Blocks {
 	 * @param string $handle The script handle.
 	 */
 	public static function mark_view_script_as_amp_plus_allowed( $tag, $handle ) {
-		if ( self::DONATE_STREAMLINED_SCRIPT_HANDLE === $handle ) {
+		if ( in_array( $handle, array_values( self::SCRIPT_HANDLES ), true ) ) {
 			return str_replace( '<script', '<script data-amp-plus-allowed', $tag );
 		}
 		return $tag;
@@ -226,6 +229,10 @@ class Newspack_Blocks {
 				$localized_data['can_use_cap']    = class_exists( 'CoAuthors_Guest_Authors' );
 				$author_list_controller           = new WP_REST_Newspack_Author_List_Controller();
 				$localized_data['editable_roles'] = $author_list_controller->get_editable_roles();
+			}
+
+			if ( class_exists( '\Newspack\Authors_Custom_Fields' ) ) {
+				$localized_data['author_custom_fields'] = \Newspack\Authors_Custom_Fields::get_custom_fields();
 			}
 
 			wp_localize_script(

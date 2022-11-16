@@ -10,7 +10,6 @@ namespace Newspack;
 use \WP_Error;
 
 use Newspack_Ads\Providers\GAM_Model;
-use Newspack_Ads\Providers\GAM_API;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -57,7 +56,7 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function update_gam_credentials( $credentials ) {
 		return $this->is_configured() ?
-			GAM_API::update_gam_credentials( $credentials ) :
+			GAM_Model::update_service_account_credentials( $credentials ) :
 			$this->unconfigured_error();
 	}
 
@@ -68,7 +67,7 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function remove_gam_credentials() {
 		return $this->is_configured() ?
-			GAM_API::remove_gam_credentials() :
+			GAM_Model::remove_service_account_credentials() :
 			$this->unconfigured_error();
 	}
 
@@ -139,7 +138,7 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function is_gam_connected() {
 		return $this->is_configured() ?
-			GAM_Model::is_gam_connected() :
+			GAM_Model::is_api_connected() :
 			$this->unconfigured_error();
 	}
 
@@ -150,7 +149,7 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function get_gam_connection_status() {
 		return $this->is_configured() ?
-			GAM_Model::get_gam_connection_status() :
+			GAM_Model::get_connection_status() :
 			$this->unconfigured_error();
 	}
 
@@ -161,7 +160,7 @@ class Newspack_Ads_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function get_gam_available_networks() {
 		return $this->is_configured() ?
-			GAM_Model::get_gam_available_networks() :
+			GAM_Model::get_available_networks() :
 			$this->unconfigured_error();
 	}
 

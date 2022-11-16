@@ -36,6 +36,7 @@ import { manageForms } from './form';
 import { manageAnimations } from './animation';
 import { managePositionObservers } from './position-observer';
 import { manageBinds } from './bind';
+import { manageAccess } from './access';
 
 if ( typeof window !== 'undefined' ) {
 	domReady( () => {
@@ -49,5 +50,6 @@ if ( typeof window !== 'undefined' ) {
 		manageAnimations();
 		managePositionObservers();
 		manageBinds();
+		manageAccess();
 	} );
 }

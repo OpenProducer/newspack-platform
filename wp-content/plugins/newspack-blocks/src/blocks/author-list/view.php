@@ -14,6 +14,16 @@ function newspack_blocks_register_author_list() {
 		true
 	);
 
+	if ( class_exists( '\Newspack\Authors_Custom_Fields' ) ) {
+		$author_custom_fields = \Newspack\Authors_Custom_Fields::get_custom_fields();
+		foreach ( $author_custom_fields as $field ) {
+			$block_json['attributes'][ 'show' . $field['name'] ] = [
+				'type'    => 'string',
+				'default' => true,
+			];
+		}
+	}
+
 	register_block_type(
 		'newspack-blocks/' . $block_json['name'],
 		[
@@ -114,7 +124,7 @@ function newspack_blocks_render_block_author_list( $attributes ) {
 					);
 					?>
 					<li class="newspack-blocks__author-list-item">
-						<?php echo wp_kses_post( $author_card ); ?>
+						<?php echo $author_card; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</li>
 				<?php endforeach; ?>
 			</ul>
@@ -155,7 +165,7 @@ function newspack_blocks_render_block_author_list( $attributes ) {
 					</li>
 				<?php endif; ?>
 				<li class="newspack-blocks__author-list-item">
-					<?php echo wp_kses_post( $author_card ); ?>
+					<?php echo $author_card; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				</li>
 			<?php endforeach; ?>
 		</ul>

@@ -13,6 +13,12 @@ use Newspack_Ads\Providers\GAM_Model;
 
 defined( 'ABSPATH' ) || exit;
 
+require_once 'api/class-api.php';
+require_once 'class-gam-model.php';
+require_once 'class-gam-lazy-load.php';
+require_once 'class-gam-scripts.php';
+require_once 'class-gam-ad-block-recovery.php';
+
 /**
  * Google Ad Manager.
  */

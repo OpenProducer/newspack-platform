@@ -378,6 +378,15 @@ class Donations {
 	}
 
 	/**
+	 * Is this frequency a recurring one?
+	 *
+	 * @param string $frequency Frequency.
+	 */
+	public static function is_recurring( $frequency ) {
+		return 'once' !== $frequency;
+	}
+
+	/**
 	 * Create missing donations products.
 	 *
 	 * @param array $args Info that will be used to create the products.
@@ -404,7 +413,7 @@ class Donations {
 		// Child products.
 		foreach ( $child_products_ids as $frequency => $maybe_product_id ) {
 			$price        = $configuration['amounts'][ $frequency ][ $price_tier_index ];
-			$is_recurring = 'once' !== $frequency;
+			$is_recurring = self::is_recurring( $frequency );
 
 			if ( false === $maybe_product_id ) {
 				$child_product = $is_recurring ? new \WC_Product_Subscription() : new \WC_Product_Simple();

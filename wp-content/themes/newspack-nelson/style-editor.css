@@ -612,33 +612,52 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 
 /** === Search === */
-.wp-block-search .wp-block-search__button {
+.wp-block-search__button {
+  background: #555;
+  border: 0;
   border-radius: 5px;
+  color: #fff;
   line-height: 1.8;
   font-family: "Montserrat", "Helvetica", sans-serif;
   font-size: 0.8em;
   font-weight: bold;
   padding: 0.55rem 1rem !important;
 }
-.wp-block-search .wp-block-search__button svg {
+.wp-block-search__button svg {
   height: 32px;
   width: 32px;
 }
-.wp-block-search .wp-block-search__button.has-icon {
+.wp-block-search__button.has-icon {
   padding: 0.3rem 0.5rem !important;
 }
-.wp-block-search.wp-block-search__button-outside .wp-block-search__button {
+
+.wp-block-search input {
+  border-color: #ccc;
+  border-radius: 0;
+  padding: 0.36rem 0.66rem;
+}
+.wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper {
+  border-color: #ccc;
+  padding: 0;
+}
+.wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper input {
   border: 0;
 }
 .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper .wp-block-search__button {
-  padding: 0.25rem 0.5rem !important;
+  margin: 2px;
+  padding: calc(0.76rem - 4px) 1rem;
 }
 .wp-block-search.wp-block-search__button-inside .wp-block-search__inside-wrapper .wp-block-search__button.has-icon {
   padding: 0.125rem 0.25rem !important;
 }
 .wp-block-search.wp-block-search__button-inside .has-icon {
-  background: transparent;
   border: 0;
+}
+.wp-block-search.wp-block-search__button-inside .has-icon:not(.has-background) {
+  background: transparent;
+}
+.wp-block-search.wp-block-search__button-inside .has-icon:not(.has-text-color) {
+  color: #111;
 }
 
 /** === Code === */

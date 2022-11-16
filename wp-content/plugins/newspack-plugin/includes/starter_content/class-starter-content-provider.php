@@ -59,7 +59,13 @@ abstract class Starter_Content_Provider {
 	 */
 	public static function has_created_starter_content() {
 		global $wpdb;
-		$post_ids = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key LIKE '%%%s%%';", self::$starter_post_meta_prefix ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQueryWithPlaceholder
+		$post_ids = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQueryWithPlaceholder
+			$wpdb->prepare(
+				"SELECT post_id FROM $wpdb->postmeta WHERE meta_key LIKE %s",
+				self::$starter_post_meta_prefix . '%'
+			),
+			ARRAY_A
+		);
 		return ! empty( $post_ids );
 	}
 
@@ -69,7 +75,13 @@ abstract class Starter_Content_Provider {
 	public static function remove_starter_content() {
 		global $wpdb;
 
-		$post_ids = $wpdb->get_results( $wpdb->prepare( "SELECT post_id FROM $wpdb->postmeta WHERE meta_key LIKE '%%%s%%';", self::$starter_post_meta_prefix ), ARRAY_A ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQueryWithPlaceholder
+		$post_ids = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.PreparedSQLPlaceholders.LikeWildcardsInQueryWithPlaceholder
+			$wpdb->prepare(
+				"SELECT post_id FROM $wpdb->postmeta WHERE meta_key LIKE %s",
+				self::$starter_post_meta_prefix . '%'
+			),
+			ARRAY_A
+		);
 
 		if ( ! empty( $post_ids ) ) {
 			foreach ( $post_ids as $post_id ) {
@@ -130,4 +142,3 @@ abstract class Starter_Content_Provider {
 		return false;
 	}
 }
-

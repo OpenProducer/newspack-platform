@@ -7,6 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
+require_once dirname( __FILE__ ) . '/../api/campaigns/class-campaign-data-utils.php';
 require_once dirname( __FILE__ ) . '/../api/segmentation/class-segmentation.php';
 
 /**
@@ -84,7 +85,7 @@ final class Newspack_Popups_Segmentation {
 			wp_schedule_event( time(), 'hourly', 'newspack_popups_segmentation_data_prune' );
 		}
 
-		add_action( 'newspack_registered_reader', [ __CLASS__, 'handle_registered_reader' ], 10, 3 );
+		add_action( 'newspack_registered_reader', [ __CLASS__, 'handle_registered_reader' ], 10, 4 );
 	}
 
 	/**
@@ -555,7 +556,7 @@ final class Newspack_Popups_Segmentation {
 			function ( $client_id ) use ( $api, $segment_config ) {
 				return Campaign_Data_Utils::does_reader_match_segment(
 					$segment_config,
-					$api->get_reader( $client_id ),
+					$api->get_readers( $client_id ),
 					$api->get_reader_events( $client_id, Campaign_Data_Utils::get_reader_events_types() )
 				);
 			}
@@ -803,19 +804,31 @@ final class Newspack_Popups_Segmentation {
 	/**
 	 * Handle reader registration.
 	 *
-	 * @param string $email Email address.
-	 * @param bool   $authenticate Whether the user was authenticated.
-	 * @param int    $user_id New user ID.
+	 * @param string       $email Email address.
+	 * @param bool         $authenticate Whether the user was authenticated.
+	 * @param int          $user_id New user ID.
+	 * @param null|WP_User $existing_user If the reader already has an account, the user object.
 	 */
-	public static function handle_registered_reader( $email, $authenticate, $user_id ) {
-		if ( $authenticate ) {
+	public static function handle_registered_reader( $email, $authenticate, $user_id, $existing_user ) {
+		if ( empty( $user_id ) && $existing_user && isset( $existing_user->ID ) ) {
+			$user_id = $existing_user->ID;
+		}
+
+		$action = $existing_user ? 'authenticate' : 'register';
+
+		if ( ! empty( $user_id ) ) {
 			try {
-				require_once dirname( __FILE__ ) . '/../api/classes/class-lightweight-api.php';
-				$api           = new Lightweight_API();
+				$api = \Campaign_Data_Utils::get_api( \wp_create_nonce( 'newspack_campaigns_lightweight_api' ) );
+				if ( ! $api ) {
+					return;
+				}
 				$reader_events = [
 					[
 						'type'    => 'user_account',
 						'context' => $user_id,
+						'value'   => [
+							'action' => $action,
+						],
 					],
 				];
 				$api->save_reader_events( self::get_client_id(), $reader_events );

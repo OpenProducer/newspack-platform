@@ -1,13 +1,25 @@
+/* globals newspack_popups_view */
+
 /**
  * Internal dependencies
  */
-import { shouldPolyfillAMPModule, parseDynamicURL } from './utils';
+import { shouldPolyfillAMPModule, getCookies, setCookie, parseDynamicURL } from './utils';
 import './access.scss';
+
+const setClientIDCookieIfNotSet = () => {
+	const clientIDCookieName = newspack_popups_view.cid_cookie_name;
+	if ( ! getCookies()[ clientIDCookieName ] ) {
+		// If entropy is an issue, https://www.npmjs.com/package/nanoid can be used.
+		const getShortStringId = () => Math.floor( Math.random() * 999999999 ).toString( 36 );
+		setCookie( clientIDCookieName, `${ getShortStringId() }${ getShortStringId() }` );
+	}
+};
 
 export const manageAccess = () => {
 	if ( ! shouldPolyfillAMPModule( 'access' ) ) {
 		return;
 	}
+	setClientIDCookieIfNotSet();
 	const ampAccessScript = document.getElementById( 'amp-access' );
 	if ( ! ampAccessScript ) {
 		return;

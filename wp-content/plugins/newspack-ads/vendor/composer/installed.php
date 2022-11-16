@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => '24ab0ce97d18b7aaa1a23b21abbef6284b7b2ff8',
+        'reference' => 'cd771f8e578960cf9676a39cac6dbd7e83d3950f',
         'name' => 'automattic/newspack-ads',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => '24ab0ce97d18b7aaa1a23b21abbef6284b7b2ff8',
+            'reference' => 'cd771f8e578960cf9676a39cac6dbd7e83d3950f',
             'dev_requirement' => false,
         ),
         'firebase/php-jwt' => array(
@@ -38,12 +38,12 @@
             'dev_requirement' => false,
         ),
         'googleads/googleads-php-lib' => array(
-            'pretty_version' => '57.0.0',
-            'version' => '57.0.0.0',
+            'pretty_version' => '58.0.0',
+            'version' => '58.0.0.0',
             'type' => 'library',
             'install_path' => __DIR__ . '/../googleads/googleads-php-lib',
             'aliases' => array(),
-            'reference' => '49d897dd63957c93c53673fc4b8f4823e76908ac',
+            'reference' => '265fbc46cf7349716d8018d7ae76dc2384f59be3',
             'dev_requirement' => false,
         ),
         'guzzlehttp/guzzle' => array(

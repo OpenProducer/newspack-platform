@@ -331,22 +331,6 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 							return $acc;
 						}
 
-						if ( in_array( 'login', $fields, true ) ) {
-							$guest_author_data['login'] = $guest_author->user_login;
-						}
-						if ( in_array( 'name', $fields, true ) ) {
-							$guest_author_data['name'] = $guest_author->display_name;
-						}
-						if ( in_array( 'bio', $fields, true ) ) {
-							$guest_author_data['bio'] = get_post_meta( $guest_author->ID, 'cap-description', true );
-						}
-						if ( in_array( 'email', $fields, true ) ) {
-							$email_data = $this->get_email( $guest_author->ID );
-
-							if ( $email_data ) {
-								$guest_author_data['email'] = $email_data;
-							}
-						}
 						if ( in_array( 'avatar', $fields, true ) && function_exists( 'coauthors_get_avatar' ) ) {
 							$avatar     = coauthors_get_avatar( $guest_author, 256, $options['avatar_hide_default'] ? 'blank' : '' );
 							$is_default = false !== strpos( $avatar, 'avatar-default' ) || false !== strpos( $avatar, 'd=blank' );
@@ -355,14 +339,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 								$guest_author_data['avatar'] = $avatar;
 							}
 						}
-						if ( in_array( 'url', $fields, true ) ) {
-							$guest_author_data['url'] = esc_urL(
-								get_site_urL( null, '?author_name=' . get_post_meta( $guest_author->ID, 'cap-user_login', true ) )
-							);
-						}
-						if ( in_array( 'social', $fields, true ) ) {
-							$guest_author_data['social'] = $this->get_social( $guest_author->ID );
-						}
+						$guest_author_data = self::fill_guest_author_data( $guest_author_data, $guest_author, $fields );
 
 						$acc[] = $guest_author_data;
 					}
@@ -390,22 +367,6 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 							'last_name'  => ! empty( $last_name ) && false !== strpos( $fallback_name, $last_name ) ? $last_name : $fallback_name,
 						];
 
-						if ( in_array( 'login', $fields, true ) ) {
-							$user_data['login'] = $user->data->user_login;
-						}
-						if ( in_array( 'name', $fields, true ) ) {
-							$user_data['name'] = $user->data->display_name;
-						}
-						if ( in_array( 'bio', $fields, true ) ) {
-							$user_data['bio'] = get_the_author_meta( 'description', $user->data->ID );
-						}
-						if ( in_array( 'email', $fields, true ) ) {
-							$email_data = $this->get_email( $user->data->ID, false, $user->data->user_email );
-
-							if ( $email_data ) {
-								$user_data['email'] = $email_data;
-							}
-						}
 						if ( in_array( 'avatar', $fields, true ) ) {
 							$avatar     = get_avatar( $user->data->ID, 256, $options['avatar_hide_default'] ? 'blank' : '' );
 							$is_default = false !== strpos( $avatar, 'avatar-default' ) || false !== strpos( $avatar, 'd=blank' );
@@ -414,12 +375,8 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 								$user_data['avatar'] = $avatar;
 							}
 						}
-						if ( in_array( 'url', $fields, true ) ) {
-							$user_data['url'] = esc_urL( get_author_posts_url( $user->data->ID ) );
-						}
-						if ( in_array( 'social', $fields, true ) ) {
-							$user_data['social'] = $this->get_social( $user->data->ID );
-						}
+
+						$user_data = self::fill_user_data( $user_data, $user, $fields );
 
 						$acc[] = $user_data;
 					}

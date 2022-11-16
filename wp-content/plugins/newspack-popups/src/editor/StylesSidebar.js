@@ -5,11 +5,11 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { Button } from '@wordpress/components';
 
 const StylesSidebar = props => {
-	const { onMetaFieldChange, hide_border, large_border } = props;
+	const { onMetaFieldChange, hide_border, large_border, isOverlay } = props;
 
 	return (
 		<div className="newspack-popups-style-selector">
@@ -27,7 +27,11 @@ const StylesSidebar = props => {
 				onClick={ () => onMetaFieldChange( { hide_border: true, large_border: false } ) }
 				aria-current={ hide_border }
 			>
-				{ __( 'Hide Border', 'newspack-popups' ) }
+				{ sprintf(
+					// Translators: %s is "padding" if the prompt is inline, or "border" if not
+					__( 'Hide %s', 'newspack-popups' ),
+					isOverlay ? __( 'Padding', 'newspack-popups' ) : __( 'Border', 'newspack-popups' )
+				) }
 			</Button>
 			<Button
 				variant={ large_border ? 'primary' : 'secondary' }
@@ -35,7 +39,11 @@ const StylesSidebar = props => {
 				onClick={ () => onMetaFieldChange( { hide_border: false, large_border: true } ) }
 				aria-current={ large_border }
 			>
-				{ __( 'Large Border', 'newspack-popups' ) }
+				{ sprintf(
+					// Translators: %s is "padding" if the prompt is inline, or "border" if not
+					__( 'Large %s', 'newspack-popups' ),
+					isOverlay ? __( 'Padding', 'newspack-popups' ) : __( 'Border', 'newspack-popups' )
+				) }
 			</Button>
 		</div>
 	);

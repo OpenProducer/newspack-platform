@@ -14,7 +14,7 @@
 		margin-bottom: 0.5em;
 	}
 
-	p {
+	p:not( &__employment ) {
 		font-size: 1em !important;
 	}
 
@@ -61,6 +61,14 @@
 		}
 	}
 
+	&__job-title,
+	&__employment {
+		margin-top: 0;
+		margin-bottom: 0;
+	}
+	&__employment {
+		font-size: 0.8em !important;
+	}
 	&__social-links {
 		display: flex;
 		flex-wrap: wrap;

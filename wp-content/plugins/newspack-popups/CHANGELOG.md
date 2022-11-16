@@ -1,3 +1,35 @@
+# [2.8.0](https://github.com/Automattic/newspack-popups/compare/v2.7.2...v2.8.0) (2022-11-14)
+
+
+### Bug Fixes
+
+* clarify padding vs. border styles in overlay vs. inline ([#998](https://github.com/Automattic/newspack-popups/issues/998)) ([7c86755](https://github.com/Automattic/newspack-popups/commit/7c8675577c7c6a918e21b0a85d1414b6196a2018))
+
+
+### Features
+
+* polyfill amp-access script ([4c41745](https://github.com/Automattic/newspack-popups/commit/4c417457df7023fa60c030b8de86f25610f5e7b1)), closes [#995](https://github.com/Automattic/newspack-popups/issues/995) [#193](https://github.com/Automattic/newspack-popups/issues/193) [#880](https://github.com/Automattic/newspack-popups/issues/880) [#749](https://github.com/Automattic/newspack-popups/issues/749) [#170](https://github.com/Automattic/newspack-popups/issues/170) [#569](https://github.com/Automattic/newspack-popups/issues/569)
+* reconcile different reader sessions ([#978](https://github.com/Automattic/newspack-popups/issues/978)) ([38a486d](https://github.com/Automattic/newspack-popups/commit/38a486d658a8bd2d45e59e4a0a2c1a623bd7364e))
+
+# [2.8.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.8.0-alpha.1...v2.8.0-alpha.2) (2022-11-11)
+
+
+### Features
+
+* polyfill amp-access script ([4c41745](https://github.com/Automattic/newspack-popups/commit/4c417457df7023fa60c030b8de86f25610f5e7b1)), closes [#995](https://github.com/Automattic/newspack-popups/issues/995) [#193](https://github.com/Automattic/newspack-popups/issues/193) [#880](https://github.com/Automattic/newspack-popups/issues/880) [#749](https://github.com/Automattic/newspack-popups/issues/749) [#170](https://github.com/Automattic/newspack-popups/issues/170) [#569](https://github.com/Automattic/newspack-popups/issues/569)
+
+# [2.8.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.7.2...v2.8.0-alpha.1) (2022-11-03)
+
+
+### Bug Fixes
+
+* clarify padding vs. border styles in overlay vs. inline ([#998](https://github.com/Automattic/newspack-popups/issues/998)) ([7c86755](https://github.com/Automattic/newspack-popups/commit/7c8675577c7c6a918e21b0a85d1414b6196a2018))
+
+
+### Features
+
+* reconcile different reader sessions ([#978](https://github.com/Automattic/newspack-popups/issues/978)) ([38a486d](https://github.com/Automattic/newspack-popups/commit/38a486d658a8bd2d45e59e4a0a2c1a623bd7364e))
+
 ## [2.7.2](https://github.com/Automattic/newspack-popups/compare/v2.7.1...v2.7.2) (2022-10-25)
 
 

@@ -22,6 +22,15 @@ export { name };
 
 export const title = __( 'Author Profile', 'newspack-blocks' );
 
+// Add Newspack author custom fields to the block attributes.
+const authorCustomFields = window.newspack_blocks_data?.author_custom_fields || [];
+authorCustomFields.forEach( field => {
+	attributes[ `show${ field.name }` ] = {
+		type: 'boolean',
+		default: true,
+	};
+} );
+
 export const settings = {
 	title,
 	icon: {

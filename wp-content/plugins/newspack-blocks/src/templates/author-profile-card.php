@@ -23,6 +23,18 @@ call_user_func(
 		if ( $attributes['showEmail'] && ! empty( $author['email'] ) ) {
 			$social_links['email'] = $author['email'];
 		}
+		if ( $attributes['shownewspack_phone_number'] && ! empty( $author['newspack_phone_number'] ) ) {
+			$social_links['newspack_phone_number'] = $author['newspack_phone_number'];
+		}
+
+		$employment_values = [];
+		if ( $attributes['shownewspack_role'] && ! empty( $author['newspack_role'] ) ) {
+			$employment_values[] = $author['newspack_role'];
+		}
+		if ( $attributes['shownewspack_employer'] && ! empty( $author['newspack_employer'] ) ) {
+			$employment_values[] = $author['newspack_employer'];
+		}
+		$employment = implode( ', ', $employment_values );
 
 		$extra_classes = [
 			'text-size-' . $attributes['textSize'],
@@ -56,6 +68,17 @@ call_user_func(
 					<?php endif; ?>
 				</h3>
 
+				<?php if ( $attributes['shownewspack_job_title'] && ! empty( $author['newspack_job_title'] ) ) : ?>
+					<p class="wp-block-newspack-blocks-author-profile__job-title">
+						<?php echo esc_html( $author['newspack_job_title'] ); ?>
+					</p>
+				<?php endif; ?>
+				<?php if ( ! empty( $employment ) ) : ?>
+					<p class="wp-block-newspack-blocks-author-profile__employment">
+						<?php echo esc_html( $employment ); ?>
+					</p>
+				<?php endif; ?>
+
 				<?php if ( $attributes['showBio'] && ! empty( $author['bio'] ) ) : ?>
 					<?php
 					$bio = $author['bio'];
@@ -73,7 +96,7 @@ call_user_func(
 					?>
 				<?php endif; ?>
 
-				<?php if ( $attributes['showEmail'] || $attributes['showSocial'] ) : ?>
+				<?php if ( ! empty( $social_links ) ) : ?>
 					<ul class="wp-block-newspack-blocks-author-profile__social-links">
 						<?php foreach ( $social_links as $service => $social_data ) : ?>
 							<li>

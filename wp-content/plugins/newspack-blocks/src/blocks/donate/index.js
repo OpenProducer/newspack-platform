@@ -15,8 +15,8 @@ import metadata from './block.json';
 /**
  * Style dependencies - will load in editor
  */
-import './editor.scss';
-import './view.scss';
+import './styles/editor.scss';
+import './styles/view.scss';
 
 const { name, attributes, category, supports } = metadata;
 

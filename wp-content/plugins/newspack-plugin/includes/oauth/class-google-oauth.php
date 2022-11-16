@@ -23,7 +23,7 @@ class Google_OAuth {
 
 	const REQUIRED_SCOPES = [
 		'https://www.googleapis.com/auth/userinfo.email', // User's email address.
-		'https://www.googleapis.com/auth/dfp', // Google Ad Manager.
+		'https://www.googleapis.com/auth/admanager',
 		'https://www.googleapis.com/auth/analytics',
 		'https://www.googleapis.com/auth/analytics.edit',
 	];
@@ -336,8 +336,15 @@ class Google_OAuth {
 		if ( 200 === wp_remote_retrieve_response_code( $token_info_response ) ) {
 			$token_info     = json_decode( wp_remote_retrieve_body( $token_info_response ) );
 			$granted_scopes = explode( ' ', $token_info->scope );
+			/** If granted scope is 'dfp', interpret as 'admanager'.  */
+			foreach ( $granted_scopes as &$scope ) {
+				if ( 'https://www.googleapis.com/auth/dfp' === $scope ) {
+					$scope = 'https://www.googleapis.com/auth/admanager';
+				}
+			}
 			$missing_scopes = array_diff( $required_scopes, $granted_scopes );
 			if ( 0 < count( $missing_scopes ) ) {
+				Logger::log( 'OAuth token validation errored with missing scopes: ' . implode( ', ', $missing_scopes ) . '. Granted scopes: ' . $token_info->scope );
 				return new \WP_Error( 'newspack_google_oauth', __( 'Newspack can’t access all necessary data because you haven’t granted all permissions requested during setup. Please reconnect your Google account.', 'newspack' ) );
 			}
 
