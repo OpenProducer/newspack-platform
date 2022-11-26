@@ -1,3 +1,20 @@
+## [1.54.4](https://github.com/Automattic/newspack-newsletters/compare/v1.54.3...v1.54.4) (2022-11-22)
+
+
+### Bug Fixes
+
+* avoid nested mj-text elements ([8ec5cb8](https://github.com/Automattic/newspack-newsletters/commit/8ec5cb89d4b24b0737455bde5bd8110d8772dd65))
+* avoid nesting mjml elements inside mj-text ([5b5b80c](https://github.com/Automattic/newspack-newsletters/commit/5b5b80c55aede86ec55c8f046520bd38997d862f))
+* group blocks ([b62bd7e](https://github.com/Automattic/newspack-newsletters/commit/b62bd7efd76793d761b9a897367f22237e102244))
+* nested list items and quote blocks in email ([860555d](https://github.com/Automattic/newspack-newsletters/commit/860555d3eccc4dac2eabb30ece77b48c0509d754))
+
+## [1.54.3](https://github.com/Automattic/newspack-newsletters/compare/v1.54.2...v1.54.3) (2022-11-16)
+
+
+### Bug Fixes
+
+* handle exception on reader registration ([#1020](https://github.com/Automattic/newspack-newsletters/issues/1020)) ([a8a5b0f](https://github.com/Automattic/newspack-newsletters/commit/a8a5b0fdc1e93554d75c54ef78add1666431c590))
+
 ## [1.54.2](https://github.com/Automattic/newspack-newsletters/compare/v1.54.1...v1.54.2) (2022-11-04)
 
 

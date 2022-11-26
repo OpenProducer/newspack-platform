@@ -466,13 +466,18 @@ class Newspack_Newsletters_Subscription {
 			return;
 		}
 		// Adding is actually upserting, so no need to check if the hook is called for an existing user.
-		self::add_contact(
-			[
-				'email'    => $email,
-				'metadata' => $metadata,
-			],
-			$lists
-		);
+		try {
+			self::add_contact(
+				[
+					'email'    => $email,
+					'metadata' => $metadata,
+				],
+				$lists
+			);
+		} catch ( \Exception $e ) {
+			// Avoid breaking the registration process.
+			Newspack_Newsletters_Logger::log( 'Error adding contact: ' . $e->getMessage() );
+		}
 	}
 
 	/**
