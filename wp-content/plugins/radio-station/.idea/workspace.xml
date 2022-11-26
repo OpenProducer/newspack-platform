@@ -1,0 +1,71 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ChangeListManager">
+    <list default="true" id="9c57d3f0-e9db-471c-bef9-1f8f51a895ec" name="Default Changelist" comment="" />
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ComposerSettings">
+    <execution>
+      <executable />
+    </execution>
+  </component>
+  <component name="PhpWorkspaceProjectConfiguration">
+    <include_path>
+      <path value="C:/!WP/InstantWP_4.5/iwpserver/htdocs/wordpress" />
+    </include_path>
+  </component>
+  <component name="ProjectId" id="2BsJZ5XXJG3NAgUBzN6c74lrXIr" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showExcludedFiles" value="true" />
+    <option name="showLibraryContents" value="true" />
+    <option name="showMembers" value="true" />
+  </component>
+  <component name="PropertiesComponent">
+    <property name="RunOnceActivity.ShowReadmeOnStart" value="true" />
+    <property name="WebServerToolWindowFactoryState" value="false" />
+    <property name="run.code.analysis.last.selected.profile" value="pProject Default" />
+  </component>
+  <component name="SvnConfiguration">
+    <configuration />
+  </component>
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="9c57d3f0-e9db-471c-bef9-1f8f51a895ec" name="Default Changelist" comment="" />
+      <created>1657688918584</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1657688918584</updated>
+      <workItem from="1657688961259" duration="3311000" />
+      <workItem from="1657932585003" duration="42000" />
+    </task>
+    <servers />
+  </component>
+  <component name="TypeScriptGeneratedFilesManager">
+    <option name="version" value="1" />
+  </component>
+  <component name="WindowStateProjectService">
+    <state x="458" y="0" key="#PHP" timestamp="1657689794884">
+      <screen x="218" y="0" width="1062" height="720" />
+    </state>
+    <state x="458" y="0" key="#PHP/218.0.1062.720@218.0.1062.720" timestamp="1657689794884" />
+    <state x="588" y="285" key="#WordPress" timestamp="1657689783597">
+      <screen x="218" y="0" width="1062" height="720" />
+    </state>
+    <state x="588" y="285" key="#WordPress/218.0.1062.720@218.0.1062.720" timestamp="1657689783597" />
+    <state x="508" y="230" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1" timestamp="1657697287447">
+      <screen x="218" y="0" width="1062" height="720" />
+    </state>
+    <state x="508" y="230" key="ANALYSIS_DLG_com.intellij.analysis.BaseAnalysisAction$1/218.0.1062.720@218.0.1062.720" timestamp="1657697287447" />
+    <state x="445" y="183" key="com.intellij.ide.util.TipDialog" timestamp="1657932624842">
+      <screen x="218" y="0" width="1062" height="720" />
+    </state>
+    <state x="445" y="183" key="com.intellij.ide.util.TipDialog/218.0.1062.720@218.0.1062.720" timestamp="1657932624842" />
+  </component>
+  <component name="WordPressConfiguration" enabled="true">
+    <wordpressPath>C:\!WP\InstantWP_4.5\iwpserver\htdocs\wordpress</wordpressPath>
+  </component>
+</project>

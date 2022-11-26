@@ -62,7 +62,11 @@ final class Newspack_Popups_Newsletters {
 		if ( ! \Newspack\Reader_Activation::is_user_reader( $user ) ) {
 			return;
 		}
-		self::fetch_reader_data_from_esp( $user->user_email );
+		try {
+			self::fetch_reader_data_from_esp( $user->user_email );
+		} catch ( \Exception $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
+			// Do nothing.
+		}
 	}
 
 	/**
