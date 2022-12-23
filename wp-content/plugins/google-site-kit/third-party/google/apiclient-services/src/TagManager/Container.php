@@ -32,6 +32,8 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string[]
      */
     public $domainName;
+    protected $featuresType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerFeatures::class;
+    protected $featuresDataType = '';
     /**
      * @var string
      */
@@ -53,9 +55,17 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
      */
     public $publicId;
     /**
+     * @var string[]
+     */
+    public $tagIds;
+    /**
      * @var string
      */
     public $tagManagerUrl;
+    /**
+     * @var string[]
+     */
+    public $taggingServerUrls;
     /**
      * @var string[]
      */
@@ -101,6 +111,20 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getDomainName()
     {
         return $this->domainName;
+    }
+    /**
+     * @param ContainerFeatures
+     */
+    public function setFeatures(\Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerFeatures $features)
+    {
+        $this->features = $features;
+    }
+    /**
+     * @return ContainerFeatures
+     */
+    public function getFeatures()
+    {
+        return $this->features;
     }
     /**
      * @param string
@@ -173,6 +197,20 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->publicId;
     }
     /**
+     * @param string[]
+     */
+    public function setTagIds($tagIds)
+    {
+        $this->tagIds = $tagIds;
+    }
+    /**
+     * @return string[]
+     */
+    public function getTagIds()
+    {
+        return $this->tagIds;
+    }
+    /**
      * @param string
      */
     public function setTagManagerUrl($tagManagerUrl)
@@ -185,6 +223,20 @@ class Container extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getTagManagerUrl()
     {
         return $this->tagManagerUrl;
+    }
+    /**
+     * @param string[]
+     */
+    public function setTaggingServerUrls($taggingServerUrls)
+    {
+        $this->taggingServerUrls = $taggingServerUrls;
+    }
+    /**
+     * @return string[]
+     */
+    public function getTaggingServerUrls()
+    {
+        return $this->taggingServerUrls;
     }
     /**
      * @param string[]

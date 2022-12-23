@@ -255,6 +255,12 @@ body.admin-color-sunrise {
 @media (min-width: 601px) {
   .woocommerce-customer-effort-score__selection .components-base-control__field {
     flex-direction: row;
+    justify-content: center;
+  }
+}
+@media (min-width: 601px) {
+  .woocommerce-customer-effort-score__selection .components-base-control__field .components-h-stack {
+    flex-direction: row;
   }
 }
 .woocommerce-customer-effort-score__selection .components-radio-control__option:not(:last-child) {

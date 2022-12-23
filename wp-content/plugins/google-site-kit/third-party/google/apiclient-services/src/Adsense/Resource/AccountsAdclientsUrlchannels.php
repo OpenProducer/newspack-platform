@@ -18,6 +18,7 @@
 namespace Google\Site_Kit_Dependencies\Google\Service\Adsense\Resource;
 
 use Google\Site_Kit_Dependencies\Google\Service\Adsense\ListUrlChannelsResponse;
+use Google\Site_Kit_Dependencies\Google\Service\Adsense\UrlChannel;
 /**
  * The "urlchannels" collection of methods.
  * Typical usage is:
@@ -28,6 +29,20 @@ use Google\Site_Kit_Dependencies\Google\Service\Adsense\ListUrlChannelsResponse;
  */
 class AccountsAdclientsUrlchannels extends \Google\Site_Kit_Dependencies\Google\Service\Resource
 {
+    /**
+     * Gets information about the selected url channel. (urlchannels.get)
+     *
+     * @param string $name Required. The name of the url channel to retrieve.
+     * Format: accounts/{account}/adclients/{adclient}/urlchannels/{urlchannel}
+     * @param array $optParams Optional parameters.
+     * @return UrlChannel
+     */
+    public function get($name, $optParams = [])
+    {
+        $params = ['name' => $name];
+        $params = \array_merge($params, $optParams);
+        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\UrlChannel::class);
+    }
     /**
      * Lists active url channels. (urlchannels.listAccountsAdclientsUrlchannels)
      *

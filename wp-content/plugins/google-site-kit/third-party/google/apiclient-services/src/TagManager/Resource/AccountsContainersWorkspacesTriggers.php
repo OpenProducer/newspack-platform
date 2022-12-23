@@ -33,7 +33,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
     /**
      * Creates a GTM Trigger. (triggers.create)
      *
-     * @param string $parent GTM Workspaces's API relative path. Example:
+     * @param string $parent GTM Workspace's API relative path. Example:
      * accounts/{account_id}/containers/{container_id}/workspaces/{workspace_id}
      * @param Trigger $postBody
      * @param array $optParams Optional parameters.
@@ -78,7 +78,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * Lists all GTM Triggers of a Container.
      * (triggers.listAccountsContainersWorkspacesTriggers)
      *
-     * @param string $parent GTM Workspaces's API relative path. Example:
+     * @param string $parent GTM Workspace's API relative path. Example:
      * accounts/{account_id}/containers/{container_id}/workspaces/{workspace_id}
      * @param array $optParams Optional parameters.
      *

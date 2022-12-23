@@ -17,7 +17,7 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListAccountSummariesResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListAccountSummariesResponse;
 /**
  * The "accountSummaries" collection of methods.
  * Typical usage is:
@@ -42,13 +42,13 @@ class AccountSummaries extends \Google\Site_Kit_Dependencies\Google\Service\Reso
      * `ListAccountSummaries` call. Provide this to retrieve the subsequent page.
      * When paginating, all other parameters provided to `ListAccountSummaries` must
      * match the call that provided the page token.
-     * @return GoogleAnalyticsAdminV1alphaListAccountSummariesResponse
+     * @return GoogleAnalyticsAdminV1betaListAccountSummariesResponse
      */
     public function listAccountSummaries($optParams = [])
     {
         $params = [];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListAccountSummariesResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListAccountSummariesResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

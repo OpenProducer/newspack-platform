@@ -17,8 +17,8 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListMeasurementProtocolSecretsResponse;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListMeasurementProtocolSecretsResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 /**
  * The "measurementProtocolSecrets" collection of methods.
@@ -35,15 +35,15 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      *
      * @param string $parent Required. The parent resource where this secret will be
      * created. Format: properties/{property}/dataStreams/{dataStream}
-     * @param GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody
+     * @param GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret
+     * @return GoogleAnalyticsAdminV1betaMeasurementProtocolSecret
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody, $optParams = [])
+    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
+        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret::class);
     }
     /**
      * Deletes target MeasurementProtocolSecret. (measurementProtocolSecrets.delete)
@@ -68,13 +68,13 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * lookup. Format: properties/{property}/dataStreams/{dataStream}/measurementPro
      * tocolSecrets/{measurementProtocolSecret}
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret
+     * @return GoogleAnalyticsAdminV1betaMeasurementProtocolSecret
      */
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
+        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret::class);
     }
     /**
      * Returns child MeasurementProtocolSecrets under the specified parent Property.
@@ -94,13 +94,13 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * subsequent page. When paginating, all other parameters provided to
      * `ListMeasurementProtocolSecrets` must match the call that provided the page
      * token.
-     * @return GoogleAnalyticsAdminV1alphaListMeasurementProtocolSecretsResponse
+     * @return GoogleAnalyticsAdminV1betaListMeasurementProtocolSecretsResponse
      */
     public function listPropertiesDataStreamsMeasurementProtocolSecrets($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListMeasurementProtocolSecretsResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListMeasurementProtocolSecretsResponse::class);
     }
     /**
      * Updates a measurement protocol secret. (measurementProtocolSecrets.patch)
@@ -108,18 +108,18 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * @param string $name Output only. Resource name of this secret. This secret
      * may be a child of any type of stream. Format: properties/{property}/dataStrea
      * ms/{dataStream}/measurementProtocolSecrets/{measurementProtocolSecret}
-     * @param GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody
+     * @param GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody
      * @param array $optParams Optional parameters.
      *
      * @opt_param string updateMask The list of fields to be updated. Omitted fields
      * will not be updated.
-     * @return GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret
+     * @return GoogleAnalyticsAdminV1betaMeasurementProtocolSecret
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret $postBody, $optParams = [])
+    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaMeasurementProtocolSecret::class);
+        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

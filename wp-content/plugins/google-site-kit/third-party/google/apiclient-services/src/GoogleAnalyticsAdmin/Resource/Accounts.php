@@ -17,13 +17,13 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAccount;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataSharingSettings;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListAccountsResponse;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProvisionAccountTicketRequest;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProvisionAccountTicketResponse;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsRequest;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataSharingSettings;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListAccountsResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsResponse;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 /**
  * The "accounts" collection of methods.
@@ -61,13 +61,13 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param string $name Required. The name of the account to lookup. Format:
      * accounts/{account} Example: "accounts/100"
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaAccount
+     * @return GoogleAnalyticsAdminV1betaAccount
      */
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAccount::class);
+        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount::class);
     }
     /**
      * Get data sharing settings on an account. Data sharing settings are
@@ -77,13 +77,13 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * accounts/{account}/dataSharingSettings Example:
      * "accounts/1000/dataSharingSettings"
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaDataSharingSettings
+     * @return GoogleAnalyticsAdminV1betaDataSharingSettings
      */
     public function getDataSharingSettings($name, $optParams = [])
     {
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
-        return $this->call('getDataSharingSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataSharingSettings::class);
+        return $this->call('getDataSharingSettings', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataSharingSettings::class);
     }
     /**
      * Returns all accounts accessible by the caller. Note that these accounts might
@@ -104,46 +104,46 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @opt_param bool showDeleted Whether to include soft-deleted (ie: "trashed")
      * Accounts in the results. Accounts can be inspected to determine whether they
      * are deleted or not.
-     * @return GoogleAnalyticsAdminV1alphaListAccountsResponse
+     * @return GoogleAnalyticsAdminV1betaListAccountsResponse
      */
     public function listAccounts($optParams = [])
     {
         $params = [];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListAccountsResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListAccountsResponse::class);
     }
     /**
      * Updates an account. (accounts.patch)
      *
      * @param string $name Output only. Resource name of this account. Format:
      * accounts/{account} Example: "accounts/100"
-     * @param GoogleAnalyticsAdminV1alphaAccount $postBody
+     * @param GoogleAnalyticsAdminV1betaAccount $postBody
      * @param array $optParams Optional parameters.
      *
      * @opt_param string updateMask Required. The list of fields to be updated.
      * Field names must be in snake case (e.g., "field_to_update"). Omitted fields
      * will not be updated. To replace the entire entity, use one path with the
      * string "*" to match all fields.
-     * @return GoogleAnalyticsAdminV1alphaAccount
+     * @return GoogleAnalyticsAdminV1betaAccount
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAccount $postBody, $optParams = [])
+    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAccount::class);
+        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaAccount::class);
     }
     /**
      * Requests a ticket for creating an account. (accounts.provisionAccountTicket)
      *
-     * @param GoogleAnalyticsAdminV1alphaProvisionAccountTicketRequest $postBody
+     * @param GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest $postBody
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaProvisionAccountTicketResponse
+     * @return GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse
      */
-    public function provisionAccountTicket(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProvisionAccountTicketRequest $postBody, $optParams = [])
+    public function provisionAccountTicket(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProvisionAccountTicketRequest $postBody, $optParams = [])
     {
         $params = ['postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('provisionAccountTicket', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProvisionAccountTicketResponse::class);
+        return $this->call('provisionAccountTicket', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaProvisionAccountTicketResponse::class);
     }
     /**
      * Searches through all changes to an account or its children given the
@@ -151,15 +151,15 @@ class Accounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      *
      * @param string $account Required. The account resource for which to return
      * change history resources.
-     * @param GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsRequest $postBody
+     * @param GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest $postBody
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse
+     * @return GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsResponse
      */
-    public function searchChangeHistoryEvents($account, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsRequest $postBody, $optParams = [])
+    public function searchChangeHistoryEvents($account, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsRequest $postBody, $optParams = [])
     {
         $params = ['account' => $account, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('searchChangeHistoryEvents', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaSearchChangeHistoryEventsResponse::class);
+        return $this->call('searchChangeHistoryEvents', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaSearchChangeHistoryEventsResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

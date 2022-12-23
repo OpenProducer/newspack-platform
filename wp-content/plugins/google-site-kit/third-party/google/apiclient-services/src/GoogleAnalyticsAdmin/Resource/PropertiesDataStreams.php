@@ -17,9 +17,8 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGlobalSiteTag;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListDataStreamsResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListDataStreamsResponse;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 /**
  * The "dataStreams" collection of methods.
@@ -35,15 +34,15 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * Creates a DataStream. (dataStreams.create)
      *
      * @param string $parent Required. Example format: properties/1234
-     * @param GoogleAnalyticsAdminV1alphaDataStream $postBody
+     * @param GoogleAnalyticsAdminV1betaDataStream $postBody
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaDataStream
+     * @return GoogleAnalyticsAdminV1betaDataStream
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream $postBody, $optParams = [])
+    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream::class);
+        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class);
     }
     /**
      * Deletes a DataStream on a property. (dataStreams.delete)
@@ -65,30 +64,13 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @param string $name Required. The name of the DataStream to get. Example
      * format: properties/1234/dataStreams/5678
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaDataStream
+     * @return GoogleAnalyticsAdminV1betaDataStream
      */
     public function get($name, $optParams = [])
     {
         $params = ['name' => $name];
         $params = \array_merge($params, $optParams);
-        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream::class);
-    }
-    /**
-     * Returns the Site Tag for the specified web stream. Site Tags are immutable
-     * singletons. (dataStreams.getGlobalSiteTag)
-     *
-     * @param string $name Required. The name of the site tag to lookup. Note that
-     * site tags are singletons and do not have unique IDs. Format:
-     * properties/{property_id}/dataStreams/{stream_id}/globalSiteTag Example:
-     * "properties/123/dataStreams/456/globalSiteTag"
-     * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaGlobalSiteTag
-     */
-    public function getGlobalSiteTag($name, $optParams = [])
-    {
-        $params = ['name' => $name];
-        $params = \array_merge($params, $optParams);
-        return $this->call('getGlobalSiteTag', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGlobalSiteTag::class);
+        return $this->call('get', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class);
     }
     /**
      * Lists DataStreams on a property. (dataStreams.listPropertiesDataStreams)
@@ -103,13 +85,13 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * `ListDataStreams` call. Provide this to retrieve the subsequent page. When
      * paginating, all other parameters provided to `ListDataStreams` must match the
      * call that provided the page token.
-     * @return GoogleAnalyticsAdminV1alphaListDataStreamsResponse
+     * @return GoogleAnalyticsAdminV1betaListDataStreamsResponse
      */
     public function listPropertiesDataStreams($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListDataStreamsResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListDataStreamsResponse::class);
     }
     /**
      * Updates a DataStream on a property. (dataStreams.patch)
@@ -117,19 +99,19 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @param string $name Output only. Resource name of this Data Stream. Format:
      * properties/{property_id}/dataStreams/{stream_id} Example:
      * "properties/1000/dataStreams/2000"
-     * @param GoogleAnalyticsAdminV1alphaDataStream $postBody
+     * @param GoogleAnalyticsAdminV1betaDataStream $postBody
      * @param array $optParams Optional parameters.
      *
      * @opt_param string updateMask Required. The list of fields to be updated.
      * Omitted fields will not be updated. To replace the entire entity, use one
      * path with the string "*" to match all fields.
-     * @return GoogleAnalyticsAdminV1alphaDataStream
+     * @return GoogleAnalyticsAdminV1betaDataStream
      */
-    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream $postBody, $optParams = [])
+    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
     {
         $params = ['name' => $name, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDataStream::class);
+        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

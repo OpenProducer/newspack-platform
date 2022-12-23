@@ -2,14 +2,127 @@
 
 ### This is a list detailing changes for all Jetpack releases.
 
-## 11.5.1 - 2022-11-02
+## 11.6 - 2022-12-06
+### Enhancements
+- Editor: adds an experimental editor extension that displays a placeholder blogging prompt when starting a new post. [#26680]
+- Form Block: fix form placeholder background color. [#27629]
+- Form Block: add a new form variation and template for a Salesforce Lead form. [#26903]
+- Form Block: enable editing placeholders on form input fields. [#27514]
+- Form Block: feedback export function is now integrated with the feedback table filters [#27427]
+- Form Block: improve the styling and formatting of the form submission page after a form block is submitted. [#27392]
+- Form Block: move the 'check for spam' buttont to below the responses table on the feedback page in WP Admin. [#27562]
+- Form Block: update design for Feedback table in WP Admin. [#27368]
+- Form Block: updates Form block placeholder to include pattern selection modal [#27337]
+- Form Block: updates Form block to allow layout blocks [#27410]
+- Form Block: updates URL validitity check [#27138]
+- Pre-Publish Panel: split out the email subscribers & social followers count in the pre-publish panel. [#27436]
+- SEO: add a 'noindex' checkbox for posts and pages. [#27409]
+- SEO: add a per post/page HTML title option. [#27236]
+- Stats: add stats option `enable_calypso_stats` to allow users to enable the new Calypso Stats experience [#27431]
+- Stats: conditionally load the new Calypso Stats package [#27247]
+- VideoPress: adds VideoPress feedback link to the VideoPress block. [#27450]
+- VideoPress: detect if the video has a vtt chapters file [#27544]
+- WordAds: add US Privacy support for additional states (Colorado, Connecticut, Utah, and Virginia). [#27045]
+
+### Improved compatibility
+- Improves compatibility with the Jetpack Protect standalone plugin. [#26069]
+
 ### Bug fixes
-- Firewall: prevent sites from crashing when updating Jetpack versions due to a missing generated file. 
+- Dashboard: fixes issue where default icon would be empty [#27511]
+- Form block: fix form patterns modal scrollbar behavior [#27692]
+- Form block: fix contact Form view responses URL [#27707]
+- Form block: add line breaks back to plain text email submissions. [#27723]
+- Provide a fix for WPA click tracking in Agencies card [#27503]
+- SSO: fix setting toggle inconsistency. [#27481]
+- Stats: stop stats loading indefinitely when a hashtag exists [#27539]
+- Widget Visibility: fix error with WooCommerce Product Categories block [#27542]
 
 ### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
-- Remove include of `functions.is-mobile.php` from `class.jetpack-user-agent.php` to restore status quo. [#27217]
+- Custom CSS: Removing compatibility checks and files for sites running WordPress versions < 4.7. [#27187]
+- Dashboard: Fix React javascscript:void console errors. [#27052]
+- Decouple the Jetpack subscription block rendering logic from Jetpack Subscription Widget shortcode [#26947]
+- Init 11.6-a.6 [#27403]
+- Remove CSS from main plugin file [#27594]
+- Removes old save() implementation for the subscription block. Doesn't impact user experience as the block is already dynamic. [#27519]
+- SEO: exclude posts with meta jetpack_seo_noindex set true from Jetpack news sitemap. [#27742]
+- Stats: take off new Stats backend for security concerns [#27589]
+- Sync: Add unit tests [#27606]
+- Tests: Clean up wpcom-compat functions no longer needed post-de-Fusioning. [#27407]
+- Updated package dependencies. [#26069]
+- Update how wpcom_gifting_subscription is saved so an option value of false can be created [#27507]
+- Update Form patterns modal filter query [#27703]
+- Updating testing instructions [#27642]
 
-## 11.5 - 2022-11-01
+## 11.6-a.5 - 2022-11-14
+### Enhancements
+- Form Block: add block alignment control for the form wrapper: center, wide and full [#27151]
+- Form Block: remove connection button from the Form block toolbar [#27301]
+
+### Improved compatibility
+- Sitemaps: improve compatibility with recent Google Image Sitemap changes. [#24341]
+
+### Bug fixes
+- Dashboard: prevent scrolling to the active settings menu item on page load. [#27347]
+- VideoPress: fix issue with uploading VideoPress videos in the Full Site Editor. [#27339]
+- Shortcodes: fix content_width handling for various shortcodes. [#27276]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Action Bar: disable experimental feature for now until the team returns to work on it. [#27358]
+- Dashboard: removing the user license activation notice. [#27329]
+- Updated package dependencies. [#26930]
+- Update the default value of subscription gifting option. [#27374]
+
+## 11.6-a.3 - 2022-11-07
+### Enhancements
+- Form block: add support links to form type selector. [#27134]
+- Form block: register Jetpack forms in the pattern inserter. [#27030]
+
+### Improved compatibility
+- Form block: update Form child blocks to show the "Manage Responses" section on the Sidebar. [#27127]
+- VideoPress (beta): introduce Video Chapters beta block. [#27241]
+
+### Bug fixes
+- Customizer: make sure the menu item is shown for block themes. [#27238]
+- Image Editor: fix issue where users are not able to edit/crop and restore images. [#27224]
+- Related Posts Block: when 3 posts are output, increase the width closer to 100%. [#27228]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Deprecation warnings are now issued for `jetpack_require_lib()`, `jetpack_require_lib_dir()`, and the `jetpack_require_lib_dir` filter. [#27273]
+- Endpoints: add a missing break statement in the site API endpoint. [#27225]
+- Featured image email template toggle: add missing 'featured_image_email_enabled' option update. [#27049]
+- Form block: rename child blocks names to be more meaningful. [#27131]
+- JSON API: add 1.4 versions to dev in order to browse in https://developer.wordpress.com/docs/api/console/ [#27239]
+- Remove include of `functions.is-mobile.php` from `class.jetpack-user-agent.php` to restore status quo. [#27217]
+- Remove nonexistent site editor styles entry point. [#27263]
+- Updated package dependencies.
+- WPcom: sync endpoint file. [#27258]
+
+## 11.6-a.1 - 2022-11-01
+### Enhancements
+- Form block: update contact-form icon [#27010]
+- Form block: update Contact Form Sidebar to include Manage Responses section and split Form Settings section into more specific sections [#26970]
+- Form block: update Contact Form Toolbar to include a form settings dropdown [#27105]
+- Stats: update mentions of "Site Stats" to "Jetpack Stats" [#27069]
+
+### Bug fixes
+- SSO: properly disable "match by email" by default. [#27102]
+- WordPress.com REST API: Fix fatal error in site ID endpoint. [#27059]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Added wpcom_gifting_subscription for syncing [#27116]
+- Dashboard: Fixed the Related Posts card link to the block editor support doc. [#27112]
+- E2E tests: disabled update plugin e2e test [#27124]
+- Gifting subscription: Add wpcom_gifting_subscription option to the site settings endpoint [#27137]
+- Gifting subscription: Update wpcom_gifting_subscription option default value [#27204]
+- Infinite Scroll: Bring in some JS fixes from wpcom. [#27065]
+- Init cycle [#27053]
+- Likes: Delete wpcom code paths. Things are just too different to de-Fusion. [#27062]
+- Remove remaining calls to `jetpack_require_lib()`, mainly for non-Fusioned stuff. [#27094]
+- Sync endpoint with wpcom [#27097]
+- Sync sites endpoints from wpcom. [#27059]
+- Updated package dependencies. [#27089]
+
+## [11.5] - 2022-11-01
 ### Enhancements
 - Dashboard: add connection widget for unconnected sites. [#26596]
 - Dashboard: add Jetpack Search Free  and Jetpack Social to My Products. [#27007, #26990]
@@ -7217,6 +7330,7 @@ Other bugfixes and enhancements at https://github.com/Automattic/jetpack/commits
 
 - Initial release
 
+[11.5]: https://wp.me/p1moTy-Ppq
 [11.4]: https://wp.me/p1moTy-O5I
 [11.3]: https://wp.me/p1moTy-M5i
 [11.2]: https://wp.me/p1moTy-JYL

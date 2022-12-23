@@ -19,7 +19,7 @@ namespace Google\Site_Kit_Dependencies\Google\Service\TagManager;
 
 class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
 {
-    protected $collection_key = 'parameter';
+    protected $collection_key = 'childContainer';
     /**
      * @var string
      */
@@ -44,8 +44,6 @@ class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $notes;
-    protected $parameterType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Parameter::class;
-    protected $parameterDataType = 'array';
     /**
      * @var string
      */
@@ -161,20 +159,6 @@ class Zone extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getNotes()
     {
         return $this->notes;
-    }
-    /**
-     * @param Parameter[]
-     */
-    public function setParameter($parameter)
-    {
-        $this->parameter = $parameter;
-    }
-    /**
-     * @return Parameter[]
-     */
-    public function getParameter()
-    {
-        return $this->parameter;
     }
     /**
      * @param string

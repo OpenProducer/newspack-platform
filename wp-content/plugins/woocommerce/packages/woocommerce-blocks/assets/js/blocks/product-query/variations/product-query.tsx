@@ -14,12 +14,13 @@ import {
 	DEFAULT_ALLOWED_CONTROLS,
 	INNER_BLOCKS_TEMPLATE,
 	QUERY_DEFAULT_ATTRIBUTES,
+	QUERY_LOOP_ID,
 } from '../constants';
 
 const VARIATION_NAME = 'woocommerce/product-query';
 
 if ( isExperimentalBuild() ) {
-	registerBlockVariation( 'core/query', {
+	registerBlockVariation( QUERY_LOOP_ID, {
 		name: VARIATION_NAME,
 		title: __( 'Product Query', 'woo-gutenberg-products-block' ),
 		isActive: ( blockAttributes ) =>
@@ -40,7 +41,7 @@ if ( isExperimentalBuild() ) {
 		// https://github.com/WordPress/gutenberg/pull/43632
 		// eslint-disable-next-line @typescript-eslint/ban-ts-comment
 		// @ts-ignore
-		allowControls: DEFAULT_ALLOWED_CONTROLS,
+		allowedControls: DEFAULT_ALLOWED_CONTROLS,
 		innerBlocks: INNER_BLOCKS_TEMPLATE,
 		scope: [ 'block', 'inserter' ],
 	} );

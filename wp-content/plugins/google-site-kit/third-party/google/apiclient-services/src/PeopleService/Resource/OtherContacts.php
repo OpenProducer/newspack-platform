@@ -53,16 +53,18 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * List all "Other contacts", that is contacts that are not in a contact group.
      * "Other contacts" are typically auto created contacts from interactions. Sync
      * tokens expire 7 days after the full sync. A request with an expired sync
-     * token will result in a 410 error. In the case of such an error clients should
-     * make a full sync request without a `sync_token`. The first page of a full
-     * sync request has an additional quota. If the quota is exceeded, a 429 error
-     * will be returned. This quota is fixed and can not be increased. When the
-     * `sync_token` is specified, resources deleted since the last sync will be
-     * returned as a person with `PersonMetadata.deleted` set to true. When the
-     * `page_token` or `sync_token` is specified, all other request parameters must
-     * match the first call. Writes may have a propagation delay of several minutes
-     * for sync requests. Incremental syncs are not intended for read-after-write
-     * use cases. See example usage at [List the user's other contacts that have
+     * token will get an error with an [google.rpc.ErrorInfo](https://cloud.google.c
+     * om/apis/design/errors#error_info) with reason "EXPIRED_SYNC_TOKEN". In the
+     * case of such an error clients should make a full sync request without a
+     * `sync_token`. The first page of a full sync request has an additional quota.
+     * If the quota is exceeded, a 429 error will be returned. This quota is fixed
+     * and can not be increased. When the `sync_token` is specified, resources
+     * deleted since the last sync will be returned as a person with
+     * `PersonMetadata.deleted` set to true. When the `page_token` or `sync_token`
+     * is specified, all other request parameters must match the first call. Writes
+     * may have a propagation delay of several minutes for sync requests.
+     * Incremental syncs are not intended for read-after-write use cases. See
+     * example usage at [List the user's other contacts that have
      * changed](/people/v1/other-
      * contacts#list_the_users_other_contacts_that_have_changed).
      * (otherContacts.listOtherContacts)
@@ -92,7 +94,11 @@ class OtherContacts extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * incremental changes since the last request by setting it on the request
      * `sync_token`. More details about sync behavior at `otherContacts.list`.
      * @opt_param string sources Optional. A mask of what source types to return.
-     * Defaults to READ_SOURCE_TYPE_CONTACT if not set.
+     * Defaults to READ_SOURCE_TYPE_CONTACT if not set. Possible values for this
+     * field are: * READ_SOURCE_TYPE_CONTACT *
+     * READ_SOURCE_TYPE_CONTACT,READ_SOURCE_TYPE_PROFILE Specifying
+     * READ_SOURCE_TYPE_PROFILE without specifying READ_SOURCE_TYPE_CONTACT is not
+     * permitted.
      * @opt_param string syncToken Optional. A sync token, received from a previous
      * response `next_sync_token` Provide this to retrieve only the resources
      * changed since the last request. When syncing, all other parameters provided

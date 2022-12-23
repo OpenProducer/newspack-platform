@@ -54,6 +54,8 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
     public $fingerprint;
     protected $folderType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder::class;
     protected $folderDataType = 'array';
+    protected $gtagConfigType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig::class;
+    protected $gtagConfigDataType = 'array';
     /**
      * @var string
      */
@@ -227,6 +229,20 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getFolder()
     {
         return $this->folder;
+    }
+    /**
+     * @param GtagConfig[]
+     */
+    public function setGtagConfig($gtagConfig)
+    {
+        $this->gtagConfig = $gtagConfig;
+    }
+    /**
+     * @return GtagConfig[]
+     */
+    public function getGtagConfig()
+    {
+        return $this->gtagConfig;
     }
     /**
      * @param string

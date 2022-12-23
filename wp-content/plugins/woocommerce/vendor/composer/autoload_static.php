@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit051090fab80b43c2037f77369c99d7be
+class ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -225,6 +225,7 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\Admin\\Features\\Navigation\\Init' => __DIR__ . '/../..' . '/src/Admin/Features/Navigation/Init.php',
         'Automattic\\WooCommerce\\Admin\\Features\\Navigation\\Menu' => __DIR__ . '/../..' . '/src/Admin/Features/Navigation/Menu.php',
         'Automattic\\WooCommerce\\Admin\\Features\\Navigation\\Screen' => __DIR__ . '/../..' . '/src/Admin/Features/Navigation/Screen.php',
+        'Automattic\\WooCommerce\\Admin\\Features\\NewProductManagementExperience' => __DIR__ . '/../..' . '/src/Admin/Features/NewProductManagementExperience.php',
         'Automattic\\WooCommerce\\Admin\\Features\\Onboarding' => __DIR__ . '/../..' . '/src/Admin/Features/Onboarding.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\DeprecatedExtendedTask' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/DeprecatedExtendedTask.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\DeprecatedOptions' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/DeprecatedOptions.php',
@@ -247,6 +248,7 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\StoreCreation' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/StoreCreation.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\StoreDetails' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/StoreDetails.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\Tax' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/Tax.php',
+        'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\TourInAppMarketplace' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/TourInAppMarketplace.php',
         'Automattic\\WooCommerce\\Admin\\Features\\OnboardingTasks\\Tasks\\WooCommercePayments' => __DIR__ . '/../..' . '/src/Admin/Features/OnboardingTasks/Tasks/WooCommercePayments.php',
         'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\DefaultPaymentGateways' => __DIR__ . '/../..' . '/src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php',
         'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\EvaluateSuggestion' => __DIR__ . '/../..' . '/src/Admin/Features/PaymentGatewaySuggestions/EvaluateSuggestion.php',
@@ -471,7 +473,6 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\Internal\\Admin\\Marketing' => __DIR__ . '/../..' . '/src/Internal/Admin/Marketing.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\MobileAppBanner' => __DIR__ . '/../..' . '/src/Internal/Admin/MobileAppBanner.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\AddFirstProduct' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/AddFirstProduct.php',
-        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\AddingAndManangingProducts' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/AddingAndManangingProducts.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\ChoosingTheme' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/ChoosingTheme.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\CouponPageMoved' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/CouponPageMoved.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\CustomizeStoreWithBlocks' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/CustomizeStoreWithBlocks.php',
@@ -479,16 +480,12 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\EUVATNumber' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/EUVATNumber.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\EditProductsOnTheMove' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/EditProductsOnTheMove.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\EmailNotification' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/EmailNotification.php',
-        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\FirstDownlaodableProduct' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/FirstDownlaodableProduct.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\FirstProduct' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/FirstProduct.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\GivingFeedbackNotes' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/GivingFeedbackNotes.php',
-        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\InsightFirstProductAndPayment' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/InsightFirstProductAndPayment.php',
-        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\InsightFirstSale' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/InsightFirstSale.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\InstallJPAndWCSPlugins' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/InstallJPAndWCSPlugins.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\LaunchChecklist' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/LaunchChecklist.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MagentoMigration' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/MagentoMigration.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\ManageOrdersOnTheGo' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/ManageOrdersOnTheGo.php',
-        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\ManageStoreActivityFromHomeScreen' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/ManageStoreActivityFromHomeScreen.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MarketingJetpack' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/MarketingJetpack.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MerchantEmailNotifications' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/MerchantEmailNotifications.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\MigrateFromShopify' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/MigrateFromShopify.php',
@@ -497,6 +494,7 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\OnboardingPayments' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/OnboardingPayments.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\OnlineClothingStore' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/OnlineClothingStore.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\OrderMilestones' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/OrderMilestones.php',
+        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PaymentsMoreInfoNeeded' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/PaymentsMoreInfoNeeded.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PaymentsRemindMeLater' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/PaymentsRemindMeLater.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PerformanceOnMobile' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/PerformanceOnMobile.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\PersonalizeStore' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/PersonalizeStore.php',
@@ -505,7 +503,6 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\TestCheckout' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/TestCheckout.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\TrackingOptIn' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/TrackingOptIn.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\UnsecuredReportFiles' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/UnsecuredReportFiles.php',
-        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\UpdateStoreDetails' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/UpdateStoreDetails.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WelcomeToWooCommerceForStoreUsers' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/WelcomeToWooCommerceForStoreUsers.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooCommercePayments' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/WooCommercePayments.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooCommerceSubscriptions' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/WooCommerceSubscriptions.php',
@@ -520,6 +517,7 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingSetupWizard' => __DIR__ . '/../..' . '/src/Internal/Admin/Onboarding/OnboardingSetupWizard.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingSync' => __DIR__ . '/../..' . '/src/Internal/Admin/Onboarding/OnboardingSync.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Onboarding\\OnboardingThemes' => __DIR__ . '/../..' . '/src/Internal/Admin/Onboarding/OnboardingThemes.php',
+        'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\COTRedirectionController' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/COTRedirectionController.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\Edit' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/Edit.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\ListTable' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/ListTable.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\MetaBoxes\\CustomMetaBox' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/MetaBoxes/CustomMetaBox.php',
@@ -705,6 +703,7 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\ProductQuery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/StoreApi/Utilities/ProductQuery.php',
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\ProductQueryFilters' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/StoreApi/Utilities/ProductQueryFilters.php',
         'Automattic\\WooCommerce\\StoreApi\\Utilities\\QuantityLimits' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/StoreApi/Utilities/QuantityLimits.php',
+        'Automattic\\WooCommerce\\StoreApi\\Utilities\\RateLimits' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/StoreApi/Utilities/RateLimits.php',
         'Automattic\\WooCommerce\\Utilities\\ArrayUtil' => __DIR__ . '/../..' . '/src/Utilities/ArrayUtil.php',
         'Automattic\\WooCommerce\\Utilities\\FeaturesUtil' => __DIR__ . '/../..' . '/src/Utilities/FeaturesUtil.php',
         'Automattic\\WooCommerce\\Utilities\\NumberUtil' => __DIR__ . '/../..' . '/src/Utilities/NumberUtil.php',
@@ -1052,10 +1051,10 @@ class ComposerStaticInit051090fab80b43c2037f77369c99d7be
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit051090fab80b43c2037f77369c99d7be::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit051090fab80b43c2037f77369c99d7be::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit051090fab80b43c2037f77369c99d7be::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit051090fab80b43c2037f77369c99d7be::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$classMap;
 
         }, null, ClassLoader::class);
     }

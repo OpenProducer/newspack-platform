@@ -21,6 +21,8 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
 {
     protected $accountType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAccount::class;
     protected $accountDataType = '';
+    protected $attributionSettingsType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAttributionSettings::class;
+    protected $attributionSettingsDataType = '';
     protected $conversionEventType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaConversionEvent::class;
     protected $conversionEventDataType = '';
     protected $customDimensionType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaCustomDimension::class;
@@ -35,6 +37,8 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     protected $displayVideo360AdvertiserLinkDataType = '';
     protected $displayVideo360AdvertiserLinkProposalType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaDisplayVideo360AdvertiserLinkProposal::class;
     protected $displayVideo360AdvertiserLinkProposalDataType = '';
+    protected $expandedDataSetType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaExpandedDataSet::class;
+    protected $expandedDataSetDataType = '';
     protected $firebaseLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaFirebaseLink::class;
     protected $firebaseLinkDataType = '';
     protected $googleAdsLinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaGoogleAdsLink::class;
@@ -45,6 +49,8 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     protected $measurementProtocolSecretDataType = '';
     protected $propertyType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaProperty::class;
     protected $propertyDataType = '';
+    protected $searchAds360LinkType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaSearchAds360Link::class;
+    protected $searchAds360LinkDataType = '';
     /**
      * @param GoogleAnalyticsAdminV1alphaAccount
      */
@@ -58,6 +64,20 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     public function getAccount()
     {
         return $this->account;
+    }
+    /**
+     * @param GoogleAnalyticsAdminV1alphaAttributionSettings
+     */
+    public function setAttributionSettings(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaAttributionSettings $attributionSettings)
+    {
+        $this->attributionSettings = $attributionSettings;
+    }
+    /**
+     * @return GoogleAnalyticsAdminV1alphaAttributionSettings
+     */
+    public function getAttributionSettings()
+    {
+        return $this->attributionSettings;
     }
     /**
      * @param GoogleAnalyticsAdminV1alphaConversionEvent
@@ -158,6 +178,20 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
         return $this->displayVideo360AdvertiserLinkProposal;
     }
     /**
+     * @param GoogleAnalyticsAdminV1alphaExpandedDataSet
+     */
+    public function setExpandedDataSet(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaExpandedDataSet $expandedDataSet)
+    {
+        $this->expandedDataSet = $expandedDataSet;
+    }
+    /**
+     * @return GoogleAnalyticsAdminV1alphaExpandedDataSet
+     */
+    public function getExpandedDataSet()
+    {
+        return $this->expandedDataSet;
+    }
+    /**
      * @param GoogleAnalyticsAdminV1alphaFirebaseLink
      */
     public function setFirebaseLink(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaFirebaseLink $firebaseLink)
@@ -226,6 +260,20 @@ class GoogleAnalyticsAdminV1alphaChangeHistoryChangeChangeHistoryResource extend
     public function getProperty()
     {
         return $this->property;
+    }
+    /**
+     * @param GoogleAnalyticsAdminV1alphaSearchAds360Link
+     */
+    public function setSearchAds360Link(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaSearchAds360Link $searchAds360Link)
+    {
+        $this->searchAds360Link = $searchAds360Link;
+    }
+    /**
+     * @return GoogleAnalyticsAdminV1alphaSearchAds360Link
+     */
+    public function getSearchAds360Link()
+    {
+        return $this->searchAds360Link;
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

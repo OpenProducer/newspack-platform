@@ -103,12 +103,6 @@ const CheckoutExpressPayment = () => {
 						<StoreNoticesContainer
 							context={ noticeContexts.EXPRESS_PAYMENTS }
 						/>
-						<p>
-							{ __(
-								'In a hurry? Use one of our express checkout options:',
-								'woocommerce'
-							) }
-						</p>
 						<ExpressPaymentMethods />
 					</div>
 				</div>

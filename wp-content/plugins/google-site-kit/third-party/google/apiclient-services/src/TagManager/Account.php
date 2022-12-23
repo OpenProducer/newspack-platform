@@ -23,6 +23,8 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $accountId;
+    protected $featuresType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\AccountFeatures::class;
+    protected $featuresDataType = '';
     /**
      * @var string
      */
@@ -56,6 +58,20 @@ class Account extends \Google\Site_Kit_Dependencies\Google\Model
     public function getAccountId()
     {
         return $this->accountId;
+    }
+    /**
+     * @param AccountFeatures
+     */
+    public function setFeatures(\Google\Site_Kit_Dependencies\Google\Service\TagManager\AccountFeatures $features)
+    {
+        $this->features = $features;
+    }
+    /**
+     * @return AccountFeatures
+     */
+    public function getFeatures()
+    {
+        return $this->features;
     }
     /**
      * @param string

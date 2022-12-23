@@ -17,8 +17,8 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\Resource;
 
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaFirebaseLink;
-use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListFirebaseLinksResponse;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaFirebaseLink;
+use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListFirebaseLinksResponse;
 use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProtobufEmpty;
 /**
  * The "firebaseLinks" collection of methods.
@@ -36,15 +36,15 @@ class PropertiesFirebaseLinks extends \Google\Site_Kit_Dependencies\Google\Servi
      *
      * @param string $parent Required. Format: properties/{property_id} Example:
      * properties/1234
-     * @param GoogleAnalyticsAdminV1alphaFirebaseLink $postBody
+     * @param GoogleAnalyticsAdminV1betaFirebaseLink $postBody
      * @param array $optParams Optional parameters.
-     * @return GoogleAnalyticsAdminV1alphaFirebaseLink
+     * @return GoogleAnalyticsAdminV1betaFirebaseLink
      */
-    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaFirebaseLink $postBody, $optParams = [])
+    public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaFirebaseLink $postBody, $optParams = [])
     {
         $params = ['parent' => $parent, 'postBody' => $postBody];
         $params = \array_merge($params, $optParams);
-        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaFirebaseLink::class);
+        return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaFirebaseLink::class);
     }
     /**
      * Deletes a FirebaseLink on a property (firebaseLinks.delete)
@@ -75,15 +75,15 @@ class PropertiesFirebaseLinks extends \Google\Site_Kit_Dependencies\Google\Servi
      * 200; (higher values will be coerced to the maximum)
      * @opt_param string pageToken A page token, received from a previous
      * `ListFirebaseLinks` call. Provide this to retrieve the subsequent page. When
-     * paginating, all other parameters provided to `ListProperties` must match the
-     * call that provided the page token.
-     * @return GoogleAnalyticsAdminV1alphaListFirebaseLinksResponse
+     * paginating, all other parameters provided to `ListFirebaseLinks` must match
+     * the call that provided the page token.
+     * @return GoogleAnalyticsAdminV1betaListFirebaseLinksResponse
      */
     public function listPropertiesFirebaseLinks($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
         $params = \array_merge($params, $optParams);
-        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1alphaListFirebaseLinksResponse::class);
+        return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListFirebaseLinksResponse::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.
