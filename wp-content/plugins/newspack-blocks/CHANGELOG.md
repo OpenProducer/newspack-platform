@@ -1,3 +1,19 @@
+## [1.59.1](https://github.com/Automattic/newspack-blocks/compare/v1.59.0...v1.59.1) (2022-12-12)
+
+
+### Bug Fixes
+
+* **donate:** override defaults with manual config ([#1313](https://github.com/Automattic/newspack-blocks/issues/1313)) ([637284f](https://github.com/Automattic/newspack-blocks/commit/637284f4e42868125785a7139f440a364fc516e8))
+* update CI orb newspack-scripts ([a6675b7](https://github.com/Automattic/newspack-blocks/commit/a6675b780e58f995bea6bc4c58fa11c56a99679f))
+
+## [1.59.1-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.59.0...v1.59.1-alpha.1) (2022-12-01)
+
+
+### Bug Fixes
+
+* **donate:** override defaults with manual config ([#1313](https://github.com/Automattic/newspack-blocks/issues/1313)) ([637284f](https://github.com/Automattic/newspack-blocks/commit/637284f4e42868125785a7139f440a364fc516e8))
+* update CI orb newspack-scripts ([a6675b7](https://github.com/Automattic/newspack-blocks/commit/a6675b780e58f995bea6bc4c58fa11c56a99679f))
+
 # [1.59.0](https://github.com/Automattic/newspack-blocks/compare/v1.58.1...v1.59.0) (2022-11-14)
 
 

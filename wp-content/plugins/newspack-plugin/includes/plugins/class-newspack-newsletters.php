@@ -116,7 +116,7 @@ class Newspack_Newsletters {
 							}
 						}
 					} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
-						Logger::log( 'Error in getting contact lists: ' . $e->getMessage() );
+						Logger::error( 'Error in getting contact lists: ' . $e->getMessage() );
 						// Move along.
 					}
 				}

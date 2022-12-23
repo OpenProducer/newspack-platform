@@ -73,7 +73,7 @@ class OAuth {
 	 */
 	public static function authenticate_proxy_url( string $type, string $path = '', array $query_args = [] ) {
 		if ( ! self::is_proxy_configured( $type ) ) {
-			Logger::log( "$type proxy type is not configured." );
+			Logger::error( "$type proxy type is not configured." );
 			throw new \Exception( "Unknown proxy type: $type" );
 		}
 		$proxy_url = self::get_proxy_url( $type );

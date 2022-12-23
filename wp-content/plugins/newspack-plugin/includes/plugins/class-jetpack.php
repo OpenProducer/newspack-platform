@@ -33,6 +33,10 @@ class Jetpack {
 		add_filter( 'newspack_amp_plus_sanitized', [ __CLASS__, 'jetpack_modules_amp_plus' ], 10, 2 );
 		add_action( 'wp_head', [ __CLASS__, 'fix_instant_search_sidebar_display' ], 10 );
 		add_filter( 'jetpack_lazy_images_skip_image_with_attributes', [ __CLASS__, 'skip_lazy_loading_on_feeds' ], 10 );
+
+		// Disables Google Analytics.
+		add_filter( 'jetpack_active_modules', array( __CLASS__, 'remove_google_analytics_from_active' ), 10, 2 );
+		add_filter( 'jetpack_get_available_modules', array( __CLASS__, 'remove_google_analytics_from_available' ) );
 	}
 
 	/**
@@ -81,7 +85,7 @@ class Jetpack {
 		if ( ! self::should_amp_plus_modules() ) {
 			return $is_sanitized;
 		}
-		if ( AMP_Enhancements::is_script_id_matching_strings( self::$scripts_handles, $error ) ) {
+		if ( AMP_Enhancements::is_script_attribute_matching_strings( self::$scripts_handles, $error ) ) {
 			$is_sanitized = false;
 		}
 
@@ -112,6 +116,29 @@ class Jetpack {
 			}
 		</style>
 		<?php
+	}
+
+	/**
+	 * Disables Google Analytics module. Users will not be able to activate it.
+	 *
+	 * @param array $modules Array with modules slugs.
+	 * @return array
+	 */
+	public static function remove_google_analytics_from_active( $modules ) {
+		return array_diff( $modules, array( 'google-analytics' ) );
+	}
+
+	/**
+	 * Remove Google Analytics from available modules
+	 *
+	 * @param array $modules The array of available modules.
+	 * @return array
+	 */
+	public static function remove_google_analytics_from_available( $modules ) {
+		if ( isset( $modules['google-analytics'] ) ) {
+			unset( $modules['google-analytics'] );
+		}
+		return $modules;
 	}
 }
 Jetpack::init();

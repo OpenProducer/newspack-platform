@@ -60,7 +60,7 @@ class Components_Demo extends Wizard {
 		parent::enqueue_scripts_and_styles();
 		wp_enqueue_media();
 
-		if ( filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING ) !== $this->slug ) {
+		if ( filter_input( INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) !== $this->slug ) {
 			return;
 		}
 

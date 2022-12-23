@@ -166,7 +166,7 @@ h1.wp-block-post-title {
 }
 @media only screen and (min-width: 1168px) {
   .editor-post-title__block .editor-post-title__input,
-h1.wp-block-post-title {
+  h1.wp-block-post-title {
     font-size: 2.8em;
   }
 }
@@ -263,7 +263,7 @@ h1.wp-block-post-title {
 }
 @media only screen and (min-width: 782px) {
   .wp-block[data-type="core/cover"][data-align=left] .wp-block-cover,
-.wp-block[data-type="core/cover"][data-align=right] .wp-block-cover {
+  .wp-block[data-type="core/cover"][data-align=right] .wp-block-cover {
     max-width: 400px;
   }
 }
@@ -274,7 +274,7 @@ h1.wp-block-post-title {
 }
 @media only screen and (min-width: 782px) {
   .wp-block[data-type="core/cover"][data-align=left] .wp-block-cover,
-.wp-block[data-type="core/cover"][data-align=right] .wp-block-cover {
+  .wp-block[data-type="core/cover"][data-align=right] .wp-block-cover {
     padding: calc( 2 * 1rem );
   }
 }
@@ -376,7 +376,7 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 @media only screen and (min-width: 600px) {
   .wp-block[data-align=left] > .wp-block-group iframe[style="width: 100%; height: 600px; max-width: 100%; max-height: 100%;"],
-.wp-block[data-align=right] > .wp-block-group iframe[style="width: 100%; height: 600px; max-width: 100%; max-height: 100%;"] {
+  .wp-block[data-align=right] > .wp-block-group iframe[style="width: 100%; height: 600px; max-width: 100%; max-height: 100%;"] {
     width: 400px !important;
   }
 }
@@ -459,7 +459,7 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote.is-style-solid-color blockquote p,
-.wp-block-pullquote p {
+  .wp-block-pullquote p {
     font-size: 1.4em;
   }
 }
@@ -512,7 +512,7 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 @media only screen and (min-width: 782px) {
   [data-align=left] .wp-block-pullquote,
-[data-align=right] .wp-block-pullquote {
+  [data-align=right] .wp-block-pullquote {
     border-bottom: 0;
   }
 }
@@ -534,9 +534,9 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 @media only screen and (min-width: 782px) {
   [data-align=left] .wp-block-pullquote.is-style-solid-color blockquote p,
-[data-align=left] .wp-block-pullquote p,
-[data-align=right] .wp-block-pullquote.is-style-solid-color blockquote p,
-[data-align=right] .wp-block-pullquote p {
+  [data-align=left] .wp-block-pullquote p,
+  [data-align=right] .wp-block-pullquote.is-style-solid-color blockquote p,
+  [data-align=right] .wp-block-pullquote p {
     font-size: 1.2em;
   }
 }

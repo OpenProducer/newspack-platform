@@ -416,7 +416,7 @@ TEMPLATE;
 			return $is_sanitized;
 		}
 
-		if ( AMP_Enhancements::is_script_id_matching_strings(
+		if ( AMP_Enhancements::is_script_attribute_matching_strings(
 			[
 				'gform_',
 				'gpoll_', // GravityForms Polls (gravityformspolls) plugin.

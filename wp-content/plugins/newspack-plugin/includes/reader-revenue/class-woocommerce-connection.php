@@ -48,6 +48,8 @@ class WooCommerce_Connection {
 		foreach ( self::DISABLED_SUBSCRIPTION_STATUSES as $status_name ) {
 			\add_filter( 'woocommerce_can_subscription_be_updated_to_' . $status_name, [ __CLASS__, 'disable_subscription_status_updates' ], 11, 2 );
 		}
+		\add_filter( 'woocommerce_subscriptions_can_user_renew_early', [ __CLASS__, 'prevent_subscription_early_renewal' ], 11, 2 );
+		\add_filter( 'woocommerce_subscription_is_manual', [ __CLASS__, 'set_syncd_subscriptions_as_manual' ], 11, 2 );
 
 		// WooCommerce Memberships.
 		\add_action( 'wc_memberships_user_membership_created', [ __CLASS__, 'wc_membership_created' ], 10, 2 );
@@ -323,7 +325,7 @@ class WooCommerce_Connection {
 		}
 		global $wpdb;
 		$query           = $wpdb->prepare(
-			'SELECT post_id FROM `wp_postmeta` WHERE `meta_key` = %s AND `meta_value` = %s',
+			"SELECT post_id FROM $wpdb->postmeta WHERE `meta_key` = %s AND `meta_value` = %s",
 			self::SUBSCRIPTION_STRIPE_ID_META_KEY,
 			$stripe_subscription_id
 		);
@@ -331,7 +333,7 @@ class WooCommerce_Connection {
 		if ( $subscription_id ) {
 			return \wcs_get_subscription( $subscription_id );
 		} else {
-			Logger::log( 'Error: could not find WC subscription by Stripe id: ' . $stripe_subscription_id );
+			Logger::error( 'Error: could not find WC subscription by Stripe id: ' . $stripe_subscription_id );
 			return false;
 		}
 	}
@@ -479,8 +481,11 @@ class WooCommerce_Connection {
 				$order->save();
 				Logger::log( 'Updated WC subscription with id: ' . $subscription->get_id() . ' with a new order of id: ' . $order->get_id() );
 			} else {
-				// Linked subscription not found, just create an order.
+				// Linked subscription not found, just create an order. Temporarily disable the
+				// "New Order" email, since this is a renewal.
+				\add_filter( 'woocommerce_email_enabled_new_order', '__return_false' );
 				$order = self::create_order( $order_data, $item );
+				\remove_filter( 'woocommerce_email_enabled_new_order', '__return_false' );
 			}
 		} else {
 			/**
@@ -502,7 +507,7 @@ class WooCommerce_Connection {
 				);
 
 				if ( is_wp_error( $subscription ) ) {
-					Logger::log( 'Error creating WC subscription: ' . $subscription->get_error_message() );
+					Logger::error( 'Error creating WC subscription: ' . $subscription->get_error_message() );
 				} else {
 					self::add_universal_order_data( $subscription, $order_data );
 					/* translators: %s - donation frequency */
@@ -657,8 +662,10 @@ class WooCommerce_Connection {
 	private static function is_synchronised_with_stripe( $subscription ) {
 		if ( is_numeric( $subscription ) ) {
 			$stripe_subscription_id = get_post_meta( $subscription, self::SUBSCRIPTION_STRIPE_ID_META_KEY, true );
-		} else {
+		} elseif ( $subscription ) {
 			$stripe_subscription_id = $subscription->get_meta( self::SUBSCRIPTION_STRIPE_ID_META_KEY );
+		} else {
+			$stripe_subscription_id = false;
 		}
 		return boolval( $stripe_subscription_id );
 	}
@@ -666,10 +673,12 @@ class WooCommerce_Connection {
 	/**
 	 * Remove subscription-related meta boxes if the subscription is sync'd with Stripe.
 	 * This is because some subscription variables should not be editable here.
+	 *
+	 * @param string $post_type Post type of current screen.
 	 */
-	public static function remove_subscriptions_schedule_meta_box() {
+	public static function remove_subscriptions_schedule_meta_box( $post_type ) {
 		global $post_ID;
-		if ( self::is_synchronised_with_stripe( $post_ID ) ) {
+		if ( 'shop_subscription' === $post_type && self::is_synchronised_with_stripe( $post_ID ) ) {
 			remove_meta_box( 'woocommerce-subscription-schedule', 'shop_subscription', 'side' );
 		}
 	}
@@ -685,6 +694,32 @@ class WooCommerce_Connection {
 			return false;
 		}
 		return $is_editable;
+	}
+
+	/**
+	 * Disable early renewal of subscriptions which are sync'd with Stripe.
+	 *
+	 * @param bool             $can_renew_early Whether the subscription can be renewed early.
+	 * @param \WC_Subscription $subscription The subscription object.
+	 */
+	public static function prevent_subscription_early_renewal( $can_renew_early, $subscription ) {
+		if ( self::is_synchronised_with_stripe( $subscription ) ) {
+			return false;
+		}
+		return $can_renew_early;
+	}
+
+	/**
+	 * Force sync'd subscriptions to manual-renewal state.
+	 *
+	 * @param bool             $is_manual Whether the subscription is manually-renewed.
+	 * @param \WC_Subscription $subscription The subscription object.
+	 */
+	public static function set_syncd_subscriptions_as_manual( $is_manual, $subscription ) {
+		if ( self::is_synchronised_with_stripe( $subscription ) ) {
+			return true;
+		}
+		return $is_manual;
 	}
 
 	/**

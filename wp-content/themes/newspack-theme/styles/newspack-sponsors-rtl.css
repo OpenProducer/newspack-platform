@@ -261,7 +261,7 @@ amp-script .sponsor-label .flag {
     display: flex;
   }
   .sponsor-archive .entry-meta,
-.sponsor-archive .author {
+  .sponsor-archive .author {
     display: block;
   }
 }

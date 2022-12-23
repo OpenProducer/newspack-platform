@@ -140,15 +140,16 @@ class AMP_Enhancements {
 	 *
 	 * @param string[] $strings Strings to look for.
 	 * @param array    $amp_error AMP error.
+	 * @param string   $attribute Which attribute to look at.
 	 */
-	public static function is_script_id_matching_strings( $strings, $amp_error ) {
-		if ( ! isset( $amp_error, $amp_error['node_attributes'], $amp_error['node_attributes']['id'] ) ) {
+	public static function is_script_attribute_matching_strings( $strings, $amp_error, $attribute = 'id' ) {
+		if ( ! isset( $amp_error, $amp_error['node_attributes'], $amp_error['node_attributes'][ $attribute ] ) ) {
 			return false;
 		}
 		return array_reduce(
 			$strings,
-			function( $carry, $text ) use ( $amp_error ) {
-				return $carry || false !== strpos( $amp_error['node_attributes']['id'], $text );
+			function( $carry, $text ) use ( $amp_error, $attribute ) {
+				return $carry || false !== strpos( $amp_error['node_attributes'][ $attribute ], $text );
 			},
 			false
 		);

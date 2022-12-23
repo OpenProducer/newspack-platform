@@ -1,3 +1,44 @@
+## [1.55.1](https://github.com/Automattic/newspack-newsletters/compare/v1.55.0...v1.55.1) (2022-12-12)
+
+
+### Bug Fixes
+
+* **ActiveCampaign:** update fields API version ([#1036](https://github.com/Automattic/newspack-newsletters/issues/1036)) ([e85e0ed](https://github.com/Automattic/newspack-newsletters/commit/e85e0eda55ae752dcdb3cd3eb5def9670e9390d6))
+* attribute types in posts inserter block.json ([#1038](https://github.com/Automattic/newspack-newsletters/issues/1038)) ([85a5606](https://github.com/Automattic/newspack-newsletters/commit/85a5606d0d837e800672386eaa5a5c5dfcf276ed))
+
+## [1.55.1-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.55.0...v1.55.1-alpha.1) (2022-12-01)
+
+
+### Bug Fixes
+
+* **ActiveCampaign:** update fields API version ([#1036](https://github.com/Automattic/newspack-newsletters/issues/1036)) ([e85e0ed](https://github.com/Automattic/newspack-newsletters/commit/e85e0eda55ae752dcdb3cd3eb5def9670e9390d6))
+* attribute types in posts inserter block.json ([#1038](https://github.com/Automattic/newspack-newsletters/issues/1038)) ([85a5606](https://github.com/Automattic/newspack-newsletters/commit/85a5606d0d837e800672386eaa5a5c5dfcf276ed))
+
+# [1.55.0](https://github.com/Automattic/newspack-newsletters/compare/v1.54.4...v1.55.0) (2022-11-28)
+
+
+### Bug Fixes
+
+* **ci:** update newspack-scripts to fix CI builds ([448133c](https://github.com/Automattic/newspack-newsletters/commit/448133c4f4e046238ac47b722a44de5fd3568d3f))
+* **constant-contact:** validate access token fetch response ([#998](https://github.com/Automattic/newspack-newsletters/issues/998)) ([ad55608](https://github.com/Automattic/newspack-newsletters/commit/ad556086c070966a90eba92bf5e231fc56b4679e))
+* package lock ([db3b012](https://github.com/Automattic/newspack-newsletters/commit/db3b012de8831e4528adb17c8eae8371b76a45f7))
+* update CI orb newspack-scripts ([#1014](https://github.com/Automattic/newspack-newsletters/issues/1014)) ([d0ed0a6](https://github.com/Automattic/newspack-newsletters/commit/d0ed0a63b26637e1dff72c80e1ba28794ff4a51c))
+
+
+### Features
+
+* active campaign tags support ([#1013](https://github.com/Automattic/newspack-newsletters/issues/1013)) ([a0f1dc4](https://github.com/Automattic/newspack-newsletters/commit/a0f1dc44872a6bf3f26fc59df8ac0718d448bbe0)), closes [#1011](https://github.com/Automattic/newspack-newsletters/issues/1011)
+
+# [1.55.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v1.55.0-alpha.1...v1.55.0-alpha.2) (2022-11-22)
+
+
+### Bug Fixes
+
+* avoid nested mj-text elements ([8ec5cb8](https://github.com/Automattic/newspack-newsletters/commit/8ec5cb89d4b24b0737455bde5bd8110d8772dd65))
+* avoid nesting mjml elements inside mj-text ([5b5b80c](https://github.com/Automattic/newspack-newsletters/commit/5b5b80c55aede86ec55c8f046520bd38997d862f))
+* group blocks ([b62bd7e](https://github.com/Automattic/newspack-newsletters/commit/b62bd7efd76793d761b9a897367f22237e102244))
+* nested list items and quote blocks in email ([860555d](https://github.com/Automattic/newspack-newsletters/commit/860555d3eccc4dac2eabb30ece77b48c0509d754))
+
 ## [1.54.4](https://github.com/Automattic/newspack-newsletters/compare/v1.54.3...v1.54.4) (2022-11-22)
 
 

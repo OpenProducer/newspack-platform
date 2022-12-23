@@ -67,16 +67,9 @@ final class Newspack_Popups_Segmentation {
 		add_action( 'wp_footer', [ __CLASS__, 'insert_amp_analytics' ], 20 );
 
 		add_filter( 'newspack_custom_dimensions', [ __CLASS__, 'register_custom_dimensions' ] );
-		if ( ! Newspack_Popups_Settings::is_non_interactive() && ( ! defined( 'NEWSPACK_POPUPS_DISABLE_REPORTING_CUSTOM_DIMENSIONS' ) || true !== NEWSPACK_POPUPS_DISABLE_REPORTING_CUSTOM_DIMENSIONS ) ) {
-			// Sending pageviews with segmentation-related custom dimensions.
-			// 1. Disable pageview sending from Site Kit's GTAG implementation. The custom events sent using Site Kit's
-			// GTAG will not contain the segmentation-related custom dimensions.
-			add_filter( 'googlesitekit_gtag_opt', [ __CLASS__, 'remove_pageview_reporting' ] );
-			add_filter( 'googlesitekit_amp_gtag_opt', [ __CLASS__, 'remove_pageview_reporting_amp' ] );
-			// 2. Add an amp-analytics tag which will send the PV with custom dimensions attached.
-			add_action( 'wp_footer', [ __CLASS__, 'insert_gtag_amp_analytics' ] );
-		}
+		add_filter( 'newspack_custom_dimensions_values', [ __CLASS__, 'report_custom_dimensions' ] );
 
+		// Data pruning CRON job.
 		register_deactivation_hook( NEWSPACK_POPUPS_PLUGIN_FILE, [ __CLASS__, 'cron_deactivate' ] );
 		add_action( 'newspack_popups_segmentation_data_prune', [ __CLASS__, 'prune_data' ] );
 		$next = wp_next_scheduled( 'newspack_popups_segmentation_data_prune' );
@@ -93,27 +86,6 @@ final class Newspack_Popups_Segmentation {
 	 */
 	public static function cron_deactivate() {
 		wp_clear_scheduled_hook( 'newspack_popups_segmentation_data_prune' );
-	}
-
-	/**
-	 * Remove pageview reporting from non-AMP Analytics GTAG config.
-	 *
-	 * @param array $gtag_opt GTAG Analytics config.
-	 */
-	public static function remove_pageview_reporting( $gtag_opt ) {
-		$gtag_opt['send_page_view'] = false;
-		return $gtag_opt;
-	}
-
-	/**
-	 * Remove pageview reporting from AMP Analytics GTAG config.
-	 *
-	 * @param array $gtag_opt AMP Analytics GTAG config.
-	 */
-	public static function remove_pageview_reporting_amp( $gtag_opt ) {
-		$tracking_id = $gtag_opt['vars']['gtag_id'];
-		$gtag_opt['vars']['config'][ $tracking_id ]['send_page_view'] = false;
-		return $gtag_opt;
 	}
 
 	/**
@@ -151,47 +123,78 @@ final class Newspack_Popups_Segmentation {
 		return $default_dimensions;
 	}
 
-
 	/**
-	 * Get GA property ID from Site Kit's options.
+	 * Add custom custom dimensions to Newspack Plugin's Analytics reporting.
+	 *
+	 * @param array $custom_dimensions_values Existing custom dimensions payload.
 	 */
-	public static function get_ga_property_id() {
-		$ga_settings = get_option( 'googlesitekit_analytics_settings' );
-		if ( $ga_settings && isset( $ga_settings['propertyID'] ) ) {
-			return $ga_settings['propertyID'];
-		}
-	}
-
-	/**
-	 * Inset GTAG amp-analytics with a remote config, which will insert segmentation-related custom dimensions.
-	 */
-	public static function insert_gtag_amp_analytics() {
-
+	public static function report_custom_dimensions( $custom_dimensions_values ) {
 		$custom_dimensions = [];
 		if ( class_exists( 'Newspack\Analytics_Wizard' ) ) {
 			$custom_dimensions = Newspack\Analytics_Wizard::list_configured_custom_dimensions();
 		}
-		$custom_dimensions_existing_values = [];
-		if ( class_exists( 'Newspack\Analytics' ) ) {
-			$custom_dimensions_existing_values = Newspack\Analytics::get_custom_dimensions_values( get_the_ID() );
+		if ( empty( $custom_dimensions ) ) {
+			return $custom_dimensions_values;
 		}
 
-		$remote_config_url = add_query_arg(
-			[
-				'client_id'                         => self::get_cid_param(),
-				'post_id'                           => esc_attr( get_the_ID() ),
-				'custom_dimensions'                 => wp_json_encode( $custom_dimensions ),
-				'custom_dimensions_existing_values' => wp_json_encode( $custom_dimensions_existing_values ),
-			],
-			self::get_client_data_endpoint()
+		$campaigns_custom_dimensions = [
+			Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
+			Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
+			Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
+		];
+		$all_campaign_dimensions     = array_values(
+			array_map(
+				function( $custom_dimension ) {
+					return $custom_dimension['role'];
+				},
+				$custom_dimensions
+			)
 		);
 
-		?>
-			<amp-analytics
-				type="gtag"
-				config="<?php echo esc_attr( $remote_config_url ); ?>"
-			></amp-analytics>
-		<?php
+		// No need to proceed if the configured custom dimensions do not include any Campaigns data.
+		if ( 0 === count( array_intersect( $campaigns_custom_dimensions, $all_campaign_dimensions ) ) ) {
+			return $custom_dimensions_values;
+		}
+
+		$client_id           = self::get_client_id();
+		$api                 = self::load_lightweight_api();
+		$subscription_events = $api->get_reader_events( $client_id, 'subscription' );
+		$donation_events     = $api->get_reader_events( $client_id, 'donation' );
+
+		foreach ( $custom_dimensions as $custom_dimension ) {
+			// Strip the `ga:` prefix from gaID.
+			$dimension_id = substr( $custom_dimension['gaID'], 3 ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
+			switch ( $custom_dimension['role'] ) {
+				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY:
+					$read_count = Campaign_Data_Utils::get_post_view_count( [ $api->get_reader( $client_id ) ] );
+					// Tiers mimick NCI's – https://news-consumer-insights.appspot.com.
+					$read_count_tier = 'casual';
+					if ( $read_count > 1 && $read_count <= 14 ) {
+						$read_count_tier = 'loyal';
+					} elseif ( $read_count > 14 ) {
+						$read_count_tier = 'brand_lover';
+					}
+					$custom_dimensions_values[ $dimension_id ] = $read_count_tier;
+					break;
+				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER:
+					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_subscriber( $subscription_events ) ? 'true' : 'false';
+					break;
+				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR:
+					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_donor( $donation_events ) ? 'true' : 'false';
+					break;
+			}
+		}
+
+		return $custom_dimensions_values;
+	}
+
+	/**
+	 * Get the light-weight API.
+	 */
+	private static function load_lightweight_api() {
+		require_once dirname( __FILE__ ) . '/../api/campaigns/class-campaign-data-utils.php';
+		require_once dirname( __FILE__ ) . '/../api/classes/class-lightweight-api.php';
+		return new Lightweight_API( null, true );
 	}
 
 	/**
@@ -206,7 +209,7 @@ final class Newspack_Popups_Segmentation {
 	 * Has to be included on every page to set the cookie.
 	 *
 	 * This amp-analytics tag will not report any analytics, it's only responsible for settings the cookie
-	 * bearing the client ID, as well as handling the linker paramerer when navigating from a proxy site.
+	 * bearing the client ID, as well as handling the linker parameter when navigating from a proxy site.
 	 *
 	 * Because this tag doesn't report any analytics but is used to look up the reader's activity, it
 	 * should be included in preview requests and logged-in admin/editor sessions.
@@ -541,10 +544,7 @@ final class Newspack_Popups_Segmentation {
 	 * @return object Total clients amount and the amount covered by the segment.
 	 */
 	public static function get_segment_reach( $segment_config ) {
-		require_once dirname( __FILE__ ) . '/../api/campaigns/class-campaign-data-utils.php';
-		require_once dirname( __FILE__ ) . '/../api/classes/class-lightweight-api.php';
-
-		$api             = new Lightweight_API();
+		$api             = self::load_lightweight_api();
 		$all_client_data = wp_cache_get( 'newspack_popups_all_clients_data', 'newspack-popups' );
 		if ( false === $all_client_data ) {
 			$all_client_data = $api->get_all_readers_data();

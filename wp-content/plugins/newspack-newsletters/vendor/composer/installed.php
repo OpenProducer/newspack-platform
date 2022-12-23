@@ -5,7 +5,7 @@
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
-        'reference' => 'b1a664c4a51ab2f0937a29266997a95dec37a20a',
+        'reference' => '768057a0b749b48bcc3fb554452091f30772900c',
         'name' => 'automattic/newspack-newsletters',
         'dev' => false,
     ),
@@ -16,7 +16,7 @@
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),
-            'reference' => 'b1a664c4a51ab2f0937a29266997a95dec37a20a',
+            'reference' => '768057a0b749b48bcc3fb554452091f30772900c',
             'dev_requirement' => false,
         ),
         'campaignmonitor/createsend-php' => array(

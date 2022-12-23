@@ -84,9 +84,10 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/reader-activation/class-reader-activation.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-recaptcha.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-magic-link.php';
-		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/stripe/class-stripe-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/stripe/class-stripe-webhooks.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-woocommerce-connection.php';
-		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-stripe-sync.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/stripe/class-stripe-sync.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/my-account/class-woocommerce-my-account.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-oauth.php';
@@ -96,7 +97,9 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-fivetran-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/oauth/class-google-login.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-blocks.php';
-		include_once NEWSPACK_ABSPATH . 'includes/class-meta-pixel.php';
+		include_once NEWSPACK_ABSPATH . 'includes/tracking/class-pixel.php';
+		include_once NEWSPACK_ABSPATH . 'includes/tracking/class-meta-pixel.php';
+		include_once NEWSPACK_ABSPATH . 'includes/tracking/class-twitter-pixel.php';
 		include_once NEWSPACK_ABSPATH . 'includes/revisions-control/class-revisions-control.php';
 		include_once NEWSPACK_ABSPATH . 'includes/authors/class-authors-custom-fields.php';
 
@@ -139,7 +142,9 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/google-site-kit/class-googlesitekit.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-newspack-newsletters.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-mailchimp-for-woocommerce.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-onesignal.php';
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-organic-profile-block.php';
+		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-perfmatters.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
 
@@ -184,7 +189,7 @@ final class Newspack {
 	 */
 	public function handle_resets() {
 		$redirect_url   = admin_url( 'admin.php?page=newspack' );
-		$newspack_reset = filter_input( INPUT_GET, 'newspack_reset', FILTER_SANITIZE_STRING );
+		$newspack_reset = filter_input( INPUT_GET, 'newspack_reset', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( 'starter-content' === $newspack_reset ) {
 			Starter_Content::remove_starter_content();
 			$redirect_url = add_query_arg( 'newspack-notice', __( 'Starter content removed.', 'newspack' ), $redirect_url );

@@ -1,3 +1,52 @@
+## [2.9.2](https://github.com/Automattic/newspack-popups/compare/v2.9.1...v2.9.2) (2022-12-20)
+
+
+### Bug Fixes
+
+* prevent API bot exit without referer ([#1035](https://github.com/Automattic/newspack-popups/issues/1035)) ([bc8ec5b](https://github.com/Automattic/newspack-popups/commit/bc8ec5bea8d0ecacab7f5deec9e747dfc5141e37))
+
+## [2.9.2-hotfix.1](https://github.com/Automattic/newspack-popups/compare/v2.9.1...v2.9.2-hotfix.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* prevent API bot exit without referer ([b9f5c56](https://github.com/Automattic/newspack-popups/commit/b9f5c5646580f7f354dac1279a33a7398bc6491c))
+
+## [2.9.1](https://github.com/Automattic/newspack-popups/compare/v2.9.0...v2.9.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* temporarily remove cd filter ([#1034](https://github.com/Automattic/newspack-popups/issues/1034)) ([c2c7f8e](https://github.com/Automattic/newspack-popups/commit/c2c7f8e47b1f738eea6c625db23e0314bd29066a))
+
+# [2.9.0](https://github.com/Automattic/newspack-popups/compare/v2.8.3...v2.9.0) (2022-12-12)
+
+
+### Bug Fixes
+
+* **ga:** add custom dimensions via Newspack instead of a remote config ([#1014](https://github.com/Automattic/newspack-popups/issues/1014)) ([fc49f4d](https://github.com/Automattic/newspack-popups/commit/fc49f4de92ae17ea42e73421e61a6c69f843a8b2)), closes [#325](https://github.com/Automattic/newspack-popups/issues/325)
+* update CI orb newspack-scripts ([2bec2ad](https://github.com/Automattic/newspack-popups/commit/2bec2ad608cd543e0e4223b00fe73925bcb2857a))
+
+
+### Features
+
+* create Json schemas ([#1019](https://github.com/Automattic/newspack-popups/issues/1019)) ([b244f9e](https://github.com/Automattic/newspack-popups/commit/b244f9e526cb3a18df6e6d5b69dbb7ca6224b7ee))
+* support custom class names on inline prompt blocks ([#1015](https://github.com/Automattic/newspack-popups/issues/1015)) ([853de19](https://github.com/Automattic/newspack-popups/commit/853de19c974a70edba88d31487bb791e810f8876))
+
+# [2.9.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.8.3...v2.9.0-alpha.1) (2022-12-01)
+
+
+### Bug Fixes
+
+* **ga:** add custom dimensions via Newspack instead of a remote config ([#1014](https://github.com/Automattic/newspack-popups/issues/1014)) ([fc49f4d](https://github.com/Automattic/newspack-popups/commit/fc49f4de92ae17ea42e73421e61a6c69f843a8b2)), closes [#325](https://github.com/Automattic/newspack-popups/issues/325)
+* update CI orb newspack-scripts ([2bec2ad](https://github.com/Automattic/newspack-popups/commit/2bec2ad608cd543e0e4223b00fe73925bcb2857a))
+
+
+### Features
+
+* create Json schemas ([#1019](https://github.com/Automattic/newspack-popups/issues/1019)) ([b244f9e](https://github.com/Automattic/newspack-popups/commit/b244f9e526cb3a18df6e6d5b69dbb7ca6224b7ee))
+* support custom class names on inline prompt blocks ([#1015](https://github.com/Automattic/newspack-popups/issues/1015)) ([853de19](https://github.com/Automattic/newspack-popups/commit/853de19c974a70edba88d31487bb791e810f8876))
+
 ## [2.8.3](https://github.com/Automattic/newspack-popups/compare/v2.8.2...v2.8.3) (2022-11-16)
 
 

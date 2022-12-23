@@ -5,6 +5,10 @@
 		"promptId": {
 			"type": "number",
 			"default": 0
+		},
+		"className": {
+			"type": "string",
+			"default": ""
 		}
 	}
 }

@@ -126,29 +126,61 @@ class Engagement_Wizard extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
+
+		$meta_pixel = new Meta_Pixel();
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
 			'/wizard/' . $this->slug . '/social/meta_pixel',
 			[
 				[
 					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => [ 'Newspack\Meta_Pixel', 'api_get' ],
+					'callback'            => [ $meta_pixel, 'api_get' ],
 					'permission_callback' => [ $this, 'api_permissions_check' ],
 				],
 				[
 					'methods'             => \WP_REST_Server::EDITABLE,
-					'callback'            => [ 'Newspack\Meta_Pixel', 'api_save' ],
+					'callback'            => [ $meta_pixel, 'api_save' ],
 					'permission_callback' => [ $this, 'api_permissions_check' ],
 					'args'                => [
 						'active'   => [
 							'type'              => 'boolean',
 							'required'          => true,
-							'validate_callback' => [ 'Newspack\Meta_Pixel', 'validate_active' ],
+							'validate_callback' => [ $meta_pixel, 'validate_active' ],
 						],
 						'pixel_id' => [
 							'type'              => [ 'integer', 'string' ],
 							'required'          => true,
-							'validate_callback' => [ 'Newspack\Meta_Pixel', 'validate_pixel_id' ],
+							'validate_callback' => [ $meta_pixel, 'validate_pixel_id' ],
+						],
+					],
+				],
+			]
+		);
+
+		$twitter_pixel = new Twitter_Pixel();
+		register_rest_route(
+			NEWSPACK_API_NAMESPACE,
+			'/wizard/' . $this->slug . '/social/twitter_pixel',
+			[
+				[
+					'methods'             => \WP_REST_Server::READABLE,
+					'callback'            => [ $twitter_pixel, 'api_get' ],
+					'permission_callback' => [ $this, 'api_permissions_check' ],
+				],
+				[
+					'methods'             => \WP_REST_Server::EDITABLE,
+					'callback'            => [ $twitter_pixel, 'api_save' ],
+					'permission_callback' => [ $this, 'api_permissions_check' ],
+					'args'                => [
+						'active'   => [
+							'type'              => 'boolean',
+							'required'          => true,
+							'validate_callback' => [ $twitter_pixel, 'validate_active' ],
+						],
+						'pixel_id' => [
+							'type'              => [ 'integer', 'string' ],
+							'required'          => true,
+							'validate_callback' => [ $twitter_pixel, 'validate_pixel_id' ],
 						],
 					],
 				],
@@ -298,7 +330,7 @@ class Engagement_Wizard extends Wizard {
 	public function enqueue_scripts_and_styles() {
 		parent::enqueue_scripts_and_styles();
 
-		if ( filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING ) !== $this->slug ) {
+		if ( filter_input( INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) !== $this->slug ) {
 			return;
 		}
 

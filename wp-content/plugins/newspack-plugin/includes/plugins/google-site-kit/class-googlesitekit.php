@@ -153,7 +153,7 @@ class GoogleSiteKit {
 			update_option( self::GA4_SETUP_DONE_OPTION_NAME, true, true );
 			update_option( $sitekit_ga4_option_name, $ga4_settings, true );
 		} catch ( \Throwable $e ) {
-			Logger::log( 'Failed updating Site Kit GA4 settings option: ' . $e->getMessage() );
+			Logger::error( 'Failed updating Site Kit GA4 settings option: ' . $e->getMessage() );
 		}
 	}
 }

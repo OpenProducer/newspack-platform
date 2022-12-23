@@ -84,6 +84,8 @@ final class Reader_Activation {
 			\add_filter( 'retrieve_password_notification_email', [ __CLASS__, 'password_reset_configuration' ], 10, 4 );
 			\add_action( 'lostpassword_post', [ __CLASS__, 'set_password_reset_mail_content_type' ] );
 			\add_filter( 'lostpassword_errors', [ __CLASS__, 'rate_limit_lost_password' ], 10, 2 );
+			\add_filter( 'woocommerce_checkout_customer_id', [ __CLASS__, 'associate_existing_woo_users_with_transactions_on_checkout' ] );
+			\add_filter( 'woocommerce_checkout_posted_data', [ __CLASS__, 'dont_force_registration_for_existing_woo_users' ], 11 );
 		}
 	}
 
@@ -729,7 +731,7 @@ final class Reader_Activation {
 			$placeholder = __( 'Enter your email address', 'newspack' );
 		}
 		?>
-		<input class="nphp" tabindex="-1" aria-hidden="true" name="email" type="email" placeholder="<?php echo \esc_attr( $placeholder ); ?>" />
+		<input class="nphp" tabindex="-1" aria-hidden="true" name="email" type="email" autocomplete="off" placeholder="<?php echo \esc_attr( $placeholder ); ?>" />
 		<?php
 	}
 
@@ -1159,7 +1161,7 @@ final class Reader_Activation {
 
 		$user = \get_user_by( 'email', $email );
 		if ( ( ! $user && 'register' !== $action ) || ( $user && ! self::is_user_reader( $user ) ) ) {
-			return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( "We couldn't find an account registered to this email address. Please confirm that you entered the correct email, or sign up for a new account.", 'newspack' ) ) );
+			return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( "We couldn't find a reader account registered to this email address. Please confirm that you entered the correct email, or sign up for a new account.", 'newspack' ) ) );
 		}
 
 		$payload = [
@@ -1330,7 +1332,7 @@ final class Reader_Activation {
 			}
 
 			if ( \is_wp_error( $user_id ) ) {
-				Logger::log( 'User registration failed: ' . $user_id->get_error_message() );
+				Logger::error( 'User registration failed: ' . $user_id->get_error_message() );
 				return $user_id;
 			}
 
@@ -1509,6 +1511,41 @@ final class Reader_Activation {
 			\update_user_meta( $user_data->ID, self::LAST_EMAIL_DATE, time() );
 		}
 		return $errors;
+	}
+
+	/**
+	 * If a reader tries to make a recurring donation with an email address that
+	 * has been previously registered, automatically associate the transaction with the user.
+	 *
+	 * @param int $customer_id Current customer ID.
+	 * @return int Modified $customer_id
+	 */
+	public static function associate_existing_woo_users_with_transactions_on_checkout( $customer_id ) {
+		$billing_email = filter_input( INPUT_POST, 'billing_email', FILTER_SANITIZE_EMAIL );
+		if ( $billing_email ) {
+			$customer = \get_user_by( 'email', $billing_email );
+			if ( $customer ) {
+				$customer_id = $customer->ID;
+			}
+		}
+		return $customer_id;
+	}
+
+	/**
+	 * Don't force account registration/login on Woo purchases for existing users.
+	 *
+	 * @param array $data Array of Woo checkout data.
+	 * @return array Modified $data.
+	 */
+	public static function dont_force_registration_for_existing_woo_users( $data ) {
+		$email    = $data['billing_email'];
+		$customer = \get_user_by( 'email', $email );
+		if ( $customer ) {
+			$data['createaccount'] = 0;
+			\add_filter( 'woocommerce_checkout_registration_required', '__return_false', 9999 );
+		}
+
+		return $data;
 	}
 }
 Reader_Activation::init();

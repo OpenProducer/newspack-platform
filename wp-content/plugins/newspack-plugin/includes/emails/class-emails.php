@@ -213,6 +213,9 @@ class Emails {
 
 		if ( 'string' === gettype( $config_name ) ) {
 			$email_config = self::get_email_config_by_type( $config_name );
+		} elseif ( 'integer' === gettype( $config_name ) ) {
+			$email_config = self::serialize_email( null, $config_name );
+			$config_name  = \get_post_meta( $config_name, self::EMAIL_CONFIG_NAME_META, true );
 		} else {
 			return false;
 		}
@@ -325,12 +328,17 @@ class Emails {
 		if ( ! $html_payload || empty( $html_payload ) ) {
 			return false;
 		}
+		$edit_link = '';
+		$post_link = get_edit_post_link( $post_id, '' );
+		if ( $post_link ) {
+			// Make the edit link relative.
+			$edit_link = str_replace( site_url(), '', $post_link );
+		}
 		$serialized_email = [
 			'label'          => $email_config['label'],
 			'description'    => $email_config['description'],
 			'post_id'        => $post_id,
-			// Make the edit link relative.
-			'edit_link'      => str_replace( site_url(), '', get_edit_post_link( $post_id, '' ) ),
+			'edit_link'      => $edit_link,
 			'subject'        => get_the_title( $post_id ),
 			'from_name'      => isset( $email_config['from_name'] ) ? $email_config['from_name'] : self::get_from_name(),
 			'from_email'     => isset( $email_config['from_email'] ) ? $email_config['from_email'] : self::get_from_email(),
@@ -416,7 +424,7 @@ class Emails {
 		} else {
 			$email_post_data = self::load_email_template( $type );
 			if ( ! $email_post_data ) {
-				Logger::log( 'Error: could not retrieve template for type: ' . $type );
+				Logger::error( 'Error: could not retrieve template for type: ' . $type );
 				return false;
 			}
 			$email_post_data['post_status'] = 'publish';
@@ -474,7 +482,7 @@ class Emails {
 		if ( $was_sent ) {
 			return \rest_ensure_response( [] );
 		} else {
-			return new WP_Error(
+			return new \WP_Error(
 				'newspack_test_email_not_sent',
 				__( 'Test email was not sent.', 'newspack' )
 			);

@@ -62,14 +62,15 @@ class WooCommerce_My_Account {
 	 * Enqueue front-end scripts.
 	 */
 	public static function enqueue_scripts() {
-		\wp_enqueue_style(
-			'my-account',
-			\Newspack\Newspack::plugin_url() . '/dist/my-account.css',
-			[],
-			NEWSPACK_PLUGIN_VERSION
-		);
+		if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+			\wp_enqueue_style(
+				'my-account',
+				\Newspack\Newspack::plugin_url() . '/dist/my-account.css',
+				[],
+				NEWSPACK_PLUGIN_VERSION
+			);
+		}
 	}
-
 
 	/**
 	 * Filter "My Account" items, if Stripe is the donations platform.
@@ -160,7 +161,7 @@ class WooCommerce_My_Account {
 			return;
 		}
 
-		$nonce = filter_input( INPUT_GET, self::RESET_PASSWORD_URL_PARAM, FILTER_SANITIZE_STRING );
+		$nonce = filter_input( INPUT_GET, self::RESET_PASSWORD_URL_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( ! $nonce ) {
 			return;
 		}
@@ -170,7 +171,7 @@ class WooCommerce_My_Account {
 			$result  = \retrieve_password( \wp_get_current_user()->user_email );
 			$message = __( 'Please check your email inbox for instructions on how to set a new password.', 'newspack' );
 			if ( \is_wp_error( $result ) ) {
-				Logger::log( 'Error resetting password: ' . $result->get_error_message() );
+				Logger::error( 'Error resetting password: ' . $result->get_error_message() );
 				$message  = $result->get_error_message();
 				$is_error = true;
 			}
@@ -205,7 +206,7 @@ class WooCommerce_My_Account {
 			return;
 		}
 
-		$nonce = filter_input( INPUT_GET, self::DELETE_ACCOUNT_URL_PARAM, FILTER_SANITIZE_STRING );
+		$nonce = filter_input( INPUT_GET, self::DELETE_ACCOUNT_URL_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( ! $nonce || ! \wp_verify_nonce( $nonce, self::DELETE_ACCOUNT_URL_PARAM ) ) {
 			return;
 		}
@@ -295,7 +296,7 @@ class WooCommerce_My_Account {
 		if ( ! \is_user_logged_in() ) {
 			return;
 		}
-		$nonce = filter_input( INPUT_GET, self::SEND_MAGIC_LINK_PARAM, FILTER_SANITIZE_STRING );
+		$nonce = filter_input( INPUT_GET, self::SEND_MAGIC_LINK_PARAM, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 		if ( $nonce ) {
 			$is_error = false;
@@ -303,7 +304,7 @@ class WooCommerce_My_Account {
 				$result  = Reader_Activation::send_verification_email( \wp_get_current_user() );
 				$message = __( 'Please check your email inbox for a link to verify your account.', 'newspack' );
 				if ( \is_wp_error( $result ) ) {
-					Logger::log( 'Error sending verification email: ' . $result->get_error_message() );
+					Logger::error( 'Error sending verification email: ' . $result->get_error_message() );
 					$message  = $result->get_error_message();
 					$is_error = true;
 				}
@@ -406,7 +407,7 @@ class WooCommerce_My_Account {
 		$error_message             = false;
 		if ( \is_wp_error( $stripe_billing_portal_url ) ) {
 			$error_message = $stripe_billing_portal_url->get_error_message();
-			Logger::log( 'Error getting Stripe billing portal URL: ' . \wp_json_encode( $stripe_billing_portal_url ) );
+			Logger::error( 'Error getting Stripe billing portal URL: ' . \wp_json_encode( $stripe_billing_portal_url ) );
 		}
 
 		include dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/reader-revenue/templates/myaccount-billing.php';

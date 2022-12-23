@@ -34,6 +34,7 @@ function register_block() {
 function render_block( $attributes ) {
 	$content             = '';
 	$custom_placement_id = \Newspack_Popups_Custom_Placements::validate_custom_placement_id( $attributes['customPlacement'] );
+	$class_names         = isset( $attributes['className'] ) ? ' class="' . $attributes['className'] . '"' : '';
 
 	if ( empty( $custom_placement_id ) ) {
 		return $content;
@@ -59,7 +60,7 @@ function render_block( $attributes ) {
 			$content .= '<!-- Newspack Campaigns: Start custom placement ' . $custom_placement_id . '-->';
 		}
 		foreach ( $prompts as $prompt_id ) {
-			$content .= '<!-- wp:shortcode -->[newspack-popup id="' . $prompt_id . '"]<!-- /wp:shortcode -->';
+			$content .= '<!-- wp:shortcode -->[newspack-popup id="' . $prompt_id . '"' . $class_names . ']<!-- /wp:shortcode -->';
 		}
 		if ( defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG ) {
 			$content .= '<!-- Newspack Campaigns: End custom placement ' . $custom_placement_id . '-->';

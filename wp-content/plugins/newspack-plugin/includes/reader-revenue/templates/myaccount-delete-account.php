@@ -39,6 +39,9 @@ if ( ! $transient_token || $transient_token !== $token ) {
 		<?php esc_html_e( 'Confirm to delete your account permanently.', 'newspack' ); ?>
 	</p>
 	<p>
+		<?php \esc_html_e( 'Deleting your account will also cancel any newsletter subscriptions and recurring payments.', 'newspack' ); ?>
+	</p>
+	<p>
 		<strong><?php esc_html_e( 'Caution, this action is irreversible!', 'newspack' ); ?></strong>
 	</p>
 	<form method="POST">

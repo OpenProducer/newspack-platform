@@ -65,17 +65,13 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 				$configuration['amounts'] = $attributes['amounts'];
 			}
 
-			if ( isset( $attributes['disabledFrequencies'] ) ) {
-				foreach ( $attributes['disabledFrequencies'] as $frequency_slug => $is_disabled ) {
-					if ( $is_disabled ) {
-						$configuration['disabledFrequencies'][ $frequency_slug ] = true;
-					}
-				}
-			}
-
 			if ( isset( $attributes['minimumDonation'] ) ) {
 				$configuration['minimumDonation'] = $attributes['minimumDonation'];
 			}
+
+			// Override defaults with manual config.
+			$configuration['defaultFrequency']    = $attributes['defaultFrequency'];
+			$configuration['disabledFrequencies'] = $attributes['disabledFrequencies'];
 		}
 
 		// Ensure default frequency is valid (not disabled).

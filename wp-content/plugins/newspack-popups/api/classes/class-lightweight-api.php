@@ -73,15 +73,16 @@ class Lightweight_API {
 	 * Constructor.
 	 *
 	 * @param string|null $nonce If API is being instantiated directly by WP, it needs nonce verification.
+	 * @param boolean     $ignore_referer_validation If API is being instantiated directly by WP, it does not need to check referer.
 	 *
 	 * @codeCoverageIgnore
 	 */
-	public function __construct( $nonce = null ) {
-		if ( $this->is_a_web_crawler() ) {
+	public function __construct( $nonce = null, $ignore_referer_validation = false ) {
+		if ( $this->is_a_web_crawler() && ! $ignore_referer_validation ) {
 			header( 'X-Robots-Tag: noindex' );
 			exit;
 		}
-		if ( ! $this->verify_referer( $nonce ) ) {
+		if ( ! $this->verify_referer( $nonce ) && ! $ignore_referer_validation ) {
 			$this->error( 'invalid_referer' );
 		}
 		if ( $this->is_debug_enabled() ) {

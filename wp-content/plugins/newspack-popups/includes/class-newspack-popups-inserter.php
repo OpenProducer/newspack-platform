@@ -589,9 +589,14 @@ final class Newspack_Popups_Inserter {
 			return;
 		}
 
+		$class_names = '';
+		if ( ! empty( $atts['class'] ) ) {
+			$class_names .= ' class="' . $atts['class'] . '"';
+		}
+
 		// Wrapping the inline popup in an aside element prevents the markup from being mangled
 		// if the shortcode is the first block.
-		return '<aside>' . Newspack_Popups_Model::generate_popup( $found_popup ) . '</aside>';
+		return '<aside' . $class_names . '>' . Newspack_Popups_Model::generate_popup( $found_popup ) . '</aside>';
 	}
 
 	/**

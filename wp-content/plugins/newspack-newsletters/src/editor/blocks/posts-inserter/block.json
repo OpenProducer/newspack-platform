@@ -1,7 +1,9 @@
 {
 	"name": "newspack-newsletters/posts-inserter",
 	"category": "widgets",
-	"supports": [ "align" ],
+	"supports": [
+		"align"
+	],
 	"attributes": {
 		"areBlocksInserted": {
 			"type": "boolean",
@@ -11,7 +13,15 @@
 			"type": "number",
 			"default": 3
 		},
+		"preventDeduplication": {
+			"type": "boolean",
+			"default": false
+		},
 		"displayPostSubtitle": {
+			"type": "boolean",
+			"default": false
+		},
+		"displayAuthor": {
 			"type": "boolean",
 			"default": false
 		},
@@ -56,13 +66,13 @@
 			"default": []
 		},
 		"textFontSize": {
-			"type": "number"
+			"type": "string"
 		},
 		"headingFontSize": {
-			"type": "number"
+			"type": "string"
 		},
 		"subHeadingFontSize": {
-			"type": "number"
+			"type": "string"
 		},
 		"textColor": {
 			"type": "string"

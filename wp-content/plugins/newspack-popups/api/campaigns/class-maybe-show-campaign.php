@@ -57,7 +57,7 @@ class Maybe_Show_Campaign extends Lightweight_API {
 				$reader_events[] = $view_event;
 			}
 
-			$referer_url                   = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_STRING );
+			$referer_url                   = filter_input( INPUT_SERVER, 'HTTP_REFERER', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 			$page_referer_url              = isset( $_REQUEST['ref'] ) ? $_REQUEST['ref'] : ''; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			$all_segments                  = isset( $settings->all_segments ) ? $settings->all_segments : [];
 			$overlay_to_maybe_display      = null;

@@ -45,7 +45,7 @@ class NRH {
 		if ( isset( $nrh_config['nrh_salesforce_campaign_id'] ) ) {
 			$salesforce_id = wp_strip_all_tags( $nrh_config['nrh_salesforce_campaign_id'] );
 		}
-		$custom_campaign = filter_input( INPUT_GET, 'campaign', FILTER_SANITIZE_STRING );
+		$custom_campaign = filter_input( INPUT_GET, 'campaign', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( $custom_campaign ) {
 			$salesforce_id = wp_strip_all_tags( $custom_campaign );
 		}
@@ -86,7 +86,7 @@ class NRH {
 			return $html;
 		}
 
-		$custom_campaign = filter_input( INPUT_GET, 'campaign', FILTER_SANITIZE_STRING );
+		$custom_campaign = filter_input( INPUT_GET, 'campaign', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( ! $custom_campaign ) {
 			return $html;
 		}

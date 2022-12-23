@@ -32,8 +32,9 @@ function register_block() {
  * @param array $attributes Block attributes.
  */
 function render_block( $attributes ) {
-	$content   = '';
-	$prompt_id = $attributes['promptId'];
+	$content     = '';
+	$prompt_id   = $attributes['promptId'];
+	$class_names = isset( $attributes['className'] ) ? ' class="' . $attributes['className'] . '"' : '';
 
 	if ( empty( $prompt_id ) ) {
 		return $content;
@@ -48,7 +49,7 @@ function render_block( $attributes ) {
 			$content .= '<!-- Newspack Campaigns: Start Prompt ' . $prompt_id . '-->';
 		}
 
-		$content .= '<!-- wp:shortcode -->[newspack-popup id="' . $prompt_id . '"]<!-- /wp:shortcode -->';
+		$content .= '<!-- wp:shortcode -->[newspack-popup id="' . $prompt_id . '"' . $class_names . ']<!-- /wp:shortcode -->';
 
 		if ( defined( 'WP_NEWSPACK_DEBUG' ) && WP_NEWSPACK_DEBUG ) {
 			$content .= '<!-- Newspack Campaigns: End Prompt ' . $prompt_id . '-->';

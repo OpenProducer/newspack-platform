@@ -133,7 +133,7 @@ class Google_Services_Connection {
 				}
 			}
 		} catch ( \Throwable $th ) {
-			Logger::log( 'Failed sending custom event to GA: ' . $th->getMessage() );
+			Logger::error( 'Failed sending custom event to GA: ' . $th->getMessage() );
 		}
 	}
 }

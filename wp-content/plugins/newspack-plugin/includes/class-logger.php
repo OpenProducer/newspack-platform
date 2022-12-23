@@ -18,8 +18,9 @@ class Logger {
 	 *
 	 * @param any    $payload The payload to log.
 	 * @param string $header Log message header.
+	 * @param string $type Type of the message.
 	 */
-	public static function log( $payload, $header = 'NEWSPACK' ) {
+	public static function log( $payload, $header = 'NEWSPACK', $type = 'info' ) {
 		if ( ! defined( 'NEWSPACK_LOG_LEVEL' ) || 0 >= (int) NEWSPACK_LOG_LEVEL ) {
 			return;
 		}
@@ -46,7 +47,18 @@ class Logger {
 
 		$message       = 'string' === gettype( $payload ) ? $payload : wp_json_encode( $payload, JSON_PRETTY_PRINT );
 		$caller_prefix = $caller ? "[$caller]" : '';
+		$type_prefix   = 'info' != $type ? "[$type]" : '';
 
-		error_log( '[' . $header . ']' . $caller_prefix . ': ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( '[' . $header . ']' . $caller_prefix . strtoupper( $type_prefix ) . ': ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+	}
+
+	/**
+	 * A logger for errors.
+	 *
+	 * @param any    $payload The payload to log.
+	 * @param string $header Log message header.
+	 */
+	public static function error( $payload, $header = 'NEWSPACK' ) {
+		return self::log( $payload, $header, 'error' );
 	}
 }

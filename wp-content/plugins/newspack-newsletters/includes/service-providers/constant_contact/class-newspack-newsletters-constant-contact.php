@@ -152,7 +152,10 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		$redirect_uri = $this->get_oauth_redirect_uri();
 		$code         = sanitize_text_field( $_GET['code'] );
 
-		$this->connect( $redirect_uri, $code );
+		$connected = $this->connect( $redirect_uri, $code );
+		if ( ! $connected ) {
+			wp_die( esc_html__( 'Could not connect to Constant Contact.', 'newspack-newsletters' ) );
+		}
 		?>
 		<script type="text/javascript">
 			window.close();
@@ -170,15 +173,22 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @param string $redirect_uri Redirect URI.
 	 * @param string $code         Authorization code.
 	 *
-	 * @return Boolean Whether we are connected.
+	 * @return boolean Whether we are connected.
 	 */
 	private function connect( $redirect_uri, $code ) {
 		$cc    = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret() );
 		$token = $cc->get_access_token( $redirect_uri, $code );
-		return $this->set_access_token(
-			$token->access_token,
-			isset( $token->refresh_token ) ? $token->refresh_token : ''
-		);
+		if ( ! $token || ! isset( $token->access_token ) ) {
+			return false;
+		}
+		try {
+			return $this->set_access_token(
+				$token->access_token,
+				isset( $token->refresh_token ) ? $token->refresh_token : ''
+			);
+		} catch ( Exception $e ) {
+			return false;
+		}
 	}
 
 	/**

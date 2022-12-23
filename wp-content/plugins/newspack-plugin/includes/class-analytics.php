@@ -57,7 +57,10 @@ class Analytics {
 	 * More about custom dimensions: https://support.google.com/analytics/answer/2709828.
 	 */
 	public static function handle_custom_dimensions_reporting() {
-		$custom_dimensions_values = self::get_custom_dimensions_values( get_the_ID() );
+		$custom_dimensions_values = apply_filters(
+			'newspack_custom_dimensions_values',
+			self::get_custom_dimensions_values( get_the_ID() )
+		);
 		foreach ( $custom_dimensions_values as $key => $value ) {
 			self::add_custom_dimension_to_ga_config( $key, $value );
 		}
@@ -579,11 +582,12 @@ class Analytics {
 	 * Can we rely on Site Kit's Analytics module?
 	 */
 	private static function can_use_site_kits_analytics() {
-		$sitekit_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
-		return $sitekit_manager->is_module_active( 'analytics' )
-		// If Google Tag Manager module is active, it supersedes the Analytics module.
-		// This means that effectively GTM module being active equals Analytics module being inactive.
-		&& false === $sitekit_manager->is_module_active( 'tagmanager' );
+		if ( ! class_exists( '\Google\Site_Kit\Modules\Analytics\Settings' ) ) {
+			return false;
+		}
+		$sitekit_manager     = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'google-site-kit' );
+		$sitekit_ga_settings = get_option( \Google\Site_Kit\Modules\Analytics\Settings::OPTION, false );
+		return (bool) $sitekit_manager->is_module_active( 'analytics' ) && $sitekit_ga_settings['canUseSnippet'];
 	}
 
 	/**

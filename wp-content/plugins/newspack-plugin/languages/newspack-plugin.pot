@@ -29,7 +29,7 @@ msgid "Automattic"
 msgstr ""
 
 #. Author URI of the plugin
-msgid "https://newspack.blog/"
+msgid "https://newspack.com/"
 msgstr ""
 
 #: includes/api/class-plugins-controller.php:392
