@@ -350,6 +350,8 @@ class Donations {
 			self::update_donation_product( [ 'minimumDonation' => $settings['minimumDonation'] ] );
 		}
 
+		$parsed_settings['platform'] = self::get_platform_slug();
+
 		return $parsed_settings;
 	}
 
@@ -518,6 +520,13 @@ class Donations {
 	 */
 	public static function is_platform_stripe() {
 		return 'stripe' === self::get_platform_slug();
+	}
+
+	/**
+	 * Is the donation platform set to 'other'?
+	 */
+	public static function is_platform_other() {
+		return 'other' === self::get_platform_slug();
 	}
 
 	/**

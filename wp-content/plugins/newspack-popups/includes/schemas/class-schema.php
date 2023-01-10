@@ -40,7 +40,7 @@ abstract class Schema {
 	 *
 	 * @return array The Schema.
 	 */
-	abstract public function get_schema();
+	abstract public static function get_schema();
 
 	/**
 	 * Validate the value against the schema.

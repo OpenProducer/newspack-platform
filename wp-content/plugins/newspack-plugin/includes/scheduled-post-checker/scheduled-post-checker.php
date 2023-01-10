@@ -15,7 +15,7 @@ define( 'NEWSPACK_SCHEDULED_POST_CHECKER_CRON_HOOK', 'newspack_scheduled_post_ch
  * Set up the checking.
  */
 function nspc_init() {
-	register_deactivation_hook( __FILE__, 'nspc_deactivate' );
+	add_action( 'newspack_deactivation', '\Newspack\Scheduled_Post_Checker\nspc_deactivate' );
 	if ( ! wp_next_scheduled( NEWSPACK_SCHEDULED_POST_CHECKER_CRON_HOOK ) ) {
 		wp_schedule_event( time(), 'fivemins', NEWSPACK_SCHEDULED_POST_CHECKER_CRON_HOOK );
 	}

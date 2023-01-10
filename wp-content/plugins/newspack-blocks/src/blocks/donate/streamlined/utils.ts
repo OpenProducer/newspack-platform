@@ -64,11 +64,11 @@ const getCookies = () =>
 	}, {} );
 
 /**
- * Retrieves donation settings passed via a `data-settings` HTML attribute
- * on a `form` element.
+ * Retrieves donation settings passed via a `data-streamlined-config` HTML attribute.
  */
-export const getSettings = ( formElement: HTMLFormElement ) => {
-	const settings = formElement.getAttribute( 'data-settings' );
+export const getSettings = ( el: HTMLElement ) => {
+	const settingsElement: HTMLElement | null = el.closest( '[data-streamlined-config]' );
+	const settings = settingsElement?.getAttribute( 'data-streamlined-config' );
 	if ( ! settings ) {
 		return {};
 	}

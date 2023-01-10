@@ -39,10 +39,14 @@
 		}
 
 		&__card {
-			border: 1px solid variables.$color__border;
-			border-radius: 3px;
 			padding: 0.34rem 0.66rem;
 			min-height: 32px;
+		}
+		input[type='text'],
+		input[type='email'],
+		&__card {
+			border: 1px solid variables.$color__border;
+			border-radius: 3px;
 		}
 		input[type='text'],
 		input[type='email'],
@@ -146,10 +150,21 @@
 					@include mixins.media( tablet ) {
 						margin-bottom: 0;
 						width: 50%;
-						&:last-child {
+						+ input {
 							margin-left: 0.5rem;
 						}
 					}
+				}
+			}
+			&--additional-fields {
+				display: flex;
+				flex-wrap: wrap;
+				margin-left: -0.25rem;
+				margin-right: -0.25rem;
+				> input {
+					margin-bottom: 0.5rem;
+					margin-left: 0.25rem;
+					margin-right: 0.25rem;
 				}
 			}
 		}
@@ -242,15 +257,6 @@
 			margin-bottom: 0.56rem;
 		}
 
-		&__methods {
-			display: grid;
-			grid-gap: 0.56rem;
-
-			> * {
-				margin-top: 0;
-			}
-		}
-
 		&__footer {
 			margin: 0 0 1.12rem 0;
 
@@ -264,10 +270,6 @@
 				margin: 0;
 				width: auto;
 			}
-		}
-
-		&__request-button {
-			margin: 0;
 		}
 	}
 }
@@ -289,30 +291,12 @@
 			margin-bottom: 1.12rem;
 		}
 
-		&__methods {
-			display: grid;
-			grid-gap: 0.28rem;
-
-			> * {
-				margin-top: 0;
-			}
-		}
-
 		&__footer {
 			margin: 0 0 1.12rem 0;
 
 			> * {
 				padding: 0;
 			}
-
-			button {
-				margin: 0;
-				min-width: auto;
-			}
-		}
-
-		&__request-button {
-			margin: 0;
 		}
 	}
 }

@@ -126,6 +126,7 @@ final class Reader_Activation {
 			'newspack_reader_activation_data',
 			$script_data
 		);
+		\wp_script_add_data( self::SCRIPT_HANDLE, 'async', true );
 		\wp_script_add_data( self::SCRIPT_HANDLE, 'amp-plus', true );
 
 		/**
@@ -217,6 +218,15 @@ final class Reader_Activation {
 			return null;
 		}
 		$value = \get_option( self::OPTIONS_PREFIX . $name, $config[ $name ] );
+
+		// If fetching terms URL, set the default here as \get_permalink and \get_post_status aren't available on the init hook.
+		if ( 'terms_url' === $name && empty( $value ) ) {
+			$privacy_policy_page_id = \get_option( 'wp_page_for_privacy_policy' );
+			if ( ! empty( $privacy_policy_page_id ) && 'publish' === \get_post_status( $privacy_policy_page_id ) ) {
+				$value = \get_permalink( $privacy_policy_page_id );
+			}
+		}
+
 		// Use default value type for casting bool option value.
 		if ( is_bool( $config[ $name ] ) ) {
 			$value = (bool) $value;
@@ -272,7 +282,7 @@ final class Reader_Activation {
 		}
 
 		if ( $is_enabled ) {
-			$is_enabled = self::get_setting( 'enabled' );
+			$is_enabled = (bool) \get_option( self::OPTIONS_PREFIX . 'enabled', true );
 		}
 
 		/**

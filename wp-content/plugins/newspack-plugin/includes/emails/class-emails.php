@@ -358,21 +358,19 @@ class Emails {
 	 * @return string Email address used as the sender for Newspack emails.
 	 */
 	public static function get_from_email() {
-		$from_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'sender_email_address', '' );
-		if ( empty( $from_email ) ) {
-			// Get the site domain and get rid of www.
-			$sitename   = wp_parse_url( network_home_url(), PHP_URL_HOST );
-			$from_email = 'no-reply@';
+		// Get the site domain and get rid of www.
+		$sitename   = wp_parse_url( network_home_url(), PHP_URL_HOST );
+		$from_email = 'no-reply@';
 
-			if ( null !== $sitename ) {
-				if ( 'www.' === substr( $sitename, 0, 4 ) ) {
-					$sitename = substr( $sitename, 4 );
-				}
-
-				$from_email .= $sitename;
+		if ( null !== $sitename ) {
+			if ( 'www.' === substr( $sitename, 0, 4 ) ) {
+				$sitename = substr( $sitename, 4 );
 			}
+			$from_email .= $sitename;
 		}
-
+		if ( Reader_Activation::is_enabled() ) {
+			$from_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'sender_email_address', $from_email );
+		}
 		return apply_filters( 'newspack_from_email', $from_email );
 	}
 
@@ -382,7 +380,10 @@ class Emails {
 	 * @return string
 	 */
 	public static function get_reply_to_email() {
-		$reply_to_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'contact_email_address', self::get_from_email() );
+		$reply_to_email = get_bloginfo( 'admin_email' );
+		if ( Reader_Activation::is_enabled() ) {
+			$reply_to_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'contact_email_address', self::get_from_email() );
+		}
 		return apply_filters( 'newspack_reply_to_email', $reply_to_email );
 	}
 
@@ -394,7 +395,10 @@ class Emails {
 	 * @return string Name used as the sender for Newspack emails.
 	 */
 	public static function get_from_name() {
-		$from_name = get_option( Reader_Activation::OPTIONS_PREFIX . 'sender_name', get_bloginfo( 'name' ) );
+		$from_name = get_bloginfo( 'name' );
+		if ( Reader_Activation::is_enabled() ) {
+			$from_name = get_option( Reader_Activation::OPTIONS_PREFIX . 'sender_name', $from_name );
+		}
 		return apply_filters( 'newspack_from_name', $from_name );
 	}
 

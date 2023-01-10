@@ -55,6 +55,37 @@
 		},
 		"minimumDonation": {
 			"type": "number"
+		},
+		"layoutOption": {
+			"type": "string",
+			"default": "frequency"
+		},
+		"tiersBasedOptions": {
+			"type": "array",
+			"default": [
+				{
+					"heading": "Small",
+					"description": "",
+					"buttonText": "Select",
+					"recommendLabel": ""
+				},
+				{
+					"heading": "Medium",
+					"description": "",
+					"buttonText": "Select",
+					"recommendLabel": "BEST VALUE"
+				},
+				{
+					"heading": "Large",
+					"description": "",
+					"buttonText": "Select",
+					"recommendLabel": ""
+				}
+			]
+		},
+		"additionalFields": {
+			"type": "array",
+			"default": []
 		}
 	},
 	"supports": {

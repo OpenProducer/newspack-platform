@@ -58,26 +58,6 @@ class Stripe_Connection {
 	}
 
 	/**
-	 * Check capabilities for using API.
-	 *
-	 * @codeCoverageIgnore
-	 * @param WP_REST_Request $request API request object.
-	 * @return bool|WP_Error
-	 */
-	public static function api_permissions_check( $request ) {
-		if ( ! current_user_can( 'manage_options' ) ) {
-			return new \WP_Error(
-				'newspack_rest_forbidden',
-				esc_html__( 'You cannot use this resource.', 'newspack' ),
-				[
-					'status' => 403,
-				]
-			);
-		}
-		return true;
-	}
-
-	/**
 	 * Get Stripe data blueprint.
 	 */
 	public static function get_default_stripe_data() {
@@ -161,29 +141,55 @@ class Stripe_Connection {
 	}
 
 	/**
+	 * Get Stripe charge.
+	 *
+	 * @param string $charge_id Customer ID.
+	 */
+	public static function get_charge_by_id( $charge_id ) {
+		$stripe = self::get_stripe_client();
+		try {
+			return $stripe->charges->retrieve( $charge_id, [] );
+		} catch ( \Throwable $e ) {
+			return new \WP_Error( 'stripe_newspack', __( 'Could not fetch charge.', 'newspack' ), $e->getMessage() );
+		}
+	}
+
+	/**
 	 * Get customer's charges.
 	 *
 	 * @param string $customer_id Customer ID.
 	 * @param int    $page Page of results.
 	 * @param int    $limit Limit of results.
+	 * @param string $type 'charge' or 'invoice'. The latter contains information about a subcription, if applicable.
 	 */
-	public static function get_customer_charges( $customer_id, $page = false, $limit = 10 ) {
+	public static function get_customer_transactions( $customer_id, $page = false, $limit = false, $type = 'charge' ) {
 		$stripe = self::get_stripe_client();
 		try {
-			$all_charges = [];
-			$params      = [
+			$all_transactions = [];
+			$params           = [
 				'query' => 'customer:"' . $customer_id . '"',
-				'limit' => $limit,
 			];
+			if ( $limit ) {
+				$params['limit'] = $limit;
+			}
 			if ( $page ) {
 				$params['page'] = $page;
 			}
-			$response    = $stripe->charges->search( $params );
-			$all_charges = $response['data'];
-			if ( $response['has_more'] ) {
-				$all_charges = array_merge( $all_charges, self::get_customer_charges( $customer_id, $response['next_page'] ) );
+			if ( 'invoice' === $type ) {
+				$response = $stripe->invoices->search( $params );
+			} elseif ( 'charge' === $type ) {
+				$response = $stripe->charges->search( $params );
+			} else {
+				return new \WP_Error( 'stripe_newspack', __( 'Invalid transaction type.', 'newspack' ) );
 			}
-			return $all_charges;
+			$all_transactions = $response['data'];
+			if ( $limit && count( $all_transactions ) >= $limit ) {
+				return $all_transactions;
+			}
+			if ( $response['has_more'] ) {
+				$all_transactions = array_merge( $all_transactions, self::get_customer_transactions( $customer_id, $response['next_page'], $limit, $type ) );
+			}
+			return $all_transactions;
 		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'stripe_newspack', __( 'Could not fetch customer\'s charges.', 'newspack' ), $e->getMessage() );
 		}
@@ -195,7 +201,7 @@ class Stripe_Connection {
 	 * @param string $customer_id Customer ID.
 	 */
 	public static function get_customer_ltv( $customer_id ) {
-		$all_charges = self::get_customer_charges( $customer_id );
+		$all_charges = self::get_customer_transactions( $customer_id );
 		if ( \is_wp_error( $all_charges ) ) {
 			return $all_charges;
 		}
@@ -353,7 +359,7 @@ class Stripe_Connection {
 	 *
 	 * @param string $customer_id Customer ID.
 	 */
-	private static function get_subscriptions_of_customer( $customer_id ) {
+	public static function get_subscriptions_of_customer( $customer_id ) {
 		$stripe = self::get_stripe_client();
 		try {
 			return $stripe->subscriptions->all(
@@ -991,10 +997,21 @@ class Stripe_Connection {
 			if ( \is_wp_error( $invoice ) ) {
 				return $frequency;
 			}
-			$recurring = $invoice['lines']['data'][0]['price']['recurring'];
-			if ( isset( $recurring['interval'] ) ) {
-				$frequency = $recurring['interval'];
-			}
+			$frequency = self::get_frequency_from_invoice( $invoice );
+		}
+		return $frequency;
+	}
+
+	/**
+	 * Get payment frequency from invoice.
+	 *
+	 * @param array $invoice Stripe invoice.
+	 */
+	public static function get_frequency_from_invoice( $invoice ) {
+		$frequency = 'once';
+		$recurring = $invoice['lines']['data'][0]['price']['recurring'];
+		if ( isset( $recurring['interval'] ) ) {
+			$frequency = $recurring['interval'];
 		}
 		return $frequency;
 	}
@@ -1015,19 +1032,31 @@ class Stripe_Connection {
 	 * @param array $payment Stripe payment.
 	 */
 	public static function create_wc_transaction_payload( $customer, $payment ) {
-		$balance_transaction    = self::get_balance_transaction( $payment['balance_transaction'] );
-		$amount_normalised      = self::normalise_amount( $payment['amount'], $payment['currency'] );
-		$stripe_data            = self::get_stripe_data();
-		$subscription_id        = null;
-		$invoice_billing_reason = null;
-		$invoice                = self::get_invoice( $payment['invoice'] );
-		if ( $invoice && ! \is_wp_error( $invoice ) ) {
-			$invoice_billing_reason = $invoice['billing_reason'];
-			if ( isset( $invoice['subscription'] ) && is_string( $invoice['subscription'] ) ) {
-				$subscription_id = $invoice['subscription'];
+		$balance_transaction = self::get_balance_transaction( $payment['balance_transaction'] );
+		$amount_normalised   = self::normalise_amount( $payment['amount'], $payment['currency'] );
+		$stripe_data         = self::get_stripe_data();
+
+		if ( isset( $payment['billing_reason'], $payment['subscription'] ) ) {
+			$subscription_id        = $payment['subscription'];
+			$invoice_billing_reason = $payment['billing_reason'];
+		} elseif ( $payment['invoice'] ) {
+			$invoice = self::get_invoice( $payment['invoice'] );
+			if ( $invoice && ! \is_wp_error( $invoice ) ) {
+				$invoice_billing_reason = $invoice['billing_reason'];
+				if ( isset( $invoice['subscription'] ) && is_string( $invoice['subscription'] ) ) {
+					$subscription_id = $invoice['subscription'];
+				}
+			} elseif ( \is_wp_error( $invoice ) ) {
+				Logger::log( 'Invoice error: ' . $invoice->get_error_message() );
 			}
-		} elseif ( \is_wp_error( $invoice ) ) {
-			Logger::log( 'Invoice error: ' . $invoice->get_error_message() );
+		} else {
+			$subscription_id        = null;
+			$invoice_billing_reason = null;
+		}
+		if ( isset( $payment['frequency'] ) ) {
+			$frequency = $payment['frequency'];
+		} else {
+			$frequency = self::get_frequency_of_payment( $payment );
 		}
 		return [
 			'email'                         => $customer['email'],
@@ -1040,7 +1069,7 @@ class Stripe_Connection {
 			'stripe_subscription_id'        => $subscription_id,
 			'date'                          => $payment['created'],
 			'amount'                        => $amount_normalised,
-			'frequency'                     => self::get_frequency_of_payment( $payment ),
+			'frequency'                     => $frequency,
 			'currency'                      => $stripe_data['currency'],
 			'client_id'                     => $customer['metadata']['clientId'],
 			'user_id'                       => $customer['metadata']['userId'],

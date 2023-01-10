@@ -1,3 +1,63 @@
+# [1.56.0](https://github.com/Automattic/newspack-newsletters/compare/v1.55.1...v1.56.0) (2023-01-09)
+
+
+### Bug Fixes
+
+* handle post status on "public" meta update ([#1045](https://github.com/Automattic/newspack-newsletters/issues/1045)) ([3ce3373](https://github.com/Automattic/newspack-newsletters/commit/3ce337356b81fa6ed5cb8cbecb06d139eac9082c))
+* list description ([9bf3981](https://github.com/Automattic/newspack-newsletters/commit/9bf398117dc59a407bda326decea878e3f3fb80a))
+* remove unused variable ([a3fbdd2](https://github.com/Automattic/newspack-newsletters/commit/a3fbdd2b44954eb460ada5cc3811a9e42f30c5d2))
+
+
+### Features
+
+* add attributes and labels to providers ([#1019](https://github.com/Automattic/newspack-newsletters/issues/1019)) ([6653b7d](https://github.com/Automattic/newspack-newsletters/commit/6653b7d05707251121762a9b5f767905f953c19c))
+* add my account support to mailchimp ([4d38bc8](https://github.com/Automattic/newspack-newsletters/commit/4d38bc87d5d6106c8c99c730730b1f652998edfd))
+* Add subscription list metabox ([#1024](https://github.com/Automattic/newspack-newsletters/issues/1024)) ([3f54d84](https://github.com/Automattic/newspack-newsletters/commit/3f54d8436e4d9c1dff7f598b30e1fc5425fec7f4))
+* add tags support to mailchimp ([#1008](https://github.com/Automattic/newspack-newsletters/issues/1008)) ([407976b](https://github.com/Automattic/newspack-newsletters/commit/407976b938ef1942a7f7fd132274101a53b2861f))
+* bootstrapping lists CPT ([#1007](https://github.com/Automattic/newspack-newsletters/issues/1007)) ([e5fc722](https://github.com/Automattic/newspack-newsletters/commit/e5fc7225fa0ae4859b2e5d58187848f10563139a))
+* **constant-contact:** improved oauth flow ([#1046](https://github.com/Automattic/newspack-newsletters/issues/1046)) ([c8f52ae](https://github.com/Automattic/newspack-newsletters/commit/c8f52ae6187d39e2cc157b834e98c42fe609a30e))
+* disable local lists edits from selection ([abfb07c](https://github.com/Automattic/newspack-newsletters/commit/abfb07c3a644224db3825157cf1c536bf5eb529e))
+* handle user creation on list update ([7fce947](https://github.com/Automattic/newspack-newsletters/commit/7fce947a2bc358adf2a911b89c0b723570a27b37))
+* improve layout ([e8b9f36](https://github.com/Automattic/newspack-newsletters/commit/e8b9f36d437e6ba0b1c9d31bcd77d20d4b7c3fbc))
+* integrate local lists to other lists ([294ea02](https://github.com/Automattic/newspack-newsletters/commit/294ea02d3ed2d4b65629b2cb5602f9a06abd4843))
+* local subscription lists [#1051](https://github.com/Automattic/newspack-newsletters/issues/1051) ([fe8969a](https://github.com/Automattic/newspack-newsletters/commit/fe8969a32abe98279eb176bc59762275054e6417))
+* merge master ([882c9a4](https://github.com/Automattic/newspack-newsletters/commit/882c9a48dcb1877c89bfd47f4b900fc8e2920113))
+* normalize support for tags ([6f8bb4f](https://github.com/Automattic/newspack-newsletters/commit/6f8bb4f797024465bd2f3136dfc35fd57fd81f5a))
+* notice that we cant create segments ([f242f57](https://github.com/Automattic/newspack-newsletters/commit/f242f57c13d3c0846312bd9b23d3bcb4932d1d79))
+* notice that we cant create segments for active campaign ([59da173](https://github.com/Automattic/newspack-newsletters/commit/59da1737132669417f218eed46a2d6214821a264))
+* save tag ID when saving lists ([e970d34](https://github.com/Automattic/newspack-newsletters/commit/e970d34e1894d54a8af6bc6e2e00edbfe8321414))
+* support my account for active campaign ([60b74ec](https://github.com/Automattic/newspack-newsletters/commit/60b74ec4b6b03c7ae4d449295e8bd00240fbdf3c))
+
+# [1.56.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.55.1...v1.56.0-alpha.1) (2022-12-14)
+
+
+### Bug Fixes
+
+* handle post status on "public" meta update ([#1045](https://github.com/Automattic/newspack-newsletters/issues/1045)) ([3ce3373](https://github.com/Automattic/newspack-newsletters/commit/3ce337356b81fa6ed5cb8cbecb06d139eac9082c))
+* list description ([9bf3981](https://github.com/Automattic/newspack-newsletters/commit/9bf398117dc59a407bda326decea878e3f3fb80a))
+* remove unused variable ([a3fbdd2](https://github.com/Automattic/newspack-newsletters/commit/a3fbdd2b44954eb460ada5cc3811a9e42f30c5d2))
+
+
+### Features
+
+* add attributes and labels to providers ([#1019](https://github.com/Automattic/newspack-newsletters/issues/1019)) ([6653b7d](https://github.com/Automattic/newspack-newsletters/commit/6653b7d05707251121762a9b5f767905f953c19c))
+* add my account support to mailchimp ([4d38bc8](https://github.com/Automattic/newspack-newsletters/commit/4d38bc87d5d6106c8c99c730730b1f652998edfd))
+* Add subscription list metabox ([#1024](https://github.com/Automattic/newspack-newsletters/issues/1024)) ([3f54d84](https://github.com/Automattic/newspack-newsletters/commit/3f54d8436e4d9c1dff7f598b30e1fc5425fec7f4))
+* add tags support to mailchimp ([#1008](https://github.com/Automattic/newspack-newsletters/issues/1008)) ([407976b](https://github.com/Automattic/newspack-newsletters/commit/407976b938ef1942a7f7fd132274101a53b2861f))
+* bootstrapping lists CPT ([#1007](https://github.com/Automattic/newspack-newsletters/issues/1007)) ([e5fc722](https://github.com/Automattic/newspack-newsletters/commit/e5fc7225fa0ae4859b2e5d58187848f10563139a))
+* **constant-contact:** improved oauth flow ([#1046](https://github.com/Automattic/newspack-newsletters/issues/1046)) ([c8f52ae](https://github.com/Automattic/newspack-newsletters/commit/c8f52ae6187d39e2cc157b834e98c42fe609a30e))
+* disable local lists edits from selection ([abfb07c](https://github.com/Automattic/newspack-newsletters/commit/abfb07c3a644224db3825157cf1c536bf5eb529e))
+* handle user creation on list update ([7fce947](https://github.com/Automattic/newspack-newsletters/commit/7fce947a2bc358adf2a911b89c0b723570a27b37))
+* improve layout ([e8b9f36](https://github.com/Automattic/newspack-newsletters/commit/e8b9f36d437e6ba0b1c9d31bcd77d20d4b7c3fbc))
+* integrate local lists to other lists ([294ea02](https://github.com/Automattic/newspack-newsletters/commit/294ea02d3ed2d4b65629b2cb5602f9a06abd4843))
+* local subscription lists [#1051](https://github.com/Automattic/newspack-newsletters/issues/1051) ([fe8969a](https://github.com/Automattic/newspack-newsletters/commit/fe8969a32abe98279eb176bc59762275054e6417))
+* merge master ([882c9a4](https://github.com/Automattic/newspack-newsletters/commit/882c9a48dcb1877c89bfd47f4b900fc8e2920113))
+* normalize support for tags ([6f8bb4f](https://github.com/Automattic/newspack-newsletters/commit/6f8bb4f797024465bd2f3136dfc35fd57fd81f5a))
+* notice that we cant create segments ([f242f57](https://github.com/Automattic/newspack-newsletters/commit/f242f57c13d3c0846312bd9b23d3bcb4932d1d79))
+* notice that we cant create segments for active campaign ([59da173](https://github.com/Automattic/newspack-newsletters/commit/59da1737132669417f218eed46a2d6214821a264))
+* save tag ID when saving lists ([e970d34](https://github.com/Automattic/newspack-newsletters/commit/e970d34e1894d54a8af6bc6e2e00edbfe8321414))
+* support my account for active campaign ([60b74ec](https://github.com/Automattic/newspack-newsletters/commit/60b74ec4b6b03c7ae4d449295e8bd00240fbdf3c))
+
 ## [1.55.1](https://github.com/Automattic/newspack-newsletters/compare/v1.55.0...v1.55.1) (2022-12-12)
 
 

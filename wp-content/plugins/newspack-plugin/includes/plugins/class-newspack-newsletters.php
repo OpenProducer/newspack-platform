@@ -14,6 +14,7 @@ defined( 'ABSPATH' ) || exit;
  */
 class Newspack_Newsletters {
 	const METADATA_DATE_FORMAT = 'Y-m-d';
+	const METADATA_PREFIX      = 'NP_';
 
 	/**
 	 * Metadata keys map for Reader Activation.
@@ -21,25 +22,25 @@ class Newspack_Newsletters {
 	 * @var array
 	 */
 	public static $metadata_keys = [
-		'account'              => 'NP_Account',
-		'registration_date'    => 'NP_Registration Date',
-		'connected_account'    => 'NP_Connected Account',
-		'signup_page'          => 'NP_Signup Page',
-		'signup_page_utm'      => 'NP_Signup UTM: ',
-		'newsletter_selection' => 'NP_Newsletter Selection',
+		'account'              => self::METADATA_PREFIX . 'Account',
+		'registration_date'    => self::METADATA_PREFIX . 'Registration Date',
+		'connected_account'    => self::METADATA_PREFIX . 'Connected Account',
+		'signup_page'          => self::METADATA_PREFIX . 'Signup Page',
+		'signup_page_utm'      => self::METADATA_PREFIX . 'Signup UTM: ',
+		'newsletter_selection' => self::METADATA_PREFIX . 'Newsletter Selection',
 		// Payment-related.
-		'membership_status'    => 'NP_Membership Status',
-		'payment_page'         => 'NP_Payment Page',
-		'payment_page_utm'     => 'NP_Payment UTM: ',
-		'sub_start_date'       => 'NP_Current Subscription Start Date',
-		'sub_end_date'         => 'NP_Current Subscription End Date',
-		'billing_cycle'        => 'NP_Billing Cycle',
-		'recurring_payment'    => 'NP_Recurring Payment',
-		'last_payment_date'    => 'NP_Last Payment Date',
-		'last_payment_amount'  => 'NP_Last Payment Amount',
-		'product_name'         => 'NP_Product Name',
-		'next_payment_date'    => 'NP_Next Payment Date',
-		'total_paid'           => 'NP_Total Paid',
+		'membership_status'    => self::METADATA_PREFIX . 'Membership Status',
+		'payment_page'         => self::METADATA_PREFIX . 'Payment Page',
+		'payment_page_utm'     => self::METADATA_PREFIX . 'Payment UTM: ',
+		'sub_start_date'       => self::METADATA_PREFIX . 'Current Subscription Start Date',
+		'sub_end_date'         => self::METADATA_PREFIX . 'Current Subscription End Date',
+		'billing_cycle'        => self::METADATA_PREFIX . 'Billing Cycle',
+		'recurring_payment'    => self::METADATA_PREFIX . 'Recurring Payment',
+		'last_payment_date'    => self::METADATA_PREFIX . 'Last Payment Date',
+		'last_payment_amount'  => self::METADATA_PREFIX . 'Last Payment Amount',
+		'product_name'         => self::METADATA_PREFIX . 'Product Name',
+		'next_payment_date'    => self::METADATA_PREFIX . 'Next Payment Date',
+		'total_paid'           => self::METADATA_PREFIX . 'Total Paid',
 	];
 
 	/**
@@ -130,7 +131,8 @@ class Newspack_Newsletters {
 
 				$is_new_contact = ! $contact['existing_contact_data'];
 				// If the contact exists, but has no account metadata (or any metadata), treat it as a new contact.
-				if ( $contact['existing_contact_data'] && ! isset( $contact['existing_contact_data']['metadata'], $contact['existing_contact_data']['metadata']['NP_ACCOUNT'] ) ) {
+				$metadata_account_field_formatted = strtoupper( self::$metadata_keys['account'] );
+				if ( $contact['existing_contact_data'] && ! isset( $contact['existing_contact_data']['metadata'], $contact['existing_contact_data']['metadata'][ $metadata_account_field_formatted ] ) ) {
 					$is_new_contact = true;
 				}
 				if ( $is_new_contact ) {
@@ -189,7 +191,7 @@ class Newspack_Newsletters {
 
 				// Ensure only the prefixed metadata is passed along to the ESP.
 				foreach ( $contact['metadata'] as $key => $value ) {
-					if ( strpos( $key, 'NP_' ) !== 0 ) {
+					if ( strpos( $key, self::METADATA_PREFIX ) !== 0 ) {
 						unset( $contact['metadata'][ $key ] );
 					}
 				}

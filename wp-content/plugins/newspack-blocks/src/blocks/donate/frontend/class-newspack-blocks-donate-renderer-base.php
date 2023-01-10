@@ -11,7 +11,8 @@ defined( 'ABSPATH' ) || exit;
  * Handles Salesforce functionality.
  */
 abstract class Newspack_Blocks_Donate_Renderer_Base {
-	const FREQUENCY_PARAM = 'donation_frequency';
+	const FREQUENCY_PARAM   = 'donation_frequency';
+	const TIER_PARAM_PREFIX = 'donation_value_';
 
 	private static $configurations_cache = []; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 
@@ -89,6 +90,12 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 			}
 		}
 
+		$is_tiers_based = $configuration['tiered'] && 'tiers' === $attributes['layoutOption'];
+		if ( ! Newspack_Blocks::can_render_tiers_based_layout() ) {
+			$is_tiers_based = false;
+		}
+		$configuration['is_tier_based_layout'] = $is_tiers_based;
+
 		$frequencies = [
 			'once'  => __( 'One-time', 'newspack-blocks' ),
 			'month' => __( 'Monthly', 'newspack-blocks' ),
@@ -96,6 +103,9 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 		];
 		foreach ( array_keys( $frequencies ) as $frequency_slug ) {
 			if ( $configuration['disabledFrequencies'][ $frequency_slug ] ) {
+				unset( $frequencies[ $frequency_slug ] );
+			}
+			if ( $is_tiers_based && 'once' === $frequency_slug ) {
 				unset( $frequencies[ $frequency_slug ] );
 			}
 		}
@@ -108,22 +118,23 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 			$classname = 'is-style-default';
 		}
 
-		$layout_version                        = 'frequency';
+		$layout_version                        = ( $is_tiers_based ? 'tiers' : 'frequency' );
 		$container_classnames                  = implode(
 			' ',
 			[
 				'wp-block-newspack-blocks-donate',
 				'wpbnbd',
 				'wpbnbd--' . $layout_version . '-based',
+				'wpbnbd--platform-' . $configuration['platform'],
 				$classname,
 				'wpbnbd-frequencies--' . count( $configuration['frequencies'] ),
 			]
 		);
 		$configuration['container_classnames'] = $container_classnames;
 
-		$configuration['is_rendering_streamlined_block'] = false;
+		$configuration['is_rendering_stripe_payment_form'] = false;
 
-		if ( Newspack_Blocks::is_rendering_streamlined_block() ) {
+		if ( Newspack_Blocks::is_rendering_stripe_payment_form() ) {
 			$stripe_data      = \Newspack\Stripe_Connection::get_stripe_data();
 			$currency         = $stripe_data['currency'];
 			$captcha_site_key = null;
@@ -132,7 +143,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 				$captcha_site_key = \Newspack\Recaptcha::get_setting( 'site_key' );
 			}
 
-			$configuration_for_frontend                      = [
+			$configuration_for_streamlined                     = [
 				$currency,
 				$configuration['currencySymbol'],
 				get_bloginfo( 'name' ),
@@ -146,11 +157,21 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 				$captcha_site_key,
 				$configuration['minimumDonation'],
 			];
-			$configuration['is_rendering_streamlined_block'] = true;
+			$configuration['is_rendering_stripe_payment_form'] = true;
 		} else {
-			$configuration_for_frontend = [];
+			$configuration_for_streamlined = [];
 		}
-		$configuration['configuration_for_frontend'] = $configuration_for_frontend;
+		$configuration['configuration_for_streamlined'] = $configuration_for_streamlined;
+
+		if ( isset( $configuration['minimumDonation'] ) ) {
+			foreach ( $configuration['amounts'] as $frequency => $amounts ) {
+				foreach ( $amounts as $index => $amount ) {
+					$configuration['amounts'][ $frequency ][ $index ] = max( $configuration['minimumDonation'], $amount );
+				}
+			}
+		}
+
+		$configuration['uid'] = uniqid();
 
 		self::$configurations_cache[ $attributes_hash ] = $configuration;
 
@@ -161,11 +182,16 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 	 * Get style for a button.
 	 *
 	 * @param array $attributes Block attributes.
+	 * @param array $is_reverse_style Reverse background/foreground colors.
 	 */
-	protected static function get_button_style( $attributes ) {
+	protected static function get_button_style( $attributes, $is_reverse_style = false ) {
 		$button_color      = $attributes['buttonColor'];
 		$button_text_color = Newspack_Blocks::get_color_for_contrast( $button_color );
-		return 'background-color: ' . esc_attr( $button_color ) . '; color: ' . esc_attr( $button_text_color ) . ';';
+		if ( $is_reverse_style ) {
+			return 'border-color: ' . esc_attr( $button_color ) . '; color: ' . esc_attr( $button_color ) . '; background: transparent;';
+		} else {
+			return 'border-color: ' . esc_attr( $button_color ) . '; background-color: ' . esc_attr( $button_color ) . '; color: ' . esc_attr( $button_text_color ) . ';';
+		}
 	}
 
 	/**
@@ -219,6 +245,20 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 							name="full_name"
 							value="<?php echo esc_attr( $user_display_name ); ?>"
 						>
+					</div>
+					<div class="stripe-payment__row stripe-payment__row--additional-fields">
+						<?php foreach ( $attributes['additionalFields'] as $field ) : ?>
+							<input
+								data-is-additional-field
+								type="<?php echo esc_attr( $field['type'] ); ?>"
+								name="<?php echo esc_attr( $field['name'] ); ?>"
+								placeholder="<?php echo esc_attr( $field['label'] ); ?>"
+								style="width: calc(<?php echo esc_attr( $field['width'] ); ?>% - 0.5rem);"
+								<?php if ( $field['isRequired'] ) : ?>
+									required
+								<?php endif; ?>
+							>
+						<?php endforeach; ?>
 					</div>
 				</div>
 				<?php if ( $is_rendering_fee_checkbox ) : ?>
@@ -290,5 +330,5 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 	 *
 	 * @param array $attributes Block attributes.
 	 */
-	abstract public static function render( $attributes);
+	abstract public static function render( $attributes );
 }

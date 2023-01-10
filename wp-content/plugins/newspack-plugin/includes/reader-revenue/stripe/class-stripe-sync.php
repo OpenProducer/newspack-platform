@@ -20,12 +20,14 @@ class Stripe_Sync {
 	 * @codeCoverageIgnore
 	 */
 	private static $results = [
-		'processed'            => 0,
-		'wc_created'           => 0,
-		'wc_found'             => 0,
-		'wc_orders_updated'    => 0,
-		'wc_orders_created'    => 0,
-		'wc_skipped_customers' => 0,
+		'processed'                                => 0,
+		'wc_created'                               => 0,
+		'wc_found'                                 => 0,
+		'wc_orders_updated'                        => 0,
+		'wc_orders_created'                        => 0,
+		'wc_stripe_subscription_charges_processed' => 0,
+		'wc_stripe_one_time_charges_processed'     => 0,
+		'wc_skipped_customers'                     => 0,
 	];
 
 	/**
@@ -47,16 +49,60 @@ class Stripe_Sync {
 		$email_address = $customer->email;
 		$is_dry_run    = false !== $args['dry-run'];
 
-		$all_charges = Stripe_Connection::get_customer_charges( $customer->id );
+		$all_invoices = Stripe_Connection::get_customer_transactions( $customer->id, false, false, 'invoice' );
+		if ( \is_wp_error( $all_invoices ) ) {
+			\WP_CLI::warning( __( 'Error fetching customer invoices: ', 'newspack' ) . $all_invoices->get_error_message() );
+			return;
+		}
+		$processed_charges_ids   = [];
+		$wc_transaction_payloads = [];
+		foreach ( $all_invoices as $invoice ) {
+			if ( ! $invoice->charge ) {
+				\WP_CLI::warning( __( 'Missing charge ID on invoice ', 'newspack' ) . ' ' . $invoice->id );
+				continue;
+			}
+			$charge = Stripe_Connection::get_charge_by_id( $invoice->charge );
+			if ( \is_wp_error( $charge ) ) {
+				\WP_CLI::warning( __( 'Error retrieving charge of ', 'newspack' ) . ' ' . $email_address . ': ' . $charge->get_error_message() );
+				continue;
+			}
+			// Construct the payment object expected by the Stripe_Connection::create_wc_transaction_payload method.
+			$stripe_payment = [
+				'id'      => $charge->id,
+				'created' => $charge->created,
+			];
 
-		// Skip charges created by WC.
+			$processed_charges_ids[] = $invoice->charge;
+
+			$stripe_payment['amount']              = $charge->amount;
+			$stripe_payment['currency']            = $charge->currency;
+			$stripe_payment['balance_transaction'] = $charge->balance_transaction;
+			$stripe_payment['frequency']           = Stripe_Connection::get_frequency_from_invoice( $invoice );
+
+			if ( $invoice->subscription ) {
+				$stripe_payment['billing_reason'] = $invoice->billing_reason;
+				$stripe_payment['subscription']   = $invoice->subscription;
+				self::$results['wc_stripe_subscription_charges_processed']++;
+			} else {
+				self::$results['wc_stripe_one_time_charges_processed']++;
+			}
+			$wc_transaction_payloads[] = Stripe_Connection::create_wc_transaction_payload( $customer, $stripe_payment );
+		}
+
+		$all_charges = Stripe_Connection::get_customer_transactions( $customer->id );
+		if ( \is_wp_error( $all_charges ) ) {
+			\WP_CLI::warning( __( 'Error fetching customer charges: ', 'newspack' ) . $all_charges->get_error_message() );
+			return;
+		}
+		// Skip charges created by WC and those already processed from invoices.
 		$charges = array_filter(
 			$all_charges,
-			function( $charge ) {
-				return ! isset( $charge->metadata->order_id );
+			function( $charge ) use ( $processed_charges_ids ) {
+				return ! isset( $charge->metadata->order_id ) && ! in_array( $charge->id, $processed_charges_ids );
 			}
 		);
-		if ( empty( $charges ) ) {
+
+		if ( empty( $charges ) && empty( $wc_transaction_payloads ) ) {
 			self::$results['wc_skipped_customers']++;
 			return;
 		}
@@ -68,58 +114,57 @@ class Stripe_Sync {
 			self::$results['wc_found']++;
 		} else {
 			// Create the WC Customer and update past orders (lookup is done by email).
+			$full_name  = $customer->name;
+			$user_login = \sanitize_title( $full_name );
+			if ( username_exists( $user_login ) ) {
+				$user_login = $user_login . '-' . uniqid();
+			}
 			if ( ! $is_dry_run ) {
-				$full_name  = $customer->name;
-				$user_login = \sanitize_title( $full_name );
-				if ( username_exists( $user_login ) ) {
-					$user_login = $user_login . '-' . uniqid();
-				}
 				$user_id = \wc_create_new_customer( $email_address, $user_login, '', [ 'display_name' => $full_name ] );
 				if ( is_wp_error( $user_id ) ) {
 					\WP_CLI::warning( __( 'Error processing customer', 'newspack' ) . ' ' . $email_address . ': ' . $user_id->get_error_message() );
-					$user_id = false;
-				} else {
-					$linked_orders_count                 = \wc_update_new_customer_past_orders( $user_id );
-					self::$results['wc_orders_updated'] += $linked_orders_count;
-
-					// translators: Customer email, linked orders count.
-					\WP_CLI::success( sprintf( __( 'Created WC Customer with email: %1$s and linked %2$d order(s) to them.', 'newspack' ), $email_address, $linked_orders_count ) );
-					self::$results['wc_created']++;
+					return;
 				}
+				$linked_orders_count                 = \wc_update_new_customer_past_orders( $user_id );
+				self::$results['wc_orders_updated'] += $linked_orders_count;
+				// translators: Customer email, linked orders count.
+				\WP_CLI::success( sprintf( __( 'Created WC Customer with email: %1$s and linked %2$d order(s) to them.', 'newspack' ), $email_address, $linked_orders_count ) );
 			}
+			self::$results['wc_created']++;
 		}
 
-		if ( false !== $user_id ) {
-			foreach ( $charges as $charge ) {
-				// Find the order associated with this charge.
-				$found_order = \WC_Stripe_Helper::get_order_by_charge_id( $charge->id );
-				if ( $found_order ) {
-					$order_customer_id = $found_order->get_customer_id();
-					if ( ! $order_customer_id ) {
-						// The order and the customer exist, but the order is not linked to the customer. Link them.
-						if ( ! $is_dry_run ) {
-							$found_order->set_customer_id( $user_id );
-							$found_order->save();
-							// translators: Order ID.
-							\WP_CLI::success( sprintf( __( 'Updated WC order: %d.', 'newspack' ), $found_order->get_id() ) );
-							self::$results['wc_orders_updated'] ++;
-						}
-					}
-				} else {
-					// This is a charge without an order. Create a new order.
+		foreach ( $charges as $charge ) {
+			$wc_transaction_payloads[] = Stripe_Connection::create_wc_transaction_payload( $customer, $charge );
+			self::$results['wc_stripe_one_time_charges_processed']++;
+		}
+
+		foreach ( $wc_transaction_payloads as $transation_payload ) {
+			$charge_id                     = $transation_payload['stripe_id'];
+			$transation_payload['user_id'] = $user_id;
+			// Find the order associated with this charge.
+			$found_order = \WC_Stripe_Helper::get_order_by_charge_id( $charge_id );
+			if ( $found_order ) {
+				$order_customer_id = $found_order->get_customer_id();
+				if ( ! $order_customer_id ) {
+					// The order and the customer exist, but the order is not linked to the customer. Link them.
 					if ( ! $is_dry_run ) {
-						$wc_transaction_payload            = Stripe_Connection::create_wc_transaction_payload( $customer, $charge );
-						$wc_transaction_payload['user_id'] = $user_id;
-						$order_id                          = WooCommerce_Connection::create_transaction( $wc_transaction_payload );
+						$found_order->set_customer_id( $user_id );
+						$found_order->save();
 						// translators: Order ID.
-						\WP_CLI::success( sprintf( __( 'Created WC order: %d.', 'newspack' ), $order_id ) );
-						self::$results['wc_orders_created'] ++;
+						\WP_CLI::success( sprintf( __( 'Updated WC order: %d.', 'newspack' ), $found_order->get_id() ) );
 					}
+					self::$results['wc_orders_updated'] ++;
 				}
+			} else {
+				// This is a charge without an order. Create a new order.
+				if ( ! $is_dry_run ) {
+					$order_id = WooCommerce_Connection::create_transaction( $transation_payload );
+					// translators: Order ID.
+					\WP_CLI::success( sprintf( __( 'Created WC order: %d.', 'newspack' ), $order_id ) );
+				}
+				self::$results['wc_orders_created'] ++;
 			}
 		}
-
-		self::$results['processed']++;
 	}
 
 	/**
@@ -141,7 +186,12 @@ class Stripe_Sync {
 			$metadata_keys['total_paid'] => Stripe_Connection::get_customer_ltv( $customer->id ),
 		];
 
-		$last_payments = Stripe_Connection::get_customer_charges( $customer->id, false, 1 );
+		$last_payments = Stripe_Connection::get_customer_transactions( $customer->id, false, 1 );
+		if ( \is_wp_error( $last_payments ) ) {
+			\WP_CLI::warning( __( 'Error fetching customer charges: ', 'newspack' ) . $last_payments->get_error_message() );
+			return;
+		}
+
 		if ( ! empty( $last_payments ) ) {
 			$payment           = $last_payments[0];
 			$amount_normalised = Stripe_Connection::normalise_amount( $payment['amount'], $payment['currency'] );
@@ -220,6 +270,7 @@ class Stripe_Sync {
 				} elseif ( $args['sync-to-wc'] ) {
 					self::sync_to_wc( $customer, $args );
 				}
+				self::$results['processed']++;
 			}
 
 			if ( $response['has_more'] ) {
@@ -231,6 +282,74 @@ class Stripe_Sync {
 			}
 		} catch ( \Throwable $e ) {
 			return new \WP_Error( 'stripe_newspack', __( 'Could not process all customers:', 'newspack' ) . ' ' . $e->getMessage() );
+		}
+	}
+
+	/**
+	 * CLI command for data backfill from Stripe to either WC or an ESP.
+	 *
+	 * @param array $args Positional args.
+	 * @param array $assoc_args Associative args.
+	 */
+	public static function data_backfill( $args, $assoc_args ) {
+		$default_args = [
+			'batch-size'  => 10,
+			'sync-to-wc'  => true, // Sync data to WooCommerce.
+			'sync-to-esp' => false, // Sync data to the ESP.
+			'dry-run'     => false,
+		];
+		$passed_args  = array_merge( $default_args, $assoc_args );
+		if ( false !== $passed_args['dry-run'] ) {
+			\WP_CLI::warning( __( 'This is a dry run, no changes will be made.', 'newspack' ) );
+		}
+
+		if ( $passed_args['sync-to-wc'] ) {
+			if ( ! class_exists( 'WC_Stripe_Helper' ) || ! method_exists( 'WC_Stripe_Helper', 'get_order_by_charge_id' ) ) {
+				\WP_CLI::error( __( 'WC Stripe Gateway plugin has to be active.', 'newspack' ) );
+				return;
+			}
+
+			if ( ! function_exists( 'wc_create_new_customer' ) ) {
+				\WP_CLI::error( __( 'WooCommerce plugin has to be active.', 'newspack' ) );
+				return;
+			}
+			if ( ! Donations::is_platform_stripe() ) {
+				\WP_CLI::error( __( 'Reader Revenue platform has to be set to Stripe.', 'newspack' ) );
+				return;
+			}
+		}
+
+		if ( $passed_args['sync-to-esp'] ) {
+			if ( ! method_exists( '\Newspack_Newsletters_Subscription', 'add_contact' ) ) {
+				\WP_CLI::error( __( 'Newspack Newsletters has to be active.', 'newspack' ) );
+				return;
+			}
+		}
+
+		$result = self::process_all_stripe_customers( $passed_args );
+
+		if ( \is_wp_error( $result ) ) {
+			\WP_CLI::error( $result->get_error_message() );
+		}
+
+		// translators: Number of Stripe customers processed.
+		\WP_CLI::success( sprintf( __( 'Processed %d Stripe customers.', 'newspack' ), self::$results['processed'] ) );
+
+		if ( $passed_args['sync-to-wc'] ) {
+			// translators: Number of customers found.
+			\WP_CLI::success( sprintf( __( 'Found %d WC customers linked to Stripe customers.', 'newspack' ), self::$results['wc_found'] ) );
+			// translators: Number of customers created.
+			\WP_CLI::success( sprintf( __( 'Created %d WC customers from Stripe customers.', 'newspack' ), self::$results['wc_created'] ) );
+			// translators: Number of subscription charges processed.
+			\WP_CLI::success( sprintf( __( 'Processed %d subscription-related Stripe charges.', 'newspack' ), self::$results['wc_stripe_subscription_charges_processed'] ) );
+			// translators: Number of one-time charges processed.
+			\WP_CLI::success( sprintf( __( 'Processed %d one-time Stripe charges.', 'newspack' ), self::$results['wc_stripe_one_time_charges_processed'] ) );
+			// translators: Number of orders updated.
+			\WP_CLI::success( sprintf( __( 'Updated %d WC orders linked to Stripe charges.', 'newspack' ), self::$results['wc_orders_updated'] ) );
+			// translators: Number of orders created.
+			\WP_CLI::success( sprintf( __( 'Created %d WC orders from Stripe charges.', 'newspack' ), self::$results['wc_orders_created'] ) );
+			// translators: Number of Stripe customers skipped.
+			\WP_CLI::success( sprintf( __( 'Skipped %d Stripe customers.', 'newspack' ), self::$results['wc_skipped_customers'] ) );
 		}
 	}
 
@@ -378,63 +497,9 @@ class Stripe_Sync {
 			return;
 		}
 
-		$sync_to_wc = function ( $args, $assoc_args ) {
-			$default_args = [
-				'batch-size'  => 10,
-				'sync-to-wc'  => true, // Sync data to WooCommerce.
-				'sync-to-esp' => false, // Sync data to the ESP.
-				'dry-run'     => false,
-			];
-			$passed_args  = array_merge( $default_args, $assoc_args );
-			if ( false !== $passed_args['dry-run'] ) {
-				\WP_CLI::warning( __( 'This is a dry run, no changes will be made.', 'newspack' ) );
-			}
-
-			if ( $passed_args['sync-to-wc'] ) {
-				if ( ! class_exists( 'WC_Stripe_Helper' ) || ! method_exists( 'WC_Stripe_Helper', 'get_order_by_charge_id' ) ) {
-					\WP_CLI::error( __( 'WC Stripe Gateway plugin has to be active.', 'newspack' ) );
-					return;
-				}
-
-				if ( ! function_exists( 'wc_create_new_customer' ) ) {
-					\WP_CLI::error( __( 'WooCommerce plugin has to be active.', 'newspack' ) );
-					return;
-				}
-			}
-
-			if ( $passed_args['sync-to-esp'] ) {
-				if ( ! method_exists( '\Newspack_Newsletters_Subscription', 'add_contact' ) ) {
-					\WP_CLI::error( __( 'Newspack Newsletters has to be active.', 'newspack' ) );
-					return;
-				}
-			}
-
-			$result = self::process_all_stripe_customers( $passed_args );
-
-			if ( \is_wp_error( $result ) ) {
-				\WP_CLI::error( $result->get_error_message() );
-			}
-
-			// translators: Number of Stripe customers processed.
-			\WP_CLI::success( sprintf( __( 'Processed %d Stripe customers.', 'newspack' ), self::$results['processed'] ) );
-
-			if ( $passed_args['sync-to-wc'] ) {
-				// translators: Number of customers found.
-				\WP_CLI::success( sprintf( __( 'Found %d WC customers linked to Stripe customers.', 'newspack' ), self::$results['wc_found'] ) );
-				// translators: Number of customers created.
-				\WP_CLI::success( sprintf( __( 'Created %d WC customers from Stripe customers.', 'newspack' ), self::$results['wc_created'] ) );
-				// translators: Number of orders updated.
-				\WP_CLI::success( sprintf( __( 'Updated %d WC orders linked to Stripe charges.', 'newspack' ), self::$results['wc_orders_updated'] ) );
-				// translators: Number of orders created.
-				\WP_CLI::success( sprintf( __( 'Created %d WC orders from Stripe charges.', 'newspack' ), self::$results['wc_orders_created'] ) );
-				// translators: Number of Stripe customers skipped.
-				\WP_CLI::success( sprintf( __( 'Skipped %d Stripe customers.', 'newspack' ), self::$results['wc_skipped_customers'] ) );
-			}
-		};
-
 		\WP_CLI::add_command(
 			'newspack stripe sync-customers',
-			$sync_to_wc,
+			[ __CLASS__, 'data_backfill' ],
 			[
 				'shortdesc' => __( 'Backfill WC Customers from Stripe database.', 'newspack' ),
 			]

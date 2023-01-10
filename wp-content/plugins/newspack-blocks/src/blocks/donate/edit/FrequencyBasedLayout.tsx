@@ -23,10 +23,10 @@ const PAYMENT_REQUEST_BUTTON_TYPE_OPTIONS: {
 	label: string;
 	value: DonateBlockAttributes[ 'paymentRequestType' ];
 }[] = [
-	{ label: __( 'Donate', 'newspack' ), value: 'donate' },
-	{ label: __( 'Pay', 'newspack' ), value: 'default' },
-	{ label: __( 'Book', 'newspack' ), value: 'book' },
-	{ label: __( 'Buy', 'newspack' ), value: 'buy' },
+	{ label: __( 'Donate', 'newspack-blocks' ), value: 'donate' },
+	{ label: __( 'Pay', 'newspack-blocks' ), value: 'default' },
+	{ label: __( 'Book', 'newspack-blocks' ), value: 'book' },
+	{ label: __( 'Buy', 'newspack-blocks' ), value: 'buy' },
 ];
 
 const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) => {
@@ -65,8 +65,8 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 		}
 	}, [ attributes.defaultFrequency ] );
 
-	const isRenderingStreamlinedBlock = () =>
-		window.newspack_blocks_data?.is_rendering_streamlined_block;
+	const isRenderingStripePaymentForm =
+		window.newspack_blocks_data?.is_rendering_stripe_payment_form;
 
 	const renderFrequencySelect = ( frequencySlug: DonationFrequencySlug ) => (
 		<>
@@ -79,7 +79,7 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 			/>
 			<label
 				htmlFor={ 'newspack-donate-' + frequencySlug + '-' + uid }
-				className="donation-frequency-label freq-label"
+				className="wpbnbd__button freq-label"
 			>
 				{ FREQUENCIES[ frequencySlug ] }
 			</label>
@@ -194,7 +194,7 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 				color: getColorForContrast( attributes.buttonColor ),
 			} }
 		>
-			{ isRenderingStreamlinedBlock() ? (
+			{ isRenderingStripePaymentForm ? (
 				<RichText
 					onChange={ ( value: string ) => setAttributes( { buttonWithCCText: value } ) }
 					placeholder={ __( 'Button text…', 'newspack-blocks' ) }
@@ -229,8 +229,31 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 					tagName="span"
 				/>
 			</p>
-			{ isRenderingStreamlinedBlock() ? (
+			{ isRenderingStripePaymentForm ? (
 				<div className="wp-block-newspack-blocks-donate__stripe stripe-payment">
+					<div className="stripe-payment__inputs">
+						<input
+							className="stripe-payment__element stripe-payment__card"
+							type="text"
+							placeholder={ __( 'Card number', 'newspack-blocks' ) }
+						/>
+						<div className="stripe-payment__row stripe-payment__row--flex">
+							<input required placeholder="Email" type="email" name="email" />
+							<input required placeholder="Full Name" type="text" name="full_name" />
+						</div>
+						<div className="stripe-payment__row stripe-payment__row--additional-fields">
+							{ attributes.additionalFields.map( ( field, index ) => (
+								<input
+									key={ index }
+									type="text"
+									name={ field.name }
+									placeholder={ field.label }
+									style={ { width: `calc(${ field.width }% - 0.5rem)` } }
+								/>
+							) ) }
+						</div>
+					</div>
+
 					<div className="stripe-payment__row stripe-payment__row--flex stripe-payment__footer">
 						<div className="stripe-payment__methods">
 							<div className="stripe-payment__request-button">

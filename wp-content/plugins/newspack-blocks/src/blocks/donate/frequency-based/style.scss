@@ -28,23 +28,11 @@
 	}
 
 	.freq-label {
-		background: colors.$color__background-body;
 		box-sizing: border-box;
-		color: colors.$color__text-light;
-		line-height: variables.$font__line-height-body;
 		overflow: hidden;
-		padding: 0.38rem 0.76rem;
-		text-overflow: ellipsis;
-		text-transform: uppercase;
 		white-space: nowrap;
 		width: 100%;
 		z-index: 1;
-		text-align: center;
-		&:focus,
-		&:hover {
-			background: colors.$color__background-screen;
-			color: colors.$color__text-main;
-		}
 	}
 
 	button {
@@ -52,6 +40,11 @@
 
 		@include mixins.media( tablet ) {
 			margin: 0 1.5rem 1.5rem;
+		}
+	}
+	.wpbnbd {
+		&__button {
+			text-transform: uppercase;
 		}
 	}
 
@@ -101,7 +94,7 @@
 			}
 
 			&:checked + .tier-label {
-				background-color: #757575;
+				background-color: colors.$color__gray;
 				border-color: transparent;
 				color: colors.$color__background-body;
 			}
@@ -208,7 +201,6 @@
 		position: absolute;
 		top: 0;
 		left: 0;
-		border: 0 solid variables.$color__border;
 		border-width: 0 0 1px;
 	}
 

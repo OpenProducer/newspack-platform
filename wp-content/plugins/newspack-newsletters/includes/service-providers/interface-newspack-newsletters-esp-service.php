@@ -113,4 +113,52 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	 * @return true|WP_Error True if the contact was updated or error.
 	 */
 	public function update_contact_lists( $email, $lists_to_add = [], $lists_to_remove = [] );
+
+	/**
+	 * Retrieve the ESP's tag ID from its name
+	 *
+	 * @param string  $tag_name The tag.
+	 * @param boolean $create_if_not_found Whether to create a new tag if not found. Default to true.
+	 * @param string  $list_id The List ID.
+	 * @return int|WP_Error The tag ID on success. WP_Error on failure.
+	 */
+	public function get_tag_id( $tag_name, $create_if_not_found = true, $list_id = null );
+
+	/**
+	 * Retrieve the ESP's tag name from its ID
+	 *
+	 * @param int    $tag_id The tag ID.
+	 * @param string $list_id The List ID.
+	 * @return string|WP_Error The tag name on success. WP_Error on failure.
+	 */
+	public function get_tag_by_id( $tag_id, $list_id = null );
+
+	/**
+	 * Create a Tag on the provider
+	 *
+	 * @param string $tag The Tag name.
+	 * @param string $list_id The List ID.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function create_tag( $tag, $list_id = null );
+
+	/**
+	 * Add a tag to a contact
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function add_tag_to_contact( $email, $tag, $list_id = null );
+
+	/**
+	 * Remove a tag from a contact
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function remove_tag_from_contact( $email, $tag, $list_id = null );
 }

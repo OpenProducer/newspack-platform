@@ -1,3 +1,95 @@
+# [1.100.0](https://github.com/Automattic/newspack-plugin/compare/v1.99.1...v1.100.0) (2023-01-09)
+
+
+### Bug Fixes
+
+* fatal due to different class property ([#2207](https://github.com/Automattic/newspack-plugin/issues/2207)) ([7536800](https://github.com/Automattic/newspack-plugin/commit/7536800ceac80e8fbb2763c643827367984f9807))
+* handle email sender when not under RAS ([#2208](https://github.com/Automattic/newspack-plugin/issues/2208)) ([deb9e02](https://github.com/Automattic/newspack-plugin/commit/deb9e0228859d3c0de716611e2b1ac8d3313a530))
+* **perfmatters:** display defaults for admin only if URL param is set ([ecca448](https://github.com/Automattic/newspack-plugin/commit/ecca448b9c788d473694960fa890ad023e05ee8c))
+* revert remove autorloader dependency ([ed575fa](https://github.com/Automattic/newspack-plugin/commit/ed575fa9ec8cd48e7cff62bb590daaf9484f77e1))
+* typo in setup command ([#2192](https://github.com/Automattic/newspack-plugin/issues/2192)) ([ebe04cd](https://github.com/Automattic/newspack-plugin/commit/ebe04cdc328d01c3f8548bbef830bf50dd8ab17f))
+* webpack build issue ([#2210](https://github.com/Automattic/newspack-plugin/issues/2210)) ([d54bb25](https://github.com/Automattic/newspack-plugin/commit/d54bb2592e660878d07a64bda182c2b3f7f6e9d8))
+* **woocommerce-sync:** ignore payment error notifications for sync'd subscriptions ([12c479b](https://github.com/Automattic/newspack-plugin/commit/12c479bb5018c3c51c11418f84d9ab8fcae64e74))
+
+
+### Features
+
+* add setup cli command ([#2108](https://github.com/Automattic/newspack-plugin/issues/2108)) ([350e16e](https://github.com/Automattic/newspack-plugin/commit/350e16e4a4ee68d5c6afafc81e17c03b1410d23e))
+* allow RAS library to load async ([#2196](https://github.com/Automattic/newspack-plugin/issues/2196)) ([3131425](https://github.com/Automattic/newspack-plugin/commit/3131425aa88f807da47cefa59ada4ed90d5116ae))
+* **analytics:** prevent Site Kit's false positive notice ([05a4707](https://github.com/Automattic/newspack-plugin/commit/05a470724039d050bb439bfb18d1272f4020643b))
+* **data-events:** agnostic data integration tool ([#2173](https://github.com/Automattic/newspack-plugin/issues/2173)) ([5ced920](https://github.com/Automattic/newspack-plugin/commit/5ced920ec6470e781f3dbaac59b1a67b94303f81))
+* **data-events:** webhooks ([#2182](https://github.com/Automattic/newspack-plugin/issues/2182)) ([cf14aa2](https://github.com/Automattic/newspack-plugin/commit/cf14aa2a2f06cf3de1af8ae2a919c60e6d855b89))
+* **newsletters:** support constant contact oauth ([#2179](https://github.com/Automattic/newspack-plugin/issues/2179)) ([a896a62](https://github.com/Automattic/newspack-plugin/commit/a896a629ba15feb0a8514332ec3dcfc0aa454b6c))
+* **perfmatters:** add an environment feature flag ([774a710](https://github.com/Automattic/newspack-plugin/commit/774a7109ee750dc22d8812d3ce53a7b2687f0dbd))
+* **reader-revenue:** add "other" reader revenue platform ([#2160](https://github.com/Automattic/newspack-plugin/issues/2160)) ([1eebe79](https://github.com/Automattic/newspack-plugin/commit/1eebe7970d60bfadca78809b17b4bd70ed024f6d))
+* **registration-block:** newsletter subscription by default ([#2198](https://github.com/Automattic/newspack-plugin/issues/2198)) ([b2d5116](https://github.com/Automattic/newspack-plugin/commit/b2d51163054faa2a78dfecaef8d523a840fc71f4))
+* **stripe-sync-cli:** create WC subscriptions ([#2180](https://github.com/Automattic/newspack-plugin/issues/2180)) ([0cebe24](https://github.com/Automattic/newspack-plugin/commit/0cebe24be60842e7ff689436ef3f8ac120927311))
+* **stripe:** handle donation additional fields ([#2187](https://github.com/Automattic/newspack-plugin/issues/2187)) ([64b96e2](https://github.com/Automattic/newspack-plugin/commit/64b96e2f4c779a92d77f4366131fc801662427d1))
+* **stripe:** webhooks management ([#2143](https://github.com/Automattic/newspack-plugin/issues/2143)) ([5ded1f9](https://github.com/Automattic/newspack-plugin/commit/5ded1f95d27f9598b0df74ef60a0f4e9f64774a5))
+* use privacy policy URL as default terms URL ([#2176](https://github.com/Automattic/newspack-plugin/issues/2176)) ([9a08231](https://github.com/Automattic/newspack-plugin/commit/9a0823137cfc93cfc27052ccbed76dcc32bc27be))
+* **webhooks:** endpoint management ui ([#2197](https://github.com/Automattic/newspack-plugin/issues/2197)) ([f781206](https://github.com/Automattic/newspack-plugin/commit/f781206f4681186cdc35754d2d225f5e34cefe99))
+
+
+### Performance Improvements
+
+* optimize analytics JS code ([#2157](https://github.com/Automattic/newspack-plugin/issues/2157)) ([f324500](https://github.com/Automattic/newspack-plugin/commit/f3245008d5f16bd8dcd1b15f38cbecee9e5e91c8))
+
+
+### Reverts
+
+* hotfix-related auto-changes ([89c0d07](https://github.com/Automattic/newspack-plugin/commit/89c0d072fb5718b5dadb31397ec72779b80cb72c))
+
+# [1.100.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v1.100.0-alpha.1...v1.100.0-alpha.2) (2022-12-22)
+
+
+### Bug Fixes
+
+* handle email sender when not under RAS ([#2208](https://github.com/Automattic/newspack-plugin/issues/2208)) ([deb9e02](https://github.com/Automattic/newspack-plugin/commit/deb9e0228859d3c0de716611e2b1ac8d3313a530))
+* webpack build issue ([#2210](https://github.com/Automattic/newspack-plugin/issues/2210)) ([d54bb25](https://github.com/Automattic/newspack-plugin/commit/d54bb2592e660878d07a64bda182c2b3f7f6e9d8))
+
+
+### Features
+
+* **webhooks:** endpoint management ui ([#2197](https://github.com/Automattic/newspack-plugin/issues/2197)) ([f781206](https://github.com/Automattic/newspack-plugin/commit/f781206f4681186cdc35754d2d225f5e34cefe99))
+
+# [1.100.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v1.99.1...v1.100.0-alpha.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* fatal due to different class property ([#2207](https://github.com/Automattic/newspack-plugin/issues/2207)) ([7536800](https://github.com/Automattic/newspack-plugin/commit/7536800ceac80e8fbb2763c643827367984f9807))
+* **perfmatters:** display defaults for admin only if URL param is set ([ecca448](https://github.com/Automattic/newspack-plugin/commit/ecca448b9c788d473694960fa890ad023e05ee8c))
+* revert remove autorloader dependency ([ed575fa](https://github.com/Automattic/newspack-plugin/commit/ed575fa9ec8cd48e7cff62bb590daaf9484f77e1))
+* typo in setup command ([#2192](https://github.com/Automattic/newspack-plugin/issues/2192)) ([ebe04cd](https://github.com/Automattic/newspack-plugin/commit/ebe04cdc328d01c3f8548bbef830bf50dd8ab17f))
+* **woocommerce-sync:** ignore payment error notifications for sync'd subscriptions ([12c479b](https://github.com/Automattic/newspack-plugin/commit/12c479bb5018c3c51c11418f84d9ab8fcae64e74))
+
+
+### Features
+
+* add setup cli command ([#2108](https://github.com/Automattic/newspack-plugin/issues/2108)) ([350e16e](https://github.com/Automattic/newspack-plugin/commit/350e16e4a4ee68d5c6afafc81e17c03b1410d23e))
+* allow RAS library to load async ([#2196](https://github.com/Automattic/newspack-plugin/issues/2196)) ([3131425](https://github.com/Automattic/newspack-plugin/commit/3131425aa88f807da47cefa59ada4ed90d5116ae))
+* **analytics:** prevent Site Kit's false positive notice ([05a4707](https://github.com/Automattic/newspack-plugin/commit/05a470724039d050bb439bfb18d1272f4020643b))
+* **data-events:** agnostic data integration tool ([#2173](https://github.com/Automattic/newspack-plugin/issues/2173)) ([5ced920](https://github.com/Automattic/newspack-plugin/commit/5ced920ec6470e781f3dbaac59b1a67b94303f81))
+* **data-events:** webhooks ([#2182](https://github.com/Automattic/newspack-plugin/issues/2182)) ([cf14aa2](https://github.com/Automattic/newspack-plugin/commit/cf14aa2a2f06cf3de1af8ae2a919c60e6d855b89))
+* **newsletters:** support constant contact oauth ([#2179](https://github.com/Automattic/newspack-plugin/issues/2179)) ([a896a62](https://github.com/Automattic/newspack-plugin/commit/a896a629ba15feb0a8514332ec3dcfc0aa454b6c))
+* **perfmatters:** add an environment feature flag ([774a710](https://github.com/Automattic/newspack-plugin/commit/774a7109ee750dc22d8812d3ce53a7b2687f0dbd))
+* **reader-revenue:** add "other" reader revenue platform ([#2160](https://github.com/Automattic/newspack-plugin/issues/2160)) ([1eebe79](https://github.com/Automattic/newspack-plugin/commit/1eebe7970d60bfadca78809b17b4bd70ed024f6d))
+* **registration-block:** newsletter subscription by default ([#2198](https://github.com/Automattic/newspack-plugin/issues/2198)) ([b2d5116](https://github.com/Automattic/newspack-plugin/commit/b2d51163054faa2a78dfecaef8d523a840fc71f4))
+* **stripe-sync-cli:** create WC subscriptions ([#2180](https://github.com/Automattic/newspack-plugin/issues/2180)) ([0cebe24](https://github.com/Automattic/newspack-plugin/commit/0cebe24be60842e7ff689436ef3f8ac120927311))
+* **stripe:** handle donation additional fields ([#2187](https://github.com/Automattic/newspack-plugin/issues/2187)) ([64b96e2](https://github.com/Automattic/newspack-plugin/commit/64b96e2f4c779a92d77f4366131fc801662427d1))
+* **stripe:** webhooks management ([#2143](https://github.com/Automattic/newspack-plugin/issues/2143)) ([5ded1f9](https://github.com/Automattic/newspack-plugin/commit/5ded1f95d27f9598b0df74ef60a0f4e9f64774a5))
+* use privacy policy URL as default terms URL ([#2176](https://github.com/Automattic/newspack-plugin/issues/2176)) ([9a08231](https://github.com/Automattic/newspack-plugin/commit/9a0823137cfc93cfc27052ccbed76dcc32bc27be))
+
+
+### Performance Improvements
+
+* optimize analytics JS code ([#2157](https://github.com/Automattic/newspack-plugin/issues/2157)) ([f324500](https://github.com/Automattic/newspack-plugin/commit/f3245008d5f16bd8dcd1b15f38cbecee9e5e91c8))
+
+
+### Reverts
+
+* hotfix-related auto-changes ([89c0d07](https://github.com/Automattic/newspack-plugin/commit/89c0d072fb5718b5dadb31397ec72779b80cb72c))
+
 ## [1.99.1](https://github.com/Automattic/newspack-plugin/compare/v1.99.0...v1.99.1) (2022-12-19)
 
 

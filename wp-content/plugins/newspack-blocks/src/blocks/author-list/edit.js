@@ -131,7 +131,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 					{ canUseCAP && (
 						<PanelRow>
 							<RadioControl
-								label={ __( 'Author Type', 'newspack' ) }
+								label={ __( 'Author Type', 'newspack-blocks' ) }
 								help={ sprintf(
 									// translators: help text for author type selection.
 									__( '%s will be displayed.', 'newspack-blocks' ),
@@ -252,7 +252,7 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 
 								return suggestions.map( _author => ( {
 									value: _author.id,
-									label: decodeEntities( _author.name ) || __( '(no name)', 'newspack' ),
+									label: decodeEntities( _author.name ) || __( '(no name)', 'newspack-blocks' ),
 									isGuest: _author.is_guest,
 								} ) );
 							} }

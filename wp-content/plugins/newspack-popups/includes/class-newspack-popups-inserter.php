@@ -14,6 +14,11 @@ require_once dirname( __FILE__ ) . '/../api/segmentation/class-segmentation.php'
  */
 final class Newspack_Popups_Inserter {
 	/**
+	 * Handle for admin UI scripts.
+	 */
+	const ADMIN_SCRIPT_HANDLE = 'newspack-popups-admin-bar';
+
+	/**
 	 * The popup objects to display.
 	 *
 	 * @var array
@@ -74,6 +79,9 @@ final class Newspack_Popups_Inserter {
 		add_action( 'wp_head', [ $this, 'insert_popups_amp_access' ] );
 		add_action( 'before_header', [ $this, 'insert_before_header' ] );
 		add_action( 'after_archive_post', [ $this, 'insert_inline_prompt_in_archive_pages' ] );
+		add_action( 'wp_before_admin_bar_render', [ $this, 'add_preview_toggle' ] );
+		add_action( 'wp_footer', [ $this, 'insert_admin_ui_elements' ] );
+		add_filter( 'newspack_amp_plus_sanitized', [ __CLASS__, 'filter_scripts_for_amp_plus' ], 10, 2 );
 
 		// Always enqueue scripts, since this plugin's scripts are handling pageview sending via GTAG.
 		add_action( 'wp_enqueue_scripts', [ $this, 'enqueue_scripts' ] );
@@ -522,6 +530,36 @@ final class Newspack_Popups_Inserter {
 	}
 
 	/**
+	 * Is the current page an AMP page?
+	 *
+	 * @return boolean True if AMP, otherwise false.
+	 */
+	public static function is_amp() {
+		return function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
+	}
+
+	/**
+	 * Is AMP Plus enabled on this site?
+	 *
+	 * @return boolean True if AMP, otherwise false.
+	 */
+	public static function is_amp_plus() {
+		return class_exists( '\Newspack\AMP_Enhancements' ) && \Newspack\AMP_Enhancements::is_amp_plus_configured();
+	}
+
+	/**
+	 * Should UI for admin users be shown?
+	 *
+	 * @return boolean
+	 */
+	public static function should_show_admin_ui() {
+		$is_amp      = self::is_amp();
+		$is_amp_plus = $is_amp && self::is_amp_plus();
+
+		return Newspack_Popups_Segmentation::is_admin_user() && ( ! $is_amp || $is_amp_plus ) && ! is_admin();
+	}
+
+	/**
 	 * Enqueue the assets needed to display the popups.
 	 */
 	public static function enqueue_scripts() {
@@ -535,10 +573,39 @@ final class Newspack_Popups_Inserter {
 			return;
 		}
 
+		if ( self::should_show_admin_ui() ) {
+			$admin_script_handle = self::ADMIN_SCRIPT_HANDLE;
+			\wp_register_script(
+				$admin_script_handle,
+				plugins_url( '../dist/admin.js', __FILE__ ),
+				[],
+				filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/admin.js' ),
+				true
+			);
+			\wp_register_style(
+				$admin_script_handle,
+				plugins_url( '../dist/admin.css', __FILE__ ),
+				null,
+				filemtime( dirname( NEWSPACK_POPUPS_PLUGIN_FILE ) . '/dist/admin.css' )
+			);
+			\wp_localize_script(
+				$admin_script_handle,
+				'newspack_popups_admin',
+				[
+					'label_visible' => __( 'Prompts Visible', 'newspack-popups' ),
+					'label_hidden'  => __( 'Prompts Hidden', 'newspack-popups' ),
+				]
+			);
+			\wp_script_add_data( $admin_script_handle, 'amp-plus', true );
+			\wp_script_add_data( $admin_script_handle, 'async', true );
+			\wp_enqueue_script( $admin_script_handle );
+			\wp_style_add_data( $admin_script_handle, 'rtl', 'replace' );
+			\wp_enqueue_style( $admin_script_handle );
+		}
+
 		$script_handle = 'newspack-popups-view';
 
-		$is_amp = function_exists( 'is_amp_endpoint' ) && is_amp_endpoint();
-		if ( ! $is_amp ) {
+		if ( ! self::is_amp() ) {
 			\wp_register_script(
 				$script_handle,
 				plugins_url( '../dist/view.js', __FILE__ ),
@@ -967,6 +1034,59 @@ final class Newspack_Popups_Inserter {
 		$is_post_context_matching = $is_taxonomy_matching && in_array( $post_type, $supported_post_types );
 
 		return $is_post_context_matching;
+	}
+
+	/**
+	 * Add an admin bar button for logged-in admins and editors to toggle Campaigns visibility.
+	 */
+	public static function add_preview_toggle() {
+		if ( ! self::should_show_admin_ui() ) {
+			return;
+		}
+
+		global $wp_admin_bar;
+		$wp_admin_bar->add_menu(
+			[
+				'parent' => false,
+				'id'     => 'campaigns_preview_toggle',
+				'title'  => __( 'Prompts Visible', 'newspack-popups' ),
+				'href'   => '#',
+				'meta'   => [
+					'class' => 'newspack-campaigns-preview-toggle',
+				],
+			]
+		);
+	}
+
+	/**
+	 * Add empty DOM elements to avoid admin UI class names from being stripped by AMP.
+	 */
+	public static function insert_admin_ui_elements() {
+		if ( ! Newspack_Popups_Segmentation::is_admin_user() || ! self::is_amp_plus() ) {
+			return;
+		}
+		?>
+			<div class="newspack-popups-hide-prompts"></div>
+		<?php
+	}
+
+	/**
+	 * Allow admin UI scripts to be loaded in AMP Plus mode.
+	 *
+	 * @param bool|null $is_sanitized If null, the error will be handled. If false, rejected.
+	 * @param object    $error        The AMP sanitisation error.
+	 *
+	 * @return bool Whether the error should be rejected.
+	 */
+	public static function filter_scripts_for_amp_plus( $is_sanitized, $error ) {
+		if (
+			method_exists( '\Newspack\AMP_Enhancements', 'is_script_body_matching_strings' ) &&
+			\Newspack\AMP_Enhancements::is_script_body_matching_strings( [ 'newspack_popups_admin' ], $error )
+		) {
+			$is_sanitized = false;
+		}
+
+		return $is_sanitized;
 	}
 }
 $newspack_popups_inserter = new Newspack_Popups_Inserter();

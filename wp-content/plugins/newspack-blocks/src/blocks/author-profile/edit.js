@@ -390,7 +390,7 @@ const AuthorProfile = ( { attributes, setAttributes } ) => {
 
 								const _suggestions = authors.map( _author => ( {
 									value: _author.id,
-									label: decodeEntities( _author.name ) || __( '(no name)', 'newspack' ),
+									label: decodeEntities( _author.name ) || __( '(no name)', 'newspack-blocks' ),
 									isGuestAuthor: _author.is_guest,
 								} ) );
 

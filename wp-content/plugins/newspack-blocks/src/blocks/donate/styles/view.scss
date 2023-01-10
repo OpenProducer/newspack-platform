@@ -1,1 +1,20 @@
+@use '../../../shared/sass/colors';
+@use '../../../shared/sass/variables';
+
 @import './style-variations';
+
+.wpbnbd {
+	&__button {
+		border: 0 solid variables.$color__border;
+		background: colors.$color__background-body;
+		color: colors.$color__text-light;
+		line-height: variables.$font__line-height-body;
+		text-overflow: ellipsis;
+		text-align: center;
+		&--active,
+		&:focus,
+		&:hover {
+			color: colors.$color__text-main;
+		}
+	}
+}

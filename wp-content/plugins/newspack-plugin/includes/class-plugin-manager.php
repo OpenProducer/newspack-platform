@@ -404,6 +404,8 @@ class Plugin_Manager {
 			'wordpress-seo-premium',
 			'gravityformspolls',
 			'gravityformsmailchimp',
+			'perfmatters',
+			'onesignal-free-web-push-notifications',
 		];
 	}
 

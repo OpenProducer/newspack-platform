@@ -12,12 +12,28 @@ import { BaseControl } from '@wordpress/components';
 /**
  * Internal dependencies
  */
-import { CategoryAutocomplete } from 'newspack-components';
+import { CategoryAutocomplete, TextControl } from 'newspack-components';
 
-const AdvancedSidebar = ( { onMetaFieldChange, excluded_categories = [], excluded_tags = [] } ) => {
+const AdvancedSidebar = ( {
+	onMetaFieldChange,
+	excluded_categories = [],
+	excluded_tags = [],
+	additional_classes = '',
+} ) => {
 	return (
 		<Fragment>
 			<BaseControl>
+				<TextControl
+					label={ __( 'Additional CSS class(es)', 'newspack-popups' ) }
+					help={ __( 'Separate multiple classes with spaces.', 'newspack-popups' ) }
+					value={ additional_classes }
+					onChange={ value =>
+						onMetaFieldChange( {
+							additional_classes: value,
+						} )
+					}
+				/>
+				<hr />
 				<CategoryAutocomplete
 					label={ __( 'Excluded Categories', 'newspack-popups' ) }
 					description={ __(

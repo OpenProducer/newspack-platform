@@ -56,6 +56,7 @@ class WooCommerce_Connection {
 
 		// WC Subscriptions hooks in and creates subscription at priority 100, so use priority 101.
 		\add_action( 'woocommerce_checkout_order_processed', [ __CLASS__, 'sync_reader_on_order_complete' ], 101 );
+		\add_action( 'option_woocommerce_subscriptions_failed_scheduled_actions', [ __CLASS__, 'filter_subscription_renewal_errors' ] );
 
 		\add_action( 'wp_login', [ __CLASS__, 'sync_reader_on_customer_login' ], 10, 2 );
 	}
@@ -750,6 +751,26 @@ class WooCommerce_Connection {
 			return false;
 		}
 		return $can_update;
+	}
+
+	/**
+	 * Filter WC Subscriptions' renewal errors. If a subscription is only sync'd,
+	 * it won't be renewed by WC Subscriptions, so we don't want to show an error.
+	 *
+	 * @param array $renewal_errors An associative array of errors.
+	 */
+	public static function filter_subscription_renewal_errors( $renewal_errors ) {
+		if ( is_array( $renewal_errors ) ) {
+			foreach ( $renewal_errors as $key => $error ) {
+				if ( isset( $error['args'], $error['args']['subscription_id'], $error['type'] ) ) {
+					$subscription_id = $error['args']['subscription_id'];
+					if ( 'subscription payment' === $error['type'] && self::is_synchronised_with_stripe( $subscription_id ) ) {
+						unset( $renewal_errors[ $key ] );
+					}
+				}
+			}
+		}
+		return $renewal_errors;
 	}
 }
 

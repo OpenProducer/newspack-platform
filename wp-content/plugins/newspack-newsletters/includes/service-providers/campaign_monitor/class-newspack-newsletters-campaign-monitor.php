@@ -16,6 +16,13 @@ define( 'CS_REST_CALL_TIMEOUT', 30 );
 final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_Service_Provider {
 
 	/**
+	 * Provider name.
+	 *
+	 * @var string
+	 */
+	public $name = 'Campaign Monitor';
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -634,5 +641,21 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 				$e->getMessage()
 			);
 		}
+	}
+
+	/**
+	 * Get the provider specific labels
+	 *
+	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
+	 *
+	 * @return array
+	 */
+	public static function get_labels() {
+		return array_merge(
+			parent::get_labels(),
+			[
+				'name' => 'Campaign Monitor',
+			]
+		);
 	}
 }

@@ -88,6 +88,22 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 						'origin'            => [
 							'sanitize_callback' => 'sanitize_text_field',
 						],
+						'additional_fields' => [
+							'type'  => 'array',
+							'items' => [
+								'type'       => 'object',
+								'properties' => [
+									'name'  => [
+										'type' => 'string',
+										'sanitize_callback' => 'sanitize_text_field',
+									],
+									'value' => [
+										'type' => 'string',
+										'sanitize_callback' => 'sanitize_text_field',
+									],
+								],
+							],
+						],
 					],
 					'permission_callback' => '__return_true',
 				],
@@ -157,6 +173,16 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 		}
 
 		$client_metadata['userId'] = $user_id;
+		$additional_fields         = $request->get_param( 'additional_fields' );
+		if ( ! empty( $additional_fields ) ) {
+			$additional_fields_object = [];
+			foreach ( $additional_fields as $field ) {
+				$additional_fields_object[ $field['name'] ] = $field['value'];
+				$client_metadata[ $field['name'] ]          = $field['value'];
+			}
+			// Save all as a single field, so these fields can be retrieved by other integrations.
+			$client_metadata['_additional_fields'] = wp_json_encode( $additional_fields_object );
+		}
 
 		$response = \Newspack\Stripe_Connection::handle_donation(
 			[

@@ -56,7 +56,7 @@ export const PostStatusesPanel = ( { attributes, setAttributes } ) => {
 				<i>
 					{ __(
 						'Selection here has effect only for editors, regular users will only see published posts.',
-						'newspack'
+						'newspack-blocks'
 					) }
 				</i>
 			</PanelRow>

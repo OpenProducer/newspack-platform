@@ -158,31 +158,31 @@ const generatePreviewPost = ( id: PostId ) => {
 	return {
 		author: 1,
 		content: {
-			rendered: '<p>' + __( 'The post content.', 'newspack' ) + '</p>',
+			rendered: '<p>' + __( 'The post content.', 'newspack-blocks' ) + '</p>',
 		},
 		date_gmt: now.toISOString(),
 		excerpt: {
-			rendered: '<p>' + __( 'The post excerpt.', 'newspack' ) + '</p>',
+			rendered: '<p>' + __( 'The post excerpt.', 'newspack-blocks' ) + '</p>',
 		},
 		featured_media: '1',
 		id,
 		meta: {
-			newspack_post_subtitle: __( 'Post Subtitle', 'newspack' ),
+			newspack_post_subtitle: __( 'Post Subtitle', 'newspack-blocks' ),
 		},
 		title: {
-			rendered: __( 'Post Title', 'newspack' ),
+			rendered: __( 'Post Title', 'newspack-blocks' ),
 		},
 		newspack_article_classes: 'type-post',
 		newspack_author_info: [
 			{
-				display_name: __( 'Author Name', 'newspack' ),
+				display_name: __( 'Author Name', 'newspack-blocks' ),
 				avatar: `<div style="background: #36f;width: 40px;height: 40px;display: block;overflow: hidden;border-radius: 50%; max-width: 100%; max-height: 100%;"></div>`,
 				id: 1,
 				author_link: '/',
 			},
 		],
-		newspack_category_info: __( 'Category', 'newspack' ),
-		newspack_featured_image_caption: __( 'Featured image caption', 'newspack' ),
+		newspack_category_info: __( 'Category', 'newspack-blocks' ),
+		newspack_featured_image_caption: __( 'Featured image caption', 'newspack-blocks' ),
 		newspack_featured_image_src: {
 			large: `${ PREVIEW_IMAGE_BASE }/newspack-1024x536.jpg`,
 			landscape: `${ PREVIEW_IMAGE_BASE }/newspack-800x600.jpg`,

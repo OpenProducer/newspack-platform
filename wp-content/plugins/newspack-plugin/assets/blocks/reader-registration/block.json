@@ -28,7 +28,7 @@
 		},
 		"newsletterSubscription": {
 			"type": "boolean",
-			"default": false
+			"default": true
 		},
 		"displayListDescription": {
 			"type": "boolean",

@@ -59,6 +59,7 @@ const webpackConfig = getBaseWebpackConfig(
 			block_styles: blockStylesScript,
 			donateStreamlined: path.join( __dirname, 'src/blocks/donate/streamlined' ),
 			frequencyBased: path.join( __dirname, 'src/blocks/donate/frequency-based' ),
+			tiersBased: path.join( __dirname, 'src/blocks/donate/tiers-based' ),
 			...viewBlocksScripts,
 		},
 		'output-path': path.join( __dirname, 'dist' ),

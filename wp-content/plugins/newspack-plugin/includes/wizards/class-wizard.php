@@ -87,12 +87,6 @@ abstract class Wizard {
 
 		Newspack::load_common_assets();
 
-		// Tachyons atomic CSS framework (http://tachyons.io/).
-		wp_enqueue_style( // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
-			'tachyons',
-			'https://unpkg.com/tachyons@4.12.0/css/tachyons.min.css'
-		);
-
 		// This script is just used for making newspack data available in JS vars.
 		// It should not actually load a JS file.
 		wp_register_script( 'newspack_data', '', [], '1.0', false );

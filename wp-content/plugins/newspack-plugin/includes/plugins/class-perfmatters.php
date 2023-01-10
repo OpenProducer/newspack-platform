@@ -34,6 +34,7 @@ class Perfmatters {
 			'newspack-sponsors',
 			'newspack-listings',
 			'newspack-theme',
+			'window.newspack',
 			// WordPress.
 			'videopress',
 			'related-posts',

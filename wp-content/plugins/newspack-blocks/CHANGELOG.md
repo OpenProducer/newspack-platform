@@ -1,3 +1,39 @@
+# [1.60.0](https://github.com/Automattic/newspack-blocks/compare/v1.59.1...v1.60.0) (2023-01-09)
+
+
+### Bug Fixes
+
+* allow all img tag attributes in avatar output ([#1333](https://github.com/Automattic/newspack-blocks/issues/1333)) ([2f57019](https://github.com/Automattic/newspack-blocks/commit/2f570192c4fc4e29a7b532c53309bdcef5cab9cb))
+
+
+### Features
+
+* **donate block:** tiers layout ([#1311](https://github.com/Automattic/newspack-blocks/issues/1311)) ([9228ee4](https://github.com/Automattic/newspack-blocks/commit/9228ee46e4059fecb0a964919a295a72f5691032))
+* **donate:** additional fields on the form ([#1330](https://github.com/Automattic/newspack-blocks/issues/1330)) ([1f6869d](https://github.com/Automattic/newspack-blocks/commit/1f6869d2c11c374eda7e56e9aa1425383d9dcd97))
+* handle 'other' reader revenue platform in the editor ([0e6ca8a](https://github.com/Automattic/newspack-blocks/commit/0e6ca8a4e78f66db35e9d95a1ba9810a08aeaebb))
+* unregister Jetpack Subscriptions block to avoid confusion with Newspack blocks ([#1337](https://github.com/Automattic/newspack-blocks/issues/1337)) ([7dab5fc](https://github.com/Automattic/newspack-blocks/commit/7dab5fcff9bcf38636becc030bdab1c612a8d0ab))
+
+# [1.60.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v1.60.0-alpha.1...v1.60.0-alpha.2) (2022-12-22)
+
+
+### Features
+
+* **donate:** additional fields on the form ([#1330](https://github.com/Automattic/newspack-blocks/issues/1330)) ([1f6869d](https://github.com/Automattic/newspack-blocks/commit/1f6869d2c11c374eda7e56e9aa1425383d9dcd97))
+* unregister Jetpack Subscriptions block to avoid confusion with Newspack blocks ([#1337](https://github.com/Automattic/newspack-blocks/issues/1337)) ([7dab5fc](https://github.com/Automattic/newspack-blocks/commit/7dab5fcff9bcf38636becc030bdab1c612a8d0ab))
+
+# [1.60.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.59.1...v1.60.0-alpha.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* allow all img tag attributes in avatar output ([#1333](https://github.com/Automattic/newspack-blocks/issues/1333)) ([2f57019](https://github.com/Automattic/newspack-blocks/commit/2f570192c4fc4e29a7b532c53309bdcef5cab9cb))
+
+
+### Features
+
+* **donate block:** tiers layout ([#1311](https://github.com/Automattic/newspack-blocks/issues/1311)) ([9228ee4](https://github.com/Automattic/newspack-blocks/commit/9228ee46e4059fecb0a964919a295a72f5691032))
+* handle 'other' reader revenue platform in the editor ([0e6ca8a](https://github.com/Automattic/newspack-blocks/commit/0e6ca8a4e78f66db35e9d95a1ba9810a08aeaebb))
+
 ## [1.59.1](https://github.com/Automattic/newspack-blocks/compare/v1.59.0...v1.59.1) (2022-12-12)
 
 

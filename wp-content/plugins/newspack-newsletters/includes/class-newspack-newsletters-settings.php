@@ -204,12 +204,42 @@ class Newspack_Newsletters_Settings {
 			<h1><?php esc_html_e( 'Newsletters Settings', 'newspack-newsletters' ); ?></h1>
 			<form method="post" action="options.php">
 				<?php
+				self::render_oauth_authorization();
 				settings_fields( 'newspack_newsletters_options_group' );
 				do_settings_sections( 'newspack-newsletters-settings-admin' );
 				self::render_lists_table();
 				submit_button();
 				?>
 			</form>
+		</div>
+		<?php
+	}
+
+	/**
+	 * Render OAuth authorization.
+	 */
+	private static function render_oauth_authorization() {
+		$provider = Newspack_Newsletters::get_service_provider();
+		if ( empty( $provider ) || ! method_exists( $provider, 'verify_token' ) ) {
+			return;
+		}
+		$token = $provider->verify_token( true );
+		if ( true === $token['valid'] || ! $token['auth_url'] ) {
+			return;
+		}
+		?>
+		<div class="newspack-newsletters-oauth notice notice-warning">
+			<h2><?php esc_html_e( 'Authorize the application', 'newspack-newsletters' ); ?></h2>
+			<p>
+			<?php
+			echo sprintf(
+				/* translators: %s: email service provider name */
+				esc_html__( 'Authorize %s to connect to Newspack.', 'newspack-newsletters' ),
+				esc_html( $provider->name )
+			);
+			?>
+				</p>
+			<p><a href="<?php echo esc_url( $token['auth_url'] ); ?>" class="button"><?php esc_html_e( 'Authorize', 'newspack-newsletters' ); ?></a></p>
 		</div>
 		<?php
 	}
@@ -259,10 +289,23 @@ class Newspack_Newsletters_Settings {
 							</td>
 							<td class="name">
 								<label for="<?php echo esc_attr( $checkbox_id ); ?>"><?php echo esc_html( $list['name'] ); ?></strong>
+								<br/>
+								<small>
+									<?php echo esc_html( $list['type_label'] ); ?>
+									<?php if ( $list['edit_link'] ) : ?>
+										(<a href="<?php echo esc_url( $list['edit_link'] ); ?>"><?php esc_html_e( 'Edit', 'newspack-newsletters' ); ?></a>)
+									<?php endif; ?>
+								</small>
 							</td>
 							<td class="details">
-								<input type="text" placeholder="<?php echo esc_attr_e( 'List title', 'newspack-newsletters' ); ?>" name="lists[<?php echo esc_attr( $list['id'] ); ?>][title]" value="<?php echo esc_attr( $list['title'] ); ?>" />
-								<textarea placeholder="<?php echo esc_attr_e( 'List description', 'newspack-newsletters' ); ?>" name="lists[<?php echo esc_attr( $list['id'] ); ?>][description]"><?php echo esc_textarea( $list['description'] ); ?></textarea>
+								<?php if ( 'local' === $list['type'] ) : ?>
+									<b><?php echo esc_html( $list['title'] ); ?></b>
+									<p><?php echo esc_html( $list['description'] ); ?></p>
+									<input type="hidden" name="lists[<?php echo esc_attr( $list['id'] ); ?>][title]" value="<?php echo esc_attr( $list['title'] ); ?>" />
+								<?php else : ?>
+									<input type="text" placeholder="<?php echo esc_attr_e( 'List title', 'newspack-newsletters' ); ?>" name="lists[<?php echo esc_attr( $list['id'] ); ?>][title]" value="<?php echo esc_attr( $list['title'] ); ?>" />
+									<textarea placeholder="<?php echo esc_attr_e( 'List description', 'newspack-newsletters' ); ?>" name="lists[<?php echo esc_attr( $list['id'] ); ?>][description]"><?php echo esc_textarea( $list['description'] ); ?></textarea>
+								<?php endif; ?>
 							</td>
 						</tr>
 					<?php endforeach; ?>
@@ -339,6 +382,19 @@ class Newspack_Newsletters_Settings {
 							$checkbox.on( 'change', function() {
 								$inputs.attr( 'disabled', ! $checkbox.is( ':checked' ) );
 							} );
+						} );
+					} );
+					$( '.newspack-newsletters-oauth' ).each( function() {
+						var $container = $( this );
+						var $button = $container.find( '.button' );
+						var authWindow;
+						var onAuthorize = function() {
+							location.reload();
+						};
+						$button.on( 'click', function( ev ) {
+							ev.preventDefault();
+							authWindow = window.open( $button.attr( 'href' ), 'newspack_newsletters_oauth', 'width=500,height=600' );
+							authWindow.opener = { verify: onAuthorize };
 						} );
 					} );
 				} );

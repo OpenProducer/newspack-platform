@@ -74,7 +74,7 @@ export const getPostStatusLabel = ( post = {} ) =>
 	post.post_status !== 'publish' ? (
 		<div className="newspack-preview-label">
 			{
-				{ draft: __( 'Draft', 'newspack' ), future: __( 'Scheduled', 'newspack' ) }[
+				{ draft: __( 'Draft', 'newspack-blocks' ), future: __( 'Scheduled', 'newspack-blocks' ) }[
 					post.post_status
 				]
 			}

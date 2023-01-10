@@ -7,6 +7,9 @@
 
 defined( 'ABSPATH' ) || exit;
 
+use Newspack\Newsletters\Subscription_List;
+use Newspack\Newsletters\Subscription_Lists;
+
 /**
  * Main Newspack Newsletters Class.
  */
@@ -43,6 +46,13 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	protected static $controlled_statuses = [ 'publish', 'private' ];
 
 	/**
+	 * Whether the provider has support to tags and tags based Subscription Lists.
+	 *
+	 * @var boolean
+	 */
+	public static $support_tags = false;
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -51,6 +61,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		}
 		add_action( 'pre_post_update', [ $this, 'pre_post_update' ], 10, 2 );
 		add_action( 'transition_post_status', [ $this, 'transition_post_status' ], 10, 3 );
+		add_action( 'updated_post_meta', [ $this, 'updated_post_meta' ], 10, 4 );
 		add_action( 'wp_insert_post', [ $this, 'insert_post' ], 10, 3 );
 		add_filter( 'wp_insert_post_data', [ $this, 'insert_post_data' ], 10, 2 );
 	}
@@ -177,6 +188,43 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 				delete_transient( $error_transient_key );
 			}
 			delete_post_meta( $post->ID, 'sending_scheduled' );
+		}
+	}
+
+	/**
+	 * Updated post meta
+	 *
+	 * @param int    $meta_id    ID of updated metadata entry.
+	 * @param int    $post_id    Post ID.
+	 * @param string $meta_key   Metadata key.
+	 * @param mixed  $meta_value Metadata value.
+	 */
+	public function updated_post_meta( $meta_id, $post_id, $meta_key, $meta_value ) {
+		// Only run if it's a newsletter post.
+		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
+			return;
+		}
+
+		// Only run if this is the active provider.
+		if ( Newspack_Newsletters::service_provider() !== $this->service ) {
+			return;
+		}
+
+		// Only run if the meta key is the one we're interested in.
+		if ( 'is_public' !== $meta_key ) {
+			return;
+		}
+
+		$is_public = $meta_value;
+
+		$post = get_post( $post_id );
+		if ( in_array( $post->post_status, self::$controlled_statuses, true ) ) {
+			wp_update_post(
+				[
+					'ID'          => $post_id,
+					'post_status' => $is_public ? 'publish' : 'private',
+				]
+			);
 		}
 	}
 
@@ -316,6 +364,263 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 * @return true|WP_Error True if the contact was updated or error.
 	 */
 	public function update_contact_lists( $email, $lists_to_add = [], $lists_to_remove = [] ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Get the provider specific labels
+	 *
+	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
+	 *
+	 * @return array
+	 */
+	public static function get_labels() {
+		return [
+			'name'  => '', // The provider name.
+			'list'  => __( 'list', 'newspack-newsletters' ), // "list" in lower case singular format.
+			'lists' => __( 'lists', 'newspack-newsletters' ), // "list" in lower case plural format.
+			'List'  => __( 'List', 'newspack-newsletters' ), // "list" in uppercase case singular format.
+			'Lists' => __( 'Lists', 'newspack-newsletters' ), // "list" in uppercase case plural format.
+		];
+	}
+
+	/**
+	 * Get one specific label for the current provider
+	 *
+	 * @param string $key The label key.
+	 * @return string Empty string in case the label is not found.
+	 */
+	public static function label( $key ) {
+		$labels = static::get_labels();
+		return $labels[ $key ] ?? '';
+	}
+
+	/**
+	 * Add or update contact to a list, but handling local Subscription Lists
+	 *
+	 * The difference between this method and add_contact is that this method will identify and handle local lists
+	 *
+	 * If the $list_id informed is a local list, it will read its settings and call add_contact with the list associated and also add the tag to the contact
+	 *
+	 * @param array  $contact      {
+	 *    Contact data.
+	 *
+	 *    @type string   $email    Contact email address.
+	 *    @type string   $name     Contact name. Optional.
+	 *    @type string[] $metadata Contact additional metadata. Optional.
+	 * }
+	 * @param string $list_id      List to add the contact to.
+	 *
+	 * @return array|WP_Error Contact data if it was added, or error otherwise.
+	 */
+	public function add_contact_handling_local_lists( $contact, $list_id ) {
+		if ( Subscription_List::is_form_id( $list_id ) ) {
+			try {
+				$list = new Subscription_List( $list_id );
+				
+				if ( ! $list->is_configured_for_provider( $this->service ) ) {
+					return new WP_Error( 'List not properly configured for the provider' );
+				}
+				$list_settings = $list->get_provider_settings( $this->service );
+
+				$added_contact = $this->add_contact( $contact, $list_settings['list'] );
+
+				if ( is_wp_error( $added_contact ) ) {
+					return $added_contact;
+				}
+
+				if ( static::$support_tags ) {
+					$this->add_tag_to_contact( $contact['email'], (int) $list_settings['tag_id'], $list_settings['list'] );
+				}
+
+				return $added_contact;
+
+			} catch ( \InvalidArgumentException $e ) {
+				return new WP_Error( 'List not found' );
+			}
+		}
+		return $this->add_contact( $contact, $list_id );
+	}
+
+	/**
+	 * Update a contact lists subscription, but handling local Subscription Lists
+	 *
+	 * The difference between this method and update_contact_lists is that this method will identify and handle local lists
+	 *
+	 * @param string   $email           Contact email address.
+	 * @param string[] $lists_to_add    Array of list IDs to subscribe the contact to.
+	 * @param string[] $lists_to_remove Array of list IDs to remove the contact from.
+	 *
+	 * @return true|WP_Error True if the contact was updated or error.
+	 */
+	public function update_contact_lists_handling_local( $email, $lists_to_add = [], $lists_to_remove = [] ) {
+		$contact = $this->get_contact_data( $email );
+		if ( is_wp_error( $contact ) ) {
+			// Create contact.
+			// Use  Newspack_Newsletters_Subscription::add_contact to trigger hooks and call add_contact_handling_local_lists if needed.
+			$result = Newspack_Newsletters_Subscription::add_contact( [ 'email' => $email ], $lists_to_add );
+			if ( is_wp_error( $result ) ) {
+				return $result;
+			}
+			return true;
+		}
+		if ( static::$support_tags ) {
+			$lists_to_add    = $this->update_contact_local_lists( $email, $lists_to_add, 'add' );
+			$lists_to_remove = $this->update_contact_local_lists( $email, $lists_to_remove, 'remove' );
+			if ( is_wp_error( $lists_to_add ) ) {
+				return $lists_to_add;
+			}
+			if ( is_wp_error( $lists_to_remove ) ) {
+				return $lists_to_remove;
+			}
+		}
+		return $this->update_contact_lists( $email, $lists_to_add, $lists_to_remove );
+
+	}
+
+	/**
+	 * Bulk update a contact local lists, by adding or removing tags
+	 *
+	 * @param string $email The contact email.
+	 * @param array  $lists An array with List IDs, mixing local and providers lists. Only local lists will be handled.
+	 * @param string $action The action to be performed. add or remove.
+	 * @return array|WP_Error The remaining lists that were not handled by this method, because they are not local lists.
+	 */
+	public function update_contact_local_lists( $email, $lists = [], $action = 'add' ) {
+		foreach ( $lists as $key => $list_id ) {
+			if ( Subscription_List::is_form_id( $list_id ) ) {
+				try {
+					$list = new Subscription_List( $list_id );
+					
+					if ( ! $list->is_configured_for_provider( $this->service ) ) {
+						return new WP_Error( 'List not properly configured for the provider' );
+					}
+					$list_settings = $list->get_provider_settings( $this->service );
+
+					if ( 'add' === $action ) {
+						$this->add_tag_to_contact( $email, (int) $list_settings['tag_id'], $list_settings['list'] );
+					} elseif ( 'remove' === $action ) {
+						$this->remove_tag_from_contact( $email, (int) $list_settings['tag_id'], $list_settings['list'] );
+					}
+					
+					unset( $lists[ $key ] );
+
+				} catch ( \InvalidArgumentException $e ) {
+					return new WP_Error( 'List not found' );
+				}
+			}
+		}
+		return $lists;
+	}
+
+	/**
+	 * Get the contact local lists IDs
+	 *
+	 * @param string $email The contact email.
+	 * @return string[] Array of local lists IDs or error.
+	 */
+	public function get_contact_local_lists( $email ) {
+		$tags = $this->get_contact_tags_ids( $email );
+		if ( is_wp_error( $tags ) ) {
+			return [];
+		}
+		$lists = Subscription_Lists::get_configured_for_provider( $this->service );
+		$ids   = [];
+		foreach ( $lists as $list ) {
+			$list_settings = $list->get_provider_settings( $this->service );
+			if ( in_array( $list_settings['tag_id'], $tags, false ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
+				$ids[] = $list->get_form_id();
+			}
+		}
+		return $ids;
+	}
+
+	/**
+	 * Get contact lists combining local lists and provider lists
+	 *
+	 * @param string $email The contact email.
+	 * @return WP_Error|array
+	 */
+	public function get_contact_combined_lists( $email ) {
+		$lists = $this->get_contact_lists( $email );
+		if ( is_wp_error( $lists ) ) {
+			return $lists;
+		}
+		$local_lists = [];
+		if ( static::$support_tags ) {
+			$local_lists = $this->get_contact_local_lists( $email );
+			if ( is_wp_error( $local_lists ) ) {
+				return $local_lists;
+			}
+		}
+		return array_merge( $lists, $local_lists );
+	}
+
+	/**
+	 * Retrieve the ESP's tag ID from its name
+	 *
+	 * @param string  $tag_name The tag.
+	 * @param boolean $create_if_not_found Whether to create a new tag if not found. Default to true.
+	 * @param string  $list_id The List ID.
+	 * @return int|WP_Error The tag ID on success. WP_Error on failure.
+	 */
+	public function get_tag_id( $tag_name, $create_if_not_found = true, $list_id = null ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Retrieve the ESP's tag name from its ID
+	 *
+	 * @param int    $tag_id The tag ID.
+	 * @param string $list_id The List ID.
+	 * @return string|WP_Error The tag name on success. WP_Error on failure.
+	 */
+	public function get_tag_by_id( $tag_id, $list_id = null ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Create a Tag on the provider
+	 *
+	 * @param string $tag The Tag name.
+	 * @param string $list_id The List ID.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function create_tag( $tag, $list_id = null ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Add a tag to a contact
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function add_tag_to_contact( $email, $tag, $list_id = null ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Remove a tag from a contact
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function remove_tag_from_contact( $email, $tag, $list_id = null ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Get the IDs of the tags associated with a contact.
+	 *
+	 * @param string $email The contact email.
+	 * @return array|WP_Error The tag IDs on success. WP_Error on failure.
+	 */
+	public function get_contact_tags_ids( $email ) {
 		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
 	}
 }

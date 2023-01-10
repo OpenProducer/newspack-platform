@@ -1,3 +1,49 @@
+# [2.10.0](https://github.com/Automattic/newspack-popups/compare/v2.9.2...v2.10.0) (2023-01-09)
+
+
+### Bug Fixes
+
+* allow every pageview frequency for overlays in editor ([#1036](https://github.com/Automattic/newspack-popups/issues/1036)) ([d792ea6](https://github.com/Automattic/newspack-popups/commit/d792ea6d6d41075f7227d08fb23a161a693d4211))
+* hide the 'Prompts Visible' button in the admin panel ([a443eca](https://github.com/Automattic/newspack-popups/commit/a443ecaf84d3464c3c9f44e519aef83b0b0dfea5))
+
+
+### Features
+
+* add export cli command ([#1021](https://github.com/Automattic/newspack-popups/issues/1021)) ([835f117](https://github.com/Automattic/newspack-popups/commit/835f1174d597a2dd55b766ac3db6103b5491748f))
+* add new field for custom CSS classes ([#1025](https://github.com/Automattic/newspack-popups/issues/1025)) ([364351b](https://github.com/Automattic/newspack-popups/commit/364351b0c6bd06dd3a3afc49841bfee78cd2fc61))
+* add the Importer basic CLI command ([#1026](https://github.com/Automattic/newspack-popups/issues/1026)) ([8aa5ac2](https://github.com/Automattic/newspack-popups/commit/8aa5ac219ed3c6a6fab180af47a8b6df2f1813b9))
+* allow admins to toggle prompts ([#1012](https://github.com/Automattic/newspack-popups/issues/1012)) ([7ed1d88](https://github.com/Automattic/newspack-popups/commit/7ed1d88d781835700379cb0bd8c9f4c633955697))
+* CLI command to add ras defaults segments and prompts ([#1032](https://github.com/Automattic/newspack-popups/issues/1032)) ([7cf8898](https://github.com/Automattic/newspack-popups/commit/7cf88985e2792482bc6e013d5d79de655341ab86))
+* Improved import and export cli commands ([#1029](https://github.com/Automattic/newspack-popups/issues/1029)) ([e8d3a22](https://github.com/Automattic/newspack-popups/commit/e8d3a22245c520776c29cc2e49d317cc78b9b671))
+
+# [2.10.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.10.0-alpha.1...v2.10.0-alpha.2) (2022-12-22)
+
+
+### Bug Fixes
+
+* allow every pageview frequency for overlays in editor ([#1036](https://github.com/Automattic/newspack-popups/issues/1036)) ([d792ea6](https://github.com/Automattic/newspack-popups/commit/d792ea6d6d41075f7227d08fb23a161a693d4211))
+
+
+### Features
+
+* CLI command to add ras defaults segments and prompts ([#1032](https://github.com/Automattic/newspack-popups/issues/1032)) ([7cf8898](https://github.com/Automattic/newspack-popups/commit/7cf88985e2792482bc6e013d5d79de655341ab86))
+
+# [2.10.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.9.2...v2.10.0-alpha.1) (2022-12-20)
+
+
+### Bug Fixes
+
+* hide the 'Prompts Visible' button in the admin panel ([a443eca](https://github.com/Automattic/newspack-popups/commit/a443ecaf84d3464c3c9f44e519aef83b0b0dfea5))
+
+
+### Features
+
+* add export cli command ([#1021](https://github.com/Automattic/newspack-popups/issues/1021)) ([835f117](https://github.com/Automattic/newspack-popups/commit/835f1174d597a2dd55b766ac3db6103b5491748f))
+* add new field for custom CSS classes ([#1025](https://github.com/Automattic/newspack-popups/issues/1025)) ([364351b](https://github.com/Automattic/newspack-popups/commit/364351b0c6bd06dd3a3afc49841bfee78cd2fc61))
+* add the Importer basic CLI command ([#1026](https://github.com/Automattic/newspack-popups/issues/1026)) ([8aa5ac2](https://github.com/Automattic/newspack-popups/commit/8aa5ac219ed3c6a6fab180af47a8b6df2f1813b9))
+* allow admins to toggle prompts ([#1012](https://github.com/Automattic/newspack-popups/issues/1012)) ([7ed1d88](https://github.com/Automattic/newspack-popups/commit/7ed1d88d781835700379cb0bd8c9f4c633955697))
+* Improved import and export cli commands ([#1029](https://github.com/Automattic/newspack-popups/issues/1029)) ([e8d3a22](https://github.com/Automattic/newspack-popups/commit/e8d3a22245c520776c29cc2e49d317cc78b9b671))
+
 ## [2.9.2](https://github.com/Automattic/newspack-popups/compare/v2.9.1...v2.9.2) (2022-12-20)
 
 

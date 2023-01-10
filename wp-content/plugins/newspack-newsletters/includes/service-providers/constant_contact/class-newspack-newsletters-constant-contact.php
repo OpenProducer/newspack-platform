@@ -27,6 +27,13 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	private $contact_data = [];
 
 	/**
+	 * Provider name.
+	 *
+	 * @var string
+	 */
+	public $name = 'Contant Constact';
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -800,6 +807,22 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 			);
 		}
 		return get_object_vars( $contact );
+	}
+
+	/**
+	 * Get the provider specific labels
+	 *
+	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
+	 *
+	 * @return array
+	 */
+	public static function get_labels() {
+		return array_merge(
+			parent::get_labels(),
+			[
+				'name' => 'Constant Contact',
+			]
+		);
 	}
 
 }
