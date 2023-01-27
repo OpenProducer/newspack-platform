@@ -634,7 +634,12 @@ class Stripe_Connection {
 	public static function get_stripe_client() {
 		$secret_key = self::get_stripe_secret_key();
 		if ( $secret_key ) {
-			return new \Stripe\StripeClient( $secret_key );
+			return new \Stripe\StripeClient(
+				[
+					'api_key'        => $secret_key,
+					'stripe_version' => '2022-11-15',
+				]
+			);
 		}
 	}
 

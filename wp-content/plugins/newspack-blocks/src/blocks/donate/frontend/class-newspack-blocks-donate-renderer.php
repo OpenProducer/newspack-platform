@@ -52,7 +52,7 @@ class Newspack_Blocks_Donate_Renderer {
 			Newspack_Blocks::SCRIPT_HANDLES[ $handle_slug ],
 			$script_data['script_path'],
 			$dependencies,
-			$script_data['version'],
+			NEWSPACK_BLOCKS__VERSION,
 			true
 		);
 

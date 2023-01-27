@@ -7,6 +7,7 @@
 
 namespace Newspack\Data_Events;
 
+use Newspack\Data_Events;
 use Newspack\Logger;
 use WP_Error;
 
@@ -50,6 +51,7 @@ final class Webhooks {
 		\add_action( 'newspack_deactivation', [ __CLASS__, 'clear_cron_events' ] );
 		\add_action( 'newspack_data_event_dispatch', [ __CLASS__, 'handle_dispatch' ], 10, 4 );
 		\add_action( 'transition_post_status', [ __CLASS__, 'transition_post_status' ], 10, 3 );
+		\add_action( 'newspack_webhooks_as_process_request', [ __CLASS__, 'process_request' ] );
 	}
 
 	/**
@@ -171,6 +173,9 @@ final class Webhooks {
 	 * 'future' status.
 	 */
 	public static function send_late_requests() {
+		if ( Data_Events::use_action_scheduler() ) {
+			return;
+		}
 		$requests = \get_posts(
 			[
 				'post_type'      => self::REQUEST_POST_TYPE,
@@ -326,7 +331,11 @@ final class Webhooks {
 		if ( ! $request || \is_wp_error( $request ) ) {
 			return new WP_Error( 'newspack_webhooks_request_not_found', __( 'Webhook request not found.', 'newspack' ) );
 		}
-		$endpoint = self::get_request_endpoint( $request->ID );
+		$endpoint  = self::get_request_endpoint( $request->ID );
+		$scheduled = (int) \get_post_meta( $request->ID, 'scheduled', true );
+		if ( ! $scheduled ) {
+			$scheduled = \get_post_timestamp( $request );
+		}
 		return [
 			'id'          => $request->ID,
 			'endpoint'    => $endpoint,
@@ -334,7 +343,7 @@ final class Webhooks {
 			'action_name' => \get_post_meta( $request->ID, 'action_name', true ),
 			'status'      => \get_post_meta( $request->ID, 'status', true ),
 			'errors'      => \get_post_meta( $request->ID, 'errors', true ),
-			'scheduled'   => \get_post_datetime( $request ),
+			'scheduled'   => $scheduled,
 		];
 	}
 
@@ -480,7 +489,8 @@ final class Webhooks {
 		if (
 			self::REQUEST_POST_TYPE === $post->post_type &&
 			'publish' === $new_status &&
-			'publish' !== $old_status
+			'publish' !== $old_status &&
+			! Data_Events::use_action_scheduler()
 		) {
 			self::process_request( $post->ID );
 		}
@@ -512,16 +522,22 @@ final class Webhooks {
 		$time     = strtotime( sprintf( '+%d minutes', \absint( $delay ) ) );
 		$date     = date( 'Y-m-d H:i:s', $time ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		$date_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $date ) );
-		Logger::log( "Scheduling request {$request_id} for {$date_gmt}.", self::LOGGER_HEADER );
-		\wp_update_post(
-			[
-				'ID'            => $request_id,
-				'post_status'   => 'future',
-				'post_date'     => $date,
-				'post_date_gmt' => $date_gmt,
-				'edit_date'     => true,
-			]
-		);
+		\update_post_meta( $request_id, 'scheduled', $time );
+		if ( Data_Events::use_action_scheduler() ) {
+			Logger::log( "Scheduling request {$request_id} for {$date_gmt} via Action Scheduler.", self::LOGGER_HEADER );
+			\as_schedule_single_action( $time, 'newspack_webhooks_as_process_request', [ $request_id ], 'newspack-data-events' );
+		} else {
+			Logger::log( "Scheduling request {$request_id} for {$date_gmt} via scheduled post publishing.", self::LOGGER_HEADER );
+			\wp_update_post(
+				[
+					'ID'            => $request_id,
+					'post_status'   => 'future',
+					'post_date'     => $date,
+					'post_date_gmt' => $date_gmt,
+					'edit_date'     => true,
+				]
+			);
+		}
 	}
 
 	/**
@@ -532,6 +548,10 @@ final class Webhooks {
 	public static function finish_request( $request_id ) {
 		Logger::log( "Finishing request {$request_id}.", self::LOGGER_HEADER );
 		\update_post_meta( $request_id, 'status', 'finished' );
+		// If using ActionScheduler, manually set to publish.
+		if ( Data_Events::use_action_scheduler() ) {
+			\wp_publish_post( $request_id );
+		}
 	}
 
 	/**
@@ -539,7 +559,7 @@ final class Webhooks {
 	 *
 	 * @param int $request_id Request ID.
 	 */
-	private static function process_request( $request_id ) {
+	public static function process_request( $request_id ) {
 		$endpoint = self::get_request_endpoint( $request_id );
 		if ( ! $endpoint ) {
 			self::add_request_error( $request_id, __( 'Endpoint not found.', 'newspack' ) );

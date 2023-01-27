@@ -781,23 +781,25 @@ final class Newspack_Popups_Segmentation {
 			return;
 		}
 
+		$logger_function = defined( 'WP_CLI' ) ? '\WP_CLI::log' : 'error_log';
+
 		if ( $removed_preview_readers ) {
-			error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_preview_readers . ' preview session rows from ' . $readers_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_preview_readers . ' preview session rows from ' . $readers_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
 		if ( $removed_preview_events ) {
-			error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_preview_events . ' preview session rows from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_preview_events . ' preview session rows from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
 		if ( $removed_old_readers ) {
-			error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_old_readers . ' old rows from ' . $readers_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_old_readers . ' old rows from ' . $readers_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
 		if ( $removed_old_events ) {
-			error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_old_events . ' old rows from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_old_events . ' old rows from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
 		if ( $removed_rows_count_page_view_events ) {
-			error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_rows_count_page_view_events . ' article/page view events from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_rows_count_page_view_events . ' article/page view events from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
 		if ( $removed_row_counts_prompt_seen_events ) {
-			error_log( 'Newspack Campaigns: Data pruning – removed ' . $removed_row_counts_prompt_seen_events . ' prompt seen events from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_row_counts_prompt_seen_events . ' prompt seen events from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
 		}
 	}
 

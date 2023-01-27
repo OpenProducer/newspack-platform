@@ -277,7 +277,13 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 			el.classList.remove( 'stripe-payment--invisible' );
 		};
 
-		initStripe();
+		// Initialise Stripe once the element is visible.
+		const observer = new IntersectionObserver( entries => {
+			if ( entries[ 0 ].isIntersecting ) {
+				initStripe();
+			}
+		} );
+		observer.observe( el );
 
 		// Card form unravelling.
 		const submitButtonEl: HTMLButtonElement | null = el.querySelector( 'button[type="submit"]' );

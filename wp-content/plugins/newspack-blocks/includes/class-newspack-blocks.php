@@ -430,55 +430,67 @@ class Newspack_Blocks {
 	public static function image_size_for_orientation( $orientation = 'landscape' ) {
 		$sizes = array(
 			'landscape' => array(
-				'large'  => array(
+				'large'        => array(
 					1200,
 					900,
 				),
-				'medium' => array(
+				'medium'       => array(
 					800,
 					600,
 				),
-				'small'  => array(
+				'intermediate' => array(
+					600,
+					450,
+				),
+				'small'        => array(
 					400,
 					300,
 				),
-				'tiny'   => array(
+				'tiny'         => array(
 					200,
 					150,
 				),
 			),
 			'portrait'  => array(
-				'large'  => array(
+				'large'        => array(
 					900,
 					1200,
 				),
-				'medium' => array(
+				'medium'       => array(
 					600,
 					800,
 				),
-				'small'  => array(
+				'intermediate' => array(
+					450,
+					600,
+				),
+				'small'        => array(
 					300,
 					400,
 				),
-				'tiny'   => array(
+				'tiny'         => array(
 					150,
 					200,
 				),
 			),
 			'square'    => array(
-				'large'  => array(
+				'large'        => array(
 					1200,
 					1200,
 				),
-				'medium' => array(
+				'medium'       => array(
 					800,
 					800,
 				),
-				'small'  => array(
+				'intermediate' => array(
+					600,
+					600,
+				),
+				'small'        => array(
 					400,
 					400,
 				),
-				'tiny'   => array(
+				'tiny'         => array(
 					200,
 					200,
 				),
@@ -509,6 +521,10 @@ class Newspack_Blocks {
 		add_image_size( 'newspack-article-block-landscape-medium', 800, 600, true );
 		add_image_size( 'newspack-article-block-portrait-medium', 600, 800, true );
 		add_image_size( 'newspack-article-block-square-medium', 800, 800, true );
+
+		add_image_size( 'newspack-article-block-landscape-intermediate', 600, 450, true );
+		add_image_size( 'newspack-article-block-portrait-intermediate', 450, 600, true );
+		add_image_size( 'newspack-article-block-square-intermediate', 600, 600, true );
 
 		add_image_size( 'newspack-article-block-landscape-small', 400, 300, true );
 		add_image_size( 'newspack-article-block-portrait-small', 300, 400, true );
@@ -616,11 +632,13 @@ class Newspack_Blocks {
 				$args['category__not_in'] = $category_exclusions;
 			}
 
+			$is_co_authors_plus_active = class_exists( 'CoAuthors_Guest_Authors' );
+
 			if ( $authors && count( $authors ) ) {
 				$co_authors_names = [];
 				$author_names     = [];
 
-				if ( class_exists( 'CoAuthors_Guest_Authors' ) ) {
+				if ( $is_co_authors_plus_active ) {
 					$co_authors_guest_authors = new CoAuthors_Guest_Authors();
 
 					foreach ( $authors as $index => $author_id ) {
@@ -669,21 +687,23 @@ class Newspack_Blocks {
 				} elseif ( empty( $co_authors_names ) && count( $authors ) ) {
 					$args['author__in'] = $authors;
 
-					// Don't get any posts that are attributed to other CAP guest authors.
-					$args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-						[
-							'relation' => 'OR',
+					if ( $is_co_authors_plus_active ) {
+						// Don't get any posts that are attributed to other CAP guest authors.
+						$args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
 							[
-								'taxonomy' => 'author',
-								'operator' => 'NOT EXISTS',
+								'relation' => 'OR',
+								[
+									'taxonomy' => 'author',
+									'operator' => 'NOT EXISTS',
+								],
+								[
+									'field'    => 'name',
+									'taxonomy' => 'author',
+									'terms'    => $author_names,
+								],
 							],
-							[
-								'field'    => 'name',
-								'taxonomy' => 'author',
-								'terms'    => $author_names,
-							],
-						],
-					];
+						];
+					}
 				} else {
 					// The query contains both WP users and CAP guest authors. We need to filter the SQL query.
 					self::$filter_clauses = [
@@ -727,19 +747,8 @@ class Newspack_Blocks {
 		if ( function_exists( 'coauthors_posts_links' ) && ! empty( get_coauthors() ) ) {
 			$authors = get_coauthors();
 			foreach ( $authors as $author ) {
-				// Check if this is a guest author post type.
-				if ( 'guest-author' === get_post_type( $author->ID ) ) {
-					// If yes, make sure the author actually has an avatar set; otherwise, coauthors_get_avatar returns a featured image.
-					if ( get_post_thumbnail_id( $author->ID ) ) {
-						$author->avatar = coauthors_get_avatar( $author, 48 );
-					} else {
-						// If there is no avatar, force it to return the current fallback image.
-						$author->avatar = get_avatar( ' ' );
-					}
-				} else {
-					$author->avatar = coauthors_get_avatar( $author, 48 );
-				}
-				$author->url = get_author_posts_url( $author->ID, $author->user_nicename );
+				$author->avatar = coauthors_get_avatar( $author, 48 );
+				$author->url    = get_author_posts_url( $author->ID, $author->user_nicename );
 			}
 			return $authors;
 		}

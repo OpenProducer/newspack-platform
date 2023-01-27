@@ -223,7 +223,7 @@ class Salesforce {
 	 * Register admin scripts for Salesforce functionality.
 	 */
 	public static function register_admin_scripts() {
-		if ( 'shop_order' !== get_post_type() || ! Donations::is_platform_wc() ) {
+		if ( 'shop_order' !== get_current_screen()->id || 'shop_order' !== get_post_type() || ! Donations::is_platform_wc() || ! self::is_connected() ) {
 			return;
 		}
 

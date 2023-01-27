@@ -43,6 +43,25 @@ final class Data_Events {
 	public static function init() {
 		\add_action( 'wp_ajax_' . self::ACTION, [ __CLASS__, 'maybe_handle' ] );
 		\add_action( 'wp_ajax_nopriv_' . self::ACTION, [ __CLASS__, 'maybe_handle' ] );
+		\add_action( 'newspack_data_events_as_dispatch', [ __CLASS__, 'handle' ], 10, 4 );
+	}
+
+	/**
+	 * Whether to use Action Scheduler if available.
+	 *
+	 * @return bool
+	 */
+	public static function use_action_scheduler() {
+		$use_action_scheduler = false;
+		if ( function_exists( 'as_enqueue_async_action' ) ) {
+			$use_action_scheduler = true;
+		}
+		/**
+		 * Filters whether to use the Action Scheduler if available.
+		 *
+		 * @param bool $use_action_scheduler
+		 */
+		return \apply_filters( 'newspack_data_events_use_action_scheduler', $use_action_scheduler );
 	}
 
 	/**
@@ -53,12 +72,12 @@ final class Data_Events {
 		session_write_close(); // phpcs:ignore
 
 		if ( ! isset( $_REQUEST['nonce'] ) || ! \wp_verify_nonce( \sanitize_text_field( $_REQUEST['nonce'] ), self::ACTION ) ) {
-			wp_die();
+			\wp_die();
 		}
 
 		$action_name = isset( $_POST['action_name'] ) ? \sanitize_text_field( \wp_unslash( $_POST['action_name'] ) ) : null;
-		if ( ! $action_name || ! isset( self::$actions[ $action_name ] ) ) {
-			wp_die();
+		if ( empty( $action_name ) || ! isset( self::$actions[ $action_name ] ) ) {
+			\wp_die();
 		}
 
 		$timestamp = isset( $_POST['timestamp'] ) ? \sanitize_text_field( \wp_unslash( $_POST['timestamp'] ) ) : null;
@@ -67,7 +86,7 @@ final class Data_Events {
 
 		self::handle( $action_name, $timestamp, $data, $client_id );
 
-		wp_die();
+		\wp_die();
 	}
 
 	/**
@@ -75,7 +94,7 @@ final class Data_Events {
 	 *
 	 * @param string $action_name Action name.
 	 * @param int    $timestamp   Timestamp.
-	 * @param mixed  $data        Data.
+	 * @param array  $data        Data.
 	 * @param string $client_id   Client ID.
 	 */
 	public static function handle( $action_name, $timestamp, $data, $client_id ) {
@@ -111,24 +130,24 @@ final class Data_Events {
 		/**
 		 * Fires after all global and action-specific handlers have been executed.
 		 *
-		 * @param string $action_name Action name.
-		 * @param int    $timestamp   Timestamp.
-		 * @param mixed  $data        Data.
-		 * @param string $client_id   Client ID.
-		 */
-		do_action( 'newspack_data_event', $action_name, $timestamp, $data, $client_id );
-
-		/**
-		 * Fires after all global and action-specific handlers have been executed.
-		 *
 		 * The dynamic portion of the hook name, `$action_name`, refers to the name
 		 * of the action being fired.
 		 *
 		 * @param int    $timestamp   Timestamp.
-		 * @param mixed  $data        Data.
+		 * @param array  $data        Data.
 		 * @param string $client_id   Client ID.
 		 */
-		do_action( 'newspack_data_event_' . $action_name, $timestamp, $data, $client_id );
+		\do_action( "newspack_data_event_{$action_name}", $timestamp, $data, $client_id );
+
+		/**
+		 * Fires after all global and action-specific handlers have been executed.
+		 *
+		 * @param string $action_name Action name.
+		 * @param int    $timestamp   Timestamp.
+		 * @param array  $data        Data.
+		 * @param string $client_id   Client ID.
+		 */
+		\do_action( 'newspack_data_event', $action_name, $timestamp, $data, $client_id );
 	}
 
 	/**
@@ -154,7 +173,7 @@ final class Data_Events {
 	 * @return void|WP_Error Error if action not registered, handler already registered or is not callable.
 	 */
 	public static function register_handler( $handler, $action_name = null ) {
-		/** If first argument is callable, treat as global handler. */
+		/** If there's no action name, treat as a global handler. */
 		if ( empty( $action_name ) ) {
 			self::$global_handlers[] = $handler;
 			return;
@@ -263,22 +282,6 @@ final class Data_Events {
 			$client_id = Reader_Activation::get_client_id();
 		}
 
-		Logger::log(
-			sprintf( 'Dispatching action "%s".', $action_name ),
-			self::LOGGER_HEADER
-		);
-
-		/**
-		 * Fires when an action is dispatched. This occurs before any handlers are
-		 * executed.
-		 *
-		 * @param string $action_name Action name.
-		 * @param int    $timestamp   Timestamp.
-		 * @param mixed  $data        Data.
-		 * @param string $client_id   Client ID.
-		 */
-		do_action( 'newspack_data_event_dispatch', $action_name, $timestamp, $data, $client_id );
-
 		/**
 		 * Fires when an action is dispatched. This occurs before any handlers are
 		 * executed.
@@ -288,18 +291,21 @@ final class Data_Events {
 		 *
 		 * @param string $action_name Action name.
 		 * @param int    $timestamp   Timestamp.
-		 * @param mixed  $data        Data.
+		 * @param array  $data        Data.
 		 * @param string $client_id   Client ID.
 		 */
-		do_action( "newspack_data_event_dispatch_{$action_name}", $timestamp, $data, $client_id );
+		\do_action( "newspack_data_event_dispatch_{$action_name}", $timestamp, $data, $client_id );
 
-		$url = \add_query_arg(
-			[
-				'action' => self::ACTION,
-				'nonce'  => \wp_create_nonce( self::ACTION ),
-			],
-			\admin_url( 'admin-ajax.php' )
-		);
+		/**
+		 * Fires when an action is dispatched. This occurs before any handlers are
+		 * executed.
+		 *
+		 * @param string $action_name Action name.
+		 * @param int    $timestamp   Timestamp.
+		 * @param array  $data        Data.
+		 * @param string $client_id   Client ID.
+		 */
+		\do_action( 'newspack_data_event_dispatch', $action_name, $timestamp, $data, $client_id );
 
 		$body = [
 			'action_name' => $action_name,
@@ -308,16 +314,47 @@ final class Data_Events {
 			'client_id'   => $client_id,
 		];
 
-		return \wp_remote_post(
-			$url,
-			[
-				'timeout'   => 0.01,
-				'blocking'  => false,
-				'body'      => $body,
+		/**
+		 * Filters the body of the action dispatch request.
+		 *
+		 * @param array  $body        Body.
+		 * @param string $action_name The action name.
+		 */
+		$body = apply_filters( 'newspack_data_events_dispatch_body', $body, $action_name );
+
+		if ( self::use_action_scheduler() ) {
+			Logger::log(
+				sprintf( 'Dispatching action "%s" via Action Scheduler.', $action_name ),
+				self::LOGGER_HEADER
+			);
+
+			\as_enqueue_async_action( 'newspack_data_events_as_dispatch', array_values( $body ), 'newspack-data-events' );
+
+		} else {
+			Logger::log(
+				sprintf( 'Dispatching action "%s" via HTTP request.', $action_name ),
+				self::LOGGER_HEADER
+			);
+
+			$url = \add_query_arg(
+				[
+					'action' => self::ACTION,
+					'nonce'  => \wp_create_nonce( self::ACTION ),
+				],
+				\admin_url( 'admin-ajax.php' )
+			);
+
+			return \wp_remote_post(
+				$url,
+				[
+					'timeout'  => 0.01,
+					'blocking' => false,
+					'body'     => $body,
 				'cookies'   => $_COOKIE, // phpcs:ignore
-				'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
-			]
-		);
+				'sslverify'    => apply_filters( 'https_local_ssl_verify', false ),
+				]
+			);
+		}
 	}
 }
 Data_Events::init();

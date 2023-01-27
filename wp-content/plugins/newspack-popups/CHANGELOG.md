@@ -1,3 +1,17 @@
+# [2.11.0](https://github.com/Automattic/newspack-popups/compare/v2.10.0...v2.11.0) (2023-01-25)
+
+
+### Features
+
+* add prune data CLI command ([#1042](https://github.com/Automattic/newspack-popups/issues/1042)) ([6535f4b](https://github.com/Automattic/newspack-popups/commit/6535f4bc994ee89fb477e88ea3e9780d6730ddbf))
+
+# [2.11.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.10.0...v2.11.0-alpha.1) (2023-01-13)
+
+
+### Features
+
+* add prune data CLI command ([#1042](https://github.com/Automattic/newspack-popups/issues/1042)) ([6535f4b](https://github.com/Automattic/newspack-popups/commit/6535f4bc994ee89fb477e88ea3e9780d6730ddbf))
+
 # [2.10.0](https://github.com/Automattic/newspack-popups/compare/v2.9.2...v2.10.0) (2023-01-09)
 
 

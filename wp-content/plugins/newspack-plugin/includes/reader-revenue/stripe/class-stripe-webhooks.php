@@ -53,7 +53,7 @@ class Stripe_Webhooks {
 			'url'         => $webhook->url,
 			'status'      => $webhook->status,
 			'livemode'    => $webhook->livemode,
-			'matches_url' => self::get_webhook_url() === $webhook->url,
+			'matches_url' => str_replace( [ 'http://', 'https://' ], '', self::get_webhook_url() ) === str_replace( [ 'http://', 'https://' ], '', $webhook->url ),
 		];
 	}
 

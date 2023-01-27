@@ -341,6 +341,8 @@ class Edit extends Component {
 			},
 		];
 
+		const handleAttributeChange = key => value => setAttributes( { [ key ]: value } );
+
 		return (
 			<Fragment>
 				<PanelBody title={ __( 'Display Settings', 'newspack-blocks' ) } initialOpen={ true }>
@@ -350,29 +352,19 @@ class Edit extends Component {
 							setAttributes( { postsToShow: _postsToShow || 1 } )
 						}
 						specificMode={ specificMode }
-						onSpecificModeChange={ _specificMode =>
-							setAttributes( { specificMode: _specificMode } )
-						}
+						onSpecificModeChange={ handleAttributeChange( 'specificMode' ) }
 						specificPosts={ specificPosts }
-						onSpecificPostsChange={ _specificPosts =>
-							setAttributes( { specificPosts: _specificPosts } )
-						}
+						onSpecificPostsChange={ handleAttributeChange( 'specificPosts' ) }
 						authors={ authors }
-						onAuthorsChange={ _authors => setAttributes( { authors: _authors } ) }
+						onAuthorsChange={ handleAttributeChange( 'authors' ) }
 						categories={ categories }
-						onCategoriesChange={ _categories => setAttributes( { categories: _categories } ) }
+						onCategoriesChange={ handleAttributeChange( 'categories' ) }
 						tags={ tags }
-						onTagsChange={ _tags => {
-							setAttributes( { tags: _tags } );
-						} }
+						onTagsChange={ handleAttributeChange( 'tags' ) }
 						tagExclusions={ tagExclusions }
-						onTagExclusionsChange={ _tagExclusions =>
-							setAttributes( { tagExclusions: _tagExclusions } )
-						}
+						onTagExclusionsChange={ handleAttributeChange( 'tagExclusions' ) }
 						categoryExclusions={ categoryExclusions }
-						onCategoryExclusionsChange={ _categoryExclusions =>
-							setAttributes( { categoryExclusions: _categoryExclusions } )
-						}
+						onCategoryExclusionsChange={ handleAttributeChange( 'categoryExclusions' ) }
 						postType={ postType }
 					/>
 					{ postLayout === 'grid' && (
@@ -380,7 +372,7 @@ class Edit extends Component {
 							<RangeControl
 								label={ __( 'Columns', 'newspack-blocks' ) }
 								value={ columns }
-								onChange={ _columns => setAttributes( { columns: _columns } ) }
+								onChange={ handleAttributeChange( 'columns' ) }
 								min={ 2 }
 								max={ 6 }
 								required

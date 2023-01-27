@@ -1,3 +1,47 @@
+# [1.61.0](https://github.com/Automattic/newspack-blocks/compare/v1.60.1...v1.61.0) (2023-01-25)
+
+
+### Bug Fixes
+
+* **donate-stripe:** initialize Stripe only if element is visible ([#1344](https://github.com/Automattic/newspack-blocks/issues/1344)) ([207bff7](https://github.com/Automattic/newspack-blocks/commit/207bff7cadca0102e02f152875425ca608149cfe))
+* **HPB:** author query if CAP is unavailable ([#1336](https://github.com/Automattic/newspack-blocks/issues/1336)) ([b3ad96f](https://github.com/Automattic/newspack-blocks/commit/b3ad96f0112e05c8f7530c2e632e7a1754d760cc))
+* make author block font sizing more specific ([#1343](https://github.com/Automattic/newspack-blocks/issues/1343)) ([a84034f](https://github.com/Automattic/newspack-blocks/commit/a84034f81c0d04ddbfe4eeb52fbcaac33d2ef158))
+* make sure correct avatar is loaded when guests and users share IDs ([#1339](https://github.com/Automattic/newspack-blocks/issues/1339)) ([ebab2eb](https://github.com/Automattic/newspack-blocks/commit/ebab2eb9a3695336c394f01dd6835b46b248732c))
+
+
+### Features
+
+* **homepage-posts-block:** filter image sizes based on the maximum image width ([#1322](https://github.com/Automattic/newspack-blocks/issues/1322)) ([6bed199](https://github.com/Automattic/newspack-blocks/commit/6bed1993216c31705e1ff59b55b1119aee13c4fc))
+
+# [1.61.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.60.1...v1.61.0-alpha.1) (2023-01-25)
+
+
+### Bug Fixes
+
+* **donate-stripe:** initialize Stripe only if element is visible ([#1344](https://github.com/Automattic/newspack-blocks/issues/1344)) ([207bff7](https://github.com/Automattic/newspack-blocks/commit/207bff7cadca0102e02f152875425ca608149cfe))
+* **HPB:** author query if CAP is unavailable ([#1336](https://github.com/Automattic/newspack-blocks/issues/1336)) ([b3ad96f](https://github.com/Automattic/newspack-blocks/commit/b3ad96f0112e05c8f7530c2e632e7a1754d760cc))
+* make author block font sizing more specific ([#1343](https://github.com/Automattic/newspack-blocks/issues/1343)) ([a84034f](https://github.com/Automattic/newspack-blocks/commit/a84034f81c0d04ddbfe4eeb52fbcaac33d2ef158))
+* make sure correct avatar is loaded when guests and users share IDs ([#1339](https://github.com/Automattic/newspack-blocks/issues/1339)) ([ebab2eb](https://github.com/Automattic/newspack-blocks/commit/ebab2eb9a3695336c394f01dd6835b46b248732c))
+
+
+### Features
+
+* **homepage-posts-block:** filter image sizes based on the maximum image width ([#1322](https://github.com/Automattic/newspack-blocks/issues/1322)) ([6bed199](https://github.com/Automattic/newspack-blocks/commit/6bed1993216c31705e1ff59b55b1119aee13c4fc))
+
+## [1.60.1](https://github.com/Automattic/newspack-blocks/compare/v1.60.0...v1.60.1) (2023-01-12)
+
+
+### Bug Fixes
+
+* use release version number instead of filemtime for JS asset versions ([623b620](https://github.com/Automattic/newspack-blocks/commit/623b620ffa50c8bd7907188db7529b44cfdf9209))
+
+## [1.60.1-hotfix.1](https://github.com/Automattic/newspack-blocks/compare/v1.60.0...v1.60.1-hotfix.1) (2023-01-12)
+
+
+### Bug Fixes
+
+* use release version number instead of filemtime for JS asset versions ([623b620](https://github.com/Automattic/newspack-blocks/commit/623b620ffa50c8bd7907188db7529b44cfdf9209))
+
 # [1.60.0](https://github.com/Automattic/newspack-blocks/compare/v1.59.1...v1.60.0) (2023-01-09)
 
 

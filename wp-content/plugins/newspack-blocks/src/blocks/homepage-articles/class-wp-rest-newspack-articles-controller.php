@@ -26,7 +26,6 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 	 */
 	public function __construct() {
 		$this->namespace = 'newspack-blocks/v1';
-		$this->rest_base = 'articles';
 	}
 
 	/**
@@ -38,7 +37,7 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 		// Endpoint to get articles on the front-end.
 		register_rest_route(
 			$this->namespace,
-			'/' . $this->rest_base,
+			'/articles',
 			[
 				[
 					'methods'             => WP_REST_Server::READABLE,

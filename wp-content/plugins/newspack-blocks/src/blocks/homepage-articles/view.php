@@ -6,6 +6,71 @@
  */
 
 /**
+ * Calculate the maximum width of an image in the Homepage Posts block.
+ */
+function newspack_blocks_hpb_maximum_image_width() {
+	$max_width = 0;
+
+	global $newspack_blocks_hpb_rendering_context;
+	if ( isset( $newspack_blocks_hpb_rendering_context['attrs'] ) ) {
+		$attributes = $newspack_blocks_hpb_rendering_context['attrs'];
+		if ( empty( $attributes ) ) {
+			return $max_width;
+		}
+		if ( isset( $attributes['align'] ) && in_array( $attributes['align'], [ 'full', 'wide' ], true ) ) {
+			// For full and wide alignments, the image width is more than 100% of the content width
+			// and depends on site width. Can't make assumptions about the site width.
+			return $max_width;
+		}
+		$site_content_width  = 1200;
+		$is_image_half_width = in_array( $attributes['mediaPosition'], [ 'left', 'right' ], true );
+		if ( 'grid' === $attributes['postLayout'] ) {
+			$columns = $attributes['columns'];
+			if ( $is_image_half_width ) {
+				// If the media position is on left or right, the image is 50% of the column width.
+				$columns = $columns * 2;
+			}
+			return $site_content_width / $columns;
+		} elseif ( 'list' === $attributes['postLayout'] && $is_image_half_width ) {
+			return $site_content_width / 2;
+		}
+	}
+	return $max_width;
+}
+
+/**
+ * Set image `sizes` attribute based on the maximum image width.
+ *
+ * @param array $sizes Sizes for the sizes attribute.
+ */
+function newspack_blocks_filter_hpb_sizes( $sizes ) {
+	if ( defined( 'NEWSPACK_DISABLE_HPB_IMAGE_OPTIMISATION' ) && NEWSPACK_DISABLE_HPB_IMAGE_OPTIMISATION ) {
+		// Allow disabling the image optimisation per-site.
+		return $sizes;
+	}
+	global $newspack_blocks_hpb_current_theme;
+	if ( ! $newspack_blocks_hpb_current_theme ) {
+		$newspack_blocks_hpb_current_theme = wp_get_theme()->template;
+	}
+	if ( stripos( $newspack_blocks_hpb_current_theme, 'newspack' ) === false ) {
+		// Bail if not using a Newspack theme – assumptions about the site content width can't be made then.
+		return $sizes;
+	}
+	$max_width = newspack_blocks_hpb_maximum_image_width();
+	if ( 0 !== $max_width ) {
+		// >=782px is the desktop size – set width as computed.
+		$sizes = '(min-width: 782px) ' . $max_width . 'px';
+		// Between 600-782px is the tablet size – all columns will collapse to two-column layout
+		// (assuming 5% padding on each side and between columns).
+		$sizes .= ', (min-width: 600px) 42.5vw';
+		// <=600px is the mobile size – columns will stack to full width
+		// (assumming 5% side padding on each side).
+		$sizes .= ', 90vw';
+	}
+	return $sizes;
+}
+
+/**
  * Renders the `newspack-blocks/homepage-posts` block on server.
  *
  * @param array $attributes The block attributes.

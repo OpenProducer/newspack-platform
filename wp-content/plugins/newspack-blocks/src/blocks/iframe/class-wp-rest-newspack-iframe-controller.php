@@ -21,7 +21,6 @@ class WP_REST_Newspack_Iframe_Controller extends WP_REST_Controller {
 	 */
 	public function __construct() {
 		$this->namespace = 'newspack-blocks/v1';
-		$this->rest_base = 'iframe';
 	}
 
 	/**

@@ -1,3 +1,45 @@
+# [1.102.0](https://github.com/Automattic/newspack-plugin/compare/v1.101.0...v1.102.0) (2023-01-26)
+
+
+### Features
+
+* if rendering media tags, ensure proper nesting ([#2250](https://github.com/Automattic/newspack-plugin/issues/2250)) ([794be65](https://github.com/Automattic/newspack-plugin/commit/794be65a6a65a99aeaf91a7e4e57a48ac409674a))
+
+# [1.101.0](https://github.com/Automattic/newspack-plugin/compare/v1.100.2...v1.101.0) (2023-01-25)
+
+
+### Bug Fixes
+
+* **stripe:** WC Subs scheduled actions errors suppression ([3ef55b3](https://github.com/Automattic/newspack-plugin/commit/3ef55b389a3ce27b5e26492d28b4957c80e3a75b))
+* **stripe:** webhooks list edge-cases ([#2209](https://github.com/Automattic/newspack-plugin/issues/2209)) ([25f24ed](https://github.com/Automattic/newspack-plugin/commit/25f24ed9fb758eb9e3f046a118781faa3c60a853))
+
+
+### Features
+
+* **data-events:** use WC's Action Scheduler if available ([#2217](https://github.com/Automattic/newspack-plugin/issues/2217)) ([08c0532](https://github.com/Automattic/newspack-plugin/commit/08c053275971c78f654169b18e654bb43d6df99e))
+* **donations:** remove donation products from cart if WC is not the donations platform ([#2224](https://github.com/Automattic/newspack-plugin/issues/2224)) ([b759d7e](https://github.com/Automattic/newspack-plugin/commit/b759d7e9eede4c6f3d0c79150ae3e211ba3cec20))
+
+# [1.101.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v1.101.0-alpha.2...v1.101.0-alpha.3) (2023-01-19)
+
+
+### Bug Fixes
+
+* only enqueue salesforce admin JS when appropriate ([14dfc74](https://github.com/Automattic/newspack-plugin/commit/14dfc7488ae177e824dc712f7a90f0cdc0c8c020))
+
+## [1.100.2](https://github.com/Automattic/newspack-plugin/compare/v1.100.1...v1.100.2) (2023-01-19)
+
+
+### Bug Fixes
+
+* only enqueue salesforce admin JS when appropriate ([14dfc74](https://github.com/Automattic/newspack-plugin/commit/14dfc7488ae177e824dc712f7a90f0cdc0c8c020))
+
+## [1.100.1](https://github.com/Automattic/newspack-plugin/compare/v1.100.0...v1.100.1) (2023-01-18)
+
+
+### Bug Fixes
+
+* use newer stripe api version ([b5d1fc7](https://github.com/Automattic/newspack-plugin/commit/b5d1fc7804df7329bc3ad43b19341962705e46e8))
+
 # [1.100.0](https://github.com/Automattic/newspack-plugin/compare/v1.99.1...v1.100.0) (2023-01-09)
 
 

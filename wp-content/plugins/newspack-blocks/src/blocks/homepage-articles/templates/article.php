@@ -39,6 +39,11 @@ call_user_func(
 			'data-hero-candidate' => true,
 			'alt'                 => trim( wp_strip_all_tags( get_the_title( $post_id ) ) ),
 		);
+
+		// This global will be used by the newspack_blocks_filter_hpb_srcset filter.
+		global $newspack_blocks_hpb_rendering_context;
+		$newspack_blocks_hpb_rendering_context = [ 'attrs' => $attributes ];
+
 		// If the image position is behind, pass the object-fit setting to maintain styles with AMP.
 		if ( 'behind' === $attributes['mediaPosition'] ) {
 			$thumbnail_args['object-fit'] = 'cover';
@@ -83,7 +88,9 @@ call_user_func(
 				<?php if ( $post_link ) : ?>
 				<a href="<?php echo esc_url( $post_link ); ?>" rel="bookmark" tabindex="-1" aria-hidden="true">
 				<?php endif; ?>
-					<?php the_post_thumbnail( $image_size, $thumbnail_args ); ?>
+				<?php add_filter( 'wp_calculate_image_sizes', 'newspack_blocks_filter_hpb_sizes' ); ?>
+				<?php the_post_thumbnail( $image_size, $thumbnail_args ); ?>
+				<?php remove_filter( 'wp_calculate_image_sizes', 'newspack_blocks_filter_hpb_sizes' ); ?>
 				<?php if ( $post_link ) : ?>
 				</a>
 				<?php endif; ?>

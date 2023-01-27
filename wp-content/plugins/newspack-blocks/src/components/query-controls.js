@@ -3,14 +3,10 @@
  */
 import { __ } from '@wordpress/i18n';
 import { Component } from '@wordpress/element';
-import { Button, QueryControls as BaseControl, ToggleControl } from '@wordpress/components';
+import { Button, QueryControls as BasicQueryControls, ToggleControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
 import { addQueryArgs } from '@wordpress/url';
 import { decodeEntities } from '@wordpress/html-entities';
-
-/**
- * External dependencies.
- */
 
 /**
  * Internal dependencies.
@@ -170,8 +166,6 @@ class QueryControls extends Component {
 		} );
 	};
 
-	// Linter seems to be confused by returning an array.
-	// eslint-disable-next-line react/require-render-return
 	render = () => {
 		const {
 			specificMode,
@@ -192,93 +186,95 @@ class QueryControls extends Component {
 		} = this.props;
 		const { showAdvancedFilters } = this.state;
 
-		return [
-			enableSpecific && (
-				<ToggleControl
-					key="specificMode"
-					checked={ specificMode }
-					onChange={ onSpecificModeChange }
-					label={ __( 'Choose Specific Posts', 'newspack-blocks' ) }
-				/>
-			),
-			specificMode && (
-				<AutocompleteTokenField
-					key="posts"
-					tokens={ specificPosts || [] }
-					onChange={ onSpecificPostsChange }
-					fetchSuggestions={ this.fetchPostSuggestions }
-					fetchSavedInfo={ this.fetchSavedPosts }
-					label={ __( 'Posts', 'newspack-blocks' ) }
-					help={ __(
-						'Begin typing post title, click autocomplete result to select.',
-						'newspack-blocks'
-					) }
-				/>
-			),
-			! specificMode && <BaseControl key="queryControls" { ...this.props } />,
-			! specificMode && onAuthorsChange && (
-				<AutocompleteTokenField
-					key="authors"
-					tokens={ authors || [] }
-					onChange={ onAuthorsChange }
-					fetchSuggestions={ this.fetchAuthorSuggestions }
-					fetchSavedInfo={ this.fetchSavedAuthors }
-					label={ __( 'Authors', 'newspack-blocks' ) }
-				/>
-			),
-			! specificMode && onCategoriesChange && (
-				<AutocompleteTokenField
-					key="categories"
-					tokens={ categories || [] }
-					onChange={ onCategoriesChange }
-					fetchSuggestions={ this.fetchCategorySuggestions }
-					fetchSavedInfo={ this.fetchSavedCategories }
-					label={ __( 'Categories', 'newspack-blocks' ) }
-				/>
-			),
-			! specificMode && onTagsChange && (
-				<AutocompleteTokenField
-					key="tags"
-					tokens={ tags || [] }
-					onChange={ onTagsChange }
-					fetchSuggestions={ this.fetchTagSuggestions }
-					fetchSavedInfo={ this.fetchSavedTags }
-					label={ __( 'Tags', 'newspack-blocks' ) }
-				/>
-			),
-			! specificMode && onTagExclusionsChange && (
-				<p key="toggle-advanced-filters">
-					<Button
-						isLink
-						onClick={ () => this.setState( { showAdvancedFilters: ! showAdvancedFilters } ) }
-					>
-						{ showAdvancedFilters
-							? __( 'Hide Advanced Filters', 'newspack-blocks' )
-							: __( 'Show Advanced Filters', 'newspack-blocks' ) }
-					</Button>
-				</p>
-			),
-			! specificMode && onTagExclusionsChange && showAdvancedFilters && (
-				<AutocompleteTokenField
-					key="tag-exclusion"
-					tokens={ tagExclusions || [] }
-					onChange={ onTagExclusionsChange }
-					fetchSuggestions={ this.fetchTagSuggestions }
-					fetchSavedInfo={ this.fetchSavedTags }
-					label={ __( 'Excluded Tags', 'newspack-blocks' ) }
-				/>
-			),
-			! specificMode && onCategoryExclusionsChange && showAdvancedFilters && (
-				<AutocompleteTokenField
-					key="category-exclusion"
-					tokens={ categoryExclusions || [] }
-					onChange={ onCategoryExclusionsChange }
-					fetchSuggestions={ this.fetchCategorySuggestions }
-					fetchSavedInfo={ this.fetchSavedCategories }
-					label={ __( 'Excluded Categories', 'newspack-blocks' ) }
-				/>
-			),
-		];
+		return (
+			<>
+				{ enableSpecific && (
+					<ToggleControl
+						checked={ specificMode }
+						onChange={ onSpecificModeChange }
+						label={ __( 'Choose Specific Posts', 'newspack-blocks' ) }
+					/>
+				) }
+				{ specificMode ? (
+					<AutocompleteTokenField
+						tokens={ specificPosts || [] }
+						onChange={ onSpecificPostsChange }
+						fetchSuggestions={ this.fetchPostSuggestions }
+						fetchSavedInfo={ this.fetchSavedPosts }
+						label={ __( 'Posts', 'newspack-blocks' ) }
+						help={ __(
+							'Begin typing post title, click autocomplete result to select.',
+							'newspack-blocks'
+						) }
+					/>
+				) : (
+					<>
+						<BasicQueryControls { ...this.props } />
+						{ onAuthorsChange && (
+							<AutocompleteTokenField
+								tokens={ authors || [] }
+								onChange={ onAuthorsChange }
+								fetchSuggestions={ this.fetchAuthorSuggestions }
+								fetchSavedInfo={ this.fetchSavedAuthors }
+								label={ __( 'Authors', 'newspack-blocks' ) }
+							/>
+						) }
+						{ onCategoriesChange && (
+							<AutocompleteTokenField
+								tokens={ categories || [] }
+								onChange={ onCategoriesChange }
+								fetchSuggestions={ this.fetchCategorySuggestions }
+								fetchSavedInfo={ this.fetchSavedCategories }
+								label={ __( 'Categories', 'newspack-blocks' ) }
+							/>
+						) }
+						{ onTagsChange && (
+							<AutocompleteTokenField
+								tokens={ tags || [] }
+								onChange={ onTagsChange }
+								fetchSuggestions={ this.fetchTagSuggestions }
+								fetchSavedInfo={ this.fetchSavedTags }
+								label={ __( 'Tags', 'newspack-blocks' ) }
+							/>
+						) }
+						{ onTagExclusionsChange && (
+							<p>
+								<Button
+									isLink
+									onClick={ () => this.setState( { showAdvancedFilters: ! showAdvancedFilters } ) }
+								>
+									{ showAdvancedFilters
+										? __( 'Hide Advanced Filters', 'newspack-blocks' )
+										: __( 'Show Advanced Filters', 'newspack-blocks' ) }
+								</Button>
+							</p>
+						) }
+						{ showAdvancedFilters && (
+							<>
+								{ onTagExclusionsChange && (
+									<AutocompleteTokenField
+										tokens={ tagExclusions || [] }
+										onChange={ onTagExclusionsChange }
+										fetchSuggestions={ this.fetchTagSuggestions }
+										fetchSavedInfo={ this.fetchSavedTags }
+										label={ __( 'Excluded Tags', 'newspack-blocks' ) }
+									/>
+								) }
+								{ onCategoryExclusionsChange && (
+									<AutocompleteTokenField
+										tokens={ categoryExclusions || [] }
+										onChange={ onCategoryExclusionsChange }
+										fetchSuggestions={ this.fetchCategorySuggestions }
+										fetchSavedInfo={ this.fetchSavedCategories }
+										label={ __( 'Excluded Categories', 'newspack-blocks' ) }
+									/>
+								) }
+							</>
+						) }
+					</>
+				) }
+			</>
+		);
 	};
 }
 

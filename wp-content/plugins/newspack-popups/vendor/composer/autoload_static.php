@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitc66290096e5ed9b853aedad5570a1abb
+class ComposerStaticInit2435143e5515a557a31e66e06c05341c
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -24,6 +24,7 @@ class ComposerStaticInitc66290096e5ed9b853aedad5570a1abb
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Newspack\\Campaigns\\CLI\\Export' => __DIR__ . '/../..' . '/includes/cli/class-export.php',
         'Newspack\\Campaigns\\CLI\\Import' => __DIR__ . '/../..' . '/includes/cli/class-import.php',
+        'Newspack\\Campaigns\\CLI\\Prune_Data' => __DIR__ . '/../..' . '/includes/cli/class-prune-data.php',
         'Newspack\\Campaigns\\Schema' => __DIR__ . '/../..' . '/includes/schemas/class-schema.php',
         'Newspack\\Campaigns\\Schemas\\Campaigns' => __DIR__ . '/../..' . '/includes/schemas/class-campaigns.php',
         'Newspack\\Campaigns\\Schemas\\Package' => __DIR__ . '/../..' . '/includes/schemas/class-package.php',
@@ -47,9 +48,9 @@ class ComposerStaticInitc66290096e5ed9b853aedad5570a1abb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitc66290096e5ed9b853aedad5570a1abb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitc66290096e5ed9b853aedad5570a1abb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitc66290096e5ed9b853aedad5570a1abb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2435143e5515a557a31e66e06c05341c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2435143e5515a557a31e66e06c05341c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2435143e5515a557a31e66e06c05341c::$classMap;
 
         }, null, ClassLoader::class);
     }
