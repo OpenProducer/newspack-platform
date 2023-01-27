@@ -19,7 +19,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 *
 	 * @var boolean
 	 */
-	public static $support_tags = true;
+	public static $support_tags = false;
 	
 	/**
 	 * Provider name.

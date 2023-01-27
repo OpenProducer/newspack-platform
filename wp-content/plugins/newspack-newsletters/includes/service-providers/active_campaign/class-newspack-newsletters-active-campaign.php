@@ -38,7 +38,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 *
 	 * @var boolean
 	 */
-	public static $support_tags = true;
+	public static $support_tags = false;
 	
 	/**
 	 * Provider name.

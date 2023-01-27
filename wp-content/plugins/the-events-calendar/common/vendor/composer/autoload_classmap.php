@@ -119,6 +119,7 @@ return array(
     'Psr\\Log\\Test\\TestLogger' => $vendorDir . '/psr/log/Psr/Log/Test/TestLogger.php',
     'TEC\\Common\\Editor\\Full_Site\\Template_Utils' => $baseDir . '/src/Common/Editor/Full_Site/Template_Utils.php',
     'TEC\\Common\\Storage\\Timed_Option' => $baseDir . '/src/Common/Storage/Timed_Option.php',
+    'TEC\\Common\\Translations_Loader' => $baseDir . '/src/Common/Translations_Loader.php',
     'Tribe\\Admin\\Conditional_Content\\Black_Friday' => $baseDir . '/src/Tribe/Admin/Conditional_Content/Black_Friday.php',
     'Tribe\\Admin\\Conditional_Content\\Datetime_Conditional_Abstract' => $baseDir . '/src/Tribe/Admin/Conditional_Content/Datetime_Conditional_Abstract.php',
     'Tribe\\Admin\\Conditional_Content\\End_Of_Year_Sale' => $baseDir . '/src/Tribe/Admin/Conditional_Content/End_Of_Year_Sale.php',

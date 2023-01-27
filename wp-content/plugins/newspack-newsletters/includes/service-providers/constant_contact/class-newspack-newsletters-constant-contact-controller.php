@@ -147,6 +147,42 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 				],
 			]
 		);
+		\register_rest_route(
+			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
+			'(?P<id>[\a-z]+)/segment/(?P<segment_id>[\a-z]+)',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_segment' ],
+				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'args'                => [
+					'id'         => [
+						'sanitize_callback' => 'absint',
+						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
+					],
+					'segment_id' => [
+						'sanitize_callback' => 'esc_attr',
+					],
+				],
+			]
+		);
+		\register_rest_route(
+			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
+			'(?P<id>[\a-z]+)/segment/',
+			[
+				'methods'             => \WP_REST_Server::DELETABLE,
+				'callback'            => [ $this, 'api_segment' ],
+				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'args'                => [
+					'id'         => [
+						'sanitize_callback' => 'absint',
+						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
+					],
+					'segment_id' => [
+						'sanitize_callback' => 'esc_attr',
+					],
+				],
+			]
+		);
 	}
 
 	/**
@@ -220,6 +256,26 @@ class Newspack_Newsletters_Constant_Contact_Controller extends Newspack_Newslett
 			$response = $this->service_provider->list(
 				$request['id'],
 				$request['list_id']
+			);
+		}
+		return self::get_api_response( $response );
+	}
+
+	/**
+	 * Set segment for a campaign.
+	 *
+	 * @param WP_REST_Request $request API request object.
+	 * @return WP_REST_Response|mixed API response or error.
+	 */
+	public function api_segment( $request ) {
+		if ( 'DELETE' === $request->get_method() ) {
+			$response = $this->service_provider->unset_segment(
+				$request['id']
+			);
+		} else {
+			$response = $this->service_provider->set_segment(
+				$request['id'],
+				$request['segment_id']
 			);
 		}
 		return self::get_api_response( $response );

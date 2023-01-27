@@ -295,6 +295,8 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	/**
 	 * Set list for a campaign.
 	 *
+	 * A campaign can not use segments and lists at the same time, so we also unset all segments.
+	 *
 	 * @param string $post_id Campaign Id.
 	 * @param string $list_id ID of the list.
 	 * @return object|WP_Error API API Response or error.
@@ -317,6 +319,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 				$activity->contact_list_ids[] = $list_id;
 			}
 
+			$activity->segment_ids = [];
 			$cc->update_campaign_activity( $activity->campaign_activity_id, $activity );
 
 			return \rest_ensure_response( $this->retrieve( $post_id ) );
@@ -365,6 +368,80 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	}
 
 	/**
+	 * Set segment for a campaign.
+	 *
+	 * A campaign can not use segments and lists at the same time, so we also unset all lists.
+	 *
+	 * @param string $post_id Campaign Id.
+	 * @param string $segment_id ID of the segment.
+	 * @return object|WP_Error API API Response or error.
+	 */
+	public function set_segment( $post_id, $segment_id ) {
+		if ( ! $this->has_valid_connection() ) {
+			return new WP_Error(
+				'newspack_newsletters_constant_contact_error',
+				__( 'Unable to connect to Constant Contact API', 'newspack-newsletters' )
+			);
+		}
+		try {
+			$cc_campaign_id = $this->retrieve_campaign_id( $post_id );
+			$cc             = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+
+			$campaign = $cc->get_campaign( $cc_campaign_id );
+			$activity = $campaign->activity;
+
+			if ( ! in_array( $segment_id, $activity->segment_ids, true ) ) {
+				$activity->segment_ids[]    = $segment_id;
+				$activity->contact_list_ids = [];
+			}
+
+			$cc->update_campaign_activity( $activity->campaign_activity_id, $activity );
+
+			return \rest_ensure_response( $this->retrieve( $post_id ) );
+
+		} catch ( Exception $e ) {
+			return new WP_Error(
+				'newspack_newsletters_constant_contact_error',
+				$e->getMessage()
+			);
+		}
+	}
+
+	/**
+	 * Unset segment for a campaign.
+	 *
+	 * @param string $post_id Campaign Id.
+	 * @return object|WP_Error API API Response or error.
+	 */
+	public function unset_segment( $post_id ) {
+		if ( ! $this->has_valid_connection() ) {
+			return new WP_Error(
+				'newspack_newsletters_constant_contact_error',
+				__( 'Unable to connect to Constant Contact API', 'newspack-newsletters' )
+			);
+		}
+		try {
+			$cc_campaign_id = $this->retrieve_campaign_id( $post_id );
+			$cc             = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+
+			$campaign = $cc->get_campaign( $cc_campaign_id );
+			$activity = $campaign->activity;
+
+			$activity->segment_ids = [];
+
+			$cc->update_campaign_activity( $activity->campaign_activity_id, $activity );
+
+			return \rest_ensure_response( $this->retrieve( $post_id ) );
+
+		} catch ( Exception $e ) {
+			return new WP_Error(
+				'newspack_newsletters_constant_contact_error',
+				$e->getMessage()
+			);
+		}
+	}
+
+	/**
 	 * Retrieve a campaign.
 	 *
 	 * @param integer $post_id Numeric ID of the Newsletter post.
@@ -394,12 +471,14 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 				$campaign = $cc->get_campaign( $cc_campaign_id );
 			}
 
-			$lists = $cc->get_contact_lists();
+			$lists    = $cc->get_contact_lists();
+			$segments = $cc->get_segments();
 
 			return [
 				'lists'       => $lists,
 				'campaign'    => $campaign,
 				'campaign_id' => $cc_campaign_id,
+				'segments'    => $segments,
 			];
 
 		} catch ( Exception $e ) {

@@ -314,6 +314,19 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	}
 
 	/**
+	 * Get segments
+	 *
+	 * @return array
+	 */
+	public function get_segments() {
+		return $this->request(
+			'GET',
+			'segments',
+			[ 'query' => [ 'sort_by' => 'name' ] ]
+		)->segments;
+	}
+
+	/**
 	 * Get v3 campaign UUID if matches v2 format.
 	 *
 	 * @param string $campaign_id Campaign ID.

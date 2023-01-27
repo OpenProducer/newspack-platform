@@ -4,6 +4,7 @@
 		"button",
 		"calendly",
 		"contact-form",
+		"contact-form/salesforce-lead-form",
 		"contact-info",
 		"donations",
 		"eventbrite",
@@ -45,8 +46,10 @@
 	],
 	"beta": [
 		"amazon",
-		"contact-form/salesforce-lead-form",
+		"blaze",
 		"google-docs-embed",
+		"launchpad-save-modal",
+		"post-publish-promote-post-panel",
 		"recipe",
 		"videopress/video",
 		"videopress/video-chapters"

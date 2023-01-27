@@ -20,6 +20,13 @@ class Jetpack_Carousel {
 	public $prebuilt_widths = array( 370, 700, 1000, 1200, 1400, 2000 );
 
 	/**
+	 * Localization strings and other data for the JavaScript
+	 *
+	 * @var array
+	 */
+	public $localize_strings;
+
+	/**
 	 * Represents whether or not this is the first load of Carousel on a page. Default is true.
 	 *
 	 * @var bool
@@ -904,15 +911,16 @@ class Jetpack_Carousel {
 
 		$img_meta = wp_json_encode( array_map( 'strval', array_filter( $img_meta, 'is_scalar' ) ) );
 
-		$attr['data-attachment-id']     = $attachment_id;
-		$attr['data-permalink']         = esc_attr( get_permalink( $attachment_id ) );
-		$attr['data-orig-file']         = esc_attr( $orig_file );
-		$attr['data-orig-size']         = $size;
-		$attr['data-comments-opened']   = $comments_opened;
-		$attr['data-image-meta']        = esc_attr( $img_meta );
-		$attr['data-image-title']       = esc_attr( htmlspecialchars( $attachment_title ) );
-		$attr['data-image-description'] = esc_attr( htmlspecialchars( $attachment_desc ) );
-		$attr['data-image-caption']     = esc_attr( htmlspecialchars( $attachment_caption ) );
+		$attr['data-attachment-id']   = $attachment_id;
+		$attr['data-permalink']       = esc_attr( get_permalink( $attachment_id ) );
+		$attr['data-orig-file']       = esc_attr( $orig_file );
+		$attr['data-orig-size']       = $size;
+		$attr['data-comments-opened'] = $comments_opened;
+		$attr['data-image-meta']      = esc_attr( $img_meta );
+		// The lines below use `esc_attr( htmlspecialchars( ) )` because esc_attr tries to be too smart and won't double-encode, and we need that here.
+		$attr['data-image-title']       = esc_attr( htmlspecialchars( $attachment_title, ENT_COMPAT ) );
+		$attr['data-image-description'] = esc_attr( htmlspecialchars( $attachment_desc, ENT_COMPAT ) );
+		$attr['data-image-caption']     = esc_attr( htmlspecialchars( $attachment_caption, ENT_COMPAT ) );
 		$attr['data-medium-file']       = esc_attr( $medium_file );
 		$attr['data-large-file']        = esc_attr( $large_file );
 

@@ -1,3 +1,32 @@
+# [1.57.0](https://github.com/Automattic/newspack-newsletters/compare/v1.56.1...v1.57.0) (2023-01-25)
+
+
+### Features
+
+* add a max height and scroll to the lists ([b351946](https://github.com/Automattic/newspack-newsletters/commit/b351946b0e1cb0b500de504a92137e91f44add1e))
+* allow constant contact to send to segments ([d7a33c0](https://github.com/Automattic/newspack-newsletters/commit/d7a33c00e784346c814ddf3d64b0fed036d96ee7))
+* customize buttons ([dc1bda8](https://github.com/Automattic/newspack-newsletters/commit/dc1bda8030dadf46d90a2d9211255ddab9e04275))
+* improve send mode UI ([fdc9982](https://github.com/Automattic/newspack-newsletters/commit/fdc9982b53e7ae5269bf709a327a2fedbf458cb4))
+* improve UI ([8be5dc7](https://github.com/Automattic/newspack-newsletters/commit/8be5dc78179fa53f62922238bac78d057cc29a11))
+
+# [1.57.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.56.1...v1.57.0-alpha.1) (2023-01-13)
+
+
+### Features
+
+* add a max height and scroll to the lists ([b351946](https://github.com/Automattic/newspack-newsletters/commit/b351946b0e1cb0b500de504a92137e91f44add1e))
+* allow constant contact to send to segments ([d7a33c0](https://github.com/Automattic/newspack-newsletters/commit/d7a33c00e784346c814ddf3d64b0fed036d96ee7))
+* customize buttons ([dc1bda8](https://github.com/Automattic/newspack-newsletters/commit/dc1bda8030dadf46d90a2d9211255ddab9e04275))
+* improve send mode UI ([fdc9982](https://github.com/Automattic/newspack-newsletters/commit/fdc9982b53e7ae5269bf709a327a2fedbf458cb4))
+* improve UI ([8be5dc7](https://github.com/Automattic/newspack-newsletters/commit/8be5dc78179fa53f62922238bac78d057cc29a11))
+
+## [1.56.1](https://github.com/Automattic/newspack-newsletters/compare/v1.56.0...v1.56.1) (2023-01-11)
+
+
+### Bug Fixes
+
+* disable tag based lists ([6fce831](https://github.com/Automattic/newspack-newsletters/commit/6fce83134fa020f235787286b8ae9c110913d4cd))
+
 # [1.56.0](https://github.com/Automattic/newspack-newsletters/compare/v1.55.1...v1.56.0) (2023-01-09)
 
 
