@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { registerExperimentalBlockType } from '@woocommerce/block-settings';
+import { registerBlockType } from '@wordpress/blocks';
 import type { BlockConfiguration } from '@wordpress/blocks';
 
 /**
@@ -17,16 +17,21 @@ import {
 } from './constants';
 
 const blockConfig: BlockConfiguration = {
-	...sharedConfig,
 	apiVersion: 2,
 	title,
 	description,
 	icon: { src: icon },
+	usesContext: [ 'query', 'queryId', 'postId' ],
+	ancestor: [
+		'woocommerce/all-products',
+		'woocommerce/single-product',
+		'core/post-template',
+	],
 	attributes,
 	edit,
 };
 
-registerExperimentalBlockType( 'woocommerce/product-sku', {
+registerBlockType( 'woocommerce/product-sku', {
 	...sharedConfig,
 	...blockConfig,
 } );

@@ -474,7 +474,7 @@ class Masterbar {
 	 * Hide language dropdown on user edit form.
 	 */
 	public function hide_language_dropdown() {
-		add_filter( 'get_available_languages', '__return_null' );
+		add_filter( 'get_available_languages', '__return_empty_array' );
 	}
 
 	/**
@@ -620,7 +620,6 @@ class Masterbar {
 				),
 			)
 		);
-
 	}
 
 	/**
@@ -1290,8 +1289,7 @@ class Masterbar {
 				)
 			);
 			$meta        = array(
-				'class' => 'mb-icon',
-				'class' => 'inline-action',
+				'class' => 'mb-icon inline-action',
 			);
 			$href        = false;
 

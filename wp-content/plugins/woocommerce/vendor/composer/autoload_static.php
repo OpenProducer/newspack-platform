@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1
+class ComposerStaticInit3448d1e458aefd9c68390cddd2e155ec
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -339,6 +339,8 @@ class ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\AttributeFilter' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/AttributeFilter.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\Cart' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/Cart.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartAcceptedPaymentMethodsBlock' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/CartAcceptedPaymentMethodsBlock.php',
+        'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartCrossSellsBlock' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/CartCrossSellsBlock.php',
+        'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartCrossSellsProductsBlock' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/CartCrossSellsProductsBlock.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartExpressPaymentBlock' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/CartExpressPaymentBlock.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartItemsBlock' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/CartItemsBlock.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\CartLineItemsBlock' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/CartLineItemsBlock.php',
@@ -503,7 +505,6 @@ class ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\TestCheckout' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/TestCheckout.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\TrackingOptIn' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/TrackingOptIn.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\UnsecuredReportFiles' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/UnsecuredReportFiles.php',
-        'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WelcomeToWooCommerceForStoreUsers' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/WelcomeToWooCommerceForStoreUsers.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooCommercePayments' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/WooCommercePayments.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooCommerceSubscriptions' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/WooCommerceSubscriptions.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Notes\\WooSubscriptionsNotes' => __DIR__ . '/../..' . '/src/Internal/Admin/Notes/WooSubscriptionsNotes.php',
@@ -1051,10 +1052,10 @@ class ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit1f350034e6fc877bfe8832c1d640b6b1::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit3448d1e458aefd9c68390cddd2e155ec::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit3448d1e458aefd9c68390cddd2e155ec::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit3448d1e458aefd9c68390cddd2e155ec::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit3448d1e458aefd9c68390cddd2e155ec::$classMap;
 
         }, null, ClassLoader::class);
     }

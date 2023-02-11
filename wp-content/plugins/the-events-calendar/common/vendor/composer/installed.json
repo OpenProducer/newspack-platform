@@ -1,17 +1,17 @@
 [
     {
         "name": "firebase/php-jwt",
-        "version": "v6.3.0",
-        "version_normalized": "6.3.0.0",
+        "version": "v6.3.2",
+        "version_normalized": "6.3.2.0",
         "source": {
             "type": "git",
             "url": "https://github.com/firebase/php-jwt.git",
-            "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8"
+            "reference": "ea7dda77098b96e666c5ef382452f94841e439cd"
         },
         "dist": {
             "type": "zip",
-            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
-            "reference": "018dfc4e1da92ad8a1b90adc4893f476a3b41cb8",
+            "url": "https://api.github.com/repos/firebase/php-jwt/zipball/ea7dda77098b96e666c5ef382452f94841e439cd",
+            "reference": "ea7dda77098b96e666c5ef382452f94841e439cd",
             "shasum": ""
         },
         "require": {
@@ -28,7 +28,7 @@
         "suggest": {
             "paragonie/sodium_compat": "Support EdDSA (Ed25519) signatures when libsodium is not present"
         },
-        "time": "2022-07-15T16:48:45+00:00",
+        "time": "2022-12-19T17:10:46+00:00",
         "type": "library",
         "installation-source": "dist",
         "autoload": {
@@ -57,7 +57,11 @@
         "keywords": [
             "jwt",
             "php"
-        ]
+        ],
+        "support": {
+            "issues": "https://github.com/firebase/php-jwt/issues",
+            "source": "https://github.com/firebase/php-jwt/tree/v6.3.2"
+        }
     },
     {
         "name": "lucatume/di52",
@@ -84,7 +88,7 @@
         },
         "time": "2021-12-20T12:52:26+00:00",
         "type": "library",
-        "installation-source": "source",
+        "installation-source": "dist",
         "autoload": {
             "psr-0": {
                 "tad_DI52_": [
@@ -102,7 +106,11 @@
                 "email": "luca@theaveragedev.com"
             }
         ],
-        "description": "A PHP 5.2 compatible dependency injection container."
+        "description": "A PHP 5.2 compatible dependency injection container.",
+        "support": {
+            "issues": "https://github.com/lucatume/di52/issues",
+            "source": "https://github.com/lucatume/di52/tree/2.1.5"
+        }
     },
     {
         "name": "monolog/monolog",
@@ -182,7 +190,11 @@
             "log",
             "logging",
             "psr-3"
-        ]
+        ],
+        "support": {
+            "issues": "https://github.com/Seldaek/monolog/issues",
+            "source": "https://github.com/Seldaek/monolog/tree/1.24.0"
+        }
     },
     {
         "name": "psr/log",
@@ -231,7 +243,172 @@
             "log",
             "psr",
             "psr-3"
-        ]
+        ],
+        "support": {
+            "source": "https://github.com/php-fig/log/tree/1.1.4"
+        }
+    },
+    {
+        "name": "stellarwp/container-contract",
+        "version": "1.0.4",
+        "version_normalized": "1.0.4.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/stellarwp/container-contract.git",
+            "reference": "37becc9edbecb0ff95556048337600dd9cc888f0"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/stellarwp/container-contract/zipball/37becc9edbecb0ff95556048337600dd9cc888f0",
+            "reference": "37becc9edbecb0ff95556048337600dd9cc888f0",
+            "shasum": ""
+        },
+        "require": {
+            "php": ">=7.0.0"
+        },
+        "time": "2022-12-20T21:29:17+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "StellarWP\\ContainerContract\\": "src/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "authors": [
+            {
+                "name": "StellarWP",
+                "homepage": "https://stellarwp.com"
+            }
+        ],
+        "description": "StellarWP Container Interface",
+        "homepage": "https://github.com/stellarwp/container-contract",
+        "keywords": [
+            "PSR-11",
+            "container",
+            "container-interface",
+            "container-interop"
+        ],
+        "support": {
+            "issues": "https://github.com/stellarwp/container-contract/issues",
+            "source": "https://github.com/stellarwp/container-contract/tree/1.0.4"
+        }
+    },
+    {
+        "name": "stellarwp/db",
+        "version": "1.0.3",
+        "version_normalized": "1.0.3.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/stellarwp/db.git",
+            "reference": "782daf58b6160478059baeb7e7d84d6127726067"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/stellarwp/db/zipball/782daf58b6160478059baeb7e7d84d6127726067",
+            "reference": "782daf58b6160478059baeb7e7d84d6127726067",
+            "shasum": ""
+        },
+        "require-dev": {
+            "codeception/module-asserts": "^1.0",
+            "codeception/module-cli": "^1.0",
+            "codeception/module-db": "^1.0",
+            "codeception/module-filesystem": "^1.0",
+            "codeception/module-phpbrowser": "^1.0",
+            "codeception/module-rest": "^1.0",
+            "codeception/module-webdriver": "^1.0",
+            "codeception/util-universalframework": "^1.0",
+            "lucatume/wp-browser": "^3.0.14",
+            "phpunit/phpunit": "~6.0",
+            "symfony/event-dispatcher-contracts": "^2.5.1",
+            "symfony/string": "^5.4",
+            "szepeviktor/phpstan-wordpress": "^1.1"
+        },
+        "time": "2022-11-22T21:32:56+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "StellarWP\\DB\\": "src/DB/"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0"
+        ],
+        "authors": [
+            {
+                "name": "StellarWP",
+                "email": "dev@stellarwp.com"
+            },
+            {
+                "name": "Matthew Batchelder",
+                "email": "matt.batchelder@stellarwp.com"
+            }
+        ],
+        "description": "A WPDB wrapper and query builder library.",
+        "support": {
+            "issues": "https://github.com/stellarwp/db/issues",
+            "source": "https://github.com/stellarwp/db/tree/1.0.3"
+        }
+    },
+    {
+        "name": "stellarwp/installer",
+        "version": "1.1.0",
+        "version_normalized": "1.1.0.0",
+        "source": {
+            "type": "git",
+            "url": "https://github.com/stellarwp/installer.git",
+            "reference": "13e800c750dbdab561ad6d67b768938fa4fee8a4"
+        },
+        "dist": {
+            "type": "zip",
+            "url": "https://api.github.com/repos/stellarwp/installer/zipball/13e800c750dbdab561ad6d67b768938fa4fee8a4",
+            "reference": "13e800c750dbdab561ad6d67b768938fa4fee8a4",
+            "shasum": ""
+        },
+        "require": {
+            "ext-json": "*",
+            "php": ">=7.2"
+        },
+        "require-dev": {
+            "automattic/vipwpcs": "^2.3",
+            "codeception/module-asserts": "^1.0",
+            "codeception/module-cli": "^1.0",
+            "codeception/module-db": "^1.0",
+            "codeception/module-filesystem": "^1.0",
+            "codeception/module-phpbrowser": "^1.0",
+            "codeception/module-webdriver": "^1.0",
+            "codeception/util-universalframework": "^1.0",
+            "dealerdirect/phpcodesniffer-composer-installer": "^0.7.2",
+            "lucatume/wp-browser": "^3.1",
+            "phpcompatibility/phpcompatibility-wp": "*",
+            "szepeviktor/phpstan-wordpress": "^1.1",
+            "the-events-calendar/coding-standards": "dev-master",
+            "wp-coding-standards/wpcs": "^2.3"
+        },
+        "time": "2023-01-30T18:33:24+00:00",
+        "type": "library",
+        "installation-source": "dist",
+        "autoload": {
+            "psr-4": {
+                "StellarWP\\Installer\\": "src/Installer",
+                "StellarWP\\Installer\\Assets_JS\\": "src/assets/js",
+                "StellarWP\\Installer\\Admin_Views\\": "src/admin-views"
+            }
+        },
+        "notification-url": "https://packagist.org/downloads/",
+        "license": [
+            "GPL-2.0-or-later"
+        ],
+        "description": "StellarWP plugin install/activation library.",
+        "support": {
+            "issues": "https://github.com/stellarwp/installer/issues",
+            "source": "https://github.com/stellarwp/installer/tree/1.1.0"
+        }
     },
     {
         "name": "xrstf/composer-php52",
@@ -264,6 +441,10 @@
         "notification-url": "https://packagist.org/downloads/",
         "license": [
             "MIT"
-        ]
+        ],
+        "support": {
+            "issues": "https://github.com/composer-php52/composer-php52/issues",
+            "source": "https://github.com/composer-php52/composer-php52"
+        }
     }
 ]

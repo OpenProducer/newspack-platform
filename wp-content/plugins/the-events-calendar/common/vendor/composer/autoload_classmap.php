@@ -118,6 +118,8 @@ return array(
     'Psr\\Log\\Test\\LoggerInterfaceTest' => $vendorDir . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
     'Psr\\Log\\Test\\TestLogger' => $vendorDir . '/psr/log/Psr/Log/Test/TestLogger.php',
     'TEC\\Common\\Editor\\Full_Site\\Template_Utils' => $baseDir . '/src/Common/Editor/Full_Site/Template_Utils.php',
+    'TEC\\Common\\Libraries\\Installer\\Provider' => $baseDir . '/src/Common/Libraries/Installer/Provider.php',
+    'TEC\\Common\\Libraries\\Provider' => $baseDir . '/src/Common/Libraries/Provider.php',
     'TEC\\Common\\Storage\\Timed_Option' => $baseDir . '/src/Common/Storage/Timed_Option.php',
     'TEC\\Common\\Translations_Loader' => $baseDir . '/src/Common/Translations_Loader.php',
     'Tribe\\Admin\\Conditional_Content\\Black_Friday' => $baseDir . '/src/Tribe/Admin/Conditional_Content/Black_Friday.php',

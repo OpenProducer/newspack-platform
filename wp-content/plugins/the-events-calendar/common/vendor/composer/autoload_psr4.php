@@ -8,6 +8,11 @@ $baseDir = dirname($vendorDir);
 return array(
     'Tribe\\' => array($baseDir . '/src/Tribe'),
     'TEC\\Common\\' => array($baseDir . '/src/Common'),
+    'StellarWP\\Installer\\Assets_JS\\' => array($vendorDir . '/stellarwp/installer/src/assets/js'),
+    'StellarWP\\Installer\\Admin_Views\\' => array($vendorDir . '/stellarwp/installer/src/admin-views'),
+    'StellarWP\\Installer\\' => array($vendorDir . '/stellarwp/installer/src/Installer'),
+    'StellarWP\\DB\\' => array($vendorDir . '/stellarwp/db/src/DB'),
+    'StellarWP\\ContainerContract\\' => array($vendorDir . '/stellarwp/container-contract/src'),
     'Psr\\Log\\' => array($vendorDir . '/psr/log/Psr/Log'),
     'Monolog\\' => array($vendorDir . '/monolog/monolog/src/Monolog'),
     'Firebase\\JWT\\' => array($vendorDir . '/firebase/php-jwt/src'),
