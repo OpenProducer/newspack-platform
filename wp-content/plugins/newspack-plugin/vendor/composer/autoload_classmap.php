@@ -67,6 +67,7 @@ return array(
     'Newspack\\Parsely_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-parsely-configuration-manager.php',
     'Newspack\\Patches' => $baseDir . '/includes/class-patches.php',
     'Newspack\\Perfmatters' => $baseDir . '/includes/plugins/class-perfmatters.php',
+    'Newspack\\Performance' => $baseDir . '/includes/class-performance.php',
     'Newspack\\Pixel' => $baseDir . '/includes/tracking/class-pixel.php',
     'Newspack\\Plugin_Manager' => $baseDir . '/includes/class-plugin-manager.php',
     'Newspack\\Popups_Wizard' => $baseDir . '/includes/wizards/class-popups-wizard.php',

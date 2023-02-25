@@ -4,6 +4,7 @@
  * Based on woocommerce/templates/myaccount/form-edit-account.php.
  *
  * @package Newspack
+ * @version 7.0.1
  */
 
 namespace Newspack;

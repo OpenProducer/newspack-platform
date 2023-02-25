@@ -8,7 +8,7 @@
 
 call_user_func(
 	function( $data ) {
-		$attributes = $data['attributes'];
+		$attributes = apply_filters( 'newspack_blocks_homepage_posts_block_attributes', $data['attributes'] );
 		$authors    = Newspack_Blocks::prepare_authors();
 		$classes    = array();
 		$styles     = '';
@@ -52,6 +52,9 @@ call_user_func(
 		// Empty string or `false` would still result in `lazy`.
 		if ( $attributes['disableImageLazyLoad'] ) {
 			$thumbnail_args['loading'] = 'none';
+		}
+		if ( $attributes['fetchPriority'] && in_array( $attributes['fetchPriority'], [ 'high', 'low', 'auto' ], true ) ) {
+			$thumbnail_args['fetchpriority'] = $attributes['fetchPriority'];
 		}
 		$category = false;
 		// Use Yoast primary category if set.

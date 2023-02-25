@@ -483,15 +483,8 @@ class Analytics_Events {
 				self::$js_events[ $event['on'] ] += 1;
 			}
 
-			// Remove unnecessary whitespace.
-			$html = preg_replace(
-				[ '/(<script>|,|\(|\)|\{|\}|;|\&\&)\s+/', '/\s+(<script>|,|\(|\)|\{|\}|;|\&\&)/' ],
-				'\1',
-				ob_get_clean()
-			);
-
 			// Other integrations can use this filter if they need to add a custom JS event handler.
-			$event_js = apply_filters( 'newspack_analytics_event_js', $html, $event );
+			$event_js = apply_filters( 'newspack_analytics_event_js', ob_get_clean(), $event );
 			echo $event_js; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		}
 	}

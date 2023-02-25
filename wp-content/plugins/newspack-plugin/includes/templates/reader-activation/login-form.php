@@ -5,6 +5,7 @@
  * into rendering nothing so that we can replace it with our own login form.
  *
  * @package Newspack
+ * @version 7.0.1
  */
 
 namespace Newspack;

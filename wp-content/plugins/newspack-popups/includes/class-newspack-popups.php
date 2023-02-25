@@ -804,11 +804,11 @@ final class Newspack_Popups {
 				break;
 			case 'overlay-top':
 				$placement    = 'top';
-				$overlay_size = 'full';
+				$overlay_size = 'full-width';
 				break;
 			case 'overlay-bottom':
 				$placement    = 'bottom';
-				$overlay_size = 'full';
+				$overlay_size = 'full-width';
 				break;
 			case 'archives':
 				$placement = 'archives';

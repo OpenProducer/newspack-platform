@@ -52,7 +52,7 @@ export const optionsFieldsSelector = select => {
 		frequency_reset,
 		overlay_color,
 		overlay_opacity,
-		overlay_size,
+		overlay_size: 'full' === overlay_size ? 'full-width' : overlay_size,
 		no_overlay_background,
 		placement,
 		trigger_type,

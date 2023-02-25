@@ -17,8 +17,8 @@ class Perfmatters {
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
-		add_filter( 'default_option_perfmatters_options', [ __CLASS__, 'set_defaults' ] );
 		add_filter( 'option_perfmatters_options', [ __CLASS__, 'set_defaults' ] );
+		add_action( 'admin_notices', [ __CLASS__, 'admin_notice' ] );
 	}
 
 	/**
@@ -64,7 +64,11 @@ class Perfmatters {
 			'/busting/facebook-tracking/',
 			// Twitter.
 			'ads-twitter.com',
-			// Etc.
+			// Plugins.
+			'gravityforms',
+			'mailchimp-for-woocommerce',
+			'mailchimp-for-wp',
+			// Third-party services.
 			'disqus',
 			'stripe.com',
 		];
@@ -76,6 +80,17 @@ class Perfmatters {
 	private static function unused_css_excluded_stylesheets() {
 		return [
 			'donateStreamlined.css',
+			'/themes/newspack-', // Any Newspack theme stylesheet.
+			'wp-includes',
+		];
+	}
+
+	/**
+	 * Selectors to exclude from the "Unused CSS" feature.
+	 */
+	private static function unused_css_excluded_selectors() {
+		return [
+			'body',
 		];
 	}
 
@@ -104,9 +119,6 @@ class Perfmatters {
 	 * @param array $options Perfmatters options.
 	 */
 	public static function set_defaults( $options = [] ) {
-		if ( ! isset( $_GET['newspack-perfmatters-defaults'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			return $options;
-		}
 		if ( defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS ) {
 			return $options;
 		}
@@ -114,7 +126,6 @@ class Perfmatters {
 		// Basic options.
 		$options['disable_emojis']              = true;
 		$options['disable_dashicons']           = true;
-		$options['remove_global_styles']        = true;
 		$options['disable_woocommerce_scripts'] = true;
 		// "The cart fragments feature and or AJAX request in WooCommerce is used to update the cart
 		// total without refreshing the page."
@@ -125,7 +136,10 @@ class Perfmatters {
 		if ( ! isset( $options['assets'] ) ) {
 			$options['assets'] = [];
 		}
-		$defer_js_exclusions           = [ 'wp-includes' ];
+		$defer_js_exclusions           = [
+			'wp-includes',
+			'jwplayer.com', // This platform won't work if the JS is deferred.
+		];
 		$options['assets']['defer_js'] = true;
 		if ( isset( $options['assets']['js_exclusions'] ) && is_array( $options['assets']['js_exclusions'] ) ) {
 			$options['assets']['js_exclusions'] = array_unique(
@@ -165,6 +179,16 @@ class Perfmatters {
 		} else {
 			$options['assets']['rucss_excluded_stylesheets'] = self::unused_css_excluded_stylesheets();
 		}
+		if ( isset( $options['assets']['rucss_excluded_selectors'] ) && is_array( $options['assets']['rucss_excluded_selectors'] ) ) {
+			$options['assets']['rucss_excluded_selectors'] = array_unique(
+				array_merge(
+					$options['assets']['rucss_excluded_selectors'],
+					self::unused_css_excluded_selectors()
+				)
+			);
+		} else {
+			$options['assets']['rucss_excluded_selectors'] = self::unused_css_excluded_selectors();
+		}
 
 		// Preload.
 		if ( ! isset( $options['preload'] ) ) {
@@ -189,6 +213,18 @@ class Perfmatters {
 		$options['lazyload']['image_dimensions']           = true;
 
 		return $options;
+	}
+
+	/**
+	 * Add an admin notice.
+	 */
+	public static function admin_notice() {
+		if ( 'settings_page_perfmatters' !== get_current_screen()->id ) {
+			return;
+		}
+		echo '<div class="notice notice-warning"><p>'
+		. __( 'Newspack plugin is overriding Perfmatters settings. You can use the <code>NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS</code> flag to disable that behavior.', 'newspack' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		. '</p></div>';
 	}
 }
 Perfmatters::init();

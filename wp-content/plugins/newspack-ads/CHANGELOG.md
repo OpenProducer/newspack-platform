@@ -1,3 +1,27 @@
+# [1.41.0](https://github.com/Automattic/newspack-ads/compare/v1.40.0...v1.41.0) (2023-02-16)
+
+
+### Bug Fixes
+
+* merge conflicts with master ([f398a90](https://github.com/Automattic/newspack-ads/commit/f398a9008b8bef6bd9f871c66939169f9c32bbcc))
+
+
+### Features
+
+* enable filtering of FE JS ([#586](https://github.com/Automattic/newspack-ads/issues/586)) ([19ec4ea](https://github.com/Automattic/newspack-ads/commit/19ec4ea967360cdcc93161646d41812b3e55d9d7))
+
+# [1.41.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.40.0...v1.41.0-alpha.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* merge conflicts with master ([f398a90](https://github.com/Automattic/newspack-ads/commit/f398a9008b8bef6bd9f871c66939169f9c32bbcc))
+
+
+### Features
+
+* enable filtering of FE JS ([#586](https://github.com/Automattic/newspack-ads/issues/586)) ([19ec4ea](https://github.com/Automattic/newspack-ads/commit/19ec4ea967360cdcc93161646d41812b3e55d9d7))
+
 # [1.40.0](https://github.com/Automattic/newspack-ads/compare/v1.39.4...v1.40.0) (2022-11-14)
 
 

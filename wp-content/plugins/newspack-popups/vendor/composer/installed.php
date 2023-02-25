@@ -3,7 +3,7 @@
         'name' => 'automattic/newspack-popups',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'b282ca824fc9bd8193a5827fd5b59bd12bfb30ff',
+        'reference' => 'cabe3105b8d2bd395435135d1a04e118b4133ec8',
         'type' => 'library',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'automattic/newspack-popups' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'b282ca824fc9bd8193a5827fd5b59bd12bfb30ff',
+            'reference' => 'cabe3105b8d2bd395435135d1a04e118b4133ec8',
             'type' => 'library',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

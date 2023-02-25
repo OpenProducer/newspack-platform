@@ -880,6 +880,10 @@ final class Newspack_Popups_Inserter {
 			$popups_access_provider['authorization'] .= '&authorizationTimeout=10000';
 		}
 
+		if ( isset( $_GET['nocache'] ) || ( defined( 'NEWSPACK_POPUPS_NOCACHE' ) && NEWSPACK_POPUPS_NOCACHE ) ) {// phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$popups_access_provider['authorization'] .= '&nocache';
+		}
+
 		?>
 		<script id="amp-access" type="application/json">
 			<?php echo wp_json_encode( $popups_access_provider ); ?>

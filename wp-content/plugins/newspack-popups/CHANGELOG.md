@@ -1,3 +1,34 @@
+# [2.13.0](https://github.com/Automattic/newspack-popups/compare/v2.12.0...v2.13.0) (2023-02-21)
+
+
+### Features
+
+* add feature to disable reader data caching via flag ([#1049](https://github.com/Automattic/newspack-popups/issues/1049)) ([cabe310](https://github.com/Automattic/newspack-popups/commit/cabe3105b8d2bd395435135d1a04e118b4133ec8))
+
+# [2.12.0](https://github.com/Automattic/newspack-popups/compare/v2.11.0...v2.12.0) (2023-02-16)
+
+
+### Bug Fixes
+
+* force invalid "full" size value to correct "full-width" value ([#1043](https://github.com/Automattic/newspack-popups/issues/1043)) ([131aba8](https://github.com/Automattic/newspack-popups/commit/131aba82ab98ab6633af5be847c75c15aa9d1693))
+
+
+### Features
+
+* add prune data CLI command ([486ea9f](https://github.com/Automattic/newspack-popups/commit/486ea9fccf213fe9bc5741561484ba604bc42d9c))
+
+# [2.12.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.11.0...v2.12.0-alpha.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* force invalid "full" size value to correct "full-width" value ([#1043](https://github.com/Automattic/newspack-popups/issues/1043)) ([131aba8](https://github.com/Automattic/newspack-popups/commit/131aba82ab98ab6633af5be847c75c15aa9d1693))
+
+
+### Features
+
+* add prune data CLI command ([486ea9f](https://github.com/Automattic/newspack-popups/commit/486ea9fccf213fe9bc5741561484ba604bc42d9c))
+
 # [2.11.0](https://github.com/Automattic/newspack-popups/compare/v2.10.0...v2.11.0) (2023-01-25)
 
 

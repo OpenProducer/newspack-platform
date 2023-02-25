@@ -237,7 +237,7 @@ class Edit extends Component {
 
 						{ showDate && ! post.newspack_listings_hide_publish_date && (
 							<time className="entry-date published" key="pub-date">
-								{ dateI18n( dateFormat, post.date_gmt ) }
+								{ dateI18n( dateFormat, post.date ) }
 							</time>
 						) }
 					</div>
@@ -271,7 +271,6 @@ class Edit extends Component {
 			postType,
 			showImage,
 			showCaption,
-			disableImageLazyLoad,
 			imageScale,
 			mobileStack,
 			minHeight,
@@ -446,20 +445,6 @@ class Edit extends Component {
 								label={ __( 'Show Featured Image Caption', 'newspack-blocks' ) }
 								checked={ showCaption }
 								onChange={ () => setAttributes( { showCaption: ! showCaption } ) }
-							/>
-						</PanelRow>
-					) }
-
-					{ showImage && (
-						<PanelRow>
-							<ToggleControl
-								label={ __( 'Disable Featured Image Lazy Loading', 'newspack-blocks' ) }
-								help={ __(
-									'Improve Largest Contentful Paint (LCP) score if the block is on initial viewport.',
-									'newspack-blocks'
-								) }
-								checked={ disableImageLazyLoad }
-								onChange={ () => setAttributes( { disableImageLazyLoad: ! disableImageLazyLoad } ) }
 							/>
 						</PanelRow>
 					) }

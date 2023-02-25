@@ -1160,7 +1160,7 @@ final class Newspack_Popups_Model {
 		$large_border          = $popup['options']['large_border'];
 		$overlay_opacity       = absint( $popup['options']['overlay_opacity'] ) / 100;
 		$overlay_color         = $popup['options']['overlay_color'];
-		$overlay_size          = $popup['options']['overlay_size'];
+		$overlay_size          = 'full' === $popup['options']['overlay_size'] ? 'full-width' : $popup['options']['overlay_size'];
 		$no_overlay_background = $popup['options']['no_overlay_background'];
 		$hidden_fields         = self::get_hidden_fields( $popup );
 		$is_newsletter_prompt  = self::has_newsletter_prompt( $popup );

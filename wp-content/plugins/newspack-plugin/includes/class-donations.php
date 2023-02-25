@@ -255,6 +255,29 @@ class Donations {
 	}
 
 	/**
+	 * Get the donation product ID for the order.
+	 *
+	 * @param int $order_id Order ID.
+	 *
+	 * @return int|false The donation product ID or false.
+	 */
+	public static function get_order_donation_product_id( $order_id ) {
+		$donation_products = self::get_donation_product_child_products_ids();
+		if ( empty( array_filter( $donation_products ) ) ) {
+			return;
+		}
+		$order          = new \WC_Order( $order_id );
+		$order_items    = $order->get_items();
+		$donation_items = array_filter(
+			$order_items,
+			function ( $item ) use ( $donation_products ) {
+				return in_array( $item->get_product_id(), $donation_products, true );
+			}
+		);
+		return ! empty( $donation_items ) ? array_values( $donation_items )[0]->get_product_id() : false;
+	}
+
+	/**
 	 * Get the donation settings.
 	 *
 	 * @return Array of donation settings or WP_Error if WooCommerce is not set up.

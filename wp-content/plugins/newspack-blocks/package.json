@@ -1,10 +1,10 @@
 {
 	"name": "@automattic/newspack-blocks",
-	"version": "1.61.0",
+	"version": "1.62.0",
 	"author": "Automattic",
 	"devDependencies": {
 		"@rushstack/eslint-patch": "^1.2.0",
-		"@testing-library/dom": "^8.19.1",
+		"@testing-library/dom": "^8.20.0",
 		"@testing-library/user-event": "^14.4.3",
 		"@types/lodash": "^4.14.191",
 		"@types/lodash.debounce": "^4.0.7",
@@ -28,7 +28,7 @@
 		"redux": "^4.2.0",
 		"redux-saga": "^1.2.2",
 		"regenerator-runtime": "^0.13.11",
-		"swiper": "8.4.5"
+		"swiper": "8.4.6"
 	},
 	"scripts": {
 		"cm": "newspack-scripts commit",

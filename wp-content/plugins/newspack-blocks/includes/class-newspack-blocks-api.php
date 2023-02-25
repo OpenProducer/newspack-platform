@@ -301,6 +301,7 @@ class Newspack_Blocks_API {
 					'rendered' => post_password_required( $post ) ? '' : $content,
 				],
 				'date_gmt'       => mysql_to_rfc3339( $post_date_gmt ),
+				'date'           => mysql_to_rfc3339( $post->post_date ),
 				'excerpt'        => [
 					'rendered' => post_password_required( $post ) ? '' : $excerpt,
 				],

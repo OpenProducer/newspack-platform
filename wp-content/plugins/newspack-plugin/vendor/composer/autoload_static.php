@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitb586700228cf42109676a41f517464ea
+class ComposerStaticInitb4ace859a960a54c46866a31e70cba82
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -155,6 +155,7 @@ class ComposerStaticInitb586700228cf42109676a41f517464ea
         'Newspack\\Parsely_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-parsely-configuration-manager.php',
         'Newspack\\Patches' => __DIR__ . '/../..' . '/includes/class-patches.php',
         'Newspack\\Perfmatters' => __DIR__ . '/../..' . '/includes/plugins/class-perfmatters.php',
+        'Newspack\\Performance' => __DIR__ . '/../..' . '/includes/class-performance.php',
         'Newspack\\Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-pixel.php',
         'Newspack\\Plugin_Manager' => __DIR__ . '/../..' . '/includes/class-plugin-manager.php',
         'Newspack\\Popups_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-popups-wizard.php',
@@ -195,9 +196,9 @@ class ComposerStaticInitb586700228cf42109676a41f517464ea
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitb586700228cf42109676a41f517464ea::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitb586700228cf42109676a41f517464ea::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitb586700228cf42109676a41f517464ea::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitb4ace859a960a54c46866a31e70cba82::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitb4ace859a960a54c46866a31e70cba82::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitb4ace859a960a54c46866a31e70cba82::$classMap;
 
         }, null, ClassLoader::class);
     }

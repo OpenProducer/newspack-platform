@@ -331,7 +331,7 @@ class Edit extends Component {
 														formatByline( post.newspack_author_info ) }
 													{ showDate && (
 														<time className="entry-date published" key="pub-date">
-															{ dateI18n( dateFormat, post.date_gmt ) }
+															{ dateI18n( dateFormat, post.date ) }
 														</time>
 													) }
 												</div>

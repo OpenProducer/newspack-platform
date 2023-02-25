@@ -1,3 +1,27 @@
+# [1.62.0](https://github.com/Automattic/newspack-blocks/compare/v1.61.0...v1.62.0) (2023-02-16)
+
+
+### Bug Fixes
+
+* show HPP dates in correct timezone in editor ([#1348](https://github.com/Automattic/newspack-blocks/issues/1348)) ([1f3245f](https://github.com/Automattic/newspack-blocks/commit/1f3245f6f93c8982ea43539a999a0defba7489b1))
+
+
+### Features
+
+* **hpb:** fetch priority attr; attrs filtering; remove disableImageLazyLoad UI ([#1351](https://github.com/Automattic/newspack-blocks/issues/1351)) ([386ae33](https://github.com/Automattic/newspack-blocks/commit/386ae33749bf1f35ccc058425c7c943ed96d890b))
+
+# [1.62.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.61.0...v1.62.0-alpha.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* show HPP dates in correct timezone in editor ([#1348](https://github.com/Automattic/newspack-blocks/issues/1348)) ([1f3245f](https://github.com/Automattic/newspack-blocks/commit/1f3245f6f93c8982ea43539a999a0defba7489b1))
+
+
+### Features
+
+* **hpb:** fetch priority attr; attrs filtering; remove disableImageLazyLoad UI ([#1351](https://github.com/Automattic/newspack-blocks/issues/1351)) ([386ae33](https://github.com/Automattic/newspack-blocks/commit/386ae33749bf1f35ccc058425c7c943ed96d890b))
+
 # [1.61.0](https://github.com/Automattic/newspack-blocks/compare/v1.60.1...v1.61.0) (2023-01-25)
 
 

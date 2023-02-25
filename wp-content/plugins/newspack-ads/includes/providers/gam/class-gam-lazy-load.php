@@ -89,6 +89,9 @@ final class GAM_Lazy_Load {
 		if ( ! $settings['active'] ) {
 			return;
 		}
+
+		ob_start();
+
 		?>
 		<script data-amp-plus-allowed>
 			( function() {
@@ -103,6 +106,8 @@ final class GAM_Lazy_Load {
 			} )();
 		</script>
 		<?php
+
+		echo apply_filters( 'newspack_ads_lazy_loading_js', ob_get_clean() ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 	}
 }
 GAM_Lazy_Load::init();

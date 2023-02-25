@@ -105,6 +105,11 @@ class Lightweight_API {
 		if ( ! file_exists( WP_CONTENT_DIR . '/object-cache.php' ) || ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) ) {
 			$this->ignore_cache = true;
 		}
+
+		if ( $this->is_cache_disabled() ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$this->ignore_cache     = true;
+			$this->debug['nocache'] = true;
+		}
 	}
 
 	/**
@@ -114,6 +119,15 @@ class Lightweight_API {
 	 */
 	public function is_debug_enabled() {
 		return isset( $_REQUEST['debug'] ) || ( defined( 'NEWSPACK_POPUPS_DEBUG' ) && NEWSPACK_POPUPS_DEBUG ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+	}
+
+	/**
+	 * Whether caching is disabled via newspack-popups-config.php or URL param.
+	 *
+	 * @return boolean
+	 */
+	public function is_cache_disabled() {
+		return isset( $_REQUEST['nocache'] ) || ( defined( 'NEWSPACK_POPUPS_NOCACHE' ) && NEWSPACK_POPUPS_NOCACHE ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 	}
 
 	/**
@@ -1009,9 +1023,7 @@ class Lightweight_API {
 		);
 
 		// Rebuild cache.
-		if ( ! $this->ignore_cache ) {
-			wp_cache_set( 'reader_events', array_merge( $cached_events, $filtered_events ), $client_id );
-		}
+		wp_cache_set( 'reader_events', array_merge( $cached_events, $filtered_events ), $client_id );
 
 		$this->update_debug_events( $filtered_events );
 
@@ -1151,7 +1163,7 @@ class Lightweight_API {
 				$all_events
 			);
 
-			// Set a cache version for future validation.
+			// Rebuild cache.
 			wp_cache_set( 'reader_events', $all_events, $client_id );
 
 			$this->update_debug_events( $all_events );
