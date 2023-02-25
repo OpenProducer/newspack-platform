@@ -34,6 +34,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	public function __construct() {
 		$this->service    = 'mailchimp';
 		$this->controller = new Newspack_Newsletters_Mailchimp_Controller( $this );
+		Newspack_Newsletters_Mailchimp_Cached_Data::init();
 
 		add_action( 'save_post_' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT, [ $this, 'save' ], 10, 3 );
 		add_action( 'wp_trash_post', [ $this, 'trash' ], 10, 1 );
@@ -339,47 +340,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				__( 'Error retrieving Mailchimp campaign.', 'newspack_newsletters' )
 			);
 			$list_id             = $campaign && isset( $campaign['recipients']['list_id'] ) ? $campaign['recipients']['list_id'] : null;
-			$merge_fields        = $list_id ? $this->get_list_merge_fields( $list_id ) : [];
-			$interest_categories = $list_id ? $this->validate(
-				$mc->get( "lists/$list_id/interest-categories" ),
-				__( 'Error retrieving Mailchimp groups.', 'newspack_newsletters' )
-			) : null;
-			if ( $interest_categories && count( $interest_categories['categories'] ) ) {
-				foreach ( $interest_categories['categories'] as &$category ) {
-					$category_id           = $category['id'];
-					$category['interests'] = $this->validate(
-						$mc->get( "lists/$list_id/interest-categories/$category_id/interests" ),
-						__( 'Error retrieving Mailchimp groups.', 'newspack_newsletters' )
-					);
-				}
-			}
-
-			$segments = [];
-			if ( $list_id ) {
-				$saved_segments_response  = $this->validate(
-					$mc->get(
-						"lists/$list_id/segments",
-						[
-							'type'  => 'saved',
-							'count' => 1000,
-						],
-						60
-					),
-					__( 'Error retrieving Mailchimp segments.', 'newspack_newsletters' )
-				);
-				$static_segments_response = $this->validate(
-					$mc->get(
-						"lists/$list_id/segments",
-						[
-							'type'  => 'static',
-							'count' => 1000,
-						],
-						60
-					),
-					__( 'Error retrieving Mailchimp segments.', 'newspack_newsletters' )
-				);
-				$segments                 = array_merge( $saved_segments_response['segments'], $static_segments_response['segments'] );
-			}
+			$merge_fields        = $list_id ? Newspack_Newsletters_Mailchimp_Cached_Data::get_merge_fields( $list_id ) : [];
+			$interest_categories = $list_id ? Newspack_Newsletters_Mailchimp_Cached_Data::get_interest_categories( $list_id ) : null;
+			$segments            = $list_id ? Newspack_Newsletters_Mailchimp_Cached_Data::get_segments( $list_id ) : [];
 
 			return [
 				'lists'               => $this->get_lists(),
@@ -430,23 +393,17 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	/**
 	 * Retrieve the list merge fields.
 	 *
+	 * @deprecated 1.57
+	 *
 	 * @param string $list_id List ID.
 	 *
 	 * @return array|WP_Error List of merge fields or error.
 	 */
 	public function get_list_merge_fields( $list_id ) {
+		_deprecated_function( __METHOD__, '1.57', 'Newspack_Newsletters_Mailchimp_Cached_Data::get_merge_fields' );
 		try {
-			$mc       = new Mailchimp( $this->api_key() );
-			$response = $this->validate(
-				$mc->get(
-					"lists/$list_id/merge-fields",
-					[
-						'count' => 1000,
-					]
-				),
-				__( 'Error retrieving Mailchimp list merge fields.', 'newspack_newsletters' )
-			);
-			return $response['merge_fields'];
+			$merge_fields = Newspack_Newsletters_Mailchimp_Cached_Data::get_merge_fields( $list_id );
+			return $merge_fields;
 		} catch ( Exception $e ) {
 			return new WP_Error(
 				'newspack_newsletters_mailchimp_error',

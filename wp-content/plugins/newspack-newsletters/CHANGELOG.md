@@ -1,3 +1,31 @@
+# [1.58.0](https://github.com/Automattic/newspack-newsletters/compare/v1.57.0...v1.58.0) (2023-02-16)
+
+
+### Bug Fixes
+
+* **activecampaign:** handle error on field creation ([#1069](https://github.com/Automattic/newspack-newsletters/issues/1069)) ([8d82cd2](https://github.com/Automattic/newspack-newsletters/commit/8d82cd2b648dab927226948acc00591c001fb79d))
+* use transient and fix typos ([d868177](https://github.com/Automattic/newspack-newsletters/commit/d868177b45c8d4a1330b77f58f63e53281fd9b5c))
+
+
+### Features
+
+* add a new log to make debugging easier ([6639f42](https://github.com/Automattic/newspack-newsletters/commit/6639f42612ee7c934116b8c07e18db2db56d88a5))
+* add caching to mailchimp ([190cf7e](https://github.com/Automattic/newspack-newsletters/commit/190cf7e28d5e62f4e8a70f827bb33f1b1c73c9de))
+
+# [1.58.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.57.0...v1.58.0-alpha.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* **activecampaign:** handle error on field creation ([#1069](https://github.com/Automattic/newspack-newsletters/issues/1069)) ([8d82cd2](https://github.com/Automattic/newspack-newsletters/commit/8d82cd2b648dab927226948acc00591c001fb79d))
+* use transient and fix typos ([d868177](https://github.com/Automattic/newspack-newsletters/commit/d868177b45c8d4a1330b77f58f63e53281fd9b5c))
+
+
+### Features
+
+* add a new log to make debugging easier ([6639f42](https://github.com/Automattic/newspack-newsletters/commit/6639f42612ee7c934116b8c07e18db2db56d88a5))
+* add caching to mailchimp ([190cf7e](https://github.com/Automattic/newspack-newsletters/commit/190cf7e28d5e62f4e8a70f827bb33f1b1c73c9de))
+
 # [1.57.0](https://github.com/Automattic/newspack-newsletters/compare/v1.56.1...v1.57.0) (2023-01-25)
 
 

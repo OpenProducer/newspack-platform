@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4f94114c4983be218b332e9ce5d1cc03
+class ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -95,6 +95,7 @@ class ComposerStaticInit4f94114c4983be218b332e9ce5d1cc03
     );
 
     public static $classMap = array (
+        'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Firebase\\JWT\\BeforeValidException' => __DIR__ . '/..' . '/firebase/php-jwt/src/BeforeValidException.php',
         'Firebase\\JWT\\CachedKeySet' => __DIR__ . '/..' . '/firebase/php-jwt/src/CachedKeySet.php',
         'Firebase\\JWT\\ExpiredException' => __DIR__ . '/..' . '/firebase/php-jwt/src/ExpiredException.php',
@@ -305,10 +306,10 @@ class ComposerStaticInit4f94114c4983be218b332e9ce5d1cc03
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4f94114c4983be218b332e9ce5d1cc03::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4f94114c4983be218b332e9ce5d1cc03::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit4f94114c4983be218b332e9ce5d1cc03::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit4f94114c4983be218b332e9ce5d1cc03::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$classMap;
 
         }, null, ClassLoader::class);
     }

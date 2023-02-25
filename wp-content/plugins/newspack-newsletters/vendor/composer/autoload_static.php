@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit945f09e841a62f85f40366eb42bd5972
+class ComposerStaticInitbfcd2e34459b2180303218ad56962621
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -59,6 +59,7 @@ class ComposerStaticInit945f09e841a62f85f40366eb42bd5972
         'Newspack_Newsletters_Letterhead_Promotion_Dto' => __DIR__ . '/../..' . '/includes/service-providers/letterhead/dtos/class-newspack-newsletters-letterhead-promotion-dto.php',
         'Newspack_Newsletters_Logger' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-logger.php',
         'Newspack_Newsletters_Mailchimp' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php',
+        'Newspack_Newsletters_Mailchimp_Cached_Data' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-cached-data.php',
         'Newspack_Newsletters_Mailchimp_Controller' => __DIR__ . '/../..' . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-controller.php',
         'Newspack_Newsletters_Quick_Edit' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-quick-edit.php',
         'Newspack_Newsletters_Renderer' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-renderer.php',
@@ -72,9 +73,9 @@ class ComposerStaticInit945f09e841a62f85f40366eb42bd5972
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit945f09e841a62f85f40366eb42bd5972::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit945f09e841a62f85f40366eb42bd5972::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit945f09e841a62f85f40366eb42bd5972::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitbfcd2e34459b2180303218ad56962621::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitbfcd2e34459b2180303218ad56962621::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitbfcd2e34459b2180303218ad56962621::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -2,9 +2,24 @@
 
 ### This is a list detailing changes for all Jetpack releases.
 
-## 11.9-a.0 - unreleased
+## 11.8.4 - 2023-02-15
+### Bug fixes
+- Blaze: prevent error on frontend-loaded Gutenberg, and bail early if Jetpack is not connected. [#28955]
+- WAF: fix PHP fatal when the jetpack-waf directory has been deleted from the wp-content folder. [#28760]
 
-This is an alpha version! The changes listed here are not final.
+## 11.8.3 - 2023-02-14
+### Bug fixes
+- Forms block: downgraded package version.
+
+## 11.8.2 - 2023-02-14
+### Bug fixes
+- Packages: fixed package versions.
+
+## 11.8.1 - 2023-02-13
+### Bug fixes
+- Form block: add filter to prevent contact-form-styles script from being concatenated. [#28905]
+- Form block: prevent Forms blur effect on AMP pages [#28926]
+- Subscriptions: fix premium content block where it would only allow access to site subscribers. [#28912]
 
 ## 11.8 - 2023-02-07
 ### Enhancements

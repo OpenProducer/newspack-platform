@@ -12,6 +12,7 @@ import {
 	useShallowEqual,
 	useBorderProps,
 } from '@woocommerce/base-hooks';
+import { Notice } from 'wordpress-components';
 import {
 	useQueryStateByKey,
 	useQueryStateByContext,
@@ -67,14 +68,14 @@ const translations = {
  *
  * @param {Object}  props            Incoming props for the component.
  * @param {Object}  props.attributes Incoming block attributes.
- * @param {boolean} props.isEditor
+ * @param {boolean} props.isEditor   Whether the component is being rendered in the editor.
  */
 const RatingFilterBlock = ( {
 	attributes: blockAttributes,
-	isEditor = false,
+	isEditor,
 }: {
+	isEditor: boolean;
 	attributes: Attributes;
-	isEditor?: boolean;
 } ) => {
 	const setWrapperVisibility = useSetWraperVisibility();
 
@@ -92,6 +93,7 @@ const RatingFilterBlock = ( {
 		useCollectionData( {
 			queryRating: true,
 			queryState,
+			isEditor,
 		} );
 
 	const [ displayedOptions, setDisplayedOptions ] = useState(
@@ -125,6 +127,8 @@ const RatingFilterBlock = ( {
 	const [ remountKey, setRemountKey ] = useState( generateUniqueId() );
 
 	const borderProps = useBorderProps( blockAttributes );
+	const [ displayNoProductRatingsNotice, setDisplayNoProductRatingsNotice ] =
+		useState( false );
 
 	/**
 	 * Used to redirect the page when filters are changed so templates using the Classic Template block can filter.
@@ -161,6 +165,10 @@ const RatingFilterBlock = ( {
 	};
 
 	const multiple = blockAttributes.selectType !== 'single';
+
+	const showChevron = multiple
+		? ! isLoading && checked.length < displayedOptions.length
+		: ! isLoading && checked.length === 0;
 
 	const onSubmit = useCallback(
 		( checkedOptions ) => {
@@ -227,12 +235,19 @@ const RatingFilterBlock = ( {
 		if ( filteredCountsLoading || blockAttributes.isPreview ) {
 			return;
 		}
+
 		const orderedRatings =
 			! filteredCountsLoading &&
 			objectHasProp( filteredCounts, 'rating_counts' ) &&
 			Array.isArray( filteredCounts.rating_counts )
 				? [ ...filteredCounts.rating_counts ].reverse()
 				: [];
+
+		if ( isEditor && orderedRatings.length === 0 ) {
+			setDisplayedOptions( previewOptions );
+			setDisplayNoProductRatingsNotice( true );
+			return;
+		}
 
 		const newOptions = orderedRatings
 			.filter(
@@ -320,6 +335,16 @@ const RatingFilterBlock = ( {
 
 	return (
 		<>
+			{ displayNoProductRatingsNotice && (
+				<Notice status="warning" isDismissible={ false }>
+					<p>
+						{ __(
+							"Your store doesn't have any products with ratings yet. This filter option will display when a product receives a review.",
+							'woo-gutenberg-products-block'
+						) }
+					</p>
+				</Notice>
+			) }
 			<div
 				className={ classnames(
 					'wc-block-rating-filter',
@@ -445,7 +470,7 @@ const RatingFilterBlock = ( {
 								),
 							} }
 						/>
-						{ multiple && (
+						{ showChevron && (
 							<Icon icon={ chevronDown } size={ 30 } />
 						) }
 					</>

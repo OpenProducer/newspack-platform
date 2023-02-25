@@ -50,7 +50,6 @@ return array(
     'Google\\Site_Kit\\Core\\Authentication\\Profile' => $baseDir . '/Core/Authentication/Profile.php',
     'Google\\Site_Kit\\Core\\Authentication\\Setup' => $baseDir . '/Core/Authentication/Setup.php',
     'Google\\Site_Kit\\Core\\Authentication\\Token' => $baseDir . '/Core/Authentication/Token.php',
-    'Google\\Site_Kit\\Core\\Authentication\\User_Input_State' => $baseDir . '/Core/Authentication/User_Input_State.php',
     'Google\\Site_Kit\\Core\\Authentication\\Verification' => $baseDir . '/Core/Authentication/Verification.php',
     'Google\\Site_Kit\\Core\\Authentication\\Verification_File' => $baseDir . '/Core/Authentication/Verification_File.php',
     'Google\\Site_Kit\\Core\\Authentication\\Verification_Meta' => $baseDir . '/Core/Authentication/Verification_Meta.php',
