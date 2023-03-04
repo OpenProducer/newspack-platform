@@ -46,6 +46,7 @@ return array(
     'Newspack_Newsletters_Mailchimp' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp.php',
     'Newspack_Newsletters_Mailchimp_Cached_Data' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-cached-data.php',
     'Newspack_Newsletters_Mailchimp_Controller' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-controller.php',
+    'Newspack_Newsletters_Mailchimp_Groups' => $baseDir . '/includes/service-providers/mailchimp/class-newspack-newsletters-mailchimp-groups.php',
     'Newspack_Newsletters_Quick_Edit' => $baseDir . '/includes/class-newspack-newsletters-quick-edit.php',
     'Newspack_Newsletters_Renderer' => $baseDir . '/includes/class-newspack-newsletters-renderer.php',
     'Newspack_Newsletters_Service_Provider' => $baseDir . '/includes/service-providers/class-newspack-newsletters-service-provider.php',

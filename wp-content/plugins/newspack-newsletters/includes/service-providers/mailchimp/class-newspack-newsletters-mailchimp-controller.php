@@ -121,6 +121,27 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 		);
 		\register_rest_route(
 			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
+			'(?P<id>[\a-z]+)/folder',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_folder' ],
+				'permission_callback' => [ $this->service_provider, 'api_authoring_permissions_check' ],
+				'args'                => [
+					'id'        => [
+						'sanitize_callback' => 'absint',
+						'validate_callback' => [ 'Newspack_Newsletters', 'validate_newsletter_id' ],
+					],
+					'list_id'   => [
+						'sanitize_callback' => 'esc_attr',
+					],
+					'folder_id' => [
+						'sanitize_callback' => 'esc_attr',
+					],
+				],
+			]
+		);
+		\register_rest_route(
+			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
 			'(?P<id>[\a-z]+)/list/(?P<list_id>[\a-z]+)',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
@@ -198,6 +219,20 @@ class Newspack_Newsletters_Mailchimp_Controller extends Newspack_Newsletters_Ser
 			$request['id'],
 			$request['from_name'],
 			$request['reply_to']
+		);
+		return self::get_api_response( $response );
+	}
+
+	/**
+	 * Set folder for a campaign.
+	 *
+	 * @param WP_REST_Request $request API request object.
+	 * @return WP_REST_Response|mixed API response or error.
+	 */
+	public function api_folder( $request ) {
+		$response = $this->service_provider->folder(
+			$request['id'],
+			$request['folder_id']
 		);
 		return self::get_api_response( $response );
 	}

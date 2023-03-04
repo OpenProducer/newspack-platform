@@ -53,7 +53,7 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	 * @var ?array
 	 */
 	private static $memoized_data;
-	
+
 	/**
 	 * Initializes this class
 	 */
@@ -83,6 +83,19 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	public static function get_interest_categories( $list_id ) {
 		$data = self::get_data( $list_id );
 		return $data['interest_categories'] ?? null;
+	}
+
+	/**
+	 * Get folders.
+	 *
+	 * TODO: This is not cached because the cache structure requires a list ID,
+	 * which shouldn't be required for folders.
+	 *
+	 * @throws Exception In case of errors while fetching data from the server.
+	 * @return array The list folders
+	 */
+	public static function get_folders() {
+		return self::fetch_folders();
 	}
 
 	/**
@@ -150,7 +163,7 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 
 		Newspack_Newsletters_Logger::log( 'Mailchimp cache: Dispatching refresh' );
 		self::dispatch_refresh( $list_id );
-		
+
 		Newspack_Newsletters_Logger::log( 'Mailchimp cache: serving from last_cache option' );
 		self::$memoized_data = $data;
 		return $data;
@@ -237,10 +250,12 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 		try {
 			$segments            = self::fetch_segments( $list_id );
 			$interest_categories = self::fetch_interest_categories( $list_id );
+			$folders             = self::fetch_folders();
 			$merge_fields        = self::fetch_merge_fields( $list_id );
 			$list_data           = [
 				'segments'            => $segments,
 				'interest_categories' => $interest_categories,
+				'folders'             => $folders,
 				'merge_fields'        => $merge_fields,
 			];
 			set_transient( self::get_cache_key( $list_id ), $list_data, 10 * MINUTE_IN_SECONDS );
@@ -278,7 +293,7 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	 *
 	 * @param string $list_id The List ID.
 	 * @throws Exception In case of errors while fetching data from the server.
-	 * @return array The list segments 
+	 * @return array The list segments
 	 */
 	private static function fetch_segments( $list_id ) {
 		$mc       = new Mailchimp( ( self::get_mc_instance() )->api_key() );
@@ -316,7 +331,7 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	 *
 	 * @param string $list_id The List ID.
 	 * @throws Exception In case of errors while fetching data from the server.
-	 * @return array The list interest_categories 
+	 * @return array The list interest_categories
 	 */
 	private static function fetch_interest_categories( $list_id ) {
 		$mc                  = new Mailchimp( ( self::get_mc_instance() )->api_key() );
@@ -339,11 +354,26 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	}
 
 	/**
+	 * Fetches the campaign folders.
+	 *
+	 * @throws Exception In case of errors while fetching data from the server.
+	 * @return array The list folders
+	 */
+	private static function fetch_folders() {
+		$mc       = new Mailchimp( ( self::get_mc_instance() )->api_key() );
+		$response = ( self::get_mc_instance() )->validate(
+			$mc->get( 'campaign-folders', [ 'count' => 1000 ] ),
+			__( 'Error retrieving Mailchimp folders.', 'newspack_newsletters' )
+		);
+		return $response['folders'];
+	}
+
+	/**
 	 * Fetches the merge fields for a given List from the Mailchimp server
 	 *
 	 * @param string $list_id The List ID.
 	 * @throws Exception In case of errors while fetching data from the server.
-	 * @return array The list interest_categories 
+	 * @return array The list interest_categories
 	 */
 	private static function fetch_merge_fields( $list_id ) {
 		$mc       = new Mailchimp( ( self::get_mc_instance() )->api_key() );
