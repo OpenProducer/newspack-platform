@@ -135,7 +135,8 @@ table th {
 
 figcaption,
 .gallery-caption,
-.wp-caption-text {
+.wp-caption-text,
+.swiper-pagination-simple {
   color: #515151;
   font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 0.6em;

@@ -80,7 +80,6 @@ class Reader_Revenue_Wizard extends Wizard {
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 			]
 		);
-
 		// Save basic data about reader revenue platform.
 		\register_rest_route(
 			NEWSPACK_API_NAMESPACE,

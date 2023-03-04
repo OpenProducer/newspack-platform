@@ -180,7 +180,8 @@ table th {
 
 figcaption,
 .gallery-caption,
-.wp-caption-text {
+.wp-caption-text,
+.swiper-pagination-simple {
   color: #444444;
   font-family: "Old Standard TT", georgia, serif;
   font-size: 0.6em;

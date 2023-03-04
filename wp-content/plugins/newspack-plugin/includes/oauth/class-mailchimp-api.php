@@ -80,18 +80,7 @@ class Mailchimp_API {
 	 * @return WP_REST_Response
 	 */
 	public static function api_mailchimp_auth_status() {
-		// 'newspack_mailchimp_api_key' is a new option introduced to manage MC API key accross Newspack plugins.
-		// Keeping the old option for backwards compatibility.
-		$mailchimp_api_key = get_option( 'newspack_mailchimp_api_key', get_option( 'newspack_newsletters_mailchimp_api_key' ) );
-		$endpoint          = self::get_api_endpoint_from_key( $mailchimp_api_key );
-
-		if ( ! $mailchimp_api_key || ! $endpoint ) {
-			return \rest_ensure_response( [] );
-		}
-
-		$key_is_valid_response = self::is_valid_api_key( $endpoint, $mailchimp_api_key );
-
-		return $key_is_valid_response;
+		return self::is_valid_api_key();
 	}
 
 	/**
@@ -106,7 +95,7 @@ class Mailchimp_API {
 			return new \WP_Error( 'wrong_parameter', __( 'Invalid Mailchimp API Key.', 'newspack' ) );
 		}
 
-		$key_is_valid_response = self::is_valid_api_key( $endpoint, $request['api_key'] );
+		$key_is_valid_response = self::is_valid_api_key( $request['api_key'] );
 
 		if ( ! is_wp_error( $key_is_valid_response ) ) {
 			update_option( 'newspack_mailchimp_api_key', $request['api_key'] );
@@ -143,37 +132,98 @@ class Mailchimp_API {
 	/**
 	 * Check API Key validity
 	 *
-	 * @param string $endpoint Mailchimp API Endpoint.
 	 * @param string $api_key Mailchimp API Key.
 	 * @return WP_REST_Response|WP_Error
 	 */
-	private static function is_valid_api_key( $endpoint, $api_key ) {
+	private static function is_valid_api_key( $api_key = '' ) {
 		// Mailchimp API root endpoint returns details about the Mailchimp user account.
-		$response = wp_safe_remote_get(
-			$endpoint,
-			[
-				'headers' => [
-					'Accept'        => 'application/json',
-					'Content-Type'  => 'application/json',
-					'Authorization' => "Basic $api_key",
-				],
-			]
-		);
-
+		$response = self::request( 'GET', '', [], $api_key );
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
-		if ( 200 !== wp_remote_retrieve_response_code( $response ) ) {
-			$parsed_response = json_decode( $response['body'], true );
+		return \rest_ensure_response( [ 'username' => $response['username'] ] );
+	}
 
+	/**
+	 * Perform Mailchimp API Request
+	 *
+	 * @param string $method  HTTP method.
+	 * @param string $path    API path.
+	 * @param array  $data    Data to send.
+	 * @param string $api_key Optional API key to override the default one.
+	 *
+	 * @return array|WP_Error response body or error.
+	 */
+	public static function request( $method, $path = '', $data = [], $api_key = '' ) {
+		if ( empty( $api_key ) ) {
+			// 'newspack_mailchimp_api_key' is a new option introduced to manage MC API key accross Newspack plugins.
+			// Keeping the old option for backwards compatibility.
+			$api_key = \get_option( 'newspack_mailchimp_api_key', get_option( 'newspack_newsletters_mailchimp_api_key' ) );
+		}
+		$endpoint = self::get_api_endpoint_from_key( $api_key );
+		if ( ! $endpoint ) {
+			return new \WP_Error( 'wrong_parameter', __( 'Invalid Mailchimp API Key.', 'newspack' ) );
+		}
+		$url    = $endpoint . '/' . $path;
+		$config = [
+			'method'  => $method,
+			'headers' => [
+				'Accept'        => 'application/json',
+				'Content-Type'  => 'application/json',
+				'Authorization' => "Basic $api_key",
+			],
+		];
+		if ( ! empty( $data ) ) {
+			$config['body'] = \wp_json_encode( $data );
+		}
+		$response = \wp_safe_remote_request( $url, $config );
+
+		if ( \is_wp_error( $response ) ) {
+			return $response;
+		}
+		$parsed_response = json_decode( $response['body'], true );
+		if ( 200 !== \wp_remote_retrieve_response_code( $response ) ) {
 			return new \WP_Error(
 				'newspack_mailchimp_api',
 				array_key_exists( 'title', $parsed_response ) ? $parsed_response['title'] : __( 'Request failed.', 'newspack' )
 			);
 		}
+		return $parsed_response;
+	}
 
-		$response_body = json_decode( $response['body'], true );
-		return \rest_ensure_response( [ 'username' => $response_body['username'] ] );
+	/**
+	 * Perform a GET request to Mailchimp's API
+	 *
+	 * @param string $path API path.
+	 *
+	 * @return array|WP_Error API response or error.
+	 */
+	public static function get( $path = '' ) {
+		return self::request( 'GET', $path );
+	}
+
+	/**
+	 * Perform a PUT request to Mailchimp's API
+	 *
+	 * @param string $path API path.
+	 * @param array  $data Data to send.
+	 *
+	 * @return array|WP_Error API response or error.
+	 */
+	public static function put( $path = '', $data = [] ) {
+		return self::request( 'PUT', $path, $data );
+	}
+
+	/**
+	 * Perform a POST request to Mailchimp's API
+	 *
+	 * @param string $path API path.
+	 * @param array  $data Data to send.
+	 *
+	 * @return array|WP_Error API response or error.
+	 */
+	public static function post( $path = '', $data = [] ) {
+		return self::request( 'POST', $path, $data );
 	}
 }
 

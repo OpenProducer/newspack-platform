@@ -66,6 +66,7 @@ final class GAM_Scripts {
 		}
 
 		$network_code = GAM_Model::get_active_network_code();
+		$fixed_height = Settings::get_settings( 'fixed_height' );
 
 		$prepared_unit_data = [];
 		foreach ( GAM_Model::$slots as $unique_id => $ad_unit ) {
@@ -110,7 +111,7 @@ final class GAM_Scripts {
 				'code'             => esc_attr( $ad_unit['code'] ),
 				'sizes'            => $sizes,
 				'fluid'            => (bool) $ad_unit['fluid'],
-				'fixed_height'     => (bool) $ad_unit['fixed_height'],
+				'fixed_height'     => $fixed_height,
 				'targeting'        => $ad_targeting,
 				'sticky'           => GAM_Model::is_sticky( $ad_unit ),
 				'size_map'         => GAM_Model::get_ad_unit_size_map( $ad_unit ),
@@ -250,8 +251,9 @@ final class GAM_Scripts {
 					 * outside of the viewport will have 'auto' height.
 					 */
 					?>
-					if ( ad_unit.fixed_height ) {
+					if ( ad_unit.fixed_height.active ) {
 						var height = 'auto';
+						var prop = 'height';
 						if ( ad_unit.in_viewport ) {
 							for ( viewportWidth in ad_unit.size_map ) {
 								if ( viewportWidth < availableWidth ) {
@@ -261,9 +263,13 @@ final class GAM_Scripts {
 									}
 								}
 							}
+							if ( ad_unit.fixed_height.use_max_height && ad_unit.fixed_height.max_height < height ) {
+								height = ad_unit.fixed_height.max_height;
+								prop = 'min-height';
+							}
 							height = height + 'px';
 						}
-						container.parentNode.style.height = height;
+						container.parentNode.style[prop] = height;
 					}
 				}
 				googletag.cmd.push(function() {
@@ -357,7 +363,7 @@ final class GAM_Scripts {
 						 * creatives to render on refresh control.
 						 */
 						?>
-						if ( ad_unit.fixed_height && container.parentNode.style.height === 'auto' && event.size ) {
+						if ( ad_unit.fixed_height.active && container.parentNode.style.height === 'auto' && event.size ) {
 							container.parentNode.style.height = event.size[1] + 'px';
 							event.slot.defineSizeMapping( googletag.sizeMapping().addSize( [ 0, 0 ], event.size ).build() );
 						}
@@ -366,7 +372,7 @@ final class GAM_Scripts {
 						 * Handle slot visibility.
 						 */
 						?>
-						if ( event.isEmpty && ( ! ad_unit.fixed_height || ( ad_unit.fixed_height && ! ad_unit.in_viewport ) ) ) {
+						if ( event.isEmpty && ( ! ad_unit.fixed_height.active || ( ad_unit.fixed_height.active && ! ad_unit.in_viewport ) ) ) {
 							container.parentNode.style.display = 'none';
 						} else {
 							container.parentNode.style.display = 'flex';
@@ -408,9 +414,18 @@ final class GAM_Scripts {
 		if ( 'gam' !== $placement_data['provider'] ) {
 			return;
 		}
-		if ( ! isset( $placement_data['fixed_height'] ) || ! $placement_data['fixed_height'] ) {
+
+		$fixed_height = Settings::get_settings( 'fixed_height' );
+		if ( ! $fixed_height['active'] ) {
 			return;
 		}
+
+		$get_height = function( $height ) use ( $fixed_height ) {
+			if ( $fixed_height['use_max_height'] && ! empty( $fixed_height['max_height'] ) ) {
+				$height = min( $height, $fixed_height['max_height'] );
+			}
+			return sprintf( '%spx', $height );
+		};
 
 		$ad_units    = GAM_Model::get_ad_units( false );
 		$ad_unit_idx = array_search( $placement_data['ad_unit'], array_column( $ad_units, 'id' ) );
@@ -423,7 +438,7 @@ final class GAM_Scripts {
 		echo '<style>';
 		foreach ( $size_map as $viewport_width => $sizes ) {
 			$height = max( array_column( $sizes, 1 ) );
-			$css    = sprintf( ' @media ( min-width: %1$dpx ) { %2$s { height: %3$dpx; } } ', $viewport_width, $container_id, $height );
+			$css    = sprintf( ' @media ( min-width: %1$dpx ) { %2$s { min-height: %3$dpx; } } ', $viewport_width, $container_id, $get_height( $height ) );
 			echo esc_html( $css );
 		}
 		echo '</style>';

@@ -1,6 +1,6 @@
 {
 	"name": "@automattic/newspack-blocks",
-	"version": "1.62.0",
+	"version": "1.63.0",
 	"author": "Automattic",
 	"devDependencies": {
 		"@rushstack/eslint-patch": "^1.2.0",
@@ -12,7 +12,7 @@
 		"fetch-mock-jest": "^1.5.1",
 		"html-entities": "^2.3.3",
 		"identity-obj-proxy": "^3.0.0",
-		"lint-staged": "^13.1.0",
+		"lint-staged": "^13.1.2",
 		"newspack-scripts": "^4.6.0",
 		"postcss-scss": "^4.0.6",
 		"prettier": "npm:wp-prettier@^2.6.2-beta-1",
@@ -25,10 +25,10 @@
 		"lodash": "^4.17.21",
 		"newspack-components": "^2.1.0",
 		"react": "^17.0.2",
-		"redux": "^4.2.0",
+		"redux": "^4.2.1",
 		"redux-saga": "^1.2.2",
 		"regenerator-runtime": "^0.13.11",
-		"swiper": "8.4.6"
+		"swiper": "8.4.7"
 	},
 	"scripts": {
 		"cm": "newspack-scripts commit",

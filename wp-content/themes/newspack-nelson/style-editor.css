@@ -160,7 +160,8 @@ table th {
 
 figcaption,
 .gallery-caption,
-.wp-caption-text {
+.wp-caption-text,
+.swiper-pagination-simple {
   color: #515151;
   font-family: "Montserrat", "Helvetica", sans-serif;
   font-size: 0.6em;

@@ -1,3 +1,29 @@
+# [1.63.0](https://github.com/Automattic/newspack-blocks/compare/v1.62.0...v1.63.0) (2023-02-28)
+
+
+### Bug Fixes
+
+* attribute types for custom author fields ([#1365](https://github.com/Automattic/newspack-blocks/issues/1365)) ([483e49c](https://github.com/Automattic/newspack-blocks/commit/483e49cd2923ad0d9f0e5c8030df23e8e64138cb))
+* remove mark background in Newspack blocks ([#1363](https://github.com/Automattic/newspack-blocks/issues/1363)) ([295b7d1](https://github.com/Automattic/newspack-blocks/commit/295b7d18df51f4bb6991c415d5e288af0dbb647f))
+
+
+### Features
+
+* **donate-block:** native wc subs ([#1359](https://github.com/Automattic/newspack-blocks/issues/1359)) ([9834aa0](https://github.com/Automattic/newspack-blocks/commit/9834aa0ade7d74fe2ab832ccdd96859917ca2ac0))
+
+# [1.63.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.62.0...v1.63.0-alpha.1) (2023-02-17)
+
+
+### Bug Fixes
+
+* attribute types for custom author fields ([#1365](https://github.com/Automattic/newspack-blocks/issues/1365)) ([483e49c](https://github.com/Automattic/newspack-blocks/commit/483e49cd2923ad0d9f0e5c8030df23e8e64138cb))
+* remove mark background in Newspack blocks ([#1363](https://github.com/Automattic/newspack-blocks/issues/1363)) ([295b7d1](https://github.com/Automattic/newspack-blocks/commit/295b7d18df51f4bb6991c415d5e288af0dbb647f))
+
+
+### Features
+
+* **donate-block:** native wc subs ([#1359](https://github.com/Automattic/newspack-blocks/issues/1359)) ([9834aa0](https://github.com/Automattic/newspack-blocks/commit/9834aa0ade7d74fe2ab832ccdd96859917ca2ac0))
+
 # [1.62.0](https://github.com/Automattic/newspack-blocks/compare/v1.61.0...v1.62.0) (2023-02-16)
 
 

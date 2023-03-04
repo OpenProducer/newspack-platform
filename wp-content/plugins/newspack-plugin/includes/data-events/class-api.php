@@ -131,6 +131,10 @@ final class Api {
 			'disabled' => [
 				'type' => 'boolean',
 			],
+			'label'    => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
 		];
 	}
 
@@ -262,6 +266,9 @@ final class Api {
 				$args['global'],
 				$args['disabled']
 			);
+		}
+		if ( is_string( $request->get_param( 'label' ) ) ) {
+			Webhooks::update_endpoint_label( $endpoint['id'], $request->get_param( 'label' ) );
 		}
 		if ( \is_wp_error( $endpoint ) ) {
 			return $endpoint;

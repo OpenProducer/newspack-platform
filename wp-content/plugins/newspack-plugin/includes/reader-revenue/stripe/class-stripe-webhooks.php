@@ -236,11 +236,22 @@ class Stripe_Webhooks {
 
 		$payload = $request['data']['object'];
 
-		// If order_id is set in the metadata, this was not created by this integration.
-		// This can happen when WC Subscriptions w/ Stripe Gateway was active before using this integration.
-		// In such a situation, WCS continues to charge subscribers, but since the platform is set to this integration,
-		// the webhook will still be exectuted for these payments, resulting in duplicate WC orders.
+		// If order_id is set in the metadata, this is a charge created by WC.
 		if ( isset( $payload['metadata']['order_id'] ) ) {
+			// Update the associated order and subscription.
+			if ( isset( $payload['metadata']['origin'] ) && 'newspack' === $payload['metadata']['origin'] && Donations::is_woocommerce_suite_active() ) {
+				$balance_transaction = Stripe_Connection::get_balance_transaction( $payload['balance_transaction'] );
+				WooCommerce_Connection::update_order(
+					$payload['metadata']['order_id'],
+					[
+						// On order completed, the connected subscription will be activated if it exists.
+						'status'     => 'completed',
+						'stripe_id'  => $payload['id'],
+						'stripe_fee' => Stripe_Connection::normalise_amount( $balance_transaction['fee'], $payload['currency'] ),
+						'stripe_net' => Stripe_Connection::normalise_amount( $balance_transaction['net'], $payload['currency'] ),
+					]
+				);
+			}
 			return;
 		}
 
@@ -292,18 +303,18 @@ class Stripe_Webhooks {
 						$customer_ltv = Stripe_Connection::get_customer_ltv( $customer['id'] );
 						if ( ! \is_wp_error( $customer_ltv ) ) {
 							$total_paid = $customer_ltv + $amount_normalised;
-							$contact['metadata'][ Newspack_Newsletters::$metadata_keys['total_paid'] ] = $total_paid;
+							$contact['metadata'][ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] = $total_paid;
 						}
 
 						$contact['metadata'] = array_merge(
 							$contact['metadata'],
 							[
-								Newspack_Newsletters::$metadata_keys['last_payment_date']   => $payment_date,
-								Newspack_Newsletters::$metadata_keys['last_payment_amount'] => $amount_normalised,
+								Newspack_Newsletters::get_metadata_key( 'last_payment_date' )   => $payment_date,
+								Newspack_Newsletters::get_metadata_key( 'last_payment_amount' ) => $amount_normalised,
 							]
 						);
 
-						$metadata[ Newspack_Newsletters::$metadata_keys['membership_status'] ] = Stripe_Connection::get_membership_status_field_value( $frequency );
+						$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = Stripe_Connection::get_membership_status_field_value( $frequency );
 						if ( 'once' !== $frequency ) {
 							$contact['metadata'] = array_merge(
 								Stripe_Connection::create_recurring_payment_metadata( $frequency, $payment['amount'], $payment['currency'], $payment['created'] ),
@@ -311,7 +322,7 @@ class Stripe_Webhooks {
 							);
 						}
 						if ( isset( $customer['metadata']['userId'] ) ) {
-							$contact['metadata'][ Newspack_Newsletters::$metadata_keys['account'] ] = $customer['metadata']['userId'];
+							$contact['metadata'][ Newspack_Newsletters::get_metadata_key( 'account' ) ] = $customer['metadata']['userId'];
 						}
 						if ( isset( $customer['metadata']['current_page_url'] ) ) {
 							$contact['metadata']['current_page_url'] = $customer['metadata']['current_page_url'];
@@ -331,7 +342,7 @@ class Stripe_Webhooks {
 							$wc_product_id = Donations::get_donation_product( $frequency );
 							try {
 								$wc_product = \wc_get_product( $wc_product_id );
-								$contact['metadata'][ Newspack_Newsletters::$metadata_keys['product_name'] ] = $wc_product->get_name();
+								$contact['metadata'][ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = $wc_product->get_name();
 							} catch ( \Throwable $th ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 								// Fail silently.
 							}
@@ -425,12 +436,12 @@ class Stripe_Webhooks {
 						$contact      = [
 							'email'    => $customer['email'],
 							'metadata' => [
-								Newspack_Newsletters::$metadata_keys['sub_end_date']   => $sub_end_date,
+								Newspack_Newsletters::get_metadata_key( 'sub_end_date' )   => $sub_end_date,
 							],
 						];
 						if ( 0 === $active_subs && in_array( $payload['plan']['interval'], [ 'month', 'year' ] ) ) {
 							$membership_status = 'Ex-' . Stripe_Connection::get_membership_status_field_value( $payload['plan']['interval'] );
-							$contact['metadata'][ Newspack_Newsletters::$metadata_keys['membership_status'] ] = $membership_status;
+							$contact['metadata'][ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = $membership_status;
 						}
 						\Newspack_Newsletters_Subscription::add_contact( $contact );
 					}
@@ -490,7 +501,7 @@ class Stripe_Webhooks {
 						if ( $payload['cancel_at'] ) {
 							// Cancellation was scheduled.
 							$sub_end_date = gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $payload['cancel_at'] );
-							$contact['metadata'][ Newspack_Newsletters::$metadata_keys['sub_end_date'] ] = $sub_end_date;
+							$contact['metadata'][ Newspack_Newsletters::get_metadata_key( 'sub_end_date' ) ] = $sub_end_date;
 						} elseif ( 'active' === $payload['status'] ) {
 							// An update to an active subscription (or activation of it).
 							$plan                = $payload['plan'];

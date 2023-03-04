@@ -83,9 +83,8 @@ final class GAM_Provider extends Provider {
 		$ad_unit = GAM_Model::get_ad_unit_for_display(
 			$unit_id,
 			array(
-				'unique_id'    => $placement_data['id'],
-				'placement'    => $placement_key,
-				'fixed_height' => isset( $placement_data['fixed_height'] ) ? (bool) $placement_data['fixed_height'] : false,
+				'unique_id' => $placement_data['id'],
+				'placement' => $placement_key,
 			)
 		);
 		if ( \is_wp_error( $ad_unit ) ) {

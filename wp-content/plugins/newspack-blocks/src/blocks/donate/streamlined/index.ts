@@ -28,7 +28,6 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 		let stripe: Stripe.Stripe | null,
 			cardElement: Stripe.StripeCardElement,
 			paymentRequest: Stripe.PaymentRequest,
-			paymentMethod: Stripe.ConfirmCardPaymentData[ 'payment_method' ],
 			paymentRequestToken: Stripe.Token,
 			isCardUIVisible = false;
 
@@ -87,8 +86,9 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 		// In card flow, this will happen after user submits their card data in the HTML form.
 		// In payment request flow, this will happen after the user validates the payment in
 		// the browser/OS UI.
-		const payWithToken = async (
-			token: Stripe.Token,
+		const payWithSource = async (
+			source: Stripe.Source,
+			token: Stripe.Token | undefined = undefined,
 			/**
 			 * Overrides for sent donation data. In a card flow the data is
 			 * provided explicitly by the user (via the form), but in payment request flow
@@ -129,7 +129,8 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 
 			const apiRequestPayload = {
 				captchaToken,
-				tokenData: token,
+				stripe_tokenization_method: token ? token.card?.tokenization_method : 'card',
+				stripe_source_id: source.id,
 				amount: utils.getTotalAmount( formElement ),
 				email: formValues.email,
 				full_name: formValues.full_name,
@@ -161,12 +162,9 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 			};
 
 			// Additional steps handling.
-			if ( chargeResultData.client_secret && paymentMethod ) {
+			if ( chargeResultData.client_secret ) {
 				const confirmationResult = await stripe.confirmCardPayment(
-					chargeResultData.client_secret,
-					{
-						payment_method: paymentMethod,
-					}
+					chargeResultData.client_secret
 				);
 
 				if ( confirmationResult.error ) {
@@ -228,20 +226,17 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 
 			const rendersPaymentRequestButton = await paymentRequest.canMakePayment();
 			if ( rendersPaymentRequestButton ) {
-				paymentRequest.on( 'token', async event => {
-					paymentRequestToken = event.token;
-				} );
-				paymentRequest.on( 'paymentmethod', async event => {
-					// Save payment method ID to use it in payWithToken if a client secret is returned.
-					paymentMethod = event.paymentMethod.id;
-					const result = await payWithToken( paymentRequestToken, {
+				paymentRequest.on( 'source', async event => {
+					const result = await payWithSource( event.source, paymentRequestToken, {
 						email: event.payerEmail,
 						full_name: event.payerName,
-						payment_method_id: paymentMethod,
 					} );
-					// The UI messages are handled in payWithToken, this event listener only
+					// The UI messages are handled in payWithSource, this event listener only
 					// has to notify the browser that the payment is done.
 					event.complete( result?.error ? 'fail' : 'success' );
+				} );
+				paymentRequest.on( 'token', async event => {
+					paymentRequestToken = event.token;
 				} );
 				// Update payment request when the form values are updated.
 				formElement.addEventListener( 'change', () => {
@@ -349,25 +344,15 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 				enableForm();
 			};
 
-			const stripeTokenCreationResult = await stripe.createToken( cardElement );
-			if ( stripeTokenCreationResult.error ) {
-				handleStripeSDKError( stripeTokenCreationResult.error );
-				return;
-			}
-			const paymentMethodCreationResult = await stripe.createPaymentMethod( {
+			const sourceCreationResult = await stripe.createSource( cardElement, {
 				type: 'card',
-				card: cardElement,
-				billing_details: { name: formValues.full_name, email: formValues.email },
+				owner: { name: formValues.full_name, email: formValues.email },
 			} );
-			if ( paymentMethodCreationResult.error ) {
-				handleStripeSDKError( paymentMethodCreationResult.error );
+			if ( sourceCreationResult.error ) {
+				handleStripeSDKError( sourceCreationResult.error );
 				return;
 			}
-			// Save payment method ID to use it in payWithToken if a client secret is returned.
-			paymentMethod = { card: cardElement };
-			await payWithToken( stripeTokenCreationResult.token, {
-				payment_method_id: paymentMethodCreationResult.paymentMethod.id,
-			} );
+			await payWithSource( sourceCreationResult.source );
 			if ( window.newspackReaderActivation?.refreshAuthentication ) {
 				window.newspackReaderActivation.refreshAuthentication();
 			}

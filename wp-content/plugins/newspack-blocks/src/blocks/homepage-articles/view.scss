@@ -50,6 +50,10 @@
 		font-size: variables.$font__size-sm;
 		margin-bottom: 0.5em;
 		width: 100%; // make sure this isn't caught up in the flex styles.
+
+		mark {
+			background-color: transparent;
+		}
 	}
 
 	/* Column styles */

@@ -1,3 +1,26 @@
+## [1.42.1](https://github.com/Automattic/newspack-ads/compare/v1.42.0...v1.42.1) (2023-03-01)
+
+
+### Bug Fixes
+
+* **broadstreet:** disable "fixed height" support ([#608](https://github.com/Automattic/newspack-ads/issues/608)) ([b9e9467](https://github.com/Automattic/newspack-ads/commit/b9e9467102382a8cd2288a199c798a1199e564b1))
+
+# [1.42.0](https://github.com/Automattic/newspack-ads/compare/v1.41.0...v1.42.0) (2023-02-28)
+
+
+### Features
+
+* "fixed height" a global setting with max threshold ([#590](https://github.com/Automattic/newspack-ads/issues/590)) ([5f56f36](https://github.com/Automattic/newspack-ads/commit/5f56f36e91c8fd47c5dd41fbefd8235914b8cc06))
+* **gam:** support "tag" key-val targeting their archive pages ([#595](https://github.com/Automattic/newspack-ads/issues/595)) ([3596c42](https://github.com/Automattic/newspack-ads/commit/3596c427587cdb2caf05cd44bc32695c438f14f1))
+
+# [1.42.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.41.0...v1.42.0-alpha.1) (2023-02-17)
+
+
+### Features
+
+* "fixed height" a global setting with max threshold ([#590](https://github.com/Automattic/newspack-ads/issues/590)) ([5f56f36](https://github.com/Automattic/newspack-ads/commit/5f56f36e91c8fd47c5dd41fbefd8235914b8cc06))
+* **gam:** support "tag" key-val targeting their archive pages ([#595](https://github.com/Automattic/newspack-ads/issues/595)) ([3596c42](https://github.com/Automattic/newspack-ads/commit/3596c427587cdb2caf05cd44bc32695c438f14f1))
+
 # [1.41.0](https://github.com/Automattic/newspack-ads/compare/v1.40.0...v1.41.0) (2023-02-16)
 
 

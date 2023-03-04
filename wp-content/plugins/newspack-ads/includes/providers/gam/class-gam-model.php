@@ -209,10 +209,9 @@ final class GAM_Model {
 			);
 		}
 
-		$unique_id    = $config['unique_id'] ?? uniqid();
-		$placement    = $config['placement'] ?? '';
-		$context      = $config['context'] ?? '';
-		$fixed_height = $config['fixed_height'] ?? false;
+		$unique_id = $config['unique_id'] ?? uniqid();
+		$placement = $config['placement'] ?? '';
+		$context   = $config['context'] ?? '';
 
 		$ad_units = self::get_ad_units( false );
 
@@ -228,9 +227,8 @@ final class GAM_Model {
 		}
 		$ad_unit = $ad_units[ $index ];
 
-		$ad_unit['placement']    = $placement;
-		$ad_unit['context']      = $context;
-		$ad_unit['fixed_height'] = $fixed_height;
+		$ad_unit['placement'] = $placement;
+		$ad_unit['context']   = $context;
 
 		$ad_unit['ad_code']     = self::get_ad_unit_code( $ad_unit, $unique_id );
 		$ad_unit['amp_ad_code'] = self::get_ad_unit_amp_code( $ad_unit, $unique_id );
@@ -1078,8 +1076,19 @@ final class GAM_Model {
 			// Add the category slugs to targeting on category archives.
 		} elseif ( get_queried_object() ) {
 			$queried_object = get_queried_object();
-			if ( 'WP_Term' === get_class( $queried_object ) && 'category' === $queried_object->taxonomy ) {
-				$targeting['category'] = [ sanitize_text_field( $queried_object->slug ) ];
+			if ( 'WP_Term' === get_class( $queried_object ) ) {
+				
+				switch ( $queried_object->taxonomy ) {
+						
+					case 'category':
+						$targeting['category'] = [ sanitize_text_field( $queried_object->slug ) ];
+						break;
+						
+					case 'post_tag':
+						$targeting['tag'] = [ sanitize_text_field( $queried_object->slug ) ];
+						break;
+						
+				}
 			}
 		}
 

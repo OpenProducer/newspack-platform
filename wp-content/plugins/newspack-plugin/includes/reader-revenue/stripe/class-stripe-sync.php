@@ -158,9 +158,9 @@ class Stripe_Sync {
 			} else {
 				// This is a charge without an order. Create a new order.
 				if ( ! $is_dry_run ) {
-					$order_id = WooCommerce_Connection::create_transaction( $transation_payload );
+					$wc_transaction_creation_data = WooCommerce_Connection::create_transaction( $wc_order_payload );
 					// translators: Order ID.
-					\WP_CLI::success( sprintf( __( 'Created WC order: %d.', 'newspack' ), $order_id ) );
+					\WP_CLI::success( sprintf( __( 'Created WC order: %d.', 'newspack' ), $wc_transaction_creation_data['order_id'] ) );
 				}
 				self::$results['wc_orders_created'] ++;
 			}
@@ -181,9 +181,8 @@ class Stripe_Sync {
 			'name'  => $customer->name,
 		];
 
-		$metadata_keys = Newspack_Newsletters::$metadata_keys;
-		$metadata      = [
-			$metadata_keys['total_paid'] => Stripe_Connection::get_customer_ltv( $customer->id ),
+		$metadata = [
+			Newspack_Newsletters::get_metadata_key( 'total_paid' ) => Stripe_Connection::get_customer_ltv( $customer->id ),
 		];
 
 		$last_payments = Stripe_Connection::get_customer_transactions( $customer->id, false, 1 );
@@ -196,18 +195,18 @@ class Stripe_Sync {
 			$payment           = $last_payments[0];
 			$amount_normalised = Stripe_Connection::normalise_amount( $payment['amount'], $payment['currency'] );
 			$frequency         = Stripe_Connection::get_frequency_of_payment( $payment );
-			$metadata[ $metadata_keys['last_payment_date'] ]   = gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $payment['created'] );
-			$metadata[ $metadata_keys['last_payment_amount'] ] = $amount_normalised;
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_date' ) ]   = gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $payment['created'] );
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_amount' ) ] = $amount_normalised;
 			if ( 'once' !== $frequency ) {
-				$metadata[ $metadata_keys['billing_cycle'] ] = $frequency;
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'billing_cycle' ) ] = $frequency;
 			}
-			$membership_status                               = Stripe_Connection::get_membership_status_field_value( $frequency );
-			$metadata[ $metadata_keys['membership_status'] ] = $membership_status;
+			$membership_status = Stripe_Connection::get_membership_status_field_value( $frequency );
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = $membership_status;
 
 			if ( Donations::is_woocommerce_suite_active() ) {
 				$wc_product_id = Donations::get_donation_product( $frequency );
 				try {
-					$metadata[ $metadata_keys['product_name'] ] = \wc_get_product( $wc_product_id )->get_name();
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = \wc_get_product( $wc_product_id )->get_name();
 				} catch ( \Throwable $th ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
 					// Fail silently.
 				}
@@ -223,20 +222,20 @@ class Stripe_Sync {
 				);
 				$metadata                   = array_merge( $recurring_related_metadata, $metadata );
 				if ( 'active' !== $subscription['status'] ) {
-					$metadata[ $metadata_keys['membership_status'] ] = 'Ex-' . $membership_status;
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-' . $membership_status;
 				}
 				if ( $subscription['ended_at'] ) {
-					$metadata[ $metadata_keys['sub_end_date'] ] = gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $subscription['ended_at'] );
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'sub_end_date' ) ] = gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $subscription['ended_at'] );
 				} else {
-					unset( $metadata[ $metadata_keys['sub_end_date'] ] );
+					unset( $metadata[ Newspack_Newsletters::get_metadata_key( 'sub_end_date' ) ] );
 				}
 			}
 		}
 
 		$wp_user = get_user_by( 'email', $email_address );
 		if ( $wp_user ) {
-			$metadata[ $metadata_keys['account'] ]           = $wp_user->ID;
-			$metadata[ $metadata_keys['registration_date'] ] = date_format( date_create( $wp_user->data->user_registered ), Newspack_Newsletters::METADATA_DATE_FORMAT );
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'account' ) ]           = $wp_user->ID;
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_date' ) ] = date_format( date_create( $wp_user->data->user_registered ), Newspack_Newsletters::METADATA_DATE_FORMAT );
 		}
 
 		$contact['metadata'] = $metadata;
@@ -534,4 +533,3 @@ class Stripe_Sync {
 }
 
 Stripe_Sync::init();
-

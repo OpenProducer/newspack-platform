@@ -11,8 +11,8 @@ export const loadStripe = async () => {
 			token: 'abc',
 			error: null,
 		} ),
-		createPaymentMethod: () => ( {
-			paymentMethod: { id: 'pm_123' },
+		createSource: () => ( {
+			source: { id: 'src_123' },
 			error: null,
 		} ),
 		paymentRequest: () => ( { canMakePayment: () => false, on: () => {}, update: () => {} } ),

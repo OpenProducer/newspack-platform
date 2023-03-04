@@ -18,7 +18,7 @@ function newspack_blocks_register_author_list() {
 		$author_custom_fields = \Newspack\Authors_Custom_Fields::get_custom_fields();
 		foreach ( $author_custom_fields as $field ) {
 			$block_json['attributes'][ 'show' . $field['name'] ] = [
-				'type'    => 'string',
+				'type'    => 'boolean',
 				'default' => true,
 			];
 		}

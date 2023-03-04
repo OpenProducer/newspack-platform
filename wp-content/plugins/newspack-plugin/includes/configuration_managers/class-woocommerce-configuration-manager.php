@@ -80,15 +80,34 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Retrieve configured payment gateways.
+	 *
+	 * @param bool $only_enabled Whether to return only the enabled gateways.
+	 * @return Array Array of payment gateways.
+	 */
+	public static function get_payment_gateways( $only_enabled = false ) {
+		if ( ! class_exists( '\WC_Payment_Gateways' ) ) {
+			return [];
+		}
+		$gateways = \WC_Payment_Gateways::instance()->payment_gateways();
+		if ( $only_enabled ) {
+			return array_filter(
+				$gateways,
+				function( $gateway ) {
+					return 'yes' === $gateway->enabled;
+				}
+			);
+		}
+		return $gateways;
+	}
+
+	/**
 	 * Retrieve Stripe data
 	 *
 	 * @return Array Array of Stripe data.
 	 */
 	public function stripe_data() {
-		if ( ! class_exists( 'WC_Payment_Gateways' ) ) {
-			return Stripe_Connection::get_default_stripe_data();
-		}
-		$gateways = WC_Payment_Gateways::instance()->payment_gateways();
+		$gateways = self::get_payment_gateways();
 		if ( ! isset( $gateways['stripe'] ) ) {
 			return Stripe_Connection::get_default_stripe_data();
 		}

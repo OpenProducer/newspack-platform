@@ -13,8 +13,10 @@ defined( 'ABSPATH' ) || exit;
  * Main class.
  */
 class Newspack_Newsletters {
-	const METADATA_DATE_FORMAT = 'Y-m-d';
-	const METADATA_PREFIX      = 'NP_';
+	const METADATA_DATE_FORMAT   = 'Y-m-d';
+	const METADATA_PREFIX        = 'NP_';
+	const METADATA_PREFIX_OPTION = '_newspack_metadata_prefix';
+
 
 	/**
 	 * Metadata keys map for Reader Activation.
@@ -22,25 +24,25 @@ class Newspack_Newsletters {
 	 * @var array
 	 */
 	public static $metadata_keys = [
-		'account'              => self::METADATA_PREFIX . 'Account',
-		'registration_date'    => self::METADATA_PREFIX . 'Registration Date',
-		'connected_account'    => self::METADATA_PREFIX . 'Connected Account',
-		'signup_page'          => self::METADATA_PREFIX . 'Signup Page',
-		'signup_page_utm'      => self::METADATA_PREFIX . 'Signup UTM: ',
-		'newsletter_selection' => self::METADATA_PREFIX . 'Newsletter Selection',
+		'account'              => 'Account',
+		'registration_date'    => 'Registration Date',
+		'connected_account'    => 'Connected Account',
+		'signup_page'          => 'Signup Page',
+		'signup_page_utm'      => 'Signup UTM: ',
+		'newsletter_selection' => 'Newsletter Selection',
 		// Payment-related.
-		'membership_status'    => self::METADATA_PREFIX . 'Membership Status',
-		'payment_page'         => self::METADATA_PREFIX . 'Payment Page',
-		'payment_page_utm'     => self::METADATA_PREFIX . 'Payment UTM: ',
-		'sub_start_date'       => self::METADATA_PREFIX . 'Current Subscription Start Date',
-		'sub_end_date'         => self::METADATA_PREFIX . 'Current Subscription End Date',
-		'billing_cycle'        => self::METADATA_PREFIX . 'Billing Cycle',
-		'recurring_payment'    => self::METADATA_PREFIX . 'Recurring Payment',
-		'last_payment_date'    => self::METADATA_PREFIX . 'Last Payment Date',
-		'last_payment_amount'  => self::METADATA_PREFIX . 'Last Payment Amount',
-		'product_name'         => self::METADATA_PREFIX . 'Product Name',
-		'next_payment_date'    => self::METADATA_PREFIX . 'Next Payment Date',
-		'total_paid'           => self::METADATA_PREFIX . 'Total Paid',
+		'membership_status'    => 'Membership Status',
+		'payment_page'         => 'Payment Page',
+		'payment_page_utm'     => 'Payment UTM: ',
+		'sub_start_date'       => 'Current Subscription Start Date',
+		'sub_end_date'         => 'Current Subscription End Date',
+		'billing_cycle'        => 'Billing Cycle',
+		'recurring_payment'    => 'Recurring Payment',
+		'last_payment_date'    => 'Last Payment Date',
+		'last_payment_amount'  => 'Last Payment Amount',
+		'product_name'         => 'Product Name',
+		'next_payment_date'    => 'Next Payment Date',
+		'total_paid'           => 'Total Paid',
 	];
 
 	/**
@@ -52,6 +54,69 @@ class Newspack_Newsletters {
 			\add_filter( 'newspack_newsletters_contact_data', [ __CLASS__, 'contact_data' ], 10, 3 );
 			\add_filter( 'newspack_newsletters_contact_lists', [ __CLASS__, 'add_activecampaign_master_list' ], 10, 3 );
 		}
+	}
+
+	/**
+	 * Fetch the prefix for synced metadata fields.
+	 * Default is NP_ but it can be configured in the Reader Activation settings page.
+	 *
+	 * @return string
+	 */
+	public static function get_metadata_prefix() {
+		$prefix = \get_option( self::METADATA_PREFIX_OPTION, self::METADATA_PREFIX );
+
+		// Guard against empty strings and falsy values.
+		if ( empty( $prefix ) ) {
+			return self::METADATA_PREFIX;
+		}
+
+		/**
+		 * Filters the string used to prefix custom fields synced to Newsletter ESPs.
+		 *
+		 * @param string $prefix Prefix to prepend the field name.
+		 */
+		return apply_filters( 'newspack_ras_metadata_prefix', $prefix );
+	}
+
+	/**
+	 * Update the prefix for synced metadata fields.
+	 *
+	 * @param string $prefix Value to set.
+	 *
+	 * @return boolean True if updated, false otherwise.
+	 */
+	public static function update_metadata_prefix( $prefix ) {
+		if ( empty( $prefix ) ) {
+			$prefix = self::METADATA_PREFIX;
+		}
+
+		return \update_option( self::METADATA_PREFIX_OPTION, $prefix );
+	}
+
+	/**
+	 * Given a field name, prepend it with the metadata field prefix.
+	 *
+	 * @param string $key Metadata field to fetch.
+	 *
+	 * @return string Prefixed field name.
+	 */
+	public static function get_metadata_key( $key ) {
+		if ( ! isset( self::$metadata_keys[ $key ] ) ) {
+			return false;
+		}
+
+		$prefix = self::get_metadata_prefix();
+		$name   = self::$metadata_keys[ $key ];
+		$key    = $prefix . $name;
+
+		/**
+		 * Filters the full, prefixed field name of each custom field synced to the ESP.
+		 *
+		 * @param string $key Full, prefixed key.
+		 * @param string $prefix The prefix part of the key.
+		 * @param string $name The unprefixed part of the key.
+		 */
+		return apply_filters( 'newspack_ras_metadata_key', $key, $prefix, $name );
 	}
 
 	/**
@@ -94,7 +159,7 @@ class Newspack_Newsletters {
 			case 'active_campaign':
 				$metadata = [];
 				if ( is_user_logged_in() ) {
-					$metadata[ self::$metadata_keys['account'] ] = get_current_user_id();
+					$metadata[ self::get_metadata_key( 'account' ) ] = get_current_user_id();
 				}
 
 				// Translate list IDs to list names and store as metadata, if lists are supplied.
@@ -113,7 +178,7 @@ class Newspack_Newsletters {
 									}
 								}
 								// Note: this field will be overwritten every time it's updated.
-								$metadata[ self::$metadata_keys['newsletter_selection'] ] = implode( ', ', $lists_names );
+								$metadata[ self::get_metadata_key( 'newsletter_selection' ) ] = implode( ', ', $lists_names );
 							}
 						}
 					} catch ( \Throwable $e ) { // phpcs:ignore Generic.CodeAnalysis.EmptyStatement.DetectedCatch
@@ -123,7 +188,10 @@ class Newspack_Newsletters {
 				}
 
 				$current_page_url = isset( $contact['metadata'], $contact['metadata']['current_page_url'] ) ? $contact['metadata']['current_page_url'] : null;
-				if ( ! $current_page_url ) {
+				if ( $current_page_url ) {
+					// Don't send this metadata to ESP, it will be used to populate signup and payment page URLs' fields.
+					unset( $contact['metadata']['current_page_url'] );
+				} else {
 					global $wp;
 					$current_page_url = home_url( add_query_arg( array(), $wp->request ) );
 				}
@@ -131,46 +199,46 @@ class Newspack_Newsletters {
 
 				$is_new_contact = ! $contact['existing_contact_data'];
 				// If the contact exists, but has no account metadata (or any metadata), treat it as a new contact.
-				$metadata_account_field_formatted = strtoupper( self::$metadata_keys['account'] );
+				$metadata_account_field_formatted = strtoupper( self::get_metadata_key( 'account' ) );
 				if ( $contact['existing_contact_data'] && ! isset( $contact['existing_contact_data']['metadata'], $contact['existing_contact_data']['metadata'][ $metadata_account_field_formatted ] ) ) {
 					$is_new_contact = true;
 				}
 				if ( $is_new_contact ) {
-					$contact['metadata'][ self::$metadata_keys['registration_date'] ] = gmdate( self::METADATA_DATE_FORMAT );
-					$metadata[ self::$metadata_keys['signup_page'] ]                  = $current_page_url;
+					$contact['metadata'][ self::get_metadata_key( 'registration_date' ) ] = gmdate( self::METADATA_DATE_FORMAT );
+					$metadata[ self::get_metadata_key( 'signup_page' ) ]                  = $current_page_url;
 
 					// Capture UTM params.
 					foreach ( [ 'source', 'medium', 'campaign' ] as $value ) {
 						$param = 'utm_' . $value;
 						if ( isset( $current_page_url_params[ $param ] ) ) {
-							$metadata[ self::$metadata_keys['signup_page_utm'] . $value ] = sanitize_text_field( $current_page_url_params[ $param ] );
+							$metadata[ self::get_metadata_key( 'signup_page_utm' ) . $value ] = sanitize_text_field( $current_page_url_params[ $param ] );
 						}
 					}
 				}
 
 				// If the membership status is to be switched from recurring to non-recurring, ignore this change.
-				if ( $contact['existing_contact_data'] && isset( $contact['metadata'][ self::$metadata_keys['membership_status'] ], $existing_metadata[ self::$metadata_keys['membership_status'] ] ) ) {
+				if ( $contact['existing_contact_data'] && isset( $contact['metadata'][ self::get_metadata_key( 'membership_status' ) ], $existing_metadata[ self::get_metadata_key( 'membership_status' ) ] ) ) {
 					$existing_metadata  = $contact['existing_contact_data']['metadata'];
-					$becomes_once_donor = Stripe_Connection::ESP_METADATA_VALUES['once_donor'] === $contact['metadata'][ self::$metadata_keys['membership_status'] ];
+					$becomes_once_donor = Stripe_Connection::ESP_METADATA_VALUES['once_donor'] === $contact['metadata'][ self::get_metadata_key( 'membership_status' ) ];
 					$is_recurring_donor = in_array(
-						$existing_metadata[ self::$metadata_keys['membership_status'] ],
+						$existing_metadata[ self::get_metadata_key( 'membership_status' ) ],
 						[
 							Stripe_Connection::ESP_METADATA_VALUES['monthly_donor'],
 							Stripe_Connection::ESP_METADATA_VALUES['yearly_donor'],
 						]
 					);
 					if ( $becomes_once_donor && $is_recurring_donor ) {
-						unset( $contact['metadata'][ self::$metadata_keys['membership_status'] ] );
+						unset( $contact['metadata'][ self::get_metadata_key( 'membership_status' ) ] );
 					}
 				}
 
 				if ( isset( $contact['metadata'] ) ) {
-					if ( isset( $contact['metadata'][ self::$metadata_keys['last_payment_amount'] ] ) ) {
-						$metadata[ self::$metadata_keys['payment_page'] ] = $current_page_url;
+					if ( isset( $contact['metadata'][ self::get_metadata_key( 'last_payment_amount' ) ] ) ) {
+						$metadata[ self::get_metadata_key( 'payment_page' ) ] = $current_page_url;
 						foreach ( [ 'source', 'medium', 'campaign' ] as $value ) {
 							$param = 'utm_' . $value;
 							if ( isset( $current_page_url_params[ $param ] ) ) {
-								$metadata[ self::$metadata_keys['payment_page_utm'] . $value ] = sanitize_text_field( $current_page_url_params[ $param ] );
+								$metadata[ self::get_metadata_key( 'payment_page_utm' ) . $value ] = sanitize_text_field( $current_page_url_params[ $param ] );
 							}
 						}
 					}
@@ -178,7 +246,7 @@ class Newspack_Newsletters {
 					if ( isset( $contact['metadata']['registration_method'] ) ) {
 						$registration_method = $contact['metadata']['registration_method'];
 						if ( in_array( $registration_method, Reader_Activation::SSO_REGISTRATION_METHODS ) ) {
-							$contact['metadata'][ self::$metadata_keys['connected_account'] ] = $registration_method;
+							$contact['metadata'][ self::get_metadata_key( 'connected_account' ) ] = $registration_method;
 						}
 					}
 				}
@@ -191,7 +259,7 @@ class Newspack_Newsletters {
 
 				// Ensure only the prefixed metadata is passed along to the ESP.
 				foreach ( $contact['metadata'] as $key => $value ) {
-					if ( strpos( $key, self::METADATA_PREFIX ) !== 0 ) {
+					if ( strpos( $key, self::get_metadata_prefix() ) !== 0 ) {
 						unset( $contact['metadata'][ $key ] );
 					}
 				}

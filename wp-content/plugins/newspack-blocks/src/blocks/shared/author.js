@@ -32,13 +32,13 @@ export const AuthorDisplaySettings = ( { attributes, setAttributes } ) => {
 		<>
 			<p>{ __( 'Display the following fields:', 'newspack-blocks' ) }</p>
 			{ fields.map( field => {
-				const attrbuteName = `show${ field.name }`;
+				const attributeName = `show${ field.name }`;
 				return (
 					<ToggleControl
 						key={ field.name }
 						label={ field.label }
-						checked={ Boolean( attributes[ attrbuteName ] ) }
-						onChange={ () => setAttributes( { [ attrbuteName ]: ! attributes[ attrbuteName ] } ) }
+						checked={ Boolean( attributes[ attributeName ] ) }
+						onChange={ () => setAttributes( { [ attributeName ]: ! attributes[ attributeName ] } ) }
 					/>
 				);
 			} ) }

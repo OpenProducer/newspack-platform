@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles Salesforce functionality.
+ * Handles the Donate block rendering functionality.
  */
 abstract class Newspack_Blocks_Donate_Renderer_Base {
 	const FREQUENCY_PARAM   = 'donation_frequency';

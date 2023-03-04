@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.68.0-alpha.1
+Version: 1.69.0-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -6872,7 +6872,8 @@ svg {
 }
 
 figcaption,
-.wp-caption-text {
+.wp-caption-text,
+.swiper-pagination-simple {
   color: #444444;
   margin: 0 auto;
   padding: 0;
@@ -6886,7 +6887,8 @@ figcaption,
 
 figcaption,
 .wp-caption-text,
-.amp-image-lightbox-caption {
+.amp-image-lightbox-caption,
+.swiper-pagination-simple {
   font-size: 0.7em;
   font-family: "Old Standard TT", georgia, serif;
   line-height: 1.6;

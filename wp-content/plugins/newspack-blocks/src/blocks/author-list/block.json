@@ -28,7 +28,12 @@
 		},
 		"authorRoles": {
 			"type": "array",
-			"default": [ "Administrator", "Editor", "Author", "Contributor" ]
+			"default": [
+				"Administrator",
+				"Editor",
+				"Author",
+				"Contributor"
+			]
 		},
 		"authorType": {
 			"type": "string",

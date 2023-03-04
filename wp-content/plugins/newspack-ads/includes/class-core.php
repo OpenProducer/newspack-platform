@@ -86,6 +86,7 @@ final class Core {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/providers/broadstreet/class-broadstreet-provider.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-settings.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-custom-label.php';
+		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-fixed-height.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-providers.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/class-bidding.php';
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/bidders/class-medianet.php';

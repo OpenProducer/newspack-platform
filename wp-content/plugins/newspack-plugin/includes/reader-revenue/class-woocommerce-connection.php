@@ -50,6 +50,7 @@ class WooCommerce_Connection {
 		}
 		\add_filter( 'woocommerce_subscriptions_can_user_renew_early', [ __CLASS__, 'prevent_subscription_early_renewal' ], 11, 2 );
 		\add_filter( 'woocommerce_subscription_is_manual', [ __CLASS__, 'set_syncd_subscriptions_as_manual' ], 11, 2 );
+		\add_filter( 'wc_stripe_generate_payment_request', [ __CLASS__, 'stripe_gateway_payment_request_data' ], 10, 2 );
 
 		// WooCommerce Memberships.
 		\add_action( 'wc_memberships_user_membership_created', [ __CLASS__, 'wc_membership_created' ], 10, 2 );
@@ -108,6 +109,7 @@ class WooCommerce_Connection {
 		$item->set_product( \wc_get_product( $product_id ) );
 		$item->set_total( $amount );
 		$item->set_subtotal( $amount );
+		$item->save();
 		return $item;
 	}
 
@@ -163,24 +165,21 @@ class WooCommerce_Connection {
 	}
 
 	/**
-	 * Sync a customer to the ESP from an order.
+	 * Get the contact data from a WooCommerce order.
 	 *
-	 * @param WC_Order $order Order object.
+	 * @param \WC_Order|int $order WooCommerce order or order ID.
+	 * @param bool|string   $payment_page_url Payment page URL. If not provided, checkout URL will be used.
+	 *
+	 * @return array|false Contact data or false.
 	 */
-	public static function sync_reader_from_order( $order ) {
-		if ( ! self::can_sync_customers() ) {
-			return;
+	public static function get_contact_from_order( $order, $payment_page_url = false ) {
+		if ( is_integer( $order ) ) {
+			$order = new \WC_Order( $order );
 		}
 
-		if ( self::CREATED_VIA_NAME === $order->get_created_via() ) {
-			// Only sync orders not created via the Stripe integration.
-			return;
-		}
-
-		$metadata_keys = Newspack_Newsletters::$metadata_keys;
-		$user_id       = $order->get_customer_id();
+		$user_id = $order->get_customer_id();
 		if ( ! $user_id ) {
-			return;
+			return false;
 		}
 
 		$customer = new \WC_Customer( $user_id );
@@ -188,84 +187,112 @@ class WooCommerce_Connection {
 			'registration_method' => 'woocommerce-order',
 		];
 
-		$metadata[ $metadata_keys['account'] ]           = $order->get_customer_id();
-		$metadata[ $metadata_keys['registration_date'] ] = $customer->get_date_created()->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
-		$metadata[ $metadata_keys['payment_page'] ]      = \wc_get_checkout_url();
+		$metadata[ Newspack_Newsletters::get_metadata_key( 'account' ) ]           = $order->get_customer_id();
+		$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_date' ) ] = $customer->get_date_created()->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
+
+		if ( false === $payment_page_url ) {
+			$payment_page_url = \wc_get_checkout_url();
+		}
+		$metadata['current_page_url'] = $payment_page_url;
 
 		$order_subscriptions = wcs_get_subscriptions_for_order( $order->get_id() );
 
 		// One-time donation.
 		if ( empty( $order_subscriptions ) ) {
-			$metadata[ $metadata_keys['membership_status'] ] = 'Donor';
-			$metadata[ $metadata_keys['total_paid'] ]        = (float) $customer->get_total_spent();
-			$metadata[ $metadata_keys['total_paid'] ]       += (float) $order->get_total();
-			$metadata[ $metadata_keys['product_name'] ]      = '';
-			$order_items                                     = $order->get_items();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]        = (float) $customer->get_total_spent();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]       += (float) $order->get_total();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ]      = '';
+			$order_items = $order->get_items();
 			if ( $order_items ) {
-				$metadata[ $metadata_keys['product_name'] ] = reset( $order_items )->get_name();
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = reset( $order_items )->get_name();
 			}
-			$metadata[ $metadata_keys['last_payment_amount'] ] = $order->get_total();
-			$order_date_paid                                   = $order->get_date_paid();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_amount' ) ] = $order->get_total();
+			$order_date_paid = $order->get_date_paid();
 			if ( null !== $order_date_paid ) {
-				$metadata[ $metadata_keys['last_payment_date'] ] = $order_date_paid->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_date' ) ] = $order_date_paid->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
 			}
 
 			// Subscription donation.
 		} else {
 			$current_subscription = reset( $order_subscriptions );
 
-			$metadata[ $metadata_keys['membership_status'] ] = 'Donor';
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
 			if ( 'active' === $current_subscription->get_status() || 'pending' === $current_subscription->get_status() ) {
 				if ( 'month' === $current_subscription->get_billing_period() ) {
-					$metadata[ $metadata_keys['membership_status'] ] = 'Monthly Donor';
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Monthly Donor';
 				}
 
 				if ( 'year' === $current_subscription->get_billing_period() ) {
-					$metadata[ $metadata_keys['membership_status'] ] = 'Yearly Donor';
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Yearly Donor';
 				}
 			} else {
 				if ( 'month' === $current_subscription->get_billing_period() ) {
-					$metadata[ $metadata_keys['membership_status'] ] = 'Ex-Monthly Donor';
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-Monthly Donor';
 				}
 
 				if ( 'year' === $current_subscription->get_billing_period() ) {
-					$metadata[ $metadata_keys['membership_status'] ] = 'Ex-Yearly Donor';
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-Yearly Donor';
 				}
 			}
 
-			$metadata[ $metadata_keys['sub_start_date'] ]      = $current_subscription->get_date( 'start' );
-			$metadata[ $metadata_keys['sub_end_date'] ]        = $current_subscription->get_date( 'end' ) ? $current_subscription->get_date( 'end' ) : '';
-			$metadata[ $metadata_keys['billing_cycle'] ]       = $current_subscription->get_billing_period();
-			$metadata[ $metadata_keys['recurring_payment'] ]   = $current_subscription->get_total();
-			$metadata[ $metadata_keys['last_payment_date'] ]   = $current_subscription->get_date( 'last_order_date_paid' ) ? $current_subscription->get_date( 'last_order_date_paid' ) : gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT );
-			$metadata[ $metadata_keys['last_payment_amount'] ] = $current_subscription->get_total();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'sub_start_date' ) ]      = $current_subscription->get_date( 'start' );
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'sub_end_date' ) ]        = $current_subscription->get_date( 'end' ) ? $current_subscription->get_date( 'end' ) : '';
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'billing_cycle' ) ]       = $current_subscription->get_billing_period();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'recurring_payment' ) ]   = $current_subscription->get_total();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_date' ) ]   = $current_subscription->get_date( 'last_order_date_paid' ) ? $current_subscription->get_date( 'last_order_date_paid' ) : gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT );
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_amount' ) ] = $current_subscription->get_total();
 
 			// When a WC Subscription is terminated, the next payment date is set to 0. We don't want to sync that – the next payment date should remain as it was
 			// in the event of cancellation.
 			$next_payment_date = $current_subscription->get_date( 'next_payment' );
 			if ( $next_payment_date ) {
-				$metadata[ $metadata_keys['next_payment_date'] ] = $next_payment_date;
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'next_payment_date' ) ] = $next_payment_date;
 			}
 
-			$metadata[ $metadata_keys['total_paid'] ]  = (float) $customer->get_total_spent();
-			$metadata[ $metadata_keys['total_paid'] ] += (float) $current_subscription->get_total();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]  = (float) $customer->get_total_spent();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] += (float) $current_subscription->get_total();
 
-			$metadata[ $metadata_keys['product_name'] ] = '';
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = '';
 			if ( $current_subscription ) {
 				$subscription_order_items = $current_subscription->get_items();
 				if ( $subscription_order_items ) {
-					$metadata[ $metadata_keys['product_name'] ] = reset( $subscription_order_items )->get_name();
+					$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = reset( $subscription_order_items )->get_name();
 				}
 			}
 		}
 
 		$first_name = $order->get_billing_first_name();
 		$last_name  = $order->get_billing_last_name();
-		$contact    = [
+		return [
 			'email'    => $order->get_billing_email(),
 			'name'     => "$first_name $last_name",
 			'metadata' => $metadata,
 		];
+	}
+
+	/**
+	 * Sync a customer to the ESP from an order.
+	 *
+	 * @param WC_Order    $order Order object.
+	 * @param bool        $verify_created_via Whether to verify that the order was not created via the Stripe integration.
+	 * @param bool|string $payment_page_url Payment page URL. If not provided, checkout URL will be used.
+	 */
+	public static function sync_reader_from_order( $order, $verify_created_via = true, $payment_page_url = false ) {
+		if ( ! self::can_sync_customers() ) {
+			return;
+		}
+
+		if ( $verify_created_via && self::CREATED_VIA_NAME === $order->get_created_via() ) {
+			// Only sync orders not created via the Stripe integration.
+			return;
+		}
+
+		$contact = self::get_contact_from_order( $order, $payment_page_url );
+		if ( ! $contact ) {
+			return;
+		}
+
 		\Newspack_Newsletters_Subscription::add_contact( $contact );
 	}
 
@@ -382,6 +409,67 @@ class WooCommerce_Connection {
 	}
 
 	/**
+	 * Update an order.
+	 *
+	 * @param int   $order_id Order ID.
+	 * @param array $update Update data.
+	 */
+	public static function update_order( $order_id, $update ) {
+		$order = \wc_get_order( $order_id );
+		if ( false === $order ) {
+			Logger::error( 'Could not find WC order with id: ' . $order_id );
+		} else {
+			if ( isset( $update['status'] ) ) {
+				$order->set_status( $update['status'] );
+			}
+			self::add_wc_stripe_gateway_metadata( $order, $update );
+			$order->save();
+			Logger::log( 'Updated WC order with id: ' . $order->get_id() );
+		}
+	}
+
+	/**
+	 * Update WC Stripe Gateway related metadata to an order or subscription.
+	 * The order has to be saved afterwards.
+	 *
+	 * @param WC_Order $order Order object. Can be a subscription or an order.
+	 * @param array    $metadata Metadata.
+	 */
+	private static function add_wc_stripe_gateway_metadata( $order, $metadata ) {
+		$order->set_payment_method( 'stripe' );
+
+		if ( isset( $metadata['stripe_id'] ) ) {
+			$order->set_transaction_id( $metadata['stripe_id'] );
+		}
+		if ( isset( $metadata['stripe_fee'] ) ) {
+			$order->add_meta_data( '_stripe_fee', $metadata['stripe_fee'] );
+		}
+		if ( isset( $metadata['stripe_net'] ) ) {
+			$order->add_meta_data( '_stripe_net', $metadata['stripe_net'] );
+		}
+		if ( isset( $metadata['payment_method_title'] ) ) {
+			$order->set_payment_method_title( $metadata['payment_method_title'] );
+		} else {
+			$order->set_payment_method_title( __( 'Stripe via Newspack', 'newspack' ) );
+		}
+		if ( isset( $metadata['stripe_customer_id'] ) ) {
+			$order->add_meta_data( '_stripe_customer_id', $metadata['stripe_customer_id'] );
+		}
+		if ( isset( $metadata['currency'] ) ) {
+			$order->add_meta_data( '_stripe_currency', $metadata['currency'] );
+		}
+		if ( isset( $metadata['stripe_source_id'] ) ) {
+			$order->add_meta_data( '_stripe_source_id', $metadata['stripe_source_id'] );
+		}
+		if ( isset( $metadata['stripe_intent_id'] ) ) {
+			$order->add_meta_data( '_stripe_intent_id', $metadata['stripe_intent_id'] );
+		}
+		if ( 'completed' === $order->get_status() ) {
+			$order->add_meta_data( '_stripe_charge_captured', 'yes' );
+		}
+	}
+
+	/**
 	 * Create a WooCommerce order.
 	 *
 	 * @param array         $order_data Order data.
@@ -403,17 +491,15 @@ class WooCommerce_Connection {
 
 		$order->add_item( $item );
 		$order->calculate_totals();
-		$order->set_status( 'completed' );
+
+		$status = 'completed';
+		if ( isset( $order_data['status'] ) && is_string( $order_data['status'] ) ) {
+			$status = $order_data['status'];
+		}
+		$order->set_status( $status );
 
 		// Metadata for woocommerce-gateway-stripe plugin.
-		$order->set_payment_method( 'stripe' );
-		$order->set_payment_method_title( __( 'Stripe via Newspack', 'newspack' ) );
-		$order->set_transaction_id( $order_data['stripe_id'] );
-		$order->add_meta_data( '_stripe_customer_id', $order_data['stripe_customer_id'] );
-		$order->add_meta_data( '_stripe_charge_captured', 'yes' );
-		$order->add_meta_data( '_stripe_fee', $order_data['stripe_fee'] );
-		$order->add_meta_data( '_stripe_net', $order_data['stripe_net'] );
-		$order->add_meta_data( '_stripe_currency', $order_data['currency'] );
+		self::add_wc_stripe_gateway_metadata( $order, $order_data );
 
 		if ( ! empty( $order_data['client_id'] ) ) {
 			/**
@@ -449,18 +535,22 @@ class WooCommerce_Connection {
 	 * Add a donation transaction to WooCommerce.
 	 *
 	 * @param object $order_data Order data.
+	 * @return array Data of created order and subscription, if applicable.
 	 */
 	public static function create_transaction( $order_data ) {
-		$transaction_id = $order_data['stripe_id'];
-
-		$found_order = self::find_order_by_transaction_id( $transaction_id );
-		if ( ! empty( $found_order ) ) {
-			Logger::log( 'NOT creating an order, it was already synced.' );
-			return;
+		if ( isset( $order_data['stripe_id'] ) ) {
+			$found_order = self::find_order_by_transaction_id( $order_data['stripe_id'] );
+			if ( ! empty( $found_order ) ) {
+				Logger::log( 'NOT creating an order, it was already synced.' );
+				return;
+			}
 		}
 
 		$frequency              = $order_data['frequency'];
-		$stripe_subscription_id = $order_data['stripe_subscription_id'];
+		$stripe_subscription_id = false;
+		if ( isset( $order_data['stripe_subscription_id'] ) ) {
+			$stripe_subscription_id = $order_data['stripe_subscription_id'];
+		}
 
 		// Match the Stripe product to WC product.
 		$item = self::get_donation_order_item( $frequency, $order_data['amount'] );
@@ -469,6 +559,9 @@ class WooCommerce_Connection {
 		}
 
 		$subscription_status = 'none';
+		if ( isset( $order_data['subscription_status'] ) ) {
+			$subscription_status = $order_data['subscription_status'];
+		}
 
 		if (
 			Donations::is_recurring( $frequency )
@@ -483,6 +576,9 @@ class WooCommerce_Connection {
 				$subscription_status = 'renewed';
 			}
 		}
+
+		$order        = false;
+		$subscription = false;
 
 		/**
 		 * Disable the emails sent to admin & customer after a subscription renewal order is completed.
@@ -519,6 +615,25 @@ class WooCommerce_Connection {
 			 * Handle WooCommerce Subscriptions - new subscription.
 			 */
 			if ( 'created' === $subscription_status ) {
+				// A subscription needs a valid user. If no user ID is provided, attribute the
+				// subscription to the user with the supplied email address.
+				if ( empty( $order_data['user_id'] ) ) {
+					$user = \get_user_by( 'email', $order_data['email'] );
+					if ( ! $user || \is_wp_error( $user ) ) {
+						Logger::log( 'Could not find user by email, creating a user.' );
+						$display_name = explode( '@', $order_data['email'], 2 )[0];
+						$user_id      = \wc_create_new_customer(
+							$order_data['email'],
+							\sanitize_user( $order_data['email'], true ),
+							\wp_generate_password(),
+							[ 'display_name' => $display_name ]
+						);
+						$order->set_customer_id( $user_id );
+					} else {
+						$order->set_customer_id( $user->ID );
+					}
+					$order->save();
+				}
 				$subscription = \wcs_create_subscription(
 					[
 						'start_date'       => self::convert_timestamp_to_date( $order_data['date'] ),
@@ -531,16 +646,41 @@ class WooCommerce_Connection {
 				if ( is_wp_error( $subscription ) ) {
 					Logger::error( 'Error creating WC subscription: ' . $subscription->get_error_message() );
 				} else {
-					self::add_universal_order_data( $subscription, $order_data );
-					/* translators: %s - donation frequency */
-					$subscription->add_order_note( sprintf( __( 'Newspack subscription with frequency: %s. The recurring payment and the subscription will be handled in Stripe, so you\'ll see "Manual renewal" as the payment method in WooCommerce.', 'newspack' ), $frequency ) );
-					$subscription->update_status( 'active' ); // Settings status via method (not in wcs_create_subscription), to make WCS recalculate dates.
-					$subscription->add_item( $item );
-					$subscription->calculate_totals();
-					$subscription->save();
 					$subscription_id = $subscription->get_id();
 
-					update_post_meta( $subscription_id, self::SUBSCRIPTION_STRIPE_ID_META_KEY, $stripe_subscription_id );
+					$wc_subscription_payload = [
+						'stripe_customer_id' => $order_data['stripe_customer_id'],
+					];
+					if ( isset( $order_data['stripe_source_id'] ) ) {
+						$wc_subscription_payload['stripe_source_id'] = $order_data['stripe_source_id'];
+					}
+					self::add_wc_stripe_gateway_metadata( $subscription, $wc_subscription_payload );
+					self::add_universal_order_data( $subscription, $order_data );
+					if ( false === $stripe_subscription_id ) {
+						$subscription->add_order_note( __( 'This subscription was created via Newspack.', 'newspack' ) );
+					} else {
+						/* translators: %s - donation frequency */
+						$subscription->add_order_note( sprintf( __( 'Newspack subscription with frequency: %s. The recurring payment and the subscription will be handled in Stripe, so you\'ll see "Manual renewal" as the payment method in WooCommerce.', 'newspack' ), $frequency ) );
+						$subscription->update_status( 'active' ); // Settings status via method (not in wcs_create_subscription), to make WCS recalculate dates.
+					}
+					// Mint a new item – subscription is a new WC order.
+					$item = self::get_donation_order_item( $frequency, $order_data['amount'] );
+					$subscription->add_item( $item );
+					$subscription->calculate_totals();
+
+					if ( false === $stripe_subscription_id ) {
+						$subscription->set_payment_method( 'stripe' );
+						if ( isset( $order_data['payment_method_title'] ) ) {
+							$subscription->set_payment_method_title( $order_data['payment_method_title'] );
+						} else {
+							$subscription->set_payment_method_title( __( 'Stripe', 'newspack' ) );
+						}
+					} else {
+						update_post_meta( $subscription_id, self::SUBSCRIPTION_STRIPE_ID_META_KEY, $stripe_subscription_id );
+					}
+
+					$subscription->save();
+
 					Logger::log( 'Created WC subscription with id: ' . $subscription_id );
 
 					if ( class_exists( 'WC_Memberships_Integration_Subscriptions_User_Membership' ) && self::$created_membership_id ) {
@@ -564,7 +704,10 @@ class WooCommerce_Connection {
 			$wc_memberships_membership_plans->grant_access_to_membership_from_order( $order );
 		}
 
-		return $order->get_id();
+		return [
+			'order_id'        => $order ? $order->get_id() : false,
+			'subscription_id' => $subscription ? $subscription->get_id() : false,
+		];
 	}
 
 	/**
@@ -795,6 +938,69 @@ class WooCommerce_Connection {
 			}
 		}
 		return $renewal_errors;
+	}
+
+	/**
+	 * Create a payment description for Stripe Gateway.
+	 *
+	 * @param array  $order_data An array of order data, containing the order ID and subscription ID, if applicable.
+	 * @param string $frequency The frequency of the donation.
+	 */
+	public static function create_payment_description( $order_data, $frequency ) {
+
+		if ( $order_data['subscription_id'] ) {
+			return sprintf(
+				/* translators: %s: Product name */
+				__( 'Newspack %1$s (Order #%2$d, Subscription #%3$d)', 'newspack' ),
+				Donations::get_donation_name_by_frequency( $frequency ),
+				$order_data['order_id'],
+				$order_data['subscription_id']
+			);
+		} else {
+			return sprintf(
+				/* translators: %s: Product name */
+				__( 'Newspack %1$s (Order #%2$d)', 'newspack' ),
+				Donations::get_donation_name_by_frequency( $frequency ),
+				$order_data['order_id']
+			);
+		}
+	}
+
+	/**
+	 * Filter post request made by the Stripe Gateway for Stripe payments.
+	 *
+	 * @param array     $post_data An array of metadata.
+	 * @param \WC_Order $order The order object.
+	 */
+	public static function stripe_gateway_payment_request_data( $post_data, $order ) {
+		if ( ! function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
+			return $post_data;
+		}
+		$related_subscriptions = \wcs_get_subscriptions_for_renewal_order( $order );
+		if ( ! empty( $related_subscriptions ) ) {
+			// In theory, there should be just one subscription per renewal.
+			$subscription    = reset( $related_subscriptions );
+			$subscription_id = $subscription->get_id();
+			// Add subscription ID to any renewal.
+			$post_data['metadata']['subscription_id'] = $subscription_id;
+			if ( \wcs_order_contains_renewal( $order ) ) {
+				$post_data['metadata']['subscription_status'] = 'renewed';
+			} else {
+				$post_data['metadata']['subscription_status'] = 'created';
+			}
+			// Add the description only for Newspack-created subscriptions.
+			if ( self::CREATED_VIA_NAME === $subscription->get_created_via() ) {
+				$post_data['metadata']['origin'] = 'newspack';
+				$post_data['description']        = self::create_payment_description(
+					[
+						'order_id'        => $order->get_id(),
+						'subscription_id' => $subscription_id,
+					],
+					$subscription->get_billing_period()
+				);
+			}
+		}
+		return $post_data;
 	}
 }
 

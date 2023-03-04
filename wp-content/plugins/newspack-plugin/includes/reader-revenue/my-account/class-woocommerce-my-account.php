@@ -78,8 +78,12 @@ class WooCommerce_My_Account {
 	 * @param array $items Items.
 	 */
 	public static function my_account_menu_items( $items ) {
-		if ( ! Donations::is_platform_stripe() ) {
-			return $items;
+		// If the user has a Stripe customer ID, they're a Stripe customer (regardless of the donations platform).
+		// Add a nav item for Stripe's billing portal.
+		$stripe_customer_id = self::get_current_user_stripe_id();
+		if ( false !== $stripe_customer_id ) {
+			$custom_endpoints = [ self::BILLING_ENDPOINT => __( 'Billing', 'newspack' ) ];
+			$items            = array_slice( $items, 0, 1, true ) + $custom_endpoints + array_slice( $items, 1, null, true );
 		}
 
 		$default_disabled_items = [];
@@ -144,13 +148,7 @@ class WooCommerce_My_Account {
 			}
 		}
 
-		// Add a nav item for Stripe's billing portal.
-		$stripe_customer_id = self::get_current_user_stripe_id();
-		if ( false === $stripe_customer_id ) {
-			return $items;
-		}
-		$custom_endpoints = [ self::BILLING_ENDPOINT => __( 'Billing', 'newspack' ) ];
-		return array_slice( $items, 0, 1, true ) + $custom_endpoints + array_slice( $items, 1, null, true );
+		return $items;
 	}
 
 	/**
@@ -417,9 +415,6 @@ class WooCommerce_My_Account {
 	 * Add the necessary endpoints to rewrite rules.
 	 */
 	public static function add_rewrite_endpoints() {
-		if ( ! Donations::is_platform_stripe() ) {
-			return;
-		}
 		\add_rewrite_endpoint( self::BILLING_ENDPOINT, EP_PAGES );
 		if ( ! \get_option( '_newspack_has_set_up_custom_billing_endpoint' ) ) {
 			\flush_rewrite_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules

@@ -194,7 +194,12 @@ class Engagement_Wizard extends Wizard {
 	 * @return WP_REST_Response
 	 */
 	public function api_get_reader_activation_settings() {
-		return rest_ensure_response( Reader_Activation::get_settings() );
+		return rest_ensure_response(
+			[
+				'config'        => Reader_Activation::get_settings(),
+				'pluginsStatus' => Reader_Activation::is_woocommerce_active(),
+			]
+		);
 	}
 
 	/**

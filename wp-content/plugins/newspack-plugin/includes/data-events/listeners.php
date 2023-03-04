@@ -55,6 +55,7 @@ Data_Events::register_listener(
 	function( $user ) {
 		return [
 			'user_id' => $user->ID,
+			'email'   => $user->user_email,
 		];
 	}
 );
@@ -72,7 +73,10 @@ Data_Events::register_listener(
 		if ( true !== $result ) {
 			return;
 		}
+		$user = get_user_by( 'email', $contact['email'] );
 		return [
+			'user_id'  => $user ? $user->ID : null,
+			'email'    => $contact['email'],
 			'provider' => $provider,
 			'contact'  => $contact,
 			'lists'    => $lists,
@@ -93,9 +97,11 @@ Data_Events::register_listener(
 		if ( true !== $result ) {
 			return;
 		}
+		$user = get_user_by( 'email', $email );
 		return [
-			'provider'      => $provider,
+			'user_id'       => $user ? $user->ID : null,
 			'email'         => $email,
+			'provider'      => $provider,
 			'lists_added'   => $lists_added,
 			'lists_removed' => $lists_removed,
 		];
@@ -187,9 +193,9 @@ Data_Events::register_listener(
 			return;
 		}
 		return [
-			'subscription_id' => $subscription->get_id(),
 			'user_id'         => $subscription->get_customer_id(),
 			'email'           => $subscription->get_billing_email(),
+			'subscription_id' => $subscription->get_id(),
 			'amount'          => (float) $subscription->get_total(),
 			'currency'        => $subscription->get_currency(),
 			'recurrence'      => get_post_meta( $product_id, '_subscription_period', true ),
@@ -210,9 +216,9 @@ Data_Events::register_listener(
 			return;
 		}
 		return [
-			'subscription_id' => $subscription->get_id(),
 			'user_id'         => $subscription->get_customer_id(),
 			'email'           => $subscription->get_billing_email(),
+			'subscription_id' => $subscription->get_id(),
 			'status_before'   => $status_from,
 			'status_after'    => $status_to,
 			'amount'          => (float) $subscription->get_total(),

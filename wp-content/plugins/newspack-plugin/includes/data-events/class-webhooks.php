@@ -202,7 +202,7 @@ final class Webhooks {
 	 * @param array  $actions Array of action names.
 	 * @param bool   $global  Whether the endpoint should be triggered for all actions.
 	 *
-	 * @return int|WP_Error Endpoint ID or error.
+	 * @return array|WP_Error Endpoint or error.
 	 */
 	public static function create_endpoint( $url, $actions = [], $global = false ) {
 		$endpoint = \wp_insert_term(
@@ -217,7 +217,7 @@ final class Webhooks {
 		}
 		\update_term_meta( $endpoint['term_id'], 'actions', $actions );
 		\update_term_meta( $endpoint['term_id'], 'global', $global );
-		return $endpoint['term_id'];
+		return self::get_endpoint( $endpoint['term_id'] );
 	}
 
 	/**
@@ -229,7 +229,7 @@ final class Webhooks {
 	 * @param bool   $global   Whether the endpoint should be triggered for all actions.
 	 * @param bool   $disabled Whether the endpoint is disabled.
 	 *
-	 * @return array|WP_Error
+	 * @return array|WP_Error Endpoint or error.
 	 */
 	public static function update_endpoint( $id, $url, $actions = [], $global = false, $disabled = false ) {
 		$endpoint = \get_term( $id, self::ENDPOINT_TAXONOMY, ARRAY_A );
@@ -247,7 +247,7 @@ final class Webhooks {
 		\update_term_meta( $endpoint['term_id'], 'actions', $actions );
 		\update_term_meta( $endpoint['term_id'], 'global', $global );
 		\update_term_meta( $endpoint['term_id'], 'disabled', $disabled );
-		return $endpoint;
+		return self::get_endpoint( $endpoint['term_id'] );
 	}
 
 	/**
@@ -263,6 +263,21 @@ final class Webhooks {
 			return new WP_Error( 'newspack_webhooks_endpoint_not_found', __( 'Webhook endpoint not found.', 'newspack' ) );
 		}
 		\wp_delete_term( $id, self::ENDPOINT_TAXONOMY );
+	}
+
+	/**
+	 * Update a webhook endpoint label.
+	 *
+	 * @param int    $id    Endpoint ID.
+	 * @param string $label Endpoint label.
+	 *
+	 * @return void|WP_Error Error if endpoint not found.
+	 */
+	public static function update_endpoint_label( $id, $label ) {
+		if ( ! get_term( $id, self::ENDPOINT_TAXONOMY ) ) {
+			return new \WP_Error( 'newspack_webhooks_endpoint_not_found', __( 'Webhook endpoint not found.', 'newspack' ) );
+		}
+		\update_term_meta( $id, 'label', $label );
 	}
 
 	/**
@@ -302,6 +317,7 @@ final class Webhooks {
 			'url'            => $endpoint->name,
 			'actions'        => (array) \get_term_meta( $endpoint->term_id, 'actions', true ),
 			'global'         => (bool) \get_term_meta( $endpoint->term_id, 'global', true ),
+			'label'          => \get_term_meta( $endpoint->term_id, 'label', true ),
 			'disabled'       => $disabled,
 			'disabled_error' => $disabled ? \get_term_meta( $endpoint->term_id, 'disabled_error', true ) : null,
 		];
@@ -564,10 +580,12 @@ final class Webhooks {
 		if ( ! $endpoint ) {
 			self::add_request_error( $request_id, __( 'Endpoint not found.', 'newspack' ) );
 			self::kill_request( $request_id );
+			return;
 		}
 		if ( $endpoint['disabled'] ) {
 			self::add_request_error( $request_id, __( 'Endpoint is disabled.', 'newspack' ) );
 			self::kill_request( $request_id );
+			return;
 		}
 
 		$errors = self::get_request_errors( $request_id );

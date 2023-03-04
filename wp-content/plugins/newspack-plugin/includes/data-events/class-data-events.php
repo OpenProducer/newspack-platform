@@ -347,11 +347,11 @@ final class Data_Events {
 			return \wp_remote_post(
 				$url,
 				[
-					'timeout'  => 0.01,
-					'blocking' => false,
-					'body'     => $body,
-				'cookies'   => $_COOKIE, // phpcs:ignore
-				'sslverify'    => apply_filters( 'https_local_ssl_verify', false ),
+					'timeout'   => 0.01,
+					'blocking'  => false,
+					'body'      => $body,
+					'cookies'   => $_COOKIE, // phpcs:ignore
+					'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
 				]
 			);
 		}

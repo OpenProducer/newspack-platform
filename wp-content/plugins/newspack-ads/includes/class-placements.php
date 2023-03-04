@@ -79,9 +79,6 @@ final class Placements {
 					'bidders_ids'  => [
 						'sanitize_callback' => [ __CLASS__, 'sanitize_bidders_ids' ],
 					],
-					'fixed_height' => [
-						'sanitize_callback' => 'rest_sanitize_boolean',
-					],
 					'hooks'        => [
 						'sanitize_callback' => [ __CLASS__, 'sanitize_hooks_data' ],
 					],
@@ -133,10 +130,6 @@ final class Placements {
 
 		if ( isset( $data['ad_unit'] ) ) {
 			$sanitized_data['ad_unit'] = sanitize_text_field( $data['ad_unit'] );
-		}
-
-		if ( isset( $data['fixed_height'] ) ) {
-			$sanitized_data['fixed_height'] = rest_sanitize_boolean( $data['fixed_height'] );
 		}
 
 		if ( isset( $data['bidders_ids'] ) ) {
@@ -235,7 +228,6 @@ final class Placements {
 			'ad_unit'      => $request['ad_unit'],
 			'bidders_ids'  => $request['bidders_ids'],
 			'hooks'        => $request['hooks'],
-			'fixed_height' => $request['fixed_height'],
 			'stick_to_top' => $request['stick_to_top'],
 		];
 		$result = self::update_placement( $request['placement'], $data );
@@ -727,8 +719,6 @@ final class Placements {
 			$placement_data = $placement['data'];
 		}
 
-		$placement_data['fixed_height'] = isset( $placement_data['fixed_height'] ) ? (bool) $placement_data['fixed_height'] : false;
-
 		if ( ! isset( $placement_data['ad_unit'] ) || empty( $placement_data['ad_unit'] ) ) {
 			return;
 		}
@@ -765,7 +755,7 @@ final class Placements {
 				$placement_key . '-' . $hook_key    => ! empty( $hook_key ),
 				'hook-' . $hook_key                 => ! empty( $hook_key ),
 				'stick-to-top'                      => $stick_to_top,
-				'fixed-height'                      => $placement_data['fixed_height'],
+				'fixed-height'                      => Settings::get_setting( 'fixed_height', 'active' ),
 			],
 			$placement_key,
 			$hook_key,

@@ -413,6 +413,24 @@ class Donations {
 	}
 
 	/**
+	 * Map donation frequency code to a human readable string.
+	 *
+	 * @param string $frequency Frequency code.
+	 */
+	public static function get_donation_name_by_frequency( $frequency ) {
+		switch ( $frequency ) {
+			case 'once':
+				return __( 'One-Time Donation', 'newspack' );
+			case 'month':
+				return __( 'Monthly Donation', 'newspack' );
+			case 'year':
+				return __( 'Yearly Donation', 'newspack' );
+			default:
+				return __( 'Donation', 'newspack' );
+		}
+	}
+
+	/**
 	 * Create missing donations products.
 	 *
 	 * @param array $args Info that will be used to create the products.

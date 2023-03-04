@@ -45,7 +45,9 @@ body.newspack-single-wide-template .wp-block[data-type="core/group"][data-align=
   max-width: 1430px;
 }
 body.newspack-static-front-page figcaption,
-body.newspack-single-wide-template figcaption {
+body.newspack-static-front-page .swiper-pagination-simple,
+body.newspack-single-wide-template figcaption,
+body.newspack-single-wide-template .swiper-pagination-simple {
   max-width: 1230px;
 }
 
