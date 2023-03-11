@@ -208,14 +208,12 @@ final class Blocks {
 		}
 
 		// Styles for Curated List block.
-		if ( is_singular() && has_block( 'newspack-listings/curated-list', $post_id ) ) {
-			wp_enqueue_style(
-				'newspack-listings-curated-list',
-				NEWSPACK_LISTINGS_URL . 'dist/curated-list.css',
-				[],
-				NEWSPACK_LISTINGS_VERSION
-			);
-		}
+		wp_enqueue_style(
+			'newspack-listings-curated-list',
+			NEWSPACK_LISTINGS_URL . 'dist/curated-list.css',
+			[],
+			NEWSPACK_LISTINGS_VERSION
+		);
 
 		// Styles for any singular listing type.
 		if ( is_singular( array_values( Core::NEWSPACK_LISTINGS_POST_TYPES ) ) ) {

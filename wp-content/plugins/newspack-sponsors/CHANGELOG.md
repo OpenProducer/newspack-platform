@@ -1,3 +1,59 @@
+## [1.10.5](https://github.com/Automattic/newspack-sponsors/compare/v1.10.4...v1.10.5) (2023-02-16)
+
+
+### Bug Fixes
+
+* ensure term has taxonomy ([deb84af](https://github.com/Automattic/newspack-sponsors/commit/deb84affaa7067d51bf5afad91e3be5275c50780))
+
+## [1.10.5-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.10.4...v1.10.5-alpha.1) (2023-01-26)
+
+
+### Bug Fixes
+
+* ensure term has taxonomy ([deb84af](https://github.com/Automattic/newspack-sponsors/commit/deb84affaa7067d51bf5afad91e3be5275c50780))
+
+## [1.10.4](https://github.com/Automattic/newspack-sponsors/compare/v1.10.3...v1.10.4) (2023-01-13)
+
+
+### Bug Fixes
+
+* update CI orb newspack-scripts ([bb984b3](https://github.com/Automattic/newspack-sponsors/commit/bb984b37938dfa275c023d31e0573caf1d4849b4))
+
+## [1.10.4-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.10.3...v1.10.4-alpha.1) (2023-01-13)
+
+
+### Bug Fixes
+
+* update CI orb newspack-scripts ([bb984b3](https://github.com/Automattic/newspack-sponsors/commit/bb984b37938dfa275c023d31e0573caf1d4849b4))
+
+## [1.10.3](https://github.com/Automattic/newspack-sponsors/compare/v1.10.2...v1.10.3) (2023-01-10)
+
+
+### Bug Fixes
+
+* add failsafe to ensure that Sponsors queries contain only sponsors CPT ([#221](https://github.com/Automattic/newspack-sponsors/issues/221)) ([8537ddb](https://github.com/Automattic/newspack-sponsors/commit/8537ddbcc4c3156ae2ad27efe100a796de02ff6d))
+
+## [1.10.2](https://github.com/Automattic/newspack-sponsors/compare/v1.10.1...v1.10.2) (2022-10-28)
+
+
+### Bug Fixes
+
+* memoization for get_sponsors_for_post ([13b127c](https://github.com/Automattic/newspack-sponsors/commit/13b127ce66a9a7b4cfa5dfa4c6e061e6c356a54c))
+
+## [1.10.1](https://github.com/Automattic/newspack-sponsors/compare/v1.10.0...v1.10.1) (2022-10-19)
+
+
+### Bug Fixes
+
+* update sponsorship byline dropdown description ([#207](https://github.com/Automattic/newspack-sponsors/issues/207)) ([a64c800](https://github.com/Automattic/newspack-sponsors/commit/a64c80007caf8509d9d93dbde923dba5bd53e479))
+
+## [1.10.1-alpha.1](https://github.com/Automattic/newspack-sponsors/compare/v1.10.0...v1.10.1-alpha.1) (2022-10-06)
+
+
+### Bug Fixes
+
+* update sponsorship byline dropdown description ([#207](https://github.com/Automattic/newspack-sponsors/issues/207)) ([a64c800](https://github.com/Automattic/newspack-sponsors/commit/a64c80007caf8509d9d93dbde923dba5bd53e479))
+
 # [1.10.0](https://github.com/Automattic/newspack-sponsors/compare/v1.9.0...v1.10.0) (2022-07-26)
 
 

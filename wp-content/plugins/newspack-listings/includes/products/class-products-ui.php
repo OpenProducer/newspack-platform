@@ -528,12 +528,16 @@ final class Products_Ui extends Products {
 	 * Intercept GET params and create a Marketplace or Event listing for a premium subscription.
 	 */
 	public function create_or_delete_premium_listing() {
-		$nonce           = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_STRING );
-		$customer_id     = filter_input( INPUT_GET, 'customer_id', FILTER_SANITIZE_STRING );
-		$subscription_id = filter_input( INPUT_GET, 'subscription_id', FILTER_SANITIZE_STRING );
-		$post_type_slug  = filter_input( INPUT_GET, 'create', FILTER_SANITIZE_STRING );
+		$nonce           = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$customer_id     = filter_input( INPUT_GET, 'customer_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$subscription_id = filter_input( INPUT_GET, 'subscription_id', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$post_type_slug  = filter_input( INPUT_GET, 'create', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		$delete_post     = filter_input( INPUT_GET, 'delete', FILTER_SANITIZE_NUMBER_INT );
-		$redirect_uri    = urldecode( filter_input( INPUT_GET, 'redirect_uri', FILTER_SANITIZE_STRING ) );
+		$redirect_uri    = filter_input( INPUT_GET, 'redirect_uri', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+		if ( $redirect_uri ) {
+			$redirect_uri = urldecode( $redirect_uri );
+		}
 
 		// Only if we have all of the required query args.
 		if ( ! $customer_id || ! $subscription_id || ( ! $delete_post && 'event' !== $post_type_slug && 'marketplace' !== $post_type_slug ) ) {

@@ -63,7 +63,7 @@ final class Products_Purchase extends Products {
 	 * Handle submission of the purchase form block.
 	 */
 	public function handle_purchase_form() {
-		$purchase_type = filter_input( INPUT_GET, 'listing-purchase-type', FILTER_SANITIZE_STRING );
+		$purchase_type = filter_input( INPUT_GET, 'listing-purchase-type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 		// Only if coming from a non-checkout page.
 		if ( is_checkout() ) {
@@ -79,11 +79,11 @@ final class Products_Purchase extends Products {
 		$is_subscription = 'subscription' === $purchase_type;
 
 		// Get form submission data.
-		$title_single       = filter_input( INPUT_GET, 'listing-title-single', FILTER_SANITIZE_STRING );
-		$single_type        = filter_input( INPUT_GET, 'listing-single-type', FILTER_SANITIZE_STRING );
-		$featured_upgrade   = filter_input( INPUT_GET, 'listing-featured-upgrade', FILTER_SANITIZE_STRING );
-		$title_subscription = filter_input( INPUT_GET, 'listing-title-subscription', FILTER_SANITIZE_STRING );
-		$premium_upgrade    = filter_input( INPUT_GET, 'listing-premium-upgrade', FILTER_SANITIZE_STRING );
+		$title_single       = filter_input( INPUT_GET, 'listing-title-single', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$single_type        = filter_input( INPUT_GET, 'listing-single-type', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$featured_upgrade   = filter_input( INPUT_GET, 'listing-featured-upgrade', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$title_subscription = filter_input( INPUT_GET, 'listing-title-subscription', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$premium_upgrade    = filter_input( INPUT_GET, 'listing-premium-upgrade', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		$listing_to_renew   = filter_input( INPUT_GET, 'listing-renew', FILTER_SANITIZE_NUMBER_INT );
 		$listing_title      = __( 'Untitled listing', 'newspack-listings' );
 
@@ -204,7 +204,7 @@ final class Products_Purchase extends Products {
 	 * Show listing details in checkout summary.
 	 */
 	public function listing_details_summary() {
-		$params        = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+		$params        = filter_input_array( INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		$listing_title = isset( $params['listing-title'] ) ? $params['listing-title'] : null;
 		$is_renewal    = isset( $params['listing_renewed'] ) ? $params['listing_renewed'] : false;
 		$listing_types = self::get_listing_types();
@@ -265,7 +265,7 @@ final class Products_Purchase extends Products {
 	 * @param Array $form_fields WC form fields.
 	 */
 	public function listing_details_billing_fields( $form_fields ) {
-		$params = filter_input_array( INPUT_GET, FILTER_SANITIZE_STRING );
+		$params = filter_input_array( INPUT_GET, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		$fields = array_keys( self::ORDER_META_KEYS );
 
 		if ( is_array( $params ) ) {
@@ -291,7 +291,7 @@ final class Products_Purchase extends Products {
 	 * @param String $order_id WC order id.
 	 */
 	public function listing_checkout_update_order_meta( $order_id ) {
-		$params = filter_input_array( INPUT_POST, FILTER_SANITIZE_STRING );
+		$params = filter_input_array( INPUT_POST, FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 
 		if ( is_array( $params ) ) {
 			foreach ( $params as $param => $value ) {

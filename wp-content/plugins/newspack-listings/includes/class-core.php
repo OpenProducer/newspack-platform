@@ -931,18 +931,13 @@ final class Core {
 		}
 
 		$expiration_date = get_post_meta( $post_id, 'newspack_listings_expiration_date', true );
-		if ( ! $expiration_date || ! Utils\is_valid_date_string( $expiration_date ) ) {
+		if ( ! $expiration_date ) {
 			return false;
 		}
 
-		$timezone = get_option( 'timezone_string', 'UTC' );
+		$date_time = Utils\convert_string_to_date_time( $expiration_date );
 
-		// Guard against 'Unknown or bad timezone' PHP error.
-		if ( empty( trim( $timezone ) ) ) {
-			$timezone = 'UTC';
-		}
-
-		return new \DateTime( $expiration_date, new \DateTimeZone( $timezone ) );
+		return $date_time;
 	}
 
 	/**
@@ -973,6 +968,7 @@ final class Core {
 	 * @param int $post_id Post ID to check.
 	 */
 	public static function expire_single_listing( $post_id ) {
+
 		if ( null === $post_id ) {
 			return false;
 		}

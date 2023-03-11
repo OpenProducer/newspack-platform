@@ -447,15 +447,30 @@ function all_posts_are_type( $post_type = 'post' ) {
 }
 
 /**
- * Checks a string to see if it's in valid YYYY-MM-DDT00:00:00 format.
- * This is the format we expect to see expiration dates saved as post meta.
+ * Converts a date string into a DateTime object in the site's time zone.
  *
  * @param string $str String to validate.
  *
- * @return boolean True if a valid date in the expected format, false otherwise.
+ * @return DateTime|boolean The DateTime object, or false if $str can't be converted.
  */
-function is_valid_date_string( $str ) {
-	return false !== \DateTime::createFromFormat( 'Y-m-d\TH:i:s', $str );
+function convert_string_to_date_time( $str ) {
+	$unix = strtotime( $str );
+
+	if ( ! $unix ) {
+		return false;
+	}
+
+	$timezone = get_option( 'timezone_string', 'UTC' );
+
+	// Guard against 'Unknown or bad timezone' PHP error.
+	if ( empty( trim( $timezone ) ) ) {
+		$timezone = 'UTC';
+	}
+
+	$date = new \DateTime( null, new \DateTimeZone( $timezone ) );
+	$date->setTimestamp( $unix );
+
+	return $date;
 }
 
 /**

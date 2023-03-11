@@ -30,9 +30,20 @@ class Products {
 	const PRODUCT_OPTION = 'newspack_listings_product_id';
 
 	/**
+	 * Actions that can be triggered by the newspack-listings-products query param.
+	 */
+	const ACTIONS = [
+		'create' => 'create-products',
+		'delete' => 'delete-products',
+	];
+
+	const ACTION_NONCE = 'newspack_listings_nonce';
+
+	/**
 	 * Meta keys for self-serve listing products.
 	 */
 	const PRODUCT_META_KEYS = [
+		'parent'       => 'newspack_listings_parent_product',
 		'single'       => 'newspack_listings_single_price',
 		'featured'     => 'newspack_listings_featured_add_on',
 		'subscription' => 'newspack_listings_subscription_price',
@@ -79,7 +90,8 @@ class Products {
 	 */
 	public static function init() {
 		// WP actions to create the necessary products, and to handle submission of the Self-Serve Listings block form.
-		add_action( 'init', [ __CLASS__, 'setup' ] );
+		add_action( 'woocommerce_after_register_post_type', [ __CLASS__, 'setup' ] );
+		add_action( 'wp_loaded', [ __CLASS__, 'create_or_delete_listing_products' ], 99 );
 
 		// When product settings are updated, make sure to update the corresponding WooCommerce products as well.
 		add_action( 'update_option', [ __CLASS__, 'update_products' ], 10, 3 );
@@ -96,12 +108,45 @@ class Products {
 	}
 
 	/**
+	 * Verify that the products associated with this feature set are valid and published.
+	 *
+	 * @return boolean True if valid.
+	 */
+	public static function validate_products() {
+		$parent = \get_option( self::PRODUCT_OPTION, false );
+
+		// If missing a product option.
+		if ( ! $parent ) {
+			return false;
+		}
+
+		$children = \get_post_meta( $parent, '_children', true );
+
+		// If missing children.
+		if ( ! $children || ! is_array( $children ) ) {
+			return false;
+		}
+
+		// Ensure that the products are published and valid.
+		foreach ( array_merge( [ $parent ], $children ) as $product_id ) {
+			// If not a product, or not published.
+			if ( 'product' !== \get_post_type( $product_id ) || 'publish' !== \get_post_status( $product_id ) ) {
+				return false;
+			}
+
+			if ( $product_id !== $parent && ! \metadata_exists( 'post', $product_id, '_newspack_listings_product_slug' ) ) {
+				return false;
+			}
+		}
+
+		return true;
+	}
+
+	/**
 	 * Init subclasses and create base products.
 	 */
 	public static function setup() {
-		if ( self::is_active() ) {
-			self::create_products();
-
+		if ( self::is_active() && self::validate_products() ) {
 			new Products_Purchase();
 			new Products_Ui();
 			new Products_User();
@@ -110,88 +155,138 @@ class Products {
 	}
 
 	/**
+	 * Create or delete self-serve listing products.
+	 */
+	public static function create_or_delete_listing_products() {
+		$action = filter_input( INPUT_GET, 'newspack-listings-products', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$nonce  = filter_input( INPUT_GET, '_wpnonce', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+		if ( wp_verify_nonce( $nonce, self::ACTION_NONCE ) && in_array( $action, self::ACTIONS, true ) ) {
+			if ( self::ACTIONS['create'] === $action ) {
+				self::create_products();
+			} elseif ( self::ACTIONS['delete'] === $action ) {
+				self::delete_products();
+			}
+
+			wp_safe_redirect( get_admin_url( null, '/admin.php?page=' . Settings::PAGE_SLUG ) );
+			exit;
+		}
+	}
+
+	/**
 	 * Create the WooCommerce products for self-serve listings.
 	 */
 	public static function create_products() {
-		$products = self::get_products();
+		// First, clean up any potential leftover dupes.
+		self::delete_products();
 
-		if ( ! $products ) {
-			$settings     = Settings::get_settings();
-			$product_name = __( 'Self-Serve Listings', 'newspack-listings' );
+		$settings     = Settings::get_settings();
+		$product_name = __( 'Self-Serve Listings', 'newspack-listings' );
 
-			// Parent product.
-			$parent_product = new \WC_Product_Grouped();
-			$parent_product->set_name( $product_name );
-			$parent_product->set_catalog_visibility( 'hidden' );
-			$parent_product->set_virtual( true );
-			$parent_product->set_downloadable( true );
-			$parent_product->set_sold_individually( true );
+		// Parent product.
+		$parent_product = new \WC_Product_Grouped();
+		$parent_product->set_name( $product_name );
+		$parent_product->set_catalog_visibility( 'hidden' );
+		$parent_product->set_virtual( true );
+		$parent_product->set_downloadable( true );
+		$parent_product->set_sold_individually( true );
+		$parent_product->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['parent'] );
 
-			// Single listing product.
-			$single_product = new \WC_Product_Simple();
-			/* translators: %s: Product name */
-			$single_product->set_name( __( 'Single Listing', 'newspack-listings' ) );
-			$single_product->set_regular_price( $settings[ self::PRODUCT_META_KEYS['single'] ] );
-			$single_product->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['single'] );
-			$single_product->set_virtual( true );
-			$single_product->set_downloadable( true );
-			$single_product->set_catalog_visibility( 'hidden' );
-			$single_product->set_sold_individually( true );
-			$single_product->save();
+		// Single listing product.
+		$single_product = new \WC_Product_Simple();
+		/* translators: %s: Product name */
+		$single_product->set_name( __( 'Single Listing', 'newspack-listings' ) );
+		$single_product->set_regular_price( $settings[ self::PRODUCT_META_KEYS['single'] ] );
+		$single_product->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['single'] );
+		$single_product->set_virtual( true );
+		$single_product->set_downloadable( true );
+		$single_product->set_catalog_visibility( 'hidden' );
+		$single_product->set_sold_individually( true );
+		$single_product->save();
 
-			// Single "featured" listing upgrade.
-			$featured_upgrade_single = new \WC_Product_Simple();
-			/* translators: %s: Product name */
-			$featured_upgrade_single->set_name( __( '“Featured” Listing Upgrade', 'newspack-listings' ) );
-			$featured_upgrade_single->set_regular_price( $settings[ self::PRODUCT_META_KEYS['featured'] ] );
-			$featured_upgrade_single->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['featured'] );
-			$featured_upgrade_single->set_virtual( true );
-			$featured_upgrade_single->set_downloadable( true );
-			$featured_upgrade_single->set_catalog_visibility( 'hidden' );
-			$featured_upgrade_single->set_sold_individually( true );
-			$featured_upgrade_single->save();
+		// Single "featured" listing upgrade.
+		$featured_upgrade_single = new \WC_Product_Simple();
+		/* translators: %s: Product name */
+		$featured_upgrade_single->set_name( __( '“Featured” Listing Upgrade', 'newspack-listings' ) );
+		$featured_upgrade_single->set_regular_price( $settings[ self::PRODUCT_META_KEYS['featured'] ] );
+		$featured_upgrade_single->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['featured'] );
+		$featured_upgrade_single->set_virtual( true );
+		$featured_upgrade_single->set_downloadable( true );
+		$featured_upgrade_single->set_catalog_visibility( 'hidden' );
+		$featured_upgrade_single->set_sold_individually( true );
+		$featured_upgrade_single->save();
 
-			// Monthly subscription product.
-			$monthly_product = new \WC_Product_Subscription();
-			/* translators: %s: Product name */
-			$monthly_product->set_name( __( 'Listing Subscription', 'newspack-listings' ) );
-			$monthly_product->set_regular_price( $settings[ self::PRODUCT_META_KEYS['subscription'] ] );
-			$monthly_product->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['subscription'] );
-			$monthly_product->update_meta_data( '_subscription_price', wc_format_decimal( $settings[ self::PRODUCT_META_KEYS['subscription'] ] ) );
-			$monthly_product->update_meta_data( '_subscription_period', 'month' );
-			$monthly_product->update_meta_data( '_subscription_period_interval', 1 );
-			$monthly_product->set_virtual( true );
-			$monthly_product->set_downloadable( true );
-			$monthly_product->set_catalog_visibility( 'hidden' );
-			$monthly_product->set_sold_individually( true );
-			$monthly_product->save();
+		// Monthly subscription product.
+		$monthly_product = new \WC_Product_Subscription();
+		/* translators: %s: Product name */
+		$monthly_product->set_name( __( 'Listing Subscription', 'newspack-listings' ) );
+		$monthly_product->set_regular_price( $settings[ self::PRODUCT_META_KEYS['subscription'] ] );
+		$monthly_product->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['subscription'] );
+		$monthly_product->update_meta_data( '_subscription_price', wc_format_decimal( $settings[ self::PRODUCT_META_KEYS['subscription'] ] ) );
+		$monthly_product->update_meta_data( '_subscription_period', 'month' );
+		$monthly_product->update_meta_data( '_subscription_period_interval', 1 );
+		$monthly_product->set_virtual( true );
+		$monthly_product->set_downloadable( true );
+		$monthly_product->set_catalog_visibility( 'hidden' );
+		$monthly_product->set_sold_individually( true );
+		$monthly_product->save();
 
-			// Monthly "premium subscription" upgrade.
-			$premium_upgrade_monthly = new \WC_Product_Subscription();
-			/* translators: %s: Product name */
-			$premium_upgrade_monthly->set_name( __( 'Premium Subscription Upgrade', 'newspack-listings' ) );
-			$premium_upgrade_monthly->set_regular_price( $settings[ self::PRODUCT_META_KEYS['premium'] ] );
-			$premium_upgrade_monthly->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['premium'] );
-			$premium_upgrade_monthly->update_meta_data( '_subscription_price', wc_format_decimal( $settings[ self::PRODUCT_META_KEYS['premium'] ] ) );
-			$premium_upgrade_monthly->update_meta_data( '_subscription_period', 'month' );
-			$premium_upgrade_monthly->update_meta_data( '_subscription_period_interval', 1 );
-			$premium_upgrade_monthly->set_virtual( true );
-			$premium_upgrade_monthly->set_downloadable( true );
-			$premium_upgrade_monthly->set_catalog_visibility( 'hidden' );
-			$premium_upgrade_monthly->set_sold_individually( true );
-			$premium_upgrade_monthly->save();
+		// Monthly "premium subscription" upgrade.
+		$premium_upgrade_monthly = new \WC_Product_Subscription();
+		/* translators: %s: Product name */
+		$premium_upgrade_monthly->set_name( __( 'Premium Subscription Upgrade', 'newspack-listings' ) );
+		$premium_upgrade_monthly->set_regular_price( $settings[ self::PRODUCT_META_KEYS['premium'] ] );
+		$premium_upgrade_monthly->update_meta_data( '_newspack_listings_product_slug', self::PRODUCT_META_KEYS['premium'] );
+		$premium_upgrade_monthly->update_meta_data( '_subscription_price', wc_format_decimal( $settings[ self::PRODUCT_META_KEYS['premium'] ] ) );
+		$premium_upgrade_monthly->update_meta_data( '_subscription_period', 'month' );
+		$premium_upgrade_monthly->update_meta_data( '_subscription_period_interval', 1 );
+		$premium_upgrade_monthly->set_virtual( true );
+		$premium_upgrade_monthly->set_downloadable( true );
+		$premium_upgrade_monthly->set_catalog_visibility( 'hidden' );
+		$premium_upgrade_monthly->set_sold_individually( true );
+		$premium_upgrade_monthly->save();
 
-			$parent_product->set_children(
-				[
-					$single_product->get_id(),
-					$featured_upgrade_single->get_id(),
-					$monthly_product->get_id(),
-					$premium_upgrade_monthly->get_id(),
-				]
-			);
-			$parent_product->save();
-			update_option( self::PRODUCT_OPTION, $parent_product->get_id() );
+		$parent_product->set_children(
+			[
+				$single_product->get_id(),
+				$featured_upgrade_single->get_id(),
+				$monthly_product->get_id(),
+				$premium_upgrade_monthly->get_id(),
+			]
+		);
+		$parent_product->save();
+		update_option( self::PRODUCT_OPTION, $parent_product->get_id() );
+	}
+
+	/**
+	 * Delete self-serve listing products.
+	 */
+	public static function delete_products() {
+		// Find all products with a _newspack_listings_product_slug meta value.
+		$product_ids = get_posts(
+			[
+				'fields'         => 'ids',
+				'posts_per_page' => 1000, // phpcs:ignore WordPress.WP.PostsPerPage.posts_per_page_posts_per_page
+				'post_status'    => 'any',
+				'post_type'      => 'product',
+				'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					[
+						'key'     => '_newspack_listings_product_slug',
+						'compare' => 'EXISTS',
+					],
+				],
+			]
+		);
+
+		if ( $product_ids ) {
+			foreach ( $product_ids as $product_id ) {
+				if ( false !== get_post_status( $product_id ) ) {
+					wp_delete_post( $product_id, true );
+				}
+			}
 		}
+
+		delete_option( self::PRODUCT_OPTION );
 	}
 
 	/**
@@ -281,19 +376,31 @@ class Products {
 		// If missing a parent product, the products need to be created.
 		$parent_product = \wc_get_product( $product_id );
 		if ( ! $parent_product || ! $parent_product->is_type( 'grouped' ) || 'publish' !== get_post_status( $product_id ) ) {
-			return false;
+			return new \WP_Error(
+				'newspack_listings_invalid_parent_product',
+				__(
+					'Missing or invalid self-serve listing parent product.',
+					'newspack-listings'
+				)
+			);
 		}
 
-		$products = [
-			'newspack_listings_parent_product' => $product_id,
-		];
+		$products = [];
+
+		$products[ self::PRODUCT_META_KEYS['parent'] ] = $product_id;
 
 		foreach ( $parent_product->get_children() as $child_id ) {
 			$child_product = \wc_get_product( $child_id );
 
 			// If missing a child product, the products need to be created.
 			if ( ! $child_product ) {
-				return false;
+				return new \WP_Error(
+					'newspack_listings_invalid_parent_product',
+					__(
+						'Missing or invalid self-serve listing child products.',
+						'newspack-listings'
+					)
+				);
 			}
 
 			$settings_slug              = $child_product->get_meta( '_newspack_listings_product_slug' );

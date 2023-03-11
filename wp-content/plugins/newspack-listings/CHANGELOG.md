@@ -1,3 +1,61 @@
+## [2.12.5](https://github.com/Automattic/newspack-listings/compare/v2.12.4...v2.12.5) (2023-03-01)
+
+
+### Bug Fixes
+
+* resolve merge conflicts ([401bf74](https://github.com/Automattic/newspack-listings/commit/401bf74f2fca05aedb4a9e82d1bff6ab87031a64))
+
+## [2.12.5-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.12.4...v2.12.5-alpha.1) (2023-03-01)
+
+
+### Bug Fixes
+
+* resolve merge conflicts ([401bf74](https://github.com/Automattic/newspack-listings/commit/401bf74f2fca05aedb4a9e82d1bff6ab87031a64))
+
+## [2.12.4](https://github.com/Automattic/newspack-listings/compare/v2.12.3...v2.12.4) (2023-03-01)
+
+
+### Bug Fixes
+
+* manually bump asset version so CI can pick it up again ([#338](https://github.com/Automattic/newspack-listings/issues/338)) ([d665af4](https://github.com/Automattic/newspack-listings/commit/d665af45aa869b6da733d91dba05833c17b89a7c))
+
+## [2.12.3](https://github.com/Automattic/newspack-listings/compare/v2.12.2...v2.12.3) (2023-03-01)
+
+
+### Bug Fixes
+
+* accommodate any valid date string in newspack_listings_expiration_date ([#337](https://github.com/Automattic/newspack-listings/issues/337)) ([2150707](https://github.com/Automattic/newspack-listings/commit/215070768a1854d86ff725ccf4352c330309696c))
+
+## [2.12.2](https://github.com/Automattic/newspack-listings/compare/v2.12.1...v2.12.2) (2022-09-27)
+
+
+### Bug Fixes
+
+* prevent dupes of self-serve products; manual creation and deletion ([#281](https://github.com/Automattic/newspack-listings/issues/281)) ([2739cf3](https://github.com/Automattic/newspack-listings/commit/2739cf398cf48d458809b79248d5c3492c0bec70))
+* remove content check before loading Curated List styles ([#298](https://github.com/Automattic/newspack-listings/issues/298)) ([62a9422](https://github.com/Automattic/newspack-listings/commit/62a9422ed9aca00b9fdb12e873bb29e22309044d))
+
+## [2.12.2-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.12.1...v2.12.2-alpha.1) (2022-09-26)
+
+
+### Bug Fixes
+
+* prevent dupes of self-serve products; manual creation and deletion ([#281](https://github.com/Automattic/newspack-listings/issues/281)) ([2739cf3](https://github.com/Automattic/newspack-listings/commit/2739cf398cf48d458809b79248d5c3492c0bec70))
+* remove content check before loading Curated List styles ([#298](https://github.com/Automattic/newspack-listings/issues/298)) ([62a9422](https://github.com/Automattic/newspack-listings/commit/62a9422ed9aca00b9fdb12e873bb29e22309044d))
+
+## [2.12.1](https://github.com/Automattic/newspack-listings/compare/v2.12.0...v2.12.1) (2022-09-14)
+
+
+### Bug Fixes
+
+* add custom CSS classes to the Curated List block ([#297](https://github.com/Automattic/newspack-listings/issues/297)) ([6594fce](https://github.com/Automattic/newspack-listings/commit/6594fce3ab5a4788ca74c2d29a66a001832a9ff1))
+
+## [2.12.1-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.12.0...v2.12.1-alpha.1) (2022-08-26)
+
+
+### Bug Fixes
+
+* add custom CSS classes to the Curated List block ([#297](https://github.com/Automattic/newspack-listings/issues/297)) ([6594fce](https://github.com/Automattic/newspack-listings/commit/6594fce3ab5a4788ca74c2d29a66a001832a9ff1))
+
 # [2.12.0](https://github.com/Automattic/newspack-listings/compare/v2.11.2...v2.12.0) (2022-08-16)
 
 

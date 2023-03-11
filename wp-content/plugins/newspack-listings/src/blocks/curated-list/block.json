@@ -2,6 +2,10 @@
 	"name": "newspack-listings/curated-list",
 	"category": "newspack",
 	"attributes": {
+		"className": {
+			"type": "string",
+			"default": ""
+		},
 		"isSelected": {
 			"type": "boolean",
 			"default": false

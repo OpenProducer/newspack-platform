@@ -25,6 +25,7 @@ final class Products_User extends Products {
 		add_filter( 'allowed_block_types_all', [ $this, 'restrict_blocks_for_customers' ], 10, 2 );
 		add_action( 'admin_menu', [ $this, 'hide_admin_menu_for_customers' ], PHP_INT_MAX ); // Late execution to override other plugins like Jetpack.
 		add_filter( 'admin_bar_menu', [ $this, 'hide_admin_bar_for_customers' ], PHP_INT_MAX ); // Late execution to override other plugins like Jetpack.
+		add_action( 'admin_page_access_denied', [ $this, 'redirect_to_dashboard' ] );
 	}
 
 	/**
@@ -230,5 +231,15 @@ final class Products_User extends Products {
 		}
 
 		return $wp_admin_bar;
+	}
+
+	/**
+	 * Redirect customers to main admin screen if trying to access restricted admin pages.
+	 */
+	public function redirect_to_dashboard() {
+		if ( self::is_listing_customer() ) {
+			\wp_safe_redirect( \get_admin_url() );
+			exit;
+		}
 	}
 }

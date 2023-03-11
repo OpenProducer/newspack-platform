@@ -39,7 +39,7 @@ function register_block() {
  */
 function render_block( $attributes ) {
 	// Only render if self-serve listings features are active.
-	if ( ! Products::is_active() ) {
+	if ( ! Products::is_active() || ! Products::validate_products() ) {
 		return '';
 	}
 

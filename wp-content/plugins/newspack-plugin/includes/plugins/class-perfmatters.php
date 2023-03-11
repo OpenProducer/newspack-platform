@@ -47,17 +47,12 @@ class Perfmatters {
 			"ga( '",
 			"ga('",
 			'google-analytics.com/analytics.js',
-			'googletag.pubads',
 			// Google Tag Manager.
 			'/gtm.js',
 			'/gtag/js',
 			'gtag(',
 			'/gtm-',
 			'/gtm.',
-			// Advertising.
-			'adsbygoogle.js',
-			'ai_insert_code',
-			'doubleclick.net',
 			// Facebook.
 			'fbevents.js',
 			'fbq(',
@@ -65,12 +60,10 @@ class Perfmatters {
 			// Twitter.
 			'ads-twitter.com',
 			// Plugins.
-			'gravityforms',
 			'mailchimp-for-woocommerce',
 			'mailchimp-for-wp',
 			// Third-party services.
 			'disqus',
-			'stripe.com',
 		];
 	}
 

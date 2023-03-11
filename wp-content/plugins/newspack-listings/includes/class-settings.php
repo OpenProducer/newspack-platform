@@ -17,6 +17,11 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Settings {
 	/**
+	 * Slug to use for settings page.
+	 */
+	const PAGE_SLUG = 'newspack-listings-settings-admin';
+
+	/**
 	 * Set up hooks.
 	 */
 	public static function init() {
@@ -45,8 +50,9 @@ final class Settings {
 		// Product settings are only relevant if WooCommerce is available.
 		if ( Products::is_active() ) {
 			$sections['product'] = [
-				'slug'  => 'newspack_listings_product_settings',
-				'title' => __( 'Self-Serve Settings', 'newspack-listings' ),
+				'slug'        => 'newspack_listings_product_settings',
+				'title'       => __( 'Self-Serve Settings', 'newspack-listings' ),
+				'description' => [ __CLASS__, 'get_self_serve_section_description' ],
 			];
 		}
 
@@ -59,6 +65,31 @@ final class Settings {
 		}
 
 		return $sections;
+	}
+
+	/**
+	 * Output a description for the self-serve listings section.
+	 */
+	public static function get_self_serve_section_description() {
+		$products = Products::get_products();
+		$is_valid = false !== $products && ! is_wp_error( $products );
+		$redirect = wp_nonce_url(
+			add_query_arg(
+				[ 'newspack-listings-products' => $is_valid ? Products::ACTIONS['delete'] : Products::ACTIONS['create'] ],
+				menu_page_url( self::PAGE_SLUG, false )
+			),
+			Products::ACTION_NONCE
+		);
+		echo wp_kses_post(
+			sprintf(
+				// Translators: instructions on how to fix missing self-serve products.
+				__( 'Self-serve listing features are %1$s. <a href="%2$s">Click here to %3$s self-serve listings features on this site</a>.%4$s', 'newspack-listings' ),
+				$is_valid ? __( 'active', 'newspack-listings' ) : __( 'not active', 'newspack-listings' ),
+				$redirect,
+				$is_valid ? __( 'disable', 'newspack-listings' ) : __( 'enable', 'newspack-listings' ),
+				$is_valid ? __( ' <b>Warning:</b> Disabling will cancel all existing self-serve listing subscriptions.', 'newspack-listings' ) : ''
+			)
+		);
 	}
 
 	/**
@@ -174,7 +205,8 @@ final class Settings {
 
 		// Product settings are only relevant if WooCommerce is available.
 		if ( Products::is_active() ) {
-			$product_settings = [
+			$products_are_invalid = ! Products::validate_products();
+			$product_settings     = [
 				[
 					'description' => __( 'The base price for a single listing (no subscription).', 'newspack-listings' ),
 					'key'         => Products::PRODUCT_META_KEYS['single'],
@@ -182,6 +214,7 @@ final class Settings {
 					'type'        => 'number',
 					'value'       => 25,
 					'section'     => $sections['product']['slug'],
+					'disabled'    => $products_are_invalid,
 				],
 				[
 					'description' => __( 'The upgrade price to make a single-purchase listing "featured."', 'newspack-listings' ),
@@ -190,6 +223,7 @@ final class Settings {
 					'type'        => 'number',
 					'value'       => 75,
 					'section'     => $sections['product']['slug'],
+					'disabled'    => $products_are_invalid,
 				],
 				// TODO: update all copy to be able to handle just 1 day in addition to multiple.
 				[
@@ -199,6 +233,7 @@ final class Settings {
 					'type'        => 'number',
 					'value'       => 30,
 					'section'     => $sections['product']['slug'],
+					'disabled'    => $products_are_invalid,
 				],
 				[
 					'description' => __( 'The base monthly subscription price. This fee is charged monthly.', 'newspack-listings' ),
@@ -207,6 +242,7 @@ final class Settings {
 					'type'        => 'number',
 					'value'       => 50,
 					'section'     => $sections['product']['slug'],
+					'disabled'    => $products_are_invalid,
 				],
 				[
 					'description' => __( 'The upgrade price for a premium subscription, which allows subscribers to create up to 10 additional Marketplace or Event listings. This fee is charged monthly.', 'newspack-listings' ),
@@ -215,6 +251,7 @@ final class Settings {
 					'type'        => 'number',
 					'value'       => 100,
 					'section'     => $sections['product']['slug'],
+					'disabled'    => $products_are_invalid,
 				],
 			];
 
@@ -277,14 +314,14 @@ final class Settings {
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Newspack Listings: Site-Wide Settings', 'newspack-listings' ); ?></h1>
 			<form method="post" action="options.php">
-			<?php
-				settings_fields( 'newspack_listings_options_group' );
-				do_settings_sections( 'newspack-listings-settings-admin' );
-				submit_button();
-			?>
+					<?php
+					settings_fields( 'newspack_listings_options_group' );
+					do_settings_sections( self::PAGE_SLUG );
+					submit_button();
+					?>
 			</form>
 		</div>
-		<?php
+					<?php
 	}
 
 	/**
@@ -294,7 +331,8 @@ final class Settings {
 		$sections = self::get_sections();
 
 		foreach ( $sections as $section ) {
-			add_settings_section( $section['slug'], $section['title'], null, 'newspack-listings-settings-admin' );
+			$section_description = isset( $section['description'] ) ? $section['description'] : null;
+			add_settings_section( $section['slug'], $section['title'], $section_description, self::PAGE_SLUG );
 		}
 
 		foreach ( self::get_default_settings() as $setting ) {
@@ -306,7 +344,7 @@ final class Settings {
 				$setting['key'],
 				$setting['label'],
 				[ __CLASS__, 'newspack_listings_settings_callback' ],
-				'newspack-listings-settings-admin',
+				self::PAGE_SLUG,
 				$setting['section'],
 				$setting
 			);
@@ -325,16 +363,18 @@ final class Settings {
 	 * @param array $setting Settings array.
 	 */
 	public static function newspack_listings_settings_callback( $setting ) {
-		$key   = $setting['key'];
-		$type  = $setting['type'];
-		$value = get_option( $key, $setting['value'] );
+		$key      = $setting['key'];
+		$type     = $setting['type'];
+		$disabled = isset( $setting['disabled'] ) && $setting['disabled'];
+		$value    = get_option( $key, $setting['value'] );
 
 		if ( 'checkbox' === $type ) {
 			printf(
-				'<input type="checkbox" id="%s" name="%s" %s /><p class="description" for="%s">%s</p>',
+				'<input type="checkbox" id="%s" name="%s" %s %s /><p class="description" for="%s">%s</p>',
 				esc_attr( $key ),
 				esc_attr( $key ),
 				! empty( $value ) ? 'checked' : '',
+				$disabled ? 'disabled' : '', // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				esc_attr( $key ),
 				wp_kses_post( $setting['description'] )
 			);
@@ -343,10 +383,11 @@ final class Settings {
 				$value = $setting['value'];
 			}
 			printf(
-				'<input type="number" id="%s" name="%s" value="%s" class="small-text" /><p class="description" for="%s">%s</p>',
+				'<input type="number" id="%s" name="%s" value="%s" class="small-text" %s /><p class="description" for="%s">%s</p>',
 				esc_attr( $key ),
 				esc_attr( $key ),
 				esc_attr( $value ),
+				$disabled ? 'disabled' : '',
 				esc_attr( $key ),
 				wp_kses_post( $setting['description'] )
 			);
@@ -355,10 +396,11 @@ final class Settings {
 				$value = $setting['value'];
 			}
 			printf(
-				'<input type="text" id="%s" name="%s" value="%s" class="regular-text" /><p class="description" for="%s">%s</p>',
+				'<input type="text" id="%s" name="%s" value="%s" class="regular-text" %s /><p class="description" for="%s">%s</p>',
 				esc_attr( $key ),
 				esc_attr( $key ),
 				esc_attr( $value ),
+				$disabled ? 'disabled' : '',
 				esc_attr( $key ),
 				wp_kses_post( $setting['description'] )
 			);

@@ -45,7 +45,7 @@ function render_block( $attributes, $inner_content ) {
 	$is_amp = Utils\is_amp();
 
 	// Conditional class names based on attributes.
-	$classes = [ 'newspack-listings__curated-list' ];
+	$classes = [ 'newspack-listings__curated-list', esc_attr( $attributes['className'] ) ];
 
 	if ( $attributes['showNumbers'] ) {
 		$classes[] = 'show-numbers';

@@ -440,7 +440,7 @@ final class Featured {
 		self::update_priority( $post_id, $priority );
 
 		// Set expiration, if given and a valid time string.
-		if ( $expires && Utils\is_valid_date_string( $expires ) ) {
+		if ( $expires && false !== Utils\convert_string_to_date_time( $expires ) ) {
 			update_post_meta( $post_id, self::META_KEYS['expires'], $expires );
 		}
 	}

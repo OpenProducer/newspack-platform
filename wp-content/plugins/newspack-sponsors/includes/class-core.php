@@ -50,6 +50,7 @@ final class Core {
 		add_action( 'init', [ __CLASS__, 'init' ] );
 		add_filter( 'newspack_ads_should_show_ads', [ __CLASS__, 'suppress_ads' ], 10, 2 );
 		add_filter( 'newspack_ads_ad_targeting', [ __CLASS__, 'ad_targeting' ], 10, 2 );
+		add_action( 'pre_get_posts', [ __CLASS__, 'ensure_only_sponsors' ] );
 	}
 
 	/**
@@ -235,7 +236,7 @@ final class Core {
 			'post',
 			'newspack_sponsor_native_byline_display',
 			[
-				'description'       => __( 'Display the sponsorship only, the author byline only, or both.', 'newspack-sponsors' ),
+				'description'       => __( 'Display the sponsor only in the byline, or both the sponsor and post author.', 'newspack-sponsors' ),
 				'type'              => 'string',
 				'default'           => self::is_sponsor() ? 'sponsor' : 'inherit',
 				'sanitize_callback' => 'sanitize_text_field',
@@ -517,6 +518,18 @@ final class Core {
 		}
 
 		return $new_term;
+	}
+
+	/**
+	 * Failsafe to ensure that sponsors queries only fetch sponsors post types.
+	 * Other plugins may have query filters to add other post types to queries.
+	 *
+	 * @param WP_Query $query Query.
+	 */
+	public static function ensure_only_sponsors( $query ) {
+		if ( boolval( $query->get( 'is_sponsors' ) ) ) {
+			$query->set( 'post_type', self::NEWSPACK_SPONSORS_CPT ); // phpcs:ignore WordPressVIPMinimum.Hooks.PreGetPosts.PreGetPosts
+		}
 	}
 }
 
