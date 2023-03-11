@@ -76,6 +76,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'is_fse_eligible'             => '(bool) If the site is capable of Full Site Editing or not',
 		'is_core_site_editor_enabled' => '(bool) If the site has the core site editor enabled.',
 		'is_wpcom_atomic'             => '(bool) If the site is a WP.com Atomic one.',
+		'is_wpcom_staging_site'       => '(bool) If the site is a WP.com staging site.',
 		'user_interactions'           => '(array) An array of user interactions with a site.',
 	);
 
@@ -177,6 +178,7 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'design_type',
 		'site_goals',
 		'site_segment',
+		'site_source_slug',
 		'import_engine',
 		'is_pending_plan',
 		'is_wpforteams_site',
@@ -194,6 +196,8 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 		'blogging_prompts_settings',
 		'launchpad_screen',
 		'launchpad_checklist_tasks_statuses',
+		'wpcom_production_blog_id',
+		'wpcom_staging_blog_ids',
 	);
 
 	/**
@@ -556,6 +560,9 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 			case 'is_wpcom_atomic':
 				$response[ $key ] = $this->site->is_wpcom_atomic();
 				break;
+			case 'is_wpcom_staging_site':
+				$response[ $key ] = $this->site->is_wpcom_staging_site();
+				break;
 			case 'user_interactions':
 				$response[ $key ] = $this->site->get_user_interactions();
 				break;
@@ -793,6 +800,12 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 						$options[ $key ] = $site_creation_flow;
 					}
 					break;
+				case 'site_source_slug':
+					$site_source_slug = $site->get_site_source_slug();
+					if ( $site_source_slug ) {
+						$options[ $key ] = $site_source_slug;
+					}
+					break;
 				case 'is_cloud_eligible':
 					$options[ $key ] = $site->is_cloud_eligible();
 					break;
@@ -845,6 +858,12 @@ class WPCOM_JSON_API_GET_Site_Endpoint extends WPCOM_JSON_API_Endpoint {
 					break;
 				case 'launchpad_checklist_tasks_statuses':
 					$options[ $key ] = $site->get_launchpad_checklist_tasks_statuses();
+					break;
+				case 'wpcom_production_blog_id':
+					$options[ $key ] = $site->get_wpcom_production_blog_id();
+					break;
+				case 'wpcom_staging_blog_ids':
+					$options[ $key ] = $site->get_wpcom_staging_blog_ids();
 					break;
 			}
 		}
