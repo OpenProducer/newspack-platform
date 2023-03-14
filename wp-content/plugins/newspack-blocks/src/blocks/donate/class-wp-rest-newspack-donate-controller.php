@@ -124,14 +124,24 @@ class WP_REST_Newspack_Donate_Controller extends WP_REST_Controller {
 			}
 		}
 
+		$referer = $request->get_param( '_wp_http_referer' );
+		if ( ! $referer ) {
+			$referer = \wp_get_referer();
+		}
+
 		$payment_metadata = [
-			'referer' => \wp_get_referer(),
+			'referer' => $referer,
 		];
+
 		if ( class_exists( 'Newspack\NRH' ) && method_exists( 'Newspack\NRH', 'get_nrh_config' ) ) {
 			$nrh_config = \Newspack\NRH::get_nrh_config();
 			if ( isset( $nrh_config['nrh_salesforce_campaign_id'] ) ) {
 				$payment_metadata['sf_campaign_id'] = $nrh_config['nrh_salesforce_campaign_id'];
 			}
+		}
+
+		if ( ! empty( $request->get_param( 'newspack_popup_id' ) ) ) {
+			$payment_metadata['newspack_popup_id'] = $request->get_param( 'newspack_popup_id' );
 		}
 
 		$frequency = $request->get_param( 'frequency' );

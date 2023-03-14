@@ -436,14 +436,19 @@ class Advertising_Wizard extends Wizard {
 		$services = array();
 		foreach ( $this->services as $service => $data ) {
 			$services[ $service ] = array(
-				'label'   => $data['label'],
-				'enabled' => $configuration_manager->is_service_enabled( $service ),
+				'label'     => $data['label'],
+				'enabled'   => $configuration_manager->is_service_enabled( $service ),
+				'available' => true,
 			);
 		}
 
 		// Verify GAM connection and run initial setup.
 		$gam_connection_status = $configuration_manager->get_gam_connection_status();
 		if ( \is_wp_error( $gam_connection_status ) ) {
+			$error_type = $gam_connection_status->get_error_code();
+			if ( 'newspack_ads_gam_api_fatal_error' === $error_type ) {
+				$services['google_ad_manager']['available'] = false;
+			}
 			$services['google_ad_manager']['status']['error'] = $gam_connection_status->get_error_message();
 		} else {
 			$services['google_ad_manager']['status']             = $gam_connection_status;

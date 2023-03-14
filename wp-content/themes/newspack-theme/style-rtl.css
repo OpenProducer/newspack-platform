@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.69.0-alpha.1
+Version: 1.69.1-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -22,7 +22,7 @@ Underscores is distributed under the terms of the GNU GPL v2 or later.
 Normalizing styles have been helped along thanks to the fine work of
 Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 */
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------
 # Variables
@@ -54,7 +54,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 # Media
 	## Captions
 	## Galleries
---------------------------------------------------------------*/
+-------------------------------------------------------------- */
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
@@ -70,7 +70,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
  */
 html {
   line-height: 1.15; /* 1 */
-  -webkit-text-size-adjust: 100%; /* 2 */
+  text-size-adjust: 100%; /* 2 */
 }
 
 /* Sections
@@ -230,7 +230,7 @@ button,
 [type=button],
 [type=reset],
 [type=submit] {
-  -webkit-appearance: button;
+  appearance: button;
 }
 
 /**
@@ -313,7 +313,7 @@ textarea {
  * 2. Correct the outline style in Safari.
  */
 [type=search] {
-  -webkit-appearance: textfield; /* 1 */
+  appearance: textfield; /* 1 */
   outline-offset: -2px; /* 2 */
 }
 
@@ -321,7 +321,7 @@ textarea {
  * Remove the inner padding in Chrome and Safari on macOS.
  */
 [type=search]::-webkit-search-decoration {
-  -webkit-appearance: none;
+  appearance: none;
 }
 
 /**
@@ -329,7 +329,7 @@ textarea {
  * 2. Change font properties to `inherit` in Safari.
  */
 ::-webkit-file-upload-button {
-  -webkit-appearance: button; /* 1 */
+  appearance: button; /* 1 */
   font: inherit; /* 2 */
 }
 
@@ -872,13 +872,13 @@ input[type=datetime-local],
 input[type=zip],
 input[type=color],
 textarea {
-  -webkit-backface-visibility: hidden;
+  backface-visibility: hidden;
   background: #fff;
   border: solid 1px #ccc;
   box-sizing: border-box;
   outline: none;
   padding: 0.36rem 0.66rem;
-  -webkit-appearance: none;
+  appearance: none;
   outline-offset: 0;
   border-radius: 0;
 }
@@ -921,7 +921,6 @@ form p {
 }
 
 input[type=checkbox] {
-  -webkit-appearance: none;
   appearance: none;
   background: white;
   border: solid 1px #ccc;
@@ -1027,8 +1026,7 @@ a:focus {
   color: inherit;
   cursor: pointer;
   transition: background 250ms ease-in-out, transform 150ms ease;
-  -webkit-appearance: none;
-  -moz-appearance: none;
+  appearance: none;
 }
 .dd-menu button:hover, .dd-menu button:focus {
   background: transparent;
@@ -1117,7 +1115,7 @@ a:focus {
 }
 .site-header .dd-menu > ul > li > .sub-menu::before {
   border-style: solid;
-  border-width: 0 8px 8px 8px;
+  border-width: 0 8px 8px;
   border-color: transparent transparent #333 transparent;
   content: "";
   display: inline-block;
@@ -2021,18 +2019,18 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   outline-offset: -4px;
 }
 
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 ## Links
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
 ## Menus
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
 ## Next / Previous
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
 ## Infinite Scroll
---------------------------------------------------------------*/
+-------------------------------------------------------------- */
 /* Text meant only for screen readers. */
 .screen-reader-text {
   border: 0;
@@ -2290,7 +2288,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .page-template-no-header-footer .site-content, .page-template-no-header-footer.hide-page-title .site-content {
   margin-top: 0;
 }
-.page-template-no-header-footer:not(.hide-page-title):not([class*=single-featured-image-]) .entry-header {
+.page-template-no-header-footer:not(.hide-page-title, [class*=single-featured-image-]) .entry-header {
   margin-top: 1rem;
 }
 
@@ -3277,7 +3275,7 @@ div.sharedaddy {
   color: #515151;
   display: block;
   font-size: 0.8em;
-  margin: 0.25em 0 0 0;
+  margin: 0.25em 0 0;
   text-transform: none;
 }
 @media only screen and (min-width: 600px) {
@@ -4423,21 +4421,21 @@ div.sharedaddy {
   font-size: 1em;
 }
 
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 ## Header
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
 ## Posts and pages
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
 ## Comments
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
 ## Archives
---------------------------------------------------------------*/
-/*--------------------------------------------------------------
+-------------------------------------------------------------- */
+/* --------------------------------------------------------------
 ## Footer
---------------------------------------------------------------*/
+-------------------------------------------------------------- */
 .widget {
   font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
   font-size: 0.8em;
@@ -4592,6 +4590,77 @@ div.sharedaddy {
   margin: 0 1.5rem 1.5rem 0;
 }
 
+.jetpack_top_posts_widget p,
+.widget_top-posts p {
+  font-style: italic;
+  font-size: 0.8em;
+}
+.jetpack_top_posts_widget ul,
+.jetpack_top_posts_widget li,
+.widget_top-posts ul,
+.widget_top-posts li {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+}
+.jetpack_top_posts_widget li::after,
+.widget_top-posts li::after {
+  content: "";
+  display: table;
+  table-layout: fixed;
+  clear: both;
+}
+.jetpack_top_posts_widget li:not(:last-child),
+.widget_top-posts li:not(:last-child) {
+  margin: 0 0 0.75em;
+}
+.jetpack_top_posts_widget li a,
+.widget_top-posts li a {
+  color: #111;
+  display: block;
+  font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-weight: bold;
+  line-height: 1.2;
+  text-decoration: none;
+}
+.jetpack_top_posts_widget .widgets-list-layout img,
+.widget_top-posts .widgets-list-layout img {
+  float: right;
+  height: auto;
+  max-width: 80px;
+  width: 30%;
+}
+.jetpack_top_posts_widget .widgets-list-layout .widgets-list-layout-links,
+.widget_top-posts .widgets-list-layout .widgets-list-layout-links {
+  float: left;
+  width: calc(100% - 95px);
+}
+.jetpack_top_posts_widget .widget-grid-view-image,
+.widget_top-posts .widget-grid-view-image {
+  float: right;
+  max-width: 50%;
+}
+.jetpack_top_posts_widget .widget-grid-view-image a,
+.widget_top-posts .widget-grid-view-image a {
+  display: inline-block;
+  margin: 0 0 2px 4px;
+}
+.jetpack_top_posts_widget .widget-grid-view-image:nth-child(2n),
+.widget_top-posts .widget-grid-view-image:nth-child(2n) {
+  float: left;
+}
+.jetpack_top_posts_widget .widget-grid-view-image:nth-child(2n) a,
+.widget_top-posts .widget-grid-view-image:nth-child(2n) a {
+  margin: 0 4px 2px 0;
+}
+
+.widget.widget_top-posts .widgets-list-layout img {
+  max-width: 60px;
+}
+.widget.widget_top-posts .widgets-list-layout .widgets-list-layout-links {
+  width: calc(100% - 75px);
+}
+
 #secondary section:first-child > *:first-child,
 #secondary section:first-child > div > *:first-child {
   margin-top: 0;
@@ -4741,6 +4810,15 @@ div.sharedaddy {
     width: auto;
   }
 }
+.newspack-front-page .entry .entry-content .alignwide .alignfull,
+.newspack-front-page .entry .entry-content .alignwide .alignwide,
+.post-template-single-wide .entry .entry-content .alignwide .alignfull,
+.post-template-single-wide .entry .entry-content .alignwide .alignwide,
+.page-template-single-wide .entry .entry-content .alignwide .alignfull,
+.page-template-single-wide .entry .entry-content .alignwide .alignwide {
+  margin-right: 0;
+  margin-left: 0;
+}
 .newspack-front-page .entry .entry-content .alignfull,
 .post-template-single-wide .entry .entry-content .alignfull,
 .page-template-single-wide .entry .entry-content .alignfull {
@@ -4753,17 +4831,31 @@ div.sharedaddy {
 .page-template-single-wide .entry .entry-content .alignfull.wp-block-cover {
   width: 100vw;
 }
-.newspack-front-page .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .newspack-front-page .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.newspack-front-page .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.newspack-front-page .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
+.newspack-front-page .entry .entry-content .alignfull .alignwide,
+.post-template-single-wide .entry .entry-content .alignfull .alignwide,
+.page-template-single-wide .entry .entry-content .alignfull .alignwide {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 100%;
+  width: calc(50vw + 600px);
+}
+.newspack-front-page .entry .entry-content .alignfull .alignfull,
+.post-template-single-wide .entry .entry-content .alignfull .alignfull,
+.page-template-single-wide .entry .entry-content .alignfull .alignfull {
+  margin-right: 0;
+  margin-left: 0;
+}
+.newspack-front-page .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide), .newspack-front-page .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.newspack-front-page .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.newspack-front-page .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide) {
   margin-right: auto;
   margin-left: auto;
   max-width: 1200px;
@@ -5095,11 +5187,11 @@ p.has-background {
     font-size: 1.4em;
   }
 }
-.wp-block-pullquote.has-text-align-right:not(.alignleft):not(.alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft):not(.alignright) p {
+.wp-block-pullquote.has-text-align-right:not(.alignleft, .alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft, .alignright) p {
   font-size: 1.4em;
 }
 @media only screen and (min-width: 782px) {
-  .wp-block-pullquote.has-text-align-right:not(.alignleft):not(.alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft):not(.alignright) p {
+  .wp-block-pullquote.has-text-align-right:not(.alignleft, .alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft, .alignright) p {
     font-size: 1.4em;
   }
 }
@@ -6241,59 +6333,49 @@ hr.has-background.is-style-dots::before {
 .page-template-no-header-footer .wp-block-cover-image.alignwide {
   width: auto;
 }
-.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide, .post-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > .alignwide,
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > .alignwide,
-.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
-.post-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > .alignwide,
-.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > .alignwide,
-.post-template-single-feature [id=pico] > .wp-block-group.alignwide > div > .alignwide,
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > .alignwide,
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > .alignwide,
-.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > .alignwide,
-.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > .alignwide,
-.page-template-single-feature [id=pico] > .wp-block-group.alignwide > div > .alignwide,
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignwide > div > .alignwide,
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignwide > div > .alignwide,
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignwide > div > .alignwide,
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > .alignwide,
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignwide > div > .alignwide {
-  margin-right: auto;
-  margin-left: auto;
-  max-width: 1200px;
-}
-.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .post-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
+.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide), .post-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.post-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
+.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
+.post-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.post-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide) {
   margin-right: auto;
   margin-left: auto;
   max-width: 780px;
+}
+.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
+.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
+.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
+.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > .alignwide,
+.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
+.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
+.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
+.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > .alignwide,
+.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
+.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
+.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
+.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > .alignwide {
+  margin-right: auto;
+  margin-left: auto;
+  max-width: 100%;
+  width: calc(50vw + 390px);
 }
 
 .newspack-front-page .wp-block-pullquote.alignfull,
@@ -6329,53 +6411,18 @@ hr.has-background.is-style-dots::before {
     padding-left: 1rem;
   }
 }
-.newspack-front-page .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.newspack-front-page [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.post-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.post-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.page-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.page-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.post-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
-.page-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border) {
+.newspack-front-page .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.newspack-front-page [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.post-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.post-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.page-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.page-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.post-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
+.page-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border) {
   padding-right: 5.5%;
   padding-left: 5.5%;
-}
-.newspack-front-page .entry .entry-content .wp-block-column .alignwide,
-.newspack-front-page .entry .entry-content .wp-block-column .alignfull,
-.newspack-front-page .entry .entry-content .wp-block-group .alignwide,
-.newspack-front-page .entry .entry-content .wp-block-group .alignfull,
-.newspack-front-page .entry .entry-content .wp-block-cover .alignwide,
-.newspack-front-page .entry .entry-content .wp-block-cover .alignfull,
-.post-template-single-wide .entry .entry-content .wp-block-column .alignwide,
-.post-template-single-wide .entry .entry-content .wp-block-column .alignfull,
-.post-template-single-wide .entry .entry-content .wp-block-group .alignwide,
-.post-template-single-wide .entry .entry-content .wp-block-group .alignfull,
-.post-template-single-wide .entry .entry-content .wp-block-cover .alignwide,
-.post-template-single-wide .entry .entry-content .wp-block-cover .alignfull,
-.page-template-single-wide .entry .entry-content .wp-block-column .alignwide,
-.page-template-single-wide .entry .entry-content .wp-block-column .alignfull,
-.page-template-single-wide .entry .entry-content .wp-block-group .alignwide,
-.page-template-single-wide .entry .entry-content .wp-block-group .alignfull,
-.page-template-single-wide .entry .entry-content .wp-block-cover .alignwide,
-.page-template-single-wide .entry .entry-content .wp-block-cover .alignfull,
-.post-template-single-feature .entry .entry-content .wp-block-column .alignwide,
-.post-template-single-feature .entry .entry-content .wp-block-column .alignfull,
-.post-template-single-feature .entry .entry-content .wp-block-group .alignwide,
-.post-template-single-feature .entry .entry-content .wp-block-group .alignfull,
-.post-template-single-feature .entry .entry-content .wp-block-cover .alignwide,
-.post-template-single-feature .entry .entry-content .wp-block-cover .alignfull,
-.page-template-single-feature .entry .entry-content .wp-block-column .alignwide,
-.page-template-single-feature .entry .entry-content .wp-block-column .alignfull,
-.page-template-single-feature .entry .entry-content .wp-block-group .alignwide,
-.page-template-single-feature .entry .entry-content .wp-block-group .alignfull,
-.page-template-single-feature .entry .entry-content .wp-block-cover .alignwide,
-.page-template-single-feature .entry .entry-content .wp-block-cover .alignfull {
-  margin-right: 0;
-  margin-left: 0;
-  padding-right: 0;
-  padding-left: 0;
 }
 .newspack-front-page .entry .entry-content .scaip .newspack_global_ad,
 .newspack-front-page .entry .entry-content .scaip .widget_newspack-ads-widget,
@@ -6425,9 +6472,9 @@ hr.has-background.is-style-dots::before {
   color: currentcolor;
 }
 
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 ## Patterns
---------------------------------------------------------------*/
+-------------------------------------------------------------- */
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
@@ -6848,9 +6895,9 @@ svg {
   fill: currentcolor;
 }
 
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 ## Captions
---------------------------------------------------------------*/
+-------------------------------------------------------------- */
 .wp-caption {
   margin-bottom: calc( 1.5 * 1rem );
 }
@@ -6918,9 +6965,9 @@ figcaption,
   width: min(90vw, 1200px);
 }
 
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 ## Galleries
---------------------------------------------------------------*/
+-------------------------------------------------------------- */
 .gallery {
   display: flex;
   flex-flow: row wrap;
@@ -7123,11 +7170,11 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   position: relative;
   z-index: 1;
 }
-.h-sub.single-featured-image-behind:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header + .site-content {
+.h-sub.single-featured-image-behind:not(.newspack-front-page, .style-pack-style-2) .global_below_header + .site-content {
   margin-top: 0;
 }
 @media only screen and (min-width: 782px) {
-  .h-sub.single-featured-image-beside:not(.newspack-front-page):not(.style-pack-style-2) .global_below_header + .site-content {
+  .h-sub.single-featured-image-beside:not(.newspack-front-page, .style-pack-style-2) .global_below_header + .site-content {
     margin-top: 0;
   }
 }

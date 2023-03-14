@@ -300,6 +300,11 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 	 */
 	protected static function render_donate_form_input() {
 		ob_start();
+		/**
+		 * Action to add custom fields before the form fields of the donation block.
+		 */
+		do_action( 'newspack_blocks_donate_before_form_fields' );
+		wp_referer_field();
 		?>
 			<input type='hidden' name='newspack_donate' value='1' />
 		<?php

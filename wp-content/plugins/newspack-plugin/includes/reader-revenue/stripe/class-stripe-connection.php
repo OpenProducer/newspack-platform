@@ -1158,6 +1158,8 @@ class Stripe_Connection {
 			'client_id'                     => $customer['metadata']['clientId'],
 			'user_id'                       => $customer['metadata']['userId'],
 			'subscribed'                    => self::has_customer_opted_in_to_newsletters( $customer ),
+			'referer'                       => $payment['referer'] ?? null,
+			'newspack_popup_id'             => $payment['newspack_popup_id'] ?? null,
 		];
 	}
 

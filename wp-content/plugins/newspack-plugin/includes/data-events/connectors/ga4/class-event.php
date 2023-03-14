@@ -94,11 +94,28 @@ class Event {
 	 * @return bool
 	 */
 	public static function validate_param_value( $value ) {
-		// Let's play nice and convert integers.
-		if ( is_int( $value ) ) {
-			$value = (string) $value;
-		}
+		$value = self::sanitize_value( $value );
 		return is_string( $value ) && strlen( $value ) <= 100;
+	}
+
+	/**
+	 * Tries to santize a value to a string in cases where it's possible. It will not act on object or arrays, which will still produce a validation error
+	 *
+	 * @param mixed $value The input value.
+	 * @return mixed The sanitized value, or the original value if it can't be sanitized
+	 */
+	public static function sanitize_value( $value ) {
+		switch ( gettype( $value ) ) {
+			case 'integer':
+			case 'double':
+			case 'NULL':
+			case 'string':
+				return substr( (string) $value, 0, 100 );
+			case 'boolean':
+				return $value ? 'yes' : 'no';
+			default:
+				return $value;
+		}
 	}
 
 	/**
@@ -131,6 +148,9 @@ class Event {
 			throw new \Exception( 'Invalid event parameters. Limit is 25 parameters, included the default parameters. Values must have a max of 100 characters.' );
 		}
 		$this->params = $params;
+		foreach ( $this->params as $param_name => $param_value ) {
+			$this->params[ $param_name ] = self::sanitize_value( $param_value );
+		}
 	}
 
 	/**

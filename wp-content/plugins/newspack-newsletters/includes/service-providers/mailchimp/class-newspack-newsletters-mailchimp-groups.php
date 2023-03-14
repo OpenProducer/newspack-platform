@@ -17,9 +17,121 @@ use \DrewM\MailChimp\MailChimp;
  * In this implementation, we will always add groups/interests to a category called "Newspack Newsletters". If this category
  * doesn't exist, it will be created.
  *
+ * You can override the category name by defining the constant NEWSPACK_NEWSLETTERS_MAILCHIMP_GROUPS_CATEGORY_NAME.
+ * But only do this if you haven't created any groups/interests yet.
+ *
  * From that point on, groups will always be added to this category.
  */
 trait Newspack_Newsletters_Mailchimp_Groups {
+
+	/**
+	 * Retrieve the ESP's Local list ID from its name
+	 *
+	 * Mailchimp overrides it to use Groups instead of Tags
+	 *
+	 * @param string  $esp_local_list_name The esp_local_list.
+	 * @param boolean $create_if_not_found Whether to create a new esp_local_list if not found. Default to true.
+	 * @param string  $list_id The List ID.
+	 * @return int|WP_Error The esp_local_list ID on success. WP_Error on failure.
+	 */
+	public function get_esp_local_list_id( $esp_local_list_name, $create_if_not_found = true, $list_id = null ) {
+		return $this->get_group_id( $esp_local_list_name, $create_if_not_found, $list_id );
+	}
+
+	/**
+	 * Retrieve the ESP's Local list name from its ID
+	 *
+	 * Mailchimp overrides it to use Groups instead of Tags
+	 *
+	 * @param int|string $esp_local_list_id The esp_local_list ID.
+	 * @param string     $list_id The List ID.
+	 * @return string|WP_Error The esp_local_list name on success. WP_Error on failure.
+	 */
+	public function get_esp_local_list_by_id( $esp_local_list_id, $list_id = null ) {
+		return $this->get_group_by_id( $esp_local_list_id, $list_id );
+	}
+
+	/**
+	 * Create a Local list on the ESP
+	 *
+	 * Mailchimp overrides it to use Groups instead of Tags
+	 *
+	 * @param string $esp_local_list The Tag name.
+	 * @param string $list_id The List ID.
+	 * @return array|WP_Error The esp_local_list representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function create_esp_local_list( $esp_local_list, $list_id = null ) {
+		return $this->create_group( $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Updates a Local list name on the ESP
+	 *
+	 * Mailchimp overrides it to use Groups instead of Tags
+	 *
+	 * @param int|string $esp_local_list_id The esp_local_list ID.
+	 * @param string     $esp_local_list The Tag name.
+	 * @param string     $list_id The List ID.
+	 * @return array|WP_Error The esp_local_list representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function update_esp_local_list( $esp_local_list_id, $esp_local_list, $list_id = null ) {
+		return $this->update_group( $esp_local_list_id, $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Add a Local list to a contact in the ESP
+	 *
+	 * Mailchimp overrides it to use Groups instead of Tags
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $esp_local_list The esp_local_list ID retrieved with get_esp_local_list_id() or the the esp_local_list string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function add_esp_local_list_to_contact( $email, $esp_local_list, $list_id = null ) {
+		return $this->add_group_to_contact( $email, $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Remove a Local list from a contact in the ESP
+	 *
+	 * Mailchimp overrides it to use Groups instead of Tags
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $esp_local_list The esp_local_list ID retrieved with get_esp_local_list_id() or the the esp_local_list string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function remove_esp_local_list_from_contact( $email, $esp_local_list, $list_id = null ) {
+		return $this->remove_group_from_contact( $email, $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Get the IDs of the Local lists associated with a contact in the ESP.
+	 *
+	 * Mailchimp overrides it to use Groups instead of Tags
+	 *
+	 * @param string $email The contact email.
+	 * @return array|WP_Error The esp_local_list IDs on success. WP_Error on failure.
+	 */
+	public function get_contact_esp_local_lists_ids( $email ) {
+		return $this->get_contact_groups_ids( $email );
+	}
+
+	/**
+	 * Get the name of the Group Category that will be used to store the groups.
+	 *
+	 * WARNING: If you change this after you have created groups, new groups with the same name will be created in the new category and new readers will be added to the new group.
+	 * Only change this if you are setting up Local lists for the first time.
+	 *
+	 * @return string
+	 */
+	public static function get_group_category_name() {
+		if ( defined( 'NEWSPACK_NEWSLETTERS_MAILCHIMP_GROUP_CATEGORY_NAME' ) ) {
+			return NEWSPACK_NEWSLETTERS_MAILCHIMP_GROUP_CATEGORY_NAME;
+		}
+		return 'Newspack Newsletters';
+	}
 
 	/**
 	 * Gets the Newspack Newsletter group category ID, and creates it if it doesn't exist.
@@ -41,7 +153,7 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 		$create = $mc->post(
 			sprintf( 'lists/%s/interest-categories', $list_id ),
 			[
-				'title' => 'Newspack Newsletters',
+				'title' => self::get_group_category_name(),
 				'type'  => 'checkboxes',
 			]
 		);
@@ -56,7 +168,7 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 			);
 			if ( ! empty( $search['total_items'] ) ) {
 				foreach ( $search['categories'] as $found_category ) {
-					if ( 'Newspack Newsletters' === $found_category['title'] ) {
+					if ( self::get_group_category_name() === $found_category['title'] ) {
 						$group_category_ids[ $list_id ] = $found_category['id'];
 						update_option( $option_name, $group_category_ids );
 						return $found_category['id'];
@@ -158,6 +270,33 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 		}
 		return new WP_Error(
 			'newspack_newsletters_error_creating_group',
+			! empty( $created['detail'] ) ? $created['detail'] : ''
+		);
+	}
+
+	/**
+	 * Create a Group on Mailchimp
+	 *
+	 * @param string $group_id The group ID.
+	 * @param string $group The Group name.
+	 * @param string $list_id The List ID.
+	 * @return array|WP_Error The group representation sent from the server on succes. WP_Error on failure.
+	 */
+	public function update_group( $group_id, $group, $list_id = null ) {
+		
+		$mc      = new Mailchimp( $this->api_key() );
+		$created = $mc->patch(
+			sprintf( '/lists/%s/interest-categories/%s/interests/%s', $list_id, $this->get_groups_category_id( $list_id ), $group_id ),
+			[
+				'name' => $group,
+			]
+		);
+
+		if ( is_array( $created ) && ! empty( $created['id'] ) && ! empty( $created['name'] ) ) {
+			return $created;
+		}
+		return new WP_Error(
+			'newspack_newsletters_error_updating_group',
 			! empty( $created['detail'] ) ? $created['detail'] : ''
 		);
 	}

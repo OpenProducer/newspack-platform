@@ -116,6 +116,10 @@ class Handoff_Banner {
 	 * @return bool
 	 */
 	public static function needs_handoff_return_ui() {
+		if ( get_option( NEWSPACK_SETUP_COMPLETE, true ) ) {
+			return false;
+		}
+
 		return get_option( NEWSPACK_HANDOFF ) ? true : false;
 	}
 

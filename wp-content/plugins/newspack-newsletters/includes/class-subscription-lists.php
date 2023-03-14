@@ -8,6 +8,8 @@
 namespace Newspack\Newsletters;
 
 use Newspack_Newsletters;
+use Newspack_Newsletters_Settings;
+use Newspack_Newsletters_Subscription;
 use WP_Post;
 
 defined( 'ABSPATH' ) || exit;
@@ -36,12 +38,17 @@ class Subscription_Lists {
 			return;
 		}
 		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
-		add_action( 'admin_menu', [ __CLASS__, 'add_submenu_item' ] );
 		add_filter( 'wp_editor_settings', [ __CLASS__, 'filter_editor_settings' ], 10, 2 );
 		add_action( 'save_post', [ __CLASS__, 'save_post' ] );
 		add_filter( 'manage_' . self::CPT . '_posts_columns', [ __CLASS__, 'posts_columns' ] );
 		add_action( 'manage_' . self::CPT . '_posts_custom_column', [ __CLASS__, 'posts_columns_values' ], 10, 2 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
+
+		add_action( 'delete_post', [ __CLASS__, 'delete_post' ] );
+		add_action( 'wp_trash_post', [ __CLASS__, 'delete_post' ] );
+
+		add_action( 'edit_form_before_permalink', [ __CLASS__, 'edit_form_before_permalink' ] );
+		add_action( 'edit_form_top', [ __CLASS__, 'edit_form_top' ] );
 	}
 
 	/**
@@ -68,7 +75,7 @@ class Subscription_Lists {
 		if ( ! is_admin() ) {
 			return false;
 		}
-		
+
 		// If Service Provider is not configured yet.
 		if ( 'manual' === Newspack_Newsletters::service_provider() || ! Newspack_Newsletters::is_service_provider_configured() ) {
 			return false;
@@ -76,8 +83,8 @@ class Subscription_Lists {
 
 		$provider = Newspack_Newsletters::get_service_provider();
 
-		// Only init if current provider supports tags.
-		return $provider::$support_tags;
+		// Only init if current provider supports local lists.
+		return $provider::$support_local_lists;
 
 	}
 
@@ -94,23 +101,8 @@ class Subscription_Lists {
 			$settings['quicktags']     = false;
 			$settings['media_buttons'] = false;
 		}
-	
-		return $settings;
-	}
 
-	/**
-	 * Add Submenu item for Lists
-	 */
-	public static function add_submenu_item() {
-		add_submenu_page(
-			'edit.php?post_type=' . Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-			__( 'Lists', 'newspack-newsletters' ),
-			__( 'Lists', 'newspack-newsletters' ),
-			'edit_others_posts',
-			'/edit.php?post_type=' . self::CPT,
-			null,
-			2
-		);
+		return $settings;
 	}
 
 	/**
@@ -125,10 +117,10 @@ class Subscription_Lists {
 			'singular_name'         => _x( 'List', 'Post Type Singular Name', 'newspack' ),
 			'menu_name'             => __( 'Lists', 'newspack' ),
 			'name_admin_bar'        => __( 'Lists', 'newspack' ),
-			'archives'              => __( 'LIsts', 'newspack' ),
+			'archives'              => __( 'Lists', 'newspack' ),
 			'attributes'            => __( 'Lists', 'newspack' ),
 			'parent_item_colon'     => __( 'Parent List', 'newspack' ),
-			'all_items'             => __( 'All Lists', 'newspack' ),
+			'all_items'             => __( 'Lists', 'newspack' ),
 			'add_new_item'          => __( 'Add new list', 'newspack' ),
 			'add_new'               => __( 'Add New', 'newspack' ),
 			'new_item'              => __( 'New List', 'newspack' ),
@@ -190,12 +182,12 @@ class Subscription_Lists {
 	 * @param array $columns Registered columns.
 	 * @return array
 	 */
-	public static function posts_columns( $columns ) {  
+	public static function posts_columns( $columns ) {
 		unset( $columns['date'] );
 		unset( $columns['stats'] );
 		$columns['active_providers'] = __( 'Service Providers', 'newspack-newsletters' );
 		return $columns;
-		
+
 	}
 
 	/**
@@ -289,17 +281,17 @@ class Subscription_Lists {
 		<div class="misc-pub-section">
 			<?php if ( ! empty( $current_settings['tag_name'] ) ) : ?>
 				<p>
-					<?php esc_html_e( 'Tag created for this list', 'newspack-newsletters' ); ?>:
+					<?php echo esc_html( $current_provider::label( 'tag_metabox_after_save' ) ); ?>
 				</p>
 				<p class="subscription-list-tag">
 					<?php echo esc_html( $current_settings['tag_name'] ); ?>
 				</p>
 			<?php else : ?>
 				<p>
-					<?php esc_html_e( 'Once this list is saved, a tag will be created for it.', 'newspack-newsletters' ); ?>
+					<?php echo esc_html( $current_provider::label( 'tag_metabox_before_save' ) ); ?>
 				</p>
 			<?php endif; ?>
-			<?php 
+			<?php
 			/**
 			 * Fires after the tag field in the list metabox.
 			 *
@@ -360,38 +352,59 @@ class Subscription_Lists {
 			return;
 		}
 
-		$provider          = Newspack_Newsletters::get_service_provider();
-		$subscription_list = new Subscription_List( $post_id );
-		$current_settings  = $subscription_list->get_current_provider_settings();
-		$tag_id            = $current_settings['tag_id'] ?? false;
-		$tag_name          = $current_settings['tag_name'] ?? $subscription_list->generate_tag_name();
-		$error             = '';
+		$provider            = Newspack_Newsletters::get_service_provider();
+		$tag_prefix          = $provider::label( 'tag_prefix' );
+		$subscription_list   = new Subscription_List( $post_id );
+		$new_tag_name        = $subscription_list->generate_tag_name( $tag_prefix );
+		$current_settings    = $subscription_list->get_current_provider_settings();
+		$tag_id              = $current_settings['tag_id'] ?? false;
+		$current_tag_name    = $current_settings['tag_name'] ?? $subscription_list->generate_tag_name( $tag_prefix );
+		$error               = '';
+		$needs_remote_update = $new_tag_name !== $current_tag_name; // Name was changed locally, needs to be updated on the ESP.
+		$needs_local_update  = false;
 
 		if ( $tag_id ) {
-			// Check if tag still exists on the ESP. Also, update tag_name if it was changed on the ESP.
-			$tag_name = $provider->get_tag_by_id( $current_settings['tag_id'], $list );
-			
-			if ( is_wp_error( $tag_name ) ) {
-				// Tag was not found. We need to create a new one. In Mailchimp, this can happen if you changed the list.
-				$tag_id   = false;
-				$tag_name = $subscription_list->generate_tag_name();
-			}       
+			// Check if tag still exists on the ESP. Will return a new name if name was changed on the ESP's dashboard.
+			$esp_tag_name = $provider->get_esp_local_list_by_id( $current_settings['tag_id'], $list );
+			if ( is_wp_error( $esp_tag_name ) ) {
+				// Tag was not found. We need to create a new one. In Mailchimp, this can happen if you changed the Audience.
+				$tag_id             = false; // Force create a new tag.
+				$new_tag_name       = $subscription_list->generate_tag_name( $tag_prefix );
+				$needs_local_update = false;
+			} elseif ( $esp_tag_name !== $current_tag_name ) {
+				// Tag name was changed on the ESP's dashboard. We need to update the local tag name.
+				$needs_local_update = true;
+			}
 		}
 
 		if ( ! $tag_id ) {
-			$tag_id = $provider->get_tag_id( $tag_name, true, $list );
+			// Get an existing tag id in the ESP or create a new one.
+			$tag_id = $provider->get_esp_local_list_id( $new_tag_name, true, $list );
 			if ( is_wp_error( $tag_id ) ) {
 				$error = $tag_id->get_error_message();
 			}
 		}
 
-		$subscription_list->update_current_provider_settings( $list, $tag_id, $tag_name, $error );
+		// Sync tag name with ESP. If tag name was changed on both ends, local changes will have precedence.
+		if ( $needs_remote_update ) {
+			$provider->update_esp_local_list( $tag_id, $new_tag_name, $list );
+		} elseif ( $needs_local_update ) {
+			$new_tag_name = $esp_tag_name;
+			wp_update_post(
+				[
+					'ID'         => $post_id,
+					'post_title' => str_replace( $tag_prefix, '', $new_tag_name ),
+				]
+			);
+		}
+
+		$subscription_list->update_current_provider_settings( $list, $tag_id, $new_tag_name, $error );
 
 	}
 
 	/**
 	 * Methods for fetching Subscription Lists
-	 * 
+	 *
 	 * Note: This was built under the assumption that there will never be too many (hundreds) of Lists, so these methods will not scale for large lists.
 	 *
 	 * If we see that the number of lists grows too much, we might need to refactor these methods and how we store Lists metadata in order to be able to perform more performatic queries using Meta_Queries.
@@ -460,5 +473,83 @@ class Subscription_Lists {
 				return $list->is_configured_for_current_provider();
 			}
 		);
+	}
+
+	/**
+	 * Callback for the delete_post and wp_trash_post actions. Will remove the deleted/trashed list from the config.
+	 *
+	 * @param int           $post_id The Post ID.
+	 * @param false|WP_Post $post Informed by the delete_post action, but not by the wp_trash_post action. The deleted post object.
+	 * @return void
+	 */
+	public static function delete_post( $post_id, $post = false ) {
+		if ( ! $post ) {
+			$post = get_post( $post_id );
+		}
+		if ( ! $post instanceof WP_Post ) {
+			return;
+		}
+		if ( self::CPT !== $post->post_type ) {
+			return;
+		}
+		$list_config = Newspack_Newsletters_Subscription::get_lists_config();
+		if ( empty( $list_config ) || \is_wp_error( $list_config ) ) {
+			return;
+		}
+
+		$id = Subscription_List::FORM_ID_PREFIX . $post_id;
+		
+		if ( ! isset( $list_config[ $id ] ) ) {
+			return;
+		}
+		
+		unset( $list_config[ $id ] );
+
+		$new_list_config = [];
+		// generate a new list config without the deleted list.
+		foreach ( $list_config as $list_id => $list ) {
+			$new_list_config[] = [
+				'id'          => $list_id,
+				'active'      => $list['active'],
+				'title'       => $list['title'],
+				'description' => $list['description'],
+			];
+		}
+
+		Newspack_Newsletters_Subscription::update_lists( $new_list_config );
+	}
+
+	/**
+	 * Get the URL to add a new Subscription List if the current provider supports it Empty string otherwise
+	 *
+	 * @return ?string
+	 */
+	public static function get_add_new_url() {
+		if ( self::should_initialize_lists() ) {
+			return admin_url( 'post-new.php?post_type=' . self::CPT );
+		}
+	}
+
+	/**
+	 * Outputs a title for the description field in the post editor.
+	 */
+	public static function edit_form_before_permalink() {
+		if ( self::CPT === get_post_type() ) {
+			printf( '<h2>%s</h2>', esc_html__( 'Description', 'newspack-newsletters' ) );
+		}
+	}
+	
+	/**
+	 * Outputs a link back to the Settings page above the title in the post editor.
+	 */
+	public static function edit_form_top() {
+		if ( self::CPT === get_post_type() ) {
+			?>
+			<a href="<?php echo esc_url( Newspack_Newsletters_Settings::get_settings_url() ); ?>">
+				&lt;&lt;
+				<?php esc_html_e( 'Back to Subscription Lists management', 'newspack-newsletters' ); ?>
+			</a>
+			<?php
+		}
 	}
 }

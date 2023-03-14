@@ -19,6 +19,7 @@ class Donations {
 	const DONATION_PRODUCT_ID_OPTION       = 'newspack_donation_product_id';
 	const DONATION_PAGE_ID_OPTION          = 'newspack_donation_page_id';
 	const DONATION_SETTINGS_OPTION         = 'newspack_donations_settings';
+	const DONATION_BILLING_FIELDS_OPTION   = 'newspack_donations_billing_fields';
 	const DONATION_ORDER_META_KEYS         = [
 		'referer_tags'       => [
 			'label' => 'Post Tags',
@@ -71,6 +72,9 @@ class Donations {
 			add_filter( 'pre_option_woocommerce_enable_guest_checkout', [ __CLASS__, 'disable_guest_checkout' ] );
 			add_action( 'woocommerce_check_cart_items', [ __CLASS__, 'handle_cart' ] );
 			add_filter( 'amp_skip_post', [ __CLASS__, 'should_skip_amp' ], 10, 2 );
+			add_filter( 'newspack_blocks_donate_billing_fields_keys', [ __CLASS__, 'get_billing_fields' ] );
+			add_filter( 'woocommerce_thankyou_order_received_text', [ __CLASS__, 'woocommerce_thankyou_order_received_text' ], 100, 2 );
+			add_action( 'woocommerce_checkout_create_order_line_item', [ __CLASS__, 'checkout_create_order_line_item' ], 10, 4 );
 		}
 	}
 
@@ -374,7 +378,8 @@ class Donations {
 			self::update_donation_product( [ 'minimumDonation' => $settings['minimumDonation'] ] );
 		}
 
-		$parsed_settings['platform'] = self::get_platform_slug();
+		$parsed_settings['platform']      = self::get_platform_slug();
+		$parsed_settings['billingFields'] = self::get_billing_fields();
 
 		return $parsed_settings;
 	}
@@ -396,6 +401,13 @@ class Donations {
 				return $ready;
 			}
 			self::update_donation_product( $configuration );
+
+			// Update the billing fields.
+			$billing_fields = $args['billingFields'];
+			if ( ! empty( $billing_fields ) ) {
+				$billing_fields = array_map( 'sanitize_text_field', $billing_fields );
+				self::update_billing_fields( $billing_fields );
+			}
 		}
 
 		Logger::log( 'Save donation settings' );
@@ -582,6 +594,8 @@ class Donations {
 			return;
 		}
 
+		$is_modal_checkout = filter_input( INPUT_GET, 'modal_checkout', FILTER_SANITIZE_NUMBER_INT );
+
 		// Parse values from the form.
 		$donation_frequency = filter_input( INPUT_GET, 'donation_frequency', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( ! $donation_frequency ) {
@@ -653,7 +667,9 @@ class Donations {
 				0,
 				[],
 				[
-					'nyp' => (float) \WC_Name_Your_Price_Helpers::standardize_number( $donation_value ),
+					'nyp'               => (float) \WC_Name_Your_Price_Helpers::standardize_number( $donation_value ),
+					'referer'           => $referer,
+					'newspack_popup_id' => filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT ),
 				]
 			);
 		}
@@ -665,6 +681,9 @@ class Donations {
 		}
 		if ( ! empty( $referer_categories ) ) {
 			$query_args['referer_categories'] = implode( ',', $referer_categories );
+		}
+		if ( $is_modal_checkout ) {
+			$query_args['modal_checkout'] = 1;
 		}
 
 		// Pass through UTM params so they can be forwarded to the WooCommerce checkout flow.
@@ -683,6 +702,24 @@ class Donations {
 		// Redirect to checkout.
 		\wp_safe_redirect( apply_filters( 'newspack_donation_checkout_url', $checkout_url, $donation_value, $donation_frequency ) );
 		exit;
+	}
+
+	/**
+	 * Add cart metadata to the order line item.
+	 *
+	 * @param \WC_Order_Item_Product $item The cart item.
+	 * @param string                 $cart_item_key The cart item key.
+	 * @param array                  $values The cart item values.
+	 * @param \WC_Order              $order The order.
+	 * @return void
+	 */
+	public static function checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+		if ( ! empty( $values['newspack_popup_id'] ) ) {
+			$order->add_meta_data( '_newspack_popup_id', $values['newspack_popup_id'] );
+		}
+		if ( ! empty( $values['referer'] ) ) {
+			$order->add_meta_data( '_newspack_referer', $values['referer'] );
+		}
 	}
 
 	/**
@@ -892,6 +929,30 @@ class Donations {
 	}
 
 	/**
+	 * Whether the WC cart contains a donation product.
+	 *
+	 * @return bool
+	 */
+	public static function is_donation_cart() {
+		if ( ! self::is_platform_wc() ) {
+			return false;
+		}
+		$donation_products_ids = array_values( self::get_donation_product_child_products_ids() );
+		if ( empty( $donation_products_ids ) ) {
+			return false;
+		}
+		if ( ! WC()->cart || ! WC()->cart->cart_contents || ! is_array( WC()->cart->cart_contents ) ) {
+			return false;
+		}
+		foreach ( WC()->cart->cart_contents as $prod_in_cart ) {
+			if ( isset( $prod_in_cart['product_id'] ) && in_array( $prod_in_cart['product_id'], $donation_products_ids ) ) {
+				return true;
+			}
+		}
+		return false;
+	}
+
+	/**
 	 * Manipulate WC's cart, if needed.
 	 * If WC is not the donations platform, the donation products should not be buyable.
 	 */
@@ -905,6 +966,58 @@ class Donations {
 				WC()->cart->remove_cart_item( $prod_in_cart['key'] );
 			}
 		}
+	}
+
+	/**
+	 * Get the checkout billing fields keys for the donation form.
+	 *
+	 * @return string[]
+	 */
+	public static function get_billing_fields() {
+		$billing_fields = get_option( self::DONATION_BILLING_FIELDS_OPTION, [] );
+
+		// If empty, return empty array so it uses the default.
+		if ( empty( $billing_fields ) ) {
+			return $billing_fields;
+		}
+
+		// Email is required, so it should always be in the list.
+		if ( ! in_array( 'billing_email', $billing_fields, true ) ) {
+			$billing_fields[] = 'billing_email';
+		}
+
+		return $billing_fields;
+	}
+
+	/**
+	 * Update the checkout billing fields keys for the donation form.
+	 *
+	 * @param string[] $billing_fields Checkout fields keys.
+	 *
+	 * @return string[] Updated checkout fields keys.
+	 */
+	public static function update_billing_fields( $billing_fields ) {
+		update_option( self::DONATION_BILLING_FIELDS_OPTION, $billing_fields );
+		return $billing_fields;
+	}
+
+	/**
+	 * Get the donation "thank you, order received" text.
+	 *
+	 * @param string $text  The text to display.
+	 * @param object $order The order object.
+	 *
+	 * @return string
+	 */
+	public static function woocommerce_thankyou_order_received_text( $text, $order ) {
+		if ( ! $order ) {
+			return $text;
+		}
+		$product_id = self::get_order_donation_product_id( $order->get_id() );
+		if ( ! $product_id ) {
+			return $text;
+		}
+		return __( 'Thank you for your donation!', 'newspack-blocks' );
 	}
 }
 Donations::init();

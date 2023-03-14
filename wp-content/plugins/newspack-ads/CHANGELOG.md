@@ -1,3 +1,17 @@
+## [1.42.2](https://github.com/Automattic/newspack-ads/compare/v1.42.1...v1.42.2) (2023-03-14)
+
+
+### Bug Fixes
+
+* **gam:** handle API fatal and session errors ([#601](https://github.com/Automattic/newspack-ads/issues/601)) ([faebc56](https://github.com/Automattic/newspack-ads/commit/faebc565cec364ddb511794a7d1a6dedad20596d))
+
+## [1.42.2-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.42.1...v1.42.2-alpha.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* **gam:** handle API fatal and session errors ([#601](https://github.com/Automattic/newspack-ads/issues/601)) ([faebc56](https://github.com/Automattic/newspack-ads/commit/faebc565cec364ddb511794a7d1a6dedad20596d))
+
 ## [1.42.1](https://github.com/Automattic/newspack-ads/compare/v1.42.0...v1.42.1) (2023-03-01)
 
 

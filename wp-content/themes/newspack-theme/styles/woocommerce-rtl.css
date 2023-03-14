@@ -67,7 +67,7 @@ a.button:hover, a.button:visited {
 }
 
 .woocommerce-pagination {
-  font-size: 0.88889em;
+  font-size: 0.8888em;
 }
 .woocommerce-pagination ul.page-numbers {
   margin: 0;
@@ -92,7 +92,7 @@ a.button:hover, a.button:visited {
   display: inline-block;
   background: #36f;
   color: #fff;
-  font-size: 0.71111em;
+  font-size: 0.7111em;
   font-weight: 700;
   letter-spacing: -0.02em;
   line-height: 1.2;
@@ -286,7 +286,7 @@ ul.products li.product .price {
 ul.products li.product .price,
 ul.products li.product .star-rating {
   display: block;
-  font-size: 0.88889em;
+  font-size: 0.8888em;
 }
 ul.products li.product .woocommerce-placeholder {
   border: 1px solid #f2f2f2;
@@ -300,7 +300,7 @@ ul.products li.product .button.loading {
 }
 ul.products li.product .added_to_cart {
   margin-right: 0.5rem;
-  font-size: 0.88889em;
+  font-size: 0.8888em;
 }
 
 /* Name your price */
@@ -929,7 +929,7 @@ table.variations select {
 }
 
 .shipping-calculator-form {
-  margin: 1rem 0 0 0;
+  margin: 1rem 0 0;
 }
 
 @media only screen and (min-width: 782px) {
@@ -1082,12 +1082,12 @@ table.variations select {
   border-style: solid;
   margin-bottom: 2px;
   margin-right: 0.25rem;
-  border-width: 6px 6px 0 6px;
-  border-color: currentcolor transparent transparent transparent;
+  border-width: 6px 6px 0;
+  border-color: currentcolor transparent transparent;
 }
 .woocommerce-terms-and-conditions-link.woocommerce-terms-and-conditions-link--open::after {
-  border-width: 0 6px 6px 6px;
-  border-color: transparent transparent currentcolor transparent;
+  border-width: 0 6px 6px;
+  border-color: transparent transparent currentcolor;
 }
 
 .woocommerce-checkout h3 {
@@ -1127,9 +1127,9 @@ table.variations select {
   transform: translateX(50%) rotate(-180deg);
   content: "";
   position: absolute;
-  border-width: 4px 6px 0 6px;
+  border-width: 4px 6px 0;
   border-style: solid;
-  border-color: royalblue transparent transparent transparent;
+  border-color: royalblue transparent transparent;
   z-index: 100;
   display: block;
 }

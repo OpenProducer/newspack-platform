@@ -40,6 +40,7 @@ class WooCommerce_Connection {
 	 */
 	public static function init() {
 		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
+		\add_filter( 'option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_switching_subscription_amount' ] );
 
 		// WooCommerce Subscriptions.
 		\add_action( 'add_meta_boxes', [ __CLASS__, 'remove_subscriptions_schedule_meta_box' ], 45 );
@@ -362,7 +363,7 @@ class WooCommerce_Connection {
 	 * @param string $stripe_subscription_id Stripe Subscription ID.
 	 * @return WC_Subscription|false Subscription object or false.
 	 */
-	private static function get_subscription_by_stripe_subscription_id( $stripe_subscription_id ) {
+	public static function get_subscription_by_stripe_subscription_id( $stripe_subscription_id ) {
 		if ( ! function_exists( 'wcs_get_subscription' ) ) {
 			return false;
 		}
@@ -393,12 +394,20 @@ class WooCommerce_Connection {
 		$order->set_billing_email( $order_data['email'] );
 		$order->set_billing_first_name( $order_data['name'] );
 
-		if ( $order_data['subscribed'] ) {
+		if ( isset( $order_data['subscribed'] ) && $order_data['subscribed'] ) {
 			$order->add_order_note( __( 'Donor has opted-in to your newsletter.', 'newspack' ) );
 		}
 
 		if ( ! empty( $order_data['client_id'] ) ) {
 			$order->add_meta_data( NEWSPACK_CLIENT_ID_COOKIE_NAME, $order_data['client_id'] );
+		}
+
+		if ( ! empty( $order_data['referer'] ) ) {
+			$order->add_meta_data( '_newspack_referer', $order_data['referer'] );
+		}
+
+		if ( ! empty( $order_data['newspack_popup_id'] ) ) {
+			$order->add_meta_data( '_newspack_popup_id', $order_data['newspack_popup_id'] );
 		}
 
 		if ( ! empty( $order_data['user_id'] ) ) {
@@ -435,7 +444,7 @@ class WooCommerce_Connection {
 	 * @param WC_Order $order Order object. Can be a subscription or an order.
 	 * @param array    $metadata Metadata.
 	 */
-	private static function add_wc_stripe_gateway_metadata( $order, $metadata ) {
+	public static function add_wc_stripe_gateway_metadata( $order, $metadata ) {
 		$order->set_payment_method( 'stripe' );
 
 		if ( isset( $metadata['stripe_id'] ) ) {
@@ -634,14 +643,16 @@ class WooCommerce_Connection {
 					}
 					$order->save();
 				}
-				$subscription = \wcs_create_subscription(
-					[
-						'start_date'       => self::convert_timestamp_to_date( $order_data['date'] ),
-						'order_id'         => $order->get_id(),
-						'billing_period'   => $frequency,
-						'billing_interval' => 1, // Every billing period (not e.g. every *second* month).
-					]
-				);
+				$subscription_creation_payload = [
+					'start_date'       => self::convert_timestamp_to_date( $order_data['date'] ),
+					'order_id'         => $order->get_id(),
+					'billing_period'   => $frequency,
+					'billing_interval' => 1, // Every billing period (not e.g. every *second* month).
+				];
+				if ( isset( $order_data['wc_subscription_status'] ) ) {
+					$subscription_creation_payload['status'] = $order_data['wc_subscription_status'];
+				}
+				$subscription = \wcs_create_subscription( $subscription_creation_payload );
 
 				if ( is_wp_error( $subscription ) ) {
 					Logger::error( 'Error creating WC subscription: ' . $subscription->get_error_message() );
@@ -656,6 +667,11 @@ class WooCommerce_Connection {
 					}
 					self::add_wc_stripe_gateway_metadata( $subscription, $wc_subscription_payload );
 					self::add_universal_order_data( $subscription, $order_data );
+
+					// Mint a new item – subscription is a new WC order.
+					$item = self::get_donation_order_item( $frequency, $order_data['amount'] );
+					$subscription->add_item( $item );
+
 					if ( false === $stripe_subscription_id ) {
 						$subscription->add_order_note( __( 'This subscription was created via Newspack.', 'newspack' ) );
 					} else {
@@ -663,9 +679,6 @@ class WooCommerce_Connection {
 						$subscription->add_order_note( sprintf( __( 'Newspack subscription with frequency: %s. The recurring payment and the subscription will be handled in Stripe, so you\'ll see "Manual renewal" as the payment method in WooCommerce.', 'newspack' ), $frequency ) );
 						$subscription->update_status( 'active' ); // Settings status via method (not in wcs_create_subscription), to make WCS recalculate dates.
 					}
-					// Mint a new item – subscription is a new WC order.
-					$item = self::get_donation_order_item( $frequency, $order_data['amount'] );
-					$subscription->add_item( $item );
 					$subscription->calculate_totals();
 
 					if ( false === $stripe_subscription_id ) {
@@ -705,8 +718,8 @@ class WooCommerce_Connection {
 		}
 
 		return [
-			'order_id'        => $order ? $order->get_id() : false,
-			'subscription_id' => $subscription ? $subscription->get_id() : false,
+			'order_id'        => ( ! \is_wp_error( $order ) && $order ) ? $order->get_id() : false,
+			'subscription_id' => ( ! \is_wp_error( $subscription ) && $subscription ) ? $subscription->get_id() : false,
 		];
 	}
 
@@ -1001,6 +1014,18 @@ class WooCommerce_Connection {
 			}
 		}
 		return $post_data;
+	}
+
+	/**
+	 * Force allow switching the subscription amount unless the NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE constant is set
+	 *
+	 * @param bool $can_switch Whether the subscription amount can be switched.
+	 */
+	public static function force_allow_switching_subscription_amount( $can_switch ) {
+		if ( defined( 'NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE' ) && NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE ) {
+			return $can_switch;
+		}
+		return 'yes';
 	}
 }
 

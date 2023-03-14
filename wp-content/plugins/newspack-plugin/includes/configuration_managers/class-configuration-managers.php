@@ -24,10 +24,6 @@ class Configuration_Managers {
 			'filename'   => 'class-jetpack-configuration-manager.php',
 			'class_name' => 'Jetpack_Configuration_Manager',
 		],
-		'amp'                   => [
-			'filename'   => 'class-amp-configuration-manager.php',
-			'class_name' => 'AMP_Configuration_Manager',
-		],
 		'google-site-kit'       => [
 			'filename'   => 'class-site-kit-configuration-manager.php',
 			'class_name' => 'Site_Kit_Configuration_Manager',

@@ -1,3 +1,50 @@
+# [1.107.0](https://github.com/Automattic/newspack-plugin/compare/v1.106.0...v1.107.0) (2023-03-14)
+
+
+### Features
+
+* remove AMP as a required plugin ([#2346](https://github.com/Automattic/newspack-plugin/issues/2346)) ([102ed04](https://github.com/Automattic/newspack-plugin/commit/102ed04723bb4a6918cfac4a9dd913d2cc6cdf25))
+
+# [1.106.0](https://github.com/Automattic/newspack-plugin/compare/v1.105.1...v1.106.0) (2023-03-14)
+
+
+### Bug Fixes
+
+* **ads:** gam api availability according to error type ([#2289](https://github.com/Automattic/newspack-plugin/issues/2289)) ([024fe08](https://github.com/Automattic/newspack-plugin/commit/024fe08b4f72d2f675b0ecc88511ea5fc917c2a0))
+* show handoff to finish Newspack setup only if setup is incomplete ([#2343](https://github.com/Automattic/newspack-plugin/issues/2343)) ([1173b5b](https://github.com/Automattic/newspack-plugin/commit/1173b5b099bdbe35d89360825341c8d6796f6b95))
+
+
+### Features
+
+* add a Add new button to subscription lists ([#2314](https://github.com/Automattic/newspack-plugin/issues/2314)) ([9543ad2](https://github.com/Automattic/newspack-plugin/commit/9543ad204421909defd4f816a86a9c44c1d19efe))
+* add ga4 user registered handler ([#2281](https://github.com/Automattic/newspack-plugin/issues/2281)) ([5eb2336](https://github.com/Automattic/newspack-plugin/commit/5eb2336559f5485e917789893ecf761540abce91))
+* add pid to Logger ([#2290](https://github.com/Automattic/newspack-plugin/issues/2290)) ([fd3011c](https://github.com/Automattic/newspack-plugin/commit/fd3011cdb4811f13506775ac0d4d6e646c956a41))
+* Add popup info to donations ([#2300](https://github.com/Automattic/newspack-plugin/issues/2300)) ([7ea800b](https://github.com/Automattic/newspack-plugin/commit/7ea800b4d18fc9ce32df6821581777188c2809e3))
+* allow external links in dashboard via a filter ([#2279](https://github.com/Automattic/newspack-plugin/issues/2279)) ([3943b1a](https://github.com/Automattic/newspack-plugin/commit/3943b1adab20d84b04dff7dae91772f2a0f72d8e))
+* campaigns listeners for the data events api ([#2291](https://github.com/Automattic/newspack-plugin/issues/2291)) ([ab407d4](https://github.com/Automattic/newspack-plugin/commit/ab407d4bbcb7aa8ced97c811babe257a806186cb))
+* disable save button for unchanged settings ([#2259](https://github.com/Automattic/newspack-plugin/issues/2259)) ([e06d72f](https://github.com/Automattic/newspack-plugin/commit/e06d72fed248f88c6dd9aacc0810572287093445)), closes [#1531](https://github.com/Automattic/newspack-plugin/issues/1531)
+* **donate-block:** support modal checkout ([#2256](https://github.com/Automattic/newspack-plugin/issues/2256)) ([34226dd](https://github.com/Automattic/newspack-plugin/commit/34226dd67311bd7246a5ddb96079ae7472f8bc45))
+* Normalize donation events ([#2299](https://github.com/Automattic/newspack-plugin/issues/2299)) ([2624d53](https://github.com/Automattic/newspack-plugin/commit/2624d53e6c1cb8a28de7ea61f861a40f3bf9ad8c))
+* **perfmatters:** improve config ([267306e](https://github.com/Automattic/newspack-plugin/commit/267306e017448fb15f59f36c49472f0d97b8e764))
+* prevent homepage from being unpublished ([#2307](https://github.com/Automattic/newspack-plugin/issues/2307)) ([a151d53](https://github.com/Automattic/newspack-plugin/commit/a151d53212fb005ee5e95d0a76f7a815f97f9166))
+* Remove the campaign rendered event ([#2301](https://github.com/Automattic/newspack-plugin/issues/2301)) ([23caa1d](https://github.com/Automattic/newspack-plugin/commit/23caa1db8f62ecbf663b01c9e17f79d26d7be46e))
+* Stripe Subscriptions to WC subscriptions migrator ([#2298](https://github.com/Automattic/newspack-plugin/issues/2298)) ([6904356](https://github.com/Automattic/newspack-plugin/commit/6904356f15d10c49b81e1eb1ccfb40452d3ac871)), closes [#2251](https://github.com/Automattic/newspack-plugin/issues/2251)
+* **wc:** force allowing subscription switching ([#2305](https://github.com/Automattic/newspack-plugin/issues/2305)) ([c13e741](https://github.com/Automattic/newspack-plugin/commit/c13e741ecacea764965aa7ce407f2621d3ddc068))
+
+# [1.106.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v1.106.0-alpha.2...v1.106.0-alpha.3) (2023-03-13)
+
+
+### Bug Fixes
+
+* show handoff to finish Newspack setup only if setup is incomplete ([#2343](https://github.com/Automattic/newspack-plugin/issues/2343)) ([1173b5b](https://github.com/Automattic/newspack-plugin/commit/1173b5b099bdbe35d89360825341c8d6796f6b95))
+
+# [1.106.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v1.106.0-alpha.1...v1.106.0-alpha.2) (2023-03-06)
+
+
+### Bug Fixes
+
+* **perfmatters:** adjust defaults ([b03833d](https://github.com/Automattic/newspack-plugin/commit/b03833d639779dcb47084c1dc25cc2255f0c3821))
+
 ## [1.105.1](https://github.com/Automattic/newspack-plugin/compare/v1.105.0...v1.105.1) (2023-03-06)
 
 

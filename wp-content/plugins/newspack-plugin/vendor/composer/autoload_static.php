@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit146c7e92bdfe66162d35bb3dabecc30f
+class ComposerStaticInitca0996e67c5790d6ec51baf67af0880d
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -95,7 +95,6 @@ class ComposerStaticInit146c7e92bdfe66162d35bb3dabecc30f
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
-        'Newspack\\AMP_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-amp-configuration-manager.php',
         'Newspack\\AMP_Enhancements' => __DIR__ . '/../..' . '/includes/class-amp-enhancements.php',
         'Newspack\\API' => __DIR__ . '/../..' . '/includes/class-api.php',
         'Newspack\\API\\Plugins_Controller' => __DIR__ . '/../..' . '/includes/api/class-plugins-controller.php',
@@ -121,6 +120,7 @@ class ComposerStaticInit146c7e92bdfe66162d35bb3dabecc30f
         'Newspack\\Data_Events\\Connectors\\GA4' => __DIR__ . '/../..' . '/includes/data-events/connectors/ga4/class-ga4.php',
         'Newspack\\Data_Events\\Connectors\\GA4\\Event' => __DIR__ . '/../..' . '/includes/data-events/connectors/ga4/class-event.php',
         'Newspack\\Data_Events\\Connectors\\Mailchimp' => __DIR__ . '/../..' . '/includes/data-events/connectors/class-mailchimp.php',
+        'Newspack\\Data_Events\\Popups' => __DIR__ . '/../..' . '/includes/data-events/class-popups.php',
         'Newspack\\Data_Events\\Webhooks' => __DIR__ . '/../..' . '/includes/data-events/class-webhooks.php',
         'Newspack\\Donations' => __DIR__ . '/../..' . '/includes/class-donations.php',
         'Newspack\\Emails' => __DIR__ . '/../..' . '/includes/emails/class-emails.php',
@@ -199,9 +199,9 @@ class ComposerStaticInit146c7e92bdfe66162d35bb3dabecc30f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit146c7e92bdfe66162d35bb3dabecc30f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit146c7e92bdfe66162d35bb3dabecc30f::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit146c7e92bdfe66162d35bb3dabecc30f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitca0996e67c5790d6ec51baf67af0880d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitca0996e67c5790d6ec51baf67af0880d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitca0996e67c5790d6ec51baf67af0880d::$classMap;
 
         }, null, ClassLoader::class);
     }

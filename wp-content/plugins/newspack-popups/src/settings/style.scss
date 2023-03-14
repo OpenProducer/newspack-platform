@@ -1,4 +1,4 @@
-@import '~newspack-components/shared/scss/colors';
+@use '~newspack-components/shared/scss/colors';
 
 .components-card {
 	margin: 2rem auto;
@@ -39,13 +39,13 @@
 	}
 
 	&__wrapper {
-		background: $primary-500;
+		background: colors.$primary-500;
 		display: flex;
 		padding: 12px 0;
 		position: relative;
 
 		&::before {
-			background: $primary-500;
+			background: colors.$primary-500;
 			bottom: 0;
 			content: '';
 			display: block;

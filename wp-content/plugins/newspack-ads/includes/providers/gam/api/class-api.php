@@ -94,23 +94,34 @@ class Api {
 				throw new \Exception( __( 'Invalid authentication method.', 'newspack-ads' ) );
 			}
 			$this->auth_method = $auth_method;
-			if ( ! $credentials ) {
-				throw new \Exception( __( 'Invalid credentials.', 'newspack-ads' ) );
-			}
 			$this->credentials = $credentials;
 		} else {
 			$this->session = $auth_method_or_session;
 		}
 		$this->network_code = $network_code;
+	}
 
-		$session = $this->get_session();
-
-		$this->advertisers    = new Api\Advertisers( $session, $this );
-		$this->creatives      = new Api\Creatives( $session, $this );
-		$this->targeting_keys = new Api\Targeting_Keys( $session, $this );
-		$this->ad_units       = new Api\Ad_Units( $session, $this );
-		$this->line_items     = new Api\Line_Items( $session, $this );
-		$this->orders         = new Api\Orders( $session, $this );
+	/**
+	 * Initialize the API instance with a session and its API objects.
+	 *
+	 * @return true|\WP_Error True if the API was initialized successfully, WP_Error otherwise.
+	 */
+	public function init() {
+		try {
+			$session = $this->get_session();
+			if ( \is_wp_error( $session ) ) {
+				return $session;
+			}
+			$this->advertisers    = new Api\Advertisers( $session, $this );
+			$this->creatives      = new Api\Creatives( $session, $this );
+			$this->targeting_keys = new Api\Targeting_Keys( $session, $this );
+			$this->ad_units       = new Api\Ad_Units( $session, $this );
+			$this->line_items     = new Api\Line_Items( $session, $this );
+			$this->orders         = new Api\Orders( $session, $this );
+		} catch ( ApiException $e ) {
+			return $this->get_error( $e );
+		}
+		return true;
 	}
 
 	/**
@@ -175,11 +186,14 @@ class Api {
 	/**
 	 * Get GAM session for making API requests.
 	 *
-	 * @return AdManagerSession
+	 * @return AdManagerSession|\WP_Error Session object or WP_Error if the session could not be created.
 	 */
 	public function get_session() {
 		if ( $this->session ) {
 			return $this->session;
+		}
+		if ( ! $this->credentials ) {
+			return new \WP_Error( 'newspack_ads_gam_error', __( 'No credentials provided.', 'newspack-ads' ) );
 		}
 		$config = [
 			'AD_MANAGER' => [

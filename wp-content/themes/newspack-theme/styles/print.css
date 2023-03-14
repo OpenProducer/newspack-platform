@@ -4,7 +4,7 @@ Theme Name: Newspack Theme
 Adding print support. The print styles are based on the the great work of
 Andreas Hecht in https://www.jotform.com/blog/css-perfect-print-stylesheet-98272/.
 */
-/*--------------------------------------------------------------
+/* --------------------------------------------------------------
 >>> TABLE OF CONTENTS:
 ----------------------------------------------------------------
 # Margins
@@ -12,7 +12,7 @@ Andreas Hecht in https://www.jotform.com/blog/css-perfect-print-stylesheet-98272
 # Page breaks
 # Links
 # Visibility
---------------------------------------------------------------*/
+-------------------------------------------------------------- */
 @media print {
   /* Margins */
   @page {

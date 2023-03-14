@@ -283,6 +283,16 @@ class Newspack_Popups_Settings {
 				'help'        => __( 'Use this setting in high traffic scenarios. No API requests will be made, reducing server load. Inline prompts will be shown to all users, and overlay prompts will be suppressed.', 'newspack-popups' ),
 				'public'      => false,
 			],
+			[
+				'section'     => 'general_settings',
+				'key'         => 'newspack_popups_dismiss_overlays_on_tap',
+				'type'        => 'boolean',
+				'value'       => self::enable_dismiss_overlays_on_background_tap(),
+				'default'     => false,
+				'description' => __( 'Dismiss overlays on background tap', 'newspack-popups' ),
+				'help'        => __( 'If enabled, readers can dismiss overlay prompts by tapping on the colored overlay background underneath the prompt content. This will make it easier for readers to dismiss prompts, but potentially result in less reader engagement.', 'newspack-popups' ),
+				'public'      => false,
+			],
 		];
 
 		$default_setting = array(
@@ -362,6 +372,15 @@ class Newspack_Popups_Settings {
 	 */
 	public static function donor_landing_page() {
 		return get_option( 'newspack_popups_donor_landing_page', '' );
+	}
+
+	/**
+	 * Enable overlay dismiss on background tap.
+	 *
+	 * @return boolean
+	 */
+	public static function enable_dismiss_overlays_on_background_tap() {
+		return get_option( 'newspack_popups_dismiss_overlays_on_tap', false );
 	}
 
 	/**

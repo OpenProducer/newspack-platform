@@ -2,9 +2,9 @@
 @use '../../../shared/sass/colors';
 @use '../../../shared/sass/variables';
 
-@import '../streamlined/style';
-@import '../frequency-based/style';
-@import '../tiers-based/style';
+@use '../streamlined/style' as streamlined;
+@use '../frequency-based/style' as frequency-based;
+@use '../tiers-based/style' as tiers-based;
 
 .wp-block-newspack-blocks-donate {
 	&__tier--frequency {
@@ -143,7 +143,7 @@
 	}
 
 	&__notice {
-		margin: 0 0 20px 0;
+		margin: 0 0 20px;
 	}
 }
 

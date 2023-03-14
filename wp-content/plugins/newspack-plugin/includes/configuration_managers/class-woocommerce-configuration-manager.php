@@ -108,8 +108,9 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 	 */
 	public function stripe_data() {
 		$gateways = self::get_payment_gateways();
+		$defaults = Stripe_Connection::get_default_stripe_data();
 		if ( ! isset( $gateways['stripe'] ) ) {
-			return Stripe_Connection::get_default_stripe_data();
+			return $defaults;
 		}
 		$stripe      = $gateways['stripe'];
 		$stripe_data = [
@@ -120,7 +121,7 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 			'testPublishableKey' => $stripe->get_option( 'test_publishable_key', '' ),
 			'testSecretKey'      => $stripe->get_option( 'test_secret_key', '' ),
 		];
-		return $stripe_data;
+		return \wp_parse_args( $stripe_data, $defaults );
 	}
 
 	/**

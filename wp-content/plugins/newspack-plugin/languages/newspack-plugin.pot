@@ -214,15 +214,6 @@ msgstr ""
 msgid "Back to Newspack"
 msgstr ""
 
-#: includes/class-plugin-manager.php:51
-#: assets/wizards/health-check/views/configuration/index.js:31
-msgid "AMP"
-msgstr ""
-
-#: includes/class-plugin-manager.php:52
-msgid "Enable AMP on your WordPress site, the WordPress way."
-msgstr ""
-
 #: includes/class-plugin-manager.php:140
 #: tests/unit-tests/plugin-manager.php:58
 #: assets/wizards/health-check/views/configuration/index.js:42
@@ -435,10 +426,6 @@ msgstr ""
 
 #: includes/class-webhooks.php:113
 msgid "Could not create or update Salesforce data."
-msgstr ""
-
-#: includes/configuration_managers/class-amp-configuration-manager.php:35
-msgid "The AMP plugin is not configured properly."
 msgstr ""
 
 #: includes/configuration_managers/class-configuration-manager.php:32
@@ -2432,18 +2419,6 @@ msgstr ""
 
 #: assets/wizards/engagement/views/related-content/index.js:51
 msgid "Maximum age of related content, in months"
-msgstr ""
-
-#: assets/wizards/health-check/views/configuration/index.js:34
-msgid "AMP plugin is in standard mode."
-msgstr ""
-
-#: assets/wizards/health-check/views/configuration/index.js:35
-msgid "AMP plugin is not in standard mode. "
-msgstr ""
-
-#: assets/wizards/health-check/views/configuration/index.js:37
-msgid "Repair"
 msgstr ""
 
 #: assets/wizards/health-check/views/configuration/index.js:45

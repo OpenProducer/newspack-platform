@@ -116,7 +116,20 @@ class Dashboard extends Wizard {
 			],
 		];
 
-		return $dashboard;
+		/**
+		 * Filters the dashboard items.
+		 *
+		 * @param array          $dashboard  {
+		 *    Dashboard items.
+		 *
+		 *    @type string   $slug        Slug.
+		 *    @type string   $name        Displayed name.
+		 *    @type string   $url         URL to redirect to.
+		 *    @type string   $description Item description.
+		 *    @type bool     $is_externam If true, the URL will be opened in a new window. Optional.
+		 * }
+		 */
+		return apply_filters( 'newspack_plugin_dashboard_items', $dashboard );
 	}
 
 	/**

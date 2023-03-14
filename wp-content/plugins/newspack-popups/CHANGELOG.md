@@ -1,3 +1,35 @@
+# [2.14.0](https://github.com/Automattic/newspack-popups/compare/v2.13.0...v2.14.0) (2023-03-14)
+
+
+### Bug Fixes
+
+* avoid notice on php 8 ([6fde157](https://github.com/Automattic/newspack-popups/commit/6fde157a8f09d3828c486dae3011a84434a23223))
+* prevent PHP warning when previewing prompts ([5a85939](https://github.com/Automattic/newspack-popups/commit/5a859396e6399575b90b9b6b7550ddb2c6d89e9a))
+
+
+### Features
+
+* add popup info to donation block ([85ec525](https://github.com/Automattic/newspack-popups/commit/85ec5257e2fbdb0700f9959ea4b34dba0ab2f41a))
+* add popup info to donation block ([7a01172](https://github.com/Automattic/newspack-popups/commit/7a01172655c285e6e9d51f34c494e58a1364363d))
+* add popups ids to forms in prompts ([b41aff9](https://github.com/Automattic/newspack-popups/commit/b41aff913999a91cc057260d8eaee39f377319ae))
+* allow overlays to be dismissed on background tap ([#1062](https://github.com/Automattic/newspack-popups/issues/1062)) ([97a040b](https://github.com/Automattic/newspack-popups/commit/97a040b3afe8f8d448eb257a1132064cc744ff71))
+
+# [2.14.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.13.0...v2.14.0-alpha.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* avoid notice on php 8 ([6fde157](https://github.com/Automattic/newspack-popups/commit/6fde157a8f09d3828c486dae3011a84434a23223))
+* prevent PHP warning when previewing prompts ([5a85939](https://github.com/Automattic/newspack-popups/commit/5a859396e6399575b90b9b6b7550ddb2c6d89e9a))
+
+
+### Features
+
+* add popup info to donation block ([85ec525](https://github.com/Automattic/newspack-popups/commit/85ec5257e2fbdb0700f9959ea4b34dba0ab2f41a))
+* add popup info to donation block ([7a01172](https://github.com/Automattic/newspack-popups/commit/7a01172655c285e6e9d51f34c494e58a1364363d))
+* add popups ids to forms in prompts ([b41aff9](https://github.com/Automattic/newspack-popups/commit/b41aff913999a91cc057260d8eaee39f377319ae))
+* allow overlays to be dismissed on background tap ([#1062](https://github.com/Automattic/newspack-popups/issues/1062)) ([97a040b](https://github.com/Automattic/newspack-popups/commit/97a040b3afe8f8d448eb257a1132064cc744ff71))
+
 # [2.13.0](https://github.com/Automattic/newspack-popups/compare/v2.12.0...v2.13.0) (2023-02-21)
 
 

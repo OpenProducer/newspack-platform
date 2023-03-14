@@ -143,10 +143,20 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	public function create_tag( $tag, $list_id = null );
 
 	/**
+	 * Updates a Tag name on the provider
+	 *
+	 * @param string|int $tag_id The tag ID.
+	 * @param string     $tag The Tag new name.
+	 * @param string     $list_id The List ID.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function update_tag( $tag_id, $tag, $list_id = null );
+
+	/**
 	 * Add a tag to a contact
 	 *
 	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string|int $tag The tag ID.
 	 * @param string     $list_id The List ID.
 	 * @return true|WP_Error
 	 */
@@ -156,7 +166,7 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	 * Remove a tag from a contact
 	 *
 	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string|int $tag The tag ID.
 	 * @param string     $list_id The List ID.
 	 * @return true|WP_Error
 	 */

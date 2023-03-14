@@ -3,7 +3,7 @@
  */
 import { useDispatch } from '@wordpress/data';
 import { __ } from '@wordpress/i18n';
-import { ToggleControl } from '@wordpress/components';
+import { ToggleControl, CheckboxControl } from '@wordpress/components';
 
 /**
  * Internal dependencies.
@@ -54,10 +54,22 @@ type WizardData = {
 				currencySymbol: string;
 				tiered: boolean;
 				minimumDonation: string;
+				billingFields: string[];
 		  };
 	donation_page: {
 		editUrl: string;
 		status: string;
+	};
+	available_billing_fields: {
+		[ key: string ]: {
+			autocomplete: string;
+			class: string[];
+			label: string;
+			priority: number;
+			required: boolean;
+			type: string;
+			validate: string[];
+		};
 	};
 };
 
@@ -229,6 +241,62 @@ export const DonationAmounts = () => {
 	);
 };
 
+const BillingFields = () => {
+	const wizardData = Wizard.useWizardData( 'reader-revenue' ) as WizardData;
+
+	const { updateWizardSettings } = useDispatch( Wizard.STORE_NAMESPACE );
+
+	const changeHandler = path => value =>
+		updateWizardSettings( {
+			slug: 'newspack-reader-revenue-wizard',
+			path: [ 'donation_data', ...path ],
+			value,
+		} );
+
+	const availableFields = wizardData.available_billing_fields;
+	if ( ! availableFields || ! Object.keys( availableFields ).length ) {
+		return null;
+	}
+
+	const billingFields = wizardData.donation_data.billingFields.length
+		? wizardData.donation_data.billingFields
+		: Object.keys( availableFields );
+
+	return (
+		<>
+			<Card noBorder headerActions>
+				<SectionHeader
+					title={ __( 'Billing Fields', 'newspack' ) }
+					description={ __(
+						'Configure which billing fields should be rendered on the donation form.',
+						'newspack'
+					) }
+					noMargin
+				/>
+			</Card>
+			<Grid columns={ 3 } rowGap={ 16 }>
+				{ Object.keys( availableFields ).map( fieldKey => (
+					<CheckboxControl
+						key={ fieldKey }
+						label={ availableFields[ fieldKey ].label }
+						checked={ billingFields.includes( fieldKey ) }
+						disabled={ fieldKey === 'billing_email' } // Email is always required.
+						onChange={ () => {
+							let newFields = [ ...billingFields ];
+							if ( billingFields.includes( fieldKey ) ) {
+								newFields = newFields.filter( field => field !== fieldKey );
+							} else {
+								newFields = [ ...newFields, fieldKey ];
+							}
+							changeHandler( [ 'billingFields' ] )( newFields );
+						} }
+					/>
+				) ) }
+			</Grid>
+		</>
+	);
+};
+
 const Donation = () => {
 	const wizardData = Wizard.useWizardData( 'reader-revenue' ) as WizardData;
 
@@ -275,6 +343,7 @@ const Donation = () => {
 				</>
 			) }
 			<DonationAmounts />
+			<BillingFields />
 			<div className="newspack-buttons-card">
 				<Button variant="primary" onClick={ onSave } href={ undefined }>
 					{ __( 'Save Settings' ) }

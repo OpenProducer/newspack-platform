@@ -208,6 +208,7 @@
 				&:not( :last-child ) {
 					margin-bottom: 10px;
 				}
+
 				width: 100%;
 				@include mixins.media( mobile ) {
 					width: auto;
@@ -258,7 +259,7 @@
 		}
 
 		&__footer {
-			margin: 0 0 1.12rem 0;
+			margin: 0 0 1.12rem;
 
 			> * {
 				padding: 0;
@@ -292,7 +293,7 @@
 		}
 
 		&__footer {
-			margin: 0 0 1.12rem 0;
+			margin: 0 0 1.12rem;
 
 			> * {
 				padding: 0;

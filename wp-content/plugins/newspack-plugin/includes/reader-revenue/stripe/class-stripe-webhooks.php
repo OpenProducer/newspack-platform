@@ -267,19 +267,19 @@ class Stripe_Webhooks {
 				$client_id         = isset( $customer['metadata']['clientId'] ) ? $customer['metadata']['clientId'] : null;
 				$origin            = isset( $customer['metadata']['origin'] ) ? $customer['metadata']['origin'] : null;
 
-				$referer = '';
-				if ( isset( $metadata['referer'] ) ) {
-					$referer = $metadata['referer'];
-				}
-
-				$frequency = Stripe_Connection::get_frequency_of_payment( $payment );
-
+				$referer           = $metadata['referer'] ?? '';
+				$newspack_popup_id = $metadata['newspack_popup_id'] ?? '';
 				if ( $payment['invoice'] ) {
 					$invoice = Stripe_Connection::get_invoice( $payment['invoice'] );
-					if ( ! \is_wp_error( $invoice ) && isset( $invoice['metadata']['referer'] ) ) {
-						$referer = $invoice['metadata']['referer'];
+					if ( ! \is_wp_error( $invoice ) ) {
+						$referer           = $invoice['metadata']['referer'] ?? $referer;
+						$newspack_popup_id = $invoice['metadata']['newspack_popup_id'] ?? $newspack_popup_id;
 					}
 				}
+				$payment['referer']           = $referer;
+				$payment['newspack_popup_id'] = $newspack_popup_id;
+
+				$frequency = Stripe_Connection::get_frequency_of_payment( $payment );
 
 				// Update data in Newsletters provider.
 				$was_customer_added_to_mailing_list = false;

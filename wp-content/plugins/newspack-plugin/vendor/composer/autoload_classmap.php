@@ -7,7 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'Newspack\\AMP_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-amp-configuration-manager.php',
     'Newspack\\AMP_Enhancements' => $baseDir . '/includes/class-amp-enhancements.php',
     'Newspack\\API' => $baseDir . '/includes/class-api.php',
     'Newspack\\API\\Plugins_Controller' => $baseDir . '/includes/api/class-plugins-controller.php',
@@ -33,6 +32,7 @@ return array(
     'Newspack\\Data_Events\\Connectors\\GA4' => $baseDir . '/includes/data-events/connectors/ga4/class-ga4.php',
     'Newspack\\Data_Events\\Connectors\\GA4\\Event' => $baseDir . '/includes/data-events/connectors/ga4/class-event.php',
     'Newspack\\Data_Events\\Connectors\\Mailchimp' => $baseDir . '/includes/data-events/connectors/class-mailchimp.php',
+    'Newspack\\Data_Events\\Popups' => $baseDir . '/includes/data-events/class-popups.php',
     'Newspack\\Data_Events\\Webhooks' => $baseDir . '/includes/data-events/class-webhooks.php',
     'Newspack\\Donations' => $baseDir . '/includes/class-donations.php',
     'Newspack\\Emails' => $baseDir . '/includes/emails/class-emails.php',

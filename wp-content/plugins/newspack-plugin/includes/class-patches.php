@@ -21,6 +21,7 @@ class Patches {
 		add_action( 'admin_menu', [ __CLASS__, 'add_reusable_blocks_menu_link' ] );
 		add_filter( 'wpseo_opengraph_url', [ __CLASS__, 'http_ogurls' ] );
 		add_filter( 'map_meta_cap', [ __CLASS__, 'prevent_accidental_page_deletion' ], 10, 4 );
+		add_action( 'pre_post_update', [ __CLASS__, 'prevent_unpublish_front_page' ], 10, 2 );
 		add_action( 'pre_get_posts', [ __CLASS__, 'maybe_display_author_page' ] );
 		add_action( 'pre_get_posts', [ __CLASS__, 'restrict_others_posts' ] );
 		add_filter( 'ajax_query_attachments_args', [ __CLASS__, 'restrict_media_library_access_ajax' ] );
@@ -229,6 +230,31 @@ class Patches {
 		}
 
 		return $caps;
+	}
+
+	/**
+	 * Prevent unpublishing of the homepage.
+	 *
+	 * @param int   $post_id ID of post being updated.
+	 * @param array $data Array of unslashed post data.
+	 */
+	public static function prevent_unpublish_front_page( $post_id, $data ) {
+		$homepage_id = intval( get_option( 'page_on_front', 0 ) );
+
+		// No need to run if not the homepage, or the homepage isn't a static page.
+		if ( ! $homepage_id || $homepage_id !== $post_id ) {
+			return;
+		}
+
+		$post         = get_post( $post_id );
+		$old_status   = $post->post_status;
+		$new_status   = $data['post_status'];
+		$is_published = 'publish' === $old_status;
+
+		// Prevent attempts to unpublish a published homepage.
+		if ( $is_published && 'publish' !== $new_status ) {
+			wp_die( __( 'Please choose a new homepage before attempting to unpublish this page.', 'newspack-plugin' ) ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+		}
 	}
 
 	/**

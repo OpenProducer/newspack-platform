@@ -38,7 +38,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 *
 	 * @var boolean
 	 */
-	public static $support_tags = false;
+	public static $support_local_lists = true;
 
 	/**
 	 * Provider name.
@@ -212,9 +212,10 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 				],
 			]
 		);
+
 		if ( ! empty( $search['tags'] ) ) {
 			foreach ( $search['tags'] as $found_tag ) {
-				if ( ! empty( $found_tag['tag'] ) && $tag_name === $found_tag['tag'] ) {
+				if ( ! empty( $found_tag['tag'] ) && strtolower( $tag_name ) === strtolower( $found_tag['tag'] ) ) {
 					return (int) $found_tag['id'];
 				}
 			}
@@ -228,6 +229,10 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		}
 
 		$created = $this->create_tag( $tag_name );
+
+		if ( is_wp_error( $created ) ) {
+			return $created;
+		}
 
 		return (int) $created['id'];
 	}
@@ -313,10 +318,44 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	}
 
 	/**
+	 * Updates a Tag name on the provider
+	 *
+	 * @param string|int $tag_id The tag ID.
+	 * @param string     $tag The Tag new name.
+	 * @param string     $list_id The List ID. Not needed for Active Campaign.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function update_tag( $tag_id, $tag, $list_id = null ) {
+		$tag_info = [
+			'tag' => [
+				'tag'         => $tag,
+				'tagType'     => 'contact',
+				'description' => 'Created by Newspack Newsletters to manage subscription lists',
+			],
+		];
+
+		$created = $this->api_v3_request(
+			sprintf( 'tags/%d', $tag_id ),
+			'PUT',
+			[
+				'body' => wp_json_encode( $tag_info ),
+			]
+		);
+		if ( is_array( $created ) && ! empty( $created['tag'] ) && ! empty( $created['tag']['id'] ) ) {
+			$created['tag']['name'] = $created['tag']['tag'];
+			return $created['tag'];
+		}
+		return new WP_Error(
+			'newspack_newsletters_error_updating_tag',
+			! empty( $created['error'] ) ? $created['error'] : ''
+		);
+	}
+
+	/**
 	 * Add a tag to a contact
 	 *
 	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string|int $tag The tag ID.
 	 * @param string     $list_id The List ID. Not needed for Active Campaign.
 	 * @return true|WP_Error
 	 */
@@ -324,12 +363,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		$existing_contact = $this->get_contact_data( $email );
 		if ( is_wp_error( $existing_contact ) ) {
 			return $existing_contact;
-		}
-		if ( ! is_integer( $tag ) ) {
-			$tag = $this->get_tag_id( (string) $tag );
-			if ( is_wp_error( $tag ) ) {
-				return $tag;
-			}
 		}
 
 		$contact_tag = [
@@ -362,7 +395,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 * Remove a tag from a contact
 	 *
 	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string|int $tag The tag ID.
 	 * @param string     $list_id The List ID. Not needed for Active Campaign.
 	 * @return true|WP_Error
 	 */
@@ -370,12 +403,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		$existing_contact = $this->get_contact_data( $email );
 		if ( is_wp_error( $existing_contact ) ) {
 			return $existing_contact;
-		}
-		if ( ! is_integer( $tag ) ) {
-			$tag = $this->get_tag_id( (string) $tag, false );
-			if ( is_wp_error( $tag ) ) {
-				return $tag;
-			}
 		}
 
 		$contact_tag_id = $this->get_contact_tag_id( $email, $tag );
@@ -1164,29 +1191,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	}
 
 	/**
-	 * Update a contact tags.
-	 *
-	 * @param string   $email          Contact email address.
-	 * @param string[] $tags_to_add    Array of tags to add to the contact.
-	 * @param string[] $tags_to_remove Array of tags to remove from the contact.
-	 *
-	 * @return true|WP_Error True if the contact was updated or error.
-	 */
-	public function update_contact_tags( $email, $tags_to_add = [], $tags_to_remove = [] ) {
-		$existing_contact = $this->get_contact_data( $email );
-		if ( is_wp_error( $existing_contact ) ) {
-			return $existing_contact;
-		}
-		foreach ( $tags_to_add as $tag_add ) {
-			$this->add_tag_to_contact( $email, $tag_add );
-		}
-		foreach ( $tags_to_remove as $tag_remove ) {
-			$this->remove_tag_from_contact( $email, $tag_remove );
-		}
-		return true;
-	}
-
-	/**
 	 * Get the list of contact metadata fields.
 	 *
 	 * @param number $offset Offset for pagination.
@@ -1299,7 +1303,9 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		return array_merge(
 			parent::get_labels(),
 			[
-				'name' => 'Active Campaign',
+				'name'                   => 'Active Campaign',
+				'list_explanation'       => __( 'Active Campaign List', 'newspack-newsletters' ),
+				'local_list_explanation' => __( 'Active Campaign Tag', 'newspack-newsletters' ),
 			]
 		);
 	}

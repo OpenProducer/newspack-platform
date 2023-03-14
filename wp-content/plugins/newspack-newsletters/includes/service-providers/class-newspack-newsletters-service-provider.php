@@ -50,7 +50,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 *
 	 * @var boolean
 	 */
-	public static $support_tags = false;
+	public static $support_local_lists = false;
 
 	/**
 	 * Class constructor.
@@ -376,11 +376,14 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 */
 	public static function get_labels() {
 		return [
-			'name'  => '', // The provider name.
-			'list'  => __( 'list', 'newspack-newsletters' ), // "list" in lower case singular format.
-			'lists' => __( 'lists', 'newspack-newsletters' ), // "list" in lower case plural format.
-			'List'  => __( 'List', 'newspack-newsletters' ), // "list" in uppercase case singular format.
-			'Lists' => __( 'Lists', 'newspack-newsletters' ), // "list" in uppercase case plural format.
+			'name'                    => '', // The provider name.
+			'list'                    => __( 'list', 'newspack-newsletters' ), // "list" in lower case singular format.
+			'lists'                   => __( 'lists', 'newspack-newsletters' ), // "list" in lower case plural format.
+			'List'                    => __( 'List', 'newspack-newsletters' ), // "list" in uppercase case singular format.
+			'Lists'                   => __( 'Lists', 'newspack-newsletters' ), // "list" in uppercase case plural format.
+			'tag_prefix'              => 'Newspack: ', // The prefix to be used in tags.
+			'tag_metabox_before_save' => __( 'Once this list is saved, a tag will be created for it.', 'newspack-newsletters' ),
+			'tag_metabox_after_save'  => __( 'Tag created for this list', 'newspack-newsletters' ),
 		];
 	}
 
@@ -429,8 +432,8 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 					return $added_contact;
 				}
 
-				if ( static::$support_tags ) {
-					$this->add_tag_to_contact( $contact['email'], (int) $list_settings['tag_id'], $list_settings['list'] );
+				if ( static::$support_local_lists ) {
+					$this->add_esp_local_list_to_contact( $contact['email'], $list_settings['tag_id'], $list_settings['list'] );
 				}
 
 				return $added_contact;
@@ -464,7 +467,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 			}
 			return true;
 		}
-		if ( static::$support_tags ) {
+		if ( static::$support_local_lists ) {
 			$lists_to_add    = $this->update_contact_local_lists( $email, $lists_to_add, 'add' );
 			$lists_to_remove = $this->update_contact_local_lists( $email, $lists_to_remove, 'remove' );
 			if ( is_wp_error( $lists_to_add ) ) {
@@ -498,9 +501,9 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 					$list_settings = $list->get_provider_settings( $this->service );
 
 					if ( 'add' === $action ) {
-						$this->add_tag_to_contact( $email, (int) $list_settings['tag_id'], $list_settings['list'] );
+						$this->add_esp_local_list_to_contact( $email, $list_settings['tag_id'], $list_settings['list'] );
 					} elseif ( 'remove' === $action ) {
-						$this->remove_tag_from_contact( $email, (int) $list_settings['tag_id'], $list_settings['list'] );
+						$this->remove_esp_local_list_from_contact( $email, $list_settings['tag_id'], $list_settings['list'] );
 					}
 					
 					unset( $lists[ $key ] );
@@ -520,7 +523,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 * @return string[] Array of local lists IDs or error.
 	 */
 	public function get_contact_local_lists( $email ) {
-		$tags = $this->get_contact_tags_ids( $email );
+		$tags = $this->get_contact_esp_local_lists_ids( $email );
 		if ( is_wp_error( $tags ) ) {
 			return [];
 		}
@@ -547,7 +550,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 			return $lists;
 		}
 		$local_lists = [];
-		if ( static::$support_tags ) {
+		if ( static::$support_local_lists ) {
 			$local_lists = $this->get_contact_local_lists( $email );
 			if ( is_wp_error( $local_lists ) ) {
 				return $local_lists;
@@ -571,8 +574,8 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	/**
 	 * Retrieve the ESP's tag name from its ID
 	 *
-	 * @param int    $tag_id The tag ID.
-	 * @param string $list_id The List ID.
+	 * @param string|int $tag_id The tag ID.
+	 * @param string     $list_id The List ID.
 	 * @return string|WP_Error The tag name on success. WP_Error on failure.
 	 */
 	public function get_tag_by_id( $tag_id, $list_id = null ) {
@@ -591,10 +594,22 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	}
 
 	/**
+	 * Updates a Tag name on the provider
+	 *
+	 * @param string|int $tag_id The tag ID.
+	 * @param string     $tag The Tag new name.
+	 * @param string     $list_id The List ID.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function update_tag( $tag_id, $tag, $list_id = null ) {
+		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
 	 * Add a tag to a contact
 	 *
 	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string|int $tag The tag ID.
 	 * @param string     $list_id The List ID.
 	 * @return true|WP_Error
 	 */
@@ -606,7 +621,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 * Remove a tag from a contact
 	 *
 	 * @param string     $email The contact email.
-	 * @param string|int $tag The tag ID retrieved with get_tag_id() or the the tag string.
+	 * @param string|int $tag The tag ID.
 	 * @param string     $list_id The List ID.
 	 * @return true|WP_Error
 	 */
@@ -622,5 +637,99 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 */
 	public function get_contact_tags_ids( $email ) {
 		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
+	}
+
+	/**
+	 * Retrieve the ESP's Local list ID from its name
+	 *
+	 * By default it will use Tags, but the provider can override this method to use something else
+	 *
+	 * @param string  $esp_local_list_name The esp_local_list.
+	 * @param boolean $create_if_not_found Whether to create a new esp_local_list if not found. Default to true.
+	 * @param string  $list_id The List ID.
+	 * @return int|WP_Error The esp_local_list ID on success. WP_Error on failure.
+	 */
+	public function get_esp_local_list_id( $esp_local_list_name, $create_if_not_found = true, $list_id = null ) {
+		return $this->get_tag_id( $esp_local_list_name, $create_if_not_found, $list_id );
+	}
+
+	/**
+	 * Retrieve the ESP's Local list name from its ID
+	 *
+	 * By default it will use Tags, but the provider can override this method to use something else
+	 *
+	 * @param string|int $esp_local_list_id The esp_local_list ID.
+	 * @param string     $list_id The List ID.
+	 * @return string|WP_Error The esp_local_list name on success. WP_Error on failure.
+	 */
+	public function get_esp_local_list_by_id( $esp_local_list_id, $list_id = null ) {
+		return $this->get_tag_by_id( $esp_local_list_id, $list_id );
+	}
+
+	/**
+	 * Create a Local list on the ESP
+	 *
+	 * By default it will use Tags, but the provider can override this method to use something else
+	 *
+	 * @param string $esp_local_list The Tag name.
+	 * @param string $list_id The List ID.
+	 * @return array|WP_Error The esp_local_list representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function create_esp_local_list( $esp_local_list, $list_id = null ) {
+		return $this->create_tag( $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Update a Local list name on the ESP
+	 *
+	 * By default it will use Tags, but the provider can override this method to use something else
+	 *
+	 * @param string|int $esp_local_list_id The esp_local_list ID.
+	 * @param string     $esp_local_list The Tag name.
+	 * @param string     $list_id The List ID.
+	 * @return array|WP_Error The esp_local_list representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function update_esp_local_list( $esp_local_list_id, $esp_local_list, $list_id = null ) {
+		return $this->update_tag( $esp_local_list_id, $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Add a Local list to a contact in the ESP
+	 *
+	 * By default it will use Tags, but the provider can override this method to use something else
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $esp_local_list The esp_local_list ID retrieved with get_esp_local_list_id() or the the esp_local_list string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function add_esp_local_list_to_contact( $email, $esp_local_list, $list_id = null ) {
+		return $this->add_tag_to_contact( $email, $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Remove a Local list from a contact in the ESP
+	 *
+	 * By default it will use Tags, but the provider can override this method to use something else
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $esp_local_list The esp_local_list ID retrieved with get_esp_local_list_id() or the the esp_local_list string.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function remove_esp_local_list_from_contact( $email, $esp_local_list, $list_id = null ) {
+		return $this->remove_tag_from_contact( $email, $esp_local_list, $list_id );
+	}
+
+	/**
+	 * Get the IDs of the Local lists associated with a contact in the ESP.
+	 *
+	 * By default it will use Tags, but the provider can override this method to use something else
+	 *
+	 * @param string $email The contact email.
+	 * @return array|WP_Error The esp_local_list IDs on success. WP_Error on failure.
+	 */
+	public function get_contact_esp_local_lists_ids( $email ) {
+		return $this->get_contact_tags_ids( $email );
 	}
 }

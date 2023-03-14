@@ -191,7 +191,7 @@ class Newspack_Newsletters_Subscription {
 						'description' => $list['description'] ?? '',
 						'edit_link'   => $list['edit_link'] ?? '',
 						'type'        => $list['type'] ?? '',
-						'type_label'  => isset( $list['type'] ) && 'local' === $list['type'] ? __( 'Local list', 'newspack-newsletters' ) : $provider::label( 'name' ) . ' ' . $provider::label( 'List' ),
+						'type_label'  => isset( $list['type'] ) && 'local' === $list['type'] ? $provider::label( 'local_list_explanation' ) : $provider::label( 'list_explanation' ),
 					];
 					if ( isset( $config[ $list['id'] ] ) ) {
 						$list_config    = $config[ $list['id'] ];
@@ -380,6 +380,11 @@ class Newspack_Newsletters_Subscription {
 		if ( isset( $contact['metadata'] ) ) {
 			Newspack_Newsletters_Logger::log( 'Adding contact with metadata key(s): ' . implode( ', ', array_keys( $contact['metadata'] ) ) . '.' );
 		}
+
+		if ( ! isset( $contact['metadata'] ) ) {
+			$contact['metadata'] = [];
+		}
+		$contact['metadata']['origin_newspack'] = '1';
 
 		/**
 		 * Filters the contact selected lists before passing on to the API.

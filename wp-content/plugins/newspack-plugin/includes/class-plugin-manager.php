@@ -23,7 +23,6 @@ class Plugin_Manager {
 	 */
 	public static $required_plugins = [
 		'jetpack',
-		'amp',
 		'pwa',
 		'google-site-kit',
 		'newspack-blocks',
@@ -46,15 +45,6 @@ class Plugin_Manager {
 				'AuthorURI'   => esc_url( 'https://automattic.com/wordpress-plugins/' ),
 				'PluginURI'   => esc_url( 'https://akismet.com/' ),
 				'Download'    => 'wporg',
-			],
-			'amp'                           => [
-				'Name'        => esc_html__( 'AMP', 'newspack' ),
-				'Description' => esc_html__( 'Enable AMP on your WordPress site, the WordPress way.', 'newspack' ),
-				'Author'      => esc_html__( 'WordPress.com VIP, XWP, Google, and contributors', 'newspack' ),
-				'PluginURI'   => esc_url( 'https://amp-wp.org/' ),
-				'AuthorURI'   => esc_url( 'https://github.com/ampproject/amp-wp/graphs/contributors' ),
-				'Download'    => 'wporg',
-				'EditPath'    => 'admin.php?page=amp-options',
 			],
 			'co-authors-plus'               => [
 				'Name'        => esc_html__( 'Co-Authors Plus', 'newspack' ),
@@ -397,6 +387,7 @@ class Plugin_Manager {
 	 */
 	private static function get_supported_plugins_slugs() {
 		return [
+			'amp',
 			'gutenberg',
 			'classic-widgets',
 			'republication-tracker-tool',

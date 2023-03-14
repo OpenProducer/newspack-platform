@@ -201,6 +201,14 @@ function render_block( $attrs, $content ) {
 					<p class="newspack-registration__description"><?php echo \wp_kses_post( $attrs['description'] ); ?></p>
 				<?php endif; ?>
 				<?php \wp_nonce_field( FORM_ACTION, FORM_ACTION ); ?>
+				<?php
+				/**
+				 * Action to add custom fields before the form fields of the registration block.
+				 *
+				 * @param array $attrs Block attributes.
+				 */
+				do_action( 'newspack_registration_before_form_fields', $attrs );
+				?>
 				<div class="newspack-registration__form-content">
 					<?php
 					if ( ! empty( $lists ) ) {
@@ -401,8 +409,15 @@ function process_form() {
 	if ( ! empty( $lists ) ) {
 		$metadata['lists'] = $lists;
 	}
-	$metadata['current_page_url']    = home_url( add_query_arg( array(), \wp_get_referer() ) );
+	$metadata['referer']             = \wp_get_raw_referer(); // wp_get_referer() will return false because it's a POST request to the same page.
+	$metadata['current_page_url']    = home_url( add_query_arg( array(), $metadata['referer'] ) );
 	$metadata['registration_method'] = 'registration-block';
+
+	$popup_id = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false;
+	if ( $popup_id ) {
+		$metadata['newspack_popup_id']   = $popup_id;
+		$metadata['registration_method'] = 'registration-block-popup';
+	}
 
 	$user_id = Reader_Activation::register_reader( $email, '', true, $metadata );
 
@@ -411,8 +426,9 @@ function process_form() {
 	 *
 	 * @param string              $email   Email address of the reader.
 	 * @param int|false|\WP_Error $user_id The created user ID in case of registration, false if not created or a WP_Error object.
+	 * @param int|false           $popup_id The ID of the popup that triggered the registration, or false if not triggered by a popup.
 	 */
-	\do_action( 'newspack_reader_registration_form_processed', $email, $user_id );
+	\do_action( 'newspack_reader_registration_form_processed', $email, $user_id, $popup_id );
 
 	if ( \is_wp_error( $user_id ) ) {
 		return send_form_response( $user_id );

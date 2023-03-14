@@ -20,6 +20,8 @@ export type DonationFormValues = {
 	cid?: string;
 	agree_to_pay_fees?: string;
 	newsletter_opt_in?: string;
+	newspack_popup_id?: string;
+	_wp_http_referer?: string;
 };
 
 export type DonationSettings = {

@@ -72,7 +72,7 @@ class Perfmatters {
 	 */
 	private static function unused_css_excluded_stylesheets() {
 		return [
-			'donateStreamlined.css',
+			'plugins/newspack-blocks', // Newspack Blocks.
 			'/themes/newspack-', // Any Newspack theme stylesheet.
 			'wp-includes',
 		];
@@ -132,6 +132,7 @@ class Perfmatters {
 		$defer_js_exclusions           = [
 			'wp-includes',
 			'jwplayer.com', // This platform won't work if the JS is deferred.
+			'adsrvr.org', // This platform won't work if the JS is deferred.
 		];
 		$options['assets']['defer_js'] = true;
 		if ( isset( $options['assets']['js_exclusions'] ) && is_array( $options['assets']['js_exclusions'] ) ) {

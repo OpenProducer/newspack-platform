@@ -60,9 +60,8 @@
 	&.is-grid {
 		> div {
 			display: flex;
-			flex-wrap: wrap;
+			flex-flow: row wrap;
 			justify-content: flex-start;
-			flex-direction: row;
 			gap: var( --wpnbha-col-gap );
 			padding: 0;
 			list-style: none;
@@ -128,11 +127,11 @@
 		}
 
 		&.columns-6 article {
-			flex-basis: calc( 16.66667% - ( var( --wpnbha-col-gap ) / 6 * 5 ) );
+			flex-basis: calc( 16.6666% - ( var( --wpnbha-col-gap ) / 6 * 5 ) );
 		}
 
 		&.is-style-borders.columns-6 article {
-			flex-basis: calc( 16.66667% - ( 2 * var( --wpnbha-col-gap ) / 6 * 5 ) - 1px );
+			flex-basis: calc( 16.6666% - ( 2 * var( --wpnbha-col-gap ) / 6 * 5 ) - 1px );
 		}
 	}
 

@@ -487,7 +487,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 				'query' => [
 					'email'   => $email_address,
 					'status'  => 'all',
-					'include' => 'custom_fields,list_memberships',
+					'include' => 'custom_fields,list_memberships,taggings',
 				],
 			]
 		);
@@ -627,6 +627,9 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 					}
 				}
 			}
+			if ( isset( $data['taggings'] ) ) { // Using isset and not empty because this can be an empty array.
+				$body['taggings'] = $data['taggings'];
+			}
 		}
 		$res = $this->request(
 			$contact ? 'PUT' : 'POST',
@@ -634,5 +637,165 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			[ 'body' => wp_json_encode( $body ) ]
 		);
 		return $this->get_contact( $email_address );
+	}
+
+	/**
+	 * Fetches a tag by its name
+	 *
+	 * Constant Contact API does not offer an endpoint to search for a tag by its name, so we have to query for all tags and look through them.
+	 *
+	 * If there are too many tags, we might not go over them all might fail in finding it, but that is a known limitation for now.
+	 * That's why we chose to do a case insensitive search, to increase the chances of finding the tag.
+	 *
+	 * @param string $name The tag name you are looking for. Case insensitive.
+	 * @return stdClass|WP_Error The tag object or a WP_Error if the tag was not found.
+	 */
+	public function get_tag_by_name( $name ) {
+		$limit_attempts    = 10;
+		$items_per_attempt = 100;
+		$cursor            = '';
+		for ( $attempt = 1; $attempt <= $limit_attempts; $attempt++ ) {
+			$res = $this->request(
+				'GET',
+				'/contact_tags',
+				[
+					'query' => [
+						'limit'  => $items_per_attempt,
+						'cursor' => $cursor,
+					],
+				]
+			);
+			if ( ! empty( $res->tags ) ) {
+				foreach ( $res->tags as $tag ) {
+					if ( strtolower( $name ) === strtolower( $tag->name ) ) {
+						return $tag;
+					}
+				}
+			}
+
+			if ( ! empty( $res->_links ) && ! empty( $res->_links->next ) && ! empty( $res->_links->next->href ) ) {
+				$cursor = preg_match( '/cursor=([^&]+)$/', $res->_links->next->href, $matches ) ? $matches[1] : '';
+			} else {
+				return new WP_Error( 'newspack_newsletter_tag_not_found' );
+			}
+		}
+	}
+
+	/**
+	 * Create a tag
+	 *
+	 * @param string $name The name of the tag to create.
+	 * @return stdClass|WP_Error The tag object or a WP_Error if the tag could not be created.
+	 */
+	public function create_tag( $name ) {
+		try {
+			$res = $this->request(
+				'POST',
+				'/contact_tags',
+				[
+					'body' => wp_json_encode(
+						[
+							'name' => $name,
+						]
+					),
+				]
+			);
+			return $res;
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletter_error_creating_tag', $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Updates a Tag name on the provider
+	 *
+	 * @param string|int $tag_id The tag ID.
+	 * @param string     $tag_name The Tag new name.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function update_tag( $tag_id, $tag_name ) {
+		try {
+			$res = $this->request(
+				'PUT',
+				sprintf( '/contact_tags/%s', $tag_id ),
+				[
+					'body' => wp_json_encode(
+						[
+							'name' => $tag_name,
+						]
+					),
+				]
+			);
+			return $res;
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletter_error_updating_tag', $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Create a Segment that will group users tagged with a given tag
+	 *
+	 * @param string $tag_id The ID of the tag to create a segment for.
+	 * @param string $tag_name The name of the tag to create a segment for.
+	 * @return stdClass|WP_Error The segment object or a WP_Error if the segment could not be created.
+	 */
+	public function create_tag_segment( $tag_id, $tag_name = '' ) {
+		$tag_name = $tag_name ? $tag_name : $tag_id;
+		$name     = 'Tagged with ' . $tag_name;
+		$criteria = [
+			'version'  => '1.0.0',
+			'criteria' => [
+				'type'  => 'and',
+				'group' => [
+					[
+						'type'  => 'or',
+						'group' => [
+							[
+								'source' => 'tags',
+								'field'  => 'tag_id',
+								'op'     => 'eq',
+								'value'  => $tag_id,
+							],
+						],
+					],
+				],
+			],
+		];
+
+		$body = wp_json_encode(
+			[
+				'name'             => $name,
+				'segment_criteria' => wp_json_encode( $criteria ),
+				
+			]
+		);
+
+		try {
+			$res = $this->request(
+				'POST',
+				'/segments',
+				[
+					'body' => $body,
+				]
+			);
+			return $res;
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletter_error_creating_tag_segment', $e->getMessage() );
+		}
+	}
+
+	/**
+	 * Get a tag from its ID
+	 *
+	 * @param string $tag_id The ID of the tag to get.
+	 * @return stdClass|WP_Error The tag object or a WP_Error if the tag could not be found.
+	 */
+	public function get_tag_by_id( $tag_id ) {
+		try {
+			$res = $this->request( 'GET', '/contact_tags/' . $tag_id );
+			return $res;
+		} catch ( Exception $e ) {
+			return new WP_Error( 'newspack_newsletter_tag_not_found', $e->getMessage() );
+		}
 	}
 }

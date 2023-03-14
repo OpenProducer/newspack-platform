@@ -1,3 +1,45 @@
+# [1.64.0](https://github.com/Automattic/newspack-blocks/compare/v1.63.0...v1.64.0) (2023-03-14)
+
+
+### Bug Fixes
+
+* don't strip HTML from Homepage Posts Block excerpts ([#1364](https://github.com/Automattic/newspack-blocks/issues/1364)) ([46ee78c](https://github.com/Automattic/newspack-blocks/commit/46ee78c9acd10397ac602e3d972d4c10386accea))
+* **modal-checkout:** z-index when used w/ Campaigns ([d47c1e8](https://github.com/Automattic/newspack-blocks/commit/d47c1e84269a0e20fbbc8df204ab189cd3fc1144))
+* remove unneeded group & columns blocks from patterns ([#1377](https://github.com/Automattic/newspack-blocks/issues/1377)) ([7b9483a](https://github.com/Automattic/newspack-blocks/commit/7b9483a0179136a6bb401998ddd514bfad983fde))
+
+
+### Features
+
+* add popup info to donation block ([9493990](https://github.com/Automattic/newspack-blocks/commit/94939908765dcd06c77fd456ed597d9b8fbe61b3))
+* add popup info to donation block ([949c2bc](https://github.com/Automattic/newspack-blocks/commit/949c2bce9077b744cf5f78bca008b2489a344787))
+* **donate:** checkout modal for woocommerce ([#1355](https://github.com/Automattic/newspack-blocks/issues/1355)) ([0413ace](https://github.com/Automattic/newspack-blocks/commit/0413ace0d37a5175043c7843e450bb637a800ef8))
+* **donate:** enquque modal checkout JS only if necessary ([f877408](https://github.com/Automattic/newspack-blocks/commit/f877408ab6d168276474bdf6ca87b8dc7cfa403f))
+* process donation - make sure referer is relative path ([777685a](https://github.com/Automattic/newspack-blocks/commit/777685a82a261f21f2a09a5743fb86ee67b3c715))
+
+# [1.64.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v1.64.0-alpha.1...v1.64.0-alpha.2) (2023-03-08)
+
+
+### Bug Fixes
+
+* **modal-checkout:** z-index when used w/ Campaigns ([d47c1e8](https://github.com/Automattic/newspack-blocks/commit/d47c1e84269a0e20fbbc8df204ab189cd3fc1144))
+
+# [1.64.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.63.0...v1.64.0-alpha.1) (2023-03-03)
+
+
+### Bug Fixes
+
+* don't strip HTML from Homepage Posts Block excerpts ([#1364](https://github.com/Automattic/newspack-blocks/issues/1364)) ([46ee78c](https://github.com/Automattic/newspack-blocks/commit/46ee78c9acd10397ac602e3d972d4c10386accea))
+* remove unneeded group & columns blocks from patterns ([#1377](https://github.com/Automattic/newspack-blocks/issues/1377)) ([7b9483a](https://github.com/Automattic/newspack-blocks/commit/7b9483a0179136a6bb401998ddd514bfad983fde))
+
+
+### Features
+
+* add popup info to donation block ([9493990](https://github.com/Automattic/newspack-blocks/commit/94939908765dcd06c77fd456ed597d9b8fbe61b3))
+* add popup info to donation block ([949c2bc](https://github.com/Automattic/newspack-blocks/commit/949c2bce9077b744cf5f78bca008b2489a344787))
+* **donate:** checkout modal for woocommerce ([#1355](https://github.com/Automattic/newspack-blocks/issues/1355)) ([0413ace](https://github.com/Automattic/newspack-blocks/commit/0413ace0d37a5175043c7843e450bb637a800ef8))
+* **donate:** enquque modal checkout JS only if necessary ([f877408](https://github.com/Automattic/newspack-blocks/commit/f877408ab6d168276474bdf6ca87b8dc7cfa403f))
+* process donation - make sure referer is relative path ([777685a](https://github.com/Automattic/newspack-blocks/commit/777685a82a261f21f2a09a5743fb86ee67b3c715))
+
 # [1.63.0](https://github.com/Automattic/newspack-blocks/compare/v1.62.0...v1.63.0) (2023-02-28)
 
 

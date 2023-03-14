@@ -193,6 +193,7 @@
 	@include mixins.media( mobile ) {
 		font-size: variables.$font__size-sm;
 	}
+
 	padding-top: 2.65em;
 }
 

@@ -60,6 +60,10 @@
 			"type": "string",
 			"default": "frequency"
 		},
+		"useModalCheckout": {
+			"type": "boolean",
+			"default": true
+		},
 		"tiersBasedOptions": {
 			"type": "array",
 			"default": [

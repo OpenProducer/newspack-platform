@@ -34,6 +34,13 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	public $name = 'Contant Constact';
 
 	/**
+	 * Whether the provider has support to tags and tags based Subscription Lists.
+	 *
+	 * @var boolean
+	 */
+	public static $support_local_lists = true;
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -899,9 +906,138 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		return array_merge(
 			parent::get_labels(),
 			[
-				'name' => 'Constant Contact',
+				'name'                   => 'Constant Contact',
+				'list_explanation'       => __( 'Constant Contact List', 'newspack-newsletters' ),
+				'local_list_explanation' => __( 'Constant Contact Tag', 'newspack-newsletters' ),
 			]
 		);
+	}
+
+	/**
+	 * Retrieve the ESP's tag ID from its name
+	 *
+	 * @param string  $tag_name The tag.
+	 * @param boolean $create_if_not_found Whether to create a new tag if not found. Default to true.
+	 * @param string  $list_id The List ID.
+	 * @return int|WP_Error The tag ID on success. WP_Error on failure.
+	 */
+	public function get_tag_id( $tag_name, $create_if_not_found = true, $list_id = null ) {
+		$cc  = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		$tag = $cc->get_tag_by_name( $tag_name );
+		if ( is_wp_error( $tag ) && $create_if_not_found ) {
+			$tag = $this->create_tag( $tag_name );
+		}
+		if ( is_wp_error( $tag ) ) {
+			return $tag;
+		}
+		return $tag['id'];
+	}
+
+	/**
+	 * Retrieve the ESP's tag name from its ID
+	 *
+	 * @param string|int $tag_id The tag ID.
+	 * @param string     $list_id The List ID.
+	 * @return string|WP_Error The tag name on success. WP_Error on failure.
+	 */
+	public function get_tag_by_id( $tag_id, $list_id = null ) {
+		$cc  = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		$tag = $cc->get_tag_by_id( $tag_id );
+		if ( is_wp_error( $tag ) ) {
+			return $tag;
+		}
+		return $tag->name;
+	}
+
+	/**
+	 * Create a Tag on the provider
+	 *
+	 * @param string $tag The Tag name.
+	 * @param string $list_id The List ID.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function create_tag( $tag, $list_id = null ) {
+		$cc  = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		$tag = $cc->create_tag( $tag );
+		if ( is_wp_error( $tag ) ) {
+			return $tag;
+		}
+		// Also create a Segment grouping users tagged with this tag.
+		$cc->create_tag_segment( $tag->tag_id, $tag->name );
+		return [
+			'id'   => $tag->tag_id,
+			'name' => $tag->name,
+		];
+	}
+
+	/**
+	 * Updates a Tag name on the provider
+	 *
+	 * @param string|int $tag_id The tag ID.
+	 * @param string     $tag The Tag new name.
+	 * @param string     $list_id The List ID.
+	 * @return array|WP_Error The tag representation with at least 'id' and 'name' keys on succes. WP_Error on failure.
+	 */
+	public function update_tag( $tag_id, $tag, $list_id = null ) {
+		$cc  = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		$tag = $cc->update_tag( $tag_id, $tag );
+		if ( is_wp_error( $tag ) ) {
+			return $tag;
+		}
+		return [
+			'id'   => $tag->tag_id,
+			'name' => $tag->name,
+		];
+	}
+
+	/**
+	 * Add a tag to a contact
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $tag The tag ID.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function add_tag_to_contact( $email, $tag, $list_id = null ) {
+		$tags = $this->get_contact_tags_ids( $email );
+		if ( in_array( $tag, $tags, true ) ) {
+			return true;
+		}
+		$new_tags = array_merge( $tags, [ $tag ] );
+		$cc       = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		return $cc->upsert_contact( $email, [ 'taggings' => $new_tags ] );
+	}
+
+	/**
+	 * Remove a tag from a contact
+	 *
+	 * @param string     $email The contact email.
+	 * @param string|int $tag The tag ID.
+	 * @param string     $list_id The List ID.
+	 * @return true|WP_Error
+	 */
+	public function remove_tag_from_contact( $email, $tag, $list_id = null ) {
+		$tags     = $this->get_contact_tags_ids( $email );
+		$new_tags = array_diff( $tags, [ $tag ] );
+		if ( count( $new_tags ) === count( $tags ) ) {
+			return true;
+		}
+		$cc = new Newspack_Newsletters_Constant_Contact_SDK( $this->api_key(), $this->api_secret(), $this->access_token() );
+		return $cc->upsert_contact( $email, [ 'taggings' => $new_tags ] );
+	}
+
+	/**
+	 * Get the IDs of the tags associated with a contact.
+	 *
+	 * @param string $email The contact email.
+	 * @return array|WP_Error The tag IDs on success. WP_Error on failure.
+	 */
+	public function get_contact_tags_ids( $email ) {
+		$contact_data = $this->get_contact_data( $email );
+		if ( is_wp_error( $contact_data ) ) {
+			return $contact_data;
+		}
+		return $contact_data['taggings'] ?? [];
 	}
 
 }

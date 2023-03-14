@@ -297,7 +297,17 @@ class Stripe_Sync {
 			'sync-to-esp' => false, // Sync data to the ESP.
 			'dry-run'     => false,
 		];
-		$passed_args  = array_merge( $default_args, $assoc_args );
+
+		\WP_CLI::log(
+			'
+
+Running data backfill from Stripe...
+
+		'
+		);
+
+
+		$passed_args = array_merge( $default_args, $assoc_args );
 		if ( false !== $passed_args['dry-run'] ) {
 			\WP_CLI::warning( __( 'This is a dry run, no changes will be made.', 'newspack' ) );
 		}
@@ -363,11 +373,19 @@ class Stripe_Sync {
 		$force_override = ! empty( $assoc_args['force'] );
 		$batch_size     = ! empty( $assoc_args['batch-size'] ) ? intval( $assoc_args['batch-size'] ) : 10;
 
-		$customers = self::get_batch_of_customers_for_stripe_connect_to_stripe( $batch_size );
+		\WP_CLI::log(
+			'
+
+Running Stripe Connect to Stripe Subscriptions Migration...
+
+		'
+		);
+
+		$customers = self::get_batch_of_customers_with_subscriptions( $batch_size );
 		while ( $customers ) {
 			$customer = array_shift( $customers );
 
-			self::process_customer_for_stripe_connect_to_stripe(
+			self::process_stripe_subscriber(
 				$customer,
 				[
 					'dry_run'                     => $is_dry_run,
@@ -377,7 +395,47 @@ class Stripe_Sync {
 
 			// Get the next batch.
 			if ( empty( $customers ) ) {
-				$customers = self::get_batch_of_customers_for_stripe_connect_to_stripe( $batch_size, $customer->id );
+				$customers = self::get_batch_of_customers_with_subscriptions( $batch_size, $customer->id );
+			}
+		}
+
+		\WP_CLI::success( 'Finished processing.' );
+	}
+
+	/**
+	 * CLI command for migrating Stripe Subscriptions from Stripe Connect to a regular Stripe account.
+	 *
+	 * @param array $args Positional args.
+	 * @param array $assoc_args Associative args.
+	 */
+	public static function sync_stripe_subscriptions_to_wc( $args, $assoc_args ) {
+		$is_dry_run = ! empty( $assoc_args['dry-run'] );
+		$batch_size = ! empty( $assoc_args['batch-size'] ) ? intval( $assoc_args['batch-size'] ) : 10;
+
+		\WP_CLI::log(
+			'
+
+Running Stripe to WC Subscriptions Migration...
+
+		'
+		);
+
+
+		$customers = self::get_batch_of_customers_with_subscriptions( $batch_size );
+		while ( $customers ) {
+			$customer = array_shift( $customers );
+
+			self::process_stripe_subscriber(
+				$customer,
+				[
+					'dry_run'       => $is_dry_run,
+					'migrate_to_wc' => true,
+				]
+			);
+
+			// Get the next batch.
+			if ( empty( $customers ) ) {
+				$customers = self::get_batch_of_customers_with_subscriptions( $batch_size, $customer->id );
 			}
 		}
 
@@ -391,13 +449,14 @@ class Stripe_Sync {
 	 * @param string $last_customer_id Stripe ID of customer to get results after, essentially the offset.
 	 * @return array Array of Stripe customers.
 	 */
-	protected static function get_batch_of_customers_for_stripe_connect_to_stripe( $limit, $last_customer_id = false ) {
+	protected static function get_batch_of_customers_with_subscriptions( $limit, $last_customer_id = false ) {
 		$stripe = Stripe_Connection::get_stripe_client();
 		try {
 			$params = [
 				'limit'  => $limit,
 				'expand' => [
 					'data.subscriptions',
+					'data.sources',
 				],
 			];
 
@@ -412,21 +471,23 @@ class Stripe_Sync {
 	}
 
 	/**
-	 * Process one customer's Stripe subscriptions and migrate them to Newspack Stripe subscriptions.
+	 * Process one customer's Stripe subscriptions and migrate them.
 	 *
 	 * @param Stripe_Customer $customer Stripe customer object.
 	 * @param array           $args Params to control migration behavior.
 	 */
-	protected static function process_customer_for_stripe_connect_to_stripe( $customer, $args ) {
+	protected static function process_stripe_subscriber( $customer, $args ) {
 		$dry_run                     = ! empty( $args['dry_run'] );
 		$force_subscription_override = ! empty( $args['force_subscription_override'] );
+		$migrate_to_wc               = ! empty( $args['migrate_to_wc'] ) && true === $args['migrate_to_wc'];
 
 		$stripe        = Stripe_Connection::get_stripe_client();
 		$stripe_prices = Stripe_Connection::get_donation_prices();
 
 		\WP_CLI::log( sprintf( 'Processing customer: %s', $customer->email ) );
 		if ( empty( $customer->subscriptions ) || empty( $customer->subscriptions->data ) ) {
-			\WP_CLI::log( '  - No subscriptions found for customer. Skipping. A future version of this tool will handle the case where we want to turn one-time Stripe payments into Stripe subscriptions.' );
+			// A future version of this tool will handle the case where we want to turn one-time Stripe payments into Stripe subscriptions.
+			\WP_CLI::log( '  - No active subscriptions found for customer. Skipping.' );
 			return;
 		}
 
@@ -437,6 +498,11 @@ class Stripe_Sync {
 			if ( ! empty( $existing_subscription->metadata['subscription_migrated_to_newspack'] && ! $force_subscription_override ) ) {
 				\WP_CLI::log( sprintf( '  - Subscription already migrated to Newspack on %s. Skipping.', $existing_subscription->metadata['subscription_migrated_to_newspack'] ) );
 				continue;
+			}
+
+			if ( 'active' !== $existing_subscription->status ) {
+				\WP_CLI::log( '  - Subscription is not active. Skipping.' );
+				return;
 			}
 
 			$new_subscription_items = [];
@@ -454,36 +520,139 @@ class Stripe_Sync {
 				\WP_CLI::log( sprintf( '    * Found subscription item: $%s/%s', $existing_subscription_item_price / 100, $frequency ) );
 			}
 
-			if ( $dry_run ) {
-				\WP_CLI::log( sprintf( '    * Would have created subscription with next renewal at %s', gmdate( 'Y-m-d', $existing_subscription->current_period_end ) ) );
-				return;
+			$subscription_id = false;
 
+			// Create a new subscription (or make a sync'd subscription billable).
+			try {
+				if ( $migrate_to_wc ) {
+					// Source ID for the Stripe Gateway may be a source, a payment method, or a card.
+					// See WC_Stripe_Subscriptions_Trait::validate_subscription_payment_meta.
+					$source_id = $customer->invoice_settings->default_payment_method ?? $customer->default_source;
+
+					$stripe_metadata_base = [
+						'stripe_customer_id' => $customer->id,
+						'stripe_source_id'   => $source_id,
+					];
+
+					// Check if this subscription is already synchronised (shadowed) in WooCommerce.
+					$subscription = WooCommerce_connection::get_subscription_by_stripe_subscription_id( $existing_subscription->id );
+					if ( $subscription ) {
+						$subscription_id = $subscription->get_id();
+						if ( $dry_run ) {
+							\WP_CLI::log(
+								sprintf(
+									'    * Would update WC Subscription #%s, which was already synced from Stripe but not renewed by WC.',
+									$subscription_id
+								)
+							);
+						} else {
+							WooCommerce_Connection::add_wc_stripe_gateway_metadata( $subscription, $stripe_metadata_base );
+							// Delete the 'link' to a Stripe subscription, so it's not sync'd anymore.
+							$subscription->delete_meta_data( WooCommerce_Connection::SUBSCRIPTION_STRIPE_ID_META_KEY );
+							$subscription->save();
+							\WP_CLI::success( sprintf( 'Updated WC Subscription #%s, which was already synced from Stripe but not renewed by WC (now it will).', $subscription_id ) );
+						}
+					} else {
+						// Create a new WooCommerce subscription, starting at the current period start.
+						$currency                = $existing_subscription->currency;
+						$amount_normalised       = Stripe_Connection::normalise_amount( $existing_subscription->quantity, $currency );
+						$first_subscription_item = $existing_subscription->items->data[0];
+						$frequency               = $first_subscription_item->price->recurring->interval;
+
+						$wc_order_payload = array_merge(
+							[
+								'status'                 => 'completed',
+								'subscription_status'    => 'created',
+								'wc_subscription_status' => 'active',
+								'email'                  => $customer->email,
+								'name'                   => $customer->name,
+								'date'                   => $existing_subscription->current_period_start,
+								'amount'                 => $amount_normalised,
+								'frequency'              => $frequency,
+								'currency'               => strtoupper( $currency ),
+								'client_id'              => $customer->metadata->clientId,
+								'user_id'                => $customer->metadata->userId,
+							],
+							$stripe_metadata_base
+						);
+
+						if ( $dry_run ) {
+							\WP_CLI::log(
+								sprintf(
+									'    * Would create a WC Subscription with frequency of %s and amount of %s.',
+									$frequency,
+									$amount_normalised
+								)
+							);
+							$subscription_id = true;
+						} else {
+							// Create the WC Subscription.
+							$wc_transaction_creation_data = WooCommerce_Connection::create_transaction( $wc_order_payload );
+							$subscription_id              = $wc_transaction_creation_data['subscription_id'];
+							$subscription                 = \wcs_get_subscription( $subscription_id );
+							\WP_CLI::success( sprintf( 'Created subscription: %s with next renewal at %s', $subscription_id, gmdate( 'Y-m-d', $existing_subscription->current_period_end ) ) );
+						}
+					}
+
+					if ( $subscription && ! $dry_run ) {
+						// Add the cancelled Stripe subscription ID to the meta data, so it can be found later.
+						$subscription->add_meta_data( 'cancelled-' . WooCommerce_Connection::SUBSCRIPTION_STRIPE_ID_META_KEY, $existing_subscription->id );
+						$subscription->add_order_note(
+							sprintf(
+								// translators: %s is the Stripe subscription ID.
+								__( 'This subscription has been migrated from Stripe. It will now be fully manageable in WooCommerce. You can find the cancelled Stripe subscription by ID %s', 'newspack' ),
+								$existing_subscription->id
+							)
+						);
+						$subscription->save();
+					}
+				} else {
+					if ( $dry_run ) {
+						\WP_CLI::log(
+							sprintf(
+								'    * Would create a Stripe subscription with next renewal at %s',
+								gmdate( 'Y-m-d', $existing_subscription->current_period_end )
+							)
+						);
+						$subscription_id = true;
+					} else {
+						$subscription    = $stripe->subscriptions->create(
+							[
+								'customer'             => $customer->id,
+								'items'                => $new_subscription_items,
+								'payment_behavior'     => 'allow_incomplete',
+								'billing_cycle_anchor' => $existing_subscription->current_period_end,
+								'trial_end'            => $existing_subscription->current_period_end,
+								'metadata'             => [
+									'subscription_migrated_to_newspack' => gmdate( 'c' ),
+								],
+							]
+						);
+						$subscription_id = $subscription->id;
+						\WP_CLI::success( sprintf( 'Created subscription: %s with next renewal at %s', $subscription_id, gmdate( 'Y-m-d', $existing_subscription->current_period_end ) ) );
+					}
+				}
+			} catch ( \Throwable $e ) {
+				\WP_CLI::warning( sprintf( 'Failed to create subscription: %s', $e->getMessage() ) );
 			}
 
-			// Create new subscriptions.
-			try {
-				$subscription = $stripe->subscriptions->create(
-					[
-						'customer'             => $customer->id,
-						'items'                => $new_subscription_items,
-						'payment_behavior'     => 'allow_incomplete',
-						'billing_cycle_anchor' => $existing_subscription->current_period_end,
-						'trial_end'            => $existing_subscription->current_period_end,
-						'metadata'             => [
-							'subscription_migrated_to_newspack' => gmdate( 'c' ),
-						],
-					]
-				);
-				\WP_CLI::log( sprintf( '    * Created subscription: %s with next renewal at %s', $subscription->id, gmdate( 'Y-m-d', $existing_subscription->current_period_end ) ) );
-			} catch ( \Throwable $e ) {
-				\WP_CLI::error( sprintf( 'Failed to create subscription: %s', $e->getMessage() ) );
-			}
-
-			try {
-				$stripe->subscriptions->cancel( $existing_subscription->id );
-				\WP_CLI::log( sprintf( '    * Cancelled old subscription: %s', $existing_subscription->id ) );
-			} catch ( \Throwable $e ) {
-				\WP_CLI::error( sprintf( 'Failed to cancel subscription: %s', $e->getMessage() ) );
+			if ( false === $subscription_id ) {
+				if ( ! $dry_run ) {
+					\WP_CLI::warning( 'A subscription was not created, so the existing Stripe subscription will not be cancelled.' );
+				}
+			} else {
+				try {
+					if ( $dry_run ) {
+						\WP_CLI::log(
+							sprintf( '    * Would cancel Stripe subscription %s.', $existing_subscription->id )
+						);
+					} else {
+						$stripe->subscriptions->cancel( $existing_subscription->id );
+						\WP_CLI::success( sprintf( 'Cancelled old subscription: %s', $existing_subscription->id ) );
+					}
+				} catch ( \Throwable $e ) {
+					\WP_CLI::warning( sprintf( 'Failed to cancel subscription: %s', $e->getMessage() ) );
+				}
 			}
 		}
 	}
@@ -501,6 +670,27 @@ class Stripe_Sync {
 			[ __CLASS__, 'data_backfill' ],
 			[
 				'shortdesc' => __( 'Backfill WC Customers from Stripe database.', 'newspack' ),
+			]
+		);
+
+		\WP_CLI::add_command(
+			'newspack stripe sync-stripe-subscriptions-to-wc',
+			[ __CLASS__, 'sync_stripe_subscriptions_to_wc' ],
+			[
+				'shortdesc' => __( 'Migrate subscribtions from Stripe to WC', 'newspack' ),
+				'synopsis'  => [
+					[
+						'type'     => 'flag',
+						'name'     => 'dry-run',
+						'optional' => true,
+					],
+					[
+						'type'     => 'flag',
+						'name'     => 'batch-size',
+						'default'  => 10,
+						'optional' => true,
+					],
+				],
 			]
 		);
 

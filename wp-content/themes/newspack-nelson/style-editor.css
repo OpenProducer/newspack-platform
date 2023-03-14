@@ -436,7 +436,7 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 
 /** === Blockquote === */
-.wp-block-quote:not(.is-large):not(.is-style-large) {
+.wp-block-quote:not(.is-large, .is-style-large) {
   border-width: 2px;
   border-color: #555;
 }
@@ -674,7 +674,7 @@ div[data-align=full] > .wp-block-image figcaption {
   border: 0;
   border-top: 1px solid #ccc;
 }
-.wp-block-separator:not(.is-style-wide):not(.is-style-dots) {
+.wp-block-separator:not(.is-style-wide, .is-style-dots) {
   max-width: 5rem;
   margin-left: auto;
   margin-right: auto;
@@ -1588,10 +1588,10 @@ blockquote {
 .wp-block-separator:not(.is-style-dots).has-background {
   border-top-color: currentcolor;
 }
-.wp-block-separator:not(.is-style-dots):not(.is-style-wide) {
+.wp-block-separator:not(.is-style-dots, .is-style-wide) {
   border-top: 5px solid #111;
 }
-.wp-block-separator:not(.is-style-dots):not(.is-style-wide).has-background {
+.wp-block-separator:not(.is-style-dots, .is-style-wide).has-background {
   border-top-color: currentcolor;
 }
 .wp-block-separator.is-style-dots::before {

@@ -1114,6 +1114,8 @@ final class Newspack_Newsletters_Renderer {
 	 * @return array[] Blocks.
 	 */
 	private static function get_valid_post_blocks( $post ) {
+		// Disable photon for newsletter images (webp is not supported on some email clients).
+		add_filter( 'jetpack_photon_skip_image', '__return_true' );
 		return array_filter(
 			parse_blocks( $post->post_content ),
 			function ( $block ) {

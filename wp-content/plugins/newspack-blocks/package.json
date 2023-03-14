@@ -1,6 +1,6 @@
 {
 	"name": "@automattic/newspack-blocks",
-	"version": "1.63.0",
+	"version": "1.64.0",
 	"author": "Automattic",
 	"devDependencies": {
 		"@rushstack/eslint-patch": "^1.2.0",
@@ -13,10 +13,10 @@
 		"html-entities": "^2.3.3",
 		"identity-obj-proxy": "^3.0.0",
 		"lint-staged": "^13.1.2",
-		"newspack-scripts": "^4.6.0",
+		"newspack-scripts": "^5.0.0",
 		"postcss-scss": "^4.0.6",
 		"prettier": "npm:wp-prettier@^2.6.2-beta-1",
-		"stylelint": "^14.9.1"
+		"stylelint": "^15.2.0"
 	},
 	"description": "=== Newspack Blocks === Contributors: (this should be a list of wordpress.org userid's) Donate link: https://example.com/ Tags: comments, spam Requires at least: 4.5 Tested up to: 5.1.1 Stable tag: 0.1.0 License: GPLv2 or later License URI: https://www.gnu.org/licenses/gpl-2.0.html",
 	"dependencies": {

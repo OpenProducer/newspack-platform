@@ -137,10 +137,12 @@ class Subscription_List {
 	/**
 	 * Generate the tag name that will be added to the ESP based on the post title
 	 *
+	 * @param string $prefix The prefix to be added to the tag name.
+	 *
 	 * @return string
 	 */
-	public function generate_tag_name() {
-		return 'Newspack: ' . $this->get_title();
+	public function generate_tag_name( $prefix = 'Newspack: ' ) {
+		return $prefix . $this->get_title();
 	}
 
 	/**

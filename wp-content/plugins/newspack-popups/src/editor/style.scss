@@ -56,7 +56,7 @@ $size__large: 1264px;
 		}
 
 		.components-notice {
-			margin: 0 0 24px 0;
+			margin: 0 0 24px;
 		}
 
 		.components-text-control__input[disabled] {
@@ -111,7 +111,7 @@ $size__large: 1264px;
 		}
 
 		div:nth-of-type( 1 ) .components-button {
-			border-radius: 4px 0 0 0 !important;
+			border-radius: 4px 0 0 !important;
 		}
 
 		div:nth-of-type( 3 ) .components-button {
@@ -119,7 +119,7 @@ $size__large: 1264px;
 		}
 
 		div:nth-last-of-type( 1 ) .components-button {
-			border-radius: 0 0 4px 0 !important;
+			border-radius: 0 0 4px !important;
 		}
 
 		div:nth-last-of-type( 3 ) .components-button {

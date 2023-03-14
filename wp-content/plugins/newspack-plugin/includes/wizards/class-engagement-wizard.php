@@ -347,12 +347,18 @@ class Engagement_Wizard extends Wizard {
 			true
 		);
 
+		$data = [
+			'has_reader_activation' => defined( 'NEWSPACK_EXPERIMENTAL_READER_ACTIVATION' ) && NEWSPACK_EXPERIMENTAL_READER_ACTIVATION,
+		];
+
+		if ( method_exists( 'Newspack\Newsletters\Subscription_Lists', 'get_add_new_url' ) ) {
+			$data['new_subscription_lists_url'] = \Newspack\Newsletters\Subscription_Lists::get_add_new_url();
+		}
+
 		\wp_localize_script(
 			'newspack-engagement-wizard',
 			'newspack_engagement_wizard',
-			[
-				'has_reader_activation' => defined( 'NEWSPACK_EXPERIMENTAL_READER_ACTIVATION' ) && NEWSPACK_EXPERIMENTAL_READER_ACTIVATION,
-			]
+			$data
 		);
 	}
 

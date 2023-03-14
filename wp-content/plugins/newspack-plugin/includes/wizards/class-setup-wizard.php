@@ -192,7 +192,6 @@ class Setup_Wizard extends Wizard {
 	public function api_initial_check() {
 		$required_plugins_slugs = [
 			'jetpack',
-			'amp',
 			'pwa',
 			'wordpress-seo',
 			'google-site-kit',

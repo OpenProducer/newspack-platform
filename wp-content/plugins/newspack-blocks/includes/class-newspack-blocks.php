@@ -14,9 +14,11 @@ class Newspack_Blocks {
 	 * Script handles.
 	 */
 	const SCRIPT_HANDLES = [
-		'streamlined'     => 'newspack-blocks-donate-streamlined',
-		'frequency-based' => 'newspack-blocks-donate-frequency-based',
-		'tiers-based'     => 'newspack-blocks-donate-tiers-based',
+		'modal-checkout'       => 'newspack-blocks-donate-modal-checkout',
+		'modal-checkout-block' => 'newspack-blocks-donate-modal-checkout-block',
+		'streamlined'          => 'newspack-blocks-donate-streamlined',
+		'frequency-based'      => 'newspack-blocks-donate-frequency-based',
+		'tiers-based'          => 'newspack-blocks-donate-tiers-based',
 	];
 
 	/**
@@ -73,7 +75,7 @@ class Newspack_Blocks {
 	}
 
 	/**
-	 * Modify the Donate block script to allow it as an "AMP Plus" script.
+	 * Modify the Donate block scripts to allow it as an "AMP Plus" script.
 	 *
 	 * @param string $tag HTML of the script tag.
 	 * @param string $handle The script handle.
@@ -364,9 +366,6 @@ class Newspack_Blocks {
 				array(),
 				NEWSPACK_BLOCKS__VERSION
 			);
-		}
-		if ( static::is_amp() ) {
-			return;
 		}
 		$script_data = static::script_enqueue_helper( NEWSPACK_BLOCKS__BLOCKS_DIRECTORY . $type . '/view.js' );
 		if ( $script_data ) {
@@ -1044,24 +1043,37 @@ class Newspack_Blocks {
 		}
 
 		self::$newspack_blocks_excerpt_closure = function( $text = '', $post = null ) use ( $attributes ) {
-			$post        = get_post( $post );
-			$text        = $post->post_excerpt;
-			$raw_excerpt = $text;
-
-			if ( empty( $text ) ) {
-				$text = get_the_content( '', false, $post );
-				$text = strip_shortcodes( $text );
-				$text = excerpt_remove_blocks( $text );
+			// If we have a manually entered excerpt, use that and allow some tags.
+			if ( ! empty( $post->post_excerpt ) ) {
+				$excerpt      = $post->post_excerpt;
+				$allowed_tags = '<em>,<i>,<strong>,<b>,<u>,<ul>,<ol>,<li>,<h1>,<h2>,<h3>,<h4>,<h5>,<h6>,<img>,<a>,<p>';
+			} else {
+				// If we don't, built an excerpt but allow no tags.
+				$excerpt      = $post->post_content;
+				$allowed_tags = '';
 			}
 
-			/** This filter is documented in wp-includes/post-template.php */
-			$text = str_replace( ']]>', ']]&gt;', $text );
-			$text = wp_trim_words( $text, $attributes['excerptLength'], static::more_excerpt() );
+			// Recreate logic from wp_trim_excerpt (https://developer.wordpress.org/reference/functions/wp_trim_excerpt/).
+			$excerpt = strip_shortcodes( $excerpt );
+			$excerpt = excerpt_remove_blocks( $excerpt );
+			$excerpt = wpautop( $excerpt );
+			$excerpt = str_replace( ']]>', ']]&gt;', $excerpt );
 
-			/** This filter is documented in wp-includes/post-template.php */
-			return apply_filters( 'wp_trim_excerpt', $text, $raw_excerpt ); // phpcs:ignore
+			// Strip HTML tags except for the explicitly allowed tags.
+			$excerpt = strip_tags( $excerpt, $allowed_tags ); // phpcs:ignore WordPressVIPMinimum.Functions.StripTags.StripTagsTwoParameters
+
+			// Get excerpt length. If not provided a valid length, use the default excerpt length.
+			if ( empty( $attributes['excerptLength'] ) || ! is_numeric( $attributes['excerptLength'] ) ) {
+				$excerpt_length = 55;
+			} else {
+				$excerpt_length = $attributes['excerptLength'];
+			}
+
+			// Set excerpt length (https://core.trac.wordpress.org/ticket/29533#comment:3).
+			$excerpt = force_balance_tags( html_entity_decode( wp_trim_words( htmlentities( $excerpt ), $excerpt_length, static::more_excerpt() ) ) );
+
+			return $excerpt;
 		};
-
 		add_filter( 'get_the_excerpt', self::$newspack_blocks_excerpt_closure, 11, 2 );
 	}
 

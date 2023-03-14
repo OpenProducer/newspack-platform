@@ -39,6 +39,20 @@ final class GAM_Model {
 	private static $api = null;
 
 	/**
+	 * GAM Api fatal error message.
+	 *
+	 * @var string
+	 */
+	private static $api_fatal_error = null;
+
+	/**
+	 * GAM Api session error message.
+	 *
+	 * @var string
+	 */
+	private static $api_session_error = null;
+
+	/**
 	 * Custom post type
 	 *
 	 * @var string
@@ -95,14 +109,20 @@ final class GAM_Model {
 
 		$network_code = self::get_active_network_code();
 
+		$api = null;
 		try {
-			self::$api = new GAM_Api( $auth_method, $credentials, $network_code );
-			/** Test the connection once to ensure the session has GAM connection. */
-			self::$api->get_current_user();
+			$api = new GAM_Api( $auth_method, $credentials, $network_code );
 		} catch ( \Exception $e ) {
-			self::$api = false;
+			self::$api_fatal_error = $e->getMessage();
+			return false;
 		}
-
+		$init_res = $api->init();
+		if ( is_wp_error( $init_res ) ) {
+			self::$api_session_error = $init_res->get_error_message();
+			return false;
+		}
+		$api->get_current_user();
+		self::$api = $api;
 		return self::$api;
 	}
 
@@ -1077,17 +1097,17 @@ final class GAM_Model {
 		} elseif ( get_queried_object() ) {
 			$queried_object = get_queried_object();
 			if ( 'WP_Term' === get_class( $queried_object ) ) {
-				
+
 				switch ( $queried_object->taxonomy ) {
-						
+
 					case 'category':
 						$targeting['category'] = [ sanitize_text_field( $queried_object->slug ) ];
 						break;
-						
+
 					case 'post_tag':
 						$targeting['tag'] = [ sanitize_text_field( $queried_object->slug ) ];
 						break;
-						
+
 				}
 			}
 		}
@@ -1135,6 +1155,10 @@ final class GAM_Model {
 				update_option( self::OPTION_NAME_GAM_NETWORK_CODE, $network_code );
 			}
 			$status['is_network_code_matched'] = self::is_network_code_matched();
+		} elseif ( self::$api_fatal_error ) {
+			return new \WP_Error( 'newspack_ads_gam_api_fatal_error', self::$api_fatal_error );
+		} elseif ( self::$api_session_error ) {
+			return new \WP_Error( 'newspack_ads_gam_api_session_error', self::$api_session_error );
 		}
 		return $status;
 	}

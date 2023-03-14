@@ -432,19 +432,29 @@ class Reader_Revenue_Wizard extends Wizard {
 		$stripe_data                            = Stripe_Connection::get_stripe_data();
 		$stripe_data['can_use_stripe_platform'] = Donations::can_use_stripe_platform();
 
+		$billing_fields = [];
+		if ( $wc_installed && Donations::is_platform_wc() ) {
+			$checkout = new \WC_Checkout();
+			$fields   = $checkout->get_checkout_fields();
+			if ( ! empty( $fields['billing'] ) ) {
+				$billing_fields = $fields['billing'];
+			}
+		}
+
 		$args = [
-			'country_state_fields' => newspack_get_countries(),
-			'currency_fields'      => newspack_get_currencies_options(),
-			'location_data'        => [],
-			'stripe_data'          => $stripe_data,
-			'donation_data'        => Donations::get_donation_settings(),
-			'donation_page'        => Donations::get_donation_page_info(),
-			'salesforce_settings'  => [],
-			'platform_data'        => [
+			'country_state_fields'     => newspack_get_countries(),
+			'currency_fields'          => newspack_get_currencies_options(),
+			'location_data'            => [],
+			'stripe_data'              => $stripe_data,
+			'donation_data'            => Donations::get_donation_settings(),
+			'donation_page'            => Donations::get_donation_page_info(),
+			'available_billing_fields' => $billing_fields,
+			'salesforce_settings'      => [],
+			'platform_data'            => [
 				'platform' => $platform,
 			],
-			'is_ssl'               => is_ssl(),
-			'errors'               => [],
+			'is_ssl'                   => is_ssl(),
+			'errors'                   => [],
 		];
 		if ( 'wc' === $platform && $wc_installed ) {
 			$plugin_status    = true;

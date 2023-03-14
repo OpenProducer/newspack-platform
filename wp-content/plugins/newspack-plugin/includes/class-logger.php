@@ -49,7 +49,22 @@ class Logger {
 		$caller_prefix = $caller ? "[$caller]" : '';
 		$type_prefix   = 'info' != $type ? "[$type]" : '';
 
-		error_log( '[' . $header . ']' . $caller_prefix . strtoupper( $type_prefix ) . ': ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+		error_log( self::get_pid() . '[' . $header . ']' . $caller_prefix . strtoupper( $type_prefix ) . ': ' . $message ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
+	}
+
+	/**
+	 * Get the current process ID and format it to the output in a way that keeps it aligned.
+	 *
+	 * @return string The process ID surrounded by brackets and followed by spaces to always match at least 7 characters.
+	 */
+	private static function get_pid() {
+		$pid = '[' . getmypid() . ']';
+		$len = strlen( $pid );
+		while ( $len < 7 ) {
+			$pid .= ' ';
+			$len++;
+		}
+		return $pid;
 	}
 
 	/**
