@@ -80,6 +80,8 @@ return array(
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Activation' => $baseDir . '/Core/Modules/Module_With_Activation.php',
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Assets' => $baseDir . '/Core/Modules/Module_With_Assets.php',
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Assets_Trait' => $baseDir . '/Core/Modules/Module_With_Assets_Trait.php',
+    'Google\\Site_Kit\\Core\\Modules\\Module_With_Data_Available_State' => $baseDir . '/Core/Modules/Module_With_Data_Available_State.php',
+    'Google\\Site_Kit\\Core\\Modules\\Module_With_Data_Available_State_Trait' => $baseDir . '/Core/Modules/Module_With_Data_Available_State_Trait.php',
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Deactivation' => $baseDir . '/Core/Modules/Module_With_Deactivation.php',
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Debug_Fields' => $baseDir . '/Core/Modules/Module_With_Debug_Fields.php',
     'Google\\Site_Kit\\Core\\Modules\\Module_With_Owner' => $baseDir . '/Core/Modules/Module_With_Owner.php',

@@ -7,12 +7,6 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
-    'Google\\Site_Kit_Dependencies\\Firebase\\JWT\\BeforeValidException' => $baseDir . '/firebase/php-jwt/src/BeforeValidException.php',
-    'Google\\Site_Kit_Dependencies\\Firebase\\JWT\\ExpiredException' => $baseDir . '/firebase/php-jwt/src/ExpiredException.php',
-    'Google\\Site_Kit_Dependencies\\Firebase\\JWT\\JWK' => $baseDir . '/firebase/php-jwt/src/JWK.php',
-    'Google\\Site_Kit_Dependencies\\Firebase\\JWT\\JWT' => $baseDir . '/firebase/php-jwt/src/JWT.php',
-    'Google\\Site_Kit_Dependencies\\Firebase\\JWT\\Key' => $baseDir . '/firebase/php-jwt/src/Key.php',
-    'Google\\Site_Kit_Dependencies\\Firebase\\JWT\\SignatureInvalidException' => $baseDir . '/firebase/php-jwt/src/SignatureInvalidException.php',
     'Google\\Site_Kit_Dependencies\\Google\\AccessToken\\Revoke' => $baseDir . '/google/apiclient/src/AccessToken/Revoke.php',
     'Google\\Site_Kit_Dependencies\\Google\\AccessToken\\Verify' => $baseDir . '/google/apiclient/src/AccessToken/Verify.php',
     'Google\\Site_Kit_Dependencies\\Google\\AuthHandler\\AuthHandlerFactory' => $baseDir . '/google/apiclient/src/AuthHandler/AuthHandlerFactory.php',

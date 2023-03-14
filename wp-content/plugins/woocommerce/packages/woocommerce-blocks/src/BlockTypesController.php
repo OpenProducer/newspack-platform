@@ -168,6 +168,8 @@ final class BlockTypesController {
 			'AllProducts',
 			'AllReviews',
 			'AttributeFilter',
+			'Breadcrumbs',
+			'CatalogSorting',
 			'ClassicTemplate',
 			'CustomerAccount',
 			'FeaturedCategory',
@@ -176,6 +178,7 @@ final class BlockTypesController {
 			'HandpickedProducts',
 			'MiniCart',
 			'MiniCartContents',
+			'StoreNotices',
 			'PriceFilter',
 			'ProductAddToCart',
 			'ProductBestSellers',
@@ -184,11 +187,13 @@ final class BlockTypesController {
 			'ProductCategory',
 			'ProductCategoryList',
 			'ProductImage',
+			'ProductImageGallery',
 			'ProductNew',
 			'ProductOnSale',
 			'ProductPrice',
 			'ProductQuery',
 			'ProductRating',
+			'ProductResultsCount',
 			'ProductSaleBadge',
 			'ProductSearch',
 			'ProductSKU',
@@ -246,7 +251,11 @@ final class BlockTypesController {
 			$block_types = array_diff(
 				$block_types,
 				[
+					'Breadcrumbs',
+					'CatalogSorting',
 					'ClassicTemplate',
+					'ProductResultsCount',
+					'StoreNotices',
 				]
 			);
 		}

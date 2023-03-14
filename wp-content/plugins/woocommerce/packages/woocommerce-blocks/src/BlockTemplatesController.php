@@ -322,6 +322,7 @@ class BlockTemplatesController {
 				if ( ! $template->description ) {
 					$template->description = BlockTemplateUtils::get_block_template_description( $template->slug );
 				}
+
 				return $template;
 			},
 			$query_result
