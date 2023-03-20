@@ -411,7 +411,7 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 
 /** === Blockquote === */
-.wp-block-quote:not(.is-large, .is-style-large) {
+.wp-block-quote:not(.is-large):not(.is-style-large) {
   border-width: 2px;
   border-color: #555;
 }
@@ -649,7 +649,7 @@ div[data-align=full] > .wp-block-image figcaption {
   border: 0;
   border-top: 1px solid #ccc;
 }
-.wp-block-separator:not(.is-style-wide, .is-style-dots) {
+.wp-block-separator:not(.is-style-wide):not(.is-style-dots) {
   max-width: 5rem;
   margin-left: auto;
   margin-right: auto;

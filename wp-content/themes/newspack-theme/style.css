@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.69.1
+Version: 1.69.2
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -2294,7 +2294,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .page-template-no-header-footer .site-content, .page-template-no-header-footer.hide-page-title .site-content {
   margin-top: 0;
 }
-.page-template-no-header-footer:not(.hide-page-title, [class*=single-featured-image-]) .entry-header {
+.page-template-no-header-footer:not(.hide-page-title):not([class*=single-featured-image-]) .entry-header {
   margin-top: 1rem;
 }
 
@@ -4855,17 +4855,17 @@ div.sharedaddy {
   margin-left: 0;
   margin-right: 0;
 }
-.newspack-front-page .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide), .newspack-front-page .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.newspack-front-page .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.newspack-front-page .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.post-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide) {
+.newspack-front-page .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .newspack-front-page .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.newspack-front-page .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.newspack-front-page .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
   margin-left: auto;
   margin-right: auto;
   max-width: 1200px;
@@ -5197,11 +5197,11 @@ p.has-background {
     font-size: 1.4em;
   }
 }
-.wp-block-pullquote.has-text-align-right:not(.alignleft, .alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft, .alignright) p {
+.wp-block-pullquote.has-text-align-right:not(.alignleft):not(.alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft):not(.alignright) p {
   font-size: 1.4em;
 }
 @media only screen and (min-width: 782px) {
-  .wp-block-pullquote.has-text-align-right:not(.alignleft, .alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft, .alignright) p {
+  .wp-block-pullquote.has-text-align-right:not(.alignleft):not(.alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft):not(.alignright) p {
     font-size: 1.4em;
   }
 }
@@ -6349,29 +6349,29 @@ hr.has-background.is-style-dots::before {
 .page-template-no-header-footer .wp-block-cover-image.alignwide {
   width: auto;
 }
-.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide), .post-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
-.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
-.post-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.post-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull, .alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull, .alignwide) {
+.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .post-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
   margin-left: auto;
   margin-right: auto;
   max-width: 780px;
@@ -6427,16 +6427,16 @@ hr.has-background.is-style-dots::before {
     padding-right: 1rem;
   }
 }
-.newspack-front-page .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.newspack-front-page [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.post-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.post-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.page-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.page-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.post-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background, .is-style-border),
-.page-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background, .is-style-border) {
+.newspack-front-page .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.newspack-front-page [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.post-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.post-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.page-template-single-wide .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.page-template-single-wide [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.post-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull:not(.has-background):not(.is-style-border),
+.page-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border) {
   padding-left: 5.5%;
   padding-right: 5.5%;
 }
@@ -7186,11 +7186,11 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   position: relative;
   z-index: 1;
 }
-.h-sub.single-featured-image-behind:not(.newspack-front-page, .style-pack-style-2) .global_below_header + .site-content {
+.h-sub.single-featured-image-behind:not(.newspack-front-page) .global_below_header + .site-content {
   margin-top: 0;
 }
 @media only screen and (min-width: 782px) {
-  .h-sub.single-featured-image-beside:not(.newspack-front-page, .style-pack-style-2) .global_below_header + .site-content {
+  .h-sub.single-featured-image-beside:not(.newspack-front-page) .global_below_header + .site-content {
     margin-top: 0;
   }
 }

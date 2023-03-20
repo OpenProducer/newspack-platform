@@ -1,3 +1,17 @@
+# [1.108.0](https://github.com/Automattic/newspack-plugin/compare/v1.107.1...v1.108.0) (2023-03-20)
+
+
+### Features
+
+* **perfmatters:** add ads, recaptcha JS to script delay list ([#2354](https://github.com/Automattic/newspack-plugin/issues/2354)) ([e8d1703](https://github.com/Automattic/newspack-plugin/commit/e8d1703b8333bd110456fcbd30f36edd8208801c))
+
+## [1.107.1](https://github.com/Automattic/newspack-plugin/compare/v1.107.0...v1.107.1) (2023-03-15)
+
+
+### Bug Fixes
+
+* prevent page auto-scroll when RAS is enabled ([3cdfb45](https://github.com/Automattic/newspack-plugin/commit/3cdfb45338352ff5d8bbe3cf66a41667266cbd80))
+
 # [1.107.0](https://github.com/Automattic/newspack-plugin/compare/v1.106.0...v1.107.0) (2023-03-14)
 
 

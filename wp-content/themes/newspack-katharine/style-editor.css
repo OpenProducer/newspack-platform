@@ -437,7 +437,7 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 
 /** === Blockquote === */
-.wp-block-quote:not(.is-large, .is-style-large) {
+.wp-block-quote:not(.is-large):not(.is-style-large) {
   border-width: 2px;
   border-color: #555;
 }
@@ -675,7 +675,7 @@ div[data-align=full] > .wp-block-image figcaption {
   border: 0;
   border-top: 1px solid #ccc;
 }
-.wp-block-separator:not(.is-style-wide, .is-style-dots) {
+.wp-block-separator:not(.is-style-wide):not(.is-style-dots) {
   max-width: 5rem;
   margin-left: auto;
   margin-right: auto;
@@ -1488,7 +1488,7 @@ Newspack Katharine Editor Styles
   font-weight: bold;
 }
 
-.wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption, .show-category) .post-has-image .entry-title {
+.wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption):not(.show-category) .post-has-image .entry-title {
   background-color: #fff;
   margin-top: -1.75em;
   padding: 0.5em 0.25em 0 0;
@@ -1496,7 +1496,7 @@ Newspack Katharine Editor Styles
   width: 85%;
   z-index: 1;
 }
-.wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption, .show-category) .post-has-image .sponsor-label + .entry-title {
+.wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption):not(.show-category) .post-has-image .sponsor-label + .entry-title {
   margin-top: 0;
   padding: 0;
 }
@@ -1510,7 +1510,7 @@ Newspack Katharine Editor Styles
   border-bottom-color: #111;
 }
 
-.wpnbha.has-text-align-center .article-section-title::before, .wpnbha.has-text-align-center.show-image.image-aligntop:not(.show-caption, .show-category) .post-has-image .entry-title {
+.wpnbha.has-text-align-center .article-section-title::before, .wpnbha.has-text-align-center.show-image.image-aligntop:not(.show-caption):not(.show-category) .post-has-image .entry-title {
   margin-left: auto;
   margin-right: auto;
 }
@@ -1524,12 +1524,12 @@ Newspack Katharine Editor Styles
   right: 0;
   top: 0;
 }
-.wpnbha.has-text-align-right.show-image.image-aligntop:not(.show-caption, .show-category) .post-has-image .entry-title {
+.wpnbha.has-text-align-right.show-image.image-aligntop:not(.show-caption):not(.show-category) .post-has-image .entry-title {
   margin-left: 15%;
 }
 
-.wp-block-cover .wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption, .show-category) .post-has-image .entry-title,
-.wp-block-group .wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption, .show-category) .post-has-image .entry-title {
+.wp-block-cover .wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption):not(.show-category) .post-has-image .entry-title,
+.wp-block-group .wp-block-newspack-blocks-homepage-articles.show-image.image-aligntop:not(.show-caption):not(.show-category) .post-has-image .entry-title {
   background-color: transparent;
   margin-top: 0;
   padding: 0;
@@ -1544,10 +1544,10 @@ figure.wp-block-pullquote {
   font-weight: bold;
   position: relative;
 }
-.wp-block-pullquote:not(.is-style-solid-color, .has-background) blockquote {
+.wp-block-pullquote:not(.is-style-solid-color):not(.has-background) blockquote {
   padding-left: 2rem;
 }
-.wp-block-pullquote:not(.is-style-solid-color, .has-background)::before {
+.wp-block-pullquote:not(.is-style-solid-color):not(.has-background)::before {
   border-top: 8px solid;
   border-left: 8px solid;
   border-color: inherit;
@@ -1559,7 +1559,7 @@ figure.wp-block-pullquote {
   top: 0;
   width: 40px;
 }
-.wp-block-pullquote:not(.is-style-solid-color, .has-background)[style*=border-width]::before {
+.wp-block-pullquote:not(.is-style-solid-color):not(.has-background)[style*=border-width]::before {
   display: none;
 }
 .wp-block-pullquote blockquote p, .wp-block-pullquote.is-style-solid-color blockquote p {
