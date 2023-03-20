@@ -1,3 +1,6 @@
+# Ignore VSCode Workspace Files
+*.code-workspace
+
 # WordPress #
 ############
 wp-config-local.php
