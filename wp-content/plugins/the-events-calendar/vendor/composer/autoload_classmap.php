@@ -16,6 +16,8 @@ return array(
     'TEC\\Events\\Custom_Tables\\V1\\Feedback\\Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Feedback/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Full_Activation_Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Full_Activation_Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Health_Check' => $baseDir . '/src/Events/Custom_Tables/V1/Health_Check.php',
+    'TEC\\Events\\Custom_Tables\\V1\\Integrations\\ACF\\Controller' => $baseDir . '/src/Events/Custom_Tables/V1/Integrations/ACF/Controller.php',
+    'TEC\\Events\\Custom_Tables\\V1\\Integrations\\ACF\\Query_Modifier' => $baseDir . '/src/Events/Custom_Tables/V1/Integrations/ACF/Query_Modifier.php',
     'TEC\\Events\\Custom_Tables\\V1\\Integrations\\Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Integrations/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Phase_View_Renderer' => $baseDir . '/src/Events/Custom_Tables/V1/Migration/Admin/Phase_View_Renderer.php',
     'TEC\\Events\\Custom_Tables\\V1\\Migration\\Admin\\Progress_Modal' => $baseDir . '/src/Events/Custom_Tables/V1/Migration/Admin/Progress_Modal.php',

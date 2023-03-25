@@ -1,3 +1,10 @@
+## [1.60.1](https://github.com/Automattic/newspack-newsletters/compare/v1.60.0...v1.60.1) (2023-03-15)
+
+
+### Bug Fixes
+
+* date field types for custom ESP metadata fields ([#1117](https://github.com/Automattic/newspack-newsletters/issues/1117)) ([b9bbd9d](https://github.com/Automattic/newspack-newsletters/commit/b9bbd9dd7a8f5e7eb1acbee1127487c59a316261))
+
 # [1.60.0](https://github.com/Automattic/newspack-newsletters/compare/v1.59.2...v1.60.0) (2023-03-14)
 
 

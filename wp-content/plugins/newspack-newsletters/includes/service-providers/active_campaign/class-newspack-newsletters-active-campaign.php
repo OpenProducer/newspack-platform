@@ -960,7 +960,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		];
 
 		foreach ( $date_fields as $date_field ) {
-			if ( str_contains( $date_field, $field_name ) ) {
+			if ( str_contains( $field_name, $date_field ) ) {
 				return 'date';
 			}
 		}

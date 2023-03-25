@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 7.5.0\n"
+"Project-Id-Version: WooCommerce 7.5.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-03-12T23:44:02+00:00\n"
+"POT-Creation-Date: 2023-03-17T18:28:01+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: woocommerce\n"
@@ -10309,7 +10309,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-menus.php:95
 #: includes/admin/views/html-admin-page-status-report.php:691
-#: includes/class-wc-install.php:1792
+#: includes/class-wc-install.php:1796
 #: includes/react-admin/connect-existing-pages.php:35
 #: src/Admin/Features/Navigation/CoreMenu.php:126
 #: src/Internal/Admin/Analytics.php:305
@@ -20251,63 +20251,63 @@ msgid "Zero rate"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1533
+#: includes/class-wc-install.php:1537
 msgctxt "User role"
 msgid "Customer"
 msgstr ""
 
 #. translators: user role
-#: includes/class-wc-install.php:1535
+#: includes/class-wc-install.php:1539
 msgctxt "User role"
 msgid "Shop manager"
 msgstr ""
 
-#: includes/class-wc-install.php:1792
+#: includes/class-wc-install.php:1796
 msgid "View WooCommerce settings"
 msgstr ""
 
-#: includes/class-wc-install.php:1840
+#: includes/class-wc-install.php:1844
 msgid "View WooCommerce documentation"
 msgstr ""
 
-#: includes/class-wc-install.php:1840
+#: includes/class-wc-install.php:1844
 #: assets/client/admin/chunks/marketing-overview.js:1
 msgid "Docs"
 msgstr ""
 
-#: includes/class-wc-install.php:1841
+#: includes/class-wc-install.php:1845
 msgid "View WooCommerce API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:1841
+#: includes/class-wc-install.php:1845
 msgid "API docs"
 msgstr ""
 
-#: includes/class-wc-install.php:1842
+#: includes/class-wc-install.php:1846
 msgid "Visit community forums"
 msgstr ""
 
-#: includes/class-wc-install.php:1842
+#: includes/class-wc-install.php:1846
 msgid "Community support"
 msgstr ""
 
-#: includes/class-wc-install.php:1846
+#: includes/class-wc-install.php:1850
 msgid "Visit premium customer support"
 msgstr ""
 
-#: includes/class-wc-install.php:1846
+#: includes/class-wc-install.php:1850
 msgid "Premium support"
 msgstr ""
 
 #. translators: 1: plugin name, 2: error message, 3: URL to install plugin manually.
 #. translators: 1: theme slug, 2: error message, 3: URL to install theme manually.
-#: includes/class-wc-install.php:1974
-#: includes/class-wc-install.php:2078
+#: includes/class-wc-install.php:1978
+#: includes/class-wc-install.php:2082
 msgid "%1$s could not be installed (%2$s). <a href=\"%3$s\">Please install it manually by clicking here.</a>"
 msgstr ""
 
 #. translators: 1: plugin name, 2: URL to WP plugin page.
-#: includes/class-wc-install.php:2002
+#: includes/class-wc-install.php:2006
 msgid "%1$s was installed but could not be activated. <a href=\"%2$s\">Please activate it manually by clicking here.</a>"
 msgstr ""
 

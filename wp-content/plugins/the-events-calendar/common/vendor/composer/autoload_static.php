@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46
+class ComposerStaticInit5352e5a62fb2350e7f5ca3c7aff4068a
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -207,6 +207,7 @@ class ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46
         'Psr\\Log\\Test\\DummyTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/DummyTest.php',
         'Psr\\Log\\Test\\LoggerInterfaceTest' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/LoggerInterfaceTest.php',
         'Psr\\Log\\Test\\TestLogger' => __DIR__ . '/..' . '/psr/log/Psr/Log/Test/TestLogger.php',
+        'TEC\\Common\\Context\\Post_Request_Type' => __DIR__ . '/../..' . '/src/Common/Context/Post_Request_Type.php',
         'TEC\\Common\\Editor\\Full_Site\\Template_Utils' => __DIR__ . '/../..' . '/src/Common/Editor/Full_Site/Template_Utils.php',
         'TEC\\Common\\Libraries\\Installer\\Provider' => __DIR__ . '/../..' . '/src/Common/Libraries/Installer/Provider.php',
         'TEC\\Common\\Libraries\\Provider' => __DIR__ . '/../..' . '/src/Common/Libraries/Provider.php',
@@ -226,6 +227,7 @@ class ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46
         'Tribe\\Admin\\Settings' => __DIR__ . '/../..' . '/src/Tribe/Admin/Settings.php',
         'Tribe\\Admin\\Troubleshooting' => __DIR__ . '/../..' . '/src/Tribe/Admin/Troubleshooting.php',
         'Tribe\\Admin\\Upsell_Notice\\Main' => __DIR__ . '/../..' . '/src/Tribe/Admin/Upsell_Notice/Main.php',
+        'Tribe\\Admin\\Wysiwyg' => __DIR__ . '/../..' . '/src/Tribe/Admin/Wysiwyg.php',
         'Tribe\\Customizer\\Control' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Control.php',
         'Tribe\\Customizer\\Controls\\Heading' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Heading.php',
         'Tribe\\Customizer\\Controls\\Number' => __DIR__ . '/../..' . '/src/Tribe/Customizer/Controls/Number.php',
@@ -306,10 +308,10 @@ class ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInitfc62bc10a05bd7ebe24813af7a6f7c46::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5352e5a62fb2350e7f5ca3c7aff4068a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5352e5a62fb2350e7f5ca3c7aff4068a::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit5352e5a62fb2350e7f5ca3c7aff4068a::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit5352e5a62fb2350e7f5ca3c7aff4068a::$classMap;
 
         }, null, ClassLoader::class);
     }
