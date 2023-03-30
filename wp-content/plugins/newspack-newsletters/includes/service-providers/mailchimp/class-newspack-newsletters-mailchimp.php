@@ -605,7 +605,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		} catch ( Exception $e ) {
 			return new WP_Error(
 				'newspack_newsletters_mailchimp_error',
-				$e->getMessage()
+				$this->get_better_error_message( $e->getMessage() )
 			);
 		}
 	}
@@ -1267,5 +1267,18 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			</p>
 			<?php
 		}
+	}
+
+	/**
+	 * Replace some of the error messages sent by Mailchimp servers with a message that makes more sense to the user in the context of the plugin
+	 *
+	 * @param string $message The error message retrieved by the API.
+	 * @return string The new error message if we have an option for it. The same message otherwise.
+	 */
+	public function get_better_error_message( $message ) {
+		$known_errors = [
+			'Error sending test email. This campaign cannot be tested:" A From Name must be entered on the Setup step."' => __( 'Error sending test email. Please enter a name and email in the "FROM" section.', 'newspack-newsletters' ),
+		];
+		return isset( $known_errors[ $message ] ) ? $known_errors[ $message ] : $message;
 	}
 }

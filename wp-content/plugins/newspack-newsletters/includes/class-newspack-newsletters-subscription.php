@@ -360,6 +360,7 @@ class Newspack_Newsletters_Subscription {
 
 		$existing_contact                 = self::get_contact_data( $contact['email'], true );
 		$contact['existing_contact_data'] = \is_wp_error( $existing_contact ) ? false : $existing_contact;
+		$is_updating                      = \is_wp_error( $existing_contact ) ? false : true;
 
 		/**
 		 * Filters the contact before passing on to the API.
@@ -436,9 +437,10 @@ class Newspack_Newsletters_Subscription {
 		 *    @type string[] $metadata Contact additional metadata. Optional.
 		 * }
 		 * @param string[]|false      $lists    Array of list IDs to subscribe the contact to.
-		 * @param bool|WP_Error       $result   True if the contact was added or error if failed.
+		 * @param array|WP_Error      $result   Array with data if the contact was added or error if failed.
+		 * @param bool                $is_updating Whether the contact is being updated. If false, the contact is being created.
 		 */
-		do_action( 'newspack_newsletters_add_contact', $provider->service, $contact, $lists, $result );
+		do_action( 'newspack_newsletters_add_contact', $provider->service, $contact, $lists, $result, $is_updating );
 
 		return $result;
 	}
@@ -490,6 +492,9 @@ class Newspack_Newsletters_Subscription {
 		if ( ! $sync && empty( $lists ) ) {
 			return;
 		}
+
+		$metadata['newsletters_subscription_method'] = 'reader-registration';
+
 		// Adding is actually upserting, so no need to check if the hook is called for an existing user.
 		try {
 			self::add_contact(
