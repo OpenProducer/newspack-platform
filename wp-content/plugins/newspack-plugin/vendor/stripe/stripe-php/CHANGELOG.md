@@ -1,5 +1,32 @@
 # Changelog
 
+## 10.10.0 - 2023-03-16
+* [#1457](https://github.com/stripe/stripe-php/pull/1457) API Updates
+  * Add support for `future_requirements` and `requirements` on `BankAccount`
+  * Add support for new value `automatic_async` on enum `PaymentIntent.capture_method`
+  * Add support for new value `cashapp` on enum `PaymentLink.payment_method_types[]`
+  * Add support for `cashapp` on `PaymentMethod`
+  * Add support for new value `cashapp` on enum `PaymentMethod.type`
+* [#1454](https://github.com/stripe/stripe-php/pull/1454) Update generated code (new)
+  * Add support for new value `cashapp` on enum `PaymentLink.payment_method_types[]`
+  * Add support for `cashapp` on `PaymentMethod`
+  * Add support for new value `cashapp` on enum `PaymentMethod.type`
+
+## 10.9.1 - 2023-03-14
+* [#1453](https://github.com/stripe/stripe-php/pull/1453) Restore StripeClient.getService
+
+## 10.9.0 - 2023-03-09
+* [#1450](https://github.com/stripe/stripe-php/pull/1450) API Updates
+  * Add support for `cancellation_details` on `Subscription`
+  * Fix return types on custom methods (extends https://github.com/stripe/stripe-php/pull/1446)
+  
+* [#1446](https://github.com/stripe/stripe-php/pull/1446) stripe->customers->retrievePaymentMethod returns the wrong class (type hint)
+
+## 10.8.0 - 2023-03-02
+* [#1447](https://github.com/stripe/stripe-php/pull/1447) API Updates
+  * Add support for `reconciliation_status` on `Payout`
+  * Add support for new value `lease_tax` on enum `TaxRate.tax_type`
+
 ## 10.7.0 - 2023-02-23
 * [#1444](https://github.com/stripe/stripe-php/pull/1444) API Updates
   * Add support for new value `igst` on enum `TaxRate.tax_type`

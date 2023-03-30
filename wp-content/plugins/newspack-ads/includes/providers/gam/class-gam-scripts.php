@@ -411,6 +411,16 @@ final class GAM_Scripts {
 	 * @param array  $placement_data The placement data.
 	 */
 	public static function print_fixed_height_css( $placement_key, $hook_key, $placement_data ) {
+		if ( ! \newspack_ads_should_show_ads() ) {
+			return;
+		}
+		if ( ! Providers::is_provider_active( 'gam' ) ) {
+			return;
+		}
+		if ( Core::is_amp() ) {
+			return;
+		}
+
 		if ( 'gam' !== $placement_data['provider'] ) {
 			return;
 		}

@@ -196,12 +196,18 @@ class Mailchimp {
 			return;
 		}
 
-		$email    = $contact['email'];
-		$metadata = $contact['metadata'];
-		$keys     = Newspack_Newsletters::$metadata_keys;
+		$email         = $contact['email'];
+		$metadata      = $contact['metadata'];
+		$keys          = Newspack_Newsletters::$metadata_keys;
+		$prefixed_keys = array_map(
+			function( $key ) {
+				return Newspack_Newsletters::get_metadata_key( $key );
+			},
+			array_values( array_flip( $keys ) )
+		);
 
 		// Only use metadata defined in 'Newspack_Newsletters'.
-		$metadata = array_intersect_key( $metadata, array_flip( $keys ) );
+		$metadata = array_intersect_key( $metadata, array_flip( $prefixed_keys ) );
 
 		// Remove "product name" from metadata, we'll use
 		// 'donation_subscription_new' action for this data.

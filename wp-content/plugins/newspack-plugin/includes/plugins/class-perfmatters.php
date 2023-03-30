@@ -65,6 +65,7 @@ class Perfmatters {
 			// Third-party services.
 			'disqus',
 			'recaptcha',
+			'twitter.com',
 			// Advertising.
 			'googletag.pubads',
 			'adsbygoogle.js',
@@ -212,6 +213,14 @@ class Perfmatters {
 		$options['lazyload']['youtube_preview_thumbnails'] = true;
 		$options['lazyload']['image_dimensions']           = true;
 
+		// Fonts.
+		if ( ! isset( $options['fonts'] ) ) {
+			$options['fonts'] = [];
+		}
+		$options['fonts']['disable_google_fonts'] = false;
+		$options['fonts']['display_swap']         = true;
+		$options['fonts']['local_google_fonts']   = true;
+
 		return $options;
 	}
 
@@ -220,6 +229,9 @@ class Perfmatters {
 	 */
 	public static function admin_notice() {
 		if ( 'settings_page_perfmatters' !== get_current_screen()->id ) {
+			return;
+		}
+		if ( defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS ) {
 			return;
 		}
 		echo '<div class="notice notice-warning"><p>'

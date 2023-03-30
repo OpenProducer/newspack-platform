@@ -44,7 +44,7 @@ export const settings = {
 					'newspack-blocks'
 				) }
 			</p>
-			<ExternalLink href={ __( 'https://newspack.pub/support/blocks/donate-block/' ) }>
+			<ExternalLink href="https://help.newspack.com/publishing-and-appearance/blocks/donate-block/">
 				{ __( 'Support reference', 'newspack-blocks' ) }
 			</ExternalLink>
 		</>

@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Newspack\\AMP_Enhancements' => $baseDir . '/includes/class-amp-enhancements.php',
+    'Newspack\\AMP_Polyfills' => $baseDir . '/includes/polyfills/class-amp-polyfills.php',
     'Newspack\\API' => $baseDir . '/includes/class-api.php',
     'Newspack\\API\\Plugins_Controller' => $baseDir . '/includes/api/class-plugins-controller.php',
     'Newspack\\API\\Wizards_Controller' => $baseDir . '/includes/api/class-wizards-controller.php',

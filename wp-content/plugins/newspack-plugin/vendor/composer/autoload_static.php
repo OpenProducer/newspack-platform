@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6a630d2b437a87ab798f0a99ba5bf85a
+class ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -96,6 +96,7 @@ class ComposerStaticInit6a630d2b437a87ab798f0a99ba5bf85a
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
         'Newspack\\AMP_Enhancements' => __DIR__ . '/../..' . '/includes/class-amp-enhancements.php',
+        'Newspack\\AMP_Polyfills' => __DIR__ . '/../..' . '/includes/polyfills/class-amp-polyfills.php',
         'Newspack\\API' => __DIR__ . '/../..' . '/includes/class-api.php',
         'Newspack\\API\\Plugins_Controller' => __DIR__ . '/../..' . '/includes/api/class-plugins-controller.php',
         'Newspack\\API\\Wizards_Controller' => __DIR__ . '/../..' . '/includes/api/class-wizards-controller.php',
@@ -199,9 +200,9 @@ class ComposerStaticInit6a630d2b437a87ab798f0a99ba5bf85a
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6a630d2b437a87ab798f0a99ba5bf85a::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6a630d2b437a87ab798f0a99ba5bf85a::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6a630d2b437a87ab798f0a99ba5bf85a::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -413,9 +413,9 @@ function process_form() {
 	$metadata['current_page_url']    = home_url( add_query_arg( array(), $metadata['referer'] ) );
 	$metadata['registration_method'] = 'registration-block';
 
-	$popup_id = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false;
+	$popup_id                      = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false;
+	$metadata['newspack_popup_id'] = $popup_id;
 	if ( $popup_id ) {
-		$metadata['newspack_popup_id']   = $popup_id;
 		$metadata['registration_method'] = 'registration-block-popup';
 	}
 
@@ -426,9 +426,9 @@ function process_form() {
 	 *
 	 * @param string              $email   Email address of the reader.
 	 * @param int|false|\WP_Error $user_id The created user ID in case of registration, false if not created or a WP_Error object.
-	 * @param int|false           $popup_id The ID of the popup that triggered the registration, or false if not triggered by a popup.
+	 * @param array               $metadata Array with metadata about the user being registered.
 	 */
-	\do_action( 'newspack_reader_registration_form_processed', $email, $user_id, $popup_id );
+	\do_action( 'newspack_reader_registration_form_processed', $email, $user_id, $metadata );
 
 	if ( \is_wp_error( $user_id ) ) {
 		return send_form_response( $user_id );

@@ -192,7 +192,12 @@ class WooCommerce_Connection {
 		$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_date' ) ] = $customer->get_date_created()->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
 
 		if ( false === $payment_page_url ) {
-			$payment_page_url = \wc_get_checkout_url();
+			$referer_from_order = $order->get_meta( '_newspack_referer' );
+			if ( empty( $referer_from_order ) ) {
+				$payment_page_url = \wc_get_checkout_url();
+			} else {
+				$payment_page_url = $referer_from_order;
+			}
 		}
 		$metadata['current_page_url'] = $payment_page_url;
 
@@ -406,8 +411,11 @@ class WooCommerce_Connection {
 			$order->add_meta_data( '_newspack_referer', $order_data['referer'] );
 		}
 
-		if ( ! empty( $order_data['newspack_popup_id'] ) ) {
-			$order->add_meta_data( '_newspack_popup_id', $order_data['newspack_popup_id'] );
+		// Add all newspack_* meta data.
+		foreach ( $order_data as $key => $value ) {
+			if ( 0 === strpos( $key, 'newspack_' ) ) {
+				$order->add_meta_data( '_' . $key, $value );
+			}
 		}
 
 		if ( ! empty( $order_data['user_id'] ) ) {

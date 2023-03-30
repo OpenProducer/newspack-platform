@@ -112,6 +112,8 @@ class Api {
 			if ( \is_wp_error( $session ) ) {
 				return $session;
 			}
+			// Ensure there's a valid user.
+			$this->get_current_user();
 			$this->advertisers    = new Api\Advertisers( $session, $this );
 			$this->creatives      = new Api\Creatives( $session, $this );
 			$this->targeting_keys = new Api\Targeting_Keys( $session, $this );
@@ -141,18 +143,23 @@ class Api {
 				$errors[] = $error->getErrorString();
 			}
 		}
-		$network_code = $this->get_network_code();
-		$message_map  = [
-			'UniqueError.NOT_UNIQUE'                => __( 'Name must be unique.', 'newspack-ads' ),
-			'CommonError.CONCURRENT_MODIFICATION'   => __( 'Unexpected API error, please try again in 30 seconds.', 'newspack-ads' ),
-			'PermissionError.PERMISSION_DENIED'     => __( 'You do not have permission to perform this action. Make sure to connect an account with administrative access.', 'newspack-ads' ),
-			'AuthenticationError.NETWORK_NOT_FOUND' => __( 'The network code is invalid.', 'newspack-ads' ),
+		try {
+			$network_code = $this->get_network_code();
+		} catch ( \Exception $e ) {
+			$network_code = null;
+		}
+		$message_map = [
+			'UniqueError.NOT_UNIQUE'                    => __( 'Name must be unique.', 'newspack-ads' ),
+			'CommonError.CONCURRENT_MODIFICATION'       => __( 'Unexpected API error, please try again in 30 seconds.', 'newspack-ads' ),
+			'PermissionError.PERMISSION_DENIED'         => __( 'You do not have permission to perform this action. Make sure to connect an account with administrative access.', 'newspack-ads' ),
+			'AuthenticationError.NETWORK_NOT_FOUND'     => __( 'The network code is invalid.', 'newspack-ads' ),
 			'AuthenticationError.NETWORK_API_ACCESS_DISABLED' => sprintf(
 				'%s <a href="%s" target="_blank">%s</a>',
 				__( 'API access for this GAM account is disabled.', 'newspack-ads' ),
 				"https://admanager.google.com/${network_code}#admin/settings/network",
 				__( 'Enable API access in your GAM settings.', 'newspack-ads' )
 			),
+			'AuthenticationError.NO_NETWORKS_TO_ACCESS' => __( 'You do not have access to any GAM networks.', 'newspack-ads' ),
 		];
 		foreach ( $message_map as $error_type => $message ) {
 			if ( in_array( $error_type, $errors, true ) ) {

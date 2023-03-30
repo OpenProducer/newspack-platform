@@ -750,6 +750,16 @@ class Stripe_Connection {
 	public static function handle_donation( $config ) {
 		Stripe_Webhooks::validate_or_create_webhooks( true );
 
+		$stripe_data = self::get_stripe_data();
+
+		/**
+		 * Fires at the top of the handle_donation method on the Stripe Connection class, just before it handles the donation.
+		 *
+		 * @param array $config Data about the donation.
+		 * @param array $stripe_data Data about the Stripe connection.
+		 */
+		do_action( 'newspack_stripe_handle_donation_before', $config, $stripe_data );
+
 		$response = [
 			'error'  => null,
 			'status' => null,
@@ -757,13 +767,24 @@ class Stripe_Connection {
 		try {
 			$stripe = self::get_stripe_client();
 
-			$amount_raw       = $config['amount'];
-			$frequency        = $config['frequency'];
-			$email_address    = $config['email_address'];
-			$full_name        = $config['full_name'];
-			$source_id        = $config['source_id'];
-			$client_metadata  = $config['client_metadata'];
-			$payment_metadata = $config['payment_metadata'];
+			$amount_raw      = $config['amount'];
+			$frequency       = $config['frequency'];
+			$email_address   = $config['email_address'];
+			$full_name       = $config['full_name'];
+			$source_id       = $config['source_id'];
+			$client_metadata = $config['client_metadata'];
+
+			/**
+			 * Filters the payment metadata that will be sent to Stripe when a donation is made.
+			 *
+			 * Use this filter to add additinoal metadata to the payment. Every metadata prefixed with "newspack_" will be later automatically added
+			 * as a metadata to the order or subscription when we receive the webhook request from Stripe.
+			 * (Note, in the order, the metadata prefix will be "_newspack_")
+			 *
+			 * @param array $payment_metadata The payment metadata.
+			 * @param array $config The donation configuration.
+			 */
+			$payment_metadata = apply_filters( 'newspack_stripe_handle_donation_payment_metadata', $config['payment_metadata'], $config );
 
 			if ( ! isset( $client_metadata['userId'] ) && Reader_Activation::is_enabled() ) {
 				$reader_metadata                        = $client_metadata;
@@ -783,6 +804,14 @@ class Stripe_Connection {
 			);
 			if ( \is_wp_error( $customer ) ) {
 				$response['error'] = $customer->get_error_message();
+				/**
+				 * Fires at handle_donation method on the Stripe Connection class, when there's an error in the donation.
+				 *
+				 * @param object $config Data about the donation.
+				 * @param array $stripe_data Data about the Stripe connection.
+				 * @param string $error_message Error message.
+				 */
+				do_action( 'newspack_stripe_handle_donation_error', $config, $stripe_data, $response['error'] );
 				return $response;
 			}
 
@@ -934,6 +963,10 @@ class Stripe_Connection {
 			}
 		} catch ( \Throwable $e ) {
 			$response['error'] = $e->getMessage();
+			/**
+			 * This hook is documented above
+			 */
+			do_action( 'newspack_stripe_handle_donation_error', $config, $stripe_data, $response['error'] );
 		}
 		return $response;
 	}
@@ -1142,7 +1175,7 @@ class Stripe_Connection {
 		} else {
 			$frequency = self::get_frequency_of_payment( $payment );
 		}
-		return [
+		$payload = [
 			'email'                         => $customer['email'],
 			'name'                          => $customer['name'],
 			'stripe_id'                     => $payment['id'],
@@ -1159,8 +1192,16 @@ class Stripe_Connection {
 			'user_id'                       => $customer['metadata']['userId'],
 			'subscribed'                    => self::has_customer_opted_in_to_newsletters( $customer ),
 			'referer'                       => $payment['referer'] ?? null,
-			'newspack_popup_id'             => $payment['newspack_popup_id'] ?? null,
 		];
+
+		// Add any metadata prefixed with newspack_ to the payload.
+		foreach ( $payment as $key => $value ) {
+			if ( 0 === strpos( $key, 'newspack_' ) ) {
+				$payload[ $key ] = $value;
+			}
+		}
+
+		return $payload;
 	}
 
 	/**

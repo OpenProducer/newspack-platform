@@ -267,17 +267,33 @@ class Stripe_Webhooks {
 				$client_id         = isset( $customer['metadata']['clientId'] ) ? $customer['metadata']['clientId'] : null;
 				$origin            = isset( $customer['metadata']['origin'] ) ? $customer['metadata']['origin'] : null;
 
-				$referer           = $metadata['referer'] ?? '';
-				$newspack_popup_id = $metadata['newspack_popup_id'] ?? '';
+				$referer                   = $metadata['referer'] ?? '';
+				$newspack_popup_id         = $metadata['newspack_popup_id'] ?? '';
+				$invoice_newspack_metadata = [];
+				$payment_newspack_metadata = array_filter(
+					$metadata,
+					function( $key ) {
+						return 0 === strpos( $key, 'newspack_' );
+					},
+					ARRAY_FILTER_USE_KEY
+				);
+
 				if ( $payment['invoice'] ) {
 					$invoice = Stripe_Connection::get_invoice( $payment['invoice'] );
 					if ( ! \is_wp_error( $invoice ) ) {
-						$referer           = $invoice['metadata']['referer'] ?? $referer;
-						$newspack_popup_id = $invoice['metadata']['newspack_popup_id'] ?? $newspack_popup_id;
+						$referer = $invoice['metadata']['referer'] ?? $referer;
+						foreach ( $invoice['metadata']->keys() as $meta_key ) {
+							if ( 0 === strpos( $meta_key, 'newspack_' ) ) {
+								$invoice_newspack_metadata[ $meta_key ] = $invoice['metadata'][ $meta_key ];
+							}
+						}
 					}
 				}
-				$payment['referer']           = $referer;
-				$payment['newspack_popup_id'] = $newspack_popup_id;
+				$payment['referer'] = $referer;
+
+				$newspack_metadata = array_merge( $payment_newspack_metadata, $invoice_newspack_metadata );
+
+				$payment = array_merge( $payment, $newspack_metadata );
 
 				$frequency = Stripe_Connection::get_frequency_of_payment( $payment );
 

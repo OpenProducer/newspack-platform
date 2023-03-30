@@ -14,7 +14,7 @@ const placeholderBlocks = {
 		description: __( 'Render an ad unit from your inventory.', 'newspack-blocks' ),
 		icon: pullquote,
 		message: __( 'Place ad units inside your page by installing Newspack Ads.', 'newspack-blocks' ),
-		url: 'https://newspack.pub/support/advertising/',
+		url: 'https://help.newspack.com/revenue/advertising/',
 	},
 };
 

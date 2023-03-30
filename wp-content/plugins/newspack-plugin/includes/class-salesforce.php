@@ -539,7 +539,7 @@ class Salesforce {
 		$order_id = isset( $args['id'] ) ? $args['id'] : 0;
 		$order    = \wc_get_order( $order_id );
 
-		if ( is_wp_error( $response ) ) {
+		if ( is_wp_error( $response ) && is_a( $order, 'WC_Order' ) ) {
 			$order->add_order_note(
 				sprintf(
 					// Translators: Note added to order when sync is unsuccessful.
@@ -547,7 +547,7 @@ class Salesforce {
 					$response->get_error_message()
 				)
 			);
-		} else {
+		} elseif ( is_a( $order, 'WC_Order' ) ) {
 			$order->add_order_note( __( 'Order successfully synced to Salesforce.', 'newspack' ) );
 		}
 
@@ -579,10 +579,10 @@ class Salesforce {
 	 * @return array|WP_Error Array containing synced contact and opportunity data, or WP_Error.
 	 */
 	private static function sync_salesforce( $order ) {
-		$order_id      = is_a( $order, 'WC_Order' ) ? $order->get_id() : $order['id'];
+		$order_id      = is_a( $order, 'WC_Order' ) ? $order->get_id() : $order['id'] ?? false;
 		$order_details = self::parse_wc_order_data( $order );
 
-		if ( empty( $order_details ) ) {
+		if ( empty( $order_details ) || is_wp_error( $order_details ) ) {
 			return \rest_ensure_response(
 				new \WP_Error(
 					'newspack_salesforce_invalid_order',

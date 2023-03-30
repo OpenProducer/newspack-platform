@@ -43,26 +43,29 @@ function Edit( { attributes, setAttributes } ) {
 	const containerWidth = sizes.length ? Math.max( ...sizes.map( s => s[ 0 ] ) ) : 300;
 	const containerHeight = sizes.length ? Math.max( ...sizes.map( s => s[ 1 ] ) ) : 200;
 
-	useEffect( async () => {
-		// Legacy attribute.
-		if ( attributes.activeAd && ! attributes.ad_unit ) {
-			setAttributes( { ad_unit: attributes.activeAd } );
-		}
+	useEffect( () => {
+		const fetchData = async () => {
+			// Legacy attribute.
+			if ( attributes.activeAd && ! attributes.ad_unit ) {
+				setAttributes( { ad_unit: attributes.activeAd } );
+			}
 
-		setInFlight( true );
-		// Fetch providers.
-		try {
-			setProviders( await apiFetch( { path: '/newspack-ads/v1/providers' } ) );
-		} catch ( err ) {
-			setError( err );
-		}
-		// Fetch bidders.
-		try {
-			setBidders( await apiFetch( { path: '/newspack-ads/v1/bidders' } ) );
-		} catch ( err ) {
-			setBiddersError( err );
-		}
-		setInFlight( false );
+			setInFlight( true );
+			// Fetch providers.
+			try {
+				setProviders( await apiFetch( { path: '/newspack-ads/v1/providers' } ) );
+			} catch ( err ) {
+				setError( err );
+			}
+			// Fetch bidders.
+			try {
+				setBidders( await apiFetch( { path: '/newspack-ads/v1/bidders' } ) );
+			} catch ( err ) {
+				setBiddersError( err );
+			}
+			setInFlight( false );
+		};
+		fetchData();
 	}, [] );
 
 	useEffect( () => {

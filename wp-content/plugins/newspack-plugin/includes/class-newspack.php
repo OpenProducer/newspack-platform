@@ -157,6 +157,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/plugins/class-perfmatters.php';
 
 		include_once NEWSPACK_ABSPATH . 'includes/class-patches.php';
+		include_once NEWSPACK_ABSPATH . 'includes/polyfills/class-amp-polyfills.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-performance.php';
 
 		if ( Donations::is_platform_nrh() ) {

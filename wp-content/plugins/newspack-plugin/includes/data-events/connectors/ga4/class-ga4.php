@@ -14,6 +14,7 @@ use Newspack\Data_Events\Connectors\GA4\Event;
 use Newspack\Data_Events\Popups as Popups_Events;
 use Newspack\Logger;
 use Newspack\Reader_Activation;
+use WC_Order;
 use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
@@ -31,6 +32,10 @@ class GA4 {
 	public static $watched_events = [
 		'reader_logged_in',
 		'reader_registered',
+		'donation_new',
+		'donation_subscription_cancelled',
+		'newsletter_subscribed',
+		'campaign_interaction',
 	];
 
 	/**
@@ -41,6 +46,9 @@ class GA4 {
 	public static function init() {
 		Data_Events::register_handler( [ __CLASS__, 'global_handler' ] );
 		add_filter( 'newspack_data_events_dispatch_body', [ __CLASS__, 'filter_event_body' ], 10, 2 );
+		add_filter( 'newspack_stripe_handle_donation_payment_metadata', [ __CLASS__, 'filter_donation_metadata' ], 10, 2 );
+
+		add_filter( 'newspack_data_events_dispatch_body', [ __CLASS__, 'filter_donation_new_event_body' ], 20, 2 );
 	}
 
 	/**
@@ -68,6 +76,9 @@ class GA4 {
 
 		if ( method_exists( __CLASS__, 'handle_' . $event_name ) ) {
 			$params = call_user_func( [ __CLASS__, 'handle_' . $event_name ], $params, $data );
+
+			// prefix event name.
+			$event_name = 'np_' . $event_name;
 
 			if ( ! Event::validate_name( $event_name ) ) {
 				throw new \Exception( 'Invalid event name' );
@@ -127,6 +138,7 @@ class GA4 {
 			$body['data']['ga_params']['ga_session_id'] = $session_id;
 		}
 
+		$body['data']['ga_params']['is_reader'] = 'no';
 		if ( is_user_logged_in() ) {
 			$current_user                           = wp_get_current_user();
 			$body['data']['ga_params']['is_reader'] = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
@@ -137,9 +149,55 @@ class GA4 {
 	}
 
 	/**
+	 * When the donation_new event is dispatched from the Stripe webhook, it can't catch GA client ID from Cookies.
+	 *
+	 * In those cases, we rely on the metadata added to the order/subscription via the `newspack_stripe_handle_donation_payment_metadata` filter.
+	 *
+	 * This filter fixes both the donation_new event and the campaign_interaction with action form_submission_success that relies on this event.
+	 *
+	 * @param array  $body The event body.
+	 * @param string $event_name The event name.
+	 * @return array
+	 */
+	public static function filter_donation_new_event_body( $body, $event_name ) {
+		if ( ! empty( $body['data']['ga_client_id'] || ( 'donation_new' !== $event_name && 'campaign_interaction' !== $event_name ) ) ) {
+			return $body;
+		}
+
+		if ( 'donation_new' === $event_name ) {
+			$order_id = $body['data']['platform_data']['order_id'];
+		} else { // campaign_interaction.
+			$order_id = $body['data']['interaction_data']['donation_order_id'] ?? false;
+		}
+
+		$order = wc_get_order( $order_id );
+		if ( $order ) {
+			$ga_client_id = $order->get_meta( '_newspack_ga_client_id' );
+			if ( $ga_client_id ) {
+				$body['data']['ga_client_id'] = $ga_client_id;
+			}
+			$ga_session_id = $order->get_meta( '_newspack_ga_session_id' );
+			if ( $ga_session_id ) {
+				$body['data']['ga_params']['ga_session_id'] = $ga_session_id;
+			}
+			$logged_in = $order->get_meta( '_newspack_logged_in' );
+			if ( $logged_in ) {
+				$body['data']['ga_params']['logged_in'] = $logged_in;
+			}
+			$is_reader = $order->get_meta( '_newspack_is_reader' );
+			if ( $is_reader ) {
+				$body['data']['ga_params']['is_reader'] = $is_reader;
+			}
+		}
+
+		return $body;
+
+	}
+
+	/**
 	 * Handler for the reader_logged_in event.
 	 *
-	 * @param int   $params The GA4 event parameters.
+	 * @param array $params The GA4 event parameters.
 	 * @param array $data      Data associated with the Data Events api event.
 	 *
 	 * @return array $params The final version of the GA4 event params that will be sent to GA.
@@ -151,7 +209,7 @@ class GA4 {
 	/**
 	 * Handler for the reader_registered event.
 	 *
-	 * @param int   $params The GA4 event parameters.
+	 * @param array $params The GA4 event parameters.
 	 * @param array $data      Data associated with the Data Events api event.
 	 *
 	 * @return array $params The final version of the GA4 event params that will be sent to GA.
@@ -159,12 +217,156 @@ class GA4 {
 	public static function handle_reader_registered( $params, $data ) {
 		$params['registration_method'] = $data['metadata']['registration_method'] ?? '';
 		if ( ! empty( $data['metadata']['newspack_popup_id'] ) ) {
-			$params = array_merge( $params, Popups_Events::get_popup_metadata( $data['metadata']['newspack_popup_id'] ) );
+			$params = array_merge( $params, self::get_sanitized_popup_params( $data['metadata']['newspack_popup_id'] ) );
 		}
 		if ( ! empty( $data['metadata']['referer'] ) ) {
 			$params['referer'] = substr( $data['metadata']['referer'], 0, 100 );
 		}
 		return $params;
+	}
+
+	/**
+	 * Handler for the donation_new event.
+	 *
+	 * @param array $params The GA4 event parameters.
+	 * @param array $data      Data associated with the Data Events api event.
+	 *
+	 * @return array $params The final version of the GA4 event params that will be sent to GA.
+	 */
+	public static function handle_donation_new( $params, $data ) {
+		$params['amount']     = $data['amount'];
+		$params['currency']   = $data['currency'];
+		$params['recurrence'] = $data['recurrence'];
+		$params['platform']   = $data['platform'];
+		$params['referer']    = $data['referer'] ?? '';
+		$params['popup_id']   = $data['popup_id'] ?? '';
+		$params['range']      = self::get_donation_amount_range( $data['amount'] );
+		return $params;
+	}
+
+	/**
+	 * Handler for the donation_subscription_cancelled event.
+	 *
+	 * @param array $params The GA4 event parameters.
+	 * @param array $data      Data associated with the Data Events api event.
+	 *
+	 * @return array $params The final version of the GA4 event params that will be sent to GA.
+	 */
+	public static function handle_donation_subscription_cancelled( $params, $data ) {
+		$params['amount']     = $data['amount'];
+		$params['currency']   = $data['currency'];
+		$params['recurrence'] = $data['recurrence'];
+		$params['platform']   = $data['platform'];
+		$params['range']      = self::get_donation_amount_range( $data['amount'] );
+		return $params;
+	}
+
+	/**
+	 * Gets the value of the donation range metadata based on the donation amount.
+	 *
+	 * @param mixed $amount The donation amount.
+	 * @return string
+	 */
+	public static function get_donation_amount_range( $amount ) {
+
+		$amount = (float) $amount;
+
+		if ( 0.0 === $amount ) {
+			return '';
+		} elseif ( $amount < 20 ) {
+			return 'under-20';
+		} elseif ( $amount < 51 ) {
+			return '20-50';
+		} elseif ( $amount < 101 ) {
+			return '51-100';
+		} elseif ( $amount < 201 ) {
+			return '101-200';
+		} elseif ( $amount < 501 ) {
+			return '201-500';
+		} else {
+			return 'over-500';
+		}
+	}
+
+	/**
+	 * Handler for the newsletter_subscribed event.
+	 *
+	 * @param array $params The GA4 event parameters.
+	 * @param array $data      Data associated with the Data Events api event.
+	 *
+	 * @return array $params The final version of the GA4 event params that will be sent to GA.
+	 */
+	public static function handle_newsletter_subscribed( $params, $data ) {
+		$metadata = $data['contact']['metadata'] ?? [];
+		if ( ! empty( $metadata['newspack_popup_id'] ) ) {
+			$params = array_merge( $params, self::get_sanitized_popup_params( $metadata['newspack_popup_id'] ) );
+		}
+		$params['newsletters_subscription_method'] = $metadata['newsletters_subscription_method'] ?? '';
+		$params['referer']                         = $metadata['current_page_url'] ?? '';
+
+		// In case the subscription happened as part of the registration process, we should also have the registration method.
+		$params['registration_method'] = $metadata['registration_method'] ?? '';
+
+		$lists = $data['lists'];
+		sort( $lists );
+		$params['lists'] = implode( ',', $lists );
+
+		return $params;
+	}
+
+	/**
+	 * Handler for the campaign_interaction event.
+	 *
+	 * @param int   $params The GA4 event parameters.
+	 * @param array $data      Data associated with the Data Events api event.
+	 *
+	 * @return array $params The final version of the GA4 event params that will be sent to GA.
+	 */
+	public static function handle_campaign_interaction( $params, $data ) {
+		$transformed_data = $data;
+		// remove data added in the body filter.
+		unset( $transformed_data['ga_params'] );
+		unset( $transformed_data['ga_client_id'] );
+
+		$transformed_data = self::sanitize_popup_params( $transformed_data );
+
+		return array_merge( $params, $transformed_data );
+	}
+
+	/**
+	 * Sanitizes the popup params to be sent as params for GA events
+	 *
+	 * @param array $popup_params The popup params as they are returned by Newspack\Data_Events\Popups::get_popup_metadata and by the campaign_interaction data.
+	 * @return array
+	 */
+	public static function sanitize_popup_params( $popup_params ) {
+		// Invalid input.
+		if ( ! is_array( $popup_params ) || ! isset( $popup_params['campaign_id'] ) ) {
+			return [];
+		}
+		$santized = $popup_params;
+
+		unset( $santized['interaction_data'] );
+		$santized = array_merge( $santized, $popup_params['interaction_data'] );
+
+		unset( $santized['campaign_blocks'] );
+		foreach ( $popup_params['campaign_blocks'] as $block ) {
+			$santized[ 'campaign_has_' . $block ] = 1;
+		}
+		return $santized;
+	}
+
+	/**
+	 * Gets the santized popup params from a popup ID
+	 *
+	 * Ensures that the params are sanitized to be sent as GA params
+	 *
+	 * @param int $popup_id The popup ID.
+	 * @return array
+	 */
+	public static function get_sanitized_popup_params( $popup_id ) {
+		$popup_params = Popups_Events::get_popup_metadata( $popup_id );
+		return self::sanitize_popup_params( $popup_params );
 	}
 
 	/**
@@ -276,6 +478,25 @@ class GA4 {
 				}
 			}
 		}
+	}
+
+	/**
+	 * Adds additional information about the current user and session to the payment metadata sent to Stripe
+	 *
+	 * @param array $payment_metadata The payment metadata.
+	 * @param array $config The donation configuration.
+	 * @return array
+	 */
+	public static function filter_donation_metadata( $payment_metadata, $config ) {
+		$payment_metadata['newspack_ga_session_id'] = self::extract_sid_from_cookies();
+		$payment_metadata['newspack_ga_client_id']  = self::extract_cid_from_cookies();
+		$payment_metadata['newspack_logged_in']     = is_user_logged_in() ? 'yes' : 'no';
+		$payment_metadata['newspack_is_reader']     = 'no';
+		if ( is_user_logged_in() ) {
+			$current_user                           = wp_get_current_user();
+			$payment_metadata['newspack_is_reader'] = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
+		}
+		return $payment_metadata;
 	}
 
 	/**

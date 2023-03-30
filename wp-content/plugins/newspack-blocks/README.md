@@ -40,4 +40,4 @@ To get started with a new block:
 
 ### Usage
 
-[End-user documentation can be found here](https://newspack.pub/support/blocks/homepage-posts/).
+[End-user documentation can be found here](https://help.newspack.com/publishing-and-appearance/blocks/homepage-posts).

@@ -121,7 +121,6 @@ final class GAM_Model {
 			self::$api_session_error = $init_res->get_error_message();
 			return false;
 		}
-		$api->get_current_user();
 		self::$api = $api;
 		return self::$api;
 	}

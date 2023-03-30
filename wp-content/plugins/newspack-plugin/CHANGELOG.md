@@ -1,3 +1,73 @@
+# [1.111.0](https://github.com/Automattic/newspack-plugin/compare/v1.110.0...v1.111.0) (2023-03-28)
+
+
+### Features
+
+* (perfmatters) add fonts settings to defaults ([#2370](https://github.com/Automattic/newspack-plugin/issues/2370)) ([025595f](https://github.com/Automattic/newspack-plugin/commit/025595f63916ccc44faeadd7807bf76fc26c600e))
+
+# [1.110.0](https://github.com/Automattic/newspack-plugin/compare/v1.109.0...v1.110.0) (2023-03-27)
+
+
+### Bug Fixes
+
+* **ads:** proper usage of useEffect cleanup function ([#2335](https://github.com/Automattic/newspack-plugin/issues/2335)) ([58e4c10](https://github.com/Automattic/newspack-plugin/commit/58e4c10c212a294137128071fae5a9463cf3d3e6))
+* **cli:** setup config path ([6de5d36](https://github.com/Automattic/newspack-plugin/commit/6de5d3624e17a62da1e2fb1fbb6abac472c866a5))
+* **data-events:** mailchimp metadata keys ([#2331](https://github.com/Automattic/newspack-plugin/issues/2331)) ([de82e06](https://github.com/Automattic/newspack-plugin/commit/de82e063c5461354e6b65da2627411022a44b859))
+* **modal-checkout:** provide conversion URL for ESP ([feca20d](https://github.com/Automattic/newspack-plugin/commit/feca20df57f483ee5bb159b74a05c3245890a4b7))
+* only show perfmatters notice if defaults are used ([bdae0b2](https://github.com/Automattic/newspack-plugin/commit/bdae0b2a452d870579c886b6283289dac4be957a))
+* **perfmatters:** add twitter.com to JS delay list ([34bac52](https://github.com/Automattic/newspack-plugin/commit/34bac52e258f1f464e100998e77e9c91bcce858e))
+* post-release merge conflict ([3d03cd2](https://github.com/Automattic/newspack-plugin/commit/3d03cd256ef3513596c03c6001f6d6a8c1b769e8))
+* show handoff to finish Newspack setup only if setup is incomplete ([#2343](https://github.com/Automattic/newspack-plugin/issues/2343)) ([b0a85ef](https://github.com/Automattic/newspack-plugin/commit/b0a85efe181b33d00ce1b98d93f1bb7d1aee8874))
+* toggling settings section ([#2349](https://github.com/Automattic/newspack-plugin/issues/2349)) ([87d5218](https://github.com/Automattic/newspack-plugin/commit/87d5218bc599f38221def09abf5f866fd9894379))
+* **webhooks:** endpoint requests modal label ([#2332](https://github.com/Automattic/newspack-plugin/issues/2332)) ([fd99ff2](https://github.com/Automattic/newspack-plugin/commit/fd99ff27ceda43f6fb28b5c57ef398a7b7601905))
+* **webhooks:** grid layout ([4aa898f](https://github.com/Automattic/newspack-plugin/commit/4aa898fa1f52cc5ff759d7a7aded79925b973ede))
+* **wizards:** broken rendering in WP 6.2 ([a6cef5a](https://github.com/Automattic/newspack-plugin/commit/a6cef5a1f2fc785f31cc2c478ebde7791db1c2f9))
+
+
+### Features
+
+* add GA4 donation events ([#2326](https://github.com/Automattic/newspack-plugin/issues/2326)) ([a1377a2](https://github.com/Automattic/newspack-plugin/commit/a1377a26300caa8d3eb0eae4afbc5817667ec74a))
+* Add GA4 Newsletters subscriptions events ([#2330](https://github.com/Automattic/newspack-plugin/issues/2330)) ([86ffc66](https://github.com/Automattic/newspack-plugin/commit/86ffc66c62492801c57bc06aeb20b9d0ce4e5fb5))
+* Add popup events to GA4 ([#2337](https://github.com/Automattic/newspack-plugin/issues/2337)) ([62c738e](https://github.com/Automattic/newspack-plugin/commit/62c738e86c9599ed166b908bd827a3d8d09597b6))
+* Add popups donation events ([#2310](https://github.com/Automattic/newspack-plugin/issues/2310)) ([53e0c4a](https://github.com/Automattic/newspack-plugin/commit/53e0c4afdef1a564cd7069ff63f9afeca77327ad))
+* **amp-deprecation:** polyfills for amp-img, amp-iframe, amp-fit-text, amp-youtube ([#2308](https://github.com/Automattic/newspack-plugin/issues/2308)) ([7419cd5](https://github.com/Automattic/newspack-plugin/commit/7419cd5977e4a226669f4a23f05e576945bd9bd0))
+* **health-check:** mark some plugins as supported ([#2329](https://github.com/Automattic/newspack-plugin/issues/2329)) ([c1774e3](https://github.com/Automattic/newspack-plugin/commit/c1774e3d42bec0f3f51e265613fd5ca84d49c27b))
+
+# [1.110.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v1.109.0...v1.110.0-alpha.1) (2023-03-24)
+
+
+### Bug Fixes
+
+* **ads:** proper usage of useEffect cleanup function ([#2335](https://github.com/Automattic/newspack-plugin/issues/2335)) ([58e4c10](https://github.com/Automattic/newspack-plugin/commit/58e4c10c212a294137128071fae5a9463cf3d3e6))
+* **cli:** setup config path ([6de5d36](https://github.com/Automattic/newspack-plugin/commit/6de5d3624e17a62da1e2fb1fbb6abac472c866a5))
+* **data-events:** mailchimp metadata keys ([#2331](https://github.com/Automattic/newspack-plugin/issues/2331)) ([de82e06](https://github.com/Automattic/newspack-plugin/commit/de82e063c5461354e6b65da2627411022a44b859))
+* **modal-checkout:** provide conversion URL for ESP ([feca20d](https://github.com/Automattic/newspack-plugin/commit/feca20df57f483ee5bb159b74a05c3245890a4b7))
+* only show perfmatters notice if defaults are used ([bdae0b2](https://github.com/Automattic/newspack-plugin/commit/bdae0b2a452d870579c886b6283289dac4be957a))
+* **perfmatters:** add twitter.com to JS delay list ([34bac52](https://github.com/Automattic/newspack-plugin/commit/34bac52e258f1f464e100998e77e9c91bcce858e))
+* post-release merge conflict ([3d03cd2](https://github.com/Automattic/newspack-plugin/commit/3d03cd256ef3513596c03c6001f6d6a8c1b769e8))
+* show handoff to finish Newspack setup only if setup is incomplete ([#2343](https://github.com/Automattic/newspack-plugin/issues/2343)) ([b0a85ef](https://github.com/Automattic/newspack-plugin/commit/b0a85efe181b33d00ce1b98d93f1bb7d1aee8874))
+* toggling settings section ([#2349](https://github.com/Automattic/newspack-plugin/issues/2349)) ([87d5218](https://github.com/Automattic/newspack-plugin/commit/87d5218bc599f38221def09abf5f866fd9894379))
+* **webhooks:** endpoint requests modal label ([#2332](https://github.com/Automattic/newspack-plugin/issues/2332)) ([fd99ff2](https://github.com/Automattic/newspack-plugin/commit/fd99ff27ceda43f6fb28b5c57ef398a7b7601905))
+* **webhooks:** grid layout ([4aa898f](https://github.com/Automattic/newspack-plugin/commit/4aa898fa1f52cc5ff759d7a7aded79925b973ede))
+* **wizards:** broken rendering in WP 6.2 ([a6cef5a](https://github.com/Automattic/newspack-plugin/commit/a6cef5a1f2fc785f31cc2c478ebde7791db1c2f9))
+
+
+### Features
+
+* add GA4 donation events ([#2326](https://github.com/Automattic/newspack-plugin/issues/2326)) ([a1377a2](https://github.com/Automattic/newspack-plugin/commit/a1377a26300caa8d3eb0eae4afbc5817667ec74a))
+* Add GA4 Newsletters subscriptions events ([#2330](https://github.com/Automattic/newspack-plugin/issues/2330)) ([86ffc66](https://github.com/Automattic/newspack-plugin/commit/86ffc66c62492801c57bc06aeb20b9d0ce4e5fb5))
+* Add popup events to GA4 ([#2337](https://github.com/Automattic/newspack-plugin/issues/2337)) ([62c738e](https://github.com/Automattic/newspack-plugin/commit/62c738e86c9599ed166b908bd827a3d8d09597b6))
+* Add popups donation events ([#2310](https://github.com/Automattic/newspack-plugin/issues/2310)) ([53e0c4a](https://github.com/Automattic/newspack-plugin/commit/53e0c4afdef1a564cd7069ff63f9afeca77327ad))
+* **amp-deprecation:** polyfills for amp-img, amp-iframe, amp-fit-text, amp-youtube ([#2308](https://github.com/Automattic/newspack-plugin/issues/2308)) ([7419cd5](https://github.com/Automattic/newspack-plugin/commit/7419cd5977e4a226669f4a23f05e576945bd9bd0))
+* **health-check:** mark some plugins as supported ([#2329](https://github.com/Automattic/newspack-plugin/issues/2329)) ([c1774e3](https://github.com/Automattic/newspack-plugin/commit/c1774e3d42bec0f3f51e265613fd5ca84d49c27b))
+
+# [1.109.0](https://github.com/Automattic/newspack-plugin/compare/v1.108.0...v1.109.0) (2023-03-24)
+
+
+### Features
+
+* **amp-deprecation:** polyfills for amp-img, amp-iframe, amp-fit-text, amp-youtube ([#2308](https://github.com/Automattic/newspack-plugin/issues/2308)) ([29b043b](https://github.com/Automattic/newspack-plugin/commit/29b043bdc25795fea4be08cebdf07894057888f8))
+
 # [1.108.0](https://github.com/Automattic/newspack-plugin/compare/v1.107.1...v1.108.0) (2023-03-20)
 
 

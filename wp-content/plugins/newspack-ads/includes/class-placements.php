@@ -719,6 +719,14 @@ final class Placements {
 			$placement_data = $placement['data'];
 		}
 
+		// Provider is not active.
+		if (
+			isset( $placement_data['provider'] ) &&
+			! Providers::is_provider_active( $placement_data['provider'] )
+		) {
+			return;
+		}
+
 		if ( ! isset( $placement_data['ad_unit'] ) || empty( $placement_data['ad_unit'] ) ) {
 			return;
 		}
