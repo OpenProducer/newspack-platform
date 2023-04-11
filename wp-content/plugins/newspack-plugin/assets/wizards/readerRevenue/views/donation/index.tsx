@@ -246,6 +246,10 @@ const BillingFields = () => {
 
 	const { updateWizardSettings } = useDispatch( Wizard.STORE_NAMESPACE );
 
+	if ( ! wizardData.donation_data || 'errors' in wizardData.donation_data ) {
+		return null;
+	}
+
 	const changeHandler = path => value =>
 		updateWizardSettings( {
 			slug: 'newspack-reader-revenue-wizard',

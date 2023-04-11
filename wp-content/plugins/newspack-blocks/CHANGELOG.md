@@ -1,3 +1,17 @@
+# [1.66.0](https://github.com/Automattic/newspack-blocks/compare/v1.65.0...v1.66.0) (2023-04-10)
+
+
+### Features
+
+* **donate:** add body class for modal checkout ([#1411](https://github.com/Automattic/newspack-blocks/issues/1411)) ([8fc436e](https://github.com/Automattic/newspack-blocks/commit/8fc436ef92e1edf8bc37a45bdaf20757c4686ae8))
+
+# [1.66.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.65.0...v1.66.0-alpha.1) (2023-03-31)
+
+
+### Features
+
+* **donate:** add body class for modal checkout ([#1411](https://github.com/Automattic/newspack-blocks/issues/1411)) ([8fc436e](https://github.com/Automattic/newspack-blocks/commit/8fc436ef92e1edf8bc37a45bdaf20757c4686ae8))
+
 # [1.65.0](https://github.com/Automattic/newspack-blocks/compare/v1.64.0...v1.65.0) (2023-03-27)
 
 

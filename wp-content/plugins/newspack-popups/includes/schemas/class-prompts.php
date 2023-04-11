@@ -236,6 +236,7 @@ class Prompts extends Schema {
 							'enum'     => [
 								'time',
 								'scroll',
+								'blocks_count',
 							],
 						],
 						'trigger_delay'                  => [

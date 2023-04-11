@@ -418,6 +418,26 @@ final class Newspack_Popups_Inserter {
 	}
 
 	/**
+	 * Whether the given post is being restricted by Woo Memberships.
+	 *
+	 * @param int $post_id The post ID.
+	 *
+	 * @return bool
+	 */
+	private static function is_memberships_restricted( $post_id = null ) {
+		if ( ! function_exists( 'wc_memberships_is_post_content_restricted' ) ) {
+			return false;
+		}
+		if ( ! $post_id ) {
+			$post_id = get_the_ID();
+		}
+		if ( ! \wc_memberships_is_post_content_restricted( $post_id ) ) {
+			return false;
+		}
+		return ! is_user_logged_in() || ! current_user_can( 'wc_memberships_view_restricted_post_content', $post_id );
+	}
+
+	/**
 	 * Process popups and insert into post and page content if needed.
 	 *
 	 * @param string $content The content of the post.
@@ -436,7 +456,7 @@ final class Newspack_Popups_Inserter {
 			|| ! in_the_loop()
 			// Don't inject inline popups on paywalled posts.
 			// It doesn't make sense with a paywall message and also causes an infinite loop.
-			|| function_exists( 'wc_memberships_is_post_content_restricted' ) && wc_memberships_is_post_content_restricted()
+			|| self::is_memberships_restricted()
 		) {
 			return $content;
 		}

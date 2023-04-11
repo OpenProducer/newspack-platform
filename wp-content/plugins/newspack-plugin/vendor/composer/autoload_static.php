@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c
+class ComposerStaticInit4bfbdf2414e2969e140d10ae284be1f5
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -188,6 +188,7 @@ class ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c
         'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
         'Newspack\\Theme_Manager' => __DIR__ . '/../..' . '/includes/class-theme-manager.php',
         'Newspack\\Twitter_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-twitter-pixel.php',
+        'Newspack\\WC_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-wc-memberships.php',
         'Newspack\\Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-wizard.php',
         'Newspack\\Wizards' => __DIR__ . '/../..' . '/includes/class-wizards.php',
         'Newspack\\WooCommerce_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
@@ -200,9 +201,9 @@ class ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit2d4d9c58ed7439fa0943cab72ff8140c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit4bfbdf2414e2969e140d10ae284be1f5::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit4bfbdf2414e2969e140d10ae284be1f5::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit4bfbdf2414e2969e140d10ae284be1f5::$classMap;
 
         }, null, ClassLoader::class);
     }

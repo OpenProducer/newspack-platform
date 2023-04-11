@@ -1,3 +1,66 @@
+# [1.112.0](https://github.com/Automattic/newspack-plugin/compare/v1.111.1...v1.112.0) (2023-04-10)
+
+
+### Bug Fixes
+
+* add pre push hook ([#2395](https://github.com/Automattic/newspack-plugin/issues/2395)) ([04a6e57](https://github.com/Automattic/newspack-plugin/commit/04a6e5727332aa19fd88ba8ae822d9f00e8ab684))
+* Avoid falal error on Reader Revenue wizard ([#2382](https://github.com/Automattic/newspack-plugin/issues/2382)) ([646d212](https://github.com/Automattic/newspack-plugin/commit/646d212d7e4f3df022a472c30dfa052aa8795f48))
+* bail silently when recaptcha key is not set ([#2363](https://github.com/Automattic/newspack-plugin/issues/2363)) ([de18369](https://github.com/Automattic/newspack-plugin/commit/de183695019b3e29f5f404ed3faace976ca3b86d))
+* don't show gate unless attached to a specific post ([#2400](https://github.com/Automattic/newspack-plugin/issues/2400)) ([c45097c](https://github.com/Automattic/newspack-plugin/commit/c45097ca4ec6ba1682254093ef50b978e1a74ca2))
+* if My Account is set to shown in RAS, show in Customizer at all breakpoints ([#2379](https://github.com/Automattic/newspack-plugin/issues/2379)) ([1052923](https://github.com/Automattic/newspack-plugin/commit/10529238fe0475c9f4933231d4f037f7687559af))
+* **memberships:** remove content filters from excerpt ([#2398](https://github.com/Automattic/newspack-plugin/issues/2398)) ([987df5b](https://github.com/Automattic/newspack-plugin/commit/987df5b88868018a86dfee0ce0e9f0db5876dc23))
+* **stripe-sync-script:** process only customers with successful transactions ([#2355](https://github.com/Automattic/newspack-plugin/issues/2355)) ([1020663](https://github.com/Automattic/newspack-plugin/commit/1020663c0dbe1cfd81679d0ce1cca716a795993e))
+
+
+### Features
+
+* **amp-deprecation:** polyfill amp-vimeo tag ([#2372](https://github.com/Automattic/newspack-plugin/issues/2372)) ([4a70b65](https://github.com/Automattic/newspack-plugin/commit/4a70b65470f62c89135d1dc5f27d4060989b736a))
+* **amp:** polyfill lightbox effect ([#2324](https://github.com/Automattic/newspack-plugin/issues/2324)) ([b31288c](https://github.com/Automattic/newspack-plugin/commit/b31288c3bf1538889f9ba6c0e49e62bca5ebe2d0))
+* **memberships:** content gate page ([#2366](https://github.com/Automattic/newspack-plugin/issues/2366)) ([15026ab](https://github.com/Automattic/newspack-plugin/commit/15026ab36f118a0447d882f42ff0b2ca148266c1))
+* **memberships:** overlay style for content gate ([#2377](https://github.com/Automattic/newspack-plugin/issues/2377)) ([dd2ff5c](https://github.com/Automattic/newspack-plugin/commit/dd2ff5c8fe177d5cac8a5af5dadb50e77bb127b9))
+* **popups:** support disabled segments ([#2376](https://github.com/Automattic/newspack-plugin/issues/2376)) ([bfd65b2](https://github.com/Automattic/newspack-plugin/commit/bfd65b23dc5da98f692efcceb738c512b85b8f4b))
+
+# [1.112.0-alpha.5](https://github.com/Automattic/newspack-plugin/compare/v1.112.0-alpha.4...v1.112.0-alpha.5) (2023-04-10)
+
+
+### Bug Fixes
+
+* don't show gate unless attached to a specific post ([#2400](https://github.com/Automattic/newspack-plugin/issues/2400)) ([c45097c](https://github.com/Automattic/newspack-plugin/commit/c45097ca4ec6ba1682254093ef50b978e1a74ca2))
+
+# [1.112.0-alpha.4](https://github.com/Automattic/newspack-plugin/compare/v1.112.0-alpha.3...v1.112.0-alpha.4) (2023-04-05)
+
+
+### Bug Fixes
+
+* **memberships:** remove content filters from excerpt ([#2398](https://github.com/Automattic/newspack-plugin/issues/2398)) ([987df5b](https://github.com/Automattic/newspack-plugin/commit/987df5b88868018a86dfee0ce0e9f0db5876dc23))
+
+# [1.112.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v1.112.0-alpha.2...v1.112.0-alpha.3) (2023-04-04)
+
+
+### Bug Fixes
+
+* add pre push hook ([#2395](https://github.com/Automattic/newspack-plugin/issues/2395)) ([04a6e57](https://github.com/Automattic/newspack-plugin/commit/04a6e5727332aa19fd88ba8ae822d9f00e8ab684))
+* Avoid falal error on Reader Revenue wizard ([#2382](https://github.com/Automattic/newspack-plugin/issues/2382)) ([646d212](https://github.com/Automattic/newspack-plugin/commit/646d212d7e4f3df022a472c30dfa052aa8795f48))
+
+
+### Features
+
+* **memberships:** overlay style for content gate ([#2377](https://github.com/Automattic/newspack-plugin/issues/2377)) ([dd2ff5c](https://github.com/Automattic/newspack-plugin/commit/dd2ff5c8fe177d5cac8a5af5dadb50e77bb127b9))
+
+# [1.112.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v1.112.0-alpha.1...v1.112.0-alpha.2) (2023-04-03)
+
+
+### Bug Fixes
+
+* **amp:** improved iframe polyfill and include vimeo ([592eba7](https://github.com/Automattic/newspack-plugin/commit/592eba753eea728f830cf6e65666a912b0319f81))
+
+## [1.111.1](https://github.com/Automattic/newspack-plugin/compare/v1.111.0...v1.111.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* **amp:** improved iframe polyfill and include vimeo ([592eba7](https://github.com/Automattic/newspack-plugin/commit/592eba753eea728f830cf6e65666a912b0319f81))
+
 # [1.111.0](https://github.com/Automattic/newspack-plugin/compare/v1.110.0...v1.111.0) (2023-03-28)
 
 

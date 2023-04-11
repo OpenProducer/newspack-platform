@@ -195,7 +195,13 @@ class Maybe_Show_Campaign extends Lightweight_API {
 
 		foreach ( $all_segments as $segment_id => $segment ) {
 			// Determine whether the client matches the segment criteria.
-			$segment                = Campaign_Data_Utils::canonize_segment( $segment );
+			$segment = Campaign_Data_Utils::canonize_segment( $segment );
+
+			// Ignore disabled segments.
+			if ( true === $segment->is_disabled ) {
+				continue;
+			}
+
 			$client_matches_segment = Campaign_Data_Utils::does_reader_match_segment(
 				$segment,
 				$readers,

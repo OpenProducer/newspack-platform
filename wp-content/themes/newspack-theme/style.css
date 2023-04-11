@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.69.3
+Version: 1.69.4
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -4855,6 +4855,11 @@ div.sharedaddy {
   margin-left: 0;
   margin-right: 0;
 }
+.newspack-front-page .entry .entry-content .alignfull.wp-block-columns .alignwide,
+.post-template-single-wide .entry .entry-content .alignfull.wp-block-columns .alignwide,
+.page-template-single-wide .entry .entry-content .alignfull.wp-block-columns .alignwide {
+  width: 100%;
+}
 .newspack-front-page .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .newspack-front-page .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
 .newspack-front-page .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
 .newspack-front-page .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
@@ -4869,6 +4874,19 @@ div.sharedaddy {
   margin-left: auto;
   margin-right: auto;
   max-width: 1200px;
+}
+.newspack-front-page .entry .entry-content .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .newspack-front-page .entry .entry-content .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.newspack-front-page .entry .entry-content .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.newspack-front-page .entry .entry-content .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-wide .entry .entry-content .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-wide .entry .entry-content .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
+  max-width: 100%;
 }
 
 .page-template-no-header-footer .entry .entry-content > *.alignfull:first-child,
@@ -5774,6 +5792,10 @@ hr.has-background.is-style-dots::before {
   margin-top: -32px;
 }
 
+.wp-block-cover .wp-block-group.has-background + .wp-block-group.has-background {
+  margin-top: unset;
+}
+
 .newspack-front-page.hide-homepage-title .entry-content > .wp-block-group.alignfull:first-child,
 .newspack-front-page.hide-homepage-title [id=pico] > .wp-block-group.alignfull:first-child {
   margin-top: 0;
@@ -6298,12 +6320,6 @@ hr.has-background.is-style-dots::before {
 .page-template-single-feature .wp-block-image.alignfull img,
 .page-template-no-header-footer .wp-block-image.alignfull img {
   width: 100vw;
-  max-width: 100vw;
-}
-.post-template-single-feature .wp-block-image.alignwide,
-.page-template-single-feature .wp-block-image.alignwide,
-.page-template-no-header-footer .wp-block-image.alignwide {
-  max-width: 100vw;
 }
 .post-template-single-feature .wp-block-cover.alignfull .wp-block-cover-image-text,
 .post-template-single-feature .wp-block-cover.alignfull .wp-block-cover-text,
@@ -6349,80 +6365,105 @@ hr.has-background.is-style-dots::before {
 .page-template-no-header-footer .wp-block-cover-image.alignwide {
   width: auto;
 }
-.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .post-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.post-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-single-feature [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
+.post-template-single-feature .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .post-template-single-feature .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
   margin-left: auto;
   margin-right: auto;
   max-width: 780px;
 }
-.post-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
-.post-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
-.post-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
-.post-template-single-feature [id=pico] > .wp-block-group.alignfull > div > .alignwide,
-.page-template-single-feature .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-single-feature .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
-.page-template-single-feature [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-single-feature [id=pico] > .wp-block-group.alignfull > div > .alignwide,
-.page-template-no-header-footer .entry .entry-content > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-no-header-footer .entry .entry-content > .wp-block-group.alignfull > div > .alignwide,
-.page-template-no-header-footer [id=pico] > .wp-block-cover.alignfull > div > .alignwide,
-.page-template-no-header-footer [id=pico] > .wp-block-group.alignfull > div > .alignwide {
+.post-template-single-feature .entry .entry-content .wp-block-cover.alignfull > div > .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-group.alignfull > div > .alignwide,
+.post-template-single-feature [id=pico] .wp-block-cover.alignfull > div > .alignwide,
+.post-template-single-feature [id=pico] .wp-block-group.alignfull > div > .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-cover.alignfull > div > .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-group.alignfull > div > .alignwide,
+.page-template-single-feature [id=pico] .wp-block-cover.alignfull > div > .alignwide,
+.page-template-single-feature [id=pico] .wp-block-group.alignfull > div > .alignwide,
+.page-template-no-header-footer .entry .entry-content .wp-block-cover.alignfull > div > .alignwide,
+.page-template-no-header-footer .entry .entry-content .wp-block-group.alignfull > div > .alignwide,
+.page-template-no-header-footer [id=pico] .wp-block-cover.alignfull > div > .alignwide,
+.page-template-no-header-footer [id=pico] .wp-block-group.alignfull > div > .alignwide {
   margin-left: auto;
   margin-right: auto;
   max-width: 100%;
   width: calc(50vw + 390px);
 }
+.post-template-single-feature .entry .entry-content .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide), .post-template-single-feature .entry .entry-content .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature .entry .entry-content .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature .entry .entry-content .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.post-template-single-feature [id=pico] .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature .entry .entry-content .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-single-feature [id=pico] .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer .entry .entry-content .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-column .wp-block-cover.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-column .wp-block-cover.alignwide > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-column .wp-block-group.alignfull > div > *:not(.alignfull):not(.alignwide),
+.page-template-no-header-footer [id=pico] .wp-block-column .wp-block-group.alignwide > div > *:not(.alignfull):not(.alignwide) {
+  max-width: 100%;
+}
 
 .newspack-front-page .wp-block-pullquote.alignfull,
 .newspack-front-page .wp-block-table.alignfull,
-.newspack-front-page .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
-.newspack-front-page .wpnbha.alignfull,
+.newspack-front-page .entry-content > .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
+.newspack-front-page .entry-content > .wpnbha.alignfull,
 .post-template-single-wide .wp-block-pullquote.alignfull,
 .post-template-single-wide .wp-block-table.alignfull,
-.post-template-single-wide .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
-.post-template-single-wide .wpnbha.alignfull,
+.post-template-single-wide .entry-content > .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
+.post-template-single-wide .entry-content > .wpnbha.alignfull,
 .page-template-single-wide .wp-block-pullquote.alignfull,
 .page-template-single-wide .wp-block-table.alignfull,
-.page-template-single-wide .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
-.page-template-single-wide .wpnbha.alignfull,
+.page-template-single-wide .entry-content > .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
+.page-template-single-wide .entry-content > .wpnbha.alignfull,
 .post-template-single-feature .wp-block-pullquote.alignfull,
 .post-template-single-feature .wp-block-table.alignfull,
-.post-template-single-feature .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
-.post-template-single-feature .wpnbha.alignfull,
+.post-template-single-feature .entry-content > .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
+.post-template-single-feature .entry-content > .wpnbha.alignfull,
 .page-template-single-feature .wp-block-pullquote.alignfull,
 .page-template-single-feature .wp-block-table.alignfull,
-.page-template-single-feature .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
-.page-template-single-feature .wpnbha.alignfull {
+.page-template-single-feature .entry-content > .wp-block-columns:not(.is-not-stacked-on-mobile).alignfull,
+.page-template-single-feature .entry-content > .wpnbha.alignfull {
   padding-left: 1rem;
   padding-right: 1rem;
 }
 @media only screen and (min-width: 600px) {
-  .newspack-front-page .wp-block-columns.is-not-stacked-on-mobile.alignfull,
-  .post-template-single-wide .wp-block-columns.is-not-stacked-on-mobile.alignfull,
-  .page-template-single-wide .wp-block-columns.is-not-stacked-on-mobile.alignfull,
-  .post-template-single-feature .wp-block-columns.is-not-stacked-on-mobile.alignfull,
-  .page-template-single-feature .wp-block-columns.is-not-stacked-on-mobile.alignfull {
+  .newspack-front-page .entry-content > .wp-block-columns.is-not-stacked-on-mobile.alignfull,
+  .post-template-single-wide .entry-content > .wp-block-columns.is-not-stacked-on-mobile.alignfull,
+  .page-template-single-wide .entry-content > .wp-block-columns.is-not-stacked-on-mobile.alignfull,
+  .post-template-single-feature .entry-content > .wp-block-columns.is-not-stacked-on-mobile.alignfull,
+  .page-template-single-feature .entry-content > .wp-block-columns.is-not-stacked-on-mobile.alignfull {
     padding-left: 1rem;
     padding-right: 1rem;
   }
@@ -6439,6 +6480,52 @@ hr.has-background.is-style-dots::before {
 .page-template-single-feature [id=pico] > .wp-block-group.alignfull:not(.has-background):not(.is-style-border) {
   padding-left: 5.5%;
   padding-right: 5.5%;
+}
+.newspack-front-page .entry .entry-content .wp-block-columns .alignwide,
+.newspack-front-page .entry .entry-content .wp-block-columns .alignfull,
+.newspack-front-page .entry .entry-content .wp-block-group .alignwide,
+.newspack-front-page .entry .entry-content .wp-block-group .alignfull,
+.newspack-front-page .entry .entry-content .wp-block-cover .alignwide,
+.newspack-front-page .entry .entry-content .wp-block-cover .alignfull,
+.post-template-single-wide .entry .entry-content .wp-block-columns .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-columns .alignfull,
+.post-template-single-wide .entry .entry-content .wp-block-group .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-group .alignfull,
+.post-template-single-wide .entry .entry-content .wp-block-cover .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-cover .alignfull,
+.page-template-single-wide .entry .entry-content .wp-block-columns .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-columns .alignfull,
+.page-template-single-wide .entry .entry-content .wp-block-group .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-group .alignfull,
+.page-template-single-wide .entry .entry-content .wp-block-cover .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-cover .alignfull,
+.post-template-single-feature .entry .entry-content .wp-block-columns .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-columns .alignfull,
+.post-template-single-feature .entry .entry-content .wp-block-group .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-group .alignfull,
+.post-template-single-feature .entry .entry-content .wp-block-cover .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-cover .alignfull,
+.page-template-single-feature .entry .entry-content .wp-block-columns .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-columns .alignfull,
+.page-template-single-feature .entry .entry-content .wp-block-group .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-group .alignfull,
+.page-template-single-feature .entry .entry-content .wp-block-cover .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-cover .alignfull {
+  margin-left: 0;
+  margin-right: 0;
+}
+.newspack-front-page .entry .entry-content .wp-block-group.alignfull .alignwide,
+.newspack-front-page .entry .entry-content .wp-block-cover.alignfull .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-group.alignfull .alignwide,
+.post-template-single-wide .entry .entry-content .wp-block-cover.alignfull .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-group.alignfull .alignwide,
+.page-template-single-wide .entry .entry-content .wp-block-cover.alignfull .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-group.alignfull .alignwide,
+.post-template-single-feature .entry .entry-content .wp-block-cover.alignfull .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-group.alignfull .alignwide,
+.page-template-single-feature .entry .entry-content .wp-block-cover.alignfull .alignwide {
+  margin-left: auto;
+  margin-right: auto;
 }
 .newspack-front-page .entry .entry-content .scaip .newspack_global_ad,
 .newspack-front-page .entry .entry-content .scaip .widget_newspack-ads-widget,
@@ -6963,6 +7050,13 @@ figcaption,
   width: min(90vw, 780px);
 }
 
+.entry-content .wp-block-column figcaption,
+.entry-content .wp-block-column .alignfull > figcaption,
+.entry-content .wp-block-column .alignwide > figcaption {
+  max-width: 100%;
+  width: 100%;
+}
+
 .newspack-front-page .entry-content .wp-caption-text,
 .newspack-front-page .entry-content figcaption,
 .post-template-single-wide .entry-content .wp-caption-text,
@@ -6979,6 +7073,19 @@ figcaption,
 .page-template-single-wide .alignfull > figcaption,
 .page-template-single-wide .alignwide > figcaption {
   width: min(90vw, 1200px);
+}
+
+.newspack-front-page .entry-content .wp-block-column figcaption,
+.newspack-front-page .entry-content .wp-block-column .alignfull > figcaption,
+.newspack-front-page .entry-content .wp-block-column .alignwide > figcaption,
+.post-template-single-wide .entry-content .wp-block-column figcaption,
+.post-template-single-wide .entry-content .wp-block-column .alignfull > figcaption,
+.post-template-single-wide .entry-content .wp-block-column .alignwide > figcaption,
+.page-template-single-wide .entry-content .wp-block-column figcaption,
+.page-template-single-wide .entry-content .wp-block-column .alignfull > figcaption,
+.page-template-single-wide .entry-content .wp-block-column .alignwide > figcaption {
+  max-width: 100%;
+  width: 100%;
 }
 
 /* --------------------------------------------------------------

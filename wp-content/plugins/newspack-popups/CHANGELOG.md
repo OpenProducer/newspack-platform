@@ -1,3 +1,37 @@
+# [2.15.0](https://github.com/Automattic/newspack-popups/compare/v2.14.0...v2.15.0) (2023-04-10)
+
+
+### Bug Fixes
+
+* ensure the plugin works when performance-lab plugin is active ([0f8bc55](https://github.com/Automattic/newspack-popups/commit/0f8bc554a4b5cd5956ff4c0ed06dabc3540f0137))
+* fatal error if wp_cache_* functions do exist ([003b6c4](https://github.com/Automattic/newspack-popups/commit/003b6c4d019faa2af9ab88a61aa700fe08da5706))
+* fatal error if wp_cache_* functions do exist [#1073](https://github.com/Automattic/newspack-popups/issues/1073) ([ce1f563](https://github.com/Automattic/newspack-popups/commit/ce1f56362b0b2a9e795a4a28d81364623e526aa8))
+* hide lightbox when modal checkout ([#1077](https://github.com/Automattic/newspack-popups/issues/1077)) ([1da8f6b](https://github.com/Automattic/newspack-popups/commit/1da8f6b207baaed1ba753ec3beb4abd5b4ded7a0))
+* **memberships:** restriction check for inline prompt insertion ([#1079](https://github.com/Automattic/newspack-popups/issues/1079)) ([89f4142](https://github.com/Automattic/newspack-popups/commit/89f4142c1928fa5797de4895ad87cb45ccdb379f))
+
+
+### Features
+
+* add feature to allow segments to be disabled ([#1076](https://github.com/Automattic/newspack-popups/issues/1076)) ([238aaa7](https://github.com/Automattic/newspack-popups/commit/238aaa77dd1182017c7113b50efb8c97a91ebefe))
+* Update default newsletter prompt ([#1074](https://github.com/Automattic/newspack-popups/issues/1074)) ([428bb98](https://github.com/Automattic/newspack-popups/commit/428bb98636c4d97eb2312a3583108204543f6739))
+
+# [2.15.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.14.0...v2.15.0-alpha.1) (2023-03-31)
+
+
+### Bug Fixes
+
+* ensure the plugin works when performance-lab plugin is active ([0f8bc55](https://github.com/Automattic/newspack-popups/commit/0f8bc554a4b5cd5956ff4c0ed06dabc3540f0137))
+* fatal error if wp_cache_* functions do exist ([003b6c4](https://github.com/Automattic/newspack-popups/commit/003b6c4d019faa2af9ab88a61aa700fe08da5706))
+* fatal error if wp_cache_* functions do exist [#1073](https://github.com/Automattic/newspack-popups/issues/1073) ([ce1f563](https://github.com/Automattic/newspack-popups/commit/ce1f56362b0b2a9e795a4a28d81364623e526aa8))
+* hide lightbox when modal checkout ([#1077](https://github.com/Automattic/newspack-popups/issues/1077)) ([1da8f6b](https://github.com/Automattic/newspack-popups/commit/1da8f6b207baaed1ba753ec3beb4abd5b4ded7a0))
+* **memberships:** restriction check for inline prompt insertion ([#1079](https://github.com/Automattic/newspack-popups/issues/1079)) ([89f4142](https://github.com/Automattic/newspack-popups/commit/89f4142c1928fa5797de4895ad87cb45ccdb379f))
+
+
+### Features
+
+* add feature to allow segments to be disabled ([#1076](https://github.com/Automattic/newspack-popups/issues/1076)) ([238aaa7](https://github.com/Automattic/newspack-popups/commit/238aaa77dd1182017c7113b50efb8c97a91ebefe))
+* Update default newsletter prompt ([#1074](https://github.com/Automattic/newspack-popups/issues/1074)) ([428bb98](https://github.com/Automattic/newspack-popups/commit/428bb98636c4d97eb2312a3583108204543f6739))
+
 # [2.14.0](https://github.com/Automattic/newspack-popups/compare/v2.13.0...v2.14.0) (2023-03-14)
 
 

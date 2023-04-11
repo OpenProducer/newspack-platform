@@ -642,7 +642,7 @@ final class Reader_Activation {
 		$locations = self::get_setting( 'account_link_menu_locations' );
 
 		/** Do not alter items for authenticated non-readers */
-		if ( \is_user_logged_in() && ! self::is_user_reader( \wp_get_current_user() ) ) {
+		if ( \is_user_logged_in() && ! self::is_user_reader( \wp_get_current_user() ) && ! \is_customize_preview() ) {
 			return $output;
 		}
 

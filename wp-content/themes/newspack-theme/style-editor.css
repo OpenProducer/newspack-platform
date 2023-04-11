@@ -147,6 +147,10 @@ figcaption,
   padding-right: 0;
 }
 
+.wp-block-column figcaption {
+  max-width: 100%;
+}
+
 .has-text-color figcaption,
 .has-text-color .wp-caption-text {
   color: inherit;
@@ -247,7 +251,6 @@ h1.wp-block-post-title {
   color: inherit;
 }
 .wp-block-cover h2 {
-  max-width: 100%;
   padding-left: 0;
 }
 @media only screen and (min-width: 782px) {
@@ -307,6 +310,10 @@ h1.wp-block-post-title {
 }
 .wp-block-columns .wp-block-cover__inner-container {
   width: 100%;
+}
+.wp-block-columns .wp-block-column,
+.wp-block-columns .wp-block-column .wp-block {
+  max-width: 100%;
 }
 .wp-block-columns .wp-block-column > * {
   margin-bottom: 0;

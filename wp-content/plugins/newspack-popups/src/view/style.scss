@@ -484,3 +484,9 @@ $width__tablet: 782px;
 .hide {
 	display: none;
 }
+
+.newspack-modal-checkout-open {
+	.newspack-lightbox {
+		display: none !important;
+	}
+}

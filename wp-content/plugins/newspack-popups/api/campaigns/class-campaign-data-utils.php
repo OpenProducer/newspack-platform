@@ -234,6 +234,7 @@ class Campaign_Data_Utils {
 				'referrers'           => '',
 				'favorite_categories' => [],
 				'priority'            => PHP_INT_MAX,
+				'is_disabled'         => false,
 			],
 			(array) $segment
 		);

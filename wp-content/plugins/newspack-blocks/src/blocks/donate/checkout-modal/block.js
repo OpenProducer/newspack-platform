@@ -27,6 +27,7 @@ function closeCheckout( element ) {
 	if ( iframe ) {
 		iframe.src = 'about:blank';
 	}
+	document.body.classList.remove( 'newspack-modal-checkout-open' );
 	iframeResizeObserver.disconnect();
 	element.style.display = 'none';
 }
@@ -57,6 +58,7 @@ domReady( () => {
 			form.addEventListener( 'submit', () => {
 				spinner.style.display = 'flex';
 				modalCheckout.style.display = 'block';
+				document.body.classList.add( 'newspack-modal-checkout-open' );
 				iframeResizeObserver = new ResizeObserver( entries => {
 					if ( ! entries || ! entries.length ) {
 						return;

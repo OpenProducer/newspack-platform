@@ -142,6 +142,12 @@ class Segments extends Schema {
 							'required' => false,
 							'default'  => '',
 						],
+						'is_disabled'         => [
+							'name'     => 'is_disabled',
+							'type'     => 'boolean',
+							'required' => false,
+							'default'  => false,
+						],
 					],
 				],
 			],

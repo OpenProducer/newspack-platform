@@ -243,16 +243,22 @@ class Stripe_Sync {
 		if ( ! $is_dry_run ) {
 			// This method is idempotent, so it's safe to call it even if the contact already exists.
 			\Newspack_Newsletters_Subscription::add_contact( $contact );
+			// translators: Customer email address.
+			\WP_CLI::success( sprintf( __( 'Added customer %s to ESP.', 'newspack' ), $email_address ) );
+		} else {
+			// translators: Customer email address.
+			\WP_CLI::log( sprintf( __( 'Would have added customer %s to ESP.', 'newspack' ), $email_address ) );
 		}
 	}
 
 	/**
-	 * Fetch Stripe customers.
+	 * Fetch Stripe customers, who have at least one successful transaction on record.
+	 * Customers resulting from card-testing hacks will not be therefore included.
 	 *
 	 * @param array  $args Arguments.
 	 * @param string $last_id Customer ID.
 	 */
-	private static function process_all_stripe_customers( $args, $last_id = false ) {
+	private static function process_all_valid_stripe_customers( $args, $last_id = false ) {
 		$stripe = Stripe_Connection::get_stripe_client();
 		try {
 			$params = [ 'limit' => $args['batch-size'] ];
@@ -264,17 +270,28 @@ class Stripe_Sync {
 			// translators: Number of customers processed.
 			\WP_CLI::log( sprintf( __( 'Processing a batch of %d Stripe customers.', 'newspack' ), count( $response['data'] ) ) );
 			foreach ( $response['data'] as $customer ) {
-				if ( $args['sync-to-esp'] ) {
-					self::sync_to_esp( $customer, $args );
-				} elseif ( $args['sync-to-wc'] ) {
-					self::sync_to_wc( $customer, $args );
+				$all_charges       = Stripe_Connection::get_customer_transactions( $customer->id );
+				$succesful_charges = array_filter(
+					$all_charges,
+					function( $charge ) {
+						return 'succeeded' === $charge->status;
+					}
+				);
+				if ( 0 === count( $succesful_charges ) ) {
+					\WP_CLI::warning( 'No successful charges for ' . $customer->email . ', skipping.' );
+				} else {
+					if ( $args['sync-to-esp'] ) {
+						self::sync_to_esp( $customer, $args );
+					} elseif ( $args['sync-to-wc'] ) {
+						self::sync_to_wc( $customer, $args );
+					}
 				}
 				self::$results['processed']++;
 			}
 
 			if ( $response['has_more'] ) {
 				$last_id             = $response['data'][ count( $response['data'] ) - 1 ]->id;
-				$intermediate_result = self::process_all_stripe_customers( $args, $last_id );
+				$intermediate_result = self::process_all_valid_stripe_customers( $args, $last_id );
 				if ( \is_wp_error( $intermediate_result ) ) {
 					\WP_CLI::error( $intermediate_result->get_error_message() );
 				}
@@ -297,22 +314,23 @@ class Stripe_Sync {
 			'sync-to-esp' => false, // Sync data to the ESP.
 			'dry-run'     => false,
 		];
+		$passed_args  = array_merge( $default_args, $assoc_args );
+		$to_wc        = $passed_args['sync-to-wc'];
+		$to_esp       = $passed_args['sync-to-esp'];
 
 		\WP_CLI::log(
 			'
 
-Running data backfill from Stripe...
+Running data backfill from Stripe to ' . ( $to_esp ? 'ESP' : 'WooCommerce' ) . '...
 
 		'
 		);
 
-
-		$passed_args = array_merge( $default_args, $assoc_args );
 		if ( false !== $passed_args['dry-run'] ) {
 			\WP_CLI::warning( __( 'This is a dry run, no changes will be made.', 'newspack' ) );
 		}
 
-		if ( $passed_args['sync-to-wc'] ) {
+		if ( $to_wc ) {
 			if ( ! class_exists( 'WC_Stripe_Helper' ) || ! method_exists( 'WC_Stripe_Helper', 'get_order_by_charge_id' ) ) {
 				\WP_CLI::error( __( 'WC Stripe Gateway plugin has to be active.', 'newspack' ) );
 				return;
@@ -322,20 +340,16 @@ Running data backfill from Stripe...
 				\WP_CLI::error( __( 'WooCommerce plugin has to be active.', 'newspack' ) );
 				return;
 			}
-			if ( ! Donations::is_platform_stripe() ) {
-				\WP_CLI::error( __( 'Reader Revenue platform has to be set to Stripe.', 'newspack' ) );
-				return;
-			}
 		}
 
-		if ( $passed_args['sync-to-esp'] ) {
+		if ( $to_esp ) {
 			if ( ! method_exists( '\Newspack_Newsletters_Subscription', 'add_contact' ) ) {
 				\WP_CLI::error( __( 'Newspack Newsletters has to be active.', 'newspack' ) );
 				return;
 			}
 		}
 
-		$result = self::process_all_stripe_customers( $passed_args );
+		$result = self::process_all_valid_stripe_customers( $passed_args );
 
 		if ( \is_wp_error( $result ) ) {
 			\WP_CLI::error( $result->get_error_message() );
@@ -344,7 +358,7 @@ Running data backfill from Stripe...
 		// translators: Number of Stripe customers processed.
 		\WP_CLI::success( sprintf( __( 'Processed %d Stripe customers.', 'newspack' ), self::$results['processed'] ) );
 
-		if ( $passed_args['sync-to-wc'] ) {
+		if ( $to_wc ) {
 			// translators: Number of customers found.
 			\WP_CLI::success( sprintf( __( 'Found %d WC customers linked to Stripe customers.', 'newspack' ), self::$results['wc_found'] ) );
 			// translators: Number of customers created.
