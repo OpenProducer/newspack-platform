@@ -118,9 +118,12 @@ function render_block( $attrs ) {
 	// phpcs:enable
 	ob_start();
 	?>
-	<div class="newspack-newsletters-subscribe <?php echo esc_attr( get_block_classes( $attrs ) ); ?>">
+	<div
+		class="newspack-newsletters-subscribe <?php echo esc_attr( get_block_classes( $attrs ) ); ?>"
+		data-success-message="<?php echo \esc_attr( $attrs['successMessage'] ); ?>"
+	>
 		<?php if ( $subscribed ) : ?>
-			<p class="message"><?php echo \esc_html( $message ); ?></p>
+			<p class="message"><?php echo \esc_html( $attrs['successMessage'] ); ?></p>
 		<?php else : ?>
 			<form id="<?php echo esc_attr( get_form_id() ); ?>">
 				<?php \wp_nonce_field( FORM_ACTION, FORM_ACTION ); ?>
@@ -247,27 +250,32 @@ function get_block_classes( $attrs = [] ) {
 function send_form_response( $data ) {
 	$is_error = \is_wp_error( $data );
 	if ( \wp_is_json_request() ) {
-		if ( ! $is_error ) {
-			$message = __( 'Thank you for subscribing!', 'newspack' );
-		} else {
+		if ( $is_error ) {
 			$message = $data->get_error_message();
+			\wp_send_json( compact( 'message', 'data' ), 400 );
+			exit;
+		} else {
+			$data['newspack_newsletters_subscribed'] = 1;
+			\wp_send_json( $data, 200 );
+			exit;
 		}
-		\wp_send_json( compact( 'message', 'data' ), \is_wp_error( $data ) ? 400 : 200 );
-		exit;
 	} elseif ( isset( $_SERVER['REQUEST_METHOD'] ) && 'GET' === $_SERVER['REQUEST_METHOD'] ) {
 		$args_to_remove = [
 			'_wp_http_referer',
 			FORM_ACTION,
 		];
-		if ( ! $is_error ) {
+
+		$args = [ 'newspack_newsletters_subscribed' => $is_error ? '0' : '1' ];
+
+		if ( $is_error ) {
+			$args['message'] = $data->get_error_code();
+		} else {
 			$args_to_remove = array_merge( $args_to_remove, [ 'email', 'lists' ] );
 		}
+
 		\wp_safe_redirect(
 			\add_query_arg(
-				[
-					'newspack_newsletters_subscribed' => $is_error ? '0' : '1',
-					'message'                         => $is_error ? $data->get_error_message() : __( 'Thank you for subscribing!', 'newspack' ),
-				],
+				$args,
 				\remove_query_arg( $args_to_remove )
 			)
 		);

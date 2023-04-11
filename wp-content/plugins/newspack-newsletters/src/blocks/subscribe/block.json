@@ -29,7 +29,7 @@
 		},
 		"label": {
 			"type": "string",
-			"default": "Subscribe"
+			"default": "Sign up"
 		},
 		"displayDescription": {
 			"type": "boolean",
@@ -38,7 +38,13 @@
 		"lists": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "string" }
+			"items": {
+				"type": "string"
+			}
+		},
+		"successMessage": {
+			"type": "string",
+			"default": "Thank you for signing up!"
 		}
 	},
 	"supports": {

@@ -1,3 +1,31 @@
+# [1.62.0](https://github.com/Automattic/newspack-newsletters/compare/v1.61.1...v1.62.0) (2023-04-10)
+
+
+### Bug Fixes
+
+* editor title with selected header font ([#1119](https://github.com/Automattic/newspack-newsletters/issues/1119)) ([300180e](https://github.com/Automattic/newspack-newsletters/commit/300180eb1e58f86a85e221abf43e92a0630d26a6))
+* **posts-inserter:** preview styles for WP 6.2 ([#1123](https://github.com/Automattic/newspack-newsletters/issues/1123)) ([afffc61](https://github.com/Automattic/newspack-newsletters/commit/afffc61be4f2f282fb4628739651c546faf63dd3))
+
+
+### Features
+
+* add customizable success message ([#1129](https://github.com/Automattic/newspack-newsletters/issues/1129)) ([84a1121](https://github.com/Automattic/newspack-newsletters/commit/84a11216570e72c314db45085d4d49b3845e190d))
+* Change the default button label to Sign up ([#1125](https://github.com/Automattic/newspack-newsletters/issues/1125)) ([d1bd524](https://github.com/Automattic/newspack-newsletters/commit/d1bd524c294a051e5b0e6d8bd70c97a86805c658))
+
+# [1.62.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v1.62.0-alpha.1...v1.62.0-alpha.2) (2023-04-03)
+
+
+### Bug Fixes
+
+* **subscription-block:** use domReady for initializing block js ([#1136](https://github.com/Automattic/newspack-newsletters/issues/1136)) ([cae88f8](https://github.com/Automattic/newspack-newsletters/commit/cae88f8c51abd7a6d3f781c0c5c5c584dd301ca4))
+
+## [1.61.1](https://github.com/Automattic/newspack-newsletters/compare/v1.61.0...v1.61.1) (2023-04-03)
+
+
+### Bug Fixes
+
+* **subscription-block:** use domReady for initializing block js ([#1136](https://github.com/Automattic/newspack-newsletters/issues/1136)) ([cae88f8](https://github.com/Automattic/newspack-newsletters/commit/cae88f8c51abd7a6d3f781c0c5c5c584dd301ca4))
+
 # [1.61.0](https://github.com/Automattic/newspack-newsletters/compare/v1.60.1...v1.61.0) (2023-03-27)
 
 

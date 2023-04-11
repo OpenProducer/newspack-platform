@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitee763548c3ded9df455701a520e048bb
+class ComposerStaticInitdf6dc284d737148f3122300ee9cffec0
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -145,7 +145,9 @@ class ComposerStaticInitee763548c3ded9df455701a520e048bb
         'TEC\\Events\\Editor\\Full_Site\\Templates' => __DIR__ . '/../..' . '/src/Events/Editor/Full_Site/Templates.php',
         'TEC\\Events\\Installer\\Provider' => __DIR__ . '/../..' . '/src/Events/Installer/Provider.php',
         'TEC\\Events\\Integrations\\Integration_Abstract' => __DIR__ . '/../..' . '/src/Events/Integrations/Integration_Abstract.php',
+        'TEC\\Events\\Integrations\\Plugins\\Colbri_Page_Builder\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Colbri_Page_Builder/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\Plugin_Integration' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Plugin_Integration.php',
+        'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Events_Schema' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Events_Schema.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
         'TEC\\Events\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Provider.php',
@@ -284,9 +286,9 @@ class ComposerStaticInitee763548c3ded9df455701a520e048bb
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitee763548c3ded9df455701a520e048bb::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitee763548c3ded9df455701a520e048bb::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitee763548c3ded9df455701a520e048bb::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdf6dc284d737148f3122300ee9cffec0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdf6dc284d737148f3122300ee9cffec0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdf6dc284d737148f3122300ee9cffec0::$classMap;
 
         }, null, ClassLoader::class);
     }
