@@ -67,7 +67,7 @@
 .author-additional-infos {
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 
 .author-additional-info {

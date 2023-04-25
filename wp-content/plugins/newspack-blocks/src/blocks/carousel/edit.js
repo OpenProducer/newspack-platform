@@ -99,6 +99,7 @@ class Edit extends Component {
 				if ( latestPosts && this.swiperInstance.realIndex < latestPosts.length ) {
 					initialSlide = this.swiperInstance.realIndex;
 				}
+				this.setState( { swiperInitialized: false } );
 				this.swiperInstance.destroy( true, true );
 			}
 
@@ -115,7 +116,6 @@ class Edit extends Component {
 
 		if ( latestPosts && latestPosts.length ) {
 			const { aspectRatio, autoplay, delay, slidesPerView } = this.props.attributes;
-
 			const swiperInstance = createSwiper(
 				{
 					block: this.carouselRef.current, // Editor uses the same wrapper for block and swiper container.
@@ -240,7 +240,7 @@ class Edit extends Component {
 							<div style={ { margin: 'auto' } }>{ __( 'Sorry, no posts were found.' ) }</div>
 						</Placeholder>
 					) }
-					{ ! latestPosts && (
+					{ ( ! this.state.swiperInitialized || ! latestPosts ) && (
 						<Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />
 					) }
 					{ latestPosts && (

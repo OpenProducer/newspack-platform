@@ -45,6 +45,8 @@ final class Blocks {
 				'google_logo_svg'         => file_get_contents( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/blocks/reader-registration/icons/google.svg' ),
 				'reader_activation_terms' => Reader_Activation::get_setting( 'terms_text' ),
 				'reader_activation_url'   => Reader_Activation::get_setting( 'terms_url' ),
+				'has_recaptcha'           => Recaptcha::can_use_captcha(),
+				'recaptcha_url'           => admin_url( 'admin.php?page=newspack-connections-wizard' ),
 			]
 		);
 		\wp_enqueue_style(

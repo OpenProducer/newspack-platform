@@ -1,3 +1,42 @@
+# [1.67.0](https://github.com/Automattic/newspack-blocks/compare/v1.66.1...v1.67.0) (2023-04-24)
+
+
+### Bug Fixes
+
+* local git hooks ([#1414](https://github.com/Automattic/newspack-blocks/issues/1414)) ([bb99969](https://github.com/Automattic/newspack-blocks/commit/bb9996926af87eb76e0c5ab6b6a78c621021f701))
+* modal checkout outside of ras ([#1434](https://github.com/Automattic/newspack-blocks/issues/1434)) ([da5e1e2](https://github.com/Automattic/newspack-blocks/commit/da5e1e2af6e9e9be9c2627b857d489eee46b4fbe))
+
+
+### Features
+
+* **donate:** add recaptcha panel in the editor ([#1419](https://github.com/Automattic/newspack-blocks/issues/1419)) ([6784bc8](https://github.com/Automattic/newspack-blocks/commit/6784bc89d109e02e72e390e261865829ef2c9044))
+
+# [1.67.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v1.67.0-alpha.1...v1.67.0-alpha.2) (2023-04-18)
+
+
+### Bug Fixes
+
+* modal checkout outside of ras ([#1434](https://github.com/Automattic/newspack-blocks/issues/1434)) ([da5e1e2](https://github.com/Automattic/newspack-blocks/commit/da5e1e2af6e9e9be9c2627b857d489eee46b4fbe))
+
+# [1.67.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.66.1...v1.67.0-alpha.1) (2023-04-13)
+
+
+### Bug Fixes
+
+* local git hooks ([#1414](https://github.com/Automattic/newspack-blocks/issues/1414)) ([bb99969](https://github.com/Automattic/newspack-blocks/commit/bb9996926af87eb76e0c5ab6b6a78c621021f701))
+
+
+### Features
+
+* **donate:** add recaptcha panel in the editor ([#1419](https://github.com/Automattic/newspack-blocks/issues/1419)) ([6784bc8](https://github.com/Automattic/newspack-blocks/commit/6784bc89d109e02e72e390e261865829ef2c9044))
+
+## [1.66.1](https://github.com/Automattic/newspack-blocks/compare/v1.66.0...v1.66.1) (2023-04-11)
+
+
+### Bug Fixes
+
+* bugs for Post Carousel ([#1422](https://github.com/Automattic/newspack-blocks/issues/1422)) ([24f3c80](https://github.com/Automattic/newspack-blocks/commit/24f3c8000d251f2272fc09d8ba7837108751506d))
+
 # [1.66.0](https://github.com/Automattic/newspack-blocks/compare/v1.65.0...v1.66.0) (2023-04-10)
 
 

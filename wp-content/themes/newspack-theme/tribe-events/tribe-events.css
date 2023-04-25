@@ -119,7 +119,7 @@ main#tribe-events-pg-template {
 .tribe_community_edit .button.mb-cta {
   background: #d33;
   border-radius: 5px;
-  font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--newspack-theme-font-heading);
   font-size: 0.7em;
   font-weight: bold;
   letter-spacing: 0;
@@ -133,7 +133,7 @@ main#tribe-events-pg-template {
 
 div.tribe-common p,
 div.tribe-events-content {
-  font-family: georgia, garamond, "Times New Roman", serif;
+  font-family: var(--newspack-theme-font-body);
 }
 
 div.tribe-common .tribe-common-form-control-checkbox__label,
@@ -198,5 +198,5 @@ div.tribe-events-single ul.tribe-related-events li .tribe-related-events-title,
 div.tribe-events-single .tribe-events-sub-nav,
 div#top.tribe-theme-enfold.single-tribe_events .tribe-events-single-event-title,
 div#top.tribe-theme-enfold.single-tribe_events .tribe-events-schedule h3 {
-  font-family: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen", "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  font-family: var(--newspack-theme-font-heading);
 }

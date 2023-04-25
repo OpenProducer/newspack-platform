@@ -47,7 +47,6 @@ a.button:hover, a.button:visited {
 .woocommerce form .form-row .required {
   color: firebrick;
   text-decoration: none;
-  display: none;
 }
 .woocommerce form .form-row .required[title] {
   border: 0 !important;
@@ -110,7 +109,7 @@ a.button:hover, a.button:visited {
 }
 
 .woocommerce-product-rating {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 
 .woocommerce-notices-wrapper:not(:empty) {
@@ -125,7 +124,7 @@ a.button:hover, a.button:visited {
   background: #eee;
   display: flex;
   flex-wrap: wrap;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   list-style: none;
   margin-bottom: 1.5rem;
   padding: 0.5rem 1rem;
@@ -237,7 +236,7 @@ a.button:hover, a.button:visited {
 }
 
 .woocommerce-results-wrapper {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   margin-bottom: 0.5rem;
 }
 @media only screen and (min-width: 600px) {
@@ -271,7 +270,7 @@ ul.products li.product .woocommerce-loop-product__link {
   display: block;
 }
 ul.products li.product .woocommerce-loop-product__title {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
   margin: 0 0 0.5em;
 }
 ul.products li.product .woocommerce-loop-product__title::before {
@@ -404,7 +403,7 @@ dl.variation p, dl.variation:last-child,
   margin-top: 0;
 }
 .single-product .posted_in {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .single-product .woocommerce-product-rating {
   margin-bottom: 2rem;
@@ -451,7 +450,7 @@ dl.variation p, dl.variation:last-child,
 }
 .woocommerce-grouped-product-list .suggested-text,
 .woocommerce-grouped-product-list .suggested-text + .subscription-details {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .woocommerce-grouped-product-list td .nyp {
   margin-bottom: 0;
@@ -570,7 +569,7 @@ table.variations select {
   padding: 0;
 }
 .woocommerce-tabs ul li {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   margin-left: 1rem;
 }
 .woocommerce-tabs ul li a {
@@ -669,7 +668,7 @@ table.variations select {
   clear: both;
 }
 .woocommerce .related h2 {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
 }
 
 /**
@@ -920,7 +919,7 @@ table.variations select {
   margin-bottom: 0;
 }
 .cart_totals h2 {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
 }
 
 .shipping-calculator-button {
@@ -1091,7 +1090,7 @@ table.variations select {
 }
 
 .woocommerce-checkout h3 {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
   margin-bottom: 1rem;
   margin-top: 2rem;
 }
@@ -1099,7 +1098,7 @@ table.variations select {
 .woocommerce-checkout .woocommerce-account-fields label,
 .woocommerce-checkout .woocommerce-shipping-fields label,
 .woocommerce-checkout .woocommerce-additional-fields label {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .woocommerce-checkout .woocommerce-billing-fields h3 {
   margin-bottom: 0;
@@ -1253,7 +1252,7 @@ table.woocommerce-table--order-details.shop_table .shipping.recurring-total td,
 .my_account_orders .woocommerce-shipping-totals.shipping td,
 .my_account_orders .shipping.recurring-total th,
 .my_account_orders .shipping.recurring-total td {
-  font-size: 0.8em;
+  font-size: calc(var(--newspack-theme-font-size-sm));
   font-weight: normal;
   vertical-align: middle;
 }
@@ -1278,7 +1277,7 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
 .wc_payment_method .payment_box {
   padding: 1rem;
   background: #eee;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .wc_payment_method .payment_box ul:last-of-type,
 .wc_payment_method .payment_box ol:last-of-type {
@@ -1338,7 +1337,7 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
 }
 
 .woocommerce-terms-and-conditions-wrapper {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   margin-bottom: 2rem;
 }
 .woocommerce-terms-and-conditions-wrapper input[type=checkbox] {
@@ -1575,9 +1574,9 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
   box-sizing: border-box;
   display: block;
   color: inherit;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   outline: none;
   padding: 0.76rem 1rem;
   text-decoration: none;

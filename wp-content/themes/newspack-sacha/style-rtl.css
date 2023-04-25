@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.69.4-alpha.1
+Version: 1.70.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -20,6 +20,29 @@ Underscores is distributed under the terms of the GNU GPL v2 or later.
 Normalizing styles have been helped along thanks to the fine work of
 Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 */
+:root {
+  --newspack-theme-font-body: georgia, garamond, "Times New Roman", serif;
+  --newspack-theme-font-heading: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen",
+  	"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --newspack-theme-font-code: menlo, monaco, consolas, lucida console, monospace;
+  --newspack-theme-font-pre: "Courier 10 Pitch", courier, monospace;
+  --newspack-theme-font-size-base: 20px;
+  --newspack-theme-font-size-base-sm: 18px;
+  --newspack-theme-font-size-ratio: 1.125;
+  --newspack-theme-font-size-xxs: calc( 1em * 0.6 );
+  --newspack-theme-font-size-xs: calc( 1em * 0.7 );
+  --newspack-theme-font-size-sm: calc( 1em * 0.8 );
+  --newspack-theme-font-size-md: calc( 1em * 1.2 );
+  --newspack-theme-font-size-lg: calc( 1em * 1.4 );
+  --newspack-theme-font-size-xl: calc( 1em * 1.8 );
+  --newspack-theme-font-size-xxl: calc( 1em * 2.2 );
+  --newspack-theme-font-size-xxxl: calc( 1em * 2.8 );
+  --newspack-theme-font-size-xxxxl: calc( 1em * 3.2 );
+  --newspack-theme-font-size-xxxxxl: calc( 1em * 4 );
+  --newspack-theme-font-line-height-body: 1.6;
+  --newspack-theme-font-line-height-heading: 1.2;
+}
+
 @font-face {
   font-family: "IBM Plex Serif";
   src: url("fonts/ibm-plex-serif/IBMPlexSerif-Regular.ttf");
@@ -46,6 +69,10 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   font-weight: 700;
   font-display: swap;
 }
+:root {
+  --newspack-theme-font-heading: "IBM Plex Serif", georgia, serif;
+}
+
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
@@ -357,11 +384,11 @@ template {
 }
 
 html {
-  font-size: 18px;
+  font-size: var(--newspack-theme-font-size-base-sm);
 }
 @media only screen and (min-width: 600px) {
   html {
-    font-size: 20px;
+    font-size: var(--newspack-theme-font-size-base);
   }
 }
 
@@ -369,10 +396,10 @@ body {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   color: #111;
-  font-family: georgia, garamond, "Times New Roman", serif;
+  font-family: var(--newspack-theme-font-body);
   font-weight: 400;
   font-size: 1em;
-  line-height: 1.6;
+  line-height: var(--newspack-theme-font-line-height-body);
   margin: 0;
   text-rendering: optimizelegibility;
 }
@@ -383,14 +410,14 @@ select,
 optgroup,
 textarea {
   color: #111;
-  font-family: georgia, garamond, "Times New Roman", serif;
+  font-family: var(--newspack-theme-font-body);
   font-weight: 400;
-  line-height: 1.6;
+  line-height: var(--newspack-theme-font-line-height-body);
   text-rendering: optimizelegibility;
 }
 
 .use-body-font {
-  font-family: georgia, garamond, "Times New Roman", serif;
+  font-family: var(--newspack-theme-font-body);
 }
 
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
@@ -456,12 +483,12 @@ h3,
 h4,
 h5,
 h6 {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
 }
 
 /* stylelint-disable selector-type-no-unknown  */
 amp-script .cat-links {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
 }
 
 /* stylelint-enable */
@@ -483,13 +510,13 @@ h4,
 h5,
 h6 {
   font-weight: 700;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
 
 .nav1 {
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -503,13 +530,13 @@ h6 {
 
 h1,
 .page-description {
-  font-size: 2.2em;
+  font-size: var(--newspack-theme-font-size-xxl);
 }
 
 @media only screen and (min-width: 782px) {
   h1,
   .page-description {
-    font-size: 2.8em;
+    font-size: var(--newspack-theme-font-size-xxxl);
   }
 }
 .entry-title,
@@ -518,7 +545,7 @@ h1,
 .has-larger-font-size,
 .archive:not(.paged).feature-latest article.entry:first-of-type .entry-title,
 h2 {
-  font-size: 1.4em;
+  font-size: var(--newspack-theme-font-size-lg);
 }
 
 @media only screen and (min-width: 782px) {
@@ -528,7 +555,7 @@ h2 {
   .has-larger-font-size,
   .archive:not(.paged).feature-latest article.entry:first-of-type .entry-title,
   h2 {
-    font-size: 1.8em;
+    font-size: var(--newspack-theme-font-size-xl);
   }
 }
 .has-regular-font-size,
@@ -537,7 +564,7 @@ h2 {
 .archive .entry-title,
 .search .entry-title,
 .blog .entry-title {
-  font-size: 1.4em;
+  font-size: var(--newspack-theme-font-size-lg);
 }
 
 h3 {
@@ -546,7 +573,7 @@ h3 {
 
 @media only screen and (min-width: 782px) {
   h3 {
-    font-size: 1.4em;
+    font-size: var(--newspack-theme-font-size-lg);
   }
 }
 .site-title,
@@ -557,17 +584,17 @@ h2.author-title,
 p.author-bio,
 .post-navigation .post-title,
 h4 {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
 }
 
 .page-title {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   letter-spacing: 0.01em;
 }
 
 @media only screen and (min-width: 782px) {
   .page-title {
-    font-size: 20px;
+    font-size: var(--newspack-theme-font-size-base);
   }
 }
 .entry-meta,
@@ -579,7 +606,7 @@ h4 {
 .wp-block-loginout a,
 .comment-content,
 h5 {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 
 .discussion-meta-info,
@@ -592,7 +619,7 @@ h5 {
 img::after,
 .site-info,
 h6 {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 
 .site-title {
@@ -646,15 +673,15 @@ i {
 }
 
 blockquote cite {
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.7em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-xs);
   font-style: normal;
 }
 
 pre {
-  font-size: 0.8em;
-  font-family: "Courier 10 Pitch", courier, monospace;
-  line-height: 1.6;
+  font-size: var(--newspack-theme-font-size-sm);
+  font-family: var(--newspack-theme-font-pre);
+  line-height: var(--newspack-theme-font-line-height-body);
   overflow: auto;
 }
 
@@ -662,8 +689,8 @@ code,
 kbd,
 tt,
 var {
-  font-size: 0.8em;
-  font-family: menlo, monaco, consolas, lucida console, monospace;
+  font-size: var(--newspack-theme-font-size-sm);
+  font-family: var(--newspack-theme-font-code);
 }
 
 abbr,
@@ -741,7 +768,7 @@ ol {
 }
 
 li {
-  line-height: 1.6;
+  line-height: var(--newspack-theme-font-line-height-body);
 }
 
 li > ul,
@@ -778,7 +805,7 @@ table {
   margin: 0 0 1rem;
   border-collapse: collapse;
   width: 100%;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 
 table td,
@@ -801,10 +828,10 @@ input[type=submit],
   box-sizing: border-box;
   display: inline-block;
   color: #fff;
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.8em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-sm);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   outline: none;
   padding: 0.76rem 1rem;
   text-decoration: none;
@@ -975,7 +1002,7 @@ input[type=checkbox]:disabled {
 }
 
 .amp-wp-default-form-message p {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   font-weight: bold;
 }
 .amp-wp-default-form-message small {
@@ -1010,7 +1037,7 @@ a:focus {
   border: none;
   padding: 0;
   margin: 0;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   line-height: 1.2;
   text-decoration: none;
   background: transparent;
@@ -1129,7 +1156,7 @@ a:focus {
   background-color: #333;
   color: #fff;
   display: block;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   padding: calc( 0.75 * 1rem ) 1rem calc( 0.75 * 1rem ) calc( 24px + 1rem );
 }
 .site-header .dd-menu .sub-menu a:hover, .site-header .dd-menu .sub-menu a:focus {
@@ -1177,7 +1204,7 @@ a:focus {
 
 /* Desktop-specific styles */
 .site-header .nav1 {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 .site-header .nav1 .main-menu {
   display: inline-block;
@@ -1254,7 +1281,7 @@ a:focus {
   padding-right: 0;
 }
 .site-header .nav2 a {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 
 /** === Tertiary menu === */
@@ -1302,7 +1329,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 .site-header .nav3 li {
   display: inline-block;
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 @media only screen and (min-width: 782px) {
   .site-header .nav3 li:nth-child(n+2) {
@@ -1313,7 +1340,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin: 0.25rem 0;
 }
 .h-sh .site-header .nav3 {
-  font-size: 20px;
+  font-size: var(--newspack-theme-font-size-base);
   margin-right: 1rem;
 }
 
@@ -1321,8 +1348,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin-top: 0.25rem;
 }
 .highlight-menu-contain .wrapper {
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.7em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-xs);
   height: 1.5em;
   overflow: hidden;
   word-wrap: break-word;
@@ -1483,7 +1510,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .site-header .desktop-menu-toggle,
 .subpage-toggle-contain {
   display: none;
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
   font-weight: normal;
   line-height: 2;
   padding: 0.125rem 0;
@@ -1579,7 +1606,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .desktop-sidebar .widget:not(.widget_block),
 .subpage-sidebar nav,
 .subpage-sidebar .widget:not(.widget_block) {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .mobile-sidebar .mobile-menu-toggle,
 .mobile-sidebar .desktop-menu-toggle,
@@ -1590,7 +1617,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .subpage-sidebar .mobile-menu-toggle,
 .subpage-sidebar .desktop-menu-toggle,
 .subpage-sidebar .subpage-toggle {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   float: left;
   margin: 0 0 1rem;
   padding: 0;
@@ -1673,7 +1700,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .desktop-sidebar .widgettitle,
 .subpage-sidebar .widget-title,
 .subpage-sidebar .widgettitle {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
 }
 
 @media only screen and (min-width: 782px) {
@@ -1926,7 +1953,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .comment-navigation .nav-next {
   min-width: 50%;
   width: 100%;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: bold;
   padding: 0.5rem 0;
 }
@@ -1981,7 +2008,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .site-main #infinite-handle span {
   background: transparent;
   display: block;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   text-align: center;
 }
 
@@ -1991,9 +2018,9 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   transition: background 150ms ease-in-out;
   background: #555;
   color: #fff;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   padding: 0.76rem 1rem;
 }
 .site-main #infinite-handle span button:hover,
@@ -2351,7 +2378,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   color: #515151;
   display: none;
   font-weight: normal;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   font-style: italic;
   margin: 0;
   padding: 0 1rem;
@@ -2865,12 +2892,12 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 .entry-title {
-  font-size: 2.2em;
+  font-size: var(--newspack-theme-font-size-xxl);
   margin: 0;
 }
 @media only screen and (min-width: 1168px) {
   .entry-title {
-    font-size: 2.8em;
+    font-size: var(--newspack-theme-font-size-xxxl);
   }
 }
 .entry-title a {
@@ -2910,12 +2937,12 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 
 body.page .entry-title {
-  font-size: 1.8em;
+  font-size: var(--newspack-theme-font-size-xl);
   margin: 0;
 }
 @media only screen and (min-width: 1168px) {
   body.page .entry-title {
-    font-size: 2.2em;
+    font-size: var(--newspack-theme-font-size-xxl);
   }
 }
 
@@ -2923,7 +2950,7 @@ body.page .entry-title {
 .cat-links,
 amp-script .cat-links {
   display: block;
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
   margin: 0 0 0.75rem;
 }
 
@@ -2933,11 +2960,11 @@ amp-script .cat-links {
 }
 .tags-links span:first-child {
   font-weight: bold;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   margin-left: 1rem;
 }
 .tags-links a {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 
 .entry-meta,
@@ -2990,7 +3017,7 @@ amp-script .cat-links {
   color: #36f;
 }
 .entry-footer .edit-link {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .entry-footer .edit-link svg {
   margin: 0 0 0 0.25rem;
@@ -3080,7 +3107,7 @@ amp-script .cat-links {
   border-bottom: 1px solid #ddd;
 }
 .single .entry-title {
-  font-size: 1.8em;
+  font-size: var(--newspack-theme-font-size-xl);
   margin: 0 0 0.5em;
 }
 .single .entry-title--with-subtitle {
@@ -3088,17 +3115,17 @@ amp-script .cat-links {
 }
 @media only screen and (min-width: 600px) {
   .single .entry-title {
-    font-size: 2.2em;
+    font-size: var(--newspack-theme-font-size-xxl);
   }
 }
 @media only screen and (min-width: 782px) {
   .single .entry-title {
-    font-size: 2.8em;
+    font-size: var(--newspack-theme-font-size-xxxl);
   }
 }
 @media only screen and (min-width: 1168px) {
   .single .entry-title {
-    font-size: 3.2em;
+    font-size: var(--newspack-theme-font-size-xxxxl);
   }
 }
 .single .entry-meta {
@@ -3265,7 +3292,7 @@ div.sharedaddy {
 .author-bio h2 span {
   color: #515151;
   display: block;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   margin: 0.25em 0 0;
   text-transform: none;
 }
@@ -3281,7 +3308,7 @@ div.sharedaddy {
 }
 .author-bio .author-link {
   color: #36f;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   font-weight: bold;
   text-decoration: none;
 }
@@ -3291,7 +3318,7 @@ div.sharedaddy {
 
 .author-meta {
   color: #515151;
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 .author-meta a {
   color: inherit;
@@ -3534,7 +3561,7 @@ div.sharedaddy {
 }
 @media only screen and (min-width: 782px) {
   .featured-image-beside .entry-title {
-    font-size: 2.2em;
+    font-size: var(--newspack-theme-font-size-xxl);
   }
 }
 @media only screen and (min-width: 782px) {
@@ -3605,12 +3632,12 @@ div.sharedaddy {
   font-style: normal;
 }
 .jp-relatedposts-i2 a {
-  font: bold 20px "IBM Plex Serif", georgia, serif;
+  font: bold var(--newspack-theme-font-size-base) var(--newspack-theme-font-heading);
   text-decoration: none;
 }
 .jp-relatedposts-i2 .jp-related-posts-i2__post-date,
 .jp-relatedposts-i2 .jp-related-posts-i2__post-context {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 
 .entry-content .jp-relatedposts-i2 a,
@@ -3626,11 +3653,11 @@ div.sharedaddy {
 .jp-relatedposts-i2,
 #jp-relatedposts.jp-relatedposts {
   clear: both;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
 }
 .jp-relatedposts-i2 .jp-relatedposts-headline,
 #jp-relatedposts.jp-relatedposts .jp-relatedposts-headline {
-  font: bold 0.7em "IBM Plex Serif", georgia, serif;
+  font: bold var(--newspack-theme-font-size-xs) var(--newspack-theme-font-heading);
 }
 .jp-relatedposts-i2 .jp-relatedposts-headline em::before,
 #jp-relatedposts.jp-relatedposts .jp-relatedposts-headline em::before {
@@ -3650,12 +3677,12 @@ div.sharedaddy {
   margin-bottom: 0.5rem;
 }
 #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-title {
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   margin-bottom: 0.25rem;
 }
 #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-title a {
   color: #111;
-  font-size: 20px;
+  font-size: var(--newspack-theme-font-size-base);
   font-weight: bold;
 }
 #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-date,
@@ -3663,7 +3690,7 @@ div.sharedaddy {
   opacity: 1;
 }
 #jp-relatedposts.jp-relatedposts .jp-reltaedposts-post-title {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
 }
 
 .comment-content a {
@@ -3734,7 +3761,7 @@ div.sharedaddy {
 #respond > small {
   bottom: 1em;
   display: block;
-  font-size: 20px;
+  font-size: var(--newspack-theme-font-size-base);
   position: absolute;
   left: 0;
   white-space: nowrap;
@@ -3764,7 +3791,7 @@ div.sharedaddy {
 }
 
 .comment-policy {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   margin: 0.5rem 0 1rem;
 }
 .comment-policy a {
@@ -3785,8 +3812,8 @@ div.sharedaddy {
 .comment-list .pingback .comment-body,
 .comment-list .trackback .comment-body {
   color: #515151;
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.7em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-xs);
   font-weight: 500;
   margin-top: 1rem;
   margin-bottom: 1rem;
@@ -3801,11 +3828,11 @@ div.sharedaddy {
 .comment-list .pingback .comment-body .comment-edit-link,
 .comment-list .trackback .comment-body .comment-edit-link {
   color: #515151;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: 500;
 }
 .comment-list #respond .comment-reply-title {
-  font-size: 20px;
+  font-size: var(--newspack-theme-font-size-base);
 }
 
 #respond + .comment-reply {
@@ -3941,7 +3968,7 @@ div.sharedaddy {
 }
 
 .must-log-in {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   font-style: italic;
 }
 
@@ -3987,8 +4014,8 @@ div.sharedaddy {
 
 .comment-form .comment-notes,
 .comment-form label {
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.7em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-xs);
   color: #515151;
 }
 @media only screen and (min-width: 782px) {
@@ -4030,7 +4057,7 @@ div.sharedaddy {
   border-top: 1px solid #ccc;
   color: #111;
   display: flex;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   justify-content: center;
   margin-top: 0;
   position: relative;
@@ -4428,8 +4455,8 @@ div.sharedaddy {
 ## Footer
 -------------------------------------------------------------- */
 .widget {
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.8em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-sm);
   margin: 0 0 1rem;
   word-wrap: break-word;
   /* Make sure select elements fit in widgets. */
@@ -4475,7 +4502,7 @@ div.sharedaddy {
 .widget_recent_comments ul li,
 .widget_recent_entries ul li,
 .widget_rss ul li {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   margin: 0.125rem 0;
 }
 @media only screen and (min-width: 600px) {
@@ -4531,13 +4558,13 @@ div.sharedaddy {
 
 .widget_recent_entries a {
   color: inherit;
-  font-size: 1.4em;
+  font-size: var(--newspack-theme-font-size-lg);
   font-weight: 700;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
 }
 .widget_recent_entries .post-date {
   color: inherit;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   display: block;
   opacity: 0.8;
 }
@@ -4584,7 +4611,7 @@ div.sharedaddy {
 .jetpack_top_posts_widget p,
 .widget_top-posts p {
   font-style: italic;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .jetpack_top_posts_widget ul,
 .jetpack_top_posts_widget li,
@@ -4609,7 +4636,7 @@ div.sharedaddy {
 .widget_top-posts li a {
   color: #111;
   display: block;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: bold;
   line-height: 1.2;
   text-decoration: none;
@@ -4658,7 +4685,7 @@ div.sharedaddy {
 }
 #secondary .widget-title,
 #secondary .widgettitle {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
 }
 
 .single #secondary {
@@ -4960,7 +4987,7 @@ p.has-background {
 .desktop-sidebar .wp-block-newspack-blocks-carousel article .entry-meta,
 .mobile-sidebar .wp-block-newspack-blocks-carousel article .entry-meta,
 .subpage-sidebar .wp-block-newspack-blocks-carousel article .entry-meta {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 #secondary .wp-block-newspack-blocks-carousel article .entry-wrapper,
 .desktop-sidebar .wp-block-newspack-blocks-carousel article .entry-wrapper,
@@ -5080,7 +5107,7 @@ p.has-background {
 .desktop-sidebar .wp-block-newspack-blocks-author-profile,
 .subpage-sidebar .wp-block-newspack-blocks-author-profile,
 .mobile-sidebar .wp-block-newspack-blocks-author-profile {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 
 .wp-block-columns .wp-block-cover,
@@ -5180,7 +5207,7 @@ p.has-background {
   padding-right: 0;
 }
 .wp-block-pullquote blockquote p, .wp-block-pullquote.is-style-solid-color blockquote p {
-  font-size: 1.4em;
+  font-size: var(--newspack-theme-font-size-lg);
 }
 .wp-block-pullquote p {
   font-style: italic;
@@ -5193,22 +5220,22 @@ p.has-background {
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote p {
-    font-size: 1.4em;
+    font-size: var(--newspack-theme-font-size-lg);
   }
 }
 .wp-block-pullquote.has-text-align-right:not(.alignleft):not(.alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft):not(.alignright) p {
-  font-size: 1.4em;
+  font-size: var(--newspack-theme-font-size-lg);
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote.has-text-align-right:not(.alignleft):not(.alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft):not(.alignright) p {
-    font-size: 1.4em;
+    font-size: var(--newspack-theme-font-size-lg);
   }
 }
 .wp-block-pullquote cite {
   display: inline-block;
   color: inherit;
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.7em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-xs);
   opacity: 0.8;
   line-height: 1.6;
   text-transform: none;
@@ -5242,7 +5269,7 @@ p.has-background {
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote.alignleft blockquote p, .wp-block-pullquote.alignright blockquote p {
-    font-size: 1.2em;
+    font-size: var(--newspack-theme-font-size-md);
   }
 }
 .wp-block-pullquote.alignleft blockquote p:first-child, .wp-block-pullquote.alignright blockquote p:first-child {
@@ -5301,11 +5328,11 @@ p.has-background {
   padding-right: 0;
 }
 .wp-block-latest-comments .wp-block-latest-comments__comment {
-  font-size: 0.8em;
-  line-height: 1.6;
+  font-size: var(--newspack-theme-font-size-sm);
+  line-height: var(--newspack-theme-font-line-height-body);
 }
 .wp-block-latest-comments .wp-block-latest-comments__comment-meta {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: bold;
 }
 .wp-block-latest-comments .wp-block-latest-comments__comment-meta a,
@@ -5370,9 +5397,9 @@ p.has-background {
   transition: background 150ms ease-in-out;
   border: none;
   border-radius: 5px;
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.8em;
-  line-height: 1.2;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-sm);
+  line-height: var(--newspack-theme-font-line-height-heading);
   box-sizing: border-box;
   font-weight: bold;
   text-decoration: none;
@@ -5384,10 +5411,10 @@ p.has-background {
 }
 
 .wp-block-jetpack-button button.wp-block-button__link {
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.8em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-sm);
   font-weight: bold;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   padding: 0.76rem 1rem;
 }
 
@@ -5456,9 +5483,9 @@ p.has-background {
 
 .wp-block-archives li,
 .wp-block-categories li {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: bold;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
 }
 .wp-block-archives.aligncenter,
 .wp-block-categories.aligncenter {
@@ -5476,7 +5503,7 @@ p.has-background {
   counter-reset: submenu;
 }
 .wp-block-categories ul > li > a::before {
-  font-family: georgia, garamond, "Times New Roman", serif;
+  font-family: var(--newspack-theme-font-body);
   font-weight: normal;
   content: "– " counters(submenu, "– ", none);
   counter-increment: submenu;
@@ -5493,13 +5520,13 @@ p.has-background {
 }
 
 .wp-block-latest-posts li > a {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: bold;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
 }
 .wp-block-latest-posts time {
   color: #515151;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
 }
 .wp-block-latest-posts .wp-block-latest-posts__post-excerpt {
   font-size: 0.8em;
@@ -5520,18 +5547,18 @@ p.has-background {
 }
 
 .wp-block-preformatted {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
   line-height: 1.8;
   padding: 1rem;
 }
 
 .widget .wp-block-preformatted {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 
 .wp-block-verse {
-  font-family: georgia, garamond, "Times New Roman", serif;
-  font-size: 20px;
+  font-family: var(--newspack-theme-font-body);
+  font-size: var(--newspack-theme-font-size-base);
   line-height: 1.8;
 }
 
@@ -5547,11 +5574,7 @@ p.has-background {
   margin-bottom: 0.5em;
 }
 .wp-block-quote cite {
-  /*
-   * This requires a rem-based font size calculation instead of our normal em-based one,
-   * because the cite tag sometimes gets wrapped in a p tag. This is equivalent to $font-size_xs.
-   */
-  font-size: calc( 1rem * 0.8em );
+  font-size: 0.7rem;
 }
 .wp-block-quote.is-large, .wp-block-quote.is-style-large {
   margin: 1rem 0;
@@ -5559,18 +5582,14 @@ p.has-background {
   border-right: none;
 }
 .wp-block-quote.is-large p, .wp-block-quote.is-style-large p {
-  font-size: 1.4em;
+  font-size: var(--newspack-theme-font-size-lg);
   font-style: italic;
   line-height: 1.4;
 }
 .wp-block-quote.is-large cite,
 .wp-block-quote.is-large footer, .wp-block-quote.is-style-large cite,
 .wp-block-quote.is-style-large footer {
-  /*
-   * This requires a rem-based font size calculation instead of our normal em-based one,
-   * because the cite tag sometimes gets wrapped in a p tag. This is equivalent to $font-size_xs.
-   */
-  font-size: calc( 1rem * 0.8em );
+  font-size: 0.7rem;
 }
 @media only screen and (min-width: 782px) {
   .wp-block-quote.is-large, .wp-block-quote.is-style-large {
@@ -5578,7 +5597,7 @@ p.has-background {
     padding: 1rem 0;
   }
   .wp-block-quote.is-large p, .wp-block-quote.is-style-large p {
-    font-size: 1.4em;
+    font-size: var(--newspack-theme-font-size-lg);
   }
 }
 .wp-block-quote.has-background {
@@ -5630,9 +5649,9 @@ hr.is-style-dots {
 .wp-block-separator.is-style-dots::before,
 hr.is-style-dots::before {
   color: #515151;
-  font-size: 1.4em;
-  letter-spacing: 0.8em;
-  padding-right: 0.8em;
+  font-size: var(--newspack-theme-font-size-lg);
+  letter-spacing: var(--newspack-theme-font-size-sm);
+  padding-right: var(--newspack-theme-font-size-sm);
 }
 .wp-block-separator.has-background,
 hr.has-background {
@@ -5663,8 +5682,8 @@ hr.has-background.is-style-dots::before {
 }
 
 .wp-block-file {
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.8em;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .wp-block-file .wp-block-file__button {
   display: table;
@@ -5672,9 +5691,9 @@ hr.has-background.is-style-dots::before {
   border: none;
   border-radius: 5px;
   background: #555;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-size: inherit;
-  line-height: 1.2;
+  line-height: var(--newspack-theme-font-line-height-heading);
   text-decoration: none;
   font-weight: bold;
   padding: 0.75rem 1rem;
@@ -5727,7 +5746,7 @@ hr.has-background.is-style-dots::before {
   border-radius: 0;
 }
 .wp-block-code code {
-  font-size: 1.2em;
+  font-size: var(--newspack-theme-font-size-md);
   white-space: pre-wrap;
   word-break: break-word;
 }
@@ -5809,13 +5828,13 @@ hr.has-background.is-style-dots::before {
   margin: 0;
 }
 .wp-block-jetpack-mailchimp p[id^=wp-block-jetpack-mailchimp] {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .wp-block-jetpack-mailchimp .wp-block-jetpack-button.wp-block-button {
   margin: 0.5rem 0;
 }
 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   margin-top: 0.5rem;
 }
 .wp-block-jetpack-mailchimp .wp-block-jetpack-mailchimp_notification.is-visible {
@@ -5914,29 +5933,29 @@ hr.has-background.is-style-dots::before {
 }
 
 .has-small-font-size {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 
 .has-normal-font-size {
-  font-size: 20px;
+  font-size: var(--newspack-theme-font-size-base);
 }
 
 .has-large-font-size {
-  font-size: 1.4em;
+  font-size: var(--newspack-theme-font-size-lg);
 }
 
 .has-huge-font-size,
 .has-x-large-font-size {
-  font-size: 1.8em;
+  font-size: var(--newspack-theme-font-size-xl);
 }
 
 @media only screen and (min-width: 782px) {
   .has-large-font-size {
-    font-size: 1.8em;
+    font-size: var(--newspack-theme-font-size-xl);
   }
   .has-huge-font-size,
   .has-x-large-font-size {
-    font-size: 2.2em;
+    font-size: var(--newspack-theme-font-size-xxl);
   }
 }
 .has-primary-background-color,
@@ -7004,9 +7023,9 @@ figcaption,
 .wp-caption-text,
 .amp-image-lightbox-caption,
 .swiper-pagination-simple {
-  font-size: 0.7em;
-  font-family: "IBM Plex Serif", georgia, serif;
-  line-height: 1.6;
+  font-size: var(--newspack-theme-font-size-xs);
+  font-family: var(--newspack-theme-font-heading);
+  line-height: var(--newspack-theme-font-line-height-body);
 }
 
 /* Hack to address a bug that affects caption positioning in Safari only. Targets Safari 9+ only. */
@@ -7152,9 +7171,9 @@ figcaption,
 
 .gallery-caption {
   display: block;
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.7em;
-  line-height: 1.6;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-xs);
+  line-height: var(--newspack-theme-font-line-height-body);
   margin: 0;
   padding: 0.5rem;
 }
@@ -7303,9 +7322,9 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   padding: 0.5em 0;
 }
 .site-breadcrumb .wrapper > span {
-  font-family: "IBM Plex Serif", georgia, serif;
-  font-size: 0.6em;
-  line-height: 1.2;
+  font-family: var(--newspack-theme-font-heading);
+  font-size: var(--newspack-theme-font-size-xxs);
+  line-height: var(--newspack-theme-font-line-height-heading);
 }
 .site-breadcrumb .breadcrumb_last {
   color: #111;
@@ -7404,7 +7423,7 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
 .accent-header,
 div.wpnbha .article-section-title,
 .cat-links {
-  font-size: 0.7em;
+  font-size: var(--newspack-theme-font-size-xs);
 }
 
 .accent-header,
@@ -7453,7 +7472,7 @@ div.wpnbha .article-section-title,
 }
 
 .cat-links {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 .cat-links a {
   color: inherit;
@@ -7476,7 +7495,7 @@ figcaption,
 
 blockquote,
 cite {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-style: italic;
 }
 blockquote em,
@@ -7489,9 +7508,9 @@ cite i {
 .has-drop-cap:not(:focus)::first-letter {
   background-color: #36f;
   color: #fff;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-weight: bold;
-  font-size: 2.2em;
+  font-size: var(--newspack-theme-font-size-xxl);
   padding: 0.4em;
 }
 
@@ -7501,12 +7520,12 @@ cite i {
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote blockquote p, .wp-block-pullquote.is-style-solid-color blockquote p {
-    font-size: 1.8em;
+    font-size: var(--newspack-theme-font-size-xl);
   }
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote.has-text-align-right:not(.alignleft):not(.alignright) p, .wp-block-pullquote.has-text-align-left:not(.alignleft):not(.alignright) p {
-    font-size: 1.8em;
+    font-size: var(--newspack-theme-font-size-xl);
   }
 }
 .wp-block-pullquote.is-style-solid-color blockquote cite,
@@ -7520,7 +7539,7 @@ cite i {
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote.alignleft blockquote p, .wp-block-pullquote.alignleft.is-style-solid-color blockquote p, .wp-block-pullquote.alignright blockquote p, .wp-block-pullquote.alignright.is-style-solid-color blockquote p {
-    font-size: 1.4em;
+    font-size: var(--newspack-theme-font-size-lg);
   }
 }
 
@@ -7725,7 +7744,7 @@ cite i {
 }
 @media only screen and (min-width: 782px) {
   .page-title {
-    font-size: 20px;
+    font-size: var(--newspack-theme-font-size-base);
   }
 }
 .page-title .page-description {
@@ -7733,7 +7752,7 @@ cite i {
 }
 
 .taxonomy-description {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-style: normal;
 }
 @media only screen and (min-width: 782px) {

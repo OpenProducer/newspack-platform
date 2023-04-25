@@ -56,7 +56,7 @@ amp-script .sponsor-label .flag {
   font-weight: normal;
   right: -9999em;
   letter-spacing: 0;
-  line-height: 1.6;
+  line-height: var(--newspack-theme-font-line-height-body);
   opacity: 0;
   padding: 0.75rem 1rem;
   position: absolute;
@@ -128,7 +128,7 @@ amp-script .sponsor-label .flag {
   }
 }
 .single.sponsors-show-authors .entry-subhead .sponsor-byline {
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
 }
 @media only screen and (min-width: 1168px) {
   .single.sponsors-show-authors .entry-subhead .sponsor-byline > span:first-child {
@@ -226,7 +226,7 @@ amp-script .sponsor-label .flag {
 }
 .sponsors-show-authors .sponsor-bio h2 {
   color: inherit;
-  font-size: 0.8em;
+  font-size: var(--newspack-theme-font-size-sm);
   border: 0;
   margin: 0;
   padding: 0;

@@ -227,6 +227,9 @@ class Newspack_Blocks {
 				'is_rendering_stripe_payment_form' => self::is_rendering_stripe_payment_form(),
 				'can_render_tiers_based_layout'    => self::can_render_tiers_based_layout(),
 				'iframe_accepted_file_mimes'       => self::iframe_accepted_file_mimes(),
+				'supports_recaptcha'               => class_exists( 'Newspack\Recaptcha' ),
+				'has_recaptcha'                    => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),
+				'recaptcha_url'                    => admin_url( 'admin.php?page=newspack-connections-wizard' ),
 			];
 
 			if ( class_exists( 'WP_REST_Newspack_Author_List_Controller' ) ) {

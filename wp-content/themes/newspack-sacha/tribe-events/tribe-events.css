@@ -1,3 +1,26 @@
+:root {
+  --newspack-theme-font-body: georgia, garamond, "Times New Roman", serif;
+  --newspack-theme-font-heading: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen",
+  	"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
+  --newspack-theme-font-code: menlo, monaco, consolas, lucida console, monospace;
+  --newspack-theme-font-pre: "Courier 10 Pitch", courier, monospace;
+  --newspack-theme-font-size-base: 20px;
+  --newspack-theme-font-size-base-sm: 18px;
+  --newspack-theme-font-size-ratio: 1.125;
+  --newspack-theme-font-size-xxs: calc( 1em * 0.6 );
+  --newspack-theme-font-size-xs: calc( 1em * 0.7 );
+  --newspack-theme-font-size-sm: calc( 1em * 0.8 );
+  --newspack-theme-font-size-md: calc( 1em * 1.2 );
+  --newspack-theme-font-size-lg: calc( 1em * 1.4 );
+  --newspack-theme-font-size-xl: calc( 1em * 1.8 );
+  --newspack-theme-font-size-xxl: calc( 1em * 2.2 );
+  --newspack-theme-font-size-xxxl: calc( 1em * 2.8 );
+  --newspack-theme-font-size-xxxxl: calc( 1em * 3.2 );
+  --newspack-theme-font-size-xxxxxl: calc( 1em * 4 );
+  --newspack-theme-font-line-height-body: 1.6;
+  --newspack-theme-font-line-height-heading: 1.2;
+}
+
 @font-face {
   font-family: "IBM Plex Serif";
   src: url("fonts/ibm-plex-serif/IBMPlexSerif-Regular.ttf");
@@ -24,6 +47,10 @@
   font-weight: 700;
   font-display: swap;
 }
+:root {
+  --newspack-theme-font-heading: "IBM Plex Serif", georgia, serif;
+}
+
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
@@ -145,7 +172,7 @@ main#tribe-events-pg-template {
 .tribe_community_edit .button.mb-cta {
   background: #d33;
   border-radius: 5px;
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
   font-size: 0.7em;
   font-weight: bold;
   letter-spacing: 0;
@@ -159,7 +186,7 @@ main#tribe-events-pg-template {
 
 div.tribe-common p,
 div.tribe-events-content {
-  font-family: georgia, garamond, "Times New Roman", serif;
+  font-family: var(--newspack-theme-font-body);
 }
 
 div.tribe-common .tribe-common-form-control-checkbox__label,
@@ -224,7 +251,7 @@ div.tribe-events-single ul.tribe-related-events li .tribe-related-events-title,
 div.tribe-events-single .tribe-events-sub-nav,
 div#top.tribe-theme-enfold.single-tribe_events .tribe-events-single-event-title,
 div#top.tribe-theme-enfold.single-tribe_events .tribe-events-schedule h3 {
-  font-family: "IBM Plex Serif", georgia, serif;
+  font-family: var(--newspack-theme-font-heading);
 }
 
 .tribe_community_edit .button.mb-cta {

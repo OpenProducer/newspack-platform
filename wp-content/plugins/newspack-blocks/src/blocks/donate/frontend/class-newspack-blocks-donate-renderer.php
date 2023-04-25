@@ -26,15 +26,13 @@ class Newspack_Blocks_Donate_Renderer {
 	 */
 	public function __construct() {
 		add_filter( 'woocommerce_checkout_fields', [ __CLASS__, 'woocommerce_checkout_fields' ] );
-		if ( defined( 'NEWSPACK_EXPERIMENTAL_READER_ACTIVATION' ) && NEWSPACK_EXPERIMENTAL_READER_ACTIVATION ) {
-			add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_modal_checkout_scripts' ] );
-			add_action( 'wp_footer', [ __CLASS__, 'render_modal_checkout_markup' ] );
-			add_action( 'template_include', [ __CLASS__, 'get_modal_checkout_template' ] );
-			add_filter( 'wc_get_template', [ __CLASS__, 'wc_get_template' ], 10, 2 );
-			add_filter( 'show_admin_bar', [ __CLASS__, 'show_admin_bar' ] );
-			add_filter( 'woocommerce_checkout_get_value', [ __CLASS__, 'woocommerce_checkout_get_value' ], 10, 2 );
-			add_filter( 'woocommerce_get_return_url', [ __CLASS__, 'woocommerce_get_return_url' ], 10, 2 );
-		}
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_modal_checkout_scripts' ] );
+		add_action( 'wp_footer', [ __CLASS__, 'render_modal_checkout_markup' ] );
+		add_action( 'template_include', [ __CLASS__, 'get_modal_checkout_template' ] );
+		add_filter( 'wc_get_template', [ __CLASS__, 'wc_get_template' ], 10, 2 );
+		add_filter( 'show_admin_bar', [ __CLASS__, 'show_admin_bar' ] );
+		add_filter( 'woocommerce_checkout_get_value', [ __CLASS__, 'woocommerce_checkout_get_value' ], 10, 2 );
+		add_filter( 'woocommerce_get_return_url', [ __CLASS__, 'woocommerce_get_return_url' ], 10, 2 );
 	}
 
 	/**

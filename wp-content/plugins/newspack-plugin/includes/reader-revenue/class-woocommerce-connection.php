@@ -52,6 +52,7 @@ class WooCommerce_Connection {
 		\add_filter( 'woocommerce_subscriptions_can_user_renew_early', [ __CLASS__, 'prevent_subscription_early_renewal' ], 11, 2 );
 		\add_filter( 'woocommerce_subscription_is_manual', [ __CLASS__, 'set_syncd_subscriptions_as_manual' ], 11, 2 );
 		\add_filter( 'wc_stripe_generate_payment_request', [ __CLASS__, 'stripe_gateway_payment_request_data' ], 10, 2 );
+		\add_action( 'woocommerce_subscription_status_updated', [ __CLASS__, 'sync_reader_on_subscription_update' ], 10, 3 );
 
 		// WooCommerce Memberships.
 		\add_action( 'wc_memberships_user_membership_created', [ __CLASS__, 'wc_membership_created' ], 10, 2 );
@@ -1022,6 +1023,24 @@ class WooCommerce_Connection {
 			}
 		}
 		return $post_data;
+	}
+
+	/**
+	 * When a subscription's status is updated, re-sync the reader.
+	 *
+	 * @param object $subscription An instance of a WC_Subscription object.
+	 * @param string $new_status A valid subscription status.
+	 * @param string $old_status A valid subscription status.
+	 */
+	public static function sync_reader_on_subscription_update( $subscription, $new_status, $old_status ) {
+		$order = $subscription->get_last_order( 'all' );
+
+		if ( $order && self::can_sync_customers() ) {
+			if ( ! $order->get_customer_id() ) {
+				return;
+			}
+			self::sync_reader_from_order( $order );
+		}
 	}
 
 	/**

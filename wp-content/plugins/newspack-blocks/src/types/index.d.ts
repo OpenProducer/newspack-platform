@@ -7,6 +7,9 @@ declare global {
 			assets_path: string;
 			is_rendering_stripe_payment_form?: boolean;
 			can_render_tiers_based_layout?: boolean;
+			supports_recaptcha: boolean;
+			has_recaptcha: boolean;
+			recaptcha_url: string;
 		};
 		grecaptcha: any;
 		newspackReaderActivation: {

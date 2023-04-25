@@ -400,6 +400,32 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 						}
 					/>
 				</PanelBody>
+				{ window.newspack_blocks_data.supports_recaptcha && (
+					<PanelBody title={ __( 'Spam protection', 'newspack' ) }>
+						<p>
+							{ sprintf(
+								// translators: %s is either 'enabled' or 'disabled'.
+								__( 'reCAPTCHA v3 is currently %s.', 'newspack' ),
+								window.newspack_blocks_data.has_recaptcha
+									? __( 'enabled', 'newspack' )
+									: __( 'disabled', 'newspack' )
+							) }
+						</p>
+						{ ! window.newspack_blocks_data.has_recaptcha && (
+							<p>
+								{ __(
+									"It's highly recommended that you enable reCAPTCHA v3 protection to prevent spambots from using this form!",
+									'newspack'
+								) }
+							</p>
+						) }
+						<p>
+							<a href={ window.newspack_blocks_data.recaptcha_url }>
+								{ __( 'Configure your reCAPTCHA settings.', 'newspack' ) }
+							</a>
+						</p>
+					</PanelBody>
+				) }
 			</InspectorControls>
 		</>
 	);

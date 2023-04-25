@@ -150,24 +150,24 @@ body.post-type-post .edit-post-visual-editor__post-title-wrapper {
 }
 body.post-type-post .editor-post-title__block .editor-post-title__input,
 body.post-type-post .editor-styles-wrapper h1.wp-block-post-title {
-  font-size: 1.8em;
+  font-size: var(--newspack-theme-font-size-xl);
 }
 @media only screen and (min-width: 600px) {
   body.post-type-post .editor-post-title__block .editor-post-title__input,
   body.post-type-post .editor-styles-wrapper h1.wp-block-post-title {
-    font-size: 2.2em;
+    font-size: var(--newspack-theme-font-size-xxl);
   }
 }
 @media only screen and (min-width: 782px) {
   body.post-type-post .editor-post-title__block .editor-post-title__input,
   body.post-type-post .editor-styles-wrapper h1.wp-block-post-title {
-    font-size: 2.8em;
+    font-size: var(--newspack-theme-font-size-xxxl);
   }
 }
 @media only screen and (min-width: 1168px) {
   body.post-type-post .editor-post-title__block .editor-post-title__input,
   body.post-type-post .editor-styles-wrapper h1.wp-block-post-title {
-    font-size: 3.2em;
+    font-size: var(--newspack-theme-font-size-xxxxl);
   }
 }
 
