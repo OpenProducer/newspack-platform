@@ -1208,7 +1208,7 @@ final class Newspack_Newsletters {
 		if ( is_admin() || ! $query->is_main_query() ) {
 			return;
 		}
-		if ( $query->is_archive() && ! $query->is_post_type_archive() ) {
+		if ( $query->is_tag() || $query->is_category() ) {
 			$post_type = $query->get( 'post_type' );
 			if ( empty( $post_type ) ) {
 				$post_type = [ 'post' ];

@@ -1,3 +1,33 @@
+# [1.63.0](https://github.com/Automattic/newspack-newsletters/compare/v1.62.0...v1.63.0) (2023-04-24)
+
+
+### Bug Fixes
+
+* commit hook and add pre push ([#1137](https://github.com/Automattic/newspack-newsletters/issues/1137)) ([94b20d2](https://github.com/Automattic/newspack-newsletters/commit/94b20d2dc191501fbc3a468e420978ad4c11c8b2))
+* only add newsletters to categories and tags archives queries ([#1138](https://github.com/Automattic/newspack-newsletters/issues/1138)) ([612125f](https://github.com/Automattic/newspack-newsletters/commit/612125f5c4ec1282969ceacd84793c5ae14ccb29))
+* restrict custom editor font sizes ([#1144](https://github.com/Automattic/newspack-newsletters/issues/1144)) ([3f53720](https://github.com/Automattic/newspack-newsletters/commit/3f53720fd7314f945ecda582c64f7c9b867f7215))
+* **subscription-block:** use domReady for initializing block js ([#1130](https://github.com/Automattic/newspack-newsletters/issues/1130)) ([9f58caf](https://github.com/Automattic/newspack-newsletters/commit/9f58cafb4e3716a786bd674b2cefc4dd422f1696))
+
+
+### Features
+
+* **subscription:** add recaptcha panel in the editor ([#1139](https://github.com/Automattic/newspack-newsletters/issues/1139)) ([cbae932](https://github.com/Automattic/newspack-newsletters/commit/cbae93244f7ad3fab1727de2105d18ebd0467c2a))
+
+# [1.63.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.62.0...v1.63.0-alpha.1) (2023-04-13)
+
+
+### Bug Fixes
+
+* commit hook and add pre push ([#1137](https://github.com/Automattic/newspack-newsletters/issues/1137)) ([94b20d2](https://github.com/Automattic/newspack-newsletters/commit/94b20d2dc191501fbc3a468e420978ad4c11c8b2))
+* only add newsletters to categories and tags archives queries ([#1138](https://github.com/Automattic/newspack-newsletters/issues/1138)) ([612125f](https://github.com/Automattic/newspack-newsletters/commit/612125f5c4ec1282969ceacd84793c5ae14ccb29))
+* restrict custom editor font sizes ([#1144](https://github.com/Automattic/newspack-newsletters/issues/1144)) ([3f53720](https://github.com/Automattic/newspack-newsletters/commit/3f53720fd7314f945ecda582c64f7c9b867f7215))
+* **subscription-block:** use domReady for initializing block js ([#1130](https://github.com/Automattic/newspack-newsletters/issues/1130)) ([9f58caf](https://github.com/Automattic/newspack-newsletters/commit/9f58cafb4e3716a786bd674b2cefc4dd422f1696))
+
+
+### Features
+
+* **subscription:** add recaptcha panel in the editor ([#1139](https://github.com/Automattic/newspack-newsletters/issues/1139)) ([cbae932](https://github.com/Automattic/newspack-newsletters/commit/cbae93244f7ad3fab1727de2105d18ebd0467c2a))
+
 # [1.62.0](https://github.com/Automattic/newspack-newsletters/compare/v1.61.1...v1.62.0) (2023-04-10)
 
 

@@ -238,7 +238,7 @@
 	text-align: right;
 	padding-top: 0;
 	margin-top: 0;
-`;var Kr=()=>{const{isSaving:e,save:t}=it();return Object(r.createElement)(Yr,{className:"submit"},Object(r.createElement)(Be.Button,{variant:"primary",isBusy:e,disabled:e,onClick:e=>{var n;const r=e.target;null!=r&&null!==(n=r.form)&&void 0!==n&&n.reportValidity()&&t()},type:"submit"},Object(Le.__)("Save changes","woocommerce")))};const Jr=Ie.form`
+`;var Kr=()=>{const{isSaving:e,save:t}=it();return Object(r.createElement)(Yr,{className:"submit"},Object(r.createElement)(Be.Button,{variant:"primary",isBusy:e,disabled:e,onClick:e=>{var n;e.preventDefault();const r=e.target;null!=r&&null!==(n=r.form)&&void 0!==n&&n.reportValidity()&&t()},type:"submit"},Object(Le.__)("Save changes","woocommerce")))};const Jr=Ie.form`
 	margin: 48px auto 0;
 	max-width: 1032px;
 	display: flex;

@@ -2,13 +2,12 @@
 
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Cookie;
 
-use Google\Site_Kit_Dependencies\GuzzleHttp\Message\RequestInterface;
-use Google\Site_Kit_Dependencies\GuzzleHttp\Message\ResponseInterface;
-use Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInterface;
+use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
+use Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
 /**
- * Cookie jar that stores cookies an an array
+ * Cookie jar that stores cookies as an array
  */
-class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\CookieJarInterface, \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInterface
+class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\CookieJarInterface
 {
     /** @var SetCookie[] Loaded cookie data */
     private $cookies = [];
@@ -17,8 +16,9 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
     /**
      * @param bool $strictMode   Set to true to throw exceptions when invalid
      *                           cookies are added to the cookie jar.
-     * @param array $cookieArray Array of SetCookie objects or a hash of arrays
-     *                           that can be used with the SetCookie constructor
+     * @param array $cookieArray Array of SetCookie objects or a hash of
+     *                           arrays that can be used with the SetCookie
+     *                           constructor
      */
     public function __construct($strictMode = \false, $cookieArray = [])
     {
@@ -47,19 +47,47 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
         return $cookieJar;
     }
     /**
-     * Quote the cookie value if it is not already quoted and it contains
-     * problematic characters.
-     *
-     * @param string $value Value that may or may not need to be quoted
-     *
-     * @return string
+     * @deprecated
      */
     public static function getCookieValue($value)
     {
-        if (\substr($value, 0, 1) !== '"' && \substr($value, -1, 1) !== '"' && \strpbrk($value, ';,')) {
-            $value = '"' . $value . '"';
-        }
         return $value;
+    }
+    /**
+     * Evaluate if this cookie should be persisted to storage
+     * that survives between requests.
+     *
+     * @param SetCookie $cookie Being evaluated.
+     * @param bool $allowSessionCookies If we should persist session cookies
+     * @return bool
+     */
+    public static function shouldPersist(\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie, $allowSessionCookies = \false)
+    {
+        if ($cookie->getExpires() || $allowSessionCookies) {
+            if (!$cookie->getDiscard()) {
+                return \true;
+            }
+        }
+        return \false;
+    }
+    /**
+     * Finds and returns the cookie based on the name
+     *
+     * @param string $name cookie name to search for
+     * @return SetCookie|null cookie that was found or null if not found
+     */
+    public function getCookieByName($name)
+    {
+        // don't allow a non string name
+        if ($name === null || !\is_scalar($name)) {
+            return null;
+        }
+        foreach ($this->cookies as $cookie) {
+            if ($cookie->getName() !== null && \strcasecmp($cookie->getName(), $name) === 0) {
+                return $cookie;
+            }
+        }
+        return null;
     }
     public function toArray()
     {
@@ -73,7 +101,7 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
             $this->cookies = [];
             return;
         } elseif (!$path) {
-            $this->cookies = \array_filter($this->cookies, function (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) use($path, $domain) {
+            $this->cookies = \array_filter($this->cookies, function (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie) use($domain) {
                 return !$cookie->matchesDomain($domain);
             });
         } elseif (!$name) {
@@ -94,6 +122,12 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
     }
     public function setCookie(\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie $cookie)
     {
+        // If the name string is empty (but not 0), ignore the set-cookie
+        // string entirely.
+        $name = $cookie->getName();
+        if (!$name && $name !== '0') {
+            return \false;
+        }
         // Only allow cookies with set and valid domain, name, value
         $result = $cookie->validate();
         if ($result !== \true) {
@@ -142,32 +176,64 @@ class CookieJar implements \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cooki
     {
         return new \ArrayIterator(\array_values($this->cookies));
     }
-    public function extractCookies(\Google\Site_Kit_Dependencies\GuzzleHttp\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\GuzzleHttp\Message\ResponseInterface $response)
+    public function extractCookies(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response)
     {
-        if ($cookieHeader = $response->getHeaderAsArray('Set-Cookie')) {
+        if ($cookieHeader = $response->getHeader('Set-Cookie')) {
             foreach ($cookieHeader as $cookie) {
                 $sc = \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie::fromString($cookie);
                 if (!$sc->getDomain()) {
-                    $sc->setDomain($request->getHost());
+                    $sc->setDomain($request->getUri()->getHost());
                 }
+                if (0 !== \strpos($sc->getPath(), '/')) {
+                    $sc->setPath($this->getCookiePathFromRequest($request));
+                }
+                if (!$sc->matchesDomain($request->getUri()->getHost())) {
+                    continue;
+                }
+                // Note: At this point `$sc->getDomain()` being a public suffix should
+                // be rejected, but we don't want to pull in the full PSL dependency.
                 $this->setCookie($sc);
             }
         }
     }
-    public function addCookieHeader(\Google\Site_Kit_Dependencies\GuzzleHttp\Message\RequestInterface $request)
+    /**
+     * Computes cookie path following RFC 6265 section 5.1.4
+     *
+     * @link https://tools.ietf.org/html/rfc6265#section-5.1.4
+     *
+     * @param RequestInterface $request
+     * @return string
+     */
+    private function getCookiePathFromRequest(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request)
+    {
+        $uriPath = $request->getUri()->getPath();
+        if ('' === $uriPath) {
+            return '/';
+        }
+        if (0 !== \strpos($uriPath, '/')) {
+            return '/';
+        }
+        if ('/' === $uriPath) {
+            return '/';
+        }
+        if (0 === ($lastSlashPos = \strrpos($uriPath, '/'))) {
+            return '/';
+        }
+        return \substr($uriPath, 0, $lastSlashPos);
+    }
+    public function withCookieHeader(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request)
     {
         $values = [];
-        $scheme = $request->getScheme();
-        $host = $request->getHost();
-        $path = $request->getPath();
+        $uri = $request->getUri();
+        $scheme = $uri->getScheme();
+        $host = $uri->getHost();
+        $path = $uri->getPath() ?: '/';
         foreach ($this->cookies as $cookie) {
-            if ($cookie->matchesPath($path) && $cookie->matchesDomain($host) && !$cookie->isExpired() && (!$cookie->getSecure() || $scheme == 'https')) {
-                $values[] = $cookie->getName() . '=' . self::getCookieValue($cookie->getValue());
+            if ($cookie->matchesPath($path) && $cookie->matchesDomain($host) && !$cookie->isExpired() && (!$cookie->getSecure() || $scheme === 'https')) {
+                $values[] = $cookie->getName() . '=' . $cookie->getValue();
             }
         }
-        if ($values) {
-            $request->setHeader('Cookie', \implode('; ', $values));
-        }
+        return $values ? $request->withHeader('Cookie', \implode('; ', $values)) : $request;
     }
     /**
      * If a cookie already exists and the server asks to set it again with a

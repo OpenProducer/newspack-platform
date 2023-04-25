@@ -2,7 +2,6 @@
 
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Cookie;
 
-use Google\Site_Kit_Dependencies\GuzzleHttp\Utils;
 /**
  * Persists non-session cookies using a JSON formatted file
  */
@@ -10,16 +9,22 @@ class FileCookieJar extends \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cook
 {
     /** @var string filename */
     private $filename;
+    /** @var bool Control whether to persist session cookies or not. */
+    private $storeSessionCookies;
     /**
      * Create a new FileCookieJar object
      *
-     * @param string $cookieFile File to store the cookie data
+     * @param string $cookieFile        File to store the cookie data
+     * @param bool $storeSessionCookies Set to true to store session cookies
+     *                                  in the cookie jar.
      *
      * @throws \RuntimeException if the file cannot be found or created
      */
-    public function __construct($cookieFile)
+    public function __construct($cookieFile, $storeSessionCookies = \false)
     {
+        parent::__construct();
         $this->filename = $cookieFile;
+        $this->storeSessionCookies = $storeSessionCookies;
         if (\file_exists($cookieFile)) {
             $this->load($cookieFile);
         }
@@ -41,14 +46,14 @@ class FileCookieJar extends \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cook
     {
         $json = [];
         foreach ($this as $cookie) {
-            if ($cookie->getExpires() && !$cookie->getDiscard()) {
+            /** @var SetCookie $cookie */
+            if (\Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\CookieJar::shouldPersist($cookie, $this->storeSessionCookies)) {
                 $json[] = $cookie->toArray();
             }
         }
-        if (\false === \file_put_contents($filename, \json_encode($json), \LOCK_EX)) {
-            // @codeCoverageIgnoreStart
+        $jsonStr = \Google\Site_Kit_Dependencies\GuzzleHttp\json_encode($json);
+        if (\false === \file_put_contents($filename, $jsonStr, \LOCK_EX)) {
             throw new \RuntimeException("Unable to save file {$filename}");
-            // @codeCoverageIgnoreEnd
         }
     }
     /**
@@ -63,13 +68,13 @@ class FileCookieJar extends \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\Cook
     {
         $json = \file_get_contents($filename);
         if (\false === $json) {
-            // @codeCoverageIgnoreStart
             throw new \RuntimeException("Unable to load file {$filename}");
-            // @codeCoverageIgnoreEnd
+        } elseif ($json === '') {
+            return;
         }
-        $data = \Google\Site_Kit_Dependencies\GuzzleHttp\Utils::jsonDecode($json, \true);
+        $data = \Google\Site_Kit_Dependencies\GuzzleHttp\json_decode($json, \true);
         if (\is_array($data)) {
-            foreach (\Google\Site_Kit_Dependencies\GuzzleHttp\Utils::jsonDecode($json, \true) as $cookie) {
+            foreach (\json_decode($json, \true) as $cookie) {
                 $this->setCookie(new \Google\Site_Kit_Dependencies\GuzzleHttp\Cookie\SetCookie($cookie));
             }
         } elseif (\strlen($data)) {

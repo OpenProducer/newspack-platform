@@ -193,6 +193,9 @@ final class Newspack_Newsletters_Editor {
 	 * Define Editor Font Sizes.
 	 */
 	public static function newspack_font_sizes() {
+		if ( ! self::is_editing_email() ) {
+			return;
+		}
 		add_theme_support(
 			'editor-font-sizes',
 			[
@@ -207,6 +210,11 @@ final class Newspack_Newsletters_Editor {
 					'slug' => 'normal',
 				],
 				[
+					'name' => _x( 'Medium', 'font size name', 'newspack-newsletters' ),
+					'size' => 16,
+					'slug' => 'medium',
+				],
+				[
 					'name' => _x( 'Large', 'font size name', 'newspack-newsletters' ),
 					'size' => 24,
 					'slug' => 'large',
@@ -215,6 +223,11 @@ final class Newspack_Newsletters_Editor {
 					'name' => _x( 'Extra Large', 'font size name', 'newspack-newsletters' ),
 					'size' => 36,
 					'slug' => 'x-large',
+				],
+				[
+					'name' => _x( 'Huge', 'font size name', 'newspack-newsletters' ),
+					'size' => 36,
+					'slug' => 'huge',
 				],
 			]
 		);

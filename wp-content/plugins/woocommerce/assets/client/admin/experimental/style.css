@@ -1,6 +1,6 @@
-/*!*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
-  !*** css ../../../node_modules/.pnpm/css-loader@3.6.0_webpack@5.70.0/node_modules/css-loader/dist/cjs.js!../../../node_modules/.pnpm/postcss-loader@3.0.0/node_modules/postcss-loader/src/index.js??ruleSet[1].rules[0].use[2]!../../../node_modules/.pnpm/sass-loader@10.2.1_webpack@5.70.0/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[0].use[3]!./src/style.scss ***!
-  \*********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
+/*!***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************!*\
+  !*** css ../../../node_modules/.pnpm/css-loader@3.6.0_webpack@5.70.0/node_modules/css-loader/dist/cjs.js!../../../node_modules/.pnpm/postcss-loader@4.3.0_wn4p5kzkgq2ohl66pfawxjf2x4/node_modules/postcss-loader/dist/cjs.js??ruleSet[1].rules[0].use[2]!../../../node_modules/.pnpm/sass-loader@10.2.1_webpack@5.70.0/node_modules/sass-loader/dist/cjs.js??ruleSet[1].rules[0].use[3]!./src/style.scss ***!
+  \***********************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************************/
 @charset "UTF-8";
 /**
  * Colors
@@ -314,26 +314,21 @@ a.woocommerce-experimental-list__item {
   background-color: #f0f0f0;
 }
 .woocommerce-experimental-list__item:hover .woocommerce-list__item-title {
-  color: #007cba;
   color: var(--wp-admin-theme-color);
 }
 .woocommerce-experimental-list__item:hover .woocommerce-list__item-before > svg {
-  fill: #007cba;
   fill: var(--wp-admin-theme-color);
 }
 .woocommerce-experimental-list__item .woocommerce-list__item-title {
-  color: #007cba;
   color: var(--wp-admin-theme-color);
 }
 .woocommerce-experimental-list__item .woocommerce-list__item-before > svg {
-  fill: #007cba;
   fill: var(--wp-admin-theme-color);
 }
 .woocommerce-experimental-list__item .woocommerce-list__item-after > svg {
   fill: #1e1e1e;
 }
 .woocommerce-experimental-list__item.complete .woocommerce-task__icon {
-  background-color: #007cba;
   background-color: var(--wp-admin-theme-color);
 }
 .woocommerce-experimental-list__item.complete .woocommerce-list__item-title {
@@ -420,7 +415,6 @@ a.woocommerce-experimental-list__item {
   background-color: #f0b849;
 }
 .woocommerce-task-list__item .woocommerce-task-list__item-title {
-  color: #007cba;
   color: var(--wp-admin-theme-color);
 }
 .woocommerce-task-list__item .woocommerce-task__additional-info,
@@ -488,7 +482,6 @@ a.woocommerce-experimental-list__item {
   left: 5px;
 }
 .woocommerce-task-list__item.complete .woocommerce-task__icon {
-  background-color: #007cba;
   background-color: var(--wp-admin-theme-color);
 }
 .woocommerce-task-list__item.complete .woocommerce-task-list__item-title {
@@ -576,8 +569,7 @@ a.woocommerce-experimental-list__item {
   margin-bottom: 10px;
 }
 .is-placeholder .woocommerce-inbox-message__content .woocommerce-inbox-message__title > div, .is-placeholder .woocommerce-inbox-message__content .woocommerce-inbox-message__title a > div {
-  -webkit-animation: loading-fade 1.6s ease-in-out infinite;
-          animation: loading-fade 1.6s ease-in-out infinite;
+  animation: loading-fade 1.6s ease-in-out infinite;
   background-color: #f0f0f0;
   color: transparent;
   margin: 5px 0;
@@ -587,8 +579,7 @@ a.woocommerce-experimental-list__item {
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .is-placeholder .woocommerce-inbox-message__content .woocommerce-inbox-message__title > div, .is-placeholder .woocommerce-inbox-message__content .woocommerce-inbox-message__title a > div {
-    -webkit-animation: none;
-            animation: none;
+    animation: none;
   }
 }
 .woocommerce-inbox-message__content .woocommerce-inbox-message__title a {
@@ -608,8 +599,7 @@ a.woocommerce-experimental-list__item {
   margin-bottom: 10px;
 }
 .is-placeholder .woocommerce-inbox-message__content .woocommerce-inbox-message__date > div {
-  -webkit-animation: loading-fade 1.6s ease-in-out infinite;
-          animation: loading-fade 1.6s ease-in-out infinite;
+  animation: loading-fade 1.6s ease-in-out infinite;
   background-color: #f0f0f0;
   color: transparent;
 }
@@ -618,8 +608,7 @@ a.woocommerce-experimental-list__item {
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .is-placeholder .woocommerce-inbox-message__content .woocommerce-inbox-message__date > div {
-    -webkit-animation: none;
-            animation: none;
+    animation: none;
   }
 }
 
@@ -642,8 +631,7 @@ a.woocommerce-experimental-list__item {
   margin-bottom: 0;
 }
 .is-placeholder .woocommerce-inbox-message__text > div {
-  -webkit-animation: loading-fade 1.6s ease-in-out infinite;
-          animation: loading-fade 1.6s ease-in-out infinite;
+  animation: loading-fade 1.6s ease-in-out infinite;
   background-color: #f0f0f0;
   color: transparent;
   margin: 5px 0;
@@ -653,8 +641,7 @@ a.woocommerce-experimental-list__item {
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .is-placeholder .woocommerce-inbox-message__text > div {
-    -webkit-animation: none;
-            animation: none;
+    animation: none;
   }
 }
 
@@ -674,7 +661,6 @@ a.woocommerce-experimental-list__item {
 }
 .woocommerce-inbox-message__actions.has-multiple-actions button.is-link {
   padding: 6px 12px;
-  border: 1px solid #007cba;
   border: 1px solid var(--wp-admin-theme-color);
   margin-right: 0.5em;
 }
@@ -702,8 +688,7 @@ a.woocommerce-experimental-list__item {
   cursor: pointer;
 }
 .is-placeholder .woocommerce-inbox-message__actions > div {
-  -webkit-animation: loading-fade 1.6s ease-in-out infinite;
-          animation: loading-fade 1.6s ease-in-out infinite;
+  animation: loading-fade 1.6s ease-in-out infinite;
   background-color: #f0f0f0;
   color: transparent;
   float: left;
@@ -715,8 +700,7 @@ a.woocommerce-experimental-list__item {
 }
 @media screen and (prefers-reduced-motion: reduce) {
   .is-placeholder .woocommerce-inbox-message__actions > div {
-    -webkit-animation: none;
-            animation: none;
+    animation: none;
   }
 }
 

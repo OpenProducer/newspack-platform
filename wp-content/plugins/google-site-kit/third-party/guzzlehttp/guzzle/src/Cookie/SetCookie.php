@@ -2,11 +2,10 @@
 
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Cookie;
 
-use Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInterface;
 /**
  * Set-Cookie object
  */
-class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInterface
+class SetCookie
 {
     /** @var array */
     private static $defaults = ['Name' => null, 'Value' => null, 'Domain' => null, 'Path' => '/', 'Max-Age' => null, 'Expires' => null, 'Secure' => \false, 'Discard' => \false, 'HttpOnly' => \false];
@@ -25,15 +24,15 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
         $data = self::$defaults;
         // Explode the cookie string using a series of semicolons
         $pieces = \array_filter(\array_map('trim', \explode(';', $cookie)));
-        // The name of the cookie (first kvp) must include an equal sign.
-        if (empty($pieces) || !\strpos($pieces[0], '=')) {
+        // The name of the cookie (first kvp) must exist and include an equal sign.
+        if (empty($pieces[0]) || !\strpos($pieces[0], '=')) {
             return new self($data);
         }
         // Add the cookie pieces into the parsed data array
         foreach ($pieces as $part) {
             $cookieParts = \explode('=', $part, 2);
             $key = \trim($cookieParts[0]);
-            $value = isset($cookieParts[1]) ? \trim($cookieParts[1], " \n\r\t\0\v\"") : \true;
+            $value = isset($cookieParts[1]) ? \trim($cookieParts[1], " \n\r\t\0\v") : \true;
             // Only check for non-cookies when cookies have been found
             if (empty($data['Name'])) {
                 $data['Name'] = $key;
@@ -68,8 +67,8 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
     {
         $str = $this->data['Name'] . '=' . $this->data['Value'] . '; ';
         foreach ($this->data as $k => $v) {
-            if ($k != 'Name' && $k != 'Value' && $v !== null && $v !== \false) {
-                if ($k == 'Expires') {
+            if ($k !== 'Name' && $k !== 'Value' && $v !== null && $v !== \false) {
+                if ($k === 'Expires') {
                     $str .= 'Expires=' . \gmdate('D, d M Y H:i:s \\G\\M\\T', $v) . '; ';
                 } else {
                     $str .= ($v === \true ? $k : "{$k}={$v}") . '; ';
@@ -193,7 +192,7 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
     /**
      * Get whether or not this is a secure cookie
      *
-     * @return null|bool
+     * @return bool|null
      */
     public function getSecure()
     {
@@ -211,7 +210,7 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
     /**
      * Get whether or not this is a session cookie
      *
-     * @return null|bool
+     * @return bool|null
      */
     public function getDiscard()
     {
@@ -245,15 +244,39 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
         $this->data['HttpOnly'] = $httpOnly;
     }
     /**
-     * Check if the cookie matches a path value
+     * Check if the cookie matches a path value.
      *
-     * @param string $path Path to check against
+     * A request-path path-matches a given cookie-path if at least one of
+     * the following conditions holds:
+     *
+     * - The cookie-path and the request-path are identical.
+     * - The cookie-path is a prefix of the request-path, and the last
+     *   character of the cookie-path is %x2F ("/").
+     * - The cookie-path is a prefix of the request-path, and the first
+     *   character of the request-path that is not included in the cookie-
+     *   path is a %x2F ("/") character.
+     *
+     * @param string $requestPath Path to check against
      *
      * @return bool
      */
-    public function matchesPath($path)
+    public function matchesPath($requestPath)
     {
-        return !$this->getPath() || 0 === \stripos($path, $this->getPath());
+        $cookiePath = $this->getPath();
+        // Match on exact matches or when path is the default empty "/"
+        if ($cookiePath === '/' || $cookiePath == $requestPath) {
+            return \true;
+        }
+        // Ensure that the cookie-path is a prefix of the request path.
+        if (0 !== \strpos($requestPath, $cookiePath)) {
+            return \false;
+        }
+        // Match if the last character of the cookie-path is "/"
+        if (\substr($cookiePath, -1, 1) === '/') {
+            return \true;
+        }
+        // Match if the first character not included in cookie path is "/"
+        return \substr($requestPath, \strlen($cookiePath), 1) === '/';
     }
     /**
      * Check if the cookie matches a domain value
@@ -264,11 +287,16 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
      */
     public function matchesDomain($domain)
     {
+        $cookieDomain = $this->getDomain();
+        if (null === $cookieDomain) {
+            return \true;
+        }
         // Remove the leading '.' as per spec in RFC 6265.
         // http://tools.ietf.org/html/rfc6265#section-5.2.3
-        $cookieDomain = \ltrim($this->getDomain(), '.');
+        $cookieDomain = \ltrim(\strtolower($cookieDomain), '.');
+        $domain = \strtolower($domain);
         // Domain not set or exact match.
-        if (!$cookieDomain || !\strcasecmp($domain, $cookieDomain)) {
+        if ('' === $cookieDomain || $domain === $cookieDomain) {
             return \true;
         }
         // Matching the subdomain according to RFC 6265.
@@ -276,7 +304,7 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
         if (\filter_var($domain, \FILTER_VALIDATE_IP)) {
             return \false;
         }
-        return (bool) \preg_match('/\\.' . \preg_quote($cookieDomain) . '$/i', $domain);
+        return (bool) \preg_match('/\\.' . \preg_quote($cookieDomain, '/') . '$/', $domain);
     }
     /**
      * Check if the cookie is expired
@@ -300,8 +328,8 @@ class SetCookie implements \Google\Site_Kit_Dependencies\GuzzleHttp\ToArrayInter
             return 'The cookie name must not be empty';
         }
         // Check if any of the invalid characters are present in the cookie name
-        if (\preg_match("/[=,; \t\r\n\v\f]/", $name)) {
-            return "Google\\Site_Kit_Dependencies\\Cookie name must not cannot invalid characters: =,; \\t\\r\\n\\013\\014";
+        if (\preg_match('/[\\x00-\\x20\\x22\\x28-\\x29\\x2c\\x2f\\x3a-\\x40\\x5c\\x7b\\x7d\\x7f]/', $name)) {
+            return 'Cookie name must not contain invalid characters: ASCII ' . 'Control characters (0-31;127), space, tab and the ' . 'following characters: ()<>@,;:\\"/?={}';
         }
         // Value must not be empty, but can be 0
         $value = $this->getValue();

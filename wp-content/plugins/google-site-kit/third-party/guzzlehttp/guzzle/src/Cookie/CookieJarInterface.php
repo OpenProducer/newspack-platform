@@ -2,8 +2,8 @@
 
 namespace Google\Site_Kit_Dependencies\GuzzleHttp\Cookie;
 
-use Google\Site_Kit_Dependencies\GuzzleHttp\Message\RequestInterface;
-use Google\Site_Kit_Dependencies\GuzzleHttp\Message\ResponseInterface;
+use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
+use Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
 /**
  * Stores HTTP cookies.
  *
@@ -17,21 +17,23 @@ use Google\Site_Kit_Dependencies\GuzzleHttp\Message\ResponseInterface;
 interface CookieJarInterface extends \Countable, \IteratorAggregate
 {
     /**
-     * Add a Cookie header to a request.
+     * Create a request with added cookie headers.
      *
      * If no matching cookies are found in the cookie jar, then no Cookie
-     * header is added to the request.
+     * header is added to the request and the same request is returned.
      *
-     * @param RequestInterface $request Request object to update
+     * @param RequestInterface $request Request object to modify.
+     *
+     * @return RequestInterface returns the modified request.
      */
-    public function addCookieHeader(\Google\Site_Kit_Dependencies\GuzzleHttp\Message\RequestInterface $request);
+    public function withCookieHeader(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request);
     /**
      * Extract cookies from an HTTP response and store them in the CookieJar.
      *
      * @param RequestInterface  $request  Request that was sent
      * @param ResponseInterface $response Response that was received
      */
-    public function extractCookies(\Google\Site_Kit_Dependencies\GuzzleHttp\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\GuzzleHttp\Message\ResponseInterface $response);
+    public function extractCookies(\Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface $request, \Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface $response);
     /**
      * Sets a cookie in the cookie jar.
      *
@@ -50,9 +52,9 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      * arguments, then the cookie with the specified name, path and domain is
      * removed.
      *
-     * @param string $domain Clears cookies matching a domain
-     * @param string $path   Clears cookies matching a domain and path
-     * @param string $name   Clears cookies matching a domain, path, and name
+     * @param string|null $domain Clears cookies matching a domain
+     * @param string|null $path   Clears cookies matching a domain and path
+     * @param string|null $name   Clears cookies matching a domain, path, and name
      *
      * @return CookieJarInterface
      */
@@ -65,4 +67,10 @@ interface CookieJarInterface extends \Countable, \IteratorAggregate
      * to RFC 2965.
      */
     public function clearSessionCookies();
+    /**
+     * Converts the cookie jar to an array.
+     *
+     * @return array
+     */
+    public function toArray();
 }

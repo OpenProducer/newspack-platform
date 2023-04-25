@@ -6,6 +6,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 		return array(
 			'activity-panels' => true,
 			'analytics' => true,
+			'block-editor-feature-enabled' => false,
 			'coupons' => true,
 			'customer-effort-score-tracks' => true,
 			'import-products-task' => true,
