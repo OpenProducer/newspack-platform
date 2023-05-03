@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 7.6.0\n"
+"Project-Id-Version: WooCommerce 7.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-04-13T18:42:46+00:00\n"
+"POT-Creation-Date: 2023-04-26T14:14:51+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: woocommerce\n"
@@ -8773,7 +8773,7 @@ msgid "Invalid coupon code"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-order.php:1221
-#: includes/class-wc-ajax.php:1255
+#: includes/class-wc-ajax.php:1207
 #: includes/class-wc-discounts.php:250
 #: src/Internal/Orders/CouponsController.php:70
 msgid "Invalid coupon"
@@ -8943,13 +8943,13 @@ msgstr ""
 #: includes/abstracts/abstract-wc-settings-api.php:817
 #: includes/admin/class-wc-admin-menus.php:380
 #: includes/admin/class-wc-admin-settings.php:697
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:65
+#: includes/admin/meta-boxes/views/html-product-attribute.php:67
 msgid "Select all"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-settings-api.php:817
 #: includes/admin/class-wc-admin-settings.php:697
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:66
+#: includes/admin/meta-boxes/views/html-product-attribute.php:68
 msgid "Select none"
 msgstr ""
 
@@ -9437,7 +9437,7 @@ msgid "%qty% variations"
 msgstr ""
 
 #: includes/admin/class-wc-admin-assets.php:322
-#: includes/admin/class-wc-admin-assets.php:514
+#: includes/admin/class-wc-admin-assets.php:513
 #: includes/admin/settings/views/html-webhooks-edit.php:68
 #: includes/class-wc-frontend-scripts.php:598
 #: includes/wc-template-functions.php:2886
@@ -9512,7 +9512,7 @@ msgstr ""
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:513
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:677
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:117
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:17
+#: includes/admin/meta-boxes/views/html-product-attribute.php:18
 #: includes/admin/meta-boxes/views/html-product-data-general.php:84
 #: includes/admin/meta-boxes/views/html-variation-admin.php:410
 #: includes/admin/settings/views/html-webhooks-edit.php:22
@@ -9551,7 +9551,7 @@ msgid "Click to toggle"
 msgstr ""
 
 #: includes/admin/class-wc-admin-assets.php:380
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:28
+#: includes/admin/meta-boxes/views/html-product-attribute.php:30
 msgid "Value(s)"
 msgstr ""
 
@@ -9560,12 +9560,12 @@ msgid "Enter some text, or some attributes by pipe (|) separating values."
 msgstr ""
 
 #: includes/admin/class-wc-admin-assets.php:382
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:90
+#: includes/admin/meta-boxes/views/html-product-attribute.php:85
 msgid "Visible on the product page"
 msgstr ""
 
 #: includes/admin/class-wc-admin-assets.php:383
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:96
+#: includes/admin/meta-boxes/views/html-product-attribute.php:91
 msgid "Used for variations"
 msgstr ""
 
@@ -9593,94 +9593,93 @@ msgstr ""
 msgid "No customer selected"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:419
+#: includes/admin/class-wc-admin-assets.php:418
 msgid "Could not grant access - the user may already have permission for this file or billing email is not set. Ensure the billing email is set, and the order has been saved."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:420
+#: includes/admin/class-wc-admin-assets.php:419
 msgid "Are you sure you want to revoke access to this download?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:421
+#: includes/admin/class-wc-admin-assets.php:420
 msgid "You cannot add the same tax rate twice!"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:422
+#: includes/admin/class-wc-admin-assets.php:421
 msgid "Are you sure you wish to delete this note? This action cannot be undone."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:423
+#: includes/admin/class-wc-admin-assets.php:422
 msgid "Enter a coupon code to apply. Discounts are applied to line totals, before taxes."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:424
+#: includes/admin/class-wc-admin-assets.php:423
 msgid "Enter a fixed amount or percentage to apply as a fee."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:425
+#: includes/admin/class-wc-admin-assets.php:424
 msgid "<b>Simple –</b> covers the vast majority of any products you may sell. Simple products are shipped and have no options. For example, a book."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:426
+#: includes/admin/class-wc-admin-assets.php:425
 msgid "<b>Grouped –</b> a collection of related products that can be purchased individually and only consist of simple products. For example, a set of six drinking glasses."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:427
+#: includes/admin/class-wc-admin-assets.php:426
 msgid "<b>External or Affiliate –</b> one that you list and describe on your website but is sold elsewhere."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:428
+#: includes/admin/class-wc-admin-assets.php:427
 msgid "<b>Variable –</b> a product with variations, each of which may have a different SKU, price, stock option, etc. For example, a t-shirt available in different colors and/or sizes."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:429
+#: includes/admin/class-wc-admin-assets.php:428
 msgid "Product types define available product details and attributes, such as downloadable files and variations. They’re also used for analytics and inventory management."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:430
+#: includes/admin/class-wc-admin-assets.php:429
 #: assets/client/admin/chunks/1204.js:1
 #: assets/client/admin/product-editor/index.js:2
 msgid "Describe this product. What makes it unique? What are its most important features?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:431
+#: includes/admin/class-wc-admin-assets.php:430
 msgid "Summarize this product in 1-2 short sentences. We’ll show it at the top of the page."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:432
+#: includes/admin/class-wc-admin-assets.php:431
 #: includes/admin/meta-boxes/views/html-product-data-attributes.php:109
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:32
 msgid "Make sure you enter the name and values for each attribute."
 msgstr ""
 
 #. translators: %1$s: maximum file size
-#: includes/admin/class-wc-admin-assets.php:434
+#: includes/admin/class-wc-admin-assets.php:433
 msgid "For best results, upload JPEG or PNG files that are 1000 by 1000 pixels or larger. Maximum upload file size: %1$s."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:487
+#: includes/admin/class-wc-admin-assets.php:486
 #: includes/admin/views/html-admin-page-status-report.php:48
 msgid "Copying to clipboard failed. Please press Ctrl/Cmd+C to copy."
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:500
+#: includes/admin/class-wc-admin-assets.php:499
 msgid "Are you sure you want to delete this log?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:501
+#: includes/admin/class-wc-admin-assets.php:500
 msgid "Are you sure you want to run this tool?"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:539
+#: includes/admin/class-wc-admin-assets.php:538
 #: src/Internal/Admin/Notes/WooCommerceSubscriptions.php:55
 msgid "Learn More"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:541
+#: includes/admin/class-wc-admin-assets.php:540
 msgid "Dismiss this suggestion"
 msgstr ""
 
-#: includes/admin/class-wc-admin-assets.php:543
+#: includes/admin/class-wc-admin-assets.php:542
 #: includes/admin/marketplace-suggestions/templates/html-product-data-extensions.php:27
 msgid "Manage suggestions"
 msgstr ""
@@ -9996,7 +9995,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-menus.php:161
 #: includes/admin/class-wc-admin-webhooks-table-list.php:49
 #: includes/admin/list-tables/class-wc-admin-list-table-orders.php:124
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:78
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:66
 #: includes/admin/settings/views/html-webhooks-edit.php:36
 #: includes/react-admin/connect-existing-pages.php:39
 #: includes/wc-account-functions.php:204
@@ -10804,8 +10803,8 @@ msgstr ""
 #: includes/admin/meta-boxes/views/html-order-items.php:319
 #: includes/admin/meta-boxes/views/html-order-items.php:385
 #: includes/admin/meta-boxes/views/html-product-data-general.php:70
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:149
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:194
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:137
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:182
 #: includes/admin/plugin-updates/views/html-notice-untested-extensions-modal.php:48
 #: includes/wc-account-functions.php:293
 #: packages/action-scheduler/classes/ActionScheduler_ListTable.php:133
@@ -11120,7 +11119,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-reports.php:99
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:524
 #: includes/admin/list-tables/class-wc-admin-list-table-products.php:124
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:94
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:82
 #: includes/export/class-wc-product-csv-exporter.php:124
 #: src/Admin/API/Reports/Products/Controller.php:406
 #: src/Admin/API/Reports/Stock/Controller.php:547
@@ -11201,7 +11200,7 @@ msgstr ""
 
 #. translators: 1: page name 2: page ID
 #: includes/admin/class-wc-admin-settings.php:614
-#: includes/class-wc-ajax.php:1924
+#: includes/class-wc-ajax.php:1876
 msgid "%1$s (ID: %2$s)"
 msgstr ""
 
@@ -11252,7 +11251,7 @@ msgstr ""
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:472
 #: includes/admin/meta-boxes/class-wc-meta-box-product-data.php:102
 #: includes/admin/meta-boxes/views/html-order-shipping.php:22
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:100
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:88
 #: includes/admin/settings/class-wc-settings-shipping.php:27
 #: includes/admin/settings/class-wc-settings-tax.php:249
 #: includes/admin/settings/views/html-settings-tax.php:40
@@ -12046,7 +12045,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-status.php:429
 #: includes/admin/meta-boxes/views/html-order-notes.php:34
 #: includes/admin/views/html-admin-page-status-report.php:678
-#: includes/class-wc-ajax.php:1542
+#: includes/class-wc-ajax.php:1494
 #: templates/content-widget-reviews.php:38
 msgid "by %s"
 msgstr ""
@@ -12878,7 +12877,7 @@ msgstr ""
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:544
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:734
 #: includes/admin/meta-boxes/views/html-product-data-general.php:142
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:107
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:95
 #: includes/admin/meta-boxes/views/html-variation-admin.php:471
 #: includes/export/class-wc-product-csv-exporter.php:144
 msgid "Download limit"
@@ -14024,7 +14023,7 @@ msgstr ""
 #. translators: $1: customer name, $2 customer id, $3: customer email
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:325
 #: includes/admin/settings/views/html-keys-edit.php:43
-#: includes/class-wc-ajax.php:1739
+#: includes/class-wc-ajax.php:1691
 #: src/Internal/Admin/Orders/ListTable.php:700
 msgid "%1$s (#%2$s &ndash; %3$s)"
 msgstr ""
@@ -14108,7 +14107,7 @@ msgstr ""
 #. translators: file name.
 #. translators: %d file count
 #: includes/admin/meta-boxes/class-wc-meta-box-order-downloads.php:64
-#: includes/class-wc-ajax.php:912
+#: includes/class-wc-ajax.php:864
 msgid "File %d"
 msgstr ""
 
@@ -14160,7 +14159,7 @@ msgid "Downloadable products give access to a file upon purchase."
 msgstr ""
 
 #: includes/admin/meta-boxes/class-wc-meta-box-product-data.php:96
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:92
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:80
 #: includes/admin/settings/class-wc-settings-products.php:42
 #: includes/admin/settings/class-wc-settings-products.php:224
 #: includes/class-wc-post-types.php:442
@@ -14541,7 +14540,7 @@ msgid "Optional"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-order-notes.php:37
-#: includes/class-wc-ajax.php:1545
+#: includes/class-wc-ajax.php:1497
 msgid "Delete note"
 msgstr ""
 
@@ -14570,29 +14569,28 @@ msgstr ""
 msgid "Shipping method"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:23
-msgid "f.e. size or color"
-msgstr ""
-
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:44
-msgid "Select terms"
-msgstr ""
-
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:67
-msgid "Add new"
-msgstr ""
-
-#. translators: %s: WC_DELIMITER
-#: includes/admin/meta-boxes/views/html-product-attribute-inner.php:82
-msgid "Enter options for customers to choose from, f.e. “Blue” or “Large”. Use “%s” to separate different options."
-msgstr ""
-
 #: includes/admin/meta-boxes/views/html-product-attribute.php:10
 msgid "Drag and drop to set admin attribute order"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-attribute.php:11
 msgid "Custom attribute"
+msgstr ""
+
+#: includes/admin/meta-boxes/views/html-product-attribute.php:24
+msgid "e.g. Fabric or Brand"
+msgstr ""
+
+#: includes/admin/meta-boxes/views/html-product-attribute.php:46
+msgid "Select terms"
+msgstr ""
+
+#: includes/admin/meta-boxes/views/html-product-attribute.php:69
+msgid "Add new"
+msgstr ""
+
+#: includes/admin/meta-boxes/views/html-product-attribute.php:77
+msgid "Enter some text, or some attributes by \"%s\" separating values."
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-advanced.php:16
@@ -14619,8 +14617,8 @@ msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-attributes.php:56
 #: includes/admin/meta-boxes/views/html-product-data-attributes.php:107
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:120
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:155
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:108
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:143
 #: assets/client/admin/chunks/9819.js:1
 #: assets/client/admin/components/index.js:2
 msgid "Expand"
@@ -14628,8 +14626,8 @@ msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-attributes.php:56
 #: includes/admin/meta-boxes/views/html-product-data-attributes.php:107
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:120
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:155
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:108
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:143
 #: assets/client/admin/app/index.js:2
 #: assets/client/admin/components/index.js:2
 #: packages/woocommerce-blocks/build/mini-cart-component-frontend.js:3
@@ -14728,7 +14726,7 @@ msgid "Leave blank for unlimited re-downloads."
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-general.php:157
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:108
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:96
 #: includes/admin/meta-boxes/views/html-variation-admin.php:489
 msgid "Download expiry"
 msgstr ""
@@ -14778,6 +14776,7 @@ msgid "Settings below apply to all variations without manual stock management en
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-inventory.php:15
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:20
 #: includes/admin/plugin-updates/views/html-notice-untested-extensions-modal.php:44
 #: src/Internal/Admin/Notes/CustomizeStoreWithBlocks.php:80
 #: src/Internal/Admin/Notes/CustomizingProductCatalog.php:77
@@ -14858,7 +14857,7 @@ msgid "Store-wide threshold (%d)"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-inventory.php:98
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:98
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:86
 #: includes/admin/meta-boxes/views/html-variation-admin.php:242
 #: includes/admin/settings/class-wc-settings-products.php:287
 msgid "Low stock threshold"
@@ -14932,21 +14931,21 @@ msgid "Dimensions (%s)"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-shipping.php:43
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:101
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:89
 #: includes/admin/meta-boxes/views/html-variation-admin.php:323
 #: includes/admin/views/html-quick-edit-product.php:111
 msgid "Length"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-shipping.php:44
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:102
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:90
 #: includes/admin/meta-boxes/views/html-variation-admin.php:324
 #: includes/admin/views/html-quick-edit-product.php:112
 msgid "Width"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-shipping.php:45
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:103
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:91
 #: includes/admin/meta-boxes/views/html-variation-admin.php:325
 #: includes/admin/views/html-quick-edit-product.php:113
 msgid "Height"
@@ -14967,106 +14966,98 @@ msgstr ""
 msgid "Shipping classes are used by certain shipping methods to group similar products."
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:19
-msgid "Offer customers multiple product options, like size and color. Start by creating a new custom attribute and enter available values (they’ll be shown as selectable product options)."
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:18
+msgid "Before you can add a variation you need to add some variation attributes on the <strong>Attributes</strong> tab."
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:19
-msgid "Learn more about creating variations"
-msgstr ""
-
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:32
-msgid "Create variations"
-msgstr ""
-
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:40
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:28
 msgid "Default Form Values"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:40
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:28
 msgid "Choose a default form value if you want a certain variation already selected when a user visits the product page."
 msgstr ""
 
 #. translators: WooCommerce attribute label
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:47
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:35
 msgid "No default %s&hellip;"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:75
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:63
 msgid "Add variation"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:76
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:64
 msgid "Create variations from all attributes"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:77
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:65
 msgid "Delete all variations"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:79
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:67
 msgid "Toggle &quot;Enabled&quot;"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:80
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:68
 msgid "Toggle &quot;Downloadable&quot;"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:81
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:69
 msgid "Toggle &quot;Virtual&quot;"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:83
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:71
 #: includes/class-wc-post-types.php:435
 #: assets/client/admin/chunks/1204.js:1
 msgid "Pricing"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:84
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:72
 msgid "Set regular prices"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:85
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:73
 msgid "Increase regular prices (fixed amount or percentage)"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:86
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:74
 msgid "Decrease regular prices (fixed amount or percentage)"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:87
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:75
 msgid "Set sale prices"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:88
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:76
 msgid "Increase sale prices (fixed amount or percentage)"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:89
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:77
 msgid "Decrease sale prices (fixed amount or percentage)"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:90
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:78
 msgid "Set scheduled sale dates"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:93
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:81
 msgid "Toggle &quot;Manage stock&quot;"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:95
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:83
 msgid "Set Status - In stock"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:96
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:84
 msgid "Set Status - Out of stock"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:97
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:85
 msgid "Set Status - On backorder"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:104
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:92
 #: includes/admin/views/html-bulk-edit-product.php:120
 #: includes/admin/views/html-quick-edit-product.php:98
 #: includes/wc-template-functions.php:3494
@@ -15074,63 +15065,63 @@ msgstr ""
 msgid "Weight"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:106
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:94
 #: includes/admin/settings/class-wc-settings-products.php:43
 #: includes/admin/settings/class-wc-settings-products.php:359
 msgid "Downloadable products"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:114
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:102
 #: includes/admin/views/html-report-by-date.php:58
 msgid "Go"
 msgstr ""
 
 #. translators: variations count
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:118
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:153
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:106
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:141
 msgid "%s item"
 msgid_plural "%s items"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:123
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:158
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:111
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:146
 msgid "Go to the first page"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:124
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:159
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:112
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:147
 msgid "Go to the previous page"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:126
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:161
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:114
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:149
 msgid "Select Page"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:127
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:162
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:115
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:150
 #: includes/admin/settings/views/html-settings-tax.php:130
 msgid "Current page"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:134
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:169
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:122
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:157
 msgctxt "number of pages"
 msgid "of"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:136
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:171
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:124
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:159
 msgid "Go to the next page"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:137
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:172
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:125
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:160
 msgid "Go to the last page"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:148
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:136
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:108
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:162
 #: includes/admin/settings/views/html-keys-edit.php:118
@@ -15140,11 +15131,11 @@ msgstr ""
 msgid "Save changes"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:190
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:178
 msgid "Add price to all variations that don't have a price"
 msgstr ""
 
-#: includes/admin/meta-boxes/views/html-product-data-variations.php:195
+#: includes/admin/meta-boxes/views/html-product-data-variations.php:183
 msgid "Add prices"
 msgstr ""
 
@@ -17454,7 +17445,7 @@ msgid "Generate API key"
 msgstr ""
 
 #: includes/admin/settings/views/html-keys-edit.php:119
-#: includes/class-wc-ajax.php:2244
+#: includes/class-wc-ajax.php:2196
 msgid "Revoke key"
 msgstr ""
 
@@ -19025,80 +19016,80 @@ msgstr ""
 msgid "Add price"
 msgstr ""
 
-#: includes/class-wc-ajax.php:250
+#: includes/class-wc-ajax.php:249
 msgid "Sorry there was a problem removing this coupon."
 msgstr ""
 
-#: includes/class-wc-ajax.php:253
+#: includes/class-wc-ajax.php:252
 msgid "Coupon has been removed."
 msgstr ""
 
-#: includes/class-wc-ajax.php:301
+#: includes/class-wc-ajax.php:300
 msgid "Sorry, your session has expired."
 msgstr ""
 
-#: includes/class-wc-ajax.php:301
+#: includes/class-wc-ajax.php:300
 #: templates/cart/cart-empty.php:35
 msgid "Return to shop"
 msgstr ""
 
-#: includes/class-wc-ajax.php:960
-#: includes/class-wc-ajax.php:992
-#: includes/class-wc-ajax.php:1082
-#: includes/class-wc-ajax.php:1146
-#: includes/class-wc-ajax.php:1188
-#: includes/class-wc-ajax.php:1250
-#: includes/class-wc-ajax.php:1302
+#: includes/class-wc-ajax.php:912
+#: includes/class-wc-ajax.php:944
+#: includes/class-wc-ajax.php:1034
+#: includes/class-wc-ajax.php:1098
+#: includes/class-wc-ajax.php:1140
+#: includes/class-wc-ajax.php:1202
+#: includes/class-wc-ajax.php:1254
 #: src/Internal/Orders/CouponsController.php:65
 msgid "Invalid order"
 msgstr ""
 
-#: includes/class-wc-ajax.php:1014
+#: includes/class-wc-ajax.php:966
 #: includes/class-wc-order-item-product.php:72
 msgid "Invalid product ID"
 msgstr ""
 
 #. translators: %s product name
-#: includes/class-wc-ajax.php:1018
+#: includes/class-wc-ajax.php:970
 msgid "%s is a variable product parent and cannot be added."
 msgstr ""
 
 #. translators: %s: error message
-#: includes/class-wc-ajax.php:1025
+#: includes/class-wc-ajax.php:977
 #: includes/wc-rest-functions.php:98
 msgid "Error: %s"
 msgstr ""
 
 #. translators: %s item name.
-#: includes/class-wc-ajax.php:1038
+#: includes/class-wc-ajax.php:990
 msgid "Added line items: %s"
 msgstr ""
 
 #. translators: %s fee amount
-#: includes/class-wc-ajax.php:1109
+#: includes/class-wc-ajax.php:1061
 msgid "%s fee"
 msgstr ""
 
-#: includes/class-wc-ajax.php:1194
+#: includes/class-wc-ajax.php:1146
 msgid "Invalid rate"
 msgstr ""
 
 #. translators: %s coupon code.
-#: includes/class-wc-ajax.php:1261
+#: includes/class-wc-ajax.php:1213
 msgid "Coupon removed: \"%s\"."
 msgstr ""
 
-#: includes/class-wc-ajax.php:1306
+#: includes/class-wc-ajax.php:1258
 msgid "Invalid items"
 msgstr ""
 
 #. translators: %1$s: item name %2$s: stock change
-#: includes/class-wc-ajax.php:1345
+#: includes/class-wc-ajax.php:1297
 msgid "Deleted %1$s and adjusted stock (%2$s)"
 msgstr ""
 
 #. translators: %s item name.
-#: includes/class-wc-ajax.php:1348
+#: includes/class-wc-ajax.php:1300
 #: includes/legacy/api/v1/class-wc-api-resource.php:333
 #: includes/legacy/api/v2/class-wc-api-products.php:468
 #: includes/legacy/api/v2/class-wc-api-products.php:2176
@@ -19115,57 +19106,57 @@ msgstr ""
 msgid "Deleted %s"
 msgstr ""
 
-#: includes/class-wc-ajax.php:1416
+#: includes/class-wc-ajax.php:1368
 msgid "Order not editable"
 msgstr ""
 
 #. translators: $1: Date created, $2 Time created
-#: includes/class-wc-ajax.php:1536
+#: includes/class-wc-ajax.php:1488
 msgid "added on %1$s at %2$s"
 msgstr ""
 
 #. Translators: %d stock amount
-#: includes/class-wc-ajax.php:1637
+#: includes/class-wc-ajax.php:1589
 msgid "Stock: %d"
 msgstr ""
 
-#: includes/class-wc-ajax.php:2057
+#: includes/class-wc-ajax.php:2009
 msgid "Invalid refund amount"
 msgstr ""
 
-#: includes/class-wc-ajax.php:2061
+#: includes/class-wc-ajax.php:2013
 msgid "Error processing refund. Please try again."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2165
+#: includes/class-wc-ajax.php:2117
 msgid "Description is missing."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2168
+#: includes/class-wc-ajax.php:2120
 msgid "User is missing."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2171
+#: includes/class-wc-ajax.php:2123
 msgid "Permissions is missing."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2182
+#: includes/class-wc-ajax.php:2134
 msgid "You do not have permission to assign API Keys to the selected user."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2208
+#: includes/class-wc-ajax.php:2160
 msgid "API Key updated successfully."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2236
+#: includes/class-wc-ajax.php:2188
 msgid "There was an error generating your API Key."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2243
+#: includes/class-wc-ajax.php:2195
 msgid "API Key generated successfully. Make sure to copy your new keys now as the secret key will be hidden once you leave this page."
 msgstr ""
 
-#: includes/class-wc-ajax.php:2332
+#: includes/class-wc-ajax.php:2284
 #: src/Internal/Admin/ProductReviews/ReviewsCommentsOverrides.php:92
 msgid "Dismiss this notice."
 msgstr ""
@@ -37573,17 +37564,17 @@ msgid "Invalid meta_query clause key: %s."
 msgstr ""
 
 #. translators: %s is a table name.
-#: src/Internal/DataStores/Orders/OrdersTableQuery.php:753
+#: src/Internal/DataStores/Orders/OrdersTableQuery.php:789
 msgid "%s can not be used as a table alias in OrdersTableQuery"
 msgstr ""
 
 #. translators: %s is a table name.
-#: src/Internal/DataStores/Orders/OrdersTableQuery.php:767
+#: src/Internal/DataStores/Orders/OrdersTableQuery.php:803
 msgid "Can not re-use table alias \"%s\" in OrdersTableQuery."
 msgstr ""
 
 #. Translators: %s is a table identifier.
-#: src/Internal/DataStores/Orders/OrdersTableQuery.php:1151
+#: src/Internal/DataStores/Orders/OrdersTableQuery.php:1187
 msgid "Invalid table id: %s."
 msgstr ""
 

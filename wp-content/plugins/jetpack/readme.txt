@@ -1,8 +1,8 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, azaozz, batmoo, barry, beaulebens, bindlegirl, biskobe, blobaugh, bjorsch, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, robertbpugh, roccotripaldi, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, wpkaren, yoavf, zinigor
 Tags: Security, backup, Woo, malware, scan, spam, CDN, search, social
-Stable tag: 12.0
-Requires at least: 6.0
+Stable tag: 12.1
+Requires at least: 6.1
 Requires PHP: 5.6
 Tested up to: 6.2
 
@@ -244,45 +244,47 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 4. Promote your newest posts, pages, and products across your social media channels.
 
 == Changelog ==
-### 12.0 - 2023-04-04
+### 12.1 - 2023-05-02
 #### Enhancements
-- Admin: fix submenu positioning in admin menu.
-- Blocks (beta): add a new beta Cookie Consent block to display a GDPR-compliant cookie consent widget on your site for your visitors.
-- Blocks: the cookie consent block is now available to general audience.
-- Blocks: the VideoPress block is now available to general audience.
-- Blocks: the writing prompts block is now available to general audience.
-- Forms: display carriage returns in user response text to properly display multiline text.
-- Forms: redesign the Multiple Choice and Single Choice fields
-- Newsletter: improve UI around newsletter visibility and add a help link in the post editor sidebar.
-- Notifications: remove all library dependencies for improved performance and lower footprint.
-- Paid newsletter block: improve logic for showing the UI based on site configuration.
-- Protect: remove account connection requirement to use the brute force protection feature.
-- Protect: share IP allow list between the Jetpack Firewall and Brute Force Protection modules.
-- SSO: add message to logout notice when SSO is enabled that gives a heads up to also log out of WordPress.com if they are on a shared computer.
-- Stats: updates the layout of the loading and some sections on the Stats page.
-- Stats: update visuals for the wp-admin dashboard Stats widget.
-- Subscriptions: make the Subscribe Block available, even when the Subscriptions module is off, so Subscriptions can be easily enabled.
+- Block editor: collapse Jetpack feature panels by default.
+- Dashboard: added Jetpack Starter bundle post-activation screen and plan header.
+- Dashboard: add link to renew expired subscription.
+- Dashboard: align Protect information display with Akismet.
+- Dashboard: improve the general appearance.
+- Dashboard: redesign the At a Glance page.
+- Dashboard: Remove a confusing "Click to view" link from the stats call to action screen.
+- Dashboard: update the links to the Mobile apps to allow opening links in the appropriate app store right away.
+- Dashboard: use the latest version of the Jetpack logo.
+- Dashboard: visually refresh the Debug page.
+- Forms: Update Forms child blocks to allow any transformation between the blocks.
+- Jetpack Visual Refresh: "At A Glance" Dashboard adjustments.
+- Markdown Block: add support for footnotes.
+- Newsletters: display the correct locked content text for newsletters when Stripe is disconnected.
+- Newsletters: display the correct locked content text for paid newsletters.
+- Publicize: improve page metadata by using attached media for the OpenGraph image.
+- Search: implemented a "tabbed" variation for static filters, adding tabs on top of the results for each filter group.
+- Stats Widget: improve appearance of footer buttons.
+- Stats Widget: make frame sections balanced with long titles.
+- Stats Widget: make the new version of the widget available to general audience.
+- Subscriptions: add counts in the newsletter panel to show the newsletter reach.
 
 #### Improved compatibility
-- Blocks: avoid conflicts with Better Click To Tweet plugin.
-- Blocks: ensure the Pinterest block does not trigger errors when using WordPress 6.2.
-- Connection: improve the connection flow that happens after plugin activation.
-- General: indicate full compatibility with the latest version of WordPress, 6.2.
-- Image CDN: do not process Flickr-hosted images with Jetpack's Image CDN.
-- SEO Tools: add message to settings screen when The SEO Framework plugin is active.
-- WordPress 6.2 compatibility: ensure that the block editor's External Media functionality and Jetpack's Twitter features in the block editor stays compatible with the upcoming version of WordPress.
+- General: Jetpack now requires WordPress version 6.1.
+- General: remove WordPress 6.0 backwards-compatibility code, now that Jetpack requires WordPress 6.1.
+- Security: ensure blocks are always fully displayed on your site, even when using a caching plugin.
 
 #### Bug fixes
-- Blocks: avoid warnings in the block editor because of invalid categories for some blocks.
-- Blocks: fix the VideoPress preload behavior when "none" is chosen.
-- Blogging Prompts: avoid PHP notices with non-existing REST query paarameters.
-- Dashboard: avoid errors in the Recommendations dashboard.
-- Forms: avoid PHP notices when using a form with a dropdown field.
-- Forms: fix a PHP warning on Feedback->Response Forms when looking at old responses.
-- Slideshow Block: make slideshow block's play and pause icons visible.
-- Stats Widget: Fix incorrect invocation of module-restricted functions
-- Subscribe Block: don't show "Include social followers in count" when "Show subscribers count" is off, or Publicize is disabled.
-- Subscriptions: ensure the block's settings are displayed properly, even when using a block theme.
+- 3rd-party plugin support code: improve loading performance.
+- Assets: avoid fatal errors with plugins that use outdated Jetpack package versions.
+- Button Block: ensure no borders are added by default browser styles.
+- Cookie Consent Block: return fresh HTML when the user revists after accepting cookies.
+- Dashboard: fix a link on the stats chart.
+- Dashboard: improve contrast for the Stats chart tooltip.
+- Dashboard: improve upgrade description for users with Akismet already installed and active.
+- Forms: Fix Forms styles when inside Cover blocks.
+- Jetpack Social: Render Social Image Generator panel even when its default one is disabled.
+- Newsletters: properly gate the feature based on the configuration of the site.
+- Payment Block: update the visibility setting of inner blocks on click to ensure that the inner block renders.
 
 --------
 

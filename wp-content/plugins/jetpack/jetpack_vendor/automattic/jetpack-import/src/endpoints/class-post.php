@@ -19,9 +19,14 @@ if ( ! function_exists( 'post_exists' ) ) {
 class Post extends \WP_REST_Posts_Controller {
 
 	/**
-	 * The Import ID add a new item to the schema.
+	 * Base class
 	 */
 	use Import;
+
+	/**
+	 * The Import ID add a new item to the schema.
+	 */
+	use Import_ID;
 
 	/**
 	 * Whether the controller supports batching.
@@ -40,19 +45,6 @@ class Post extends \WP_REST_Posts_Controller {
 
 		// @see add_post_meta
 		$this->import_id_meta_type = $post_type;
-	}
-
-	/**
-	 * Registers the routes for the objects of the controller.
-	 *
-	 * @see WP_REST_Posts_Controller::register_rest_route()
-	 */
-	public function register_routes() {
-		register_rest_route(
-			self::$rest_namespace,
-			'/' . $this->rest_base,
-			$this->get_route_options()
-		);
 	}
 
 	/**
@@ -93,7 +85,7 @@ class Post extends \WP_REST_Posts_Controller {
 				'post_exists',
 				__( 'Cannot create existing post.', 'jetpack-import' ),
 				array(
-					'status'  => 400,
+					'status'  => 409,
 					'post_id' => $post_id,
 				)
 			);
@@ -256,5 +248,4 @@ class Post extends \WP_REST_Posts_Controller {
 		$name = ucwords( $name );
 		return $name;
 	}
-
 }
