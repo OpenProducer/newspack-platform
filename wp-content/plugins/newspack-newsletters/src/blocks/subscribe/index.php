@@ -37,7 +37,7 @@ function enqueue_scripts() {
 	);
 
 	$use_captcha  = method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha();
-	$dependencies = [ 'wp-polyfill', 'wp-i18n' ];
+	$dependencies = [];
 	if ( $use_captcha ) {
 		$dependencies[] = \Newspack\Recaptcha::SCRIPT_HANDLE;
 	}
@@ -49,10 +49,17 @@ function enqueue_scripts() {
 		filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/subscribeBlock.js' ),
 		true
 	);
+	\wp_localize_script(
+		$handle,
+		'newspack_newsletters_subscribe_block',
+		[
+			'recaptcha_error' => __( 'Error loading the reCaptcha library.', 'newspack-newsletters' ),
+			'invalid_email'   => __( 'Please enter a valid email address', 'newspack-newsletter' ),
+		]
+	);
 	\wp_script_add_data( $handle, 'async', true );
 	\wp_script_add_data( $handle, 'amp-plus', true );
 }
-add_action( 'wp_enqueue_scripts', __NAMESPACE__ . '\\enqueue_scripts' );
 
 /**
  * Generate a unique ID for each subscription form.
@@ -90,6 +97,9 @@ function render_block( $attrs ) {
 		$available_lists = [ $lists[0] ];
 	}
 
+	// Enqueue scripts.
+	enqueue_scripts();
+
 	if ( \is_user_logged_in() ) {
 		$email = \wp_get_current_user()->user_email;
 	} elseif ( class_exists( '\Newspack\Reader_Activation' ) ) {
@@ -115,6 +125,10 @@ function render_block( $attrs ) {
 			$list_map = array_flip( array_map( 'sanitize_text_field', $_REQUEST['lists'] ) );
 		}
 	}
+
+	$display_input_label = ! empty( $attrs['displayInputLabels'] );
+	$email_label         = $display_input_label ? $attrs['emailLabel'] : '';
+	$input_id            = sprintf( 'newspack-newsletters-subscribe-block-input-%s', $block_id );
 	// phpcs:enable
 	ob_start();
 	?>
@@ -175,22 +189,36 @@ function render_block( $attrs ) {
 				<?php endif; ?>
 				<?php
 				if ( $attrs['displayNameField'] ) :
+					$name_label            = $attrs['nameLabel'];
 					$name_placeholder      = $attrs['namePlaceholder'];
+					$last_name_label       = $attrs['lastNameLabel'];
 					$last_name_placeholder = $attrs['lastNamePlaceholder'];
 					$display_last_name     = $attrs['displayLastNameField'];
-					if ( empty( $name_placeholder ) ) {
-						$name_placeholder = $display_last_name ? __( 'First Name', 'newspack-newsletters' ) : __( 'Name', 'newspack-newsletters' );
-					}
 					?>
 					<div class="newspack-newsletters-name-input">
-						<input type="text" name="name" placeholder="<?php echo \esc_attr( $name_placeholder ); ?>" />
+
+						<div class="newspack-newsletters-name-input-item">
+							<?php if ( $display_input_label ) : ?>
+								<label for="<?php echo \esc_attr( $input_id . '-name' ); ?>"><?php echo \esc_html( $name_label ); ?></label>
+							<?php endif; ?>
+							<input id="<?php echo \esc_attr( $input_id . '-name' ); ?>" type="text" name="name" placeholder="<?php echo \esc_attr( $name_placeholder ); ?>" />
+						</div>
 						<?php if ( $display_last_name ) : ?>
-							<input type="text" name="last_name" placeholder="<?php echo \esc_attr( $last_name_placeholder ); ?>" />
+							<div class="newspack-newsletters-name-input-item">
+								<?php if ( $display_input_label ) : ?>
+									<label for="<?php echo \esc_attr( $input_id . '-last-name' ); ?>"><?php echo \esc_html( $last_name_label ); ?></label>
+								<?php endif; ?>
+								<input id="<?php echo \esc_attr( $input_id . '-last-name' ); ?>" type="text" name="last_name" placeholder="<?php echo \esc_attr( $last_name_placeholder ); ?>" />
+							</div>
 						<?php endif; ?>
 					</div>
 				<?php endif; ?>
 				<div class="newspack-newsletters-email-input">
+					<?php if ( $email_label ) : ?>
+						<label for="<?php echo \esc_attr( $input_id . '-email' ); ?>"><?php echo \esc_html( $email_label ); ?></label>
+					<?php endif; ?>
 					<input
+						id="<?php echo \esc_attr( $input_id . '-email' ); ?>"
 						type="email"
 						name="npe"
 						autocomplete="email"

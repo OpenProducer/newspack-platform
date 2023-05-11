@@ -87,21 +87,20 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 * @return array
 	 */
 	public function verify_token( $refresh = true ) {
-		$credentials  = $this->api_credentials();
-		$redirect_uri = $this->get_oauth_redirect_uri();
-		$cc           = new Newspack_Newsletters_Constant_Contact_SDK(
-			$credentials['api_key'],
-			$credentials['api_secret'],
-			$credentials['access_token']
-		);
-
-		$response = [
-			'error'    => null,
-			'valid'    => false,
-			'auth_url' => $cc->get_auth_code_url( wp_create_nonce( 'constant_contact_oauth2' ), $redirect_uri ),
-		];
-
 		try {
+			$credentials  = $this->api_credentials();
+			$redirect_uri = $this->get_oauth_redirect_uri();
+			$cc           = new Newspack_Newsletters_Constant_Contact_SDK(
+				$credentials['api_key'],
+				$credentials['api_secret'],
+				$credentials['access_token']
+			);
+	
+			$response = [
+				'error'    => null,
+				'valid'    => false,
+				'auth_url' => $cc->get_auth_code_url( wp_create_nonce( 'constant_contact_oauth2' ), $redirect_uri ),
+			];
 			// If we have a valid access token, we're connected.
 			if ( $cc->validate_token() ) {
 				$response['valid'] = true;

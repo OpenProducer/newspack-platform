@@ -19,10 +19,14 @@
 				"remove": true,
 				"move": true
 			}
+		},
+		"shippingCostRequiresAddress": {
+			"type": "boolean",
+			"default": false
 		}
 	},
 	"parent": [ "woocommerce/checkout-fields-block" ],
-	"textdomain": "woo-gutenberg-products-block",
+	"textdomain": "woocommerce",
 	"$schema": "https://schemas.wp.org/trunk/block.json",
 	"apiVersion": 2
 }

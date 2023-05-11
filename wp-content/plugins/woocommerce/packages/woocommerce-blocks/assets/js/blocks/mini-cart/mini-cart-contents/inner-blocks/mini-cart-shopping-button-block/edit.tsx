@@ -8,6 +8,7 @@ import EditableButton from '@woocommerce/editor-components/editable-button';
  * Internal dependencies
  */
 import { defaultStartShoppingButtonLabel } from './constants';
+import { getVariant } from '../utils';
 
 export const Edit = ( {
 	attributes,
@@ -22,8 +23,9 @@ export const Edit = ( {
 	const { startShoppingButtonLabel } = attributes;
 
 	return (
-		<div { ...blockProps }>
+		<div className="wp-block-button aligncenter">
 			<EditableButton
+				{ ...blockProps }
 				className="wc-block-mini-cart__shopping-button"
 				value={ startShoppingButtonLabel }
 				placeholder={ defaultStartShoppingButtonLabel }
@@ -32,6 +34,7 @@ export const Edit = ( {
 						startShoppingButtonLabel: content,
 					} );
 				} }
+				variant={ getVariant( blockProps.className, 'contained' ) }
 			/>
 		</div>
 	);

@@ -22,6 +22,7 @@
 		}
 	},
 	"parent": [ "woocommerce/filled-mini-cart-contents-block" ],
-	"textdomain": "woo-gutenberg-products-block",
-	"apiVersion": 2
+	"textdomain": "woocommerce",
+	"apiVersion": 2,
+	"$schema": "https://schemas.wp.org/trunk/block.json"
 }

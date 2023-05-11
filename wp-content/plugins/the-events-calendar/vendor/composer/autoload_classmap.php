@@ -8,6 +8,8 @@ $baseDir = dirname($vendorDir);
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'TEC\\Events\\Custom_Tables\\V1\\Activation' => $baseDir . '/src/Events/Custom_Tables/V1/Activation.php',
+    'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Event_Cleaner' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Event_Cleaner.php',
+    'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Events\\Occurrences\\Max_Recurrence' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Occurrences/Max_Recurrence.php',
     'TEC\\Events\\Custom_Tables\\V1\\Events\\Occurrences\\Max_Recurrence_Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Occurrences/Max_Recurrence_Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Events\\Occurrences\\Occurrences_Generator' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Occurrences/Occurrences_Generator.php',
@@ -126,6 +128,7 @@ return array(
     'TEC\\Events\\Installer\\Provider' => $baseDir . '/src/Events/Installer/Provider.php',
     'TEC\\Events\\Integrations\\Integration_Abstract' => $baseDir . '/src/Events/Integrations/Integration_Abstract.php',
     'TEC\\Events\\Integrations\\Plugins\\Colbri_Page_Builder\\Provider' => $baseDir . '/src/Events/Integrations/Plugins/Colbri_Page_Builder/Provider.php',
+    'TEC\\Events\\Integrations\\Plugins\\Elementor\\Provider' => $baseDir . '/src/Events/Integrations/Plugins/Elementor/Provider.php',
     'TEC\\Events\\Integrations\\Plugins\\Plugin_Integration' => $baseDir . '/src/Events/Integrations/Plugins/Plugin_Integration.php',
     'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => $baseDir . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
     'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Events_Schema' => $baseDir . '/src/Events/Integrations/Plugins/WordPress_SEO/Events_Schema.php',

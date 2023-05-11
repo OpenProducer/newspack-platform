@@ -1,3 +1,29 @@
+# [1.64.0](https://github.com/Automattic/newspack-newsletters/compare/v1.63.0...v1.64.0) (2023-05-08)
+
+
+### Bug Fixes
+
+* avoid fatal error on Constant Contact ([155eb03](https://github.com/Automattic/newspack-newsletters/commit/155eb03a22d9bb584ea4754c57da585e850696d2))
+* **subscribe-block:** optimize js dependencies ([#1142](https://github.com/Automattic/newspack-newsletters/issues/1142)) ([6b7c82d](https://github.com/Automattic/newspack-newsletters/commit/6b7c82d3f9deffb6a481af26dc963040d40f01d3))
+
+
+### Features
+
+* **subscribe-block:** support input labels ([#1151](https://github.com/Automattic/newspack-newsletters/issues/1151)) ([40ac87d](https://github.com/Automattic/newspack-newsletters/commit/40ac87de9f32de6ed5dce56dae6933c15447628d))
+
+# [1.64.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.63.0...v1.64.0-alpha.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* avoid fatal error on Constant Contact ([155eb03](https://github.com/Automattic/newspack-newsletters/commit/155eb03a22d9bb584ea4754c57da585e850696d2))
+* **subscribe-block:** optimize js dependencies ([#1142](https://github.com/Automattic/newspack-newsletters/issues/1142)) ([6b7c82d](https://github.com/Automattic/newspack-newsletters/commit/6b7c82d3f9deffb6a481af26dc963040d40f01d3))
+
+
+### Features
+
+* **subscribe-block:** support input labels ([#1151](https://github.com/Automattic/newspack-newsletters/issues/1151)) ([40ac87d](https://github.com/Automattic/newspack-newsletters/commit/40ac87de9f32de6ed5dce56dae6933c15447628d))
+
 # [1.63.0](https://github.com/Automattic/newspack-newsletters/compare/v1.62.0...v1.63.0) (2023-04-24)
 
 

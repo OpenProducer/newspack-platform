@@ -7,7 +7,15 @@
 	"description": "Subscribe an email to a newsletter list.",
 	"textdomain": "newspack-newsletters",
 	"attributes": {
+		"displayInputLabels": {
+			"type": "boolean",
+			"default": false
+		},
 		"placeholder": {
+			"type": "string",
+			"default": "Email Address"
+		},
+		"emailLabel": {
 			"type": "string",
 			"default": "Email Address"
 		},
@@ -21,9 +29,17 @@
 		},
 		"namePlaceholder": {
 			"type": "string",
-			"default": ""
+			"default": "Name"
+		},
+		"nameLabel": {
+			"type": "string",
+			"default": "Name"
 		},
 		"lastNamePlaceholder": {
+			"type": "string",
+			"default": "Last Name"
+		},
+		"lastNameLabel": {
 			"type": "string",
 			"default": "Last Name"
 		},

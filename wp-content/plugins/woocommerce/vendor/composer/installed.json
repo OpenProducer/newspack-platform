@@ -451,24 +451,24 @@
         },
         {
             "name": "symfony/css-selector",
-            "version": "v4.4.44",
-            "version_normalized": "4.4.44.0",
+            "version": "v5.4.21",
+            "version_normalized": "5.4.21.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/symfony/css-selector.git",
-                "reference": "bd0a6737e48de45b4b0b7b6fc98c78404ddceaed"
+                "reference": "95f3c7468db1da8cc360b24fa2a26e7cefcb355d"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/symfony/css-selector/zipball/bd0a6737e48de45b4b0b7b6fc98c78404ddceaed",
-                "reference": "bd0a6737e48de45b4b0b7b6fc98c78404ddceaed",
+                "url": "https://api.github.com/repos/symfony/css-selector/zipball/95f3c7468db1da8cc360b24fa2a26e7cefcb355d",
+                "reference": "95f3c7468db1da8cc360b24fa2a26e7cefcb355d",
                 "shasum": ""
             },
             "require": {
-                "php": ">=7.1.3",
+                "php": ">=7.2.5",
                 "symfony/polyfill-php80": "^1.16"
             },
-            "time": "2022-06-27T13:16:42+00:00",
+            "time": "2023-02-14T08:03:56+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -500,7 +500,7 @@
             "description": "Converts CSS selectors to XPath expressions",
             "homepage": "https://symfony.com",
             "support": {
-                "source": "https://github.com/symfony/css-selector/tree/v4.4.44"
+                "source": "https://github.com/symfony/css-selector/tree/v5.4.21"
             },
             "funding": [
                 {
@@ -649,17 +649,17 @@
         },
         {
             "name": "woocommerce/woocommerce-blocks",
-            "version": "9.8.5",
-            "version_normalized": "9.8.5.0",
+            "version": "10.0.4",
+            "version_normalized": "10.0.4.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/woocommerce/woocommerce-blocks.git",
-                "reference": "95587377e1085f6cc09b6d09973bc568eb91be6f"
+                "reference": "1717e5f237b308982870da919bdd52618955c365"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/woocommerce/woocommerce-blocks/zipball/95587377e1085f6cc09b6d09973bc568eb91be6f",
-                "reference": "95587377e1085f6cc09b6d09973bc568eb91be6f",
+                "url": "https://api.github.com/repos/woocommerce/woocommerce-blocks/zipball/1717e5f237b308982870da919bdd52618955c365",
+                "reference": "1717e5f237b308982870da919bdd52618955c365",
                 "shasum": ""
             },
             "require": {
@@ -675,7 +675,7 @@
                 "wp-phpunit/wp-phpunit": "^6.0",
                 "yoast/phpunit-polyfills": "^1.0"
             },
-            "time": "2023-04-21T08:13:59+00:00",
+            "time": "2023-05-05T09:32:30+00:00",
             "type": "wordpress-plugin",
             "extra": {
                 "scripts-description": {
@@ -707,7 +707,7 @@
             ],
             "support": {
                 "issues": "https://github.com/woocommerce/woocommerce-blocks/issues",
-                "source": "https://github.com/woocommerce/woocommerce-blocks/tree/v9.8.5"
+                "source": "https://github.com/woocommerce/woocommerce-blocks/tree/v10.0.4"
             },
             "install-path": "../../packages/woocommerce-blocks"
         }

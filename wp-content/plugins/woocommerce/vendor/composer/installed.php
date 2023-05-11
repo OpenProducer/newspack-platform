@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'woocommerce/woocommerce',
-        'pretty_version' => '7.6.1',
-        'version' => '7.6.1.0',
+        'pretty_version' => '7.7.0',
+        'version' => '7.7.0.0',
         'reference' => NULL,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -77,9 +77,9 @@
             ),
         ),
         'symfony/css-selector' => array(
-            'pretty_version' => 'v4.4.44',
-            'version' => '4.4.44.0',
-            'reference' => 'bd0a6737e48de45b4b0b7b6fc98c78404ddceaed',
+            'pretty_version' => 'v5.4.21',
+            'version' => '5.4.21.0',
+            'reference' => '95f3c7468db1da8cc360b24fa2a26e7cefcb355d',
             'type' => 'library',
             'install_path' => __DIR__ . '/../symfony/css-selector',
             'aliases' => array(),
@@ -104,8 +104,8 @@
             'dev_requirement' => false,
         ),
         'woocommerce/woocommerce' => array(
-            'pretty_version' => '7.6.1',
-            'version' => '7.6.1.0',
+            'pretty_version' => '7.7.0',
+            'version' => '7.7.0.0',
             'reference' => NULL,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
@@ -113,9 +113,9 @@
             'dev_requirement' => false,
         ),
         'woocommerce/woocommerce-blocks' => array(
-            'pretty_version' => '9.8.5',
-            'version' => '9.8.5.0',
-            'reference' => '95587377e1085f6cc09b6d09973bc568eb91be6f',
+            'pretty_version' => '10.0.4',
+            'version' => '10.0.4.0',
+            'reference' => '1717e5f237b308982870da919bdd52618955c365',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../packages/woocommerce-blocks',
             'aliases' => array(),

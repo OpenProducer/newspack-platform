@@ -4,24 +4,27 @@
 import { __ } from '@wordpress/i18n';
 import { useCallback } from '@wordpress/element';
 import { useDispatch } from '@wordpress/data';
-import { InnerBlocks, InspectorControls } from '@wordpress/block-editor';
 import {
 	InnerBlockLayoutContextProvider,
 	ProductDataContextProvider,
 } from '@woocommerce/shared-context';
 import { createBlocksFromTemplate } from '@woocommerce/atomic-utils';
 import { PanelBody, Button } from '@wordpress/components';
-import { Icon, backup } from '@wordpress/icons';
+import { backup } from '@wordpress/icons';
 import { ProductResponseItem } from '@woocommerce/types';
+import {
+	InnerBlocks,
+	InspectorControls,
+	// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+	// @ts-ignore
+	BlockContextProvider,
+} from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
-import {
-	BLOCK_NAME,
-	DEFAULT_INNER_BLOCKS,
-	ALLOWED_INNER_BLOCKS,
-} from '../constants';
+import { DEFAULT_INNER_BLOCKS, ALLOWED_INNER_BLOCKS } from '../constants';
+import metadata from '../block.json';
 
 interface LayoutEditorProps {
 	isLoading: boolean;
@@ -34,7 +37,8 @@ const LayoutEditor = ( {
 	product,
 	clientId,
 }: LayoutEditorProps ) => {
-	const baseClassName = 'wc-block-single-product wc-block-layout';
+	const baseClassName =
+		'.wc-block-editor-single-product .wc-block-editor-layout';
 	const { replaceInnerBlocks } = useDispatch( 'core/block-editor' );
 
 	const resetInnerBlocks = useCallback( () => {
@@ -47,7 +51,7 @@ const LayoutEditor = ( {
 
 	return (
 		<InnerBlockLayoutContextProvider
-			parentName={ BLOCK_NAME }
+			parentName={ metadata.name }
 			parentClassName={ baseClassName }
 		>
 			<ProductDataContextProvider
@@ -66,9 +70,9 @@ const LayoutEditor = ( {
 							) }
 							onClick={ resetInnerBlocks }
 							isTertiary
-							className="wc-block-single-product__reset-layout"
+							className="wc-block-editor-single-product__reset-layout"
+							icon={ backup }
 						>
-							<Icon icon={ backup } />{ ' ' }
 							{ __(
 								'Reset layout',
 								'woo-gutenberg-products-block'
@@ -77,12 +81,15 @@ const LayoutEditor = ( {
 					</PanelBody>
 				</InspectorControls>
 				<div className={ baseClassName }>
-					<InnerBlocks
-						template={ DEFAULT_INNER_BLOCKS }
-						allowedBlocks={ ALLOWED_INNER_BLOCKS }
-						templateLock={ false }
-						renderAppender={ false }
-					/>
+					<BlockContextProvider
+						value={ { postId: product?.id, postType: 'product' } }
+					>
+						<InnerBlocks
+							template={ DEFAULT_INNER_BLOCKS }
+							allowedBlocks={ ALLOWED_INNER_BLOCKS }
+							templateLock={ false }
+						/>
+					</BlockContextProvider>
 				</div>
 			</ProductDataContextProvider>
 		</InnerBlockLayoutContextProvider>
