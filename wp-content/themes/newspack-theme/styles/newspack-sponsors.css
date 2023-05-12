@@ -13,7 +13,7 @@
 .sponsor-label button {
   align-items: center;
   background: transparent;
-  color: #515151;
+  color: var(--newspack-theme-color-text-light);
   display: inline-flex;
   margin-left: 0.15rem;
   padding: 0;
@@ -40,8 +40,8 @@
 /* stylelint-disable selector-type-no-unknown  */
 .sponsor-label .flag,
 amp-script .sponsor-label .flag {
-  background: #fed850;
-  color: #111;
+  background: var(--newspack-theme-color-highlight);
+  color: var(--newspack-theme-color-text-main);
   line-height: 1;
   padding: 0.3em 0.5em;
   text-transform: uppercase;
@@ -90,7 +90,7 @@ amp-script .sponsor-label .flag {
 }
 @media only screen and (min-width: 600px) {
   .sponsor-logos {
-    border-right: 1px solid #ccc;
+    border-right: 1px solid var(--newspack-theme-color-border);
     margin: 0 0.75rem 0 0;
   }
 }
@@ -155,7 +155,7 @@ amp-script .sponsor-label .flag {
 }
 @media only screen and (min-width: 1168px) {
   .single .entry-meta + .entry-sponsor + .sharedaddy {
-    border-left: 1px solid #ccc;
+    border-left: 1px solid var(--newspack-theme-color-border);
     margin-top: 0;
     padding-left: 1rem;
   }
@@ -216,7 +216,7 @@ amp-script .sponsor-label .flag {
 }
 
 .sponsors-show-authors .sponsor-bio {
-  border: solid #ccc;
+  border: solid var(--newspack-theme-color-border);
   border-width: 2px 0 1px;
   padding: 1rem 0;
 }
@@ -309,9 +309,9 @@ amp-script .sponsor-label .flag {
 
 .sponsor-uw-info {
   align-items: center;
-  background: #eee;
-  border: 1px solid #ccc;
-  border-left: 4px solid #36f;
+  background: var(--newspack-theme-color-bg-pre);
+  border: 1px solid var(--newspack-theme-color-border);
+  border-left: 4px solid var(--newspack-theme-color-primary);
   display: flex;
   font-size: 80%;
   padding: 1rem;

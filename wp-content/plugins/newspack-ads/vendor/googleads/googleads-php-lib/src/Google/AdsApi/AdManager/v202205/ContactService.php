@@ -91,8 +91,8 @@ class ContactService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link ContactPage} of {@link Contact} objects that satisfy the given
-     * {@link Statement#query}. The following fields are supported for filtering:
+     * Gets a {@link ContactPage} of {@link Contact} objects that satisfy the given {@link
+     * Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -139,8 +139,6 @@ class ContactService extends \Google\AdsApi\Common\AdsSoapClient
      * <td>{@link Contact#status}</td>
      * </tr>
      * </table>
-     *
-     * a set of contacts
      *
      * @param \Google\AdsApi\AdManager\v202205\Statement $statement
      * @return \Google\AdsApi\AdManager\v202205\ContactPage

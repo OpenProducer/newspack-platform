@@ -5,8 +5,8 @@
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
 .sponsor-label .flag {
-  background: #fed850;
-  color: #111;
+  background: var(--newspack-theme-color-highlight);
+  color: var(--newspack-theme-color-text-main);
   line-height: 1;
   padding: 0.3em 0.5em;
   text-transform: uppercase;

@@ -64,8 +64,10 @@ final class Reader_Activation {
 	 * Initialize hooks.
 	 */
 	public static function init() {
+		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
+		\add_action( 'wp_footer', [ __CLASS__, 'render_auth_form' ] );
+
 		if ( self::is_enabled() ) {
-			\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
 			\add_action( 'clear_auth_cookie', [ __CLASS__, 'clear_auth_intention_cookie' ] );
 			\add_action( 'clear_auth_cookie', [ __CLASS__, 'clear_auth_reader_cookie' ] );
 			\add_action( 'set_auth_cookie', [ __CLASS__, 'clear_auth_intention_cookie' ] );
@@ -76,7 +78,6 @@ final class Reader_Activation {
 			\add_action( 'newspack_magic_link_authenticated', [ __CLASS__, 'set_reader_verified' ] );
 			\add_action( 'auth_cookie_expiration', [ __CLASS__, 'auth_cookie_expiration' ], 10, 3 );
 			\add_action( 'init', [ __CLASS__, 'setup_nav_menu' ] );
-			\add_action( 'wp_footer', [ __CLASS__, 'render_auth_form' ] );
 			\add_action( 'wc_get_template', [ __CLASS__, 'replace_woocommerce_auth_form' ], 10, 2 );
 			\add_action( 'template_redirect', [ __CLASS__, 'process_auth_form' ] );
 			\add_filter( 'amp_native_post_form_allowed', '__return_true' );
@@ -93,6 +94,10 @@ final class Reader_Activation {
 	 * Enqueue front-end scripts.
 	 */
 	public static function enqueue_scripts() {
+		if ( ! self::allow_reg_block_render() ) {
+			return;
+		}
+
 		$authenticated_email = '';
 		if ( \is_user_logged_in() && self::is_user_reader( \wp_get_current_user() ) ) {
 			$authenticated_email = \wp_get_current_user()->user_email;
@@ -165,11 +170,11 @@ final class Reader_Activation {
 	 */
 	private static function get_settings_config() {
 		$settings_config = [
-			'enabled'                     => true,
-			'enabled_account_link'        => false,
+			'enabled'                     => false,
+			'enabled_account_link'        => true,
 			'account_link_menu_locations' => [ 'tertiary-menu' ],
 			'newsletters_label'           => __( 'Subscribe to our newsletters:', 'newspack' ),
-			'terms_text'                  => __( 'By signing up, you agree to our Terms and Conditions.', 'newspack' ),
+			'terms_text'                  => '',
 			'terms_url'                   => '',
 			'sync_esp'                    => true,
 			'metadata_prefix'             => Newspack_Newsletters::get_metadata_prefix(),
@@ -220,14 +225,6 @@ final class Reader_Activation {
 		}
 		$value = \get_option( self::OPTIONS_PREFIX . $name, $config[ $name ] );
 
-		// If fetching terms URL, set the default here as \get_permalink and \get_post_status aren't available on the init hook.
-		if ( 'terms_url' === $name && empty( $value ) ) {
-			$privacy_policy_page_id = \get_option( 'wp_page_for_privacy_policy' );
-			if ( ! empty( $privacy_policy_page_id ) && 'publish' === \get_post_status( $privacy_policy_page_id ) ) {
-				$value = \get_permalink( $privacy_policy_page_id );
-			}
-		}
-
 		// Use default value type for casting bool option value.
 		if ( is_bool( $config[ $name ] ) ) {
 			$value = (bool) $value;
@@ -259,6 +256,17 @@ final class Reader_Activation {
 	}
 
 	/**
+	 * Activate RAS features and publish RAS prompts + segments.
+	 */
+	public static function activate() {
+		if ( ! method_exists( '\Newspack_Popups_Presets', 'activate_ras_presets' ) ) {
+			return new \WP_Error( 'newspack_reader_activation_missing_dependencies', __( 'Newspack Campaigns plugin is required to activate Reader Activation features.', 'newspack' ) );
+		}
+
+		return \Newspack_Popups_Presets::activate_ras_presets();
+	}
+
+	/**
 	 * Check if the required Woo plugins are active.
 	 *
 	 * @return boolean True if all required plugins are active, otherwise false.
@@ -271,6 +279,183 @@ final class Reader_Activation {
 		}
 
 		return $is_active;
+	}
+
+	/**
+	 * Is the Newspack Newsletters plugin configured with an ESP?
+	 */
+	public static function is_esp_configured() {
+		$newsletters_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-newsletters' );
+
+		if ( ! $newsletters_configuration_manager->is_esp_set_up() ) {
+			return false;
+		}
+
+		$lists = $newsletters_configuration_manager->get_enabled_lists();
+		if ( empty( $lists ) || ! is_array( $lists ) ) {
+			return false;
+		}
+
+		// Can be considered fully configured if the ESP is setup and there's at least one active list.
+		foreach ( $lists as $list ) {
+			if ( $list['active'] ) {
+				return true;
+			}
+		}
+
+		return false;
+	}
+
+	/**
+	 * Are all Reader Revenue features configured and ready to use?
+	 * Platform must be "Newspack" and all donation settings must be configured.
+	 */
+	public static function is_reader_revenue_ready() {
+		$donation_settings = Donations::get_donation_settings();
+
+		if ( \is_wp_error( $donation_settings ) ) {
+			return false;
+		}
+
+		return Donations::is_platform_wc();
+	}
+
+	/**
+	 * Are the Legal Pages settings configured?
+	 * Allows for blank values.
+	 */
+	public static function is_terms_configured() {
+		$terms_text = \get_option( self::OPTIONS_PREFIX . 'terms_text', false );
+		$terms_url  = \get_option( self::OPTIONS_PREFIX . 'terms_url', false );
+
+		return is_string( $terms_text ) && is_string( $terms_url );
+	}
+
+	/**
+	 * Are Transaction Email settings configured?
+	 */
+	public static function is_transactional_email_configured() {
+		$sender_name           = \get_option( self::OPTIONS_PREFIX . 'sender_name', false );
+		$sender_email          = \get_option( self::OPTIONS_PREFIX . 'sender_email_address', false );
+		$contact_email_address = \get_option( self::OPTIONS_PREFIX . 'contact_email_address', false );
+
+		return ! empty( $sender_name ) && ! empty( $sender_email ) && ! empty( $contact_email_address );
+	}
+
+	/**
+	 * Is the RAS campaign configured?
+	 *
+	 * TODO: Make this dynamic once the third UI screen to generate the prompts is built.
+	 */
+	public static function is_ras_campaign_configured() {
+		return self::is_enabled();
+	}
+
+	/**
+	 * Are all prerequisites for Reader Activation complete?
+	 */
+	public static function is_ras_ready_to_configure() {
+		return self::is_terms_configured() && self::is_esp_configured() && self::is_transactional_email_configured() && method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha() && self::is_woocommerce_active();
+	}
+
+	/**
+	 * Get the status of the prerequisites for enabling reader activation.
+	 * TODO: Finalize the list of prerequisites and all copy.
+	 * TODO: Establish schema for input fields to be shown in expandable cards.
+	 *
+	 * @return array Array of prerequisites to complete.
+	 */
+	public static function get_prerequisites_status() {
+		$prerequisites = [
+			'terms_conditions' => [
+				'active'      => self::is_terms_configured(),
+				'label'       => __( 'Legal Pages', 'newspack' ),
+				'description' => __( 'Displaying legal pages like Privacy Policy and Terms of Service on your site is recommended for allowing readers to register and access their account.', 'newspack-plugin' ),
+				'help_url'    => 'https://help.newspack.com/engagement/reader-activation-system',
+				'warning'     => __( 'Privacy policies that tell users how you collect and use their data are essential for running a  trustworthy website. While rules and regulations can differ by country, certain legal pages might be required by law.', 'newspack' ),
+				'fields'      => [
+					'terms_text' => [
+						'label'       => __( 'Legal Pages Disclaimer Text', 'newspack' ),
+						'description' => __( 'Legal pages disclaimer text to display on registration.', 'newspack-plugin' ),
+					],
+					'terms_url'  => [
+						'label'       => __( 'Legal Pages URL', 'newspack' ),
+						'description' => __( 'URL to the page containing the privacy policy or terms of service.', 'newspack-plugin' ),
+					],
+				],
+			],
+			'esp'              => [
+				'active'       => self::is_esp_configured(),
+				'plugins'      => [
+					'newspack-newsletters' => class_exists( '\Newspack_Newsletters' ),
+				],
+				'label'        => __( 'Email Service Provider (ESP)', 'newspack' ),
+				'description'  => __( 'Connect to your ESP to register readers with their email addresses and send newsletters.', 'newspack' ),
+				'instructions' => __( 'Connect to your email service provider (ESP) and enable at least one subscription list.', 'newspack' ),
+				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
+				'href'         => \admin_url( '/admin.php?page=newspack-engagement-wizard#/newsletters' ),
+				'action_text'  => __( 'ESP settings' ),
+			],
+			'emails'           => [
+				'active'      => self::is_transactional_email_configured(),
+				'label'       => __( 'Transactional Emails', 'newspack' ),
+				'description' => __( 'Your sender name and email address determines how readers find emails related to their account in their inbox. To customize the content of these emails, visit Advanced Settings below.', 'newspack-plugin' ),
+				'help_url'    => 'https://help.newspack.com/engagement/reader-activation-system',
+				'fields'      => [
+					'sender_name'           => [
+						'label'       => __( 'Sender Name', 'newspack' ),
+						'description' => __( 'Name to use as the sender of transactional emails.', 'newspack-plugin' ),
+					],
+					'sender_email_address'  => [
+						'label'       => __( 'Sender Email Address', 'newspack' ),
+						'description' => __( 'Email address to use as the sender of transactional emails.', 'newspack-plugin' ),
+					],
+					'contact_email_address' => [
+						'label'       => __( 'Contact Email Address', 'newspack' ),
+						'description' => __( 'This email will be used as "Reply-To" for transactional emails as well.', 'newspack-plugin' ),
+					],
+				],
+			],
+			'recaptcha'        => [
+				'active'       => method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha(),
+				'label'        => __( 'reCAPTCHA v3', 'newspack' ),
+				'description'  => __( 'Connecting to a Google reCAPTCHA v3 account enables enhanced anti-spam for all Newspack sign-up blocks.', 'newspack' ),
+				'instructions' => __( 'Enable reCAPTCHA v3 and enter your account credentials.', 'newspack' ),
+				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
+				'href'         => \admin_url( '/admin.php?page=newspack-connections-wizard&scrollTo=recaptcha' ),
+				'action_text'  => __( 'reCAPTCHA settings' ),
+			],
+			'reader_revenue'   => [
+				'active'       => self::is_reader_revenue_ready(),
+				'plugins'      => [
+					'newspack-blocks'             => class_exists( '\Newspack_Blocks' ),
+					'woocommerce'                 => function_exists( 'WC' ),
+					'woocommerce-subscriptions'   => class_exists( 'WC_Subscriptions_Product' ),
+					'woocommerce-name-your-price' => class_exists( 'WC_Name_Your_Price_Helpers' ),
+				],
+				'label'        => __( 'Reader Revenue', 'newspack' ),
+				'description'  => __( 'Setting suggested donation amounts is required for enabling a streamlined donation experience.', 'newspack' ),
+				'instructions' => __( 'Set platform to "Newspack" and configure your default donation settings.', 'newspack' ),
+				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
+				'href'         => \admin_url( '/admin.php?page=newspack-reader-revenue-wizard' ),
+				'action_text'  => __( 'Reader Revenue settings' ),
+			],
+			'ras_campaign'     => [
+				'active'         => self::is_ras_campaign_configured(),
+				'plugins'        => [
+					'newspack-popups' => class_exists( '\Newspack_Popups_Model' ),
+				],
+				'label'          => __( 'Reader Activation Campaign', 'newspack' ),
+				'description'    => __( 'Building a set of prompts with default segments and settings allows for an improved experience optimized for Reader Activation.', 'newspack' ),
+				'help_url'       => 'https://help.newspack.com/engagement/reader-activation-system',
+				'href'           => self::is_ras_campaign_configured() ? \admin_url( '/admin.php?page=newspack-popups-wizard#/campaigns' ) : \admin_url( '/admin.php?page=newspack-engagement-wizard#/reader-activation/campaign' ),
+				'action_enabled' => self::is_ras_ready_to_configure(),
+				'action_text'    => __( 'Reader Activation campaign', 'newspack' ),
+				'disabled_text'  => __( 'Waiting for all settings to be ready', 'newspack' ),
+			],
+		];
+
+		return $prerequisites;
 	}
 
 	/**
@@ -293,7 +478,7 @@ final class Reader_Activation {
 		}
 
 		if ( $is_enabled ) {
-			$is_enabled = (bool) \get_option( self::OPTIONS_PREFIX . 'enabled', true );
+			$is_enabled = (bool) \get_option( self::OPTIONS_PREFIX . 'enabled', false );
 		}
 
 		/**
@@ -302,6 +487,21 @@ final class Reader_Activation {
 		 * @param bool $is_enabled Whether reader activation is enabled.
 		 */
 		return \apply_filters( 'newspack_reader_activation_enabled', $is_enabled );
+	}
+
+	/**
+	 * Whether or not to render the Registration block front-end.
+	 * This must be allowed to render before RAS is enabled in the context of previews.
+	 *
+	 * @return boolean
+	 */
+	public static function allow_reg_block_render() {
+		if ( ! class_exists( '\Newspack_Popups' ) ) {
+			return self::is_enabled();
+		}
+
+		// If RAS is not enabled yet, allow to render when previewing a campaign prompt.
+		return self::is_enabled() || ( method_exists( '\Newspack_Popups', 'is_preview_request' ) && \Newspack_Popups::is_preview_request() );
 	}
 
 	/**
@@ -762,8 +962,8 @@ final class Reader_Activation {
 	 * @param boolean $is_inline If true, render the form inline, otherwise render as a modal.
 	 */
 	public static function render_auth_form( $is_inline = false ) {
-		// No need to render when logged in.
-		if ( \is_user_logged_in() ) {
+		// No need to render if RAS is disabled and not a preview request.
+		if ( ! self::allow_reg_block_render() ) {
 			return;
 		}
 

@@ -228,9 +228,17 @@ class Newspack_Popups_Importer {
 		$prompts = $this->pre_process_prompts_terms( $prompts );
 
 		foreach ( $prompts as $prompt ) {
+			$prompt_slug       = isset( $prompt['slug'] ) ? $prompt['slug'] : null;
+			$prompt_content    = $prompt['content'];
+			$user_input_fields = isset( $prompt['user_input_fields'] ) ? $prompt['user_input_fields'] : [];
+
+			foreach ( $user_input_fields as $field ) {
+				$prompt_content = Newspack_Popups_Presets::process_user_inputs( $prompt_content, $field );
+			}
+
 			$post_data = [
 				'post_title'   => $prompt['title'],
-				'post_content' => $prompt['content'],
+				'post_content' => $prompt_content,
 				'post_status'  => $prompt['status'],
 				'post_type'    => Newspack_Popups::NEWSPACK_POPUPS_CPT,
 			];
@@ -252,6 +260,11 @@ class Newspack_Popups_Importer {
 			}
 			if ( ! empty( $prompt['tags'] ) ) {
 				Newspack_Popups_Model::set_popup_terms( $new_post, $prompt['tags'], 'post_tag' );
+			}
+
+			// If there's a featured image.
+			if ( ! empty( $prompt['featured_image_id'] ) && false !== wp_get_attachment_url( (int) $prompt['featured_image_id'] ) ) {
+				set_post_thumbnail( $new_post, (int) $prompt['featured_image_id'] );
 			}
 		}
 	}

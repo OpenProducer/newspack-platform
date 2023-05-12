@@ -25,6 +25,7 @@ return array(
     'Newspack_Popups_Model' => $baseDir . '/includes/class-newspack-popups-model.php',
     'Newspack_Popups_Newsletters' => $baseDir . '/includes/class-newspack-popups-newsletters.php',
     'Newspack_Popups_Parse_Logs' => $baseDir . '/includes/class-newspack-popups-parse-logs.php',
+    'Newspack_Popups_Presets' => $baseDir . '/includes/class-newspack-popups-presets.php',
     'Newspack_Popups_Segmentation' => $baseDir . '/includes/class-newspack-popups-segmentation.php',
     'Newspack_Popups_Settings' => $baseDir . '/includes/class-newspack-popups-settings.php',
     'Newspack_Popups_View_As' => $baseDir . '/includes/class-newspack-popups-view-as.php',

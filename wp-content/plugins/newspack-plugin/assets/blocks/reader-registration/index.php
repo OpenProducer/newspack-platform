@@ -28,7 +28,7 @@ function register_block() {
 	);
 
 	// No need to register block styles if Reader Activation is disabled.
-	if ( ! Reader_Activation::is_enabled() ) {
+	if ( ! Reader_Activation::is_enabled( false ) ) {
 		return;
 	}
 
@@ -54,8 +54,8 @@ add_action( 'init', __NAMESPACE__ . '\\register_block' );
  * Enqueue front-end scripts.
  */
 function enqueue_scripts() {
-	// No need to enqueue scripts if Reader Activation is disabled.
-	if ( ! Reader_Activation::is_enabled() ) {
+	// No need to enqueue scripts if Reader Activation is disabled and not a preview request.
+	if ( ! Reader_Activation::allow_reg_block_render() ) {
 		return;
 	}
 
@@ -99,8 +99,8 @@ function get_form_id() {
  * @param string  $content Block content (inner blocks) – success state in this case.
  */
 function render_block( $attrs, $content ) {
-	// Render nothing if Reader Activation is disabled.
-	if ( ! Reader_Activation::is_enabled() ) {
+	// Render nothing if Reader Activation is disabled and not a preview request.
+	if ( ! Reader_Activation::allow_reg_block_render() ) {
 		return '';
 	}
 
@@ -152,7 +152,7 @@ function render_block( $attrs, $content ) {
 	if (
 		! \is_preview() &&
 		! $is_admin_preview &&
-		( ! method_exists( 'Newspack_Popups', 'is_preview_request' ) || ! \Newspack_Popups::is_preview_request() ) &&
+		( ! method_exists( '\Newspack_Popups', 'is_preview_request' ) || ! \Newspack_Popups::is_preview_request() ) &&
 		(
 			\is_user_logged_in() ||
 			( isset( $_GET['newspack_reader'] ) && absint( $_GET['newspack_reader'] ) )

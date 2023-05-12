@@ -194,6 +194,14 @@ class Newspack_Popups_Exporter {
 			unset( $prompt['options']['utm_suppression'] );
 		}
 
+		// We do not export custom taxonomies added to the popup.
+		$custom_taxonomies = Newspack_Popups_Model::get_custom_taxonomies();
+		foreach ( $custom_taxonomies as $custom_tax ) {
+			if ( isset( $prompt[ $custom_tax ] ) ) {
+				unset( $prompt[ $custom_tax ] );
+			}
+		}
+
 		return $prompt;
 
 	}

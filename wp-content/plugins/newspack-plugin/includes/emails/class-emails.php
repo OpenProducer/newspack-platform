@@ -382,7 +382,7 @@ class Emails {
 	public static function get_reply_to_email() {
 		$reply_to_email = get_bloginfo( 'admin_email' );
 		if ( Reader_Activation::is_enabled() ) {
-			$reply_to_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'contact_email_address', self::get_from_email() );
+			$reply_to_email = get_option( Reader_Activation::OPTIONS_PREFIX . 'contact_email_address', $reply_to_email );
 		}
 		return apply_filters( 'newspack_reply_to_email', $reply_to_email );
 	}

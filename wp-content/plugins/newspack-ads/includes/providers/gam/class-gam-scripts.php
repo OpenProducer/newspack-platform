@@ -372,7 +372,7 @@ final class GAM_Scripts {
 						 * Handle slot visibility.
 						 */
 						?>
-						if ( event.isEmpty && ( ! ad_unit.fixed_height.active || ( ad_unit.fixed_height.active && ! ad_unit.in_viewport ) ) ) {
+						if ( event.isEmpty && ( ad_unit.sticky || ! ad_unit.fixed_height.active || ( ad_unit.fixed_height.active && ! ad_unit.in_viewport ) ) ) {
 							container.parentNode.style.display = 'none';
 						} else {
 							container.parentNode.style.display = 'flex';
@@ -397,6 +397,52 @@ final class GAM_Scripts {
 							}
 						}
 					} );
+					<?php
+					/**
+					 * Handle Sticky Ads.
+					 */
+					?>
+					if ( ad_unit.sticky ) {
+						var stickyContainer = container.parentNode;
+						var stickyClose = stickyContainer.querySelector( 'button.newspack_sticky_ad__close' );
+						var initialBodyPadding = document.body.style.paddingBottom;
+						if ( stickyClose ) {
+							stickyClose.addEventListener( 'click', function() {
+								stickyContainer.parentNode.removeChild( stickyContainer );
+								document.body.style.paddingBottom = initialBodyPadding;
+							} );
+						}
+						googletag.pubads().addEventListener( 'slotRenderEnded', function( event ) {
+							var container = document.getElementById( event.slot.getSlotElementId() );
+							if ( ! container ) {
+								return;
+							}
+							var ad_unit = container.ad_unit;
+							if ( ! ad_unit || ! ad_unit.sticky ) {
+								return;
+							}
+							if ( ! event.isEmpty && document.body.clientWidth <= 600 ) {
+								stickyContainer.style.display = 'flex';
+								document.body.style.paddingBottom = stickyContainer.clientHeight + 'px';
+							}
+						} );
+					}
+					<?php
+					/**
+					 * Sticky header & sticky ad handling.
+					 *
+					 * If the site uses sticky header and a sticky ad, the ad should
+					 * be offset by the header height in order to stack the sticky
+					 * elements on top of each other.
+					 */
+					?>
+					( function () {
+						var stickyAd = document.querySelector( '.h-stk .stick-to-top:last-child' );
+						var siteHeader = document.querySelector( '.h-stk .site-header' );
+						if ( stickyAd && siteHeader ) {
+							stickyAd.style.top = 'calc(' + siteHeader.offsetHeight + 'px + 1rem)';
+						}
+					} )();
 				} );
 			} )();
 		</script>

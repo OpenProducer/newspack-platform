@@ -97,6 +97,9 @@ class Reader_Revenue_Wizard extends Wizard {
 						'sanitize_callback' => 'Newspack\newspack_clean',
 						'validate_callback' => [ $this, 'api_validate_not_empty' ],
 					],
+					'nrh_custom_domain'          => [
+						'sanitize_callback' => 'Newspack\newspack_clean',
+					],
 					'nrh_salesforce_campaign_id' => [
 						'sanitize_callback' => 'Newspack\newspack_clean',
 					],
@@ -274,14 +277,10 @@ class Reader_Revenue_Wizard extends Wizard {
 		$params   = $request->get_params();
 		$platform = $params['platform'];
 		Donations::set_platform_slug( $platform );
-		if ( 'nrh' === $platform && isset( $params['nrh_organization_id'] ) ) {
-			$nrh_config = [
-				'nrh_organization_id' => $params['nrh_organization_id'],
-			];
-			if ( isset( $params['nrh_salesforce_campaign_id'] ) ) {
-				$nrh_config['nrh_salesforce_campaign_id'] = $params['nrh_salesforce_campaign_id'];
-			}
-			update_option( NEWSPACK_NRH_CONFIG, $nrh_config );
+
+		// Update NRH settings.
+		if ( 'nrh' === $platform ) {
+			NRH::update_settings( $params );
 		}
 
 		// Ensure that any Reader Revenue settings changed while the platform wasn't WC are persisted to WC products.

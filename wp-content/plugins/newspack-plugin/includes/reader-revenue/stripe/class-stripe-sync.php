@@ -423,8 +423,9 @@ Running Stripe Connect to Stripe Subscriptions Migration...
 	 * @param array $assoc_args Associative args.
 	 */
 	public static function sync_stripe_subscriptions_to_wc( $args, $assoc_args ) {
-		$is_dry_run = ! empty( $assoc_args['dry-run'] );
-		$batch_size = ! empty( $assoc_args['batch-size'] ) ? intval( $assoc_args['batch-size'] ) : 10;
+		$is_dry_run     = ! empty( $assoc_args['dry-run'] );
+		$force_override = ! empty( $assoc_args['force'] );
+		$batch_size     = ! empty( $assoc_args['batch-size'] ) ? intval( $assoc_args['batch-size'] ) : 10;
 
 		\WP_CLI::log(
 			'
@@ -442,8 +443,9 @@ Running Stripe to WC Subscriptions Migration...
 			self::process_stripe_subscriber(
 				$customer,
 				[
-					'dry_run'       => $is_dry_run,
-					'migrate_to_wc' => true,
+					'dry_run'                     => $is_dry_run,
+					'force_subscription_override' => $force_override,
+					'migrate_to_wc'               => true,
 				]
 			);
 
@@ -454,6 +456,75 @@ Running Stripe to WC Subscriptions Migration...
 		}
 
 		\WP_CLI::success( 'Finished processing.' );
+	}
+
+	/**
+	 * CLI command for finding previously migrated Stripe Subscriptions in Woo and ensuring they have a next payment date set.
+	 *
+	 * @param array $args Positional args.
+	 * @param array $assoc_args Associative args.
+	 */
+	public static function set_next_payment_dates_for_migrated_subscriptions( $args, $assoc_args ) {
+		$is_dry_run = ! empty( $assoc_args['dry-run'] );
+		$batch_size = ! empty( $assoc_args['batch-size'] ) ? intval( $assoc_args['batch-size'] ) : 10;
+
+		\WP_CLI::log(
+			'
+
+Running script to set next payment dates on migrated subscriptions...
+
+		'
+		);
+
+
+		$migrated_subscriptions = self::get_migrated_subscriptions( $batch_size );
+		$offset                 = 0;
+		$processed              = 0;
+		while ( $migrated_subscriptions ) {
+			$subscription_id = array_shift( $migrated_subscriptions );
+
+			// Set next payment date.
+			$subscription = \wcs_get_subscription( $subscription_id );
+			if ( $subscription ) {
+				\WP_CLI::log(
+					sprintf(
+						'Found subscription with ID %d and start date %s.',
+						$subscription_id,
+						$subscription->get_date( 'start' )
+					)
+				);
+
+				// Get the next payment date.
+				$next_payment_date = $subscription->get_date( 'next_payment' );
+
+				// If there's no next payment, set it.
+				if ( ! $next_payment_date ) {
+					$next_payment_date = $subscription->calculate_date( 'next_payment' );
+					\WP_CLI::log( sprintf( 'No next payment date set. Setting to %s.', $next_payment_date ) );
+
+					if ( ! $is_dry_run ) {
+						$subscription->update_dates(
+							[
+								'next_payment' => $next_payment_date,
+							]
+						);
+
+						$subscription->save();
+					}
+					$processed ++;
+				} else {
+					\WP_CLI::log( sprintf( 'Next payment date already set to %s. Skipping.', $next_payment_date ) );
+				}
+			}
+
+			// Get the next batch.
+			if ( empty( $migrated_subscriptions ) ) {
+				$offset                += $batch_size;
+				$migrated_subscriptions = self::get_migrated_subscriptions( $batch_size, $offset );
+			}
+		}
+
+		\WP_CLI::success( sprintf( 'Finished processing %d subscriptions.', $processed ) );
 	}
 
 	/**
@@ -482,6 +553,29 @@ Running Stripe to WC Subscriptions Migration...
 		} catch ( \Throwable $e ) {
 			\WP_CLI::error( sprintf( 'Could not process all customers: %s', $e->getMessage() ) );
 		}
+	}
+
+	/**
+	 * Get a batch of migrated subscriptions.
+	 *
+	 * @param int $batch_size Number of subscriptions to fetch.
+	 * @param int $offset Offset to start at.
+	 * @return array Array of WC Subscriptions.
+	 */
+	protected static function get_migrated_subscriptions( $batch_size = 0, $offset = 0 ) {
+		$args = [
+			'fields'         => 'ids',
+			'offset'         => $offset,
+			'post_status'    => 'wc-active',
+			'post_type'      => 'shop_subscription',
+			'posts_per_page' => $batch_size,
+			'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+				'key'     => 'cancelled-newspack-stripe-subscription-id',
+				'compare' => 'EXISTS',
+			],
+		];
+
+		return \get_posts( $args );
 	}
 
 	/**
@@ -514,7 +608,7 @@ Running Stripe to WC Subscriptions Migration...
 				continue;
 			}
 
-			if ( 'active' !== $existing_subscription->status ) {
+			if ( ! in_array( $existing_subscription->status, [ 'active', 'trialing' ], true ) ) {
 				\WP_CLI::log( '  - Subscription is not active. Skipping.' );
 				return;
 			}
@@ -544,8 +638,9 @@ Running Stripe to WC Subscriptions Migration...
 					$source_id = $customer->invoice_settings->default_payment_method ?? $customer->default_source;
 
 					$stripe_metadata_base = [
-						'stripe_customer_id' => $customer->id,
-						'stripe_source_id'   => $source_id,
+						'stripe_customer_id'       => $customer->id,
+						'stripe_source_id'         => $source_id,
+						'stripe_next_payment_date' => $existing_subscription->current_period_end,
 					];
 
 					// Check if this subscription is already synchronised (shadowed) in WooCommerce.
@@ -691,7 +786,33 @@ Running Stripe to WC Subscriptions Migration...
 			'newspack stripe sync-stripe-subscriptions-to-wc',
 			[ __CLASS__, 'sync_stripe_subscriptions_to_wc' ],
 			[
-				'shortdesc' => __( 'Migrate subscribtions from Stripe to WC', 'newspack' ),
+				'shortdesc' => __( 'Migrate subscriptions from Stripe to WC', 'newspack' ),
+				'synopsis'  => [
+					[
+						'type'     => 'flag',
+						'name'     => 'dry-run',
+						'optional' => true,
+					],
+					[
+						'type'     => 'flag',
+						'name'     => 'force',
+						'optional' => true,
+					],
+					[
+						'type'     => 'flag',
+						'name'     => 'batch-size',
+						'default'  => 10,
+						'optional' => true,
+					],
+				],
+			]
+		);
+
+		\WP_CLI::add_command(
+			'newspack stripe set-next-payment-dates-for-migrated-subscriptions',
+			[ __CLASS__, 'set_next_payment_dates_for_migrated_subscriptions' ],
+			[
+				'shortdesc' => __( 'Ensure that all migrated subscriptions have a next payment date.', 'newspack' ),
 				'synopsis'  => [
 					[
 						'type'     => 'flag',

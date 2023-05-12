@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!-- Generated file, do not edit -->
-<!-- Copyright 2022 Google Inc. All Rights Reserved -->
+<!-- Copyright 2023 Google Inc. All Rights Reserved -->
 <wsdl:definitions
   targetNamespace="https://www.google.com/apis/ads/publisher/v202205"
   xmlns:tns="https://www.google.com/apis/ads/publisher/v202205"
@@ -227,29 +227,26 @@
       <complexType name="CreativeWrapper">
         <annotation>
           <documentation>
-            A {@code CreativeWrapper} allows the wrapping of HTML snippets to be
-            served along with {@code Creative} objects.
-            &lt;p&gt;
-            Creative wrappers must be associated with a
-            {@link LabelType#CREATIVE_WRAPPER} label and applied to ad units by
-            {@link AdUnit#appliedLabels}.
+            A {@code CreativeWrapper} allows the wrapping of HTML snippets to be served along with {@code
+            Creative} objects.
+            
+            &lt;p&gt;Creative wrappers must be associated with a {@link LabelType#CREATIVE_WRAPPER} label and
+            applied to ad units by {@link AdUnit#appliedLabels}.
           </documentation>
         </annotation>
         <sequence>
           <element maxOccurs="1" minOccurs="0" name="id" type="xsd:long">
             <annotation>
               <documentation>
-                The unique ID of the {@code CreativeWrapper}. This value is readonly
-                and is assigned by Google.
+                The unique ID of the {@code CreativeWrapper}. This value is readonly and is assigned by Google.
               </documentation>
             </annotation>
           </element>
           <element maxOccurs="1" minOccurs="0" name="labelId" type="xsd:long">
             <annotation>
               <documentation>
-                The ID of the {@link Label} which will be used to label ad units. The
-                {@code labelId} on a creative wrapper cannot be changed once it is
-                created.
+                The ID of the {@link Label} which will be used to label ad units. The {@code labelId} on a
+                creative wrapper cannot be changed once it is created.
               </documentation>
             </annotation>
           </element>
@@ -257,10 +254,10 @@
             name="creativeWrapperType" type="tns:CreativeWrapperType">
             <annotation>
               <documentation>
-                The creative wrapper type. If the creative wrapper type is
-                {@link CreativeWrapperType#VIDEO_TRACKING_URL}, the {@code videoTrackingUrls} field must be
-                set. If the creative wrapper type is {@link CreativeWrapperType#HTML}, either the
-                {@code header} or {@code footer} field must be set. This field is required.
+                The creative wrapper type. If the creative wrapper type is {@link
+                CreativeWrapperType#VIDEO_TRACKING_URL}, the {@code videoTrackingUrls} field must be set. If
+                the creative wrapper type is {@link CreativeWrapperType#HTML}, either the {@code header} or
+                {@code footer} field must be set. This field is required.
               </documentation>
             </annotation>
           </element>
@@ -316,9 +313,8 @@
           <element maxOccurs="1" minOccurs="0" name="ordering" type="tns:CreativeWrapperOrdering">
             <annotation>
               <documentation>
-                If there are multiple wrappers for a creative, then
-                {@code ordering} defines the order in which the HTML
-                snippets are rendered.
+                If there are multiple wrappers for a creative, then {@code ordering} defines the order in which
+                the HTML snippets are rendered.
               </documentation>
             </annotation>
           </element>
@@ -962,8 +958,8 @@
       <complexType name="ThirdPartyDataDeclaration">
         <annotation>
           <documentation>
-            Represents a set of declarations about what (if any) third party companies are
-            associated with a given creative.
+            Represents a set of declarations about what (if any) third party companies are associated with a
+            given creative.
             
             &lt;p&gt;This can be set at the network level, as a default for all creatives, or overridden for a
             particular creative.
@@ -2074,16 +2070,13 @@
           <documentation>
             Creates a new {@code CreativeWrapper} objects.
             
-            The following fields are required:
-            &lt;ul&gt;
-            &lt;li&gt;{@link CreativeWrapper#labelId}&lt;/li&gt;
-            &lt;li&gt;{@link CreativeWrapper#ordering}&lt;/li&gt;
-            &lt;li&gt;{@link CreativeWrapper#header} or {@link CreativeWrapper#footer}&lt;/li&gt;
-            &lt;/ul&gt;
+            &lt;p&gt;The following fields are required:
             
-            @param creativeWrappers the creative wrappers to create
-            @return the creative wrappers with their IDs filled in
-            @throws ApiException
+            &lt;ul&gt;
+            &lt;li&gt;{@link CreativeWrapper#labelId}
+            &lt;li&gt;{@link CreativeWrapper#ordering}
+            &lt;li&gt;{@link CreativeWrapper#header} or {@link CreativeWrapper#footer}
+            &lt;/ul&gt;
           </documentation>
         </annotation>
         <complexType>
@@ -2110,9 +2103,8 @@
       <element name="getCreativeWrappersByStatement">
         <annotation>
           <documentation>
-            Gets a {@link CreativeWrapperPage} of {@link CreativeWrapper}
-            objects that satisfy the given {@link Statement#query}. The following
-            fields are supported for filtering:
+            Gets a {@link CreativeWrapperPage} of {@link CreativeWrapper} objects that satisfy the given
+            {@link Statement#query}. The following fields are supported for filtering:
             
             &lt;table&gt;
             &lt;tr&gt;
@@ -2135,10 +2127,6 @@
             &lt;td&gt;{@link CreativeWrapper#ordering}&lt;/td&gt;
             &lt;/tr&gt;
             &lt;/table&gt;
-            
-            @param filterStatement a Publisher Query Language statement used to filter
-            a set of creative wrappers.
-            @return the creative wrappers that match the given filter
           </documentation>
         </annotation>
         <complexType>
@@ -2157,13 +2145,8 @@
       <element name="performCreativeWrapperAction">
         <annotation>
           <documentation>
-            Performs actions on {@link CreativeWrapper} objects that match the
-            given {@link Statement#query}.
-            
-            @param creativeWrapperAction the action to perform
-            @param filterStatement a Publisher Query Language statement used to filter
-            a set of labels
-            @return the result of the action performed
+            Performs actions on {@link CreativeWrapper} objects that match the given {@link
+            Statement#query}.
           </documentation>
         </annotation>
         <complexType>
@@ -2185,10 +2168,6 @@
         <annotation>
           <documentation>
             Updates the specified {@code CreativeWrapper} objects.
-            
-            @param creativeWrappers the creative wrappers to update
-            @return the updated creative wrapper objects
-            @throws ApiException
           </documentation>
         </annotation>
         <complexType>
@@ -2244,28 +2223,23 @@
   </wsdl:message>
   <wsdl:portType name="CreativeWrapperServiceInterface">
     <wsdl:documentation>
-      Provides methods for the creation and management of creative wrappers.
-      {@link CreativeWrapper CreativeWrappers} allow HTML snippets to be
-      served along with creatives.
-      &lt;p&gt;
-      Creative wrappers must be associated with a
-      {@link LabelType#CREATIVE_WRAPPER} label and applied to ad units by
-      {@link AdUnit#appliedLabels}.
+      Provides methods for the creation and management of creative wrappers. {@link CreativeWrapper
+      CreativeWrappers} allow HTML snippets to be served along with creatives.
+      
+      &lt;p&gt;Creative wrappers must be associated with a {@link LabelType#CREATIVE_WRAPPER} label and
+      applied to ad units by {@link AdUnit#appliedLabels}.
     </wsdl:documentation>
     <wsdl:operation name="createCreativeWrappers">
       <wsdl:documentation>
         Creates a new {@code CreativeWrapper} objects.
         
-        The following fields are required:
-        &lt;ul&gt;
-        &lt;li&gt;{@link CreativeWrapper#labelId}&lt;/li&gt;
-        &lt;li&gt;{@link CreativeWrapper#ordering}&lt;/li&gt;
-        &lt;li&gt;{@link CreativeWrapper#header} or {@link CreativeWrapper#footer}&lt;/li&gt;
-        &lt;/ul&gt;
+        &lt;p&gt;The following fields are required:
         
-        @param creativeWrappers the creative wrappers to create
-        @return the creative wrappers with their IDs filled in
-        @throws ApiException
+        &lt;ul&gt;
+        &lt;li&gt;{@link CreativeWrapper#labelId}
+        &lt;li&gt;{@link CreativeWrapper#ordering}
+        &lt;li&gt;{@link CreativeWrapper#header} or {@link CreativeWrapper#footer}
+        &lt;/ul&gt;
       </wsdl:documentation>
       <wsdl:input message="tns:createCreativeWrappersRequest" name="createCreativeWrappersRequest"/>
       <wsdl:output message="tns:createCreativeWrappersResponse" name="createCreativeWrappersResponse"/>
@@ -2273,9 +2247,8 @@
     </wsdl:operation>
     <wsdl:operation name="getCreativeWrappersByStatement">
       <wsdl:documentation>
-        Gets a {@link CreativeWrapperPage} of {@link CreativeWrapper}
-        objects that satisfy the given {@link Statement#query}. The following
-        fields are supported for filtering:
+        Gets a {@link CreativeWrapperPage} of {@link CreativeWrapper} objects that satisfy the given
+        {@link Statement#query}. The following fields are supported for filtering:
         
         &lt;table&gt;
         &lt;tr&gt;
@@ -2298,10 +2271,6 @@
         &lt;td&gt;{@link CreativeWrapper#ordering}&lt;/td&gt;
         &lt;/tr&gt;
         &lt;/table&gt;
-        
-        @param filterStatement a Publisher Query Language statement used to filter
-        a set of creative wrappers.
-        @return the creative wrappers that match the given filter
       </wsdl:documentation>
       <wsdl:input message="tns:getCreativeWrappersByStatementRequest" name="getCreativeWrappersByStatementRequest"/>
       <wsdl:output message="tns:getCreativeWrappersByStatementResponse" name="getCreativeWrappersByStatementResponse"/>
@@ -2309,13 +2278,8 @@
     </wsdl:operation>
     <wsdl:operation name="performCreativeWrapperAction">
       <wsdl:documentation>
-        Performs actions on {@link CreativeWrapper} objects that match the
-        given {@link Statement#query}.
-        
-        @param creativeWrapperAction the action to perform
-        @param filterStatement a Publisher Query Language statement used to filter
-        a set of labels
-        @return the result of the action performed
+        Performs actions on {@link CreativeWrapper} objects that match the given {@link
+        Statement#query}.
       </wsdl:documentation>
       <wsdl:input message="tns:performCreativeWrapperActionRequest" name="performCreativeWrapperActionRequest"/>
       <wsdl:output message="tns:performCreativeWrapperActionResponse" name="performCreativeWrapperActionResponse"/>
@@ -2324,10 +2288,6 @@
     <wsdl:operation name="updateCreativeWrappers">
       <wsdl:documentation>
         Updates the specified {@code CreativeWrapper} objects.
-        
-        @param creativeWrappers the creative wrappers to update
-        @return the updated creative wrapper objects
-        @throws ApiException
       </wsdl:documentation>
       <wsdl:input message="tns:updateCreativeWrappersRequest" name="updateCreativeWrappersRequest"/>
       <wsdl:output message="tns:updateCreativeWrappersResponse" name="updateCreativeWrappersResponse"/>

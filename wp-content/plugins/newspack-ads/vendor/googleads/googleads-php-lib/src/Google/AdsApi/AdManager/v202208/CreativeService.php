@@ -171,9 +171,8 @@ class CreativeService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link CreativePage} of {@link Creative} objects that satisfy the
-     * given {@link Statement#query}. The following fields are supported for
-     * filtering:
+     * Gets a {@link CreativePage} of {@link Creative} objects that satisfy the given {@link
+     * Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -204,8 +203,6 @@ class CreativeService extends \Google\AdsApi\Common\AdsSoapClient
      * <td>{@link Creative#lastModifiedDateTime}</td>
      * </tr>
      * </table>
-     *
-     * a set of creatives
      *
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202208\CreativePage

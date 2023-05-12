@@ -224,6 +224,44 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
+	 * Get an array of options from abbreviated query parameters.
+	 *
+	 * @return array Array of options.
+	 */
+	public static function get_preview_query_options() {
+		$options_filters = [
+			'background_color'               => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'display_title'                  => FILTER_VALIDATE_BOOLEAN,
+			'hide_border'                    => FILTER_VALIDATE_BOOLEAN,
+			'large_border'                   => FILTER_VALIDATE_BOOLEAN,
+			'frequency'                      => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'frequency_max'                  => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'frequency_start'                => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'frequency_between'              => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'frequency_reset'                => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'overlay_color'                  => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'overlay_opacity'                => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'overlay_size'                   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'no_overlay_background'          => FILTER_VALIDATE_BOOLEAN,
+			'placement'                      => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'trigger_type'                   => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'trigger_delay'                  => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'trigger_scroll_progress'        => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'trigger_blocks_count'           => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'archive_insertion_posts_count'  => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+			'archive_insertion_is_repeating' => FILTER_VALIDATE_BOOLEAN,
+			'utm_suppression'                => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
+		];
+
+		$options = [];
+		foreach ( $options_filters as $option => $filter ) {
+			$options[ $option ] = filter_input( INPUT_GET, Newspack_Popups::PREVIEW_QUERY_KEYS[ $option ], $filter );
+		}
+
+		return $options;
+	}
+
+	/**
 	 * Retrieve popup preview CPT post.
 	 *
 	 * @param string $post_id Post id.
@@ -236,33 +274,7 @@ final class Newspack_Popups_Model {
 		// Setting proper id for correct API calls.
 		$post_object->ID = $post_id;
 
-		return self::create_popup_object(
-			$post_object,
-			false,
-			[
-				'background_color'               => filter_input( INPUT_GET, 'n_bc', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'display_title'                  => filter_input( INPUT_GET, 'n_ti', FILTER_VALIDATE_BOOLEAN ),
-				'hide_border'                    => filter_input( INPUT_GET, 'n_hb', FILTER_VALIDATE_BOOLEAN ),
-				'large_border'                   => filter_input( INPUT_GET, 'n_lb', FILTER_VALIDATE_BOOLEAN ),
-				'frequency'                      => filter_input( INPUT_GET, 'n_fr', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'frequency_max'                  => filter_input( INPUT_GET, 'n_fm', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'frequency_start'                => filter_input( INPUT_GET, 'n_fs', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'frequency_between'              => filter_input( INPUT_GET, 'n_fb', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'frequency_reset'                => filter_input( INPUT_GET, 'n_ft', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'overlay_color'                  => filter_input( INPUT_GET, 'n_oc', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'overlay_opacity'                => filter_input( INPUT_GET, 'n_oo', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'overlay_size'                   => filter_input( INPUT_GET, 'n_os', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'no_overlay_background'          => filter_input( INPUT_GET, 'n_bg', FILTER_VALIDATE_BOOLEAN ),
-				'placement'                      => filter_input( INPUT_GET, 'n_pl', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'trigger_type'                   => filter_input( INPUT_GET, 'n_tt', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'trigger_delay'                  => filter_input( INPUT_GET, 'n_td', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'trigger_scroll_progress'        => filter_input( INPUT_GET, 'n_ts', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'trigger_blocks_count'           => filter_input( INPUT_GET, 'n_tb', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'archive_insertion_posts_count'  => filter_input( INPUT_GET, 'n_ac', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-				'archive_insertion_is_repeating' => filter_input( INPUT_GET, 'n_ar', FILTER_VALIDATE_BOOLEAN ),
-				'utm_suppression'                => filter_input( INPUT_GET, 'n_ut', FILTER_SANITIZE_FULL_SPECIAL_CHARS ),
-			]
-		);
+		return self::create_popup_object( $post_object, false, self::get_preview_query_options() );
 	}
 
 	/**
@@ -613,6 +625,12 @@ final class Newspack_Popups_Model {
 			$popup['categories']      = get_the_category( $id );
 			$popup['tags']            = get_the_tags( $id );
 			$popup['campaign_groups'] = get_the_terms( $id, Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY );
+
+			$all_taxonomies = self::get_custom_taxonomies();
+
+			foreach ( $all_taxonomies as $custom_taxonomy ) {
+				$popup[ $custom_taxonomy ] = get_the_terms( $id, $custom_taxonomy );
+			}
 		}
 
 		$duplicate_of = get_post_meta( $id, 'duplicate_of', true );
@@ -652,6 +670,16 @@ final class Newspack_Popups_Model {
 		}
 
 		return $popup;
+	}
+
+	/**
+	 * Gets custom taxonomies that are assigned to the popup post type.
+	 *
+	 * @return array
+	 */
+	public static function get_custom_taxonomies() {
+		$all_taxonomies = get_object_taxonomies( Newspack_Popups::NEWSPACK_POPUPS_CPT );
+		return array_diff( $all_taxonomies, [ Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY, 'category', 'post_tag' ] );
 	}
 
 	/**
@@ -1055,7 +1083,7 @@ final class Newspack_Popups_Model {
 		if ( Newspack_Popups_Settings::is_non_interactive() ) {
 			return '';
 		}
-		if ( Newspack_Popups::previewed_popup_id() ) {
+		if ( Newspack_Popups::previewed_popup_id() || Newspack_Popups::preset_popup_id() ) {
 			return '';
 		}
 		// The amp-access endpoint is queried only once (on page load), but after changing block settings,
@@ -1196,6 +1224,9 @@ final class Newspack_Popups_Model {
 		if ( Newspack_Popups::previewed_popup_id() ) {
 			$popup = self::retrieve_preview_popup( Newspack_Popups::previewed_popup_id() );
 		}
+		if ( Newspack_Popups::preset_popup_id() ) {
+			$popup = Newspack_Popups_Presets::retrieve_preset_popup( Newspack_Popups::preset_popup_id() );
+		}
 
 		if ( self::is_overlay( $popup ) && self::is_overlay( $popup ) && has_block( 'newspack-blocks/homepage-articles', $popup['content'] ) ) {
 			add_filter( 'newspack_blocks_homepage_enable_duplication', '__return_true' );
@@ -1227,7 +1258,7 @@ final class Newspack_Popups_Model {
 		$no_overlay_background = $popup['options']['no_overlay_background'];
 		$hidden_fields         = self::get_hidden_fields( $popup );
 		$is_newsletter_prompt  = self::has_newsletter_prompt( $popup );
-		$has_featured_image    = has_post_thumbnail( $popup['id'] );
+		$has_featured_image    = has_post_thumbnail( $popup['id'] ) || ! empty( $popup['options']['featured_image_id'] );
 		$classes               = array( 'newspack-lightbox', 'newspack-popup', 'newspack-lightbox-placement-' . $popup['options']['placement'], 'newspack-lightbox-size-' . $overlay_size );
 		$classes[]             = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]             = $hide_border ? 'newspack-lightbox-no-border' : null;
@@ -1263,7 +1294,7 @@ final class Newspack_Popups_Model {
 				<div class="newspack-popup__content-wrapper" style="<?php echo $hide_border ? esc_attr( self::container_style( $popup ) ) : ''; ?>">
 					<?php if ( $has_featured_image ) : ?>
 						<div class="newspack-popup__featured-image">
-							<?php echo get_the_post_thumbnail( $popup['id'], 'large' ); ?>
+							<?php echo ! empty( $popup['options']['featured_image_id'] ) ? wp_get_attachment_image( $popup['options']['featured_image_id'], 'large' ) : get_the_post_thumbnail( $popup['id'], 'large' ); ?>
 						</div>
 					<?php endif; ?>
 					<div class="newspack-popup__content">

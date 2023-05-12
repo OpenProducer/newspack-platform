@@ -1059,16 +1059,24 @@ final class GAM_Model {
 				$targeting['template'] = sanitize_title( basename( $template_slug, '.php' ) );
 			}
 
-			// Add the category slugs to targeting.
-			$categories = wp_get_post_categories( get_the_ID(), [ 'fields' => 'slugs' ] );
-			if ( ! empty( $categories ) ) {
-				$targeting['category'] = array_map( 'sanitize_text_field', $categories );
-			}
-
-			// Add tags slugs to targeting.
-			$tags = wp_get_post_tags( get_the_ID(), [ 'fields' => 'slugs' ] );
-			if ( ! empty( $tags ) ) {
-				$targeting['tag'] = array_map( 'sanitize_text_field', $tags );
+			// Add post taxonomy terms to targeting.
+			$taxonomy_name_map = [
+				'post_tag' => 'tag',
+			];
+			$taxonomies        = get_object_taxonomies( get_post_type(), 'objects' );
+			foreach ( $taxonomies as $taxonomy ) {
+				if ( $taxonomy->public && $taxonomy->show_ui ) {
+					$terms = get_the_terms( get_the_ID(), $taxonomy->name );
+					if ( ! empty( $terms ) ) {
+						$taxonomy_name               = isset( $taxonomy_name_map[ $taxonomy->name ] ) ? $taxonomy_name_map[ $taxonomy->name ] : $taxonomy->name;
+						$targeting[ $taxonomy_name ] = array_map(
+							function( $term ) {
+								return sanitize_text_field( $term->slug );
+							},
+							$terms
+						);
+					}
+				}
 			}
 
 			// Add the post authors to targeting.
@@ -1092,22 +1100,11 @@ final class GAM_Model {
 			// Add the post ID to targeting.
 			$targeting['ID'] = get_the_ID();
 
-			// Add the category slugs to targeting on category archives.
+			// Add the taxonomy slugs to targeting on category archives.
 		} elseif ( get_queried_object() ) {
 			$queried_object = get_queried_object();
 			if ( 'WP_Term' === get_class( $queried_object ) ) {
-
-				switch ( $queried_object->taxonomy ) {
-
-					case 'category':
-						$targeting['category'] = [ sanitize_text_field( $queried_object->slug ) ];
-						break;
-
-					case 'post_tag':
-						$targeting['tag'] = [ sanitize_text_field( $queried_object->slug ) ];
-						break;
-
-				}
+				$targeting[ $queried_object->taxonomy ] = [ sanitize_text_field( $queried_object->slug ) ];
 			}
 		}
 

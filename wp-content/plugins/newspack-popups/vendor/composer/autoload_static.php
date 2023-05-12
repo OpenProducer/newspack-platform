@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8c2311567a7e5ad130179a4c4d32a0a3
+class ComposerStaticInit5d1947cbca1e76e7f9df301aa32801b4
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -40,6 +40,7 @@ class ComposerStaticInit8c2311567a7e5ad130179a4c4d32a0a3
         'Newspack_Popups_Model' => __DIR__ . '/../..' . '/includes/class-newspack-popups-model.php',
         'Newspack_Popups_Newsletters' => __DIR__ . '/../..' . '/includes/class-newspack-popups-newsletters.php',
         'Newspack_Popups_Parse_Logs' => __DIR__ . '/../..' . '/includes/class-newspack-popups-parse-logs.php',
+        'Newspack_Popups_Presets' => __DIR__ . '/../..' . '/includes/class-newspack-popups-presets.php',
         'Newspack_Popups_Segmentation' => __DIR__ . '/../..' . '/includes/class-newspack-popups-segmentation.php',
         'Newspack_Popups_Settings' => __DIR__ . '/../..' . '/includes/class-newspack-popups-settings.php',
         'Newspack_Popups_View_As' => __DIR__ . '/../..' . '/includes/class-newspack-popups-view-as.php',
@@ -48,9 +49,9 @@ class ComposerStaticInit8c2311567a7e5ad130179a4c4d32a0a3
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8c2311567a7e5ad130179a4c4d32a0a3::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8c2311567a7e5ad130179a4c4d32a0a3::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8c2311567a7e5ad130179a4c4d32a0a3::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5d1947cbca1e76e7f9df301aa32801b4::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5d1947cbca1e76e7f9df301aa32801b4::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5d1947cbca1e76e7f9df301aa32801b4::$classMap;
 
         }, null, ClassLoader::class);
     }

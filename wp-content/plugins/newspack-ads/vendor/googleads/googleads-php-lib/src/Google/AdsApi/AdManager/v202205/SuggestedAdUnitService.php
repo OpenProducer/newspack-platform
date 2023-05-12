@@ -28,6 +28,7 @@ class SuggestedAdUnitService extends \Google\AdsApi\Common\AdsSoapClient
       'DateTime' => 'Google\\AdsApi\\AdManager\\v202205\\DateTime',
       'DateTimeValue' => 'Google\\AdsApi\\AdManager\\v202205\\DateTimeValue',
       'DateValue' => 'Google\\AdsApi\\AdManager\\v202205\\DateValue',
+      'EntityLimitReachedError' => 'Google\\AdsApi\\AdManager\\v202205\\EntityLimitReachedError',
       'FeatureError' => 'Google\\AdsApi\\AdManager\\v202205\\FeatureError',
       'FieldPathElement' => 'Google\\AdsApi\\AdManager\\v202205\\FieldPathElement',
       'InternalApiError' => 'Google\\AdsApi\\AdManager\\v202205\\InternalApiError',
@@ -84,9 +85,9 @@ class SuggestedAdUnitService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link SuggestedAdUnitPage} of {@link SuggestedAdUnit} objects that
-     * satisfy the filter query.  There is a system-enforced limit of 1000 on the number of suggested
-     * ad units that are suggested at any one time.
+     * Gets a {@link SuggestedAdUnitPage} of {@link SuggestedAdUnit} objects that satisfy the filter
+     * query. There is a system-enforced limit of 1000 on the number of suggested ad units that are
+     * suggested at any one time.
      *
      * <table>
      * <tr>
@@ -105,8 +106,6 @@ class SuggestedAdUnitService extends \Google\AdsApi\Common\AdsSoapClient
      * <p><strong>Note:</strong> After API version 201311, the {@code id} field will only be
      * numerical.
      *
-     * a set of suggested ad units
-     *
      * @param \Google\AdsApi\AdManager\v202205\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202205\SuggestedAdUnitPage
      * @throws \Google\AdsApi\AdManager\v202205\ApiException
@@ -117,8 +116,8 @@ class SuggestedAdUnitService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Performs actions on {@link SuggestedAdUnit} objects that match the given
-     * {@link Statement#query}.  The following fields are supported for filtering:
+     * Performs actions on {@link SuggestedAdUnit} objects that match the given {@link
+     * Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -133,8 +132,6 @@ class SuggestedAdUnitService extends \Google\AdsApi\Common\AdsSoapClient
      * <td>{@link SuggestedAdUnit#numRequests}</td>
      * </tr>
      * </table>
-     *
-     * a set of suggested ad units
      *
      * @param \Google\AdsApi\AdManager\v202205\SuggestedAdUnitAction $suggestedAdUnitAction
      * @param \Google\AdsApi\AdManager\v202205\Statement $filterStatement

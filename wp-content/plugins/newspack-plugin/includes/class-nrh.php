@@ -10,16 +10,90 @@ namespace Newspack;
 defined( 'ABSPATH' ) || exit;
 
 /**
- * Handles Salesforce functionality.
+ * Handles News Revenue Hub functionality.
  */
 class NRH {
+	/**
+	 * Allowed config keys for NRH settings.
+	 *
+	 * @var array
+	 */
+	protected static $allowed_keys = [
+		'nrh_organization_id',
+		'nrh_custom_domain',
+		'nrh_salesforce_campaign_id',
+	];
+
 	/**
 	 * Add hooks.
 	 */
 	public static function init() {
-		add_filter( 'newspack_donation_checkout_url', [ __CLASS__, 'redirect_to_nrh_checkout' ], 10, 3 );
-		add_filter( 'newspack_blocks_donate_block_html', [ __CLASS__, 'handle_custom_campaign_id' ], 10, 2 );
-		add_filter( 'allowed_redirect_hosts', [ __CLASS__, 'allow_redirect_to_nrh' ] );
+		\add_filter( 'newspack_donation_checkout_url', [ __CLASS__, 'redirect_to_nrh_checkout' ], 10, 3 );
+		\add_filter( 'newspack_blocks_donate_block_html', [ __CLASS__, 'handle_custom_campaign_id' ], 10, 2 );
+		\add_filter( 'allowed_redirect_hosts', [ __CLASS__, 'allow_redirect_to_nrh' ] );
+	}
+
+	/**
+	 * Get all News Revenue Hub settings.
+	 *
+	 * @return array Array of settings.
+	 */
+	private static function get_settings() {
+		return \get_option( NEWSPACK_NRH_CONFIG, [] );
+	}
+
+	/**
+	 * Get a specific News Revenue Hub setting by key name.
+	 * Validates given key against valid keys.
+	 *
+	 * @param string $key Key of setting to get.
+	 *
+	 * @return string|boolean Value of setting if found, false otherwise.
+	 */
+	private static function get_setting( $key ) {
+		if ( ! in_array( $key, self::$allowed_keys, true ) ) {
+			return false;
+		}
+
+		$settings = self::get_settings();
+		return isset( $settings[ $key ] ) ? \wp_strip_all_tags( $settings[ $key ] ) : false;
+	}
+
+	/**
+	 * Update News Revenue Hub settings.
+	 * Validates given data against valid keys.
+	 *
+	 * @param array $data Array of settings to update.
+	 *
+	 * @return boolean True if settings were updated, false otherwise.
+	 */
+	public static function update_settings( $data ) {
+		$settings = self::get_settings();
+
+		foreach ( $data as $key => $value ) {
+			if ( in_array( $key, self::$allowed_keys, true ) ) {
+				$settings[ $key ] = $value;
+			}
+		}
+
+		return \update_option( NEWSPACK_NRH_CONFIG, $settings );
+	}
+
+	/**
+	 * Strips protocol from a domain, if it contains one.
+	 *
+	 * @param string|boolean $domain Domain to strip protocol from. Will accept falsy values as well.
+	 *
+	 * @return string|boolean Domain without protocol or false if the given domain is empty.
+	 */
+	public static function strip_protocol( $domain ) {
+		if ( empty( $domain ) ) {
+			return false;
+		}
+
+		$domain_parts = explode( '//', $domain );
+
+		return \wp_unslash( end( $domain_parts ) );
 	}
 
 	/**
@@ -38,16 +112,14 @@ class NRH {
 			'once'  => 'once',
 		];
 
-		$nrh_config = get_option( NEWSPACK_NRH_CONFIG );
+		$nrh_config = self::get_settings();
 
-		$organization_id = wp_strip_all_tags( $nrh_config['nrh_organization_id'] );
-		$salesforce_id   = false;
-		if ( isset( $nrh_config['nrh_salesforce_campaign_id'] ) ) {
-			$salesforce_id = wp_strip_all_tags( $nrh_config['nrh_salesforce_campaign_id'] );
-		}
+		$organization_id = self::get_setting( 'nrh_organization_id' );
+		$custom_domain   = self::strip_protocol( self::get_setting( 'nrh_custom_domain' ) );
+		$salesforce_id   = self::get_setting( 'nrh_salesforce_campaign_id' );
 		$custom_campaign = filter_input( INPUT_GET, 'campaign', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
 		if ( $custom_campaign ) {
-			$salesforce_id = wp_strip_all_tags( $custom_campaign );
+			$salesforce_id = \wp_strip_all_tags( $custom_campaign );
 		}
 		$donation_value     = floatval( $donation_value );
 		$donation_frequency = isset( $donation_frequencies[ $donation_frequency ] ) ? $donation_frequencies[ $donation_frequency ] : false;
@@ -60,7 +132,8 @@ class NRH {
 		Donations::remove_donations_from_cart();
 
 		$url = sprintf(
-			'https://checkout.fundjournalism.org/memberform?amount=%.1f&installmentPeriod=%s&org_id=%s',
+			'https://%s/?amount=%.1f&frequency=%s&org_id=%s',
+			! empty( $custom_domain ) ? $custom_domain : $organization_id . '.fundjournalism.org',
 			$donation_value,
 			$donation_frequency,
 			$organization_id
@@ -97,13 +170,25 @@ class NRH {
 	}
 
 	/**
-	 * Add the NRH checkout URL as an allowed redirect target.
+	 * Add the potential NRH checkout URLs as allowed redirect targets.
 	 *
 	 * @param array $hosts Array of allowed hosts.
 	 * @return array Modified $hosts.
 	 */
 	public static function allow_redirect_to_nrh( $hosts ) {
-		$hosts[] = 'checkout.fundjournalism.org';
+		$organization_id = self::get_setting( 'nrh_organization_id' );
+		$custom_domain   = self::strip_protocol( self::get_setting( 'nrh_custom_domain' ) );
+		$allowed_urls    = [
+			'checkout.fundjournalism.org',
+			$organization_id . '.fundjournalism.org',
+		];
+
+		if ( ! empty( $custom_domain ) ) {
+			$allowed_urls[] = $custom_domain;
+		}
+
+		$hosts = array_merge( $hosts, $allowed_urls );
+
 		return $hosts;
 	}
 

@@ -1,3 +1,65 @@
+# [2.16.0](https://github.com/Automattic/newspack-popups/compare/v2.15.0...v2.16.0) (2023-05-08)
+
+
+### Bug Fixes
+
+* adjust pre-commit hook ([#1086](https://github.com/Automattic/newspack-popups/issues/1086)) ([19de3f0](https://github.com/Automattic/newspack-popups/commit/19de3f0a70f03552a70dde0e944d7e5749475df0))
+* pre commit and add pre push ([#1084](https://github.com/Automattic/newspack-popups/issues/1084)) ([1f0a59d](https://github.com/Automattic/newspack-popups/commit/1f0a59d508988bac13546eddf3e2384e598e6cf9))
+* **ras-defaults:** allow override values via $_GET for previewing presets ([#1107](https://github.com/Automattic/newspack-popups/issues/1107)) ([58736a5](https://github.com/Automattic/newspack-popups/commit/58736a5fc955630eec079335ce0658ab1db1d78f))
+* **ras-defaults:** turn on feature to always subscribe to newsletters by default ([#1111](https://github.com/Automattic/newspack-popups/issues/1111)) ([283e0d8](https://github.com/Automattic/newspack-popups/commit/283e0d845c54a8d4f122fe3f4da2fc692f07ccd5))
+
+
+### Features
+
+* add custom prompt taxonomies ([f75f6fc](https://github.com/Automattic/newspack-popups/commit/f75f6fcff8941b674cb8bb2573dd0ba2840d200c))
+* add custom prompt taxonomies [#1100](https://github.com/Automattic/newspack-popups/issues/1100) ([1af879d](https://github.com/Automattic/newspack-popups/commit/1af879d7865466900754a5028bfdae8b87c97ec7))
+* add filter to maybe display prompt check ([7b5bb9b](https://github.com/Automattic/newspack-popups/commit/7b5bb9bd0de864133d96714ef466608d384b27dc))
+* add filter to maybe display prompt check [#1095](https://github.com/Automattic/newspack-popups/issues/1095) ([1bbe843](https://github.com/Automattic/newspack-popups/commit/1bbe84319456ec23de1214c980572e039f894716))
+* filter the whole result ([40863dd](https://github.com/Automattic/newspack-popups/commit/40863ddb4c532d79cc2701f3ad8b223809d0102b))
+* hide overlays on sign in modal ([#1094](https://github.com/Automattic/newspack-popups/issues/1094)) ([226bb5e](https://github.com/Automattic/newspack-popups/commit/226bb5e0472b125288d83e35f386af471ca188bc))
+* increase max length of default prompt input fields ([#1109](https://github.com/Automattic/newspack-popups/issues/1109)) ([6b759a1](https://github.com/Automattic/newspack-popups/commit/6b759a13716359e79d822f726e0366c5e0063314))
+* RAS setup UI and default Campaigns wizard ([#1103](https://github.com/Automattic/newspack-popups/issues/1103)) ([f595046](https://github.com/Automattic/newspack-popups/commit/f595046e0acf5e4678852fb9d3217a811a1abc42)), closes [#1078](https://github.com/Automattic/newspack-popups/issues/1078) [#1090](https://github.com/Automattic/newspack-popups/issues/1090) [#1096](https://github.com/Automattic/newspack-popups/issues/1096) [#1097](https://github.com/Automattic/newspack-popups/issues/1097) [#1102](https://github.com/Automattic/newspack-popups/issues/1102)
+
+# [2.16.0-alpha.4](https://github.com/Automattic/newspack-popups/compare/v2.16.0-alpha.3...v2.16.0-alpha.4) (2023-05-08)
+
+
+### Bug Fixes
+
+* **ras-defaults:** turn on feature to always subscribe to newsletters by default ([#1111](https://github.com/Automattic/newspack-popups/issues/1111)) ([283e0d8](https://github.com/Automattic/newspack-popups/commit/283e0d845c54a8d4f122fe3f4da2fc692f07ccd5))
+
+# [2.16.0-alpha.3](https://github.com/Automattic/newspack-popups/compare/v2.16.0-alpha.2...v2.16.0-alpha.3) (2023-05-03)
+
+
+### Features
+
+* increase max length of default prompt input fields ([#1109](https://github.com/Automattic/newspack-popups/issues/1109)) ([6b759a1](https://github.com/Automattic/newspack-popups/commit/6b759a13716359e79d822f726e0366c5e0063314))
+
+# [2.16.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.16.0-alpha.1...v2.16.0-alpha.2) (2023-05-03)
+
+
+### Bug Fixes
+
+* **ras-defaults:** allow override values via $_GET for previewing presets ([#1107](https://github.com/Automattic/newspack-popups/issues/1107)) ([58736a5](https://github.com/Automattic/newspack-popups/commit/58736a5fc955630eec079335ce0658ab1db1d78f))
+
+# [2.16.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.15.0...v2.16.0-alpha.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* adjust pre-commit hook ([#1086](https://github.com/Automattic/newspack-popups/issues/1086)) ([19de3f0](https://github.com/Automattic/newspack-popups/commit/19de3f0a70f03552a70dde0e944d7e5749475df0))
+* pre commit and add pre push ([#1084](https://github.com/Automattic/newspack-popups/issues/1084)) ([1f0a59d](https://github.com/Automattic/newspack-popups/commit/1f0a59d508988bac13546eddf3e2384e598e6cf9))
+
+
+### Features
+
+* add custom prompt taxonomies ([f75f6fc](https://github.com/Automattic/newspack-popups/commit/f75f6fcff8941b674cb8bb2573dd0ba2840d200c))
+* add custom prompt taxonomies [#1100](https://github.com/Automattic/newspack-popups/issues/1100) ([1af879d](https://github.com/Automattic/newspack-popups/commit/1af879d7865466900754a5028bfdae8b87c97ec7))
+* add filter to maybe display prompt check ([7b5bb9b](https://github.com/Automattic/newspack-popups/commit/7b5bb9bd0de864133d96714ef466608d384b27dc))
+* add filter to maybe display prompt check [#1095](https://github.com/Automattic/newspack-popups/issues/1095) ([1bbe843](https://github.com/Automattic/newspack-popups/commit/1bbe84319456ec23de1214c980572e039f894716))
+* filter the whole result ([40863dd](https://github.com/Automattic/newspack-popups/commit/40863ddb4c532d79cc2701f3ad8b223809d0102b))
+* hide overlays on sign in modal ([#1094](https://github.com/Automattic/newspack-popups/issues/1094)) ([226bb5e](https://github.com/Automattic/newspack-popups/commit/226bb5e0472b125288d83e35f386af471ca188bc))
+* RAS setup UI and default Campaigns wizard ([#1103](https://github.com/Automattic/newspack-popups/issues/1103)) ([f595046](https://github.com/Automattic/newspack-popups/commit/f595046e0acf5e4678852fb9d3217a811a1abc42)), closes [#1078](https://github.com/Automattic/newspack-popups/issues/1078) [#1090](https://github.com/Automattic/newspack-popups/issues/1090) [#1096](https://github.com/Automattic/newspack-popups/issues/1096) [#1097](https://github.com/Automattic/newspack-popups/issues/1097) [#1102](https://github.com/Automattic/newspack-popups/issues/1102)
+
 # [2.15.0](https://github.com/Automattic/newspack-popups/compare/v2.14.0...v2.15.0) (2023-04-10)
 
 

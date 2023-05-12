@@ -97,10 +97,11 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
     /**
      * Creates new {@link CustomTargetingKey} objects.
      *
-     * The following fields are required:
+     * <p>The following fields are required:
+     *
      * <ul>
-     * <li>{@link CustomTargetingKey#name}</li>
-     * <li>{@link CustomTargetingKey#type}</li>
+     * <li>{@link CustomTargetingKey#name}
+     * <li>{@link CustomTargetingKey#type}
      * </ul>
      *
      * @param \Google\AdsApi\AdManager\v202208\CustomTargetingKey[] $keys
@@ -115,10 +116,11 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
     /**
      * Creates new {@link CustomTargetingValue} objects.
      *
-     * The following fields are required:
+     * <p>The following fields are required:
+     *
      * <ul>
-     * <li>{@link CustomTargetingValue#customTargetingKeyId}</li>
-     * <li>{@link CustomTargetingValue#name}</li>
+     * <li>{@link CustomTargetingValue#customTargetingKeyId}
+     * <li>{@link CustomTargetingValue#name}
      * </ul>
      *
      * @param \Google\AdsApi\AdManager\v202208\CustomTargetingValue[] $values
@@ -131,9 +133,8 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link CustomTargetingKeyPage} of {@link CustomTargetingKey} objects
-     * that satisfy the given {@link Statement#query}. The following fields are
-     * supported for filtering:
+     * Gets a {@link CustomTargetingKeyPage} of {@link CustomTargetingKey} objects that satisfy the
+     * given {@link Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -158,8 +159,6 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
      * </tr>
      * </table>
      *
-     * a set of custom targeting keys
-     *
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202208\CustomTargetingKeyPage
      * @throws \Google\AdsApi\AdManager\v202208\ApiException
@@ -170,29 +169,23 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link CustomTargetingValuePage} of {@link CustomTargetingValue}
-     * objects that satisfy the given {@link Statement#query}.
-     * <p>
-     * The {@code WHERE} clause in the {@link Statement#query} must always contain
-     * {@link CustomTargetingValue#customTargetingKeyId} as one of its columns in
-     * a way that it is AND'ed with the rest of the query. So, if you want to
-     * retrieve values for a known set of key ids, valid {@link Statement#query}
-     * would look like:
-     * </p>
+     * Gets a {@link CustomTargetingValuePage} of {@link CustomTargetingValue} objects that satisfy
+     * the given {@link Statement#query}.
+     *
+     * <p>The {@code WHERE} clause in the {@link Statement#query} must always contain {@link
+     * CustomTargetingValue#customTargetingKeyId} as one of its columns in a way that it is AND'ed
+     * with the rest of the query. So, if you want to retrieve values for a known set of key ids,
+     * valid {@link Statement#query} would look like:
+     *
      * <ol>
-     * <li>
-     * "WHERE customTargetingKeyId IN ('17','18','19')" retrieves all values that
-     * are associated with keys having ids 17, 18, 19.
-     * </li>
-     * <li>
-     * "WHERE customTargetingKeyId = '17' AND name = 'red'" retrieves values that
-     * are associated with keys having id 17 and value name is 'red'.
-     * </li>
+     * <li>"WHERE customTargetingKeyId IN ('17','18','19')" retrieves all values that are associated
+     * with keys having ids 17, 18, 19.
+     * <li>"WHERE customTargetingKeyId = '17' AND name = 'red'" retrieves values that are associated
+     * with keys having id 17 and value name is 'red'.
      * </ol>
-     * </p>
-     * <p>
-     * The following fields are supported for filtering:
-     * </p>
+     *
+     * <p>The following fields are supported for filtering:
+     *
      * <table>
      * <tr>
      * <th scope="col">PQL Property</th>
@@ -220,8 +213,6 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
      * </tr>
      * </table>
      *
-     * a set of custom targeting values
-     *
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202208\CustomTargetingValuePage
      * @throws \Google\AdsApi\AdManager\v202208\ApiException
@@ -232,10 +223,8 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Performs actions on {@link CustomTargetingKey} objects that match the given
-     * {@link Statement#query}.
-     *
-     * a set of custom targeting keys
+     * Performs actions on {@link CustomTargetingKey} objects that match the given {@link
+     * Statement#query}.
      *
      * @param \Google\AdsApi\AdManager\v202208\CustomTargetingKeyAction $customTargetingKeyAction
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
@@ -248,10 +237,8 @@ class CustomTargetingService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Performs actions on {@link CustomTargetingValue} objects that match the
-     * given {@link Statement#query}.
-     *
-     * a set of ad units
+     * Performs actions on {@link CustomTargetingValue} objects that match the given {@link
+     * Statement#query}.
      *
      * @param \Google\AdsApi\AdManager\v202208\CustomTargetingValueAction $customTargetingValueAction
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement

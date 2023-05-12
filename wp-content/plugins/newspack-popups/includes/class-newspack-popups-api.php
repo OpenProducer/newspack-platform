@@ -100,6 +100,26 @@ final class Newspack_Popups_API {
 				],
 			]
 		);
+
+		// API endpoints for RAS presets.
+		register_rest_route(
+			'newspack-popups/v1',
+			'/reader-activation/campaign',
+			[
+				'methods'             => \WP_REST_Server::READABLE,
+				'callback'            => [ $this, 'api_get_reader_activation_campaign_settings' ],
+				'permission_callback' => [ $this, 'permission_callback' ],
+			]
+		);
+		register_rest_route(
+			'newspack-popups/v1',
+			'/reader-activation/campaign',
+			[
+				'methods'             => \WP_REST_Server::EDITABLE,
+				'callback'            => [ $this, 'api_update_reader_activation_campaign_settings' ],
+				'permission_callback' => [ $this, 'permission_callback' ],
+			]
+		);
 	}
 
 	/**
@@ -281,6 +301,42 @@ final class Newspack_Popups_API {
 	public function api_duplicate_popup( $request ) {
 		$response = Newspack_Popups::duplicate_popup( $request['id'], $request['title'] );
 		return rest_ensure_response( $response );
+	}
+
+	/**
+	 * Get reader activation campaign settings.
+	 *
+	 * @param WP_REST_Request $request Request object.
+	 *
+	 * @return WP_REST_Response
+	 */
+	public function api_get_reader_activation_campaign_settings( $request ) {
+		$response = Newspack_Popups_Presets::get_ras_presets();
+
+		if ( \is_wp_error( $response ) ) {
+			return new \WP_REST_Response( [ 'message' => $response->get_error_message() ], 400 );
+		}
+
+		return rest_ensure_response( $response['prompts'] );
+	}
+
+	/**
+	 * Update reader activation campaign settings.
+	 *
+	 * @param WP_REST_Request $request Full details about the request.
+	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
+	 */
+	public function api_update_reader_activation_campaign_settings( $request ) {
+		$slug = $request['slug'];
+		$data = $request['data'];
+
+		$response = Newspack_Popups_Presets::update_preset_prompt( $slug, $data );
+
+		if ( \is_wp_error( $response ) ) {
+			return new \WP_REST_Response( [ 'message' => $response->get_error_message() ], 400 );
+		}
+
+		return rest_ensure_response( $response['prompts'] );
 	}
 }
 $newspack_popups_api = new Newspack_Popups_API();

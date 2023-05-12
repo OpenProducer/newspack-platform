@@ -1,3 +1,72 @@
+## [1.114.1](https://github.com/Automattic/newspack-plugin/compare/v1.114.0...v1.114.1) (2023-05-10)
+
+
+### Bug Fixes
+
+* ensure migrated Stripe subs have next_payment scheduled ([#2434](https://github.com/Automattic/newspack-plugin/issues/2434)) ([b3b32f0](https://github.com/Automattic/newspack-plugin/commit/b3b32f0bfc09a6cf296153f783778c146e3b8291))
+
+# [1.114.0](https://github.com/Automattic/newspack-plugin/compare/v1.113.1...v1.114.0) (2023-05-08)
+
+
+### Features
+
+* force release version bump ([323da0a](https://github.com/Automattic/newspack-plugin/commit/323da0a010a1d1b1689b65aefbf4236707dc66cd))
+
+## [1.113.1](https://github.com/Automattic/newspack-plugin/compare/v1.113.0...v1.113.1) (2023-05-08)
+
+
+### Bug Fixes
+
+* force release build ([5691429](https://github.com/Automattic/newspack-plugin/commit/56914296a4cf92fe6c061e4f7f1bb592997a15f1))
+
+# [1.114.0-alpha.4](https://github.com/Automattic/newspack-plugin/compare/v1.114.0-alpha.3...v1.114.0-alpha.4) (2023-05-08)
+
+
+### Bug Fixes
+
+* check for required plugins in RAS setup wizard ([#2442](https://github.com/Automattic/newspack-plugin/issues/2442)) ([0d5bb63](https://github.com/Automattic/newspack-plugin/commit/0d5bb63e028a13f47712150787f707593a68e969))
+
+# [1.114.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v1.114.0-alpha.2...v1.114.0-alpha.3) (2023-05-03)
+
+
+### Bug Fixes
+
+* **ras-defaults:** feedback from QA ([#2437](https://github.com/Automattic/newspack-plugin/issues/2437)) ([1dd1f36](https://github.com/Automattic/newspack-plugin/commit/1dd1f369427c137f9c24a72a559370a264b77def))
+
+
+### Features
+
+* **auth:** support "register modal" hash url ([#2427](https://github.com/Automattic/newspack-plugin/issues/2427)) ([fcb1199](https://github.com/Automattic/newspack-plugin/commit/fcb119964dbe6e977efa0ce5d236b736a6af79b0))
+
+# [1.114.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v1.114.0-alpha.1...v1.114.0-alpha.2) (2023-05-03)
+
+
+### Bug Fixes
+
+* **ras-defaults:** updates for design review feedback ([#2435](https://github.com/Automattic/newspack-plugin/issues/2435)) ([3aa6de7](https://github.com/Automattic/newspack-plugin/commit/3aa6de7e9a77d9640f3b42c2e9bf8182f3dc2d1b))
+
+
+### Features
+
+* update NRH settings page and redirect behavior ([#2425](https://github.com/Automattic/newspack-plugin/issues/2425)) ([f7a6c6b](https://github.com/Automattic/newspack-plugin/commit/f7a6c6b5d9ef5876c1128407b541a6d8cd986a95))
+
+# [1.114.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v1.113.0...v1.114.0-alpha.1) (2023-04-28)
+
+
+### Bug Fixes
+
+* add filter to prompt conflicts check ([#2421](https://github.com/Automattic/newspack-plugin/issues/2421)) ([8d1c1d3](https://github.com/Automattic/newspack-plugin/commit/8d1c1d3e17ae51f97a7d783b05c4fef4a2b6660e))
+* ensure .hooks is excluded from the dist ZIP ([#2420](https://github.com/Automattic/newspack-plugin/issues/2420)) ([75f8f36](https://github.com/Automattic/newspack-plugin/commit/75f8f3665bc19ee65333726906e42a1a8724ef25))
+* **newsletters:** only attempt token verification for Constant Contact ([#2407](https://github.com/Automattic/newspack-plugin/issues/2407)) ([c58f9a8](https://github.com/Automattic/newspack-plugin/commit/c58f9a8c8036d5c86987768a20117bf7d3c00d68))
+* **perfmatters:** exclude Jetpack and Newsletters css delay ([#2410](https://github.com/Automattic/newspack-plugin/issues/2410)) ([d2b167c](https://github.com/Automattic/newspack-plugin/commit/d2b167c19ecc851ef8a3a3a1d052d28c23a1ac83))
+
+
+### Features
+
+* memberships block patterns ([#2406](https://github.com/Automattic/newspack-plugin/issues/2406)) ([c96555a](https://github.com/Automattic/newspack-plugin/commit/c96555a7297b82644dfa67fb873692411890debc))
+* RAS setup UI and default Campaigns wizard ([#2426](https://github.com/Automattic/newspack-plugin/issues/2426)) ([a1d4eb7](https://github.com/Automattic/newspack-plugin/commit/a1d4eb7aad13449cb1d847fb25ee2414028fdb69)), closes [#2381](https://github.com/Automattic/newspack-plugin/issues/2381) [#2366](https://github.com/Automattic/newspack-plugin/issues/2366) [#2382](https://github.com/Automattic/newspack-plugin/issues/2382)
+* **sign-in:** body class when in modal and url hash ([#2414](https://github.com/Automattic/newspack-plugin/issues/2414)) ([aea4dc9](https://github.com/Automattic/newspack-plugin/commit/aea4dc949439f459465fa15c695639a65dcb26f8))
+
 # [1.113.0](https://github.com/Automattic/newspack-plugin/compare/v1.112.1...v1.113.0) (2023-04-24)
 
 

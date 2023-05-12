@@ -25,17 +25,32 @@ class Prompts extends Schema {
 			'type'                 => 'object',
 			'additionalProperties' => false,
 			'properties'           => [
-				'title'           => [
+				'slug'              => [
+					'name'     => 'slug', // An optional unique slug to describe the purpose of the prompt.
+					'type'     => 'string',
+					'required' => false,
+				],
+				'title'             => [
 					'name'     => 'title',
 					'type'     => 'string',
 					'required' => true,
 				],
-				'content'         => [
+				'content'           => [
 					'name'     => 'content',
 					'type'     => 'string',
 					'required' => true,
 				],
-				'campaign_groups' => [
+				'featured_image_id' => [
+					'name'     => 'featured_image_id',
+					'type'     => 'integer', // Attachment ID to be used as the featured image.
+					'required' => false,
+				],
+				'ready'             => [
+					'name'     => 'ready',
+					'type'     => 'boolean',
+					'required' => false,
+				],
+				'campaign_groups'   => [
 					'name'     => 'campaign_groups',
 					'type'     => 'array',
 					'required' => false,
@@ -53,7 +68,7 @@ class Prompts extends Schema {
 						],
 					],
 				],
-				'status'          => [
+				'status'            => [
 					'name'     => 'status',
 					'type'     => 'string',
 					'required' => true,
@@ -62,7 +77,7 @@ class Prompts extends Schema {
 						'draft',
 					],
 				],
-				'categories'      => [
+				'categories'        => [
 					'name'     => 'categories',
 					'type'     => 'array',
 					'required' => false,
@@ -80,7 +95,7 @@ class Prompts extends Schema {
 						],
 					],
 				],
-				'tags'            => [
+				'tags'              => [
 					'name'     => 'tags',
 					'type'     => 'array',
 					'required' => false,
@@ -98,7 +113,7 @@ class Prompts extends Schema {
 						],
 					],
 				],
-				'options'         => [
+				'options'           => [
 					'type'                 => 'object',
 					'required'             => true,
 					'additionalProperties' => false,
@@ -352,6 +367,91 @@ class Prompts extends Schema {
 							'type'     => 'boolean',
 							'required' => false,
 							'default'  => false,
+						],
+					],
+				],
+				// Required user inputs when auto-generating a prompt. These will be shown as fields in the UI.
+				'user_input_fields' => [
+					'name'     => 'user_input_fields',
+					'type'     => 'array',
+					'required' => false,
+					'default'  => [],
+					'items'    => [
+						'type'                 => 'object',
+						'additionalProperties' => false,
+						'properties'           => [
+							// Slug for the input. Must be unique per prompt.
+							'name'        => [
+								'type' => 'string',
+							],
+							// Data type for the input.
+							'type'        => [
+								'type' => 'string',
+							],
+							// Label for the input.
+							'label'       => [
+								'type' => 'string',
+							],
+							// Help text describing the input.
+							'description' => [
+								'type' => 'string',
+							],
+							// Whether the input is required to generate the prompt or if it can be generated with an empty value. If true, the default value will be used when the input is empty.
+							'required'    => [
+								'type' => 'boolean',
+							],
+							// Default value of the input. This will be populated by default in the UI.
+							'default'     => [
+								'type' => [ 'array', 'integer', 'string' ],
+							],
+							// User-inputted value of the input, if available.
+							'value'       => [
+								'type' => [ 'array', 'integer', 'string' ],
+							],
+							// If a string, maximum length for the input value. This will be used to validate the input in the UI.
+							'max_length'  => [
+								'type'     => 'integer',
+								'required' => false,
+							],
+							// If an array, selectable options.
+							'options'     => [
+								'type'     => 'array',
+								'required' => false,
+							],
+						],
+					],
+				],
+				'help_info'         => [
+					'type'                 => 'object',
+					'required'             => false,
+					'additionalProperties' => false,
+					'properties'           => [
+						'screenshot'      => [
+							'name'     => 'screenshot',
+							'type'     => 'string',
+							'required' => false,
+							'default'  => '', // Filename of a screenshot to display. Will look for it in the plugin's src/assets folder.
+						],
+						'description'     => [
+							'name'     => 'description',
+							'type'     => 'string',
+							'required' => false,
+							'default'  => '',
+						],
+						'recommendations' => [
+							'name'     => 'recommendations',
+							'type'     => 'array',
+							'required' => false,
+							'items'    => [
+								'type' => 'string',
+							],
+							'default'  => [],
+						],
+						'url'             => [
+							'name'     => 'url',
+							'type'     => 'string',
+							'required' => false,
+							'default'  => '',
 						],
 					],
 				],

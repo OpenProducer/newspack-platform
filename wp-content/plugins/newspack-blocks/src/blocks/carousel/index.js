@@ -67,6 +67,9 @@ export const settings = {
 		tags: {
 			type: 'array',
 		},
+		brands: {
+			type: 'array',
+		},
 		showDate: {
 			type: 'boolean',
 			default: true,

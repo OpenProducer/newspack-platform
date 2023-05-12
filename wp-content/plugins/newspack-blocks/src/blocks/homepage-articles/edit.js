@@ -72,6 +72,15 @@ if (
 	IS_SUBTITLE_SUPPORTED_IN_THEME = true;
 }
 
+let IS_MULTIBRANDED_SITE;
+if (
+	typeof window === 'object' &&
+	window.newspack_blocks_data &&
+	window.newspack_blocks_data.multibranded_sites_enabled
+) {
+	IS_MULTIBRANDED_SITE = true;
+}
+
 const landscapeIcon = (
 	<SVG xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24">
 		<Path
@@ -266,6 +275,7 @@ class Edit extends Component {
 			specificPosts,
 			postsToShow,
 			categories,
+			brands,
 			columns,
 			colGap,
 			postType,
@@ -342,6 +352,13 @@ class Edit extends Component {
 
 		const handleAttributeChange = key => value => setAttributes( { [ key ]: value } );
 
+		const brandProps = IS_MULTIBRANDED_SITE
+			? {
+					brands,
+					onBrandsChange: handleAttributeChange( 'brands' ),
+			  }
+			: '';
+
 		return (
 			<Fragment>
 				<PanelBody title={ __( 'Display Settings', 'newspack-blocks' ) } initialOpen={ true }>
@@ -360,6 +377,7 @@ class Edit extends Component {
 						onCategoriesChange={ handleAttributeChange( 'categories' ) }
 						tags={ tags }
 						onTagsChange={ handleAttributeChange( 'tags' ) }
+						{ ...brandProps }
 						tagExclusions={ tagExclusions }
 						onTagExclusionsChange={ handleAttributeChange( 'tagExclusions' ) }
 						categoryExclusions={ categoryExclusions }

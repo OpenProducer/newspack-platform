@@ -242,6 +242,10 @@ class Newspack_Blocks {
 				$localized_data['author_custom_fields'] = \Newspack\Authors_Custom_Fields::get_custom_fields();
 			}
 
+			if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
+				$localized_data['multibranded_sites_enabled'] = true;
+			}
+
 			wp_localize_script(
 				'newspack-blocks-editor',
 				'newspack_blocks_data',
@@ -285,12 +289,12 @@ class Newspack_Blocks {
 	 * Can the tiers-based layout of the Donate block be rendered?
 	 */
 	public static function can_render_tiers_based_layout() {
-		if ( method_exists( '\Newspack\AMP_Enhancements', 'is_amp_plus_configured' ) ) {
+		if ( ! is_plugin_active( 'amp/amp.php' ) ) {
+			return true;
+		} elseif ( method_exists( '\Newspack\AMP_Enhancements', 'is_amp_plus_configured' ) ) {
 			return \Newspack\AMP_Enhancements::is_amp_plus_configured();
-		} else {
-			return ! is_plugin_active( 'amp/amp.php' );
 		}
-		return true;
+		return false;
 	}
 
 	/**
@@ -587,6 +591,7 @@ class Newspack_Blocks {
 		$authors             = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
 		$categories          = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
 		$tags                = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
+		$brands              = isset( $attributes['brands'] ) ? $attributes['brands'] : array();
 		$tag_exclusions      = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
 		$category_exclusions = isset( $attributes['categoryExclusions'] ) ? $attributes['categoryExclusions'] : array();
 		$specific_posts      = isset( $attributes['specificPosts'] ) ? $attributes['specificPosts'] : array();
@@ -620,7 +625,6 @@ class Newspack_Blocks {
 					get_the_ID() ? [ get_the_ID() ] : []
 				);
 			}
-
 			if ( $categories && count( $categories ) ) {
 				$args['category__in'] = $categories;
 			}
@@ -633,7 +637,18 @@ class Newspack_Blocks {
 			if ( $category_exclusions && count( $category_exclusions ) ) {
 				$args['category__not_in'] = $category_exclusions;
 			}
-
+			if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
+				if ( $brands && count( $brands ) ) {
+					$args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+						[
+							'taxonomy'         => 'brand',
+							'field'            => 'term_id',
+							'terms'            => $brands,
+							'include_children' => false,
+						],
+					];
+				}
+			}
 			$is_co_authors_plus_active = class_exists( 'CoAuthors_Guest_Authors' );
 
 			if ( $authors && count( $authors ) ) {
@@ -786,6 +801,15 @@ class Newspack_Blocks {
 		if ( ! empty( $categories ) ) {
 			foreach ( $categories as $cat ) {
 				$classes[] = 'category-' . $cat->slug;
+			}
+		}
+
+		if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
+			$brands = get_the_terms( $post_id, 'brand' );
+			if ( ! empty( $brands ) ) {
+				foreach ( $brands as $brand ) {
+					$classes[] = 'brands-' . $brand->slug;
+				}
 			}
 		}
 

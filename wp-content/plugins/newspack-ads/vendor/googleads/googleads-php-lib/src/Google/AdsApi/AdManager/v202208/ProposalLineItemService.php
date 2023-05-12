@@ -88,6 +88,7 @@ class ProposalLineItemService extends \Google\AdsApi\Common\AdsSoapClient
       'InventoryUrlTargeting' => 'Google\\AdsApi\\AdManager\\v202208\\InventoryUrlTargeting',
       'LabelEntityAssociationError' => 'Google\\AdsApi\\AdManager\\v202208\\LabelEntityAssociationError',
       'LineItemError' => 'Google\\AdsApi\\AdManager\\v202208\\LineItemError',
+      'LineItemFlightDateError' => 'Google\\AdsApi\\AdManager\\v202208\\LineItemFlightDateError',
       'LineItemOperationError' => 'Google\\AdsApi\\AdManager\\v202208\\LineItemOperationError',
       'Location' => 'Google\\AdsApi\\AdManager\\v202208\\Location',
       'MobileApplicationTargeting' => 'Google\\AdsApi\\AdManager\\v202208\\MobileApplicationTargeting',
@@ -214,9 +215,8 @@ class ProposalLineItemService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link ProposalLineItemPage} of {@link ProposalLineItem} objects
-     * that satisfy the given {@link Statement#query}.  The following fields are supported for
-     * filtering:
+     * Gets a {@link ProposalLineItemPage} of {@link ProposalLineItem} objects that satisfy the given
+     * {@link Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -256,8 +256,6 @@ class ProposalLineItemService extends \Google\AdsApi\Common\AdsSoapClient
      * </tr>
      * </table>
      *
-     * a set of proposal line items
-     *
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202208\ProposalLineItemPage
      * @throws \Google\AdsApi\AdManager\v202208\ApiException
@@ -268,10 +266,8 @@ class ProposalLineItemService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Performs actions on {@link ProposalLineItem} objects that match
-     * the given {@link Statement#query}.
-     *
-     * proposal line items
+     * Performs actions on {@link ProposalLineItem} objects that match the given {@link
+     * Statement#query}.
      *
      * @param \Google\AdsApi\AdManager\v202208\ProposalLineItemAction $proposalLineItemAction
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement

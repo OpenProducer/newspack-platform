@@ -1,4 +1,34 @@
 :root {
+  --newspack-theme-color-primary: #36f;
+  --newspack-theme-color-primary-variation: #2240d5;
+  --newspack-theme-color-secondary: #555;
+  --newspack-theme-color-secondary-variation: #3E3E3E;
+  --newspack-theme-color-highlight: #fed850;
+  --newspack-theme-color-primary-darken-5: #1a53ff;
+  --newspack-theme-color-primary-darken-10: #0040ff;
+  --newspack-theme-color-bg-body: #fff;
+  --newspack-theme-color-bg-input: var( --newspack-theme-color-bg-body );
+  --newspack-theme-color-bg-light: #f0f0f0;
+  --newspack-theme-color-bg-button-hover: #111;
+  --newspack-theme-color-bg-pre: #eee;
+  --newspack-theme-color-bg-pre-lighten-5: #fbfbfb;
+  --newspack-theme-color-bg-dark: #333;
+  --newspack-theme-color-bg-dark-lighten-5: #404040;
+  --newspack-theme-color-bg-dark-darken-5: #262626;
+  --newspack-theme-color-text-main: #111;
+  --newspack-theme-color-text-light: #515151;
+  --newspack-theme-color-text-hover: var( --newspack-theme-color-bg-dark-lighten-5 );
+  --newspack-theme-color-text-screen: #21759b;
+  --newspack-theme-color-link: var( --newspack-theme-color-secondary );
+  --newspack-theme-color-link-hover: var( --newspack-theme-color-secondary-variation );
+  --newspack-theme-color-border: #ccc;
+  --newspack-theme-color-border-light: #e0e0e0;
+  --newspack-theme-color-alert-yellow: #f0b849;
+  --newspack-theme-color-alert-red: #cc1818;
+  --newspack-theme-color-alert-green: #4ab866;
+}
+
+:root {
   --newspack-theme-font-body: georgia, garamond, "Times New Roman", serif;
   --newspack-theme-font-heading: -apple-system, blinkmacsystemfont, "Segoe UI", "Roboto", "Oxygen",
   	"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
@@ -260,12 +290,12 @@ div#top.tribe-theme-enfold.single-tribe_events .tribe-events-schedule h3 {
 }
 
 .tec-wrapper {
-  background-color: #fff;
+  background-color: var(--newspack-theme-color-bg-body);
   padding-top: 1rem 0;
 }
 @media only screen and (min-width: 782px) {
   .tec-wrapper {
-    border-top: 4px solid #2240d5;
+    border-top: 4px solid var(--newspack-theme-color-primary-variation);
     padding: 3rem 2rem 0;
   }
 }

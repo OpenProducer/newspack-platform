@@ -23,6 +23,7 @@ class LineItemService extends \Google\AdsApi\Common\AdsSoapClient
       'ApplicationException' => 'Google\\AdsApi\\AdManager\\v202208\\ApplicationException',
       'AppliedLabel' => 'Google\\AdsApi\\AdManager\\v202208\\AppliedLabel',
       'ArchiveLineItems' => 'Google\\AdsApi\\AdManager\\v202208\\ArchiveLineItems',
+      'AssetError' => 'Google\\AdsApi\\AdManager\\v202208\\AssetError',
       'AudienceExtensionError' => 'Google\\AdsApi\\AdManager\\v202208\\AudienceExtensionError',
       'AuthenticationError' => 'Google\\AdsApi\\AdManager\\v202208\\AuthenticationError',
       'BandwidthGroup' => 'Google\\AdsApi\\AdManager\\v202208\\BandwidthGroup',
@@ -219,9 +220,8 @@ class LineItemService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link LineItemPage} of {@link LineItem} objects that satisfy the
-     * given {@link Statement#query}. The following fields are supported for
-     * filtering:
+     * Gets a {@link LineItemPage} of {@link LineItem} objects that satisfy the given {@link
+     * Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tbody>
@@ -352,8 +352,6 @@ class LineItemService extends \Google\AdsApi\Common\AdsSoapClient
      * </tbody>
      * </table>
      *
-     * a set of line items.
-     *
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202208\LineItemPage
      * @throws \Google\AdsApi\AdManager\v202208\ApiException
@@ -364,10 +362,7 @@ class LineItemService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Performs actions on {@link LineItem} objects that match the given
-     * {@link Statement#query}.
-     *
-     * a set of line items
+     * Performs actions on {@link LineItem} objects that match the given {@link Statement#query}.
      *
      * @param \Google\AdsApi\AdManager\v202208\LineItemAction $lineItemAction
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement

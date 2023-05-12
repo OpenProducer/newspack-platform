@@ -105,6 +105,11 @@
 			"default": [],
 			"items": { "type": "integer" }
 		},
+		"brands": {
+			"type": "array",
+			"default": [],
+			"items": { "type": "integer" }
+		},
 		"tagExclusions": {
 			"type": "array",
 			"default": [],

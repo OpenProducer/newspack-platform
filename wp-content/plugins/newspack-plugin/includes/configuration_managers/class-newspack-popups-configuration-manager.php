@@ -315,6 +315,24 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Get post URL for preview requests.
+	 */
+	public function preview_post() {
+		return $this->is_configured() ?
+			\Newspack_Popups::preview_post_permalink() :
+			$this->unconfigured_error();
+	}
+
+	/**
+	 * Get archive URL for preview requests.
+	 */
+	public function preview_archive() {
+		return $this->is_configured() ?
+			\Newspack_Popups::preview_archive_permalink() :
+			$this->unconfigured_error();
+	}
+
+	/**
 	 * Configure Newspack Popups for Newspack use.
 	 *
 	 * @return bool || WP_Error Return true if successful, or WP_Error if not.

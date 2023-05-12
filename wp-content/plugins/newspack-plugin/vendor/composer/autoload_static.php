@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitedf626d70fa89251c7a9e30548cc2bc5
+class ComposerStaticInita049717117145437af9ad9427649b097
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -188,7 +188,8 @@ class ComposerStaticInitedf626d70fa89251c7a9e30548cc2bc5
         'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
         'Newspack\\Theme_Manager' => __DIR__ . '/../..' . '/includes/class-theme-manager.php',
         'Newspack\\Twitter_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-twitter-pixel.php',
-        'Newspack\\WC_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-wc-memberships.php',
+        'Newspack\\WC_Memberships' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-wc-memberships.php',
+        'Newspack\\WC_Memberships\\Block_Patterns' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-block-patterns.php',
         'Newspack\\Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-wizard.php',
         'Newspack\\Wizards' => __DIR__ . '/../..' . '/includes/class-wizards.php',
         'Newspack\\WooCommerce_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
@@ -201,9 +202,9 @@ class ComposerStaticInitedf626d70fa89251c7a9e30548cc2bc5
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitedf626d70fa89251c7a9e30548cc2bc5::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitedf626d70fa89251c7a9e30548cc2bc5::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitedf626d70fa89251c7a9e30548cc2bc5::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInita049717117145437af9ad9427649b097::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInita049717117145437af9ad9427649b097::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInita049717117145437af9ad9427649b097::$classMap;
 
         }, null, ClassLoader::class);
     }

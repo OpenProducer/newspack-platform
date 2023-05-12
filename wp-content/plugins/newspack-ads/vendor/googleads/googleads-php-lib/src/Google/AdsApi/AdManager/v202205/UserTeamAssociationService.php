@@ -94,9 +94,8 @@ class UserTeamAssociationService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link UserTeamAssociationPage} of {@link UserTeamAssociation}
-     * objects that satisfy the given {@link Statement#query}. The following
-     * fields are supported for filtering:
+     * Gets a {@link UserTeamAssociationPage} of {@link UserTeamAssociation} objects that satisfy the
+     * given {@link Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -112,8 +111,6 @@ class UserTeamAssociationService extends \Google\AdsApi\Common\AdsSoapClient
      * </tr>
      * </table>
      *
-     * a set of user team associations
-     *
      * @param \Google\AdsApi\AdManager\v202205\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202205\UserTeamAssociationPage
      * @throws \Google\AdsApi\AdManager\v202205\ApiException
@@ -124,10 +121,8 @@ class UserTeamAssociationService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Performs actions on {@link UserTeamAssociation} objects that match the
-     * given {@link Statement#query}.
-     *
-     * a set of user team associations
+     * Performs actions on {@link UserTeamAssociation} objects that match the given {@link
+     * Statement#query}.
      *
      * @param \Google\AdsApi\AdManager\v202205\UserTeamAssociationAction $userTeamAssociationAction
      * @param \Google\AdsApi\AdManager\v202205\Statement $statement

@@ -114,9 +114,8 @@ class CompanyService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link CompanyPage} of {@link Company} objects that satisfy the
-     * given {@link Statement#query}. The following fields are supported for
-     * filtering:
+     * Gets a {@link CompanyPage} of {@link Company} objects that satisfy the given {@link
+     * Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -139,8 +138,6 @@ class CompanyService extends \Google\AdsApi\Common\AdsSoapClient
      * <td>{@link Company#lastModifiedDateTime}</td>
      * </tr>
      * </table>
-     *
-     * a set of companies
      *
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202208\CompanyPage

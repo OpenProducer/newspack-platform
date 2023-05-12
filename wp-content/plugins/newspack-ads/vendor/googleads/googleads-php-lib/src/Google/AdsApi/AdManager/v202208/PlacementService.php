@@ -102,9 +102,8 @@ class PlacementService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@link PlacementPage} of {@link Placement} objects that satisfy the
-     * given {@link Statement#query}. The following fields are supported for
-     * filtering:
+     * Gets a {@link PlacementPage} of {@link Placement} objects that satisfy the given {@link
+     * Statement#query}. The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -136,8 +135,6 @@ class PlacementService extends \Google\AdsApi\Common\AdsSoapClient
      * </tr>
      * </table>
      *
-     * a set of placements
-     *
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202208\PlacementPage
      * @throws \Google\AdsApi\AdManager\v202208\ApiException
@@ -148,10 +145,7 @@ class PlacementService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Performs actions on {@link Placement} objects that match the given
-     * {@link Statement#query}.
-     *
-     * a set of placements
+     * Performs actions on {@link Placement} objects that match the given {@link Statement#query}.
      *
      * @param \Google\AdsApi\AdManager\v202208\PlacementAction $placementAction
      * @param \Google\AdsApi\AdManager\v202208\Statement $filterStatement

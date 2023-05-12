@@ -16,6 +16,7 @@ final class Newspack_Popups {
 	const NEWSPACK_POPUPS_TAXONOMY              = 'newspack_popups_taxonomy';
 	const NEWSPACK_POPUPS_ACTIVE_CAMPAIGN_GROUP = 'newspack_popups_active_campaign_group';
 	const NEWSPACK_POPUP_PREVIEW_QUERY_PARAM    = 'pid';
+	const NEWSPACK_POPUP_PRESET_QUERY_PARAM     = 'preset';
 	const NEWSPACK_POPUPS_TAXONOMY_STATUS       = 'newspack_popups_taxonomy_status';
 
 	const LIGHTWEIGHT_API_CONFIG_FILE_PATH_LEGACY = WP_CONTENT_DIR . '/../newspack-popups-config.php';
@@ -87,6 +88,7 @@ final class Newspack_Popups {
 			add_filter( 'show_admin_bar', [ __CLASS__, 'show_admin_bar' ], 10, 2 ); // phpcs:ignore WordPressVIPMinimum.UserExperience.AdminBarRemoval.RemovalDetected
 
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-model.php';
+			include_once dirname( __FILE__ ) . '/class-newspack-popups-presets.php';
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-inserter.php';
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-api.php';
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-settings.php';
@@ -764,7 +766,7 @@ final class Newspack_Popups {
 		$is_customizer_preview = is_customize_preview();
 		// Used by the Newspack Plugin's Campaigns Wizard.
 		$is_view_as_preview = false != Newspack_Popups_View_As::viewing_as_spec();
-		return ! empty( self::previewed_popup_id() ) || $is_view_as_preview || $is_customizer_preview;
+		return ! empty( self::previewed_popup_id() ) || ! empty( self::preset_popup_id() ) || $is_view_as_preview || $is_customizer_preview;
 	}
 
 	/**
@@ -776,6 +778,19 @@ final class Newspack_Popups {
 		// Not using filter_input since it's not playing well with phpunit.
 		if ( isset( $_GET[ self::NEWSPACK_POPUP_PREVIEW_QUERY_PARAM ] ) && $_GET[ self::NEWSPACK_POPUP_PREVIEW_QUERY_PARAM ] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 			return sanitize_text_field( $_GET[ self::NEWSPACK_POPUP_PREVIEW_QUERY_PARAM ] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		}
+		return null;
+	}
+
+	/**
+	 * Get preset popup slug from the URL.
+	 *
+	 * @return string|null Popup slug, if found in the URL
+	 */
+	public static function preset_popup_id() {
+		// Not using filter_input since it's not playing well with phpunit.
+		if ( isset( $_GET[ self::NEWSPACK_POPUP_PRESET_QUERY_PARAM ] ) && $_GET[ self::NEWSPACK_POPUP_PRESET_QUERY_PARAM ] ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			return sanitize_text_field( $_GET[ self::NEWSPACK_POPUP_PRESET_QUERY_PARAM ] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 		return null;
 	}

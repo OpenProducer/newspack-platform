@@ -85,6 +85,26 @@ class Newspack_Newsletters_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
+	 * Get ESP's lists enabled in wizard for sending.
+	 *
+	 * @return array Lists.
+	 */
+	public function get_enabled_lists() {
+		if ( $this->is_configured() ) {
+			return \Newspack_Newsletters_Subscription::get_lists();
+		} else {
+			return new \WP_Error(
+				'newspack_missing_required_plugin',
+				esc_html__( 'The Newspack Newsletters plugin is not installed and activated. Install and/or activate it to access this feature.', 'newspack' ),
+				[
+					'status' => 400,
+					'level'  => 'fatal',
+				]
+			);
+		}
+	}
+
+	/**
 	 * Add a contact to ESP's list.
 	 *
 	 * @param array  $contact Contact info.

@@ -84,7 +84,7 @@ class AMP_Enhancements {
 				return false;
 			}
 			// Allow any Reader Activation (e.g. localizations) scripts.
-			if ( 0 === strpos( $error['node_attributes']['id'], 'newspack-reader-' ) && Reader_Activation::is_enabled() ) {
+			if ( 0 === strpos( $error['node_attributes']['id'], 'newspack-reader-' ) && Reader_Activation::allow_reg_block_render() ) {
 				return false;
 			}
 			// Allow Complianz plugin (complianz-gdpr) scripts, unless its AMP integration is enabled.

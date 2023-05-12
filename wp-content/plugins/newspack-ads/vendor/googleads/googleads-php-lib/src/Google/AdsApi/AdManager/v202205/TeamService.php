@@ -87,9 +87,10 @@ class TeamService extends \Google\AdsApi\Common\AdsSoapClient
     /**
      * Creates new {@link Team} objects.
      *
-     * The following fields are required:
+     * <p>The following fields are required:
+     *
      * <ul>
-     * <li>{@link Team#name}</li>
+     * <li>{@link Team#name}
      * </ul>
      *
      * @param \Google\AdsApi\AdManager\v202205\Team[] $teams
@@ -102,9 +103,8 @@ class TeamService extends \Google\AdsApi\Common\AdsSoapClient
     }
 
     /**
-     * Gets a {@code TeamPage} of {@code Team} objects that satisfy the
-     * given {@link Statement#query}. The following fields are supported for
-     * filtering:
+     * Gets a {@code TeamPage} of {@code Team} objects that satisfy the given {@link Statement#query}.
+     * The following fields are supported for filtering:
      *
      * <table>
      * <tr>
@@ -123,8 +123,6 @@ class TeamService extends \Google\AdsApi\Common\AdsSoapClient
      * <td>{@link Team#description}</td>
      * </tr>
      * </table>
-     *
-     * a set of teams.
      *
      * @param \Google\AdsApi\AdManager\v202205\Statement $filterStatement
      * @return \Google\AdsApi\AdManager\v202205\TeamPage
