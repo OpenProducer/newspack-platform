@@ -1,3 +1,31 @@
+## [1.114.5](https://github.com/Automattic/newspack-plugin/compare/v1.114.4...v1.114.5) (2023-05-17)
+
+
+### Bug Fixes
+
+* **ras:** total paid sum race condition ([#2464](https://github.com/Automattic/newspack-plugin/issues/2464)) ([eea0e81](https://github.com/Automattic/newspack-plugin/commit/eea0e816a7b7e99087712de665553d10407ff7cb))
+
+## [1.114.4](https://github.com/Automattic/newspack-plugin/compare/v1.114.3...v1.114.4) (2023-05-16)
+
+
+### Bug Fixes
+
+* **perfmatters:** exlcude Newspack CSS from being delayed ([#2459](https://github.com/Automattic/newspack-plugin/issues/2459)) ([ee649f5](https://github.com/Automattic/newspack-plugin/commit/ee649f5e2929f4aba8c38fac9f76991e391ed991))
+
+## [1.114.3](https://github.com/Automattic/newspack-plugin/compare/v1.114.2...v1.114.3) (2023-05-15)
+
+
+### Bug Fixes
+
+* **onboarding:** handoff message component ([#2450](https://github.com/Automattic/newspack-plugin/issues/2450)) ([e010876](https://github.com/Automattic/newspack-plugin/commit/e0108764a3272555e1b882abaa794b10bd52fc03))
+
+## [1.114.2](https://github.com/Automattic/newspack-plugin/compare/v1.114.1...v1.114.2) (2023-05-12)
+
+
+### Bug Fixes
+
+* **perfmatters:** do not delay CSS from Newspack Campaigns or Perfmatters’ own cache ([#2449](https://github.com/Automattic/newspack-plugin/issues/2449)) ([8075b5e](https://github.com/Automattic/newspack-plugin/commit/8075b5edc8a1902cd45f972dc505303f51fa9cfa))
+
 ## [1.114.1](https://github.com/Automattic/newspack-plugin/compare/v1.114.0...v1.114.1) (2023-05-10)
 
 

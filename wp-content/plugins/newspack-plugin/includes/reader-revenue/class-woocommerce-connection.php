@@ -208,8 +208,12 @@ class WooCommerce_Connection {
 		if ( empty( $order_subscriptions ) ) {
 			$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
 			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]        = (float) $customer->get_total_spent();
-			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]       += (float) $order->get_total();
-			$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ]      = '';
+
+			if ( 'pending' === $order->get_status() ) {
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] += (float) $order->get_total();
+			}
+
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = '';
 			$order_items = $order->get_items();
 			if ( $order_items ) {
 				$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = reset( $order_items )->get_name();
@@ -257,8 +261,11 @@ class WooCommerce_Connection {
 				$metadata[ Newspack_Newsletters::get_metadata_key( 'next_payment_date' ) ] = $next_payment_date;
 			}
 
-			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]  = (float) $customer->get_total_spent();
-			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] += (float) $current_subscription->get_total();
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] = (float) $customer->get_total_spent();
+
+			if ( 'pending' === $order->get_status() ) {
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] += (float) $current_subscription->get_total();
+			}
 
 			$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = '';
 			if ( $current_subscription ) {

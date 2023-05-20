@@ -81,9 +81,12 @@ class Perfmatters {
 		return [
 			'plugins/newspack-blocks', // Newspack Blocks.
 			'plugins/newspack-newsletters', // Newspack Newsletters.
+			'plugins/newspack-plugin', // Newspack main plugin.
+			'plugins/newspack-popups', // Newspack Campaigns.
 			'plugins/jetpack/modules/sharedaddy', // Jetpack's share buttons.
 			'plugins/jetpack/_inc/social-logos', // Jetpack's social logos CSS.
 			'/themes/newspack-', // Any Newspack theme stylesheet.
+			'cache/perfmatters', //	Perfmatters' cache.
 			'wp-includes',
 		];
 	}
