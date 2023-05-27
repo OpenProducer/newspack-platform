@@ -351,6 +351,26 @@ final class Newspack_Newsletters_Renderer {
 		$block_mjml_markup = '';
 		$attrs             = self::process_attributes( array_merge( $default_attrs, $attrs ) );
 
+		$conditionals = [];
+		if ( ! empty( $attrs['conditionalBefore'] ) && ! empty( $attrs['conditionalAfter'] ) ) {
+			$conditionals = [
+				'before' => $attrs['conditionalBefore'],
+				'after'  => $attrs['conditionalAfter'],
+			];
+		}
+
+		// Remove attributes that are not supported by MJML.
+		$unsupported_attrs = [
+			'newsletterVisibility',
+			'conditionalBefore',
+			'conditionalAfter',
+		];
+		foreach ( $unsupported_attrs as $attr ) {
+			if ( isset( $attrs[ $attr ] ) ) {
+				unset( $attrs[ $attr ] );
+			}
+		}
+
 		// Default attributes for the section which will envelop the mj-column.
 		$section_attrs = array_merge(
 			$attrs,
@@ -878,12 +898,16 @@ final class Newspack_Newsletters_Renderer {
 			$column_attrs['width'] = '100%';
 			$block_mjml_markup     = '<mj-column ' . self::array_to_attributes( $column_attrs ) . '>' . $block_mjml_markup . '</mj-column>';
 		}
-		if ( $is_in_column || $is_in_list_or_quote || $is_posts_inserter_block ) {
-			// Render a nested block without a wrapping section.
-			return $block_mjml_markup;
-		} else {
-			return '<mj-section ' . self::array_to_attributes( $section_attrs ) . '>' . $block_mjml_markup . '</mj-section>';
+
+		if ( ! $is_in_column && ! $is_in_list_or_quote && ! $is_posts_inserter_block ) {
+			$block_mjml_markup = '<mj-section ' . self::array_to_attributes( $section_attrs ) . '>' . $block_mjml_markup . '</mj-section>';
 		}
+
+		if ( ! empty( $conditionals ) ) {
+			$block_mjml_markup = '<mj-raw>' . $conditionals['before'] . '</mj-raw>' . $block_mjml_markup . '<mj-raw>' . $conditionals['after'] . '</mj-raw>';
+		}
+
+		return $block_mjml_markup;
 	}
 
 	/**

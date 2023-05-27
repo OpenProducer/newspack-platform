@@ -2,17 +2,17 @@
     "packages": [
         {
             "name": "campaignmonitor/createsend-php",
-            "version": "v6.1.2",
-            "version_normalized": "6.1.2.0",
+            "version": "v7.0.0",
+            "version_normalized": "7.0.0.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/campaignmonitor/createsend-php.git",
-                "reference": "922cec7fbc9da1508c18156db7693a6ddad7194e"
+                "reference": "3ac6d4d2721f6529a2cae2515f7e88a17baa7d19"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/campaignmonitor/createsend-php/zipball/922cec7fbc9da1508c18156db7693a6ddad7194e",
-                "reference": "922cec7fbc9da1508c18156db7693a6ddad7194e",
+                "url": "https://api.github.com/repos/campaignmonitor/createsend-php/zipball/3ac6d4d2721f6529a2cae2515f7e88a17baa7d19",
+                "reference": "3ac6d4d2721f6529a2cae2515f7e88a17baa7d19",
                 "shasum": ""
             },
             "require": {
@@ -21,7 +21,7 @@
             "require-dev": {
                 "simpletest/simpletest": "~1.1.3"
             },
-            "time": "2021-10-02T04:57:43+00:00",
+            "time": "2022-02-11T00:01:29+00:00",
             "type": "library",
             "installation-source": "dist",
             "autoload": {
@@ -63,7 +63,7 @@
             ],
             "support": {
                 "issues": "https://github.com/campaignmonitor/createsend-php/issues",
-                "source": "https://github.com/campaignmonitor/createsend-php/tree/v6.1.2"
+                "source": "https://github.com/campaignmonitor/createsend-php/tree/v7.0.0"
             },
             "install-path": "../campaignmonitor/createsend-php"
         },

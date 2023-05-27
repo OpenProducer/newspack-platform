@@ -296,12 +296,18 @@ final class Newspack_Newsletters_Editor {
 			// Remove the Ads CPT - it does not need MJML handling since ads
 			// will be injected into email content before it's converted to MJML.
 			$mjml_handling_post_types = array_values( array_diff( self::get_email_editor_cpts(), [ Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT ] ) );
+			$provider                 = Newspack_Newsletters::get_service_provider();
+			$conditional_tag_support  = false;
+			if ( $provider ) {
+				$conditional_tag_support = $provider::get_conditional_tag_support();
+			}
 			wp_localize_script(
 				'newspack-newsletters-editor',
 				'newspack_email_editor_data',
 				[
 					'email_html_meta'          => Newspack_Newsletters::EMAIL_HTML_META,
 					'mjml_handling_post_types' => $mjml_handling_post_types,
+					'conditional_tag_support'  => $conditional_tag_support,
 				]
 			);
 

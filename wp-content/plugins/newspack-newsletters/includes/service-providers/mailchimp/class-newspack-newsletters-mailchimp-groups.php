@@ -12,15 +12,12 @@ use \DrewM\MailChimp\MailChimp;
 /**
  * This trait adds the Mailchimp Groups implementation to the Mailchimp Service Provider.
  *
+ * It overrides the tags methods used by the other providers to handle "local" lists. In Mailchimp, we use groups for that instead.
+ *
  * In Mailchimp, Groups are also called Interests. Interests are categorized in Interest Categories.
  *
  * In this implementation, we will always add groups/interests to a category called "Newspack Newsletters". If this category
  * doesn't exist, it will be created.
- *
- * You can override the category name by defining the constant NEWSPACK_NEWSLETTERS_MAILCHIMP_GROUPS_CATEGORY_NAME.
- * But only do this if you haven't created any groups/interests yet.
- *
- * From that point on, groups will always be added to this category.
  */
 trait Newspack_Newsletters_Mailchimp_Groups {
 
@@ -121,20 +118,16 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 	/**
 	 * Get the name of the Group Category that will be used to store the groups.
 	 *
-	 * WARNING: If you change this after you have created groups, new groups with the same name will be created in the new category and new readers will be added to the new group.
-	 * Only change this if you are setting up Local lists for the first time.
-	 *
 	 * @return string
 	 */
 	public static function get_group_category_name() {
-		if ( defined( 'NEWSPACK_NEWSLETTERS_MAILCHIMP_GROUP_CATEGORY_NAME' ) ) {
-			return NEWSPACK_NEWSLETTERS_MAILCHIMP_GROUP_CATEGORY_NAME;
-		}
 		return 'Newspack Newsletters';
 	}
 
 	/**
 	 * Gets the Newspack Newsletter group category ID, and creates it if it doesn't exist.
+	 *
+	 * This is the base category for all the groups created via wp-admin as "Local lists".
 	 *
 	 * @param string $list_id The list ID.
 	 * @return string|WP_Error The group category ID on success . WP_Error on failure .
@@ -371,7 +364,7 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 	 * Get the IDs of the groups associated with a contact.
 	 *
 	 * @param string $email The contact email.
-	 * @return array|WP_Error The groups IDs on success. WP_Error on failure.
+	 * @return array|WP_Error The groups IDs on success, grouped by lists. WP_Error on failure.
 	 */
 	public function get_contact_groups_ids( $email ) {
 		$contact_data = $this->get_contact_data( $email );
@@ -381,12 +374,70 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 
 		$groups = [];
 
-		foreach ( $contact_data['interests'] as $group_id => $is_subscribed ) {
-			if ( $is_subscribed ) {
-				$groups[] = $group_id;
+		foreach ( $contact_data['interests'] as $list_id => $interests ) {
+			$groups[ $list_id ] = [];
+			foreach ( $interests as $group_id => $is_subscribed ) {
+				if ( $is_subscribed ) {
+					$groups[ $list_id ][] = $group_id;
+				}
 			}
 		}
 		
 		return $groups;
-	}       
+	}
+
+	/**
+	 * Fetches all group categories of a certain Audience from Mailchimp.
+	 *
+	 * @param string $list_id The Audicence ID.
+	 * @return array The group categories on success.
+	 */
+	public function get_all_categories( $list_id ) {
+		$cache_key = 'newspack_newsletters_mailchimp_categories';
+		$cache     = wp_cache_get( $cache_key, $list_id );
+		if ( $cache ) {
+			return $cache;
+		}
+		$mc     = new Mailchimp( $this->api_key() );
+		$search = $mc->get(
+			sprintf( 'lists/%s/interest-categories', $list_id ),
+			[
+				'count' => 100,
+			]
+		);
+
+		if ( ! empty( $search['total_items'] ) ) {
+			wp_cache_add( $cache_key, $search['categories'], $list_id, 120 );
+			return $search['categories'];
+		}
+		return [];
+	}
+
+	/**
+	 * Fetches all groups in a given category of a certain Audience from Mailchimp.
+	 *
+	 * @param string $list_id The Audicence ID.
+	 * @param string $category_id The Group Category ID.
+	 * @return array The groups on success.
+	 */
+	public function get_all_groups_in_category( $list_id, $category_id ) {
+		$cache_key = 'newspack_newsletters_mailchimp_category_groups';
+		$cache     = wp_cache_get( $cache_key, $category_id );
+		if ( $cache ) {
+			return $cache;
+		}
+		$mc            = new Mailchimp( $this->api_key() );
+		$search_groups = $mc->get(
+			sprintf( '/lists/%s/interest-categories/%s/interests', $list_id, $category_id ),
+			[
+				'count' => 100,
+			]
+		);
+
+		if ( ! empty( $search_groups['total_items'] ) ) {
+			wp_cache_add( $cache_key, $search_groups['interests'], $category_id, 120 );
+			return $search_groups['interests'];
+		}
+		return [];
+	}
 }

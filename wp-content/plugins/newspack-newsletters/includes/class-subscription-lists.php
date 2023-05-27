@@ -270,6 +270,13 @@ class Subscription_Lists {
 			<select name="newspack_newsletters_list" id="newspack_newsletters_list" style="width: 100%">
 				<?php foreach ( $lists as $list ) : ?>
 
+					<?php
+					// Some providers (mailchimp) register some special types of list that are not the native ESP lists. Here we want only the native lists.
+					if ( ! empty( $list['type'] ) ) {
+						continue;
+					}
+					?>
+
 					<option value="<?php echo esc_attr( $list['id'] ); ?>" <?php selected( $current_settings['list'], $list['id'] ); ?> >
 						<?php echo esc_html( $list['name'] ); ?>
 					</option>

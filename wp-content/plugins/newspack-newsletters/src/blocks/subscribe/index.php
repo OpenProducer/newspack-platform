@@ -97,6 +97,8 @@ function render_block( $attrs ) {
 		$available_lists = [ $lists[0] ];
 	}
 
+	$provider = \Newspack_Newsletters::get_service_provider();
+
 	// Enqueue scripts.
 	enqueue_scripts();
 
@@ -235,6 +237,9 @@ function render_block( $attrs ) {
 						placeholder="<?php echo \esc_attr( $attrs['placeholder'] ); ?>"
 						value=""
 					/>
+					<?php if ( $provider && 'mailchimp' === $provider->service && $attrs['mailchimpDoubleOptIn'] ) : ?>
+						<input type="hidden" name="double_optin" value="1" />
+					<?php endif; ?>
 					<input type="submit" value="<?php echo \esc_attr( $attrs['label'] ); ?>" />
 				</div>
 			</form>
@@ -358,6 +363,12 @@ function process_form() {
 		'newspack_popup_id'               => $popup_id,
 		'newsletters_subscription_method' => 'newsletters-subscription-block',
 	];
+
+	// Handle Mailchimp double opt-in option.
+	$provider = \Newspack_Newsletters::get_service_provider();
+	if ( $provider && 'mailchimp' === $provider->service && isset( $_REQUEST['double_optin'] ) && '1' === $_REQUEST['double_optin'] ) {
+		$metadata['status'] = 'pending';
+	}
 
 	$result = \Newspack_Newsletters_Subscription::add_contact(
 		[

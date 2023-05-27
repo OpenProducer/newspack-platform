@@ -899,9 +899,10 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	 *
 	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
 	 *
+	 * @param mixed $context The context in which the labels are being applied.
 	 * @return array
 	 */
-	public static function get_labels() {
+	public static function get_labels( $context = '' ) {
 		return array_merge(
 			parent::get_labels(),
 			[

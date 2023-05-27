@@ -191,7 +191,7 @@ class Newspack_Newsletters_Subscription {
 						'description' => $list['description'] ?? '',
 						'edit_link'   => $list['edit_link'] ?? '',
 						'type'        => $list['type'] ?? '',
-						'type_label'  => isset( $list['type'] ) && 'local' === $list['type'] ? $provider::label( 'local_list_explanation' ) : $provider::label( 'list_explanation' ),
+						'type_label'  => isset( $list['type'] ) && 'local' === $list['type'] ? $provider::label( 'local_list_explanation', $list ) : $provider::label( 'list_explanation', $list ),
 					];
 					if ( isset( $config[ $list['id'] ] ) ) {
 						$list_config    = $config[ $list['id'] ];

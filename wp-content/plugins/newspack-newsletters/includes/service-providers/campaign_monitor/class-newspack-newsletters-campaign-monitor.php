@@ -35,6 +35,21 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 	}
 
 	/**
+	 * Get configuration for conditional tag support.
+	 *
+	 * @return array
+	 */
+	public static function get_conditional_tag_support() {
+		return [
+			'support_url' => 'https://www.campaignmonitor.com/create/dynamic-content/',
+			'example'     => [
+				'before' => '[ifmemberof:"My list|VIP segment"]',
+				'after'  => '[endif]',
+			],
+		];
+	}
+
+	/**
 	 * Get API credentials for service provider.
 	 *
 	 * @return Object Stored API credentials for the service provider.
@@ -648,9 +663,10 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 	 *
 	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
 	 *
+	 * @param mixed $context The context in which the labels are being applied.
 	 * @return array
 	 */
-	public static function get_labels() {
+	public static function get_labels( $context = '' ) {
 		return array_merge(
 			parent::get_labels(),
 			[

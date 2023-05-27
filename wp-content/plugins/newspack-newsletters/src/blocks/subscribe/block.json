@@ -58,6 +58,10 @@
 				"type": "string"
 			}
 		},
+		"mailchimpDoubleOptIn": {
+			"type": "boolean",
+			"default": false
+		},
 		"successMessage": {
 			"type": "string",
 			"default": "Thank you for signing up!"

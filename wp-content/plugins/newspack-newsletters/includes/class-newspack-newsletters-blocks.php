@@ -31,10 +31,12 @@ final class Newspack_Newsletters_Blocks {
 			filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/blocks.js' ),
 			true
 		);
+		$provider = Newspack_Newsletters::get_service_provider();
 		wp_localize_script(
 			$handle,
 			'newspack_newsletters_blocks',
 			[
+				'provider'           => $provider ? $provider->service : '',
 				'settings_url'       => Newspack_Newsletters_Settings::get_settings_url(),
 				'supports_recaptcha' => class_exists( 'Newspack\Recaptcha' ),
 				'has_recaptcha'      => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),

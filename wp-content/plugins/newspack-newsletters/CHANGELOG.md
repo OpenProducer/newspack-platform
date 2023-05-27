@@ -1,3 +1,35 @@
+# [1.65.0](https://github.com/Automattic/newspack-newsletters/compare/v1.64.0...v1.65.0) (2023-05-24)
+
+
+### Bug Fixes
+
+* **activecampaign:** prevent fatal error when fetching contact fields ([#1160](https://github.com/Automattic/newspack-newsletters/issues/1160)) ([4988fdd](https://github.com/Automattic/newspack-newsletters/commit/4988fdd7ac9fd14ff38cf362e595538d9382f4b4))
+* display only Audiences in list metabox ([#1167](https://github.com/Automattic/newspack-newsletters/issues/1167)) ([6bc78bc](https://github.com/Automattic/newspack-newsletters/commit/6bc78bced3579b927e71eaf166c4c10741f60d81))
+
+
+### Features
+
+* conditional content tags ([#1165](https://github.com/Automattic/newspack-newsletters/issues/1165)) ([4d8f67f](https://github.com/Automattic/newspack-newsletters/commit/4d8f67fc7633a3712c190ed71f5f302a8723f131))
+* fix SEND TO mailchimp audiences ([#1168](https://github.com/Automattic/newspack-newsletters/issues/1168)) ([6c0897b](https://github.com/Automattic/newspack-newsletters/commit/6c0897bd4e4de0ed5e30e2d73ca1dd67fa7ffae2))
+* **mailchimp:** support double opt-in subscription ([#1161](https://github.com/Automattic/newspack-newsletters/issues/1161)) ([8183278](https://github.com/Automattic/newspack-newsletters/commit/8183278d351bf663ef48e1649481056602219ff1))
+* offer groups as Subscription Lists ([#1156](https://github.com/Automattic/newspack-newsletters/issues/1156)) ([31e3969](https://github.com/Automattic/newspack-newsletters/commit/31e396981a95c42c3a264f18f4e99563971f8df3))
+
+# [1.65.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.64.0...v1.65.0-alpha.1) (2023-05-11)
+
+
+### Bug Fixes
+
+* **activecampaign:** prevent fatal error when fetching contact fields ([#1160](https://github.com/Automattic/newspack-newsletters/issues/1160)) ([4988fdd](https://github.com/Automattic/newspack-newsletters/commit/4988fdd7ac9fd14ff38cf362e595538d9382f4b4))
+* display only Audiences in list metabox ([#1167](https://github.com/Automattic/newspack-newsletters/issues/1167)) ([6bc78bc](https://github.com/Automattic/newspack-newsletters/commit/6bc78bced3579b927e71eaf166c4c10741f60d81))
+
+
+### Features
+
+* conditional content tags ([#1165](https://github.com/Automattic/newspack-newsletters/issues/1165)) ([4d8f67f](https://github.com/Automattic/newspack-newsletters/commit/4d8f67fc7633a3712c190ed71f5f302a8723f131))
+* fix SEND TO mailchimp audiences ([#1168](https://github.com/Automattic/newspack-newsletters/issues/1168)) ([6c0897b](https://github.com/Automattic/newspack-newsletters/commit/6c0897bd4e4de0ed5e30e2d73ca1dd67fa7ffae2))
+* **mailchimp:** support double opt-in subscription ([#1161](https://github.com/Automattic/newspack-newsletters/issues/1161)) ([8183278](https://github.com/Automattic/newspack-newsletters/commit/8183278d351bf663ef48e1649481056602219ff1))
+* offer groups as Subscription Lists ([#1156](https://github.com/Automattic/newspack-newsletters/issues/1156)) ([31e3969](https://github.com/Automattic/newspack-newsletters/commit/31e396981a95c42c3a264f18f4e99563971f8df3))
+
 # [1.64.0](https://github.com/Automattic/newspack-newsletters/compare/v1.63.0...v1.64.0) (2023-05-08)
 
 
