@@ -395,7 +395,6 @@ class Engagement_Wizard extends Wizard {
 		);
 
 		$data = [
-			'has_reader_activation' => Reader_Activation::is_enabled( false ),
 			'has_memberships'       => class_exists( 'WC_Memberships' ),
 			'reader_activation_url' => \admin_url( 'admin.php?page=newspack-engagement-wizard#/reader-activation' ),
 		];

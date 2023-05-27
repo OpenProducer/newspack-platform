@@ -28,7 +28,7 @@ function register_block() {
 	);
 
 	// No need to register block styles if Reader Activation is disabled.
-	if ( ! Reader_Activation::is_enabled( false ) ) {
+	if ( ! Reader_Activation::is_enabled() ) {
 		return;
 	}
 

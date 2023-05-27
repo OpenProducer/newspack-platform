@@ -85,6 +85,7 @@ class Perfmatters {
 			'plugins/newspack-popups', // Newspack Campaigns.
 			'plugins/jetpack/modules/sharedaddy', // Jetpack's share buttons.
 			'plugins/jetpack/_inc/social-logos', // Jetpack's social logos CSS.
+			'plugins/jetpack/css/jetpack.css', // Jetpack's main CSS.
 			'/themes/newspack-', // Any Newspack theme stylesheet.
 			'cache/perfmatters', //	Perfmatters' cache.
 			'wp-includes',

@@ -691,15 +691,17 @@ amp-script .wpnbha {
 		}
 		.newspack-post-subtitle,
 		.entry-wrapper p,
-		.entry-wrapper .more-link {
-			font-size: 0.8em;
-		}
+		.entry-wrapper .more-link,
 		.entry-meta {
-			font-size: 0.7em;
+			font-size: 0.8em;
 		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.2em;
+			}
+
+			.entry-meta {
+				font-size: 0.7em;
 			}
 
 			.avatar {
@@ -709,19 +711,30 @@ amp-script .wpnbha {
 		}
 	}
 
-	&.ts-2 article {
+	&.ts-2 article,
+	&.ts-1 article {
 		.entry-title {
-			font-size: 0.8em;
+			font-size: 0.9em;
 		}
-		.newspack-post-subtitle {
-			font-size: 0.7em;
-		}
+		.newspack-post-subtitle,
 		.entry-wrapper p,
 		.entry-wrapper .more-link,
 		.entry-meta {
-			font-size: 0.7em;
+			font-size: 0.8em;
 		}
 
+		@include mixins.media( tablet ) {
+			.newspack-post-subtitle,
+			.entry-wrapper p,
+			.entry-wrapper .more-link,
+			.entry-meta,
+			.newspack-post-subtitle {
+				font-size: 0.7em;
+			}
+		}
+	}
+
+	&.ts-2 article {
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 0.9em;
@@ -735,18 +748,11 @@ amp-script .wpnbha {
 	}
 
 	&.ts-1 article {
-		.entry-title,
-		.entry-wrapper p,
-		.entry-wrapper .more-link {
-			font-size: 0.7em;
-		}
-		.newspack-post-subtitle {
-			font-size: 0.7em;
-		}
-		.entry-meta {
-			font-size: 0.6em;
-		}
 		@include mixins.media( tablet ) {
+			.entry-title {
+				font-size: 0.7em;
+			}
+
 			.avatar {
 				height: 24px;
 				width: 24px;

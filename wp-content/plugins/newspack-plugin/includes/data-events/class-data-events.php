@@ -315,12 +315,20 @@ final class Data_Events {
 		];
 
 		/**
-		 * Filters the body of the action dispatch request.
+		 * Filters the body of the action dispatch request. Return a WP_Error if you want to cancel the dispatch.
 		 *
 		 * @param array  $body        Body.
 		 * @param string $action_name The action name.
 		 */
 		$body = apply_filters( 'newspack_data_events_dispatch_body', $body, $action_name );
+
+		if ( is_wp_error( $body ) ) {
+			Logger::log(
+				sprintf( 'Error dispatching action "%s": %s', $action_name, $body->get_error_message() ),
+				self::LOGGER_HEADER
+			);
+			return $body;
+		}
 
 		if ( self::use_action_scheduler() ) {
 			Logger::log(

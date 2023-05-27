@@ -459,27 +459,16 @@ final class Reader_Activation {
 	}
 
 	/**
-	 * Whether reader activation is enabled.
-	 *
-	 * @param bool $strict If true, check both the environment constant and the setting.
-	 *                     If false, only check for the constant.
+	 * Whether reader activation features should be enabled.
 	 *
 	 * @return bool True if reader activation is enabled.
 	 */
-	public static function is_enabled( $strict = true ) {
+	public static function is_enabled() {
 		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
 			return true;
 		}
 
-		$is_enabled = defined( 'NEWSPACK_EXPERIMENTAL_READER_ACTIVATION' ) && NEWSPACK_EXPERIMENTAL_READER_ACTIVATION;
-
-		if ( ! $strict ) {
-			return $is_enabled;
-		}
-
-		if ( $is_enabled ) {
-			$is_enabled = (bool) \get_option( self::OPTIONS_PREFIX . 'enabled', false );
-		}
+		$is_enabled = (bool) \get_option( self::OPTIONS_PREFIX . 'enabled', false );
 
 		/**
 		 * Filters whether reader activation is enabled.

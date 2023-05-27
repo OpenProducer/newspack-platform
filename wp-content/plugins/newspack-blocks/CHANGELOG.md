@@ -1,3 +1,17 @@
+## [1.68.2](https://github.com/Automattic/newspack-blocks/compare/v1.68.1...v1.68.2) (2023-05-24)
+
+
+### Bug Fixes
+
+* bump up font size on smallest blocks ([#1443](https://github.com/Automattic/newspack-blocks/issues/1443)) ([97c77c3](https://github.com/Automattic/newspack-blocks/commit/97c77c3129c352b541be47e7b842f0b048165a81))
+
+## [1.68.2-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v1.68.1...v1.68.2-alpha.1) (2023-05-11)
+
+
+### Bug Fixes
+
+* bump up font size on smallest blocks ([#1443](https://github.com/Automattic/newspack-blocks/issues/1443)) ([97c77c3](https://github.com/Automattic/newspack-blocks/commit/97c77c3129c352b541be47e7b842f0b048165a81))
+
 ## [1.68.1](https://github.com/Automattic/newspack-blocks/compare/v1.68.0...v1.68.1) (2023-05-09)
 
 

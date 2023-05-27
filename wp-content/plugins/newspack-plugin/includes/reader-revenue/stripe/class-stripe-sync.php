@@ -212,7 +212,15 @@ class Stripe_Sync {
 				}
 			}
 
-			$subscription = Stripe_Connection::get_subscription_from_payment( $payment );
+			// Check if there are any active subscriptions.
+			$subscriptions = Stripe_Connection::get_subscriptions_of_customer( $customer->id );
+			if ( ! empty( $subscriptions['data'] ) ) {
+				$subscription = reset( $subscriptions['data'] );
+			} else {
+				// If there are no active subscriptions, see if there used to be a subscription.
+				$subscription = Stripe_Connection::get_subscription_from_payment( $payment );
+			}
+
 			if ( $subscription ) {
 				$recurring_related_metadata = Stripe_Connection::create_recurring_payment_metadata(
 					$frequency,
@@ -221,7 +229,7 @@ class Stripe_Sync {
 					$subscription['start_date']
 				);
 				$metadata                   = array_merge( $recurring_related_metadata, $metadata );
-				if ( 'active' !== $subscription['status'] ) {
+				if ( ! in_array( $subscription['status'], [ 'active', 'trialing' ], true ) ) {
 					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-' . $membership_status;
 				}
 				if ( $subscription['ended_at'] ) {

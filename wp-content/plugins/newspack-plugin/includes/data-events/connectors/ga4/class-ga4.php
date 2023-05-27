@@ -160,7 +160,7 @@ class GA4 {
 	 * @return array
 	 */
 	public static function filter_donation_new_event_body( $body, $event_name ) {
-		if ( ! empty( $body['data']['ga_client_id'] || ( 'donation_new' !== $event_name && 'campaign_interaction' !== $event_name ) ) ) {
+		if ( ! empty( $body['data']['ga_client_id'] ) || ( 'donation_new' !== $event_name && 'campaign_interaction' !== $event_name ) ) {
 			return $body;
 		}
 
