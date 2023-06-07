@@ -198,7 +198,7 @@ return array(
     'Google\\Site_Kit\\Modules\\Analytics\\Advanced_Tracking\\Event_List_Registry' => $baseDir . '/Modules/Analytics/Advanced_Tracking/Event_List_Registry.php',
     'Google\\Site_Kit\\Modules\\Analytics\\Advanced_Tracking\\Script_Injector' => $baseDir . '/Modules/Analytics/Advanced_Tracking/Script_Injector.php',
     'Google\\Site_Kit\\Modules\\Analytics\\Google_Service_AnalyticsProvisioning' => $baseDir . '/Modules/Analytics/Google_Service_AnalyticsProvisioning.php',
-    'Google\\Site_Kit\\Modules\\Analytics\\Proxy_AccountTicket' => $baseDir . '/Modules/Analytics/Proxy_Account_Ticket.php',
+    'Google\\Site_Kit\\Modules\\Analytics\\Proxy_AccountTicket' => $baseDir . '/Modules/Analytics/Proxy_AccountTicket.php',
     'Google\\Site_Kit\\Modules\\Analytics\\Proxy_Provisioning' => $baseDir . '/Modules/Analytics/Proxy_Provisioning.php',
     'Google\\Site_Kit\\Modules\\Analytics\\Settings' => $baseDir . '/Modules/Analytics/Settings.php',
     'Google\\Site_Kit\\Modules\\Analytics\\Tag_Guard' => $baseDir . '/Modules/Analytics/Tag_Guard.php',

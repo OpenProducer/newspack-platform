@@ -466,6 +466,15 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 					$lists_response->getMessage()
 				);
 			}
+
+			if ( ! isset( $lists_response['lists'] ) ) {
+				$error_message  = __( 'Error retrieving Mailchimp lists.', 'newspack_newsletters' );
+				$error_message .= ! empty( $lists_response['title'] ) ? ' ' . $lists_response['title'] : '';
+				return new WP_Error(
+					'newspack_newsletters_mailchimp_error',
+					$error_message
+				);
+			}
 			$lists = [];
 
 			// In addition to Audiences, we also automatically fetch all groups and offer them as Subscription Lists.

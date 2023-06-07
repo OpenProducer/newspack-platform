@@ -1,3 +1,17 @@
+# [1.66.0](https://github.com/Automattic/newspack-newsletters/compare/v1.65.0...v1.66.0) (2023-06-05)
+
+
+### Features
+
+* better feedback to the user about api error ([#1179](https://github.com/Automattic/newspack-newsletters/issues/1179)) ([43807e0](https://github.com/Automattic/newspack-newsletters/commit/43807e066180cec04da0b1641cb183c9cf543f26))
+
+# [1.66.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.65.0...v1.66.0-alpha.1) (2023-05-25)
+
+
+### Features
+
+* better feedback to the user about api error ([#1179](https://github.com/Automattic/newspack-newsletters/issues/1179)) ([43807e0](https://github.com/Automattic/newspack-newsletters/commit/43807e066180cec04da0b1641cb183c9cf543f26))
+
 # [1.65.0](https://github.com/Automattic/newspack-newsletters/compare/v1.64.0...v1.65.0) (2023-05-24)
 
 

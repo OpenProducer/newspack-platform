@@ -6,12 +6,15 @@
  * @package automattic/jetpack
  */
 
+use Automattic\Jetpack\Boost_Speed_Score\Speed_Score_History;
 use Automattic\Jetpack\Connection\Manager as Connection_Manager;
 use Automattic\Jetpack\Connection\Plugin_Storage as Connection_Plugin_Storage;
 use Automattic\Jetpack\Connection\REST_Connector;
 use Automattic\Jetpack\Constants;
 use Automattic\Jetpack\Device_Detection\User_Agent_Info;
 use Automattic\Jetpack\Identity_Crisis;
+use Automattic\Jetpack\Image_CDN\Image_CDN_Core;
+use Automattic\Jetpack\Image_CDN\Image_CDN_Image;
 use Automattic\Jetpack\IP\Utils as IP_Utils;
 use Automattic\Jetpack\Licensing;
 use Automattic\Jetpack\Licensing\Endpoints as Licensing_Endpoints;
@@ -124,6 +127,8 @@ class Jetpack_Redux_State_Helper {
 
 		$host = new Host();
 
+		$speed_score_history = new Speed_Score_History( wp_parse_url( get_site_url(), PHP_URL_HOST ) );
+
 		return array(
 			'WP_API_root'                 => esc_url_raw( rest_url() ),
 			'WP_API_nonce'                => wp_create_nonce( 'wp_rest' ),
@@ -184,6 +189,7 @@ class Jetpack_Redux_State_Helper {
 				'showMyJetpack'              => My_Jetpack_Initializer::should_initialize(),
 				'isMultisite'                => is_multisite(),
 				'dateFormat'                 => get_option( 'date_format' ),
+				'latestBoostSpeedScores'     => $speed_score_history->latest(),
 			),
 			'themeData'                   => array(
 				'name'      => $current_theme->get( 'Name' ),
@@ -281,10 +287,9 @@ class Jetpack_Redux_State_Helper {
 
 		$post_thumbnail = isset( $post['post_thumbnail'] ) ? $post['post_thumbnail'] : null;
 		if ( ! empty( $post_thumbnail ) ) {
-			require_once JETPACK__PLUGIN_DIR . '_inc/lib/class.jetpack-photon-image.php';
-			$photon_image = new Jetpack_Photon_Image(
+			$photon_image = new Image_CDN_Image(
 				array(
-					'file'   => jetpack_photon_url( $post_thumbnail['URL'] ),
+					'file'   => Image_CDN_Core::cdn_url( $post_thumbnail['URL'] ),
 					'width'  => $post_thumbnail['width'],
 					'height' => $post_thumbnail['height'],
 				),

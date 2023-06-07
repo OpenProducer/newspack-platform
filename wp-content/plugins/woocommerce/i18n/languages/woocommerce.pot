@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 7.7.0\n"
+"Project-Id-Version: WooCommerce 7.7.2\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-05-09T22:08:15+00:00\n"
+"POT-Creation-Date: 2023-05-30T23:19:10+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.7.1\n"
 "X-Domain: woocommerce\n"
@@ -9829,8 +9829,8 @@ msgstr ""
 #: includes/admin/settings/views/html-admin-page-shipping-zone-methods.php:125
 #: includes/admin/settings/views/html-admin-page-shipping-zones.php:78
 #: includes/class-wc-post-types.php:328
-#: includes/class-wc-post-types.php:746
-#: includes/class-wc-post-types.php:811
+#: includes/class-wc-post-types.php:397
+#: includes/class-wc-post-types.php:462
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore_PostTypeRegistrar.php:35
 #: src/Internal/Admin/Orders/ListTable.php:1427
 #: src/Internal/Admin/ProductReviews/ReviewsListTable.php:546
@@ -10050,7 +10050,7 @@ msgid "Total"
 msgstr ""
 
 #: includes/admin/class-wc-admin-dashboard.php:437
-#: includes/class-wc-post-types.php:751
+#: includes/class-wc-post-types.php:402
 msgid "No orders found"
 msgstr ""
 
@@ -10356,7 +10356,7 @@ msgid "WooCommerce extensions"
 msgstr ""
 
 #: includes/admin/class-wc-admin-menus.php:211
-#: includes/class-wc-post-types.php:754
+#: includes/class-wc-post-types.php:405
 msgctxt "Admin menu name"
 msgid "Orders"
 msgstr ""
@@ -11041,7 +11041,7 @@ msgstr ""
 #: includes/admin/class-wc-admin-reports.php:47
 #: includes/admin/reports/class-wc-report-customer-list.php:219
 #: includes/admin/settings/class-wc-settings-advanced.php:238
-#: includes/class-wc-post-types.php:742
+#: includes/class-wc-post-types.php:393
 #: includes/class-wc-privacy-exporters.php:76
 #: includes/class-wc-query.php:134
 #: includes/react-admin/connect-existing-pages.php:134
@@ -11254,9 +11254,9 @@ msgstr ""
 #: includes/admin/settings/class-wc-settings-tax.php:249
 #: includes/admin/settings/views/html-settings-tax.php:40
 #: includes/class-wc-order-item-shipping.php:201
-#: includes/class-wc-post-types.php:684
 #: src/Admin/API/Reports/Revenue/Stats/Controller.php:198
 #: src/Admin/API/Reports/Revenue/Stats/Controller.php:463
+#: src/Admin/Features/ProductBlockEditor/Init.php:444
 #: templates/cart/cart-totals.php:52
 #: templates/cart/cart-totals.php:53
 #: assets/client/admin/chunks/3628.js:1
@@ -12721,8 +12721,8 @@ msgstr ""
 #: includes/admin/settings/class-wc-settings-tax.php:250
 #: includes/admin/views/html-bulk-edit-product.php:91
 #: includes/admin/views/html-quick-edit-product.php:67
-#: includes/class-wc-post-types.php:550
 #: includes/export/class-wc-product-csv-exporter.php:122
+#: src/Admin/Features/ProductBlockEditor/Init.php:310
 #: assets/client/admin/chunks/3628.js:1
 msgid "Tax class"
 msgstr ""
@@ -12815,9 +12815,9 @@ msgstr ""
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:687
 #: includes/admin/meta-boxes/views/html-product-data-general.php:55
 #: includes/admin/views/html-quick-edit-product.php:41
-#: includes/class-wc-post-types.php:425
-#: includes/class-wc-post-types.php:508
 #: includes/export/class-wc-product-csv-exporter.php:138
+#: src/Admin/Features/ProductBlockEditor/Init.php:185
+#: src/Admin/Features/ProductBlockEditor/Init.php:268
 #: assets/client/admin/chunks/3628.js:1
 msgid "Sale price"
 msgstr ""
@@ -12868,8 +12868,8 @@ msgstr ""
 
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:543
 #: includes/admin/importers/class-wc-product-csv-importer-controller.php:716
-#: includes/class-wc-post-types.php:437
 #: includes/export/class-wc-product-csv-exporter.php:143
+#: src/Admin/Features/ProductBlockEditor/Init.php:197
 #: assets/client/admin/chunks/3628.js:1
 msgid "Images"
 msgstr ""
@@ -13742,7 +13742,7 @@ msgstr ""
 #: includes/admin/settings/class-wc-settings-general.php:24
 #: includes/admin/settings/class-wc-settings-page.php:173
 #: includes/admin/settings/class-wc-settings-products.php:41
-#: includes/class-wc-post-types.php:373
+#: src/Admin/Features/ProductBlockEditor/Init.php:133
 #: assets/client/admin/chunks/3628.js:1
 #: packages/woocommerce-blocks/build/wc-shipping-method-pickup-location.js:80
 msgid "General"
@@ -14166,8 +14166,8 @@ msgstr ""
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:117
 #: includes/admin/settings/class-wc-settings-products.php:42
 #: includes/admin/settings/class-wc-settings-products.php:224
-#: includes/class-wc-post-types.php:584
-#: includes/class-wc-post-types.php:590
+#: src/Admin/Features/ProductBlockEditor/Init.php:344
+#: src/Admin/Features/ProductBlockEditor/Init.php:350
 #: assets/client/admin/chunks/3628.js:1
 msgid "Inventory"
 msgstr ""
@@ -14177,7 +14177,7 @@ msgid "Linked Products"
 msgstr ""
 
 #: includes/admin/meta-boxes/class-wc-meta-box-product-data.php:120
-#: includes/class-wc-post-types.php:726
+#: includes/class-wc-post-types.php:377
 #: src/Admin/API/Reports/Products/Controller.php:401
 #: src/Admin/ReportCSVEmail.php:41
 #: src/Internal/Admin/Analytics.php:239
@@ -14192,8 +14192,8 @@ msgstr ""
 
 #: includes/admin/meta-boxes/class-wc-meta-box-product-data.php:126
 #: includes/admin/settings/class-wc-settings-advanced.php:27
-#: includes/class-wc-post-types.php:542
-#: includes/class-wc-post-types.php:611
+#: src/Admin/Features/ProductBlockEditor/Init.php:302
+#: src/Admin/Features/ProductBlockEditor/Init.php:371
 #: src/Internal/ProductAttributesLookup/LookupDataStore.php:651
 #: assets/client/admin/chunks/3628.js:1
 msgid "Advanced"
@@ -14899,7 +14899,7 @@ msgid "Sold individually"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-inventory.php:166
-#: includes/class-wc-post-types.php:660
+#: src/Admin/Features/ProductBlockEditor/Init.php:420
 #: assets/client/admin/chunks/3628.js:1
 msgid "Limit purchases to 1 item per order"
 msgstr ""
@@ -15025,8 +15025,8 @@ msgid "Toggle &quot;Virtual&quot;"
 msgstr ""
 
 #: includes/admin/meta-boxes/views/html-product-data-variations.php:108
-#: includes/class-wc-post-types.php:460
-#: includes/class-wc-post-types.php:466
+#: src/Admin/Features/ProductBlockEditor/Init.php:220
+#: src/Admin/Features/ProductBlockEditor/Init.php:226
 #: assets/client/admin/chunks/3628.js:1
 msgid "Pricing"
 msgstr ""
@@ -16307,7 +16307,7 @@ msgid "Endpoint for the \"My account &rarr; Orders\" page."
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-advanced.php:247
-#: includes/class-wc-post-types.php:749
+#: includes/class-wc-post-types.php:400
 msgid "View order"
 msgstr ""
 
@@ -17495,8 +17495,8 @@ msgstr ""
 #: includes/admin/settings/views/html-settings-tax.php:24
 #: includes/admin/views/html-bulk-edit-product.php:97
 #: includes/admin/views/html-quick-edit-product.php:72
-#: includes/class-wc-post-types.php:560
 #: includes/wc-product-functions.php:854
+#: src/Admin/Features/ProductBlockEditor/Init.php:320
 msgid "Standard"
 msgstr ""
 
@@ -20358,12 +20358,12 @@ msgid "Refund and Returns Policy"
 msgstr ""
 
 #: includes/class-wc-install.php:825
-#: includes/class-wc-post-types.php:564
+#: src/Admin/Features/ProductBlockEditor/Init.php:324
 msgid "Reduced rate"
 msgstr ""
 
 #: includes/class-wc-install.php:826
-#: includes/class-wc-post-types.php:568
+#: src/Admin/Features/ProductBlockEditor/Init.php:328
 msgid "Zero rate"
 msgstr ""
 
@@ -20871,161 +20871,64 @@ msgstr ""
 msgid "This is where you can browse products in this store."
 msgstr ""
 
-#: includes/class-wc-post-types.php:379
-msgid "Basic details"
-msgstr ""
-
-#: includes/class-wc-post-types.php:380
-#: assets/client/admin/chunks/3628.js:1
-msgid "This info will be displayed on the product page, category pages, social media, and search results."
-msgstr ""
-
-#: includes/class-wc-post-types.php:409
-#: includes/class-wc-post-types.php:492
-#: assets/client/admin/chunks/3628.js:1
-msgid "List price"
-msgstr ""
-
-#. translators: %1$s: Images guide link opening tag. %2$s: Images guide link closing tag.
-#: includes/class-wc-post-types.php:440
-msgid "Drag images, upload new ones or select files from your library. For best results, use JPEG files that are 1000 by 1000 pixels or larger. %1$sHow to prepare images?%2$s."
-msgstr ""
-
-#. translators: %1$s: Images guide link opening tag. %2$s: Images guide link closing tag.
-#: includes/class-wc-post-types.php:469
-msgid "Set a competitive price, put the product on sale, and manage tax calculations. %1$sHow to price your product?%2$s"
-msgstr ""
-
-#: includes/class-wc-post-types.php:521
-#: assets/client/admin/chunks/3628.js:1
-msgid "Charge sales tax on"
-msgstr ""
-
-#: includes/class-wc-post-types.php:525
-#: assets/client/admin/chunks/3628.js:1
-msgid "Product and shipping"
-msgstr ""
-
-#: includes/class-wc-post-types.php:529
-#: assets/client/admin/chunks/3628.js:1
-msgid "Only shipping"
-msgstr ""
-
-#: includes/class-wc-post-types.php:533
-#: assets/client/admin/chunks/3628.js:1
-msgid "Don't charge tax"
-msgstr ""
-
-#. translators: %1$s: Learn more link opening tag. %2$s: Learn more link closing tag.
-#: includes/class-wc-post-types.php:553
-msgid "Apply a tax rate if this product qualifies for tax reduction or exemption. %1$sLearn more%2$s."
-msgstr ""
-
-#. translators: %1$s: Inventory settings link opening tag. %2$s: Inventory settings link closing tag.
-#: includes/class-wc-post-types.php:593
-msgid "Set up and manage inventory for this product, including status and available quantity. %1$sManage store inventory settings%2$s"
-msgstr ""
-
-#: includes/class-wc-post-types.php:627
-#: assets/client/admin/chunks/3628.js:1
-msgid "When out of stock"
-msgstr ""
-
-#: includes/class-wc-post-types.php:631
-#: assets/client/admin/chunks/3628.js:1
-msgid "Allow purchases"
-msgstr ""
-
-#: includes/class-wc-post-types.php:635
-#: assets/client/admin/chunks/3628.js:1
-msgid "Allow purchases, but notify customers"
-msgstr ""
-
-#: includes/class-wc-post-types.php:642
-#: assets/client/admin/chunks/3628.js:1
-msgid "Don't allow purchases"
-msgstr ""
-
-#: includes/class-wc-post-types.php:656
-#: assets/client/admin/chunks/3628.js:1
-msgid "Restrictions"
-msgstr ""
-
-#: includes/class-wc-post-types.php:665
-msgid "When checked, customers will be able to purchase only 1 item in a single order. This is particularly useful for items that have limited quantity, like art or handmade goods."
-msgstr ""
-
-#: includes/class-wc-post-types.php:690
-msgid "Fees & dimensions"
-msgstr ""
-
-#. translators: %1$s: How to get started? link opening tag. %2$s: How to get started? link closing tag.
-#: includes/class-wc-post-types.php:693
-msgid "Set up shipping costs and enter dimensions used for accurate rate calculations. %1$sHow to get started?%2$s."
-msgstr ""
-
-#: includes/class-wc-post-types.php:705
-msgid "Shipping fee"
-msgstr ""
-
-#: includes/class-wc-post-types.php:743
+#: includes/class-wc-post-types.php:394
 msgctxt "shop_order post type singular name"
 msgid "Order"
 msgstr ""
 
-#: includes/class-wc-post-types.php:744
+#: includes/class-wc-post-types.php:395
 #: src/Admin/Features/Navigation/CoreMenu.php:295
 msgid "Add order"
 msgstr ""
 
-#: includes/class-wc-post-types.php:745
+#: includes/class-wc-post-types.php:396
 msgid "Add new order"
 msgstr ""
 
-#: includes/class-wc-post-types.php:747
+#: includes/class-wc-post-types.php:398
 msgid "Edit order"
 msgstr ""
 
-#: includes/class-wc-post-types.php:748
+#: includes/class-wc-post-types.php:399
 #: includes/emails/class-wc-email-new-order.php:31
 msgid "New order"
 msgstr ""
 
-#: includes/class-wc-post-types.php:750
+#: includes/class-wc-post-types.php:401
 #: src/Internal/Admin/Orders/ListTable.php:213
 msgid "Search orders"
 msgstr ""
 
-#: includes/class-wc-post-types.php:752
+#: includes/class-wc-post-types.php:403
 msgid "No orders found in trash"
 msgstr ""
 
-#: includes/class-wc-post-types.php:753
+#: includes/class-wc-post-types.php:404
 msgid "Parent orders"
 msgstr ""
 
-#: includes/class-wc-post-types.php:755
+#: includes/class-wc-post-types.php:406
 msgid "Filter orders"
 msgstr ""
 
-#: includes/class-wc-post-types.php:756
+#: includes/class-wc-post-types.php:407
 msgid "Orders navigation"
 msgstr ""
 
-#: includes/class-wc-post-types.php:757
+#: includes/class-wc-post-types.php:408
 msgid "Orders list"
 msgstr ""
 
-#: includes/class-wc-post-types.php:759
+#: includes/class-wc-post-types.php:410
 msgid "This is where store orders are stored."
 msgstr ""
 
-#: includes/class-wc-post-types.php:782
+#: includes/class-wc-post-types.php:433
 #: assets/client/admin/chunks/6743.js:1
 msgid "Refunds"
 msgstr ""
 
-#: includes/class-wc-post-types.php:806
+#: includes/class-wc-post-types.php:457
 #: includes/react-admin/connect-existing-pages.php:177
 #: src/Admin/API/Reports/Revenue/Stats/Controller.php:460
 #: src/Admin/ReportCSVEmail.php:33
@@ -21044,7 +20947,7 @@ msgstr ""
 msgid "Coupons"
 msgstr ""
 
-#: includes/class-wc-post-types.php:807
+#: includes/class-wc-post-types.php:458
 #: assets/client/admin/chunks/analytics-report-coupons.js:1
 #: assets/client/admin/chunks/analytics-report-orders.js:1
 msgid "Coupon"
@@ -21052,222 +20955,222 @@ msgid_plural "Coupons"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-post-types.php:808
+#: includes/class-wc-post-types.php:459
 msgctxt "Admin menu name"
 msgid "Coupons"
 msgstr ""
 
-#: includes/class-wc-post-types.php:809
+#: includes/class-wc-post-types.php:460
 msgid "Add coupon"
 msgstr ""
 
-#: includes/class-wc-post-types.php:810
+#: includes/class-wc-post-types.php:461
 msgid "Add new coupon"
 msgstr ""
 
-#: includes/class-wc-post-types.php:812
+#: includes/class-wc-post-types.php:463
 msgid "Edit coupon"
 msgstr ""
 
-#: includes/class-wc-post-types.php:813
+#: includes/class-wc-post-types.php:464
 msgid "New coupon"
 msgstr ""
 
-#: includes/class-wc-post-types.php:814
+#: includes/class-wc-post-types.php:465
 msgid "View coupon"
 msgstr ""
 
-#: includes/class-wc-post-types.php:815
+#: includes/class-wc-post-types.php:466
 #: assets/client/admin/chunks/6743.js:1
 msgid "Search coupons"
 msgstr ""
 
-#: includes/class-wc-post-types.php:816
+#: includes/class-wc-post-types.php:467
 msgid "No coupons found"
 msgstr ""
 
-#: includes/class-wc-post-types.php:817
+#: includes/class-wc-post-types.php:468
 msgid "No coupons found in trash"
 msgstr ""
 
-#: includes/class-wc-post-types.php:818
+#: includes/class-wc-post-types.php:469
 msgid "Parent coupon"
 msgstr ""
 
-#: includes/class-wc-post-types.php:819
+#: includes/class-wc-post-types.php:470
 msgid "Filter coupons"
 msgstr ""
 
-#: includes/class-wc-post-types.php:820
+#: includes/class-wc-post-types.php:471
 msgid "Coupons navigation"
 msgstr ""
 
-#: includes/class-wc-post-types.php:821
+#: includes/class-wc-post-types.php:472
 msgid "Coupons list"
 msgstr ""
 
-#: includes/class-wc-post-types.php:823
+#: includes/class-wc-post-types.php:474
 msgid "This is where you can add new coupons that customers can use in your store."
 msgstr ""
 
-#: includes/class-wc-post-types.php:855
+#: includes/class-wc-post-types.php:506
 msgid "Category added."
 msgstr ""
 
-#: includes/class-wc-post-types.php:856
+#: includes/class-wc-post-types.php:507
 msgid "Category deleted."
 msgstr ""
 
-#: includes/class-wc-post-types.php:857
+#: includes/class-wc-post-types.php:508
 msgid "Category updated."
 msgstr ""
 
-#: includes/class-wc-post-types.php:858
+#: includes/class-wc-post-types.php:509
 msgid "Category not added."
 msgstr ""
 
-#: includes/class-wc-post-types.php:859
+#: includes/class-wc-post-types.php:510
 msgid "Category not updated."
 msgstr ""
 
-#: includes/class-wc-post-types.php:860
+#: includes/class-wc-post-types.php:511
 msgid "Categories deleted."
 msgstr ""
 
-#: includes/class-wc-post-types.php:865
+#: includes/class-wc-post-types.php:516
 msgid "Tag added."
 msgstr ""
 
-#: includes/class-wc-post-types.php:866
+#: includes/class-wc-post-types.php:517
 msgid "Tag deleted."
 msgstr ""
 
-#: includes/class-wc-post-types.php:867
+#: includes/class-wc-post-types.php:518
 msgid "Tag updated."
 msgstr ""
 
-#: includes/class-wc-post-types.php:868
+#: includes/class-wc-post-types.php:519
 msgid "Tag not added."
 msgstr ""
 
-#: includes/class-wc-post-types.php:869
+#: includes/class-wc-post-types.php:520
 msgid "Tag not updated."
 msgstr ""
 
-#: includes/class-wc-post-types.php:870
+#: includes/class-wc-post-types.php:521
 msgid "Tags deleted."
 msgstr ""
 
 #. translators: %s: taxonomy label
-#: includes/class-wc-post-types.php:886
+#: includes/class-wc-post-types.php:537
 msgctxt "taxonomy term messages"
 msgid "%s added"
 msgstr ""
 
 #. translators: %s: taxonomy label
-#: includes/class-wc-post-types.php:888
-#: includes/class-wc-post-types.php:896
+#: includes/class-wc-post-types.php:539
+#: includes/class-wc-post-types.php:547
 msgctxt "taxonomy term messages"
 msgid "%s deleted"
 msgstr ""
 
 #. translators: %s: taxonomy label
-#: includes/class-wc-post-types.php:890
+#: includes/class-wc-post-types.php:541
 msgctxt "taxonomy term messages"
 msgid "%s updated"
 msgstr ""
 
 #. translators: %s: taxonomy label
-#: includes/class-wc-post-types.php:892
+#: includes/class-wc-post-types.php:543
 msgctxt "taxonomy term messages"
 msgid "%s not added"
 msgstr ""
 
 #. translators: %s: taxonomy label
-#: includes/class-wc-post-types.php:894
+#: includes/class-wc-post-types.php:545
 msgctxt "taxonomy term messages"
 msgid "%s not updated"
 msgstr ""
 
-#: includes/class-wc-post-types.php:914
+#: includes/class-wc-post-types.php:565
 #: includes/wc-order-functions.php:98
 msgctxt "Order status"
 msgid "Pending payment"
 msgstr ""
 
 #. translators: %s: number of orders
-#: includes/class-wc-post-types.php:920
+#: includes/class-wc-post-types.php:571
 msgid "Pending payment <span class=\"count\">(%s)</span>"
 msgid_plural "Pending payment <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-post-types.php:923
+#: includes/class-wc-post-types.php:574
 #: includes/wc-order-functions.php:99
 msgctxt "Order status"
 msgid "Processing"
 msgstr ""
 
 #. translators: %s: number of orders
-#: includes/class-wc-post-types.php:929
+#: includes/class-wc-post-types.php:580
 msgid "Processing <span class=\"count\">(%s)</span>"
 msgid_plural "Processing <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-post-types.php:932
+#: includes/class-wc-post-types.php:583
 #: includes/wc-order-functions.php:100
 msgctxt "Order status"
 msgid "On hold"
 msgstr ""
 
 #. translators: %s: number of orders
-#: includes/class-wc-post-types.php:938
+#: includes/class-wc-post-types.php:589
 msgid "On hold <span class=\"count\">(%s)</span>"
 msgid_plural "On hold <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-post-types.php:941
+#: includes/class-wc-post-types.php:592
 #: includes/wc-order-functions.php:101
 msgctxt "Order status"
 msgid "Completed"
 msgstr ""
 
 #. translators: %s: number of orders
-#: includes/class-wc-post-types.php:947
+#: includes/class-wc-post-types.php:598
 msgid "Completed <span class=\"count\">(%s)</span>"
 msgid_plural "Completed <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-post-types.php:950
+#: includes/class-wc-post-types.php:601
 #: includes/wc-order-functions.php:102
 msgctxt "Order status"
 msgid "Cancelled"
 msgstr ""
 
 #. translators: %s: number of orders
-#: includes/class-wc-post-types.php:956
+#: includes/class-wc-post-types.php:607
 msgid "Cancelled <span class=\"count\">(%s)</span>"
 msgid_plural "Cancelled <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-post-types.php:959
+#: includes/class-wc-post-types.php:610
 #: includes/wc-order-functions.php:103
 msgctxt "Order status"
 msgid "Refunded"
 msgstr ""
 
 #. translators: %s: number of orders
-#: includes/class-wc-post-types.php:965
+#: includes/class-wc-post-types.php:616
 msgid "Refunded <span class=\"count\">(%s)</span>"
 msgid_plural "Refunded <span class=\"count\">(%s)</span>"
 msgstr[0] ""
 msgstr[1] ""
 
-#: includes/class-wc-post-types.php:968
+#: includes/class-wc-post-types.php:619
 #: includes/wc-order-functions.php:104
 msgctxt "Order status"
 msgid "Failed"
@@ -21275,7 +21178,7 @@ msgstr ""
 
 #. translators: %s: number of orders
 #. translators: %s: count
-#: includes/class-wc-post-types.php:974
+#: includes/class-wc-post-types.php:625
 #: packages/action-scheduler/classes/data-stores/ActionScheduler_wpPostStore_PostStatusRegistrar.php:38
 msgid "Failed <span class=\"count\">(%s)</span>"
 msgid_plural "Failed <span class=\"count\">(%s)</span>"
@@ -35749,6 +35652,103 @@ msgstr ""
 #. translators: the title of the payment gateway
 #: src/Admin/Features/PaymentGatewaySuggestions/PaymentGatewaysController.php:133
 msgid "%s connected successfully"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:139
+msgid "Basic details"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:140
+#: assets/client/admin/chunks/3628.js:1
+msgid "This info will be displayed on the product page, category pages, social media, and search results."
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:169
+#: src/Admin/Features/ProductBlockEditor/Init.php:252
+#: assets/client/admin/chunks/3628.js:1
+msgid "List price"
+msgstr ""
+
+#. translators: %1$s: Images guide link opening tag. %2$s: Images guide link closing tag.
+#: src/Admin/Features/ProductBlockEditor/Init.php:200
+msgid "Drag images, upload new ones or select files from your library. For best results, use JPEG files that are 1000 by 1000 pixels or larger. %1$sHow to prepare images?%2$s."
+msgstr ""
+
+#. translators: %1$s: Images guide link opening tag. %2$s: Images guide link closing tag.
+#: src/Admin/Features/ProductBlockEditor/Init.php:229
+msgid "Set a competitive price, put the product on sale, and manage tax calculations. %1$sHow to price your product?%2$s"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:281
+#: assets/client/admin/chunks/3628.js:1
+msgid "Charge sales tax on"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:285
+#: assets/client/admin/chunks/3628.js:1
+msgid "Product and shipping"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:289
+#: assets/client/admin/chunks/3628.js:1
+msgid "Only shipping"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:293
+#: assets/client/admin/chunks/3628.js:1
+msgid "Don't charge tax"
+msgstr ""
+
+#. translators: %1$s: Learn more link opening tag. %2$s: Learn more link closing tag.
+#: src/Admin/Features/ProductBlockEditor/Init.php:313
+msgid "Apply a tax rate if this product qualifies for tax reduction or exemption. %1$sLearn more%2$s."
+msgstr ""
+
+#. translators: %1$s: Inventory settings link opening tag. %2$s: Inventory settings link closing tag.
+#: src/Admin/Features/ProductBlockEditor/Init.php:353
+msgid "Set up and manage inventory for this product, including status and available quantity. %1$sManage store inventory settings%2$s"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:387
+#: assets/client/admin/chunks/3628.js:1
+msgid "When out of stock"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:391
+#: assets/client/admin/chunks/3628.js:1
+msgid "Allow purchases"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:395
+#: assets/client/admin/chunks/3628.js:1
+msgid "Allow purchases, but notify customers"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:402
+#: assets/client/admin/chunks/3628.js:1
+msgid "Don't allow purchases"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:416
+#: assets/client/admin/chunks/3628.js:1
+msgid "Restrictions"
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:425
+msgid "When checked, customers will be able to purchase only 1 item in a single order. This is particularly useful for items that have limited quantity, like art or handmade goods."
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:450
+msgid "Fees & dimensions"
+msgstr ""
+
+#. translators: %1$s: How to get started? link opening tag. %2$s: How to get started? link closing tag.
+#: src/Admin/Features/ProductBlockEditor/Init.php:453
+msgid "Set up shipping costs and enter dimensions used for accurate rate calculations. %1$sHow to get started?%2$s."
+msgstr ""
+
+#: src/Admin/Features/ProductBlockEditor/Init.php:465
+msgid "Shipping fee"
 msgstr ""
 
 #: src/Admin/Features/ShippingPartnerSuggestions/DefaultShippingPartners.php:20

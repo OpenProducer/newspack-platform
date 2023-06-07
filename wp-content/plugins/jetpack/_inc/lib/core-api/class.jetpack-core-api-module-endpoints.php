@@ -284,7 +284,7 @@ class Jetpack_Core_API_Module_List_Endpoint {
 			$activated_text = $activated_count > 1 ? sprintf(
 				/* Translators: first variable is a list followed by the last item, which is the second variable. Example: dog, cat and bird. */
 				__( '%1$s and %2$s', 'jetpack' ),
-				join( ', ', $activated ),
+				implode( ', ', $activated ),
 				$activated_last
 			) : $activated_last;
 
@@ -301,7 +301,7 @@ class Jetpack_Core_API_Module_List_Endpoint {
 			$failed_text = $failed_count > 1 ? sprintf(
 				/* Translators: first variable is a list followed by the last item, which is the second variable. Example: dog, cat and bird. */
 				__( '%1$s and %2$s', 'jetpack' ),
-				join( ', ', $failed ),
+				implode( ', ', $failed ),
 				$failed_last
 			) : $failed_last;
 
@@ -506,7 +506,8 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 					break;
 
 				default:
-					$response[ $setting ] = Jetpack_Core_Json_Api_Endpoints::cast_value( get_option( $setting ), $settings[ $setting ] );
+					$default              = isset( $settings[ $setting ]['default'] ) ? $settings[ $setting ]['default'] : false;
+					$response[ $setting ] = Jetpack_Core_Json_Api_Endpoints::cast_value( get_option( $setting, $default ), $settings[ $setting ] );
 					break;
 			}
 		}
@@ -989,8 +990,14 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 					break;
 
 				default:
-					// If option value was the same, consider it done.
-					$updated = get_option( $option ) != $value // phpcs:ignore Universal.Operators.StrictComparisons.LooseNotEqual -- ensure we support scalars or strings saved by update_option.
+					// Boolean values are stored as 1 or 0.
+					if ( isset( $options[ $option ]['type'] ) && 'boolean' === $options[ $option ]['type'] ) {
+						$value = (int) $value;
+					}
+
+					// If option value was the same as it's current value, or it's default, consider it done.
+					$default = isset( $options[ $option ]['default'] ) ? $options[ $option ]['default'] : false;
+					$updated = get_option( $option, $default ) != $value // phpcs:ignore Universal.Operators.StrictComparisons.LooseNotEqual -- ensure we support scalars or strings saved by update_option.
 						? update_option( $option, $value )
 						: true;
 					break;
@@ -1013,7 +1020,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 				$error = sprintf(
 				/* Translators: the plural variable is a comma-separated list. Example: dog, cat, bird. */
 					_n( 'Invalid option: %s.', 'Invalid options: %s.', $invalid_count, 'jetpack' ),
-					join( ', ', $invalid )
+					implode( ', ', $invalid )
 				);
 			}
 			if ( $not_updated_count > 0 ) {
@@ -1032,7 +1039,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 					$error .= ' ';
 				}
 				if ( ! empty( $not_updated_messages ) ) {
-					$error .= ' ' . join( '. ', $not_updated_messages );
+					$error .= ' ' . implode( '. ', $not_updated_messages );
 				}
 			}
 			// There was an error because some options were updated but others were invalid or failed to update.
@@ -1189,7 +1196,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 		}
 
 		if ( isset( $data['businessPersonal'] ) && 'business' === $data['businessPersonal'] ) {
-			$contact_page .= "\n" . join( "\n", $data['businessInfo'] );
+			$contact_page .= "\n" . implode( "\n", $data['businessInfo'] );
 		}
 
 		if ( ! empty( $contact_page ) ) {
@@ -1244,7 +1251,7 @@ class Jetpack_Core_API_Data extends Jetpack_Core_API_XMLRPC_Consumer_Endpoint {
 
 		return empty( $error )
 			? ''
-			: join( ', ', $error );
+			: implode( ', ', $error );
 	}
 
 	/**
@@ -1730,7 +1737,7 @@ class Jetpack_Core_API_Module_Data_Endpoint {
 				sprintf(
 					/* translators: %1$s is a comma separated list of services, and %2$s is a single service name like Google, Bing, Pinterest, etc. */
 					__( 'Your site is verified with %1$s and %2$s.', 'jetpack' ),
-					join( ', ', $copy_services ),
+					implode( ', ', $copy_services ),
 					$last_service
 				)
 			);

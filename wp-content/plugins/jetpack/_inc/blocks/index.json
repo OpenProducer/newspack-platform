@@ -1,5 +1,6 @@
 {
 	"production": [
+		"ai-assistant",
 		"blogging-prompt",
 		"business-hours",
 		"button",
@@ -23,6 +24,7 @@
 		"payments",
 		"pinterest",
 		"podcast-player",
+		"premium-content",
 		"publicize",
 		"rating-star",
 		"recurring-payments",
@@ -51,6 +53,7 @@
 	"beta": [
 		"ai-chat",
 		"amazon",
+		"author-recommendation",
 		"conversation",
 		"dialogue",
 		"google-docs-embed",
@@ -60,7 +63,7 @@
 		"v6-video-frame-poster",
 		"videopress/video-chapters"
 	],
-	"experimental": [ "ai-image", "ai-paragraph", "anchor-fm", "premium-content" ],
+	"experimental": [ "ai-image", "ai-paragraph", "anchor-fm" ],
 	"no-post-editor": [
 		"business-hours",
 		"button",

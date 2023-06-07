@@ -4,7 +4,7 @@ Tags: gutenberg, woocommerce, woo commerce, products, blocks, woocommerce blocks
 Requires at least: 6.1
 Tested up to: 6.2
 Requires PHP: 7.3
-Stable tag: 10.0.4
+Stable tag: 10.0.6
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -79,6 +79,18 @@ Yes you can! Join in on our [GitHub repository](https://github.com/woocommerce/w
 Release and roadmap notes available on the [WooCommerce Developers Blog](https://woocommerce.wordpress.com/2019/01/15/woocommerce-blocks-1-3-0-release-notes/)
 
 == Changelog ==
+
+= 10.0.6 - 2023-05-30 =
+
+#### Bug Fixes
+
+- - Fix some scripts needed by the Mini-Cart block not loading. ([9649](https://github.com/woocommerce/woocommerce-blocks/pull/9649))
+
+= 10.0.5 - 2023-05-24 =
+
+#### Bug Fixes
+
+- Fix a conflict between the Mini-Cart block and the Page Optimize and Product Bundles extensions. ([9586](https://github.com/woocommerce/woocommerce-blocks/pull/9586))
 
 = 10.0.4 - 2023-05-04 =
 

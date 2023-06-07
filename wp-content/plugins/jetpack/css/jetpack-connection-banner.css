@@ -23,6 +23,7 @@
   --jp-gray-100: #101517;
   --jp-gray-off: #e2e2df;
   --jp-yellow-10: #f2cf75;
+  --jp-orange-20: #faa754;
   --jp-red-0: #F7EBEC;
   --jp-red-50: #D63638;
   --jp-red-60: #B32D2E;
@@ -54,6 +55,7 @@
   --jp-button-padding: 8px;
   --jp-button-radius: 4px;
   --jp-gap: 16px;
+  --jp-highlight: #3858e9;
 }
 
 /********* Mixins *********/

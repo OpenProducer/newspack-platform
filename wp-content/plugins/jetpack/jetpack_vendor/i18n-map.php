@@ -6,7 +6,7 @@ return array(
   'packages' => array(
     'jetpack-action-bar' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-action-bar',
-      'ver' => '0.1.17',
+      'ver' => '0.1.18',
     ),
     'jetpack-admin-ui' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-admin-ui',
@@ -14,15 +14,19 @@ return array(
     ),
     'jetpack-assets' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-assets',
-      'ver' => '1.18.1',
+      'ver' => '1.18.3',
     ),
     'jetpack-backup-pkg' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-backup',
-      'ver' => '1.12.15',
+      'ver' => '1.13.0',
     ),
     'jetpack-blaze' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-blaze',
-      'ver' => '0.5.11',
+      'ver' => '0.5.13',
+    ),
+    'jetpack-boost-speed-score' => array(
+      'path' => 'jetpack_vendor/automattic/jetpack-boost-speed-score',
+      'ver' => '0.1.0',
     ),
     'jetpack-compat' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-compat',
@@ -34,11 +38,11 @@ return array(
     ),
     'jetpack-connection' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-connection',
-      'ver' => '1.51.7',
+      'ver' => '1.52.1',
     ),
     'jetpack-forms' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-forms',
-      'ver' => '0.14.1',
+      'ver' => '0.19.2',
     ),
     'jetpack-google-fonts-provider' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-google-fonts-provider',
@@ -46,23 +50,27 @@ return array(
     ),
     'jetpack-idc' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-identity-crisis',
-      'ver' => '0.8.45',
+      'ver' => '0.8.47',
+    ),
+    'jetpack-image-cdn' => array(
+      'path' => 'jetpack_vendor/automattic/jetpack-image-cdn',
+      'ver' => '0.2.2',
     ),
     'jetpack-import' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-import',
-      'ver' => '0.7.0',
+      'ver' => '0.7.1',
     ),
     'jetpack-ip' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-ip',
-      'ver' => '0.1.2',
+      'ver' => '0.1.4',
     ),
     'jetpack-jitm' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-jitm',
-      'ver' => '2.3.6',
+      'ver' => '2.3.8',
     ),
     'jetpack-lazy-images' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-lazy-images',
-      'ver' => '2.1.36',
+      'ver' => '2.1.38',
     ),
     'jetpack-licensing' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-licensing',
@@ -70,7 +78,7 @@ return array(
     ),
     'jetpack-my-jetpack' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-my-jetpack',
-      'ver' => '2.11.0',
+      'ver' => '2.14.1',
     ),
     'jetpack-password-checker' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-password-checker',
@@ -86,35 +94,35 @@ return array(
     ),
     'jetpack-publicize-pkg' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-publicize',
-      'ver' => '0.25.1',
+      'ver' => '0.30.0',
     ),
     'jetpack-search-pkg' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-search',
-      'ver' => '0.36.2',
+      'ver' => '0.37.1',
     ),
     'jetpack-stats' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-stats',
-      'ver' => '0.6.2',
+      'ver' => '0.6.3',
     ),
     'jetpack-stats-admin' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-stats-admin',
-      'ver' => '0.7.3',
+      'ver' => '0.8.0',
     ),
     'jetpack-sync' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-sync',
-      'ver' => '1.47.8',
+      'ver' => '1.49.0',
     ),
     'jetpack-videopress-pkg' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-videopress',
-      'ver' => '0.13.10',
+      'ver' => '0.14.4',
     ),
     'jetpack-waf' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-waf',
-      'ver' => '0.11.3',
+      'ver' => '0.11.6',
     ),
     'jetpack-wordads' => array(
       'path' => 'jetpack_vendor/automattic/jetpack-wordads',
-      'ver' => '0.2.41',
+      'ver' => '0.2.42',
     ),
   ),
 );

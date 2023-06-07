@@ -14,6 +14,13 @@ use Automattic\Jetpack\Status;
  */
 abstract class Jetpack_Admin_Page {
 	/**
+	 * Jetpack Object.
+	 *
+	 * @var Jetpack
+	 */
+	public $jetpack;
+
+	/**
 	 * Add page specific actions given the page hook.
 	 *
 	 * @param string $hook Hook of current page.
@@ -67,7 +74,7 @@ abstract class Jetpack_Admin_Page {
 		$this->jetpack = $jetpack;
 
 		self::$block_page_rendering_for_idc = (
-			Identity_Crisis::validate_sync_error_idc_option() && ! Jetpack_Options::get_option( 'safe_mode_confirmed' )
+			Jetpack::is_connection_ready() && Identity_Crisis::validate_sync_error_idc_option() && ! Jetpack_Options::get_option( 'safe_mode_confirmed' )
 		);
 	}
 
@@ -149,7 +156,15 @@ abstract class Jetpack_Admin_Page {
 			$this->page_render();
 			return;
 		}
-		self::wrap_ui( array( $this, 'page_render' ) );
+
+		$args = array();
+
+		// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( isset( $_GET['page'] ) && 'jetpack_modules' === $_GET['page'] ) {
+			$args['is-wide'] = true;
+		}
+
+		self::wrap_ui( array( $this, 'page_render' ), $args );
 	}
 
 	/**
