@@ -21,7 +21,7 @@ define( 'NEWSPACK_API_URL', get_site_url() . '/wp-json/' . NEWSPACK_API_NAMESPAC
  */
 function newspack_clean( $var ) {
 	if ( is_array( $var ) ) {
-		return array_map( 'newspack_clean', $var );
+		return array_map( 'Newspack\newspack_clean', $var );
 	} else {
 		return is_scalar( $var ) ? sanitize_text_field( $var ) : $var;
 	}

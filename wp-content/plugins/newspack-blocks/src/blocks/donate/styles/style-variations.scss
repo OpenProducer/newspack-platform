@@ -115,13 +115,10 @@
 			+ .freq-label {
 				&::after {
 					box-sizing: content-box;
-					bottom: 0.19rem;
 					content: '';
 					display: block;
-					left: 0.19rem;
+					inset: 0.19rem;
 					position: absolute;
-					right: 0.19rem;
-					top: 0.19rem;
 					z-index: -1;
 				}
 				&:hover {

@@ -1,3 +1,42 @@
+## [1.116.1](https://github.com/Automattic/newspack-plugin/compare/v1.116.0...v1.116.1) (2023-06-07)
+
+
+### Bug Fixes
+
+* **recaptcha:** selector for response input in WC checkout ([#2490](https://github.com/Automattic/newspack-plugin/issues/2490)) ([bf4ac17](https://github.com/Automattic/newspack-plugin/commit/bf4ac1710a51d60c65d7e09c97b9b984193924f4))
+
+# [1.116.0](https://github.com/Automattic/newspack-plugin/compare/v1.115.1...v1.116.0) (2023-06-05)
+
+
+### Bug Fixes
+
+* remove 'username' from Twitter menu label ([#2460](https://github.com/Automattic/newspack-plugin/issues/2460)) ([e85d69c](https://github.com/Automattic/newspack-plugin/commit/e85d69c8f48240ce10df0516f019a92730f506dc))
+* remove unneeded blocks from patterns ([#2441](https://github.com/Automattic/newspack-plugin/issues/2441)) ([ea334ab](https://github.com/Automattic/newspack-plugin/commit/ea334ab8eb0762a6c92babe92f8006cc1e986d53))
+
+
+### Features
+
+* **content-gate:** metering ([#2423](https://github.com/Automattic/newspack-plugin/issues/2423)) ([60b0d6d](https://github.com/Automattic/newspack-plugin/commit/60b0d6d47629a15d2e7a4bab363acd5b6362872e))
+* **content-gate:** updated block patterns ([#2474](https://github.com/Automattic/newspack-plugin/issues/2474)) ([161f935](https://github.com/Automattic/newspack-plugin/commit/161f935368be4305dba28631fd9142c3c84f6758))
+* hook reCAPTCHA v3 to WooCommerce checkout ([#2447](https://github.com/Automattic/newspack-plugin/issues/2447)) ([6650b82](https://github.com/Automattic/newspack-plugin/commit/6650b8298d872aceb213fa0280553e6327ffeb75))
+* **ras:** add NRH support for setup wizard ([#2484](https://github.com/Automattic/newspack-plugin/issues/2484)) ([d1255c9](https://github.com/Automattic/newspack-plugin/commit/d1255c9d0cf3923701293138610192f4b09ba531))
+* **ras:** mailchimp audience config ([#2462](https://github.com/Automattic/newspack-plugin/issues/2462)) ([8ee4440](https://github.com/Automattic/newspack-plugin/commit/8ee444030b6e5171db7165f9789fdff2a58cf123))
+* **ras:** remove env flag requirements for RAS functionality ([#2461](https://github.com/Automattic/newspack-plugin/issues/2461)) ([e25dcf3](https://github.com/Automattic/newspack-plugin/commit/e25dcf3baa7afd7b79c6ad2cdb67400b2dc5ef0d))
+
+# [1.116.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v1.116.0-alpha.2...v1.116.0-alpha.3) (2023-05-29)
+
+
+### Features
+
+* **content-gate:** updated block patterns ([#2474](https://github.com/Automattic/newspack-plugin/issues/2474)) ([161f935](https://github.com/Automattic/newspack-plugin/commit/161f935368be4305dba28631fd9142c3c84f6758))
+
+# [1.116.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v1.116.0-alpha.1...v1.116.0-alpha.2) (2023-05-26)
+
+
+### Bug Fixes
+
+* **performance:** exclude main jetpack css from delay ([4e7aa5e](https://github.com/Automattic/newspack-plugin/commit/4e7aa5e8a076bb37d5378a007c83c5f26c22f7e9))
+
 ## [1.115.1](https://github.com/Automattic/newspack-plugin/compare/v1.115.0...v1.115.1) (2023-05-26)
 
 

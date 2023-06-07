@@ -42,7 +42,7 @@ class Profile {
 			],
 			[
 				'key'         => 'twitter_site',
-				'label'       => __( 'Twitter Username', 'newspack' ),
+				'label'       => __( 'Twitter', 'newspack' ),
 				'placeholder' => __( 'username', 'newspack' ),
 			],
 			[

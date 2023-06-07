@@ -1,3 +1,25 @@
+# [2.18.0](https://github.com/Automattic/newspack-popups/compare/v2.17.0...v2.18.0) (2023-06-05)
+
+
+### Features
+
+* deprecate "display title" option ([#1101](https://github.com/Automattic/newspack-popups/issues/1101)) ([e3de495](https://github.com/Automattic/newspack-popups/commit/e3de495e1885bb1eebb7dd12d7d523ea2846f6fd))
+* **ras:** add segmentation support for NRH donations ([#1124](https://github.com/Automattic/newspack-popups/issues/1124)) ([da1a088](https://github.com/Automattic/newspack-popups/commit/da1a088d43eb021b63e142772e702d59da678775))
+
+# [2.18.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.17.0...v2.18.0-alpha.1) (2023-05-30)
+
+
+### Features
+
+* deprecate "display title" option ([#1101](https://github.com/Automattic/newspack-popups/issues/1101)) ([e3de495](https://github.com/Automattic/newspack-popups/commit/e3de495e1885bb1eebb7dd12d7d523ea2846f6fd))
+
+# [2.17.0](https://github.com/Automattic/newspack-popups/compare/v2.16.0...v2.17.0) (2023-05-30)
+
+
+### Features
+
+* record timestamp when RAS setup wizard is completed ([#1118](https://github.com/Automattic/newspack-popups/issues/1118)) ([c6b225c](https://github.com/Automattic/newspack-popups/commit/c6b225cdf043a79fe3044052cb0c99a9a2a6425c))
+
 # [2.16.0](https://github.com/Automattic/newspack-popups/compare/v2.15.0...v2.16.0) (2023-05-08)
 
 

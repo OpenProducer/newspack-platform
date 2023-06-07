@@ -3,7 +3,7 @@
         'name' => 'automattic/newspack-popups',
         'pretty_version' => 'dev-master',
         'version' => 'dev-master',
-        'reference' => 'c73384a9d082c275305203ca0573a568f22513e2',
+        'reference' => 'd7c23d41e0e29db3b13fbe559caa95d5bba10caf',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -13,7 +13,7 @@
         'automattic/newspack-popups' => array(
             'pretty_version' => 'dev-master',
             'version' => 'dev-master',
-            'reference' => 'c73384a9d082c275305203ca0573a568f22513e2',
+            'reference' => 'd7c23d41e0e29db3b13fbe559caa95d5bba10caf',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

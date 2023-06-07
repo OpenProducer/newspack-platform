@@ -7,7 +7,6 @@
             "content": "<!-- wp:newspack\/reader-registration {\"title\":\"{{heading}}\",\"description\":\"{{body}}\",\"label\":\"{{button_label}}\",\"hideSubscriptionInput\":true,{{lists}}} -->\n<div class=\"wp-block-newspack-reader-registration\"><!-- wp:paragraph {\"align\":\"center\"} --><p class=\"has-text-align-center\">{{success_message}}</p><!-- /wp:paragraph --><\/div>\n<!-- \/wp:newspack\/reader-registration -->",
             "options": {
                 "background_color": "#FFFFFF",
-                "display_title": false,
                 "hide_border": false,
                 "large_border": false,
                 "frequency": "custom",
@@ -125,7 +124,6 @@
             "content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
             "options": {
                 "background_color": "#FFFFFF",
-                "display_title": false,
                 "hide_border": false,
                 "large_border": false,
                 "frequency": "custom",
@@ -243,7 +241,6 @@
             "content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-blocks\/donate {\"className\":\"is-style-alternate\",\"amounts\":{\"once\":[9,20,90,20],\"month\":[7,15,30,15],\"year\":[84,180,360,180]},\"disabledFrequencies\":{\"once\":false,\"month\":false,\"year\":false},\"thanksText\":\"{{thanks_message}}\",\"buttonText\": \"{{button_label}}\",\"minimumDonation\":5} \/-->",
             "options": {
                 "background_color": "#FFFFFF",
-                "display_title": false,
                 "hide_border": false,
                 "large_border": false,
                 "frequency": "custom",
@@ -353,7 +350,6 @@
             "content": "<!-- wp:paragraph -->\n<p>{{body}}</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
             "options": {
                 "background_color": "#FFFFFF",
-                "display_title": false,
                 "hide_border": false,
                 "large_border": false,
                 "frequency": "always",
@@ -452,7 +448,6 @@
             "content": "<!-- wp:separator -->\n<hr class=\"wp-block-separator has-alpha-channel-opacity\"\/>\n<!-- \/wp:separator -->\n\n<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-blocks\/donate {\"className\":\"is-style-alternate\",\"amounts\":{\"once\":[9,20,90,20],\"month\":[7,15,30,15],\"year\":[84,180,360,180]},\"disabledFrequencies\":{\"once\":false,\"month\":false,\"year\":false},\"thanksText\":\"{{thanks_message}}\",\"buttonText\": \"{{button_label}}\",\"minimumDonation\":5} \/-->",
             "options": {
                 "background_color": "#FFFFFF",
-                "display_title": false,
                 "hide_border": true,
                 "large_border": false,
                 "frequency": "always",

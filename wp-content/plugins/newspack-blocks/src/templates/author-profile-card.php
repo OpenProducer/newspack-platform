@@ -53,25 +53,33 @@ call_user_func(
 			<?php if ( $attributes['showAvatar'] && isset( $author['avatar'] ) ) : ?>
 				<div class="wp-block-newspack-blocks-author-profile__avatar">
 					<figure style="border-radius: <?php echo esc_attr( $attributes['avatarBorderRadius'] ); ?>; height: <?php echo esc_attr( $attributes['avatarSize'] ); ?>px; width: <?php echo esc_attr( $attributes['avatarSize'] ); ?>px;">
+					<?php if ( $show_archive_link ) : ?>
+						<a href="<?php echo esc_url( $author['url'] ); ?>">
 						<?php
-						echo wp_kses(
-							$author['avatar'],
-							[
-								'img' => [
-									'alt'      => true,
-									'class'    => true,
-									'data-*'   => true,
-									'decoding' => true,
-									'height'   => true,
-									'loading'  => true,
-									'sizes'    => true,
-									'src'      => true,
-									'srcset'   => true,
-									'width'    => true,
-								],
-							]
-						);
-						?>
+					endif;
+
+					echo wp_kses(
+						$author['avatar'],
+						[
+							'img' => [
+								'alt'      => true,
+								'class'    => true,
+								'data-*'   => true,
+								'decoding' => true,
+								'height'   => true,
+								'loading'  => true,
+								'sizes'    => true,
+								'src'      => true,
+								'srcset'   => true,
+								'width'    => true,
+							],
+						]
+					);
+
+				if ( $show_archive_link ) :
+					?>
+						</a>
+					<?php endif; ?>
 					</figure>
 				</div>
 			<?php endif; ?>

@@ -28,7 +28,6 @@ import PositionPlacementControl from './PositionPlacementControl';
 
 const Sidebar = props => {
 	const {
-		display_title,
 		onMetaFieldChange,
 		placement,
 		overlay_size,
@@ -219,11 +218,6 @@ const Sidebar = props => {
 					/>
 				</Fragment>
 			) }
-			<ToggleControl
-				label={ __( 'Display Prompt Title', 'newspack-popups' ) }
-				checked={ display_title }
-				onChange={ value => onMetaFieldChange( { display_title: value } ) }
-			/>
 		</>
 	);
 };

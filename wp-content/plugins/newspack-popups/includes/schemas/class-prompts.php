@@ -125,12 +125,6 @@ class Prompts extends Schema {
 							'required' => false,
 							'default'  => '#FFFFFF',
 						],
-						'display_title'                  => [
-							'name'     => 'display_title',
-							'type'     => 'boolean',
-							'required' => false,
-							'default'  => false,
-						],
 						'hide_border'                    => [
 							'name'     => 'hide_border',
 							'type'     => 'boolean',

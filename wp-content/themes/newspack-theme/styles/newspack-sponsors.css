@@ -82,19 +82,19 @@ amp-script .sponsor-label .flag {
   opacity: 1;
 }
 
-.sponsor-logos {
+.sponsor-logos:not(:empty) {
   align-items: center;
   display: inline-flex;
   line-height: 1;
   margin-right: 0.25rem;
 }
 @media only screen and (min-width: 600px) {
-  .sponsor-logos {
+  .sponsor-logos:not(:empty) {
     border-right: 1px solid var(--newspack-theme-color-border);
     margin: 0 0.75rem 0 0;
   }
 }
-.sponsor-logos > * {
+.sponsor-logos:not(:empty) > * {
   margin-right: 0.75rem;
 }
 

@@ -38,8 +38,22 @@ class NRH {
 	 *
 	 * @return array Array of settings.
 	 */
-	private static function get_settings() {
-		return \get_option( NEWSPACK_NRH_CONFIG, [] );
+	public static function get_settings() {
+		$settings = \get_option( NEWSPACK_NRH_CONFIG, [] );
+
+		if ( method_exists( '\Newspack_Popups_Settings', 'donor_landing_page' ) ) {
+			$settings['donor_landing_page'] = null;
+			$donor_landing_page             = \Newspack_Popups_Settings::donor_landing_page();
+
+			if ( $donor_landing_page ) {
+				$settings['donor_landing_page'] = [
+					'label' => \get_the_title( $donor_landing_page ),
+					'value' => $donor_landing_page,
+				];
+			}
+		}
+
+		return $settings;
 	}
 
 	/**
@@ -50,7 +64,7 @@ class NRH {
 	 *
 	 * @return string|boolean Value of setting if found, false otherwise.
 	 */
-	private static function get_setting( $key ) {
+	public static function get_setting( $key ) {
 		if ( ! in_array( $key, self::$allowed_keys, true ) ) {
 			return false;
 		}
@@ -73,8 +87,14 @@ class NRH {
 		foreach ( $data as $key => $value ) {
 			if ( in_array( $key, self::$allowed_keys, true ) ) {
 				$settings[ $key ] = $value;
+			} elseif ( 'donor_landing_page' === $key && method_exists( '\Newspack_Popups_Settings', 'update_setting' ) ) {
+				// Update the donor landing page in Campaigns settings.
+				\Newspack_Popups_Settings::update_setting( 'donor_settings', 'newspack_popups_donor_landing_page', ! empty( $value['value'] ) ? (string) $value['value'] : 0 );
 			}
 		}
+
+		// Don't want to save this extra key which is used only for the front-end display.
+		unset( $settings['donor_landing_page'] );
 
 		return \update_option( NEWSPACK_NRH_CONFIG, $settings );
 	}

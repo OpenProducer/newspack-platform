@@ -257,6 +257,23 @@ final class Newspack_Popups_Segmentation {
 					'offsite_has_donated' => true,
 				]
 			);
+
+			// Log a donation event for the reader.
+			try {
+				$api = \Campaign_Data_Utils::get_api( \wp_create_nonce( 'newspack_campaigns_lightweight_api' ) );
+				if ( ! $api ) {
+					return;
+				}
+				$reader_events = [
+					[
+						'type'    => 'donation',
+						'context' => method_exists( '\Newspack\Donations', 'get_platform_slug' ) ? \Newspack\Donations::get_platform_slug() : 'offsite',
+					],
+				];
+				$api->save_reader_events( self::get_client_id(), $reader_events );
+			} catch ( \Throwable $th ) {
+				\Newspack\Logger::log( 'Error when saving reader data on offsite donation: ' . $th->getMessage() );
+			}
 		}
 
 		if ( ! empty( $initial_client_report_url_params ) ) {

@@ -231,7 +231,6 @@ final class Newspack_Popups_Model {
 	public static function get_preview_query_options() {
 		$options_filters = [
 			'background_color'               => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
-			'display_title'                  => FILTER_VALIDATE_BOOLEAN,
 			'hide_border'                    => FILTER_VALIDATE_BOOLEAN,
 			'large_border'                   => FILTER_VALIDATE_BOOLEAN,
 			'frequency'                      => FILTER_SANITIZE_FULL_SPECIAL_CHARS,
@@ -384,7 +383,6 @@ final class Newspack_Popups_Model {
 	public static function get_popup_options( $id, $options = null ) {
 		$post_options = isset( $options ) ? $options : [
 			'background_color'               => get_post_meta( $id, 'background_color', true ),
-			'display_title'                  => get_post_meta( $id, 'display_title', true ),
 			'hide_border'                    => get_post_meta( $id, 'hide_border', true ),
 			'large_border'                   => get_post_meta( $id, 'large_border', true ),
 			'frequency'                      => get_post_meta( $id, 'frequency', true ),
@@ -429,7 +427,6 @@ final class Newspack_Popups_Model {
 			$filtered_options,
 			[
 				'background_color'               => '#FFFFFF',
-				'display_title'                  => false,
 				'hide_border'                    => false,
 				'large_border'                   => false,
 				'frequency'                      => 'always',
@@ -1168,7 +1165,6 @@ final class Newspack_Popups_Model {
 
 		$element_id           = self::get_uniqid();
 		$endpoint             = self::get_reader_endpoint();
-		$display_title        = $popup['options']['display_title'];
 		$hide_border          = $popup['options']['hide_border'];
 		$large_border         = $popup['options']['large_border'];
 		$is_newsletter_prompt = self::has_newsletter_prompt( $popup );
@@ -1176,7 +1172,6 @@ final class Newspack_Popups_Model {
 		$classes[]            = 'above_header' === $popup['options']['placement'] ? 'newspack-above-header-popup' : null;
 		$classes[]            = ! self::is_above_header( $popup ) ? 'newspack-inline-popup' : null;
 		$classes[]            = 'publish' !== $popup['status'] ? 'newspack-inactive-popup-status' : null;
-		$classes[]            = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]            = $hide_border ? 'newspack-lightbox-no-border' : null;
 		$classes[]            = $large_border ? 'newspack-lightbox-large-border' : null;
 		$classes[]            = $is_newsletter_prompt ? 'newspack-newsletter-prompt-inline' : null;
@@ -1204,9 +1199,6 @@ final class Newspack_Popups_Model {
 				style="<?php echo esc_attr( self::container_style( $popup ) ); ?>"
 				id="<?php echo esc_attr( $element_id ); ?>"
 			>
-				<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
-					<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
-				<?php endif; ?>
 				<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</amp-layout>
 		<?php
@@ -1249,7 +1241,6 @@ final class Newspack_Popups_Model {
 
 		$element_id            = self::get_uniqid();
 		$endpoint              = self::get_reader_endpoint();
-		$display_title         = $popup['options']['display_title'];
 		$hide_border           = $popup['options']['hide_border'];
 		$large_border          = $popup['options']['large_border'];
 		$overlay_opacity       = absint( $popup['options']['overlay_opacity'] ) / 100;
@@ -1260,7 +1251,6 @@ final class Newspack_Popups_Model {
 		$is_newsletter_prompt  = self::has_newsletter_prompt( $popup );
 		$has_featured_image    = has_post_thumbnail( $popup['id'] ) || ! empty( $popup['options']['featured_image_id'] );
 		$classes               = array( 'newspack-lightbox', 'newspack-popup', 'newspack-lightbox-placement-' . $popup['options']['placement'], 'newspack-lightbox-size-' . $overlay_size );
-		$classes[]             = ( ! empty( $popup['title'] ) && $display_title ) ? 'newspack-lightbox-has-title' : null;
 		$classes[]             = $hide_border ? 'newspack-lightbox-no-border' : null;
 		$classes[]             = $large_border ? 'newspack-lightbox-large-border' : null;
 		$classes[]             = $is_newsletter_prompt ? 'newspack-newsletter-prompt-overlay' : null;
@@ -1298,9 +1288,6 @@ final class Newspack_Popups_Model {
 						</div>
 					<?php endif; ?>
 					<div class="newspack-popup__content">
-						<?php if ( ! empty( $popup['title'] ) && $display_title ) : ?>
-							<h1 class="newspack-popup-title"><?php echo esc_html( $popup['title'] ); ?></h1>
-						<?php endif; ?>
 						<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					</div>
 					<form class="popup-dismiss-form <?php echo esc_attr( self::get_form_class( 'dismiss', $element_id ) ); ?> popup-action-form <?php echo esc_attr( self::get_form_class( 'action', $element_id ) ); ?>"

@@ -138,6 +138,7 @@ export default function Prerequisite( {
 																	? '</a>'
 																	: ''
 															),
+															url: href,
 														} )
 													);
 												}

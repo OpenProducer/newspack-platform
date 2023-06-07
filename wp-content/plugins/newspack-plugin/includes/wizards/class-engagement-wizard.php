@@ -204,8 +204,8 @@ class Engagement_Wizard extends Wizard {
 	 */
 	private static function get_memberships_settings() {
 		return [
-			'edit_gate_url' => WC_Memberships::get_edit_gate_url(),
-			'gate_status'   => get_post_status( WC_Memberships::get_gate_post_id() ),
+			'edit_gate_url' => Memberships::get_edit_gate_url(),
+			'gate_status'   => get_post_status( Memberships::get_gate_post_id() ),
 		];
 	}
 

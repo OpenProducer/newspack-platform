@@ -29,7 +29,14 @@ add_action( 'init', __NAMESPACE__ . '\\register_block' );
  * @return string
  */
 function render_callback( $attributes, $content ) {
-	\Newspack_Blocks\Modal_Checkout::enqueue_modal();
+	if ( empty( $attributes['product'] ) ) {
+		return '';
+	}
+	$product_id = $attributes['product'];
+	if ( $attributes['is_variable'] && ! empty( $attributes['variation'] ) ) {
+		$product_id = $attributes['variation'];
+	}
+	\Newspack_Blocks\Modal_Checkout::enqueue_modal( $product_id );
 	\Newspack_Blocks::enqueue_view_assets( 'checkout-button' );
 	return $content;
 }

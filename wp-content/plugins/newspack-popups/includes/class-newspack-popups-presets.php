@@ -12,6 +12,7 @@ defined( 'ABSPATH' ) || exit;
  */
 final class Newspack_Popups_Presets {
 	const NEWSPACK_POPUPS_RAS_PROMPTS_OPTION = 'newspack_popups_ras_prompts';
+	const NEWSPACK_POPUPS_RAS_LAST_UPDATED   = 'newspack_popups_ras_prompts_last_updated';
 
 	/**
 	 * Retrieve popup preview preset prompt.
@@ -383,6 +384,9 @@ final class Newspack_Popups_Presets {
 			}
 			return new \WP_Error( 'newspack_popups_activate_ras_prompts_error', __( 'Error creating preset prompts and segments. Please try again.', 'newspack-popups' ) );
 		}
+
+		// Set the last updated timestamp.
+		\update_option( self::NEWSPACK_POPUPS_RAS_LAST_UPDATED, time() );
 
 		return true;
 	}

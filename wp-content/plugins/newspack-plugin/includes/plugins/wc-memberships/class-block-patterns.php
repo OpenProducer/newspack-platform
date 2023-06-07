@@ -5,7 +5,7 @@
  * @package Newspack
  */
 
-namespace Newspack\WC_Memberships;
+namespace Newspack\Memberships;
 
 /**
  * WooCommerce Memberships Block Patterns class.
@@ -16,7 +16,26 @@ class Block_Patterns {
 	 */
 	public static function init() {
 		add_action( 'admin_init', [ __CLASS__, 'register_block_patterns' ] );
+		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_styles' ] );
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_styles' ] );
 	}
+
+	/**
+	 * Enqueue styles.
+	 */
+	public static function enqueue_styles() {
+		// Bail if Woo Memberships is not active.
+		if ( ! class_exists( 'WC_Memberships' ) ) {
+			return false;
+		}
+		wp_enqueue_style(
+			'newspack-memberships-block-patterns',
+			\Newspack\Newspack::plugin_url() . '/dist/memberships-gate-block-patterns.css',
+			[],
+			NEWSPACK_PLUGIN_VERSION
+		);
+	}
+
 
 	/**
 	 * Get block patterns.
@@ -28,9 +47,11 @@ class Block_Patterns {
 	 */
 	public static function get_block_patterns() {
 		return [
-			'registration-wall' => __( 'Registration Wall', 'newspack' ),
-			'donation-wall'     => __( 'Donation Wall', 'newspack' ),
-			'pay-wall-one-tier' => __( 'Pay Wall with One Tier', 'newspack' ),
+			'registration-wall'          => __( 'Registration Wall', 'newspack' ),
+			'donation-wall'              => __( 'Donation Wall', 'newspack' ),
+			'pay-wall-one-tier'          => __( 'Pay Wall with One Tier', 'newspack' ),
+			'pay-wall-one-tier-metering' => __( 'Pay Wall with One Tier and Metering', 'newspack' ),
+			'pay-wall-two-tiers'         => __( 'Pay Wall with Two Tiers', 'newspack' ),
 		];
 	}
 

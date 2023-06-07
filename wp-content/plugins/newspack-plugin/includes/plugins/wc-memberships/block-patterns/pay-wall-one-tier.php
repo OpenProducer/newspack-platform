@@ -1,45 +1,62 @@
 <?php
 /**
- * Memberships Pay Wall One Tier Pattern.
+ * Memberships Pay Wall with One Tier Pattern.
  *
  * @package Newspack
  */
 
+$features = [
+	__( 'Unlimited access to our content and archive', 'newspack' ),
+	__( 'Puzzles and recipes', 'newspack' ),
+	__( 'Exclusive podcasts and newsletters', 'newspack' ),
+];
+
 ?>
-<!-- wp:group -->
-<div class="wp-block-group">
-	<!-- wp:paragraph {"align":"left","textColor":"medium-gray","fontSize":"normal"} -->
-	<p class="has-text-align-left has-medium-gray-color has-text-color has-normal-font-size">
-		<em><?php esc_html_e( 'Become a member to continue reading', 'newspack' ); ?></em>
+<!-- wp:separator {"className":"is-style-dots"} -->
+<hr class="wp-block-separator has-alpha-channel-opacity is-style-dots"/>
+<!-- /wp:separator -->
+
+<!-- wp:group { "style":{ "spacing":{"padding":{"top":"var:preset|spacing|70","right":"var:preset|spacing|70","bottom":"var:preset|spacing|70","left":"var:preset|spacing|70"}} },"className":"is-style-border newspack-content-gate","layout":{"type":"constrained"} } -->
+<div class="wp-block-group is-style-border newspack-content-gate" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70);padding-left:var(--wp--preset--spacing--70)">
+
+<!-- wp:heading { "textAlign":"center","style":{"typography":{"fontSize":"28px"}} } -->
+	<h2 class="wp-block-heading has-text-align-center" style="font-size:28px">
+		Subscribe to continue reading
+	</h2>
+	<!-- /wp:heading -->
+
+	<!-- wp:paragraph { "align":"center","style":{"typography":{"fontSize":"13px"}},"className":"newspack-sign-in" } -->
+	<p class="has-text-align-center newspack-sign-in" style="font-size:13px">
+		<?php esc_html_e( 'Already have an account?', 'newspack' ); ?>
+		<a href="#signin_modal"><?php esc_html_e( 'Sign In', 'newspack' ); ?></a>.
 	</p>
 	<!-- /wp:paragraph -->
 
-	<!-- wp:separator {"className":"is-style-wide"} -->
-	<hr class="wp-block-separator has-alpha-channel-opacity is-style-wide"/>
-	<!-- /wp:separator -->
+	<!-- wp:columns -->
+	<div class="wp-block-columns">
+		<!-- wp:column {"width":"15%"} -->
+		<div class="wp-block-column" style="flex-basis:15%"></div>
+		<!-- /wp:column -->
 
-	<!-- wp:columns {"verticalAlignment":"center"} -->
-	<div class="wp-block-columns are-vertically-aligned-center">
-		<!-- wp:column {"verticalAlignment":"center","width":"60%"} -->
-		<div class="wp-block-column is-vertically-aligned-center" style="flex-basis:60%">
-			<!-- wp:list { "style":{"typography":{"fontSize":"24px"}} } -->
-			<ul style="font-size:24px">
-				<!-- wp:list-item -->
-				<li><?php esc_html_e( 'Unlimited access to our content', 'newspack' ); ?></li>
-				<!-- /wp:list-item -->
-
-				<!-- wp:list-item -->
-				<li><?php esc_html_e( 'Weekly newsletters', 'newspack' ); ?></li>
-				<!-- /wp:list-item -->
-			</ul>
-			<!-- /wp:list -->
+		<!-- wp:column {"width":""} -->
+		<div class="wp-block-column">
+			<!-- wp:group {"backgroundColor":"light-gray","layout":{"type":"constrained"}} -->
+			<div class="wp-block-group has-light-gray-background-color has-background">
+				<!-- wp:list {"style":{"typography":{"fontSize":"15px"}},"className":"newspack-feature-list"} -->
+				<ul class="newspack-feature-list" style="font-size:15px">
+					<?php foreach ( $features as $feature ) : ?>
+						<li><?php echo esc_html( $feature ); ?></li>
+					<?php endforeach; ?>
+				</ul>
+				<!-- /wp:list -->
+				<!-- wp:newspack-blocks/checkout-button { "text":"Subscribe for only $5/month!","align":"wide","style":{"color":{"background":"#cc1818"}} } /-->
+			</div>
+			<!-- /wp:group -->
 		</div>
 		<!-- /wp:column -->
 
-		<!-- wp:column {"verticalAlignment":"center"} -->
-		<div class="wp-block-column is-vertically-aligned-center">
-			<!-- wp:newspack-blocks/checkout-button { "text":"<?php esc_attr_e( 'Subscribe now!', 'newspack' ); ?>","align":"wide","style":{"color":{"background":"#cc1818"}} } /-->
-		</div>
+		<!-- wp:column {"width":"15%"} -->
+		<div class="wp-block-column" style="flex-basis:15%"></div>
 		<!-- /wp:column -->
 	</div>
 	<!-- /wp:columns -->

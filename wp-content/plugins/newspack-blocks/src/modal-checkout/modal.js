@@ -25,7 +25,8 @@ function domReady( callback ) {
 	document.addEventListener( 'DOMContentLoaded', callback );
 }
 
-const triggers = '.wpbnbd.wpbnbd--platform-wc,.wp-block-newspack-blocks-checkout-button';
+const triggers =
+	'.wpbnbd.wpbnbd--platform-wc,.wp-block-newspack-blocks-checkout-button,.newspack-blocks-variation-modal';
 
 let iframeResizeObserver;
 
@@ -35,11 +36,16 @@ function closeCheckout( element ) {
 		iframe.src = 'about:blank';
 	}
 	document.body.classList.remove( 'newspack-modal-checkout-open' );
-	iframeResizeObserver.disconnect();
+	if ( iframeResizeObserver ) {
+		iframeResizeObserver.disconnect();
+	}
 	element.style.display = 'none';
 }
 
 domReady( () => {
+	/**
+	 * Initialize modal checkout.
+	 */
 	const modalCheckout = document.querySelector( '.newspack-blocks-checkout-modal' );
 	if ( ! modalCheckout ) {
 		return;
@@ -54,13 +60,65 @@ domReady( () => {
 	const iframe = document.createElement( 'iframe' );
 	iframe.name = iframeName;
 	modalContent.appendChild( iframe );
+	modalCheckout.addEventListener( 'click', ev => {
+		if ( ev.target === modalCheckout ) {
+			closeCheckout( modalCheckout );
+		}
+	} );
+	const closeButtons = modalCheckout.querySelectorAll( '.newspack-blocks-checkout-modal__close' );
+	closeButtons.forEach( button => {
+		button.addEventListener( 'click', ev => {
+			ev.preventDefault();
+			closeCheckout( modalCheckout );
+		} );
+	} );
+
+	/**
+	 * Variation modals.
+	 */
+	const variationModals = document.querySelectorAll( '.newspack-blocks-variation-modal' );
+	variationModals.forEach( variationModal => {
+		variationModal.addEventListener( 'click', ev => {
+			if ( ev.target === variationModal ) {
+				closeCheckout( variationModal );
+			}
+		} );
+		variationModal
+			.querySelectorAll( '.newspack-blocks-variation-modal__close' )
+			.forEach( button => {
+				button.addEventListener( 'click', ev => {
+					ev.preventDefault();
+					closeCheckout( variationModal );
+				} );
+			} );
+	} );
+
+	/**
+	 * Handle triggers.
+	 */
 	const elements = document.querySelectorAll( triggers );
 	elements.forEach( element => {
 		const forms = element.querySelectorAll( 'form' );
 		forms.forEach( form => {
 			form.appendChild( modalCheckoutInput.cloneNode() );
 			form.target = iframeName;
-			form.addEventListener( 'submit', () => {
+			form.addEventListener( 'submit', ev => {
+				const formData = new FormData( form );
+				// Clear any open variation modal.
+				variationModals.forEach( variationModal => ( variationModal.style.display = 'none' ) );
+				// Trigger variation modal if variation is not selected.
+				if ( formData.get( 'is_variable' ) && ! formData.get( 'variation_id' ) ) {
+					const variationModal = [ ...variationModals ].find(
+						modal => modal.dataset.productId === formData.get( 'product_id' )
+					);
+					if ( variationModal ) {
+						ev.preventDefault();
+						document.body.classList.add( 'newspack-modal-checkout-open' );
+						variationModal.style.display = 'block';
+						return;
+					}
+				}
+				// Continue with checkout modal.
 				spinner.style.display = 'flex';
 				modalCheckout.style.display = 'block';
 				document.body.classList.add( 'newspack-modal-checkout-open' );
@@ -93,18 +151,6 @@ domReady( () => {
 					spinner.style.display = 'none';
 				} );
 			} );
-		} );
-	} );
-	modalCheckout.addEventListener( 'click', ev => {
-		if ( ev.target === modalCheckout ) {
-			closeCheckout( modalCheckout );
-		}
-	} );
-	const closeButtons = modalCheckout.querySelectorAll( '.newspack-blocks-checkout-modal__close' );
-	closeButtons.forEach( button => {
-		button.addEventListener( 'click', ev => {
-			ev.preventDefault();
-			closeCheckout( modalCheckout );
 		} );
 	} );
 } );

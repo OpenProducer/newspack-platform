@@ -15,7 +15,6 @@ export const optionsFieldsSelector = select => {
 		frequency_start,
 		frequency_between,
 		frequency_reset,
-		display_title,
 		hide_border,
 		large_border,
 		overlay_color,
@@ -42,7 +41,6 @@ export const optionsFieldsSelector = select => {
 
 	return {
 		background_color,
-		display_title,
 		hide_border,
 		large_border,
 		frequency,

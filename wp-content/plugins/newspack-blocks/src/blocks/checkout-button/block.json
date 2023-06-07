@@ -11,6 +11,13 @@
 		"product": {
 			"type": "string"
 		},
+		"variation": {
+			"type": "string"
+		},
+		"is_variable": {
+			"type": "boolean",
+			"default": false
+		},
 		"price": {
 			"type": "string"
 		},

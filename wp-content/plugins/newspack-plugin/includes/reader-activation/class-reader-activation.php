@@ -311,13 +311,20 @@ final class Reader_Activation {
 	 * Platform must be "Newspack" and all donation settings must be configured.
 	 */
 	public static function is_reader_revenue_ready() {
+		$ready             = false;
 		$donation_settings = Donations::get_donation_settings();
 
 		if ( \is_wp_error( $donation_settings ) ) {
-			return false;
+			return $ready;
 		}
 
-		return Donations::is_platform_wc();
+		if ( Donations::is_platform_wc() ) {
+			$ready = true;
+		} elseif ( Donations::is_platform_nrh() && NRH::get_setting( 'nrh_organization_id' ) && method_exists( '\Newspack_Popups_Settings', 'donor_landing_page' ) && \Newspack_Popups_Settings::donor_landing_page() ) {
+			$ready = true;
+		}
+
+		return $ready;
 	}
 
 	/**
@@ -435,7 +442,7 @@ final class Reader_Activation {
 				],
 				'label'        => __( 'Reader Revenue', 'newspack' ),
 				'description'  => __( 'Setting suggested donation amounts is required for enabling a streamlined donation experience.', 'newspack' ),
-				'instructions' => __( 'Set platform to "Newspack" and configure your default donation settings.', 'newspack' ),
+				'instructions' => __( 'Set platform to "Newspack" or "News Revenue Hub" and configure your default donation settings. If using News Revenue Hub, set an Organization ID and a Donor Landing Page in News Revenue Hub Settings.', 'newspack' ),
 				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
 				'href'         => \admin_url( '/admin.php?page=newspack-reader-revenue-wizard' ),
 				'action_text'  => __( 'Reader Revenue settings' ),

@@ -57,10 +57,7 @@ div.wp-block-columns {
 				&::after {
 					border-right-width: 1px;
 					border-top-width: 0;
-					bottom: 0;
-					left: auto;
-					right: -32px;
-					top: 0;
+					inset: 0 -32px 0 auto;
 				}
 			}
 		}
@@ -86,10 +83,7 @@ div.wp-block-columns {
 				&::after {
 					border-right-width: 1px;
 					border-top-width: 0;
-					bottom: 0;
-					left: auto;
-					right: -20px;
-					top: 0;
+					inset: 0 -20px 0 auto;
 
 					@include mixins.media( tablet ) {
 						right: -32px;
