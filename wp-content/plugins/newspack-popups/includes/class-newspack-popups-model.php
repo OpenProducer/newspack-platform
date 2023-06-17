@@ -1163,7 +1163,7 @@ final class Newspack_Popups_Model {
 		self::remove_form_hooks( $popup );
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 
-		$element_id           = self::get_uniqid();
+		$element_id           = self::canonize_popup_id( $popup['id'] );
 		$endpoint             = self::get_reader_endpoint();
 		$hide_border          = $popup['options']['hide_border'];
 		$large_border         = $popup['options']['large_border'];
@@ -1239,7 +1239,7 @@ final class Newspack_Popups_Model {
 		self::remove_form_hooks( $popup );
 		do_action( 'newspack_campaigns_after_campaign_render', $popup );
 
-		$element_id            = self::get_uniqid();
+		$element_id            = self::canonize_popup_id( $popup['id'] );
 		$endpoint              = self::get_reader_endpoint();
 		$hide_border           = $popup['options']['hide_border'];
 		$large_border          = $popup['options']['large_border'];

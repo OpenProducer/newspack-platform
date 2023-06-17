@@ -18,6 +18,7 @@ return array(
     'Newspack_Popups' => $baseDir . '/includes/class-newspack-popups.php',
     'Newspack_Popups_API' => $baseDir . '/includes/class-newspack-popups-api.php',
     'Newspack_Popups_Custom_Placements' => $baseDir . '/includes/class-newspack-popups-custom-placements.php',
+    'Newspack_Popups_Data_Api' => $baseDir . '/includes/class-newspack-popups-data-api.php',
     'Newspack_Popups_Donations' => $baseDir . '/includes/class-newspack-popups-donations.php',
     'Newspack_Popups_Exporter' => $baseDir . '/includes/class-newspack-popups-exporter.php',
     'Newspack_Popups_Importer' => $baseDir . '/includes/class-newspack-popups-importer.php',

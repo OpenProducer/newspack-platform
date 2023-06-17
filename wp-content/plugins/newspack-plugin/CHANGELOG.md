@@ -1,3 +1,11 @@
+# [1.117.0](https://github.com/Automattic/newspack-plugin/compare/v1.116.1...v1.117.0) (2023-06-15)
+
+
+### Features
+
+* do not override data on popup events ([#2506](https://github.com/Automattic/newspack-plugin/issues/2506)) ([34068ff](https://github.com/Automattic/newspack-plugin/commit/34068ffe67d8c28ce1b524b5abb322c7deb17d6b))
+* rename ga4 events ([#2489](https://github.com/Automattic/newspack-plugin/issues/2489)) ([1e81a15](https://github.com/Automattic/newspack-plugin/commit/1e81a15971a5835807bf9a7f15bcc6a948375c1b))
+
 ## [1.116.1](https://github.com/Automattic/newspack-plugin/compare/v1.116.0...v1.116.1) (2023-06-07)
 
 

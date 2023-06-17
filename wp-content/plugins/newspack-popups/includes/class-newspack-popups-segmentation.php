@@ -357,9 +357,11 @@ final class Newspack_Popups_Segmentation {
 	/**
 	 * Get all configured segments.
 	 *
+	 * @param boolean $include_inactive If true, fetch both inactive and active segments. If false, only fetch active segments.
+	 *
 	 * @return array Array of segments.
 	 */
-	public static function get_segments() {
+	public static function get_segments( $include_inactive = true ) {
 		$segments                  = get_option( self::SEGMENTS_OPTION_NAME, [] );
 		$segments_without_priority = array_filter(
 			$segments,
@@ -371,6 +373,16 @@ final class Newspack_Popups_Segmentation {
 		// Failsafe to ensure that all segments have an assigned priority.
 		if ( 0 < count( $segments_without_priority ) ) {
 			$segments = self::reindex_segments( $segments );
+		}
+
+		// Filter out inactive segments, if needed.
+		if ( ! $include_inactive ) {
+			$segments = array_filter(
+				$segments,
+				function( $segment ) {
+					return empty( $segment['configuration']['is_disabled'] );
+				}
+			);
 		}
 
 		// Filter out non-existing categories.

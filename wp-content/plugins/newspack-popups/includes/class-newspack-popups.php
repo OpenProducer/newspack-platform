@@ -97,6 +97,7 @@ final class Newspack_Popups {
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-newsletters.php';
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-donations.php';
 			include_once dirname( __FILE__ ) . '/class-newspack-popups-view-as.php';
+			include_once dirname( __FILE__ ) . '/class-newspack-popups-data-api.php';
 		}
 	}
 

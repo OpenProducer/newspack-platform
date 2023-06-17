@@ -328,7 +328,7 @@ class Newspack_Popups_Settings {
 					[
 						'key'   => 'all_segments',
 						'value' => array_reduce(
-							Newspack_Popups_Segmentation::get_segments(),
+							Newspack_Popups_Segmentation::get_segments( false ),
 							function( $acc, $item ) {
 								$acc[ $item['id'] ]             = $item['configuration'];
 								$acc[ $item['id'] ]['priority'] = $item['priority'];
