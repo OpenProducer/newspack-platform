@@ -2,7 +2,7 @@
 /**
  * @license GPL-2.0
  *
- * Modified by the-events-calendar on 15-May-2023 using Strauss.
+ * Modified by the-events-calendar on 15-June-2023 using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 

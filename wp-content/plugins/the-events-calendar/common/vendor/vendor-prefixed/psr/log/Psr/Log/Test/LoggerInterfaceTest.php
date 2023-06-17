@@ -1,9 +1,15 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by the-events-calendar on 15-June-2023 using Strauss.
+ * @see https://github.com/BrianHenryIE/strauss
+ */
 
-namespace Psr\Log\Test;
+namespace TEC\Common\Psr\Log\Test;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
+use TEC\Common\Psr\Log\LoggerInterface;
+use TEC\Common\Psr\Log\LogLevel;
 use PHPUnit\Framework\TestCase;
 
 /**
@@ -32,7 +38,7 @@ abstract class LoggerInterfaceTest extends TestCase
 
     public function testImplements()
     {
-        $this->assertInstanceOf('Psr\Log\LoggerInterface', $this->getLogger());
+        $this->assertInstanceOf('TEC\Common\Psr\Log\LoggerInterface', $this->getLogger());
     }
 
     /**
@@ -66,7 +72,7 @@ abstract class LoggerInterfaceTest extends TestCase
     }
 
     /**
-     * @expectedException \Psr\Log\InvalidArgumentException
+     * @expectedException \TEC\Common\Psr\Log\InvalidArgumentException
      */
     public function testThrowsOnInvalidLevel()
     {
@@ -86,9 +92,9 @@ abstract class LoggerInterfaceTest extends TestCase
     public function testObjectCastToString()
     {
         if (method_exists($this, 'createPartialMock')) {
-            $dummy = $this->createPartialMock('Psr\Log\Test\DummyTest', array('__toString'));
+            $dummy = $this->createPartialMock('TEC\Common\Psr\Log\Test\DummyTest', array('__toString'));
         } else {
-            $dummy = $this->getMock('Psr\Log\Test\DummyTest', array('__toString'));
+            $dummy = $this->getMock('TEC\Common\Psr\Log\Test\DummyTest', array('__toString'));
         }
         $dummy->expects($this->once())
             ->method('__toString')

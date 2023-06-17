@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit08fb3bf4047c748cad763844dbdb1120
+class ComposerStaticInit1f03095eb3cd79095df0b38a2e1fecc3
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -149,13 +149,23 @@ class ComposerStaticInit08fb3bf4047c748cad763844dbdb1120
         'TEC\\Events\\Integrations\\Integration_Abstract' => __DIR__ . '/../..' . '/src/Events/Integrations/Integration_Abstract.php',
         'TEC\\Events\\Integrations\\Plugins\\Colbri_Page_Builder\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Colbri_Page_Builder/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\Elementor\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Elementor/Provider.php',
-        'TEC\\Events\\Integrations\\Plugins\\Plugin_Integration' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Plugin_Integration.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Email\\RSVP' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Email/RSVP.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Email\\Ticket' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Email/Ticket.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Emails' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Emails.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Hooks' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Hooks.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\JSON_LD\\Event_Data' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/JSON_LD/Event_Data.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Template' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Template.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Events_Schema' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Events_Schema.php',
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
         'TEC\\Events\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Provider.php',
-        'TEC\\Events\\Integrations\\Themes\\Theme_Integration' => __DIR__ . '/../..' . '/src/Events/Integrations/Themes/Theme_Integration.php',
         'TEC\\Events\\Legacy\\Views\\V1\\Provider' => __DIR__ . '/../..' . '/src/Events/Legacy/Views/V1/Provider.php',
+        'TEC\\Events\\Site_Health\\Info_Section' => __DIR__ . '/../..' . '/src/Events/Site_Health/Info_Section.php',
+        'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
+        'TEC\\Events\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Events/Telemetry/Provider.php',
+        'TEC\\Events\\Telemetry\\Telemetry' => __DIR__ . '/../..' . '/src/Events/Telemetry/Telemetry.php',
         'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Filter_Bar/Provider.php',
         'Tribe\\Events\\Admin\\Notice\\Full_Site_Editor' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Full_Site_Editor.php',
         'Tribe\\Events\\Admin\\Notice\\Install_Event_Tickets' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Install_Event_Tickets.php',
@@ -289,9 +299,9 @@ class ComposerStaticInit08fb3bf4047c748cad763844dbdb1120
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit08fb3bf4047c748cad763844dbdb1120::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit08fb3bf4047c748cad763844dbdb1120::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit08fb3bf4047c748cad763844dbdb1120::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit1f03095eb3cd79095df0b38a2e1fecc3::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit1f03095eb3cd79095df0b38a2e1fecc3::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit1f03095eb3cd79095df0b38a2e1fecc3::$classMap;
 
         }, null, ClassLoader::class);
     }

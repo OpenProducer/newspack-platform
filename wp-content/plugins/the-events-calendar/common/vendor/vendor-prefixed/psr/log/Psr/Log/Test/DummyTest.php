@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by the-events-calendar on 15-June-2023 using Strauss.
+ * @see https://github.com/BrianHenryIE/strauss
+ */
 
-namespace Psr\Log\Test;
+namespace TEC\Common\Psr\Log\Test;
 
 /**
  * This class is internal and does not follow the BC promise.

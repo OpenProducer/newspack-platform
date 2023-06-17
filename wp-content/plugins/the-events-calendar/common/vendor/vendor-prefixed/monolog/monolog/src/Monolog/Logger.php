@@ -8,7 +8,7 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Modified by the-events-calendar on 15-May-2023 using Strauss.
+ * Modified by the-events-calendar on 15-June-2023 using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
@@ -16,8 +16,8 @@ namespace TEC\Common\Monolog;
 
 use TEC\Common\Monolog\Handler\HandlerInterface;
 use TEC\Common\Monolog\Handler\StreamHandler;
-use Psr\Log\LoggerInterface;
-use Psr\Log\InvalidArgumentException;
+use TEC\Common\Psr\Log\LoggerInterface;
+use TEC\Common\Psr\Log\InvalidArgumentException;
 use Exception;
 
 /**

@@ -1,8 +1,14 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by the-events-calendar on 15-June-2023 using Strauss.
+ * @see https://github.com/BrianHenryIE/strauss
+ */
 
-namespace Psr\Log\Test;
+namespace TEC\Common\Psr\Log\Test;
 
-use Psr\Log\AbstractLogger;
+use TEC\Common\Psr\Log\AbstractLogger;
 
 /**
  * Used for testing purposes.

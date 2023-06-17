@@ -8,14 +8,14 @@
  * For the full copyright and license information, please view the LICENSE
  * file that was distributed with this source code.
  *
- * Modified by the-events-calendar on 15-May-2023 using Strauss.
+ * Modified by the-events-calendar on 15-June-2023 using Strauss.
  * @see https://github.com/BrianHenryIE/strauss
  */
 
 namespace TEC\Common\Monolog;
 
-use Psr\Log\LoggerInterface;
-use Psr\Log\LogLevel;
+use TEC\Common\Psr\Log\LoggerInterface;
+use TEC\Common\Psr\Log\LogLevel;
 use TEC\Common\Monolog\Handler\AbstractHandler;
 use TEC\Common\Monolog\Registry;
 
@@ -64,7 +64,7 @@ class ErrorHandler
     public static function register(LoggerInterface $logger, $errorLevelMap = array(), $exceptionLevel = null, $fatalLevel = null)
     {
         //Forces the autoloader to run for LogLevel. Fixes an autoload issue at compile-time on PHP5.3. See https://github.com/Seldaek/monolog/pull/929
-        class_exists('\\Psr\\Log\\LogLevel', true);
+        class_exists('\\TEC\\Common\\Psr\\Log\\LogLevel', true);
 
         $handler = new static($logger);
         if ($errorLevelMap !== false) {

@@ -1,6 +1,12 @@
 <?php
+/**
+ * @license MIT
+ *
+ * Modified by the-events-calendar on 15-June-2023 using Strauss.
+ * @see https://github.com/BrianHenryIE/strauss
+ */
 
-namespace Psr\Log;
+namespace TEC\Common\Psr\Log;
 
 /**
  * This is a simple Logger implementation that other Loggers can inherit from.
