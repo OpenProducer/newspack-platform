@@ -91,9 +91,12 @@ final class Newspack_Newsletters_Editor {
 
 	/**
 	 * Is the editor editing an email?
+	 *
+	 * @param int $post_id Optional post ID to check.
 	 */
-	private static function is_editing_email() {
-		return in_array( get_post_type(), self::get_email_editor_cpts() );
+	private static function is_editing_email( $post_id = null ) {
+		$post_id = empty( $post_id ) ? get_the_ID() : $post_id;
+		return in_array( get_post_type( $post_id ), self::get_email_editor_cpts() );
 	}
 
 	/**
@@ -193,7 +196,11 @@ final class Newspack_Newsletters_Editor {
 	 * Define Editor Font Sizes.
 	 */
 	public static function newspack_font_sizes() {
-		if ( ! self::is_editing_email() ) {
+		global $pagenow;
+		$email_editor_cpts = self::get_email_editor_cpts();
+		$is_editing_email  = 'post.php' === $pagenow && isset( $_GET['post'] ) && self::is_editing_email( absint( $_GET['post'] ) ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$is_creating_email = 'post-new.php' === $pagenow && isset( $_GET['post_type'] ) && in_array( $_GET['post_type'], $email_editor_cpts ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! $is_editing_email && ! $is_creating_email ) {
 			return;
 		}
 		add_theme_support(
@@ -203,11 +210,6 @@ final class Newspack_Newsletters_Editor {
 					'name' => _x( 'Small', 'font size name', 'newspack-newsletters' ),
 					'size' => 12,
 					'slug' => 'small',
-				],
-				[
-					'name' => _x( 'Normal', 'font size name', 'newspack-newsletters' ),
-					'size' => 16,
-					'slug' => 'normal',
 				],
 				[
 					'name' => _x( 'Medium', 'font size name', 'newspack-newsletters' ),
@@ -223,11 +225,6 @@ final class Newspack_Newsletters_Editor {
 					'name' => _x( 'Extra Large', 'font size name', 'newspack-newsletters' ),
 					'size' => 36,
 					'slug' => 'x-large',
-				],
-				[
-					'name' => _x( 'Huge', 'font size name', 'newspack-newsletters' ),
-					'size' => 36,
-					'slug' => 'huge',
 				],
 			]
 		);

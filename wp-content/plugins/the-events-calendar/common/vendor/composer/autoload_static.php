@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf837c41ac27fe6992859bbba70641680
+class ComposerStaticInitea357ea237f030408f790bd76fb5572d
 {
     public static $prefixLengthsPsr4 = array (
         'l' => 
@@ -112,6 +112,8 @@ class ComposerStaticInitf837c41ac27fe6992859bbba70641680
         'TEC\\Common\\Contracts\\Provider\\Controller' => __DIR__ . '/../..' . '/src/Common/Contracts/Provider/Controller.php',
         'TEC\\Common\\Contracts\\Service_Provider' => __DIR__ . '/../..' . '/src/Common/Contracts/Service_Provider.php',
         'TEC\\Common\\Editor\\Full_Site\\Template_Utils' => __DIR__ . '/../..' . '/src/Common/Editor/Full_Site/Template_Utils.php',
+        'TEC\\Common\\Exceptions\\Container_Exception' => __DIR__ . '/../..' . '/src/Common/Exceptions/Container_Exception.php',
+        'TEC\\Common\\Exceptions\\Not_Bound_Exception' => __DIR__ . '/../..' . '/src/Common/Exceptions/Not_Bound_Exception.php',
         'TEC\\Common\\Integrations\\Integration_Abstract' => __DIR__ . '/../..' . '/src/Common/Integrations/Integration_Abstract.php',
         'TEC\\Common\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Common/Integrations/Provider.php',
         'TEC\\Common\\Integrations\\Traits\\Module_Integration' => __DIR__ . '/../..' . '/src/Common/Integrations/Traits/Module_Integration.php',
@@ -221,9 +223,9 @@ class ComposerStaticInitf837c41ac27fe6992859bbba70641680
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf837c41ac27fe6992859bbba70641680::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf837c41ac27fe6992859bbba70641680::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf837c41ac27fe6992859bbba70641680::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitea357ea237f030408f790bd76fb5572d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitea357ea237f030408f790bd76fb5572d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitea357ea237f030408f790bd76fb5572d::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,3 +1,31 @@
+# [1.67.0](https://github.com/Automattic/newspack-newsletters/compare/v1.66.0...v1.67.0) (2023-06-19)
+
+
+### Bug Fixes
+
+* remove important flag from font size rules ([#1185](https://github.com/Automattic/newspack-newsletters/issues/1185)) ([39031fd](https://github.com/Automattic/newspack-newsletters/commit/39031fd6a2bad728eb13a3b5dbb6d655887a640b))
+
+
+### Features
+
+* optional comments support ([#1170](https://github.com/Automattic/newspack-newsletters/issues/1170)) ([d0b7878](https://github.com/Automattic/newspack-newsletters/commit/d0b7878dca45cf3bb3ed6a98563d79b5866653df))
+* **subscribe-form:** improve success message ([#1184](https://github.com/Automattic/newspack-newsletters/issues/1184)) ([4d11566](https://github.com/Automattic/newspack-newsletters/commit/4d11566a48a9e379616b341ff638d75e0e7e6a8d))
+* support non-stacking on mobile ([#1178](https://github.com/Automattic/newspack-newsletters/issues/1178)) ([e68068e](https://github.com/Automattic/newspack-newsletters/commit/e68068e003e8f2d903d116ae9182384ce376bafc))
+
+# [1.67.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.66.0...v1.67.0-alpha.1) (2023-06-08)
+
+
+### Bug Fixes
+
+* remove important flag from font size rules ([#1185](https://github.com/Automattic/newspack-newsletters/issues/1185)) ([39031fd](https://github.com/Automattic/newspack-newsletters/commit/39031fd6a2bad728eb13a3b5dbb6d655887a640b))
+
+
+### Features
+
+* optional comments support ([#1170](https://github.com/Automattic/newspack-newsletters/issues/1170)) ([d0b7878](https://github.com/Automattic/newspack-newsletters/commit/d0b7878dca45cf3bb3ed6a98563d79b5866653df))
+* **subscribe-form:** improve success message ([#1184](https://github.com/Automattic/newspack-newsletters/issues/1184)) ([4d11566](https://github.com/Automattic/newspack-newsletters/commit/4d11566a48a9e379616b341ff638d75e0e7e6a8d))
+* support non-stacking on mobile ([#1178](https://github.com/Automattic/newspack-newsletters/issues/1178)) ([e68068e](https://github.com/Automattic/newspack-newsletters/commit/e68068e003e8f2d903d116ae9182384ce376bafc))
+
 # [1.66.0](https://github.com/Automattic/newspack-newsletters/compare/v1.65.0...v1.66.0) (2023-06-05)
 
 

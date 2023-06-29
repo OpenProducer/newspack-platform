@@ -12,6 +12,8 @@ return array(
     'TEC\\Common\\Contracts\\Provider\\Controller' => $baseDir . '/src/Common/Contracts/Provider/Controller.php',
     'TEC\\Common\\Contracts\\Service_Provider' => $baseDir . '/src/Common/Contracts/Service_Provider.php',
     'TEC\\Common\\Editor\\Full_Site\\Template_Utils' => $baseDir . '/src/Common/Editor/Full_Site/Template_Utils.php',
+    'TEC\\Common\\Exceptions\\Container_Exception' => $baseDir . '/src/Common/Exceptions/Container_Exception.php',
+    'TEC\\Common\\Exceptions\\Not_Bound_Exception' => $baseDir . '/src/Common/Exceptions/Not_Bound_Exception.php',
     'TEC\\Common\\Integrations\\Integration_Abstract' => $baseDir . '/src/Common/Integrations/Integration_Abstract.php',
     'TEC\\Common\\Integrations\\Provider' => $baseDir . '/src/Common/Integrations/Provider.php',
     'TEC\\Common\\Integrations\\Traits\\Module_Integration' => $baseDir . '/src/Common/Integrations/Traits/Module_Integration.php',

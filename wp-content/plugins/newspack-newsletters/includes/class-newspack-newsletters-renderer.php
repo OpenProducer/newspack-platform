@@ -717,9 +717,17 @@ final class Newspack_Newsletters_Renderer {
 				if ( isset( $attrs['color'] ) ) {
 					$default_attrs['color'] = $attrs['color'];
 				}
-				$markup = '';
+				$stack_on_mobile = ! isset( $attrs['isStackedOnMobile'] ) || true === $attrs['isStackedOnMobile'];
+				if ( ! $stack_on_mobile ) {
+					$markup = '<mj-group>';
+				} else {
+					$markup = '';
+				}
 				foreach ( $inner_blocks as $block ) {
 					$markup .= self::render_mjml_component( $block, true, false, $default_attrs );
+				}
+				if ( ! $stack_on_mobile ) {
+					$markup .= '</mj-group>';
 				}
 				$block_mjml_markup = $markup;
 				break;

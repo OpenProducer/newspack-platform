@@ -137,10 +137,9 @@ function render_block( $attrs ) {
 	<div
 		class="newspack-newsletters-subscribe <?php echo esc_attr( get_block_classes( $attrs ) ); ?>"
 		data-success-message="<?php echo \esc_attr( $attrs['successMessage'] ); ?>"
+		<?php echo $subscribed ? 'data-status="200"' : ''; ?>
 	>
-		<?php if ( $subscribed ) : ?>
-			<p class="message"><?php echo \esc_html( $attrs['successMessage'] ); ?></p>
-		<?php else : ?>
+		<?php if ( ! $subscribed ) : ?>
 			<form id="<?php echo esc_attr( get_form_id() ); ?>">
 				<?php \wp_nonce_field( FORM_ACTION, FORM_ACTION ); ?>
 				<?php
@@ -243,12 +242,15 @@ function render_block( $attrs ) {
 					<input type="submit" value="<?php echo \esc_attr( $attrs['label'] ); ?>" />
 				</div>
 			</form>
-			<div class="newspack-newsletters-subscribe-response">
-				<?php if ( ! empty( $message ) ) : ?>
-					<p><?php echo \esc_html( $message ); ?></p>
+		<?php endif; ?>
+		<div class="newspack-newsletters-subscribe__response">
+			<div class="newspack-newsletters-subscribe__icon"></div>
+			<div class="newspack-newsletters-subscribe__message">
+				<?php if ( ! empty( $message ) || $subscribed ) : ?>
+					<p><?php echo $subscribed ? \wp_kses_post( $attrs['successMessage'] ) : \esc_html( $message ); ?></p>
 				<?php endif; ?>
 			</div>
-		<?php endif; ?>
+		</div>
 	</div>
 	<?php
 	return ob_get_clean();

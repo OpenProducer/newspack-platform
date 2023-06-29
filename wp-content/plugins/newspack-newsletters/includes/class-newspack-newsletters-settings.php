@@ -160,6 +160,18 @@ class Newspack_Newsletters_Settings {
 				'helpURL'     => esc_url( 'https://help.tryletterhead.com/promotions-api-reference' ),
 				'onboarding'  => false,
 			),
+
+			/**
+			 * Post Comments support.
+			 */
+			array(
+				'default'           => false,
+				'description'       => esc_html__( 'Allow comments to be enabled for public Newsletters', 'newspack-newsletters' ),
+				'key'               => 'newspack_newsletters_support_comments',
+				'sanitize_callback' => 'boolval',
+				'type'              => 'checkbox',
+				'onboarding'        => false,
+			),
 		);
 
 		if ( class_exists( 'Jetpack' ) && \Jetpack::is_module_active( 'related-posts' ) ) {
