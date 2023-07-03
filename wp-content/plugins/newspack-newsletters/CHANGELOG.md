@@ -1,3 +1,21 @@
+## [1.67.1](https://github.com/Automattic/newspack-newsletters/compare/v1.67.0...v1.67.1) (2023-07-03)
+
+
+### Bug Fixes
+
+* add a width to the email inputs to prevent overflow ([#1196](https://github.com/Automattic/newspack-newsletters/issues/1196)) ([058a14a](https://github.com/Automattic/newspack-newsletters/commit/058a14aaf42244a9bf71804f57a92c4ddf43fb1d))
+* allow public newsletters in author archives ([#1197](https://github.com/Automattic/newspack-newsletters/issues/1197)) ([d3eb018](https://github.com/Automattic/newspack-newsletters/commit/d3eb0184499e39520d1f4da30879994c98d24d11))
+* **subscribe-block:** allow spaces in submit button ([#1202](https://github.com/Automattic/newspack-newsletters/issues/1202)) ([5ad7ab5](https://github.com/Automattic/newspack-newsletters/commit/5ad7ab5ff6979752bfa30f5e5e1dcad9bd7bd26d))
+
+## [1.67.1-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.67.0...v1.67.1-alpha.1) (2023-06-22)
+
+
+### Bug Fixes
+
+* add a width to the email inputs to prevent overflow ([#1196](https://github.com/Automattic/newspack-newsletters/issues/1196)) ([058a14a](https://github.com/Automattic/newspack-newsletters/commit/058a14aaf42244a9bf71804f57a92c4ddf43fb1d))
+* allow public newsletters in author archives ([#1197](https://github.com/Automattic/newspack-newsletters/issues/1197)) ([d3eb018](https://github.com/Automattic/newspack-newsletters/commit/d3eb0184499e39520d1f4da30879994c98d24d11))
+* **subscribe-block:** allow spaces in submit button ([#1202](https://github.com/Automattic/newspack-newsletters/issues/1202)) ([5ad7ab5](https://github.com/Automattic/newspack-newsletters/commit/5ad7ab5ff6979752bfa30f5e5e1dcad9bd7bd26d))
+
 # [1.67.0](https://github.com/Automattic/newspack-newsletters/compare/v1.66.0...v1.67.0) (2023-06-19)
 
 
