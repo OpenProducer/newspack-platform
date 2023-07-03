@@ -22,6 +22,17 @@
 			}
 		}
 	}
+	.woocommerce-checkout-review-order-table {
+		margin-top: 16px;
+		th,
+		td {
+			font-size: 0.8rem;
+		}
+		&.empty {
+			margin: 0;
+			padding: 0;
+		}
+	}
 	.woocommerce-billing-fields {
 		margin-bottom: 16px;
 	}
@@ -71,7 +82,8 @@
 		#payment button#place_order { /* stylelint-disable-line */
 			margin-bottom: 0;
 		}
-		button {
+		.checkout-billing button[type='submit'],
+		button.modal-continue {
 			display: block;
 			width: 100%;
 		}

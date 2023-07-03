@@ -875,23 +875,55 @@ final class Newspack_Popups {
 	 * Create the config file for the API, unless it exists.
 	 */
 	public static function create_lightweight_api_config() {
-		// Don't create a config file if not on Newspack's Atomic platform, or if there is a file already.
+		// Don't create a config file if it's already there.
 		if (
-			! ( defined( 'ATOMIC_SITE_ID' ) && ATOMIC_SITE_ID ) ||
 			( file_exists( self::LIGHTWEIGHT_API_CONFIG_FILE_PATH_LEGACY ) || file_exists( self::LIGHTWEIGHT_API_CONFIG_FILE_PATH ) )
 		) {
 			return;
 		}
+		// Don't create a config file if the directory is not writable.
+		if ( ! is_writable( dirname( self::LIGHTWEIGHT_API_CONFIG_FILE_PATH ) ) ) { // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_is_writable
+			return;
+		}
 		global $wpdb;
+		$config_vars = [
+			'DB_NAME',
+			'DB_USER',
+			'DB_PASSWORD',
+			'DB_HOST',
+			'DB_CHARSET',
+			'DB_COLLATE',
+			'DB_PREFIX',
+			'WP_CACHE_KEY_SALT',
+			'NEWSPACK_POPUPS_DEBUG',
+		];
+
 		$new_config_file = file_put_contents( // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents -- VIP will have to create a config manually
 			self::LIGHTWEIGHT_API_CONFIG_FILE_PATH,
-			'<?php' .
-			// Insert these only if they are defined, but not in the as environment variables.
-			// This way only variables which are already declared in wp-config.php should be inserted in this config file.
-			( ! getenv( 'DB_CHARSET' ) && defined( 'DB_CHARSET' ) ? "\ndefine( 'DB_CHARSET', '" . DB_CHARSET . "' );" : '' ) .
-			( ! getenv( 'WP_CACHE_KEY_SALT' ) && defined( 'WP_CACHE_KEY_SALT' ) ? "\ndefine( 'WP_CACHE_KEY_SALT', '" . WP_CACHE_KEY_SALT . "' );" : '' ) .
-			"\ndefine( 'DB_PREFIX', '" . $wpdb->prefix . "' );" .
-			"\n"
+			"<?php\n" .
+			implode(
+				"\n",
+				array_map(
+					function( $config_var ) use ( $wpdb ) {
+						// Skip if it's set through an env var.
+						if ( getenv( $config_var ) ) {
+							return '';
+						}
+						if ( defined( $config_var ) ) {
+							$value = constant( $config_var );
+						}
+						if ( 'DB_PREFIX' === $config_var ) {
+							$value = $wpdb->prefix;
+						}
+						if ( ! isset( $value ) ) {
+							return '';
+						}
+						$value = addslashes( $value );
+						return "define( '" . $config_var . "', '" . $value . "' );";
+					},
+					$config_vars
+				)
+			)
 		);
 		if ( $new_config_file ) {
 			error_log( 'Created the config file: ' . self::LIGHTWEIGHT_API_CONFIG_FILE_PATH ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log

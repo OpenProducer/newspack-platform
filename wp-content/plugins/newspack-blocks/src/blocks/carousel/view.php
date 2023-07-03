@@ -382,82 +382,93 @@ function newspack_blocks_register_carousel() {
 			'newspack_blocks_block_args',
 			array(
 				'attributes'      => array(
-					'className'     => array(
+					'className'        => array(
 						'type' => 'string',
 					),
-					'postsToShow'   => array(
+					'postsToShow'      => array(
 						'type'    => 'integer',
 						'default' => 3,
 					),
-					'authors'       => array(
+					'authors'          => array(
 						'type'    => 'array',
 						'default' => array(),
 						'items'   => array(
 							'type' => 'integer',
 						),
 					),
-					'categories'    => array(
+					'categories'       => array(
 						'type'    => 'array',
 						'default' => array(),
 						'items'   => array(
 							'type' => 'integer',
 						),
 					),
-					'tags'          => array(
+					'tags'             => array(
 						'type'    => 'array',
 						'default' => array(),
 						'items'   => array(
 							'type' => 'integer',
 						),
 					),
-					'brands'        => array(
+					'customTaxonomies' => array(
 						'type'    => 'array',
 						'default' => array(),
 						'items'   => array(
-							'type' => 'integer',
+							'type'       => 'object',
+							'properties' => array(
+								'slug'  => array(
+									'type' => 'string',
+								),
+								'terms' => array(
+									'type'  => 'array',
+									'items' => array(
+										'type' => 'integer',
+									),
+								),
+							),
 						),
 					),
-					'autoplay'      => array(
+					'autoplay'         => array(
 						'type'    => 'boolean',
 						'default' => false,
 					),
-					'delay'         => array(
+					'delay'            => array(
 						'type'    => 'integer',
 						'default' => 5,
 					),
-					'showAuthor'    => array(
+					'showAuthor'       => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'showAvatar'    => array(
+					'showAvatar'       => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'showCategory'  => array(
+					'showCategory'     => array(
 						'type'    => 'boolean',
 						'default' => false,
 					),
-					'showDate'      => array(
+					'showDate'         => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'imageFit'      => array(
+					'imageFit'         => array(
 						'type'    => 'string',
 						'default' => 'cover',
 					),
-					'showTitle'     => array(
+					'showTitle'        => array(
 						'type'    => 'boolean',
 						'default' => true,
 					),
-					'slidesPerView' => array(
+					'slidesPerView'    => array(
 						'type'    => 'number',
 						'default' => 1,
 					),
-					'hideControls'  => array(
+					'hideControls'     => array(
 						'type'    => 'boolean',
 						'default' => false,
 					),
-					'aspectRatio'   => array(
+					'aspectRatio'      => array(
 						'type'    => 'number',
 						'default' => 0.75,
 					),

@@ -39,12 +39,14 @@ import {
 	Notice,
 	TextControl,
 	WebPreview,
+	hooks,
 } from '../../../components/src';
 
 // Note: Schema and types for the `prompt` prop is defined in Newspack Campaigns: https://github.com/Automattic/newspack-popups/blob/master/includes/schemas/class-prompts.php
 export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: PromptProps ) {
 	const [ values, setValues ] = useState< InputValues | Record< string, never > >( {} );
 	const [ error, setError ] = useState< false | { message: string } >( false );
+	const [ isDirty, setIsDirty ] = useState< boolean >( false );
 	const [ success, setSuccess ] = useState< false | string >( false );
 	const [ image, setImage ] = useState< null | Attachment >( null );
 	const [ isSavingFromPreview, setIsSavingFromPreview ] = useState( false );
@@ -115,8 +117,16 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 		return `${ previewURL }?${ stringify( { ...abbreviatedKeys } ) }`;
 	};
 
+	const unblock = hooks.usePrompt(
+		isDirty,
+		__( 'You have unsaved changes. Discard changes?', 'newspack' )
+	);
+
 	const savePrompt = ( slug: string, data: InputValues ) => {
 		return new Promise< void >( ( res, rej ) => {
+			if ( unblock ) {
+				unblock();
+			}
 			setError( false );
 			setSuccess( false );
 			setInFlight( true );
@@ -131,6 +141,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 				.then( ( fetchedPrompts: Array< PromptType > ) => {
 					setPrompts( fetchedPrompts );
 					setSuccess( __( 'Prompt saved.', 'newspack' ) );
+					setIsDirty( false );
 					res();
 				} )
 				.catch( err => {
@@ -154,9 +165,13 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 			description={ sprintf(
 				// Translators: Status of the prompt.
 				__( 'Status: %s', 'newspack' ),
-				prompt.ready ? __( 'Ready', 'newspack' ) : __( 'Pending', 'newspack' )
+				isDirty
+					? __( 'Unsaved changes', 'newspack' )
+					: prompt.ready
+					? __( 'Ready', 'newspack' )
+					: __( 'Pending', 'newspack' )
 			) }
-			checkbox={ prompt.ready ? 'checked' : 'unchecked' }
+			checkbox={ prompt.ready && ! isDirty ? 'checked' : 'unchecked' }
 		>
 			{
 				<Grid columns={ 2 } gutter={ 64 } className="newspack-ras-campaign__grid">
@@ -192,6 +207,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 															toUpdate[ field.name ].push( option.id );
 														}
 														setValues( toUpdate );
+														setIsDirty( true );
 													} }
 												/>
 											</BaseControl>
@@ -211,9 +227,8 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 
 											const toUpdate = { ...values };
 											toUpdate[ field.name ] = value;
-											if ( JSON.stringify( toUpdate ) !== JSON.stringify( values ) ) {
-											}
 											setValues( toUpdate );
+											setIsDirty( true );
 										} }
 										placeholder={ field.default }
 										rows={ 10 }
@@ -232,9 +247,8 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 
 											const toUpdate = { ...values };
 											toUpdate[ field.name ] = value;
-											if ( JSON.stringify( toUpdate ) !== JSON.stringify( values ) ) {
-											}
 											setValues( toUpdate );
+											setIsDirty( true );
 										} }
 										placeholder={ field.default }
 										value={ values[ field.name ] || '' }
@@ -255,6 +269,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 												if ( toUpdate[ field.name ] !== values[ field.name ] ) {
 												}
 												setValues( toUpdate );
+												setIsDirty( true );
 												if ( attachment?.url ) {
 													setImage( attachment );
 												} else {

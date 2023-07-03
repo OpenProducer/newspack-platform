@@ -223,4 +223,5 @@ export type PromptProps = {
 	setInFlight: ( inFlight: boolean ) => void;
 	prompt: PromptType;
 	setPrompts: ( prompts: boolean | Array< PromptType > ) => void;
+	unblock: () => void;
 };

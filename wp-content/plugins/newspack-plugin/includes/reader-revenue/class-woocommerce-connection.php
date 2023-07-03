@@ -41,6 +41,7 @@ class WooCommerce_Connection {
 	public static function init() {
 		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
 		\add_filter( 'option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_switching_subscription_amount' ] );
+		\add_filter( 'woocommerce_email_enabled_customer_completed_order', [ __CLASS__, 'send_customizable_receipt_email' ], 10, 3 );
 
 		// WooCommerce Subscriptions.
 		\add_action( 'add_meta_boxes', [ __CLASS__, 'remove_subscriptions_schedule_meta_box' ], 45 );
@@ -1071,6 +1072,55 @@ class WooCommerce_Connection {
 			return $can_switch;
 		}
 		return 'yes';
+	}
+
+	/**
+	 * Send the customizable receipt email instead of WooCommerce's default receipt.
+	 *
+	 * @param bool     $enable Whether to send the default receipt email.
+	 * @param WC_Order $order The order object for the receipt email.
+	 * @param WC_Email $class Instance of the WC_Email class.
+	 *
+	 * @return bool
+	 */
+	public static function send_customizable_receipt_email( $enable, $order, $class ) {
+		// If we don't have a valid order, or the customizable email isn't enabled, bail.
+		if ( ! is_a( $order, 'WC_Order' ) || ! Emails::can_send_email( Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'] ) ) {
+			return $enable;
+		}
+
+		$currency = $order->get_currency();
+		$symbol   = newspack_get_currency_symbol( $currency );
+		$total    = $order->get_total();
+		$created  = $order->get_date_created();
+
+		// Replace content placeholders.
+		$placeholders = [
+			[
+				'template' => '*AMOUNT*',
+				'value'    => 'USD' === $currency ? $symbol . $total : $total . $symbol,
+			],
+			[
+				'template' => '*DATE*',
+				'value'    => $created->date_i18n(),
+			],
+			[
+				'template' => '*PAYMENT_METHOD*',
+				'value'    => __( 'Card', 'newspack' ) . ' – ' . $order->get_payment_method(),
+			],
+			[
+				'template' => '*RECEIPT_URL*',
+				'value'    => sprintf( '<a href="%s">%s</a>', $order->get_view_order_url(), __( 'My Account', 'newspack' ) ),
+			],
+		];
+
+		$sent = Emails::send_email(
+			Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'],
+			$order->get_billing_email(),
+			$placeholders
+		);
+
+		return false;
 	}
 }
 

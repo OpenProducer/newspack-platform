@@ -1,3 +1,59 @@
+# [2.21.0](https://github.com/Automattic/newspack-popups/compare/v2.20.0...v2.21.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* ensure inline posts are inserted into main post content only ([#1137](https://github.com/Automattic/newspack-popups/issues/1137)) ([624bd56](https://github.com/Automattic/newspack-popups/commit/624bd56f4327ea92112cf465733837b1c343ac6c))
+* remove dismissed event after form is submitted ([#1143](https://github.com/Automattic/newspack-popups/issues/1143)) ([b470efd](https://github.com/Automattic/newspack-popups/commit/b470efdc753f242b8470251345acea87a678414e))
+* render prompts on metered content ([#1152](https://github.com/Automattic/newspack-popups/issues/1152)) ([05b5f76](https://github.com/Automattic/newspack-popups/commit/05b5f7621d4bf935904dd9a45a0832f1c3e34d90))
+
+
+### Features
+
+* front-end GA4 events for prompt interactions ([#1136](https://github.com/Automattic/newspack-popups/issues/1136)) ([ae274aa](https://github.com/Automattic/newspack-popups/commit/ae274aaed210e93a741d640f3d2b1c95ccacff8a)), closes [#1133](https://github.com/Automattic/newspack-popups/issues/1133)
+* rearrange info on popup metadta events ([#1144](https://github.com/Automattic/newspack-popups/issues/1144)) ([dcac4b7](https://github.com/Automattic/newspack-popups/commit/dcac4b7823f9913572a67c9010d63a72a350d936))
+
+# [2.21.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.20.0...v2.21.0-alpha.1) (2023-06-22)
+
+
+### Bug Fixes
+
+* ensure inline posts are inserted into main post content only ([#1137](https://github.com/Automattic/newspack-popups/issues/1137)) ([624bd56](https://github.com/Automattic/newspack-popups/commit/624bd56f4327ea92112cf465733837b1c343ac6c))
+* remove dismissed event after form is submitted ([#1143](https://github.com/Automattic/newspack-popups/issues/1143)) ([b470efd](https://github.com/Automattic/newspack-popups/commit/b470efdc753f242b8470251345acea87a678414e))
+* render prompts on metered content ([#1152](https://github.com/Automattic/newspack-popups/issues/1152)) ([05b5f76](https://github.com/Automattic/newspack-popups/commit/05b5f7621d4bf935904dd9a45a0832f1c3e34d90))
+
+
+### Features
+
+* front-end GA4 events for prompt interactions ([#1136](https://github.com/Automattic/newspack-popups/issues/1136)) ([ae274aa](https://github.com/Automattic/newspack-popups/commit/ae274aaed210e93a741d640f3d2b1c95ccacff8a)), closes [#1133](https://github.com/Automattic/newspack-popups/issues/1133)
+* rearrange info on popup metadta events ([#1144](https://github.com/Automattic/newspack-popups/issues/1144)) ([dcac4b7](https://github.com/Automattic/newspack-popups/commit/dcac4b7823f9913572a67c9010d63a72a350d936))
+
+# [2.20.0](https://github.com/Automattic/newspack-popups/compare/v2.19.0...v2.20.0) (2023-06-19)
+
+
+### Bug Fixes
+
+* attempt to create config file on every host ([#1121](https://github.com/Automattic/newspack-popups/issues/1121)) ([8ba33b7](https://github.com/Automattic/newspack-popups/commit/8ba33b733889068b709b5179beb3cc180901b9ad))
+* escape value when creating config file ([#1123](https://github.com/Automattic/newspack-popups/issues/1123)) ([53232e5](https://github.com/Automattic/newspack-popups/commit/53232e5c431c0628bb0cca421277f2cb7faf8189))
+
+
+### Features
+
+* **ras:** add segmentation support for NRH donations ([#1124](https://github.com/Automattic/newspack-popups/issues/1124)) ([d2b0ca8](https://github.com/Automattic/newspack-popups/commit/d2b0ca8fa9d35c610f616af334fa555c425f421d))
+
+# [2.20.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.19.0...v2.20.0-alpha.1) (2023-06-15)
+
+
+### Bug Fixes
+
+* attempt to create config file on every host ([#1121](https://github.com/Automattic/newspack-popups/issues/1121)) ([8ba33b7](https://github.com/Automattic/newspack-popups/commit/8ba33b733889068b709b5179beb3cc180901b9ad))
+* escape value when creating config file ([#1123](https://github.com/Automattic/newspack-popups/issues/1123)) ([53232e5](https://github.com/Automattic/newspack-popups/commit/53232e5c431c0628bb0cca421277f2cb7faf8189))
+
+
+### Features
+
+* **ras:** add segmentation support for NRH donations ([#1124](https://github.com/Automattic/newspack-popups/issues/1124)) ([d2b0ca8](https://github.com/Automattic/newspack-popups/commit/d2b0ca8fa9d35c610f616af334fa555c425f421d))
+
 # [2.19.0](https://github.com/Automattic/newspack-popups/compare/v2.18.1...v2.19.0) (2023-06-15)
 
 

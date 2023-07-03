@@ -30,16 +30,23 @@
 		}
 	}
 
-	button {
+	.submit-button {
+		display: inline-block;
+	}
+
+	button,
+	.submit-button {
+		font-family: var( --newspack-theme-font-heading );
 		font-size: variables.$font__size-sm;
 		font-weight: bold;
 		outline: none;
+
+		&[type="submit"] {
+			border: none;
+		}
 	}
-	button:not( .wpbnbd__button ),
-	button[type='submit'] {
-		border: none;
-	}
-	button[type='submit'] {
+	button[type='submit'],
+	.submit-button {
 		border-radius: 5px;
 		box-sizing: border-box;
 		color: colors.$color__background-body;
@@ -90,11 +97,11 @@
 }
 
 .block-editor-block-list__layout
-	.block-editor-block-list__block
-	.wp-block-newspack-blocks-donate.tiered.is-style-minimal
-	.wp-block-newspack-blocks-donate__tiers
-	input[type='radio']:checked
-	+ .tier-select-label {
+.block-editor-block-list__block
+.wp-block-newspack-blocks-donate.tiered.is-style-minimal
+.wp-block-newspack-blocks-donate__tiers
+input[type='radio']:checked
++ .tier-select-label {
 	background: transparent;
 	color: colors.$color__text-main;
 }

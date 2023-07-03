@@ -28,7 +28,7 @@ declare global {
 	type PostId = number;
 	type CategoryId = number;
 	type TagId = number;
-	type BrandId = number;
+	type Taxonomy = { slug: string, terms: number[] }[];
 	type AuthorId = number;
 
 	type PostType = { name: string; slug: string; supports: { newspack_blocks: boolean } };

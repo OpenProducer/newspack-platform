@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.73.0-alpha.1
+Version: 1.75.0-alpha.2
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -1408,7 +1408,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 }
 .highlight-menu a,
 .highlight-menu a:visited {
-  color: var(--newspack-theme-color-link);
+  color: var(--newspack-theme-color-text-light);
 }
 
 .h-cl .site-header .highlight-menu-contain .wrapper {
@@ -3624,7 +3624,7 @@ div.sharedaddy {
     margin-bottom: 2rem;
   }
 }
-.featured-image-above img {
+.featured-image-above .post-thumbnail img {
   width: 100%;
 }
 .featured-image-above figcaption {
@@ -3670,33 +3670,64 @@ div.sharedaddy {
   display: none;
 }
 
-#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post {
-  opacity: 1;
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post {
   width: 100%;
 }
-@media only screen and (min-width: 782px) {
-  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post {
-    width: 33.3%;
-  }
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post span,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post span {
+  max-width: 100%;
 }
-#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-img {
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-img,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-img {
   margin-bottom: 0.5rem;
 }
-#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-title {
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-title,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-title {
   line-height: var(--newspack-theme-font-line-height-heading);
   margin-bottom: 0.25rem;
 }
-#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-title a {
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-title a,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-title a {
   color: var(--newspack-theme-color-text-main);
   font-size: var(--newspack-theme-font-size-base);
-  font-weight: bold;
+  font-weight: bold !important;
 }
-#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-date,
-#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual .jp-relatedposts-post .jp-relatedposts-post-content {
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-date,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-content,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-date,
+#jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-content {
   opacity: 1;
 }
-#jp-relatedposts.jp-relatedposts .jp-reltaedposts-post-title {
-  font-family: var(--newspack-theme-font-heading);
+@media only screen and (max-width: 781px) {
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post,
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post {
+    padding-left: 0;
+  }
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-title a,
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-items .jp-relatedposts-post .jp-relatedposts-post-title a {
+    font-size: 0.85rem;
+  }
+}
+@media only screen and (min-width: 782px) {
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-grid .jp-relatedposts-post,
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-grid .jp-relatedposts-post {
+    width: 33.3%;
+  }
+}
+@media only screen and (max-width: 781px) {
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-grid .jp-relatedposts-post-thumbs > *,
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-grid .jp-relatedposts-post-thumbs > * {
+    float: left;
+    width: 64%;
+  }
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-visual.jp-relatedposts-grid .jp-relatedposts-post-thumbs > .jp-relatedposts-post-a:first-child,
+  #jp-relatedposts.jp-relatedposts .jp-relatedposts-items-minimal.jp-relatedposts-grid .jp-relatedposts-post-thumbs > .jp-relatedposts-post-a:first-child {
+    float: right;
+    width: 33%;
+  }
 }
 
 .comment-content a {
@@ -4486,7 +4517,7 @@ div.sharedaddy {
   max-width: 100%;
 }
 .widget a:hover {
-  color: var(--newspack-theme-color-primary-variation);
+  color: var(--newspack-theme-color-secondary-variation);
 }
 
 .widget_archive ul,

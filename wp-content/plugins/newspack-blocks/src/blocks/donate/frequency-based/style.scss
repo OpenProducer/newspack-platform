@@ -35,14 +35,15 @@
 		z-index: 1;
 	}
 
-	button {
+	button,
+	.submit-button {
 		margin: 0 0.76rem 0.76rem;
 
 		@include mixins.media( tablet ) {
 			margin: 0 1.5rem 1.5rem;
 		}
 	}
-	.wpbnbd {
+	label.wpbnbd {
 		&__button {
 			text-transform: uppercase;
 		}

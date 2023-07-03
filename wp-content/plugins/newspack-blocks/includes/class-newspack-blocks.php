@@ -203,6 +203,49 @@ class Newspack_Blocks {
 	}
 
 	/**
+	 * Gets the list of custom taxonomies that will be available for filtering in the blocks
+	 *
+	 * @return array Array of custom taxonomies where each taxonomy is an array with slug and label keys.
+	 */
+	public static function get_custom_taxonomies() {
+		$custom_taxonomies = array_map(
+			function( $tax ) {
+				if ( ! empty( array_intersect( [ 'post', 'page' ], $tax->object_type ) ) ) {
+					return [
+						'slug'  => $tax->name,
+						'label' => $tax->label,
+					];
+				};
+			},
+			get_taxonomies(
+				[
+					'public'       => true,
+					'_builtin'     => false,
+					'show_in_rest' => true,
+				],
+				'objects'
+			)
+		);
+		$custom_taxonomies = array_values(
+			array_filter(
+				$custom_taxonomies,
+				function( $tax ) {
+					return ! empty( $tax );
+				}
+			)
+		);
+
+		/**
+		 * Filters the custom taxonomies that will be available in the Home Page block.
+		 *
+		 * By default, on the top of category and tags, will display any public taxonomy applied to post or pages
+		 *
+		 * @param array $custom_taxonomies Array of custom taxonomies where each taxonomy is an array with slug and label keys.
+		 */
+		return apply_filters( 'newspack_blocks_home_page_block_custom_taxonomies', $custom_taxonomies );
+	}
+
+	/**
 	 * Enqueue block scripts and styles for editor.
 	 */
 	public static function enqueue_block_editor_assets() {
@@ -230,6 +273,7 @@ class Newspack_Blocks {
 				'supports_recaptcha'               => class_exists( 'Newspack\Recaptcha' ),
 				'has_recaptcha'                    => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),
 				'recaptcha_url'                    => admin_url( 'admin.php?page=newspack-connections-wizard' ),
+				'custom_taxonomies'                => self::get_custom_taxonomies(),
 			];
 
 			if ( class_exists( 'WP_REST_Newspack_Author_List_Controller' ) ) {
@@ -240,10 +284,6 @@ class Newspack_Blocks {
 
 			if ( class_exists( '\Newspack\Authors_Custom_Fields' ) ) {
 				$localized_data['author_custom_fields'] = \Newspack\Authors_Custom_Fields::get_custom_fields();
-			}
-
-			if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
-				$localized_data['multibranded_sites_enabled'] = true;
 			}
 
 			wp_localize_script(
@@ -591,7 +631,7 @@ class Newspack_Blocks {
 		$authors             = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
 		$categories          = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
 		$tags                = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
-		$brands              = isset( $attributes['brands'] ) ? $attributes['brands'] : array();
+		$custom_taxonomies   = isset( $attributes['customTaxonomies'] ) ? $attributes['customTaxonomies'] : array();
 		$tag_exclusions      = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
 		$category_exclusions = isset( $attributes['categoryExclusions'] ) ? $attributes['categoryExclusions'] : array();
 		$specific_posts      = isset( $attributes['specificPosts'] ) ? $attributes['specificPosts'] : array();
@@ -637,18 +677,19 @@ class Newspack_Blocks {
 			if ( $category_exclusions && count( $category_exclusions ) ) {
 				$args['category__not_in'] = $category_exclusions;
 			}
-			if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
-				if ( $brands && count( $brands ) ) {
-					$args['tax_query'] = [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
-						[
-							'taxonomy'         => 'brand',
+			if ( ! empty( $custom_taxonomies ) ) {
+				foreach ( $custom_taxonomies as $taxonomy ) {
+					if ( ! empty( $taxonomy['slug'] ) && ! empty( $taxonomy['terms'] ) ) {
+						$args['tax_query'][] = [
+							'taxonomy'         => $taxonomy['slug'],
 							'field'            => 'term_id',
-							'terms'            => $brands,
+							'terms'            => $taxonomy['terms'],
 							'include_children' => false,
-						],
-					];
+						];
+					}
 				}
 			}
+
 			$is_co_authors_plus_active = class_exists( 'CoAuthors_Guest_Authors' );
 
 			if ( $authors && count( $authors ) ) {
@@ -804,11 +845,11 @@ class Newspack_Blocks {
 			}
 		}
 
-		if ( class_exists( 'Newspack_Multibranded_Site\Customizations\Theme_Colors' ) ) {
-			$brands = get_the_terms( $post_id, 'brand' );
-			if ( ! empty( $brands ) ) {
-				foreach ( $brands as $brand ) {
-					$classes[] = 'brands-' . $brand->slug;
+		foreach ( self::get_custom_taxonomies() as $tax ) {
+			$terms = get_the_terms( $post_id, $tax['slug'] );
+			if ( ! empty( $terms ) ) {
+				foreach ( $terms as $term ) {
+					$classes[] = $term->taxonomy . '-' . $term->slug;
 				}
 			}
 		}

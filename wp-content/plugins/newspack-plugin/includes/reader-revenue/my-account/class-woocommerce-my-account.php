@@ -429,8 +429,11 @@ class WooCommerce_My_Account {
 	 * @param array $required_fields Required fields.
 	 */
 	public static function remove_required_fields( $required_fields ) {
-		if ( ! Donations::is_platform_stripe() ) {
-			return $required_fields;
+		if ( Donations::is_platform_wc() ) {
+			return [
+				'account_display_name' => __( 'Display name', 'newspack' ),
+				'account_email'        => __( 'Email address', 'newspack' ),
+			];
 		}
 		return [];
 	}

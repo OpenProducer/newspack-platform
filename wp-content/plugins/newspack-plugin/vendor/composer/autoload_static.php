@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit7224a9209c7e4612bdc57be1a0997724
+class ComposerStaticInit59ce6300e0c1e5f8610d2bd52d740586
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -169,8 +169,10 @@ class ComposerStaticInit7224a9209c7e4612bdc57be1a0997724
         'Newspack\\Profile' => __DIR__ . '/../..' . '/includes/class-profile.php',
         'Newspack\\Publish_To_Apple_News_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-publish-to-apple-news-configuration-manager.php',
         'Newspack\\RSS' => __DIR__ . '/../..' . '/includes/optional-modules/class-rss.php',
+        'Newspack\\RSS_Add_Image' => __DIR__ . '/../..' . '/includes/class-rss-add-image.php',
         'Newspack\\Reader_Activation' => __DIR__ . '/../..' . '/includes/reader-activation/class-reader-activation.php',
         'Newspack\\Reader_Activation_Emails' => __DIR__ . '/../..' . '/includes/reader-activation/class-reader-activation-emails.php',
+        'Newspack\\Reader_Data' => __DIR__ . '/../..' . '/includes/reader-activation/class-reader-data.php',
         'Newspack\\Reader_Revenue_Emails' => __DIR__ . '/../..' . '/includes/reader-revenue/class-reader-revenue-emails.php',
         'Newspack\\Reader_Revenue_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-reader-revenue-wizard.php',
         'Newspack\\Recaptcha' => __DIR__ . '/../..' . '/includes/class-recaptcha.php',
@@ -203,9 +205,9 @@ class ComposerStaticInit7224a9209c7e4612bdc57be1a0997724
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit7224a9209c7e4612bdc57be1a0997724::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit7224a9209c7e4612bdc57be1a0997724::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit7224a9209c7e4612bdc57be1a0997724::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit59ce6300e0c1e5f8610d2bd52d740586::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit59ce6300e0c1e5f8610d2bd52d740586::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit59ce6300e0c1e5f8610d2bd52d740586::$classMap;
 
         }, null, ClassLoader::class);
     }

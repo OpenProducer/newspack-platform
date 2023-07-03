@@ -48,16 +48,6 @@ import { postsBlockSelector, postsBlockDispatch, shouldReflow } from '../homepag
 // Max number of slides that can be shown at once.
 const MAX_NUMBER_OF_SLIDES = 6;
 
-// Check if multi-branded site
-let IS_MULTIBRANDED_SITE;
-if (
-	typeof window === 'object' &&
-	window.newspack_blocks_data &&
-	window.newspack_blocks_data.multibranded_sites_enabled
-) {
-	IS_MULTIBRANDED_SITE = true;
-}
-
 class Edit extends Component {
 	constructor( props ) {
 		super( props );
@@ -160,7 +150,7 @@ class Edit extends Component {
 			authors,
 			autoplay,
 			categories,
-			brands,
+			customTaxonomies,
 			delay,
 			hideControls,
 			imageFit,
@@ -243,13 +233,6 @@ class Edit extends Component {
 				),
 			},
 		];
-
-		const brandProps = IS_MULTIBRANDED_SITE
-			? {
-					brands,
-					onBrandsChange: value => setAttributes( { brands: value } ),
-			  }
-			: '';
 
 		return (
 			<Fragment>
@@ -393,7 +376,8 @@ class Edit extends Component {
 								onCategoriesChange={ value => setAttributes( { categories: value } ) }
 								tags={ tags }
 								onTagsChange={ value => setAttributes( { tags: value } ) }
-								{ ...brandProps }
+								onCustomTaxonomiesChange={ value => setAttributes( { customTaxonomies: value } ) }
+								customTaxonomies={ customTaxonomies }
 								specificMode={ specificMode }
 								onSpecificModeChange={ _specificMode =>
 									setAttributes( { specificMode: _specificMode } )

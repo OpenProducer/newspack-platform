@@ -659,7 +659,7 @@ class Donations {
 				return;
 			}
 
-			self::remove_donations_from_cart();
+			\WC()->cart->empty_cart();
 
 			\WC()->cart->add_to_cart(
 				$product_id,

@@ -105,10 +105,23 @@
 			"default": [],
 			"items": { "type": "integer" }
 		},
-		"brands": {
+		"customTaxonomies": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "integer" }
+			"items": {
+				"type": "object",
+				"properties": {
+					"slug": {
+						"type": "string"
+					},
+					"terms": {
+						"type": "array",
+						"items": {
+							"type": "integer"
+						}
+					}
+				}
+			}
 		},
 		"tagExclusions": {
 			"type": "array",

@@ -33,10 +33,51 @@ class Jetpack {
 		add_filter( 'newspack_amp_plus_sanitized', [ __CLASS__, 'jetpack_modules_amp_plus' ], 10, 2 );
 		add_action( 'wp_head', [ __CLASS__, 'fix_instant_search_sidebar_display' ], 10 );
 		add_filter( 'jetpack_lazy_images_skip_image_with_attributes', [ __CLASS__, 'skip_lazy_loading_on_feeds' ], 10 );
+		add_filter( 'wp_calculate_image_srcset', [ __CLASS__, 'filter_srcset_array' ], 100, 5 );
 
 		// Disables Google Analytics.
 		add_filter( 'jetpack_active_modules', array( __CLASS__, 'remove_google_analytics_from_active' ), 10, 2 );
 		add_filter( 'jetpack_get_available_modules', array( __CLASS__, 'remove_google_analytics_from_available' ) );
+	}
+
+	/**
+	 * Filters an array of image `srcset` values, adding Photon urls for additional sizes.
+	 *
+	 * @param array  $sources       An array of image urls and widths.
+	 * @param int[]  $size_array    The size array for srcset.
+	 * @param string $image_src     The 'src' of the image.
+	 * @param array  $image_meta    The image meta.
+	 * @param int    $attachment_id The image attachment ID.
+	 *
+	 * @return array An array of Photon image urls and widths.
+	 */
+	public static function filter_srcset_array( $sources, $size_array, $image_src, $image_meta, $attachment_id ) {
+		if ( ! class_exists( 'Jetpack' ) || ! \Jetpack::is_module_active( 'photon' ) ) {
+			return $sources;
+		}
+		if ( ! function_exists( 'jetpack_photon_url' ) ) {
+			return $sources;
+		}
+
+		/**
+		 * Filter the additional sizes to add to the srcset.
+		 *
+		 * @param array $additional_sizes An array of additional sizes to add to the srcset.
+		 */
+		$additional_sizes = apply_filters( 'newspack_photon_srcset_additional_sizes', [ 370, 400 ] );
+
+		foreach ( $additional_sizes as $w ) {
+			if ( isset( $sources[ $w ] ) ) {
+				continue;
+			}
+			$sources[ $w ] = [
+				'url'        => \jetpack_photon_url( $image_src, [ 'w' => $w ] ),
+				'descriptor' => 'w',
+				'value'      => $w,
+			];
+		}
+
+		return $sources;
 	}
 
 	/**

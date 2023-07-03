@@ -67,7 +67,7 @@ export const settings = {
 		tags: {
 			type: 'array',
 		},
-		brands: {
+		customTaxonomies: {
 			type: 'array',
 		},
 		showDate: {

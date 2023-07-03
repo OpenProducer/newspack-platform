@@ -16,8 +16,7 @@ import AutocompleteTokenField from './autocomplete-tokenfield';
 const getCategoryTitle = category =>
 	decodeEntities( category.name ) || __( '(no title)', 'newspack-blocks' );
 
-const getBrandTitle = brand =>
-	decodeEntities( brand.name ) || __( '(no title)', 'newspack-blocks' );
+const getTermTitle = term => decodeEntities( term.name ) || __( '(no title)', 'newspack-blocks' );
 
 class QueryControls extends Component {
 	state = {
@@ -169,47 +168,47 @@ class QueryControls extends Component {
 		} );
 	};
 
-	fetchBrandSuggestions = search => {
+	fetchCustomTaxonomiesSuggestions = ( taxSlug, search ) => {
 		return apiFetch( {
-			path: addQueryArgs( '/wp/v2/brand', {
+			path: addQueryArgs( `/wp/v2/${ taxSlug }`, {
 				search,
 				per_page: 20,
 				_fields: 'id,name,parent',
 				orderby: 'count',
 				order: 'desc',
 			} ),
-		} ).then( brands =>
+		} ).then( terms =>
 			Promise.all(
-				brands.map( brand => {
-					if ( brand.parent > 0 ) {
+				terms.map( term => {
+					if ( term.parent > 0 ) {
 						return apiFetch( {
-							path: addQueryArgs( `/wp/v2/brand/${ brand.parent }`, {
+							path: addQueryArgs( `/wp/v2/${ taxSlug }/${ term.parent }`, {
 								_fields: 'name',
 							} ),
-						} ).then( parentBrand => ( {
-							value: brand.id,
-							label: `${ getBrandTitle( brand ) } – ${ getBrandTitle( parentBrand ) }`,
+						} ).then( parentTerm => ( {
+							value: term.id,
+							label: `${ getTermTitle( term ) } – ${ getTermTitle( parentTerm ) }`,
 						} ) );
 					}
 					return Promise.resolve( {
-						value: brand.id,
-						label: getBrandTitle( brand ),
+						value: term.id,
+						label: getTermTitle( term ),
 					} );
 				} )
 			)
 		);
 	};
-	fetchSavedBrands = brandIDs => {
+	fetchSavedCustomTaxonomies = ( taxSlug, termIDs ) => {
 		return apiFetch( {
-			path: addQueryArgs( '/wp/v2/brand', {
+			path: addQueryArgs( `/wp/v2/${ taxSlug }`, {
 				per_page: 100,
 				_fields: 'id,name',
-				include: brandIDs.join( ',' ),
+				include: termIDs.join( ',' ),
 			} ),
-		} ).then( function ( brands ) {
-			return brands.map( brand => ( {
-				value: brand.id,
-				label: decodeEntities( brand.name ) || __( '(no title)', 'newspack-blocks' ),
+		} ).then( function ( terms ) {
+			return terms.map( term => ( {
+				value: term.id,
+				label: decodeEntities( term.name ) || __( '(no title)', 'newspack-blocks' ),
 			} ) );
 		} );
 	};
@@ -226,8 +225,8 @@ class QueryControls extends Component {
 			onCategoriesChange,
 			tags,
 			onTagsChange,
-			brands,
-			onBrandsChange,
+			customTaxonomies,
+			onCustomTaxonomiesChange,
 			tagExclusions,
 			onTagExclusionsChange,
 			categoryExclusions,
@@ -235,6 +234,19 @@ class QueryControls extends Component {
 			enableSpecific,
 		} = this.props;
 		const { showAdvancedFilters } = this.state;
+
+		const registeredCustomTaxonomies = window.newspack_blocks_data?.custom_taxonomies;
+
+		const customTaxonomiesPrepareChange = ( taxSlug, value ) => {
+			let newValue = customTaxonomies.filter( tax => tax.slug !== taxSlug );
+			newValue = [ ...newValue, { slug: taxSlug, terms: value } ];
+			onCustomTaxonomiesChange( newValue );
+		};
+
+		const getTermsOfCustomTaxonomy = taxSlug => {
+			const tax = customTaxonomies.find( taxObj => taxObj.slug === taxSlug );
+			return tax ? tax.terms : [];
+		};
 
 		return (
 			<>
@@ -287,15 +299,21 @@ class QueryControls extends Component {
 								label={ __( 'Tags', 'newspack-blocks' ) }
 							/>
 						) }
-						{ onBrandsChange && (
-							<AutocompleteTokenField
-								tokens={ brands || [] }
-								onChange={ onBrandsChange }
-								fetchSuggestions={ this.fetchBrandSuggestions }
-								fetchSavedInfo={ this.fetchSavedBrands }
-								label={ __( 'Brands', 'newspack-blocks' ) }
-							/>
-						) }
+						{ onCustomTaxonomiesChange &&
+							registeredCustomTaxonomies.map( tax => (
+								<AutocompleteTokenField
+									key={ `${ customTaxonomies[ tax.slug ] }-selector` }
+									tokens={ getTermsOfCustomTaxonomy( tax.slug ) }
+									onChange={ value => {
+										customTaxonomiesPrepareChange( tax.slug, value );
+									} }
+									fetchSuggestions={ search =>
+										this.fetchCustomTaxonomiesSuggestions( tax.slug, search )
+									}
+									fetchSavedInfo={ termIds => this.fetchSavedCustomTaxonomies( tax.slug, termIds ) }
+									label={ tax.label }
+								/>
+							) ) }
 						{ onTagExclusionsChange && (
 							<p>
 								<Button
@@ -343,7 +361,7 @@ QueryControls.defaultProps = {
 	authors: [],
 	categories: [],
 	tags: [],
-	brands: [],
+	customTaxonomies: [],
 	tagExclusions: [],
 };
 

@@ -613,8 +613,8 @@ class RSS {
 		}
 
 		if ( ! $settings['content_featured_image'] ) {
-			remove_filter( 'the_excerpt_rss', 'newspack_thumbnails_in_rss' );
-			remove_filter( 'the_content_feed', 'newspack_thumbnails_in_rss' );
+			remove_filter( 'the_excerpt_rss', [ 'Newspack\RSS_Add_Image', 'thumbnails_in_rss' ] );
+			remove_filter( 'the_content_feed', [ 'Newspack\RSS_Add_Image', 'thumbnails_in_rss' ] );
 		}
 
 		return $content;

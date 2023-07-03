@@ -1,3 +1,77 @@
+# [2.1.0](https://github.com/Automattic/newspack-plugin/compare/v2.0.3...v2.1.0) (2023-07-03)
+
+
+### Bug Fixes
+
+* allow campaign prompts to render on metered content ([#2516](https://github.com/Automattic/newspack-plugin/issues/2516)) ([bba79ef](https://github.com/Automattic/newspack-plugin/commit/bba79ef89723b1cebf7bc09ba63cdcb68ae1bfbd))
+* allow high-res youtube thumbs via constant ([#2507](https://github.com/Automattic/newspack-plugin/issues/2507)) ([235757b](https://github.com/Automattic/newspack-plugin/commit/235757b8b021870610669b267dd700f13c3232f1))
+* **donations:** empty cart on donation checkout ([#2505](https://github.com/Automattic/newspack-plugin/issues/2505)) ([35d9a91](https://github.com/Automattic/newspack-plugin/commit/35d9a917d267c085833ac7f940f2fa451de998d0))
+
+
+### Features
+
+* do not override data on popup events ([#2506](https://github.com/Automattic/newspack-plugin/issues/2506)) ([051769b](https://github.com/Automattic/newspack-plugin/commit/051769bea935977ce2f482210aac170fe3b6e5c8))
+* move RSS image to plugin and increase size ([#2504](https://github.com/Automattic/newspack-plugin/issues/2504)) ([3dab16f](https://github.com/Automattic/newspack-plugin/commit/3dab16f02070749a2d08813f408105832966f483))
+* **plugin-installer:** handle premium plugins in PluginInstaller ([#2482](https://github.com/Automattic/newspack-plugin/issues/2482)) ([b35aeeb](https://github.com/Automattic/newspack-plugin/commit/b35aeebf4970f20ae41b6497364e0e4794dfd686))
+* reader data library ([#2451](https://github.com/Automattic/newspack-plugin/issues/2451)) ([2ad5f06](https://github.com/Automattic/newspack-plugin/commit/2ad5f06c3f87e9b3c7bd17fed5092364fbf38bdb))
+
+## [2.0.3](https://github.com/Automattic/newspack-plugin/compare/v2.0.2...v2.0.3) (2023-06-29)
+
+
+### Bug Fixes
+
+* **auth:** stop redirect registration from hash link ([#2528](https://github.com/Automattic/newspack-plugin/issues/2528)) ([d462341](https://github.com/Automattic/newspack-plugin/commit/d46234175b065f8f1e4df643aa8ae1ad2df0b6e2))
+
+## [2.0.2](https://github.com/Automattic/newspack-plugin/compare/v2.0.1...v2.0.2) (2023-06-26)
+
+
+### Bug Fixes
+
+* update required fields for editing My Account details ([#2519](https://github.com/Automattic/newspack-plugin/issues/2519)) ([becc207](https://github.com/Automattic/newspack-plugin/commit/becc2076336561faa1efab9a4707d3f5a1f82162))
+
+## [2.0.1](https://github.com/Automattic/newspack-plugin/compare/v2.0.0...v2.0.1) (2023-06-20)
+
+
+### Bug Fixes
+
+* **jetpack:** preserve image src for photon srcset filter ([#2515](https://github.com/Automattic/newspack-plugin/issues/2515)) ([2b8c94b](https://github.com/Automattic/newspack-plugin/commit/2b8c94b05f06368c0c4d1a6e0d56fbaa603df1dd))
+
+# [2.0.0](https://github.com/Automattic/newspack-plugin/compare/v1.117.0...v2.0.0) (2023-06-19)
+
+
+### Bug Fixes
+
+* force alpha release ([3312ac6](https://github.com/Automattic/newspack-plugin/commit/3312ac6775326fbb5d4a0b370af4a92b4ecf79ad))
+* **ras-defaults:** warn if navigating away from wizard with unsaved changes ([#2453](https://github.com/Automattic/newspack-plugin/issues/2453)) ([029e89a](https://github.com/Automattic/newspack-plugin/commit/029e89a386c42ddc190659d40009833df6fd3ff1))
+* **ras:** check that unblock exists before calling it ([#2483](https://github.com/Automattic/newspack-plugin/issues/2483)) ([8ab9a8f](https://github.com/Automattic/newspack-plugin/commit/8ab9a8fca6aec9563c164ae3e3d1805941a585fe))
+
+
+### Features
+
+* **content-gate:** updated block patterns ([#2474](https://github.com/Automattic/newspack-plugin/issues/2474)) ([244240d](https://github.com/Automattic/newspack-plugin/commit/244240d92380cb95b7e77cf1ec2c76bc34423776))
+* customizable receipt emails for Woo ([#2463](https://github.com/Automattic/newspack-plugin/issues/2463)) ([6c5c38d](https://github.com/Automattic/newspack-plugin/commit/6c5c38d48bf7156cd4241e14c9f18f2fce1045ba))
+* **jetpack-photon:** additional srcset sizes ([#2471](https://github.com/Automattic/newspack-plugin/issues/2471)) ([35ac697](https://github.com/Automattic/newspack-plugin/commit/35ac697baa12894beb240848028287ede143991c))
+* only display author filter for posts ([#2470](https://github.com/Automattic/newspack-plugin/issues/2470)) ([2461e49](https://github.com/Automattic/newspack-plugin/commit/2461e49a80d0e07156ddf86d8d6540b469dde016))
+* **ras:** add NRH support for setup wizard ([#2484](https://github.com/Automattic/newspack-plugin/issues/2484)) ([efd1c66](https://github.com/Automattic/newspack-plugin/commit/efd1c669443c6ce372d1f07380757d6ac2f059d3))
+* rename ga4 events ([#2489](https://github.com/Automattic/newspack-plugin/issues/2489)) ([d1b0a3d](https://github.com/Automattic/newspack-plugin/commit/d1b0a3dc6db7ef86b6992a55ebe8b35b4556941e))
+
+
+### BREAKING CHANGES
+
+* Turns on customizable receipt emails for sites using WooCommerce as a Reader Revenue platform. This can be turned off in Reader Revenue settings, if desired.
+
+* feat: use customizable receipt emails for Woo and start feature to enable/disable
+
+* feat: allow customizable receipt to be turned on or off
+
+# [2.0.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-06-15)
+
+
+### Features
+
+* do not override data on popup events ([#2506](https://github.com/Automattic/newspack-plugin/issues/2506)) ([34068ff](https://github.com/Automattic/newspack-plugin/commit/34068ffe67d8c28ce1b524b5abb322c7deb17d6b))
+* rename ga4 events ([#2489](https://github.com/Automattic/newspack-plugin/issues/2489)) ([1e81a15](https://github.com/Automattic/newspack-plugin/commit/1e81a15971a5835807bf9a7f15bcc6a948375c1b))
+
 # [1.117.0](https://github.com/Automattic/newspack-plugin/compare/v1.116.1...v1.117.0) (2023-06-15)
 
 

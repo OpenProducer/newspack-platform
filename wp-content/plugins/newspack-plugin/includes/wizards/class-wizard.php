@@ -140,6 +140,7 @@ abstract class Wizard {
 			'is_debug_mode'       => Newspack::is_debug_mode(),
 			'has_completed_setup' => get_option( NEWSPACK_SETUP_COMPLETE ),
 			'site_title'          => get_option( 'blogname' ),
+			'is_atomic'           => defined( 'ATOMIC_SITE_ID' ) && ATOMIC_SITE_ID,
 		];
 
 		if ( class_exists( 'Newspack_Popups_Segmentation' ) ) {

@@ -117,9 +117,10 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 									{ getFrequencyLabel( currentFrequency ) }
 								</span>
 							</div>
-							<button
-								type="submit"
+							<div
+								className="submit-button"
 								style={ {
+									appearance: 'button',
 									borderColor: attributes.buttonColor,
 									...( isAnyRecommended && ! recommendLabel
 										? {
@@ -138,7 +139,7 @@ const TierBasedLayout = ( props: ComponentProps ) => {
 									value={ attributes.tiersBasedOptions[ index ].buttonText }
 									tagName="span"
 								/>
-							</button>
+							</div>
 							<div className="wpbnbd__tiers__description">
 								<RichText
 									onChange={ handleTierOptionChange( index, 'description' ) }

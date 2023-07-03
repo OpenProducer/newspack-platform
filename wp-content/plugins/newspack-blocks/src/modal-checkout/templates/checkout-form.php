@@ -13,15 +13,19 @@ if ( ! defined( 'ABSPATH' ) ) {
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound -- WooCommerce hooks.
 // phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedVariableFound -- Template variables.
 
-$order_details_display = get_theme_mod( 'collapse_order_details', 'hide' );
+$cart = WC()->cart;
 
 $has_filled_billing = \Newspack_Blocks\Modal_Checkout::has_filled_required_fields( 'billing' );
 $edit_billing       = ! $has_filled_billing || isset( $_REQUEST['edit_billing'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
 $form_action         = $edit_billing ? '#checkout' : wc_get_checkout_url();
-$form_class          = $edit_billing ? 'edit-billing' : 'checkout woocommerce-checkout';
+$form_class          = 'checkout woocommerce-checkout';
 $form_method         = $edit_billing ? 'get' : 'post';
 $form_billing_fields = \Newspack_Blocks\Modal_Checkout::get_prefilled_fields();
+
+if ( $edit_billing ) {
+	$form_class .= ' edit-billing';
+}
 
 do_action( 'woocommerce_before_checkout_form', $checkout );
 
@@ -32,29 +36,11 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 }
 ?>
 
-<form name="checkout" method="<?php echo esc_attr( $form_method ); ?>" class="<?php echo esc_attr( $form_class ); ?>" action="<?php echo esc_url( $form_action ); ?>" enctype="multipart/form-data">
-
-	<input type="hidden" name="modal_checkout" value="1" />
-	<?php
-	if ( $edit_billing ) {
-		wp_nonce_field( 'newspack_blocks_edit_billing', 'newspack_blocks_edit_billing_nonce' );
-	}
-	?>
-	<?php if ( 'toggle' === $order_details_display ) : ?>
-	<div class="cart-summary-header">
-		<h3><?php esc_html_e( 'Summary', 'newspack-blocks' ); ?></h3>
-		<button id="toggle-order-details" class="order-details-hidden" on="tap:AMP.setState( { orderVisible: !orderVisible } )" [class]="orderVisible ? '' : 'order-details-hidden'" aria-controls="full-order-details" [aria-expanded]="orderVisible ? 'true' : 'false'" aria-expanded="false">
-		<?php echo wp_kses( newspack_get_icon_svg( 'chevron_left', 24 ), newspack_sanitize_svgs() ); ?>
-		<span [text]="orderVisible ? '<?php esc_html_e( 'Hide details', 'newspack-blocks' ); ?>' : '<?php esc_html_e( 'Show details', 'newspack-blocks' ); ?>'"><?php esc_html_e( 'Show details', 'newspack-blocks' ); ?></span>
-		</button>
-	</div>
-	<?php endif; ?>
-
-	<?php if ( 'display' !== $order_details_display ) : ?>
+<?php if ( 1 === $cart->get_cart_contents_count() ) : ?>
 	<div class="order-details-summary">
 		<?php
 		// Simplified output of order.
-		foreach ( WC()->cart->get_cart() as $cart_item_key => $cart_item ) {
+		foreach ( $cart->get_cart() as $cart_item_key => $cart_item ) {
 			$_product = apply_filters( 'woocommerce_cart_item_product', $cart_item['data'], $cart_item, $cart_item_key );
 
 			if ( $_product && $_product->exists() && $cart_item['quantity'] > 0 && apply_filters( 'woocommerce_checkout_cart_item_visible', true, $cart_item, $cart_item_key ) ) {
@@ -69,7 +55,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 			</strong>
 			<span>
 				<?php
-				echo apply_filters( 'woocommerce_cart_item_subtotal', WC()->cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				echo apply_filters( 'woocommerce_cart_item_subtotal', $cart->get_product_subtotal( $_product, $cart_item['quantity'] ), $cart_item, $cart_item_key ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				?>
 			</span>
 		</h4>
@@ -78,7 +64,26 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 		}
 		?>
 	</div><!-- .order-details-summary -->
-	<?php endif; ?>
+<?php endif; ?>
+
+<form name="checkout" method="<?php echo esc_attr( $form_method ); ?>" class="<?php echo esc_attr( $form_class ); ?>" action="<?php echo esc_url( $form_action ); ?>" enctype="multipart/form-data">
+
+	<input type="hidden" name="modal_checkout" value="1" />
+	<?php
+	if ( $edit_billing ) {
+		wp_nonce_field( 'newspack_blocks_edit_billing', 'newspack_blocks_edit_billing_nonce' );
+	}
+	?>
+
+	<div id="order-details-wrapper">
+		<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
+		<h3 id="order_review_heading" class="screen-reader-text"><?php esc_html_e( 'Order Details', 'newspack-blocks' ); ?></h3>
+		<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
+		<div id="order_review" class="woocommerce-checkout-review-order">
+			<?php do_action( 'woocommerce_checkout_order_review' ); ?>
+		</div>
+		<?php do_action( 'woocommerce_checkout_after_order_review' ); ?>
+	</div><!-- .full-order-details -->
 
 	<?php if ( $checkout->get_checkout_fields() ) : ?>
 
@@ -87,7 +92,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 		<?php if ( $edit_billing ) : ?>
 			<div class="checkout-billing">
 				<?php do_action( 'woocommerce_checkout_billing' ); ?>
-				<button type="submit" class="button alt wp-element-button"><?php esc_html_e( 'Continue', 'newspack-blocks' ); ?></button>
+				<button type="button" class="button alt wp-element-button modal-continue"><?php esc_html_e( 'Continue', 'newspack-blocks' ); ?></button>
 			</div>
 		<?php else : ?>
 			<div class="checkout-billing checkout-billing-summary">

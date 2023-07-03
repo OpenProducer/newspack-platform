@@ -19,6 +19,7 @@ class Perfmatters {
 	public static function init() {
 		add_filter( 'option_perfmatters_options', [ __CLASS__, 'set_defaults' ] );
 		add_action( 'admin_notices', [ __CLASS__, 'admin_notice' ] );
+		add_filter( 'perfmatters_lazyload_youtube_thumbnail_resolution', [ __CLASS__, 'maybe_serve_high_res_youtube_thumbs' ] );
 	}
 
 	/**
@@ -244,6 +245,26 @@ class Perfmatters {
 		echo '<div class="notice notice-warning"><p>'
 		. __( 'Newspack plugin is overriding Perfmatters settings. You can use the <code>NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS</code> flag to disable that behavior.', 'newspack' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		. '</p></div>';
+	}
+
+	/**
+	 * Serve high resolution YouTube thumbnails if a constant is set.
+	 *
+	 * @param string $resolution Resolution.
+	 */
+	public static function maybe_serve_high_res_youtube_thumbs( $resolution ) {
+		// Use standard-res thumbnails if the constant is not set.
+		if ( ! defined( 'NEWSPACK_PERFMATTERS_USE_HIGH_RES_YOUTUBE_IMAGES' ) || ! NEWSPACK_PERFMATTERS_USE_HIGH_RES_YOUTUBE_IMAGES ) {
+			return $resolution;
+		}
+
+		// Use standard-res thumbnails on mobile devices.
+		if ( ( function_exists( 'jetpack_is_mobile' ) && \jetpack_is_mobile() ) || \wp_is_mobile() ) { // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.wp_is_mobile_wp_is_mobile
+			return $resolution;
+		}
+
+		// Use high-res thumbnails on desktop devices.
+		return 'maxresdefault';
 	}
 }
 Perfmatters::init();

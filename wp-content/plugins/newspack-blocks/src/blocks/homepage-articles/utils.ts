@@ -29,7 +29,7 @@ const POST_QUERY_ATTRIBUTES = [
 	'categories',
 	'excerptLength',
 	'tags',
-	'brands',
+	'customTaxonomies',
 	'showExcerpt',
 	'specificPosts',
 	'specificMode',
@@ -47,7 +47,7 @@ type HomepageArticlesAttributes = {
 	postType: PostType[];
 	showExcerpt: boolean;
 	tags: TagId[];
-	brands: BrandId[];
+	customTaxonomies: Taxonomy[];
 	specificPosts: string[];
 	specificMode: boolean;
 	tagExclusions: TagId[];
@@ -91,7 +91,7 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 		postType,
 		showExcerpt,
 		tags,
-		brands,
+		customTaxonomies,
 		specificPosts = [],
 		specificMode,
 		tagExclusions,
@@ -115,7 +115,7 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 					tags,
 					tagExclusions,
 					categoryExclusions,
-					brands,
+					customTaxonomies,
 					postType,
 					includedPostStatuses,
 			  },

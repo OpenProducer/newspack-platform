@@ -42,6 +42,7 @@ final class Modal_Checkout {
 		add_filter( 'wc_get_template', [ __CLASS__, 'wc_get_template' ], 10, 2 );
 		add_filter( 'woocommerce_checkout_get_value', [ __CLASS__, 'woocommerce_checkout_get_value' ], 10, 2 );
 		add_filter( 'woocommerce_checkout_fields', [ __CLASS__, 'woocommerce_checkout_fields' ] );
+		add_filter( 'woocommerce_update_order_review_fragments', [ __CLASS__, 'order_review_fragments' ] );
 	}
 
 	/**
@@ -480,6 +481,49 @@ final class Modal_Checkout {
 			}
 		}
 		return true;
+	}
+
+	/**
+	 * Whether to show order details table.
+	 *
+	 * @return bool
+	 */
+	private static function should_show_order_details() {
+		$cart = \WC()->cart;
+		if ( $cart->is_empty() ) {
+			return false;
+		}
+		if ( ! empty( $cart->get_applied_coupons() ) ) {
+			return true;
+		}
+		if ( \wc_tax_enabled() && ! $cart->display_prices_including_tax() ) {
+			return true;
+		}
+		if ( 1 < $cart->get_cart_contents_count() ) {
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Customize order review fragments on cart updates.
+	 *
+	 * @param array $fragments Fragments.
+	 *
+	 * @return array
+	 */
+	public static function order_review_fragments( $fragments ) {
+		if ( isset( $_POST['post_data'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			parse_str( \sanitize_text_field( \wp_unslash( $_POST['post_data'] ) ), $post_data ); // phpcs:ignore WordPress.Security.NonceVerification.Missing
+		}
+		if ( ! isset( $post_data['modal_checkout'] ) ) {
+			return $fragments;
+		}
+		if ( ! self::should_show_order_details() ) {
+			// Render an empty table so WC knows how to replace it on updates.
+			$fragments['.woocommerce-checkout-review-order-table'] = '<table class="shop_table woocommerce-checkout-review-order-table empty"></table>';
+		}
+		return $fragments;
 	}
 }
 Modal_Checkout::init();

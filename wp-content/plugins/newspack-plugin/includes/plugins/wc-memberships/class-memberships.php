@@ -471,7 +471,7 @@ class Memberships {
 	 * @return bool
 	 */
 	public static function disable_popups( $disabled ) {
-		if ( self::has_gate() && self::is_post_restricted() ) {
+		if ( self::has_gate() && self::is_post_restricted() && ! Metering::is_metering() ) {
 			return true;
 		}
 		return $disabled;
