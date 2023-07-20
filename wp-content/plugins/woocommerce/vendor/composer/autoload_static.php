@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit741993bb9566fe1702f83908718d3a93
+class ComposerStaticInit09014f663f005d46046475809298319f
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -100,12 +100,51 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
 
     public static $classMap = array (
         'Attribute' => __DIR__ . '/..' . '/symfony/polyfill-php80/Resources/stubs/Attribute.php',
+        'Automattic\\Jetpack\\A8c_Mc_Stats' => __DIR__ . '/..' . '/automattic/jetpack-a8c-mc-stats/src/class-a8c-mc-stats.php',
+        'Automattic\\Jetpack\\Admin_UI\\Admin_Menu' => __DIR__ . '/..' . '/automattic/jetpack-admin-ui/src/class-admin-menu.php',
         'Automattic\\Jetpack\\Autoloader\\AutoloadFileWriter' => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src/AutoloadFileWriter.php',
         'Automattic\\Jetpack\\Autoloader\\AutoloadGenerator' => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src/AutoloadGenerator.php',
         'Automattic\\Jetpack\\Autoloader\\AutoloadProcessor' => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src/AutoloadProcessor.php',
         'Automattic\\Jetpack\\Autoloader\\CustomAutoloaderPlugin' => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src/CustomAutoloaderPlugin.php',
         'Automattic\\Jetpack\\Autoloader\\ManifestGenerator' => __DIR__ . '/..' . '/automattic/jetpack-autoloader/src/ManifestGenerator.php',
+        'Automattic\\Jetpack\\Config' => __DIR__ . '/..' . '/automattic/jetpack-config/src/class-config.php',
+        'Automattic\\Jetpack\\Connection\\Client' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-client.php',
+        'Automattic\\Jetpack\\Connection\\Connection_Notice' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-connection-notice.php',
+        'Automattic\\Jetpack\\Connection\\Error_Handler' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-error-handler.php',
+        'Automattic\\Jetpack\\Connection\\Initial_State' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-initial-state.php',
+        'Automattic\\Jetpack\\Connection\\Manager' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-manager.php',
+        'Automattic\\Jetpack\\Connection\\Manager_Interface' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/interface-manager.php',
+        'Automattic\\Jetpack\\Connection\\Nonce_Handler' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-nonce-handler.php',
+        'Automattic\\Jetpack\\Connection\\Package_Version' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-package-version.php',
+        'Automattic\\Jetpack\\Connection\\Package_Version_Tracker' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-package-version-tracker.php',
+        'Automattic\\Jetpack\\Connection\\Plugin' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-plugin.php',
+        'Automattic\\Jetpack\\Connection\\Plugin_Storage' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-plugin-storage.php',
+        'Automattic\\Jetpack\\Connection\\REST_Connector' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-rest-connector.php',
+        'Automattic\\Jetpack\\Connection\\Rest_Authentication' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-rest-authentication.php',
+        'Automattic\\Jetpack\\Connection\\Secrets' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-secrets.php',
+        'Automattic\\Jetpack\\Connection\\Server_Sandbox' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-server-sandbox.php',
+        'Automattic\\Jetpack\\Connection\\Tokens' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-tokens.php',
+        'Automattic\\Jetpack\\Connection\\Urls' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-urls.php',
+        'Automattic\\Jetpack\\Connection\\Utils' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-utils.php',
+        'Automattic\\Jetpack\\Connection\\Webhooks' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-webhooks.php',
+        'Automattic\\Jetpack\\Connection\\Webhooks\\Authorize_Redirect' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/webhooks/class-authorize-redirect.php',
+        'Automattic\\Jetpack\\Connection\\XMLRPC_Async_Call' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-xmlrpc-async-call.php',
+        'Automattic\\Jetpack\\Connection\\XMLRPC_Connector' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-xmlrpc-connector.php',
         'Automattic\\Jetpack\\Constants' => __DIR__ . '/..' . '/automattic/jetpack-constants/src/class-constants.php',
+        'Automattic\\Jetpack\\CookieState' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-cookiestate.php',
+        'Automattic\\Jetpack\\Errors' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-errors.php',
+        'Automattic\\Jetpack\\Files' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-files.php',
+        'Automattic\\Jetpack\\Heartbeat' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-heartbeat.php',
+        'Automattic\\Jetpack\\Modules' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-modules.php',
+        'Automattic\\Jetpack\\Paths' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-paths.php',
+        'Automattic\\Jetpack\\Redirect' => __DIR__ . '/..' . '/automattic/jetpack-redirect/src/class-redirect.php',
+        'Automattic\\Jetpack\\Roles' => __DIR__ . '/..' . '/automattic/jetpack-roles/src/class-roles.php',
+        'Automattic\\Jetpack\\Status' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-status.php',
+        'Automattic\\Jetpack\\Status\\Cache' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-cache.php',
+        'Automattic\\Jetpack\\Status\\Host' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-host.php',
+        'Automattic\\Jetpack\\Status\\Visitor' => __DIR__ . '/..' . '/automattic/jetpack-status/src/class-visitor.php',
+        'Automattic\\Jetpack\\Terms_Of_Service' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-terms-of-service.php',
+        'Automattic\\Jetpack\\Tracking' => __DIR__ . '/..' . '/automattic/jetpack-connection/src/class-tracking.php',
         'Automattic\\WooCommerce\\Admin\\API\\Coupons' => __DIR__ . '/../..' . '/src/Admin/API/Coupons.php',
         'Automattic\\WooCommerce\\Admin\\API\\CustomAttributeTraits' => __DIR__ . '/../..' . '/src/Admin/API/CustomAttributeTraits.php',
         'Automattic\\WooCommerce\\Admin\\API\\Customers' => __DIR__ . '/../..' . '/src/Admin/API/Customers.php',
@@ -174,6 +213,8 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
         'Automattic\\WooCommerce\\Admin\\API\\Reports\\Export\\Controller' => __DIR__ . '/../..' . '/src/Admin/API/Reports/Export/Controller.php',
         'Automattic\\WooCommerce\\Admin\\API\\Reports\\ExportableInterface' => __DIR__ . '/../..' . '/src/Admin/API/Reports/ExportableInterface.php',
         'Automattic\\WooCommerce\\Admin\\API\\Reports\\ExportableTraits' => __DIR__ . '/../..' . '/src/Admin/API/Reports/ExportableTraits.php',
+        'Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericController' => __DIR__ . '/../..' . '/src/Admin/API/Reports/GenericController.php',
+        'Automattic\\WooCommerce\\Admin\\API\\Reports\\GenericStatsController' => __DIR__ . '/../..' . '/src/Admin/API/Reports/GenericStatsController.php',
         'Automattic\\WooCommerce\\Admin\\API\\Reports\\Import\\Controller' => __DIR__ . '/../..' . '/src/Admin/API/Reports/Import/Controller.php',
         'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\Controller' => __DIR__ . '/../..' . '/src/Admin/API/Reports/Orders/Controller.php',
         'Automattic\\WooCommerce\\Admin\\API\\Reports\\Orders\\DataStore' => __DIR__ . '/../..' . '/src/Admin/API/Reports/Orders/DataStore.php',
@@ -264,6 +305,8 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
         'Automattic\\WooCommerce\\Admin\\Features\\PaymentGatewaySuggestions\\PaymentGatewaysController' => __DIR__ . '/../..' . '/src/Admin/Features/PaymentGatewaySuggestions/PaymentGatewaysController.php',
         'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\BlockRegistry' => __DIR__ . '/../..' . '/src/Admin/Features/ProductBlockEditor/BlockRegistry.php',
         'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\Init' => __DIR__ . '/../..' . '/src/Admin/Features/ProductBlockEditor/Init.php',
+        'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\RedirectionController' => __DIR__ . '/../..' . '/src/Admin/Features/ProductBlockEditor/RedirectionController.php',
+        'Automattic\\WooCommerce\\Admin\\Features\\ProductBlockEditor\\Tracks' => __DIR__ . '/../..' . '/src/Admin/Features/ProductBlockEditor/Tracks.php',
         'Automattic\\WooCommerce\\Admin\\Features\\ShippingPartnerSuggestions\\DefaultShippingPartners' => __DIR__ . '/../..' . '/src/Admin/Features/ShippingPartnerSuggestions/DefaultShippingPartners.php',
         'Automattic\\WooCommerce\\Admin\\Features\\ShippingPartnerSuggestions\\ShippingPartnerSuggestions' => __DIR__ . '/../..' . '/src/Admin/Features/ShippingPartnerSuggestions/ShippingPartnerSuggestions.php',
         'Automattic\\WooCommerce\\Admin\\Features\\ShippingPartnerSuggestions\\ShippingPartnerSuggestionsDataSourcePoller' => __DIR__ . '/../..' . '/src/Admin/Features/ShippingPartnerSuggestions/ShippingPartnerSuggestionsDataSourcePoller.php',
@@ -329,6 +372,7 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
         'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\Transformers\\ArrayValues' => __DIR__ . '/../..' . '/src/Admin/RemoteInboxNotifications/Transformers/ArrayValues.php',
         'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\Transformers\\Count' => __DIR__ . '/../..' . '/src/Admin/RemoteInboxNotifications/Transformers/Count.php',
         'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\Transformers\\DotNotation' => __DIR__ . '/../..' . '/src/Admin/RemoteInboxNotifications/Transformers/DotNotation.php',
+        'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\Transformers\\PrepareUrl' => __DIR__ . '/../..' . '/src/Admin/RemoteInboxNotifications/Transformers/PrepareUrl.php',
         'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\WCAdminActiveForProvider' => __DIR__ . '/../..' . '/src/Admin/RemoteInboxNotifications/WCAdminActiveForProvider.php',
         'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\WCAdminActiveForRuleProcessor' => __DIR__ . '/../..' . '/src/Admin/RemoteInboxNotifications/WCAdminActiveForRuleProcessor.php',
         'Automattic\\WooCommerce\\Admin\\RemoteInboxNotifications\\WooCommerceAdminUpdatedRuleProcessor' => __DIR__ . '/../..' . '/src/Admin/RemoteInboxNotifications/WooCommerceAdminUpdatedRuleProcessor.php',
@@ -425,6 +469,7 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductButton' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductButton.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCategories' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductCategories.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCategory' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductCategory.php',
+        'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductCollection.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductDetails' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductDetails.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductImage' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductImage.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductImageGallery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductImageGallery.php',
@@ -441,6 +486,7 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductStockIndicator' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductStockIndicator.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductSummary' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductSummary.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTag' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductTag.php',
+        'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTitle' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductTitle.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductTopRated' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductTopRated.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductsByAttribute' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductsByAttribute.php',
@@ -573,6 +619,7 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\EditLock' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/EditLock.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\ListTable' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/ListTable.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\MetaBoxes\\CustomMetaBox' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/MetaBoxes/CustomMetaBox.php',
+        'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\MetaBoxes\\TaxonomiesMetaBox' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/MetaBoxes/TaxonomiesMetaBox.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PageController' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/PageController.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\Orders\\PostsRedirectionController' => __DIR__ . '/../..' . '/src/Internal/Admin/Orders/PostsRedirectionController.php',
         'Automattic\\WooCommerce\\Internal\\Admin\\ProductForm\\Component' => __DIR__ . '/../..' . '/src/Internal/Admin/ProductForm/Component.php',
@@ -908,6 +955,13 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
         'Composer\\Installers\\YawikInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/YawikInstaller.php',
         'Composer\\Installers\\ZendInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZendInstaller.php',
         'Composer\\Installers\\ZikulaInstaller' => __DIR__ . '/..' . '/composer/installers/src/Composer/Installers/ZikulaInstaller.php',
+        'Jetpack_IXR_Client' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-ixr-client.php',
+        'Jetpack_IXR_ClientMulticall' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-ixr-clientmulticall.php',
+        'Jetpack_Options' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-options.php',
+        'Jetpack_Signature' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-signature.php',
+        'Jetpack_Tracks_Client' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-tracks-client.php',
+        'Jetpack_Tracks_Event' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-tracks-event.php',
+        'Jetpack_XMLRPC_Server' => __DIR__ . '/..' . '/automattic/jetpack-connection/legacy/class-jetpack-xmlrpc-server.php',
         'MaxMind\\Db\\Reader' => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db/Reader.php',
         'MaxMind\\Db\\Reader\\Decoder' => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db/Reader/Decoder.php',
         'MaxMind\\Db\\Reader\\InvalidDatabaseException' => __DIR__ . '/..' . '/maxmind-db/reader/src/MaxMind/Db/Reader/InvalidDatabaseException.php',
@@ -1117,10 +1171,10 @@ class ComposerStaticInit741993bb9566fe1702f83908718d3a93
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit741993bb9566fe1702f83908718d3a93::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit741993bb9566fe1702f83908718d3a93::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit741993bb9566fe1702f83908718d3a93::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit741993bb9566fe1702f83908718d3a93::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit09014f663f005d46046475809298319f::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit09014f663f005d46046475809298319f::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit09014f663f005d46046475809298319f::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit09014f663f005d46046475809298319f::$classMap;
 
         }, null, ClassLoader::class);
     }

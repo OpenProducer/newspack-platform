@@ -7,6 +7,10 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TEC\\Common\\Configuration\\Configuration' => $baseDir . '/src/Common/Configuration/Configuration.php',
+    'TEC\\Common\\Configuration\\Configuration_Loader' => $baseDir . '/src/Common/Configuration/Configuration_Loader.php',
+    'TEC\\Common\\Configuration\\Configuration_Provider_Interface' => $baseDir . '/src/Common/Configuration/Configuration_Provider_Interface.php',
+    'TEC\\Common\\Configuration\\Constants_Provider' => $baseDir . '/src/Common/Configuration/Constants_Provider.php',
     'TEC\\Common\\Context\\Post_Request_Type' => $baseDir . '/src/Common/Context/Post_Request_Type.php',
     'TEC\\Common\\Contracts\\Container' => $baseDir . '/src/Common/Contracts/Container.php',
     'TEC\\Common\\Contracts\\Provider\\Controller' => $baseDir . '/src/Common/Contracts/Provider/Controller.php',

@@ -2,12 +2,170 @@
 
 ### This is a list detailing changes for all Jetpack releases.
 
+## 12.4-a.0 - unreleased
+
+This is an alpha version! The changes listed here are not final.
+
+## 12.3 - 2023-07-05
+### Enhancements
+- AI Assistant: extend AI features to select core blocks.
+- AI Extension: add ask assistant menu option. [#31568]
+- Blocks: add a new Tock block. [#31303]
+- Newsletters: add an Email Preview feature. [#31021]
+- Sharing Buttons: add a Nextdoor sharing button. [#31537]
+
+### Improved compatibility
+- Blocks: introduce standardized messaging system to display notices when a block is no longer supported on a site. [#31463]
+- Blocks: remove retired Revue Block. [#31463]
+
+### Bug fixes
+- AI Assistant: close event stream of completions when the block gets deleted. [#31447]
+- AI Assistant: fix empty content on P2. [#31561]
+- AI Extension: extend the block when the edit post store is undefined (P2). [#31563]
+- AI Extension: use ID on error notices to prevent stacking multiple notices. [#31584]
+- Customizer: fix an issue which was preventing the Customize menu from appearing for plugins that still require it to be present. [#31452]
+- Newsletters: properly gate newsletters based on the correct subscription product. [#31450]
+- Sharing Buttons: remove Reddit's official iframe sharing button, it is no longer working. Use icon+text sharing button instead. [#31666]
+- Social Review Prompt: fix the state so it is shown when Jetpack is also active. [#31456]
+- Subscriptions: avoid fatal error when site is connected to WordPress.com, but user account is not. [#31635]
+- Subscriptions: fix visibility misalignment. [#31544]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- AI Assistant: add a specific delimiter for content in the prompts. [#31515]
+- AI Assistant: add transform from core to AI Assistant block. [#31442]
+- AI Assistant: change delimiter and remove it from responses. [#31518]
+- AI Assistant: disable toolbar tooltip when streaming suggestion. [#31581]
+- AI Assistant: remove page content from prompt. [#31465]
+- AI Assistant: replace imported store constants with strings. [#31585]
+- AI Extension: disable the AI toolbar button when the block doesn't have content. [#31559]
+- AI Extension: dispatch action to update extended block attributes. [#31437]
+- AI Extension: do not extend block sidebar. [#31476]
+- AI Extension: do not extend core blocks when the user decided to hide the AI Assistant block. [#31557]
+- AI Extension: extend core list item core block. [#31496]
+- AI Extension: handle errors from extended blocks actions. [#31497]
+- AI Extension: handle multiple blocks editing. [#31491]
+- AI Extension: improve block transform process. [#31481]
+- AI Extension: improve block transform process for Heading core block type. [#31571]
+- AI Extension: improve prompt when using the AI Assistant in extended blocks. [#31449]
+- AI Extension: iterate over prompt to try to keep the lang of the content. [#31482]
+- AI Extension: iterate over spelling and grammar prompt item. [#31509]
+- AI Extension: move feature from beta to production. [#31574]
+- AI Extension: populate the prompt with previous messages. [#31470]
+- AI Extension: reorganize prompt items for the AI extension. [#31514]
+- AI Extension: tweak the tone prompt. [#31466]
+- AI Extension: winking toolbar color when requesting. [#31474]
+- Blaze: introduce module, instead of automatically initializing the feature. [#31479]
+- Connection: update visual used in banner. [#31440]
+- Dependency update. [#31394]
+- General: added a new callable to a list of default callables. [#31333]
+- Newsletters: add tests for newsletter loop. [#31483]
+- Newsletters: add tracks to email preview feature. [#31566]
+- Tock Block: avoid PHP warning when restaurant name isn't set. [#31577]
+- Updated package dependencies.
+- Upudate to-test.md for 12.3 [#31586]
+- Zendesk Chat Widget: add authentication to the widget. [#31339]
+
+## 12.3-a.7 - 2023-06-19
+### Enhancements
+- AI Assistant: add and use ImproveToolbarDropdownMenu in block toolbar. [#31346]
+- AI Assistant: add Expand option into AI Assistant dropdown menu. [#31363]
+- AI Assistant: add Summarize option to the AI Assistant dropdown menu. [#31364]
+- AI Assistant: add tone into AI Assistant dropdown menu. [#31359]
+- AI Assistant: add translate option in extensions. [#31384]
+- AI Assistant: build prompt from AI Assistant toolbar menu. [#31366]
+- AI Assistant: collect, store and send prompt history. [#31416]
+- AI Assistant: create function to build the post data prompt. [#31403]
+- AI Assistant: extend blocks toolbar. [#31354]
+- AI Assistant: extract and use block content utils. [#31409]
+- AI Assistant: introduce function to create the initial system prompt. [#31398]
+- AI Assistant: introduce jetpack/ai supports. [#30908]
+- AI Assistant: iterate over custom hook to request suggestions. [#31389]
+- AI Assistant: register ai-assistant-support beta extension. [#31335]
+- AI Assistant: separate prompt text from relevant content for extensions. [#31401]
+- AI Assistant: do not extend if the AI Assistant block is not registered. [#31350]
+- AI Assistant: fix generating prompt when requesting suggestion. [#31387]
+- AI Assistant: update block content once AI response is ready. [#31378]
+- Customizer: hide the customizer submenu for block based themes. [#31353, #31376]
+- Newsletters: silence creation of the default membership product in a newsletter context. [#30940]
+- Newsletters: update Paid newsletter panel designs. [#31224]
+- Related Posts: add srcset for the thumbnails. [#31432]
+- Social Logos: update to include a Nextdoor and a Fediverse logo. [#31404]
+- Subscribers: add menu item to Calypso interface. [#31170]
+- Tock Block: update the block settings interface. [#31355]
+
+### Improved compatibility
+- Tiled Galleries: avoid PHP deprecation notices on sites using PHP 8.2. [#31296]
+- WordPress.com Toolbar: avoid PHP warnings with PHP 8.2. [#31438]
+
+### Bug fixes
+- Newsletters: remove Newsletter column on products post type. [#31374]
+- Tock Block: fix the embed rendering on WordPress.com sites. [#31385]
+- WPcom: fix output of static script path on WordPress.com sites. [#31402]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Plans: switch to using the Plans package to detect feature support. [#31213]
+
+## 12.3-a.5 - 2023-06-12
+### Enhancements
+- AI Assistant: add keyboard shortcuts. [#31264]
+- AI Assistant: change icon on AI disclaimer message. [#31320]
+- AI Assistant: move caret to end of generated content when accepting. [#31286]
+- AI Assistant: show message when content generated. [#31271]
+- AI Assistant: tidy some block components. [#31222]
+- AI Assistant: tweak content generated message. [#31298]
+- AI Assistant: remove shortcuts labels from block area. [#31278]
+- Backup: add video section to Backup connect page. [#31260]
+- Blocks: add new Tock block to beta blocks. [#31303]
+- Blocks: load block stylesheets inline when possible for improved performance. [#31214]
+
+### Improved compatibility
+- PHP8 compatibility updates. [#31240, #31242, #31243, #31250]
+
+### Bug fixes
+- AI Assistant: block query requests when upgrade required. [#31282]
+- AI Assistant: check if the block is in the block editor context before enabling accept title action. [#31255]
+- AI Assistant: fix translation feature. [#31300]
+- AI Assistant: request completion JWT token as the user, not the blog. [#31262]
+- AI Assistant: show Jetpack AI product in the plan products list. [#31291]
+- Connection: fix redirecting users who click back button before approving connection to Jetpack Dashboard. [#31212]
+- Dashboard: display an external icon next to the link to the Subscribers list. [#31159]
+- Memberships: correctly gate posts rendered on pages. [#31254]
+- Memberships: fix an issue where Jetpack_Memberships::user_can_view_post would cache the wrong value. [#31249]
+- Markdown Block: render single and double quotes as smart quotes. [#31187]
+- Newsletters: do not display Newsletter plans in the Premium Content and Recurring Payment blocks. [#31200]
+- Newsletters: make the subscribers reach sentence future-tense for scheduled posts. [#31215]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Blocks: update documentation. [#31206]
+- Jetpack: jsdoc improvements in reducer file. [#31290]
+
+## 12.3-a.3 - 2023-06-08
+### Bug fixes
+- Memberships: fix potential class not found error. [#31268]
+
+## 12.3-a.1 - 2023-06-06
+### Enhancements
+- AI Assistant: improve the process of getting post content. [#31211]
+- AI Assistant: replace tone button icon for clarity. [#31152]
+- Stats: display the links to a post's stats in the Posts list as soon as the user has access to stats. [#31025]
+
+### Bug fixes
+- Newsletters: verify the access level should be gated before checking subscriptions. [#30807]
+- Newsletters: show paid subscriber reach numbers in the past tense when the post has been already been published. [#30883]
+
+### Other changes <!-- Non-user-facing changes go here. This section will not be copied to readme.txt. -->
+- Added comments to the LaunchpadSaveModal code for future reference. [#31149]
+- Remove Anchor.fm extension. [#31117]
+- RNA: update connection module to have an RNA option that updates the design [#31201]
+- Updated package dependencies.
+- WPcom: add send email preview endpoint. [#31028]
+
 ## 12.2.1 - 2023-06-14
 ### Bug fixes
 - Newsletters: fix sidebar panel in WordPress 6.1. [#31386]
 - Newsletters: show paid Newsletter subscriber reach numbers in the past tense when the post has already been published. [#30883]
 
-## 12.2 - 2023-06-06
+## [12.2] - 2023-06-06
 ### Major Enhancements
 - New AI Assistant block: harness AI power directly from your editor.
 - Donations, Paid Content and Payment Buttons blocks are now available with all Jetpack plans. A commission is charged for free plans.
@@ -112,7 +270,7 @@
 - wpcom/v3/blogging-prompts endpoint: Add param to force prompt dates to be a specific year [#30255]
 - Zendesk chat widget: Remove conditional rendering from component due to it being handled by an api endpoint now. [#29942]
 
-## 12.1 - 2023-05-02
+## [12.1] - 2023-05-02
 ### Enhancements
 - Dashboard: added Jetpack Starter bundle post-activation screen and plan header. [#30368]
 - Dashboard: add link to renew expired subscription. [#30357]
@@ -8180,6 +8338,8 @@ Other bugfixes and enhancements at https://github.com/Automattic/jetpack/commits
 - Initial release
 
 [11.6]: https://wp.me/p1moTy-PLI
+[12.2]: https://wp.me/p1moTy-Tzw
+[12.1]: https://wp.me/p1moTy-TA2
 [12.0]: https://wp.me/p1moTy-RGw
 [11.9]: https://wp.me/p1moTy-RdX
 [11.8]: https://wp.me/p1moTy-QEM

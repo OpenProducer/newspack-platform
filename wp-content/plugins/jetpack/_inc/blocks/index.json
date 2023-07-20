@@ -30,7 +30,6 @@
 		"recurring-payments",
 		"related-posts",
 		"repeat-visitor",
-		"revue",
 		"send-a-message",
 		"whatsapp-button",
 		"seo",
@@ -42,13 +41,15 @@
 		"story",
 		"subscriptions",
 		"tiled-gallery",
+		"tock",
 		"videopress",
 		"wordads",
 		"payments-intro",
 		"post-publish-qr-post-panel",
 		"payment-buttons",
 		"site-editor-snackbars",
-		"videopress/video"
+		"videopress/video",
+		"ai-assistant-support"
 	],
 	"beta": [
 		"ai-chat",
@@ -63,8 +64,9 @@
 		"v6-video-frame-poster",
 		"videopress/video-chapters"
 	],
-	"experimental": [ "ai-image", "ai-paragraph", "anchor-fm" ],
+	"experimental": [ "ai-image", "ai-paragraph" ],
 	"no-post-editor": [
+		"ai-assistant",
 		"business-hours",
 		"button",
 		"calendly",
@@ -83,10 +85,10 @@
 		"rating-star",
 		"related-posts",
 		"repeat-visitor",
-		"revue",
 		"simple-payments",
 		"slideshow",
 		"tiled-gallery",
+		"tock",
 		"videopress",
 		"wordads"
 	]

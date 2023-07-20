@@ -10,12 +10,13 @@ export interface BlockAttributes {
 	className?: string | undefined;
 	textAlign?: string | undefined;
 	isDescendentOfQueryLoop?: boolean | undefined;
+	isDescendentOfSingleProductBlock?: boolean | undefined;
 	width?: number | undefined;
 }
 
 export interface AddToCartButtonPlaceholderAttributes {
 	className: string;
-	style: Record< string, unknown >;
+	style: React.CSSProperties;
 }
 
 export interface AddToCartButtonAttributes

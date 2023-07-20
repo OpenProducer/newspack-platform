@@ -11,18 +11,18 @@
 	<div class="wp-block-columns">
 		<!-- wp:column {"width":"40%"} -->
 		<div class="wp-block-column" style="flex-basis:40%"><!-- wp:image {"id":1,"sizeSlug":"full","linkDestination":"none"} -->
-			<figure class="wp-block-image size-full"><img src="<?php echo esc_url( plugins_url( 'images/pattern-placeholders/leather-guitar-typewriter-red-gadget-sofa.png', dirname( __FILE__ ) ) ); ?>" alt="" class="wp-image-1"/></figure>
+			<figure class="wp-block-image size-full"><img src="<?php echo esc_url( plugins_url( 'images/pattern-placeholders/leather-guitar-typewriter-red-gadget-sofa.png', dirname( __FILE__ ) ) ); ?>" alt="<?php esc_attr_e( 'Placeholder image used to represent a product being showcased in a hero section.', 'woocommerce' ); ?>" class="wp-image-1"/></figure>
 			<!-- /wp:image --></div>
 		<!-- /wp:column -->
 
 		<!-- wp:column {"width":"60%","style":{"spacing":{"padding":{"top":"3em","left":"0em","bottom":"3em"}}}} -->
 		<div class="wp-block-column" style="padding-top:3em;padding-bottom:3em;padding-left:0em;flex-basis:60%">
-			<!-- wp:heading {"style":{"typography":{"lineHeight":"0"}},"textColor":"base","fontSize":"large"} -->
-			<h2 class="wp-block-heading has-base-color has-text-color has-large-font-size" style="line-height:0">Mini 5 Dreamer</h2>
+			<!-- wp:heading {"style":{"typography":{"lineHeight":"0"},"color":{"text":"#ffffff"}},"fontSize":"large"} -->
+			<h2 class="wp-block-heading has-text-color has-large-font-size" style="color:#ffffff;line-height:0">Mini 5 Dreamer</h2>
 			<!-- /wp:heading -->
 
-			<!-- wp:paragraph {"style":{"typography":{"fontSize":"1em"}},"textColor":"base"} -->
-			<p class="has-base-color has-text-color" style="font-size:1em"><strong>$1,999</strong></p>
+			<!-- wp:paragraph {"style":{"typography":{"fontSize":"1em"},"color":{"text":"#ffffff"}}} -->
+			<p class="has-text-color" style="color:#ffffff;font-size:1em"><strong>$1,999</strong></p>
 			<!-- /wp:paragraph -->
 
 			<!-- wp:buttons -->

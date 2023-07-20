@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit73fe93c2b46ef1d3cd5dbf85e8421671
+class ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -676,6 +676,9 @@ class ComposerStaticInit73fe93c2b46ef1d3cd5dbf85e8421671
         'Yoast\\WP\\SEO\\Config\\Wincher_PKCE_Provider' => __DIR__ . '/../..' . '/src/config/wincher-pkce-provider.php',
         'Yoast\\WP\\SEO\\Config\\Wordproof_App_Config' => __DIR__ . '/../..' . '/src/config/wordproof-app-config.php',
         'Yoast\\WP\\SEO\\Config\\Wordproof_Translations' => __DIR__ . '/../..' . '/src/config/wordproof-translations.php',
+        'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Dismiss_Notifications' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-dismiss-notifications.php',
+        'Yoast\\WP\\SEO\\Content_Type_Visibility\\Application\\Content_Type_Visibility_Watcher_Actions' => __DIR__ . '/../..' . '/src/content-type-visibility/application/content-type-visibility-watcher-actions.php',
+        'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route' => __DIR__ . '/../..' . '/src/content-type-visibility/user-interface/content-type-visibility-dismiss-new-route.php',
         'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => __DIR__ . '/../..' . '/src/context/meta-tags-context.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Activation_Error_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-activation-error-exception.php',
         'Yoast\\WP\\SEO\\Exceptions\\Addon_Installation\\Addon_Already_Installed_Exception' => __DIR__ . '/../..' . '/src/exceptions/addon-installation/addon-already-installed-exception.php',
@@ -1077,9 +1080,9 @@ class ComposerStaticInit73fe93c2b46ef1d3cd5dbf85e8421671
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit73fe93c2b46ef1d3cd5dbf85e8421671::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit73fe93c2b46ef1d3cd5dbf85e8421671::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit73fe93c2b46ef1d3cd5dbf85e8421671::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit0198cf30433eb0da4c0d76a0071fb247::$classMap;
 
         }, null, ClassLoader::class);
     }

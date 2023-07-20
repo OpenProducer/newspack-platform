@@ -76,6 +76,38 @@ class ProductQuery extends AbstractBlock {
 	}
 
 	/**
+	 * Extra data passed through from server to client for block.
+	 *
+	 * @param array $attributes  Any attributes that currently are available from the block.
+	 *                           Note, this will be empty in the editor context when the block is
+	 *                           not in the post content on editor load.
+	 */
+	protected function enqueue_data( array $attributes = [] ) {
+		parent::enqueue_data( $attributes );
+
+		$gutenberg_version = '';
+
+		if ( is_plugin_active( 'gutenberg/gutenberg.php' ) ) {
+			if ( defined( 'GUTENBERG_VERSION' ) ) {
+				$gutenberg_version = GUTENBERG_VERSION;
+			}
+
+			if ( ! $gutenberg_version ) {
+				$gutenberg_data    = get_file_data(
+					WP_PLUGIN_DIR . '/gutenberg/gutenberg.php',
+					array( 'Version' => 'Version' )
+				);
+				$gutenberg_version = $gutenberg_data['Version'];
+			}
+		}
+
+		$this->asset_data_registry->add(
+			'post_template_has_support_for_grid_view',
+			version_compare( $gutenberg_version, '16.0', '>=' )
+		);
+	}
+
+	/**
 	 * Check if a given block
 	 *
 	 * @param array $parsed_block The block being rendered.
@@ -103,7 +135,6 @@ class ProductQuery extends AbstractBlock {
 			// Set this so that our product filters can detect if it's a PHP template.
 			$this->asset_data_registry->add( 'has_filterable_products', true, true );
 			$this->asset_data_registry->add( 'is_rendering_php_template', true, true );
-			$this->asset_data_registry->add( 'product_ids', $this->get_products_ids_by_attributes( $parsed_block ), true );
 			add_filter(
 				'query_loop_block_query_vars',
 				array( $this, 'build_query' ),
@@ -190,33 +221,6 @@ class ProductQuery extends AbstractBlock {
 		);
 
 		return $this->filter_query_to_only_include_ids( $merged_query, $handpicked_products );
-	}
-
-	/**
-	 * Return the product ids based on the attributes and global query.
-	 * This is used to allow the filter blocks to render data that matches with variations. More details here: https://github.com/woocommerce/woocommerce-blocks/issues/7245
-	 *
-	 * @param array $parsed_block The block being rendered.
-	 * @return array
-	 */
-	private function get_products_ids_by_attributes( $parsed_block ) {
-		$query = $this->merge_queries(
-			array(
-				'post_type'      => 'product',
-				'post__in'       => array(),
-				'post_status'    => 'publish',
-				'posts_per_page' => -1,
-				'meta_query'     => array(),
-				'tax_query'      => array(),
-			),
-			$this->get_queries_by_custom_attributes( $parsed_block ),
-			$this->get_global_query( $parsed_block )
-		);
-
-		$products = new \WP_Query( $query );
-		$post_ids = wp_list_pluck( $products->posts, 'ID' );
-
-		return $post_ids;
 	}
 
 	/**

@@ -1,3 +1,10 @@
+## [1.67.2](https://github.com/Automattic/newspack-newsletters/compare/v1.67.1...v1.67.2) (2023-07-04)
+
+
+### Bug Fixes
+
+* preserve list order on subscribe block ([#1211](https://github.com/Automattic/newspack-newsletters/issues/1211)) ([e712735](https://github.com/Automattic/newspack-newsletters/commit/e71273582e2de5c3c77e45bc59c1c4cdc6f2c8b8))
+
 ## [1.67.1](https://github.com/Automattic/newspack-newsletters/compare/v1.67.0...v1.67.1) (2023-07-03)
 
 

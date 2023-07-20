@@ -222,14 +222,19 @@ body.admin-color-sunrise {
  */
 /* stylelint-disable block-closing-brace-newline-after */
 /* stylelint-enable */
+.woocommerce-product-form__checkbox .components-base-control__field,
+.woocommerce-product-form__checkbox .components-checkbox-control__label, .woocommerce-product-form__checkbox-wrapper, .woocommerce-product-form__checkbox-tooltip-icon {
+  display: flex;
+  align-items: center;
+}
 .woocommerce-product-form__checkbox .components-base-control__field {
   display: flex;
+  align-items: center;
+  margin-bottom: 0;
 }
-.woocommerce-product-form__checkbox .components-checkbox-control__label {
-  display: flex;
-}
-.woocommerce-product-form__checkbox-tooltip-icon {
-  margin: -2px 12px 0 0;
+
+.woocommerce-product-form__checkbox-wrapper {
+  gap: 4px;
 }
 
 .woocommerce-product-form__checkbox-tooltip .components-popover__content {

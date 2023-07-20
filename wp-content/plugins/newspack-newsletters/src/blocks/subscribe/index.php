@@ -91,7 +91,7 @@ function render_block( $attrs ) {
 	$email           = '';
 	$lists           = array_keys( $list_config );
 	$list_map        = array_flip( $lists );
-	$available_lists = array_values( array_intersect( $lists, $attrs['lists'] ) );
+	$available_lists = array_values( array_intersect( $attrs['lists'], $lists ) );
 
 	if ( empty( $available_lists ) ) {
 		$available_lists = [ $lists[0] ];

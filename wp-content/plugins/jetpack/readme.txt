@@ -1,7 +1,7 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, azaozz, batmoo, barry, beaulebens, bindlegirl, biskobe, blobaugh, bjorsch, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, robertbpugh, roccotripaldi, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, wpkaren, yoavf, zinigor
 Tags: Security, backup, Woo, malware, scan, spam, CDN, search, social
-Stable tag: 12.2.1
+Stable tag: 12.3
 Requires at least: 6.1
 Requires PHP: 5.6
 Tested up to: 6.2
@@ -293,10 +293,43 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 
 
 == Changelog ==
-### 12.2.1 - 2023-06-14
+### 12.3 - 2023-07-05
+#### Enhancements
+- AI Assistant: extend AI features to select core blocks.
+- AI Extension: add ask assistant menu option.
+- Blocks: add a new Tock block.
+- Blocks: load block stylesheets inline when possible for improved performance.
+- Customizer: hide the customizer submenu for block based themes.
+- Newsletters: add an Email Preview feature.
+- Newsletters: update Paid newsletter panel designs.
+- Related Posts: add srcset for the thumbnails.
+- Sharing Buttons: add a Nextdoor sharing button.
+- Social Logos: update to include a Nextdoor and a Fediverse logo.
+- Stats: display the links to a post's stats in the Posts list as soon as the user has access to stats.
+- Subscribers: add menu item to Calypso interface.
+
+#### Improved compatibility
+- Blocks: introduce standardized messaging system to display notices when a block is no longer supported on a site.
+- Blocks: remove retired Revue Block.
+- PHP8 compatibility updates.
+- Tiled Galleries: avoid PHP deprecation notices on sites using PHP 8.2.
+- WordPress.com Toolbar: avoid PHP warnings with PHP 8.2.
+
 #### Bug fixes
-- Newsletters: fix sidebar panel in WordPress 6.1.
-- Newsletters: show paid Newsletter subscriber reach numbers in the past tense when the post has already been published.
+- AI Assistant: several bug fixes this release, check the CHANGELOG.md file for more info.
+- Connection: fix redirecting users who click back button before approving connection to Jetpack Dashboard.
+- Customizer: fix an issue which was preventing the Customize menu from appearing for plugins that still require it to be present.
+- Dashboard: display an external icon next to the link to the Subscribers list.
+- Markdown Block: render single and double quotes as smart quotes.
+- Memberships: correctly gate posts rendered on pages.
+- Memberships: fix an issue where Jetpack_Memberships::user_can_view_post would cache the wrong value.
+- Memberships: fix potential class not found error.
+- Newsletters: several bug fixes this release, check the CHANGELOG.md file for more info.
+- Sharing Buttons: remove Reddit's official iframe sharing button, it is no longer working. Use icon+text sharing button instead.
+- Social Review Prompt: fix the state so it is shown when Jetpack is also active.
+- Subscriptions: avoid fatal error when site is connected to WordPress.com, but user account is not.
+- Subscriptions: fix visibility misalignment.
+- WPcom: fix output of static script path on WordPress.com sites.
 
 --------
 

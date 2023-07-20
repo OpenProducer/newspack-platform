@@ -7,6 +7,7 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TEC\\Events\\Configuration\\Provider' => $baseDir . '/src/Events/Configuration/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Activation' => $baseDir . '/src/Events/Custom_Tables/V1/Activation.php',
     'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Event_Cleaner' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Event_Cleaner.php',
     'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Provider' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Provider.php',

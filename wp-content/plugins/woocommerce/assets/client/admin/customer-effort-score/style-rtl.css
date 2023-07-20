@@ -340,8 +340,18 @@ body.admin-color-sunrise {
   width: 100%;
 }
 
+.woocommerce-customer-effort-score .components-modal__content {
+  padding-bottom: 100px;
+}
+
 .woocommerce-customer-effort-score__buttons {
   text-align: left;
+  position: fixed;
+  bottom: 0;
+  right: 0;
+  left: 0;
+  background-color: #fff;
+  padding: 32px;
 }
 .woocommerce-customer-effort-score__buttons .components-button {
   margin-right: 1em;

@@ -15,15 +15,17 @@
 
 		<!-- wp:buttons {"style":{"spacing":{"margin":{"bottom":"var:preset|spacing|40"}}}} -->
 		<div class="wp-block-buttons" style="margin-bottom:var(--wp--preset--spacing--40)">
-			<!-- wp:button -->
-			<div class="wp-block-button"><a class="wp-block-button__link wp-element-button">Shop now</a></div>
-			<!-- /wp:button -->
+		<!-- wp:button {"style":{"color":{"text":"#000000","background":"#ffffff"}}} -->
+		<div class="wp-block-button">
+			<a class="wp-block-button__link has-text-color has-background wp-element-button" style="color:#000000;background-color:#ffffff;"><?php esc_html_e( 'Shop now', 'woocommerce' ); ?></a>
+		</div>
+		<!-- /wp:button -->
 		</div>
 		<!-- /wp:buttons -->
 	</div>
 
 	<figure class="wp-block-media-text__media">
-		<img src="<?php echo esc_url( plugins_url( 'images/pattern-placeholders/pattern-fashion-clothing-outerwear-wool-scarf.png', dirname( __FILE__ ) ) ); ?>" alt="<?php esc_attr_e( 'Woman in red, black, and white plaid hoodie.', 'woocommerce' ); ?>" />
+		<img src="<?php echo esc_url( plugins_url( 'images/pattern-placeholders/pattern-fashion-clothing-outerwear-wool-scarf.png', dirname( __FILE__ ) ) ); ?>" alt="<?php esc_attr_e( 'Placeholder image used to represent a product being showcased in a hero section.', 'woocommerce' ); ?>" />
 	</figure>
 </div>
 <!-- /wp:media-text -->

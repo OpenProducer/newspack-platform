@@ -328,8 +328,8 @@ class BlockTemplateUtils {
 				'description' => __( 'Displays search results for your store.', 'woocommerce' ),
 			),
 			MiniCartTemplate::SLUG             => array(
-				'title'       => _x( 'Mini Cart', 'Template name', 'woocommerce' ),
-				'description' => __( 'Template used to display the Mini Cart drawer.', 'woocommerce' ),
+				'title'       => _x( 'Mini-Cart', 'Template name', 'woocommerce' ),
+				'description' => __( 'Template used to display the Mini-Cart drawer.', 'woocommerce' ),
 			),
 		);
 

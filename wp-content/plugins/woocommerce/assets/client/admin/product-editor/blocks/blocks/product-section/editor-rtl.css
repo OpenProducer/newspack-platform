@@ -223,35 +223,51 @@ body.admin-color-sunrise {
 /* stylelint-disable block-closing-brace-newline-after */
 /* stylelint-enable */
 .wp-block-woocommerce-product-section {
-  margin-bottom: 48px;
-  padding-top: 48px;
+  margin: 48px 0 0;
+  padding: 0 0 48px;
+  border-bottom: 1px solid #ddd;
 }
 .wp-block-woocommerce-product-section:first-child {
-  padding-top: 64px;
+  margin-top: 64px;
 }
-.wp-block-woocommerce-product-section .wp-block-woocommerce-product-section__title {
-  margin-top: 0;
-  margin-bottom: 0;
-  font-size: 24px;
+.wp-block-woocommerce-product-section:last-child {
+  border-bottom: none;
+}
+.wp-block-woocommerce-product-section__heading {
+  padding: 0;
+  margin: 0 0 32px 0;
+  width: 100%;
+}
+.wp-block-woocommerce-product-section__heading .wp-block-woocommerce-product-section__heading-title {
+  margin: 0;
+  font-size: 20px;
   font-weight: 500;
   color: #1e1e1e;
   display: inline-flex;
   align-items: center;
 }
-.wp-block-woocommerce-product-section .wp-block-woocommerce-product-section__title .block-editor-block-icon {
+.wp-block-woocommerce-product-section__heading .wp-block-woocommerce-product-section__heading-title .block-editor-block-icon {
   margin-left: 14px;
 }
-.wp-block-woocommerce-product-section .wp-block-woocommerce-product-section__title .block-editor-block-icon > div {
+.wp-block-woocommerce-product-section__heading .wp-block-woocommerce-product-section__heading-title .block-editor-block-icon > div {
   display: flex;
   align-items: center;
   justify-content: center;
 }
-.wp-block-woocommerce-product-section__description {
-  margin-top: 12px;
+.wp-block-woocommerce-product-section__heading .wp-block-woocommerce-product-section__heading-description {
+  margin: 12px 0 0;
   font-size: 13px;
-  color: #1e1e1e;
+  color: #757575;
+  line-height: 1.5;
 }
-
-.wp-block-woocommerce-product-section + .wp-block-woocommerce-product-section {
-  border-top: 1px solid #ddd;
+.wp-block-woocommerce-product-section__content--block-gap-unit-30 > * + * {
+  margin-top: 24px;
+}
+.wp-block-woocommerce-product-section__content--block-gap-unit-40 > * + * {
+  margin-top: 32px;
+}
+.wp-block-woocommerce-product-section__content .wp-block-woocommerce-product-section {
+  margin-top: 0;
+  padding-bottom: 0;
+  border-bottom: none;
 }
