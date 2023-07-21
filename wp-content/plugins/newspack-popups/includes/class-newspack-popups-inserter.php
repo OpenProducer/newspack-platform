@@ -452,6 +452,8 @@ final class Newspack_Popups_Inserter {
 	 * @param string $content The content of the post.
 	 */
 	public static function insert_popups_in_content( $content = '' ) {
+		$filtered_content = explode( "\n", $content );
+		$post_content     = explode( "\n", get_post()->post_content );
 		if (
 			// Avoid duplicate execution.
 			true === self::$the_content_has_rendered
@@ -467,7 +469,7 @@ final class Newspack_Popups_Inserter {
 			// It doesn't make sense with a paywall message and also causes an infinite loop.
 			|| self::is_memberships_restricted()
 			// At filter priority 1, $content should be the same as the unfiltered post_content. This guards against inserting in other content such as featured image captions/descriptions.
-			|| get_post()->post_content !== $content
+			|| ( ! empty( $filtered_content ) && ! empty( $post_content ) && $filtered_content[0] !== $post_content[0] )
 		) {
 			return $content;
 		}

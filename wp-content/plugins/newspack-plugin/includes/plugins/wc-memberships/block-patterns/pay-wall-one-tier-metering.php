@@ -10,17 +10,17 @@
 <hr class="wp-block-separator has-alpha-channel-opacity is-style-dots"/>
 <!-- /wp:separator -->
 
-<!-- wp:group { "style":{ "spacing":{"padding":{"top":"var:preset|spacing|70","right":"var:preset|spacing|70","bottom":"var:preset|spacing|70","left":"var:preset|spacing|70"}} },"className":"is-style-border newspack-content-gate","layout":{"type":"constrained"} } -->
+<!-- wp:group { "style":{ "spacing":{ "padding":{ "top":"var:preset|spacing|70","right":"var:preset|spacing|70","bottom":"var:preset|spacing|70","left":"var:preset|spacing|70" } } },"className":"is-style-border newspack-content-gate","layout":{ "type":"constrained" } } -->
 <div class="wp-block-group is-style-border newspack-content-gate" style="padding-top:var(--wp--preset--spacing--70);padding-right:var(--wp--preset--spacing--70);padding-bottom:var(--wp--preset--spacing--70);padding-left:var(--wp--preset--spacing--70)">
 
-	<!-- wp:paragraph {"align":"center","textColor":"secondary","fontSize":"normal"} -->
-	<p class="has-text-align-center has-secondary-color has-text-color has-normal-font-size">
+	<!-- wp:paragraph {"align":"center","fontSize":"normal"} -->
+	<p class="has-text-align-center has-normal-font-size">
 		<?php esc_html_e( "You've read all free articles for the week.", 'newspack' ); ?>
 	</p>
 	<!-- /wp:paragraph -->
 
-	<!-- wp:columns {"backgroundColor":"light-gray","className":"is-style-borders"} -->
-	<div class="wp-block-columns is-style-borders has-light-gray-background-color has-background">
+	<!-- wp:columns { "style":{ "spacing":{ "padding":{ "top":"var:preset|spacing|60","right":"var:preset|spacing|60","bottom":"var:preset|spacing|60","left":"var:preset|spacing|60" } } },"backgroundColor":"light-gray","className":"is-style-borders" } -->
+	<div class="wp-block-columns is-style-borders has-light-gray-background-color has-background" style="padding-top:var(--wp--preset--spacing--60);padding-right:var(--wp--preset--spacing--60);padding-bottom:var(--wp--preset--spacing--60);padding-left:var(--wp--preset--spacing--60)">
 		<!-- wp:column -->
 		<div class="wp-block-column">
 			<!-- wp:paragraph {"align":"center","fontSize":"small"} -->
@@ -28,6 +28,7 @@
 				<?php echo wp_kses( __( 'Register now and get<br><strong>3 free articles every week.</strong>', 'newspack' ), 'post' ); ?>
 			</p>
 			<!-- /wp:paragraph -->
+
 			<!-- wp:buttons -->
 			<div class="wp-block-buttons">
 				<!-- wp:button {"backgroundColor":"secondary-variation","width":100} -->

@@ -332,14 +332,10 @@ final class Newspack_Popups_Presets {
 	 */
 	public static function activate_ras_presets() {
 		// Deactivate all existing segments.
-		$existing_segments = array_map(
-			function( $segment ) {
-				$segment['configuration']['is_disabled'] = true;
-				return $segment;
-			},
-			Newspack_Popups_Segmentation::get_segments()
-		);
-		\update_option( Newspack_Popups_Segmentation::SEGMENTS_OPTION_NAME, $existing_segments );
+		foreach ( Newspack_Segments_Model::get_segments() as $existing_segment ) {
+			$existing_segment['configuration']['is_disabled'] = true;
+			Newspack_Segments_Model::update_segment( $existing_segment );
+		}
 
 		// Deactivate all existing prompts.
 		$existing_prompts = Newspack_Popups_Model::retrieve_active_popups();

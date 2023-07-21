@@ -628,16 +628,17 @@ class Newspack_Blocks {
 		if ( current_user_can( 'edit_others_posts' ) && isset( $attributes['includedPostStatuses'] ) ) {
 			$included_post_statuses = $attributes['includedPostStatuses'];
 		}
-		$authors             = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
-		$categories          = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
-		$tags                = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
-		$custom_taxonomies   = isset( $attributes['customTaxonomies'] ) ? $attributes['customTaxonomies'] : array();
-		$tag_exclusions      = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
-		$category_exclusions = isset( $attributes['categoryExclusions'] ) ? $attributes['categoryExclusions'] : array();
-		$specific_posts      = isset( $attributes['specificPosts'] ) ? $attributes['specificPosts'] : array();
-		$posts_to_show       = intval( $attributes['postsToShow'] );
-		$specific_mode       = isset( $attributes['specificMode'] ) ? intval( $attributes['specificMode'] ) : false;
-		$args                = array(
+		$authors               = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
+		$categories            = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
+		$include_subcategories = isset( $attributes['includeSubcategories'] ) ? intval( $attributes['includeSubcategories'] ) : false;
+		$tags                  = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
+		$custom_taxonomies     = isset( $attributes['customTaxonomies'] ) ? $attributes['customTaxonomies'] : array();
+		$tag_exclusions        = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
+		$category_exclusions   = isset( $attributes['categoryExclusions'] ) ? $attributes['categoryExclusions'] : array();
+		$specific_posts        = isset( $attributes['specificPosts'] ) ? $attributes['specificPosts'] : array();
+		$posts_to_show         = intval( $attributes['postsToShow'] );
+		$specific_mode         = isset( $attributes['specificMode'] ) ? intval( $attributes['specificMode'] ) : false;
+		$args                  = array(
 			'post_type'           => $post_type,
 			'post_status'         => $included_post_statuses,
 			'suppress_filters'    => false,
@@ -666,6 +667,14 @@ class Newspack_Blocks {
 				);
 			}
 			if ( $categories && count( $categories ) ) {
+				if ( 1 === $include_subcategories ) {
+					foreach ( $categories as $parent ) {
+						$children[] = get_categories( array( 'child_of' => $parent ) );
+						foreach ( $children[0] as $child ) {
+							$categories[] = $child->term_id;
+						}
+					}
+				}
 				$args['category__in'] = $categories;
 			}
 			if ( $tags && count( $tags ) ) {

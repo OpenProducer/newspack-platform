@@ -1,10 +1,24 @@
 @charset "UTF-8";
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 :root {
   --newspack-theme-color-primary: #36f;
   --newspack-theme-color-primary-variation: #2240d5;

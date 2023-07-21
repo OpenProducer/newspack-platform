@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.75.0
+Version: 1.75.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -55,6 +55,13 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 	## Captions
 	## Galleries
 -------------------------------------------------------------- */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 :root {
   --newspack-theme-color-primary: #36f;
   --newspack-theme-color-primary-variation: #2240d5;
@@ -114,6 +121,13 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
 /* Document
 	 ========================================================================== */
@@ -455,12 +469,26 @@ textarea {
   font-family: var(--newspack-theme-font-body);
 }
 
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 .comment-metadata,
 .comment-reply-link,
 .comment-reply-login,
@@ -785,6 +813,13 @@ hr {
   height: 2px;
 }
 
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 ul,
 ol {
   padding-left: 1rem;
@@ -834,6 +869,13 @@ blockquote > p {
 }
 blockquote cite {
   color: var(--newspack-theme-color-text-light);
+}
+
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
 table {
@@ -6630,12 +6672,26 @@ hr.has-background.is-style-dots::before {
 /* --------------------------------------------------------------
 ## Patterns
 -------------------------------------------------------------- */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
 /* Calculates maximum width for post content */
 /* Nested sub-menu padding: 10 levels deep */
 /* Jetpack Mailchimp Block */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 .newspack-pattern {
   /* Subscribe Style 7 */
   /* Subscribe Style 8 */
@@ -7053,6 +7109,13 @@ svg {
 /* --------------------------------------------------------------
 ## Captions
 -------------------------------------------------------------- */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 .wp-caption {
   margin-bottom: calc( 1.5 * 1rem );
 }
@@ -7143,6 +7206,13 @@ figcaption,
 /* --------------------------------------------------------------
 ## Galleries
 -------------------------------------------------------------- */
+body {
+  --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
+  --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
+  --wp--preset--spacing--70: clamp( 1.75rem, 0.12rem + 5.4333vw, 3.38rem);
+  --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
+}
+
 .gallery {
   display: flex;
   flex-flow: row wrap;

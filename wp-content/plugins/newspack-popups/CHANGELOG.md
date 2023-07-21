@@ -1,3 +1,24 @@
+# [2.22.0](https://github.com/Automattic/newspack-popups/compare/v2.21.1...v2.22.0) (2023-07-17)
+
+
+### Features
+
+* refactor segments into a taxonomy ([#1106](https://github.com/Automattic/newspack-popups/issues/1106)) ([a3373e4](https://github.com/Automattic/newspack-popups/commit/a3373e4c2d033009e9284cfe2383622f31aba332))
+
+# [2.22.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.22.0-alpha.1...v2.22.0-alpha.2) (2023-07-11)
+
+
+### Bug Fixes
+
+* when comparing filtered vs post content, compare only 1st paragraph ([#1160](https://github.com/Automattic/newspack-popups/issues/1160)) ([b47449e](https://github.com/Automattic/newspack-popups/commit/b47449e891f0a042365af22a848d82ad8c5cafcf))
+
+## [2.21.1](https://github.com/Automattic/newspack-popups/compare/v2.21.0...v2.21.1) (2023-07-11)
+
+
+### Bug Fixes
+
+* when comparing filtered vs post content, compare only 1st paragraph ([#1160](https://github.com/Automattic/newspack-popups/issues/1160)) ([b47449e](https://github.com/Automattic/newspack-popups/commit/b47449e891f0a042365af22a848d82ad8c5cafcf))
+
 # [2.21.0](https://github.com/Automattic/newspack-popups/compare/v2.20.0...v2.21.0) (2023-07-03)
 
 

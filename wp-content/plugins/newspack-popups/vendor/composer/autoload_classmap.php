@@ -30,4 +30,5 @@ return array(
     'Newspack_Popups_Segmentation' => $baseDir . '/includes/class-newspack-popups-segmentation.php',
     'Newspack_Popups_Settings' => $baseDir . '/includes/class-newspack-popups-settings.php',
     'Newspack_Popups_View_As' => $baseDir . '/includes/class-newspack-popups-view-as.php',
+    'Newspack_Segments_Model' => $baseDir . '/includes/class-newspack-segments-model.php',
 );

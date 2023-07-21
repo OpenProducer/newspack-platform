@@ -87,6 +87,8 @@ class Perfmatters {
 			'plugins/jetpack/modules/sharedaddy', // Jetpack's share buttons.
 			'plugins/jetpack/_inc/social-logos', // Jetpack's social logos CSS.
 			'plugins/jetpack/css/jetpack.css', // Jetpack's main CSS.
+			'plugins/the-events-calendar', // The Events Calendar.
+			'plugins/events-calendar-pro', // The Events Calendar Pro.
 			'/themes/newspack-', // Any Newspack theme stylesheet.
 			'cache/perfmatters', //	Perfmatters' cache.
 			'wp-includes',
@@ -122,15 +124,13 @@ class Perfmatters {
 	}
 
 	/**
-	 * Set default options for Perfmatters.
+	 * Get Newspack default options for Perfmatters.
 	 *
-	 * @param array $options Perfmatters options.
+	 * @param array $options Initial options. Optional.
+	 *
+	 * @return array Newspack default options.
 	 */
-	public static function set_defaults( $options = [] ) {
-		if ( defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS ) {
-			return $options;
-		}
-
+	private static function get_defaults( $options = [] ) {
 		// Basic options.
 		$options['disable_emojis']              = true;
 		$options['disable_dashicons']           = true;
@@ -175,6 +175,7 @@ class Perfmatters {
 			$options['assets']['delay_js_inclusions'] = self::scripts_to_delay();
 		}
 		$options['assets']['delay_timeout'] = true;
+		$options['assets']['fastclick']     = true;
 
 		// Unused CSS.
 		$options['assets']['remove_unused_css'] = true;
@@ -230,6 +231,25 @@ class Perfmatters {
 		$options['fonts']['local_google_fonts']   = true;
 
 		return $options;
+	}
+
+	/**
+	 * Set default options for Perfmatters.
+	 * Overwrites existing options unless the NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS constant is set.
+	 *
+	 * @param array $options Perfmatters options.
+	 *
+	 * @return array Newspack default options.
+	 */
+	public static function set_defaults( $options = [] ) {
+		$defaults = self::get_defaults( $options );
+
+		// Ensure our defaults remain the default, but can be overwritten.
+		if ( defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS ) {
+			return array_merge( $defaults, $options );
+		}
+
+		return $defaults;
 	}
 
 	/**

@@ -362,51 +362,7 @@ final class Newspack_Popups_Segmentation {
 	 * @return array Array of segments.
 	 */
 	public static function get_segments( $include_inactive = true ) {
-		$segments                  = get_option( self::SEGMENTS_OPTION_NAME, [] );
-		$segments_without_priority = array_filter(
-			$segments,
-			function( $segment ) {
-				return ! isset( $segment['priority'] );
-			}
-		);
-
-		// Failsafe to ensure that all segments have an assigned priority.
-		if ( 0 < count( $segments_without_priority ) ) {
-			$segments = self::reindex_segments( $segments );
-		}
-
-		// Filter out inactive segments, if needed.
-		if ( ! $include_inactive ) {
-			$segments = array_filter(
-				$segments,
-				function( $segment ) {
-					return empty( $segment['configuration']['is_disabled'] );
-				}
-			);
-		}
-
-		// Filter out non-existing categories.
-		$existing_categories_ids = get_categories(
-			[
-				'hide_empty' => false,
-				'fields'     => 'ids',
-			]
-		);
-		foreach ( $segments as &$segment ) {
-			if ( ! isset( $segment['configuration']['favorite_categories'] ) ) {
-				continue;
-			}
-			$fav_categories = $segment['configuration']['favorite_categories'];
-			if ( ! empty( $fav_categories ) ) {
-				$segment['configuration']['favorite_categories'] = array_values(
-					array_intersect(
-						$existing_categories_ids,
-						$fav_categories
-					)
-				);
-			}
-		}
-		return $segments;
+		return Newspack_Segments_Model::get_segments( $include_inactive );
 	}
 
 	/**
@@ -416,48 +372,24 @@ final class Newspack_Popups_Segmentation {
 	 * @return object|null The single segment object with matching ID, or null.
 	 */
 	public static function get_segment( $id ) {
-		$matching_segments = array_values(
-			array_filter(
-				self::get_segments(),
-				function( $segment ) use ( $id ) {
-					return $segment['id'] === $id;
-				}
-			)
-		);
-
-		if ( 0 < count( $matching_segments ) ) {
-			return $matching_segments[0];
-		}
-
-		return null;
+		return Newspack_Segments_Model::get_segment( $id );
 	}
 
 	/**
 	 * Get segment IDs.
 	 */
 	public static function get_segment_ids() {
-		return array_map(
-			function( $segment ) {
-				return $segment['id'];
-			},
-			self::get_segments()
-		);
+		return Newspack_Segments_Model::get_segment_ids();
 	}
 
 	/**
 	 * Create a segment.
 	 *
 	 * @param object $segment A segment.
+	 * @deprecated
 	 */
 	public static function create_segment( $segment ) {
-		$segments              = self::get_segments();
-		$segment['id']         = uniqid();
-		$segment['created_at'] = gmdate( 'Y-m-d' );
-		$segment['updated_at'] = gmdate( 'Y-m-d' );
-		$segments[]            = $segment;
-
-		update_option( self::SEGMENTS_OPTION_NAME, $segments );
-		return self::get_segments();
+		return Newspack_Segments_Model::create_segment( $segment );
 	}
 
 	/**
@@ -466,16 +398,7 @@ final class Newspack_Popups_Segmentation {
 	 * @param string $id A segment id.
 	 */
 	public static function delete_segment( $id ) {
-		$segments = array_values(
-			array_filter(
-				self::get_segments(),
-				function( $segment ) use ( $id ) {
-					return $segment['id'] !== $id;
-				}
-			)
-		);
-		update_option( self::SEGMENTS_OPTION_NAME, $segments );
-		return self::get_segments();
+		return Newspack_Segments_Model::delete_segment( $id );
 	}
 
 	/**
@@ -484,26 +407,7 @@ final class Newspack_Popups_Segmentation {
 	 * @param object $segment A segment.
 	 */
 	public static function update_segment( $segment ) {
-		$segments              = self::get_segments();
-		$segment['updated_at'] = gmdate( 'Y-m-d' );
-		foreach ( $segments as &$_segment ) {
-			if ( $_segment['id'] === $segment['id'] ) {
-				$_segment['name'] = $segment['name'];
-
-				// Deprecate is_logged_in and is_not_logged_in option names in favor of has_user_account and no_user_account.
-				if ( isset( $segment['is_logged_in'] ) ) {
-					unset( $segment['is_logged_in'] );
-				}
-				if ( isset( $segment['is_not_logged_in'] ) ) {
-					unset( $segment['is_not_logged_in'] );
-				}
-
-				$_segment['configuration'] = $segment['configuration'];
-			}
-		}
-
-		update_option( self::SEGMENTS_OPTION_NAME, $segments );
-		return self::get_segments();
+		return Newspack_Segments_Model::update_segment( $segment );
 	}
 
 	/**
@@ -602,35 +506,10 @@ final class Newspack_Popups_Segmentation {
 	 *
 	 * @param array $segment_ids Array of segment IDs, in order of desired priority.
 	 * @return array Array of sorted segments.
+	 * @deprecated
 	 */
 	public static function sort_segments( $segment_ids ) {
-		$segments = get_option( self::SEGMENTS_OPTION_NAME, [] );
-		$is_valid = self::validate_segment_ids( $segment_ids, $segments );
-
-		if ( ! $is_valid ) {
-			return new WP_Error(
-				'invalid_segment_sort',
-				__( 'Failed to sort due to outdated segment data. Please refresh and try again.', 'newspack-popups' )
-			);
-		}
-
-		$sorted_segments = array_map(
-			function( $segment_id ) use ( $segments ) {
-				$segment = array_filter(
-					$segments,
-					function( $segment ) use ( $segment_id ) {
-						return $segment['id'] === $segment_id;
-					}
-				);
-
-				return reset( $segment );
-			},
-			$segment_ids
-		);
-
-		$sorted_segments = self::reindex_segments( $sorted_segments );
-		update_option( self::SEGMENTS_OPTION_NAME, $sorted_segments );
-		return self::get_segments();
+		return Newspack_Segments_Model::sort_segments( $segment_ids );
 	}
 
 	/**
@@ -641,34 +520,20 @@ final class Newspack_Popups_Segmentation {
 	 * @param array $segment_ids Array of segment IDs to validate.
 	 * @param array $segments    Array of existing segments to validate against.
 	 * @return boolean Whether $segment_ids is valid.
+	 * @deprecated
 	 */
 	public static function validate_segment_ids( $segment_ids, $segments ) {
-		$existing_ids = array_map(
-			function( $segment ) {
-				return $segment['id'];
-			},
-			$segments
-		);
-
-		return array_diff( $segment_ids, $existing_ids ) === array_diff( $existing_ids, $segment_ids );
+		return Newspack_Segments_Model::validate_segment_ids( $segment_ids, $segments );
 	}
 
 	/**
 	 * Reindex segment priorities based on current position in array.
 	 *
 	 * @param object $segments Array of segments.
+	 * @deprecated
 	 */
 	public static function reindex_segments( $segments ) {
-		$index = 0;
-
-		return array_map(
-			function( $segment ) use ( &$index ) {
-				$segment['priority'] = $index;
-				$index++;
-				return $segment;
-			},
-			$segments
-		);
+		return Newspack_Segments_Model::reindex_segments( $segments );
 	}
 
 	/**

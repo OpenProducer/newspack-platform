@@ -223,6 +223,8 @@ class QueryControls extends Component {
 			onAuthorsChange,
 			categories,
 			onCategoriesChange,
+			includeSubcategories,
+			onIncludeSubcategoriesChange,
 			tags,
 			onTagsChange,
 			customTaxonomies,
@@ -288,6 +290,13 @@ class QueryControls extends Component {
 								fetchSuggestions={ this.fetchCategorySuggestions }
 								fetchSavedInfo={ this.fetchSavedCategories }
 								label={ __( 'Categories', 'newspack-blocks' ) }
+							/>
+						) }
+						{ onIncludeSubcategoriesChange && (
+							<ToggleControl
+								checked={ includeSubcategories }
+								onChange={ onIncludeSubcategoriesChange }
+								label={ __( 'Include subcategories ', 'newspack-blocks' ) }
 							/>
 						) }
 						{ onTagsChange && (

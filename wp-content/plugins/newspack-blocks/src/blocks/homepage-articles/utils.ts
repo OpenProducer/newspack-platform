@@ -27,6 +27,7 @@ const POST_QUERY_ATTRIBUTES = [
 	'postsToShow',
 	'authors',
 	'categories',
+	'includeSubcategories',
 	'excerptLength',
 	'tags',
 	'customTaxonomies',
@@ -43,6 +44,7 @@ type HomepageArticlesAttributes = {
 	postsToShow: number;
 	authors: AuthorId[];
 	categories: CategoryId[];
+	includeSubcategories: boolean;
 	excerptLength: number;
 	postType: PostType[];
 	showExcerpt: boolean;
@@ -87,6 +89,7 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 		postsToShow,
 		authors,
 		categories,
+		includeSubcategories,
 		excerptLength,
 		postType,
 		showExcerpt,
@@ -111,6 +114,7 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 			: {
 					postsToShow,
 					categories,
+					includeSubcategories,
 					authors,
 					tags,
 					tagExclusions,

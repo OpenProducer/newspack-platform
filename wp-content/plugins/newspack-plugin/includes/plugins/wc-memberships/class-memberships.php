@@ -41,6 +41,7 @@ class Memberships {
 		add_action( 'wp_footer', [ __CLASS__, 'render_overlay_gate' ], 1 );
 		add_action( 'wp_footer', [ __CLASS__, 'render_js' ] );
 		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_popups' ] );
+		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'suppress_article_view_activity' ], 100 );
 
 		include __DIR__ . '/class-block-patterns.php';
 		include __DIR__ . '/class-metering.php';
@@ -317,6 +318,9 @@ class Memberships {
 		}
 		$gate = \apply_filters( 'the_content', \get_the_content( null, null, $gate_post_id ) );
 
+		// Add clearfix to the gate.
+		$gate = '<div style=\'content:"";clear:both;display:table;\'></div>' . $gate;
+
 		// Apply inline fade.
 		if ( \get_post_meta( $gate_post_id, 'inline_fade', true ) ) {
 			$gate = '<div style="pointer-events: none; height: 10em; margin-top: -10em; width: 100%; position: absolute; background: linear-gradient(180deg, rgba(255,255,255,0) 14%, rgba(255,255,255,1) 76%);"></div>' . $gate;
@@ -391,7 +395,7 @@ class Memberships {
 				$content[ count( $content ) - 1 ] .= ' [&hellip;]';
 			}
 			// Rejoin the paragraphs into a single string again.
-			$content = wp_kses_post( implode( '</p>', $content ) . '</p>' );
+			$content = \force_balance_tags( \wp_kses_post( implode( '</p>', $content ) . '</p>' ) );
 		}
 		return $content;
 	}
@@ -471,10 +475,27 @@ class Memberships {
 	 * @return bool
 	 */
 	public static function disable_popups( $disabled ) {
-		if ( self::has_gate() && self::is_post_restricted() && ! Metering::is_metering() ) {
+		if (
+			is_singular() &&
+			self::has_gate() &&
+			self::is_post_restricted() &&
+			! Metering::is_metering()
+		) {
 			return true;
 		}
 		return $disabled;
+	}
+
+	/**
+	 * Suppress 'article_view' reader activity on locked posts.
+	 *
+	 * @param array $activity Activity.
+	 */
+	public static function suppress_article_view_activity( $activity ) {
+		if ( Metering::is_frontend_metering() || ( self::is_post_restricted() && ! Metering::is_logged_in_metering_allowed() ) ) {
+			return false;
+		}
+		return $activity;
 	}
 }
 Memberships::init();

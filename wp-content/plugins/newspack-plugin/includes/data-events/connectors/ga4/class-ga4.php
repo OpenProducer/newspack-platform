@@ -53,6 +53,38 @@ class GA4 {
 	}
 
 	/**
+	 * Whether GA4 can be used.
+	 *
+	 * @return bool
+	 */
+	public static function can_use_ga4() {
+		$properties = self::get_ga4_properties();
+		return ! empty( $properties ) && ! empty( $properties[0]['measurement_id'] );
+	}
+
+	/**
+	 * Get the GA4 properties to send events to.
+	 *
+	 * @return array
+	 */
+	private static function get_ga4_properties() {
+		$properties = [
+			self::get_credentials(),
+		];
+
+		/**
+		 * Filters the properties of the GA4 events in the GA4 Data Events connector.
+		 *
+		 * Each property is an array with two keys: `measurement_id` and `measurement_protocol_secret`.
+		 *
+		 * @param array $properties The properties.
+		 */
+		$properties = apply_filters( 'newspack_data_events_ga4_properties', $properties );
+
+		return $properties;
+	}
+
+	/**
 	 * Global handler for the Data Events API.
 	 *
 	 * @param string $event_name The event name.
@@ -65,6 +97,9 @@ class GA4 {
 	 */
 	public static function global_handler( $event_name, $timestamp, $data, $user_id ) {
 		if ( ! in_array( $event_name, self::$watched_events, true ) ) {
+			return;
+		}
+		if ( ! self::can_use_ga4() ) {
 			return;
 		}
 
@@ -126,6 +161,9 @@ class GA4 {
 		if ( ! in_array( $event_name, self::$watched_events, true ) ) {
 			return $body;
 		}
+		if ( ! self::can_use_ga4() ) {
+			return $body;
+		}
 
 		$body['data']['ga_client_id'] = self::extract_cid_from_cookies();
 
@@ -161,6 +199,9 @@ class GA4 {
 	 * @return array
 	 */
 	public static function filter_donation_new_event_body( $body, $event_name ) {
+		if ( ! self::can_use_ga4() ) {
+			return $body;
+		}
 		if ( ! empty( $body['data']['ga_client_id'] ) || ( 'donation_new' !== $event_name && 'prompt_interaction' !== $event_name ) ) {
 			return $body;
 		}
@@ -406,18 +447,7 @@ class GA4 {
 			$payload['user_id'] = $user_id;
 		}
 
-		$properties = [
-			self::get_credentials(),
-		];
-
-		/**
-		 * Filters the properties of the GA4 events in the GA4 Data Events connector.
-		 *
-		 * Each property is an array with two keys: `measurement_id` and `measurement_protocol_secret`.
-		 *
-		 * @param array $properties The properties.
-		 */
-		$properties = apply_filters( 'newspack_data_events_ga4_properties', $properties );
+		$properties = self::get_ga4_properties();
 
 		foreach ( $properties as $property ) {
 

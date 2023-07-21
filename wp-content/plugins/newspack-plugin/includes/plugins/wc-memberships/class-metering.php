@@ -18,6 +18,13 @@ class Metering {
 	const METERING_META_KEY = 'np_memberships_metering';
 
 	/**
+	 * Article view activity to be handled by frontend metering.
+	 *
+	 * @var array|null
+	 */
+	private static $article_view = null;
+
+	/**
 	 * Cache of the user's metering status for posts.
 	 *
 	 * @var boolean[] Map of post IDs to booleans.
@@ -30,7 +37,8 @@ class Metering {
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'wp', [ __CLASS__, 'handle_restriction' ], 11 );
-		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
+		add_action( 'wp_footer', [ __CLASS__, 'enqueue_scripts' ] );
+		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'get_article_view' ], 20 );
 	}
 
 	/**
@@ -102,6 +110,7 @@ class Metering {
 				'count'              => \get_post_meta( $gate_post_id, 'metering_anonymous_count', true ),
 				'period'             => \get_post_meta( $gate_post_id, 'metering_period', true ),
 				'post_id'            => get_the_ID(),
+				'article_view'       => self::$article_view,
 			]
 		);
 	}
@@ -269,6 +278,19 @@ class Metering {
 	 */
 	public static function is_metering() {
 		return self::is_frontend_metering() || self::is_logged_in_metering_allowed();
+	}
+
+	/**
+	 * Store the article view activity push for use in the frontend metering
+	 * strategy.
+	 *
+	 * @param array $activity Activity data.
+	 *
+	 * @return array
+	 */
+	public static function get_article_view( $activity ) {
+		self::$article_view = $activity;
+		return $activity;
 	}
 }
 Metering::init();

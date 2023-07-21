@@ -142,7 +142,13 @@ function render_block( $attrs, $content ) {
 	if ( $attrs['newsletterSubscription'] && method_exists( 'Newspack_Newsletters_Subscription', 'get_lists_config' ) ) {
 		$list_config = \Newspack_Newsletters_Subscription::get_lists_config();
 		if ( ! \is_wp_error( $list_config ) ) {
-			$lists = array_intersect_key( $list_config, array_flip( $attrs['lists'] ) );
+			// get existing lists preserving the order.
+			$lists = [];
+			foreach ( $attrs['lists'] as $list_id ) {
+				if ( isset( $list_config[ $list_id ] ) ) {
+					$lists[ $list_id ] = $list_config[ $list_id ];
+				}
+			}
 		}
 	}
 

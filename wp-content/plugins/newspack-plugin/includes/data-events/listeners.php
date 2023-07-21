@@ -15,16 +15,18 @@ use Newspack\Donations;
  * For when a reader registers.
  */
 Data_Events::register_listener(
-	'newspack_registered_reader',
+	'user_register',
 	'reader_registered',
-	function( $email, $authenticate, $user_id, $existing_user, $metadata ) {
-		if ( $existing_user ) {
+	function( $user_id, $userdata ) {
+		$user = \get_user_by( 'id', $user_id );
+		if ( ! Reader_Activation::is_user_reader( $user ) ) {
 			return null;
 		}
+		$metadata = \get_user_meta( $user_id, 'np_registration_metadata', true );
 		return [
 			'user_id'  => $user_id,
-			'email'    => $email,
-			'metadata' => $metadata,
+			'email'    => $userdata['user_email'],
+			'metadata' => $metadata ? $metadata : [],
 		];
 	}
 );

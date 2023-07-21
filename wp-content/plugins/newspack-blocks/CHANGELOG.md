@@ -1,3 +1,33 @@
+# [1.73.0](https://github.com/Automattic/newspack-blocks/compare/v1.72.2...v1.73.0) (2023-07-17)
+
+
+### Features
+
+* add updated translation files ([#1486](https://github.com/Automattic/newspack-blocks/issues/1486)) ([3a44410](https://github.com/Automattic/newspack-blocks/commit/3a44410e43fcc00510a317e527e2acf782dac4d1))
+* allow Homepage Posts and Carousel blocks to include subcategories ([#1482](https://github.com/Automattic/newspack-blocks/issues/1482)) ([faa8734](https://github.com/Automattic/newspack-blocks/commit/faa87346869dce0503b269c23f453b08cdd5724f))
+* **modal-checkout:** render order details under different conditions ([#1485](https://github.com/Automattic/newspack-blocks/issues/1485)) ([ae62734](https://github.com/Automattic/newspack-blocks/commit/ae62734ee8ca769b23d14a2cb5067fb87dea37e7))
+
+# [1.73.0-alpha.3](https://github.com/Automattic/newspack-blocks/compare/v1.73.0-alpha.2...v1.73.0-alpha.3) (2023-07-17)
+
+
+### Bug Fixes
+
+* only show Additional Fields panel when using Stripe platform ([#1499](https://github.com/Automattic/newspack-blocks/issues/1499)) ([1a08513](https://github.com/Automattic/newspack-blocks/commit/1a085131f881ac62d2ac4879298c3a47d86df684))
+
+## [1.72.2](https://github.com/Automattic/newspack-blocks/compare/v1.72.1...v1.72.2) (2023-07-17)
+
+
+### Bug Fixes
+
+* only show Additional Fields panel when using Stripe platform ([#1499](https://github.com/Automattic/newspack-blocks/issues/1499)) ([1a08513](https://github.com/Automattic/newspack-blocks/commit/1a085131f881ac62d2ac4879298c3a47d86df684))
+
+## [1.72.1](https://github.com/Automattic/newspack-blocks/compare/v1.72.0...v1.72.1) (2023-07-13)
+
+
+### Bug Fixes
+
+* **post-carousel:** set aspect ratio on init ([#1497](https://github.com/Automattic/newspack-blocks/issues/1497)) ([8a48982](https://github.com/Automattic/newspack-blocks/commit/8a489829dbe7882210b211cbde109d930d4e770b))
+
 # [1.72.0](https://github.com/Automattic/newspack-blocks/compare/v1.71.0...v1.72.0) (2023-07-03)
 
 

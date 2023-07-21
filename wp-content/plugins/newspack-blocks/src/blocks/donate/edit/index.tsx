@@ -383,12 +383,14 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 						label={ __( 'Button Color', 'newspack-blocks' ) }
 					/>
 				</PanelBody>
-				<PanelBody
-					title={ __( 'Additional data fields', 'newspack-blocks' ) }
-					initialOpen={ false }
-				>
-					<AdditionalFields attributes={ attributes } setAttributes={ setAttributes } />
-				</PanelBody>
+				{ 'stripe' === settings.platform && (
+					<PanelBody
+						title={ __( 'Additional data fields', 'newspack-blocks' ) }
+						initialOpen={ false }
+					>
+						<AdditionalFields attributes={ attributes } setAttributes={ setAttributes } />
+					</PanelBody>
+				) }
 				<PanelBody title={ __( 'Campaign', 'newspack-blocks' ) } initialOpen={ false }>
 					<TextControl
 						label={ __( 'Campaign ID', 'newspack-blocks' ) }

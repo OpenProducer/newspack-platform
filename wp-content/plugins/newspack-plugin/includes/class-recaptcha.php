@@ -322,11 +322,22 @@ final class Recaptcha {
 		<script src="<?php echo \esc_url( self::get_script_url() ); ?>"></script>
 		<script>
 			grecaptcha.ready( function() {
+				var field;
+				setInterval( function() {
+					grecaptcha.execute(
+						'<?php echo \esc_attr( $site_key ); ?>',
+						{ action: 'checkout' }
+					).then( function( token ) {
+						if ( field ) {
+							field.value = token;
+						}
+					} );
+				}, 30000 );
 				grecaptcha.execute(
 					'<?php echo \esc_attr( $site_key ); ?>',
 					{ action: 'checkout' }
 				).then( function( token ) {
-					var field   = document.createElement('input');
+					field       = document.createElement('input');
 					field.type  = 'hidden';
 					field.name  = 'g-recaptcha-response';
 					field.value = token;

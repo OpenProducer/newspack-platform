@@ -266,6 +266,7 @@ class Edit extends Component {
 			specificPosts,
 			postsToShow,
 			categories,
+			includeSubcategories,
 			customTaxonomies,
 			columns,
 			colGap,
@@ -359,6 +360,8 @@ class Edit extends Component {
 						onAuthorsChange={ handleAttributeChange( 'authors' ) }
 						categories={ categories }
 						onCategoriesChange={ handleAttributeChange( 'categories' ) }
+						includeSubcategories={ includeSubcategories }
+						onIncludeSubcategoriesChange={ handleAttributeChange( 'includeSubcategories' ) }
 						tags={ tags }
 						onTagsChange={ handleAttributeChange( 'tags' ) }
 						onCustomTaxonomiesChange={ handleAttributeChange( 'customTaxonomies' ) }

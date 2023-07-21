@@ -130,6 +130,7 @@ export default function createSwiper( els, config = {} ) {
 					deactivateSlide( slide )
 				);
 
+				setAspectRatio.call( this ); // Set the aspect ratio on init.
 				activateSlide( this.slides[ this.activeIndex ] ); // Set-up our active slide.
 			},
 
