@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit09014f663f005d46046475809298319f
+class ComposerStaticInit74cad37f03b517f5f51a0956a403bde2
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -471,6 +471,7 @@ class ComposerStaticInit09014f663f005d46046475809298319f
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCategory' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductCategory.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductCollection' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductCollection.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductDetails' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductDetails.php',
+        'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductGallery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductGallery.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductImage' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductImage.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductImageGallery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductImageGallery.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductNew' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductNew.php',
@@ -478,6 +479,7 @@ class ComposerStaticInit09014f663f005d46046475809298319f
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductPrice' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductPrice.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductQuery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductQuery.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductRating' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductRating.php',
+        'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductRatingStars' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductRatingStars.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductResultsCount' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductResultsCount.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductReviews' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductReviews.php',
         'Automattic\\WooCommerce\\Blocks\\BlockTypes\\ProductSKU' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/BlockTypes/ProductSKU.php',
@@ -527,17 +529,24 @@ class ComposerStaticInit09014f663f005d46046475809298319f
         'Automattic\\WooCommerce\\Blocks\\Registry\\SharedType' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Registry/SharedType.php',
         'Automattic\\WooCommerce\\Blocks\\Shipping\\PickupLocation' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Shipping/PickupLocation.php',
         'Automattic\\WooCommerce\\Blocks\\Shipping\\ShippingController' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Shipping/ShippingController.php',
+        'Automattic\\WooCommerce\\Blocks\\Templates\\AbstractPageTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/AbstractPageTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\AbstractTemplateCompatibility' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/AbstractTemplateCompatibility.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\ArchiveProductTemplatesCompatibility' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ArchiveProductTemplatesCompatibility.php',
+        'Automattic\\WooCommerce\\Blocks\\Templates\\CartTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/CartTemplate.php',
+        'Automattic\\WooCommerce\\Blocks\\Templates\\CheckoutHeaderTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/CheckoutHeaderTemplate.php',
+        'Automattic\\WooCommerce\\Blocks\\Templates\\CheckoutTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/CheckoutTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\ClassicTemplatesCompatibility' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ClassicTemplatesCompatibility.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\MiniCartTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/MiniCartTemplate.php',
+        'Automattic\\WooCommerce\\Blocks\\Templates\\OrderConfirmationTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/OrderConfirmationTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\ProductAttributeTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ProductAttributeTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\ProductSearchResultsTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ProductSearchResultsTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplateCompatibility' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/SingleProductTemplateCompatibility.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\BlocksWpQuery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/BlocksWpQuery.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/CartCheckoutUtils.php',
+        'Automattic\\WooCommerce\\Blocks\\Utils\\SettingsUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/SettingsUtils.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\StyleAttributesUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/StyleAttributesUtils.php',
+        'Automattic\\WooCommerce\\Blocks\\Utils\\Utils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/Utils.php',
         'Automattic\\WooCommerce\\Caches\\OrderCache' => __DIR__ . '/../..' . '/src/Caches/OrderCache.php',
         'Automattic\\WooCommerce\\Caches\\OrderCacheController' => __DIR__ . '/../..' . '/src/Caches/OrderCacheController.php',
         'Automattic\\WooCommerce\\Caching\\CacheEngine' => __DIR__ . '/../..' . '/src/Caching/CacheEngine.php',
@@ -1171,10 +1180,10 @@ class ComposerStaticInit09014f663f005d46046475809298319f
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit09014f663f005d46046475809298319f::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit09014f663f005d46046475809298319f::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit09014f663f005d46046475809298319f::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit09014f663f005d46046475809298319f::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$classMap;
 
         }, null, ClassLoader::class);
     }

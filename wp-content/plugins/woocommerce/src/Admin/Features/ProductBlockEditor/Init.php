@@ -43,6 +43,7 @@ class Init {
 		if ( \Automattic\WooCommerce\Utilities\FeaturesUtil::feature_is_enabled( 'product_block_editor' ) ) {
 			if ( ! Features::is_enabled( 'new-product-management-experience' ) ) {
 				add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_styles' ) );
+				add_action( 'admin_enqueue_scripts', array( $this, 'dequeue_conflicting_styles' ), 100 );
 				add_action( 'get_edit_post_link', array( $this, 'update_edit_product_link' ), 10, 2 );
 			}
 			add_action( 'admin_enqueue_scripts', array( $this, 'enqueue_scripts' ) );
@@ -109,6 +110,17 @@ class Init {
 		 * @since 7.1.0
 		*/
 		do_action( 'enqueue_block_editor_assets' );
+	}
+
+	/**
+	 * Dequeue conflicting styles.
+	 */
+	public function dequeue_conflicting_styles() {
+		if ( ! PageController::is_admin_or_embed_page() ) {
+			return;
+		}
+		// Dequeing this to avoid conflicts, until we remove the 'woocommerce-page' class.
+		wp_dequeue_style( 'woocommerce-blocktheme' );
 	}
 
 	/**
@@ -259,7 +271,8 @@ class Init {
 								array(
 									'woocommerce/product-name-field',
 									array(
-										'name' => 'Product name',
+										'name'      => 'Product name',
+										'autoFocus' => true,
 									),
 								),
 								array(
@@ -689,6 +702,33 @@ class Init {
 					),
 				),
 			);
+			if ( Features::is_enabled( 'product-variation-management' ) ) {
+				array_push(
+					$args['template'],
+					array(
+						'woocommerce/product-tab',
+						array(
+							'id'    => 'variations',
+							'title' => __( 'Variations', 'woocommerce' ),
+							'order' => 40,
+						),
+						array(
+							array(
+								'woocommerce/product-variations-fields',
+								array(
+									'description' => sprintf(
+										/* translators: %1$s: Sell your product in multiple variations like size or color. strong opening tag. %2$s: Sell your product in multiple variations like size or color. strong closing tag.*/
+										__( '%1$sSell your product in multiple variations like size or color.%2$s Get started by adding options for the buyers to choose on the product page.', 'woocommerce' ),
+										'<strong>',
+										'</strong>'
+									),
+								),
+								array(),
+							),
+						),
+					)
+				);
+			}
 		}
 		return $args;
 	}
@@ -706,6 +746,11 @@ class Init {
 		// not be the product edit page (it mostly likely isn't).
 		if ( PageController::is_admin_page() ) {
 			$screen->is_block_editor( true );
+
+			wp_add_inline_script(
+				'wp-blocks',
+				'wp.blocks && wp.blocks.unstable__bootstrapServerSideBlockDefinitions && wp.blocks.unstable__bootstrapServerSideBlockDefinitions(' . wp_json_encode( get_block_editor_server_block_settings() ) . ');'
+			);
 		}
 	}
 }

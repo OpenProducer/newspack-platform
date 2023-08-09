@@ -1,10 +1,10 @@
 === Jetpack - WP Security, Backup, Speed, & Growth ===
 Contributors: automattic, adamkheckler, adrianmoldovanwp, aduth, akirk, allendav, alternatekev, andy, annamcphee, annezazu, apeatling, arcangelini, azaozz, batmoo, barry, beaulebens, bindlegirl, biskobe, blobaugh, bjorsch, brbrr, cainm, cena, cfinke, chaselivingston, chellycat, clickysteve, csonnek, danielbachhuber, davoraltman, daniloercoli, delawski, designsimply, dllh, drawmyface, dsmart, dzver, ebinnion, egregor, eliorivero, enej, eoigal, erania-pinnera, ethitter, fgiannar, gcorne, georgestephanis, gibrown, goldsounds, hew, hugobaeta, hypertextranch, iammattthomas, iandunn, jblz, jasmussen, jeffgolenski, jeherve, jenhooks, jenia, jessefriedman, jgs, jkudish, jmdodd, joanrho, johnjamesjacoby, jshreve, kbrownkd, keoshi, koke, kraftbj, lancewillett, leogermani, lschuyler, macmanx, martinremy, matt, matveb, mattwiebe, maverick3x6, mcsf, mdawaffe, mdbitz, MichaelArestad, migueluy, mikeyarce, mkaz, nancythanki, nickmomrik, obenland, oskosk, pento, professor44, rachelsquirrel, rdcoll, ryancowles, richardmuscat, richardmtl, robertbpugh, roccotripaldi, samhotchkiss, samiff, scarstocea, scottsweb, sdixon194, sdquirk, sermitr, simison, stephdau, tmoorewp, tyxla, Viper007Bond, westi, wpkaren, yoavf, zinigor
 Tags: Security, backup, Woo, malware, scan, spam, CDN, search, social
-Stable tag: 12.3
+Stable tag: 12.4
 Requires at least: 6.1
 Requires PHP: 5.6
-Tested up to: 6.2
+Tested up to: 6.3
 
 Improve your WP security with powerful one-click tools like backup, WAF, and malware scan. Get essential free tools including stats, CDN and social sharing.
 
@@ -293,43 +293,42 @@ Jetpack Backup can do a full website migration to a new host, migrate theme file
 
 
 == Changelog ==
-### 12.3 - 2023-07-05
+### 12.4 - 2023-08-01
 #### Enhancements
-- AI Assistant: extend AI features to select core blocks.
-- AI Extension: add ask assistant menu option.
-- Blocks: add a new Tock block.
-- Blocks: load block stylesheets inline when possible for improved performance.
-- Customizer: hide the customizer submenu for block based themes.
-- Newsletters: add an Email Preview feature.
-- Newsletters: update Paid newsletter panel designs.
-- Related Posts: add srcset for the thumbnails.
-- Sharing Buttons: add a Nextdoor sharing button.
-- Social Logos: update to include a Nextdoor and a Fediverse logo.
-- Stats: display the links to a post's stats in the Posts list as soon as the user has access to stats.
-- Subscribers: add menu item to Calypso interface.
+- AI Assistant: introduce sidebar and proofread components.
+- AI Assistant: keep original content when trying again after transforming a paragraph using the "Ask AI Assistant" button.
+- AI Assistant: add a "Get Feedback" feature.
+- AI Assistant: various improvements to syntax parsing, formatting, and other backend enhancements.
+- Akismet: show correct logo for all Jetpack plans that include Akismet.
+- Contact Forms: remove the default title ("You got a new response!") added to emails sent for new feedback received.
+- Cookie Consent Block: persist markup and ensure it is rendered in the footer.
+- Custom CSS: display a notice to recommend the use of Global Styles when you use a Block theme on your site.
+- Dashboard: add a new "Earn" section to the settings.
+- Dashboard: highlight Jetpack Newsletter in recommendations flow.
+- Dashboard: update link to configure Related Posts when you use a Block theme on your site.
+- External Media: add Pexels to the Media Sidebar of the block editor.
+- Social Menu & Social Media Icons: add support for the Threads service.
+- Subscriptions: link to new Subscription management page from the Jetpack dashboard.
 
 #### Improved compatibility
-- Blocks: introduce standardized messaging system to display notices when a block is no longer supported on a site.
-- Blocks: remove retired Revue Block.
-- PHP8 compatibility updates.
-- Tiled Galleries: avoid PHP deprecation notices on sites using PHP 8.2.
-- WordPress.com Toolbar: avoid PHP warnings with PHP 8.2.
+- Customizer: make the testimonial, featured content, portfolio, and related post customizer sections be shown only if current theme is not a block theme.
+- General: indicate full compatibility with the latest version of WordPress, 6.3.
+- Sharing: deprecate the Skype sharing button, as Skype does not support those buttons anymore.
+- Social Links: prevent social links from being used in block themes.
+- Tiled Galleries: Fix deprecation notices that may appear in logs when using PHP 8.2.
+- WordPress.com REST API: avoid PHP notice when using PHP 8.2.
 
 #### Bug fixes
-- AI Assistant: several bug fixes this release, check the CHANGELOG.md file for more info.
-- Connection: fix redirecting users who click back button before approving connection to Jetpack Dashboard.
-- Customizer: fix an issue which was preventing the Customize menu from appearing for plugins that still require it to be present.
-- Dashboard: display an external icon next to the link to the Subscribers list.
-- Markdown Block: render single and double quotes as smart quotes.
-- Memberships: correctly gate posts rendered on pages.
-- Memberships: fix an issue where Jetpack_Memberships::user_can_view_post would cache the wrong value.
-- Memberships: fix potential class not found error.
-- Newsletters: several bug fixes this release, check the CHANGELOG.md file for more info.
-- Sharing Buttons: remove Reddit's official iframe sharing button, it is no longer working. Use icon+text sharing button instead.
-- Social Review Prompt: fix the state so it is shown when Jetpack is also active.
-- Subscriptions: avoid fatal error when site is connected to WordPress.com, but user account is not.
-- Subscriptions: fix visibility misalignment.
-- WPcom: fix output of static script path on WordPress.com sites.
+- AI Assistant: fix crash when transforming to AI Assistant.
+- WordPress.com REST API: fix PHP warning in list posts endpoint.
+- Contact Forms: avoid fatal errors when exporting form data to CSV.
+- Contact Forms: fix Forms dropdown required validation.
+- Dashboard: fix accessibility issues in the footer area.
+- Fix issue with Paid-content block by enabling sub-blocks.
+- Payments Block: update link to support documentation.
+- Related Posts: do not display related posts in emails and outside of WordPress context.
+- Search: when using a block theme, display a link to add a Search Block instead of a Search Widget in the Jetpack dashboard.
+- Subscriptions: only display the "Newsletter access" column if we have set up a payment plan.
 
 --------
 

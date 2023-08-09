@@ -135,9 +135,13 @@ class ShippingController {
 		$location        = $shipping_method->get_meta( 'pickup_location' );
 		$address         = $shipping_method->get_meta( 'pickup_address' );
 
+		if ( ! $address ) {
+			return $return;
+		}
+
 		return sprintf(
 			// Translators: %s location name.
-			__( 'Pickup from <strong>%s</strong>:', 'woocommerce' ),
+			__( 'Collection from <strong>%s</strong>:', 'woocommerce' ),
 			$location
 		) . '<br/><address>' . str_replace( ',', ',<br/>', $address ) . '</address><br/>' . $details;
 	}

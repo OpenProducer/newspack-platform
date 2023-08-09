@@ -1,3 +1,19 @@
+## [1.67.3](https://github.com/Automattic/newspack-newsletters/compare/v1.67.2...v1.67.3) (2023-08-07)
+
+
+### Bug Fixes
+
+* disable autocomplete for recaptcha input ([#1203](https://github.com/Automattic/newspack-newsletters/issues/1203)) ([5d899c0](https://github.com/Automattic/newspack-newsletters/commit/5d899c0649cbb3a114b3ac6216e28741978849cf))
+* **subscription-block:** css on tablet/mobile preview ([#1218](https://github.com/Automattic/newspack-newsletters/issues/1218)) ([d0539cc](https://github.com/Automattic/newspack-newsletters/commit/d0539cc093b45b99dade1963ba23c8977ff128ba))
+
+## [1.67.3-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.67.2...v1.67.3-alpha.1) (2023-07-20)
+
+
+### Bug Fixes
+
+* disable autocomplete for recaptcha input ([#1203](https://github.com/Automattic/newspack-newsletters/issues/1203)) ([5d899c0](https://github.com/Automattic/newspack-newsletters/commit/5d899c0649cbb3a114b3ac6216e28741978849cf))
+* **subscription-block:** css on tablet/mobile preview ([#1218](https://github.com/Automattic/newspack-newsletters/issues/1218)) ([d0539cc](https://github.com/Automattic/newspack-newsletters/commit/d0539cc093b45b99dade1963ba23c8977ff128ba))
+
 ## [1.67.2](https://github.com/Automattic/newspack-newsletters/compare/v1.67.1...v1.67.2) (2023-07-04)
 
 

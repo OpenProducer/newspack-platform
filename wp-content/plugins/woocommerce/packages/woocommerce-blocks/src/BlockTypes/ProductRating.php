@@ -81,6 +81,15 @@ class ProductRating extends AbstractBlock {
 	}
 
 	/**
+	 * Get the frontend style handle for this block type.
+	 *
+	 * @return null
+	 */
+	protected function get_block_type_style() {
+		return null;
+	}
+
+	/**
 	 * Register the context.
 	 */
 	protected function get_block_type_uses_context() {
@@ -105,7 +114,7 @@ class ProductRating extends AbstractBlock {
 		$post_id = $block->context['postId'];
 		$product = wc_get_product( $post_id );
 
-		if ( $product ) {
+		if ( $product && $product->get_review_count() > 0 ) {
 			$product_reviews_count                    = $product->get_review_count();
 			$product_rating                           = $product->get_average_rating();
 			$parsed_attributes                        = $this->parse_attributes( $attributes );
@@ -123,8 +132,8 @@ class ProductRating extends AbstractBlock {
 			 * @param int    $count  Total number of ratings.
 			 * @return string
 			 */
-			$filter_rating_html = function( $html, $rating, $count ) use ( $product_rating, $product_reviews_count, $is_descendent_of_single_product_block, $is_descendent_of_single_product_template ) {
-				$product_permalink = get_permalink();
+			$filter_rating_html = function( $html, $rating, $count ) use ( $post_id, $product_rating, $product_reviews_count, $is_descendent_of_single_product_block, $is_descendent_of_single_product_template ) {
+				$product_permalink = get_permalink( $post_id );
 				$reviews_count     = $count;
 				$average_rating    = $rating;
 
@@ -201,5 +210,6 @@ class ProductRating extends AbstractBlock {
 				$rating_html
 			);
 		}
+		return '';
 	}
 }
