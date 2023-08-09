@@ -24,6 +24,7 @@ class PWA {
 		add_filter( 'pre_option_offline_browsing', '__return_true' );
 
 		add_filter( 'wp_service_worker_navigation_caching', [ __CLASS__, 'increase_network_timeout' ] );
+		add_filter( 'wp_service_worker_error_messages', [ __CLASS__, 'error_messages' ] );
 	}
 
 	/**
@@ -74,7 +75,7 @@ class PWA {
 	}
 
 	/**
-	 * By default, PWA serves the offline-cached page if a request takes longer than 2 seconds. 
+	 * By default, PWA serves the offline-cached page if a request takes longer than 2 seconds.
 	 * This is too short, especially for homepages with a lot of posts blocks.
 	 * 44 seconds is right before the 45-second PHP process timeout.
 	 *
@@ -84,6 +85,20 @@ class PWA {
 	public static function increase_network_timeout( $config ) {
 		$config['network_timeout_seconds'] = 44;
 		return $config;
+	}
+
+	/**
+	 * Modify error messages.
+	 *
+	 * @param array $messages Error messages.
+	 *
+	 * @return array Modified error messages.
+	 */
+	public static function error_messages( $messages ) {
+		if ( ! empty( $messages['serverOffline'] ) ) {
+			$messages['serverOffline'] = __( 'There has been a problem connecting with the server. Please check your internet connection or try again later.', 'newspack' );
+		}
+		return $messages;
 	}
 }
 PWA::init();

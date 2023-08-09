@@ -12,7 +12,7 @@ namespace Stripe;
  * @property string $id Unique identifier for the object.
  * @property string $object String representing the object's type. Objects of the same type share the same value.
  * @property null|string|\Stripe\StripeObject $application ID of the Connect Application that created the subscription.
- * @property null|float $application_fee_percent A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice subtotal that will be transferred to the application owner's Stripe account.
+ * @property null|float $application_fee_percent A non-negative decimal between 0 and 100, with at most two decimal places. This represents the percentage of the subscription invoice total that will be transferred to the application owner's Stripe account.
  * @property \Stripe\StripeObject $automatic_tax
  * @property int $billing_cycle_anchor Determines the date of the first full invoice, and, for plans with <code>month</code> or <code>year</code> intervals, the day of the month for subsequent invoices. The timestamp is in UTC format.
  * @property null|\Stripe\StripeObject $billing_thresholds Define thresholds at which an invoice will be sent, and the subscription advanced to a new billing period
@@ -63,14 +63,8 @@ class Subscription extends ApiResource
     use ApiOperations\Search;
     use ApiOperations\Update;
 
-    const PAYMENT_BEHAVIOR_ALLOW_INCOMPLETE = 'allow_incomplete';
-    const PAYMENT_BEHAVIOR_DEFAULT_INCOMPLETE = 'default_incomplete';
-    const PAYMENT_BEHAVIOR_ERROR_IF_INCOMPLETE = 'error_if_incomplete';
-    const PAYMENT_BEHAVIOR_PENDING_IF_INCOMPLETE = 'pending_if_incomplete';
-
-    const PRORATION_BEHAVIOR_ALWAYS_INVOICE = 'always_invoice';
-    const PRORATION_BEHAVIOR_CREATE_PRORATIONS = 'create_prorations';
-    const PRORATION_BEHAVIOR_NONE = 'none';
+    const COLLECTION_METHOD_CHARGE_AUTOMATICALLY = 'charge_automatically';
+    const COLLECTION_METHOD_SEND_INVOICE = 'send_invoice';
 
     const STATUS_ACTIVE = 'active';
     const STATUS_CANCELED = 'canceled';
@@ -114,6 +108,15 @@ class Subscription extends ApiResource
         return $this;
     }
 
+    const PAYMENT_BEHAVIOR_ALLOW_INCOMPLETE = 'allow_incomplete';
+    const PAYMENT_BEHAVIOR_DEFAULT_INCOMPLETE = 'default_incomplete';
+    const PAYMENT_BEHAVIOR_ERROR_IF_INCOMPLETE = 'error_if_incomplete';
+    const PAYMENT_BEHAVIOR_PENDING_IF_INCOMPLETE = 'pending_if_incomplete';
+
+    const PRORATION_BEHAVIOR_ALWAYS_INVOICE = 'always_invoice';
+    const PRORATION_BEHAVIOR_CREATE_PRORATIONS = 'create_prorations';
+    const PRORATION_BEHAVIOR_NONE = 'none';
+
     /**
      * @param null|array $params
      * @param null|array|string $opts
@@ -154,7 +157,7 @@ class Subscription extends ApiResource
      *
      * @throws \Stripe\Exception\ApiErrorException if the request fails
      *
-     * @return \Stripe\SearchResult<Subscription> the subscription search results
+     * @return \Stripe\SearchResult<\Stripe\Subscription> the subscription search results
      */
     public static function search($params = null, $opts = null)
     {

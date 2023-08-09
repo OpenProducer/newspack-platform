@@ -72,6 +72,7 @@ final class Reader_Activation {
 			\add_action( 'clear_auth_cookie', [ __CLASS__, 'clear_auth_reader_cookie' ] );
 			\add_action( 'set_auth_cookie', [ __CLASS__, 'clear_auth_intention_cookie' ] );
 			\add_filter( 'login_form_defaults', [ __CLASS__, 'add_auth_intention_to_login_form' ], 20 );
+			\add_action( 'wp_login', [ __CLASS__, 'login_set_reader_cookie' ], 10, 2 );
 			\add_action( 'resetpass_form', [ __CLASS__, 'set_reader_verified' ] );
 			\add_action( 'password_reset', [ __CLASS__, 'set_reader_verified' ] );
 			\add_action( 'password_reset', [ __CLASS__, 'set_reader_has_password' ] );
@@ -578,6 +579,18 @@ final class Reader_Activation {
 
 		// phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.cookies_setcookie
 		setcookie( self::AUTH_READER_COOKIE, $user->user_email, time() + HOUR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN, true );
+	}
+
+	/**
+	 * Set the reader cookie on wp login.
+	 *
+	 * @param string   $user_login User login.
+	 * @param \WP_User $user       User object.
+	 */
+	public static function login_set_reader_cookie( $user_login, $user ) {
+		if ( self::is_user_reader( $user ) ) {
+			self::set_auth_reader_cookie( $user );
+		}
 	}
 
 	/**
@@ -1468,7 +1481,6 @@ final class Reader_Activation {
 		\wp_clear_auth_cookie();
 		\wp_set_current_user( $user->ID );
 		\wp_set_auth_cookie( $user->ID, true );
-		self::set_auth_reader_cookie( $user );
 		\do_action( 'wp_login', $user->user_login, $user );
 		Logger::log( 'Logged in user ' . $user->ID );
 
@@ -1566,10 +1578,6 @@ final class Reader_Activation {
 				self::$is_new_reader_auth = true;
 				self::set_current_reader( $user_id );
 			}
-		}
-
-		if ( ! empty( $metadata ) ) {
-			\update_user_meta( $user_id, 'np_registration_metadata', $metadata );
 		}
 
 		// Note the user's login method for later use.

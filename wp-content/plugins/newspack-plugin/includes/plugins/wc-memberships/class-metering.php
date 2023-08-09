@@ -109,6 +109,7 @@ class Metering {
 				'use_more_tag'       => \get_post_meta( $gate_post_id, 'use_more_tag', true ),
 				'count'              => \get_post_meta( $gate_post_id, 'metering_anonymous_count', true ),
 				'period'             => \get_post_meta( $gate_post_id, 'metering_period', true ),
+				'gate_id'            => $gate_post_id,
 				'post_id'            => get_the_ID(),
 				'article_view'       => self::$article_view,
 			]
@@ -224,8 +225,10 @@ class Metering {
 			return self::$logged_in_metering_cache[ $post_id ];
 		}
 
+		$user_meta_key = self::METERING_META_KEY . '_' . $gate_post_id;
+
 		$updated_user_data  = false;
-		$user_metering_data = \get_user_meta( get_current_user_id(), self::METERING_META_KEY, true );
+		$user_metering_data = \get_user_meta( get_current_user_id(), $user_meta_key, true );
 		if ( ! is_array( $user_metering_data ) ) {
 			$user_metering_data = [];
 		}
@@ -253,7 +256,7 @@ class Metering {
 		}
 
 		if ( $updated_user_data ) {
-			\update_user_meta( get_current_user_id(), self::METERING_META_KEY, $user_metering_data );
+			\update_user_meta( get_current_user_id(), $user_meta_key, $user_metering_data );
 		}
 
 		// Allowed if the content has been accessed or the metering limit has not been reached.

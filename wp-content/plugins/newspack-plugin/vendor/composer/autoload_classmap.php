@@ -35,6 +35,7 @@ return array(
     'Newspack\\Data_Events\\Connectors\\Mailchimp' => $baseDir . '/includes/data-events/connectors/class-mailchimp.php',
     'Newspack\\Data_Events\\Popups' => $baseDir . '/includes/data-events/class-popups.php',
     'Newspack\\Data_Events\\Webhooks' => $baseDir . '/includes/data-events/class-webhooks.php',
+    'Newspack\\Data_Events\\Woo_User_Registration' => $baseDir . '/includes/data-events/class-woo-user-registration.php',
     'Newspack\\Donations' => $baseDir . '/includes/class-donations.php',
     'Newspack\\Emails' => $baseDir . '/includes/emails/class-emails.php',
     'Newspack\\Engagement_Wizard' => $baseDir . '/includes/wizards/class-engagement-wizard.php',

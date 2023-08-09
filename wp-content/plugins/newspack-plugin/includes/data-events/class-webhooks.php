@@ -534,7 +534,10 @@ final class Webhooks {
 		 */
 		$body = apply_filters( 'newspack_webhooks_request_body', $body, $endpoint_id );
 
-		\update_post_meta( $request_id, 'body', \wp_json_encode( $body ) );
+		// addslashes prevents JSON from breaking if the data contains quotes or another json encoded string inside it.
+		$body_value = addslashes( \wp_json_encode( $body ) );
+
+		\update_post_meta( $request_id, 'body', $body_value );
 		\update_post_meta( $request_id, 'action_name', $action_name );
 		\update_post_meta( $request_id, 'client_id', $action_name );
 

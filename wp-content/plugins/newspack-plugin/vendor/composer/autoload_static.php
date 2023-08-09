@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInita9dfb95b2cfe50fe3b5e1eb34129b317
+class ComposerStaticInit07ed99c576039b5e99b7caed1ca1dfd0
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -123,6 +123,7 @@ class ComposerStaticInita9dfb95b2cfe50fe3b5e1eb34129b317
         'Newspack\\Data_Events\\Connectors\\Mailchimp' => __DIR__ . '/../..' . '/includes/data-events/connectors/class-mailchimp.php',
         'Newspack\\Data_Events\\Popups' => __DIR__ . '/../..' . '/includes/data-events/class-popups.php',
         'Newspack\\Data_Events\\Webhooks' => __DIR__ . '/../..' . '/includes/data-events/class-webhooks.php',
+        'Newspack\\Data_Events\\Woo_User_Registration' => __DIR__ . '/../..' . '/includes/data-events/class-woo-user-registration.php',
         'Newspack\\Donations' => __DIR__ . '/../..' . '/includes/class-donations.php',
         'Newspack\\Emails' => __DIR__ . '/../..' . '/includes/emails/class-emails.php',
         'Newspack\\Engagement_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-engagement-wizard.php',
@@ -205,9 +206,9 @@ class ComposerStaticInita9dfb95b2cfe50fe3b5e1eb34129b317
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInita9dfb95b2cfe50fe3b5e1eb34129b317::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInita9dfb95b2cfe50fe3b5e1eb34129b317::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInita9dfb95b2cfe50fe3b5e1eb34129b317::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit07ed99c576039b5e99b7caed1ca1dfd0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit07ed99c576039b5e99b7caed1ca1dfd0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit07ed99c576039b5e99b7caed1ca1dfd0::$classMap;
 
         }, null, ClassLoader::class);
     }

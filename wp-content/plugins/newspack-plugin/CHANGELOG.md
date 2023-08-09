@@ -1,3 +1,74 @@
+# [2.3.0](https://github.com/Automattic/newspack-plugin/compare/v2.2.5...v2.3.0) (2023-08-07)
+
+
+### Bug Fixes
+
+* avoid webhooks to break with json encoded data ([#2579](https://github.com/Automattic/newspack-plugin/issues/2579)) ([8fdbc74](https://github.com/Automattic/newspack-plugin/commit/8fdbc74f3d9e1834e41c906528ee9d8cf178d2d2))
+* **content-gate:** custom filter for 'do_blocks()' ([#2577](https://github.com/Automattic/newspack-plugin/issues/2577)) ([98b5f9f](https://github.com/Automattic/newspack-plugin/commit/98b5f9f6d1c27e598c324c5a2504ed48dac99c62))
+* **content-gate:** custom filter for 'do_blocks()' ([#2577](https://github.com/Automattic/newspack-plugin/issues/2577)) ([b25c010](https://github.com/Automattic/newspack-plugin/commit/b25c010d5c7094412ff0f024677ab03dfdab9f41))
+* **content-gate:** use custom filter for gate content ([#2551](https://github.com/Automattic/newspack-plugin/issues/2551)) ([714cfec](https://github.com/Automattic/newspack-plugin/commit/714cfec4792db5699935eda9a8e3c5ea950014eb))
+* ensure generated id always have given length ([#2557](https://github.com/Automattic/newspack-plugin/issues/2557)) ([84c018b](https://github.com/Automattic/newspack-plugin/commit/84c018bb4c3f485209296a97e0f15bfc5290ef50))
+* ensure not null in currency string ([#2566](https://github.com/Automattic/newspack-plugin/issues/2566)) ([fdd84a9](https://github.com/Automattic/newspack-plugin/commit/fdd84a9f868ef3a6c4e3a2ed8de4d31bce70ce0d))
+* **pwa:** improve "server offline" message ([#2550](https://github.com/Automattic/newspack-plugin/issues/2550)) ([dbe4519](https://github.com/Automattic/newspack-plugin/commit/dbe451944675282479464ffbc76586af9cef8ba8))
+* **ras:** reorganize script initialization ([#2576](https://github.com/Automattic/newspack-plugin/issues/2576)) ([76e0e5d](https://github.com/Automattic/newspack-plugin/commit/76e0e5dae764d41cbff7a2f0e78bd7e363ed98f9))
+* **reader-data:** ensure author on 'article_view' push ([#2584](https://github.com/Automattic/newspack-plugin/issues/2584)) ([fbe62c3](https://github.com/Automattic/newspack-plugin/commit/fbe62c3ef98116f555d8e5c5d07d0c18b1a64d52))
+
+
+### Features
+
+* add an image size control for the RSS images ([#2553](https://github.com/Automattic/newspack-plugin/issues/2553)) ([dbc8358](https://github.com/Automattic/newspack-plugin/commit/dbc83580551212b144b07d7d0a6c6301ddab746b))
+* **auth:** listen cookie changes for store state ([#2569](https://github.com/Automattic/newspack-plugin/issues/2569)) ([4df1a95](https://github.com/Automattic/newspack-plugin/commit/4df1a951f6110df7ed0e1131279876b1117b1b9a))
+* **content-gate:** support gate per plan ([#2531](https://github.com/Automattic/newspack-plugin/issues/2531)) ([eaf5d50](https://github.com/Automattic/newspack-plugin/commit/eaf5d501514bd18914a7fc7c33837e7977954cde))
+* Remove GA Fivetran connection ([2100013](https://github.com/Automattic/newspack-plugin/commit/210001340db82964973a0947769e6702742011be))
+* trigger reader_registered for Woo checkout ([#2527](https://github.com/Automattic/newspack-plugin/issues/2527)) ([8e2f244](https://github.com/Automattic/newspack-plugin/commit/8e2f244c11bb1f577ad730001024b5f45a54595b))
+* update analytics wizard ([#2580](https://github.com/Automattic/newspack-plugin/issues/2580)) ([ec89736](https://github.com/Automattic/newspack-plugin/commit/ec89736f8a61acb768924009e9dcae68bd0d0286))
+
+# [2.3.0-alpha.6](https://github.com/Automattic/newspack-plugin/compare/v2.3.0-alpha.5...v2.3.0-alpha.6) (2023-08-07)
+
+
+### Bug Fixes
+
+* avoid webhooks to break with json encoded data ([#2579](https://github.com/Automattic/newspack-plugin/issues/2579)) ([8fdbc74](https://github.com/Automattic/newspack-plugin/commit/8fdbc74f3d9e1834e41c906528ee9d8cf178d2d2))
+* **content-gate:** custom filter for 'do_blocks()' ([#2577](https://github.com/Automattic/newspack-plugin/issues/2577)) ([98b5f9f](https://github.com/Automattic/newspack-plugin/commit/98b5f9f6d1c27e598c324c5a2504ed48dac99c62))
+* **content-gate:** custom filter for 'do_blocks()' ([#2577](https://github.com/Automattic/newspack-plugin/issues/2577)) ([b25c010](https://github.com/Automattic/newspack-plugin/commit/b25c010d5c7094412ff0f024677ab03dfdab9f41))
+* ensure not null in currency string ([#2566](https://github.com/Automattic/newspack-plugin/issues/2566)) ([fdd84a9](https://github.com/Automattic/newspack-plugin/commit/fdd84a9f868ef3a6c4e3a2ed8de4d31bce70ce0d))
+* **ras:** reorganize script initialization ([#2576](https://github.com/Automattic/newspack-plugin/issues/2576)) ([76e0e5d](https://github.com/Automattic/newspack-plugin/commit/76e0e5dae764d41cbff7a2f0e78bd7e363ed98f9))
+* **reader-data:** ensure author on 'article_view' push ([#2584](https://github.com/Automattic/newspack-plugin/issues/2584)) ([fbe62c3](https://github.com/Automattic/newspack-plugin/commit/fbe62c3ef98116f555d8e5c5d07d0c18b1a64d52))
+
+
+### Features
+
+* **auth:** listen cookie changes for store state ([#2569](https://github.com/Automattic/newspack-plugin/issues/2569)) ([4df1a95](https://github.com/Automattic/newspack-plugin/commit/4df1a951f6110df7ed0e1131279876b1117b1b9a))
+* update analytics wizard ([#2580](https://github.com/Automattic/newspack-plugin/issues/2580)) ([ec89736](https://github.com/Automattic/newspack-plugin/commit/ec89736f8a61acb768924009e9dcae68bd0d0286))
+
+# [2.3.0-alpha.5](https://github.com/Automattic/newspack-plugin/compare/v2.3.0-alpha.4...v2.3.0-alpha.5) (2023-08-02)
+
+
+### Bug Fixes
+
+* check for the ga4 connector ([#2587](https://github.com/Automattic/newspack-plugin/issues/2587)) ([4fc21ab](https://github.com/Automattic/newspack-plugin/commit/4fc21abd6d172665b7ef7d8f4dcac2020fbaf684))
+
+## [2.2.5](https://github.com/Automattic/newspack-plugin/compare/v2.2.4...v2.2.5) (2023-08-02)
+
+
+### Bug Fixes
+
+* check for the ga4 connector ([#2587](https://github.com/Automattic/newspack-plugin/issues/2587)) ([4fc21ab](https://github.com/Automattic/newspack-plugin/commit/4fc21abd6d172665b7ef7d8f4dcac2020fbaf684))
+
+## [2.2.4](https://github.com/Automattic/newspack-plugin/compare/v2.2.3...v2.2.4) (2023-07-24)
+
+
+### Bug Fixes
+
+* **wp-6.3:** destructured lodash module import error ([#2578](https://github.com/Automattic/newspack-plugin/issues/2578)) ([18ccf54](https://github.com/Automattic/newspack-plugin/commit/18ccf540bef664cee9afeb832d0764145cd398b6))
+
+## [2.2.3](https://github.com/Automattic/newspack-plugin/compare/v2.2.2...v2.2.3) (2023-07-21)
+
+
+### Bug Fixes
+
+* **auth:** restore sign-in otp ui ([#2568](https://github.com/Automattic/newspack-plugin/issues/2568)) ([16c4b02](https://github.com/Automattic/newspack-plugin/commit/16c4b024fdedaa9aee7b2f9a5d4fa812a0184ae0))
+
 ## [2.2.2](https://github.com/Automattic/newspack-plugin/compare/v2.2.1...v2.2.2) (2023-07-20)
 
 

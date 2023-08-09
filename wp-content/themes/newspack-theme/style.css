@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.75.1
+Version: 1.77.0
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -5779,6 +5779,9 @@ hr.has-background.is-style-dots::before {
   font-family: var(--newspack-theme-font-heading);
   font-size: var(--newspack-theme-font-size-sm);
 }
+.wp-block-file.has-background {
+  padding: 1rem;
+}
 .wp-block-file .wp-block-file__button {
   display: table;
   transition: background 150ms ease-in-out;
@@ -5834,6 +5837,10 @@ hr.has-background.is-style-dots::before {
 }
 .wp-block-search.wp-block-search__button-inside .has-icon:not(.has-text-color) {
   color: var(--newspack-theme-color-text-main);
+}
+.wp-block-search__button-behavior-expand:not(.wp-block-search__searchfield-hidden) .wp-block-search__button {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
 }
 
 .wp-block-code {
@@ -5909,6 +5916,49 @@ hr.has-background.is-style-dots::before {
 
 .wp-block-loginout label {
   display: block;
+}
+
+.wp-block-details {
+  border: solid var(--newspack-theme-color-border);
+  border-width: 1px 0;
+  padding: 0.5rem 1.5rem;
+}
+.wp-block-details > :not(summary) {
+  margin-bottom: 16px;
+  margin-top: 16px;
+}
+.wp-block-details summary {
+  font-family: var(--newspack-theme-font-heading);
+  margin-left: -1rem;
+}
+.wp-block-details + .wp-block-details {
+  border-top: 0;
+  margin-top: -32px;
+}
+
+.wp-block-footnotes li:focus {
+  outline: thin dotted;
+}
+
+.h-stk sup.fn a,
+.h-stk .wp-block-footnotes li {
+  scroll-margin-top: 115px;
+}
+@media only screen and (min-width: 782px) {
+  .h-stk sup.fn a,
+  .h-stk .wp-block-footnotes li {
+    scroll-margin-top: 180px;
+  }
+}
+@media only screen and (min-width: 782px) {
+  .h-stk.h-dh sup.fn a, .h-stk.h-dh .wp-block-footnotes li {
+    scroll-margin-top: 210px;
+  }
+}
+@media only screen and (min-width: 782px) {
+  .h-stk.h-sub:not(.home) sup.fn a, .h-stk.h-sub:not(.home) .wp-block-footnotes li {
+    scroll-margin-top: 100px;
+  }
 }
 
 .wp-block-navigation a {

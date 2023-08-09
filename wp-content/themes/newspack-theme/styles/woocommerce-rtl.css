@@ -1172,7 +1172,8 @@ table.woocommerce-table--order-details.shop_table,
 .woocommerce-product-attributes,
 .woocommerce-grouped-product-list.group_table,
 .woocommerce-cart-form .woocommerce-cart-form__contents,
-.cart-collaterals .shop_table_responsive {
+.cart-collaterals .shop_table_responsive,
+.woocommerce-table--order-downloads {
   border-top: 1px solid var(--newspack-theme-color-border);
 }
 .woocommerce-checkout-review-order-table thead th,
@@ -1188,7 +1189,9 @@ table.woocommerce-table--order-details.shop_table thead td,
 .woocommerce-cart-form .woocommerce-cart-form__contents thead th,
 .woocommerce-cart-form .woocommerce-cart-form__contents thead td,
 .cart-collaterals .shop_table_responsive thead th,
-.cart-collaterals .shop_table_responsive thead td {
+.cart-collaterals .shop_table_responsive thead td,
+.woocommerce-table--order-downloads thead th,
+.woocommerce-table--order-downloads thead td {
   background-color: var(--newspack-theme-color-bg-pre);
   font-weight: bold;
 }
@@ -1198,7 +1201,8 @@ table.woocommerce-table--order-details.shop_table td,
 .woocommerce-product-attributes td,
 .woocommerce-grouped-product-list.group_table td,
 .woocommerce-cart-form .woocommerce-cart-form__contents td,
-.cart-collaterals .shop_table_responsive td {
+.cart-collaterals .shop_table_responsive td,
+.woocommerce-table--order-downloads td {
   font-weight: normal;
 }
 .woocommerce-checkout-review-order-table td,
@@ -1214,7 +1218,9 @@ table.woocommerce-table--order-details.shop_table th,
 .woocommerce-cart-form .woocommerce-cart-form__contents td,
 .woocommerce-cart-form .woocommerce-cart-form__contents th,
 .cart-collaterals .shop_table_responsive td,
-.cart-collaterals .shop_table_responsive th {
+.cart-collaterals .shop_table_responsive th,
+.woocommerce-table--order-downloads td,
+.woocommerce-table--order-downloads th {
   border-color: var(--newspack-theme-color-border);
   border-width: 0 0 1px;
   padding: 0.5rem;
@@ -1225,7 +1231,8 @@ table.woocommerce-table--order-details.shop_table tfoot th,
 .woocommerce-product-attributes tfoot th,
 .woocommerce-grouped-product-list.group_table tfoot th,
 .woocommerce-cart-form .woocommerce-cart-form__contents tfoot th,
-.cart-collaterals .shop_table_responsive tfoot th {
+.cart-collaterals .shop_table_responsive tfoot th,
+.woocommerce-table--order-downloads tfoot th {
   font-weight: normal;
 }
 
@@ -1365,10 +1372,6 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
   .woocommerce table.shop_table_responsive tr,
   .woocommerce-page table.shop_table_responsive tr {
     margin: 0 0 1.5rem;
-  }
-  .woocommerce table.shop_table_responsive tr:first-child,
-  .woocommerce-page table.shop_table_responsive tr:first-child {
-    border-top: 1px solid;
   }
   .woocommerce table.shop_table_responsive tr:last-child,
   .woocommerce-page table.shop_table_responsive tr:last-child {

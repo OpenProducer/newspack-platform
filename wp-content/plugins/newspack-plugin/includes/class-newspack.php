@@ -85,6 +85,7 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-popups.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/ga4/class-ga4.php';
 		include_once NEWSPACK_ABSPATH . 'includes/data-events/connectors/class-mailchimp.php';
+		include_once NEWSPACK_ABSPATH . 'includes/data-events/class-woo-user-registration.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-api.php';
 		include_once NEWSPACK_ABSPATH . 'includes/class-profile.php';
 		include_once NEWSPACK_ABSPATH . 'includes/analytics/class-analytics.php';

@@ -146,6 +146,8 @@ class Donations {
 
 	/**
 	 * Get the donation currency symbol.
+	 *
+	 * @return string Currency symbol.
 	 */
 	private static function get_currency_symbol() {
 		switch ( self::get_platform_slug() ) {
@@ -157,9 +159,8 @@ class Donations {
 			case 'stripe':
 				$currency = Stripe_Connection::get_stripe_data()['currency'];
 				return newspack_get_currency_symbol( $currency );
-			default:
-				return '$';
 		}
+		return '$';
 	}
 
 	/**

@@ -291,6 +291,7 @@ final class Reader_Data {
 		 * Article view activity.
 		 */
 		if ( is_singular( 'post' ) ) {
+			global $post;
 			$activity = [
 				'action' => 'article_view',
 				'data'   => [
@@ -298,7 +299,7 @@ final class Reader_Data {
 					'permalink'  => get_permalink(),
 					'categories' => wp_get_post_categories( get_the_ID(), [ 'fields' => 'ids' ] ),
 					'tags'       => wp_get_post_tags( get_the_ID(), [ 'fields' => 'ids' ] ),
-					'author'     => get_the_author(),
+					'author'     => $post->post_author,
 				],
 			];
 

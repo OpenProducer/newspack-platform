@@ -1,3 +1,17 @@
+## [1.43.1](https://github.com/Automattic/newspack-ads/compare/v1.43.0...v1.43.1) (2023-08-07)
+
+
+### Bug Fixes
+
+* **gam:** update api version ([#676](https://github.com/Automattic/newspack-ads/issues/676)) ([6f3687d](https://github.com/Automattic/newspack-ads/commit/6f3687d7b4292e9553a2fbbb97ca54001a39a421))
+
+## [1.43.1-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.43.0...v1.43.1-alpha.1) (2023-07-20)
+
+
+### Bug Fixes
+
+* **gam:** update api version ([#676](https://github.com/Automattic/newspack-ads/issues/676)) ([6f3687d](https://github.com/Automattic/newspack-ads/commit/6f3687d7b4292e9553a2fbbb97ca54001a39a421))
+
 # [1.43.0](https://github.com/Automattic/newspack-ads/compare/v1.42.5...v1.43.0) (2023-05-08)
 
 

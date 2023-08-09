@@ -79,121 +79,69 @@ class Analytics_Wizard extends Wizard {
 	 * Register the endpoints needed for the wizard screens.
 	 */
 	public function register_api_endpoints() {
-		// Create a custom dimension.
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/analytics/custom-dimensions',
+			'/wizard/analytics/ga4-credentials',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'create_custom_dimension' ],
+				'callback'            => [ $this, 'api_set_ga4_credentials' ],
 				'permission_callback' => [ $this, 'api_permissions_check' ],
 				'args'                => [
-					'name'  => [
+					'measurement_id'              => [
 						'sanitize_callback' => 'sanitize_text_field',
+						'validate_callback' => [ $this, 'validate_measurement_id' ],
 					],
-					'scope' => [
+					'measurement_protocol_secret' => [
 						'sanitize_callback' => 'sanitize_text_field',
 					],
 				],
 			]
 		);
+	}
 
-		// Set the custom dimensions.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/analytics/custom-dimensions/(?P<id>[\w:]+)',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_set_custom_dimensions' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'id'   => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-					'role' => [
-						'sanitize_callback' => 'sanitize_text_field',
-						'validate_callback' => [ __CLASS__, 'validate_custom_dimension_name' ],
-					],
-				],
-			]
-		);
+	/**
+	 * Validates the Measurement ID
+	 *
+	 * @param string $value The value to validate.
+	 * @return bool
+	 */
+	public function validate_measurement_id( $value ) {
+		return is_string( $value ) && strpos( $value, 'G-' ) === 0;
+	}
 
-		// Set custom events.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/analytics/custom-events',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'set_custom_events' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'events' => [
-						'type'     => 'array',
-						'required' => true,
-						'items'    => [
-							'type'       => 'object',
-							'properties' => [
-								'event_name'      => [
-									'type' => 'string',
-								],
-								'event_category'  => [
-									'type' => 'string',
-								],
-								'event_label'     => [
-									'type' => 'string',
-								],
-								'on'              => [
-									'type' => 'string',
-									'enum' => [ 'click', 'submit' ],
-								],
-								'element'         => [
-									'type' => 'string',
-								],
-								'amp_element'     => [
-									'type' => 'string',
-								],
-								'non_interaction' => [
-									'type' => 'boolean',
-								],
-								'is_active'       => [
-									'type' => 'boolean',
-								],
-							],
-							'required'   => [ 'event_name', 'event_category', 'on', 'element' ],
-						],
-					],
-				],
-			]
-		);
+	/**
+	 * Gets the credentials for the GA4 API.
+	 *
+	 * @return array
+	 */
+	public static function get_ga4_credentials() {
+		$measurement_protocol_secret = get_option( 'ga4_measurement_protocol_secret', '' );
+		$measurement_id              = get_option( 'ga4_measurement_id', '' );
+		return compact( 'measurement_protocol_secret', 'measurement_id' );
+	}
 
-		// NTG Events.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/analytics/ntg',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'api_ntg_events_status' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/analytics/ntg',
-			[
-				'methods'             => \WP_REST_Server::EDITABLE,
-				'callback'            => [ $this, 'api_enable_ntg_events' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-			]
-		);
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/wizard/analytics/ntg',
-			[
-				'methods'             => \WP_REST_Server::DELETABLE,
-				'callback'            => [ $this, 'api_disable_ntg_events' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-			]
-		);
+	/**
+	 * Updates the GA4 crendetials
+	 *
+	 * @param WP_REST_Request $request The REST request.
+	 * @return WP_REST_Response|WP_Error
+	 */
+	public function api_set_ga4_credentials( $request ) {
+		$measurement_id              = $request->get_param( 'measurement_id' );
+		$measurement_protocol_secret = $request->get_param( 'measurement_protocol_secret' );
+
+		if ( ! $measurement_id || ! $measurement_protocol_secret ) {
+			return new \WP_Error(
+				'newspack_analytics_wizard_invalid_params',
+				\esc_html__( 'Invalid parameters.', 'newspack' ),
+				[ 'status' => 400 ]
+			);
+		}
+
+		update_option( 'ga4_measurement_id', $measurement_id );
+		update_option( 'ga4_measurement_protocol_secret', $measurement_protocol_secret );
+
+		return rest_ensure_response( $this->get_ga4_credentials() );
 	}
 
 	/**
@@ -213,33 +161,12 @@ class Analytics_Wizard extends Wizard {
 			NEWSPACK_PLUGIN_VERSION,
 			true
 		);
-		$custom_dimensions          = self::list_custom_dimensions();
-		$analytics_connection_error = null;
-		if ( is_wp_error( $custom_dimensions ) ) {
-			$analytics_connection_error = $custom_dimensions->get_error_message();
-		}
-		$custom_events = get_option( self::$custom_events_option_name, '[]' );
+
 		\wp_localize_script(
 			'newspack-analytics-wizard',
 			'newspack_analytics_wizard_data',
 			[
-				'customEvents'             => json_decode( $custom_events ),
-				'customDimensions'         => $custom_dimensions,
-				'analyticsConnectionError' => $analytics_connection_error,
-				'customDimensionsOptions'  => array_merge(
-					[
-						[
-							'value' => '',
-							'label' => __( 'none', 'newspack' ),
-						],
-					],
-					array_map(
-						function ( $item ) {
-							return $item['option'];
-						},
-						self::get_custom_dimensions_config()
-					)
-				),
+				'ga4_credentials' => $this->get_ga4_credentials(),
 			]
 		);
 
@@ -448,17 +375,6 @@ class Analytics_Wizard extends Wizard {
 	}
 
 	/**
-	 * Set custom dimension as the category-reporting dimension.
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
-	 */
-	public static function api_set_custom_dimensions( $request ) {
-		self::set_custom_dimension( $request['id'], self::get_custom_dimensions_option_name( $request['role'] ) );
-		return self::list_custom_dimensions();
-	}
-
-	/**
 	 * Set custom dimension option.
 	 *
 	 * @param string $dimension_id Dimension id.
@@ -512,19 +428,6 @@ class Analytics_Wizard extends Wizard {
 	}
 
 	/**
-	 * NTG events status.
-	 *
-	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
-	 */
-	public static function api_ntg_events_status() {
-		return rest_ensure_response(
-			[
-				'enabled' => self::ntg_events_enabled(),
-			]
-		);
-	}
-
-	/**
 	 * Enable NTG events.
 	 *
 	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
@@ -537,16 +440,4 @@ class Analytics_Wizard extends Wizard {
 		}
 	}
 
-	/**
-	 * Disable NTG events.
-	 *
-	 * @return Object|WP_Error Object on success, or WP_Error object on failure.
-	 */
-	public static function api_disable_ntg_events() {
-		if ( update_option( self::$ntg_events_option_name, 'disabled' ) ) {
-			return self::api_ntg_events_status();
-		} else {
-			return new WP_Error( 'newspack_analytics', __( 'Error when setting NTG events status.', 'newspack' ) );
-		}
-	}
 }
