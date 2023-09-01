@@ -184,6 +184,9 @@ class Newspack_Popups_Exporter {
 		if ( ! empty( $prompt['campaign_groups'] ) ) {
 			$prompt['campaign_groups'] = $this->sanitize_campaign_groups( $prompt['campaign_groups'] );
 		}
+		if ( ! empty( $prompt['segments'] ) ) {
+			$prompt['segments'] = $this->sanitize_segments( $prompt['segments'] );
+		}
 
 		// There was a bug that was saving some overlay_sizes as full instead of full-width. Let's take this into account and fix it.
 		if ( isset( $prompt['options']['overlay_size'] ) && 'full' === $prompt['options']['overlay_size'] ) {
@@ -240,6 +243,18 @@ class Newspack_Popups_Exporter {
 	 */
 	private function sanitize_campaign_groups( $campaign_groups ) {
 		return $this->sanitize_terms( $campaign_groups, Newspack_Popups::NEWSPACK_POPUPS_TAXONOMY );
+	}
+
+	/**
+	 * Sanitizes an array of Segments
+	 *
+	 * @see self::sanitize_terms
+	 *
+	 * @param int[]|WP_Term[] $segments An array of segments IDs or WP_Term objects.
+	 * @return array
+	 */
+	private function sanitize_segments( $segments ) {
+		return $this->sanitize_terms( $segments, Newspack_Segments_Model::TAX_SLUG );
 	}
 
 	/**

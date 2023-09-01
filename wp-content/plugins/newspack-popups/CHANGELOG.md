@@ -1,3 +1,63 @@
+# [2.23.0](https://github.com/Automattic/newspack-popups/compare/v2.22.0...v2.23.0) (2023-08-24)
+
+
+### Bug Fixes
+
+* account for frequency presets in printed config ([#1203](https://github.com/Automattic/newspack-popups/issues/1203)) ([a97bc8f](https://github.com/Automattic/newspack-popups/commit/a97bc8fdb187799bc4b9bc0fdb842de8396d5e3b))
+* add .hidden styles for above header prompts ([#1207](https://github.com/Automattic/newspack-popups/issues/1207)) ([a19d64d](https://github.com/Automattic/newspack-popups/commit/a19d64dcd1a3b8cdd7cd9cc55839a60269b9e30b))
+* ensure url param segment is set ([#1197](https://github.com/Automattic/newspack-popups/issues/1197)) ([dc6c130](https://github.com/Automattic/newspack-popups/commit/dc6c13027356dd6a0dbacddd654745cbe697bccf))
+* eslint new rule declaration-block-no-redundant-longhand-properties ([d1bf215](https://github.com/Automattic/newspack-popups/commit/d1bf2158999e18c8329a008b2e78fb2c7cdbb80a))
+* include missing file ([#1194](https://github.com/Automattic/newspack-popups/issues/1194)) ([d5fe344](https://github.com/Automattic/newspack-popups/commit/d5fe34425340b04c459d6f5a6f2ad5c7740ac12b))
+* move the close button when Hide Padding is enabled ([#1165](https://github.com/Automattic/newspack-popups/issues/1165)) ([20d17d9](https://github.com/Automattic/newspack-popups/commit/20d17d94758d3e53508a02f4cbbde9e36f4bc628))
+* remove string from overlay prompt ([#1204](https://github.com/Automattic/newspack-popups/issues/1204)) ([232f05a](https://github.com/Automattic/newspack-popups/commit/232f05a6badb06a155ddac4ad94d354f0bde3bdc))
+
+
+### Features
+
+* add segmentation README and more useful info to debug object ([#1195](https://github.com/Automattic/newspack-popups/issues/1195)) ([b501d9a](https://github.com/Automattic/newspack-popups/commit/b501d9adb8d5d095b77a3c7dca59926cc78cdcb6))
+* campaigns segmentation API rearchitecture ([#1192](https://github.com/Automattic/newspack-popups/issues/1192)) ([d554151](https://github.com/Automattic/newspack-popups/commit/d554151bfd05d7278d86825385d337847956b037)), closes [#1155](https://github.com/Automattic/newspack-popups/issues/1155) [#1166](https://github.com/Automattic/newspack-popups/issues/1166) [#1167](https://github.com/Automattic/newspack-popups/issues/1167) [#1159](https://github.com/Automattic/newspack-popups/issues/1159) [#1175](https://github.com/Automattic/newspack-popups/issues/1175) [#1169](https://github.com/Automattic/newspack-popups/issues/1169)
+
+# [2.23.0-alpha.4](https://github.com/Automattic/newspack-popups/compare/v2.23.0-alpha.3...v2.23.0-alpha.4) (2023-08-23)
+
+
+### Bug Fixes
+
+* add .hidden styles for above header prompts ([#1207](https://github.com/Automattic/newspack-popups/issues/1207)) ([a19d64d](https://github.com/Automattic/newspack-popups/commit/a19d64dcd1a3b8cdd7cd9cc55839a60269b9e30b))
+* eslint new rule declaration-block-no-redundant-longhand-properties ([d1bf215](https://github.com/Automattic/newspack-popups/commit/d1bf2158999e18c8329a008b2e78fb2c7cdbb80a))
+
+# [2.23.0-alpha.3](https://github.com/Automattic/newspack-popups/compare/v2.23.0-alpha.2...v2.23.0-alpha.3) (2023-08-21)
+
+
+### Bug Fixes
+
+* account for frequency presets in printed config ([#1203](https://github.com/Automattic/newspack-popups/issues/1203)) ([a97bc8f](https://github.com/Automattic/newspack-popups/commit/a97bc8fdb187799bc4b9bc0fdb842de8396d5e3b))
+* ensure url param segment is set ([#1197](https://github.com/Automattic/newspack-popups/issues/1197)) ([dc6c130](https://github.com/Automattic/newspack-popups/commit/dc6c13027356dd6a0dbacddd654745cbe697bccf))
+* remove string from overlay prompt ([#1204](https://github.com/Automattic/newspack-popups/issues/1204)) ([232f05a](https://github.com/Automattic/newspack-popups/commit/232f05a6badb06a155ddac4ad94d354f0bde3bdc))
+
+
+### Features
+
+* add segmentation README and more useful info to debug object ([#1195](https://github.com/Automattic/newspack-popups/issues/1195)) ([b501d9a](https://github.com/Automattic/newspack-popups/commit/b501d9adb8d5d095b77a3c7dca59926cc78cdcb6))
+
+# [2.23.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.23.0-alpha.1...v2.23.0-alpha.2) (2023-08-18)
+
+
+### Bug Fixes
+
+* include missing file ([#1194](https://github.com/Automattic/newspack-popups/issues/1194)) ([d5fe344](https://github.com/Automattic/newspack-popups/commit/d5fe34425340b04c459d6f5a6f2ad5c7740ac12b))
+
+# [2.23.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.22.0...v2.23.0-alpha.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* move the close button when Hide Padding is enabled ([#1165](https://github.com/Automattic/newspack-popups/issues/1165)) ([20d17d9](https://github.com/Automattic/newspack-popups/commit/20d17d94758d3e53508a02f4cbbde9e36f4bc628))
+
+
+### Features
+
+* campaigns segmentation API rearchitecture ([#1192](https://github.com/Automattic/newspack-popups/issues/1192)) ([d554151](https://github.com/Automattic/newspack-popups/commit/d554151bfd05d7278d86825385d337847956b037)), closes [#1155](https://github.com/Automattic/newspack-popups/issues/1155) [#1166](https://github.com/Automattic/newspack-popups/issues/1166) [#1167](https://github.com/Automattic/newspack-popups/issues/1167) [#1159](https://github.com/Automattic/newspack-popups/issues/1159) [#1175](https://github.com/Automattic/newspack-popups/issues/1175) [#1169](https://github.com/Automattic/newspack-popups/issues/1169)
+
 # [2.22.0](https://github.com/Automattic/newspack-popups/compare/v2.21.1...v2.22.0) (2023-07-17)
 
 

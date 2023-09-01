@@ -171,17 +171,6 @@ class Newspack_Popups_Configuration_Manager extends Configuration_Manager {
 	}
 
 	/**
-	 * Get segment's potential reach.
-	 *
-	 * @param object $config Segment configuration.
-	 */
-	public function get_segment_reach( $config ) {
-		return $this->is_configured() ?
-			\Newspack_Popups_Segmentation::get_segment_reach( $config ) :
-			$this->unconfigured_error();
-	}
-
-	/**
 	 * Sort all segments.
 	 *
 	 * @param object $segment_ids Sorted array of segment IDs.

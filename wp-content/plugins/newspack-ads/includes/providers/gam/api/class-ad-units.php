@@ -15,6 +15,7 @@ use Google\AdsApi\AdManager\v202305\InventoryService;
 use Google\AdsApi\AdManager\v202305\Size;
 use Google\AdsApi\AdManager\v202305\EnvironmentType;
 use Google\AdsApi\AdManager\v202305\AdUnit;
+use Google\AdsApi\AdManager\v202305\AdUnitParent;
 use Google\AdsApi\AdManager\v202305\AdUnitSize;
 use Google\AdsApi\AdManager\v202305\AdUnitTargetWindow;
 use Google\AdsApi\AdManager\v202305\ArchiveAdUnits as ArchiveAdUnitsAction;
@@ -116,6 +117,21 @@ final class Ad_Units extends Api_Object {
 	}
 
 	/**
+	 * Get serialized ad unit parent.
+	 *
+	 * @param AdUnitParent $parent An ad unit parent.
+	 *
+	 * @return array
+	 */
+	public static function get_serialized_parent( $parent ) {
+		return [
+			'id'   => $parent->getId(),
+			'name' => $parent->getName(),
+			'code' => $parent->getAdUnitCode(),
+		];
+	}
+
+	/**
 	 * Serialize Ad Unit.
 	 *
 	 * @param AdUnit $gam_ad_unit An AdUnit.
@@ -123,8 +139,20 @@ final class Ad_Units extends Api_Object {
 	 * @return array Ad Unit configuration.
 	 */
 	private function get_serialized_ad_unit( $gam_ad_unit ) {
+		$path = array_map( [ __CLASS__, 'get_serialized_parent' ], $gam_ad_unit->getParentPath() );
+		// Remove path that matches `ca-pub-<int>` pattern.
+		$path = array_values(
+			array_filter(
+				$path,
+				function( $parent ) {
+					return ! preg_match( '/^ca-pub-\d+$/', $parent['code'] );
+				}
+			)
+		);
+
 		$ad_unit = [
 			'id'     => $gam_ad_unit->getId(),
+			'path'   => $path,
 			'code'   => $gam_ad_unit->getAdUnitCode(),
 			'status' => $gam_ad_unit->getStatus(),
 			'name'   => $gam_ad_unit->getName(),

@@ -32,7 +32,7 @@ class Segments extends Schema {
 				],
 				'id'   => [
 					'name'     => 'id',
-					'type'     => 'string',
+					'type'     => 'integer',
 					'required' => true,
 				],
 			],

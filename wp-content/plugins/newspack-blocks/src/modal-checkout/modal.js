@@ -57,6 +57,7 @@ domReady( () => {
 	modalCheckoutInput.name = 'modal_checkout';
 	modalCheckoutInput.value = '1';
 	const modalContent = modalCheckout.querySelector( '.newspack-blocks-checkout-modal__content' );
+	const initialHeight = modalContent.clientHeight + 'px';
 	const iframe = document.createElement( 'iframe' );
 	iframe.name = iframeName;
 	modalContent.appendChild( iframe );
@@ -69,6 +70,8 @@ domReady( () => {
 	closeButtons.forEach( button => {
 		button.addEventListener( 'click', ev => {
 			ev.preventDefault();
+			modalContent.style.height = initialHeight;
+			spinner.style.display = 'flex';
 			closeCheckout( modalCheckout );
 		} );
 	} );
@@ -129,6 +132,7 @@ domReady( () => {
 					const contentRect = entries[ 0 ].contentRect;
 					if ( contentRect ) {
 						modalContent.style.height = contentRect.top + contentRect.bottom + 'px';
+						spinner.style.display = 'none';
 					}
 				} );
 				iframe.addEventListener( 'load', () => {
@@ -144,11 +148,30 @@ domReady( () => {
 							ras.setAuthenticated( true );
 						}
 					}
-					const container = iframe.contentWindow.document.querySelector(
-						'#newspack_modal_checkout'
-					);
-					if ( container ) iframeResizeObserver.observe( container );
-					spinner.style.display = 'none';
+					const container = iframe.contentDocument.querySelector( '#newspack_modal_checkout' );
+					if ( container ) {
+						iframeResizeObserver.observe( container );
+					}
+					const innerButtons = [
+						...iframe.contentDocument.querySelectorAll( '.modal-continue, .edit-billing-link' ),
+					];
+					innerButtons.forEach( innerButton => {
+						innerButton.addEventListener( 'click', () => ( spinner.style.display = 'flex' ) );
+					} );
+					const innerForm = iframe.contentDocument.querySelector( '.checkout' );
+					if ( innerForm ) {
+						const innerBillingFields = [
+							...innerForm.querySelectorAll( '.woocommerce-billing-fields input' ),
+						];
+						innerBillingFields.forEach( innerField => {
+							innerField.addEventListener( 'keyup', e => {
+								if ( 'Enter' === e.key ) {
+									spinner.style.display = 'flex';
+									innerForm.submit();
+								}
+							} );
+						} );
+					}
 				} );
 			} );
 		} );

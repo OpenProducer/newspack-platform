@@ -1018,7 +1018,7 @@ class Donations {
 		if ( ! $product_id ) {
 			return $text;
 		}
-		return __( 'Thank you for your donation!', 'newspack-blocks' );
+		return __( 'Thank you for your donation!', 'newspack' );
 	}
 }
 Donations::init();

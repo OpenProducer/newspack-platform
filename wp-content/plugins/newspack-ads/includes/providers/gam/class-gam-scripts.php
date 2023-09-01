@@ -109,6 +109,7 @@ final class GAM_Scripts {
 				'unique_id'        => $unique_id,
 				'name'             => esc_attr( $ad_unit['name'] ),
 				'code'             => esc_attr( $ad_unit['code'] ),
+				'path'             => $ad_unit['path'],
 				'sizes'            => $sizes,
 				'fluid'            => (bool) $ad_unit['fluid'],
 				'fixed_height'     => $fixed_height,
@@ -285,8 +286,16 @@ final class GAM_Scripts {
 							slotSizes = slotSizes.concat( 'fluid' );
 						}
 
+						var codeParts = [ ad_config['network_code'] ];
+						if ( ad_unit.path && ad_unit.path.length ) {
+							codeParts = codeParts.concat( ad_unit.path.map( function( parent ) {
+								return parent['code'];
+							} ) );
+						}
+						codeParts.push( ad_unit['code'] );
+						var code = '/' + codeParts.join( '/' );
 						defined_ad_units[ container_id ] = googletag.defineSlot(
-							'/' + ad_config['network_code'] + '/' + ad_unit['code'],
+							code,
 							slotSizes,
 							container_id
 						).addService( googletag.pubads() );

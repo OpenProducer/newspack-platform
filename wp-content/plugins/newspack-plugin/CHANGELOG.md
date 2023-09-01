@@ -1,3 +1,42 @@
+# [2.5.0](https://github.com/Automattic/newspack-plugin/compare/v2.4.0...v2.5.0) (2023-08-30)
+
+
+### Features
+
+* **reader-data:** check newsletter subscription on login ([#2619](https://github.com/Automattic/newspack-plugin/issues/2619)) ([34afeb3](https://github.com/Automattic/newspack-plugin/commit/34afeb36560f38007e84dfeec8a970a7fb0e3b23))
+
+# [2.4.0](https://github.com/Automattic/newspack-plugin/compare/v2.3.0...v2.4.0) (2023-08-24)
+
+
+### Bug Fixes
+
+* correct thank you message text domain ([#2596](https://github.com/Automattic/newspack-plugin/issues/2596)) ([6765737](https://github.com/Automattic/newspack-plugin/commit/6765737e598064c65e5d3045d7e379bb3f1e9ab2))
+* only redirect to setup if not completed already ([#2591](https://github.com/Automattic/newspack-plugin/issues/2591)) ([ed682b6](https://github.com/Automattic/newspack-plugin/commit/ed682b6f7816c174f60425006d4ce907e1c3d527))
+* **wp-6.3:** rename Reusable Blocks to Patterns ([#2581](https://github.com/Automattic/newspack-plugin/issues/2581)) ([8c66a45](https://github.com/Automattic/newspack-plugin/commit/8c66a45a3ca5562daf685c3ad3b043480ef00861))
+
+
+### Features
+
+* **ads:** display parent ad unit path on ad unit editor ([#2592](https://github.com/Automattic/newspack-plugin/issues/2592)) ([c8437d8](https://github.com/Automattic/newspack-plugin/commit/c8437d888eb751d4b2474057f8a65924dd0ddd8f))
+* changes required for Campaigns rearchitecture ([#2558](https://github.com/Automattic/newspack-plugin/issues/2558)) ([336521f](https://github.com/Automattic/newspack-plugin/commit/336521f18fa4e686c7943bdcc0eef67a5eebcfe4)), closes [#2537](https://github.com/Automattic/newspack-plugin/issues/2537) [#2582](https://github.com/Automattic/newspack-plugin/issues/2582) [#2583](https://github.com/Automattic/newspack-plugin/issues/2583)
+* **ras:** replace newsletters verification email ([#2538](https://github.com/Automattic/newspack-plugin/issues/2538)) ([cc87736](https://github.com/Automattic/newspack-plugin/commit/cc87736873a94fdb6ade5c615f80bd9b3e90c6c0))
+
+# [2.4.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v2.3.0...v2.4.0-alpha.1) (2023-08-17)
+
+
+### Bug Fixes
+
+* correct thank you message text domain ([#2596](https://github.com/Automattic/newspack-plugin/issues/2596)) ([6765737](https://github.com/Automattic/newspack-plugin/commit/6765737e598064c65e5d3045d7e379bb3f1e9ab2))
+* only redirect to setup if not completed already ([#2591](https://github.com/Automattic/newspack-plugin/issues/2591)) ([ed682b6](https://github.com/Automattic/newspack-plugin/commit/ed682b6f7816c174f60425006d4ce907e1c3d527))
+* **wp-6.3:** rename Reusable Blocks to Patterns ([#2581](https://github.com/Automattic/newspack-plugin/issues/2581)) ([8c66a45](https://github.com/Automattic/newspack-plugin/commit/8c66a45a3ca5562daf685c3ad3b043480ef00861))
+
+
+### Features
+
+* **ads:** display parent ad unit path on ad unit editor ([#2592](https://github.com/Automattic/newspack-plugin/issues/2592)) ([c8437d8](https://github.com/Automattic/newspack-plugin/commit/c8437d888eb751d4b2474057f8a65924dd0ddd8f))
+* changes required for Campaigns rearchitecture ([#2558](https://github.com/Automattic/newspack-plugin/issues/2558)) ([336521f](https://github.com/Automattic/newspack-plugin/commit/336521f18fa4e686c7943bdcc0eef67a5eebcfe4)), closes [#2537](https://github.com/Automattic/newspack-plugin/issues/2537) [#2582](https://github.com/Automattic/newspack-plugin/issues/2582) [#2583](https://github.com/Automattic/newspack-plugin/issues/2583)
+* **ras:** replace newsletters verification email ([#2538](https://github.com/Automattic/newspack-plugin/issues/2538)) ([cc87736](https://github.com/Automattic/newspack-plugin/commit/cc87736873a94fdb6ade5c615f80bd9b3e90c6c0))
+
 # [2.3.0](https://github.com/Automattic/newspack-plugin/compare/v2.2.5...v2.3.0) (2023-08-07)
 
 

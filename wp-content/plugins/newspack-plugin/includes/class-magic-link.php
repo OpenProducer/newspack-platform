@@ -57,6 +57,8 @@ final class Magic_Link {
 		\add_filter( 'user_row_actions', [ __CLASS__, 'user_row_actions' ], 10, 2 );
 		\add_action( 'edit_user_profile', [ __CLASS__, 'edit_user_profile' ] );
 
+		/** Replace Newspack Newsletters Verification Email */
+		\add_filter( 'newspack_newsletters_email_verification_email', [ __CLASS__, 'newsletters_email_verification_email' ], 10, 3 );
 	}
 
 	/**
@@ -707,10 +709,16 @@ final class Magic_Link {
 			$authenticated = self::authenticate( $user->ID, $token );
 		}
 
+		$redirect = \wp_validate_redirect(
+			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			\sanitize_text_field( \wp_unslash( $_GET['redirect'] ?? '' ) ),
+			\remove_query_arg( [ 'action', 'email', 'token' ] )
+		);
+
 		\wp_safe_redirect(
 			\add_query_arg(
 				[ self::AUTH_ACTION_RESULT => true === $authenticated ? '1' : '0' ],
-				\remove_query_arg( [ 'action', 'email', 'token' ] )
+				$redirect
 			)
 		);
 		exit;
@@ -1060,6 +1068,52 @@ final class Magic_Link {
 			</table>
 		</div>
 		<?php
+	}
+
+	/**
+	 * Replace Newspack Newsletters verification email with a magic link.
+	 *
+	 * @param array    $email Email arguments. {
+	 *   Used to build wp_mail().
+	 *
+	 *   @type string $to      The intended recipient - New user email address.
+	 *   @type string $subject The subject of the email.
+	 *   @type string $message The body of the email.
+	 *   @type string $headers The headers of the email.
+	 * }
+	 * @param \WP_User $user  User to send the magic link to.
+	 * @param string   $url   Magic link url.
+	 *
+	 * @return array Modified email arguments.
+	 */
+	public static function newsletters_email_verification_email( $email, $user, $url ) {
+		if ( ! self::can_magic_link( $user->ID ) ) {
+			return $email;
+		}
+		$token_data = self::generate_token( $user );
+		if ( \is_wp_error( $token_data ) ) {
+			return $email;
+		}
+		$verification_url   = \add_query_arg(
+			[
+				'action'   => self::AUTH_ACTION,
+				'email'    => urlencode( $user->user_email ),
+				'token'    => $token_data['token'],
+				'redirect' => urlencode( $url ),
+			],
+			\home_url()
+		);
+		$email['message']   = Emails::get_email_payload(
+			Reader_Activation_Emails::EMAIL_TYPES['VERIFICATION'],
+			[
+				[
+					'template' => '*VERIFICATION_URL*',
+					'value'    => $verification_url,
+				],
+			]
+		);
+		$email['headers'][] = 'Content-Type: text/html; charset=UTF-8';
+		return $email;
 	}
 }
 Magic_Link::init();

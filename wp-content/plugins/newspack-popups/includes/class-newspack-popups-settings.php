@@ -275,16 +275,6 @@ class Newspack_Popups_Settings {
 			],
 			[
 				'section'     => 'general_settings',
-				'key'         => 'newspack_popups_non_interative_mode',
-				'type'        => 'boolean',
-				'value'       => self::is_non_interactive(),
-				'default'     => false,
-				'description' => __( 'Non-interactive mode', 'newspack-popups' ),
-				'help'        => __( 'Use this setting in high traffic scenarios. No API requests will be made, reducing server load. Inline prompts will be shown to all users, and overlay prompts will be suppressed.', 'newspack-popups' ),
-				'public'      => false,
-			],
-			[
-				'section'     => 'general_settings',
 				'key'         => 'newspack_popups_dismiss_overlays_on_tap',
 				'type'        => 'boolean',
 				'value'       => self::enable_dismiss_overlays_on_background_tap(),
@@ -361,10 +351,13 @@ class Newspack_Popups_Settings {
 
 	/**
 	 * Is the non-interactive setting on?
+	 *
+	 * Deprecated: There is no longer a non interactive mode
+	 *
+	 * @deprecated
 	 */
 	public static function is_non_interactive() {
-		// Handle legacy option name.
-		return get_option( 'newspack_newsletters_non_interative_mode', false ) || get_option( 'newspack_popups_non_interative_mode', false ) || get_option( 'newspack_popups_non_interactive_mode', false );
+		return false;
 	}
 
 	/**

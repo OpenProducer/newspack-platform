@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit06068f80aaa0d9db6f4ef63de29c5f7c
+class ComposerStaticInit6c6e537f31f4b0afb701ce12c04b5877
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -32,28 +32,27 @@ class ComposerStaticInit06068f80aaa0d9db6f4ef63de29c5f7c
         'Newspack\\Campaigns\\Schemas\\Segments' => __DIR__ . '/../..' . '/includes/schemas/class-segments.php',
         'Newspack_Popups' => __DIR__ . '/../..' . '/includes/class-newspack-popups.php',
         'Newspack_Popups_API' => __DIR__ . '/../..' . '/includes/class-newspack-popups-api.php',
+        'Newspack_Popups_Criteria' => __DIR__ . '/../..' . '/includes/class-newspack-popups-criteria.php',
         'Newspack_Popups_Custom_Placements' => __DIR__ . '/../..' . '/includes/class-newspack-popups-custom-placements.php',
         'Newspack_Popups_Data_Api' => __DIR__ . '/../..' . '/includes/class-newspack-popups-data-api.php',
-        'Newspack_Popups_Donations' => __DIR__ . '/../..' . '/includes/class-newspack-popups-donations.php',
         'Newspack_Popups_Exporter' => __DIR__ . '/../..' . '/includes/class-newspack-popups-exporter.php',
         'Newspack_Popups_Importer' => __DIR__ . '/../..' . '/includes/class-newspack-popups-importer.php',
         'Newspack_Popups_Inserter' => __DIR__ . '/../..' . '/includes/class-newspack-popups-inserter.php',
         'Newspack_Popups_Model' => __DIR__ . '/../..' . '/includes/class-newspack-popups-model.php',
-        'Newspack_Popups_Newsletters' => __DIR__ . '/../..' . '/includes/class-newspack-popups-newsletters.php',
-        'Newspack_Popups_Parse_Logs' => __DIR__ . '/../..' . '/includes/class-newspack-popups-parse-logs.php',
         'Newspack_Popups_Presets' => __DIR__ . '/../..' . '/includes/class-newspack-popups-presets.php',
         'Newspack_Popups_Segmentation' => __DIR__ . '/../..' . '/includes/class-newspack-popups-segmentation.php',
         'Newspack_Popups_Settings' => __DIR__ . '/../..' . '/includes/class-newspack-popups-settings.php',
         'Newspack_Popups_View_As' => __DIR__ . '/../..' . '/includes/class-newspack-popups-view-as.php',
+        'Newspack_Segments_Migration' => __DIR__ . '/../..' . '/includes/class-newspack-segments-migration.php',
         'Newspack_Segments_Model' => __DIR__ . '/../..' . '/includes/class-newspack-segments-model.php',
     );
 
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit06068f80aaa0d9db6f4ef63de29c5f7c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit06068f80aaa0d9db6f4ef63de29c5f7c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit06068f80aaa0d9db6f4ef63de29c5f7c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6c6e537f31f4b0afb701ce12c04b5877::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6c6e537f31f4b0afb701ce12c04b5877::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6c6e537f31f4b0afb701ce12c04b5877::$classMap;
 
         }, null, ClassLoader::class);
     }

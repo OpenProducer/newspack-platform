@@ -239,21 +239,6 @@ class Popups_Wizard extends Wizard {
 
 		register_rest_route(
 			NEWSPACK_API_NAMESPACE,
-			'/wizard/' . $this->slug . '/segmentation-reach',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'api_get_segment_reach' ],
-				'permission_callback' => [ $this, 'api_permissions_check' ],
-				'args'                => [
-					'config' => [
-						'sanitize_callback' => 'sanitize_text_field',
-					],
-				],
-			]
-		);
-
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
 			'/wizard/' . $this->slug . '/segmentation-sort',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
@@ -452,6 +437,11 @@ class Popups_Wizard extends Wizard {
 			$preview_archive = \Newspack_Popups::preview_archive_permalink();
 		}
 
+		$criteria = [];
+		if ( method_exists( 'Newspack_Popups_Criteria', 'get_registered_criteria' ) ) {
+			$criteria = \Newspack_Popups_Criteria::get_registered_criteria();
+		}
+
 		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
 		$custom_placements                     = $newspack_popups_configuration_manager->get_custom_placements();
 		$overlay_placements                    = $newspack_popups_configuration_manager->get_overlay_placements();
@@ -470,6 +460,7 @@ class Popups_Wizard extends Wizard {
 				'overlay_sizes'      => $overlay_sizes,
 				'preview_query_keys' => $preview_query_keys,
 				'experimental'       => Reader_Activation::is_enabled(),
+				'criteria'           => $criteria,
 			]
 		);
 
@@ -568,6 +559,10 @@ class Popups_Wizard extends Wizard {
 			return $response;
 		}
 		$response = $newspack_popups_configuration_manager->set_popup_terms( $id, self::sanitize_terms( $config['tags'] ), 'post_tag' );
+		if ( is_wp_error( $response ) ) {
+			return $response;
+		}
+		$response = $newspack_popups_configuration_manager->set_popup_terms( $id, self::sanitize_terms( $config['segments'] ), 'popup_segment' );
 		if ( is_wp_error( $response ) ) {
 			return $response;
 		}
@@ -776,6 +771,7 @@ class Popups_Wizard extends Wizard {
 		$response                              = $newspack_popups_configuration_manager->create_segment(
 			[
 				'name'          => $request['name'],
+				'criteria'      => $request['criteria'],
 				'configuration' => $request['configuration'],
 			]
 		);
@@ -794,6 +790,7 @@ class Popups_Wizard extends Wizard {
 			[
 				'id'            => $request['id'],
 				'name'          => $request['name'],
+				'criteria'      => $request['criteria'],
 				'configuration' => $request['configuration'],
 			]
 		);
@@ -809,18 +806,6 @@ class Popups_Wizard extends Wizard {
 	public function api_delete_segment( $request ) {
 		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
 		$response                              = $newspack_popups_configuration_manager->delete_segment( $request['id'] );
-		return $response;
-	}
-
-	/**
-	 * Get a specific segment's potential reach.
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
-	 */
-	public function api_get_segment_reach( $request ) {
-		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
-		$response                              = $newspack_popups_configuration_manager->get_segment_reach( json_decode( $request['config'] ) );
 		return $response;
 	}
 

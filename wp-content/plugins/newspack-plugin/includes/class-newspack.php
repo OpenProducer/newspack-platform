@@ -335,6 +335,9 @@ final class Newspack {
 			return;
 		}
 		delete_transient( NEWSPACK_ACTIVATION_TRANSIENT );
+		if ( \get_option( NEWSPACK_SETUP_COMPLETE, false ) ) {
+			return;
+		}
 		wp_safe_redirect( admin_url( 'admin.php?page=newspack-setup-wizard' ) );
 		exit;
 	}

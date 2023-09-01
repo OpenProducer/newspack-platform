@@ -1,6 +1,7 @@
 <?php
 /**
  * Checkout Form
+ * Original template: https://github.com/woocommerce/woocommerce/blob/trunk/plugins/woocommerce/templates/checkout/form-checkout.php
  *
  * @see https://docs.woocommerce.com/document/template-structure/
  * @package Newspack_Blocks
@@ -75,7 +76,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	}
 	?>
 
-	<div id="order-details-wrapper">
+	<div id="order-details-wrapper" class="<?php echo esc_attr( ! \Newspack_Blocks\Modal_Checkout::should_show_order_details() ? 'hidden' : '' ); ?>">
 		<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
 		<h3 id="order_review_heading" class="screen-reader-text"><?php esc_html_e( 'Order Details', 'newspack-blocks' ); ?></h3>
 		<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
@@ -108,6 +109,36 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 			<?php foreach ( $form_billing_fields as $key => $value ) : ?>
 				<input type="hidden" name="<?php echo esc_attr( 'billing_' . $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
 			<?php endforeach; ?>
+
+			<?php if ( ! is_user_logged_in() && $checkout->is_registration_enabled() ) : ?>
+				<div class="woocommerce-account-fields">
+					<?php if ( ! $checkout->is_registration_required() ) : ?>
+
+						<p class="form-row form-row-wide create-account">
+							<label class="woocommerce-form__label woocommerce-form__label-for-checkbox checkbox">
+								<input class="woocommerce-form__input woocommerce-form__input-checkbox input-checkbox" id="createaccount" <?php checked( ( true === $checkout->get_value( 'createaccount' ) || ( true === apply_filters( 'woocommerce_create_account_default_checked', false ) ) ), true ); ?> type="checkbox" name="createaccount" value="1" /> <span><?php esc_html_e( 'Create an account?', 'newspack-blocks' ); ?></span>
+							</label>
+						</p>
+
+					<?php endif; ?>
+
+					<?php do_action( 'woocommerce_before_checkout_registration_form', $checkout ); ?>
+
+					<?php if ( $checkout->get_checkout_fields( 'account' ) ) : ?>
+
+						<div class="create-account">
+							<?php foreach ( $checkout->get_checkout_fields( 'account' ) as $key => $field ) : ?>
+								<?php woocommerce_form_field( $key, $field, $checkout->get_value( $key ) ); ?>
+							<?php endforeach; ?>
+							<div class="clear"></div>
+						</div>
+
+					<?php endif; ?>
+
+					<?php do_action( 'woocommerce_after_checkout_registration_form', $checkout ); ?>
+				</div>
+			<?php endif; ?>
+
 			<div class="after-customer-details">
 				<?php do_action( 'woocommerce_checkout_after_customer_details' ); ?>
 			</div>

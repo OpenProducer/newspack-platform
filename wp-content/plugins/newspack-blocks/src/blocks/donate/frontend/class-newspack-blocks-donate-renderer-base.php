@@ -312,25 +312,6 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 	}
 
 	/**
-	 * Render Client ID hidden form input.
-	 */
-	protected static function render_client_id_form_input() {
-		if ( class_exists( 'Newspack_Popups_Segmentation' ) ) {
-			$client_id = Newspack_Popups_Segmentation::NEWSPACK_SEGMENTATION_CID_NAME;
-			ob_start();
-			?>
-				<input
-					name="cid"
-					type="hidden"
-					value="CLIENT_ID(<?php echo esc_attr( $client_id ); ?>)"
-					data-amp-replace="CLIENT_ID"
-				/>
-			<?php
-			return ob_get_clean();
-		}
-	}
-
-	/**
 	 * Render the block HTML.
 	 *
 	 * @param array $attributes Block attributes.

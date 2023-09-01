@@ -68,6 +68,24 @@ class Prompts extends Schema {
 						],
 					],
 				],
+				'segments'          => [
+					'name'     => 'segments',
+					'type'     => 'array',
+					'required' => false,
+					'default'  => [],
+					'items'    => [
+						'type'                 => 'object',
+						'additionalProperties' => false,
+						'properties'           => [
+							'id'   => [
+								'type' => 'integer',
+							],
+							'name' => [
+								'type' => 'string',
+							],
+						],
+					],
+				],
 				'status'            => [
 					'name'     => 'status',
 					'type'     => 'string',
@@ -280,12 +298,6 @@ class Prompts extends Schema {
 						],
 						'utm_suppression'                => [
 							'name'     => 'utm_suppression',
-							'type'     => 'string',
-							'required' => false,
-							'default'  => '',
-						],
-						'selected_segment_id'            => [
-							'name'     => 'selected_segment_id',
 							'type'     => 'string',
 							'required' => false,
 							'default'  => '',

@@ -76,7 +76,6 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 		<?php if ( $campaign ) : ?>
 			<input type='hidden' name='campaign' value='<?php echo esc_attr( $campaign ); ?>' />
 		<?php endif; ?>
-		<?php echo self::render_client_id_form_input(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 
 		<?php
 		return ob_get_clean();

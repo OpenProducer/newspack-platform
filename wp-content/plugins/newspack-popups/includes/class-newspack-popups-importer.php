@@ -195,9 +195,9 @@ class Newspack_Popups_Importer {
 		$segments = $this->input['segments'];
 		$segments = $this->pre_process_segments_terms( $segments );
 		foreach ( $segments as $segment ) {
-			$stored_segments                          = Newspack_Popups_Segmentation::create_segment( $segment );
-			$created                                  = end( $stored_segments );
-			$this->segments_mapping[ $segment['id'] ] = $created['id'];
+			$stored_segments = Newspack_Popups_Segmentation::create_segment( $segment );
+			$created         = end( $stored_segments );
+			$this->add_term_mapping( $segment['id'], $created['id'] );
 			$this->totals['segments']++;
 		}
 	}
@@ -224,7 +224,6 @@ class Newspack_Popups_Importer {
 	 */
 	private function process_prompts() {
 		$prompts = $this->input['prompts'];
-		$prompts = $this->pre_process_prompt_segments( $prompts );
 		$prompts = $this->pre_process_prompts_terms( $prompts );
 
 		foreach ( $prompts as $prompt ) {
@@ -261,37 +260,15 @@ class Newspack_Popups_Importer {
 			if ( ! empty( $prompt['tags'] ) ) {
 				Newspack_Popups_Model::set_popup_terms( $new_post, $prompt['tags'], 'post_tag' );
 			}
+			if ( ! empty( $prompt['segments'] ) ) {
+				Newspack_Popups_Model::set_popup_terms( $new_post, $prompt['segments'], Newspack_Segments_Model::TAX_SLUG );
+			}
 
 			// If there's a featured image.
 			if ( ! empty( $prompt['featured_image_id'] ) && false !== wp_get_attachment_url( (int) $prompt['featured_image_id'] ) ) {
 				set_post_thumbnail( $new_post, (int) $prompt['featured_image_id'] );
 			}
 		}
-	}
-
-	/**
-	 * Pre-process prompt segments
-	 *
-	 * If there are segments set, replace the IDs with the IDs from the segment mapping
-	 *
-	 * @param array $prompts The prompts to process.
-	 * @return array The processed prompts.
-	 */
-	private function pre_process_prompt_segments( $prompts ) {
-		foreach ( $prompts as $prompt_index => $prompt ) {
-			if ( ! empty( $prompt['options']['selected_segment_id'] ) ) {
-				$segments = explode( ',', $prompt['options']['selected_segment_id'] );
-				foreach ( $segments as $key => $segment ) {
-					if ( isset( $this->segments_mapping[ $segment ] ) ) {
-						$segments[ $key ] = $this->segments_mapping[ $segment ];
-					} else {
-						unset( $segments[ $key ] );
-					}
-				}
-				$prompts[ $prompt_index ]['options']['selected_segment_id'] = implode( ',', $segments );
-			}
-		}
-		return array_values( $prompts );
 	}
 
 	/**
@@ -311,6 +288,9 @@ class Newspack_Popups_Importer {
 			}
 			if ( ! empty( $prompt['tags'] ) ) {
 				$prompts[ $prompt_index ]['tags'] = $this->pre_process_terms( $prompt['tags'], 'post_tag' );
+			}
+			if ( ! empty( $prompt['segments'] ) ) {
+				$prompts[ $prompt_index ]['segments'] = $this->pre_process_terms( $prompt['segments'], Newspack_Segments_Model::TAX_SLUG );
 			}
 			if ( ! empty( $prompt['options']['excluded_categories'] ) ) {
 				$prompts[ $prompt_index ]['options']['excluded_categories'] = $this->pre_process_terms( $prompt['options']['excluded_categories'], 'category', true );

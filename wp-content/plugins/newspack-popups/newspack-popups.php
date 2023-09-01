@@ -2,12 +2,12 @@
 /**
  * Plugin Name:     Newspack Campaigns
  * Plugin URI:      https://newspack.blog
- * Description:     AMP-compatible overlay and inline Campaigns.
+ * Description:     Build persuasive call-to-action prompts from scratch and display them as overlays, inline with the story, or above the site header.
  * Author:          Automattic
- * Author URI:      https://newspack.blog
+ * Author URI:      https://newspack.com
  * Text Domain:     newspack-popups
  * Domain Path:     /languages
- * Version:         2.22.0
+ * Version:         2.23.0
  *
  * @package         Newspack_Popups
  */

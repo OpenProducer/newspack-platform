@@ -7,8 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-require_once dirname( __FILE__ ) . '/../api/campaigns/class-campaign-data-utils.php';
-require_once dirname( __FILE__ ) . '/../api/segmentation/class-segmentation.php';
+use \DrewM\MailChimp\MailChimp;
 
 /**
  * Main Newspack Segmentation Plugin Class.
@@ -22,14 +21,11 @@ final class Newspack_Popups_Segmentation {
 	protected static $instance = null;
 
 	/**
-	 * Name of the Client ID, to be used by amp-analytics.
+	 * Names of custom dimensions options.
 	 */
-	const NEWSPACK_SEGMENTATION_CID_NAME = 'newspack-cid';
-
-	/**
-	 * Query param that will overwrite the cookie value.
-	 */
-	const NEWSPACK_SEGMENTATION_CID_LINKER_PARAM = 'ref_newspack_cid';
+	const CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY = 'newspack_popups_cd_reader_frequency';
+	const CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER    = 'newspack_popups_cd_is_subscriber';
+	const CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR         = 'newspack_popups_cd_is_donor';
 
 	/**
 	 * Name of the option to store segments under.
@@ -64,21 +60,22 @@ final class Newspack_Popups_Segmentation {
 	 */
 	public function __construct() {
 		add_action( 'init', [ __CLASS__, 'check_update_version' ] );
-		add_action( 'wp_footer', [ __CLASS__, 'insert_amp_analytics' ], 20 );
+
+		// Remove legacy pruning CRON job.
+		add_action( 'init', [ __CLASS__, 'cron_deactivate' ] );
 
 		add_filter( 'newspack_custom_dimensions', [ __CLASS__, 'register_custom_dimensions' ] );
 		add_filter( 'newspack_custom_dimensions_values', [ __CLASS__, 'report_custom_dimensions' ] );
 
-		// Data pruning CRON job.
-		register_deactivation_hook( NEWSPACK_POPUPS_PLUGIN_FILE, [ __CLASS__, 'cron_deactivate' ] );
-		add_action( 'newspack_popups_segmentation_data_prune', [ __CLASS__, 'prune_data' ] );
-		$next = wp_next_scheduled( 'newspack_popups_segmentation_data_prune' );
-		if ( ! $next || 3600 < $next - time() ) {
-			self::cron_deactivate(); // To avoid duplicate execution when transitioning from daily to hourly schedule.
-			wp_schedule_event( time(), 'hourly', 'newspack_popups_segmentation_data_prune' );
+		// Handle Mailchimp merge tag functionality.
+		if (
+			method_exists( '\Newspack_Newsletters', 'service_provider' ) &&
+			'mailchimp' === \Newspack_Newsletters::service_provider() &&
+			method_exists( '\Newspack\Data_Events', 'register_handler' ) &&
+			method_exists( '\Newspack\Reader_Data', 'set_is_newsletter_subscriber' )
+		) {
+			\Newspack\Data_Events::register_handler( [ __CLASS__, 'reader_logged_in' ], 'reader_logged_in' );
 		}
-
-		add_action( 'newspack_registered_reader', [ __CLASS__, 'handle_registered_reader' ], 10, 4 );
 	}
 
 	/**
@@ -98,23 +95,23 @@ final class Newspack_Popups_Segmentation {
 			$default_dimensions,
 			[
 				[
-					'role'   => Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
+					'role'   => self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
 					'option' => [
-						'value' => Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
+						'value' => self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
 						'label' => __( 'Reader frequency', 'newspack' ),
 					],
 				],
 				[
-					'role'   => Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
+					'role'   => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
 					'option' => [
-						'value' => Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
+						'value' => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
 						'label' => __( 'Is a subcriber', 'newspack' ),
 					],
 				],
 				[
-					'role'   => Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
+					'role'   => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
 					'option' => [
-						'value' => Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
+						'value' => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
 						'label' => __( 'Is a donor', 'newspack' ),
 					],
 				],
@@ -138,9 +135,9 @@ final class Newspack_Popups_Segmentation {
 		}
 
 		$campaigns_custom_dimensions = [
-			Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
-			Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
-			Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
+			self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
+			self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
+			self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
 		];
 		$all_campaign_dimensions     = array_values(
 			array_map(
@@ -156,17 +153,12 @@ final class Newspack_Popups_Segmentation {
 			return $custom_dimensions_values;
 		}
 
-		$client_id           = self::get_client_id();
-		$api                 = self::load_lightweight_api();
-		$subscription_events = $api->get_reader_events( $client_id, 'subscription' );
-		$donation_events     = $api->get_reader_events( $client_id, 'donation' );
-
 		foreach ( $custom_dimensions as $custom_dimension ) {
 			// Strip the `ga:` prefix from gaID.
 			$dimension_id = substr( $custom_dimension['gaID'], 3 ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 			switch ( $custom_dimension['role'] ) {
-				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY:
-					$read_count = Campaign_Data_Utils::get_post_view_count( [ $api->get_reader( $client_id ) ] );
+				case self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY:
+					$read_count = 0; // TODO: get article view count from user meta/reader data
 					// Tiers mimick NCI's – https://news-consumer-insights.appspot.com.
 					$read_count_tier = 'casual';
 					if ( $read_count > 1 && $read_count <= 14 ) {
@@ -176,25 +168,16 @@ final class Newspack_Popups_Segmentation {
 					}
 					$custom_dimensions_values[ $dimension_id ] = $read_count_tier;
 					break;
-				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER:
-					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_subscriber( $subscription_events ) ? 'true' : 'false';
+				case self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER:
+					$custom_dimensions_values[ $dimension_id ] = false; // TODO: get is_subscriber from reader data.
 					break;
-				case Segmentation::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR:
-					$custom_dimensions_values[ $dimension_id ] = Campaign_Data_Utils::is_donor( $donation_events ) ? 'true' : 'false';
+				case self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR:
+					$custom_dimensions_values[ $dimension_id ] = false; // TODO: get is_donor from reader data.
 					break;
 			}
 		}
 
 		return $custom_dimensions_values;
-	}
-
-	/**
-	 * Get the light-weight API.
-	 */
-	private static function load_lightweight_api() {
-		require_once dirname( __FILE__ ) . '/../api/campaigns/class-campaign-data-utils.php';
-		require_once dirname( __FILE__ ) . '/../api/classes/class-lightweight-api.php';
-		return new Lightweight_API( null, true );
 	}
 
 	/**
@@ -205,153 +188,15 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
-	 * Insert amp-analytics tracking code.
-	 * Has to be included on every page to set the cookie.
-	 *
-	 * This amp-analytics tag will not report any analytics, it's only responsible for settings the cookie
-	 * bearing the client ID, as well as handling the linker parameter when navigating from a proxy site.
-	 *
-	 * Because this tag doesn't report any analytics but is used to look up the reader's activity, it
-	 * should be included in preview requests and logged-in admin/editor sessions.
-	 *
-	 * There is a known issue with amp-analytics & amp-access interoperation – more on that at
-	 * https://github.com/Automattic/newspack-popups/pull/224#discussion_r496655085.
-	 */
-	public static function insert_amp_analytics() {
-		$linker_id            = 'cid';
-		$amp_analytics_config = [
-			// Linker will append a query param to all internal links.
-			// This will only be performed on a proxy site (like AMP cache) by default.
-			// https://amp.dev/documentation/components/amp-analytics/?format=websites#linkers.
-			'linkers' => [
-				'enabled' => true,
-				self::NEWSPACK_SEGMENTATION_CID_LINKER_PARAM => [
-					'ids' => [
-						$linker_id => self::get_cid_param(),
-					],
-				],
-			],
-			// If the linker parameter is found, the cookie value will be overwritten by it.
-			// https://amp.dev/documentation/components/amp-analytics/?format=websites#cookies.
-			'cookies' => [
-				'enabled'                            => true,
-				self::NEWSPACK_SEGMENTATION_CID_NAME => [
-					'value' => 'LINKER_PARAM(' . self::NEWSPACK_SEGMENTATION_CID_LINKER_PARAM . ', ' . $linker_id . ')',
-				],
-			],
-		];
-
-		$initial_client_report_url_params = [];
-
-		// Handle Mailchimp URL parameters.
-		if ( isset( $_GET['mc_cid'], $_GET['mc_eid'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$initial_client_report_url_params['mc_cid'] = sanitize_text_field( $_GET['mc_cid'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$initial_client_report_url_params['mc_eid'] = sanitize_text_field( $_GET['mc_eid'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		}
-
-		// If visiting the donor landing page, mark the visitor as donor.
-		$donor_landing_page = intval( Newspack_Popups_Settings::donor_landing_page() );
-		if ( ! empty( $donor_landing_page ) && get_queried_object_id() === $donor_landing_page ) {
-			$initial_client_report_url_params['donation'] = wp_json_encode(
-				[
-					'offsite_has_donated' => true,
-				]
-			);
-
-			// Log a donation event for the reader.
-			try {
-				$api = \Campaign_Data_Utils::get_api( \wp_create_nonce( 'newspack_campaigns_lightweight_api' ) );
-				if ( ! $api ) {
-					return;
-				}
-				$reader_events = [
-					[
-						'type'    => 'donation',
-						'context' => method_exists( '\Newspack\Donations', 'get_platform_slug' ) ? \Newspack\Donations::get_platform_slug() : 'offsite',
-					],
-				];
-				$api->save_reader_events( self::get_client_id(), $reader_events );
-			} catch ( \Throwable $th ) {
-				\Newspack\Logger::log( 'Error when saving reader data on offsite donation: ' . $th->getMessage() );
-			}
-		}
-
-		if ( ! empty( $initial_client_report_url_params ) ) {
-			$amp_analytics_config['requests']                            = [
-				'initialClientDataReport' => esc_url( self::get_client_data_endpoint() ),
-			];
-			$amp_analytics_config['triggers']['initialClientDataReport'] = [
-				'on'             => 'ini-load',
-				'request'        => 'initialClientDataReport',
-				'extraUrlParams' => array_merge(
-					$initial_client_report_url_params,
-					[
-						'client_id' => self::get_cid_param(),
-					]
-				),
-			];
-		}
-
-		?>
-			<amp-analytics>
-				<script type="application/json">
-					<?php echo wp_json_encode( $amp_analytics_config ); ?>
-				</script>
-			</amp-analytics>
-		<?php
-	}
-
-	/**
 	 * Checks if the custom table has been created and is up-to-date.
-	 * If not, run the create_database_tables method.
 	 * See: https://codex.wordpress.org/Creating_Tables_with_Plugins
 	 */
 	public static function check_update_version() {
 		$current_version = get_option( self::TABLE_VERSION_OPTION, false );
 
 		if ( self::TABLE_VERSION !== $current_version ) {
-			self::create_database_tables();
 			update_option( self::TABLE_VERSION_OPTION, self::TABLE_VERSION );
 		}
-	}
-
-	/**
-	 * Create the clients and events tables.
-	 */
-	public static function create_database_tables() {
-		global $wpdb;
-		$reader_events_table_name = Segmentation::get_reader_events_table_name();
-		$readers_table_name       = Segmentation::get_readers_table_name();
-		$charset_collate          = $wpdb->get_charset_collate();
-
-		require_once ABSPATH . 'wp-admin/includes/upgrade.php';
-
-		$readers_sql = "CREATE TABLE $readers_table_name (
-			client_id varchar(100) NOT NULL,
-			date_created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			date_modified datetime NOT NULL,
-			reader_data longtext,
-			is_preview bool,
-			PRIMARY KEY  client_id (client_id),
-			KEY is_preview (is_preview),
-			KEY date_modified (date_modified)
-		) $charset_collate;";
-
-		dbDelta( $readers_sql ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.dbDelta_dbdelta
-
-		$reader_events_sql = "CREATE TABLE $reader_events_table_name (
-			id bigint(20) NOT NULL AUTO_INCREMENT,
-			client_id varchar(100) NOT NULL,
-			date_created datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-			type varchar(20) NOT NULL,
-			context varchar(100) NOT NULL,
-			value longtext,
-			PRIMARY KEY  id (id),
-			KEY client_id_type_context (client_id, type, context),
-			KEY date_created (date_created)
-		) $charset_collate;";
-
-		dbDelta( $reader_events_sql ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.dbDelta_dbdelta
 	}
 
 	/**
@@ -411,97 +256,6 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
-	 * Mock a preview CID for logged-in admin and editor users.
-	 *
-	 * @return string Preview client ID.
-	 */
-	private static function get_preview_user_cid() {
-		return 'preview-user-' . \get_current_user_id();
-	}
-
-	/**
-	 * Get the client ID placeholder used in AMP Access requests.
-	 */
-	public static function get_cid_param() {
-		if ( Newspack_Popups::is_user_admin() ) {
-			return self::get_preview_user_cid();
-		}
-
-		return 'CLIENT_ID(' . esc_attr( self::NEWSPACK_SEGMENTATION_CID_NAME ) . ')';
-	}
-
-	/**
-	 * Get current client's id.
-	 */
-	public static function get_client_id() {
-		if ( Newspack_Popups::is_user_admin() ) {
-			return self::get_preview_user_cid();
-		}
-
-		return isset( $_COOKIE[ self::NEWSPACK_SEGMENTATION_CID_NAME ] ) ? esc_attr( $_COOKIE[ self::NEWSPACK_SEGMENTATION_CID_NAME ] ) : false; // phpcs:ignore WordPressVIPMinimum.Variables.RestrictedVariables.cache_constraints___COOKIE, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
-	}
-
-	/**
-	 * Get API client data endpoint.
-	 */
-	public static function get_client_data_endpoint() {
-		return plugins_url( '../api/segmentation/index.php', __FILE__ );
-	}
-
-	/**
-	 * Update client data.
-	 *
-	 * @param string $client_id Client ID.
-	 * @param string $payload Client data.
-	 */
-	public static function update_client_data( $client_id, $payload ) {
-		if ( isset( $client_id ) ) {
-			wp_safe_remote_post(
-				self::get_client_data_endpoint(),
-				[
-					'body' => array_merge(
-						[
-							'client_id' => $client_id,
-						],
-						$payload
-					),
-				]
-			);
-		}
-	}
-
-	/**
-	 * Get segment reach, based on recorded client data.
-	 *
-	 * @param object $segment_config Segment configuration.
-	 * @return object Total clients amount and the amount covered by the segment.
-	 */
-	public static function get_segment_reach( $segment_config ) {
-		$api             = self::load_lightweight_api();
-		$all_client_data = wp_cache_get( 'newspack_popups_all_clients_data', 'newspack-popups' );
-		if ( false === $all_client_data ) {
-			$all_client_data = $api->get_all_readers_data();
-			wp_cache_set( 'newspack_popups_all_clients_data', $all_client_data, 'newspack-popups' );
-		}
-
-		$client_in_segment = array_filter(
-			$all_client_data,
-			function ( $client_id ) use ( $api, $segment_config ) {
-				return Campaign_Data_Utils::does_reader_match_segment(
-					$segment_config,
-					$api->get_readers( $client_id ),
-					$api->get_reader_events( $client_id, Campaign_Data_Utils::get_reader_events_types() )
-				);
-			}
-		);
-
-		return [
-			'total'      => count( $all_client_data ),
-			'in_segment' => count( $client_in_segment ),
-		];
-	}
-
-	/**
 	 * Sort all segments by relative priority.
 	 *
 	 * @param array $segment_ids Array of segment IDs, in order of desired priority.
@@ -537,199 +291,52 @@ final class Newspack_Popups_Segmentation {
 	}
 
 	/**
-	 * Run the given query with chunks of up to 1000 rows, sleeping in between chunks.
-	 * This helps avoid replication lag from deleting many records at once.
+	 * When a reader logs in and the connected ESP is Mailchimp, check their donation status.
+	 * If they have a non-empty value in a merge field which matches the newspack_popups_mc_donor_merge_field
+	 * setting, then they should be segmented as a donor.
 	 *
-	 * @param string $query The query string to execute.
-	 * @param array  $values If $query contains %s or %d placeholders, an array of values replace them.
+	 * @param int   $timestamp Timestamp of the event.
+	 * @param array $data      Data associated with the event.
 	 */
-	public static function query_with_sleep( $query, $values = [] ) {
-		global $wpdb;
-		$total     = 0;
-		$processed = PHP_INT_MAX;
-		$max_rows  = 1000; // Max number of records to process at once.
+	public static function reader_logged_in( $timestamp, $data ) {
+		$user_id = $data['user_id'];
+		$email   = $data['email'];
 
-		if ( ! empty( $values ) ) {
-			$sql = $wpdb->prepare(
-				"$query LIMIT $max_rows", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
-				$values
-			);
-		} else {
-			$sql = $wpdb->prepare( "$query LIMIT %d", $max_rows ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		}
+		// See newspack-newsletters/includes/class-newspack-newsletters.php:827.
+		$api_key = \get_option( 'newspack_mailchimp_api_key', false );
 
-		while ( $processed > 0 ) {
-			$start     = microtime( true );
-			$processed = $wpdb->query( $sql ); // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-			$took      = microtime( true ) - $start;
-			$total    += $processed;
-
-			// Convert from float seconds to int microseconds.
-			$sleep = round( $took * 1000000 );
-
-			// Sleep 2x the time it took for the query to run.
-			usleep( $sleep * 2 );
-		}
-
-		return $total;
-	}
-
-	/**
-	 * Transform an array of strings into a part of an SQL query.
-	 *
-	 * @param string[] $items Array of strings to transform.
-	 * @param string   $column_name Name of the column to include in the query.
-	 */
-	private static function array_to_in_query( $items, $column_name ) {
-		$items = array_map(
-			function( $item ) {
-				return "'$item'";
-			},
-			$items
-		);
-		return $column_name . ' IN (' . implode( ',', $items ) . ')';
-	}
-
-	/**
-	 * Remove unneeded data so the DB does not blow up.
-	 * TODO: Ensure that client IDs on single-prompt previews are tagged as preview sessions.
-	 */
-	public static function prune_data() {
-		global $wpdb;
-		$readers_table_name       = Segmentation::get_readers_table_name();
-		$reader_events_table_name = Segmentation::get_reader_events_table_name();
-
-		// Remove all preview sessions data.
-		$removed_preview_readers = 0;
-		$removed_preview_events  = 0;
-		$preview_client_ids      = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-			"SELECT client_id FROM $readers_table_name WHERE is_preview = 1" // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-		);
-		if ( 0 < count( $preview_client_ids ) ) {
-			$preview_client_ids      = implode(
-				',',
-				array_map(
-					function( $row ) {
-						return "'$row->client_id'";
-					},
-					$preview_client_ids
-				)
-			);
-			$removed_preview_readers = self::query_with_sleep( "DELETE FROM $readers_table_name WHERE is_preview = 1" );
-			$removed_preview_events  = self::query_with_sleep(
-				"DELETE FROM $reader_events_table_name WHERE client_id IN ( $preview_client_ids )"
-			);
-		}
-
-		// Remove reader data if not containing donations nor subscriptions, and not updated in $days days.
-		$days                     = 30;
-		$removed_old_readers      = 0;
-		$removed_old_events       = 0;
-		$old_client_ids           = $wpdb->get_results( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery
-			$wpdb->prepare(
-				"SELECT SQL_CALC_FOUND_ROWS `client_id` FROM $readers_table_name WHERE date_modified < now() - interval %d DAY", // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared
-				$days
-			)
-		);
-		$old_client_ids_to_delete = [];
-		foreach ( $old_client_ids as $row ) {
-			$protected_events_types = Campaign_Data_Utils::get_protected_events_types();
-			$sql_query              = $wpdb->prepare(
-				"SELECT SQL_CALC_FOUND_ROWS `client_id` FROM $reader_events_table_name WHERE client_id = %s AND " . self::array_to_in_query( $protected_events_types, 'type' ) . ' ORDER BY date_created', // phpcs:ignore WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQL.NotPrepared
-				$row->client_id
-			);
-			$protected_events       = $wpdb->get_results( $sql_query ); // phpcs:ignore WordPress.DB.DirectDatabaseQuery.NoCaching, WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.PreparedSQL.NotPrepared
-			if ( 0 === count( $protected_events ) ) {
-				$old_client_ids_to_delete[] = $row->client_id;
-			}
-		}
-		if ( 0 < count( $old_client_ids_to_delete ) ) {
-			$client_id_placeholders = array_map(
-				function() {
-					return '%s';
-				},
-				$old_client_ids_to_delete
-			);
-			$client_id_placeholders = implode( ', ', $client_id_placeholders );
-			$removed_old_readers    = self::query_with_sleep(
-				"DELETE FROM $readers_table_name WHERE client_id IN ( $client_id_placeholders )",
-				$old_client_ids_to_delete
-			);
-			$removed_old_events     = self::query_with_sleep(
-				"DELETE FROM $reader_events_table_name WHERE client_id IN ( $client_id_placeholders )",
-				$old_client_ids_to_delete
-			);
-		}
-
-		// Remove article_view and page_view events older than 1 hour.
-		$removed_rows_count_page_view_events = self::query_with_sleep(
-			"DELETE FROM $reader_events_table_name WHERE ( type = 'view' ) AND date_created < now() - interval 1 HOUR"
-		);
-
-		// Remove prompt interaction events older than $days days.
-		$removed_row_counts_prompt_seen_events = self::query_with_sleep(
-			"DELETE FROM $reader_events_table_name WHERE ( type = 'prompt_seen' OR type = 'prompt_dismissed' ) AND date_created < now() - interval $days DAY"
-		);
-
-		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
+		if ( ! $api_key ) {
 			return;
 		}
 
-		$logger_function = defined( 'WP_CLI' ) ? '\WP_CLI::log' : 'error_log';
+		$mailchimp = new Mailchimp( $api_key );
+		$contacts  = $mailchimp->get(
+			'search-members',
+			[
+				'fields' => [ 'members.email_address', 'members.merge_fields' ],
+				'query'  => $email,
+			]
+		);
 
-		if ( $removed_preview_readers ) {
-			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_preview_readers . ' preview session rows from ' . $readers_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
-		if ( $removed_preview_events ) {
-			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_preview_events . ' preview session rows from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
-		if ( $removed_old_readers ) {
-			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_old_readers . ' old rows from ' . $readers_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
-		if ( $removed_old_events ) {
-			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_old_events . ' old rows from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
-		if ( $removed_rows_count_page_view_events ) {
-			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_rows_count_page_view_events . ' article/page view events from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
-		if ( $removed_row_counts_prompt_seen_events ) {
-			$logger_function( 'Newspack Campaigns: Data pruning – removed ' . $removed_row_counts_prompt_seen_events . ' prompt seen events from ' . $reader_events_table_name . ' table.' ); // phpcs:ignore WordPress.PHP.DevelopmentFunctions.error_log_error_log
-		}
-	}
+		if ( isset( $contacts['exact_matches']['members'][0] ) ) {
+			$contact           = $contacts['exact_matches']['members'][0];
+			$merge_fields      = $contact['merge_fields'];
+			$donor_merge_field = Newspack_Popups_Settings::get_setting( 'newspack_popups_mc_donor_merge_field' );
 
-	/**
-	 * Handle reader registration.
-	 *
-	 * @param string       $email Email address.
-	 * @param bool         $authenticate Whether the user was authenticated.
-	 * @param int          $user_id New user ID.
-	 * @param null|WP_User $existing_user If the reader already has an account, the user object.
-	 */
-	public static function handle_registered_reader( $email, $authenticate, $user_id, $existing_user ) {
-		if ( empty( $user_id ) && $existing_user && isset( $existing_user->ID ) ) {
-			$user_id = $existing_user->ID;
-		}
-
-		$action = $existing_user ? 'authenticate' : 'register';
-
-		if ( ! empty( $user_id ) ) {
-			try {
-				$api = \Campaign_Data_Utils::get_api( \wp_create_nonce( 'newspack_campaigns_lightweight_api' ) );
-				if ( ! $api ) {
-					return;
+			foreach ( $merge_fields as $field_name => $field_value ) {
+				if ( false !== strpos( $field_name, $donor_merge_field ) && ! empty( $field_value ) ) {
+					if ( method_exists( '\Newspack\Logger', 'log' ) ) {
+						\Newspack\Logger::log(
+							sprintf(
+								'Setting reader %d with email %s as a donor due to Mailchimp merge tag match.',
+								$user_id,
+								$email
+							),
+							'NEWSPACK-POPUPS'
+						);
+					}
+					\Newspack\Reader_Data::set_is_donor( time(), [ 'user_id' => $user_id ] );
 				}
-				$reader_events = [
-					[
-						'type'    => 'user_account',
-						'context' => $user_id,
-						'value'   => [
-							'action' => $action,
-						],
-					],
-				];
-				$api->save_reader_events( self::get_client_id(), $reader_events );
-			} catch ( \Throwable $th ) {
-				\Newspack\Logger::log( 'Error when saving reader data on registration: ' . $th->getMessage() );
 			}
 		}
 	}

@@ -337,9 +337,17 @@ final class Modal_Checkout {
 	 * @return string Template file.
 	 */
 	public static function wc_get_template( $located, $template_name ) {
-		if ( 'checkout/form-checkout.php' === $template_name && isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			$located = NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/modal-checkout/templates/checkout-form.php';
+		$custom_templates = [
+			'checkout/form-checkout.php' => 'src/modal-checkout/templates/checkout-form.php',
+			'checkout/form-billing.php'  => 'src/modal-checkout/templates/billing-form.php',
+		];
+
+		foreach ( $custom_templates as $original_template => $custom_template ) {
+			if ( $template_name === $original_template && isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$located = NEWSPACK_BLOCKS__PLUGIN_DIR . $custom_template;
+			}
 		}
+
 		return $located;
 	}
 
@@ -488,7 +496,7 @@ final class Modal_Checkout {
 	 *
 	 * @return bool
 	 */
-	private static function should_show_order_details() {
+	public static function should_show_order_details() {
 		$cart = \WC()->cart;
 		if ( $cart->is_empty() ) {
 			return false;

@@ -139,6 +139,12 @@ export type PromptType = {
 	title: string;
 	content: string;
 	featured_image_id?: number;
+	segments: [
+		{
+			id: number;
+			name: string;
+		}
+	];
 	options: PromptOptions;
 	user_input_fields: [ InputField ];
 	help_info?: {
@@ -171,7 +177,6 @@ export type PromptOptions = {
 	trigger_blocks_count: number;
 	archive_insertion_posts_count: number;
 	archive_insertion_is_repeating: false;
-	selected_segment_id: string;
 	post_types: Array< string >;
 	archive_page_types: Array< string >;
 	additional_classes: string;

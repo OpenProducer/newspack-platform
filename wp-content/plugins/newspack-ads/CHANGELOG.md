@@ -1,3 +1,17 @@
+# [1.44.0](https://github.com/Automattic/newspack-ads/compare/v1.43.1...v1.44.0) (2023-08-24)
+
+
+### Features
+
+* **gam:** support parent ad unit path ([#701](https://github.com/Automattic/newspack-ads/issues/701)) ([3d2a51d](https://github.com/Automattic/newspack-ads/commit/3d2a51d5ecbe7cd428e24ab0756172111793f6c3))
+
+# [1.44.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.43.1...v1.44.0-alpha.1) (2023-08-17)
+
+
+### Features
+
+* **gam:** support parent ad unit path ([#701](https://github.com/Automattic/newspack-ads/issues/701)) ([3d2a51d](https://github.com/Automattic/newspack-ads/commit/3d2a51d5ecbe7cd428e24ab0756172111793f6c3))
+
 ## [1.43.1](https://github.com/Automattic/newspack-ads/compare/v1.43.0...v1.43.1) (2023-08-07)
 
 

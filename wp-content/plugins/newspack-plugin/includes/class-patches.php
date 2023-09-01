@@ -18,7 +18,10 @@ class Patches {
 	 */
 	public static function init() {
 		add_filter( 'wpseo_enhanced_slack_data', [ __CLASS__, 'use_cap_for_slack_preview' ] );
-		add_action( 'admin_menu', [ __CLASS__, 'add_reusable_blocks_menu_link' ] );
+		add_action( 'admin_menu', [ __CLASS__, 'add_patterns_menu_link' ] );
+		add_action( 'manage_edit-wp_block_columns', [ __CLASS__, 'add_custom_columns' ] );
+		add_action( 'manage_edit-wp_block_sortable_columns', [ __CLASS__, 'add_sortable_columns' ] );
+		add_action( 'manage_wp_block_posts_custom_column', [ __CLASS__, 'custom_column_content' ], 10, 2 );
 		add_filter( 'wpseo_opengraph_url', [ __CLASS__, 'http_ogurls' ] );
 		add_filter( 'map_meta_cap', [ __CLASS__, 'prevent_accidental_page_deletion' ], 10, 4 );
 		add_action( 'pre_post_update', [ __CLASS__, 'prevent_unpublish_front_page' ], 10, 2 );
@@ -101,10 +104,48 @@ class Patches {
 	}
 
 	/**
-	 * Add a menu link in WP Admin to easily edit and manage reusable blocks.
+	 * Add a menu link in WP Admin to easily edit and manage patterns.
 	 */
-	public static function add_reusable_blocks_menu_link() {
-		add_submenu_page( 'edit.php', 'manage_reusable_blocks', __( 'Reusable Blocks' ), 'edit_posts', 'edit.php?post_type=wp_block', '', 2 );
+	public static function add_patterns_menu_link() {
+		add_submenu_page( 'edit.php', 'manage_patterns', __( 'Patterns' ), 'edit_posts', 'edit.php?post_type=wp_block', '', 2 );
+	}
+
+	/**
+	 * Add a custom column to the patterns list table.
+	 *
+	 * @param array $columns An associative array of column headings.
+	 */
+	public static function add_custom_columns( $columns ) {
+		$columns['sync_status'] = __( 'Sync status', 'newspack' );
+		return $columns;
+	}
+
+	/**
+	 * Add a sortable custom column to the patterns list table.
+	 *
+	 * @param array $columns An associative array of column headings.
+	 */
+	public static function add_sortable_columns( $columns ) {
+		$columns['sync_status'] = __( 'Sync status', 'newspack' );
+		return $columns;
+	}
+
+	/**
+	 * Render sync status in the custom column content.
+	 *
+	 * @param string $column The column name.
+	 * @param int    $post_id The post ID.
+	 */
+	public static function custom_column_content( $column, $post_id ) {
+		switch ( $column ) {
+			case 'sync_status':
+				$sync_status = get_post_meta( $post_id, 'wp_pattern_sync_status', true );
+				printf(
+					'%s',
+					empty( $sync_status ) ? esc_html( __( 'synced', 'newspack' ) ) : esc_html( $sync_status )
+				);
+				break;
+		}
 	}
 
 	/**

@@ -112,7 +112,7 @@ final class Newspack_Popups_Custom_Placements {
 		if ( ! empty( $prompts ) ) {
 			$sorted_prompts = array_map(
 				function( $post ) {
-					$segment_ids = get_post_meta( $post->ID, 'selected_segment_id', true );
+					$segment_ids = Newspack_Segments_Model::get_popup_segments_ids_string( $post->ID );
 					$segments    = [
 						[
 							'name'     => 'Everyone',

@@ -5,6 +5,12 @@
             "slug": "ras_registration_overlay",
             "title": "Registration Overlay",
             "content": "<!-- wp:newspack\/reader-registration {\"title\":\"{{heading}}\",\"description\":\"{{body}}\",\"label\":\"{{button_label}}\",\"hideSubscriptionInput\":true,{{lists}}} -->\n<div class=\"wp-block-newspack-reader-registration\"><!-- wp:paragraph {\"align\":\"center\"} --><p class=\"has-text-align-center\">{{success_message}}</p><!-- /wp:paragraph --><\/div>\n<!-- \/wp:newspack\/reader-registration -->",
+            "segments": [
+              {
+                "id": 1003,
+                "name": "Not registered and not signed up for a newsletter"
+              }
+            ],
             "options": {
                 "background_color": "#FFFFFF",
                 "hide_border": false,
@@ -25,7 +31,6 @@
                 "trigger_blocks_count": "3",
                 "archive_insertion_posts_count": 1,
                 "archive_insertion_is_repeating": false,
-                "selected_segment_id": "639b337fdbf33",
                 "post_types": [
                     "post",
                     "page",
@@ -122,6 +127,12 @@
             "slug": "ras_newsletter_overlay",
             "title": "Newsletter Signup Overlay",
             "content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
+            "segments": [
+              {
+                "id": 1002,
+                "name": "Registered but not signed up for a newsletter"
+              }
+            ],
             "options": {
                 "background_color": "#FFFFFF",
                 "hide_border": false,
@@ -142,7 +153,6 @@
                 "trigger_blocks_count": "3",
                 "archive_insertion_posts_count": 1,
                 "archive_insertion_is_repeating": false,
-                "selected_segment_id": "639b333b41025",
                 "post_types": [
                     "post",
                     "page",
@@ -239,6 +249,12 @@
             "slug": "ras_donation_overlay",
             "title": "Donation Overlay",
             "content": "<!-- wp:heading -->\n<h2>{{heading}}<\/h2>\n<!-- \/wp:heading -->\n\n<!-- wp:paragraph -->\n<p>{{body}}<\/p>\n<!-- \/wp:paragraph -->\n\n<!-- wp:newspack-blocks\/donate {\"className\":\"is-style-alternate\",\"amounts\":{\"once\":[9,20,90,20],\"month\":[7,15,30,15],\"year\":[84,180,360,180]},\"disabledFrequencies\":{\"once\":false,\"month\":false,\"year\":false},\"thanksText\":\"{{thanks_message}}\",\"buttonText\": \"{{button_label}}\",\"minimumDonation\":5} \/-->",
+            "segments": [
+              {
+                "id": 1001,
+                "name": "Registered, signed up for at least one newsletter, but has not donated"
+              }
+            ],
             "options": {
                 "background_color": "#FFFFFF",
                 "hide_border": false,
@@ -259,7 +275,6 @@
                 "trigger_blocks_count": "3",
                 "archive_insertion_posts_count": 1,
                 "archive_insertion_is_repeating": false,
-                "selected_segment_id": "639b3315239f0",
                 "post_types": [
                     "post",
                     "page",
@@ -348,6 +363,16 @@
             "slug": "ras_newsletter_inline",
             "title": "Inline Newsletter Signup (secondary)",
             "content": "<!-- wp:paragraph -->\n<p>{{body}}</p>\n<!-- /wp:paragraph -->\n\n<!-- wp:newspack-newsletters/subscribe {\"label\":\"{{button_label}}\",\"successMessage\":\"{{success_message}}\",{{lists}}} /-->",
+            "segments": [
+              {
+                "id": 1002,
+                "name": "Registered but not signed up for a newsletter"
+              },
+              {
+                "id": 1003,
+                "name": "Not registered and not signed up for a newsletter"
+              }
+            ],
             "options": {
                 "background_color": "#FFFFFF",
                 "hide_border": false,
@@ -368,7 +393,6 @@
                 "trigger_blocks_count": 2,
                 "archive_insertion_posts_count": 1,
                 "archive_insertion_is_repeating": false,
-                "selected_segment_id": "639b333b41025,639b337fdbf33",
                 "post_types": [
                     "post"
                 ],
@@ -466,7 +490,6 @@
                 "trigger_blocks_count": 0,
                 "archive_insertion_posts_count": 1,
                 "archive_insertion_is_repeating": false,
-                "selected_segment_id": "",
                 "post_types": [
                     "post"
                 ],
@@ -560,7 +583,7 @@
                 "referrers": "",
                 "referrers_not": ""
             },
-            "id": "639b3315239f0",
+            "id": "1001",
             "priority": 0
         },
         {
@@ -581,7 +604,7 @@
                 "referrers": "",
                 "referrers_not": ""
             },
-            "id": "639b333b41025",
+            "id": "1002",
             "priority": 1
         },
         {
@@ -602,7 +625,7 @@
                 "referrers": "",
                 "referrers_not": ""
             },
-            "id": "639b337fdbf33",
+            "id": "1003",
             "priority": 2
         }
     ],

@@ -44,6 +44,36 @@ final class Newspack_Popups_View_As {
 			return sanitize_text_field( $_GET['view_as'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		}
 	}
+
+	/**
+	 * Parse "view as" spec.
+	 *
+	 * @param string|null $raw_spec Raw spec. If null, read from $_GET['view_as'].
+	 * @return object Parsed spac.
+	 */
+	public static function parse_view_as( $raw_spec = null ) {
+		if ( empty( $raw_spec ) ) {
+			$raw_spec = self::viewing_as_spec();
+		}
+
+		if ( empty( $raw_spec ) ) {
+			return [];
+		}
+
+		return array_reduce(
+			explode( ';', $raw_spec ),
+			function( $acc, $item ) {
+				$parts = explode( ':', $item );
+				if ( 1 === count( $parts ) ) {
+					$acc[ $parts[0] ] = true;
+				} else {
+					$acc[ $parts[0] ] = $parts[1];
+				}
+				return $acc;
+			},
+			[]
+		);
+	}
 }
 
 Newspack_Popups_View_As::instance();
