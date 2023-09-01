@@ -169,6 +169,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			'headers' => [
 				'Content-Type' => $content_type,
 				'Accept'       => 'application/json',
+				'API-TOKEN'    => $credentials['key'],
 			],
 			'body'    => $body,
 		];

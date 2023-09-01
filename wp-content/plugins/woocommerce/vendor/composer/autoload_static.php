@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit74cad37f03b517f5f51a0956a403bde2
+class ComposerStaticInitf04c068a64cbaa8c2d8666c9e308f28d
 {
     public static $files = array (
         'a4a119a56e50fbb293281d9a48007e0e' => __DIR__ . '/..' . '/symfony/polyfill-php80/bootstrap.php',
@@ -541,6 +541,7 @@ class ComposerStaticInit74cad37f03b517f5f51a0956a403bde2
         'Automattic\\WooCommerce\\Blocks\\Templates\\ProductAttributeTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ProductAttributeTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\ProductSearchResultsTemplate' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/ProductSearchResultsTemplate.php',
         'Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplateCompatibility' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Templates/SingleProductTemplateCompatibility.php',
+        'Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateMigrationUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/BlockTemplateMigrationUtils.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\BlocksWpQuery' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/BlocksWpQuery.php',
         'Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils' => __DIR__ . '/../..' . '/packages/woocommerce-blocks/src/Utils/CartCheckoutUtils.php',
@@ -1180,10 +1181,10 @@ class ComposerStaticInit74cad37f03b517f5f51a0956a403bde2
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$prefixDirsPsr4;
-            $loader->prefixesPsr0 = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$prefixesPsr0;
-            $loader->classMap = ComposerStaticInit74cad37f03b517f5f51a0956a403bde2::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf04c068a64cbaa8c2d8666c9e308f28d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf04c068a64cbaa8c2d8666c9e308f28d::$prefixDirsPsr4;
+            $loader->prefixesPsr0 = ComposerStaticInitf04c068a64cbaa8c2d8666c9e308f28d::$prefixesPsr0;
+            $loader->classMap = ComposerStaticInitf04c068a64cbaa8c2d8666c9e308f28d::$classMap;
 
         }, null, ClassLoader::class);
     }

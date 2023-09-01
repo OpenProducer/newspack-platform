@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 8.0.1\n"
+"Project-Id-Version: WooCommerce 8.0.3\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-08-09T09:23:29+00:00\n"
+"POT-Creation-Date: 2023-08-24T23:12:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.8.1\n"
 "X-Domain: woocommerce\n"
@@ -9090,7 +9090,7 @@ msgstr ""
 #: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:800
 #: src/Admin/Features/PaymentGatewaySuggestions/DefaultPaymentGateways.php:835
 #: src/Internal/Admin/RemoteFreeExtensions/DefaultFreeExtensions.php:206
-#: src/Internal/Admin/WcPayWelcomePage.php:107
+#: src/Internal/Admin/WcPayWelcomePage.php:112
 #: assets/client/admin/app/index.js:2
 #: assets/client/admin/chunks/homescreen.js:1
 #: assets/client/admin/data/index.js:2
@@ -16274,7 +16274,7 @@ msgid "These pages need to be set so that WooCommerce knows where to send users 
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-advanced.php:64
-#: packages/woocommerce-blocks/src/BlockTemplatesController.php:886
+#: packages/woocommerce-blocks/src/BlockTemplatesController.php:789
 msgid "Cart page"
 msgstr ""
 
@@ -16286,7 +16286,7 @@ msgid "Page contents: [%s]"
 msgstr ""
 
 #: includes/admin/settings/class-wc-settings-advanced.php:84
-#: packages/woocommerce-blocks/src/BlockTemplatesController.php:869
+#: packages/woocommerce-blocks/src/BlockTemplatesController.php:772
 msgid "Checkout page"
 msgstr ""
 
@@ -21674,9 +21674,9 @@ msgid "We share information with third parties who help us provide our orders an
 msgstr ""
 
 #: includes/class-wc-privacy.php:122
-#: src/Internal/Admin/WcPayWelcomePage.php:103
-#: src/Internal/Admin/WcPayWelcomePage.php:123
-#: src/Internal/Admin/WcPayWelcomePage.php:124
+#: src/Internal/Admin/WcPayWelcomePage.php:108
+#: src/Internal/Admin/WcPayWelcomePage.php:128
+#: src/Internal/Admin/WcPayWelcomePage.php:129
 #: assets/client/admin/chunks/homescreen.js:1
 msgid "Payments"
 msgstr ""
@@ -22292,7 +22292,7 @@ msgstr ""
 
 #: includes/customizer/class-wc-shop-customizer.php:678
 #: includes/wc-template-functions.php:2253
-#: packages/woocommerce-blocks/src/Templates/CheckoutTemplate.php:35
+#: packages/woocommerce-blocks/src/Templates/CheckoutTemplate.php:37
 msgid "Checkout"
 msgstr ""
 
@@ -30503,7 +30503,7 @@ msgstr ""
 #: includes/widgets/class-wc-widget-cart.php:25
 #: includes/widgets/class-wc-widget-cart.php:29
 #: includes/widgets/class-wc-widget-cart.php:64
-#: packages/woocommerce-blocks/src/Templates/CartTemplate.php:46
+#: packages/woocommerce-blocks/src/Templates/CartTemplate.php:53
 #: packages/woocommerce-blocks/assets/js/blocks/cart/index.js:22
 #: packages/woocommerce-blocks/build/cart.js:42
 msgid "Cart"
@@ -31755,25 +31755,25 @@ msgstr ""
 msgid "Could not register file \"%s\" as a block pattern (\"Title\" field missing)"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/BlockTemplatesController.php:735
+#: packages/woocommerce-blocks/src/BlockTemplatesController.php:737
 msgid "Shop"
 msgstr ""
 
 #. translators: %1$s: opening anchor tag, %2$s: closing anchor tag.
-#: packages/woocommerce-blocks/src/BlockTemplatesController.php:872
+#: packages/woocommerce-blocks/src/BlockTemplatesController.php:775
 msgid "The checkout template can be %1$s edited here%2$s."
 msgstr ""
 
-#: packages/woocommerce-blocks/src/BlockTemplatesController.php:876
+#: packages/woocommerce-blocks/src/BlockTemplatesController.php:779
 msgid "This is the URL to the checkout page."
 msgstr ""
 
 #. translators: %1$s: opening anchor tag, %2$s: closing anchor tag.
-#: packages/woocommerce-blocks/src/BlockTemplatesController.php:889
+#: packages/woocommerce-blocks/src/BlockTemplatesController.php:792
 msgid "The cart template can be %1$s edited here%2$s."
 msgstr ""
 
-#: packages/woocommerce-blocks/src/BlockTemplatesController.php:893
+#: packages/woocommerce-blocks/src/BlockTemplatesController.php:796
 msgid "This is the URL to the cart page."
 msgstr ""
 

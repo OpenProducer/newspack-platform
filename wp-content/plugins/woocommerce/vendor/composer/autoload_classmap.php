@@ -448,6 +448,7 @@ return array(
     'Automattic\\WooCommerce\\Blocks\\Templates\\ProductAttributeTemplate' => $baseDir . '/packages/woocommerce-blocks/src/Templates/ProductAttributeTemplate.php',
     'Automattic\\WooCommerce\\Blocks\\Templates\\ProductSearchResultsTemplate' => $baseDir . '/packages/woocommerce-blocks/src/Templates/ProductSearchResultsTemplate.php',
     'Automattic\\WooCommerce\\Blocks\\Templates\\SingleProductTemplateCompatibility' => $baseDir . '/packages/woocommerce-blocks/src/Templates/SingleProductTemplateCompatibility.php',
+    'Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateMigrationUtils' => $baseDir . '/packages/woocommerce-blocks/src/Utils/BlockTemplateMigrationUtils.php',
     'Automattic\\WooCommerce\\Blocks\\Utils\\BlockTemplateUtils' => $baseDir . '/packages/woocommerce-blocks/src/Utils/BlockTemplateUtils.php',
     'Automattic\\WooCommerce\\Blocks\\Utils\\BlocksWpQuery' => $baseDir . '/packages/woocommerce-blocks/src/Utils/BlocksWpQuery.php',
     'Automattic\\WooCommerce\\Blocks\\Utils\\CartCheckoutUtils' => $baseDir . '/packages/woocommerce-blocks/src/Utils/CartCheckoutUtils.php',

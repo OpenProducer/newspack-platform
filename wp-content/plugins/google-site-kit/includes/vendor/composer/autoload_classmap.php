@@ -71,6 +71,7 @@ return array(
     'Google\\Site_Kit\\Core\\Guards\\Guard_Interface' => $baseDir . '/Core/Guards/Guard_Interface.php',
     'Google\\Site_Kit\\Core\\Key_Metrics\\Key_Metrics' => $baseDir . '/Core/Key_Metrics/Key_Metrics.php',
     'Google\\Site_Kit\\Core\\Key_Metrics\\Key_Metrics_Settings' => $baseDir . '/Core/Key_Metrics/Key_Metrics_Settings.php',
+    'Google\\Site_Kit\\Core\\Key_Metrics\\Key_Metrics_Setup_Completed' => $baseDir . '/Core/Key_Metrics/Key_Metrics_Setup_Completed.php',
     'Google\\Site_Kit\\Core\\Key_Metrics\\REST_Key_Metrics_Controller' => $baseDir . '/Core/Key_Metrics/REST_Key_Metrics_Controller.php',
     'Google\\Site_Kit\\Core\\Modules\\Datapoint' => $baseDir . '/Core/Modules/Datapoint.php',
     'Google\\Site_Kit\\Core\\Modules\\Module' => $baseDir . '/Core/Modules/Module.php',

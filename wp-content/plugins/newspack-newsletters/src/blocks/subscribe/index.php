@@ -322,8 +322,12 @@ function send_form_response( $data ) {
  * Process newsletter signup form.
  */
 function process_form() {
-	if ( ! isset( $_REQUEST[ FORM_ACTION ] ) || ! \wp_verify_nonce( \sanitize_text_field( $_REQUEST[ FORM_ACTION ] ), FORM_ACTION ) ) {
+	if ( ! isset( $_REQUEST[ FORM_ACTION ] ) ) {
 		return;
+	}
+
+	if ( ! \wp_verify_nonce( \sanitize_text_field( $_REQUEST[ FORM_ACTION ] ), FORM_ACTION ) ) {
+		return send_form_response( new \WP_Error( 'invalid_nonce', __( 'Invalid request.', 'newspack-newsletters' ) ) );
 	}
 
 	// Honeypot trap.
@@ -372,6 +376,14 @@ function process_form() {
 		$metadata['status'] = 'pending';
 	}
 
+	if ( ! \is_user_logged_in() && \class_exists( '\Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) {
+		$metadata = array_merge( $metadata, [ 'registration_method' => 'newsletters-subscription' ] );
+		if ( $popup_id ) {
+			$metadata['registration_method'] = 'newsletters-subscription-popup';
+		}
+		\Newspack\Reader_Activation::register_reader( $email, $name, true, $metadata );
+	}
+
 	$result = \Newspack_Newsletters_Subscription::add_contact(
 		[
 			'name'     => $name ?? null,
@@ -381,12 +393,8 @@ function process_form() {
 		$lists
 	);
 
-	if ( ! \is_user_logged_in() && \class_exists( '\Newspack\Reader_Activation' ) && \Newspack\Reader_Activation::is_enabled() ) {
-		$metadata = array_merge( $metadata, [ 'registration_method' => 'newsletters-subscription' ] );
-		if ( $popup_id ) {
-			$metadata['registration_method'] = 'newsletters-subscription-popup';
-		}
-		\Newspack\Reader_Activation::register_reader( $email, $name, true, $metadata );
+	if ( \is_wp_error( $result ) ) {
+		return send_form_response( $result );
 	}
 
 	/**
@@ -397,6 +405,9 @@ function process_form() {
 	 * @param array          $metadata Some metadata about the subscription. Always contains `current_page_url`, `newspack_popup_id` and `newsletters_subscription_method` keys.
 	 */
 	\do_action( 'newspack_newsletters_subscribe_form_processed', $email, $result, $metadata );
+
+	// Generate a new nonce for subsequent form submissions.
+	$result[ FORM_ACTION ] = \wp_create_nonce( FORM_ACTION );
 
 	return send_form_response( $result );
 }
