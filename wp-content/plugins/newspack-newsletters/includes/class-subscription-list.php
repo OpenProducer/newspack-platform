@@ -14,6 +14,9 @@ defined( 'ABSPATH' ) || exit;
 
 /**
  * Class used to represent one Subscription List
+ *
+ * A list can be either local or remote. Local lists reffer to lists that are created via wp-admin and synced to the ESP as tags or groups.
+ * Remote lists are lists that are created and managed on the ESP and synced to the site. Users can store a local title and description that will be used to represent the list on the site.
  */
 class Subscription_List {
 
@@ -35,14 +38,29 @@ class Subscription_List {
 	const FORM_ID_PREFIX = 'newspack-';
 
 	/**
-	 * Checks if a string $id is in the format of a Subscription List Form ID
+	 * The post meta key used to mark a list as local
+	 */
+	const TYPE_META = '_type';
+
+	/**
+	 * The post meta key used to store the list provider, only present for remote lists
+	 */
+	const PROVIDER_META = '_provider';
+
+	/**
+	 * The post meta key used to store the list remote ID (the ID in the ESP), only present for remote lists
+	 */
+	const REMOTE_ID_META = '_remote_id';
+
+	/**
+	 * Checks if a string $id is in the format of a local Subscription List Form ID
 	 *
 	 * @see self::get_form_id
 	 * @param string $id The ID to be checked.
 	 * @return boolean
 	 */
-	public static function is_form_id( $id ) {
-		return (bool) self::get_id_from_form_id( $id );
+	public static function is_local_form_id( $id ) {
+		return (bool) self::get_id_from_local_form_id( $id );
 	}
 
 	/**
@@ -52,7 +70,7 @@ class Subscription_List {
 	 * @param string $form_id The Form id.
 	 * @return ?int The ID on success, NULL on failure
 	 */
-	public static function get_id_from_form_id( $form_id ) {
+	public static function get_id_from_local_form_id( $form_id ) {
 		if ( ! is_string( $form_id ) ) {
 			return;
 		}
@@ -67,16 +85,59 @@ class Subscription_List {
 	}
 
 	/**
+	 * Gets a Subscription List object by its form_id
+	 *
+	 * @param string $form_id The list's form ID.
+	 * @return ?Subscription_List
+	 */
+	public static function from_form_id( $form_id ) {
+		$form_id = (string) $form_id;
+		if ( self::is_local_form_id( $form_id ) ) {
+			$post_id = self::get_id_from_local_form_id( $form_id );
+			try {
+				return new self( $post_id );
+			} catch ( \InvalidArgumentException $e ) {
+				return;
+			}
+		}
+		return self::from_remote_id( $form_id );
+	}
+
+	/**
+	 * Gets a Subscription_List object by its remote ID
+	 *
+	 * @param string $remote_id The remote ID. The ID of the list in the ESP.
+	 * @return ?Subscription_List
+	 */
+	public static function from_remote_id( $remote_id ) {
+		$posts = get_posts(
+			[
+				'post_type'      => Subscription_Lists::CPT,
+				'posts_per_page' => 1,
+				'post_status'    => 'any',
+				'meta_query'     => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_query
+					[
+						'key'   => self::REMOTE_ID_META,
+						'value' => $remote_id,
+					],
+				],
+				'orderby'        => 'ID',
+				'order'          => 'ASC',
+			]
+		);
+		if ( 1 === count( $posts ) ) {
+			return new self( $posts[0] );
+		}
+	}
+
+	/**
 	 * Initializes a new Subscription List
 	 *
-	 * @param WP_Post|int|string $post_or_id The post object, post ID or Subscription List form ID.
+	 * @param WP_Post|int $post_or_id The post object or post ID.
 	 * @throws \InvalidArgumentException In case the post is not found.
 	 */
 	public function __construct( $post_or_id ) {
 		if ( ! $post_or_id instanceof WP_Post ) {
-			if ( self::is_form_id( $post_or_id ) ) {
-				$post_or_id = self::get_id_from_form_id( $post_or_id );
-			}
 			$post_or_id = get_post( (int) $post_or_id );
 			if ( ! $post_or_id instanceof WP_Post ) {
 				throw new \InvalidArgumentException( 'Post not found' );
@@ -102,7 +163,10 @@ class Subscription_List {
 	 * @return string
 	 */
 	public function get_form_id() {
-		return self::FORM_ID_PREFIX . $this->get_id();
+		if ( $this->is_local() ) {
+			return self::FORM_ID_PREFIX . $this->get_id();
+		}
+		return $this->get_remote_id();
 	}
 
 	/**
@@ -124,14 +188,103 @@ class Subscription_List {
 	}
 
 	/**
-	 * Gets the link to edit this list
+	 * Gets the list type. If not defined, defaults to 'local'
+	 *
+	 * @return string
+	 */
+	public function get_type() {
+		$meta = get_post_meta( $this->get_id(), self::TYPE_META, true );
+		return empty( $meta ) || ! is_string( $meta ) || 'remote' !== $meta ? 'local' : 'remote';
+	}
+
+	/**
+	 * Sets the list type
+	 *
+	 * @param string $type The type to be set. Accepts local or remote.
+	 * @return boolean
+	 */
+	public function set_type( $type ) {
+		return update_post_meta( $this->get_id(), self::TYPE_META, 'remote' === $type ? 'remote' : 'local' );
+	}
+
+	/**
+	 * Gets the label for the list type from the provider class
+	 *
+	 * @return string
+	 */
+	public function get_type_label() {
+		$provider = Newspack_Newsletters::get_service_provider();
+		if ( ! empty( $provider ) ) {
+			return $this->is_local() ? $provider::label( 'local_list_explanation', $this->get_form_id() ) : $provider::label( 'list_explanation', $this->get_form_id() );
+		}
+		return '';
+	}
+
+	/**
+	 * Checks if the list is active
+	 *
+	 * @return boolean
+	 */
+	public function is_active() {
+		return 'publish' === $this->post->post_status;
+	}
+
+	/**
+	 * Checks if the list is local
+	 *
+	 * @return boolean
+	 */
+	public function is_local() {
+		return 'local' === $this->get_type();
+	}
+
+	/**
+	 * Gets the provider slug, only present for remote lists
+	 *
+	 * @return string
+	 */
+	public function get_provider() {
+		return get_post_meta( $this->get_id(), self::PROVIDER_META, true );
+	}
+
+	/**
+	 * Sets the provider slug, only present for remote lists
+	 *
+	 * @param string $provider The provider slug.
+	 * @return boolean
+	 */
+	public function set_provider( $provider ) {
+		return update_post_meta( $this->get_id(), self::PROVIDER_META, $provider );
+	}
+
+	/**
+	 * Gets the remote ID, only present for remote lists
+	 *
+	 * @return string
+	 */
+	public function get_remote_id() {
+		return get_post_meta( $this->get_id(), self::REMOTE_ID_META, true );
+	}
+
+	/**
+	 * Sets the remote ID, only present for remote lists
+	 *
+	 * @param string $remote_id The remote ID.
+	 * @return boolean
+	 */
+	public function set_remote_id( $remote_id ) {
+		return update_post_meta( $this->get_id(), self::REMOTE_ID_META, $remote_id );
+	}
+
+	/**
+	 * Gets the link to edit this list. Only local lists can be edited locally.
 	 *
 	 * In some rest requests, the post type is not registered, so we can't use get_edit_post_link
 	 *
 	 * @return string
 	 */
 	public function get_edit_link() {
-		return sprintf( admin_url( 'post.php?post=%d&action=edit' ), $this->get_id() );
+		return $this->is_local() ? sprintf( admin_url( 'post.php?post=%d&action=edit' ), $this->get_id() ) : '';
 	}
 
 	/**
@@ -184,6 +337,9 @@ class Subscription_List {
 	 * @return boolean
 	 */
 	public function is_configured_for_provider( $provider_slug ) {
+		if ( ! $this->is_local() ) {
+			return $this->get_provider() === $provider_slug;
+		}
 		$settings = $this->get_provider_settings( $provider_slug );
 		if ( ! is_array( $settings ) ) {
 			return false;
@@ -290,6 +446,60 @@ class Subscription_List {
 		}
 		
 		return update_post_meta( $this->get_id(), self::META_KEY, $settings );
+	}
+
+	/**
+	 * Update the list settings.
+	 *
+	 * This methdos can update three fields: title, description and active.
+	 *
+	 * @param array[] $fields {
+	 *    Array of list configuration. All keys are optional.
+	 *
+	 *    @type boolean active      Whether the list is available for subscription.
+	 *    @type string  title       The list title.
+	 *    @type string  description The list description.
+	 * }
+	 *
+	 * @return boolean|WP_Error Whether the lists were updated or error.
+	 */
+	public function update( $fields ) {
+		$post_data = [];
+		if ( isset( $fields['active'] ) && $fields['active'] !== $this->is_active() ) {
+			$post_data['post_status'] = $fields['active'] ? 'publish' : 'draft';
+		}
+		if ( ! empty( $fields['title'] ) && $this->get_title() !== $fields['title'] ) {
+			$post_data['post_title'] = $fields['title'];
+		}
+		if ( ! empty( $fields['description'] ) && $this->get_description() !== $fields['description'] ) {
+			$post_data['post_content'] = $fields['description'];
+		}
+		if ( ! empty( $post_data ) ) {
+			$post_data['ID'] = $this->get_id();
+			wp_update_post( $post_data );
+			$this->post = get_post( $this->get_id() );
+			return true;
+		}
+		return false;
+	}
+
+	/**
+	 * Converts the list to an array, to be used in the configuration object used by the plugin
+	 *
+	 * @return array
+	 */
+	public function to_array() {
+		return [
+			'id'          => $this->get_form_id(),
+			'db_id'       => $this->get_id(),
+			'title'       => $this->get_title(),
+			'name'        => $this->get_title(),
+			'description' => $this->get_description(),
+			'type'        => $this->get_type(),
+			'type_label'  => $this->get_type_label(),
+			'edit_link'   => $this->get_edit_link(),
+			'active'      => $this->is_active(),
+		];
 	}
 
 }

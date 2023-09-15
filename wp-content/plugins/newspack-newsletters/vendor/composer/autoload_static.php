@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit9625b9159ec6e445672bf79a9a1ceede
+class ComposerStaticInit356a38c8887ec15c5e7a0b370eaa0de1
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -40,6 +40,12 @@ class ComposerStaticInit9625b9159ec6e445672bf79a9a1ceede
         'Newspack\\Newsletters\\Subscription_List' => __DIR__ . '/../..' . '/includes/class-subscription-list.php',
         'Newspack\\Newsletters\\Subscription_Lists' => __DIR__ . '/../..' . '/includes/class-subscription-lists.php',
         'Newspack_Newsletters' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters.php',
+        'Newspack_Newsletters\\Plugins\\Woocommerce_Memberships' => __DIR__ . '/../..' . '/includes/plugins/class-woocommerce-memberships.php',
+        'Newspack_Newsletters\\Tracking\\Admin' => __DIR__ . '/../..' . '/includes/tracking/class-admin.php',
+        'Newspack_Newsletters\\Tracking\\Click' => __DIR__ . '/../..' . '/includes/tracking/class-click.php',
+        'Newspack_Newsletters\\Tracking\\Data_Events' => __DIR__ . '/../..' . '/includes/tracking/class-data-events.php',
+        'Newspack_Newsletters\\Tracking\\Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-pixel.php',
+        'Newspack_Newsletters\\Tracking\\Utils' => __DIR__ . '/../..' . '/includes/tracking/class-utils.php',
         'Newspack_Newsletters_Active_Campaign' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php',
         'Newspack_Newsletters_Active_Campaign_Controller' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign-controller.php',
         'Newspack_Newsletters_Ads' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-ads.php',
@@ -74,9 +80,9 @@ class ComposerStaticInit9625b9159ec6e445672bf79a9a1ceede
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit9625b9159ec6e445672bf79a9a1ceede::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit9625b9159ec6e445672bf79a9a1ceede::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit9625b9159ec6e445672bf79a9a1ceede::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit356a38c8887ec15c5e7a0b370eaa0de1::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit356a38c8887ec15c5e7a0b370eaa0de1::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit356a38c8887ec15c5e7a0b370eaa0de1::$classMap;
 
         }, null, ClassLoader::class);
     }

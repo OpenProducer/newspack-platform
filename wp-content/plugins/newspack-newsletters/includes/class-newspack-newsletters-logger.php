@@ -14,7 +14,7 @@ class Newspack_Newsletters_Logger {
 	/**
 	 * A logger.
 	 *
-	 * @param any $payload The payload to log.
+	 * @param string $payload The payload to log.
 	 */
 	public static function log( $payload ) {
 		if ( ! defined( 'NEWSPACK_LOG_LEVEL' ) || 0 > (int) NEWSPACK_LOG_LEVEL || 'string' !== gettype( $payload ) ) {

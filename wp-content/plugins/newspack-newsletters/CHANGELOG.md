@@ -1,3 +1,63 @@
+# [2.0.0](https://github.com/Automattic/newspack-newsletters/compare/v1.68.0...v2.0.0) (2023-09-13)
+
+
+### Bug Fixes
+
+* avoid reprocessing links ([#1277](https://github.com/Automattic/newspack-newsletters/issues/1277)) ([f1822d3](https://github.com/Automattic/newspack-newsletters/commit/f1822d3a12ff18e579d987b201af20a434caf60d))
+* PHP warning if block is missing backgroundColor attribute ([afa4859](https://github.com/Automattic/newspack-newsletters/commit/afa48595fc69ed0c2ce3501d16f3bda1f5e33b6b))
+* **posts-inserter:** avoid conflicting UI state ([#1280](https://github.com/Automattic/newspack-newsletters/issues/1280)) ([5f87423](https://github.com/Automattic/newspack-newsletters/commit/5f87423f9b72484e373057955ff96b727a6ebdfb))
+
+
+* Merge pull request #1273 from Automattic/master ([f9185b3](https://github.com/Automattic/newspack-newsletters/commit/f9185b3ad5a40b1a8630cc824e4f27b957e6e466)), closes [#1273](https://github.com/Automattic/newspack-newsletters/issues/1273)
+
+
+### Features
+
+* add filters to support additional custom blocks ([#1253](https://github.com/Automattic/newspack-newsletters/issues/1253)) ([b113925](https://github.com/Automattic/newspack-newsletters/commit/b113925e081222768b31f59afe51138b628338c8))
+* revenue optimizations ([#1272](https://github.com/Automattic/newspack-newsletters/issues/1272)) ([e26e5b9](https://github.com/Automattic/newspack-newsletters/commit/e26e5b9e7468af22a73c314493d83fc92ac14dc0)), closes [#1189](https://github.com/Automattic/newspack-newsletters/issues/1189) [#1232](https://github.com/Automattic/newspack-newsletters/issues/1232) [#1241](https://github.com/Automattic/newspack-newsletters/issues/1241) [#1237](https://github.com/Automattic/newspack-newsletters/issues/1237) [#1259](https://github.com/Automattic/newspack-newsletters/issues/1259) [#1256](https://github.com/Automattic/newspack-newsletters/issues/1256) [#1261](https://github.com/Automattic/newspack-newsletters/issues/1261) [#1249](https://github.com/Automattic/newspack-newsletters/issues/1249) [#1262](https://github.com/Automattic/newspack-newsletters/issues/1262) [#1269](https://github.com/Automattic/newspack-newsletters/issues/1269) [#1263](https://github.com/Automattic/newspack-newsletters/issues/1263)
+
+
+### BREAKING CHANGES
+
+* Temporarily removes the Letterhead API integration for fetching newsletter ads
+
+Alpha release Sep 06
+* Temporarily deprecates the Letterhead newsletter ads integration until we can test it more thoroughly.
+
+# [2.0.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-09-12)
+
+
+### Bug Fixes
+
+* avoid reprocessing links ([#1277](https://github.com/Automattic/newspack-newsletters/issues/1277)) ([f1822d3](https://github.com/Automattic/newspack-newsletters/commit/f1822d3a12ff18e579d987b201af20a434caf60d))
+* PHP warning if block is missing backgroundColor attribute ([afa4859](https://github.com/Automattic/newspack-newsletters/commit/afa48595fc69ed0c2ce3501d16f3bda1f5e33b6b))
+
+# [2.0.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v1.68.0...v2.0.0-alpha.1) (2023-09-06)
+
+
+* Merge pull request #1273 from Automattic/master ([f9185b3](https://github.com/Automattic/newspack-newsletters/commit/f9185b3ad5a40b1a8630cc824e4f27b957e6e466)), closes [#1273](https://github.com/Automattic/newspack-newsletters/issues/1273)
+
+
+### Features
+
+* add filters to support additional custom blocks ([#1253](https://github.com/Automattic/newspack-newsletters/issues/1253)) ([b113925](https://github.com/Automattic/newspack-newsletters/commit/b113925e081222768b31f59afe51138b628338c8))
+* revenue optimizations ([#1272](https://github.com/Automattic/newspack-newsletters/issues/1272)) ([e26e5b9](https://github.com/Automattic/newspack-newsletters/commit/e26e5b9e7468af22a73c314493d83fc92ac14dc0)), closes [#1189](https://github.com/Automattic/newspack-newsletters/issues/1189) [#1232](https://github.com/Automattic/newspack-newsletters/issues/1232) [#1241](https://github.com/Automattic/newspack-newsletters/issues/1241) [#1237](https://github.com/Automattic/newspack-newsletters/issues/1237) [#1259](https://github.com/Automattic/newspack-newsletters/issues/1259) [#1256](https://github.com/Automattic/newspack-newsletters/issues/1256) [#1261](https://github.com/Automattic/newspack-newsletters/issues/1261) [#1249](https://github.com/Automattic/newspack-newsletters/issues/1249) [#1262](https://github.com/Automattic/newspack-newsletters/issues/1262) [#1269](https://github.com/Automattic/newspack-newsletters/issues/1269) [#1263](https://github.com/Automattic/newspack-newsletters/issues/1263)
+
+
+### BREAKING CHANGES
+
+* Temporarily removes the Letterhead API integration for fetching newsletter ads
+
+Alpha release Sep 06
+* Temporarily deprecates the Letterhead newsletter ads integration until we can test it more thoroughly.
+
+# [1.68.0](https://github.com/Automattic/newspack-newsletters/compare/v1.67.7...v1.68.0) (2023-09-06)
+
+
+### Features
+
+* add filters to support additional custom blocks ([#1270](https://github.com/Automattic/newspack-newsletters/issues/1270)) ([2fda0aa](https://github.com/Automattic/newspack-newsletters/commit/2fda0aaab9dfae2a82190187f8635efc7a21fafe))
+
 ## [1.67.7](https://github.com/Automattic/newspack-newsletters/compare/v1.67.6...v1.67.7) (2023-08-24)
 
 

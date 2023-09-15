@@ -157,56 +157,52 @@ class Newspack_Newsletters_Subscription {
 			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.' ) );
 		}
 		try {
+			/**
+			 * Here we always fetch the lists from the ESP, because we want to make sure we have the latest data.
+			 */
 			$lists = $provider->get_lists();
 			if ( is_wp_error( $lists ) ) {
 				return $lists;
 			}
-			$config = self::get_lists_config();
+			$saved_lists = Subscription_Lists::get_configured_for_current_provider();
 
-			$local_lists = Subscription_Lists::get_configured_for_current_provider();
-
-			$locals = [];
-			foreach ( $local_lists as $local_list ) {
-				$locals[] = [
-					'id'          => $local_list->get_form_id(),
-					'name'        => $local_list->get_title(),
-					'description' => $local_list->get_description(),
-					'type'        => 'local',
-					'edit_link'   => $local_list->get_edit_link(),
-				];
-			}
-
-			$lists = array_merge( $lists, $locals );
-
-			return array_map(
-				function( $list ) use ( $config, $provider ) {
+			/**
+			 * We loop through the lists returned by the ESP.
+			 * Only remote lists that still exist in the ESP will be returned.
+			 */
+			$return_lists = array_map(
+				function( $list ) {
 					if ( ! isset( $list['id'], $list['name'] ) || empty( $list['id'] ) || empty( $list['name'] ) ) {
 						return;
 					}
-					$item = [
-						'id'          => $list['id'],
-						'name'        => $list['name'],
-						'active'      => false,
-						'title'       => $list['name'],
-						'description' => $list['description'] ?? '',
-						'edit_link'   => $list['edit_link'] ?? '',
-						'type'        => $list['type'] ?? '',
-						'type_label'  => isset( $list['type'] ) && 'local' === $list['type'] ? $provider::label( 'local_list_explanation', $list ) : $provider::label( 'list_explanation', $list ),
-					];
-					if ( isset( $config[ $list['id'] ] ) ) {
-						$list_config    = $config[ $list['id'] ];
-						$item['active'] = $list_config['active'];
-						
-						// If it's a local list, ignore what is stored in the option and always use info from the Subscription_List object.
-						if ( 'local' !== $item['type'] ) {
-							$item['title']       = $list_config['title'];
-							$item['description'] = $list_config['description'];
-						}
+					
+					// This is messy, when the ESP returns lists, it's name, when we get it from our UIs, it's title... we need both.
+					$list['title'] = $list['name'];
+
+					$stored_list = Subscription_Lists::get_or_create_remote_list( $list );
+
+					if ( is_wp_error( $stored_list ) ) {
+						return;
 					}
-					return $item;
+
+					return $stored_list->to_array();
 				},
 				$lists
 			);
+
+			/**
+			 * Remove from the local DB lists that no longer exist in the ESP.
+			 * This also cleans up the DB in case we accidentally created more than one list for the same ESP list.
+			 */
+			Subscription_Lists::garbage_collector( wp_list_pluck( $return_lists, 'db_id' ) );
+
+			// Add local lists to the response.
+			foreach ( $saved_lists as $saved_list ) {
+				if ( $saved_list->is_local() ) {
+					$return_lists[] = $saved_list->to_array();
+				}
+			}
+			return $return_lists;
 		} catch ( \Exception $e ) {
 			return new WP_Error(
 				'newspack_newsletters_get_lists',
@@ -226,15 +222,18 @@ class Newspack_Newsletters_Subscription {
 		if ( empty( $provider ) ) {
 			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.' ) );
 		}
-		$provider_name = $provider->service;
-		$option_name   = sprintf( '_newspack_newsletters_%s_lists', $provider_name );
-		$config        = get_option( $option_name, [] );
-		return array_filter(
-			$config,
-			function( $item ) {
-				return true === isset( $item['active'] ) && (bool) $item['active'];
+
+		$saved_lists  = Subscription_Lists::get_configured_for_current_provider();
+		$active_lists = [];
+
+		foreach ( $saved_lists as $list ) {
+			if ( ! $list->is_active() ) {
+				continue;
 			}
-		);
+			$active_lists[ $list->get_form_id() ] = $list->to_array();
+		}
+
+		return $active_lists;
 	}
 
 	/**
@@ -243,7 +242,7 @@ class Newspack_Newsletters_Subscription {
 	 * @param array[] $lists {
 	 *    Array of list configuration.
 	 *
-	 *    @type string  id          The list id.
+	 *    @type string  id          The list id in the ESP (not the ID in the DB)
 	 *    @type boolean active      Whether the list is available for subscription.
 	 *    @type string  title       The list title.
 	 *    @type string  description The list description.
@@ -260,9 +259,8 @@ class Newspack_Newsletters_Subscription {
 		if ( empty( $lists ) ) {
 			return new WP_Error( 'newspack_newsletters_invalid_lists', __( 'Invalid list configuration.' ) );
 		}
-		$provider_name = $provider->service;
-		$option_name   = sprintf( '_newspack_newsletters_%s_lists', $provider_name );
-		return update_option( $option_name, $lists );
+
+		return Subscription_Lists::update_lists( $lists );
 	}
 
 	/**
@@ -278,7 +276,8 @@ class Newspack_Newsletters_Subscription {
 			if ( ! isset( $list['id'], $list['title'] ) || empty( $list['id'] ) || empty( $list['title'] ) ) {
 				continue;
 			}
-			$sanitized[ $list['id'] ] = [
+			$sanitized[] = [
+				'id'          => $list['id'],
 				'active'      => isset( $list['active'] ) ? (bool) $list['active'] : false,
 				'title'       => $list['title'],
 				'description' => isset( $list['description'] ) ? (string) $list['description'] : '',
@@ -900,7 +899,12 @@ class Newspack_Newsletters_Subscription {
 			<?php endif; ?>
 			<?php
 			if ( $verified ) :
-				$list_config = self::get_lists_config();
+				/**
+				 * Filters the available lists for the user to manage in the Manage Newsletters page under My Account.
+				 *
+				 * @param array|WP_Error $lists_config Associative array with list configuration keyed by list ID or WP_Error.
+				 */
+				$list_config = apply_filters( 'newspack_newsletters_manage_newsletters_available_lists', self::get_lists_config() );
 				$list_map    = [];
 				$user_lists  = array_flip( self::get_contact_lists( $email ) );
 				?>

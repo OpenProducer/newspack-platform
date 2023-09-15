@@ -10,6 +10,7 @@ namespace Newspack\Newsletters;
 use Newspack_Newsletters;
 use Newspack_Newsletters_Settings;
 use Newspack_Newsletters_Subscription;
+use WP_Error;
 use WP_Post;
 
 defined( 'ABSPATH' ) || exit;
@@ -34,18 +35,15 @@ class Subscription_Lists {
 	 * @return void
 	 */
 	public static function init() {
-		if ( ! self::should_initialize_lists() ) {
+		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
+		add_action( 'init', [ __CLASS__, 'migrate_lists' ], 11 );
+
+		if ( ! self::should_initialize_local_lists() ) {
 			return;
 		}
-		add_action( 'init', [ __CLASS__, 'register_post_type' ] );
 		add_filter( 'wp_editor_settings', [ __CLASS__, 'filter_editor_settings' ], 10, 2 );
 		add_action( 'save_post', [ __CLASS__, 'save_post' ] );
-		add_filter( 'manage_' . self::CPT . '_posts_columns', [ __CLASS__, 'posts_columns' ] );
-		add_action( 'manage_' . self::CPT . '_posts_custom_column', [ __CLASS__, 'posts_columns_values' ], 10, 2 );
 		add_action( 'admin_enqueue_scripts', [ __CLASS__, 'admin_enqueue_scripts' ] );
-
-		add_action( 'delete_post', [ __CLASS__, 'delete_post' ] );
-		add_action( 'wp_trash_post', [ __CLASS__, 'delete_post' ] );
 
 		add_action( 'edit_form_before_permalink', [ __CLASS__, 'edit_form_before_permalink' ] );
 		add_action( 'edit_form_top', [ __CLASS__, 'edit_form_top' ] );
@@ -70,7 +68,7 @@ class Subscription_Lists {
 	 *
 	 * @return boolean
 	 */
-	public static function should_initialize_lists() {
+	public static function should_initialize_local_lists() {
 		// We only need this on admin.
 		if ( ! is_admin() ) {
 			return false;
@@ -113,22 +111,22 @@ class Subscription_Lists {
 	public static function register_post_type() {
 
 		$labels = array(
-			'name'                  => _x( 'Lists', 'Post Type General Name', 'newspack' ),
-			'singular_name'         => _x( 'List', 'Post Type Singular Name', 'newspack' ),
-			'menu_name'             => __( 'Lists', 'newspack' ),
-			'name_admin_bar'        => __( 'Lists', 'newspack' ),
-			'archives'              => __( 'Lists', 'newspack' ),
-			'attributes'            => __( 'Lists', 'newspack' ),
-			'parent_item_colon'     => __( 'Parent List', 'newspack' ),
-			'all_items'             => __( 'Lists', 'newspack' ),
+			'name'                  => _x( 'Subscription Lists', 'Post Type General Name', 'newspack' ),
+			'singular_name'         => _x( 'Subscription List', 'Post Type Singular Name', 'newspack' ),
+			'menu_name'             => __( 'Subscription Lists', 'newspack' ),
+			'name_admin_bar'        => __( 'Subscription Lists', 'newspack' ),
+			'archives'              => __( 'Subscription Lists', 'newspack' ),
+			'attributes'            => __( 'Subscription Lists', 'newspack' ),
+			'parent_item_colon'     => __( 'Parent Subscription List', 'newspack' ),
+			'all_items'             => __( 'Subscription Lists', 'newspack' ),
 			'add_new_item'          => __( 'Add new list', 'newspack' ),
 			'add_new'               => __( 'Add New', 'newspack' ),
-			'new_item'              => __( 'New List', 'newspack' ),
+			'new_item'              => __( 'New Subscription List', 'newspack' ),
 			'edit_item'             => __( 'Edit list', 'newspack' ),
 			'update_item'           => __( 'Update list', 'newspack' ),
 			'view_item'             => __( 'View list', 'newspack' ),
-			'view_items'            => __( 'View Lists', 'newspack' ),
-			'search_items'          => __( 'Search List', 'newspack' ),
+			'view_items'            => __( 'View Subscription Lists', 'newspack' ),
+			'search_items'          => __( 'Search Subscription List', 'newspack' ),
 			'not_found'             => __( 'Not found', 'newspack' ),
 			'not_found_in_trash'    => __( 'Not found in Trash', 'newspack' ),
 			'featured_image'        => __( 'Featured Image', 'newspack' ),
@@ -142,12 +140,15 @@ class Subscription_Lists {
 			'filter_items_list'     => __( 'Filter items list', 'newspack' ),
 		);
 		$args   = array(
-			'label'                => __( 'List', 'newspack' ),
-			'description'          => __( 'Newsletter list', 'newspack' ),
+			'label'                => __( 'Subscription List', 'newspack' ),
+			'description'          => __( 'Newsletter Subscription list', 'newspack' ),
 			'labels'               => $labels,
 			'supports'             => array( 'title', 'editor' ),
 			'hierarchical'         => false,
-			'public'               => false,
+			'public'               => Newspack_Newsletters_Subscription::has_subscription_management(), // public true only to allow it to be restricted by Memberships. All params affected by public are also explicitly set.
+			'exclude_from_search'  => false,
+			'publicly_queryable'   => false,
+			'show_in_nav_menus'    => false,
 			'show_ui'              => true,
 			'show_in_menu'         => false,
 			'can_export'           => false,
@@ -174,46 +175,6 @@ class Subscription_Lists {
 			'side',
 			'high'
 		);
-	}
-
-	/**
-	 * Modify columns on post type table
-	 *
-	 * @param array $columns Registered columns.
-	 * @return array
-	 */
-	public static function posts_columns( $columns ) {
-		unset( $columns['date'] );
-		unset( $columns['stats'] );
-		$columns['active_providers'] = __( 'Service Providers', 'newspack-newsletters' );
-		return $columns;
-
-	}
-
-	/**
-	 * Add content to the custom column
-	 *
-	 * @param string $column The current column.
-	 * @param int    $post_id The current post ID.
-	 * @return void
-	 */
-	public static function posts_columns_values( $column, $post_id ) {
-		if ( 'active_providers' === $column ) {
-			$list = new Subscription_List( $post_id );
-			foreach ( $list->get_configured_providers() as $provider ) {
-				$settings     = $list->get_provider_settings( $provider );
-				$provider_obj = Newspack_Newsletters::get_service_provider_instance( $provider );
-				?>
-				<p>
-					<?php echo esc_html( $provider_obj::label( 'name' ) ); ?>:
-					<span class="subscription-list-tag">
-						<?php echo esc_html( $settings['tag_name'] ); ?>
-					</span>
-				</p>
-				<?php
-
-			}
-		}
 	}
 
 	/**
@@ -353,7 +314,12 @@ class Subscription_Lists {
 			return;
 		}
 
-		$list = sanitize_text_field( $_POST['newspack_newsletters_list'] ?? '' );
+		$list              = sanitize_text_field( $_POST['newspack_newsletters_list'] ?? '' );
+		$subscription_list = new Subscription_List( $post_id );
+
+		// All lists created via UI are local lists.
+		// Regular lists are created via Subscription_Lists::create_remote_list().
+		$subscription_list->set_type( 'local' );
 
 		if ( empty( $list ) ) {
 			return;
@@ -361,7 +327,6 @@ class Subscription_Lists {
 
 		$provider            = Newspack_Newsletters::get_service_provider();
 		$tag_prefix          = $provider::label( 'tag_prefix' );
-		$subscription_list   = new Subscription_List( $post_id );
 		$new_tag_name        = $subscription_list->generate_tag_name( $tag_prefix );
 		$current_settings    = $subscription_list->get_current_provider_settings();
 		$tag_id              = $current_settings['tag_id'] ?? false;
@@ -427,7 +392,7 @@ class Subscription_Lists {
 			[
 				'post_type'      => self::CPT,
 				'posts_per_page' => -1,
-				'post_status'    => 'publish',
+				'post_status'    => 'any',
 			]
 		);
 		$objects = [];
@@ -483,47 +448,155 @@ class Subscription_Lists {
 	}
 
 	/**
-	 * Callback for the delete_post and wp_trash_post actions. Will remove the deleted/trashed list from the config.
+	 * Gets the list object from a list definition fetched from the ESP. If not found, the list will be created in the database
 	 *
-	 * @param int           $post_id The Post ID.
-	 * @param false|WP_Post $post Informed by the delete_post action, but not by the wp_trash_post action. The deleted post object.
+	 * @param array[] $list {
+	 *    Array of list configuration. Fields are required.
+	 *
+	 *    @type string  id         The list id in the ESP.
+	 *    @type string  title       The list title.
+	 * }
+	 * @throws \Exception If the list is invalid.
+	 * @return Subscription_List
+	 */
+	public static function get_or_create_remote_list( $list ) {
+		if ( empty( $list['id'] ) || empty( $list['title'] ) ) {
+			throw new \Exception( 'Invalid list' );
+		}
+
+		$saved = Subscription_List::from_form_id( $list['id'] );
+
+		if ( $saved ) {
+			return $saved;
+		}
+
+		return self::create_remote_list( $list['id'], $list['title'] );
+	}
+
+	/**
+	 * Creates a remote list
+	 *
+	 * @param string $remote_id The ID of the list in the ESP.
+	 * @param string $name The name of the list.
+	 * @param string $provider_slug The provider slug to create the list for. Default is the current configured provider.
+	 * @return Subscription_List|WP_Error
+	 */
+	public static function create_remote_list( $remote_id, $name, $provider_slug = null ) {
+		$post_id = wp_insert_post(
+			[
+				'post_type'   => self::CPT,
+				'post_status' => 'draft',
+				'post_title'  => $name,
+			]
+		);
+
+		if ( is_wp_error( $post_id ) ) {
+			return $post_id;
+		}
+
+		$list = new Subscription_List( $post_id );
+		$list->set_remote_id( $remote_id );
+		$list->set_type( 'remote' );
+		if ( is_null( $provider_slug ) ) {
+			$provider = Newspack_Newsletters::get_service_provider();
+		} else {
+			$provider = Newspack_Newsletters::get_service_provider_instance( $provider_slug );
+		}
+		if ( ! empty( $provider ) ) {
+			$list->set_provider( $provider->service );
+		}
+		return $list;
+	}
+
+	/**
+	 * Update the lists settings.
+	 *
+	 * This function retrieves the list of lists configured in the site and updates them all at once.
+	 *
+	 * Remote Lists that are not part of the provided array will be deleted.
+	 * Local lists that are not part of the array will be disabled.
+	 *
+	 * @param array[] $lists {
+	 *    Array of list configuration.
+	 *
+	 *    @type string  id          The list id in the ESP (not the ID in the DB)
+	 *    @type boolean active      Whether the list is available for subscription.
+	 *    @type string  title       The list title.
+	 *    @type string  description The list description.
+	 * }
+	 *
+	 * @return boolean|WP_Error Whether the lists were updated or error.
+	 */
+	public static function update_lists( $lists ) {
+		$provider = Newspack_Newsletters::get_service_provider();
+		if ( empty( $provider ) ) {
+			return new WP_Error( 'newspack_newsletters_invalid_provider', __( 'Provider is not set.' ) );
+		}
+		$lists = Newspack_Newsletters_Subscription::sanitize_lists( $lists );
+		if ( empty( $lists ) ) {
+			return new WP_Error( 'newspack_newsletters_invalid_lists', __( 'Invalid list configuration.' ) );
+		}
+
+		$existing_ids = [];
+
+		foreach ( $lists as $list ) {
+			if ( Subscription_List::is_local_form_id( $list['id'] ) ) {
+				// Local lists will be fetched here.
+				$stored_list = Subscription_List::from_form_id( $list['id'] );
+			} else {
+				// Remote lists will be either fetched or created here.
+				$stored_list = self::get_or_create_remote_list( $list );
+			}
+
+			if ( ! $stored_list instanceof Subscription_List ) {
+				continue;
+			}
+
+			$existing_ids[] = $stored_list->get_id();
+
+			$stored_list->update( $list );
+
+		}
+
+		// Clean up. Lists that are not in the new config deactivated.
+		$all_lists = self::get_all();
+		foreach ( $all_lists as $list ) {
+			if ( ! in_array( $list->get_id(), $existing_ids, true ) ) {
+				$list->update( [ 'active' => false ] );
+			}
+		}
+
+		return true;
+	}
+
+	/**
+	 * Deletes a list from the database
+	 *
+	 * @param Subscription_List $list The list to be deleted.
+	 * @return bool
+	 */
+	public static function delete_list( Subscription_List $list ) {
+		return wp_delete_post( $list->get_id() );
+	}
+
+	/**
+	 * Clean up stored lists that no longer exist in the ESP.
+	 *
+	 * @param array  $existing_ids The list of IDs that exist in the ESP. All other remote lists will be deleted.
+	 * @param string $provider_slug The provider slug to clean up lists for. Default is the current configured provider.
 	 * @return void
 	 */
-	public static function delete_post( $post_id, $post = false ) {
-		if ( ! $post ) {
-			$post = get_post( $post_id );
+	public static function garbage_collector( $existing_ids, $provider_slug = null ) {
+		if ( is_null( $provider_slug ) ) {
+			$provider      = Newspack_Newsletters::get_service_provider();
+			$provider_slug = $provider->service;
 		}
-		if ( ! $post instanceof WP_Post ) {
-			return;
+		$all_lists = self::get_all();
+		foreach ( $all_lists as $list ) {
+			if ( ! $list->is_local() && $provider_slug === $list->get_provider() && ! in_array( $list->get_id(), $existing_ids ) ) {
+				self::delete_list( $list );
+			}
 		}
-		if ( self::CPT !== $post->post_type ) {
-			return;
-		}
-		$list_config = Newspack_Newsletters_Subscription::get_lists_config();
-		if ( empty( $list_config ) || \is_wp_error( $list_config ) ) {
-			return;
-		}
-
-		$id = Subscription_List::FORM_ID_PREFIX . $post_id;
-		
-		if ( ! isset( $list_config[ $id ] ) ) {
-			return;
-		}
-		
-		unset( $list_config[ $id ] );
-
-		$new_list_config = [];
-		// generate a new list config without the deleted list.
-		foreach ( $list_config as $list_id => $list ) {
-			$new_list_config[] = [
-				'id'          => $list_id,
-				'active'      => $list['active'],
-				'title'       => $list['title'],
-				'description' => $list['description'],
-			];
-		}
-
-		Newspack_Newsletters_Subscription::update_lists( $new_list_config );
 	}
 
 	/**
@@ -532,7 +605,7 @@ class Subscription_Lists {
 	 * @return ?string
 	 */
 	public static function get_add_new_url() {
-		if ( self::should_initialize_lists() ) {
+		if ( self::should_initialize_local_lists() ) {
 			return admin_url( 'post-new.php?post_type=' . self::CPT );
 		}
 	}
@@ -558,5 +631,45 @@ class Subscription_Lists {
 			</a>
 			<?php
 		}
+	}
+
+	/**
+	 * Migrates the lists from the old options to the new CPT.
+	 *
+	 * @return void
+	 */
+	public static function migrate_lists() {
+		$migrated_option_name = '_newspack_newsletters_lists_migrated';
+		if ( get_option( $migrated_option_name ) ) {
+			return;
+		}
+
+		$providers = [ 'active_campaign', 'mailchimp', 'campaign_monitor', 'constant_contact' ];
+
+		foreach ( $providers as $provider ) {
+			$option_name = sprintf( '_newspack_newsletters_%s_lists', $provider );
+			$lists       = get_option( $option_name );
+			if ( empty( $lists ) ) {
+				continue;
+			}
+
+			foreach ( $lists as $list_id => $list ) {
+				
+				if ( Subscription_List::is_local_form_id( $list_id ) ) {
+					continue;
+				}
+
+				$list['id']  = $list_id;
+				$list_object = self::get_or_create_remote_list( $list, $provider );
+				$list_object->update( $list );
+				$list_object->set_provider( $provider );
+
+			}
+		}
+
+		add_option( $migrated_option_name, true );
+		// Workaround the options bug on persistent cache.
+		wp_cache_delete( 'notoptions', 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
 	}
 }

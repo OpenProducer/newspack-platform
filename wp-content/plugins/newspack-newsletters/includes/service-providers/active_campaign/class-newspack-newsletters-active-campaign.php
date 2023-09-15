@@ -697,16 +697,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	}
 
 	/**
-	 * Get campaign name.
-	 *
-	 * @param WP_Post $post Post object.
-	 * @return String Campaign name.
-	 */
-	private function get_campaign_name( $post ) {
-		return sprintf( 'Newspack Newsletter (%d)', $post->ID );
-	}
-
-	/**
 	 * Synchronize post with corresponding ESP campaign.
 	 *
 	 * @param WP_Post $post Post to synchronize.

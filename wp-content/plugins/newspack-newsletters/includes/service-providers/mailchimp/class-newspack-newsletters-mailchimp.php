@@ -696,7 +696,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				'content_type' => 'template',
 				'settings'     => [
 					'subject_line' => $post->post_title,
-					'title'        => $post->post_title,
+					'title'        => $this->get_campaign_name( $post ),
 				],
 			];
 			$mc_campaign_id = get_post_meta( $post->ID, 'mc_campaign_id', true );
@@ -1364,6 +1364,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		$lists = Subscription_Lists::get_configured_for_provider( $this->service );
 		$ids   = [];
 		foreach ( $lists as $list ) {
+			if ( ! $list->is_local() ) {
+				continue;
+			}
 			$list_settings = $list->get_provider_settings( $this->service );
 
 			if ( ! empty( $tags[ $list_settings['list'] ] ) ) {
@@ -1380,7 +1383,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 *
 	 * This allows us to make reference to provider specific features in the way the user is used to see them in the provider's UI
 	 *
-	 * @param mixed $context The context in which the labels are being applied.
+	 * @param string $context The context in which the labels are being applied.
 	 * @return array
 	 */
 	public static function get_labels( $context = '' ) {
@@ -1398,7 +1401,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			// translators: %s is the name of the group category. "Newspack newsletters" by default.
 			'tag_metabox_after_save'  => sprintf( __( 'Group created for this list under %s:', 'newspack-newsletters' ), self::get_group_category_name() ),
 		];
-		if ( ! empty( $context['id'] ) && strpos( $context['id'], 'group-' ) === 0 ) {
+		if ( ! empty( $context ) && strpos( $context, 'group-' ) === 0 ) {
 			$labels['list_explanation'] = __( 'Mailchimp Group', 'newspack-newsletters' );
 		}
 		return $labels;

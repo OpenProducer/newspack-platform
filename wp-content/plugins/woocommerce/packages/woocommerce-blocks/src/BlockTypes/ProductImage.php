@@ -190,7 +190,7 @@ class ProductImage extends AbstractBlock {
 	 *                           not in the post content on editor load.
 	 */
 	protected function enqueue_data( array $attributes = [] ) {
-		$this->asset_data_registry->add( 'is_block_theme_enabled', wc_current_theme_is_fse_theme(), false );
+		$this->asset_data_registry->add( 'isBlockThemeEnabled', wc_current_theme_is_fse_theme(), false );
 	}
 
 
@@ -210,11 +210,9 @@ class ProductImage extends AbstractBlock {
 		}
 		$parsed_attributes = $this->parse_attributes( $attributes );
 
-		$border_radius      = StyleAttributesUtils::get_border_radius_class_and_style( $attributes );
-		$margin             = StyleAttributesUtils::get_margin_class_and_style( $attributes );
 		$classes_and_styles = StyleAttributesUtils::get_classes_and_styles_by_attributes( $attributes );
 
-		$post_id = $block->context['postId'];
+		$post_id = isset( $block->context['postId'] ) ? $block->context['postId'] : '';
 		$product = wc_get_product( $post_id );
 
 		if ( $product ) {

@@ -971,6 +971,8 @@ class WC_AJAX {
 		$data['date_created']  = $data['date_created'] ? $data['date_created']->getTimestamp() : null;
 		$data['date_modified'] = $data['date_modified'] ? $data['date_modified']->getTimestamp() : null;
 
+		unset( $data['meta_data'] );
+
 		$customer_data = apply_filters( 'woocommerce_ajax_get_customer_details', $data, $customer, $user_id );
 		wp_send_json( $customer_data );
 	}
@@ -3615,7 +3617,7 @@ class WC_AJAX {
 	 * @param array $data     Data sent through the heartbeat.
 	 * @return array Response to be sent.
 	 */
-	private static function order_refresh_lock( $response, $data ) : array {
+	private static function order_refresh_lock( $response, $data ) {
 		return wc_get_container()->get( Automattic\WooCommerce\Internal\Admin\Orders\EditLock::class )->refresh_lock_ajax( $response, $data );
 	}
 
@@ -3628,7 +3630,7 @@ class WC_AJAX {
 	 * @param array $data     Data sent through the heartbeat.
 	 * @return array Response to be sent.
 	 */
-	private static function check_locked_orders( $response, $data ) : array {
+	private static function check_locked_orders( $response, $data ) {
 		return wc_get_container()->get( Automattic\WooCommerce\Internal\Admin\Orders\EditLock::class )->check_locked_orders_ajax( $response, $data );
 	}
 

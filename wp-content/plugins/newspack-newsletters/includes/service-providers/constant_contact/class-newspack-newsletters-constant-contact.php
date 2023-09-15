@@ -95,7 +95,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 				$credentials['api_secret'],
 				$credentials['access_token']
 			);
-	
+
 			$response = [
 				'error'    => null,
 				'valid'    => false,
@@ -286,16 +286,6 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		$update_access_token  = update_option( 'newspack_newsletters_constant_contact_api_access_token', $access_token );
 		$update_refresh_token = update_option( 'newspack_newsletters_constant_contact_api_refresh_token', $refresh_token );
 		return $update_access_token;
-	}
-
-	/**
-	 * Get campaign name.
-	 *
-	 * @param WP_Post $post Post object.
-	 * @return String Campaign name.
-	 */
-	private function get_campaign_name( $post ) {
-		return 'Newspack Newsletter #' . $post->ID;
 	}
 
 	/**

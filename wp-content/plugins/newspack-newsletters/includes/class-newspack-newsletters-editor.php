@@ -50,6 +50,7 @@ final class Newspack_Newsletters_Editor {
 		add_action( 'enqueue_block_editor_assets', [ __CLASS__, 'enqueue_block_editor_assets' ] );
 		add_filter( 'allowed_block_types_all', [ __CLASS__, 'newsletters_allowed_block_types' ], 10, 2 );
 		add_action( 'rest_post_query', [ __CLASS__, 'maybe_filter_excerpt_length' ], 10, 2 );
+		add_action( 'rest_post_query', [ __CLASS__, 'maybe_exclude_sponsored_posts' ], 10, 2 );
 		add_action( 'rest_api_init', [ __CLASS__, 'add_newspack_author_info' ] );
 		add_filter( 'the_posts', [ __CLASS__, 'maybe_reset_excerpt_length' ] );
 		add_filter( 'should_load_remote_block_patterns', [ __CLASS__, 'strip_block_patterns' ] );
@@ -84,7 +85,7 @@ final class Newspack_Newsletters_Editor {
 	private static function get_email_editor_cpts() {
 		$email_cpts = [
 			Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
-			Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
+			Newspack_Newsletters_Ads::CPT,
 		];
 		return apply_filters( 'newspack_newsletters_email_editor_cpts', $email_cpts );
 	}
@@ -240,7 +241,7 @@ final class Newspack_Newsletters_Editor {
 		if ( ! self::is_editing_email() ) {
 			return $allowed_block_types;
 		}
-		return array(
+		$allowed_block_types = array(
 			'core/spacer',
 			'core/block',
 			'core/group',
@@ -261,9 +262,17 @@ final class Newspack_Newsletters_Editor {
 			'core/site-title',
 			'core/social-links',
 			'core/social-link',
+			'newspack-newsletters/ad',
 			'newspack-newsletters/posts-inserter',
 			'newspack-newsletters/share',
 		);
+		/**
+		 * Filters the allowed block types for the Newsletter CPT.
+		 *
+		 * @param array   $allowed_block_types default block types.
+		 * @param WP_Post $post the post to consider.
+		 */
+		return apply_filters( 'newspack_newsletters_allowed_block_types', $allowed_block_types, $post );
 	}
 
 	/**
@@ -292,7 +301,7 @@ final class Newspack_Newsletters_Editor {
 
 			// Remove the Ads CPT - it does not need MJML handling since ads
 			// will be injected into email content before it's converted to MJML.
-			$mjml_handling_post_types = array_values( array_diff( self::get_email_editor_cpts(), [ Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT ] ) );
+			$mjml_handling_post_types = array_values( array_diff( self::get_email_editor_cpts(), [ Newspack_Newsletters_Ads::CPT ] ) );
 			$provider                 = Newspack_Newsletters::get_service_provider();
 			$conditional_tag_support  = false;
 			if ( $provider ) {
@@ -305,6 +314,8 @@ final class Newspack_Newsletters_Editor {
 					'email_html_meta'          => Newspack_Newsletters::EMAIL_HTML_META,
 					'mjml_handling_post_types' => $mjml_handling_post_types,
 					'conditional_tag_support'  => $conditional_tag_support,
+					'sponsors_flag_hex'        => get_theme_mod( 'sponsored_flag_hex', '#FED850' ),
+					'sponsors_flag_text_color' => function_exists( 'newspack_get_color_contrast' ) ? newspack_get_color_contrast( \get_theme_mod( 'sponsored_flag_hex', '#FED850' ) ) : 'black',
 				]
 			);
 
@@ -346,6 +357,13 @@ final class Newspack_Newsletters_Editor {
 				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/newsletterEditor.js' ),
 				true
 			);
+			\wp_enqueue_script(
+				'newspack-newsletters-ads-editor',
+				plugins_url( '../dist/newsletterAdsEditor.js', __FILE__ ),
+				[ 'wp-components', 'wp-api-fetch' ],
+				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/newsletterAdsEditor.js' ),
+				true
+			);
 		}
 
 		// If it's a reusable block, register this plugin's blocks.
@@ -379,7 +397,7 @@ final class Newspack_Newsletters_Editor {
 	 * Is editing a newsletter ad?
 	 */
 	private static function is_editing_newsletter_ad() {
-		return Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT === get_post_type();
+		return Newspack_Newsletters_Ads::CPT === get_post_type();
 	}
 
 	/**
@@ -401,10 +419,49 @@ final class Newspack_Newsletters_Editor {
 	}
 
 	/**
+	 * If Posts Inserter is set to hide sponsored content, add a tax query to exclude sponsored posts.
+	 * 
+	 * @param array           $args Request arguments.
+	 * @param WP_REST_Request $request The original REST request params.
+	 *
+	 * @return array Filtered request args.
+	 */
+	public static function maybe_exclude_sponsored_posts( $args, $request ) {
+		$params = $request->get_params();
+	
+		if ( ! empty( $params['exclude_sponsors'] ) && class_exists( '\Newspack_Sponsors\Core' ) ) {
+			if ( empty( $args['tax_query'] ) ) {
+				$args['tax_query'] = []; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+			}
+
+			// Exclude posts with direct sponsors.
+			$args['tax_query'][] = [
+				'taxonomy' => \Newspack_Sponsors\Core::NEWSPACK_SPONSORS_TAX,
+				'operator' => 'NOT EXISTS',
+			];
+
+			// Exclude posts with sponsored terms, too.
+			$sponsored_terms = \Newspack_Sponsors\get_all_sponsored_terms();
+			if ( ! empty( $sponsored_terms ) ) {
+				$args['tax_query']['relation'] = 'AND';
+				foreach ( $sponsored_terms as $taxonomy => $term_ids ) {
+					$args['tax_query'][] = [
+						'taxonomy' => $taxonomy,
+						'terms'    => $term_ids,
+						'operator' => 'NOT IN',
+					];
+				}
+			}
+		}
+
+		return $args;
+	}
+
+	/**
 	 * Append author info to the posts REST response so we can append Coauthors, if they exist.
 	 */
 	public static function add_newspack_author_info() {
-		/* Add author info source */
+		// Add author info source.
 		register_rest_field(
 			'post',
 			'newspack_author_info',
@@ -418,6 +475,23 @@ final class Newspack_Newsletters_Editor {
 				],
 			]
 		);
+
+		// Add sponsor info.
+		if ( function_exists( '\Newspack_Sponsors\get_all_sponsors' ) ) {
+			register_rest_field(
+				'post',
+				'newspack_sponsors_info',
+				[
+					'get_callback' => [ __CLASS__, 'newspack_get_sponsors_info' ],
+					'schema'       => [
+						'context' => [
+							'edit',
+						],
+						'type'    => 'array',
+					],
+				]
+			);
+		}
 	}
 
 	/**
@@ -530,6 +604,16 @@ final class Newspack_Newsletters_Editor {
 
 		/* Return the author data */
 		return $author_data;
+	}
+
+	/**
+	 * Append sponsor data to the REST /posts response.
+	 *
+	 * @param object $post Post object for the post being returned.
+	 * @return object Formatted data for all sponsors associated with the post.
+	 */
+	public static function newspack_get_sponsors_info( $post ) {
+		return \Newspack_Sponsors\get_all_sponsors( $post['id'], null, 'post' );
 	}
 }
 Newspack_Newsletters_Editor::instance();

@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online, storefront, che
 Requires at least: 6.2
 Tested up to: 6.3
 Requires PHP: 7.3
-Stable tag: 8.0.3
+Stable tag: 8.1.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -163,9 +163,11 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 8.0.3 2023-08-29 =
+= 8.1.1 2023-09-15 =
 
-* Update - Bump WooCommerce Blocks to 10.6.6. [#39853](https://github.com/woocommerce/woocommerce/pull/39853)
-* Fix - Avoid extra queries when a WooPayments incentive has been dismissed. [#39882](https://github.com/woocommerce/woocommerce/pull/39882)
+**WooCommerce**
+
+* Fix - Do not send user meta data back in `woocommerce_get_customer_details` response. [#40221](https://github.com/woocommerce/woocommerce/pull/40221)
+* Fix - Fix possible metadata duplication when HPOS is enabled. [#40148](https://github.com/woocommerce/woocommerce/pull/40148)
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

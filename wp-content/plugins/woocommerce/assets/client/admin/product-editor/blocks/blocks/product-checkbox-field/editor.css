@@ -232,6 +232,9 @@ body.admin-color-sunrise {
   align-items: center;
   margin-bottom: 0;
 }
+.woocommerce-product-form__checkbox .components-checkbox-control__label {
+  margin-bottom: 0;
+}
 
 .woocommerce-product-form__checkbox-wrapper {
   gap: 4px;

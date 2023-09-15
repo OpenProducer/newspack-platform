@@ -18,7 +18,7 @@
 
 			echo esc_html( $css );
 			echo Newspack_Newsletters_Editor::get_color_palette_css();
-			do_action( 'newspack_newsletters_editor_mjml_head' );
+			do_action( 'newspack_newsletters_editor_mjml_head', $post );
 		?>
 		</mj-style>
 		<?php if ( isset( $preview_text ) ): ?>
@@ -27,5 +27,6 @@
 	</mj-head>
 	<mj-body background-color="<?php echo $background_color; ?>">
 		<?php echo $body; ?>
+		<?php do_action( 'newspack_newsletters_editor_mjml_body', $post ); ?>
 	</mj-body>
 </mjml>

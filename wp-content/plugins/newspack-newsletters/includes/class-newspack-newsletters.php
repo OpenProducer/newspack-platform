@@ -215,6 +215,21 @@ final class Newspack_Newsletters {
 	public static function register_meta() {
 		\register_meta(
 			'post',
+			'campaign_name',
+			[
+				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
+				'show_in_rest'   => [
+					'schema' => [
+						'context' => [ 'edit' ],
+					],
+				],
+				'type'           => 'string',
+				'single'         => true,
+				'auth_callback'  => '__return_true',
+			]
+		);
+		\register_meta(
+			'post',
 			'template_id',
 			[
 				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
@@ -301,21 +316,6 @@ final class Newspack_Newsletters {
 					],
 				],
 				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'diable_ads',
-			[
-				'object_subtype' => self::NEWSPACK_NEWSLETTERS_CPT,
-				'show_in_rest'   => [
-					'schema' => [
-						'context' => [ 'edit' ],
-					],
-				],
-				'type'           => 'boolean',
 				'single'         => true,
 				'auth_callback'  => '__return_true',
 			]
@@ -627,27 +627,6 @@ final class Newspack_Newsletters {
 				'methods'             => \WP_REST_Server::EDITABLE,
 				'callback'            => [ __CLASS__, 'api_set_color_palette' ],
 				'permission_callback' => [ __CLASS__, 'api_authoring_permissions_check' ],
-			]
-		);
-
-		\register_rest_route(
-			'wp/v2/' . Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT,
-			'count',
-			[
-				/**
-				 * Return an array of properties required to render a useful ads warning.
-				 *
-				 * @uses Newspack_Newsletters::get_ads_warning_in_editor()
-				 */
-				'callback'            => [ __CLASS__, 'get_ads_warning_in_editor' ],
-				'methods'             => 'GET',
-
-				/**
-				 * Ensure the user can call this route.
-				 *
-				 * @uses Newspack_Newsletters::api_administration_permissions_check()
-				 */
-				'permission_callback' => [ __CLASS__, 'api_administration_permissions_check' ],
 			]
 		);
 
@@ -980,7 +959,7 @@ final class Newspack_Newsletters {
 		$screen = get_current_screen();
 		if (
 			self::NEWSPACK_NEWSLETTERS_CPT !== $screen->post_type &&
-			Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT !== $screen->post_type &&
+			Newspack_Newsletters_Ads::CPT !== $screen->post_type &&
 			Newspack\Newsletters\Subscription_Lists::CPT !== $screen->post_type
 		) {
 			return;
@@ -1040,39 +1019,6 @@ final class Newspack_Newsletters {
 	public static function debug_mode() {
 		return defined( 'NEWSPACK_NEWSLETTERS_DEBUG_MODE' ) ? NEWSPACK_NEWSLETTERS_DEBUG_MODE : false;
 	}
-
-
-	/**
-	 * Get properties required to render a useful modal in the editor that alerts
-	 * users of ads they're sending.
-	 *
-	 * @param WP_REST_REQUEST $request The WP Request Object.
-	 * @return array
-	 */
-	public static function get_ads_warning_in_editor( $request ) {
-		$letterhead                 = new Newspack_Newsletters_Letterhead();
-		$has_letterhead_credentials = $letterhead->has_api_credentials();
-		$post_date                  = $request->get_param( 'date' );
-		$newspack_ad_type           = Newspack_Newsletters_Ads::NEWSPACK_NEWSLETTERS_ADS_CPT;
-
-		$url_to_manage_promotions   = 'https://app.tryletterhead.com/promotions';
-		$url_to_manage_newspack_ads = "/wp-admin/edit.php?post_type={$newspack_ad_type}";
-
-		$ads                   = Newspack_Newsletters_Renderer::get_ads( $post_date, 0 );
-		$ads_label             = $has_letterhead_credentials ? __( 'promotion', 'newspack-newsletters' ) : __( 'ad', 'newspack-newsletters' );
-		$ads_manage_url        = $has_letterhead_credentials ? $url_to_manage_promotions : $url_to_manage_newspack_ads;
-		$ads_manage_url_rel    = $has_letterhead_credentials ? 'noreferrer' : '';
-		$ads_manage_url_target = $has_letterhead_credentials ? '_blank' : '_self';
-
-		return [
-			'count'           => count( $ads ),
-			'label'           => $ads_label,
-			'manageUrl'       => $ads_manage_url,
-			'manageUrlRel'    => $ads_manage_url_rel,
-			'manageUrlTarget' => $ads_manage_url_target,
-		];
-	}
-
 
 	/**
 	 * Which Email Service Provider should be used.

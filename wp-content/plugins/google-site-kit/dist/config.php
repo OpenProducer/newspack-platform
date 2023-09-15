@@ -8,5 +8,5 @@
 
 return array(
 	'buildMode' => 'production',
-	'features' => array( 'adBlockerDetection','adsenseSetupV2','dashboardSharing','ga4Reporting','gm3Components','userInput' ),
+	'features' => array( 'adsenseSetupV2','enhancedMeasurement','ga4Reporting','gm3Components','userInput' ),
 );
