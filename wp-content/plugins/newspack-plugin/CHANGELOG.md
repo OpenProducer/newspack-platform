@@ -1,3 +1,47 @@
+## [2.6.1](https://github.com/Automattic/newspack-plugin/compare/v2.6.0...v2.6.1) (2023-09-15)
+
+
+### Bug Fixes
+
+* restore audience selector for mailchimp data sync ([#2645](https://github.com/Automattic/newspack-plugin/issues/2645)) ([8ce676c](https://github.com/Automattic/newspack-plugin/commit/8ce676c0ca8d74c1d4464ad3af15b88e2e7ffd30))
+
+# [2.6.0](https://github.com/Automattic/newspack-plugin/compare/v2.5.1...v2.6.0) (2023-09-13)
+
+
+### Bug Fixes
+
+* sync scripts for Stripe-to-Woo migrations ([#2632](https://github.com/Automattic/newspack-plugin/issues/2632)) ([34beb15](https://github.com/Automattic/newspack-plugin/commit/34beb159d4d8a5eb2ce2c6a931989708752a59fd))
+
+
+### Features
+
+* add anonymized email to ga4 events ([#2585](https://github.com/Automattic/newspack-plugin/issues/2585)) ([9ac1c33](https://github.com/Automattic/newspack-plugin/commit/9ac1c3378f188794de63c9947ca7e46f5dd8644c))
+* add filter to the lists in the reg block ([#2611](https://github.com/Automattic/newspack-plugin/issues/2611)) ([d960541](https://github.com/Automattic/newspack-plugin/commit/d96054167c428f0d7f3a36e99f7c1b3fd1c3bbd3))
+* new option to require all membership plans for restricted content ([#2623](https://github.com/Automattic/newspack-plugin/issues/2623)) ([60b361e](https://github.com/Automattic/newspack-plugin/commit/60b361e78b86a77ab2502a91a6d1bcbc9218e533))
+
+# [2.6.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v2.6.0-alpha.1...v2.6.0-alpha.2) (2023-09-11)
+
+
+### Bug Fixes
+
+* sync scripts for Stripe-to-Woo migrations ([#2632](https://github.com/Automattic/newspack-plugin/issues/2632)) ([34beb15](https://github.com/Automattic/newspack-plugin/commit/34beb159d4d8a5eb2ce2c6a931989708752a59fd))
+
+# [2.6.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v2.5.1...v2.6.0-alpha.1) (2023-09-06)
+
+
+### Features
+
+* add anonymized email to ga4 events ([#2585](https://github.com/Automattic/newspack-plugin/issues/2585)) ([9ac1c33](https://github.com/Automattic/newspack-plugin/commit/9ac1c3378f188794de63c9947ca7e46f5dd8644c))
+* add filter to the lists in the reg block ([#2611](https://github.com/Automattic/newspack-plugin/issues/2611)) ([d960541](https://github.com/Automattic/newspack-plugin/commit/d96054167c428f0d7f3a36e99f7c1b3fd1c3bbd3))
+* new option to require all membership plans for restricted content ([#2623](https://github.com/Automattic/newspack-plugin/issues/2623)) ([60b361e](https://github.com/Automattic/newspack-plugin/commit/60b361e78b86a77ab2502a91a6d1bcbc9218e533))
+
+## [2.5.1](https://github.com/Automattic/newspack-plugin/compare/v2.5.0...v2.5.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* **reader-data:** `gettype` typo while checking newsletter subscription ([#2629](https://github.com/Automattic/newspack-plugin/issues/2629)) ([f95850e](https://github.com/Automattic/newspack-plugin/commit/f95850ec7546e1a92d4e05a7633c67c339aaaa3d))
+
 # [2.5.0](https://github.com/Automattic/newspack-plugin/compare/v2.4.0...v2.5.0) (2023-08-30)
 
 

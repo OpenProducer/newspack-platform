@@ -338,6 +338,15 @@ final class GAM_Scripts {
 						?>
 						if ( ad_unit['sticky'] ) {
 							mapping.addSize( [600, 0], baseSizes );
+							var stickyContainer = container.parentNode;
+							var stickyClose = stickyContainer.querySelector( 'button.newspack_sticky_ad__close' );
+							var initialBodyPadding = document.body.style.paddingBottom;
+							if ( stickyClose ) {
+								stickyClose.addEventListener( 'click', function() {
+									stickyContainer.parentNode.removeChild( stickyContainer );
+									document.body.style.paddingBottom = initialBodyPadding;
+								} );
+							}
 						}
 						<?php
 						// On viewports smaller than the smallest ad size, don't show any ads.
@@ -408,34 +417,23 @@ final class GAM_Scripts {
 					} );
 					<?php
 					/**
-					 * Handle Sticky Ads.
+					 * Handle Sticky Ads Rendering.
 					 */
 					?>
-					if ( ad_unit.sticky ) {
-						var stickyContainer = container.parentNode;
-						var stickyClose = stickyContainer.querySelector( 'button.newspack_sticky_ad__close' );
-						var initialBodyPadding = document.body.style.paddingBottom;
-						if ( stickyClose ) {
-							stickyClose.addEventListener( 'click', function() {
-								stickyContainer.parentNode.removeChild( stickyContainer );
-								document.body.style.paddingBottom = initialBodyPadding;
-							} );
+					googletag.pubads().addEventListener( 'slotRenderEnded', function( event ) {
+						var container = document.getElementById( event.slot.getSlotElementId() );
+						if ( ! container ) {
+							return;
 						}
-						googletag.pubads().addEventListener( 'slotRenderEnded', function( event ) {
-							var container = document.getElementById( event.slot.getSlotElementId() );
-							if ( ! container ) {
-								return;
-							}
-							var ad_unit = container.ad_unit;
-							if ( ! ad_unit || ! ad_unit.sticky ) {
-								return;
-							}
-							if ( ! event.isEmpty && document.body.clientWidth <= 600 ) {
-								stickyContainer.style.display = 'flex';
-								document.body.style.paddingBottom = stickyContainer.clientHeight + 'px';
-							}
-						} );
-					}
+						var ad_unit = container.ad_unit;
+						if ( ! ad_unit || ! ad_unit.sticky ) {
+							return;
+						}
+						if ( ! event.isEmpty && document.body.clientWidth <= 600 ) {
+							stickyContainer.style.display = 'flex';
+							document.body.style.paddingBottom = stickyContainer.clientHeight + 'px';
+						}
+					} );
 					<?php
 					/**
 					 * Sticky header & sticky ad handling.

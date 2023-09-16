@@ -42,6 +42,7 @@ class Memberships {
 		add_action( 'wp_footer', [ __CLASS__, 'render_js' ] );
 		add_filter( 'newspack_popups_assess_has_disabled_popups', [ __CLASS__, 'disable_popups' ] );
 		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'suppress_article_view_activity' ], 100 );
+		add_filter( 'user_has_cap', [ __CLASS__, 'user_has_cap' ], 10, 3 );
 
 		/** Add gate content filters to mimic 'the_content'. See 'wp-includes/default-filters.php' for reference. */
 		add_filter( 'newspack_gate_content', 'capital_P_dangit', 11 );
@@ -329,21 +330,44 @@ class Memberships {
 	 *
 	 * @return array
 	 */
-	private static function get_plans() {
+	public static function get_plans() {
 		if ( ! function_exists( 'wc_memberships_get_membership_plans' ) ) {
 			return [];
 		}
 		$membership_plans = wc_memberships_get_membership_plans();
 		$plans            = [];
 		foreach ( $membership_plans as $plan ) {
+			$plan_id = $plan->get_id();
 			$plans[] = [
-				'id'          => $plan->get_id(),
+				'id'          => $plan_id,
 				'name'        => $plan->get_name(),
-				'gate_id'     => self::get_plan_gate_id( $plan->get_id() ),
-				'gate_status' => get_post_status( self::get_plan_gate_id( $plan->get_id() ) ),
+				'gate_id'     => self::get_plan_gate_id( $plan_id ),
+				'gate_status' => get_post_status( self::get_plan_gate_id( $plan_id ) ),
+				'plan_url'    => get_edit_post_link( $plan_id ),
 			];
 		}
 		return $plans;
+	}
+
+	/**
+	 * Get the current setting of the "Require memberships in all plans" option.
+	 * 
+	 * @return boolean
+	 */
+	public static function get_require_all_plans_setting() {
+		return \get_option( 'newspack_memberships_require_all_plans', false );
+	}
+
+	/**
+	 * Set the "Require memberships in all plans" option.
+	 * 
+	 * @param boolean $require False to require membership in any plan restricting content (default)
+	 *                         or true to require membership in all plans restricting content.
+	 * 
+	 * @return boolean
+	 */
+	public static function set_require_all_plans_setting( $require = false ) {
+		return \update_option( 'newspack_memberships_require_all_plans', $require );
 	}
 
 	/**
@@ -688,6 +712,112 @@ class Memberships {
 			return false;
 		}
 		return $activity;
+	}
+
+	/**
+	 * Check if the passed in caps contain a positive 'manage_woocommerce' capability.
+	 * Copied from the WooCommerce Memberships plugin.
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $caps Capabilities.
+	 * @return bool
+	 */
+	private static function can_manage_woocommerce( $caps ) {
+		return isset( $caps['manage_woocommerce'] ) && $caps['manage_woocommerce'];
+	}
+
+	/**
+	 * Checks if a user has a certain capability.
+	 * Overrides behvavior from the WooCommerce Memberships plugin to decide whether to show restricted content.
+	 *
+	 * @internal
+	 *
+	 * @since 1.0.0
+	 *
+	 * @param array $all_caps All capabilities.
+	 * @param array $caps Capabilities.
+	 * @param array $args Capability arguments.
+	 * @return array Filtered capabilities.
+	 */
+	public static function user_has_cap( $all_caps, $caps, $args ) {
+		// Bail if Woo Memberships is not active.
+		if ( ! class_exists( 'WC_Memberships' ) || ! function_exists( 'wc_memberships' ) ) {
+			return $all_caps;
+		}
+
+		if ( ! empty( $caps ) ) {
+			foreach ( $caps as $cap ) {
+				if ( 'wc_memberships_view_restricted_post_content' === $cap ) {
+					if ( self::can_manage_woocommerce( $all_caps ) ) {
+						$all_caps[ $cap ] = true;
+						break;
+					}
+
+					$user_id = (int) $args[1];
+					$post_id = (int) $args[2];
+
+					if ( wc_memberships()->get_restrictions_instance()->is_post_public( $post_id ) ) {
+						$all_caps[ $cap ] = true;
+						break;
+					}
+
+					$rules            = wc_memberships()->get_rules_instance()->get_post_content_restriction_rules( $post_id );
+					$all_caps[ $cap ] = self::user_has_content_access_from_rules( $user_id, $rules, $post_id );
+
+					break;
+				}           
+			}
+		}
+
+		return $all_caps;
+	}
+
+	/**
+	 * Checks if a user has content access from rules.
+	 * Overrides behvavior from the WooCommerce Memberships plugin to decide whether to show restricted content.
+	 * Default behavior matches the WooCommerce Memberships plugin: if a user matches ANY applicable membership
+	 * plan rules, they are granted access to the content.
+	 * 
+	 * Custom behavior: If the "Require membership in all plans" option is enabled in the Engagement wizard,
+	 * then a user must match ALL applicable membership plan rules before being granted access to the content.
+	 *
+	 * @since 1.9.0
+	 *
+	 * @param int                                    $user_id WP_User ID.
+	 * @param \WC_Memberships_Membership_Plan_Rule[] $rules array of rules to search access from.
+	 * @param int                                    $object_id Optional object ID to check access for (defaults to null).
+	 * @return bool returns true if there are no rules at all (users always have access).
+	 */
+	private static function user_has_content_access_from_rules( $user_id, array $rules, $object_id = null ) {
+		// Return true if there are no rules at all (users always have access).
+		if ( empty( $rules ) ) {
+			return true;
+		}
+
+		$require_all_plans = self::get_require_all_plans_setting();
+		$has_access        = false;
+
+		foreach ( $rules as $rule ) {
+
+			// If no object ID is provided, then we are looking at rules that apply to whole post types or taxonomies.
+			// In this case, rules that apply to specific objects should be skipped.
+			if ( empty( $object_id ) && $rule->has_objects() ) {
+				continue;
+			}
+
+			if ( wc_memberships_is_user_active_or_delayed_member( $user_id, $rule->get_membership_plan_id() ) ) {
+				$has_access = true;
+				if ( ! $require_all_plans ) {
+					break;
+				}
+			} elseif ( $require_all_plans ) {
+				$has_access = false;
+				break;
+			}
+		}
+
+		return $has_access;
 	}
 }
 Memberships::init();

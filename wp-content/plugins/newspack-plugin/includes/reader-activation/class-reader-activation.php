@@ -1226,6 +1226,13 @@ final class Reader_Activation {
 			$lists = \Newspack_Newsletters_Subscription::get_lists_config();
 		}
 
+		/**
+		 * Filter the available newsletter subscription lists in the Registration form.
+		 *
+		 * @param array[] $lists List config keyed by their ID.
+		 */
+		$lists = apply_filters( 'newspack_auth_form_newsletters_lists', $lists );
+
 		if ( empty( $lists ) || is_wp_error( $lists ) ) {
 			return;
 		}

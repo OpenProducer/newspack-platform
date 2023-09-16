@@ -98,7 +98,8 @@ final class Newspack {
 		include_once NEWSPACK_ABSPATH . 'includes/class-magic-link.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/stripe/class-stripe-connection.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/stripe/class-stripe-webhooks.php';
-		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-woocommerce-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/woocommerce/class-woocommerce-connection.php';
+		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/woocommerce/class-woocommerce-sync.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/stripe/class-stripe-sync.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/my-account/class-woocommerce-my-account.php';
 		include_once NEWSPACK_ABSPATH . 'includes/reader-revenue/class-reader-revenue-emails.php';

@@ -204,8 +204,10 @@ class Engagement_Wizard extends Wizard {
 	 */
 	private static function get_memberships_settings() {
 		return [
-			'edit_gate_url' => Memberships::get_edit_gate_url(),
-			'gate_status'   => get_post_status( Memberships::get_gate_post_id() ),
+			'edit_gate_url'     => Memberships::get_edit_gate_url(),
+			'gate_status'       => get_post_status( Memberships::get_gate_post_id() ),
+			'plans'             => Memberships::get_plans(),
+			'require_all_plans' => Memberships::get_require_all_plans_setting(),
 		];
 	}
 
@@ -236,6 +238,12 @@ class Engagement_Wizard extends Wizard {
 		foreach ( $args as $key => $value ) {
 			Reader_Activation::update_setting( $key, $value );
 		}
+
+		// Update Memberships options.
+		if ( isset( $args['memberships_require_all_plans'] ) ) {
+			Memberships::set_require_all_plans_setting( (bool) $args['memberships_require_all_plans'] );
+		}
+
 		return rest_ensure_response(
 			[
 				'config'               => Reader_Activation::get_settings(),

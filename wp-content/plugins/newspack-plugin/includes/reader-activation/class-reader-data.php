@@ -345,7 +345,7 @@ final class Reader_Data {
 			return;
 		}
 		$is_newsletter_subscriber = self::get_data( $data['user_id'], 'is_newsletter_subscriber' );
-		if ( ! empty( $is_newsletter_subscriber ) && type( $is_newsletter_subscriber ) === 'string' ) {
+		if ( ! empty( $is_newsletter_subscriber ) && gettype( $is_newsletter_subscriber ) === 'string' ) {
 			$is_newsletter_subscriber = json_decode( $is_newsletter_subscriber );
 		}
 		// Bail if reader is already a newsletter subscriber.

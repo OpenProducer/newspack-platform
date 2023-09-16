@@ -346,7 +346,7 @@ final class GAM_Model {
 							continue;
 						}
 						$ad_unit_idx = array_search( $ad_unit_config['name'], array_column( $gam_ad_units, 'name' ) );
-						if ( $ad_unit_idx ) {
+						if ( false !== $ad_unit_idx ) {
 							$gam_ad_unit = $gam_ad_units[ $ad_unit_idx ];
 							/** Update ad unit status to 'ACTIVE' if not active. */
 							if ( 'ACTIVE' !== $gam_ad_unit['status'] ) {

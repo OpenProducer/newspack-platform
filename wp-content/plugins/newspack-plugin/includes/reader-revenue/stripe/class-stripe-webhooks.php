@@ -255,6 +255,11 @@ class Stripe_Webhooks {
 			return;
 		}
 
+		// If the subscription was cancelled due to a migration to WooCommerce, don't attempt to sync this subscription.
+		if ( isset( $payload['cancellation_details']['comment'] ) && Stripe_Sync::MIGRATION_CANCELLATION_FLAG === $payload['cancellation_details']['comment'] ) {
+			return;
+		}
+
 		switch ( $request['type'] ) {
 			case 'charge.succeeded':
 				$payment  = $payload;

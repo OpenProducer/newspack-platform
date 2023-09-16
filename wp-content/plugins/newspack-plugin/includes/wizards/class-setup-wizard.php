@@ -191,6 +191,7 @@ class Setup_Wizard extends Wizard {
 	 */
 	public function api_initial_check() {
 		$required_plugins_slugs = [
+			'akismet',
 			'jetpack',
 			'pwa',
 			'wordpress-seo',

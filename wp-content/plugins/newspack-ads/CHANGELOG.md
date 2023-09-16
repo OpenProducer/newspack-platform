@@ -1,3 +1,24 @@
+## [1.44.3](https://github.com/Automattic/newspack-ads/compare/v1.44.2...v1.44.3) (2023-09-15)
+
+
+### Bug Fixes
+
+* **gam:** default units array search matching ([#729](https://github.com/Automattic/newspack-ads/issues/729)) ([5c44dca](https://github.com/Automattic/newspack-ads/commit/5c44dca2c146f2e487294cf767b73a609f756b19))
+
+## [1.44.2](https://github.com/Automattic/newspack-ads/compare/v1.44.1...v1.44.2) (2023-09-12)
+
+
+### Bug Fixes
+
+* sticky ad handling ([#727](https://github.com/Automattic/newspack-ads/issues/727)) ([39bc387](https://github.com/Automattic/newspack-ads/commit/39bc38792d5c82f2b8e3e6993b35fc7a3a32ab7f))
+
+## [1.44.1](https://github.com/Automattic/newspack-ads/compare/v1.44.0...v1.44.1) (2023-09-11)
+
+
+### Bug Fixes
+
+* dont throw fatals if parentPath is null ([#721](https://github.com/Automattic/newspack-ads/issues/721)) ([5a6d3f6](https://github.com/Automattic/newspack-ads/commit/5a6d3f68bae5093688764bcad0d1932d677fa7e3))
+
 # [1.44.0](https://github.com/Automattic/newspack-ads/compare/v1.43.1...v1.44.0) (2023-08-24)
 
 

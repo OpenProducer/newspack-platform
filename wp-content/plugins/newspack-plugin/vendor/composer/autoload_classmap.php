@@ -109,8 +109,9 @@ return array(
     'Newspack\\Wizard' => $baseDir . '/includes/wizards/class-wizard.php',
     'Newspack\\Wizards' => $baseDir . '/includes/class-wizards.php',
     'Newspack\\WooCommerce_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
-    'Newspack\\WooCommerce_Connection' => $baseDir . '/includes/reader-revenue/class-woocommerce-connection.php',
+    'Newspack\\WooCommerce_Connection' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
     'Newspack\\WooCommerce_My_Account' => $baseDir . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
+    'Newspack\\WooCommerce_Sync' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-sync.php',
     'Newspack\\WordPress_SEO_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
     'Popups_Analytics_Utils' => $baseDir . '/includes/popups-analytics/class-popups-analytics-utils.php',
 );
