@@ -1,3 +1,17 @@
+## [1.74.2](https://github.com/Automattic/newspack-blocks/compare/v1.74.1...v1.74.2) (2023-09-19)
+
+
+### Bug Fixes
+
+* undefined variable error ([#1534](https://github.com/Automattic/newspack-blocks/issues/1534)) ([b0ed7f9](https://github.com/Automattic/newspack-blocks/commit/b0ed7f911982f914678c466c07bc5f0659aaca86))
+
+## [1.74.1](https://github.com/Automattic/newspack-blocks/compare/v1.74.0...v1.74.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* harden usage and output of attribute values ([#1530](https://github.com/Automattic/newspack-blocks/issues/1530)) ([c157395](https://github.com/Automattic/newspack-blocks/commit/c15739539d73884b36284e9d1c2eb854202269f8))
+
 # [1.74.0](https://github.com/Automattic/newspack-blocks/compare/v1.73.0...v1.74.0) (2023-08-24)
 
 

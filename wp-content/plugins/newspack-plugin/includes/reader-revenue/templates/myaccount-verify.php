@@ -53,14 +53,14 @@ $reset_password_url                                  = \add_query_arg(
 
 <div class="newspack-verify-account-message">
 	<p>
-		<?php esc_html_e( 'You must verify your account before you can manage account settings. Verify with a link or by setting a password.', 'newspack' ); ?>
+		<?php esc_html_e( 'You must verify your account before you can manage account settings. Verify with a link or by setting a password.', 'newspack-plugin' ); ?>
 	</p>
 	<p>
 		<a class="woocommerce-Button button" href="<?php echo esc_url( $magic_link_url ); ?>">
-			<?php esc_html_e( 'Send me a link', 'newspack' ); ?>
+			<?php esc_html_e( 'Send me a link', 'newspack-plugin' ); ?>
 		</a>
 		<a class="woocommerce-Button button" href="<?php echo esc_url( $reset_password_url ); ?>">
-			<?php esc_html_e( 'Set a new password', 'newspack' ); ?>
+			<?php esc_html_e( 'Set a new password', 'newspack-plugin' ); ?>
 		</a>
 	</p>
 </div>

@@ -119,7 +119,9 @@ function newspack_blocks_get_video_playlist_videos( $args ) {
 			}
 		);
 		foreach ( $youtube_blocks as $youtube_block ) {
-			$videos[] = $youtube_block['attrs']['url'];
+			if ( isset( $youtube_block['attrs']['url'] ) ) {
+				$videos[] = esc_url( $youtube_block['attrs']['url'] );
+			}
 		}
 	}
 

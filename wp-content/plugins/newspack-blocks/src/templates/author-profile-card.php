@@ -60,20 +60,7 @@ call_user_func(
 
 					echo wp_kses(
 						$author['avatar'],
-						[
-							'img' => [
-								'alt'      => true,
-								'class'    => true,
-								'data-*'   => true,
-								'decoding' => true,
-								'height'   => true,
-								'loading'  => true,
-								'sizes'    => true,
-								'src'      => true,
-								'srcset'   => true,
-								'width'    => true,
-							],
-						]
+						Newspack_Blocks::get_sanitized_image_attributes()
 					);
 
 				if ( $show_archive_link ) :

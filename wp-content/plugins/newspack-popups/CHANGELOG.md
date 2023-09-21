@@ -1,3 +1,17 @@
+## [2.23.1](https://github.com/Automattic/newspack-popups/compare/v2.23.0...v2.23.1) (2023-09-13)
+
+
+### Bug Fixes
+
+* avoid SQL error if legacy table doesn't exist ([#1211](https://github.com/Automattic/newspack-popups/issues/1211)) ([f091a24](https://github.com/Automattic/newspack-popups/commit/f091a24c4cb7e78c114fcb5d473a47c7ef1210aa))
+
+## [2.23.1-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.23.0...v2.23.1-alpha.1) (2023-09-06)
+
+
+### Bug Fixes
+
+* avoid SQL error if legacy table doesn't exist ([#1211](https://github.com/Automattic/newspack-popups/issues/1211)) ([f091a24](https://github.com/Automattic/newspack-popups/commit/f091a24c4cb7e78c114fcb5d473a47c7ef1210aa))
+
 # [2.23.0](https://github.com/Automattic/newspack-popups/compare/v2.22.0...v2.23.0) (2023-08-24)
 
 

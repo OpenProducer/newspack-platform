@@ -25,7 +25,7 @@ function newspack_blocks_hpb_maximum_image_width() {
 		$site_content_width  = 1200;
 		$is_image_half_width = in_array( $attributes['mediaPosition'], [ 'left', 'right' ], true );
 		if ( 'grid' === $attributes['postLayout'] ) {
-			$columns = $attributes['columns'];
+			$columns = absint( $attributes['columns'] );
 			if ( $is_image_half_width ) {
 				// If the media position is on left or right, the image is 50% of the column width.
 				$columns = $columns * 2;
@@ -284,7 +284,14 @@ add_action( 'init', 'newspack_blocks_register_homepage_articles' );
 function newspack_blocks_format_avatars( $author_info ) {
 	$elements = array_map(
 		function ( $author ) {
-			return sprintf( '<a href="%s">%s</a>', $author->url, $author->avatar );
+			return sprintf(
+				'<a href="%s">%s</a>',
+				esc_url( $author->url ),
+				wp_kses(
+					$author->avatar,
+					Newspack_Blocks::get_sanitized_image_attributes()
+				)
+			);
 		},
 		$author_info
 	);

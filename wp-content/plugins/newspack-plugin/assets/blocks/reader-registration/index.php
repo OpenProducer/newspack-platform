@@ -36,7 +36,7 @@ function register_block() {
 		'newspack/reader-registration',
 		[
 			'name'       => 'stacked',
-			'label'      => __( 'Stacked', 'newspack' ),
+			'label'      => __( 'Stacked', 'newspack-plugin' ),
 			'is_default' => true,
 		]
 	);
@@ -44,7 +44,7 @@ function register_block() {
 		'newspack/reader-registration',
 		[
 			'name'  => 'columns',
-			'label' => __( 'Columns (newsletter subscription)', 'newspack' ),
+			'label' => __( 'Columns (newsletter subscription)', 'newspack-plugin' ),
 		]
 	);
 }
@@ -107,24 +107,24 @@ function render_block( $attrs, $content ) {
 	$registered      = false;
 	$my_account_url  = function_exists( 'wc_get_account_endpoint_url' ) ? \wc_get_account_endpoint_url( 'dashboard' ) : false;
 	$message         = '';
-	$success_message = __( 'Thank you for registering!', 'newspack' ) . '<br />';
+	$success_message = __( 'Thank you for registering!', 'newspack-plugin' ) . '<br />';
 
 	if ( $my_account_url ) {
 		$success_message .= sprintf(
 			// Translators: %s is a link to My Account.
-			__( 'Please visit %s to verify and manage your account.', 'newspack' ),
-			'<a href="' . esc_url( $my_account_url ) . '">' . __( 'My Account', 'newspack' ) . '</a>'
+			__( 'Please visit %s to verify and manage your account.', 'newspack-plugin' ),
+			'<a href="' . esc_url( $my_account_url ) . '">' . __( 'My Account', 'newspack-plugin' ) . '</a>'
 		);
 	}
 
 	/** Handle default attributes. */
 	$default_attrs = [
 		'style'            => 'stacked',
-		'label'            => __( 'Sign up', 'newspack' ),
-		'newsletterLabel'  => __( 'Subscribe to our newsletter', 'newspack' ),
-		'haveAccountLabel' => __( 'Already have an account?', 'newspack' ),
-		'signInLabel'      => __( 'Sign in', 'newspack' ),
-		'signedInLabel'    => __( 'An account was already registered with this email. Please check your inbox for an authentication link.', 'newspack' ),
+		'label'            => __( 'Sign up', 'newspack-plugin' ),
+		'newsletterLabel'  => __( 'Subscribe to our newsletter', 'newspack-plugin' ),
+		'haveAccountLabel' => __( 'Already have an account?', 'newspack-plugin' ),
+		'signInLabel'      => __( 'Sign in', 'newspack-plugin' ),
+		'signedInLabel'    => __( 'An account was already registered with this email. Please check your inbox for an authentication link.', 'newspack-plugin' ),
 	];
 	$attrs         = \wp_parse_args( $attrs, $default_attrs );
 	foreach ( $default_attrs as $key => $value ) {
@@ -340,7 +340,7 @@ function get_block_classes( $attrs = [] ) {
 function send_form_response( $data, $message = '' ) {
 	$is_error = \is_wp_error( $data );
 	if ( empty( $message ) ) {
-		$message = $is_error ? $data->get_error_message() : __( 'Thank you for registering!', 'newspack' );
+		$message = $is_error ? $data->get_error_message() : __( 'Thank you for registering!', 'newspack-plugin' );
 	}
 	if ( \wp_is_json_request() ) {
 		\wp_send_json( compact( 'message', 'data' ), \is_wp_error( $data ) ? 400 : 200 );
@@ -407,7 +407,7 @@ function process_form() {
 	// The honeypot field is called `email` to hopefully capture bots that might be looking for such a field.
 	$email = isset( $_REQUEST['npe'] ) ? \sanitize_email( $_REQUEST['npe'] ) : '';
 	if ( empty( $email ) ) {
-		return send_form_response( new \WP_Error( 'invalid_email', __( 'You must enter a valid email address.', 'newspack' ) ) );
+		return send_form_response( new \WP_Error( 'invalid_email', __( 'You must enter a valid email address.', 'newspack-plugin' ) ) );
 	}
 
 	$metadata = [];

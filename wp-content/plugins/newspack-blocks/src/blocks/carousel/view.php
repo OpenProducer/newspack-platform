@@ -73,6 +73,10 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			$hide_publish_date = apply_filters( 'newspack_listings_hide_publish_date', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			$show_author       = $attributes['showAuthor'] && ! $hide_author;
 			$show_date         = $attributes['showDate'] && ! $hide_publish_date;
+
+			// Validate the value of the "image fit" attribute.
+			$image_fits = [ 'cover', 'contain' ];
+			$image_fit  = in_array( $attributes['imageFit'], $image_fits, true ) ? $attributes['imageFit'] : $image_fits[0];
 			?>
 
 			<article data-post-id="<?php echo esc_attr( $post_id ); ?>" class="<?php echo esc_attr( implode( ' ', $article_classes ) . ' ' . $post_type ); ?>">
@@ -86,9 +90,9 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 								the_post_thumbnail(
 									'large',
 									array(
-										'object-fit' => $attributes['imageFit'],
+										'object-fit' => $image_fit,
 										'layout'     => 'fill',
-										'class'      => 'contain' === $attributes['imageFit'] ? 'image-fit-contain' : 'image-fit-cover',
+										'class'      => 'contain' === $image_fit ? 'image-fit-contain' : 'image-fit-cover',
 										'alt'        => trim( wp_strip_all_tags( get_the_title( $post_id ) ) ),
 									)
 								);
@@ -204,21 +208,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 								if ( $attributes['showAvatar'] ) :
 									echo wp_kses(
 										newspack_blocks_format_avatars( $authors ),
-										array(
-											'img'      => array(
-												'class'  => true,
-												'src'    => true,
-												'alt'    => true,
-												'width'  => true,
-												'height' => true,
-												'data-*' => true,
-												'srcset' => true,
-											),
-											'noscript' => array(),
-											'a'        => array(
-												'href' => true,
-											),
-										)
+										Newspack_Blocks::get_sanitized_image_attributes()
 									);
 								endif;
 								?>
@@ -259,8 +249,9 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 		);
 	}
 
-	$slides_per_view = absint( ! empty( $attributes['slidesPerView'] ) ? $attributes['slidesPerView'] : 1 );
+	$slides_per_view = absint( $attributes['slidesPerView'] ?? 1 );
 	$slides_to_show  = $slides_per_view <= $counter ? $slides_per_view : $counter;
+	$aspect_ratio    = floatval( $attributes['aspectRatio'] ?? 0.75 );
 
 	if ( $is_amp ) {
 		$selector = sprintf(
@@ -272,14 +263,14 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 
 		$carousel    = sprintf(
 			'<amp-base-carousel class="wp-block-newspack-carousel__amp-carousel" width="%1$s" height="%2$s" heights="%3$s" layout="responsive" snap="true" data-next-button-aria-label="%4$s" data-prev-button-aria-label="%5$s" controls="auto" loop="true" %6$s id="wp-block-newspack-carousel__amp-carousel__%7$s" on="slideChange:wp-block-newspack-carousel__amp-pagination__%7$s.toggle(index=event.index, value=true)" advance-count="1" visible-count="%8$s">%9$s</amp-base-carousel>',
-			$attributes['slidesPerView'] * 1,
-			$attributes['aspectRatio'],
-			'(min-width: 1168px) ' . ( $attributes['aspectRatio'] / $slides_to_show * 100 ) . '% !important, (min-width: 782px) ' . ( $slides_to_show > 1 ? ( $attributes['aspectRatio'] / 2 * 100 ) . '% !important' : ( $attributes['aspectRatio'] * 100 ) . '% !important' ) . ', ' . ( $attributes['aspectRatio'] * 100 ) . '% !important',
+			esc_attr( $slides_per_view * 1 ),
+			esc_attr( $aspect_ratio ),
+			esc_attr( '(min-width: 1168px) ' . ( $aspect_ratio / $slides_to_show * 100 ) . '% !important, (min-width: 782px) ' . ( $slides_to_show > 1 ? ( $aspect_ratio / 2 * 100 ) . '% !important' : ( $aspect_ratio * 100 ) . '% !important' ) . ', ' . ( $aspect_ratio * 100 ) . '% !important' ),
 			esc_attr__( 'Next Slide', 'newspack-blocks' ),
 			esc_attr__( 'Previous Slide', 'newspack-blocks' ),
 			$autoplay ? 'auto-advance="true" auto-advance-interval=' . esc_attr( $delay * 1000 ) : '',
 			absint( $newspack_blocks_carousel_id ),
-			'(min-width: 1168px) ' . $slides_to_show . ', (min-width: 782px) ' . ( $slides_to_show > 1 ? 2 : 1 ) . ', ' . 1,
+			esc_attr( '(min-width: 1168px) ' . $slides_to_show . ', (min-width: 782px) ' . ( $slides_to_show > 1 ? 2 : 1 ) . ', ' . 1 ),
 			$slides
 		);
 		$autoplay_ui = $autoplay ? newspack_blocks_carousel_block_autoplay_ui_amp( $newspack_blocks_carousel_id ) : '';
@@ -304,9 +295,9 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 	}
 	$data_attributes = [
 		'data-current-post-id=' . $post_id,
-		'data-slides-per-view=' . $attributes['slidesPerView'],
+		'data-slides-per-view=' . esc_attr( $slides_per_view ),
 		'data-slide-count=' . $counter,
-		'data-aspect-ratio=' . $attributes['aspectRatio'],
+		'data-aspect-ratio=' . esc_attr( $aspect_ratio ),
 	];
 
 	if ( $autoplay && ! $is_amp ) {

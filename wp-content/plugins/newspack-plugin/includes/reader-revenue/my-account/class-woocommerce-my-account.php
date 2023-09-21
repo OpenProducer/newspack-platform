@@ -82,7 +82,7 @@ class WooCommerce_My_Account {
 		// Add a nav item for Stripe's billing portal.
 		$stripe_customer_id = self::get_current_user_stripe_id();
 		if ( false !== $stripe_customer_id ) {
-			$custom_endpoints = [ self::BILLING_ENDPOINT => __( 'Billing', 'newspack' ) ];
+			$custom_endpoints = [ self::BILLING_ENDPOINT => __( 'Billing', 'newspack-plugin' ) ];
 			$items            = array_slice( $items, 0, 1, true ) + $custom_endpoints + array_slice( $items, 1, null, true );
 		}
 
@@ -90,7 +90,7 @@ class WooCommerce_My_Account {
 
 		// Rename 'Logout' action to 'Log out', for grammatical reasons.
 		if ( isset( $items['customer-logout'] ) ) {
-			$items['customer-logout'] = __( 'Log out', 'newspack' );
+			$items['customer-logout'] = __( 'Log out', 'newspack-plugin' );
 		}
 
 		if ( Reader_Activation::is_enabled() ) {
@@ -167,14 +167,14 @@ class WooCommerce_My_Account {
 		$is_error = false;
 		if ( \wp_verify_nonce( $nonce, self::RESET_PASSWORD_URL_PARAM ) ) {
 			$result  = \retrieve_password( \wp_get_current_user()->user_email );
-			$message = __( 'Please check your email inbox for instructions on how to set a new password.', 'newspack' );
+			$message = __( 'Please check your email inbox for instructions on how to set a new password.', 'newspack-plugin' );
 			if ( \is_wp_error( $result ) ) {
 				Logger::error( 'Error resetting password: ' . $result->get_error_message() );
 				$message  = $result->get_error_message();
 				$is_error = true;
 			}
 		} else {
-			$message  = __( 'Something went wrong.', 'newspack' );
+			$message  = __( 'Something went wrong.', 'newspack-plugin' );
 			$is_error = true;
 		}
 
@@ -235,7 +235,7 @@ class WooCommerce_My_Account {
 		\wp_safe_redirect(
 			\add_query_arg(
 				[
-					'message'  => $sent ? __( 'Please check your email inbox for instructions on how to delete your account.', 'newspack' ) : __( 'Something went wrong.', 'newspack' ),
+					'message'  => $sent ? __( 'Please check your email inbox for instructions on how to delete your account.', 'newspack-plugin' ) : __( 'Something went wrong.', 'newspack-plugin' ),
 					'is_error' => ! $sent,
 				],
 				\remove_query_arg( self::DELETE_ACCOUNT_URL_PARAM )
@@ -258,7 +258,7 @@ class WooCommerce_My_Account {
 
 		$form_nonce = \sanitize_text_field( $_POST[ self::DELETE_ACCOUNT_FORM ] );
 		if ( ! $form_nonce || ! \wp_verify_nonce( $form_nonce, self::DELETE_ACCOUNT_FORM ) ) {
-			\wp_die( \esc_html__( 'Invalid request.', 'newspack' ) );
+			\wp_die( \esc_html__( 'Invalid request.', 'newspack-plugin' ) );
 		}
 
 		if ( ! isset( $_POST['confirm_delete'] ) ) {
@@ -278,7 +278,7 @@ class WooCommerce_My_Account {
 		$token           = isset( $_POST['token'] ) ? \sanitize_text_field( $_POST['token'] ) : '';
 		$transient_token = \get_transient( 'np_reader_account_delete_' . $user_id );
 		if ( ! $token || ! $transient_token || $token !== $transient_token ) {
-			\wp_die( \esc_html__( 'Invalid request.', 'newspack' ) );
+			\wp_die( \esc_html__( 'Invalid request.', 'newspack-plugin' ) );
 		}
 		\delete_transient( 'np_reader_account_delete_' . $user_id );
 
@@ -300,14 +300,14 @@ class WooCommerce_My_Account {
 			$is_error = false;
 			if ( \wp_verify_nonce( $nonce, self::SEND_MAGIC_LINK_PARAM ) ) {
 				$result  = Reader_Activation::send_verification_email( \wp_get_current_user() );
-				$message = __( 'Please check your email inbox for a link to verify your account.', 'newspack' );
+				$message = __( 'Please check your email inbox for a link to verify your account.', 'newspack-plugin' );
 				if ( \is_wp_error( $result ) ) {
 					Logger::error( 'Error sending verification email: ' . $result->get_error_message() );
 					$message  = $result->get_error_message();
 					$is_error = true;
 				}
 			} else {
-				$message  = __( 'Something went wrong.', 'newspack' );
+				$message  = __( 'Something went wrong.', 'newspack-plugin' );
 				$is_error = true;
 			}
 			wp_safe_redirect(
@@ -431,8 +431,8 @@ class WooCommerce_My_Account {
 	public static function remove_required_fields( $required_fields ) {
 		if ( Donations::is_platform_wc() ) {
 			return [
-				'account_display_name' => __( 'Display name', 'newspack' ),
-				'account_email'        => __( 'Email address', 'newspack' ),
+				'account_display_name' => __( 'Display name', 'newspack-plugin' ),
+				'account_email'        => __( 'Email address', 'newspack-plugin' ),
 			];
 		}
 		return [];
@@ -518,7 +518,7 @@ class WooCommerce_My_Account {
 	 */
 	public static function show_message_after_logout() {
 		if ( isset( $_GET['logged_out'] ) && function_exists( 'wc_add_notice' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			\wc_add_notice( __( 'You have successfully logged out.', 'newspack' ), 'success' );
+			\wc_add_notice( __( 'You have successfully logged out.', 'newspack-plugin' ), 'success' );
 		}
 	}
 }

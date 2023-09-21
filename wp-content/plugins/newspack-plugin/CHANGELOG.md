@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/Automattic/newspack-plugin/compare/v2.6.1...v2.6.2) (2023-09-20)
+
+
+### Bug Fixes
+
+* partial text domain update for the newspack plugin ([#2646](https://github.com/Automattic/newspack-plugin/issues/2646)) ([#2654](https://github.com/Automattic/newspack-plugin/issues/2654)) ([3b5b713](https://github.com/Automattic/newspack-plugin/commit/3b5b713e06b0e8a7abd7d92688fd25402e8c44b4))
+
 ## [2.6.1](https://github.com/Automattic/newspack-plugin/compare/v2.6.0...v2.6.1) (2023-09-15)
 
 

@@ -145,9 +145,9 @@ final class Reader_Activation {
 			self::AUTH_SCRIPT_HANDLE,
 			'newspack_reader_auth_labels',
 			[
-				'invalid_email'    => __( 'Please enter a valid email address.', 'newspack' ),
-				'invalid_password' => __( 'Please enter a password.', 'newspack' ),
-				'blocked_popup'    => __( 'The popup has been blocked. Allow popups for the site and try again.', 'newspack' ),
+				'invalid_email'    => __( 'Please enter a valid email address.', 'newspack-plugin' ),
+				'invalid_password' => __( 'Please enter a password.', 'newspack-plugin' ),
+				'blocked_popup'    => __( 'The popup has been blocked. Allow popups for the site and try again.', 'newspack-plugin' ),
 			]
 		);
 		\wp_script_add_data( self::AUTH_SCRIPT_HANDLE, 'async', true );
@@ -170,7 +170,7 @@ final class Reader_Activation {
 			'enabled'                     => false,
 			'enabled_account_link'        => true,
 			'account_link_menu_locations' => [ 'tertiary-menu' ],
-			'newsletters_label'           => __( 'Subscribe to our newsletters:', 'newspack' ),
+			'newsletters_label'           => __( 'Subscribe to our newsletters:', 'newspack-plugin' ),
 			'terms_text'                  => '',
 			'terms_url'                   => '',
 			'sync_esp'                    => true,
@@ -257,7 +257,7 @@ final class Reader_Activation {
 	 */
 	public static function activate() {
 		if ( ! method_exists( '\Newspack_Popups_Presets', 'activate_ras_presets' ) ) {
-			return new \WP_Error( 'newspack_reader_activation_missing_dependencies', __( 'Newspack Campaigns plugin is required to activate Reader Activation features.', 'newspack' ) );
+			return new \WP_Error( 'newspack_reader_activation_missing_dependencies', __( 'Newspack Campaigns plugin is required to activate Reader Activation features.', 'newspack-plugin' ) );
 		}
 
 		return \Newspack_Popups_Presets::activate_ras_presets();
@@ -373,17 +373,17 @@ final class Reader_Activation {
 		$prerequisites = [
 			'terms_conditions' => [
 				'active'      => self::is_terms_configured(),
-				'label'       => __( 'Legal Pages', 'newspack' ),
+				'label'       => __( 'Legal Pages', 'newspack-plugin' ),
 				'description' => __( 'Displaying legal pages like Privacy Policy and Terms of Service on your site is recommended for allowing readers to register and access their account.', 'newspack-plugin' ),
 				'help_url'    => 'https://help.newspack.com/engagement/reader-activation-system',
-				'warning'     => __( 'Privacy policies that tell users how you collect and use their data are essential for running a  trustworthy website. While rules and regulations can differ by country, certain legal pages might be required by law.', 'newspack' ),
+				'warning'     => __( 'Privacy policies that tell users how you collect and use their data are essential for running a  trustworthy website. While rules and regulations can differ by country, certain legal pages might be required by law.', 'newspack-plugin' ),
 				'fields'      => [
 					'terms_text' => [
-						'label'       => __( 'Legal Pages Disclaimer Text', 'newspack' ),
+						'label'       => __( 'Legal Pages Disclaimer Text', 'newspack-plugin' ),
 						'description' => __( 'Legal pages disclaimer text to display on registration.', 'newspack-plugin' ),
 					],
 					'terms_url'  => [
-						'label'       => __( 'Legal Pages URL', 'newspack' ),
+						'label'       => __( 'Legal Pages URL', 'newspack-plugin' ),
 						'description' => __( 'URL to the page containing the privacy policy or terms of service.', 'newspack-plugin' ),
 					],
 				],
@@ -393,38 +393,38 @@ final class Reader_Activation {
 				'plugins'      => [
 					'newspack-newsletters' => class_exists( '\Newspack_Newsletters' ),
 				],
-				'label'        => __( 'Email Service Provider (ESP)', 'newspack' ),
-				'description'  => __( 'Connect to your ESP to register readers with their email addresses and send newsletters.', 'newspack' ),
-				'instructions' => __( 'Connect to your email service provider (ESP) and enable at least one subscription list.', 'newspack' ),
+				'label'        => __( 'Email Service Provider (ESP)', 'newspack-plugin' ),
+				'description'  => __( 'Connect to your ESP to register readers with their email addresses and send newsletters.', 'newspack-plugin' ),
+				'instructions' => __( 'Connect to your email service provider (ESP) and enable at least one subscription list.', 'newspack-plugin' ),
 				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
 				'href'         => \admin_url( '/admin.php?page=newspack-engagement-wizard#/newsletters' ),
 				'action_text'  => __( 'ESP settings' ),
 			],
 			'emails'           => [
 				'active'      => self::is_transactional_email_configured(),
-				'label'       => __( 'Transactional Emails', 'newspack' ),
+				'label'       => __( 'Transactional Emails', 'newspack-plugin' ),
 				'description' => __( 'Your sender name and email address determines how readers find emails related to their account in their inbox. To customize the content of these emails, visit Advanced Settings below.', 'newspack-plugin' ),
 				'help_url'    => 'https://help.newspack.com/engagement/reader-activation-system',
 				'fields'      => [
 					'sender_name'           => [
-						'label'       => __( 'Sender Name', 'newspack' ),
+						'label'       => __( 'Sender Name', 'newspack-plugin' ),
 						'description' => __( 'Name to use as the sender of transactional emails.', 'newspack-plugin' ),
 					],
 					'sender_email_address'  => [
-						'label'       => __( 'Sender Email Address', 'newspack' ),
+						'label'       => __( 'Sender Email Address', 'newspack-plugin' ),
 						'description' => __( 'Email address to use as the sender of transactional emails.', 'newspack-plugin' ),
 					],
 					'contact_email_address' => [
-						'label'       => __( 'Contact Email Address', 'newspack' ),
+						'label'       => __( 'Contact Email Address', 'newspack-plugin' ),
 						'description' => __( 'This email will be used as "Reply-To" for transactional emails as well.', 'newspack-plugin' ),
 					],
 				],
 			],
 			'recaptcha'        => [
 				'active'       => method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha(),
-				'label'        => __( 'reCAPTCHA v3', 'newspack' ),
-				'description'  => __( 'Connecting to a Google reCAPTCHA v3 account enables enhanced anti-spam for all Newspack sign-up blocks.', 'newspack' ),
-				'instructions' => __( 'Enable reCAPTCHA v3 and enter your account credentials.', 'newspack' ),
+				'label'        => __( 'reCAPTCHA v3', 'newspack-plugin' ),
+				'description'  => __( 'Connecting to a Google reCAPTCHA v3 account enables enhanced anti-spam for all Newspack sign-up blocks.', 'newspack-plugin' ),
+				'instructions' => __( 'Enable reCAPTCHA v3 and enter your account credentials.', 'newspack-plugin' ),
 				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
 				'href'         => \admin_url( '/admin.php?page=newspack-connections-wizard&scrollTo=recaptcha' ),
 				'action_text'  => __( 'reCAPTCHA settings' ),
@@ -437,9 +437,9 @@ final class Reader_Activation {
 					'woocommerce-subscriptions'   => class_exists( 'WC_Subscriptions_Product' ),
 					'woocommerce-name-your-price' => class_exists( 'WC_Name_Your_Price_Helpers' ),
 				],
-				'label'        => __( 'Reader Revenue', 'newspack' ),
-				'description'  => __( 'Setting suggested donation amounts is required for enabling a streamlined donation experience.', 'newspack' ),
-				'instructions' => __( 'Set platform to "Newspack" or "News Revenue Hub" and configure your default donation settings. If using News Revenue Hub, set an Organization ID and a Donor Landing Page in News Revenue Hub Settings.', 'newspack' ),
+				'label'        => __( 'Reader Revenue', 'newspack-plugin' ),
+				'description'  => __( 'Setting suggested donation amounts is required for enabling a streamlined donation experience.', 'newspack-plugin' ),
+				'instructions' => __( 'Set platform to "Newspack" or "News Revenue Hub" and configure your default donation settings. If using News Revenue Hub, set an Organization ID and a Donor Landing Page in News Revenue Hub Settings.', 'newspack-plugin' ),
 				'help_url'     => 'https://help.newspack.com/engagement/reader-activation-system',
 				'href'         => \admin_url( '/admin.php?page=newspack-reader-revenue-wizard' ),
 				'action_text'  => __( 'Reader Revenue settings' ),
@@ -449,13 +449,13 @@ final class Reader_Activation {
 				'plugins'        => [
 					'newspack-popups' => class_exists( '\Newspack_Popups_Model' ),
 				],
-				'label'          => __( 'Reader Activation Campaign', 'newspack' ),
-				'description'    => __( 'Building a set of prompts with default segments and settings allows for an improved experience optimized for Reader Activation.', 'newspack' ),
+				'label'          => __( 'Reader Activation Campaign', 'newspack-plugin' ),
+				'description'    => __( 'Building a set of prompts with default segments and settings allows for an improved experience optimized for Reader Activation.', 'newspack-plugin' ),
 				'help_url'       => 'https://help.newspack.com/engagement/reader-activation-system',
 				'href'           => self::is_ras_campaign_configured() ? \admin_url( '/admin.php?page=newspack-popups-wizard#/campaigns' ) : \admin_url( '/admin.php?page=newspack-engagement-wizard#/reader-activation/campaign' ),
 				'action_enabled' => self::is_ras_ready_to_configure(),
-				'action_text'    => __( 'Reader Activation campaign', 'newspack' ),
-				'disabled_text'  => __( 'Waiting for all settings to be ready', 'newspack' ),
+				'action_text'    => __( 'Reader Activation campaign', 'newspack-plugin' ),
+				'disabled_text'  => __( 'Waiting for all settings to be ready', 'newspack-plugin' ),
 			],
 		];
 
@@ -507,7 +507,7 @@ final class Reader_Activation {
 	public static function add_auth_intention_to_login_form( $defaults ) {
 		$email = self::get_auth_intention_value();
 		if ( ! empty( $email ) ) {
-			$defaults['label_username'] = __( 'Email address', 'newspack' );
+			$defaults['label_username'] = __( 'Email address', 'newspack-plugin' );
 			$defaults['value_username'] = $email;
 		}
 		return $defaults;
@@ -681,7 +681,7 @@ final class Reader_Activation {
 		\update_user_meta( $user->ID, self::EMAIL_VERIFIED, true );
 
 		if ( function_exists( '\wc_add_notice' ) ) {
-			\wc_add_notice( __( 'Thank you for verifying your account!', 'newspack' ), 'success' );
+			\wc_add_notice( __( 'Thank you for verifying your account!', 'newspack-plugin' ), 'success' );
 		}
 
 		/**
@@ -731,7 +731,7 @@ final class Reader_Activation {
 		}
 
 		if ( ! isset( $user ) || ! $user || ! self::is_user_reader( $user ) ) {
-			return new \WP_Error( 'newspack_is_reader_without_password', __( 'Invalid user.', 'newspack' ) );
+			return new \WP_Error( 'newspack_is_reader_without_password', __( 'Invalid user.', 'newspack-plugin' ) );
 		}
 
 		return (bool) \get_user_meta( $user->ID, self::WITHOUT_PASSWORD, false );
@@ -925,8 +925,8 @@ final class Reader_Activation {
 		};
 
 		$labels = [
-			'signedin'  => \__( 'My Account', 'newspack' ),
-			'signedout' => \__( 'Sign In', 'newspack' ),
+			'signedin'  => \__( 'My Account', 'newspack-plugin' ),
+			'signedout' => \__( 'Sign In', 'newspack-plugin' ),
 		];
 		$label  = \is_user_logged_in() ? 'signedin' : 'signedout';
 
@@ -954,7 +954,7 @@ final class Reader_Activation {
 	 */
 	public static function render_honeypot_field( $placeholder = '' ) {
 		if ( empty( $placeholder ) ) {
-			$placeholder = __( 'Enter your email address', 'newspack' );
+			$placeholder = __( 'Enter your email address', 'newspack-plugin' );
 		}
 		?>
 		<input class="nphp" tabindex="-1" aria-hidden="true" name="email" type="email" autocomplete="off" placeholder="<?php echo \esc_attr( $placeholder ); ?>" />
@@ -978,8 +978,8 @@ final class Reader_Activation {
 		};
 
 		$labels = [
-			'signin'   => \__( 'Sign In', 'newspack' ),
-			'register' => \__( 'Sign Up', 'newspack' ),
+			'signin'   => \__( 'Sign In', 'newspack-plugin' ),
+			'register' => \__( 'Sign Up', 'newspack-plugin' ),
 		];
 
 		$message    = '';
@@ -1010,7 +1010,7 @@ final class Reader_Activation {
 		<div class="<?php echo \esc_attr( implode( ' ', $classnames ) ); ?>" data-labels="<?php echo \esc_attr( htmlspecialchars( \wp_json_encode( $labels ), ENT_QUOTES, 'UTF-8' ) ); ?>">
 			<div class="<?php echo \esc_attr( $class( 'wrapper' ) ); ?>">
 				<?php if ( ! $is_inline ) : ?>
-				<button class="<?php echo \esc_attr( $class( 'close' ) ); ?>" data-close aria-label="<?php \esc_attr_e( 'Close Authentication Form', 'newspack' ); ?>">
+				<button class="<?php echo \esc_attr( $class( 'close' ) ); ?>" data-close aria-label="<?php \esc_attr_e( 'Close Authentication Form', 'newspack-plugin' ); ?>">
 					<svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" role="img" aria-hidden="true" focusable="false">
 						<path d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12 19 6.41z"/>
 					</svg>
@@ -1021,11 +1021,11 @@ final class Reader_Activation {
 						<input type="hidden" name="<?php echo \esc_attr( self::AUTH_FORM_ACTION ); ?>" value="1" />
 						<input type="hidden" name="action" value="pwd" />
 						<div class="<?php echo \esc_attr( $class( 'have-account' ) ); ?>">
-							<a href="#" data-action="pwd link" data-set-action="register"><?php \esc_html_e( "I don't have an account", 'newspack' ); ?></a>
-							<a href="#" data-action="register" data-set-action="pwd"><?php \esc_html_e( 'I already have an account', 'newspack' ); ?></a>
+							<a href="#" data-action="pwd link" data-set-action="register"><?php \esc_html_e( "I don't have an account", 'newspack-plugin' ); ?></a>
+							<a href="#" data-action="register" data-set-action="pwd"><?php \esc_html_e( 'I already have an account', 'newspack-plugin' ); ?></a>
 						</div>
 						<div class="<?php echo \esc_attr( $class( 'header' ) ); ?>">
-							<h2><?php _e( 'Sign In', 'newspack' ); ?></h2>
+							<h2><?php _e( 'Sign In', 'newspack-plugin' ); ?></h2>
 						</div>
 						<div class="<?php echo \esc_attr( $class( 'response' ) ); ?>">
 							<span class="<?php echo \esc_attr( $class( 'response', 'icon' ) ); ?>" data-form-status="400">
@@ -1041,15 +1041,15 @@ final class Reader_Activation {
 							</div>
 						</div>
 						<p data-has-auth-link>
-							<?php _e( "We've recently sent you an authentication link. Please, check your inbox!", 'newspack' ); ?>
+							<?php _e( "We've recently sent you an authentication link. Please, check your inbox!", 'newspack-plugin' ); ?>
 						</p>
 						<p data-action="pwd">
 							<?php
 								echo wp_kses_post(
 									sprintf(
 										// Translators: %s is the link to sign in via magic link instead.
-										__( 'Sign in with a password below, or %s.', 'newspack' ),
-										'<a href="#" data-set-action="link">' . __( 'sign in using your email', 'newspack' ) . '</a>'
+										__( 'Sign in with a password below, or %s.', 'newspack-plugin' ),
+										'<a href="#" data-set-action="link">' . __( 'sign in using your email', 'newspack-plugin' ) . '</a>'
 									)
 								);
 							?>
@@ -1059,8 +1059,8 @@ final class Reader_Activation {
 								echo wp_kses_post(
 									sprintf(
 										// Translators: %s is the link to sign in via password instead.
-										__( 'Get a code sent to your email to sign in, or %s.', 'newspack' ),
-										'<a href="#" data-set-action="pwd">' . __( 'sign in using a password', 'newspack' ) . '</a>'
+										__( 'Get a code sent to your email to sign in, or %s.', 'newspack-plugin' ),
+										'<a href="#" data-set-action="pwd">' . __( 'sign in using a password', 'newspack-plugin' ) . '</a>'
 									)
 								);
 							?>
@@ -1070,8 +1070,8 @@ final class Reader_Activation {
 								echo wp_kses_post(
 									sprintf(
 										// Translators: %s is the link to sign in via password instead.
-										__( 'Enter the code you received via email to sign in, or %s.', 'newspack' ),
-										'<a href="#" data-set-action="pwd">' . __( 'sign in using a password', 'newspack' ) . '</a>'
+										__( 'Enter the code you received via email to sign in, or %s.', 'newspack-plugin' ),
+										'<a href="#" data-set-action="pwd">' . __( 'sign in using a password', 'newspack-plugin' ) . '</a>'
 									)
 								);
 							?>
@@ -1094,54 +1094,54 @@ final class Reader_Activation {
 							</div>
 						<?php endif; ?>
 						<div class="components-form__field" data-action="pwd link register">
-							<input name="npe" type="email" placeholder="<?php \esc_attr_e( 'Enter your email address', 'newspack' ); ?>" />
+							<input name="npe" type="email" placeholder="<?php \esc_attr_e( 'Enter your email address', 'newspack-plugin' ); ?>" />
 							<?php self::render_honeypot_field(); ?>
 						</div>
 						<div class="components-form__field otp-field" data-action="otp">
-							<input name="otp_code" type="text" maxlength="<?php echo \esc_attr( Magic_Link::OTP_LENGTH ); ?>" placeholder="<?php \esc_attr_e( '6-digit code', 'newspack' ); ?>" />
+							<input name="otp_code" type="text" maxlength="<?php echo \esc_attr( Magic_Link::OTP_LENGTH ); ?>" placeholder="<?php \esc_attr_e( '6-digit code', 'newspack-plugin' ); ?>" />
 						</div>
 						<div class="components-form__field" data-action="pwd">
-							<input name="password" type="password" placeholder="<?php \esc_attr_e( 'Enter your password', 'newspack' ); ?>" />
+							<input name="password" type="password" placeholder="<?php \esc_attr_e( 'Enter your password', 'newspack-plugin' ); ?>" />
 						</div>
 						<div class="<?php echo \esc_attr( $class( 'actions' ) ); ?>" data-action="pwd">
 							<div class="components-form__submit">
-								<button type="submit"><?php \esc_html_e( 'Sign in', 'newspack' ); ?></button>
+								<button type="submit"><?php \esc_html_e( 'Sign in', 'newspack-plugin' ); ?></button>
 							</div>
 							<div class="components-form__help">
 								<p class="small">
-									<a href="#" data-set-action="link"><?php \esc_html_e( 'Sign in with your email', 'newspack' ); ?></a>
+									<a href="#" data-set-action="link"><?php \esc_html_e( 'Sign in with your email', 'newspack-plugin' ); ?></a>
 								</p>
 								<p class="small">
-									<a href="<?php echo \esc_url( \wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'newspack' ); ?></a>
+									<a href="<?php echo \esc_url( \wp_lostpassword_url() ); ?>"><?php _e( 'Lost your password?', 'newspack-plugin' ); ?></a>
 								</p>
 							</div>
 						</div>
 						<div class="<?php echo \esc_attr( $class( 'actions' ) ); ?>" data-action="otp">
 							<div class="components-form__submit">
-								<button type="submit"><?php \esc_html_e( 'Sign in', 'newspack' ); ?></button>
+								<button type="submit"><?php \esc_html_e( 'Sign in', 'newspack-plugin' ); ?></button>
 							</div>
 							<div class="components-form__help">
 								<p class="small">
-									<a href="#" data-set-action="link"><?php \esc_html_e( 'Try a different email', 'newspack' ); ?></a>
+									<a href="#" data-set-action="link"><?php \esc_html_e( 'Try a different email', 'newspack-plugin' ); ?></a>
 								</p>
 								<p class="small">
-									<a href="#" data-set-action="link"><?php _e( 'Send another code', 'newspack' ); ?></a>
+									<a href="#" data-set-action="link"><?php _e( 'Send another code', 'newspack-plugin' ); ?></a>
 								</p>
 							</div>
 						</div>
 						<div class="<?php echo \esc_attr( $class( 'actions' ) ); ?>" data-action="link">
 							<div class="components-form__submit">
-								<button type="submit"><?php \esc_html_e( 'Send authorization code', 'newspack' ); ?></button>
+								<button type="submit"><?php \esc_html_e( 'Send authorization code', 'newspack-plugin' ); ?></button>
 							</div>
 							<div class="components-form__help">
 								<p class="small">
-									<a href="#" data-set-action="pwd"><?php \esc_html_e( 'Sign in with a password', 'newspack' ); ?></a>
+									<a href="#" data-set-action="pwd"><?php \esc_html_e( 'Sign in with a password', 'newspack-plugin' ); ?></a>
 								</p>
 							</div>
 						</div>
 						<div class="<?php echo \esc_attr( $class( 'actions' ) ); ?>" data-action="register">
 							<div class="components-form__submit">
-								<button type="submit"><?php \esc_html_e( 'Sign up', 'newspack' ); ?></button>
+								<button type="submit"><?php \esc_html_e( 'Sign up', 'newspack-plugin' ); ?></button>
 							</div>
 						</div>
 						<?php self::render_third_party_auth(); ?>
@@ -1173,7 +1173,7 @@ final class Reader_Activation {
 	private static function send_auth_form_response( $data = [], $message = false, $redirect_url = false ) {
 		$is_error = \is_wp_error( $data );
 		if ( empty( $message ) ) {
-			$message = $is_error ? $data->get_error_message() : __( 'Login successful!', 'newspack' );
+			$message = $is_error ? $data->get_error_message() : __( 'Login successful!', 'newspack-plugin' );
 		}
 		if ( \wp_is_json_request() ) {
 			\wp_send_json( compact( 'message', 'data' ), \is_wp_error( $data ) ? 400 : 200 );
@@ -1217,7 +1217,7 @@ final class Reader_Activation {
 			[
 				'title'            => '',
 				'name'             => 'lists',
-				'single_label'     => __( 'Subscribe to our newsletter', 'newspack' ),
+				'single_label'     => __( 'Subscribe to our newsletter', 'newspack-plugin' ),
 				'show_description' => true,
 			]
 		);
@@ -1307,14 +1307,14 @@ final class Reader_Activation {
 			<div class="<?php echo \esc_attr( $class( 'separator' ) ); ?>">
 				<div></div>
 				<div>
-					<?php echo \esc_html__( 'OR', 'newspack' ); ?>
+					<?php echo \esc_html__( 'OR', 'newspack-plugin' ); ?>
 				</div>
 				<div></div>
 			</div>
 			<button type="button" class="<?php echo \esc_attr( $class( 'google' ) ); ?>">
 				<?php echo file_get_contents( dirname( NEWSPACK_PLUGIN_FILE ) . '/assets/blocks/reader-registration/icons/google.svg' ); // phpcs:disable WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 				<span>
-					<?php echo \esc_html__( 'Sign in with Google', 'newspack' ); ?>
+					<?php echo \esc_html__( 'Sign in with Google', 'newspack-plugin' ); ?>
 				</span>
 			</button>
 		</div>
@@ -1379,22 +1379,22 @@ final class Reader_Activation {
 		}
 
 		if ( ! in_array( $action, self::AUTH_FORM_OPTIONS, true ) ) {
-			return self::send_auth_form_response( new \WP_Error( 'invalid_request', __( 'Invalid request.', 'newspack' ) ) );
+			return self::send_auth_form_response( new \WP_Error( 'invalid_request', __( 'Invalid request.', 'newspack-plugin' ) ) );
 		}
 
 		if ( $redirect && false === strpos( $redirect, home_url(), 0 ) ) {
-			return self::send_auth_form_response( new \WP_Error( 'invalid_request', __( 'Invalid request.', 'newspack' ) ) );
+			return self::send_auth_form_response( new \WP_Error( 'invalid_request', __( 'Invalid request.', 'newspack-plugin' ) ) );
 		}
 
 		if ( empty( $email ) ) {
-			return self::send_auth_form_response( new \WP_Error( 'invalid_email', __( 'You must enter a valid email address.', 'newspack' ) ) );
+			return self::send_auth_form_response( new \WP_Error( 'invalid_email', __( 'You must enter a valid email address.', 'newspack-plugin' ) ) );
 		}
 
 		self::set_auth_intention_cookie( $email );
 
 		$user = \get_user_by( 'email', $email );
 		if ( ( ! $user && 'register' !== $action ) || ( $user && ! self::is_user_reader( $user ) ) ) {
-			return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( "We couldn't find a reader account registered to this email address. Please confirm that you entered the correct email, or sign up for a new account.", 'newspack' ) ) );
+			return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( "We couldn't find a reader account registered to this email address. Please confirm that you entered the correct email, or sign up for a new account.", 'newspack-plugin' ) ) );
 		}
 
 		$payload = [
@@ -1405,11 +1405,11 @@ final class Reader_Activation {
 		switch ( $action ) {
 			case 'pwd':
 				if ( empty( $password ) ) {
-					return self::send_auth_form_response( new \WP_Error( 'invalid_password', __( 'You must enter a valid password.', 'newspack' ) ) );
+					return self::send_auth_form_response( new \WP_Error( 'invalid_password', __( 'You must enter a valid password.', 'newspack-plugin' ) ) );
 				}
 				$user = \wp_authenticate( $user->user_login, $password );
 				if ( \is_wp_error( $user ) ) {
-					return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( 'Invalid credentials.', 'newspack' ) ) );
+					return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( 'Invalid credentials.', 'newspack-plugin' ) ) );
 				}
 				$authenticated            = self::set_current_reader( $user->ID );
 				$payload['authenticated'] = \is_wp_error( $authenticated ) ? 0 : 1;
@@ -1417,9 +1417,9 @@ final class Reader_Activation {
 			case 'link':
 				$sent = Magic_Link::send_email( $user );
 				if ( true !== $sent ) {
-					return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( 'We encountered an error sending an authentication link. Please try again.', 'newspack' ) ) );
+					return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( 'We encountered an error sending an authentication link. Please try again.', 'newspack-plugin' ) ) );
 				}
-				return self::send_auth_form_response( $payload, __( 'Please check your inbox for an authentication link.', 'newspack' ), $redirect );
+				return self::send_auth_form_response( $payload, __( 'Please check your inbox for an authentication link.', 'newspack-plugin' ), $redirect );
 			case 'register':
 				$metadata = [];
 				if ( ! empty( $lists ) ) {
@@ -1428,12 +1428,12 @@ final class Reader_Activation {
 				$user_id = self::register_reader( $email, '', true, $metadata );
 				if ( false === $user_id ) {
 					return self::send_auth_form_response(
-						new \WP_Error( 'unauthorized', __( 'An account was already registered with this email.', 'newspack' ) )
+						new \WP_Error( 'unauthorized', __( 'An account was already registered with this email.', 'newspack-plugin' ) )
 					);
 				}
 				if ( \is_wp_error( $user_id ) ) {
 					return self::send_auth_form_response(
-						new \WP_Error( 'unauthorized', __( 'Unable to register your account. Try a different email.', 'newspack' ) )
+						new \WP_Error( 'unauthorized', __( 'Unable to register your account. Try a different email.', 'newspack-plugin' ) )
 					);
 				}
 				$payload['authenticated'] = \absint( $user_id ) ? 1 : 0;
@@ -1480,7 +1480,7 @@ final class Reader_Activation {
 		}
 
 		if ( ! $user || \is_wp_error( $user ) || ! self::is_user_reader( $user ) ) {
-			return new \WP_Error( 'newspack_authenticate_invalid_user', __( 'Invalid user.', 'newspack' ) );
+			return new \WP_Error( 'newspack_authenticate_invalid_user', __( 'Invalid user.', 'newspack-plugin' ) );
 		}
 
 		$user_id = \absint( $user->ID );
@@ -1509,17 +1509,17 @@ final class Reader_Activation {
 	 */
 	public static function register_reader( $email, $display_name = '', $authenticate = true, $metadata = [] ) {
 		if ( ! self::is_enabled() ) {
-			return new \WP_Error( 'newspack_register_reader_disabled', __( 'Registration is disabled.', 'newspack' ) );
+			return new \WP_Error( 'newspack_register_reader_disabled', __( 'Registration is disabled.', 'newspack-plugin' ) );
 		}
 
 		if ( \is_user_logged_in() ) {
-			return new \WP_Error( 'newspack_register_reader_logged_in', __( 'Cannot register while logged in.', 'newspack' ) );
+			return new \WP_Error( 'newspack_register_reader_logged_in', __( 'Cannot register while logged in.', 'newspack-plugin' ) );
 		}
 
 		$email = \sanitize_email( $email );
 
 		if ( empty( $email ) ) {
-			return new \WP_Error( 'newspack_register_reader_empty_email', __( 'Please enter a valid email address.', 'newspack' ) );
+			return new \WP_Error( 'newspack_register_reader_empty_email', __( 'Please enter a valid email address.', 'newspack-plugin' ) );
 		}
 
 		self::set_auth_intention_cookie( $email );
@@ -1634,7 +1634,7 @@ final class Reader_Activation {
 
 		/** Rate limit control */
 		if ( self::is_reader_email_rate_limited( $user ) ) {
-			return new \WP_Error( 'newspack_verification_email_interval', __( 'Please wait before requesting another verification email.', 'newspack' ) );
+			return new \WP_Error( 'newspack_verification_email_interval', __( 'Please wait before requesting another verification email.', 'newspack-plugin' ) );
 		}
 		\update_user_meta( $user->ID, self::LAST_EMAIL_DATE, time() );
 
@@ -1740,7 +1740,7 @@ final class Reader_Activation {
 	 */
 	public static function rate_limit_lost_password( $errors, $user_data ) {
 		if ( $user_data && self::is_reader_email_rate_limited( $user_data ) ) {
-			$errors->add( 'newspack_password_reset_interval', __( 'Please wait a moment before requesting another password reset email.', 'newspack' ) );
+			$errors->add( 'newspack_password_reset_interval', __( 'Please wait a moment before requesting another password reset email.', 'newspack-plugin' ) );
 		} else {
 			\update_user_meta( $user_data->ID, self::LAST_EMAIL_DATE, time() );
 		}

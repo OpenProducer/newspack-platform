@@ -48,12 +48,12 @@ endif;
 	<?php \do_action( 'newspack_woocommerce_edit_account_form_start' ); ?>
 
 	<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide mt0">
-		<label for="account_display_name"><?php \esc_html_e( 'Display name', 'newspack' ); ?>&nbsp;<span class="required">*</span></label>
+		<label for="account_display_name"><?php \esc_html_e( 'Display name', 'newspack-plugin' ); ?>&nbsp;<span class="required">*</span></label>
 		<input type="text" class="woocommerce-Input woocommerce-Input--text input-text" name="account_display_name" id="account_display_name" autocomplete="name" value="<?php echo \esc_attr( $user->display_name ); ?>" />
 	</p>
 
 	<p class="woocommerce-form-row woocommerce-form-row--wide form-row form-row-wide">
-		<label for="account_email_display"><?php \esc_html_e( 'Email address', 'newspack' ); ?>&nbsp;<span class="required">*</span></label>
+		<label for="account_email_display"><?php \esc_html_e( 'Email address', 'newspack-plugin' ); ?>&nbsp;<span class="required">*</span></label>
 		<input type="email" disabled class="woocommerce-Input woocommerce-Input--email input-text" name="account_email_display" id="account_email_display" autocomplete="email" value="<?php echo \esc_attr( $user->user_email ); ?>" />
 		<input type="hidden" class="woocommerce-Input woocommerce-Input--email input-text" name="account_email" id="account_email" autocomplete="email" value="<?php echo \esc_attr( $user->user_email ); ?>" />
 	</p>
@@ -62,7 +62,7 @@ endif;
 
 	<p class="woocommerce-buttons-card">
 		<?php \wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>
-		<button type="submit" class="woocommerce-Button button ma0" name="save_account_details" value="<?php \esc_attr_e( 'Save changes', 'newspack' ); ?>"><?php \esc_html_e( 'Save changes', 'newspack' ); ?></button>
+		<button type="submit" class="woocommerce-Button button ma0" name="save_account_details" value="<?php \esc_attr_e( 'Save changes', 'newspack-plugin' ); ?>"><?php \esc_html_e( 'Save changes', 'newspack-plugin' ); ?></button>
 		<input type="hidden" name="action" value="save_account_details" />
 	</p>
 
@@ -77,18 +77,18 @@ endif;
 			<h4 class="woocommerce-card__title">
 				<?php
 				if ( $without_password ) {
-					\esc_html_e( 'Create a Password', 'newspack' );
+					\esc_html_e( 'Create a Password', 'newspack-plugin' );
 				} else {
-					\esc_html_e( 'Reset Password', 'newspack' );
+					\esc_html_e( 'Reset Password', 'newspack-plugin' );
 				}
 				?>
 			</h4>
 			<span class="woocommerce-card__description">
 				<?php
 				if ( $without_password ) {
-					\esc_html_e( 'Email me a link to set my password', 'newspack' );
+					\esc_html_e( 'Email me a link to set my password', 'newspack-plugin' );
 				} else {
-					\esc_html_e( 'Email me a password reset link', 'newspack' );
+					\esc_html_e( 'Email me a password reset link', 'newspack-plugin' );
 				}
 				?>
 			</span>
@@ -104,15 +104,15 @@ if ( $is_reader ) :
 	<a href="<?php echo '?' . \esc_attr( $newspack_delete_account_arg ) . '=' . \esc_attr( \wp_create_nonce( $newspack_delete_account_arg ) ); ?>" class="is-destructive">
 		<span class="woocommerce-card__content">
 			<h4 class="woocommerce-card__title">
-				<?php \esc_html_e( 'Delete Account', 'newspack' ); ?>
+				<?php \esc_html_e( 'Delete Account', 'newspack-plugin' ); ?>
 			</h4>
 			<span class="woocommerce-card__description">
-				<?php \esc_html_e( 'Request account deletion', 'newspack' ); ?>
+				<?php \esc_html_e( 'Request account deletion', 'newspack-plugin' ); ?>
 			</span>
 		</span>
 	</a>
 	<p>
-		<?php \esc_html_e( 'Deleting your account will also cancel any newsletter subscriptions and recurring payments.', 'newspack' ); ?>
+		<?php \esc_html_e( 'Deleting your account will also cancel any newsletter subscriptions and recurring payments.', 'newspack-plugin' ); ?>
 	</p>
 </div>
 
