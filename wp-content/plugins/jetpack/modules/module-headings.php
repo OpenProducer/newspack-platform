@@ -38,7 +38,7 @@ function jetpack_get_module_i18n( $key ) {
 
 			'comments' => array(
 				'name' => _x( 'Comments', 'Module Name', 'jetpack' ),
-				'description' => _x( 'Let visitors use a WordPress.com, Twitter, or Facebook account to comment', 'Module Description', 'jetpack' ),
+				'description' => _x( 'Let visitors use a WordPress.com or Facebook account to comment', 'Module Description', 'jetpack' ),
 			),
 
 			'contact-form' => array(
@@ -98,7 +98,7 @@ function jetpack_get_module_i18n( $key ) {
 
 			'lazy-images' => array(
 				'name' => _x( 'Lazy Images', 'Module Name', 'jetpack' ),
-				'description' => _x( 'Speed up your site and create a smoother viewing experience by loading images as visitors scroll down the screen, instead of all at once.', 'Module Description', 'jetpack' ),
+				'description' => _x( 'Most modern browsers already support lazy loading. With over 90% of current browsers offering native support, enabling this feature may be unnecessary.', 'Module Description', 'jetpack' ),
 			),
 
 			'likes' => array(
@@ -464,7 +464,7 @@ function jetpack_get_module_info( $key ) {
 	  'comments' => 
 	  array (
 	    'name' => 'Comments',
-	    'description' => 'Let visitors use a WordPress.com, Twitter, or Facebook account to comment',
+	    'description' => 'Let visitors use a WordPress.com or Facebook account to comment',
 	    'sort' => '20',
 	    'recommendation_order' => '',
 	    'introduced' => '1.4',
@@ -476,7 +476,7 @@ function jetpack_get_module_info( $key ) {
 	    'auto_activate' => 'No',
 	    'module_tags' => 'Social',
 	    'feature' => 'Engagement',
-	    'additional_search_queries' => 'comments, comment, facebook, twitter, social',
+	    'additional_search_queries' => 'comments, comment, facebook, social',
 	    'plan_classes' => '',
 	  ),
 	  'contact-form' => 
@@ -680,7 +680,7 @@ function jetpack_get_module_info( $key ) {
 	  'lazy-images' => 
 	  array (
 	    'name' => 'Lazy Images',
-	    'description' => 'Speed up your site and create a smoother viewing experience by loading images as visitors scroll down the screen, instead of all at once.',
+	    'description' => 'Most modern browsers already support lazy loading. With over 90% of current browsers offering native support, enabling this feature may be unnecessary.',
 	    'sort' => '24',
 	    'recommendation_order' => '14',
 	    'introduced' => '5.6.0',

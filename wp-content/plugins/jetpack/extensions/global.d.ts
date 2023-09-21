@@ -1,7 +1,12 @@
-import { JETPACK_FORM_BLOCK_AI_COMPOSITION } from './extensions/jetpack-contact-form/constants';
-import { SiteAIAssistantFeatureEndpointResponseProps } from './hooks/use-ai-feature';
+import { JETPACK_FORM_AI_COMPOSITION_EXTENSION } from './blocks/ai-assistant/extensions/jetpack-contact-form/constants';
+import { JETPACK_CREATE_WITH_VOICE_EXTENSION } from './blocks/create-with-voice/constants';
+import { SiteAIAssistantFeatureEndpointResponseProps } from './types';
 
-export {};
+type AvailableBlockProps =
+	| {
+			available?: boolean;
+	  }
+	| undefined;
 
 declare global {
 	interface Window {
@@ -36,9 +41,18 @@ declare global {
 					};
 					gravatar: string;
 					permissions: {
+						admin_page?: boolean;
 						connect: boolean;
 						connect_user: boolean;
 						disconnect: boolean;
+						edit_posts?: boolean;
+						manage_modules?: boolean;
+						manage_options?: boolean;
+						manage_plugins?: boolean;
+						network_admin?: boolean;
+						network_sites_page?: boolean;
+						publish_posts?: boolean;
+						view_stats?: boolean;
 					};
 				};
 				connectionOwner: null;
@@ -50,10 +64,8 @@ declare global {
 		};
 		Jetpack_Editor_Initial_State: {
 			available_blocks: {
-				'ai-assistant-support': boolean;
-				[ JETPACK_FORM_BLOCK_AI_COMPOSITION ]: {
-					available?: boolean;
-				};
+				[ JETPACK_CREATE_WITH_VOICE_EXTENSION ]: AvailableBlockProps;
+				[ JETPACK_FORM_AI_COMPOSITION_EXTENSION ]: AvailableBlockProps;
 			};
 			adminUrl: string;
 			siteLocale: string;
