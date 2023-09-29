@@ -51,7 +51,7 @@
 		opacity: 0.5;
 		position: absolute;
 		top: 50%;
-		transform: translate(-50%, -50%);
+		transform: translate( -50%, -50% );
 		width: 100%;
 		> span {
 			animation: spin 1s infinite linear;
@@ -84,6 +84,8 @@
 .newspack-blocks-variation-modal {
 	&__content {
 		padding: 32px;
+		overflow: auto;
+		border-radius: 5px;
 		h3 {
 			margin: 0 0 1em;
 		}

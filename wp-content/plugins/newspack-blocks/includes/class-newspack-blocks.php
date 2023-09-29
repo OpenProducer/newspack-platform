@@ -707,6 +707,7 @@ class Newspack_Blocks {
 			if ( $authors && count( $authors ) ) {
 				$co_authors_names = [];
 				$author_names     = [];
+				$author_emails    = [];
 
 				if ( $is_co_authors_plus_active ) {
 					$co_authors_guest_authors = new CoAuthors_Guest_Authors();
@@ -736,7 +737,8 @@ class Newspack_Blocks {
 										unset( $authors[ $index ] );
 									}
 								} else {
-									$author_names[] = $author_data->user_login;
+									$author_names[]  = $author_data->user_login;
+									$author_emails[] = $author_data->user_email;
 								}
 							}
 						}
@@ -770,6 +772,11 @@ class Newspack_Blocks {
 									'field'    => 'name',
 									'taxonomy' => 'author',
 									'terms'    => $author_names,
+								],
+								[
+									'field'    => 'name',
+									'taxonomy' => 'author',
+									'terms'    => $author_emails,
 								],
 							],
 						];

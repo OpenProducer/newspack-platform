@@ -13,7 +13,7 @@ import { __ } from '@wordpress/i18n';
 import { InspectorControls } from '@wordpress/block-editor';
 // eslint-disable-next-line @wordpress/no-unsafe-wp-apis
 import { dateI18n, __experimentalGetSettings } from '@wordpress/date';
-import { Component, createRef, Fragment } from '@wordpress/element';
+import { Component, createRef, Fragment, RawHTML } from '@wordpress/element';
 import {
 	BaseControl,
 	Button,
@@ -303,7 +303,7 @@ class Edit extends Component {
 														{ showCategory &&
 															( ! post.newspack_post_sponsors ||
 																post.newspack_sponsors_show_categories ) && (
-																<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
+																<RawHTML>{ decodeEntities( post.newspack_category_info ) }</RawHTML>
 															) }
 													</div>
 												) }

@@ -345,6 +345,40 @@ function newspack_blocks_format_byline( $author_info ) {
 }
 
 /**
+ * Renders category markup plus filter.
+ *
+ * @param string $post_id Post ID.
+ */
+function newspack_blocks_format_categories( $post_id ) {
+	$category = false;
+	// Use Yoast primary category if set.
+	if ( class_exists( 'WPSEO_Primary_Term' ) ) {
+		$primary_term = new WPSEO_Primary_Term( 'category', $post_id );
+		$category_id  = $primary_term->get_primary_term();
+		if ( $category_id ) {
+			$category = get_term( $category_id );
+		}
+	}
+	if ( ! $category ) {
+		$categories_list = get_the_category();
+		if ( ! empty( $categories_list ) ) {
+			$category = $categories_list[0];
+		}
+	}
+
+	$category_link      = get_category_link( $category->term_id );
+	$category_formatted = esc_html( $category->name );
+
+	if ( ! empty( $category_link ) ) {
+		$category_formatted = '<a href="' . esc_attr( $category_link ) . '">' . esc_html( $category->name ) . '</a>';
+	}
+
+	if ( $category ) {
+		return apply_filters( 'newspack_blocks_categories', $category_formatted );
+	}
+}
+
+/**
  * Inject amp-state containing all post IDs visible on page load.
  */
 function newspack_blocks_inject_amp_state() {

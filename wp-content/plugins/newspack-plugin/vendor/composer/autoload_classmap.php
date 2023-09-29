@@ -101,7 +101,6 @@ return array(
     'Newspack\\Starter_Content_Provider' => $baseDir . '/includes/starter_content/class-starter-content-provider.php',
     'Newspack\\Starter_Content_WordPress' => $baseDir . '/includes/starter_content/class-starter-content-wordpress.php',
     'Newspack\\Stripe_Connection' => $baseDir . '/includes/reader-revenue/stripe/class-stripe-connection.php',
-    'Newspack\\Stripe_Sync' => $baseDir . '/includes/reader-revenue/stripe/class-stripe-sync.php',
     'Newspack\\Stripe_Webhooks' => $baseDir . '/includes/reader-revenue/stripe/class-stripe-webhooks.php',
     'Newspack\\Syndication_Wizard' => $baseDir . '/includes/wizards/class-syndication-wizard.php',
     'Newspack\\Theme_Manager' => $baseDir . '/includes/class-theme-manager.php',
@@ -111,7 +110,6 @@ return array(
     'Newspack\\WooCommerce_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
     'Newspack\\WooCommerce_Connection' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
     'Newspack\\WooCommerce_My_Account' => $baseDir . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
-    'Newspack\\WooCommerce_Sync' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-sync.php',
     'Newspack\\WordPress_SEO_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
     'Popups_Analytics_Utils' => $baseDir . '/includes/popups-analytics/class-popups-analytics-utils.php',
 );

@@ -1,3 +1,53 @@
+## [2.7.2](https://github.com/Automattic/newspack-plugin/compare/v2.7.1...v2.7.2) (2023-09-28)
+
+
+### Bug Fixes
+
+* **ads:** stick to top toggle ([#2669](https://github.com/Automattic/newspack-plugin/issues/2669)) ([4085ba7](https://github.com/Automattic/newspack-plugin/commit/4085ba7309369481cf242962c086514683d2eb52))
+
+## [2.7.1](https://github.com/Automattic/newspack-plugin/compare/v2.7.0...v2.7.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* **perfmatters:** handling false values when applying defaults ([7169d5d](https://github.com/Automattic/newspack-plugin/commit/7169d5dffd531bde6b2d46ca16d2a55aa61de856))
+
+# [2.7.0](https://github.com/Automattic/newspack-plugin/compare/v2.6.4...v2.7.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* partial text domain update for the newspack plugin ([#2646](https://github.com/Automattic/newspack-plugin/issues/2646)) ([7d92092](https://github.com/Automattic/newspack-plugin/commit/7d92092340e6559e0676e42b42561546e43550ef))
+
+
+### Features
+
+* add ads.txt manager to plugin manager ([#2639](https://github.com/Automattic/newspack-plugin/issues/2639)) ([06eccaa](https://github.com/Automattic/newspack-plugin/commit/06eccaa75daaafa915df03f5758e776ba763c1a0))
+* **amp-deprecation:** remove AMP from supported list ([#2647](https://github.com/Automattic/newspack-plugin/issues/2647)) ([ef98476](https://github.com/Automattic/newspack-plugin/commit/ef98476e834f672504d40f554411e647af3b1707))
+* disable deactivate and delete for Akismet ([#2593](https://github.com/Automattic/newspack-plugin/issues/2593)) ([136752a](https://github.com/Automattic/newspack-plugin/commit/136752a6f86c7d8de6d77921ddd841380405a231))
+* replace recommended cookie plugin ([#2223](https://github.com/Automattic/newspack-plugin/issues/2223)) ([4a309be](https://github.com/Automattic/newspack-plugin/commit/4a309be2141a18333f6ce3c2346450224c555028))
+
+# [2.7.0-alpha.4](https://github.com/Automattic/newspack-plugin/compare/v2.7.0-alpha.3...v2.7.0-alpha.4) (2023-09-22)
+
+
+### Bug Fixes
+
+* remove Stripe migration scripts ([#2657](https://github.com/Automattic/newspack-plugin/issues/2657)) ([13ad632](https://github.com/Automattic/newspack-plugin/commit/13ad63274c5d4a80a23f25306b5e4ce9c35f3141))
+
+## [2.6.4](https://github.com/Automattic/newspack-plugin/compare/v2.6.3...v2.6.4) (2023-09-22)
+
+
+### Bug Fixes
+
+* remove Stripe migration scripts ([#2657](https://github.com/Automattic/newspack-plugin/issues/2657)) ([13ad632](https://github.com/Automattic/newspack-plugin/commit/13ad63274c5d4a80a23f25306b5e4ce9c35f3141))
+
+## [2.6.3](https://github.com/Automattic/newspack-plugin/compare/v2.6.2...v2.6.3) (2023-09-21)
+
+
+### Bug Fixes
+
+* allow set-next-payment-dates-for-migrated-subscriptions to reset past dates ([#2644](https://github.com/Automattic/newspack-plugin/issues/2644)) ([72f147e](https://github.com/Automattic/newspack-plugin/commit/72f147e5f480e395eead1b12ede84c5a2d968d8c))
+
 ## [2.6.2](https://github.com/Automattic/newspack-plugin/compare/v2.6.1...v2.6.2) (2023-09-20)
 
 

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitf7729a3a2c507870becbc36519c3f035
+class ComposerStaticInitdf2aed097c4d310abd3f906c60d1cb3a
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -188,7 +188,6 @@ class ComposerStaticInitf7729a3a2c507870becbc36519c3f035
         'Newspack\\Starter_Content_Provider' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-provider.php',
         'Newspack\\Starter_Content_WordPress' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-wordpress.php',
         'Newspack\\Stripe_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-connection.php',
-        'Newspack\\Stripe_Sync' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-sync.php',
         'Newspack\\Stripe_Webhooks' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-webhooks.php',
         'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
         'Newspack\\Theme_Manager' => __DIR__ . '/../..' . '/includes/class-theme-manager.php',
@@ -198,7 +197,6 @@ class ComposerStaticInitf7729a3a2c507870becbc36519c3f035
         'Newspack\\WooCommerce_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
         'Newspack\\WooCommerce_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
         'Newspack\\WooCommerce_My_Account' => __DIR__ . '/../..' . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
-        'Newspack\\WooCommerce_Sync' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-sync.php',
         'Newspack\\WordPress_SEO_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
         'Popups_Analytics_Utils' => __DIR__ . '/../..' . '/includes/popups-analytics/class-popups-analytics-utils.php',
     );
@@ -206,9 +204,9 @@ class ComposerStaticInitf7729a3a2c507870becbc36519c3f035
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitf7729a3a2c507870becbc36519c3f035::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitf7729a3a2c507870becbc36519c3f035::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitf7729a3a2c507870becbc36519c3f035::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdf2aed097c4d310abd3f906c60d1cb3a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdf2aed097c4d310abd3f906c60d1cb3a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdf2aed097c4d310abd3f906c60d1cb3a::$classMap;
 
         }, null, ClassLoader::class);
     }

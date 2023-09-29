@@ -362,7 +362,7 @@ final class GAM_Model {
 						}
 						$ad_units[ $ad_unit_key ] = $gam_ad_unit;
 					}
-					update_option( self::OPTION_NAME_DEFAULT_UNITS, $ad_units );
+					self::update_default_units( $ad_units );
 				}
 			}
 		}
@@ -382,6 +382,20 @@ final class GAM_Model {
 			array_keys( $ad_units ),
 			array_values( $ad_units )
 		);
+	}
+
+	/**
+	 * Update default units
+	 *
+	 * @param array $ad_units Default units.
+	 *
+	 * @return void
+	 */
+	private static function update_default_units( $ad_units ) {
+		update_option( self::OPTION_NAME_DEFAULT_UNITS, $ad_units );
+		// Avoid notoptions cache issue.
+		wp_cache_delete( 'notoptions', 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
 	}
 
 	/**
@@ -636,12 +650,30 @@ final class GAM_Model {
 		}
 
 		if ( isset( $settings['network_code'] ) && $serialised_ad_units && ! empty( $serialised_ad_units ) ) {
-			$synced_gam_items                              = get_option( self::OPTION_NAME_GAM_ITEMS, [] );
-			$network_code                                  = sanitize_text_field( $settings['network_code'] );
+			$synced_gam_items = get_option( self::OPTION_NAME_GAM_ITEMS, [] );
+			$network_code     = sanitize_text_field( $settings['network_code'] );
+			if ( empty( $synced_gam_items ) || ! is_array( $synced_gam_items ) ) {
+				$synced_gam_items = [];
+			}
 			$synced_gam_items[ $network_code ]['ad_units'] = $serialised_ad_units;
-			update_option( self::OPTION_NAME_LEGACY_NETWORK_CODE, $network_code );
-			update_option( self::OPTION_NAME_GAM_ITEMS, $synced_gam_items );
+			self::update_gam_config( $network_code, $synced_gam_items );
 		}
+	}
+
+	/**
+	 * Update GAM configuration.
+	 *
+	 * @param string $network_code Network code.
+	 * @param array  $gam_items    GAM Items.
+	 *
+	 * @return void
+	 */
+	private static function update_gam_config( $network_code, $gam_items ) {
+		update_option( self::OPTION_NAME_LEGACY_NETWORK_CODE, $network_code );
+		update_option( self::OPTION_NAME_GAM_ITEMS, $gam_items );
+		// Avoid notoptions cache issue.
+		wp_cache_delete( 'notoptions', 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
 	}
 
 	/**
@@ -1149,6 +1181,9 @@ final class GAM_Model {
 			if ( ! empty( $network_code ) ) {
 				$status['network_code'] = $network_code;
 				update_option( self::OPTION_NAME_GAM_NETWORK_CODE, $network_code );
+				// Avoid notoptions cache issue.
+				wp_cache_delete( 'notoptions', 'options' );
+				wp_cache_delete( 'alloptions', 'options' );
 			}
 			$status['is_network_code_matched'] = self::is_network_code_matched();
 		} elseif ( self::$api_fatal_error ) {
@@ -1207,6 +1242,9 @@ final class GAM_Model {
 			return new \WP_Error( 'newspack_ads_gam_credentials', __( 'Invalid credentials configuration.', 'newspack-ads' ) );
 		}
 		$update_result = update_option( self::SERVICE_ACCOUNT_CREDENTIALS_OPTION_NAME, $config );
+		// Avoid notoptions cache issue.
+		wp_cache_delete( 'notoptions', 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
 		if ( ! $update_result ) {
 			return new \WP_Error( 'newspack_ads_gam_credentials', __( 'Unable to update GAM credentials', 'newspack-ads' ) );
 		}

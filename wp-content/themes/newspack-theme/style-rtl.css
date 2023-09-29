@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.77.0-alpha.1
+Version: 1.77.2-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -5693,6 +5693,9 @@ p.has-background {
 }
 .wp-block-image figcaption {
   text-align: right;
+}
+.wp-block-image img:not([style*=object-fit]) {
+  height: auto !important;
 }
 
 .wp-block-gallery {

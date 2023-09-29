@@ -56,21 +56,6 @@ call_user_func(
 		if ( $attributes['fetchPriority'] && in_array( $attributes['fetchPriority'], [ 'high', 'low', 'auto' ], true ) ) {
 			$thumbnail_args['fetchpriority'] = $attributes['fetchPriority'];
 		}
-		$category = false;
-		// Use Yoast primary category if set.
-		if ( class_exists( 'WPSEO_Primary_Term' ) ) {
-			$primary_term = new WPSEO_Primary_Term( 'category', $post_id );
-			$category_id  = $primary_term->get_primary_term();
-			if ( $category_id ) {
-				$category = get_term( $category_id );
-			}
-		}
-		if ( ! $category ) {
-			$categories_list = get_the_category();
-			if ( ! empty( $categories_list ) ) {
-				$category = $categories_list[0];
-			}
-		}
 
 		// Support Newspack Listings hide author/publish date options.
 		$hide_author       = apply_filters( 'newspack_listings_hide_author', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
@@ -105,19 +90,20 @@ call_user_func(
 		<?php endif; ?>
 
 		<div class="entry-wrapper">
-			<?php if ( ! empty( $sponsors ) || ( $attributes['showCategory'] && $category ) ) : ?>
-				<?php $category_link = get_category_link( $category->term_id ); ?>
+			<?php if ( ! empty( $sponsors ) || ( $attributes['showCategory'] ) ) : ?>
+
 				<div class="cat-links <?php if ( ! empty( $sponsors ) ) : ?>sponsor-label<?php endif; // phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace ?>">
 					<?php if ( ! empty( $sponsors ) ) : ?>
 						<span class="flag">
 							<?php echo esc_html( Newspack_Blocks::get_sponsor_label( $sponsors ) ); ?>
 						</span>
-					<?php endif; ?>
-					<?php if ( $attributes['showCategory'] && ! empty( $category_link ) && ( empty( $sponsors ) || Newspack_Blocks::newspack_display_sponsors_and_categories( $sponsors ) ) ) : ?>
-					<a href="<?php echo esc_url( $category_link ); ?>">
-						<?php echo esc_html( $category->name ); ?>
-					</a>
-					<?php endif; ?>
+						<?php
+					endif;
+
+					if ( $attributes['showCategory'] && ( empty( $sponsors ) || Newspack_Blocks::newspack_display_sponsors_and_categories( $sponsors ) ) ) :
+						echo wp_kses_post( newspack_blocks_format_categories( $post_id ) );
+					endif;
+					?>
 				</div>
 				<?php
 			endif;

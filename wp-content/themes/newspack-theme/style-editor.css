@@ -456,6 +456,12 @@ div[data-align=full] > .wp-block-image figcaption {
   }
 }
 
+[data-type="core/group"].is-selected .block-list-appender,
+[data-type="core/group"] .block-list-appender:only-child {
+  margin-left: auto;
+  margin-right: auto;
+}
+
 /** === Button === */
 .wp-block-buttons {
   --wp--style--block-gap: 10px;

@@ -246,6 +246,14 @@ class Perfmatters {
 
 		// Ensure our defaults remain the default, but can be overwritten.
 		if ( defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS ) {
+
+			// Ensure all keys from $defaults are present in $options.
+			// The $options will not contain keys set to false, so these would be otherwise overwritten by
+			// the array_merge call.
+			foreach ( array_keys( $defaults ) as $key ) {
+				$options[ $key ] = $options[ $key ] ?? false;
+			}
+
 			return array_merge( $defaults, $options );
 		}
 

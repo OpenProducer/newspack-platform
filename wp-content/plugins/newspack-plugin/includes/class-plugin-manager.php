@@ -22,6 +22,7 @@ class Plugin_Manager {
 	 * @var array
 	 */
 	public static $required_plugins = [
+		'akismet',
 		'jetpack',
 		'pwa',
 		'google-site-kit',
@@ -252,12 +253,12 @@ class Plugin_Manager {
 				'WPCore'   => true,
 				'EditPath' => 'options-discussion.php',
 			],
-			'wp-gdpr-cookie-notice'         => [
-				'Name'        => esc_html__( 'WP GDPR Cookie Notice', 'newspack' ),
-				'Description' => esc_html__( 'Simple performant cookie consent notice that supports AMP, granular cookie control and live preview customization.', 'newspack' ),
-				'Author'      => esc_html__( 'Felix Arntz', 'newspack' ),
-				'AuthorURI'   => esc_url( 'https://felix-arntz.me/' ),
-				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/wp-gdpr-cookie-notice/' ),
+			'complianz-gdpr'                => [
+				'Name'        => esc_html__( 'Complianz - GDPR/CCPA Cookie Consent', 'newspack' ),
+				'Description' => esc_html__( 'Complianz is a GDPR/CCPA Cookie Consent plugin that supports GDPR, ePrivacy, DSGVO, TTDSG, LGPD, POPIA, APA, RGPD, CCPA/CPRA and PIPEDA with a conditional Cookie Notice and customized Cookie Policy based on the results of the built-in Cookie Scan.', 'newspack' ),
+				'Author'      => esc_html__( 'Really Simple Plugins', 'newspack' ),
+				'AuthorURI'   => esc_url( 'https://www.complianz.io/' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/complianz-gdpr/' ),
 				'Download'    => 'wporg',
 			],
 			'simple-local-avatars'          => [
@@ -291,6 +292,15 @@ class Plugin_Manager {
 				'AuthorURI'   => esc_url( 'https://10up.com' ),
 				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/ad-refresh-control/' ),
 				'Download'    => 'wporg',
+			],
+			'ads-txt'                       => [
+				'Name'        => esc_html__( 'Ads.txt Manager', 'newspack' ),
+				'Description' => esc_html__( 'Create, manage, and validate your ads.txt and app-ads.txt from within WordPress, just like any other content asset.', 'newspack' ),
+				'Author'      => esc_html__( '10up', 'newspack' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/ads-txt/' ),
+				'AuthorURI'   => esc_url( 'https://10up.com/' ),
+				'Download'    => 'wporg',
+				'EditPath'    => 'options-general.php?page=adstxt-settings',
 			],
 			'publisher-media-kit'           => [
 				'Name'        => esc_html__( 'Publisher Media Kit', 'newspack' ),
@@ -380,7 +390,6 @@ class Plugin_Manager {
 	 */
 	private static function get_supported_plugins_slugs() {
 		return [
-			'amp',
 			'gutenberg',
 			'classic-widgets',
 			'republication-tracker-tool',
@@ -391,6 +400,7 @@ class Plugin_Manager {
 			'gravityformsstripe',
 			'perfmatters',
 			'onesignal-free-web-push-notifications',
+			'super-cool-ad-inserter-plugin',
 			'web-stories',
 			'ads-txt',
 			'woocommerce-memberships',

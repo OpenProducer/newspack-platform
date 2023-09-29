@@ -1,3 +1,25 @@
+## [1.75.1](https://github.com/Automattic/newspack-blocks/compare/v1.75.0...v1.75.1) (2023-09-28)
+
+
+### Bug Fixes
+
+* **checkout-button:** handle 10+ product variations ([#1536](https://github.com/Automattic/newspack-blocks/issues/1536)) ([5df5065](https://github.com/Automattic/newspack-blocks/commit/5df5065011d6779a689358844212628757b6b5b9))
+* query for CAP terms ([#1535](https://github.com/Automattic/newspack-blocks/issues/1535)) ([49406b9](https://github.com/Automattic/newspack-blocks/commit/49406b9bf1075897939cad2e4c30f34efcf841da))
+
+# [1.75.0](https://github.com/Automattic/newspack-blocks/compare/v1.74.2...v1.75.0) (2023-09-25)
+
+
+### Features
+
+* add category filter for the categories in the blocks ([#1528](https://github.com/Automattic/newspack-blocks/issues/1528)) ([ebbfce9](https://github.com/Automattic/newspack-blocks/commit/ebbfce99dd78521fe5624be81df43c3ba3f8c731))
+
+# [1.75.0-alpha.3](https://github.com/Automattic/newspack-blocks/compare/v1.75.0-alpha.2...v1.75.0-alpha.3) (2023-09-19)
+
+
+### Bug Fixes
+
+* undefined variable error ([#1534](https://github.com/Automattic/newspack-blocks/issues/1534)) ([b0ed7f9](https://github.com/Automattic/newspack-blocks/commit/b0ed7f911982f914678c466c07bc5f0659aaca86))
+
 ## [1.74.2](https://github.com/Automattic/newspack-blocks/compare/v1.74.1...v1.74.2) (2023-09-19)
 
 

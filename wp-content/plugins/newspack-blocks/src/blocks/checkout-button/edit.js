@@ -167,7 +167,7 @@ function CheckoutButtonEdit( props ) {
 		// Handle product variation data.
 		if ( data?.variations?.length ) {
 			setAttributes( { is_variable: true } );
-			apiFetch( { path: `/wc/v2/products/${ data.id }/variations` } )
+			apiFetch( { path: `/wc/v2/products/${ data.id }/variations?per_page=100` } )
 				.then( res => setVariations( res ) )
 				.catch( () => setVariations( [] ) );
 		} else {

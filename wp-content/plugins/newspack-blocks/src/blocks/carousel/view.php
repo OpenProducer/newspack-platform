@@ -115,36 +115,10 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 									</span>
 									<?php
 								endif;
-								$category = false;
 
-								// Use Yoast primary category if set.
-								if ( class_exists( 'WPSEO_Primary_Term' ) ) {
-									$primary_term = new WPSEO_Primary_Term( 'category', $post_id );
-									$category_id  = $primary_term->get_primary_term();
-									if ( $category_id ) {
-										$category = get_term( $category_id );
-									}
-								}
-
-								if ( ! $category ) {
-									$categories_list = get_the_category();
-									if ( ! empty( $categories_list ) ) {
-										$category = $categories_list[0];
-									}
-								}
-
-								if ( $attributes['showCategory'] && $category && ( empty( $sponsors ) || Newspack_Blocks::newspack_display_sponsors_and_categories( $sponsors ) ) ) :
-									?>
-									<?php $category_link = get_category_link( $category->term_id ); ?>
-									<?php if ( ! empty( $category_link ) ) : ?>
-										<a href="<?php echo esc_url( get_category_link( $category->term_id ) ); ?>">
-									<?php endif; ?>
-										<?php echo esc_html( $category->name ); ?>
-									<?php if ( ! empty( $category_link ) ) : ?>
-									</a>
-										<?php
-										endif;
-									endif;
+								if ( $attributes['showCategory'] && ( empty( $sponsors ) || Newspack_Blocks::newspack_display_sponsors_and_categories( $sponsors ) ) ) :
+									echo wp_kses_post( newspack_blocks_format_categories( $post_id ) );
+								endif;
 								?>
 								</div>
 							<?php

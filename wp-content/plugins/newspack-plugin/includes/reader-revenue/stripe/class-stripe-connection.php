@@ -17,6 +17,10 @@ defined( 'ABSPATH' ) || exit;
  * All things Stripe.
  */
 class Stripe_Connection {
+	/**
+	 * A flag to indicate that a Stripe subscription was migrated from Stripe to WooCommerce.
+	 */
+	const MIGRATION_CANCELLATION_FLAG    = 'newspack_subscription_migrated_to_woo';
 	const STRIPE_DATA_OPTION_NAME        = 'newspack_stripe_data';
 	const STRIPE_DONATION_PRICE_METADATA = 'newspack_donation_price';
 	const STRIPE_CUSTOMER_ID_USER_META   = '_newspack_stripe_customer_id';

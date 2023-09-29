@@ -181,7 +181,7 @@ class Edit extends Component {
 							) }
 							{ showCategory &&
 								( ! post.newspack_post_sponsors || post.newspack_sponsors_show_categories ) && (
-									<a href="#">{ decodeEntities( post.newspack_category_info ) }</a>
+									<RawHTML>{ decodeEntities( post.newspack_category_info ) }</RawHTML>
 								) }
 						</div>
 					) }
