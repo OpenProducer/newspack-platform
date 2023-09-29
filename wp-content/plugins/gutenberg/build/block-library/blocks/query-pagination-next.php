@@ -37,7 +37,7 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 
 	// Check if the pagination is for Query that inherits the global context.
 	if ( isset( $block->context['query']['inherit'] ) && $block->context['query']['inherit'] ) {
-		$filter_link_attributes = static function() use ( $wrapper_attributes ) {
+		$filter_link_attributes = static function () use ( $wrapper_attributes ) {
 			return $wrapper_attributes;
 		};
 		add_filter( 'next_posts_link_attributes', $filter_link_attributes );
@@ -50,7 +50,7 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 		$content = get_next_posts_link( $label, $max_page );
 		remove_filter( 'next_posts_link_attributes', $filter_link_attributes );
 	} elseif ( ! $max_page || $max_page > $page ) {
-		$custom_query           = new WP_Query( gutenberg_build_query_vars_from_query_block( $block, $page ) );
+		$custom_query           = new WP_Query( build_query_vars_from_query_block( $block, $page ) );
 		$custom_query_max_pages = (int) $custom_query->max_num_pages;
 		if ( $custom_query_max_pages && $custom_query_max_pages !== $page ) {
 			$content = sprintf(
@@ -74,6 +74,7 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 			$p->set_attribute( 'data-wp-key', 'query-pagination-next' );
 			$p->set_attribute( 'data-wp-on--click', 'actions.core.query.navigate' );
 			$p->set_attribute( 'data-wp-on--mouseenter', 'actions.core.query.prefetch' );
+			$p->set_attribute( 'data-wp-effect', 'effects.core.query.prefetch' );
 			$content = $p->get_updated_html();
 		}
 	}

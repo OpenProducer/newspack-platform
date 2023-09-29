@@ -39,8 +39,8 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony export */   "createBlobURL": () => (/* binding */ createBlobURL),
 /* harmony export */   "getBlobByURL": () => (/* binding */ getBlobByURL),
 /* harmony export */   "getBlobTypeByURL": () => (/* binding */ getBlobTypeByURL),
-/* harmony export */   "revokeBlobURL": () => (/* binding */ revokeBlobURL),
-/* harmony export */   "isBlobURL": () => (/* binding */ isBlobURL)
+/* harmony export */   "isBlobURL": () => (/* binding */ isBlobURL),
+/* harmony export */   "revokeBlobURL": () => (/* binding */ revokeBlobURL)
 /* harmony export */ });
 /**
  * @type {Record<string, File|undefined>}
@@ -101,7 +101,7 @@ function revokeBlobURL(url) {
 /**
  * Check whether a url is a blob url.
  *
- * @param {string} url The URL.
+ * @param {string|undefined} url The URL.
  *
  * @return {boolean} Is the url a blob url?
  */

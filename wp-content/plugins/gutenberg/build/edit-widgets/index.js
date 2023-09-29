@@ -821,6 +821,7 @@ function ComplementaryAreaToggle({
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
   return (0,external_wp_element_namespaceObject.createElement)(ComponentToUse, {
     icon: selectedIcon && isSelected ? selectedIcon : icon,
+    "aria-controls": identifier.replace('/', ':'),
     onClick: () => {
       if (isSelected) {
         disableComplementaryArea(scope);
@@ -1064,11 +1065,13 @@ function ComplementaryAreaSlot({
 function ComplementaryAreaFill({
   scope,
   children,
-  className
+  className,
+  id
 }) {
   return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Fill, {
     name: `ComplementaryArea/${scope}`
   }, (0,external_wp_element_namespaceObject.createElement)("div", {
+    id: id,
     className: className
   }, children));
 }
@@ -1183,7 +1186,8 @@ function ComplementaryArea({
     icon: icon
   }, title), isActive && (0,external_wp_element_namespaceObject.createElement)(ComplementaryAreaFill, {
     className: classnames_default()('interface-complementary-area', className),
-    scope: scope
+    scope: scope,
+    id: identifier.replace('/', ':')
   }, (0,external_wp_element_namespaceObject.createElement)(complementary_area_header, {
     className: headerClassName,
     closeLabel: closeLabel,
@@ -2969,7 +2973,6 @@ const {
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -3035,7 +3038,7 @@ function WidgetAreasBlockEditorProvider({
   const [blocks, onInput, onChange] = (0,external_wp_coreData_namespaceObject.useEntityBlockEditor)(KIND, POST_TYPE, {
     id: buildWidgetAreasPostId()
   });
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_keyboardShortcuts_namespaceObject.ShortcutProvider, null, (0,external_wp_element_namespaceObject.createElement)(keyboard_shortcuts.Register, null), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.SlotFillProvider, null, (0,external_wp_element_namespaceObject.createElement)(ExperimentalBlockEditorProvider, {
+  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.SlotFillProvider, null, (0,external_wp_element_namespaceObject.createElement)(keyboard_shortcuts.Register, null), (0,external_wp_element_namespaceObject.createElement)(ExperimentalBlockEditorProvider, {
     value: blocks,
     onInput: onInput,
     onChange: onChange,
@@ -3044,7 +3047,7 @@ function WidgetAreasBlockEditorProvider({
     ...props
   }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.CopyHandler, null, children), (0,external_wp_element_namespaceObject.createElement)(PatternsMenuItems, {
     rootClientId: widgetAreaId
-  }))));
+  })));
 }
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/drawer-left.js
@@ -3851,7 +3854,9 @@ function MoreMenu() {
 const {
   useShouldContextualToolbarShow
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
-function Header() {
+function Header({
+  setListViewToggleElement
+}) {
   const isMediumViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
   const inserterButton = (0,external_wp_element_namespaceObject.useRef)();
   const widgetAreaClientId = use_last_selected_widget_area();
@@ -3939,7 +3944,8 @@ function Header() {
     isPressed: isListViewOpen
     /* translators: button label text should, if possible, be under 16 characters. */,
     label: (0,external_wp_i18n_namespaceObject.__)('List View'),
-    onClick: toggleListView
+    onClick: toggleListView,
+    ref: setListViewToggleElement
   })))), (0,external_wp_element_namespaceObject.createElement)("div", {
     className: "edit-widgets-header__actions"
   }, (0,external_wp_element_namespaceObject.createElement)(save_button, null), (0,external_wp_element_namespaceObject.createElement)(pinned_items.Slot, {
@@ -4018,7 +4024,8 @@ function WidgetAreasBlockEditorContent({
   return (0,external_wp_element_namespaceObject.createElement)("div", {
     className: "edit-widgets-block-editor"
   }, (0,external_wp_element_namespaceObject.createElement)(notices, null), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockTools, null, (0,external_wp_element_namespaceObject.createElement)(keyboard_shortcuts, null), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableEditorStyles, {
-    styles: styles
+    styles: styles,
+    scope: ".editor-styles-wrapper"
   }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockSelectionClearer, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.WritingFlow, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockList, {
     className: "edit-widgets-main-block-list"
   })))));
@@ -4172,7 +4179,9 @@ function InserterSidebar() {
  * Internal dependencies
  */
 
-function ListViewSidebar() {
+function ListViewSidebar({
+  listViewToggleElement
+}) {
   const {
     setIsListViewOpened
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
@@ -4181,29 +4190,32 @@ function ListViewSidebar() {
   // re-renders when the dropZoneElement updates.
   const [dropZoneElement, setDropZoneElement] = (0,external_wp_element_namespaceObject.useState)(null);
   const focusOnMountRef = (0,external_wp_compose_namespaceObject.useFocusOnMount)('firstElement');
-  const headerFocusReturnRef = (0,external_wp_compose_namespaceObject.useFocusReturn)();
-  const contentFocusReturnRef = (0,external_wp_compose_namespaceObject.useFocusReturn)();
-  function closeOnEscape(event) {
+
+  // When closing the list view, focus should return to the toggle button.
+  const closeListView = (0,external_wp_element_namespaceObject.useCallback)(() => {
+    setIsListViewOpened(false);
+    listViewToggleElement?.focus();
+  }, [listViewToggleElement, setIsListViewOpened]);
+  const closeOnEscape = (0,external_wp_element_namespaceObject.useCallback)(event => {
     if (event.keyCode === external_wp_keycodes_namespaceObject.ESCAPE && !event.defaultPrevented) {
       event.preventDefault();
-      setIsListViewOpened(false);
+      closeListView();
     }
-  }
+  }, [closeListView]);
   return (
     // eslint-disable-next-line jsx-a11y/no-static-element-interactions
     (0,external_wp_element_namespaceObject.createElement)("div", {
       className: "edit-widgets-editor__list-view-panel",
       onKeyDown: closeOnEscape
     }, (0,external_wp_element_namespaceObject.createElement)("div", {
-      className: "edit-widgets-editor__list-view-panel-header",
-      ref: headerFocusReturnRef
+      className: "edit-widgets-editor__list-view-panel-header"
     }, (0,external_wp_element_namespaceObject.createElement)("strong", null, (0,external_wp_i18n_namespaceObject.__)('List View')), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
       icon: close_small,
       label: (0,external_wp_i18n_namespaceObject.__)('Close'),
-      onClick: () => setIsListViewOpened(false)
+      onClick: closeListView
     })), (0,external_wp_element_namespaceObject.createElement)("div", {
       className: "edit-widgets-editor__list-view-panel-content",
-      ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([contentFocusReturnRef, focusOnMountRef, setDropZoneElement])
+      ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([focusOnMountRef, setDropZoneElement])
     }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalListView, {
       dropZoneElement: dropZoneElement
     })))
@@ -4226,7 +4238,9 @@ function ListViewSidebar() {
  */
 
 
-function SecondarySidebar() {
+function SecondarySidebar({
+  listViewToggleElement
+}) {
   const {
     isInserterOpen,
     isListViewOpen
@@ -4244,7 +4258,9 @@ function SecondarySidebar() {
     return (0,external_wp_element_namespaceObject.createElement)(InserterSidebar, null);
   }
   if (isListViewOpen) {
-    return (0,external_wp_element_namespaceObject.createElement)(ListViewSidebar, null);
+    return (0,external_wp_element_namespaceObject.createElement)(ListViewSidebar, {
+      listViewToggleElement: listViewToggleElement
+    });
   }
   return null;
 }
@@ -4305,6 +4321,7 @@ function Interface({
     previousShortcut: select(external_wp_keyboardShortcuts_namespaceObject.store).getAllShortcutKeyCombinations('core/edit-widgets/previous-region'),
     nextShortcut: select(external_wp_keyboardShortcuts_namespaceObject.store).getAllShortcutKeyCombinations('core/edit-widgets/next-region')
   }), []);
+  const [listViewToggleElement, setListViewToggleElement] = (0,external_wp_element_namespaceObject.useState)(null);
 
   // Inserter and Sidebars are mutually exclusive
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -4325,8 +4342,12 @@ function Interface({
       ...interfaceLabels,
       secondarySidebar: secondarySidebarLabel
     },
-    header: (0,external_wp_element_namespaceObject.createElement)(header, null),
-    secondarySidebar: hasSecondarySidebar && (0,external_wp_element_namespaceObject.createElement)(SecondarySidebar, null),
+    header: (0,external_wp_element_namespaceObject.createElement)(header, {
+      setListViewToggleElement: setListViewToggleElement
+    }),
+    secondarySidebar: hasSecondarySidebar && (0,external_wp_element_namespaceObject.createElement)(SecondarySidebar, {
+      listViewToggleElement: listViewToggleElement
+    }),
     sidebar: hasSidebarEnabled && (0,external_wp_element_namespaceObject.createElement)(complementary_area.Slot, {
       scope: "core/edit-widgets"
     }),

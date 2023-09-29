@@ -80,7 +80,7 @@ const I18nContext = (0,external_wp_element_namespaceObject.createContext)(makeCo
  *
  * @example
  * ```js
- * import { createI18n } from '@wordpress/react-i18n';
+ * import { createI18n } from '@wordpress/i18n';
  * import { I18nProvider } from '@wordpress/react-i18n';
  * const i18n = createI18n();
  *

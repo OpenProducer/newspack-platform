@@ -652,6 +652,27 @@ function camelCaseJoin(strings) {
   return firstItem.toLowerCase() + rest.map(upperFirst).join('');
 }
 
+/**
+ * Safely decodes a URI with `decodeURI`. Returns the URI unmodified if
+ * `decodeURI` throws an error.
+ *
+ * @param {string} uri URI to decode.
+ *
+ * @example
+ * ```js
+ * const badUri = safeDecodeURI( '%z' ); // does not throw an Error, simply returns '%z'
+ * ```
+ *
+ * @return {string} Decoded URI if possible.
+ */
+function safeDecodeURI(uri) {
+  try {
+    return decodeURI(uri);
+  } catch (uriError) {
+    return uri;
+  }
+}
+
 ;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/border/index.js
 /**
  * Internal dependencies
@@ -788,6 +809,43 @@ const minHeight = {
   }
 };
 /* harmony default export */ const dimensions = ([minHeight]);
+
+;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/background/index.js
+/**
+ * Internal dependencies
+ */
+
+
+const backgroundImage = {
+  name: 'backgroundImage',
+  generate: (style, options) => {
+    const _backgroundImage = style?.background?.backgroundImage;
+    const _backgroundSize = style?.background?.backgroundSize;
+    const styleRules = [];
+    if (!_backgroundImage) {
+      return styleRules;
+    }
+    if (_backgroundImage?.source === 'file' && _backgroundImage?.url) {
+      styleRules.push({
+        selector: options.selector,
+        key: 'backgroundImage',
+        // Passed `url` may already be encoded. To prevent double encoding, decodeURI is executed to revert to the original string.
+        value: `url( '${encodeURI(safeDecodeURI(_backgroundImage.url))}' )`
+      });
+    }
+
+    // If no background size is set, but an image is, default to cover.
+    if (!_backgroundSize) {
+      styleRules.push({
+        selector: options.selector,
+        key: 'backgroundSize',
+        value: 'cover'
+      });
+    }
+    return styleRules;
+  }
+};
+/* harmony default export */ const styles_background = ([backgroundImage]);
 
 ;// CONCATENATED MODULE: ./packages/style-engine/build-module/styles/shadow/index.js
 /**
@@ -956,7 +1014,8 @@ const writingMode = {
 
 
 
-const styleDefinitions = [...border, ...styles_color, ...dimensions, ...outline, ...spacing, ...typography, ...styles_shadow];
+
+const styleDefinitions = [...border, ...styles_color, ...dimensions, ...outline, ...spacing, ...typography, ...styles_shadow, ...styles_background];
 
 ;// CONCATENATED MODULE: ./packages/style-engine/build-module/index.js
 /**

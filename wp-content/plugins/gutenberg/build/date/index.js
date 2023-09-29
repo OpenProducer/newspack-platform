@@ -1371,13 +1371,29 @@ function __experimentalGetSettings() {
   return getSettings();
 }
 function setupWPTimezone() {
-  // Create WP timezone based off dateSettings.
-  external_moment_default().tz.add(external_moment_default().tz.pack({
-    name: WP_ZONE,
-    abbrs: [WP_ZONE],
-    untils: [null],
-    offsets: [-settings.timezone.offset * 60 || 0]
-  }));
+  // Get the current timezone settings from the WP timezone string.
+  const currentTimezone = external_moment_default().tz.zone(settings.timezone.string);
+
+  // Check to see if we have a valid TZ data, if so, use it for the custom WP_ZONE timezone, otherwise just use the offset.
+  if (currentTimezone) {
+    // Create WP timezone based off settings.timezone.string.  We need to include the additional data so that we
+    // don't lose information about daylight savings time and other items.
+    // See https://github.com/WordPress/gutenberg/pull/48083
+    external_moment_default().tz.add(external_moment_default().tz.pack({
+      name: WP_ZONE,
+      abbrs: currentTimezone.abbrs,
+      untils: currentTimezone.untils,
+      offsets: currentTimezone.offsets
+    }));
+  } else {
+    // Create WP timezone based off dateSettings.
+    external_moment_default().tz.add(external_moment_default().tz.pack({
+      name: WP_ZONE,
+      abbrs: [WP_ZONE],
+      untils: [null],
+      offsets: [-settings.timezone.offset * 60 || 0]
+    }));
+  }
 }
 
 // Date constants.

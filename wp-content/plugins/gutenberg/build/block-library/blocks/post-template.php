@@ -64,7 +64,7 @@ function gutenberg_render_block_core_post_template( $attributes, $content, $bloc
 			$query = $wp_query;
 		}
 	} else {
-		$query_args = gutenberg_build_query_vars_from_query_block( $block, $page );
+		$query_args = build_query_vars_from_query_block( $block, $page );
 		$query      = new WP_Query( $query_args );
 	}
 
@@ -106,7 +106,7 @@ function gutenberg_render_block_core_post_template( $attributes, $content, $bloc
 
 		$post_id              = get_the_ID();
 		$post_type            = get_post_type();
-		$filter_block_context = static function( $context ) use ( $post_id, $post_type ) {
+		$filter_block_context = static function ( $context ) use ( $post_id, $post_type ) {
 			$context['postType'] = $post_type;
 			$context['postId']   = $post_id;
 			return $context;

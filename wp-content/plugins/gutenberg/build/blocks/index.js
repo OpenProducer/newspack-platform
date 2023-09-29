@@ -7017,7 +7017,7 @@ function getBlockSettingsFromMetadata({
   textdomain,
   ...metadata
 }) {
-  const allowedFields = ['apiVersion', 'title', 'category', 'parent', 'ancestor', 'icon', 'description', 'keywords', 'attributes', 'providesContext', 'usesContext', 'selectors', 'supports', 'styles', 'example', 'variations', '__experimentalBlockHooks'];
+  const allowedFields = ['apiVersion', 'title', 'category', 'parent', 'ancestor', 'icon', 'description', 'keywords', 'attributes', 'providesContext', 'usesContext', 'selectors', 'supports', 'styles', 'example', 'variations', 'blockHooks'];
   const settings = Object.fromEntries(Object.entries(metadata).filter(([key]) => allowedFields.includes(key)));
   if (textdomain) {
     Object.keys(i18nBlockSchema).forEach(key => {
@@ -7556,24 +7556,29 @@ const unregisterBlockVariation = (blockName, variationName) => {
   (0,external_wp_data_namespaceObject.dispatch)(store).removeBlockVariations(blockName, variationName);
 };
 
-;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/rng.js
+;// CONCATENATED MODULE: ./packages/blocks/node_modules/uuid/dist/esm-browser/rng.js
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
 // generators (like Math.random()).
-// getRandomValues needs to be invoked in a context where "this" is a Crypto implementation. Also,
-// find the complete implementation of crypto (msCrypto) on IE11.
-var getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto) || typeof msCrypto !== 'undefined' && typeof msCrypto.getRandomValues === 'function' && msCrypto.getRandomValues.bind(msCrypto);
+var getRandomValues;
 var rnds8 = new Uint8Array(16);
 function rng() {
+  // lazy load so that environments that need to polyfill have a chance to do so
   if (!getRandomValues) {
-    throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    // getRandomValues needs to be invoked in a context where "this" is a Crypto implementation. Also,
+    // find the complete implementation of crypto (msCrypto) on IE11.
+    getRandomValues = typeof crypto !== 'undefined' && crypto.getRandomValues && crypto.getRandomValues.bind(crypto) || typeof msCrypto !== 'undefined' && typeof msCrypto.getRandomValues === 'function' && msCrypto.getRandomValues.bind(msCrypto);
+
+    if (!getRandomValues) {
+      throw new Error('crypto.getRandomValues() not supported. See https://github.com/uuidjs/uuid#getrandomvalues-not-supported');
+    }
   }
 
   return getRandomValues(rnds8);
 }
-;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/regex.js
+;// CONCATENATED MODULE: ./packages/blocks/node_modules/uuid/dist/esm-browser/regex.js
 /* harmony default export */ const regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
-;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/validate.js
+;// CONCATENATED MODULE: ./packages/blocks/node_modules/uuid/dist/esm-browser/validate.js
 
 
 function validate(uuid) {
@@ -7581,7 +7586,7 @@ function validate(uuid) {
 }
 
 /* harmony default export */ const esm_browser_validate = (validate);
-;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/stringify.js
+;// CONCATENATED MODULE: ./packages/blocks/node_modules/uuid/dist/esm-browser/stringify.js
 
 /**
  * Convert array of 16 byte values to UUID string format of the form:
@@ -7612,7 +7617,7 @@ function stringify(arr) {
 }
 
 /* harmony default export */ const esm_browser_stringify = (stringify);
-;// CONCATENATED MODULE: ./node_modules/uuid/dist/esm-browser/v4.js
+;// CONCATENATED MODULE: ./packages/blocks/node_modules/uuid/dist/esm-browser/v4.js
 
 
 
@@ -8426,11 +8431,11 @@ function bootstrappedBlockTypes(state = {}, action) {
         // The `blockHooks` prop is not yet included in the server provided
         // definitions and needs to be polyfilled. This can be removed when the
         // minimum supported WordPress is >= 6.4.
-        if (serverDefinition.__experimentalBlockHooks === undefined && blockType.__experimentalBlockHooks) {
+        if (serverDefinition.blockHooks === undefined && blockType.blockHooks) {
           newDefinition = {
             ...serverDefinition,
             ...newDefinition,
-            __experimentalBlockHooks: blockType.__experimentalBlockHooks
+            blockHooks: blockType.blockHooks
           };
         }
       } else {
@@ -9966,6 +9971,7 @@ const processBlockType = (name, blockSettings) => ({
     supports: {},
     styles: [],
     variations: [],
+    blockHooks: {},
     save: () => null,
     ...select.getBootstrappedBlockType(name),
     ...blockSettings
@@ -14909,6 +14915,7 @@ function slackParagraphCorrector(node) {
 
 
 
+
 /**
  * Browser dependencies
  */
@@ -14939,33 +14946,6 @@ function filterInlineHTML(HTML, preserveWhiteSpace) {
 }
 
 /**
- * If we're allowed to return inline content, and there is only one inlineable
- * block, and the original plain text content does not have any line breaks,
- * then treat it as inline paste.
- *
- * @param {Object} options
- * @param {Array}  options.blocks
- * @param {string} options.plainText
- * @param {string} options.mode
- */
-function maybeConvertToInline({
-  blocks,
-  plainText,
-  mode
-}) {
-  if (mode === 'AUTO' && blocks.length === 1 && hasBlockSupport(blocks[0].name, '__unstablePasteTextInline', false)) {
-    const trimRegex = /^[\n]+|[\n]+$/g;
-    // Don't catch line breaks at the start or end.
-    const trimmedPlainText = plainText.replace(trimRegex, '');
-    if (trimmedPlainText !== '' && trimmedPlainText.indexOf('\n') === -1) {
-      const target = blocks[0].innerBlocks.length ? blocks[0].innerBlocks[0] : blocks[0];
-      return target.attributes.content;
-    }
-  }
-  return blocks;
-}
-
-/**
  * Converts an HTML string to known blocks. Strips everything else.
  *
  * @param {Object}  options
@@ -14978,7 +14958,6 @@ function maybeConvertToInline({
  * @param {Array}   [options.tagName]            The tag into which content will be inserted.
  * @param {boolean} [options.preserveWhiteSpace] Whether or not to preserve consequent white space.
  *
- * @param {boolean} [options.disableFilters]     Whether or not to filter non semantic content.
  * @return {Array|string} A list of blocks or a string, depending on `handlerMode`.
  */
 function pasteHandler({
@@ -14986,8 +14965,7 @@ function pasteHandler({
   plainText = '',
   mode = 'AUTO',
   tagName,
-  preserveWhiteSpace,
-  disableFilters
+  preserveWhiteSpace
 }) {
   // First of all, strip any meta tags.
   HTML = HTML.replace(/<meta[^>]+>/g, '');
@@ -15013,13 +14991,6 @@ function pasteHandler({
   // See: https://github.com/WordPress/gutenberg/pull/6983#pullrequestreview-125151075
   if (String.prototype.normalize) {
     HTML = HTML.normalize();
-  }
-  if (disableFilters) {
-    return maybeConvertToInline({
-      blocks: htmlToBlocks(normaliseBlocks(HTML), pasteHandler),
-      plainText,
-      mode
-    });
   }
 
   // Parse Markdown (and encoded HTML) if:
@@ -15082,11 +15053,19 @@ function pasteHandler({
     paste_handler_console.log('Processed HTML piece:\n\n', piece);
     return htmlToBlocks(piece, pasteHandler);
   }).flat().filter(Boolean);
-  return maybeConvertToInline({
-    blocks,
-    plainText,
-    mode
-  });
+
+  // If we're allowed to return inline content, and there is only one
+  // inlineable block, and the original plain text content does not have any
+  // line breaks, then treat it as inline paste.
+  if (mode === 'AUTO' && blocks.length === 1 && hasBlockSupport(blocks[0].name, '__unstablePasteTextInline', false)) {
+    const trimRegex = /^[\n]+|[\n]+$/g;
+    // Don't catch line breaks at the start or end.
+    const trimmedPlainText = plainText.replace(trimRegex, '');
+    if (trimmedPlainText !== '' && trimmedPlainText.indexOf('\n') === -1) {
+      return (0,external_wp_dom_namespaceObject.removeInvalidHTML)(getBlockInnerHTML(blocks[0]), phrasingContentSchema).replace(trimRegex, '');
+    }
+  }
+  return blocks;
 }
 
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/categories.js

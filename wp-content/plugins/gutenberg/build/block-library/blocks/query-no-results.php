@@ -28,7 +28,7 @@ function gutenberg_render_block_core_query_no_results( $attributes, $content, $b
 		global $wp_query;
 		$query = $wp_query;
 	} else {
-		$query_args = gutenberg_build_query_vars_from_query_block( $block, $page );
+		$query_args = build_query_vars_from_query_block( $block, $page );
 		$query      = new WP_Query( $query_args );
 	}
 

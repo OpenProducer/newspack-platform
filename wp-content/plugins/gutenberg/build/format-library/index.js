@@ -512,14 +512,15 @@ function isValidHref(href) {
  * @param {string}  options.type             The type of the link.
  * @param {string}  options.id               The ID of the link.
  * @param {boolean} options.opensInNewWindow Whether this link will open in a new window.
- *
+ * @param {boolean} options.nofollow         Whether this link is marked as no follow relationship.
  * @return {Object} The final format object.
  */
 function createLinkFormat({
   url,
   type,
   id,
-  opensInNewWindow
+  opensInNewWindow,
+  nofollow
 }) {
   const format = {
     type: 'core/link',
@@ -531,7 +532,10 @@ function createLinkFormat({
   if (id) format.attributes.id = id;
   if (opensInNewWindow) {
     format.attributes.target = '_blank';
-    format.attributes.rel = 'noreferrer noopener';
+    format.attributes.rel = format.attributes.rel ? format.attributes.rel + ' noreferrer noopener' : 'noreferrer noopener';
+  }
+  if (nofollow) {
+    format.attributes.rel = format.attributes.rel ? format.attributes.rel + ' nofollow' : 'nofollow';
   }
   return format;
 }
@@ -692,6 +696,10 @@ function useLinkInstanceKey(instance) {
 
 
 
+const LINK_SETTINGS = [...external_wp_blockEditor_namespaceObject.__experimentalLinkControl.DEFAULT_LINK_SETTINGS, {
+  id: 'nofollow',
+  title: (0,external_wp_i18n_namespaceObject.__)('Mark as nofollow')
+}];
 function InlineLinkUI({
   isActive,
   activeAttributes,
@@ -718,13 +726,14 @@ function InlineLinkUI({
       userCanCreatePages: _settings.__experimentalUserCanCreatePages
     };
   }, []);
-  const linkValue = {
+  const linkValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     url: activeAttributes.url,
     type: activeAttributes.type,
     id: activeAttributes.id,
     opensInNewTab: activeAttributes.target === '_blank',
+    nofollow: activeAttributes.rel?.includes('nofollow'),
     title: richTextText
-  };
+  }), [activeAttributes.id, activeAttributes.rel, activeAttributes.target, activeAttributes.type, activeAttributes.url, richTextText]);
   function removeLink() {
     const newValue = (0,external_wp_richText_namespaceObject.removeFormat)(value, 'core/link');
     onChange(newValue);
@@ -736,7 +745,6 @@ function InlineLinkUI({
     // Before merging the next value with the current link value, check if
     // the setting was toggled.
     const didToggleSetting = linkValue.opensInNewTab !== nextValue.opensInNewTab && nextValue.url === undefined;
-
     // Merge the next value with the current link value.
     nextValue = {
       ...linkValue,
@@ -747,7 +755,8 @@ function InlineLinkUI({
       url: newUrl,
       type: nextValue.type,
       id: nextValue.id !== undefined && nextValue.id !== null ? String(nextValue.id) : undefined,
-      opensInNewWindow: nextValue.opensInNewTab
+      opensInNewWindow: nextValue.opensInNewTab,
+      nofollow: nextValue.nofollow
     });
     const newText = nextValue.title || newUrl;
     if ((0,external_wp_richText_namespaceObject.isCollapsed)(value) && !isActive) {
@@ -830,7 +839,11 @@ function InlineLinkUI({
   // See https://github.com/WordPress/gutenberg/pull/34742.
   const forceRemountKey = use_link_instance_key(popoverAnchor);
 
-  // The focusOnMount prop shouldn't evolve during render of a Popover
+  // Focus should only be moved into the Popover when the Link is being created or edited.
+  // When the Link is in "preview" mode focus should remain on the rich text because at
+  // this point the Link dialog is informational only and thus the user should be able to
+  // continue editing the rich text.
+  // Ref used because the focusOnMount prop shouldn't evolve during render of a Popover
   // otherwise it causes a render of the content.
   const focusOnMount = (0,external_wp_element_namespaceObject.useRef)(addingLink ? 'firstElement' : false);
   async function handleCreate(pageTitle) {
@@ -869,7 +882,8 @@ function InlineLinkUI({
     createSuggestion: createPageEntity && handleCreate,
     withCreateSuggestion: userCanCreatePages,
     createSuggestionButtonText: createButtonText,
-    hasTextControl: true
+    hasTextControl: true,
+    settings: LINK_SETTINGS
   }));
 }
 function getRichTextValueFromSelection(value, isActive) {
@@ -1003,7 +1017,8 @@ const build_module_link_link = {
     url: 'href',
     type: 'data-type',
     id: 'data-id',
-    target: 'target'
+    target: 'target',
+    rel: 'rel'
   },
   __unstablePasteRule(value, {
     html,
@@ -1141,9 +1156,10 @@ const underline = {
 /**
  * Return an SVG icon.
  *
- * @param {IconProps} props icon is the SVG component to render
- *                          size is a number specifiying the icon size in pixels
- *                          Other props will be passed to wrapped SVG component
+ * @param {IconProps}                                 props icon is the SVG component to render
+ *                                                          size is a number specifiying the icon size in pixels
+ *                                                          Other props will be passed to wrapped SVG component
+ * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
  *
  * @return {JSX.Element}  Icon component
  */
@@ -1151,14 +1167,15 @@ function Icon({
   icon,
   size = 24,
   ...props
-}) {
+}, ref) {
   return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
     width: size,
     height: size,
-    ...props
+    ...props,
+    ref
   });
 }
-/* harmony default export */ const icon = (Icon);
+/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/text-color.js
 

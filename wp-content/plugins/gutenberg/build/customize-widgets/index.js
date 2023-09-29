@@ -282,8 +282,6 @@ const external_wp_data_namespaceObject = window["wp"]["data"];
 const external_wp_preferences_namespaceObject = window["wp"]["preferences"];
 ;// CONCATENATED MODULE: external ["wp","components"]
 const external_wp_components_namespaceObject = window["wp"]["components"];
-;// CONCATENATED MODULE: external ["wp","keyboardShortcuts"]
-const external_wp_keyboardShortcuts_namespaceObject = window["wp"]["keyboardShortcuts"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","blockEditor"]
@@ -660,6 +658,8 @@ const external = (0,external_wp_element_namespaceObject.createElement)(external_
 }));
 /* harmony default export */ const library_external = (external);
 
+;// CONCATENATED MODULE: external ["wp","keyboardShortcuts"]
+const external_wp_keyboardShortcuts_namespaceObject = window["wp"]["keyboardShortcuts"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/more-vertical.js
 
 /**
@@ -2182,6 +2182,10 @@ function BlockAppender(props) {
 
 
 
+
+const {
+  ExperimentalBlockCanvas: BlockCanvas
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function SidebarBlockEditor({
   blockEditorSettings,
   sidebar,
@@ -2249,13 +2253,13 @@ function SidebarBlockEditor({
     isInserterOpened: isInserterOpened,
     setIsInserterOpened: setIsInserterOpened,
     isFixedToolbarActive: isFixedToolbarActive
-  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.CopyHandler, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockTools, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableEditorStyles, {
-    styles: settings.defaultEditorStyles
-  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockSelectionClearer, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.WritingFlow, {
-    className: "editor-styles-wrapper"
+  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockTools, null, (0,external_wp_element_namespaceObject.createElement)(BlockCanvas, {
+    shouldIframe: false,
+    styles: settings.defaultEditorStyles,
+    height: "100%"
   }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockList, {
     renderAppender: BlockAppender
-  }))))), (0,external_wp_element_namespaceObject.createPortal)(
+  }))), (0,external_wp_element_namespaceObject.createPortal)(
   // This is a temporary hack to prevent button component inside <BlockInspector>
   // from submitting form when type="button" is not specified.
   (0,external_wp_element_namespaceObject.createElement)("form", {
@@ -2379,7 +2383,6 @@ function useClearSelectedBlock(sidebarControl, popoverRef) {
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -2421,13 +2424,13 @@ function CustomizeWidgets({
     className: "customize-widgets-popover",
     ref: popoverRef
   }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover.Slot, null)), parentContainer);
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_keyboardShortcuts_namespaceObject.ShortcutProvider, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.SlotFillProvider, null, (0,external_wp_element_namespaceObject.createElement)(SidebarControls, {
+  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.SlotFillProvider, null, (0,external_wp_element_namespaceObject.createElement)(SidebarControls, {
     sidebarControls: sidebarControls,
     activeSidebarControl: activeSidebarControl
   }, (0,external_wp_element_namespaceObject.createElement)(FocusControl, {
     api: api,
     sidebarControls: sidebarControls
-  }, activeSidebar, popover))));
+  }, activeSidebar, popover)));
 }
 
 ;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/controls/inspector-section.js

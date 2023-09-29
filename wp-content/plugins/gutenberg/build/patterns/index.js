@@ -39,23 +39,25 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "privateApis": () => (/* reexport */ privateApis)
+  "privateApis": () => (/* reexport */ privateApis),
+  "store": () => (/* reexport */ store)
 });
 
 // NAMESPACE OBJECT: ./packages/patterns/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "__experimentalConvertSyncedPatternToStatic": () => (__experimentalConvertSyncedPatternToStatic),
-  "__experimentalCreatePattern": () => (__experimentalCreatePattern),
-  "__experimentalSetEditingPattern": () => (__experimentalSetEditingPattern)
+  "convertSyncedPatternToStatic": () => (convertSyncedPatternToStatic),
+  "createPattern": () => (createPattern),
+  "createPatternFromFile": () => (createPatternFromFile),
+  "setEditingPattern": () => (setEditingPattern)
 });
 
 // NAMESPACE OBJECT: ./packages/patterns/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "__experimentalIsEditingPattern": () => (__experimentalIsEditingPattern)
+  "isEditingPattern": () => (selectors_isEditingPattern)
 });
 
 ;// CONCATENATED MODULE: external ["wp","data"]
@@ -84,6 +86,19 @@ const external_wp_blocks_namespaceObject = window["wp"]["blocks"];
 const external_wp_coreData_namespaceObject = window["wp"]["coreData"];
 ;// CONCATENATED MODULE: external ["wp","blockEditor"]
 const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
+;// CONCATENATED MODULE: ./packages/patterns/build-module/constants.js
+const PATTERN_TYPES = {
+  theme: 'pattern',
+  user: 'wp_block'
+};
+const PATTERN_DEFAULT_CATEGORY = 'all-patterns';
+const PATTERN_USER_CATEGORY = 'my-patterns';
+const PATTERN_CORE_SOURCES = ['core', 'pattern-directory/core', 'pattern-directory/featured', 'pattern-directory/theme'];
+const PATTERN_SYNC_TYPES = {
+  full: 'fully',
+  unsynced: 'unsynced'
+};
+
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/store/actions.js
 /**
  * WordPress dependencies
@@ -94,35 +109,56 @@ const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
 
 
 /**
+ * Internal dependencies
+ */
+
+
+/**
  * Returns a generator converting one or more static blocks into a pattern, or creating a new empty pattern.
  *
- * @param {string}             title     Pattern title.
- * @param {'full'|'unsynced'}  syncType  They way block is synced, 'full' or 'unsynced'.
- * @param {string[]|undefined} clientIds Optional client IDs of blocks to convert to pattern.
+ * @param {string}             title        Pattern title.
+ * @param {'full'|'unsynced'}  syncType     They way block is synced, 'full' or 'unsynced'.
+ * @param {string|undefined}   [content]    Optional serialized content of blocks to convert to pattern.
+ * @param {number[]|undefined} [categories] Ids of any selected categories.
  */
-const __experimentalCreatePattern = (title, syncType, clientIds) => async ({
-  registry,
-  dispatch
+const createPattern = (title, syncType, content, categories) => async ({
+  registry
 }) => {
-  const meta = syncType === 'unsynced' ? {
+  const meta = syncType === PATTERN_SYNC_TYPES.unsynced ? {
     wp_pattern_sync_status: syncType
   } : undefined;
   const reusableBlock = {
     title,
-    content: clientIds ? (0,external_wp_blocks_namespaceObject.serialize)(registry.select(external_wp_blockEditor_namespaceObject.store).getBlocksByClientId(clientIds)) : undefined,
+    content,
     status: 'publish',
-    meta
+    meta,
+    wp_pattern_category: categories
   };
   const updatedRecord = await registry.dispatch(external_wp_coreData_namespaceObject.store).saveEntityRecord('postType', 'wp_block', reusableBlock);
-  if (syncType === 'unsynced' || !clientIds) {
-    return updatedRecord;
-  }
-  const newBlock = (0,external_wp_blocks_namespaceObject.createBlock)('core/block', {
-    ref: updatedRecord.id
-  });
-  registry.dispatch(external_wp_blockEditor_namespaceObject.store).replaceBlocks(clientIds, newBlock);
-  dispatch.__experimentalSetEditingPattern(newBlock.clientId, true);
   return updatedRecord;
+};
+
+/**
+ * Create a pattern from a JSON file.
+ * @param {File}               file         The JSON file instance of the pattern.
+ * @param {number[]|undefined} [categories] Ids of any selected categories.
+ */
+const createPatternFromFile = (file, categories) => async ({
+  dispatch
+}) => {
+  const fileContent = await file.text();
+  /** @type {import('./types').PatternJSON} */
+  let parsedContent;
+  try {
+    parsedContent = JSON.parse(fileContent);
+  } catch (e) {
+    throw new Error('Invalid JSON file');
+  }
+  if (parsedContent.__file !== 'wp_block' || !parsedContent.title || !parsedContent.content || typeof parsedContent.title !== 'string' || typeof parsedContent.content !== 'string' || parsedContent.syncStatus && typeof parsedContent.syncStatus !== 'string') {
+    throw new Error('Invalid pattern JSON file');
+  }
+  const pattern = await dispatch.createPattern(parsedContent.title, parsedContent.syncStatus, parsedContent.content, categories);
+  return pattern;
 };
 
 /**
@@ -130,7 +166,7 @@ const __experimentalCreatePattern = (title, syncType, clientIds) => async ({
  *
  * @param {string} clientId The client ID of the block to attach.
  */
-const __experimentalConvertSyncedPatternToStatic = clientId => ({
+const convertSyncedPatternToStatic = clientId => ({
   registry
 }) => {
   const oldBlock = registry.select(external_wp_blockEditor_namespaceObject.store).getBlock(clientId);
@@ -146,7 +182,7 @@ const __experimentalConvertSyncedPatternToStatic = clientId => ({
  * @param {boolean} isEditing Whether the block should be in editing state.
  * @return {Object} Action descriptor.
  */
-function __experimentalSetEditingPattern(clientId, isEditing) {
+function setEditingPattern(clientId, isEditing) {
   return {
     type: 'SET_EDITING_PATTERN',
     clientId,
@@ -168,9 +204,21 @@ const STORE_NAME = 'core/patterns';
  * @param {number} clientId the clientID of the block.
  * @return {boolean} Whether the pattern is in the editing state.
  */
-function __experimentalIsEditingPattern(state, clientId) {
+function selectors_isEditingPattern(state, clientId) {
   return state.isEditingPattern[clientId];
 }
+
+;// CONCATENATED MODULE: external ["wp","privateApis"]
+const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// CONCATENATED MODULE: ./packages/patterns/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/patterns');
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/store/index.js
 /**
@@ -186,6 +234,7 @@ function __experimentalIsEditingPattern(state, clientId) {
 
 
 
+
 /**
  * Post editor data store configuration.
  *
@@ -194,9 +243,7 @@ function __experimentalIsEditingPattern(state, clientId) {
  * @type {Object}
  */
 const storeConfig = {
-  reducer: reducer,
-  selectors: selectors_namespaceObject,
-  actions: actions_namespaceObject
+  reducer: reducer
 };
 
 /**
@@ -210,18 +257,8 @@ const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, 
   ...storeConfig
 });
 (0,external_wp_data_namespaceObject.register)(store);
-
-;// CONCATENATED MODULE: external ["wp","privateApis"]
-const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./packages/patterns/build-module/lock-unlock.js
-/**
- * WordPress dependencies
- */
-
-const {
-  lock,
-  unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/patterns');
+unlock(store).registerPrivateActions(actions_namespaceObject);
+unlock(store).registerPrivateSelectors(selectors_namespaceObject);
 
 ;// CONCATENATED MODULE: external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
@@ -231,6 +268,76 @@ const external_wp_components_namespaceObject = window["wp"]["components"];
 const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","notices"]
 const external_wp_notices_namespaceObject = window["wp"]["notices"];
+;// CONCATENATED MODULE: external ["wp","compose"]
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
+;// CONCATENATED MODULE: external ["wp","htmlEntities"]
+const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
+;// CONCATENATED MODULE: ./packages/patterns/build-module/components/category-selector.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+const unescapeString = arg => {
+  return (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(arg);
+};
+const EMPTY_ARRAY = [];
+const MAX_TERMS_SUGGESTIONS = 20;
+const DEFAULT_QUERY = {
+  per_page: MAX_TERMS_SUGGESTIONS,
+  _fields: 'id,name',
+  context: 'view'
+};
+const CATEGORY_SLUG = 'wp_pattern_category';
+function CategorySelector({
+  values,
+  onChange
+}) {
+  const [search, setSearch] = (0,external_wp_element_namespaceObject.useState)('');
+  const debouncedSearch = (0,external_wp_compose_namespaceObject.useDebounce)(setSearch, 500);
+  const {
+    searchResults
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getEntityRecords
+    } = select(external_wp_coreData_namespaceObject.store);
+    return {
+      searchResults: !!search ? getEntityRecords('taxonomy', CATEGORY_SLUG, {
+        ...DEFAULT_QUERY,
+        search
+      }) : EMPTY_ARRAY
+    };
+  }, [search]);
+  const suggestions = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    return (searchResults !== null && searchResults !== void 0 ? searchResults : []).map(term => unescapeString(term.name));
+  }, [searchResults]);
+  function handleChange(termNames) {
+    const uniqueTerms = termNames.reduce((terms, newTerm) => {
+      if (!terms.some(term => term.toLowerCase() === newTerm.toLowerCase())) {
+        terms.push(newTerm);
+      }
+      return terms;
+    }, []);
+    onChange(uniqueTerms);
+  }
+  return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.FormTokenField, {
+    className: "patterns-menu-items__convert-modal-categories",
+    value: values,
+    suggestions: suggestions,
+    onChange: handleChange,
+    onInputChange: debouncedSearch,
+    maxSuggestions: MAX_TERMS_SUGGESTIONS,
+    label: (0,external_wp_i18n_namespaceObject.__)('Categories'),
+    tokenizeOnBlur: true
+  }));
+}
+
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/components/create-pattern-modal.js
 
 /**
@@ -241,37 +348,51 @@ const external_wp_notices_namespaceObject = window["wp"]["notices"];
 
 
 
-const USER_PATTERN_CATEGORY = 'my-patterns';
-const SYNC_TYPES = {
-  full: undefined,
-  unsynced: 'unsynced'
-};
+
 
 /**
  * Internal dependencies
  */
 
+
+/**
+ * Internal dependencies
+ */
+
+
+
 function CreatePatternModal({
   onSuccess,
   onError,
-  clientIds,
+  content,
   onClose,
   className = 'patterns-menu-items__convert-modal'
 }) {
-  const [syncType, setSyncType] = (0,external_wp_element_namespaceObject.useState)(SYNC_TYPES.full);
+  const [syncType, setSyncType] = (0,external_wp_element_namespaceObject.useState)(PATTERN_SYNC_TYPES.full);
+  const [categoryTerms, setCategoryTerms] = (0,external_wp_element_namespaceObject.useState)([]);
   const [title, setTitle] = (0,external_wp_element_namespaceObject.useState)('');
+  const [isSaving, setIsSaving] = (0,external_wp_element_namespaceObject.useState)(false);
   const {
-    __experimentalCreatePattern: createPattern
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+    createPattern
+  } = unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
+  const {
+    saveEntityRecord,
+    invalidateResolution
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
   const {
     createErrorNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  const onCreate = (0,external_wp_element_namespaceObject.useCallback)(async function (patternTitle, sync) {
+  async function onCreate(patternTitle, sync) {
+    if (!title || isSaving) {
+      return;
+    }
     try {
-      const newPattern = await createPattern(patternTitle, sync, clientIds);
+      setIsSaving(true);
+      const categories = await Promise.all(categoryTerms.map(termName => findOrCreateTerm(termName)));
+      const newPattern = await createPattern(patternTitle, sync, typeof content === 'function' ? content() : content, categories);
       onSuccess({
         pattern: newPattern,
-        categoryId: USER_PATTERN_CATEGORY
+        categoryId: PATTERN_DEFAULT_CATEGORY
       });
     } catch (error) {
       createErrorNotice(error.message, {
@@ -279,8 +400,33 @@ function CreatePatternModal({
         id: 'convert-to-pattern-error'
       });
       onError();
+    } finally {
+      setIsSaving(false);
+      setCategoryTerms([]);
+      setTitle('');
     }
-  }, [createPattern, clientIds, onSuccess, createErrorNotice, onError]);
+  }
+
+  /**
+   * @param {string} term
+   * @return {Promise<number>} The pattern category id.
+   */
+  async function findOrCreateTerm(term) {
+    try {
+      const newTerm = await saveEntityRecord('taxonomy', CATEGORY_SLUG, {
+        name: term
+      }, {
+        throwOnError: true
+      });
+      invalidateResolution('getUserPatternCategories');
+      return newTerm.id;
+    } catch (error) {
+      if (error.code !== 'term_exists') {
+        throw error;
+      }
+      return error.data.term_id;
+    }
+  }
   return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
     title: (0,external_wp_i18n_namespaceObject.__)('Create pattern'),
     onRequestClose: () => {
@@ -292,7 +438,6 @@ function CreatePatternModal({
     onSubmit: event => {
       event.preventDefault();
       onCreate(title, syncType);
-      setTitle('');
     }
   }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
     spacing: "5"
@@ -301,13 +446,17 @@ function CreatePatternModal({
     label: (0,external_wp_i18n_namespaceObject.__)('Name'),
     value: title,
     onChange: setTitle,
-    placeholder: (0,external_wp_i18n_namespaceObject.__)('My pattern')
+    placeholder: (0,external_wp_i18n_namespaceObject.__)('My pattern'),
+    className: "patterns-create-modal__name-input"
+  }), (0,external_wp_element_namespaceObject.createElement)(CategorySelector, {
+    values: categoryTerms,
+    onChange: setCategoryTerms
   }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
     label: (0,external_wp_i18n_namespaceObject.__)('Synced'),
     help: (0,external_wp_i18n_namespaceObject.__)('Editing the pattern will update it anywhere it is used.'),
-    checked: !syncType,
+    checked: syncType === PATTERN_SYNC_TYPES.full,
     onChange: () => {
-      setSyncType(syncType === SYNC_TYPES.full ? SYNC_TYPES.unsynced : SYNC_TYPES.full);
+      setSyncType(syncType === PATTERN_SYNC_TYPES.full ? PATTERN_SYNC_TYPES.unsynced : PATTERN_SYNC_TYPES.full);
     }
   }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
     justify: "right"
@@ -319,7 +468,9 @@ function CreatePatternModal({
     }
   }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     variant: "primary",
-    type: "submit"
+    type: "submit",
+    "aria-disabled": !title || isSaving,
+    isBusy: isSaving
   }, (0,external_wp_i18n_namespaceObject.__)('Create'))))));
 }
 
@@ -358,6 +509,9 @@ const symbol = (0,external_wp_element_namespaceObject.createElement)(external_wp
  */
 
 
+
+
+
 /**
  * Menu control to convert block(s) to a pattern block.
  *
@@ -373,6 +527,14 @@ function PatternConvertButton({
   const {
     createSuccessNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  const {
+    replaceBlocks
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
+  // Ignore reason: false positive of the lint rule.
+  // eslint-disable-next-line @wordpress/no-unused-vars-before-return
+  const {
+    setEditingPattern
+  } = unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
   const [isModalOpen, setIsModalOpen] = (0,external_wp_element_namespaceObject.useState)(false);
   const canConvert = (0,external_wp_data_namespaceObject.useSelect)(select => {
     var _getBlocksByClientId;
@@ -402,17 +564,28 @@ function PatternConvertButton({
     !!canUser('create', 'blocks');
     return _canConvert;
   }, [clientIds, rootClientId]);
+  const {
+    getBlocksByClientId
+  } = (0,external_wp_data_namespaceObject.useSelect)(external_wp_blockEditor_namespaceObject.store);
+  const getContent = (0,external_wp_element_namespaceObject.useCallback)(() => (0,external_wp_blocks_namespaceObject.serialize)(getBlocksByClientId(clientIds)), [getBlocksByClientId, clientIds]);
   if (!canConvert) {
     return null;
   }
   const handleSuccess = ({
     pattern
   }) => {
-    createSuccessNotice(pattern.wp_pattern_sync_status === 'unsynced' ? (0,external_wp_i18n_namespaceObject.sprintf)(
+    if (pattern.wp_pattern_sync_status !== PATTERN_SYNC_TYPES.unsynced) {
+      const newBlock = (0,external_wp_blocks_namespaceObject.createBlock)('core/block', {
+        ref: pattern.id
+      });
+      replaceBlocks(clientIds, newBlock);
+      setEditingPattern(newBlock.clientId, true);
+    }
+    createSuccessNotice(pattern.wp_pattern_sync_status === PATTERN_SYNC_TYPES.unsynced ? (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %s: the name the user has given to the pattern.
-    (0,external_wp_i18n_namespaceObject.__)('Unsynced Pattern created: %s'), pattern.title.raw) : (0,external_wp_i18n_namespaceObject.sprintf)(
+    (0,external_wp_i18n_namespaceObject.__)('Unsynced pattern created: %s'), pattern.title.raw) : (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %s: the name the user has given to the pattern.
-    (0,external_wp_i18n_namespaceObject.__)('Synced Pattern created: %s'), pattern.title.raw), {
+    (0,external_wp_i18n_namespaceObject.__)('Synced pattern created: %s'), pattern.title.raw), {
       type: 'snackbar',
       id: 'convert-to-pattern-success'
     });
@@ -424,7 +597,7 @@ function PatternConvertButton({
     "aria-expanded": isModalOpen,
     "aria-haspopup": "dialog"
   }, (0,external_wp_i18n_namespaceObject.__)('Create pattern')), isModalOpen && (0,external_wp_element_namespaceObject.createElement)(CreatePatternModal, {
-    clientIds: clientIds,
+    content: getContent,
     onSuccess: pattern => {
       handleSuccess(pattern);
     },
@@ -455,6 +628,7 @@ const external_wp_url_namespaceObject = window["wp"]["url"];
 /**
  * Internal dependencies
  */
+
 
 function PatternsManageButton({
   clientId
@@ -490,16 +664,19 @@ function PatternsManageButton({
       })
     };
   }, [clientId]);
+
+  // Ignore reason: false positive of the lint rule.
+  // eslint-disable-next-line @wordpress/no-unused-vars-before-return
   const {
-    __experimentalConvertSyncedPatternToStatic: convertBlockToStatic
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store);
+    convertSyncedPatternToStatic
+  } = unlock((0,external_wp_data_namespaceObject.useDispatch)(store));
   if (!isVisible) {
     return null;
   }
   return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
     href: managePatternsUrl
   }, (0,external_wp_i18n_namespaceObject.__)('Manage patterns')), canRemove && (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
-    onClick: () => convertBlockToStatic(clientId)
+    onClick: () => convertSyncedPatternToStatic(clientId)
   }, innerBlockCount > 1 ? (0,external_wp_i18n_namespaceObject.__)('Detach patterns') : (0,external_wp_i18n_namespaceObject.__)('Detach pattern')));
 }
 /* harmony default export */ const patterns_manage_button = (PatternsManageButton);
@@ -536,10 +713,16 @@ function PatternsMenuItems({
 
 
 
+
 const privateApis = {};
 lock(privateApis, {
   CreatePatternModal: CreatePatternModal,
-  PatternsMenuItems: PatternsMenuItems
+  PatternsMenuItems: PatternsMenuItems,
+  PATTERN_TYPES: PATTERN_TYPES,
+  PATTERN_DEFAULT_CATEGORY: PATTERN_DEFAULT_CATEGORY,
+  PATTERN_USER_CATEGORY: PATTERN_USER_CATEGORY,
+  PATTERN_CORE_SOURCES: PATTERN_CORE_SOURCES,
+  PATTERN_SYNC_TYPES: PATTERN_SYNC_TYPES
 });
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/index.js

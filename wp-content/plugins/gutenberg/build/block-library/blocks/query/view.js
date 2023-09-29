@@ -38,8 +38,7 @@ const isValidEvent = event => event.button === 0 &&
         navigate: async ({
           event,
           ref,
-          context,
-          state
+          context
         }) => {
           if (isValidLink(ref) && isValidEvent(event)) {
             event.preventDefault();
@@ -47,9 +46,9 @@ const isValidEvent = event => event.button === 0 &&
 
             // Don't announce the navigation immediately, wait 300 ms.
             const timeout = setTimeout(() => {
-              context.core.query.message = state.core.query.loadingText;
+              context.core.query.message = context.core.query.loadingText;
               context.core.query.animation = 'start';
-            }, 300);
+            }, 400);
             await (0,external_wp_interactivity_namespaceObject.navigate)(ref.href);
 
             // Dismiss loading message if it hasn't been added yet.
@@ -58,17 +57,33 @@ const isValidEvent = event => event.button === 0 &&
             // Announce that the page has been loaded. If the message is the
             // same, we use a no-break space similar to the @wordpress/a11y
             // package: https://github.com/WordPress/gutenberg/blob/c395242b8e6ee20f8b06c199e4fc2920d7018af1/packages/a11y/src/filter-message.js#L20-L26
-            context.core.query.message = state.core.query.loadedText + (context.core.query.message === state.core.query.loadedText ? '\u00A0' : '');
+            context.core.query.message = context.core.query.loadedText + (context.core.query.message === context.core.query.loadedText ? '\u00A0' : '');
             context.core.query.animation = 'finish';
+            context.core.query.url = ref.href;
 
             // Focus the first anchor of the Query block.
-            document.querySelector(`[data-wp-navigation-id=${id}] a[href]`)?.focus();
+            const firstAnchor = `[data-wp-navigation-id=${id}] .wp-block-post-template a[href]`;
+            document.querySelector(firstAnchor)?.focus();
           }
         },
         prefetch: async ({
           ref
         }) => {
           if (isValidLink(ref)) {
+            await (0,external_wp_interactivity_namespaceObject.prefetch)(ref.href);
+          }
+        }
+      }
+    }
+  },
+  effects: {
+    core: {
+      query: {
+        prefetch: async ({
+          ref,
+          context
+        }) => {
+          if (context.core.query.url && isValidLink(ref)) {
             await (0,external_wp_interactivity_namespaceObject.prefetch)(ref.href);
           }
         }

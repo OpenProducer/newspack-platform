@@ -973,7 +973,26 @@ function useShortcutEventMatch() {
  * WordPress dependencies
  */
 
-const context = (0,external_wp_element_namespaceObject.createContext)();
+const globalShortcuts = new Set();
+const globalListener = event => {
+  for (const keyboardShortcut of globalShortcuts) {
+    keyboardShortcut(event);
+  }
+};
+const context = (0,external_wp_element_namespaceObject.createContext)({
+  add: shortcut => {
+    if (globalShortcuts.size === 0) {
+      document.addEventListener('keydown', globalListener);
+    }
+    globalShortcuts.add(shortcut);
+  },
+  delete: shortcut => {
+    globalShortcuts.delete(shortcut);
+    if (globalShortcuts.size === 0) {
+      document.removeEventListener('keydown', globalListener);
+    }
+  }
+});
 
 ;// CONCATENATED MODULE: ./packages/keyboard-shortcuts/build-module/hooks/use-shortcut.js
 /**
@@ -996,12 +1015,14 @@ const context = (0,external_wp_element_namespaceObject.createContext)();
  * @param {boolean}  options.isDisabled Whether to disable to shortut.
  */
 function useShortcut(name, callback, {
-  isDisabled
+  isDisabled = false
 } = {}) {
   const shortcuts = (0,external_wp_element_namespaceObject.useContext)(context);
   const isMatch = useShortcutEventMatch();
   const callbackRef = (0,external_wp_element_namespaceObject.useRef)();
-  callbackRef.current = callback;
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    callbackRef.current = callback;
+  }, [callback]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (isDisabled) {
       return;
@@ -1011,11 +1032,11 @@ function useShortcut(name, callback, {
         callbackRef.current(event);
       }
     }
-    shortcuts.current.add(_callback);
+    shortcuts.add(_callback);
     return () => {
-      shortcuts.current.delete(_callback);
+      shortcuts.delete(_callback);
     };
-  }, [name, isDisabled]);
+  }, [name, isDisabled, shortcuts]);
 }
 
 ;// CONCATENATED MODULE: ./packages/keyboard-shortcuts/build-module/components/shortcut-provider.js
@@ -1035,6 +1056,8 @@ const {
 
 /**
  * Handles callbacks added to context by `useShortcut`.
+ * Adding a provider allows to register contextual shortcuts
+ * that are only active when a certain part of the UI is focused.
  *
  * @param {Object} props Props to pass to `div`.
  *

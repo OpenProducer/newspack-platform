@@ -8,6 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 use Newspack\Newsletters\Subscription_Lists;
+use Newspack\Newsletters\Reader_Activation;
 
 /**
  * Manages Settings Subscription Class.
@@ -480,6 +481,11 @@ class Newspack_Newsletters_Subscription {
 	 * @param array          $metadata      Metadata.
 	 */
 	public static function newspack_registered_reader( $email, $authenticate, $user_id, $existing_user, $metadata ) {
+		// Prevent double-syncing to audience if the registration method was through a Newsletter Subscription Form block.
+		if ( isset( $metadata['registration_method'] ) && 'newsletters-subscription' === $metadata['registration_method'] ) {
+			return;
+		}
+
 		if ( isset( $metadata['lists'] ) && ! empty( $metadata['lists'] ) ) {
 			$lists = $metadata['lists'];
 			unset( $metadata['lists'] );
@@ -520,7 +526,7 @@ class Newspack_Newsletters_Subscription {
 	 * @return bool|WP_Error Whether the contact was deleted or error.
 	 */
 	public static function delete_user( $user_id, $reassign, $user ) {
-		if ( ! \Newspack\Reader_Activation::is_user_reader( $user ) ) {
+		if ( ! class_exists( '\Newspack\Reader_Activation' ) || ! \Newspack\Reader_Activation::is_user_reader( $user ) ) {
 			return;
 		}
 		$sync = \Newspack\Reader_Activation::get_setting( 'sync_esp' );

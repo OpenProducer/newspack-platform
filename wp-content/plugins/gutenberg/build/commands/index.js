@@ -274,6 +274,11 @@ module.exports = commandScore;
 /******/ 		};
 /******/ 	})();
 /******/ 	
+/******/ 	/* webpack/runtime/nonce */
+/******/ 	(() => {
+/******/ 		__webpack_require__.nc = undefined;
+/******/ 	})();
+/******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
@@ -3219,9 +3224,10 @@ const external_wp_keyboardShortcuts_namespaceObject = window["wp"]["keyboardShor
 /**
  * Return an SVG icon.
  *
- * @param {IconProps} props icon is the SVG component to render
- *                          size is a number specifiying the icon size in pixels
- *                          Other props will be passed to wrapped SVG component
+ * @param {IconProps}                                 props icon is the SVG component to render
+ *                                                          size is a number specifiying the icon size in pixels
+ *                                                          Other props will be passed to wrapped SVG component
+ * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
  *
  * @return {JSX.Element}  Icon component
  */
@@ -3229,14 +3235,15 @@ function Icon({
   icon,
   size = 24,
   ...props
-}) {
+}, ref) {
   return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
     width: size,
     height: size,
-    ...props
+    ...props,
+    ref
   });
 }
-/* harmony default export */ const icon = (Icon);
+/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
 
 ;// CONCATENATED MODULE: external ["wp","primitives"]
 const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
@@ -3872,9 +3879,19 @@ const STORE_NAME = 'core/commands';
 /**
  * Store definition for the commands namespace.
  *
+ * See how the Commands Store is being used in components like [site-hub](https://github.com/WordPress/gutenberg/blob/HEAD/packages/edit-site/src/components/site-hub/index.js#L23) and [document-actions](https://github.com/WordPress/gutenberg/blob/HEAD/packages/edit-post/src/components/header/document-actions/index.js#L14).
+ *
  * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
  *
  * @type {Object}
+ *
+ * @example
+ * ```js
+ * import { store as commandsStore } from '@wordpress/commands';
+ * import { useDispatch } from '@wordpress/data';
+ * ...
+ * const { open: openCommandCenter } = useDispatch( commandsStore );
+ * ```
  */
 const store = (0,external_wp_data_namespaceObject.createReduxStore)(STORE_NAME, {
   reducer: store_reducer,
@@ -4051,6 +4068,10 @@ function CommandInput({
     icon: search
   });
 }
+
+/**
+ * @ignore
+ */
 function CommandMenu() {
   const {
     registerShortcut
@@ -4183,6 +4204,10 @@ function useCommandContext(context) {
  */
 
 
+
+/**
+ * @private
+ */
 const privateApis = {};
 lock(privateApis, {
   useCommandContext: useCommandContext
@@ -4201,9 +4226,25 @@ lock(privateApis, {
 
 
 /**
- * Attach a command to the command palette.
+ * Attach a command to the command palette. Used for static commands.
  *
  * @param {import('../store/actions').WPCommandConfig} command command config.
+ *
+ * @example
+ * ```js
+ * import { useCommand } from '@wordpress/commands';
+ * import { plus } from '@wordpress/icons';
+ *
+ * useCommand( {
+ *     name: 'myplugin/my-command-name',
+ *     label: __( 'Add new post' ),
+ *	   icon: plus,
+ *     callback: ({ close }) => {
+ *         document.location.href = 'post-new.php';
+ *         close();
+ *     },
+ * } );
+ * ```
  */
 function useCommand(command) {
   const {
@@ -4242,9 +4283,73 @@ function useCommand(command) {
 
 
 /**
- * Attach a command loader to the command palette.
+ * Attach a command loader to the command palette. Used for dynamic commands.
  *
  * @param {import('../store/actions').WPCommandLoaderConfig} loader command loader config.
+ *
+ * @example
+ * ```js
+ * import { useCommandLoader } from '@wordpress/commands';
+ * import { post, page, layout, symbolFilled } from '@wordpress/icons';
+ *
+ * const icons = {
+ *     post,
+ *     page,
+ *     wp_template: layout,
+ *     wp_template_part: symbolFilled,
+ * };
+ *
+ * function usePageSearchCommandLoader( { search } ) {
+ *     // Retrieve the pages for the "search" term.
+ *     const { records, isLoading } = useSelect( ( select ) => {
+ *         const { getEntityRecords } = select( coreStore );
+ *         const query = {
+ *             search: !! search ? search : undefined,
+ *             per_page: 10,
+ *             orderby: search ? 'relevance' : 'date',
+ *         };
+ *         return {
+ *             records: getEntityRecords( 'postType', 'page', query ),
+ *             isLoading: ! select( coreStore ).hasFinishedResolution(
+ *                 'getEntityRecords',
+ *                 'postType', 'page', query ]
+ *             ),
+ *         };
+ *     }, [ search ] );
+ *
+ *     // Create the commands.
+ *     const commands = useMemo( () => {
+ *         return ( records ?? [] ).slice( 0, 10 ).map( ( record ) => {
+ *             return {
+ *                 name: record.title?.rendered + ' ' + record.id,
+ *                 label: record.title?.rendered
+ *                     ? record.title?.rendered
+ *                     : __( '(no title)' ),
+ *                 icon: icons[ postType ],
+ *                 callback: ( { close } ) => {
+ *                     const args = {
+ *                         postType,
+ *                         postId: record.id,
+ *                         ...extraArgs,
+ *                     };
+ *                     document.location = addQueryArgs( 'site-editor.php', args );
+ *                     close();
+ *                 },
+ *             };
+ *         } );
+ *     }, [ records, history ] );
+ *
+ *     return {
+ *         commands,
+ *         isLoading,
+ *     };
+ * }
+ *
+ * useCommandLoader( {
+ *     name: 'myplugin/page-search',
+ *     hook: usePageSearchCommandLoader,
+ * } );
+ * ```
  */
 function useCommandLoader(loader) {
   const {

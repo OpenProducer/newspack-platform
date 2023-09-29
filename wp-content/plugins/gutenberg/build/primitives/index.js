@@ -245,19 +245,19 @@ const LinearGradient = props => (0,external_wp_element_namespaceObject.createEle
  * @return {JSX.Element} Stop component
  */
 const Stop = props => (0,external_wp_element_namespaceObject.createElement)('stop', props);
-
+const SVG = (0,external_wp_element_namespaceObject.forwardRef)(
 /**
- *
- * @param {SVGProps} props isPressed indicates whether the SVG should appear as pressed.
- *                         Other props will be passed through to svg component.
+ * @param {SVGProps}                                    props isPressed indicates whether the SVG should appear as pressed.
+ *                                                            Other props will be passed through to svg component.
+ * @param {import('react').ForwardedRef<SVGSVGElement>} ref   The forwarded ref to the SVG element.
  *
  * @return {JSX.Element} Stop component
  */
-const SVG = ({
+({
   className,
   isPressed,
   ...props
-}) => {
+}, ref) => {
   const appliedProps = {
     ...props,
     className: classnames_default()(className, {
@@ -270,9 +270,11 @@ const SVG = ({
   // Disable reason: We need to have a way to render HTML tag for web.
   // eslint-disable-next-line react/forbid-elements
   return (0,external_wp_element_namespaceObject.createElement)("svg", {
-    ...appliedProps
+    ...appliedProps,
+    ref: ref
   });
-};
+});
+SVG.displayName = 'SVG';
 
 ;// CONCATENATED MODULE: ./packages/primitives/build-module/horizontal-rule/index.js
 const HorizontalRule = 'hr';

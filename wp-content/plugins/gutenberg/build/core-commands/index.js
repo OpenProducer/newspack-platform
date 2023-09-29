@@ -78,20 +78,6 @@ const symbol = (0,external_wp_element_namespaceObject.createElement)(external_wp
 }));
 /* harmony default export */ const library_symbol = (symbol);
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/external.js
-
-/**
- * WordPress dependencies
- */
-
-const external = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M19.5 4.5h-7V6h4.44l-5.97 5.97 1.06 1.06L18 7.06v4.44h1.5v-7Zm-13 1a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-3H17v3a.5.5 0 0 1-.5.5h-10a.5.5 0 0 1-.5-.5v-10a.5.5 0 0 1 .5-.5h3V5.5h-3Z"
-}));
-/* harmony default export */ const library_external = (external);
-
 ;// CONCATENATED MODULE: external ["wp","url"]
 const external_wp_url_namespaceObject = window["wp"]["url"];
 ;// CONCATENATED MODULE: external ["wp","router"]
@@ -166,7 +152,8 @@ function useAdminNavigationCommands() {
   });
   (0,external_wp_commands_namespaceObject.useCommand)({
     name: 'core/manage-reusable-blocks',
-    label: (0,external_wp_i18n_namespaceObject.__)('Open patterns'),
+    label: (0,external_wp_i18n_namespaceObject.__)('Patterns'),
+    icon: library_symbol,
     callback: ({
       close
     }) => {
@@ -183,8 +170,7 @@ function useAdminNavigationCommands() {
       } else {
         document.location.href = 'edit.php?post_type=wp_block';
       }
-    },
-    icon: isSiteEditor ? library_symbol : library_external
+    }
   });
 }
 
@@ -313,7 +299,8 @@ function orderEntityRecordsBySearch(records = [], search = '') {
 
 
 const {
-  useHistory: site_editor_navigation_commands_useHistory
+  useHistory: site_editor_navigation_commands_useHistory,
+  useLocation
 } = unlock(external_wp_router_namespaceObject.privateApis);
 const icons = {
   post: library_post,
@@ -402,6 +389,9 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
   search
 }) {
   const history = site_editor_navigation_commands_useHistory();
+  const location = useLocation();
+  const isPatternsPage = location?.params?.path === '/patterns' || location?.params?.postType === 'wp_block';
+  const didAccessPatternsPage = !!location?.params?.didAccessPatternsPage;
   const isBlockBasedTheme = useIsBlockBasedTheme();
   const {
     records,
@@ -447,6 +437,7 @@ const getNavigationCommandLoaderPerTemplate = templateType => function useNaviga
           const args = {
             postType: templateType,
             postId: record.id,
+            didAccessPatternsPage: !isBlockBasedTheme && (isPatternsPage || didAccessPatternsPage) ? 1 : undefined,
             ...extraArgs
           };
           const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
@@ -545,25 +536,6 @@ function useSiteEditorBasicNavigationCommands() {
       }) => {
         const args = {
           path: '/wp_template'
-        };
-        const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
-        if (isSiteEditor) {
-          history.push(args);
-        } else {
-          document.location = targetUrl;
-        }
-        close();
-      }
-    });
-    result.push({
-      name: 'core/edit-site/open-patterns',
-      label: (0,external_wp_i18n_namespaceObject.__)('Patterns'),
-      icon: library_symbol,
-      callback: ({
-        close
-      }) => {
-        const args = {
-          path: '/patterns'
         };
         const targetUrl = (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', args);
         if (isSiteEditor) {

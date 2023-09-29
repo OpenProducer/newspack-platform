@@ -208,6 +208,11 @@ class Woocommerce_Memberships {
 				$lists_to_add[]    = $subscription_list->get_form_id();
 			}
 		}
+		
+		if ( empty( $lists_to_add ) ) {
+			return;
+		}
+
 		$provider = Newspack_Newsletters::get_service_provider();
 		$provider->update_contact_lists_handling_local( $user_email, $lists_to_add );
 		Newspack_Newsletters_Logger::log( 'Reader ' . $user_email . ' added to the following lists: ' . implode( ', ', $lists_to_add ) );

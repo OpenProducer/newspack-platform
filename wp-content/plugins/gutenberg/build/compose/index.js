@@ -2182,6 +2182,7 @@ __webpack_require__.d(__webpack_exports__, {
   "useReducedMotion": () => (/* reexport */ use_reduced_motion),
   "useRefEffect": () => (/* reexport */ useRefEffect),
   "useResizeObserver": () => (/* reexport */ useResizeAware),
+  "useStateWithHistory": () => (/* reexport */ useStateWithHistory),
   "useThrottle": () => (/* reexport */ useThrottle),
   "useViewportMatch": () => (/* reexport */ use_viewport_match),
   "useWarnOnChange": () => (/* reexport */ use_warn_on_change),
@@ -3915,10 +3916,6 @@ function useFocusReturn(onFocusReturn) {
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focus-outside/index.js
 /**
- * External dependencies
- */
-
-/**
  * WordPress dependencies
  */
 
@@ -4553,9 +4550,11 @@ function useMediaQuery(query) {
         if (!mediaQueryList) {
           return () => {};
         }
-        mediaQueryList.addEventListener('change', onStoreChange);
+
+        // Avoid a fatal error when browsers don't support `addEventListener` on MediaQueryList.
+        mediaQueryList.addEventListener?.('change', onStoreChange);
         return () => {
-          mediaQueryList.removeEventListener('change', onStoreChange);
+          mediaQueryList.removeEventListener?.('change', onStoreChange);
         };
       },
       getValue() {
@@ -4606,6 +4605,266 @@ function usePrevious(value) {
  */
 const useReducedMotion = () => useMediaQuery('(prefers-reduced-motion: reduce)');
 /* harmony default export */ const use_reduced_motion = (useReducedMotion);
+
+;// CONCATENATED MODULE: ./packages/undo-manager/build-module/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/** @typedef {import('./types').HistoryRecord}  HistoryRecord */
+/** @typedef {import('./types').HistoryChange}  HistoryChange */
+/** @typedef {import('./types').HistoryChanges} HistoryChanges */
+/** @typedef {import('./types').UndoManager} UndoManager */
+
+/**
+ * Merge changes for a single item into a record of changes.
+ *
+ * @param {Record< string, HistoryChange >} changes1 Previous changes
+ * @param {Record< string, HistoryChange >} changes2 NextChanges
+ *
+ * @return {Record< string, HistoryChange >} Merged changes
+ */
+function mergeHistoryChanges(changes1, changes2) {
+  /**
+   * @type {Record< string, HistoryChange >}
+   */
+  const newChanges = {
+    ...changes1
+  };
+  Object.entries(changes2).forEach(([key, value]) => {
+    if (newChanges[key]) {
+      newChanges[key] = {
+        ...newChanges[key],
+        to: value.to
+      };
+    } else {
+      newChanges[key] = value;
+    }
+  });
+  return newChanges;
+}
+
+/**
+ * Adds history changes for a single item into a record of changes.
+ *
+ * @param {HistoryRecord}  record  The record to merge into.
+ * @param {HistoryChanges} changes The changes to merge.
+ */
+const addHistoryChangesIntoRecord = (record, changes) => {
+  const existingChangesIndex = record?.findIndex(({
+    id: recordIdentifier
+  }) => {
+    return typeof recordIdentifier === 'string' ? recordIdentifier === changes.id : external_wp_isShallowEqual_default()(recordIdentifier, changes.id);
+  });
+  const nextRecord = [...record];
+  if (existingChangesIndex !== -1) {
+    // If the edit is already in the stack leave the initial "from" value.
+    nextRecord[existingChangesIndex] = {
+      id: changes.id,
+      changes: mergeHistoryChanges(nextRecord[existingChangesIndex].changes, changes.changes)
+    };
+  } else {
+    nextRecord.push(changes);
+  }
+  return nextRecord;
+};
+
+/**
+ * Creates an undo manager.
+ *
+ * @return {UndoManager} Undo manager.
+ */
+function createUndoManager() {
+  /**
+   * @type {HistoryRecord[]}
+   */
+  let history = [];
+  /**
+   * @type {HistoryRecord}
+   */
+  let stagedRecord = [];
+  /**
+   * @type {number}
+   */
+  let offset = 0;
+  const dropPendingRedos = () => {
+    history = history.slice(0, offset || undefined);
+    offset = 0;
+  };
+  const appendStagedRecordToLatestHistoryRecord = () => {
+    var _history$index;
+    const index = history.length === 0 ? 0 : history.length - 1;
+    let latestRecord = (_history$index = history[index]) !== null && _history$index !== void 0 ? _history$index : [];
+    stagedRecord.forEach(changes => {
+      latestRecord = addHistoryChangesIntoRecord(latestRecord, changes);
+    });
+    stagedRecord = [];
+    history[index] = latestRecord;
+  };
+
+  /**
+   * Checks whether a record is empty.
+   * A record is considered empty if it the changes keep the same values.
+   * Also updates to function values are ignored.
+   *
+   * @param {HistoryRecord} record
+   * @return {boolean} Whether the record is empty.
+   */
+  const isRecordEmpty = record => {
+    const filteredRecord = record.filter(({
+      changes
+    }) => {
+      return Object.values(changes).some(({
+        from,
+        to
+      }) => typeof from !== 'function' && typeof to !== 'function' && !external_wp_isShallowEqual_default()(from, to));
+    });
+    return !filteredRecord.length;
+  };
+  return {
+    /**
+     * Record changes into the history.
+     *
+     * @param {HistoryRecord=} record   A record of changes to record.
+     * @param {boolean}        isStaged Whether to immediately create an undo point or not.
+     */
+    addRecord(record, isStaged = false) {
+      const isEmpty = !record || isRecordEmpty(record);
+      if (isStaged) {
+        if (isEmpty) {
+          return;
+        }
+        record.forEach(changes => {
+          stagedRecord = addHistoryChangesIntoRecord(stagedRecord, changes);
+        });
+      } else {
+        dropPendingRedos();
+        if (stagedRecord.length) {
+          appendStagedRecordToLatestHistoryRecord();
+        }
+        if (isEmpty) {
+          return;
+        }
+        history.push(record);
+      }
+    },
+    undo() {
+      if (stagedRecord.length) {
+        dropPendingRedos();
+        appendStagedRecordToLatestHistoryRecord();
+      }
+      const undoRecord = history[history.length - 1 + offset];
+      if (!undoRecord) {
+        return;
+      }
+      offset -= 1;
+      return undoRecord;
+    },
+    redo() {
+      const redoRecord = history[history.length + offset];
+      if (!redoRecord) {
+        return;
+      }
+      offset += 1;
+      return redoRecord;
+    },
+    hasUndo() {
+      return !!history[history.length - 1 + offset];
+    },
+    hasRedo() {
+      return !!history[history.length + offset];
+    }
+  };
+}
+
+;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-state-with-history/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+function undoRedoReducer(state, action) {
+  switch (action.type) {
+    case 'UNDO':
+      {
+        const undoRecord = state.manager.undo();
+        if (undoRecord) {
+          return {
+            ...state,
+            value: undoRecord[0].changes.prop.from
+          };
+        }
+        return state;
+      }
+    case 'REDO':
+      {
+        const redoRecord = state.manager.redo();
+        if (redoRecord) {
+          return {
+            ...state,
+            value: redoRecord[0].changes.prop.to
+          };
+        }
+        return state;
+      }
+    case 'RECORD':
+      {
+        state.manager.addRecord([{
+          id: 'object',
+          changes: {
+            prop: {
+              from: state.value,
+              to: action.value
+            }
+          }
+        }], action.isStaged);
+        return {
+          ...state,
+          value: action.value
+        };
+      }
+  }
+  return state;
+}
+function initReducer(value) {
+  return {
+    manager: createUndoManager(),
+    value
+  };
+}
+
+/**
+ * useState with undo/redo history.
+ *
+ * @param initialValue Initial value.
+ * @return Value, setValue, hasUndo, hasRedo, undo, redo.
+ */
+function useStateWithHistory(initialValue) {
+  const [state, dispatch] = (0,external_wp_element_namespaceObject.useReducer)(undoRedoReducer, initialValue, initReducer);
+  return {
+    value: state.value,
+    setValue: (0,external_wp_element_namespaceObject.useCallback)((newValue, isStaged) => {
+      dispatch({
+        type: 'RECORD',
+        value: newValue,
+        isStaged
+      });
+    }, []),
+    hasUndo: state.manager.hasUndo(),
+    hasRedo: state.manager.hasRedo(),
+    undo: (0,external_wp_element_namespaceObject.useCallback)(() => {
+      dispatch({
+        type: 'UNDO'
+      });
+    }, []),
+    redo: (0,external_wp_element_namespaceObject.useCallback)(() => {
+      dispatch({
+        type: 'REDO'
+      });
+    }, [])
+  };
+}
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-viewport-match/index.js
 /**
@@ -5567,6 +5826,7 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
 
 
 // Hooks.
+
 
 
 

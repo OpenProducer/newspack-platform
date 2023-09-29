@@ -1,3 +1,42 @@
+## [2.1.1](https://github.com/Automattic/newspack-newsletters/compare/v2.1.0...v2.1.1) (2023-09-26)
+
+
+### Bug Fixes
+
+* avoid duplicate firing of add_contact ([#1300](https://github.com/Automattic/newspack-newsletters/issues/1300)) ([80fe4c4](https://github.com/Automattic/newspack-newsletters/commit/80fe4c4e5e779c4a625ee8964fc3d47aed880a6b))
+
+# [2.1.0](https://github.com/Automattic/newspack-newsletters/compare/v2.0.1...v2.1.0) (2023-09-25)
+
+
+### Bug Fixes
+
+* buttons' border radius, width, padding and colors ([#1276](https://github.com/Automattic/newspack-newsletters/issues/1276)) ([7b3e0f3](https://github.com/Automattic/newspack-newsletters/commit/7b3e0f38f64e5a8cdf75873872f5928b10a94d9d))
+
+
+### Features
+
+* add `newsletter_id` to the `newspack_newsletters_render_mjml_component` filter ([#1292](https://github.com/Automattic/newspack-newsletters/issues/1292)) ([392991b](https://github.com/Automattic/newspack-newsletters/commit/392991bc0eee8acce91817fd148a5e89f2d9f295))
+
+# [2.1.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v2.0.1...v2.1.0-alpha.1) (2023-09-21)
+
+
+### Bug Fixes
+
+* buttons' border radius, width, padding and colors ([#1276](https://github.com/Automattic/newspack-newsletters/issues/1276)) ([7b3e0f3](https://github.com/Automattic/newspack-newsletters/commit/7b3e0f38f64e5a8cdf75873872f5928b10a94d9d))
+
+
+### Features
+
+* add `newsletter_id` to the `newspack_newsletters_render_mjml_component` filter ([#1292](https://github.com/Automattic/newspack-newsletters/issues/1292)) ([392991b](https://github.com/Automattic/newspack-newsletters/commit/392991bc0eee8acce91817fd148a5e89f2d9f295))
+
+## [2.0.1](https://github.com/Automattic/newspack-newsletters/compare/v2.0.0...v2.0.1) (2023-09-18)
+
+
+### Bug Fixes
+
+* crash when adding underwritten posts to Posts Inserter ([#1289](https://github.com/Automattic/newspack-newsletters/issues/1289)) ([9964766](https://github.com/Automattic/newspack-newsletters/commit/996476689dd763a9010214151e921347f7744e0b))
+* fatal error from nonexistent class in main plugin ([#1288](https://github.com/Automattic/newspack-newsletters/issues/1288)) ([ae27d30](https://github.com/Automattic/newspack-newsletters/commit/ae27d304d3783d0a103ed0fa3613cfa16bab83fd))
+
 # [2.0.0](https://github.com/Automattic/newspack-newsletters/compare/v1.68.0...v2.0.0) (2023-09-13)
 
 
