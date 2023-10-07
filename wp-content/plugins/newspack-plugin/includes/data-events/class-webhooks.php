@@ -52,8 +52,8 @@ final class Webhooks {
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		\add_action( 'init', [ __CLASS__, 'register_request_post_type' ] );
-		\add_action( 'init', [ __CLASS__, 'register_endpoint_taxonomy' ] );
+		\add_action( 'init', [ __CLASS__, 'register_request_post_type' ], 1, 0 );
+		\add_action( 'init', [ __CLASS__, 'register_endpoint_taxonomy' ], 1, 0 );
 		\add_action( 'init', [ __CLASS__, 'register_cron_events' ] );
 		\add_action( 'newspack_deactivation', [ __CLASS__, 'clear_cron_events' ] );
 		\add_action( 'newspack_data_event_dispatch', [ __CLASS__, 'handle_dispatch' ], 10, 4 );

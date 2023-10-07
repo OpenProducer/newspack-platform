@@ -109,7 +109,7 @@ final class GAM_Scripts {
 				'unique_id'        => $unique_id,
 				'name'             => esc_attr( $ad_unit['name'] ),
 				'code'             => esc_attr( $ad_unit['code'] ),
-				'path'             => $ad_unit['path'],
+				'path'             => $ad_unit['path'] ?? '',
 				'sizes'            => $sizes,
 				'fluid'            => (bool) $ad_unit['fluid'],
 				'fixed_height'     => $fixed_height,

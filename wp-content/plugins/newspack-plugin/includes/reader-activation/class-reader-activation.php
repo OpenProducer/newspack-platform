@@ -949,10 +949,16 @@ final class Reader_Activation {
 	 * Render a honeypot field to guard against bot form submissions. Note that
 	 * this field is named `email` to hopefully catch more bots who might be
 	 * looking for such fields, where as the "real" field is named "npe".
+	 * 
+	 * Not rendered if reCAPTCHA is enabled as it's a superior spam protection.
 	 *
 	 * @param string $placeholder Placeholder text to render in the field.
 	 */
 	public static function render_honeypot_field( $placeholder = '' ) {
+		if ( Recaptcha::can_use_captcha() ) {
+			return;
+		}
+
 		if ( empty( $placeholder ) ) {
 			$placeholder = __( 'Enter your email address', 'newspack-plugin' );
 		}

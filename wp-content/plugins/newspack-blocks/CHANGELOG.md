@@ -1,3 +1,10 @@
+## [1.75.2](https://github.com/Automattic/newspack-blocks/compare/v1.75.1...v1.75.2) (2023-10-04)
+
+
+### Bug Fixes
+
+* allow order details wrapper to render ([#1547](https://github.com/Automattic/newspack-blocks/issues/1547)) ([b76f196](https://github.com/Automattic/newspack-blocks/commit/b76f196dc4b73d881237c3c015d60db00ee49877))
+
 ## [1.75.1](https://github.com/Automattic/newspack-blocks/compare/v1.75.0...v1.75.1) (2023-09-28)
 
 

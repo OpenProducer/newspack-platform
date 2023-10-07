@@ -1,3 +1,10 @@
+## [1.44.6](https://github.com/Automattic/newspack-ads/compare/v1.44.5...v1.44.6) (2023-10-02)
+
+
+### Bug Fixes
+
+* **gam:** handle missing ad unit 'path' ([#742](https://github.com/Automattic/newspack-ads/issues/742)) ([f43473b](https://github.com/Automattic/newspack-ads/commit/f43473b28c62509c9e61b4e26f8083a720931fe6))
+
 ## [1.44.5](https://github.com/Automattic/newspack-ads/compare/v1.44.4...v1.44.5) (2023-09-26)
 
 

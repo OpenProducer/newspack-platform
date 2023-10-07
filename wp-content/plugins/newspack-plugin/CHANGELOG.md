@@ -1,3 +1,24 @@
+## [2.7.5](https://github.com/Automattic/newspack-plugin/compare/v2.7.4...v2.7.5) (2023-10-05)
+
+
+### Bug Fixes
+
+* **data-events:** earlier priority for webhook registration ([#2683](https://github.com/Automattic/newspack-plugin/issues/2683)) ([3467434](https://github.com/Automattic/newspack-plugin/commit/3467434cf6008326766b01c3f777ef2d1c23cd3e))
+
+## [2.7.4](https://github.com/Automattic/newspack-plugin/compare/v2.7.3...v2.7.4) (2023-10-02)
+
+
+### Bug Fixes
+
+* avoid deepMapKeys NPM package ([#2680](https://github.com/Automattic/newspack-plugin/issues/2680)) ([60b9828](https://github.com/Automattic/newspack-plugin/commit/60b9828f5ae41bc11763b4867f44000a4394d1c6))
+
+## [2.7.3](https://github.com/Automattic/newspack-plugin/compare/v2.7.2...v2.7.3) (2023-09-29)
+
+
+### Bug Fixes
+
+* remove honeypot field if using reCAPTCHA ([#2667](https://github.com/Automattic/newspack-plugin/issues/2667)) ([9c6c325](https://github.com/Automattic/newspack-plugin/commit/9c6c3259c7638c917790705b6d76bbfdc9ebcb50))
+
 ## [2.7.2](https://github.com/Automattic/newspack-plugin/compare/v2.7.1...v2.7.2) (2023-09-28)
 
 

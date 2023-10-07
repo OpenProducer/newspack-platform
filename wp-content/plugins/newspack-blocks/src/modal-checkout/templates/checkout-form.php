@@ -76,7 +76,7 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 	}
 	?>
 
-	<div id="order-details-wrapper" class="<?php echo esc_attr( ! \Newspack_Blocks\Modal_Checkout::should_show_order_details() ? 'hidden' : '' ); ?>">
+	<div id="order-details-wrapper">
 		<?php do_action( 'woocommerce_checkout_before_order_review_heading' ); ?>
 		<h3 id="order_review_heading" class="screen-reader-text"><?php esc_html_e( 'Order Details', 'newspack-blocks' ); ?></h3>
 		<?php do_action( 'woocommerce_checkout_before_order_review' ); ?>
