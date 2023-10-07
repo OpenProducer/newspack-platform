@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6a1cd07dbd802db7ca7ce16cdc29349c
+class ComposerStaticInit55b33596092552749c67fce9198813c8
 {
     public static $prefixLengthsPsr4 = array (
         'T' => 
@@ -163,6 +163,7 @@ class ComposerStaticInit6a1cd07dbd802db7ca7ce16cdc29349c
         'TEC\\Events\\Integrations\\Plugins\\WordPress_SEO\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/WordPress_SEO/Provider.php',
         'TEC\\Events\\Integrations\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Provider.php',
         'TEC\\Events\\Legacy\\Views\\V1\\Provider' => __DIR__ . '/../..' . '/src/Events/Legacy/Views/V1/Provider.php',
+        'TEC\\Events\\SEO\\Controller' => __DIR__ . '/../..' . '/src/Events/SEO/Controller.php',
         'TEC\\Events\\Site_Health\\Info_Section' => __DIR__ . '/../..' . '/src/Events/Site_Health/Info_Section.php',
         'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
         'TEC\\Events\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Events/Telemetry/Provider.php',
@@ -271,6 +272,7 @@ class ComposerStaticInit6a1cd07dbd802db7ca7ce16cdc29349c
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\Json_Ld_Data' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/Json_Ld_Data.php',
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\List_Behavior' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/List_Behavior.php',
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\With_Fast_Forward_Link' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/With_Fast_Forward_Link.php',
+        'Tribe\\Events\\Views\\V2\\Views\\Traits\\With_Noindex' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/With_Noindex.php',
         'Tribe\\Events\\Views\\V2\\Views\\Traits\\iCal_Data' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Traits/iCal_Data.php',
         'Tribe\\Events\\Views\\V2\\Views\\Widgets\\Widget_List_View' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Widgets/Widget_List_View.php',
         'Tribe\\Events\\Views\\V2\\Views\\Widgets\\Widget_View' => __DIR__ . '/../..' . '/src/Tribe/Views/V2/Views/Widgets/Widget_View.php',
@@ -300,9 +302,9 @@ class ComposerStaticInit6a1cd07dbd802db7ca7ce16cdc29349c
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6a1cd07dbd802db7ca7ce16cdc29349c::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6a1cd07dbd802db7ca7ce16cdc29349c::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6a1cd07dbd802db7ca7ce16cdc29349c::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit55b33596092552749c67fce9198813c8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit55b33596092552749c67fce9198813c8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit55b33596092552749c67fce9198813c8::$classMap;
 
         }, null, ClassLoader::class);
     }

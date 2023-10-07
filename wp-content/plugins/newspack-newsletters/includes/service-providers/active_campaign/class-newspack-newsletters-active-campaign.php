@@ -818,6 +818,9 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			'p[' . $sync_result['list_id'] . ']'    => $sync_result['list_id'],
 			'm[' . $sync_result['message_id'] . ']' => 100, // 100 = 100% of contacts will receive this.
 		];
+		if ( defined( 'NEWSPACK_NEWSLETTERS_AC_DISABLE_LINK_TRACKING' ) && NEWSPACK_NEWSLETTERS_AC_DISABLE_LINK_TRACKING ) {
+			$campaign_data['tracklinks'] = 'none';
+		}
 		return $this->api_v1_request( 'campaign_create', 'POST', [ 'body' => $campaign_data ] );
 	}
 

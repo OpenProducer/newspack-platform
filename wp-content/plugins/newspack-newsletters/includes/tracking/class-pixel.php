@@ -28,6 +28,7 @@ final class Pixel {
 		\add_action( 'init', [ __CLASS__, 'rewrite_rule' ] );
 		\add_filter( 'redirect_canonical', [ __CLASS__, 'redirect_canonical' ], 10, 2 );
 		\add_filter( 'query_vars', [ __CLASS__, 'query_vars' ] );
+		\add_action( 'init', [ __CLASS__, 'render' ], 2, 0 ); // Run on priority 2 to allow Data Events and ActionScheduler to initialize first.
 		\add_action( 'template_redirect', [ __CLASS__, 'render' ] );
 	}
 
@@ -52,6 +53,8 @@ final class Pixel {
 
 	/**
 	 * Add rewrite rule for tracking pixel.
+	 *
+	 * Backwards compatibility for old tracking URLs.
 	 */
 	public static function rewrite_rule() {
 		\add_rewrite_rule( 'np-newsletters.gif', 'index.php?' . self::QUERY_VAR . '=1', 'top' );
@@ -103,11 +106,12 @@ final class Pixel {
 		}
 		$url = \add_query_arg(
 			[
-				'id'  => $post_id,
-				'tid' => $tracking_id,
-				'em'  => Utils::get_email_address_tag(),
+				self::QUERY_VAR => 1,
+				'id'            => $post_id,
+				'tid'           => $tracking_id,
+				'em'            => Utils::get_email_address_tag(),
 			],
-			\home_url( 'np-newsletters.gif' )
+			\home_url()
 		);
 		return $url;
 	}
@@ -149,7 +153,7 @@ final class Pixel {
 	 * Render the tracking pixel.
 	 */
 	public static function render() {
-		if ( ! \get_query_var( self::QUERY_VAR ) ) {
+		if ( ! \get_query_var( self::QUERY_VAR ) && ! isset( $_GET[ self::QUERY_VAR ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 

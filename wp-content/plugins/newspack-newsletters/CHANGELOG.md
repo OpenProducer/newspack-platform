@@ -1,3 +1,24 @@
+## [2.1.4](https://github.com/Automattic/newspack-newsletters/compare/v2.1.3...v2.1.4) (2023-10-05)
+
+
+### Bug Fixes
+
+* execute tracking in an earlier hook ([#1314](https://github.com/Automattic/newspack-newsletters/issues/1314)) ([e48aeab](https://github.com/Automattic/newspack-newsletters/commit/e48aeabeacd0adc8892db054b9c2299abdb0f913))
+
+## [2.1.3](https://github.com/Automattic/newspack-newsletters/compare/v2.1.2...v2.1.3) (2023-09-29)
+
+
+### Bug Fixes
+
+* remove honeypot field if using reCAPTCHA ([#1301](https://github.com/Automattic/newspack-newsletters/issues/1301)) ([772ca53](https://github.com/Automattic/newspack-newsletters/commit/772ca53847a8d1f6864a2ec9afc830ca0bd5a189))
+
+## [2.1.2](https://github.com/Automattic/newspack-newsletters/compare/v2.1.1...v2.1.2) (2023-09-28)
+
+
+### Bug Fixes
+
+* **activecampaign:** allow link tracking to be disabled ([#1302](https://github.com/Automattic/newspack-newsletters/issues/1302)) ([670d856](https://github.com/Automattic/newspack-newsletters/commit/670d856591cd861741c2d10c901a651b71c2c489))
+
 ## [2.1.1](https://github.com/Automattic/newspack-newsletters/compare/v2.1.0...v2.1.1) (2023-09-26)
 
 

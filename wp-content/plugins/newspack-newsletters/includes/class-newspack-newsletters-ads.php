@@ -710,6 +710,10 @@ final class Newspack_Newsletters_Ads {
 		if ( empty( self::$inserted_ads[ $newsletter_id ] ) ) {
 			self::$inserted_ads[ $newsletter_id ] = [];
 		}
+		// Avoid duplicate.
+		if ( in_array( $ad_id, self::$inserted_ads[ $newsletter_id ], true ) ) {
+			return;
+		}
 		self::$inserted_ads[ $newsletter_id ][] = $ad_id;
 		update_post_meta( $newsletter_id, 'inserted_ads', self::$inserted_ads[ $newsletter_id ] );
 	}

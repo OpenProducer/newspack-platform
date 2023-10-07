@@ -15,7 +15,7 @@ final class Data_Events {
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		add_action( 'init', [ __CLASS__, 'register_listeners' ] );
+		add_action( 'plugins_loaded', [ __CLASS__, 'register_listeners' ] );
 	}
 
 	/**

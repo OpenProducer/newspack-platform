@@ -19,12 +19,15 @@ final class Click {
 	public static function init() {
 		\add_action( 'init', [ __CLASS__, 'rewrite_rule' ] );
 		\add_filter( 'query_vars', [ __CLASS__, 'query_vars' ] );
+		\add_action( 'init', [ __CLASS__, 'handle_click' ], 2, 0 ); // Run on priority 2 to allow Data Events and ActionScheduler to initialize first.
 		\add_action( 'template_redirect', [ __CLASS__, 'handle_click' ] );
 		\add_filter( 'newspack_newsletters_process_link', [ __CLASS__, 'process_link' ], 10, 3 );
 	}
 
 	/**
 	 * Add rewrite rule for tracking url.
+	 *
+	 * Backwards compatibility for old tracking URLs.
 	 */
 	public static function rewrite_rule() {
 		\add_rewrite_rule( 'np-newsletters-click', 'index.php?' . self::QUERY_VAR . '=1', 'top' );
@@ -51,10 +54,12 @@ final class Click {
 	/**
 	 * Get tracking URL.
 	 *
+	 * Formerly 'home_url( 'np-newsletters-click' );'
+	 *
 	 * @return string
 	 */
 	public static function get_tracking_url() {
-		return \home_url( 'np-newsletters-click' );
+		return \add_query_arg( [ self::QUERY_VAR => 1 ], \home_url() );
 	}
 
 	/**
@@ -129,7 +134,7 @@ final class Click {
 	 * Handle proxied URL click and redirect to destination.
 	 */
 	public static function handle_click() {
-		if ( ! \get_query_var( self::QUERY_VAR ) ) {
+		if ( ! \get_query_var( self::QUERY_VAR ) && ! isset( $_GET[ self::QUERY_VAR ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			return;
 		}
 
