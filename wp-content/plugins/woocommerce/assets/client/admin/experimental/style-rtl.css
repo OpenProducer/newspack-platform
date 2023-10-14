@@ -316,6 +316,9 @@ a.woocommerce-experimental-list__item {
 .woocommerce-experimental-list__item:hover .woocommerce-list__item-title {
   color: var(--wp-admin-theme-color);
 }
+.woocommerce-experimental-list__item:hover .woocommerce-task-list__item-badge {
+  background-color: #fff;
+}
 .woocommerce-experimental-list__item:hover .woocommerce-list__item-before > svg {
   fill: var(--wp-admin-theme-color);
 }
@@ -416,6 +419,20 @@ a.woocommerce-experimental-list__item {
 }
 .woocommerce-task-list__item .woocommerce-task-list__item-title {
   color: var(--wp-admin-theme-color);
+  display: flex;
+  -moz-column-gap: 12px;
+       column-gap: 12px;
+  row-gap: 4px;
+  flex-wrap: wrap;
+}
+.woocommerce-task-list__item .woocommerce-task-list__item-badge {
+  padding: 0 10px;
+  background-color: #f6f7f7;
+  border-radius: 2px;
+  color: #2f2f2f;
+  font-size: 11px;
+  font-weight: 500;
+  line-height: 20px;
 }
 .woocommerce-task-list__item .woocommerce-task__additional-info,
 .woocommerce-task-list__item .woocommerce-task-list__item-expandable-content,

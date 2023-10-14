@@ -65,6 +65,25 @@
 		"successMessage": {
 			"type": "string",
 			"default": "Thank you for signing up!"
+		},
+		"className": {
+			"type": "string"
+		},
+		"textColor": {
+			"type": "string",
+			"default": "#ffffff"
+		},
+		"textColorName": {
+			"type": "string",
+			"default": ""
+		},
+		"backgroundColor": {
+			"type": "string",
+			"default": "#dd3333"
+		},
+		"backgroundColorName": {
+			"type": "string",
+			"default": ""
 		}
 	},
 	"supports": {

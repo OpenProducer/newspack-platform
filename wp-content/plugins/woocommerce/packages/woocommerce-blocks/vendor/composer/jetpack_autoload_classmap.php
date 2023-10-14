@@ -7,7 +7,7 @@ $baseDir   = dirname($vendorDir);
 
 return array(
 	'Automattic\\Jetpack\\Autoloader\\AutoloadGenerator' => array(
-		'version' => '2.11.21.0',
+		'version' => '2.11.22.0',
 		'path'    => $vendorDir . '/automattic/jetpack-autoloader/src/AutoloadGenerator.php'
 	),
 );

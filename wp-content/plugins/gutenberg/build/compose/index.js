@@ -1,4 +1,4 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 8294:
@@ -19,12 +19,12 @@ return /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 134:
-/***/ (function(__unused_webpack_module, __webpack_exports__, __nested_webpack_require_622__) {
+/***/ (function(__unused_webpack_module, __nested_webpack_exports__, __nested_webpack_require_622__) {
 
 "use strict";
 
 // EXPORTS
-__nested_webpack_require_622__.d(__webpack_exports__, {
+__nested_webpack_require_622__.d(__nested_webpack_exports__, {
   "default": function() { return /* binding */ clipboard; }
 });
 
@@ -957,7 +957,7 @@ module.exports.TinyEmitter = E;
 /***/ }),
 
 /***/ 7973:
-/***/ ((module, exports, __webpack_require__) => {
+/***/ (function(module, exports, __webpack_require__) {
 
 var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /**
@@ -2023,7 +2023,7 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /***/ }),
 
 /***/ 5538:
-/***/ (() => {
+/***/ (function() {
 
 /**
  * adds a bindGlobal method to Mousetrap that allows you to
@@ -2103,93 +2103,93 @@ var __WEBPACK_AMD_DEFINE_RESULT__;/*global define:false */
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
+/******/ 		__webpack_require__.n = function(module) {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+!function() {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "__experimentalUseDialog": () => (/* reexport */ use_dialog),
-  "__experimentalUseDragging": () => (/* reexport */ useDragging),
-  "__experimentalUseDropZone": () => (/* reexport */ useDropZone),
-  "__experimentalUseFixedWindowList": () => (/* reexport */ useFixedWindowList),
-  "__experimentalUseFocusOutside": () => (/* reexport */ useFocusOutside),
-  "compose": () => (/* reexport */ higher_order_compose),
-  "createHigherOrderComponent": () => (/* reexport */ createHigherOrderComponent),
-  "debounce": () => (/* reexport */ debounce),
-  "ifCondition": () => (/* reexport */ if_condition),
-  "pipe": () => (/* reexport */ higher_order_pipe),
-  "pure": () => (/* reexport */ higher_order_pure),
-  "throttle": () => (/* reexport */ throttle),
-  "useAsyncList": () => (/* reexport */ use_async_list),
-  "useConstrainedTabbing": () => (/* reexport */ use_constrained_tabbing),
-  "useCopyOnClick": () => (/* reexport */ useCopyOnClick),
-  "useCopyToClipboard": () => (/* reexport */ useCopyToClipboard),
-  "useDebounce": () => (/* reexport */ useDebounce),
-  "useDisabled": () => (/* reexport */ useDisabled),
-  "useFocusOnMount": () => (/* reexport */ useFocusOnMount),
-  "useFocusReturn": () => (/* reexport */ use_focus_return),
-  "useFocusableIframe": () => (/* reexport */ useFocusableIframe),
-  "useInstanceId": () => (/* reexport */ use_instance_id),
-  "useIsomorphicLayoutEffect": () => (/* reexport */ use_isomorphic_layout_effect),
-  "useKeyboardShortcut": () => (/* reexport */ use_keyboard_shortcut),
-  "useMediaQuery": () => (/* reexport */ useMediaQuery),
-  "useMergeRefs": () => (/* reexport */ useMergeRefs),
-  "usePrevious": () => (/* reexport */ usePrevious),
-  "useReducedMotion": () => (/* reexport */ use_reduced_motion),
-  "useRefEffect": () => (/* reexport */ useRefEffect),
-  "useResizeObserver": () => (/* reexport */ useResizeAware),
-  "useStateWithHistory": () => (/* reexport */ useStateWithHistory),
-  "useThrottle": () => (/* reexport */ useThrottle),
-  "useViewportMatch": () => (/* reexport */ use_viewport_match),
-  "useWarnOnChange": () => (/* reexport */ use_warn_on_change),
-  "withGlobalEvents": () => (/* reexport */ withGlobalEvents),
-  "withInstanceId": () => (/* reexport */ with_instance_id),
-  "withSafeTimeout": () => (/* reexport */ with_safe_timeout),
-  "withState": () => (/* reexport */ withState)
+  __experimentalUseDialog: function() { return /* reexport */ use_dialog; },
+  __experimentalUseDragging: function() { return /* reexport */ useDragging; },
+  __experimentalUseDropZone: function() { return /* reexport */ useDropZone; },
+  __experimentalUseFixedWindowList: function() { return /* reexport */ useFixedWindowList; },
+  __experimentalUseFocusOutside: function() { return /* reexport */ useFocusOutside; },
+  compose: function() { return /* reexport */ higher_order_compose; },
+  createHigherOrderComponent: function() { return /* reexport */ createHigherOrderComponent; },
+  debounce: function() { return /* reexport */ debounce; },
+  ifCondition: function() { return /* reexport */ if_condition; },
+  pipe: function() { return /* reexport */ higher_order_pipe; },
+  pure: function() { return /* reexport */ higher_order_pure; },
+  throttle: function() { return /* reexport */ throttle; },
+  useAsyncList: function() { return /* reexport */ use_async_list; },
+  useConstrainedTabbing: function() { return /* reexport */ use_constrained_tabbing; },
+  useCopyOnClick: function() { return /* reexport */ useCopyOnClick; },
+  useCopyToClipboard: function() { return /* reexport */ useCopyToClipboard; },
+  useDebounce: function() { return /* reexport */ useDebounce; },
+  useDisabled: function() { return /* reexport */ useDisabled; },
+  useFocusOnMount: function() { return /* reexport */ useFocusOnMount; },
+  useFocusReturn: function() { return /* reexport */ use_focus_return; },
+  useFocusableIframe: function() { return /* reexport */ useFocusableIframe; },
+  useInstanceId: function() { return /* reexport */ use_instance_id; },
+  useIsomorphicLayoutEffect: function() { return /* reexport */ use_isomorphic_layout_effect; },
+  useKeyboardShortcut: function() { return /* reexport */ use_keyboard_shortcut; },
+  useMediaQuery: function() { return /* reexport */ useMediaQuery; },
+  useMergeRefs: function() { return /* reexport */ useMergeRefs; },
+  usePrevious: function() { return /* reexport */ usePrevious; },
+  useReducedMotion: function() { return /* reexport */ use_reduced_motion; },
+  useRefEffect: function() { return /* reexport */ useRefEffect; },
+  useResizeObserver: function() { return /* reexport */ useResizeAware; },
+  useStateWithHistory: function() { return /* reexport */ useStateWithHistory; },
+  useThrottle: function() { return /* reexport */ useThrottle; },
+  useViewportMatch: function() { return /* reexport */ use_viewport_match; },
+  useWarnOnChange: function() { return /* reexport */ use_warn_on_change; },
+  withGlobalEvents: function() { return /* reexport */ withGlobalEvents; },
+  withInstanceId: function() { return /* reexport */ with_instance_id; },
+  withSafeTimeout: function() { return /* reexport */ with_safe_timeout; },
+  withState: function() { return /* reexport */ withState; }
 });
 
 ;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
@@ -2534,7 +2534,7 @@ function __disposeResources(env) {
   return next();
 }
 
-/* harmony default export */ const tslib_es6 = ({
+/* harmony default export */ var tslib_es6 = ({
   __extends,
   __assign,
   __rest,
@@ -3051,7 +3051,7 @@ const basePipe = (reverse = false) => (...funcs) => (...args) => {
  */
 const pipe = basePipe();
 
-/* harmony default export */ const higher_order_pipe = (pipe);
+/* harmony default export */ var higher_order_pipe = (pipe);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/compose.js
 /**
@@ -3068,10 +3068,10 @@ const pipe = basePipe();
  * @see https://docs-lodash.com/v4/flow-right/
  */
 const compose = basePipe(true);
-/* harmony default export */ const higher_order_compose = (compose);
+/* harmony default export */ var higher_order_compose = (compose);
 
-;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+;// CONCATENATED MODULE: external "React"
+var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/if-condition/index.js
 
 /**
@@ -3105,16 +3105,18 @@ function ifCondition(predicate) {
     if (!predicate(props)) {
       return null;
     }
-    return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, {
+    return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
       ...props
     });
   }, 'ifCondition');
 }
-/* harmony default export */ const if_condition = (ifCondition);
+/* harmony default export */ var if_condition = (ifCondition);
 
 ;// CONCATENATED MODULE: external ["wp","isShallowEqual"]
-const external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
+var external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
 var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(external_wp_isShallowEqual_namespaceObject);
+;// CONCATENATED MODULE: external ["wp","element"]
+var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/pure/index.js
 
 /**
@@ -3149,16 +3151,16 @@ const pure = createHigherOrderComponent(function (WrappedComponent) {
       return !external_wp_isShallowEqual_default()(nextProps, this.props);
     }
     render() {
-      return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, {
+      return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
         ...this.props
       });
     }
   };
 }, 'pure');
-/* harmony default export */ const higher_order_pure = (pure);
+/* harmony default export */ var higher_order_pure = (pure);
 
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
-const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-global-events/listener.js
 /**
@@ -3197,7 +3199,7 @@ class Listener {
     });
   }
 }
-/* harmony default export */ const listener = (Listener);
+/* harmony default export */ var listener = (Listener);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-global-events/index.js
 
@@ -3282,14 +3284,14 @@ function withGlobalEvents(eventTypesToHandlers) {
         }
       }
       render() {
-        return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, {
+        return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
           ...this.props.ownProps,
           ref: this.handleRef
         });
       }
     }
     return (0,external_wp_element_namespaceObject.forwardRef)((props, ref) => {
-      return (0,external_wp_element_namespaceObject.createElement)(Wrapper, {
+      return (0,external_React_namespaceObject.createElement)(Wrapper, {
         ownProps: props,
         forwardedRef: ref
       });
@@ -3344,7 +3346,7 @@ function useInstanceId(object, prefix, preferredId) {
     return prefix ? `${prefix}-${id}` : id;
   }, [object, preferredId, prefix]);
 }
-/* harmony default export */ const use_instance_id = (useInstanceId);
+/* harmony default export */ var use_instance_id = (useInstanceId);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-instance-id/index.js
 
@@ -3362,13 +3364,13 @@ const withInstanceId = createHigherOrderComponent(WrappedComponent => {
   return props => {
     const instanceId = use_instance_id(WrappedComponent);
     // @ts-ignore
-    return (0,external_wp_element_namespaceObject.createElement)(WrappedComponent, {
+    return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
       ...props,
       instanceId: instanceId
     });
   };
 }, 'instanceId');
-/* harmony default export */ const with_instance_id = (withInstanceId);
+/* harmony default export */ var with_instance_id = (withInstanceId);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-safe-timeout/index.js
 
@@ -3422,7 +3424,7 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
     render() {
       return (
         // @ts-ignore
-        (0,external_wp_element_namespaceObject.createElement)(OriginalComponent, {
+        (0,external_React_namespaceObject.createElement)(OriginalComponent, {
           ...this.props,
           setTimeout: this.setTimeout,
           clearTimeout: this.clearTimeout
@@ -3431,7 +3433,7 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
     }
   };
 }, 'withSafeTimeout');
-/* harmony default export */ const with_safe_timeout = (withSafeTimeout);
+/* harmony default export */ var with_safe_timeout = (withSafeTimeout);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-state/index.js
 
@@ -3469,7 +3471,7 @@ function withState(initialState = {}) {
         this.state = initialState;
       }
       render() {
-        return (0,external_wp_element_namespaceObject.createElement)(OriginalComponent, {
+        return (0,external_React_namespaceObject.createElement)(OriginalComponent, {
           ...this.props,
           ...this.state,
           setState: this.setState
@@ -3480,9 +3482,9 @@ function withState(initialState = {}) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","keycodes"]
-const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
+var external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// CONCATENATED MODULE: external ["wp","dom"]
-const external_wp_dom_namespaceObject = window["wp"]["dom"];
+var external_wp_dom_namespaceObject = window["wp"]["dom"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-ref-effect/index.js
 /**
  * External dependencies
@@ -3612,7 +3614,7 @@ function useConstrainedTabbing() {
     };
   }, []);
 }
-/* harmony default export */ const use_constrained_tabbing = (useConstrainedTabbing);
+/* harmony default export */ var use_constrained_tabbing = (useConstrainedTabbing);
 
 // EXTERNAL MODULE: ./node_modules/clipboard/dist/clipboard.js
 var dist_clipboard = __webpack_require__(8294);
@@ -3912,7 +3914,7 @@ function useFocusReturn(onFocusReturn) {
     }
   }, []);
 }
-/* harmony default export */ const use_focus_return = (useFocusReturn);
+/* harmony default export */ var use_focus_return = (useFocusReturn);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-focus-outside/index.js
 /**
@@ -4256,7 +4258,7 @@ function useDialog(options) {
     tabIndex: -1
   }];
 }
-/* harmony default export */ const use_dialog = (useDialog);
+/* harmony default export */ var use_dialog = (useDialog);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-disabled/index.js
 /**
@@ -4353,7 +4355,7 @@ function useDisabled({
  * throws a warning when using useLayoutEffect in that environment.
  */
 const useIsomorphicLayoutEffect = typeof window !== 'undefined' ? external_wp_element_namespaceObject.useLayoutEffect : external_wp_element_namespaceObject.useEffect;
-/* harmony default export */ const use_isomorphic_layout_effect = (useIsomorphicLayoutEffect);
+/* harmony default export */ var use_isomorphic_layout_effect = (useIsomorphicLayoutEffect);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-dragging/index.js
 /**
@@ -4514,7 +4516,7 @@ shortcuts, callback, {
     };
   }, [shortcuts, bindGlobal, eventName, target, isDisabled]);
 }
-/* harmony default export */ const use_keyboard_shortcut = (useKeyboardShortcut);
+/* harmony default export */ var use_keyboard_shortcut = (useKeyboardShortcut);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-media-query/index.js
 /**
@@ -4604,7 +4606,7 @@ function usePrevious(value) {
  * @return {boolean} Reduced motion preference value.
  */
 const useReducedMotion = () => useMediaQuery('(prefers-reduced-motion: reduce)');
-/* harmony default export */ const use_reduced_motion = (useReducedMotion);
+/* harmony default export */ var use_reduced_motion = (useReducedMotion);
 
 ;// CONCATENATED MODULE: ./packages/undo-manager/build-module/index.js
 /**
@@ -4947,7 +4949,7 @@ const useViewportMatch = (breakpoint, operator = '>=') => {
   return mediaQueryResult;
 };
 useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provider;
-/* harmony default export */ const use_viewport_match = (useViewportMatch);
+/* harmony default export */ var use_viewport_match = (useViewportMatch);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-resize-observer/index.js
 
@@ -5173,7 +5175,7 @@ function useResizeAware() {
       height: height !== null && height !== void 0 ? height : null
     };
   }, [width, height]);
-  const resizeListener = (0,external_wp_element_namespaceObject.createElement)("div", {
+  const resizeListener = (0,external_React_namespaceObject.createElement)("div", {
     style: {
       position: 'absolute',
       top: 0,
@@ -5192,7 +5194,7 @@ function useResizeAware() {
 }
 
 ;// CONCATENATED MODULE: external ["wp","priorityQueue"]
-const external_wp_priorityQueue_namespaceObject = window["wp"]["priorityQueue"];
+var external_wp_priorityQueue_namespaceObject = window["wp"]["priorityQueue"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-async-list/index.js
 /**
  * WordPress dependencies
@@ -5253,7 +5255,7 @@ function useAsyncList(list, config = {
   }, [list]);
   return current;
 }
-/* harmony default export */ const use_async_list = (useAsyncList);
+/* harmony default export */ var use_async_list = (useAsyncList);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-warn-on-change/index.js
 /**
@@ -5293,10 +5295,8 @@ function useWarnOnChange(object, prefix = 'Change detection') {
   });
 }
 
-/* harmony default export */ const use_warn_on_change = (useWarnOnChange);
+/* harmony default export */ var use_warn_on_change = (useWarnOnChange);
 
-;// CONCATENATED MODULE: external "React"
-const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./node_modules/use-memo-one/dist/use-memo-one.esm.js
 
 
@@ -5854,8 +5854,7 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
 
 
 
-})();
-
+}();
 (window.wp = window.wp || {}).compose = __webpack_exports__;
 /******/ })()
 ;

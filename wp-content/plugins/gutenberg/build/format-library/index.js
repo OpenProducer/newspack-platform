@@ -1,19 +1,19 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
@@ -21,28 +21,28 @@ var __webpack_exports__ = {};
 __webpack_require__.r(__webpack_exports__);
 
 ;// CONCATENATED MODULE: external ["wp","richText"]
-const external_wp_richText_namespaceObject = window["wp"]["richText"];
-;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+var external_wp_richText_namespaceObject = window["wp"]["richText"];
+;// CONCATENATED MODULE: external "React"
+var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","blockEditor"]
-const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
+var external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
 ;// CONCATENATED MODULE: external ["wp","primitives"]
-const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
+var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/format-bold.js
 
 /**
  * WordPress dependencies
  */
 
-const formatBold = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const formatBold = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M14.7 11.3c1-.6 1.5-1.6 1.5-3 0-2.3-1.3-3.4-4-3.4H7v14h5.8c1.4 0 2.5-.3 3.3-1 .8-.7 1.2-1.7 1.2-2.9.1-1.9-.8-3.1-2.6-3.7zm-5.1-4h2.3c.6 0 1.1.1 1.4.4.3.3.5.7.5 1.2s-.2 1-.5 1.2c-.3.3-.8.4-1.4.4H9.6V7.3zm4.6 9c-.4.3-1 .4-1.7.4H9.6v-3.9h2.9c.7 0 1.3.2 1.7.5.4.3.6.8.6 1.5s-.2 1.2-.6 1.5z"
 }));
-/* harmony default export */ const format_bold = (formatBold);
+/* harmony default export */ var format_bold = (formatBold);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/bold/index.js
 
@@ -78,11 +78,11 @@ const bold = {
       }));
       onFocus();
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
+    return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
       type: "primary",
       character: "b",
       onUse: onToggle
-    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       name: "bold",
       icon: format_bold,
       title: title,
@@ -90,7 +90,7 @@ const bold = {
       isActive: isActive,
       shortcutType: "primary",
       shortcutCharacter: "b"
-    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableRichTextInputEvent, {
+    }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableRichTextInputEvent, {
       inputType: "formatBold",
       onInput: onToggle
     }));
@@ -103,13 +103,13 @@ const bold = {
  * WordPress dependencies
  */
 
-const code = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const code = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M20.8 10.7l-4.3-4.3-1.1 1.1 4.3 4.3c.1.1.1.3 0 .4l-4.3 4.3 1.1 1.1 4.3-4.3c.7-.8.7-1.9 0-2.6zM4.2 11.8l4.3-4.3-1-1-4.3 4.3c-.7.7-.7 1.8 0 2.5l4.3 4.3 1.1-1.1-4.3-4.3c-.2-.1-.2-.3-.1-.4z"
 }));
-/* harmony default export */ const library_code = (code);
+/* harmony default export */ var library_code = (code);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/code/index.js
 
@@ -171,11 +171,11 @@ const code_code = {
       }));
       onFocus();
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
+    return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
       type: "access",
       character: "x",
       onUse: onClick
-    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       icon: library_code,
       title: code_title,
       onClick: onClick,
@@ -186,20 +186,22 @@ const code_code = {
 };
 
 ;// CONCATENATED MODULE: external ["wp","components"]
-const external_wp_components_namespaceObject = window["wp"]["components"];
+var external_wp_components_namespaceObject = window["wp"]["components"];
+;// CONCATENATED MODULE: external ["wp","element"]
+var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/keyboard-return.js
 
 /**
  * WordPress dependencies
  */
 
-const keyboardReturn = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const keyboardReturn = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "-2 -2 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M6.734 16.106l2.176-2.38-1.093-1.028-3.846 4.158 3.846 4.157 1.093-1.027-2.176-2.38h2.811c1.125 0 2.25.03 3.374 0 1.428-.001 3.362-.25 4.963-1.277 1.66-1.065 2.868-2.906 2.868-5.859 0-2.479-1.327-4.896-3.65-5.93-1.82-.813-3.044-.8-4.806-.788l-.567.002v1.5c.184 0 .368 0 .553-.002 1.82-.007 2.704-.014 4.21.657 1.854.827 2.76 2.657 2.76 4.561 0 2.472-.973 3.824-2.178 4.596-1.258.807-2.864 1.04-4.163 1.04h-.02c-1.115.03-2.229 0-3.344 0H6.734z"
 }));
-/* harmony default export */ const keyboard_return = (keyboardReturn);
+/* harmony default export */ var keyboard_return = (keyboardReturn);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/image/index.js
 
@@ -244,12 +246,12 @@ function InlineUI({
     editableContentElement: contentRef.current,
     settings: image_image
   });
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
     placement: "bottom",
     focusOnMount: false,
     anchor: popoverAnchor,
     className: "block-editor-format-toolbar__image-popover"
-  }, (0,external_wp_element_namespaceObject.createElement)("form", {
+  }, (0,external_React_namespaceObject.createElement)("form", {
     className: "block-editor-format-toolbar__image-container-content",
     onSubmit: event => {
       const newReplacements = value.replacements.slice();
@@ -266,16 +268,16 @@ function InlineUI({
       });
       event.preventDefault();
     }
-  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
     alignment: "bottom",
     spacing: "0"
-  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalNumberControl, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalNumberControl, {
     className: "block-editor-format-toolbar__image-container-value",
     label: (0,external_wp_i18n_namespaceObject.__)('Width'),
     value: width,
     min: 1,
     onChange: newWidth => setWidth(newWidth)
-  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     className: "block-editor-format-toolbar__image-container-button",
     icon: keyboard_return,
     label: (0,external_wp_i18n_namespaceObject.__)('Apply'),
@@ -297,17 +299,17 @@ function Edit({
   function closeModal() {
     setIsModalOpen(false);
   }
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.MediaUploadCheck, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
-    icon: (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.SVG, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.MediaUploadCheck, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    icon: (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.SVG, {
       xmlns: "http://www.w3.org/2000/svg",
       viewBox: "0 0 24 24"
-    }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Path, {
+    }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Path, {
       d: "M4 18.5h16V17H4v1.5zM16 13v1.5h4V13h-4zM5.1 15h7.8c.6 0 1.1-.5 1.1-1.1V6.1c0-.6-.5-1.1-1.1-1.1H5.1C4.5 5 4 5.5 4 6.1v7.8c0 .6.5 1.1 1.1 1.1zm.4-8.5h7V10l-1-1c-.3-.3-.8-.3-1 0l-1.6 1.5-1.2-.7c-.3-.2-.6-.2-.9 0l-1.3 1V6.5zm0 6.1l1.8-1.3 1.3.8c.3.2.7.2.9-.1l1.5-1.4 1.5 1.4v1.5h-7v-.9z"
     })),
     title: image_title,
     onClick: openModal,
     isActive: isObjectActive
-  }), isModalOpen && (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.MediaUpload, {
+  }), isModalOpen && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.MediaUpload, {
     allowedTypes: ALLOWED_MEDIA_TYPES,
     onSelect: ({
       id,
@@ -334,7 +336,7 @@ function Edit({
       open();
       return null;
     }
-  }), isObjectActive && (0,external_wp_element_namespaceObject.createElement)(InlineUI, {
+  }), isObjectActive && (0,external_React_namespaceObject.createElement)(InlineUI, {
     value: value,
     onChange: onChange,
     activeObjectAttributes: activeObjectAttributes,
@@ -348,13 +350,13 @@ function Edit({
  * WordPress dependencies
  */
 
-const formatItalic = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const formatItalic = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M12.5 5L10 19h1.9l2.5-14z"
 }));
-/* harmony default export */ const format_italic = (formatItalic);
+/* harmony default export */ var format_italic = (formatItalic);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/italic/index.js
 
@@ -390,11 +392,11 @@ const italic = {
       }));
       onFocus();
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
+    return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
       type: "primary",
       character: "i",
       onUse: onToggle
-    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       name: "italic",
       icon: format_italic,
       title: italic_title,
@@ -402,7 +404,7 @@ const italic = {
       isActive: isActive,
       shortcutType: "primary",
       shortcutCharacter: "i"
-    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableRichTextInputEvent, {
+    }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableRichTextInputEvent, {
       inputType: "formatItalic",
       onInput: onToggle
     }));
@@ -410,22 +412,22 @@ const italic = {
 };
 
 ;// CONCATENATED MODULE: external ["wp","url"]
-const external_wp_url_namespaceObject = window["wp"]["url"];
+var external_wp_url_namespaceObject = window["wp"]["url"];
 ;// CONCATENATED MODULE: external ["wp","htmlEntities"]
-const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
+var external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/link-off.js
 
 /**
  * WordPress dependencies
  */
 
-const linkOff = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const linkOff = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M17.031 4.703 15.576 4l-1.56 3H14v.03l-2.324 4.47H9.5V13h1.396l-1.502 2.889h-.95a3.694 3.694 0 0 1 0-7.389H10V7H8.444a5.194 5.194 0 1 0 0 10.389h.17L7.5 19.53l1.416.719L15.049 8.5h.507a3.694 3.694 0 0 1 0 7.39H14v1.5h1.556a5.194 5.194 0 0 0 .273-10.383l1.202-2.304Z"
 }));
-/* harmony default export */ const link_off = (linkOff);
+/* harmony default export */ var link_off = (linkOff);
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/link.js
 
@@ -433,18 +435,18 @@ const linkOff = (0,external_wp_element_namespaceObject.createElement)(external_w
  * WordPress dependencies
  */
 
-const link_link = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const link_link = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M10 17.389H8.444A5.194 5.194 0 1 1 8.444 7H10v1.5H8.444a3.694 3.694 0 0 0 0 7.389H10v1.5ZM14 7h1.556a5.194 5.194 0 0 1 0 10.39H14v-1.5h1.556a3.694 3.694 0 0 0 0-7.39H14V7Zm-4.5 6h5v-1.5h-5V13Z"
 }));
-/* harmony default export */ const library_link = (link_link);
+/* harmony default export */ var library_link = (link_link);
 
 ;// CONCATENATED MODULE: external ["wp","a11y"]
-const external_wp_a11y_namespaceObject = window["wp"]["a11y"];
+var external_wp_a11y_namespaceObject = window["wp"]["a11y"];
 ;// CONCATENATED MODULE: external ["wp","data"]
-const external_wp_data_namespaceObject = window["wp"]["data"];
+var external_wp_data_namespaceObject = window["wp"]["data"];
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/link/utils.js
 /**
  * WordPress dependencies
@@ -674,7 +676,7 @@ function useLinkInstanceKey(instance) {
   weakMap.set(instance, id);
   return getKey(id);
 }
-/* harmony default export */ const use_link_instance_key = (useLinkInstanceKey);
+/* harmony default export */ var use_link_instance_key = (useLinkInstanceKey);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/link/inline.js
 
@@ -862,17 +864,17 @@ function InlineLinkUI({
   function createButtonText(searchTerm) {
     return (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: search term. */
     (0,external_wp_i18n_namespaceObject.__)('Create page: <mark>%s</mark>'), searchTerm), {
-      mark: (0,external_wp_element_namespaceObject.createElement)("mark", null)
+      mark: (0,external_React_namespaceObject.createElement)("mark", null)
     });
   }
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
     anchor: popoverAnchor,
     focusOnMount: focusOnMount.current,
     onClose: stopAddingLink,
     onFocusOutside: () => stopAddingLink(false),
     placement: "bottom",
     shift: true
-  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalLinkControl, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalLinkControl, {
     key: forceRemountKey,
     value: linkValue,
     onChange: onChangeLink,
@@ -908,7 +910,7 @@ function getRichTextValueFromSelection(value, isActive) {
   // Get a RichTextValue containing the selected text content.
   return (0,external_wp_richText_namespaceObject.slice)(value, textStart, textEnd);
 }
-/* harmony default export */ const inline = (InlineLinkUI);
+/* harmony default export */ var inline = (InlineLinkUI);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/link/index.js
 
@@ -970,15 +972,15 @@ function link_Edit({
     onChange((0,external_wp_richText_namespaceObject.removeFormat)(value, link_name));
     (0,external_wp_a11y_namespaceObject.speak)((0,external_wp_i18n_namespaceObject.__)('Link removed.'), 'assertive');
   }
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
     type: "primary",
     character: "k",
     onUse: addLink
-  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
+  }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
     type: "primaryShift",
     character: "k",
     onUse: onRemoveFormat
-  }), isActive && (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+  }), isActive && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
     name: "link",
     icon: link_off,
     title: (0,external_wp_i18n_namespaceObject.__)('Unlink'),
@@ -988,7 +990,7 @@ function link_Edit({
     shortcutCharacter: "k",
     "aria-haspopup": "true",
     "aria-expanded": addingLink || isActive
-  }), !isActive && (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+  }), !isActive && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
     name: "link",
     icon: library_link,
     title: link_title,
@@ -998,7 +1000,7 @@ function link_Edit({
     shortcutCharacter: "k",
     "aria-haspopup": "true",
     "aria-expanded": addingLink || isActive
-  }), (addingLink || isActive) && (0,external_wp_element_namespaceObject.createElement)(inline, {
+  }), (addingLink || isActive) && (0,external_React_namespaceObject.createElement)(inline, {
     addingLink: addingLink,
     stopAddingLink: stopAddingLink,
     isActive: isActive,
@@ -1017,6 +1019,7 @@ const build_module_link_link = {
     url: 'href',
     type: 'data-type',
     id: 'data-id',
+    _id: 'id',
     target: 'target',
     rel: 'rel'
   },
@@ -1052,13 +1055,13 @@ const build_module_link_link = {
  * WordPress dependencies
  */
 
-const formatStrikethrough = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const formatStrikethrough = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M9.1 9v-.5c0-.6.2-1.1.7-1.4.5-.3 1.2-.5 2-.5.7 0 1.4.1 2.1.3.7.2 1.4.5 2.1.9l.2-1.9c-.6-.3-1.2-.5-1.9-.7-.8-.1-1.6-.2-2.4-.2-1.5 0-2.7.3-3.6 1-.8.7-1.2 1.5-1.2 2.6V9h2zM20 12H4v1h8.3c.3.1.6.2.8.3.5.2.9.5 1.1.8.3.3.4.7.4 1.2 0 .7-.2 1.1-.8 1.5-.5.3-1.2.5-2.1.5-.8 0-1.6-.1-2.4-.3-.8-.2-1.5-.5-2.2-.8L7 18.1c.5.2 1.2.4 2 .6.8.2 1.6.3 2.4.3 1.7 0 3-.3 3.9-1 .9-.7 1.3-1.6 1.3-2.8 0-.9-.2-1.7-.7-2.2H20v-1z"
 }));
-/* harmony default export */ const format_strikethrough = (formatStrikethrough);
+/* harmony default export */ var format_strikethrough = (formatStrikethrough);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/strikethrough/index.js
 
@@ -1089,11 +1092,11 @@ const strikethrough = {
       }));
       onFocus();
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
+    return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
       type: "access",
       character: "d",
       onUse: onClick
-    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       icon: format_strikethrough,
       title: strikethrough_title,
       onClick: onClick,
@@ -1134,11 +1137,11 @@ const underline = {
         title: underline_title
       }));
     };
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
+    return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextShortcut, {
       type: "primary",
       character: "u",
       onUse: onToggle
-    }), (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableRichTextInputEvent, {
+    }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableRichTextInputEvent, {
       inputType: "formatUnderline",
       onInput: onToggle
     }));
@@ -1175,7 +1178,7 @@ function Icon({
     ref
   });
 }
-/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
+/* harmony default export */ var icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/text-color.js
 
@@ -1183,13 +1186,13 @@ function Icon({
  * WordPress dependencies
  */
 
-const textColor = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const textColor = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M12.9 6h-2l-4 11h1.9l1.1-3h4.2l1.1 3h1.9L12.9 6zm-2.5 6.5l1.5-4.9 1.7 4.9h-3.2z"
 }));
-/* harmony default export */ const text_color = (textColor);
+/* harmony default export */ var text_color = (textColor);
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/color.js
 
@@ -1197,13 +1200,13 @@ const textColor = (0,external_wp_element_namespaceObject.createElement)(external
  * WordPress dependencies
  */
 
-const color = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const color = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M17.2 10.9c-.5-1-1.2-2.1-2.1-3.2-.6-.9-1.3-1.7-2.1-2.6L12 4l-1 1.1c-.6.9-1.3 1.7-2 2.6-.8 1.2-1.5 2.3-2 3.2-.6 1.2-1 2.2-1 3 0 3.4 2.7 6.1 6.1 6.1s6.1-2.7 6.1-6.1c0-.8-.3-1.8-1-3zm-5.1 7.6c-2.5 0-4.6-2.1-4.6-4.6 0-.3.1-1 .8-2.3.5-.9 1.1-1.9 2-3.1.7-.9 1.3-1.7 1.8-2.3.7.8 1.3 1.6 1.8 2.3.8 1.1 1.5 2.2 2 3.1.7 1.3.8 2 .8 2.3 0 2.5-2.1 4.6-4.6 4.6z"
 }));
-/* harmony default export */ const library_color = (color);
+/* harmony default export */ var library_color = (color);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/text-color/inline.js
 
@@ -1306,7 +1309,7 @@ function ColorPicker({
     }));
   }, [colors, onChange, property]);
   const activeColors = (0,external_wp_element_namespaceObject.useMemo)(() => getActiveColors(value, name, colors), [name, value, colors]);
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.ColorPalette, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.ColorPalette, {
     value: activeColors[property],
     onChange: onColorChange
   });
@@ -1318,6 +1321,11 @@ function InlineColorUI({
   onClose,
   contentRef
 }) {
+  const popoverAnchor = (0,external_wp_richText_namespaceObject.useAnchor)({
+    editableContentElement: contentRef.current,
+    settings: text_color_textColor
+  });
+
   /*
    As you change the text color by typing a HEX value into a field,
    the return value of document.getSelection jumps to the field you're editing,
@@ -1325,15 +1333,13 @@ function InlineColorUI({
    it will return null, since it can't find the <mark> element within the HEX input.
    This caches the last truthy value of the selection anchor reference.
    */
-  const popoverAnchor = (0,external_wp_blockEditor_namespaceObject.useCachedTruthy)((0,external_wp_richText_namespaceObject.useAnchor)({
-    editableContentElement: contentRef.current,
-    settings: text_color_textColor
-  }));
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
+  const cachedRect = (0,external_wp_blockEditor_namespaceObject.useCachedTruthy)(popoverAnchor.getBoundingClientRect());
+  popoverAnchor.getBoundingClientRect = () => cachedRect;
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
     onClose: onClose,
     className: "components-inline-color-popover",
     anchor: popoverAnchor
-  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.TabPanel, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TabPanel, {
     tabs: [{
       name: 'color',
       title: (0,external_wp_i18n_namespaceObject.__)('Text')
@@ -1341,7 +1347,7 @@ function InlineColorUI({
       name: 'backgroundColor',
       title: (0,external_wp_i18n_namespaceObject.__)('Background')
     }]
-  }, tab => (0,external_wp_element_namespaceObject.createElement)(ColorPicker, {
+  }, tab => (0,external_React_namespaceObject.createElement)(ColorPicker, {
     name: name,
     property: tab.name,
     value: value,
@@ -1411,10 +1417,10 @@ function TextColorEdit({
   if (!hasColorsToChoose && !isActive) {
     return null;
   }
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
     className: "format-library-text-color-button",
     isActive: isActive,
-    icon: (0,external_wp_element_namespaceObject.createElement)(icon, {
+    icon: (0,external_React_namespaceObject.createElement)(icon, {
       icon: Object.keys(activeAttributes).length ? text_color : library_color,
       style: colorIndicatorStyle
     }),
@@ -1423,7 +1429,7 @@ function TextColorEdit({
     ,
     onClick: hasColorsToChoose ? enableIsAddingColor : () => onChange((0,external_wp_richText_namespaceObject.removeFormat)(value, text_color_name)),
     role: "menuitemcheckbox"
-  }), isAddingColor && (0,external_wp_element_namespaceObject.createElement)(InlineColorUI, {
+  }), isAddingColor && (0,external_React_namespaceObject.createElement)(InlineColorUI, {
     name: text_color_name,
     onClose: disableIsAddingColor,
     activeAttributes: activeAttributes,
@@ -1468,13 +1474,13 @@ const text_color_textColor = {
  * WordPress dependencies
  */
 
-const subscript = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const subscript = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M16.9 18.3l.8-1.2c.4-.6.7-1.2.9-1.6.2-.4.3-.8.3-1.2 0-.3-.1-.7-.2-1-.1-.3-.4-.5-.6-.7-.3-.2-.6-.3-1-.3s-.8.1-1.1.2c-.3.1-.7.3-1 .6l.2 1.3c.3-.3.5-.5.8-.6s.6-.2.9-.2c.3 0 .5.1.7.2.2.2.2.4.2.7 0 .3-.1.5-.2.8-.1.3-.4.7-.8 1.3L15 19.4h4.3v-1.2h-2.4zM14.1 7.2h-2L9.5 11 6.9 7.2h-2l3.6 5.3L4.7 18h2l2.7-4 2.7 4h2l-3.8-5.5 3.8-5.3z"
 }));
-/* harmony default export */ const library_subscript = (subscript);
+/* harmony default export */ var library_subscript = (subscript);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/subscript/index.js
 
@@ -1508,7 +1514,7 @@ const subscript_subscript = {
       onToggle();
       onFocus();
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       icon: library_subscript,
       title: subscript_title,
       onClick: onClick,
@@ -1524,13 +1530,13 @@ const subscript_subscript = {
  * WordPress dependencies
  */
 
-const superscript = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const superscript = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M16.9 10.3l.8-1.3c.4-.6.7-1.2.9-1.6.2-.4.3-.8.3-1.2 0-.3-.1-.7-.2-1-.2-.2-.4-.4-.7-.6-.3-.2-.6-.3-1-.3s-.8.1-1.1.2c-.3.1-.7.3-1 .6l.1 1.3c.3-.3.5-.5.8-.6s.6-.2.9-.2c.3 0 .5.1.7.2.2.2.2.4.2.7 0 .3-.1.5-.2.8-.1.3-.4.7-.8 1.3l-1.8 2.8h4.3v-1.2h-2.2zm-2.8-3.1h-2L9.5 11 6.9 7.2h-2l3.6 5.3L4.7 18h2l2.7-4 2.7 4h2l-3.8-5.5 3.8-5.3z"
 }));
-/* harmony default export */ const library_superscript = (superscript);
+/* harmony default export */ var library_superscript = (superscript);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/superscript/index.js
 
@@ -1564,7 +1570,7 @@ const superscript_superscript = {
       onToggle();
       onFocus();
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       icon: library_superscript,
       title: superscript_title,
       onClick: onClick,
@@ -1580,13 +1586,13 @@ const superscript_superscript = {
  * WordPress dependencies
  */
 
-const button_button = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const button_button = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   viewBox: "0 0 24 24",
   xmlns: "http://www.w3.org/2000/svg"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M8 12.5h8V11H8v1.5Z M19 6.5H5a2 2 0 0 0-2 2V15a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V8.5a2 2 0 0 0-2-2ZM5 8h14a.5.5 0 0 1 .5.5V15a.5.5 0 0 1-.5.5H5a.5.5 0 0 1-.5-.5V8.5A.5.5 0 0 1 5 8Z"
 }));
-/* harmony default export */ const library_button = (button_button);
+/* harmony default export */ var library_button = (button_button);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/keyboard/index.js
 
@@ -1620,7 +1626,7 @@ const keyboard = {
       onToggle();
       onFocus();
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       icon: library_button,
       title: keyboard_title,
       onClick: onClick,
@@ -1636,13 +1642,13 @@ const keyboard = {
  * WordPress dependencies
  */
 
-const help = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const help = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M12 4.75a7.25 7.25 0 100 14.5 7.25 7.25 0 000-14.5zM3.25 12a8.75 8.75 0 1117.5 0 8.75 8.75 0 01-17.5 0zM12 8.75a1.5 1.5 0 01.167 2.99c-.465.052-.917.44-.917 1.01V14h1.5v-.845A3 3 0 109 10.25h1.5a1.5 1.5 0 011.5-1.5zM11.25 15v1.5h1.5V15h-1.5z"
 }));
-/* harmony default export */ const library_help = (help);
+/* harmony default export */ var library_help = (help);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/unknown/index.js
 
@@ -1677,7 +1683,7 @@ const unknown = {
     if (!isActive && !hasUnknownFormats) {
       return null;
     }
-    return (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+    return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       name: "unknown",
       icon: library_help,
       title: unknown_title,
@@ -1693,13 +1699,13 @@ const unknown = {
  * WordPress dependencies
  */
 
-const language = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const language = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M17.5 10h-1.7l-3.7 10.5h1.7l.9-2.6h3.9l.9 2.6h1.7L17.5 10zm-2.2 6.3 1.4-4 1.4 4h-2.8zm-4.8-3.8c1.6-1.8 2.9-3.6 3.7-5.7H16V5.2h-5.8V3H8.8v2.2H3v1.5h9.6c-.7 1.6-1.8 3.1-3.1 4.6C8.6 10.2 7.8 9 7.2 8H5.6c.6 1.4 1.7 2.9 2.9 4.4l-2.4 2.4c-.3.4-.7.8-1.1 1.2l1 1 1.2-1.2c.8-.8 1.6-1.5 2.3-2.3.8.9 1.7 1.7 2.5 2.5l.6-1.5c-.7-.6-1.4-1.3-2.1-2z"
 }));
-/* harmony default export */ const library_language = (language);
+/* harmony default export */ var library_language = (language);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/language/index.js
 
@@ -1735,7 +1741,7 @@ function language_Edit({
   const togglePopover = () => {
     setIsPopoverVisible(state => !state);
   };
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
     icon: library_language,
     label: language_title,
     title: language_title,
@@ -1748,7 +1754,7 @@ function language_Edit({
     },
     isActive: isActive,
     role: "menuitemcheckbox"
-  }), isPopoverVisible && (0,external_wp_element_namespaceObject.createElement)(InlineLanguageUI, {
+  }), isPopoverVisible && (0,external_React_namespaceObject.createElement)(InlineLanguageUI, {
     value: value,
     onChange: onChange,
     onClose: togglePopover,
@@ -1767,11 +1773,11 @@ function InlineLanguageUI({
   });
   const [lang, setLang] = (0,external_wp_element_namespaceObject.useState)('');
   const [dir, setDir] = (0,external_wp_element_namespaceObject.useState)('ltr');
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
     className: "block-editor-format-toolbar__language-popover",
     anchor: popoverAnchor,
     onClose: onClose
-  }, (0,external_wp_element_namespaceObject.createElement)("form", {
+  }, (0,external_React_namespaceObject.createElement)("form", {
     className: "block-editor-format-toolbar__language-container-content",
     onSubmit: event => {
       event.preventDefault();
@@ -1784,12 +1790,12 @@ function InlineLanguageUI({
       }));
       onClose();
     }
-  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
     label: language_title,
     value: lang,
     onChange: val => setLang(val),
     help: (0,external_wp_i18n_namespaceObject.__)('A valid language attribute, like "en" or "fr".')
-  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.SelectControl, {
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.SelectControl, {
     label: (0,external_wp_i18n_namespaceObject.__)('Text direction'),
     value: dir,
     options: [{
@@ -1800,9 +1806,9 @@ function InlineLanguageUI({
       value: 'rtl'
     }],
     onChange: val => setDir(val)
-  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
     alignment: "right"
-  }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     variant: "primary",
     type: "submit",
     text: (0,external_wp_i18n_namespaceObject.__)('Apply')
@@ -1826,7 +1832,7 @@ function InlineLanguageUI({
 
 
 
-/* harmony default export */ const default_formats = ([bold, code_code, image_image, italic, build_module_link_link, strikethrough, underline, text_color_textColor, subscript_subscript, superscript_superscript, keyboard, unknown, language_language]);
+/* harmony default export */ var default_formats = ([bold, code_code, image_image, italic, build_module_link_link, strikethrough, underline, text_color_textColor, subscript_subscript, superscript_superscript, keyboard, unknown, language_language]);
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/index.js
 /**

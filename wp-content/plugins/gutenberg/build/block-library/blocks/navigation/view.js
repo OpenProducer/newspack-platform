@@ -1,9 +1,9 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: external ["wp","interactivity"]
-const external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
+var external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/navigation/view.js
 /**
  * WordPress dependencies

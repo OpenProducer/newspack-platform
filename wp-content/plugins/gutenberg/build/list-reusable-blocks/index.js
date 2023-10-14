@@ -1,58 +1,60 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 /******/ 	// The require scope
 /******/ 	var __webpack_require__ = {};
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
+/******/ 		__webpack_require__.n = function(module) {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
+;// CONCATENATED MODULE: external "React"
+var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
 /******************************************************************************
 Copyright (c) Microsoft Corporation.
@@ -395,7 +397,7 @@ function __disposeResources(env) {
   return next();
 }
 
-/* harmony default export */ const tslib_es6 = ({
+/* harmony default export */ var tslib_es6 = ({
   __extends,
   __assign,
   __rest,
@@ -523,7 +525,7 @@ function paramCase(input, options) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","apiFetch"]
-const external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
+var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/file.js
 /**
@@ -609,12 +611,12 @@ async function exportReusableBlock(id) {
   const fileName = paramCase(title) + '.json';
   download(fileName, fileContent, 'application/json');
 }
-/* harmony default export */ const utils_export = (exportReusableBlock);
+/* harmony default export */ var utils_export = (exportReusableBlock);
 
 ;// CONCATENATED MODULE: external ["wp","compose"]
-const external_wp_compose_namespaceObject = window["wp"]["compose"];
+var external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: external ["wp","components"]
-const external_wp_components_namespaceObject = window["wp"]["components"];
+var external_wp_components_namespaceObject = window["wp"]["components"];
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/import.js
 /**
  * WordPress dependencies
@@ -660,7 +662,7 @@ async function importReusableBlock(file) {
   });
   return reusableBlock;
 }
-/* harmony default export */ const utils_import = (importReusableBlock);
+/* harmony default export */ var utils_import = (importReusableBlock);
 
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/components/import-form/index.js
 
@@ -725,21 +727,21 @@ function ImportForm({
   const onDismissError = () => {
     setError(null);
   };
-  return (0,external_wp_element_namespaceObject.createElement)("form", {
+  return (0,external_React_namespaceObject.createElement)("form", {
     className: "list-reusable-blocks-import-form",
     onSubmit: onSubmit,
     ref: formRef
-  }, error && (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Notice, {
+  }, error && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Notice, {
     status: "error",
     onRemove: () => onDismissError()
-  }, error), (0,external_wp_element_namespaceObject.createElement)("label", {
+  }, error), (0,external_React_namespaceObject.createElement)("label", {
     htmlFor: inputId,
     className: "list-reusable-blocks-import-form__label"
-  }, (0,external_wp_i18n_namespaceObject.__)('File')), (0,external_wp_element_namespaceObject.createElement)("input", {
+  }, (0,external_wp_i18n_namespaceObject.__)('File')), (0,external_React_namespaceObject.createElement)("input", {
     id: inputId,
     type: "file",
     onChange: onChangeFile
-  }), (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     type: "submit",
     isBusy: isLoading,
     disabled: !file || isLoading,
@@ -747,7 +749,7 @@ function ImportForm({
     className: "list-reusable-blocks-import-form__button"
   }, (0,external_wp_i18n_namespaceObject._x)('Import', 'button label')));
 }
-/* harmony default export */ const import_form = ((0,external_wp_compose_namespaceObject.withInstanceId)(ImportForm));
+/* harmony default export */ var import_form = ((0,external_wp_compose_namespaceObject.withInstanceId)(ImportForm));
 
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/components/import-dropdown/index.js
 
@@ -765,7 +767,7 @@ function ImportForm({
 function ImportDropdown({
   onUpload
 }) {
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Dropdown, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Dropdown, {
     popoverProps: {
       placement: 'bottom-start'
     },
@@ -773,19 +775,19 @@ function ImportDropdown({
     renderToggle: ({
       isOpen,
       onToggle
-    }) => (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    }) => (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
       "aria-expanded": isOpen,
       onClick: onToggle,
       variant: "primary"
     }, (0,external_wp_i18n_namespaceObject.__)('Import from JSON')),
     renderContent: ({
       onClose
-    }) => (0,external_wp_element_namespaceObject.createElement)(import_form, {
+    }) => (0,external_React_namespaceObject.createElement)(import_form, {
       onUpload: (0,external_wp_compose_namespaceObject.pipe)(onClose, onUpload)
     })
   });
 }
-/* harmony default export */ const import_dropdown = (ImportDropdown);
+/* harmony default export */ var import_dropdown = (ImportDropdown);
 
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/index.js
 
@@ -829,7 +831,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const container = document.createElement('div');
   container.className = 'list-reusable-blocks__container';
   button.parentNode.insertBefore(container, button);
-  (0,external_wp_element_namespaceObject.createRoot)(container).render((0,external_wp_element_namespaceObject.createElement)(import_dropdown, {
+  (0,external_wp_element_namespaceObject.createRoot)(container).render((0,external_React_namespaceObject.createElement)(import_dropdown, {
     onUpload: showNotice
   }));
 });

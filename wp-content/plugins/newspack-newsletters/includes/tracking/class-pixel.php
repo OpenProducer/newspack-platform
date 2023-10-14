@@ -168,24 +168,24 @@ final class Pixel {
 			! empty( $_SERVER['HTTP_USER_AGENT'] ) &&
 			preg_match( '/bot|crawl|slurp|spider|mediapartners/i', $_SERVER['HTTP_USER_AGENT'] )
 		) {
-			return;
+			exit;
 		}
 		// Skip prefetching and previews.
 		if (
 			! empty( $_SERVER['HTTP_X_PURPOSE'] ) &&
 			in_array( $_SERVER['HTTP_X_PURPOSE'], [ 'preview', 'instant' ], true )
 		) {
-			return;
+			exit;
 		}
 		if ( ! empty( $_SERVER['HTTP_X_MOZ'] ) && 'prefetch' === $_SERVER['HTTP_X_MOZ'] ) {
-			return;
+			exit;
 		}
 		// Skip Google Image Pre-Fetch.
 		if (
 			! empty( $_SERVER['HTTP_USER_AGENT'] ) &&
 			'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246 Mozilla/5.0' === $_SERVER['HTTP_USER_AGENT']
 		) {
-			return;
+			exit;
 		}
 		// phpcs:enable
 
@@ -201,7 +201,7 @@ final class Pixel {
 		// phpcs:enable
 
 		if ( ! $newsletter_id || ! $tracking_id || ! $email_address ) {
-			return;
+			exit;
 		}
 
 		self::track_seen( $newsletter_id, $tracking_id, $email_address );

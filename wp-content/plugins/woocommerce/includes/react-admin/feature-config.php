@@ -23,7 +23,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'new-product-management-experience' => false,
 			'onboarding' => true,
 			'onboarding-tasks' => true,
-			'product-variation-management' => false,
+			'product-variation-management' => true,
 			'remote-inbox-notifications' => true,
 			'remote-free-extensions' => true,
 			'payment-gateway-suggestions' => true,

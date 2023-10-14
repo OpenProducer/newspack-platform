@@ -264,7 +264,8 @@ function render_block( $attrs ) {
 					<?php if ( $provider && 'mailchimp' === $provider->service && $attrs['mailchimpDoubleOptIn'] ) : ?>
 						<input type="hidden" name="double_optin" value="1" />
 					<?php endif; ?>
-					<input type="submit" value="<?php echo \esc_attr( $attrs['label'] ); ?>" />
+
+					<input class="<?php echo \esc_attr( get_block_button_classes( $attrs ) ); ?>"type="submit" value="<?php echo \esc_attr( $attrs['label'] ); ?>" style="<?php echo \esc_attr( get_block_button_styles( $attrs ) ); ?>" />
 				</div>
 			</form>
 		<?php endif; ?>
@@ -300,6 +301,83 @@ function get_block_classes( $attrs = [] ) {
 		$classes[] = 'multiple-lists';
 	}
 	return implode( ' ', $classes );
+}
+
+/**
+ * Check if button text is set to the default color.
+ *
+ * @param array $attrs Block attributes.
+ *
+ * @return bool Whether text color is default.
+ */
+function is_button_text_default( $attrs = [] ) {
+	if ( '#ffffff' === $attrs['textColor'] ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Check if button background is set to the default color.
+ *
+ * @param array $attrs Block attributes.
+ *
+ * @return bool Whether background color is default.
+ */
+function is_button_background_default( $attrs = [] ) {
+	if ( '#dd3333' === $attrs['backgroundColor'] ) {
+		return true;
+	}
+	return false;
+}
+
+/**
+ * Utility to assemble the class for a server-side rendered block button.
+ *
+ * @param array $attrs Block attributes.
+ *
+ * @return string Class list separated by spaces.
+ */
+function get_block_button_classes( $attrs = [] ) {
+	$classes[] = 'submit-button';
+
+	if ( ! is_button_text_default( $attrs ) ) {
+		$classes[] = 'has-text-color';
+	}
+
+	if ( ! is_button_background_default( $attrs ) ) {
+		$classes[] = 'has-background-color';
+	}
+
+	if ( '' !== $attrs['backgroundColorName'] ) {
+		$classes[] = 'has-' . $attrs['backgroundColorName'] . '-background-color';
+	}
+
+	if ( '' !== $attrs['textColorName'] ) {
+		$classes[] = 'has-' . $attrs['textColorName'] . '-color';
+	}
+
+	return implode( ' ', $classes );
+}
+
+/**
+ * Utility to assemble the styles for a server-side rendered block button.
+ *
+ * @param array $attrs Block attributes.
+ *
+ * @return string Class list separated by spaces.
+ */
+function get_block_button_styles( $attrs = [] ) {
+	$style = '';
+
+	if ( ! is_button_text_default( $attrs ) ) {
+		$style .= 'color: ' . $attrs['textColor'] . ';';
+	}
+
+	if ( ! is_button_background_default( $attrs ) ) {
+		$style .= 'background-color: ' . $attrs['backgroundColor'] . ';';
+	}
+	return $style;
 }
 
 /**

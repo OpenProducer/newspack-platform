@@ -63,12 +63,24 @@ interface BlockInterface {
 	/**
 	 * Get the parent container that the block belongs to.
 	 */
-	public function &get_parent(): ?ContainerInterface;
+	public function &get_parent(): ContainerInterface;
 
 	/**
 	 * Get the root template that the block belongs to.
 	 */
 	public function &get_root_template(): BlockTemplateInterface;
+
+	/**
+	 * Remove the block from its parent.
+	 */
+	public function remove();
+
+	/**
+	 * Check if the block is detached from its parent or root template.
+	 *
+	 * @return bool True if the block is detached from its parent or root template.
+	 */
+	public function is_detached(): bool;
 
 	/**
 	 * Get the block configuration as a formatted template.

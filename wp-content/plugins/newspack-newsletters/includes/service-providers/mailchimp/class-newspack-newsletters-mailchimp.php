@@ -403,15 +403,6 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		if ( ! $this->has_api_credentials() ) {
 			return [];
 		}
-		$transient       = sprintf( 'newspack_newsletters_error_%s_%s', $post_id, get_current_user_id() );
-		$persisted_error = get_transient( $transient );
-		if ( $persisted_error ) {
-			delete_transient( $transient );
-			return new WP_Error(
-				'newspack_newsletters_mailchimp_error',
-				$persisted_error
-			);
-		}
 		try {
 			$mc_campaign_id = get_post_meta( $post_id, 'mc_campaign_id', true );
 			if ( ! $mc_campaign_id ) {
@@ -740,6 +731,13 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				$mc->put( "campaigns/$mc_campaign_id/content", $content_payload ),
 				__( 'Error updating campaign content.', 'newspack_newsletters' )
 			);
+
+			// Retrieve and store campaign data.
+			$data = $this->retrieve( $post->ID );
+			if ( ! is_wp_error( $data ) ) {
+				update_post_meta( $post->ID, 'newsletterData', $data );
+			}
+
 			return [
 				'campaign_result' => $campaign_result,
 				'content_result'  => $content_result,

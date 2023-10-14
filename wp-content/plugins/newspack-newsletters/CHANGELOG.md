@@ -1,3 +1,46 @@
+## [2.2.1](https://github.com/Automattic/newspack-newsletters/compare/v2.2.0...v2.2.1) (2023-10-10)
+
+
+### Bug Fixes
+
+* **tracking:** exit on pixel validation checks ([#1315](https://github.com/Automattic/newspack-newsletters/issues/1315)) ([83fd227](https://github.com/Automattic/newspack-newsletters/commit/83fd227d92e1b24e6e49309eddc7ba7d755086f5))
+
+# [2.2.0](https://github.com/Automattic/newspack-newsletters/compare/v2.1.4...v2.2.0) (2023-10-09)
+
+
+### Bug Fixes
+
+* newsletterData and ActiveCampaign editor tweaks ([#1316](https://github.com/Automattic/newspack-newsletters/issues/1316)) ([574b5e0](https://github.com/Automattic/newspack-newsletters/commit/574b5e0640212b35f90bddce5f761c21aa74e89b))
+* newsletterData handling and editor improvements ([#1287](https://github.com/Automattic/newspack-newsletters/issues/1287)) ([f42b387](https://github.com/Automattic/newspack-newsletters/commit/f42b387cbac7ea4bca8d6f5d9524e634a7edd523))
+* prevent duplicate js plugin registration ([#1298](https://github.com/Automattic/newspack-newsletters/issues/1298)) ([11efaa7](https://github.com/Automattic/newspack-newsletters/commit/11efaa7841374e0b8abe52a44bbe77f30f645e23))
+
+
+### Features
+
+* add alt attr to mj-image elements ([#1306](https://github.com/Automattic/newspack-newsletters/issues/1306)) ([f7f1fa5](https://github.com/Automattic/newspack-newsletters/commit/f7f1fa558307aac2a0d88b38eed66f23cff43c38))
+* add color picker for the subscribe block button ([#1283](https://github.com/Automattic/newspack-newsletters/issues/1283)) ([000188a](https://github.com/Automattic/newspack-newsletters/commit/000188a13d67dbb41c9756f6e4e87c7d476d3403))
+* log send errors ([#1299](https://github.com/Automattic/newspack-newsletters/issues/1299)) ([3c12596](https://github.com/Automattic/newspack-newsletters/commit/3c12596e2787703a93066f193a847a9e9e605e8c))
+
+# [2.2.0-alpha.3](https://github.com/Automattic/newspack-newsletters/compare/v2.2.0-alpha.2...v2.2.0-alpha.3) (2023-10-09)
+
+
+### Bug Fixes
+
+* newsletterData and ActiveCampaign editor tweaks ([#1316](https://github.com/Automattic/newspack-newsletters/issues/1316)) ([574b5e0](https://github.com/Automattic/newspack-newsletters/commit/574b5e0640212b35f90bddce5f761c21aa74e89b))
+
+
+### Features
+
+* add alt attr to mj-image elements ([#1306](https://github.com/Automattic/newspack-newsletters/issues/1306)) ([f7f1fa5](https://github.com/Automattic/newspack-newsletters/commit/f7f1fa558307aac2a0d88b38eed66f23cff43c38))
+* log send errors ([#1299](https://github.com/Automattic/newspack-newsletters/issues/1299)) ([3c12596](https://github.com/Automattic/newspack-newsletters/commit/3c12596e2787703a93066f193a847a9e9e605e8c))
+
+# [2.2.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v2.2.0-alpha.1...v2.2.0-alpha.2) (2023-10-05)
+
+
+### Bug Fixes
+
+* execute tracking in an earlier hook ([#1314](https://github.com/Automattic/newspack-newsletters/issues/1314)) ([e48aeab](https://github.com/Automattic/newspack-newsletters/commit/e48aeabeacd0adc8892db054b9c2299abdb0f913))
+
 ## [2.1.4](https://github.com/Automattic/newspack-newsletters/compare/v2.1.3...v2.1.4) (2023-10-05)
 
 

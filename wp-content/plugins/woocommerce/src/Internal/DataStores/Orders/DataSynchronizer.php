@@ -155,7 +155,13 @@ class DataSynchronizer implements BatchProcessorInterface {
 	 */
 	public function create_database_tables() {
 		$this->database_util->dbdelta( $this->data_store->get_database_schema() );
-		$this->check_orders_table_exists();
+		$success = $this->check_orders_table_exists();
+		if ( ! $success ) {
+			$missing_tables = $this->database_util->get_missing_tables( $this->data_store->get_database_schema() );
+			$missing_tables = implode( ', ', $missing_tables );
+			$this->error_logger->error( "HPOS tables are missing in the database and couldn't be created. The missing tables are: $missing_tables" );
+		}
+		return $success;
 	}
 
 	/**
@@ -251,12 +257,15 @@ class DataSynchronizer implements BatchProcessorInterface {
 		}
 
 		if ( $this->custom_orders_table_is_authoritative() ) {
-			$missing_orders_count_sql = "
+			$missing_orders_count_sql = $wpdb->prepare(
+				"
 SELECT COUNT(1) FROM $wpdb->posts posts
 INNER JOIN $orders_table orders ON posts.id=orders.id
 WHERE posts.post_type = '" . self::PLACEHOLDER_ORDER_POST_TYPE . "'
  AND orders.status not in ( 'auto-draft' )
-";
+ AND orders.type IN ($order_post_type_placeholder)",
+				$order_post_types
+			);
 			$operator                 = '>';
 		} else {
 			// phpcs:disable WordPress.DB.PreparedSQL.InterpolatedNotPrepared, WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare -- $order_post_type_placeholder is prepared.
@@ -374,13 +383,16 @@ ORDER BY posts.ID ASC",
 				// phpcs:enable WordPress.DB.PreparedSQLPlaceholders.UnfinishedPrepare
 				break;
 			case self::ID_TYPE_MISSING_IN_POSTS_TABLE:
-				$sql = "
+				$sql = $wpdb->prepare(
+					"
 SELECT posts.ID FROM $wpdb->posts posts
 INNER JOIN $orders_table orders ON posts.id=orders.id
 WHERE posts.post_type = '" . self::PLACEHOLDER_ORDER_POST_TYPE . "'
 AND orders.status not in ( 'auto-draft' )
-ORDER BY posts.id ASC
-";
+AND orders.type IN ($order_post_type_placeholders)
+ORDER BY posts.id ASC",
+					$order_post_types
+				);
 				break;
 			case self::ID_TYPE_DIFFERENT_UPDATE_DATE:
 				$operator = $this->custom_orders_table_is_authoritative() ? '>' : '<';

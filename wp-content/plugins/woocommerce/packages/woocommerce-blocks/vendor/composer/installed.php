@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'woocommerce/woocommerce-blocks',
-        'pretty_version' => '10.9.3',
-        'version' => '10.9.3.0',
+        'pretty_version' => '11.1.2',
+        'version' => '11.1.2.0',
         'reference' => NULL,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'automattic/jetpack-autoloader' => array(
-            'pretty_version' => 'v2.11.21',
-            'version' => '2.11.21.0',
-            'reference' => '3a01a4a4ac166eaa721438cc06daa3cca0d51a15',
+            'pretty_version' => 'v2.11.22',
+            'version' => '2.11.22.0',
+            'reference' => '32cc6b4a30e5cb5be669b4c8bed7330202e9f0c1',
             'type' => 'composer-plugin',
             'install_path' => __DIR__ . '/../automattic/jetpack-autoloader',
             'aliases' => array(),
@@ -41,8 +41,8 @@
             ),
         ),
         'woocommerce/woocommerce-blocks' => array(
-            'pretty_version' => '10.9.3',
-            'version' => '10.9.3.0',
+            'pretty_version' => '11.1.2',
+            'version' => '11.1.2.0',
             'reference' => NULL,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',

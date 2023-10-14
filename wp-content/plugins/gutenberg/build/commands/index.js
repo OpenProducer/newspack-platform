@@ -1,8 +1,8 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 4403:
-/***/ ((module, exports) => {
+/***/ (function(module, exports) {
 
 var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
   Copyright (c) 2018 Jed Watson.
@@ -66,7 +66,7 @@ var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
 /***/ }),
 
 /***/ 8670:
-/***/ ((module) => {
+/***/ (function(module) {
 
 // The scores are arranged so that a continuous match of characters will
 // result in a total score of 1.
@@ -235,98 +235,98 @@ module.exports = commandScore;
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = (module) => {
+/******/ 		__webpack_require__.n = function(module) {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				() => (module['default']) :
-/******/ 				() => (module);
+/******/ 				function() { return module['default']; } :
+/******/ 				function() { return module; };
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = (exports, definition) => {
+/******/ 		__webpack_require__.d = function(exports, definition) {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	(() => {
-/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
-/******/ 	})();
+/******/ 	!function() {
+/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = (exports) => {
+/******/ 		__webpack_require__.r = function(exports) {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /******/ 	/* webpack/runtime/nonce */
-/******/ 	(() => {
+/******/ 	!function() {
 /******/ 		__webpack_require__.nc = undefined;
-/******/ 	})();
+/******/ 	}();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-(() => {
+!function() {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  "CommandMenu": () => (/* reexport */ CommandMenu),
-  "privateApis": () => (/* reexport */ privateApis),
-  "store": () => (/* reexport */ store),
-  "useCommand": () => (/* reexport */ useCommand),
-  "useCommandLoader": () => (/* reexport */ useCommandLoader)
+  CommandMenu: function() { return /* reexport */ CommandMenu; },
+  privateApis: function() { return /* reexport */ privateApis; },
+  store: function() { return /* reexport */ store; },
+  useCommand: function() { return /* reexport */ useCommand; },
+  useCommandLoader: function() { return /* reexport */ useCommandLoader; }
 });
 
 // NAMESPACE OBJECT: ./packages/commands/build-module/store/actions.js
 var actions_namespaceObject = {};
 __webpack_require__.r(actions_namespaceObject);
 __webpack_require__.d(actions_namespaceObject, {
-  "close": () => (actions_close),
-  "open": () => (actions_open),
-  "registerCommand": () => (registerCommand),
-  "registerCommandLoader": () => (registerCommandLoader),
-  "unregisterCommand": () => (unregisterCommand),
-  "unregisterCommandLoader": () => (unregisterCommandLoader)
+  close: function() { return actions_close; },
+  open: function() { return actions_open; },
+  registerCommand: function() { return registerCommand; },
+  registerCommandLoader: function() { return registerCommandLoader; },
+  unregisterCommand: function() { return unregisterCommand; },
+  unregisterCommandLoader: function() { return unregisterCommandLoader; }
 });
 
 // NAMESPACE OBJECT: ./packages/commands/build-module/store/selectors.js
 var selectors_namespaceObject = {};
 __webpack_require__.r(selectors_namespaceObject);
 __webpack_require__.d(selectors_namespaceObject, {
-  "getCommandLoaders": () => (getCommandLoaders),
-  "getCommands": () => (getCommands),
-  "getContext": () => (getContext),
-  "isOpen": () => (selectors_isOpen)
+  getCommandLoaders: function() { return getCommandLoaders; },
+  getCommands: function() { return getCommands; },
+  getContext: function() { return getContext; },
+  isOpen: function() { return selectors_isOpen; }
 });
 
 // NAMESPACE OBJECT: ./packages/commands/build-module/store/private-actions.js
 var private_actions_namespaceObject = {};
 __webpack_require__.r(private_actions_namespaceObject);
 __webpack_require__.d(private_actions_namespaceObject, {
-  "setContext": () => (setContext)
+  setContext: function() { return setContext; }
 });
 
-;// CONCATENATED MODULE: external ["wp","element"]
-const external_wp_element_namespaceObject = window["wp"]["element"];
+;// CONCATENATED MODULE: external "React"
+var external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/extends.js
 function _extends() {
   _extends = Object.assign ? Object.assign.bind() : function (target) {
@@ -342,8 +342,6 @@ function _extends() {
   };
   return _extends.apply(this, arguments);
 }
-;// CONCATENATED MODULE: external "React"
-const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./node_modules/@radix-ui/primitive/dist/index.module.js
 function $e42e1063c40fb3ef$export$b9ecd428b558ff10(originalEventHandler, ourEventHandler, { checkForDefaultPrevented: checkForDefaultPrevented = true  } = {}) {
     return function handleEvent(event) {
@@ -639,7 +637,7 @@ function $71cd76cc60e0454e$var$useUncontrolledState({ defaultProp: defaultProp ,
 
 
 ;// CONCATENATED MODULE: external "ReactDOM"
-const external_ReactDOM_namespaceObject = window["ReactDOM"];
+var external_ReactDOM_namespaceObject = window["ReactDOM"];
 var external_ReactDOM_default = /*#__PURE__*/__webpack_require__.n(external_ReactDOM_namespaceObject);
 ;// CONCATENATED MODULE: ./node_modules/@radix-ui/react-slot/dist/index.module.js
 
@@ -1946,7 +1944,7 @@ function __disposeResources(env) {
   return next();
 }
 
-/* harmony default export */ const tslib_es6 = ({
+/* harmony default export */ var tslib_es6 = ({
   __extends,
   __assign,
   __rest,
@@ -2663,7 +2661,7 @@ function RemoveScrollSideCar(props) {
 
 
 
-/* harmony default export */ const sidecar = (exportSidecar(effectCar, RemoveScrollSideCar));
+/* harmony default export */ var sidecar = (exportSidecar(effectCar, RemoveScrollSideCar));
 
 ;// CONCATENATED MODULE: ./node_modules/react-remove-scroll/dist/es2015/Combination.js
 
@@ -2672,7 +2670,7 @@ function RemoveScrollSideCar(props) {
 
 var ReactRemoveScroll = external_React_namespaceObject.forwardRef(function (props, ref) { return (external_React_namespaceObject.createElement(RemoveScroll, __assign({}, props, { ref: ref, sideCar: sidecar }))); });
 ReactRemoveScroll.classNames = RemoveScroll.classNames;
-/* harmony default export */ const Combination = (ReactRemoveScroll);
+/* harmony default export */ var Combination = (ReactRemoveScroll);
 
 ;// CONCATENATED MODULE: ./node_modules/aria-hidden/dist/es2015/index.js
 var getDefaultParent = function (originalTarget) {
@@ -3206,13 +3204,15 @@ var ue='[cmdk-list-sizer=""]',M='[cmdk-group=""]',N='[cmdk-group-items=""]',de='
 var classnames = __webpack_require__(4403);
 var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 ;// CONCATENATED MODULE: external ["wp","data"]
-const external_wp_data_namespaceObject = window["wp"]["data"];
+var external_wp_data_namespaceObject = window["wp"]["data"];
+;// CONCATENATED MODULE: external ["wp","element"]
+var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","components"]
-const external_wp_components_namespaceObject = window["wp"]["components"];
+var external_wp_components_namespaceObject = window["wp"]["components"];
 ;// CONCATENATED MODULE: external ["wp","keyboardShortcuts"]
-const external_wp_keyboardShortcuts_namespaceObject = window["wp"]["keyboardShortcuts"];
+var external_wp_keyboardShortcuts_namespaceObject = window["wp"]["keyboardShortcuts"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/icon/index.js
 /**
  * WordPress dependencies
@@ -3243,23 +3243,23 @@ function Icon({
     ref
   });
 }
-/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
+/* harmony default export */ var icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
 
 ;// CONCATENATED MODULE: external ["wp","primitives"]
-const external_wp_primitives_namespaceObject = window["wp"]["primitives"];
+var external_wp_primitives_namespaceObject = window["wp"]["primitives"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/search.js
 
 /**
  * WordPress dependencies
  */
 
-const search = (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+const search = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
-}, (0,external_wp_element_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
   d: "M13 5c-3.3 0-6 2.7-6 6 0 1.4.5 2.7 1.3 3.7l-3.8 3.8 1.1 1.1 3.8-3.8c1 .8 2.3 1.3 3.7 1.3 3.3 0 6-2.7 6-6S16.3 5 13 5zm0 10.5c-2.5 0-4.5-2-4.5-4.5s2-4.5 4.5-4.5 4.5 2 4.5 4.5-2 4.5-4.5 4.5z"
 }));
-/* harmony default export */ const library_search = (search);
+/* harmony default export */ var library_search = (search);
 
 ;// CONCATENATED MODULE: ./packages/commands/build-module/store/reducer.js
 /**
@@ -3371,7 +3371,7 @@ const reducer = (0,external_wp_data_namespaceObject.combineReducers)({
   isOpen,
   context
 });
-/* harmony default export */ const store_reducer = (reducer);
+/* harmony default export */ var store_reducer = (reducer);
 
 ;// CONCATENATED MODULE: ./packages/commands/build-module/store/actions.js
 /** @typedef {import('@wordpress/keycodes').WPKeycodeModifier} WPKeycodeModifier */
@@ -3849,7 +3849,7 @@ function setContext(context) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","privateApis"]
-const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 ;// CONCATENATED MODULE: ./packages/commands/build-module/lock-unlock.js
 /**
  * WordPress dependencies
@@ -3943,23 +3943,23 @@ function CommandMenuLoader({
   if (!commands.length) {
     return null;
   }
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_element_namespaceObject.Fragment, null, (0,external_wp_element_namespaceObject.createElement)(Le.List, null, commands.map(command => {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(Le.List, null, commands.map(command => {
     var _command$searchLabel;
-    return (0,external_wp_element_namespaceObject.createElement)(Le.Item, {
+    return (0,external_React_namespaceObject.createElement)(Le.Item, {
       key: command.name,
       value: (_command$searchLabel = command.searchLabel) !== null && _command$searchLabel !== void 0 ? _command$searchLabel : command.label,
       onSelect: () => command.callback({
         close
       }),
       id: command.name
-    }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
       alignment: "left",
       className: classnames_default()('commands-command-menu__item', {
         'has-icon': command.icon
       })
-    }, command.icon && (0,external_wp_element_namespaceObject.createElement)(icon, {
+    }, command.icon && (0,external_React_namespaceObject.createElement)(icon, {
       icon: command.icon
-    }), (0,external_wp_element_namespaceObject.createElement)("span", null, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.TextHighlight, {
+    }), (0,external_React_namespaceObject.createElement)("span", null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextHighlight, {
       text: command.label,
       highlight: search
     }))));
@@ -3984,7 +3984,7 @@ function CommandMenuLoaderWrapper({
       setKey(prevKey => prevKey + 1);
     }
   }, [hook]);
-  return (0,external_wp_element_namespaceObject.createElement)(CommandMenuLoader, {
+  return (0,external_React_namespaceObject.createElement)(CommandMenuLoader, {
     key: key,
     hook: currentLoader.current,
     search: search,
@@ -4014,27 +4014,27 @@ function CommandMenuGroup({
   if (!commands.length && !loaders.length) {
     return null;
   }
-  return (0,external_wp_element_namespaceObject.createElement)(Le.Group, null, commands.map(command => {
+  return (0,external_React_namespaceObject.createElement)(Le.Group, null, commands.map(command => {
     var _command$searchLabel2;
-    return (0,external_wp_element_namespaceObject.createElement)(Le.Item, {
+    return (0,external_React_namespaceObject.createElement)(Le.Item, {
       key: command.name,
       value: (_command$searchLabel2 = command.searchLabel) !== null && _command$searchLabel2 !== void 0 ? _command$searchLabel2 : command.label,
       onSelect: () => command.callback({
         close
       }),
       id: command.name
-    }, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
       alignment: "left",
       className: classnames_default()('commands-command-menu__item', {
         'has-icon': command.icon
       })
-    }, command.icon && (0,external_wp_element_namespaceObject.createElement)(icon, {
+    }, command.icon && (0,external_React_namespaceObject.createElement)(icon, {
       icon: command.icon
-    }), (0,external_wp_element_namespaceObject.createElement)("span", null, (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.TextHighlight, {
+    }), (0,external_React_namespaceObject.createElement)("span", null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextHighlight, {
       text: command.label,
       highlight: search
     }))));
-  }), loaders.map(loader => (0,external_wp_element_namespaceObject.createElement)(CommandMenuLoaderWrapper, {
+  }), loaders.map(loader => (0,external_React_namespaceObject.createElement)(CommandMenuLoaderWrapper, {
     key: loader.name,
     hook: loader.hook,
     search: search,
@@ -4059,7 +4059,7 @@ function CommandInput({
       commandMenuInput.current.focus();
     }
   }, [isOpen]);
-  return (0,external_wp_element_namespaceObject.createElement)(Le.Input, {
+  return (0,external_React_namespaceObject.createElement)(Le.Input, {
     ref: commandMenuInput,
     value: search,
     onValueChange: setSearch,
@@ -4130,30 +4130,30 @@ function CommandMenu() {
     }
   };
   const isLoading = Object.values(loaders).some(Boolean);
-  return (0,external_wp_element_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
     className: "commands-command-menu",
     overlayClassName: "commands-command-menu__overlay",
     onRequestClose: closeAndReset,
     __experimentalHideHeader: true
-  }, (0,external_wp_element_namespaceObject.createElement)("div", {
+  }, (0,external_React_namespaceObject.createElement)("div", {
     className: "commands-command-menu__container"
-  }, (0,external_wp_element_namespaceObject.createElement)(Le, {
+  }, (0,external_React_namespaceObject.createElement)(Le, {
     label: (0,external_wp_i18n_namespaceObject.__)('Command palette'),
     onKeyDown: onKeyDown
-  }, (0,external_wp_element_namespaceObject.createElement)("div", {
+  }, (0,external_React_namespaceObject.createElement)("div", {
     className: "commands-command-menu__header"
-  }, (0,external_wp_element_namespaceObject.createElement)(icon, {
+  }, (0,external_React_namespaceObject.createElement)(icon, {
     icon: library_search
-  }), (0,external_wp_element_namespaceObject.createElement)(CommandInput, {
+  }), (0,external_React_namespaceObject.createElement)(CommandInput, {
     search: search,
     setSearch: setSearch,
     isOpen: isOpen
-  })), (0,external_wp_element_namespaceObject.createElement)(Le.List, null, search && !isLoading && (0,external_wp_element_namespaceObject.createElement)(Le.Empty, null, (0,external_wp_i18n_namespaceObject.__)('No results found.')), (0,external_wp_element_namespaceObject.createElement)(CommandMenuGroup, {
+  })), (0,external_React_namespaceObject.createElement)(Le.List, null, search && !isLoading && (0,external_React_namespaceObject.createElement)(Le.Empty, null, (0,external_wp_i18n_namespaceObject.__)('No results found.')), (0,external_React_namespaceObject.createElement)(CommandMenuGroup, {
     search: search,
     setLoader: setLoader,
     close: closeAndReset,
     isContextual: true
-  }), search && (0,external_wp_element_namespaceObject.createElement)(CommandMenuGroup, {
+  }), search && (0,external_React_namespaceObject.createElement)(CommandMenuGroup, {
     search: search,
     setLoader: setLoader,
     close: closeAndReset
@@ -4375,8 +4375,7 @@ function useCommandLoader(loader) {
 
 
 
-})();
-
+}();
 (window.wp = window.wp || {}).commands = __webpack_exports__;
 /******/ })()
 ;

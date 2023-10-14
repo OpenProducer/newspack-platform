@@ -141,7 +141,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		// Prevent status change from the controlled status if newsletter has been sent.
 		if ( ! in_array( $new_status, self::$controlled_statuses, true ) && $old_status !== $new_status && $sent ) {
 			$error = new WP_Error( 'newspack_newsletters_error', __( 'You cannot change a sent newsletter status.', 'newspack-newsletters' ), [ 'status' => 403 ] );
-			wp_die( $error ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+			wp_die( esc_html( $error->get_error_message() ) );
 		}
 
 		// Send if changing from any status to controlled statuses - 'publish' or 'private'.
@@ -153,9 +153,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		) {
 			$result = $this->send_newsletter( $post );
 			if ( is_wp_error( $result ) ) {
-				$transient = sprintf( 'newspack_newsletters_error_%s_%s', $post->ID, get_current_user_id() );
-				set_transient( $transient, $result->get_error_message(), 45 );
-				wp_die( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				wp_die( esc_html( $result->get_error_message() ) );
 			}
 		}
 	}
@@ -188,19 +186,15 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 
 		if ( in_array( $new_status, self::$controlled_statuses, true ) && 'future' === $old_status ) {
 			update_post_meta( $post->ID, 'sending_scheduled', true );
-			$result              = $this->send_newsletter( $post );
-			$error_transient_key = sprintf( 'newspack_newsletters_scheduling_error_%s', $post->ID );
+			$result = $this->send_newsletter( $post );
 			if ( is_wp_error( $result ) ) {
-				set_transient( $error_transient_key, $result->get_error_message() );
 				wp_update_post(
 					[
 						'ID'          => $post->ID,
 						'post_status' => 'draft',
 					]
 				);
-				wp_die( $result ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-			} else {
-				delete_transient( $error_transient_key );
+				wp_die( esc_html( $result->get_error_message() ) );
 			}
 			delete_post_meta( $post->ID, 'sending_scheduled' );
 		}
@@ -364,6 +358,19 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 
 		if ( true === $result ) {
 			Newspack_Newsletters::set_newsletter_sent( $post_id );
+		}
+
+		if ( \is_wp_error( $result ) ) {
+			$errors = get_post_meta( $post_id, 'newsletter_send_errors', true );
+			if ( ! is_array( $errors ) ) {
+				$errors = [];
+			}
+			$errors[] = [
+				'timestamp' => time(),
+				'message'   => $result->get_error_message(),
+			];
+			$errors   = array_slice( $errors, -10, 10, true );
+			update_post_meta( $post_id, 'newsletter_send_errors', $errors );
 		}
 
 		return $result;

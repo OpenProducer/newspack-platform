@@ -1,9 +1,9 @@
-/******/ (() => { // webpackBootstrap
+/******/ (function() { // webpackBootstrap
 /******/ 	"use strict";
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: external ["wp","interactivity"]
-const external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
+var external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/query/view.js
 /**
  * WordPress dependencies
@@ -11,13 +11,13 @@ const external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
 
 const isValidLink = ref => ref && ref instanceof window.HTMLAnchorElement && ref.href && (!ref.target || ref.target === '_self') && ref.origin === window.location.origin;
 const isValidEvent = event => event.button === 0 &&
-// left clicks only
+// Left clicks only.
 !event.metaKey &&
-// open in new tab (mac)
+// Open in new tab (Mac).
 !event.ctrlKey &&
-// open in new tab (windows)
+// Open in new tab (Windows).
 !event.altKey &&
-// download
+// Download.
 !event.shiftKey && !event.defaultPrevented;
 (0,external_wp_interactivity_namespaceObject.store)({
   selectors: {
@@ -44,7 +44,7 @@ const isValidEvent = event => event.button === 0 &&
             event.preventDefault();
             const id = ref.closest('[data-wp-navigation-id]').dataset.wpNavigationId;
 
-            // Don't announce the navigation immediately, wait 300 ms.
+            // Don't announce the navigation immediately, wait 400 ms.
             const timeout = setTimeout(() => {
               context.core.query.message = context.core.query.loadingText;
               context.core.query.animation = 'start';

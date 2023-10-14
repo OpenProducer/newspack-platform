@@ -92,7 +92,7 @@ final class Newspack_Newsletters_Renderer {
 						isset( $attributes[ $key ] ) &&
 						( is_string( $attributes[ $key ] ) || is_numeric( $attributes[ $key ] ) ) // Don't convert values that can't be expressed as a string.
 					) {
-						return $key . '="' . $attributes[ $key ] . '"';
+						return $key . '="' . esc_attr( $attributes[ $key ] ) . '"';
 					} else {
 						return '';
 					}
@@ -100,6 +100,30 @@ final class Newspack_Newsletters_Renderer {
 				array_keys( $attributes )
 			)
 		);
+	}
+
+	/**
+	 * Get a value for an image alt attribute.
+	 * 
+	 * @param int $attachment_id Attachment ID of the image.
+	 * 
+	 * @return string A value for the alt attribute.
+	 */
+	private static function get_image_alt( $attachment_id ) {
+		$alt        = get_post_meta( $attachment_id, '_wp_attachment_image_alt', true );
+		$attachment = get_post( $attachment_id );
+
+		if ( empty( $alt ) ) {
+			$alt = $attachment->post_content;
+		}
+		if ( empty( $alt ) ) {
+			$alt = $attachment->post_excerpt;
+		}
+		if ( empty( $alt ) ) {
+			$alt = $attachment->post_title;
+		}
+
+		return $alt;
 	}
 
 	/**
@@ -533,6 +557,7 @@ final class Newspack_Newsletters_Renderer {
 						'src'     => $image[0],
 						'href'    => isset( $attrs['isLink'] ) && ! $attrs['isLink'] ? '' : esc_url( home_url( '/' ) ),
 						'target'  => isset( $attrs['linkTarget'] ) && '_blank' === $attrs['linkTarget'] ? '_blank' : '',
+						'alt'     => self::get_image_alt( $custom_logo_id ),
 					);
 					$markup   .= '<mj-image ' . self::array_to_attributes( $img_attrs ) . ' />';
 				}
@@ -549,12 +574,14 @@ final class Newspack_Newsletters_Renderer {
 				$dom->loadHTML( mb_convert_encoding( $inner_html, 'HTML-ENTITIES', get_bloginfo( 'charset' ) ), LIBXML_HTML_NOIMPLIED | LIBXML_HTML_NODEFDTD );
 				$img        = $dom->getElementsByTagName( 'img' )->item( 0 );
 				$img_src    = $img->getAttribute( 'src' );
+				$img_alt    = self::get_image_alt( $attrs['id'] );
 				$figcaption = $dom->getElementsByTagName( 'figcaption' )->item( 0 );
 
 				$img_attrs = array(
 					'padding' => '0',
 					'align'   => isset( $attrs['align'] ) ? $attrs['align'] : 'left',
 					'src'     => $img_src,
+					'alt'     => $img_alt,
 				);
 
 				if ( isset( $attrs['sizeSlug'] ) ) {

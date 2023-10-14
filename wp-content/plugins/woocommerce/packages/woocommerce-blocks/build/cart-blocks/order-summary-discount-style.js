@@ -1,1 +1,1 @@
-(window.webpackWcBlocksJsonp=window.webpackWcBlocksJsonp||[]).push([[35],{941:function(c,o,s){"use strict";s.r(o);var n=s(489);o.default=n.a}}]);
+(window.webpackWcBlocksJsonp=window.webpackWcBlocksJsonp||[]).push([[35],{952:function(c,o,s){"use strict";s.r(o);var n=s(498);o.default=n.a}}]);

@@ -2,27 +2,27 @@
     "packages": [
         {
             "name": "automattic/jetpack-autoloader",
-            "version": "v2.11.21",
-            "version_normalized": "2.11.21.0",
+            "version": "v2.11.22",
+            "version_normalized": "2.11.22.0",
             "source": {
                 "type": "git",
                 "url": "https://github.com/Automattic/jetpack-autoloader.git",
-                "reference": "3a01a4a4ac166eaa721438cc06daa3cca0d51a15"
+                "reference": "32cc6b4a30e5cb5be669b4c8bed7330202e9f0c1"
             },
             "dist": {
                 "type": "zip",
-                "url": "https://api.github.com/repos/Automattic/jetpack-autoloader/zipball/3a01a4a4ac166eaa721438cc06daa3cca0d51a15",
-                "reference": "3a01a4a4ac166eaa721438cc06daa3cca0d51a15",
+                "url": "https://api.github.com/repos/Automattic/jetpack-autoloader/zipball/32cc6b4a30e5cb5be669b4c8bed7330202e9f0c1",
+                "reference": "32cc6b4a30e5cb5be669b4c8bed7330202e9f0c1",
                 "shasum": ""
             },
             "require": {
                 "composer-plugin-api": "^1.1 || ^2.0"
             },
             "require-dev": {
-                "automattic/jetpack-changelogger": "^3.3.4",
-                "yoast/phpunit-polyfills": "1.0.4"
+                "automattic/jetpack-changelogger": "^3.3.8",
+                "yoast/phpunit-polyfills": "1.1.0"
             },
-            "time": "2023-05-22T14:27:35+00:00",
+            "time": "2023-08-23T17:57:14+00:00",
             "type": "composer-plugin",
             "extra": {
                 "autotagger": true,
@@ -58,7 +58,7 @@
                 "wordpress"
             ],
             "support": {
-                "source": "https://github.com/Automattic/jetpack-autoloader/tree/v2.11.21"
+                "source": "https://github.com/Automattic/jetpack-autoloader/tree/v2.11.22"
             },
             "install-path": "../automattic/jetpack-autoloader"
         },
