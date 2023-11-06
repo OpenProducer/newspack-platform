@@ -162,6 +162,15 @@ function render_block( $attrs ) {
 		}
 	}
 
+	// Handle checkbox checked state.
+	if ( isset( $attrs['listsCheckboxes'] ) ) {
+		foreach ( $list_map as $list_id => $list_index ) {
+			if ( isset( $attrs['listsCheckboxes'][ $list_id ] ) && false === $attrs['listsCheckboxes'][ $list_id ] ) {
+				unset( $list_map[ $list_id ] );
+			}
+		}
+	}
+
 	$display_input_label = ! empty( $attrs['displayInputLabels'] );
 	$email_label         = $display_input_label ? $attrs['emailLabel'] : '';
 	$input_id            = sprintf( 'newspack-newsletters-subscribe-block-input-%s', $block_id );

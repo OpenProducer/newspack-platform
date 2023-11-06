@@ -140,17 +140,6 @@ class Template implements Template_Interface {
 	 *
 	 * @since 1.0.0
 	 *
-	 * @return void
-	 */
-	public function enqueue() {
-		// TODO: Implement enqueue() method.
-	}
-
-	/**
-	 * @inheritDoc
-	 *
-	 * @since 1.0.0
-	 *
 	 * @param string $stellar_slug The stellar slug for which the modal should be rendered.
 	 *
 	 * @return boolean

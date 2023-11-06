@@ -58,6 +58,10 @@
 				"type": "string"
 			}
 		},
+		"listsCheckboxes": {
+			"type": "object",
+			"default": {}
+		},
 		"mailchimpDoubleOptIn": {
 			"type": "boolean",
 			"default": false

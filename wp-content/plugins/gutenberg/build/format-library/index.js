@@ -1027,24 +1027,28 @@ const build_module_link_link = {
     html,
     plainText
   }) {
-    if ((0,external_wp_richText_namespaceObject.isCollapsed)(value)) {
-      return value;
-    }
     const pastedText = (html || plainText).replace(/<[^>]+>/g, '').trim();
 
     // A URL was pasted, turn the selection into a link.
-    if (!(0,external_wp_url_namespaceObject.isURL)(pastedText)) {
+    // For the link pasting feature, allow only http(s) protocols.
+    if (!(0,external_wp_url_namespaceObject.isURL)(pastedText) || !/^https?:/.test(pastedText)) {
       return value;
     }
 
     // Allows us to ask for this information when we get a report.
     window.console.log('Created link:\n\n', pastedText);
-    return (0,external_wp_richText_namespaceObject.applyFormat)(value, {
+    const format = {
       type: link_name,
       attributes: {
         url: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(pastedText)
       }
-    });
+    };
+    if ((0,external_wp_richText_namespaceObject.isCollapsed)(value)) {
+      return (0,external_wp_richText_namespaceObject.insert)(value, (0,external_wp_richText_namespaceObject.applyFormat)((0,external_wp_richText_namespaceObject.create)({
+        text: plainText
+      }), format, 0, plainText.length));
+    }
+    return (0,external_wp_richText_namespaceObject.applyFormat)(value, format);
   },
   edit: link_Edit
 };

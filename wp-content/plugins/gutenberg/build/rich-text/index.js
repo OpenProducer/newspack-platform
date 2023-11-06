@@ -3070,7 +3070,11 @@ function useAnchor({
     }
     editableContentElement.addEventListener('focusin', attach);
     editableContentElement.addEventListener('focusout', detach);
-    return detach;
+    return () => {
+      detach();
+      editableContentElement.removeEventListener('focusin', attach);
+      editableContentElement.removeEventListener('focusout', detach);
+    };
   }, [editableContentElement, tagName, className]);
   return anchor;
 }

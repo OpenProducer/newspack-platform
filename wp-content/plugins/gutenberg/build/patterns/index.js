@@ -218,7 +218,7 @@ var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/patterns');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/patterns');
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/store/index.js
 /**
@@ -284,41 +284,25 @@ var external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
 
 
 
-
-
 const unescapeString = arg => {
   return (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(arg);
 };
-const EMPTY_ARRAY = [];
-const MAX_TERMS_SUGGESTIONS = 20;
-const DEFAULT_QUERY = {
-  per_page: MAX_TERMS_SUGGESTIONS,
-  _fields: 'id,name',
-  context: 'view'
-};
 const CATEGORY_SLUG = 'wp_pattern_category';
 function CategorySelector({
-  values,
-  onChange
+  categoryTerms,
+  onChange,
+  categoryMap
 }) {
   const [search, setSearch] = (0,external_wp_element_namespaceObject.useState)('');
   const debouncedSearch = (0,external_wp_compose_namespaceObject.useDebounce)(setSearch, 500);
-  const {
-    searchResults
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getEntityRecords
-    } = select(external_wp_coreData_namespaceObject.store);
-    return {
-      searchResults: !!search ? getEntityRecords('taxonomy', CATEGORY_SLUG, {
-        ...DEFAULT_QUERY,
-        search
-      }) : EMPTY_ARRAY
-    };
-  }, [search]);
   const suggestions = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    return (searchResults !== null && searchResults !== void 0 ? searchResults : []).map(term => unescapeString(term.name));
-  }, [searchResults]);
+    return Array.from(categoryMap.values()).map(category => unescapeString(category.label)).filter(category => {
+      if (search !== '') {
+        return category.toLowerCase().includes(search.toLowerCase());
+      }
+      return true;
+    }).sort((a, b) => a.localeCompare(b));
+  }, [search, categoryMap]);
   function handleChange(termNames) {
     const uniqueTerms = termNames.reduce((terms, newTerm) => {
       if (!terms.some(term => term.toLowerCase() === newTerm.toLowerCase())) {
@@ -328,16 +312,17 @@ function CategorySelector({
     }, []);
     onChange(uniqueTerms);
   }
-  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.FormTokenField, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.FormTokenField, {
     className: "patterns-menu-items__convert-modal-categories",
-    value: values,
+    value: categoryTerms,
     suggestions: suggestions,
     onChange: handleChange,
     onInputChange: debouncedSearch,
-    maxSuggestions: MAX_TERMS_SUGGESTIONS,
     label: (0,external_wp_i18n_namespaceObject.__)('Categories'),
-    tokenizeOnBlur: true
-  }));
+    tokenizeOnBlur: true,
+    __experimentalExpandOnFocus: true,
+    __next40pxDefaultSize: true
+  });
 }
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/components/create-pattern-modal.js
@@ -364,15 +349,20 @@ function CategorySelector({
 
 
 function CreatePatternModal({
-  onSuccess,
-  onError,
+  confirmLabel = (0,external_wp_i18n_namespaceObject.__)('Create'),
+  defaultCategories = [],
+  className = 'patterns-menu-items__convert-modal',
   content,
+  modalTitle = (0,external_wp_i18n_namespaceObject.__)('Create pattern'),
   onClose,
-  className = 'patterns-menu-items__convert-modal'
+  onError,
+  onSuccess,
+  defaultSyncType = PATTERN_SYNC_TYPES.full,
+  defaultTitle = ''
 }) {
-  const [syncType, setSyncType] = (0,external_wp_element_namespaceObject.useState)(PATTERN_SYNC_TYPES.full);
-  const [categoryTerms, setCategoryTerms] = (0,external_wp_element_namespaceObject.useState)([]);
-  const [title, setTitle] = (0,external_wp_element_namespaceObject.useState)('');
+  const [syncType, setSyncType] = (0,external_wp_element_namespaceObject.useState)(defaultSyncType);
+  const [categoryTerms, setCategoryTerms] = (0,external_wp_element_namespaceObject.useState)(defaultCategories);
+  const [title, setTitle] = (0,external_wp_element_namespaceObject.useState)(defaultTitle);
   const [isSaving, setIsSaving] = (0,external_wp_element_namespaceObject.useState)(false);
   const {
     createPattern
@@ -384,6 +374,38 @@ function CreatePatternModal({
   const {
     createErrorNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  const {
+    corePatternCategories,
+    userPatternCategories
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getUserPatternCategories,
+      getBlockPatternCategories
+    } = select(external_wp_coreData_namespaceObject.store);
+    return {
+      corePatternCategories: getBlockPatternCategories(),
+      userPatternCategories: getUserPatternCategories()
+    };
+  });
+  const categoryMap = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    // Merge the user and core pattern categories and remove any duplicates.
+    const uniqueCategories = new Map();
+    [...userPatternCategories, ...corePatternCategories].forEach(category => {
+      if (!uniqueCategories.has(category.label) &&
+      // There are two core categories with `Post` label so explicitly remove the one with
+      // the `query` slug to avoid any confusion.
+      category.name !== 'query') {
+        // We need to store the name separately as this is used as the slug in the
+        // taxonomy and may vary from the label.
+        uniqueCategories.set(category.label, {
+          label: category.label,
+          value: category.label,
+          name: category.name
+        });
+      }
+    });
+    return uniqueCategories;
+  }, [userPatternCategories, corePatternCategories]);
   async function onCreate(patternTitle, sync) {
     if (!title || isSaving) {
       return;
@@ -399,9 +421,9 @@ function CreatePatternModal({
     } catch (error) {
       createErrorNotice(error.message, {
         type: 'snackbar',
-        id: 'convert-to-pattern-error'
+        id: 'pattern-create'
       });
-      onError();
+      onError?.();
     } finally {
       setIsSaving(false);
       setCategoryTerms([]);
@@ -415,9 +437,16 @@ function CreatePatternModal({
    */
   async function findOrCreateTerm(term) {
     try {
-      const newTerm = await saveEntityRecord('taxonomy', CATEGORY_SLUG, {
+      // We need to match any existing term to the correct slug to prevent duplicates, eg.
+      // the core `Headers` category uses the singular `header` as the slug.
+      const existingTerm = categoryMap.get(term);
+      const termData = existingTerm ? {
+        name: existingTerm.label,
+        slug: existingTerm.name
+      } : {
         name: term
-      }, {
+      };
+      const newTerm = await saveEntityRecord('taxonomy', CATEGORY_SLUG, termData, {
         throwOnError: true
       });
       invalidateResolution('getUserPatternCategories');
@@ -430,7 +459,7 @@ function CreatePatternModal({
     }
   }
   return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
-    title: (0,external_wp_i18n_namespaceObject.__)('Create pattern'),
+    title: modalTitle,
     onRequestClose: () => {
       onClose();
       setTitle('');
@@ -451,8 +480,9 @@ function CreatePatternModal({
     placeholder: (0,external_wp_i18n_namespaceObject.__)('My pattern'),
     className: "patterns-create-modal__name-input"
   }), (0,external_React_namespaceObject.createElement)(CategorySelector, {
-    values: categoryTerms,
-    onChange: setCategoryTerms
+    categoryTerms: categoryTerms,
+    onChange: setCategoryTerms,
+    categoryMap: categoryMap
   }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
     label: (0,external_wp_i18n_namespaceObject.__)('Synced'),
     help: (0,external_wp_i18n_namespaceObject.__)('Editing the pattern will update it anywhere it is used.'),
@@ -473,7 +503,172 @@ function CreatePatternModal({
     type: "submit",
     "aria-disabled": !title || isSaving,
     isBusy: isSaving
-  }, (0,external_wp_i18n_namespaceObject.__)('Create'))))));
+  }, confirmLabel)))));
+}
+
+;// CONCATENATED MODULE: ./packages/patterns/build-module/components/duplicate-pattern-modal.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+function getTermLabels(pattern, categories) {
+  // Theme patterns don't have an id and rely on core pattern categories.
+  if (!pattern.id) {
+    return categories.core?.filter(category => pattern.categories.includes(category.name)).map(category => category.label);
+  }
+  return categories.user?.filter(category => pattern.wp_pattern_category.includes(category.id)).map(category => category.label);
+}
+function DuplicatePatternModal({
+  pattern,
+  onClose,
+  onSuccess
+}) {
+  const {
+    createSuccessNotice
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  const categories = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getUserPatternCategories,
+      getBlockPatternCategories
+    } = select(external_wp_coreData_namespaceObject.store);
+    return {
+      core: getBlockPatternCategories(),
+      user: getUserPatternCategories()
+    };
+  });
+  if (!pattern) {
+    return null;
+  }
+  const duplicatedProps = {
+    content: pattern.content,
+    defaultCategories: getTermLabels(pattern, categories),
+    defaultSyncType: !pattern.id // Theme patterns don't have an ID.
+    ? PATTERN_SYNC_TYPES.unsynced : pattern.wp_pattern_sync_status || PATTERN_SYNC_TYPES.full,
+    defaultTitle: (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: Existing pattern title */
+    (0,external_wp_i18n_namespaceObject.__)('%s (Copy)'), typeof pattern.title === 'string' ? pattern.title : pattern.title.raw)
+  };
+  function handleOnSuccess({
+    pattern: newPattern
+  }) {
+    createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(
+    // translators: %s: The new pattern's title e.g. 'Call to action (copy)'.
+    (0,external_wp_i18n_namespaceObject.__)('"%s" duplicated.'), newPattern.title.raw), {
+      type: 'snackbar',
+      id: 'patterns-create'
+    });
+    onSuccess?.({
+      pattern: newPattern
+    });
+  }
+  return (0,external_React_namespaceObject.createElement)(CreatePatternModal, {
+    modalTitle: (0,external_wp_i18n_namespaceObject.__)('Duplicate pattern'),
+    confirmLabel: (0,external_wp_i18n_namespaceObject.__)('Duplicate'),
+    onClose: onClose,
+    onError: onClose,
+    onSuccess: handleOnSuccess,
+    ...duplicatedProps
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/patterns/build-module/components/rename-pattern-modal.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+function RenamePatternModal({
+  onClose,
+  onError,
+  onSuccess,
+  pattern,
+  ...props
+}) {
+  const originalName = (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(pattern.title);
+  const [name, setName] = (0,external_wp_element_namespaceObject.useState)(originalName);
+  const [isSaving, setIsSaving] = (0,external_wp_element_namespaceObject.useState)(false);
+  const {
+    editEntityRecord,
+    __experimentalSaveSpecifiedEntityEdits: saveSpecifiedEntityEdits
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
+  const {
+    createSuccessNotice,
+    createErrorNotice
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  const onRename = async event => {
+    event.preventDefault();
+    if (!name || name === pattern.title || isSaving) {
+      return;
+    }
+    try {
+      await editEntityRecord('postType', pattern.type, pattern.id, {
+        title: name
+      });
+      setIsSaving(true);
+      setName('');
+      onClose?.();
+      const savedRecord = await saveSpecifiedEntityEdits('postType', pattern.type, pattern.id, ['title'], {
+        throwOnError: true
+      });
+      onSuccess?.(savedRecord);
+      createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Pattern renamed'), {
+        type: 'snackbar',
+        id: 'pattern-update'
+      });
+    } catch (error) {
+      onError?.();
+      const errorMessage = error.message && error.code !== 'unknown_error' ? error.message : (0,external_wp_i18n_namespaceObject.__)('An error occurred while renaming the pattern.');
+      createErrorNotice(errorMessage, {
+        type: 'snackbar',
+        id: 'pattern-update'
+      });
+    } finally {
+      setIsSaving(false);
+      setName('');
+    }
+  };
+  const onRequestClose = () => {
+    onClose?.();
+    setName('');
+  };
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Rename'),
+    ...props,
+    onRequestClose: onClose
+  }, (0,external_React_namespaceObject.createElement)("form", {
+    onSubmit: onRename
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: "5"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,external_wp_i18n_namespaceObject.__)('Name'),
+    value: name,
+    onChange: setName,
+    required: true
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    justify: "right"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "tertiary",
+    onClick: onRequestClose
+  }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "primary",
+    type: "submit"
+  }, (0,external_wp_i18n_namespaceObject.__)('Save'))))));
 }
 
 ;// CONCATENATED MODULE: external ["wp","primitives"]
@@ -708,6 +903,106 @@ function PatternsMenuItems({
   })));
 }
 
+;// CONCATENATED MODULE: ./packages/patterns/build-module/components/rename-pattern-category-modal.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+function RenamePatternCategoryModal({
+  category,
+  onClose,
+  onError,
+  onSuccess,
+  ...props
+}) {
+  const [name, setName] = (0,external_wp_element_namespaceObject.useState)((0,external_wp_htmlEntities_namespaceObject.decodeEntities)(category.name));
+  const [isSaving, setIsSaving] = (0,external_wp_element_namespaceObject.useState)(false);
+  const {
+    saveEntityRecord,
+    invalidateResolution
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
+  const {
+    createErrorNotice,
+    createSuccessNotice
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+  const onRename = async event => {
+    event.preventDefault();
+    if (!name || name === category.name || isSaving) {
+      return;
+    }
+    try {
+      setIsSaving(true);
+
+      // User pattern category properties may differ as they can be
+      // normalized for use alongside template part areas, core pattern
+      // categories etc. As a result we won't just destructure the passed
+      // category object.
+      const savedRecord = await saveEntityRecord('taxonomy', CATEGORY_SLUG, {
+        id: category.id,
+        slug: category.slug,
+        name
+      });
+      invalidateResolution('getUserPatternCategories');
+      onSuccess?.(savedRecord);
+      onClose();
+      createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Pattern category renamed.'), {
+        type: 'snackbar',
+        id: 'pattern-category-update'
+      });
+    } catch (error) {
+      onError?.();
+      createErrorNotice(error.message, {
+        type: 'snackbar',
+        id: 'pattern-category-update'
+      });
+    } finally {
+      setIsSaving(false);
+      setName('');
+    }
+  };
+  const onRequestClose = () => {
+    onClose();
+    setName('');
+  };
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Rename'),
+    onRequestClose: onRequestClose,
+    ...props
+  }, (0,external_React_namespaceObject.createElement)("form", {
+    onSubmit: onRename
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: "5"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,external_wp_i18n_namespaceObject.__)('Name'),
+    value: name,
+    onChange: setName,
+    required: true
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    justify: "right"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "tertiary",
+    onClick: onRequestClose
+  }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "primary",
+    type: "submit",
+    "aria-disabled": !name || name === category.name || isSaving,
+    isBusy: isSaving
+  }, (0,external_wp_i18n_namespaceObject.__)('Save'))))));
+}
+
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/private-apis.js
 /**
  * Internal dependencies
@@ -716,10 +1011,16 @@ function PatternsMenuItems({
 
 
 
+
+
+
 const privateApis = {};
 lock(privateApis, {
   CreatePatternModal: CreatePatternModal,
+  DuplicatePatternModal: DuplicatePatternModal,
+  RenamePatternModal: RenamePatternModal,
   PatternsMenuItems: PatternsMenuItems,
+  RenamePatternCategoryModal: RenamePatternCategoryModal,
   PATTERN_TYPES: PATTERN_TYPES,
   PATTERN_DEFAULT_CATEGORY: PATTERN_DEFAULT_CATEGORY,
   PATTERN_USER_CATEGORY: PATTERN_USER_CATEGORY,

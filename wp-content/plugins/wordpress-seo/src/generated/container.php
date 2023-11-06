@@ -293,7 +293,8 @@ class Cached_Container extends Container
             'yoast\\wp\\seo\\integrations\\admin\\social_templates_integration' => 'Yoast\\WP\\SEO\\Integrations\\Admin\\Social_Templates_Integration',
             'yoast\\wp\\seo\\integrations\\admin\\workouts_integration' => 'Yoast\\WP\\SEO\\Integrations\\Admin\\Workouts_Integration',
             'yoast\\wp\\seo\\integrations\\alerts\\black_friday_product_editor_checklist_notification' => 'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Product_Editor_Checklist_Notification',
-            'yoast\\wp\\seo\\integrations\\alerts\\black_friday_promo_notification' => 'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promo_Notification',
+            'yoast\\wp\\seo\\integrations\\alerts\\black_friday_promotion_notification' => 'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promotion_Notification',
+            'yoast\\wp\\seo\\integrations\\alerts\\black_friday_sidebar_checklist_notification' => 'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Sidebar_Checklist_Notification',
             'yoast\\wp\\seo\\integrations\\alerts\\jetpack_boost_pre_publish' => 'Yoast\\WP\\SEO\\Integrations\\Alerts\\Jetpack_Boost_Pre_Publish',
             'yoast\\wp\\seo\\integrations\\alerts\\webinar_promo_notification' => 'Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification',
             'yoast\\wp\\seo\\integrations\\blocks\\breadcrumbs_block' => 'Yoast\\WP\\SEO\\Integrations\\Blocks\\Breadcrumbs_Block',
@@ -723,7 +724,8 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Integrations\\Admin\\Social_Templates_Integration' => 'getSocialTemplatesIntegrationService',
             'Yoast\\WP\\SEO\\Integrations\\Admin\\Workouts_Integration' => 'getWorkoutsIntegrationService',
             'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Product_Editor_Checklist_Notification' => 'getBlackFridayProductEditorChecklistNotificationService',
-            'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promo_Notification' => 'getBlackFridayPromoNotificationService',
+            'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promotion_Notification' => 'getBlackFridayPromotionNotificationService',
+            'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Sidebar_Checklist_Notification' => 'getBlackFridaySidebarChecklistNotificationService',
             'Yoast\\WP\\SEO\\Integrations\\Alerts\\Jetpack_Boost_Pre_Publish' => 'getJetpackBoostPrePublishService',
             'Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification' => 'getWebinarPromoNotificationService',
             'Yoast\\WP\\SEO\\Integrations\\Blocks\\Breadcrumbs_Block' => 'getBreadcrumbsBlockService',
@@ -3908,13 +3910,23 @@ class Cached_Container extends Container
     }
 
     /**
-     * Gets the public 'Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Promo_Notification' shared autowired service.
+     * Gets the public 'Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Promotion_Notification' shared autowired service.
      *
-     * @return \Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Promo_Notification
+     * @return \Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Promotion_Notification
      */
-    protected function getBlackFridayPromoNotificationService()
+    protected function getBlackFridayPromotionNotificationService()
     {
-        return $this->services['Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promo_Notification'] = new \Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Promo_Notification();
+        return $this->services['Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promotion_Notification'] = new \Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Promotion_Notification();
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Sidebar_Checklist_Notification' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Sidebar_Checklist_Notification
+     */
+    protected function getBlackFridaySidebarChecklistNotificationService()
+    {
+        return $this->services['Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Sidebar_Checklist_Notification'] = new \Yoast\WP\SEO\Integrations\Alerts\Black_Friday_Sidebar_Checklist_Notification();
     }
 
     /**
@@ -4842,7 +4854,8 @@ class Cached_Container extends Container
         $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Admin\\Redirects_Page_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Admin\\Workouts_Integration');
         $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Product_Editor_Checklist_Notification');
-        $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promo_Notification');
+        $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promotion_Notification');
+        $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Sidebar_Checklist_Notification');
         $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Alerts\\Jetpack_Boost_Pre_Publish');
         $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification');
         $instance->register_integration('Yoast\\WP\\SEO\\Integrations\\Blocks\\Internal_Linking_Category');

@@ -3868,20 +3868,19 @@ function getNotificationArgumentsForSaveSuccess(data) {
   if (data.options?.isAutosave) {
     return [];
   }
-
-  // No notice is shown after trashing a post
-  if (post.status === 'trash' && previousPost.status !== 'trash') {
-    return [];
-  }
   const publishStatus = ['publish', 'private', 'future'];
   const isPublished = publishStatus.includes(previousPost.status);
   const willPublish = publishStatus.includes(post.status);
+  const willTrash = post.status === 'trash' && previousPost.status !== 'trash';
   let noticeMessage;
   let shouldShowLink = (_postType$viewable = postType?.viewable) !== null && _postType$viewable !== void 0 ? _postType$viewable : false;
   let isDraft;
 
   // Always should a notice, which will be spoken for accessibility.
-  if (!isPublished && !willPublish) {
+  if (willTrash) {
+    noticeMessage = postType.labels.item_trashed;
+    shouldShowLink = false;
+  } else if (!isPublished && !willPublish) {
     // If saving a non-published post, don't show notice.
     noticeMessage = (0,external_wp_i18n_namespaceObject.__)('Draft saved.');
     isDraft = true;
@@ -10936,7 +10935,7 @@ var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/editor');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/editor');
 
 ;// CONCATENATED MODULE: ./packages/editor/build-module/components/post-sync-status/index.js
 

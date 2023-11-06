@@ -30,6 +30,20 @@ final class Pixel {
 		\add_filter( 'query_vars', [ __CLASS__, 'query_vars' ] );
 		\add_action( 'init', [ __CLASS__, 'render' ], 2, 0 ); // Run on priority 2 to allow Data Events and ActionScheduler to initialize first.
 		\add_action( 'template_redirect', [ __CLASS__, 'render' ] );
+
+		/**
+		 * Replace the default approach, which processes each request in the pixel
+		 * hit, to an approach that processes requests in batches by cycling log
+		 * files.
+		 *
+		 * The new pixel URL appends the tracking data to a log file, and then the
+		 * log file is processed in batches by the `newspack_newsletters_tracking_pixel_process_log`
+		 *
+		 * Unhooking the following restores the original approach.
+		 */
+		\add_action( 'wp', [ __CLASS__, 'schedule_log_processing' ] );
+		\add_action( 'newspack_newsletters_tracking_pixel_process_log', [ __CLASS__, 'process_logs' ] );
+		\add_filter( 'newspack_newsletters_tracking_pixel_url', [ __CLASS__, 'log_pixel_url' ], 10, 4 );
 	}
 
 	/**
@@ -113,7 +127,15 @@ final class Pixel {
 			],
 			\home_url()
 		);
-		return $url;
+		/**
+		 * Filters the pixel URL.
+		 *
+		 * @param string $url         Pixel URL.
+		 * @param int    $post_id     ID of the newsletter.
+		 * @param string $tracking_id Tracking ID.
+		 * @param string $email_tag   The ESP email address tag.
+		 */
+		return apply_filters( 'newspack_newsletters_tracking_pixel_url', $url, $post_id, $tracking_id, Utils::get_email_address_tag() );
 	}
 
 	/**
@@ -206,6 +228,117 @@ final class Pixel {
 
 		self::track_seen( $newsletter_id, $tracking_id, $email_address );
 		exit;
+	}
+
+	/**
+	 * Schedule log processing.
+	 */
+	public static function schedule_log_processing() {
+		if ( ! \wp_next_scheduled( 'newspack_newsletters_tracking_pixel_process_log' ) ) {
+			\wp_schedule_single_event( time() + 60, 'newspack_newsletters_tracking_pixel_process_log' );
+		}
+	}
+
+	/**
+	 * Log pixel URL.
+	 *
+	 * @param string $url         Pixel URL.
+	 * @param int    $post_id     ID of the newsletter.
+	 * @param string $tracking_id Tracking ID.
+	 * @param string $email_tag   Email address of the recipient.
+	 *
+	 * @return string
+	 */
+	public static function log_pixel_url( $url, $post_id, $tracking_id, $email_tag ) {
+		return \add_query_arg(
+			[
+				'id'  => $post_id,
+				'tid' => $tracking_id,
+				'em'  => $email_tag,
+			],
+			\content_url( '/np-newsletters-pixel.php' )
+		);
+	}
+
+	/**
+	 * Process logs.
+	 */
+	public static function process_logs() {
+		$current_log_file = \get_option( 'newspack_newsletters_tracking_pixel_log_file' );
+
+		if ( $current_log_file && file_exists( $current_log_file ) ) {
+			// Read the tracking data from the log file.
+			$data = file_get_contents( $current_log_file ); // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
+
+			// Process the tracking data.
+			$tracking_data = explode( PHP_EOL, $data );
+			foreach ( $tracking_data as $item ) {
+				if ( ! $item ) {
+					continue;
+				}
+				$item = explode( '|', $item );
+				if ( 3 !== count( $item ) ) {
+					continue;
+				}
+				// Values must be sanitized as they are stored in the logs without sanitization.
+				$newsletter_id = isset( $item[0] ) ? intval( $item[0] ) : 0;
+				$tracking_id   = isset( $item[1] ) ? \sanitize_text_field( $item[1] ) : 0;
+				$email_address = isset( $item[2] ) ? \sanitize_email( $item[2] ) : '';
+				if ( ! $newsletter_id || ! $tracking_id || ! $email_address ) {
+					continue;
+				}
+				self::track_seen( $newsletter_id, $tracking_id, $email_address );
+			}
+
+			// Remove the log file after processing.
+			unlink( $current_log_file, null ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink
+		}
+
+		// Generate a new log file.
+		$log_dir       = \wp_get_upload_dir()['path'];
+		$log_file_path = tempnam( $log_dir, 'newspack_newsletters_pixel_log_' ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_tempnam
+
+		// Create the pixel.php file with the new log file path.
+		$pixel_code = '<?php
+		// Skip bots.
+		if ( ! empty( $_SERVER["HTTP_USER_AGENT"] ) && preg_match( \'/bot|crawl|slurp|spider|mediapartners/i\', $_SERVER["HTTP_USER_AGENT"] )
+		) {
+			exit;
+		}
+		// Skip prefetching and previews.
+		if ( ! empty( $_SERVER["HTTP_X_PURPOSE"] ) && in_array( $_SERVER["HTTP_X_PURPOSE"], [ "preview", "instant" ], true ) ) {
+			exit;
+		}
+		if ( ! empty( $_SERVER["HTTP_X_MOZ"] ) && "prefetch" === $_SERVER["HTTP_X_MOZ"] ) {
+			exit;
+		}
+		if ( ! empty( $_SERVER["HTTP_USER_AGENT"] ) && "Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/42.0.2311.135 Safari/537.36 Edge/12.246 Mozilla/5.0" === $_SERVER["HTTP_USER_AGENT"] ) {
+			exit;
+		}
+		if ( ! isset( $_GET["id"] ) || ! isset( $_GET["tid"] ) || ! isset( $_GET["em"] ) ) {
+			exit;
+		}
+		$file = "' . $log_file_path . '";
+		$id = $_GET["id"];
+		$tid = $_GET["tid"];
+		$email_address = $_GET["em"];
+		file_put_contents( $file, $id . "|" . $tid . "|" . $email_address . PHP_EOL, FILE_APPEND );
+		header( "Cache-Control: no-cache, no-store, must-revalidate" );
+		header( "Pragma: no-cache" );
+		header( "Expires: 0" );
+		header( "Content-Type: image/gif" );
+		echo base64_decode( "R0lGODlhAQABAIAAAAUEBAAAACwAAAAAAQABAAACAkQBADs=" );
+		?>';
+
+		// Save the updated np-newsletters-pixel.php file.
+		file_put_contents( WP_CONTENT_DIR . '/np-newsletters-pixel.php', $pixel_code ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
+
+		// Update the log file path option.
+		update_option( 'newspack_newsletters_tracking_pixel_log_file', $log_file_path );
+
+		// Avoid notoptions bug.
+		wp_cache_delete( 'notoptions', 'options' );
+		wp_cache_delete( 'alloptions', 'options' );
 	}
 }
 Pixel::init();

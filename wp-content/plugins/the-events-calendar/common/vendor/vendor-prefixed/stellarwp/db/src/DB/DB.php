@@ -178,12 +178,12 @@ class DB {
 	/**
 	 * Create QueryBuilder instance
 	 *
-	 * @param string $table
-	 * @param null|string $alias
+	 * @param string|RawSQL $table
+	 * @param string|null  $alias
 	 *
 	 * @return QueryBuilder
 	 */
-	public static function table( $table, $alias = null ) {
+	public static function table( $table, $alias = '' ) {
 		$builder = new QueryBuilder();
 		$builder->from( $table, $alias );
 

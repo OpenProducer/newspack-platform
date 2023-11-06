@@ -33,7 +33,8 @@ interface ContainerInterface {
 	 *
 	 * @param string|class-string<T> $id Identifier of the entry to look for.
 	 *
-	 * @return ($id is class-string<T> ? T : mixed) Entry.
+	 * @return T|mixed
+	 * @phpstan-return ($id is class-string ? T : mixed)
 	 */
 	public function get( string $id );
 

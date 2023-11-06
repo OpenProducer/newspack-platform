@@ -343,7 +343,7 @@ trait WhereClause {
 	/**
 	 * @param  Closure  $callback  The closure will receive a StellarWP\DB\QueryBuilder\QueryBuilder instance
 	 *
-	 * @return QueryBuilder|WhereQueryBuilder
+	 * @return $this
 	 */
 	public function whereExists( $callback ) {
 		return $this->where(
@@ -356,7 +356,7 @@ trait WhereClause {
 	/**
 	 * @param  Closure  $callback  The closure will receive a StellarWP\DB\QueryBuilder\QueryBuilder instance
 	 *
-	 * @return QueryBuilder|WhereQueryBuilder
+	 * @return $this
 	 */
 	public function whereNotExists( $callback ) {
 		return $this->where(

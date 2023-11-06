@@ -102,6 +102,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		);
 		$args        = [
 			'method'  => $method,
+			'timeout' => 45, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 			'headers' => [
 				'Content-Type' => 'application/json',
 				'Accept'       => 'application/json',
@@ -166,6 +167,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 		}
 		$args     = [
 			'method'  => $method,
+			'timeout' => 45, // phpcs:ignore WordPressVIPMinimum.Performance.RemoteRequestTimeout.timeout_timeout
 			'headers' => [
 				'Content-Type' => $content_type,
 				'Accept'       => 'application/json',

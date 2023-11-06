@@ -281,8 +281,6 @@ function gutenberg_classnames_for_block_core_search( $attributes ) {
  * @param array  $wrapper_styles Current collection of wrapper styles.
  * @param array  $button_styles  Current collection of button styles.
  * @param array  $input_styles   Current collection of input styles.
- *
- * @return void
  */
 function gutenberg_apply_block_core_search_border_style( $attributes, $property, $side, &$wrapper_styles, &$button_styles, &$input_styles ) {
 	$is_button_inside = isset( $attributes['buttonPosition'] ) && 'button-inside' === $attributes['buttonPosition'];
@@ -327,8 +325,6 @@ function gutenberg_apply_block_core_search_border_style( $attributes, $property,
  * @param array  $wrapper_styles Current collection of wrapper styles.
  * @param array  $button_styles  Current collection of button styles.
  * @param array  $input_styles   Current collection of input styles.
- *
- * @return void
  */
 function gutenberg_gutenberg_apply_block_core_search_border_styles( $attributes, $property, &$wrapper_styles, &$button_styles, &$input_styles ) {
 	gutenberg_apply_block_core_search_border_style( $attributes, $property, null, $wrapper_styles, $button_styles, $input_styles );

@@ -2772,9 +2772,9 @@ __webpack_require__.d(__webpack_exports__, {
   __experimentalView: function() { return /* reexport */ component; },
   __experimentalZStack: function() { return /* reexport */ z_stack_component; },
   __unstableAnimatePresence: function() { return /* reexport */ AnimatePresence; },
-  __unstableComposite: function() { return /* reexport */ Composite; },
+  __unstableComposite: function() { return /* reexport */ Composite_Composite; },
   __unstableCompositeGroup: function() { return /* reexport */ CompositeGroup; },
-  __unstableCompositeItem: function() { return /* reexport */ CompositeItem; },
+  __unstableCompositeItem: function() { return /* reexport */ CompositeItem_CompositeItem; },
   __unstableDisclosureContent: function() { return /* reexport */ DisclosureContent_DisclosureContent; },
   __unstableGetAnimateClassName: function() { return /* reexport */ getAnimateClassName; },
   __unstableMotion: function() { return /* reexport */ motion; },
@@ -2832,2477 +2832,10 @@ var classnames_default = /*#__PURE__*/__webpack_require__.n(classnames);
 var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","compose"]
 var external_wp_compose_namespaceObject = window["wp"]["compose"];
-;// CONCATENATED MODULE: external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
-;// CONCATENATED MODULE: ./node_modules/reakit/es/_rollupPluginBabelHelpers-1f0bf8c2.js
-function _defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/BMLNRUFQ.js
+// src/focusable/focusable-context.ts
 
-  return obj;
-}
-
-function ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      ownKeys(Object(source), true).forEach(function (key) {
-        _defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-  return arr2;
-}
-
-function _createForOfIteratorHelperLoose(o, allowArrayLike) {
-  var it;
-
-  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-      return function () {
-        if (i >= o.length) return {
-          done: true
-        };
-        return {
-          done: false,
-          value: o[i++]
-        };
-      };
-    }
-
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  it = o[Symbol.iterator]();
-  return it.next.bind(it);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/_rollupPluginBabelHelpers-0c84a174.js
-function _rollupPluginBabelHelpers_0c84a174_defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source), true).forEach(function (key) {
-        _rollupPluginBabelHelpers_0c84a174_defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
-}
-
-function _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-  return arr2;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(o, allowArrayLike) {
-  var it;
-
-  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-      return function () {
-        if (i >= o.length) return {
-          done: true
-        };
-        return {
-          done: false,
-          value: o[i++]
-        };
-      };
-    }
-
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  it = o[Symbol.iterator]();
-  return it.next.bind(it);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/SystemContext.js
-
-
-var SystemContext = /*#__PURE__*/(0,external_React_.createContext)({});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useCreateElement.js
-
-
-
-
-function isRenderProp(children) {
-  return typeof children === "function";
-}
-
-/**
- * Custom hook that will call `children` if it's a function. If
- * `useCreateElement` has been passed to the context, it'll be used instead.
- *
- * @example
- * import React from "react";
- * import { SystemProvider, useCreateElement } from "reakit-system";
- *
- * const system = {
- *   useCreateElement(type, props, children = props.children) {
- *     // very similar to what `useCreateElement` does already
- *     if (typeof children === "function") {
- *       const { children: _, ...rest } = props;
- *       return children(rest);
- *     }
- *     return React.createElement(type, props, children);
- *   },
- * };
- *
- * function Component(props) {
- *   return useCreateElement("div", props);
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <Component url="url">{({ url }) => <a href={url}>link</a>}</Component>
- *     </SystemProvider>
- *   );
- * }
- */
-
-var useCreateElement = function useCreateElement(type, props, children) {
-  if (children === void 0) {
-    children = props.children;
-  }
-
-  var context = (0,external_React_.useContext)(SystemContext);
-
-  if (context.useCreateElement) {
-    return context.useCreateElement(type, props, children);
-  }
-
-  if (typeof type === "string" && isRenderProp(children)) {
-    var _ = props.children,
-        rest = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(props, ["children"]);
-
-    return children(rest);
-  }
-
-  return /*#__PURE__*/(0,external_React_.createElement)(type, props, children);
-};
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/_rollupPluginBabelHelpers-1f0bf8c2.js
-function _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source), true).forEach(function (key) {
-        _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-  return arr2;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_createForOfIteratorHelperLoose(o, allowArrayLike) {
-  var it;
-
-  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-      return function () {
-        if (i >= o.length) return {
-          done: true
-        };
-        return {
-          done: false,
-          value: o[i++]
-        };
-      };
-    }
-
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  it = o[Symbol.iterator]();
-  return it.next.bind(it);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isObject.js
-/**
- * Checks whether `arg` is an object or not.
- *
- * @returns {boolean}
- */
-function isObject_isObject(arg) {
-  return typeof arg === "object" && arg != null;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isPlainObject.js
-
-
-/**
- * Checks whether `arg` is a plain object or not.
- *
- * @returns {boolean}
- */
-
-function isPlainObject(arg) {
-  var _proto$constructor;
-
-  if (!isObject_isObject(arg)) return false;
-  var proto = Object.getPrototypeOf(arg);
-  if (proto == null) return true;
-  return ((_proto$constructor = proto.constructor) === null || _proto$constructor === void 0 ? void 0 : _proto$constructor.toString()) === Object.toString();
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/splitProps.js
-
-
-
-
-/**
- * Splits an object (`props`) into a tuple where the first item is an object
- * with the passed `keys`, and the second item is an object with these keys
- * omitted.
- *
- * @deprecated will be removed in version 2
- *
- * @example
- * import { splitProps } from "reakit-utils";
- *
- * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
- */
-
-function __deprecatedSplitProps(props, keys) {
-  var propsKeys = Object.keys(props);
-  var picked = {};
-  var omitted = {};
-
-  for (var _i = 0, _propsKeys = propsKeys; _i < _propsKeys.length; _i++) {
-    var key = _propsKeys[_i];
-
-    if (keys.indexOf(key) >= 0) {
-      picked[key] = props[key];
-    } else {
-      omitted[key] = props[key];
-    }
-  }
-
-  return [picked, omitted];
-}
-/**
- * Splits an object (`props`) into a tuple where the first item
- * is the `state` property, and the second item is the rest of the properties.
- *
- * It is also backward compatible with version 1. If `keys` are passed then
- * splits an object (`props`) into a tuple where the first item is an object
- * with the passed `keys`, and the second item is an object with these keys
- * omitted.
- *
- * @example
- * import { splitProps } from "reakit-utils";
- *
- * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
- *
- * @example
- * import { splitProps } from "reakit-utils";
- *
- * splitProps({ state: { a: "a" }, b: "b" }); // [{ a: "a" }, { b: "b" }]
- */
-
-
-function splitProps(props, keys) {
-  if (keys === void 0) {
-    keys = [];
-  }
-
-  if (!isPlainObject(props.state)) {
-    return __deprecatedSplitProps(props, keys);
-  }
-
-  var _deprecatedSplitProp = __deprecatedSplitProps(props, [].concat(keys, ["state"])),
-      picked = _deprecatedSplitProp[0],
-      omitted = _deprecatedSplitProp[1];
-
-  var state = picked.state,
-      restPicked = es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(picked, ["state"]);
-
-  return [_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), restPicked), omitted];
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/shallowEqual.js
-/**
- * Compares two objects.
- *
- * @example
- * import { shallowEqual } from "reakit-utils";
- *
- * shallowEqual({ a: "a" }, {}); // false
- * shallowEqual({ a: "a" }, { b: "b" }); // false
- * shallowEqual({ a: "a" }, { a: "a" }); // true
- * shallowEqual({ a: "a" }, { a: "a", b: "b" }); // false
- */
-function shallowEqual(objA, objB) {
-  if (objA === objB) return true;
-  if (!objA) return false;
-  if (!objB) return false;
-  if (typeof objA !== "object") return false;
-  if (typeof objB !== "object") return false;
-  var aKeys = Object.keys(objA);
-  var bKeys = Object.keys(objB);
-  var length = aKeys.length;
-  if (bKeys.length !== length) return false;
-
-  for (var _i = 0, _aKeys = aKeys; _i < _aKeys.length; _i++) {
-    var key = _aKeys[_i];
-
-    if (objA[key] !== objB[key]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/normalizePropsAreEqual.js
-
-
-
-
-/**
- * This higher order functions take `propsAreEqual` function and
- * returns a new function which normalizes the props.
- *
- * Normalizing in our case is making sure the `propsAreEqual` works with
- * both version 1 (object spreading) and version 2 (state object) state passing.
- *
- * To achieve this, the returned function in case of a state object
- * will spread the state object in both `prev` and `next props.
- *
- * Other case it just returns the function as is which makes sure
- * that we are still backward compatible
- */
-function normalizePropsAreEqual(propsAreEqual) {
-  if (propsAreEqual.name === "normalizePropsAreEqualInner") {
-    return propsAreEqual;
-  }
-
-  return function normalizePropsAreEqualInner(prev, next) {
-    if (!isPlainObject(prev.state) || !isPlainObject(next.state)) {
-      return propsAreEqual(prev, next);
-    }
-
-    return propsAreEqual(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, prev.state), prev), _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, next.state), next));
-  };
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createComponent.js
-
-
-
-
-
-
-
-
-function createComponent_forwardRef(component) {
-  return /*#__PURE__*/(0,external_React_.forwardRef)(component);
-}
-
-function memo(component, propsAreEqual) {
-  return /*#__PURE__*/(0,external_React_.memo)(component, propsAreEqual);
-}
-
-/**
- * Creates a React component.
- *
- * @example
- * import { createComponent } from "reakit-system";
- *
- * const A = createComponent({ as: "a" });
- *
- * @param options
- */
-function createComponent(_ref) {
-  var type = _ref.as,
-      useHook = _ref.useHook,
-      shouldMemo = _ref.memo,
-      _ref$propsAreEqual = _ref.propsAreEqual,
-      propsAreEqual = _ref$propsAreEqual === void 0 ? useHook === null || useHook === void 0 ? void 0 : useHook.unstable_propsAreEqual : _ref$propsAreEqual,
-      _ref$keys = _ref.keys,
-      keys = _ref$keys === void 0 ? (useHook === null || useHook === void 0 ? void 0 : useHook.__keys) || [] : _ref$keys,
-      _ref$useCreateElement = _ref.useCreateElement,
-      useCreateElement$1 = _ref$useCreateElement === void 0 ? useCreateElement : _ref$useCreateElement;
-
-  var Comp = function Comp(_ref2, ref) {
-    var _ref2$as = _ref2.as,
-        as = _ref2$as === void 0 ? type : _ref2$as,
-        props = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_ref2, ["as"]);
-
-    if (useHook) {
-      var _as$render;
-
-      var _splitProps = splitProps(props, keys),
-          _options = _splitProps[0],
-          htmlProps = _splitProps[1];
-
-      var _useHook = useHook(_options, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
-        ref: ref
-      }, htmlProps)),
-          wrapElement = _useHook.wrapElement,
-          elementProps = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_useHook, ["wrapElement"]); // @ts-ignore
-
-
-      var asKeys = ((_as$render = as.render) === null || _as$render === void 0 ? void 0 : _as$render.__keys) || as.__keys;
-      var asOptions = asKeys && splitProps(props, asKeys)[0];
-      var allProps = asOptions ? _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, elementProps), asOptions) : elementProps;
-
-      var _element = useCreateElement$1(as, allProps);
-
-      if (wrapElement) {
-        return wrapElement(_element);
-      }
-
-      return _element;
-    }
-
-    return useCreateElement$1(as, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
-      ref: ref
-    }, props));
-  };
-
-  if (false) {}
-
-  Comp = createComponent_forwardRef(Comp);
-
-  if (shouldMemo) {
-    Comp = memo(Comp, propsAreEqual && normalizePropsAreEqual(propsAreEqual));
-  }
-
-  Comp.__keys = keys;
-  Comp.unstable_propsAreEqual = normalizePropsAreEqual(propsAreEqual || shallowEqual);
-  return Comp;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useToken.js
-
-
-
-/**
- * React custom hook that returns the value of any token defined in the
- * SystemContext. It's mainly used internally in [`useOptions`](#useoptions)
- * and [`useProps`](#useprops).
- *
- * @example
- * import { SystemProvider, useToken } from "reakit-system";
- *
- * const system = {
- *   token: "value",
- * };
- *
- * function Component(props) {
- *   const token = useToken("token", "default value");
- *   return <div {...props}>{token}</div>;
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <Component />
- *     </SystemProvider>
- *   );
- * }
- */
-
-function useToken(token, defaultValue) {
-  (0,external_React_.useDebugValue)(token);
-  var context = (0,external_React_.useContext)(SystemContext);
-  return context[token] != null ? context[token] : defaultValue;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useProps.js
-
-
-
-
-/**
- * React custom hook that returns the props returned by a given
- * `use${name}Props` in the SystemContext.
- *
- * @example
- * import { SystemProvider, useProps } from "reakit-system";
- *
- * const system = {
- *   useAProps(options, htmlProps) {
- *     return {
- *       ...htmlProps,
- *       href: options.url,
- *     };
- *   },
- * };
- *
- * function A({ url, ...htmlProps }) {
- *   const props = useProps("A", { url }, htmlProps);
- *   return <a {...props} />;
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <A url="url">It will convert url into href in useAProps</A>
- *     </SystemProvider>
- *   );
- * }
- */
-
-function useProps(name, options, htmlProps) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  if (htmlProps === void 0) {
-    htmlProps = {};
-  }
-
-  var hookName = "use" + name + "Props";
-  (0,external_React_.useDebugValue)(hookName);
-  var useHook = useToken(hookName);
-
-  if (useHook) {
-    return useHook(options, htmlProps);
-  }
-
-  return htmlProps;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useOptions.js
-
-
-
-
-
-/**
- * React custom hook that returns the options returned by a given
- * `use${name}Options` in the SystemContext.
- *
- * @example
- * import React from "react";
- * import { SystemProvider, useOptions } from "reakit-system";
- *
- * const system = {
- *   useAOptions(options, htmlProps) {
- *     return {
- *       ...options,
- *       url: htmlProps.href,
- *     };
- *   },
- * };
- *
- * function A({ url, ...htmlProps }) {
- *   const options = useOptions("A", { url }, htmlProps);
- *   return <a href={options.url} {...htmlProps} />;
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <A href="url">
- *         It will convert href into url in useAOptions and then url into href in A
- *       </A>
- *     </SystemProvider>
- *   );
- * }
- */
-
-function useOptions(name, options, htmlProps) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  if (htmlProps === void 0) {
-    htmlProps = {};
-  }
-
-  var hookName = "use" + name + "Options";
-  (0,external_React_.useDebugValue)(hookName);
-  var useHook = useToken(hookName);
-
-  if (useHook) {
-    return _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, options), useHook(options, htmlProps));
-  }
-
-  return options;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/toArray.js
-/**
- * Transforms `arg` into an array if it's not already.
- *
- * @example
- * import { toArray } from "reakit-utils";
- *
- * toArray("a"); // ["a"]
- * toArray(["a"]); // ["a"]
- */
-function toArray(arg) {
-  if (Array.isArray(arg)) {
-    return arg;
-  }
-
-  return typeof arg !== "undefined" ? [arg] : [];
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createHook.js
-
-
-
-
-
-
-
-
-
-/**
- * Creates a React custom hook that will return component props.
- *
- * @example
- * import { createHook } from "reakit-system";
- *
- * const useA = createHook({
- *   name: "A",
- *   keys: ["url"], // custom props/options keys
- *   useProps(options, htmlProps) {
- *     return {
- *       ...htmlProps,
- *       href: options.url,
- *     };
- *   },
- * });
- *
- * function A({ url, ...htmlProps }) {
- *   const props = useA({ url }, htmlProps);
- *   return <a {...props} />;
- * }
- *
- * @param options
- */
-function createHook(options) {
-  var _options$useState, _composedHooks$;
-
-  var composedHooks = toArray(options.compose);
-
-  var __useOptions = function __useOptions(hookOptions, htmlProps) {
-    // Call the current hook's useOptions first
-    if (options.useOptions) {
-      hookOptions = options.useOptions(hookOptions, htmlProps);
-    } // If there's name, call useOptions from the system context
-
-
-    if (options.name) {
-      hookOptions = useOptions(options.name, hookOptions, htmlProps);
-    } // Run composed hooks useOptions
-
-
-    if (options.compose) {
-      for (var _iterator = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step; !(_step = _iterator()).done;) {
-        var hook = _step.value;
-        hookOptions = hook.__useOptions(hookOptions, htmlProps);
-      }
-    }
-
-    return hookOptions;
-  };
-
-  var useHook = function useHook(hookOptions, htmlProps, unstable_ignoreUseOptions) {
-    if (hookOptions === void 0) {
-      hookOptions = {};
-    }
-
-    if (htmlProps === void 0) {
-      htmlProps = {};
-    }
-
-    if (unstable_ignoreUseOptions === void 0) {
-      unstable_ignoreUseOptions = false;
-    }
-
-    // This won't execute when useHook was called from within another useHook
-    if (!unstable_ignoreUseOptions) {
-      hookOptions = __useOptions(hookOptions, htmlProps);
-    } // Call the current hook's useProps
-
-
-    if (options.useProps) {
-      htmlProps = options.useProps(hookOptions, htmlProps);
-    } // If there's name, call useProps from the system context
-
-
-    if (options.name) {
-      htmlProps = useProps(options.name, hookOptions, htmlProps);
-    }
-
-    if (options.compose) {
-      if (options.useComposeOptions) {
-        hookOptions = options.useComposeOptions(hookOptions, htmlProps);
-      }
-
-      if (options.useComposeProps) {
-        htmlProps = options.useComposeProps(hookOptions, htmlProps);
-      } else {
-        for (var _iterator2 = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step2; !(_step2 = _iterator2()).done;) {
-          var hook = _step2.value;
-          htmlProps = hook(hookOptions, htmlProps, true);
-        }
-      }
-    } // Remove undefined values from htmlProps
-
-
-    var finalHTMLProps = {};
-    var definedHTMLProps = htmlProps || {};
-
-    for (var prop in definedHTMLProps) {
-      if (definedHTMLProps[prop] !== undefined) {
-        finalHTMLProps[prop] = definedHTMLProps[prop];
-      }
-    }
-
-    return finalHTMLProps;
-  };
-
-  useHook.__useOptions = __useOptions;
-  var composedKeys = composedHooks.reduce(function (keys, hook) {
-    keys.push.apply(keys, hook.__keys || []);
-    return keys;
-  }, []); // It's used by createComponent to split option props (keys) and html props
-
-  useHook.__keys = [].concat(composedKeys, ((_options$useState = options.useState) === null || _options$useState === void 0 ? void 0 : _options$useState.__keys) || [], options.keys || []);
-  useHook.unstable_propsAreEqual = options.propsAreEqual || ((_composedHooks$ = composedHooks[0]) === null || _composedHooks$ === void 0 ? void 0 : _composedHooks$.unstable_propsAreEqual) || shallowEqual;
-
-  if (false) {}
-
-  return useHook;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useForkRef.js
-
-
-// https://github.com/mui-org/material-ui/blob/2bcc874cf07b81202968f769cb9c2398c7c11311/packages/material-ui/src/utils/useForkRef.js
-
-function setRef(ref, value) {
-  if (value === void 0) {
-    value = null;
-  }
-
-  if (!ref) return;
-
-  if (typeof ref === "function") {
-    ref(value);
-  } else {
-    ref.current = value;
-  }
-}
-/**
- * Merges up to two React Refs into a single memoized function React Ref so you
- * can pass it to an element.
- *
- * @example
- * import React from "react";
- * import { useForkRef } from "reakit-utils";
- *
- * const Component = React.forwardRef((props, ref) => {
- *   const internalRef = React.useRef();
- *   return <div {...props} ref={useForkRef(internalRef, ref)} />;
- * });
- */
-
-
-function useForkRef(refA, refB) {
-  return (0,external_React_.useMemo)(function () {
-    if (refA == null && refB == null) {
-      return null;
-    }
-
-    return function (value) {
-      setRef(refA, value);
-      setRef(refB, value);
-    };
-  }, [refA, refB]);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-warning/es/useWarning.js
-
-
-
-
-
-function isRefObject(ref) {
-  return isObject(ref) && "current" in ref;
-}
-/**
- * Logs `messages` to the console using `console.warn` based on a `condition`.
- * This should be used inside components.
- */
-
-
-function useWarning(condition) {
-  for (var _len = arguments.length, messages = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
-    messages[_key - 1] = arguments[_key];
-  }
-
-  if (false) {}
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-warning/es/index.js
-
-
-
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getDocument.js
-/**
- * Returns `element.ownerDocument || document`.
- */
-function getDocument_getDocument(element) {
-  return element ? element.ownerDocument || element : document;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getWindow.js
-
-
-// Thanks to Fluent UI for doing the [research on IE11 memory leak](https://github.com/microsoft/fluentui/pull/9010#issuecomment-490768427)
-
-var _window; // Note: Accessing "window" in IE11 is somewhat expensive, and calling "typeof window"
-// hits a memory leak, whereas aliasing it and calling "typeof _window" does not.
-// Caching the window value at the file scope lets us minimize the impact.
-
-
-try {
-  _window = window;
-} catch (e) {
-  /* no-op */
-}
-/**
- * Returns `element.ownerDocument.defaultView || window`.
- */
-
-
-function getWindow(element) {
-  if (!element) {
-    return _window;
-  }
-
-  return getDocument_getDocument(element).defaultView || _window;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/canUseDOM.js
-
-
-
-function checkIsBrowser() {
-  var _window = getWindow();
-
-  return Boolean(typeof _window !== "undefined" && _window.document && _window.document.createElement);
-}
-/**
- * It's `true` if it is running in a browser environment or `false` if it is not (SSR).
- *
- * @example
- * import { canUseDOM } from "reakit-utils";
- *
- * const title = canUseDOM ? document.title : "";
- */
-
-
-var canUseDOM = checkIsBrowser();
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useIsomorphicEffect.js
-
-
-
-
-
-/**
- * `React.useLayoutEffect` that fallbacks to `React.useEffect` on server side
- * rendering.
- */
-
-var useIsomorphicEffect = !canUseDOM ? external_React_.useEffect : external_React_.useLayoutEffect;
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useLiveRef.js
-
-
-
-
-
-
-/**
- * A `React.Ref` that keeps track of the passed `value`.
- */
-
-function useLiveRef(value) {
-  var ref = (0,external_React_.useRef)(value);
-  useIsomorphicEffect(function () {
-    ref.current = value;
-  });
-  return ref;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isSelfTarget.js
-/**
- * Returns `true` if `event.target` and `event.currentTarget` are the same.
- */
-function isSelfTarget(event) {
-  return event.target === event.currentTarget;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getActiveElement.js
-
-
-/**
- * Returns `element.ownerDocument.activeElement`.
- */
-
-function getActiveElement_getActiveElement(element) {
-  var _getDocument = getDocument_getDocument(element),
-      activeElement = _getDocument.activeElement;
-
-  if (!(activeElement !== null && activeElement !== void 0 && activeElement.nodeName)) {
-    // In IE11, activeElement might be an empty object if we're interacting
-    // with elements inside of an iframe.
-    return null;
-  }
-
-  return activeElement;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/contains.js
-/**
- * Similar to `Element.prototype.contains`, but a little bit faster when
- * `element` is the same as `child`.
- *
- * @example
- * import { contains } from "reakit-utils";
- *
- * contains(document.getElementById("parent"), document.getElementById("child"));
- */
-function contains(parent, child) {
-  return parent === child || parent.contains(child);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/hasFocusWithin.js
-
-
-
-
-/**
- * Checks if `element` has focus within. Elements that are referenced by
- * `aria-activedescendant` are also considered.
- *
- * @example
- * import { hasFocusWithin } from "reakit-utils";
- *
- * hasFocusWithin(document.getElementById("id"));
- */
-
-function hasFocusWithin(element) {
-  var activeElement = getActiveElement_getActiveElement(element);
-  if (!activeElement) return false;
-  if (contains(element, activeElement)) return true;
-  var activeDescendant = activeElement.getAttribute("aria-activedescendant");
-  if (!activeDescendant) return false;
-  if (activeDescendant === element.id) return true;
-  return !!element.querySelector("#" + activeDescendant);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isPortalEvent.js
-
-
-/**
- * Returns `true` if `event` has been fired within a React Portal element.
- */
-
-function isPortalEvent(event) {
-  return !contains(event.currentTarget, event.target);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isButton.js
-var buttonInputTypes = ["button", "color", "file", "image", "reset", "submit"];
-/**
- * Checks whether `element` is a native HTML button element.
- *
- * @example
- * import { isButton } from "reakit-utils";
- *
- * isButton(document.querySelector("button")); // true
- * isButton(document.querySelector("input[type='button']")); // true
- * isButton(document.querySelector("div")); // false
- * isButton(document.querySelector("input[type='text']")); // false
- * isButton(document.querySelector("div[role='button']")); // false
- *
- * @returns {boolean}
- */
-
-function isButton(element) {
-  if (element.tagName === "BUTTON") return true;
-
-  if (element.tagName === "INPUT") {
-    var input = element;
-    return buttonInputTypes.indexOf(input.type) !== -1;
-  }
-
-  return false;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/dom.js
-
-
-
-
-/**
- * Checks if a given string exists in the user agent string.
- */
-
-function isUA(string) {
-  if (!canUseDOM) return false;
-  return window.navigator.userAgent.indexOf(string) !== -1;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/matches.js
-/**
- * Ponyfill for `Element.prototype.matches`
- *
- * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
- */
-function matches(element, selectors) {
-  if ("matches" in element) {
-    return element.matches(selectors);
-  }
-
-  if ("msMatchesSelector" in element) {
-    return element.msMatchesSelector(selectors);
-  }
-
-  return element.webkitMatchesSelector(selectors);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/tabbable.js
-
-
-
-
-
-/** @module tabbable */
-var selector = "input:not([type='hidden']):not([disabled]), select:not([disabled]), " + "textarea:not([disabled]), a[href], button:not([disabled]), [tabindex], " + "iframe, object, embed, area[href], audio[controls], video[controls], " + "[contenteditable]:not([contenteditable='false'])";
-
-function isVisible(element) {
-  var htmlElement = element;
-  return htmlElement.offsetWidth > 0 || htmlElement.offsetHeight > 0 || element.getClientRects().length > 0;
-}
-
-function hasNegativeTabIndex(element) {
-  var tabIndex = parseInt(element.getAttribute("tabindex") || "0", 10);
-  return tabIndex < 0;
-}
-/**
- * Checks whether `element` is focusable or not.
- *
- * @memberof tabbable
- *
- * @example
- * import { isFocusable } from "reakit-utils";
- *
- * isFocusable(document.querySelector("input")); // true
- * isFocusable(document.querySelector("input[tabindex='-1']")); // true
- * isFocusable(document.querySelector("input[hidden]")); // false
- * isFocusable(document.querySelector("input:disabled")); // false
- */
-
-
-function isFocusable(element) {
-  return matches(element, selector) && isVisible(element);
-}
-/**
- * Checks whether `element` is tabbable or not.
- *
- * @memberof tabbable
- *
- * @example
- * import { isTabbable } from "reakit-utils";
- *
- * isTabbable(document.querySelector("input")); // true
- * isTabbable(document.querySelector("input[tabindex='-1']")); // false
- * isTabbable(document.querySelector("input[hidden]")); // false
- * isTabbable(document.querySelector("input:disabled")); // false
- */
-
-function isTabbable(element) {
-  return isFocusable(element) && !hasNegativeTabIndex(element);
-}
-/**
- * Returns all the focusable elements in `container`.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- *
- * @returns {Element[]}
- */
-
-function getAllFocusableIn(container) {
-  var allFocusable = Array.from(container.querySelectorAll(selector));
-  allFocusable.unshift(container);
-  return allFocusable.filter(isFocusable);
-}
-/**
- * Returns the first focusable element in `container`.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- *
- * @returns {Element|null}
- */
-
-function getFirstFocusableIn(container) {
-  var _getAllFocusableIn = getAllFocusableIn(container),
-      first = _getAllFocusableIn[0];
-
-  return first || null;
-}
-/**
- * Returns all the tabbable elements in `container`, including the container
- * itself.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- * @param fallbackToFocusable If `true`, it'll return focusable elements if there are no tabbable ones.
- *
- * @returns {Element[]}
- */
-
-function getAllTabbableIn(container, fallbackToFocusable) {
-  var allFocusable = Array.from(container.querySelectorAll(selector));
-  var allTabbable = allFocusable.filter(isTabbable);
-
-  if (isTabbable(container)) {
-    allTabbable.unshift(container);
-  }
-
-  if (!allTabbable.length && fallbackToFocusable) {
-    return allFocusable;
-  }
-
-  return allTabbable;
-}
-/**
- * Returns the first tabbable element in `container`, including the container
- * itself if it's tabbable.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- * @param fallbackToFocusable If `true`, it'll return the first focusable element if there are no tabbable ones.
- *
- * @returns {Element|null}
- */
-
-function getFirstTabbableIn(container, fallbackToFocusable) {
-  var _getAllTabbableIn = getAllTabbableIn(container, fallbackToFocusable),
-      first = _getAllTabbableIn[0];
-
-  return first || null;
-}
-/**
- * Returns the last tabbable element in `container`, including the container
- * itself if it's tabbable.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- * @param fallbackToFocusable If `true`, it'll return the last focusable element if there are no tabbable ones.
- *
- * @returns {Element|null}
- */
-
-function getLastTabbableIn(container, fallbackToFocusable) {
-  var allTabbable = getAllTabbableIn(container, fallbackToFocusable);
-  return allTabbable[allTabbable.length - 1] || null;
-}
-/**
- * Returns the next tabbable element in `container`.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- * @param fallbackToFocusable If `true`, it'll return the next focusable element if there are no tabbable ones.
- *
- * @returns {Element|null}
- */
-
-function getNextTabbableIn(container, fallbackToFocusable) {
-  var activeElement = getActiveElement(container);
-  var allFocusable = getAllFocusableIn(container);
-  var index = allFocusable.indexOf(activeElement);
-  var slice = allFocusable.slice(index + 1);
-  return slice.find(isTabbable) || allFocusable.find(isTabbable) || (fallbackToFocusable ? slice[0] : null);
-}
-/**
- * Returns the previous tabbable element in `container`.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- * @param fallbackToFocusable If `true`, it'll return the previous focusable element if there are no tabbable ones.
- *
- * @returns {Element|null}
- */
-
-function getPreviousTabbableIn(container, fallbackToFocusable) {
-  var activeElement = getActiveElement(container);
-  var allFocusable = getAllFocusableIn(container).reverse();
-  var index = allFocusable.indexOf(activeElement);
-  var slice = allFocusable.slice(index + 1);
-  return slice.find(isTabbable) || allFocusable.find(isTabbable) || (fallbackToFocusable ? slice[0] : null);
-}
-/**
- * Returns the closest focusable element.
- *
- * @memberof tabbable
- *
- * @param {Element} container
- *
- * @returns {Element|null}
- */
-
-function getClosestFocusable(element) {
-  while (element && !isFocusable(element)) {
-    element = closest(element, selector);
-  }
-
-  return element;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Role/Role.js
-
-
-
-
-
-// Automatically generated
-var ROLE_KEYS = ["unstable_system"];
-
-var useRole = createHook({
-  name: "Role",
-  keys: ROLE_KEYS,
-  propsAreEqual: function propsAreEqual(prev, next) {
-    var prevSystem = prev.unstable_system,
-        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["unstable_system"]);
-
-    var nextSystem = next.unstable_system,
-        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["unstable_system"]);
-
-    if (prevSystem !== nextSystem && !shallowEqual(prevSystem, nextSystem)) {
-      return false;
-    }
-
-    return shallowEqual(prevProps, nextProps);
-  }
-});
-var Role = createComponent({
-  as: "div",
-  useHook: useRole
-});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Tabbable/Tabbable.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Automatically generated
-var TABBABLE_KEYS = ["disabled", "focusable"];
-
-var isSafariOrFirefoxOnMac = isUA("Mac") && !isUA("Chrome") && (isUA("Safari") || isUA("Firefox"));
-
-function focusIfNeeded(element) {
-  if (!hasFocusWithin(element) && isFocusable(element)) {
-    element.focus();
-  }
-}
-
-function isNativeTabbable(element) {
-  return ["BUTTON", "INPUT", "SELECT", "TEXTAREA", "A"].includes(element.tagName);
-}
-
-function supportsDisabledAttribute(element) {
-  return ["BUTTON", "INPUT", "SELECT", "TEXTAREA"].includes(element.tagName);
-}
-
-function getTabIndex(trulyDisabled, nativeTabbable, supportsDisabled, htmlTabIndex) {
-  if (trulyDisabled) {
-    if (nativeTabbable && !supportsDisabled) {
-      // Anchor, audio and video tags don't support the `disabled` attribute.
-      // We must pass tabIndex={-1} so they don't receive focus on tab.
-      return -1;
-    } // Elements that support the `disabled` attribute don't need tabIndex.
-
-
-    return undefined;
-  }
-
-  if (nativeTabbable) {
-    // If the element is enabled and it's natively tabbable, we don't need to
-    // specify a tabIndex attribute unless it's explicitly set by the user.
-    return htmlTabIndex;
-  } // If the element is enabled and is not natively tabbable, we have to
-  // fallback tabIndex={0}.
-
-
-  return htmlTabIndex || 0;
-}
-
-function useDisableEvent(htmlEventRef, disabled) {
-  return (0,external_React_.useCallback)(function (event) {
-    var _htmlEventRef$current;
-
-    (_htmlEventRef$current = htmlEventRef.current) === null || _htmlEventRef$current === void 0 ? void 0 : _htmlEventRef$current.call(htmlEventRef, event);
-    if (event.defaultPrevented) return;
-
-    if (disabled) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-  }, [htmlEventRef, disabled]);
-}
-
-var useTabbable = createHook({
-  name: "Tabbable",
-  compose: useRole,
-  keys: TABBABLE_KEYS,
-  useOptions: function useOptions(options, _ref) {
-    var disabled = _ref.disabled;
-    return _objectSpread2({
-      disabled: disabled
-    }, options);
-  },
-  useProps: function useProps(options, _ref2) {
-    var htmlRef = _ref2.ref,
-        htmlTabIndex = _ref2.tabIndex,
-        htmlOnClickCapture = _ref2.onClickCapture,
-        htmlOnMouseDownCapture = _ref2.onMouseDownCapture,
-        htmlOnMouseDown = _ref2.onMouseDown,
-        htmlOnKeyPressCapture = _ref2.onKeyPressCapture,
-        htmlStyle = _ref2.style,
-        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref2, ["ref", "tabIndex", "onClickCapture", "onMouseDownCapture", "onMouseDown", "onKeyPressCapture", "style"]);
-
-    var ref = (0,external_React_.useRef)(null);
-    var onClickCaptureRef = useLiveRef(htmlOnClickCapture);
-    var onMouseDownCaptureRef = useLiveRef(htmlOnMouseDownCapture);
-    var onMouseDownRef = useLiveRef(htmlOnMouseDown);
-    var onKeyPressCaptureRef = useLiveRef(htmlOnKeyPressCapture);
-    var trulyDisabled = !!options.disabled && !options.focusable;
-
-    var _React$useState = (0,external_React_.useState)(true),
-        nativeTabbable = _React$useState[0],
-        setNativeTabbable = _React$useState[1];
-
-    var _React$useState2 = (0,external_React_.useState)(true),
-        supportsDisabled = _React$useState2[0],
-        setSupportsDisabled = _React$useState2[1];
-
-    var style = options.disabled ? _objectSpread2({
-      pointerEvents: "none"
-    }, htmlStyle) : htmlStyle;
-    useIsomorphicEffect(function () {
-      var tabbable = ref.current;
-
-      if (!tabbable) {
-         false ? 0 : void 0;
-        return;
-      }
-
-      if (!isNativeTabbable(tabbable)) {
-        setNativeTabbable(false);
-      }
-
-      if (!supportsDisabledAttribute(tabbable)) {
-        setSupportsDisabled(false);
-      }
-    }, []);
-    var onClickCapture = useDisableEvent(onClickCaptureRef, options.disabled);
-    var onMouseDownCapture = useDisableEvent(onMouseDownCaptureRef, options.disabled);
-    var onKeyPressCapture = useDisableEvent(onKeyPressCaptureRef, options.disabled);
-    var onMouseDown = (0,external_React_.useCallback)(function (event) {
-      var _onMouseDownRef$curre;
-
-      (_onMouseDownRef$curre = onMouseDownRef.current) === null || _onMouseDownRef$curre === void 0 ? void 0 : _onMouseDownRef$curre.call(onMouseDownRef, event);
-      var element = event.currentTarget;
-      if (event.defaultPrevented) return; // Safari and Firefox on MacOS don't focus on buttons on mouse down
-      // like other browsers/platforms. Instead, they focus on the closest
-      // focusable ancestor element, which is ultimately the body element. So
-      // we make sure to give focus to the tabbable element on mouse down so
-      // it works consistently across browsers.
-
-      if (!isSafariOrFirefoxOnMac) return;
-      if (isPortalEvent(event)) return;
-      if (!isButton(element)) return; // We can't focus right away after on mouse down, otherwise it would
-      // prevent drag events from happening. So we schedule the focus to the
-      // next animation frame.
-
-      var raf = requestAnimationFrame(function () {
-        element.removeEventListener("mouseup", focusImmediately, true);
-        focusIfNeeded(element);
-      }); // If mouseUp happens before the next animation frame (which is common
-      // on touch screens or by just tapping the trackpad on MacBook's), we
-      // cancel the animation frame and immediately focus on the element.
-
-      var focusImmediately = function focusImmediately() {
-        cancelAnimationFrame(raf);
-        focusIfNeeded(element);
-      }; // By listening to the event in the capture phase, we make sure the
-      // focus event is fired before the onMouseUp and onMouseUpCapture React
-      // events, which is aligned with the default browser behavior.
-
-
-      element.addEventListener("mouseup", focusImmediately, {
-        once: true,
-        capture: true
-      });
-    }, []);
-    return _objectSpread2({
-      ref: useForkRef(ref, htmlRef),
-      style: style,
-      tabIndex: getTabIndex(trulyDisabled, nativeTabbable, supportsDisabled, htmlTabIndex),
-      disabled: trulyDisabled && supportsDisabled ? true : undefined,
-      "aria-disabled": options.disabled ? true : undefined,
-      onClickCapture: onClickCapture,
-      onMouseDownCapture: onMouseDownCapture,
-      onMouseDown: onMouseDown,
-      onKeyPressCapture: onKeyPressCapture
-    }, htmlProps);
-  }
-});
-var Tabbable = createComponent({
-  as: "div",
-  useHook: useTabbable
-});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Clickable/Clickable.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-// Automatically generated
-var CLICKABLE_KEYS = ["unstable_clickOnEnter", "unstable_clickOnSpace"];
-
-function isNativeClick(event) {
-  var element = event.currentTarget;
-  if (!event.isTrusted) return false; // istanbul ignore next: can't test trusted events yet
-
-  return isButton(element) || element.tagName === "INPUT" || element.tagName === "TEXTAREA" || element.tagName === "A" || element.tagName === "SELECT";
-}
-
-var useClickable = createHook({
-  name: "Clickable",
-  compose: useTabbable,
-  keys: CLICKABLE_KEYS,
-  useOptions: function useOptions(_ref) {
-    var _ref$unstable_clickOn = _ref.unstable_clickOnEnter,
-        unstable_clickOnEnter = _ref$unstable_clickOn === void 0 ? true : _ref$unstable_clickOn,
-        _ref$unstable_clickOn2 = _ref.unstable_clickOnSpace,
-        unstable_clickOnSpace = _ref$unstable_clickOn2 === void 0 ? true : _ref$unstable_clickOn2,
-        options = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["unstable_clickOnEnter", "unstable_clickOnSpace"]);
-
-    return _objectSpread2({
-      unstable_clickOnEnter: unstable_clickOnEnter,
-      unstable_clickOnSpace: unstable_clickOnSpace
-    }, options);
-  },
-  useProps: function useProps(options, _ref2) {
-    var htmlOnKeyDown = _ref2.onKeyDown,
-        htmlOnKeyUp = _ref2.onKeyUp,
-        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref2, ["onKeyDown", "onKeyUp"]);
-
-    var _React$useState = (0,external_React_.useState)(false),
-        active = _React$useState[0],
-        setActive = _React$useState[1];
-
-    var onKeyDownRef = useLiveRef(htmlOnKeyDown);
-    var onKeyUpRef = useLiveRef(htmlOnKeyUp);
-    var onKeyDown = (0,external_React_.useCallback)(function (event) {
-      var _onKeyDownRef$current;
-
-      (_onKeyDownRef$current = onKeyDownRef.current) === null || _onKeyDownRef$current === void 0 ? void 0 : _onKeyDownRef$current.call(onKeyDownRef, event);
-      if (event.defaultPrevented) return;
-      if (options.disabled) return;
-      if (event.metaKey) return;
-      if (!isSelfTarget(event)) return;
-      var isEnter = options.unstable_clickOnEnter && event.key === "Enter";
-      var isSpace = options.unstable_clickOnSpace && event.key === " ";
-
-      if (isEnter || isSpace) {
-        if (isNativeClick(event)) return;
-        event.preventDefault();
-
-        if (isEnter) {
-          event.currentTarget.click();
-        } else if (isSpace) {
-          setActive(true);
-        }
-      }
-    }, [options.disabled, options.unstable_clickOnEnter, options.unstable_clickOnSpace]);
-    var onKeyUp = (0,external_React_.useCallback)(function (event) {
-      var _onKeyUpRef$current;
-
-      (_onKeyUpRef$current = onKeyUpRef.current) === null || _onKeyUpRef$current === void 0 ? void 0 : _onKeyUpRef$current.call(onKeyUpRef, event);
-      if (event.defaultPrevented) return;
-      if (options.disabled) return;
-      if (event.metaKey) return;
-      var isSpace = options.unstable_clickOnSpace && event.key === " ";
-
-      if (active && isSpace) {
-        setActive(false);
-        event.currentTarget.click();
-      }
-    }, [options.disabled, options.unstable_clickOnSpace, active]);
-    return _objectSpread2({
-      "data-active": active || undefined,
-      onKeyDown: onKeyDown,
-      onKeyUp: onKeyUp
-    }, htmlProps);
-  }
-});
-var Clickable = createComponent({
-  as: "button",
-  memo: true,
-  useHook: useClickable
-});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/getCurrentId-5aa9849e.js
-function findFirstEnabledItem(items, excludeId) {
-  if (excludeId) {
-    return items.find(function (item) {
-      return !item.disabled && item.id !== excludeId;
-    });
-  }
-
-  return items.find(function (item) {
-    return !item.disabled;
-  });
-}
-
-function getCurrentId(options, passedId) {
-  var _findFirstEnabledItem;
-
-  if (passedId || passedId === null) {
-    return passedId;
-  }
-
-  if (options.currentId || options.currentId === null) {
-    return options.currentId;
-  }
-
-  return (_findFirstEnabledItem = findFirstEnabledItem(options.items || [])) === null || _findFirstEnabledItem === void 0 ? void 0 : _findFirstEnabledItem.id;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/__keys-6742f591.js
-// Automatically generated
-var COMPOSITE_STATE_KEYS = ["baseId", "unstable_idCountRef", "setBaseId", "unstable_virtual", "rtl", "orientation", "items", "groups", "currentId", "loop", "wrap", "shift", "unstable_moves", "unstable_hasActiveWidget", "unstable_includesBaseElement", "registerItem", "unregisterItem", "registerGroup", "unregisterGroup", "move", "next", "previous", "up", "down", "first", "last", "sort", "unstable_setVirtual", "setRTL", "setOrientation", "setCurrentId", "setLoop", "setWrap", "setShift", "reset", "unstable_setIncludesBaseElement", "unstable_setHasActiveWidget"];
-var COMPOSITE_KEYS = COMPOSITE_STATE_KEYS;
-var COMPOSITE_GROUP_KEYS = COMPOSITE_KEYS;
-var COMPOSITE_ITEM_KEYS = COMPOSITE_GROUP_KEYS;
-var COMPOSITE_ITEM_WIDGET_KEYS = (/* unused pure expression or super */ null && (COMPOSITE_ITEM_KEYS));
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/userFocus-e16425e3.js
-function userFocus(element) {
-  element.userFocus = true;
-  element.focus();
-  element.userFocus = false;
-}
-function hasUserFocus(element) {
-  return !!element.userFocus;
-}
-function setUserFocus(element, value) {
-  element.userFocus = value;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isTextField.js
-/**
- * Check whether the given element is a text field, where text field is defined
- * by the ability to select within the input, or that it is contenteditable.
- *
- * @example
- * import { isTextField } from "reakit-utils";
- *
- * isTextField(document.querySelector("div")); // false
- * isTextField(document.querySelector("input")); // true
- * isTextField(document.querySelector("input[type='button']")); // false
- * isTextField(document.querySelector("textarea")); // true
- * isTextField(document.querySelector("div[contenteditable='true']")); // true
- */
-function isTextField_isTextField(element) {
-  try {
-    var isTextInput = element instanceof HTMLInputElement && element.selectionStart !== null;
-    var isTextArea = element.tagName === "TEXTAREA";
-    var isContentEditable = element.contentEditable === "true";
-    return isTextInput || isTextArea || isContentEditable || false;
-  } catch (error) {
-    // Safari throws an exception when trying to get `selectionStart`
-    // on non-text <input> elements (which, understandably, don't
-    // have the text selection API). We catch this via a try/catch
-    // block, as opposed to a more explicit check of the element's
-    // input types, because of Safari's non-standard behavior. This
-    // also means we don't have to worry about the list of input
-    // types that support `selectionStart` changing as the HTML spec
-    // evolves over time.
-    return false;
-  }
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/hasFocus.js
-
-
-
-/**
- * Checks if `element` has focus. Elements that are referenced by
- * `aria-activedescendant` are also considered.
- *
- * @example
- * import { hasFocus } from "reakit-utils";
- *
- * hasFocus(document.getElementById("id"));
- */
-
-function hasFocus(element) {
-  var activeElement = getActiveElement_getActiveElement(element);
-  if (!activeElement) return false;
-  if (activeElement === element) return true;
-  var activeDescendant = activeElement.getAttribute("aria-activedescendant");
-  if (!activeDescendant) return false;
-  return activeDescendant === element.id;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/ensureFocus.js
-
-
-
-
-/**
- * Ensures `element` will receive focus if it's not already.
- *
- * @example
- * import { ensureFocus } from "reakit-utils";
- *
- * ensureFocus(document.activeElement); // does nothing
- *
- * const element = document.querySelector("input");
- *
- * ensureFocus(element); // focuses element
- * ensureFocus(element, { preventScroll: true }); // focuses element preventing scroll jump
- *
- * function isActive(el) {
- *   return el.dataset.active === "true";
- * }
- *
- * ensureFocus(document.querySelector("[data-active='true']"), { isActive }); // does nothing
- *
- * @returns {number} `requestAnimationFrame` call ID so it can be passed to `cancelAnimationFrame` if needed.
- */
-function ensureFocus(element, _temp) {
-  var _ref = _temp === void 0 ? {} : _temp,
-      preventScroll = _ref.preventScroll,
-      _ref$isActive = _ref.isActive,
-      isActive = _ref$isActive === void 0 ? hasFocus : _ref$isActive;
-
-  if (isActive(element)) return -1;
-  element.focus({
-    preventScroll: preventScroll
-  });
-  if (isActive(element)) return -1;
-  return requestAnimationFrame(function () {
-    element.focus({
-      preventScroll: preventScroll
-    });
-  });
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Id/IdProvider.js
-
-
-var defaultPrefix = "id";
-function generateRandomString(prefix) {
-  if (prefix === void 0) {
-    prefix = defaultPrefix;
-  }
-
-  return "" + (prefix ? prefix + "-" : "") + Math.random().toString(32).substr(2, 6);
-}
-
-var unstable_IdContext = /*#__PURE__*/(0,external_React_.createContext)(generateRandomString);
-function unstable_IdProvider(_ref) {
-  var children = _ref.children,
-      _ref$prefix = _ref.prefix,
-      prefix = _ref$prefix === void 0 ? defaultPrefix : _ref$prefix;
-  var count = useRef(0);
-  var generateId = useCallback(function (localPrefix) {
-    if (localPrefix === void 0) {
-      localPrefix = prefix;
-    }
-
-    return "" + (localPrefix ? localPrefix + "-" : "") + ++count.current;
-  }, [prefix]);
-  return /*#__PURE__*/createElement(unstable_IdContext.Provider, {
-    value: generateId
-  }, children);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Id/Id.js
-
-
-
-
-
-
-// Automatically generated
-var ID_STATE_KEYS = ["baseId", "unstable_idCountRef", "setBaseId"];
-var ID_KEYS = [].concat(ID_STATE_KEYS, ["id"]);
-
-var unstable_useId = createHook({
-  keys: ID_KEYS,
-  useOptions: function useOptions(options, htmlProps) {
-    var generateId = (0,external_React_.useContext)(unstable_IdContext);
-
-    var _React$useState = (0,external_React_.useState)(function () {
-      // This comes from useIdState
-      if (options.unstable_idCountRef) {
-        options.unstable_idCountRef.current += 1;
-        return "-" + options.unstable_idCountRef.current;
-      } // If there's no useIdState, we check if `baseId` was passed (as a prop,
-      // not from useIdState).
-
-
-      if (options.baseId) {
-        return "-" + generateId("");
-      }
-
-      return "";
-    }),
-        suffix = _React$useState[0]; // `baseId` will be the prop passed directly as a prop or via useIdState.
-    // If there's neither, then it'll fallback to Context's generateId.
-    // This generateId can result in a sequential ID (if there's a Provider)
-    // or a random string (without Provider).
-
-
-    var baseId = (0,external_React_.useMemo)(function () {
-      return options.baseId || generateId();
-    }, [options.baseId, generateId]);
-    var id = htmlProps.id || options.id || "" + baseId + suffix;
-    return _objectSpread2(_objectSpread2({}, options), {}, {
-      id: id
-    });
-  },
-  useProps: function useProps(options, htmlProps) {
-    return _objectSpread2({
-      id: options.id
-    }, htmlProps);
-  }
-});
-var unstable_Id = createComponent({
-  as: "div",
-  useHook: unstable_useId
-});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/createEvent.js
-
-
-/**
- * Creates an `Event` in a way that also works on IE 11.
- *
- * @example
- * import { createEvent } from "reakit-utils";
- *
- * const el = document.getElementById("id");
- * el.dispatchEvent(createEvent(el, "blur", { bubbles: false }));
- */
-
-function createEvent(element, type, eventInit) {
-  if (typeof Event === "function") {
-    return new Event(type, eventInit);
-  } // IE 11 doesn't support Event constructors
-
-
-  var event = getDocument_getDocument(element).createEvent("Event");
-  event.initEvent(type, eventInit === null || eventInit === void 0 ? void 0 : eventInit.bubbles, eventInit === null || eventInit === void 0 ? void 0 : eventInit.cancelable);
-  return event;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/fireEvent.js
-
-
-
-/**
- * Creates and dispatches `Event` in a way that also works on IE 11.
- *
- * @example
- * import { fireEvent } from "reakit-utils";
- *
- * fireEvent(document.getElementById("id"), "blur", {
- *   bubbles: true,
- *   cancelable: true,
- * });
- */
-
-function fireEvent(element, type, eventInit) {
-  return element.dispatchEvent(createEvent(element, type, eventInit));
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/setTextFieldValue-0a221f4e.js
-
-
-function setTextFieldValue(element, value) {
-  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
-    var _Object$getOwnPropert;
-
-    var proto = Object.getPrototypeOf(element);
-    var setValue = (_Object$getOwnPropert = Object.getOwnPropertyDescriptor(proto, "value")) === null || _Object$getOwnPropert === void 0 ? void 0 : _Object$getOwnPropert.set;
-
-    if (setValue) {
-      setValue.call(element, value);
-      fireEvent(element, "input", {
-        bubbles: true
-      });
-    }
-  }
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/CompositeItem.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getWidget(itemElement) {
-  return itemElement.querySelector("[data-composite-item-widget]");
-}
-
-function useItem(options) {
-  return (0,external_React_.useMemo)(function () {
-    var _options$items;
-
-    return (_options$items = options.items) === null || _options$items === void 0 ? void 0 : _options$items.find(function (item) {
-      return options.id && item.id === options.id;
-    });
-  }, [options.items, options.id]);
-}
-
-function targetIsAnotherItem(event, items) {
-  if (isSelfTarget(event)) return false;
-
-  for (var _iterator = _createForOfIteratorHelperLoose(items), _step; !(_step = _iterator()).done;) {
-    var item = _step.value;
-
-    if (item.ref.current === event.target) {
-      return true;
-    }
-  }
-
-  return false;
-}
-
-var useCompositeItem = createHook({
-  name: "CompositeItem",
-  compose: [useClickable, unstable_useId],
-  keys: COMPOSITE_ITEM_KEYS,
-  propsAreEqual: function propsAreEqual(prev, next) {
-    if (!next.id || prev.id !== next.id) {
-      return useClickable.unstable_propsAreEqual(prev, next);
-    }
-
-    var prevCurrentId = prev.currentId,
-        prevMoves = prev.unstable_moves,
-        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["currentId", "unstable_moves"]);
-
-    var nextCurrentId = next.currentId,
-        nextMoves = next.unstable_moves,
-        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["currentId", "unstable_moves"]);
-
-    if (nextCurrentId !== prevCurrentId) {
-      if (next.id === nextCurrentId || next.id === prevCurrentId) {
-        return false;
-      }
-    } else if (prevMoves !== nextMoves) {
-      return false;
-    }
-
-    return useClickable.unstable_propsAreEqual(prevProps, nextProps);
-  },
-  useOptions: function useOptions(options) {
-    return _objectSpread2(_objectSpread2({}, options), {}, {
-      id: options.id,
-      currentId: getCurrentId(options),
-      unstable_clickOnSpace: options.unstable_hasActiveWidget ? false : options.unstable_clickOnSpace
-    });
-  },
-  useProps: function useProps(options, _ref) {
-    var _options$items2;
-
-    var htmlRef = _ref.ref,
-        _ref$tabIndex = _ref.tabIndex,
-        htmlTabIndex = _ref$tabIndex === void 0 ? 0 : _ref$tabIndex,
-        htmlOnMouseDown = _ref.onMouseDown,
-        htmlOnFocus = _ref.onFocus,
-        htmlOnBlurCapture = _ref.onBlurCapture,
-        htmlOnKeyDown = _ref.onKeyDown,
-        htmlOnClick = _ref.onClick,
-        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["ref", "tabIndex", "onMouseDown", "onFocus", "onBlurCapture", "onKeyDown", "onClick"]);
-
-    var ref = (0,external_React_.useRef)(null);
-    var id = options.id;
-    var trulyDisabled = options.disabled && !options.focusable;
-    var isCurrentItem = options.currentId === id;
-    var isCurrentItemRef = useLiveRef(isCurrentItem);
-    var hasFocusedComposite = (0,external_React_.useRef)(false);
-    var item = useItem(options);
-    var onMouseDownRef = useLiveRef(htmlOnMouseDown);
-    var onFocusRef = useLiveRef(htmlOnFocus);
-    var onBlurCaptureRef = useLiveRef(htmlOnBlurCapture);
-    var onKeyDownRef = useLiveRef(htmlOnKeyDown);
-    var onClickRef = useLiveRef(htmlOnClick);
-    var shouldTabIndex = !options.unstable_virtual && !options.unstable_hasActiveWidget && isCurrentItem || // We don't want to set tabIndex="-1" when using CompositeItem as a
-    // standalone component, without state props.
-    !((_options$items2 = options.items) !== null && _options$items2 !== void 0 && _options$items2.length);
-    (0,external_React_.useEffect)(function () {
-      var _options$registerItem;
-
-      if (!id) return undefined;
-      (_options$registerItem = options.registerItem) === null || _options$registerItem === void 0 ? void 0 : _options$registerItem.call(options, {
-        id: id,
-        ref: ref,
-        disabled: !!trulyDisabled
-      });
-      return function () {
-        var _options$unregisterIt;
-
-        (_options$unregisterIt = options.unregisterItem) === null || _options$unregisterIt === void 0 ? void 0 : _options$unregisterIt.call(options, id);
-      };
-    }, [id, trulyDisabled, options.registerItem, options.unregisterItem]);
-    (0,external_React_.useEffect)(function () {
-      var element = ref.current;
-
-      if (!element) {
-         false ? 0 : void 0;
-        return;
-      } // `moves` will be incremented whenever next, previous, up, down, first,
-      // last or move have been called. This means that the composite item will
-      // be focused whenever some of these functions are called. We're using
-      // isCurrentItemRef instead of isCurrentItem because we don't want to
-      // focus the item if isCurrentItem changes (and options.moves doesn't).
-
-
-      if (options.unstable_moves && isCurrentItemRef.current) {
-        userFocus(element);
-      }
-    }, [options.unstable_moves]);
-    var onMouseDown = (0,external_React_.useCallback)(function (event) {
-      var _onMouseDownRef$curre;
-
-      (_onMouseDownRef$curre = onMouseDownRef.current) === null || _onMouseDownRef$curre === void 0 ? void 0 : _onMouseDownRef$curre.call(onMouseDownRef, event);
-      setUserFocus(event.currentTarget, true);
-    }, []);
-    var onFocus = (0,external_React_.useCallback)(function (event) {
-      var _onFocusRef$current, _options$setCurrentId;
-
-      var shouldFocusComposite = hasUserFocus(event.currentTarget);
-      setUserFocus(event.currentTarget, false);
-      (_onFocusRef$current = onFocusRef.current) === null || _onFocusRef$current === void 0 ? void 0 : _onFocusRef$current.call(onFocusRef, event);
-      if (event.defaultPrevented) return;
-      if (isPortalEvent(event)) return;
-      if (!id) return;
-      if (targetIsAnotherItem(event, options.items)) return;
-      (_options$setCurrentId = options.setCurrentId) === null || _options$setCurrentId === void 0 ? void 0 : _options$setCurrentId.call(options, id); // When using aria-activedescendant, we want to make sure that the
-      // composite container receives focus, not the composite item.
-      // But we don't want to do this if the target is another focusable
-      // element inside the composite item, such as CompositeItemWidget.
-
-      if (shouldFocusComposite && options.unstable_virtual && options.baseId && isSelfTarget(event)) {
-        var target = event.target;
-        var composite = getDocument_getDocument(target).getElementById(options.baseId);
-
-        if (composite) {
-          hasFocusedComposite.current = true;
-          ensureFocus(composite);
-        }
-      }
-    }, [id, options.items, options.setCurrentId, options.unstable_virtual, options.baseId]);
-    var onBlurCapture = (0,external_React_.useCallback)(function (event) {
-      var _onBlurCaptureRef$cur;
-
-      (_onBlurCaptureRef$cur = onBlurCaptureRef.current) === null || _onBlurCaptureRef$cur === void 0 ? void 0 : _onBlurCaptureRef$cur.call(onBlurCaptureRef, event);
-      if (event.defaultPrevented) return;
-
-      if (options.unstable_virtual && hasFocusedComposite.current) {
-        // When hasFocusedComposite is true, composite has been focused right
-        // after focusing this item. This is an intermediate blur event, so
-        // we ignore it.
-        hasFocusedComposite.current = false;
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    }, [options.unstable_virtual]);
-    var onKeyDown = (0,external_React_.useCallback)(function (event) {
-      var _onKeyDownRef$current;
-
-      if (!isSelfTarget(event)) return;
-      var isVertical = options.orientation !== "horizontal";
-      var isHorizontal = options.orientation !== "vertical";
-      var isGrid = !!(item !== null && item !== void 0 && item.groupId);
-      var keyMap = {
-        ArrowUp: (isGrid || isVertical) && options.up,
-        ArrowRight: (isGrid || isHorizontal) && options.next,
-        ArrowDown: (isGrid || isVertical) && options.down,
-        ArrowLeft: (isGrid || isHorizontal) && options.previous,
-        Home: function Home() {
-          if (!isGrid || event.ctrlKey) {
-            var _options$first;
-
-            (_options$first = options.first) === null || _options$first === void 0 ? void 0 : _options$first.call(options);
-          } else {
-            var _options$previous;
-
-            (_options$previous = options.previous) === null || _options$previous === void 0 ? void 0 : _options$previous.call(options, true);
-          }
-        },
-        End: function End() {
-          if (!isGrid || event.ctrlKey) {
-            var _options$last;
-
-            (_options$last = options.last) === null || _options$last === void 0 ? void 0 : _options$last.call(options);
-          } else {
-            var _options$next;
-
-            (_options$next = options.next) === null || _options$next === void 0 ? void 0 : _options$next.call(options, true);
-          }
-        },
-        PageUp: function PageUp() {
-          if (isGrid) {
-            var _options$up;
-
-            (_options$up = options.up) === null || _options$up === void 0 ? void 0 : _options$up.call(options, true);
-          } else {
-            var _options$first2;
-
-            (_options$first2 = options.first) === null || _options$first2 === void 0 ? void 0 : _options$first2.call(options);
-          }
-        },
-        PageDown: function PageDown() {
-          if (isGrid) {
-            var _options$down;
-
-            (_options$down = options.down) === null || _options$down === void 0 ? void 0 : _options$down.call(options, true);
-          } else {
-            var _options$last2;
-
-            (_options$last2 = options.last) === null || _options$last2 === void 0 ? void 0 : _options$last2.call(options);
-          }
-        }
-      };
-      var action = keyMap[event.key];
-
-      if (action) {
-        event.preventDefault();
-        action();
-        return;
-      }
-
-      (_onKeyDownRef$current = onKeyDownRef.current) === null || _onKeyDownRef$current === void 0 ? void 0 : _onKeyDownRef$current.call(onKeyDownRef, event);
-      if (event.defaultPrevented) return;
-
-      if (event.key.length === 1 && event.key !== " ") {
-        var widget = getWidget(event.currentTarget);
-
-        if (widget && isTextField_isTextField(widget)) {
-          widget.focus();
-          setTextFieldValue(widget, "");
-        }
-      } else if (event.key === "Delete" || event.key === "Backspace") {
-        var _widget = getWidget(event.currentTarget);
-
-        if (_widget && isTextField_isTextField(_widget)) {
-          event.preventDefault();
-          setTextFieldValue(_widget, "");
-        }
-      }
-    }, [options.orientation, item, options.up, options.next, options.down, options.previous, options.first, options.last]);
-    var onClick = (0,external_React_.useCallback)(function (event) {
-      var _onClickRef$current;
-
-      (_onClickRef$current = onClickRef.current) === null || _onClickRef$current === void 0 ? void 0 : _onClickRef$current.call(onClickRef, event);
-      if (event.defaultPrevented) return;
-      var element = event.currentTarget;
-      var widget = getWidget(element);
-
-      if (widget && !hasFocusWithin(widget)) {
-        // If there's a widget inside the composite item, we make sure it's
-        // focused when pressing enter, space or clicking on the composite item.
-        widget.focus();
-      }
-    }, []);
-    return _objectSpread2({
-      ref: useForkRef(ref, htmlRef),
-      id: id,
-      tabIndex: shouldTabIndex ? htmlTabIndex : -1,
-      "aria-selected": options.unstable_virtual && isCurrentItem ? true : undefined,
-      onMouseDown: onMouseDown,
-      onFocus: onFocus,
-      onBlurCapture: onBlurCapture,
-      onKeyDown: onKeyDown,
-      onClick: onClick
-    }, htmlProps);
-  }
-});
-var CompositeItem = createComponent({
-  as: "button",
-  memo: true,
-  useHook: useCompositeItem
-});
+var FocusableContext = (0,external_React_.createContext)(true);
 
 
 
@@ -5382,7 +2915,7 @@ var PNRLI7OV_objRest = (source, exclude) => {
 // src/utils/misc.ts
 function noop(..._) {
 }
-function WVTCK5PV_shallowEqual(a, b) {
+function shallowEqual(a, b) {
   if (a === b)
     return true;
   if (!a)
@@ -5519,7 +3052,7 @@ function defaultValue(...values) {
 // src/utils/misc.ts
 
 
-function CP3U4HPL_setRef(ref, value) {
+function setRef(ref, value) {
   if (typeof ref === "function") {
     ref(value);
   } else if (ref) {
@@ -5575,15 +3108,15 @@ function mergeProps(base, overrides) {
 
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/O35LWD4W.js
 // src/utils/dom.ts
-var O35LWD4W_canUseDOM = O35LWD4W_checkIsBrowser();
-function O35LWD4W_checkIsBrowser() {
+var canUseDOM = checkIsBrowser();
+function checkIsBrowser() {
   var _a;
   return typeof window !== "undefined" && !!((_a = window.document) == null ? void 0 : _a.createElement);
 }
 function O35LWD4W_getDocument(node) {
   return node ? node.ownerDocument || node : document;
 }
-function O35LWD4W_getWindow(node) {
+function getWindow(node) {
   return O35LWD4W_getDocument(node).defaultView || window;
 }
 function O35LWD4W_getActiveElement(node, activeDescendant = false) {
@@ -5608,22 +3141,22 @@ function O35LWD4W_getActiveElement(node, activeDescendant = false) {
   }
   return activeElement;
 }
-function O35LWD4W_contains(parent, child) {
+function contains(parent, child) {
   return parent === child || parent.contains(child);
 }
 function isFrame(element) {
   return element.tagName === "IFRAME";
 }
-function O35LWD4W_isButton(element) {
+function isButton(element) {
   const tagName = element.tagName.toLowerCase();
   if (tagName === "button")
     return true;
   if (tagName === "input" && element.type) {
-    return O35LWD4W_buttonInputTypes.indexOf(element.type) !== -1;
+    return buttonInputTypes.indexOf(element.type) !== -1;
   }
   return false;
 }
-var O35LWD4W_buttonInputTypes = [
+var buttonInputTypes = [
   "button",
   "color",
   "file",
@@ -5631,7 +3164,7 @@ var O35LWD4W_buttonInputTypes = [
   "reset",
   "submit"
 ];
-function O35LWD4W_matches(element, selectors) {
+function matches(element, selectors) {
   if ("matches" in element) {
     return element.matches(selectors);
   }
@@ -5640,7 +3173,7 @@ function O35LWD4W_matches(element, selectors) {
   }
   return element.webkitMatchesSelector(selectors);
 }
-function O35LWD4W_isVisible(element) {
+function isVisible(element) {
   const htmlElement = element;
   return htmlElement.offsetWidth > 0 || htmlElement.offsetHeight > 0 || element.getClientRects().length > 0;
 }
@@ -5648,7 +3181,7 @@ function O35LWD4W_closest(element, selectors) {
   if ("closest" in element)
     return element.closest(selectors);
   do {
-    if (O35LWD4W_matches(element, selectors))
+    if (matches(element, selectors))
       return element;
     element = element.parentElement || element.parentNode;
   } while (element !== null && element.nodeType === 1);
@@ -5693,7 +3226,7 @@ function getTextboxSelection(element) {
     end = element.selectionEnd || 0;
   } else if (element.isContentEditable) {
     const selection = O35LWD4W_getDocument(element).getSelection();
-    if ((selection == null ? void 0 : selection.rangeCount) && selection.anchorNode && O35LWD4W_contains(element, selection.anchorNode) && selection.focusNode && O35LWD4W_contains(element, selection.focusNode)) {
+    if ((selection == null ? void 0 : selection.rangeCount) && selection.anchorNode && contains(element, selection.anchorNode) && selection.focusNode && contains(element, selection.focusNode)) {
       const range = selection.getRangeAt(0);
       const nextRange = range.cloneRange();
       nextRange.selectNodeContents(element);
@@ -5752,12 +3285,12 @@ function isPartiallyHidden(element) {
 
 
 // src/utils/events.ts
-function events_isPortalEvent(event) {
+function isPortalEvent(event) {
   return Boolean(
-    event.currentTarget && !O35LWD4W_contains(event.currentTarget, event.target)
+    event.currentTarget && !contains(event.currentTarget, event.target)
   );
 }
-function events_isSelfTarget(event) {
+function isSelfTarget(event) {
   return event.target === event.currentTarget;
 }
 function isOpeningInNewTab(event) {
@@ -5793,7 +3326,7 @@ function isDownloading(event) {
     return true;
   return false;
 }
-function events_fireEvent(element, type, eventInit) {
+function fireEvent(element, type, eventInit) {
   const event = new Event(type, eventInit);
   return element.dispatchEvent(event);
 }
@@ -5822,7 +3355,7 @@ function fireClickEvent(element, eventInit) {
 function isFocusEventOutside(event, container) {
   const containerElement = container || event.currentTarget;
   const relatedTarget = event.relatedTarget;
-  return !relatedTarget || !O35LWD4W_contains(containerElement, relatedTarget);
+  return !relatedTarget || !contains(containerElement, relatedTarget);
 }
 function queueBeforeEvent(element, type, callback) {
   const raf = requestAnimationFrame(() => {
@@ -5873,7 +3406,7 @@ var _React = PNRLI7OV_spreadValues({}, external_React_namespaceObject);
 var useReactId = _React.useId;
 var useReactDeferredValue = _React.useDeferredValue;
 var useReactInsertionEffect = _React.useInsertionEffect;
-var useSafeLayoutEffect = O35LWD4W_canUseDOM ? external_React_.useLayoutEffect : external_React_.useEffect;
+var useSafeLayoutEffect = canUseDOM ? external_React_.useLayoutEffect : external_React_.useEffect;
 function useInitialValue(value) {
   const [initialValue] = useState(value);
   return initialValue;
@@ -5885,7 +3418,7 @@ function useLazyValue(init) {
   }
   return ref.current;
 }
-function J7Q2EO23_useLiveRef(value) {
+function useLiveRef(value) {
   const ref = (0,external_React_.useRef)(value);
   useSafeLayoutEffect(() => {
     ref.current = value;
@@ -5920,7 +3453,7 @@ function useMergeRefs(...refs) {
     if (!refs.some(Boolean))
       return;
     return (value) => {
-      refs.forEach((ref) => CP3U4HPL_setRef(ref, value));
+      refs.forEach((ref) => setRef(ref, value));
     };
   }, refs);
 }
@@ -6016,9 +3549,9 @@ function useUpdateLayoutEffect(effect, deps) {
 function useControlledState(defaultState, state, setState) {
   const [localState, setLocalState] = useState(defaultState);
   const nextState = state !== void 0 ? state : localState;
-  const stateRef = J7Q2EO23_useLiveRef(state);
-  const setStateRef = J7Q2EO23_useLiveRef(setState);
-  const nextStateRef = J7Q2EO23_useLiveRef(nextState);
+  const stateRef = useLiveRef(state);
+  const setStateRef = useLiveRef(setState);
+  const nextStateRef = useLiveRef(nextState);
   const setNextState = useCallback((prevValue) => {
     const setStateProp = setStateRef.current;
     if (setStateProp) {
@@ -6101,6 +3634,1016 @@ function setMouseMoving(event) {
 function resetMouseMoving() {
   mouseMoving = false;
 }
+
+
+
+// EXTERNAL MODULE: ./node_modules/react/jsx-runtime.js
+var jsx_runtime = __webpack_require__(7557);
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/CFEUKV6C.js
+
+
+
+
+// src/utils/system.tsx
+
+
+
+function isRenderProp(children) {
+  return typeof children === "function";
+}
+function forwardRef2(render) {
+  const Role = React.forwardRef((props, ref) => render(__spreadProps(__spreadValues({}, props), { ref })));
+  Role.displayName = render.displayName || render.name;
+  return Role;
+}
+function memo2(Component, propsAreEqual) {
+  const Role = React.memo(Component, propsAreEqual);
+  Role.displayName = Component.displayName || Component.name;
+  return Role;
+}
+function createComponent(render) {
+  const Role = (props, ref) => render(PNRLI7OV_spreadValues({ ref }, props));
+  return external_React_.forwardRef(Role);
+}
+function createMemoComponent(render) {
+  const Role = createComponent(render);
+  return external_React_.memo(Role);
+}
+function CFEUKV6C_createElement(Type, props) {
+  const _a = props, { as: As, wrapElement, render } = _a, rest = __objRest(_a, ["as", "wrapElement", "render"]);
+  let element;
+  const mergedRef = useMergeRefs(props.ref, getRefProperty(render));
+  if (false) {}
+  if (As && typeof As !== "string") {
+    element = /* @__PURE__ */ (0,jsx_runtime.jsx)(As, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, rest), { render }));
+  } else if (external_React_.isValidElement(render)) {
+    const renderProps = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, render.props), { ref: mergedRef });
+    element = external_React_.cloneElement(render, mergeProps(rest, renderProps));
+  } else if (render) {
+    element = render(rest);
+  } else if (isRenderProp(props.children)) {
+    if (false) {}
+    const _b = rest, { children } = _b, otherProps = __objRest(_b, ["children"]);
+    element = props.children(otherProps);
+  } else if (As) {
+    element = /* @__PURE__ */ (0,jsx_runtime.jsx)(As, PNRLI7OV_spreadValues({}, rest));
+  } else {
+    element = /* @__PURE__ */ (0,jsx_runtime.jsx)(Type, PNRLI7OV_spreadValues({}, rest));
+  }
+  if (wrapElement) {
+    return wrapElement(element);
+  }
+  return element;
+}
+function createHook(useProps) {
+  const useRole = (props = {}) => {
+    const htmlProps = useProps(props);
+    const copy = {};
+    for (const prop in htmlProps) {
+      if (WVTCK5PV_hasOwnProperty(htmlProps, prop) && htmlProps[prop] !== void 0) {
+        copy[prop] = htmlProps[prop];
+      }
+    }
+    return copy;
+  };
+  return useRole;
+}
+function createStoreContext(providers = [], scopedProviders = []) {
+  const context = external_React_.createContext(void 0);
+  const scopedContext = external_React_.createContext(void 0);
+  const useContext2 = () => external_React_.useContext(context);
+  const useScopedContext = (onlyScoped = false) => {
+    const scoped = external_React_.useContext(scopedContext);
+    const store = useContext2();
+    if (onlyScoped)
+      return scoped;
+    return scoped || store;
+  };
+  const useProviderContext = () => {
+    const scoped = external_React_.useContext(scopedContext);
+    const store = useContext2();
+    if (scoped && scoped === store)
+      return;
+    return store;
+  };
+  const ContextProvider = (props) => {
+    return providers.reduceRight(
+      (children, Provider) => /* @__PURE__ */ (0,jsx_runtime.jsx)(Provider, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { children })),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(context.Provider, PNRLI7OV_spreadValues({}, props))
+    );
+  };
+  const ScopedContextProvider = (props) => {
+    return /* @__PURE__ */ (0,jsx_runtime.jsx)(ContextProvider, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { children: scopedProviders.reduceRight(
+      (children, Provider) => /* @__PURE__ */ (0,jsx_runtime.jsx)(Provider, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { children })),
+      /* @__PURE__ */ (0,jsx_runtime.jsx)(scopedContext.Provider, PNRLI7OV_spreadValues({}, props))
+    ) }));
+  };
+  return {
+    context,
+    scopedContext,
+    useContext: useContext2,
+    useScopedContext,
+    useProviderContext,
+    ContextProvider,
+    ScopedContextProvider
+  };
+}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/utils/focus.js
+
+
+
+// src/utils/focus.ts
+var selector = "input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], button:not([disabled]), [tabindex], iframe, object, embed, area[href], audio[controls], video[controls], [contenteditable]:not([contenteditable='false'])";
+function hasNegativeTabIndex(element) {
+  const tabIndex = parseInt(element.getAttribute("tabindex") || "0", 10);
+  return tabIndex < 0;
+}
+function isFocusable(element) {
+  if (!matches(element, selector))
+    return false;
+  if (!isVisible(element))
+    return false;
+  if (O35LWD4W_closest(element, "[inert]"))
+    return false;
+  return true;
+}
+function isTabbable(element) {
+  if (!isFocusable(element))
+    return false;
+  if (hasNegativeTabIndex(element))
+    return false;
+  if (!("form" in element))
+    return true;
+  if (!element.form)
+    return true;
+  if (element.checked)
+    return true;
+  if (element.type !== "radio")
+    return true;
+  const radioGroup = element.form.elements.namedItem(element.name);
+  if (!radioGroup)
+    return true;
+  if (!("length" in radioGroup))
+    return true;
+  const activeElement = O35LWD4W_getActiveElement(element);
+  if (!activeElement)
+    return true;
+  if (activeElement === element)
+    return true;
+  if (!("form" in activeElement))
+    return true;
+  if (activeElement.form !== element.form)
+    return true;
+  if (activeElement.name !== element.name)
+    return true;
+  return false;
+}
+function getAllFocusableIn(container, includeContainer) {
+  const elements = Array.from(
+    container.querySelectorAll(selector)
+  );
+  if (includeContainer) {
+    elements.unshift(container);
+  }
+  const focusableElements = elements.filter(isFocusable);
+  focusableElements.forEach((element, i) => {
+    if (isFrame(element) && element.contentDocument) {
+      const frameBody = element.contentDocument.body;
+      focusableElements.splice(i, 1, ...getAllFocusableIn(frameBody));
+    }
+  });
+  return focusableElements;
+}
+function getAllFocusable(includeBody) {
+  return getAllFocusableIn(document.body, includeBody);
+}
+function getFirstFocusableIn(container, includeContainer) {
+  const [first] = getAllFocusableIn(container, includeContainer);
+  return first || null;
+}
+function getFirstFocusable(includeBody) {
+  return getFirstFocusableIn(document.body, includeBody);
+}
+function getAllTabbableIn(container, includeContainer, fallbackToFocusable) {
+  const elements = Array.from(
+    container.querySelectorAll(selector)
+  );
+  const tabbableElements = elements.filter(isTabbable);
+  if (includeContainer && isTabbable(container)) {
+    tabbableElements.unshift(container);
+  }
+  tabbableElements.forEach((element, i) => {
+    if (isFrame(element) && element.contentDocument) {
+      const frameBody = element.contentDocument.body;
+      const allFrameTabbable = getAllTabbableIn(
+        frameBody,
+        false,
+        fallbackToFocusable
+      );
+      tabbableElements.splice(i, 1, ...allFrameTabbable);
+    }
+  });
+  if (!tabbableElements.length && fallbackToFocusable) {
+    return elements;
+  }
+  return tabbableElements;
+}
+function getAllTabbable(fallbackToFocusable) {
+  return getAllTabbableIn(document.body, false, fallbackToFocusable);
+}
+function getFirstTabbableIn(container, includeContainer, fallbackToFocusable) {
+  const [first] = getAllTabbableIn(
+    container,
+    includeContainer,
+    fallbackToFocusable
+  );
+  return first || null;
+}
+function getFirstTabbable(fallbackToFocusable) {
+  return getFirstTabbableIn(document.body, false, fallbackToFocusable);
+}
+function getLastTabbableIn(container, includeContainer, fallbackToFocusable) {
+  const allTabbable = getAllTabbableIn(
+    container,
+    includeContainer,
+    fallbackToFocusable
+  );
+  return allTabbable[allTabbable.length - 1] || null;
+}
+function getLastTabbable(fallbackToFocusable) {
+  return getLastTabbableIn(document.body, false, fallbackToFocusable);
+}
+function getNextTabbableIn(container, includeContainer, fallbackToFirst, fallbackToFocusable) {
+  const activeElement = O35LWD4W_getActiveElement(container);
+  const allFocusable = getAllFocusableIn(container, includeContainer);
+  const activeIndex = allFocusable.indexOf(activeElement);
+  const nextFocusableElements = allFocusable.slice(activeIndex + 1);
+  return nextFocusableElements.find(isTabbable) || (fallbackToFirst ? allFocusable.find(isTabbable) : null) || (fallbackToFocusable ? nextFocusableElements[0] : null) || null;
+}
+function getNextTabbable(fallbackToFirst, fallbackToFocusable) {
+  return getNextTabbableIn(
+    document.body,
+    false,
+    fallbackToFirst,
+    fallbackToFocusable
+  );
+}
+function getPreviousTabbableIn(container, includeContainer, fallbackToLast, fallbackToFocusable) {
+  const activeElement = O35LWD4W_getActiveElement(container);
+  const allFocusable = getAllFocusableIn(container, includeContainer).reverse();
+  const activeIndex = allFocusable.indexOf(activeElement);
+  const previousFocusableElements = allFocusable.slice(activeIndex + 1);
+  return previousFocusableElements.find(isTabbable) || (fallbackToLast ? allFocusable.find(isTabbable) : null) || (fallbackToFocusable ? previousFocusableElements[0] : null) || null;
+}
+function getPreviousTabbable(fallbackToFirst, fallbackToFocusable) {
+  return getPreviousTabbableIn(
+    document.body,
+    false,
+    fallbackToFirst,
+    fallbackToFocusable
+  );
+}
+function getClosestFocusable(element) {
+  while (element && !isFocusable(element)) {
+    element = closest(element, selector);
+  }
+  return element || null;
+}
+function hasFocus(element) {
+  const activeElement = O35LWD4W_getActiveElement(element);
+  if (!activeElement)
+    return false;
+  if (activeElement === element)
+    return true;
+  const activeDescendant = activeElement.getAttribute("aria-activedescendant");
+  if (!activeDescendant)
+    return false;
+  return activeDescendant === element.id;
+}
+function hasFocusWithin(element) {
+  const activeElement = O35LWD4W_getActiveElement(element);
+  if (!activeElement)
+    return false;
+  if (contains(element, activeElement))
+    return true;
+  const activeDescendant = activeElement.getAttribute("aria-activedescendant");
+  if (!activeDescendant)
+    return false;
+  if (!("id" in element))
+    return false;
+  if (activeDescendant === element.id)
+    return true;
+  return !!element.querySelector(`#${CSS.escape(activeDescendant)}`);
+}
+function focusIfNeeded(element) {
+  if (!hasFocusWithin(element) && isFocusable(element)) {
+    element.focus();
+  }
+}
+function disableFocus(element) {
+  var _a;
+  const currentTabindex = (_a = element.getAttribute("tabindex")) != null ? _a : "";
+  element.setAttribute("data-tabindex", currentTabindex);
+  element.setAttribute("tabindex", "-1");
+}
+function disableFocusIn(container, includeContainer) {
+  const tabbableElements = getAllTabbableIn(container, includeContainer);
+  tabbableElements.forEach(disableFocus);
+}
+function restoreFocusIn(container) {
+  const elements = container.querySelectorAll("[data-tabindex]");
+  const restoreTabIndex = (element) => {
+    const tabindex = element.getAttribute("data-tabindex");
+    element.removeAttribute("data-tabindex");
+    if (tabindex) {
+      element.setAttribute("tabindex", tabindex);
+    } else {
+      element.removeAttribute("tabindex");
+    }
+  };
+  if (container.hasAttribute("data-tabindex")) {
+    restoreTabIndex(container);
+  }
+  elements.forEach(restoreTabIndex);
+}
+function focusIntoView(element, options) {
+  if (!("scrollIntoView" in element)) {
+    element.focus();
+  } else {
+    element.focus({ preventScroll: true });
+    element.scrollIntoView(_chunks_PNRLI7OV_spreadValues({ block: "nearest", inline: "nearest" }, options));
+  }
+}
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/UCFCIHEU.js
+
+
+// src/utils/platform.ts
+function isTouchDevice() {
+  return canUseDOM && !!navigator.maxTouchPoints;
+}
+function UCFCIHEU_isApple() {
+  if (!canUseDOM)
+    return false;
+  return /mac|iphone|ipad|ipod/i.test(navigator.platform);
+}
+function isSafari() {
+  return canUseDOM && UCFCIHEU_isApple() && /apple/i.test(navigator.vendor);
+}
+function isFirefox() {
+  return canUseDOM && /firefox\//i.test(navigator.userAgent);
+}
+function isMac() {
+  return canUseDOM && navigator.platform.startsWith("Mac") && !isTouchDevice();
+}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/YTHH33BK.js
+
+
+
+
+
+// src/focusable/focusable.ts
+
+
+
+
+
+var isSafariBrowser = isSafari();
+var alwaysFocusVisibleInputTypes = [
+  "text",
+  "search",
+  "url",
+  "tel",
+  "email",
+  "password",
+  "number",
+  "date",
+  "month",
+  "week",
+  "time",
+  "datetime",
+  "datetime-local"
+];
+function isAlwaysFocusVisible(element) {
+  const { tagName, readOnly, type } = element;
+  if (tagName === "TEXTAREA" && !readOnly)
+    return true;
+  if (tagName === "SELECT" && !readOnly)
+    return true;
+  if (tagName === "INPUT" && !readOnly) {
+    return alwaysFocusVisibleInputTypes.includes(type);
+  }
+  if (element.isContentEditable)
+    return true;
+  return false;
+}
+function isAlwaysFocusVisibleDelayed(element) {
+  const role = element.getAttribute("role");
+  if (role !== "combobox")
+    return false;
+  return !!element.dataset.name;
+}
+function getLabels(element) {
+  if ("labels" in element) {
+    return element.labels;
+  }
+  return null;
+}
+function isNativeCheckboxOrRadio(element) {
+  const tagName = element.tagName.toLowerCase();
+  if (tagName === "input" && element.type) {
+    return element.type === "radio" || element.type === "checkbox";
+  }
+  return false;
+}
+function isNativeTabbable(tagName) {
+  if (!tagName)
+    return true;
+  return tagName === "button" || tagName === "input" || tagName === "select" || tagName === "textarea" || tagName === "a";
+}
+function supportsDisabledAttribute(tagName) {
+  if (!tagName)
+    return true;
+  return tagName === "button" || tagName === "input" || tagName === "select" || tagName === "textarea";
+}
+function getTabIndex(focusable, trulyDisabled, nativeTabbable, supportsDisabled, tabIndexProp) {
+  if (!focusable) {
+    return tabIndexProp;
+  }
+  if (trulyDisabled) {
+    if (nativeTabbable && !supportsDisabled) {
+      return -1;
+    }
+    return;
+  }
+  if (nativeTabbable) {
+    return tabIndexProp;
+  }
+  return tabIndexProp || 0;
+}
+function useDisableEvent(onEvent, disabled) {
+  return useEvent((event) => {
+    onEvent == null ? void 0 : onEvent(event);
+    if (event.defaultPrevented)
+      return;
+    if (disabled) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  });
+}
+var isKeyboardModality = true;
+function onGlobalMouseDown(event) {
+  const target = event.target;
+  if (target && "hasAttribute" in target) {
+    if (!target.hasAttribute("data-focus-visible")) {
+      isKeyboardModality = false;
+    }
+  }
+}
+function onGlobalKeyDown(event) {
+  if (event.metaKey)
+    return;
+  if (event.ctrlKey)
+    return;
+  if (event.altKey)
+    return;
+  isKeyboardModality = true;
+}
+var useFocusable = createHook(
+  (_a) => {
+    var _b = _a, {
+      focusable = true,
+      accessibleWhenDisabled,
+      autoFocus,
+      onFocusVisible
+    } = _b, props = __objRest(_b, [
+      "focusable",
+      "accessibleWhenDisabled",
+      "autoFocus",
+      "onFocusVisible"
+    ]);
+    const ref = (0,external_React_.useRef)(null);
+    (0,external_React_.useEffect)(() => {
+      if (!focusable)
+        return;
+      addGlobalEventListener("mousedown", onGlobalMouseDown, true);
+      addGlobalEventListener("keydown", onGlobalKeyDown, true);
+    }, [focusable]);
+    if (isSafariBrowser) {
+      (0,external_React_.useEffect)(() => {
+        if (!focusable)
+          return;
+        const element = ref.current;
+        if (!element)
+          return;
+        if (!isNativeCheckboxOrRadio(element))
+          return;
+        const labels = getLabels(element);
+        if (!labels)
+          return;
+        const onMouseUp = () => queueMicrotask(() => element.focus());
+        labels.forEach((label) => label.addEventListener("mouseup", onMouseUp));
+        return () => {
+          labels.forEach(
+            (label) => label.removeEventListener("mouseup", onMouseUp)
+          );
+        };
+      }, [focusable]);
+    }
+    const disabled = focusable && props.disabled;
+    const trulyDisabled = !!disabled && !accessibleWhenDisabled;
+    const [focusVisible, setFocusVisible] = (0,external_React_.useState)(false);
+    (0,external_React_.useEffect)(() => {
+      if (!focusable)
+        return;
+      if (trulyDisabled && focusVisible) {
+        setFocusVisible(false);
+      }
+    }, [focusable, trulyDisabled, focusVisible]);
+    (0,external_React_.useEffect)(() => {
+      if (!focusable)
+        return;
+      if (!focusVisible)
+        return;
+      const element = ref.current;
+      if (!element)
+        return;
+      if (typeof IntersectionObserver === "undefined")
+        return;
+      const observer = new IntersectionObserver(() => {
+        if (!isFocusable(element)) {
+          setFocusVisible(false);
+        }
+      });
+      observer.observe(element);
+      return () => observer.disconnect();
+    }, [focusable, focusVisible]);
+    const onKeyPressCapture = useDisableEvent(
+      props.onKeyPressCapture,
+      disabled
+    );
+    const onMouseDownCapture = useDisableEvent(
+      props.onMouseDownCapture,
+      disabled
+    );
+    const onClickCapture = useDisableEvent(props.onClickCapture, disabled);
+    const onMouseDownProp = props.onMouseDown;
+    const onMouseDown = useEvent((event) => {
+      onMouseDownProp == null ? void 0 : onMouseDownProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!focusable)
+        return;
+      const element = event.currentTarget;
+      if (!isSafariBrowser)
+        return;
+      if (isPortalEvent(event))
+        return;
+      if (!isButton(element) && !isNativeCheckboxOrRadio(element))
+        return;
+      let receivedFocus = false;
+      const onFocus = () => {
+        receivedFocus = true;
+      };
+      const options = { capture: true, once: true };
+      element.addEventListener("focusin", onFocus, options);
+      queueBeforeEvent(element, "mouseup", () => {
+        element.removeEventListener("focusin", onFocus, true);
+        if (receivedFocus)
+          return;
+        focusIfNeeded(element);
+      });
+    });
+    const handleFocusVisible = (event, currentTarget) => {
+      if (currentTarget) {
+        event.currentTarget = currentTarget;
+      }
+      if (!focusable)
+        return;
+      const element = event.currentTarget;
+      if (!element)
+        return;
+      if (!hasFocus(element))
+        return;
+      onFocusVisible == null ? void 0 : onFocusVisible(event);
+      if (event.defaultPrevented)
+        return;
+      setFocusVisible(true);
+    };
+    const onKeyDownCaptureProp = props.onKeyDownCapture;
+    const onKeyDownCapture = useEvent(
+      (event) => {
+        onKeyDownCaptureProp == null ? void 0 : onKeyDownCaptureProp(event);
+        if (event.defaultPrevented)
+          return;
+        if (!focusable)
+          return;
+        if (focusVisible)
+          return;
+        if (event.metaKey)
+          return;
+        if (event.altKey)
+          return;
+        if (event.ctrlKey)
+          return;
+        if (!isSelfTarget(event))
+          return;
+        const element = event.currentTarget;
+        queueMicrotask(() => handleFocusVisible(event, element));
+      }
+    );
+    const onFocusCaptureProp = props.onFocusCapture;
+    const onFocusCapture = useEvent((event) => {
+      onFocusCaptureProp == null ? void 0 : onFocusCaptureProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!focusable)
+        return;
+      if (!isSelfTarget(event)) {
+        setFocusVisible(false);
+        return;
+      }
+      const element = event.currentTarget;
+      const applyFocusVisible = () => handleFocusVisible(event, element);
+      if (isKeyboardModality || isAlwaysFocusVisible(event.target)) {
+        queueMicrotask(applyFocusVisible);
+      } else if (isAlwaysFocusVisibleDelayed(event.target)) {
+        queueBeforeEvent(event.target, "focusout", applyFocusVisible);
+      } else {
+        setFocusVisible(false);
+      }
+    });
+    const onBlurProp = props.onBlur;
+    const onBlur = useEvent((event) => {
+      onBlurProp == null ? void 0 : onBlurProp(event);
+      if (!focusable)
+        return;
+      if (!isFocusEventOutside(event))
+        return;
+      setFocusVisible(false);
+    });
+    const autoFocusOnShow = (0,external_React_.useContext)(FocusableContext);
+    const autoFocusRef = useEvent((element) => {
+      if (!focusable)
+        return;
+      if (!autoFocus)
+        return;
+      if (!element)
+        return;
+      if (!autoFocusOnShow)
+        return;
+      queueMicrotask(() => {
+        if (hasFocus(element))
+          return;
+        if (!isFocusable(element))
+          return;
+        element.focus();
+      });
+    });
+    const tagName = useTagName(ref, props.as);
+    const nativeTabbable = focusable && isNativeTabbable(tagName);
+    const supportsDisabled = focusable && supportsDisabledAttribute(tagName);
+    const style = trulyDisabled ? PNRLI7OV_spreadValues({ pointerEvents: "none" }, props.style) : props.style;
+    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
+      "data-focus-visible": focusable && focusVisible ? "" : void 0,
+      "data-autofocus": autoFocus ? true : void 0,
+      "aria-disabled": disabled ? true : void 0
+    }, props), {
+      ref: useMergeRefs(ref, autoFocusRef, props.ref),
+      style,
+      tabIndex: getTabIndex(
+        focusable,
+        trulyDisabled,
+        nativeTabbable,
+        supportsDisabled,
+        props.tabIndex
+      ),
+      disabled: supportsDisabled && trulyDisabled ? true : void 0,
+      // TODO: Test Focusable contentEditable.
+      contentEditable: disabled ? void 0 : props.contentEditable,
+      onKeyPressCapture,
+      onClickCapture,
+      onMouseDownCapture,
+      onMouseDown,
+      onKeyDownCapture,
+      onFocusCapture,
+      onBlur
+    });
+    return props;
+  }
+);
+var Focusable = createComponent((props) => {
+  props = useFocusable(props);
+  return CFEUKV6C_createElement("div", props);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/XBIFFFUN.js
+
+
+
+
+
+// src/command/command.ts
+
+
+
+
+function isNativeClick(event) {
+  if (!event.isTrusted)
+    return false;
+  const element = event.currentTarget;
+  if (event.key === "Enter") {
+    return isButton(element) || element.tagName === "SUMMARY" || element.tagName === "A";
+  }
+  if (event.key === " ") {
+    return isButton(element) || element.tagName === "SUMMARY" || element.tagName === "INPUT" || element.tagName === "SELECT";
+  }
+  return false;
+}
+var useCommand = createHook(
+  (_a) => {
+    var _b = _a, { clickOnEnter = true, clickOnSpace = true } = _b, props = __objRest(_b, ["clickOnEnter", "clickOnSpace"]);
+    const ref = (0,external_React_.useRef)(null);
+    const tagName = useTagName(ref, props.as);
+    const type = props.type;
+    const [isNativeButton, setIsNativeButton] = (0,external_React_.useState)(
+      () => !!tagName && isButton({ tagName, type })
+    );
+    (0,external_React_.useEffect)(() => {
+      if (!ref.current)
+        return;
+      setIsNativeButton(isButton(ref.current));
+    }, []);
+    const [active, setActive] = (0,external_React_.useState)(false);
+    const activeRef = (0,external_React_.useRef)(false);
+    const isDuplicate = "data-command" in props;
+    const onKeyDownProp = props.onKeyDown;
+    const onKeyDown = useEvent((event) => {
+      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
+      const element = event.currentTarget;
+      if (event.defaultPrevented)
+        return;
+      if (isDuplicate)
+        return;
+      if (props.disabled)
+        return;
+      if (!isSelfTarget(event))
+        return;
+      if (O35LWD4W_isTextField(element))
+        return;
+      if (element.isContentEditable)
+        return;
+      const isEnter = clickOnEnter && event.key === "Enter";
+      const isSpace = clickOnSpace && event.key === " ";
+      const shouldPreventEnter = event.key === "Enter" && !clickOnEnter;
+      const shouldPreventSpace = event.key === " " && !clickOnSpace;
+      if (shouldPreventEnter || shouldPreventSpace) {
+        event.preventDefault();
+        return;
+      }
+      if (isEnter || isSpace) {
+        const nativeClick = isNativeClick(event);
+        if (isEnter) {
+          if (!nativeClick) {
+            event.preventDefault();
+            const _a2 = event, { view } = _a2, eventInit = __objRest(_a2, ["view"]);
+            const click = () => fireClickEvent(element, eventInit);
+            if (isFirefox()) {
+              queueBeforeEvent(element, "keyup", click);
+            } else {
+              queueMicrotask(click);
+            }
+          }
+        } else if (isSpace) {
+          activeRef.current = true;
+          if (!nativeClick) {
+            event.preventDefault();
+            setActive(true);
+          }
+        }
+      }
+    });
+    const onKeyUpProp = props.onKeyUp;
+    const onKeyUp = useEvent((event) => {
+      onKeyUpProp == null ? void 0 : onKeyUpProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (isDuplicate)
+        return;
+      if (props.disabled)
+        return;
+      if (event.metaKey)
+        return;
+      const isSpace = clickOnSpace && event.key === " ";
+      if (activeRef.current && isSpace) {
+        activeRef.current = false;
+        if (!isNativeClick(event)) {
+          setActive(false);
+          const element = event.currentTarget;
+          const _a2 = event, { view } = _a2, eventInit = __objRest(_a2, ["view"]);
+          queueMicrotask(() => fireClickEvent(element, eventInit));
+        }
+      }
+    });
+    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
+      "data-command": "",
+      "data-active": active ? "" : void 0,
+      type: isNativeButton ? "button" : void 0
+    }, props), {
+      ref: useMergeRefs(ref, props.ref),
+      onKeyDown,
+      onKeyUp
+    });
+    props = useFocusable(props);
+    return props;
+  }
+);
+var Command = createComponent((props) => {
+  props = useCommand(props);
+  return CFEUKV6C_createElement("button", props);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/74KKBFVP.js
+
+
+// src/collection/collection-context.tsx
+var ctx = createStoreContext();
+var useCollectionContext = ctx.useContext;
+var useCollectionScopedContext = ctx.useScopedContext;
+var useCollectionProviderContext = ctx.useProviderContext;
+var CollectionContextProvider = ctx.ContextProvider;
+var CollectionScopedContextProvider = ctx.ScopedContextProvider;
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/XIA3HAXM.js
+
+
+
+
+
+// src/collection/collection-item.ts
+
+
+var useCollectionItem = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      shouldRegisterItem = true,
+      getItem = identity,
+      element: element
+    } = _b, props = __objRest(_b, [
+      "store",
+      "shouldRegisterItem",
+      "getItem",
+      // @ts-expect-error This prop may come from a collection renderer.
+      "element"
+    ]);
+    const context = useCollectionContext();
+    store = store || context;
+    const id = useId(props.id);
+    const ref = (0,external_React_.useRef)(element);
+    (0,external_React_.useEffect)(() => {
+      const element2 = ref.current;
+      if (!id)
+        return;
+      if (!element2)
+        return;
+      if (!shouldRegisterItem)
+        return;
+      const item = getItem({ id, element: element2 });
+      return store == null ? void 0 : store.renderItem(item);
+    }, [id, shouldRegisterItem, getItem, store]);
+    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), {
+      ref: useMergeRefs(ref, props.ref)
+    });
+    return props;
+  }
+);
+var CollectionItem = createComponent(
+  (props) => {
+    const htmlProps = useCollectionItem(props);
+    return CFEUKV6C_createElement("div", htmlProps);
+  }
+);
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/OXPV2NBK.js
+// src/composite/utils.ts
+
+var NULL_ITEM = { id: null };
+function flipItems(items, activeId, shouldInsertNullItem = false) {
+  const index = items.findIndex((item) => item.id === activeId);
+  return [
+    ...items.slice(index + 1),
+    ...shouldInsertNullItem ? [NULL_ITEM] : [],
+    ...items.slice(0, index)
+  ];
+}
+function findFirstEnabledItem(items, excludeId) {
+  return items.find((item) => {
+    if (excludeId) {
+      return !item.disabled && item.id !== excludeId;
+    }
+    return !item.disabled;
+  });
+}
+function getEnabledItem(store, id) {
+  if (!id)
+    return null;
+  return store.item(id) || null;
+}
+function groupItemsByRows(items) {
+  const rows = [];
+  for (const item of items) {
+    const row = rows.find((currentRow) => {
+      var _a;
+      return ((_a = currentRow[0]) == null ? void 0 : _a.rowId) === item.rowId;
+    });
+    if (row) {
+      row.push(item);
+    } else {
+      rows.push([item]);
+    }
+  }
+  return rows;
+}
+function selectTextField(element, collapseToEnd = false) {
+  if (isTextField(element)) {
+    element.setSelectionRange(
+      collapseToEnd ? element.value.length : 0,
+      element.value.length
+    );
+  } else if (element.isContentEditable) {
+    const selection = getDocument(element).getSelection();
+    selection == null ? void 0 : selection.selectAllChildren(element);
+    if (collapseToEnd) {
+      selection == null ? void 0 : selection.collapseToEnd();
+    }
+  }
+}
+var FOCUS_SILENTLY = Symbol("FOCUS_SILENTLY");
+function focusSilently(element) {
+  element[FOCUS_SILENTLY] = true;
+  element.focus();
+}
+function silentlyFocused(element) {
+  const isSilentlyFocused = element[FOCUS_SILENTLY];
+  delete element[FOCUS_SILENTLY];
+  return isSilentlyFocused;
+}
+function isItem(store, element, exclude) {
+  if (!element)
+    return false;
+  if (element === exclude)
+    return false;
+  const item = store.item(element.id);
+  if (!item)
+    return false;
+  if (exclude && item.element === exclude)
+    return false;
+  return true;
+}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/5C7J4IAS.js
+
+
+
+// src/composite/composite-context.tsx
+
+var _5C7J4IAS_ctx = createStoreContext(
+  [CollectionContextProvider],
+  [CollectionScopedContextProvider]
+);
+var useCompositeContext = _5C7J4IAS_ctx.useContext;
+var useCompositeScopedContext = _5C7J4IAS_ctx.useScopedContext;
+var useCompositeProviderContext = _5C7J4IAS_ctx.useProviderContext;
+var CompositeContextProvider = _5C7J4IAS_ctx.ContextProvider;
+var CompositeScopedContextProvider = _5C7J4IAS_ctx.ScopedContextProvider;
+var CompositeItemContext = (0,external_React_.createContext)(
+  void 0
+);
+var CompositeRowContext = (0,external_React_.createContext)(
+  void 0
+);
 
 
 
@@ -6377,7 +4920,7 @@ function useStoreState(store, keyOrSelector = identity) {
 function useStoreProps(store, props, key, setKey) {
   const value = WVTCK5PV_hasOwnProperty(props, key) ? props[key] : void 0;
   const setValue = setKey ? props[setKey] : void 0;
-  const propsRef = J7Q2EO23_useLiveRef({ value, setValue });
+  const propsRef = useLiveRef({ value, setValue });
   const canSyncValue = external_React_.useRef(true);
   useSafeLayoutEffect(() => {
     let canFlushSync = false;
@@ -6428,6 +4971,356 @@ function _4LP74VAP_useStore(createStore, props) {
   });
   return [memoizedStore, updateStore];
 }
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/54J7EHCU.js
+
+
+
+
+
+
+
+
+
+// src/composite/composite-item.tsx
+
+
+
+
+function isEditableElement(element) {
+  if (element.isContentEditable)
+    return true;
+  if (O35LWD4W_isTextField(element))
+    return true;
+  return element.tagName === "INPUT" && !isButton(element);
+}
+function getNextPageOffset(scrollingElement, pageUp = false) {
+  const height = scrollingElement.clientHeight;
+  const { top } = scrollingElement.getBoundingClientRect();
+  const pageSize = Math.max(height * 0.875, height - 40) * 1.5;
+  const pageOffset = pageUp ? height - pageSize + top : pageSize + top;
+  if (scrollingElement.tagName === "HTML") {
+    return pageOffset + scrollingElement.scrollTop;
+  }
+  return pageOffset;
+}
+function getItemOffset(itemElement, pageUp = false) {
+  const { top } = itemElement.getBoundingClientRect();
+  if (pageUp) {
+    return top + itemElement.clientHeight;
+  }
+  return top;
+}
+function findNextPageItemId(element, store, next, pageUp = false) {
+  var _a;
+  if (!store)
+    return;
+  if (!next)
+    return;
+  const { renderedItems } = store.getState();
+  const scrollingElement = getScrollingElement(element);
+  if (!scrollingElement)
+    return;
+  const nextPageOffset = getNextPageOffset(scrollingElement, pageUp);
+  let id;
+  let prevDifference;
+  for (let i = 0; i < renderedItems.length; i += 1) {
+    const previousId = id;
+    id = next(i);
+    if (!id)
+      break;
+    if (id === previousId)
+      continue;
+    const itemElement = (_a = getEnabledItem(store, id)) == null ? void 0 : _a.element;
+    if (!itemElement)
+      continue;
+    const itemOffset = getItemOffset(itemElement, pageUp);
+    const difference = itemOffset - nextPageOffset;
+    const absDifference = Math.abs(difference);
+    if (pageUp && difference <= 0 || !pageUp && difference >= 0) {
+      if (prevDifference !== void 0 && prevDifference < absDifference) {
+        id = previousId;
+      }
+      break;
+    }
+    prevDifference = absDifference;
+  }
+  return id;
+}
+function targetIsAnotherItem(event, store) {
+  if (isSelfTarget(event))
+    return false;
+  return isItem(store, event.target);
+}
+function useRole(ref, props) {
+  const roleProp = props.role;
+  const [role, setRole] = (0,external_React_.useState)(roleProp);
+  useSafeLayoutEffect(() => {
+    const element = ref.current;
+    if (!element)
+      return;
+    setRole(element.getAttribute("role") || roleProp);
+  }, [roleProp]);
+  return role;
+}
+function requiresAriaSelected(role) {
+  return role === "option" || role === "treeitem";
+}
+function supportsAriaSelected(role) {
+  if (role === "option")
+    return true;
+  if (role === "tab")
+    return true;
+  if (role === "treeitem")
+    return true;
+  if (role === "gridcell")
+    return true;
+  if (role === "row")
+    return true;
+  if (role === "columnheader")
+    return true;
+  if (role === "rowheader")
+    return true;
+  return false;
+}
+var useCompositeItem = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      rowId: rowIdProp,
+      preventScrollOnKeyDown = false,
+      moveOnKeyPress = true,
+      getItem: getItemProp,
+      "aria-setsize": ariaSetSizeProp,
+      "aria-posinset": ariaPosInSetProp
+    } = _b, props = __objRest(_b, [
+      "store",
+      "rowId",
+      "preventScrollOnKeyDown",
+      "moveOnKeyPress",
+      "getItem",
+      "aria-setsize",
+      "aria-posinset"
+    ]);
+    const context = useCompositeContext();
+    store = store || context;
+    const id = useId(props.id);
+    const ref = (0,external_React_.useRef)(null);
+    const row = (0,external_React_.useContext)(CompositeRowContext);
+    const rowId = useStoreState(store, (state) => {
+      if (rowIdProp)
+        return rowIdProp;
+      if (!state)
+        return;
+      if (!(row == null ? void 0 : row.baseElement))
+        return;
+      if (row.baseElement !== state.baseElement)
+        return;
+      return row.id;
+    });
+    const trulyDisabled = props.disabled && !props.accessibleWhenDisabled;
+    const getItem = (0,external_React_.useCallback)(
+      (item) => {
+        const nextItem = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, item), {
+          id: id || item.id,
+          rowId,
+          disabled: !!trulyDisabled
+        });
+        if (getItemProp) {
+          return getItemProp(nextItem);
+        }
+        return nextItem;
+      },
+      [id, rowId, trulyDisabled, getItemProp]
+    );
+    const onFocusProp = props.onFocus;
+    const hasFocusedComposite = (0,external_React_.useRef)(false);
+    const onFocus = useEvent((event) => {
+      onFocusProp == null ? void 0 : onFocusProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (isPortalEvent(event))
+        return;
+      if (!id)
+        return;
+      if (!store)
+        return;
+      const { activeId, virtualFocus: virtualFocus2, baseElement: baseElement2 } = store.getState();
+      if (targetIsAnotherItem(event, store))
+        return;
+      if (activeId !== id) {
+        store.setActiveId(id);
+      }
+      if (!virtualFocus2)
+        return;
+      if (!isSelfTarget(event))
+        return;
+      if (isEditableElement(event.currentTarget))
+        return;
+      if (!baseElement2)
+        return;
+      hasFocusedComposite.current = true;
+      const fromComposite = event.relatedTarget === baseElement2 || isItem(store, event.relatedTarget);
+      if (fromComposite) {
+        focusSilently(baseElement2);
+      } else {
+        baseElement2.focus();
+      }
+    });
+    const onBlurCaptureProp = props.onBlurCapture;
+    const onBlurCapture = useEvent((event) => {
+      onBlurCaptureProp == null ? void 0 : onBlurCaptureProp(event);
+      if (event.defaultPrevented)
+        return;
+      const state = store == null ? void 0 : store.getState();
+      if ((state == null ? void 0 : state.virtualFocus) && hasFocusedComposite.current) {
+        hasFocusedComposite.current = false;
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    });
+    const onKeyDownProp = props.onKeyDown;
+    const preventScrollOnKeyDownProp = useBooleanEvent(preventScrollOnKeyDown);
+    const moveOnKeyPressProp = useBooleanEvent(moveOnKeyPress);
+    const onKeyDown = useEvent((event) => {
+      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!isSelfTarget(event))
+        return;
+      if (!store)
+        return;
+      const { currentTarget } = event;
+      const state = store.getState();
+      const item = store.item(id);
+      const isGrid = !!(item == null ? void 0 : item.rowId);
+      const isVertical = state.orientation !== "horizontal";
+      const isHorizontal = state.orientation !== "vertical";
+      const keyMap = {
+        ArrowUp: (isGrid || isVertical) && store.up,
+        ArrowRight: (isGrid || isHorizontal) && store.next,
+        ArrowDown: (isGrid || isVertical) && store.down,
+        ArrowLeft: (isGrid || isHorizontal) && store.previous,
+        Home: () => {
+          if (!isGrid || event.ctrlKey) {
+            return store == null ? void 0 : store.first();
+          }
+          return store == null ? void 0 : store.previous(-1);
+        },
+        End: () => {
+          if (!isGrid || event.ctrlKey) {
+            return store == null ? void 0 : store.last();
+          }
+          return store == null ? void 0 : store.next(-1);
+        },
+        PageUp: () => {
+          return findNextPageItemId(currentTarget, store, store == null ? void 0 : store.up, true);
+        },
+        PageDown: () => {
+          return findNextPageItemId(currentTarget, store, store == null ? void 0 : store.down);
+        }
+      };
+      const action = keyMap[event.key];
+      if (action) {
+        const nextId = action();
+        if (preventScrollOnKeyDownProp(event) || nextId !== void 0) {
+          if (!moveOnKeyPressProp(event))
+            return;
+          event.preventDefault();
+          store.move(nextId);
+        }
+      }
+    });
+    const baseElement = useStoreState(
+      store,
+      (state) => (state == null ? void 0 : state.baseElement) || void 0
+    );
+    const providerValue = (0,external_React_.useMemo)(
+      () => ({ id, baseElement }),
+      [id, baseElement]
+    );
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,jsx_runtime.jsx)(CompositeItemContext.Provider, { value: providerValue, children: element }),
+      [providerValue]
+    );
+    const isActiveItem = useStoreState(
+      store,
+      (state) => !!state && state.activeId === id
+    );
+    const virtualFocus = useStoreState(store, "virtualFocus");
+    const role = useRole(ref, props);
+    let ariaSelected;
+    if (isActiveItem) {
+      if (requiresAriaSelected(role)) {
+        ariaSelected = true;
+      } else if (virtualFocus && supportsAriaSelected(role)) {
+        ariaSelected = true;
+      }
+    }
+    const ariaSetSize = useStoreState(store, (state) => {
+      if (ariaSetSizeProp != null)
+        return ariaSetSizeProp;
+      if (!state)
+        return;
+      if (!(row == null ? void 0 : row.ariaSetSize))
+        return;
+      if (row.baseElement !== state.baseElement)
+        return;
+      return row.ariaSetSize;
+    });
+    const ariaPosInSet = useStoreState(store, (state) => {
+      if (ariaPosInSetProp != null)
+        return ariaPosInSetProp;
+      if (!state)
+        return;
+      if (!(row == null ? void 0 : row.ariaPosInSet))
+        return;
+      if (row.baseElement !== state.baseElement)
+        return;
+      const itemsInRow = state.renderedItems.filter(
+        (item) => item.rowId === rowId
+      );
+      return row.ariaPosInSet + itemsInRow.findIndex((item) => item.id === id);
+    });
+    const isTabbable = useStoreState(store, (state) => {
+      if (!(state == null ? void 0 : state.renderedItems.length))
+        return true;
+      return !state.virtualFocus && state.activeId === id;
+    });
+    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
+      id,
+      "aria-selected": ariaSelected,
+      "data-active-item": isActiveItem ? "" : void 0
+    }, props), {
+      ref: useMergeRefs(ref, props.ref),
+      tabIndex: isTabbable ? props.tabIndex : -1,
+      onFocus,
+      onBlurCapture,
+      onKeyDown
+    });
+    props = useCommand(props);
+    props = useCollectionItem(PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
+      store
+    }, props), {
+      getItem,
+      shouldRegisterItem: !!id ? props.shouldRegisterItem : false
+    }));
+    return PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), {
+      "aria-setsize": ariaSetSize,
+      "aria-posinset": ariaPosInSet
+    });
+  }
+);
+var CompositeItem = createMemoComponent(
+  (props) => {
+    const htmlProps = useCompositeItem(props);
+    return CFEUKV6C_createElement("button", htmlProps);
+  }
+);
+if (false) {}
 
 
 
@@ -6714,130 +5607,16 @@ function useTooltipStore(props = {}) {
 
 
 
-// EXTERNAL MODULE: ./node_modules/react/jsx-runtime.js
-var jsx_runtime = __webpack_require__(7557);
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/CFEUKV6C.js
-
-
-
-
-// src/utils/system.tsx
-
-
-
-function CFEUKV6C_isRenderProp(children) {
-  return typeof children === "function";
-}
-function forwardRef2(render) {
-  const Role = React.forwardRef((props, ref) => render(__spreadProps(__spreadValues({}, props), { ref })));
-  Role.displayName = render.displayName || render.name;
-  return Role;
-}
-function memo2(Component, propsAreEqual) {
-  const Role = React.memo(Component, propsAreEqual);
-  Role.displayName = Component.displayName || Component.name;
-  return Role;
-}
-function CFEUKV6C_createComponent(render) {
-  const Role = (props, ref) => render(PNRLI7OV_spreadValues({ ref }, props));
-  return external_React_.forwardRef(Role);
-}
-function createMemoComponent(render) {
-  const Role = CFEUKV6C_createComponent(render);
-  return external_React_.memo(Role);
-}
-function CFEUKV6C_createElement(Type, props) {
-  const _a = props, { as: As, wrapElement, render } = _a, rest = __objRest(_a, ["as", "wrapElement", "render"]);
-  let element;
-  const mergedRef = useMergeRefs(props.ref, getRefProperty(render));
-  if (false) {}
-  if (As && typeof As !== "string") {
-    element = /* @__PURE__ */ (0,jsx_runtime.jsx)(As, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, rest), { render }));
-  } else if (external_React_.isValidElement(render)) {
-    const renderProps = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, render.props), { ref: mergedRef });
-    element = external_React_.cloneElement(render, mergeProps(rest, renderProps));
-  } else if (render) {
-    element = render(rest);
-  } else if (CFEUKV6C_isRenderProp(props.children)) {
-    if (false) {}
-    const _b = rest, { children } = _b, otherProps = __objRest(_b, ["children"]);
-    element = props.children(otherProps);
-  } else if (As) {
-    element = /* @__PURE__ */ (0,jsx_runtime.jsx)(As, PNRLI7OV_spreadValues({}, rest));
-  } else {
-    element = /* @__PURE__ */ (0,jsx_runtime.jsx)(Type, PNRLI7OV_spreadValues({}, rest));
-  }
-  if (wrapElement) {
-    return wrapElement(element);
-  }
-  return element;
-}
-function CFEUKV6C_createHook(useProps) {
-  const useRole = (props = {}) => {
-    const htmlProps = useProps(props);
-    const copy = {};
-    for (const prop in htmlProps) {
-      if (WVTCK5PV_hasOwnProperty(htmlProps, prop) && htmlProps[prop] !== void 0) {
-        copy[prop] = htmlProps[prop];
-      }
-    }
-    return copy;
-  };
-  return useRole;
-}
-function createStoreContext(providers = [], scopedProviders = []) {
-  const context = external_React_.createContext(void 0);
-  const scopedContext = external_React_.createContext(void 0);
-  const useContext2 = () => external_React_.useContext(context);
-  const useScopedContext = (onlyScoped = false) => {
-    const scoped = external_React_.useContext(scopedContext);
-    const store = useContext2();
-    if (onlyScoped)
-      return scoped;
-    return scoped || store;
-  };
-  const useProviderContext = () => {
-    const scoped = external_React_.useContext(scopedContext);
-    const store = useContext2();
-    if (scoped && scoped === store)
-      return;
-    return store;
-  };
-  const ContextProvider = (props) => {
-    return providers.reduceRight(
-      (children, Provider) => /* @__PURE__ */ (0,jsx_runtime.jsx)(Provider, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { children })),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(context.Provider, PNRLI7OV_spreadValues({}, props))
-    );
-  };
-  const ScopedContextProvider = (props) => {
-    return /* @__PURE__ */ (0,jsx_runtime.jsx)(ContextProvider, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { children: scopedProviders.reduceRight(
-      (children, Provider) => /* @__PURE__ */ (0,jsx_runtime.jsx)(Provider, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { children })),
-      /* @__PURE__ */ (0,jsx_runtime.jsx)(scopedContext.Provider, PNRLI7OV_spreadValues({}, props))
-    ) }));
-  };
-  return {
-    context,
-    scopedContext,
-    useContext: useContext2,
-    useScopedContext,
-    useProviderContext,
-    ContextProvider,
-    ScopedContextProvider
-  };
-}
-
-
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/56KWVYDN.js
 
 
 // src/disclosure/disclosure-context.tsx
-var ctx = createStoreContext();
-var useDisclosureContext = ctx.useContext;
-var useDisclosureScopedContext = ctx.useScopedContext;
-var useDisclosureProviderContext = ctx.useProviderContext;
-var DisclosureContextProvider = ctx.ContextProvider;
-var DisclosureScopedContextProvider = ctx.ScopedContextProvider;
+var _56KWVYDN_ctx = createStoreContext();
+var useDisclosureContext = _56KWVYDN_ctx.useContext;
+var useDisclosureScopedContext = _56KWVYDN_ctx.useScopedContext;
+var useDisclosureProviderContext = _56KWVYDN_ctx.useProviderContext;
+var DisclosureContextProvider = _56KWVYDN_ctx.ContextProvider;
+var DisclosureScopedContextProvider = _56KWVYDN_ctx.ScopedContextProvider;
 
 
 
@@ -6895,610 +5674,6 @@ var HovercardScopedContextProvider = _5DA3HK6G_ctx.ScopedContextProvider;
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/BMLNRUFQ.js
-// src/focusable/focusable-context.ts
-
-var FocusableContext = (0,external_React_.createContext)(true);
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/utils/focus.js
-
-
-
-// src/utils/focus.ts
-var focus_selector = "input:not([type='hidden']):not([disabled]), select:not([disabled]), textarea:not([disabled]), a[href], button:not([disabled]), [tabindex], iframe, object, embed, area[href], audio[controls], video[controls], [contenteditable]:not([contenteditable='false'])";
-function focus_hasNegativeTabIndex(element) {
-  const tabIndex = parseInt(element.getAttribute("tabindex") || "0", 10);
-  return tabIndex < 0;
-}
-function focus_isFocusable(element) {
-  if (!O35LWD4W_matches(element, focus_selector))
-    return false;
-  if (!O35LWD4W_isVisible(element))
-    return false;
-  if (O35LWD4W_closest(element, "[inert]"))
-    return false;
-  return true;
-}
-function focus_isTabbable(element) {
-  if (!focus_isFocusable(element))
-    return false;
-  if (focus_hasNegativeTabIndex(element))
-    return false;
-  if (!("form" in element))
-    return true;
-  if (!element.form)
-    return true;
-  if (element.checked)
-    return true;
-  if (element.type !== "radio")
-    return true;
-  const radioGroup = element.form.elements.namedItem(element.name);
-  if (!radioGroup)
-    return true;
-  if (!("length" in radioGroup))
-    return true;
-  const activeElement = O35LWD4W_getActiveElement(element);
-  if (!activeElement)
-    return true;
-  if (activeElement === element)
-    return true;
-  if (!("form" in activeElement))
-    return true;
-  if (activeElement.form !== element.form)
-    return true;
-  if (activeElement.name !== element.name)
-    return true;
-  return false;
-}
-function focus_getAllFocusableIn(container, includeContainer) {
-  const elements = Array.from(
-    container.querySelectorAll(focus_selector)
-  );
-  if (includeContainer) {
-    elements.unshift(container);
-  }
-  const focusableElements = elements.filter(focus_isFocusable);
-  focusableElements.forEach((element, i) => {
-    if (isFrame(element) && element.contentDocument) {
-      const frameBody = element.contentDocument.body;
-      focusableElements.splice(i, 1, ...focus_getAllFocusableIn(frameBody));
-    }
-  });
-  return focusableElements;
-}
-function getAllFocusable(includeBody) {
-  return focus_getAllFocusableIn(document.body, includeBody);
-}
-function focus_getFirstFocusableIn(container, includeContainer) {
-  const [first] = focus_getAllFocusableIn(container, includeContainer);
-  return first || null;
-}
-function getFirstFocusable(includeBody) {
-  return focus_getFirstFocusableIn(document.body, includeBody);
-}
-function focus_getAllTabbableIn(container, includeContainer, fallbackToFocusable) {
-  const elements = Array.from(
-    container.querySelectorAll(focus_selector)
-  );
-  const tabbableElements = elements.filter(focus_isTabbable);
-  if (includeContainer && focus_isTabbable(container)) {
-    tabbableElements.unshift(container);
-  }
-  tabbableElements.forEach((element, i) => {
-    if (isFrame(element) && element.contentDocument) {
-      const frameBody = element.contentDocument.body;
-      const allFrameTabbable = focus_getAllTabbableIn(
-        frameBody,
-        false,
-        fallbackToFocusable
-      );
-      tabbableElements.splice(i, 1, ...allFrameTabbable);
-    }
-  });
-  if (!tabbableElements.length && fallbackToFocusable) {
-    return elements;
-  }
-  return tabbableElements;
-}
-function getAllTabbable(fallbackToFocusable) {
-  return focus_getAllTabbableIn(document.body, false, fallbackToFocusable);
-}
-function focus_getFirstTabbableIn(container, includeContainer, fallbackToFocusable) {
-  const [first] = focus_getAllTabbableIn(
-    container,
-    includeContainer,
-    fallbackToFocusable
-  );
-  return first || null;
-}
-function getFirstTabbable(fallbackToFocusable) {
-  return focus_getFirstTabbableIn(document.body, false, fallbackToFocusable);
-}
-function focus_getLastTabbableIn(container, includeContainer, fallbackToFocusable) {
-  const allTabbable = focus_getAllTabbableIn(
-    container,
-    includeContainer,
-    fallbackToFocusable
-  );
-  return allTabbable[allTabbable.length - 1] || null;
-}
-function getLastTabbable(fallbackToFocusable) {
-  return focus_getLastTabbableIn(document.body, false, fallbackToFocusable);
-}
-function focus_getNextTabbableIn(container, includeContainer, fallbackToFirst, fallbackToFocusable) {
-  const activeElement = O35LWD4W_getActiveElement(container);
-  const allFocusable = focus_getAllFocusableIn(container, includeContainer);
-  const activeIndex = allFocusable.indexOf(activeElement);
-  const nextFocusableElements = allFocusable.slice(activeIndex + 1);
-  return nextFocusableElements.find(focus_isTabbable) || (fallbackToFirst ? allFocusable.find(focus_isTabbable) : null) || (fallbackToFocusable ? nextFocusableElements[0] : null) || null;
-}
-function getNextTabbable(fallbackToFirst, fallbackToFocusable) {
-  return focus_getNextTabbableIn(
-    document.body,
-    false,
-    fallbackToFirst,
-    fallbackToFocusable
-  );
-}
-function focus_getPreviousTabbableIn(container, includeContainer, fallbackToLast, fallbackToFocusable) {
-  const activeElement = O35LWD4W_getActiveElement(container);
-  const allFocusable = focus_getAllFocusableIn(container, includeContainer).reverse();
-  const activeIndex = allFocusable.indexOf(activeElement);
-  const previousFocusableElements = allFocusable.slice(activeIndex + 1);
-  return previousFocusableElements.find(focus_isTabbable) || (fallbackToLast ? allFocusable.find(focus_isTabbable) : null) || (fallbackToFocusable ? previousFocusableElements[0] : null) || null;
-}
-function getPreviousTabbable(fallbackToFirst, fallbackToFocusable) {
-  return focus_getPreviousTabbableIn(
-    document.body,
-    false,
-    fallbackToFirst,
-    fallbackToFocusable
-  );
-}
-function focus_getClosestFocusable(element) {
-  while (element && !focus_isFocusable(element)) {
-    element = closest(element, focus_selector);
-  }
-  return element || null;
-}
-function focus_hasFocus(element) {
-  const activeElement = O35LWD4W_getActiveElement(element);
-  if (!activeElement)
-    return false;
-  if (activeElement === element)
-    return true;
-  const activeDescendant = activeElement.getAttribute("aria-activedescendant");
-  if (!activeDescendant)
-    return false;
-  return activeDescendant === element.id;
-}
-function focus_hasFocusWithin(element) {
-  const activeElement = O35LWD4W_getActiveElement(element);
-  if (!activeElement)
-    return false;
-  if (O35LWD4W_contains(element, activeElement))
-    return true;
-  const activeDescendant = activeElement.getAttribute("aria-activedescendant");
-  if (!activeDescendant)
-    return false;
-  if (!("id" in element))
-    return false;
-  if (activeDescendant === element.id)
-    return true;
-  return !!element.querySelector(`#${CSS.escape(activeDescendant)}`);
-}
-function focus_focusIfNeeded(element) {
-  if (!focus_hasFocusWithin(element) && focus_isFocusable(element)) {
-    element.focus();
-  }
-}
-function disableFocus(element) {
-  var _a;
-  const currentTabindex = (_a = element.getAttribute("tabindex")) != null ? _a : "";
-  element.setAttribute("data-tabindex", currentTabindex);
-  element.setAttribute("tabindex", "-1");
-}
-function disableFocusIn(container, includeContainer) {
-  const tabbableElements = focus_getAllTabbableIn(container, includeContainer);
-  tabbableElements.forEach(disableFocus);
-}
-function restoreFocusIn(container) {
-  const elements = container.querySelectorAll("[data-tabindex]");
-  const restoreTabIndex = (element) => {
-    const tabindex = element.getAttribute("data-tabindex");
-    element.removeAttribute("data-tabindex");
-    if (tabindex) {
-      element.setAttribute("tabindex", tabindex);
-    } else {
-      element.removeAttribute("tabindex");
-    }
-  };
-  if (container.hasAttribute("data-tabindex")) {
-    restoreTabIndex(container);
-  }
-  elements.forEach(restoreTabIndex);
-}
-function focusIntoView(element, options) {
-  if (!("scrollIntoView" in element)) {
-    element.focus();
-  } else {
-    element.focus({ preventScroll: true });
-    element.scrollIntoView(_chunks_PNRLI7OV_spreadValues({ block: "nearest", inline: "nearest" }, options));
-  }
-}
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/UCFCIHEU.js
-
-
-// src/utils/platform.ts
-function isTouchDevice() {
-  return O35LWD4W_canUseDOM && !!navigator.maxTouchPoints;
-}
-function UCFCIHEU_isApple() {
-  if (!O35LWD4W_canUseDOM)
-    return false;
-  return /mac|iphone|ipad|ipod/i.test(navigator.platform);
-}
-function isSafari() {
-  return O35LWD4W_canUseDOM && UCFCIHEU_isApple() && /apple/i.test(navigator.vendor);
-}
-function isFirefox() {
-  return O35LWD4W_canUseDOM && /firefox\//i.test(navigator.userAgent);
-}
-function isMac() {
-  return O35LWD4W_canUseDOM && navigator.platform.startsWith("Mac") && !isTouchDevice();
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/YTHH33BK.js
-
-
-
-
-
-// src/focusable/focusable.ts
-
-
-
-
-
-var isSafariBrowser = isSafari();
-var alwaysFocusVisibleInputTypes = [
-  "text",
-  "search",
-  "url",
-  "tel",
-  "email",
-  "password",
-  "number",
-  "date",
-  "month",
-  "week",
-  "time",
-  "datetime",
-  "datetime-local"
-];
-function isAlwaysFocusVisible(element) {
-  const { tagName, readOnly, type } = element;
-  if (tagName === "TEXTAREA" && !readOnly)
-    return true;
-  if (tagName === "SELECT" && !readOnly)
-    return true;
-  if (tagName === "INPUT" && !readOnly) {
-    return alwaysFocusVisibleInputTypes.includes(type);
-  }
-  if (element.isContentEditable)
-    return true;
-  return false;
-}
-function isAlwaysFocusVisibleDelayed(element) {
-  const role = element.getAttribute("role");
-  if (role !== "combobox")
-    return false;
-  return !!element.dataset.name;
-}
-function getLabels(element) {
-  if ("labels" in element) {
-    return element.labels;
-  }
-  return null;
-}
-function isNativeCheckboxOrRadio(element) {
-  const tagName = element.tagName.toLowerCase();
-  if (tagName === "input" && element.type) {
-    return element.type === "radio" || element.type === "checkbox";
-  }
-  return false;
-}
-function YTHH33BK_isNativeTabbable(tagName) {
-  if (!tagName)
-    return true;
-  return tagName === "button" || tagName === "input" || tagName === "select" || tagName === "textarea" || tagName === "a";
-}
-function YTHH33BK_supportsDisabledAttribute(tagName) {
-  if (!tagName)
-    return true;
-  return tagName === "button" || tagName === "input" || tagName === "select" || tagName === "textarea";
-}
-function YTHH33BK_getTabIndex(focusable, trulyDisabled, nativeTabbable, supportsDisabled, tabIndexProp) {
-  if (!focusable) {
-    return tabIndexProp;
-  }
-  if (trulyDisabled) {
-    if (nativeTabbable && !supportsDisabled) {
-      return -1;
-    }
-    return;
-  }
-  if (nativeTabbable) {
-    return tabIndexProp;
-  }
-  return tabIndexProp || 0;
-}
-function YTHH33BK_useDisableEvent(onEvent, disabled) {
-  return useEvent((event) => {
-    onEvent == null ? void 0 : onEvent(event);
-    if (event.defaultPrevented)
-      return;
-    if (disabled) {
-      event.stopPropagation();
-      event.preventDefault();
-    }
-  });
-}
-var isKeyboardModality = true;
-function onGlobalMouseDown(event) {
-  const target = event.target;
-  if (target && "hasAttribute" in target) {
-    if (!target.hasAttribute("data-focus-visible")) {
-      isKeyboardModality = false;
-    }
-  }
-}
-function onGlobalKeyDown(event) {
-  if (event.metaKey)
-    return;
-  if (event.ctrlKey)
-    return;
-  if (event.altKey)
-    return;
-  isKeyboardModality = true;
-}
-var useFocusable = CFEUKV6C_createHook(
-  (_a) => {
-    var _b = _a, {
-      focusable = true,
-      accessibleWhenDisabled,
-      autoFocus,
-      onFocusVisible
-    } = _b, props = __objRest(_b, [
-      "focusable",
-      "accessibleWhenDisabled",
-      "autoFocus",
-      "onFocusVisible"
-    ]);
-    const ref = (0,external_React_.useRef)(null);
-    (0,external_React_.useEffect)(() => {
-      if (!focusable)
-        return;
-      addGlobalEventListener("mousedown", onGlobalMouseDown, true);
-      addGlobalEventListener("keydown", onGlobalKeyDown, true);
-    }, [focusable]);
-    if (isSafariBrowser) {
-      (0,external_React_.useEffect)(() => {
-        if (!focusable)
-          return;
-        const element = ref.current;
-        if (!element)
-          return;
-        if (!isNativeCheckboxOrRadio(element))
-          return;
-        const labels = getLabels(element);
-        if (!labels)
-          return;
-        const onMouseUp = () => queueMicrotask(() => element.focus());
-        labels.forEach((label) => label.addEventListener("mouseup", onMouseUp));
-        return () => {
-          labels.forEach(
-            (label) => label.removeEventListener("mouseup", onMouseUp)
-          );
-        };
-      }, [focusable]);
-    }
-    const disabled = focusable && props.disabled;
-    const trulyDisabled = !!disabled && !accessibleWhenDisabled;
-    const [focusVisible, setFocusVisible] = (0,external_React_.useState)(false);
-    (0,external_React_.useEffect)(() => {
-      if (!focusable)
-        return;
-      if (trulyDisabled && focusVisible) {
-        setFocusVisible(false);
-      }
-    }, [focusable, trulyDisabled, focusVisible]);
-    (0,external_React_.useEffect)(() => {
-      if (!focusable)
-        return;
-      if (!focusVisible)
-        return;
-      const element = ref.current;
-      if (!element)
-        return;
-      if (typeof IntersectionObserver === "undefined")
-        return;
-      const observer = new IntersectionObserver(() => {
-        if (!focus_isFocusable(element)) {
-          setFocusVisible(false);
-        }
-      });
-      observer.observe(element);
-      return () => observer.disconnect();
-    }, [focusable, focusVisible]);
-    const onKeyPressCapture = YTHH33BK_useDisableEvent(
-      props.onKeyPressCapture,
-      disabled
-    );
-    const onMouseDownCapture = YTHH33BK_useDisableEvent(
-      props.onMouseDownCapture,
-      disabled
-    );
-    const onClickCapture = YTHH33BK_useDisableEvent(props.onClickCapture, disabled);
-    const onMouseDownProp = props.onMouseDown;
-    const onMouseDown = useEvent((event) => {
-      onMouseDownProp == null ? void 0 : onMouseDownProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!focusable)
-        return;
-      const element = event.currentTarget;
-      if (!isSafariBrowser)
-        return;
-      if (events_isPortalEvent(event))
-        return;
-      if (!O35LWD4W_isButton(element) && !isNativeCheckboxOrRadio(element))
-        return;
-      let receivedFocus = false;
-      const onFocus = () => {
-        receivedFocus = true;
-      };
-      const options = { capture: true, once: true };
-      element.addEventListener("focusin", onFocus, options);
-      queueBeforeEvent(element, "mouseup", () => {
-        element.removeEventListener("focusin", onFocus, true);
-        if (receivedFocus)
-          return;
-        focus_focusIfNeeded(element);
-      });
-    });
-    const handleFocusVisible = (event, currentTarget) => {
-      if (currentTarget) {
-        event.currentTarget = currentTarget;
-      }
-      if (!focusable)
-        return;
-      const element = event.currentTarget;
-      if (!element)
-        return;
-      if (!focus_hasFocus(element))
-        return;
-      onFocusVisible == null ? void 0 : onFocusVisible(event);
-      if (event.defaultPrevented)
-        return;
-      setFocusVisible(true);
-    };
-    const onKeyDownCaptureProp = props.onKeyDownCapture;
-    const onKeyDownCapture = useEvent(
-      (event) => {
-        onKeyDownCaptureProp == null ? void 0 : onKeyDownCaptureProp(event);
-        if (event.defaultPrevented)
-          return;
-        if (!focusable)
-          return;
-        if (focusVisible)
-          return;
-        if (event.metaKey)
-          return;
-        if (event.altKey)
-          return;
-        if (event.ctrlKey)
-          return;
-        if (!events_isSelfTarget(event))
-          return;
-        const element = event.currentTarget;
-        queueMicrotask(() => handleFocusVisible(event, element));
-      }
-    );
-    const onFocusCaptureProp = props.onFocusCapture;
-    const onFocusCapture = useEvent((event) => {
-      onFocusCaptureProp == null ? void 0 : onFocusCaptureProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!focusable)
-        return;
-      if (!events_isSelfTarget(event)) {
-        setFocusVisible(false);
-        return;
-      }
-      const element = event.currentTarget;
-      const applyFocusVisible = () => handleFocusVisible(event, element);
-      if (isKeyboardModality || isAlwaysFocusVisible(event.target)) {
-        queueMicrotask(applyFocusVisible);
-      } else if (isAlwaysFocusVisibleDelayed(event.target)) {
-        queueBeforeEvent(event.target, "focusout", applyFocusVisible);
-      } else {
-        setFocusVisible(false);
-      }
-    });
-    const onBlurProp = props.onBlur;
-    const onBlur = useEvent((event) => {
-      onBlurProp == null ? void 0 : onBlurProp(event);
-      if (!focusable)
-        return;
-      if (!isFocusEventOutside(event))
-        return;
-      setFocusVisible(false);
-    });
-    const autoFocusOnShow = (0,external_React_.useContext)(FocusableContext);
-    const autoFocusRef = useEvent((element) => {
-      if (!focusable)
-        return;
-      if (!autoFocus)
-        return;
-      if (!element)
-        return;
-      if (!autoFocusOnShow)
-        return;
-      queueMicrotask(() => {
-        if (focus_hasFocus(element))
-          return;
-        if (!focus_isFocusable(element))
-          return;
-        element.focus();
-      });
-    });
-    const tagName = useTagName(ref, props.as);
-    const nativeTabbable = focusable && YTHH33BK_isNativeTabbable(tagName);
-    const supportsDisabled = focusable && YTHH33BK_supportsDisabledAttribute(tagName);
-    const style = trulyDisabled ? PNRLI7OV_spreadValues({ pointerEvents: "none" }, props.style) : props.style;
-    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
-      "data-focus-visible": focusable && focusVisible ? "" : void 0,
-      "data-autofocus": autoFocus ? true : void 0,
-      "aria-disabled": disabled ? true : void 0
-    }, props), {
-      ref: useMergeRefs(ref, autoFocusRef, props.ref),
-      style,
-      tabIndex: YTHH33BK_getTabIndex(
-        focusable,
-        trulyDisabled,
-        nativeTabbable,
-        supportsDisabled,
-        props.tabIndex
-      ),
-      disabled: supportsDisabled && trulyDisabled ? true : void 0,
-      // TODO: Test Focusable contentEditable.
-      contentEditable: disabled ? void 0 : props.contentEditable,
-      onKeyPressCapture,
-      onClickCapture,
-      onMouseDownCapture,
-      onMouseDown,
-      onKeyDownCapture,
-      onFocusCapture,
-      onBlur
-    });
-    return props;
-  }
-);
-var Focusable = CFEUKV6C_createComponent((props) => {
-  props = useFocusable(props);
-  return CFEUKV6C_createElement("div", props);
-});
-if (false) {}
-
-
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/KXTLHNBI.js
 
 
@@ -7510,7 +5685,7 @@ if (false) {}
 
 
 
-var useHovercardAnchor = CFEUKV6C_createHook(
+var useHovercardAnchor = createHook(
   (_a) => {
     var _b = _a, { store, showOnHover = true } = _b, props = __objRest(_b, ["store", "showOnHover"]);
     const context = useHovercardProviderContext();
@@ -7580,7 +5755,7 @@ var useHovercardAnchor = CFEUKV6C_createHook(
     return props;
   }
 );
-var HovercardAnchor = CFEUKV6C_createComponent(
+var HovercardAnchor = createComponent(
   (props) => {
     const htmlProps = useHovercardAnchor(props);
     return CFEUKV6C_createElement("a", htmlProps);
@@ -7628,7 +5803,7 @@ var TooltipScopedContextProvider = _3QOG4FFB_ctx.ScopedContextProvider;
 var globalStore = createStore({
   activeStore: null
 });
-var useTooltipAnchor = CFEUKV6C_createHook(
+var useTooltipAnchor = createHook(
   (_a) => {
     var _b = _a, { store, showOnHover = true } = _b, props = __objRest(_b, ["store", "showOnHover"]);
     const context = useTooltipProviderContext();
@@ -7718,7 +5893,7 @@ var useTooltipAnchor = CFEUKV6C_createHook(
     return props;
   }
 );
-var TooltipAnchor = CFEUKV6C_createComponent((props) => {
+var TooltipAnchor = createComponent((props) => {
   const htmlProps = useTooltipAnchor(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -7954,7 +6129,7 @@ function isValidElement(id, element, ignoredElements) {
   if (!inSnapshot(id, element))
     return false;
   return !ignoredElements.some(
-    (enabledElement) => enabledElement && O35LWD4W_contains(element, enabledElement)
+    (enabledElement) => enabledElement && contains(element, enabledElement)
   );
 }
 function walkTreeOutside(id, elements, callback, ancestorCallback) {
@@ -8091,17 +6266,17 @@ var PGK6S5NC_elements = [
   "ul",
   "svg"
 ];
-var PGK6S5NC_useRole = CFEUKV6C_createHook((props) => {
+var PGK6S5NC_useRole = createHook((props) => {
   return props;
 });
-var PGK6S5NC_Role = CFEUKV6C_createComponent((props) => {
+var Role = createComponent((props) => {
   return CFEUKV6C_createElement("div", props);
 });
 if (false) {}
 Object.assign(
-  PGK6S5NC_Role,
+  Role,
   PGK6S5NC_elements.reduce((acc, element) => {
-    acc[element] = CFEUKV6C_createComponent((props) => {
+    acc[element] = createComponent((props) => {
       return CFEUKV6C_createElement(element, props);
     });
     return acc;
@@ -8142,7 +6317,7 @@ function parseCSSTime(...times) {
 function isHidden(mounted, hidden, alwaysVisible) {
   return !alwaysVisible && hidden !== false && (!mounted || !!hidden);
 }
-var useDisclosureContent = CFEUKV6C_createHook(
+var useDisclosureContent = createHook(
   (_a) => {
     var _b = _a, { store, alwaysVisible } = _b, props = __objRest(_b, ["store", "alwaysVisible"]);
     const context = useDisclosureProviderContext();
@@ -8217,7 +6392,7 @@ var useDisclosureContent = CFEUKV6C_createHook(
     return props;
   }
 );
-var DisclosureContent = CFEUKV6C_createComponent(
+var DisclosureContent = createComponent(
   (props) => {
     const htmlProps = useDisclosureContent(props);
     return CFEUKV6C_createElement("div", htmlProps);
@@ -8287,10 +6462,10 @@ function DialogBackdrop({
   if (!backdrop)
     return null;
   if ((0,external_React_.isValidElement)(backdrop)) {
-    return /* @__PURE__ */ (0,jsx_runtime.jsx)(PGK6S5NC_Role, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { render: backdrop }));
+    return /* @__PURE__ */ (0,jsx_runtime.jsx)(Role, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { render: backdrop }));
   }
   const Component = typeof backdrop !== "boolean" ? backdrop : "div";
-  return /* @__PURE__ */ (0,jsx_runtime.jsx)(PGK6S5NC_Role, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { render: /* @__PURE__ */ (0,jsx_runtime.jsx)(Component, {}) }));
+  return /* @__PURE__ */ (0,jsx_runtime.jsx)(Role, PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), { render: /* @__PURE__ */ (0,jsx_runtime.jsx)(Component, {}) }));
 }
 
 
@@ -8371,18 +6546,18 @@ function usePreviousMouseDownRef(enabled) {
 function isInDocument(target) {
   if (target.tagName === "HTML")
     return true;
-  return O35LWD4W_contains(O35LWD4W_getDocument(target).body, target);
+  return contains(O35LWD4W_getDocument(target).body, target);
 }
 function isDisclosure(disclosure, target) {
   if (!disclosure)
     return false;
-  if (O35LWD4W_contains(disclosure, target))
+  if (contains(disclosure, target))
     return true;
   const activeId = target.getAttribute("aria-activedescendant");
   if (activeId) {
     const activeElement = O35LWD4W_getDocument(disclosure).getElementById(activeId);
     if (activeElement) {
-      return O35LWD4W_contains(disclosure, activeElement);
+      return contains(disclosure, activeElement);
     }
   }
   return false;
@@ -8431,7 +6606,7 @@ function useEventOutside({
         return;
       if (!isInDocument(target))
         return;
-      if (O35LWD4W_contains(contentElement, target))
+      if (contains(contentElement, target))
         return;
       if (isDisclosure(disclosureElement, target))
         return;
@@ -8464,7 +6639,7 @@ function useHideOnInteractOutside(store, hideOnInteractOutside, domReady) {
       const previousMouseDown = previousMouseDownRef.current;
       if (!previousMouseDown)
         return;
-      if (!O35LWD4W_isVisible(previousMouseDown))
+      if (!isVisible(previousMouseDown))
         return;
       if (!isElementMarked(previousMouseDown, contentElement == null ? void 0 : contentElement.id))
         return;
@@ -8579,9 +6754,9 @@ function disableTree(element, ignoredElements) {
   if (supportsInert()) {
     return setProperty(element, "inert", true);
   }
-  const tabbableElements = focus_getAllTabbableIn(element, true);
+  const tabbableElements = getAllTabbableIn(element, true);
   const enableElements = tabbableElements.map((element2) => {
-    if (ignoredElements == null ? void 0 : ignoredElements.some((el) => el && O35LWD4W_contains(el, element2)))
+    if (ignoredElements == null ? void 0 : ignoredElements.some((el) => el && contains(el, element2)))
       return noop;
     return setAttribute(element2, "tabindex", "-1");
   });
@@ -8682,7 +6857,7 @@ function usePreventBodyScroll(contentElement, contentId, enabled) {
     if (!contentElement)
       return;
     const doc = O35LWD4W_getDocument(contentElement);
-    const win = O35LWD4W_getWindow(contentElement);
+    const win = getWindow(contentElement);
     const { documentElement, body } = doc;
     const cssScrollbarWidth = documentElement.style.getPropertyValue("--scrollbar-width");
     const scrollbarWidth = cssScrollbarWidth ? parseInt(cssScrollbarWidth) : win.innerWidth - documentElement.clientWidth;
@@ -8734,7 +6909,7 @@ function usePreventBodyScroll(contentElement, contentId, enabled) {
 
 // src/focusable/focusable-container.tsx
 
-var useFocusableContainer = CFEUKV6C_createHook(
+var useFocusableContainer = createHook(
   (_a) => {
     var _b = _a, { autoFocusOnShow = true } = _b, props = __objRest(_b, ["autoFocusOnShow"]);
     props = useWrapElement(
@@ -8745,7 +6920,7 @@ var useFocusableContainer = CFEUKV6C_createHook(
     return props;
   }
 );
-var FocusableContainer = CFEUKV6C_createComponent(
+var FocusableContainer = createComponent(
   (props) => {
     const htmlProps = useFocusableContainer(props);
     return CFEUKV6C_createElement("div", htmlProps);
@@ -8784,7 +6959,7 @@ function HeadingLevel({ level, children }) {
 
 
 // src/visually-hidden/visually-hidden.ts
-var useVisuallyHidden = CFEUKV6C_createHook((props) => {
+var useVisuallyHidden = createHook((props) => {
   props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), {
     style: PNRLI7OV_spreadValues({
       border: 0,
@@ -8800,7 +6975,7 @@ var useVisuallyHidden = CFEUKV6C_createHook((props) => {
   });
   return props;
 });
-var VisuallyHidden = CFEUKV6C_createComponent(
+var VisuallyHidden = createComponent(
   (props) => {
     const htmlProps = useVisuallyHidden(props);
     return CFEUKV6C_createElement("span", htmlProps);
@@ -8816,7 +6991,7 @@ if (false) {}
 
 
 // src/focus-trap/focus-trap.ts
-var useFocusTrap = CFEUKV6C_createHook((props) => {
+var useFocusTrap = createHook((props) => {
   props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
     "data-focus-trap": "",
     tabIndex: 0,
@@ -8832,7 +7007,7 @@ var useFocusTrap = CFEUKV6C_createHook((props) => {
   props = useVisuallyHidden(props);
   return props;
 });
-var FocusTrap = CFEUKV6C_createComponent((props) => {
+var FocusTrap = createComponent((props) => {
   const htmlProps = useFocusTrap(props);
   return CFEUKV6C_createElement("span", htmlProps);
 });
@@ -8882,7 +7057,7 @@ function queueFocus(element) {
     element == null ? void 0 : element.focus();
   });
 }
-var usePortal = CFEUKV6C_createHook(
+var usePortal = createHook(
   (_a) => {
     var _b = _a, { preserveTabOrder, portalElement, portalRef, portal = true } = _b, props = __objRest(_b, ["preserveTabOrder", "portalElement", "portalRef", "portal"]);
     const ref = (0,external_React_.useRef)(null);
@@ -8913,12 +7088,12 @@ var usePortal = CFEUKV6C_createHook(
         portalEl.id = element.id ? `portal/${element.id}` : getRandomId();
       }
       setPortalNode(portalEl);
-      CP3U4HPL_setRef(portalRef, portalEl);
+      setRef(portalRef, portalEl);
       if (isPortalInDocument)
         return;
       return () => {
         portalEl.remove();
-        CP3U4HPL_setRef(portalRef, null);
+        setRef(portalRef, null);
       };
     }, [portal, portalElement, context, portalRef]);
     (0,external_React_.useEffect)(() => {
@@ -9052,7 +7227,7 @@ var usePortal = CFEUKV6C_createHook(
     return props;
   }
 );
-var Portal = CFEUKV6C_createComponent((props) => {
+var Portal = createComponent((props) => {
   const htmlProps = usePortal(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -9093,9 +7268,9 @@ function isAlreadyFocusingAnotherElement(dialog) {
   const activeElement = O35LWD4W_getActiveElement();
   if (!activeElement)
     return false;
-  if (dialog && O35LWD4W_contains(dialog, activeElement))
+  if (dialog && contains(dialog, activeElement))
     return false;
-  if (focus_isFocusable(activeElement))
+  if (isFocusable(activeElement))
     return true;
   return false;
 }
@@ -9106,10 +7281,10 @@ function getElementFromProp(prop, focusable = false) {
   if (!element)
     return null;
   if (focusable)
-    return focus_isFocusable(element) ? element : null;
+    return isFocusable(element) ? element : null;
   return element;
 }
-var useDialog = CFEUKV6C_createHook(
+var useDialog = createHook(
   (_a) => {
     var _b = _a, {
       store,
@@ -9175,7 +7350,7 @@ var useDialog = CFEUKV6C_createHook(
         return;
       if (activeElement.tagName === "BODY")
         return;
-      if (dialog && O35LWD4W_contains(dialog, activeElement))
+      if (dialog && contains(dialog, activeElement))
         return;
       store.setDisclosureElement(activeElement);
     }, [store, open]);
@@ -9188,7 +7363,7 @@ var useDialog = CFEUKV6C_createHook(
         const { disclosureElement } = store.getState();
         if (!disclosureElement)
           return;
-        if (!O35LWD4W_isButton(disclosureElement))
+        if (!isButton(disclosureElement))
           return;
         const onMouseDown = () => {
           let receivedFocus = false;
@@ -9201,7 +7376,7 @@ var useDialog = CFEUKV6C_createHook(
             disclosureElement.removeEventListener("focusin", onFocus, true);
             if (receivedFocus)
               return;
-            focus_focusIfNeeded(disclosureElement);
+            focusIfNeeded(disclosureElement);
           });
         };
         disclosureElement.addEventListener("mousedown", onMouseDown);
@@ -9318,9 +7493,9 @@ var useDialog = CFEUKV6C_createHook(
       // dialogs with preserveTabOrder set to true will not receive focus
       // properly because the elements aren't tabbable until the dialog
       // receives focus.
-      focus_getFirstTabbableIn(contentElement, true, portal && preserveTabOrder) || // Finally, we fallback to the dialog element itself.
+      getFirstTabbableIn(contentElement, true, portal && preserveTabOrder) || // Finally, we fallback to the dialog element itself.
       contentElement;
-      const isElementFocusable = focus_isFocusable(element);
+      const isElementFocusable = isFocusable(element);
       if (!autoFocusOnShowProp(isElementFocusable ? element : null))
         return;
       setAutoFocusEnabled(true);
@@ -9367,7 +7542,7 @@ var useDialog = CFEUKV6C_createHook(
             element = composite;
           }
         }
-        if (element && !focus_isFocusable(element)) {
+        if (element && !isFocusable(element)) {
           const maybeParentDialog = O35LWD4W_closest(element, "[data-dialog]");
           if (maybeParentDialog && maybeParentDialog.id) {
             const doc = O35LWD4W_getDocument(maybeParentDialog);
@@ -9378,7 +7553,7 @@ var useDialog = CFEUKV6C_createHook(
             }
           }
         }
-        const isElementFocusable = element && focus_isFocusable(element);
+        const isElementFocusable = element && isFocusable(element);
         if (!isElementFocusable && retry) {
           requestAnimationFrame(() => focusOnHide(dialog, false));
           return;
@@ -9434,11 +7609,11 @@ var useDialog = CFEUKV6C_createHook(
         const isValidTarget = () => {
           if (target.tagName === "BODY")
             return true;
-          if (O35LWD4W_contains(dialog, target))
+          if (contains(dialog, target))
             return true;
           if (!disclosureElement)
             return true;
-          if (O35LWD4W_contains(disclosureElement, target))
+          if (contains(disclosureElement, target))
             return true;
           return false;
         };
@@ -9506,7 +7681,7 @@ var useDialog = CFEUKV6C_createHook(
     return props;
   }
 );
-var Dialog = CFEUKV6C_createComponent((props) => {
+var Dialog = createComponent((props) => {
   const htmlProps = useDialog(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -11497,7 +9672,7 @@ function getArrowMiddleware(arrowElement, props) {
     padding: props.arrowPadding
   });
 }
-var usePopover = CFEUKV6C_createHook(
+var usePopover = createHook(
   (_a) => {
     var _b = _a, {
       store,
@@ -11709,7 +9884,7 @@ var usePopover = CFEUKV6C_createHook(
     return props;
   }
 );
-var Popover = CFEUKV6C_createComponent((props) => {
+var Popover = createComponent((props) => {
   const htmlProps = usePopover(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -11734,13 +9909,13 @@ if (false) {}
 
 
 function isMovingOnHovercard(target, card, anchor, nested) {
-  if (focus_hasFocusWithin(card))
+  if (hasFocusWithin(card))
     return true;
   if (!target)
     return false;
-  if (O35LWD4W_contains(card, target))
+  if (contains(card, target))
     return true;
-  if (anchor && O35LWD4W_contains(anchor, target))
+  if (anchor && contains(anchor, target))
     return true;
   if (nested == null ? void 0 : nested.some((card2) => isMovingOnHovercard(target, card2, anchor))) {
     return true;
@@ -11754,7 +9929,7 @@ function useAutoFocusOnShow(_a) {
     "store"
   ]);
   const open = store.useState("open");
-  const openRef = J7Q2EO23_useLiveRef(open);
+  const openRef = useLiveRef(open);
   (0,external_React_.useEffect)(() => {
     if (!open) {
       store.setAutoFocusOnShow(false);
@@ -11809,7 +9984,7 @@ function useAutoFocusOnHide(_a) {
   return props;
 }
 var NestedHovercardContext = (0,external_React_.createContext)(null);
-var useHovercard = CFEUKV6C_createHook(
+var useHovercard = createHook(
   (_a) => {
     var _b = _a, {
       store,
@@ -11862,7 +10037,7 @@ var useHovercard = CFEUKV6C_createHook(
         const target = event.target;
         const anchor = anchorElement;
         if (isMovingOnHovercard(target, element, anchor, nestedHovercards)) {
-          enterPointRef.current = target && anchor && O35LWD4W_contains(anchor, target) ? getEventPoint(event) : null;
+          enterPointRef.current = target && anchor && contains(anchor, target) ? getEventPoint(event) : null;
           window.clearTimeout(hideTimeoutRef.current);
           hideTimeoutRef.current = 0;
           return;
@@ -11990,7 +10165,7 @@ var useHovercard = CFEUKV6C_createHook(
     return props;
   }
 );
-var Hovercard = CFEUKV6C_createComponent((props) => {
+var Hovercard = createComponent((props) => {
   const htmlProps = useHovercard(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -12044,7 +10219,7 @@ if (false) {}
 
 
 
-var useTooltip = CFEUKV6C_createHook(
+var useTooltip = createHook(
   (_a) => {
     var _b = _a, {
       store,
@@ -12097,7 +10272,7 @@ var useTooltip = CFEUKV6C_createHook(
         const anchorElement = store == null ? void 0 : store.getState().anchorElement;
         if (!anchorElement)
           return true;
-        if (O35LWD4W_contains(anchorElement, event.target))
+        if (contains(anchorElement, event.target))
           return false;
         return true;
       }
@@ -12105,13 +10280,15 @@ var useTooltip = CFEUKV6C_createHook(
     return props;
   }
 );
-var Tooltip = CFEUKV6C_createComponent((props) => {
+var Tooltip = createComponent((props) => {
   const htmlProps = useTooltip(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
 if (false) {}
 
 
+;// CONCATENATED MODULE: external ["wp","element"]
+var external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
 var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
@@ -12509,7 +10686,7 @@ function is_plain_object_isObject(o) {
   return Object.prototype.toString.call(o) === '[object Object]';
 }
 
-function is_plain_object_isPlainObject(o) {
+function isPlainObject(o) {
   var ctor,prot;
 
   if (is_plain_object_isObject(o) === false) return false;
@@ -12625,7 +10802,7 @@ function useContextSystemBridge({
   const config = (0,external_wp_element_namespaceObject.useMemo)(() => {
     // Deep clone `parentContext` to avoid mutating it later.
     return cjs_default()(parentContext !== null && parentContext !== void 0 ? parentContext : {}, value !== null && value !== void 0 ? value : {}, {
-      isMergeableObject: is_plain_object_isPlainObject
+      isMergeableObject: isPlainObject
     });
   }, [parentContext, value]);
   return config;
@@ -15989,6 +14166,7 @@ const component_VisuallyHidden = contextConnect(UnconnectedVisuallyHidden, 'Visu
  * WordPress dependencies
  */
 
+
 /**
  * Internal dependencies
  */
@@ -16013,15 +14191,20 @@ const ALIGNMENT_LABEL = {
 const ALIGNMENTS = GRID.flat();
 
 /**
- * Parses and transforms an incoming value to better match the alignment values
+ * Normalizes and transforms an incoming value to better match the alignment values
  *
  * @param value An alignment value to parse.
  *
  * @return The parsed value.
  */
-function transformValue(value) {
-  const nextValue = value === 'center' ? 'center center' : value;
-  return nextValue.replace('-', ' ');
+function normalize(value) {
+  const normalized = value === 'center' ? 'center center' : value;
+
+  // Strictly speaking, this could be `string | null | undefined`,
+  // but will be validated shortly, so we're typecasting to an
+  // `AlignmentMatrixControlValue` to keep TypeScript happy.
+  const transformed = normalized?.replace('-', ' ');
+  return ALIGNMENTS.includes(transformed) ? transformed : undefined;
 }
 
 /**
@@ -16033,8 +14216,22 @@ function transformValue(value) {
  * @return The item id.
  */
 function getItemId(prefixId, value) {
-  const valueId = transformValue(value).replace(' ', '-');
-  return `${prefixId}-${valueId}`;
+  const normalized = normalize(value);
+  if (!normalized) return;
+  const id = normalized.replace(' ', '-');
+  return `${prefixId}-${id}`;
+}
+
+/**
+ * Extracts an item value from its ID
+ *
+ * @param prefixId An ID prefix to remove
+ * @param id       An item ID
+ * @return         The item value
+ */
+function getItemValue(prefixId, id) {
+  const value = id?.replace(prefixId + '-', '');
+  return normalize(value);
 }
 
 /**
@@ -16045,8 +14242,9 @@ function getItemId(prefixId, value) {
  * @return The index of a matching alignment.
  */
 function getAlignmentIndex(alignment = 'center') {
-  const item = transformValue(alignment);
-  const index = ALIGNMENTS.indexOf(item);
+  const normalized = normalize(alignment);
+  if (!normalized) return undefined;
+  const index = ALIGNMENTS.indexOf(normalized);
   return index > -1 ? index : undefined;
 }
 
@@ -16642,6 +14840,7 @@ const Cell = emotion_styled_base_browser_esm("span",  true ? {
 
 
 function cell_Cell({
+  id,
   isActive = false,
   value,
   ...props
@@ -16650,1652 +14849,925 @@ function cell_Cell({
   return (0,external_React_.createElement)(tooltip, {
     text: tooltipText
   }, (0,external_React_.createElement)(CompositeItem, {
-    as: Cell,
-    role: "gridcell",
-    ...props
+    id: id,
+    render: (0,external_React_.createElement)(Cell, {
+      ...props,
+      role: "gridcell"
+    })
   }, (0,external_React_.createElement)(visually_hidden_component, null, value), (0,external_React_.createElement)(Point, {
     isActive: isActive,
     role: "presentation"
   })));
 }
 
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useSealedState.js
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/C6MBVGZ2.js
 
 
-/**
- * React custom hook that returns the very first value passed to `initialState`,
- * even if it changes between re-renders.
- */
-function useSealedState(initialState) {
-  var _React$useState = (0,external_React_.useState)(initialState),
-      sealed = _React$useState[0];
 
-  return sealed;
+// src/collection/collection-store.ts
+
+function useCollectionStoreProps(store, update, props) {
+  useUpdateEffect(update, [props.store]);
+  useStoreProps(store, props, "items", "setItems");
+  return store;
+}
+function useCollectionStore(props = {}) {
+  const [store, update] = useStore(Core.createCollectionStore, props);
+  return useCollectionStoreProps(store, update, props);
 }
 
 
 
-;// CONCATENATED MODULE: ./node_modules/reakit/es/reverse-30eaa122.js
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/STQCKYT6.js
 
 
-function groupItems(items) {
-  var groups = [[]];
 
-  var _loop = function _loop() {
-    var item = _step.value;
-    var group = groups.find(function (g) {
-      return !g[0] || g[0].groupId === item.groupId;
-    });
 
-    if (group) {
-      group.push(item);
-    } else {
-      groups.push([item]);
+
+// src/collection/collection-store.ts
+function isElementPreceding(a, b) {
+  return Boolean(
+    b.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING
+  );
+}
+function sortBasedOnDOMPosition(items) {
+  const pairs = items.map((item, index) => [index, item]);
+  let isOrderDifferent = false;
+  pairs.sort(([indexA, a], [indexB, b]) => {
+    const elementA = a.element;
+    const elementB = b.element;
+    if (elementA === elementB)
+      return 0;
+    if (!elementA || !elementB)
+      return 0;
+    if (isElementPreceding(elementA, elementB)) {
+      if (indexA > indexB) {
+        isOrderDifferent = true;
+      }
+      return -1;
     }
-  };
-
-  for (var _iterator = _createForOfIteratorHelperLoose(items), _step; !(_step = _iterator()).done;) {
-    _loop();
+    if (indexA < indexB) {
+      isOrderDifferent = true;
+    }
+    return 1;
+  });
+  if (isOrderDifferent) {
+    return pairs.map(([_, item]) => item);
   }
-
-  return groups;
+  return items;
+}
+function getCommonParent(items) {
+  var _a;
+  const firstItem = items.find((item) => !!item.element);
+  const lastItem = [...items].reverse().find((item) => !!item.element);
+  let parentElement = (_a = firstItem == null ? void 0 : firstItem.element) == null ? void 0 : _a.parentElement;
+  while (parentElement && (lastItem == null ? void 0 : lastItem.element)) {
+    const parent = parentElement;
+    if (lastItem && parent.contains(lastItem.element)) {
+      return parentElement;
+    }
+    parentElement = parentElement.parentElement;
+  }
+  return O35LWD4W_getDocument(parentElement).body;
+}
+function createCollectionStore(props = {}) {
+  var _a;
+  throwOnConflictingProps(props, props.store);
+  const syncState = (_a = props.store) == null ? void 0 : _a.getState();
+  const items = defaultValue(
+    props.items,
+    syncState == null ? void 0 : syncState.items,
+    props.defaultItems,
+    []
+  );
+  const itemsMap = new Map(items.map((item) => [item.id, item]));
+  const initialState = {
+    items,
+    renderedItems: defaultValue(syncState == null ? void 0 : syncState.renderedItems, [])
+  };
+  const privateStore = createStore({
+    renderedItems: initialState.renderedItems
+  });
+  const collection = createStore(initialState, props.store);
+  const sortItems = () => {
+    const state = privateStore.getState();
+    const renderedItems = sortBasedOnDOMPosition(state.renderedItems);
+    privateStore.setState("renderedItems", renderedItems);
+    collection.setState("renderedItems", renderedItems);
+  };
+  setup(collection, () => {
+    return batch(privateStore, ["renderedItems"], (state) => {
+      let firstRun = true;
+      let raf = requestAnimationFrame(sortItems);
+      if (typeof IntersectionObserver !== "function")
+        return;
+      const callback = () => {
+        if (firstRun) {
+          firstRun = false;
+          return;
+        }
+        cancelAnimationFrame(raf);
+        raf = requestAnimationFrame(sortItems);
+      };
+      const root = getCommonParent(state.renderedItems);
+      const observer = new IntersectionObserver(callback, { root });
+      state.renderedItems.forEach((item) => {
+        if (!item.element)
+          return;
+        observer.observe(item.element);
+      });
+      return () => {
+        cancelAnimationFrame(raf);
+        observer.disconnect();
+      };
+    });
+  });
+  const mergeItem = (item, setItems, canDeleteFromMap = false) => {
+    let prevItem;
+    setItems((items2) => {
+      const index = items2.findIndex(({ id }) => id === item.id);
+      const nextItems = items2.slice();
+      if (index !== -1) {
+        prevItem = items2[index];
+        const nextItem = _chunks_PNRLI7OV_spreadValues(_chunks_PNRLI7OV_spreadValues({}, prevItem), item);
+        nextItems[index] = nextItem;
+        itemsMap.set(item.id, nextItem);
+      } else {
+        nextItems.push(item);
+        itemsMap.set(item.id, item);
+      }
+      return nextItems;
+    });
+    const unmergeItem = () => {
+      setItems((items2) => {
+        if (!prevItem) {
+          if (canDeleteFromMap) {
+            itemsMap.delete(item.id);
+          }
+          return items2.filter(({ id }) => id !== item.id);
+        }
+        const index = items2.findIndex(({ id }) => id === item.id);
+        if (index === -1)
+          return items2;
+        const nextItems = items2.slice();
+        nextItems[index] = prevItem;
+        itemsMap.set(item.id, prevItem);
+        return nextItems;
+      });
+    };
+    return unmergeItem;
+  };
+  const registerItem = (item) => mergeItem(item, (getItems) => collection.setState("items", getItems), true);
+  return _chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues({}, collection), {
+    registerItem,
+    renderItem: (item) => chain(
+      registerItem(item),
+      mergeItem(
+        item,
+        (getItems) => privateStore.setState("renderedItems", getItems)
+      )
+    ),
+    item: (id) => {
+      if (!id)
+        return null;
+      let item = itemsMap.get(id);
+      if (!item) {
+        const { items: items2 } = collection.getState();
+        item = items2.find((item2) => item2.id === id);
+        if (item) {
+          itemsMap.set(id, item);
+        }
+      }
+      return item || null;
+    }
+  });
 }
 
-function flatten(grid) {
-  var flattened = [];
 
-  for (var _iterator = _createForOfIteratorHelperLoose(grid), _step; !(_step = _iterator()).done;) {
-    var row = _step.value;
-    flattened.push.apply(flattened, row);
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/5XEKIOCW.js
+// src/utils/array.ts
+function toArray(arg) {
+  if (Array.isArray(arg)) {
+    return arg;
   }
-
+  return typeof arg !== "undefined" ? [arg] : [];
+}
+function addItemToArray(array, item, index = -1) {
+  if (!(index in array)) {
+    return [...array, item];
+  }
+  return [...array.slice(0, index), item, ...array.slice(index)];
+}
+function flatten2DArray(array) {
+  const flattened = [];
+  for (const row of array) {
+    flattened.push(...row);
+  }
   return flattened;
 }
-
-function reverse(array) {
+function reverseArray(array) {
   return array.slice().reverse();
 }
 
 
 
-;// CONCATENATED MODULE: ./node_modules/reakit/es/findEnabledItemById-8ddca752.js
-function findEnabledItemById(items, id) {
-  if (!id) return undefined;
-  return items === null || items === void 0 ? void 0 : items.find(function (item) {
-    return item.id === id && !item.disabled;
-  });
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/applyState.js
-function applyState_isUpdater(argument) {
-  return typeof argument === "function";
-}
-/**
- * Receives a `setState` argument and calls it with `currentValue` if it's a
- * function. Otherwise return the argument as the new value.
- *
- * @example
- * import { applyState } from "reakit-utils";
- *
- * applyState((value) => value + 1, 1); // 2
- * applyState(2, 1); // 2
- */
-
-
-function applyState_applyState(argument, currentValue) {
-  if (applyState_isUpdater(argument)) {
-    return argument(currentValue);
-  }
-
-  return argument;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Id/IdState.js
-
-
-
-
-function unstable_useIdState(initialState) {
-  if (initialState === void 0) {
-    initialState = {};
-  }
-
-  var _useSealedState = useSealedState(initialState),
-      initialBaseId = _useSealedState.baseId;
-
-  var generateId = (0,external_React_.useContext)(unstable_IdContext);
-  var idCountRef = (0,external_React_.useRef)(0);
-
-  var _React$useState = (0,external_React_.useState)(function () {
-    return initialBaseId || generateId();
-  }),
-      baseId = _React$useState[0],
-      setBaseId = _React$useState[1];
-
-  return {
-    baseId: baseId,
-    setBaseId: setBaseId,
-    unstable_idCountRef: idCountRef
-  };
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/CompositeState.js
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/BL2LUIIN.js
 
 
 
 
 
 
-
-
-
-
-
-
-function isElementPreceding(element1, element2) {
-  return Boolean(element2.compareDocumentPosition(element1) & Node.DOCUMENT_POSITION_PRECEDING);
-}
-
-function findDOMIndex(items, item) {
-  return items.findIndex(function (currentItem) {
-    if (!currentItem.ref.current || !item.ref.current) {
-      return false;
+// src/composite/composite-store.ts
+var BL2LUIIN_NULL_ITEM = { id: null };
+function BL2LUIIN_findFirstEnabledItem(items, excludeId) {
+  return items.find((item) => {
+    if (excludeId) {
+      return !item.disabled && item.id !== excludeId;
     }
-
-    return isElementPreceding(item.ref.current, currentItem.ref.current);
+    return !item.disabled;
   });
 }
-
-function getMaxLength(rows) {
-  var maxLength = 0;
-
-  for (var _iterator = _createForOfIteratorHelperLoose(rows), _step; !(_step = _iterator()).done;) {
-    var length = _step.value.length;
-
+function getEnabledItems(items, excludeId) {
+  return items.filter((item) => {
+    if (excludeId) {
+      return !item.disabled && item.id !== excludeId;
+    }
+    return !item.disabled;
+  });
+}
+function getOppositeOrientation(orientation) {
+  if (orientation === "vertical")
+    return "horizontal";
+  if (orientation === "horizontal")
+    return "vertical";
+  return;
+}
+function getItemsInRow(items, rowId) {
+  return items.filter((item) => item.rowId === rowId);
+}
+function BL2LUIIN_flipItems(items, activeId, shouldInsertNullItem = false) {
+  const index = items.findIndex((item) => item.id === activeId);
+  return [
+    ...items.slice(index + 1),
+    ...shouldInsertNullItem ? [BL2LUIIN_NULL_ITEM] : [],
+    ...items.slice(0, index)
+  ];
+}
+function BL2LUIIN_groupItemsByRows(items) {
+  const rows = [];
+  for (const item of items) {
+    const row = rows.find((currentRow) => {
+      var _a;
+      return ((_a = currentRow[0]) == null ? void 0 : _a.rowId) === item.rowId;
+    });
+    if (row) {
+      row.push(item);
+    } else {
+      rows.push([item]);
+    }
+  }
+  return rows;
+}
+function getMaxRowLength(array) {
+  let maxLength = 0;
+  for (const { length } of array) {
     if (length > maxLength) {
       maxLength = length;
     }
   }
-
   return maxLength;
 }
-
-/**
- * Turns [row1, row1, row2, row2] into [row1, row2, row1, row2]
- */
-
-function verticalizeItems(items) {
-  var groups = groupItems(items);
-  var maxLength = getMaxLength(groups);
-  var verticalized = [];
-
-  for (var i = 0; i < maxLength; i += 1) {
-    for (var _iterator = _createForOfIteratorHelperLoose(groups), _step; !(_step = _iterator()).done;) {
-      var group = _step.value;
-
-      if (group[i]) {
-        verticalized.push(_objectSpread2(_objectSpread2({}, group[i]), {}, {
-          // If there's no groupId, it means that it's not a grid composite,
-          // but a single row instead. So, instead of verticalizing it, that
-          // is, assigning a different groupId based on the column index, we
-          // keep it undefined so they will be part of the same group.
-          // It's useful when using up/down on one-dimensional composites.
-          groupId: group[i].groupId ? "" + i : undefined
-        }));
-      }
-    }
-  }
-
-  return verticalized;
-}
-
-function createEmptyItem(groupId) {
+function createEmptyItem(rowId) {
   return {
     id: "__EMPTY_ITEM__",
     disabled: true,
-    ref: {
-      current: null
-    },
-    groupId: groupId
+    rowId
   };
 }
-/**
- * Turns [[row1, row1], [row2]] into [[row1, row1], [row2, row2]]
- */
-
-
-function fillGroups(groups, currentId, shift) {
-  var maxLength = getMaxLength(groups);
-
-  for (var _iterator = _createForOfIteratorHelperLoose(groups), _step; !(_step = _iterator()).done;) {
-    var group = _step.value;
-
-    for (var i = 0; i < maxLength; i += 1) {
-      var item = group[i];
-
-      if (!item || shift && item.disabled) {
-        var isFrist = i === 0;
-        var previousItem = isFrist && shift ? findFirstEnabledItem(group) : group[i - 1];
-        group[i] = previousItem && currentId !== (previousItem === null || previousItem === void 0 ? void 0 : previousItem.id) && shift ? previousItem : createEmptyItem(previousItem === null || previousItem === void 0 ? void 0 : previousItem.groupId);
+function normalizeRows(rows, activeId, focusShift) {
+  const maxLength = getMaxRowLength(rows);
+  for (const row of rows) {
+    for (let i = 0; i < maxLength; i += 1) {
+      const item = row[i];
+      if (!item || focusShift && item.disabled) {
+        const isFirst = i === 0;
+        const previousItem = isFirst && focusShift ? BL2LUIIN_findFirstEnabledItem(row) : row[i - 1];
+        row[i] = previousItem && activeId !== previousItem.id && focusShift ? previousItem : createEmptyItem(previousItem == null ? void 0 : previousItem.rowId);
       }
     }
   }
-
-  return groups;
+  return rows;
 }
-
-var nullItem = {
-  id: null,
-  ref: {
-    current: null
-  }
-};
-function placeItemsAfter(items, id, shouldInsertNullItem) {
-  var index = items.findIndex(function (item) {
-    return item.id === id;
-  });
-  return [].concat(items.slice(index + 1), shouldInsertNullItem ? [nullItem] : [], items.slice(0, index));
-}
-
-function getItemsInGroup(items, groupId) {
-  return items.filter(function (item) {
-    return item.groupId === groupId;
-  });
-}
-
-var map = {
-  horizontal: "vertical",
-  vertical: "horizontal"
-};
-function getOppositeOrientation(orientation) {
-  return orientation && map[orientation];
-}
-
-function addItemAtIndex(array, item, index) {
-  if (!(index in array)) {
-    return [].concat(array, [item]);
-  }
-
-  return [].concat(array.slice(0, index), [item], array.slice(index));
-}
-
-function sortBasedOnDOMPosition(items) {
-  var pairs = items.map(function (item, index) {
-    return [index, item];
-  });
-  var isOrderDifferent = false;
-  pairs.sort(function (_ref, _ref2) {
-    var indexA = _ref[0],
-        a = _ref[1];
-    var indexB = _ref2[0],
-        b = _ref2[1];
-    var elementA = a.ref.current;
-    var elementB = b.ref.current;
-    if (!elementA || !elementB) return 0; // a before b
-
-    if (isElementPreceding(elementA, elementB)) {
-      if (indexA > indexB) {
-        isOrderDifferent = true;
-      }
-
-      return -1;
-    } // a after b
-
-
-    if (indexA < indexB) {
-      isOrderDifferent = true;
-    }
-
-    return 1;
-  });
-
-  if (isOrderDifferent) {
-    return pairs.map(function (_ref3) {
-      var _ = _ref3[0],
-          item = _ref3[1];
-      return item;
-    });
-  }
-
-  return items;
-}
-
-function setItemsBasedOnDOMPosition(items, setItems) {
-  var sortedItems = sortBasedOnDOMPosition(items);
-
-  if (items !== sortedItems) {
-    setItems(sortedItems);
-  }
-}
-
-function getCommonParent(items) {
-  var _firstItem$ref$curren;
-
-  var firstItem = items[0],
-      nextItems = items.slice(1);
-  var parentElement = firstItem === null || firstItem === void 0 ? void 0 : (_firstItem$ref$curren = firstItem.ref.current) === null || _firstItem$ref$curren === void 0 ? void 0 : _firstItem$ref$curren.parentElement;
-
-  var _loop = function _loop() {
-    var parent = parentElement;
-
-    if (nextItems.every(function (item) {
-      return parent.contains(item.ref.current);
-    })) {
-      return {
-        v: parentElement
-      };
-    }
-
-    parentElement = parentElement.parentElement;
-  };
-
-  while (parentElement) {
-    var _ret = _loop();
-
-    if (typeof _ret === "object") return _ret.v;
-  }
-
-  return getDocument_getDocument(parentElement).body;
-} // istanbul ignore next: JSDOM doesn't support IntersectionObverser
-// See https://github.com/jsdom/jsdom/issues/2032
-
-
-function useIntersectionObserver(items, setItems) {
-  var previousItems = (0,external_React_.useRef)([]);
-  (0,external_React_.useEffect)(function () {
-    var callback = function callback() {
-      var hasPreviousItems = !!previousItems.current.length; // We don't want to sort items if items have been just registered.
-
-      if (hasPreviousItems) {
-        setItemsBasedOnDOMPosition(items, setItems);
-      }
-
-      previousItems.current = items;
-    };
-
-    var root = getCommonParent(items);
-    var observer = new IntersectionObserver(callback, {
-      root: root
-    });
-
-    for (var _iterator = _createForOfIteratorHelperLoose(items), _step; !(_step = _iterator()).done;) {
-      var item = _step.value;
-
-      if (item.ref.current) {
-        observer.observe(item.ref.current);
+function verticalizeItems(items) {
+  const rows = BL2LUIIN_groupItemsByRows(items);
+  const maxLength = getMaxRowLength(rows);
+  const verticalized = [];
+  for (let i = 0; i < maxLength; i += 1) {
+    for (const row of rows) {
+      const item = row[i];
+      if (item) {
+        verticalized.push(_chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues({}, item), {
+          // If there's no rowId, it means that it's not a grid composite, but
+          // a single row instead. So, instead of verticalizing it, that is,
+          // assigning a different rowId based on the column index, we keep it
+          // undefined so they will be part of the same row. This is useful
+          // when using up/down on one-dimensional composites.
+          rowId: item.rowId ? `${i}` : void 0
+        }));
       }
     }
-
-    return function () {
-      observer.disconnect();
-    };
-  }, [items]);
+  }
+  return verticalized;
 }
-
-function useTimeoutObserver(items, setItems) {
-  (0,external_React_.useEffect)(function () {
-    var callback = function callback() {
-      return setItemsBasedOnDOMPosition(items, setItems);
-    };
-
-    var timeout = setTimeout(callback, 250);
-    return function () {
-      return clearTimeout(timeout);
-    };
+function createCompositeStore(props = {}) {
+  var _a;
+  const syncState = (_a = props.store) == null ? void 0 : _a.getState();
+  const collection = createCollectionStore(props);
+  const activeId = defaultValue(
+    props.activeId,
+    syncState == null ? void 0 : syncState.activeId,
+    props.defaultActiveId
+  );
+  const initialState = _chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues({}, collection.getState()), {
+    activeId,
+    baseElement: defaultValue(syncState == null ? void 0 : syncState.baseElement, null),
+    includesBaseElement: defaultValue(
+      props.includesBaseElement,
+      syncState == null ? void 0 : syncState.includesBaseElement,
+      activeId === null
+    ),
+    moves: defaultValue(syncState == null ? void 0 : syncState.moves, 0),
+    orientation: defaultValue(
+      props.orientation,
+      syncState == null ? void 0 : syncState.orientation,
+      "both"
+    ),
+    rtl: defaultValue(props.rtl, syncState == null ? void 0 : syncState.rtl, false),
+    virtualFocus: defaultValue(
+      props.virtualFocus,
+      syncState == null ? void 0 : syncState.virtualFocus,
+      false
+    ),
+    focusLoop: defaultValue(props.focusLoop, syncState == null ? void 0 : syncState.focusLoop, false),
+    focusWrap: defaultValue(props.focusWrap, syncState == null ? void 0 : syncState.focusWrap, false),
+    focusShift: defaultValue(props.focusShift, syncState == null ? void 0 : syncState.focusShift, false)
   });
-}
-
-function useSortBasedOnDOMPosition(items, setItems) {
-  if (typeof IntersectionObserver === "function") {
-    useIntersectionObserver(items, setItems);
-  } else {
-    useTimeoutObserver(items, setItems);
-  }
-}
-
-function reducer(state, action) {
-  var virtual = state.unstable_virtual,
-      rtl = state.rtl,
-      orientation = state.orientation,
-      items = state.items,
-      groups = state.groups,
-      currentId = state.currentId,
-      loop = state.loop,
-      wrap = state.wrap,
-      pastIds = state.pastIds,
-      shift = state.shift,
-      moves = state.unstable_moves,
-      includesBaseElement = state.unstable_includesBaseElement,
-      initialVirtual = state.initialVirtual,
-      initialRTL = state.initialRTL,
-      initialOrientation = state.initialOrientation,
-      initialCurrentId = state.initialCurrentId,
-      initialLoop = state.initialLoop,
-      initialWrap = state.initialWrap,
-      initialShift = state.initialShift,
-      hasSetCurrentId = state.hasSetCurrentId;
-
-  switch (action.type) {
-    case "registerGroup":
-      {
-        var _group = action.group; // If there are no groups yet, just add it as the first one
-
-        if (groups.length === 0) {
-          return _objectSpread2(_objectSpread2({}, state), {}, {
-            groups: [_group]
-          });
-        } // Finds the group index based on DOM position
-
-
-        var index = findDOMIndex(groups, _group);
-        return _objectSpread2(_objectSpread2({}, state), {}, {
-          groups: addItemAtIndex(groups, _group, index)
-        });
-      }
-
-    case "unregisterGroup":
-      {
-        var _id = action.id;
-        var nextGroups = groups.filter(function (group) {
-          return group.id !== _id;
-        }); // The group isn't registered, so do nothing
-
-        if (nextGroups.length === groups.length) {
-          return state;
-        }
-
-        return _objectSpread2(_objectSpread2({}, state), {}, {
-          groups: nextGroups
-        });
-      }
-
-    case "registerItem":
-      {
-        var _item = action.item; // Finds the item group based on the DOM hierarchy
-
-        var _group2 = groups.find(function (r) {
-          var _r$ref$current;
-
-          return (_r$ref$current = r.ref.current) === null || _r$ref$current === void 0 ? void 0 : _r$ref$current.contains(_item.ref.current);
-        }); // Group will be null if it's a one-dimensional composite
-
-
-        var nextItem = _objectSpread2({
-          groupId: _group2 === null || _group2 === void 0 ? void 0 : _group2.id
-        }, _item);
-
-        var _index = findDOMIndex(items, nextItem);
-
-        var nextState = _objectSpread2(_objectSpread2({}, state), {}, {
-          items: addItemAtIndex(items, nextItem, _index)
-        });
-
-        if (!hasSetCurrentId && !moves && initialCurrentId === undefined) {
-          var _findFirstEnabledItem;
-
-          // Sets currentId to the first enabled item. This runs whenever an item
-          // is registered because the first enabled item may be registered
-          // asynchronously.
-          return _objectSpread2(_objectSpread2({}, nextState), {}, {
-            currentId: (_findFirstEnabledItem = findFirstEnabledItem(nextState.items)) === null || _findFirstEnabledItem === void 0 ? void 0 : _findFirstEnabledItem.id
-          });
-        }
-
-        return nextState;
-      }
-
-    case "unregisterItem":
-      {
-        var _id2 = action.id;
-        var nextItems = items.filter(function (item) {
-          return item.id !== _id2;
-        }); // The item isn't registered, so do nothing
-
-        if (nextItems.length === items.length) {
-          return state;
-        } // Filters out the item that is being removed from the pastIds list
-
-
-        var nextPastIds = pastIds.filter(function (pastId) {
-          return pastId !== _id2;
-        });
-
-        var _nextState = _objectSpread2(_objectSpread2({}, state), {}, {
-          pastIds: nextPastIds,
-          items: nextItems
-        }); // If the current item is the item that is being removed, focus pastId
-
-
-        if (currentId && currentId === _id2) {
-          var nextId = includesBaseElement ? null : getCurrentId(_objectSpread2(_objectSpread2({}, _nextState), {}, {
-            currentId: nextPastIds[0]
-          }));
-          return _objectSpread2(_objectSpread2({}, _nextState), {}, {
-            currentId: nextId
-          });
-        }
-
-        return _nextState;
-      }
-
-    case "move":
-      {
-        var _id3 = action.id; // move() does nothing
-
-        if (_id3 === undefined) {
-          return state;
-        } // Removes the current item and the item that is receiving focus from the
-        // pastIds list
-
-
-        var filteredPastIds = pastIds.filter(function (pastId) {
-          return pastId !== currentId && pastId !== _id3;
-        }); // If there's a currentId, add it to the pastIds list so it can be focused
-        // if the new item gets removed or disabled
-
-        var _nextPastIds = currentId ? [currentId].concat(filteredPastIds) : filteredPastIds;
-
-        var _nextState2 = _objectSpread2(_objectSpread2({}, state), {}, {
-          pastIds: _nextPastIds
-        }); // move(null) will focus the composite element itself, not an item
-
-
-        if (_id3 === null) {
-          return _objectSpread2(_objectSpread2({}, _nextState2), {}, {
-            unstable_moves: moves + 1,
-            currentId: getCurrentId(_nextState2, _id3)
-          });
-        }
-
-        var _item2 = findEnabledItemById(items, _id3);
-
-        return _objectSpread2(_objectSpread2({}, _nextState2), {}, {
-          unstable_moves: _item2 ? moves + 1 : moves,
-          currentId: getCurrentId(_nextState2, _item2 === null || _item2 === void 0 ? void 0 : _item2.id)
-        });
-      }
-
-    case "next":
-      {
-        // If there's no item focused, we just move the first one
-        if (currentId == null) {
-          return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-            type: "first"
-          }));
-        } // RTL doesn't make sense on vertical navigation
-
-
-        var isHorizontal = orientation !== "vertical";
-        var isRTL = rtl && isHorizontal;
-        var allItems = isRTL ? reverse(items) : items;
-        var currentItem = allItems.find(function (item) {
-          return item.id === currentId;
-        }); // If there's no item focused, we just move the first one
-
-        if (!currentItem) {
-          return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-            type: "first"
-          }));
-        }
-
-        var isGrid = !!currentItem.groupId;
-        var currentIndex = allItems.indexOf(currentItem);
-
-        var _nextItems = allItems.slice(currentIndex + 1);
-
-        var nextItemsInGroup = getItemsInGroup(_nextItems, currentItem.groupId); // Home, End
-
-        if (action.allTheWay) {
-          // We reverse so we can get the last enabled item in the group. If it's
-          // RTL, nextItems and nextItemsInGroup are already reversed and don't
-          // have the items before the current one anymore. So we have to get
-          // items in group again with allItems.
-          var _nextItem2 = findFirstEnabledItem(isRTL ? getItemsInGroup(allItems, currentItem.groupId) : reverse(nextItemsInGroup));
-
-          return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-            type: "move",
-            id: _nextItem2 === null || _nextItem2 === void 0 ? void 0 : _nextItem2.id
-          }));
-        }
-
-        var oppositeOrientation = getOppositeOrientation( // If it's a grid and orientation is not set, it's a next/previous
-        // call, which is inherently horizontal. up/down will call next with
-        // orientation set to vertical by default (see below on up/down cases).
-        isGrid ? orientation || "horizontal" : orientation);
-        var canLoop = loop && loop !== oppositeOrientation;
-        var canWrap = isGrid && wrap && wrap !== oppositeOrientation;
-        var hasNullItem = // `previous` and `up` will set action.hasNullItem, but when calling
-        // next directly, hasNullItem will only be true if it's not a grid and
-        // loop is set to true, which means that pressing right or down keys on
-        // grids will never focus the composite element. On one-dimensional
-        // composites that don't loop, pressing right or down keys also doesn't
-        // focus the composite element.
-        action.hasNullItem || !isGrid && canLoop && includesBaseElement;
-
-        if (canLoop) {
-          var loopItems = canWrap && !hasNullItem ? allItems : getItemsInGroup(allItems, currentItem.groupId); // Turns [0, 1, current, 3, 4] into [3, 4, 0, 1]
-
-          var sortedItems = placeItemsAfter(loopItems, currentId, hasNullItem);
-
-          var _nextItem3 = findFirstEnabledItem(sortedItems, currentId);
-
-          return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-            type: "move",
-            id: _nextItem3 === null || _nextItem3 === void 0 ? void 0 : _nextItem3.id
-          }));
-        }
-
-        if (canWrap) {
-          var _nextItem4 = findFirstEnabledItem( // We can use nextItems, which contains all the next items, including
-          // items from other groups, to wrap between groups. However, if there
-          // is a null item (the composite element), we'll only use the next
-          // items in the group. So moving next from the last item will focus
-          // the composite element (null). On grid composites, horizontal
-          // navigation never focuses the composite element, only vertical.
-          hasNullItem ? nextItemsInGroup : _nextItems, currentId);
-
-          var _nextId = hasNullItem ? (_nextItem4 === null || _nextItem4 === void 0 ? void 0 : _nextItem4.id) || null : _nextItem4 === null || _nextItem4 === void 0 ? void 0 : _nextItem4.id;
-
-          return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-            type: "move",
-            id: _nextId
-          }));
-        }
-
-        var _nextItem = findFirstEnabledItem(nextItemsInGroup, currentId);
-
-        if (!_nextItem && hasNullItem) {
-          return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-            type: "move",
-            id: null
-          }));
-        }
-
-        return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-          type: "move",
-          id: _nextItem === null || _nextItem === void 0 ? void 0 : _nextItem.id
-        }));
-      }
-
-    case "previous":
-      {
-        // If currentId is initially set to null, the composite element will be
-        // focusable while navigating with arrow keys. But, if it's a grid, we
-        // don't want to focus the composite element with horizontal navigation.
-        var _isGrid = !!groups.length;
-
-        var _hasNullItem = !_isGrid && includesBaseElement;
-
-        var _nextState3 = reducer(_objectSpread2(_objectSpread2({}, state), {}, {
-          items: reverse(items)
-        }), _objectSpread2(_objectSpread2({}, action), {}, {
-          type: "next",
-          hasNullItem: _hasNullItem
-        }));
-
-        return _objectSpread2(_objectSpread2({}, _nextState3), {}, {
-          items: items
-        });
-      }
-
-    case "down":
-      {
-        var shouldShift = shift && !action.allTheWay; // First, we make sure groups have the same number of items by filling it
-        // with disabled fake items. Then, we reorganize the items list so
-        // [1-1, 1-2, 2-1, 2-2] becomes [1-1, 2-1, 1-2, 2-2].
-
-        var verticalItems = verticalizeItems(flatten(fillGroups(groupItems(items), currentId, shouldShift)));
-
-        var _canLoop = loop && loop !== "horizontal"; // Pressing down arrow key will only focus the composite element if loop
-        // is true or vertical.
-
-
-        var _hasNullItem2 = _canLoop && includesBaseElement;
-
-        var _nextState4 = reducer(_objectSpread2(_objectSpread2({}, state), {}, {
-          orientation: "vertical",
-          items: verticalItems
-        }), _objectSpread2(_objectSpread2({}, action), {}, {
-          type: "next",
-          hasNullItem: _hasNullItem2
-        }));
-
-        return _objectSpread2(_objectSpread2({}, _nextState4), {}, {
-          orientation: orientation,
-          items: items
-        });
-      }
-
-    case "up":
-      {
-        var _shouldShift = shift && !action.allTheWay;
-
-        var _verticalItems = verticalizeItems(reverse(flatten(fillGroups(groupItems(items), currentId, _shouldShift)))); // If currentId is initially set to null, we'll always focus the
-        // composite element when the up arrow key is pressed in the first row.
-
-
-        var _hasNullItem3 = includesBaseElement;
-
-        var _nextState5 = reducer(_objectSpread2(_objectSpread2({}, state), {}, {
-          orientation: "vertical",
-          items: _verticalItems
-        }), _objectSpread2(_objectSpread2({}, action), {}, {
-          type: "next",
-          hasNullItem: _hasNullItem3
-        }));
-
-        return _objectSpread2(_objectSpread2({}, _nextState5), {}, {
-          orientation: orientation,
-          items: items
-        });
-      }
-
-    case "first":
-      {
-        var firstItem = findFirstEnabledItem(items);
-        return reducer(state, _objectSpread2(_objectSpread2({}, action), {}, {
-          type: "move",
-          id: firstItem === null || firstItem === void 0 ? void 0 : firstItem.id
-        }));
-      }
-
-    case "last":
-      {
-        var _nextState6 = reducer(_objectSpread2(_objectSpread2({}, state), {}, {
-          items: reverse(items)
-        }), _objectSpread2(_objectSpread2({}, action), {}, {
-          type: "first"
-        }));
-
-        return _objectSpread2(_objectSpread2({}, _nextState6), {}, {
-          items: items
-        });
-      }
-
-    case "sort":
-      {
-        return _objectSpread2(_objectSpread2({}, state), {}, {
-          items: sortBasedOnDOMPosition(items),
-          groups: sortBasedOnDOMPosition(groups)
-        });
-      }
-
-    case "setVirtual":
-      return _objectSpread2(_objectSpread2({}, state), {}, {
-        unstable_virtual: applyState_applyState(action.virtual, virtual)
-      });
-
-    case "setRTL":
-      return _objectSpread2(_objectSpread2({}, state), {}, {
-        rtl: applyState_applyState(action.rtl, rtl)
-      });
-
-    case "setOrientation":
-      return _objectSpread2(_objectSpread2({}, state), {}, {
-        orientation: applyState_applyState(action.orientation, orientation)
-      });
-
-    case "setCurrentId":
-      {
-        var nextCurrentId = getCurrentId(_objectSpread2(_objectSpread2({}, state), {}, {
-          currentId: applyState_applyState(action.currentId, currentId)
-        }));
-        return _objectSpread2(_objectSpread2({}, state), {}, {
-          currentId: nextCurrentId,
-          hasSetCurrentId: true
-        });
-      }
-
-    case "setLoop":
-      return _objectSpread2(_objectSpread2({}, state), {}, {
-        loop: applyState_applyState(action.loop, loop)
-      });
-
-    case "setWrap":
-      return _objectSpread2(_objectSpread2({}, state), {}, {
-        wrap: applyState_applyState(action.wrap, wrap)
-      });
-
-    case "setShift":
-      return _objectSpread2(_objectSpread2({}, state), {}, {
-        shift: applyState_applyState(action.shift, shift)
-      });
-
-    case "setIncludesBaseElement":
-      {
-        return _objectSpread2(_objectSpread2({}, state), {}, {
-          unstable_includesBaseElement: applyState_applyState(action.includesBaseElement, includesBaseElement)
-        });
-      }
-
-    case "reset":
-      return _objectSpread2(_objectSpread2({}, state), {}, {
-        unstable_virtual: initialVirtual,
-        rtl: initialRTL,
-        orientation: initialOrientation,
-        currentId: getCurrentId(_objectSpread2(_objectSpread2({}, state), {}, {
-          currentId: initialCurrentId
-        })),
-        loop: initialLoop,
-        wrap: initialWrap,
-        shift: initialShift,
-        unstable_moves: 0,
-        pastIds: []
-      });
-
-    case "setItems":
-      {
-        return _objectSpread2(_objectSpread2({}, state), {}, {
-          items: action.items
-        });
-      }
-
-    default:
-      throw new Error();
-  }
-}
-
-function useAction(fn) {
-  return (0,external_React_.useCallback)(fn, []);
-}
-
-function useIsUnmountedRef() {
-  var isUnmountedRef = (0,external_React_.useRef)(false);
-  useIsomorphicEffect(function () {
-    return function () {
-      isUnmountedRef.current = true;
-    };
-  }, []);
-  return isUnmountedRef;
-}
-
-function useCompositeState(initialState) {
-  if (initialState === void 0) {
-    initialState = {};
-  }
-
-  var _useSealedState = useSealedState(initialState),
-      _useSealedState$unsta = _useSealedState.unstable_virtual,
-      virtual = _useSealedState$unsta === void 0 ? false : _useSealedState$unsta,
-      _useSealedState$rtl = _useSealedState.rtl,
-      rtl = _useSealedState$rtl === void 0 ? false : _useSealedState$rtl,
-      orientation = _useSealedState.orientation,
-      currentId = _useSealedState.currentId,
-      _useSealedState$loop = _useSealedState.loop,
-      loop = _useSealedState$loop === void 0 ? false : _useSealedState$loop,
-      _useSealedState$wrap = _useSealedState.wrap,
-      wrap = _useSealedState$wrap === void 0 ? false : _useSealedState$wrap,
-      _useSealedState$shift = _useSealedState.shift,
-      shift = _useSealedState$shift === void 0 ? false : _useSealedState$shift,
-      unstable_includesBaseElement = _useSealedState.unstable_includesBaseElement,
-      sealed = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_useSealedState, ["unstable_virtual", "rtl", "orientation", "currentId", "loop", "wrap", "shift", "unstable_includesBaseElement"]);
-
-  var idState = unstable_useIdState(sealed);
-
-  var _React$useReducer = (0,external_React_.useReducer)(reducer, {
-    unstable_virtual: virtual,
-    rtl: rtl,
-    orientation: orientation,
-    items: [],
-    groups: [],
-    currentId: currentId,
-    loop: loop,
-    wrap: wrap,
-    shift: shift,
-    unstable_moves: 0,
-    pastIds: [],
-    unstable_includesBaseElement: unstable_includesBaseElement != null ? unstable_includesBaseElement : currentId === null,
-    initialVirtual: virtual,
-    initialRTL: rtl,
-    initialOrientation: orientation,
-    initialCurrentId: currentId,
-    initialLoop: loop,
-    initialWrap: wrap,
-    initialShift: shift
-  }),
-      _React$useReducer$ = _React$useReducer[0],
-      pastIds = _React$useReducer$.pastIds,
-      initialVirtual = _React$useReducer$.initialVirtual,
-      initialRTL = _React$useReducer$.initialRTL,
-      initialOrientation = _React$useReducer$.initialOrientation,
-      initialCurrentId = _React$useReducer$.initialCurrentId,
-      initialLoop = _React$useReducer$.initialLoop,
-      initialWrap = _React$useReducer$.initialWrap,
-      initialShift = _React$useReducer$.initialShift,
-      hasSetCurrentId = _React$useReducer$.hasSetCurrentId,
-      state = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_React$useReducer$, ["pastIds", "initialVirtual", "initialRTL", "initialOrientation", "initialCurrentId", "initialLoop", "initialWrap", "initialShift", "hasSetCurrentId"]),
-      dispatch = _React$useReducer[1];
-
-  var _React$useState = (0,external_React_.useState)(false),
-      hasActiveWidget = _React$useState[0],
-      setHasActiveWidget = _React$useState[1]; // register/unregister may be called when this component is unmounted. We
-  // store the unmounted state here so we don't update the state if it's true.
-  // This only happens in a very specific situation.
-  // See https://github.com/reakit/reakit/issues/650
-
-
-  var isUnmountedRef = useIsUnmountedRef();
-  var setItems = (0,external_React_.useCallback)(function (items) {
-    return dispatch({
-      type: "setItems",
-      items: items
-    });
-  }, []);
-  useSortBasedOnDOMPosition(state.items, setItems);
-  return _objectSpread2(_objectSpread2(_objectSpread2({}, idState), state), {}, {
-    unstable_hasActiveWidget: hasActiveWidget,
-    unstable_setHasActiveWidget: setHasActiveWidget,
-    registerItem: useAction(function (item) {
-      if (isUnmountedRef.current) return;
-      dispatch({
-        type: "registerItem",
-        item: item
-      });
-    }),
-    unregisterItem: useAction(function (id) {
-      if (isUnmountedRef.current) return;
-      dispatch({
-        type: "unregisterItem",
-        id: id
-      });
-    }),
-    registerGroup: useAction(function (group) {
-      if (isUnmountedRef.current) return;
-      dispatch({
-        type: "registerGroup",
-        group: group
-      });
-    }),
-    unregisterGroup: useAction(function (id) {
-      if (isUnmountedRef.current) return;
-      dispatch({
-        type: "unregisterGroup",
-        id: id
-      });
-    }),
-    move: useAction(function (id) {
-      return dispatch({
-        type: "move",
-        id: id
-      });
-    }),
-    next: useAction(function (allTheWay) {
-      return dispatch({
-        type: "next",
-        allTheWay: allTheWay
-      });
-    }),
-    previous: useAction(function (allTheWay) {
-      return dispatch({
-        type: "previous",
-        allTheWay: allTheWay
-      });
-    }),
-    up: useAction(function (allTheWay) {
-      return dispatch({
-        type: "up",
-        allTheWay: allTheWay
-      });
-    }),
-    down: useAction(function (allTheWay) {
-      return dispatch({
-        type: "down",
-        allTheWay: allTheWay
-      });
-    }),
-    first: useAction(function () {
-      return dispatch({
-        type: "first"
-      });
-    }),
-    last: useAction(function () {
-      return dispatch({
-        type: "last"
-      });
-    }),
-    sort: useAction(function () {
-      return dispatch({
-        type: "sort"
-      });
-    }),
-    unstable_setVirtual: useAction(function (value) {
-      return dispatch({
-        type: "setVirtual",
-        virtual: value
-      });
-    }),
-    setRTL: useAction(function (value) {
-      return dispatch({
-        type: "setRTL",
-        rtl: value
-      });
-    }),
-    setOrientation: useAction(function (value) {
-      return dispatch({
-        type: "setOrientation",
-        orientation: value
-      });
-    }),
-    setCurrentId: useAction(function (value) {
-      return dispatch({
-        type: "setCurrentId",
-        currentId: value
-      });
-    }),
-    setLoop: useAction(function (value) {
-      return dispatch({
-        type: "setLoop",
-        loop: value
-      });
-    }),
-    setWrap: useAction(function (value) {
-      return dispatch({
-        type: "setWrap",
-        wrap: value
-      });
-    }),
-    setShift: useAction(function (value) {
-      return dispatch({
-        type: "setShift",
-        shift: value
-      });
-    }),
-    unstable_setIncludesBaseElement: useAction(function (value) {
-      return dispatch({
-        type: "setIncludesBaseElement",
-        includesBaseElement: value
-      });
-    }),
-    reset: useAction(function () {
-      return dispatch({
-        type: "reset"
+  const composite = createStore(initialState, collection, props.store);
+  setup(
+    composite,
+    () => sync(composite, ["renderedItems", "activeId"], (state) => {
+      composite.setState("activeId", (activeId2) => {
+        var _a2;
+        if (activeId2 !== void 0)
+          return activeId2;
+        return (_a2 = BL2LUIIN_findFirstEnabledItem(state.renderedItems)) == null ? void 0 : _a2.id;
       });
     })
-  });
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/fireBlurEvent.js
-
-
-
-
-function createFocusEvent(element, type, eventInit) {
-  if (eventInit === void 0) {
-    eventInit = {};
-  }
-
-  if (typeof FocusEvent === "function") {
-    return new FocusEvent(type, eventInit);
-  }
-
-  return createEvent(element, type, eventInit);
-}
-/**
- * Creates and dispatches a blur event in a way that also works on IE 11.
- *
- * @example
- * import { fireBlurEvent } from "reakit-utils";
- *
- * fireBlurEvent(document.getElementById("id"));
- */
-
-
-function fireBlurEvent_fireBlurEvent(element, eventInit) {
-  var event = createFocusEvent(element, "blur", eventInit);
-  var defaultAllowed = element.dispatchEvent(event);
-
-  var bubbleInit = _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, eventInit), {}, {
-    bubbles: true
-  });
-
-  element.dispatchEvent(createFocusEvent(element, "focusout", bubbleInit));
-  return defaultAllowed;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/fireKeyboardEvent.js
-
-
-
-function createKeyboardEvent(element, type, eventInit) {
-  if (eventInit === void 0) {
-    eventInit = {};
-  }
-
-  if (typeof KeyboardEvent === "function") {
-    return new KeyboardEvent(type, eventInit);
-  } // IE 11 doesn't support Event constructors
-
-
-  var event = getDocument_getDocument(element).createEvent("KeyboardEvent");
-  event.initKeyboardEvent(type, eventInit.bubbles, eventInit.cancelable, getWindow(element), eventInit.key, eventInit.location, eventInit.ctrlKey, eventInit.altKey, eventInit.shiftKey, eventInit.metaKey);
-  return event;
-}
-/**
- * Creates and dispatches `KeyboardEvent` in a way that also works on IE 11.
- *
- * @example
- * import { fireKeyboardEvent } from "reakit-utils";
- *
- * fireKeyboardEvent(document.getElementById("id"), "keydown", {
- *   key: "ArrowDown",
- *   shiftKey: true,
- * });
- */
-
-
-function fireKeyboardEvent_fireKeyboardEvent(element, type, eventInit) {
-  return element.dispatchEvent(createKeyboardEvent(element, type, eventInit));
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getNextActiveElementOnBlur.js
-
-
-
-
-
-var isIE11 = canUseDOM && "msCrypto" in window;
-/**
- * Cross-browser method that returns the next active element (the element that
- * is receiving focus) after a blur event is dispatched. It receives the blur
- * event object as the argument.
- *
- * @example
- * import { getNextActiveElementOnBlur } from "reakit-utils";
- *
- * const element = document.getElementById("id");
- * element.addEventListener("blur", (event) => {
- *   const nextActiveElement = getNextActiveElementOnBlur(event);
- * });
- */
-
-function getNextActiveElementOnBlur(event) {
-  // IE 11 doesn't support event.relatedTarget on blur.
-  // document.activeElement points the the next active element.
-  // On modern browsers, document.activeElement points to the current target.
-  if (isIE11) {
-    var activeElement = getActiveElement_getActiveElement(event.currentTarget);
-    return activeElement;
-  }
-
-  return event.relatedTarget;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/Composite.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var Composite_isIE11 = canUseDOM && "msCrypto" in window;
-
-function canProxyKeyboardEvent(event) {
-  if (!isSelfTarget(event)) return false;
-  if (event.metaKey) return false;
-  if (event.key === "Tab") return false;
-  return true;
-}
-
-function useKeyboardEventProxy(virtual, currentItem, htmlEventHandler) {
-  var eventHandlerRef = useLiveRef(htmlEventHandler);
-  return (0,external_React_.useCallback)(function (event) {
-    var _eventHandlerRef$curr;
-
-    (_eventHandlerRef$curr = eventHandlerRef.current) === null || _eventHandlerRef$curr === void 0 ? void 0 : _eventHandlerRef$curr.call(eventHandlerRef, event);
-    if (event.defaultPrevented) return;
-
-    if (virtual && canProxyKeyboardEvent(event)) {
-      var currentElement = currentItem === null || currentItem === void 0 ? void 0 : currentItem.ref.current;
-
-      if (currentElement) {
-        if (!fireKeyboardEvent_fireKeyboardEvent(currentElement, event.type, event)) {
-          event.preventDefault();
-        } // The event will be triggered on the composite item and then
-        // propagated up to this composite element again, so we can pretend
-        // that it wasn't called on this component in the first place.
-
-
-        if (event.currentTarget.contains(currentElement)) {
-          event.stopPropagation();
-        }
-      }
+  );
+  const getNextId = (items, orientation, hasNullItem, skip) => {
+    var _a2, _b;
+    const { activeId: activeId2, rtl, focusLoop, focusWrap, includesBaseElement } = composite.getState();
+    const isHorizontal = orientation !== "vertical";
+    const isRTL = rtl && isHorizontal;
+    const allItems = isRTL ? reverseArray(items) : items;
+    if (activeId2 == null) {
+      return (_a2 = BL2LUIIN_findFirstEnabledItem(allItems)) == null ? void 0 : _a2.id;
     }
-  }, [virtual, currentItem]);
-} // istanbul ignore next
-
-
-function useActiveElementRef(elementRef) {
-  var activeElementRef = (0,external_React_.useRef)(null);
-  (0,external_React_.useEffect)(function () {
-    var document = getDocument_getDocument(elementRef.current);
-
-    var onFocus = function onFocus(event) {
-      var target = event.target;
-      activeElementRef.current = target;
-    };
-
-    document.addEventListener("focus", onFocus, true);
-    return function () {
-      document.removeEventListener("focus", onFocus, true);
-    };
-  }, []);
-  return activeElementRef;
+    const activeItem = allItems.find((item) => item.id === activeId2);
+    if (!activeItem) {
+      return (_b = BL2LUIIN_findFirstEnabledItem(allItems)) == null ? void 0 : _b.id;
+    }
+    const isGrid = !!activeItem.rowId;
+    const activeIndex = allItems.indexOf(activeItem);
+    const nextItems = allItems.slice(activeIndex + 1);
+    const nextItemsInRow = getItemsInRow(nextItems, activeItem.rowId);
+    if (skip !== void 0) {
+      const nextEnabledItemsInRow = getEnabledItems(nextItemsInRow, activeId2);
+      const nextItem2 = nextEnabledItemsInRow.slice(skip)[0] || // If we can't find an item, just return the last one.
+      nextEnabledItemsInRow[nextEnabledItemsInRow.length - 1];
+      return nextItem2 == null ? void 0 : nextItem2.id;
+    }
+    const oppositeOrientation = getOppositeOrientation(
+      // If it's a grid and orientation is not set, it's a next/previous call,
+      // which is inherently horizontal. up/down will call next with orientation
+      // set to vertical by default (see below on up/down methods).
+      isGrid ? orientation || "horizontal" : orientation
+    );
+    const canLoop = focusLoop && focusLoop !== oppositeOrientation;
+    const canWrap = isGrid && focusWrap && focusWrap !== oppositeOrientation;
+    hasNullItem = hasNullItem || !isGrid && canLoop && includesBaseElement;
+    if (canLoop) {
+      const loopItems = canWrap && !hasNullItem ? allItems : getItemsInRow(allItems, activeItem.rowId);
+      const sortedItems = BL2LUIIN_flipItems(loopItems, activeId2, hasNullItem);
+      const nextItem2 = BL2LUIIN_findFirstEnabledItem(sortedItems, activeId2);
+      return nextItem2 == null ? void 0 : nextItem2.id;
+    }
+    if (canWrap) {
+      const nextItem2 = BL2LUIIN_findFirstEnabledItem(
+        // We can use nextItems, which contains all the next items, including
+        // items from other rows, to wrap between rows. However, if there is a
+        // null item (the composite container), we'll only use the next items in
+        // the row. So moving next from the last item will focus on the
+        // composite container. On grid composites, horizontal navigation never
+        // focuses on the composite container, only vertical.
+        hasNullItem ? nextItemsInRow : nextItems,
+        activeId2
+      );
+      const nextId = hasNullItem ? (nextItem2 == null ? void 0 : nextItem2.id) || null : nextItem2 == null ? void 0 : nextItem2.id;
+      return nextId;
+    }
+    const nextItem = BL2LUIIN_findFirstEnabledItem(nextItemsInRow, activeId2);
+    if (!nextItem && hasNullItem) {
+      return null;
+    }
+    return nextItem == null ? void 0 : nextItem.id;
+  };
+  return _chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues(_chunks_PNRLI7OV_spreadValues({}, collection), composite), {
+    setBaseElement: (element) => composite.setState("baseElement", element),
+    setActiveId: (id) => composite.setState("activeId", id),
+    move: (id) => {
+      if (id === void 0)
+        return;
+      composite.setState("activeId", id);
+      composite.setState("moves", (moves) => moves + 1);
+    },
+    first: () => {
+      var _a2;
+      return (_a2 = BL2LUIIN_findFirstEnabledItem(composite.getState().renderedItems)) == null ? void 0 : _a2.id;
+    },
+    last: () => {
+      var _a2;
+      return (_a2 = BL2LUIIN_findFirstEnabledItem(reverseArray(composite.getState().renderedItems))) == null ? void 0 : _a2.id;
+    },
+    next: (skip) => {
+      const { renderedItems, orientation } = composite.getState();
+      return getNextId(renderedItems, orientation, false, skip);
+    },
+    previous: (skip) => {
+      var _a2;
+      const { renderedItems, orientation, includesBaseElement } = composite.getState();
+      const isGrid = !!((_a2 = BL2LUIIN_findFirstEnabledItem(renderedItems)) == null ? void 0 : _a2.rowId);
+      const hasNullItem = !isGrid && includesBaseElement;
+      return getNextId(
+        reverseArray(renderedItems),
+        orientation,
+        hasNullItem,
+        skip
+      );
+    },
+    down: (skip) => {
+      const {
+        activeId: activeId2,
+        renderedItems,
+        focusShift,
+        focusLoop,
+        includesBaseElement
+      } = composite.getState();
+      const shouldShift = focusShift && !skip;
+      const verticalItems = verticalizeItems(
+        flatten2DArray(
+          normalizeRows(BL2LUIIN_groupItemsByRows(renderedItems), activeId2, shouldShift)
+        )
+      );
+      const canLoop = focusLoop && focusLoop !== "horizontal";
+      const hasNullItem = canLoop && includesBaseElement;
+      return getNextId(verticalItems, "vertical", hasNullItem, skip);
+    },
+    up: (skip) => {
+      const { activeId: activeId2, renderedItems, focusShift, includesBaseElement } = composite.getState();
+      const shouldShift = focusShift && !skip;
+      const verticalItems = verticalizeItems(
+        reverseArray(
+          flatten2DArray(
+            normalizeRows(
+              BL2LUIIN_groupItemsByRows(renderedItems),
+              activeId2,
+              shouldShift
+            )
+          )
+        )
+      );
+      const hasNullItem = includesBaseElement;
+      return getNextId(verticalItems, "vertical", hasNullItem, skip);
+    }
+  });
 }
 
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/EZ23JQKA.js
+
+
+
+// src/composite/composite-store.ts
+
+function useCompositeStoreProps(store, update, props) {
+  store = useCollectionStoreProps(store, update, props);
+  useStoreProps(store, props, "activeId", "setActiveId");
+  useStoreProps(store, props, "includesBaseElement");
+  useStoreProps(store, props, "virtualFocus");
+  useStoreProps(store, props, "orientation");
+  useStoreProps(store, props, "rtl");
+  useStoreProps(store, props, "focusLoop");
+  useStoreProps(store, props, "focusWrap");
+  useStoreProps(store, props, "focusShift");
+  return store;
+}
+function useCompositeStore(props = {}) {
+  const [store, update] = _4LP74VAP_useStore(createCompositeStore, props);
+  return useCompositeStoreProps(store, update, props);
+}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/56TAEBRJ.js
+
+
+
+
+
+
+
+// src/composite/composite.tsx
+
+
+
+
+
+
+
+function isGrid(items) {
+  return items.some((item) => !!item.rowId);
+}
+function isPrintableKey(event) {
+  return event.key.length === 1 && !event.ctrlKey && !event.metaKey;
+}
+function isModifierKey(event) {
+  return event.key === "Shift" || event.key === "Control" || event.key === "Alt" || event.key === "Meta";
+}
+function canProxyKeyboardEvent(event, state) {
+  if (!isSelfTarget(event))
+    return false;
+  if (isModifierKey(event))
+    return false;
+  const target = event.target;
+  if (!target)
+    return true;
+  if (O35LWD4W_isTextField(target)) {
+    if (isPrintableKey(event))
+      return false;
+    const grid = isGrid(state.renderedItems);
+    const focusingInputOnly = state.activeId === null;
+    const allowHorizontalNavigationOnItems = grid && !focusingInputOnly;
+    const isHomeOrEnd = event.key === "Home" || event.key === "End";
+    if (!allowHorizontalNavigationOnItems && isHomeOrEnd)
+      return false;
+  }
+  return !event.isPropagationStopped();
+}
+function useKeyboardEventProxy(store, onKeyboardEvent, previousElementRef) {
+  return useEvent((event) => {
+    var _a;
+    onKeyboardEvent == null ? void 0 : onKeyboardEvent(event);
+    if (event.defaultPrevented)
+      return;
+    const state = store.getState();
+    const activeElement = (_a = getEnabledItem(store, state.activeId)) == null ? void 0 : _a.element;
+    if (!activeElement)
+      return;
+    if (!canProxyKeyboardEvent(event, state))
+      return;
+    const _b = event, { view } = _b, eventInit = __objRest(_b, ["view"]);
+    const previousElement = previousElementRef == null ? void 0 : previousElementRef.current;
+    if (activeElement !== previousElement) {
+      activeElement.focus();
+    }
+    if (!fireKeyboardEvent(activeElement, event.type, eventInit)) {
+      event.preventDefault();
+    }
+    if (event.currentTarget.contains(activeElement)) {
+      event.stopPropagation();
+    }
+  });
+}
 function findFirstEnabledItemInTheLastRow(items) {
-  return findFirstEnabledItem(flatten(reverse(groupItems(items))));
+  return findFirstEnabledItem(
+    flatten2DArray(reverseArray(groupItemsByRows(items)))
+  );
 }
-
-function isItem(items, element) {
-  return items === null || items === void 0 ? void 0 : items.some(function (item) {
-    return !!element && item.ref.current === element;
-  });
-}
-
-function useScheduleUserFocus(currentItem) {
-  var currentItemRef = useLiveRef(currentItem);
-
-  var _React$useReducer = (0,external_React_.useReducer)(function (n) {
-    return n + 1;
-  }, 0),
-      scheduled = _React$useReducer[0],
-      schedule = _React$useReducer[1];
-
-  (0,external_React_.useEffect)(function () {
-    var _currentItemRef$curre;
-
-    var currentElement = (_currentItemRef$curre = currentItemRef.current) === null || _currentItemRef$curre === void 0 ? void 0 : _currentItemRef$curre.ref.current;
-
-    if (scheduled && currentElement) {
-      userFocus(currentElement);
-    }
-  }, [scheduled]);
+function useScheduleFocus(store) {
+  const [scheduled, setScheduled] = (0,external_React_.useState)(false);
+  const schedule = (0,external_React_.useCallback)(() => setScheduled(true), []);
+  const activeItem = store.useState(
+    (state) => getEnabledItem(store, state.activeId)
+  );
+  (0,external_React_.useEffect)(() => {
+    const activeElement = activeItem == null ? void 0 : activeItem.element;
+    if (!scheduled)
+      return;
+    if (!activeElement)
+      return;
+    setScheduled(false);
+    activeElement.focus({ preventScroll: true });
+  }, [activeItem, scheduled]);
   return schedule;
 }
-
-var useComposite = createHook({
-  name: "Composite",
-  compose: [useTabbable],
-  keys: COMPOSITE_KEYS,
-  useOptions: function useOptions(options) {
-    return _objectSpread2(_objectSpread2({}, options), {}, {
-      currentId: getCurrentId(options)
-    });
-  },
-  useProps: function useProps(options, _ref) {
-    var htmlRef = _ref.ref,
-        htmlOnFocusCapture = _ref.onFocusCapture,
-        htmlOnFocus = _ref.onFocus,
-        htmlOnBlurCapture = _ref.onBlurCapture,
-        htmlOnKeyDown = _ref.onKeyDown,
-        htmlOnKeyDownCapture = _ref.onKeyDownCapture,
-        htmlOnKeyUpCapture = _ref.onKeyUpCapture,
-        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["ref", "onFocusCapture", "onFocus", "onBlurCapture", "onKeyDown", "onKeyDownCapture", "onKeyUpCapture"]);
-
-    var ref = (0,external_React_.useRef)(null);
-    var currentItem = findEnabledItemById(options.items, options.currentId);
-    var previousElementRef = (0,external_React_.useRef)(null);
-    var onFocusCaptureRef = useLiveRef(htmlOnFocusCapture);
-    var onFocusRef = useLiveRef(htmlOnFocus);
-    var onBlurCaptureRef = useLiveRef(htmlOnBlurCapture);
-    var onKeyDownRef = useLiveRef(htmlOnKeyDown);
-    var scheduleUserFocus = useScheduleUserFocus(currentItem); // IE 11 doesn't support event.relatedTarget, so we use the active element
-    // ref instead.
-
-    var activeElementRef = Composite_isIE11 ? useActiveElementRef(ref) : undefined;
-    (0,external_React_.useEffect)(function () {
-      var element = ref.current;
-
-      if (options.unstable_moves && !currentItem) {
-         false ? 0 : void 0; // If composite.move(null) has been called, the composite container
-        // will receive focus.
-
-        element === null || element === void 0 ? void 0 : element.focus();
+var useComposite = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      composite = true,
+      focusOnMove = composite,
+      moveOnKeyPress = true
+    } = _b, props = __objRest(_b, [
+      "store",
+      "composite",
+      "focusOnMove",
+      "moveOnKeyPress"
+    ]);
+    const context = useCompositeProviderContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const previousElementRef = (0,external_React_.useRef)(null);
+    const scheduleFocus = useScheduleFocus(store);
+    const moves = store.useState("moves");
+    (0,external_React_.useEffect)(() => {
+      var _a2;
+      if (!store)
+        return;
+      if (!moves)
+        return;
+      if (!composite)
+        return;
+      if (!focusOnMove)
+        return;
+      const { activeId: activeId2 } = store.getState();
+      const itemElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
+      if (!itemElement)
+        return;
+      focusIntoView(itemElement);
+    }, [store, moves, composite, focusOnMove]);
+    useSafeLayoutEffect(() => {
+      if (!store)
+        return;
+      if (!moves)
+        return;
+      if (!composite)
+        return;
+      const { baseElement, activeId: activeId2 } = store.getState();
+      const isSelfAcive = activeId2 === null;
+      if (!isSelfAcive)
+        return;
+      if (!baseElement)
+        return;
+      const previousElement = previousElementRef.current;
+      previousElementRef.current = null;
+      if (previousElement) {
+        fireBlurEvent(previousElement, { relatedTarget: baseElement });
       }
-    }, [options.unstable_moves, currentItem]);
-    var onKeyDownCapture = useKeyboardEventProxy(options.unstable_virtual, currentItem, htmlOnKeyDownCapture);
-    var onKeyUpCapture = useKeyboardEventProxy(options.unstable_virtual, currentItem, htmlOnKeyUpCapture);
-    var onFocusCapture = (0,external_React_.useCallback)(function (event) {
-      var _onFocusCaptureRef$cu;
-
-      (_onFocusCaptureRef$cu = onFocusCaptureRef.current) === null || _onFocusCaptureRef$cu === void 0 ? void 0 : _onFocusCaptureRef$cu.call(onFocusCaptureRef, event);
-      if (event.defaultPrevented) return;
-      if (!options.unstable_virtual) return; // IE11 doesn't support event.relatedTarget, so we use the active
-      // element ref instead.
-
-      var previousActiveElement = (activeElementRef === null || activeElementRef === void 0 ? void 0 : activeElementRef.current) || event.relatedTarget;
-      var previousActiveElementWasItem = isItem(options.items, previousActiveElement);
-
-      if (isSelfTarget(event) && previousActiveElementWasItem) {
-        // Composite has been focused as a result of an item receiving focus.
-        // The composite item will move focus back to the composite
-        // container. In this case, we don't want to propagate this
-        // additional event nor call the onFocus handler passed to
-        // <Composite onFocus={...} />.
-        event.stopPropagation(); // We keep track of the previous active item element so we can
-        // manually fire a blur event on it later when the focus is moved to
-        // another item on the onBlurCapture event below.
-
+      if (hasFocus(baseElement)) {
+        fireFocusEvent(baseElement, { relatedTarget: previousElement });
+      } else {
+        baseElement.focus();
+      }
+    }, [store, moves, composite]);
+    const activeId = store.useState("activeId");
+    const virtualFocus = store.useState("virtualFocus");
+    useSafeLayoutEffect(() => {
+      var _a2;
+      if (!store)
+        return;
+      if (!composite)
+        return;
+      if (!virtualFocus)
+        return;
+      const previousElement = previousElementRef.current;
+      previousElementRef.current = null;
+      if (!previousElement)
+        return;
+      const activeElement = (_a2 = getEnabledItem(store, activeId)) == null ? void 0 : _a2.element;
+      const relatedTarget = activeElement || O35LWD4W_getActiveElement(previousElement);
+      fireBlurEvent(previousElement, { relatedTarget });
+    }, [store, activeId, virtualFocus, composite]);
+    const onKeyDownCapture = useKeyboardEventProxy(
+      store,
+      props.onKeyDownCapture,
+      previousElementRef
+    );
+    const onKeyUpCapture = useKeyboardEventProxy(
+      store,
+      props.onKeyUpCapture,
+      previousElementRef
+    );
+    const onFocusCaptureProp = props.onFocusCapture;
+    const onFocusCapture = useEvent((event) => {
+      onFocusCaptureProp == null ? void 0 : onFocusCaptureProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!store)
+        return;
+      const { virtualFocus: virtualFocus2 } = store.getState();
+      if (!virtualFocus2)
+        return;
+      const previousActiveElement = event.relatedTarget;
+      const isSilentlyFocused = silentlyFocused(event.currentTarget);
+      if (isSelfTarget(event) && isSilentlyFocused) {
+        event.stopPropagation();
         previousElementRef.current = previousActiveElement;
       }
-    }, [options.unstable_virtual, options.items]);
-    var onFocus = (0,external_React_.useCallback)(function (event) {
-      var _onFocusRef$current;
-
-      (_onFocusRef$current = onFocusRef.current) === null || _onFocusRef$current === void 0 ? void 0 : _onFocusRef$current.call(onFocusRef, event);
-      if (event.defaultPrevented) return;
-
-      if (options.unstable_virtual) {
-        if (isSelfTarget(event)) {
-          // This means that the composite element has been focused while the
-          // composite item has not. For example, by clicking on the
-          // composite element without touching any item, or by tabbing into
-          // the composite element. In this case, we want to trigger focus on
-          // the item, just like it would happen with roving tabindex.
-          // When it receives focus, the composite item will put focus back
-          // on the composite element, in which case hasItemWithFocus will be
-          // true.
-          scheduleUserFocus();
+    });
+    const onFocusProp = props.onFocus;
+    const onFocus = useEvent((event) => {
+      onFocusProp == null ? void 0 : onFocusProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!composite)
+        return;
+      if (!store)
+        return;
+      const { relatedTarget } = event;
+      const { virtualFocus: virtualFocus2 } = store.getState();
+      if (virtualFocus2) {
+        if (isSelfTarget(event) && !isItem(store, relatedTarget)) {
+          queueMicrotask(scheduleFocus);
         }
       } else if (isSelfTarget(event)) {
-        var _options$setCurrentId;
-
-        // When the roving tabindex composite gets intentionally focused (for
-        // example, by clicking directly on it, and not on an item), we make
-        // sure to set the current id to null (which means the composite
-        // itself is focused).
-        (_options$setCurrentId = options.setCurrentId) === null || _options$setCurrentId === void 0 ? void 0 : _options$setCurrentId.call(options, null);
+        store.setActiveId(null);
       }
-    }, [options.unstable_virtual, options.setCurrentId]);
-    var onBlurCapture = (0,external_React_.useCallback)(function (event) {
-      var _onBlurCaptureRef$cur;
-
-      (_onBlurCaptureRef$cur = onBlurCaptureRef.current) === null || _onBlurCaptureRef$cur === void 0 ? void 0 : _onBlurCaptureRef$cur.call(onBlurCaptureRef, event);
-      if (event.defaultPrevented) return;
-      if (!options.unstable_virtual) return; // When virtual is set to true, we move focus from the composite
-      // container (this component) to the composite item that is being
-      // selected. Then we move focus back to the composite container. This
-      // is so we can provide the same API as the roving tabindex method,
-      // which means people can attach onFocus/onBlur handlers on the
-      // CompositeItem component regardless of whether it's virtual or not.
-      // This sequence of blurring and focusing items and composite may be
-      // confusing, so we ignore intermediate focus and blurs by stopping its
-      // propagation and not calling the passed onBlur handler (htmlOnBlur).
-
-      var currentElement = (currentItem === null || currentItem === void 0 ? void 0 : currentItem.ref.current) || null;
-      var nextActiveElement = getNextActiveElementOnBlur(event);
-      var nextActiveElementIsItem = isItem(options.items, nextActiveElement);
-
+    });
+    const onBlurCaptureProp = props.onBlurCapture;
+    const onBlurCapture = useEvent((event) => {
+      var _a2;
+      onBlurCaptureProp == null ? void 0 : onBlurCaptureProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!store)
+        return;
+      const { virtualFocus: virtualFocus2, activeId: activeId2 } = store.getState();
+      if (!virtualFocus2)
+        return;
+      const activeElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
+      const nextActiveElement = event.relatedTarget;
+      const nextActiveElementIsItem = isItem(store, nextActiveElement);
+      const previousElement = previousElementRef.current;
+      previousElementRef.current = null;
       if (isSelfTarget(event) && nextActiveElementIsItem) {
-        // This is an intermediate blur event: blurring the composite
-        // container to focus an item (nextActiveElement).
-        if (nextActiveElement === currentElement) {
-          // The next active element will be the same as the current item in
-          // the state in two scenarios:
-          //   - Moving focus with keyboard: the state is updated before the
-          // blur event is triggered, so here the current item is already
-          // pointing to the next active element.
-          //   - Clicking on the current active item with a pointer: this
-          // will trigger blur on the composite element and then the next
-          // active element will be the same as the current item. Clicking on
-          // an item other than the current one doesn't end up here as the
-          // currentItem state will be updated only after it.
-          if (previousElementRef.current && previousElementRef.current !== nextActiveElement) {
-            // If there's a previous active item and it's not a click action,
-            // then we fire a blur event on it so it will work just like if
-            // it had DOM focus before (like when using roving tabindex).
-            fireBlurEvent_fireBlurEvent(previousElementRef.current, event);
+        if (nextActiveElement === activeElement) {
+          if (previousElement && previousElement !== nextActiveElement) {
+            fireBlurEvent(previousElement, event);
           }
-        } else if (currentElement) {
-          // This will be true when the next active element is not the
-          // current element, but there's a current item. This will only
-          // happen when clicking with a pointer on a different item, when
-          // there's already an item selected, in which case currentElement
-          // is the item that is getting blurred, and nextActiveElement is
-          // the item that is being clicked.
-          fireBlurEvent_fireBlurEvent(currentElement, event);
-        } // We want to ignore intermediate blur events, so we stop its
-        // propagation and return early so onFocus will not be called.
-
-
+        } else if (activeElement) {
+          fireBlurEvent(activeElement, event);
+        }
         event.stopPropagation();
       } else {
-        var targetIsItem = isItem(options.items, event.target);
-
-        if (!targetIsItem && currentElement) {
-          // If target is not a composite item, it may be the composite
-          // element itself (isSelfTarget) or a tabbable element inside the
-          // composite widget. This may be triggered by clicking outside the
-          // composite widget or by tabbing out of it. In either cases we
-          // want to fire a blur event on the current item.
-          fireBlurEvent_fireBlurEvent(currentElement, event);
+        const targetIsItem = isItem(store, event.target);
+        if (!targetIsItem && activeElement) {
+          fireBlurEvent(activeElement, event);
         }
       }
-    }, [options.unstable_virtual, options.items, currentItem]);
-    var onKeyDown = (0,external_React_.useCallback)(function (event) {
-      var _onKeyDownRef$current, _options$groups;
-
-      (_onKeyDownRef$current = onKeyDownRef.current) === null || _onKeyDownRef$current === void 0 ? void 0 : _onKeyDownRef$current.call(onKeyDownRef, event);
-      if (event.defaultPrevented) return;
-      if (options.currentId !== null) return;
-      if (!isSelfTarget(event)) return;
-      var isVertical = options.orientation !== "horizontal";
-      var isHorizontal = options.orientation !== "vertical";
-      var isGrid = !!((_options$groups = options.groups) !== null && _options$groups !== void 0 && _options$groups.length);
-
-      var up = function up() {
-        if (isGrid) {
-          var item = findFirstEnabledItemInTheLastRow(options.items);
-
-          if (item !== null && item !== void 0 && item.id) {
-            var _options$move;
-
-            (_options$move = options.move) === null || _options$move === void 0 ? void 0 : _options$move.call(options, item.id);
-          }
-        } else {
-          var _options$last;
-
-          (_options$last = options.last) === null || _options$last === void 0 ? void 0 : _options$last.call(options);
-        }
-      };
-
-      var keyMap = {
-        ArrowUp: (isGrid || isVertical) && up,
-        ArrowRight: (isGrid || isHorizontal) && options.first,
-        ArrowDown: (isGrid || isVertical) && options.first,
-        ArrowLeft: (isGrid || isHorizontal) && options.last,
-        Home: options.first,
-        End: options.last,
-        PageUp: options.first,
-        PageDown: options.last
-      };
-      var action = keyMap[event.key];
-
-      if (action) {
-        event.preventDefault();
-        action();
-      }
-    }, [options.currentId, options.orientation, options.groups, options.items, options.move, options.last, options.first]);
-    return _objectSpread2({
-      ref: useForkRef(ref, htmlRef),
-      id: options.baseId,
-      onFocus: onFocus,
-      onFocusCapture: onFocusCapture,
-      onBlurCapture: onBlurCapture,
-      onKeyDownCapture: onKeyDownCapture,
-      onKeyDown: onKeyDown,
-      onKeyUpCapture: onKeyUpCapture,
-      "aria-activedescendant": options.unstable_virtual ? (currentItem === null || currentItem === void 0 ? void 0 : currentItem.id) || undefined : undefined
-    }, htmlProps);
-  },
-  useComposeProps: function useComposeProps(options, htmlProps) {
-    htmlProps = useRole(options, htmlProps, true);
-    var tabbableHTMLProps = useTabbable(options, htmlProps, true);
-
-    if (options.unstable_virtual || options.currentId === null) {
-      // Composite will only be tabbable by default if the focus is managed
-      // using aria-activedescendant, which requires DOM focus on the container
-      // element (the composite)
-      return _objectSpread2({
-        tabIndex: 0
-      }, tabbableHTMLProps);
-    }
-
-    return _objectSpread2(_objectSpread2({}, htmlProps), {}, {
-      ref: tabbableHTMLProps.ref
     });
-  }
-});
-var Composite = createComponent({
-  as: "div",
-  useHook: useComposite,
-  useCreateElement: function useCreateElement$1(type, props, children) {
-     false ? 0 : void 0;
-    return useCreateElement(type, props, children);
-  }
-});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Group/Group.js
-
-
-
-
-
-
-// Automatically generated
-var GROUP_KEYS = [];
-
-var useGroup = createHook({
-  name: "Group",
-  compose: useRole,
-  keys: GROUP_KEYS,
-  useProps: function useProps(_, htmlProps) {
-    return _objectSpread2({
-      role: "group"
-    }, htmlProps);
-  }
-});
-var Group = createComponent({
-  as: "div",
-  useHook: useGroup
-});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/CompositeGroup.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var useCompositeGroup = createHook({
-  name: "CompositeGroup",
-  compose: [useGroup, unstable_useId],
-  keys: COMPOSITE_GROUP_KEYS,
-  propsAreEqual: function propsAreEqual(prev, next) {
-    if (!next.id || prev.id !== next.id) {
-      return useGroup.unstable_propsAreEqual(prev, next);
-    }
-
-    var prevCurrentId = prev.currentId,
-        prevMoves = prev.unstable_moves,
-        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["currentId", "unstable_moves"]);
-
-    var nextCurrentId = next.currentId,
-        nextMoves = next.unstable_moves,
-        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["currentId", "unstable_moves"]);
-
-    if (prev.items && next.items) {
-      var prevCurrentItem = findEnabledItemById(prev.items, prevCurrentId);
-      var nextCurrentItem = findEnabledItemById(next.items, nextCurrentId);
-      var prevGroupId = prevCurrentItem === null || prevCurrentItem === void 0 ? void 0 : prevCurrentItem.groupId;
-      var nextGroupId = nextCurrentItem === null || nextCurrentItem === void 0 ? void 0 : nextCurrentItem.groupId;
-
-      if (next.id === nextGroupId || next.id === prevGroupId) {
-        return false;
-      }
-    }
-
-    return useGroup.unstable_propsAreEqual(prevProps, nextProps);
-  },
-  useProps: function useProps(options, _ref) {
-    var htmlRef = _ref.ref,
-        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["ref"]);
-
-    var ref = (0,external_React_.useRef)(null);
-    var id = options.id; // We need this to be called before CompositeItems' register
-
-    useIsomorphicEffect(function () {
-      var _options$registerGrou;
-
-      if (!id) return undefined;
-      (_options$registerGrou = options.registerGroup) === null || _options$registerGrou === void 0 ? void 0 : _options$registerGrou.call(options, {
-        id: id,
-        ref: ref
-      });
-      return function () {
-        var _options$unregisterGr;
-
-        (_options$unregisterGr = options.unregisterGroup) === null || _options$unregisterGr === void 0 ? void 0 : _options$unregisterGr.call(options, id);
+    const onKeyDownProp = props.onKeyDown;
+    const moveOnKeyPressProp = useBooleanEvent(moveOnKeyPress);
+    const onKeyDown = useEvent((event) => {
+      var _a2;
+      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
+      if (event.defaultPrevented)
+        return;
+      if (!store)
+        return;
+      if (!isSelfTarget(event))
+        return;
+      const { orientation, items, renderedItems, activeId: activeId2 } = store.getState();
+      const activeItem = getEnabledItem(store, activeId2);
+      if ((_a2 = activeItem == null ? void 0 : activeItem.element) == null ? void 0 : _a2.isConnected)
+        return;
+      const isVertical = orientation !== "horizontal";
+      const isHorizontal = orientation !== "vertical";
+      const grid = isGrid(renderedItems);
+      const up = () => {
+        if (grid) {
+          const item = items && findFirstEnabledItemInTheLastRow(items);
+          return item == null ? void 0 : item.id;
+        }
+        return store == null ? void 0 : store.last();
       };
-    }, [id, options.registerGroup, options.unregisterGroup]);
-    return _objectSpread2({
-      ref: useForkRef(ref, htmlRef)
-    }, htmlProps);
+      const keyMap = {
+        ArrowUp: (grid || isVertical) && up,
+        ArrowRight: (grid || isHorizontal) && store.first,
+        ArrowDown: (grid || isVertical) && store.first,
+        ArrowLeft: (grid || isHorizontal) && store.last,
+        Home: store.first,
+        End: store.last,
+        PageUp: store.first,
+        PageDown: store.last
+      };
+      const action = keyMap[event.key];
+      if (action) {
+        const id = action();
+        if (id !== void 0) {
+          if (!moveOnKeyPressProp(event))
+            return;
+          event.preventDefault();
+          store.move(id);
+        }
+      }
+    });
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,jsx_runtime.jsx)(CompositeContextProvider, { value: store, children: element }),
+      [store]
+    );
+    const activeDescendant = store.useState((state) => {
+      var _a2;
+      if (!store)
+        return;
+      if (!composite)
+        return;
+      if (!state.virtualFocus)
+        return;
+      return (_a2 = getEnabledItem(store, state.activeId)) == null ? void 0 : _a2.id;
+    });
+    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
+      "aria-activedescendant": activeDescendant
+    }, props), {
+      ref: useMergeRefs(composite ? store.setBaseElement : null, props.ref),
+      onKeyDownCapture,
+      onKeyUpCapture,
+      onFocusCapture,
+      onFocus,
+      onBlurCapture,
+      onKeyDown
+    });
+    const focusable = store.useState(
+      (state) => composite && (state.virtualFocus || state.activeId === null)
+    );
+    props = useFocusable(PNRLI7OV_spreadValues({ focusable }, props));
+    return props;
   }
+);
+var Composite = createComponent((props) => {
+  const htmlProps = useComposite(props);
+  return CFEUKV6C_createElement("div", htmlProps);
 });
-var CompositeGroup = createComponent({
-  as: "div",
-  useHook: useCompositeGroup
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/FV4UX26M.js
+
+
+
+
+
+// src/composite/composite-row.tsx
+
+
+
+var useCompositeRow = createHook(
+  (_a) => {
+    var _b = _a, {
+      store,
+      "aria-setsize": ariaSetSize,
+      "aria-posinset": ariaPosInSet
+    } = _b, props = __objRest(_b, [
+      "store",
+      "aria-setsize",
+      "aria-posinset"
+    ]);
+    const context = useCompositeContext();
+    store = store || context;
+    invariant(
+      store,
+       false && 0
+    );
+    const id = useId(props.id);
+    const baseElement = store.useState(
+      (state) => state.baseElement || void 0
+    );
+    const providerValue = (0,external_React_.useMemo)(
+      () => ({ id, baseElement, ariaSetSize, ariaPosInSet }),
+      [id, baseElement, ariaSetSize, ariaPosInSet]
+    );
+    props = useWrapElement(
+      props,
+      (element) => /* @__PURE__ */ (0,jsx_runtime.jsx)(CompositeRowContext.Provider, { value: providerValue, children: element }),
+      [providerValue]
+    );
+    props = PNRLI7OV_spreadValues({ id }, props);
+    return props;
+  }
+);
+var CompositeRow = createComponent((props) => {
+  const htmlProps = useCompositeRow(props);
+  return CFEUKV6C_createElement("div", htmlProps);
 });
+if (false) {}
 
 
 
@@ -18407,7 +15879,6 @@ function AlignmentMatrixControlIcon({
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -18415,12 +15886,6 @@ function AlignmentMatrixControlIcon({
 
 
 
-
-const alignment_matrix_control_noop = () => {};
-function useBaseId(id) {
-  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(AlignmentMatrixControl, 'alignment-matrix-control');
-  return id || instanceId;
-}
 
 /**
  *
@@ -18448,54 +15913,45 @@ function AlignmentMatrixControl({
   label = (0,external_wp_i18n_namespaceObject.__)('Alignment Matrix Control'),
   defaultValue = 'center center',
   value,
-  onChange = alignment_matrix_control_noop,
+  onChange,
   width = 92,
   ...props
 }) {
-  const [immutableDefaultValue] = (0,external_wp_element_namespaceObject.useState)(value !== null && value !== void 0 ? value : defaultValue);
-  const baseId = useBaseId(id);
-  const initialCurrentId = getItemId(baseId, immutableDefaultValue);
-  const composite = useCompositeState({
-    baseId,
-    currentId: initialCurrentId,
+  const baseId = (0,external_wp_compose_namespaceObject.useInstanceId)(AlignmentMatrixControl, 'alignment-matrix-control', id);
+  const compositeStore = useCompositeStore({
+    defaultActiveId: getItemId(baseId, defaultValue),
+    activeId: getItemId(baseId, value),
+    setActiveId: nextActiveId => {
+      const nextValue = getItemValue(baseId, nextActiveId);
+      if (nextValue) onChange?.(nextValue);
+    },
     rtl: (0,external_wp_i18n_namespaceObject.isRTL)()
   });
-  const handleOnChange = nextValue => {
-    onChange(nextValue);
-  };
-  const {
-    setCurrentId
-  } = composite;
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (typeof value !== 'undefined') {
-      setCurrentId(getItemId(baseId, value));
-    }
-  }, [value, setCurrentId, baseId]);
+  const activeId = compositeStore.useState('activeId');
   const classes = classnames_default()('component-alignment-matrix-control', className);
   return (0,external_React_.createElement)(Composite, {
-    ...props,
-    ...composite,
-    "aria-label": label,
-    as: Root,
-    className: classes,
-    role: "grid",
-    size: width
-  }, GRID.map((cells, index) => (0,external_React_.createElement)(CompositeGroup, {
-    ...composite,
-    as: Row,
-    role: "row",
+    store: compositeStore,
+    render: (0,external_React_.createElement)(Root, {
+      ...props,
+      "aria-label": label,
+      className: classes,
+      id: baseId,
+      role: "grid",
+      size: width
+    })
+  }, GRID.map((cells, index) => (0,external_React_.createElement)(CompositeRow, {
+    render: (0,external_React_.createElement)(Row, {
+      role: "row"
+    }),
     key: index
   }, cells.map(cell => {
     const cellId = getItemId(baseId, cell);
-    const isActive = composite.currentId === cellId;
+    const isActive = cellId === activeId;
     return (0,external_React_.createElement)(cell_Cell, {
-      ...composite,
       id: cellId,
       isActive: isActive,
       key: cell,
-      value: cell,
-      onFocus: () => handleOnChange(cell),
-      tabIndex: isActive ? 0 : -1
+      value: cell
     });
   }))));
 }
@@ -18692,7 +16148,7 @@ function useVisualElement(Component, visualState, props, createVisualElement) {
 
 
 ;// CONCATENATED MODULE: ./packages/components/node_modules/framer-motion/dist/es/utils/is-ref-object.mjs
-function is_ref_object_isRefObject(ref) {
+function isRefObject(ref) {
     return (typeof ref === "object" &&
         Object.prototype.hasOwnProperty.call(ref, "current"));
 }
@@ -18719,7 +16175,7 @@ function useMotionRef(visualState, visualElement, externalRef) {
             if (typeof externalRef === "function") {
                 externalRef(instance);
             }
-            else if (is_ref_object_isRefObject(externalRef)) {
+            else if (isRefObject(externalRef)) {
                 externalRef.current = instance;
             }
         }
@@ -22406,7 +19862,7 @@ function animateValue({ autoplay = true, delay = 0, driver = frameloopDriver, ke
 
 
 ;// CONCATENATED MODULE: ./packages/components/node_modules/framer-motion/dist/es/utils/memo.mjs
-function memo_memo(callback) {
+function memo(callback) {
     let result;
     return () => {
         if (result === undefined)
@@ -22426,7 +19882,7 @@ function memo_memo(callback) {
 
 
 
-const supportsWaapi = memo_memo(() => Object.hasOwnProperty.call(Element.prototype, "animate"));
+const supportsWaapi = memo(() => Object.hasOwnProperty.call(Element.prototype, "animate"));
 /**
  * A list of values that can be hardware-accelerated.
  */
@@ -24900,7 +22356,7 @@ class VisualElementDragControls {
         const { dragConstraints, dragElastic } = this.getProps();
         const { layout } = this.visualElement.projection || {};
         const prevConstraints = this.constraints;
-        if (dragConstraints && is_ref_object_isRefObject(dragConstraints)) {
+        if (dragConstraints && isRefObject(dragConstraints)) {
             if (!this.constraints) {
                 this.constraints = this.resolveRefConstraints();
             }
@@ -24931,7 +22387,7 @@ class VisualElementDragControls {
     }
     resolveRefConstraints() {
         const { dragConstraints: constraints, onMeasureDragConstraints } = this.getProps();
-        if (!constraints || !is_ref_object_isRefObject(constraints))
+        if (!constraints || !isRefObject(constraints))
             return false;
         const constraintsElement = constraints.current;
         errors_invariant(constraintsElement !== null, "If `dragConstraints` is set as a React ref, that ref must be passed to another component's `ref` prop.");
@@ -25036,7 +22492,7 @@ class VisualElementDragControls {
             return;
         const { drag, dragConstraints } = this.getProps();
         const { projection } = this.visualElement;
-        if (!is_ref_object_isRefObject(dragConstraints) || !projection || !this.constraints)
+        if (!isRefObject(dragConstraints) || !projection || !this.constraints)
             return;
         /**
          * Stop current animations as there can be visual glitching if we try to do
@@ -25094,7 +22550,7 @@ class VisualElementDragControls {
         });
         const measureDragConstraints = () => {
             const { dragConstraints } = this.getProps();
-            if (is_ref_object_isRefObject(dragConstraints)) {
+            if (isRefObject(dragConstraints)) {
                 this.constraints = this.resolveRefConstraints();
             }
         };
@@ -28217,7 +25673,7 @@ class VisualElement {
                 layoutId,
                 layout,
                 alwaysMeasureLayout: Boolean(drag) ||
-                    (dragConstraints && is_ref_object_isRefObject(dragConstraints)),
+                    (dragConstraints && isRefObject(dragConstraints)),
                 visualElement: this,
                 scheduleRender: () => this.scheduleRender(),
                 /**
@@ -29973,7 +27429,6 @@ var dist = __webpack_require__(3138);
  * https://github.com/bvaughn/react-highlight-words/blob/HEAD/src/Highlighter.js
  */
 
-/* eslint-disable jsdoc/valid-types */
 /**
  * @typedef Options
  * @property {string}                                                     [activeClassName='']      Classname for active highlighted areas.
@@ -29995,13 +27450,10 @@ var dist = __webpack_require__(3138);
 /**
  * Maps props to lowercase names.
  *
- * @template {Record<string, unknown>} T
- * @param {T} object Props to map.
- * @return {{[K in keyof T as Lowercase<string & K>]: T[K]}} The mapped props.
+ * @param object Props to map.
+ * @return The mapped props.
  */
-/* eslint-enable jsdoc/valid-types */
 const lowercaseProps = object => {
-  /** @type {any} */
   const mapped = {};
   for (const key in object) {
     mapped[key.toLowerCase()] = object[key];
@@ -30011,8 +27463,21 @@ const lowercaseProps = object => {
 const memoizedLowercaseProps = memize(lowercaseProps);
 
 /**
- *
- * @param {Options} options
+ * @param options
+ * @param options.activeClassName
+ * @param options.activeIndex
+ * @param options.activeStyle
+ * @param options.autoEscape
+ * @param options.caseSensitive
+ * @param options.children
+ * @param options.findChunks
+ * @param options.highlightClassName
+ * @param options.highlightStyle
+ * @param options.highlightTag
+ * @param options.sanitize
+ * @param options.searchWords
+ * @param options.unhighlightClassName
+ * @param options.unhighlightStyle
  */
 function createHighlighterText({
   activeClassName = '',
@@ -30063,8 +27528,6 @@ function createHighlighterText({
       const isActive = highlightIndex === +activeIndex;
       highlightClassNames = `${highlightClass} ${isActive ? activeClassName : ''}`;
       highlightStyles = isActive === true && activeStyle !== null ? Object.assign({}, highlightStyle, activeStyle) : highlightStyle;
-
-      /** @type {Record<string, any>} */
       const props = {
         children: text,
         className: highlightClassNames,
@@ -30166,6 +27629,7 @@ function hook_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to strin
  */
 
 
+
 /**
  * WordPress dependencies
  */
@@ -30184,13 +27648,13 @@ function hook_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to strin
 
 
 
-/**
- * @param {import('../context').WordPressComponentProps<import('./types').Props, 'span'>} props
- */
 var hook_ref =  true ? {
   name: "50zrmy",
   styles: "text-transform:uppercase"
 } : 0;
+/**
+ * @param {import('../context').WordPressComponentProps<import('./types').Props, 'span'>} props
+ */
 function useText(props) {
   const {
     adjustLineHeightForInnerControls,
@@ -30216,8 +27680,6 @@ function useText(props) {
     weight = config_values.fontWeight,
     ...otherProps
   } = useContextSystem(props, 'Text');
-
-  /** @type {import('react').ReactNode} */
   let content = children;
   const isHighlighter = Array.isArray(highlightWords);
   const isCaption = size === 'caption';
@@ -30227,9 +27689,7 @@ function useText(props) {
     }
     content = createHighlighterText({
       autoEscape: highlightEscape,
-      // Disable reason: We need to disable this otherwise it erases the cast
-      // eslint-disable-next-line object-shorthand
-      children: /** @type {string} */children,
+      children,
       caseSensitive: highlightCaseSensitive,
       searchWords: highlightWords,
       sanitize: highlightSanitize
@@ -30243,10 +27703,7 @@ function useText(props) {
       color,
       display,
       fontSize: getFontSize(size),
-      /* eslint-disable jsdoc/valid-types */
-      fontWeight: /** @type {import('react').CSSProperties['fontWeight']} */
-      weight,
-      /* eslint-enable jsdoc/valid-types */
+      fontWeight: weight,
       lineHeight,
       letterSpacing,
       textAlign: align
@@ -30263,8 +27720,6 @@ function useText(props) {
     }
     return cx(Text, sx.Base, sx.optimalTextColor, isDestructive && destructive, !!isHighlighter && highlighterText, isBlock && styles_block, isCaption && muted, variant && text_styles_namespaceObject[variant], upperCase && sx.upperCase, className);
   }, [adjustLineHeightForInnerControls, align, className, color, cx, display, isBlock, isCaption, isDestructive, isHighlighter, letterSpacing, lineHeightProp, optimizeReadabilityFor, size, upperCase, variant, weight]);
-
-  /** @type {undefined | 'auto' | 'none'} */
   let finalEllipsizeMode;
   if (truncate === true) {
     finalEllipsizeMode = 'auto';
@@ -30313,10 +27768,10 @@ function useText(props) {
 
 
 /**
- * @param {import('../context').WordPressComponentProps<import('./types').Props, 'span'>} props
- * @param {import('react').ForwardedRef<any>}                                             forwardedRef
+ * @param props
+ * @param forwardedRef
  */
-function component_Text(props, forwardedRef) {
+function UnconnectedText(props, forwardedRef) {
   const textProps = useText(props);
   return (0,external_React_.createElement)(component, {
     as: "span",
@@ -30341,8 +27796,8 @@ function component_Text(props, forwardedRef) {
  * }
  * ```
  */
-const ConnectedText = contextConnect(component_Text, 'Text');
-/* harmony default export */ var text_component = (ConnectedText);
+const component_Text = contextConnect(UnconnectedText, 'Text');
+/* harmony default export */ var text_component = (component_Text);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/utils/base-label.js
 function base_label_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
@@ -30816,7 +28271,7 @@ function _toPropertyKey(arg) {
   return typeof key === "symbol" ? key : String(key);
 }
 
-function actions_b1cc53c2_esm_defineProperty(obj, key, value) {
+function _defineProperty(obj, key, value) {
   key = _toPropertyKey(key);
   if (key in obj) {
     Object.defineProperty(obj, key, {
@@ -30831,7 +28286,7 @@ function actions_b1cc53c2_esm_defineProperty(obj, key, value) {
   return obj;
 }
 
-function actions_b1cc53c2_esm_ownKeys(object, enumerableOnly) {
+function ownKeys(object, enumerableOnly) {
   var keys = Object.keys(object);
   if (Object.getOwnPropertySymbols) {
     var symbols = Object.getOwnPropertySymbols(object);
@@ -30841,12 +28296,12 @@ function actions_b1cc53c2_esm_ownKeys(object, enumerableOnly) {
   }
   return keys;
 }
-function actions_b1cc53c2_esm_objectSpread2(target) {
+function _objectSpread2(target) {
   for (var i = 1; i < arguments.length; i++) {
     var source = null != arguments[i] ? arguments[i] : {};
-    i % 2 ? actions_b1cc53c2_esm_ownKeys(Object(source), !0).forEach(function (key) {
-      actions_b1cc53c2_esm_defineProperty(target, key, source[key]);
-    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : actions_b1cc53c2_esm_ownKeys(Object(source)).forEach(function (key) {
+    i % 2 ? ownKeys(Object(source), !0).forEach(function (key) {
+      _defineProperty(target, key, source[key]);
+    }) : Object.getOwnPropertyDescriptors ? Object.defineProperties(target, Object.getOwnPropertyDescriptors(source)) : ownKeys(Object(source)).forEach(function (key) {
       Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
     });
   }
@@ -31207,7 +28662,7 @@ class Engine {
     const config = this.config;
     if (!state._active) this.clean();
     if ((state._blocked || !state.intentional) && !state._force && !config.triggerAllEvents) return;
-    const memo = this.handler(actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, shared), state), {}, {
+    const memo = this.handler(_objectSpread2(_objectSpread2(_objectSpread2({}, shared), state), {}, {
       [this.aliasKey]: state.values
     }));
     if (memo !== undefined) state.memo = memo;
@@ -31232,7 +28687,7 @@ function selectAxis([dx, dy], threshold) {
 class CoordinatesEngine extends Engine {
   constructor(...args) {
     super(...args);
-    actions_b1cc53c2_esm_defineProperty(this, "aliasKey", 'xy');
+    _defineProperty(this, "aliasKey", 'xy');
   }
   reset() {
     super.reset();
@@ -31278,7 +28733,7 @@ const commonConfigResolver = {
     return value;
   },
   eventOptions(value, _k, config) {
-    return actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, config.shared.eventOptions), value);
+    return _objectSpread2(_objectSpread2({}, config.shared.eventOptions), value);
   },
   preventDefault(value = false) {
     return value;
@@ -31313,7 +28768,7 @@ const commonConfigResolver = {
 if (false) {}
 
 const DEFAULT_AXIS_THRESHOLD = 0;
-const coordinatesConfigResolver = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, commonConfigResolver), {}, {
+const coordinatesConfigResolver = _objectSpread2(_objectSpread2({}, commonConfigResolver), {}, {
   axis(_v, _k, {
     axis
   }) {
@@ -31352,7 +28807,7 @@ const KEYS_DELTA_MAP = {
 class DragEngine extends CoordinatesEngine {
   constructor(...args) {
     super(...args);
-    actions_b1cc53c2_esm_defineProperty(this, "ingKey", 'dragging');
+    _defineProperty(this, "ingKey", 'dragging');
   }
   reset() {
     super.reset();
@@ -31642,7 +29097,7 @@ const DEFAULT_DRAG_AXIS_THRESHOLD = {
   touch: 0,
   pen: 8
 };
-const dragConfigResolver = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, coordinatesConfigResolver), {}, {
+const dragConfigResolver = _objectSpread2(_objectSpread2({}, coordinatesConfigResolver), {}, {
   device(_v, _k, {
     pointer: {
       touch = false,
@@ -31708,7 +29163,7 @@ const dragConfigResolver = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_e
   },
   axisThreshold(value) {
     if (!value) return DEFAULT_DRAG_AXIS_THRESHOLD;
-    return actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, DEFAULT_DRAG_AXIS_THRESHOLD), value);
+    return _objectSpread2(_objectSpread2({}, DEFAULT_DRAG_AXIS_THRESHOLD), value);
   },
   keyboardDisplacement(value = DEFAULT_KEYBOARD_DISPLACEMENT) {
     return value;
@@ -31733,8 +29188,8 @@ const PINCH_WHEEL_RATIO = 100;
 class PinchEngine extends Engine {
   constructor(...args) {
     super(...args);
-    actions_b1cc53c2_esm_defineProperty(this, "ingKey", 'pinching');
-    actions_b1cc53c2_esm_defineProperty(this, "aliasKey", 'da');
+    _defineProperty(this, "ingKey", 'pinching');
+    _defineProperty(this, "aliasKey", 'da');
   }
   init() {
     this.state.offset = [1, 0];
@@ -31958,7 +29413,7 @@ class PinchEngine extends Engine {
   }
 }
 
-const pinchConfigResolver = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, commonConfigResolver), {}, {
+const pinchConfigResolver = _objectSpread2(_objectSpread2({}, commonConfigResolver), {}, {
   device(_v, _k, {
     shared,
     pointer: {
@@ -32011,7 +29466,7 @@ const pinchConfigResolver = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_
 class MoveEngine extends CoordinatesEngine {
   constructor(...args) {
     super(...args);
-    actions_b1cc53c2_esm_defineProperty(this, "ingKey", 'moving');
+    _defineProperty(this, "ingKey", 'moving');
   }
   move(event) {
     if (this.config.mouseOnly && event.pointerType !== 'mouse') return;
@@ -32047,14 +29502,14 @@ class MoveEngine extends CoordinatesEngine {
   }
 }
 
-const moveConfigResolver = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, coordinatesConfigResolver), {}, {
+const moveConfigResolver = _objectSpread2(_objectSpread2({}, coordinatesConfigResolver), {}, {
   mouseOnly: (value = true) => value
 });
 
 class ScrollEngine extends CoordinatesEngine {
   constructor(...args) {
     super(...args);
-    actions_b1cc53c2_esm_defineProperty(this, "ingKey", 'scrolling');
+    _defineProperty(this, "ingKey", 'scrolling');
   }
   scroll(event) {
     if (!this.state._active) this.start(event);
@@ -32087,7 +29542,7 @@ const scrollConfigResolver = coordinatesConfigResolver;
 class WheelEngine extends CoordinatesEngine {
   constructor(...args) {
     super(...args);
-    actions_b1cc53c2_esm_defineProperty(this, "ingKey", 'wheeling');
+    _defineProperty(this, "ingKey", 'wheeling');
   }
   wheel(event) {
     if (!this.state._active) this.start(event);
@@ -32118,7 +29573,7 @@ const wheelConfigResolver = coordinatesConfigResolver;
 class HoverEngine extends CoordinatesEngine {
   constructor(...args) {
     super(...args);
-    actions_b1cc53c2_esm_defineProperty(this, "ingKey", 'hovering');
+    _defineProperty(this, "ingKey", 'hovering');
   }
   enter(event) {
     if (this.config.mouseOnly && event.pointerType !== 'mouse') return;
@@ -32145,7 +29600,7 @@ class HoverEngine extends CoordinatesEngine {
   }
 }
 
-const hoverConfigResolver = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, coordinatesConfigResolver), {}, {
+const hoverConfigResolver = _objectSpread2(_objectSpread2({}, coordinatesConfigResolver), {}, {
   mouseOnly: (value = true) => value
 });
 
@@ -32287,14 +29742,14 @@ function use_gesture_core_esm_parse(newConfig, gestureKey, _config = {}) {
   }, sharedConfigResolver);
   if (gestureKey) {
     const resolver = ConfigResolverMap.get(gestureKey);
-    _config[gestureKey] = resolveWith(actions_b1cc53c2_esm_objectSpread2({
+    _config[gestureKey] = resolveWith(_objectSpread2({
       shared: _config.shared
     }, rest), resolver);
   } else {
     for (const key in rest) {
       const resolver = ConfigResolverMap.get(key);
       if (resolver) {
-        _config[key] = resolveWith(actions_b1cc53c2_esm_objectSpread2({
+        _config[key] = resolveWith(_objectSpread2({
           shared: _config.shared
         }, rest[key]), resolver);
       } else if (false) {}
@@ -32305,7 +29760,7 @@ function use_gesture_core_esm_parse(newConfig, gestureKey, _config = {}) {
 
 class EventStore {
   constructor(ctrl, gestureKey) {
-    actions_b1cc53c2_esm_defineProperty(this, "_listeners", new Set());
+    _defineProperty(this, "_listeners", new Set());
     this._ctrl = ctrl;
     this._gestureKey = gestureKey;
   }
@@ -32313,7 +29768,7 @@ class EventStore {
     const listeners = this._listeners;
     const type = toDomEventType(device, action);
     const _options = this._gestureKey ? this._ctrl.config[this._gestureKey].eventOptions : {};
-    const eventOptions = actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, _options), options);
+    const eventOptions = _objectSpread2(_objectSpread2({}, _options), options);
     element.addEventListener(type, handler, eventOptions);
     const remove = () => {
       element.removeEventListener(type, handler, eventOptions);
@@ -32330,7 +29785,7 @@ class EventStore {
 
 class TimeoutStore {
   constructor() {
-    actions_b1cc53c2_esm_defineProperty(this, "_timeouts", new Map());
+    _defineProperty(this, "_timeouts", new Map());
   }
   add(key, callback, ms = 140, ...args) {
     this.remove(key);
@@ -32348,15 +29803,15 @@ class TimeoutStore {
 
 class Controller {
   constructor(handlers) {
-    actions_b1cc53c2_esm_defineProperty(this, "gestures", new Set());
-    actions_b1cc53c2_esm_defineProperty(this, "_targetEventStore", new EventStore(this));
-    actions_b1cc53c2_esm_defineProperty(this, "gestureEventStores", {});
-    actions_b1cc53c2_esm_defineProperty(this, "gestureTimeoutStores", {});
-    actions_b1cc53c2_esm_defineProperty(this, "handlers", {});
-    actions_b1cc53c2_esm_defineProperty(this, "config", {});
-    actions_b1cc53c2_esm_defineProperty(this, "pointerIds", new Set());
-    actions_b1cc53c2_esm_defineProperty(this, "touchIds", new Set());
-    actions_b1cc53c2_esm_defineProperty(this, "state", {
+    _defineProperty(this, "gestures", new Set());
+    _defineProperty(this, "_targetEventStore", new EventStore(this));
+    _defineProperty(this, "gestureEventStores", {});
+    _defineProperty(this, "gestureTimeoutStores", {});
+    _defineProperty(this, "handlers", {});
+    _defineProperty(this, "config", {});
+    _defineProperty(this, "pointerIds", new Set());
+    _defineProperty(this, "touchIds", new Set());
+    _defineProperty(this, "state", {
       shared: {
         shiftKey: false,
         metaKey: false,
@@ -32412,7 +29867,7 @@ class Controller {
       }
       const nativeBindFunction = bindToProps(props, sharedConfig.eventOptions, !!target);
       for (const eventKey in this.nativeHandlers) {
-        nativeBindFunction(eventKey, '', event => this.nativeHandlers[eventKey](actions_b1cc53c2_esm_objectSpread2(actions_b1cc53c2_esm_objectSpread2({}, this.state.shared), {}, {
+        nativeBindFunction(eventKey, '', event => this.nativeHandlers[eventKey](_objectSpread2(_objectSpread2({}, this.state.shared), {}, {
           event,
           args
         })), undefined, true);
@@ -36917,6 +34372,7 @@ function overlayMiddlewares() {
 
 
 
+
 /**
  * Name of slot in which popover should fill.
  *
@@ -36952,7 +34408,7 @@ const getPopoverFallbackContainer = () => {
   }
   return container;
 };
-const UnforwardedPopover = (props, forwardedRef) => {
+const UnconnectedPopover = (props, forwardedRef) => {
   const {
     animate = true,
     headerTitle,
@@ -36981,7 +34437,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
     isAlternate,
     // Rest
     ...contentProps
-  } = props;
+  } = useContextSystem(props, 'Popover');
   let computedFlipProp = flip;
   let computedResizeProp = resize;
   if (__unstableForcePosition !== undefined) {
@@ -37151,7 +34607,32 @@ const UnforwardedPopover = (props, forwardedRef) => {
   // When Floating UI has finished positioning and Framer Motion has finished animating
   // the popover, add the `is-positioned` class to signal that all transitions have finished.
   const isPositioned = (!shouldAnimate || animationFinished) && x !== null && y !== null;
-  let content = (0,external_React_.createElement)(motion.div, {
+
+  // In case a `ColorPicker` component is rendered as a child of `Popover`,
+  // the `Popover` component can be notified of when the user is dragging
+  // parts of the `ColorPicker` UI (this is possible because the `ColorPicker`
+  // component exposes the `onPickerDragStart` and `onPickerDragEnd` props
+  // via internal context).
+  // While the user is performing a pointer drag, the `Popover` will render
+  // a transparent backdrop element that will serve as a "pointer events trap",
+  // making sure that no pointer events reach any potential `iframe` element
+  // underneath (like, for example, the editor canvas in the WordPress editor).
+  const [showBackdrop, setShowBackdrop] = (0,external_wp_element_namespaceObject.useState)(false);
+  const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    ColorPicker: {
+      onPickerDragStart() {
+        setShowBackdrop(true);
+      },
+      onPickerDragEnd() {
+        setShowBackdrop(false);
+      }
+    }
+  }), []);
+  let content = (0,external_React_.createElement)(external_React_.Fragment, null, showBackdrop && (0,external_React_.createElement)("div", {
+    className: "components-popover-pointer-events-trap",
+    "aria-hidden": "true",
+    onClick: () => setShowBackdrop(false)
+  }), (0,external_React_.createElement)(motion.div, {
     className: classnames_default()('components-popover', className, {
       'is-expanded': isExpanded,
       'is-positioned': isPositioned,
@@ -37173,14 +34654,16 @@ const UnforwardedPopover = (props, forwardedRef) => {
     onClick: onClose
   })), (0,external_React_.createElement)("div", {
     className: "components-popover__content"
-  }, children), hasArrow && (0,external_React_.createElement)("div", {
+  }, (0,external_React_.createElement)(ContextSystemProvider, {
+    value: contextValue
+  }, children)), hasArrow && (0,external_React_.createElement)("div", {
     ref: arrowCallbackRef,
     className: ['components-popover__arrow', `is-${computedPlacement.split('-')[0]}`].join(' '),
     style: {
       left: typeof arrowData?.x !== 'undefined' && Number.isFinite(arrowData.x) ? `${arrowData.x}px` : '',
       top: typeof arrowData?.y !== 'undefined' && Number.isFinite(arrowData.y) ? `${arrowData.y}px` : ''
     }
-  }, (0,external_React_.createElement)(ArrowTriangle, null)));
+  }, (0,external_React_.createElement)(ArrowTriangle, null))));
   const shouldRenderWithinSlot = slot.ref && !inline;
   const hasAnchor = anchorRef || anchorRect || anchor;
   if (shouldRenderWithinSlot) {
@@ -37223,7 +34706,7 @@ const UnforwardedPopover = (props, forwardedRef) => {
  * ```
  *
  */
-const popover_Popover = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedPopover);
+const popover_Popover = contextConnect(UnconnectedPopover, 'Popover');
 function PopoverSlot({
   name = SLOT_NAME
 }, ref) {
@@ -39712,7 +37195,7 @@ const ColorInputWrapper = /*#__PURE__*/emotion_styled_base_browser_esm(flex_comp
 } : 0)("padding-top:", space(4), ";padding-left:", space(4), ";padding-right:", space(3), ";padding-bottom:", space(5), ";" + ( true ? "" : 0));
 const ColorfulWrapper = emotion_styled_base_browser_esm("div",  true ? {
   target: "ez9hsf41"
-} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;overflow:hidden;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:16px;margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
+} : 0)(boxSizingReset, ";width:216px;.react-colorful{display:flex;flex-direction:column;align-items:center;width:216px;height:auto;}.react-colorful__saturation{width:100%;border-radius:0;height:216px;margin-bottom:", space(4), ";border-bottom:none;}.react-colorful__hue,.react-colorful__alpha{width:184px;height:16px;border-radius:16px;margin-bottom:", space(2), ";}.react-colorful__pointer{height:16px;width:16px;border:none;box-shadow:0 0 2px 0 rgba( 0, 0, 0, 0.25 );outline:2px solid transparent;}.react-colorful__pointer-fill{box-shadow:inset 0 0 0 ", config_values.borderWidthFocus, " #fff;}", interactiveHueStyles, ";" + ( true ? "" : 0));
 const CopyButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_button,  true ? {
   target: "ez9hsf40"
 } : 0)("&&&&&{min-width:", space(6), ";padding:0;>svg{margin-right:0;}}" + ( true ? "" : 0));
@@ -40131,13 +37614,89 @@ function index_module_u(){return(index_module_u=Object.assign||function(e){for(v
  * Internal dependencies
  */
 
+/**
+ * Track the start and the end of drag pointer events related to controlling
+ * the picker's saturation / hue / alpha, and fire the corresponding callbacks.
+ * This is particularly useful to implement synergies like the one with the
+ * `Popover` component, where a pointer events "trap" is rendered while
+ * the user is dragging the pointer to avoid potential interference with iframe
+ * elements.
+ *
+ * @param props
+ * @param props.containerEl
+ * @param props.onDragStart
+ * @param props.onDragEnd
+ */
+const useOnPickerDrag = ({
+  containerEl,
+  onDragStart,
+  onDragEnd
+}) => {
+  const isDragging = (0,external_wp_element_namespaceObject.useRef)(false);
+  const leftWhileDragging = (0,external_wp_element_namespaceObject.useRef)(false);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!containerEl || !onDragStart && !onDragEnd) {
+      return;
+    }
+    const interactiveElements = [containerEl.querySelector('.react-colorful__saturation'), containerEl.querySelector('.react-colorful__hue'), containerEl.querySelector('.react-colorful__alpha')].filter(el => !!el);
+    if (interactiveElements.length === 0) {
+      return;
+    }
+    const doc = containerEl.ownerDocument;
+    const onPointerUp = event => {
+      isDragging.current = false;
+      leftWhileDragging.current = false;
+      onDragEnd?.(event);
+    };
+    const onPointerDown = event => {
+      isDragging.current = true;
+      onDragStart?.(event);
+    };
+    const onPointerLeave = () => {
+      leftWhileDragging.current = isDragging.current;
+    };
+
+    // Try to detect if the user released the pointer while away from the
+    // current window. If the check is successfull, the dragEnd callback will
+    // called as soon as the pointer re-enters the window (better late than never)
+    const onPointerEnter = event => {
+      const noPointerButtonsArePressed = event.buttons === 0;
+      if (leftWhileDragging.current && noPointerButtonsArePressed) {
+        onPointerUp(event);
+      }
+    };
+
+    // The pointerdown event is added on the interactive elements,
+    // while the remaining events are added on the document object since
+    // the pointer wouldn't necessarily be hovering the initial interactive
+    // element at that point.
+    interactiveElements.forEach(el => el.addEventListener('pointerdown', onPointerDown));
+    doc.addEventListener('pointerup', onPointerUp);
+    doc.addEventListener('pointerenter', onPointerEnter);
+    doc.addEventListener('pointerleave', onPointerLeave);
+    return () => {
+      interactiveElements.forEach(el => el.removeEventListener('pointerdown', onPointerDown));
+      doc.removeEventListener('pointerup', onPointerUp);
+      doc.removeEventListener('pointerenter', onPointerEnter);
+      doc.removeEventListener('pointerleave', onPointerUp);
+    };
+  }, [onDragStart, onDragEnd, containerEl]);
+};
 const Picker = ({
   color,
   enableAlpha,
-  onChange
+  onChange,
+  onDragStart,
+  onDragEnd,
+  containerEl
 }) => {
   const Component = enableAlpha ? ge : Ce;
   const rgbColor = (0,external_wp_element_namespaceObject.useMemo)(() => color.toRgbString(), [color]);
+  useOnPickerDrag({
+    containerEl,
+    onDragStart,
+    onDragEnd
+  });
   return (0,external_React_.createElement)(Component, {
     color: rgbColor,
     onChange: nextColor => {
@@ -40189,8 +37748,15 @@ const UnconnectedColorPicker = (props, forwardedRef) => {
     onChange,
     defaultValue = '#fff',
     copyFormat,
+    // Context
+    onPickerDragStart,
+    onPickerDragEnd,
     ...divProps
   } = useContextSystem(props, 'ColorPicker');
+  const [containerEl, setContainerEl] = (0,external_wp_element_namespaceObject.useState)(null);
+  const containerRef = node => {
+    setContainerEl(node);
+  };
 
   // Use a safe default value for the color and remove the possibility of `undefined`.
   const [color, setColor] = useControlledValue({
@@ -40207,12 +37773,15 @@ const UnconnectedColorPicker = (props, forwardedRef) => {
   }, [debouncedSetColor]);
   const [colorType, setColorType] = (0,external_wp_element_namespaceObject.useState)(copyFormat || 'hex');
   return (0,external_React_.createElement)(ColorfulWrapper, {
-    ref: forwardedRef,
+    ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([containerRef, forwardedRef]),
     ...divProps
   }, (0,external_React_.createElement)(Picker, {
+    containerEl: containerEl,
     onChange: handleChange,
     color: safeColordColor,
-    enableAlpha: enableAlpha
+    enableAlpha: enableAlpha,
+    onDragStart: onPickerDragStart,
+    onDragEnd: onPickerDragEnd
   }), (0,external_React_.createElement)(AuxiliaryColorArtefactWrapper, null, (0,external_React_.createElement)(AuxiliaryColorArtefactHStackHeader, {
     justify: "space-between"
   }, (0,external_React_.createElement)(styles_SelectControl, {
@@ -40359,7 +37928,6 @@ const check = (0,external_React_.createElement)(external_wp_primitives_namespace
 
 
 
-const hasSelectedOption = new Map();
 function UnforwardedOptionAsButton(props, forwardedRef) {
   const {
     isPressed,
@@ -40376,39 +37944,22 @@ function UnforwardedOptionAsOption(props, forwardedRef) {
   const {
     id,
     isSelected,
-    context,
+    compositeStore,
     ...additionalProps
   } = props;
-  const {
-    isComposite,
-    ..._compositeState
-  } = context;
-  const compositeState = _compositeState;
-  const {
-    baseId,
-    currentId,
-    setCurrentId
-  } = compositeState;
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // If we call `setCurrentId` here, it doesn't update for other
-    // Option renders in the same pass. So we have to store our own
-    // map to make sure that we only set the first selected option.
-    // We still need to check `currentId` because the control will
-    // update this as the user moves around, and that state should
-    // be maintained as the group gains and loses focus.
-    if (isSelected && !currentId && !hasSelectedOption.get(baseId)) {
-      hasSelectedOption.set(baseId, true);
-      setCurrentId(id);
-    }
-  }, [baseId, currentId, id, isSelected, setCurrentId]);
+  const activeId = compositeStore.useState('activeId');
+  if (isSelected && !activeId) {
+    compositeStore.setActiveId(id);
+  }
   return (0,external_React_.createElement)(CompositeItem, {
-    ...additionalProps,
-    ...compositeState,
-    as: build_module_button,
-    id: id,
-    role: "option",
-    "aria-selected": !!isSelected,
-    ref: forwardedRef
+    render: (0,external_React_.createElement)(build_module_button, {
+      ...additionalProps,
+      role: "option",
+      "aria-selected": !!isSelected,
+      ref: forwardedRef
+    }),
+    store: compositeStore,
+    id: id
   });
 }
 const OptionAsOption = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedOptionAsOption);
@@ -40419,20 +37970,19 @@ function Option({
   tooltipText,
   ...additionalProps
 }) {
-  const compositeContext = (0,external_wp_element_namespaceObject.useContext)(CircularOptionPickerContext);
   const {
-    isComposite,
-    baseId
-  } = compositeContext;
+    baseId,
+    compositeStore
+  } = (0,external_wp_element_namespaceObject.useContext)(CircularOptionPickerContext);
   const id = (0,external_wp_compose_namespaceObject.useInstanceId)(Option, baseId || 'components-circular-option-picker__option');
   const commonProps = {
     id,
     className: 'components-circular-option-picker__option',
     ...additionalProps
   };
-  const optionControl = isComposite ? (0,external_React_.createElement)(OptionAsOption, {
+  const optionControl = compositeStore ? (0,external_React_.createElement)(OptionAsOption, {
     ...commonProps,
-    context: compositeContext,
+    compositeStore: compositeStore,
     isSelected: isSelected
   }) : (0,external_React_.createElement)(OptionAsButton, {
     ...commonProps,
@@ -40530,7 +38080,6 @@ function ButtonAction({
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -40596,34 +38145,13 @@ function ListboxCircularOptionPicker(props) {
     children,
     ...additionalProps
   } = props;
-  const rtl = (0,external_wp_i18n_namespaceObject.isRTL)();
-  const compositeState = useCompositeState({
-    baseId,
-    loop,
-    rtl
+  const compositeStore = useCompositeStore({
+    focusLoop: loop,
+    rtl: (0,external_wp_i18n_namespaceObject.isRTL)()
   });
-  const {
-    setBaseId,
-    setLoop,
-    setRTL
-  } = compositeState;
-
-  // These are necessary as `useCompositeState` is sealed after
-  // the first render, so although unlikely to happen, if a state
-  // property should change, we need to process it accordingly.
-
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    setBaseId(baseId);
-  }, [setBaseId, baseId]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    setLoop(loop);
-  }, [setLoop, loop]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    setRTL(rtl);
-  }, [setRTL, rtl]);
   const compositeContext = {
-    isComposite: true,
-    ...compositeState
+    baseId,
+    compositeStore
   };
   return (0,external_React_.createElement)("div", {
     className: className
@@ -40631,7 +38159,8 @@ function ListboxCircularOptionPicker(props) {
     value: compositeContext
   }, (0,external_React_.createElement)(Composite, {
     ...additionalProps,
-    ...compositeState,
+    id: baseId,
+    store: compositeStore,
     role: 'listbox'
   }, options), children, actions));
 }
@@ -40644,10 +38173,10 @@ function ButtonsCircularOptionPicker(props) {
     ...additionalProps
   } = props;
   return (0,external_React_.createElement)("div", {
-    ...additionalProps
+    ...additionalProps,
+    id: baseId
   }, (0,external_React_.createElement)(CircularOptionPickerContext.Provider, {
     value: {
-      isComposite: false,
       baseId
     }
   }, options, children, actions));
@@ -41158,6 +38687,10 @@ function CustomColorPickerDropdown({
 }) {
   const popoverProps = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     shift: true,
+    // Disabling resize as it would otherwise cause the popover to show
+    // scrollbars while dragging the color picker's handle close to the
+    // popover edge.
+    resize: false,
     ...(isRenderedInSidebar ? {
       // When in the sidebar: open to the left (stacking),
       // leaving the same gap as the parent popover.
@@ -41270,13 +38803,14 @@ function UnforwardedColorPalette(props, forwardedRef) {
       "aria-label": customColorAccessibleLabel,
       style: {
         background: value
-      }
+      },
+      type: "button"
     }), (0,external_React_.createElement)(v_stack_component, {
       className: "components-color-palette__custom-color-text-wrapper",
       spacing: 0.5
     }, (0,external_React_.createElement)(truncate_component, {
       className: "components-color-palette__custom-color-name"
-    }, value ? buttonLabelName : 'No color selected'), (0,external_React_.createElement)(truncate_component, {
+    }, value ? buttonLabelName : (0,external_wp_i18n_namespaceObject.__)('No color selected')), (0,external_React_.createElement)(truncate_component, {
       className: classnames_default()('components-color-palette__custom-color-value', {
         'components-color-palette__custom-color-value--is-hex': isHex
       })
@@ -41426,6 +38960,114 @@ const allUnits = {
     label: isWeb ? 'pt' : (0,external_wp_i18n_namespaceObject.__)('Points (pt)'),
     a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Points (pt)'),
     step: 1
+  },
+  svw: {
+    value: 'svw',
+    label: isWeb ? 'svw' : (0,external_wp_i18n_namespaceObject.__)('Small viewport width (svw)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Small viewport width (svw)'),
+    step: 0.1
+  },
+  svh: {
+    value: 'svh',
+    label: isWeb ? 'svh' : (0,external_wp_i18n_namespaceObject.__)('Small viewport height (svh)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Small viewport height (svh)'),
+    step: 0.1
+  },
+  svi: {
+    value: 'svi',
+    label: isWeb ? 'svi' : (0,external_wp_i18n_namespaceObject.__)('Viewport smallest size in the inline direction (svi)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Small viewport width or height (svi)'),
+    step: 0.1
+  },
+  svb: {
+    value: 'svb',
+    label: isWeb ? 'svb' : (0,external_wp_i18n_namespaceObject.__)('Viewport smallest size in the block direction (svb)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Small viewport width or height (svb)'),
+    step: 0.1
+  },
+  svmin: {
+    value: 'svmin',
+    label: isWeb ? 'svmin' : (0,external_wp_i18n_namespaceObject.__)('Small viewport smallest dimension (svmin)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Small viewport smallest dimension (svmin)'),
+    step: 0.1
+  },
+  lvw: {
+    value: 'lvw',
+    label: isWeb ? 'lvw' : (0,external_wp_i18n_namespaceObject.__)('Large viewport width (lvw)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Large viewport width (lvw)'),
+    step: 0.1
+  },
+  lvh: {
+    value: 'lvh',
+    label: isWeb ? 'lvh' : (0,external_wp_i18n_namespaceObject.__)('Large viewport height (lvh)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Large viewport height (lvh)'),
+    step: 0.1
+  },
+  lvi: {
+    value: 'lvi',
+    label: isWeb ? 'lvi' : (0,external_wp_i18n_namespaceObject.__)('Large viewport width or height (lvi)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Large viewport width or height (lvi)'),
+    step: 0.1
+  },
+  lvb: {
+    value: 'lvb',
+    label: isWeb ? 'lvb' : (0,external_wp_i18n_namespaceObject.__)('Large viewport width or height (lvb)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Large viewport width or height (lvb)'),
+    step: 0.1
+  },
+  lvmin: {
+    value: 'lvmin',
+    label: isWeb ? 'lvmin' : (0,external_wp_i18n_namespaceObject.__)('Large viewport smallest dimension (lvmin)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Large viewport smallest dimension (lvmin)'),
+    step: 0.1
+  },
+  dvw: {
+    value: 'dvw',
+    label: isWeb ? 'dvw' : (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport width (dvw)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport width (dvw)'),
+    step: 0.1
+  },
+  dvh: {
+    value: 'dvh',
+    label: isWeb ? 'dvh' : (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport height (dvh)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport height (dvh)'),
+    step: 0.1
+  },
+  dvi: {
+    value: 'dvi',
+    label: isWeb ? 'dvi' : (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport width or height (dvi)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport width or height (dvi)'),
+    step: 0.1
+  },
+  dvb: {
+    value: 'dvb',
+    label: isWeb ? 'dvb' : (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport width or height (dvb)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport width or height (dvb)'),
+    step: 0.1
+  },
+  dvmin: {
+    value: 'dvmin',
+    label: isWeb ? 'dvmin' : (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport smallest dimension (dvmin)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport smallest dimension (dvmin)'),
+    step: 0.1
+  },
+  dvmax: {
+    value: 'dvmax',
+    label: isWeb ? 'dvmax' : (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport largest dimension (dvmax)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Dynamic viewport largest dimension (dvmax)'),
+    step: 0.1
+  },
+  svmax: {
+    value: 'svmax',
+    label: isWeb ? 'svmax' : (0,external_wp_i18n_namespaceObject.__)('Small viewport largest dimension (svmax)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Small viewport largest dimension (svmax)'),
+    step: 0.1
+  },
+  lvmax: {
+    value: 'lvmax',
+    label: isWeb ? 'lvmax' : (0,external_wp_i18n_namespaceObject.__)('Large viewport largest dimension (lvmax)'),
+    a11yLabel: (0,external_wp_i18n_namespaceObject.__)('Large viewport largest dimension (lvmax)'),
+    step: 0.1
   }
 };
 
@@ -42706,7 +40348,7 @@ const ConnectedBorderBoxControlSplitControls = contextConnect(BorderBoxControlSp
 /* harmony default export */ var border_box_control_split_controls_component = (ConnectedBorderBoxControlSplitControls);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/utils/unit-values.js
-const UNITED_VALUE_REGEX = /^([\d.\-+]*)\s*(fr|cm|mm|Q|in|pc|pt|px|em|ex|ch|rem|lh|vw|vh|vmin|vmax|%|cap|ic|rlh|vi|vb|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx)?$/;
+const UNITED_VALUE_REGEX = /^([\d.\-+]*)\s*(fr|cm|mm|Q|in|pc|pt|px|em|ex|ch|rem|lh|vw|vh|vmin|vmax|%|cap|ic|rlh|vi|vb|deg|grad|rad|turn|s|ms|Hz|kHz|dpi|dpcm|dppx|svw|lvw|dvw|svh|lvh|dvh|svi|lvi|dvi|svb|lvb|dvb|svmin|lvmin|dvmin|svmax|lvmax|dvmax)?$/;
 
 /**
  * Parses a number and unit from a value.
@@ -44841,6 +42483,1015 @@ function UnconnectedCardBody(props, forwardedRef) {
 const CardBody = contextConnect(UnconnectedCardBody, 'CardBody');
 /* harmony default export */ var card_body_component = (CardBody);
 
+;// CONCATENATED MODULE: ./node_modules/reakit/es/_rollupPluginBabelHelpers-1f0bf8c2.js
+function _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source), true).forEach(function (key) {
+        _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/_rollupPluginBabelHelpers-0c84a174.js
+function _rollupPluginBabelHelpers_0c84a174_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source), true).forEach(function (key) {
+        _rollupPluginBabelHelpers_0c84a174_defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
+}
+
+function _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/SystemContext.js
+
+
+var SystemContext = /*#__PURE__*/(0,external_React_.createContext)({});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useCreateElement.js
+
+
+
+
+function useCreateElement_isRenderProp(children) {
+  return typeof children === "function";
+}
+
+/**
+ * Custom hook that will call `children` if it's a function. If
+ * `useCreateElement` has been passed to the context, it'll be used instead.
+ *
+ * @example
+ * import React from "react";
+ * import { SystemProvider, useCreateElement } from "reakit-system";
+ *
+ * const system = {
+ *   useCreateElement(type, props, children = props.children) {
+ *     // very similar to what `useCreateElement` does already
+ *     if (typeof children === "function") {
+ *       const { children: _, ...rest } = props;
+ *       return children(rest);
+ *     }
+ *     return React.createElement(type, props, children);
+ *   },
+ * };
+ *
+ * function Component(props) {
+ *   return useCreateElement("div", props);
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <Component url="url">{({ url }) => <a href={url}>link</a>}</Component>
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+var useCreateElement = function useCreateElement(type, props, children) {
+  if (children === void 0) {
+    children = props.children;
+  }
+
+  var context = (0,external_React_.useContext)(SystemContext);
+
+  if (context.useCreateElement) {
+    return context.useCreateElement(type, props, children);
+  }
+
+  if (typeof type === "string" && useCreateElement_isRenderProp(children)) {
+    var _ = props.children,
+        rest = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(props, ["children"]);
+
+    return children(rest);
+  }
+
+  return /*#__PURE__*/(0,external_React_.createElement)(type, props, children);
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/_rollupPluginBabelHelpers-1f0bf8c2.js
+function es_rollupPluginBabelHelpers_1f0bf8c2_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source), true).forEach(function (key) {
+        es_rollupPluginBabelHelpers_1f0bf8c2_defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isObject.js
+/**
+ * Checks whether `arg` is an object or not.
+ *
+ * @returns {boolean}
+ */
+function isObject_isObject(arg) {
+  return typeof arg === "object" && arg != null;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isPlainObject.js
+
+
+/**
+ * Checks whether `arg` is a plain object or not.
+ *
+ * @returns {boolean}
+ */
+
+function isPlainObject_isPlainObject(arg) {
+  var _proto$constructor;
+
+  if (!isObject_isObject(arg)) return false;
+  var proto = Object.getPrototypeOf(arg);
+  if (proto == null) return true;
+  return ((_proto$constructor = proto.constructor) === null || _proto$constructor === void 0 ? void 0 : _proto$constructor.toString()) === Object.toString();
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/splitProps.js
+
+
+
+
+/**
+ * Splits an object (`props`) into a tuple where the first item is an object
+ * with the passed `keys`, and the second item is an object with these keys
+ * omitted.
+ *
+ * @deprecated will be removed in version 2
+ *
+ * @example
+ * import { splitProps } from "reakit-utils";
+ *
+ * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
+ */
+
+function __deprecatedSplitProps(props, keys) {
+  var propsKeys = Object.keys(props);
+  var picked = {};
+  var omitted = {};
+
+  for (var _i = 0, _propsKeys = propsKeys; _i < _propsKeys.length; _i++) {
+    var key = _propsKeys[_i];
+
+    if (keys.indexOf(key) >= 0) {
+      picked[key] = props[key];
+    } else {
+      omitted[key] = props[key];
+    }
+  }
+
+  return [picked, omitted];
+}
+/**
+ * Splits an object (`props`) into a tuple where the first item
+ * is the `state` property, and the second item is the rest of the properties.
+ *
+ * It is also backward compatible with version 1. If `keys` are passed then
+ * splits an object (`props`) into a tuple where the first item is an object
+ * with the passed `keys`, and the second item is an object with these keys
+ * omitted.
+ *
+ * @example
+ * import { splitProps } from "reakit-utils";
+ *
+ * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
+ *
+ * @example
+ * import { splitProps } from "reakit-utils";
+ *
+ * splitProps({ state: { a: "a" }, b: "b" }); // [{ a: "a" }, { b: "b" }]
+ */
+
+
+function splitProps(props, keys) {
+  if (keys === void 0) {
+    keys = [];
+  }
+
+  if (!isPlainObject_isPlainObject(props.state)) {
+    return __deprecatedSplitProps(props, keys);
+  }
+
+  var _deprecatedSplitProp = __deprecatedSplitProps(props, [].concat(keys, ["state"])),
+      picked = _deprecatedSplitProp[0],
+      omitted = _deprecatedSplitProp[1];
+
+  var state = picked.state,
+      restPicked = es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(picked, ["state"]);
+
+  return [es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), restPicked), omitted];
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/shallowEqual.js
+/**
+ * Compares two objects.
+ *
+ * @example
+ * import { shallowEqual } from "reakit-utils";
+ *
+ * shallowEqual({ a: "a" }, {}); // false
+ * shallowEqual({ a: "a" }, { b: "b" }); // false
+ * shallowEqual({ a: "a" }, { a: "a" }); // true
+ * shallowEqual({ a: "a" }, { a: "a", b: "b" }); // false
+ */
+function shallowEqual_shallowEqual(objA, objB) {
+  if (objA === objB) return true;
+  if (!objA) return false;
+  if (!objB) return false;
+  if (typeof objA !== "object") return false;
+  if (typeof objB !== "object") return false;
+  var aKeys = Object.keys(objA);
+  var bKeys = Object.keys(objB);
+  var length = aKeys.length;
+  if (bKeys.length !== length) return false;
+
+  for (var _i = 0, _aKeys = aKeys; _i < _aKeys.length; _i++) {
+    var key = _aKeys[_i];
+
+    if (objA[key] !== objB[key]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/normalizePropsAreEqual.js
+
+
+
+
+/**
+ * This higher order functions take `propsAreEqual` function and
+ * returns a new function which normalizes the props.
+ *
+ * Normalizing in our case is making sure the `propsAreEqual` works with
+ * both version 1 (object spreading) and version 2 (state object) state passing.
+ *
+ * To achieve this, the returned function in case of a state object
+ * will spread the state object in both `prev` and `next props.
+ *
+ * Other case it just returns the function as is which makes sure
+ * that we are still backward compatible
+ */
+function normalizePropsAreEqual(propsAreEqual) {
+  if (propsAreEqual.name === "normalizePropsAreEqualInner") {
+    return propsAreEqual;
+  }
+
+  return function normalizePropsAreEqualInner(prev, next) {
+    if (!isPlainObject_isPlainObject(prev.state) || !isPlainObject_isPlainObject(next.state)) {
+      return propsAreEqual(prev, next);
+    }
+
+    return propsAreEqual(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, prev.state), prev), es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, next.state), next));
+  };
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createComponent.js
+
+
+
+
+
+
+
+
+function createComponent_forwardRef(component) {
+  return /*#__PURE__*/(0,external_React_.forwardRef)(component);
+}
+
+function createComponent_memo(component, propsAreEqual) {
+  return /*#__PURE__*/(0,external_React_.memo)(component, propsAreEqual);
+}
+
+/**
+ * Creates a React component.
+ *
+ * @example
+ * import { createComponent } from "reakit-system";
+ *
+ * const A = createComponent({ as: "a" });
+ *
+ * @param options
+ */
+function createComponent_createComponent(_ref) {
+  var type = _ref.as,
+      useHook = _ref.useHook,
+      shouldMemo = _ref.memo,
+      _ref$propsAreEqual = _ref.propsAreEqual,
+      propsAreEqual = _ref$propsAreEqual === void 0 ? useHook === null || useHook === void 0 ? void 0 : useHook.unstable_propsAreEqual : _ref$propsAreEqual,
+      _ref$keys = _ref.keys,
+      keys = _ref$keys === void 0 ? (useHook === null || useHook === void 0 ? void 0 : useHook.__keys) || [] : _ref$keys,
+      _ref$useCreateElement = _ref.useCreateElement,
+      useCreateElement$1 = _ref$useCreateElement === void 0 ? useCreateElement : _ref$useCreateElement;
+
+  var Comp = function Comp(_ref2, ref) {
+    var _ref2$as = _ref2.as,
+        as = _ref2$as === void 0 ? type : _ref2$as,
+        props = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_ref2, ["as"]);
+
+    if (useHook) {
+      var _as$render;
+
+      var _splitProps = splitProps(props, keys),
+          _options = _splitProps[0],
+          htmlProps = _splitProps[1];
+
+      var _useHook = useHook(_options, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
+        ref: ref
+      }, htmlProps)),
+          wrapElement = _useHook.wrapElement,
+          elementProps = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_useHook, ["wrapElement"]); // @ts-ignore
+
+
+      var asKeys = ((_as$render = as.render) === null || _as$render === void 0 ? void 0 : _as$render.__keys) || as.__keys;
+      var asOptions = asKeys && splitProps(props, asKeys)[0];
+      var allProps = asOptions ? _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, elementProps), asOptions) : elementProps;
+
+      var _element = useCreateElement$1(as, allProps);
+
+      if (wrapElement) {
+        return wrapElement(_element);
+      }
+
+      return _element;
+    }
+
+    return useCreateElement$1(as, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
+      ref: ref
+    }, props));
+  };
+
+  if (false) {}
+
+  Comp = createComponent_forwardRef(Comp);
+
+  if (shouldMemo) {
+    Comp = createComponent_memo(Comp, propsAreEqual && normalizePropsAreEqual(propsAreEqual));
+  }
+
+  Comp.__keys = keys;
+  Comp.unstable_propsAreEqual = normalizePropsAreEqual(propsAreEqual || shallowEqual_shallowEqual);
+  return Comp;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useToken.js
+
+
+
+/**
+ * React custom hook that returns the value of any token defined in the
+ * SystemContext. It's mainly used internally in [`useOptions`](#useoptions)
+ * and [`useProps`](#useprops).
+ *
+ * @example
+ * import { SystemProvider, useToken } from "reakit-system";
+ *
+ * const system = {
+ *   token: "value",
+ * };
+ *
+ * function Component(props) {
+ *   const token = useToken("token", "default value");
+ *   return <div {...props}>{token}</div>;
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <Component />
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+function useToken(token, defaultValue) {
+  (0,external_React_.useDebugValue)(token);
+  var context = (0,external_React_.useContext)(SystemContext);
+  return context[token] != null ? context[token] : defaultValue;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useProps.js
+
+
+
+
+/**
+ * React custom hook that returns the props returned by a given
+ * `use${name}Props` in the SystemContext.
+ *
+ * @example
+ * import { SystemProvider, useProps } from "reakit-system";
+ *
+ * const system = {
+ *   useAProps(options, htmlProps) {
+ *     return {
+ *       ...htmlProps,
+ *       href: options.url,
+ *     };
+ *   },
+ * };
+ *
+ * function A({ url, ...htmlProps }) {
+ *   const props = useProps("A", { url }, htmlProps);
+ *   return <a {...props} />;
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <A url="url">It will convert url into href in useAProps</A>
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+function useProps(name, options, htmlProps) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  if (htmlProps === void 0) {
+    htmlProps = {};
+  }
+
+  var hookName = "use" + name + "Props";
+  (0,external_React_.useDebugValue)(hookName);
+  var useHook = useToken(hookName);
+
+  if (useHook) {
+    return useHook(options, htmlProps);
+  }
+
+  return htmlProps;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useOptions.js
+
+
+
+
+
+/**
+ * React custom hook that returns the options returned by a given
+ * `use${name}Options` in the SystemContext.
+ *
+ * @example
+ * import React from "react";
+ * import { SystemProvider, useOptions } from "reakit-system";
+ *
+ * const system = {
+ *   useAOptions(options, htmlProps) {
+ *     return {
+ *       ...options,
+ *       url: htmlProps.href,
+ *     };
+ *   },
+ * };
+ *
+ * function A({ url, ...htmlProps }) {
+ *   const options = useOptions("A", { url }, htmlProps);
+ *   return <a href={options.url} {...htmlProps} />;
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <A href="url">
+ *         It will convert href into url in useAOptions and then url into href in A
+ *       </A>
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+function useOptions(name, options, htmlProps) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  if (htmlProps === void 0) {
+    htmlProps = {};
+  }
+
+  var hookName = "use" + name + "Options";
+  (0,external_React_.useDebugValue)(hookName);
+  var useHook = useToken(hookName);
+
+  if (useHook) {
+    return _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, options), useHook(options, htmlProps));
+  }
+
+  return options;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/toArray.js
+/**
+ * Transforms `arg` into an array if it's not already.
+ *
+ * @example
+ * import { toArray } from "reakit-utils";
+ *
+ * toArray("a"); // ["a"]
+ * toArray(["a"]); // ["a"]
+ */
+function toArray_toArray(arg) {
+  if (Array.isArray(arg)) {
+    return arg;
+  }
+
+  return typeof arg !== "undefined" ? [arg] : [];
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createHook.js
+
+
+
+
+
+
+
+
+
+/**
+ * Creates a React custom hook that will return component props.
+ *
+ * @example
+ * import { createHook } from "reakit-system";
+ *
+ * const useA = createHook({
+ *   name: "A",
+ *   keys: ["url"], // custom props/options keys
+ *   useProps(options, htmlProps) {
+ *     return {
+ *       ...htmlProps,
+ *       href: options.url,
+ *     };
+ *   },
+ * });
+ *
+ * function A({ url, ...htmlProps }) {
+ *   const props = useA({ url }, htmlProps);
+ *   return <a {...props} />;
+ * }
+ *
+ * @param options
+ */
+function createHook_createHook(options) {
+  var _options$useState, _composedHooks$;
+
+  var composedHooks = toArray_toArray(options.compose);
+
+  var __useOptions = function __useOptions(hookOptions, htmlProps) {
+    // Call the current hook's useOptions first
+    if (options.useOptions) {
+      hookOptions = options.useOptions(hookOptions, htmlProps);
+    } // If there's name, call useOptions from the system context
+
+
+    if (options.name) {
+      hookOptions = useOptions(options.name, hookOptions, htmlProps);
+    } // Run composed hooks useOptions
+
+
+    if (options.compose) {
+      for (var _iterator = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step; !(_step = _iterator()).done;) {
+        var hook = _step.value;
+        hookOptions = hook.__useOptions(hookOptions, htmlProps);
+      }
+    }
+
+    return hookOptions;
+  };
+
+  var useHook = function useHook(hookOptions, htmlProps, unstable_ignoreUseOptions) {
+    if (hookOptions === void 0) {
+      hookOptions = {};
+    }
+
+    if (htmlProps === void 0) {
+      htmlProps = {};
+    }
+
+    if (unstable_ignoreUseOptions === void 0) {
+      unstable_ignoreUseOptions = false;
+    }
+
+    // This won't execute when useHook was called from within another useHook
+    if (!unstable_ignoreUseOptions) {
+      hookOptions = __useOptions(hookOptions, htmlProps);
+    } // Call the current hook's useProps
+
+
+    if (options.useProps) {
+      htmlProps = options.useProps(hookOptions, htmlProps);
+    } // If there's name, call useProps from the system context
+
+
+    if (options.name) {
+      htmlProps = useProps(options.name, hookOptions, htmlProps);
+    }
+
+    if (options.compose) {
+      if (options.useComposeOptions) {
+        hookOptions = options.useComposeOptions(hookOptions, htmlProps);
+      }
+
+      if (options.useComposeProps) {
+        htmlProps = options.useComposeProps(hookOptions, htmlProps);
+      } else {
+        for (var _iterator2 = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step2; !(_step2 = _iterator2()).done;) {
+          var hook = _step2.value;
+          htmlProps = hook(hookOptions, htmlProps, true);
+        }
+      }
+    } // Remove undefined values from htmlProps
+
+
+    var finalHTMLProps = {};
+    var definedHTMLProps = htmlProps || {};
+
+    for (var prop in definedHTMLProps) {
+      if (definedHTMLProps[prop] !== undefined) {
+        finalHTMLProps[prop] = definedHTMLProps[prop];
+      }
+    }
+
+    return finalHTMLProps;
+  };
+
+  useHook.__useOptions = __useOptions;
+  var composedKeys = composedHooks.reduce(function (keys, hook) {
+    keys.push.apply(keys, hook.__keys || []);
+    return keys;
+  }, []); // It's used by createComponent to split option props (keys) and html props
+
+  useHook.__keys = [].concat(composedKeys, ((_options$useState = options.useState) === null || _options$useState === void 0 ? void 0 : _options$useState.__keys) || [], options.keys || []);
+  useHook.unstable_propsAreEqual = options.propsAreEqual || ((_composedHooks$ = composedHooks[0]) === null || _composedHooks$ === void 0 ? void 0 : _composedHooks$.unstable_propsAreEqual) || shallowEqual_shallowEqual;
+
+  if (false) {}
+
+  return useHook;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Role/Role.js
+
+
+
+
+
+// Automatically generated
+var ROLE_KEYS = ["unstable_system"];
+
+var Role_useRole = createHook_createHook({
+  name: "Role",
+  keys: ROLE_KEYS,
+  propsAreEqual: function propsAreEqual(prev, next) {
+    var prevSystem = prev.unstable_system,
+        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["unstable_system"]);
+
+    var nextSystem = next.unstable_system,
+        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["unstable_system"]);
+
+    if (prevSystem !== nextSystem && !shallowEqual_shallowEqual(prevSystem, nextSystem)) {
+      return false;
+    }
+
+    return shallowEqual_shallowEqual(prevProps, nextProps);
+  }
+});
+var Role_Role = createComponent_createComponent({
+  as: "div",
+  useHook: Role_useRole
+});
+
+
+
 ;// CONCATENATED MODULE: ./node_modules/reakit/es/Separator/Separator.js
 
 
@@ -44851,27 +43502,27 @@ const CardBody = contextConnect(UnconnectedCardBody, 'CardBody');
 // Automatically generated
 var SEPARATOR_KEYS = ["orientation"];
 
-var useSeparator = createHook({
+var useSeparator = createHook_createHook({
   name: "Separator",
-  compose: useRole,
+  compose: Role_useRole,
   keys: SEPARATOR_KEYS,
   useOptions: function useOptions(_ref) {
     var _ref$orientation = _ref.orientation,
         orientation = _ref$orientation === void 0 ? "horizontal" : _ref$orientation,
         options = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["orientation"]);
 
-    return _objectSpread2({
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
       orientation: orientation
     }, options);
   },
   useProps: function useProps(options, htmlProps) {
-    return _objectSpread2({
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
       role: "separator",
       "aria-orientation": options.orientation
     }, htmlProps);
   }
 });
-var Separator = createComponent({
+var Separator = createComponent_createComponent({
   as: "hr",
   memo: true,
   useHook: useSeparator
@@ -45787,6 +44438,7 @@ function getHorizontalRelativeGradientPosition(mouseXCoordinate, containerElemen
 
 
 
+
 function ControlPointButton({
   isOpen,
   position,
@@ -45818,7 +44470,11 @@ function GradientColorPickerDropdown({
   // Open the popover below the gradient control/insertion point
   const popoverProps = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     placement: 'bottom',
-    offset: 8
+    offset: 8,
+    // Disabling resize as it would otherwise cause the popover to show
+    // scrollbars while dragging the color picker's handle close to the
+    // popover edge.
+    resize: false
   }), []);
   const mergedClassName = classnames_default()('components-custom-gradient-picker__control-point-dropdown', className);
   return (0,external_React_.createElement)(CustomColorPickerDropdown, {
@@ -45928,7 +44584,9 @@ function ControlPoints({
       }),
       renderContent: ({
         onClose
-      }) => (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(LegacyAdapter, {
+      }) => (0,external_React_.createElement)(dropdown_content_wrapper, {
+        paddingSize: "none"
+      }, (0,external_React_.createElement)(LegacyAdapter, {
         enableAlpha: !disableAlpha,
         color: point.color,
         onChange: color => {
@@ -45985,7 +44643,9 @@ function InsertPoint({
       className: "components-custom-gradient-picker__insert-point-dropdown",
       icon: library_plus
     }),
-    renderContent: () => (0,external_React_.createElement)(LegacyAdapter, {
+    renderContent: () => (0,external_React_.createElement)(dropdown_content_wrapper, {
+      paddingSize: "none"
+    }, (0,external_React_.createElement)(LegacyAdapter, {
       enableAlpha: !disableAlpha,
       onChange: color => {
         if (!alreadyInsertedPoint) {
@@ -45995,7 +44655,7 @@ function InsertPoint({
           onChange(updateControlPointColorByPosition(controlPoints, insertPosition, w(color).toRgbString()));
         }
       }
-    }),
+    })),
     style: insertPosition !== null ? {
       left: `${insertPosition}%`,
       transform: 'translateX( -50% )'
@@ -47450,6 +46110,10 @@ function ColorPickerPopover({
   const popoverProps = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     shift: true,
     offset: 20,
+    // Disabling resize as it would otherwise cause the popover to show
+    // scrollbars while dragging the color picker's handle close to the
+    // popover edge.
+    resize: false,
     placement: 'left-start',
     ...receivedPopoverProps,
     className: classnames_default()('components-palette-edit__popover', receivedPopoverProps?.className)
@@ -48301,6 +46965,3109 @@ function ComboboxControl(props) {
 
 /* harmony default export */ var combobox_control = (ComboboxControl);
 
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useForkRef.js
+
+
+// https://github.com/mui-org/material-ui/blob/2bcc874cf07b81202968f769cb9c2398c7c11311/packages/material-ui/src/utils/useForkRef.js
+
+function useForkRef_setRef(ref, value) {
+  if (value === void 0) {
+    value = null;
+  }
+
+  if (!ref) return;
+
+  if (typeof ref === "function") {
+    ref(value);
+  } else {
+    ref.current = value;
+  }
+}
+/**
+ * Merges up to two React Refs into a single memoized function React Ref so you
+ * can pass it to an element.
+ *
+ * @example
+ * import React from "react";
+ * import { useForkRef } from "reakit-utils";
+ *
+ * const Component = React.forwardRef((props, ref) => {
+ *   const internalRef = React.useRef();
+ *   return <div {...props} ref={useForkRef(internalRef, ref)} />;
+ * });
+ */
+
+
+function useForkRef(refA, refB) {
+  return (0,external_React_.useMemo)(function () {
+    if (refA == null && refB == null) {
+      return null;
+    }
+
+    return function (value) {
+      useForkRef_setRef(refA, value);
+      useForkRef_setRef(refB, value);
+    };
+  }, [refA, refB]);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-warning/es/useWarning.js
+
+
+
+
+
+function useWarning_isRefObject(ref) {
+  return isObject(ref) && "current" in ref;
+}
+/**
+ * Logs `messages` to the console using `console.warn` based on a `condition`.
+ * This should be used inside components.
+ */
+
+
+function useWarning(condition) {
+  for (var _len = arguments.length, messages = new Array(_len > 1 ? _len - 1 : 0), _key = 1; _key < _len; _key++) {
+    messages[_key - 1] = arguments[_key];
+  }
+
+  if (false) {}
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-warning/es/index.js
+
+
+
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getDocument.js
+/**
+ * Returns `element.ownerDocument || document`.
+ */
+function getDocument_getDocument(element) {
+  return element ? element.ownerDocument || element : document;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getWindow.js
+
+
+// Thanks to Fluent UI for doing the [research on IE11 memory leak](https://github.com/microsoft/fluentui/pull/9010#issuecomment-490768427)
+
+var _window; // Note: Accessing "window" in IE11 is somewhat expensive, and calling "typeof window"
+// hits a memory leak, whereas aliasing it and calling "typeof _window" does not.
+// Caching the window value at the file scope lets us minimize the impact.
+
+
+try {
+  _window = window;
+} catch (e) {
+  /* no-op */
+}
+/**
+ * Returns `element.ownerDocument.defaultView || window`.
+ */
+
+
+function getWindow_getWindow(element) {
+  if (!element) {
+    return _window;
+  }
+
+  return getDocument_getDocument(element).defaultView || _window;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/canUseDOM.js
+
+
+
+function canUseDOM_checkIsBrowser() {
+  var _window = getWindow_getWindow();
+
+  return Boolean(typeof _window !== "undefined" && _window.document && _window.document.createElement);
+}
+/**
+ * It's `true` if it is running in a browser environment or `false` if it is not (SSR).
+ *
+ * @example
+ * import { canUseDOM } from "reakit-utils";
+ *
+ * const title = canUseDOM ? document.title : "";
+ */
+
+
+var canUseDOM_canUseDOM = canUseDOM_checkIsBrowser();
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useIsomorphicEffect.js
+
+
+
+
+
+/**
+ * `React.useLayoutEffect` that fallbacks to `React.useEffect` on server side
+ * rendering.
+ */
+
+var useIsomorphicEffect = !canUseDOM_canUseDOM ? external_React_.useEffect : external_React_.useLayoutEffect;
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useLiveRef.js
+
+
+
+
+
+
+/**
+ * A `React.Ref` that keeps track of the passed `value`.
+ */
+
+function useLiveRef_useLiveRef(value) {
+  var ref = (0,external_React_.useRef)(value);
+  useIsomorphicEffect(function () {
+    ref.current = value;
+  });
+  return ref;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isSelfTarget.js
+/**
+ * Returns `true` if `event.target` and `event.currentTarget` are the same.
+ */
+function isSelfTarget_isSelfTarget(event) {
+  return event.target === event.currentTarget;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isButton.js
+var isButton_buttonInputTypes = ["button", "color", "file", "image", "reset", "submit"];
+/**
+ * Checks whether `element` is a native HTML button element.
+ *
+ * @example
+ * import { isButton } from "reakit-utils";
+ *
+ * isButton(document.querySelector("button")); // true
+ * isButton(document.querySelector("input[type='button']")); // true
+ * isButton(document.querySelector("div")); // false
+ * isButton(document.querySelector("input[type='text']")); // false
+ * isButton(document.querySelector("div[role='button']")); // false
+ *
+ * @returns {boolean}
+ */
+
+function isButton_isButton(element) {
+  if (element.tagName === "BUTTON") return true;
+
+  if (element.tagName === "INPUT") {
+    var input = element;
+    return isButton_buttonInputTypes.indexOf(input.type) !== -1;
+  }
+
+  return false;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getActiveElement.js
+
+
+/**
+ * Returns `element.ownerDocument.activeElement`.
+ */
+
+function getActiveElement_getActiveElement(element) {
+  var _getDocument = getDocument_getDocument(element),
+      activeElement = _getDocument.activeElement;
+
+  if (!(activeElement !== null && activeElement !== void 0 && activeElement.nodeName)) {
+    // In IE11, activeElement might be an empty object if we're interacting
+    // with elements inside of an iframe.
+    return null;
+  }
+
+  return activeElement;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/contains.js
+/**
+ * Similar to `Element.prototype.contains`, but a little bit faster when
+ * `element` is the same as `child`.
+ *
+ * @example
+ * import { contains } from "reakit-utils";
+ *
+ * contains(document.getElementById("parent"), document.getElementById("child"));
+ */
+function contains_contains(parent, child) {
+  return parent === child || parent.contains(child);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/hasFocusWithin.js
+
+
+
+
+/**
+ * Checks if `element` has focus within. Elements that are referenced by
+ * `aria-activedescendant` are also considered.
+ *
+ * @example
+ * import { hasFocusWithin } from "reakit-utils";
+ *
+ * hasFocusWithin(document.getElementById("id"));
+ */
+
+function hasFocusWithin_hasFocusWithin(element) {
+  var activeElement = getActiveElement_getActiveElement(element);
+  if (!activeElement) return false;
+  if (contains_contains(element, activeElement)) return true;
+  var activeDescendant = activeElement.getAttribute("aria-activedescendant");
+  if (!activeDescendant) return false;
+  if (activeDescendant === element.id) return true;
+  return !!element.querySelector("#" + activeDescendant);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isPortalEvent.js
+
+
+/**
+ * Returns `true` if `event` has been fired within a React Portal element.
+ */
+
+function isPortalEvent_isPortalEvent(event) {
+  return !contains_contains(event.currentTarget, event.target);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/dom.js
+
+
+
+
+/**
+ * Checks if a given string exists in the user agent string.
+ */
+
+function isUA(string) {
+  if (!canUseDOM_canUseDOM) return false;
+  return window.navigator.userAgent.indexOf(string) !== -1;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/matches.js
+/**
+ * Ponyfill for `Element.prototype.matches`
+ *
+ * @see https://developer.mozilla.org/en-US/docs/Web/API/Element/matches
+ */
+function matches_matches(element, selectors) {
+  if ("matches" in element) {
+    return element.matches(selectors);
+  }
+
+  if ("msMatchesSelector" in element) {
+    return element.msMatchesSelector(selectors);
+  }
+
+  return element.webkitMatchesSelector(selectors);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/tabbable.js
+
+
+
+
+
+/** @module tabbable */
+var tabbable_selector = "input:not([type='hidden']):not([disabled]), select:not([disabled]), " + "textarea:not([disabled]), a[href], button:not([disabled]), [tabindex], " + "iframe, object, embed, area[href], audio[controls], video[controls], " + "[contenteditable]:not([contenteditable='false'])";
+
+function tabbable_isVisible(element) {
+  var htmlElement = element;
+  return htmlElement.offsetWidth > 0 || htmlElement.offsetHeight > 0 || element.getClientRects().length > 0;
+}
+
+function tabbable_hasNegativeTabIndex(element) {
+  var tabIndex = parseInt(element.getAttribute("tabindex") || "0", 10);
+  return tabIndex < 0;
+}
+/**
+ * Checks whether `element` is focusable or not.
+ *
+ * @memberof tabbable
+ *
+ * @example
+ * import { isFocusable } from "reakit-utils";
+ *
+ * isFocusable(document.querySelector("input")); // true
+ * isFocusable(document.querySelector("input[tabindex='-1']")); // true
+ * isFocusable(document.querySelector("input[hidden]")); // false
+ * isFocusable(document.querySelector("input:disabled")); // false
+ */
+
+
+function tabbable_isFocusable(element) {
+  return matches_matches(element, tabbable_selector) && tabbable_isVisible(element);
+}
+/**
+ * Checks whether `element` is tabbable or not.
+ *
+ * @memberof tabbable
+ *
+ * @example
+ * import { isTabbable } from "reakit-utils";
+ *
+ * isTabbable(document.querySelector("input")); // true
+ * isTabbable(document.querySelector("input[tabindex='-1']")); // false
+ * isTabbable(document.querySelector("input[hidden]")); // false
+ * isTabbable(document.querySelector("input:disabled")); // false
+ */
+
+function tabbable_isTabbable(element) {
+  return tabbable_isFocusable(element) && !tabbable_hasNegativeTabIndex(element);
+}
+/**
+ * Returns all the focusable elements in `container`.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ *
+ * @returns {Element[]}
+ */
+
+function tabbable_getAllFocusableIn(container) {
+  var allFocusable = Array.from(container.querySelectorAll(tabbable_selector));
+  allFocusable.unshift(container);
+  return allFocusable.filter(tabbable_isFocusable);
+}
+/**
+ * Returns the first focusable element in `container`.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ *
+ * @returns {Element|null}
+ */
+
+function tabbable_getFirstFocusableIn(container) {
+  var _getAllFocusableIn = tabbable_getAllFocusableIn(container),
+      first = _getAllFocusableIn[0];
+
+  return first || null;
+}
+/**
+ * Returns all the tabbable elements in `container`, including the container
+ * itself.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ * @param fallbackToFocusable If `true`, it'll return focusable elements if there are no tabbable ones.
+ *
+ * @returns {Element[]}
+ */
+
+function tabbable_getAllTabbableIn(container, fallbackToFocusable) {
+  var allFocusable = Array.from(container.querySelectorAll(tabbable_selector));
+  var allTabbable = allFocusable.filter(tabbable_isTabbable);
+
+  if (tabbable_isTabbable(container)) {
+    allTabbable.unshift(container);
+  }
+
+  if (!allTabbable.length && fallbackToFocusable) {
+    return allFocusable;
+  }
+
+  return allTabbable;
+}
+/**
+ * Returns the first tabbable element in `container`, including the container
+ * itself if it's tabbable.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ * @param fallbackToFocusable If `true`, it'll return the first focusable element if there are no tabbable ones.
+ *
+ * @returns {Element|null}
+ */
+
+function tabbable_getFirstTabbableIn(container, fallbackToFocusable) {
+  var _getAllTabbableIn = tabbable_getAllTabbableIn(container, fallbackToFocusable),
+      first = _getAllTabbableIn[0];
+
+  return first || null;
+}
+/**
+ * Returns the last tabbable element in `container`, including the container
+ * itself if it's tabbable.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ * @param fallbackToFocusable If `true`, it'll return the last focusable element if there are no tabbable ones.
+ *
+ * @returns {Element|null}
+ */
+
+function tabbable_getLastTabbableIn(container, fallbackToFocusable) {
+  var allTabbable = tabbable_getAllTabbableIn(container, fallbackToFocusable);
+  return allTabbable[allTabbable.length - 1] || null;
+}
+/**
+ * Returns the next tabbable element in `container`.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ * @param fallbackToFocusable If `true`, it'll return the next focusable element if there are no tabbable ones.
+ *
+ * @returns {Element|null}
+ */
+
+function tabbable_getNextTabbableIn(container, fallbackToFocusable) {
+  var activeElement = getActiveElement(container);
+  var allFocusable = tabbable_getAllFocusableIn(container);
+  var index = allFocusable.indexOf(activeElement);
+  var slice = allFocusable.slice(index + 1);
+  return slice.find(tabbable_isTabbable) || allFocusable.find(tabbable_isTabbable) || (fallbackToFocusable ? slice[0] : null);
+}
+/**
+ * Returns the previous tabbable element in `container`.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ * @param fallbackToFocusable If `true`, it'll return the previous focusable element if there are no tabbable ones.
+ *
+ * @returns {Element|null}
+ */
+
+function tabbable_getPreviousTabbableIn(container, fallbackToFocusable) {
+  var activeElement = getActiveElement(container);
+  var allFocusable = tabbable_getAllFocusableIn(container).reverse();
+  var index = allFocusable.indexOf(activeElement);
+  var slice = allFocusable.slice(index + 1);
+  return slice.find(tabbable_isTabbable) || allFocusable.find(tabbable_isTabbable) || (fallbackToFocusable ? slice[0] : null);
+}
+/**
+ * Returns the closest focusable element.
+ *
+ * @memberof tabbable
+ *
+ * @param {Element} container
+ *
+ * @returns {Element|null}
+ */
+
+function tabbable_getClosestFocusable(element) {
+  while (element && !tabbable_isFocusable(element)) {
+    element = closest(element, tabbable_selector);
+  }
+
+  return element;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Tabbable/Tabbable.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Automatically generated
+var TABBABLE_KEYS = ["disabled", "focusable"];
+
+var isSafariOrFirefoxOnMac = isUA("Mac") && !isUA("Chrome") && (isUA("Safari") || isUA("Firefox"));
+
+function Tabbable_focusIfNeeded(element) {
+  if (!hasFocusWithin_hasFocusWithin(element) && tabbable_isFocusable(element)) {
+    element.focus();
+  }
+}
+
+function Tabbable_isNativeTabbable(element) {
+  return ["BUTTON", "INPUT", "SELECT", "TEXTAREA", "A"].includes(element.tagName);
+}
+
+function Tabbable_supportsDisabledAttribute(element) {
+  return ["BUTTON", "INPUT", "SELECT", "TEXTAREA"].includes(element.tagName);
+}
+
+function Tabbable_getTabIndex(trulyDisabled, nativeTabbable, supportsDisabled, htmlTabIndex) {
+  if (trulyDisabled) {
+    if (nativeTabbable && !supportsDisabled) {
+      // Anchor, audio and video tags don't support the `disabled` attribute.
+      // We must pass tabIndex={-1} so they don't receive focus on tab.
+      return -1;
+    } // Elements that support the `disabled` attribute don't need tabIndex.
+
+
+    return undefined;
+  }
+
+  if (nativeTabbable) {
+    // If the element is enabled and it's natively tabbable, we don't need to
+    // specify a tabIndex attribute unless it's explicitly set by the user.
+    return htmlTabIndex;
+  } // If the element is enabled and is not natively tabbable, we have to
+  // fallback tabIndex={0}.
+
+
+  return htmlTabIndex || 0;
+}
+
+function Tabbable_useDisableEvent(htmlEventRef, disabled) {
+  return (0,external_React_.useCallback)(function (event) {
+    var _htmlEventRef$current;
+
+    (_htmlEventRef$current = htmlEventRef.current) === null || _htmlEventRef$current === void 0 ? void 0 : _htmlEventRef$current.call(htmlEventRef, event);
+    if (event.defaultPrevented) return;
+
+    if (disabled) {
+      event.stopPropagation();
+      event.preventDefault();
+    }
+  }, [htmlEventRef, disabled]);
+}
+
+var useTabbable = createHook_createHook({
+  name: "Tabbable",
+  compose: Role_useRole,
+  keys: TABBABLE_KEYS,
+  useOptions: function useOptions(options, _ref) {
+    var disabled = _ref.disabled;
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      disabled: disabled
+    }, options);
+  },
+  useProps: function useProps(options, _ref2) {
+    var htmlRef = _ref2.ref,
+        htmlTabIndex = _ref2.tabIndex,
+        htmlOnClickCapture = _ref2.onClickCapture,
+        htmlOnMouseDownCapture = _ref2.onMouseDownCapture,
+        htmlOnMouseDown = _ref2.onMouseDown,
+        htmlOnKeyPressCapture = _ref2.onKeyPressCapture,
+        htmlStyle = _ref2.style,
+        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref2, ["ref", "tabIndex", "onClickCapture", "onMouseDownCapture", "onMouseDown", "onKeyPressCapture", "style"]);
+
+    var ref = (0,external_React_.useRef)(null);
+    var onClickCaptureRef = useLiveRef_useLiveRef(htmlOnClickCapture);
+    var onMouseDownCaptureRef = useLiveRef_useLiveRef(htmlOnMouseDownCapture);
+    var onMouseDownRef = useLiveRef_useLiveRef(htmlOnMouseDown);
+    var onKeyPressCaptureRef = useLiveRef_useLiveRef(htmlOnKeyPressCapture);
+    var trulyDisabled = !!options.disabled && !options.focusable;
+
+    var _React$useState = (0,external_React_.useState)(true),
+        nativeTabbable = _React$useState[0],
+        setNativeTabbable = _React$useState[1];
+
+    var _React$useState2 = (0,external_React_.useState)(true),
+        supportsDisabled = _React$useState2[0],
+        setSupportsDisabled = _React$useState2[1];
+
+    var style = options.disabled ? _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      pointerEvents: "none"
+    }, htmlStyle) : htmlStyle;
+    useIsomorphicEffect(function () {
+      var tabbable = ref.current;
+
+      if (!tabbable) {
+         false ? 0 : void 0;
+        return;
+      }
+
+      if (!Tabbable_isNativeTabbable(tabbable)) {
+        setNativeTabbable(false);
+      }
+
+      if (!Tabbable_supportsDisabledAttribute(tabbable)) {
+        setSupportsDisabled(false);
+      }
+    }, []);
+    var onClickCapture = Tabbable_useDisableEvent(onClickCaptureRef, options.disabled);
+    var onMouseDownCapture = Tabbable_useDisableEvent(onMouseDownCaptureRef, options.disabled);
+    var onKeyPressCapture = Tabbable_useDisableEvent(onKeyPressCaptureRef, options.disabled);
+    var onMouseDown = (0,external_React_.useCallback)(function (event) {
+      var _onMouseDownRef$curre;
+
+      (_onMouseDownRef$curre = onMouseDownRef.current) === null || _onMouseDownRef$curre === void 0 ? void 0 : _onMouseDownRef$curre.call(onMouseDownRef, event);
+      var element = event.currentTarget;
+      if (event.defaultPrevented) return; // Safari and Firefox on MacOS don't focus on buttons on mouse down
+      // like other browsers/platforms. Instead, they focus on the closest
+      // focusable ancestor element, which is ultimately the body element. So
+      // we make sure to give focus to the tabbable element on mouse down so
+      // it works consistently across browsers.
+
+      if (!isSafariOrFirefoxOnMac) return;
+      if (isPortalEvent_isPortalEvent(event)) return;
+      if (!isButton_isButton(element)) return; // We can't focus right away after on mouse down, otherwise it would
+      // prevent drag events from happening. So we schedule the focus to the
+      // next animation frame.
+
+      var raf = requestAnimationFrame(function () {
+        element.removeEventListener("mouseup", focusImmediately, true);
+        Tabbable_focusIfNeeded(element);
+      }); // If mouseUp happens before the next animation frame (which is common
+      // on touch screens or by just tapping the trackpad on MacBook's), we
+      // cancel the animation frame and immediately focus on the element.
+
+      var focusImmediately = function focusImmediately() {
+        cancelAnimationFrame(raf);
+        Tabbable_focusIfNeeded(element);
+      }; // By listening to the event in the capture phase, we make sure the
+      // focus event is fired before the onMouseUp and onMouseUpCapture React
+      // events, which is aligned with the default browser behavior.
+
+
+      element.addEventListener("mouseup", focusImmediately, {
+        once: true,
+        capture: true
+      });
+    }, []);
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      ref: useForkRef(ref, htmlRef),
+      style: style,
+      tabIndex: Tabbable_getTabIndex(trulyDisabled, nativeTabbable, supportsDisabled, htmlTabIndex),
+      disabled: trulyDisabled && supportsDisabled ? true : undefined,
+      "aria-disabled": options.disabled ? true : undefined,
+      onClickCapture: onClickCapture,
+      onMouseDownCapture: onMouseDownCapture,
+      onMouseDown: onMouseDown,
+      onKeyPressCapture: onKeyPressCapture
+    }, htmlProps);
+  }
+});
+var Tabbable = createComponent_createComponent({
+  as: "div",
+  useHook: useTabbable
+});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/createEvent.js
+
+
+/**
+ * Creates an `Event` in a way that also works on IE 11.
+ *
+ * @example
+ * import { createEvent } from "reakit-utils";
+ *
+ * const el = document.getElementById("id");
+ * el.dispatchEvent(createEvent(el, "blur", { bubbles: false }));
+ */
+
+function createEvent(element, type, eventInit) {
+  if (typeof Event === "function") {
+    return new Event(type, eventInit);
+  } // IE 11 doesn't support Event constructors
+
+
+  var event = getDocument_getDocument(element).createEvent("Event");
+  event.initEvent(type, eventInit === null || eventInit === void 0 ? void 0 : eventInit.bubbles, eventInit === null || eventInit === void 0 ? void 0 : eventInit.cancelable);
+  return event;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/fireBlurEvent.js
+
+
+
+
+function createFocusEvent(element, type, eventInit) {
+  if (eventInit === void 0) {
+    eventInit = {};
+  }
+
+  if (typeof FocusEvent === "function") {
+    return new FocusEvent(type, eventInit);
+  }
+
+  return createEvent(element, type, eventInit);
+}
+/**
+ * Creates and dispatches a blur event in a way that also works on IE 11.
+ *
+ * @example
+ * import { fireBlurEvent } from "reakit-utils";
+ *
+ * fireBlurEvent(document.getElementById("id"));
+ */
+
+
+function fireBlurEvent_fireBlurEvent(element, eventInit) {
+  var event = createFocusEvent(element, "blur", eventInit);
+  var defaultAllowed = element.dispatchEvent(event);
+
+  var bubbleInit = es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, eventInit), {}, {
+    bubbles: true
+  });
+
+  element.dispatchEvent(createFocusEvent(element, "focusout", bubbleInit));
+  return defaultAllowed;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/fireKeyboardEvent.js
+
+
+
+function createKeyboardEvent(element, type, eventInit) {
+  if (eventInit === void 0) {
+    eventInit = {};
+  }
+
+  if (typeof KeyboardEvent === "function") {
+    return new KeyboardEvent(type, eventInit);
+  } // IE 11 doesn't support Event constructors
+
+
+  var event = getDocument_getDocument(element).createEvent("KeyboardEvent");
+  event.initKeyboardEvent(type, eventInit.bubbles, eventInit.cancelable, getWindow_getWindow(element), eventInit.key, eventInit.location, eventInit.ctrlKey, eventInit.altKey, eventInit.shiftKey, eventInit.metaKey);
+  return event;
+}
+/**
+ * Creates and dispatches `KeyboardEvent` in a way that also works on IE 11.
+ *
+ * @example
+ * import { fireKeyboardEvent } from "reakit-utils";
+ *
+ * fireKeyboardEvent(document.getElementById("id"), "keydown", {
+ *   key: "ArrowDown",
+ *   shiftKey: true,
+ * });
+ */
+
+
+function fireKeyboardEvent_fireKeyboardEvent(element, type, eventInit) {
+  return element.dispatchEvent(createKeyboardEvent(element, type, eventInit));
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/getNextActiveElementOnBlur.js
+
+
+
+
+
+var isIE11 = canUseDOM_canUseDOM && "msCrypto" in window;
+/**
+ * Cross-browser method that returns the next active element (the element that
+ * is receiving focus) after a blur event is dispatched. It receives the blur
+ * event object as the argument.
+ *
+ * @example
+ * import { getNextActiveElementOnBlur } from "reakit-utils";
+ *
+ * const element = document.getElementById("id");
+ * element.addEventListener("blur", (event) => {
+ *   const nextActiveElement = getNextActiveElementOnBlur(event);
+ * });
+ */
+
+function getNextActiveElementOnBlur(event) {
+  // IE 11 doesn't support event.relatedTarget on blur.
+  // document.activeElement points the the next active element.
+  // On modern browsers, document.activeElement points to the current target.
+  if (isIE11) {
+    var activeElement = getActiveElement_getActiveElement(event.currentTarget);
+    return activeElement;
+  }
+
+  return event.relatedTarget;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/reverse-30eaa122.js
+
+
+function groupItems(items) {
+  var groups = [[]];
+
+  var _loop = function _loop() {
+    var item = _step.value;
+    var group = groups.find(function (g) {
+      return !g[0] || g[0].groupId === item.groupId;
+    });
+
+    if (group) {
+      group.push(item);
+    } else {
+      groups.push([item]);
+    }
+  };
+
+  for (var _iterator = _createForOfIteratorHelperLoose(items), _step; !(_step = _iterator()).done;) {
+    _loop();
+  }
+
+  return groups;
+}
+
+function flatten(grid) {
+  var flattened = [];
+
+  for (var _iterator = _createForOfIteratorHelperLoose(grid), _step; !(_step = _iterator()).done;) {
+    var row = _step.value;
+    flattened.push.apply(flattened, row);
+  }
+
+  return flattened;
+}
+
+function reverse(array) {
+  return array.slice().reverse();
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/getCurrentId-5aa9849e.js
+function getCurrentId_5aa9849e_findFirstEnabledItem(items, excludeId) {
+  if (excludeId) {
+    return items.find(function (item) {
+      return !item.disabled && item.id !== excludeId;
+    });
+  }
+
+  return items.find(function (item) {
+    return !item.disabled;
+  });
+}
+
+function getCurrentId(options, passedId) {
+  var _findFirstEnabledItem;
+
+  if (passedId || passedId === null) {
+    return passedId;
+  }
+
+  if (options.currentId || options.currentId === null) {
+    return options.currentId;
+  }
+
+  return (_findFirstEnabledItem = getCurrentId_5aa9849e_findFirstEnabledItem(options.items || [])) === null || _findFirstEnabledItem === void 0 ? void 0 : _findFirstEnabledItem.id;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/findEnabledItemById-8ddca752.js
+function findEnabledItemById(items, id) {
+  if (!id) return undefined;
+  return items === null || items === void 0 ? void 0 : items.find(function (item) {
+    return item.id === id && !item.disabled;
+  });
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/__keys-6742f591.js
+// Automatically generated
+var COMPOSITE_STATE_KEYS = ["baseId", "unstable_idCountRef", "setBaseId", "unstable_virtual", "rtl", "orientation", "items", "groups", "currentId", "loop", "wrap", "shift", "unstable_moves", "unstable_hasActiveWidget", "unstable_includesBaseElement", "registerItem", "unregisterItem", "registerGroup", "unregisterGroup", "move", "next", "previous", "up", "down", "first", "last", "sort", "unstable_setVirtual", "setRTL", "setOrientation", "setCurrentId", "setLoop", "setWrap", "setShift", "reset", "unstable_setIncludesBaseElement", "unstable_setHasActiveWidget"];
+var COMPOSITE_KEYS = COMPOSITE_STATE_KEYS;
+var COMPOSITE_GROUP_KEYS = COMPOSITE_KEYS;
+var COMPOSITE_ITEM_KEYS = COMPOSITE_GROUP_KEYS;
+var COMPOSITE_ITEM_WIDGET_KEYS = (/* unused pure expression or super */ null && (COMPOSITE_ITEM_KEYS));
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/userFocus-e16425e3.js
+function userFocus(element) {
+  element.userFocus = true;
+  element.focus();
+  element.userFocus = false;
+}
+function hasUserFocus(element) {
+  return !!element.userFocus;
+}
+function setUserFocus(element, value) {
+  element.userFocus = value;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/Composite.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var Composite_isIE11 = canUseDOM_canUseDOM && "msCrypto" in window;
+
+function Composite_canProxyKeyboardEvent(event) {
+  if (!isSelfTarget_isSelfTarget(event)) return false;
+  if (event.metaKey) return false;
+  if (event.key === "Tab") return false;
+  return true;
+}
+
+function Composite_useKeyboardEventProxy(virtual, currentItem, htmlEventHandler) {
+  var eventHandlerRef = useLiveRef_useLiveRef(htmlEventHandler);
+  return (0,external_React_.useCallback)(function (event) {
+    var _eventHandlerRef$curr;
+
+    (_eventHandlerRef$curr = eventHandlerRef.current) === null || _eventHandlerRef$curr === void 0 ? void 0 : _eventHandlerRef$curr.call(eventHandlerRef, event);
+    if (event.defaultPrevented) return;
+
+    if (virtual && Composite_canProxyKeyboardEvent(event)) {
+      var currentElement = currentItem === null || currentItem === void 0 ? void 0 : currentItem.ref.current;
+
+      if (currentElement) {
+        if (!fireKeyboardEvent_fireKeyboardEvent(currentElement, event.type, event)) {
+          event.preventDefault();
+        } // The event will be triggered on the composite item and then
+        // propagated up to this composite element again, so we can pretend
+        // that it wasn't called on this component in the first place.
+
+
+        if (event.currentTarget.contains(currentElement)) {
+          event.stopPropagation();
+        }
+      }
+    }
+  }, [virtual, currentItem]);
+} // istanbul ignore next
+
+
+function useActiveElementRef(elementRef) {
+  var activeElementRef = (0,external_React_.useRef)(null);
+  (0,external_React_.useEffect)(function () {
+    var document = getDocument_getDocument(elementRef.current);
+
+    var onFocus = function onFocus(event) {
+      var target = event.target;
+      activeElementRef.current = target;
+    };
+
+    document.addEventListener("focus", onFocus, true);
+    return function () {
+      document.removeEventListener("focus", onFocus, true);
+    };
+  }, []);
+  return activeElementRef;
+}
+
+function Composite_findFirstEnabledItemInTheLastRow(items) {
+  return getCurrentId_5aa9849e_findFirstEnabledItem(flatten(reverse(groupItems(items))));
+}
+
+function Composite_isItem(items, element) {
+  return items === null || items === void 0 ? void 0 : items.some(function (item) {
+    return !!element && item.ref.current === element;
+  });
+}
+
+function useScheduleUserFocus(currentItem) {
+  var currentItemRef = useLiveRef_useLiveRef(currentItem);
+
+  var _React$useReducer = (0,external_React_.useReducer)(function (n) {
+    return n + 1;
+  }, 0),
+      scheduled = _React$useReducer[0],
+      schedule = _React$useReducer[1];
+
+  (0,external_React_.useEffect)(function () {
+    var _currentItemRef$curre;
+
+    var currentElement = (_currentItemRef$curre = currentItemRef.current) === null || _currentItemRef$curre === void 0 ? void 0 : _currentItemRef$curre.ref.current;
+
+    if (scheduled && currentElement) {
+      userFocus(currentElement);
+    }
+  }, [scheduled]);
+  return schedule;
+}
+
+var Composite_useComposite = createHook_createHook({
+  name: "Composite",
+  compose: [useTabbable],
+  keys: COMPOSITE_KEYS,
+  useOptions: function useOptions(options) {
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, options), {}, {
+      currentId: getCurrentId(options)
+    });
+  },
+  useProps: function useProps(options, _ref) {
+    var htmlRef = _ref.ref,
+        htmlOnFocusCapture = _ref.onFocusCapture,
+        htmlOnFocus = _ref.onFocus,
+        htmlOnBlurCapture = _ref.onBlurCapture,
+        htmlOnKeyDown = _ref.onKeyDown,
+        htmlOnKeyDownCapture = _ref.onKeyDownCapture,
+        htmlOnKeyUpCapture = _ref.onKeyUpCapture,
+        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["ref", "onFocusCapture", "onFocus", "onBlurCapture", "onKeyDown", "onKeyDownCapture", "onKeyUpCapture"]);
+
+    var ref = (0,external_React_.useRef)(null);
+    var currentItem = findEnabledItemById(options.items, options.currentId);
+    var previousElementRef = (0,external_React_.useRef)(null);
+    var onFocusCaptureRef = useLiveRef_useLiveRef(htmlOnFocusCapture);
+    var onFocusRef = useLiveRef_useLiveRef(htmlOnFocus);
+    var onBlurCaptureRef = useLiveRef_useLiveRef(htmlOnBlurCapture);
+    var onKeyDownRef = useLiveRef_useLiveRef(htmlOnKeyDown);
+    var scheduleUserFocus = useScheduleUserFocus(currentItem); // IE 11 doesn't support event.relatedTarget, so we use the active element
+    // ref instead.
+
+    var activeElementRef = Composite_isIE11 ? useActiveElementRef(ref) : undefined;
+    (0,external_React_.useEffect)(function () {
+      var element = ref.current;
+
+      if (options.unstable_moves && !currentItem) {
+         false ? 0 : void 0; // If composite.move(null) has been called, the composite container
+        // will receive focus.
+
+        element === null || element === void 0 ? void 0 : element.focus();
+      }
+    }, [options.unstable_moves, currentItem]);
+    var onKeyDownCapture = Composite_useKeyboardEventProxy(options.unstable_virtual, currentItem, htmlOnKeyDownCapture);
+    var onKeyUpCapture = Composite_useKeyboardEventProxy(options.unstable_virtual, currentItem, htmlOnKeyUpCapture);
+    var onFocusCapture = (0,external_React_.useCallback)(function (event) {
+      var _onFocusCaptureRef$cu;
+
+      (_onFocusCaptureRef$cu = onFocusCaptureRef.current) === null || _onFocusCaptureRef$cu === void 0 ? void 0 : _onFocusCaptureRef$cu.call(onFocusCaptureRef, event);
+      if (event.defaultPrevented) return;
+      if (!options.unstable_virtual) return; // IE11 doesn't support event.relatedTarget, so we use the active
+      // element ref instead.
+
+      var previousActiveElement = (activeElementRef === null || activeElementRef === void 0 ? void 0 : activeElementRef.current) || event.relatedTarget;
+      var previousActiveElementWasItem = Composite_isItem(options.items, previousActiveElement);
+
+      if (isSelfTarget_isSelfTarget(event) && previousActiveElementWasItem) {
+        // Composite has been focused as a result of an item receiving focus.
+        // The composite item will move focus back to the composite
+        // container. In this case, we don't want to propagate this
+        // additional event nor call the onFocus handler passed to
+        // <Composite onFocus={...} />.
+        event.stopPropagation(); // We keep track of the previous active item element so we can
+        // manually fire a blur event on it later when the focus is moved to
+        // another item on the onBlurCapture event below.
+
+        previousElementRef.current = previousActiveElement;
+      }
+    }, [options.unstable_virtual, options.items]);
+    var onFocus = (0,external_React_.useCallback)(function (event) {
+      var _onFocusRef$current;
+
+      (_onFocusRef$current = onFocusRef.current) === null || _onFocusRef$current === void 0 ? void 0 : _onFocusRef$current.call(onFocusRef, event);
+      if (event.defaultPrevented) return;
+
+      if (options.unstable_virtual) {
+        if (isSelfTarget_isSelfTarget(event)) {
+          // This means that the composite element has been focused while the
+          // composite item has not. For example, by clicking on the
+          // composite element without touching any item, or by tabbing into
+          // the composite element. In this case, we want to trigger focus on
+          // the item, just like it would happen with roving tabindex.
+          // When it receives focus, the composite item will put focus back
+          // on the composite element, in which case hasItemWithFocus will be
+          // true.
+          scheduleUserFocus();
+        }
+      } else if (isSelfTarget_isSelfTarget(event)) {
+        var _options$setCurrentId;
+
+        // When the roving tabindex composite gets intentionally focused (for
+        // example, by clicking directly on it, and not on an item), we make
+        // sure to set the current id to null (which means the composite
+        // itself is focused).
+        (_options$setCurrentId = options.setCurrentId) === null || _options$setCurrentId === void 0 ? void 0 : _options$setCurrentId.call(options, null);
+      }
+    }, [options.unstable_virtual, options.setCurrentId]);
+    var onBlurCapture = (0,external_React_.useCallback)(function (event) {
+      var _onBlurCaptureRef$cur;
+
+      (_onBlurCaptureRef$cur = onBlurCaptureRef.current) === null || _onBlurCaptureRef$cur === void 0 ? void 0 : _onBlurCaptureRef$cur.call(onBlurCaptureRef, event);
+      if (event.defaultPrevented) return;
+      if (!options.unstable_virtual) return; // When virtual is set to true, we move focus from the composite
+      // container (this component) to the composite item that is being
+      // selected. Then we move focus back to the composite container. This
+      // is so we can provide the same API as the roving tabindex method,
+      // which means people can attach onFocus/onBlur handlers on the
+      // CompositeItem component regardless of whether it's virtual or not.
+      // This sequence of blurring and focusing items and composite may be
+      // confusing, so we ignore intermediate focus and blurs by stopping its
+      // propagation and not calling the passed onBlur handler (htmlOnBlur).
+
+      var currentElement = (currentItem === null || currentItem === void 0 ? void 0 : currentItem.ref.current) || null;
+      var nextActiveElement = getNextActiveElementOnBlur(event);
+      var nextActiveElementIsItem = Composite_isItem(options.items, nextActiveElement);
+
+      if (isSelfTarget_isSelfTarget(event) && nextActiveElementIsItem) {
+        // This is an intermediate blur event: blurring the composite
+        // container to focus an item (nextActiveElement).
+        if (nextActiveElement === currentElement) {
+          // The next active element will be the same as the current item in
+          // the state in two scenarios:
+          //   - Moving focus with keyboard: the state is updated before the
+          // blur event is triggered, so here the current item is already
+          // pointing to the next active element.
+          //   - Clicking on the current active item with a pointer: this
+          // will trigger blur on the composite element and then the next
+          // active element will be the same as the current item. Clicking on
+          // an item other than the current one doesn't end up here as the
+          // currentItem state will be updated only after it.
+          if (previousElementRef.current && previousElementRef.current !== nextActiveElement) {
+            // If there's a previous active item and it's not a click action,
+            // then we fire a blur event on it so it will work just like if
+            // it had DOM focus before (like when using roving tabindex).
+            fireBlurEvent_fireBlurEvent(previousElementRef.current, event);
+          }
+        } else if (currentElement) {
+          // This will be true when the next active element is not the
+          // current element, but there's a current item. This will only
+          // happen when clicking with a pointer on a different item, when
+          // there's already an item selected, in which case currentElement
+          // is the item that is getting blurred, and nextActiveElement is
+          // the item that is being clicked.
+          fireBlurEvent_fireBlurEvent(currentElement, event);
+        } // We want to ignore intermediate blur events, so we stop its
+        // propagation and return early so onFocus will not be called.
+
+
+        event.stopPropagation();
+      } else {
+        var targetIsItem = Composite_isItem(options.items, event.target);
+
+        if (!targetIsItem && currentElement) {
+          // If target is not a composite item, it may be the composite
+          // element itself (isSelfTarget) or a tabbable element inside the
+          // composite widget. This may be triggered by clicking outside the
+          // composite widget or by tabbing out of it. In either cases we
+          // want to fire a blur event on the current item.
+          fireBlurEvent_fireBlurEvent(currentElement, event);
+        }
+      }
+    }, [options.unstable_virtual, options.items, currentItem]);
+    var onKeyDown = (0,external_React_.useCallback)(function (event) {
+      var _onKeyDownRef$current, _options$groups;
+
+      (_onKeyDownRef$current = onKeyDownRef.current) === null || _onKeyDownRef$current === void 0 ? void 0 : _onKeyDownRef$current.call(onKeyDownRef, event);
+      if (event.defaultPrevented) return;
+      if (options.currentId !== null) return;
+      if (!isSelfTarget_isSelfTarget(event)) return;
+      var isVertical = options.orientation !== "horizontal";
+      var isHorizontal = options.orientation !== "vertical";
+      var isGrid = !!((_options$groups = options.groups) !== null && _options$groups !== void 0 && _options$groups.length);
+
+      var up = function up() {
+        if (isGrid) {
+          var item = Composite_findFirstEnabledItemInTheLastRow(options.items);
+
+          if (item !== null && item !== void 0 && item.id) {
+            var _options$move;
+
+            (_options$move = options.move) === null || _options$move === void 0 ? void 0 : _options$move.call(options, item.id);
+          }
+        } else {
+          var _options$last;
+
+          (_options$last = options.last) === null || _options$last === void 0 ? void 0 : _options$last.call(options);
+        }
+      };
+
+      var keyMap = {
+        ArrowUp: (isGrid || isVertical) && up,
+        ArrowRight: (isGrid || isHorizontal) && options.first,
+        ArrowDown: (isGrid || isVertical) && options.first,
+        ArrowLeft: (isGrid || isHorizontal) && options.last,
+        Home: options.first,
+        End: options.last,
+        PageUp: options.first,
+        PageDown: options.last
+      };
+      var action = keyMap[event.key];
+
+      if (action) {
+        event.preventDefault();
+        action();
+      }
+    }, [options.currentId, options.orientation, options.groups, options.items, options.move, options.last, options.first]);
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      ref: useForkRef(ref, htmlRef),
+      id: options.baseId,
+      onFocus: onFocus,
+      onFocusCapture: onFocusCapture,
+      onBlurCapture: onBlurCapture,
+      onKeyDownCapture: onKeyDownCapture,
+      onKeyDown: onKeyDown,
+      onKeyUpCapture: onKeyUpCapture,
+      "aria-activedescendant": options.unstable_virtual ? (currentItem === null || currentItem === void 0 ? void 0 : currentItem.id) || undefined : undefined
+    }, htmlProps);
+  },
+  useComposeProps: function useComposeProps(options, htmlProps) {
+    htmlProps = Role_useRole(options, htmlProps, true);
+    var tabbableHTMLProps = useTabbable(options, htmlProps, true);
+
+    if (options.unstable_virtual || options.currentId === null) {
+      // Composite will only be tabbable by default if the focus is managed
+      // using aria-activedescendant, which requires DOM focus on the container
+      // element (the composite)
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+        tabIndex: 0
+      }, tabbableHTMLProps);
+    }
+
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, htmlProps), {}, {
+      ref: tabbableHTMLProps.ref
+    });
+  }
+});
+var Composite_Composite = createComponent_createComponent({
+  as: "div",
+  useHook: Composite_useComposite,
+  useCreateElement: function useCreateElement$1(type, props, children) {
+     false ? 0 : void 0;
+    return useCreateElement(type, props, children);
+  }
+});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Id/IdProvider.js
+
+
+var defaultPrefix = "id";
+function generateRandomString(prefix) {
+  if (prefix === void 0) {
+    prefix = defaultPrefix;
+  }
+
+  return "" + (prefix ? prefix + "-" : "") + Math.random().toString(32).substr(2, 6);
+}
+
+var unstable_IdContext = /*#__PURE__*/(0,external_React_.createContext)(generateRandomString);
+function unstable_IdProvider(_ref) {
+  var children = _ref.children,
+      _ref$prefix = _ref.prefix,
+      prefix = _ref$prefix === void 0 ? defaultPrefix : _ref$prefix;
+  var count = useRef(0);
+  var generateId = useCallback(function (localPrefix) {
+    if (localPrefix === void 0) {
+      localPrefix = prefix;
+    }
+
+    return "" + (localPrefix ? localPrefix + "-" : "") + ++count.current;
+  }, [prefix]);
+  return /*#__PURE__*/createElement(unstable_IdContext.Provider, {
+    value: generateId
+  }, children);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Id/Id.js
+
+
+
+
+
+
+// Automatically generated
+var ID_STATE_KEYS = ["baseId", "unstable_idCountRef", "setBaseId"];
+var ID_KEYS = [].concat(ID_STATE_KEYS, ["id"]);
+
+var unstable_useId = createHook_createHook({
+  keys: ID_KEYS,
+  useOptions: function useOptions(options, htmlProps) {
+    var generateId = (0,external_React_.useContext)(unstable_IdContext);
+
+    var _React$useState = (0,external_React_.useState)(function () {
+      // This comes from useIdState
+      if (options.unstable_idCountRef) {
+        options.unstable_idCountRef.current += 1;
+        return "-" + options.unstable_idCountRef.current;
+      } // If there's no useIdState, we check if `baseId` was passed (as a prop,
+      // not from useIdState).
+
+
+      if (options.baseId) {
+        return "-" + generateId("");
+      }
+
+      return "";
+    }),
+        suffix = _React$useState[0]; // `baseId` will be the prop passed directly as a prop or via useIdState.
+    // If there's neither, then it'll fallback to Context's generateId.
+    // This generateId can result in a sequential ID (if there's a Provider)
+    // or a random string (without Provider).
+
+
+    var baseId = (0,external_React_.useMemo)(function () {
+      return options.baseId || generateId();
+    }, [options.baseId, generateId]);
+    var id = htmlProps.id || options.id || "" + baseId + suffix;
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, options), {}, {
+      id: id
+    });
+  },
+  useProps: function useProps(options, htmlProps) {
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      id: options.id
+    }, htmlProps);
+  }
+});
+var unstable_Id = createComponent_createComponent({
+  as: "div",
+  useHook: unstable_useId
+});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Group/Group.js
+
+
+
+
+
+
+// Automatically generated
+var GROUP_KEYS = [];
+
+var useGroup = createHook_createHook({
+  name: "Group",
+  compose: Role_useRole,
+  keys: GROUP_KEYS,
+  useProps: function useProps(_, htmlProps) {
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      role: "group"
+    }, htmlProps);
+  }
+});
+var Group = createComponent_createComponent({
+  as: "div",
+  useHook: useGroup
+});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/CompositeGroup.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+var useCompositeGroup = createHook_createHook({
+  name: "CompositeGroup",
+  compose: [useGroup, unstable_useId],
+  keys: COMPOSITE_GROUP_KEYS,
+  propsAreEqual: function propsAreEqual(prev, next) {
+    if (!next.id || prev.id !== next.id) {
+      return useGroup.unstable_propsAreEqual(prev, next);
+    }
+
+    var prevCurrentId = prev.currentId,
+        prevMoves = prev.unstable_moves,
+        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["currentId", "unstable_moves"]);
+
+    var nextCurrentId = next.currentId,
+        nextMoves = next.unstable_moves,
+        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["currentId", "unstable_moves"]);
+
+    if (prev.items && next.items) {
+      var prevCurrentItem = findEnabledItemById(prev.items, prevCurrentId);
+      var nextCurrentItem = findEnabledItemById(next.items, nextCurrentId);
+      var prevGroupId = prevCurrentItem === null || prevCurrentItem === void 0 ? void 0 : prevCurrentItem.groupId;
+      var nextGroupId = nextCurrentItem === null || nextCurrentItem === void 0 ? void 0 : nextCurrentItem.groupId;
+
+      if (next.id === nextGroupId || next.id === prevGroupId) {
+        return false;
+      }
+    }
+
+    return useGroup.unstable_propsAreEqual(prevProps, nextProps);
+  },
+  useProps: function useProps(options, _ref) {
+    var htmlRef = _ref.ref,
+        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["ref"]);
+
+    var ref = (0,external_React_.useRef)(null);
+    var id = options.id; // We need this to be called before CompositeItems' register
+
+    useIsomorphicEffect(function () {
+      var _options$registerGrou;
+
+      if (!id) return undefined;
+      (_options$registerGrou = options.registerGroup) === null || _options$registerGrou === void 0 ? void 0 : _options$registerGrou.call(options, {
+        id: id,
+        ref: ref
+      });
+      return function () {
+        var _options$unregisterGr;
+
+        (_options$unregisterGr = options.unregisterGroup) === null || _options$unregisterGr === void 0 ? void 0 : _options$unregisterGr.call(options, id);
+      };
+    }, [id, options.registerGroup, options.unregisterGroup]);
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      ref: useForkRef(ref, htmlRef)
+    }, htmlProps);
+  }
+});
+var CompositeGroup = createComponent_createComponent({
+  as: "div",
+  useHook: useCompositeGroup
+});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Clickable/Clickable.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+// Automatically generated
+var CLICKABLE_KEYS = ["unstable_clickOnEnter", "unstable_clickOnSpace"];
+
+function Clickable_isNativeClick(event) {
+  var element = event.currentTarget;
+  if (!event.isTrusted) return false; // istanbul ignore next: can't test trusted events yet
+
+  return isButton_isButton(element) || element.tagName === "INPUT" || element.tagName === "TEXTAREA" || element.tagName === "A" || element.tagName === "SELECT";
+}
+
+var useClickable = createHook_createHook({
+  name: "Clickable",
+  compose: useTabbable,
+  keys: CLICKABLE_KEYS,
+  useOptions: function useOptions(_ref) {
+    var _ref$unstable_clickOn = _ref.unstable_clickOnEnter,
+        unstable_clickOnEnter = _ref$unstable_clickOn === void 0 ? true : _ref$unstable_clickOn,
+        _ref$unstable_clickOn2 = _ref.unstable_clickOnSpace,
+        unstable_clickOnSpace = _ref$unstable_clickOn2 === void 0 ? true : _ref$unstable_clickOn2,
+        options = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["unstable_clickOnEnter", "unstable_clickOnSpace"]);
+
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      unstable_clickOnEnter: unstable_clickOnEnter,
+      unstable_clickOnSpace: unstable_clickOnSpace
+    }, options);
+  },
+  useProps: function useProps(options, _ref2) {
+    var htmlOnKeyDown = _ref2.onKeyDown,
+        htmlOnKeyUp = _ref2.onKeyUp,
+        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref2, ["onKeyDown", "onKeyUp"]);
+
+    var _React$useState = (0,external_React_.useState)(false),
+        active = _React$useState[0],
+        setActive = _React$useState[1];
+
+    var onKeyDownRef = useLiveRef_useLiveRef(htmlOnKeyDown);
+    var onKeyUpRef = useLiveRef_useLiveRef(htmlOnKeyUp);
+    var onKeyDown = (0,external_React_.useCallback)(function (event) {
+      var _onKeyDownRef$current;
+
+      (_onKeyDownRef$current = onKeyDownRef.current) === null || _onKeyDownRef$current === void 0 ? void 0 : _onKeyDownRef$current.call(onKeyDownRef, event);
+      if (event.defaultPrevented) return;
+      if (options.disabled) return;
+      if (event.metaKey) return;
+      if (!isSelfTarget_isSelfTarget(event)) return;
+      var isEnter = options.unstable_clickOnEnter && event.key === "Enter";
+      var isSpace = options.unstable_clickOnSpace && event.key === " ";
+
+      if (isEnter || isSpace) {
+        if (Clickable_isNativeClick(event)) return;
+        event.preventDefault();
+
+        if (isEnter) {
+          event.currentTarget.click();
+        } else if (isSpace) {
+          setActive(true);
+        }
+      }
+    }, [options.disabled, options.unstable_clickOnEnter, options.unstable_clickOnSpace]);
+    var onKeyUp = (0,external_React_.useCallback)(function (event) {
+      var _onKeyUpRef$current;
+
+      (_onKeyUpRef$current = onKeyUpRef.current) === null || _onKeyUpRef$current === void 0 ? void 0 : _onKeyUpRef$current.call(onKeyUpRef, event);
+      if (event.defaultPrevented) return;
+      if (options.disabled) return;
+      if (event.metaKey) return;
+      var isSpace = options.unstable_clickOnSpace && event.key === " ";
+
+      if (active && isSpace) {
+        setActive(false);
+        event.currentTarget.click();
+      }
+    }, [options.disabled, options.unstable_clickOnSpace, active]);
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      "data-active": active || undefined,
+      onKeyDown: onKeyDown,
+      onKeyUp: onKeyUp
+    }, htmlProps);
+  }
+});
+var Clickable = createComponent_createComponent({
+  as: "button",
+  memo: true,
+  useHook: useClickable
+});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isTextField.js
+/**
+ * Check whether the given element is a text field, where text field is defined
+ * by the ability to select within the input, or that it is contenteditable.
+ *
+ * @example
+ * import { isTextField } from "reakit-utils";
+ *
+ * isTextField(document.querySelector("div")); // false
+ * isTextField(document.querySelector("input")); // true
+ * isTextField(document.querySelector("input[type='button']")); // false
+ * isTextField(document.querySelector("textarea")); // true
+ * isTextField(document.querySelector("div[contenteditable='true']")); // true
+ */
+function isTextField_isTextField(element) {
+  try {
+    var isTextInput = element instanceof HTMLInputElement && element.selectionStart !== null;
+    var isTextArea = element.tagName === "TEXTAREA";
+    var isContentEditable = element.contentEditable === "true";
+    return isTextInput || isTextArea || isContentEditable || false;
+  } catch (error) {
+    // Safari throws an exception when trying to get `selectionStart`
+    // on non-text <input> elements (which, understandably, don't
+    // have the text selection API). We catch this via a try/catch
+    // block, as opposed to a more explicit check of the element's
+    // input types, because of Safari's non-standard behavior. This
+    // also means we don't have to worry about the list of input
+    // types that support `selectionStart` changing as the HTML spec
+    // evolves over time.
+    return false;
+  }
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/hasFocus.js
+
+
+
+/**
+ * Checks if `element` has focus. Elements that are referenced by
+ * `aria-activedescendant` are also considered.
+ *
+ * @example
+ * import { hasFocus } from "reakit-utils";
+ *
+ * hasFocus(document.getElementById("id"));
+ */
+
+function hasFocus_hasFocus(element) {
+  var activeElement = getActiveElement_getActiveElement(element);
+  if (!activeElement) return false;
+  if (activeElement === element) return true;
+  var activeDescendant = activeElement.getAttribute("aria-activedescendant");
+  if (!activeDescendant) return false;
+  return activeDescendant === element.id;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/ensureFocus.js
+
+
+
+
+/**
+ * Ensures `element` will receive focus if it's not already.
+ *
+ * @example
+ * import { ensureFocus } from "reakit-utils";
+ *
+ * ensureFocus(document.activeElement); // does nothing
+ *
+ * const element = document.querySelector("input");
+ *
+ * ensureFocus(element); // focuses element
+ * ensureFocus(element, { preventScroll: true }); // focuses element preventing scroll jump
+ *
+ * function isActive(el) {
+ *   return el.dataset.active === "true";
+ * }
+ *
+ * ensureFocus(document.querySelector("[data-active='true']"), { isActive }); // does nothing
+ *
+ * @returns {number} `requestAnimationFrame` call ID so it can be passed to `cancelAnimationFrame` if needed.
+ */
+function ensureFocus(element, _temp) {
+  var _ref = _temp === void 0 ? {} : _temp,
+      preventScroll = _ref.preventScroll,
+      _ref$isActive = _ref.isActive,
+      isActive = _ref$isActive === void 0 ? hasFocus_hasFocus : _ref$isActive;
+
+  if (isActive(element)) return -1;
+  element.focus({
+    preventScroll: preventScroll
+  });
+  if (isActive(element)) return -1;
+  return requestAnimationFrame(function () {
+    element.focus({
+      preventScroll: preventScroll
+    });
+  });
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/fireEvent.js
+
+
+
+/**
+ * Creates and dispatches `Event` in a way that also works on IE 11.
+ *
+ * @example
+ * import { fireEvent } from "reakit-utils";
+ *
+ * fireEvent(document.getElementById("id"), "blur", {
+ *   bubbles: true,
+ *   cancelable: true,
+ * });
+ */
+
+function fireEvent_fireEvent(element, type, eventInit) {
+  return element.dispatchEvent(createEvent(element, type, eventInit));
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/setTextFieldValue-0a221f4e.js
+
+
+function setTextFieldValue(element, value) {
+  if (element instanceof HTMLInputElement || element instanceof HTMLTextAreaElement) {
+    var _Object$getOwnPropert;
+
+    var proto = Object.getPrototypeOf(element);
+    var setValue = (_Object$getOwnPropert = Object.getOwnPropertyDescriptor(proto, "value")) === null || _Object$getOwnPropert === void 0 ? void 0 : _Object$getOwnPropert.set;
+
+    if (setValue) {
+      setValue.call(element, value);
+      fireEvent_fireEvent(element, "input", {
+        bubbles: true
+      });
+    }
+  }
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/CompositeItem.js
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+function getWidget(itemElement) {
+  return itemElement.querySelector("[data-composite-item-widget]");
+}
+
+function useItem(options) {
+  return (0,external_React_.useMemo)(function () {
+    var _options$items;
+
+    return (_options$items = options.items) === null || _options$items === void 0 ? void 0 : _options$items.find(function (item) {
+      return options.id && item.id === options.id;
+    });
+  }, [options.items, options.id]);
+}
+
+function CompositeItem_targetIsAnotherItem(event, items) {
+  if (isSelfTarget_isSelfTarget(event)) return false;
+
+  for (var _iterator = _createForOfIteratorHelperLoose(items), _step; !(_step = _iterator()).done;) {
+    var item = _step.value;
+
+    if (item.ref.current === event.target) {
+      return true;
+    }
+  }
+
+  return false;
+}
+
+var CompositeItem_useCompositeItem = createHook_createHook({
+  name: "CompositeItem",
+  compose: [useClickable, unstable_useId],
+  keys: COMPOSITE_ITEM_KEYS,
+  propsAreEqual: function propsAreEqual(prev, next) {
+    if (!next.id || prev.id !== next.id) {
+      return useClickable.unstable_propsAreEqual(prev, next);
+    }
+
+    var prevCurrentId = prev.currentId,
+        prevMoves = prev.unstable_moves,
+        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["currentId", "unstable_moves"]);
+
+    var nextCurrentId = next.currentId,
+        nextMoves = next.unstable_moves,
+        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["currentId", "unstable_moves"]);
+
+    if (nextCurrentId !== prevCurrentId) {
+      if (next.id === nextCurrentId || next.id === prevCurrentId) {
+        return false;
+      }
+    } else if (prevMoves !== nextMoves) {
+      return false;
+    }
+
+    return useClickable.unstable_propsAreEqual(prevProps, nextProps);
+  },
+  useOptions: function useOptions(options) {
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, options), {}, {
+      id: options.id,
+      currentId: getCurrentId(options),
+      unstable_clickOnSpace: options.unstable_hasActiveWidget ? false : options.unstable_clickOnSpace
+    });
+  },
+  useProps: function useProps(options, _ref) {
+    var _options$items2;
+
+    var htmlRef = _ref.ref,
+        _ref$tabIndex = _ref.tabIndex,
+        htmlTabIndex = _ref$tabIndex === void 0 ? 0 : _ref$tabIndex,
+        htmlOnMouseDown = _ref.onMouseDown,
+        htmlOnFocus = _ref.onFocus,
+        htmlOnBlurCapture = _ref.onBlurCapture,
+        htmlOnKeyDown = _ref.onKeyDown,
+        htmlOnClick = _ref.onClick,
+        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["ref", "tabIndex", "onMouseDown", "onFocus", "onBlurCapture", "onKeyDown", "onClick"]);
+
+    var ref = (0,external_React_.useRef)(null);
+    var id = options.id;
+    var trulyDisabled = options.disabled && !options.focusable;
+    var isCurrentItem = options.currentId === id;
+    var isCurrentItemRef = useLiveRef_useLiveRef(isCurrentItem);
+    var hasFocusedComposite = (0,external_React_.useRef)(false);
+    var item = useItem(options);
+    var onMouseDownRef = useLiveRef_useLiveRef(htmlOnMouseDown);
+    var onFocusRef = useLiveRef_useLiveRef(htmlOnFocus);
+    var onBlurCaptureRef = useLiveRef_useLiveRef(htmlOnBlurCapture);
+    var onKeyDownRef = useLiveRef_useLiveRef(htmlOnKeyDown);
+    var onClickRef = useLiveRef_useLiveRef(htmlOnClick);
+    var shouldTabIndex = !options.unstable_virtual && !options.unstable_hasActiveWidget && isCurrentItem || // We don't want to set tabIndex="-1" when using CompositeItem as a
+    // standalone component, without state props.
+    !((_options$items2 = options.items) !== null && _options$items2 !== void 0 && _options$items2.length);
+    (0,external_React_.useEffect)(function () {
+      var _options$registerItem;
+
+      if (!id) return undefined;
+      (_options$registerItem = options.registerItem) === null || _options$registerItem === void 0 ? void 0 : _options$registerItem.call(options, {
+        id: id,
+        ref: ref,
+        disabled: !!trulyDisabled
+      });
+      return function () {
+        var _options$unregisterIt;
+
+        (_options$unregisterIt = options.unregisterItem) === null || _options$unregisterIt === void 0 ? void 0 : _options$unregisterIt.call(options, id);
+      };
+    }, [id, trulyDisabled, options.registerItem, options.unregisterItem]);
+    (0,external_React_.useEffect)(function () {
+      var element = ref.current;
+
+      if (!element) {
+         false ? 0 : void 0;
+        return;
+      } // `moves` will be incremented whenever next, previous, up, down, first,
+      // last or move have been called. This means that the composite item will
+      // be focused whenever some of these functions are called. We're using
+      // isCurrentItemRef instead of isCurrentItem because we don't want to
+      // focus the item if isCurrentItem changes (and options.moves doesn't).
+
+
+      if (options.unstable_moves && isCurrentItemRef.current) {
+        userFocus(element);
+      }
+    }, [options.unstable_moves]);
+    var onMouseDown = (0,external_React_.useCallback)(function (event) {
+      var _onMouseDownRef$curre;
+
+      (_onMouseDownRef$curre = onMouseDownRef.current) === null || _onMouseDownRef$curre === void 0 ? void 0 : _onMouseDownRef$curre.call(onMouseDownRef, event);
+      setUserFocus(event.currentTarget, true);
+    }, []);
+    var onFocus = (0,external_React_.useCallback)(function (event) {
+      var _onFocusRef$current, _options$setCurrentId;
+
+      var shouldFocusComposite = hasUserFocus(event.currentTarget);
+      setUserFocus(event.currentTarget, false);
+      (_onFocusRef$current = onFocusRef.current) === null || _onFocusRef$current === void 0 ? void 0 : _onFocusRef$current.call(onFocusRef, event);
+      if (event.defaultPrevented) return;
+      if (isPortalEvent_isPortalEvent(event)) return;
+      if (!id) return;
+      if (CompositeItem_targetIsAnotherItem(event, options.items)) return;
+      (_options$setCurrentId = options.setCurrentId) === null || _options$setCurrentId === void 0 ? void 0 : _options$setCurrentId.call(options, id); // When using aria-activedescendant, we want to make sure that the
+      // composite container receives focus, not the composite item.
+      // But we don't want to do this if the target is another focusable
+      // element inside the composite item, such as CompositeItemWidget.
+
+      if (shouldFocusComposite && options.unstable_virtual && options.baseId && isSelfTarget_isSelfTarget(event)) {
+        var target = event.target;
+        var composite = getDocument_getDocument(target).getElementById(options.baseId);
+
+        if (composite) {
+          hasFocusedComposite.current = true;
+          ensureFocus(composite);
+        }
+      }
+    }, [id, options.items, options.setCurrentId, options.unstable_virtual, options.baseId]);
+    var onBlurCapture = (0,external_React_.useCallback)(function (event) {
+      var _onBlurCaptureRef$cur;
+
+      (_onBlurCaptureRef$cur = onBlurCaptureRef.current) === null || _onBlurCaptureRef$cur === void 0 ? void 0 : _onBlurCaptureRef$cur.call(onBlurCaptureRef, event);
+      if (event.defaultPrevented) return;
+
+      if (options.unstable_virtual && hasFocusedComposite.current) {
+        // When hasFocusedComposite is true, composite has been focused right
+        // after focusing this item. This is an intermediate blur event, so
+        // we ignore it.
+        hasFocusedComposite.current = false;
+        event.preventDefault();
+        event.stopPropagation();
+      }
+    }, [options.unstable_virtual]);
+    var onKeyDown = (0,external_React_.useCallback)(function (event) {
+      var _onKeyDownRef$current;
+
+      if (!isSelfTarget_isSelfTarget(event)) return;
+      var isVertical = options.orientation !== "horizontal";
+      var isHorizontal = options.orientation !== "vertical";
+      var isGrid = !!(item !== null && item !== void 0 && item.groupId);
+      var keyMap = {
+        ArrowUp: (isGrid || isVertical) && options.up,
+        ArrowRight: (isGrid || isHorizontal) && options.next,
+        ArrowDown: (isGrid || isVertical) && options.down,
+        ArrowLeft: (isGrid || isHorizontal) && options.previous,
+        Home: function Home() {
+          if (!isGrid || event.ctrlKey) {
+            var _options$first;
+
+            (_options$first = options.first) === null || _options$first === void 0 ? void 0 : _options$first.call(options);
+          } else {
+            var _options$previous;
+
+            (_options$previous = options.previous) === null || _options$previous === void 0 ? void 0 : _options$previous.call(options, true);
+          }
+        },
+        End: function End() {
+          if (!isGrid || event.ctrlKey) {
+            var _options$last;
+
+            (_options$last = options.last) === null || _options$last === void 0 ? void 0 : _options$last.call(options);
+          } else {
+            var _options$next;
+
+            (_options$next = options.next) === null || _options$next === void 0 ? void 0 : _options$next.call(options, true);
+          }
+        },
+        PageUp: function PageUp() {
+          if (isGrid) {
+            var _options$up;
+
+            (_options$up = options.up) === null || _options$up === void 0 ? void 0 : _options$up.call(options, true);
+          } else {
+            var _options$first2;
+
+            (_options$first2 = options.first) === null || _options$first2 === void 0 ? void 0 : _options$first2.call(options);
+          }
+        },
+        PageDown: function PageDown() {
+          if (isGrid) {
+            var _options$down;
+
+            (_options$down = options.down) === null || _options$down === void 0 ? void 0 : _options$down.call(options, true);
+          } else {
+            var _options$last2;
+
+            (_options$last2 = options.last) === null || _options$last2 === void 0 ? void 0 : _options$last2.call(options);
+          }
+        }
+      };
+      var action = keyMap[event.key];
+
+      if (action) {
+        event.preventDefault();
+        action();
+        return;
+      }
+
+      (_onKeyDownRef$current = onKeyDownRef.current) === null || _onKeyDownRef$current === void 0 ? void 0 : _onKeyDownRef$current.call(onKeyDownRef, event);
+      if (event.defaultPrevented) return;
+
+      if (event.key.length === 1 && event.key !== " ") {
+        var widget = getWidget(event.currentTarget);
+
+        if (widget && isTextField_isTextField(widget)) {
+          widget.focus();
+          setTextFieldValue(widget, "");
+        }
+      } else if (event.key === "Delete" || event.key === "Backspace") {
+        var _widget = getWidget(event.currentTarget);
+
+        if (_widget && isTextField_isTextField(_widget)) {
+          event.preventDefault();
+          setTextFieldValue(_widget, "");
+        }
+      }
+    }, [options.orientation, item, options.up, options.next, options.down, options.previous, options.first, options.last]);
+    var onClick = (0,external_React_.useCallback)(function (event) {
+      var _onClickRef$current;
+
+      (_onClickRef$current = onClickRef.current) === null || _onClickRef$current === void 0 ? void 0 : _onClickRef$current.call(onClickRef, event);
+      if (event.defaultPrevented) return;
+      var element = event.currentTarget;
+      var widget = getWidget(element);
+
+      if (widget && !hasFocusWithin_hasFocusWithin(widget)) {
+        // If there's a widget inside the composite item, we make sure it's
+        // focused when pressing enter, space or clicking on the composite item.
+        widget.focus();
+      }
+    }, []);
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+      ref: useForkRef(ref, htmlRef),
+      id: id,
+      tabIndex: shouldTabIndex ? htmlTabIndex : -1,
+      "aria-selected": options.unstable_virtual && isCurrentItem ? true : undefined,
+      onMouseDown: onMouseDown,
+      onFocus: onFocus,
+      onBlurCapture: onBlurCapture,
+      onKeyDown: onKeyDown,
+      onClick: onClick
+    }, htmlProps);
+  }
+});
+var CompositeItem_CompositeItem = createComponent_createComponent({
+  as: "button",
+  memo: true,
+  useHook: CompositeItem_useCompositeItem
+});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useSealedState.js
+
+
+/**
+ * React custom hook that returns the very first value passed to `initialState`,
+ * even if it changes between re-renders.
+ */
+function useSealedState(initialState) {
+  var _React$useState = (0,external_React_.useState)(initialState),
+      sealed = _React$useState[0];
+
+  return sealed;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/applyState.js
+function applyState_isUpdater(argument) {
+  return typeof argument === "function";
+}
+/**
+ * Receives a `setState` argument and calls it with `currentValue` if it's a
+ * function. Otherwise return the argument as the new value.
+ *
+ * @example
+ * import { applyState } from "reakit-utils";
+ *
+ * applyState((value) => value + 1, 1); // 2
+ * applyState(2, 1); // 2
+ */
+
+
+function applyState_applyState(argument, currentValue) {
+  if (applyState_isUpdater(argument)) {
+    return argument(currentValue);
+  }
+
+  return argument;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Id/IdState.js
+
+
+
+
+function unstable_useIdState(initialState) {
+  if (initialState === void 0) {
+    initialState = {};
+  }
+
+  var _useSealedState = useSealedState(initialState),
+      initialBaseId = _useSealedState.baseId;
+
+  var generateId = (0,external_React_.useContext)(unstable_IdContext);
+  var idCountRef = (0,external_React_.useRef)(0);
+
+  var _React$useState = (0,external_React_.useState)(function () {
+    return initialBaseId || generateId();
+  }),
+      baseId = _React$useState[0],
+      setBaseId = _React$useState[1];
+
+  return {
+    baseId: baseId,
+    setBaseId: setBaseId,
+    unstable_idCountRef: idCountRef
+  };
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Composite/CompositeState.js
+
+
+
+
+
+
+
+
+
+
+
+
+function CompositeState_isElementPreceding(element1, element2) {
+  return Boolean(element2.compareDocumentPosition(element1) & Node.DOCUMENT_POSITION_PRECEDING);
+}
+
+function findDOMIndex(items, item) {
+  return items.findIndex(function (currentItem) {
+    if (!currentItem.ref.current || !item.ref.current) {
+      return false;
+    }
+
+    return CompositeState_isElementPreceding(item.ref.current, currentItem.ref.current);
+  });
+}
+
+function getMaxLength(rows) {
+  var maxLength = 0;
+
+  for (var _iterator = _createForOfIteratorHelperLoose(rows), _step; !(_step = _iterator()).done;) {
+    var length = _step.value.length;
+
+    if (length > maxLength) {
+      maxLength = length;
+    }
+  }
+
+  return maxLength;
+}
+
+/**
+ * Turns [row1, row1, row2, row2] into [row1, row2, row1, row2]
+ */
+
+function CompositeState_verticalizeItems(items) {
+  var groups = groupItems(items);
+  var maxLength = getMaxLength(groups);
+  var verticalized = [];
+
+  for (var i = 0; i < maxLength; i += 1) {
+    for (var _iterator = _createForOfIteratorHelperLoose(groups), _step; !(_step = _iterator()).done;) {
+      var group = _step.value;
+
+      if (group[i]) {
+        verticalized.push(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, group[i]), {}, {
+          // If there's no groupId, it means that it's not a grid composite,
+          // but a single row instead. So, instead of verticalizing it, that
+          // is, assigning a different groupId based on the column index, we
+          // keep it undefined so they will be part of the same group.
+          // It's useful when using up/down on one-dimensional composites.
+          groupId: group[i].groupId ? "" + i : undefined
+        }));
+      }
+    }
+  }
+
+  return verticalized;
+}
+
+function CompositeState_createEmptyItem(groupId) {
+  return {
+    id: "__EMPTY_ITEM__",
+    disabled: true,
+    ref: {
+      current: null
+    },
+    groupId: groupId
+  };
+}
+/**
+ * Turns [[row1, row1], [row2]] into [[row1, row1], [row2, row2]]
+ */
+
+
+function fillGroups(groups, currentId, shift) {
+  var maxLength = getMaxLength(groups);
+
+  for (var _iterator = _createForOfIteratorHelperLoose(groups), _step; !(_step = _iterator()).done;) {
+    var group = _step.value;
+
+    for (var i = 0; i < maxLength; i += 1) {
+      var item = group[i];
+
+      if (!item || shift && item.disabled) {
+        var isFrist = i === 0;
+        var previousItem = isFrist && shift ? getCurrentId_5aa9849e_findFirstEnabledItem(group) : group[i - 1];
+        group[i] = previousItem && currentId !== (previousItem === null || previousItem === void 0 ? void 0 : previousItem.id) && shift ? previousItem : CompositeState_createEmptyItem(previousItem === null || previousItem === void 0 ? void 0 : previousItem.groupId);
+      }
+    }
+  }
+
+  return groups;
+}
+
+var nullItem = {
+  id: null,
+  ref: {
+    current: null
+  }
+};
+function placeItemsAfter(items, id, shouldInsertNullItem) {
+  var index = items.findIndex(function (item) {
+    return item.id === id;
+  });
+  return [].concat(items.slice(index + 1), shouldInsertNullItem ? [nullItem] : [], items.slice(0, index));
+}
+
+function getItemsInGroup(items, groupId) {
+  return items.filter(function (item) {
+    return item.groupId === groupId;
+  });
+}
+
+var map = {
+  horizontal: "vertical",
+  vertical: "horizontal"
+};
+function CompositeState_getOppositeOrientation(orientation) {
+  return orientation && map[orientation];
+}
+
+function addItemAtIndex(array, item, index) {
+  if (!(index in array)) {
+    return [].concat(array, [item]);
+  }
+
+  return [].concat(array.slice(0, index), [item], array.slice(index));
+}
+
+function CompositeState_sortBasedOnDOMPosition(items) {
+  var pairs = items.map(function (item, index) {
+    return [index, item];
+  });
+  var isOrderDifferent = false;
+  pairs.sort(function (_ref, _ref2) {
+    var indexA = _ref[0],
+        a = _ref[1];
+    var indexB = _ref2[0],
+        b = _ref2[1];
+    var elementA = a.ref.current;
+    var elementB = b.ref.current;
+    if (!elementA || !elementB) return 0; // a before b
+
+    if (CompositeState_isElementPreceding(elementA, elementB)) {
+      if (indexA > indexB) {
+        isOrderDifferent = true;
+      }
+
+      return -1;
+    } // a after b
+
+
+    if (indexA < indexB) {
+      isOrderDifferent = true;
+    }
+
+    return 1;
+  });
+
+  if (isOrderDifferent) {
+    return pairs.map(function (_ref3) {
+      var _ = _ref3[0],
+          item = _ref3[1];
+      return item;
+    });
+  }
+
+  return items;
+}
+
+function setItemsBasedOnDOMPosition(items, setItems) {
+  var sortedItems = CompositeState_sortBasedOnDOMPosition(items);
+
+  if (items !== sortedItems) {
+    setItems(sortedItems);
+  }
+}
+
+function CompositeState_getCommonParent(items) {
+  var _firstItem$ref$curren;
+
+  var firstItem = items[0],
+      nextItems = items.slice(1);
+  var parentElement = firstItem === null || firstItem === void 0 ? void 0 : (_firstItem$ref$curren = firstItem.ref.current) === null || _firstItem$ref$curren === void 0 ? void 0 : _firstItem$ref$curren.parentElement;
+
+  var _loop = function _loop() {
+    var parent = parentElement;
+
+    if (nextItems.every(function (item) {
+      return parent.contains(item.ref.current);
+    })) {
+      return {
+        v: parentElement
+      };
+    }
+
+    parentElement = parentElement.parentElement;
+  };
+
+  while (parentElement) {
+    var _ret = _loop();
+
+    if (typeof _ret === "object") return _ret.v;
+  }
+
+  return getDocument_getDocument(parentElement).body;
+} // istanbul ignore next: JSDOM doesn't support IntersectionObverser
+// See https://github.com/jsdom/jsdom/issues/2032
+
+
+function useIntersectionObserver(items, setItems) {
+  var previousItems = (0,external_React_.useRef)([]);
+  (0,external_React_.useEffect)(function () {
+    var callback = function callback() {
+      var hasPreviousItems = !!previousItems.current.length; // We don't want to sort items if items have been just registered.
+
+      if (hasPreviousItems) {
+        setItemsBasedOnDOMPosition(items, setItems);
+      }
+
+      previousItems.current = items;
+    };
+
+    var root = CompositeState_getCommonParent(items);
+    var observer = new IntersectionObserver(callback, {
+      root: root
+    });
+
+    for (var _iterator = _createForOfIteratorHelperLoose(items), _step; !(_step = _iterator()).done;) {
+      var item = _step.value;
+
+      if (item.ref.current) {
+        observer.observe(item.ref.current);
+      }
+    }
+
+    return function () {
+      observer.disconnect();
+    };
+  }, [items]);
+}
+
+function useTimeoutObserver(items, setItems) {
+  (0,external_React_.useEffect)(function () {
+    var callback = function callback() {
+      return setItemsBasedOnDOMPosition(items, setItems);
+    };
+
+    var timeout = setTimeout(callback, 250);
+    return function () {
+      return clearTimeout(timeout);
+    };
+  });
+}
+
+function useSortBasedOnDOMPosition(items, setItems) {
+  if (typeof IntersectionObserver === "function") {
+    useIntersectionObserver(items, setItems);
+  } else {
+    useTimeoutObserver(items, setItems);
+  }
+}
+
+function reducer(state, action) {
+  var virtual = state.unstable_virtual,
+      rtl = state.rtl,
+      orientation = state.orientation,
+      items = state.items,
+      groups = state.groups,
+      currentId = state.currentId,
+      loop = state.loop,
+      wrap = state.wrap,
+      pastIds = state.pastIds,
+      shift = state.shift,
+      moves = state.unstable_moves,
+      includesBaseElement = state.unstable_includesBaseElement,
+      initialVirtual = state.initialVirtual,
+      initialRTL = state.initialRTL,
+      initialOrientation = state.initialOrientation,
+      initialCurrentId = state.initialCurrentId,
+      initialLoop = state.initialLoop,
+      initialWrap = state.initialWrap,
+      initialShift = state.initialShift,
+      hasSetCurrentId = state.hasSetCurrentId;
+
+  switch (action.type) {
+    case "registerGroup":
+      {
+        var _group = action.group; // If there are no groups yet, just add it as the first one
+
+        if (groups.length === 0) {
+          return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+            groups: [_group]
+          });
+        } // Finds the group index based on DOM position
+
+
+        var index = findDOMIndex(groups, _group);
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          groups: addItemAtIndex(groups, _group, index)
+        });
+      }
+
+    case "unregisterGroup":
+      {
+        var _id = action.id;
+        var nextGroups = groups.filter(function (group) {
+          return group.id !== _id;
+        }); // The group isn't registered, so do nothing
+
+        if (nextGroups.length === groups.length) {
+          return state;
+        }
+
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          groups: nextGroups
+        });
+      }
+
+    case "registerItem":
+      {
+        var _item = action.item; // Finds the item group based on the DOM hierarchy
+
+        var _group2 = groups.find(function (r) {
+          var _r$ref$current;
+
+          return (_r$ref$current = r.ref.current) === null || _r$ref$current === void 0 ? void 0 : _r$ref$current.contains(_item.ref.current);
+        }); // Group will be null if it's a one-dimensional composite
+
+
+        var nextItem = _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+          groupId: _group2 === null || _group2 === void 0 ? void 0 : _group2.id
+        }, _item);
+
+        var _index = findDOMIndex(items, nextItem);
+
+        var nextState = _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          items: addItemAtIndex(items, nextItem, _index)
+        });
+
+        if (!hasSetCurrentId && !moves && initialCurrentId === undefined) {
+          var _findFirstEnabledItem;
+
+          // Sets currentId to the first enabled item. This runs whenever an item
+          // is registered because the first enabled item may be registered
+          // asynchronously.
+          return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, nextState), {}, {
+            currentId: (_findFirstEnabledItem = getCurrentId_5aa9849e_findFirstEnabledItem(nextState.items)) === null || _findFirstEnabledItem === void 0 ? void 0 : _findFirstEnabledItem.id
+          });
+        }
+
+        return nextState;
+      }
+
+    case "unregisterItem":
+      {
+        var _id2 = action.id;
+        var nextItems = items.filter(function (item) {
+          return item.id !== _id2;
+        }); // The item isn't registered, so do nothing
+
+        if (nextItems.length === items.length) {
+          return state;
+        } // Filters out the item that is being removed from the pastIds list
+
+
+        var nextPastIds = pastIds.filter(function (pastId) {
+          return pastId !== _id2;
+        });
+
+        var _nextState = _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          pastIds: nextPastIds,
+          items: nextItems
+        }); // If the current item is the item that is being removed, focus pastId
+
+
+        if (currentId && currentId === _id2) {
+          var nextId = includesBaseElement ? null : getCurrentId(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState), {}, {
+            currentId: nextPastIds[0]
+          }));
+          return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState), {}, {
+            currentId: nextId
+          });
+        }
+
+        return _nextState;
+      }
+
+    case "move":
+      {
+        var _id3 = action.id; // move() does nothing
+
+        if (_id3 === undefined) {
+          return state;
+        } // Removes the current item and the item that is receiving focus from the
+        // pastIds list
+
+
+        var filteredPastIds = pastIds.filter(function (pastId) {
+          return pastId !== currentId && pastId !== _id3;
+        }); // If there's a currentId, add it to the pastIds list so it can be focused
+        // if the new item gets removed or disabled
+
+        var _nextPastIds = currentId ? [currentId].concat(filteredPastIds) : filteredPastIds;
+
+        var _nextState2 = _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          pastIds: _nextPastIds
+        }); // move(null) will focus the composite element itself, not an item
+
+
+        if (_id3 === null) {
+          return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState2), {}, {
+            unstable_moves: moves + 1,
+            currentId: getCurrentId(_nextState2, _id3)
+          });
+        }
+
+        var _item2 = findEnabledItemById(items, _id3);
+
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState2), {}, {
+          unstable_moves: _item2 ? moves + 1 : moves,
+          currentId: getCurrentId(_nextState2, _item2 === null || _item2 === void 0 ? void 0 : _item2.id)
+        });
+      }
+
+    case "next":
+      {
+        // If there's no item focused, we just move the first one
+        if (currentId == null) {
+          return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+            type: "first"
+          }));
+        } // RTL doesn't make sense on vertical navigation
+
+
+        var isHorizontal = orientation !== "vertical";
+        var isRTL = rtl && isHorizontal;
+        var allItems = isRTL ? reverse(items) : items;
+        var currentItem = allItems.find(function (item) {
+          return item.id === currentId;
+        }); // If there's no item focused, we just move the first one
+
+        if (!currentItem) {
+          return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+            type: "first"
+          }));
+        }
+
+        var isGrid = !!currentItem.groupId;
+        var currentIndex = allItems.indexOf(currentItem);
+
+        var _nextItems = allItems.slice(currentIndex + 1);
+
+        var nextItemsInGroup = getItemsInGroup(_nextItems, currentItem.groupId); // Home, End
+
+        if (action.allTheWay) {
+          // We reverse so we can get the last enabled item in the group. If it's
+          // RTL, nextItems and nextItemsInGroup are already reversed and don't
+          // have the items before the current one anymore. So we have to get
+          // items in group again with allItems.
+          var _nextItem2 = getCurrentId_5aa9849e_findFirstEnabledItem(isRTL ? getItemsInGroup(allItems, currentItem.groupId) : reverse(nextItemsInGroup));
+
+          return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+            type: "move",
+            id: _nextItem2 === null || _nextItem2 === void 0 ? void 0 : _nextItem2.id
+          }));
+        }
+
+        var oppositeOrientation = CompositeState_getOppositeOrientation( // If it's a grid and orientation is not set, it's a next/previous
+        // call, which is inherently horizontal. up/down will call next with
+        // orientation set to vertical by default (see below on up/down cases).
+        isGrid ? orientation || "horizontal" : orientation);
+        var canLoop = loop && loop !== oppositeOrientation;
+        var canWrap = isGrid && wrap && wrap !== oppositeOrientation;
+        var hasNullItem = // `previous` and `up` will set action.hasNullItem, but when calling
+        // next directly, hasNullItem will only be true if it's not a grid and
+        // loop is set to true, which means that pressing right or down keys on
+        // grids will never focus the composite element. On one-dimensional
+        // composites that don't loop, pressing right or down keys also doesn't
+        // focus the composite element.
+        action.hasNullItem || !isGrid && canLoop && includesBaseElement;
+
+        if (canLoop) {
+          var loopItems = canWrap && !hasNullItem ? allItems : getItemsInGroup(allItems, currentItem.groupId); // Turns [0, 1, current, 3, 4] into [3, 4, 0, 1]
+
+          var sortedItems = placeItemsAfter(loopItems, currentId, hasNullItem);
+
+          var _nextItem3 = getCurrentId_5aa9849e_findFirstEnabledItem(sortedItems, currentId);
+
+          return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+            type: "move",
+            id: _nextItem3 === null || _nextItem3 === void 0 ? void 0 : _nextItem3.id
+          }));
+        }
+
+        if (canWrap) {
+          var _nextItem4 = getCurrentId_5aa9849e_findFirstEnabledItem( // We can use nextItems, which contains all the next items, including
+          // items from other groups, to wrap between groups. However, if there
+          // is a null item (the composite element), we'll only use the next
+          // items in the group. So moving next from the last item will focus
+          // the composite element (null). On grid composites, horizontal
+          // navigation never focuses the composite element, only vertical.
+          hasNullItem ? nextItemsInGroup : _nextItems, currentId);
+
+          var _nextId = hasNullItem ? (_nextItem4 === null || _nextItem4 === void 0 ? void 0 : _nextItem4.id) || null : _nextItem4 === null || _nextItem4 === void 0 ? void 0 : _nextItem4.id;
+
+          return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+            type: "move",
+            id: _nextId
+          }));
+        }
+
+        var _nextItem = getCurrentId_5aa9849e_findFirstEnabledItem(nextItemsInGroup, currentId);
+
+        if (!_nextItem && hasNullItem) {
+          return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+            type: "move",
+            id: null
+          }));
+        }
+
+        return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+          type: "move",
+          id: _nextItem === null || _nextItem === void 0 ? void 0 : _nextItem.id
+        }));
+      }
+
+    case "previous":
+      {
+        // If currentId is initially set to null, the composite element will be
+        // focusable while navigating with arrow keys. But, if it's a grid, we
+        // don't want to focus the composite element with horizontal navigation.
+        var _isGrid = !!groups.length;
+
+        var _hasNullItem = !_isGrid && includesBaseElement;
+
+        var _nextState3 = reducer(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          items: reverse(items)
+        }), _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+          type: "next",
+          hasNullItem: _hasNullItem
+        }));
+
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState3), {}, {
+          items: items
+        });
+      }
+
+    case "down":
+      {
+        var shouldShift = shift && !action.allTheWay; // First, we make sure groups have the same number of items by filling it
+        // with disabled fake items. Then, we reorganize the items list so
+        // [1-1, 1-2, 2-1, 2-2] becomes [1-1, 2-1, 1-2, 2-2].
+
+        var verticalItems = CompositeState_verticalizeItems(flatten(fillGroups(groupItems(items), currentId, shouldShift)));
+
+        var _canLoop = loop && loop !== "horizontal"; // Pressing down arrow key will only focus the composite element if loop
+        // is true or vertical.
+
+
+        var _hasNullItem2 = _canLoop && includesBaseElement;
+
+        var _nextState4 = reducer(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          orientation: "vertical",
+          items: verticalItems
+        }), _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+          type: "next",
+          hasNullItem: _hasNullItem2
+        }));
+
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState4), {}, {
+          orientation: orientation,
+          items: items
+        });
+      }
+
+    case "up":
+      {
+        var _shouldShift = shift && !action.allTheWay;
+
+        var _verticalItems = CompositeState_verticalizeItems(reverse(flatten(fillGroups(groupItems(items), currentId, _shouldShift)))); // If currentId is initially set to null, we'll always focus the
+        // composite element when the up arrow key is pressed in the first row.
+
+
+        var _hasNullItem3 = includesBaseElement;
+
+        var _nextState5 = reducer(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          orientation: "vertical",
+          items: _verticalItems
+        }), _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+          type: "next",
+          hasNullItem: _hasNullItem3
+        }));
+
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState5), {}, {
+          orientation: orientation,
+          items: items
+        });
+      }
+
+    case "first":
+      {
+        var firstItem = getCurrentId_5aa9849e_findFirstEnabledItem(items);
+        return reducer(state, _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+          type: "move",
+          id: firstItem === null || firstItem === void 0 ? void 0 : firstItem.id
+        }));
+      }
+
+    case "last":
+      {
+        var _nextState6 = reducer(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          items: reverse(items)
+        }), _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, action), {}, {
+          type: "first"
+        }));
+
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, _nextState6), {}, {
+          items: items
+        });
+      }
+
+    case "sort":
+      {
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          items: CompositeState_sortBasedOnDOMPosition(items),
+          groups: CompositeState_sortBasedOnDOMPosition(groups)
+        });
+      }
+
+    case "setVirtual":
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+        unstable_virtual: applyState_applyState(action.virtual, virtual)
+      });
+
+    case "setRTL":
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+        rtl: applyState_applyState(action.rtl, rtl)
+      });
+
+    case "setOrientation":
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+        orientation: applyState_applyState(action.orientation, orientation)
+      });
+
+    case "setCurrentId":
+      {
+        var nextCurrentId = getCurrentId(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          currentId: applyState_applyState(action.currentId, currentId)
+        }));
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          currentId: nextCurrentId,
+          hasSetCurrentId: true
+        });
+      }
+
+    case "setLoop":
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+        loop: applyState_applyState(action.loop, loop)
+      });
+
+    case "setWrap":
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+        wrap: applyState_applyState(action.wrap, wrap)
+      });
+
+    case "setShift":
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+        shift: applyState_applyState(action.shift, shift)
+      });
+
+    case "setIncludesBaseElement":
+      {
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          unstable_includesBaseElement: applyState_applyState(action.includesBaseElement, includesBaseElement)
+        });
+      }
+
+    case "reset":
+      return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+        unstable_virtual: initialVirtual,
+        rtl: initialRTL,
+        orientation: initialOrientation,
+        currentId: getCurrentId(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          currentId: initialCurrentId
+        })),
+        loop: initialLoop,
+        wrap: initialWrap,
+        shift: initialShift,
+        unstable_moves: 0,
+        pastIds: []
+      });
+
+    case "setItems":
+      {
+        return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), {}, {
+          items: action.items
+        });
+      }
+
+    default:
+      throw new Error();
+  }
+}
+
+function useAction(fn) {
+  return (0,external_React_.useCallback)(fn, []);
+}
+
+function useIsUnmountedRef() {
+  var isUnmountedRef = (0,external_React_.useRef)(false);
+  useIsomorphicEffect(function () {
+    return function () {
+      isUnmountedRef.current = true;
+    };
+  }, []);
+  return isUnmountedRef;
+}
+
+function useCompositeState(initialState) {
+  if (initialState === void 0) {
+    initialState = {};
+  }
+
+  var _useSealedState = useSealedState(initialState),
+      _useSealedState$unsta = _useSealedState.unstable_virtual,
+      virtual = _useSealedState$unsta === void 0 ? false : _useSealedState$unsta,
+      _useSealedState$rtl = _useSealedState.rtl,
+      rtl = _useSealedState$rtl === void 0 ? false : _useSealedState$rtl,
+      orientation = _useSealedState.orientation,
+      currentId = _useSealedState.currentId,
+      _useSealedState$loop = _useSealedState.loop,
+      loop = _useSealedState$loop === void 0 ? false : _useSealedState$loop,
+      _useSealedState$wrap = _useSealedState.wrap,
+      wrap = _useSealedState$wrap === void 0 ? false : _useSealedState$wrap,
+      _useSealedState$shift = _useSealedState.shift,
+      shift = _useSealedState$shift === void 0 ? false : _useSealedState$shift,
+      unstable_includesBaseElement = _useSealedState.unstable_includesBaseElement,
+      sealed = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_useSealedState, ["unstable_virtual", "rtl", "orientation", "currentId", "loop", "wrap", "shift", "unstable_includesBaseElement"]);
+
+  var idState = unstable_useIdState(sealed);
+
+  var _React$useReducer = (0,external_React_.useReducer)(reducer, {
+    unstable_virtual: virtual,
+    rtl: rtl,
+    orientation: orientation,
+    items: [],
+    groups: [],
+    currentId: currentId,
+    loop: loop,
+    wrap: wrap,
+    shift: shift,
+    unstable_moves: 0,
+    pastIds: [],
+    unstable_includesBaseElement: unstable_includesBaseElement != null ? unstable_includesBaseElement : currentId === null,
+    initialVirtual: virtual,
+    initialRTL: rtl,
+    initialOrientation: orientation,
+    initialCurrentId: currentId,
+    initialLoop: loop,
+    initialWrap: wrap,
+    initialShift: shift
+  }),
+      _React$useReducer$ = _React$useReducer[0],
+      pastIds = _React$useReducer$.pastIds,
+      initialVirtual = _React$useReducer$.initialVirtual,
+      initialRTL = _React$useReducer$.initialRTL,
+      initialOrientation = _React$useReducer$.initialOrientation,
+      initialCurrentId = _React$useReducer$.initialCurrentId,
+      initialLoop = _React$useReducer$.initialLoop,
+      initialWrap = _React$useReducer$.initialWrap,
+      initialShift = _React$useReducer$.initialShift,
+      hasSetCurrentId = _React$useReducer$.hasSetCurrentId,
+      state = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_React$useReducer$, ["pastIds", "initialVirtual", "initialRTL", "initialOrientation", "initialCurrentId", "initialLoop", "initialWrap", "initialShift", "hasSetCurrentId"]),
+      dispatch = _React$useReducer[1];
+
+  var _React$useState = (0,external_React_.useState)(false),
+      hasActiveWidget = _React$useState[0],
+      setHasActiveWidget = _React$useState[1]; // register/unregister may be called when this component is unmounted. We
+  // store the unmounted state here so we don't update the state if it's true.
+  // This only happens in a very specific situation.
+  // See https://github.com/reakit/reakit/issues/650
+
+
+  var isUnmountedRef = useIsUnmountedRef();
+  var setItems = (0,external_React_.useCallback)(function (items) {
+    return dispatch({
+      type: "setItems",
+      items: items
+    });
+  }, []);
+  useSortBasedOnDOMPosition(state.items, setItems);
+  return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, idState), state), {}, {
+    unstable_hasActiveWidget: hasActiveWidget,
+    unstable_setHasActiveWidget: setHasActiveWidget,
+    registerItem: useAction(function (item) {
+      if (isUnmountedRef.current) return;
+      dispatch({
+        type: "registerItem",
+        item: item
+      });
+    }),
+    unregisterItem: useAction(function (id) {
+      if (isUnmountedRef.current) return;
+      dispatch({
+        type: "unregisterItem",
+        id: id
+      });
+    }),
+    registerGroup: useAction(function (group) {
+      if (isUnmountedRef.current) return;
+      dispatch({
+        type: "registerGroup",
+        group: group
+      });
+    }),
+    unregisterGroup: useAction(function (id) {
+      if (isUnmountedRef.current) return;
+      dispatch({
+        type: "unregisterGroup",
+        id: id
+      });
+    }),
+    move: useAction(function (id) {
+      return dispatch({
+        type: "move",
+        id: id
+      });
+    }),
+    next: useAction(function (allTheWay) {
+      return dispatch({
+        type: "next",
+        allTheWay: allTheWay
+      });
+    }),
+    previous: useAction(function (allTheWay) {
+      return dispatch({
+        type: "previous",
+        allTheWay: allTheWay
+      });
+    }),
+    up: useAction(function (allTheWay) {
+      return dispatch({
+        type: "up",
+        allTheWay: allTheWay
+      });
+    }),
+    down: useAction(function (allTheWay) {
+      return dispatch({
+        type: "down",
+        allTheWay: allTheWay
+      });
+    }),
+    first: useAction(function () {
+      return dispatch({
+        type: "first"
+      });
+    }),
+    last: useAction(function () {
+      return dispatch({
+        type: "last"
+      });
+    }),
+    sort: useAction(function () {
+      return dispatch({
+        type: "sort"
+      });
+    }),
+    unstable_setVirtual: useAction(function (value) {
+      return dispatch({
+        type: "setVirtual",
+        virtual: value
+      });
+    }),
+    setRTL: useAction(function (value) {
+      return dispatch({
+        type: "setRTL",
+        rtl: value
+      });
+    }),
+    setOrientation: useAction(function (value) {
+      return dispatch({
+        type: "setOrientation",
+        orientation: value
+      });
+    }),
+    setCurrentId: useAction(function (value) {
+      return dispatch({
+        type: "setCurrentId",
+        currentId: value
+      });
+    }),
+    setLoop: useAction(function (value) {
+      return dispatch({
+        type: "setLoop",
+        loop: value
+      });
+    }),
+    setWrap: useAction(function (value) {
+      return dispatch({
+        type: "setWrap",
+        wrap: value
+      });
+    }),
+    setShift: useAction(function (value) {
+      return dispatch({
+        type: "setShift",
+        shift: value
+      });
+    }),
+    unstable_setIncludesBaseElement: useAction(function (value) {
+      return dispatch({
+        type: "setIncludesBaseElement",
+        includesBaseElement: value
+      });
+    }),
+    reset: useAction(function () {
+      return dispatch({
+        type: "reset"
+      });
+    })
+  });
+}
+
+
+
 ;// CONCATENATED MODULE: ./packages/components/build-module/modal/aria-helper.js
 const LIVE_REGION_ARIA_ROLES = new Set(['alert', 'status', 'log', 'marquee', 'timer']);
 const hiddenElementsByDepth = [];
@@ -48372,8 +50139,10 @@ function unmodalize() {
 
 
 
-// Used to count the number of open modals.
-let openModalCount = 0;
+// Used to track and dismiss the prior modal when another opens unless nested.
+const level0Dismissers = [];
+const ModalContext = (0,external_wp_element_namespaceObject.createContext)(level0Dismissers);
+let isBodyOpenClassActive = false;
 function UnforwardedModal(props, forwardedRef) {
   const {
     bodyOpenClassName = 'modal-open',
@@ -48417,7 +50186,6 @@ function UnforwardedModal(props, forwardedRef) {
   const focusOnMountRef = (0,external_wp_compose_namespaceObject.useFocusOnMount)(focusOnMount === 'firstContentElement' ? 'firstElement' : focusOnMount);
   const constrainedTabbingRef = (0,external_wp_compose_namespaceObject.useConstrainedTabbing)();
   const focusReturnRef = (0,external_wp_compose_namespaceObject.useFocusReturn)();
-  const focusOutsideProps = (0,external_wp_compose_namespaceObject.__experimentalUseFocusOutside)(onRequestClose);
   const contentRef = (0,external_wp_element_namespaceObject.useRef)(null);
   const childrenContainerRef = (0,external_wp_element_namespaceObject.useRef)(null);
   const [hasScrolledContent, setHasScrolledContent] = (0,external_wp_element_namespaceObject.useState)(false);
@@ -48441,22 +50209,51 @@ function UnforwardedModal(props, forwardedRef) {
       setHasScrollableContent(false);
     }
   }, [contentRef]);
+
+  // Accessibly isolates/unisolates the modal.
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     modalize(ref.current);
     return () => unmodalize();
   }, []);
+
+  // Keeps a fresh ref for the subsequent effect.
+  const refOnRequestClose = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    openModalCount++;
-    if (openModalCount === 1) {
+    refOnRequestClose.current = onRequestClose;
+  }, [onRequestClose]);
+
+  // The list of `onRequestClose` callbacks of open (non-nested) Modals. Only
+  // one should remain open at a time and the list enables closing prior ones.
+  const dismissers = (0,external_wp_element_namespaceObject.useContext)(ModalContext);
+  // Used for the tracking and dismissing any nested modals.
+  const nestedDismissers = (0,external_wp_element_namespaceObject.useRef)([]);
+
+  // Updates the stack tracking open modals at this level and calls
+  // onRequestClose for any prior and/or nested modals as applicable.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    dismissers.push(refOnRequestClose);
+    const [first, second] = dismissers;
+    if (second) first?.current?.();
+    const nested = nestedDismissers.current;
+    return () => {
+      nested[0]?.current?.();
+      dismissers.shift();
+    };
+  }, [dismissers]);
+  const isLevel0 = dismissers === level0Dismissers;
+  // Adds/removes the value of bodyOpenClassName to body element.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!isBodyOpenClassActive) {
+      isBodyOpenClassActive = true;
       document.body.classList.add(bodyOpenClassName);
     }
     return () => {
-      openModalCount--;
-      if (openModalCount === 0) {
+      if (isLevel0 && dismissers.length === 0) {
         document.body.classList.remove(bodyOpenClassName);
+        isBodyOpenClassActive = false;
       }
     };
-  }, [bodyOpenClassName]);
+  }, [bodyOpenClassName, dismissers, isLevel0]);
 
   // Calls the isContentScrollable callback when the Modal children container resizes.
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
@@ -48499,12 +50296,9 @@ function UnforwardedModal(props, forwardedRef) {
   let pressTarget = null;
   const overlayPressHandlers = {
     onPointerDown: event => {
-      if (event.isPrimary && event.target === event.currentTarget) {
+      if (event.target === event.currentTarget) {
         pressTarget = event.target;
-        // Avoids loss of focus yet also leaves `useFocusOutside`
-        // practically useless with its only potential trigger being
-        // programmatic focus movement. TODO opt for either removing
-        // the hook or enhancing it such that this isn't needed.
+        // Avoids focus changing so that focus return works as expected.
         event.preventDefault();
       }
     },
@@ -48523,7 +50317,7 @@ function UnforwardedModal(props, forwardedRef) {
       if (button === 0 && isSameTarget) onRequestClose();
     }
   };
-  return (0,external_wp_element_namespaceObject.createPortal)(
+  const modal =
   // eslint-disable-next-line jsx-a11y/no-static-element-interactions
   (0,external_React_.createElement)("div", {
     ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([ref, forwardedRef]),
@@ -48541,7 +50335,6 @@ function UnforwardedModal(props, forwardedRef) {
     "aria-labelledby": contentLabel ? undefined : headingId,
     "aria-describedby": aria.describedby,
     tabIndex: -1,
-    ...(shouldCloseOnClickOutside ? focusOutsideProps : {}),
     onKeyDown: onKeyDown
   }, (0,external_React_.createElement)("div", {
     className: classnames_default()('components-modal__content', {
@@ -48570,7 +50363,10 @@ function UnforwardedModal(props, forwardedRef) {
     label: closeButtonLabel || (0,external_wp_i18n_namespaceObject.__)('Close')
   })), (0,external_React_.createElement)("div", {
     ref: (0,external_wp_compose_namespaceObject.useMergeRefs)([childrenContainerRef, focusOnMount === 'firstContentElement' ? focusOnMountRef : null])
-  }, children))))), document.body);
+  }, children)))));
+  return (0,external_wp_element_namespaceObject.createPortal)((0,external_React_.createElement)(ModalContext.Provider, {
+    value: nestedDismissers.current
+  }, modal), document.body);
 }
 
 /**
@@ -48630,10 +50426,6 @@ const styles_wrapper =  true ? {
 ;// CONCATENATED MODULE: ./packages/components/build-module/confirm-dialog/component.js
 
 /**
- * External dependencies
- */
-
-/**
  * WordPress dependencies
  */
 
@@ -48650,7 +50442,7 @@ const styles_wrapper =  true ? {
 
 
 
-function ConfirmDialog(props, forwardedRef) {
+const UnconnectedConfirmDialog = (props, forwardedRef) => {
   const {
     isOpen: isOpenProp,
     onConfirm,
@@ -48714,8 +50506,77 @@ function ConfirmDialog(props, forwardedRef) {
     variant: "primary",
     onClick: handleEvent(onConfirm)
   }, confirmLabel)))));
-}
-/* harmony default export */ var confirm_dialog_component = (contextConnect(ConfirmDialog, 'ConfirmDialog'));
+};
+
+/**
+ * `ConfirmDialog` is built of top of [`Modal`](/packages/components/src/modal/README.md)
+ * and displays a confirmation dialog, with _confirm_ and _cancel_ buttons.
+ * The dialog is confirmed by clicking the _confirm_ button or by pressing the `Enter` key.
+ * It is cancelled (closed) by clicking the _cancel_ button, by pressing the `ESC` key, or by
+ * clicking outside the dialog focus (i.e, the overlay).
+ *
+ * `ConfirmDialog` has two main implicit modes: controlled and uncontrolled.
+ *
+ * UnControlled:
+ *
+ * Allows the component to be used standalone, just by declaring it as part of another React's component render method:
+ * -   It will be automatically open (displayed) upon mounting;
+ * -   It will be automatically closed when clicking the _cancel_ button, by pressing the `ESC` key, or by clicking outside the dialog focus (i.e, the overlay);
+ * -   `onCancel` is not mandatory but can be passed. Even if passed, the dialog will still be able to close itself.
+ *
+ * Activating this mode is as simple as omitting the `isOpen` prop. The only mandatory prop, in this case, is the `onConfirm` callback. The message is passed as the `children`. You can pass any JSX you'd like, which allows to further format the message or include sub-component if you'd like:
+ *
+ * ```jsx
+ * import { __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
+ *
+ * function Example() {
+ * 	return (
+ * 		<ConfirmDialog onConfirm={ () => console.debug( ' Confirmed! ' ) }>
+ * 			Are you sure? <strong>This action cannot be undone!</strong>
+ * 		</ConfirmDialog>
+ * 	);
+ * }
+ * ```
+ *
+ *
+ * Controlled mode:
+ *  Let the parent component control when the dialog is open/closed. It's activated when a
+ * boolean value is passed to `isOpen`:
+ * -   It will not be automatically closed. You need to let it know when to open/close by updating the value of the `isOpen` prop;
+ * -   Both `onConfirm` and the `onCancel` callbacks are mandatory props in this mode;
+ * -   You'll want to update the state that controls `isOpen` by updating it from the `onCancel` and `onConfirm` callbacks.
+ *
+ *```jsx
+ * import { __experimentalConfirmDialog as ConfirmDialog } from '@wordpress/components';
+ * import { useState } from '@wordpress/element';
+ *
+ * function Example() {
+ * 	const [ isOpen, setIsOpen ] = useState( true );
+ *
+ * 	const handleConfirm = () => {
+ * 		console.debug( 'Confirmed!' );
+ * 		setIsOpen( false );
+ * 	};
+ *
+ * 	const handleCancel = () => {
+ * 		console.debug( 'Cancelled!' );
+ * 		setIsOpen( false );
+ * 	};
+ *
+ * 	return (
+ * 		<ConfirmDialog
+ * 			isOpen={ isOpen }
+ * 			onConfirm={ handleConfirm }
+ * 			onCancel={ handleCancel }
+ * 		>
+ * 			Are you sure? <strong>This action cannot be undone!</strong>
+ * 		</ConfirmDialog>
+ * 	);
+ * }
+ * ```
+ */
+const ConfirmDialog = contextConnect(UnconnectedConfirmDialog, 'ConfirmDialog');
+/* harmony default export */ var confirm_dialog_component = (ConfirmDialog);
 
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/objectWithoutPropertiesLoose.js
 function objectWithoutPropertiesLoose_objectWithoutPropertiesLoose(source, excluded) {
@@ -58131,9 +59992,9 @@ var DISCLOSURE_CONTENT_KEYS = DISCLOSURE_KEYS;
 
 
 
-var DisclosureContent_useDisclosureContent = createHook({
+var DisclosureContent_useDisclosureContent = createHook_createHook({
   name: "DisclosureContent",
-  compose: useRole,
+  compose: Role_useRole,
   keys: DISCLOSURE_CONTENT_KEYS,
   useProps: function useProps(options, _ref) {
     var htmlOnTransitionEnd = _ref.onTransitionEnd,
@@ -58148,11 +60009,11 @@ var DisclosureContent_useDisclosureContent = createHook({
         setTransition = _React$useState[1];
 
     var hidden = !options.visible && !animating;
-    var style = hidden ? _objectSpread2({
+    var style = hidden ? _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
       display: "none"
     }, htmlStyle) : htmlStyle;
-    var onTransitionEndRef = useLiveRef(htmlOnTransitionEnd);
-    var onAnimationEndRef = useLiveRef(htmlOnAnimationEnd);
+    var onTransitionEndRef = useLiveRef_useLiveRef(htmlOnTransitionEnd);
+    var onAnimationEndRef = useLiveRef_useLiveRef(htmlOnAnimationEnd);
     var raf = (0,external_React_.useRef)(0);
     (0,external_React_.useEffect)(function () {
       if (!options.animated) return undefined; // Double RAF is needed so the browser has enough time to paint the
@@ -58176,7 +60037,7 @@ var DisclosureContent_useDisclosureContent = createHook({
       };
     }, [options.animated, options.visible, animating]);
     var onEnd = (0,external_React_.useCallback)(function (event) {
-      if (!isSelfTarget(event)) return;
+      if (!isSelfTarget_isSelfTarget(event)) return;
       if (!animating) return; // Ignores number animated
 
       if (options.animated === true) {
@@ -58197,7 +60058,7 @@ var DisclosureContent_useDisclosureContent = createHook({
       (_onAnimationEndRef$cu = onAnimationEndRef.current) === null || _onAnimationEndRef$cu === void 0 ? void 0 : _onAnimationEndRef$cu.call(onAnimationEndRef, event);
       onEnd(event);
     }, [onEnd]);
-    return _objectSpread2({
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
       id: options.baseId,
       "data-enter": transition === "enter" ? "" : undefined,
       "data-leave": transition === "leave" ? "" : undefined,
@@ -58208,7 +60069,7 @@ var DisclosureContent_useDisclosureContent = createHook({
     }, htmlProps);
   }
 });
-var DisclosureContent_DisclosureContent = createComponent({
+var DisclosureContent_DisclosureContent = createComponent_createComponent({
   as: "div",
   useHook: DisclosureContent_useDisclosureContent
 });
@@ -59817,7 +61678,7 @@ const settings = (0,external_React_.createElement)(external_wp_primitives_namesp
  * @return Whether the value is a simple css value.
  */
 function isSimpleCssValue(value) {
-  const sizeRegex = /^[\d\.]+(px|em|rem|vw|vh|%)?$/i;
+  const sizeRegex = /^[\d\.]+(px|em|rem|vw|vh|%|svw|lvw|dvw|svh|lvh|dvh|vi|svi|lvi|dvi|vb|svb|lvb|dvb|vmin|svmin|lvmin|dvmin|vmax|svmax|lvmax|dvmax)?$/i;
   return sizeRegex.test(String(value));
 }
 
@@ -60063,528 +61924,6 @@ const VisualLabelWrapper = emotion_styled_base_browser_esm("div",  true ? {
   styles: "display:flex"
 } : 0);
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/C6MBVGZ2.js
-
-
-
-// src/collection/collection-store.ts
-
-function useCollectionStoreProps(store, update, props) {
-  useUpdateEffect(update, [props.store]);
-  useStoreProps(store, props, "items", "setItems");
-  return store;
-}
-function useCollectionStore(props = {}) {
-  const [store, update] = useStore(Core.createCollectionStore, props);
-  return useCollectionStoreProps(store, update, props);
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/EZ23JQKA.js
-
-
-
-// src/composite/composite-store.ts
-
-function useCompositeStoreProps(store, update, props) {
-  store = useCollectionStoreProps(store, update, props);
-  useStoreProps(store, props, "activeId", "setActiveId");
-  useStoreProps(store, props, "includesBaseElement");
-  useStoreProps(store, props, "virtualFocus");
-  useStoreProps(store, props, "orientation");
-  useStoreProps(store, props, "rtl");
-  useStoreProps(store, props, "focusLoop");
-  useStoreProps(store, props, "focusWrap");
-  useStoreProps(store, props, "focusShift");
-  return store;
-}
-function useCompositeStore(props = {}) {
-  const [store, update] = useStore(Core.createCompositeStore, props);
-  return useCompositeStoreProps(store, update, props);
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/STQCKYT6.js
-
-
-
-
-
-// src/collection/collection-store.ts
-function STQCKYT6_isElementPreceding(a, b) {
-  return Boolean(
-    b.compareDocumentPosition(a) & Node.DOCUMENT_POSITION_PRECEDING
-  );
-}
-function STQCKYT6_sortBasedOnDOMPosition(items) {
-  const pairs = items.map((item, index) => [index, item]);
-  let isOrderDifferent = false;
-  pairs.sort(([indexA, a], [indexB, b]) => {
-    const elementA = a.element;
-    const elementB = b.element;
-    if (elementA === elementB)
-      return 0;
-    if (!elementA || !elementB)
-      return 0;
-    if (STQCKYT6_isElementPreceding(elementA, elementB)) {
-      if (indexA > indexB) {
-        isOrderDifferent = true;
-      }
-      return -1;
-    }
-    if (indexA < indexB) {
-      isOrderDifferent = true;
-    }
-    return 1;
-  });
-  if (isOrderDifferent) {
-    return pairs.map(([_, item]) => item);
-  }
-  return items;
-}
-function STQCKYT6_getCommonParent(items) {
-  var _a;
-  const firstItem = items.find((item) => !!item.element);
-  const lastItem = [...items].reverse().find((item) => !!item.element);
-  let parentElement = (_a = firstItem == null ? void 0 : firstItem.element) == null ? void 0 : _a.parentElement;
-  while (parentElement && (lastItem == null ? void 0 : lastItem.element)) {
-    const parent = parentElement;
-    if (lastItem && parent.contains(lastItem.element)) {
-      return parentElement;
-    }
-    parentElement = parentElement.parentElement;
-  }
-  return O35LWD4W_getDocument(parentElement).body;
-}
-function createCollectionStore(props = {}) {
-  var _a;
-  throwOnConflictingProps(props, props.store);
-  const syncState = (_a = props.store) == null ? void 0 : _a.getState();
-  const items = defaultValue(
-    props.items,
-    syncState == null ? void 0 : syncState.items,
-    props.defaultItems,
-    []
-  );
-  const itemsMap = new Map(items.map((item) => [item.id, item]));
-  const initialState = {
-    items,
-    renderedItems: defaultValue(syncState == null ? void 0 : syncState.renderedItems, [])
-  };
-  const privateStore = createStore({
-    renderedItems: initialState.renderedItems
-  });
-  const collection = createStore(initialState, props.store);
-  const sortItems = () => {
-    const state = privateStore.getState();
-    const renderedItems = STQCKYT6_sortBasedOnDOMPosition(state.renderedItems);
-    privateStore.setState("renderedItems", renderedItems);
-    collection.setState("renderedItems", renderedItems);
-  };
-  setup(collection, () => {
-    return batch(privateStore, ["renderedItems"], (state) => {
-      let firstRun = true;
-      let raf = requestAnimationFrame(sortItems);
-      if (typeof IntersectionObserver !== "function")
-        return;
-      const callback = () => {
-        if (firstRun) {
-          firstRun = false;
-          return;
-        }
-        cancelAnimationFrame(raf);
-        raf = requestAnimationFrame(sortItems);
-      };
-      const root = STQCKYT6_getCommonParent(state.renderedItems);
-      const observer = new IntersectionObserver(callback, { root });
-      state.renderedItems.forEach((item) => {
-        if (!item.element)
-          return;
-        observer.observe(item.element);
-      });
-      return () => {
-        cancelAnimationFrame(raf);
-        observer.disconnect();
-      };
-    });
-  });
-  const mergeItem = (item, setItems, canDeleteFromMap = false) => {
-    let prevItem;
-    setItems((items2) => {
-      const index = items2.findIndex(({ id }) => id === item.id);
-      const nextItems = items2.slice();
-      if (index !== -1) {
-        prevItem = items2[index];
-        const nextItem = _chunks_PNRLI7OV_spreadValues(_chunks_PNRLI7OV_spreadValues({}, prevItem), item);
-        nextItems[index] = nextItem;
-        itemsMap.set(item.id, nextItem);
-      } else {
-        nextItems.push(item);
-        itemsMap.set(item.id, item);
-      }
-      return nextItems;
-    });
-    const unmergeItem = () => {
-      setItems((items2) => {
-        if (!prevItem) {
-          if (canDeleteFromMap) {
-            itemsMap.delete(item.id);
-          }
-          return items2.filter(({ id }) => id !== item.id);
-        }
-        const index = items2.findIndex(({ id }) => id === item.id);
-        if (index === -1)
-          return items2;
-        const nextItems = items2.slice();
-        nextItems[index] = prevItem;
-        itemsMap.set(item.id, prevItem);
-        return nextItems;
-      });
-    };
-    return unmergeItem;
-  };
-  const registerItem = (item) => mergeItem(item, (getItems) => collection.setState("items", getItems), true);
-  return _chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues({}, collection), {
-    registerItem,
-    renderItem: (item) => chain(
-      registerItem(item),
-      mergeItem(
-        item,
-        (getItems) => privateStore.setState("renderedItems", getItems)
-      )
-    ),
-    item: (id) => {
-      if (!id)
-        return null;
-      let item = itemsMap.get(id);
-      if (!item) {
-        const { items: items2 } = collection.getState();
-        item = items2.find((item2) => item2.id === id);
-        if (item) {
-          itemsMap.set(id, item);
-        }
-      }
-      return item || null;
-    }
-  });
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/5XEKIOCW.js
-// src/utils/array.ts
-function _5XEKIOCW_toArray(arg) {
-  if (Array.isArray(arg)) {
-    return arg;
-  }
-  return typeof arg !== "undefined" ? [arg] : [];
-}
-function addItemToArray(array, item, index = -1) {
-  if (!(index in array)) {
-    return [...array, item];
-  }
-  return [...array.slice(0, index), item, ...array.slice(index)];
-}
-function flatten2DArray(array) {
-  const flattened = [];
-  for (const row of array) {
-    flattened.push(...row);
-  }
-  return flattened;
-}
-function reverseArray(array) {
-  return array.slice().reverse();
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/__chunks/BL2LUIIN.js
-
-
-
-
-
-
-// src/composite/composite-store.ts
-var NULL_ITEM = { id: null };
-function BL2LUIIN_findFirstEnabledItem(items, excludeId) {
-  return items.find((item) => {
-    if (excludeId) {
-      return !item.disabled && item.id !== excludeId;
-    }
-    return !item.disabled;
-  });
-}
-function getEnabledItems(items, excludeId) {
-  return items.filter((item) => {
-    if (excludeId) {
-      return !item.disabled && item.id !== excludeId;
-    }
-    return !item.disabled;
-  });
-}
-function BL2LUIIN_getOppositeOrientation(orientation) {
-  if (orientation === "vertical")
-    return "horizontal";
-  if (orientation === "horizontal")
-    return "vertical";
-  return;
-}
-function getItemsInRow(items, rowId) {
-  return items.filter((item) => item.rowId === rowId);
-}
-function flipItems(items, activeId, shouldInsertNullItem = false) {
-  const index = items.findIndex((item) => item.id === activeId);
-  return [
-    ...items.slice(index + 1),
-    ...shouldInsertNullItem ? [NULL_ITEM] : [],
-    ...items.slice(0, index)
-  ];
-}
-function groupItemsByRows(items) {
-  const rows = [];
-  for (const item of items) {
-    const row = rows.find((currentRow) => {
-      var _a;
-      return ((_a = currentRow[0]) == null ? void 0 : _a.rowId) === item.rowId;
-    });
-    if (row) {
-      row.push(item);
-    } else {
-      rows.push([item]);
-    }
-  }
-  return rows;
-}
-function getMaxRowLength(array) {
-  let maxLength = 0;
-  for (const { length } of array) {
-    if (length > maxLength) {
-      maxLength = length;
-    }
-  }
-  return maxLength;
-}
-function BL2LUIIN_createEmptyItem(rowId) {
-  return {
-    id: "__EMPTY_ITEM__",
-    disabled: true,
-    rowId
-  };
-}
-function normalizeRows(rows, activeId, focusShift) {
-  const maxLength = getMaxRowLength(rows);
-  for (const row of rows) {
-    for (let i = 0; i < maxLength; i += 1) {
-      const item = row[i];
-      if (!item || focusShift && item.disabled) {
-        const isFirst = i === 0;
-        const previousItem = isFirst && focusShift ? BL2LUIIN_findFirstEnabledItem(row) : row[i - 1];
-        row[i] = previousItem && activeId !== previousItem.id && focusShift ? previousItem : BL2LUIIN_createEmptyItem(previousItem == null ? void 0 : previousItem.rowId);
-      }
-    }
-  }
-  return rows;
-}
-function BL2LUIIN_verticalizeItems(items) {
-  const rows = groupItemsByRows(items);
-  const maxLength = getMaxRowLength(rows);
-  const verticalized = [];
-  for (let i = 0; i < maxLength; i += 1) {
-    for (const row of rows) {
-      const item = row[i];
-      if (item) {
-        verticalized.push(_chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues({}, item), {
-          // If there's no rowId, it means that it's not a grid composite, but
-          // a single row instead. So, instead of verticalizing it, that is,
-          // assigning a different rowId based on the column index, we keep it
-          // undefined so they will be part of the same row. This is useful
-          // when using up/down on one-dimensional composites.
-          rowId: item.rowId ? `${i}` : void 0
-        }));
-      }
-    }
-  }
-  return verticalized;
-}
-function createCompositeStore(props = {}) {
-  var _a;
-  const syncState = (_a = props.store) == null ? void 0 : _a.getState();
-  const collection = createCollectionStore(props);
-  const activeId = defaultValue(
-    props.activeId,
-    syncState == null ? void 0 : syncState.activeId,
-    props.defaultActiveId
-  );
-  const initialState = _chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues({}, collection.getState()), {
-    activeId,
-    baseElement: defaultValue(syncState == null ? void 0 : syncState.baseElement, null),
-    includesBaseElement: defaultValue(
-      props.includesBaseElement,
-      syncState == null ? void 0 : syncState.includesBaseElement,
-      activeId === null
-    ),
-    moves: defaultValue(syncState == null ? void 0 : syncState.moves, 0),
-    orientation: defaultValue(
-      props.orientation,
-      syncState == null ? void 0 : syncState.orientation,
-      "both"
-    ),
-    rtl: defaultValue(props.rtl, syncState == null ? void 0 : syncState.rtl, false),
-    virtualFocus: defaultValue(
-      props.virtualFocus,
-      syncState == null ? void 0 : syncState.virtualFocus,
-      false
-    ),
-    focusLoop: defaultValue(props.focusLoop, syncState == null ? void 0 : syncState.focusLoop, false),
-    focusWrap: defaultValue(props.focusWrap, syncState == null ? void 0 : syncState.focusWrap, false),
-    focusShift: defaultValue(props.focusShift, syncState == null ? void 0 : syncState.focusShift, false)
-  });
-  const composite = createStore(initialState, collection, props.store);
-  setup(
-    composite,
-    () => sync(composite, ["renderedItems", "activeId"], (state) => {
-      composite.setState("activeId", (activeId2) => {
-        var _a2;
-        if (activeId2 !== void 0)
-          return activeId2;
-        return (_a2 = BL2LUIIN_findFirstEnabledItem(state.renderedItems)) == null ? void 0 : _a2.id;
-      });
-    })
-  );
-  const getNextId = (items, orientation, hasNullItem, skip) => {
-    var _a2, _b;
-    const { activeId: activeId2, rtl, focusLoop, focusWrap, includesBaseElement } = composite.getState();
-    const isHorizontal = orientation !== "vertical";
-    const isRTL = rtl && isHorizontal;
-    const allItems = isRTL ? reverseArray(items) : items;
-    if (activeId2 == null) {
-      return (_a2 = BL2LUIIN_findFirstEnabledItem(allItems)) == null ? void 0 : _a2.id;
-    }
-    const activeItem = allItems.find((item) => item.id === activeId2);
-    if (!activeItem) {
-      return (_b = BL2LUIIN_findFirstEnabledItem(allItems)) == null ? void 0 : _b.id;
-    }
-    const isGrid = !!activeItem.rowId;
-    const activeIndex = allItems.indexOf(activeItem);
-    const nextItems = allItems.slice(activeIndex + 1);
-    const nextItemsInRow = getItemsInRow(nextItems, activeItem.rowId);
-    if (skip !== void 0) {
-      const nextEnabledItemsInRow = getEnabledItems(nextItemsInRow, activeId2);
-      const nextItem2 = nextEnabledItemsInRow.slice(skip)[0] || // If we can't find an item, just return the last one.
-      nextEnabledItemsInRow[nextEnabledItemsInRow.length - 1];
-      return nextItem2 == null ? void 0 : nextItem2.id;
-    }
-    const oppositeOrientation = BL2LUIIN_getOppositeOrientation(
-      // If it's a grid and orientation is not set, it's a next/previous call,
-      // which is inherently horizontal. up/down will call next with orientation
-      // set to vertical by default (see below on up/down methods).
-      isGrid ? orientation || "horizontal" : orientation
-    );
-    const canLoop = focusLoop && focusLoop !== oppositeOrientation;
-    const canWrap = isGrid && focusWrap && focusWrap !== oppositeOrientation;
-    hasNullItem = hasNullItem || !isGrid && canLoop && includesBaseElement;
-    if (canLoop) {
-      const loopItems = canWrap && !hasNullItem ? allItems : getItemsInRow(allItems, activeItem.rowId);
-      const sortedItems = flipItems(loopItems, activeId2, hasNullItem);
-      const nextItem2 = BL2LUIIN_findFirstEnabledItem(sortedItems, activeId2);
-      return nextItem2 == null ? void 0 : nextItem2.id;
-    }
-    if (canWrap) {
-      const nextItem2 = BL2LUIIN_findFirstEnabledItem(
-        // We can use nextItems, which contains all the next items, including
-        // items from other rows, to wrap between rows. However, if there is a
-        // null item (the composite container), we'll only use the next items in
-        // the row. So moving next from the last item will focus on the
-        // composite container. On grid composites, horizontal navigation never
-        // focuses on the composite container, only vertical.
-        hasNullItem ? nextItemsInRow : nextItems,
-        activeId2
-      );
-      const nextId = hasNullItem ? (nextItem2 == null ? void 0 : nextItem2.id) || null : nextItem2 == null ? void 0 : nextItem2.id;
-      return nextId;
-    }
-    const nextItem = BL2LUIIN_findFirstEnabledItem(nextItemsInRow, activeId2);
-    if (!nextItem && hasNullItem) {
-      return null;
-    }
-    return nextItem == null ? void 0 : nextItem.id;
-  };
-  return _chunks_PNRLI7OV_spreadProps(_chunks_PNRLI7OV_spreadValues(_chunks_PNRLI7OV_spreadValues({}, collection), composite), {
-    setBaseElement: (element) => composite.setState("baseElement", element),
-    setActiveId: (id) => composite.setState("activeId", id),
-    move: (id) => {
-      if (id === void 0)
-        return;
-      composite.setState("activeId", id);
-      composite.setState("moves", (moves) => moves + 1);
-    },
-    first: () => {
-      var _a2;
-      return (_a2 = BL2LUIIN_findFirstEnabledItem(composite.getState().renderedItems)) == null ? void 0 : _a2.id;
-    },
-    last: () => {
-      var _a2;
-      return (_a2 = BL2LUIIN_findFirstEnabledItem(reverseArray(composite.getState().renderedItems))) == null ? void 0 : _a2.id;
-    },
-    next: (skip) => {
-      const { renderedItems, orientation } = composite.getState();
-      return getNextId(renderedItems, orientation, false, skip);
-    },
-    previous: (skip) => {
-      var _a2;
-      const { renderedItems, orientation, includesBaseElement } = composite.getState();
-      const isGrid = !!((_a2 = BL2LUIIN_findFirstEnabledItem(renderedItems)) == null ? void 0 : _a2.rowId);
-      const hasNullItem = !isGrid && includesBaseElement;
-      return getNextId(
-        reverseArray(renderedItems),
-        orientation,
-        hasNullItem,
-        skip
-      );
-    },
-    down: (skip) => {
-      const {
-        activeId: activeId2,
-        renderedItems,
-        focusShift,
-        focusLoop,
-        includesBaseElement
-      } = composite.getState();
-      const shouldShift = focusShift && !skip;
-      const verticalItems = BL2LUIIN_verticalizeItems(
-        flatten2DArray(
-          normalizeRows(groupItemsByRows(renderedItems), activeId2, shouldShift)
-        )
-      );
-      const canLoop = focusLoop && focusLoop !== "horizontal";
-      const hasNullItem = canLoop && includesBaseElement;
-      return getNextId(verticalItems, "vertical", hasNullItem, skip);
-    },
-    up: (skip) => {
-      const { activeId: activeId2, renderedItems, focusShift, includesBaseElement } = composite.getState();
-      const shouldShift = focusShift && !skip;
-      const verticalItems = BL2LUIIN_verticalizeItems(
-        reverseArray(
-          flatten2DArray(
-            normalizeRows(
-              groupItemsByRows(renderedItems),
-              activeId2,
-              shouldShift
-            )
-          )
-        )
-      );
-      const hasNullItem = includesBaseElement;
-      return getNextId(verticalItems, "vertical", hasNullItem, skip);
-    }
-  });
-}
-
-
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/core/esm/radio/radio-store.js
 
 
@@ -60635,43 +61974,6 @@ function useRadioStore(props = {}) {
 
 
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/74KKBFVP.js
-
-
-// src/collection/collection-context.tsx
-var _74KKBFVP_ctx = createStoreContext();
-var useCollectionContext = _74KKBFVP_ctx.useContext;
-var useCollectionScopedContext = _74KKBFVP_ctx.useScopedContext;
-var useCollectionProviderContext = _74KKBFVP_ctx.useProviderContext;
-var CollectionContextProvider = _74KKBFVP_ctx.ContextProvider;
-var CollectionScopedContextProvider = _74KKBFVP_ctx.ScopedContextProvider;
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/5C7J4IAS.js
-
-
-
-// src/composite/composite-context.tsx
-
-var _5C7J4IAS_ctx = createStoreContext(
-  [CollectionContextProvider],
-  [CollectionScopedContextProvider]
-);
-var useCompositeContext = _5C7J4IAS_ctx.useContext;
-var useCompositeScopedContext = _5C7J4IAS_ctx.useScopedContext;
-var useCompositeProviderContext = _5C7J4IAS_ctx.useProviderContext;
-var CompositeContextProvider = _5C7J4IAS_ctx.ContextProvider;
-var CompositeScopedContextProvider = _5C7J4IAS_ctx.ScopedContextProvider;
-var CompositeItemContext = (0,external_React_.createContext)(
-  void 0
-);
-var CompositeRowContext = (0,external_React_.createContext)(
-  void 0
-);
-
-
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/NRFPH2ON.js
 
 
@@ -60686,422 +61988,6 @@ var useRadioScopedContext = NRFPH2ON_ctx.useScopedContext;
 var useRadioProviderContext = NRFPH2ON_ctx.useProviderContext;
 var RadioContextProvider = NRFPH2ON_ctx.ContextProvider;
 var RadioScopedContextProvider = NRFPH2ON_ctx.ScopedContextProvider;
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/OXPV2NBK.js
-// src/composite/utils.ts
-
-var OXPV2NBK_NULL_ITEM = { id: null };
-function OXPV2NBK_flipItems(items, activeId, shouldInsertNullItem = false) {
-  const index = items.findIndex((item) => item.id === activeId);
-  return [
-    ...items.slice(index + 1),
-    ...shouldInsertNullItem ? [OXPV2NBK_NULL_ITEM] : [],
-    ...items.slice(0, index)
-  ];
-}
-function OXPV2NBK_findFirstEnabledItem(items, excludeId) {
-  return items.find((item) => {
-    if (excludeId) {
-      return !item.disabled && item.id !== excludeId;
-    }
-    return !item.disabled;
-  });
-}
-function getEnabledItem(store, id) {
-  if (!id)
-    return null;
-  return store.item(id) || null;
-}
-function OXPV2NBK_groupItemsByRows(items) {
-  const rows = [];
-  for (const item of items) {
-    const row = rows.find((currentRow) => {
-      var _a;
-      return ((_a = currentRow[0]) == null ? void 0 : _a.rowId) === item.rowId;
-    });
-    if (row) {
-      row.push(item);
-    } else {
-      rows.push([item]);
-    }
-  }
-  return rows;
-}
-function selectTextField(element, collapseToEnd = false) {
-  if (isTextField(element)) {
-    element.setSelectionRange(
-      collapseToEnd ? element.value.length : 0,
-      element.value.length
-    );
-  } else if (element.isContentEditable) {
-    const selection = getDocument(element).getSelection();
-    selection == null ? void 0 : selection.selectAllChildren(element);
-    if (collapseToEnd) {
-      selection == null ? void 0 : selection.collapseToEnd();
-    }
-  }
-}
-var FOCUS_SILENTLY = Symbol("FOCUS_SILENTLY");
-function focusSilently(element) {
-  element[FOCUS_SILENTLY] = true;
-  element.focus();
-}
-function silentlyFocused(element) {
-  const isSilentlyFocused = element[FOCUS_SILENTLY];
-  delete element[FOCUS_SILENTLY];
-  return isSilentlyFocused;
-}
-function OXPV2NBK_isItem(store, element, exclude) {
-  if (!element)
-    return false;
-  if (element === exclude)
-    return false;
-  const item = store.item(element.id);
-  if (!item)
-    return false;
-  if (exclude && item.element === exclude)
-    return false;
-  return true;
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/56TAEBRJ.js
-
-
-
-
-
-
-
-// src/composite/composite.tsx
-
-
-
-
-
-
-
-function isGrid(items) {
-  return items.some((item) => !!item.rowId);
-}
-function isPrintableKey(event) {
-  return event.key.length === 1 && !event.ctrlKey && !event.metaKey;
-}
-function isModifierKey(event) {
-  return event.key === "Shift" || event.key === "Control" || event.key === "Alt" || event.key === "Meta";
-}
-function _56TAEBRJ_canProxyKeyboardEvent(event, state) {
-  if (!events_isSelfTarget(event))
-    return false;
-  if (isModifierKey(event))
-    return false;
-  const target = event.target;
-  if (!target)
-    return true;
-  if (O35LWD4W_isTextField(target)) {
-    if (isPrintableKey(event))
-      return false;
-    const grid = isGrid(state.renderedItems);
-    const focusingInputOnly = state.activeId === null;
-    const allowHorizontalNavigationOnItems = grid && !focusingInputOnly;
-    const isHomeOrEnd = event.key === "Home" || event.key === "End";
-    if (!allowHorizontalNavigationOnItems && isHomeOrEnd)
-      return false;
-  }
-  return !event.isPropagationStopped();
-}
-function _56TAEBRJ_useKeyboardEventProxy(store, onKeyboardEvent, previousElementRef) {
-  return useEvent((event) => {
-    var _a;
-    onKeyboardEvent == null ? void 0 : onKeyboardEvent(event);
-    if (event.defaultPrevented)
-      return;
-    const state = store.getState();
-    const activeElement = (_a = getEnabledItem(store, state.activeId)) == null ? void 0 : _a.element;
-    if (!activeElement)
-      return;
-    if (!_56TAEBRJ_canProxyKeyboardEvent(event, state))
-      return;
-    const _b = event, { view } = _b, eventInit = __objRest(_b, ["view"]);
-    const previousElement = previousElementRef == null ? void 0 : previousElementRef.current;
-    if (activeElement !== previousElement) {
-      activeElement.focus();
-    }
-    if (!fireKeyboardEvent(activeElement, event.type, eventInit)) {
-      event.preventDefault();
-    }
-    if (event.currentTarget.contains(activeElement)) {
-      event.stopPropagation();
-    }
-  });
-}
-function _56TAEBRJ_findFirstEnabledItemInTheLastRow(items) {
-  return OXPV2NBK_findFirstEnabledItem(
-    flatten2DArray(reverseArray(OXPV2NBK_groupItemsByRows(items)))
-  );
-}
-function useScheduleFocus(store) {
-  const [scheduled, setScheduled] = (0,external_React_.useState)(false);
-  const schedule = (0,external_React_.useCallback)(() => setScheduled(true), []);
-  const activeItem = store.useState(
-    (state) => getEnabledItem(store, state.activeId)
-  );
-  (0,external_React_.useEffect)(() => {
-    const activeElement = activeItem == null ? void 0 : activeItem.element;
-    if (!scheduled)
-      return;
-    if (!activeElement)
-      return;
-    setScheduled(false);
-    activeElement.focus({ preventScroll: true });
-  }, [activeItem, scheduled]);
-  return schedule;
-}
-var _56TAEBRJ_useComposite = CFEUKV6C_createHook(
-  (_a) => {
-    var _b = _a, {
-      store,
-      composite = true,
-      focusOnMove = composite,
-      moveOnKeyPress = true
-    } = _b, props = __objRest(_b, [
-      "store",
-      "composite",
-      "focusOnMove",
-      "moveOnKeyPress"
-    ]);
-    const context = useCompositeProviderContext();
-    store = store || context;
-    invariant(
-      store,
-       false && 0
-    );
-    const previousElementRef = (0,external_React_.useRef)(null);
-    const scheduleFocus = useScheduleFocus(store);
-    const moves = store.useState("moves");
-    (0,external_React_.useEffect)(() => {
-      var _a2;
-      if (!store)
-        return;
-      if (!moves)
-        return;
-      if (!composite)
-        return;
-      if (!focusOnMove)
-        return;
-      const { activeId: activeId2 } = store.getState();
-      const itemElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
-      if (!itemElement)
-        return;
-      focusIntoView(itemElement);
-    }, [store, moves, composite, focusOnMove]);
-    useSafeLayoutEffect(() => {
-      if (!store)
-        return;
-      if (!moves)
-        return;
-      if (!composite)
-        return;
-      const { baseElement, activeId: activeId2 } = store.getState();
-      const isSelfAcive = activeId2 === null;
-      if (!isSelfAcive)
-        return;
-      if (!baseElement)
-        return;
-      const previousElement = previousElementRef.current;
-      previousElementRef.current = null;
-      if (previousElement) {
-        fireBlurEvent(previousElement, { relatedTarget: baseElement });
-      }
-      if (focus_hasFocus(baseElement)) {
-        fireFocusEvent(baseElement, { relatedTarget: previousElement });
-      } else {
-        baseElement.focus();
-      }
-    }, [store, moves, composite]);
-    const activeId = store.useState("activeId");
-    const virtualFocus = store.useState("virtualFocus");
-    useSafeLayoutEffect(() => {
-      var _a2;
-      if (!store)
-        return;
-      if (!composite)
-        return;
-      if (!virtualFocus)
-        return;
-      const previousElement = previousElementRef.current;
-      previousElementRef.current = null;
-      if (!previousElement)
-        return;
-      const activeElement = (_a2 = getEnabledItem(store, activeId)) == null ? void 0 : _a2.element;
-      const relatedTarget = activeElement || O35LWD4W_getActiveElement(previousElement);
-      fireBlurEvent(previousElement, { relatedTarget });
-    }, [store, activeId, virtualFocus, composite]);
-    const onKeyDownCapture = _56TAEBRJ_useKeyboardEventProxy(
-      store,
-      props.onKeyDownCapture,
-      previousElementRef
-    );
-    const onKeyUpCapture = _56TAEBRJ_useKeyboardEventProxy(
-      store,
-      props.onKeyUpCapture,
-      previousElementRef
-    );
-    const onFocusCaptureProp = props.onFocusCapture;
-    const onFocusCapture = useEvent((event) => {
-      onFocusCaptureProp == null ? void 0 : onFocusCaptureProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!store)
-        return;
-      const { virtualFocus: virtualFocus2 } = store.getState();
-      if (!virtualFocus2)
-        return;
-      const previousActiveElement = event.relatedTarget;
-      const isSilentlyFocused = silentlyFocused(event.currentTarget);
-      if (events_isSelfTarget(event) && isSilentlyFocused) {
-        event.stopPropagation();
-        previousElementRef.current = previousActiveElement;
-      }
-    });
-    const onFocusProp = props.onFocus;
-    const onFocus = useEvent((event) => {
-      onFocusProp == null ? void 0 : onFocusProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!composite)
-        return;
-      if (!store)
-        return;
-      const { relatedTarget } = event;
-      const { virtualFocus: virtualFocus2 } = store.getState();
-      if (virtualFocus2) {
-        if (events_isSelfTarget(event) && !OXPV2NBK_isItem(store, relatedTarget)) {
-          queueMicrotask(scheduleFocus);
-        }
-      } else if (events_isSelfTarget(event)) {
-        store.setActiveId(null);
-      }
-    });
-    const onBlurCaptureProp = props.onBlurCapture;
-    const onBlurCapture = useEvent((event) => {
-      var _a2;
-      onBlurCaptureProp == null ? void 0 : onBlurCaptureProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!store)
-        return;
-      const { virtualFocus: virtualFocus2, activeId: activeId2 } = store.getState();
-      if (!virtualFocus2)
-        return;
-      const activeElement = (_a2 = getEnabledItem(store, activeId2)) == null ? void 0 : _a2.element;
-      const nextActiveElement = event.relatedTarget;
-      const nextActiveElementIsItem = OXPV2NBK_isItem(store, nextActiveElement);
-      const previousElement = previousElementRef.current;
-      previousElementRef.current = null;
-      if (events_isSelfTarget(event) && nextActiveElementIsItem) {
-        if (nextActiveElement === activeElement) {
-          if (previousElement && previousElement !== nextActiveElement) {
-            fireBlurEvent(previousElement, event);
-          }
-        } else if (activeElement) {
-          fireBlurEvent(activeElement, event);
-        }
-        event.stopPropagation();
-      } else {
-        const targetIsItem = OXPV2NBK_isItem(store, event.target);
-        if (!targetIsItem && activeElement) {
-          fireBlurEvent(activeElement, event);
-        }
-      }
-    });
-    const onKeyDownProp = props.onKeyDown;
-    const moveOnKeyPressProp = useBooleanEvent(moveOnKeyPress);
-    const onKeyDown = useEvent((event) => {
-      var _a2;
-      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!store)
-        return;
-      if (!events_isSelfTarget(event))
-        return;
-      const { orientation, items, renderedItems, activeId: activeId2 } = store.getState();
-      const activeItem = getEnabledItem(store, activeId2);
-      if ((_a2 = activeItem == null ? void 0 : activeItem.element) == null ? void 0 : _a2.isConnected)
-        return;
-      const isVertical = orientation !== "horizontal";
-      const isHorizontal = orientation !== "vertical";
-      const grid = isGrid(renderedItems);
-      const up = () => {
-        if (grid) {
-          const item = items && _56TAEBRJ_findFirstEnabledItemInTheLastRow(items);
-          return item == null ? void 0 : item.id;
-        }
-        return store == null ? void 0 : store.last();
-      };
-      const keyMap = {
-        ArrowUp: (grid || isVertical) && up,
-        ArrowRight: (grid || isHorizontal) && store.first,
-        ArrowDown: (grid || isVertical) && store.first,
-        ArrowLeft: (grid || isHorizontal) && store.last,
-        Home: store.first,
-        End: store.last,
-        PageUp: store.first,
-        PageDown: store.last
-      };
-      const action = keyMap[event.key];
-      if (action) {
-        const id = action();
-        if (id !== void 0) {
-          if (!moveOnKeyPressProp(event))
-            return;
-          event.preventDefault();
-          store.move(id);
-        }
-      }
-    });
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,jsx_runtime.jsx)(CompositeContextProvider, { value: store, children: element }),
-      [store]
-    );
-    const activeDescendant = store.useState((state) => {
-      var _a2;
-      if (!store)
-        return;
-      if (!composite)
-        return;
-      if (!state.virtualFocus)
-        return;
-      return (_a2 = getEnabledItem(store, state.activeId)) == null ? void 0 : _a2.id;
-    });
-    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
-      "aria-activedescendant": activeDescendant
-    }, props), {
-      ref: useMergeRefs(composite ? store.setBaseElement : null, props.ref),
-      onKeyDownCapture,
-      onKeyUpCapture,
-      onFocusCapture,
-      onFocus,
-      onBlurCapture,
-      onKeyDown
-    });
-    const focusable = store.useState(
-      (state) => composite && (state.virtualFocus || state.activeId === null)
-    );
-    props = useFocusable(PNRLI7OV_spreadValues({ focusable }, props));
-    return props;
-  }
-);
-var _56TAEBRJ_Composite = CFEUKV6C_createComponent((props) => {
-  const htmlProps = _56TAEBRJ_useComposite(props);
-  return CFEUKV6C_createElement("div", htmlProps);
-});
-if (false) {}
 
 
 
@@ -61121,7 +62007,7 @@ if (false) {}
 // src/radio/radio-group.tsx
 
 
-var useRadioGroup = CFEUKV6C_createHook(
+var useRadioGroup = createHook(
   (_a) => {
     var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
     const context = useRadioProviderContext();
@@ -61138,11 +62024,11 @@ var useRadioGroup = CFEUKV6C_createHook(
     props = PNRLI7OV_spreadValues({
       role: "radiogroup"
     }, props);
-    props = _56TAEBRJ_useComposite(PNRLI7OV_spreadValues({ store }, props));
+    props = useComposite(PNRLI7OV_spreadValues({ store }, props));
     return props;
   }
 );
-var RadioGroup = CFEUKV6C_createComponent((props) => {
+var RadioGroup = createComponent((props) => {
   const htmlProps = useRadioGroup(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -61440,539 +62326,6 @@ function UnconnectedToggleGroupControl(props, forwardedRef) {
 const ToggleGroupControl = contextConnect(UnconnectedToggleGroupControl, 'ToggleGroupControl');
 /* harmony default export */ var toggle_group_control_component = (ToggleGroupControl);
 
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/XBIFFFUN.js
-
-
-
-
-
-// src/command/command.ts
-
-
-
-
-function XBIFFFUN_isNativeClick(event) {
-  if (!event.isTrusted)
-    return false;
-  const element = event.currentTarget;
-  if (event.key === "Enter") {
-    return O35LWD4W_isButton(element) || element.tagName === "SUMMARY" || element.tagName === "A";
-  }
-  if (event.key === " ") {
-    return O35LWD4W_isButton(element) || element.tagName === "SUMMARY" || element.tagName === "INPUT" || element.tagName === "SELECT";
-  }
-  return false;
-}
-var useCommand = CFEUKV6C_createHook(
-  (_a) => {
-    var _b = _a, { clickOnEnter = true, clickOnSpace = true } = _b, props = __objRest(_b, ["clickOnEnter", "clickOnSpace"]);
-    const ref = (0,external_React_.useRef)(null);
-    const tagName = useTagName(ref, props.as);
-    const type = props.type;
-    const [isNativeButton, setIsNativeButton] = (0,external_React_.useState)(
-      () => !!tagName && O35LWD4W_isButton({ tagName, type })
-    );
-    (0,external_React_.useEffect)(() => {
-      if (!ref.current)
-        return;
-      setIsNativeButton(O35LWD4W_isButton(ref.current));
-    }, []);
-    const [active, setActive] = (0,external_React_.useState)(false);
-    const activeRef = (0,external_React_.useRef)(false);
-    const isDuplicate = "data-command" in props;
-    const onKeyDownProp = props.onKeyDown;
-    const onKeyDown = useEvent((event) => {
-      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
-      const element = event.currentTarget;
-      if (event.defaultPrevented)
-        return;
-      if (isDuplicate)
-        return;
-      if (props.disabled)
-        return;
-      if (!events_isSelfTarget(event))
-        return;
-      if (O35LWD4W_isTextField(element))
-        return;
-      if (element.isContentEditable)
-        return;
-      const isEnter = clickOnEnter && event.key === "Enter";
-      const isSpace = clickOnSpace && event.key === " ";
-      const shouldPreventEnter = event.key === "Enter" && !clickOnEnter;
-      const shouldPreventSpace = event.key === " " && !clickOnSpace;
-      if (shouldPreventEnter || shouldPreventSpace) {
-        event.preventDefault();
-        return;
-      }
-      if (isEnter || isSpace) {
-        const nativeClick = XBIFFFUN_isNativeClick(event);
-        if (isEnter) {
-          if (!nativeClick) {
-            event.preventDefault();
-            const _a2 = event, { view } = _a2, eventInit = __objRest(_a2, ["view"]);
-            const click = () => fireClickEvent(element, eventInit);
-            if (isFirefox()) {
-              queueBeforeEvent(element, "keyup", click);
-            } else {
-              queueMicrotask(click);
-            }
-          }
-        } else if (isSpace) {
-          activeRef.current = true;
-          if (!nativeClick) {
-            event.preventDefault();
-            setActive(true);
-          }
-        }
-      }
-    });
-    const onKeyUpProp = props.onKeyUp;
-    const onKeyUp = useEvent((event) => {
-      onKeyUpProp == null ? void 0 : onKeyUpProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (isDuplicate)
-        return;
-      if (props.disabled)
-        return;
-      if (event.metaKey)
-        return;
-      const isSpace = clickOnSpace && event.key === " ";
-      if (activeRef.current && isSpace) {
-        activeRef.current = false;
-        if (!XBIFFFUN_isNativeClick(event)) {
-          setActive(false);
-          const element = event.currentTarget;
-          const _a2 = event, { view } = _a2, eventInit = __objRest(_a2, ["view"]);
-          queueMicrotask(() => fireClickEvent(element, eventInit));
-        }
-      }
-    });
-    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
-      "data-command": "",
-      "data-active": active ? "" : void 0,
-      type: isNativeButton ? "button" : void 0
-    }, props), {
-      ref: useMergeRefs(ref, props.ref),
-      onKeyDown,
-      onKeyUp
-    });
-    props = useFocusable(props);
-    return props;
-  }
-);
-var Command = CFEUKV6C_createComponent((props) => {
-  props = useCommand(props);
-  return CFEUKV6C_createElement("button", props);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/XIA3HAXM.js
-
-
-
-
-
-// src/collection/collection-item.ts
-
-
-var useCollectionItem = CFEUKV6C_createHook(
-  (_a) => {
-    var _b = _a, {
-      store,
-      shouldRegisterItem = true,
-      getItem = identity,
-      element: element
-    } = _b, props = __objRest(_b, [
-      "store",
-      "shouldRegisterItem",
-      "getItem",
-      // @ts-expect-error This prop may come from a collection renderer.
-      "element"
-    ]);
-    const context = useCollectionContext();
-    store = store || context;
-    const id = useId(props.id);
-    const ref = (0,external_React_.useRef)(element);
-    (0,external_React_.useEffect)(() => {
-      const element2 = ref.current;
-      if (!id)
-        return;
-      if (!element2)
-        return;
-      if (!shouldRegisterItem)
-        return;
-      const item = getItem({ id, element: element2 });
-      return store == null ? void 0 : store.renderItem(item);
-    }, [id, shouldRegisterItem, getItem, store]);
-    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), {
-      ref: useMergeRefs(ref, props.ref)
-    });
-    return props;
-  }
-);
-var CollectionItem = CFEUKV6C_createComponent(
-  (props) => {
-    const htmlProps = useCollectionItem(props);
-    return CFEUKV6C_createElement("div", htmlProps);
-  }
-);
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/54J7EHCU.js
-
-
-
-
-
-
-
-
-
-// src/composite/composite-item.tsx
-
-
-
-
-function isEditableElement(element) {
-  if (element.isContentEditable)
-    return true;
-  if (O35LWD4W_isTextField(element))
-    return true;
-  return element.tagName === "INPUT" && !O35LWD4W_isButton(element);
-}
-function getNextPageOffset(scrollingElement, pageUp = false) {
-  const height = scrollingElement.clientHeight;
-  const { top } = scrollingElement.getBoundingClientRect();
-  const pageSize = Math.max(height * 0.875, height - 40) * 1.5;
-  const pageOffset = pageUp ? height - pageSize + top : pageSize + top;
-  if (scrollingElement.tagName === "HTML") {
-    return pageOffset + scrollingElement.scrollTop;
-  }
-  return pageOffset;
-}
-function getItemOffset(itemElement, pageUp = false) {
-  const { top } = itemElement.getBoundingClientRect();
-  if (pageUp) {
-    return top + itemElement.clientHeight;
-  }
-  return top;
-}
-function findNextPageItemId(element, store, next, pageUp = false) {
-  var _a;
-  if (!store)
-    return;
-  if (!next)
-    return;
-  const { renderedItems } = store.getState();
-  const scrollingElement = getScrollingElement(element);
-  if (!scrollingElement)
-    return;
-  const nextPageOffset = getNextPageOffset(scrollingElement, pageUp);
-  let id;
-  let prevDifference;
-  for (let i = 0; i < renderedItems.length; i += 1) {
-    const previousId = id;
-    id = next(i);
-    if (!id)
-      break;
-    if (id === previousId)
-      continue;
-    const itemElement = (_a = getEnabledItem(store, id)) == null ? void 0 : _a.element;
-    if (!itemElement)
-      continue;
-    const itemOffset = getItemOffset(itemElement, pageUp);
-    const difference = itemOffset - nextPageOffset;
-    const absDifference = Math.abs(difference);
-    if (pageUp && difference <= 0 || !pageUp && difference >= 0) {
-      if (prevDifference !== void 0 && prevDifference < absDifference) {
-        id = previousId;
-      }
-      break;
-    }
-    prevDifference = absDifference;
-  }
-  return id;
-}
-function _54J7EHCU_targetIsAnotherItem(event, store) {
-  if (events_isSelfTarget(event))
-    return false;
-  return OXPV2NBK_isItem(store, event.target);
-}
-function _54J7EHCU_useRole(ref, props) {
-  const roleProp = props.role;
-  const [role, setRole] = (0,external_React_.useState)(roleProp);
-  useSafeLayoutEffect(() => {
-    const element = ref.current;
-    if (!element)
-      return;
-    setRole(element.getAttribute("role") || roleProp);
-  }, [roleProp]);
-  return role;
-}
-function requiresAriaSelected(role) {
-  return role === "option" || role === "treeitem";
-}
-function supportsAriaSelected(role) {
-  if (role === "option")
-    return true;
-  if (role === "tab")
-    return true;
-  if (role === "treeitem")
-    return true;
-  if (role === "gridcell")
-    return true;
-  if (role === "row")
-    return true;
-  if (role === "columnheader")
-    return true;
-  if (role === "rowheader")
-    return true;
-  return false;
-}
-var _54J7EHCU_useCompositeItem = CFEUKV6C_createHook(
-  (_a) => {
-    var _b = _a, {
-      store,
-      rowId: rowIdProp,
-      preventScrollOnKeyDown = false,
-      moveOnKeyPress = true,
-      getItem: getItemProp,
-      "aria-setsize": ariaSetSizeProp,
-      "aria-posinset": ariaPosInSetProp
-    } = _b, props = __objRest(_b, [
-      "store",
-      "rowId",
-      "preventScrollOnKeyDown",
-      "moveOnKeyPress",
-      "getItem",
-      "aria-setsize",
-      "aria-posinset"
-    ]);
-    const context = useCompositeContext();
-    store = store || context;
-    const id = useId(props.id);
-    const ref = (0,external_React_.useRef)(null);
-    const row = (0,external_React_.useContext)(CompositeRowContext);
-    const rowId = useStoreState(store, (state) => {
-      if (rowIdProp)
-        return rowIdProp;
-      if (!state)
-        return;
-      if (!(row == null ? void 0 : row.baseElement))
-        return;
-      if (row.baseElement !== state.baseElement)
-        return;
-      return row.id;
-    });
-    const trulyDisabled = props.disabled && !props.accessibleWhenDisabled;
-    const getItem = (0,external_React_.useCallback)(
-      (item) => {
-        const nextItem = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, item), {
-          id: id || item.id,
-          rowId,
-          disabled: !!trulyDisabled
-        });
-        if (getItemProp) {
-          return getItemProp(nextItem);
-        }
-        return nextItem;
-      },
-      [id, rowId, trulyDisabled, getItemProp]
-    );
-    const onFocusProp = props.onFocus;
-    const hasFocusedComposite = (0,external_React_.useRef)(false);
-    const onFocus = useEvent((event) => {
-      onFocusProp == null ? void 0 : onFocusProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (events_isPortalEvent(event))
-        return;
-      if (!id)
-        return;
-      if (!store)
-        return;
-      const { activeId, virtualFocus: virtualFocus2, baseElement: baseElement2 } = store.getState();
-      if (_54J7EHCU_targetIsAnotherItem(event, store))
-        return;
-      if (activeId !== id) {
-        store.setActiveId(id);
-      }
-      if (!virtualFocus2)
-        return;
-      if (!events_isSelfTarget(event))
-        return;
-      if (isEditableElement(event.currentTarget))
-        return;
-      if (!baseElement2)
-        return;
-      hasFocusedComposite.current = true;
-      const fromComposite = event.relatedTarget === baseElement2 || OXPV2NBK_isItem(store, event.relatedTarget);
-      if (fromComposite) {
-        focusSilently(baseElement2);
-      } else {
-        baseElement2.focus();
-      }
-    });
-    const onBlurCaptureProp = props.onBlurCapture;
-    const onBlurCapture = useEvent((event) => {
-      onBlurCaptureProp == null ? void 0 : onBlurCaptureProp(event);
-      if (event.defaultPrevented)
-        return;
-      const state = store == null ? void 0 : store.getState();
-      if ((state == null ? void 0 : state.virtualFocus) && hasFocusedComposite.current) {
-        hasFocusedComposite.current = false;
-        event.preventDefault();
-        event.stopPropagation();
-      }
-    });
-    const onKeyDownProp = props.onKeyDown;
-    const preventScrollOnKeyDownProp = useBooleanEvent(preventScrollOnKeyDown);
-    const moveOnKeyPressProp = useBooleanEvent(moveOnKeyPress);
-    const onKeyDown = useEvent((event) => {
-      onKeyDownProp == null ? void 0 : onKeyDownProp(event);
-      if (event.defaultPrevented)
-        return;
-      if (!events_isSelfTarget(event))
-        return;
-      if (!store)
-        return;
-      const { currentTarget } = event;
-      const state = store.getState();
-      const item = store.item(id);
-      const isGrid = !!(item == null ? void 0 : item.rowId);
-      const isVertical = state.orientation !== "horizontal";
-      const isHorizontal = state.orientation !== "vertical";
-      const keyMap = {
-        ArrowUp: (isGrid || isVertical) && store.up,
-        ArrowRight: (isGrid || isHorizontal) && store.next,
-        ArrowDown: (isGrid || isVertical) && store.down,
-        ArrowLeft: (isGrid || isHorizontal) && store.previous,
-        Home: () => {
-          if (!isGrid || event.ctrlKey) {
-            return store == null ? void 0 : store.first();
-          }
-          return store == null ? void 0 : store.previous(-1);
-        },
-        End: () => {
-          if (!isGrid || event.ctrlKey) {
-            return store == null ? void 0 : store.last();
-          }
-          return store == null ? void 0 : store.next(-1);
-        },
-        PageUp: () => {
-          return findNextPageItemId(currentTarget, store, store == null ? void 0 : store.up, true);
-        },
-        PageDown: () => {
-          return findNextPageItemId(currentTarget, store, store == null ? void 0 : store.down);
-        }
-      };
-      const action = keyMap[event.key];
-      if (action) {
-        const nextId = action();
-        if (preventScrollOnKeyDownProp(event) || nextId !== void 0) {
-          if (!moveOnKeyPressProp(event))
-            return;
-          event.preventDefault();
-          store.move(nextId);
-        }
-      }
-    });
-    const baseElement = useStoreState(
-      store,
-      (state) => (state == null ? void 0 : state.baseElement) || void 0
-    );
-    const providerValue = (0,external_React_.useMemo)(
-      () => ({ id, baseElement }),
-      [id, baseElement]
-    );
-    props = useWrapElement(
-      props,
-      (element) => /* @__PURE__ */ (0,jsx_runtime.jsx)(CompositeItemContext.Provider, { value: providerValue, children: element }),
-      [providerValue]
-    );
-    const isActiveItem = useStoreState(
-      store,
-      (state) => !!state && state.activeId === id
-    );
-    const virtualFocus = useStoreState(store, "virtualFocus");
-    const role = _54J7EHCU_useRole(ref, props);
-    let ariaSelected;
-    if (isActiveItem) {
-      if (requiresAriaSelected(role)) {
-        ariaSelected = true;
-      } else if (virtualFocus && supportsAriaSelected(role)) {
-        ariaSelected = true;
-      }
-    }
-    const ariaSetSize = useStoreState(store, (state) => {
-      if (ariaSetSizeProp != null)
-        return ariaSetSizeProp;
-      if (!state)
-        return;
-      if (!(row == null ? void 0 : row.ariaSetSize))
-        return;
-      if (row.baseElement !== state.baseElement)
-        return;
-      return row.ariaSetSize;
-    });
-    const ariaPosInSet = useStoreState(store, (state) => {
-      if (ariaPosInSetProp != null)
-        return ariaPosInSetProp;
-      if (!state)
-        return;
-      if (!(row == null ? void 0 : row.ariaPosInSet))
-        return;
-      if (row.baseElement !== state.baseElement)
-        return;
-      const itemsInRow = state.renderedItems.filter(
-        (item) => item.rowId === rowId
-      );
-      return row.ariaPosInSet + itemsInRow.findIndex((item) => item.id === id);
-    });
-    const isTabbable = useStoreState(store, (state) => {
-      if (!(state == null ? void 0 : state.renderedItems.length))
-        return true;
-      return !state.virtualFocus && state.activeId === id;
-    });
-    props = PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
-      id,
-      "aria-selected": ariaSelected,
-      "data-active-item": isActiveItem ? "" : void 0
-    }, props), {
-      ref: useMergeRefs(ref, props.ref),
-      tabIndex: isTabbable ? props.tabIndex : -1,
-      onFocus,
-      onBlurCapture,
-      onKeyDown
-    });
-    props = useCommand(props);
-    props = useCollectionItem(PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
-      store
-    }, props), {
-      getItem,
-      shouldRegisterItem: !!id ? props.shouldRegisterItem : false
-    }));
-    return PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({}, props), {
-      "aria-setsize": ariaSetSize,
-      "aria-posinset": ariaPosInSet
-    });
-  }
-);
-var _54J7EHCU_CompositeItem = createMemoComponent(
-  (props) => {
-    const htmlProps = _54J7EHCU_useCompositeItem(props);
-    return CFEUKV6C_createElement("button", htmlProps);
-  }
-);
-if (false) {}
-
-
-
 ;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/OJDCQDIL.js
 
 
@@ -61994,7 +62347,7 @@ function getIsChecked(value, storeValue) {
 function isNativeRadio(tagName, type) {
   return tagName === "input" && (!type || type === "radio");
 }
-var useRadio = CFEUKV6C_createHook(
+var useRadio = createHook(
   (_a) => {
     var _b = _a, { store, value, checked } = _b, props = __objRest(_b, ["store", "value", "checked"]);
     const context = useRadioContext();
@@ -62068,7 +62421,7 @@ var useRadio = CFEUKV6C_createHook(
       onClick,
       onFocus
     });
-    props = _54J7EHCU_useCompositeItem(PNRLI7OV_spreadValues({ store, clickOnEnter: !nativeRadio }, props));
+    props = useCompositeItem(PNRLI7OV_spreadValues({ store, clickOnEnter: !nativeRadio }, props));
     return PNRLI7OV_spreadValues({
       value: nativeRadio ? value : void 0,
       checked: isChecked
@@ -62233,6 +62586,7 @@ function ToggleGroupControlOptionBase(props, forwardedRef) {
     onClick: buttonOnClick
   }, (0,external_React_.createElement)(component_ButtonContentView, null, children)) : (0,external_React_.createElement)(Radio, {
     render: (0,external_React_.createElement)("button", {
+      type: "button",
       ...commonProps,
       onFocus: event => {
         onFocusProp?.(event);
@@ -67444,9 +67798,9 @@ function fireChange(element, onChange) {
   onChange === null || onChange === void 0 ? void 0 : onChange(event);
 }
 
-var Radio_useRadio = createHook({
+var Radio_useRadio = createHook_createHook({
   name: "Radio",
-  compose: useCompositeItem,
+  compose: CompositeItem_useCompositeItem,
   keys: RADIO_KEYS,
   useOptions: function useOptions(_ref, _ref2) {
     var _options$value;
@@ -67460,7 +67814,7 @@ var Radio_useRadio = createHook({
         unstable_checkOnFocus = _ref$unstable_checkOn === void 0 ? true : _ref$unstable_checkOn,
         options = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["unstable_clickOnEnter", "unstable_checkOnFocus"]);
 
-    return _objectSpread2(_objectSpread2({
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
       checked: checked,
       unstable_clickOnEnter: unstable_clickOnEnter,
       unstable_checkOnFocus: unstable_checkOnFocus
@@ -67481,9 +67835,9 @@ var Radio_useRadio = createHook({
         setIsNativeRadio = _React$useState3[1];
 
     var checked = getChecked(options);
-    var isCurrentItemRef = useLiveRef(options.currentId === options.id);
-    var onChangeRef = useLiveRef(htmlOnChange);
-    var onClickRef = useLiveRef(htmlOnClick);
+    var isCurrentItemRef = useLiveRef_useLiveRef(options.currentId === options.id);
+    var onChangeRef = useLiveRef_useLiveRef(htmlOnChange);
+    var onClickRef = useLiveRef_useLiveRef(htmlOnClick);
     useInitialChecked(options);
     (0,external_React_.useEffect)(function () {
       var element = ref.current;
@@ -67521,7 +67875,7 @@ var Radio_useRadio = createHook({
         fireChange(element, onChange);
       }
     }, [options.unstable_moves, options.unstable_checkOnFocus, onChange]);
-    return _objectSpread2({
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
       ref: useForkRef(ref, htmlRef),
       role: !isNativeRadio ? "radio" : undefined,
       type: isNativeRadio ? "radio" : undefined,
@@ -67534,7 +67888,7 @@ var Radio_useRadio = createHook({
     }, htmlProps);
   }
 });
-var Radio_Radio = createComponent({
+var Radio_Radio = createComponent_createComponent({
   as: "input",
   memo: true,
   useHook: Radio_useRadio
@@ -67623,10 +67977,10 @@ function useRadioState(initialState) {
       state = _React$useState[0],
       setState = _React$useState[1];
 
-  var composite = useCompositeState(_objectSpread2(_objectSpread2({}, sealed), {}, {
+  var composite = useCompositeState(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, sealed), {}, {
     loop: loop
   }));
-  return _objectSpread2(_objectSpread2({}, composite), {}, {
+  return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, composite), {}, {
     state: state,
     setState: setState
   });
@@ -67666,17 +68020,17 @@ function useRadioState(initialState) {
 
 
 
-var RadioGroup_useRadioGroup = createHook({
+var RadioGroup_useRadioGroup = createHook_createHook({
   name: "RadioGroup",
-  compose: useComposite,
+  compose: Composite_useComposite,
   keys: RADIO_GROUP_KEYS,
   useProps: function useProps(_, htmlProps) {
-    return _objectSpread2({
+    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
       role: "radiogroup"
     }, htmlProps);
   }
 });
-var RadioGroup_RadioGroup = createComponent({
+var RadioGroup_RadioGroup = createComponent_createComponent({
   as: "div",
   useHook: RadioGroup_useRadioGroup,
   useCreateElement: function useCreateElement$1(type, props, children) {
@@ -69235,7 +69589,7 @@ const observeAndResizeJS = function () {
   function removeViewportStyles(ruleOrNode) {
     if (ruleOrNode.style) {
       ['width', 'height', 'minHeight', 'maxHeight'].forEach(function (style) {
-        if (/^\\d+(vmin|vmax|vh|vw)$/.test(ruleOrNode.style[style])) {
+        if (/^\\d+(vw|vh|svw|lvw|dvw|svh|lvh|dvh|vi|svi|lvi|dvi|vb|svb|lvb|dvb|vmin|svmin|lvmin|dvmin|vmax|svmax|lvmax|dvmax)$/.test(ruleOrNode.style[style])) {
           ruleOrNode.style[style] = '';
         }
       });
@@ -69971,7 +70325,7 @@ var TabScopedContextProvider = DL4RBG46_ctx.ScopedContextProvider;
 // src/tab/tab-list.tsx
 
 
-var useTabList = CFEUKV6C_createHook((_a) => {
+var useTabList = createHook((_a) => {
   var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
   const context = useTabProviderContext();
   store = store || context;
@@ -69991,10 +70345,10 @@ var useTabList = CFEUKV6C_createHook((_a) => {
     role: "tablist",
     "aria-orientation": orientation
   }, props);
-  props = _56TAEBRJ_useComposite(PNRLI7OV_spreadValues({ store }, props));
+  props = useComposite(PNRLI7OV_spreadValues({ store }, props));
   return props;
 });
-var TabList = CFEUKV6C_createComponent((props) => {
+var tab_list_TabList = createComponent((props) => {
   const htmlProps = useTabList(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -70020,7 +70374,7 @@ if (false) {}
 // src/tab/tab.ts
 
 
-var useTab = CFEUKV6C_createHook(
+var useTab = createHook(
   (_a) => {
     var _b = _a, {
       store,
@@ -70072,7 +70426,7 @@ var useTab = CFEUKV6C_createHook(
     }, props), {
       onClick
     });
-    props = _54J7EHCU_useCompositeItem(PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
+    props = useCompositeItem(PNRLI7OV_spreadProps(PNRLI7OV_spreadValues({
       store
     }, props), {
       accessibleWhenDisabled,
@@ -70111,7 +70465,7 @@ if (false) {}
 
 
 
-var useTabPanel = CFEUKV6C_createHook(
+var useTabPanel = createHook(
   (_a) => {
     var _b = _a, { store, tabId: tabIdProp, getItem: getItemProp } = _b, props = __objRest(_b, ["store", "tabId", "getItem"]);
     const context = useTabProviderContext();
@@ -70127,7 +70481,7 @@ var useTabPanel = CFEUKV6C_createHook(
       const element = ref.current;
       if (!element)
         return;
-      const tabbable = focus_getAllTabbableIn(element);
+      const tabbable = getAllTabbableIn(element);
       setHasTabbableChildren(!!tabbable.length);
     }, []);
     const getItem = (0,external_React_.useCallback)(
@@ -70168,7 +70522,7 @@ var useTabPanel = CFEUKV6C_createHook(
     return props;
   }
 );
-var TabPanel = CFEUKV6C_createComponent((props) => {
+var tab_panel_TabPanel = createComponent((props) => {
   const htmlProps = useTabPanel(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -70251,7 +70605,7 @@ const UnforwardedTabPanel = ({
   activeClass = 'is-active',
   onSelect
 }, ref) => {
-  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(tab_panel_TabPanel, 'tab-panel');
+  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(TabPanel, 'tab-panel');
   const prependInstanceId = (0,external_wp_element_namespaceObject.useCallback)(tabName => {
     if (typeof tabName === 'undefined') {
       return;
@@ -70335,7 +70689,7 @@ const UnforwardedTabPanel = ({
   return (0,external_React_.createElement)("div", {
     className: className,
     ref: ref
-  }, (0,external_React_.createElement)(TabList, {
+  }, (0,external_React_.createElement)(tab_list_TabList, {
     store: tabStore,
     className: "components-tab-panel__tabs"
   }, tabs.map(tab => {
@@ -70353,15 +70707,15 @@ const UnforwardedTabPanel = ({
         showTooltip: !!tab.icon
       })
     }, !tab.icon && tab.title);
-  })), selectedTab && (0,external_React_.createElement)(TabPanel, {
+  })), selectedTab && (0,external_React_.createElement)(tab_panel_TabPanel, {
     id: `${prependInstanceId(selectedTab.name)}-view`,
     store: tabStore,
     tabId: prependInstanceId(selectedTab.name),
     className: 'components-tab-panel__tab-content'
   }, children(selectedTab)));
 };
-const tab_panel_TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedTabPanel);
-/* harmony default export */ var tab_panel = (tab_panel_TabPanel);
+const TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedTabPanel);
+/* harmony default export */ var tab_panel = (TabPanel);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/text-control/index.js
 
@@ -70848,12 +71202,12 @@ var ToolbarScopedContextProvider = IPFII6JW_ctx.ScopedContextProvider;
 
 
 // src/toolbar/toolbar-item.ts
-var useToolbarItem = CFEUKV6C_createHook(
+var useToolbarItem = createHook(
   (_a) => {
     var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
     const context = useToolbarContext();
     store = store || context;
-    props = _54J7EHCU_useCompositeItem(PNRLI7OV_spreadValues({ store }, props));
+    props = useCompositeItem(PNRLI7OV_spreadValues({ store }, props));
     return props;
   }
 );
@@ -71251,7 +71605,7 @@ function useToolbarStore(props = {}) {
 
 // src/toolbar/toolbar.tsx
 
-var useToolbar = CFEUKV6C_createHook(
+var useToolbar = createHook(
   (_a) => {
     var _b = _a, {
       store: storeProp,
@@ -71287,11 +71641,11 @@ var useToolbar = CFEUKV6C_createHook(
       role: "toolbar",
       "aria-orientation": orientation
     }, props);
-    props = _56TAEBRJ_useComposite(PNRLI7OV_spreadValues({ store }, props));
+    props = useComposite(PNRLI7OV_spreadValues({ store }, props));
     return props;
   }
 );
-var Toolbar = CFEUKV6C_createComponent((props) => {
+var Toolbar = createComponent((props) => {
   const htmlProps = useToolbar(props);
   return CFEUKV6C_createElement("div", htmlProps);
 });
@@ -71356,19 +71710,26 @@ const ToolbarContainer = (0,external_wp_element_namespaceObject.forwardRef)(Unfo
 
 
 
-const CONTEXT_SYSTEM_VALUE = {
-  DropdownMenu: {
-    variant: 'toolbar'
-  },
-  Dropdown: {
-    variant: 'toolbar'
-  }
-};
 function UnforwardedToolbar({
   className,
   label,
+  variant,
   ...props
 }, ref) {
+  const isVariantDefined = variant !== undefined;
+  const contextSystemValue = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    if (isVariantDefined) {
+      return {};
+    }
+    return {
+      DropdownMenu: {
+        variant: 'toolbar'
+      },
+      Dropdown: {
+        variant: 'toolbar'
+      }
+    };
+  }, [isVariantDefined]);
   if (!label) {
     external_wp_deprecated_default()('Using Toolbar without label prop', {
       since: '5.6',
@@ -71387,9 +71748,9 @@ function UnforwardedToolbar({
     });
   }
   // `ToolbarGroup` already uses components-toolbar for compatibility reasons.
-  const finalClassName = classnames_default()('components-accessible-toolbar', className);
+  const finalClassName = classnames_default()('components-accessible-toolbar', className, variant && `is-${variant}`);
   return (0,external_React_.createElement)(ContextSystemProvider, {
-    value: CONTEXT_SYSTEM_VALUE
+    value: contextSystemValue
   }, (0,external_React_.createElement)(toolbar_container, {
     className: finalClassName,
     label: label,
@@ -72253,10 +72614,10 @@ function useToolsPanelItem(props) {
   const isShown = isShownByDefault ? menuItems?.[menuGroup]?.[label] !== undefined : isMenuItemChecked;
   const cx = useCx();
   const classes = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    const placeholderStyle = shouldRenderPlaceholder && !isShown && ToolsPanelItemPlaceholder;
+    const shouldApplyPlaceholderStyles = shouldRenderPlaceholder && !isShown;
     const firstItemStyle = firstDisplayedItem === label && __experimentalFirstVisibleItemClass;
     const lastItemStyle = lastDisplayedItem === label && __experimentalLastVisibleItemClass;
-    return cx(ToolsPanelItem, placeholderStyle, className, firstItemStyle, lastItemStyle);
+    return cx(ToolsPanelItem, shouldApplyPlaceholderStyles && ToolsPanelItemPlaceholder, !shouldApplyPlaceholderStyles && className, firstItemStyle, lastItemStyle);
   }, [isShown, shouldRenderPlaceholder, className, cx, firstDisplayedItem, lastDisplayedItem, __experimentalFirstVisibleItemClass, __experimentalLastVisibleItemClass, label]);
   return {
     ...otherProps,
@@ -73476,6 +73837,66 @@ const with_focus_return_Provider = ({
 
 ;// CONCATENATED MODULE: external ["wp","privateApis"]
 var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/F5VAC7MB.js
+// src/group/group-label-context.ts
+
+var GroupLabelContext = (0,external_React_.createContext)(void 0);
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/JCUV76PT.js
+
+
+
+
+
+// src/group/group.tsx
+
+
+var JCUV76PT_useGroup = createHook((props) => {
+  const [labelId, setLabelId] = (0,external_React_.useState)();
+  props = useWrapElement(
+    props,
+    (element) => /* @__PURE__ */ (0,jsx_runtime.jsx)(GroupLabelContext.Provider, { value: setLabelId, children: element }),
+    []
+  );
+  props = PNRLI7OV_spreadValues({
+    role: "group",
+    "aria-labelledby": labelId
+  }, props);
+  return props;
+});
+var JCUV76PT_Group = createComponent((props) => {
+  const htmlProps = JCUV76PT_useGroup(props);
+  return CFEUKV6C_createElement("div", htmlProps);
+});
+if (false) {}
+
+
+
+;// CONCATENATED MODULE: ./packages/components/node_modules/@ariakit/react-core/esm/__chunks/E5S26AHF.js
+
+
+
+
+// src/composite/composite-group.ts
+var E5S26AHF_useCompositeGroup = createHook(
+  (_a) => {
+    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
+    props = JCUV76PT_useGroup(props);
+    return props;
+  }
+);
+var E5S26AHF_CompositeGroup = createComponent(
+  (props) => {
+    const htmlProps = E5S26AHF_useCompositeGroup(props);
+    return CFEUKV6C_createElement("div", htmlProps);
+  }
+);
+if (false) {}
+
+
+
 ;// CONCATENATED MODULE: ./packages/components/build-module/progress-bar/styles.js
 
 function progress_bar_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
@@ -73502,10 +73923,10 @@ const animateProgressBar = emotion_react_browser_esm_keyframes({
 const INDETERMINATE_TRACK_WIDTH = 50;
 const styles_Track = emotion_styled_base_browser_esm("div",  true ? {
   target: "e15u147w2"
-} : 0)("position:relative;overflow:hidden;width:100%;max-width:160px;height:", config_values.borderWidthFocus, ";background-color:var(\n\t\t--wp-components-color-gray-300,\n\t\t", COLORS.gray[300], "\n\t);border-radius:", config_values.radiusBlockUi, ";" + ( true ? "" : 0));
+} : 0)("position:relative;overflow:hidden;width:100%;max-width:160px;height:", config_values.borderWidthFocus, ";background-color:color-mix(\n\t\tin srgb,\n\t\tvar( --wp-components-color-foreground, ", COLORS.gray[900], " ),\n\t\ttransparent 90%\n\t);border-radius:", config_values.radiusBlockUi, ";outline:2px solid transparent;outline-offset:2px;" + ( true ? "" : 0));
 const Indicator = emotion_styled_base_browser_esm("div",  true ? {
   target: "e15u147w1"
-} : 0)("display:inline-block;position:absolute;top:0;height:100%;border-radius:", config_values.radiusBlockUi, ";background-color:", COLORS.theme.accent, ";", ({
+} : 0)("display:inline-block;position:absolute;top:0;height:100%;border-radius:", config_values.radiusBlockUi, ";background-color:color-mix(\n\t\tin srgb,\n\t\tvar( --wp-components-color-foreground, ", COLORS.gray[900], " ),\n\t\ttransparent 10%\n\t);outline:2px solid transparent;outline-offset:-2px;", ({
   isIndeterminate,
   value
 }) => isIndeterminate ? /*#__PURE__*/emotion_react_browser_esm_css({
@@ -79461,6 +79882,318 @@ function Theme({
 }
 /* harmony default export */ var theme = (Theme);
 
+;// CONCATENATED MODULE: ./packages/components/build-module/tabs/context.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+const TabsContext = (0,external_wp_element_namespaceObject.createContext)(undefined);
+const useTabsContext = () => (0,external_wp_element_namespaceObject.useContext)(TabsContext);
+
+;// CONCATENATED MODULE: ./packages/components/build-module/tabs/styles.js
+
+function tabs_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
+/**
+ * External dependencies
+ */
+
+// eslint-disable-next-line no-restricted-imports
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const TabListWrapper = emotion_styled_base_browser_esm("div",  true ? {
+  target: "enfox0g1"
+} : 0)( true ? {
+  name: "xbm4q1",
+  styles: "display:flex;align-items:stretch;flex-direction:row;&[aria-orientation='vertical']{flex-direction:column;}"
+} : 0);
+const styles_Tab = /*#__PURE__*/emotion_styled_base_browser_esm(Tab,  true ? {
+  target: "enfox0g0"
+} : 0)("&&{position:relative;border-radius:0;height:", space(12), ";background:transparent;border:none;box-shadow:none;cursor:pointer;padding:3px ", space(4), ";margin-left:0;font-weight:500;&[aria-disabled='true']{cursor:default;opacity:0.3;}&:focus:not( :disabled ){position:relative;box-shadow:none;outline:none;}&::after{content:'';position:absolute;right:0;bottom:0;left:0;pointer-events:none;background:", COLORS.theme.accent, ";height:calc( 0 * var( --wp-admin-border-width-focus ) );border-radius:0;transition:all 0.1s linear;", reduceMotion('transition'), ";}&[aria-selected='true']::after{height:calc( 1 * var( --wp-admin-border-width-focus ) );outline:2px solid transparent;outline-offset:-1px;}&::before{content:'';position:absolute;top:", space(3), ";right:", space(3), ";bottom:", space(3), ";left:", space(3), ";pointer-events:none;box-shadow:0 0 0 0 transparent;border-radius:2px;transition:all 0.1s linear;", reduceMotion('transition'), ";}&:focus-visible::before{box-shadow:0 0 0 var( --wp-admin-border-width-focus ) ", COLORS.theme.accent, ";outline:2px solid transparent;}}" + ( true ? "" : 0));
+
+;// CONCATENATED MODULE: ./packages/components/build-module/tabs/tab.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab({
+  children,
+  id,
+  className,
+  disabled,
+  render,
+  style
+}, ref) {
+  const context = (0,external_wp_element_namespaceObject.useContext)(TabsContext);
+  if (!context) {
+     false ? 0 : void 0;
+    return null;
+  }
+  const {
+    store,
+    instanceId
+  } = context;
+  const instancedTabId = `${instanceId}-${id}`;
+  return (0,external_React_.createElement)(styles_Tab, {
+    ref: ref,
+    store: store,
+    id: instancedTabId,
+    className: className,
+    style: style,
+    disabled: disabled,
+    render: render
+  }, children);
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/tabs/tablist.js
+
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line no-restricted-imports
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const TabList = (0,external_wp_element_namespaceObject.forwardRef)(function TabList({
+  children,
+  className,
+  style
+}, ref) {
+  const context = useTabsContext();
+  if (!context) {
+     false ? 0 : void 0;
+    return null;
+  }
+  const {
+    store
+  } = context;
+  return (0,external_React_.createElement)(tab_list_TabList, {
+    ref: ref,
+    style: style,
+    store: store,
+    className: className,
+    render: (0,external_React_.createElement)(TabListWrapper, null)
+  }, children);
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/tabs/tabpanel.js
+
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line no-restricted-imports
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const tabpanel_TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(function TabPanel({
+  children,
+  id,
+  className,
+  style
+}, ref) {
+  const context = (0,external_wp_element_namespaceObject.useContext)(TabsContext);
+  if (!context) {
+     false ? 0 : void 0;
+    return null;
+  }
+  const {
+    store,
+    instanceId
+  } = context;
+  return (0,external_React_.createElement)(tab_panel_TabPanel, {
+    ref: ref,
+    style: style,
+    store: store,
+    id: `${instanceId}-${id}-view`,
+    className: className
+  }, children);
+});
+
+;// CONCATENATED MODULE: ./packages/components/build-module/tabs/index.js
+
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line no-restricted-imports
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+function Tabs({
+  selectOnMove = true,
+  initialTabId,
+  orientation = 'horizontal',
+  onSelect,
+  children,
+  selectedTabId
+}) {
+  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(Tabs, 'tabs');
+  const store = useTabStore({
+    selectOnMove,
+    orientation,
+    defaultSelectedId: initialTabId && `${instanceId}-${initialTabId}`,
+    setSelectedId: selectedId => {
+      const strippedDownId = typeof selectedId === 'string' ? selectedId.replace(`${instanceId}-`, '') : selectedId;
+      onSelect?.(strippedDownId);
+    },
+    selectedId: selectedTabId && `${instanceId}-${selectedTabId}`
+  });
+  const isControlled = selectedTabId !== undefined;
+  const {
+    items,
+    selectedId
+  } = store.useState();
+  const {
+    setSelectedId
+  } = store;
+
+  // Keep track of whether tabs have been populated. This is used to prevent
+  // certain effects from firing too early while tab data and relevant
+  // variables are undefined during the initial render.
+  const tabsHavePopulated = (0,external_wp_element_namespaceObject.useRef)(false);
+  if (items.length > 0) {
+    tabsHavePopulated.current = true;
+  }
+  const selectedTab = items.find(item => item.id === selectedId);
+  const firstEnabledTab = items.find(item => {
+    // Ariakit internally refers to disabled tabs as `dimmed`.
+    return !item.dimmed;
+  });
+  const initialTab = items.find(item => item.id === `${instanceId}-${initialTabId}`);
+
+  // Handle selecting the initial tab.
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    if (isControlled) {
+      return;
+    }
+
+    // Wait for the denoted initial tab to be declared before making a
+    // selection. This ensures that if a tab is declared lazily it can
+    // still receive initial selection, as well as ensuring no tab is
+    // selected if an invalid `initialTabId` is provided.
+    if (initialTabId && !initialTab) {
+      return;
+    }
+
+    // If the currently selected tab is missing (i.e. removed from the DOM),
+    // fall back to the initial tab or the first enabled tab if there is
+    // one. Otherwise, no tab should be selected.
+    if (!items.find(item => item.id === selectedId)) {
+      if (initialTab && !initialTab.dimmed) {
+        setSelectedId(initialTab?.id);
+        return;
+      }
+      if (firstEnabledTab) {
+        setSelectedId(firstEnabledTab.id);
+      } else if (tabsHavePopulated.current) {
+        setSelectedId(null);
+      }
+    }
+  }, [firstEnabledTab, initialTab, initialTabId, isControlled, items, selectedId, setSelectedId]);
+
+  // Handle the currently selected tab becoming disabled.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!selectedTab?.dimmed) {
+      return;
+    }
+
+    // In controlled mode, we trust that disabling tabs is done
+    // intentionally, and don't select a new tab automatically.
+    if (isControlled) {
+      setSelectedId(null);
+      return;
+    }
+
+    // If the currently selected tab becomes disabled, fall back to the
+    // `initialTabId` if possible. Otherwise select the first
+    // enabled tab (if there is one).
+    if (initialTab && !initialTab.dimmed) {
+      setSelectedId(initialTab.id);
+      return;
+    }
+    if (firstEnabledTab) {
+      setSelectedId(firstEnabledTab.id);
+    }
+  }, [firstEnabledTab, initialTab, isControlled, selectedTab?.dimmed, setSelectedId]);
+
+  // Clear `selectedId` if the active tab is removed from the DOM in controlled mode.
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (!isControlled) {
+      return;
+    }
+
+    // Once the tabs have populated, if the `selectedTabId` still can't be
+    // found, clear the selection.
+    if (tabsHavePopulated.current && !!selectedTabId && !selectedTab) {
+      setSelectedId(null);
+    }
+  }, [isControlled, selectedId, selectedTab, selectedTabId, setSelectedId]);
+  return (0,external_React_.createElement)(TabsContext.Provider, {
+    value: {
+      store,
+      instanceId
+    }
+  }, children);
+}
+Tabs.TabList = TabList;
+Tabs.Tab = tab_Tab;
+Tabs.TabPanel = tabpanel_TabPanel;
+/* harmony default export */ var tabs = (Tabs);
+
 ;// CONCATENATED MODULE: ./packages/components/build-module/private-apis.js
 /**
  * WordPress dependencies
@@ -79477,12 +80210,19 @@ function Theme({
 
 
 
+
+
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/components');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/components');
 const privateApis = {};
 lock(privateApis, {
+  CompositeV2: Composite,
+  CompositeGroupV2: E5S26AHF_CompositeGroup,
+  CompositeItemV2: CompositeItem,
+  CompositeRowV2: CompositeRow,
+  useCompositeStoreV2: useCompositeStore,
   CustomSelectControl: CustomSelectControl,
   __experimentalPopoverLegacyPositionToPlacement: positionToPlacement,
   createPrivateSlotFill: createPrivateSlotFill,
@@ -79498,6 +80238,7 @@ lock(privateApis, {
   DropdownSubMenuV2: DropdownSubMenu,
   DropdownSubMenuTriggerV2: DropdownSubMenuTrigger,
   ProgressBar: progress_bar,
+  Tabs: tabs,
   Theme: theme
 });
 

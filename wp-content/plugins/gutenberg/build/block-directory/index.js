@@ -1499,6 +1499,18 @@ const DownloadableBlockNotice = ({
 };
 /* harmony default export */ var downloadable_block_notice = (DownloadableBlockNotice);
 
+;// CONCATENATED MODULE: external ["wp","privateApis"]
+var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// CONCATENATED MODULE: ./packages/block-directory/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/block-directory');
+
 ;// CONCATENATED MODULE: ./packages/block-directory/build-module/components/downloadable-block-list-item/index.js
 
 /**
@@ -1518,6 +1530,10 @@ const DownloadableBlockNotice = ({
 
 
 
+
+const {
+  CompositeItemV2: CompositeItem
+} = unlock(external_wp_components_namespaceObject.privateApis);
 
 // Return the appropriate block item label, given the block data and status.
 function getDownloadableBlockLabel({
@@ -1588,25 +1604,27 @@ function DownloadableBlockListItem({
   } else if (isInstalling) {
     statusText = (0,external_wp_i18n_namespaceObject.__)('Installing…');
   }
-  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__unstableCompositeItem, {
-    __experimentalIsFocusable: true,
-    role: "option",
-    as: external_wp_components_namespaceObject.Button,
-    ...composite,
-    className: "block-directory-downloadable-block-list-item",
-    onClick: event => {
-      event.preventDefault();
-      onClick();
-    },
-    isBusy: isInstalling,
-    disabled: isInstalling || !isInstallable,
-    label: getDownloadableBlockLabel(item, {
-      hasNotice,
-      isInstalled,
-      isInstalling
+  return (0,external_React_namespaceObject.createElement)(CompositeItem, {
+    render: (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+      __experimentalIsFocusable: true,
+      type: "button",
+      role: "option",
+      className: "block-directory-downloadable-block-list-item",
+      isBusy: isInstalling,
+      onClick: event => {
+        event.preventDefault();
+        onClick();
+      },
+      label: getDownloadableBlockLabel(item, {
+        hasNotice,
+        isInstalled,
+        isInstalling
+      }),
+      showTooltip: true,
+      tooltipPosition: "top center"
     }),
-    showTooltip: true,
-    tooltipPosition: "top center"
+    store: composite,
+    disabled: isInstalling || !isInstallable
   }, (0,external_React_namespaceObject.createElement)("div", {
     className: "block-directory-downloadable-block-list-item__icon"
   }, (0,external_React_namespaceObject.createElement)(downloadable_block_icon, {
@@ -1648,21 +1666,26 @@ function DownloadableBlockListItem({
  */
 
 
+
+const {
+  CompositeV2: Composite,
+  useCompositeStoreV2: useCompositeStore
+} = unlock(external_wp_components_namespaceObject.privateApis);
 const noop = () => {};
 function DownloadableBlocksList({
   items,
   onHover = noop,
   onSelect
 }) {
-  const composite = (0,external_wp_components_namespaceObject.__unstableUseCompositeState)();
+  const composite = useCompositeStore();
   const {
     installBlockType
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
   if (!items.length) {
     return null;
   }
-  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__unstableComposite, {
-    ...composite,
+  return (0,external_React_namespaceObject.createElement)(Composite, {
+    store: composite,
     role: "listbox",
     className: "block-directory-downloadable-blocks-list",
     "aria-label": (0,external_wp_i18n_namespaceObject.__)('Blocks available for install')
@@ -1818,20 +1841,27 @@ function DownloadableBlocksPanel({
   })) : !hasLocalBlocks && (0,external_React_namespaceObject.createElement)(no_results, null);
 }
 /* harmony default export */ var downloadable_blocks_panel = ((0,external_wp_compose_namespaceObject.compose)([(0,external_wp_data_namespaceObject.withSelect)((select, {
-  filterValue,
-  rootClientId = null
+  filterValue
 }) => {
   const {
     getDownloadableBlocks,
-    isRequestingDownloadableBlocks
+    isRequestingDownloadableBlocks,
+    getInstalledBlockTypes
   } = select(store);
-  const {
-    canInsertBlockType
-  } = select(external_wp_blockEditor_namespaceObject.store);
   const hasPermission = select(external_wp_coreData_namespaceObject.store).canUser('read', 'block-directory/search');
   function getInstallableBlocks(term) {
     const downloadableBlocks = getDownloadableBlocks(term);
-    const installableBlocks = downloadableBlocks.filter(block => canInsertBlockType(block, rootClientId, true));
+    const installedBlockTypes = getInstalledBlockTypes();
+    // Filter out blocks that are already installed.
+    const installableBlocks = downloadableBlocks.filter(block => {
+      // Check if the block has just been installed, in which case it
+      // should still show in the list to avoid suddenly disappearing.
+      // `installedBlockTypes` only returns blocks stored in state
+      // immediately after installation, not all installed blocks.
+      const isJustInstalled = !!installedBlockTypes.find(blockType => blockType.name === block.name);
+      const isPreviouslyInstalled = (0,external_wp_blocks_namespaceObject.getBlockType)(block.name);
+      return isJustInstalled || !isPreviouslyInstalled;
+    });
     if (downloadableBlocks.length === installableBlocks.length) {
       return downloadableBlocks;
     }

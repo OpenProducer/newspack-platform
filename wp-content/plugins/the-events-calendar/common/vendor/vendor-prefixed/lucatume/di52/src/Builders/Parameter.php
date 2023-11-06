@@ -210,7 +210,7 @@ class Parameter
         }
 
         try {
-            if (function_exists('enum_exists') && enum_exists($this->type)) {
+            if (function_exists('enum_exists') && enum_exists((string) $this->type)) {
                 return false;
             }
         } catch (ParseError $e) {

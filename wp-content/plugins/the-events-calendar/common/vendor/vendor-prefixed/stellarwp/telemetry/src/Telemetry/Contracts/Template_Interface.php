@@ -30,15 +30,6 @@ interface Template_Interface {
 	public function render( string $stellar_slug );
 
 	/**
-	 * Enqueues assets for the rendered template.
-	 *
-	 * @since 1.0.0
-	 *
-	 * @return void
-	 */
-	public function enqueue();
-
-	/**
 	 * Determines if the template should be rendered.
 	 *
 	 * @since 1.0.0

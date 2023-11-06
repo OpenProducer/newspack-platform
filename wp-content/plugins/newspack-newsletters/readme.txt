@@ -43,7 +43,7 @@ Before sending your campaign, you can send test emails to one or more email addr
 
 = About Newspack =
 
-The Newspack Newletters plugin is part of Newspack, a suite of tools to help small to mid-sized news organizations publish and generate revenue with WordPress. Newspack is a collaborative project by WordPress.com and the Google News Initiative. You can learn more about Newspack by [visiting our website](https://newspack.pub/).
+The Newspack Newletters plugin is part of Newspack, a suite of tools to help small to mid-sized news organizations publish and generate revenue with WordPress. Newspack is a collaborative project by WordPress.com and the Google News Initiative. You can learn more about Newspack by [visiting our website](https://newspack.com/).
 
 = Credits =
 

@@ -27,7 +27,7 @@ trait FromClause {
 	 *
 	 * @return $this
 	 */
-	public function from( $table, $alias = null ) {
+	public function from( $table, $alias = '' ) {
 		$this->froms[] = new From( $table, $alias );
 
 		return $this;

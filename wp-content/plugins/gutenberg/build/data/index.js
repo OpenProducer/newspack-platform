@@ -535,7 +535,7 @@ __webpack_require__.d(__webpack_exports__, {
   AsyncModeProvider: function() { return /* reexport */ async_mode_provider_context; },
   RegistryConsumer: function() { return /* reexport */ RegistryConsumer; },
   RegistryProvider: function() { return /* reexport */ context; },
-  combineReducers: function() { return /* reexport */ combine_reducers_combineReducers; },
+  combineReducers: function() { return /* binding */ build_module_combineReducers; },
   controls: function() { return /* reexport */ controls; },
   createReduxStore: function() { return /* reexport */ createReduxStore; },
   createRegistry: function() { return /* reexport */ createRegistry; },
@@ -1591,7 +1591,7 @@ var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/data');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/data');
 
 ;// CONCATENATED MODULE: ./node_modules/is-promise/index.mjs
 function isPromise(obj) {
@@ -2690,9 +2690,15 @@ function createReduxStore(key, options) {
           selector.registry = registry;
         }
         const boundSelector = (...args) => {
+          args = normalize(selector, args);
           const state = store.__unstableOriginalGetState();
           return selector(state.root, ...args);
         };
+
+        // Expose normalization method on the bound selector
+        // in order that it can be called when fullfilling
+        // the resolver.
+        boundSelector.__unstableNormalizeArgs = selector.__unstableNormalizeArgs;
         const resolver = resolvers[selectorName];
         if (!resolver) {
           boundSelector.hasResolver = false;
@@ -2700,10 +2706,18 @@ function createReduxStore(key, options) {
         }
         return mapSelectorWithResolver(boundSelector, selectorName, resolver, store, resolversCache);
       }
-      function bindMetadataSelector(selector) {
+      function bindMetadataSelector(metaDataSelector) {
         const boundSelector = (...args) => {
           const state = store.__unstableOriginalGetState();
-          return selector(state.metadata, ...args);
+          const originalSelectorName = args && args[0];
+          const originalSelectorArgs = args && args[1];
+          const targetSelector = options?.selectors?.[originalSelectorName];
+
+          // Normalize the arguments passed to the target selector.
+          if (originalSelectorName && targetSelector) {
+            args[1] = normalize(targetSelector, originalSelectorArgs);
+          }
+          return metaDataSelector(state.metadata, ...args);
         };
         boundSelector.hasResolver = false;
         return boundSelector;
@@ -2974,11 +2988,27 @@ function mapSelectorWithResolver(selector, selectorName, resolver, store, resolv
     }, 0);
   }
   const selectorResolver = (...args) => {
+    args = normalize(selector, args);
     fulfillSelector(args);
     return selector(...args);
   };
   selectorResolver.hasResolver = true;
   return selectorResolver;
+}
+
+/**
+ * Applies selector's normalization function to the given arguments
+ * if it exists.
+ *
+ * @param {Object} selector The selector potentially with a normalization method property.
+ * @param {Array}  args     selector arguments to normalize.
+ * @return {Array} Potentially normalized arguments.
+ */
+function normalize(selector, args) {
+  if (selector.__unstableNormalizeArgs && typeof selector.__unstableNormalizeArgs === 'function' && args?.length) {
+    return selector.__unstableNormalizeArgs(args);
+  }
+  return args;
 }
 
 ;// CONCATENATED MODULE: ./packages/data/build-module/store/index.js
@@ -3643,7 +3673,7 @@ function persistencePlugin(registry, pluginOptions) {
       const reducers = keys.reduce((accumulator, key) => Object.assign(accumulator, {
         [key]: (state, action) => action.nextState[key]
       }), {});
-      getPersistedState = withLazySameState(combine_reducers_combineReducers(reducers));
+      getPersistedState = withLazySameState(build_module_combineReducers(reducers));
     } else {
       getPersistedState = (state, action) => action.nextState;
     }
@@ -4539,6 +4569,7 @@ function select_select(storeNameOrDescriptor) {
 
 
 
+
 /** @typedef {import('./types').StoreDescriptor} StoreDescriptor */
 
 
@@ -4603,7 +4634,7 @@ function select_select(storeNameOrDescriptor) {
  * @return {Function} A reducer that invokes every reducer inside the reducers
  *                    object, and constructs a state object with the same shape.
  */
-
+const build_module_combineReducers = combine_reducers_combineReducers;
 
 /**
  * Given a store descriptor, returns an object containing the store's selectors pre-bound to state

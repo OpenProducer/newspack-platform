@@ -1137,6 +1137,46 @@ __webpack_require__.d(build_module_file_namespaceObject, {
   settings: function() { return file_settings; }
 });
 
+// NAMESPACE OBJECT: ./packages/block-library/build-module/form/index.js
+var build_module_form_namespaceObject = {};
+__webpack_require__.r(build_module_form_namespaceObject);
+__webpack_require__.d(build_module_form_namespaceObject, {
+  init: function() { return form_init; },
+  metadata: function() { return form_metadata; },
+  name: function() { return form_name; },
+  settings: function() { return form_settings; }
+});
+
+// NAMESPACE OBJECT: ./packages/block-library/build-module/form-input/index.js
+var form_input_namespaceObject = {};
+__webpack_require__.r(form_input_namespaceObject);
+__webpack_require__.d(form_input_namespaceObject, {
+  init: function() { return form_input_init; },
+  metadata: function() { return form_input_metadata; },
+  name: function() { return form_input_name; },
+  settings: function() { return form_input_settings; }
+});
+
+// NAMESPACE OBJECT: ./packages/block-library/build-module/form-submit-button/index.js
+var form_submit_button_namespaceObject = {};
+__webpack_require__.r(form_submit_button_namespaceObject);
+__webpack_require__.d(form_submit_button_namespaceObject, {
+  init: function() { return form_submit_button_init; },
+  metadata: function() { return form_submit_button_metadata; },
+  name: function() { return form_submit_button_name; },
+  settings: function() { return form_submit_button_settings; }
+});
+
+// NAMESPACE OBJECT: ./packages/block-library/build-module/form-submission-notification/index.js
+var form_submission_notification_namespaceObject = {};
+__webpack_require__.r(form_submission_notification_namespaceObject);
+__webpack_require__.d(form_submission_notification_namespaceObject, {
+  init: function() { return form_submission_notification_init; },
+  metadata: function() { return form_submission_notification_metadata; },
+  name: function() { return form_submission_notification_name; },
+  settings: function() { return form_submission_notification_settings; }
+});
+
 // NAMESPACE OBJECT: ./packages/block-library/build-module/gallery/index.js
 var build_module_gallery_namespaceObject = {};
 __webpack_require__.r(build_module_gallery_namespaceObject);
@@ -2776,7 +2816,7 @@ var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 const {
   lock,
   unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my plugin or theme will inevitably break on the next WordPress release.', '@wordpress/block-library');
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/block-library');
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/embed/util.js
 
@@ -6128,7 +6168,7 @@ const fullscreen = (0,external_React_namespaceObject.createElement)(external_wp_
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
 }, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M4.2 9h1.5V5.8H9V4.2H4.2V9zm14 9.2H15v1.5h4.8V15h-1.5v3.2zM15 4.2v1.5h3.2V9h1.5V4.2H15zM5.8 15H4.2v4.8H9v-1.5H5.8V15z"
+  d: "M6 4a2 2 0 0 0-2 2v3h1.5V6a.5.5 0 0 1 .5-.5h3V4H6Zm3 14.5H6a.5.5 0 0 1-.5-.5v-3H4v3a2 2 0 0 0 2 2h3v-1.5Zm6 1.5v-1.5h3a.5.5 0 0 0 .5-.5v-3H20v3a2 2 0 0 1-2 2h-3Zm3-16a2 2 0 0 1 2 2v3h-1.5V6a.5.5 0 0 0-.5-.5h-3V4h3Z"
 }));
 /* harmony default export */ var library_fullscreen = (fullscreen);
 
@@ -11227,7 +11267,7 @@ function mediaPosition({
   return `${Math.round(x * 100)}% ${Math.round(y * 100)}%`;
 }
 function dimRatioToClass(ratio) {
-  return ratio === 50 || !ratio === undefined ? null : 'has-background-dim-' + 10 * Math.round(ratio / 10);
+  return ratio === 50 || ratio === undefined ? null : 'has-background-dim-' + 10 * Math.round(ratio / 10);
 }
 function attributesFromMedia(media) {
   if (!media || !media.url) {
@@ -11513,6 +11553,115 @@ const v12BlockSupports = {
   },
   layout: {
     allowJustification: false
+  }
+};
+
+// Deprecation for blocks that does not have the aria-label when the image background is fixed or repeated.
+const v13 = {
+  attributes: v12BlockAttributes,
+  supports: v12BlockSupports,
+  save({
+    attributes
+  }) {
+    const {
+      backgroundType,
+      gradient,
+      contentPosition,
+      customGradient,
+      customOverlayColor,
+      dimRatio,
+      focalPoint,
+      useFeaturedImage,
+      hasParallax,
+      isDark,
+      isRepeated,
+      overlayColor,
+      url,
+      alt,
+      id,
+      minHeight: minHeightProp,
+      minHeightUnit,
+      tagName: Tag
+    } = attributes;
+    const overlayColorClass = (0,external_wp_blockEditor_namespaceObject.getColorClassName)('background-color', overlayColor);
+    const gradientClass = (0,external_wp_blockEditor_namespaceObject.__experimentalGetGradientClass)(gradient);
+    const minHeight = minHeightProp && minHeightUnit ? `${minHeightProp}${minHeightUnit}` : minHeightProp;
+    const isImageBackground = IMAGE_BACKGROUND_TYPE === backgroundType;
+    const isVideoBackground = VIDEO_BACKGROUND_TYPE === backgroundType;
+    const isImgElement = !(hasParallax || isRepeated);
+    const style = {
+      minHeight: minHeight || undefined
+    };
+    const bgStyle = {
+      backgroundColor: !overlayColorClass ? customOverlayColor : undefined,
+      background: customGradient ? customGradient : undefined
+    };
+    const objectPosition =
+    // prettier-ignore
+    focalPoint && isImgElement ? mediaPosition(focalPoint) : undefined;
+    const backgroundImage = url ? `url(${url})` : undefined;
+    const backgroundPosition = mediaPosition(focalPoint);
+    const classes = classnames_default()({
+      'is-light': !isDark,
+      'has-parallax': hasParallax,
+      'is-repeated': isRepeated,
+      'has-custom-content-position': !isContentPositionCenter(contentPosition)
+    }, getPositionClassName(contentPosition));
+    const imgClasses = classnames_default()('wp-block-cover__image-background', id ? `wp-image-${id}` : null, {
+      'has-parallax': hasParallax,
+      'is-repeated': isRepeated
+    });
+    const gradientValue = gradient || customGradient;
+    return (0,external_React_namespaceObject.createElement)(Tag, {
+      ...external_wp_blockEditor_namespaceObject.useBlockProps.save({
+        className: classes,
+        style
+      })
+    }, (0,external_React_namespaceObject.createElement)("span", {
+      "aria-hidden": "true",
+      className: classnames_default()('wp-block-cover__background', overlayColorClass, dimRatioToClass(dimRatio), {
+        'has-background-dim': dimRatio !== undefined,
+        // For backwards compatibility. Former versions of the Cover Block applied
+        // `.wp-block-cover__gradient-background` in the presence of
+        // media, a gradient and a dim.
+        'wp-block-cover__gradient-background': url && gradientValue && dimRatio !== 0,
+        'has-background-gradient': gradientValue,
+        [gradientClass]: gradientClass
+      }),
+      style: bgStyle
+    }), !useFeaturedImage && isImageBackground && url && (isImgElement ? (0,external_React_namespaceObject.createElement)("img", {
+      className: imgClasses,
+      alt: alt,
+      src: url,
+      style: {
+        objectPosition
+      },
+      "data-object-fit": "cover",
+      "data-object-position": objectPosition
+    }) : (0,external_React_namespaceObject.createElement)("div", {
+      role: "img",
+      className: imgClasses,
+      style: {
+        backgroundPosition,
+        backgroundImage
+      }
+    })), isVideoBackground && url && (0,external_React_namespaceObject.createElement)("video", {
+      className: classnames_default()('wp-block-cover__video-background', 'intrinsic-ignore'),
+      autoPlay: true,
+      muted: true,
+      loop: true,
+      playsInline: true,
+      src: url,
+      style: {
+        objectPosition
+      },
+      "data-object-fit": "cover",
+      "data-object-position": objectPosition
+    }), (0,external_React_namespaceObject.createElement)("div", {
+      ...external_wp_blockEditor_namespaceObject.useInnerBlocksProps.save({
+        className: 'wp-block-cover__inner-container'
+      })
+    }));
   }
 };
 
@@ -12591,7 +12740,7 @@ const cover_deprecated_v1 = {
     })]];
   }
 };
-/* harmony default export */ var cover_deprecated = ([v12, deprecated_v11, deprecated_v10, v9, v8, v7, v6, v5, v4, v3, v2, cover_deprecated_v1]);
+/* harmony default export */ var cover_deprecated = ([v13, v12, deprecated_v11, deprecated_v10, v9, v8, v7, v6, v5, v4, v3, v2, cover_deprecated_v1]);
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/cover/edit/inspector-controls.js
 
@@ -12678,7 +12827,6 @@ function CoverInspectorControls({
     isImageBackground,
     mediaElement,
     url,
-    isImgElement,
     overlayColor
   } = currentSettings;
   const {
@@ -12734,7 +12882,7 @@ function CoverInspectorControls({
     onChange: newFocalPoint => setAttributes({
       focalPoint: newFocalPoint
     })
-  }), !useFeaturedImage && url && isImageBackground && isImgElement && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextareaControl, {
+  }), !useFeaturedImage && url && !isVideoBackground && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextareaControl, {
     __nextHasNoMarginBottom: true,
     label: (0,external_wp_i18n_namespaceObject.__)('Alternative text'),
     value: alt,
@@ -13823,7 +13971,8 @@ function CoverEdit({
   } = (0,external_wp_blockEditor_namespaceObject.__experimentalUseGradient)();
   const onSelectMedia = async newMedia => {
     const mediaAttributes = attributesFromMedia(newMedia);
-    const averageBackgroundColor = await getMediaColor(newMedia?.type === IMAGE_BACKGROUND_TYPE ? newMedia?.url : undefined);
+    const isImage = [newMedia?.type, newMedia?.media_type].includes(IMAGE_BACKGROUND_TYPE);
+    const averageBackgroundColor = await getMediaColor(isImage ? newMedia?.url : undefined);
     let newOverlayColor = overlayColor.color;
     if (!isUserOverlayColor) {
       newOverlayColor = averageBackgroundColor;
@@ -13832,7 +13981,11 @@ function CoverEdit({
       // Make undo revert the next setAttributes and the previous setOverlayColor.
       __unstableMarkNextChangeAsNotPersistent();
     }
-    const newDimRatio = dimRatio === 100 ? 50 : dimRatio;
+
+    // Only set a new dimRatio if there was no previous media selected
+    // to avoid resetting to 50 if it has been explicitly set to 100.
+    // See issue #52835 for context.
+    const newDimRatio = originalUrl === undefined && dimRatio === 100 ? 50 : dimRatio;
     const newIsDark = compositeIsDark(newDimRatio, newOverlayColor, averageBackgroundColor);
     setAttributes({
       ...mediaAttributes,
@@ -14081,7 +14234,8 @@ function CoverEdit({
     style: mediaStyle
   }) : (0,external_React_namespaceObject.createElement)("div", {
     ref: mediaElement,
-    role: "img",
+    role: alt ? 'img' : undefined,
+    "aria-label": alt ? alt : undefined,
     className: classnames_default()(classes, 'wp-block-cover__image-background'),
     style: {
       backgroundImage,
@@ -14205,7 +14359,8 @@ function cover_save_save({
     "data-object-fit": "cover",
     "data-object-position": objectPosition
   }) : (0,external_React_namespaceObject.createElement)("div", {
-    role: "img",
+    role: alt ? 'img' : undefined,
+    "aria-label": alt ? alt : undefined,
     className: imgClasses,
     style: {
       backgroundPosition,
@@ -14534,9 +14689,6 @@ const cover_metadata = {
     },
     alt: {
       type: "string",
-      source: "attribute",
-      selector: "img",
-      attribute: "alt",
       "default": ""
     },
     hasParallax: {
@@ -17440,6 +17592,996 @@ const file_init = () => initBlock({
   name: file_name,
   metadata: file_metadata,
   settings: file_settings
+});
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form/utils.js
+/**
+ * WordPress dependencies
+ */
+
+const formSubmissionNotificationSuccess = ['core/form-submission-notification', {
+  type: 'success'
+}, [['core/paragraph', {
+  content: '<mark style="background-color:rgba(0, 0, 0, 0);color:#345C00" class="has-inline-color">' + (0,external_wp_i18n_namespaceObject.__)('Your form has been submitted successfully') + '</mark>'
+}]]];
+const formSubmissionNotificationError = ['core/form-submission-notification', {
+  type: 'error'
+}, [['core/paragraph', {
+  content: '<mark style="background-color:rgba(0, 0, 0, 0);color:#CF2E2E" class="has-inline-color">' + (0,external_wp_i18n_namespaceObject.__)('There was an error submitting your form.') + '</mark>'
+}]]];
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form/edit.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+const form_edit_ALLOWED_BLOCKS = ['core/paragraph', 'core/heading', 'core/form-input', 'core/form-submit-button', 'core/form-submission-notification'];
+const form_edit_TEMPLATE = [formSubmissionNotificationSuccess, formSubmissionNotificationError, ['core/form-input', {
+  type: 'text',
+  label: (0,external_wp_i18n_namespaceObject.__)('Name'),
+  required: true
+}], ['core/form-input', {
+  type: 'email',
+  label: (0,external_wp_i18n_namespaceObject.__)('Email'),
+  required: true
+}], ['core/form-input', {
+  type: 'textarea',
+  label: (0,external_wp_i18n_namespaceObject.__)('Comment'),
+  required: true
+}], ['core/form-submit-button', {}]];
+const form_edit_Edit = ({
+  attributes,
+  setAttributes,
+  clientId
+}) => {
+  const {
+    action,
+    method,
+    email,
+    submissionMethod
+  } = attributes;
+  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)();
+  const {
+    hasInnerBlocks
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getBlock
+    } = select(external_wp_blockEditor_namespaceObject.store);
+    const block = getBlock(clientId);
+    return {
+      hasInnerBlocks: !!(block && block.innerBlocks.length)
+    };
+  }, [clientId]);
+  const innerBlocksProps = (0,external_wp_blockEditor_namespaceObject.useInnerBlocksProps)(blockProps, {
+    allowedBlocks: form_edit_ALLOWED_BLOCKS,
+    template: form_edit_TEMPLATE,
+    renderAppender: hasInnerBlocks ? undefined : external_wp_blockEditor_namespaceObject.InnerBlocks.ButtonBlockAppender
+  });
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.PanelBody, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Settings')
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.SelectControl
+  // __nextHasNoMarginBottom
+  // size={ '__unstable-large' }
+  , {
+    label: (0,external_wp_i18n_namespaceObject.__)('Submissions method'),
+    options: [
+    // TODO: Allow plugins to add their own submission methods.
+    {
+      label: (0,external_wp_i18n_namespaceObject.__)('Send email'),
+      value: 'email'
+    }, {
+      label: (0,external_wp_i18n_namespaceObject.__)('- Custom -'),
+      value: 'custom'
+    }],
+    value: submissionMethod,
+    onChange: value => setAttributes({
+      submissionMethod: value
+    }),
+    help: submissionMethod === 'custom' ? (0,external_wp_i18n_namespaceObject.__)('Select the method to use for form submissions. Additional options for the "custom" mode can be found in the "Andvanced" section.') : (0,external_wp_i18n_namespaceObject.__)('Select the method to use for form submissions.')
+  }), submissionMethod === 'email' && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    __nextHasNoMarginBottom: true,
+    autoComplete: "off",
+    label: (0,external_wp_i18n_namespaceObject.__)('Email for form submissions'),
+    value: email,
+    required: true,
+    onChange: value => {
+      setAttributes({
+        email: value
+      });
+      setAttributes({
+        action: `mailto:${value}`
+      });
+      setAttributes({
+        method: 'post'
+      });
+    },
+    help: (0,external_wp_i18n_namespaceObject.__)('The email address where form submissions will be sent. Separate multiple email addresses with a comma.')
+  }))), submissionMethod !== 'email' && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, {
+    group: "advanced"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.SelectControl, {
+    __nextHasNoMarginBottom: true,
+    label: (0,external_wp_i18n_namespaceObject.__)('Method'),
+    options: [{
+      label: 'Get',
+      value: 'get'
+    }, {
+      label: 'Post',
+      value: 'post'
+    }],
+    value: method,
+    onChange: value => setAttributes({
+      method: value
+    }),
+    help: (0,external_wp_i18n_namespaceObject.__)('Select the method to use for form submissions.')
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    __nextHasNoMarginBottom: true,
+    autoComplete: "off",
+    label: (0,external_wp_i18n_namespaceObject.__)('Form action'),
+    value: action,
+    onChange: newVal => {
+      setAttributes({
+        action: newVal
+      });
+    },
+    help: (0,external_wp_i18n_namespaceObject.__)('The URL where the form should be submitted.')
+  })), (0,external_React_namespaceObject.createElement)("form", {
+    ...innerBlocksProps,
+    className: "wp-block-form",
+    encType: submissionMethod === 'email' ? 'text/plain' : null
+  }));
+};
+/* harmony default export */ var form_edit = (form_edit_Edit);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form/save.js
+
+/**
+ * WordPress dependencies
+ */
+
+const Save = ({
+  attributes
+}) => {
+  const blockProps = external_wp_blockEditor_namespaceObject.useBlockProps.save();
+  const {
+    submissionMethod
+  } = attributes;
+  return (0,external_React_namespaceObject.createElement)("form", {
+    ...blockProps,
+    className: "wp-block-form",
+    encType: submissionMethod === 'email' ? 'text/plain' : null
+  }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InnerBlocks.Content, null));
+};
+/* harmony default export */ var form_save = (Save);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form/variations.js
+/**
+ * WordPress dependencies
+ */
+
+/**
+ * Internal dependencies
+ */
+
+const form_variations_variations = [{
+  name: 'comment-form',
+  title: (0,external_wp_i18n_namespaceObject.__)('Experimental Comment form'),
+  description: (0,external_wp_i18n_namespaceObject.__)('A comment form for posts and pages.'),
+  attributes: {
+    submissionMethod: 'custom',
+    action: '{SITE_URL}/wp-comments-post.php',
+    method: 'post',
+    anchor: 'comment-form'
+  },
+  isDefault: false,
+  innerBlocks: [['core/form-input', {
+    type: 'text',
+    name: 'author',
+    label: (0,external_wp_i18n_namespaceObject.__)('Name'),
+    required: true,
+    visibilityPermissions: 'logged-out'
+  }], ['core/form-input', {
+    type: 'email',
+    name: 'email',
+    label: (0,external_wp_i18n_namespaceObject.__)('Email'),
+    required: true,
+    visibilityPermissions: 'logged-out'
+  }], ['core/form-input', {
+    type: 'textarea',
+    name: 'comment',
+    label: (0,external_wp_i18n_namespaceObject.__)('Comment'),
+    required: true,
+    visibilityPermissions: 'all'
+  }], ['core/form-submit-button', {}]],
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => !blockAttributes?.type || blockAttributes?.type === 'text'
+}, {
+  name: 'wp-privacy-form',
+  title: (0,external_wp_i18n_namespaceObject.__)('Experimental privacy request form'),
+  keywords: ['GDPR'],
+  description: (0,external_wp_i18n_namespaceObject.__)('A form torequest data exports and/or deletion.'),
+  attributes: {
+    submissionMethod: 'custom',
+    action: '',
+    method: 'post',
+    anchor: 'gdpr-form'
+  },
+  isDefault: false,
+  innerBlocks: [formSubmissionNotificationSuccess, formSubmissionNotificationError, ['core/paragraph', {
+    content: (0,external_wp_i18n_namespaceObject.__)('To request an export or deletion of your personal data on this site, please fill-in the form below. You can define the type of request you wish to perform, and your email address. Once the form is submitted, you will receive a confirmation email with instructions on the next steps.')
+  }], ['core/form-input', {
+    type: 'email',
+    name: 'email',
+    label: (0,external_wp_i18n_namespaceObject.__)('Enter your email address.'),
+    required: true,
+    visibilityPermissions: 'all'
+  }], ['core/form-input', {
+    type: 'checkbox',
+    name: 'export_personal_data',
+    label: (0,external_wp_i18n_namespaceObject.__)('Request data export'),
+    required: false,
+    visibilityPermissions: 'all'
+  }], ['core/form-input', {
+    type: 'checkbox',
+    name: 'remove_personal_data',
+    label: (0,external_wp_i18n_namespaceObject.__)('Request data deletion'),
+    required: false,
+    visibilityPermissions: 'all'
+  }], ['core/form-submit-button', {}], ['core/form-input', {
+    type: 'hidden',
+    name: 'wp-action',
+    value: 'wp_privacy_send_request'
+  }], ['core/form-input', {
+    type: 'hidden',
+    name: 'wp-privacy-request',
+    value: '1'
+  }]],
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => !blockAttributes?.type || blockAttributes?.type === 'text'
+}];
+/* harmony default export */ var form_variations = (form_variations_variations);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form/index.js
+/**
+ * Internal dependencies
+ */
+
+
+const form_metadata = {
+  $schema: "https://schemas.wp.org/trunk/block.json",
+  apiVersion: 3,
+  __experimental: true,
+  name: "core/form",
+  title: "Form",
+  category: "common",
+  description: "A form.",
+  keywords: ["container", "wrapper", "row", "section"],
+  textdomain: "default",
+  icon: "feedback",
+  attributes: {
+    submissionMethod: {
+      type: "string",
+      "default": "email"
+    },
+    method: {
+      type: "string",
+      "default": "post"
+    },
+    action: {
+      type: "string"
+    },
+    email: {
+      type: "string"
+    }
+  },
+  supports: {
+    anchor: true,
+    className: false,
+    color: {
+      gradients: true,
+      link: true,
+      __experimentalDefaultControls: {
+        background: true,
+        text: true,
+        link: true
+      }
+    },
+    spacing: {
+      margin: true,
+      padding: true
+    },
+    typography: {
+      fontSize: true,
+      lineHeight: true,
+      __experimentalFontFamily: true,
+      __experimentalTextDecoration: true,
+      __experimentalFontStyle: true,
+      __experimentalFontWeight: true,
+      __experimentalLetterSpacing: true,
+      __experimentalTextTransform: true,
+      __experimentalDefaultControls: {
+        fontSize: true
+      }
+    },
+    __experimentalSelector: "form"
+  },
+  viewScript: "file:./view.min.js"
+};
+
+
+const {
+  name: form_name
+} = form_metadata;
+
+const form_settings = {
+  edit: form_edit,
+  save: form_save,
+  variations: form_variations
+};
+const form_init = () => initBlock({
+  name: form_name,
+  metadata: form_metadata,
+  settings: form_settings
+});
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-input/edit.js
+
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+function InputFieldBlock({
+  attributes,
+  setAttributes,
+  className
+}) {
+  const {
+    type,
+    name,
+    label,
+    inlineLabel,
+    required,
+    placeholder,
+    value
+  } = attributes;
+  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)();
+  const ref = (0,external_wp_element_namespaceObject.useRef)();
+  const TagName = type === 'textarea' ? 'textarea' : 'input';
+  const borderProps = (0,external_wp_blockEditor_namespaceObject.__experimentalUseBorderProps)(attributes);
+  const colorProps = (0,external_wp_blockEditor_namespaceObject.__experimentalUseColorProps)(attributes);
+  if (ref.current) {
+    ref.current.focus();
+  }
+  const controls = (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, 'hidden' !== type && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.PanelBody, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Input settings')
+  }, 'checkbox' !== type && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.CheckboxControl, {
+    label: (0,external_wp_i18n_namespaceObject.__)('Inline label'),
+    checked: inlineLabel,
+    onChange: newVal => {
+      setAttributes({
+        inlineLabel: newVal
+      });
+    }
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.CheckboxControl, {
+    label: (0,external_wp_i18n_namespaceObject.__)('Required'),
+    checked: required,
+    onChange: newVal => {
+      setAttributes({
+        required: newVal
+      });
+    }
+  }))), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, {
+    __experimentalGroup: "advanced"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    autoComplete: "off",
+    label: (0,external_wp_i18n_namespaceObject.__)('Name'),
+    value: name,
+    onChange: newVal => {
+      setAttributes({
+        name: newVal
+      });
+    },
+    help: (0,external_wp_i18n_namespaceObject.__)('Affects the "name" atribute of the input element, and is used as a name for the form submission results.')
+  })));
+  if ('hidden' === type) {
+    return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, controls, (0,external_React_namespaceObject.createElement)("input", {
+      type: "hidden",
+      className: classnames_default()(className, 'wp-block-form-input__input', colorProps.className, borderProps.className),
+      "aria-label": (0,external_wp_i18n_namespaceObject.__)('Value'),
+      value: value,
+      onChange: event => setAttributes({
+        value: event.target.value
+      })
+    }));
+  }
+  return (0,external_React_namespaceObject.createElement)("div", {
+    ...blockProps
+  }, controls, (0,external_React_namespaceObject.createElement)("span", {
+    className: classnames_default()('wp-block-form-input__label', {
+      'is-label-inline': inlineLabel || 'checkbox' === type
+    })
+  }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
+    tagName: "span",
+    className: "wp-block-form-input__label-content",
+    value: label,
+    onChange: newLabel => setAttributes({
+      label: newLabel
+    }),
+    "aria-label": label ? (0,external_wp_i18n_namespaceObject.__)('Label') : (0,external_wp_i18n_namespaceObject.__)('Empty label'),
+    "data-empty": label ? false : true,
+    placeholder: (0,external_wp_i18n_namespaceObject.__)('Type the label for this input')
+  }), (0,external_React_namespaceObject.createElement)(TagName, {
+    type: 'textarea' === type ? undefined : type,
+    className: classnames_default()(className, 'wp-block-form-input__input', colorProps.className, borderProps.className),
+    "aria-label": (0,external_wp_i18n_namespaceObject.__)('Optional placeholder text')
+    // We hide the placeholder field's placeholder when there is a value. This
+    // stops screen readers from reading the placeholder field's placeholder
+    // which is confusing.
+    ,
+    placeholder: placeholder ? undefined : (0,external_wp_i18n_namespaceObject.__)('Optional placeholder…'),
+    value: placeholder,
+    onChange: event => setAttributes({
+      placeholder: event.target.value
+    }),
+    "aria-required": required,
+    style: {
+      ...borderProps.style,
+      ...colorProps.style
+    }
+  })));
+}
+/* harmony default export */ var form_input_edit = (InputFieldBlock);
+
+// EXTERNAL MODULE: ./node_modules/remove-accents/index.js
+var remove_accents = __webpack_require__(4793);
+var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-input/save.js
+
+/**
+ * External dependencies
+ */
+
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Get the name attribute from a content string.
+ *
+ * @param {string} content The block content.
+ *
+ * @return {string} Returns the slug.
+ */
+const getNameFromLabel = content => {
+  const dummyElement = document.createElement('div');
+  dummyElement.innerHTML = content;
+  // Get the slug.
+  return remove_accents_default()(dummyElement.innerText)
+  // Convert anything that's not a letter or number to a hyphen.
+  .replace(/[^\p{L}\p{N}]+/gu, '-')
+  // Convert to lowercase
+  .toLowerCase()
+  // Remove any remaining leading or trailing hyphens.
+  .replace(/(^-+)|(-+$)/g, '');
+};
+function form_input_save_save({
+  attributes
+}) {
+  const {
+    type,
+    name,
+    label,
+    inlineLabel,
+    required,
+    placeholder,
+    value
+  } = attributes;
+  const borderProps = (0,external_wp_blockEditor_namespaceObject.__experimentalGetBorderClassesAndStyles)(attributes);
+  const colorProps = (0,external_wp_blockEditor_namespaceObject.__experimentalGetColorClassesAndStyles)(attributes);
+  const inputStyle = {
+    ...borderProps.style,
+    ...colorProps.style
+  };
+  const inputClasses = classnames_default()('wp-block-form-input__input', colorProps.className, borderProps.className);
+  const TagName = type === 'textarea' ? 'textarea' : 'input';
+  if ('hidden' === type) {
+    return (0,external_React_namespaceObject.createElement)("input", {
+      type: type,
+      name: name,
+      value: value
+    });
+  }
+
+  /* eslint-disable jsx-a11y/label-has-associated-control */
+  return (0,external_React_namespaceObject.createElement)("label", {
+    className: classnames_default()('wp-block-form-input__label', {
+      'is-label-inline': inlineLabel
+    })
+  }, (0,external_React_namespaceObject.createElement)("span", {
+    className: "wp-block-form-input__label-content"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText.Content, {
+    value: label
+  })), (0,external_React_namespaceObject.createElement)(TagName, {
+    className: inputClasses,
+    type: 'textarea' === type ? undefined : type,
+    name: name || getNameFromLabel(label),
+    required: required,
+    "aria-required": required,
+    placeholder: placeholder || undefined,
+    style: inputStyle
+  }));
+  /* eslint-enable jsx-a11y/label-has-associated-control */
+}
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-input/variations.js
+/**
+ * WordPress dependencies
+ */
+
+const form_input_variations_variations = [{
+  name: 'text',
+  title: (0,external_wp_i18n_namespaceObject.__)('Text input'),
+  icon: 'edit-page',
+  description: (0,external_wp_i18n_namespaceObject.__)('A generic text input.'),
+  attributes: {
+    type: 'text'
+  },
+  isDefault: true,
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => !blockAttributes?.type || blockAttributes?.type === 'text'
+}, {
+  name: 'textarea',
+  title: (0,external_wp_i18n_namespaceObject.__)('Textarea input'),
+  icon: 'testimonial',
+  description: (0,external_wp_i18n_namespaceObject.__)('A textarea input to allow entering multiple lines of text.'),
+  attributes: {
+    type: 'textarea'
+  },
+  isDefault: true,
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => blockAttributes?.type === 'textarea'
+}, {
+  name: 'checkbox',
+  title: (0,external_wp_i18n_namespaceObject.__)('Checkbox input'),
+  description: (0,external_wp_i18n_namespaceObject.__)('A simple checkbox input.'),
+  icon: 'forms',
+  attributes: {
+    type: 'checkbox',
+    inlineLabel: true
+  },
+  isDefault: true,
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => blockAttributes?.type === 'checkbox'
+}, {
+  name: 'email',
+  title: (0,external_wp_i18n_namespaceObject.__)('Email input'),
+  icon: 'email',
+  description: (0,external_wp_i18n_namespaceObject.__)('Used for email addresses.'),
+  attributes: {
+    type: 'email'
+  },
+  isDefault: true,
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => blockAttributes?.type === 'email'
+}, {
+  name: 'url',
+  title: (0,external_wp_i18n_namespaceObject.__)('URL input'),
+  icon: 'admin-site',
+  description: (0,external_wp_i18n_namespaceObject.__)('Used for URLs.'),
+  attributes: {
+    type: 'url'
+  },
+  isDefault: true,
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => blockAttributes?.type === 'url'
+}, {
+  name: 'tel',
+  title: (0,external_wp_i18n_namespaceObject.__)('Telephone input'),
+  icon: 'phone',
+  description: (0,external_wp_i18n_namespaceObject.__)('Used for phone numbers.'),
+  attributes: {
+    type: 'tel'
+  },
+  isDefault: true,
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => blockAttributes?.type === 'tel'
+}, {
+  name: 'number',
+  title: (0,external_wp_i18n_namespaceObject.__)('Number input'),
+  icon: 'edit-page',
+  description: (0,external_wp_i18n_namespaceObject.__)('A numeric input.'),
+  attributes: {
+    type: 'number'
+  },
+  isDefault: true,
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => blockAttributes?.type === 'number'
+}];
+/* harmony default export */ var form_input_variations = (form_input_variations_variations);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-input/index.js
+/**
+ * Internal dependencies
+ */
+
+
+const form_input_metadata = {
+  $schema: "https://schemas.wp.org/trunk/block.json",
+  apiVersion: 3,
+  __experimental: true,
+  name: "core/form-input",
+  title: "Input field",
+  category: "common",
+  parent: ["core/form"],
+  description: "The basic building block for forms.",
+  keywords: ["input", "form"],
+  textdomain: "default",
+  icon: "forms",
+  attributes: {
+    type: {
+      type: "string",
+      "default": "text"
+    },
+    name: {
+      type: "string"
+    },
+    label: {
+      type: "string",
+      "default": "Label",
+      selector: ".wp-block-form-input__label-content",
+      source: "html",
+      __experimentalRole: "content"
+    },
+    inlineLabel: {
+      type: "boolean",
+      "default": false
+    },
+    required: {
+      type: "boolean",
+      "default": false,
+      selector: ".wp-block-form-input__input",
+      source: "attribute",
+      attribute: "required"
+    },
+    placeholder: {
+      type: "string",
+      selector: ".wp-block-form-input__input",
+      source: "attribute",
+      attribute: "placeholder",
+      __experimentalRole: "content"
+    },
+    value: {
+      type: "string",
+      "default": "",
+      selector: "input",
+      source: "attribute",
+      attribute: "value"
+    },
+    visibilityPermissions: {
+      type: "string",
+      "default": "all"
+    }
+  },
+  supports: {
+    anchor: true,
+    reusable: false,
+    spacing: {
+      margin: ["top", "bottom"]
+    },
+    __experimentalBorder: {
+      radius: true,
+      __experimentalSkipSerialization: true,
+      __experimentalDefaultControls: {
+        radius: true
+      }
+    }
+  },
+  style: ["wp-block-form-input"]
+};
+
+
+const {
+  name: form_input_name
+} = form_input_metadata;
+
+const form_input_settings = {
+  edit: form_input_edit,
+  save: form_input_save_save,
+  variations: form_input_variations
+};
+const form_input_init = () => initBlock({
+  name: form_input_name,
+  metadata: form_input_metadata,
+  settings: form_input_settings
+});
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-submit-button/edit.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+const form_submit_button_edit_TEMPLATE = [['core/buttons', {}, [['core/button', {
+  text: (0,external_wp_i18n_namespaceObject.__)('Submit'),
+  tagName: 'button'
+}]]]];
+const form_submit_button_edit_Edit = () => {
+  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)();
+  const innerBlocksProps = (0,external_wp_blockEditor_namespaceObject.useInnerBlocksProps)(blockProps, {
+    allowedBlocks: form_submit_button_edit_TEMPLATE,
+    template: form_submit_button_edit_TEMPLATE,
+    templateLock: 'all'
+  });
+  return (0,external_React_namespaceObject.createElement)("div", {
+    className: "wp-block-form-submit-wrapper",
+    ...innerBlocksProps
+  });
+};
+/* harmony default export */ var form_submit_button_edit = (form_submit_button_edit_Edit);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-submit-button/save.js
+
+/**
+ * WordPress dependencies
+ */
+
+const save_Save = () => {
+  const blockProps = external_wp_blockEditor_namespaceObject.useBlockProps.save();
+  return (0,external_React_namespaceObject.createElement)("div", {
+    className: "wp-block-form-submit-wrapper",
+    ...blockProps
+  }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InnerBlocks.Content, null));
+};
+/* harmony default export */ var form_submit_button_save = (save_Save);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-submit-button/index.js
+/**
+ * Internal dependencies
+ */
+
+
+const form_submit_button_metadata = {
+  $schema: "https://schemas.wp.org/trunk/block.json",
+  apiVersion: 3,
+  __experimental: true,
+  name: "core/form-submit-button",
+  title: "Form submit button",
+  category: "common",
+  icon: "button",
+  parent: ["core/form"],
+  description: "A submission button for forms.",
+  keywords: ["submit", "button", "form"],
+  textdomain: "default",
+  style: ["wp-block-form-submit-button"]
+};
+
+const {
+  name: form_submit_button_name
+} = form_submit_button_metadata;
+
+const form_submit_button_settings = {
+  edit: form_submit_button_edit,
+  save: form_submit_button_save
+};
+const form_submit_button_init = () => initBlock({
+  name: form_submit_button_name,
+  metadata: form_submit_button_metadata,
+  settings: form_submit_button_settings
+});
+
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/group.js
+
+/**
+ * WordPress dependencies
+ */
+
+const group = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg"
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M18 4h-7c-1.1 0-2 .9-2 2v3H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h7c1.1 0 2-.9 2-2v-3h3c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4.5 14c0 .3-.2.5-.5.5H6c-.3 0-.5-.2-.5-.5v-7c0-.3.2-.5.5-.5h3V13c0 1.1.9 2 2 2h2.5v3zm0-4.5H11c-.3 0-.5-.2-.5-.5v-2.5H13c.3 0 .5.2.5.5v2.5zm5-.5c0 .3-.2.5-.5.5h-3V11c0-1.1-.9-2-2-2h-2.5V6c0-.3.2-.5.5-.5h7c.3 0 .5.2.5.5v7z"
+}));
+/* harmony default export */ var library_group = (group);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-submission-notification/edit.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * External dependencies
+ */
+
+const form_submission_notification_edit_TEMPLATE = [['core/paragraph', {
+  content: (0,external_wp_i18n_namespaceObject.__)("Enter the message you wish displayed for form submission error/success, and select the type of the message (success/error) from the block's options.")
+}]];
+const form_submission_notification_edit_Edit = ({
+  attributes,
+  clientId
+}) => {
+  const {
+    type
+  } = attributes;
+  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
+    className: classnames_default()('wp-block-form-submission-notification', {
+      [`form-notification-type-${type}`]: type
+    })
+  });
+  const {
+    hasInnerBlocks
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getBlock
+    } = select(external_wp_blockEditor_namespaceObject.store);
+    const block = getBlock(clientId);
+    return {
+      hasInnerBlocks: !!(block && block.innerBlocks.length)
+    };
+  }, [clientId]);
+  const innerBlocksProps = (0,external_wp_blockEditor_namespaceObject.useInnerBlocksProps)(blockProps, {
+    template: form_submission_notification_edit_TEMPLATE,
+    renderAppender: hasInnerBlocks ? undefined : external_wp_blockEditor_namespaceObject.InnerBlocks.ButtonBlockAppender
+  });
+  return (0,external_React_namespaceObject.createElement)("div", {
+    ...innerBlocksProps,
+    "data-message-success": (0,external_wp_i18n_namespaceObject.__)('Submission success notification'),
+    "data-message-error": (0,external_wp_i18n_namespaceObject.__)('Submission error notification')
+  });
+};
+/* harmony default export */ var form_submission_notification_edit = (form_submission_notification_edit_Edit);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-submission-notification/save.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * External dependencies
+ */
+
+function form_submission_notification_save_save({
+  attributes
+}) {
+  const {
+    type
+  } = attributes;
+  return (0,external_React_namespaceObject.createElement)("div", {
+    ...external_wp_blockEditor_namespaceObject.useInnerBlocksProps.save(external_wp_blockEditor_namespaceObject.useBlockProps.save({
+      className: classnames_default()('wp-block-form-submission-notification', {
+        [`form-notification-type-${type}`]: type
+      })
+    }))
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-submission-notification/variations.js
+/**
+ * WordPress dependencies
+ */
+
+const form_submission_notification_variations_variations = [{
+  name: 'form-submission-success',
+  title: (0,external_wp_i18n_namespaceObject.__)('Form submission success'),
+  description: (0,external_wp_i18n_namespaceObject.__)('Success message for form submissions'),
+  attributes: {
+    type: 'success'
+  },
+  isDefault: true,
+  innerBlocks: [['core/paragraph', {
+    content: (0,external_wp_i18n_namespaceObject.__)('Your form has been submitted successfully.'),
+    backgroundColor: '#00D084',
+    textColor: '#000000',
+    style: {
+      elements: {
+        link: {
+          color: {
+            text: '#000000'
+          }
+        }
+      }
+    }
+  }]],
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => !blockAttributes?.type || blockAttributes?.type === 'success'
+}, {
+  name: 'form-submission-error',
+  title: (0,external_wp_i18n_namespaceObject.__)('Form submission error'),
+  description: (0,external_wp_i18n_namespaceObject.__)('Error/failure message for form submissions'),
+  attributes: {
+    type: 'error'
+  },
+  isDefault: false,
+  innerBlocks: [['core/paragraph', {
+    content: (0,external_wp_i18n_namespaceObject.__)('There was an error submitting your form.'),
+    backgroundColor: '#CF2E2E',
+    textColor: '#FFFFFF',
+    style: {
+      elements: {
+        link: {
+          color: {
+            text: '#FFFFFF'
+          }
+        }
+      }
+    }
+  }]],
+  scope: ['inserter', 'transform'],
+  isActive: blockAttributes => !blockAttributes?.type || blockAttributes?.type === 'error'
+}];
+/* harmony default export */ var form_submission_notification_variations = (form_submission_notification_variations_variations);
+
+;// CONCATENATED MODULE: ./packages/block-library/build-module/form-submission-notification/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const form_submission_notification_metadata = {
+  $schema: "https://schemas.wp.org/trunk/block.json",
+  apiVersion: 3,
+  __experimental: true,
+  name: "core/form-submission-notification",
+  title: "Form Submission Notification",
+  category: "common",
+  parent: ["core/form"],
+  description: "Provide a notification message after the form has been submitted.",
+  keywords: ["form", "feedback", "notification", "message"],
+  textdomain: "default",
+  icon: "feedback",
+  attributes: {
+    type: {
+      type: "string",
+      "default": "success"
+    }
+  }
+};
+
+
+const {
+  name: form_submission_notification_name
+} = form_submission_notification_metadata;
+
+const form_submission_notification_settings = {
+  icon: library_group,
+  edit: form_submission_notification_edit,
+  save: form_submission_notification_save_save,
+  variations: form_submission_notification_variations
+};
+const form_submission_notification_init = () => initBlock({
+  name: form_submission_notification_name,
+  metadata: form_submission_notification_metadata,
+  settings: form_submission_notification_settings
 });
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/gallery.js
@@ -20830,20 +21972,6 @@ const gallery_init = () => initBlock({
   settings: gallery_settings
 });
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/group.js
-
-/**
- * WordPress dependencies
- */
-
-const group = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
-  viewBox: "0 0 24 24",
-  xmlns: "http://www.w3.org/2000/svg"
-}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M18 4h-7c-1.1 0-2 .9-2 2v3H6c-1.1 0-2 .9-2 2v7c0 1.1.9 2 2 2h7c1.1 0 2-.9 2-2v-3h3c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm-4.5 14c0 .3-.2.5-.5.5H6c-.3 0-.5-.2-.5-.5v-7c0-.3.2-.5.5-.5h3V13c0 1.1.9 2 2 2h2.5v3zm0-4.5H11c-.3 0-.5-.2-.5-.5v-2.5H13c.3 0 .5.2.5.5v2.5zm5-.5c0 .3-.2.5-.5.5h-3V11c0-1.1-.9-2-2-2h-2.5V6c0-.3.2-.5.5-.5h7c.3 0 .5.2.5.5v7z"
-}));
-/* harmony default export */ var library_group = (group);
-
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/group/deprecated.js
 
 /**
@@ -21661,7 +22789,6 @@ const group_metadata = {
     __experimentalOnEnter: true,
     __experimentalOnMerge: true,
     __experimentalSettings: true,
-    __experimentalMetadata: true,
     align: ["wide", "full"],
     anchor: true,
     ariaLabel: true,
@@ -22119,9 +23246,6 @@ const heading_deprecated_v5 = {
 const heading_deprecated_deprecated = [heading_deprecated_v5, heading_deprecated_v4, heading_deprecated_v3, heading_deprecated_v2, heading_deprecated_v1];
 /* harmony default export */ var heading_deprecated = (heading_deprecated_deprecated);
 
-// EXTERNAL MODULE: ./node_modules/remove-accents/index.js
-var remove_accents = __webpack_require__(4793);
-var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/heading/autogenerate-anchors.js
 /**
  * External dependencies
@@ -22570,11 +23694,12 @@ const heading_settings = {
       content,
       level
     } = attributes;
+    const customName = attributes?.metadata?.name;
 
     // In the list view, use the block's content as the label.
     // If the content is empty, fall back to the default label.
-    if (context === 'list-view' && content) {
-      return content;
+    if (context === 'list-view' && (customName || content)) {
+      return attributes?.metadata?.name || content;
     }
     if (context === 'accessibility') {
       return !content || content.length === 0 ? (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: accessibility text. %s: heading level. */
@@ -24427,6 +25552,7 @@ function image_Image({
   const lightboxSetting = (0,external_wp_blockEditor_namespaceObject.useSetting)('lightbox');
   const showLightboxToggle = !!lightbox || lightboxSetting?.allowEditing === true;
   const lightboxChecked = !!lightbox?.enabled || !lightbox && !!lightboxSetting?.enabled;
+  const lightboxToggleDisabled = linkDestination !== 'none';
   const dimensionsControl = (0,external_React_namespaceObject.createElement)(DimensionsTool, {
     value: {
       width,
@@ -24560,7 +25686,9 @@ function image_Image({
           enabled: newValue
         }
       });
-    }
+    },
+    disabled: lightboxToggleDisabled,
+    help: lightboxToggleDisabled ? (0,external_wp_i18n_namespaceObject.__)('“Expand on click” scales the image up, and can’t be combined with a link.') : ''
   })))), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, {
     group: "advanced"
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
@@ -26264,14 +27392,18 @@ function LatestPostsEdit({
       }
     });
     const needsReadMore = excerptLength < excerpt.trim().split(' ').length && post.excerpt.raw === '';
-    const postExcerpt = needsReadMore ? (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, excerpt.trim().split(' ', excerptLength).join(' '), (0,external_wp_element_namespaceObject.createInterpolateElement)( /* translators: excerpt truncation character, default …  */
-    (0,external_wp_i18n_namespaceObject.__)(' … <a>Read more</a>'), {
+    const postExcerpt = needsReadMore ? (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, excerpt.trim().split(' ', excerptLength).join(' '), (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)( /* translators: 1: Hidden accessibility text: Post title */
+    (0,external_wp_i18n_namespaceObject.__)('… <a>Read more<span>: %1$s</span></a>'), titleTrimmed || (0,external_wp_i18n_namespaceObject.__)('(no title)')), {
       a:
       // eslint-disable-next-line jsx-a11y/anchor-has-content
       (0,external_React_namespaceObject.createElement)("a", {
+        className: "wp-block-latest-posts__read-more",
         href: post.link,
         rel: "noopener noreferrer",
         onClick: showRedirectionPreventedNotice
+      }),
+      span: (0,external_React_namespaceObject.createElement)("span", {
+        className: "screen-reader-text"
       })
     })) : excerpt;
     return (0,external_React_namespaceObject.createElement)("li", {
@@ -27872,6 +29004,19 @@ function useMerge(clientId, onMerge) {
     return getBlockOrder(order[0])[0];
   }
   return forward => {
+    function mergeWithNested(clientIdA, clientIdB) {
+      registry.batch(() => {
+        // When merging a sub list item with a higher next list item, we
+        // also need to move any nested list items. Check if there's a
+        // listed list, and append its nested list items to the current
+        // list.
+        const [nestedListClientId] = getBlockOrder(clientIdB);
+        if (nestedListClientId) {
+          moveBlocksToPosition(getBlockOrder(nestedListClientId), nestedListClientId, getBlockRootClientId(clientIdA));
+        }
+        mergeBlocks(clientIdA, clientIdB);
+      });
+    }
     if (forward) {
       const nextBlockClientId = getNextId(clientId);
       if (!nextBlockClientId) {
@@ -27881,10 +29026,7 @@ function useMerge(clientId, onMerge) {
       if (getParentListItemId(nextBlockClientId)) {
         outdentListItem(nextBlockClientId);
       } else {
-        registry.batch(() => {
-          moveBlocksToPosition(getBlockOrder(nextBlockClientId), nextBlockClientId, getPreviousBlockClientId(nextBlockClientId));
-          mergeBlocks(clientId, nextBlockClientId);
-        });
+        mergeWithNested(clientId, nextBlockClientId);
       }
     } else {
       // Merging is only done from the top level. For lowel levels, the
@@ -27894,17 +29036,7 @@ function useMerge(clientId, onMerge) {
         outdentListItem(clientId);
       } else if (previousBlockClientId) {
         const trailingId = getTrailingId(previousBlockClientId);
-        registry.batch(() => {
-          // When merging a list item with a previous trailing list
-          // item, we also need to move any nested list items. First,
-          // check if there's a listed list. If there's a nested list,
-          // append its nested list items to the trailing list.
-          const [nestedListClientId] = getBlockOrder(clientId);
-          if (nestedListClientId) {
-            moveBlocksToPosition(getBlockOrder(nestedListClientId), nestedListClientId, getBlockRootClientId(trailingId));
-          }
-          mergeBlocks(trailingId, clientId);
-        });
+        mergeWithNested(trailingId, clientId);
       } else {
         onMerge(forward);
       }
@@ -33330,7 +34462,6 @@ function Navigation({
   }), (0,external_React_namespaceObject.createElement)(ResponsiveWrapper, {
     id: clientId,
     onToggle: setResponsiveMenuVisibility,
-    label: (0,external_wp_i18n_namespaceObject.__)('Menu'),
     hasIcon: hasIcon,
     icon: icon,
     isOpen: isResponsiveMenuOpen,
@@ -34063,7 +35194,8 @@ const navigation_metadata = {
         }
       }
     },
-    interactivity: true
+    interactivity: true,
+    renaming: false
   },
   viewScript: "file:./view.min.js",
   editorStyle: "wp-block-navigation-editor",
@@ -35750,7 +36882,8 @@ const pattern_metadata = {
   description: "Show a block pattern.",
   supports: {
     html: false,
-    inserter: false
+    inserter: false,
+    renaming: false
   },
   textdomain: "default",
   attributes: {
@@ -36363,6 +37496,7 @@ function PageListItemEdit({
       'menu-item-home': id === frontPageId
     })
   }, hasChildren && context.openSubmenusOnClick ? (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("button", {
+    type: "button",
     className: "wp-block-navigation-item__content wp-block-navigation-submenu__toggle",
     "aria-expanded": "false"
   }, (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(label)), (0,external_React_namespaceObject.createElement)("span", {
@@ -36374,7 +37508,8 @@ function PageListItemEdit({
     href: link
   }, (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title)), hasChildren && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, !context.openSubmenusOnClick && context.showSubmenuIcon && (0,external_React_namespaceObject.createElement)("button", {
     className: "wp-block-navigation-item__content wp-block-navigation-submenu__toggle wp-block-page-list__submenu-icon wp-block-navigation__submenu-icon",
-    "aria-expanded": "false"
+    "aria-expanded": "false",
+    type: "button"
   }, (0,external_React_namespaceObject.createElement)(icons_ItemSubmenuIcon, null)), (0,external_React_namespaceObject.createElement)("ul", {
     ...innerBlocksProps
   })));
@@ -37312,7 +38447,14 @@ const paragraph_settings = {
   __experimentalLabel(attributes, {
     context
   }) {
+    const customName = attributes?.metadata?.name;
+    if (context === 'list-view' && customName) {
+      return customName;
+    }
     if (context === 'accessibility') {
+      if (customName) {
+        return customName;
+      }
       const {
         content
       } = attributes;
@@ -46684,7 +47826,8 @@ const block_metadata = {
   supports: {
     customClassName: false,
     html: false,
-    inserter: false
+    inserter: false,
+    renaming: false
   }
 };
 
@@ -56045,7 +57188,8 @@ const template_part_metadata = {
   supports: {
     align: true,
     html: false,
-    reusable: false
+    reusable: false,
+    renaming: false
   },
   editorStyle: "wp-block-template-part-editor"
 };
@@ -58185,6 +59329,7 @@ const footnotes_metadata = {
     html: false,
     multiple: false,
     reusable: false,
+    inserter: false,
     spacing: {
       margin: true,
       padding: true,
@@ -58348,6 +59493,10 @@ var is_block_metadata_experimental_default = /*#__PURE__*/__webpack_require__.n(
 
 
 
+
+
+
+
 /**
  * Function to get all the block-library blocks in an array
  */
@@ -58360,6 +59509,12 @@ const getAllBlocks = () => {
   archives_namespaceObject, build_module_audio_namespaceObject, build_module_button_namespaceObject, build_module_buttons_namespaceObject, build_module_calendar_namespaceObject, categories_namespaceObject, build_module_code_namespaceObject, build_module_column_namespaceObject, build_module_columns_namespaceObject, build_module_comment_author_avatar_namespaceObject, build_module_cover_namespaceObject, build_module_details_namespaceObject, embed_namespaceObject, build_module_file_namespaceObject, build_module_group_namespaceObject, build_module_html_namespaceObject, latest_comments_namespaceObject, latest_posts_namespaceObject, media_text_namespaceObject, missing_namespaceObject, build_module_more_namespaceObject, nextpage_namespaceObject, page_list_namespaceObject, page_list_item_namespaceObject, pattern_namespaceObject, build_module_preformatted_namespaceObject, build_module_pullquote_namespaceObject, block_namespaceObject, build_module_rss_namespaceObject, build_module_search_namespaceObject, build_module_separator_namespaceObject, build_module_shortcode_namespaceObject, social_link_namespaceObject, social_links_namespaceObject, spacer_namespaceObject, build_module_table_namespaceObject, tag_cloud_namespaceObject, text_columns_namespaceObject, build_module_verse_namespaceObject, build_module_video_namespaceObject, footnotes_namespaceObject,
   // theme blocks
   build_module_navigation_namespaceObject, navigation_link_namespaceObject, navigation_submenu_namespaceObject, build_module_site_logo_namespaceObject, site_title_namespaceObject, site_tagline_namespaceObject, query_namespaceObject, template_part_namespaceObject, avatar_namespaceObject, post_title_namespaceObject, build_module_post_excerpt_namespaceObject, build_module_post_featured_image_namespaceObject, build_module_post_content_namespaceObject, build_module_post_author_namespaceObject, post_author_name_namespaceObject, post_comment_namespaceObject, build_module_post_comments_count_namespaceObject, post_comments_link_namespaceObject, build_module_post_date_namespaceObject, build_module_post_terms_namespaceObject, post_navigation_link_namespaceObject, post_template_namespaceObject, post_time_to_read_namespaceObject, build_module_query_pagination_namespaceObject, build_module_query_pagination_next_namespaceObject, build_module_query_pagination_numbers_namespaceObject, build_module_query_pagination_previous_namespaceObject, query_no_results_namespaceObject, read_more_namespaceObject, comments_namespaceObject, build_module_comment_author_name_namespaceObject, build_module_comment_content_namespaceObject, comment_date_namespaceObject, build_module_comment_edit_link_namespaceObject, build_module_comment_reply_link_namespaceObject, comment_template_namespaceObject, comments_title_namespaceObject, comments_pagination_namespaceObject, comments_pagination_next_namespaceObject, comments_pagination_numbers_namespaceObject, comments_pagination_previous_namespaceObject, build_module_post_comments_form_namespaceObject, table_of_contents_namespaceObject, home_link_namespaceObject, loginout_namespaceObject, build_module_term_description_namespaceObject, query_title_namespaceObject, post_author_biography_namespaceObject];
+  if (window?.__experimentalEnableFormBlocks) {
+    blocks.push(build_module_form_namespaceObject);
+    blocks.push(form_input_namespaceObject);
+    blocks.push(form_submit_button_namespaceObject);
+    blocks.push(form_submission_notification_namespaceObject);
+  }
 
   // When in a WordPress context, conditionally
   // add the classic block and TinyMCE editor
