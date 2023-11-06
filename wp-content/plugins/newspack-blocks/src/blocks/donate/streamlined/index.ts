@@ -116,13 +116,6 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 				}
 			}
 			const formValues = utils.getDonationFormValues( formElement );
-			const promptOrigin = formElement.closest( 'amp-layout.newspack-popup' );
-
-			// If the donation originated from a Campaigns prompt, append the prompt ID to the event label.
-			const origin =
-				promptOrigin && promptOrigin.hasAttribute( 'amp-access' )
-					? promptOrigin.getAttribute( 'amp-access' )
-					: null;
 
 			const additionalFields: { name: string; value: string }[] =
 				getAdditionalFieldsValues( formElement );
@@ -139,7 +132,6 @@ export const processStreamlinedElements = ( parentElement = document ) =>
 				newspack_popup_id: formValues.newspack_popup_id,
 				_wp_http_referer: formValues._wp_http_referer,
 				clientId: formValues.cid,
-				origin,
 				additional_fields: additionalFields,
 				...requestPayloadOverrides,
 			};

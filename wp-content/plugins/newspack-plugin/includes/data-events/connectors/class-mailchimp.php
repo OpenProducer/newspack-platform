@@ -169,10 +169,12 @@ class Mailchimp {
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
 	public static function reader_registered( $timestamp, $data, $client_id ) {
-		$prefix      = Newspack_Newsletters::get_metadata_prefix();
-		$account_key = Newspack_Newsletters::get_metadata_key( 'account' );
-		$metadata    = [
-			$account_key => $data['user_id'],
+		$prefix                = Newspack_Newsletters::get_metadata_prefix();
+		$account_key           = Newspack_Newsletters::get_metadata_key( 'account' );
+		$registration_date_key = Newspack_Newsletters::get_metadata_key( 'registration_date' );
+		$metadata              = [
+			$account_key           => $data['user_id'],
+			$registration_date_key => gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $timestamp ),
 		];
 		if ( isset( $data['metadata']['current_page_url'] ) ) {
 			$metadata[ $prefix . 'Registration Page' ] = $data['metadata']['current_page_url'];

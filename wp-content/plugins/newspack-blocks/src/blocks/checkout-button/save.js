@@ -57,9 +57,32 @@ export default function save( { attributes, className } ) {
 				/>
 				<input type="hidden" name="product_id" value={ product } />
 				<input type="hidden" name="newspack_checkout" value="1" />
+
 				{ price && <input type="hidden" name="price" value={ price } /> }
 				{ variation && <input type="hidden" name="variation_id" value={ variation } /> }
 				{ is_variable && <input type="hidden" name="is_variable" value="1" /> }
+
+				{ attributes.afterSuccessBehavior && (
+					<input
+						type="hidden"
+						name="after_success_behavior"
+						value={ attributes.afterSuccessBehavior }
+					/>
+				) }
+				{ attributes.afterSuccessButtonLabel && (
+					<input
+						type="hidden"
+						name="after_success_button_label"
+						value={ attributes.afterSuccessButtonLabel }
+					/>
+				) }
+				{ attributes.afterSuccessBehavior && (
+					<input
+						type="hidden"
+						name="after_success_url"
+						value={ attributes.afterSuccessURL || '' }
+					/>
+				) }
 			</form>
 		</div>
 	);

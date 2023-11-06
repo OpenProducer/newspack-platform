@@ -20,8 +20,8 @@ msgstr "Newspack Blocks"
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
-msgid "https://newspack.blog/"
-msgstr "https://newspack.blog/"
+msgid "https://newspack.com/"
+msgstr "https://newspack.com/"
 
 #. Description of the plugin
 msgid "A collection of blocks for news publishers."

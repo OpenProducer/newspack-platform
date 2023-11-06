@@ -350,17 +350,6 @@ class Newspack_Popups_Settings {
 	}
 
 	/**
-	 * Is the non-interactive setting on?
-	 *
-	 * Deprecated: There is no longer a non interactive mode
-	 *
-	 * @deprecated
-	 */
-	public static function is_non_interactive() {
-		return false;
-	}
-
-	/**
 	 * Donor landing page.
 	 */
 	public static function donor_landing_page() {

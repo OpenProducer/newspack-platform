@@ -1,3 +1,84 @@
+# [2.10.0](https://github.com/Automattic/newspack-plugin/compare/v2.9.1...v2.10.0) (2023-10-31)
+
+
+### Features
+
+* add Perfmatters to managed plugins ([#2684](https://github.com/Automattic/newspack-plugin/issues/2684)) ([eb657d8](https://github.com/Automattic/newspack-plugin/commit/eb657d801d4d07cee2b4844da827ecb9953210c4))
+* **data-events:** activecampaign connector ([#2663](https://github.com/Automattic/newspack-plugin/issues/2663)) ([377a51f](https://github.com/Automattic/newspack-plugin/commit/377a51fbe6dcb51484f88ea5dedc710769e8511c))
+* **design-wizard:** allow bulk update of featured image, post template ([#2670](https://github.com/Automattic/newspack-plugin/issues/2670)) ([37a4656](https://github.com/Automattic/newspack-plugin/commit/37a46562a215afb92b7a2a24a628770c5ab2b4ee))
+* newspack_managed_plugins filter ([#2605](https://github.com/Automattic/newspack-plugin/issues/2605)) ([81ba5f2](https://github.com/Automattic/newspack-plugin/commit/81ba5f2c154c60f542adf8c67dfe3b5e1def95f3))
+* **ras:** custom newsletter list selection on registration ([#2706](https://github.com/Automattic/newspack-plugin/issues/2706)) ([57b2871](https://github.com/Automattic/newspack-plugin/commit/57b2871c7d3261e7cddd97e32fdf7c4102e868c1))
+* **ras:** overlay management for content gate refresh ([#2708](https://github.com/Automattic/newspack-plugin/issues/2708)) ([6767740](https://github.com/Automattic/newspack-plugin/commit/67677406213737d38127881e75376bdc5eb10deb))
+* **reader-registration:** custom checkbox state for lists ([#2682](https://github.com/Automattic/newspack-plugin/issues/2682)) ([b8ce865](https://github.com/Automattic/newspack-plugin/commit/b8ce8653a864db97b573a92444c0231bbb8239c9))
+* remove order-received text ([#2707](https://github.com/Automattic/newspack-plugin/issues/2707)) ([a386524](https://github.com/Automattic/newspack-plugin/commit/a386524274a8f3736384e9435737cb8678fe6105))
+
+# [2.10.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v2.10.0-alpha.2...v2.10.0-alpha.3) (2023-10-26)
+
+
+### Bug Fixes
+
+* **perfmatters:** force stylesheet exclusion in unused CSS feature ([f0c291f](https://github.com/Automattic/newspack-plugin/commit/f0c291f6900464eb5a5ce412217d39bd60e8828f))
+
+## [2.9.1](https://github.com/Automattic/newspack-plugin/compare/v2.9.0...v2.9.1) (2023-10-26)
+
+
+### Bug Fixes
+
+* **perfmatters:** force stylesheet exclusion in unused CSS feature ([f0c291f](https://github.com/Automattic/newspack-plugin/commit/f0c291f6900464eb5a5ce412217d39bd60e8828f))
+
+# [2.9.0](https://github.com/Automattic/newspack-plugin/compare/v2.8.3...v2.9.0) (2023-10-17)
+
+
+### Features
+
+* **reader-data:** set newsletter subscriber status on form submission ([#2703](https://github.com/Automattic/newspack-plugin/issues/2703)) ([35c13cc](https://github.com/Automattic/newspack-plugin/commit/35c13cc565074364ca7b2e33d88eae7aaaf970f3))
+
+## [2.8.3](https://github.com/Automattic/newspack-plugin/compare/v2.8.2...v2.8.3) (2023-10-11)
+
+
+### Bug Fixes
+
+* update support link to help site ([#2693](https://github.com/Automattic/newspack-plugin/issues/2693)) ([1ab741d](https://github.com/Automattic/newspack-plugin/commit/1ab741dfddbfdfd541496167e443f979bcbb1060))
+
+## [2.8.2](https://github.com/Automattic/newspack-plugin/compare/v2.8.1...v2.8.2) (2023-10-10)
+
+
+### Bug Fixes
+
+* **media-credit:** use post ids selection for search query ([#2692](https://github.com/Automattic/newspack-plugin/issues/2692)) ([6c9fa3e](https://github.com/Automattic/newspack-plugin/commit/6c9fa3ee3ebc498c52f0fd4accef0b9db3de9a5f))
+
+## [2.8.1](https://github.com/Automattic/newspack-plugin/compare/v2.8.0...v2.8.1) (2023-10-10)
+
+
+### Bug Fixes
+
+* **media-credit:** refactor clauses for credit search ([#2691](https://github.com/Automattic/newspack-plugin/issues/2691)) ([6547fe1](https://github.com/Automattic/newspack-plugin/commit/6547fe1989cf39814827840b95e678f16ad0eb2d))
+
+# [2.8.0](https://github.com/Automattic/newspack-plugin/compare/v2.7.5...v2.8.0) (2023-10-09)
+
+
+### Bug Fixes
+
+* inline documentation for `Donations::get_donation_settings()` ([#2675](https://github.com/Automattic/newspack-plugin/issues/2675)) ([c6c7916](https://github.com/Automattic/newspack-plugin/commit/c6c79165b1579739b6428b612b5e141903656c88))
+* **woocommerce:** check method exists before syncing reader ([#2673](https://github.com/Automattic/newspack-plugin/issues/2673)) ([063509c](https://github.com/Automattic/newspack-plugin/commit/063509c12a322f72818c21d3cb10e4b20f5ab243))
+* **woocommerce:** hook for rendering UTM inputs ([#2671](https://github.com/Automattic/newspack-plugin/issues/2671)) ([634f7bf](https://github.com/Automattic/newspack-plugin/commit/634f7bfd8b9b96e572151a5aa2554e9a6098fc0c))
+
+
+### Features
+
+* add RAS CLI commands ([#2666](https://github.com/Automattic/newspack-plugin/issues/2666)) ([5afc049](https://github.com/Automattic/newspack-plugin/commit/5afc04934077661e78fe56c0d006868e1364d447))
+* **campaigns:** newsletter subscription list criteria ([#2658](https://github.com/Automattic/newspack-plugin/issues/2658)) ([69c8f88](https://github.com/Automattic/newspack-plugin/commit/69c8f88e794a52952ddbb7f9ef519aabb82558ed))
+* remove unused GA code ([#2664](https://github.com/Automattic/newspack-plugin/issues/2664)) ([1fa99fa](https://github.com/Automattic/newspack-plugin/commit/1fa99fa6f0833416b71ef864eaedb3488d57c6c8))
+* search credit metadata on media library ([#2594](https://github.com/Automattic/newspack-plugin/issues/2594)) ([c33c5b2](https://github.com/Automattic/newspack-plugin/commit/c33c5b2a83bc12777aeac66a13ea38b4d13c19d9))
+* **woocommerce:** store UTM parameters as order meta ([#2665](https://github.com/Automattic/newspack-plugin/issues/2665)) ([39dfc31](https://github.com/Automattic/newspack-plugin/commit/39dfc31de6795fa91cfe79f5505b1eecd651c9ad))
+
+# [2.8.0-alpha.7](https://github.com/Automattic/newspack-plugin/compare/v2.8.0-alpha.6...v2.8.0-alpha.7) (2023-10-05)
+
+
+### Bug Fixes
+
+* **data-events:** earlier priority for webhook registration ([#2683](https://github.com/Automattic/newspack-plugin/issues/2683)) ([3467434](https://github.com/Automattic/newspack-plugin/commit/3467434cf6008326766b01c3f777ef2d1c23cd3e))
+
 ## [2.7.5](https://github.com/Automattic/newspack-plugin/compare/v2.7.4...v2.7.5) (2023-10-05)
 
 

@@ -396,7 +396,6 @@ class Edit extends Component {
 											const isCurrent = colGap === option.value;
 											return (
 												<Button
-													isLarge
 													isPrimary={ isCurrent }
 													aria-pressed={ isCurrent }
 													aria-label={ option.label }
@@ -435,6 +434,16 @@ class Edit extends Component {
 							/>
 						)
 					) }
+					<ToggleControl
+						label={ __( 'Use deduplication logic', 'newspack-blocks' ) }
+						help={ __(
+							'If unchecked, this block will be excluded from the deduplication logic and may show duplicate posts.',
+							'newspack-blocks'
+						) }
+						checked={ attributes.deduplicate }
+						onChange={ () => setAttributes( { deduplicate: ! attributes.deduplicate } ) }
+						className="newspack-blocks-deduplication-toggle"
+					/>
 				</PanelBody>
 				<PanelBody title={ __( 'Featured Image Settings', 'newspack-blocks' ) }>
 					<PanelRow>
@@ -477,7 +486,6 @@ class Edit extends Component {
 											const isCurrent = imageScale === option.value;
 											return (
 												<Button
-													isLarge
 													isPrimary={ isCurrent }
 													aria-pressed={ isCurrent }
 													aria-label={ option.label }

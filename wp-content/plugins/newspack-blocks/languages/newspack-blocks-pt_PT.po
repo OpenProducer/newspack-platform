@@ -22,7 +22,7 @@ msgstr ""
 
 #. Plugin URI of the plugin
 #. Author URI of the plugin
-msgid "https://newspack.blog/"
+msgid "https://newspack.com/"
 msgstr ""
 
 #. Description of the plugin

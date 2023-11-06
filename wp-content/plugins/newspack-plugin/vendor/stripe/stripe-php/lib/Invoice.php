@@ -53,7 +53,7 @@ namespace Stripe;
  * @property bool $attempted Whether an attempt has been made to pay the invoice. An invoice is not attempted until 1 hour after the <code>invoice.created</code> webhook, for example, so you might not want to display that invoice as unpaid to your users.
  * @property null|bool $auto_advance Controls whether Stripe performs <a href="https://stripe.com/docs/invoicing/integration/automatic-advancement-collection">automatic collection</a> of the invoice. If <code>false</code>, the invoice's state doesn't automatically advance without an explicit action.
  * @property \Stripe\StripeObject $automatic_tax
- * @property null|string $billing_reason Indicates the reason why the invoice was created. <code>subscription_cycle</code> indicates an invoice created by a subscription advancing into a new period. <code>subscription_create</code> indicates an invoice created due to creating a subscription. <code>subscription_update</code> indicates an invoice created due to updating a subscription. <code>subscription</code> is set for all old invoices to indicate either a change to a subscription or a period advancement. <code>manual</code> is set for all invoices unrelated to a subscription (for example: created via the invoice editor). The <code>upcoming</code> value is reserved for simulated invoices per the upcoming invoice endpoint. <code>subscription_threshold</code> indicates an invoice created due to a billing threshold being reached.
+ * @property null|string $billing_reason <p>Indicates the reason why the invoice was created.</p><p>* <code>manual</code>: Unrelated to a subscription, for example, created via the invoice editor. * <code>subscription</code>: No longer in use. Applies to subscriptions from before May 2018 where no distinction was made between updates, cycles, and thresholds. * <code>subscription_create</code>: A new subscription was created. * <code>subscription_cycle</code>: A subscription advanced into a new period. * <code>subscription_threshold</code>: A subscription reached a billing threshold. * <code>subscription_update</code>: A subscription was updated. * <code>upcoming</code>: Reserved for simulated invoices, per the upcoming invoice endpoint.</p>
  * @property null|string|\Stripe\Charge $charge ID of the latest charge generated for this invoice, if any.
  * @property string $collection_method Either <code>charge_automatically</code>, or <code>send_invoice</code>. When charging automatically, Stripe will attempt to pay this invoice using the default source attached to the customer. When sending an invoice, Stripe will email this invoice to the customer with payment instructions.
  * @property int $created Time at which the object was created. Measured in seconds since the Unix epoch.
@@ -98,7 +98,8 @@ namespace Stripe;
  * @property int $pre_payment_credit_notes_amount Total amount of all pre-payment credit notes issued for this invoice.
  * @property null|string|\Stripe\Quote $quote The quote this invoice was generated from.
  * @property null|string $receipt_number This is the transaction number that appears on email receipts sent for this invoice.
- * @property null|\Stripe\StripeObject $rendering_options Options for invoice PDF rendering.
+ * @property null|\Stripe\StripeObject $rendering The rendering-related settings that control how the invoice is displayed on customer-facing surfaces such as PDF and Hosted Invoice Page.
+ * @property null|\Stripe\StripeObject $rendering_options This is a legacy field that will be removed soon. For details about <code>rendering_options</code>, refer to <code>rendering</code> instead. Options for invoice PDF rendering.
  * @property null|\Stripe\StripeObject $shipping_cost The details of the cost of shipping, including the ShippingRate applied on the invoice.
  * @property null|\Stripe\StripeObject $shipping_details Shipping details for the invoice. The Invoice PDF will use the <code>shipping_details</code> value if it is set, otherwise the PDF will render the shipping address from the customer.
  * @property int $starting_balance Starting customer balance before the invoice is finalized. If the invoice has not been finalized yet, this will be the current customer balance. For revision invoices, this also includes any customer balance that was applied to the original invoice.
@@ -157,9 +158,6 @@ class Invoice extends ApiResource
 
     const BILLING_CHARGE_AUTOMATICALLY = 'charge_automatically';
     const BILLING_SEND_INVOICE = 'send_invoice';
-
-    /** @deprecated */
-    const STATUS_DELETED = 'deleted';
 
     /**
      * @param null|array $params

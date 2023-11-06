@@ -153,6 +153,48 @@ function ProductControl( props ) {
 	);
 }
 
+function RedirectAfterSuccess( props ) {
+	const { attributes, setAttributes } = props;
+	return (
+		<>
+			<SelectControl
+				label={ __( 'Post-Checkout Button', 'newspack-blocks' ) }
+				help={ __(
+					'Select whether the user should be presented with a button to navigate after a successful purchase.',
+					'newspack-blocks'
+				) }
+				value={ attributes.afterSuccessBehavior }
+				options={ [
+					{ label: __( 'Do not show a button', 'newspack-blocks' ), value: '' },
+					{ label: __( 'Go to a custom URL', 'newspack-blocks' ), value: 'custom' },
+					{ label: __( 'Go to the previous page', 'newspack-blocks' ), value: 'referrer' },
+				] }
+				onChange={ value => {
+					setAttributes( { afterSuccessBehavior: value.toString() } );
+				} }
+			/>
+			{ attributes.afterSuccessBehavior !== '' && (
+				<>
+					<TextControl
+						label={ __( 'Button Label', 'newspack-blocks' ) }
+						placeholder={ __( 'Continue browsing', 'newspack-blocks' ) }
+						value={ attributes.afterSuccessButtonLabel || '' }
+						onChange={ value => setAttributes( { afterSuccessButtonLabel: value } ) }
+					/>
+					{ attributes.afterSuccessBehavior === 'custom' && (
+						<TextControl
+							label={ __( 'Custom URL', 'newspack-blocks' ) }
+							placeholder={ __( 'https://example.com', 'newspack-blocks' ) }
+							value={ attributes.afterSuccessURL || '' }
+							onChange={ value => setAttributes( { afterSuccessURL: value } ) }
+						/>
+					) }
+				</>
+			) }
+		</>
+	);
+}
+
 function CheckoutButtonEdit( props ) {
 	const { attributes, setAttributes, className } = props;
 	const { placeholder, style, text, product, price, variation } = attributes;
@@ -290,6 +332,9 @@ function CheckoutButtonEdit( props ) {
 							</>
 						) }
 					</ProductControl>
+				</PanelBody>
+				<PanelBody title={ __( 'After purchase', 'newspack-blocks' ) }>
+					<RedirectAfterSuccess setAttributes={ setAttributes } attributes={ attributes } />
 				</PanelBody>
 				{ nyp?.isNYP && (
 					<PanelBody title={ __( 'Name Your Price', 'newspack-blocks' ) }>

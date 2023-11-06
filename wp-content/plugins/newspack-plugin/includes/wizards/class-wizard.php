@@ -105,7 +105,7 @@ abstract class Wizard {
 			],
 			'homepage'       => get_edit_post_link( get_option( 'page_on_front', false ) ),
 			'site'           => get_site_url(),
-			'support'        => esc_url( 'https://newspack.com/support/' ),
+			'support'        => esc_url( 'https://help.newspack.com/' ),
 			'support_email'  => $support_email,
 		];
 

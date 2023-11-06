@@ -9,6 +9,9 @@ export default {
 	/**
 	 * Matches the criteria value against a list provided by the segment config,
 	 * returns true if the value is on the list.
+	 *
+	 * If the criteria value is an array, it returns true if any of the values
+	 * are on the list.
 	 */
 	list__in: ( criteria, config ) => {
 		let list = config.value;
@@ -18,6 +21,9 @@ export default {
 		if ( ! Array.isArray( list ) ) {
 			return false;
 		}
+		if ( Array.isArray( criteria.value ) ) {
+			return criteria.value.some( value => list.includes( value ) );
+		}
 		if ( ! criteria.value || ! list.includes( criteria.value ) ) {
 			return false;
 		}
@@ -26,6 +32,9 @@ export default {
 	/**
 	 * Matches the criteria value against a list provided by the segment config,
 	 * returns true if the value is empty or not on the list.
+	 *
+	 * If the criteria value is an array, it returns true if none of the values
+	 * are on the list.
 	 */
 	list__not_in: ( criteria, config ) => {
 		let list = config.value;
@@ -34,6 +43,9 @@ export default {
 		}
 		if ( ! Array.isArray( list ) ) {
 			return true;
+		}
+		if ( Array.isArray( criteria.value ) ) {
+			return ! criteria.value.some( value => list.includes( value ) );
 		}
 		if ( ! criteria.value || ! list.includes( criteria.value ) ) {
 			return true;

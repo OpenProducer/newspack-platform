@@ -113,9 +113,12 @@ final class Newspack_Popups_Data_Api {
 					)[0];
 
 					if ( $donate_block && method_exists( '\Newspack\Donations', 'get_donation_settings' ) ) {
-						$is_manual         = $donate_block['attrs']['manual'] ?? false;
-						$is_layout_tiers   = isset( $donate_block['attrs']['layoutOption'] ) && 'tiers' === $donate_block['attrs']['layoutOption'];
-						$default_settings  = \Newspack\Donations::get_donation_settings();
+						$is_manual        = $donate_block['attrs']['manual'] ?? false;
+						$is_layout_tiers  = isset( $donate_block['attrs']['layoutOption'] ) && 'tiers' === $donate_block['attrs']['layoutOption'];
+						$default_settings = \Newspack\Donations::get_donation_settings();
+						if ( ! $default_settings || is_wp_error( $default_settings ) ) {
+							$default_settings = [];
+						}
 						$donation_settings = $is_manual ? \wp_parse_args( $donate_block['attrs'], $default_settings ) : $default_settings;
 						$is_tiered         = $donation_settings['tiered'] ?? false;
 						$suggested_amounts = $donation_settings['amounts'] ?? [];

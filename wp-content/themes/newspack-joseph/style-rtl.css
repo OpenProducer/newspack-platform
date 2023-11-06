@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.77.0-alpha.1
+Version: 1.79.0-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -5715,6 +5715,9 @@ p.has-background {
 .wp-block-image figcaption {
   text-align: right;
 }
+.wp-block-image img:not([style*=object-fit]) {
+  height: auto !important;
+}
 
 .wp-block-gallery {
   list-style-type: none;
@@ -6119,7 +6122,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-primary-background-color,
 .is-style-outline .wp-block-button__link.has-primary-background-color:not(:hover),
 .wp-block-navigation-item.has-primary-background-color,
-.wp-block-search__button.has-primary-background-color {
+.wp-block-search__button.has-primary-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-primary-background-color {
   background-color: var(--newspack-theme-color-primary);
 }
 
@@ -6130,7 +6134,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-primary-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-primary-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-primary-color:not(:hover),
-.wp-block-search__button.has-primary-color {
+.wp-block-search__button.has-primary-color,
+.newspack-newsletters-subscribe input[type=submit].has-primary-color {
   color: var(--newspack-theme-color-primary);
 }
 
@@ -6145,7 +6150,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-primary-variation-background-color,
 .is-style-outline .wp-block-button__link.has-primary-variation-background-color:not(:hover),
 .wp-block-navigation-item.has-primary-variation-background-color,
-.wp-block-search__button.has-primary-variation-background-color {
+.wp-block-search__button.has-primary-variation-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-primary-variation-background-color {
   background-color: var(--newspack-theme-color-primary-variation);
 }
 
@@ -6156,7 +6162,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-primary-variation-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-primary-variation-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-primary-variation-color:not(:hover),
-.wp-block-search__button.has-primary-variation-color {
+.wp-block-search__button.has-primary-variation-color,
+.newspack-newsletters-subscribe input[type=submit].has-primary-variation-color {
   color: var(--newspack-theme-color-primary-variation);
 }
 
@@ -6171,7 +6178,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-secondary-background-color,
 .is-style-outline .wp-block-button__link.has-secondary-background-color:not(:hover),
 .wp-block-navigation-item.has-secondary-background-color,
-.wp-block-search__button.has-secondary-background-color {
+.wp-block-search__button.has-secondary-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-secondary-background-color {
   background-color: var(--newspack-theme-color-secondary);
 }
 
@@ -6182,7 +6190,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-secondary-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-secondary-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-secondary-color:not(:hover),
-.wp-block-search__button.has-secondary-color {
+.wp-block-search__button.has-secondary-color,
+.newspack-newsletters-subscribe input[type=submit].has-secondary-color {
   color: var(--newspack-theme-color-secondary);
 }
 
@@ -6197,7 +6206,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-secondary-variation-background-color,
 .is-style-outline .wp-block-button__link.has-secondary-variation-background-color:not(:hover),
 .wp-block-navigation-item.has-secondary-variation-background-color,
-.wp-block-search__button.has-secondary-variation-background-color {
+.wp-block-search__button.has-secondary-variation-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-secondary-variation-background-color {
   background-color: var(--newspack-theme-color-secondary-variation);
 }
 
@@ -6208,7 +6218,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-secondary-variation-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-secondary-variation-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-secondary-variation-color:not(:hover),
-.wp-block-search__button.has-secondary-variation-color {
+.wp-block-search__button.has-secondary-variation-color,
+.newspack-newsletters-subscribe input[type=submit].has-secondary-variation-color {
   color: var(--newspack-theme-color-secondary-variation);
 }
 
@@ -6223,7 +6234,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-dark-gray-background-color,
 .is-style-outline .wp-block-button__link.has-dark-gray-background-color:not(:hover),
 .wp-block-navigation-item.has-dark-gray-background-color,
-.wp-block-search__button.has-dark-gray-background-color {
+.wp-block-search__button.has-dark-gray-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-dark-gray-background-color {
   background-color: #111;
 }
 
@@ -6234,7 +6246,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-dark-gray-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-dark-gray-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-dark-gray-color:not(:hover),
-.wp-block-search__button.has-dark-gray-color {
+.wp-block-search__button.has-dark-gray-color,
+.newspack-newsletters-subscribe input[type=submit].has-dark-gray-color {
   color: #111;
 }
 
@@ -6249,7 +6262,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-medium-gray-background-color,
 .is-style-outline .wp-block-button__link.has-medium-gray-background-color:not(:hover),
 .wp-block-navigation-item.has-medium-gray-background-color,
-.wp-block-search__button.has-medium-gray-background-color {
+.wp-block-search__button.has-medium-gray-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-medium-gray-background-color {
   background-color: #767676;
 }
 
@@ -6260,7 +6274,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-medium-gray-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-medium-gray-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-medium-gray-color:not(:hover),
-.wp-block-search__button.has-medium-gray-color {
+.wp-block-search__button.has-medium-gray-color,
+.newspack-newsletters-subscribe input[type=submit].has-medium-gray-color {
   color: #767676;
 }
 
@@ -6275,7 +6290,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-light-gray-background-color,
 .is-style-outline .wp-block-button__link.has-light-gray-background-color:not(:hover),
 .wp-block-navigation-item.has-light-gray-background-color,
-.wp-block-search__button.has-light-gray-background-color {
+.wp-block-search__button.has-light-gray-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-light-gray-background-color {
   background-color: #eee;
 }
 
@@ -6286,7 +6302,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-light-gray-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-light-gray-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-light-gray-color:not(:hover),
-.wp-block-search__button.has-light-gray-color {
+.wp-block-search__button.has-light-gray-color,
+.newspack-newsletters-subscribe input[type=submit].has-light-gray-color {
   color: #eee;
 }
 
@@ -6301,7 +6318,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-pullquote.has-white-background-color,
 .is-style-outline .wp-block-button__link.has-white-background-color:not(:hover),
 .wp-block-navigation-item.has-white-background-color,
-.wp-block-search__button.has-white-background-color {
+.wp-block-search__button.has-white-background-color,
+.newspack-newsletters-subscribe input[type=submit].has-white-background-color {
   background-color: #fff;
 }
 
@@ -6312,7 +6330,8 @@ hr.has-background.is-style-dots::before {
 .wp-block-button__link.has-white-color:visited:not(:hover),
 .is-style-outline .wp-block-button__link.has-white-color:not(:hover),
 .wp-block-button__link.is-style-outline.has-white-color:not(:hover),
-.wp-block-search__button.has-white-color {
+.wp-block-search__button.has-white-color,
+.newspack-newsletters-subscribe input[type=submit].has-white-color {
   color: #fff;
 }
 

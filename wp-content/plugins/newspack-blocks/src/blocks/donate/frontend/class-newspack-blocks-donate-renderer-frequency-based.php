@@ -94,7 +94,7 @@ class Newspack_Blocks_Donate_Renderer_Frequency_Based extends Newspack_Blocks_Do
 		ob_start();
 
 		/**
-		 * For AMP-compatibility, the donation forms are implemented as pure HTML forms (no JS).
+		 * For AMP-compatibility, the donation forms were implemented as pure HTML forms (no JS).
 		 * Each frequency and tier option is a radio input, styled to look like a button.
 		 * As the radio inputs are checked/unchecked, fields are hidden/displayed using only CSS.
 		 */

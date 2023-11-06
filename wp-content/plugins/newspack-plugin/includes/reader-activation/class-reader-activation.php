@@ -171,6 +171,8 @@ final class Reader_Activation {
 			'enabled_account_link'        => true,
 			'account_link_menu_locations' => [ 'tertiary-menu' ],
 			'newsletters_label'           => __( 'Subscribe to our newsletters:', 'newspack-plugin' ),
+			'use_custom_lists'            => false,
+			'newsletter_lists'            => [],
 			'terms_text'                  => '',
 			'terms_url'                   => '',
 			'sync_esp'                    => true,
@@ -301,6 +303,34 @@ final class Reader_Activation {
 		}
 
 		return false;
+	}
+
+	/**
+	 * Get the newsletter lists that should be rendered during registration.
+	 *
+	 * @return array
+	 */
+	public static function get_registration_newsletter_lists() {
+		if ( ! method_exists( 'Newspack_Newsletters_Subscription', 'get_lists' ) ) {
+			return [];
+		}
+		$use_custom_lists = self::get_setting( 'use_custom_lists' );
+		$available_lists  = \Newspack_Newsletters_Subscription::get_lists_config();
+		if ( ! $use_custom_lists ) {
+			return $available_lists;
+		}
+		$lists = self::get_setting( 'newsletter_lists' );
+		if ( empty( $lists ) ) {
+			return [];
+		}
+		$registration_lists = [];
+		foreach ( $lists as $list ) {
+			if ( isset( $available_lists[ $list['id'] ] ) ) {
+				$registration_lists[ $list['id'] ]            = $available_lists[ $list['id'] ];
+				$registration_lists[ $list['id'] ]['checked'] = $list['checked'] ?? false;
+			}
+		}
+		return $registration_lists;
 	}
 
 	/**
@@ -949,7 +979,7 @@ final class Reader_Activation {
 	 * Render a honeypot field to guard against bot form submissions. Note that
 	 * this field is named `email` to hopefully catch more bots who might be
 	 * looking for such fields, where as the "real" field is named "npe".
-	 * 
+	 *
 	 * Not rendered if reCAPTCHA is enabled as it's a superior spam protection.
 	 *
 	 * @param string $placeholder Placeholder text to render in the field.
@@ -1003,7 +1033,7 @@ final class Reader_Activation {
 
 		$newsletters_label = self::get_setting( 'newsletters_label' );
 		if ( method_exists( 'Newspack_Newsletters_Subscription', 'get_lists_config' ) ) {
-			$lists_config = \Newspack_Newsletters_Subscription::get_lists_config();
+			$lists_config = self::get_registration_newsletter_lists();
 			if ( ! \is_wp_error( $lists_config ) ) {
 				$lists = $lists_config;
 			}
@@ -1091,7 +1121,14 @@ final class Reader_Activation {
 								<?php
 								self::render_subscription_lists_inputs(
 									$lists,
-									array_keys( $lists ),
+									array_keys(
+										array_filter(
+											$lists,
+											function( $list ) {
+												return $list['checked'] ?? false;
+											}
+										)
+									),
 									[
 										'single_label' => $newsletters_label,
 									]
@@ -1228,8 +1265,8 @@ final class Reader_Activation {
 			]
 		);
 
-		if ( empty( $lists ) && method_exists( 'Newspack_Newsletters_Subscription', 'get_lists_config' ) ) {
-			$lists = \Newspack_Newsletters_Subscription::get_lists_config();
+		if ( empty( $lists ) ) {
+			$lists = self::get_registration_newsletter_lists();
 		}
 
 		/**

@@ -279,7 +279,6 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 									const isCurrent = textSize === option.value;
 									return (
 										<Button
-											isLarge
 											isPrimary={ isCurrent }
 											aria-pressed={ isCurrent }
 											aria-label={ option.label }
@@ -326,7 +325,6 @@ const AuthorList = ( { attributes, clientId, setAttributes } ) => {
 										const isCurrent = avatarSize === option.value;
 										return (
 											<Button
-												isLarge
 												isPrimary={ isCurrent }
 												aria-pressed={ isCurrent }
 												aria-label={ option.label }

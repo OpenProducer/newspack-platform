@@ -33,8 +33,8 @@ final class Reader_Data {
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'config_script' ] );
 
 		/* Update reader data items on event dispatches */
-		add_action( 'newspack_data_event_dispatch_newsletter_subscribed', [ __CLASS__, 'set_is_newsletter_subscriber' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_newsletter_updated', [ __CLASS__, 'set_is_newsletter_subscriber' ], 10, 2 );
+		add_action( 'newspack_data_event_dispatch_newsletter_subscribed', [ __CLASS__, 'update_newsletter_subscribed_lists' ], 10, 2 );
+		add_action( 'newspack_data_event_dispatch_newsletter_updated', [ __CLASS__, 'update_newsletter_subscribed_lists' ], 10, 2 );
 		add_action( 'newspack_data_event_dispatch_donation_new', [ __CLASS__, 'set_is_donor' ], 10, 2 );
 		add_action( 'newspack_data_event_dispatch_donation_subscription_cancelled', [ __CLASS__, 'set_is_former_donor' ], 10, 2 );
 
@@ -264,8 +264,35 @@ final class Reader_Data {
 	 * @param int   $timestamp Timestamp.
 	 * @param array $data      Data.
 	 */
-	public static function set_is_newsletter_subscriber( $timestamp, $data ) {
-		self::update_item( $data['user_id'] ?? \get_current_user_id(), 'is_newsletter_subscriber', true );
+	public static function update_newsletter_subscribed_lists( $timestamp, $data ) {
+		if ( ! empty( $data['lists'] ) ) {
+			self::update_item( $data['user_id'], 'is_newsletter_subscriber', true );
+			self::update_item( $data['user_id'], 'newsletter_subscribed_lists', wp_json_encode( $data['lists'] ) );
+		}
+		if ( ! empty( $data['lists_added'] ) ) {
+			$newsletter_subscribed_lists = self::get_data( $data['user_id'], 'newsletter_subscribed_lists' );
+			if ( ! empty( $newsletter_subscribed_lists ) && gettype( $newsletter_subscribed_lists ) === 'string' ) {
+				$newsletter_subscribed_lists = json_decode( $newsletter_subscribed_lists );
+			}
+			if ( ! empty( $newsletter_subscribed_lists ) && is_array( $newsletter_subscribed_lists ) ) {
+				$newsletter_subscribed_lists = array_merge( $newsletter_subscribed_lists, $data['lists_added'] );
+			} else {
+				$newsletter_subscribed_lists = $data['lists_added'];
+			}
+			self::update_item( $data['user_id'], 'is_newsletter_subscriber', true );
+			self::update_item( $data['user_id'], 'newsletter_subscribed_lists', wp_json_encode( $newsletter_subscribed_lists ) );
+		}
+		if ( ! empty( $data['lists_removed'] ) ) {
+			$newsletter_subscribed_lists = self::get_data( $data['user_id'], 'newsletter_subscribed_lists' );
+			if ( ! empty( $newsletter_subscribed_lists ) && gettype( $newsletter_subscribed_lists ) === 'string' ) {
+				$newsletter_subscribed_lists = json_decode( $newsletter_subscribed_lists );
+			}
+			if ( ! empty( $newsletter_subscribed_lists ) && is_array( $newsletter_subscribed_lists ) ) {
+				$newsletter_subscribed_lists = array_diff( $newsletter_subscribed_lists, $data['lists_removed'] );
+			}
+			self::update_item( $data['user_id'], 'is_newsletter_subscriber', ! empty( $newsletter_subscribed_lists ) );
+			self::update_item( $data['user_id'], 'newsletter_subscribed_lists', wp_json_encode( $newsletter_subscribed_lists ) );
+		}
 	}
 
 	/**
@@ -344,21 +371,13 @@ final class Reader_Data {
 		if ( empty( $data['user_id'] ) || empty( $data['email'] ) ) {
 			return;
 		}
-		$is_newsletter_subscriber = self::get_data( $data['user_id'], 'is_newsletter_subscriber' );
-		if ( ! empty( $is_newsletter_subscriber ) && gettype( $is_newsletter_subscriber ) === 'string' ) {
-			$is_newsletter_subscriber = json_decode( $is_newsletter_subscriber );
-		}
-		// Bail if reader is already a newsletter subscriber.
-		if ( $is_newsletter_subscriber ) {
-			return;
-		}
-		// Check if the user is subscribed to a newsletter.
 		if ( ! class_exists( '\Newspack_Newsletters' ) || ! class_exists( '\Newspack_Newsletters_Subscription' ) ) {
 			return;
 		}
 		$subscribed_lists = \Newspack_Newsletters_Subscription::get_contact_lists( $data['email'] );
-		if ( ! is_wp_error( $subscribed_lists ) && ! empty( $subscribed_lists ) && is_array( $subscribed_lists ) ) {
-			self::update_item( $data['user_id'], 'is_newsletter_subscriber', true );
+		if ( ! is_wp_error( $subscribed_lists ) && is_array( $subscribed_lists ) ) {
+			self::update_item( $data['user_id'], 'is_newsletter_subscriber', ! empty( $subscribed_lists ) );
+			self::update_item( $data['user_id'], 'newsletter_subscribed_lists', wp_json_encode( $subscribed_lists ) );
 		}
 	}
 }

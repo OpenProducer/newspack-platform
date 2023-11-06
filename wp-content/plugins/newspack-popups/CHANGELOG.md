@@ -1,3 +1,69 @@
+# [2.25.0](https://github.com/Automattic/newspack-popups/compare/v2.24.0...v2.25.0) (2023-10-31)
+
+
+### Bug Fixes
+
+* deduplication strategy for Homepage Posts block ([#1228](https://github.com/Automattic/newspack-popups/issues/1228)) ([bbb952d](https://github.com/Automattic/newspack-popups/commit/bbb952d0f696bb72850607579574a2a0d19d82a3))
+
+
+### Features
+
+* implement ras overlays ([#1233](https://github.com/Automattic/newspack-popups/issues/1233)) ([6c86cd3](https://github.com/Automattic/newspack-popups/commit/6c86cd3c5689622160b7d118764b1c62a77b95e2))
+* remove is_non_interactive method ([adabea2](https://github.com/Automattic/newspack-popups/commit/adabea225a04df880f0b6e120ee8dcad82c3445d))
+
+# [2.25.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.25.0-alpha.1...v2.25.0-alpha.2) (2023-10-20)
+
+
+### Features
+
+* implement ras overlays ([#1233](https://github.com/Automattic/newspack-popups/issues/1233)) ([6c86cd3](https://github.com/Automattic/newspack-popups/commit/6c86cd3c5689622160b7d118764b1c62a77b95e2))
+
+# [2.25.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.24.0...v2.25.0-alpha.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* deduplication strategy for Homepage Posts block ([#1228](https://github.com/Automattic/newspack-popups/issues/1228)) ([bbb952d](https://github.com/Automattic/newspack-popups/commit/bbb952d0f696bb72850607579574a2a0d19d82a3))
+
+
+### Features
+
+* remove is_non_interactive method ([adabea2](https://github.com/Automattic/newspack-popups/commit/adabea225a04df880f0b6e120ee8dcad82c3445d))
+
+# [2.24.0](https://github.com/Automattic/newspack-popups/compare/v2.23.1...v2.24.0) (2023-10-09)
+
+
+### Bug Fixes
+
+* **data-api:** handle errored default donation settings ([#1224](https://github.com/Automattic/newspack-popups/issues/1224)) ([76b70b6](https://github.com/Automattic/newspack-popups/commit/76b70b636b3f45f7fa7826073afc5eabaadaa461))
+
+
+### Features
+
+* newsletter subscription list criteria ([#1218](https://github.com/Automattic/newspack-popups/issues/1218)) ([22961a3](https://github.com/Automattic/newspack-popups/commit/22961a39db38d5d64a2839091497aee8fa6f40e5))
+* remove GA related code ([#1220](https://github.com/Automattic/newspack-popups/issues/1220)) ([cb2ce82](https://github.com/Automattic/newspack-popups/commit/cb2ce82919cca4ca9f6812cf445d71982b8e3cab))
+
+# [2.24.0-alpha.3](https://github.com/Automattic/newspack-popups/compare/v2.24.0-alpha.2...v2.24.0-alpha.3) (2023-09-29)
+
+
+### Bug Fixes
+
+* **data-api:** handle errored default donation settings ([#1224](https://github.com/Automattic/newspack-popups/issues/1224)) ([76b70b6](https://github.com/Automattic/newspack-popups/commit/76b70b636b3f45f7fa7826073afc5eabaadaa461))
+
+# [2.24.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.24.0-alpha.1...v2.24.0-alpha.2) (2023-09-29)
+
+
+### Features
+
+* newsletter subscription list criteria ([#1218](https://github.com/Automattic/newspack-popups/issues/1218)) ([22961a3](https://github.com/Automattic/newspack-popups/commit/22961a39db38d5d64a2839091497aee8fa6f40e5))
+
+# [2.24.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.23.1...v2.24.0-alpha.1) (2023-09-28)
+
+
+### Features
+
+* remove GA related code ([#1220](https://github.com/Automattic/newspack-popups/issues/1220)) ([cb2ce82](https://github.com/Automattic/newspack-popups/commit/cb2ce82919cca4ca9f6812cf445d71982b8e3cab))
+
 ## [2.23.1](https://github.com/Automattic/newspack-popups/compare/v2.23.0...v2.23.1) (2023-09-13)
 
 

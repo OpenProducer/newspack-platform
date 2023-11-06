@@ -179,6 +179,13 @@ class Plugin_Manager {
 				'Download'    => 'wporg',
 				'EditPath'    => 'options-general.php?page=password-protected',
 			],
+			'perfmatters'                   => [
+				'Name'        => esc_html__( 'Perfmatters', 'newspack' ),
+				'Description' => esc_html__( 'Perfmatters is a lightweight performance plugin developed to speed up your WordPress site.', 'newspack' ),
+				'Author'      => esc_html__( 'forgemedia', 'newspack' ),
+				'AuthorURI'   => esc_url( 'https://forgemedia.io/' ),
+				'PluginURI'   => esc_url( 'https://perfmatters.io/' ),
+			],
 			'publish-to-apple-news'         => [
 				'Name'        => esc_html__( 'Publish to Apple News', 'newspack' ),
 				'Description' => esc_html__( 'Export and synchronize posts to Apple format', 'newspack' ),
@@ -351,7 +358,13 @@ class Plugin_Manager {
 			$managed_plugins[ $plugin_slug ]['HandoffLink'] = isset( $managed_plugins[ $plugin_slug ]['EditPath'] ) ? admin_url( $managed_plugins[ $plugin_slug ]['EditPath'] ) : null;
 			$managed_plugins[ $plugin_slug ]                = wp_parse_args( $managed_plugins[ $plugin_slug ], $default_info );
 		}
-		return $managed_plugins;
+
+		/**
+		 * Filter the list of managed plugins.
+		 *
+		 * @param array $args Full list of managed plugins.
+		 */
+		return apply_filters( 'newspack_managed_plugins', $managed_plugins );
 	}
 
 	/**
@@ -398,11 +411,8 @@ class Plugin_Manager {
 			'gravityformspolls',
 			'gravityformsmailchimp',
 			'gravityformsstripe',
-			'perfmatters',
 			'onesignal-free-web-push-notifications',
-			'super-cool-ad-inserter-plugin',
 			'web-stories',
-			'ads-txt',
 			'woocommerce-memberships',
 		];
 	}

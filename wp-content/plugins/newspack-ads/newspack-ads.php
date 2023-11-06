@@ -1,11 +1,11 @@
 <?php
 /**
  * Plugin Name:     Newspack Ads
- * Plugin URI:      https://newspack.blog
+ * Plugin URI:      https://newspack.com
  * Description:     Ad services integration.
  * Author:          Automattic
  * License:         GPL2
- * Version:         1.44.6
+ * Version:         1.44.7
  *
  * @package         Newspack
  */

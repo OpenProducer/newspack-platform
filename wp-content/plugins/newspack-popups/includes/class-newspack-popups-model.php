@@ -44,6 +44,13 @@ final class Newspack_Popups_Model {
 	protected static $form_hooks_popup_id;
 
 	/**
+	 * The current popup.
+	 *
+	 * @var array|null
+	 */
+	protected static $current_popup = null;
+
+	/**
 	 * Retrieve all Popups (first 100).
 	 *
 	 * @param  boolean $include_unpublished Whether to include unpublished posts.
@@ -827,113 +834,6 @@ final class Newspack_Popups_Model {
 	}
 
 	/**
-	 * Add tracked analytics events to use in Newspack Plugin's newspack_analytics_events filter.
-	 *
-	 * @param object $popup The popup object.
-	 * @param string $body Post body.
-	 * @param string $element_id The id of the popup element.
-	 */
-	private static function get_analytics_events( $popup, $body, $element_id ) {
-		if ( Newspack_Popups::is_preview_request() || ! Newspack_Popups::is_tracking() ) {
-			return [];
-		}
-
-		$popup_id            = $popup['id'];
-		$segments            = array_reduce(
-			$popup['segments'],
-			function( $acc, $segment ) {
-				if ( $segment instanceof \WP_Term ) {
-					$acc[] = $segment->name;
-				}
-				return $acc;
-			},
-			[]
-		);
-		$event_category      = __( 'Newspack Announcement', 'newspack-popups' );
-		$formatted_placement = ucwords( str_replace( '_', ' ', $popup['options']['placement'] ) );
-		$default_event_label = sprintf(
-			// Translators: Analytics label with prompt details (placement, title, ID, targeted segments).
-			__( '%1$s: %2$s (%3$s) - %4$s', 'newspack-popups' ),
-			$formatted_placement,
-			$popup['title'],
-			$popup_id,
-			0 < count( $segments ) ? implode( '; ', $segments ) : __( 'Everyone', 'newspack-popups' )
-		);
-		$has_link            = preg_match( '/<a\s/', $body ) !== 0;
-		$newspack_form_class = apply_filters( 'newspack_campaigns_form_class', '.newspack-subscribe-form' );
-		$newspack_form_class = '.' === substr( $newspack_form_class, 0, 1 ) ? substr( $newspack_form_class, 1 ) : $newspack_form_class; // Strip the "." class selector.
-		$has_register_form   = preg_match( '/id="newspack-(register|subscribe)-(.+)"/', $body ) !== 0;
-		$has_lists_field     = preg_match( '/name="lists\[\]"/', $body ) !== 0;
-		$has_form            = preg_match( '/<form\s|mc4wp-form|\[gravityforms\s|' . $newspack_form_class . '/', $body ) !== 0;
-		$has_dismiss_form    = self::is_overlay( $popup );
-
-		$analytics_events = [
-			[
-				'on'              => 'ini-load',
-				'element'         => '#' . esc_attr( $element_id ),
-				'event_name'      => __( 'Load', 'newspack-popups' ),
-				'non_interaction' => true,
-			],
-			[
-				'on'              => 'visible',
-				'element'         => '#' . esc_attr( $element_id ),
-				'event_name'      => __( 'Seen', 'newspack-popups' ),
-				'non_interaction' => true,
-				'visibilitySpec'  => [
-					'totalTimeMin' => 500,
-				],
-			],
-		];
-
-		if ( $has_link ) {
-			$analytics_events[] = [
-				'on'          => 'click',
-				'element'     => '#' . esc_attr( $element_id ) . ' a',
-				'amp_element' => '#' . esc_attr( $element_id ) . ' a',
-				'event_name'  => __( 'Link Click', 'newspack-popups' ),
-			];
-		}
-
-		if ( $has_form ) {
-			$analytics_events[] = [
-				'amp_on'     => 'amp-form-submit',
-				'on'         => 'submit',
-				'element'    => '#' . esc_attr( $element_id ) . ' form:not(.popup-dismiss-form)', // Not a dismissal form.
-				'event_name' => __( 'Form Submission', 'newspack-popups' ),
-			];
-		}
-		if ( $has_dismiss_form ) {
-			$analytics_events[] = [
-				'amp_on'          => 'amp-form-submit-success',
-				'on'              => 'submit',
-				'element'         => '#' . esc_attr( $element_id ) . ' .popup-dismiss-form',
-				'event_name'      => __( 'Dismissal', 'newspack-popups' ),
-				'non_interaction' => true,
-			];
-		}
-
-		foreach ( $analytics_events as &$event ) {
-			$event_label = $default_event_label;
-
-			// If a form submission and the form contains registration + list info, append that to the event label.
-			if ( isset( $event['amp_on'] ) && 'amp-form-submit' === $event['amp_on'] && $has_register_form ) {
-				$event_label .= ' | ${formId}';
-
-				// If the reg form has a lists[] field, append the value to the event label.
-				if ( $has_lists_field ) {
-					$event_label .= ' - ${formFields[lists[]]}';
-				}
-			}
-
-			$event['id']             = self::get_uniqid();
-			$event['event_category'] = esc_attr( $event_category );
-			$event['event_label']    = esc_attr( $event_label );
-		}
-
-		return $analytics_events;
-	}
-
-	/**
 	 * Canonise popups id. The id from WP will be an integer, but AMP does not play well with that and needs a string.
 	 *
 	 * @param int $popup_id Popup id.
@@ -1044,7 +944,6 @@ final class Newspack_Popups_Model {
 	public static function generate_inline_popup( $popup ) {
 		global $wp;
 
-		do_action( 'newspack_campaigns_before_campaign_render', $popup );
 		$blocks = parse_blocks( $popup['content'] );
 		$body   = '';
 		self::add_form_hooks( $popup );
@@ -1069,16 +968,6 @@ final class Newspack_Popups_Model {
 		$assigned_segments    = Newspack_Segments_Model::get_popup_segments_ids_string( $popup['id'] );
 		$frequency_config     = self::get_frequency_config( $popup );
 
-		$analytics_events = self::get_analytics_events( $popup, $body, $element_id );
-		if ( ! empty( $analytics_events ) ) {
-			add_filter(
-				'newspack_analytics_events',
-				function ( $evts ) use ( $analytics_events ) {
-					return array_merge( $evts, $analytics_events );
-				}
-			);
-		}
-
 		ob_start();
 		?>
 			<div
@@ -1094,7 +983,17 @@ final class Newspack_Popups_Model {
 				<?php echo do_shortcode( $body ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			</div>
 		<?php
+		self::$current_popup = null;
 		return ob_get_clean();
+	}
+
+	/**
+	 * Return the current popup.
+	 *
+	 * @return array|null The current popup or null if it's not set.
+	 */
+	public static function get_current_popup() {
+		return self::$current_popup;
 	}
 
 	/**
@@ -1115,16 +1014,12 @@ final class Newspack_Popups_Model {
 			$popup = Newspack_Popups_Presets::retrieve_preset_popup( Newspack_Popups::preset_popup_id() );
 		}
 
-		if ( self::is_overlay( $popup ) && self::is_overlay( $popup ) && has_block( 'newspack-blocks/homepage-articles', $popup['content'] ) ) {
-			add_filter( 'newspack_blocks_homepage_enable_duplication', '__return_true' );
-			add_filter( 'newspack_blocks_homepage_shown_rendered_posts', '__return_true' );
-		}
+		self::$current_popup = $popup;
 
 		if ( ! self::is_overlay( $popup ) ) {
 			return self::generate_inline_popup( $popup );
 		}
 
-		do_action( 'newspack_campaigns_before_campaign_render', $popup );
 		$blocks = parse_blocks( $popup['content'] );
 		$body   = '';
 		self::add_form_hooks( $popup );
@@ -1156,13 +1051,6 @@ final class Newspack_Popups_Model {
 		$is_scroll_triggered   = 'scroll' === $popup['options']['trigger_type'];
 		$assigned_segments     = Newspack_Segments_Model::get_popup_segments_ids_string( $popup['id'] );
 		$frequency_config      = self::get_frequency_config( $popup );
-
-		add_filter(
-			'newspack_analytics_events',
-			function ( $evts ) use ( $popup, $body, $element_id ) {
-				return array_merge( $evts, self::get_analytics_events( $popup, $body, $element_id ) );
-			}
-		);
 
 		$animation_id = 'a_' . $element_id;
 
@@ -1210,12 +1098,7 @@ final class Newspack_Popups_Model {
 			<div id="page-position-marker_<?php echo esc_attr( $element_id ); ?>" class="page-position-marker" style="position: absolute; top: <?php echo esc_attr( $popup['options']['trigger_scroll_progress'] ); ?>%"></div>
 		<?php endif; ?>
 		<?php
-		if ( self::is_overlay( $popup ) && has_block( 'newspack-blocks/homepage-articles', $popup['content'] ) ) {
-			add_filter( 'newspack_blocks_homepage_enable_duplication', '__return_false' );
-			add_filter( 'newspack_blocks_homepage_shown_rendered_posts', '__return_false' );
-		}
-		?>
-		<?php
+		self::$current_popup = null;
 		return ob_get_clean();
 	}
 

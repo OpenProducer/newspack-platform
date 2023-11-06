@@ -120,7 +120,6 @@ export const getDonationFormValues = ( formElement: HTMLFormElement ): DonationF
 		typeof formValues.cid === 'string' &&
 		formValues.cid.indexOf( 'CLIENT_ID' ) === 0
 	) {
-		// In non-AMP environment, the value will not be dynamically substituted by AMP runtime.
 		formValues.cid = getCookies()[ 'newspack-cid' ];
 	}
 	return formValues;

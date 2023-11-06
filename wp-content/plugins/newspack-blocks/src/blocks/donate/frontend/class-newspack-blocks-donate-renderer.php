@@ -146,7 +146,6 @@ class Newspack_Blocks_Donate_Renderer {
 
 		Newspack_Blocks::enqueue_view_assets( 'donate' );
 		wp_script_add_data( 'newspack-blocks-donate', 'async', true );
-		wp_script_add_data( 'newspack-blocks-donate', 'amp-plus', true );
 
 		if ( true === $attributes['useModalCheckout'] && ! $configuration['is_rendering_stripe_payment_form'] ) {
 			\Newspack_Blocks\Modal_Checkout::enqueue_modal();

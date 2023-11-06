@@ -54,7 +54,6 @@ class Newspack_Blocks {
 		add_action( 'after_setup_theme', [ __CLASS__, 'add_image_sizes' ] );
 		add_post_type_support( 'post', 'newspack_blocks' );
 		add_post_type_support( 'page', 'newspack_blocks' );
-		add_filter( 'script_loader_tag', [ __CLASS__, 'mark_view_script_as_amp_plus_allowed' ], 10, 2 );
 		add_action( 'jetpack_register_gutenberg_extensions', [ __CLASS__, 'disable_jetpack_donate' ], 99 );
 		add_filter( 'the_content', [ __CLASS__, 'hide_post_content_when_iframe_block_is_fullscreen' ] );
 		add_filter( 'posts_clauses', [ __CLASS__, 'filter_posts_clauses_when_co_authors' ], 999, 2 );
@@ -72,19 +71,6 @@ class Newspack_Blocks {
 		if ( ! defined( 'NGG_DISABLE_SHORTCODE_MANAGER' ) ) {
 			define( 'NGG_DISABLE_SHORTCODE_MANAGER', true ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedConstantFound
 		}
-	}
-
-	/**
-	 * Modify the Donate block scripts to allow it as an "AMP Plus" script.
-	 *
-	 * @param string $tag HTML of the script tag.
-	 * @param string $handle The script handle.
-	 */
-	public static function mark_view_script_as_amp_plus_allowed( $tag, $handle ) {
-		if ( in_array( $handle, array_values( self::SCRIPT_HANDLES ), true ) ) {
-			return str_replace( '<script', '<script data-amp-plus-allowed', $tag );
-		}
-		return $tag;
 	}
 
 	/**
@@ -268,7 +254,6 @@ class Newspack_Blocks {
 				'assets_path'                      => plugins_url( '/src/assets', NEWSPACK_BLOCKS__PLUGIN_FILE ),
 				'post_subtitle'                    => get_theme_support( 'post-subtitle' ),
 				'is_rendering_stripe_payment_form' => self::is_rendering_stripe_payment_form(),
-				'can_render_tiers_based_layout'    => self::can_render_tiers_based_layout(),
 				'iframe_accepted_file_mimes'       => self::iframe_accepted_file_mimes(),
 				'supports_recaptcha'               => class_exists( 'Newspack\Recaptcha' ),
 				'has_recaptcha'                    => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),
@@ -321,18 +306,6 @@ class Newspack_Blocks {
 			&& method_exists( 'Newspack\Donations', 'is_platform_stripe' )
 		) {
 			return \Newspack\Donations::can_use_streamlined_donate_block() && \Newspack\Donations::is_platform_stripe();
-		}
-		return false;
-	}
-
-	/**
-	 * Can the tiers-based layout of the Donate block be rendered?
-	 */
-	public static function can_render_tiers_based_layout() {
-		if ( ! is_plugin_active( 'amp/amp.php' ) ) {
-			return true;
-		} elseif ( method_exists( '\Newspack\AMP_Enhancements', 'is_amp_plus_configured' ) ) {
-			return \Newspack\AMP_Enhancements::is_amp_plus_configured();
 		}
 		return false;
 	}
@@ -455,18 +428,6 @@ class Newspack_Blocks {
 	}
 
 	/**
-	 * Checks whether the current view is served in AMP context.
-	 *
-	 * @return bool True if AMP, false otherwise.
-	 */
-	public static function is_amp() {
-		if ( function_exists( 'is_amp_endpoint' ) && is_amp_endpoint() ) {
-			return true;
-		}
-		return false;
-	}
-
-	/**
 	 * Return the most appropriate thumbnail size to display.
 	 *
 	 * @param string $orientation The block's orientation settings: landscape|portrait|square.
@@ -586,6 +547,56 @@ class Newspack_Blocks {
 	}
 
 	/**
+	 * Whether the block should be included in the deduplication logic.
+	 *
+	 * @param array $attributes Block attributes.
+	 *
+	 * @return bool
+	 */
+	public static function should_deduplicate_block( $attributes ) {
+		/**
+		 * Filters whether to use deduplication while rendering the given block.
+		 *
+		 * @param bool   $deduplicate Whether to deduplicate.
+		 * @param array  $attributes  The block attributes.
+		 */
+		return apply_filters( 'newspack_blocks_should_deduplicate', $attributes['deduplicate'] ?? true, $attributes );
+	}
+
+	/**
+	 * Get all "specificPosts" ids from given blocks.
+	 *
+	 * @param array  $blocks     An array of blocks.
+	 * @param string $block_name Name of the block requesting the query.
+	 *
+	 * @return array All "specificPosts" ids from all eligible blocks.
+	 */
+	private static function get_specific_posts_from_blocks( $blocks, $block_name ) {
+		$specific_posts = [];
+		foreach ( $blocks as $block ) {
+			if ( ! empty( $block['innerBlocks'] ) ) {
+				$specific_posts = array_merge(
+					$specific_posts,
+					self::get_specific_posts_from_blocks( $block['innerBlocks'], $block_name )
+				);
+				continue;
+			}
+			if (
+				$block_name === $block['blockName'] &&
+				self::should_deduplicate_block( $block['attrs'] ) &&
+				! empty( $block['attrs']['specificMode'] ) &&
+				! empty( $block['attrs']['specificPosts'] )
+			) {
+				$specific_posts = array_merge(
+					$specific_posts,
+					$block['attrs']['specificPosts']
+				);
+			}
+		}
+		return $specific_posts;
+	}
+
+	/**
 	 * Builds and returns query args based on block attributes.
 	 *
 	 * @param array $attributes An array of block attributes.
@@ -606,23 +617,7 @@ class Newspack_Blocks {
 		global $newspack_blocks_all_specific_posts_ids;
 		if ( ! is_array( $newspack_blocks_all_specific_posts_ids ) ) {
 			$blocks                                 = parse_blocks( get_the_content() );
-			$newspack_blocks_all_specific_posts_ids = array_reduce(
-				$blocks,
-				function ( $acc, $block ) use ( $block_name ) {
-					if (
-						$block_name === $block['blockName'] &&
-						isset( $block['attrs']['specificMode'], $block['attrs']['specificPosts'] ) &&
-						count( $block['attrs']['specificPosts'] )
-					) {
-						return array_merge(
-							$block['attrs']['specificPosts'],
-							$acc
-						);
-					}
-					return $acc;
-				},
-				[]
-			);
+			$newspack_blocks_all_specific_posts_ids = self::get_specific_posts_from_blocks( $blocks, $block_name );
 		}
 
 		$post_type              = isset( $attributes['postType'] ) ? $attributes['postType'] : [ 'post' ];
@@ -654,9 +649,7 @@ class Newspack_Blocks {
 			$args['orderby']  = 'post__in';
 		} else {
 			$args['posts_per_page'] = $posts_to_show;
-
-			$show_rendered_posts = apply_filters( 'newspack_blocks_homepage_shown_rendered_posts', false );
-			if ( $show_rendered_posts ) {
+			if ( ! self::should_deduplicate_block( $attributes ) ) {
 				$args['post__not_in'] = [ get_the_ID() ];
 			} else {
 				if ( count( $newspack_blocks_all_specific_posts_ids ) ) {

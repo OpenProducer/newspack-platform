@@ -44,10 +44,6 @@ call_user_func(
 		global $newspack_blocks_hpb_rendering_context;
 		$newspack_blocks_hpb_rendering_context = [ 'attrs' => $attributes ];
 
-		// If the image position is behind, pass the object-fit setting to maintain styles with AMP.
-		if ( 'behind' === $attributes['mediaPosition'] ) {
-			$thumbnail_args['object-fit'] = 'cover';
-		}
 		// Disable lazy loading by using an arbitraty `loading` attribute other than `lazy`.
 		// Empty string or `false` would still result in `lazy`.
 		if ( $attributes['disableImageLazyLoad'] ) {

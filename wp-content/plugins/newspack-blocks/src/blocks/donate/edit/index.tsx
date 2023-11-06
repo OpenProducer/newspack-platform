@@ -142,20 +142,13 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 	}
 
 	const isTiered = attributes.manual ? attributes.tiered : settings.tiered;
-	const canRenderTiersBasedLayout = Boolean(
-		window.newspack_blocks_data?.can_render_tiers_based_layout
-	);
-	const isTierBasedLayoutEnabled =
-		canRenderTiersBasedLayout && isTiered && attributes.layoutOption === 'tiers';
+	const isTierBasedLayoutEnabled = isTiered && attributes.layoutOption === 'tiers';
 
 	const amounts = attributes.manual ? attributes.amounts : settings.amounts;
 	const availableFrequencies = FREQUENCY_SLUGS.filter( slug =>
 		attributes.manual
 			? ! attributes.disabledFrequencies[ slug ]
 			: ! settings.disabledFrequencies[ slug ]
-	).filter( slug => ( isTierBasedLayoutEnabled ? slug !== 'once' : true ) );
-	const displayedFrequencies = FREQUENCY_SLUGS.filter( slug =>
-		isTierBasedLayoutEnabled ? slug !== 'once' : true
 	);
 
 	// Editor bug – initially, the default style is selected, but the class not applied.
@@ -233,7 +226,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 									isPressed={ isSelected }
 									onClick={ () => setAttributes( { layoutOption: key } ) }
 									aria-current={ isSelected }
-									disabled={ key === 'tiers' && ( ! canRenderTiersBasedLayout || ! isTiered ) }
+									disabled={ key === 'tiers' && ! isTiered }
 								>
 									{ label }
 								</Button>
@@ -278,13 +271,13 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 							{ attributes.tiered ? (
 								<>
 									<div className="components-frequency-donations">
-										{ displayedFrequencies.map( ( frequency: DonationFrequencySlug ) => {
+										{ FREQUENCY_SLUGS.map( ( frequency: DonationFrequencySlug ) => {
 											const isFrequencyDisabled = attributes.disabledFrequencies[ frequency ];
 											const disabledDisplayedFrequencyCount = Object.values(
-												pick( attributes.disabledFrequencies, displayedFrequencies )
+												pick( attributes.disabledFrequencies, FREQUENCY_SLUGS )
 											).filter( Boolean ).length;
 											const isOnlyOneFrequencyActive =
-												displayedFrequencies.length - disabledDisplayedFrequencyCount === 1;
+												FREQUENCY_SLUGS.length - disabledDisplayedFrequencyCount === 1;
 											return (
 												<Fragment key={ frequency }>
 													<CheckboxControl

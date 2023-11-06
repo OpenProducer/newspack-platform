@@ -21,13 +21,6 @@ final class Newspack_Popups_Segmentation {
 	protected static $instance = null;
 
 	/**
-	 * Names of custom dimensions options.
-	 */
-	const CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY = 'newspack_popups_cd_reader_frequency';
-	const CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER    = 'newspack_popups_cd_is_subscriber';
-	const CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR         = 'newspack_popups_cd_is_donor';
-
-	/**
 	 * Name of the option to store segments under.
 	 */
 	const SEGMENTS_OPTION_NAME = 'newspack_popups_segments';
@@ -64,15 +57,12 @@ final class Newspack_Popups_Segmentation {
 		// Remove legacy pruning CRON job.
 		add_action( 'init', [ __CLASS__, 'cron_deactivate' ] );
 
-		add_filter( 'newspack_custom_dimensions', [ __CLASS__, 'register_custom_dimensions' ] );
-		add_filter( 'newspack_custom_dimensions_values', [ __CLASS__, 'report_custom_dimensions' ] );
-
 		// Handle Mailchimp merge tag functionality.
 		if (
 			method_exists( '\Newspack_Newsletters', 'service_provider' ) &&
 			'mailchimp' === \Newspack_Newsletters::service_provider() &&
 			method_exists( '\Newspack\Data_Events', 'register_handler' ) &&
-			method_exists( '\Newspack\Reader_Data', 'set_is_newsletter_subscriber' )
+			method_exists( '\Newspack\Reader_Data', 'update_newsletter_subscribed_lists' )
 		) {
 			\Newspack\Data_Events::register_handler( [ __CLASS__, 'reader_logged_in' ], 'reader_logged_in' );
 		}
@@ -83,101 +73,6 @@ final class Newspack_Popups_Segmentation {
 	 */
 	public static function cron_deactivate() {
 		wp_clear_scheduled_hook( 'newspack_popups_segmentation_data_prune' );
-	}
-
-	/**
-	 * Add custom custom dimensions to Newspack Plugin's Analytics Wizard.
-	 *
-	 * @param array $default_dimensions Default custom dimensions.
-	 */
-	public static function register_custom_dimensions( $default_dimensions ) {
-		$default_dimensions = array_merge(
-			$default_dimensions,
-			[
-				[
-					'role'   => self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
-					'option' => [
-						'value' => self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
-						'label' => __( 'Reader frequency', 'newspack' ),
-					],
-				],
-				[
-					'role'   => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
-					'option' => [
-						'value' => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
-						'label' => __( 'Is a subcriber', 'newspack' ),
-					],
-				],
-				[
-					'role'   => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
-					'option' => [
-						'value' => self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
-						'label' => __( 'Is a donor', 'newspack' ),
-					],
-				],
-			]
-		);
-		return $default_dimensions;
-	}
-
-	/**
-	 * Add custom custom dimensions to Newspack Plugin's Analytics reporting.
-	 *
-	 * @param array $custom_dimensions_values Existing custom dimensions payload.
-	 */
-	public static function report_custom_dimensions( $custom_dimensions_values ) {
-		$custom_dimensions = [];
-		if ( class_exists( 'Newspack\Analytics_Wizard' ) ) {
-			$custom_dimensions = Newspack\Analytics_Wizard::list_configured_custom_dimensions();
-		}
-		if ( empty( $custom_dimensions ) ) {
-			return $custom_dimensions_values;
-		}
-
-		$campaigns_custom_dimensions = [
-			self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY,
-			self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER,
-			self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR,
-		];
-		$all_campaign_dimensions     = array_values(
-			array_map(
-				function( $custom_dimension ) {
-					return $custom_dimension['role'];
-				},
-				$custom_dimensions
-			)
-		);
-
-		// No need to proceed if the configured custom dimensions do not include any Campaigns data.
-		if ( 0 === count( array_intersect( $campaigns_custom_dimensions, $all_campaign_dimensions ) ) ) {
-			return $custom_dimensions_values;
-		}
-
-		foreach ( $custom_dimensions as $custom_dimension ) {
-			// Strip the `ga:` prefix from gaID.
-			$dimension_id = substr( $custom_dimension['gaID'], 3 ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-			switch ( $custom_dimension['role'] ) {
-				case self::CUSTOM_DIMENSIONS_OPTION_NAME_READER_FREQUENCY:
-					$read_count = 0; // TODO: get article view count from user meta/reader data
-					// Tiers mimick NCI's – https://news-consumer-insights.appspot.com.
-					$read_count_tier = 'casual';
-					if ( $read_count > 1 && $read_count <= 14 ) {
-						$read_count_tier = 'loyal';
-					} elseif ( $read_count > 14 ) {
-						$read_count_tier = 'brand_lover';
-					}
-					$custom_dimensions_values[ $dimension_id ] = $read_count_tier;
-					break;
-				case self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_SUBSCRIBER:
-					$custom_dimensions_values[ $dimension_id ] = false; // TODO: get is_subscriber from reader data.
-					break;
-				case self::CUSTOM_DIMENSIONS_OPTION_NAME_IS_DONOR:
-					$custom_dimensions_values[ $dimension_id ] = false; // TODO: get is_donor from reader data.
-					break;
-			}
-		}
-
-		return $custom_dimensions_values;
 	}
 
 	/**

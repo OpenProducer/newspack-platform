@@ -406,22 +406,6 @@ class Stripe_Webhooks {
 					);
 				}
 
-				$label = $frequency;
-				if ( ! empty( $origin ) ) {
-					$label .= ' - ' . $origin;
-				}
-
-				// Send custom event to GA.
-				\Newspack\Google_Services_Connection::send_custom_event(
-					[
-						'category' => __( 'Newspack Donation', 'newspack' ),
-						'action'   => __( 'Stripe', 'newspack' ),
-						'label'    => $label,
-						'value'    => $amount_normalised,
-						'referer'  => $referer,
-					]
-				);
-
 				// Add a transaction to WooCommerce.
 				if ( Donations::is_woocommerce_suite_active() ) {
 					WooCommerce_Connection::create_transaction( Stripe_Connection::create_wc_transaction_payload( $customer, $payment ) );

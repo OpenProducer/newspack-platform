@@ -73,7 +73,6 @@ class Donations {
 			add_action( 'woocommerce_check_cart_items', [ __CLASS__, 'handle_cart' ] );
 			add_filter( 'amp_skip_post', [ __CLASS__, 'should_skip_amp' ], 10, 2 );
 			add_filter( 'newspack_blocks_donate_billing_fields_keys', [ __CLASS__, 'get_billing_fields' ] );
-			add_filter( 'woocommerce_thankyou_order_received_text', [ __CLASS__, 'woocommerce_thankyou_order_received_text' ], 100, 2 );
 			add_action( 'woocommerce_checkout_create_order_line_item', [ __CLASS__, 'checkout_create_order_line_item' ], 10, 4 );
 		}
 	}
@@ -285,7 +284,7 @@ class Donations {
 	/**
 	 * Get the donation settings.
 	 *
-	 * @return Array of donation settings or WP_Error if WooCommerce is not set up.
+	 * @return array|WP_Error Donation settings or WP_Error if WooCommerce is not set up.
 	 */
 	public static function get_donation_settings() {
 		$settings                   = self::get_donation_default_settings();
@@ -1000,25 +999,6 @@ class Donations {
 	public static function update_billing_fields( $billing_fields ) {
 		update_option( self::DONATION_BILLING_FIELDS_OPTION, $billing_fields );
 		return $billing_fields;
-	}
-
-	/**
-	 * Get the donation "thank you, order received" text.
-	 *
-	 * @param string $text  The text to display.
-	 * @param object $order The order object.
-	 *
-	 * @return string
-	 */
-	public static function woocommerce_thankyou_order_received_text( $text, $order ) {
-		if ( ! $order ) {
-			return $text;
-		}
-		$product_id = self::get_order_donation_product_id( $order->get_id() );
-		if ( ! $product_id ) {
-			return $text;
-		}
-		return __( 'Thank you for your donation!', 'newspack' );
 	}
 }
 Donations::init();

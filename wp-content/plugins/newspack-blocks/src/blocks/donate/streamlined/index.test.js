@@ -36,7 +36,7 @@ const createDOM = settings => {
 				<div class="stripe-payment__messages"></div>
 				<button type="submit">Donate</button>
 			</div>
-			<input name="cid" type="hidden" value="amp-123" />
+			<input name="cid" type="hidden" value="cid-123" />
 		</form>
 	`;
 	document.body.appendChild( parentElement );
@@ -122,8 +122,7 @@ describe( 'Streamlined Donate block processing', () => {
 					full_name: 'Bax',
 					frequency: 'month',
 					newsletter_opt_in: false,
-					clientId: 'amp-123',
-					origin: null,
+					clientId: 'cid-123',
 					additional_fields: [],
 				},
 			},

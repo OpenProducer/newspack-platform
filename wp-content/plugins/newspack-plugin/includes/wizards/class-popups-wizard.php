@@ -12,7 +12,6 @@ use \WP_Error, \WP_Query;
 defined( 'ABSPATH' ) || exit;
 
 require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
-require_once NEWSPACK_ABSPATH . 'includes/popups-analytics/class-popups-analytics-utils.php';
 
 /**
  * Interface for managing Pop-ups.
@@ -247,36 +246,6 @@ class Popups_Wizard extends Wizard {
 				'args'                => [
 					'segments' => [
 						'sanitize_callback' => [ $this, 'sanitize_array' ],
-					],
-				],
-			]
-		);
-
-		// Register newspack/v1/popups-analytics/report endpoint.
-		register_rest_route(
-			NEWSPACK_API_NAMESPACE,
-			'/popups-analytics/report',
-			[
-				[
-					'methods'             => \WP_REST_Server::READABLE,
-					'callback'            => [ $this, 'get_popups_analytics_report' ],
-					'permission_callback' => [ $this, 'api_permissions_check' ],
-					'args'                => [
-						'start_date'        => [
-							'sanitize_callback' => 'sanitize_text_field',
-						],
-						'end_date'          => [
-							'sanitize_callback' => 'sanitize_text_field',
-						],
-						'event_label_id'    => [
-							'sanitize_callback' => 'sanitize_text_field',
-						],
-						'event_action'      => [
-							'sanitize_callback' => 'sanitize_text_field',
-						],
-						'with_report_by_id' => [
-							'sanitize_callback' => 'rest_sanitize_boolean',
-						],
 					],
 				],
 			]
@@ -730,23 +699,6 @@ class Popups_Wizard extends Wizard {
 	public static function api_update_settings_section( $options ) {
 		$newspack_popups_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'newspack-popups' );
 		return $newspack_popups_configuration_manager->update_settings_section( $options );
-	}
-
-	/**
-	 * Get Campaigns Analytics report.
-	 *
-	 * @param WP_REST_Request $request Full details about the request.
-	 * @return WP_REST_Response|WP_Error Response object on success, or WP_Error object on failure.
-	 */
-	public function get_popups_analytics_report( $request ) {
-		$options = array(
-			'start_date'        => $request['start_date'],
-			'end_date'          => $request['end_date'],
-			'event_label_id'    => $request['event_label_id'],
-			'event_action'      => $request['event_action'],
-			'with_report_by_id' => $request['with_report_by_id'],
-		);
-		return rest_ensure_response( \Popups_Analytics_Utils::get_report( $options ) );
 	}
 
 	/**

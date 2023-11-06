@@ -7,6 +7,8 @@
 
 namespace Newspack;
 
+use WP_Meta_Query;
+
 /**
  * Newspack_Image_Credits class.
  */
@@ -41,6 +43,7 @@ class Newspack_Image_Credits {
 		add_filter( 'get_the_excerpt', [ __CLASS__, 'add_credit_to_attachment_excerpts' ], 10, 2 );
 		add_filter( 'render_block', [ __CLASS__, 'add_credit_to_image_block' ], 10, 2 );
 		add_filter( 'wp_get_attachment_image_src', [ __CLASS__, 'maybe_show_placeholder_image' ], 11, 4 );
+		add_filter( 'ajax_query_attachments_args', [ __CLASS__, 'filter_ajax_query_attachments' ] );
 	}
 
 	/**
@@ -426,6 +429,53 @@ class Newspack_Image_Credits {
 			return absint( $value );
 		}
 		return sanitize_text_field( $value );
+	}
+
+	/**
+	 * Prepare the query filters to include metadata to the search query
+	 *
+	 * This hook runs only in the ajax call for the media library, and will only do anything if it's a search query.
+	 *
+	 * It will not modify the query, but register the hooks that will act on the query later on
+	 *
+	 * @param array $query The query parameters.
+	 * @return array
+	 */
+	public static function filter_ajax_query_attachments( $query ) {
+		if ( empty( $query['s'] ) ) {
+			return $query;
+		}
+		add_filter( 'posts_clauses', [ __CLASS__, 'filter_posts_clauses' ], 10, 2 );
+		return $query;
+	}
+
+	/**
+	 * Filter posts query clauses to include media credit meta search.
+	 *
+	 * @param array     $clauses The current query clauses.
+	 * @param \WP_Query $query The current WP_Query object.
+	 *
+	 * @return array
+	 */
+	public static function filter_posts_clauses( $clauses, $query ) {
+		if ( empty( $query->get( 's' ) ) ) {
+			return $clauses;
+		}
+		global $wpdb;
+		// Fetch post IDs that have the search term in the media credit meta.
+		$post_ids = $wpdb->get_col( // phpcs:ignore WordPress.DB.DirectDatabaseQuery.DirectQuery, WordPress.DB.DirectDatabaseQuery.NoCaching
+			$wpdb->prepare(
+				"SELECT post_id FROM $wpdb->postmeta WHERE meta_key IN ( '_media_credit', '_media_credit_url', '_navis_media_credit_org' ) AND meta_value LIKE %s",
+				'%' . $wpdb->esc_like( $query->get( 's' ) ) . '%'
+			)
+		);
+		if ( empty( $post_ids ) ) {
+			return $clauses;
+		}
+		// Add the post IDs to the search query.
+		$post_ids          = array_map( 'absint', $post_ids );
+		$clauses['where'] .= " OR ( {$wpdb->posts}.ID IN ( " . implode( ',', $post_ids ) . ' ) )';
+		return $clauses;
 	}
 }
 Newspack_Image_Credits::init();

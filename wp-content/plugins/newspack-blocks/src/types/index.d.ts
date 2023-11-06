@@ -6,7 +6,6 @@ declare global {
 		newspack_blocks_data: {
 			assets_path: string;
 			is_rendering_stripe_payment_form?: boolean;
-			can_render_tiers_based_layout?: boolean;
 			supports_recaptcha: boolean;
 			has_recaptcha: boolean;
 			recaptcha_url: string;
@@ -28,7 +27,7 @@ declare global {
 	type PostId = number;
 	type CategoryId = number;
 	type TagId = number;
-	type Taxonomy = { slug: string, terms: number[] }[];
+	type Taxonomy = { slug: string; terms: number[] }[];
 	type AuthorId = number;
 
 	type PostType = { name: string; slug: string; supports: { newspack_blocks: boolean } };

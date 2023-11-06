@@ -161,9 +161,6 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 				]
 			);
 
-			if ( $request->get_param( 'amp' ) ) {
-				$html = $this->generate_amp_partial( $html );
-			}
 			$items[]['html'] = $html;
 			$ids[]           = get_the_ID();
 		}
@@ -184,8 +181,6 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 					[
 						'exclude_ids' => false,
 						'page'        => $next_page,
-						'amp'         => $request->get_param( 'amp' ),
-
 					]
 				),
 				rest_url( '/newspack-blocks/v1/articles' )
@@ -227,28 +222,5 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 			);
 		}
 		return $this->attribute_schema;
-	}
-
-	/**
-	 * Use AMP Plugin functions to render markup as valid AMP.
-	 *
-	 * @param string $html Markup to convert to AMP.
-	 * @return string
-	 */
-	public function generate_amp_partial( $html ) {
-		$dom = AMP_DOM_Utils::get_dom_from_content( $html );
-
-		AMP_Content_Sanitizer::sanitize_document(
-			$dom,
-			amp_get_content_sanitizers(),
-			[
-				'use_document_element' => false,
-			]
-		);
-		$xpath = new DOMXPath( $dom );
-		foreach ( iterator_to_array( $xpath->query( '//noscript | //comment()' ) ) as $node ) {
-			$node->parentNode->removeChild( $node ); // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
-		}
-		return AMP_DOM_Utils::get_content_from_dom( $dom );
 	}
 }

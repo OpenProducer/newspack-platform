@@ -53,6 +53,10 @@
 				"type": "string"
 			}
 		},
+		"listsCheckboxes": {
+			"type": "object",
+			"default": {}
+		},
 		"haveAccountLabel": {
 			"type": "string",
 			"default": "Already have an account?"

@@ -191,6 +191,10 @@
 			"type": "array",
 			"default": [ "publish" ],
 			"items": { "type": "string" }
+		},
+		"deduplicate": {
+			"type": "boolean",
+			"default": true
 		}
 	}
 }

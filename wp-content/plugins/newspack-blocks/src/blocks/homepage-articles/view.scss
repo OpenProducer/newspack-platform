@@ -455,11 +455,7 @@
 			margin: 0;
 		}
 	}
-}
 
-/* stylelint-disable selector-type-no-unknown  */
-.wpnbha,
-amp-script .wpnbha {
 	/* Article meta */
 	.cat-links {
 		display: flex;
@@ -507,7 +503,6 @@ amp-script .wpnbha {
 		line-height: 1;
 	}
 }
-/* stylelint-enable */
 
 /*
 	Some really rough font sizing.
@@ -830,21 +825,3 @@ amp-script .wpnbha {
 		font-style: italic;
 	}
 }
-
-/* Prevent tree-shaking Loading and Error style rules */
-/* stylelint-disable selector-type-no-unknown  */
-amp-script .wpnbha.has-more-button.is-loading {
-	button {
-		display: none;
-	}
-	.loading {
-		display: block;
-	}
-}
-amp-script .wpnbha.has-more-button.is-error {
-	button,
-	.error {
-		display: block;
-	}
-}
-/* stylelint-enable */

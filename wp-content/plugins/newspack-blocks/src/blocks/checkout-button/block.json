@@ -35,6 +35,15 @@
 		},
 		"gradient": {
 			"type": "string"
+		},
+		"afterSuccessBehavior": {
+			"type": "string"
+		},
+		"afterSuccessButtonLabel": {
+			"type": "string"
+		},
+		"afterSuccessURL": {
+			"type": "string"
 		}
 	},
 	"supports": {

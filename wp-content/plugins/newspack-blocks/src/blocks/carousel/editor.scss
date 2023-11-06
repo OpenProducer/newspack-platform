@@ -27,24 +27,8 @@
 		opacity: 1;
 		width: 24px;
 	}
-	.amp-carousel-button {
-		&.amp-carousel-button-next,
-		&.amp-carousel-button-prev {
-			left: 1.5em;
-			margin-top: -24px; // buttons height / 2
-			transform: translateY( -50% );
-			right: auto;
-		}
-
-		&.amp-carousel-button-next {
-			left: auto;
-			right: 1.5em;
-		}
-	}
-
 	&.hide-controls {
-		button,
-		.amp-pagination {
+		button {
 			display: none;
 			visibility: hidden;
 		}

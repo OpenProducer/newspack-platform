@@ -111,19 +111,17 @@ function newspack_blocks_get_iframe_html( $mode, $src, $height, $width, $is_full
 		</div>
 	</figure>
 
-	<?php if ( ! Newspack_Blocks::is_amp() ) : ?>
-		<script>
-			const iframe = document.getElementById("<?php echo esc_attr( $iframe_id ); ?>");
-			const timerId = setInterval( function() {
-					iframe.src = iframe.src;
-				}, 2000 );
+	<script>
+		const iframe = document.getElementById("<?php echo esc_attr( $iframe_id ); ?>");
+		const timerId = setInterval( function() {
+				iframe.src = iframe.src;
+			}, 2000 );
 
-			iframe.onload = function() {
-				clearInterval(timerId);
-			}
+		iframe.onload = function() {
+			clearInterval(timerId);
+		}
 
-		</script>
-	<?php endif; ?>
+	</script>
 
 	<?php
 	return ob_get_clean();

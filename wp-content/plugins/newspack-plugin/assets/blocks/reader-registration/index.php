@@ -182,6 +182,15 @@ function render_block( $attrs, $content ) {
 		$success_login_markup = '<p class="has-text-align-center">' . $attrs['signedInLabel'] . '</p>';
 	}
 
+	$checked = [];
+	if ( ! empty( $attrs['listsCheckboxes'] ) ) {
+		foreach ( $lists as $list_id => $list_name ) {
+			if ( ! isset( $attrs['listsCheckboxes'][ $list_id ] ) || false !== $attrs['listsCheckboxes'][ $list_id ] ) {
+				$checked[] = $list_id;
+			}
+		}
+	}
+
 	ob_start();
 	?>
 	<div class="newspack-registration <?php echo esc_attr( get_block_classes( $attrs ) ); ?>">
@@ -234,7 +243,7 @@ function render_block( $attrs, $content ) {
 						} else {
 							Reader_Activation::render_subscription_lists_inputs(
 								$lists,
-								array_keys( $lists ),
+								$checked,
 								[
 									'title'            => $attrs['newsletterTitle'],
 									'single_label'     => $attrs['newsletterLabel'],

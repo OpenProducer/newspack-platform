@@ -20,6 +20,7 @@ class Perfmatters {
 		add_filter( 'option_perfmatters_options', [ __CLASS__, 'set_defaults' ] );
 		add_action( 'admin_notices', [ __CLASS__, 'admin_notice' ] );
 		add_filter( 'perfmatters_lazyload_youtube_thumbnail_resolution', [ __CLASS__, 'maybe_serve_high_res_youtube_thumbs' ] );
+		add_filter( 'perfmatters_rucss_excluded_stylesheets', [ __CLASS__, 'add_rucss_excluded_stylesheets' ] );
 	}
 
 	/**
@@ -293,6 +294,18 @@ class Perfmatters {
 
 		// Use high-res thumbnails on desktop devices.
 		return 'maxresdefault';
+	}
+
+	/**
+	 * Use the Perfmatters filter to always exclude Newspack stylesheets from the "Unused CSS" feature,
+	 * regardless of the settings value.
+	 *
+	 * This is a backup solution, in a edge case where a user overrides their settings.
+	 *
+	 * @param array $stylesheet_exclusions Existing stylesheet exclusions.
+	 */
+	public static function add_rucss_excluded_stylesheets( $stylesheet_exclusions ) {
+		return array_unique( array_merge( $stylesheet_exclusions, self::unused_css_excluded_stylesheets() ) );
 	}
 }
 Perfmatters::init();

@@ -52,6 +52,20 @@ $criteria = [
 			],
 		],
 	],
+	'subscribed_lists'         => [
+		'name'               => __( 'Subscribed to newsletter lists', 'newspack-popups' ),
+		'description'        => __( 'Whether the reader subscribed to any of the selected newsletter lists', 'newspack-popups' ),
+		'category'           => 'reader_activity',
+		'matching_function'  => 'list__in',
+		'matching_attribute' => 'newsletter_subscribed_lists',
+	],
+	'not_subscribed_lists'     => [
+		'name'               => __( 'Not subscribed to newsletter lists', 'newspack-popups' ),
+		'description'        => __( 'Whether the reader is not subscribed to any of the selected newsletter lists', 'newspack-popups' ),
+		'category'           => 'reader_activity',
+		'matching_function'  => 'list__not_in',
+		'matching_attribute' => 'newsletter_subscribed_lists',
+	],
 	'donation'                 => [
 		'name'        => __( 'Donation', 'newspack-popups' ),
 		'description' => __( '(if checkout happens on-site)', 'newspack-popups' ),

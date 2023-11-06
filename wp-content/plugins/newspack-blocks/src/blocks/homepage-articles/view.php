@@ -163,7 +163,6 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 			),
 			[
 				'page' => 2,
-				'amp'  => Newspack_Blocks::is_amp(),
 			]
 		),
 		rest_url( '/newspack-blocks/v1/articles' )
@@ -191,9 +190,6 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 	ob_start();
 
 	if ( $article_query->have_posts() ) : ?>
-		<?php if ( $has_more_button && Newspack_Blocks::is_amp() ) : ?>
-			<amp-script layout="container" src="<?php echo esc_url( plugins_url( '/newspack-blocks/amp/homepage-articles/view.js' ) ); ?>">
-		<?php endif; ?>
 		<div
 			class="<?php echo esc_attr( $classes ); ?>"
 			style="<?php echo esc_attr( $styles ); ?>"
@@ -238,9 +234,6 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 			<?php endif; ?>
 
 		</div>
-		<?php if ( $has_more_button && Newspack_Blocks::is_amp() ) : ?>
-			</amp-script>
-		<?php endif; ?>
 		<?php
 	endif;
 
@@ -377,30 +370,3 @@ function newspack_blocks_format_categories( $post_id ) {
 		return apply_filters( 'newspack_blocks_categories', $category_formatted );
 	}
 }
-
-/**
- * Inject amp-state containing all post IDs visible on page load.
- */
-function newspack_blocks_inject_amp_state() {
-	if ( ! Newspack_Blocks::is_amp() ) {
-		return;
-	}
-	global $newspack_blocks_post_id;
-	if ( ! $newspack_blocks_post_id || ! count( $newspack_blocks_post_id ) ) {
-		return;
-	}
-	$post_ids = implode( ', ', array_merge( array_keys( $newspack_blocks_post_id ), [ get_the_ID() ] ) );
-	ob_start();
-	?>
-	<amp-state id='newspackHomepagePosts'>
-		<script type="application/json">
-			{
-				"exclude_ids": [ <?php echo esc_attr( $post_ids ); ?> ]
-			}
-		</script>
-	</amp-state>
-	<?php
-	echo ob_get_clean(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-}
-
-add_action( 'wp_footer', 'newspack_blocks_inject_amp_state' );

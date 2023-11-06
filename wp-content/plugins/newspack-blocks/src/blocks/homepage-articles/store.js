@@ -110,6 +110,19 @@ function* getPostsForBlock( block ) {
 	return postsIds;
 }
 
+/**
+ * Whether a block uses deduplication.
+ *
+ * @param {string} clientId
+ *
+ * @return {boolean} whether the block uses deduplication
+ */
+function shouldDeduplicate( clientId ) {
+	const { getBlock } = select( 'core/block-editor' );
+	const block = getBlock( clientId );
+	return block?.attributes?.deduplicate;
+}
+
 const createFetchPostsSaga = blockNames => {
 	/**
 	 * "worker" Saga: will be fired on REFLOW actions
@@ -138,8 +151,8 @@ const createFetchPostsSaga = blockNames => {
 		const blockQueries = getBlockQueries( blocks, blockNames );
 
 		// Use requested specific posts ids as the starting state of exclusion list.
-		const specificPostsId = blockQueries.reduce( ( acc, { postsQuery } ) => {
-			if ( postsQuery.include ) {
+		const specificPostsId = blockQueries.reduce( ( acc, { clientId, postsQuery } ) => {
+			if ( shouldDeduplicate( clientId ) && postsQuery.include ) {
 				acc = [ ...acc, ...postsQuery.include ];
 			}
 			return acc;
@@ -148,14 +161,19 @@ const createFetchPostsSaga = blockNames => {
 		let exclude = sanitizePostList( [ ...specificPostsId, getCurrentPostId() ] );
 		while ( blockQueries.length ) {
 			const nextBlock = blockQueries.shift();
-			nextBlock.postsQuery.exclude = exclude;
+			const deduplicate = shouldDeduplicate( nextBlock.clientId );
+			if ( deduplicate ) {
+				nextBlock.postsQuery.exclude = exclude;
+			}
 			let fetchedPostIds = [];
 			try {
 				fetchedPostIds = yield call( getPostsForBlock, nextBlock );
 			} catch ( e ) {
 				yield put( { type: 'UPDATE_BLOCK_ERROR', clientId: nextBlock.clientId, error: e.message } );
 			}
-			exclude = [ ...exclude, ...fetchedPostIds ];
+			if ( deduplicate ) {
+				exclude = [ ...exclude, ...fetchedPostIds ];
+			}
 		}
 
 		yield put( { type: 'ENABLE_UI' } );

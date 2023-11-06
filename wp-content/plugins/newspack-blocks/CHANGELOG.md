@@ -1,3 +1,77 @@
+# [2.0.0](https://github.com/Automattic/newspack-blocks/compare/v1.75.6...v2.0.0) (2023-10-31)
+
+
+### Bug Fixes
+
+* **donate:** allow "once" in tiers-based layout ([ad7268a](https://github.com/Automattic/newspack-blocks/commit/ad7268a320b70a85189cc36055744c3b6aca712f))
+* **homepage-posts:** check existing "specific posts" recursively for deduplication ([#1541](https://github.com/Automattic/newspack-blocks/issues/1541)) ([9755e40](https://github.com/Automattic/newspack-blocks/commit/9755e4090ce645c56ff26183684a07503c92fc65))
+* newspack.pub > newspack.com ([#1552](https://github.com/Automattic/newspack-blocks/issues/1552)) ([343b80b](https://github.com/Automattic/newspack-blocks/commit/343b80b49ac5516cb8ca877b1ca4a6ce6bcaaedf))
+* update WC's variation methods ([860f9fa](https://github.com/Automattic/newspack-blocks/commit/860f9fa2c8b5cda48c9310c958abcf8a3567d5ad))
+
+
+### Features
+
+* add option for a button after checkout ([#1521](https://github.com/Automattic/newspack-blocks/issues/1521)) ([bdfb3c2](https://github.com/Automattic/newspack-blocks/commit/bdfb3c2cceeb52097494884935546655a4a1650e))
+* **homepage-posts:** support deduplication toggling ([#1543](https://github.com/Automattic/newspack-blocks/issues/1543)) ([6acc719](https://github.com/Automattic/newspack-blocks/commit/6acc71959a28d213e1f9064a28a84ebeda44f636))
+* **modal checkout:** post-checkout newsletter signup ([#1561](https://github.com/Automattic/newspack-blocks/issues/1561)) ([092007a](https://github.com/Automattic/newspack-blocks/commit/092007a59ed89ce8ea3ef309851c26fde88b7e9f))
+* **modal-checkout:** implement ras overlay ([#1562](https://github.com/Automattic/newspack-blocks/issues/1562)) ([8270c9b](https://github.com/Automattic/newspack-blocks/commit/8270c9be4dc513ec317c0c256063cf12c936a0a7))
+* remove AMP compatibility ([27ecf88](https://github.com/Automattic/newspack-blocks/commit/27ecf88abecaa935ec931df397c340cba19de978))
+
+
+### BREAKING CHANGES
+
+* AMP will not be supported anymore by this plugin.
+
+# [2.0.0-alpha.3](https://github.com/Automattic/newspack-blocks/compare/v2.0.0-alpha.2...v2.0.0-alpha.3) (2023-10-20)
+
+
+### Bug Fixes
+
+* update WC's variation methods ([860f9fa](https://github.com/Automattic/newspack-blocks/commit/860f9fa2c8b5cda48c9310c958abcf8a3567d5ad))
+
+
+### Features
+
+* **modal checkout:** post-checkout newsletter signup ([#1561](https://github.com/Automattic/newspack-blocks/issues/1561)) ([092007a](https://github.com/Automattic/newspack-blocks/commit/092007a59ed89ce8ea3ef309851c26fde88b7e9f))
+* **modal-checkout:** implement ras overlay ([#1562](https://github.com/Automattic/newspack-blocks/issues/1562)) ([8270c9b](https://github.com/Automattic/newspack-blocks/commit/8270c9be4dc513ec317c0c256063cf12c936a0a7))
+
+# [2.0.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v2.0.0-alpha.1...v2.0.0-alpha.2) (2023-10-19)
+
+
+### Bug Fixes
+
+* hide WC's login prompt ([124fee7](https://github.com/Automattic/newspack-blocks/commit/124fee794e1e81490d95b822e132841e720bedf9))
+* **modal-checkout:** remove login prompt from initial flow ([4a8d48f](https://github.com/Automattic/newspack-blocks/commit/4a8d48f05b5d15760c8cf7365ed50d90ae22c639)), closes [/github.com/Automattic/newspack-blocks/pull/1550#issuecomment-1755996086](https://github.com//github.com/Automattic/newspack-blocks/pull/1550/issues/issuecomment-1755996086)
+
+## [1.75.6](https://github.com/Automattic/newspack-blocks/compare/v1.75.5...v1.75.6) (2023-10-19)
+
+
+### Bug Fixes
+
+* hide WC's login prompt ([124fee7](https://github.com/Automattic/newspack-blocks/commit/124fee794e1e81490d95b822e132841e720bedf9))
+* **modal-checkout:** remove login prompt from initial flow ([4a8d48f](https://github.com/Automattic/newspack-blocks/commit/4a8d48f05b5d15760c8cf7365ed50d90ae22c639)), closes [/github.com/Automattic/newspack-blocks/pull/1550#issuecomment-1755996086](https://github.com//github.com/Automattic/newspack-blocks/pull/1550/issues/issuecomment-1755996086)
+
+## [1.75.5](https://github.com/Automattic/newspack-blocks/compare/v1.75.4...v1.75.5) (2023-10-12)
+
+
+### Bug Fixes
+
+* always show email address for order summaries ([#1554](https://github.com/Automattic/newspack-blocks/issues/1554)) ([33952d1](https://github.com/Automattic/newspack-blocks/commit/33952d1dd8a879d26566b09c4cc3b8f132d54014))
+
+## [1.75.4](https://github.com/Automattic/newspack-blocks/compare/v1.75.3...v1.75.4) (2023-10-10)
+
+
+### Bug Fixes
+
+* match thankyou template when using existing customer email ([#1550](https://github.com/Automattic/newspack-blocks/issues/1550)) ([4b0dbf2](https://github.com/Automattic/newspack-blocks/commit/4b0dbf29a98aa7b95b0cda30e4bd03c3ea31285b))
+
+## [1.75.3](https://github.com/Automattic/newspack-blocks/compare/v1.75.2...v1.75.3) (2023-10-10)
+
+
+### Bug Fixes
+
+* **donate:** reset "other" value when switching tiers ([#1549](https://github.com/Automattic/newspack-blocks/issues/1549)) ([844505f](https://github.com/Automattic/newspack-blocks/commit/844505fdefb445e4d68b5a1df5b980d4eae21e0e))
+
 ## [1.75.2](https://github.com/Automattic/newspack-blocks/compare/v1.75.1...v1.75.2) (2023-10-04)
 
 

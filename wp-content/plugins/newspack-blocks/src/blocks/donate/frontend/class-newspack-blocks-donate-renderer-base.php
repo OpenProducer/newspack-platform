@@ -90,10 +90,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 			}
 		}
 
-		$is_tiers_based = $configuration['tiered'] && 'tiers' === $attributes['layoutOption'];
-		if ( ! Newspack_Blocks::can_render_tiers_based_layout() ) {
-			$is_tiers_based = false;
-		}
+		$is_tiers_based                        = $configuration['tiered'] && 'tiers' === $attributes['layoutOption'];
 		$configuration['is_tier_based_layout'] = $is_tiers_based;
 
 		$frequencies = [
@@ -103,9 +100,6 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 		];
 		foreach ( array_keys( $frequencies ) as $frequency_slug ) {
 			if ( $configuration['disabledFrequencies'][ $frequency_slug ] ) {
-				unset( $frequencies[ $frequency_slug ] );
-			}
-			if ( $is_tiers_based && 'once' === $frequency_slug ) {
 				unset( $frequencies[ $frequency_slug ] );
 			}
 		}
