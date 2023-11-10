@@ -60,8 +60,7 @@ class WooCommerce_Connection {
 		// WooCommerce Memberships.
 		\add_action( 'wc_memberships_user_membership_created', [ __CLASS__, 'wc_membership_created' ], 10, 2 );
 
-		// WC Subscriptions hooks in and creates subscription at priority 100, so use priority 101.
-		\add_action( 'woocommerce_checkout_order_processed', [ __CLASS__, 'order_processed' ], 101 );
+		\add_action( 'woocommerce_payment_complete', [ __CLASS__, 'order_paid' ], 101 );
 		\add_action( 'option_woocommerce_subscriptions_failed_scheduled_actions', [ __CLASS__, 'filter_subscription_scheduled_actions_errors' ] );
 
 		\add_action( 'wp_login', [ __CLASS__, 'sync_reader_on_customer_login' ], 10, 2 );
@@ -123,7 +122,7 @@ class WooCommerce_Connection {
 	 *
 	 * @param int $order_id Order ID.
 	 */
-	public static function order_processed( $order_id ) {
+	public static function order_paid( $order_id ) {
 		$product_id = Donations::get_order_donation_product_id( $order_id );
 
 		/** Bail if not a donation order. */
@@ -167,6 +166,33 @@ class WooCommerce_Connection {
 		}
 
 		self::sync_reader_from_order( $customer->get_last_order() );
+	}
+
+	/**
+	 * Get the contact data from a WooCommerce customer user account.
+	 *
+	 * @param \WC_Customer|int $customer Customer or customer ID.
+	 *
+	 * @return array|false Contact data or false.
+	 */
+	public static function get_contact_from_customer( $customer ) {
+		if ( is_integer( $customer ) ) {
+			$customer = new \WC_Customer( $customer );
+		}
+
+		$metadata = [];
+
+		$metadata[ Newspack_Newsletters::get_metadata_key( 'account' ) ]           = $customer->get_id();
+		$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_date' ) ] = $customer->get_date_created()->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
+
+		$first_name   = $customer->get_first_name();
+		$last_name    = $customer->get_last_name();
+		$display_name = $customer->get_display_name();
+		return [
+			'email'    => $customer->get_email(),
+			'name'     => $display_name ?? "$first_name $last_name",
+			'metadata' => $metadata,
+		];
 	}
 
 	/**

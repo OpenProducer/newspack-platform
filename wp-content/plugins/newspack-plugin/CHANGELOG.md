@@ -1,3 +1,24 @@
+## [2.10.3](https://github.com/Automattic/newspack-plugin/compare/v2.10.2...v2.10.3) (2023-11-07)
+
+
+### Bug Fixes
+
+* **password-reset:** redirect non-readers to WP login ([#2742](https://github.com/Automattic/newspack-plugin/issues/2742)) ([0645073](https://github.com/Automattic/newspack-plugin/commit/0645073ae0ea3dcc63835ae53eaba0e88a742e4c))
+
+## [2.10.2](https://github.com/Automattic/newspack-plugin/compare/v2.10.1...v2.10.2) (2023-11-06)
+
+
+### Bug Fixes
+
+* restore method used by migration scripts ([#2741](https://github.com/Automattic/newspack-plugin/issues/2741)) ([d8d0860](https://github.com/Automattic/newspack-plugin/commit/d8d0860f294e79a48f3ce003e08cdc3675ef0682))
+
+## [2.10.1](https://github.com/Automattic/newspack-plugin/compare/v2.10.0...v2.10.1) (2023-11-06)
+
+
+### Bug Fixes
+
+* sync order to ac after payment ([#2731](https://github.com/Automattic/newspack-plugin/issues/2731)) ([8960127](https://github.com/Automattic/newspack-plugin/commit/8960127580b68f1950dab5750585001a38e401b6))
+
 # [2.10.0](https://github.com/Automattic/newspack-plugin/compare/v2.9.1...v2.10.0) (2023-10-31)
 
 

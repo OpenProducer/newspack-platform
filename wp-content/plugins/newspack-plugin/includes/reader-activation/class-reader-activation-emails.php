@@ -32,6 +32,7 @@ class Reader_Activation_Emails {
 		// Disable the default WC password reset email and replace it with ours.
 		add_filter( 'woocommerce_email_enabled_customer_reset_password', '__return_false' );
 		add_action( 'woocommerce_reset_password_notification', [ __CLASS__, 'send_reset_password_email' ], 10, 2 );
+		add_action( 'woocommerce_customer_reset_password', [ __CLASS__, 'redirect_non_reader' ] );
 	}
 
 	/**
@@ -110,6 +111,18 @@ class Reader_Activation_Emails {
 			],
 		];
 		return $configs;
+	}
+
+	/**
+	 * Redirect non reader to default wp-login.php.
+	 *
+	 * @param \WP_User $user User object.
+	 */
+	public static function redirect_non_reader( $user ) {
+		if ( ! \Newspack\Reader_Activation::is_user_reader( $user ) ) {
+			wp_safe_redirect( wp_login_url() );
+			exit;
+		}
 	}
 
 	/**
