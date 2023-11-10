@@ -4,7 +4,7 @@ Tags: online store, ecommerce, shop, shopping cart, sell online, storefront, che
 Requires at least: 6.2
 Tested up to: 6.3
 Requires PHP: 7.4
-Stable tag: 8.2.0
+Stable tag: 8.2.1
 License: GPLv3
 License URI: https://www.gnu.org/licenses/gpl-3.0.html
 
@@ -163,11 +163,11 @@ WooCommerce comes with some sample data you can use to see how products look; im
 
 == Changelog ==
 
-= 8.2.1 2023-10-16 =
+= 8.2.2 2023-11-08 =
 
 **WooCommerce**
 
-* Fix - Prevent global attribute terms from being automatically selected [#40729](https://github.com/woocommerce/woocommerce/pull/40729)
+* Fix - Update WooCommerce Blocks to 11.1.3 [#41291](https://github.com/woocommerce/woocommerce/pull/41291)
 
 
 [See changelog for all versions](https://raw.githubusercontent.com/woocommerce/woocommerce/trunk/changelog.txt).

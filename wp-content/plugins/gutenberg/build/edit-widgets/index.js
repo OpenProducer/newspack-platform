@@ -2999,14 +2999,26 @@ function WidgetAreasBlockEditorProvider({
   const {
     reusableBlocks,
     isFixedToolbarActive,
-    keepCaretInsideBlock
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => ({
-    widgetAreas: select(store_store).getWidgetAreas(),
-    widgets: select(store_store).getWidgets(),
-    reusableBlocks: ALLOW_REUSABLE_BLOCKS ? select(external_wp_coreData_namespaceObject.store).getEntityRecords('postType', 'wp_block') : [],
-    isFixedToolbarActive: !!select(external_wp_preferences_namespaceObject.store).get('core/edit-widgets', 'fixedToolbar'),
-    keepCaretInsideBlock: !!select(external_wp_preferences_namespaceObject.store).get('core/edit-widgets', 'keepCaretInsideBlock')
-  }), []);
+    keepCaretInsideBlock,
+    pageOnFront,
+    pageForPosts
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      canUser,
+      getEntityRecord,
+      getEntityRecords
+    } = select(external_wp_coreData_namespaceObject.store);
+    const siteSettings = canUser('read', 'settings') ? getEntityRecord('root', 'site') : undefined;
+    return {
+      widgetAreas: select(store_store).getWidgetAreas(),
+      widgets: select(store_store).getWidgets(),
+      reusableBlocks: ALLOW_REUSABLE_BLOCKS ? getEntityRecords('postType', 'wp_block') : [],
+      isFixedToolbarActive: !!select(external_wp_preferences_namespaceObject.store).get('core/edit-widgets', 'fixedToolbar'),
+      keepCaretInsideBlock: !!select(external_wp_preferences_namespaceObject.store).get('core/edit-widgets', 'keepCaretInsideBlock'),
+      pageOnFront: siteSettings?.page_on_front,
+      pageForPosts: siteSettings?.page_for_posts
+    };
+  }, []);
   const {
     setIsInserterOpened
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
@@ -3033,9 +3045,11 @@ function WidgetAreasBlockEditorProvider({
       keepCaretInsideBlock,
       mediaUpload: mediaUploadBlockEditor,
       templateLock: 'all',
-      __experimentalSetIsInserterOpened: setIsInserterOpened
+      __experimentalSetIsInserterOpened: setIsInserterOpened,
+      pageOnFront,
+      pageForPosts
     };
-  }, [blockEditorSettings, isFixedToolbarActive, keepCaretInsideBlock, mediaPermissions.canCreate, reusableBlocks, setIsInserterOpened]);
+  }, [blockEditorSettings, isFixedToolbarActive, keepCaretInsideBlock, mediaPermissions.canCreate, reusableBlocks, setIsInserterOpened, pageOnFront, pageForPosts]);
   const widgetAreaId = use_last_selected_widget_area();
   const [blocks, onInput, onChange] = (0,external_wp_coreData_namespaceObject.useEntityBlockEditor)(KIND, POST_TYPE, {
     id: buildWidgetAreasPostId()

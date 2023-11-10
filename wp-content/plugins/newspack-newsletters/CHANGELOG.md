@@ -1,3 +1,10 @@
+## [2.4.2](https://github.com/Automattic/newspack-newsletters/compare/v2.4.1...v2.4.2) (2023-11-06)
+
+
+### Bug Fixes
+
+* **tracking:** dont flush options cache on log processing ([#1341](https://github.com/Automattic/newspack-newsletters/issues/1341)) ([c693384](https://github.com/Automattic/newspack-newsletters/commit/c6933842c2c85c132d5f82e9b57bcb0edf581b4a))
+
 ## [2.4.1](https://github.com/Automattic/newspack-newsletters/compare/v2.4.0...v2.4.1) (2023-11-01)
 
 

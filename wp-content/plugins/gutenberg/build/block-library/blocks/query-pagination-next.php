@@ -63,7 +63,7 @@ function gutenberg_render_block_core_query_pagination_next( $attributes, $conten
 		wp_reset_postdata(); // Restore original Post Data.
 	}
 
-	if ( $enhanced_pagination ) {
+	if ( $enhanced_pagination && isset( $content ) ) {
 		$p = new WP_HTML_Tag_Processor( $content );
 		if ( $p->next_tag(
 			array(

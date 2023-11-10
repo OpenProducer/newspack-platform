@@ -51,7 +51,7 @@ function gutenberg_render_block_core_query_pagination_previous( $attributes, $co
 		);
 	}
 
-	if ( $enhanced_pagination ) {
+	if ( $enhanced_pagination && isset( $content ) ) {
 		$p = new WP_HTML_Tag_Processor( $content );
 		if ( $p->next_tag(
 			array(

@@ -36,6 +36,7 @@ return array(
     'TEC\\Common\\Site_Health\\Provider' => $baseDir . '/src/Common/Site_Health/Provider.php',
     'TEC\\Common\\Storage\\Timed_Option' => $baseDir . '/src/Common/Storage/Timed_Option.php',
     'TEC\\Common\\Telemetry\\Migration' => $baseDir . '/src/Common/Telemetry/Migration.php',
+    'TEC\\Common\\Telemetry\\Opt_In' => $baseDir . '/src/Common/Telemetry/Opt_In.php',
     'TEC\\Common\\Telemetry\\Provider' => $baseDir . '/src/Common/Telemetry/Provider.php',
     'TEC\\Common\\Telemetry\\Telemetry' => $baseDir . '/src/Common/Telemetry/Telemetry.php',
     'TEC\\Common\\Translations_Loader' => $baseDir . '/src/Common/Translations_Loader.php',

@@ -26,6 +26,11 @@ use TEC\Common\StellarWP\Telemetry\Contracts\Abstract_Subscriber;
 class Event_Subscriber extends Abstract_Subscriber {
 
 	/**
+	 * @var array
+	 */
+	private static $events = [];
+
+	/**
 	 * @inheritDoc
 	 *
 	 * @since 2.1.0
@@ -50,19 +55,11 @@ class Event_Subscriber extends Abstract_Subscriber {
 	 * @return void
 	 */
 	public function cache_event( $name, $data ) {
-		$events = [];
-
-		if ( $this->container->has( 'events' ) ) {
-			$events = $this->container->get( 'events' );
-		}
-
-		$events[] = [
+		self::$events[] = [
 			'name'         => $name,
 			'data'         => wp_json_encode( $data ),
 			'stellar_slug' => Config::get_stellar_slug(),
 		];
-
-		$this->container->bind( 'events', $events );
 	}
 
 	/**
@@ -73,7 +70,7 @@ class Event_Subscriber extends Abstract_Subscriber {
 	 * @return void
 	 */
 	public function send_cached_events() {
-		if ( ! $this->container->has( 'events' ) ) {
+		if ( empty( self::$events ) ) {
 			return;
 		}
 
@@ -86,12 +83,12 @@ class Event_Subscriber extends Abstract_Subscriber {
 				'sslverify' => false,
 				'body'      => [
 					'action' => Event::AJAX_ACTION,
-					'events' => $this->container->get( 'events' ),
+					'events' => self::$events,
 				],
 			]
 		);
 
-		$this->container->bind( 'events', [] );
+		self::$events = [];
 	}
 
 	/**
@@ -105,6 +102,10 @@ class Event_Subscriber extends Abstract_Subscriber {
 		// Get the passed event array.
 		$events = filter_input( INPUT_POST, 'events', FILTER_DEFAULT, FILTER_REQUIRE_ARRAY ); // phpcs:ignore WordPressVIPMinimum.Security.PHPFilterFunctions.RestrictedFilter
 
-		$this->container->get( Event::class )->send_batch( $events );
+		if ( empty( $events ) ) {
+			return;
+		}
+
+		$this->container->get( Event::class )->send_batch( (array) $events );
 	}
 }

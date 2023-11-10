@@ -3,9 +3,9 @@
 Contributors: theeventscalendar, borkweb, bordoni, brianjessee, aguseo, camwynsp, GeoffBel, jentheo, leahkoerper, lucatume, neillmcshea, vicskf, zbtirrell, juanfra
 Tags: events, calendar, event, schedule, organizer
 Donate link: https://evnt.is/29
-Requires at least: 6.1.0
-Stable tag: 6.2.5
-Tested up to: 6.3.2
+Requires at least: 6.2.0
+Stable tag: 6.2.6.1
+Tested up to: 6.4.0
 Requires PHP: 7.4
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
@@ -228,6 +228,22 @@ Previous versions of The Events Calendar are not cross-compatible with 6.X add-o
 Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
+
+= [6.2.6.1] 2023-11-09 =
+
+* Version - The Events Calendar 6.2.6.1 is only compatible with Event Tickets 5.6.8.1 and higher
+* Fix - Update a common library to prevent possible fatals. [TEC-4978]
+
+= [6.2.6] 2023-11-08 =
+
+* Fix - SEO: Ensure that the noindex meta tag properly observes whether events are present on the page or not. [TEC-4976]
+* Fix - SEO: Add noindex, nofollow for grid-based views like Month and Week View when they are not set as the home page. [TEC-4976]
+* Tweak - Add an X-Robots-Tag to the response headers for ical download links to help prevent search engine crawling. [TEC-4976]
+* Tweak - Added filter: `tec_events_ical_header_noindex` to allow preventing the X-Robots-Tag addition. [TEC-4976]
+* Tweak - Added filter `tec_events_seo_robots_meta_include` and `tec_events_seo_robots_meta_include_{$view}` to short-circuit the robots meta tag addition. [TEC-4976]
+* Tweak - Added filter `tec_events_seo_robots_meta_content` to alter the content attribute of the robots meta tag addition. [TEC-4976]
+* Tweak - Added filter `tec_events_seo_robots_meta_allowable_post_types` to allow for the filtering of single post types that can have robots meta tags added.
+* Tweak - Deprecated filters `tec_events_add_no_index_meta_tag`, `tribe_events_add_no_index_meta`, and `tec_events_{$view}_add_no_index_meta` in favor of the above new filters.
 
 = [6.2.5] 2023-11-01 =
 

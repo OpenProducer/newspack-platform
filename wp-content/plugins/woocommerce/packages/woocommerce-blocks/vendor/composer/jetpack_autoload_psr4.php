@@ -11,15 +11,15 @@ return array(
 		'path'    => array( $vendorDir . '/composer/installers/src/Composer/Installers' )
 	),
 	'Automattic\\WooCommerce\\StoreApi\\' => array(
-		'version' => '11.1.2.0',
+		'version' => '11.1.3.0',
 		'path'    => array( $baseDir . '/src/StoreApi' )
 	),
 	'Automattic\\WooCommerce\\Blocks\\Tests\\' => array(
-		'version' => '11.1.2.0',
+		'version' => '11.1.3.0',
 		'path'    => array( $baseDir . '/tests/php' )
 	),
 	'Automattic\\WooCommerce\\Blocks\\' => array(
-		'version' => '11.1.2.0',
+		'version' => '11.1.3.0',
 		'path'    => array( $baseDir . '/src' )
 	),
 	'Automattic\\Jetpack\\Autoloader\\' => array(

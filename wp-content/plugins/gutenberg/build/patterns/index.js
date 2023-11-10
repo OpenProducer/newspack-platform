@@ -903,11 +903,14 @@ function PatternsMenuItems({
   })));
 }
 
+;// CONCATENATED MODULE: external ["wp","a11y"]
+var external_wp_a11y_namespaceObject = window["wp"]["a11y"];
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/components/rename-pattern-category-modal.js
 
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -922,13 +925,18 @@ function PatternsMenuItems({
 
 function RenamePatternCategoryModal({
   category,
+  existingCategories,
   onClose,
   onError,
   onSuccess,
   ...props
 }) {
+  const id = (0,external_wp_element_namespaceObject.useId)();
+  const textControlRef = (0,external_wp_element_namespaceObject.useRef)();
   const [name, setName] = (0,external_wp_element_namespaceObject.useState)((0,external_wp_htmlEntities_namespaceObject.decodeEntities)(category.name));
   const [isSaving, setIsSaving] = (0,external_wp_element_namespaceObject.useState)(false);
+  const [validationMessage, setValidationMessage] = (0,external_wp_element_namespaceObject.useState)(false);
+  const validationMessageId = validationMessage ? `patterns-rename-pattern-category-modal__validation-message-${id}` : undefined;
   const {
     saveEntityRecord,
     invalidateResolution
@@ -937,9 +945,35 @@ function RenamePatternCategoryModal({
     createErrorNotice,
     createSuccessNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  const onRename = async event => {
+  const onChange = newName => {
+    if (validationMessage) {
+      setValidationMessage(undefined);
+    }
+    setName(newName);
+  };
+  const onSave = async event => {
     event.preventDefault();
-    if (!name || name === category.name || isSaving) {
+    if (isSaving) {
+      return;
+    }
+    if (!name || name === category.name) {
+      const message = (0,external_wp_i18n_namespaceObject.__)('Please enter a new name for this category.');
+      (0,external_wp_a11y_namespaceObject.speak)(message, 'assertive');
+      setValidationMessage(message);
+      textControlRef.current?.focus();
+      return;
+    }
+
+    // Check existing categories to avoid creating duplicates.
+    if (existingCategories.patternCategories.find(existingCategory => {
+      // Compare the id so that the we don't disallow the user changing the case of their current category
+      // (i.e. renaming 'test' to 'Test').
+      return existingCategory.id !== category.id && existingCategory.label.toLowerCase() === name.toLowerCase();
+    })) {
+      const message = (0,external_wp_i18n_namespaceObject.__)('This category already exists. Please use a different name.');
+      (0,external_wp_a11y_namespaceObject.speak)(message, 'assertive');
+      setValidationMessage(message);
+      textControlRef.current?.focus();
       return;
     }
     try {
@@ -981,16 +1015,23 @@ function RenamePatternCategoryModal({
     onRequestClose: onRequestClose,
     ...props
   }, (0,external_React_namespaceObject.createElement)("form", {
-    onSubmit: onRename
+    onSubmit: onSave
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
     spacing: "5"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: "2"
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    ref: textControlRef,
     __nextHasNoMarginBottom: true,
     label: (0,external_wp_i18n_namespaceObject.__)('Name'),
     value: name,
-    onChange: setName,
+    onChange: onChange,
+    "aria-describedby": validationMessageId,
     required: true
-  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+  }), validationMessage && (0,external_React_namespaceObject.createElement)("span", {
+    className: "patterns-rename-pattern-category-modal__validation-message",
+    id: validationMessageId
+  }, validationMessage)), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
     justify: "right"
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     variant: "tertiary",

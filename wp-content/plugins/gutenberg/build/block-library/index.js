@@ -2470,7 +2470,11 @@ const avatar_metadata = {
     alignWide: false,
     spacing: {
       margin: true,
-      padding: true
+      padding: true,
+      __experimentalDefaultControls: {
+        margin: false,
+        padding: false
+      }
     },
     __experimentalBorder: {
       __experimentalSkipSerialization: true,
@@ -6952,8 +6956,9 @@ function ColumnEdit({
   const classes = classnames_default()('block-core-columns', {
     [`is-vertically-aligned-${verticalAlignment}`]: verticalAlignment
   });
+  const [availableUnits] = (0,external_wp_blockEditor_namespaceObject.useSettings)('spacing.units');
   const units = (0,external_wp_components_namespaceObject.__experimentalUseCustomUnits)({
-    availableUnits: (0,external_wp_blockEditor_namespaceObject.useSetting)('spacing.units') || ['%', 'px', 'em', 'rem', 'vw']
+    availableUnits: availableUnits || ['%', 'px', 'em', 'rem', 'vw']
   });
   const {
     columnsIds,
@@ -12766,8 +12771,9 @@ function CoverHeightInput({
   const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(external_wp_components_namespaceObject.__experimentalUnitControl);
   const inputId = `block-cover-height-input-${instanceId}`;
   const isPx = unit === 'px';
+  const [availableUnits] = (0,external_wp_blockEditor_namespaceObject.useSettings)('spacing.units');
   const units = (0,external_wp_components_namespaceObject.__experimentalUseCustomUnits)({
-    availableUnits: (0,external_wp_blockEditor_namespaceObject.useSetting)('spacing.units') || ['px', 'em', 'rem', 'vw', 'vh'],
+    availableUnits: availableUnits || ['px', 'em', 'rem', 'vw', 'vh'],
     defaultValues: {
       px: 430,
       '%': 20,
@@ -14075,7 +14081,8 @@ function CoverEdit({
   });
 
   // Check for fontSize support before we pass a fontSize attribute to the innerBlocks.
-  const hasFontSizes = !!(0,external_wp_blockEditor_namespaceObject.useSetting)('typography.fontSizes')?.length;
+  const [fontSizes] = (0,external_wp_blockEditor_namespaceObject.useSettings)('typography.fontSizes');
+  const hasFontSizes = fontSizes?.length > 0;
   const innerBlocksTemplate = getInnerBlocksTemplate({
     fontSize: hasFontSizes ? 'large' : undefined
   });
@@ -17624,7 +17631,7 @@ const formSubmissionNotificationError = ['core/form-submission-notification', {
  * Internal dependencies
  */
 
-const form_edit_ALLOWED_BLOCKS = ['core/paragraph', 'core/heading', 'core/form-input', 'core/form-submit-button', 'core/form-submission-notification'];
+const form_edit_ALLOWED_BLOCKS = ['core/paragraph', 'core/heading', 'core/form-input', 'core/form-submit-button', 'core/form-submission-notification', 'core/group', 'core/columns'];
 const form_edit_TEMPLATE = [formSubmissionNotificationSuccess, formSubmissionNotificationError, ['core/form-input', {
   type: 'text',
   label: (0,external_wp_i18n_namespaceObject.__)('Name'),
@@ -17686,7 +17693,7 @@ const form_edit_Edit = ({
     onChange: value => setAttributes({
       submissionMethod: value
     }),
-    help: submissionMethod === 'custom' ? (0,external_wp_i18n_namespaceObject.__)('Select the method to use for form submissions. Additional options for the "custom" mode can be found in the "Andvanced" section.') : (0,external_wp_i18n_namespaceObject.__)('Select the method to use for form submissions.')
+    help: submissionMethod === 'custom' ? (0,external_wp_i18n_namespaceObject.__)('Select the method to use for form submissions. Additional options for the "custom" mode can be found in the "Advanced" section.') : (0,external_wp_i18n_namespaceObject.__)('Select the method to use for form submissions.')
   }), submissionMethod === 'email' && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
     __nextHasNoMarginBottom: true,
     autoComplete: "off",
@@ -17807,7 +17814,7 @@ const form_variations_variations = [{
   name: 'wp-privacy-form',
   title: (0,external_wp_i18n_namespaceObject.__)('Experimental privacy request form'),
   keywords: ['GDPR'],
-  description: (0,external_wp_i18n_namespaceObject.__)('A form torequest data exports and/or deletion.'),
+  description: (0,external_wp_i18n_namespaceObject.__)('A form to request data exports and/or deletion.'),
   attributes: {
     submissionMethod: 'custom',
     action: '',
@@ -17917,6 +17924,11 @@ const form_metadata = {
 };
 
 
+
+/**
+ * WordPress dependencies
+ */
+
 const {
   name: form_name
 } = form_metadata;
@@ -17926,11 +17938,30 @@ const form_settings = {
   save: form_save,
   variations: form_variations
 };
-const form_init = () => initBlock({
-  name: form_name,
-  metadata: form_metadata,
-  settings: form_settings
-});
+const form_init = () => {
+  // Prevent adding forms inside forms.
+  const DISALLOWED_PARENTS = ['core/form'];
+  (0,external_wp_hooks_namespaceObject.addFilter)('blockEditor.__unstableCanInsertBlockType', 'removeTemplatePartsFromPostTemplates', (canInsert, blockType, rootClientId, {
+    getBlock,
+    getBlockParentsByBlockName
+  }) => {
+    if (blockType.name !== 'core/form') {
+      return canInsert;
+    }
+    for (const disallowedParentType of DISALLOWED_PARENTS) {
+      const hasDisallowedParent = getBlock(rootClientId)?.name === disallowedParentType || getBlockParentsByBlockName(rootClientId, disallowedParentType).length;
+      if (hasDisallowedParent) {
+        return false;
+      }
+    }
+    return true;
+  });
+  return initBlock({
+    name: form_name,
+    metadata: form_metadata,
+    settings: form_settings
+  });
+};
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/form-input/edit.js
 
@@ -18139,7 +18170,7 @@ function form_input_save_save({
 
 const form_input_variations_variations = [{
   name: 'text',
-  title: (0,external_wp_i18n_namespaceObject.__)('Text input'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Text Input'),
   icon: 'edit-page',
   description: (0,external_wp_i18n_namespaceObject.__)('A generic text input.'),
   attributes: {
@@ -18150,7 +18181,7 @@ const form_input_variations_variations = [{
   isActive: blockAttributes => !blockAttributes?.type || blockAttributes?.type === 'text'
 }, {
   name: 'textarea',
-  title: (0,external_wp_i18n_namespaceObject.__)('Textarea input'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Textarea Input'),
   icon: 'testimonial',
   description: (0,external_wp_i18n_namespaceObject.__)('A textarea input to allow entering multiple lines of text.'),
   attributes: {
@@ -18161,7 +18192,7 @@ const form_input_variations_variations = [{
   isActive: blockAttributes => blockAttributes?.type === 'textarea'
 }, {
   name: 'checkbox',
-  title: (0,external_wp_i18n_namespaceObject.__)('Checkbox input'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Checkbox Input'),
   description: (0,external_wp_i18n_namespaceObject.__)('A simple checkbox input.'),
   icon: 'forms',
   attributes: {
@@ -18173,7 +18204,7 @@ const form_input_variations_variations = [{
   isActive: blockAttributes => blockAttributes?.type === 'checkbox'
 }, {
   name: 'email',
-  title: (0,external_wp_i18n_namespaceObject.__)('Email input'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Email Input'),
   icon: 'email',
   description: (0,external_wp_i18n_namespaceObject.__)('Used for email addresses.'),
   attributes: {
@@ -18184,7 +18215,7 @@ const form_input_variations_variations = [{
   isActive: blockAttributes => blockAttributes?.type === 'email'
 }, {
   name: 'url',
-  title: (0,external_wp_i18n_namespaceObject.__)('URL input'),
+  title: (0,external_wp_i18n_namespaceObject.__)('URL Input'),
   icon: 'admin-site',
   description: (0,external_wp_i18n_namespaceObject.__)('Used for URLs.'),
   attributes: {
@@ -18195,7 +18226,7 @@ const form_input_variations_variations = [{
   isActive: blockAttributes => blockAttributes?.type === 'url'
 }, {
   name: 'tel',
-  title: (0,external_wp_i18n_namespaceObject.__)('Telephone input'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Telephone Input'),
   icon: 'phone',
   description: (0,external_wp_i18n_namespaceObject.__)('Used for phone numbers.'),
   attributes: {
@@ -18206,7 +18237,7 @@ const form_input_variations_variations = [{
   isActive: blockAttributes => blockAttributes?.type === 'tel'
 }, {
   name: 'number',
-  title: (0,external_wp_i18n_namespaceObject.__)('Number input'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Number Input'),
   icon: 'edit-page',
   description: (0,external_wp_i18n_namespaceObject.__)('A numeric input.'),
   attributes: {
@@ -18229,9 +18260,9 @@ const form_input_metadata = {
   apiVersion: 3,
   __experimental: true,
   name: "core/form-input",
-  title: "Input field",
+  title: "Input Field",
   category: "common",
-  parent: ["core/form"],
+  ancestor: ["core/form"],
   description: "The basic building block for forms.",
   keywords: ["input", "form"],
   textdomain: "default",
@@ -18365,10 +18396,10 @@ const form_submit_button_metadata = {
   apiVersion: 3,
   __experimental: true,
   name: "core/form-submit-button",
-  title: "Form submit button",
+  title: "Form Submit Button",
   category: "common",
   icon: "button",
-  parent: ["core/form"],
+  ancestor: ["core/form"],
   description: "A submission button for forms.",
   keywords: ["submit", "button", "form"],
   textdomain: "default",
@@ -18487,8 +18518,8 @@ function form_submission_notification_save_save({
 
 const form_submission_notification_variations_variations = [{
   name: 'form-submission-success',
-  title: (0,external_wp_i18n_namespaceObject.__)('Form submission success'),
-  description: (0,external_wp_i18n_namespaceObject.__)('Success message for form submissions'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Form Submission Success'),
+  description: (0,external_wp_i18n_namespaceObject.__)('Success message for form submissions.'),
   attributes: {
     type: 'success'
   },
@@ -18511,8 +18542,8 @@ const form_submission_notification_variations_variations = [{
   isActive: blockAttributes => !blockAttributes?.type || blockAttributes?.type === 'success'
 }, {
   name: 'form-submission-error',
-  title: (0,external_wp_i18n_namespaceObject.__)('Form submission error'),
-  description: (0,external_wp_i18n_namespaceObject.__)('Error/failure message for form submissions'),
+  title: (0,external_wp_i18n_namespaceObject.__)('Form Submission Error'),
+  description: (0,external_wp_i18n_namespaceObject.__)('Error/failure message for form submissions.'),
   attributes: {
     type: 'error'
   },
@@ -18554,7 +18585,7 @@ const form_submission_notification_metadata = {
   name: "core/form-submission-notification",
   title: "Form Submission Notification",
   category: "common",
-  parent: ["core/form"],
+  ancestor: ["core/form"],
   description: "Provide a notification message after the form has been submitted.",
   keywords: ["form", "feedback", "notification", "message"],
   textdomain: "default",
@@ -22516,18 +22547,9 @@ function GroupEdit({
   } = attributes;
 
   // Layout settings.
-  const defaultLayout = (0,external_wp_blockEditor_namespaceObject.useSetting)('layout') || {};
-  const usedLayout = !layout?.type ? {
-    ...defaultLayout,
-    ...layout,
-    type: 'default'
-  } : {
-    ...defaultLayout,
-    ...layout
-  };
   const {
     type = 'default'
-  } = usedLayout;
+  } = layout;
   const layoutSupportEnabled = themeSupportsLayout || type === 'flex' || type === 'grid';
 
   // Hooks.
@@ -22536,7 +22558,7 @@ function GroupEdit({
   });
   const [showPlaceholder, setShowPlaceholder] = useShouldShowPlaceHolder({
     attributes,
-    usedLayoutType: usedLayout?.type,
+    usedLayoutType: type,
     hasInnerBlocks
   });
 
@@ -23938,10 +23960,8 @@ function HTMLEditPreview({
   content,
   isSelected
 }) {
-  const settingStyles = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    return select(external_wp_blockEditor_namespaceObject.store).getSettings()?.styles;
-  }, []);
-  const styles = (0,external_wp_element_namespaceObject.useMemo)(() => [DEFAULT_STYLES, ...(0,external_wp_blockEditor_namespaceObject.transformStyles)(settingStyles)], [settingStyles]);
+  const settingStyles = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_blockEditor_namespaceObject.store).getSettings().styles);
+  const styles = (0,external_wp_element_namespaceObject.useMemo)(() => [DEFAULT_STYLES, ...(0,external_wp_blockEditor_namespaceObject.transformStyles)(settingStyles.filter(style => style.css))], [settingStyles]);
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.SandBox, {
     html: content,
     styles: styles,
@@ -25291,6 +25311,10 @@ const scaleOptions = [{
   label: (0,external_wp_i18n_namespaceObject._x)('Contain', 'Scale option for dimensions control'),
   help: (0,external_wp_i18n_namespaceObject.__)('Image is contained without distortion.')
 }];
+const disabledClickProps = {
+  onClick: event => event.preventDefault(),
+  'aria-disabled': true
+};
 function image_Image({
   temporaryURL,
   attributes,
@@ -25549,7 +25573,7 @@ function image_Image({
   const dimensionsUnitsOptions = (0,external_wp_components_namespaceObject.__experimentalUseCustomUnits)({
     availableUnits: ['px']
   });
-  const lightboxSetting = (0,external_wp_blockEditor_namespaceObject.useSetting)('lightbox');
+  const [lightboxSetting] = (0,external_wp_blockEditor_namespaceObject.useSettings)('lightbox');
   const showLightboxToggle = !!lightbox || lightboxSetting?.allowEditing === true;
   const lightboxChecked = !!lightbox?.enabled || !lightbox && !!lightboxSetting?.enabled;
   const lightboxToggleDisabled = linkDestination !== 'none';
@@ -25670,7 +25694,7 @@ function image_Image({
     options: imageSizeOptions
   }), showLightboxToggle && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalToolsPanelItem, {
     hasValue: () => !!lightbox,
-    label: (0,external_wp_i18n_namespaceObject.__)('Expand on Click'),
+    label: (0,external_wp_i18n_namespaceObject.__)('Expand on click'),
     onDeselect: () => {
       setAttributes({
         lightbox: undefined
@@ -25678,7 +25702,7 @@ function image_Image({
     },
     isShownByDefault: true
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
-    label: (0,external_wp_i18n_namespaceObject.__)('Expand on Click'),
+    label: (0,external_wp_i18n_namespaceObject.__)('Expand on click'),
     checked: lightboxChecked,
     onChange: newValue => {
       setAttributes({
@@ -25811,7 +25835,6 @@ function image_Image({
       }
     }
     /* eslint-enable no-lonely-if */
-
     img = (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ResizableBox, {
       style: {
         display: 'block',
@@ -25853,7 +25876,10 @@ function image_Image({
   if (!url && !temporaryURL) {
     return sizeControls;
   }
-  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, !temporaryURL && controls, img, showCaption && (!external_wp_blockEditor_namespaceObject.RichText.isEmpty(caption) || isSelected) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, !temporaryURL && controls, !!href ? (0,external_React_namespaceObject.createElement)("a", {
+    href: href,
+    ...disabledClickProps
+  }, img) : img, showCaption && (!external_wp_blockEditor_namespaceObject.RichText.isEmpty(caption) || isSelected) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
     identifier: "caption",
     className: (0,external_wp_blockEditor_namespaceObject.__experimentalGetElementClassName)('caption'),
     ref: captionRef,
@@ -38106,7 +38132,7 @@ function ParagraphBlock({
     dropCap,
     placeholder
   } = attributes;
-  const isDropCapFeatureEnabled = (0,external_wp_blockEditor_namespaceObject.useSetting)('typography.dropCap');
+  const [isDropCapFeatureEnabled] = (0,external_wp_blockEditor_namespaceObject.useSettings)('typography.dropCap');
   const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
     ref: useOnEnter({
       clientId,
@@ -40531,9 +40557,9 @@ const DimensionControls = ({
   setAttributes,
   imageSizeOptions = []
 }) => {
-  const defaultUnits = ['px', '%', 'vw', 'em', 'rem'];
+  const [availableUnits] = (0,external_wp_blockEditor_namespaceObject.useSettings)('spacing.units');
   const units = (0,external_wp_components_namespaceObject.__experimentalUseCustomUnits)({
-    availableUnits: (0,external_wp_blockEditor_namespaceObject.useSetting)('spacing.units') || defaultUnits
+    availableUnits: availableUnits || ['px', '%', 'vw', 'em', 'rem']
   });
   const onDimensionChange = (dimension, nextValue) => {
     const parsedValue = parseFloat(nextValue);
@@ -41867,7 +41893,7 @@ function PostTermsEdit({
     help: (0,external_wp_i18n_namespaceObject.__)('Enter character(s) used to separate terms.')
   })), (0,external_React_namespaceObject.createElement)("div", {
     ...blockProps
-  }, isLoading && hasPost && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Spinner, null), !isLoading && hasPostTerms && (isSelected || prefix) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
+  }, isLoading && hasPost && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Spinner, null), !isLoading && (isSelected || prefix) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
     allowedFormats: ALLOWED_FORMATS,
     className: "wp-block-post-terms__prefix",
     multiline: false,
@@ -41884,7 +41910,7 @@ function PostTermsEdit({
     onClick: event => event.preventDefault()
   }, (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(postTerm.name))).reduce((prev, curr) => (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, prev, (0,external_React_namespaceObject.createElement)("span", {
     className: "wp-block-post-terms__separator"
-  }, separator || ' '), curr)), hasPost && !isLoading && !hasPostTerms && (selectedTerm?.labels?.no_terms || (0,external_wp_i18n_namespaceObject.__)('Term items not found.')), !isLoading && hasPostTerms && (isSelected || suffix) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
+  }, separator || ' '), curr)), hasPost && !isLoading && !hasPostTerms && (selectedTerm?.labels?.no_terms || (0,external_wp_i18n_namespaceObject.__)('Term items not found.')), !isLoading && (isSelected || suffix) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
     allowedFormats: ALLOWED_FORMATS,
     className: "wp-block-post-terms__suffix",
     multiline: false,
@@ -43972,19 +43998,41 @@ const usePatterns = (clientId, name) => {
 };
 
 /**
- * Hook that returns whether the Query Loop with the given `clientId` contains
- * any third-party block.
+ * The object returned by useUnsupportedBlocks with info about the type of
+ * unsupported blocks present inside the Query block.
+ *
+ * @typedef  {Object}  UnsupportedBlocksInfo
+ * @property {boolean} hasBlocksFromPlugins True if blocks from plugins are present.
+ * @property {boolean} hasPostContentBlock  True if a 'core/post-content' block is present.
+ * @property {boolean} hasUnsupportedBlocks True if there are any unsupported blocks.
+ */
+
+/**
+ * Hook that returns an object with information about the unsupported blocks
+ * present inside a Query Loop with the given `clientId`. The returned object
+ * contains props that are true when a certain type of unsupported block is
+ * present.
  *
  * @param {string} clientId The block's client ID.
- * @return {boolean} True if it contains third-party blocks.
+ * @return {UnsupportedBlocksInfo} The object containing the information.
  */
-const useContainsThirdPartyBlocks = clientId => {
+const useUnsupportedBlocks = clientId => {
   return (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getClientIdsOfDescendants,
       getBlockName
     } = select(external_wp_blockEditor_namespaceObject.store);
-    return getClientIdsOfDescendants(clientId).some(descendantClientId => !getBlockName(descendantClientId).startsWith('core/'));
+    const blocks = {};
+    getClientIdsOfDescendants(clientId).forEach(descendantClientId => {
+      const blockName = getBlockName(descendantClientId);
+      if (!blockName.startsWith('core/')) {
+        blocks.hasBlocksFromPlugins = true;
+      } else if (blockName === 'core/post-content') {
+        blocks.hasPostContentBlock = true;
+      }
+    });
+    blocks.hasUnsupportedBlocks = blocks.hasBlocksFromPlugins || blocks.hasPostContentBlock;
+    return blocks;
   }, [clientId]);
 };
 
@@ -44556,23 +44604,26 @@ function EnhancedPaginationControl({
   setAttributes,
   clientId
 }) {
-  const enhancedPaginationNotice = (0,external_wp_i18n_namespaceObject.__)("Enhanced pagination doesn't support plugin blocks yet. If you want to enable it, you have to remove all plugin blocks from the Query Loop.");
-  const containsThirdPartyBlocks = useContainsThirdPartyBlocks(clientId);
+  const {
+    hasUnsupportedBlocks
+  } = useUnsupportedBlocks(clientId);
+  let help = (0,external_wp_i18n_namespaceObject.__)('Browsing between pages requires a full page reload.');
+  if (enhancedPagination) {
+    help = (0,external_wp_i18n_namespaceObject.__)("Browsing between pages won't require a full page reload, unless non-compatible blocks are detected.");
+  } else if (hasUnsupportedBlocks) {
+    help = (0,external_wp_i18n_namespaceObject.__)("Force page reload can't be disabled because there are non-compatible blocks inside the Query block.");
+  }
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
-    label: (0,external_wp_i18n_namespaceObject.__)('Enhanced pagination'),
-    help: (0,external_wp_i18n_namespaceObject.__)('Browsing between pages won’t require a full page reload.'),
-    checked: !!enhancedPagination,
-    disabled: containsThirdPartyBlocks,
+    label: (0,external_wp_i18n_namespaceObject.__)('Force page reload'),
+    help: help,
+    checked: !enhancedPagination,
+    disabled: hasUnsupportedBlocks,
     onChange: value => {
       setAttributes({
-        enhancedPagination: !!value
+        enhancedPagination: !value
       });
     }
-  }), containsThirdPartyBlocks && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Notice, {
-    status: "warning",
-    isDismissible: false,
-    className: "wp-block-query__enhanced-pagination-notice"
-  }, enhancedPaginationNotice));
+  }));
 }
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/query/edit/inspector-controls/create-new-post-link.js
@@ -44819,7 +44870,6 @@ function QueryInspectorControls(props) {
  * Internal dependencies
  */
 
-const disableEnhancedPaginationDescription = (0,external_wp_i18n_namespaceObject.__)('Plugin blocks are not supported yet. For the enhanced pagination to work, remove the plugin block, then re-enable "Enhanced pagination" in the Query Block settings.');
 const modalDescriptionId = 'wp-block-query-enhanced-pagination-modal__description';
 function EnhancedPaginationModal({
   clientId,
@@ -44829,31 +44879,46 @@ function EnhancedPaginationModal({
   setAttributes
 }) {
   const [isOpen, setOpen] = (0,external_wp_element_namespaceObject.useState)(false);
-  const containsThirdPartyBlocks = useContainsThirdPartyBlocks(clientId);
+  const {
+    hasBlocksFromPlugins,
+    hasPostContentBlock,
+    hasUnsupportedBlocks
+  } = useUnsupportedBlocks(clientId);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
-    setOpen(containsThirdPartyBlocks && enhancedPagination);
-  }, [containsThirdPartyBlocks, enhancedPagination, setOpen]);
+    if (enhancedPagination && hasUnsupportedBlocks) {
+      setAttributes({
+        enhancedPagination: false
+      });
+      setOpen(true);
+    }
+  }, [enhancedPagination, hasUnsupportedBlocks, setAttributes]);
+  const closeModal = () => {
+    setOpen(false);
+  };
+  let notice = (0,external_wp_i18n_namespaceObject.__)('If you still want to prevent full page reloads, remove that block, then disable "Force page reload" again in the Query Block settings.');
+  if (hasBlocksFromPlugins) {
+    notice = (0,external_wp_i18n_namespaceObject.__)('Currently, avoiding full page reloads is not possible when blocks from plugins are present inside the Query block.') + ' ' + notice;
+  } else if (hasPostContentBlock) {
+    notice = (0,external_wp_i18n_namespaceObject.__)('Currently, avoiding full page reloads is not possible when a Content block is present inside the Query block.') + ' ' + notice;
+  }
   return isOpen && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
-    title: (0,external_wp_i18n_namespaceObject.__)('Enhanced pagination will be disabled'),
+    title: (0,external_wp_i18n_namespaceObject.__)('Query block: Force page reload enabled'),
     className: "wp-block-query__enhanced-pagination-modal",
     aria: {
       describedby: modalDescriptionId
     },
+    role: "alertdialog",
+    focusOnMount: "firstElement",
     isDismissible: false,
-    shouldCloseOnEsc: false,
-    shouldCloseOnClickOutside: false
+    onRequestClose: closeModal
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
     alignment: "right",
     spacing: 5
   }, (0,external_React_namespaceObject.createElement)("span", {
     id: modalDescriptionId
-  }, disableEnhancedPaginationDescription), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+  }, notice), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     variant: "primary",
-    onClick: () => {
-      setAttributes({
-        enhancedPagination: false
-      });
-    }
+    onClick: closeModal
   }, (0,external_wp_i18n_namespaceObject.__)('OK'))));
 }
 
@@ -47708,6 +47773,9 @@ const symbol = (0,external_React_namespaceObject.createElement)(external_wp_prim
  * Internal dependencies
  */
 
+const {
+  useLayoutClasses
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 const fullAlignments = ['full', 'wide', 'left', 'right'];
 const useInferredLayout = (blocks, parentLayout) => {
   const initialInferredAlignmentRef = (0,external_wp_element_namespaceObject.useRef)();
@@ -47740,9 +47808,6 @@ function ReusableBlockEdit({
   },
   __unstableParentLayout: parentLayout
 }) {
-  const {
-    useLayoutClasses
-  } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
   const hasAlreadyRendered = (0,external_wp_blockEditor_namespaceObject.__experimentalUseHasRecursion)(ref);
   const {
     record,
@@ -48436,8 +48501,7 @@ function SearchEdit({
     borderProps.style.borderRadius = `${borderRadius}px`;
   }
   const colorProps = (0,external_wp_blockEditor_namespaceObject.__experimentalUseColorProps)(attributes);
-  const fluidTypographySettings = (0,external_wp_blockEditor_namespaceObject.useSetting)('typography.fluid');
-  const layout = (0,external_wp_blockEditor_namespaceObject.useSetting)('layout');
+  const [fluidTypographySettings, layout] = (0,external_wp_blockEditor_namespaceObject.useSettings)('typography.fluid', 'layout');
   const typographyProps = (0,external_wp_blockEditor_namespaceObject.getTypographyClassesAndStyles)(attributes, {
     typography: {
       fluid: fluidTypographySettings
@@ -52482,13 +52546,13 @@ function DimensionInput({
   value = ''
 }) {
   const inputId = (0,external_wp_compose_namespaceObject.useInstanceId)(external_wp_components_namespaceObject.__experimentalUnitControl, 'block-spacer-height-input');
-  const spacingSizes = (0,external_wp_blockEditor_namespaceObject.useSetting)('spacing.spacingSizes');
+  const [spacingSizes, spacingUnits] = (0,external_wp_blockEditor_namespaceObject.useSettings)('spacing.spacingSizes', 'spacing.units');
   // In most contexts the spacer size cannot meaningfully be set to a
   // percentage, since this is relative to the parent container. This
   // unit is disabled from the UI.
-  const availableUnitSettings = ((0,external_wp_blockEditor_namespaceObject.useSetting)('spacing.units') || undefined)?.filter(availableUnit => availableUnit !== '%');
+  const availableUnits = spacingUnits ? spacingUnits.filter(unit => unit !== '%') : ['px', 'em', 'rem', 'vw', 'vh'];
   const units = (0,external_wp_components_namespaceObject.__experimentalUseCustomUnits)({
-    availableUnits: availableUnitSettings || ['px', 'em', 'rem', 'vw', 'vh'],
+    availableUnits,
     defaultValues: {
       px: 100,
       em: 10,
@@ -52664,7 +52728,7 @@ const SpacerEdit = ({
     selfStretch,
     flexSize
   } = layout;
-  const spacingSizes = (0,external_wp_blockEditor_namespaceObject.useSetting)('spacing.spacingSizes');
+  const [spacingSizes] = (0,external_wp_blockEditor_namespaceObject.useSettings)('spacing.spacingSizes');
   const [isResizing, setIsResizing] = (0,external_wp_element_namespaceObject.useState)(false);
   const [temporaryHeight, setTemporaryHeight] = (0,external_wp_element_namespaceObject.useState)(null);
   const [temporaryWidth, setTemporaryWidth] = (0,external_wp_element_namespaceObject.useState)(null);
@@ -55521,8 +55585,9 @@ function TagCloudEdit({
     smallestFontSize,
     largestFontSize
   } = attributes;
+  const [availableUnits] = (0,external_wp_blockEditor_namespaceObject.useSettings)('spacing.units');
   const units = (0,external_wp_components_namespaceObject.__experimentalUseCustomUnits)({
-    availableUnits: (0,external_wp_blockEditor_namespaceObject.useSetting)('spacing.units') || ['%', 'px', 'em', 'rem']
+    availableUnits: availableUnits || ['%', 'px', 'em', 'rem']
   });
   const getTaxonomyOptions = () => {
     const selectOption = {
@@ -56876,8 +56941,8 @@ function TemplatePartInnerBlocks({
     } = select(external_wp_blockEditor_namespaceObject.store);
     return getSettings()?.supportsLayout;
   }, []);
-  const defaultLayout = (0,external_wp_blockEditor_namespaceObject.useSetting)('layout') || {};
-  const usedLayout = !!layout && layout.inherit ? defaultLayout : layout;
+  const [defaultLayout] = (0,external_wp_blockEditor_namespaceObject.useSettings)('layout');
+  const usedLayout = layout?.inherit ? defaultLayout || {} : layout;
   const [blocks, onInput, onChange] = (0,external_wp_coreData_namespaceObject.useEntityBlockEditor)('postType', 'wp_template_part', {
     id
   });
@@ -57314,7 +57379,6 @@ function TermDescriptionEdit({
 const term_description_metadata = {
   $schema: "https://schemas.wp.org/trunk/block.json",
   apiVersion: 3,
-  __experimental: "fse",
   name: "core/term-description",
   title: "Term Description",
   category: "theme",

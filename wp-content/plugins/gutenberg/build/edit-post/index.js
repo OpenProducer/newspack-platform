@@ -4018,7 +4018,7 @@ function VisualEditor({
     borderBottom: 0
   };
   const resizedCanvasStyles = (0,external_wp_blockEditor_namespaceObject.__experimentalUseResizeCanvas)(deviceType, isTemplateMode);
-  const globalLayoutSettings = (0,external_wp_blockEditor_namespaceObject.useSetting)('layout');
+  const [globalLayoutSettings] = (0,external_wp_blockEditor_namespaceObject.useSettings)('layout');
   const previewMode = 'is-' + deviceType.toLowerCase() + '-preview';
   let animatedStyles = isTemplateMode ? templateModeStyles : desktopCanvasStyles;
   if (resizedCanvasStyles) {

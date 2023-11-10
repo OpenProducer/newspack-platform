@@ -335,10 +335,6 @@ final class Pixel {
 
 		// Update the log file path option.
 		update_option( 'newspack_newsletters_tracking_pixel_log_file', $log_file_path );
-
-		// Avoid notoptions bug.
-		wp_cache_delete( 'notoptions', 'options' );
-		wp_cache_delete( 'alloptions', 'options' );
 	}
 }
 Pixel::init();

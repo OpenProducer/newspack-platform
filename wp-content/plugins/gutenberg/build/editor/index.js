@@ -6714,6 +6714,7 @@ function PostAuthorSelect() {
     });
   };
   return (0,external_React_.createElement)(external_wp_components_namespaceObject.SelectControl, {
+    __next40pxDefaultSize: true,
     __nextHasNoMarginBottom: true,
     className: "post-author-selector",
     label: (0,external_wp_i18n_namespaceObject.__)('Author'),
@@ -12332,6 +12333,7 @@ function useBlockEditorSettings(settings, hasTemplate) {
     canUseUnfilteredHTML,
     userCanCreatePages,
     pageOnFront,
+    pageForPosts,
     postType,
     userPatternCategories
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
@@ -12356,6 +12358,7 @@ function useBlockEditorSettings(settings, hasTemplate) {
       hasUploadPermissions: (_canUser = canUser('create', 'media')) !== null && _canUser !== void 0 ? _canUser : true,
       userCanCreatePages: canUser('create', 'pages'),
       pageOnFront: siteSettings?.page_on_front,
+      pageForPosts: siteSettings?.page_for_posts,
       postType: getCurrentPostType(),
       userPatternCategories: getUserPatternCategories()
     };
@@ -12418,8 +12421,9 @@ function useBlockEditorSettings(settings, hasTemplate) {
     __experimentalCreatePageEntity: createPageEntity,
     __experimentalUserCanCreatePages: userCanCreatePages,
     pageOnFront,
+    pageForPosts,
     __experimentalPreferPatternsOnRoot: hasTemplate
-  }), [settings, hasUploadPermissions, reusableBlocks, userPatternCategories, blockPatterns, blockPatternCategories, canUseUnfilteredHTML, undo, hasTemplate, createPageEntity, userCanCreatePages, pageOnFront]);
+  }), [settings, hasUploadPermissions, reusableBlocks, userPatternCategories, blockPatterns, blockPatternCategories, canUseUnfilteredHTML, undo, hasTemplate, createPageEntity, userCanCreatePages, pageOnFront, pageForPosts]);
 }
 /* harmony default export */ var use_block_editor_settings = (useBlockEditorSettings);
 

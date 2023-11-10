@@ -8077,8 +8077,16 @@ function switchToBlockType(blocks, name) {
  * @return {Object} block.
  */
 const getBlockFromExample = (name, example) => {
-  var _example$innerBlocks;
-  return createBlock(name, example.attributes, ((_example$innerBlocks = example.innerBlocks) !== null && _example$innerBlocks !== void 0 ? _example$innerBlocks : []).map(innerBlock => getBlockFromExample(innerBlock.name, innerBlock)));
+  try {
+    var _example$innerBlocks;
+    return createBlock(name, example.attributes, ((_example$innerBlocks = example.innerBlocks) !== null && _example$innerBlocks !== void 0 ? _example$innerBlocks : []).map(innerBlock => getBlockFromExample(innerBlock.name, innerBlock)));
+  } catch {
+    return createBlock('core/missing', {
+      originalName: name,
+      originalContent: '',
+      originalUndelimitedContent: ''
+    });
+  }
 };
 
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/utils.js
