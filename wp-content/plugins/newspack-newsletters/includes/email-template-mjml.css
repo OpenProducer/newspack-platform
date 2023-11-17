@@ -61,9 +61,9 @@ h6 {
 
 /* List */
 ul, ol {
-	margin-bottom: 0;
-	margin-top: 0;
-	padding-left: 1.3em;
+	margin: 12px 0;
+	padding: 0;
+	list-style-position: inside;
 }
 
 /* Quote */

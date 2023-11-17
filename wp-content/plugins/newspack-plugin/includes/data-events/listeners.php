@@ -10,6 +10,7 @@ namespace Newspack\Data_Events;
 use Newspack\Data_Events;
 use Newspack\Reader_Activation;
 use Newspack\Donations;
+use Newspack\Memberships;
 
 /**
  * For when a reader registers.
@@ -298,6 +299,134 @@ Data_Events::register_listener(
 			'currency'        => $subscription->get_currency(),
 			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
 			'platform'        => Donations::get_platform_slug(),
+		];
+	}
+);
+
+/**
+ * When a non-donation subscription is activated.
+ * The subscription will be added to the user's list of active subscriptions.
+ */
+Data_Events::register_listener(
+	'woocommerce_subscription_status_active',
+	'product_subscription_active',
+	function( $subscription ) {
+		// We only want to fire this for non-donation products.
+		$product_ids = array_values(
+			array_filter(
+				\Newspack\WooCommerce_Connection::get_products_for_subscription( $subscription->get_id() ),
+				function( $product_id ) {
+					return ! Donations::is_donation_product( $product_id );
+				}
+			)
+		);
+
+		if ( empty( $product_ids ) ) {
+			return;
+		}
+
+		return [
+			'user_id'         => $subscription->get_customer_id(),
+			'email'           => $subscription->get_billing_email(),
+			'subscription_id' => $subscription->get_id(),
+			'product_ids'     => $product_ids,
+			'amount'          => (float) $subscription->get_total(),
+			'currency'        => $subscription->get_currency(),
+			'recurrence'      => $subscription->get_billing_period(),
+		];
+	}
+);
+
+/**
+ * When a non-donation subscription is deactivated.
+ * The subscription will be removed from the user's list of active subscriptions.
+ */
+Data_Events::register_listener(
+	'woocommerce_subscription_status_updated',
+	'product_subscription_inactive',
+	function( $subscription, $status_to, $status_from ) {
+		// We only want to fire this for non-active statuses.
+		if ( 'active' === $status_to ) {
+			return;
+		}
+
+		// We only want to fire this for non-donation products.
+		$product_ids = array_values(
+			array_filter(
+				\Newspack\WooCommerce_Connection::get_products_for_subscription( $subscription->get_id() ),
+				function( $product_id ) {
+					return ! Donations::is_donation_product( $product_id );
+				}
+			)
+		);
+
+		if ( empty( $product_ids ) ) {
+			return;
+		}
+
+		return [
+			'user_id'         => $subscription->get_customer_id(),
+			'email'           => $subscription->get_billing_email(),
+			'subscription_id' => $subscription->get_id(),
+			'product_ids'     => $product_ids,
+			'amount'          => (float) $subscription->get_total(),
+			'currency'        => $subscription->get_currency(),
+			'recurrence'      => $subscription->get_billing_period(),
+			'status_before'   => $status_from,
+			'status_after'    => $status_to,
+		];
+	}
+);
+
+/**
+ * When a WooCommerce Memberships plan becomes active for a reader.
+ * This hook is fired whenever a user is granted access to a membership plan.
+ * The membership plan will be add to the user's list of active memberships.
+ */
+Data_Events::register_listener(
+	'wc_memberships_user_membership_saved',
+	'membership_status_active',
+	function( $membership_plan, $args ) {
+		$membership = \wc_memberships_get_user_membership( $args['user_membership_id'] );
+
+		// Only fire for active statuses.
+		if ( ! in_array( $membership->get_status(), Memberships::$active_statuses, true ) ) {
+			return;
+		}
+
+		$user       = \get_user_by( 'id', $args['user_id'] );
+		$user_email = $user ? $user->user_email : '';
+		return [
+			'user_id' => $args['user_id'],
+			'email'   => $user_email,
+			'plan_id' => $membership_plan->get_id(),
+		];
+	}
+);
+
+/**
+ * When a WooCommerce Memberships plan becomes inactive for a reader.
+ * This hook is fired when an existing user membership is updated, but not when created.
+ * The membership plan will be removed from the user's list of active memberships.
+ */
+Data_Events::register_listener(
+	'wc_memberships_user_membership_status_changed',
+	'membership_status_inactive',
+	function( $membership, $old_status, $new_status ) {
+		// Only fire for inactive statuses.
+		if ( in_array( $new_status, Memberships::$active_statuses, true ) ) {
+			return;
+		}
+
+		$user_id    = $membership->get_user_id();
+		$user       = \get_user_by( 'id', $user_id );
+		$user_email = $user ? $user->user_email : '';
+		return [
+			'user_id'       => $user_id,
+			'email'         => $user_email,
+			'plan_id'       => $membership->get_plan_id(),
+			'status_before' => $old_status,
+			'status_after'  => $new_status,
 		];
 	}
 );

@@ -43,6 +43,90 @@ final class Modal_Checkout {
 		add_filter( 'woocommerce_checkout_get_value', [ __CLASS__, 'woocommerce_checkout_get_value' ], 10, 2 );
 		add_filter( 'woocommerce_checkout_fields', [ __CLASS__, 'woocommerce_checkout_fields' ] );
 		add_filter( 'woocommerce_update_order_review_fragments', [ __CLASS__, 'order_review_fragments' ] );
+		add_filter( 'woocommerce_payment_successful_result', [ __CLASS__, 'woocommerce_payment_successful_result' ] );
+		add_action( 'woocommerce_checkout_create_order_line_item', [ __CLASS__, 'woocommerce_checkout_create_order_line_item' ], 10, 4 );
+		add_filter( 'newspack_donations_cart_item_data', [ __CLASS__, 'amend_cart_item_data' ] );
+		add_filter( 'newspack_recaptcha_verify_captcha', [ __CLASS__, 'recaptcha_verify_captcha' ], 10, 2 );
+		add_filter( 'woocommerce_enqueue_styles', [ __CLASS__, 'dequeue_woocommerce_styles' ] );
+		add_filter( 'wcs_place_subscription_order_text', [ __CLASS__, 'order_button_text' ], 1 );
+		add_filter( 'woocommerce_order_button_text', [ __CLASS__, 'order_button_text' ] );
+		add_filter( 'option_woocommerce_subscriptions_order_button_text', [ __CLASS__, 'order_button_text' ] );
+	}
+
+	/**
+	 * Add information about modal checkout to cart item data.
+	 *
+	 * @param array $cart_item_data Cart item data.
+	 */
+	public static function amend_cart_item_data( $cart_item_data ) {
+		if ( self::is_modal_checkout() ) {
+			$cart_item_data['newspack_modal_checkout_url'] = \home_url( \add_query_arg( null, null ) );
+		}
+		return $cart_item_data;
+	}
+
+	/**
+	 * Add information about modal checkout to order item meta.
+	 *
+	 * @param \WC_Order_Item_Product $item The cart item.
+	 * @param string                 $cart_item_key The cart item key.
+	 * @param array                  $values The cart item values.
+	 * @param \WC_Order              $order The order.
+	 * @return void
+	 */
+	public static function woocommerce_checkout_create_order_line_item( $item, $cart_item_key, $values, $order ) {
+		if ( ! empty( $values['newspack_modal_checkout_url'] ) ) {
+			$order->add_meta_data( '_newspack_modal_checkout_url', $values['newspack_modal_checkout_url'] );
+		}
+	}
+
+	/**
+	 * Change the post-transaction return URL.
+	 * This is specifically for non-redirect-based flows, such as Apple Pay.
+	 *
+	 * @param array $result The return payload for a successfull transaction.
+	 */
+	public static function woocommerce_payment_successful_result( $result ) {
+		$order_id           = $result['order_id'];
+		$order              = \wc_get_order( $order_id );
+		$modal_checkout_url = $order->get_meta( '_newspack_modal_checkout_url' );
+		if ( empty( $modal_checkout_url ) ) {
+			return $result;
+		}
+
+		$originating_from_modal = ! empty( $order->get_meta( '_newspack_modal_checkout_url' ) );
+		if ( $originating_from_modal ) {
+			$modal_checkout_url_query = \wp_parse_url( $modal_checkout_url, PHP_URL_QUERY );
+			\wp_parse_str( $modal_checkout_url_query, $modal_checkout_url_query_params );
+			$passed_params_names = [ 'modal_checkout', 'after_success_behavior', 'after_success_url', 'after_success_button_label' ];
+			// Pick passed params from the query params.
+			$passed_params = array_intersect_key( $modal_checkout_url_query_params, array_flip( $passed_params_names ) );
+
+			$result['redirect'] = \add_query_arg(
+				array_merge(
+					$passed_params,
+					[
+						'order_id' => $order_id,
+					]
+				),
+				$result['redirect']
+			);
+		}
+		return $result;
+	}
+
+	/**
+	 * Dequeue WC styles if on modal checkout.
+	 *
+	 * @param array $enqueue_styles Array of styles to enqueue.
+	 */
+	public static function dequeue_woocommerce_styles( $enqueue_styles ) {
+		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			return $enqueue_styles;
+		}
+		unset( $enqueue_styles['woocommerce-general'] );
+		unset( $enqueue_styles['woocommerce-smallscreen'] );
+		return $enqueue_styles;
 	}
 
 	/**
@@ -104,7 +188,7 @@ final class Modal_Checkout {
 			);
 		}
 
-		$cart_item_data = [ 'referer' => $referer ];
+		$cart_item_data = self::amend_cart_item_data( [ 'referer' => $referer ] );
 
 		$newspack_popup_id = filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT );
 		if ( $newspack_popup_id ) {
@@ -241,7 +325,7 @@ final class Modal_Checkout {
 		if ( ! function_exists( 'is_checkout' ) || ! is_checkout() ) {
 			return;
 		}
-		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return;
 		}
 		wp_enqueue_script(
@@ -298,7 +382,7 @@ final class Modal_Checkout {
 		if ( ! is_checkout() && ! is_order_received_page() ) {
 			return $template;
 		}
-		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return $template;
 		}
 		ob_start();
@@ -313,6 +397,29 @@ final class Modal_Checkout {
 		ob_end_flush();
 	}
 
+	/**
+	 * Get after success button params.
+	 */
+	private static function get_after_success_params() {
+		return array_filter(
+			[
+				'after_success_behavior'     => isset( $_REQUEST['after_success_behavior'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_behavior'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'after_success_url'          => isset( $_REQUEST['after_success_url'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_url'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				'after_success_button_label' => isset( $_REQUEST['after_success_button_label'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			]
+		);
+	}
+
+	/**
+	 * Render hidden inputs to pass some params along.
+	 */
+	private static function render_hidden_inputs() {
+		foreach ( self::get_after_success_params() as $key => $value ) {
+			?>
+				<input type="hidden" name="<?php echo esc_attr( $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+			<?php
+		}
+	}
 
 	/**
 	 * Return URL for modal checkout "thank you" page.
@@ -323,17 +430,17 @@ final class Modal_Checkout {
 	 * @return string
 	 */
 	public static function woocommerce_get_return_url( $url, $order ) {
-		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return $url;
 		}
 
-		$args = [
-			'modal_checkout'             => '1',
-			'email'                      => isset( $_REQUEST['billing_email'] ) ? rawurlencode( \sanitize_email( \wp_unslash( $_REQUEST['billing_email'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			'after_success_behavior'     => isset( $_REQUEST['after_success_behavior'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_behavior'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			'after_success_url'          => isset( $_REQUEST['after_success_url'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_url'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			'after_success_button_label' => isset( $_REQUEST['after_success_button_label'] ) ? rawurlencode( sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		];
+		$args = array_merge(
+			[
+				'modal_checkout' => '1',
+				'email'          => isset( $_REQUEST['billing_email'] ) ? rawurlencode( \sanitize_email( \wp_unslash( $_REQUEST['billing_email'] ) ) ) : '', // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			],
+			self::get_after_success_params()
+		);
 
 		// Pass order ID for modal checkout templates.
 		if ( $order && is_a( $order, 'WC_Order' ) ) {
@@ -356,7 +463,7 @@ final class Modal_Checkout {
 	 * @return string Template file.
 	 */
 	public static function wc_get_template( $located, $template_name ) {
-		if ( ! isset( $_REQUEST['modal_checkout'] ) || ! boolval( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return $located;
 		}
 
@@ -386,7 +493,7 @@ final class Modal_Checkout {
 	 * @return bool
 	 */
 	public static function show_admin_bar( $show ) {
-		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return $show;
 		}
 		return false;
@@ -416,7 +523,7 @@ final class Modal_Checkout {
 	 * @return string|null Value or null if unaltered.
 	 */
 	public static function woocommerce_checkout_get_value( $value, $input ) {
-		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return null;
 		}
 		$valid_request = self::validate_edit_billing_request(); // This performs nonce verification.
@@ -437,7 +544,7 @@ final class Modal_Checkout {
 	 * @return array
 	 */
 	public static function woocommerce_checkout_fields( $fields ) {
-		if ( ! isset( $_REQUEST['modal_checkout'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! self::is_modal_checkout() ) {
 			return $fields;
 		}
 		/**
@@ -562,28 +669,42 @@ final class Modal_Checkout {
 	}
 
 	/**
-	 * Adds an additional button to the Thank you page
+	 * Render markup at the end of the "thank you" view.
+	 *
+	 * @param WC_Order $order The order related to the transaction.
 	 *
 	 * @return void
 	 */
-	public static function render_checkout_after_success_markup() {
+	public static function render_checkout_after_success_markup( $order ) {
+		if ( self::is_newsletter_signup_available() ) {
+			self::render_newsletter_signup_form( $order );
+		} else {
+			self::render_after_success_button();
+		}
+	}
+
+	/**
+	 * Render markup at the end of the "thank you" view.
+	 *
+	 * @return void
+	 */
+	private static function render_after_success_button() {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
-		if (
-			empty( $_REQUEST['modal_checkout'] ) ||
-			empty( $_REQUEST['after_success_behavior'] ) ||
-			empty( $_REQUEST['after_success_url'] )
-		) {
+		if ( empty( $_REQUEST['modal_checkout'] ) ) {
 			return;
 		}
 
-		$button_label = ! empty( $_REQUEST['after_success_button_label'] ) ? sanitize_text_field( wp_unslash( $_REQUEST['after_success_button_label'] ) ) : __( 'Continue browsing', 'newspack-blocks' );
-
+		$button_label = ! empty( $_REQUEST['after_success_button_label'] ) ? urldecode( wp_unslash( $_REQUEST['after_success_button_label'] ) ) : __( 'Continue browsing', 'newspack-blocks' ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		$url          = ! empty( $_REQUEST['after_success_url'] ) ? urldecode( wp_unslash( $_REQUEST['after_success_url'] ) ) : ''; // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		?>
 			<a
-				class="button"
-				href="<?php echo esc_url( sanitize_text_field( wp_unslash( $_REQUEST['after_success_url'] ) ) ); ?>"
-				target="_top"
-				style="display:block;margin:16px 0;"
+				<?php if ( empty( $url ) ) : ?>
+					onclick="parent.newspackCloseModalCheckout(this);"
+				<?php else : ?>
+					href="<?php echo esc_url( $url ); ?>"
+					target="_top"
+				<?php endif; ?>
+				class="button newspack-modal-newsletters__button"
 			>
 				<?php echo esc_html( $button_label ); ?>
 			</a>
@@ -596,10 +717,7 @@ final class Modal_Checkout {
 	 *
 	 * @param WC_Order $order The order related to the transaction.
 	 */
-	public static function render_newsletter_signup_form( $order ) {
-		if ( ! self::is_newsletter_signup_available() ) {
-			return false;
-		}
+	private static function render_newsletter_signup_form( $order ) {
 		$email_address = $order->get_billing_email();
 		if ( ! $email_address ) {
 			return;
@@ -646,6 +764,7 @@ final class Modal_Checkout {
 					<input type="hidden" name="modal_checkout" value="1" />
 					<input type="hidden" name="newsletter_signup_email" value="<?php echo esc_html( $email_address ); ?>" />
 					<?php
+					self::render_hidden_inputs();
 					foreach ( $newsletters_lists as $list ) {
 						$checkbox_id = sprintf( 'newspack-blocks-list-%s', $list['id'] );
 						?>
@@ -693,18 +812,22 @@ final class Modal_Checkout {
 		}
 		$signup_data = self::get_newsletter_signup_data();
 		if ( false !== $signup_data ) {
-			$result = \Newspack_Newsletters_Subscription::add_contact(
-				[
-					'email'    => $signup_data['email'],
-					'metadata' => [
-						'current_page_url'                => home_url( add_query_arg( array(), \wp_get_referer() ) ),
-						'newsletters_subscription_method' => 'post-checkout',
+			if ( empty( $signup_data['lists'] ) ) {
+				return new \WP_Error( 'newspack_no_lists_selected', __( 'No lists selected.', 'newspack-blocks' ) );
+			} else {
+				$result = \Newspack_Newsletters_Subscription::add_contact(
+					[
+						'email'    => $signup_data['email'],
+						'metadata' => [
+							'current_page_url' => home_url( add_query_arg( array(), \wp_get_referer() ) ),
+							'newsletters_subscription_method' => 'post-checkout',
+						],
 					],
-				],
-				$signup_data['lists']
-			);
-			if ( \is_wp_error( $result ) ) {
-				return $result;
+					$signup_data['lists']
+				);
+				if ( \is_wp_error( $result ) ) {
+					return $result;
+				}
 			}
 			return true;
 		}
@@ -718,22 +841,28 @@ final class Modal_Checkout {
 		$newsletter_signup_email = isset( $_GET['newsletter_signup_email'] ) ? \sanitize_text_field( \wp_unslash( $_GET['newsletter_signup_email'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 		if ( $newsletter_signup_email && isset( $_SERVER['REQUEST_URI'] ) ) {
 			parse_str( \wp_parse_url( \wp_unslash( $_SERVER['REQUEST_URI'] ) )['query'], $query ); // phpcs:ignore WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+			$signup_data = [
+				'email' => $newsletter_signup_email,
+				'lists' => [],
+			];
 			if ( isset( $query['lists'] ) && count( $query['lists'] ) ) {
-				return [
-					'email' => $newsletter_signup_email,
-					'lists' => $query['lists'],
-				];
+				$signup_data['lists'] = $query['lists'];
 			}
+			return $signup_data;
 		}
 		return false;
 	}
 
 	/**
 	 * Renders newsletter signup confirmation.
+	 *
+	 * @param bool $no_lists_selected Whether no lists were selected.
 	 */
-	public static function render_newsletter_confirmation() {
+	public static function render_newsletter_confirmation( $no_lists_selected = false ) {
 		?>
-			<h4><?php esc_html_e( 'Signup successful!', 'newspack-blocks' ); ?></h4>
+			<?php if ( ! $no_lists_selected ) : ?>
+				<h4><?php esc_html_e( 'Signup successful!', 'newspack-blocks' ); ?></h4>
+			<?php endif; ?>
 			<p>
 				<?php
 				echo esc_html(
@@ -745,10 +874,50 @@ final class Modal_Checkout {
 				);
 				?>
 			</p>
-			<button onclick="parent.newspackCloseModalCheckout(this);" class="newspack-modal-newsletters__button">
-				<?php esc_html_e( 'Close', 'newspack-blocks' ); ?>
-			</button>
 		<?php
+		self::render_after_success_button();
+	}
+
+	/**
+	 * Prevent reCaptcha from being verified for AJAX checkout (e.g. Apple Pay).
+	 *
+	 * @param bool   $should_verify Whether to verify the captcha.
+	 * @param string $url The URL from which the checkout originated.
+	 */
+	public static function recaptcha_verify_captcha( $should_verify, $url ) {
+		parse_str( \wp_parse_url( $url, PHP_URL_QUERY ), $query );
+		if (
+			// Only in the context of a checkout request.
+			defined( 'WOOCOMMERCE_CHECKOUT' )
+			&& isset( $query['wc-ajax'] )
+			&& 'wc_stripe_create_order' === $query['wc-ajax']
+		) {
+			return false;
+		}
+		return $should_verify;
+	}
+
+	/**
+	 * Is this request using the modal checkout?
+	 */
+	public static function is_modal_checkout() {
+		$is_modal_checkout = isset( $_REQUEST['modal_checkout'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! $is_modal_checkout && isset( $_REQUEST['post_data'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			$is_modal_checkout = strpos( $_REQUEST['post_data'], 'modal_checkout=1' ) !== false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
+		}
+		return $is_modal_checkout;
+	}
+
+	/**
+	 * Set the "Place order" button text.
+	 *
+	 * @param string $text The button text.
+	 */
+	public static function order_button_text( $text ) {
+		if ( self::is_modal_checkout() && method_exists( 'Newspack\Donations', 'is_donation_cart' ) && \Newspack\Donations::is_donation_cart() ) {
+			return __( 'Donate now', 'newspack-blocks' );
+		}
+		return $text;
 	}
 }
 Modal_Checkout::init();

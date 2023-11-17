@@ -13,13 +13,15 @@
 		"interactivity": true
 	},
 	"textdomain": "woocommerce",
+	"usesContext": [ "postId" ],
 	"providesContext": {
 		"thumbnailsPosition": "thumbnailsPosition",
 		"thumbnailsNumberOfThumbnails": "thumbnailsNumberOfThumbnails",
 		"productGalleryClientId": "productGalleryClientId",
 		"nextPreviousButtonsPosition": "nextPreviousButtonsPosition",
 		"pagerDisplayMode": "pagerDisplayMode",
-		"hoverZoom": "hoverZoom"
+		"hoverZoom": "hoverZoom",
+		"fullScreenOnClick": "fullScreenOnClick"
 	},
 	"attributes": {
 		"thumbnailsPosition": {
@@ -48,12 +50,17 @@
 		},
 		"fullScreenOnClick": {
 			"type": "boolean",
-			"default": false
+			"default": true
 		},
 		"nextPreviousButtonsPosition":{
 			"type": "string",
 			"default": "insideTheImage"
+		},
+		"mode": {
+			"type": "string",
+			"default": "standard"
 		}
 	},
-	"viewScript": "wc-product-gallery-interactivity-frontend"
+	"viewScript": "wc-product-gallery-frontend",
+	"example": {}
 }

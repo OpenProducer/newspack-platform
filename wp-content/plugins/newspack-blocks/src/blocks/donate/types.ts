@@ -96,6 +96,10 @@ export type DonateBlockAttributes = OverridableConfiguration & {
 	tiersBasedOptions: [ TierBasedOptionValue, TierBasedOptionValue, TierBasedOptionValue ];
 	// Manual mode enables block-level overrides of the global Donate settings.
 	manual: boolean;
+	// Post-checkout button option.
+	afterSuccessBehavior: string;
+	afterSuccessButtonLabel: string;
+	afterSuccessURL: string;
 	// Legacy attributes.
 	suggestedAmounts?: [ number, number, number ];
 	suggestedAmountUntiered?: number;

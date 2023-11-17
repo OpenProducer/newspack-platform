@@ -40,7 +40,8 @@
 			"type": "string"
 		},
 		"afterSuccessButtonLabel": {
-			"type": "string"
+			"type": "string",
+			"default": "Continue browsing"
 		},
 		"afterSuccessURL": {
 			"type": "string"

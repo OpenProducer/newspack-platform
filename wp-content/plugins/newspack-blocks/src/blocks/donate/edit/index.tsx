@@ -45,6 +45,7 @@ import {
 	LAYOUT_OPTIONS,
 	DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX,
 } from '../consts';
+import RedirectAfterSuccess from '../../../components/redirect-after-success';
 
 const TIER_LABELS = [
 	__( 'Low-tier', 'newspack-blocks' ),
@@ -421,6 +422,9 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 						</p>
 					</PanelBody>
 				) }
+				<PanelBody title={ __( 'After purchase', 'newspack-blocks' ) }>
+					<RedirectAfterSuccess setAttributes={ setAttributes } attributes={ attributes } />
+				</PanelBody>
 			</InspectorControls>
 		</>
 	);

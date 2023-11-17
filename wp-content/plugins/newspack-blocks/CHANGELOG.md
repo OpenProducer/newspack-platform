@@ -1,3 +1,57 @@
+# [2.1.0](https://github.com/Automattic/newspack-blocks/compare/v2.0.0...v2.1.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* **homepage-posts:** change copy for deduplication block option ([#1578](https://github.com/Automattic/newspack-blocks/issues/1578)) ([dff89a0](https://github.com/Automattic/newspack-blocks/commit/dff89a040e45109eaa0ae04248cb41f2d6543aca))
+* **modal-checkout:** add id attributes to hidden inputs ([90f077c](https://github.com/Automattic/newspack-blocks/commit/90f077ce49c164014e7779140e207a1278afda3e))
+* **modal-checkout:** place order button width ([9b1b04e](https://github.com/Automattic/newspack-blocks/commit/9b1b04e6c5b5ec7931c69eef859b93397735291f)), closes [#1572](https://github.com/Automattic/newspack-blocks/issues/1572) [#1586](https://github.com/Automattic/newspack-blocks/issues/1586)
+
+
+### Features
+
+* **donate-block:** changes to button-after-success  ([#1571](https://github.com/Automattic/newspack-blocks/issues/1571)) ([ac1c6a6](https://github.com/Automattic/newspack-blocks/commit/ac1c6a63f028f6cafa1e5cd852520ebf6ce75845))
+* expose is_modal_checkout method ([4315730](https://github.com/Automattic/newspack-blocks/commit/43157303d800e1447088c40f283d670c9fc6682e))
+* **modal-checkout:** dequeue WC styles ([#1572](https://github.com/Automattic/newspack-blocks/issues/1572)) ([9aa0039](https://github.com/Automattic/newspack-blocks/commit/9aa003954bb5676d009f0ef60765a82c9ec811d9))
+* **modal-checkout:** handle non-redirect-based flow (e.g. Apple Pay) ([#1573](https://github.com/Automattic/newspack-blocks/issues/1573)) ([671b551](https://github.com/Automattic/newspack-blocks/commit/671b551bfedd4724fc85005e21387b1ef462c97c))
+* **modal-checkout:** update "place order" text to "donate now" ([#1591](https://github.com/Automattic/newspack-blocks/issues/1591)) ([63fc202](https://github.com/Automattic/newspack-blocks/commit/63fc20204b95d9213e99481edd1b4549f011c448))
+
+# [2.1.0-alpha.4](https://github.com/Automattic/newspack-blocks/compare/v2.1.0-alpha.3...v2.1.0-alpha.4) (2023-11-10)
+
+
+### Features
+
+* **modal-checkout:** update "place order" text to "donate now" ([#1591](https://github.com/Automattic/newspack-blocks/issues/1591)) ([63fc202](https://github.com/Automattic/newspack-blocks/commit/63fc20204b95d9213e99481edd1b4549f011c448))
+
+# [2.1.0-alpha.3](https://github.com/Automattic/newspack-blocks/compare/v2.1.0-alpha.2...v2.1.0-alpha.3) (2023-11-08)
+
+
+### Bug Fixes
+
+* **modal-checkout:** place order button width ([9b1b04e](https://github.com/Automattic/newspack-blocks/commit/9b1b04e6c5b5ec7931c69eef859b93397735291f)), closes [#1572](https://github.com/Automattic/newspack-blocks/issues/1572) [#1586](https://github.com/Automattic/newspack-blocks/issues/1586)
+
+# [2.1.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v2.1.0-alpha.1...v2.1.0-alpha.2) (2023-11-03)
+
+
+### Bug Fixes
+
+* **homepage-posts:** change copy for deduplication block option ([#1578](https://github.com/Automattic/newspack-blocks/issues/1578)) ([dff89a0](https://github.com/Automattic/newspack-blocks/commit/dff89a040e45109eaa0ae04248cb41f2d6543aca))
+* **modal-checkout:** add id attributes to hidden inputs ([90f077c](https://github.com/Automattic/newspack-blocks/commit/90f077ce49c164014e7779140e207a1278afda3e))
+
+
+### Features
+
+* expose is_modal_checkout method ([4315730](https://github.com/Automattic/newspack-blocks/commit/43157303d800e1447088c40f283d670c9fc6682e))
+* **modal-checkout:** dequeue WC styles ([#1572](https://github.com/Automattic/newspack-blocks/issues/1572)) ([9aa0039](https://github.com/Automattic/newspack-blocks/commit/9aa003954bb5676d009f0ef60765a82c9ec811d9))
+* **modal-checkout:** handle non-redirect-based flow (e.g. Apple Pay) ([#1573](https://github.com/Automattic/newspack-blocks/issues/1573)) ([671b551](https://github.com/Automattic/newspack-blocks/commit/671b551bfedd4724fc85005e21387b1ef462c97c))
+
+# [2.1.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v2.0.0...v2.1.0-alpha.1) (2023-10-31)
+
+
+### Features
+
+* **donate-block:** changes to button-after-success  ([#1571](https://github.com/Automattic/newspack-blocks/issues/1571)) ([ac1c6a6](https://github.com/Automattic/newspack-blocks/commit/ac1c6a63f028f6cafa1e5cd852520ebf6ce75845))
+
 # [2.0.0](https://github.com/Automattic/newspack-blocks/compare/v1.75.6...v2.0.0) (2023-10-31)
 
 

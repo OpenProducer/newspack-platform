@@ -17,9 +17,15 @@ export interface ProductCollectionAttributes {
 	convertedFromProducts: boolean;
 }
 
+export enum LayoutOptions {
+	GRID = 'flex',
+	STACK = 'list',
+}
+
 export interface ProductCollectionDisplayLayout {
-	type: 'flex' | 'list';
+	type: LayoutOptions;
 	columns: number;
+	shrinkColumns?: boolean;
 }
 
 export interface ProductCollectionQuery {
@@ -30,11 +36,9 @@ export interface ProductCollectionQuery {
 	order: TProductCollectionOrder;
 	orderBy: TProductCollectionOrderBy;
 	pages: number;
-	parents: number[];
 	perPage: number;
 	postType: string;
 	search: string;
-	sticky: string;
 	taxQuery: Record< string, number[] >;
 	woocommerceOnSale: boolean;
 	/**
@@ -63,7 +67,7 @@ export type TProductCollectionOrderBy =
 	| 'popularity'
 	| 'rating';
 
-export type DisplayLayoutControlProps = {
+export type DisplayLayoutToolbarProps = {
 	displayLayout: ProductCollectionDisplayLayout;
 	setAttributes: ( attrs: Partial< ProductCollectionAttributes > ) => void;
 };

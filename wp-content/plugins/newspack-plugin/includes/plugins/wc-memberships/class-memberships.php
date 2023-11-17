@@ -26,6 +26,14 @@ class Memberships {
 	private static $gate_rendered = false;
 
 	/**
+	 * Membership statuses that should grant access to restricted content.
+	 * See: https://woocommerce.com/document/woocommerce-memberships-user-memberships/#section-4
+	 * 
+	 * @var array
+	 */
+	public static $active_statuses = [ 'active', 'complimentary', 'free-trial', 'pending' ];
+
+	/**
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {

@@ -90,6 +90,16 @@
 		"additionalFields": {
 			"type": "array",
 			"default": []
+		},
+		"afterSuccessBehavior": {
+			"type": "string"
+		},
+		"afterSuccessButtonLabel": {
+			"type": "string",
+			"default": "Continue browsing"
+		},
+		"afterSuccessURL": {
+			"type": "string"
 		}
 	},
 	"supports": {

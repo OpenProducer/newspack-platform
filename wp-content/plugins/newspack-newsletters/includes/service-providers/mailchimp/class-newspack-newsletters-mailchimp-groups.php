@@ -150,7 +150,7 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 				'type'  => 'checkboxes',
 			]
 		);
-		
+
 		// If there was an error creating the category, let's check if it already exists.
 		if ( ! empty( $create['status'] ) && 400 === $create['status'] ) {
 			$search = $mc->get(
@@ -169,7 +169,7 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 				}
 			}
 		}
-			
+
 		if ( ! empty( $create['id'] ) ) {
 			$group_category_ids[ $list_id ] = $create['id'];
 			update_option( $option_name, $group_category_ids );
@@ -249,7 +249,6 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 	 * @return array|WP_Error The group representation sent from the server on succes. WP_Error on failure.
 	 */
 	public function create_group( $group, $list_id = null ) {
-		
 		$mc      = new Mailchimp( $this->api_key() );
 		$created = $mc->post(
 			sprintf( '/lists/%s/interest-categories/%s/interests', $list_id, $this->get_groups_category_id( $list_id ) ),
@@ -276,7 +275,6 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 	 * @return array|WP_Error The group representation sent from the server on succes. WP_Error on failure.
 	 */
 	public function update_group( $group_id, $group, $list_id = null ) {
-		
 		$mc      = new Mailchimp( $this->api_key() );
 		$created = $mc->patch(
 			sprintf( '/lists/%s/interest-categories/%s/interests/%s', $list_id, $this->get_groups_category_id( $list_id ), $group_id ),
@@ -382,7 +380,7 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 				}
 			}
 		}
-		
+
 		return $groups;
 	}
 

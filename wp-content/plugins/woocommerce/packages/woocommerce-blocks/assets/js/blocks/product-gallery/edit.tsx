@@ -9,6 +9,7 @@ import {
 } from '@wordpress/block-editor';
 import { BlockEditProps, InnerBlockTemplate } from '@wordpress/blocks';
 import { useEffect } from '@wordpress/element';
+import { useSelect } from '@wordpress/data';
 
 /**
  * Internal dependencies
@@ -16,12 +17,10 @@ import { useEffect } from '@wordpress/element';
 import {
 	moveInnerBlocksToPosition,
 	getInnerBlocksLockAttributes,
+	getClassNameByNextPreviousButtonsPosition,
 } from './utils';
-import { ProductGalleryThumbnailsBlockSettings } from './inner-blocks/product-gallery-thumbnails/block-settings';
-import { ProductGalleryPagerBlockSettings } from './inner-blocks/product-gallery-pager/settings';
 import { ProductGalleryBlockSettings } from './block-settings/index';
 import type { ProductGalleryAttributes } from './types';
-import { ProductGalleryNextPreviousBlockSettings } from './inner-blocks/product-gallery-large-image-next-previous/settings';
 
 const TEMPLATE: InnerBlockTemplate[] = [
 	[
@@ -86,53 +85,67 @@ const TEMPLATE: InnerBlockTemplate[] = [
 	],
 ];
 
+const getMode = ( currentTemplateId: string, templateType: string ) => {
+	if (
+		templateType === 'wp_template_part' &&
+		currentTemplateId.includes( 'product-gallery' )
+	) {
+		return 'full';
+	}
+	return 'standard';
+};
+
 export const Edit = ( {
 	clientId,
 	attributes,
 	setAttributes,
 }: BlockEditProps< ProductGalleryAttributes > ) => {
-	const blockProps = useBlockProps();
+	const blockProps = useBlockProps( {
+		className: getClassNameByNextPreviousButtonsPosition(
+			attributes.nextPreviousButtonsPosition
+		),
+	} );
+
+	const { currentTemplateId, templateType } = useSelect(
+		( select ) => ( {
+			currentTemplateId: select( 'core/edit-site' ).getEditedPostId(),
+			templateType: select( 'core/edit-site' ).getEditedPostType(),
+		} ),
+		[]
+	);
 
 	useEffect( () => {
+		const mode = getMode( currentTemplateId, templateType );
+
 		setAttributes( {
 			...attributes,
+			mode,
 			productGalleryClientId: clientId,
 		} );
 		// Move the Thumbnails block to the correct above or below the Large Image based on the thumbnailsPosition attribute.
 		moveInnerBlocksToPosition( attributes, clientId );
-	}, [ setAttributes, attributes, clientId ] );
+	}, [
+		setAttributes,
+		attributes,
+		clientId,
+		currentTemplateId,
+		templateType,
+	] );
 
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<ProductGalleryPagerBlockSettings
-					context={ {
-						productGalleryClientId: clientId,
-						pagerDisplayMode: attributes.pagerDisplayMode,
-					} }
-				/>
-				<ProductGalleryThumbnailsBlockSettings
-					attributes={ attributes }
-					setAttributes={ setAttributes }
-					context={ {
-						productGalleryClientId: clientId,
-						thumbnailsPosition: attributes.thumbnailsPosition,
-						thumbnailsNumberOfThumbnails:
-							attributes.thumbnailsNumberOfThumbnails,
-					} }
-				/>
-			</InspectorControls>
-			<InspectorControls>
 				<ProductGalleryBlockSettings
 					attributes={ attributes }
 					setAttributes={ setAttributes }
-				/>
-			</InspectorControls>
-			<InspectorControls>
-				<ProductGalleryNextPreviousBlockSettings
 					context={ {
-						...attributes,
 						productGalleryClientId: clientId,
+						pagerDisplayMode: attributes.pagerDisplayMode,
+						thumbnailsPosition: attributes.thumbnailsPosition,
+						thumbnailsNumberOfThumbnails:
+							attributes.thumbnailsNumberOfThumbnails,
+						nextPreviousButtonsPosition:
+							attributes.nextPreviousButtonsPosition,
 					} }
 				/>
 			</InspectorControls>

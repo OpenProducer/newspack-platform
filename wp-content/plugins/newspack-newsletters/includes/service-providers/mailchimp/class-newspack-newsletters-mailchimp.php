@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use \DrewM\MailChimp\MailChimp;
+use DrewM\MailChimp\MailChimp;
 use Newspack\Newsletters\Subscription_Lists;
 
 /**
@@ -274,7 +274,6 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			'newspack_newsletter_error_adding_tag_to_contact',
 			! empty( $created['errors'] ) && ! empty( $created['errors'][0]['error'] ) ? $created['errors'][0]['error'] : ''
 		);
-
 	}
 
 	/**
@@ -306,7 +305,6 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			'newspack_newsletter_error_adding_tag_to_contact',
 			! empty( $created['errors'] ) && ! empty( $created['errors'][0]['error'] ) ? $created['errors'][0]['error'] : ''
 		);
-
 	}
 
 	/**
@@ -1466,5 +1464,14 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			];
 		}
 		return false;
+	}
+
+	/**
+	 * Get usage report.
+	 *
+	 * @param int $last_n_days Number of days to get the report for.
+	 */
+	public function get_usage_report( $last_n_days ) {
+		return Newspack_Newsletters_Mailchimp_Usage_Reports::get_usage_report( $last_n_days );
 	}
 }

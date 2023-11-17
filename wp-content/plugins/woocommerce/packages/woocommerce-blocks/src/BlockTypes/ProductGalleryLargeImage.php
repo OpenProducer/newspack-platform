@@ -1,6 +1,8 @@
 <?php
 namespace Automattic\WooCommerce\Blocks\BlockTypes;
 
+use Automattic\WooCommerce\Blocks\Utils\ProductGalleryUtils;
+
 /**
  * ProductGalleryLargeImage class.
  */
@@ -12,13 +14,23 @@ class ProductGalleryLargeImage extends AbstractBlock {
 	 */
 	protected $block_name = 'product-gallery-large-image';
 
+
+	/**
+	 * Get the frontend style handle for this block type.
+	 *
+	 * @return null
+	 */
+	protected function get_block_type_style() {
+		return null;
+	}
+
 	/**
 	 *  Register the context
 	 *
 	 * @return string[]
 	 */
 	protected function get_block_type_uses_context() {
-		return [ 'postId', 'hoverZoom' ];
+		return [ 'postId', 'hoverZoom', 'fullScreenOnClick' ];
 	}
 
 	/**
@@ -29,7 +41,7 @@ class ProductGalleryLargeImage extends AbstractBlock {
 	 * @param WP_Block $block    The block object.
 	 */
 	protected function enqueue_assets( array $attributes, $content, $block ) {
-		if ( $block->context['hoverZoom'] ) {
+		if ( $block->context['hoverZoom'] || $block->context['fullScreenOnClick'] ) {
 			parent::enqueue_assets( $attributes, $content, $block );
 		}
 	}
@@ -69,28 +81,22 @@ class ProductGalleryLargeImage extends AbstractBlock {
 		$processor->remove_class( 'wp-block-woocommerce-product-gallery-large-image' );
 		$content = $processor->get_updated_html();
 
-		$image_html = wp_get_attachment_image(
-			$product->get_image_id(),
-			'full',
-			false,
-			array(
-				'class' => 'wc-block-woocommerce-product-gallery-large-image__image',
-			)
-		);
+		[ $visible_main_image, $main_images ] = $this->get_main_images_html( $block->context, $post_id );
 
-		[$directives, $image_html] = $block->context['hoverZoom'] ? $this->get_html_with_interactivity( $image_html ) : array( array(), $image_html );
+		$directives = $this->get_directives( $block->context );
 
 		return strtr(
-			'<div class="wp-block-woocommerce-product-gallery-large-image" {directives}>
-				{image}
-				<div class="wc-block-woocommerce-product-gallery-large-image__content">
-					{content}
+			'<div class="wc-block-product-gallery-large-image wp-block-woocommerce-product-gallery-large-image" {directives}>
+				<div class="wc-block-product-gallery-large-image__container">
+					{main_images}
 				</div>
+					{content}
 			</div>',
 			array(
-				'{image}'      => $image_html,
-				'{content}'    => $content,
-				'{directives}' => array_reduce(
+				'{visible_main_image}' => $visible_main_image,
+				'{main_images}'        => implode( ' ', $main_images ),
+				'{content}'            => $content,
+				'{directives}'         => array_reduce(
 					array_keys( $directives ),
 					function( $carry, $key ) use ( $directives ) {
 						return $carry . ' ' . $key . '="' . esc_attr( $directives[ $key ] ) . '"';
@@ -102,12 +108,74 @@ class ProductGalleryLargeImage extends AbstractBlock {
 	}
 
 	/**
-	 * Get the HTML that adds interactivity to the image. This is used for the hover zoom effect.
+	 * Get the main images html code. The first element of the array contains the HTML of the first image that is visible, the second element contains the HTML of the other images that are hidden.
 	 *
-	 * @param string $image_html The image HTML.
+	 * @param array $context The block context.
+	 * @param int   $product_id The product id.
+	 *
 	 * @return array
 	 */
-	private function get_html_with_interactivity( $image_html ) {
+	private function get_main_images_html( $context, $product_id ) {
+		$attributes = array(
+			'data-wc-bind--style' => 'selectors.woocommerce.productGalleryLargeImage.styles',
+			'data-wc-effect'      => 'effects.woocommerce.scrollInto',
+			'class'               => 'wc-block-woocommerce-product-gallery-large-image__image',
+
+		);
+
+		if ( $context['fullScreenOnClick'] ) {
+			$attributes['class'] .= ' wc-block-woocommerce-product-gallery-large-image__image--full-screen-on-click';
+		}
+
+		if ( $context['hoverZoom'] ) {
+			$attributes['class']              .= ' wc-block-woocommerce-product-gallery-large-image__image--hoverZoom';
+			$attributes['data-wc-bind--style'] = 'selectors.woocommerce.productGalleryLargeImage.styles';
+		}
+
+		$main_images = ProductGalleryUtils::get_product_gallery_images(
+			$product_id,
+			'full',
+			$attributes,
+			'wc-block-product-gallery-large-image__image-element'
+		);
+
+		$main_image_with_wrapper = array_map(
+			function( $main_image_element ) {
+				return "<div class='wc-block-product-gallery-large-image__wrapper'>" . $main_image_element . '</div>';
+			},
+			$main_images
+		);
+
+		$visible_main_image = array_shift( $main_images );
+		return array( $visible_main_image, $main_image_with_wrapper );
+
+	}
+
+	/**
+	 * Get directives for the block.
+	 *
+	 * @param array $block_context The block context.
+	 *
+	 * @return array
+	 */
+	private function get_directives( $block_context ) {
+		return array_merge(
+			$this->get_zoom_directives( $block_context ),
+			$this->get_open_dialog_directives( $block_context )
+		);
+	}
+
+	/**
+	 * Get directives for zoom.
+	 *
+	 * @param array $block_context The block context.
+	 *
+	 * @return array
+	 */
+	private function get_zoom_directives( $block_context ) {
+		if ( ! $block_context['hoverZoom'] ) {
+			return array();
+		}
 		$context = array(
 			'woocommerce' => array(
 				'styles' => array(
@@ -117,21 +185,27 @@ class ProductGalleryLargeImage extends AbstractBlock {
 			),
 		);
 
-		$directives = array(
+		return array(
 			'data-wc-on--mousemove'  => 'actions.woocommerce.handleMouseMove',
 			'data-wc-on--mouseleave' => 'actions.woocommerce.handleMouseLeave',
 			'data-wc-context'        => wp_json_encode( $context, JSON_NUMERIC_CHECK ),
 		);
+	}
 
-		$image_html_processor = new \WP_HTML_Tag_Processor( $image_html );
-		$image_html_processor->next_tag( 'img' );
-		$image_html_processor->add_class( 'wc-block-woocommerce-product-gallery-large-image__image--hoverZoom' );
-		$image_html_processor->set_attribute( 'data-wc-bind--style', 'selectors.woocommerce.styles' );
-		$image_html = $image_html_processor->get_updated_html();
+	/**
+	 * Get directives for opening the dialog.
+	 *
+	 * @param array $block_context The block context.
+	 *
+	 * @return array
+	 */
+	private function get_open_dialog_directives( $block_context ) {
+		if ( ! $block_context['fullScreenOnClick'] ) {
+			return array();
+		}
 
 		return array(
-			$directives,
-			$image_html,
+			'data-wc-on--click' => 'actions.woocommerce.handleClick',
 		);
 	}
 }

@@ -1,3 +1,44 @@
+# [2.11.0](https://github.com/Automattic/newspack-plugin/compare/v2.10.3...v2.11.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* get subscriptions from any order type ([#2744](https://github.com/Automattic/newspack-plugin/issues/2744)) ([5f0bef3](https://github.com/Automattic/newspack-plugin/commit/5f0bef3cc39f60ca1df96dd2644076223e27ff8a))
+
+
+### Features
+
+* add donation processing filters ([#2720](https://github.com/Automattic/newspack-plugin/issues/2720)) ([d041fa8](https://github.com/Automattic/newspack-plugin/commit/d041fa80a3916f384d2e598c3eda545fe791aece))
+* **donations:** process after-checkout-button params ([167a20e](https://github.com/Automattic/newspack-plugin/commit/167a20e500c565a7e549285d723741ae511dd332))
+* **emails:** support billing name on receipt email ([#2729](https://github.com/Automattic/newspack-plugin/issues/2729)) ([c9ad368](https://github.com/Automattic/newspack-plugin/commit/c9ad3684f072dce3d831ca477f35c51aa66ec8e8))
+* **modal-checkout:** allow covering Stripe's fees  ([#2695](https://github.com/Automattic/newspack-plugin/issues/2695)) ([420ca32](https://github.com/Automattic/newspack-plugin/commit/420ca32ce675fc976961591164963b73882e9644))
+* new options for Stripe fees ([#2745](https://github.com/Automattic/newspack-plugin/issues/2745)) ([c974352](https://github.com/Automattic/newspack-plugin/commit/c974352a0a9da2387b3e1e3e1cbc76e7879b201a))
+* **recaptcha:** make recaptcha threshold configurable ([#2705](https://github.com/Automattic/newspack-plugin/issues/2705)) ([f3ec1a6](https://github.com/Automattic/newspack-plugin/commit/f3ec1a6fae04201014d7880328b4e3413758d47a))
+* remove MC4WP from managed plugins ([#2723](https://github.com/Automattic/newspack-plugin/issues/2723)) ([8026688](https://github.com/Automattic/newspack-plugin/commit/80266880dda048ad8e580fd789f43d2cf95a079c))
+* segmentation criteria for subscriptions and memberships ([#2696](https://github.com/Automattic/newspack-plugin/issues/2696)) ([4631b51](https://github.com/Automattic/newspack-plugin/commit/4631b51e443fd8b3cd78d14ecd800194e25ac2bc))
+* **stripe-migration:** support mapping of products by SKU ([#2725](https://github.com/Automattic/newspack-plugin/issues/2725)) ([08f9569](https://github.com/Automattic/newspack-plugin/commit/08f95691e7facda5555f8003b19dbeb66fb2e276))
+
+# [2.11.0-alpha.8](https://github.com/Automattic/newspack-plugin/compare/v2.11.0-alpha.7...v2.11.0-alpha.8) (2023-11-13)
+
+
+### Features
+
+* new options for Stripe fees ([#2745](https://github.com/Automattic/newspack-plugin/issues/2745)) ([c974352](https://github.com/Automattic/newspack-plugin/commit/c974352a0a9da2387b3e1e3e1cbc76e7879b201a))
+
+# [2.11.0-alpha.7](https://github.com/Automattic/newspack-plugin/compare/v2.11.0-alpha.6...v2.11.0-alpha.7) (2023-11-09)
+
+
+### Bug Fixes
+
+* get subscriptions from any order type ([#2744](https://github.com/Automattic/newspack-plugin/issues/2744)) ([5f0bef3](https://github.com/Automattic/newspack-plugin/commit/5f0bef3cc39f60ca1df96dd2644076223e27ff8a))
+
+# [2.11.0-alpha.6](https://github.com/Automattic/newspack-plugin/compare/v2.11.0-alpha.5...v2.11.0-alpha.6) (2023-11-07)
+
+
+### Bug Fixes
+
+* **password-reset:** redirect non-readers to WP login ([#2742](https://github.com/Automattic/newspack-plugin/issues/2742)) ([0645073](https://github.com/Automattic/newspack-plugin/commit/0645073ae0ea3dcc63835ae53eaba0e88a742e4c))
+
 ## [2.10.3](https://github.com/Automattic/newspack-plugin/compare/v2.10.2...v2.10.3) (2023-11-07)
 
 

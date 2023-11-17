@@ -4,15 +4,17 @@
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
 import { useMemo } from '@wordpress/element';
 import { BlockAttributes } from '@wordpress/blocks';
+import { PanelBody } from '@wordpress/components';
 import classNames from 'classnames';
 
 /**
  * Internal dependencies
  */
-import { NextButton, PrevButton } from './icons';
+
 import './editor.scss';
 import { ProductGalleryNextPreviousBlockSettings } from './settings';
 import { ProductGalleryContext } from '../../types';
+import { getNextPreviousImagesWithClassName } from './utils';
 
 const getAlignmentStyle = ( alignment: string ): string => {
 	switch ( alignment ) {
@@ -41,34 +43,39 @@ export const Edit = ( {
 				attributes.layout?.verticalAlignment
 			),
 		},
+		className: classNames(
+			'wc-block-editor-product-gallery-large-image-next-previous',
+			'wc-block-product-gallery-large-image-next-previous'
+		),
 	} );
 
-	const suffixClass = useMemo( () => {
-		switch ( context.nextPreviousButtonsPosition ) {
-			case 'insideTheImage':
-				return 'inside-image';
-			case 'outsideTheImage':
-				return 'outside-image';
-			case 'off':
-				return 'off';
-			default:
-				return 'off';
-		}
+	const previousNextImage = useMemo( () => {
+		return getNextPreviousImagesWithClassName(
+			context.nextPreviousButtonsPosition
+		);
 	}, [ context.nextPreviousButtonsPosition ] );
 
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<ProductGalleryNextPreviousBlockSettings context={ context } />
+				<PanelBody>
+					<ProductGalleryNextPreviousBlockSettings
+						context={ context }
+					/>
+				</PanelBody>
 			</InspectorControls>
 			<div
 				className={ classNames(
 					'wc-block-product-gallery-large-image-next-previous-container',
-					`wc-block-product-gallery-large-image-next-previous--${ suffixClass }`
+					`wc-block-product-gallery-large-image-next-previous--${ previousNextImage?.classname }`
 				) }
 			>
-				<PrevButton suffixClass={ suffixClass } />
-				<NextButton suffixClass={ suffixClass } />
+				{ previousNextImage?.PrevButtonImage && (
+					<previousNextImage.PrevButtonImage />
+				) }
+				{ previousNextImage?.NextButtonImage && (
+					<previousNextImage.NextButtonImage />
+				) }
 			</div>
 		</div>
 	);
