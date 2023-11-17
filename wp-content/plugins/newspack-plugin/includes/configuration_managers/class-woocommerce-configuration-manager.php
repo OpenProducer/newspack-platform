@@ -114,12 +114,15 @@ class WooCommerce_Configuration_Manager extends Configuration_Manager {
 		}
 		$stripe      = $gateways['stripe'];
 		$stripe_data = [
-			'enabled'            => 'yes' === $stripe->get_option( 'enabled', false ) ? true : false,
-			'testMode'           => 'yes' === $stripe->get_option( 'testmode', false ) ? true : false,
-			'publishableKey'     => $stripe->get_option( 'publishable_key', '' ),
-			'secretKey'          => $stripe->get_option( 'secret_key', '' ),
-			'testPublishableKey' => $stripe->get_option( 'test_publishable_key', '' ),
-			'testSecretKey'      => $stripe->get_option( 'test_secret_key', '' ),
+			'enabled'                     => 'yes' === $stripe->get_option( 'enabled', false ) ? true : false,
+			'testMode'                    => 'yes' === $stripe->get_option( 'testmode', false ) ? true : false,
+			'publishableKey'              => $stripe->get_option( 'publishable_key', '' ),
+			'secretKey'                   => $stripe->get_option( 'secret_key', '' ),
+			'testPublishableKey'          => $stripe->get_option( 'test_publishable_key', '' ),
+			'testSecretKey'               => $stripe->get_option( 'test_secret_key', '' ),
+			'allow_covering_fees'         => get_option( 'newspack_donations_allow_covering_fees', true ),
+			'allow_covering_fees_default' => get_option( 'newspack_donations_allow_covering_fees_default', false ),
+			'allow_covering_fees_label'   => get_option( 'newspack_donations_allow_covering_fees_label', '' ),
 		];
 		return \wp_parse_args( $stripe_data, $defaults );
 	}

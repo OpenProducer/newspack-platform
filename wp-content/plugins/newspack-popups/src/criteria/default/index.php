@@ -34,10 +34,29 @@ $criteria = [
 	/**
 	 * Reader Activity.
 	 */
-	'newsletter'               => [
-		'name'     => __( 'Newsletter', 'newspack-popups' ),
+	'user_account'             => [
+		'name'     => __( 'User Account', 'newspack-popups' ),
 		'category' => 'reader_activity',
 		'options'  => [
+			[
+				'label' => __( 'All users', 'newspack-popups' ),
+				'value' => '',
+			],
+			[
+				'label' => __( 'Has user account', 'newspack-popups' ),
+				'value' => 'with-account',
+			],
+			[
+				'label' => __( 'Does not have user account', 'newspack-popups' ),
+				'value' => 'without-account',
+			],
+		],
+	],
+	'newsletter'               => [
+		'name'        => __( 'Newsletter', 'newspack-popups' ),
+		'description' => __( 'Subscriber status based on any newsletter list.', 'newspack-popups' ),
+		'category'    => 'newsletter',
+		'options'     => [
 			[
 				'label' => __( 'Subscribers and non-subscribers', 'newspack-popups' ),
 				'value' => '',
@@ -54,22 +73,22 @@ $criteria = [
 	],
 	'subscribed_lists'         => [
 		'name'               => __( 'Subscribed to newsletter lists', 'newspack-popups' ),
-		'description'        => __( 'Whether the reader subscribed to any of the selected newsletter lists', 'newspack-popups' ),
-		'category'           => 'reader_activity',
+		'description'        => __( 'If the reader is subscribed to any of the selected newsletter lists.', 'newspack-popups' ),
+		'category'           => 'newsletter',
 		'matching_function'  => 'list__in',
 		'matching_attribute' => 'newsletter_subscribed_lists',
 	],
 	'not_subscribed_lists'     => [
 		'name'               => __( 'Not subscribed to newsletter lists', 'newspack-popups' ),
-		'description'        => __( 'Whether the reader is not subscribed to any of the selected newsletter lists', 'newspack-popups' ),
-		'category'           => 'reader_activity',
+		'description'        => __( 'If the reader is NOT subscribed to any of the selected newsletter lists.', 'newspack-popups' ),
+		'category'           => 'newsletter',
 		'matching_function'  => 'list__not_in',
 		'matching_attribute' => 'newsletter_subscribed_lists',
 	],
 	'donation'                 => [
 		'name'        => __( 'Donation', 'newspack-popups' ),
-		'description' => __( '(if checkout happens on-site)', 'newspack-popups' ),
-		'category'    => 'reader_activity',
+		'description' => __( 'If the reader has completed an onsite donation.', 'newspack-popups' ),
+		'category'    => 'reader_revenue',
 		'options'     => [
 			[
 				'label' => __( 'Donors and non-donors', 'newspack-popups' ),
@@ -89,23 +108,33 @@ $criteria = [
 			],
 		],
 	],
-	'user_account'             => [
-		'name'     => __( 'User Account', 'newspack-popups' ),
-		'category' => 'reader_activity',
-		'options'  => [
-			[
-				'label' => __( 'All users', 'newspack-popups' ),
-				'value' => '',
-			],
-			[
-				'label' => __( 'Has user account', 'newspack-popups' ),
-				'value' => 'with-account',
-			],
-			[
-				'label' => __( 'Does not have user account', 'newspack-popups' ),
-				'value' => 'without-account',
-			],
-		],
+	'active_subscriptions'     => [
+		'name'               => __( 'Has active subscription(s)', 'newspack-popups' ),
+		'description'        => __( 'If the reader is an active subscriber to non-donation products.', 'newspack-popups' ),
+		'category'           => 'reader_revenue',
+		'matching_function'  => 'list__in',
+		'matching_attribute' => 'active_subscriptions',
+	],
+	'not_active_subscriptions' => [
+		'name'               => __( 'Does not have active subscription(s)', 'newspack-popups' ),
+		'description'        => __( 'If the reader is NOT an active subscriber to non-donation products.', 'newspack-popups' ),
+		'category'           => 'reader_revenue',
+		'matching_function'  => 'list__not_in',
+		'matching_attribute' => 'active_subscriptions',
+	],
+	'active_memberships'       => [
+		'name'               => __( 'Has active membership(s)', 'newspack-popups' ),
+		'description'        => __( 'If the reader is a member of membership plans.', 'newspack-popups' ),
+		'category'           => 'reader_revenue',
+		'matching_function'  => 'list__in',
+		'matching_attribute' => 'active_memberships',
+	],
+	'not_active_memberships'   => [
+		'name'               => __( 'Does not have active membership(s)', 'newspack-popups' ),
+		'description'        => __( 'If the reader is NOT a member of membership plans.', 'newspack-popups' ),
+		'category'           => 'reader_revenue',
+		'matching_function'  => 'list__not_in',
+		'matching_attribute' => 'active_memberships',
 	],
 	/**
 	 * Referrer Sources.

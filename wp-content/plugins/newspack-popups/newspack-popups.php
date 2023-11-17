@@ -7,7 +7,7 @@
  * Author URI:      https://newspack.com
  * Text Domain:     newspack-popups
  * Domain Path:     /languages
- * Version:         2.25.0
+ * Version:         2.26.0
  *
  * @package         Newspack_Popups
  */

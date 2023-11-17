@@ -136,6 +136,23 @@ domReady( () => {
 						modal => modal.dataset.productId === formData.get( 'product_id' )
 					);
 					if ( variationModal ) {
+						// Fill in the after success variables in the variation modal.
+						variationModal
+							.querySelectorAll( 'form[target="newspack_modal_checkout"]' )
+							.forEach( singleVariationForm => {
+								[
+									'after_success_behavior',
+									'after_success_url',
+									'after_success_button_label',
+								].forEach( afterSuccessParam => {
+									const input = document.createElement( 'input' );
+									input.type = 'hidden';
+									input.name = afterSuccessParam;
+									input.value = formData.get( afterSuccessParam );
+									singleVariationForm.appendChild( input );
+								} );
+							} );
+						// Open the variations modal.
 						ev.preventDefault();
 						document.body.classList.add( 'newspack-modal-checkout-open' );
 						variationModal.style.display = 'block';

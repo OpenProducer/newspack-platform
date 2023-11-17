@@ -115,7 +115,17 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 				</p>
 			</div>
 			<?php foreach ( $form_billing_fields as $key => $value ) : ?>
-				<input type="hidden" name="<?php echo esc_attr( 'billing_' . $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+				<?php if ( 'state' === $key ) : ?>
+					<?php $wc_states = WC()->countries->get_states( $form_billing_fields['country'] ); ?>
+					<select style="display:none;" id="<?php echo esc_attr( 'billing_' . $key ); ?>" name="<?php echo esc_attr( 'billing_' . $key ); ?>" value="<?php echo esc_attr( $value ); ?>" >
+						<?php foreach ( $wc_states as $key => $value ) { ?>
+							<option <?php echo $key === $form_billing_fields['state'] ? 'selected' : ''; ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value ); ?></option>
+						<?php } ?>
+					</select>
+					<span id="select2-billing_state-container" style="display:none;"></span>
+				<?php else : ?>
+					<input type="hidden" id="<?php echo esc_attr( 'billing_' . $key ); ?>" name="<?php echo esc_attr( 'billing_' . $key ); ?>" value="<?php echo esc_attr( $value ); ?>" />
+				<?php endif; ?>
 			<?php endforeach; ?>
 
 			<?php if ( ! is_user_logged_in() && $checkout->is_registration_enabled() ) : ?>

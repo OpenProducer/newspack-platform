@@ -62,6 +62,10 @@ class Reader_Revenue_Emails {
 			'from_email'             => self::get_from_email(),
 			'available_placeholders' => [
 				[
+					'label'    => __( 'the customer billing name', 'newspack' ),
+					'template' => '*BILLING_NAME*',
+				],
+				[
 					'label'    => __( 'the payment amount', 'newspack' ),
 					'template' => '*AMOUNT*',
 				],

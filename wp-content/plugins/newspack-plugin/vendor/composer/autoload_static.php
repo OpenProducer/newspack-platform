@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitbad1f3c3cd4758a51fbbbd2dc055ab6b
+class ComposerStaticInit58cd62ee6dcbfca53e3869e82b4f73ab
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -195,6 +195,7 @@ class ComposerStaticInitbad1f3c3cd4758a51fbbbd2dc055ab6b
         'Newspack\\Wizards' => __DIR__ . '/../..' . '/includes/class-wizards.php',
         'Newspack\\WooCommerce_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
         'Newspack\\WooCommerce_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
+        'Newspack\\WooCommerce_Cover_Fees' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-cover-fees.php',
         'Newspack\\WooCommerce_My_Account' => __DIR__ . '/../..' . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
         'Newspack\\WooCommerce_Order_UTM' => __DIR__ . '/../..' . '/includes/reader-revenue/woocommerce/class-woocommerce-order-utm.php',
         'Newspack\\WordPress_SEO_Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
@@ -203,9 +204,9 @@ class ComposerStaticInitbad1f3c3cd4758a51fbbbd2dc055ab6b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitbad1f3c3cd4758a51fbbbd2dc055ab6b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitbad1f3c3cd4758a51fbbbd2dc055ab6b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitbad1f3c3cd4758a51fbbbd2dc055ab6b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit58cd62ee6dcbfca53e3869e82b4f73ab::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit58cd62ee6dcbfca53e3869e82b4f73ab::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit58cd62ee6dcbfca53e3869e82b4f73ab::$classMap;
 
         }, null, ClassLoader::class);
     }

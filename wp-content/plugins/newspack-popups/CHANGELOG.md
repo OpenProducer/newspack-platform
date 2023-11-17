@@ -1,3 +1,17 @@
+# [2.26.0](https://github.com/Automattic/newspack-popups/compare/v2.25.0...v2.26.0) (2023-11-13)
+
+
+### Features
+
+* segmentation criteria for subscriptions and memberships ([#1230](https://github.com/Automattic/newspack-popups/issues/1230)) ([bef21e0](https://github.com/Automattic/newspack-popups/commit/bef21e0babaf2590d28b75177e171397d68d4d4e))
+
+# [2.26.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.25.0...v2.26.0-alpha.1) (2023-10-31)
+
+
+### Features
+
+* segmentation criteria for subscriptions and memberships ([#1230](https://github.com/Automattic/newspack-popups/issues/1230)) ([bef21e0](https://github.com/Automattic/newspack-popups/commit/bef21e0babaf2590d28b75177e171397d68d4d4e))
+
 # [2.25.0](https://github.com/Automattic/newspack-popups/compare/v2.24.0...v2.25.0) (2023-10-31)
 
 

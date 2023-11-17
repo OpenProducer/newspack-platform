@@ -92,14 +92,6 @@ class Plugin_Manager {
 				'PluginURI'   => esc_url( 'https://mailchimp.com/connect-your-store/' ),
 				'Download'    => 'wporg',
 			],
-			'mailchimp-for-wp'              => [
-				'Name'        => esc_html__( 'MC4WP: Mailchimp for WordPress', 'newspack' ),
-				'Description' => esc_html__( 'Mailchimp for WordPress by ibericode. Adds various highly effective sign-up methods to your site.', 'newspack' ),
-				'Author'      => esc_html__( 'ibericode', 'newspack' ),
-				'PluginURI'   => esc_url( 'https://mc4wp.com' ),
-				'AuthorURI'   => esc_url( 'https://ibericode.com' ),
-				'Download'    => 'wporg',
-			],
 			'newspack-ads'                  => [
 				'Name'        => esc_html__( 'Newspack Ads', 'newspack' ),
 				'Description' => esc_html__( 'Ads integration.', 'newspack' ),

@@ -435,13 +435,13 @@ class Edit extends Component {
 						)
 					) }
 					<ToggleControl
-						label={ __( 'Use deduplication logic', 'newspack-blocks' ) }
+						label={ __( 'Allow duplicate stories', 'newspack-blocks' ) }
 						help={ __(
-							'If unchecked, this block will be excluded from the deduplication logic and may show duplicate posts.',
+							"If checked, this block will be excluded from the page's de-duplication logic. Duplicate stories may appear.",
 							'newspack-blocks'
 						) }
-						checked={ attributes.deduplicate }
-						onChange={ () => setAttributes( { deduplicate: ! attributes.deduplicate } ) }
+						checked={ ! attributes.deduplicate }
+						onChange={ value => setAttributes( { deduplicate: ! value } ) }
 						className="newspack-blocks-deduplication-toggle"
 					/>
 				</PanelBody>

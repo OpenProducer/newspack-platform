@@ -290,9 +290,11 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 	}
 
 	/**
-	 * Render hidden form input indentifying a donate form submission.
+	 * Render hidden form inputs.
+	 *
+	 * @param array $attributes The block attributes.
 	 */
-	protected static function render_donate_form_input() {
+	protected static function render_hidden_form_inputs( $attributes ) {
 		ob_start();
 		/**
 		 * Action to add custom fields before the form fields of the donation block.
@@ -302,6 +304,16 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 		?>
 			<input type='hidden' name='newspack_donate' value='1' />
 		<?php
+
+		foreach ( [ [ 'afterSuccessBehavior', 'after_success_behavior' ], [ 'afterSuccessButtonLabel', 'after_success_button_label' ], [ 'afterSuccessURL', 'after_success_url' ] ] as $attribute ) {
+			$attribute_name = $attribute[0];
+			$param_name     = $attribute[1];
+			$value          = isset( $attributes[ $attribute_name ] ) ? $attributes[ $attribute_name ] : '';
+			?>
+				<input type='hidden' name='<?php echo esc_attr( $param_name ); ?>' value='<?php echo esc_attr( $value ); ?>' />
+			<?php
+		}
+
 		return ob_get_clean();
 	}
 

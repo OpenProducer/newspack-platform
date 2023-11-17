@@ -460,8 +460,14 @@ final class Newspack_Popups_Inserter {
 	 * @param string $content The content of the post.
 	 */
 	public static function insert_popups_in_content( $content = '' ) {
+		$post = get_post();
+
+		if ( ! $post ) {
+			return $content;
+		}
+
 		$filtered_content = explode( "\n", $content );
-		$post_content     = explode( "\n", get_post()->post_content );
+		$post_content     = explode( "\n", $post->post_content );
 		if (
 			// Avoid duplicate execution.
 			true === self::$the_content_has_rendered

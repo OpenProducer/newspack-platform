@@ -150,7 +150,7 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 		>
 			<form data-is-init-form <?php echo 'stripe' === $configuration['platform'] ? 'onsubmit="return false;"' : ''; ?>>
 				<div class="wpbnbd__tiers__view">
-					<?php echo self::render_donate_form_input(); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+					<?php echo self::render_hidden_form_inputs( $attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<input type="hidden" name="<?php echo esc_attr( self::FREQUENCY_PARAM ); ?>" value="<?php echo esc_attr( $intial_selected_frequency ); ?>">
 					<div class="wpbnbd__tiers">
 						<div class="wpbnbd__tiers__selection">

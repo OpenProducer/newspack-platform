@@ -447,6 +447,10 @@ class Stripe_Connection {
 		// Replace content placeholders.
 		$placeholders = [
 			[
+				'template' => '*BILLING_NAME*',
+				'value'    => $customer['name'],
+			],
+			[
 				'template' => '*AMOUNT*',
 				'value'    => self::format_amount( $amount_normalised, $payment['currency'] ),
 			],
