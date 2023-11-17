@@ -1,3 +1,24 @@
+## [2.5.1](https://github.com/Automattic/newspack-newsletters/compare/v2.5.0...v2.5.1) (2023-11-16)
+
+
+### Bug Fixes
+
+* **ras:** contact syncing to mailchimp ([#1355](https://github.com/Automattic/newspack-newsletters/issues/1355)) ([3068d51](https://github.com/Automattic/newspack-newsletters/commit/3068d511b9f5e5632c22c7a964c970c968e66308))
+
+# [2.5.0](https://github.com/Automattic/newspack-newsletters/compare/v2.4.2...v2.5.0) (2023-11-13)
+
+
+### Bug Fixes
+
+* add margin to lists and list style position ([#1335](https://github.com/Automattic/newspack-newsletters/issues/1335)) ([e75bb42](https://github.com/Automattic/newspack-newsletters/commit/e75bb4214126fa3bece903b25b68c38a5d36c5b7))
+* init modal header misalignment ([#1322](https://github.com/Automattic/newspack-newsletters/issues/1322)) ([5913c54](https://github.com/Automattic/newspack-newsletters/commit/5913c540542924208afa08554f0422ad7858dd37))
+* restrict conditional content to newsletters ([#1340](https://github.com/Automattic/newspack-newsletters/issues/1340)) ([e8adde1](https://github.com/Automattic/newspack-newsletters/commit/e8adde134052c8a30ea12bc1f77a5bacf2b18366))
+
+
+### Features
+
+* mailchimp usage data report ([#1331](https://github.com/Automattic/newspack-newsletters/issues/1331)) ([4fa7386](https://github.com/Automattic/newspack-newsletters/commit/4fa738695f6c954330dc39b959a4e4714744fb43))
+
 ## [2.4.2](https://github.com/Automattic/newspack-newsletters/compare/v2.4.1...v2.4.2) (2023-11-06)
 
 

@@ -304,7 +304,7 @@ final class Newspack_Newsletters_Editor {
 			$mjml_handling_post_types = array_values( array_diff( self::get_email_editor_cpts(), [ Newspack_Newsletters_Ads::CPT ] ) );
 			$provider                 = Newspack_Newsletters::get_service_provider();
 			$conditional_tag_support  = false;
-			if ( $provider ) {
+			if ( $provider && ( self::is_editing_newsletter() || self::is_editing_newsletter_ad() ) ) {
 				$conditional_tag_support = $provider::get_conditional_tag_support();
 			}
 			wp_localize_script(
@@ -420,7 +420,7 @@ final class Newspack_Newsletters_Editor {
 
 	/**
 	 * If Posts Inserter is set to hide sponsored content, add a tax query to exclude sponsored posts.
-	 * 
+	 *
 	 * @param array           $args Request arguments.
 	 * @param WP_REST_Request $request The original REST request params.
 	 *
@@ -428,7 +428,7 @@ final class Newspack_Newsletters_Editor {
 	 */
 	public static function maybe_exclude_sponsored_posts( $args, $request ) {
 		$params = $request->get_params();
-	
+
 		if ( ! empty( $params['exclude_sponsors'] ) && class_exists( '\Newspack_Sponsors\Core' ) ) {
 			if ( empty( $args['tax_query'] ) ) {
 				$args['tax_query'] = []; // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query

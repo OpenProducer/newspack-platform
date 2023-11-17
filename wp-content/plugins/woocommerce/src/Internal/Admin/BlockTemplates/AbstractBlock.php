@@ -10,6 +10,8 @@ use Automattic\WooCommerce\Admin\BlockTemplates\ContainerInterface;
  * Block configuration used to specify blocks in BlockTemplate.
  */
 class AbstractBlock implements BlockInterface {
+	use BlockFormattedTemplateTrait;
+
 	/**
 	 * The block name.
 	 *
@@ -37,6 +39,20 @@ class AbstractBlock implements BlockInterface {
 	 * @var array
 	 */
 	private $attributes = [];
+
+	/**
+	 * The block hide conditions.
+	 *
+	 * @var array
+	 */
+	private $hide_conditions = [];
+
+	/**
+	 * The block hide conditions counter.
+	 *
+	 * @var int
+	 */
+	private $hide_conditions_counter = 0;
 
 	/**
 	 * The block template that this block belongs to.
@@ -82,6 +98,12 @@ class AbstractBlock implements BlockInterface {
 
 		if ( isset( $config[ self::ATTRIBUTES_KEY ] ) ) {
 			$this->attributes = $config[ self::ATTRIBUTES_KEY ];
+		}
+
+		if ( isset( $config[ self::HIDE_CONDITIONS_KEY ] ) ) {
+			foreach ( $config[ self::HIDE_CONDITIONS_KEY ] as $hide_condition ) {
+				$this->add_hide_condition( $hide_condition['expression'] );
+			}
 		}
 	}
 
@@ -191,17 +213,41 @@ class AbstractBlock implements BlockInterface {
 
 		return ! ( $is_in_parent && $is_in_root_template );
 	}
+
 	/**
-	 * Get the block configuration as a formatted template.
+	 * Add a hide condition to the block.
 	 *
-	 * @return array The block configuration as a formatted template.
+	 * The hide condition is a JavaScript-like expression that will be evaluated on the client to determine if the block should be hidden.
+	 * See [@woocommerce/expression-evaluation](https://github.com/woocommerce/woocommerce/blob/trunk/packages/js/expression-evaluation/README.md) for more details.
+	 *
+	 * @param string $expression An expression, which if true, will hide the block.
 	 */
-	public function get_formatted_template(): array {
-		$arr = [
-			$this->get_name(),
-			$this->get_attributes(),
+	public function add_hide_condition( string $expression ): string {
+		$key = 'k' . $this->hide_conditions_counter;
+		$this->hide_conditions_counter++;
+
+		// Storing the expression in an array to allow for future expansion
+		// (such as adding the plugin that added the condition).
+		$this->hide_conditions[ $key ] = [
+			'expression' => $expression,
 		];
 
-		return $arr;
+		return $key;
+	}
+
+	/**
+	 * Remove a hide condition from the block.
+	 *
+	 * @param string $key The key of the hide condition to remove.
+	 */
+	public function remove_hide_condition( string $key ) {
+		unset( $this->hide_conditions[ $key ] );
+	}
+
+	/**
+	 * Get the hide conditions of the block.
+	 */
+	public function get_hide_conditions(): array {
+		return $this->hide_conditions;
 	}
 }

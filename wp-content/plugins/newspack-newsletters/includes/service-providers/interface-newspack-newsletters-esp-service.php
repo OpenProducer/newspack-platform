@@ -171,4 +171,13 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	 * @return true|WP_Error
 	 */
 	public function remove_tag_from_contact( $email, $tag, $list_id = null );
+
+	/**
+	 * Get usage report (no. of subscribers etc.)
+	 *
+	 * @param int $last_n_days Number of days to get the report for.
+	 *
+	 * @return array|WP_Error
+	 */
+	public function get_usage_report( $last_n_days );
 }

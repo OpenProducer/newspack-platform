@@ -3,6 +3,8 @@
  */
 import { Icon } from '@wordpress/icons';
 import { InspectorControls, useBlockProps } from '@wordpress/block-editor';
+import { PanelBody } from '@wordpress/components';
+import classNames from 'classnames';
 
 /**
  * Internal dependencies
@@ -19,7 +21,7 @@ const DigitsPager = (): JSX.Element => {
 
 		return (
 			<li
-				className={ `wc-block-editor-product-gallery-pager__pager-item ${
+				className={ `wc-block-editor-product-gallery-pager__item ${
 					isActive ? 'is-active' : ''
 				}` }
 				key={ index }
@@ -87,13 +89,18 @@ interface EditProps {
 export const Edit = ( props: EditProps ): JSX.Element => {
 	const { context } = props;
 	const blockProps = useBlockProps( {
-		className: 'wc-block-editor-product-gallery-pager',
+		className: classNames(
+			'wc-block-editor-product-gallery-pager',
+			'wc-block-product-gallery-pager'
+		),
 	} );
 
 	return (
 		<div { ...blockProps }>
 			<InspectorControls>
-				<ProductGalleryPagerBlockSettings context={ context } />
+				<PanelBody>
+					<ProductGalleryPagerBlockSettings context={ context } />
+				</PanelBody>
 			</InspectorControls>
 
 			<Pager pagerDisplayMode={ context.pagerDisplayMode } />

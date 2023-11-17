@@ -32,25 +32,11 @@
 	{
 		"name": "Discount Banner",
 		"slug": "woocommerce-blocks/discount-banner",
-		"images_total": 1,
-		"images_format": "square",
 		"content": {
-			"titles": [
-				{
-					"default": "Up to 40% off",
-					"ai_prompt": "A title advertising the sale"
-				}
-			],
 			"descriptions": [
 				{
 					"default": "Select products",
 					"ai_prompt": "A description of the products on sale"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the sale page"
 				}
 			]
 		}
@@ -59,24 +45,12 @@
 		"name": "Discount Banner with Image",
 		"slug": "woocommerce-blocks/discount-banner-with-image",
 		"images_total": 1,
-		"images_format": "square",
+		"images_format": "landscape",
 		"content": {
-			"titles": [
-				{
-					"default": "Up to 40% off",
-					"ai_prompt": "A title advertising the sale"
-				}
-			],
 			"descriptions": [
 				{
 					"default": "Select products",
 					"ai_prompt": "A description of the products on sale"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the sale page"
 				}
 			]
 		}
@@ -90,13 +64,7 @@
 			"titles": [
 				{
 					"default": "Announcing our newest collection",
-					"ai_prompt": "The title of the featured category"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the featured category"
+					"ai_prompt": "The title of the featured category: {image.0}"
 				}
 			]
 		}
@@ -110,47 +78,15 @@
 			"titles": [
 				{
 					"default": "Cupcakes",
-					"ai_prompt": "The title of the first featured category"
+					"ai_prompt": "The title of the first featured category: {image.0}"
 				},
 				{
 					"default": "Sweet Danish",
-					"ai_prompt": "The title of the second featured category"
+					"ai_prompt": "The title of the second featured category: {image.1}"
 				},
 				{
 					"default": "Warm Bread",
-					"ai_prompt": "The title of the third featured category"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the first featured category"
-				},
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the second featured category"
-				},
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the third featured category"
-				}
-			]
-		}
-	},
-	{
-		"name": "Featured Products 5-Item Grid",
-		"slug": "woocommerce-blocks/featured-products-5-item-grid",
-		"content": {
-			"titles": [
-				{
-					"default": "Shop new arrivals",
-					"ai_prompt": "The title of the featured products"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop All",
-					"ai_prompt": "The button text to go to the featured products"
+					"ai_prompt": "The title of the third featured category: {image.2}"
 				}
 			]
 		}
@@ -170,19 +106,19 @@
 			"descriptions": [
 				{
 					"default": "Sweet Organic Lemons",
-					"ai_prompt": "The description of the first featured products"
+					"ai_prompt": "The description of the first featured products: {image.0}"
 				},
 				{
 					"default": "Fresh Organic Tomatoes",
-					"ai_prompt": "The description of the second featured products"
+					"ai_prompt": "The description of the second featured products: {image.1}"
 				},
 				{
 					"default": "Fresh Lettuce (Washed)",
-					"ai_prompt": "The description of the third featured products"
+					"ai_prompt": "The description of the third featured products: {image.2}"
 				},
 				{
 					"default": "Russet Organic Potatoes",
-					"ai_prompt": "The description of the fourth featured products"
+					"ai_prompt": "The description of the fourth featured products: {image.3}"
 				}
 			]
 		}
@@ -195,52 +131,34 @@
 		"content": {
 			"titles": [
 				{
-					"default": "Endless Tee's",
-					"ai_prompt": "An impact phrase that advertises the displayed product"
+					"default": "New in: 3-in-1 parka",
+					"ai_prompt": "An impact phrase that advertises the displayed product: {image.0}. The title must have less than 30 characters"
 				},
 				{
 					"default": "Waterproof Membrane",
-					"ai_prompt": "A title describing the first displayed product feature"
+					"ai_prompt": "A title describing the first displayed product feature. The title must have only 2 or 3 words."
 				},
 				{
 					"default": "Expert Craftsmanship",
-					"ai_prompt": "A title describing the second displayed product feature"
+					"ai_prompt": "A title describing the second displayed product feature. The title must have only 2 or 3 words."
 				},
 				{
 					"default": "Durable Fabric",
-					"ai_prompt": "A title describing the third displayed product feature"
-				},
-				{
-					"default": "Sustainable Dyes",
-					"ai_prompt": "A title describing the fourth displayed product feature"
+					"ai_prompt": "A title describing the third displayed product feature. The title must have only 2 or 3 words."
 				}
 			],
 			"descriptions": [
 				{
-					"default": "With high-quality materials and expert craftsmanship, our products are built to last and exceed your expectations.",
-					"ai_prompt": "A description of the product"
-				},
-				{
 					"default": "Never worry about the weather again. Keep yourself dry, warm, and looking stylish.",
-					"ai_prompt": "A description of the first displayed product feature"
+					"ai_prompt": "A description of the first displayed product feature. The description must have less than 120 characters."
 				},
 				{
-					"default": "Our products are made with expert craftsmanship and attention to detail, ensuring that every stitch and seam is perfect.",
-					"ai_prompt": "A description of the second displayed product feature"
+					"default": "Our products are made with expert craftsmanship and attention to detail.",
+					"ai_prompt": "A description of the second displayed product feature. The description must have less than 120 characters."
 				},
 				{
-					"default": "We use only the highest-quality materials in our products, ensuring that they look great and last for years to come.",
-					"ai_prompt": "A description of the third displayed product feature"
-				},
-				{
-					"default": "From bold prints and colors to intricate details and textures, our products are a perfect combination of style and function.",
-					"ai_prompt": "A description of the fourth displayed product feature"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the product page"
+					"default": "We use only the highest-quality materials in our products, ensuring that they look great.",
+					"ai_prompt": "A description of the third displayed product feature. The description must have less than 120 characters."
 				}
 			]
 		}
@@ -249,12 +167,12 @@
 		"name": "Hero Product Chessboard",
 		"slug": "woocommerce-blocks/hero-product-chessboard",
 		"images_total": 2,
-		"images_format": "square",
+		"images_format": "landscape",
 		"content": {
 			"titles": [
 				{
 					"default": "The Fall Collection",
-					"ai_prompt": "An impact phrase that advertises the displayed product"
+					"ai_prompt": "An impact phrase that advertises the displayed product: {image.0}"
 				},
 				{
 					"default": "Quality Materials",
@@ -294,12 +212,6 @@
 					"default": "Our top priority is customer satisfaction, and we stand behind our products 100%. ",
 					"ai_prompt": "A description of the fourth displayed product feature"
 				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the product page"
-				}
 			]
 		}
 	},
@@ -312,13 +224,7 @@
 			"titles": [
 				{
 					"default": "Get cozy this fall with knit sweaters",
-					"ai_prompt": "An impact phrase that advertises the displayed product"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the product page"
+					"ai_prompt": "An impact phrase that advertises the displayed product: {image.0}"
 				}
 			]
 		}
@@ -358,19 +264,13 @@
 			"titles": [
 				{
 					"default": "Brand New for the Holidays",
-					"ai_prompt": "An impact phrase that advertises the displayed product collection"
+					"ai_prompt": "An impact phrase that advertises the displayed product collection: {image.0}"
 				}
 			],
 			"descriptions": [
 				{
-					"default": "OCheck out our brand new collection of holiday products and find the right gift for anyone.",
+					"default": "Check out our brand new collection of holiday products and find the right gift for anyone.",
 					"ai_prompt": "A description of the product collection"
-				}
-			],
-			"buttons": [
-				{
-					"default": "Shop now",
-					"ai_prompt": "The button text to go to the product collection page"
 				}
 			]
 		}
@@ -396,11 +296,11 @@
 			"titles": [
 				{
 					"default": "Tech gifts under $100",
-					"ai_prompt": "An impact phrase that advertises the first product collection"
+					"ai_prompt": "An impact phrase that advertises the first product collection: {image.0}, {image.1}"
 				},
 				{
 					"default": "For the gamers",
-					"ai_prompt": "An impact phrase that advertises the second product collection"
+					"ai_prompt": "An impact phrase that advertises the second product collection: {image.2}, {image.3}"
 				}
 			],
 			"buttons": [
@@ -434,8 +334,56 @@
 		}
 	},
 	{
+		"name": "Product Gallery",
+		"slug": "woocommerce-blocks/product-query-product-gallery",
+		"content": {
+			"titles": [
+				{
+					"default": "Our newest arrivals",
+					"ai_prompt": "An impact phrase that advertises the displayed product collection"
+				}
+			]
+		}
+	},
+	{
+		"name": "Product Collection 3 Columns",
+		"slug": "woocommerce-blocks/product-collection-3-columns",
+		"content": {
+			"titles": [
+				{
+					"default": "Our newest arrivals",
+					"ai_prompt": "An impact phrase that advertises the displayed product collection"
+				}
+			]
+		}
+	},
+	{
+		"name": "Product Collection 4 Columns",
+		"slug": "woocommerce-blocks/product-collection-4-columns",
+		"content": {
+			"titles": [
+				{
+					"default": "Our newest arrivals",
+					"ai_prompt": "An impact phrase that advertises the displayed product collection"
+				}
+			]
+		}
+	},
+	{
+		"name": "Product Collection 5 Columns",
+		"slug": "woocommerce-blocks/product-collection-5-columns",
+		"content": {
+			"titles": [
+				{
+					"default": "Our newest arrivals",
+					"ai_prompt": "An impact phrase that advertises the displayed product collection"
+				}
+			]
+		}
+	},
+	{
 		"name": "Featured Products 2 Columns",
-		"slug": "woocommerce-blocks/featured-products-2-columns",
+		"slug": "woocommerce-blocks/featured-products-2-cols",
 		"content": {
 			"titles": [
 				{
@@ -459,14 +407,14 @@
 	},
 	{
 		"name": "Product Hero 2 Column 2 Row",
-		"slug": "woocommerce-blocks/product-hero-2-column-2-row",
+		"slug": "woocommerce-blocks/product-hero-2-col-2-row",
 		"images_total": 2,
-		"images_format": "square",
+		"images_format": "landscape",
 		"content": {
 			"titles": [
 				{
 					"default": "The Eden Jacket",
-					"ai_prompt": "An title that advertises the displayed product"
+					"ai_prompt": "An title that advertises the displayed product: {image.0}"
 				},
 				{
 					"default": "100% Woolen",
@@ -488,7 +436,7 @@
 			"descriptions": [
 				{
 					"default": "Perfect for any look featuring a mid-rise, relax fitting silhouette.",
-					"ai_prompt": "A description of the displayed product"
+					"ai_prompt": "A description of the displayed product: {image.0}"
 				},
 				{
 					"default": "Reflect your fashionable style.",
@@ -536,24 +484,6 @@
 					"default": "Kids' Styles",
 					"ai_prompt": "An impact phrase that advertises the fourth product collection"
 				}
-			],
-			"descriptions": [
-				{
-					"default": "Highest rated",
-					"ai_prompt": "A description of the first product collection"
-				},
-				{
-					"default": "Under 15$",
-					"ai_prompt": "A description of the second product collection"
-				},
-				{
-					"default": "Under 25$",
-					"ai_prompt": "A description of the third product collection"
-				},
-				{
-					"default": "Under 20$",
-					"ai_prompt": "A description of the fourth product collection"
-				}
 			]
 		}
 	},
@@ -561,25 +491,25 @@
 		"name": "Small Discount Banner with Image",
 		"slug": "woocommerce-blocks/small-discount-banner-with-image",
 		"images_total": 1,
-		"images_format": "square",
+		"images_format": "landscape",
 		"content": {
 			"titles": [
 				{
-					"default": "Chairs from $149",
-					"ai_prompt": "An impact phrase that advertises the products and their price"
+					"default": "Chairs",
+					"ai_prompt": "An impact phrase that advertises a products: {image.0}"
 				}
 			]
 		}
 	},
 	{
-		"name": "Social: Follow us in social media",
+		"name": "Social: Follow us on social media",
 		"slug": "woocommerce-blocks/social-follow-us-in-social-media",
 		"images_total": 4,
-		"images_format": "square",
+		"images_format": "landscape",
 		"content": {
 			"titles": [
 				{
-					"default": "Follow us in social media",
+					"default": "Follow us on social media",
 					"ai_prompt": "An phrase that advertises the social media accounts"
 				}
 			]
@@ -589,7 +519,7 @@
 		"name": "Alternating Image and Text",
 		"slug": "woocommerce-blocks/alt-image-and-text",
 		"images_total": 2,
-		"images_format": "square",
+		"images_format": "landscape",
 		"content": {
 			"titles": [
 				{
@@ -598,14 +528,14 @@
 				},
 				{
 					"default": "Created with love and care in Australia",
-					"ai_prompt": "An impact phrase that advertises the products"
+					"ai_prompt": "An impact phrase that advertises the products: {image.0}"
 				},
 				{
 					"default": "About us",
 					"ai_prompt": "An impact phrase that advertises the brand"
 				},
 				{
-					"default": "Marl is an independent studio and artisanal gallery",
+					"default": "Marl is an independent studio and artisanal gallery: {image.1}",
 					"ai_prompt": "An impact phrase that advertises the brand"
 				}
 			],
@@ -633,6 +563,10 @@
 		"content": {
 			"titles": [
 				{
+					"default": "What our customers say",
+					"ai_prompt": "A title that advertises the set of testimonials"
+				},
+				{
 					"default": "Great experience",
 					"ai_prompt": "A title that advertises the first testimonial"
 				},
@@ -641,22 +575,22 @@
 					"ai_prompt": "A title that advertises the second testimonial"
 				},
 				{
-					"default": "Awesome couch and great buying experience",
+					"default": "Awesome couch",
 					"ai_prompt": "A title that advertises the third testimonial"
 				}
 			],
 			"descriptions": [
 				{
-					"default": "In the end the couch wasn't exactly what I was looking for but my experience with the Burrow team was excellent. First in providing a discount when the couch was delayed, then timely feedback and updates as the…\n\n~ Tanner P.",
-					"ai_prompt": "A description of the first testimonial"
+					"default": "In the end the couch wasn't exactly what I was looking for but my experience with the Burrow team was excellent. First in providing a discount when the couch was delayed.",
+					"ai_prompt": "A description of the first testimonial. The testimonial must have less than 200 characters."
 				},
 				{
-					"default": "Great couch. color as advertise. seat is nice and firm. Easy to put together. Versatile. Bought one for my mother in law as well. And she loves hers!\n\n~ Abigail N.",
-					"ai_prompt": "A description of the second testimonial"
+					"default": "Great couch. color as advertise. seat is nice and firm. Easy to put together. Versatile. Bought one for my mother in law as well. And she loves hers!",
+					"ai_prompt": "A description of the second testimonial. The testimonial must have less than 200 characters."
 				},
 				{
-					"default": "I got the kind sofa. The look and feel is high quality, and I enjoy that it is a medium level of firmness. Assembly took a little longer than I expected, and it came in 4 boxes. I am excited about the time / st…\n\n~ Albert L.",
-					"ai_prompt": "A description of the third testimonial"
+					"default": "I got the kind sofa. The look and feel is high quality, and I enjoy that it is a medium level of firmness. Assembly took a little longer than I expected, and it came in 4 boxes.",
+					"ai_prompt": "A description of the third testimonial. The testimonial must have less than 200 characters."
 				}
 			]
 		}
@@ -665,7 +599,7 @@
 		"name": "Testimonials Single",
 		"slug": "woocommerce-blocks/testimonials-single",
 		"images_total": 1,
-		"images_format": "square",
+		"images_format": "landscape",
 		"content": {
 			"titles": [
 				{
@@ -676,7 +610,45 @@
 			"descriptions": [
 				{
 					"default": "In the end the couch wasn't exactly what I was looking for but my experience with the Burrow team was excellent. First in providing a discount when the couch was delayed, then timely feedback and updates as the...\n\n~ Anna W.",
-					"ai_prompt": "A description of the testimonial"
+					"ai_prompt": "A description of the testimonial. The testimonial must have less than 200 characters."
+				}
+			]
+		}
+	},
+	{
+		"name": "Featured Category Cover Image",
+		"slug": "woocommerce-blocks/featured-category-cover-image",
+		"images_total": 1,
+		"images_format": "landscape",
+		"content": {
+			"titles": [
+				{
+					"default": "100% natural denim",
+					"ai_prompt": "A description for a product"
+				}
+			],
+			"descriptions": [
+				{
+					"default": "Only the finest goes into our products. You deserve it.",
+					"ai_prompt": "An impact phrase that advertises the products"
+				}
+			],
+			"buttons": [
+				{
+					"default": "Shop jeans",
+					"ai_prompt": "The button text to go to the shop page"
+				}
+			]
+		}
+	},
+	{
+		"name": "Product Collection: Featured Products 5 Columns",
+		"slug": "woocommerce-blocks/product-collection-featured-products-5-columns",
+		"content": {
+			"titles": [
+				{
+					"default": "Shop new arrivals",
+					"ai_prompt": "An impact phrase that advertises the newest additions to the store"
 				}
 			]
 		}
