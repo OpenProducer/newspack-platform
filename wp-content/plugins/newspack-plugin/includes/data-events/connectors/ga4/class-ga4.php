@@ -287,13 +287,15 @@ class GA4 {
 	 * @return array $params The final version of the GA4 event params that will be sent to GA.
 	 */
 	public static function handle_donation_new( $params, $data ) {
-		$params['amount']     = $data['amount'];
-		$params['currency']   = $data['currency'];
-		$params['recurrence'] = $data['recurrence'];
-		$params['platform']   = $data['platform'];
-		$params['referer']    = $data['referer'] ?? '';
-		$params['popup_id']   = $data['popup_id'] ?? '';
-		$params['range']      = self::get_donation_amount_range( $data['amount'] );
+		$params['amount']          = $data['amount'];
+		$params['currency']        = $data['currency'];
+		$params['recurrence']      = $data['recurrence'];
+		$params['platform']        = $data['platform'];
+		$params['referer']         = $data['referer'] ?? '';
+		$params['popup_id']        = $data['popup_id'] ?? '';
+		$params['is_renewal']      = $data['is_renewal'] ? 'yes' : 'no';
+		$params['subscription_id'] = $data['subscription_id'] ?? '';
+		$params['range']           = self::get_donation_amount_range( $data['amount'] );
 		return $params;
 	}
 
@@ -465,6 +467,7 @@ class GA4 {
 			);
 
 			self::log( sprintf( 'Event sent to %s - %s - Client ID: %s', $property['measurement_id'], $event->get_name(), $client_id ) );
+			self::log( sprintf( 'Event payload: %s', wp_json_encode( $payload ) ) );
 		}
 
 	}

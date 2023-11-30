@@ -74,23 +74,21 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 	/**
 	 * Sanitize an array of text or number values.
 	 *
-	 * @param array $array Array of text or float values to be sanitized.
+	 * @param array $array_to_sanitize Array of text or float values to be sanitized.
 	 * @return array Sanitized array.
 	 */
-	public static function sanitize_array( $array ) {
-		foreach ( $array as $value ) {
+	public static function sanitize_array( $array_to_sanitize ) {
+		foreach ( $array_to_sanitize as $value ) {
 			if ( is_array( $value ) ) {
 				$value = self::sanitize_array( $value );
-			} else {
-				if ( is_string( $value ) ) {
+			} elseif ( is_string( $value ) ) {
 					$value = sanitize_text_field( $value );
-				} else {
-					$value = floatval( $value );
-				}
+			} else {
+				$value = floatval( $value );
 			}
 		}
 
-		return $array;
+		return $array_to_sanitize;
 	}
 
 	/**
@@ -221,7 +219,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 			// Keep querying until we have all guest authors.
 			if ( $current_page < $number_of_pages ) {
 				while ( $current_page < $number_of_pages ) {
-					$current_page               ++;
+					$current_page++;
 					$guest_author_args['paged'] = $current_page;
 					$results                    = new \WP_Query( $guest_author_args );
 					$all_guest_authors          = array_merge( $all_guest_authors, $results->posts );
@@ -278,7 +276,7 @@ class WP_REST_Newspack_Author_List_Controller extends WP_REST_Newspack_Authors_C
 			// Keep querying until we have all users.
 			if ( $current_page < $number_of_pages ) {
 				while ( $current_page < $number_of_pages ) {
-					$current_page       ++;
+					$current_page++;
 					$user_args['paged'] = $current_page;
 					$results            = new \WP_User_Query( $user_args );
 					$all_users          = array_merge( $all_users, $results->get_results() );

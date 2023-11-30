@@ -71,6 +71,149 @@ function newspack_blocks_filter_hpb_sizes( $sizes ) {
 }
 
 /**
+ * Retrieve Homepage Articles blocks from blocks, recursively.
+ *
+ * @param array  $blocks The blocks to search.
+ * @param string $block_name The block name to search for.
+ */
+function newspack_blocks_retrieve_homepage_articles_blocks( $blocks, $block_name ) {
+	$ha_blocks = [];
+	foreach ( $blocks as $block ) {
+		if ( $block_name === $block['blockName'] ) {
+			$ha_blocks = array_merge( $ha_blocks, [ $block ] );
+		}
+		if ( is_array( $block['innerBlocks'] ) ) {
+			$ha_blocks = array_merge( $ha_blocks, newspack_blocks_retrieve_homepage_articles_blocks( $block['innerBlocks'], $block_name ) );
+		}
+	}
+	return $ha_blocks;
+}
+
+/**
+ * Collect all attributes' values used in a set of blocks.
+ *
+ * @param array $blocks The blocks to search.
+ */
+function newspack_blocks_collect_all_attribute_values( $blocks ) {
+	$result = [];
+
+	foreach ( $blocks as $block ) {
+		foreach ( $block as $key => $value ) {
+			if ( ! isset( $result[ $key ] ) ) {
+				$result[ $key ] = [];
+			}
+			if ( ! in_array( $value, $result[ $key ], true ) ) {
+				$result[ $key ][] = $value;
+			}
+		}
+	}
+
+	return $result;
+}
+
+/**
+ * Output a CSS string based on attributes used in a set of blocks.
+ * This is to mitigate CLS. Any CSS that might cause CLS should be output here,
+ * inline and before the blocks are printed.
+ *
+ * @param array $attrs The attributes used in the blocks.
+ */
+function newspack_blocks_get_homepage_articles_css_string( $attrs ) {
+	$entry_title_type_scale = [
+		'0.7em',
+		'0.9em',
+		'1em',
+		'1.2em',
+		'1.4em',
+		'1.7em',
+		'2em',
+		'2.2em',
+		'2.4em',
+		'2.6em',
+	];
+
+	ob_start();
+	?>
+		.wpnbha article .entry-title {
+			font-size: 1.2em;
+		}
+		.wpnbha .entry-meta {
+			display: flex;
+			flex-wrap: wrap;
+			align-items: center;
+			margin-top: 0.5em;
+		}
+		.wpnbha article .entry-meta {
+			font-size: 0.8em;
+		}
+		.wpnbha article .avatar {
+			height: 25px;
+			width: 25px;
+		}
+		.wpnbha .post-thumbnail{
+			margin: 0;
+			margin-bottom: 0.25em;
+		}
+		.wpnbha .post-thumbnail img {
+			height: auto;
+			width: 100%;
+		}
+		.wpnbha .post-thumbnail figcaption {
+			margin-bottom: 0.5em;
+		}
+		.wpnbha p {
+			margin: 0.5em 0;
+		}
+
+		<?php
+		if ( isset( $attrs['typeScale'] ) ) {
+			foreach ( $attrs['typeScale'] as $scale ) {
+				echo esc_html(
+					".wpnbha.ts-$scale .entry-title{font-size: {$entry_title_type_scale[$scale - 1]}}"
+				);
+				if ( in_array( $scale, [ 8, 9, 10 ], true ) ) {
+					echo esc_html(
+						".wpnbha.ts-$scale .entry-title {line-height: 1.1;}"
+					);
+				}
+				if ( in_array( $scale, [ 7, 8, 9, 10 ], true ) ) {
+					echo esc_html(
+						".wpnbha.ts-$scale .newspack-post-subtitle {font-size: 1.4em;}"
+					);
+				}
+				if ( in_array( $scale, [ 6 ], true ) ) {
+					echo esc_html(
+						".wpnbha.ts-$scale article .newspack-post-subtitle {font-size: 1.4em;}"
+					);
+				}
+				if ( in_array( $scale, [ 5 ], true ) ) {
+					echo esc_html(
+						".wpnbha.ts-$scale article .newspack-post-subtitle {font-size: 1.2em;}"
+					);
+				}
+				if ( in_array( $scale, [ 1, 2, 3 ], true ) ) {
+					echo esc_html(
+						".wpnbha.ts-$scale article .newspack-post-subtitle, .wpnbha.ts-$scale article .entry-wrapper p, .wpnbha.ts-$scale article .entry-wrapper .more-link, .wpnbha.ts-$scale article .entry-meta {font-size: 0.8em;}"
+					);
+				}
+			}
+		}
+		if ( isset( $attrs['showSubtitle'] ) && in_array( 1, $attrs['showSubtitle'], false ) ) { // phpcs:ignore WordPress.PHP.StrictInArray.FoundNonStrictFalse
+			echo esc_html(
+				'.newspack-post-subtitle--in-homepage-block {
+					margin-top: 0.3em;
+					margin-bottom: 0;
+					line-height: 1.4;
+					font-style: italic;
+				}'
+			);
+		}
+		?>
+	<?php
+	return ob_get_clean();
+}
+
+/**
  * Renders the `newspack-blocks/homepage-posts` block on server.
  *
  * @param array $attributes The block attributes.
@@ -83,10 +226,30 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 		return;
 	}
 
+	$block_name = apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/homepage-articles' );
+
+	// Gather all Homepage Articles blocks on the page and output only the needed CSS.
+	// This CSS will be printed along with the first found block markup.
+	global $newspack_blocks_hpb_all_blocks;
+	$inline_style_html = '';
+	if ( ! is_array( $newspack_blocks_hpb_all_blocks ) ) {
+		$newspack_blocks_hpb_all_blocks = newspack_blocks_retrieve_homepage_articles_blocks(
+			parse_blocks( get_the_content() ),
+			$block_name
+		);
+		$all_used_attrs                 = newspack_blocks_collect_all_attribute_values( array_column( $newspack_blocks_hpb_all_blocks, 'attrs' ) );
+		$css_string                     = newspack_blocks_get_homepage_articles_css_string( $all_used_attrs );
+		ob_start();
+		?>
+			<style id="newspack-blocks-inline-css" type="text/css"><?php echo esc_html( $css_string ); ?></style>
+		<?php
+		$inline_style_html = ob_get_clean();
+	}
+
 	// This will let the FSE plugin know we need CSS/JS now.
 	do_action( 'newspack_blocks_render_homepage_articles' );
 
-	$article_query = new WP_Query( Newspack_Blocks::build_articles_query( $attributes, apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/homepage-articles' ) ) );
+	$article_query = new WP_Query( Newspack_Blocks::build_articles_query( $attributes, $block_name ) );
 
 	$classes = Newspack_Blocks::block_classes( 'homepage-articles', $attributes, [ 'wpnbha' ] );
 
@@ -189,11 +352,13 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 
 	ob_start();
 
-	if ( $article_query->have_posts() ) : ?>
+	if ( $article_query->have_posts() ) :
+		?>
 		<div
 			class="<?php echo esc_attr( $classes ); ?>"
 			style="<?php echo esc_attr( $styles ); ?>"
 			>
+			<?php echo $inline_style_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 			<div data-posts data-current-post-id="<?php the_ID(); ?>">
 				<?php if ( '' !== $attributes['sectionHeader'] ) : ?>
 					<h2 class="article-section-title">
@@ -204,9 +369,9 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 				echo Newspack_Blocks::template_inc( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					__DIR__ . '/templates/articles-list.php',
 					[
-						'articles_rest_url' => $articles_rest_url,
-						'article_query'     => $article_query,
-						'attributes'        => $attributes,
+						'articles_rest_url' => $articles_rest_url, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'article_query'     => $article_query, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+						'attributes'        => $attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					]
 				);
 				?>
@@ -308,7 +473,7 @@ function newspack_blocks_format_byline( $author_info ) {
 		array_reduce(
 			$author_info,
 			function ( $accumulator, $author ) use ( $author_info, &$index ) {
-				$index ++;
+				$index++;
 				$penultimate = count( $author_info ) - 2;
 
 				$get_author_posts_url = get_author_posts_url( $author->ID );
@@ -359,14 +524,16 @@ function newspack_blocks_format_categories( $post_id ) {
 		}
 	}
 
+	if ( ! is_a( $category, 'WP_Term' ) ) {
+		return '';
+	}
+
 	$category_link      = get_category_link( $category->term_id );
 	$category_formatted = esc_html( $category->name );
 
 	if ( ! empty( $category_link ) ) {
-		$category_formatted = '<a href="' . esc_attr( $category_link ) . '">' . esc_html( $category->name ) . '</a>';
+		$category_formatted = '<a href="' . esc_url( $category_link ) . '">' . $category_formatted . '</a>';
 	}
 
-	if ( $category ) {
-		return apply_filters( 'newspack_blocks_categories', $category_formatted );
-	}
+	return apply_filters( 'newspack_blocks_categories', $category_formatted );
 }

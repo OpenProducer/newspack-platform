@@ -1,5 +1,21 @@
 # Changelog
 
+## 13.3.0 - 2023-11-09
+* [#1603](https://github.com/stripe/stripe-php/pull/1603) Update generated code
+  * Add support for new value `terminal_reader_hardware_fault` on enum `StripeError.code`
+
+## 13.2.1 - 2023-11-06
+* [#1602](https://github.com/stripe/stripe-php/pull/1602) Fix error when "id" is not a string.
+
+## 13.2.0 - 2023-11-02
+* [#1599](https://github.com/stripe/stripe-php/pull/1599) Update generated code
+  * Add support for new resource `Tax.Registration`
+  * Add support for `all`, `create`, and `update` methods on resource `Registration`
+  * Add support for new value `token_card_network_invalid` on enum `StripeError.code`
+  * Add support for new value `payment_unreconciled` on enum `BalanceTransaction.type`
+  * Add support for `revolut_pay` on `PaymentMethod`
+  * Add support for new value `revolut_pay` on enum `PaymentMethod.type`
+
 ## 13.1.0 - 2023-10-26
 * [#1595](https://github.com/stripe/stripe-php/pull/1595) Update generated code
   * Add support for new value `balance_invalid_parameter` on enum `StripeError.code`

@@ -1,11 +1,16 @@
 @use '../../shared/sass/variables';
 @use '../../shared/sass/placeholder';
 @use '../../shared/sass/colors';
+@use '../../shared/sass/mixins';
 
 .wpnbha {
-	article {
-		.entry-title {
-			margin: 0 0 0.25em;
+	article .entry-title {
+		margin: 0 0 0.25em;
+	}
+
+	@include mixins.media( tablet ) {
+		&.ts-4 article .entry-title {
+			font-size: 1.6em;
 		}
 	}
 
@@ -30,6 +35,8 @@
 	.excerpt-contain p {
 		margin: 0.5em 0;
 	}
+
+
 }
 
 .editor-styles-wrapper.wpnbha__wp-block-button__wrapper {

@@ -136,19 +136,6 @@
 	}
 
 	/* Image styles */
-	.post-thumbnail {
-		margin: 0;
-		margin-bottom: 0.25em;
-
-		img {
-			height: auto;
-			width: 100%;
-		}
-
-		figcaption {
-			margin-bottom: 0.5em;
-		}
-	}
 
 	figcaption {
 		font-size: variables.$font__size-xxs;
@@ -252,11 +239,6 @@
 	}
 
 	.entry-meta {
-		display: flex;
-		flex-wrap: wrap;
-		align-items: center;
-		margin-top: 0.5em;
-
 		.byline:not( :last-child ) {
 			margin-right: 1.5em;
 		}
@@ -274,10 +256,6 @@
 		border-radius: 100%;
 		display: block;
 		margin-right: 0.5em;
-	}
-
-	p {
-		margin: 0.5em 0;
 	}
 
 	&.has-text-color {
@@ -509,25 +487,11 @@
  */
 /* stylelint-disable no-duplicate-selectors  */
 .wpnbha {
-	/* 'Normal' size */
 	article {
-		.entry-title {
-			font-size: 1.2em;
-		}
-		.entry-meta {
-			font-size: 0.8em;
-		}
-
-		.avatar {
-			height: 25px;
-			width: 25px;
-		}
-
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.6em;
 			}
-
 			.avatar {
 				height: 40px;
 				width: 40px;
@@ -538,9 +502,6 @@
 	&.ts-10,
 	&.ts-9,
 	&.ts-8 {
-		.entry-title {
-			line-height: 1.1;
-		}
 		@include mixins.media( tablet ) {
 			article .avatar {
 				height: 2.4em;
@@ -549,19 +510,7 @@
 		}
 	}
 
-	&.ts-10,
-	&.ts-9,
-	&.ts-8,
-	&.ts-7 {
-		.newspack-post-subtitle {
-			font-size: 1.4em;
-		}
-	}
-
 	&.ts-10 article {
-		.entry-title {
-			font-size: 2.6em;
-		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 3.6em;
@@ -575,9 +524,6 @@
 	}
 
 	&.ts-9 article {
-		.entry-title {
-			font-size: 2.4em;
-		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 3.4em;
@@ -591,9 +537,6 @@
 	}
 
 	&.ts-8 article {
-		.entry-title {
-			font-size: 2.2em;
-		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 3em;
@@ -607,9 +550,6 @@
 	}
 
 	&.ts-7 article {
-		.entry-title {
-			font-size: 2em;
-		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 2.4em;
@@ -627,12 +567,6 @@
 	}
 
 	&.ts-6 article {
-		.entry-title {
-			font-size: 1.7em;
-		}
-		.newspack-post-subtitle {
-			font-size: 1.4em;
-		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 2em;
@@ -650,12 +584,6 @@
 	}
 
 	&.ts-5 article {
-		.entry-title {
-			font-size: 1.4em;
-		}
-		.newspack-post-subtitle {
-			font-size: 1.2em;
-		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.8em;
@@ -675,15 +603,6 @@
 	/* Type Scale 4: default */
 
 	&.ts-3 article {
-		.entry-title {
-			font-size: 1em;
-		}
-		.newspack-post-subtitle,
-		.entry-wrapper p,
-		.entry-wrapper .more-link,
-		.entry-meta {
-			font-size: 0.8em;
-		}
 		@include mixins.media( tablet ) {
 			.entry-title {
 				font-size: 1.2em;
@@ -702,18 +621,7 @@
 
 	&.ts-2 article,
 	&.ts-1 article {
-		.entry-title {
-			font-size: 0.9em;
-		}
-		.newspack-post-subtitle,
-		.entry-wrapper p,
-		.entry-wrapper .more-link,
-		.entry-meta {
-			font-size: 0.8em;
-		}
-
 		@include mixins.media( tablet ) {
-			.newspack-post-subtitle,
 			.entry-wrapper p,
 			.entry-wrapper .more-link,
 			.entry-meta,
@@ -813,15 +721,5 @@
 			border: 0;
 			padding-right: 0;
 		}
-	}
-}
-
-/* Styles for the Subtitle, as part of the the Block */
-.newspack-post-subtitle {
-	&--in-homepage-block {
-		margin-top: 0.3em;
-		margin-bottom: 0;
-		line-height: 1.4;
-		font-style: italic;
 	}
 }

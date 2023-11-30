@@ -16,7 +16,8 @@ import {
 } from '@wordpress/block-editor';
 
 export default function save( { attributes, className } ) {
-	const { textAlign, fontSize, style, text, product, price, variation, is_variable } = attributes;
+	const { textAlign, fontSize, style, text, product, price, variation, is_variable, width } =
+		attributes;
 
 	if ( ! text || ! product ) {
 		return null;
@@ -44,6 +45,7 @@ export default function save( { attributes, className } ) {
 
 	const wrapperClasses = classnames( className, {
 		[ `has-custom-font-size` ]: fontSize || style?.typography?.fontSize,
+		[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 	} );
 
 	return (

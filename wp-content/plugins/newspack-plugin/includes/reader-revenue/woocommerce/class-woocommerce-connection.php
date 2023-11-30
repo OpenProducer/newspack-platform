@@ -169,7 +169,9 @@ class WooCommerce_Connection {
 			return;
 		}
 
-		self::sync_reader_from_order( $customer->get_last_order() );
+		$last_order = $customer->get_last_order();
+
+		self::sync_reader_from_order( $last_order );
 	}
 
 	/**
@@ -243,11 +245,14 @@ class WooCommerce_Connection {
 		}
 
 		$order_subscriptions = wcs_get_subscriptions_for_order( $order->get_id(), [ 'order_type' => 'any' ] );
+		$is_donation_order   = Donations::is_donation_order( $order );
 
-		// One-time donation.
+		// One-time transaction.
 		if ( empty( $order_subscriptions ) ) {
-			$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
-			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]        = (float) $customer->get_total_spent();
+			if ( $is_donation_order ) {
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
+			}
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] = (float) $customer->get_total_spent();
 
 			if ( 'pending' === $order->get_status() ) {
 				$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ] += (float) $order->get_total();
@@ -264,26 +269,28 @@ class WooCommerce_Connection {
 				$metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_date' ) ] = $order_date_paid->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
 			}
 
-			// Subscription donation.
+			// Subscription transaction.
 		} else {
 			$current_subscription = reset( $order_subscriptions );
 
-			$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
-			if ( 'active' === $current_subscription->get_status() || 'pending' === $current_subscription->get_status() ) {
-				if ( 'month' === $current_subscription->get_billing_period() ) {
-					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Monthly Donor';
-				}
+			if ( $is_donation_order ) {
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
+				if ( 'active' === $current_subscription->get_status() || 'pending' === $current_subscription->get_status() ) {
+					if ( 'month' === $current_subscription->get_billing_period() ) {
+						$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Monthly Donor';
+					}
 
-				if ( 'year' === $current_subscription->get_billing_period() ) {
-					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Yearly Donor';
-				}
-			} else {
-				if ( 'month' === $current_subscription->get_billing_period() ) {
-					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-Monthly Donor';
-				}
+					if ( 'year' === $current_subscription->get_billing_period() ) {
+						$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Yearly Donor';
+					}
+				} else {
+					if ( 'month' === $current_subscription->get_billing_period() ) {
+						$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-Monthly Donor';
+					}
 
-				if ( 'year' === $current_subscription->get_billing_period() ) {
-					$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-Yearly Donor';
+					if ( 'year' === $current_subscription->get_billing_period() ) {
+						$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Ex-Yearly Donor';
+					}
 				}
 			}
 
@@ -318,11 +325,12 @@ class WooCommerce_Connection {
 
 		$first_name = $order->get_billing_first_name();
 		$last_name  = $order->get_billing_last_name();
-		return [
+		$contact    = [
 			'email'    => $order->get_billing_email(),
-			'name'     => "$first_name $last_name",
-			'metadata' => $metadata,
+			'name'     => trim( "$first_name $last_name" ),
+			'metadata' => array_filter( $metadata ),
 		];
+		return array_filter( $contact );
 	}
 
 	/**
@@ -1098,12 +1106,15 @@ class WooCommerce_Connection {
 	public static function sync_reader_on_subscription_update( $subscription, $new_status, $old_status ) {
 		$order = $subscription->get_last_order( 'all' );
 
-		if ( $order && self::can_sync_customers() ) {
-			if ( ! $order->get_customer_id() ) {
-				return;
-			}
-			self::sync_reader_from_order( $order );
+		if ( ! $order || ! self::can_sync_customers() ) {
+			return;
 		}
+
+		if ( ! $order->get_customer_id() ) {
+			return;
+		}
+
+		self::sync_reader_from_order( $order );
 	}
 
 	/**

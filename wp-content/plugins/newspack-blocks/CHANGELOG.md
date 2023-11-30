@@ -1,3 +1,51 @@
+## [2.2.2](https://github.com/Automattic/newspack-blocks/compare/v2.2.1...v2.2.2) (2023-11-29)
+
+
+### Bug Fixes
+
+* update title, subtitle CSS selectors in homepage posts block ([#1614](https://github.com/Automattic/newspack-blocks/issues/1614)) ([0ccb973](https://github.com/Automattic/newspack-blocks/commit/0ccb9730c96a598b873fca6ff15147e2fe053930))
+
+## [2.2.1](https://github.com/Automattic/newspack-blocks/compare/v2.2.0...v2.2.1) (2023-11-27)
+
+
+### Bug Fixes
+
+* **homepage-posts:** placement for inline styles ([#1611](https://github.com/Automattic/newspack-blocks/issues/1611)) ([1831ba0](https://github.com/Automattic/newspack-blocks/commit/1831ba0a2d0eb44a00e65a891c9fdf11bdd99f0a))
+
+# [2.2.0](https://github.com/Automattic/newspack-blocks/compare/v2.1.0...v2.2.0) (2023-11-27)
+
+
+### Bug Fixes
+
+* add checks for Newspack plugin ([#1579](https://github.com/Automattic/newspack-blocks/issues/1579)) ([b516a6f](https://github.com/Automattic/newspack-blocks/commit/b516a6f2a5111361f6180c98e09814c95f5e9861))
+* **homepage-posts:** terms handling in category list ([#1596](https://github.com/Automattic/newspack-blocks/issues/1596)) ([55dbf42](https://github.com/Automattic/newspack-blocks/commit/55dbf42c969d33029ea6531cf6f5db1e5b4953a5))
+* **modal-checkout:** place order button width ([b48efcb](https://github.com/Automattic/newspack-blocks/commit/b48efcb6391d7282322f63f9f8aeeb860bff2cf8)), closes [#1572](https://github.com/Automattic/newspack-blocks/issues/1572)
+
+
+### Features
+
+* add width control to the Checkout block ([#1583](https://github.com/Automattic/newspack-blocks/issues/1583)) ([3f75c1e](https://github.com/Automattic/newspack-blocks/commit/3f75c1e074554ead923f7007e9d026811cb186dd))
+* **cwv:** inline HPB styles in a style tag ([#1548](https://github.com/Automattic/newspack-blocks/issues/1548)) ([dea8d93](https://github.com/Automattic/newspack-blocks/commit/dea8d93fb518fc815d00bbd3e926f052b1638250))
+* **modal-checkout:** display item name on success ([a3a03df](https://github.com/Automattic/newspack-blocks/commit/a3a03df36a5bb18556d3c643a119e8401e9123fd))
+* update subscribe patterns to use Newspack block ([#1580](https://github.com/Automattic/newspack-blocks/issues/1580)) ([70088e2](https://github.com/Automattic/newspack-blocks/commit/70088e2628e9045715f0b6df925b39290ecf00ed))
+
+# [2.2.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v2.1.0...v2.2.0-alpha.1) (2023-11-16)
+
+
+### Bug Fixes
+
+* add checks for Newspack plugin ([#1579](https://github.com/Automattic/newspack-blocks/issues/1579)) ([b516a6f](https://github.com/Automattic/newspack-blocks/commit/b516a6f2a5111361f6180c98e09814c95f5e9861))
+* **homepage-posts:** terms handling in category list ([#1596](https://github.com/Automattic/newspack-blocks/issues/1596)) ([55dbf42](https://github.com/Automattic/newspack-blocks/commit/55dbf42c969d33029ea6531cf6f5db1e5b4953a5))
+* **modal-checkout:** place order button width ([b48efcb](https://github.com/Automattic/newspack-blocks/commit/b48efcb6391d7282322f63f9f8aeeb860bff2cf8)), closes [#1572](https://github.com/Automattic/newspack-blocks/issues/1572)
+
+
+### Features
+
+* add width control to the Checkout block ([#1583](https://github.com/Automattic/newspack-blocks/issues/1583)) ([3f75c1e](https://github.com/Automattic/newspack-blocks/commit/3f75c1e074554ead923f7007e9d026811cb186dd))
+* **cwv:** inline HPB styles in a style tag ([#1548](https://github.com/Automattic/newspack-blocks/issues/1548)) ([dea8d93](https://github.com/Automattic/newspack-blocks/commit/dea8d93fb518fc815d00bbd3e926f052b1638250))
+* **modal-checkout:** display item name on success ([a3a03df](https://github.com/Automattic/newspack-blocks/commit/a3a03df36a5bb18556d3c643a119e8401e9123fd))
+* update subscribe patterns to use Newspack block ([#1580](https://github.com/Automattic/newspack-blocks/issues/1580)) ([70088e2](https://github.com/Automattic/newspack-blocks/commit/70088e2628e9045715f0b6df925b39290ecf00ed))
+
 # [2.1.0](https://github.com/Automattic/newspack-blocks/compare/v2.0.0...v2.1.0) (2023-11-13)
 
 

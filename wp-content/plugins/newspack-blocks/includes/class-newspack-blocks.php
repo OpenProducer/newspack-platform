@@ -201,7 +201,7 @@ class Newspack_Blocks {
 						'slug'  => $tax->name,
 						'label' => $tax->label,
 					];
-				};
+				}
 			},
 			get_taxonomies(
 				[
@@ -794,7 +794,7 @@ class Newspack_Blocks {
 	 * @param array  $data          Data to be passed into the template to be included.
 	 * @return string
 	 */
-	public static function template_inc( $template, $data = array() ) { //phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable
+	public static function template_inc( $template, $data = array() ) { //phpcs:ignore VariableAnalysis.CodeAnalysis.VariableAnalysis.UnusedVariable, Generic.CodeAnalysis.UnusedFunctionParameter.FoundAfterLastUsed
 		if ( ! strpos( $template, '.php' ) ) {
 			$template = $template . '.php';
 		}

@@ -47,7 +47,8 @@ function newspack_blocks_replace_login_with_order_summary() {
 		return;
 	}
 
-	$is_success = ! $order->has_status( 'failed' );
+	$is_success      = ! $order->has_status( 'failed' );
+	$order_item_name = array_values( $order->get_items() )[0]->get_name();
 
 	?>
 
@@ -78,6 +79,11 @@ function newspack_blocks_replace_login_with_order_summary() {
 						<strong><?php echo wp_kses_post( $order->get_payment_method_title() ); ?></strong>
 					</li>
 				<?php endif; ?>
+
+				<li>
+					<?php esc_html_e( 'Item:', 'newspack-blocks' ); ?>
+					<strong><?php echo esc_html( $order_item_name ); ?></strong>
+				</li>
 
 				<li class="woocommerce-order-overview__order order">
 					<?php esc_html_e( 'Transaction:', 'newspack-blocks' ); ?>

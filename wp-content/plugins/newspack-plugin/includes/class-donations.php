@@ -260,13 +260,28 @@ class Donations {
 
 	/**
 	 * Check whether the given product ID is a donation product.
-	 * 
+	 *
 	 * @param int $product_id Product ID to check.
 	 * @return boolean True if a donation product, false if not.
 	 */
 	public static function is_donation_product( $product_id ) {
 		$donation_product_ids = array_values( self::get_donation_product_child_products_ids() );
 		return in_array( $product_id, $donation_product_ids, true );
+	}
+
+	/**
+	 * Whether the order is a donation.
+	 *
+	 * @param \WC_Order $order Order object.
+	 * @return boolean True if a donation, false if not.
+	 */
+	public static function is_donation_order( $order ) {
+		foreach ( $order->get_items() as $item ) {
+			if ( self::is_donation_product( $item->get_product_id() ) ) {
+				return true;
+			}
+		}
+		return false;
 	}
 
 	/**

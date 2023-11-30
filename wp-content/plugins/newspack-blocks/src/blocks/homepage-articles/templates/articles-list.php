@@ -12,8 +12,8 @@ call_user_func(
 		echo Newspack_Blocks::template_inc( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			__DIR__ . '/articles-loop.php',
 			array(
-				'attributes'    => $data['attributes'],
-				'article_query' => $data['article_query'],
+				'attributes'    => $data['attributes'], // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				'article_query' => $data['article_query'], // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			)
 		);
 	},
