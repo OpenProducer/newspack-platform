@@ -173,11 +173,9 @@ interface Newspack_Newsletters_ESP_API_Interface {
 	public function remove_tag_from_contact( $email, $tag, $list_id = null );
 
 	/**
-	 * Get usage report (no. of subscribers etc.)
+	 * Get usage report for yesterday.
 	 *
-	 * @param int $last_n_days Number of days to get the report for.
-	 *
-	 * @return array|WP_Error
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error
 	 */
-	public function get_usage_report( $last_n_days );
+	public function get_usage_report();
 }

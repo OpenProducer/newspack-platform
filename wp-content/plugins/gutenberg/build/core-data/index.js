@@ -528,6 +528,7 @@ __webpack_require__.d(build_module_actions_namespaceObject, {
   receiveAutosaves: function() { return receiveAutosaves; },
   receiveCurrentTheme: function() { return receiveCurrentTheme; },
   receiveCurrentUser: function() { return receiveCurrentUser; },
+  receiveDefaultTemplateId: function() { return receiveDefaultTemplateId; },
   receiveEmbedPreview: function() { return receiveEmbedPreview; },
   receiveEntityRecords: function() { return receiveEntityRecords; },
   receiveNavigationFallbackId: function() { return receiveNavigationFallbackId; },
@@ -563,6 +564,7 @@ __webpack_require__.d(build_module_selectors_namespaceObject, {
   getCurrentTheme: function() { return getCurrentTheme; },
   getCurrentThemeGlobalStylesRevisions: function() { return getCurrentThemeGlobalStylesRevisions; },
   getCurrentUser: function() { return getCurrentUser; },
+  getDefaultTemplateId: function() { return getDefaultTemplateId; },
   getEditedEntityRecord: function() { return getEditedEntityRecord; },
   getEmbedPreview: function() { return getEmbedPreview; },
   getEntitiesByKind: function() { return getEntitiesByKind; },
@@ -622,6 +624,7 @@ __webpack_require__.d(resolvers_namespaceObject, {
   getCurrentTheme: function() { return resolvers_getCurrentTheme; },
   getCurrentThemeGlobalStylesRevisions: function() { return resolvers_getCurrentThemeGlobalStylesRevisions; },
   getCurrentUser: function() { return resolvers_getCurrentUser; },
+  getDefaultTemplateId: function() { return resolvers_getDefaultTemplateId; },
   getEditedEntityRecord: function() { return resolvers_getEditedEntityRecord; },
   getEmbedPreview: function() { return resolvers_getEmbedPreview; },
   getEntityRecord: function() { return resolvers_getEntityRecord; },
@@ -19425,6 +19428,22 @@ function receiveNavigationFallbackId(fallbackId) {
   };
 }
 
+/**
+ * Returns an action object used to set the template for a given query.
+ *
+ * @param {Object} query      The lookup query.
+ * @param {string} templateId The resolved template id.
+ *
+ * @return {Object} Action object.
+ */
+function receiveDefaultTemplateId(query, templateId) {
+  return {
+    type: 'RECEIVE_DEFAULT_TEMPLATE',
+    query,
+    templateId
+  };
+}
+
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/entities.js
 /**
  * External dependencies
@@ -20066,7 +20085,9 @@ function getMergedItemIds(itemIds, nextItemIds, page, perPage) {
   const mergedItemIds = new Array(size);
   for (let i = 0; i < size; i++) {
     // Preserve existing item ID except for subset of range of next items.
-    const isInNextItemsRange = i >= nextItemIdsStartIndex && i < nextItemIdsStartIndex + nextItemIds.length;
+    // We need to check against the possible maximum upper boundary because
+    // a page could recieve less items than what was previously stored.
+    const isInNextItemsRange = i >= nextItemIdsStartIndex && i < nextItemIdsStartIndex + perPage;
     mergedItemIds[i] = isInNextItemsRange ? nextItemIds[i - nextItemIdsStartIndex] : itemIds?.[i];
   }
   return mergedItemIds;
@@ -20759,6 +20780,25 @@ function themeGlobalStyleRevisions(state = {}, action) {
   }
   return state;
 }
+
+/**
+ * Reducer managing the template lookup per query.
+ *
+ * @param {Record<string, string>} state  Current state.
+ * @param {Object}                 action Dispatched action.
+ *
+ * @return {Record<string, string>} Updated state.
+ */
+function defaultTemplates(state = {}, action) {
+  switch (action.type) {
+    case 'RECEIVE_DEFAULT_TEMPLATE':
+      return {
+        ...state,
+        [JSON.stringify(action.query)]: action.templateId
+      };
+  }
+  return state;
+}
 /* harmony default export */ var build_module_reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
   terms,
   users,
@@ -20778,7 +20818,8 @@ function themeGlobalStyleRevisions(state = {}, action) {
   blockPatterns,
   blockPatternCategories,
   userPatternCategories,
-  navigationFallbackId
+  navigationFallbackId,
+  defaultTemplates
 }));
 
 ;// CONCATENATED MODULE: ./node_modules/rememo/rememo.js
@@ -21136,7 +21177,9 @@ function getQueriedItemsUncached(state, query) {
     if (Array.isArray(include) && !include.includes(itemId)) {
       continue;
     }
-
+    if (itemId === undefined) {
+      continue;
+    }
     // Having a target item ID doesn't guarantee that this object has been queried.
     if (!state.items[context]?.hasOwnProperty(itemId)) {
       return null;
@@ -22168,6 +22211,18 @@ function getCurrentThemeGlobalStylesRevisions(state) {
   return state.themeGlobalStyleRevisions[currentGlobalStylesId];
 }
 
+/**
+ * Returns the default template use to render a given query.
+ *
+ * @param state Data state.
+ * @param query Query.
+ *
+ * @return The default template id for the given query.
+ */
+function getDefaultTemplateId(state, query) {
+  return state.defaultTemplates[JSON.stringify(query)];
+}
+
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/private-selectors.js
 /**
  * Internal dependencies
@@ -22791,6 +22846,16 @@ const resolvers_getNavigationFallbackId = () => async ({
     dispatch.finishResolution('getEntityRecord', ['postType', 'wp_navigation', fallback?.id]);
   }
 };
+const resolvers_getDefaultTemplateId = query => async ({
+  dispatch
+}) => {
+  const template = await external_wp_apiFetch_default()({
+    path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/templates/lookup', query)
+  });
+  if (template) {
+    dispatch.receiveDefaultTemplateId(query, template.id);
+  }
+};
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/locks/utils.js
 function deepCopyLocksTreePath(tree, path) {
@@ -23409,6 +23474,9 @@ function useEntityBlockEditor(kind, name, {
     editedBlocks,
     meta
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    if (!id) {
+      return {};
+    }
     const {
       getEditedEntityRecord
     } = select(STORE_NAME);
@@ -23424,11 +23492,14 @@ function useEntityBlockEditor(kind, name, {
     editEntityRecord
   } = (0,external_wp_data_namespaceObject.useDispatch)(STORE_NAME);
   const blocks = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    if (!id) {
+      return undefined;
+    }
     if (editedBlocks) {
       return editedBlocks;
     }
     return content && typeof content !== 'function' ? (0,external_wp_blocks_namespaceObject.parse)(content) : EMPTY_ARRAY;
-  }, [editedBlocks, content]);
+  }, [id, editedBlocks, content]);
   const updateFootnotes = (0,external_wp_element_namespaceObject.useCallback)(_blocks => updateFootnotesFromMeta(_blocks, meta), [meta]);
   const onChange = (0,external_wp_element_namespaceObject.useCallback)((newBlocks, options) => {
     const noChange = blocks === newBlocks;

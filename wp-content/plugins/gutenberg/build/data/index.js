@@ -4081,7 +4081,11 @@ function useStaticSelect(storeName) {
 function useMappingSelect(suspense, mapSelect, deps) {
   const registry = useRegistry();
   const isAsync = useAsyncMode();
-  const store = (0,external_wp_element_namespaceObject.useMemo)(() => Store(registry, suspense), [registry]);
+  const store = (0,external_wp_element_namespaceObject.useMemo)(() => Store(registry, suspense), [registry, suspense]);
+
+  // These are "pass-through" dependencies from the parent hook,
+  // and the parent should catch any hook rule violations.
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   const selector = (0,external_wp_element_namespaceObject.useCallback)(mapSelect, deps);
   const {
     subscribe,

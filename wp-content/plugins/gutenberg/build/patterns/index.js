@@ -93,7 +93,7 @@ const PATTERN_TYPES = {
 };
 const PATTERN_DEFAULT_CATEGORY = 'all-patterns';
 const PATTERN_USER_CATEGORY = 'my-patterns';
-const PATTERN_CORE_SOURCES = ['core', 'pattern-directory/core', 'pattern-directory/featured', 'pattern-directory/theme'];
+const EXCLUDED_PATTERN_SOURCES = ['core', 'pattern-directory/core', 'pattern-directory/featured'];
 const PATTERN_SYNC_TYPES = {
   full: 'fully',
   unsynced: 'unsynced'
@@ -484,7 +484,7 @@ function CreatePatternModal({
     onChange: setCategoryTerms,
     categoryMap: categoryMap
   }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
-    label: (0,external_wp_i18n_namespaceObject.__)('Synced'),
+    label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'Option that makes an individual pattern synchronized'),
     help: (0,external_wp_i18n_namespaceObject.__)('Editing the pattern will update it anywhere it is used.'),
     checked: syncType === PATTERN_SYNC_TYPES.full,
     onChange: () => {
@@ -870,11 +870,11 @@ function PatternsManageButton({
   if (!isVisible) {
     return null;
   }
-  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
-    href: managePatternsUrl
-  }, (0,external_wp_i18n_namespaceObject.__)('Manage patterns')), canRemove && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, canRemove && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
     onClick: () => convertSyncedPatternToStatic(clientId)
-  }, innerBlockCount > 1 ? (0,external_wp_i18n_namespaceObject.__)('Detach patterns') : (0,external_wp_i18n_namespaceObject.__)('Detach pattern')));
+  }, innerBlockCount > 1 ? (0,external_wp_i18n_namespaceObject.__)('Detach patterns') : (0,external_wp_i18n_namespaceObject.__)('Detach pattern')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
+    href: managePatternsUrl
+  }, (0,external_wp_i18n_namespaceObject.__)('Manage patterns')));
 }
 /* harmony default export */ var patterns_manage_button = (PatternsManageButton);
 
@@ -1065,7 +1065,7 @@ lock(privateApis, {
   PATTERN_TYPES: PATTERN_TYPES,
   PATTERN_DEFAULT_CATEGORY: PATTERN_DEFAULT_CATEGORY,
   PATTERN_USER_CATEGORY: PATTERN_USER_CATEGORY,
-  PATTERN_CORE_SOURCES: PATTERN_CORE_SOURCES,
+  EXCLUDED_PATTERN_SOURCES: EXCLUDED_PATTERN_SOURCES,
   PATTERN_SYNC_TYPES: PATTERN_SYNC_TYPES
 });
 

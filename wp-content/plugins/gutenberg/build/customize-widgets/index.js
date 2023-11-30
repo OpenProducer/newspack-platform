@@ -1451,6 +1451,18 @@ function MoreMenu() {
   }));
 }
 
+;// CONCATENATED MODULE: external ["wp","privateApis"]
+var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/customize-widgets');
+
 ;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/components/header/index.js
 
 /**
@@ -1468,11 +1480,16 @@ function MoreMenu() {
 
 
 
+
 /**
  * Internal dependencies
  */
 
 
+
+const {
+  BlockContextualToolbar
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function Header({
   sidebar,
   inserter,
@@ -1480,6 +1497,8 @@ function Header({
   setIsInserterOpened,
   isFixedToolbarActive
 }) {
+  const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
+  const blockToolbarRef = (0,external_wp_element_namespaceObject.useRef)();
   const [[hasUndo, hasRedo], setUndoRedo] = (0,external_wp_element_namespaceObject.useState)([sidebar.hasUndo(), sidebar.hasRedo()]);
   const shortcut = (0,external_wp_keycodes_namespaceObject.isAppleOS)() ? external_wp_keycodes_namespaceObject.displayShortcut.primaryShift('z') : external_wp_keycodes_namespaceObject.displayShortcut.primary('y');
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -1529,7 +1548,14 @@ function Header({
     }
   }), (0,external_React_namespaceObject.createElement)(MoreMenu, null))), (0,external_wp_element_namespaceObject.createPortal)((0,external_React_namespaceObject.createElement)(components_inserter, {
     setIsOpened: setIsInserterOpened
-  }), inserter.contentContainer[0]));
+  }), inserter.contentContainer[0]), isFixedToolbarActive && isLargeViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
+    className: "selected-block-tools-wrapper"
+  }, (0,external_React_namespaceObject.createElement)(BlockContextualToolbar, {
+    isFixed: true
+  })), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover.Slot, {
+    ref: blockToolbarRef,
+    name: "block-toolbar"
+  })));
 }
 /* harmony default export */ var header = (Header);
 
@@ -1898,18 +1924,6 @@ function useBlocksFocusControl(blocks) {
     }
   }, [focusedWidgetIdRef, selectBlock]);
 }
-
-;// CONCATENATED MODULE: external ["wp","privateApis"]
-var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/lock-unlock.js
-/**
- * WordPress dependencies
- */
-
-const {
-  lock,
-  unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/customize-widgets');
 
 ;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/components/sidebar-block-editor/sidebar-editor-provider.js
 

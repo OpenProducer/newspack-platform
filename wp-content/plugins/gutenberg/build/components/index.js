@@ -2775,7 +2775,7 @@ __webpack_require__.d(__webpack_exports__, {
   __unstableComposite: function() { return /* reexport */ Composite_Composite; },
   __unstableCompositeGroup: function() { return /* reexport */ CompositeGroup; },
   __unstableCompositeItem: function() { return /* reexport */ CompositeItem_CompositeItem; },
-  __unstableDisclosureContent: function() { return /* reexport */ DisclosureContent_DisclosureContent; },
+  __unstableDisclosureContent: function() { return /* reexport */ disclosure_DisclosureContent; },
   __unstableGetAnimateClassName: function() { return /* reexport */ getAnimateClassName; },
   __unstableMotion: function() { return /* reexport */ motion; },
   __unstableMotionContext: function() { return /* reexport */ MotionContext; },
@@ -42655,1050 +42655,27 @@ function UnconnectedCardBody(props, forwardedRef) {
 const CardBody = contextConnect(UnconnectedCardBody, 'CardBody');
 /* harmony default export */ var card_body_component = (CardBody);
 
-;// CONCATENATED MODULE: ./node_modules/reakit/es/_rollupPluginBabelHelpers-1f0bf8c2.js
-function _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
+;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/C3N6W3CQ.js
+"use client";
 
-  return obj;
-}
 
-function _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
 
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source), true).forEach(function (key) {
-        _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
-}
-
-function _arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-  return arr2;
-}
-
-function _createForOfIteratorHelperLoose(o, allowArrayLike) {
-  var it;
-
-  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-      return function () {
-        if (i >= o.length) return {
-          done: true
-        };
-        return {
-          done: false,
-          value: o[i++]
-        };
-      };
-    }
-
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  it = o[Symbol.iterator]();
-  return it.next.bind(it);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/_rollupPluginBabelHelpers-0c84a174.js
-function _rollupPluginBabelHelpers_0c84a174_defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source), true).forEach(function (key) {
-        _rollupPluginBabelHelpers_0c84a174_defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
-}
-
-function _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-  return arr2;
-}
-
-function _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(o, allowArrayLike) {
-  var it;
-
-  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-      return function () {
-        if (i >= o.length) return {
-          done: true
-        };
-        return {
-          done: false,
-          value: o[i++]
-        };
-      };
-    }
-
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  it = o[Symbol.iterator]();
-  return it.next.bind(it);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/SystemContext.js
-
-
-var SystemContext = /*#__PURE__*/(0,external_React_.createContext)({});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useCreateElement.js
-
-
-
-
-function useCreateElement_isRenderProp(children) {
-  return typeof children === "function";
-}
-
-/**
- * Custom hook that will call `children` if it's a function. If
- * `useCreateElement` has been passed to the context, it'll be used instead.
- *
- * @example
- * import React from "react";
- * import { SystemProvider, useCreateElement } from "reakit-system";
- *
- * const system = {
- *   useCreateElement(type, props, children = props.children) {
- *     // very similar to what `useCreateElement` does already
- *     if (typeof children === "function") {
- *       const { children: _, ...rest } = props;
- *       return children(rest);
- *     }
- *     return React.createElement(type, props, children);
- *   },
- * };
- *
- * function Component(props) {
- *   return useCreateElement("div", props);
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <Component url="url">{({ url }) => <a href={url}>link</a>}</Component>
- *     </SystemProvider>
- *   );
- * }
- */
-
-var useCreateElement = function useCreateElement(type, props, children) {
-  if (children === void 0) {
-    children = props.children;
-  }
-
-  var context = (0,external_React_.useContext)(SystemContext);
-
-  if (context.useCreateElement) {
-    return context.useCreateElement(type, props, children);
-  }
-
-  if (typeof type === "string" && useCreateElement_isRenderProp(children)) {
-    var _ = props.children,
-        rest = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(props, ["children"]);
-
-    return children(rest);
-  }
-
-  return /*#__PURE__*/(0,external_React_.createElement)(type, props, children);
-};
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/_rollupPluginBabelHelpers-1f0bf8c2.js
-function es_rollupPluginBabelHelpers_1f0bf8c2_defineProperty(obj, key, value) {
-  if (key in obj) {
-    Object.defineProperty(obj, key, {
-      value: value,
-      enumerable: true,
-      configurable: true,
-      writable: true
-    });
-  } else {
-    obj[key] = value;
-  }
-
-  return obj;
-}
-
-function es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(object, enumerableOnly) {
-  var keys = Object.keys(object);
-
-  if (Object.getOwnPropertySymbols) {
-    var symbols = Object.getOwnPropertySymbols(object);
-    if (enumerableOnly) symbols = symbols.filter(function (sym) {
-      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
-    });
-    keys.push.apply(keys, symbols);
-  }
-
-  return keys;
-}
-
-function es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(target) {
-  for (var i = 1; i < arguments.length; i++) {
-    var source = arguments[i] != null ? arguments[i] : {};
-
-    if (i % 2) {
-      es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source), true).forEach(function (key) {
-        es_rollupPluginBabelHelpers_1f0bf8c2_defineProperty(target, key, source[key]);
-      });
-    } else if (Object.getOwnPropertyDescriptors) {
-      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
-    } else {
-      es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source)).forEach(function (key) {
-        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
-      });
-    }
-  }
-
-  return target;
-}
-
-function es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
-  if (source == null) return {};
-  var target = {};
-  var sourceKeys = Object.keys(source);
-  var key, i;
-
-  for (i = 0; i < sourceKeys.length; i++) {
-    key = sourceKeys[i];
-    if (excluded.indexOf(key) >= 0) continue;
-    target[key] = source[key];
-  }
-
-  return target;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o, minLen) {
-  if (!o) return;
-  if (typeof o === "string") return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
-  var n = Object.prototype.toString.call(o).slice(8, -1);
-  if (n === "Object" && o.constructor) n = o.constructor.name;
-  if (n === "Map" || n === "Set") return Array.from(o);
-  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(arr, len) {
-  if (len == null || len > arr.length) len = arr.length;
-
-  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
-
-  return arr2;
-}
-
-function _rollupPluginBabelHelpers_1f0bf8c2_createForOfIteratorHelperLoose(o, allowArrayLike) {
-  var it;
-
-  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
-    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
-      if (it) o = it;
-      var i = 0;
-      return function () {
-        if (i >= o.length) return {
-          done: true
-        };
-        return {
-          done: false,
-          value: o[i++]
-        };
-      };
-    }
-
-    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
-  }
-
-  it = o[Symbol.iterator]();
-  return it.next.bind(it);
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isObject.js
-/**
- * Checks whether `arg` is an object or not.
- *
- * @returns {boolean}
- */
-function isObject_isObject(arg) {
-  return typeof arg === "object" && arg != null;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isPlainObject.js
-
-
-/**
- * Checks whether `arg` is a plain object or not.
- *
- * @returns {boolean}
- */
-
-function isPlainObject_isPlainObject(arg) {
-  var _proto$constructor;
-
-  if (!isObject_isObject(arg)) return false;
-  var proto = Object.getPrototypeOf(arg);
-  if (proto == null) return true;
-  return ((_proto$constructor = proto.constructor) === null || _proto$constructor === void 0 ? void 0 : _proto$constructor.toString()) === Object.toString();
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/splitProps.js
-
-
-
-
-/**
- * Splits an object (`props`) into a tuple where the first item is an object
- * with the passed `keys`, and the second item is an object with these keys
- * omitted.
- *
- * @deprecated will be removed in version 2
- *
- * @example
- * import { splitProps } from "reakit-utils";
- *
- * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
- */
-
-function __deprecatedSplitProps(props, keys) {
-  var propsKeys = Object.keys(props);
-  var picked = {};
-  var omitted = {};
-
-  for (var _i = 0, _propsKeys = propsKeys; _i < _propsKeys.length; _i++) {
-    var key = _propsKeys[_i];
-
-    if (keys.indexOf(key) >= 0) {
-      picked[key] = props[key];
-    } else {
-      omitted[key] = props[key];
-    }
-  }
-
-  return [picked, omitted];
-}
-/**
- * Splits an object (`props`) into a tuple where the first item
- * is the `state` property, and the second item is the rest of the properties.
- *
- * It is also backward compatible with version 1. If `keys` are passed then
- * splits an object (`props`) into a tuple where the first item is an object
- * with the passed `keys`, and the second item is an object with these keys
- * omitted.
- *
- * @example
- * import { splitProps } from "reakit-utils";
- *
- * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
- *
- * @example
- * import { splitProps } from "reakit-utils";
- *
- * splitProps({ state: { a: "a" }, b: "b" }); // [{ a: "a" }, { b: "b" }]
- */
-
-
-function splitProps(props, keys) {
-  if (keys === void 0) {
-    keys = [];
-  }
-
-  if (!isPlainObject_isPlainObject(props.state)) {
-    return __deprecatedSplitProps(props, keys);
-  }
-
-  var _deprecatedSplitProp = __deprecatedSplitProps(props, [].concat(keys, ["state"])),
-      picked = _deprecatedSplitProp[0],
-      omitted = _deprecatedSplitProp[1];
-
-  var state = picked.state,
-      restPicked = es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(picked, ["state"]);
-
-  return [es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), restPicked), omitted];
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/shallowEqual.js
-/**
- * Compares two objects.
- *
- * @example
- * import { shallowEqual } from "reakit-utils";
- *
- * shallowEqual({ a: "a" }, {}); // false
- * shallowEqual({ a: "a" }, { b: "b" }); // false
- * shallowEqual({ a: "a" }, { a: "a" }); // true
- * shallowEqual({ a: "a" }, { a: "a", b: "b" }); // false
- */
-function shallowEqual_shallowEqual(objA, objB) {
-  if (objA === objB) return true;
-  if (!objA) return false;
-  if (!objB) return false;
-  if (typeof objA !== "object") return false;
-  if (typeof objB !== "object") return false;
-  var aKeys = Object.keys(objA);
-  var bKeys = Object.keys(objB);
-  var length = aKeys.length;
-  if (bKeys.length !== length) return false;
-
-  for (var _i = 0, _aKeys = aKeys; _i < _aKeys.length; _i++) {
-    var key = _aKeys[_i];
-
-    if (objA[key] !== objB[key]) {
-      return false;
-    }
-  }
-
-  return true;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/normalizePropsAreEqual.js
-
-
-
-
-/**
- * This higher order functions take `propsAreEqual` function and
- * returns a new function which normalizes the props.
- *
- * Normalizing in our case is making sure the `propsAreEqual` works with
- * both version 1 (object spreading) and version 2 (state object) state passing.
- *
- * To achieve this, the returned function in case of a state object
- * will spread the state object in both `prev` and `next props.
- *
- * Other case it just returns the function as is which makes sure
- * that we are still backward compatible
- */
-function normalizePropsAreEqual(propsAreEqual) {
-  if (propsAreEqual.name === "normalizePropsAreEqualInner") {
-    return propsAreEqual;
-  }
-
-  return function normalizePropsAreEqualInner(prev, next) {
-    if (!isPlainObject_isPlainObject(prev.state) || !isPlainObject_isPlainObject(next.state)) {
-      return propsAreEqual(prev, next);
-    }
-
-    return propsAreEqual(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, prev.state), prev), es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, next.state), next));
-  };
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createComponent.js
-
-
-
-
-
-
-
-
-function createComponent_forwardRef(component) {
-  return /*#__PURE__*/(0,external_React_.forwardRef)(component);
-}
-
-function createComponent_memo(component, propsAreEqual) {
-  return /*#__PURE__*/(0,external_React_.memo)(component, propsAreEqual);
-}
-
-/**
- * Creates a React component.
- *
- * @example
- * import { createComponent } from "reakit-system";
- *
- * const A = createComponent({ as: "a" });
- *
- * @param options
- */
-function createComponent_createComponent(_ref) {
-  var type = _ref.as,
-      useHook = _ref.useHook,
-      shouldMemo = _ref.memo,
-      _ref$propsAreEqual = _ref.propsAreEqual,
-      propsAreEqual = _ref$propsAreEqual === void 0 ? useHook === null || useHook === void 0 ? void 0 : useHook.unstable_propsAreEqual : _ref$propsAreEqual,
-      _ref$keys = _ref.keys,
-      keys = _ref$keys === void 0 ? (useHook === null || useHook === void 0 ? void 0 : useHook.__keys) || [] : _ref$keys,
-      _ref$useCreateElement = _ref.useCreateElement,
-      useCreateElement$1 = _ref$useCreateElement === void 0 ? useCreateElement : _ref$useCreateElement;
-
-  var Comp = function Comp(_ref2, ref) {
-    var _ref2$as = _ref2.as,
-        as = _ref2$as === void 0 ? type : _ref2$as,
-        props = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_ref2, ["as"]);
-
-    if (useHook) {
-      var _as$render;
-
-      var _splitProps = splitProps(props, keys),
-          _options = _splitProps[0],
-          htmlProps = _splitProps[1];
-
-      var _useHook = useHook(_options, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
-        ref: ref
-      }, htmlProps)),
-          wrapElement = _useHook.wrapElement,
-          elementProps = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_useHook, ["wrapElement"]); // @ts-ignore
-
-
-      var asKeys = ((_as$render = as.render) === null || _as$render === void 0 ? void 0 : _as$render.__keys) || as.__keys;
-      var asOptions = asKeys && splitProps(props, asKeys)[0];
-      var allProps = asOptions ? _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, elementProps), asOptions) : elementProps;
-
-      var _element = useCreateElement$1(as, allProps);
-
-      if (wrapElement) {
-        return wrapElement(_element);
-      }
-
-      return _element;
-    }
-
-    return useCreateElement$1(as, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
-      ref: ref
-    }, props));
-  };
-
-  if (false) {}
-
-  Comp = createComponent_forwardRef(Comp);
-
-  if (shouldMemo) {
-    Comp = createComponent_memo(Comp, propsAreEqual && normalizePropsAreEqual(propsAreEqual));
-  }
-
-  Comp.__keys = keys;
-  Comp.unstable_propsAreEqual = normalizePropsAreEqual(propsAreEqual || shallowEqual_shallowEqual);
-  return Comp;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useToken.js
-
-
-
-/**
- * React custom hook that returns the value of any token defined in the
- * SystemContext. It's mainly used internally in [`useOptions`](#useoptions)
- * and [`useProps`](#useprops).
- *
- * @example
- * import { SystemProvider, useToken } from "reakit-system";
- *
- * const system = {
- *   token: "value",
- * };
- *
- * function Component(props) {
- *   const token = useToken("token", "default value");
- *   return <div {...props}>{token}</div>;
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <Component />
- *     </SystemProvider>
- *   );
- * }
- */
-
-function useToken(token, defaultValue) {
-  (0,external_React_.useDebugValue)(token);
-  var context = (0,external_React_.useContext)(SystemContext);
-  return context[token] != null ? context[token] : defaultValue;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useProps.js
-
-
-
-
-/**
- * React custom hook that returns the props returned by a given
- * `use${name}Props` in the SystemContext.
- *
- * @example
- * import { SystemProvider, useProps } from "reakit-system";
- *
- * const system = {
- *   useAProps(options, htmlProps) {
- *     return {
- *       ...htmlProps,
- *       href: options.url,
- *     };
- *   },
- * };
- *
- * function A({ url, ...htmlProps }) {
- *   const props = useProps("A", { url }, htmlProps);
- *   return <a {...props} />;
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <A url="url">It will convert url into href in useAProps</A>
- *     </SystemProvider>
- *   );
- * }
- */
-
-function useProps(name, options, htmlProps) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  if (htmlProps === void 0) {
-    htmlProps = {};
-  }
-
-  var hookName = "use" + name + "Props";
-  (0,external_React_.useDebugValue)(hookName);
-  var useHook = useToken(hookName);
-
-  if (useHook) {
-    return useHook(options, htmlProps);
-  }
-
-  return htmlProps;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useOptions.js
-
-
-
-
-
-/**
- * React custom hook that returns the options returned by a given
- * `use${name}Options` in the SystemContext.
- *
- * @example
- * import React from "react";
- * import { SystemProvider, useOptions } from "reakit-system";
- *
- * const system = {
- *   useAOptions(options, htmlProps) {
- *     return {
- *       ...options,
- *       url: htmlProps.href,
- *     };
- *   },
- * };
- *
- * function A({ url, ...htmlProps }) {
- *   const options = useOptions("A", { url }, htmlProps);
- *   return <a href={options.url} {...htmlProps} />;
- * }
- *
- * function App() {
- *   return (
- *     <SystemProvider unstable_system={system}>
- *       <A href="url">
- *         It will convert href into url in useAOptions and then url into href in A
- *       </A>
- *     </SystemProvider>
- *   );
- * }
- */
-
-function useOptions(name, options, htmlProps) {
-  if (options === void 0) {
-    options = {};
-  }
-
-  if (htmlProps === void 0) {
-    htmlProps = {};
-  }
-
-  var hookName = "use" + name + "Options";
-  (0,external_React_.useDebugValue)(hookName);
-  var useHook = useToken(hookName);
-
-  if (useHook) {
-    return _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, options), useHook(options, htmlProps));
-  }
-
-  return options;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/toArray.js
-/**
- * Transforms `arg` into an array if it's not already.
- *
- * @example
- * import { toArray } from "reakit-utils";
- *
- * toArray("a"); // ["a"]
- * toArray(["a"]); // ["a"]
- */
-function toArray_toArray(arg) {
-  if (Array.isArray(arg)) {
-    return arg;
-  }
-
-  return typeof arg !== "undefined" ? [arg] : [];
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createHook.js
-
-
-
-
-
-
-
-
-
-/**
- * Creates a React custom hook that will return component props.
- *
- * @example
- * import { createHook } from "reakit-system";
- *
- * const useA = createHook({
- *   name: "A",
- *   keys: ["url"], // custom props/options keys
- *   useProps(options, htmlProps) {
- *     return {
- *       ...htmlProps,
- *       href: options.url,
- *     };
- *   },
- * });
- *
- * function A({ url, ...htmlProps }) {
- *   const props = useA({ url }, htmlProps);
- *   return <a {...props} />;
- * }
- *
- * @param options
- */
-function createHook_createHook(options) {
-  var _options$useState, _composedHooks$;
-
-  var composedHooks = toArray_toArray(options.compose);
-
-  var __useOptions = function __useOptions(hookOptions, htmlProps) {
-    // Call the current hook's useOptions first
-    if (options.useOptions) {
-      hookOptions = options.useOptions(hookOptions, htmlProps);
-    } // If there's name, call useOptions from the system context
-
-
-    if (options.name) {
-      hookOptions = useOptions(options.name, hookOptions, htmlProps);
-    } // Run composed hooks useOptions
-
-
-    if (options.compose) {
-      for (var _iterator = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step; !(_step = _iterator()).done;) {
-        var hook = _step.value;
-        hookOptions = hook.__useOptions(hookOptions, htmlProps);
-      }
-    }
-
-    return hookOptions;
-  };
-
-  var useHook = function useHook(hookOptions, htmlProps, unstable_ignoreUseOptions) {
-    if (hookOptions === void 0) {
-      hookOptions = {};
-    }
-
-    if (htmlProps === void 0) {
-      htmlProps = {};
-    }
-
-    if (unstable_ignoreUseOptions === void 0) {
-      unstable_ignoreUseOptions = false;
-    }
-
-    // This won't execute when useHook was called from within another useHook
-    if (!unstable_ignoreUseOptions) {
-      hookOptions = __useOptions(hookOptions, htmlProps);
-    } // Call the current hook's useProps
-
-
-    if (options.useProps) {
-      htmlProps = options.useProps(hookOptions, htmlProps);
-    } // If there's name, call useProps from the system context
-
-
-    if (options.name) {
-      htmlProps = useProps(options.name, hookOptions, htmlProps);
-    }
-
-    if (options.compose) {
-      if (options.useComposeOptions) {
-        hookOptions = options.useComposeOptions(hookOptions, htmlProps);
-      }
-
-      if (options.useComposeProps) {
-        htmlProps = options.useComposeProps(hookOptions, htmlProps);
-      } else {
-        for (var _iterator2 = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step2; !(_step2 = _iterator2()).done;) {
-          var hook = _step2.value;
-          htmlProps = hook(hookOptions, htmlProps, true);
-        }
-      }
-    } // Remove undefined values from htmlProps
-
-
-    var finalHTMLProps = {};
-    var definedHTMLProps = htmlProps || {};
-
-    for (var prop in definedHTMLProps) {
-      if (definedHTMLProps[prop] !== undefined) {
-        finalHTMLProps[prop] = definedHTMLProps[prop];
-      }
-    }
-
-    return finalHTMLProps;
-  };
-
-  useHook.__useOptions = __useOptions;
-  var composedKeys = composedHooks.reduce(function (keys, hook) {
-    keys.push.apply(keys, hook.__keys || []);
-    return keys;
-  }, []); // It's used by createComponent to split option props (keys) and html props
-
-  useHook.__keys = [].concat(composedKeys, ((_options$useState = options.useState) === null || _options$useState === void 0 ? void 0 : _options$useState.__keys) || [], options.keys || []);
-  useHook.unstable_propsAreEqual = options.propsAreEqual || ((_composedHooks$ = composedHooks[0]) === null || _composedHooks$ === void 0 ? void 0 : _composedHooks$.unstable_propsAreEqual) || shallowEqual_shallowEqual;
-
-  if (false) {}
-
-  return useHook;
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Role/Role.js
-
-
-
-
-
-// Automatically generated
-var ROLE_KEYS = ["unstable_system"];
-
-var Role_useRole = createHook_createHook({
-  name: "Role",
-  keys: ROLE_KEYS,
-  propsAreEqual: function propsAreEqual(prev, next) {
-    var prevSystem = prev.unstable_system,
-        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["unstable_system"]);
-
-    var nextSystem = next.unstable_system,
-        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["unstable_system"]);
-
-    if (prevSystem !== nextSystem && !shallowEqual_shallowEqual(prevSystem, nextSystem)) {
-      return false;
-    }
-
-    return shallowEqual_shallowEqual(prevProps, nextProps);
-  }
-});
-var Role_Role = createComponent_createComponent({
-  as: "div",
-  useHook: Role_useRole
-});
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Separator/Separator.js
-
-
-
-
-
-
-// Automatically generated
-var SEPARATOR_KEYS = ["orientation"];
-
-var useSeparator = createHook_createHook({
-  name: "Separator",
-  compose: Role_useRole,
-  keys: SEPARATOR_KEYS,
-  useOptions: function useOptions(_ref) {
-    var _ref$orientation = _ref.orientation,
-        orientation = _ref$orientation === void 0 ? "horizontal" : _ref$orientation,
-        options = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["orientation"]);
-
-    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
-      orientation: orientation
-    }, options);
-  },
-  useProps: function useProps(options, htmlProps) {
-    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
+// src/separator/separator.ts
+var useSeparator = createHook(
+  (_a) => {
+    var _b = _a, { orientation = "horizontal" } = _b, props = __objRest(_b, ["orientation"]);
+    props = _2SMRF6AD_spreadValues({
       role: "separator",
-      "aria-orientation": options.orientation
-    }, htmlProps);
+      "aria-orientation": orientation
+    }, props);
+    return props;
   }
+);
+var Separator = createComponent((props) => {
+  const htmlProps = useSeparator(props);
+  return LFJDOMBA_createElement("hr", htmlProps);
 });
-var Separator = createComponent_createComponent({
-  as: "hr",
-  memo: true,
-  useHook: useSeparator
-});
+if (false) {}
 
 
 
@@ -43777,7 +42754,7 @@ const DividerView = emotion_styled_base_browser_esm("hr",  true ? {
 function UnconnectedDivider(props, forwardedRef) {
   const contextProps = useContextSystem(props, 'Divider');
   return (0,external_React_.createElement)(Separator, {
-    as: DividerView,
+    render: (0,external_React_.createElement)(DividerView, null),
     ...contextProps,
     ref: forwardedRef
   });
@@ -45618,7 +44595,7 @@ function GradientPicker({
       __experimentalIsRenderedInSidebar: __experimentalIsRenderedInSidebar,
       value: value,
       onChange: onChange
-    }), (gradients.length || clearable) && (0,external_React_.createElement)(gradient_picker_Component, {
+    }), (gradients.length > 0 || clearable) && (0,external_React_.createElement)(gradient_picker_Component, {
       ...additionalProps,
       className: className,
       clearGradient: clearGradient,
@@ -47137,6 +46114,982 @@ function ComboboxControl(props) {
 
 /* harmony default export */ var combobox_control = (ComboboxControl);
 
+;// CONCATENATED MODULE: ./node_modules/reakit/es/_rollupPluginBabelHelpers-1f0bf8c2.js
+function _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source), true).forEach(function (key) {
+        _rollupPluginBabelHelpers_1f0bf8c2_defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      _rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _arrayLikeToArray(o, minLen);
+}
+
+function _arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/_rollupPluginBabelHelpers-0c84a174.js
+function _rollupPluginBabelHelpers_0c84a174_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source), true).forEach(function (key) {
+        _rollupPluginBabelHelpers_0c84a174_defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      _rollupPluginBabelHelpers_0c84a174_ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(o, minLen);
+}
+
+function _rollupPluginBabelHelpers_0c84a174_arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_0c84a174_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/SystemContext.js
+
+
+var SystemContext = /*#__PURE__*/(0,external_React_.createContext)({});
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useCreateElement.js
+
+
+
+
+function useCreateElement_isRenderProp(children) {
+  return typeof children === "function";
+}
+
+/**
+ * Custom hook that will call `children` if it's a function. If
+ * `useCreateElement` has been passed to the context, it'll be used instead.
+ *
+ * @example
+ * import React from "react";
+ * import { SystemProvider, useCreateElement } from "reakit-system";
+ *
+ * const system = {
+ *   useCreateElement(type, props, children = props.children) {
+ *     // very similar to what `useCreateElement` does already
+ *     if (typeof children === "function") {
+ *       const { children: _, ...rest } = props;
+ *       return children(rest);
+ *     }
+ *     return React.createElement(type, props, children);
+ *   },
+ * };
+ *
+ * function Component(props) {
+ *   return useCreateElement("div", props);
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <Component url="url">{({ url }) => <a href={url}>link</a>}</Component>
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+var useCreateElement = function useCreateElement(type, props, children) {
+  if (children === void 0) {
+    children = props.children;
+  }
+
+  var context = (0,external_React_.useContext)(SystemContext);
+
+  if (context.useCreateElement) {
+    return context.useCreateElement(type, props, children);
+  }
+
+  if (typeof type === "string" && useCreateElement_isRenderProp(children)) {
+    var _ = props.children,
+        rest = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(props, ["children"]);
+
+    return children(rest);
+  }
+
+  return /*#__PURE__*/(0,external_React_.createElement)(type, props, children);
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/_rollupPluginBabelHelpers-1f0bf8c2.js
+function es_rollupPluginBabelHelpers_1f0bf8c2_defineProperty(obj, key, value) {
+  if (key in obj) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+  } else {
+    obj[key] = value;
+  }
+
+  return obj;
+}
+
+function es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(object, enumerableOnly) {
+  var keys = Object.keys(object);
+
+  if (Object.getOwnPropertySymbols) {
+    var symbols = Object.getOwnPropertySymbols(object);
+    if (enumerableOnly) symbols = symbols.filter(function (sym) {
+      return Object.getOwnPropertyDescriptor(object, sym).enumerable;
+    });
+    keys.push.apply(keys, symbols);
+  }
+
+  return keys;
+}
+
+function es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(target) {
+  for (var i = 1; i < arguments.length; i++) {
+    var source = arguments[i] != null ? arguments[i] : {};
+
+    if (i % 2) {
+      es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source), true).forEach(function (key) {
+        es_rollupPluginBabelHelpers_1f0bf8c2_defineProperty(target, key, source[key]);
+      });
+    } else if (Object.getOwnPropertyDescriptors) {
+      Object.defineProperties(target, Object.getOwnPropertyDescriptors(source));
+    } else {
+      es_rollupPluginBabelHelpers_1f0bf8c2_ownKeys(Object(source)).forEach(function (key) {
+        Object.defineProperty(target, key, Object.getOwnPropertyDescriptor(source, key));
+      });
+    }
+  }
+
+  return target;
+}
+
+function es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o, minLen) {
+  if (!o) return;
+  if (typeof o === "string") return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
+  var n = Object.prototype.toString.call(o).slice(8, -1);
+  if (n === "Object" && o.constructor) n = o.constructor.name;
+  if (n === "Map" || n === "Set") return Array.from(o);
+  if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(o, minLen);
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_arrayLikeToArray(arr, len) {
+  if (len == null || len > arr.length) len = arr.length;
+
+  for (var i = 0, arr2 = new Array(len); i < len; i++) arr2[i] = arr[i];
+
+  return arr2;
+}
+
+function _rollupPluginBabelHelpers_1f0bf8c2_createForOfIteratorHelperLoose(o, allowArrayLike) {
+  var it;
+
+  if (typeof Symbol === "undefined" || o[Symbol.iterator] == null) {
+    if (Array.isArray(o) || (it = _rollupPluginBabelHelpers_1f0bf8c2_unsupportedIterableToArray(o)) || allowArrayLike && o && typeof o.length === "number") {
+      if (it) o = it;
+      var i = 0;
+      return function () {
+        if (i >= o.length) return {
+          done: true
+        };
+        return {
+          done: false,
+          value: o[i++]
+        };
+      };
+    }
+
+    throw new TypeError("Invalid attempt to iterate non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method.");
+  }
+
+  it = o[Symbol.iterator]();
+  return it.next.bind(it);
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isObject.js
+/**
+ * Checks whether `arg` is an object or not.
+ *
+ * @returns {boolean}
+ */
+function isObject_isObject(arg) {
+  return typeof arg === "object" && arg != null;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/isPlainObject.js
+
+
+/**
+ * Checks whether `arg` is a plain object or not.
+ *
+ * @returns {boolean}
+ */
+
+function isPlainObject_isPlainObject(arg) {
+  var _proto$constructor;
+
+  if (!isObject_isObject(arg)) return false;
+  var proto = Object.getPrototypeOf(arg);
+  if (proto == null) return true;
+  return ((_proto$constructor = proto.constructor) === null || _proto$constructor === void 0 ? void 0 : _proto$constructor.toString()) === Object.toString();
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/splitProps.js
+
+
+
+
+/**
+ * Splits an object (`props`) into a tuple where the first item is an object
+ * with the passed `keys`, and the second item is an object with these keys
+ * omitted.
+ *
+ * @deprecated will be removed in version 2
+ *
+ * @example
+ * import { splitProps } from "reakit-utils";
+ *
+ * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
+ */
+
+function __deprecatedSplitProps(props, keys) {
+  var propsKeys = Object.keys(props);
+  var picked = {};
+  var omitted = {};
+
+  for (var _i = 0, _propsKeys = propsKeys; _i < _propsKeys.length; _i++) {
+    var key = _propsKeys[_i];
+
+    if (keys.indexOf(key) >= 0) {
+      picked[key] = props[key];
+    } else {
+      omitted[key] = props[key];
+    }
+  }
+
+  return [picked, omitted];
+}
+/**
+ * Splits an object (`props`) into a tuple where the first item
+ * is the `state` property, and the second item is the rest of the properties.
+ *
+ * It is also backward compatible with version 1. If `keys` are passed then
+ * splits an object (`props`) into a tuple where the first item is an object
+ * with the passed `keys`, and the second item is an object with these keys
+ * omitted.
+ *
+ * @example
+ * import { splitProps } from "reakit-utils";
+ *
+ * splitProps({ a: "a", b: "b" }, ["a"]); // [{ a: "a" }, { b: "b" }]
+ *
+ * @example
+ * import { splitProps } from "reakit-utils";
+ *
+ * splitProps({ state: { a: "a" }, b: "b" }); // [{ a: "a" }, { b: "b" }]
+ */
+
+
+function splitProps(props, keys) {
+  if (keys === void 0) {
+    keys = [];
+  }
+
+  if (!isPlainObject_isPlainObject(props.state)) {
+    return __deprecatedSplitProps(props, keys);
+  }
+
+  var _deprecatedSplitProp = __deprecatedSplitProps(props, [].concat(keys, ["state"])),
+      picked = _deprecatedSplitProp[0],
+      omitted = _deprecatedSplitProp[1];
+
+  var state = picked.state,
+      restPicked = es_rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(picked, ["state"]);
+
+  return [es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, state), restPicked), omitted];
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/shallowEqual.js
+/**
+ * Compares two objects.
+ *
+ * @example
+ * import { shallowEqual } from "reakit-utils";
+ *
+ * shallowEqual({ a: "a" }, {}); // false
+ * shallowEqual({ a: "a" }, { b: "b" }); // false
+ * shallowEqual({ a: "a" }, { a: "a" }); // true
+ * shallowEqual({ a: "a" }, { a: "a", b: "b" }); // false
+ */
+function shallowEqual_shallowEqual(objA, objB) {
+  if (objA === objB) return true;
+  if (!objA) return false;
+  if (!objB) return false;
+  if (typeof objA !== "object") return false;
+  if (typeof objB !== "object") return false;
+  var aKeys = Object.keys(objA);
+  var bKeys = Object.keys(objB);
+  var length = aKeys.length;
+  if (bKeys.length !== length) return false;
+
+  for (var _i = 0, _aKeys = aKeys; _i < _aKeys.length; _i++) {
+    var key = _aKeys[_i];
+
+    if (objA[key] !== objB[key]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/normalizePropsAreEqual.js
+
+
+
+
+/**
+ * This higher order functions take `propsAreEqual` function and
+ * returns a new function which normalizes the props.
+ *
+ * Normalizing in our case is making sure the `propsAreEqual` works with
+ * both version 1 (object spreading) and version 2 (state object) state passing.
+ *
+ * To achieve this, the returned function in case of a state object
+ * will spread the state object in both `prev` and `next props.
+ *
+ * Other case it just returns the function as is which makes sure
+ * that we are still backward compatible
+ */
+function normalizePropsAreEqual(propsAreEqual) {
+  if (propsAreEqual.name === "normalizePropsAreEqualInner") {
+    return propsAreEqual;
+  }
+
+  return function normalizePropsAreEqualInner(prev, next) {
+    if (!isPlainObject_isPlainObject(prev.state) || !isPlainObject_isPlainObject(next.state)) {
+      return propsAreEqual(prev, next);
+    }
+
+    return propsAreEqual(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, prev.state), prev), es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(es_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, next.state), next));
+  };
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createComponent.js
+
+
+
+
+
+
+
+
+function createComponent_forwardRef(component) {
+  return /*#__PURE__*/(0,external_React_.forwardRef)(component);
+}
+
+function createComponent_memo(component, propsAreEqual) {
+  return /*#__PURE__*/(0,external_React_.memo)(component, propsAreEqual);
+}
+
+/**
+ * Creates a React component.
+ *
+ * @example
+ * import { createComponent } from "reakit-system";
+ *
+ * const A = createComponent({ as: "a" });
+ *
+ * @param options
+ */
+function createComponent_createComponent(_ref) {
+  var type = _ref.as,
+      useHook = _ref.useHook,
+      shouldMemo = _ref.memo,
+      _ref$propsAreEqual = _ref.propsAreEqual,
+      propsAreEqual = _ref$propsAreEqual === void 0 ? useHook === null || useHook === void 0 ? void 0 : useHook.unstable_propsAreEqual : _ref$propsAreEqual,
+      _ref$keys = _ref.keys,
+      keys = _ref$keys === void 0 ? (useHook === null || useHook === void 0 ? void 0 : useHook.__keys) || [] : _ref$keys,
+      _ref$useCreateElement = _ref.useCreateElement,
+      useCreateElement$1 = _ref$useCreateElement === void 0 ? useCreateElement : _ref$useCreateElement;
+
+  var Comp = function Comp(_ref2, ref) {
+    var _ref2$as = _ref2.as,
+        as = _ref2$as === void 0 ? type : _ref2$as,
+        props = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_ref2, ["as"]);
+
+    if (useHook) {
+      var _as$render;
+
+      var _splitProps = splitProps(props, keys),
+          _options = _splitProps[0],
+          htmlProps = _splitProps[1];
+
+      var _useHook = useHook(_options, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
+        ref: ref
+      }, htmlProps)),
+          wrapElement = _useHook.wrapElement,
+          elementProps = _rollupPluginBabelHelpers_0c84a174_objectWithoutPropertiesLoose(_useHook, ["wrapElement"]); // @ts-ignore
+
+
+      var asKeys = ((_as$render = as.render) === null || _as$render === void 0 ? void 0 : _as$render.__keys) || as.__keys;
+      var asOptions = asKeys && splitProps(props, asKeys)[0];
+      var allProps = asOptions ? _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, elementProps), asOptions) : elementProps;
+
+      var _element = useCreateElement$1(as, allProps);
+
+      if (wrapElement) {
+        return wrapElement(_element);
+      }
+
+      return _element;
+    }
+
+    return useCreateElement$1(as, _rollupPluginBabelHelpers_0c84a174_objectSpread2({
+      ref: ref
+    }, props));
+  };
+
+  if (false) {}
+
+  Comp = createComponent_forwardRef(Comp);
+
+  if (shouldMemo) {
+    Comp = createComponent_memo(Comp, propsAreEqual && normalizePropsAreEqual(propsAreEqual));
+  }
+
+  Comp.__keys = keys;
+  Comp.unstable_propsAreEqual = normalizePropsAreEqual(propsAreEqual || shallowEqual_shallowEqual);
+  return Comp;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useToken.js
+
+
+
+/**
+ * React custom hook that returns the value of any token defined in the
+ * SystemContext. It's mainly used internally in [`useOptions`](#useoptions)
+ * and [`useProps`](#useprops).
+ *
+ * @example
+ * import { SystemProvider, useToken } from "reakit-system";
+ *
+ * const system = {
+ *   token: "value",
+ * };
+ *
+ * function Component(props) {
+ *   const token = useToken("token", "default value");
+ *   return <div {...props}>{token}</div>;
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <Component />
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+function useToken(token, defaultValue) {
+  (0,external_React_.useDebugValue)(token);
+  var context = (0,external_React_.useContext)(SystemContext);
+  return context[token] != null ? context[token] : defaultValue;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useProps.js
+
+
+
+
+/**
+ * React custom hook that returns the props returned by a given
+ * `use${name}Props` in the SystemContext.
+ *
+ * @example
+ * import { SystemProvider, useProps } from "reakit-system";
+ *
+ * const system = {
+ *   useAProps(options, htmlProps) {
+ *     return {
+ *       ...htmlProps,
+ *       href: options.url,
+ *     };
+ *   },
+ * };
+ *
+ * function A({ url, ...htmlProps }) {
+ *   const props = useProps("A", { url }, htmlProps);
+ *   return <a {...props} />;
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <A url="url">It will convert url into href in useAProps</A>
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+function useProps(name, options, htmlProps) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  if (htmlProps === void 0) {
+    htmlProps = {};
+  }
+
+  var hookName = "use" + name + "Props";
+  (0,external_React_.useDebugValue)(hookName);
+  var useHook = useToken(hookName);
+
+  if (useHook) {
+    return useHook(options, htmlProps);
+  }
+
+  return htmlProps;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/useOptions.js
+
+
+
+
+
+/**
+ * React custom hook that returns the options returned by a given
+ * `use${name}Options` in the SystemContext.
+ *
+ * @example
+ * import React from "react";
+ * import { SystemProvider, useOptions } from "reakit-system";
+ *
+ * const system = {
+ *   useAOptions(options, htmlProps) {
+ *     return {
+ *       ...options,
+ *       url: htmlProps.href,
+ *     };
+ *   },
+ * };
+ *
+ * function A({ url, ...htmlProps }) {
+ *   const options = useOptions("A", { url }, htmlProps);
+ *   return <a href={options.url} {...htmlProps} />;
+ * }
+ *
+ * function App() {
+ *   return (
+ *     <SystemProvider unstable_system={system}>
+ *       <A href="url">
+ *         It will convert href into url in useAOptions and then url into href in A
+ *       </A>
+ *     </SystemProvider>
+ *   );
+ * }
+ */
+
+function useOptions(name, options, htmlProps) {
+  if (options === void 0) {
+    options = {};
+  }
+
+  if (htmlProps === void 0) {
+    htmlProps = {};
+  }
+
+  var hookName = "use" + name + "Options";
+  (0,external_React_.useDebugValue)(hookName);
+  var useHook = useToken(hookName);
+
+  if (useHook) {
+    return _rollupPluginBabelHelpers_0c84a174_objectSpread2(_rollupPluginBabelHelpers_0c84a174_objectSpread2({}, options), useHook(options, htmlProps));
+  }
+
+  return options;
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/toArray.js
+/**
+ * Transforms `arg` into an array if it's not already.
+ *
+ * @example
+ * import { toArray } from "reakit-utils";
+ *
+ * toArray("a"); // ["a"]
+ * toArray(["a"]); // ["a"]
+ */
+function toArray_toArray(arg) {
+  if (Array.isArray(arg)) {
+    return arg;
+  }
+
+  return typeof arg !== "undefined" ? [arg] : [];
+}
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit-system/es/createHook.js
+
+
+
+
+
+
+
+
+
+/**
+ * Creates a React custom hook that will return component props.
+ *
+ * @example
+ * import { createHook } from "reakit-system";
+ *
+ * const useA = createHook({
+ *   name: "A",
+ *   keys: ["url"], // custom props/options keys
+ *   useProps(options, htmlProps) {
+ *     return {
+ *       ...htmlProps,
+ *       href: options.url,
+ *     };
+ *   },
+ * });
+ *
+ * function A({ url, ...htmlProps }) {
+ *   const props = useA({ url }, htmlProps);
+ *   return <a {...props} />;
+ * }
+ *
+ * @param options
+ */
+function createHook_createHook(options) {
+  var _options$useState, _composedHooks$;
+
+  var composedHooks = toArray_toArray(options.compose);
+
+  var __useOptions = function __useOptions(hookOptions, htmlProps) {
+    // Call the current hook's useOptions first
+    if (options.useOptions) {
+      hookOptions = options.useOptions(hookOptions, htmlProps);
+    } // If there's name, call useOptions from the system context
+
+
+    if (options.name) {
+      hookOptions = useOptions(options.name, hookOptions, htmlProps);
+    } // Run composed hooks useOptions
+
+
+    if (options.compose) {
+      for (var _iterator = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step; !(_step = _iterator()).done;) {
+        var hook = _step.value;
+        hookOptions = hook.__useOptions(hookOptions, htmlProps);
+      }
+    }
+
+    return hookOptions;
+  };
+
+  var useHook = function useHook(hookOptions, htmlProps, unstable_ignoreUseOptions) {
+    if (hookOptions === void 0) {
+      hookOptions = {};
+    }
+
+    if (htmlProps === void 0) {
+      htmlProps = {};
+    }
+
+    if (unstable_ignoreUseOptions === void 0) {
+      unstable_ignoreUseOptions = false;
+    }
+
+    // This won't execute when useHook was called from within another useHook
+    if (!unstable_ignoreUseOptions) {
+      hookOptions = __useOptions(hookOptions, htmlProps);
+    } // Call the current hook's useProps
+
+
+    if (options.useProps) {
+      htmlProps = options.useProps(hookOptions, htmlProps);
+    } // If there's name, call useProps from the system context
+
+
+    if (options.name) {
+      htmlProps = useProps(options.name, hookOptions, htmlProps);
+    }
+
+    if (options.compose) {
+      if (options.useComposeOptions) {
+        hookOptions = options.useComposeOptions(hookOptions, htmlProps);
+      }
+
+      if (options.useComposeProps) {
+        htmlProps = options.useComposeProps(hookOptions, htmlProps);
+      } else {
+        for (var _iterator2 = _rollupPluginBabelHelpers_0c84a174_createForOfIteratorHelperLoose(composedHooks), _step2; !(_step2 = _iterator2()).done;) {
+          var hook = _step2.value;
+          htmlProps = hook(hookOptions, htmlProps, true);
+        }
+      }
+    } // Remove undefined values from htmlProps
+
+
+    var finalHTMLProps = {};
+    var definedHTMLProps = htmlProps || {};
+
+    for (var prop in definedHTMLProps) {
+      if (definedHTMLProps[prop] !== undefined) {
+        finalHTMLProps[prop] = definedHTMLProps[prop];
+      }
+    }
+
+    return finalHTMLProps;
+  };
+
+  useHook.__useOptions = __useOptions;
+  var composedKeys = composedHooks.reduce(function (keys, hook) {
+    keys.push.apply(keys, hook.__keys || []);
+    return keys;
+  }, []); // It's used by createComponent to split option props (keys) and html props
+
+  useHook.__keys = [].concat(composedKeys, ((_options$useState = options.useState) === null || _options$useState === void 0 ? void 0 : _options$useState.__keys) || [], options.keys || []);
+  useHook.unstable_propsAreEqual = options.propsAreEqual || ((_composedHooks$ = composedHooks[0]) === null || _composedHooks$ === void 0 ? void 0 : _composedHooks$.unstable_propsAreEqual) || shallowEqual_shallowEqual;
+
+  if (false) {}
+
+  return useHook;
+}
+
+
+
 ;// CONCATENATED MODULE: ./node_modules/reakit-utils/es/useForkRef.js
 
 
@@ -47323,6 +47276,39 @@ function useLiveRef_useLiveRef(value) {
 function isSelfTarget_isSelfTarget(event) {
   return event.target === event.currentTarget;
 }
+
+
+
+;// CONCATENATED MODULE: ./node_modules/reakit/es/Role/Role.js
+
+
+
+
+
+// Automatically generated
+var ROLE_KEYS = ["unstable_system"];
+
+var Role_useRole = createHook_createHook({
+  name: "Role",
+  keys: ROLE_KEYS,
+  propsAreEqual: function propsAreEqual(prev, next) {
+    var prevSystem = prev.unstable_system,
+        prevProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(prev, ["unstable_system"]);
+
+    var nextSystem = next.unstable_system,
+        nextProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(next, ["unstable_system"]);
+
+    if (prevSystem !== nextSystem && !shallowEqual_shallowEqual(prevSystem, nextSystem)) {
+      return false;
+    }
+
+    return shallowEqual_shallowEqual(prevProps, nextProps);
+  }
+});
+var Role_Role = createComponent_createComponent({
+  as: "div",
+  useHook: Role_useRole
+});
 
 
 
@@ -60145,108 +60131,43 @@ Disabled.Context = Context;
 Disabled.Consumer = Consumer;
 /* harmony default export */ var disabled = (Disabled);
 
-;// CONCATENATED MODULE: ./node_modules/reakit/es/__keys-e6a5cfbe.js
-// Automatically generated
-var DISCLOSURE_STATE_KEYS = ["baseId", "unstable_idCountRef", "visible", "animated", "animating", "setBaseId", "show", "hide", "toggle", "setVisible", "setAnimated", "stopAnimation"];
-var DISCLOSURE_KEYS = DISCLOSURE_STATE_KEYS;
-var DISCLOSURE_CONTENT_KEYS = DISCLOSURE_KEYS;
+;// CONCATENATED MODULE: ./packages/components/build-module/disclosure/index.js
+
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line no-restricted-imports
 
 
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Disclosure/DisclosureContent.js
-
-
-
+/**
+ * WordPress dependencies
+ */
 
 
+/**
+ * Internal dependencies
+ */
 
-
-
-
-
-var DisclosureContent_useDisclosureContent = createHook_createHook({
-  name: "DisclosureContent",
-  compose: Role_useRole,
-  keys: DISCLOSURE_CONTENT_KEYS,
-  useProps: function useProps(options, _ref) {
-    var htmlOnTransitionEnd = _ref.onTransitionEnd,
-        htmlOnAnimationEnd = _ref.onAnimationEnd,
-        htmlStyle = _ref.style,
-        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["onTransitionEnd", "onAnimationEnd", "style"]);
-
-    var animating = options.animated && options.animating;
-
-    var _React$useState = (0,external_React_.useState)(null),
-        transition = _React$useState[0],
-        setTransition = _React$useState[1];
-
-    var hidden = !options.visible && !animating;
-    var style = hidden ? _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
-      display: "none"
-    }, htmlStyle) : htmlStyle;
-    var onTransitionEndRef = useLiveRef_useLiveRef(htmlOnTransitionEnd);
-    var onAnimationEndRef = useLiveRef_useLiveRef(htmlOnAnimationEnd);
-    var raf = (0,external_React_.useRef)(0);
-    (0,external_React_.useEffect)(function () {
-      if (!options.animated) return undefined; // Double RAF is needed so the browser has enough time to paint the
-      // default styles before processing the `data-enter` attribute. Otherwise
-      // it wouldn't be considered a transition.
-      // See https://github.com/reakit/reakit/issues/643
-
-      raf.current = window.requestAnimationFrame(function () {
-        raf.current = window.requestAnimationFrame(function () {
-          if (options.visible) {
-            setTransition("enter");
-          } else if (animating) {
-            setTransition("leave");
-          } else {
-            setTransition(null);
-          }
-        });
-      });
-      return function () {
-        return window.cancelAnimationFrame(raf.current);
-      };
-    }, [options.animated, options.visible, animating]);
-    var onEnd = (0,external_React_.useCallback)(function (event) {
-      if (!isSelfTarget_isSelfTarget(event)) return;
-      if (!animating) return; // Ignores number animated
-
-      if (options.animated === true) {
-        var _options$stopAnimatio;
-
-        (_options$stopAnimatio = options.stopAnimation) === null || _options$stopAnimatio === void 0 ? void 0 : _options$stopAnimatio.call(options);
-      }
-    }, [options.animated, animating, options.stopAnimation]);
-    var onTransitionEnd = (0,external_React_.useCallback)(function (event) {
-      var _onTransitionEndRef$c;
-
-      (_onTransitionEndRef$c = onTransitionEndRef.current) === null || _onTransitionEndRef$c === void 0 ? void 0 : _onTransitionEndRef$c.call(onTransitionEndRef, event);
-      onEnd(event);
-    }, [onEnd]);
-    var onAnimationEnd = (0,external_React_.useCallback)(function (event) {
-      var _onAnimationEndRef$cu;
-
-      (_onAnimationEndRef$cu = onAnimationEndRef.current) === null || _onAnimationEndRef$cu === void 0 ? void 0 : _onAnimationEndRef$cu.call(onAnimationEndRef, event);
-      onEnd(event);
-    }, [onEnd]);
-    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
-      id: options.baseId,
-      "data-enter": transition === "enter" ? "" : undefined,
-      "data-leave": transition === "leave" ? "" : undefined,
-      onTransitionEnd: onTransitionEnd,
-      onAnimationEnd: onAnimationEnd,
-      hidden: hidden,
-      style: style
-    }, htmlProps);
-  }
-});
-var DisclosureContent_DisclosureContent = createComponent_createComponent({
-  as: "div",
-  useHook: DisclosureContent_useDisclosureContent
-});
-
-
+/**
+ * Accessible Disclosure component that controls visibility of a section of
+ * content. It follows the WAI-ARIA Disclosure Pattern.
+ */
+const UnforwardedDisclosureContent = ({
+  visible,
+  children,
+  ...props
+}, ref) => {
+  const disclosure = useDisclosureStore({
+    open: visible
+  });
+  return (0,external_React_.createElement)(DisclosureContent, {
+    store: disclosure,
+    ref: ref,
+    ...props
+  }, children);
+};
+const disclosure_DisclosureContent = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedDisclosureContent);
+/* harmony default export */ var disclosure = ((/* unused pure expression or super */ null && (disclosure_DisclosureContent)));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/draggable/index.js
 
@@ -62072,17 +61993,21 @@ function toggle_group_control_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "
 const toggleGroupControl = ({
   isBlock,
   isDeselectable,
-  size
-}) => /*#__PURE__*/emotion_react_browser_esm_css("background:", COLORS.ui.background, ";border:1px solid transparent;border-radius:", config_values.controlBorderRadius, ";display:inline-flex;min-width:0;padding:2px;position:relative;", toggleGroupControlSize(size), " ", !isDeselectable && enclosingBorders(isBlock), ";" + ( true ? "" : 0),  true ? "" : 0);
+  size,
+  __next40pxDefaultSize
+}) => /*#__PURE__*/emotion_react_browser_esm_css("background:", COLORS.ui.background, ";border:1px solid transparent;border-radius:", config_values.controlBorderRadius, ";display:inline-flex;min-width:0;padding:2px;position:relative;", toggleGroupControlSize(size, __next40pxDefaultSize), " ", !isDeselectable && enclosingBorders(isBlock), ";" + ( true ? "" : 0),  true ? "" : 0);
 const enclosingBorders = isBlock => {
   const enclosingBorder = /*#__PURE__*/emotion_react_browser_esm_css("border-color:", COLORS.ui.border, ";" + ( true ? "" : 0),  true ? "" : 0);
   return /*#__PURE__*/emotion_react_browser_esm_css(isBlock && enclosingBorder, " &:hover{border-color:", COLORS.ui.borderHover, ";}&:focus-within{border-color:", COLORS.ui.borderFocus, ";box-shadow:", config_values.controlBoxShadowFocus, ";z-index:1;outline:2px solid transparent;outline-offset:-2px;}" + ( true ? "" : 0),  true ? "" : 0);
 };
-const toggleGroupControlSize = size => {
+const toggleGroupControlSize = (size, __next40pxDefaultSize) => {
   const heights = {
-    default: '36px',
+    default: '40px',
     '__unstable-large': '40px'
   };
+  if (!__next40pxDefaultSize) {
+    heights.default = '36px';
+  }
   return /*#__PURE__*/emotion_react_browser_esm_css("min-height:", heights[size], ";" + ( true ? "" : 0),  true ? "" : 0);
 };
 const toggle_group_control_styles_block =  true ? {
@@ -62432,6 +62357,7 @@ const ToggleGroupControlAsButtonGroup = (0,external_wp_element_namespaceObject.f
 function UnconnectedToggleGroupControl(props, forwardedRef) {
   const {
     __nextHasNoMarginBottom = false,
+    __next40pxDefaultSize = false,
     className,
     isAdaptiveWidth = false,
     isBlock = false,
@@ -62450,8 +62376,9 @@ function UnconnectedToggleGroupControl(props, forwardedRef) {
   const classes = (0,external_wp_element_namespaceObject.useMemo)(() => cx(toggleGroupControl({
     isBlock,
     isDeselectable,
-    size
-  }), isBlock && toggle_group_control_styles_block, className), [className, cx, isBlock, isDeselectable, size]);
+    size,
+    __next40pxDefaultSize
+  }), isBlock && toggle_group_control_styles_block, className), [className, cx, isBlock, isDeselectable, size, __next40pxDefaultSize]);
   const MainControl = isDeselectable ? ToggleGroupControlAsButtonGroup : ToggleGroupControlAsRadioGroup;
   return (0,external_React_.createElement)(base_control, {
     help: help,
@@ -67912,211 +67839,32 @@ function QueryControls({
 }
 /* harmony default export */ var query_controls = (QueryControls);
 
-;// CONCATENATED MODULE: ./node_modules/reakit/es/__keys-d251e56b.js
-// Automatically generated
-var RADIO_STATE_KEYS = ["baseId", "unstable_idCountRef", "unstable_virtual", "rtl", "orientation", "items", "groups", "currentId", "loop", "wrap", "shift", "unstable_moves", "unstable_hasActiveWidget", "unstable_includesBaseElement", "state", "setBaseId", "registerItem", "unregisterItem", "registerGroup", "unregisterGroup", "move", "next", "previous", "up", "down", "first", "last", "sort", "unstable_setVirtual", "setRTL", "setOrientation", "setCurrentId", "setLoop", "setWrap", "setShift", "reset", "unstable_setIncludesBaseElement", "unstable_setHasActiveWidget", "setState"];
-var RADIO_KEYS = [].concat(RADIO_STATE_KEYS, ["value", "checked", "unstable_checkOnFocus"]);
-var RADIO_GROUP_KEYS = RADIO_STATE_KEYS;
+;// CONCATENATED MODULE: ./packages/components/build-module/radio-group/context.js
+/**
+ * External dependencies
+ */
+// eslint-disable-next-line no-restricted-imports
 
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Radio/Radio.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-function getChecked(options) {
-  if (typeof options.checked !== "undefined") {
-    return options.checked;
-  }
-
-  return typeof options.value !== "undefined" && options.state === options.value;
-}
-
-function useInitialChecked(options) {
-  var _React$useState = (0,external_React_.useState)(function () {
-    return getChecked(options);
-  }),
-      initialChecked = _React$useState[0];
-
-  var _React$useState2 = (0,external_React_.useState)(options.currentId),
-      initialCurrentId = _React$useState2[0];
-
-  var id = options.id,
-      setCurrentId = options.setCurrentId;
-  (0,external_React_.useEffect)(function () {
-    if (initialChecked && id && initialCurrentId !== id) {
-      setCurrentId === null || setCurrentId === void 0 ? void 0 : setCurrentId(id);
-    }
-  }, [initialChecked, id, setCurrentId, initialCurrentId]);
-}
-
-function fireChange(element, onChange) {
-  var event = createEvent(element, "change");
-  Object.defineProperties(event, {
-    type: {
-      value: "change"
-    },
-    target: {
-      value: element
-    },
-    currentTarget: {
-      value: element
-    }
-  });
-  onChange === null || onChange === void 0 ? void 0 : onChange(event);
-}
-
-var Radio_useRadio = createHook_createHook({
-  name: "Radio",
-  compose: CompositeItem_useCompositeItem,
-  keys: RADIO_KEYS,
-  useOptions: function useOptions(_ref, _ref2) {
-    var _options$value;
-
-    var value = _ref2.value,
-        checked = _ref2.checked;
-
-    var _ref$unstable_clickOn = _ref.unstable_clickOnEnter,
-        unstable_clickOnEnter = _ref$unstable_clickOn === void 0 ? false : _ref$unstable_clickOn,
-        _ref$unstable_checkOn = _ref.unstable_checkOnFocus,
-        unstable_checkOnFocus = _ref$unstable_checkOn === void 0 ? true : _ref$unstable_checkOn,
-        options = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref, ["unstable_clickOnEnter", "unstable_checkOnFocus"]);
-
-    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
-      checked: checked,
-      unstable_clickOnEnter: unstable_clickOnEnter,
-      unstable_checkOnFocus: unstable_checkOnFocus
-    }, options), {}, {
-      value: (_options$value = options.value) != null ? _options$value : value
-    });
-  },
-  useProps: function useProps(options, _ref3) {
-    var htmlRef = _ref3.ref,
-        htmlOnChange = _ref3.onChange,
-        htmlOnClick = _ref3.onClick,
-        htmlProps = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_ref3, ["ref", "onChange", "onClick"]);
-
-    var ref = (0,external_React_.useRef)(null);
-
-    var _React$useState3 = (0,external_React_.useState)(true),
-        isNativeRadio = _React$useState3[0],
-        setIsNativeRadio = _React$useState3[1];
-
-    var checked = getChecked(options);
-    var isCurrentItemRef = useLiveRef_useLiveRef(options.currentId === options.id);
-    var onChangeRef = useLiveRef_useLiveRef(htmlOnChange);
-    var onClickRef = useLiveRef_useLiveRef(htmlOnClick);
-    useInitialChecked(options);
-    (0,external_React_.useEffect)(function () {
-      var element = ref.current;
-
-      if (!element) {
-         false ? 0 : void 0;
-        return;
-      }
-
-      if (element.tagName !== "INPUT" || element.type !== "radio") {
-        setIsNativeRadio(false);
-      }
-    }, []);
-    var onChange = (0,external_React_.useCallback)(function (event) {
-      var _onChangeRef$current, _options$setState;
-
-      (_onChangeRef$current = onChangeRef.current) === null || _onChangeRef$current === void 0 ? void 0 : _onChangeRef$current.call(onChangeRef, event);
-      if (event.defaultPrevented) return;
-      if (options.disabled) return;
-      (_options$setState = options.setState) === null || _options$setState === void 0 ? void 0 : _options$setState.call(options, options.value);
-    }, [options.disabled, options.setState, options.value]);
-    var onClick = (0,external_React_.useCallback)(function (event) {
-      var _onClickRef$current;
-
-      (_onClickRef$current = onClickRef.current) === null || _onClickRef$current === void 0 ? void 0 : _onClickRef$current.call(onClickRef, event);
-      if (event.defaultPrevented) return;
-      if (isNativeRadio) return;
-      fireChange(event.currentTarget, onChange);
-    }, [onChange, isNativeRadio]);
-    (0,external_React_.useEffect)(function () {
-      var element = ref.current;
-      if (!element) return;
-
-      if (options.unstable_moves && isCurrentItemRef.current && options.unstable_checkOnFocus) {
-        fireChange(element, onChange);
-      }
-    }, [options.unstable_moves, options.unstable_checkOnFocus, onChange]);
-    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
-      ref: useForkRef(ref, htmlRef),
-      role: !isNativeRadio ? "radio" : undefined,
-      type: isNativeRadio ? "radio" : undefined,
-      value: isNativeRadio ? options.value : undefined,
-      name: isNativeRadio ? options.baseId : undefined,
-      "aria-checked": checked,
-      checked: checked,
-      onChange: onChange,
-      onClick: onClick
-    }, htmlProps);
-  }
-});
-var Radio_Radio = createComponent_createComponent({
-  as: "input",
-  memo: true,
-  useHook: Radio_useRadio
-});
-
-
-
-;// CONCATENATED MODULE: ./packages/components/build-module/radio-group/radio-context/index.js
 /**
  * WordPress dependencies
  */
 
-const RadioContext = (0,external_wp_element_namespaceObject.createContext)({
-  state: null,
-  setState: () => {}
+const RadioGroupContext = (0,external_wp_element_namespaceObject.createContext)({
+  store: undefined,
+  disabled: undefined
 });
-/* harmony default export */ var radio_context = (RadioContext);
 
-;// CONCATENATED MODULE: ./packages/components/build-module/radio-group/radio/index.js
+;// CONCATENATED MODULE: ./packages/components/build-module/radio-group/radio.js
 
-// @ts-nocheck
+/**
+ * WordPress dependencies
+ */
+
 
 /**
  * External dependencies
  */
-
-
-/**
- * WordPress dependencies
- */
+// eslint-disable-next-line no-restricted-imports
 
 
 /**
@@ -68124,128 +67872,41 @@ const RadioContext = (0,external_wp_element_namespaceObject.createContext)({
  */
 
 
-function radio_Radio({
-  children,
+function UnforwardedRadio({
   value,
+  children,
   ...props
 }, ref) {
-  const radioContext = (0,external_wp_element_namespaceObject.useContext)(radio_context);
-  const checked = radioContext.state === value;
-  return (0,external_React_.createElement)(Radio_Radio, {
+  const {
+    store,
+    disabled
+  } = (0,external_wp_element_namespaceObject.useContext)(RadioGroupContext);
+  const selectedValue = store?.useState('value');
+  const isChecked = selectedValue !== undefined && selectedValue === value;
+  return (0,external_React_.createElement)(Radio, {
+    disabled: disabled,
+    store: store,
     ref: ref,
-    as: build_module_button,
-    variant: checked ? 'primary' : 'secondary',
     value: value,
-    ...radioContext,
-    ...props
+    render: (0,external_React_.createElement)(build_module_button, {
+      variant: isChecked ? 'primary' : 'secondary',
+      ...props
+    })
   }, children || value);
 }
 
 /**
  * @deprecated Use `RadioControl` or `ToggleGroupControl` instead.
  */
-/* harmony default export */ var radio_group_radio = ((0,external_wp_element_namespaceObject.forwardRef)(radio_Radio));
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Radio/RadioState.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-function useRadioState(initialState) {
-  if (initialState === void 0) {
-    initialState = {};
-  }
-
-  var _useSealedState = useSealedState(initialState),
-      initialValue = _useSealedState.state,
-      _useSealedState$loop = _useSealedState.loop,
-      loop = _useSealedState$loop === void 0 ? true : _useSealedState$loop,
-      sealed = _rollupPluginBabelHelpers_1f0bf8c2_objectWithoutPropertiesLoose(_useSealedState, ["state", "loop"]);
-
-  var _React$useState = (0,external_React_.useState)(initialValue),
-      state = _React$useState[0],
-      setState = _React$useState[1];
-
-  var composite = useCompositeState(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, sealed), {}, {
-    loop: loop
-  }));
-  return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2(_rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({}, composite), {}, {
-    state: state,
-    setState: setState
-  });
-}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/reakit/es/Radio/RadioGroup.js
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-var RadioGroup_useRadioGroup = createHook_createHook({
-  name: "RadioGroup",
-  compose: Composite_useComposite,
-  keys: RADIO_GROUP_KEYS,
-  useProps: function useProps(_, htmlProps) {
-    return _rollupPluginBabelHelpers_1f0bf8c2_objectSpread2({
-      role: "radiogroup"
-    }, htmlProps);
-  }
-});
-var RadioGroup_RadioGroup = createComponent_createComponent({
-  as: "div",
-  useHook: RadioGroup_useRadioGroup,
-  useCreateElement: function useCreateElement$1(type, props, children) {
-     false ? 0 : void 0;
-    return useCreateElement(type, props, children);
-  }
-});
-
-
+const radio_Radio = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedRadio);
+/* harmony default export */ var radio_group_radio = (radio_Radio);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/radio-group/index.js
-
-// @ts-nocheck
 
 /**
  * External dependencies
  */
+// eslint-disable-next-line no-restricted-imports
 
 
 /**
@@ -68258,32 +67919,33 @@ var RadioGroup_RadioGroup = createComponent_createComponent({
  */
 
 
-function radio_group_RadioGroup({
+function UnforwardedRadioGroup({
   label,
   checked,
   defaultChecked,
   disabled,
   onChange,
+  children,
   ...props
 }, ref) {
-  const radioState = useRadioState({
-    state: defaultChecked,
-    baseId: props.id
+  const radioStore = useRadioStore({
+    value: checked,
+    defaultValue: defaultChecked,
+    setValue: newValue => {
+      onChange?.(newValue !== null && newValue !== void 0 ? newValue : undefined);
+    }
   });
-  const radioContext = {
-    ...radioState,
-    disabled,
-    // Controlled or uncontrolled.
-    state: checked !== null && checked !== void 0 ? checked : radioState.state,
-    setState: onChange !== null && onChange !== void 0 ? onChange : radioState.setState
-  };
-  return (0,external_React_.createElement)(radio_context.Provider, {
-    value: radioContext
-  }, (0,external_React_.createElement)(RadioGroup_RadioGroup, {
-    ref: ref,
-    as: button_group,
+  const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    store: radioStore,
+    disabled
+  }), [radioStore, disabled]);
+  return (0,external_React_.createElement)(RadioGroupContext.Provider, {
+    value: contextValue
+  }, (0,external_React_.createElement)(RadioGroup, {
+    store: radioStore,
+    render: (0,external_React_.createElement)(button_group, null, children),
     "aria-label": label,
-    ...radioState,
+    ref: ref,
     ...props
   }));
 }
@@ -68291,7 +67953,8 @@ function radio_group_RadioGroup({
 /**
  * @deprecated Use `RadioControl` or `ToggleGroupControl` instead.
  */
-/* harmony default export */ var radio_group = ((0,external_wp_element_namespaceObject.forwardRef)(radio_group_RadioGroup));
+const radio_group_RadioGroup = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedRadioGroup);
+/* harmony default export */ var radio_group = (radio_group_RadioGroup);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/radio-control/index.js
 
@@ -70726,7 +70389,7 @@ var useTabPanel = createHook(
     return props;
   }
 );
-var tab_panel_TabPanel = createComponent((props) => {
+var TabPanel = createComponent((props) => {
   const htmlProps = useTabPanel(props);
   return LFJDOMBA_createElement("div", htmlProps);
 });
@@ -70809,7 +70472,7 @@ const UnforwardedTabPanel = ({
   activeClass = 'is-active',
   onSelect
 }, ref) => {
-  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(TabPanel, 'tab-panel');
+  const instanceId = (0,external_wp_compose_namespaceObject.useInstanceId)(tab_panel_TabPanel, 'tab-panel');
   const prependInstanceId = (0,external_wp_element_namespaceObject.useCallback)(tabName => {
     if (typeof tabName === 'undefined') {
       return;
@@ -70911,21 +70574,23 @@ const UnforwardedTabPanel = ({
         showTooltip: !!tab.icon
       })
     }, !tab.icon && tab.title);
-  })), selectedTab && (0,external_React_.createElement)(tab_panel_TabPanel, {
+  })), selectedTab && (0,external_React_.createElement)(TabPanel, {
     id: `${prependInstanceId(selectedTab.name)}-view`,
     store: tabStore,
     tabId: prependInstanceId(selectedTab.name),
     className: 'components-tab-panel__tab-content'
   }, children(selectedTab)));
 };
-const TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedTabPanel);
-/* harmony default export */ var tab_panel = (TabPanel);
+const tab_panel_TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedTabPanel);
+/* harmony default export */ var tab_panel = (tab_panel_TabPanel);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/text-control/index.js
 
 /**
  * External dependencies
  */
+
+
 
 /**
  * WordPress dependencies
@@ -70940,6 +70605,7 @@ const TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(UnforwardedT
 function UnforwardedTextControl(props, ref) {
   const {
     __nextHasNoMarginBottom,
+    __next40pxDefaultSize = false,
     label,
     hideLabelFromVision,
     value,
@@ -70960,7 +70626,9 @@ function UnforwardedTextControl(props, ref) {
     help: help,
     className: className
   }, (0,external_React_.createElement)("input", {
-    className: "components-text-control__input",
+    className: classnames_default()('components-text-control__input', {
+      'is-next-40px-default-size': __next40pxDefaultSize
+    }),
     type: type,
     id: id,
     value: value,
@@ -81859,30 +81527,6 @@ var MenuGroupLabel = createComponent(
 if (false) {}
 
 
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/C3N6W3CQ.js
-"use client";
-
-
-
-// src/separator/separator.ts
-var C3N6W3CQ_useSeparator = createHook(
-  (_a) => {
-    var _b = _a, { orientation = "horizontal" } = _b, props = __objRest(_b, ["orientation"]);
-    props = _2SMRF6AD_spreadValues({
-      role: "separator",
-      "aria-orientation": orientation
-    }, props);
-    return props;
-  }
-);
-var C3N6W3CQ_Separator = createComponent((props) => {
-  const htmlProps = C3N6W3CQ_useSeparator(props);
-  return LFJDOMBA_createElement("hr", htmlProps);
-});
-if (false) {}
-
-
-
 ;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/PLOKN2PQ.js
 "use client";
 
@@ -81904,7 +81548,7 @@ var useCompositeSeparator = createHook(
     const orientation = store.useState(
       (state) => state.orientation === "horizontal" ? "vertical" : "horizontal"
     );
-    props = C3N6W3CQ_useSeparator(_2SMRF6AD_spreadProps(_2SMRF6AD_spreadValues({}, props), { orientation }));
+    props = useSeparator(_2SMRF6AD_spreadProps(_2SMRF6AD_spreadValues({}, props), { orientation }));
     return props;
   }
 );
@@ -82116,6 +81760,14 @@ const dropdown_menu_v2_ariakit_DropdownMenuCheckboxItem = (0,external_wp_element
     size: 24
   })), children, suffix && (0,external_React_.createElement)(styles_ItemSuffixWrapper, null, suffix));
 });
+const radioCheck = (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.Circle, {
+  cx: 12,
+  cy: 12,
+  r: 3
+}));
 const dropdown_menu_v2_ariakit_DropdownMenuRadioItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuRadioItem({
   suffix,
   children,
@@ -82131,15 +81783,10 @@ const dropdown_menu_v2_ariakit_DropdownMenuRadioItem = (0,external_wp_element_na
   }, (0,external_React_.createElement)(MenuItemCheck, {
     store: dropdownMenuContext?.store,
     render: (0,external_React_.createElement)(styles_ItemPrefixWrapper, null)
-  }, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
-    viewBox: "0 0 24 24",
-    xmlns: "http://www.w3.org/2000/svg"
-  }, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.Circle, {
-    cx: 12,
-    cy: 12,
-    r: 3,
-    fill: "currentColor"
-  }))), children, suffix);
+  }, (0,external_React_.createElement)(build_module_icon, {
+    icon: radioCheck,
+    size: 24
+  })), children, suffix);
 });
 const dropdown_menu_v2_ariakit_DropdownMenuGroup = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuGroup(props, ref) {
   const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
@@ -82172,7 +81819,6 @@ const dropdown_menu_v2_ariakit_UnconnectedDropdownMenu = (props, ref) => {
     children,
     shift,
     modal = true,
-    hideOnEscape = true,
     // From internal components context
     variant,
     // Rest
@@ -82215,6 +81861,19 @@ const dropdown_menu_v2_ariakit_UnconnectedDropdownMenu = (props, ref) => {
     // eslint-disable-next-line no-console
     console.warn('For nested DropdownMenus, the `trigger` should always be a `DropdownMenuItem`.');
   }
+  const hideOnEscape = (0,external_wp_element_namespaceObject.useCallback)(event => {
+    // Pressing Escape can cause unexpected consequences (ie. exiting
+    // full screen mode on MacOs, close parent modals...).
+    event.preventDefault();
+    // Returning `true` causes the menu to hide.
+    return true;
+  }, []);
+  const wrapperProps = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    dir: computedDirection,
+    style: {
+      direction: computedDirection
+    }
+  }), [computedDirection]);
   return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(MenuButton, {
     ref: ref,
     store: dropdownMenuStore,
@@ -82235,12 +81894,7 @@ const dropdown_menu_v2_ariakit_UnconnectedDropdownMenu = (props, ref) => {
     hideOnHoverOutside: false,
     "data-side": appliedPlacementSide,
     variant: variant,
-    wrapperProps: {
-      dir: computedDirection,
-      style: {
-        direction: computedDirection
-      }
-    },
+    wrapperProps: wrapperProps,
     hideOnEscape: hideOnEscape,
     unmountOnHide: true
   }, (0,external_React_.createElement)(DropdownMenuContext.Provider, {
@@ -82464,14 +82118,17 @@ function tabs_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried t
 
 
 const TabListWrapper = emotion_styled_base_browser_esm("div",  true ? {
-  target: "enfox0g1"
+  target: "enfox0g2"
 } : 0)( true ? {
   name: "xbm4q1",
   styles: "display:flex;align-items:stretch;flex-direction:row;&[aria-orientation='vertical']{flex-direction:column;}"
 } : 0);
 const styles_Tab = /*#__PURE__*/emotion_styled_base_browser_esm(Tab,  true ? {
-  target: "enfox0g0"
+  target: "enfox0g1"
 } : 0)("&&{position:relative;border-radius:0;height:", space(12), ";background:transparent;border:none;box-shadow:none;cursor:pointer;padding:3px ", space(4), ";margin-left:0;font-weight:500;&[aria-disabled='true']{cursor:default;opacity:0.3;}&:focus:not( :disabled ){position:relative;box-shadow:none;outline:none;}&::after{content:'';position:absolute;right:0;bottom:0;left:0;pointer-events:none;background:", COLORS.theme.accent, ";height:calc( 0 * var( --wp-admin-border-width-focus ) );border-radius:0;transition:all 0.1s linear;", reduceMotion('transition'), ";}&[aria-selected='true']::after{height:calc( 1 * var( --wp-admin-border-width-focus ) );outline:2px solid transparent;outline-offset:-1px;}&::before{content:'';position:absolute;top:", space(3), ";right:", space(3), ";bottom:", space(3), ";left:", space(3), ";pointer-events:none;box-shadow:0 0 0 0 transparent;border-radius:2px;transition:all 0.1s linear;", reduceMotion('transition'), ";}&:focus-visible::before{box-shadow:0 0 0 var( --wp-admin-border-width-focus ) ", COLORS.theme.accent, ";outline:2px solid transparent;}}" + ( true ? "" : 0));
+const styles_TabPanel = /*#__PURE__*/emotion_styled_base_browser_esm(TabPanel,  true ? {
+  target: "enfox0g0"
+} : 0)("&:focus{box-shadow:none;outline:none;}&:focus-visible{border-radius:2px;box-shadow:0 0 0 var( --wp-admin-border-width-focus ) ", COLORS.theme.accent, ";outline:2px solid transparent;outline-offset:0;}" + ( true ? "" : 0));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/tabs/tab.js
 
@@ -82491,10 +82148,9 @@ const styles_Tab = /*#__PURE__*/emotion_styled_base_browser_esm(Tab,  true ? {
 const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab({
   children,
   id,
-  className,
   disabled,
   render,
-  style
+  ...otherProps
 }, ref) {
   const context = (0,external_wp_element_namespaceObject.useContext)(TabsContext);
   if (!context) {
@@ -82510,10 +82166,9 @@ const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab(
     ref: ref,
     store: store,
     id: instancedTabId,
-    className: className,
-    style: style,
     disabled: disabled,
-    render: render
+    render: render,
+    ...otherProps
   }, children);
 });
 
@@ -82539,8 +82194,7 @@ const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab(
 
 const TabList = (0,external_wp_element_namespaceObject.forwardRef)(function TabList({
   children,
-  className,
-  style
+  ...otherProps
 }, ref) {
   const context = useTabsContext();
   if (!context) {
@@ -82552,10 +82206,9 @@ const TabList = (0,external_wp_element_namespaceObject.forwardRef)(function TabL
   } = context;
   return (0,external_React_.createElement)(tab_list_TabList, {
     ref: ref,
-    style: style,
     store: store,
-    className: className,
-    render: (0,external_React_.createElement)(TabListWrapper, null)
+    render: (0,external_React_.createElement)(TabListWrapper, null),
+    ...otherProps
   }, children);
 });
 
@@ -82564,8 +82217,6 @@ const TabList = (0,external_wp_element_namespaceObject.forwardRef)(function TabL
 /**
  * External dependencies
  */
-// eslint-disable-next-line no-restricted-imports
-
 
 /**
  * WordPress dependencies
@@ -82579,11 +82230,12 @@ const TabList = (0,external_wp_element_namespaceObject.forwardRef)(function TabL
 
 
 
+
 const tabpanel_TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(function TabPanel({
   children,
   id,
-  className,
-  style
+  focusable = true,
+  ...otherProps
 }, ref) {
   const context = (0,external_wp_element_namespaceObject.useContext)(TabsContext);
   if (!context) {
@@ -82594,12 +82246,12 @@ const tabpanel_TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(fun
     store,
     instanceId
   } = context;
-  return (0,external_React_.createElement)(tab_panel_TabPanel, {
+  return (0,external_React_.createElement)(styles_TabPanel, {
     ref: ref,
-    style: style,
     store: store,
     id: `${instanceId}-${id}-view`,
-    className: className
+    focusable: focusable,
+    ...otherProps
   }, children);
 });
 

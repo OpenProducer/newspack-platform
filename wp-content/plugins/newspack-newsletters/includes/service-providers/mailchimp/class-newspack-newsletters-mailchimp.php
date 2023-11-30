@@ -1479,10 +1479,8 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 	/**
 	 * Get usage report.
-	 *
-	 * @param int $last_n_days Number of days to get the report for.
 	 */
-	public function get_usage_report( $last_n_days ) {
-		return Newspack_Newsletters_Mailchimp_Usage_Reports::get_usage_report( $last_n_days );
+	public function get_usage_report() {
+		return Newspack_Newsletters_Mailchimp_Usage_Reports::get_usage_report();
 	}
 }

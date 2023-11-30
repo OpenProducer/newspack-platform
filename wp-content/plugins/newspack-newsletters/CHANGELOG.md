@@ -1,3 +1,31 @@
+# [2.6.0](https://github.com/Automattic/newspack-newsletters/compare/v2.5.1...v2.6.0) (2023-11-27)
+
+
+### Bug Fixes
+
+* add layout styles to newsletter ([#1353](https://github.com/Automattic/newspack-newsletters/issues/1353)) ([c6a4ce3](https://github.com/Automattic/newspack-newsletters/commit/c6a4ce34416b4dc507ee0b260d05d6780180dab4))
+
+
+### Features
+
+* add editorconfig file ([#1352](https://github.com/Automattic/newspack-newsletters/issues/1352)) ([0be9449](https://github.com/Automattic/newspack-newsletters/commit/0be94491f164bed436bf7a1cbd19eda6fa6703ee))
+* change usage report signature ([#1349](https://github.com/Automattic/newspack-newsletters/issues/1349)) ([1db6532](https://github.com/Automattic/newspack-newsletters/commit/1db6532aeb0462354362eac201e18847bce59c6d))
+* **subscription:** support async `add_contact()` ([#1344](https://github.com/Automattic/newspack-newsletters/issues/1344)) ([82e9dc1](https://github.com/Automattic/newspack-newsletters/commit/82e9dc1da26ca009f1f320f88f4b729df287b908))
+
+# [2.6.0-alpha.3](https://github.com/Automattic/newspack-newsletters/compare/v2.6.0-alpha.2...v2.6.0-alpha.3) (2023-11-21)
+
+
+### Bug Fixes
+
+* add layout styles to newsletter ([#1353](https://github.com/Automattic/newspack-newsletters/issues/1353)) ([c6a4ce3](https://github.com/Automattic/newspack-newsletters/commit/c6a4ce34416b4dc507ee0b260d05d6780180dab4))
+
+# [2.6.0-alpha.2](https://github.com/Automattic/newspack-newsletters/compare/v2.6.0-alpha.1...v2.6.0-alpha.2) (2023-11-16)
+
+
+### Bug Fixes
+
+* **ras:** contact syncing to mailchimp ([#1355](https://github.com/Automattic/newspack-newsletters/issues/1355)) ([3068d51](https://github.com/Automattic/newspack-newsletters/commit/3068d511b9f5e5632c22c7a964c970c968e66308))
+
 ## [2.5.1](https://github.com/Automattic/newspack-newsletters/compare/v2.5.0...v2.5.1) (2023-11-16)
 
 
