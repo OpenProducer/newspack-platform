@@ -30,10 +30,13 @@
 		<exclude name="WordPress.Files.FileName"/>
 		<exclude name="Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace"/>
 		<exclude name="Squiz.Commenting.InlineComment.InvalidEndChar"/>
-		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
-		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
+		<exclude name="Squiz.Commenting.BlockComment.HasEmptyLine"/>
+		<exclude name="Squiz.Commenting.BlockComment.LineIndent"/>
 		<exclude name="Squiz.Commenting.FunctionComment.ParamCommentFullStop"/>
 		<exclude name="Squiz.Commenting.FunctionComment.ThrowsNoFullStop"/>
+		<exclude name="Squiz.Commenting.InlineComment.SpacingAfter"/>
+		<exclude name="Squiz.Functions.MultiLineFunctionDeclaration.BraceOnSameLine"/>
+		<exclude name="Generic.CodeAnalysis.EmptyStatement.DetectedCatch"/>
 		<exclude name="Generic.Arrays.DisallowShortArraySyntax.Found"/>
 		<exclude name="WordPress.WP.GlobalVariablesOverride.Prohibited"/>
 
@@ -70,6 +73,21 @@
 		<exclude name="WordPress.WhiteSpace.PrecisionAlignment.Found"/>
 		<exclude name="WordPress.WhiteSpace.ControlStructureSpacing.NoSpaceAfterStructureOpen"/>
 		<exclude name="Squiz.WhiteSpace.SuperfluousWhitespace.EmptyLines"/>
+		<exclude name="Universal.Whitespace.DisallowInlineTabs.NonIndentTabsUsed"/>
+		<exclude name="PSR2.Methods.FunctionClosingBrace.SpacingBeforeClose"/>
+
+		<!-- Extra Exclude Rules -->
+		<exclude name="Universal.ControlStructures.DisallowLonelyIf.Found"/>
+		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_print_r"/>
+		<exclude name="WordPress.PHP.DevelopmentFunctions.error_log_error_log"/>
+		<exclude name="Generic.Strings.UnnecessaryStringConcat.Found"/>
+		<exclude name="Universal.Operators.DisallowStandalonePostIncrementDecrement.PostIncrementFound"/>
+		<exclude name="Universal.Operators.DisallowStandalonePostIncrementDecrement.PostDecrementFound"/>
+		<exclude name="Universal.Files.SeparateFunctionsFromOO.Mixed"/>
+
+		<!-- Temporary: Remove Strictness -->
+		<exclude name="Universal.Operators.StrictComparisons.LooseEqual"/>
+		<exclude name="Universal.Operators.StrictComparisons.LooseNotEqual"/>
 
 	</rule>
 

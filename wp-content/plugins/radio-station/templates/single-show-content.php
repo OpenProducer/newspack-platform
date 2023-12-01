@@ -168,6 +168,9 @@ $posts_per_page = radio_station_get_setting( 'show_posts_per_page' );
 if ( absint( $posts_per_page ) > 0 ) {
 	$limit = apply_filters( 'radio_station_show_page_posts_limit', false, $post_id );
 	$show_posts = radio_station_get_show_posts( $post_id, array( 'limit' => $limit ) );
+	if ( RADIO_STATION_DEBUG ) {
+		echo "Show Posts: " . esc_html( print_r( $show_posts, true ) ) . "\n";
+	}
 }
 
 // --- check for show playlists ---
@@ -175,6 +178,9 @@ $playlists_per_page = radio_station_get_setting( 'show_playlists_per_page' );
 if ( absint( $playlists_per_page ) > 0 ) {
 	$limit = apply_filters( 'radio_station_show_page_playlist_limit', false, $post_id );
 	$show_playlists = radio_station_get_show_playlists( $post_id, array( 'limit' => $limit ) );
+	if ( RADIO_STATION_DEBUG ) {
+		echo "Show Playlists: " . esc_html( print_r( $show_playlists, true ) ) . "\n";
+	}
 }
 
 // --- get layout display settings ----
@@ -293,8 +299,7 @@ if ( RADIO_STATION_DEBUG ) {
 }
 
 // --- combine image blocks to show images block ---
-if ( is_array( $image_blocks ) && ( count( $image_blocks ) > 0 )
-  && is_array( $image_block_order ) && ( count( $image_block_order ) > 0 ) ) {
+if ( is_array( $image_blocks ) && ( count( $image_blocks ) > 0 ) && is_array( $image_block_order ) && ( count( $image_block_order ) > 0 ) ) {
 	$blocks['show_images'] .= '<div class="show-controls">';
 	foreach ( $image_block_order as $image_block ) {
 		if ( isset( $image_blocks[$image_block] ) ) {
@@ -335,7 +340,7 @@ if ( $show_phone || $hosts || $producers || $genres || $languages ) {
 		}
 		$host_count = count( $hosts );
 		foreach ( $hosts as $host ) {
-			$count ++;
+			$count++;
 			$user_info = get_userdata( $host );
 
 			// --- DJ / Host URL and/or display ---
@@ -374,7 +379,7 @@ if ( $show_phone || $hosts || $producers || $genres || $languages ) {
 		}
 		$producer_count = count( $producers );
 		foreach ( $producers as $producer ) {
-			$count ++;
+			$count++;
 			$user_info = get_userdata( $producer );
 
 			// --- Producer URL / display ---
@@ -468,8 +473,7 @@ if ( $show_phone || $hosts || $producers || $genres || $languages ) {
 	}
 
 	// --- combine meta blocks to show meta block ---
-	if ( is_array( $meta_blocks ) && ( count( $meta_blocks ) > 0 )
-	  && is_array( $meta_block_order ) && ( count( $meta_block_order ) > 0 ) ) {
+	if ( is_array( $meta_blocks ) && ( count( $meta_blocks ) > 0 ) && is_array( $meta_block_order ) && ( count( $meta_block_order ) > 0 ) ) {
 		foreach ( $meta_block_order as $meta_block ) {
 			if ( isset( $meta_blocks[$meta_block] ) ) {
 				$blocks['show_meta'] .= $meta_blocks[$meta_block];
@@ -662,45 +666,51 @@ $show_past_dates = apply_filters( 'radio_station_override_show_past_dates', fals
 $overrides = radio_station_get_linked_override_times( $post_id );
 $scheduled = '';
 if ( $overrides && is_array( $overrides ) && ( count( $overrides ) > 0 ) ) {
+	if ( RADIO_STATION_DEBUG ) {
+		echo '<span style="display:none;">LINKED OVERRIDES: ' . esc_html( print_r( $overrides, true ) ) . '</span>' . "\n";
+	}
 	$now = radio_station_get_now();
 	foreach ( $overrides as $override ) {
 		if ( 'yes' != $override['disabled'] ) {
+			// 2.5.6: added check that override keys are not empty
+			if ( !empty( $override['date'] ) && !empty( $override['start_hour'] ) && !empty( $override['start_min'] ) && !empty( $override['start_meridian'] ) && !empty( $override['end_hour'] ) && !empty( $override['end_min'] ) && !empty( $override['end_meridian'] ) ) {
 
-			$start = $override['date'] . ' ' . $override['start_hour'] . ':' . $override['start_min'] . ' ' . $override['start_meridian'];
-			$end = $override['date'] . ' ' . $override['end_hour'] . ':' . $override['end_min'] . ' ' . $override['end_meridian'];
-			$override_start_time = radio_station_to_time( $start );
-			$override_end_time = radio_station_to_time( $end );
-			if ( $override_end_time <= $override_start_time ) {
-				$override_end_time = $override_end_time + ( 24 * 60 * 60 );
-			}
+				$start = $override['date'] . ' ' . $override['start_hour'] . ':' . $override['start_min'] . ' ' . $override['start_meridian'];
+				$end = $override['date'] . ' ' . $override['end_hour'] . ':' . $override['end_min'] . ' ' . $override['end_meridian'];
+				$override_start_time = radio_station_to_time( $start );
+				$override_end_time = radio_station_to_time( $end );
+				if ( $override_end_time <= $override_start_time ) {
+					$override_end_time = $override_end_time + ( 24 * 60 * 60 );
+				}
 
-			// --- maybe filter out past scheduled dates ---
-			if ( $show_past_dates || ( $override_end_time > $now ) ) {
+				// --- maybe filter out past scheduled dates ---
+				if ( $show_past_dates || ( $override_end_time > $now ) ) {
 
-				$start_display = radio_station_get_time( $start_data_format, $override_start_time );
-				$end_display = radio_station_get_time( $end_data_format, $override_end_time );
-				$start_display = radio_station_translate_time( $start_display );
-				$end_display = radio_station_translate_time( $end_display );
-				$date_time = radio_station_to_time( $override['date'] . ' 00:00' );
-				$date = radio_station_get_time( $date_format, $date_time );
+					$start_display = radio_station_get_time( $start_data_format, $override_start_time );
+					$end_display = radio_station_get_time( $end_data_format, $override_end_time );
+					$start_display = radio_station_translate_time( $start_display );
+					$end_display = radio_station_translate_time( $end_display );
+					$date_time = radio_station_to_time( $override['date'] . ' 00:00' );
+					$date = radio_station_get_time( $date_format, $date_time );
 
-				// 2.4.0.6: use filtered shift separator
-				$separator = ' - ';
-				$separator = apply_filters( 'radio_station_show_times_separator', $separator, 'override-content' );
+					// 2.4.0.6: use filtered shift separator
+					$separator = ' - ';
+					$separator = apply_filters( 'radio_station_show_times_separator', $separator, 'override-content' );
 
-				$scheduled .= '<div class="override-time">' . "\n";
-					$scheduled .= '<span class="rs-date rs-start-date" data-format="' . esc_attr( $date_format ) . '" data="' . esc_attr( $date_time ) . '">' . esc_html( $date ) . '</span>' . "\n";
-					$scheduled .= '<span class="rs-time rs-start-time" data-format="' . esc_attr( $start_data_format ) . '" data="' . esc_attr( $override_start_time ) . '">' . esc_html( $start_display ) . '</span>' . "\n";
-					$scheduled .= '<span class="rs-sep">' . esc_html( $separator ) . '</span>' . "\n";
-					$scheduled .= '<span class="rs-time rs-end-time" data-format="' . esc_attr( $end_data_format ) . '" data="' . esc_attr( $override_end_time ) . '">' . esc_html( $end_display ) . '</span>' . "\n";
-				$scheduled .= '</div>' . "\n";
+					$scheduled .= '<div class="override-time">' . "\n";
+						$scheduled .= '<span class="rs-date rs-start-date" data-format="' . esc_attr( $date_format ) . '" data="' . esc_attr( $date_time ) . '">' . esc_html( $date ) . '</span>' . "\n";
+						$scheduled .= '<span class="rs-time rs-start-time" data-format="' . esc_attr( $start_data_format ) . '" data="' . esc_attr( $override_start_time ) . '">' . esc_html( $start_display ) . '</span>' . "\n";
+						$scheduled .= '<span class="rs-sep">' . esc_html( $separator ) . '</span>' . "\n";
+						$scheduled .= '<span class="rs-time rs-end-time" data-format="' . esc_attr( $end_data_format ) . '" data="' . esc_attr( $override_end_time ) . '">' . esc_html( $end_display ) . '</span>' . "\n";
+					$scheduled .= '</div>' . "\n";
 
-				$scheduled .= '<div class="show-user-time">' . "\n";
-					$scheduled .= '[<span class="rs-date rs-start-date"></span>' . "\n";
-					$scheduled .= '<span class="rs-time rs-start-time"></span>' . "\n";
-					$scheduled .= '<span class="rs-sep">' . esc_html( $separator ) . '</span>' . "\n";
-					$scheduled .= '<span class="rs-time rs-end-time"></span>]' . "\n";
-				$scheduled .= '</div>' . "\n";
+					$scheduled .= '<div class="show-user-time">' . "\n";
+						$scheduled .= '[<span class="rs-date rs-start-date"></span>' . "\n";
+						$scheduled .= '<span class="rs-time rs-start-time"></span>' . "\n";
+						$scheduled .= '<span class="rs-sep">' . esc_html( $separator ) . '</span>' . "\n";
+						$scheduled .= '<span class="rs-time rs-end-time"></span>]' . "\n";
+					$scheduled .= '</div>' . "\n";
+				}
 			}
 		}
 	}
@@ -863,8 +873,8 @@ echo '<input type="hidden" id="radio-page-type" value="show">' . "\n";
 		$header_image .= '<img class="show-image" src="' . esc_url( $header_url ) . '" width="' . esc_attr( $header_width ) . '" height="' . esc_attr( $header_height ) . '">';
 		$header_image .= '</div><br>';
 		$header_image = apply_filters( 'radio_station_show_page_header_image', $header_image, $post_id );
-		// phpcs:ignore WordPress.Security.OutputNotEscaped
-		echo $header_image;
+		// 2.5.6: wrap output in wp_kses_post
+		echo wp_kses_post( $header_image );
 	}
 
 	// --- Show Info Blocks ---
@@ -892,7 +902,8 @@ echo '<input type="hidden" id="radio-page-type" value="show">' . "\n";
 
 				// --- output blocks ---
 				echo '<div class="' . esc_attr( $class ) . '">' . "\n";
-				// phpcs:ignore WordPress.Security.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				// TODO: test wrapping in wp_kses ?
 				echo $blocks[$block] . "\n";
 				echo '</div>' . "\n";
 
@@ -912,7 +923,7 @@ echo '<input type="hidden" id="radio-page-type" value="show">' . "\n";
 
 		echo '<div id="show-latest">' . "\n";
 			echo '<div class="show-latest-title">' . "\n";
-			echo '<span class="show-latest-label show-label">' .  esc_html( $label ) . '</span>' . "\n";
+			echo '<span class="show-latest-label show-label">' . esc_html( $label ) . '</span>' . "\n";
 			echo '</div>' . "\n";
 
 			$radio_station_data['show-latests'] = $show_latest;
@@ -937,10 +948,11 @@ echo '<input type="hidden" id="radio-page-type" value="show">' . "\n";
 		if ( 'tabbed' == $section_layout ) {
 
 			// --- output first section as non-tabbed ---
+			// TODO: test wrapping output in wp_kses
 			if ( isset( $sections[$section_order[0]] ) ) {
-				// phpcs:ignore WordPress.Security.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $sections[$section_order[0]]['heading'];
-				// phpcs:ignore WordPress.Security.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $sections[$section_order[0]]['content'];
 			}
 			unset( $section_order[0] );
@@ -983,21 +995,30 @@ echo '<input type="hidden" id="radio-page-type" value="show">' . "\n";
 
 					// --- section jump links ---
 					if ( 'yes' == $jump_links ) {
-						echo '<div class="show-jump-links">' . "\n";
-						echo '<b>' . esc_html( __( 'Jump to', 'radio-station' ) ) . '</b>: ' . "\n";
-						$found_link = false;
+						// 2.5.6: make sure we have at least one jump link
+						$jump_links = false;
 						foreach ( $section_order as $link ) {
 							if ( isset( $sections[$link] ) && ( $link != $section ) ) {
-								if ( $found_link ) {
-									echo ' | ';
-								}
-								echo '<a href="javascript:void(0);" onclick="radio_scroll_link(\'' . esc_attr( $link ) . '\');">';
-									echo esc_html( $sections[$link]['anchor'] );
-								echo '</a>' . "\n";
-								$found_link = true;
+								$jump_links = true;
 							}
 						}
-						echo '</div>' . "\n";
+						if ( $jump_links ) {
+							echo '<div class="show-jump-links">' . "\n";
+							echo '<b>' . esc_html( __( 'Jump to', 'radio-station' ) ) . '</b>: ' . "\n";
+							$found_link = false;
+							foreach ( $section_order as $link ) {
+								if ( isset( $sections[$link] ) && ( $link != $section ) ) {
+									if ( $found_link ) {
+										echo ' | ';
+									}
+									echo '<a href="javascript:void(0);" onclick="radio_scroll_link(\'' . esc_attr( $link ) . '\');">';
+										echo esc_html( $sections[$link]['anchor'] );
+									echo '</a>' . "\n";
+									$found_link = true;
+								}
+							}
+							echo '</div>' . "\n";
+						}
 					}
 
 				} else {
@@ -1012,7 +1033,8 @@ echo '<input type="hidden" id="radio-page-type" value="show">' . "\n";
 				}
 
 				// --- section content ---
-				// phpcs:ignore WordPress.Security.OutputNotEscaped
+				// TODO: test wrapping output in wp_kses
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $sections[$section]['content'] . "\n";
 				$i++;
 			}
@@ -1046,4 +1068,3 @@ if ( 'tabbed' == $section_layout ) {
 
 // 2.3.3.9: turn off doing template flag
 $radio_station_data['doing-template'] = false;
-

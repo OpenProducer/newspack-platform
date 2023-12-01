@@ -305,7 +305,7 @@ function radio_station_post_type_editor( $can_edit, $post_type ) {
 		RADIO_STATION_SHOW_SLUG,
 		RADIO_STATION_PLAYLIST_SLUG,
 		RADIO_STATION_OVERRIDE_SLUG,
-		RADIO_STATION_HOST_SLUG.
+		RADIO_STATION_HOST_SLUG,
 		RADIO_STATION_PRODUCER_SLUG,
 	);
 	// 2.2.8: removed strict in_array checking
@@ -545,4 +545,3 @@ function radio_station_register_show_taxonomies() {
 	register_taxonomy( RADIO_STATION_LANGUAGES_SLUG, $post_types, $args );
 
 }
-

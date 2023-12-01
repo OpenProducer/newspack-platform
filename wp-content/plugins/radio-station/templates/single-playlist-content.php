@@ -25,7 +25,7 @@ if ( $related_show ) {
 // --- output the playlist post content ---
 echo '<br>';
 the_content();
-		
+
 // --- get the playlist data ---
 $playlist = get_post_meta( $post_id, 'playlist', true );
 
@@ -77,7 +77,7 @@ if ( $playlist ) {
 		echo '</div>' . "\n";
 
 	}  else {
-	
+
 		// 2.4.0.3: added text to indicate no played tracks
 		echo '<div class="myplaylist-no-entries">' . "\n";
 			echo esc_html( __( 'No played tracks found for this Playlist yet.', 'radio-station' ) );
@@ -91,7 +91,7 @@ if ( $playlist ) {
 		echo esc_html( __( 'No entries found for this Playlist', 'radio-station' ) ) . "\n";
 	echo '</div>' . "\n";
 
-} 
+}
 
 // --- link show playlists (bottom) ---
 if ( $related_show ) {
@@ -102,4 +102,3 @@ if ( $related_show ) {
 	// 2.5.0: uses wp_kses on after section
 	echo wp_kses( $after, $allowed );
 }
-

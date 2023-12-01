@@ -1,7 +1,17 @@
 /* =============================== */
 /* === Radio Player Javascript === */
-/* --------- Version 1.0.1 ------- */
+/* --------- Version 1.0.2 ------- */
 /* =============================== */
+
+/* === Debounce Delay Callback === */
+var radio_player_debounce = (function () {
+	var player_debouncers = {};
+	return function (callback, ms, uniqueId) {
+		if (!uniqueId) {uniqueId = "nonuniqueid";}
+		if (player_debouncers[uniqueId]) {clearTimeout (player_debouncers[uniqueId]);}
+		player_debouncers[uniqueId] = setTimeout(callback, ms);
+	};
+})();
 
 /* === Cookie Value Function === */
 radio_player_cookie = {
@@ -48,13 +58,17 @@ function radio_player_check_format(data) {
 	/* TODO: add more possible formats for detection ? */
 	formats = ['mp3','aac','m4a','mp4','ogg','oga','webm','rtmpa','wav','flac'];
 	if (format == '') {
+		if (radio_player.debug) {console.log('Detecting stream format from URL.');}
 		for (i = 0; i < formats.length; i++) {
-			if (url.indexOf(formats[i]) > -1) {format = formats[i];}
+			length = formats[i].length;
+			if (url.substr(-length,length) == formats[i]) {format = formats[i];}
 		}
 	}
 	if (fformat == '') {
+		if (radio_player.debug) {console.log('Detecting fallback format from URL.');}
 		for (i = 0; i < formats.length; i++) {
-			if (fallback.indexOf(formats[i]) > -1) {fformat = formats[i];}
+			length = formats[i].length;
+			if (fallback.substr(-length,length) == formats[i]) {fformat = formats[i];}
 		}
 	}
 
@@ -651,7 +665,7 @@ function radio_player_set_state(key, value) {
 
 /* --- store player instance data */
 function radio_player_set_data_state(script, instance, data, start) {
-	url = data.url; format = data.format; fallback = data.fallback; fformat = data.fallback;
+	url = data.url; format = data.format; fallback = data.fallback; fformat = data.fformat; /* 2.5.6: fix to fallback format */
 	if (typeof radio_data.data[instance] != 'undefined') {
 		cdata = radio_data.data[instance];
 		if ( (cdata.script != script) || (cdata.url != url) || (cdata.format != format) || (cdata.fallback != fallback) || (cdata.fformat != fformat) || (cdata.start != start) ) {
@@ -691,16 +705,17 @@ function radio_player_save_user_state() {
 
 /* --- volume change audio test --- */
 /* ref: https://stackoverflow.com/a/62094756/5240159 */
+/* 2.5.6: fix radio.debug to radio_player.debug */
 function radio_player_volume_test() {
 	isIOS = ['iPad Simulator','iPhone Simulator','iPod Simulator','iPad','iPhone','iPod'].includes(navigator.platform);
-	if (radio.debug && isIOS) {console.log('iOS Mobile Device Detected. ');}
+	if (radio_player.debug && isIOS) {console.log('iOS Mobile Device Detected. ');}
     isAppleDevice = navigator.userAgent.includes('Macintosh');
-	if (radio.debug && isAppleDevice) {console.log('Apple Device Detected.');}
+	if (radio_player.debug && isAppleDevice) {console.log('Apple Device Detected.');}
     isTouchScreen = navigator.maxTouchPoints >= 1;
-	if (radio.debug && isTouchScreen) {console.log('Touch Screen Detected. ');}
+	if (radio_player.debug && isTouchScreen) {console.log('Touch Screen Detected. ');}
 	iosAudioFailure = false; testaudio = new Audio();
-	try {testaudio.volume = 0.5;} catch(e) {if (radio.debug) {console.log('Caught Volume Change Error.');} iosAudioFailure = true;}
-	if (testaudio.volume === 1) {if (radio.debug) {console.log('Volume could not be changed.');} iosAudioFailure = true;}
+	try {testaudio.volume = 0.5;} catch(e) {if (radio_player.debug) {console.log('Caught Volume Change Error.');} iosAudioFailure = true;}
+	if (testaudio.volume === 1) {if (radio_player.debug) {console.log('Volume could not be changed.');} iosAudioFailure = true;}
     return isIOS || (isAppleDevice && (isTouchScreen || iosAudioFailure));
 }
 

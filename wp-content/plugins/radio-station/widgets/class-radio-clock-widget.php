@@ -201,7 +201,7 @@ class Radio_Clock_Widget extends WP_Widget {
 				// --- output widget display ---
 				// TODO: test wp_kses on output ?
 				// echo wp_kses( $output, $allowed );
-				// phpcs:ignore WordPress.Security.OutputNotEscaped
+				// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 				echo $output;
 
 			// --- close widget contents ---
@@ -227,4 +227,3 @@ add_action( 'widgets_init', 'radio_station_register_radio_clock_widget' );
 function radio_station_register_radio_clock_widget() {
 	register_widget( 'Radio_Clock_Widget' );
 }
-

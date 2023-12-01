@@ -109,7 +109,7 @@
 	border: 1px solid #F00000;
 }
 
-#.aster-program-schedule th .headings {
+#master-program-schedule th .headings {
 	display: inline-block;
 }
 
@@ -180,7 +180,7 @@
 	vertical-align: top;
 	font-size: 1em;
 	text-align: center;
-	padding: 0px;
+	padding: 0;
 	height: 100%;
 }
 

@@ -263,10 +263,14 @@ function radio_station_get_block_attributes() {
 add_action( 'init', 'radio_station_register_blocks' );
 function radio_station_register_blocks() {
 
+	if ( !function_exists( 'register_block_type' ) ) {
+		return;
+	}
+
 	// --- get block callbacks and attributes ---
 	$callbacks = radio_station_get_block_callbacks();
 	$attributes = radio_station_get_block_attributes();
-	
+
 	// --- loop block names to register blocks ---
 	foreach ( $callbacks as $block_slug => $callback ) {
 		$block_key = 'radio-station/' . $block_slug;
@@ -274,7 +278,7 @@ function radio_station_register_blocks() {
 			'render_callback' => $callback,
 			'attributes'      => $attributes[$block_slug],
 			'category'        => 'radio-station',
-		);	
+		);
 		$args = apply_filters( 'radio_station_block_args', $args, $block_slug, $callback );
 		register_block_type( $block_key, $args );
 	}
@@ -287,11 +291,11 @@ function radio_station_register_blocks() {
 // reF: https://jasonyingling.me/enqueueing-scripts-and-styles-for-gutenberg-blocks/
 add_action( 'enqueue_block_editor_assets', 'radio_station_block_editor_assets' );
 function radio_station_block_editor_assets() {
-	
+
 	// --- get block callabacks ---
 	$callbacks = radio_station_get_block_callbacks();
 
-    // --- set block dependencies ---
+	// --- set block dependencies ---
 	$deps = array( 'wp-blocks', 'wp-i18n', 'wp-element', 'wp-components', 'wp-editor' );
 
 	// --- set base block URL and path ---
@@ -314,7 +318,7 @@ function radio_station_block_editor_assets() {
 			);
 
 		}
-    }
+	}
 
 	// --- filter scripts and loop to enqueue ---
 	$block_scripts = apply_filters( 'radio_station_block_scripts', $block_scripts );
@@ -330,15 +334,15 @@ function radio_station_block_editor_assets() {
 	$js = radio_station_localization_script();
 	// 2.5.0: use radio_station_add_inline_script
 	radio_station_add_inline_script( 'radio-station-admin', $js );
-	
+
 	// --- block editor support for conditional loading ---
 	$script_url = plugins_url( '/blocks/editor.js', RADIO_STATION_FILE );
 	$script_path = RADIO_STATION_DIR . 'blocks/editor.js';
 	$version = filemtime( $script_path );
 	wp_enqueue_script( 'radio-blockedit-js', $script_url, $deps, $version, true );
 
-    // --- enqueue shortcode styles for blocks ---
-	$deps = array( 'wp-edit-blocks' );
+	// --- enqueue shortcode styles for blocks ---
+	// $deps = array( 'wp-edit-blocks' );
 	$stylesheets = array( 'shortcodes', 'schedule' ); // 'block-editor', 'blocks'
 	foreach ( $stylesheets as $stylekey ) {
 		$style_path = RADIO_STATION_DIR . 'css/rs-' . $stylekey . '.css';
@@ -400,7 +404,7 @@ function radio_station_enqueue_block_assets() {
 // ----------------------
 add_action( 'wp_ajax_radio_station_block_script', 'radio_station_block_script' );
 function radio_station_block_script() {
-	
+
 	if ( !isset( $_REQUEST['handle'] ) ) {
 		exit;
 	}
@@ -427,8 +431,8 @@ function radio_station_block_script() {
 	// --- output javascript ---
 	header( 'Content-Type: application/javascript' );
 	if ( '' != $js ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo $js;
 	}
 	exit;
 }
-

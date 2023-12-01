@@ -37,17 +37,18 @@ function radio_station_current_schedule( $scheds = array() ) {
 		// 2.3.0: added check is shift is disabled
 		if ( !isset( $sched['disabled'] ) || ( 'yes' != $sched['disabled'] ) ) {
 
-			if ( date( 'l', $now ) !== $sched['day'] ) {
+			// 2.5.6: use radio_station-get_time instead of date
+			if ( radio_station_get_time( 'l', $now ) !== $sched['day'] ) {
 				continue;
 			}
 
-			$start = strtotime( date( 'Y-m-d', $now ) . $sched['start_hour'] . ':' . $sched['start_min'] . ' ' . $sched['start_meridian'] );
+			$start = strtotime( radio_station_get_time( 'Y-m-d', $now ) . $sched['start_hour'] . ':' . $sched['start_min'] . ' ' . $sched['start_meridian'] );
 
 			if ( 'pm' === $sched['start_meridian'] && 'am' === $sched['end_meridian'] ) {
 				// check for shows that run overnight into the next morning
-				$end = strtotime( date( 'Y-m-d', ( $now + 86400 ) ) . $sched['end_hour'] . ':' . $sched['end_min'] . ' ' . $sched['end_meridian'] );
+				$end = strtotime( radio_station_get_time( 'Y-m-d', ( $now + 86400 ) ) . $sched['end_hour'] . ':' . $sched['end_min'] . ' ' . $sched['end_meridian'] );
 			} else {
-				$end = strtotime( date( 'Y-m-d', $now ) . $sched['end_hour'] . ':' . $sched['end_min'] . ' ' . $sched['end_meridian'] );
+				$end = strtotime( radio_station_get_time( 'Y-m-d', $now ) . $sched['end_hour'] . ':' . $sched['end_min'] . ' ' . $sched['end_meridian'] );
 			}
 
 			// a show cannot end before it begins... if it does, it ends the following day.
@@ -75,8 +76,8 @@ function radio_station_convert_time( $time = array() ) {
 	}
 
 	$now = strtotime( current_time( 'mysql' ) );
-	$cur_date = date( 'Y-m-d', $now );
-	$tom_date = date( 'Y-m-d', ( $now + 86400 ) ); // get the date for tomorrow
+	$cur_date = radio_station_get_time( 'Y-m-d', $now );
+	$tom_date = radio_station_get_time( 'Y-m-d', ( $now + 86400 ) ); // get the date for tomorrow
 
 	// --- convert to 24 hour time ---
 	$time = radio_station_convert_schedule_to_24hour( $time );
@@ -148,7 +149,7 @@ function radio_station_dj_get_current() {
 
 	// --- get the current time and day ---
 	$now = strtotime( current_time( 'mysql' ) );
-	$cur_day = date( 'l', $now );
+	$cur_day = radio_station_get_time( 'l', $now );
 
 	// --- query for active shows only ---
 	$show_shifts = $wpdb->get_results(
@@ -191,7 +192,7 @@ function radio_station_dj_get_current() {
 				}
 
 				// we need to make a special allowance for shows that run from one day into the next
-				if ( date( 'w', strtotime( $time['day'] ) ) + 1 == date( 'w', strtotime( $cur_day ) ) ) {
+				if ( radio_station_get_time( 'w', strtotime( $time['day'] ) ) + 1 == radio_station_get_time( 'w', strtotime( $cur_day ) ) ) {
 
 					$time = radio_station_convert_time( $time );
 					// because station_convert_time assumes that the show STARTS on the current day,
@@ -224,9 +225,9 @@ function radio_station_dj_get_next( $limit = 1 ) {
 	global $wpdb;
 
 	// get the various times/dates we need
-	$cur_day = date( 'l', strtotime( current_time( 'mysql' ) ) );
-	$cur_day_num = date( 'N', strtotime( current_time( 'mysql' ) ) );
-	$cur_date = date( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
+	$cur_day = radio_station_get_time( 'l', strtotime( current_time( 'mysql' ) ) );
+	$cur_day_num = radio_station_get_time( 'N', strtotime( current_time( 'mysql' ) ) );
+	$cur_date = radio_station_get_time( 'Y-m-d', strtotime( current_time( 'mysql' ) ) );
 	$now = strtotime( current_time( 'mysql' ) );
 	$shows = array();
 
@@ -352,7 +353,7 @@ function radio_station_dj_get_next( $limit = 1 ) {
 			$array = array();
 			$n = func_num_args();
 
-			while ( $n -- > 0 ) {
+			while ( $n-- > 0 ) {
 				$array += func_get_arg( $n );
 			}
 
@@ -457,9 +458,9 @@ function radio_station_get_now_playing( $time = false ) {
 		'post_status' => 'publish',
 		'meta_query'  => array(
 			array(
-				'key'		=> 'playlist_show_id',
-				'value'		=> $show_id,
-				'compare'	=> '=',
+				'key'     => 'playlist_show_id',
+				'value'   => $show_id,
+				'compare' => '=',
 			),
 		),
 	);
@@ -478,6 +479,7 @@ function radio_station_get_now_playing( $time = false ) {
 			$shift_id = get_post_meta( $playlist_post->ID, 'playlist_shift_id', true );
 			if ( $shift_id == $current_show['id'] ) {
 				$playlist_id = $playlist_post->ID;
+				$found_playlist_post = $playlist_post;
 				$found = true;
 			}
 		}
@@ -485,6 +487,7 @@ function radio_station_get_now_playing( $time = false ) {
 		if ( !$found ) {
 			// --- if not found use most recently published show playlist ---
 			$playlist_id = $playlist_posts[0]->ID;
+			$found_playlist_post = $playlist_posts[0];
 		}
 
 		// --- fetch the tracks for the playlist ---
@@ -518,11 +521,12 @@ function radio_station_get_now_playing( $time = false ) {
 			// --- add show and playlist data ---
 			// 2.3.0: add IDs and URLs instead of just playlist URL
 			// 2.5.0: add playlist title to playlist array
+			// 2.5.6: fix possible mismatch to found_playlist_post
 			$playlist['show'] = $show_id;
 			$playlist['show_url'] = get_permalink( $show_id );
-			$playlist['title'] = $playlist_post->post_title;
-			$playlist['playlist'] = $playlist_post->ID;
-			$playlist['playlist_url'] = get_permalink( $playlist_post->ID );
+			$playlist['title'] = $found_playlist_post->post_title;
+			$playlist['playlist'] = $found_playlist_post->ID;
+			$playlist['playlist_url'] = get_permalink( $found_playlist_post->ID );
 
 		}
 	}
@@ -544,19 +548,12 @@ function radio_station_master_get_overrides( $currenthour = false, $date = false
 	$now = strtotime( current_time( 'mysql' ) );
 	// 2.3.0: check if date argument supplied
 	if ( !$date ) {
-		$date = date( 'Y-m-d', $now );
+		$date = radio_station_get_time( 'Y-m-d', $now );
 	}
 	$sql_date = $wpdb->esc_like( $date );
 	$sql_date = '%' . $sql_date . '%';
-	$show_shifts = $wpdb->get_results(
-		$wpdb->prepare(
-			"SELECT meta.post_id
-			FROM {$wpdb->postmeta} AS meta
-			WHERE meta_key = 'show_override_sched' AND
-				meta_value LIKE %s",
-			$sql_date
-		)
-	);
+	$query = "SELECT meta.post_id FROM " . $wpdb->postmeta . " AS meta WHERE meta_key = 'show_override_sched' AND meta_value LIKE %s";
+	$show_shifts = $wpdb->get_results( $wpdb->prepare( $query, $sql_date ) );
 
 	$scheds = array();
 	if ( $show_shifts ) {
@@ -568,7 +565,7 @@ function radio_station_master_get_overrides( $currenthour = false, $date = false
 			if ( $currenthour ) {
 
 				// --- convert to 24 hour time ---
-				$check = $time;
+				// $check = $time;
 				$time = radio_station_convert_time( $time );
 
 				// --- compare to the current timestamp ---
@@ -609,15 +606,8 @@ function radio_station_myplaylist_get_posts_for_show( $show_id = null, $title = 
 		return false;
 	}
 
-	$fetch_posts = $wpdb->get_results(
-		$wpdb->prepare(
-			"SELECT meta.post_id
-			FROM {$wpdb->postmeta} AS meta
-			WHERE meta.meta_key = 'post_showblog_id' AND
-  			meta.meta_value = %d",
-			$show_id
-		)
-	);
+	$query = "SELECT post_id FROM " . $wpdb->postmeta . " WHERE meta_key = 'post_showblog_id' AND meta_value = %d";
+	$fetch_posts = $wpdb->get_results( $wpdb->prepare( $query, $show_id ) );
 
 	$blog_array = array();
 	$blogposts = array();
@@ -629,18 +619,14 @@ function radio_station_myplaylist_get_posts_for_show( $show_id = null, $title = 
 
 		// 2.2.8: fix to implode blog array to string
 		// 2.3.0: allow for getting without limit
-		$query = $wpdb->prepare(
-			"SELECT posts.ID, posts.post_title
-			FROM {$wpdb->posts} AS posts
-			WHERE posts.ID IN(%s) AND
-				posts.post_status = 'publish'
-			ORDER BY posts.post_date DESC",
-			implode( ',', $blog_array )
-		);
+		$query = "SELECT ID, post_title FROM " . $wpdb->posts . " WHERE ID IN(%s) AND post_status = 'publish' ORDER BY post_date DESC";
 		if ( $limit > 0 ) {
-			$query .= $wpdb->prepare( " LIMIT %d", $limit );
+			$query .= " LIMIT %d";
+			$blogposts = $wpdb->get_results( $wpdb->prepare( $query, array( implode( ',', $blog_array ), $limit ) ) );
+		} else {
+			$blogposts = $wpdb->get_results( $wpdb->prepare( $query, implode( ',', $blog_array ) ) );
 		}
-		$blogposts = $wpdb->get_results( $query );
+
 	}
 
 	$output = '';
@@ -655,13 +641,8 @@ function radio_station_myplaylist_get_posts_for_show( $show_id = null, $title = 
 	$output .= '</div>';
 
 	// if the blog archive page has been created, add a link to the archive for this show
-	$page = $wpdb->get_results(
-		"SELECT meta.post_id
-		FROM {$wpdb->postmeta} AS meta
-		WHERE meta.meta_key = '_wp_page_template' AND
-			meta.meta_value = 'show-blog-archive-template.php'
-		LIMIT 1"
-	);
+	$query = "SELECT post_id FROM " . $wpdb->postmeta . " WHERE meta.meta_key = '_wp_page_template' AND	meta.meta_value = 'show-blog-archive-template.php' LIMIT 1";
+	$page = $wpdb->get_results( $query );
 
 	if ( $page ) {
 		$blog_archive = get_permalink( $page[0]->post_id );
@@ -680,10 +661,8 @@ function radio_station_shorten_string( $string, $limit ) {
 	$shortened = $string;
 	$array = explode( ' ', $string );
 
-	if ( count( $array ) <= $limit ) {
-		// --- already at or under the limit ---
-		$shortened = $string;
-	} else {
+	// 2.5.6: remove unnecessary logic condition
+	if ( count( $array ) > $limit ) {
 		// --- over the word limit so trim ---
 		array_splice( $array, $limit );
 		$shortened = implode( ' ', $array ) . ' ...';

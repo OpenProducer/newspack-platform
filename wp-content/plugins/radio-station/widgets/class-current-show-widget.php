@@ -60,17 +60,10 @@ class DJ_Widget extends WP_Widget {
 		$pricing_url = radio_station_get_pricing_url();
 		$upgrade_url = radio_station_get_upgrade_url();
 
-		// --- set image size options ---
-		$image_sizes = radio_station_get_image_sizes();
-		$image_size_options = '';
-		foreach ( $image_sizes as $image_size => $label ) {
-			$image_size_options	.= '<option value="' . esc_attr( $image_size ) . '">' . esc_html( $label ) . '</option>' . "\n";
-		}
-
 		// 2.3.0: convert template style code to strings
 		// 2.5.0: use fields array
 		$fields = array();
-		
+
 		// === Widget Display Options ===
 
 		// --- Widget Title ---
@@ -98,7 +91,7 @@ class DJ_Widget extends WP_Widget {
 		$fields['dynamic'] = '<p>
 			<label for="dynamic">' . esc_html( __( 'Show changeover reloading available in Pro.', 'radio-station' ) ) . '</label><br>
 			<a href="' . esc_url( $upgrade_url ) . '">' . esc_html( __( 'Upgrade to Pro', 'radio-station' ) ) . '</a> |
-			<a href="' . esc_url( $pricing_url ) . '" target="_blank">' . esc_html( __( 'More Details', 'radio-station' ) ) . '</a>
+			<a href="' . esc_url( $pricing_url ) . '#dynamic-reload" target="_blank">' . esc_html( __( 'More Details', 'radio-station' ) ) . '</a>
 		</p>';
 
 		// --- No Current Show Text ---
@@ -109,7 +102,7 @@ class DJ_Widget extends WP_Widget {
 			</label>
 			<small>' . esc_html( __( 'Empty for default. 0 for none.', 'radio-station' ) ) . '</small>
 		</p>';
-		
+
 		// --- Hide if Empty ---
 		$fields['hide_empty'] = '<p>
 			<label for="' . esc_attr( $this->get_field_id( 'hide_empty' ) ) . '">
@@ -159,9 +152,19 @@ class DJ_Widget extends WP_Widget {
 		$fields['avatar_size'] = '<p>
 			<label for="' . esc_attr( $this->get_field_id( 'avatar_size' ) ) . '">
 				' . esc_html( __( 'Avatar Image Size', 'radio-station' ) ) . ':
-				<select id="' . esc_attr( $this->get_field_id( 'avatar_size' ) ) . '" name="' . esc_attr( $this->get_field_name( 'avatar_size' ) ) . '">
-					' . $image_size_options . '
-				</select>
+				<select id="' . esc_attr( $this->get_field_id( 'avatar_size' ) ) . '" name="' . esc_attr( $this->get_field_name( 'avatar_size' ) ) . '">';
+				// --- set image size options ---
+				// 2.5.6: move loop to directly inside select field
+				$image_sizes = radio_station_get_image_sizes();
+				foreach ( $image_sizes as $image_size => $label ) {
+					$fields['avatar_size'] .= '<option value="' . esc_attr( $image_size ) . '"';
+					// 2.5.6: added missing check for current avatar size selection
+					if ( $image_size == $avatar_size ) {
+						$fields['avatar_size'] .= ' selected="selected"';
+					}
+					$fields['avatar_size'] .= '>' . esc_html( $label ) . '</option>' . "\n";
+				}
+		$fields['avatar_size'] .= '</select>
 			</label>
 		</p>';
 
@@ -274,11 +277,12 @@ class DJ_Widget extends WP_Widget {
 		// 2.2.7: fix checkbox value saving
 		// 2.3.0: added countdown display option
 		// 2.3.2: added ajax load option
+		// 2.5.6: fix hide_empty to 1 or 0
 		// --- widget display options ---
 		$instance['title'] = $new_instance['title'];
 		$instance['ajax'] = isset( $new_instance['ajax'] ) ? $new_instance['ajax'] : 0;
 		$instance['default'] = $new_instance['default'];
-		$instance['hide_empty'] = isset( $new_instance['hide_empty'] ) ? $new_instance['hide_empty'] : 0;
+		$instance['hide_empty'] = isset( $new_instance['hide_empty'] ) ? 1 : 0;
 		// --- show display options ---
 		$instance['link'] = isset( $new_instance['link'] ) ? 1 : 0;
 		$instance['title_position'] = $new_instance['title_position'];
@@ -321,13 +325,14 @@ class DJ_Widget extends WP_Widget {
 		// 2.3.2: fix old false values to use 0 for shortcodes
 		// 2.3.2: added AJAX load option
 		// 2.5.0: added avatar_size for show image size
+		// 2.5.6: cast hide_empty to 1 or 0
 
 		// --- widget display options ---
 		$title = empty( $instance['title'] ) ? '' : $instance['title'];
 		$title = apply_filters( 'widget_title', $title );
 		$ajax = isset( $instance['ajax'] ) ? $instance['ajax'] : 0;
 		$no_shows = empty( $instance['default'] ) ? '' : $instance['default'];
-		$hide_empty = isset( $instance['hide_empty'] ) ? $instance['hide_empty'] : 0;
+		$hide_empty = ( isset( $instance['hide_empty'] ) && $instance['hide_empty'] ) ? 1 : 0;
 		// --- show display options ---
 		$show_link = $instance['link'];
 		$title_position = empty( $instance['title_position'] ) ? 'bottom' : $instance['title_position'];
@@ -422,7 +427,7 @@ class DJ_Widget extends WP_Widget {
 					// --- output widget display ---
 					// TODO: test wp_kses on shortcode output
 					// echo wp_kses( $output, $allowed );
-					// phpcs:ignore WordPress.Security.OutputNotEscaped
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo $output;
 
 				// --- close widget contents wrapper ---
@@ -430,7 +435,7 @@ class DJ_Widget extends WP_Widget {
 
 			// --- close widget container ---
 			echo '</div>' . "\n";
-		
+
 			// --- after widget ---
 			// 2.5.0: use wp_kses on output
 			echo wp_kses( $args['after_widget'], $allowed );
@@ -454,4 +459,3 @@ function radio_station_register_current_show_widget() {
 	// note: widget class name to remain unchanged for backwards compatibility
 	register_widget( 'DJ_Widget' );
 }
-

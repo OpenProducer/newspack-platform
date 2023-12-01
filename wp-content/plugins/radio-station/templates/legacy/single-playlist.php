@@ -38,7 +38,7 @@ get_header();
 
 						<?php $playlist = get_post_meta( $post->ID, 'playlist', true ); ?>
 
-						<?php if ( $playlist ) : ?>
+						<?php if ( $playlist ) { ?>
 						<div class="myplaylist-playlist-entires">
 							<table>
 							<tr>
@@ -53,9 +53,9 @@ get_header();
 									<?php
 									$myplaylist_class = '';
 									if ( isset( $entry['playlist_entry_new'] ) && 'on' === $entry['playlist_entry_new'] ) {
-										$myplaylist_class = 'class="new"';}
-									?>
-									<tr <?php echo $myplaylist_class; ?>>
+										$myplaylist_class = 'new';
+									} ?>
+									<tr <?php echo 'class="' . esc_attr( $myplaylist_class ) . '"'; ?>>
 										<td><?php echo esc_html( $entry['playlist_entry_artist'] ); ?></td>
 										<td><?php echo esc_html( $entry['playlist_entry_song'] ); ?></td>
 										<td><?php echo esc_html( $entry['playlist_entry_album'] ); ?></td>
@@ -66,14 +66,13 @@ get_header();
 							<?php endforeach; ?>
 							</table>
 						</div>
-						<? else: ?>
+						<? } else { ?>
 						<div class="myplaylist-no-entries">
 							<?php esc_html_e( 'No entries for this playlist', 'radio-station' ); ?>
 						</div>
-						<?php endif; ?>
+						<?php } ?>
 
 						<!-- /custom playlist output -->
-
 
 					</div><!-- .entry-content -->
 					</article>

@@ -232,7 +232,7 @@ The following attributes are available for this shortcode:
 
 `[host-archive]` or `[hosts-archive]`
 
-* *description* : Profile description display. 'none', 'full' or 'excerpt'. Default 'excerpt', default 'none' for grid view.
+* *description* : Profile description display. 'none', 'full' or 'excerpt'. Default 'excerpt'.
 * *view* : Display view option. 'list' or 'grid' option. Default 'list'.
 * *status* : Query for Host status. Default 'publish'.
 * *perpage* : Query for number of Hosts. Default -1 (all)
@@ -249,7 +249,7 @@ The following attributes are available for this shortcode:
 
 `[producer-archive]` or `[producers-archive]`
 
-* *description* : Profile description display. 'none', 'full' or 'excerpt'. Default 'excerpt', default 'none' for grid view.
+* *description* : Profile description display. 'none', 'full' or 'excerpt'. Default 'excerpt'.
 * *view* : Display view option. 'list' or 'grid' option. Default 'list'.
 * *status* : Query for Producer status. Default 'publish'.
 * *perpage* : Query for number of Producers. Default -1 (all)
@@ -261,6 +261,24 @@ The following attributes are available for this shortcode:
 * *shows* : Display a list of Shows assigned to Producer. 0 or 1. Default 1.
 
 [Demo Site Example Output](https://demo.radiostation.pro/archive-shortcodes/producers-archive/)
+
+### [Pro] Episodes Archive Shortcode
+
+`[episode-archive]` or `[episodes-archive]`
+
+* *description* : Episode description display. 'none', 'full' or 'excerpt'. Default 'excerpt'.
+* *view* : Display view option. 'list' or 'grid' option. Default 'list'.
+* *status* : Query for Episode status. Default 'publish'.
+* *perpage* : Query for number of Episodes. Default -1 (all)
+* *offset* : Query for episode offset. Default '' (no offset)
+* *orderby* : Query to order Episode display by. Default 'title'.
+* *order* : Query order for Episode. Default 'ASC'.
+* *thumbnails* : Display Episode image. 0 or 1. Default 0.
+* *show* : Display the Show the Episode is assigned to. 0 or 1. Default 1.
+* *number* : Display the Episode Number. 0 or 1. Default 1.
+* *air_date* : Display the Episode Air Date. 0 or 1. Default 1.
+
+[Demo Site Example Output](https://demo.radiostation.pro/archive-shortcodes/episodes-archive/)
 
 ### [Pro] Team Archive Shortcode
 

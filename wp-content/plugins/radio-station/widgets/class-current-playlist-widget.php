@@ -78,7 +78,7 @@ class Playlist_Widget extends WP_Widget {
 		$fields['dynamic'] = '<p>
 			<label for="dynamic">' . esc_html( __( 'Show changeover reloading available in Pro.', 'radio-station' ) ) . '</label><br>
 			<a href="' . esc_url( $upgrade_url ) . '">' . esc_html( __( 'Upgrade to Pro', 'radio-station' ) ) . '</a> |
-			<a href="' . esc_url( $pricing_url ) . '" target="_blank">' . esc_html( __( 'More Details', 'radio-station' ) ) . '</a>
+			<a href="' . esc_url( $pricing_url ) . '#dynamic-reload" target="_blank">' . esc_html( __( 'More Details', 'radio-station' ) ) . '</a>
 		</p>';
 
 		// --- Hide if Empty ---
@@ -137,7 +137,7 @@ class Playlist_Widget extends WP_Widget {
 		// --- Display Artist ---
 		$fields['artist'] = '<p>
 			<label for="' . esc_attr( $this->get_field_id( 'artist' ) ) . '">
-			<input id="' . esc_attr( $this->get_field_id( 'artist' ) ) . '" name="' . esc_attr( $this->get_field_name( 'artist' ) ) . '" type="checkbox"' . checked( $artist, true, false ) . '>
+			<input id="' . esc_attr( $this->get_field_id( 'artist' ) ) . '" name="' . esc_attr( $this->get_field_name( 'artist' ) ) . '" type="checkbox" ' . checked( $artist, true, false ) . '>
 				' . esc_html( __( 'Show Artist Name', 'radio-station' ) ) . '
 			</label>
 		</p>';
@@ -195,7 +195,7 @@ class Playlist_Widget extends WP_Widget {
 		// --- playlist display options ---
 		$instance['playlist_title'] = isset( $new_instance['playlist_title'] ) ? 1 : 0;
 		$instance['link'] = isset( $new_instance['link'] ) ? 1 : 0;
-		$instance['no_playlist'] = isset ( $new_instance['no_playlist'] ) ? $new_instance['no_playlist'] : '';
+		$instance['no_playlist'] = isset( $new_instance['no_playlist'] ) ? $new_instance['no_playlist'] : '';
 		$instance['countdown'] = isset( $new_instance['countdown'] ) ? 1 : 0;
 		// --- track display options ---
 		$instance['artist'] = isset( $new_instance['artist'] ) ? 1 : 0;
@@ -230,11 +230,13 @@ class Playlist_Widget extends WP_Widget {
 		// 2.3.2: added AJAX load option
 		// 2.5.0: added no_playlist text option
 		// 2.5.0: added playlist_title option
+		// 2.5.6: cast hide_empty to 1 or 0
+
 		// --- widget display options ---
 		$title = empty( $instance['title'] ) ? '' : $instance['title'];
 		$title = apply_filters( 'widget_title', $title );
 		$ajax = isset( $instance['ajax'] ) ? $instance['ajax'] : 0;
-		$hide_empty = isset( $instance['hide_empty'] ) ? $instance['hide_empty'] : 0;
+		$hide_empty = ( isset( $instance['hide_empty'] ) && $instance['hide_empty'] ) ? 1 : 0;
 		// --- playlist display options ---
 		$playlist_title = isset( $instance['playlist_title'] ) ? $instance['playlist_title'] : 0;
 		$link = isset( $instance['link'] ) ? $instance['link'] : 1;
@@ -252,6 +254,7 @@ class Playlist_Widget extends WP_Widget {
 		// 2.5.0: set AJAX attribute anyway (checked in shortcode)
 		// 2.5.0: added no_playlist and hide_empty attributes
 		// 2.5.0: removed title attribute (only used for shortcodes)
+		// 2.5.6: added missing no_playlist variable value
 		$atts = array(
 			// --- widget display options ---
 			'ajax'           => $ajax,
@@ -259,7 +262,7 @@ class Playlist_Widget extends WP_Widget {
 			// --- playlist display options ---
 			'playlist_title' => $playlist_title,
 			'link'           => $link,
-			'no_playlist'    => '',
+			'no_playlist'    => $no_playlist,
 			'countdown'      => $countdown,
 			// --- track display options ---
 			'artist'         => $artist,
@@ -318,7 +321,7 @@ class Playlist_Widget extends WP_Widget {
 					// --- output widget display ---
 					// TODO: test wp_kses on shortcode output
 					// echo wp_kses( $output, $allowed );
-					// phpcs:ignore WordPress.Security.OutputNotEscaped
+					// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					echo $output;
 
 				// --- close widget contents wrapper ---
@@ -349,4 +352,3 @@ function radio_station_register_current_playlist_widget() {
 	// note: widget class name to remain unchanged for backwards compatibility
 	register_widget( 'Playlist_Widget' );
 }
-

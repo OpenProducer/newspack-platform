@@ -13,8 +13,8 @@
 }
  
 .rp-player audio {
-	width: 0px;
-	height: 0px;
+	width: 0;
+	height: 0;
 }
 
 .rp-audio button::-moz-focus-inner, .rp-audio-stream button::-moz-focus-inner {
@@ -274,7 +274,7 @@
 	background-image: url("../images/volume-controls-dark.png?v=3");
 }
 
-.rp-mute {background-position: 0px 0px;}
+.rp-mute {background-position: 0 0;}
 .muted .rp-mute, .rp-mute:hover {background-position: -18px -18px;}
 .rp-volume-max {background-position: 0 -36px;}
 .maxed .rp-volume-max, .rp-volume-max:focus, .rp-volume-max:hover {background-position: -18px -36px;}
@@ -308,11 +308,11 @@
 	background-size: 100% 100%;
 }
 .rp-station-info .rp-station-image {margin-right: 16px;}
-.rp-station-info .rp-station-image.no-image {width: 0; height: 0; margin-right: 0;}
+.rp-station-info .rp-station-image.no-image {width: 0; height: 0; margin-right: 0; display: none;}
 .rp-station-info .rp-station-image.no-image.new-image {width: 64px; height: 64px; margin-right: 20px;}
 .rp-station-info .rp-station-image.new-image img {display: none;}
 .rp-show-info .rp-show-image {margin-left: 16px;}
-.rp-show-info .rp-show-image.no-image {width: 0; height: 0; margin-left: 0;}
+.rp-show-info .rp-show-image.no-image {width: 0; height: 0; margin-left: 0; display: none;}
 /* @end */
 
 /* @group No Solution error */

@@ -66,8 +66,8 @@ get_header(); ?>
 				?>
 
 				<div class="navigation">
-				  <div class="alignleft"><?php next_posts_link( '&laquo; Older' ); ?></div>
-				  <div class="alignright"><?php previous_posts_link( 'Newer &raquo;' ); ?></div>
+					<div class="alignleft"><?php next_posts_link( '&laquo; Older' ); ?></div>
+					<div class="alignright"><?php previous_posts_link( 'Newer &raquo;' ); ?></div>
 				</div>
 				<!-- /end important part -->
 

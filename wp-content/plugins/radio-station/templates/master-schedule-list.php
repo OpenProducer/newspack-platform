@@ -200,7 +200,7 @@ foreach ( $weekdays as $weekday ) {
 				// $shift_start_time = radio_station_to_time( $shift['day'] . ' ' . $shift_start );
 				// $shift_end_time = radio_station_to_time( $shift['day'] . ' ' . $shift_end );
 				// if ( $shift_end_time < $shift_start_time ) {
-				// 	$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
+				//  $shift_end_time = $shift_end_time + ( 24 * 60 * 60 );
 				// }
 				if ( '00:00 am' == $shift['start'] ) {
 					$shift_start_time = radio_station_to_time( $weekdate . ' 00:00' );
@@ -322,7 +322,7 @@ foreach ( $weekdays as $weekday ) {
 						$show_hosts .= ' </span>' . "\n";
 
 						foreach ( $show['hosts'] as $host ) {
-							$count ++;
+							$count++;
 							// 2.3.0: added link_hosts attribute check
 							if ( $atts['link_hosts'] && !empty( $host['url'] ) ) {
 								$show_hosts .= '<a href="' . esc_url( $host['url'] ) . '">' . esc_html( $host['name'] ) . '</a>' . "\n";
@@ -524,5 +524,5 @@ $list .= '</ul>' . "\n";
 // --- hidden iframe for schedule reloading ---
 $list .= '<iframe src="javascript:void(0);" id="schedule-list-loader" name="schedule-list-loader" style="display:none;"></iframe>' . "\n";
 
+// TODO: test wp_kses on output ?
 echo $list;
-

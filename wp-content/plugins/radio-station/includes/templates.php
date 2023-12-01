@@ -405,10 +405,13 @@ function radio_station_single_content_template( $content, $post_type ) {
 		$templates[] = RADIO_STATION_DIR . '/templates/single-show-content.php';
 	}
 	$templates = apply_filters( 'radio_station_' . $post_type . '_content_templates', $templates, $post_type );
-	foreach ( $templates as $template ) {
-		if ( file_exists( $template ) ) {
-			$content_template = $template;
-			break;
+	// 2.5.6: added check that templates is still a populated array
+	if ( is_array( $templates ) && ( count( $templates ) > 0 ) ) {
+		foreach ( $templates as $template ) {
+			if ( file_exists( $template ) ) {
+				$content_template = $template;
+				break;
+			}
 		}
 	}
 	if ( !isset( $content_template ) ) {
@@ -599,8 +602,8 @@ function radio_station_author_host_pages( $template ) {
 
 				// --- check if author has DJ, producer or administrator role ---
 				if ( in_array( 'dj', $author->roles )
-						|| in_array( 'producer', $author->roles )
-						|| in_array( 'administrator', $author->roles ) ) {
+					|| in_array( 'producer', $author->roles )
+					|| in_array( 'administrator', $author->roles ) ) {
 
 					// TODO: maybe check if user is assigned to any shows ?
 					$template = get_author_template();
@@ -731,7 +734,8 @@ function radio_station_load_template( $single_template, $type, $templates ) {
 			} elseif ( 'page' == $show_template ) {
 				$templates = array( 'page.php' );
 			} elseif ( 'singular' == $show_template ) {
-				$template = array( 'singular.php' );
+				// 2.5.6: fix singular variable to plural
+				$templates = array( 'singular.php' );
 			}
 
 			// --- add standard fallbacks to index ---
@@ -774,7 +778,6 @@ function radio_station_archive_template_hierarchy( $templates ) {
 // TODO: implement standard archive page overrides via plugin settings
 // add_filter( 'archive_template', 'radio_station_post_type_archive_template', 10, 3 );
 function radio_station_post_type_archive_template( $archive_template, $type, $templates ) {
-	global $post;
 
 	// --- check for archive template override ---
 	$post_types = array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_PLAYLIST_SLUG, RADIO_STATION_HOST_SLUG, RADIO_STATION_PRODUCER_SLUG );
@@ -908,10 +911,10 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 	// 2.3.4: add filtering for adjacent show links
 	$post_types = array( RADIO_STATION_SHOW_SLUG, RADIO_STATION_OVERRIDE_SLUG );
 	if ( in_array( $post->post_type, $post_types ) ) {
-		
+
 		// 2.5.0: get timezone for time conversion
 		$timezone = radio_station_get_timezone();
-		
+
 		if ( RADIO_STATION_OVERRIDE_SLUG == $post->post_type ) {
 			// 2.3.3.6: get next/previous Show for override date/time
 			// 2.3.3.9: modified to handle multiple override times
@@ -919,7 +922,8 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 			$scheds = get_post_meta( $post->ID, 'show_override_sched', true );
 			if ( $scheds && is_array( $scheds ) ) {
 				if ( array_key_exists( 'date', $scheds ) ) {
-					$sched = array( $scheds );
+					// 2.5.6: fix variable singular to plural
+					$scheds = array( $scheds );
 				}
 				$now = time();
 				foreach ( $scheds as $sched ) {
@@ -1031,7 +1035,7 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 			if ( isset( $show['show'] ) ) {
 				$show = $show['show'];
 			}
-			
+
 			if ( 'next' == $adjacent ) {
 				$rel = 'next';
 			} elseif ( 'previous' == $adjacent ) {
@@ -1050,7 +1054,7 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 				$post_title = apply_filters( 'the_title', $post_title, $adjacent_post->ID );
 
 				$date = mysql2date( get_option( 'date_format' ), $adjacent_post->post_date );
-				$string = '<a href="' . esc_url( get_permalink( $adjacent_post ) ) . '" rel="' . esc_attr( $rel ) . '" title="' . $post_title . '">';
+				$string = '<a href="' . esc_url( get_permalink( $adjacent_post ) ) . '" rel="' . esc_attr( $rel ) . '" title="' . esc_attr( $post_title ) . '">';
 				$inlink = str_replace( '%title', $post_title, $link );
 				$inlink = str_replace( '%date', $date, $inlink );
 				$inlink = $string . $inlink . '</a>';
@@ -1064,7 +1068,8 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 	// --- filter to allow related post types ---
 	$related_post_types = array( 'post' );
 	$show_post_types = apply_filters( 'radio_station_show_related_post_types', $related_post_types );
-	if ( in_array( $post->post_type, $related_post_types ) ) {
+	// 2.5.6: use filtered variable in array check
+	if ( in_array( $post->post_type, $show_post_types ) ) {
 
 		// --- filter to allow disabling ---
 		$link_show_posts = apply_filters( 'radio_station_link_show_posts', true, $post );
@@ -1099,7 +1104,7 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 		// --- get more Shows related to this related Post ---
 		// 2.3.3.6: allow for multiple related posts
 		// 2.3.3.9: added 'i:' prefix to LIKE value matches
-		// TODO: use prepare method on like placeholders (tricky, requires testing)
+		// TODO: test prepare method on like placeholders
 		global $wpdb;
 		$query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta"
 				. " WHERE meta_key = 'post_showblog_id' AND meta_value LIKE '%i:" . $related_shows[0] . "%'";
@@ -1144,8 +1149,8 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 		// --- get adjacent post query ---
 		// 2.3.3.6: use post__in related post array instead of meta_query
 		$args = array(
-			'post_type'			  => $post->post_type,
-			'posts_per_page'	  => 1,
+			'post_type'           => $post->post_type,
+			'posts_per_page'      => 1,
 			'orderby'             => 'post_modified',
 			'post__in'            => $related_posts,
 			'ignore_sticky_posts' => true,
@@ -1238,7 +1243,7 @@ function radio_station_show_playlist_query( $query ) {
 				unset( $show_id );
 			}
 		} elseif ( isset( $_GET['show'] ) ) {
-			$show = sanitize_title( $_GET['show'] );
+			$show = sanitize_text_field( $_GET['show'] );
 			global $wpdb;
 			$show_query = "SELECT ID FROM " . $wpdb->prefix . "posts WHERE post_type = '" . RADIO_STATION_SHOW_SLUG . "' AND post_name = %s";
 			$show_id = $wpdb->get_var( $wpdb->prepare( $show_query, $show ) );
@@ -1473,4 +1478,3 @@ function radio_station_override_show_shifts( $show_shifts, $post_id ) {
 	}
 	return $show_shifts;
 }
-

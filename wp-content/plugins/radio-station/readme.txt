@@ -4,8 +4,8 @@ Contributors: tonyzeoli, majick
 Donate link: https://netmix.co/donate
 Tags: dj, music, playlist, radio, shows, scheduling, broadcasting
 Requires at least: 3.3.1
-Tested up to: 6.2.2
-Stable tag: 2.5.5
+Tested up to: 6.4.1
+Stable tag: 2.5.6
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -15,6 +15,7 @@ Radio Station lets you build and manage a Show Schedule for a radio station or I
 
 [Live Demo](https://demo.radiostation.pro/) | [Documentation](https://radiostation.pro/docs/) | [Support](https://wordpress.org/support/plugin/radio-station/) | [**Upgrade to PRO**!](https://radiostation.pro/pricing/)
 
+This plugin can be downloaded for free without any paid subscription from the [official WordPress repository](https://wordpress.org/plugins/radio-station/).
 
 #### RADIO STATION by netmix®† - THE BEST WORDPRESS PLUGIN FOR BROADCASTERS!
 
@@ -169,7 +170,7 @@ Once you have installed and activated the **Radio Station** plugin on your WordP
 
 Firstly, you can visit the Plugin Settings screen to adjust the default [Plugin Options](https://radiostation.pro/docs/options/) to your liking. Here you can set your Radio Timezone and Language, along with your Streaming URL and Station Logo, as well as other global plugin settings. Also from this Settings page you can assign [Automatic Pages](https://radiostation.pro/docs/display/#automatic-pages) and Views for your Program Schedule display and for other plugin post type archive displays. But first you will want to add some Shows to display in your Schedule!
 
-To do this, click on Shows in the adimn submenu, then on "Add a New Show" at the top. Give it a Shift timeslot and a description and then click Publish. Then view the Show page by clicking the Show Permalink under the show title. (Depending on your Theme, you may wish to adjust the [Templates](https://radiostation.pro/docs/display/#page-templates) used.) You can also assign different [Images](https://radiostation.pro/docs/display/#images) to Shows. 
+To do this, click on Shows in the admin submenu, then on "Add a New Show" at the top. Give it a Shift timeslot and a description and then click Publish. Then view the Show page by clicking the Show Permalink under the show title. (Depending on your Theme, you may wish to adjust the [Templates](https://radiostation.pro/docs/display/#page-templates) used.) You can also assign different [Images](https://radiostation.pro/docs/display/#images) to Shows. 
 
 Next, have a look at your Program Schedule page to see the Show displayed there also. Keep adding Shows until you have your Schedule filled in! You can also add schedule Overrides for specific date and time blocks only. For ease of use they can be fully or partially linked to an existing Show. You can further [Manage](https://radiostation.pro/docs/manage/) your Shows and other Station data via the WordPress Admin area.
 
@@ -399,6 +400,20 @@ We recommend you test these on a Staging site (or a development copy of your liv
 8. Show Conflict Display
 
 == Changelog ==
+
+= 2.5.6 =
+* Updated: Freemius SDK (2.5.11)
+* Updated: Plugin Panel (1.3.0)
+* Added: Filter for query and meta for show post list shortcode
+* Updated: Language translations file (.pot)
+* Updated: Bundled Dutch translation
+* Fixed: check linked override shifts before displaying
+* Fixed: hide empty widgets to work in AJAX loading mode
+* Fixed: remove direct usages of date function
+* Fixed: display of show posts on show page (query)
+* Fixed: Data API next_show data field
+* Fixed: minor schedule engine issues
+* Improved: more consistent sanitization and escaping
 
 = 2.5.5 =
 * Updated: Freemius SDK (2.5.10)

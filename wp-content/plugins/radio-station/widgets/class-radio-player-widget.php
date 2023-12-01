@@ -89,7 +89,7 @@ class Radio_Player_Widget extends WP_Widget {
 
 		// --- Station Image ---
 		// 2.5.0: fix to image field key (script)
-		// TODO: support for custom image?
+		// TODO: maybe add support for custom image?
 		$field = '<p>
 			<label for="' . esc_attr( $this->get_field_id( 'image' ) ) . '">
 			' . esc_html( __( 'Display Station Image', 'radio-station' ) ) . '</label><br>
@@ -127,9 +127,9 @@ class Radio_Player_Widget extends WP_Widget {
 			$field .= '</select>
 		</p>';
 		$fields['script'] = $field;
-		
+
 		// --- Player Volume ---
-		// TODO: improve this to a number field control?
+		// TODO: maybe improve this to a number field control?
 		$fields['volume'] = '<p>
 			<label for="' . esc_attr( $this->get_field_id( 'volume' ) ) . '">
 			' . esc_html( __( 'Player Start Volume', 'radio-station' ) ) . ' (0 to 100, empty for default):
@@ -141,11 +141,11 @@ class Radio_Player_Widget extends WP_Widget {
 		// 2.5.0: added for consistency with main plugin settings
 		$fields['volumes'] = '<p>
 			<label>
-			' . esc_html( __( 'Volume Controls', 'radio-station' ) ) . '
-				<input name="' . esc_attr( $this->get_field_name( 'volume_slider' ) ) . '" type="checkbox" ' . checked( $volume_slider, true, false ) . '>
-				<input name="' . esc_attr( $this->get_field_name( 'volume_updown' ) ) . '" type="checkbox" ' . checked( $volume_updown, true, false ) . '>
-				<input name="' . esc_attr( $this->get_field_name( 'volume_mute' ) ) . '" type="checkbox" ' . checked( $volume_mute, true, false ) . '>
-				<input name="' . esc_attr( $this->get_field_name( 'volume_max' ) ) . '" type="checkbox" ' . checked( $volume_max, true, false ) . '>
+			' . esc_html( __( 'Volume Controls', 'radio-station' ) ) . '<br>
+				<input name="' . esc_attr( $this->get_field_name( 'volume_slider' ) ) . '" type="checkbox" ' . checked( $volume_slider, true, false ) . '> ' . esc_html( __( 'Slider', 'radio-station' ) ) . ' ' . '
+				<input name="' . esc_attr( $this->get_field_name( 'volume_updown' ) ) . '" type="checkbox" ' . checked( $volume_updown, true, false ) . '> ' . esc_html( __( 'Up/Down', 'radio-station' ) ) . ' ' . '
+				<input name="' . esc_attr( $this->get_field_name( 'volume_mute' ) ) . '" type="checkbox" ' . checked( $volume_mute, true, false ) . '> ' . esc_html( __( 'Mute', 'radio-station' ) ) . ' ' . '
+				<input name="' . esc_attr( $this->get_field_name( 'volume_max' ) ) . '" type="checkbox" ' . checked( $volume_max, true, false ) . '> ' . esc_html( __( 'Max', 'radio-station' ) ) . ' ' . '
 			</label>
 		</p>';
 
@@ -189,9 +189,9 @@ class Radio_Player_Widget extends WP_Widget {
 			' . esc_html( __( 'Player Theme Style', 'radio-station' ) ) . '</label><br>
 			<select id="' . esc_attr( $this->get_field_id( 'theme' ) ) . '" name="' . esc_attr( $this->get_field_name( 'theme' ) ) . '">';
 			$options = array(
-				'default'	=> __( 'Plugin Setting', 'radio-station' ),
-				'light'		=> __( 'Light', 'radio-station' ),
-				'dark'		=> __( 'Dark', 'radio-station' ),
+				'default' => __( 'Plugin Setting', 'radio-station' ),
+				'light'   => __( 'Light', 'radio-station' ),
+				'dark'    => __( 'Dark', 'radio-station' ),
 			);
 			$options = apply_filters( 'radio_station_player_theme_options', $options );
 			$options = apply_filters( 'radio_player_theme_options', $options );
@@ -209,10 +209,10 @@ class Radio_Player_Widget extends WP_Widget {
 			' . esc_html( __( 'Buttons Style', 'radio-station' ) ) . '</label><br>
 			<select id="' . esc_attr( $this->get_field_id( 'buttons' ) ) . '" name="' . esc_attr( $this->get_field_name( 'buttons' ) ) . '">';
 			$options = array(
-				'default'	=> __( 'Plugin Setting', 'radio-station' ),
-				'circular'	=> __( 'Circular', 'radio-station' ),
-				'rounded'	=> __( 'Rounded', 'radio-station' ),
-				'square'	=> __( 'Square', 'radio-station' ),
+				'default'  => __( 'Plugin Setting', 'radio-station' ),
+				'circular' => __( 'Circular', 'radio-station' ),
+				'rounded'  => __( 'Rounded', 'radio-station' ),
+				'square'   => __( 'Square', 'radio-station' ),
 			);
 			$options = apply_filters( 'radio_station_player_button_options', $options );
 			$options = apply_filters( 'radio_player_button_options', $options );
@@ -222,11 +222,12 @@ class Radio_Player_Widget extends WP_Widget {
 			$field .= '</select>
 		</p>';
 		$fields['buttons'] = $field;
-		
+
 		// --- [Pro] Color Options ---
 		// 2.5.0: added Pro color options message
-		$fields['color_options'] .= '<h4>' . esc_html( __( '[Pro] Color Options', 'radio-station' ) ) . '</h4>' . "\n";
-		$fields['color_options'] = '<p>
+		// 2.5.6: fix to color options title / undefined index warning
+		$fields['color_options'] = '<h4>' . esc_html( __( '[Pro] Color Options', 'radio-station' ) ) . '</h4>' . "\n";
+		$fields['color_options'] .= '<p>
 			<label for="dynamic">' . esc_html( __( 'Color options available in Pro.', 'radio-station' ) ) . '</label><br>
 			<a href="' . esc_url( $pricing_url ) . '">' . esc_html( __( 'Upgrade to Pro', 'radio-station' ) ) . '</a> |
 			<a href="' . esc_url( $upgrade_url ) . '" target="_blank">' . esc_html( __( 'More Details', 'radio-station' ) ) . '</a>
@@ -378,7 +379,8 @@ class Radio_Player_Widget extends WP_Widget {
 
 		// --- maybe debug widget attributes --
 		// 2.5.0: added for debugging widget attributes
-		if ( isset( $_REQUEST['player-debug'] ) && ( '1' == $_REQUEST['player-debug'] ) ) {
+		// 2.5.6: added sanitize_text_field wrapper
+		if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 			echo '<span style="display:none;">Radio Player Widget Attributes: ';
 			echo esc_html( print_r( $atts, true ) ) . '</span>';
 		}
@@ -410,7 +412,9 @@ class Radio_Player_Widget extends WP_Widget {
 			$output = apply_filters( 'radio_station_player_widget_override', $output, $args, $atts );
 
 			// --- output widget display ---
-			// phpcs:ignore WordPress.Security.OutputNotEscaped
+			// TODO: test wp_kses on widget output ?
+			// wp_kses( $output, $allowed );
+			// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 			echo $output;
 
 		echo '</div>' . "\n";
@@ -429,4 +433,3 @@ add_action( 'widgets_init', 'radio_station_register_player_widget' );
 function radio_station_register_player_widget() {
 	register_widget( 'Radio_Player_Widget' );
 }
-

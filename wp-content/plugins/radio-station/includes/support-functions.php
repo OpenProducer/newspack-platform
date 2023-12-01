@@ -17,8 +17,11 @@
 // x Get Show Schedule
 // - Generate Unique Shift ID
 // - Get Show Data
-// - Get Show Metadata
+// - Get Show Data Meta
+// - Show Data Meta Filter
+// - Get Show Description
 // - Get Override Metadata
+// - Override Data Meta Filter
 // - Get Show Override Value
 // - Get Linked Overrides for Show
 // - Get Linked Override Times
@@ -35,6 +38,7 @@
 // - Get Show Avatar
 // === URL Functions ===
 // - Get Streaming URL
+// - Get Fallback URL
 // - Get Stream Formats
 // - Get Master Schedule Page URL
 // - Get Radio Station API URL
@@ -60,6 +64,7 @@
 // - Sanitize Shortcode Values
 // - KSES Allowed HTML
 // - Link Tag Allowed HTML
+// - Settings Inputs Allowed HTML
 
 
 // ----------------------
@@ -75,8 +80,7 @@ function radio_station_get_show( $show ) {
 		if ( is_string( $show ) ) {
 			global $wpdb;
 			$query = "SELECT ID FROM " . $wpdb->posts . " WHERE post_type = '" . RADIO_STATION_SHOW_SLUG . "' AND post_name = %s";
-			$query = $wpdb->prepare( $query, $show );
-			$show_id = $wpdb->get_var( $query );
+			$show_id = $wpdb->get_var( $wpdb->prepare( $query, $show ) );
 			$show = get_post( $show_id );
 		} elseif ( is_int( $show ) ) {
 			$show = get_post( $show );
@@ -91,7 +95,7 @@ function radio_station_get_show( $show ) {
 // ---------
 // 2.3.0: added get shows data grabber
 function radio_station_get_shows( $args = false ) {
-	
+
 	// --- set default args ---
 	$query_args = array(
 		'post_type'   => RADIO_STATION_SHOW_SLUG,
@@ -100,17 +104,17 @@ function radio_station_get_shows( $args = false ) {
 		'meta_query'  => array(
 			'relation' => 'AND',
 			array(
-				'key'		=> 'show_sched',
-				'compare'	=> 'EXISTS',
+				'key'     => 'show_sched',
+				'compare' => 'EXISTS',
 			),
 			array(
-				'key'		=> 'show_active',
-				'value'		=> 'on',
-				'compare'	=> '=',
+				'key'     => 'show_active',
+				'value'   => 'on',
+				'compare' => '=',
 			),
 		),
-		'orderby'	=> 'post_name',
-		'order'		=> 'ASC',
+		'orderby' => 'post_name',
+		'order'   => 'ASC',
 	);
 
 	// --- overwrite defaults with any arguments passed ---
@@ -119,7 +123,7 @@ function radio_station_get_shows( $args = false ) {
 			$query_args[$key] = $value;
 		}
 	}
-	
+
 	// 2.5.0: added query args filter
 	$query_args = apply_filters( 'radio_station_get_shows_args', $query_args, $args );
 
@@ -146,17 +150,17 @@ function radio_station_get_overrides( $args = false ) {
 		'meta_query'  => array(
 			// 'relation' => 'AND',
 			array(
-				'key'		=> 'show_override_sched',
-				'compare'	=> 'EXISTS',
+				'key'     => 'show_override_sched',
+				'compare' => 'EXISTS',
 			),
 			/* array(
-				'key'		=> 'show_active',
-				'value'		=> 'on',
-				'compare'	=> '=',
+				'key'     => 'show_active',
+				'value'   => 'on',
+				'compare' => '=',
 			), */
 		),
-		'orderby'	=> 'post_name',
-		'order'		=> 'ASC',
+		'orderby' => 'post_name',
+		'order'   => 'ASC',
 	);
 
 	// --- overwrite defaults with any arguments passed ---
@@ -212,7 +216,8 @@ function radio_station_get_show_guid( $show_id ) {
 
 	global $wpdb;
 	$query = "SELECT guid FROM " . $wpdb->posts . " WHERE ID = %d";
-	$guid = $wpdb->get_var( $query );
+	// 2.5.6: added missing prepare for query
+	$guid = $wpdb->get_var( $wpdb->prepare( $query, $show_id ) );
 	if ( !$guid ) {
 		$guid = get_permalink( $show_id );
 	}
@@ -323,9 +328,13 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 
 		// 2.3.3.4: handle possible multiple show post values
 		// 2.3.3.9: added 'i:' prefix to LIKE match value
-		// TODO: use wpdb prepare method on LIKE statement
-		$query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta WHERE meta_key = %s AND meta_value LIKE '%i:" . $show_id . "%'";
-		$query = $wpdb->prepare( $query, $metakey );
+		// 2.5.6: fix prepare query syntax by separating LIKE statement
+		// $query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta WHERE meta_key = %s";
+		// $query = $wpdb->prepare( $query, $metakey );
+		// $query .= "AND meta_value LIKE '%i:" . $show_id . "%'";
+		// 2.5.6: then use wpdb prepare method for LIKE statement
+		$query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta WHERE meta_key = %s AND meta_value LIKE %s";
+		$query = $wpdb->prepare( $query, array( $metakey, "%i:" . $show_id . "%" ) );
 		$results = $wpdb->get_results( $query, ARRAY_A );
 		if ( RADIO_STATION_DEBUG ) {
 			echo '<span style="display:none;">Related Query: ' . esc_html( $query ) . '</span>';
@@ -355,8 +364,7 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 		$post_ids = $no_profile_ids = array();
 		foreach ( $user_ids as $user_id ) {
 			$query = "SELECT post_id FROM " . $wpdb->prefix . "postmeta WHERE meta_key = %s AND meta_value = %d";
-			$query = $wpdb->prepare( $query, array( $userkey, $user_id ) );
-			$profile_id = $wpdb->get_var( $query );
+			$profile_id = $wpdb->get_var( $wpdb->prepare( $query, array( $userkey, $user_id ) ) );
 			if ( RADIO_STATION_DEBUG ) {
 				echo '<span style="display:none;">Related Query: ' . esc_html( $query ) . '</span>';
 				echo '<span style="display:none;">Related Result: ' . esc_html( print_r( $profile_id, true ) ) . '</span>';
@@ -372,8 +380,7 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 
 		// --- other types (episodes/playlists) ---
 		$query = "SELECT post_id FROM " . $wpdb->prefix . "postmeta WHERE meta_key = %s AND meta_value = %d";
-		$query = $wpdb->prepare( $query, array( $metakey, $show_id ) );
-		$post_metas = $wpdb->get_results( $query, ARRAY_A );
+		$post_metas = $wpdb->get_results( $wpdb->prepare( $query, array( $metakey, $show_id ) ), ARRAY_A );
 		if ( RADIO_STATION_DEBUG ) {
 			echo '<span style="display:none;">Related Query: ' . esc_html( $query ) . '</span>';
 			echo '<span style="display:none;">Related Results: ' . esc_html( print_r( $post_metas, true ) ) . '</span>';
@@ -399,7 +406,20 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 	// --- get posts from post IDs ---
 	$post_id_list = implode( ',', $post_ids );
 	$query = "SELECT " . $columns . " FROM " . $wpdb->prefix . "posts";
-	$query .= " WHERE ID IN(" . $post_id_list . ") AND post_status = 'publish' ORDER BY post_date DESC";
+	$query .= " WHERE ID IN(" . $post_id_list . ") AND post_status = 'publish'";
+	// 2.5.6: allow for alternative ordering attributes
+	if ( !isset( $atts['orderby'] ) || ( 'date' == $atts['orderby'] ) ) {
+		$query .= "ORDER BY post_date";
+	} elseif ( 'title' == $atts['orderby'] ) {
+		$query .= "ORDER BY post_title";
+	}
+	if ( !isset( $atts['order'] ) || ( 'DESC' == $atts['order'] ) ) {
+		$query .= " DESC";
+	} elseif ( 'ASC' == $atts['order'] ) {
+		$query .= " ASC";
+	}
+	// 2.5.6: add filter to allow for modification of query
+	$query = apply_filters( 'radio_station_show_' . $datatype . '_query', $query, $show_id, $args, $atts );
 	if ( $args['limit'] ) {
 		$query .= $wpdb->prepare( " LIMIT %d", $args['limit'] );
 	}
@@ -409,7 +429,7 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 	if ( RADIO_STATION_DEBUG ) {
 		echo '<span style="display:none;">' . esc_html( $datatype ) . ' for Show ' . esc_html( $show_id ) . ': ';
 		echo esc_html( print_r( $results, true ) );
-		echo 'Query: ' . $query . '</span>';
+		echo 'Query: ' . esc_html( $query ) . '</span>';
 	}
 
 	// 2.4.0.6: add processing of post excerpts
@@ -565,7 +585,7 @@ function radio_station_get_show_data_meta( $show, $single = false ) {
 		'latest'     => $show_file,
 		'website'    => $show_link,
 		// note: left out intentionally to avoid spam scraping
-		// 'email'		=> $show_email,
+		// 'email'   => $show_email,
 		'hosts'      => $hosts,
 		'producers'  => $producers,
 		'genres'     => $genre_list,
@@ -578,12 +598,12 @@ function radio_station_get_show_data_meta( $show, $single = false ) {
 	);
 
 	// --- data route / feed for show ---
-	if ( radio_station_get_setting( 'enable_data_routes' ) == 'yes' ) {
+	if ( 'yes' == radio_station_get_setting( 'enable_data_routes' ) ) {
 		$route_link = radio_station_get_route_url( 'shows' );
 		$show_route = add_query_arg( 'show', $show->post_name, $route_link );
 		$show_data['route'] = $show_route;
 	}
-	if ( radio_station_get_setting( 'enable_data_feeds' ) == 'yes' ) {
+	if ( 'yes' == radio_station_get_setting( 'enable_data_feeds' ) ) {
 		$feed_link = radio_station_get_feed_url( 'shows' );
 		$show_feed = add_query_arg( 'show', $show->post_name, $feed_link );
 		$show_data['feed'] = $show_feed;
@@ -607,6 +627,24 @@ function radio_station_get_show_data_meta( $show, $single = false ) {
 	do_action( 'radio_station_cache_data', 'show_meta', $show_id, $show_data );
 
 	return $show_data;
+}
+
+// ---------------------
+// Show Data Meta Filter
+// ---------------------
+// 2.5.6: added to get show data for show in schedule engine
+add_filter( 'radio_station_schedule_show_data_meta', 'radio_station_show_data_meta_filter', 10, 2 );
+function radio_station_show_data_meta_filter( $show_id, $shift_id ) {
+
+	// --- get (or get stored) show data ---						
+	global $radio_station_data;
+	if ( isset( $radio_station_data['show-' . $show_id] ) ) {
+		$show = $radio_station_data['show-' . $show_id];
+	} else {
+		$show = radio_station_get_show_data_meta( $show_id );
+		$radio_station_data['show-' . $show_id] = $show;
+	}
+	return $show;
 }
 
 // --------------------
@@ -764,6 +802,24 @@ function radio_station_get_override_data_meta( $override ) {
 	return $override_data;
 }
 
+// -------------------------
+// Override Data Meta Filter
+// -------------------------
+// 2.5.6: added to get override data for override in schedule engine
+add_filter( 'radio_station_schedule_override_data_meta', 'radio_station_override_data_meta_filter', 10, 2 );
+function radio_station_override_data_meta_filter( $override_id, $shift_id ) {
+
+	// --- get (or get stored) override data ---						
+	global $radio_station_data;
+	if ( isset( $radio_station_data['override-' . $override_id] ) ) {
+		$override = $radio_station_data['override-' . $override_id];
+	} else {
+		$override = radio_station_get_override_data_meta( $override_id );
+		$radio_station_data['override-' . $override_id] = $override;
+	}
+	return $override;
+}
+
 // -----------------------
 // Get Show Override Value
 // -----------------------
@@ -828,8 +884,7 @@ function radio_station_get_linked_overrides( $post_id ) {
 	// --- get linked override IDs via show ID ---
 	global $wpdb;
 	$query = "SELECT post_id FROM " . $wpdb->prefix . "postmeta WHERE meta_key = 'linked_show_id' AND meta_value = %d";
-	$query = $wpdb->prepare( $query, $show_id );
-	$results = $wpdb->get_results( $query, ARRAY_A );
+	$results = $wpdb->get_results( $wpdb->prepare( $query, $show_id ), ARRAY_A );
 	$override_ids = array();
 	if ( $results && is_array( $results ) && ( count( $results ) > 0 ) ) {
 		foreach ( $results as $result ) {
@@ -837,8 +892,7 @@ function radio_station_get_linked_overrides( $post_id ) {
 
 			// --- check for published post status ---
 			$query = "SELECT post_status FROM " . $wpdb->prefix . "posts WHERE ID = %d";
-			$query = $wpdb->prepare( $query, $override_id );
-			$status = $wpdb->get_var( $query );
+			$status = $wpdb->get_var( $wpdb->prepare( $query, $override_id ) );
 			if ( 'publish' == $status ) {
 				$override_ids[] = $override_id;
 			}
@@ -858,17 +912,19 @@ function radio_station_get_linked_override_times( $post_id ) {
 
 	$override_ids = radio_station_get_linked_overrides( $post_id );
 	$overrides = array();
-	foreach ( $override_ids as $override_id ) {
-		$schedule = get_post_meta( $override_id, 'show_override_sched', true );
-		if ( $schedule ) {
-			if ( !is_array( $overrides ) ) {
-				$override = array();
-			}
-			if ( !is_array( $schedule ) ) {
-				$schedule = array( $schedule );
-			}
-			foreach ( $schedule as $override ) {
-				$overrides[] = $override;
+	if ( $override_ids && is_array( $override_ids ) && ( count( $override_ids ) > 0 ) ) {
+		foreach ( $override_ids as $override_id ) {
+			$schedule = get_post_meta( $override_id, 'show_override_sched', true );
+			if ( $schedule ) {
+				if ( !is_array( $schedule ) ) {
+					$schedule = array( $schedule );
+				}
+				foreach ( $schedule as $override ) {
+					// 2.5.6: add check if override is disabled
+					if ( 'yes' != $override['disabled'] ) {
+						$overrides[] = $override;
+					}
+				}
 			}
 		}
 	}
@@ -963,6 +1019,7 @@ function radio_station_get_show_playlists( $show_id = false, $args = array() ) {
 // ---------
 // 2.3.0: added genre data grabber
 function radio_station_get_genre( $genre ) {
+
 	// 2.3.3.8: explicitly check for numberic genre term ID
 	$id = absint( $genre );
 	if ( $id < 1 ) {
@@ -1053,13 +1110,13 @@ function radio_station_get_genre_shows( $genre = false ) {
 		'meta_query'  => array(
 			'relation' => 'AND',
 			array(
-				'key'		=> 'show_sched',
-				'compare'	=> 'EXISTS',
+				'key'     => 'show_sched',
+				'compare' => 'EXISTS',
 			),
 			array(
-				'key'		=> 'show_active',
-				'value'		=> 'on',
-				'compare'	=> '=',
+				'key'     => 'show_active',
+				'value'   => 'on',
+				'compare' => '=',
 			),
 		),
 	);
@@ -1102,13 +1159,13 @@ function radio_station_get_language_shows( $language = false ) {
 		'meta_query'  => array(
 			'relation' => 'AND',
 			array(
-				'key'		=> 'show_sched',
-				'compare'	=> 'EXISTS',
+				'key'     => 'show_sched',
+				'compare' => 'EXISTS',
 			),
 			array(
-				'key'		=> 'show_active',
-				'value'		=> 'on',
-				'compare'	=> '=',
+				'key'     => 'show_active',
+				'value'   => 'on',
+				'compare' => '=',
 			),
 		),
 	);
@@ -1130,7 +1187,7 @@ function radio_station_get_language_shows( $language = false ) {
 function radio_station_get_image_sizes() {
 
 	// --- get image size names ---
-	$image_sizes = 	array(
+	$image_sizes = array(
 		'thumbnail' => __( 'Thumbnail' ),
 		'medium'    => __( 'Medium' ),
 		'large'     => __( 'Large' ),
@@ -1292,9 +1349,9 @@ function radio_station_get_stream_url() {
 	return $streaming_url;
 }
 
-// -----------------
-// Get Streaming URL
-// -----------------
+// ----------------
+// Get Fallback URL
+// ----------------
 // 2.3.3.9: added get fallback URL helper
 function radio_station_get_fallback_url() {
 	$fallback_url = '';
@@ -1326,13 +1383,13 @@ function radio_station_get_stream_formats() {
 	// [Media Elements] Audio: mp3, wma, wav +Video: mp4, ogg, webm, wmv
 
 	$formats = array(
-		'aac'	=> 'AAC/M4A',		// A/H/J
-		'mp3'	=> 'MP3',			// A/H/J
-		'ogg'	=> 'OGG',			// H
-		'oga'	=> 'OGA',			// H/J
-		'webm'	=> 'WebM',			// H/J
-		'rtmpa' => 'RTMPA',			// J
-		'opus'  => 'OPUS',			// H
+		'aac'   => 'AAC/M4A',	// A/H/J
+		'mp3'   => 'MP3',		// A/H/J
+		'ogg'   => 'OGG',		// H
+		'oga'   => 'OGA',		// H/J
+		'webm'  => 'WebM',		// H/J
+		'rtmpa' => 'RTMPA',		// J
+		'opus'  => 'OPUS',		// H
 	);
 
 	// --- filter and return ---
@@ -1564,14 +1621,18 @@ function radio_station_queue_directory_ping() {
 // -------------------
 // 2.3.1: added directory ping function prototype
 function radio_station_send_directory_ping() {
+
 	$do_ping = radio_station_get_setting( 'ping_netmix_directory' );
-	if ( 'yes' != $do_ping ) {return;}
+	if ( 'yes' != $do_ping ) {
+		return false;
+	}
 
 	// --- set the URL to ping ---
 	// 2.3.2: fix url_encode to urlencode
+	// 2.5.6: use rawurlencode instead of urlencode
 	$site_url = site_url();
 	$url = add_query_arg( 'ping', 'directory', RADIO_STATION_NETMIX_DIR );
-	$url = add_query_arg( 'station-url', urlencode( $site_url ), $url );
+	$url = add_query_arg( 'station-url', rawurlencode( $site_url ), $url );
 	$url = add_query_arg( 'timestamp', time(), $url );
 
 	// --- send the ping ---
@@ -1580,10 +1641,10 @@ function radio_station_send_directory_ping() {
 		include_once ABSPATH . WPINC . '/http.php';
 	}
 	$response = wp_remote_get( $url, $args );
-	if ( isset( $_GET['rs-test-ping'] ) && ( '1' == $_GET['rs-test-ping'] ) ) {
+	if ( isset( $_GET['rs-test-ping'] ) && ( '1' === sanitize_text_field( $_GET['rs-test-ping'] ) ) ) {
 		echo '<span style="display:none;">Directory Ping Response:</span>';
 		echo '<textarea style="display:none; float:right; width:700px; height:200px;">';
-		echo print_r( $response, true ) . '</textarea>';
+		echo esC_html( print_r( $response, true ) ) . '</textarea>';
 	}
 	return $response;
 }
@@ -1600,7 +1661,7 @@ function radio_station_check_directory_ping() {
 		if ( !is_wp_error( $response ) && isset( $response['response']['code'] ) && ( 200 == $response['response']['code'] ) ) {
 			delete_option( 'radio_station_ping_directory' );
 		}
-	} elseif ( isset( $_GET['rs-test-ping'] ) && ( '1' == $_GET['rs-test-ping'] ) ) {
+	} elseif ( isset( $_GET['rs-test-ping'] ) && ( '1' === sanitize_text_field( $_GET['rs-test-ping'] ) ) ) {
 		$response = radio_station_send_directory_ping();
 	}
 }
@@ -1631,9 +1692,9 @@ function radio_station_get_icon_colors( $context = false ) {
 // --------------------
 // 2.3.2: added PHP equivalent of javascript encodeURIComponent
 // ref: https://stackoverflow.com/a/1734255/5240159
-function radio_station_encode_uri_component( $string ) {
+function radio_station_encode_uri_component( $component ) {
 	$revert = array( '%21' => '!', '%2A' => '*', '%27' => "'", '%28' => '(', '%29' => ')' );
-    return strtr( rawurlencode( $string ), $revert );
+    return strtr( rawurlencode( $component ), $revert );
 }
 
 // ------------------
@@ -1642,7 +1703,11 @@ function radio_station_encode_uri_component( $string ) {
 // 2.3.3.9: added for language archive shortcode
 function radio_station_get_language_terms( $args = false ) {
 
-	$defaults = array( 'taxonomy' => RADIO_STATION_LANGUAGES_SLUG, 'orderby' => 'name', 'hide_empty' => true );
+	$defaults = array(
+		'taxonomy'   => RADIO_STATION_LANGUAGES_SLUG,
+		'orderby'    => 'name',
+		'hide_empty' => true
+	);
 	if ( $args && is_array( $args ) ) {
 		foreach ( $args as $key => $value ) {
 			$defaults[$key] = $value;
@@ -1768,8 +1833,8 @@ function radio_station_get_language( $lang = false ) {
 			}
 		}
 	}
-	if ( isset( $_REQUEST['lang-debug'] ) && ( '1' == $_REQUEST['lang-debug'] ) ) {
-		echo PHP_EOL . "LANG: " . print_r( $lang, true ) . PHP_EOL;
+	if ( isset( $_REQUEST['lang-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['lang-debug'] ) ) ) {
+		echo PHP_EOL . "LANG: " . esc_html( print_r( $lang, true ) ) . PHP_EOL;
 	}
 
 	// --- get the specified language term ---
@@ -1813,8 +1878,8 @@ function radio_station_get_language( $lang = false ) {
 			$language = false;
 		}
 	}
-	if ( isset( $_REQUEST['lang-debug'] ) && ( '1' == $_REQUEST['lang-debug'] ) ) {
-		echo PHP_EOL . "LANGUAGE: " . print_r( $language, true ) . PHP_EOL;
+	if ( isset( $_REQUEST['lang-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['lang-debug'] ) ) ) {
+		echo 'LANGUAGE: ' . esc_html( print_r( $language, true ) ) . "\n";
 	}
 
 	return $language;
@@ -1850,14 +1915,14 @@ function radio_station_trim_excerpt( $content, $length = false, $more = false, $
 			$length = (int) apply_filters( 'radio_station_excerpt_length', $length );
 		}
 		if ( !$more ) {
-			$more = ' [&hellip;]';
+			// $more = ' [&hellip;]';
 			// $more = apply_filters( 'excerpt_more', $more);
 			$more = apply_filters( 'radio_station_excerpt_more', ' [&hellip;]' );
 		}
 		// 2.3.0: added link wrapper
 		if ( $permalink ) {
 			// 2.5.0: add esc_html to more anchor
-			$more = ' <a href="'. esc_url( $permalink ) . '">' . esc_html( $more ) . '</a>';
+			$more = ' <a href="' . esc_url( $permalink ) . '">' . esc_html( $more ) . '</a>';
 		}
 		$excerpt = wp_trim_words( $content, $length, $more );
 	}
@@ -1870,7 +1935,7 @@ function radio_station_trim_excerpt( $content, $length = false, $more = false, $
 // Sanitize Values
 // ---------------
 function radio_station_sanitize_values( $data, $keys ) {
-	
+
 	$sanitized = array();
 	foreach ( $keys as $key => $type ) {
 		if ( isset( $data[$key] ) ) {
@@ -1911,114 +1976,110 @@ function radio_station_sanitize_input( $prefix, $key ) {
 
 	// 2.4.0.3: bug out if post key not set
 	// 2.5.0: set empty value as default
+	// 2.5.6: put POST directly in sanitize functions
 	$value = '';
 	if ( isset( $_POST[$postkey] ) ) {
-		$posted_value = $_POST[$postkey];
-	}
 
-	if ( in_array( $key, $types['file'] ) ) {
-		$value = wp_strip_all_tags( trim( $posted_value ) );
-	} elseif ( in_array( $key, $types['email'] ) ) {
-		$value = sanitize_email( trim( $posted_value ) );
-	} elseif ( in_array( $key, $types['url'] ) ) {
-		$value = filter_var( trim( $posted_value ), FILTER_SANITIZE_URL );
-	} elseif ( in_array( $key, $types['slug'] ) ) {
-		$value = sanitize_title( $posted_value );
-	} elseif ( in_array( $key, $types['phone'] ) ) {
-		// 2.3.3.6: added phone number with character filter validation
-		$value = trim( $posted_value );
-		if ( strlen( $value ) > 0 ) {
-			$value = str_split( $value, 1 );
-			$value = preg_filter( '/^[0-9+\(\)#\.\s\-]+$/', '$0', $value );
-			if ( count( $value ) > 0 ) {
-				$value = implode( '', $value );
-			} else {
+		if ( in_array( $key, $types['file'] ) ) {
+			$value = wp_strip_all_tags( trim( $_POST[$postkey] ) );
+		} elseif ( in_array( $key, $types['email'] ) ) {
+			$value = sanitize_email( trim( $_POST[$postkey] ) );
+		} elseif ( in_array( $key, $types['url'] ) ) {
+			$value = filter_var( trim( $_POST[$postkey] ), FILTER_SANITIZE_URL );
+		} elseif ( in_array( $key, $types['slug'] ) ) {
+			$value = sanitize_title( $_POST[$postkey] );
+		} elseif ( in_array( $key, $types['phone'] ) ) {
+			// 2.3.3.6: added phone number with character filter validation
+			$value = trim( sanitize_text_field( $_POST[$postkey] ) );
+			if ( strlen( $value ) > 0 ) {
+				$value = str_split( $value, 1 );
+				$value = preg_filter( '/^[0-9+\(\)#\.\s\-]+$/', '$0', $value );
+				if ( count( $value ) > 0 ) {
+					$value = implode( '', $value );
+				} else {
+					$value = '';
+				}
+			}
+		} elseif ( in_array( $key, $types['numeric'] ) ) {
+
+			$value = absint( $_POST[$postkey] );
+			if ( $value < 0 ) {
 				$value = '';
 			}
-		}
-	} elseif ( in_array( $key, $types['numeric'] ) ) {
 
-		$value = absint( $posted_value );
-		if ( $value < 0 ) {
-			$value = '';
-		}
+		} elseif ( in_array( $key, $types['checkbox'] ) ) {
 
-	} elseif ( in_array( $key, $types['checkbox'] ) ) {
+			// --- checkbox inputs ---
+			// 2.2.8: removed strict in_array checking
+			// 2.3.2: fix for unchecked boxes index warning
+			$value = sanitize_text_field( $_POST[$postkey] );
+			if ( !in_array( $value, array( '', 'on', 'yes' ) ) ) {
+				$value = '';
+			}
 
-		// --- checkbox inputs ---
-		// 2.2.8: removed strict in_array checking
-		// 2.3.2: fix for unchecked boxes index warning
-		$value = '';
-		if ( isset( $posted_value ) ) {
-			$value = $posted_value;
-		}
-		if ( !in_array( $value, array( '', 'on', 'yes' ) ) ) {
-			$value = '';
-		}
+		} elseif ( in_array( $key, $types['user'] ) ) {
 
-	} elseif ( in_array( $key, $types['user'] ) ) {
-
-		// --- user selection inputs ---
-		if ( isset( $posted_value ) ) {
-			$value = $posted_value;
-		}
-		if ( !isset( $value ) || !is_array( $value ) ) {
-			$value = array();
-		} else {
-			foreach ( $value as $i => $userid ) {
-				if ( !empty( $userid ) ) {
-					$user = get_user_by( 'ID', $userid );
-					if ( !$user ) {
-						unset( $value[$i] );
+			// --- user selection inputs ---
+			// 2.5.6: use array_map on posted value
+			$value = array_map( 'absint', $_POST[$postkey] );
+			if ( !isset( $value ) || !is_array( $value ) ) {
+				$value = array();
+			} else {
+				foreach ( $value as $i => $userid ) {
+					if ( ! empty( $userid ) ) {
+						$user = get_user_by( 'ID', $userid );
+						if ( !$user ) {
+							unset( $value[ $i ] );
+						}
 					}
 				}
 			}
-		}
 
-	} elseif ( in_array( $key, $types['date'] ) ) {
+		} elseif ( in_array( $key, $types['date'] ) ) {
 
-		// --- datepicker date field ---
-		$date = $posted_value;
-		$parts = explode( '-', $date );
-		if ( 3 == count( $parts ) ) {
-			if ( checkdate( (int) $parts[1], (int) $parts[2], (int) $parts[0] ) ) {
-				$value = $date;
+			// --- datepicker date field ---
+			$date  = sanitize_text_field( $_POST[$postkey] );
+			$parts = explode( '-', $date );
+			if ( 3 == count( $parts ) ) {
+				if ( checkdate( (int) $parts[1], (int) $parts[2], (int) $parts[0] ) ) {
+					$value = $date;
+				}
 			}
+
+		} elseif ( in_array( $key, $types['hour'] ) ) {
+
+			// --- hours (24) ---
+			$value = absint( $_POST[$postkey] );
+			if ( ( $value < 0 ) || ( $value > 23 ) ) {
+				$value = '00';
+			} elseif ( $value < 10 ) {
+				$value = '0' . $value;
+			} else {
+				$value = (string) $value;
+			}
+
+		} elseif ( in_array( $key, $types['mins'] ) ) {
+
+			// --- minutes (or seconds) ---
+			$value = absint( $_POST[$postkey] );
+			if ( ( $value < 0 ) || ( $value > 60 ) ) {
+				$value = '00';
+			} elseif ( $value < 10 ) {
+				$value = '0' . $value;
+			} else {
+				$value = (string) $value;
+			}
+
+		} elseif ( in_array( $key, $types['meridiem'] ) ) {
+
+			// --- meridiems ---
+			$valid = array( '', 'am', 'pm' );
+			$value = sanitize_text_field( $_POST[$postkey] );
+			if ( !in_array( $value, $valid ) ) {
+				$value = '';
+			}
+
 		}
-
-	} elseif ( in_array( $key, $types['hour'] ) ) {
-
-		// --- hours (24) ---
-		$value = absint( $posted_value );
-		if ( ( $value < 0 ) || ( $value > 23 ) ) {
-			$value = '00';
-		} elseif ( $value < 10 ) {
-			$value = '0' . $value;
-		} else {
-			$value = (string) $value;
-		}
-
-	} elseif ( in_array( $key, $types['mins'] ) ) {
-
-		// --- minutes (or seconds) ---
-		$value = absint( $posted_value );
-		if ( ( $value < 0 ) || ( $value > 60 ) ) {
-			$value = '00';
-		} elseif ( $value < 10 ) {
-			$value = '0' . $value;
-		} else {
-			$value = (string) $value;
-		}
-
-	} elseif ( in_array( $key, $types['meridiem'] ) ) {
-
-		// --- meridiems ---
-		$valid = array( '', 'am', 'pm' );
-		$value = $posted_value;
-		if ( !in_array( $value, $valid ) ) {
-			$value = '';
-		}
-
 	}
 
 	return $value;
@@ -2078,8 +2139,12 @@ function radio_station_sanitize_playlist_entry( $entry ) {
 				$value = sanitize_text_field( $value );
 			} elseif ( in_array( $key, $numeric_keys ) ) {
 				$value = absint( $value );
+				// 2.5.6: set non-numeric values to blank
+				if ( $value < 0 ) {
+					$value = '';
+				}
 				if ( ( 'seconds' == $key ) && ( $value < 10 ) ) {
-
+					// pad seconds with zero prefix ?
 				}
 			} elseif ( 'status' == $key ) {
 				if ( $value != 'played' ) {
@@ -2101,8 +2166,7 @@ function radio_station_sanitize_playlist_entry( $entry ) {
 // 2.5.0: updated to match changed shortcode keys
 function radio_station_sanitize_shortcode_values( $type, $extras = false ) {
 
-	$atts = array();
-
+	// $atts = array();
 	if ( 'current-show' == $type ) {
 
 		// --- current show attribute keys ---
@@ -2216,7 +2280,7 @@ function radio_station_sanitize_shortcode_values( $type, $extras = false ) {
 
 		// --- master schedule attribute keys ---
 		// 2.3.3.9: added for AJAX schedule loading
-		// 2.5.0: added active_date, 
+		// 2.5.0: added active_date,
 		$keys = array(
 
 			// --- control display options ---
@@ -2232,7 +2296,7 @@ function radio_station_sanitize_shortcode_values( $type, $extras = false ) {
 			'active_date'       => 'text',
 			'display_day'       => 'text',
 			'display_date'      => 'text',
-			'display_month'	    => 'text',
+			'display_month'     => 'text',
 			'time_format'       => 'text',
 
 			// --- show display options ---
@@ -2259,7 +2323,7 @@ function radio_station_sanitize_shortcode_values( $type, $extras = false ) {
 			'time_spaced'       => 'boolean',
 			'weeks'             => 'integer',
 			'previous_weeks'    => 'integer',
-			
+
 			// --- shortcode data ---
 			'block'             => 'boolean',
 			'instance'          => 'boolean',
@@ -2296,8 +2360,9 @@ function radio_station_allowed_html( $type, $context = false ) {
 // 2.5.0: added for allowing link tag output for wp_kses
 add_filter( 'radio_station_allowed_html', 'radio_station_link_tag_allowed_html', 10, 3 );
 function radio_station_link_tag_allowed_html( $allowed, $type, $context ) {
-	
-	if ( 'link' != $type ) {
+
+	// 2.5.6: change type to context
+	if ( 'link' != $context ) {
 		return $allowed;
 	}
 
@@ -2312,6 +2377,25 @@ function radio_station_link_tag_allowed_html( $allowed, $type, $context ) {
 		'title'          => array(),
 		'type'           => array(),
 	);
+
+	return $allowed;
+}
+
+// -----------------------
+// Anchor Tag Allowed HTML
+// -----------------------
+// 2.5.6: added for allowing extended anchor tag output for wp_kses
+add_filter( 'radio_station_allowed_html', 'radio_station_anchor_tag_allowed_html', 10, 3 );
+function radio_station_anchor_tag_allowed_html( $allowed, $type, $context ) {
+
+	// 2.5.6: added docs context for documentation links
+	if ( 'docs' != $context ) {
+		return $allowed;
+	}
+
+	// 2.5.6: added data-href attribute for docs
+	$allowed['a']['id'] = true;
+
 	return $allowed;
 }
 
@@ -2328,39 +2412,39 @@ function radio_station_settings_allowed_html( $allowed, $type, $context ) {
 
 	// --- input ---
 	$allowed['input'] = array(
-		'id'			=> array(),
-		'class'			=> array(),
-		'name'			=> array(),
-		'value'			=> array(),
-		'type'			=> array(),
-		'data'			=> array(),
-		'placeholder'	=> array(),
-		'style'         => array(),
-		'checked'       => array(),
-		'onclick'       => array(),
+		'id'          => array(),
+		'class'       => array(),
+		'name'        => array(),
+		'value'       => array(),
+		'type'        => array(),
+		'data'        => array(),
+		'placeholder' => array(),
+		'style'       => array(),
+		'checked'     => array(),
+		'onclick'     => array(),
 	);
 
 	// --- textarea ---
 	$allowed['textarea'] = array(
-		'id'			=> array(),
-		'class'			=> array(),
-		'name'			=> array(),
-		'value'			=> array(),
-		'type'			=> array(),
-		'placeholder'	=> array(),
-		'style'         => array(),
+		'id'          => array(),
+		'class'       => array(),
+		'name'        => array(),
+		'value'       => array(),
+		'type'        => array(),
+		'placeholder' => array(),
+		'style'       => array(),
 	);
 
 	// --- select ---
 	$allowed['select'] = array(
-		'id'			=> array(),
-		'class'			=> array(),
-		'name'			=> array(),
-		'value'			=> array(),
-		'type'			=> array(),
-		'multiselect'	=> array(),
-		'style'         => array(),
-		'onchange'      => array(),
+		'id'          => array(),
+		'class'       => array(),
+		'name'        => array(),
+		'value'       => array(),
+		'type'        => array(),
+		'multiselect' => array(),
+		'style'       => array(),
+		'onchange'    => array(),
 	);
 
 	// --- select option ---
@@ -2380,4 +2464,3 @@ function radio_station_settings_allowed_html( $allowed, $type, $context ) {
 
 	return $allowed;
 }
-

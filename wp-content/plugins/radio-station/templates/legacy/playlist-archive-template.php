@@ -44,16 +44,17 @@ get_header(); ?>
 									echo esc_html( get_the_title( $show_id ) );
 								}
 								?>
-								 -
-								<?php echo esc_html( date( 'M. d, Y', strtotime( $post->post_date ) ) ); ?>
+								-
+								<?php // 2.5.6: use wp_date for formatted output
+								echo esc_html( wp_date( 'M. d, Y', strtotime( $post->post_date ) ) ); ?>
 							</div>
 					</header><!-- .entry-header -->
 				</article>
 				<?php endwhile; ?>
 
 				<div class="navigation">
-				  <div class="alignleft"><?php next_posts_link( '&laquo; Older' ); ?></div>
-				  <div class="alignright"><?php previous_posts_link( 'Newer &raquo;' ); ?></div>
+				    <div class="alignleft"><?php next_posts_link( '&laquo; Older' ); ?></div>
+					<div class="alignright"><?php previous_posts_link( 'Newer &raquo;' ); ?></div>
 				</div>
 
 

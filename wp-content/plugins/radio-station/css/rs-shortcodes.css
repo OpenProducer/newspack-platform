@@ -147,8 +147,8 @@
 /* Show Subarchive Shortcodes */
 /* -------------------------- */
 .show-post, .show-playlist, .show-host, .show-producer, .show-episode {
-	padding-top: 5px;
-	padding-bottom: 5px;
+	padding-top: 10px;
+	padding-bottom: 10px;
 }
 
 .show-post-thumbnail, .show-playlist-thumbnail, .show-host-thumbnail, .show-producer-thumbnail, .show-episode-thumbnail,

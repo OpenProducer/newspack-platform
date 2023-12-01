@@ -45,7 +45,7 @@
 }
 
 #show-content .show-info .show-block.first-block {
-	margin-top: 0px;
+	margin-top: 0;
 }
 
 #show-content .show-info .show-block.last-block {
@@ -224,7 +224,7 @@
 	line-height: 40px;
 	font-size: 18px;
 	color: #444444;
-	margin: 0px;
+	margin: 0;
 	cursor: pointer; 
 	text-align: center; 
 	background-color: #eeeeee; 

@@ -28,10 +28,7 @@ get_header();
 
 					<div class="dj-meta">
 						URL: <a href="<?php echo esc_url( $curauth->user_url ); ?>"><?php echo esc_url( $curauth->user_url ); ?></a><br />
-						Email: <?php echo sanitize_email( $curauth->user_email ); ?><br />
-						AIM: <?php echo esc_html( $curauth->aim ); ?><br />
-						Jabber: <?php echo esc_html( $curauth->jabber ); ?><br />
-						YIM: <?php echo esc_html( $curauth->yim ); ?><br />
+						Email: <?php echo esc_html( $curauth->user_email ); ?><br />
 					</div>
 
 				</div>

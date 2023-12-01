@@ -315,7 +315,7 @@ function radio_station_revoke_show_edit_cap( $allcaps, $caps, $args, $user ) {
 
 	// --- debug passed capability arguments ---
 	// TODO: get post object from args instead of global ?
-	if ( isset( $_REQUEST['cap-debug'] ) && ( '1' == $_REQUEST['cap-debug'] ) ) {
+	if ( isset( $_REQUEST['cap-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['cap-debug'] ) ) ) {
 		echo '<span style="display:none;">Cap Args: ' . esc_html( print_r( $args, true ) ) . '</span>';
 	}
 

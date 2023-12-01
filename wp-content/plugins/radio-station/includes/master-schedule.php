@@ -22,7 +22,7 @@
 add_shortcode( 'radio-schedule', 'radio_station_master_schedule' );
 add_shortcode( 'master-schedule', 'radio_station_master_schedule' );
 function radio_station_master_schedule( $atts ) {
-	
+
 	global $radio_station_data;
 
 	// 2.5.0: maybe set schedule instances array
@@ -77,7 +77,7 @@ function radio_station_master_schedule( $atts ) {
 			$atts['clock'] = 0;
 			$atts['timezone'] = 0;
 		}
-	}		
+	}
 
 	if ( RADIO_STATION_DEBUG ) {
 		echo '<span style="display:none;">Master Schedule Shortcode Attributes: ' . esc_html( print_r( $atts, true ) ) . '</span>';
@@ -117,7 +117,7 @@ function radio_station_master_schedule( $atts ) {
 		'active_date'       => false,
 		'display_day'       => 'short',
 		'display_date'      => 'jS',
-		'display_month'	    => 'short',
+		'display_month'     => 'short',
 		'time_format'       => $time_format,
 
 		// --- show display options ---
@@ -290,7 +290,8 @@ function radio_station_master_schedule( $atts ) {
 	// --- hidden inputs for calendar start/active dates ---
 	// 2.3.3.9: added for schedule week change reloading
 	if ( isset( $atts['start_date'] ) && $atts['start_date'] ) {
-		if ( date( 'Y-m-d', strtotime( $atts['start_date'] ) ) == $atts['start_date'] ) {
+		// 2.5.6: use radio_station_get_time instead of date
+		if ( radio_station_get_time( 'Y-m-d', strtotime( $atts['start_date'] ) ) == $atts['start_date'] ) {
 			$start_date = $atts['start_date'];
 		}
 	}
@@ -301,7 +302,8 @@ function radio_station_master_schedule( $atts ) {
 	$output .= '<input type="hidden" id="schedule-start-date" value="' . esc_attr( $start_date ) . '">';
 	$active_date = $start_date;
 	if ( isset( $atts['active_date'] ) && $atts['active_date'] ) {
-		if ( $atts['active_date'] == date( 'Y-m-d', strtotime( $atts['active_date'] ) ) ) {
+		// 2.5.6: use radio_station_get_time instead of date
+		if ( $atts['active_date'] == radio_station_get_time( 'Y-m-d', strtotime( $atts['active_date'] ) ) ) {
 			$active_date = $atts['active_date'];
 		}
 	}
@@ -345,6 +347,8 @@ function radio_station_master_schedule( $atts ) {
 		}
 		$radio_station_data['schedules']['table']++;
 		$instance = $radio_station_data['schedules']['table'];
+		// 2.5.6: fix for missing id definition
+		$id = ( 0 == $instance ) ? '' : '-' . $instance;
 
 		// --- load table view template ---
 		ob_start();
@@ -375,6 +379,8 @@ function radio_station_master_schedule( $atts ) {
 		}
 		$radio_station_data['schedules']['tabs']++;
 		$instance = $radio_station_data['schedules']['tabs'];
+		// 2.5.6: fix for missing id definition
+		$id = ( 0 == $instance ) ? '' : '-' . $instance;
 
 		// --- load tabs view template ---
 		ob_start();
@@ -405,6 +411,8 @@ function radio_station_master_schedule( $atts ) {
 		}
 		$radio_station_data['schedules']['list']++;
 		$instance = $radio_station_data['schedules']['list'];
+		// 2.5.6: fix for missing id definition
+		$id = ( 0 == $instance ) ? '' : '-' . $instance;
 
 		// --- load list view template ---
 		ob_start();
@@ -457,12 +465,12 @@ function radio_station_master_schedule( $atts ) {
 			unset( $days_of_the_week[$i] );
 			$days_of_the_week[$i] = $add;
 		}
-		$start_of_week --;
+		$start_of_week--;
 	}
 
 	// --- create the master_list array based on the start of the week ---
 	$master_list = array();
-	for ( $i = 0; $i < 24; $i ++ ) {
+	for ( $i = 0; $i < 24; $i++ ) {
 		$master_list[$i] = $days_of_the_week;
 	}
 
@@ -654,7 +662,7 @@ add_action( 'wp_ajax_nopriv_radio_station_schedule', 'radio_station_ajax_schedul
 function radio_station_ajax_schedule_loader() {
 
 	// --- maybe clear cached data ---
-	if ( isset( $_REQUEST['clear'] ) && ( '1' == sanitize_title( $_REQUEST['clear'] ) ) ) {
+	if ( isset( $_REQUEST['clear'] ) && ( '1' === sanitize_text_field( $_REQUEST['clear'] ) ) ) {
 		radio_station_clear_cached_data( false );
 	}
 
@@ -665,12 +673,13 @@ function radio_station_ajax_schedule_loader() {
 	$debug = true;
 	$atts = radio_station_sanitize_shortcode_values( 'master-schedule' );
 	if ( RADIO_STATION_DEBUG || $debug ) {
-		echo "Full Request Inputs: " . esc_html( print_r( $_REQUEST, true ) );
+		echo "Full Request Inputs: " . esc_html( print_r( array_map( 'sanitize_text_field', $_REQUEST ), true ) );
 		echo "Sanitized Master Schedule Shortcode Attributes: " . esc_html( print_r( $atts, true ) );
 	}
 
 	// --- output schedule contents ---
 	// 2.5.0: remove unused schedule contents wrap
+	// TODO: test wp_kses on master schedule output
 	echo radio_station_master_schedule( $atts );
 
 	$js = '';
@@ -784,6 +793,7 @@ function radio_station_ajax_schedule_loader() {
 	// --- filter load script and output ---
 	$js = apply_filters( 'radio_station_master_schedule_load_script', $js, $atts );
 	if ( '' != $js ) {
+		// phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo "<script>" . $js . "</script>";
 	}
 
@@ -798,12 +808,16 @@ function radio_station_ajax_schedule_loader() {
 function radio_station_master_schedule_genre_selector( $instances ) {
 
 	// --- get genres ---
+	// 2.5.6: add taxonomy to get_terms arguments
 	$args = array(
+		'taxonomy'   => RADIO_STATION_GENRES_SLUG,
 		'hide_empty' => true,
 		'orderby'    => 'name',
 		'order'      => 'ASC',
 	);
-	$genres = get_terms( RADIO_STATION_GENRES_SLUG, $args );
+	// 2.5.6: remove deprecated second argument from get_terms
+	// $genres = get_terms( RADIO_STATION_GENRES_SLUG, $args );
+	$genres = get_terms( $args );
 	// 2.3.2: bug out if there are no genre terms
 	if ( !$genres || !is_array( $genres ) ) {
 		return '';
@@ -1407,4 +1421,3 @@ function radio_station_master_schedule_list_js() {
 	$js = apply_filters( 'radio_station_master_schedule_list_js', $js );
 	return $js;
 }
-

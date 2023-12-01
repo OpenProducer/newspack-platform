@@ -6,7 +6,7 @@
  * Licence: GPL3
  */
 
- define( 'RADIO_STATION_PREFIX', 'radio-station' );
+define( 'RADIO_STATION_PREFIX', 'radio-station' );
 
 // -----------------------
 // Contextual Help Screens
@@ -46,45 +46,53 @@ function radio_station_contextual_help() {
 		// --- import feature documentation tab ---
 		$help_file = RADIO_STATION_DIR . '/help/import.php';
 		if ( file_exists( $help_file ) ) {
-		  $content = radio_station_get_help_output( $help_file );
-		  $screen->add_help_tab( array(
-			'id'        =>  'rs-import',
-			'title'     =>  __( 'Import' ), // tab name
-			'content'   =>  $content,
-		  ) );
+		    $content = radio_station_get_help_output( $help_file );
+			$screen->add_help_tab(
+				array(
+					'id'      =>  'rs-import',
+					'title'   =>  __( 'Import' ), // tab name
+					'content' =>  $content,
+			    )
+			);
 		}
 
 		// --- export feature documentation tab ---
 		$help_file = RADIO_STATION_DIR . '/help/export.php';
 		if ( file_exists( $help_file ) ) {
-		  $content = radio_station_get_help_output($help_file);
-		  $screen->add_help_tab( array(
-			'id'        =>  'rs-export',
-			'title'     =>  __( 'Export' ),  // tab name
-			'content'   =>  $content,
-		  ) );
+			$content = radio_station_get_help_output($help_file);
+		    $screen->add_help_tab(
+		    	array(
+					'id'      =>  'rs-export',
+					'title'   =>  __( 'Export' ),  // tab name
+					'content' =>  $content,
+			    )
+		    );
 		}
 
 		//--- YAML file format documentation tab ---
 		$help_file = RADIO_STATION_DIR . '/help/yaml.php';
 		if ( file_exists( $help_file ) ) {
 			$content = radio_station_get_help_output( $help_file );
-			$screen->add_help_tab( array(
-				'id'        =>  'yaml-data-format',
-				'title'     =>  __( 'YAML format '), // tab name
-				'content'   =>  $content,
-			) );
+			$screen->add_help_tab(
+				array(
+					'id'      =>  'yaml-data-format',
+					'title'   =>  __( 'YAML format '), // tab name
+					'content' =>  $content,
+				)
+			);
 		}
 
 		// --- show-schedule key documentation tab ---
 		$help_file = RADIO_STATION_DIR . '/help/show-schedule.php';
 		if ( file_exists( $help_file ) ) {
 			$content = radio_station_get_help_output( $help_file );
-			$screen->add_help_tab( array(
-				'id'        =>  'rs-show-schedule',
-				'title'     =>  __ ('show-schedule:' ),  // tab name
-				'content'   =>  $content,
-			) );
+			$screen->add_help_tab(
+				array(
+					'id'      =>  'rs-show-schedule',
+					'title'   =>  __ ('show-schedule:' ),  // tab name
+					'content' =>  $content,
+				)
+			);
 		}
 	}
 

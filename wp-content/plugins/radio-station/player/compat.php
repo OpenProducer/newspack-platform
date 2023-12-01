@@ -36,7 +36,7 @@ if ( !function_exists( 'radio_station_player_default_colors' ) ) {
 	}
 }
 
-if ( !function_exists( 'radio_station_player_ajax' )  ) {
+if ( !function_exists( 'radio_station_player_ajax' ) ) {
 	function radio_station_player_ajax() {
 		radio_player_ajax();
 	}
@@ -164,8 +164,7 @@ if ( !function_exists( 'radio_station_player_style_tag' ) ) {
 }
 
 if ( !function_exists( 'radio_station_player_validate_boolean' ) ) {
-	function radio_station_player_validate_boolean( $var ) {
-		return radio_player_validate_boolean( $var );
+	function radio_station_player_validate_boolean( $value ) {
+		return radio_player_validate_boolean( $value );
 	}
 }
-

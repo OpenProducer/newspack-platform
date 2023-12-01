@@ -81,6 +81,8 @@ foreach ( $master_list as $hour => $days ) {
 					// $classes .= sanitize_title_with_dashes( $show_term->name ) . ' ';
 					$classes[] = $term->slug;
 				}
+				// 2.5.6: fix for uncombined class list
+				$classlist = implode( ' ', $classes );
 
 				$output .= '<div class="' . esc_attr( $classlist ) . '">';
 

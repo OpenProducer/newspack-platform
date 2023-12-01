@@ -6,7 +6,7 @@ Plugin Name: Radio Station
 Plugin URI: https://radiostation.pro/radio-station
 Description: Adds Show pages, DJ role, playlist and on-air programming functionality to your site.
 Author: Tony Zeoli, Tony Hayes
-Version: 2.5.5
+Version: 2.5.6
 Requires at least: 3.3.1
 Text Domain: radio-station
 Domain Path: /languages
@@ -124,12 +124,12 @@ if ( get_option( 'radio_show_cpts_prefixed' ) ) {
 // 2.3.2: added saving debug mode constant
 if ( !defined( 'RADIO_STATION_DEBUG' ) ) {
 	// 2.5.0: use simplified single line condition
-	$rs_debug = ( isset( $_REQUEST['rs-debug'] ) && ( '1' == $_REQUEST['rs-debug'] ) ) ? true : false;
+	$rs_debug = ( isset( $_REQUEST['rs-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['rs-debug'] ) ) ) ? true : false;
 	define( 'RADIO_STATION_DEBUG', $rs_debug );
 }
 if ( !defined( 'RADIO_STATION_SAVE_DEBUG' ) ) {
 	// 2.5.0: use simplified single line condition
-	$rs_save_debug = ( isset( $_REQUEST['rs-save-debug'] ) && ( '1' == $_REQUEST['rs-save-debug'] ) ) ? true : false;
+	$rs_save_debug = ( isset( $_REQUEST['rs-save-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['rs-save-debug'] ) ) ) ? true : false;
 	define( 'RADIO_STATION_SAVE_DEBUG', $rs_save_debug );
 }
 
@@ -256,6 +256,7 @@ $settings = array(
 	// 2.4.0.3: turn on plans switch for Pro also
 	// 2.4.0.3: set Pro details and Upgrade links
 	// 2.4.0.4: change upgrade_link to -upgrade
+	// 2.5.6: added affiliation selected key
 	'freemius_id'  => '4526',
 	'freemius_key' => 'pk_aaf375c4fb42e0b5b3831e0b8476b',
 	'hasplans'     => $plan_options['has_plans'],
@@ -264,6 +265,8 @@ $settings = array(
 	'hasaddons'    => $plan_options['has_addons'],
 	'addons_link'  => add_query_arg( 'page', RADIO_STATION_SLUG . '-addons', admin_url( 'admin.php' ) ),
 	'plan'         => $plan_options['plan_type'],
+	'affiliation'  => 'selected',
+
 );
 
 // ---------------------------
@@ -339,7 +342,7 @@ function radio_station_add_pricing_path_filter() {
 // ------------------------
 // Pricing Page Path Filter
 // ------------------------
-// 2.6.0: added for Freemius Pricing Page v2
+// 2.5.0: added for Freemius Pricing Page v2
 function radio_station_pricing_page_path( $default_pricing_js_path ) {
 	return RADIO_STATION_DIR . '/freemius-pricing/freemius-pricing.js';
 }
@@ -540,7 +543,8 @@ function radio_station_allowed_player_origins( $origins ) {
 	if ( !defined( 'DOING_AJAX' ) || !DOING_AJAX ) {
 		return $origins;
 	}
-	if ( !isset( $_REQUEST['action'] ) || ( 'radio_player' != $_REQUEST['action'] ) ) {
+	// 2.5.6: added sanitize_text_field
+	if ( !isset( $_REQUEST['action'] ) || ( 'radio_player' !== sanitize_text_field( $_REQUEST['action'] ) ) ) {
 		return $origins;
 	}
 
@@ -592,9 +596,9 @@ function radio_station_enqueue_plugin_scripts() {
 // ------------------
 // Register Moment JS
 // ------------------
-// 2.5.0: moved to separate funciton for resusability
+// 2.5.0: moved to separate function for resusability
 function radio_station_register_moment() {
-	
+
 	// --- set script suffix ---
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
 	$suffix = ( defined( 'RADIO_STATION_DEBUG' ) && RADIO_STATION_DEBUG ) ? '' : $suffix;
@@ -605,7 +609,7 @@ function radio_station_register_moment() {
 	// 2.5.0: add check for registered script in WP core
 	if ( !wp_script_is( 'moment', 'registered' ) ) {
 		$moment_url = plugins_url( 'js/moment' . $suffix . '.js', RADIO_STATION_FILE );
-		wp_register_script( 'moment', $moment_url, array(), '2.29.4', false );
+		wp_register_script( 'moment', $moment_url, array( 'jquery' ), '2.29.4', false );
 	}
 }
 
@@ -645,7 +649,7 @@ function radio_station_enqueue_script( $scriptkey, $deps = array(), $infooter = 
 // -----------------
 // 2.5.0: added for missed inline scripts (via shortcodes)
 function radio_station_add_inline_script( $handle, $js, $position = 'after' ) {
-	
+
 	// --- add check if script is already done ---
 	if ( !wp_script_is( $handle, 'done' ) ) {
 		// --- handle javascript normally ---
@@ -749,10 +753,10 @@ function radio_station_add_inline_style( $handle, $css ) {
 
 	// --- add check if style is already done ---
 	if ( !wp_style_is( $handle, 'done' ) ) {
-		// --- handle javascript normally ---
+		// --- handle style normally ---
 		wp_add_inline_style( $handle, $css );
 	} else {
-		// --- store extra javascript for later output ---
+		// --- store extra styles for later output ---
 		if ( !strstr( $handle, '-admin' ) ) {
 			global $radio_station_styles;
 			add_action( 'wp_print_footer_scripts', 'radio_station_print_footer_styles', 20 );
@@ -893,7 +897,7 @@ function radio_station_localization_script() {
 	}
 
 	// 2.5.0: set separate clock debug flag
-	if ( isset( $_REQUEST['rs-clock-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['rs-clock-debug'] ) ) ) {
+	if ( isset( $_REQUEST['rs-clock-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['rs-clock-debug'] ) ) ) {
 		$js .= "radio.clock_debug = true;" . "\n";
 	} else {
 		$js .= "radio.clock_debug = false;" . "\n";
@@ -997,7 +1001,7 @@ function radio_station_localization_script() {
 	// 2.5.0: moved here from countdown enqueue function
 	$js .= "radio.labels.showstarted = '" . esc_js( __( 'This Show has started.', 'radio-station' ) ) . "';" . "\n";
 	$js .= "radio.labels.showended = '" . esc_js( __( 'This Show has ended.', 'radio-station' ) ) . "';" . "\n";
-	$js .= "radio.labels.playlistended = '" . esc_js( __( 'This Playlist has ended.', 'radio-station') ) . "';" . "\n";
+	$js .= "radio.labels.playlistended = '" . esc_js( __( 'This Playlist has ended.', 'radio-station' ) ) . "';" . "\n";
 	$js .= "radio.labels.timecommencing = '" . esc_js( __( 'Commencing in', 'radio-station' ) ) . "';" . "\n";
 	$js .= "radio.labels.timeremaining = '" . esc_js( __( 'Remaining Time', 'radio-station' ) ) . "';" . "\n";
 
@@ -1036,15 +1040,16 @@ function radio_station_localization_script() {
 // Filter for Streaming Data
 // -------------------------
 // 2.3.3.7: added streaming data filter for player integration
-add_filter( 'radio_player_data', 'radio_station_streaming_data' );
+// 2.5.6: added missing 4th argument (arg count declaration)
+add_filter( 'radio_player_data', 'radio_station_streaming_data', 10, 2 );
 function radio_station_streaming_data( $data, $station = false ) {
 	$data = array(
-		'script'	=> radio_station_get_setting( 'player_script' ),
-		'instance'	=> 0,
-		'url'		=> radio_station_get_stream_url(),
-		'format'	=> radio_station_get_setting( 'streaming_format' ),
-		'fallback'	=> radio_station_get_fallback_url(),
-		'fformat'	=> radio_station_get_setting( 'fallback_format' ),
+		'script'   => radio_station_get_setting( 'player_script' ),
+		'instance' => 0,
+		'url'      => radio_station_get_stream_url(),
+		'format'   => radio_station_get_setting( 'streaming_format' ),
+		'fallback' => radio_station_get_fallback_url(),
+		'fformat'  => radio_station_get_setting( 'fallback_format' ),
 	);
 	if ( RADIO_STATION_DEBUG ) {
 		echo '<span style="display:none;">Player Stream Data: ' . esc_html( print_r( $data, true ) ) . '</span>' . "\n";
@@ -1070,8 +1075,13 @@ function radio_station_delete_transients_with_prefix( $prefix ) {
 	$prefix = $wpdb->esc_like( '_transient_' . $prefix . '_' );
 
 	// 2.3.3.9: fix to LIKE match
+	// TODO: use wpdb_prepare on LIKE statement ?
+	// $like = '%' . $prefix . '%';
+	// $query = "SELECT `option_name` FROM " . $wpdb->prefix . "options WHERE `option_name` LIKE '%s'";
+	// $results = $wpdb->get_results( $wpdb->prepare( $query, $like ), ARRAY_A );
 	$query = "SELECT `option_name` FROM " . $wpdb->prefix . "options WHERE `option_name` LIKE '%" . $prefix . "%'";
 	$results = $wpdb->get_results( $query, ARRAY_A );
+
 	// if ( RADIO_STATION_DEBUG ) {
 	//	echo $query . PHP_EOL . '<br>';
 	//	echo 'Transients: ' . esc_html( print_r( $results, true ) ) . "\n";
@@ -1081,7 +1091,7 @@ function radio_station_delete_transients_with_prefix( $prefix ) {
 	}
 
 	foreach ( $results as $option ) {
-		// 2.3.3.9: fix to replace malgunctioning ltrim
+		// 2.3.3.9: fix to replace malfunctioning ltrim
 		// $key = ltrim( $option['option_name'], '_transient_' );
 		$key = substr( $option['option_name'], 11 );
 		delete_transient( $key );
@@ -1228,16 +1238,15 @@ function radio_station_script_debug() {
 		return;
 	}
 	if ( isset( $_REQUEST['debug-script'] ) ) {
-		$handle = $_REQUEST['debug-script'];
+		$handle = sanitize_text_field( $_REQUEST['debug-script'] );
 		global $wp_scripts;
 		$debug = $wp_scripts->registered[$handle];
-		echo '<span style="display:none;">Script object for ' . $handle . ': ' . print_r( $debug, true ) . '</span>' . "\n";
+		echo '<span style="display:none;">Script object for ' . esc_html( $handle ) . ': ' . esc_html( print_r( $debug, true ) ) . '</span>' . "\n";
 	}
 	if ( isset( $_REQUEST['debug-style'] ) ) {
-		$handle = $_REQUEST['debug-style'];
+		$handle = sanitize_text_field( $_REQUEST['debug-style'] );
 		global $wp_styles;
 		$debug = $wp_styles->registered[$handle];
-		echo '<span style="display:none;">Style object for ' . $handle . ': ' . print_r( $debug, true ) . '</span>' . "\n";
+		echo '<span style="display:none;">Style object for ' . esc_html( $handle ) . ': ' . esc_html( print_r( $debug, true ) ) . '</span>' . "\n";
 	}
 }
-

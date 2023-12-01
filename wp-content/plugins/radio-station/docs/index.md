@@ -18,7 +18,7 @@
 | [API](./API.md) | Data API via REST and Feed Endpoints
 | [Roadmap](./Roadmap.md) | Feature Roadmap for Free and Pro Versions |
 | [Changelog](../CHANGELOG.md) | Log of Changes for each Release |
-| [Pro](./Pro.md) | Index of Pro Feature Documenation |
+| [Pro](./Pro.md) | Index of Pro Feature Documentation |
 
 
 ### Quickstart Guide
@@ -27,7 +27,7 @@ Once you have installed and activated the **Radio Station** plugin on your WordP
 
 Firstly, you can visit the Plugin Settings screen to adjust the default [Plugin Options](./Options.md) to your liking. Here you can set your Radio Timezone and Language, along with your Streaming URL and Station Logo, as well as other global plugin settings. Also from this Settings page you can assign [Automatic Pages](./Display.md#automatic-pages) and Views for your Program Schedule display and for other plugin post type archive displays. But first you will want to add some Shows to display in your Schedule!
 
-To do this, click on Shows in the adimn submenu, then on "Add a New Show" at the top. Give it a Shift timeslot and a description and then click Publish. Then view the Show page by clicking the Show Permalink under the show title. (Depending on your Theme, you may wish to adjust the [Templates](./Display.md#page-templates) used.) You can also assign different [Images](./Display.md#images) to Shows. 
+To do this, click on Shows in the admin submenu, then on "Add a New Show" at the top. Give it a Shift timeslot and a description and then click Publish. Then view the Show page by clicking the Show Permalink under the show title. (Depending on your Theme, you may wish to adjust the [Templates](./Display.md#page-templates) used.) You can also assign different [Images](./Display.md#images) to Shows. 
 
 Next, have a look at your Program Schedule page to see the Show displayed there also. Keep adding Shows until you have your Schedule filled in! You can also add schedule Overrides for specific date and time blocks only. For ease of use they can be fully or partially linked to an existing Show. You can further [Manage](./Manage.md) your Shows and other Station data via the WordPress Admin area.
 

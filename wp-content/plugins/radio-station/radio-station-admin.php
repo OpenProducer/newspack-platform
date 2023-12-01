@@ -68,9 +68,9 @@ function radio_station_enqueue_admin_scripts() {
 
 	// --- enqueue admin styles ---
 	radio_station_enqueue_style( 'admin' );
-	
+
 	// 2.5.0: maybe enqueue pricing page styles
-	if ( isset( $_REQUEST['page'] ) && ( 'radio-station-pricing' == $_REQUEST['page'] ) ) {
+	if ( isset( $_REQUEST['page'] ) && ( 'radio-station-pricing' == sanitize_text_field( $_REQUEST['page'] ) ) ) {
 		$style_url = plugins_url( 'freemius-pricing/freemius-pricing.css', RADIO_STATION_FILE );
 		$style_path = RADIO_STATION_DIR . '/freemius-pricing/freemius-pricing.css';
 		$version = filemtime( $style_path );
@@ -105,7 +105,10 @@ function radio_station_admin_styles() {
 	$css = apply_filters( 'radio_station_admin_styles', $css );
 
 	// --- output admin styles ---
-	echo '<style>' . wp_strip_all_tags( $css ) . '</style>' . "\n";
+	// 2.5.6: use wp_kses_post instead of wp_strip_all_tags
+	// 2.5.6: use radio_station_add_inline_style
+	// echo '<style>' . wp_kses_post( $css ) . '</style>' . "\n";
+	radio_station_add_inline_style( 'rs-admin', $css );
 
 }
 
@@ -178,7 +181,7 @@ function radio_station_plugin_page_links( $links, $file ) {
 // (recheck permissions for main menu item click)
 add_action( 'admin_init', 'radio_station_settings_cap_check' );
 function radio_station_settings_cap_check() {
-	if ( isset( $_REQUEST['page'] ) && ( RADIO_STATION_SLUG == $_REQUEST['page'] ) ) {
+	if ( isset( $_REQUEST['page'] ) && ( RADIO_STATION_SLUG == sanitize_text_field( $_REQUEST['page'] ) ) ) {
 		$settingscap = apply_filters( 'radio_station_settings_capability', 'manage_options' );
 		if ( !current_user_can( $settingscap ) ) {
 			wp_die( esc_html( __( 'You do not have permissions to access that page.', 'radio-station' ) ) );
@@ -327,7 +330,7 @@ function radio_station_taxonomy_submenu_fix() {
 		}
 
 		// 2.3.0: add fix for language taxonomy also
-		if ( RADIO_STATION_LANGUAGES_SLUG == $_GET['taxonomy'] ) {
+		if ( RADIO_STATION_LANGUAGES_SLUG == sanitize_text_field( $_GET['taxonomy'] ) ) {
 			$js = "jQuery('#toplevel_page_radio-station ul li').each(function() {
 	    		if (jQuery(this).find('a').attr('href') == 'edit-tags.php?taxonomy=" . esc_js( RADIO_STATION_LANGUAGES_SLUG ) . "') {
 		    		jQuery(this).addClass('current').find('a').addClass('current').attr('aria-current', 'page');
@@ -358,10 +361,11 @@ function radio_station_settings_page_redirect() {
 	}
 
 	// --- check if link is for options-general.php ---
-	if ( strstr( $_SERVER['REQUEST_URI'], '/options-general.php' ) ) {
+	if ( strstr( filter_var( $_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL ), '/options-general.php' ) ) {
 
 		// --- redirect to plugin settings page (admin.php) ---
 		$url = add_query_arg( 'page', RADIO_STATION_SLUG, admin_url( 'admin.php' ) );
+		// TODO: maybe use wp_safe_redirect here ?
 		wp_redirect( $url );
 		exit;
 	}
@@ -451,14 +455,16 @@ function radio_station_plugin_docs_page() {
 				echo ' style="display:none;"';
 			}
 			echo '>';
-				// TODO: use wp_kses with allowed HTML (needs onclick on a tag fix)
-				// phpcs:ignore WordPress.Security.OutputNotEscaped
-				echo radio_station_parse_doc( $id );
+				// 2.5.6: use wp_kses with allowed HTML
+				$allowed = radio_station_allowed_html( 'content', 'docs' );
+				echo wp_kses( radio_station_parse_doc( $id ), $allowed );
 			echo '</div>' . "\n";
 		}
 	}
 
-	echo "<script>function radio_load_doc(id) {
+	// 2.5.6: added jquery onclick function to replace onclick attributes
+	echo "<script>jQuery('.doc-link').on('click',function(){ref = jQuery(this).attr('id').replace('-doc-link',''); radio_load_doc(ref);});
+	function radio_load_doc(id) {
 		pages = document.getElementsByClassName('doc-page');
 		for (i = 0; i < pages.length; i++) {pages[i].style.display = 'none';}
 		hash = '';
@@ -509,7 +515,9 @@ function radio_station_parse_doc( $id ) {
 	$sep = '***';
 	$backlink = '';
 	if ( 'index' != $id ) {
-		$backlink = '<alink href="javascript:void(0);" onclick="radio_load_doc(\'index\');">&larr; ';
+		// 2.5.6: replace onlick attribute with class
+		// $backlink = '<alink href="javascript:void(0);" onclick="radio_load_doc(\'index\');">&larr; ';
+		$backlink = '<alink class="doc-link" id="index-doc-link">&larr; ';
 		$backlink .= esc_html( __( 'Back to Documentation Index', 'radio-station' ) );
 		$backlink .= '</a><br>';
 	}
@@ -545,7 +553,7 @@ function radio_station_parse_doc( $id ) {
 	// --- replace links with javascript ---
 	$tag_start = '<a href="./';
 	$tag_end = '"';
-	$placeholder = '<alink href="javascript:void(0);"';
+	$placeholder = '<alink ';
 	if ( stristr( $formatted, $tag_start ) ) {
 		while ( stristr( $formatted, $tag_start ) ) {
 			$pos = strpos( $formatted, $tag_start );
@@ -555,9 +563,11 @@ function radio_station_parse_doc( $id ) {
 			$pos2 = strpos( $after, $tag_end );
 			$url = substr( $after, 0, $pos2 );
 			$url = strtolower( $url );
-			$onclick = ' onclick="radio_load_doc(\'' . esc_js( $url ) . '\');';
-			$after = substr( $after, $pos2, strlen( $after ) );
-			$formatted = $before . $placeholder . $onclick . $after;
+			// 2.5.6: replace onclick with class and id
+			// $onclick = ' onclick="radio_load_doc(\'' . esc_js( $url ) . '\');';
+			$class = ' class="doc-link" id="' . esc_attr( $url ) . '-doc-link"';
+			$after = substr( $after, ($pos2 + 1), strlen( $after ) );
+			$formatted = $before . $placeholder . $class . $after;
 		}
 	}
 	$formatted = str_replace( '<a href="', '<a target="_blank" href="', $formatted );
@@ -586,38 +596,39 @@ function radio_station_playlist_export_page() {
 		$get_contents = opendir( $dir );
 		while ( $file = readdir( $get_contents ) ) {
 			if ( '.' !== $file && '..' !== $file ) {
-				unlink( $dir . $file );
+				// 2.5.6: use wp_delete_file
+				// unlink( $dir . $file );
+				wp_delete_file( $dir . $file );
 			}
 		}
 		closedir( $get_contents );
 	}
 
 	// --- watch for form submission ---
-	if ( isset( $_POST['export_action'] ) && ( 'station_playlist_export' === $_POST['export_action'] ) ) {
+	if ( isset( $_POST['export_action'] ) && ( 'station_playlist_export' === sanitize_text_field( $_POST['export_action'] ) ) ) {
 
 		// --- validate referrer and nonce field ---
 		check_admin_referer( 'station_export_valid' );
 
-		$start = $_POST['station_export_start_year'] . '-' . $_POST['station_export_start_month'] . '-' . $_POST['station_export_start_day'];
+		$start = sanitize_text_field( $_POST['station_export_start_year'] ) . '-';
+		$start .= sanitize_text_field( $_POST['station_export_start_month'] ) . '-';
+		$start .= sanitize_text_field(  $_POST['station_export_start_day'] );
 		$start .= ' 00:00:00';
-		$end = $_POST['station_export_end_year'] . '-' . $_POST['station_export_end_month'] . '-' . $_POST['station_export_end_day'];
+		$end = sanitize_text_field( $_POST['station_export_end_year'] ) . '-';
+		$end .= sanitize_text_field( $_POST['station_export_end_month'] ) . '-';
+		$end .= sanitize_text_field( $_POST['station_export_end_day'] );
 		$end .= ' 23:59:59';
 
 		// fetch all records that were created between the start and end dates
-		$sql =
-			"SELECT posts.ID, posts.post_date
-		FROM {$wpdb->posts} AS posts
-		WHERE posts.post_type = '" . RADIO_STATION_PLAYLIST_SLUG . " AND
-			posts.post_status = 'publish' AND
-			TO_DAYS(posts.post_date) >= TO_DAYS(%s) AND
-			TO_DAYS(posts.post_date) <= TO_DAYS(%s)
-		ORDER BY posts.post_date ASC";
+		$sql = "SELECT ID,post_date FROM " . $wpdb->posts . " WHERE post_type = '" . RADIO_STATION_PLAYLIST_SLUG;
+		$sql .= " AND post_status = 'publish' AND TO_DAYS(post_date) >= TO_DAYS(%s) AND TO_DAYS(post_date) <= TO_DAYS(%s) ORDER BY post_date ASC";
 
 		// prepare query before executing
 		$playlists = $wpdb->get_results( $wpdb->prepare( $sql, array( $start, $end ) ) );
 
-		if ( ! $playlists ) {
-			$list = 'No playlists found for this period.';
+		if ( !$playlists ) {
+			// 2.5.6: output translated and escaped message
+			echo esc_html( __( 'No playlists found for this period.', 'radio-station' ) );
 		}
 
 		// fetch the tracks for each playlist from the wp_postmeta table
@@ -747,7 +758,7 @@ function radio_station_parse_upgrade_notice( $notice ) {
 	}
 
 	foreach ( $contents as $content ) {
-		if ( trim( $content ) != '' ) {
+		if ( '' != trim( $content ) ) {
 			// --- extract link from line ---
 			if ( strstr( $content, 'http' ) ) {
 				$pos = strpos( $content, 'http' );
@@ -814,10 +825,12 @@ function radio_station_plugin_update_message( $plugin_data, $response ) {
 
 	// --- output update available message ---
 	echo '<br><b>' . esc_html( __( 'Take a moment to Update for a better experience. In this update', 'radio-station' ) ) . ":</b><br>";
-	foreach ( $notice['lines'] as $line ) {
+	// 2.5.6: added missing index variable $i to foreach
+	foreach ( $notice['lines'] as $i => $line ) {
 		// 2.5.0: maybe output link to notice URL
 		if ( ( '' != $notice['url'] ) && ( 0 == $i ) ) {
-			echo '&bull; <a href="' . esc_url( $notice_url ) . '" target="_blank" title="' . esc_attr( __( 'Read full update details.', 'radio-station' ) ) . '">' . esc_html( $line ) . '</a><br>';
+			// 2.5.6: fix variable notice_url to notice['url']
+			echo '&bull; <a href="' . esc_url( $notice['url'] ) . '" target="_blank" title="' . esc_attr( __( 'Read full update details.', 'radio-station' ) ) . '">' . esc_html( $line ) . '</a><br>';
 		} else {
 			echo '&bull; ' . esc_html( $line ) . '<br>';
 		}
@@ -1160,7 +1173,7 @@ function radio_station_settings_page_top() {
 		if ( !$user_ids || !is_array( $user_ids ) || !in_array( $user_id, $user_ids ) ) {
 			$prelaunch = ( $now < $offer_start ) ? true : false;
 			if ( isset( $_GET['offertest'] ) ) {
-				$offertest = sanitize_title( $_GET['offertest'] );
+				$offertest = sanitize_text_field( $_GET['offertest'] );
 				if ( '1' == $offertest ) {
 					$prelaunch = false;
 				} elseif ( '2' == $offertest ) {
@@ -1196,7 +1209,7 @@ function radio_station_listing_offer_notice() {
 
 	// --- bug out on certain plugin pages ---
 	$pages = array( 'radio-station', 'radio-station-docs' );
-	if ( isset( $_REQUEST['page'] ) && in_array( sanitize_text_field( $_REQUEST['page'], $pages ) ) ) {
+	if ( isset( $_REQUEST['page'] ) && in_array( sanitize_text_field( $_REQUEST['page'] ), $pages ) ) {
 		return;
 	}
 
@@ -1390,7 +1403,8 @@ function radio_station_launch_offer_content( $dismissable = true, $prelaunch = f
 				}
 				echo '>' . esc_html( __( "Yes, I'm in!", 'radio-station' ) ) . '</a>' . "\n";
 			} else {
-				echo '<a href="' . RADIO_STATION_PRO_URL . 'pricing/" style="font-size: 16px;" target="_blank" class="button-primary"';
+				// 2.5.6: added missing escape wrapper for URL
+				echo '<a href="' . esc_url_raw( RADIO_STATION_PRO_URL . 'pricing/' )  . '" style="font-size: 16px;" target="_blank" class="button-primary"';
 				if ( $dismissable ) {
 					echo ' onclick="radio_display_dismiss_link();"';
 				}
@@ -1439,7 +1453,7 @@ function radio_station_listing_offer_dismiss() {
 
 	// --- set option to dismissed ---
 	update_option( 'radio_station_listing_offer_dismissed', true );
-	if ( isset( $_REQUEST['accept'] ) && ( '1' == sanitize_text_field( $_REQUEST['accept'] ) ) ) {
+	if ( isset( $_REQUEST['accept'] ) && ( '1' === sanitize_text_field( $_REQUEST['accept'] ) ) ) {
 		update_option( 'radio_station_listing_offer_accepted', true );
 	}
 
@@ -1473,7 +1487,7 @@ function radio_station_launch_offer_dismiss() {
 	update_option( 'radio_station_launch_offer_dismissed', $user_ids );
 
 	// --- maybe set option for accepted ---
-	if ( isset( $_REQUEST['accept'] ) && ( '1' == $_REQUEST['accepted'] ) ) {
+	if ( isset( $_REQUEST['accept'] ) && ( '1' === sanitize_text_field( $_REQUEST['accepted'] ) ) ) {
 		$user_ids = get_option( 'radio_station_launch_offer_accepted' );
 		if ( !$user_ids || !is_array( $user_ids ) ) {
 			$user_ids = array( $user_id );
@@ -1551,11 +1565,11 @@ function radio_station_announcement_content( $dismissable = true ) {
 			echo '</a> ' . esc_html( __( 'to make it better for everyone', 'radio-station' ) ) . '!' . "\n";
 		echo '</li>' . "\n";
 		echo '<li style="display:inline-block; text-align:center; vertical-align:middle; margin-left:40px;">' . "\n";
-		
+
 			$button = radio_station_patreon_button( 'radiostation' );
 			// 2.5.0: added wp_kses to button output
 			$allowed = radio_station_allowed_html( 'button', 'patreon' );
-			echo wp_kses( $button , $allowed );
+			echo wp_kses( $button, $allowed );
 
 			// 2.2.7: added WordPress.Org star rating link
 			// 2.3.0: only show for dismissable notice

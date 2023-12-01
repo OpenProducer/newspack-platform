@@ -59,8 +59,38 @@ function radio_station_use_server_times() {
 function radio_station_get_now( $gmt = true ) {
 	global $rs_se;
 	// note: channel not explicitly needed here
-	$now = $rs_se->get_now( $gmt );
+	// 2.5.6: use stored now time to prevent data mismatch
+	$now = $rs_se->now;
+	// $now = $rs_se->get_now( $gmt );
 	return $now;
+}
+
+// -----------
+// Date Format
+// -----------
+// 2.5.6: added for localized date formatting output
+function radio_station_date( $format, $timestamp = false, $timezone = false ) {
+
+	// --- maybe get time / timezone ---
+	if ( !$timestamp ) {
+		$timestamp = radio_station_get_now();
+	}
+	if ( !$timezone ) {
+		$timezone = radio_station_get_timezone();
+	}
+	$timezone = new DateTimeZone( $timezone );
+
+	if ( function_exists( 'wp_date' ) ) {
+		$date = wp_date( $format, $timestamp, $timezone );
+	} else {
+		// --- fallback to calculate timezone offset manually ---
+		$date_time = new DateTime( $timestamp, $timezone );
+		$offset = timezone_offset_get( $timezone, $date_time );
+		$timestamp_with_offset = $timestamp + $offset;
+		$date = date_i18n( $format, $timestamp_with_offset );
+	}
+	
+	return $date;
 }
 
 // ------------
@@ -138,10 +168,12 @@ function radio_station_get_date_time( $timestring, $timezone ) {
 // 2.3.2: added for timezone handling
 // 2.5.0: added optional timezone argument for consistency
 function radio_station_to_time( $timestring, $timezone = false ) {
-	global $radio_station_data, $rs_se;
-	$channel = $rs_se->channel = $radio_station_data['channel'];
+	global $rs_se;
+	// 2.5.6: remove unnecessary channel argument
+	// $radio_station_data
+	// $channel = $rs_se->channel = $radio_station_data['channel'];
 	if ( !$timezone ) {
-		$timezone = radio_station_get_timezone( $channel );
+		$timezone = radio_station_get_timezone();
 	}
 	$time = $rs_se->to_time( $timestring, $timezone );
 	return $time;
@@ -161,16 +193,15 @@ function radio_station_get_times( $time = false, $timezone = false ) {
 		$time = radio_station_get_now();
 	}
 
-	// --- maybe get timezone ---
-	if ( !$timezone ) {
-		$timezone = radio_station_get_timezone();
-	}
-
 	// --- get offset time and date ---
 	if ( defined( 'RADIO_STATION_USE_SERVER_TIMES' ) && RADIO_STATION_USE_SERVER_TIMES ) {
 		$times = $rs_se->get_times( $time, false );
 	} else {
-		$timezone = radio_station_get_timezone();
+		// --- maybe get timezone ---
+		// 2.5.6: moved inside to replace duplicate line
+		if ( !$timezone ) {
+			$timezone = radio_station_get_timezone();
+		}
 		$times = $rs_se->get_times( $time, $timezone );
 	}
 
@@ -207,7 +238,8 @@ function radio_station_get_time( $key = false, $time = false, $timezone = false 
 		$datetime = $times['object'];
 		$time = $datetime->format( $key );
 	} else {
-		$time = date( $key, $time );
+		// 2.5.6: use radio_station_get_time instead of date
+		$time = radio_station_get_time( $key, $time );
 		if ( RADIO_STATION_DEBUG ) {
 			echo '<span style="display:none;">Time key not found: ' . esc_html( $key ) . '</span>' . "\n";
 		}
@@ -307,7 +339,7 @@ function radio_station_get_previous_date( $date, $weekday = false ) {
 function radio_station_get_days( $translate = false ) {
 	global $radio_station_data, $rs_se;
 	$channel = $rs_se->channel = $radio_station_data['channel'];
-	return $rs_se->get_days( $translate );
+	return $rs_se->get_weekdays( $translate );
 }
 
 // -------------
@@ -383,10 +415,10 @@ function radio_station_translate_weekday( $weekday, $short = null ) {
 // Replace Weekdays
 // ----------------
 // 2.3.2: to replace with translated weekdays in a time string
-function radio_station_replace_weekday( $string ) {
+function radio_station_replace_weekday( $weekday ) {
 	global $radio_station_data, $rs_se;
 	$channel = $rs_se->channel = $radio_station_data['channel'];
-	return $rs_se->replace_weekday( $string );
+	return $rs_se->replace_weekday( $weekday );
 }
 
 // ---------------
@@ -405,10 +437,10 @@ function radio_station_translate_month( $month, $short = null ) {
 // Replace Months
 // --------------
 // 2.3.2: to replace with translated months in a time string
-function radio_station_replace_month( $string ) {
+function radio_station_replace_month( $month ) {
 	global $radio_station_data, $rs_se;
 	$channel = $rs_se->channel = $radio_station_data['channel'];
-	return $rs_se->replace_month( $string );
+	return $rs_se->replace_month( $month );
 }
 
 // ------------------
@@ -425,19 +457,18 @@ function radio_station_translate_meridiem( $meridiem ) {
 // Replace Meridiem
 // ----------------
 // 2.3.2: added optimized meridiem replacement
-function radio_station_replace_meridiem( $string ) {
+function radio_station_replace_meridiem( $meridiem ) {
 	global $radio_station_data, $rs_se;
 	$channel = $rs_se->channel = $radio_station_data['channel'];
-	return $rs_se->replace_meridiem( $string );
+	return $rs_se->replace_meridiem( $meridiem );
 }
 
 // ---------------------
 // Translate Time String
 // ---------------------
 // 2.3.2: replace with translated month, day and meridiem in a string
-function radio_station_translate_time( $string ) {
+function radio_station_translate_time( $time ) {
 	global $radio_station_data, $rs_se;
 	$channel = $rs_se->channel = $radio_station_data['channel'];
-	return $rs_se->translate_time( $string );
+	return $rs_se->translate_time( $time );
 }
-

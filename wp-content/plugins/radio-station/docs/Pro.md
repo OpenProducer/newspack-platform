@@ -13,13 +13,15 @@ If you are interested in testing cutting edge features in development for this n
 
 ### Radio Station Plus
 
-Note that the following features are *not* available in Radio Station Plus:
+Please note that the following features are *not* available in Radio Station Plus:
 
-- Persistent Stream Player Bar
+- Persistent Stream Player Bar (and related features)
 - Visual Schedule Editor Interface
 - Episodes and Segments (and related data/features)
 - Page Builder Modules (for Elementor and Beaver Builder)
 
+
+### PRO Plugin Features
 
 #### API
 
@@ -51,7 +53,7 @@ Note that the following features are *not* available in Radio Station Plus:
 
 #### Options
 
-[Pro Options](./Options.md) (throughout options list)
+[Pro Options](./Options.md) (marked throughout options list)
 
 #### Roles
 
@@ -77,8 +79,6 @@ Note that the following features are *not* available in Radio Station Plus:
 
 #### Widgets
 
-[Sitewide Bar Player](./Player.md#pro-sitewide-bar-player)
-
 [Timezone Switcher](./Widgets.md#pro-timezone-switcher)
 
 [Extra Block Options](./Widgets.md#pro-extra-block-options)
@@ -87,3 +87,29 @@ Note that the following features are *not* available in Radio Station Plus:
 
 [Beaver Builder Modules]('./Widgets.md#pro-beaver-builder-modules)
 
+
+### Pro Player Features
+
+[Extra Widget and Shortcode Options](./Player.md#pro-extra-widget-and-shortcode-options)
+
+[Extra Block Options](./Player.md#pro-extra-block-options)
+
+[Sitewide Bar Player](./Player.md#pro-sitewide-bar-player)
+
+[Responside Bar Display](./Player.md#pro-responsive-bar-display)
+
+[Continous Player Integration](./Player.md#pro-continuous-player-integration)
+
+[Smooth Page Transitions](./Player.md#pro-smooth-page-transitions)
+
+[Extra Bar Color Options](./Player.md#pro-extra-bar-color-options)
+
+[Playback AutoResume](./Player.md#pro-playback-autoresume)
+
+[Popup Player](./Player.md#pro-popup-player)
+
+[Track Metadata](./Player.md#pro-track-metadata)
+
+[Elementor Widget](./Player.md#pro-elementor-widget)
+
+[Beaver Builder Module]('./Player.md#pro-beaver-builder-module)

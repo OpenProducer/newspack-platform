@@ -104,6 +104,8 @@ Use Transient Caching to improve Schedule calculation performance.
 
 ## Player
 
+### Basic Defaults
+
 #### Player Title
 Default: on. Key: player_title
 Display your Radio Station Title in Player by default.
@@ -132,6 +134,8 @@ Which volume controls to display in the Player by default.
 Default: off. Key: player_debug
 Output player debug information in browser javascript console.
 
+### Player Colors
+
 #### [Pro] Playing Highlight Color
 Default: #70E070. Key: player_playing_color
 Default highlight color to use for Play button icon when playing.
@@ -148,6 +152,8 @@ Default Knob Color for Player Volume Slider.
 Default: #80C080. Key: player_range_color
 Default Track Color for Player Volume Slider.
 
+### Advanced Defaults
+
 #### Player Start Volume
 Default: 77. Key: player_volume
 Initial volume for when the Player starts playback. 0-100
@@ -163,6 +169,8 @@ Attempt to resume playback if visitor was playing. Only triggered when the user 
 #### [Pro] Player Popup
 Default: off. Key: player_popup
 Add button to open Popup Player in separate window.
+
+### Player Bar
 
 #### [Pro] Sitewide Player Bar
 Default: off. Key: player_bar

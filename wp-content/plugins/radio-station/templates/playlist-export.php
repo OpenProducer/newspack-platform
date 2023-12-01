@@ -8,15 +8,15 @@
 		<table class="form-table">
 
 			<tr valign="top">
-				<?php
-				$smonth = isset( $_POST['station_export_start_month'] ) ? (int) $_POST['station_export_start_month'] : '';
+				<?php // 2.5.6: replace integer casting with absint
+				$smonth = isset( $_POST['station_export_start_month'] ) ? absint( $_POST['station_export_start_month'] ) : '';
 				?>
 				<th scope="row"><?php esc_html_e( 'Start Date', 'radio-station' ); ?></th>
 				<td>
 					<select name="station_export_start_month" id="station_export_start_month">
 						<?php
 						$selected = 'selected="selected"';
-						for ( $i = 1; $i <= 12; $i ++ ) {
+						for ( $i = 1; $i <= 12; $i++ ) {
 							$month_num = $i;
 							if ( $month_num < 10 ) {
 								$month_num = '0' . $i;
@@ -38,7 +38,8 @@
 						?>
 					</select>
 
-					<?php $sday = isset( $_POST['station_export_start_day'] ) ? (int) $_POST['station_export_start_day'] : ''; ?>
+					<?php // 2.5.6: replace integer casting with absint
+					$sday = isset( $_POST['station_export_start_day'] ) ? absint( $_POST['station_export_start_day'] ) : ''; ?>
 					<select name="station_export_start_day" id="station_export_start_day">
 						<?php
 						for ( $i = 1; $i <= 31; $i ++ ) {
@@ -56,18 +57,20 @@
 						?>
 					</select>
 
-					<?php $syear = isset( $_POST['station_export_start_year'] ) ? (int) $_POST['station_export_start_year'] : ''; ?>
+					<?php // 2.5.6: replace integer casting with absint
+					$syear = isset( $_POST['station_export_start_year'] ) ? absint( $_POST['station_export_start_year'] ) : ''; ?>
 					<select name="station_export_start_year" id="station_export_start_year">
 						<?php
-						$year = date( 'Y' );
-						for ( $i = $year - 5; $i <= ( $year + 5 ); $i ++ ) {
-							$selected = '';
+						$year = radio_station_get_time( 'Y' );
+						for ( $i = $year - 5; $i <= ( $year + 5 ); $i++ ) {
+							echo '<option value="' . esc_attr( $i ) . '"';
+							// 2.5.6: output selected attribute directly
 							if ( $i == $syear ) {
-								$selected = ' selected="selected"';
+								echo ' selected="selected"';
 							} elseif ( $i === $year && empty( $syear ) ) {
-								$selected = ' selected="selected"';
+								echo ' selected="selected"';
 							}
-							echo '<option value="' . esc_attr( $i ) . '"' . $selected . '>' . esc_html( $i ) . '</option>';
+							echo '>' . esc_html( $i ) . '</option>';
 						}
 						?>
 					</select>
@@ -77,7 +80,8 @@
 			<tr valign="top">
 				<th scope="row"><?php esc_html_e( 'End Date', 'radio-station' ); ?></th>
 				<td>
-					<?php $emonth = isset( $_POST['station_export_end_month'] ) ? (int) $_POST['station_export_end_month'] : ''; ?>
+					<?php // 2.5.6: replace integer casting with absint
+					$emonth = isset( $_POST['station_export_end_month'] ) ? absint( $_POST['station_export_end_month'] ) : ''; ?>
 					<select name="station_export_end_month" id="station_export_end_month">
 						<?php
 						$selected = 'selected="selected"';
@@ -103,10 +107,11 @@
 						?>
 					</select>
 
-					<?php $eday = isset( $_POST['station_export_end_day'] ) ? (int) $_POST['station_export_end_day'] : ''; ?>
+					<?php // 2.5.6: replace integer casting with absint
+					$eday = isset( $_POST['station_export_end_day'] ) ? absint( $_POST['station_export_end_day'] ) : ''; ?>
 					<select name="station_export_end_day" id="station_export_end_day">
 						<?php
-						for ( $i = 1; $i <= 31; $i ++ ) {
+						for ( $i = 1; $i <= 31; $i++ ) {
 							$day = $i;
 							if ( $i < 10 ) {
 								$day = '0' . $day;
@@ -116,18 +121,20 @@
 						?>
 					</select>
 
-					<?php $eyear = isset( $_POST['station_export_end_year'] ) ? (int) $_POST['station_export_end_year'] : ''; ?>
+					<?php // 2.5.6: replace integer casting with absint
+					$eyear = isset( $_POST['station_export_end_year'] ) ? absint( $_POST['station_export_end_year'] ) : ''; ?>
 					<select name="station_export_end_year" id="station_export_end_year">
 						<?php
-						$year = date( 'Y' );
-						for ( $i = $year - 5; $i <= ( $year + 5 ); $i ++ ) {
-							$selected = '';
+						$year = radio_station_get_time( 'Y' );
+						for ( $i = $year - 5; $i <= ( $year + 5 ); $i++ ) {
+							echo '<option value="' . esc_attr( $i ) . '"';
+							// 2.5.6: output selected attribute directly
 							if ( $i === $eyear ) {
-								$selected = ' selected="selected"';
+								echo ' selected="selected"';
 							} elseif ( $i === $year && empty( $eyear ) ) {
-								$selected = ' selected="selected"';
+								echo ' selected="selected"';
 							}
-							echo '<option value="' . esc_attr( $i ) . '"' . $selected . '>' . esc_html( $i ) . '</option>';
+							echo '>' . esc_html( $i ) . '</option>';
 						}
 						?>
 					</select>

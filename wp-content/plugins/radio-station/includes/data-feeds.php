@@ -16,6 +16,7 @@
 // - Get Broadcast Data
 // - Get Shows Data
 // - Get Genres Data
+// - Get Languages Data
 // === Data Endpoints ===
 // - Station Data Endpoint
 // - Broadcast Data Endpoint
@@ -43,8 +44,12 @@
 // - Genre List Feed
 // - Language List Feed
 // - Not Found Feed Error
-// - Format Data to XML
-// - Convert Array to XML
+// === RSS Feeds ===
+// - Show Posts Feed Conflict Fix
+// - Show Posts Feed filter
+// - Add Feed Item Show Node
+// - Add Feed Item Host Node
+// - Add Feed Item Producer Node
 // === Shift Conversions ===
 // - Convert Show Shift
 // - Convert Show Shifts
@@ -81,7 +86,8 @@ function radio_station_api_discovery_link() {
 	$link = apply_filters( 'radio_station_api_discovery_link', $link );
 	if ( $link ) {
 		// 2.5.0: sanitize with wp_kses and allowed HTML
-		$allowed_html = radio_station_allowed_html( 'link' );
+		// 2.5.6: change to link context rather than type
+		$allowed_html = radio_station_allowed_html( 'content', 'link' );
 		echo wp_kses( $link, $allowed_html );
 	}
 }
@@ -210,7 +216,8 @@ function radio_station_get_broadcast_data() {
 	$next_show = radio_station_convert_show_shift( $next_show );
 
 	// 2.3.3.5: just in case transients are the same
-	if ( $current_show == $next_show ) {
+	// 2.5.6: added check for empty next_show array
+	if ( !is_array( $next_show ) || ( $current_show == $next_show ) ) {
 		// 2.5.0: change from radio_station_get_time
 		$now = radio_station_get_now();
 		$next_show = radio_station_get_next_show( $now );
@@ -364,7 +371,7 @@ function radio_station_get_languages_data( $language = false ) {
 		$terms = get_terms( $args );
 
 		if ( count( $terms ) > 0 ) {
-			$all_langs = radio_station_get_languages();
+			// $all_langs = radio_station_get_languages();
 			foreach ( $terms as $term ) {
 				$languages_data[$term->slug] = array(
 					'id'          => $term->term_id,
@@ -498,10 +505,10 @@ function radio_station_schedule_endpoint() {
 		// 2.5.0: added sanitize_text_field
 		$weekday = sanitize_text_field( $_GET['weekday'] );
 		if ( strstr( $weekday, ',' ) ) {
-			$multiple = true;
+			// $multiple = true;
 			$weekdays = explode( ',', $weekday );
 		} else {
-			$singular = true;
+			// $singular = true;
 			$weekdays = array( $weekday );
 		}
 
@@ -529,7 +536,7 @@ function radio_station_schedule_endpoint() {
 
 	} elseif ( isset( $_GET['date'] ) ) {
 
-		// TODO: get schedule for specific date ?
+		// TODO: get schedule for specified date ?
 
 	} else {
 
@@ -993,7 +1000,7 @@ function radio_station_route_languages( $request ) {
 // Add Feed
 // --------
 // (modified version of WordPress add_feed function)
-function radio_station_add_feed( $feedname, $function ) {
+function radio_station_add_feed( $feedname, $function_name ) {
 
 	// note: removed as this is overwriting normal page slugs...
 	// so /feed/schedule/ overwrites /schedule/ - which is no good!
@@ -1004,7 +1011,7 @@ function radio_station_add_feed( $feedname, $function ) {
 
 	$hook = 'do_feed_' . $feedname;
 	remove_action( $hook, $hook );
-	add_action( $hook, $function, 10, 2 );
+	add_action( $hook, $function_name, 10, 2 );
 
 	return $hook;
 }
@@ -1133,11 +1140,11 @@ function radio_station_feed_radio( $comment_feed, $feed_name ) {
 	foreach ( $radio['endpoints'] as $endpoint => $url ) {
 		$key = '/' . $base . '/' . $endpoint;
 		$routes[$key] = array(
-			'namespace'	=> $base,
-			'methods'	=> array( 'GET' ),
-			// 'endpoints'	=> array(),
-			// 'url'	=> $url,
-			'_links' => array(
+			'namespace' => $base,
+			'methods'   => array( 'GET' ),
+			// 'endpoints' => array(),
+			// 'url'    => $url,
+			'_links'    => array(
 				'self' => $url,
 			),
 		);
@@ -1173,7 +1180,7 @@ function radio_station_feed_station( $comment_feed, $feed_name ) {
 	if ( RADIO_STATION_DEBUG ) {
 		echo "Output: " . esc_html( print_r( $station, true ) ) . PHP_EOL;
 	} else {
-		// 2.5.0: use wp_json_encode and wp_send_json instead of echo json_encode
+		// 2.5.0: use wp_send_json instead of echo json_encode
 		// header( 'Content-Type: application/json' );
 		wp_send_json( $station, $status_code );
 	}
@@ -1340,6 +1347,148 @@ function radio_station_feed_not_found( $error ) {
 }
 
 
+// -----------------
+// === RSS Feeds ===
+// -----------------
+
+// ----------------------------
+// Show Posts Feed Conflict Fix
+// ----------------------------
+// 2.5.5: added to allow filtering posts by related show
+add_filter( 'parse_query', 'radio_station_feed_filter_fix', 0 );
+function radio_station_feed_filter_fix( $query ) {
+
+	// --- override incorrect shows feed ---
+	if ( isset( $query->query['feed'] ) && ( 'feed' == $query->query['feed'] ) && ( 'show' == $query->query['post_type'] ) ) {
+		
+		if ( strstr( filter_var( $_SERVER['REQUEST_URI'], FILTER_SANITIZE_URL ), '/shows/feed/' ) ) {
+			
+			// --- add host/producer nodes to RSS item output ---
+			add_action( 'rss2_item', 'radio_station_feed_item_node_hosts' );
+			add_action( 'rss2_item', 'radio_station_feed_item_node_producers' );
+			
+		} else {
+
+			// --- fix for post feed with show filter ---
+			$query->query['post_type'] = 'post';
+			$query->query_vars['post_type'] = 'post';
+			$query->query_vars['name'] = '';
+			$query->is_comment_feed = '';
+			$query->is_post_type_archive = '1';
+			unset( $query->query['name'] );
+
+			// --- add show node to RSS item output ---
+			add_action( 'rss2_item', 'radio_station_feed_item_node_shows' );
+
+		}
+	}
+	// print_r( $query );
+}
+
+// ----------------------
+// Show Posts Feed Filter
+// ----------------------
+// eg. /feed/?show=something
+// 2.5.5: added to allow filtering posts by related show
+add_filter( 'pre_get_posts', 'radio_station_feed_filter' );
+function radio_station_feed_filter( $query ) {
+
+	// --- check for shows query parameter on posts feed ---
+    if ( $query->is_feed && $query->is_main_query() && isset( $query->query['post_type'] ) && ( 'post' == $query->query['post_type'] ) && isset( $query->query_vars['show'] ) ) {
+		$show_id = $query->query_vars['show'];
+		$show = get_post( $show_id );
+		if ( !$show ) {
+			// --- get show by post slug ---
+			global $wpdb;
+			$q = "SELECT ID FROM " . $wpdb->prefix . "posts WHERE post_name = %s AND post_type = %s";
+			$show_id = $wpdb->get_var( $wpdb->prepare( $q, array( $show_id, RADIO_STATION_SHOW_SLUG ) ) );
+		}
+		if ( $show_id ) {
+			$query->set(
+				'meta_query',
+				array(
+					array(
+						'key'     => 'post_showblog_id',
+						'value'   => $show_id,
+						'compare' => 'EQUALS'
+					)
+				)
+			);
+		}
+	}
+
+    return $query;
+}
+
+// -----------------------
+// Add Feed Item Show Node
+// -----------------------
+// 2.5.5: added show node to post feed items
+function radio_station_feed_item_node_shows() {
+	global $post;
+	$show_id = get_post_meta( $post->ID, 'post_showblog_id', true );
+	if ( $show_id ) {
+		$show = get_post( $show_id );
+		echo '<show>' . esc_html( $show->post_title ) . '</show>' . PHP_EOL;
+		echo '<show-id>' . esc_html( $show_id ) . '</show-id>' . PHP_EOL;
+	}
+}
+
+// -----------------------
+// Add Feed Item Host Node
+// -----------------------
+// 2.5.5: add host node to show feed items
+function radio_station_feed_item_node_hosts() {
+	global $post;
+	$host_ids = get_post_meta( $post->ID, 'show_user_list', true );
+	$hosts = '';
+	$count = 0;
+	if ( $host_ids && is_array( $host_ids ) && ( count( $host_ids ) > 0 ) ) {
+		$host_count = count( $host_ids );
+		foreach ( $host_ids as $host ) {
+			$count++;
+			$user = get_user_by( 'ID', $host );
+			$hosts .= $user->display_name;
+			if ( ( ( 1 == $count ) && ( 2 == $host_count ) ) || ( ( $host_count > 2 ) && ( ( $host_count - 1 ) == $count ) ) ) {
+				$hosts .= ' ' . __( 'and', 'radio-station' ) . ' ';
+			} elseif ( ( $count < $host_count ) && ( $host_count > 2 ) ) {
+				$hosts .= ', ';
+			}
+		}
+	}
+	if ( '' != $hosts ) {
+		echo '<host>' . esc_html( $hosts ) . '</host>' . PHP_EOL;
+	}
+}
+
+// ---------------------------
+// Add Feed Item Producer Node
+// ---------------------------
+// 2.5.5: add producer node to show feed items
+function radio_station_feed_item_node_producers() {
+	global $post;
+	$producer_ids = get_post_meta( $post->ID, 'producer_user_id', true );
+	$producers = '';
+	$count = 0;
+	if ( $producer_ids && is_array( $producer_ids ) && ( count( $producer_ids ) > 0 ) ) {
+		$producer_count = count( $producer_ids );
+		foreach ( $producer_ids as $producer ) {
+			$count++;
+			$user = get_user_by( 'ID', $producer );
+			$producers .= $user->display_name;
+			if ( ( ( 1 == $count ) && ( 2 == $producer_count ) ) || ( ( $producer_count > 2 ) && ( ( $producer_count - 1 ) == $count ) ) ) {
+				$producers .= ' ' . __( 'and', 'radio-station' ) . ' ';
+			} elseif ( ( $count < $producer_count ) && ( $producer_count > 2 ) ) {
+				$producers .= ', ';
+			}
+		}
+	}
+	if ( '' != $producers ) {
+		echo '<producer>' . esc_html( $producers ) . '</producer>' . PHP_EOL;
+	}
+}
+
+
 // -------------------------
 // === Shift Conversions ===
 // -------------------------
@@ -1351,12 +1500,12 @@ function radio_station_feed_not_found( $error ) {
 // 2.3.0: 24 format shift for broadcast data endpoint
 function radio_station_convert_show_shift( $shift ) {
 
-	// note: timezone can be ignored here as just getting hours and minutes
+	// 2.5.6: use radio_station_get_time instead of date
 	if ( isset( $shift['start'] ) ) {
-		$shift['start'] = date( 'H:i', strtotime( $shift['start'] ) );
+		$shift['start'] = radio_station_get_time( 'H:i', strtotime( $shift['start'] ) );
 	}
 	if ( isset( $shift['end'] ) ) {
-		$shift['end'] = date( 'H:i', strtotime( $shift['end'] ) );
+		$shift['end'] = radio_station_get_time( 'H:i', strtotime( $shift['end'] ) );
 	}
 	return $shift;
 }
@@ -1377,9 +1526,9 @@ function radio_station_convert_show_shifts( $show ) {
 			// 2.4.0.6: fix to undefined index warning for encore
 			$encore = ( isset( $shift['encore'] ) && ( 'on' == $shift['encore'] ) ) ? true : false;
 			$schedule[$i] = array(
-				'day'	 => $shift['day'],
-				'start'	 => $start_hour . ':' . $shift['start_min'],
-				'end'	 => $end_hour . ':' . $shift['end_min'],
+				'day'    => $shift['day'],
+				'start'  => $start_hour . ':' . $shift['start_min'],
+				'end'    => $end_hour . ':' . $shift['end_min'],
 				'encore' => $encore,
 			);
 		}
@@ -1410,4 +1559,3 @@ function radio_station_convert_schedule_shifts( $schedule ) {
 	}
 	return $schedule;
 }
-

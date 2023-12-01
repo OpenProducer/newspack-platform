@@ -8,8 +8,8 @@
 ?>
 <style type="text/css">
   .tg  {border-collapse:collapse;border-spacing:0;border:none;border-color:#aaa;}
-  .tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#aaa;color:#333;background-color:#fff;}
-  .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 5px;border-style:solid;border-width:0px;overflow:hidden;word-break:normal;border-color:#aaa;color:#fff;background-color:#f38630;}
+  .tg td{font-family:Arial, sans-serif;font-size:14px;padding:5px 5px;border-style:solid;border-width:0;overflow:hidden;word-break:normal;border-color:#aaa;color:#333;background-color:#fff;}
+  .tg th{font-family:Arial, sans-serif;font-size:14px;font-weight:normal;padding:5px 5px;border-style:solid;border-width:0;overflow:hidden;word-break:normal;border-color:#aaa;color:#fff;background-color:#f38630;}
   .tg .tg-cly1{text-align:left;vertical-align:middle}
   .tg .tg-89io{background-color:#FCFBE3;font-weight:bold;text-align:right;vertical-align:middle}
   .tg .tg-wa1i{font-weight:bold;text-align:center;vertical-align:middle}
@@ -24,16 +24,15 @@
   .left-header{
     display: inline-block;
     width: 140px;
-    margin:4px, 4px;
-    padding:4px;
+    margin: 4px;
+    padding: 4px;
     /* border: 1px solid red; */
     text-align: right;
   }
   .right-header{
     display: inline-block;
-    margin: 4px, 4px;
-    margin-left: 4px;
-    padding:4px;
+    margin: 4px;
+    padding: 4px;
   }
   .left-column{
     width: 140px;
@@ -41,17 +40,16 @@
   .right-column{
   }
   div.scroll {
-      margin:4px, 4px;
-      padding:4px;
+      margin: 4px;
+      padding: 4px;
       /* background-color: green; */
       border-top: 1px;
       border-top-style: solid;
       border-top-color: #CBD0D4;
       width: 90%;
       height: 200px;
-      overflow-x: hidden;
       overflow-x: auto;
-      text-align:justify;
+      text-align: justify;
   }
 </style>
 

@@ -309,11 +309,11 @@ foreach ( $weekdays as $i => $weekday ) {
 
 				// --- shift debug ---
 				// 2.3.2: added shift debugging
-				if ( isset( $_GET['rs-shift-debug'] ) && ( '1' == $_GET['rs-shift-debug'] ) ) {
+				if ( isset( $_GET['rs-shift-debug'] ) && ( '1' === sanitize_text_field( $_GET['rs-shift-debug'] ) ) ) {
 					$shiftdebug = isset( $shiftdebug ) ? $shiftdebug : '';
 					$shiftdebug .= 'Now: ' . $now . ' (' . radio_station_get_time( 'datetime', $now ) . ') -- Today: ' . $today . '<br>';
-					$shiftdebug .= 'Shift Start: ' . $shift_start . ' (' . date( 'Y-m-d l H: i', $shift_start ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_start ) . ')<br>';
-					$shiftdebug .= 'Shift End: ' . $shift_end . ' (' . date( 'Y-m-d l H: i', $shift_end ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_end ) . ')<br>';
+					$shiftdebug .= 'Shift Start: ' . $shift_start . ' (' . radio_station_get_time( 'Y-m-d l H: i', $shift_start ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_start ) . ')<br>';
+					$shiftdebug .= 'Shift End: ' . $shift_end . ' (' . radio_station_get_time( 'Y-m-d l H: i', $shift_end ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_end ) . ')<br>';
 				}
 
 				// 2.3.0: add genre classes for highlighting
@@ -419,7 +419,7 @@ foreach ( $weekdays as $i => $weekday ) {
 						$show_hosts .= ' </span>' . "\n";
 
 						foreach ( $show['hosts'] as $host ) {
-							$count ++;
+							$count++;
 							// 2.3.0: added link_hosts attribute check
 							if ( $atts['link_hosts'] && !empty( $host['url'] ) ) {
 								$show_hosts .= '<a href="' . esc_url( $host['url'] ) . '">' . esc_html( $host['name'] ) . '</a>' . "\n";
@@ -497,7 +497,7 @@ foreach ( $weekdays as $i => $weekday ) {
 				$times .= '<span class="rs-time rs-end-time"></span>]' . "\n";
 				$times .= '</div>' . "\n";
 				$info['times'] = $times;
-				$tcount ++;
+				$tcount++;
 
 				// --- encore ---
 				// 2.3.0: filter encore switch by show and context
@@ -671,6 +671,7 @@ if ( '' != $load_next ) {
 // 2.5.0: maybe add instance to element ID
 $id = ( 0 == $instance ) ? '' : '-' . $instance;
 echo '<ul id="master-schedule-tabs' . esc_attr( $id ) . '" class="master-schedule-tabs">' . "\n";
+	// TODO: test wp_kses on output
 	echo $tabs;
 echo '</ul>' . "\n";
 
@@ -682,12 +683,13 @@ if ( $atts['hide_past_shows'] ) {
 	echo ' class="hide-past-shows"';
 }
 echo '>' . "\n";
+	// TODO: test wp_kses on output
 	echo $panels;
 echo '</div>' . "\n";
 
 // --- hidden iframe for schedule reloading ---
 echo '<iframe src="javascript:void(0);" id="schedule-tabs-loader" name="schedule-tabs-loader" style="display:none;"></iframe>' . "\n";
 
-if ( isset( $_GET['rs-shift-debug'] ) && ( '1' == sanitize_title( $_GET['rs-shift-debug'] ) ) ) {
+if ( isset( $_GET['rs-shift-debug'] ) && ( '1' === sanitize_text_field( $_GET['rs-shift-debug'] ) ) ) {
 	echo '<br><b>Shift Debug Info:</b><br>' . esc_html( $shiftdebug ) . '<br>';
 }

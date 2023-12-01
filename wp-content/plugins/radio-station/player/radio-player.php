@@ -11,6 +11,8 @@
 // - Store Player Instance Args
 // - Player Shortcode
 // - Player AJAX Display
+// - Add Inline Styles
+// - Print Footer Styles
 // - Sanitize Shortcode Values
 // - Sanitize Values
 // - Media Elements Interface
@@ -178,15 +180,16 @@
 // 'layout'  | 'horizontal', 'vertical'
 // 'theme'   | 'light', 'dark'
 // 'buttons' | 'circular', 'rounded', 'square'
-// 'skin'    | // Media Elements: 'wordpress', 'minimal');
+// 'skin'    | [not implemented] Media Elements: wordpress, minimal
 // 'volume'  | [Integer: 0 to 100]: Initial Player Volume - default: 77
+// 'default' | Default Player flag
 // 2.5.0: added second echo argument with default to false
 function radio_player_output( $args = array(), $echo = false ) {
 
 	global $radio_player;
 
 	// --- maybe debug output arguments ---
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		echo '<span style="display:none;">Passed Radio Player Output Arguments: ';
 		echo print_r( $args, true ) . '</span>';
 	}
@@ -235,7 +238,7 @@ function radio_player_output( $args = array(), $echo = false ) {
 		}
 	}
 	$radio_player['instances'][] = $instance;
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		echo '<span style="display:none;">Player Instance: ' . esc_html( $instance ) . ' - Instances: ' . esc_html( print_r( $radio_player['instances'], true ) ) . '</span>';
 	}
 
@@ -247,7 +250,7 @@ function radio_player_output( $args = array(), $echo = false ) {
 	}
 
 	// --- maybe debug output arguments ---
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		echo '<span style="display:none;">Parsed Radio Player Output Arguments: ' . esc_html( print_r( $args, true ) ) . '</span>';
 	}
 		
@@ -263,15 +266,8 @@ function radio_player_output( $args = array(), $echo = false ) {
 	$class_list = implode( ' ', $classes );
 	$html['player_open'] = '<div id="' . esc_attr( $player_id ) . '" class="' . esc_attr( $class_list ) . '"></div>' . "\n";
 
-	// 2.5.0: added preconnect/dns-prefetch link tags for URL host
-	if ( 'stream' == $args['media'] ) {
-		$url_host = parse_url( $args['url'], PHP_URL_HOST );
-		$html['player_open'] .= '<link rel="preconnect" href="' . esc_url( $url_host ) . '">' . "\n";
-		$html['player_open'] .= '<link rel="dns-prefetch" href="' . esc_url( $url_host ) . '">' . "\n";
-	}
-
 	// --- set Player container ---
-	$classes = array( 'radio-container', 'rp-audio', 'rp-audio-stream' );
+	$classes = array( 'radio-container', 'rp-audio' );
 	$classes[] = $args['layout'];
 	$classes[] = $args['theme'];
 	$classes[] = $args['buttons'];
@@ -280,14 +276,30 @@ function radio_player_output( $args = array(), $echo = false ) {
 		$classes[] = 'no-volume-controls';
 	}
 
+	// 2.5.0: added preconnect/dns-prefetch link tags for URL host
+	if ( 'stream' == $args['media'] ) {
+		$url_host = parse_url( $args['url'], PHP_URL_HOST );
+		// 2.5.6: added to prevent possible deprecated warning in esc_url
+		if ( ( null != $url_host ) && ( '' != $url_host ) ) {
+			$html['player_open'] .= '<link rel="preconnect" href="' . esc_url( $url_host ) . '">' . "\n";
+			$html['player_open'] .= '<link rel="dns-prefetch" href="' . esc_url( $url_host ) . '">' . "\n";
+		}
+		$classes[] = 'rp-audio-stream';
+	}
+
 	// 2.5.0: added filter for radio container class
 	if ( function_exists( 'apply_filters' ) ) {
 		$classes = apply_filters( 'radio_station_player_container_classes', $classes, $args, $instance );
 		$classes = apply_filters( 'radio_player_container_classes', $classes, $args, $instance );
 	}
 	$class_list = implode( ' ', $classes );
-	$html['player_open'] .= '<div id="' . esc_attr( $container_id ) . '" class="' . esc_attr( $class_list ) . '" role="application" aria-label="media player" data-href="' . esc_url( $args['url'] ) . '" data-format="' . esc_attr( $args['format'] ) . '" data-fallback="' . esc_url( $args['fallback'] ) . '" data-fformat="' . esc_attr( $args['fformat'] ) . '">' . "\n";
-	$html['player_open'] .= '	<div class="rp-type-single">' . "\n";
+
+	$html['player_open'] .= '<div id="' . esc_attr( $container_id ) . '" class="' . esc_attr( $class_list ) . '" role="application" aria-label="media player" data-href="' . esc_url( $args['url'] ) . '" data-format="' . esc_attr( $args['format'] ) . '" data-fallback="' . esc_url( $args['fallback'] ) . '" data-fformat="' . esc_attr( $args['fformat'] ) . '"';
+	// 2.5.6: added optional argument for metadata URL (or 0 to disable)
+	if ( isset( $args['metadata'] ) && ( '1' != $args['metadata'] ) ) {
+		$html['player_open'] .= ' data-meta="' . esc_url_raw( $args['metadata'] ) . '"';
+	}
+	$html['player_open'] .= '>' . "\n" . '	<div class="rp-type-single">' . "\n";
     $html['player_close'] = '</div></div>' . "\n";
 
 	// --- set interface wrapper ---
@@ -386,7 +398,7 @@ function radio_player_output( $args = array(), $echo = false ) {
 	$html['volume'] .= '</div>' . "\n";
 
 	// --- dropdown script switcher for testing ---
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		$html['switcher'] = '<div class="rp-script-switcher">' . "\n";
 			$html['switcher'] .= '<div class="rp-show-switcher" onclick="radio_player_show_switcher(' . esc_js( $instance ) . ');">*</div>';
 			$html['switcher'] .= '<select class="rp-script-select" name="rp-script-select" style="display:none;">' . "\n";
@@ -477,7 +489,7 @@ function radio_player_output( $args = array(), $echo = false ) {
 		$control_order = apply_filters( 'radio_player_control_order', $control_order, $args, $instance );
 	}
 
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		echo '<span style="display:none;">Section Order: ' . esc_html( print_r( $section_order, true ) ) . '</span>' ."\n";
 		echo '<span style="display:none;">' . esc_html( print_r( $control_order, true ) ) . '</span>' . "\n";
 	}
@@ -569,7 +581,7 @@ function radio_player_shortcode( $atts ) {
 	}
 
 	// --- maybe debug shortcode attributes --
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		echo '<span style="display:none;">Passed Radio Player Shortcode Attributes: ';
 		echo esc_html( print_r( $atts, true ) ) . '</span>';
 	}
@@ -646,10 +658,11 @@ function radio_player_shortcode( $atts ) {
 			$volume_controls = array( 'slider', 'updown', 'mute', 'max' );
 		}
 	}
+	// 2.5.6: move isset check outside of function_exists
+	if ( !isset( $volume_controls ) ) {
+		$volume_controls = array( 'slider', 'updown', 'mute', 'max' );
+	}
 	if ( function_exists( 'apply_filters' ) ) {
-		if ( !isset( $volume_controls ) ) {
-			$volume_controls = array( 'slider', 'updown', 'mute', 'max' );
-		}
 		$volume_controls = apply_filters( 'radio_station_player_volumes_display', $volume_controls );
 		$volume_controls = apply_filters( 'radio_player_volumes_display', $volume_controls );
 	}
@@ -728,7 +741,7 @@ function radio_player_shortcode( $atts ) {
 	}
 
 	// --- maybe debug shortcode attributes --
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		echo '<span style="display:none;">Combined Radio Player Shortcode Attributes: ' . esc_html( print_r( $atts, true ) ) . '</span>' . "\n";
 	}
 
@@ -802,7 +815,7 @@ function radio_player_shortcode( $atts ) {
 		}
 
 		// --- maybe debug shortcode attributes --
-		if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+		if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 			echo '<span style="display:none;">Parsed Radio Player Shortcode Attributes: ' . esc_html( print_r( $atts, true ) ) . '</span>';
 		}
 
@@ -974,6 +987,8 @@ function radio_player_ajax() {
 
 		// --- maybe add text color ---
 		// 2.5.0: added for matching with background color
+		// 2.5.6: fix for undefined variable css
+		$css = '';
 		if ( '' != $text_color ) {
 			if ( ( 'rgb' != substr( $text_color, 0, 3 ) ) && ( '#' != substr( $text_color, 0, 1 ) ) ) {
 				$text_color = '#' . $text_color;
@@ -992,7 +1007,10 @@ function radio_player_ajax() {
 		// --- output extra player styles ---
 		$css = apply_filters( 'radio_station_player_ajax_styles', $css, $atts );
 		$css = apply_filters( 'radio_player_ajax_styles', $css, $atts );
-		echo '<style>' . wp_strip_all_tags( $css ) . '</style>';
+		// 2.5.6: use wp_kses_post instead of wp_strip_all_tags
+		// echo '<style>' . wp_kses_post( $css ) . '</style>';
+		// 2.5.6: use radio_player_add_inline_style (with fallback)
+		radio_player_add_inline_style( 'radio-player', $css );
 
 	// --- close footer ---
 	echo '</div>' . "\n";
@@ -1001,6 +1019,37 @@ function radio_player_ajax() {
 	echo '</body></html>' . "\n";
 
 	exit;
+}
+
+
+// -----------------
+// Add Inline Styles
+// -----------------
+// 2.5.6: added for possible missed inline styles (via shortcodes)
+function radio_player_add_inline_style( $css ) {
+
+	// --- add check if style is already done ---
+	if ( !wp_style_is( 'radio-player', 'done' ) ) {
+		// --- add styles as normal ---
+		wp_add_inline_style( 'radio-player', $css );
+	} else {
+		// --- fallback: store extra styles for later output ---
+		global $radio_player_styles;
+		add_action( 'wp_print_footer_scripts', 'radio_player_print_footer_styles', 20 );
+		if ( !isset( $radio_player_styles[$handle] ) ) {
+			$radio_player_styles = '';
+		}
+		$radio_player_styles .= $css;
+	}
+}
+
+// -------------------
+// Print Footer Styles
+// -------------------
+// 2.5.6: added for possible missed inline styles (via shortcode)
+function radio_player_print_footer_styles() {
+	global $radio_player_styles;
+	echo '<style>' . wp_kses_post( $css ) . '</style>';
 }
 
 // -------------------------
@@ -1031,37 +1080,42 @@ function radio_player_sanitize_shortcode_values() {
 	$keys = apply_filters( 'radio_player_attribute_keys', $keys );
 
 	// --- sanitize values by key type ---
-	$atts = radio_player_sanitize_values( $_REQUEST, $keys );
+	// 2.5.6: remove unnecessary first argument
+	// $atts = radio_player_sanitize_values( $_REQUEST, $keys );
+	$atts = radio_player_sanitize_values( $keys );
 	return $atts;
 }
 
 // ---------------
 // Sanitize Values
 // ---------------
-function radio_player_sanitize_values( $data, $keys ) {
+// 2.5.6: remove unnecessary first argument
+// function radio_player_sanitize_values( $data, $keys ) {
+function radio_player_sanitize_values( $keys ) {
 
 	$sanitized = array();
 	foreach ( $keys as $key => $type ) {
-		if ( isset( $data[$key] ) ) {
+		if ( isset( $_REQUEST[$key] ) ) {
 			if ( 'boolean' == $type ) {
-				if ( ( 0 == $data[$key] ) || ( 1 == $data[$key] ) ) {
-					$sanitized[$key] = $data[$key];
+				if ( ( '0' === sanitize_text_field( $_REQUEST[$key] ) )
+					|| ( '1' === sanitize_text_field( $_REQUEST[$key] ) ) ) {
+					$sanitized[$key] = sanitize_text_field( $_REQUEST[$key] );
 				}
 			} elseif ( 'integer' == $type ) {
 				$sanitized[$key] = absint( $data[$key] );
 			} elseif ( 'alphanumeric' == $type ) {
-				$value = preg_match( '/^[a-zA-Z0-9_]+$/', $data[$key] );
+				$value = preg_match( '/^[a-zA-Z0-9_]+$/', sanitize_text_field( $_REQUEST[$key] ) );
 				if ( $value ) {
 					$sanitized[$key] = $value;
 				}
 			} elseif ( 'text' == $type ) {
-				$sanitized[$key] = sanitize_text_field( $data[$key] );
+				$sanitized[$key] = sanitize_text_field( $_REQUEST[$key] );
 			} elseif ( 'slug' == $type ) {
-				$sanitized[$key] = sanitize_title( $data[$key] );
+				$sanitized[$key] = sanitize_title( $_REQUEST[$key] );
 			} elseif ( strstr( $type, '/' ) ) {
 				$options = explode( '/', $type );
-				if ( in_array( $data[$key], $options ) ) {
-					$sanitized[$key] = $data[$key];
+				if ( in_array( sanitize_text_field( $_REQUEST[$key] ), $options ) ) {
+					$sanitized[$key] = sanitize_text_field( $_REQUEST[$key] );
 				}
 			}
 		}
@@ -1684,8 +1738,9 @@ function radio_player_get_player_settings() {
 		$player_single = true;
 
 		if ( function_exists( 'apply_filters' ) ) {
-			$player_script = apply_fitlers( 'radio_station_player_script', $player_script );
-			$player_script = apply_fitlers( 'radio_player_script', $player_script );
+			// 2.5.6: fix to function typo apply_fitlers!
+			$player_script = apply_filters( 'radio_station_player_script', $player_script );
+			$player_script = apply_filters( 'radio_player_script', $player_script );
 			$player_title = apply_filters( 'radio_station_player_title', $player_title );
 			$player_title = apply_filters( 'radio_player_title', $player_title );
 			$player_image = apply_filters( 'radio_station_player_image', $player_image );
@@ -1775,7 +1830,7 @@ function radio_player_get_player_settings() {
 			}
 		}
 	}
-	
+
 	// 2.4.0.3: merge fallbacks with current script
 	if ( is_array( $fallbacks ) && ( count( $fallbacks ) > 0 ) ) {
 		$scripts = array_merge( $scripts, $fallbacks );
@@ -1818,7 +1873,7 @@ function radio_player_get_player_settings() {
 		$debug = apply_filters( 'radio_station_player_debug', $debug );
 		$debug = apply_filters( 'radio_player_debug', $debug );
 	}
-	if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+	if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 		$debug = true;
 	}
 	if ( defined( 'RADIO_PLAYER_DEBUG' ) ) {
@@ -1826,9 +1881,13 @@ function radio_player_get_player_settings() {
 	}
 	$debug = $debug ? 'true' : 'false';
 
+	// 2.5.6: added explicit touchscreen detection setting
+	$js .= "matchmedia = window.matchMedia || window.msMatchMedia;" . "\n";
+	$js .= "touchscreen = !matchmedia('(any-pointer: fine)').matches;" . "\n";
+
 	// --- set radio player settings and radio data objects ---
 	// (with empty arrays for instances, script types, failbacks, audio targets and stream data)
-	$js .= "var radio_player = {settings:player_settings, scripts:scripts, formats:formats, loading:false, debug:" . esc_js( $debug ) . "}" . "\n";
+	$js .= "var radio_player = {settings:player_settings, scripts:scripts, formats:formats, loading:false, touchscreen:touchscreen, debug:" . esc_js( $debug ) . "}" . "\n";
 	$js .= "var radio_data = {state:{}, players:[], scripts:[], failed:[], data:[], types:[], channels:[], faders:[]}" . "\n";
 
 	// --- logged in / user state settings ---
@@ -1842,7 +1901,7 @@ function radio_player_get_player_settings() {
 
 	// ---- maybe set play state ---
 	// 2.5.0: set playing variable in single line
-	$playing = ( isset( $state['playing'] ) && $state['playing'] ) ? 'true' : 'false';
+	$playing = ( isset( $state ) && isset( $state['playing'] ) && $state['playing'] ) ? 'true' : 'false';
 	$js .= "radio_data.state.playing = " . esc_js( $playing ) . "; " . "\n";
 
 	// --- maybe set station ID ---
@@ -1878,7 +1937,8 @@ function radio_player_get_player_settings() {
 		$data = apply_filters( 'radio_station_player_data', false, $station );
 		$data = apply_filters( 'radio_player_data', false, $station );
 	}
-	if ( $data && is_array( $data ) ) {
+	// 2.5.6: add isset check for data variable
+	if ( isset( $data ) && $data && is_array( $data ) ) {
 		foreach ( $data as $key => $value ) {
 			$js .= "radio_data.state.data['" . $key . "'] = '" . $value . "';" . "\n";
 		}
@@ -2218,7 +2278,7 @@ function radio_player_script_howler() {
 		radio_player_instance = new Howl({
 			src: sources,
 			format: formats,
-			html5: true,
+			html5: false,
 			autoplay: false,
 			preload: false,
 			volume: volume,
@@ -2566,6 +2626,7 @@ function radio_player_get_default_script() {
 function radio_player_enqueue_styles( $script = false, $skin = false ) {
 
 	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) ? '' : '.min';
+	$suffix = ''; // DEV TEMP
 
 	// --- get default if not passed by shortcode attribute ---
 	if ( !$script ) {
@@ -2623,8 +2684,8 @@ function radio_player_enqueue_styles( $script = false, $skin = false ) {
 			// --- enqueue player control styles inline ---
 			$control_styles = radio_player_control_styles( false );
 			if ( '' != $control_styles ) {
-				// 2.5.0: use radio_station_add_inline_style
-				radio_station_add_inline_style( 'radio-player', $control_styles );
+				// 2.5.0: use radio_player_add_inline_style (with fallback)
+				radio_player_add_inline_style( $control_styles );
 			}
 
 		} else {
@@ -2638,13 +2699,14 @@ function radio_player_enqueue_styles( $script = false, $skin = false ) {
 			// 2.5.0: added missing non-WP control style output
 			$control_styles = radio_player_control_styles( false );
 			if ( '' != $control_styles ) {
-				echo '<style>' . $control_styles . '</style>';
+				// 2.5.6: use wp_kses_post on control styles
+				echo '<style>' . wp_kses_post( $control_styles ) . '</style>';
 			}
 			
 		}
 
 		// --- debug skin path / URL ---
-		if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
+		if ( isset( $_REQUEST['player-debug'] ) && ( '1' === sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
 			echo '<span style="display:none;">Skin Path: ' . esc_html( $path ) . '</span>' . "\n";
 			echo '<span style="display:none;">Skin URL: ' . esc_html( $url ) . '</span>' . "\n";
 		}
@@ -2652,6 +2714,7 @@ function radio_player_enqueue_styles( $script = false, $skin = false ) {
 	}
 
 	// --- enqueue base jplayer styles ---
+	/*
 	$suffix = ''; // DEV TEMP
 
 	if ( defined( 'RADIO_STATION_DIR' ) ) {
@@ -2679,10 +2742,10 @@ function radio_player_enqueue_styles( $script = false, $skin = false ) {
 
 		// --- debug skin path / URL ---
 		if ( isset( $_REQUEST['player-debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['player-debug'] ) ) ) {
-			echo '<style="display:none;">Skin Path: ' . esc_html( $path ) . '</span>' . "\n";
-			echo '<style="display:none;">Skin URL: ' . esc_html( $url ) . '</span>' . "\n";
+			echo '<span style="display:none;">Skin Path: ' . esc_html( $path ) . '</span>' . "\n";
+			echo '<span style="display:none;">Skin URL: ' . esc_html( $url ) . '</span>' . "\n";
 		}
-	}
+	} */
 
 	// --- JPlayer Skins ---
 	// $skins = array( 'pink-flag', 'blue-monday' );
@@ -2947,20 +3010,19 @@ function radio_player_control_styles( $instance ) {
 
 	// --- Slider Range Thumb ---
 	$thumb_radius = '9px';
-	
 	$css .= "/* Range Thumb */
 " . $container . " .rp-volume-controls input[type=range]::-webkit-slider-thumb {
 	width: 18px; height: 18px; cursor: pointer; background: rgba(128, 128, 128, 1);
-	border: 1px solid rgba(128, 128, 128, 0.5); border-radius: 9px;
+	border: 1px solid rgba(128, 128, 128, 0.5); border-radius: ' . $thumb_radius . ';
 	margin-top: -4.5px; -webkit-appearance: none;
 }
 " . $container . " .rp-volume-controls input[type=range]::-moz-range-thumb {
 	width: 18px; height: 18px; cursor: pointer; background: rgba(128, 128, 128, 1);
-	border: 1px solid rgba(128, 128, 128, 0.5); border-radius: 9px;
+	border: 1px solid rgba(128, 128, 128, 0.5); border-radius: ' . $thumb_radius;
 }
 " . $container . " .rp-volume-controls input[type=range]::-ms-thumb {
 	width: 18px; height: 18px; cursor: pointer; background: rgba(128, 128, 128, 1);
-	border: 1px solid rgba(128, 128, 128, 0.5); border-radius: 9px; margin-top: 0px;
+	border: 1px solid rgba(128, 128, 128, 0.5); border-radius: ' . $thumb_radius . '; margin-top: 0px;
 }
 " . $container . ".rounded .rp-volume-controls input[type=range]::-webkit-slider-thumb {border-radius: 5px !important;}
 " . $container . ".square .rp-volume-controls input[type=range]::-webkit-slider-thumb {border-radius: 0px !important;}

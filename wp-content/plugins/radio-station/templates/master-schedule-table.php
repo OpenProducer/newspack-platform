@@ -166,7 +166,7 @@ foreach ( $weekdays as $i => $weekday ) {
 		// 2.5.0: add odd/even day class
 		$classes = array( 'master-program-day', 'day-' . $i, strtolower( $weekday ), 'date-' . $weekdate );
 		$oddeven_day = ( 'even' == $oddeven_day ) ? 'odd' : 'even';
-		$classes[] = $oddeven_day . '-day';	
+		$classes[] = $oddeven_day . '-day';
 		if ( ( $now > $day_start_time ) && ( $now < $day_end_time ) ) {
 			$classes[] = 'current-day';
 			// $classes[] = 'selected-day';
@@ -243,11 +243,11 @@ foreach ( $hours as $hour ) {
 
 	// --- hour heading ---
 	$table .= '<th class="' . esc_attr( $class ) . '">' . "\n";
-		if ( isset( $_GET['hourdebug'] ) && ( '1' == sanitize_title( $_GET['hourdebug'] ) ) ) {
+		if ( isset( $_GET['hourdebug'] ) && ( '1' === sanitize_text_field( $_GET['hourdebug'] ) ) ) {
 			$table .= '<span style="display:none;">';
-			$table .= 'Now' . esc_html( $now ) . '(' . esc_html( date( 'H:i', $now ) ) . ')<br>';
-			$table .= 'Hour Start' . esc_html( $hour_start ) . '(' . esc_html( date( 'H:i', $hour_start ) ) . ')<br>';
-			$table .= 'Hour End' . esc_html( $hour_end ) . '(' . esc_html( date( 'H:i', $hour_end ) ) . ')<br>';
+			$table .= 'Now' . esc_html( $now ) . '(' . esc_html( radio_station_get_time( 'H:i', $now ) ) . ')<br>';
+			$table .= 'Hour Start' . esc_html( $hour_start ) . '(' . esc_html( radio_station_get_time( 'H:i', $hour_start ) ) . ')<br>';
+			$table .= 'Hour End' . esc_html( $hour_end ) . '(' . esc_html( radio_station_get_time( 'H:i', $hour_end ) ) . ')<br>';
 			$table .= '</span>';
 		}
 
@@ -389,15 +389,15 @@ foreach ( $hours as $hour ) {
 						}
 					}
 
-					if ( isset( $_GET['rs-shift-debug'] ) && ( '1' == sanitize_title( $_GET['rs-shift-debug'] ) ) ) {
+					if ( isset( $_GET['rs-shift-debug'] ) && ( '1' === sanitize_title( $_GET['rs-shift-debug'] ) ) ) {
 						if ( !isset( $shiftdebug ) ) {$shiftdebug = '';}
 						if ( $display ) {
 							$shiftdebug .= 'Now: ' . $now . ' (' . radio_station_get_time( 'datetime', $now ) . ') -- Today: ' . $today . '<br>';
 							$shiftdebug .= 'Day: ' . $weekday . ' - Raw Hour: ' . $raw_hour . ' - Hour: ' . $hour . ' - Hour Display: ' . $hour_display . '<br>';
-							$shiftdebug .= 'Hour Start: ' . $hour_start . ' (' . date( 'Y-m-d l H:i', $hour_start ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $hour_start ) . ')<br>';
-							$shiftdebug .= 'Hour End: ' . $hour_end . ' (' . date( 'Y-m-d l H: i', $hour_end ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $hour_end ) . ')<br>';
-							$shiftdebug .= 'Shift Start: ' . $shift_start_time . ' (' . date( 'Y-m-d l H: i', $shift_start_time ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_start_time ) . ')<br>';
-							$shiftdebug .= 'Shift End: ' . $shift_end_time . ' (' . date( 'Y-m-d l H: i', $shift_end_time ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_end_time ) . ')<br>';
+							$shiftdebug .= 'Hour Start: ' . $hour_start . ' (' . gmdate( 'Y-m-d l H:i', $hour_start ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $hour_start ) . ')<br>';
+							$shiftdebug .= 'Hour End: ' . $hour_end . ' (' . gmdate( 'Y-m-d l H: i', $hour_end ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $hour_end ) . ')<br>';
+							$shiftdebug .= 'Shift Start: ' . $shift_start_time . ' (' . gmdate( 'Y-m-d l H: i', $shift_start_time ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_start_time ) . ')<br>';
+							$shiftdebug .= 'Shift End: ' . $shift_end_time . ' (' . gmdate( 'Y-m-d l H: i', $shift_end_time ) . ' - ' . radio_station_get_time( 'Y-m-d l H:i', $shift_end_time ) . ')<br>';
 							$shiftdebug .= 'Display: ' . ( $display ? 'yes' : 'no' ) . ' - ';
 							$shiftdebug .= 'New Shift: ' . ( $newshift ? 'yes' : 'no' ) . ' - ';
 							$shiftdebug .= 'Now Playing: ' . ( $nowplaying ? 'YES' : 'no' ) . ' - ';
@@ -524,7 +524,7 @@ foreach ( $hours as $hour ) {
 									$count = 0;
 									$host_count = count( $show['hosts'] );
 									foreach ( $show['hosts'] as $host ) {
-										$count ++;
+										$count++;
 										// 2.3.0: added link_hosts attribute check
 										if ( $atts['link_hosts'] && !empty( $host['url'] ) ) {
 											$show_hosts .= '<a href="' . esc_url( $host['url'] ) . '">' . esc_html( $host['name'] ) . '</a>' . "\n";
@@ -744,8 +744,9 @@ $table .= '</table>' . "\n";
 // --- hidden iframe for schedule reloading ---
 $table .= '<iframe src="javascript:void(0);" id="schedule-table-loader" name="schedule-table-loader" style="display:none;"></iframe>' . "\n";
 
-if ( isset( $_GET['rs-shift-debug'] ) && ( '1' == sanitize_title( $_GET['rs-shift-debug'] ) ) ) {
+if ( isset( $_GET['rs-shift-debug'] ) && ( '1' === sanitize_text_field( $_GET['rs-shift-debug'] ) ) ) {
 	$table .= '<br><b>Shift Debug Info:</b><br>' . esc_html( $shiftdebug ) . '<br>';
 }
 
+// TODO: test wp_kses on output
 echo $table;
