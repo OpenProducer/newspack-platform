@@ -138,17 +138,26 @@ Data_Events::register_listener(
 		if ( ! $order ) {
 			return;
 		}
-		$recurrence = get_post_meta( $product_id, '_subscription_period', true );
+		$recurrence      = get_post_meta( $product_id, '_subscription_period', true );
+		$is_renewal      = function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order );
+		$subscription_id = null;
+		if ( function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
+			$subscriptions   = array_values( wcs_get_subscriptions_for_renewal_order( $order ) );
+			$subscription_id = is_array( $subscriptions ) && ! empty( $subscriptions ) && is_a( $subscriptions[0], 'WC_Subscription' ) ? $subscriptions[0]->get_id() : null;
+		}
+
 		return [
-			'user_id'       => $order->get_customer_id(),
-			'email'         => $order->get_billing_email(),
-			'amount'        => (float) $order->get_total(),
-			'currency'      => $order->get_currency(),
-			'recurrence'    => empty( $recurrence ) ? 'once' : $recurrence,
-			'platform'      => 'wc',
-			'referer'       => $order->get_meta( '_newspack_referer' ),
-			'popup_id'      => $order->get_meta( '_newspack_popup_id' ),
-			'platform_data' => [
+			'user_id'         => $order->get_customer_id(),
+			'email'           => $order->get_billing_email(),
+			'amount'          => (float) $order->get_total(),
+			'currency'        => $order->get_currency(),
+			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
+			'platform'        => 'wc',
+			'referer'         => $order->get_meta( '_newspack_referer' ),
+			'popup_id'        => $order->get_meta( '_newspack_popup_id' ),
+			'is_renewal'      => $is_renewal,
+			'subscription_id' => $subscription_id,
+			'platform_data'   => [
 				'order_id'   => $order_id,
 				'product_id' => $product_id,
 			],
@@ -170,18 +179,26 @@ Data_Events::register_listener(
 		if ( ! $product_id ) {
 			return;
 		}
-		$recurrence = get_post_meta( $product_id, '_subscription_period', true );
+		$recurrence      = get_post_meta( $product_id, '_subscription_period', true );
+		$is_renewal      = function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order );
+		$subscription_id = null;
+		if ( function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
+			$subscriptions   = array_values( wcs_get_subscriptions_for_renewal_order( $order ) );
+			$subscription_id = is_array( $subscriptions ) && ! empty( $subscriptions ) && is_a( $subscriptions[0], 'WC_Subscription' ) ? $subscriptions[0]->get_id() : null;
+		}
 
 		return [
-			'user_id'       => $order->get_customer_id(),
-			'email'         => $order->get_billing_email(),
-			'amount'        => (float) $order->get_total(),
-			'currency'      => $order->get_currency(),
-			'recurrence'    => empty( $recurrence ) ? 'once' : $recurrence,
-			'platform'      => Donations::get_platform_slug(),
-			'referer'       => $order->get_meta( '_newspack_referer' ),
-			'popup_id'      => $order->get_meta( '_newspack_popup_id' ),
-			'platform_data' => [
+			'user_id'         => $order->get_customer_id(),
+			'email'           => $order->get_billing_email(),
+			'amount'          => (float) $order->get_total(),
+			'currency'        => $order->get_currency(),
+			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
+			'platform'        => Donations::get_platform_slug(),
+			'referer'         => $order->get_meta( '_newspack_referer' ),
+			'popup_id'        => $order->get_meta( '_newspack_popup_id' ),
+			'is_renewal'      => $is_renewal,
+			'subscription_id' => $subscription_id,
+			'platform_data'   => [
 				'order_id'   => $order_id,
 				'product_id' => $product_id,
 				'client_id'  => $order->get_meta( NEWSPACK_CLIENT_ID_COOKIE_NAME ),
@@ -230,18 +247,26 @@ Data_Events::register_listener(
 		if ( ! $product_id ) {
 			return;
 		}
-		$recurrence = get_post_meta( $product_id, '_subscription_period', true );
+		$recurrence      = get_post_meta( $product_id, '_subscription_period', true );
+		$is_renewal      = function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order );
+		$subscription_id = null;
+		if ( function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
+			$subscriptions   = array_values( wcs_get_subscriptions_for_renewal_order( $order ) );
+			$subscription_id = is_array( $subscriptions ) && ! empty( $subscriptions ) && is_a( $subscriptions[0], 'WC_Subscription' ) ? $subscriptions[0]->get_id() : null;
+		}
 
 		return [
-			'user_id'       => $order->get_customer_id(),
-			'email'         => $order->get_billing_email(),
-			'amount'        => (float) $order->get_total(),
-			'currency'      => $order->get_currency(),
-			'recurrence'    => empty( $recurrence ) ? 'once' : $recurrence,
-			'platform'      => Donations::get_platform_slug(),
-			'referer'       => $order->get_meta( '_newspack_referer' ),
-			'popup_id'      => $order->get_meta( '_newspack_popup_id' ),
-			'platform_data' => [
+			'user_id'         => $order->get_customer_id(),
+			'email'           => $order->get_billing_email(),
+			'amount'          => (float) $order->get_total(),
+			'currency'        => $order->get_currency(),
+			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
+			'platform'        => Donations::get_platform_slug(),
+			'referer'         => $order->get_meta( '_newspack_referer' ),
+			'popup_id'        => $order->get_meta( '_newspack_popup_id' ),
+			'is_renewal'      => $is_renewal,
+			'subscription_id' => $subscription_id,
+			'platform_data'   => [
 				'order_id'   => $order_id,
 				'product_id' => $product_id,
 				'client_id'  => $order->get_meta( NEWSPACK_CLIENT_ID_COOKIE_NAME ),

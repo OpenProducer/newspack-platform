@@ -104,21 +104,19 @@ call_user_func(
 				<?php
 			endif;
 
-			if ( '' === $attributes['sectionHeader'] ) :
+			if ( '' === $attributes['sectionHeader'] ) {
 				// Don't link the title if the post lacks a valid URL.
-				if ( ! $post_link ) :
+				if ( ! $post_link ) {
 					the_title( '<h2 class="entry-title">', '</h2>' );
-				else :
+				} else {
 					the_title( '<h2 class="entry-title"><a href="' . esc_url( $post_link ) . '" rel="bookmark">', '</a></h2>' );
-				endif;
-			else :
+				}
+			} elseif ( ! $post_link ) {
 				// Don't link the title if the post lacks a valid URL.
-				if ( ! $post_link ) :
-					the_title( '<h3 class="entry-title">', '</h3>' );
-				else :
-					the_title( '<h3 class="entry-title"><a href="' . esc_url( $post_link ) . '" rel="bookmark">', '</a></h3>' );
-				endif;
-			endif;
+				the_title( '<h3 class="entry-title">', '</h3>' );
+			} else {
+				the_title( '<h3 class="entry-title"><a href="' . esc_url( $post_link ) . '" rel="bookmark">', '</a></h3>' );
+			}
 			?>
 			<?php
 			if ( $attributes['showSubtitle'] ) :

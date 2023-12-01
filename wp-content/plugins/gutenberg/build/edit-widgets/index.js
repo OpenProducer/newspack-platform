@@ -1299,7 +1299,6 @@ function InterfaceSkeleton({
   secondarySidebar,
   notices,
   content,
-  contentProps,
   actions,
   labels,
   className,
@@ -1357,8 +1356,7 @@ function InterfaceSkeleton({
     className: "interface-interface-skeleton__notices"
   }, notices), (0,external_React_namespaceObject.createElement)(NavigableRegion, {
     className: "interface-interface-skeleton__content",
-    ariaLabel: mergedLabels.body,
-    ...contentProps
+    ariaLabel: mergedLabels.body
   }, content), !!sidebar && (0,external_React_namespaceObject.createElement)(NavigableRegion, {
     className: "interface-interface-skeleton__sidebar",
     ariaLabel: mergedLabels.sidebar
@@ -3336,46 +3334,6 @@ const listView = (0,external_React_namespaceObject.createElement)(external_wp_pr
 }));
 /* harmony default export */ var list_view = (listView);
 
-;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/components/save-button/index.js
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-/**
- * Internal dependencies
- */
-
-function SaveButton() {
-  const {
-    hasEditedWidgetAreaIds,
-    isSaving
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getEditedWidgetAreas,
-      isSavingWidgetAreas
-    } = select(store_store);
-    return {
-      hasEditedWidgetAreaIds: getEditedWidgetAreas()?.length > 0,
-      isSaving: isSavingWidgetAreas()
-    };
-  }, []);
-  const {
-    saveEditedWidgetAreas
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
-  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
-    variant: "primary",
-    isBusy: isSaving,
-    "aria-disabled": isSaving,
-    onClick: isSaving ? undefined : saveEditedWidgetAreas,
-    disabled: !hasEditedWidgetAreaIds
-  }, isSaving ? (0,external_wp_i18n_namespaceObject.__)('Saving…') : (0,external_wp_i18n_namespaceObject.__)('Update'));
-}
-/* harmony default export */ var save_button = (SaveButton);
-
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/undo.js
 
 /**
@@ -3462,6 +3420,157 @@ function RedoButton() {
     onClick: hasRedo ? redo : undefined
   });
 }
+
+;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/components/header/document-tools/index.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+
+
+const {
+  useShouldContextualToolbarShow
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
+function DocumentTools({
+  setListViewToggleElement
+}) {
+  const isMediumViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
+  const inserterButton = (0,external_wp_element_namespaceObject.useRef)();
+  const widgetAreaClientId = use_last_selected_widget_area();
+  const isLastSelectedWidgetAreaOpen = (0,external_wp_data_namespaceObject.useSelect)(select => select(store_store).getIsWidgetAreaOpen(widgetAreaClientId), [widgetAreaClientId]);
+  const {
+    isInserterOpen,
+    isListViewOpen
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      isInserterOpened,
+      isListViewOpened
+    } = select(store_store);
+    return {
+      isInserterOpen: isInserterOpened(),
+      isListViewOpen: isListViewOpened()
+    };
+  }, []);
+  const {
+    setIsWidgetAreaOpen,
+    setIsInserterOpened,
+    setIsListViewOpened
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+  const {
+    selectBlock
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
+  const handleClick = () => {
+    if (isInserterOpen) {
+      // Focusing the inserter button closes the inserter popover.
+      setIsInserterOpened(false);
+    } else {
+      if (!isLastSelectedWidgetAreaOpen) {
+        // Select the last selected block if hasn't already.
+        selectBlock(widgetAreaClientId);
+        // Open the last selected widget area when opening the inserter.
+        setIsWidgetAreaOpen(widgetAreaClientId, true);
+      }
+      // The DOM updates resulting from selectBlock() and setIsInserterOpened() calls are applied the
+      // same tick and pretty much in a random order. The inserter is closed if any other part of the
+      // app receives focus. If selectBlock() happens to take effect after setIsInserterOpened() then
+      // the inserter is visible for a brief moment and then gets auto-closed due to focus moving to
+      // the selected block.
+      window.requestAnimationFrame(() => setIsInserterOpened(true));
+    }
+  };
+  const toggleListView = (0,external_wp_element_namespaceObject.useCallback)(() => setIsListViewOpened(!isListViewOpen), [setIsListViewOpened, isListViewOpen]);
+  const {
+    shouldShowContextualToolbar,
+    canFocusHiddenToolbar,
+    fixedToolbarCanBeFocused
+  } = useShouldContextualToolbarShow();
+  // If there's a block toolbar to be focused, disable the focus shortcut for the document toolbar.
+  // There's a fixed block toolbar when the fixed toolbar option is enabled or when the browser width is less than the large viewport.
+  const blockToolbarCanBeFocused = shouldShowContextualToolbar || canFocusHiddenToolbar || fixedToolbarCanBeFocused;
+  return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.NavigableToolbar, {
+    className: "edit-widgets-header-toolbar",
+    "aria-label": (0,external_wp_i18n_namespaceObject.__)('Document tools'),
+    shouldUseKeyboardFocusShortcut: !blockToolbarCanBeFocused
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarItem, {
+    ref: inserterButton,
+    as: external_wp_components_namespaceObject.Button,
+    className: "edit-widgets-header-toolbar__inserter-toggle",
+    variant: "primary",
+    isPressed: isInserterOpen,
+    onMouseDown: event => {
+      event.preventDefault();
+    },
+    onClick: handleClick,
+    icon: library_plus
+    /* translators: button label text should, if possible, be under 16
+    	characters. */,
+    label: (0,external_wp_i18n_namespaceObject._x)('Toggle block inserter', 'Generic label for block inserter button')
+  }), isMediumViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(UndoButton, null), (0,external_React_namespaceObject.createElement)(RedoButton, null), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarItem, {
+    as: external_wp_components_namespaceObject.Button,
+    className: "edit-widgets-header-toolbar__list-view-toggle",
+    icon: list_view,
+    isPressed: isListViewOpen
+    /* translators: button label text should, if possible, be under 16 characters. */,
+    label: (0,external_wp_i18n_namespaceObject.__)('List View'),
+    onClick: toggleListView,
+    ref: setListViewToggleElement
+  })));
+}
+/* harmony default export */ var document_tools = (DocumentTools);
+
+;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/components/save-button/index.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+function SaveButton() {
+  const {
+    hasEditedWidgetAreaIds,
+    isSaving
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getEditedWidgetAreas,
+      isSavingWidgetAreas
+    } = select(store_store);
+    return {
+      hasEditedWidgetAreaIds: getEditedWidgetAreas()?.length > 0,
+      isSaving: isSavingWidgetAreas()
+    };
+  }, []);
+  const {
+    saveEditedWidgetAreas
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "primary",
+    isBusy: isSaving,
+    "aria-disabled": isSaving,
+    onClick: isSaving ? undefined : saveEditedWidgetAreas,
+    disabled: !hasEditedWidgetAreaIds
+  }, isSaving ? (0,external_wp_i18n_namespaceObject.__)('Saving…') : (0,external_wp_i18n_namespaceObject.__)('Update'));
+}
+/* harmony default export */ var save_button = (SaveButton);
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/external.js
 
@@ -3864,105 +3973,38 @@ function MoreMenu() {
 
 
 
-
-
-
 const {
-  useShouldContextualToolbarShow
+  BlockContextualToolbar
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function Header({
   setListViewToggleElement
 }) {
-  const isMediumViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
-  const inserterButton = (0,external_wp_element_namespaceObject.useRef)();
-  const widgetAreaClientId = use_last_selected_widget_area();
-  const isLastSelectedWidgetAreaOpen = (0,external_wp_data_namespaceObject.useSelect)(select => select(store_store).getIsWidgetAreaOpen(widgetAreaClientId), [widgetAreaClientId]);
+  const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
+  const blockToolbarRef = (0,external_wp_element_namespaceObject.useRef)();
   const {
-    isInserterOpen,
-    isListViewOpen
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      isInserterOpened,
-      isListViewOpened
-    } = select(store_store);
-    return {
-      isInserterOpen: isInserterOpened(),
-      isListViewOpen: isListViewOpened()
-    };
-  }, []);
-  const {
-    setIsWidgetAreaOpen,
-    setIsInserterOpened,
-    setIsListViewOpened
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
-  const {
-    selectBlock
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const handleClick = () => {
-    if (isInserterOpen) {
-      // Focusing the inserter button closes the inserter popover.
-      setIsInserterOpened(false);
-    } else {
-      if (!isLastSelectedWidgetAreaOpen) {
-        // Select the last selected block if hasn't already.
-        selectBlock(widgetAreaClientId);
-        // Open the last selected widget area when opening the inserter.
-        setIsWidgetAreaOpen(widgetAreaClientId, true);
-      }
-      // The DOM updates resulting from selectBlock() and setIsInserterOpened() calls are applied the
-      // same tick and pretty much in a random order. The inserter is closed if any other part of the
-      // app receives focus. If selectBlock() happens to take effect after setIsInserterOpened() then
-      // the inserter is visible for a brief moment and then gets auto-closed due to focus moving to
-      // the selected block.
-      window.requestAnimationFrame(() => setIsInserterOpened(true));
-    }
-  };
-  const toggleListView = (0,external_wp_element_namespaceObject.useCallback)(() => setIsListViewOpened(!isListViewOpen), [setIsListViewOpened, isListViewOpen]);
-  const {
-    shouldShowContextualToolbar,
-    canFocusHiddenToolbar,
-    fixedToolbarCanBeFocused
-  } = useShouldContextualToolbarShow();
-  // If there's a block toolbar to be focused, disable the focus shortcut for the document toolbar.
-  // There's a fixed block toolbar when the fixed toolbar option is enabled or when the browser width is less than the large viewport.
-  const blockToolbarCanBeFocused = shouldShowContextualToolbar || canFocusHiddenToolbar || fixedToolbarCanBeFocused;
+    hasFixedToolbar
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => ({
+    hasFixedToolbar: !!select(external_wp_preferences_namespaceObject.store).get('core/edit-widgets', 'fixedToolbar')
+  }), []);
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
     className: "edit-widgets-header"
   }, (0,external_React_namespaceObject.createElement)("div", {
     className: "edit-widgets-header__navigable-toolbar-wrapper"
-  }, isMediumViewport && (0,external_React_namespaceObject.createElement)("h1", {
+  }, isLargeViewport && (0,external_React_namespaceObject.createElement)("h1", {
     className: "edit-widgets-header__title"
-  }, (0,external_wp_i18n_namespaceObject.__)('Widgets')), !isMediumViewport && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.VisuallyHidden, {
+  }, (0,external_wp_i18n_namespaceObject.__)('Widgets')), !isLargeViewport && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.VisuallyHidden, {
     as: "h1",
     className: "edit-widgets-header__title"
-  }, (0,external_wp_i18n_namespaceObject.__)('Widgets')), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.NavigableToolbar, {
-    className: "edit-widgets-header-toolbar",
-    "aria-label": (0,external_wp_i18n_namespaceObject.__)('Document tools'),
-    shouldUseKeyboardFocusShortcut: !blockToolbarCanBeFocused
-  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarItem, {
-    ref: inserterButton,
-    as: external_wp_components_namespaceObject.Button,
-    className: "edit-widgets-header-toolbar__inserter-toggle",
-    variant: "primary",
-    isPressed: isInserterOpen,
-    onMouseDown: event => {
-      event.preventDefault();
-    },
-    onClick: handleClick,
-    icon: library_plus
-    /* translators: button label text should, if possible, be under 16
-    characters. */,
-    label: (0,external_wp_i18n_namespaceObject._x)('Toggle block inserter', 'Generic label for block inserter button')
-  }), isMediumViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(UndoButton, null), (0,external_React_namespaceObject.createElement)(RedoButton, null), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarItem, {
-    as: external_wp_components_namespaceObject.Button,
-    className: "edit-widgets-header-toolbar__list-view-toggle",
-    icon: list_view,
-    isPressed: isListViewOpen
-    /* translators: button label text should, if possible, be under 16 characters. */,
-    label: (0,external_wp_i18n_namespaceObject.__)('List View'),
-    onClick: toggleListView,
-    ref: setListViewToggleElement
-  })))), (0,external_React_namespaceObject.createElement)("div", {
+  }, (0,external_wp_i18n_namespaceObject.__)('Widgets')), (0,external_React_namespaceObject.createElement)(document_tools, {
+    setListViewToggleElement: setListViewToggleElement
+  }), hasFixedToolbar && isLargeViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
+    className: "selected-block-tools-wrapper"
+  }, (0,external_React_namespaceObject.createElement)(BlockContextualToolbar, {
+    isFixed: true
+  })), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover.Slot, {
+    ref: blockToolbarRef,
+    name: "block-toolbar"
+  }))), (0,external_React_namespaceObject.createElement)("div", {
     className: "edit-widgets-header__actions"
   }, (0,external_React_namespaceObject.createElement)(save_button, null), (0,external_React_namespaceObject.createElement)(pinned_items.Slot, {
     scope: "core/edit-widgets"

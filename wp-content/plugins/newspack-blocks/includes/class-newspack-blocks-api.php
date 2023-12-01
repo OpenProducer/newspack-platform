@@ -12,19 +12,19 @@ class Newspack_Blocks_API {
 	/**
 	 * Get thumbnail featured image source for the rest field.
 	 *
-	 * @param array $object The object info.
+	 * @param array $object_info The object info.
 	 * @return array | bool Featured image if available, false if not.
 	 */
-	public static function newspack_blocks_get_image_src( $object ) {
+	public static function newspack_blocks_get_image_src( $object_info ) {
 		$featured_image_set = [];
 
-		if ( 0 === $object['featured_media'] ) {
+		if ( 0 === $object_info['featured_media'] ) {
 			return false;
 		}
 
 		// Large image.
 		$feat_img_array_large        = wp_get_attachment_image_src(
-			$object['featured_media'],
+			$object_info['featured_media'],
 			'large',
 			false
 		);
@@ -34,7 +34,7 @@ class Newspack_Blocks_API {
 		$landscape_size = Newspack_Blocks::image_size_for_orientation( 'landscape' );
 
 		$feat_img_array_landscape        = wp_get_attachment_image_src(
-			$object['featured_media'],
+			$object_info['featured_media'],
 			$landscape_size,
 			false
 		);
@@ -44,7 +44,7 @@ class Newspack_Blocks_API {
 		$portrait_size = Newspack_Blocks::image_size_for_orientation( 'portrait' );
 
 		$feat_img_array_portrait        = wp_get_attachment_image_src(
-			$object['featured_media'],
+			$object_info['featured_media'],
 			$portrait_size,
 			false
 		);
@@ -54,7 +54,7 @@ class Newspack_Blocks_API {
 		$square_size = Newspack_Blocks::image_size_for_orientation( 'square' );
 
 		$feat_img_array_square        = wp_get_attachment_image_src(
-			$object['featured_media'],
+			$object_info['featured_media'],
 			$square_size,
 			false
 		);
@@ -64,7 +64,7 @@ class Newspack_Blocks_API {
 		$uncropped_size = 'newspack-article-block-uncropped';
 
 		$feat_img_array_uncropped        = wp_get_attachment_image_src(
-			$object['featured_media'],
+			$object_info['featured_media'],
 			$uncropped_size,
 			false
 		);
@@ -76,20 +76,20 @@ class Newspack_Blocks_API {
 	/**
 	 * Get thumbnail featured image captions for the rest field.
 	 *
-	 * @param array $object The object info.
+	 * @param array $object_info The object info.
 	 * @return string|null Image caption on success, null on failure.
 	 */
-	public static function newspack_blocks_get_image_caption( $object ) {
-		return (int) $object['featured_media'] > 0 ? trim( wp_get_attachment_caption( $object['featured_media'] ) ) : null;
+	public static function newspack_blocks_get_image_caption( $object_info ) {
+		return (int) $object_info['featured_media'] > 0 ? trim( wp_get_attachment_caption( $object_info['featured_media'] ) ) : null;
 	}
 
 	/**
 	 * Get author info for the rest field.
 	 *
-	 * @param array $object The object info.
+	 * @param array $object_info The object info.
 	 * @return array Author data.
 	 */
-	public static function newspack_blocks_get_author_info( $object ) {
+	public static function newspack_blocks_get_author_info( $object_info ) {
 		$author_data = [];
 
 		if ( function_exists( 'coauthors_posts_links' ) && ! empty( get_coauthors() ) ) :
@@ -116,13 +116,13 @@ class Newspack_Blocks_API {
 		else :
 			$author_data[] = array(
 				/* Get the author name */
-				'display_name' => get_the_author_meta( 'display_name', $object['author'] ),
+				'display_name' => get_the_author_meta( 'display_name', $object_info['author'] ),
 				/* Get the author avatar */
-				'avatar'       => get_avatar( $object['author'], 48 ),
+				'avatar'       => get_avatar( $object_info['author'], 48 ),
 				/* Get the author ID */
-				'id'           => $object['author'],
+				'id'           => $object_info['author'],
 				/* Get the author Link */
-				'author_link'  => get_author_posts_url( $object['author'] ),
+				'author_link'  => get_author_posts_url( $object_info['author'] ),
 			);
 		endif;
 
@@ -133,15 +133,15 @@ class Newspack_Blocks_API {
 	/**
 	 * Get primary category for the rest field.
 	 *
-	 * @param array $object The object info.
+	 * @param array $object_info The object info.
 	 * @return string Category name.
 	 */
-	public static function newspack_blocks_get_primary_category( $object ) {
+	public static function newspack_blocks_get_primary_category( $object_info ) {
 		$category = false;
 
 		// Use Yoast primary category if set.
 		if ( class_exists( 'WPSEO_Primary_Term' ) ) {
-			$primary_term = new WPSEO_Primary_Term( 'category', $object['id'] );
+			$primary_term = new WPSEO_Primary_Term( 'category', $object_info['id'] );
 			$category_id  = $primary_term->get_primary_term();
 			if ( $category_id ) {
 				$category = get_term( $category_id );
@@ -149,7 +149,7 @@ class Newspack_Blocks_API {
 		}
 
 		if ( ! $category ) {
-			$categories_list = get_the_category( $object['id'] );
+			$categories_list = get_the_category( $object_info['id'] );
 			if ( ! empty( $categories_list ) ) {
 				$category = $categories_list[0];
 			}
@@ -167,22 +167,22 @@ class Newspack_Blocks_API {
 	/**
 	 * Get a list of category, tag classes for the rest field.
 	 *
-	 * @param array $object The object info.
+	 * @param array $object_info The object info.
 	 * @return string classes from assigned categories and tags.
 	 */
-	public static function newspack_blocks_get_cat_tag_classes( $object ) {
-		return Newspack_Blocks::get_term_classes( $object['id'] );
+	public static function newspack_blocks_get_cat_tag_classes( $object_info ) {
+		return Newspack_Blocks::get_term_classes( $object_info['id'] );
 	}
 
 	/**
 	 * Get all sponsor information for the rest field.
 	 *
-	 * @param array $object The object info.
+	 * @param array $object_info The object info.
 	 * @return array sponsor information.
 	 */
-	public static function newspack_blocks_sponsor_info( $object ) {
+	public static function newspack_blocks_sponsor_info( $object_info ) {
 		$sponsors = Newspack_Blocks::get_all_sponsors(
-			$object['id'],
+			$object_info['id'],
 			'native',
 			'post',
 			array(
@@ -217,11 +217,11 @@ class Newspack_Blocks_API {
 	/**
 	 * Pass whether there is a custom excerpt to the editor.
 	 *
-	 * @param array $object The object info.
+	 * @param array $object_info The object info.
 	 * @return boolean custom excerpt status.
 	 */
-	public static function newspack_blocks_has_custom_excerpt( $object ) {
-		$post_has_custom_excerpt = has_excerpt( $object['id'] );
+	public static function newspack_blocks_has_custom_excerpt( $object_info ) {
+		$post_has_custom_excerpt = has_excerpt( $object_info['id'] );
 		return $post_has_custom_excerpt;
 	}
 
@@ -396,6 +396,20 @@ class Newspack_Blocks_API {
 		$search = ! empty( $query->query['title_wildcard_search'] ) ? $query->query['title_wildcard_search'] : null;
 		$where .= ' AND post_title LIKE "%' . $search . '%" ';
 		return $where;
+	}
+
+	/**
+	 * Return CSS for the Homepage Articles block, when rendered in the editor.
+	 *
+	 * @return WP_REST_Response.
+	 */
+	public static function css_endpoint() {
+		return newspack_blocks_get_homepage_articles_css_string(
+			[
+				'typeScale'    => range( 1, 10 ),
+				'showSubtitle' => [ 1 ],
+			]
+		);
 	}
 }
 

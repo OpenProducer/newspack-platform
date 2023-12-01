@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.80.0-alpha.4
+Version: 1.81.0-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -5007,6 +5007,33 @@ div.sharedaddy {
   }
 }
 
+.h-stk sup.fn a,
+.h-stk .wp-block-footnotes li,
+.h-stk .entry-content *[id] {
+  scroll-margin-top: 115px;
+}
+@media only screen and (min-width: 782px) {
+  .h-stk sup.fn a,
+  .h-stk .wp-block-footnotes li,
+  .h-stk .entry-content *[id] {
+    scroll-margin-top: 180px;
+  }
+}
+@media only screen and (min-width: 782px) {
+  .h-stk.h-dh sup.fn a,
+  .h-stk.h-dh .wp-block-footnotes li,
+  .h-stk.h-dh .entry-content *[id] {
+    scroll-margin-top: 210px;
+  }
+}
+@media only screen and (min-width: 782px) {
+  .h-stk.h-sub:not(.home) sup.fn a,
+  .h-stk.h-sub:not(.home) .wp-block-footnotes li,
+  .h-stk.h-sub:not(.home) .entry-content *[id] {
+    scroll-margin-top: 100px;
+  }
+}
+
 h1.has-background,
 h2.has-background,
 h3.has-background,
@@ -5931,27 +5958,6 @@ hr.has-background.is-style-dots::before {
 
 .wp-block-footnotes li:focus {
   outline: thin dotted;
-}
-
-.h-stk sup.fn a,
-.h-stk .wp-block-footnotes li {
-  scroll-margin-top: 115px;
-}
-@media only screen and (min-width: 782px) {
-  .h-stk sup.fn a,
-  .h-stk .wp-block-footnotes li {
-    scroll-margin-top: 180px;
-  }
-}
-@media only screen and (min-width: 782px) {
-  .h-stk.h-dh sup.fn a, .h-stk.h-dh .wp-block-footnotes li {
-    scroll-margin-top: 210px;
-  }
-}
-@media only screen and (min-width: 782px) {
-  .h-stk.h-sub:not(.home) sup.fn a, .h-stk.h-sub:not(.home) .wp-block-footnotes li {
-    scroll-margin-top: 100px;
-  }
 }
 
 .wp-block-navigation a {

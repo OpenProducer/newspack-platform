@@ -455,7 +455,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 *
 	 * @return array|WP_Error Contact data if it was added, or error otherwise.
 	 */
-	public function add_contact_handling_local_lists( $contact, $list_id ) {
+	public function add_contact_handling_local_list( $contact, $list_id ) {
 		if ( Subscription_List::is_local_form_id( $list_id ) ) {
 			try {
 				$list = Subscription_List::from_form_id( $list_id );
@@ -499,7 +499,7 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 		$contact = $this->get_contact_data( $email );
 		if ( is_wp_error( $contact ) ) {
 			// Create contact.
-			// Use  Newspack_Newsletters_Subscription::add_contact to trigger hooks and call add_contact_handling_local_lists if needed.
+			// Use  Newspack_Newsletters_Subscription::add_contact to trigger hooks and call add_contact_handling_local_list if needed.
 			$result = Newspack_Newsletters_Subscription::add_contact( [ 'email' => $email ], $lists_to_add );
 			if ( is_wp_error( $result ) ) {
 				return $result;
@@ -775,13 +775,11 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	}
 
 	/**
-	 * Get usage data.
+	 * Get usage data for yesterday.
 	 *
-	 * @param int $last_n_days Number of days to get the report for.
-	 *
-	 * @return array|WP_Error
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error
 	 */
-	public function get_usage_report( $last_n_days ) {
+	public function get_usage_report() {
 		return new WP_Error( 'newspack_newsletters_not_implemented', __( 'Not implemented', 'newspack-newsletters' ), [ 'status' => 400 ] );
 	}
 }

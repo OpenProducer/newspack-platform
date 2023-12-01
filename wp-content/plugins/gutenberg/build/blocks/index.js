@@ -14955,19 +14955,16 @@ const {
 /**
  * Filters HTML to only contain phrasing content.
  *
- * @param {string}  HTML               The HTML to filter.
- * @param {boolean} preserveWhiteSpace Whether or not to preserve consequent white space.
+ * @param {string} HTML The HTML to filter.
  *
  * @return {string} HTML only containing phrasing content.
  */
-function filterInlineHTML(HTML, preserveWhiteSpace) {
+function filterInlineHTML(HTML) {
   HTML = deepFilterHTML(HTML, [headRemover, googleDocsUIdRemover, msListIgnore, phrasingContentReducer, commentRemover]);
   HTML = (0,external_wp_dom_namespaceObject.removeInvalidHTML)(HTML, (0,external_wp_dom_namespaceObject.getPhrasingContentSchema)('paste'), {
     inline: true
   });
-  if (!preserveWhiteSpace) {
-    HTML = deepFilterHTML(HTML, [htmlFormattingRemover, brRemover]);
-  }
+  HTML = deepFilterHTML(HTML, [htmlFormattingRemover, brRemover]);
 
   // Allows us to ask for this information when we get a report.
   paste_handler_console.log('Processed inline HTML:\n\n', HTML);
@@ -14977,15 +14974,14 @@ function filterInlineHTML(HTML, preserveWhiteSpace) {
 /**
  * Converts an HTML string to known blocks. Strips everything else.
  *
- * @param {Object}  options
- * @param {string}  [options.HTML]               The HTML to convert.
- * @param {string}  [options.plainText]          Plain text version.
- * @param {string}  [options.mode]               Handle content as blocks or inline content.
- *                                               * 'AUTO': Decide based on the content passed.
- *                                               * 'INLINE': Always handle as inline content, and return string.
- *                                               * 'BLOCKS': Always handle as blocks, and return array of blocks.
- * @param {Array}   [options.tagName]            The tag into which content will be inserted.
- * @param {boolean} [options.preserveWhiteSpace] Whether or not to preserve consequent white space.
+ * @param {Object} options
+ * @param {string} [options.HTML]      The HTML to convert.
+ * @param {string} [options.plainText] Plain text version.
+ * @param {string} [options.mode]      Handle content as blocks or inline content.
+ *                                     * 'AUTO': Decide based on the content passed.
+ *                                     * 'INLINE': Always handle as inline content, and return string.
+ *                                     * 'BLOCKS': Always handle as blocks, and return array of blocks.
+ * @param {Array}  [options.tagName]   The tag into which content will be inserted.
  *
  * @return {Array|string} A list of blocks or a string, depending on `handlerMode`.
  */
@@ -14993,8 +14989,7 @@ function pasteHandler({
   HTML = '',
   plainText = '',
   mode = 'AUTO',
-  tagName,
-  preserveWhiteSpace
+  tagName
 }) {
   // First of all, strip any meta tags.
   HTML = HTML.replace(/<meta[^>]+>/g, '');
@@ -15059,10 +15054,10 @@ function pasteHandler({
     }
   }
   if (mode === 'INLINE') {
-    return filterInlineHTML(HTML, preserveWhiteSpace);
+    return filterInlineHTML(HTML);
   }
   if (mode === 'AUTO' && !hasShortcodes && isInlineContent(HTML, tagName)) {
-    return filterInlineHTML(HTML, preserveWhiteSpace);
+    return filterInlineHTML(HTML);
   }
   const phrasingContentSchema = (0,external_wp_dom_namespaceObject.getPhrasingContentSchema)('paste');
   const blockContentSchema = getBlockContentSchema('paste');

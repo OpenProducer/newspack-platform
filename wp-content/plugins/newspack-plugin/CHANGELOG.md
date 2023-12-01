@@ -1,3 +1,39 @@
+## [2.11.3](https://github.com/Automattic/newspack-plugin/compare/v2.11.2...v2.11.3) (2023-11-28)
+
+
+### Bug Fixes
+
+* don’t sync empty contact fields to ESP ([#2779](https://github.com/Automattic/newspack-plugin/issues/2779)) ([f0866bd](https://github.com/Automattic/newspack-plugin/commit/f0866bdbec04dd95b0a06a907fec31aff0ab4142))
+
+## [2.11.2](https://github.com/Automattic/newspack-plugin/compare/v2.11.1...v2.11.2) (2023-11-27)
+
+
+### Bug Fixes
+
+* **auth-modal:** handle very long newsletter lists list ([ad6895e](https://github.com/Automattic/newspack-plugin/commit/ad6895e03dbde96ecf7dd4c09dca85bba6ad3c50))
+* trigger alpha release ([fc88a05](https://github.com/Automattic/newspack-plugin/commit/fc88a05462865d3d008670ac608363bd4b481bc2))
+
+## [2.11.2-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v2.11.2-alpha.1...v2.11.2-alpha.2) (2023-11-21)
+
+
+### Bug Fixes
+
+* trigger alpha release ([fc88a05](https://github.com/Automattic/newspack-plugin/commit/fc88a05462865d3d008670ac608363bd4b481bc2))
+
+## [2.11.2-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v2.11.1...v2.11.2-alpha.1) (2023-11-20)
+
+
+### Bug Fixes
+
+* **auth-modal:** handle very long newsletter lists list ([ad6895e](https://github.com/Automattic/newspack-plugin/commit/ad6895e03dbde96ecf7dd4c09dca85bba6ad3c50))
+
+## [2.11.1](https://github.com/Automattic/newspack-plugin/compare/v2.11.0...v2.11.1) (2023-11-20)
+
+
+### Bug Fixes
+
+* don't sync non-donation purchases to the ESP ([#2758](https://github.com/Automattic/newspack-plugin/issues/2758)) ([1e483ae](https://github.com/Automattic/newspack-plugin/commit/1e483ae333da4538564d54c0ff395899beefa665))
+
 # [2.11.0](https://github.com/Automattic/newspack-plugin/compare/v2.10.3...v2.11.0) (2023-11-13)
 
 

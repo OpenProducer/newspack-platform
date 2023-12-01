@@ -222,7 +222,7 @@ final class Popups {
 	 */
 	public static function donation_submission_success( $timestamp, $data ) {
 		$popup_id = $data['popup_id'] ?? false;
-		if ( ! $popup_id ) {
+		if ( ! $popup_id || $data['is_renewal'] ) {
 			return;
 		}
 		$popup_data = Newspack_Popups_Data_Api::get_popup_metadata( $popup_id );
@@ -310,7 +310,7 @@ final class Popups {
 	 */
 	public static function donation_submission_woocommerce( $timestamp, $data ) {
 		$popup_id = $data['popup_id'] ?? false;
-		if ( ! $popup_id ) {
+		if ( ! $popup_id || $data['is_renewal'] ) {
 			return;
 		}
 		$popup_data = Newspack_Popups_Data_Api::get_popup_metadata( $popup_id );
@@ -340,7 +340,7 @@ final class Popups {
 	 */
 	public static function donation_submission_woocommerce_error( $timestamp, $data ) {
 		$popup_id = $data['popup_id'] ?? false;
-		if ( ! $popup_id ) {
+		if ( ! $popup_id || $data['is_renewal'] ) {
 			return;
 		}
 		$popup_data = Newspack_Popups_Data_Api::get_popup_metadata( $popup_id );

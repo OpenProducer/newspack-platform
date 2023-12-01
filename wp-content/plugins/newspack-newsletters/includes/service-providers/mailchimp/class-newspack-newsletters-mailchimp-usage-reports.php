@@ -25,63 +25,38 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 	/**
 	 * Creates a usage report.
 	 *
-	 * @param int $last_n_days Number of days to get the report for.
-	 *
 	 * @return array Usage report.
 	 */
-	public static function get_usage_report( $last_n_days ) {
+	public static function get_usage_report() {
 		$mailchimp_instance = self::get_mc_instance();
 		$mc_api             = new Mailchimp( $mailchimp_instance->api_key() );
 
-		// Get daily activity for each list.
-		$lists = $mc_api->get( 'lists', [ 'count' => 1000 ] );
+		$report = new Newspack_Newsletters_Service_Provider_Usage_Report();
+		$lists  = $mc_api->get( 'lists', [ 'count' => 1000 ] );
+
 		foreach ( $lists['lists'] as &$list ) {
+			$report->total_contacts += $list['stats']['member_count'];
+
+			// Get daily activity for each list.
 			$activity_response = $mc_api->get(
 				'lists/' . $list['id'] . '/activity',
 				[
-					'count' => $last_n_days,
+					'count' => 2,
 				]
 			);
 			$list['activity']  = $activity_response['activity'];
-		}
+			$yesterday         = gmdate( 'Y-m-d', strtotime( '-1 day' ) );
 
-		return self::process_data_to_report( $lists['lists'] );
-	}
-
-	/**
-	 * Process lists and activity data to a usage report.
-	 *
-	 * @param array $lists_with_activity Lists with activity.
-	 */
-	public static function process_data_to_report( $lists_with_activity ) {
-		$report = [];
-		foreach ( $lists_with_activity as $list ) {
-			foreach ( $list['activity'] as $day ) {
-				$date = $day['day'];
-				if ( isset( $report[ $date ] ) ) {
-					$existing_day    = $report[ $date ];
-					$report[ $date ] = array_merge(
-						$existing_day,
-						[
-							'emails_sent' => $existing_day['emails_sent'] + $day['emails_sent'],
-							'opens'       => $existing_day['opens'] + $day['unique_opens'],
-							'clicks'      => $existing_day['clicks'] + $day['recipient_clicks'],
-							'subs'        => $existing_day['subs'] + $day['subs'],
-							'unsubs'      => $existing_day['unsubs'] + $day['unsubs'],
-						]
-					);
-				} else {
-					$report[ $date ] = [
-						'date'        => $date,
-						'emails_sent' => $day['emails_sent'],
-						'opens'       => $day['unique_opens'],
-						'clicks'      => $day['recipient_clicks'],
-						'subs'        => $day['subs'],
-						'unsubs'      => $day['unsubs'],
-					];
-				}
+			if ( ! empty( $activity_response['activity'][1] ) && $yesterday === $activity_response['activity'][1]['day'] ) {
+				$report->emails_sent  += $activity_response['activity'][1]['emails_sent'];
+				$report->opens        += $activity_response['activity'][1]['unique_opens'];
+				$report->clicks       += $activity_response['activity'][1]['recipient_clicks'];
+				$report->subscribes   += $activity_response['activity'][1]['subs'];
+				$report->unsubscribes += $activity_response['activity'][1]['unsubs'];
 			}
 		}
-		return array_values( $report );
+
+		return $report;
 	}
+
 }

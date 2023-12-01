@@ -527,50 +527,8 @@ function paramCase(input, options) {
 ;// CONCATENATED MODULE: external ["wp","apiFetch"]
 var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
-;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/file.js
-/**
- * Downloads a file.
- *
- * @param {string} fileName    File Name.
- * @param {string} content     File Content.
- * @param {string} contentType File mime type.
- */
-function download(fileName, content, contentType) {
-  const file = new window.Blob([content], {
-    type: contentType
-  });
-
-  // IE11 can't use the click to download technique
-  // we use a specific IE11 technique instead.
-  if (window.navigator.msSaveOrOpenBlob) {
-    window.navigator.msSaveOrOpenBlob(file, fileName);
-  } else {
-    const a = document.createElement('a');
-    a.href = URL.createObjectURL(file);
-    a.download = fileName;
-    a.style.display = 'none';
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-  }
-}
-
-/**
- * Reads the textual content of the given file.
- *
- * @param {File} file File.
- * @return {Promise<string>}  Content of the file.
- */
-function readTextFile(file) {
-  const reader = new window.FileReader();
-  return new Promise(resolve => {
-    reader.onload = () => {
-      resolve(reader.result);
-    };
-    reader.readAsText(file);
-  });
-}
-
+;// CONCATENATED MODULE: external ["wp","blob"]
+var external_wp_blob_namespaceObject = window["wp"]["blob"];
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/export.js
 /**
  * External dependencies
@@ -609,7 +567,7 @@ async function exportReusableBlock(id) {
     syncStatus
   }, null, 2);
   const fileName = paramCase(title) + '.json';
-  download(fileName, fileContent, 'application/json');
+  (0,external_wp_blob_namespaceObject.downloadBlob)(fileName, fileContent, 'application/json');
 }
 /* harmony default export */ var utils_export = (exportReusableBlock);
 
@@ -617,6 +575,23 @@ async function exportReusableBlock(id) {
 var external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: external ["wp","components"]
 var external_wp_components_namespaceObject = window["wp"]["components"];
+;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/file.js
+/**
+ * Reads the textual content of the given file.
+ *
+ * @param {File} file File.
+ * @return {Promise<string>}  Content of the file.
+ */
+function readTextFile(file) {
+  const reader = new window.FileReader();
+  return new Promise(resolve => {
+    reader.onload = () => {
+      resolve(reader.result);
+    };
+    reader.readAsText(file);
+  });
+}
+
 ;// CONCATENATED MODULE: ./packages/list-reusable-blocks/build-module/utils/import.js
 /**
  * WordPress dependencies

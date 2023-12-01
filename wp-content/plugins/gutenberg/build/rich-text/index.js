@@ -53,7 +53,6 @@ __webpack_require__.r(__webpack_exports__);
 __webpack_require__.d(__webpack_exports__, {
   __experimentalRichText: function() { return /* reexport */ __experimentalRichText; },
   __unstableCreateElement: function() { return /* reexport */ createElement; },
-  __unstableFormatEdit: function() { return /* reexport */ FormatEdit; },
   __unstableToDom: function() { return /* reexport */ toDom; },
   __unstableUseRichText: function() { return /* reexport */ useRichText; },
   applyFormat: function() { return /* reexport */ applyFormat; },
@@ -946,9 +945,6 @@ function toFormat({
   for (const key in formatType.attributes) {
     const name = formatType.attributes[key];
     registeredAttributes[key] = _attributes[name];
-    if (formatType.__unstableFilterAttributeValue) {
-      registeredAttributes[key] = formatType.__unstableFilterAttributeValue(key, registeredAttributes[key]);
-    }
 
     // delete the attribute and what's left is considered
     // to be unregistered.
@@ -1003,8 +999,6 @@ function toFormat({
  * @param {string}  [$1.text]                     Text to create value from.
  * @param {string}  [$1.html]                     HTML to create value from.
  * @param {Range}   [$1.range]                    Range to create value from.
- * @param {boolean} [$1.preserveWhiteSpace]       Whether or not to collapse
- *                                                white space characters.
  * @param {boolean} [$1.__unstableIsEditableTree]
  *
  * @return {RichTextValue} A rich text value.
@@ -1014,8 +1008,7 @@ function create({
   text,
   html,
   range,
-  __unstableIsEditableTree: isEditableTree,
-  preserveWhiteSpace
+  __unstableIsEditableTree: isEditableTree
 } = {}) {
   if (typeof text === 'string' && text.length > 0) {
     return {
@@ -1035,8 +1028,7 @@ function create({
   return createFromElement({
     element,
     range,
-    isEditableTree,
-    preserveWhiteSpace
+    isEditableTree
   });
 }
 
@@ -1138,6 +1130,14 @@ function filterRange(node, range, filter) {
  * Collapse any whitespace used for HTML formatting to one space character,
  * because it will also be displayed as such by the browser.
  *
+ * We need to strip it from the content because we use white-space: pre-wrap for
+ * displaying editable rich text. Without using white-space: pre-wrap, the
+ * browser will litter the content with non breaking spaces, among other issues.
+ * See packages/rich-text/src/component/use-default-style.js.
+ *
+ * @see
+ * https://developer.mozilla.org/en-US/docs/Web/CSS/white-space-collapse#collapsing_of_white_space
+ *
  * @param {string} string
  */
 function collapseWhiteSpace(string) {
@@ -1157,11 +1157,9 @@ function removeReservedCharacters(string) {
 /**
  * Creates a Rich Text value from a DOM element and range.
  *
- * @param {Object}  $1                      Named argements.
- * @param {Element} [$1.element]            Element to create value from.
- * @param {Range}   [$1.range]              Range to create value from.
- * @param {boolean} [$1.preserveWhiteSpace] Whether or not to collapse white
- *                                          space characters.
+ * @param {Object}  $1                  Named argements.
+ * @param {Element} [$1.element]        Element to create value from.
+ * @param {Range}   [$1.range]          Range to create value from.
  * @param {boolean} [$1.isEditableTree]
  *
  * @return {RichTextValue} A rich text value.
@@ -1169,8 +1167,7 @@ function removeReservedCharacters(string) {
 function createFromElement({
   element,
   range,
-  isEditableTree,
-  preserveWhiteSpace
+  isEditableTree
 }) {
   const accumulator = createEmptyValue();
   if (!element) {
@@ -1187,12 +1184,8 @@ function createFromElement({
     const node = element.childNodes[index];
     const tagName = node.nodeName.toLowerCase();
     if (node.nodeType === node.TEXT_NODE) {
-      let filter = removeReservedCharacters;
-      if (!preserveWhiteSpace) {
-        filter = string => removeReservedCharacters(collapseWhiteSpace(string));
-      }
-      const text = filter(node.nodeValue);
-      range = filterRange(node, range, filter);
+      const text = removeReservedCharacters(node.nodeValue);
+      range = filterRange(node, range, removeReservedCharacters);
       accumulateSelection(accumulator, node, range, {
         text
       });
@@ -1262,8 +1255,7 @@ function createFromElement({
     const value = createFromElement({
       element: node,
       range,
-      isEditableTree,
-      preserveWhiteSpace
+      isEditableTree
     });
     accumulateSelection(accumulator, node, range, value);
     if (!format) {
@@ -2192,7 +2184,6 @@ function isEqualUntil(a, b, index) {
 }
 function toTree({
   value,
-  preserveWhiteSpace,
   createEmpty,
   append,
   getLastChild,
@@ -2308,7 +2299,7 @@ function toTree({
       }
       // Ensure pointer is text node.
       pointer = append(getParent(pointer), '');
-    } else if (!preserveWhiteSpace && character === '\n') {
+    } else if (character === '\n') {
       pointer = append(getParent(pointer), {
         type: 'br',
         attributes: isEditableTree ? {
@@ -2667,20 +2658,16 @@ var external_wp_escapeHtml_namespaceObject = window["wp"]["escapeHtml"];
 /**
  * Create an HTML string from a Rich Text value.
  *
- * @param {Object}        $1                      Named argements.
- * @param {RichTextValue} $1.value                Rich text value.
- * @param {boolean}       [$1.preserveWhiteSpace] Whether or not to use newline
- *                                                characters for line breaks.
+ * @param {Object}        $1       Named argements.
+ * @param {RichTextValue} $1.value Rich text value.
  *
  * @return {string} HTML string.
  */
 function toHTMLString({
-  value,
-  preserveWhiteSpace
+  value
 }) {
   const tree = toTree({
     value,
-    preserveWhiteSpace,
     createEmpty,
     append: to_html_string_append,
     getLastChild: to_html_string_getLastChild,
@@ -3198,8 +3185,7 @@ function useCopyHandler(props) {
   return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
     function onCopy(event) {
       const {
-        record,
-        preserveWhiteSpace
+        record
       } = propsRef.current;
       const {
         ownerDocument
@@ -3210,8 +3196,7 @@ function useCopyHandler(props) {
       const selectedRecord = slice(record.current);
       const plainText = getTextContent(selectedRecord);
       const html = toHTMLString({
-        value: selectedRecord,
-        preserveWhiteSpace
+        value: selectedRecord
       });
       event.clipboardData.setData('text/plain', plainText);
       event.clipboardData.setData('text/html', html);
@@ -3864,8 +3849,8 @@ function useRichText({
   selectionStart,
   selectionEnd,
   placeholder,
-  preserveWhiteSpace,
   onSelectionChange,
+  preserveWhiteSpace,
   onChange,
   __unstableDisableFormats: disableFormats,
   __unstableIsSelected: isSelected,
@@ -3888,8 +3873,7 @@ function useRichText({
     return create({
       element: ref.current,
       range,
-      __unstableIsEditableTree: true,
-      preserveWhiteSpace
+      __unstableIsEditableTree: true
     });
   }
   function applyRecord(newRecord, {
@@ -3910,8 +3894,7 @@ function useRichText({
   function setRecordFromProps() {
     _value.current = value;
     record.current = create({
-      html: value,
-      preserveWhiteSpace
+      html: preserveWhiteSpace ? value : collapseWhiteSpace(typeof value === 'string' ? value : '')
     });
     if (disableFormats) {
       record.current.formats = Array(value.length);
@@ -3927,19 +3910,6 @@ function useRichText({
   if (!record.current) {
     hadSelectionUpdate.current = isSelected;
     setRecordFromProps();
-    // Sometimes formats are added programmatically and we need to make
-    // sure it's persisted to the block store / markup. If these formats
-    // are not applied, they could cause inconsistencies between the data
-    // in the visual editor and the frontend. Right now, it's only relevant
-    // to the `core/text-color` format, which is applied at runtime in
-    // certain circunstances. See the `__unstableFilterAttributeValue`
-    // function in `packages/format-library/src/text-color/index.js`.
-    // @todo find a less-hacky way of solving this.
-
-    const hasRelevantInitFormat = record.current?.formats[0]?.[0]?.type === 'core/text-color';
-    if (hasRelevantInitFormat) {
-      handleChangesUponInit(record.current);
-    }
   } else if (selectionStart !== record.current.start || selectionEnd !== record.current.end) {
     hadSelectionUpdate.current = isSelected;
     record.current = {
@@ -3966,8 +3936,7 @@ function useRichText({
         value: __unstableBeforeSerialize ? {
           ...newRecord,
           formats: __unstableBeforeSerialize(newRecord)
-        } : newRecord,
-        preserveWhiteSpace
+        } : newRecord
       });
     }
     const {
@@ -3982,27 +3951,6 @@ function useRichText({
     // We batch both calls to only attempt to rerender once.
     registry.batch(() => {
       onSelectionChange(start, end);
-      onChange(_value.current, {
-        __unstableFormats: formats,
-        __unstableText: text
-      });
-    });
-    forceRender();
-  }
-  function handleChangesUponInit(newRecord) {
-    record.current = newRecord;
-    _value.current = toHTMLString({
-      value: __unstableBeforeSerialize ? {
-        ...newRecord,
-        formats: __unstableBeforeSerialize(newRecord)
-      } : newRecord,
-      preserveWhiteSpace
-    });
-    const {
-      formats,
-      text
-    } = newRecord;
-    registry.batch(() => {
       onChange(_value.current, {
         __unstableFormats: formats,
         __unstableText: text
@@ -4038,8 +3986,7 @@ function useRichText({
   const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([ref, useDefaultStyle(), useBoundaryStyle({
     record
   }), useCopyHandler({
-    record,
-    preserveWhiteSpace
+    record
   }), useSelectObject(), useFormatBoundaries({
     record,
     applyRecord
@@ -4071,50 +4018,7 @@ function useRichText({
 }
 function __experimentalRichText() {}
 
-;// CONCATENATED MODULE: external "React"
-var external_React_namespaceObject = window["React"];
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/format-edit.js
-
-/**
- * Internal dependencies
- */
-
-
-function FormatEdit({
-  formatTypes,
-  onChange,
-  onFocus,
-  value,
-  forwardedRef
-}) {
-  return formatTypes.map(settings => {
-    const {
-      name,
-      edit: Edit
-    } = settings;
-    if (!Edit) {
-      return null;
-    }
-    const activeFormat = getActiveFormat(value, name);
-    const isActive = activeFormat !== undefined;
-    const activeObject = getActiveObject(value);
-    const isObjectActive = activeObject !== undefined && activeObject.type === name;
-    return (0,external_React_namespaceObject.createElement)(Edit, {
-      key: name,
-      isActive: isActive,
-      activeAttributes: isActive ? activeFormat.attributes || {} : {},
-      isObjectActive: isObjectActive,
-      activeObjectAttributes: isObjectActive ? activeObject.attributes || {} : {},
-      value: value,
-      onChange: onChange,
-      onFocus: onFocus,
-      contentRef: forwardedRef
-    });
-  });
-}
-
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/index.js
-
 
 
 

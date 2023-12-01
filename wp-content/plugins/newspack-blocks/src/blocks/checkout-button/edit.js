@@ -25,6 +25,7 @@ import {
 	SelectControl,
 	FormTokenField,
 	Button,
+	ButtonGroup,
 	Spinner,
 } from '@wordpress/components';
 import { useState, useEffect } from '@wordpress/element';
@@ -51,6 +52,35 @@ function getNYP( product ) {
 		minPrice: product?.meta_data?.find( meta => meta.key === '_min_price' )?.value,
 		maxPrice: product?.meta_data?.find( meta => meta.key === '_maximum_price' )?.value,
 	};
+}
+
+function WidthPanel( { selectedWidth, setAttributes } ) {
+	function handleChange( newWidth ) {
+		// Check if we are toggling the width off
+		const width = selectedWidth === newWidth ? undefined : newWidth;
+
+		// Update attributes.
+		setAttributes( { width } );
+	}
+
+	return (
+		<PanelBody title={ __( 'Width settings', 'newspack-blocks' ) }>
+			<ButtonGroup aria-label={ __( 'Button width', 'newspack-blocks' ) }>
+				{ [ 25, 50, 75, 100 ].map( widthValue => {
+					return (
+						<Button
+							key={ widthValue }
+							size="small"
+							variant={ widthValue === selectedWidth ? 'primary' : undefined }
+							onClick={ () => handleChange( widthValue ) }
+						>
+							{ widthValue }%
+						</Button>
+					);
+				} ) }
+			</ButtonGroup>
+		</PanelBody>
+	);
 }
 
 function ProductControl( props ) {
@@ -156,7 +186,7 @@ function ProductControl( props ) {
 
 function CheckoutButtonEdit( props ) {
 	const { attributes, setAttributes, className } = props;
-	const { placeholder, style, text, product, price, variation } = attributes;
+	const { placeholder, style, text, product, price, variation, width } = attributes;
 
 	const [ productData, setProductData ] = useState( {} );
 	const [ variations, setVariations ] = useState( [] );
@@ -214,6 +244,7 @@ function CheckoutButtonEdit( props ) {
 				className={ classnames( blockProps.className, {
 					[ `wp-block-button` ]: true,
 					[ `has-custom-font-size` ]: blockProps.style.fontSize,
+					[ `has-custom-width wp-block-button__width-${ width }` ]: width,
 				} ) }
 			>
 				<RichText
@@ -330,6 +361,9 @@ function CheckoutButtonEdit( props ) {
 						/>
 					</PanelBody>
 				) }
+			</InspectorControls>
+			<InspectorControls>
+				<WidthPanel selectedWidth={ width } setAttributes={ setAttributes } />
 			</InspectorControls>
 		</>
 	);

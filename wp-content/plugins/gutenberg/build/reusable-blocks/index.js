@@ -278,6 +278,10 @@ const {
  */
 
 
+const {
+  useReusableBlocksRenameHint,
+  ReusableBlocksRenameHint
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 
 /**
  * Menu control to convert block(s) to reusable block.
@@ -293,10 +297,6 @@ function ReusableBlockConvertButton({
   rootClientId,
   onClose
 }) {
-  const {
-    useReusableBlocksRenameHint,
-    ReusableBlocksRenameHint
-  } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
   const showRenameHint = useReusableBlocksRenameHint();
   const [syncType, setSyncType] = (0,external_wp_element_namespaceObject.useState)(undefined);
   const [isModalOpen, setIsModalOpen] = (0,external_wp_element_namespaceObject.useState)(false);
@@ -384,7 +384,7 @@ function ReusableBlockConvertButton({
     onChange: setTitle,
     placeholder: (0,external_wp_i18n_namespaceObject.__)('My pattern')
   }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
-    label: (0,external_wp_i18n_namespaceObject.__)('Synced'),
+    label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'Option that makes an individual pattern synchronized'),
     help: (0,external_wp_i18n_namespaceObject.__)('Editing the pattern will update it anywhere it is used.'),
     checked: !syncType,
     onChange: () => {
