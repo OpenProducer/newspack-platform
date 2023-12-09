@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'woocommerce/woocommerce-blocks',
-        'pretty_version' => '11.4.8',
-        'version' => '11.4.8.0',
+        'pretty_version' => '11.4.9',
+        'version' => '11.4.9.0',
         'reference' => NULL,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -113,8 +113,8 @@
             ),
         ),
         'woocommerce/woocommerce-blocks' => array(
-            'pretty_version' => '11.4.8',
-            'version' => '11.4.8.0',
+            'pretty_version' => '11.4.9',
+            'version' => '11.4.9.0',
             'reference' => NULL,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',

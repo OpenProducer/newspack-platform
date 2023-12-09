@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 8.3.0\n"
+"Project-Id-Version: WooCommerce 8.3.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2023-11-16T17:32:44+00:00\n"
+"POT-Creation-Date: 2023-11-21T17:42:02+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: woocommerce\n"
@@ -10985,7 +10985,7 @@ msgstr ""
 #: includes/class-wc-countries.php:731
 #: includes/class-wc-form-handler.php:278
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:21
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:354
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:370
 #: templates/myaccount/form-edit-account.php:27
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "First name"
@@ -10998,7 +10998,7 @@ msgstr ""
 #: includes/class-wc-countries.php:738
 #: includes/class-wc-form-handler.php:279
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:27
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:358
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:374
 #: templates/myaccount/form-edit-account.php:31
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Last name"
@@ -11009,7 +11009,7 @@ msgstr ""
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:60
 #: includes/admin/meta-boxes/class-wc-meta-box-order-data.php:119
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:33
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:362
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:378
 #: packages/woocommerce-blocks/build/checkout.js:26
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Company"
@@ -11054,7 +11054,7 @@ msgstr ""
 #: includes/admin/settings/class-wc-settings-tax.php:244
 #: includes/admin/settings/views/html-settings-tax.php:35
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:51
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:378
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:394
 #: src/Admin/API/Reports/Customers/Controller.php:563
 #: templates/cart/shipping-calculator.php:80
 #: assets/client/admin/app/index.js:2
@@ -11469,7 +11469,7 @@ msgstr ""
 
 #: includes/admin/class-wc-admin-setup-wizard.php:511
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:39
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:366
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:382
 #: assets/client/admin/app/index.js:2
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 #: packages/woocommerce-blocks/build/wc-shipping-method-pickup-location.js:232
@@ -19585,7 +19585,7 @@ msgstr ""
 #. translators: %s: product name
 #: includes/class-wc-cart.php:793
 #: includes/shortcodes/class-wc-shortcode-checkout.php:167
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:557
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:649
 msgid "Sorry, we do not have enough \"%1$s\" in stock to fulfill your order (%2$s available). We apologize for any inconvenience caused."
 msgstr ""
 
@@ -19932,7 +19932,7 @@ msgstr ""
 #: includes/class-wc-countries.php:977
 #: includes/class-wc-countries.php:1292
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:63
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:386
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:402
 #: assets/client/admin/chunks/analytics-report-customers.js:1
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Postal code"
@@ -29415,7 +29415,7 @@ msgstr ""
 
 #. translators: %s: product name
 #: includes/shortcodes/class-wc-shortcode-checkout.php:153
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:530
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:622
 msgid "Sorry, \"%s\" is no longer in stock so this order cannot be paid for. We apologize for any inconvenience caused."
 msgstr ""
 
@@ -32712,7 +32712,7 @@ msgid "Extension data registered by %s"
 msgstr ""
 
 #: packages/woocommerce-blocks/src/StoreApi/Schemas/V1/AbstractAddressSchema.php:45
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:370
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:386
 #: packages/woocommerce-blocks/build/checkout.js:26
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Apartment, suite, etc."
@@ -33689,59 +33689,64 @@ msgstr ""
 msgid "Cannot create order from empty cart."
 msgstr ""
 
+#. translators: %1$s Coupon codes, %2$s Reason
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:212
+msgid "\"%1$s\" was removed from the cart. %2$s"
+msgstr ""
+
 #. translators: %s Coupon codes.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:211
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:226
 msgid "Invalid coupons were removed from the cart: \"%s\""
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:234
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:250
 msgid "A valid email address is required"
 msgstr ""
 
 #. translators: %s provided email.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:244
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:260
 msgid "The provided email address (%s) is not valid—please provide a valid email address"
 msgstr ""
 
 #. translators: %s country code.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:269
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:285
 msgid "Sorry, we do not ship orders to the provided country (%s)"
 msgstr ""
 
 #. translators: %s country code.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:284
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:300
 msgid "Sorry, we do not allow orders from the provided country (%s)"
 msgstr ""
 
 #. translators: %s Address type.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:315
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:331
 msgid "There was a problem with the provided %s:"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:316
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:332
 msgid "shipping address"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:316
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:332
 msgid "billing address"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:374
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:390
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "Country/Region"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:382
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:398
 #: packages/woocommerce-blocks/build/wc-settings.js:1
 msgid "State/County"
 msgstr ""
 
 #. translators: %s Field label.
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:403
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:419
 msgid "%s is required"
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:459
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:551
 #: packages/woocommerce-blocks/build/cart-frontend.js:2
 #: packages/woocommerce-blocks/build/cart.js:2
 #: packages/woocommerce-blocks/build/checkout-frontend.js:2
@@ -33749,7 +33754,7 @@ msgstr ""
 msgid "Sorry, this order requires a shipping option."
 msgstr ""
 
-#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:478
+#: packages/woocommerce-blocks/src/StoreApi/Utilities/OrderController.php:570
 msgid "Invalid order ID or key provided."
 msgstr ""
 

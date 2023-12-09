@@ -32115,7 +32115,6 @@ function UnforwardedAnglePickerControl(props, ref) {
   if (!__nextHasNoMarginBottom) {
     external_wp_deprecated_default()('Bottom margin styles for wp.components.AnglePickerControl', {
       since: '6.1',
-      version: '6.4',
       hint: 'Set the `__nextHasNoMarginBottom` prop to true to start opting into the new styles, which will become the default in a future version.'
     });
   }
@@ -38521,6 +38520,9 @@ function useHeading(props) {
   const {
     as: asProp,
     level = 2,
+    color = COLORS.gray[900],
+    isBlock = true,
+    weight = config_values.fontWeightHeading,
     ...otherProps
   } = useContextSystem(props, 'Heading');
   const as = asProp || `h${level}`;
@@ -38531,10 +38533,10 @@ function useHeading(props) {
     a11yProps['aria-level'] = typeof level === 'string' ? parseInt(level) : level;
   }
   const textProps = useText({
-    color: COLORS.gray[900],
+    color,
+    isBlock,
+    weight,
     size: getHeadingFontSize(level),
-    isBlock: true,
-    weight: config_values.fontWeightHeading,
     ...otherProps
   });
   return {
@@ -63408,7 +63410,7 @@ function FormTokenField(props) {
       onFocus(event);
     }
   }
-  function onBlur() {
+  function onBlur(event) {
     if (inputHasValidValue() && __experimentalValidateInput(incompleteTokenValue)) {
       setIsActive(false);
       if (tokenizeOnBlur && inputHasValidValue()) {
@@ -63419,7 +63421,11 @@ function FormTokenField(props) {
       setIncompleteTokenValue('');
       setInputOffsetFromEnd(0);
       setIsActive(false);
-      setIsExpanded(false);
+
+      // If `__experimentalExpandOnFocus` is true, don't close the suggestions list when
+      // the user clicks on it (`tokensAndInput` will be the element that caused the blur).
+      const shouldKeepSuggestionsExpanded = !__experimentalExpandOnFocus || __experimentalExpandOnFocus && event.relatedTarget === tokensAndInput.current;
+      setIsExpanded(shouldKeepSuggestionsExpanded);
       setSelectedSuggestionIndex(-1);
       setSelectedSuggestionScroll(false);
     }
@@ -72417,7 +72423,11 @@ function useToolsPanelItem(props) {
 
   // Registering the panel item allows the panel to include it in its
   // automatically generated menu and determine its initial checked status.
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
+  //
+  // This is performed in a layout effect to ensure that the panel item
+  // is registered before it is rendered preventing a rendering glitch.
+  // See: https://github.com/WordPress/gutenberg/issues/56470
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (hasMatchingPanel && previousPanelId !== null) {
       registerPanelItem({
         hasValue: hasValueCallback,
@@ -81449,84 +81459,6 @@ var menu_group_MenuGroup = createComponent((props) => {
 if (false) {}
 
 
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/S6KFVXKD.js
-"use client";
-
-
-
-
-
-// src/group/group-label.ts
-
-var useGroupLabel = createHook((props) => {
-  const setLabelId = (0,external_React_.useContext)(GroupLabelContext);
-  const id = useId(props.id);
-  useSafeLayoutEffect(() => {
-    setLabelId == null ? void 0 : setLabelId(id);
-    return () => setLabelId == null ? void 0 : setLabelId(void 0);
-  }, [setLabelId, id]);
-  props = _2SMRF6AD_spreadValues({
-    id,
-    "aria-hidden": true
-  }, props);
-  return props;
-});
-var GroupLabel = createComponent((props) => {
-  const htmlProps = useGroupLabel(props);
-  return LFJDOMBA_createElement("div", htmlProps);
-});
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/7E5H65N4.js
-"use client";
-
-
-
-
-// src/composite/composite-group-label.ts
-var useCompositeGroupLabel = createHook(
-  (_a) => {
-    var _b = _a, { store } = _b, props = __objRest(_b, ["store"]);
-    props = useGroupLabel(props);
-    return props;
-  }
-);
-var CompositeGroupLabel = createComponent(
-  (props) => {
-    const htmlProps = useCompositeGroupLabel(props);
-    return LFJDOMBA_createElement("div", htmlProps);
-  }
-);
-if (false) {}
-
-
-
-;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/menu/menu-group-label.js
-"use client";
-
-
-
-
-
-
-
-
-// src/menu/menu-group-label.ts
-var useMenuGroupLabel = createHook((props) => {
-  props = useCompositeGroupLabel(props);
-  return props;
-});
-var MenuGroupLabel = createComponent(
-  (props) => {
-    const htmlProps = useMenuGroupLabel(props);
-    return LFJDOMBA_createElement("div", htmlProps);
-  }
-);
-if (false) {}
-
-
 ;// CONCATENATED MODULE: ./node_modules/@ariakit/react-core/esm/__chunks/PLOKN2PQ.js
 "use client";
 
@@ -81597,6 +81529,7 @@ if (false) {}
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2-ariakit/styles.js
 
+function dropdown_menu_v2_ariakit_styles_EMOTION_STRINGIFIED_CSS_ERROR_() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
 /**
  * External dependencies
  */
@@ -81609,18 +81542,22 @@ if (false) {}
 
 
 
+
 const styles_ANIMATION_PARAMS = {
   SLIDE_AMOUNT: '2px',
   DURATION: '400ms',
   EASING: 'cubic-bezier( 0.16, 1, 0.3, 1 )'
 };
-const styles_CONTENT_WRAPPER_PADDING = space(2);
-const styles_ITEM_PREFIX_WIDTH = space(7);
-const styles_ITEM_PADDING_INLINE_START = space(2);
-const styles_ITEM_PADDING_INLINE_END = space(2.5);
+const styles_CONTENT_WRAPPER_PADDING = space(1);
+const ITEM_PADDING_BLOCK = space(2);
+const ITEM_PADDING_INLINE = space(3);
 
-// TODO: should bring this into the config, and make themeable
-const styles_DEFAULT_BORDER_COLOR = COLORS.ui.borderDisabled;
+// TODO:
+// - those values are different from saved variables?
+// - should bring this into the config, and make themeable
+// - border color and divider color are different?
+const styles_DEFAULT_BORDER_COLOR = COLORS.gray[300];
+const DIVIDER_COLOR = COLORS.gray[200];
 const styles_TOOLBAR_VARIANT_BORDER_COLOR = COLORS.gray['900'];
 const styles_DEFAULT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${styles_DEFAULT_BORDER_COLOR}, ${config_values.popoverShadow}`;
 const styles_TOOLBAR_VARIANT_BOX_SHADOW = `0 0 0 ${config_values.borderWidth} ${styles_TOOLBAR_VARIANT_BORDER_COLOR}`;
@@ -81665,42 +81602,52 @@ const styles_slideLeftAndFade = emotion_react_browser_esm_keyframes({
   }
 });
 const dropdown_menu_v2_ariakit_styles_DropdownMenu = /*#__PURE__*/emotion_styled_base_browser_esm(Menu,  true ? {
-  target: "e12mdn2z9"
-} : 0)("position:relative;z-index:1000000;min-width:220px;max-height:var( --popover-available-height );padding:", styles_CONTENT_WRAPPER_PADDING, ";background-color:", COLORS.ui.background, ";border-radius:", config_values.radiusBlockUi, ";", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? styles_TOOLBAR_VARIANT_BOX_SHADOW : styles_DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;animation-duration:", styles_ANIMATION_PARAMS.DURATION, ";animation-timing-function:", styles_ANIMATION_PARAMS.EASING, ";will-change:transform,opacity;animation-name:", styles_slideDownAndFade, ";&[data-side='right']{animation-name:", styles_slideLeftAndFade, ";}&[data-side='bottom']{animation-name:", styles_slideUpAndFade, ";}&[data-side='left']{animation-name:", styles_slideRightAndFade, ";}@media ( prefers-reduced-motion ){animation-duration:0s;}" + ( true ? "" : 0));
-const styles_itemPrefix = /*#__PURE__*/emotion_react_browser_esm_css("width:", styles_ITEM_PREFIX_WIDTH, "!important;height:auto!important;display:inline-flex;align-items:center;justify-content:center;margin-inline-start:calc( -1 * ", styles_ITEM_PADDING_INLINE_START, " );margin-top:", space(-2), ";margin-bottom:", space(-2), ";" + ( true ? "" : 0),  true ? "" : 0);
-const styles_itemSuffix = /*#__PURE__*/emotion_react_browser_esm_css("width:max-content;display:inline-flex;align-items:center;justify-content:center;margin-inline-start:auto;padding-inline-start:", space(6), ";margin-top:", space(-2), ";margin-bottom:", space(-2), ";opacity:0.6;[data-active-item]>&,[aria-expanded='true']>&,[aria-disabled='true']>&{opacity:1;}" + ( true ? "" : 0),  true ? "" : 0);
-const styles_ItemPrefixWrapper = emotion_styled_base_browser_esm("span",  true ? {
-  target: "e12mdn2z8"
-} : 0)(styles_itemPrefix, ";" + ( true ? "" : 0));
-const styles_ItemSuffixWrapper = emotion_styled_base_browser_esm("span",  true ? {
-  target: "e12mdn2z7"
-} : 0)(styles_itemSuffix, ";" + ( true ? "" : 0));
-const styles_baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.gray[900], ";border-radius:", config_values.radiusBlockUi, ";display:flex;align-items:center;padding:", space(2), " ", styles_ITEM_PADDING_INLINE_END, " ", space(2), " ", styles_ITEM_PADDING_INLINE_START, ";position:relative;user-select:none;outline:none;&[aria-disabled='true']{opacity:0.5;pointer-events:none;}&[data-active-item]{background-color:", COLORS.gray['100'], ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px var( --wp-admin-theme-color );outline:2px solid transparent;}&:active,&[data-active]{}", dropdown_menu_v2_ariakit_styles_DropdownMenu, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{}svg{fill:currentColor;}&:not( :has( ", styles_ItemPrefixWrapper, " ) ){padding-inline-start:", styles_ITEM_PREFIX_WIDTH, ";}" + ( true ? "" : 0),  true ? "" : 0);
+  target: "e12mdn2z12"
+} : 0)("position:relative;z-index:1000000;display:grid;grid-template-columns:minmax( 0, max-content ) 1fr;grid-template-rows:auto;box-sizing:border-box;min-width:160px;max-width:320px;max-height:var( --popover-available-height );padding:", styles_CONTENT_WRAPPER_PADDING, ";background-color:", COLORS.ui.background, ";border-radius:4px;", props => /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", props.variant === 'toolbar' ? styles_TOOLBAR_VARIANT_BOX_SHADOW : styles_DEFAULT_BOX_SHADOW, ";" + ( true ? "" : 0),  true ? "" : 0), " overscroll-behavior:contain;overflow:auto;outline:2px solid transparent!important;animation-duration:", styles_ANIMATION_PARAMS.DURATION, ";animation-timing-function:", styles_ANIMATION_PARAMS.EASING, ";will-change:transform,opacity;animation-name:", styles_slideDownAndFade, ";&[data-side='right']{animation-name:", styles_slideLeftAndFade, ";}&[data-side='bottom']{animation-name:", styles_slideUpAndFade, ";}&[data-side='left']{animation-name:", styles_slideRightAndFade, ";}@media ( prefers-reduced-motion ){animation-duration:0s;}" + ( true ? "" : 0));
+const styles_baseItem = /*#__PURE__*/emotion_react_browser_esm_css("all:unset;position:relative;min-height:", space(10), ";box-sizing:border-box;grid-column:1/-1;display:grid;grid-template-columns:subgrid;align-items:center;font-size:", font('default.fontSize'), ";font-family:inherit;font-weight:normal;line-height:20px;color:", COLORS.gray[900], ";border-radius:", config_values.radiusBlockUi, ";padding-block:", ITEM_PADDING_BLOCK, ";padding-inline:", ITEM_PADDING_INLINE, ";scroll-margin:", styles_CONTENT_WRAPPER_PADDING, ";user-select:none;outline:none;&[aria-disabled='true']{color:", COLORS.ui.textDisabled, ";cursor:not-allowed;}&[data-active-item]:not( [data-focus-visible] ):not(\n\t\t\t[aria-disabled='true']\n\t\t){background-color:", COLORS.theme.accent, ";color:", COLORS.white, ";}&[data-focus-visible]{box-shadow:0 0 0 1.5px var( --wp-admin-theme-color );outline:2px solid transparent;}&:active,&[data-active]{}", dropdown_menu_v2_ariakit_styles_DropdownMenu, ":not(:focus) &:not(:focus)[aria-expanded=\"true\"]{background-color:", COLORS.gray[100], ";color:", COLORS.gray[900], ";}svg{fill:currentColor;}" + ( true ? "" : 0),  true ? "" : 0);
 const styles_DropdownMenuItem = /*#__PURE__*/emotion_styled_base_browser_esm(OXY6XIZF_MenuItem,  true ? {
-  target: "e12mdn2z6"
+  target: "e12mdn2z11"
 } : 0)(styles_baseItem, ";" + ( true ? "" : 0));
 const styles_DropdownMenuCheckboxItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemCheckbox,  true ? {
-  target: "e12mdn2z5"
+  target: "e12mdn2z10"
 } : 0)(styles_baseItem, ";" + ( true ? "" : 0));
 const styles_DropdownMenuRadioItem = /*#__PURE__*/emotion_styled_base_browser_esm(MenuItemRadio,  true ? {
-  target: "e12mdn2z4"
+  target: "e12mdn2z9"
 } : 0)(styles_baseItem, ";" + ( true ? "" : 0));
+const styles_ItemPrefixWrapper = emotion_styled_base_browser_esm("span",  true ? {
+  target: "e12mdn2z8"
+} : 0)("grid-column:1;&:not( :empty ){margin-inline-end:", space(2), ";}display:flex;align-items:center;justify-content:center;color:", COLORS.gray['700'], ";[data-active-item]:not( [data-focus-visible] )>&,[aria-disabled='true']>&{color:inherit;}" + ( true ? "" : 0));
+const DropdownMenuItemContentWrapper = emotion_styled_base_browser_esm("div",  true ? {
+  target: "e12mdn2z7"
+} : 0)("grid-column:2;display:flex;align-items:center;justify-content:space-between;gap:", space(3), ";pointer-events:none;" + ( true ? "" : 0));
+const DropdownMenuItemChildrenWrapper = emotion_styled_base_browser_esm("div",  true ? {
+  target: "e12mdn2z6"
+} : 0)("flex:1;display:inline-flex;flex-direction:column;gap:", space(1), ";" + ( true ? "" : 0));
+const styles_ItemSuffixWrapper = emotion_styled_base_browser_esm("span",  true ? {
+  target: "e12mdn2z5"
+} : 0)("flex:0;width:max-content;display:flex;align-items:center;justify-content:center;gap:", space(3), ";color:", COLORS.gray['700'], ";[data-active-item]:not( [data-focus-visible] ) *:not(", dropdown_menu_v2_ariakit_styles_DropdownMenu, ") &,[aria-disabled='true'] *:not(", dropdown_menu_v2_ariakit_styles_DropdownMenu, ") &{color:inherit;}" + ( true ? "" : 0));
 const styles_DropdownMenuGroup = /*#__PURE__*/emotion_styled_base_browser_esm(menu_group_MenuGroup,  true ? {
-  target: "e12mdn2z3"
-} : 0)( true ? "" : 0);
-const styles_DropdownMenuGroupLabel = /*#__PURE__*/emotion_styled_base_browser_esm(MenuGroupLabel,  true ? {
-  target: "e12mdn2z2"
-} : 0)("box-sizing:border-box;display:flex;align-items:center;min-height:", space(8), ";padding:", space(2), " ", styles_ITEM_PADDING_INLINE_END, " ", space(2), " ", styles_ITEM_PREFIX_WIDTH, ";color:", COLORS.gray[700], ";font-size:11px;line-height:1.4;font-weight:500;text-transform:uppercase;" + ( true ? "" : 0));
+  target: "e12mdn2z4"
+} : 0)( true ? {
+  name: "49aokf",
+  styles: "display:contents"
+} : 0);
 const styles_DropdownMenuSeparator = /*#__PURE__*/emotion_styled_base_browser_esm(MenuSeparator,  true ? {
-  target: "e12mdn2z1"
-} : 0)("border:none;height:", config_values.borderWidth, ";background-color:", props => props.variant === 'toolbar' ? styles_TOOLBAR_VARIANT_BORDER_COLOR : styles_DEFAULT_BORDER_COLOR, ";margin:", space(2), " calc( -1 * ", styles_CONTENT_WRAPPER_PADDING, " );outline:2px solid transparent;" + ( true ? "" : 0));
+  target: "e12mdn2z3"
+} : 0)("grid-column:1/-1;border:none;height:", config_values.borderWidth, ";background-color:", props => props.variant === 'toolbar' ? styles_TOOLBAR_VARIANT_BORDER_COLOR : DIVIDER_COLOR, ";margin-block:", space(2), ";margin-inline:", ITEM_PADDING_INLINE, ";outline:2px solid transparent;" + ( true ? "" : 0));
 const SubmenuChevronIcon = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_icon,  true ? {
-  target: "e12mdn2z0"
-} : 0)(rtl({
-  transform: `scaleX(1) translateX(${space(2)})`
+  target: "e12mdn2z2"
+} : 0)("width:", space(1.5), ";", rtl({
+  transform: `scaleX(1)`
 }, {
-  transform: `scaleX(-1) translateX(${space(2)})`
+  transform: `scaleX(-1)`
 }), ";" + ( true ? "" : 0));
+const styles_DropdownMenuItemLabel = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
+  target: "e12mdn2z1"
+} : 0)("font-size:", font('default.fontSize'), ";line-height:20px;color:inherit;" + ( true ? "" : 0));
+const styles_DropdownMenuItemHelpText = /*#__PURE__*/emotion_styled_base_browser_esm(truncate_component,  true ? {
+  target: "e12mdn2z0"
+} : 0)("font-size:", font('helpText.fontSize'), ";line-height:16px;color:", COLORS.gray['700'], ";[data-active-item]:not( [data-focus-visible] ) *:not( ", dropdown_menu_v2_ariakit_styles_DropdownMenu, " ) &,[aria-disabled='true'] *:not( ", dropdown_menu_v2_ariakit_styles_DropdownMenu, " ) &{color:inherit;}" + ( true ? "" : 0));
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/dropdown-menu-v2-ariakit/index.js
 
@@ -81736,9 +81683,10 @@ const dropdown_menu_v2_ariakit_DropdownMenuItem = (0,external_wp_element_namespa
   return (0,external_React_.createElement)(styles_DropdownMenuItem, {
     ref: ref,
     ...props,
+    accessibleWhenDisabled: true,
     hideOnClick: hideOnClick,
     store: dropdownMenuContext?.store
-  }, prefix && (0,external_React_.createElement)(styles_ItemPrefixWrapper, null, prefix), children, suffix && (0,external_React_.createElement)(styles_ItemSuffixWrapper, null, suffix));
+  }, (0,external_React_.createElement)(styles_ItemPrefixWrapper, null, prefix), (0,external_React_.createElement)(DropdownMenuItemContentWrapper, null, (0,external_React_.createElement)(DropdownMenuItemChildrenWrapper, null, children), suffix && (0,external_React_.createElement)(styles_ItemSuffixWrapper, null, suffix)));
 });
 const dropdown_menu_v2_ariakit_DropdownMenuCheckboxItem = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuCheckboxItem({
   suffix,
@@ -81750,15 +81698,22 @@ const dropdown_menu_v2_ariakit_DropdownMenuCheckboxItem = (0,external_wp_element
   return (0,external_React_.createElement)(styles_DropdownMenuCheckboxItem, {
     ref: ref,
     ...props,
+    accessibleWhenDisabled: true,
     hideOnClick: hideOnClick,
     store: dropdownMenuContext?.store
   }, (0,external_React_.createElement)(MenuItemCheck, {
     store: dropdownMenuContext?.store,
     render: (0,external_React_.createElement)(styles_ItemPrefixWrapper, null)
+    // Override some ariakit inline styles
+    ,
+    style: {
+      width: 'auto',
+      height: 'auto'
+    }
   }, (0,external_React_.createElement)(build_module_icon, {
     icon: library_check,
     size: 24
-  })), children, suffix && (0,external_React_.createElement)(styles_ItemSuffixWrapper, null, suffix));
+  })), (0,external_React_.createElement)(DropdownMenuItemContentWrapper, null, (0,external_React_.createElement)(DropdownMenuItemChildrenWrapper, null, children), suffix && (0,external_React_.createElement)(styles_ItemSuffixWrapper, null, suffix)));
 });
 const radioCheck = (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
   xmlns: "http://www.w3.org/2000/svg",
@@ -81778,15 +81733,22 @@ const dropdown_menu_v2_ariakit_DropdownMenuRadioItem = (0,external_wp_element_na
   return (0,external_React_.createElement)(styles_DropdownMenuRadioItem, {
     ref: ref,
     ...props,
+    accessibleWhenDisabled: true,
     hideOnClick: hideOnClick,
     store: dropdownMenuContext?.store
   }, (0,external_React_.createElement)(MenuItemCheck, {
     store: dropdownMenuContext?.store,
     render: (0,external_React_.createElement)(styles_ItemPrefixWrapper, null)
+    // Override some ariakit inline styles
+    ,
+    style: {
+      width: 'auto',
+      height: 'auto'
+    }
   }, (0,external_React_.createElement)(build_module_icon, {
     icon: radioCheck,
     size: 24
-  })), children, suffix);
+  })), (0,external_React_.createElement)(DropdownMenuItemContentWrapper, null, (0,external_React_.createElement)(DropdownMenuItemChildrenWrapper, null, children), suffix && (0,external_React_.createElement)(styles_ItemSuffixWrapper, null, suffix)));
 });
 const dropdown_menu_v2_ariakit_DropdownMenuGroup = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuGroup(props, ref) {
   const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
@@ -81796,16 +81758,8 @@ const dropdown_menu_v2_ariakit_DropdownMenuGroup = (0,external_wp_element_namesp
     store: dropdownMenuContext?.store
   });
 });
-const DropdownMenuGroupLabel = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuGroupLabel(props, ref) {
-  const dropdownMenuContext = (0,external_wp_element_namespaceObject.useContext)(DropdownMenuContext);
-  return (0,external_React_.createElement)(styles_DropdownMenuGroupLabel, {
-    ref: ref,
-    ...props,
-    store: dropdownMenuContext?.store
-  });
-});
 const dropdown_menu_v2_ariakit_UnconnectedDropdownMenu = (props, ref) => {
-  var _props$placement, _trigger$props$suffix;
+  var _props$placement;
   const {
     // Store props
     open,
@@ -81879,18 +81833,25 @@ const dropdown_menu_v2_ariakit_UnconnectedDropdownMenu = (props, ref) => {
     store: dropdownMenuStore,
     render: dropdownMenuStore.parent ? (0,external_wp_element_namespaceObject.cloneElement)(trigger, {
       // Add submenu arrow, unless a `suffix` is explicitly specified
-      suffix: (_trigger$props$suffix = trigger.props.suffix) !== null && _trigger$props$suffix !== void 0 ? _trigger$props$suffix : (0,external_React_.createElement)(SubmenuChevronIcon, {
+      suffix: (0,external_React_.createElement)(external_React_.Fragment, null, trigger.props.suffix, (0,external_React_.createElement)(SubmenuChevronIcon, {
         "aria-hidden": "true",
         icon: chevron_right_small,
-        size: 24
-      })
+        size: 24,
+        preserveAspectRatio: "xMidYMid slice"
+      }))
     }) : trigger
   }), (0,external_React_.createElement)(dropdown_menu_v2_ariakit_styles_DropdownMenu, {
     ...otherProps,
     modal: modal,
-    store: dropdownMenuStore,
-    gutter: gutter !== null && gutter !== void 0 ? gutter : dropdownMenuStore.parent ? 16 : 8,
-    shift: shift !== null && shift !== void 0 ? shift : dropdownMenuStore.parent ? -8 : 0,
+    store: dropdownMenuStore
+    // Root menu has an 8px distance from its trigger,
+    // otherwise 0 (which causes the submenu to slightly overlap)
+    ,
+    gutter: gutter !== null && gutter !== void 0 ? gutter : dropdownMenuStore.parent ? 0 : 8
+    // Align nested menu by the same (but opposite) amount
+    // as the menu container's padding.
+    ,
+    shift: shift !== null && shift !== void 0 ? shift : dropdownMenuStore.parent ? -4 : 0,
     hideOnHoverOutside: false,
     "data-side": appliedPlacementSide,
     variant: variant,
@@ -81909,6 +81870,20 @@ const dropdown_menu_v2_ariakit_DropdownMenuSeparator = (0,external_wp_element_na
     ...props,
     store: dropdownMenuContext?.store,
     variant: dropdownMenuContext?.variant
+  });
+});
+const DropdownMenuItemLabel = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItemLabel(props, ref) {
+  return (0,external_React_.createElement)(styles_DropdownMenuItemLabel, {
+    numberOfLines: 1,
+    ref: ref,
+    ...props
+  });
+});
+const DropdownMenuItemHelpText = (0,external_wp_element_namespaceObject.forwardRef)(function DropdownMenuItemHelpText(props, ref) {
+  return (0,external_React_.createElement)(styles_DropdownMenuItemHelpText, {
+    numberOfLines: 2,
+    ref: ref,
+    ...props
   });
 });
 
@@ -82152,7 +82127,7 @@ const tab_Tab = (0,external_wp_element_namespaceObject.forwardRef)(function Tab(
   render,
   ...otherProps
 }, ref) {
-  const context = (0,external_wp_element_namespaceObject.useContext)(TabsContext);
+  const context = useTabsContext();
   if (!context) {
      false ? 0 : void 0;
     return null;
@@ -82237,7 +82212,7 @@ const tabpanel_TabPanel = (0,external_wp_element_namespaceObject.forwardRef)(fun
   focusable = true,
   ...otherProps
 }, ref) {
-  const context = (0,external_wp_element_namespaceObject.useContext)(TabsContext);
+  const context = useTabsContext();
   if (!context) {
      false ? 0 : void 0;
     return null;
@@ -82386,16 +82361,18 @@ function Tabs({
       setSelectedId(null);
     }
   }, [isControlled, selectedId, selectedTab, selectedTabId, setSelectedId]);
+  const contextValue = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    store,
+    instanceId
+  }), [store, instanceId]);
   return (0,external_React_.createElement)(TabsContext.Provider, {
-    value: {
-      store,
-      instanceId
-    }
+    value: contextValue
   }, children);
 }
 Tabs.TabList = TabList;
 Tabs.Tab = tab_Tab;
 Tabs.TabPanel = tabpanel_TabPanel;
+Tabs.Context = TabsContext;
 /* harmony default export */ var tabs = (Tabs);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/private-apis.js
@@ -82447,11 +82424,12 @@ lock(privateApis, {
   Theme: theme,
   DropdownMenuV2Ariakit: dropdown_menu_v2_ariakit_DropdownMenu,
   DropdownMenuGroupV2Ariakit: dropdown_menu_v2_ariakit_DropdownMenuGroup,
-  DropdownMenuGroupLabelV2Ariakit: DropdownMenuGroupLabel,
   DropdownMenuItemV2Ariakit: dropdown_menu_v2_ariakit_DropdownMenuItem,
   DropdownMenuCheckboxItemV2Ariakit: dropdown_menu_v2_ariakit_DropdownMenuCheckboxItem,
   DropdownMenuRadioItemV2Ariakit: dropdown_menu_v2_ariakit_DropdownMenuRadioItem,
-  DropdownMenuSeparatorV2Ariakit: dropdown_menu_v2_ariakit_DropdownMenuSeparator
+  DropdownMenuSeparatorV2Ariakit: dropdown_menu_v2_ariakit_DropdownMenuSeparator,
+  DropdownMenuItemLabelV2Ariakit: DropdownMenuItemLabel,
+  DropdownMenuItemHelpTextV2Ariakit: DropdownMenuItemHelpText
 });
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/index.js

@@ -7,6 +7,5 @@
  */
 
 return array(
-	'buildMode' => 'production',
 	'features' => array( 'adsenseSetupV2','enhancedMeasurement','gm3Components','keyMetrics' ),
 );

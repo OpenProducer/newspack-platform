@@ -1,147 +1,6 @@
 /******/ (function() { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 1919:
-/***/ (function(module) {
-
-"use strict";
-
-
-var isMergeableObject = function isMergeableObject(value) {
-	return isNonNullObject(value)
-		&& !isSpecial(value)
-};
-
-function isNonNullObject(value) {
-	return !!value && typeof value === 'object'
-}
-
-function isSpecial(value) {
-	var stringValue = Object.prototype.toString.call(value);
-
-	return stringValue === '[object RegExp]'
-		|| stringValue === '[object Date]'
-		|| isReactElement(value)
-}
-
-// see https://github.com/facebook/react/blob/b5ac963fb791d1298e7f396236383bc955f916c1/src/isomorphic/classic/element/ReactElement.js#L21-L25
-var canUseSymbol = typeof Symbol === 'function' && Symbol.for;
-var REACT_ELEMENT_TYPE = canUseSymbol ? Symbol.for('react.element') : 0xeac7;
-
-function isReactElement(value) {
-	return value.$$typeof === REACT_ELEMENT_TYPE
-}
-
-function emptyTarget(val) {
-	return Array.isArray(val) ? [] : {}
-}
-
-function cloneUnlessOtherwiseSpecified(value, options) {
-	return (options.clone !== false && options.isMergeableObject(value))
-		? deepmerge(emptyTarget(value), value, options)
-		: value
-}
-
-function defaultArrayMerge(target, source, options) {
-	return target.concat(source).map(function(element) {
-		return cloneUnlessOtherwiseSpecified(element, options)
-	})
-}
-
-function getMergeFunction(key, options) {
-	if (!options.customMerge) {
-		return deepmerge
-	}
-	var customMerge = options.customMerge(key);
-	return typeof customMerge === 'function' ? customMerge : deepmerge
-}
-
-function getEnumerableOwnPropertySymbols(target) {
-	return Object.getOwnPropertySymbols
-		? Object.getOwnPropertySymbols(target).filter(function(symbol) {
-			return Object.propertyIsEnumerable.call(target, symbol)
-		})
-		: []
-}
-
-function getKeys(target) {
-	return Object.keys(target).concat(getEnumerableOwnPropertySymbols(target))
-}
-
-function propertyIsOnObject(object, property) {
-	try {
-		return property in object
-	} catch(_) {
-		return false
-	}
-}
-
-// Protects from prototype poisoning and unexpected merging up the prototype chain.
-function propertyIsUnsafe(target, key) {
-	return propertyIsOnObject(target, key) // Properties are safe to merge if they don't exist in the target yet,
-		&& !(Object.hasOwnProperty.call(target, key) // unsafe if they exist up the prototype chain,
-			&& Object.propertyIsEnumerable.call(target, key)) // and also unsafe if they're nonenumerable.
-}
-
-function mergeObject(target, source, options) {
-	var destination = {};
-	if (options.isMergeableObject(target)) {
-		getKeys(target).forEach(function(key) {
-			destination[key] = cloneUnlessOtherwiseSpecified(target[key], options);
-		});
-	}
-	getKeys(source).forEach(function(key) {
-		if (propertyIsUnsafe(target, key)) {
-			return
-		}
-
-		if (propertyIsOnObject(target, key) && options.isMergeableObject(source[key])) {
-			destination[key] = getMergeFunction(key, options)(target[key], source[key], options);
-		} else {
-			destination[key] = cloneUnlessOtherwiseSpecified(source[key], options);
-		}
-	});
-	return destination
-}
-
-function deepmerge(target, source, options) {
-	options = options || {};
-	options.arrayMerge = options.arrayMerge || defaultArrayMerge;
-	options.isMergeableObject = options.isMergeableObject || isMergeableObject;
-	// cloneUnlessOtherwiseSpecified is added to `options` so that custom arrayMerge()
-	// implementations can use it. The caller may not replace it.
-	options.cloneUnlessOtherwiseSpecified = cloneUnlessOtherwiseSpecified;
-
-	var sourceIsArray = Array.isArray(source);
-	var targetIsArray = Array.isArray(target);
-	var sourceAndTargetTypesMatch = sourceIsArray === targetIsArray;
-
-	if (!sourceAndTargetTypesMatch) {
-		return cloneUnlessOtherwiseSpecified(source, options)
-	} else if (sourceIsArray) {
-		return options.arrayMerge(target, source, options)
-	} else {
-		return mergeObject(target, source, options)
-	}
-}
-
-deepmerge.all = function deepmergeAll(array, options) {
-	if (!Array.isArray(array)) {
-		throw new Error('first argument should be an array')
-	}
-
-	return array.reduce(function(prev, next) {
-		return deepmerge(prev, next, options)
-	}, {})
-};
-
-var deepmerge_1 = deepmerge;
-
-module.exports = deepmerge_1;
-
-
-/***/ }),
-
 /***/ 5619:
 /***/ (function(module) {
 
@@ -9938,10 +9797,8 @@ function isPlainObject(o) {
 
 /** @typedef {import('../api/registration').WPBlockType} WPBlockType */
 
-const {
-  error,
-  warn
-} = window.console;
+const error = (...args) => window?.console?.error?.(...args);
+const warn = (...args) => window?.console?.warn?.(...args);
 
 /**
  * Mapping of legacy category slugs to their latest normal values, used to
@@ -14158,15 +14015,7 @@ function segmentHTMLToShortcodeBlock(HTML, lastIndex = 0, excludedBlockNames = [
 }
 /* harmony default export */ var shortcode_converter = (segmentHTMLToShortcodeBlock);
 
-// EXTERNAL MODULE: ./node_modules/deepmerge/dist/cjs.js
-var cjs = __webpack_require__(1919);
-var cjs_default = /*#__PURE__*/__webpack_require__.n(cjs);
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/raw-handling/utils.js
-/**
- * External dependencies
- */
-
-
 /**
  * WordPress dependencies
  */
@@ -14177,44 +14026,6 @@ var cjs_default = /*#__PURE__*/__webpack_require__.n(cjs);
  */
 
 
-const customMerge = key => {
-  return (srcValue, objValue) => {
-    switch (key) {
-      case 'children':
-        {
-          if (objValue === '*' || srcValue === '*') {
-            return '*';
-          }
-          return {
-            ...objValue,
-            ...srcValue
-          };
-        }
-      case 'attributes':
-      case 'require':
-        {
-          return [...(objValue || []), ...(srcValue || [])];
-        }
-      case 'isMatch':
-        {
-          // If one of the values being merge is undefined (matches everything),
-          // the result of the merge will be undefined.
-          if (!objValue || !srcValue) {
-            return undefined;
-          }
-          // When merging two isMatch functions, the result is a new function
-          // that returns if one of the source functions returns true.
-          return (...args) => {
-            return objValue(...args) || srcValue(...args);
-          };
-        }
-    }
-    return cjs_default()(objValue, srcValue, {
-      customMerge,
-      clone: false
-    });
-  };
-};
 function getBlockContentSchemaFromTransforms(transforms, context) {
   const phrasingContentSchema = (0,external_wp_dom_namespaceObject.getPhrasingContentSchema)(context);
   const schemaArgs = {
@@ -14250,10 +14061,60 @@ function getBlockContentSchemaFromTransforms(transforms, context) {
       }];
     }));
   });
-  return cjs_default().all(schemas, {
-    customMerge,
-    clone: false
-  });
+  function mergeTagNameSchemaProperties(objValue, srcValue, key) {
+    switch (key) {
+      case 'children':
+        {
+          if (objValue === '*' || srcValue === '*') {
+            return '*';
+          }
+          return {
+            ...objValue,
+            ...srcValue
+          };
+        }
+      case 'attributes':
+      case 'require':
+        {
+          return [...(objValue || []), ...(srcValue || [])];
+        }
+      case 'isMatch':
+        {
+          // If one of the values being merge is undefined (matches everything),
+          // the result of the merge will be undefined.
+          if (!objValue || !srcValue) {
+            return undefined;
+          }
+          // When merging two isMatch functions, the result is a new function
+          // that returns if one of the source functions returns true.
+          return (...args) => {
+            return objValue(...args) || srcValue(...args);
+          };
+        }
+    }
+  }
+
+  // A tagName schema is an object with children, attributes, require, and
+  // isMatch properties.
+  function mergeTagNameSchemas(a, b) {
+    for (const key in b) {
+      a[key] = a[key] ? mergeTagNameSchemaProperties(a[key], b[key], key) : {
+        ...b[key]
+      };
+    }
+    return a;
+  }
+
+  // A schema is an object with tagName schemas by tag name.
+  function mergeSchemas(a, b) {
+    for (const key in b) {
+      a[key] = a[key] ? mergeTagNameSchemas(a[key], b[key]) : {
+        ...b[key]
+      };
+    }
+    return a;
+  }
+  return schemas.reduce(mergeSchemas, {});
 }
 
 /**
@@ -14564,13 +14425,6 @@ function msListIgnore(node) {
 
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/raw-handling/ms-list-converter.js
 /**
- * Browser dependencies
- */
-const {
-  parseInt: ms_list_converter_parseInt
-} = window;
-
-/**
  * Internal dependencies
  */
 
@@ -14607,7 +14461,7 @@ function msListConverter(node, doc) {
   // Add content.
   listItem.innerHTML = deepFilterHTML(node.innerHTML, [msListIgnore]);
   const matches = /mso-list\s*:[^;]+level([0-9]+)/i.exec(style);
-  let level = matches ? ms_list_converter_parseInt(matches[1], 10) - 1 || 0 : 0;
+  let level = matches ? parseInt(matches[1], 10) - 1 || 0 : 0;
 
   // Change pointer depending on indentation level.
   while (level--) {
@@ -14638,14 +14492,6 @@ var external_wp_blob_namespaceObject = window["wp"]["blob"];
  * WordPress dependencies
  */
 
-
-/**
- * Browser dependencies
- */
-const {
-  atob,
-  File
-} = window;
 function imageCorrector(node) {
   if (node.nodeName !== 'IMG') {
     return;
@@ -14676,7 +14522,7 @@ function imageCorrector(node) {
       uint8Array[i] = decoded.charCodeAt(i);
     }
     const name = type.replace('/', '.');
-    const file = new File([uint8Array], name, {
+    const file = new window.File([uint8Array], name, {
       type
     });
     node.src = (0,external_wp_blob_namespaceObject.createBlobURL)(file);
@@ -14944,13 +14790,7 @@ function slackParagraphCorrector(node) {
 
 
 
-
-/**
- * Browser dependencies
- */
-const {
-  console: paste_handler_console
-} = window;
+const log = (...args) => window?.console?.log?.(...args);
 
 /**
  * Filters HTML to only contain phrasing content.
@@ -14967,7 +14807,7 @@ function filterInlineHTML(HTML) {
   HTML = deepFilterHTML(HTML, [htmlFormattingRemover, brRemover]);
 
   // Allows us to ask for this information when we get a report.
-  paste_handler_console.log('Processed inline HTML:\n\n', HTML);
+  log('Processed inline HTML:\n\n', HTML);
   return HTML;
 }
 
@@ -15078,7 +14918,7 @@ function pasteHandler({
     piece = deepFilterHTML(piece, [htmlFormattingRemover, brRemover, emptyParagraphRemover], blockContentSchema);
 
     // Allows us to ask for this information when we get a report.
-    paste_handler_console.log('Processed HTML piece:\n\n', piece);
+    log('Processed HTML piece:\n\n', piece);
     return htmlToBlocks(piece, pasteHandler);
   }).flat().filter(Boolean);
 
