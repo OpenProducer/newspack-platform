@@ -321,7 +321,8 @@ function CategorySelector({
     label: (0,external_wp_i18n_namespaceObject.__)('Categories'),
     tokenizeOnBlur: true,
     __experimentalExpandOnFocus: true,
-    __next40pxDefaultSize: true
+    __next40pxDefaultSize: true,
+    __nextHasNoMarginBottom: true
   });
 }
 
@@ -473,19 +474,20 @@ function CreatePatternModal({
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
     spacing: "5"
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
-    __nextHasNoMarginBottom: true,
     label: (0,external_wp_i18n_namespaceObject.__)('Name'),
     value: title,
     onChange: setTitle,
     placeholder: (0,external_wp_i18n_namespaceObject.__)('My pattern'),
-    className: "patterns-create-modal__name-input"
+    className: "patterns-create-modal__name-input",
+    __nextHasNoMarginBottom: true,
+    __next40pxDefaultSize: true
   }), (0,external_React_namespaceObject.createElement)(CategorySelector, {
     categoryTerms: categoryTerms,
     onChange: setCategoryTerms,
     categoryMap: categoryMap
   }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
     label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'Option that makes an individual pattern synchronized'),
-    help: (0,external_wp_i18n_namespaceObject.__)('Editing the pattern will update it anywhere it is used.'),
+    help: (0,external_wp_i18n_namespaceObject.__)('Sync this pattern across multiple locations.'),
     checked: syncType === PATTERN_SYNC_TYPES.full,
     onChange: () => {
       setSyncType(syncType === PATTERN_SYNC_TYPES.full ? PATTERN_SYNC_TYPES.unsynced : PATTERN_SYNC_TYPES.full);
@@ -493,12 +495,14 @@ function CreatePatternModal({
   }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
     justify: "right"
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
     variant: "tertiary",
     onClick: () => {
       onClose();
       setTitle('');
     }
   }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
     variant: "primary",
     type: "submit",
     "aria-disabled": !title || isSaving,
@@ -522,8 +526,8 @@ function CreatePatternModal({
 
 
 function getTermLabels(pattern, categories) {
-  // Theme patterns don't have an id and rely on core pattern categories.
-  if (!pattern.id) {
+  // Theme patterns rely on core pattern categories.
+  if (pattern.type !== PATTERN_TYPES.user) {
     return categories.core?.filter(category => pattern.categories.includes(category.name)).map(category => category.label);
   }
   return categories.user?.filter(category => pattern.wp_pattern_category.includes(category.id)).map(category => category.label);
@@ -552,7 +556,7 @@ function DuplicatePatternModal({
   const duplicatedProps = {
     content: pattern.content,
     defaultCategories: getTermLabels(pattern, categories),
-    defaultSyncType: !pattern.id // Theme patterns don't have an ID.
+    defaultSyncType: pattern.type !== PATTERN_TYPES.user // Theme patterns are unsynced by default.
     ? PATTERN_SYNC_TYPES.unsynced : pattern.wp_pattern_sync_status || PATTERN_SYNC_TYPES.full,
     defaultTitle: (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: Existing pattern title */
     (0,external_wp_i18n_namespaceObject.__)('%s (Copy)'), typeof pattern.title === 'string' ? pattern.title : pattern.title.raw)
@@ -712,14 +716,16 @@ const symbol = (0,external_React_namespaceObject.createElement)(external_wp_prim
 /**
  * Menu control to convert block(s) to a pattern block.
  *
- * @param {Object}   props              Component props.
- * @param {string[]} props.clientIds    Client ids of selected blocks.
- * @param {string}   props.rootClientId ID of the currently selected top-level block.
+ * @param {Object}   props                        Component props.
+ * @param {string[]} props.clientIds              Client ids of selected blocks.
+ * @param {string}   props.rootClientId           ID of the currently selected top-level block.
+ * @param {()=>void} props.closeBlockSettingsMenu Callback to close the block settings menu dropdown.
  * @return {import('react').ComponentType} The menu control or null.
  */
 function PatternConvertButton({
   clientIds,
-  rootClientId
+  rootClientId,
+  closeBlockSettingsMenu
 }) {
   const {
     createSuccessNotice
@@ -777,6 +783,7 @@ function PatternConvertButton({
       });
       replaceBlocks(clientIds, newBlock);
       setEditingPattern(newBlock.clientId, true);
+      closeBlockSettingsMenu();
     }
     createSuccessNotice(pattern.wp_pattern_sync_status === PATTERN_SYNC_TYPES.unsynced ? (0,external_wp_i18n_namespaceObject.sprintf)(
     // translators: %s: the name the user has given to the pattern.
@@ -833,7 +840,6 @@ function PatternsManageButton({
   const {
     canRemove,
     isVisible,
-    innerBlockCount,
     managePatternsUrl
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
@@ -872,7 +878,7 @@ function PatternsManageButton({
   }
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, canRemove && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
     onClick: () => convertSyncedPatternToStatic(clientId)
-  }, innerBlockCount > 1 ? (0,external_wp_i18n_namespaceObject.__)('Detach patterns') : (0,external_wp_i18n_namespaceObject.__)('Detach pattern')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
+  }, (0,external_wp_i18n_namespaceObject.__)('Detach')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
     href: managePatternsUrl
   }, (0,external_wp_i18n_namespaceObject.__)('Manage patterns')));
 }
@@ -894,10 +900,12 @@ function PatternsMenuItems({
   rootClientId
 }) {
   return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockSettingsMenuControls, null, ({
-    selectedClientIds
+    selectedClientIds,
+    onClose
   }) => (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(PatternConvertButton, {
     clientIds: selectedClientIds,
-    rootClientId: rootClientId
+    rootClientId: rootClientId,
+    closeBlockSettingsMenu: onClose
   }), selectedClientIds.length === 1 && (0,external_React_namespaceObject.createElement)(patterns_manage_button, {
     clientId: selectedClientIds[0]
   })));

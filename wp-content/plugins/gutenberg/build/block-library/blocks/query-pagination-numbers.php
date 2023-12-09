@@ -98,7 +98,7 @@ function gutenberg_render_block_core_query_pagination_numbers( $attributes, $con
 				'class_name' => 'page-numbers',
 			)
 		) ) {
-			$p->set_attribute( 'data-wp-on--click', 'actions.core.query.navigate' );
+			$p->set_attribute( 'data-wp-on--click', 'core/query::actions.navigate' );
 		}
 		$content = $p->get_updated_html();
 	}

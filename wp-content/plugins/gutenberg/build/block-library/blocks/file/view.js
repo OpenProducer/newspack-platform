@@ -60,12 +60,10 @@ const createActiveXObject = type => {
  * Internal dependencies
  */
 
-(0,external_wp_interactivity_namespaceObject.store)({
-  selectors: {
-    core: {
-      file: {
-        hasPdfPreview: browserSupportsPdfs
-      }
+(0,external_wp_interactivity_namespaceObject.store)('core/file', {
+  state: {
+    get hasPdfPreview() {
+      return browserSupportsPdfs();
     }
   }
 });
