@@ -224,6 +224,7 @@ body.admin-color-sunrise {
 /* stylelint-enable */
 .components-currency-control .components-input-control__prefix {
   color: #757575;
+  word-break: normal;
 }
 .components-currency-control .components-input-control__input {
   text-align: right;

@@ -260,8 +260,41 @@ body.admin-color-sunrise {
 .woocommerce-edit-downloads-modal__file-url {
   padding-bottom: 24px;
 }
+.woocommerce-edit-downloads-modal__preview {
+  margin-bottom: 16px;
+}
 .woocommerce-edit-downloads-modal .components-input-control__suffix {
   cursor: pointer;
+}
+.woocommerce-edit-downloads-modal .woocommerce-image-gallery,
+.woocommerce-edit-downloads-modal .components-form-file-upload {
+  display: inline-block;
+  vertical-align: middle;
+  padding-right: 16px;
+}
+.woocommerce-edit-downloads-modal .woocommerce-image-gallery p,
+.woocommerce-edit-downloads-modal .components-form-file-upload p {
+  margin-bottom: 4px;
+}
+.woocommerce-edit-downloads-modal .woocommerce-image-gallery button,
+.woocommerce-edit-downloads-modal .components-form-file-upload button {
+  color: var(--wp-admin-theme-color);
+  padding: 0;
+}
+.woocommerce-edit-downloads-modal .woocommerce-image-gallery button:hover:not(.is-busy),
+.woocommerce-edit-downloads-modal .components-form-file-upload button:hover:not(.is-busy) {
+  background: rgba(var(--wp-admin-theme-color--rgb), 0.04);
+}
+.woocommerce-edit-downloads-modal .woocommerce-image-gallery .woocommerce-image-gallery__item,
+.woocommerce-edit-downloads-modal .components-form-file-upload .woocommerce-image-gallery__item {
+  width: 72px;
+  height: 72px;
+}
+.woocommerce-edit-downloads-modal .woocommerce-image-gallery .woocommerce-image-gallery__item img,
+.woocommerce-edit-downloads-modal .components-form-file-upload .woocommerce-image-gallery__item img {
+  width: 72px;
+  height: 72px;
+  border-color: #fff;
 }
 
 .wp-block-woocommerce-product-downloads-field__header {

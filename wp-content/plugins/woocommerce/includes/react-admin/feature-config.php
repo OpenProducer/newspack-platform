@@ -24,7 +24,7 @@ if ( ! function_exists( 'wc_admin_get_feature_config' ) ) {
 			'onboarding' => true,
 			'onboarding-tasks' => true,
 			'product-variation-management' => true,
-			'product-virtual-downloadable' => false,
+			'product-virtual-downloadable' => true,
 			'product-external-affiliate' => false,
 			'remote-inbox-notifications' => true,
 			'remote-free-extensions' => true,

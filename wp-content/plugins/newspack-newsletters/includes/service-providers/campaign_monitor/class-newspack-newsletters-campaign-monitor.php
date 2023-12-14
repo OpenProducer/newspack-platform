@@ -674,4 +674,13 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 			]
 		);
 	}
+
+	/**
+	 * Get usage data for yesterday.
+	 *
+	 * @return Newspack_Newsletters_Service_Provider_Usage_Report|WP_Error
+	 */
+	public function get_usage_report() {
+		return Newspack_Newsletters_Campaign_Monitor_Usage_Reports::get_report();
+	}
 }
