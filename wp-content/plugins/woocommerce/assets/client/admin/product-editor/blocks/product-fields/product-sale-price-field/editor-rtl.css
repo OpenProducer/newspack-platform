@@ -224,6 +224,7 @@ body.admin-color-sunrise {
 /* stylelint-enable */
 .wp-block-woocommerce-product-sale-price-field .components-currency-control .components-input-control__prefix {
   color: #757575;
+  word-break: normal;
 }
 .wp-block-woocommerce-product-sale-price-field .components-currency-control .components-input-control__input {
   text-align: left;

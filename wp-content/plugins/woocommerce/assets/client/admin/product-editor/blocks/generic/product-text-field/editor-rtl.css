@@ -222,3 +222,11 @@ body.admin-color-sunrise {
  */
 /* stylelint-disable block-closing-brace-newline-after */
 /* stylelint-enable */
+.wp-block-woocommerce-product-text-field__suffix-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px;
+  height: 24px;
+  fill: #757575;
+}

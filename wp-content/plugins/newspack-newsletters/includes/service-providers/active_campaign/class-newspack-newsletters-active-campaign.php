@@ -86,7 +86,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 *
 	 * @return object|WP_Error The API response body or WP_Error.
 	 */
-	private function api_v3_request( $resource, $method = 'GET', $options = [] ) {
+	public function api_v3_request( $resource, $method = 'GET', $options = [] ) {
 		if ( ! $this->has_api_credentials() ) {
 			return new \WP_Error(
 				'newspack_newsletters_active_campaign_api_credentials_missing',
@@ -133,7 +133,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 	 *
 	 * @return array|WP_Error The API response body or WP_Error.
 	 */
-	private function api_v1_request( $action, $method = 'GET', $options = [] ) {
+	public function api_v1_request( $action, $method = 'GET', $options = [] ) {
 		if ( ! $this->has_api_credentials() ) {
 			return new \WP_Error(
 				'newspack_newsletters_active_campaign_api_credentials_missing',
@@ -299,7 +299,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 				$result['contactTags']
 			)
 		);
-
 	}
 
 	/**
@@ -406,7 +405,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			'newspack_newsletter_error_adding_tag_to_contact',
 			! empty( $created['message'] ) ? $created['message'] : ''
 		);
-
 	}
 
 	/**
@@ -442,7 +440,6 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			'newspack_newsletter_error_removing_tag_from_contact',
 			! empty( $deleted['message'] ) ? $deleted['message'] : ''
 		);
-
 	}
 
 	/**
@@ -1357,5 +1354,13 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			</p>
 			<?php
 		}
+	}
+
+	/**
+	 * Get usage report.
+	 */
+	public function get_usage_report() {
+		$ac_usage_reports = new Newspack_Newsletters_Active_Campaign_Usage_Reports();
+		return $ac_usage_reports->get_usage_report();
 	}
 }
