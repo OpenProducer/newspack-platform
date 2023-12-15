@@ -1,3 +1,66 @@
+# [2.4.0](https://github.com/Automattic/newspack-blocks/compare/v2.3.0...v2.4.0) (2023-12-11)
+
+
+### Bug Fixes
+
+* modal checkout template markup ([#1608](https://github.com/Automattic/newspack-blocks/issues/1608)) ([4d593db](https://github.com/Automattic/newspack-blocks/commit/4d593db4e80b57570e13db2ed203586bab974fb6))
+* **modal-checkout:** align Stripe's "save payment" checkbox ([#1623](https://github.com/Automattic/newspack-blocks/issues/1623)) ([69e0e42](https://github.com/Automattic/newspack-blocks/commit/69e0e42b3d6f6ab8b1a918346e0d2f8e90eeabcb))
+* **modal-checkout:** prevent initial render of details table ([#1601](https://github.com/Automattic/newspack-blocks/issues/1601)) ([06d4ccd](https://github.com/Automattic/newspack-blocks/commit/06d4ccdc799cb4233a1a85efdbd1264399d85291))
+* replace FILTER_SANITIZE_STRING ([6f805b0](https://github.com/Automattic/newspack-blocks/commit/6f805b0806d24f9e44d293a13ca486fdf23c73ab))
+
+
+### Features
+
+* improve performance of modal checkout ([#1607](https://github.com/Automattic/newspack-blocks/issues/1607)) ([a48d190](https://github.com/Automattic/newspack-blocks/commit/a48d19068cc0fc22d36f6371bdee447f72177ed7))
+* **modal-checkout:** add filter to cart item data ([#1590](https://github.com/Automattic/newspack-blocks/issues/1590)) ([1e83dc1](https://github.com/Automattic/newspack-blocks/commit/1e83dc119aac531db18dbdcc7aaa4c781aa8576e))
+
+
+### Performance Improvements
+
+* **modal-checkout:** process checkout request earlier ([#1612](https://github.com/Automattic/newspack-blocks/issues/1612)) ([5c58f5e](https://github.com/Automattic/newspack-blocks/commit/5c58f5e811bb24098afb093c3a4efbb8efa83d4a))
+
+# [2.4.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v2.3.0...v2.4.0-alpha.1) (2023-12-07)
+
+
+### Bug Fixes
+
+* modal checkout template markup ([#1608](https://github.com/Automattic/newspack-blocks/issues/1608)) ([4d593db](https://github.com/Automattic/newspack-blocks/commit/4d593db4e80b57570e13db2ed203586bab974fb6))
+* **modal-checkout:** align Stripe's "save payment" checkbox ([#1623](https://github.com/Automattic/newspack-blocks/issues/1623)) ([69e0e42](https://github.com/Automattic/newspack-blocks/commit/69e0e42b3d6f6ab8b1a918346e0d2f8e90eeabcb))
+* **modal-checkout:** prevent initial render of details table ([#1601](https://github.com/Automattic/newspack-blocks/issues/1601)) ([06d4ccd](https://github.com/Automattic/newspack-blocks/commit/06d4ccdc799cb4233a1a85efdbd1264399d85291))
+* replace FILTER_SANITIZE_STRING ([6f805b0](https://github.com/Automattic/newspack-blocks/commit/6f805b0806d24f9e44d293a13ca486fdf23c73ab))
+
+
+### Features
+
+* improve performance of modal checkout ([#1607](https://github.com/Automattic/newspack-blocks/issues/1607)) ([a48d190](https://github.com/Automattic/newspack-blocks/commit/a48d19068cc0fc22d36f6371bdee447f72177ed7))
+* **modal-checkout:** add filter to cart item data ([#1590](https://github.com/Automattic/newspack-blocks/issues/1590)) ([1e83dc1](https://github.com/Automattic/newspack-blocks/commit/1e83dc119aac531db18dbdcc7aaa4c781aa8576e))
+
+
+### Performance Improvements
+
+* **modal-checkout:** process checkout request earlier ([#1612](https://github.com/Automattic/newspack-blocks/issues/1612)) ([5c58f5e](https://github.com/Automattic/newspack-blocks/commit/5c58f5e811bb24098afb093c3a4efbb8efa83d4a))
+
+# [2.3.0](https://github.com/Automattic/newspack-blocks/compare/v2.2.4...v2.3.0) (2023-12-07)
+
+
+### Features
+
+* update thank you translation strings in modal checkout ([#1625](https://github.com/Automattic/newspack-blocks/issues/1625)) ([b571c29](https://github.com/Automattic/newspack-blocks/commit/b571c29a00f2d05f88cee75916984372f8fa9b8e))
+
+## [2.2.4](https://github.com/Automattic/newspack-blocks/compare/v2.2.3...v2.2.4) (2023-12-06)
+
+
+### Bug Fixes
+
+* **homepage-posts:** handle empty block when printing inline styles ([#1621](https://github.com/Automattic/newspack-blocks/issues/1621)) ([c3aa957](https://github.com/Automattic/newspack-blocks/commit/c3aa9577c2284f2139c8fa1170785db9fe4edfe9))
+
+## [2.2.3](https://github.com/Automattic/newspack-blocks/compare/v2.2.2...v2.2.3) (2023-12-04)
+
+
+### Bug Fixes
+
+* update selected tier behavior for donate block ([#1617](https://github.com/Automattic/newspack-blocks/issues/1617)) ([8a9a76f](https://github.com/Automattic/newspack-blocks/commit/8a9a76fb970ffac6f00f67f83a17a931a169c103))
+
 ## [2.2.2](https://github.com/Automattic/newspack-blocks/compare/v2.2.1...v2.2.2) (2023-11-29)
 
 

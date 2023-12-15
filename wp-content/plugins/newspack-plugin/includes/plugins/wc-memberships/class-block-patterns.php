@@ -24,8 +24,13 @@ class Block_Patterns {
 	 * Enqueue styles.
 	 */
 	public static function enqueue_styles() {
-		// Bail if Woo Memberships is not active.
-		if ( ! class_exists( 'WC_Memberships' ) ) {
+		$should_enqueue_styles = class_exists( 'WC_Memberships' );
+		/**
+		 * Filters whether to enqueue the reader auth scripts.
+		 *
+		 * @param bool $should_enqueue_styles Whether to enqueue the reader auth scripts.
+		 */
+		if ( ! apply_filters( 'newspack_enqueue_memberships_block_patterns', $should_enqueue_styles ) ) {
 			return false;
 		}
 		wp_enqueue_style(

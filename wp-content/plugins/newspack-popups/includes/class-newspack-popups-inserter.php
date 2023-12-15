@@ -8,7 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 /**
- * API endpoints
+ * Popups Inserter class.
  */
 final class Newspack_Popups_Inserter {
 	/**
@@ -325,7 +325,7 @@ final class Newspack_Popups_Inserter {
 					$next_block               = $parsed_blocks[ $next_index ];
 					$group_blocks[]           = $next_block;
 					$grouped_blocks_indexes[] = $next_index;
-					$next_index ++;
+					$next_index++;
 					$index_in_group++;
 				}
 				// Always insert the initial block in the group (if the index in group was not incremented, this is the initial block).

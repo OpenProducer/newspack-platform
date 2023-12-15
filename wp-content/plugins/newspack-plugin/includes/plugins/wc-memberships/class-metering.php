@@ -112,6 +112,7 @@ class Metering {
 				'gate_id'            => $gate_post_id,
 				'post_id'            => get_the_ID(),
 				'article_view'       => self::$article_view,
+				'excerpt'            => Memberships::get_restricted_post_excerpt( get_post() ),
 			]
 		);
 	}

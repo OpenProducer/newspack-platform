@@ -176,11 +176,29 @@ final class Webhooks {
 	}
 
 	/**
+	 * Whether to use Action Scheduler if available.
+	 *
+	 * @return bool
+	 */
+	private static function use_action_scheduler() {
+		$use_action_scheduler = false;
+		if ( function_exists( 'as_enqueue_async_action' ) ) {
+			$use_action_scheduler = true;
+		}
+		/**
+		 * Filters whether to use the Action Scheduler if available.
+		 *
+		 * @param bool $use_action_scheduler
+		 */
+		return \apply_filters( 'newspack_data_events_use_action_scheduler', $use_action_scheduler );
+	}
+
+	/**
 	 * Send webhook requests that should've been sent but are still pending at
 	 * 'future' status.
 	 */
 	public static function send_late_requests() {
-		if ( Data_Events::use_action_scheduler() ) {
+		if ( self::use_action_scheduler() ) {
 			return;
 		}
 		$requests = \get_posts(
@@ -602,7 +620,7 @@ final class Webhooks {
 			self::REQUEST_POST_TYPE === $post->post_type &&
 			'publish' === $new_status &&
 			'publish' !== $old_status &&
-			! Data_Events::use_action_scheduler()
+			! self::use_action_scheduler()
 		) {
 			self::process_request( $post->ID );
 		}
@@ -635,7 +653,7 @@ final class Webhooks {
 		$date     = date( 'Y-m-d H:i:s', $time ); // phpcs:ignore WordPress.DateTime.RestrictedFunctions.date_date
 		$date_gmt = gmdate( 'Y-m-d H:i:s', strtotime( $date ) );
 		\update_post_meta( $request_id, 'scheduled', $time );
-		if ( Data_Events::use_action_scheduler() ) {
+		if ( self::use_action_scheduler() ) {
 			Logger::log( "Scheduling request {$request_id} for {$date_gmt} via Action Scheduler.", self::LOGGER_HEADER );
 			\as_schedule_single_action( $time, 'newspack_webhooks_as_process_request', [ $request_id ], 'newspack-data-events' );
 		} else {
@@ -661,7 +679,7 @@ final class Webhooks {
 		Logger::log( "Finishing request {$request_id}.", self::LOGGER_HEADER );
 		\update_post_meta( $request_id, 'status', 'finished' );
 		// If using ActionScheduler, manually set to publish.
-		if ( Data_Events::use_action_scheduler() ) {
+		if ( self::use_action_scheduler() ) {
 			\wp_publish_post( $request_id );
 		}
 	}

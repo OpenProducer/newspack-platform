@@ -186,7 +186,20 @@ class Newspack_Popups_Settings {
 	 * @param string $key Key name.
 	 */
 	public static function get_setting( $key ) {
-		return get_option( $key, true );
+		$settings = self::get_settings();
+		foreach ( $settings as $setting ) {
+			if ( $key === $setting['key'] ) {
+				return $setting['value'];
+			}
+		}
+		return new \WP_Error(
+			'newspack_popups_settings_error',
+			sprintf(
+				// Translators: Invalid settings key error.
+				__( 'Invalid settings key: %s', 'newpack-popups' ),
+				$key
+			)
+		);
 	}
 
 	/**
@@ -231,7 +244,7 @@ class Newspack_Popups_Settings {
 
 		$settings_list = [
 			[
-				'description' => __( 'Donor Settings', 'newspack-ads' ),
+				'description' => __( 'Donor Settings', 'newspack-popups' ),
 				'help'        => __( 'Configure when readers are considered donors.', 'newspack-ads' ),
 				'section'     => 'donor_settings',
 				'key'         => 'active',
@@ -339,6 +352,9 @@ class Newspack_Popups_Settings {
 			$settings_list = array_reduce(
 				$settings_list,
 				function ( $carry, $item ) {
+					if ( ! isset( $carry[ $item['section'] ] ) ) {
+						$carry[ $item['section'] ] = [];
+					}
 					$carry[ $item['section'] ][] = $item;
 					return $carry;
 				},

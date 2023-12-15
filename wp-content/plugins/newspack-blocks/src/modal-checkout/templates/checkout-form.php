@@ -24,9 +24,9 @@ $form_class          = 'checkout woocommerce-checkout';
 $form_method         = $edit_billing ? 'get' : 'post';
 $form_billing_fields = \Newspack_Blocks\Modal_Checkout::get_prefilled_fields();
 
-$after_success_behavior     = filter_input( INPUT_GET, 'after_success_behavior', FILTER_SANITIZE_STRING );
-$after_success_url          = filter_input( INPUT_GET, 'after_success_url', FILTER_SANITIZE_STRING );
-$after_success_button_label = filter_input( INPUT_GET, 'after_success_button_label', FILTER_SANITIZE_STRING );
+$after_success_behavior     = filter_input( INPUT_GET, 'after_success_behavior', FILTER_SANITIZE_SPECIAL_CHARS );
+$after_success_url          = filter_input( INPUT_GET, 'after_success_url', FILTER_SANITIZE_SPECIAL_CHARS );
+$after_success_button_label = filter_input( INPUT_GET, 'after_success_button_label', FILTER_SANITIZE_SPECIAL_CHARS );
 
 if ( $edit_billing ) {
 	$form_class .= ' edit-billing';

@@ -31,7 +31,7 @@ final class Modal_Checkout {
 	 * Initialize hooks.
 	 */
 	public static function init() {
-		add_action( 'template_redirect', [ __CLASS__, 'process_checkout_request' ] );
+		add_action( 'wp_loaded', [ __CLASS__, 'process_checkout_request' ], 5 );
 		add_action( 'wp_footer', [ __CLASS__, 'render_modal_markup' ], 100 );
 		add_action( 'wp_footer', [ __CLASS__, 'render_variation_selection' ], 100 );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
@@ -51,6 +51,21 @@ final class Modal_Checkout {
 		add_filter( 'wcs_place_subscription_order_text', [ __CLASS__, 'order_button_text' ], 1 );
 		add_filter( 'woocommerce_order_button_text', [ __CLASS__, 'order_button_text' ] );
 		add_filter( 'option_woocommerce_subscriptions_order_button_text', [ __CLASS__, 'order_button_text' ] );
+
+		// Remove some stuff from the modal checkout page. It's displayed in an iframe, so it should not be treated as a separate page.
+		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'dequeue_scripts' ], 11 );
+		add_filter( 'newspack_reader_activation_should_render_auth', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+		add_filter( 'newspack_enqueue_reader_activation_block', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+		add_filter( 'newspack_enqueue_memberships_block_patterns', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+		add_filter( 'newspack_ads_should_show_ads', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+		add_filter( 'newspack_theme_enqueue_js', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+		add_filter( 'newspack_theme_enqueue_print_styles', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+		add_filter( 'cmplz_site_needs_cookiewarning', [ __CLASS__, 'is_not_modal_checkout_filter' ] );
+		add_filter( 'googlesitekit_analytics_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
+		add_filter( 'googlesitekit_analytics-4_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
+		add_filter( 'googlesitekit_adsense_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
+		add_filter( 'googlesitekit_tagmanager_tag_blocked', [ __CLASS__, 'is_modal_checkout' ] );
+		add_filter( 'jetpack_active_modules', [ __CLASS__, 'jetpack_active_modules' ] );
 	}
 
 	/**
@@ -133,12 +148,16 @@ final class Modal_Checkout {
 	 * Process checkout request for modal.
 	 */
 	public static function process_checkout_request() {
+		if ( is_admin() ) {
+			return;
+		}
+
 		$is_newspack_checkout       = filter_input( INPUT_GET, 'newspack_checkout', FILTER_SANITIZE_NUMBER_INT );
 		$product_id                 = filter_input( INPUT_GET, 'product_id', FILTER_SANITIZE_NUMBER_INT );
 		$variation_id               = filter_input( INPUT_GET, 'variation_id', FILTER_SANITIZE_NUMBER_INT );
-		$after_success_behavior     = filter_input( INPUT_GET, 'after_success_behavior', FILTER_SANITIZE_STRING );
-		$after_success_url          = filter_input( INPUT_GET, 'after_success_url', FILTER_SANITIZE_STRING );
-		$after_success_button_label = filter_input( INPUT_GET, 'after_success_button_label', FILTER_SANITIZE_STRING );
+		$after_success_behavior     = filter_input( INPUT_GET, 'after_success_behavior', FILTER_SANITIZE_SPECIAL_CHARS );
+		$after_success_url          = filter_input( INPUT_GET, 'after_success_url', FILTER_SANITIZE_SPECIAL_CHARS );
+		$after_success_button_label = filter_input( INPUT_GET, 'after_success_button_label', FILTER_SANITIZE_SPECIAL_CHARS );
 
 		if ( ! $is_newspack_checkout || ! $product_id ) {
 			return;
@@ -211,6 +230,13 @@ final class Modal_Checkout {
 				$cart_item_data['nyp'] = (float) \WC_Name_Your_Price_Helpers::standardize_number( $price );
 			}
 		}
+
+		/**
+		 * Filters the cart item data for the modal checkout.
+		 *
+		 * @param array $cart_item_data Cart item data.
+		 */
+		$cart_item_data = apply_filters( 'newspack_blocks_modal_checkout_cart_item_data', $cart_item_data );
 
 		\WC()->cart->add_to_cart( $product_id, 1, 0, [], $cart_item_data );
 
@@ -344,6 +370,18 @@ final class Modal_Checkout {
 	}
 
 	/**
+	 * Dequeue scripts not needed in the modal checkout.
+	 */
+	public static function dequeue_scripts() {
+		if ( ! self::is_modal_checkout() ) {
+			return;
+		}
+		wp_dequeue_style( 'cmplz-general' );
+		wp_deregister_script( 'wp-mediaelement' );
+		wp_deregister_style( 'wp-mediaelement' );
+	}
+
+	/**
 	 * Enqueue script for triggering modal checkout.
 	 *
 	 * @param int $product_id Product ID (optional).
@@ -386,14 +424,23 @@ final class Modal_Checkout {
 			return $template;
 		}
 		ob_start();
-		wp_head();
-		while ( have_posts() ) {
-			the_post();
-			echo '<div id="newspack_modal_checkout">';
-			the_content();
-			echo '</div>';
-		}
-		wp_footer();
+		?>
+		<!doctype html>
+		<html <?php language_attributes(); ?>>
+		<head>
+			<meta charset="<?php bloginfo( 'charset' ); ?>" />
+			<meta name="viewport" content="width=device-width, initial-scale=1" />
+			<link rel="profile" href="https://gmpg.org/xfn/11" />
+			<?php wp_head(); ?>
+		</head>
+		<body id="newspack_modal_checkout">
+			<?php
+			echo do_shortcode( '[woocommerce_checkout]' );
+			wp_footer();
+			?>
+		</body>
+		</html>
+		<?php
 		ob_end_flush();
 	}
 
@@ -480,6 +527,12 @@ final class Modal_Checkout {
 			if ( $template_name === $original_template ) {
 				$located = NEWSPACK_BLOCKS__PLUGIN_DIR . $custom_template;
 			}
+		}
+
+		// This is for the initial display – the markup will be refetched on cart updates (e.g. applying a coupon).
+		// Then it'd be handled by the `woocommerce_update_order_review_fragments` filter.
+		if ( 'checkout/review-order.php' === $template_name && ! self::should_show_order_details() ) {
+			$located = NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/modal-checkout/templates/empty-order-details.php';
 		}
 
 		return $located;
@@ -918,6 +971,30 @@ final class Modal_Checkout {
 			return __( 'Donate now', 'newspack-blocks' );
 		}
 		return $text;
+	}
+
+	/**
+	 * Filter the a value dependent on the page not being modal checkout.
+	 *
+	 * @param bool $value The value.
+	 */
+	public static function is_not_modal_checkout_filter( $value ) {
+		if ( self::is_modal_checkout() ) {
+			return false;
+		}
+		return $value;
+	}
+
+	/**
+	 * Deactivate all Jetpack modules on the modal checkout.
+	 *
+	 * @param bool $modules JP modules.
+	 */
+	public static function jetpack_active_modules( $modules ) {
+		if ( self::is_modal_checkout() ) {
+			return [];
+		}
+		return $modules;
 	}
 }
 Modal_Checkout::init();

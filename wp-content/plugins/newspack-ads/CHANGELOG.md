@@ -1,3 +1,39 @@
+# [1.45.0](https://github.com/Automattic/newspack-ads/compare/v1.44.7...v1.45.0) (2023-12-11)
+
+
+### Bug Fixes
+
+* **gam:** parse targeting site url ([#777](https://github.com/Automattic/newspack-ads/issues/777)) ([034716a](https://github.com/Automattic/newspack-ads/commit/034716acbc36325a61e745348001e04a5ddd46bb))
+
+
+### Features
+
+* **gam:** support custom "site" targeting key-val ([#770](https://github.com/Automattic/newspack-ads/issues/770)) ([fc1a8b2](https://github.com/Automattic/newspack-ads/commit/fc1a8b2252d6749509890b275a1869b2ca2e4171))
+* **gam:** support custom type for targeting key-val ([#766](https://github.com/Automattic/newspack-ads/issues/766)) ([c64c01c](https://github.com/Automattic/newspack-ads/commit/c64c01cc8e6e130202a6f02ef726cde9501913aa))
+* **perf:** don't enqueue CSS if ads are not to be displayed ([2c70480](https://github.com/Automattic/newspack-ads/commit/2c70480684d172200dbe66b44269009a8f18eb4b))
+
+# [1.45.0-alpha.3](https://github.com/Automattic/newspack-ads/compare/v1.45.0-alpha.2...v1.45.0-alpha.3) (2023-12-08)
+
+
+### Bug Fixes
+
+* **gam:** parse targeting site url ([#777](https://github.com/Automattic/newspack-ads/issues/777)) ([034716a](https://github.com/Automattic/newspack-ads/commit/034716acbc36325a61e745348001e04a5ddd46bb))
+
+# [1.45.0-alpha.2](https://github.com/Automattic/newspack-ads/compare/v1.45.0-alpha.1...v1.45.0-alpha.2) (2023-12-01)
+
+
+### Features
+
+* **gam:** support custom "site" targeting key-val ([#770](https://github.com/Automattic/newspack-ads/issues/770)) ([fc1a8b2](https://github.com/Automattic/newspack-ads/commit/fc1a8b2252d6749509890b275a1869b2ca2e4171))
+
+# [1.45.0-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.44.7...v1.45.0-alpha.1) (2023-11-30)
+
+
+### Features
+
+* **gam:** support custom type for targeting key-val ([#766](https://github.com/Automattic/newspack-ads/issues/766)) ([c64c01c](https://github.com/Automattic/newspack-ads/commit/c64c01cc8e6e130202a6f02ef726cde9501913aa))
+* **perf:** don't enqueue CSS if ads are not to be displayed ([2c70480](https://github.com/Automattic/newspack-ads/commit/2c70480684d172200dbe66b44269009a8f18eb4b))
+
 ## [1.44.7](https://github.com/Automattic/newspack-ads/compare/v1.44.6...v1.44.7) (2023-10-31)
 
 

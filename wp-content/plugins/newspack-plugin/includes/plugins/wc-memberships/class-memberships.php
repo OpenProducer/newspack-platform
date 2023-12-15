@@ -28,7 +28,7 @@ class Memberships {
 	/**
 	 * Membership statuses that should grant access to restricted content.
 	 * See: https://woocommerce.com/document/woocommerce-memberships-user-memberships/#section-4
-	 * 
+	 *
 	 * @var array
 	 */
 	public static $active_statuses = [ 'active', 'complimentary', 'free-trial', 'pending' ];
@@ -195,25 +195,20 @@ class Memberships {
 		if ( ! is_singular() || ! self::is_post_restricted() ) {
 			return;
 		}
-		$gate_post_id = self::get_gate_post_id();
-		$style        = \get_post_meta( $gate_post_id, 'style', true );
-		if ( 'overlay' !== $style ) {
-			return;
-		}
-		$handle = 'newspack-memberships-gate-overlay';
+		$handle = 'newspack-memberships-gate';
 		\wp_enqueue_script(
 			$handle,
-			Newspack::plugin_url() . '/dist/memberships-gate-overlay.js',
+			Newspack::plugin_url() . '/dist/memberships-gate.js',
 			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate-overlay.js' ),
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate.js' ),
 			true
 		);
 		\wp_script_add_data( $handle, 'async', true );
 		\wp_enqueue_style(
 			$handle,
-			Newspack::plugin_url() . '/dist/memberships-gate-overlay.css',
+			Newspack::plugin_url() . '/dist/memberships-gate.css',
 			[],
-			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate-overlay.css' )
+			filemtime( dirname( NEWSPACK_PLUGIN_FILE ) . '/dist/memberships-gate.css' )
 		);
 	}
 
@@ -598,6 +593,17 @@ class Memberships {
 		if ( get_queried_object_id() !== $post->ID ) {
 			return $excerpt;
 		}
+		return self::get_restricted_post_excerpt( $post );
+	}
+
+	/**
+	 * Get the post excerpt to be displayed in the gate.
+	 *
+	 * @param WP_Post $post Post object.
+	 *
+	 * @return string
+	 */
+	public static function get_restricted_post_excerpt( $post ) {
 		$gate_post_id = self::get_gate_post_id();
 
 		$content = $post->post_content;

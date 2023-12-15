@@ -32,6 +32,7 @@ return array(
     'Newspack\\Data_Events\\Connectors\\GA4' => $baseDir . '/includes/data-events/connectors/ga4/class-ga4.php',
     'Newspack\\Data_Events\\Connectors\\GA4\\Event' => $baseDir . '/includes/data-events/connectors/ga4/class-event.php',
     'Newspack\\Data_Events\\Connectors\\Mailchimp' => $baseDir . '/includes/data-events/connectors/class-mailchimp.php',
+    'Newspack\\Data_Events\\Memberships' => $baseDir . '/includes/data-events/class-memberships.php',
     'Newspack\\Data_Events\\Popups' => $baseDir . '/includes/data-events/class-popups.php',
     'Newspack\\Data_Events\\Webhooks' => $baseDir . '/includes/data-events/class-webhooks.php',
     'Newspack\\Data_Events\\Woo_User_Registration' => $baseDir . '/includes/data-events/class-woo-user-registration.php',

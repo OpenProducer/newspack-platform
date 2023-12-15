@@ -182,7 +182,7 @@ class Mailchimp_API {
 			return $response;
 		}
 		$parsed_response = json_decode( $response['body'], true );
-		if ( 200 !== \wp_remote_retrieve_response_code( $response ) ) {
+		if ( $parsed_response && 200 !== \wp_remote_retrieve_response_code( $response ) ) {
 			return new \WP_Error(
 				'newspack_mailchimp_api',
 				array_key_exists( 'title', $parsed_response ) ? $parsed_response['title'] : __( 'Request failed.', 'newspack' )
@@ -224,6 +224,18 @@ class Mailchimp_API {
 	 */
 	public static function post( $path = '', $data = [] ) {
 		return self::request( 'POST', $path, $data );
+	}
+
+	/**
+	 * Perform a DELETE request to Mailchimp's API
+	 *
+	 * @param string $path API path.
+	 * @param array  $data Data to send.
+	 *
+	 * @return array|WP_Error API response or error.
+	 */
+	public static function delete( $path = '', $data = [] ) {
+		return self::request( 'DELETE', $path, $data );
 	}
 }
 

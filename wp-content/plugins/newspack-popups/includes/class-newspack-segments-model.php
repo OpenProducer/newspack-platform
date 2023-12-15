@@ -381,7 +381,78 @@ final class Newspack_Segments_Model {
 			);
 		}
 
+		// Compute a criteria hash, so duplicate criteria sets can be found.
+		$segments = array_map(
+			function( $segment ) {
+				$segment['criteria_hash'] = md5( wp_json_encode( $segment['criteria'] ) );
+				return $segment;
+			},
+			$segments
+		);
+		// Mark segments as duplicate if any of the preceding (in priority) segments have the same criteria hash.
+		$segments = array_map(
+			function( $segment ) use ( $segments ) {
+				$preceding_segments                = array_filter(
+					$segments,
+					function( $s ) use ( $segment ) {
+						return $s['priority'] < $segment['priority'];
+					}
+				);
+				$segment['is_criteria_duplicated'] = count(
+					array_filter(
+						$preceding_segments,
+						function( $s ) use ( $segment ) {
+							return $s['criteria_hash'] === $segment['criteria_hash'];
+						}
+					)
+				) >= 1;
+				return $segment;
+			},
+			$segments
+		);
+
 		return $segments;
+	}
+
+	/**
+	 * Get the ids of prompts assigned to a segment.
+	 *
+	 * @param int $segment_id The segment ID.
+	 */
+	private static function get_segment_prompts_ids( $segment_id ) {
+		return get_posts(
+			[
+				'post_type'      => Newspack_Popups::NEWSPACK_POPUPS_CPT,
+				'fields'         => 'ids',
+				'posts_per_page' => -1,
+				'tax_query'      => [ // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_tax_query
+					[
+						'taxonomy' => self::TAX_SLUG,
+						'field'    => 'term_id',
+						'terms'    => (int) $segment_id,
+					],
+				],
+			]
+		);
+	}
+
+	/**
+	 * Remove duplicated segments, if there are no active prompts using them.
+	 * This is to be used from the CLI, but the issue is uncommon enough that it
+	 * does not warrant a TUI: just do `$ wp eval "\Newspack_Segments_Model::remove_duplicates();"`.
+	 */
+	public static function remove_duplicates() {
+		foreach ( self::get_segments() as $segment ) {
+			if ( $segment['is_criteria_duplicated'] ) {
+				$assigned_prompts_count = count( self::get_segment_prompts_ids( $segment['id'] ) );
+				if ( 0 === $assigned_prompts_count ) {
+					Newspack_Popups_Logger::log( sprintf( 'Segment "%s" is duplicated, it will be removed.', $segment['name'] ) );
+					self::delete_segment( $segment['id'] );
+				} else {
+					Newspack_Popups_Logger::log( sprintf( 'Segment "%s" is duplicated, but has %d active prompts assigned, it will *not* be removed.', $segment['name'], $assigned_prompts_count ) );
+				}
+			}
+		}
 	}
 
 	/**

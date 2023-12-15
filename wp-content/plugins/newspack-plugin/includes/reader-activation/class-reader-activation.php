@@ -95,6 +95,15 @@ final class Reader_Activation {
 	 * Enqueue front-end scripts.
 	 */
 	public static function enqueue_scripts() {
+		/**
+		 * Filters whether to enqueue the reader auth scripts.
+		 *
+		 * @param bool $allow_reg_block_render Whether to allow the registration block to render.
+		 */
+		if ( ! apply_filters( 'newspack_reader_activation_should_render_auth', true ) ) {
+			return;
+		}
+
 		$authenticated_email = '';
 		if ( \is_user_logged_in() && self::is_user_reader( \wp_get_current_user() ) ) {
 			$authenticated_email = \wp_get_current_user()->user_email;
@@ -317,20 +326,27 @@ final class Reader_Activation {
 		$use_custom_lists = self::get_setting( 'use_custom_lists' );
 		$available_lists  = \Newspack_Newsletters_Subscription::get_lists_config();
 		if ( ! $use_custom_lists ) {
-			return $available_lists;
-		}
-		$lists = self::get_setting( 'newsletter_lists' );
-		if ( empty( $lists ) ) {
-			return [];
-		}
-		$registration_lists = [];
-		foreach ( $lists as $list ) {
-			if ( isset( $available_lists[ $list['id'] ] ) ) {
-				$registration_lists[ $list['id'] ]            = $available_lists[ $list['id'] ];
-				$registration_lists[ $list['id'] ]['checked'] = $list['checked'] ?? false;
+			$registration_lists = $available_lists;
+		} else {
+			$lists = self::get_setting( 'newsletter_lists' );
+			if ( empty( $lists ) ) {
+				return [];
+			}
+			$registration_lists = [];
+			foreach ( $lists as $list ) {
+				if ( isset( $available_lists[ $list['id'] ] ) ) {
+					$registration_lists[ $list['id'] ]            = $available_lists[ $list['id'] ];
+					$registration_lists[ $list['id'] ]['checked'] = $list['checked'] ?? false;
+				}
 			}
 		}
-		return $registration_lists;
+
+		/**
+		 * Filters the newsletters lists that should be rendered during registration.
+		 *
+		 * @param array $registration_lists Array of newsletter lists.
+		 */
+		return apply_filters( 'newspack_registration_newsletters_lists', $registration_lists );
 	}
 
 	/**
@@ -1003,6 +1019,14 @@ final class Reader_Activation {
 	 * @param boolean $is_inline If true, render the form inline, otherwise render as a modal.
 	 */
 	public static function render_auth_form( $is_inline = false ) {
+		/**
+		 * Filters whether to render reader auth form.
+		 *
+		 * @param bool $should_render Whether to render reader auth form.
+		 */
+		if ( ! apply_filters( 'newspack_reader_activation_should_render_auth', true ) ) {
+			return;
+		}
 		// No need to render if RAS is disabled and not a preview request.
 		if ( ! self::allow_reg_block_render() ) {
 			return;
@@ -1042,6 +1066,8 @@ final class Reader_Activation {
 		$terms_url       = self::get_setting( 'terms_url' );
 		$is_account_page = function_exists( '\wc_get_page_id' ) ? \get_the_ID() === \wc_get_page_id( 'myaccount' ) : false;
 		$redirect        = $is_account_page ? \wc_get_account_endpoint_url( 'dashboard' ) : '';
+		$referer         = \wp_parse_url( \wp_get_referer() );
+		global $wp;
 		?>
 		<div class="<?php echo \esc_attr( implode( ' ', $classnames ) ); ?>" data-labels="<?php echo \esc_attr( htmlspecialchars( \wp_json_encode( $labels ), ENT_QUOTES, 'UTF-8' ) ); ?>">
 			<div class="<?php echo \esc_attr( $class( 'wrapper' ) ); ?>">
@@ -1055,6 +1081,9 @@ final class Reader_Activation {
 				<div class="<?php echo \esc_attr( $class( 'content' ) ); ?>">
 					<form method="post" target="_top">
 						<input type="hidden" name="<?php echo \esc_attr( self::AUTH_FORM_ACTION ); ?>" value="1" />
+						<?php if ( ! empty( $referer['path'] ) ) : ?>
+							<input type="hidden" name="referer" value="<?php echo \esc_url( $referer['path'] ); ?>" />
+						<?php endif; ?>
 						<input type="hidden" name="action" value="pwd" />
 						<div class="<?php echo \esc_attr( $class( 'have-account' ) ); ?>">
 							<a href="#" data-action="pwd link" data-set-action="register"><?php \esc_html_e( "I don't have an account", 'newspack-plugin' ); ?></a>
@@ -1394,13 +1423,15 @@ final class Reader_Activation {
 		if ( ! isset( $_POST[ self::AUTH_FORM_ACTION ] ) ) {
 			return;
 		}
-		$action        = isset( $_POST['action'] ) ? \sanitize_text_field( $_POST['action'] ) : '';
-		$email         = isset( $_POST['npe'] ) ? \sanitize_email( $_POST['npe'] ) : '';
-		$password      = isset( $_POST['password'] ) ? \sanitize_text_field( $_POST['password'] ) : '';
-		$redirect      = isset( $_POST['redirect'] ) ? \esc_url_raw( $_POST['redirect'] ) : '';
-		$lists         = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : [];
-		$honeypot      = isset( $_POST['email'] ) ? \sanitize_text_field( $_POST['email'] ) : '';
-		$captcha_token = isset( $_POST['captcha_token'] ) ? \sanitize_text_field( $_POST['captcha_token'] ) : '';
+		$action           = isset( $_POST['action'] ) ? \sanitize_text_field( $_POST['action'] ) : '';
+		$referer          = isset( $_POST['referer'] ) ? \sanitize_text_field( $_POST['referer'] ) : '';
+		$current_page_url = \wp_parse_url( \wp_get_raw_referer() ); // Referer is the current page URL because the form is submitted via AJAX.
+		$email            = isset( $_POST['npe'] ) ? \sanitize_email( $_POST['npe'] ) : '';
+		$password         = isset( $_POST['password'] ) ? \sanitize_text_field( $_POST['password'] ) : '';
+		$redirect         = isset( $_POST['redirect'] ) ? \esc_url_raw( $_POST['redirect'] ) : '';
+		$lists            = isset( $_POST['lists'] ) ? array_map( 'sanitize_text_field', $_POST['lists'] ) : [];
+		$honeypot         = isset( $_POST['email'] ) ? \sanitize_text_field( $_POST['email'] ) : '';
+		$captcha_token    = isset( $_POST['captcha_token'] ) ? \sanitize_text_field( $_POST['captcha_token'] ) : '';
 		// phpcs:enable
 
 		// Honeypot trap.
@@ -1460,13 +1491,19 @@ final class Reader_Activation {
 			case 'link':
 				$sent = Magic_Link::send_email( $user );
 				if ( true !== $sent ) {
-					return self::send_auth_form_response( new \WP_Error( 'unauthorized', __( 'We encountered an error sending an authentication link. Please try again.', 'newspack-plugin' ) ) );
+					return self::send_auth_form_response( new \WP_Error( 'unauthorized', \is_wp_error( $sent ) ? $sent->get_error_message() : __( 'We encountered an error sending an authentication link. Please try again.', 'newspack-plugin' ) ) );
 				}
 				return self::send_auth_form_response( $payload, __( 'Please check your inbox for an authentication link.', 'newspack-plugin' ), $redirect );
 			case 'register':
-				$metadata = [];
+				$metadata = [ 'registration_method' => 'auth-form' ];
 				if ( ! empty( $lists ) ) {
 					$metadata['lists'] = $lists;
+				}
+				if ( ! empty( $referer ) ) {
+					$metadata['referer'] = \esc_url( $referer );
+				}
+				if ( ! empty( $current_page_url['path'] ) ) {
+					$metadata['current_page_url'] = \esc_url( \home_url( $current_page_url['path'] ) );
 				}
 				$user_id = self::register_reader( $email, '', true, $metadata );
 				if ( false === $user_id ) {
@@ -1629,6 +1666,15 @@ final class Reader_Activation {
 				self::set_current_reader( $user_id );
 			}
 		}
+
+		/**
+		 * Filters the metadata to pass along to the action hook.
+		 *
+		 * @param array          $metadata      Metadata.
+		 * @param int|false      $user_id       The created user id or false if the user already exists.
+		 * @param false|\WP_User $existing_user The existing user object.
+		 */
+		$metadata = apply_filters( 'newspack_register_reader_metadata', $metadata, $user_id, $existing_user );
 
 		// Note the user's login method for later use.
 		if ( isset( $metadata['registration_method'] ) ) {

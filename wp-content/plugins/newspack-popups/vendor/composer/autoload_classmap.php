@@ -23,6 +23,7 @@ return array(
     'Newspack_Popups_Exporter' => $baseDir . '/includes/class-newspack-popups-exporter.php',
     'Newspack_Popups_Importer' => $baseDir . '/includes/class-newspack-popups-importer.php',
     'Newspack_Popups_Inserter' => $baseDir . '/includes/class-newspack-popups-inserter.php',
+    'Newspack_Popups_Logger' => $baseDir . '/includes/class-newspack-popups-logger.php',
     'Newspack_Popups_Model' => $baseDir . '/includes/class-newspack-popups-model.php',
     'Newspack_Popups_Presets' => $baseDir . '/includes/class-newspack-popups-presets.php',
     'Newspack_Popups_Segmentation' => $baseDir . '/includes/class-newspack-popups-segmentation.php',

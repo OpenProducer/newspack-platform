@@ -28,6 +28,8 @@ final class Magic_Link {
 	const AUTH_ACTION_RESULT = 'np_auth_link_result';
 	const COOKIE             = 'np_auth_link';
 
+	const RATE_INTERVAL = 60; // Interval in seconds to rate limit token generation.
+
 	const OTP_LENGTH       = 6;
 	const OTP_MAX_ATTEMPTS = 5;
 	const OTP_AUTH_ACTION  = 'np_otp_auth';
@@ -346,10 +348,14 @@ final class Magic_Link {
 		if ( ! empty( $tokens ) ) {
 			/** Limit maximum tokens to 5. */
 			$tokens = array_slice( $tokens, -4, 4 );
-			/** Clear expired tokens. */
 			foreach ( $tokens as $index => $token_data ) {
+				/** Clear expired tokens. */
 				if ( $token_data['time'] < $expire ) {
 					unset( $tokens[ $index ] );
+				}
+				/** Rate limit token generation. */
+				if ( $token_data['time'] + self::RATE_INTERVAL > $now ) {
+					return new \WP_Error( 'rate_limit_exceeded', __( 'Please wait a minute before requesting another authorization code.', 'newspack' ) );
 				}
 			}
 			$tokens = array_values( $tokens );
@@ -538,7 +544,9 @@ final class Magic_Link {
 			$errors->add( 'invalid_otp', __( 'OTP is not enabled.', 'newspack' ) );
 		} else {
 			$tokens = \get_user_meta( $user->ID, self::TOKENS_META, true );
-			if ( empty( $tokens ) || empty( $hash ) || empty( $code ) ) {
+			if ( empty( $tokens ) || empty( $hash ) ) {
+				$errors->add( 'invalid_hash', __( 'Invalid hash.', 'newspack' ) );
+			} elseif ( empty( $code ) ) {
 				$errors->add( 'invalid_otp', __( 'Invalid OTP.', 'newspack' ) );
 			}
 		}

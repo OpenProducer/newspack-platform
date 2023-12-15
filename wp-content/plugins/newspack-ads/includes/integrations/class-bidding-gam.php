@@ -322,7 +322,7 @@ final class Bidding_GAM {
 	public static function enqueue_scripts() {
 
 		$slug = 'newspack-advertising-wizard';
-		if ( filter_input( INPUT_GET, 'page', FILTER_SANITIZE_STRING ) !== $slug ) {
+		if ( filter_input( INPUT_GET, 'page', FILTER_SANITIZE_FULL_SPECIAL_CHARS ) !== $slug ) {
 			return;
 		}
 

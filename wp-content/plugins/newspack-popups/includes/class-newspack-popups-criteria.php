@@ -35,7 +35,7 @@ final class Newspack_Popups_Criteria {
 	 * Initialize the hooks.
 	 */
 	public static function init() {
-		require_once dirname( __FILE__ ) . '/../src/criteria/default/index.php';
+		require_once __DIR__ . '/../src/criteria/default/index.php';
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'enqueue_scripts' ] );
 	}
 
@@ -44,6 +44,9 @@ final class Newspack_Popups_Criteria {
 	 */
 	public static function enqueue_scripts() {
 		if ( defined( 'IS_TEST_ENV' ) && IS_TEST_ENV ) {
+			return;
+		}
+		if ( Newspack_Popups_Inserter::assess_has_disabled_popups() ) {
 			return;
 		}
 

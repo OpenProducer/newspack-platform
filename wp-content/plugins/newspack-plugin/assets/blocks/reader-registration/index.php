@@ -54,8 +54,13 @@ add_action( 'init', __NAMESPACE__ . '\\register_block' );
  * Enqueue front-end scripts.
  */
 function enqueue_scripts() {
-	// No need to enqueue scripts if Reader Activation is disabled and not a preview request.
-	if ( ! Reader_Activation::allow_reg_block_render() ) {
+	$should_enqueue_scripts = Reader_Activation::allow_reg_block_render();
+	/**
+	 * Filters whether to enqueue the reader registration block scripts.
+	 *
+	 * @param bool $should_enqueue_scripts Whether to enqueue the reader registration block scripts.
+	 */
+	if ( ! apply_filters( 'newspack_enqueue_reader_activation_block', $should_enqueue_scripts ) ) {
 		return;
 	}
 
@@ -430,9 +435,18 @@ function process_form() {
 
 	$popup_id                      = isset( $_REQUEST['newspack_popup_id'] ) ? (int) $_REQUEST['newspack_popup_id'] : false;
 	$metadata['newspack_popup_id'] = $popup_id;
+
 	if ( $popup_id ) {
 		$metadata['registration_method'] = 'registration-block-popup';
 	}
+
+	/**
+	 * Filters the metadata to be saved for a reader registered through the Reader Registration Block.
+	 *
+	 * @param array  $metadata Metadata.
+	 * @param string $email    Email address of the reader.
+	 */
+	$metadata = apply_filters( 'newspack_register_reader_form_metadata', $metadata, $email );
 
 	$user_id = Reader_Activation::register_reader( $email, '', true, $metadata );
 

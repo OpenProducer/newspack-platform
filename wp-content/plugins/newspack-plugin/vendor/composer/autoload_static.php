@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit51cace7c8fbed6f998fddae4485c874b
+class ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -119,6 +119,7 @@ class ComposerStaticInit51cace7c8fbed6f998fddae4485c874b
         'Newspack\\Data_Events\\Connectors\\GA4' => __DIR__ . '/../..' . '/includes/data-events/connectors/ga4/class-ga4.php',
         'Newspack\\Data_Events\\Connectors\\GA4\\Event' => __DIR__ . '/../..' . '/includes/data-events/connectors/ga4/class-event.php',
         'Newspack\\Data_Events\\Connectors\\Mailchimp' => __DIR__ . '/../..' . '/includes/data-events/connectors/class-mailchimp.php',
+        'Newspack\\Data_Events\\Memberships' => __DIR__ . '/../..' . '/includes/data-events/class-memberships.php',
         'Newspack\\Data_Events\\Popups' => __DIR__ . '/../..' . '/includes/data-events/class-popups.php',
         'Newspack\\Data_Events\\Webhooks' => __DIR__ . '/../..' . '/includes/data-events/class-webhooks.php',
         'Newspack\\Data_Events\\Woo_User_Registration' => __DIR__ . '/../..' . '/includes/data-events/class-woo-user-registration.php',
@@ -204,9 +205,9 @@ class ComposerStaticInit51cace7c8fbed6f998fddae4485c874b
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit51cace7c8fbed6f998fddae4485c874b::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit51cace7c8fbed6f998fddae4485c874b::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit51cace7c8fbed6f998fddae4485c874b::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7::$classMap;
 
         }, null, ClassLoader::class);
     }

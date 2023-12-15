@@ -56,6 +56,10 @@ final class Core {
 	 * Enqueue front-end styles.
 	 */
 	public static function enqueue_scripts() {
+		if ( ! newspack_ads_should_show_ads() ) {
+			return;
+		}
+
 		\wp_register_style(
 			'newspack-ads-frontend',
 			plugins_url( '../dist/frontend.css', __FILE__ ),

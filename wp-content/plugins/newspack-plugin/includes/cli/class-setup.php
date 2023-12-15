@@ -23,10 +23,6 @@ class Setup {
 	 *
 	 * This is a command used to set up a testing site from scratch, installing required plugins and running the onboard wizard automatically
 	 *
-	 * ## OPTIONS
-	 * [--skip-ras]
-	 * : If set, will not add the EXPERIMENTAL RAS flag to wp-config
-	 *
 	 * @param array $args Positional arguments.
 	 * @param array $assoc_args Assoc arguments.
 	 * @return void
@@ -46,12 +42,6 @@ class Setup {
 		$this->plugins();
 
 		$this->initial_content();
-
-		$this->campaigns_config();
-
-		if ( ! WP_CLI\Utils\get_flag_value( $assoc_args, 'skip-ras', false ) ) {
-			$this->ras_beta();
-		}
 
 		WP_CLI::success( 'Done!' );
 	}
@@ -128,41 +118,5 @@ class Setup {
 		$request  = new WP_REST_Request( 'POST', '/' . NEWSPACK_API_NAMESPACE . '/wizard/newspack-setup-wizard/complete' );
 		$response = rest_do_request( $request );
 		WP_CLI::success( 'Initial content completed.' );
-	}
-
-	/**
-	 * Creates the newspack-popups-config file
-	 *
-	 * @return void
-	 */
-	private function campaigns_config() {
-		global $table_prefix;
-		$filename = WP_CONTENT_DIR . '/newspack-popups-config.php';
-		if ( ! file_exists( $filename ) ) {
-			$content  = "<?php \n";
-			$content .= sprintf( "define( 'DB_NAME', '%s' );\n", DB_NAME );
-			$content .= sprintf( "define( 'DB_USER', '%s' );\n", DB_USER );
-			$content .= sprintf( "define( 'DB_PASSWORD', '%s' );\n", DB_PASSWORD );
-			$content .= sprintf( "define( 'DB_HOST', '%s' );\n", DB_HOST );
-			$content .= sprintf( "define( 'DB_CHARSET', '%s' );\n", DB_CHARSET );
-			$content .= sprintf( "define( 'DB_PREFIX', '%s' );\n", $table_prefix );
-			$content .= "define( 'NEWSPACK_POPUPS_DEBUG', true );\n";
-
-			file_put_contents( $filename, $content ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_file_put_contents
-
-			WP_CLI::success( 'Campaigns config created.' );
-
-		}
-
-	}
-
-	/**
-	 * Adds the Experimental RAS flag wp-config
-	 *
-	 * @return void
-	 */
-	private function ras_beta() {
-		$wpconfig = new WPConfigTransformer( WP_CLI\Utils\locate_wp_config() );
-		WP_CLI::success( 'RAS enabled.' );
 	}
 }

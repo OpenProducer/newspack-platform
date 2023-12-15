@@ -43,26 +43,8 @@ final class Data_Events {
 	public static function init() {
 		\add_action( 'wp_ajax_' . self::ACTION, [ __CLASS__, 'maybe_handle' ] );
 		\add_action( 'wp_ajax_nopriv_' . self::ACTION, [ __CLASS__, 'maybe_handle' ] );
-		\add_action( 'newspack_data_events_as_dispatch', [ __CLASS__, 'handle' ], 10, 4 );
 	}
 
-	/**
-	 * Whether to use Action Scheduler if available.
-	 *
-	 * @return bool
-	 */
-	public static function use_action_scheduler() {
-		$use_action_scheduler = false;
-		if ( function_exists( 'as_enqueue_async_action' ) ) {
-			$use_action_scheduler = true;
-		}
-		/**
-		 * Filters whether to use the Action Scheduler if available.
-		 *
-		 * @param bool $use_action_scheduler
-		 */
-		return \apply_filters( 'newspack_data_events_use_action_scheduler', $use_action_scheduler );
-	}
 
 	/**
 	 * Maybe handle an event.
@@ -330,39 +312,29 @@ final class Data_Events {
 			return $body;
 		}
 
-		if ( self::use_action_scheduler() ) {
-			Logger::log(
-				sprintf( 'Dispatching action "%s" via Action Scheduler.', $action_name ),
-				self::LOGGER_HEADER
-			);
+		Logger::log(
+			sprintf( 'Dispatching action "%s".', $action_name ),
+			self::LOGGER_HEADER
+		);
 
-			\as_enqueue_async_action( 'newspack_data_events_as_dispatch', array_values( $body ), 'newspack-data-events' );
+		$url = \add_query_arg(
+			[
+				'action' => self::ACTION,
+				'nonce'  => \wp_create_nonce( self::ACTION ),
+			],
+			\admin_url( 'admin-ajax.php' )
+		);
 
-		} else {
-			Logger::log(
-				sprintf( 'Dispatching action "%s" via HTTP request.', $action_name ),
-				self::LOGGER_HEADER
-			);
-
-			$url = \add_query_arg(
-				[
-					'action' => self::ACTION,
-					'nonce'  => \wp_create_nonce( self::ACTION ),
-				],
-				\admin_url( 'admin-ajax.php' )
-			);
-
-			return \wp_remote_post(
-				$url,
-				[
-					'timeout'   => 0.01,
-					'blocking'  => false,
-					'body'      => $body,
-					'cookies'   => $_COOKIE, // phpcs:ignore
-					'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
-				]
-			);
-		}
+		return \wp_remote_post(
+			$url,
+			[
+				'timeout'   => 0.01,
+				'blocking'  => false,
+				'body'      => $body,
+				'cookies'   => $_COOKIE, // phpcs:ignore
+				'sslverify' => apply_filters( 'https_local_ssl_verify', false ),
+			]
+		);
 	}
 }
 Data_Events::init();
