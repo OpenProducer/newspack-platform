@@ -3,7 +3,9 @@
 // =================================
 // === Plugin Panel Loader Class ===
 // =================================
-//
+
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // --------------
 // Version: 1.3.0
 // --------------
@@ -621,7 +623,11 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 
 						// --- text area ---
 						// 1.2.5: use sanitize_textarea_field with stripslashes
-						$posted = isset( $_POST[$postkey] ) ? sanitize_textarea_field( stripslashes( $_POST[$postkey] ) ) : null;
+						$posted = isset( $_POST[$postkey] ) ? sanitize_textarea_field( $_POST[$postkey] ) : null;
+						// 1.3.0: move use of stripslashes to separate line
+						if ( !is_null( $posted ) ) {
+							$posted = stripslashes( $posted );
+						}
 						$settings[$key] = $posted;
 
 					} elseif ( 'text' == $type ) {
@@ -1875,7 +1881,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 					$posted = array_map( 'sanitize_text_field', $_POST );
 					foreach ( $posted as $key => $value ) {
 						// phpcs:ignore WordPress.PHP.DevelopmentFunctions
-						echo esc_attr( $key ) . ': ' . esc_html( print_r( $value, true ) ) . '<br>' . "\n";
+						echo esc_html( $key ) . ': ' . esc_html( print_r( $value, true ) ) . '<br>' . "\n";
 					}
 				}
 			}
@@ -1907,7 +1913,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 			// --- plugin icon ---
 			// 1.1.9: add filter for plugin icon url
 			$icon_url = apply_filters( $namespace . '_settings_page_icon_url', $icon_url );
-			echo '<td>' . PHP_EOL;
+			echo '<td>' . "\n";
 			if ( $icon_url ) {
 				echo '<img class="plugin-settings-page-icon" src="' . esc_url( $icon_url ) . '" width="128" height="128">' . "\n";
 			}
@@ -2022,7 +2028,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 				}
 				$rate_link = '<a href="' . esc_url( $rate_url ) . '" class="pluginlink" target="_blank">';
 				$rate_link .= '<span style="font-size:24px; color:#FC5; margin-right:10px;" class="dashicons dashicons-star-filled"></span>' . "\n";
-				$rate_link .= ' ' . esc_html( $rate_text ) . '</a><br><br>' . PHP_EOL;
+				$rate_link .= ' ' . esc_html( $rate_text ) . '</a><br><br>' . "\n";
 				$rate_link = apply_filters( $args['namespace'] . '_rate_link', $rate_link, $args );
 				if ( $rate_link ) {
 					// 1.2.5: use wp_kses_post on rate link output
@@ -2064,7 +2070,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 				}
 			}
 
-			echo '</div></td></tr>' . PHP_EOL;
+			echo '</div></td></tr>' . "\n";
 
 			// --- output updated and reset messages ---
 			// phpcs:ignore WordPress.Security.NonceVerification.Recommended
@@ -2099,7 +2105,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 				}
 			}
 
-			echo '</table><br>' . PHP_EOL;
+			echo '</table><br>' . "\n";
 		}
 
 		// -------------
@@ -2240,7 +2246,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 				$this->scripts[] = 'tab_switcher';
 
 				$i = 0;
-				echo '<ul id="settings-tab-buttons">' . PHP_EOL;
+				echo '<ul id="settings-tab-buttons">' . "\n";
 				foreach ( $tabs as $tab => $tablabel ) {
 					$class = 'inactive';
 					if ( ( $tab == $currenttab ) || ( ( '' == $currenttab ) && ( 0 == $i ) ) ) {
@@ -2602,15 +2608,10 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						if ( in_array( $option['options'], array( 'POSTID', 'POSTIDS', 'PAGEID', 'PAGEIDS' ) ) ) {
 
 							$posttype = strtolower( substr( $option['options'], 0, 4 ) );
-							if ( ( ( 'page' == $posttype ) && !isset( $pageoptions ) )
-								|| ( ( 'post' == $posttype ) && !isset( $postoptions ) ) ) {
+							if ( ( ( 'page' == $posttype ) && !isset( $pageoptions ) ) || ( ( 'post' == $posttype ) && !isset( $postoptions ) ) ) {
+
 								global $wpdb;
-								$query = "SELECT ID,post_title,post_status FROM " . $wpdb->prefix . "posts";
-								$query .= " WHERE post_type = %s AND post_status != 'auto-draft'";
-								// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-								$query = $wpdb->prepare( $query, $posttype );
-								// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-								$results = $wpdb->get_results( $query, ARRAY_A );
+								$results = $wpdb->get_results( $wpdb->prepare( "SELECT ID,post_title,post_status FROM " . $wpdb->prefix . "posts WHERE post_type = %s AND post_status != 'auto-draft'", $posttype ), ARRAY_A );
 
 								// 1.2.7: fix by moving page/post options variable here
 								// 1.3.0: check separately to avoid overwriting existing options
@@ -2695,10 +2696,10 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 								$userkey = 'username';
 							}
 							$useroptions = array( '' => '' );
+
 							global $wpdb;
-							$query = "SELECT ID,user_login,display_name FROM " . $wpdb->prefix . "users";
 							// phpcs:ignore WordPress.DB.PreparedSQL.NotPrepared
-							$results = $wpdb->get_results( $query, ARRAY_A );
+							$results = $wpdb->get_results( "SELECT ID,user_login,display_name FROM " . $wpdb->prefix . "users", ARRAY_A );
 							if ( $results && ( count( $results ) > 0 ) ) {
 								foreach ( $results as $result ) {
 									$label = $result['ID'] . ': ' . $result['display_name'];
@@ -2875,7 +2876,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						}
 
 						// 1.1.7: remove esc_js from onclick attributes
-						// $onclickdown = "plugin_panel_number_step('down', '" . esc_attr( $name ) . "', " . esc_attr( $min ) . ", " . esc_attr( $max ) . ", " . esc_attr( $step ) . ");" . PHP_EOL;
+						// $onclickdown = "plugin_panel_number_step('down', '" . esc_attr( $name ) . "', " . esc_attr( $min ) . ", " . esc_attr( $max ) . ", " . esc_attr( $step ) . ");" . "\n";
 						// $row .= '<input class="setting-button button-secondary" type="button" value="-" onclick="' . $onclickdown . '">' . "\n";
 						$row .= '<input class="number-button number-down-button setting-button button-secondary" type="button" value="-" data="' . esc_attr( $name ) . '">' . "\n";
 						if ( isset( $option['prefix'] ) ) {
@@ -2886,7 +2887,7 @@ if ( !class_exists( 'radio_station_loader' ) ) {
 						if ( isset( $option['suffix'] ) ) {
 							$row .= ' ' . $option['suffix'];
 						}
-						// $onclickup = "plugin_panel_number_step('up', '" . esc_attr( $name ) . "', " . esc_attr( $min ) . ", " . esc_attr( $max ) . ", " . esc_attr( $step ) . ");" . PHP_EOL;
+						// $onclickup = "plugin_panel_number_step('up', '" . esc_attr( $name ) . "', " . esc_attr( $min ) . ", " . esc_attr( $max ) . ", " . esc_attr( $step ) . ");" . "\n";
 						// $row .= '<input class="setting-button button-secondary" type="button" value="+" onclick="' . $onclickup . '">' . "\n";
 						$row .= '<input class="number-button number-up-button setting-button button-secondary" type="button" value="+" data="' . esc_attr( $name ) . '">' . "\n";
 

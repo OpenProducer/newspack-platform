@@ -6,6 +6,8 @@
 // =====================
 // @since 2.5.0
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === Block Editor Support ===
 // - Register Block Category
 // - Get Block Callbacks

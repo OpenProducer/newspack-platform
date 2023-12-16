@@ -1,5 +1,46 @@
 <?php
 
+// --------------------------------------------
+// Standalone Compatibility WordPress Functions
+// --------------------------------------------
+
+// ---------
+// Escape JS
+// ---------
+if ( !function_exists( 'esc_js' ) ) {
+ function esc_js( $js ) {
+	return $js;
+ }
+}
+
+// -----------
+// Escape HTML
+// -----------
+if ( !function_exists( 'esc_html' ) ) {
+ function esc_html( $html ) {
+	return $html;
+ }
+}
+
+// ----------
+// Escape URL
+// ----------
+if ( !function_exists( 'esc_url' ) ) {
+ function esc_url( $url ) {
+	return $url;
+ }
+}
+
+// -------------------
+// Sanitize Text Field
+// -------------------
+if ( !function_exists( 'sanitize_text_field' ) ) {
+ function sanitize_text_field( $text ) {
+	return $text;
+ }
+}
+
+
 // ----------------------------------------
 // Player Backwards Compatibility Functions
 // ----------------------------------------

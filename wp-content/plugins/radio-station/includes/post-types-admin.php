@@ -6,6 +6,8 @@
  * Since: 2.2.7
  */
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === Metabox Positions ===
 // - Metaboxes Above Content Area
 // - Modify Taxonomy Metabox Positions

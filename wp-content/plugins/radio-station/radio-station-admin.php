@@ -4,6 +4,8 @@
  * @Since: 2.2.7
  */
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === Admin Setup ===
 // - Enqueue Admin Scripts
 // - Admin Style Fixes

@@ -2456,14 +2456,19 @@ function radio_station_current_show_shortcode( $atts ) {
 			$html .= "<script>" . "\n";
 				$html .= "timestamp = Math.floor( (new Date()).getTime() / 1000 );" . "\n";
 				$html .= "url = '" . esc_url( $ajax_url ) . "?action=radio_station_current_show';" . "\n";
-				$html .= "url += '&instance=" . esc_js( $instance ) . "&timestamp='+timestamp;" . "\n";
+				$html .= "url += '&instance=" . esc_js( $instance ) . "';" . "\n";
 				if ( RADIO_STATION_DEBUG ) {
 					$html .= "url += '&rs-debug=1';";
 				}
 				$html .= "url += '";
 				foreach ( $atts as $key => $value ) {
-					$value = radio_station_encode_uri_component( $value );
-					$html .= "&" . esc_js( $key ) . "=" . esc_js( $value );
+					// 2.5.7: fix to ensure for_time is used for timestamp
+					if ( ( 'for_time' == $key ) && ( 0 == $value ) ) {
+						$html .= "&for_time='+timestamp+'";
+					} else {
+						$value = radio_station_encode_uri_component( $value );
+						$html .= "&" . esc_js( $key ) . "=" . esc_js( $value );
+					}
 				}
 				$html .= "';" . "\n";
 				$html .= "document.getElementById('rs-current-show-" . esc_js( $instance ) ."-loader').src = url;" . "\n";
@@ -2529,7 +2534,8 @@ function radio_station_current_show_shortcode( $atts ) {
 
 	// --- shortcode title ---
 	// 2.5.0: also display title for non-shortcodes if set
-	if ( ( '' != $atts['title'] ) && ( 0 != $atts['title'] ) ) {
+	// 2.5.7: but do not display for widgets (duplication)
+	if ( ( '' != $atts['title'] ) && ( 0 != $atts['title'] ) && !$atts['widget'] ) {
 		// 2.3.3.9: fix class to not conflict with actual show title
 		$output .= '<h3 class="current-show-shortcode-title">' . "\n";
 			$output .= esc_html( $atts['title'] ) . "\n";
@@ -3074,15 +3080,17 @@ function radio_station_current_show() {
 		// 2.5.6: maybe hide entire parent widget if empty
 		if ( $atts['hide_empty'] && ( '' == trim( $output ) ) ) {
 
+			// 2.5.7: added check that widget element exists
 			$js .= "instance = parent.document.getElementById('current-show-widget-" . esc_js( $atts['instance'] ) . "');" . "\n";
-			$js .= "instance.style.display = 'none';" . "\n";
+			$js .= "if (instance) {instance.style.display = 'none';}" . "\n";
 
 		} else {
 
 			// --- send to parent window ---
 			// 2.5.6: ensure parent widget is displayed
+			// 2.5.7: added check that widget element exists
 			$js .= "instance = parent.document.getElementById('current-show-widget-" . esc_js( $atts['instance'] ) . "');" . "\n";
-			$js .= "instance.style.display = '';" . "\n";
+			$js .= "if (instance) {instance.style.display = '';}" . "\n";
 			$js .= "widget = document.getElementById('widget-contents').innerHTML;" . "\n";
 			$js .= "parent.document.getElementById('rs-current-show-" . esc_js( $atts['instance'] ) . "').innerHTML = widget;" . PHP_EOL;
 
@@ -3261,14 +3269,19 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 			$html .= "<script>" . "\n";
 				$html .= "timestamp = Math.floor( (new Date()).getTime() / 1000 );" . "\n";
 				$html .= "url = '" . esc_url( $ajax_url ) . "?action=radio_station_upcoming_shows';" . "\n";
-				$html .= "url += '&instance=" . esc_js( $instance ) . "&timestamp='+timestamp;" . "\n";
+				$html .= "url += '&instance=" . esc_js( $instance ) . "';" . "\n";
 				if ( RADIO_STATION_DEBUG ) {
 					$html .= "url += '&rs-debug=1';" . "\n";
 				}
 				$html .= "url += '";
 				foreach ( $atts as $key => $value ) {
-					$value = radio_station_encode_uri_component( $value );
-					$html .= "&" . esc_js( $key ) . "=" . esc_js( $value );
+					// 2.5.7: fix to ensure for_time is used for timestamp
+					if ( ( 'for_time' == $key ) && ( 0 == $value ) ) {
+						$html .= "&for_time='+timestamp+'";
+					} else {
+						$value = radio_station_encode_uri_component( $value );
+						$html .= "&" . esc_js( $key ) . "=" . esc_js( $value );
+					}
 				}
 				$html .= "';" . "\n";
 				$html .= "document.getElementById('rs-upcoming-shows-" . esc_js( $instance ) . "-loader').src = url;" . "\n";
@@ -3321,7 +3334,8 @@ function radio_station_upcoming_shows_shortcode( $atts ) {
 
 	// --- shortcode title ---
 	// 2.5.0: also maybe output for non-shortcodes
-	if ( ( '' != $atts['title'] ) && ( 0 != $atts['title'] ) ) {
+	// 2.5.7: but do not display for widgets (duplication)
+	if ( ( '' != $atts['title'] ) && ( 0 != $atts['title'] ) && !$atts['widget'] ) {
 		$output .= '<h3 class="upcoming-shows-title dj-coming-up-title">' . "\n";
 			$output .= esc_html( $atts['title'] ) . "\n";
 		$output .= '</h3>' . "\n";
@@ -3757,8 +3771,9 @@ function radio_station_upcoming_shows() {
 
 			// --- send to parent window ---
 			// 2.5.6: ensure parent widget is displayed
+			// 2.5.7: added check that widget element exists
 			$js .= "instance = parent.document.getElementById('upcoming-shows-widget-" . esc_js( $atts['instance'] ) . "');" . "\n";
-			$js .= "instance.style.display = '';" . "\n";
+			$js .= "if (instance) {instance.style.display = '';}" . "\n";
 			$js .= "widget = document.getElementById('widget-contents').innerHTML;" . "\n";
 			$js .= "parent.document.getElementById('rs-upcoming-shows-" . esc_js( $atts['instance'] ) . "').innerHTML = widget;" . "\n";
 
@@ -3898,11 +3913,19 @@ function radio_station_current_playlist_shortcode( $atts ) {
 			// --- shortcode script loader ---
 			$html .= "<script>timestamp = Math.floor( (new Date()).getTime() / 1000 );" . "\n";
 				$html .= "url = '" . esc_url( $ajax_url ) . "?action=radio_station_current_playlist';" . "\n";
-				$html .= "url += '&instance=" . esc_attr( $instance ) . "&timestamp='+timestamp;" . "\n";
+				$html .= "url += '&instance=" . esc_attr( $instance ) . "';" . "\n";
+				if ( RADIO_STATION_DEBUG ) {
+					$html .= "url += '&rs-debug=1';" . "\n";
+				}
 				$html .= "url += '";
 				foreach ( $atts as $key => $value ) {
-					$value = radio_station_encode_uri_component( $value );
-					$html .= "&" . esc_js( $key ) . "=" . esc_js( $value );
+					// 2.5.7: fix to ensure for_time is used for timestamp
+					if ( ( 'for_time' == $key ) && ( 0 == $value ) ) {
+						$html .= "&for_time='+timestamp+'";
+					} else {
+						$value = radio_station_encode_uri_component( $value );
+						$html .= "&" . esc_js( $key ) . "=" . esc_js( $value );
+					}
 				}
 				$html .= "';" . "\n";
 				$html .= "document.getElementById('rs-current-playlist-" . esc_attr( $instance ) ."-loader').src = url;" . "\n";
@@ -3948,7 +3971,8 @@ function radio_station_current_playlist_shortcode( $atts ) {
 
 	// --- shortcode title ---
 	// 2.5.0: also maybe display for non-shortcodes
-	if ( ( '' ==  $atts['title'] ) && ( 0 != $atts['title'] ) ) {
+	// 2.5.7: but do not display for widgets (duplication)
+	if ( ( '' ==  $atts['title'] ) && ( 0 != $atts['title'] ) && !$atts['widget'] ) {
 		// 2.3.0: added title class for shortcode
 		$output .= '<h3 class="show-playlist-title myplaylist-title">' . "\n";
 			// 2.5.0: fixed to use esc_html instead of esc_attr
@@ -4266,15 +4290,17 @@ function radio_station_current_playlist() {
 		// 2.6.5: maybe hide entire parent widget area if empty
 		if ( $atts['hide_empty'] && ( '' == trim( $output ) ) ) {
 
+			// 2.5.7: added check that widget element exists
 			$js .= "instance = parent.document.getElementById('current-playlist-widget-" . esc_js( $atts['instance'] ) . "');" . "\n";
-			$js .= "instance.style.display = 'none';" . "\n";
+			$js .= "if (instance) {instance.style.display = 'none';}" . "\n";
 
 		} else {
 
 			// --- send to parent window ---
 			// 2.5.6: ensure parent widget is displayed
+			// 2.5.7: added check that widget element exists
 			$js .= "instance = parent.document.getElementById('current-playlist-widget-" . esc_js( $atts['instance'] ) . "');" . "\n";
-			$js .= "instance.style.display = '';" . "\n";
+			$js .= "if (instance) {instance.style.display = '';}" . "\n";
 			$js .= "widget = document.getElementById('widget-contents').innerHTML;" . "\n";
 			$js .= "parent.document.getElementById('rs-current-playlist-" . esc_js( $atts['instance'] ) . "').innerHTML = widget;" . "\n";
 

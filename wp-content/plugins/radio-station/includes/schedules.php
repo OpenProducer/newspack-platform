@@ -5,7 +5,8 @@
 // ===============================
 // 2.5.0: use new schedule_engine class
 
-// - Set Scheduler Debug Mode
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // - Instantiate Schedule Engine Class
 // === Schedule ===
 // - Get Show Schedule
@@ -30,26 +31,21 @@
 // - Set Shift Conflicts
 
 
-// ------------------------
-// Set Scheduler Debug Mode
-// ------------------------
-add_action( 'plugins_loaded', 'radio_station_schedule_debug', 9 );
-function radio_station_schedule_debug() {
-	if ( defined( 'RADIO_STATION_DEBUG' ) && !defined( 'SCHEDULE_ENGINE_DEBUG' ) ) {
-		define( 'SCHEDULE_ENGINE_DEBUG', RADIO_STATION_DEBUG );
-	}
-}
-
 // ---------------------------------
 // Instantiate Schedule Engine Class
 // ---------------------------------
 // 2.5.0: extracted functions to new schedule engine class
 global $rs_se;
 $args = array( 'context' => 'radio_station' );
-if ( defined( 'RADIO_STATION_DEBUG' ) && RADIO_STATION_DEBUG ) {
-	$args['debug'] = RADIO_STATION_DEBUG;
-}
 $rs_se = new radio_station_schedule_engine( $args );
+
+add_action( 'plugins_loaded', 'radio_station_schedule_debug_init', 9 );
+function radio_station_schedule_debug_init() {
+	if ( defined( 'RADIO_STATION_DEBUG' ) && RADIO_STATION_DEBUG ) {
+		global $rs_se;
+		$rs_se->debug = RADIO_STATION_DEBUG;
+	}
+}
 
 
 // ----------------
@@ -360,16 +356,22 @@ function radio_station_get_current_show( $time = false ) {
 	// 2.5.0: maybe get channel or combined channel/time data
 	if ( !$time ) {
 		if ( ( '' != $channel ) && isset( $radio_station_data['current_show_' . $channel] ) ) {
-			return $radio_station_data['current_show_' . $channel];
+			$current_show = $radio_station_data['current_show_' . $channel];
 		} elseif ( isset( $radio_station_data['current_show'] ) ) {
-			return $radio_station_data['current_show'];
+			$current_show = $radio_station_data['current_show'];
 		}
 	} else {
 		if ( isset( $radio_station_data['current_show_' . $channel . '_' . $time] ) ) {
-			return $radio_station_data['current_show_' . $channel . '_' . $time];
+			$current_show = $radio_station_data['current_show_' . $channel . '_' . $time];
 		} elseif ( isset( $radio_station_data['current_show_' . $time] ) ) {
-			return $radio_station_data['current_show_' . $time];
+			$current_show = $radio_station_data['current_show_' . $time];
 		}
+	}
+	if ( isset( $current_show ) ) {
+		if ( RADIO_STATION_DEBUG ) {
+			echo 'Current Show (Stored): ' . esc_html( print_r( $current_show, true ) ) . PHP_EOL;
+		}
+		return $current_show;
 	}
 
 	// --- get all show shifts ---
@@ -388,7 +390,7 @@ function radio_station_get_current_show( $time = false ) {
 	$current_show = apply_filters( 'radio_station_current_show', $current_show, $time, $show_shifts, $channel );
 
 	if ( RADIO_STATION_DEBUG ) {
-		echo 'Current Show: ' . esc_html( print_r( $current_show, true ) ) . PHP_EOL;
+		echo 'Current Show (Set): ' . esc_html( print_r( $current_show, true ) ) . PHP_EOL;
 	}
 
 	// --- set to global data ---

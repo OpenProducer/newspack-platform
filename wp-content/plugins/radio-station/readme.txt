@@ -1,11 +1,10 @@
-=== Radio Station by netmix® - Manage and play your Show Schedule in WordPress!
-===
+=== Radio Station by netmix® - Manage and play your Show Schedule in WordPress! ===
 Contributors: tonyzeoli, majick
 Donate link: https://netmix.co/donate
 Tags: dj, music, playlist, radio, shows, scheduling, broadcasting
 Requires at least: 3.3.1
 Tested up to: 6.4.1
-Stable tag: 2.5.6
+Stable tag: 2.5.7
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -400,6 +399,13 @@ We recommend you test these on a Staging site (or a development copy of your liv
 8. Show Conflict Display
 
 == Changelog ==
+
+= 2.5.7 =
+* Updated: Freemius SDK (2.6.0)
+* Disabled: Howler Player Script (browser compatibility issues)
+* Improved: Schedule Engine Weekdate calculations
+* Fixed: AJAX shortcode/widget loading for current time
+* Fixed: Widget title display duplication
 
 = 2.5.6 =
 * Updated: Freemius SDK (2.5.11)

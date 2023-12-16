@@ -6,7 +6,7 @@ Plugin Name: Radio Station
 Plugin URI: https://radiostation.pro/radio-station
 Description: Adds Show pages, DJ role, playlist and on-air programming functionality to your site.
 Author: Tony Zeoli, Tony Hayes
-Version: 2.5.6
+Version: 2.5.7
 Requires at least: 3.3.1
 Text Domain: radio-station
 Domain Path: /languages
@@ -28,6 +28,8 @@ You should have received a copy of the GNU General Public License
 along with this program; if not, write to the Free Software
 Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 */
+
+if ( !defined( 'ABSPATH' ) ) exit;
 
 // === Plugin Setup ===
 // - Define Plugin Constants
@@ -63,6 +65,8 @@ Foundation, Inc., 51 Franklin St, Fifth Floor, Boston, MA  02110-1301  USA
 // - Enqueue Datepicker
 // - Enqueue Localized Script Values
 // - Localization Script
+// - Filter Streaming Data
+// - Filter Player Script
 // === Transient Caching ===
 // - Delete Prefixed Transients
 // - Clear Cached Data
@@ -344,7 +348,8 @@ function radio_station_add_pricing_path_filter() {
 // ------------------------
 // 2.5.0: added for Freemius Pricing Page v2
 function radio_station_pricing_page_path( $default_pricing_js_path ) {
-	return RADIO_STATION_DIR . '/freemius-pricing/freemius-pricing.js';
+	$suffix = ( defined( 'SCRIPT_DEBUG' ) && SCRIPT_DEBUG ) || RADIO_STATION_DEBUG ? '' : '.min';
+	return RADIO_STATION_DIR . '/freemius-pricing/freemius-pricing' . $suffix . '.js';
 }
 
 
@@ -656,7 +661,7 @@ function radio_station_add_inline_script( $handle, $js, $position = 'after' ) {
 		wp_add_inline_script( $handle, $js, $position );
 	} else {
 		// --- store extra javascript for later output ---
-		if ( !strstr( $handle, '-admin' ) ) {
+		/* if ( !strstr( $handle, '-admin' ) ) {
 			global $radio_station_scripts;
 			add_action( 'wp_print_footer_scripts', 'radio_station_print_footer_scripts', 20 );
 			if ( !isset( $radio_station_scripts[$handle] ) ) {
@@ -670,7 +675,14 @@ function radio_station_add_inline_script( $handle, $js, $position = 'after' ) {
 				$radio_station_admin_scripts[$handle] = '';
 			}
 			$radio_station_admin_scripts[$handle] .= $js;
+		} */
+		
+		// 2.5.7: enqueue dummy javascript file to output in footer
+		if ( !wp_script_is( 'rp-footer', 'registered' ) ) {
+			$script_url = plugins_url( '/js/rp-footer.js', RADIO_STATION_FILE );
+			wp_register_script( 'rp-footer', $script_url, array(), '', true );
 		}
+		wp_add_inline_script( 'rp-footer', $js, $position );
 	}
 }
 
@@ -678,7 +690,8 @@ function radio_station_add_inline_script( $handle, $js, $position = 'after' ) {
 // Print Footer Scripts
 // --------------------
 // 2.5.0: added for missed inline scripts
-function radio_station_print_footer_scripts() {
+// 2.5.7: deprecated in favour of adding inline to dummy script
+/* function radio_station_print_footer_scripts() {
 	global $radio_station_scripts;
 	if ( is_array( $radio_station_scripts ) && ( count( $radio_station_scripts ) > 0 ) ) {
 		foreach ( $radio_station_scripts as $handle => $js ) {
@@ -686,12 +699,13 @@ function radio_station_print_footer_scripts() {
 			echo '<script id="' . esc_attr( $handle ) . '-js-after">' . $js . '</script>';
 		}
 	}
-}
+} */
 
 // --------------------------
 // Print Admin Footer Scripts
 // --------------------------
-function radio_station_admin_print_footer_scripts() {
+// 2.5.7: deprecated in favour of adding inline to dummy script
+/* function radio_station_admin_print_footer_scripts() {
 	global $radio_station_admin_scripts;
 	if ( is_array( $radio_station_admin_scripts ) && ( count( $radio_station_admin_scripts ) > 0 ) ) {
 		foreach ( $radio_station_admin_scripts as $handle => $js ) {
@@ -699,7 +713,7 @@ function radio_station_admin_print_footer_scripts() {
 			echo '<script id="' . esc_attr( $handle ) . '-js-after">' . $js . '</script>';
 		}
 	}
-}
+} */
 
 // -------------------------
 // Enqueue Plugin Stylesheet
@@ -1036,13 +1050,14 @@ function radio_station_localization_script() {
 	return $js;
 }
 
-// -------------------------
-// Filter for Streaming Data
-// -------------------------
+// ---------------------
+// Filter Streaming Data
+// ---------------------
 // 2.3.3.7: added streaming data filter for player integration
 // 2.5.6: added missing 4th argument (arg count declaration)
 add_filter( 'radio_player_data', 'radio_station_streaming_data', 10, 2 );
 function radio_station_streaming_data( $data, $station = false ) {
+
 	$data = array(
 		'script'   => radio_station_get_setting( 'player_script' ),
 		'instance' => 0,
@@ -1051,11 +1066,24 @@ function radio_station_streaming_data( $data, $station = false ) {
 		'fallback' => radio_station_get_fallback_url(),
 		'fformat'  => radio_station_get_setting( 'fallback_format' ),
 	);
+	
 	if ( RADIO_STATION_DEBUG ) {
 		echo '<span style="display:none;">Player Stream Data: ' . esc_html( print_r( $data, true ) ) . '</span>' . "\n";
 	}
 	$data = apply_filters( 'radio_station_streaming_data', $data, $station );
 	return $data;
+}
+
+// --------------------
+// Filter Player Script
+// --------------------
+// 2.5.7: disable Howler script setting (browser incompatibilities)
+add_filter( 'radio_station_player_script', 'radio_station_filter_player_script', 11 );
+function radio_station_filter_player_script( $script ) {
+	if ( 'howler' == $script ) {
+		$script = 'amplitude';
+	}
+	return $script;
 }
 
 

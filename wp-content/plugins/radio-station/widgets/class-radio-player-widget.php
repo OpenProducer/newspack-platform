@@ -4,6 +4,8 @@
 // === Player Widget ===
 // ---------------------
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // -------------
 // Player Widget
 // -------------

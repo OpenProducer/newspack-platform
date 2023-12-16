@@ -5,6 +5,8 @@
  * Since: 2.0.0
  */
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === Post Types ===
 // - Register Post Types
 // -- Show

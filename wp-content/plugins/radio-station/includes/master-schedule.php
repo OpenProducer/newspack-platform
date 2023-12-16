@@ -1,5 +1,7 @@
 <?php
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 /*
  * Master Show schedule
  * Author: Nikki Blight

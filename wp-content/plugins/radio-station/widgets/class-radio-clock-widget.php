@@ -5,6 +5,8 @@
 // --------------------------
 // @since 2.3.2
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 class Radio_Clock_Widget extends WP_Widget {
 
 	// --- construct widget class ---

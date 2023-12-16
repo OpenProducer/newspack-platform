@@ -6,6 +6,8 @@
  * @Since: 2.3.0
  */
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === API Discovery ===
 // - Add Data API Header Link
 // - Add Data API Discovery Link

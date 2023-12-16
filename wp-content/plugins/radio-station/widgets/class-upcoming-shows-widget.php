@@ -5,6 +5,8 @@
  * Since 2.1.1
  */
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // note: widget class name to remain unchanged for backwards compatibility
 class DJ_Upcoming_Widget extends WP_Widget {
 

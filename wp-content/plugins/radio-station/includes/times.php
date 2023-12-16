@@ -6,6 +6,8 @@
 // 2.5.0: separated from support-functions.php
 // 2.5.0: use new schedule_engine class
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // - Set Server Timezone Mode
 // === Time Conversions ===
 // - Get Now
@@ -224,9 +226,9 @@ function radio_station_get_time( $key = false, $time = false, $timezone = false 
 
 	// --- get formatted times ---
 	$times = radio_station_get_times( $time, $timezone );
-	if ( RADIO_STATION_DEBUG ) {
-		echo '<span style="display:none;">Times: ' . esc_html( print_r( $times, true ) ) . '</span>' . "\n";
-	}
+	// if ( RADIO_STATION_DEBUG ) {
+	// 	echo '<span style="display:none;">Times: ' . esc_html( print_r( $times, true ) ) . '</span>' . "\n";
+	// }
 	if ( !$key ) {
 		return $times;
 	}

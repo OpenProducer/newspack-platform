@@ -6,6 +6,8 @@
 * Since: 2.0.14
 */
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === Legacy Functions ===
 // - Current Schedule
 // - Convert Time

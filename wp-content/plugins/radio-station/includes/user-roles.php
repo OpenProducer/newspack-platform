@@ -5,6 +5,8 @@
 // ================================
 // 2.5.0: separated from radio-station.php
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === User Roles ===
 // - Set Roles and Capabilities
 // - Admin Fix for DJ / Host Role Label

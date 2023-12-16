@@ -7,6 +7,13 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+= 2.5.7 =
+* Updated: Freemius SDK (2.6.0)
+* Disabled: Howler Player Script (browser compatibility issues)
+* Improved: Schedule Engine Weekdate calculations
+* Fixed: AJAX shortcode/widget loading for current time
+* Fixed: Widget title display duplication
+
 = 2.5.6 =
 * Updated: Freemius SDK (2.5.11)
 * Updated: Plugin Panel (1.3.0)

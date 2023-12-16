@@ -5,6 +5,8 @@
 // ===============================
 // 2.5.0: separated from radio-station.php
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // === Template Filters ===
 // - Doing Template Check
 // - Get Template

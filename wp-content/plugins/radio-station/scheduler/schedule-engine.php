@@ -6,6 +6,7 @@
 // ==== Version 2.5.0 ====
 // =======================
 
+if ( !defined( 'ABSPATH' ) ) exit;
 
 // - Set Scheduler Debug Mode
 // - Open Schedule Engine Class
@@ -130,11 +131,13 @@ class radio_station_schedule_engine {
 		} elseif ( isset( $args['debug'] ) ) {
 			$this->debug = $args['debug'];
 		}
+			
 		if ( defined( 'SCHEDULE_ENGINE_DEBUG_LOG' ) && SCHEDULE_ENGINE_DEBUG_LOG ) {
 			$this->debug_log = SCHEDULE_ENGINE_DEBUG_LOG;
 		} elseif ( isset( $args['debug_log'] ) ) {
 			$this->debug_log = $args['debug_log'];
 		}
+		
 		
 		// --- add class actions ---
 		add_action( 'schedule_engine_set_current_schedule', array( $this, 'set_current_schedule' ), 10, 5 );
@@ -1625,6 +1628,7 @@ class radio_station_schedule_engine {
 
 					if ( $this->debug ) {
 						$debug = 'Next? ' . $now . ' - ' . $shift_start_time . ' - ' . $shift_end_time . PHP_EOL;
+						$debug .= radio_station_get_time( 'date', $now ) . ' - ' . radio_station_get_time( 'date', $shift_start_time ) . ' - ' . radio_station_get_time( 'date', $shift_end_time ) . PHP_EOL;
 						$debug .= 'Shift: ' . print_r( $shift, true ) . PHP_EOL;
 						$this->debug_log( $debug );
 					}
@@ -1721,7 +1725,6 @@ class radio_station_schedule_engine {
 			$weekdates = $this->get_schedule_weekdates( $weekdays, $now, $timezone );
 		}
 
-		// echo "*****TIMEZONE*****: " . $timezone;
 		$conflicts = $checked_shifts = array();
 		if ( count( $all_shifts ) > 0 ) {
 			$prev_shift = $prev_prev_shift = false;
@@ -1778,6 +1781,8 @@ class radio_station_schedule_engine {
 								$debug .= "Previous Shift Date: " . $prevdate . " - Shift Day: " . $prevday . PHP_EOL;
 								$debug .= "Shift: " . print_r( $shift, true ) . PHP_EOL;
 								$debug .= "Previous Shift: " . print_r( $prev_shift, true ) . PHP_EOL;
+								$debug .= "Weekdays: " . print_r( $weekdays, true ) . PHP_EOL;
+								$debug .= "Weekdates: " . print_r( $weekdates, true ) . PHP_EOL;
 								$this->debug_log( $debug );
 							}
 
@@ -2873,9 +2878,8 @@ class radio_station_schedule_engine {
 		$context = $this->context;
 
 		// --- maybe get current time ---
-		if ( !$time ) {
-			$time = $this->get_now();
-		}
+		$time = $time ? $time : $this->get_now();
+		$timezone = $timezone ? $timezone : $this->get_timezone();
 
 		// 2.3.2: use timezone setting to get offset date
 		if ( defined( 'SCHEDULE_ENGINE_USE_SERVER_TIMES' ) && SCHEDULE_ENGINE_USE_SERVER_TIMES ) {
@@ -2893,8 +2897,22 @@ class radio_station_schedule_engine {
 			}
 		}
 		foreach ( $weekdays as $i => $weekday ) {
-			$diff = $index - $i;
-			$weekdate_time = $time - ( $diff * 24 * 60 * 60 );
+
+			$diff = $i - $index;
+
+			// 2.5.7: use datetime object and modify
+			$times = $this->get_times( $time, $timezone );
+			$date_time = $times['object'];
+			// $weekdate_time = $time - ( $diff * 24 * 60 * 60 );
+			if ( 0 == $diff ) {
+				$weekdate_time = $date_time->format( 'U');
+			} elseif ( $diff > 0 ) {
+				$date_time->modify( '+' . $diff . ' day' );
+				$weekdate_time = $date_time->format( 'U');
+			} elseif ( $diff < 0 ) {
+				$date_time->modify( (string) $diff . ' day' );
+				$weekdate_time = $date_time->format( 'U');
+			}
 			// 2.3.2: include timezone adjustment
 			if ( defined( 'SCHEDULE_ENGINE_USE_SERVER_TIMES' ) && SCHEDULE_ENGINE_USE_SERVER_TIMES ) {
 				$weekdate = date( 'Y-m-d', $weekdate_time );
@@ -2904,6 +2922,7 @@ class radio_station_schedule_engine {
 			}
 			$weekdates[$weekday] = $weekdate;
 		}
+		// echo '**A**'; print_r( $weekdates );
 
 		// 2.4.0.4: check/fix for duplicate date crackliness (daylight saving?)
 		foreach ( $weekdates as $day => $date ) {
@@ -2921,6 +2940,7 @@ class radio_station_schedule_engine {
 			}
 			$prevdate = $date;
 		}
+		// echo '**B**'; print_r( $weekdates );
 
 		// --- filter and return ---
 		$weekdates = apply_filters( 'schedule_engine_schedule_weekdates', $weekdates, $weekdays, $time, $timezone, $channel, $context );

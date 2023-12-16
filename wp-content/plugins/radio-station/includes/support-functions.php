@@ -6,6 +6,8 @@
 * Since: 2.3.0
 */
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // =======================================
 // === Radio Station Support Functions ===
 // =======================================
@@ -408,14 +410,16 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 	$query = "SELECT " . $columns . " FROM " . $wpdb->prefix . "posts";
 	$query .= " WHERE ID IN(" . $post_id_list . ") AND post_status = 'publish'";
 	// 2.5.6: allow for alternative ordering attributes
-	if ( !isset( $atts['orderby'] ) || ( 'date' == $atts['orderby'] ) ) {
-		$query .= "ORDER BY post_date";
-	} elseif ( 'title' == $atts['orderby'] ) {
-		$query .= "ORDER BY post_title";
+	if ( !isset( $atts['orderby'] ) || ( 'date' == strtolower( $atts['orderby'] ) ) ) {
+		$query .= " ORDER BY post_date";
+	} elseif ( 'title' == strtolower( $atts['orderby'] ) ) {
+		$query .= " ORDER BY post_title";
+	} else {
+		$query .= " ORDER BY post_date";
 	}
-	if ( !isset( $atts['order'] ) || ( 'DESC' == $atts['order'] ) ) {
+	if ( !isset( $atts['order'] ) || ( 'DESC' == strtoupper( $atts['order'] ) ) ) {
 		$query .= " DESC";
-	} elseif ( 'ASC' == $atts['order'] ) {
+	} elseif ( 'ASC' == strtoupper( $atts['order'] ) ) {
 		$query .= " ASC";
 	}
 	// 2.5.6: add filter to allow for modification of query

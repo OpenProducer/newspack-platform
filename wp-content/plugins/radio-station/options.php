@@ -4,10 +4,11 @@
 // === Radio Station Options ===
 // =============================
 
+if ( !defined( 'ABSPATH' ) ) exit;
+
 // ------------------
 // Set Plugin Options
 // ------------------
-
 $options = array(
 
 	// === Broadcast ===
@@ -287,13 +288,14 @@ $options = array(
 
 	// --- [Player] Player Script ---
 	// 2.4.0.3: change script default to jplayer
+	// 2.5.7: disable howler script (browser incompatibilities)
 	'player_script' => array(
 		'type'    => 'select',
 		'label'   => __( 'Player Script', 'radio-station' ),
 		'default' => 'jplayer',
 		'options' => array(
 			'jplayer'   => __( 'jPlayer', 'radio-station' ),
-			'howler'    => __( 'Howler', 'radio-station' ),
+			// 'howler'    => __( 'Howler', 'radio-station' ),
 			'amplitude' => __( 'Amplitude', 'radio-station' ),
 		),
 		'helper'  => __( 'Default audio script to use for playback in the Player.', 'radio-station' ),
@@ -304,13 +306,14 @@ $options = array(
 	// --- [Player] Fallback Scripts ---
 	// 2.4.0.3: added fallback enable/disable switching
 	// 2.4.0.3: fixed option label from Player Script
+	// 2.5.7: disable howler script (browser incompatibilities)
 	'player_fallbacks' => array(
 		'type'    => 'multicheck',
 		'label'   => __( 'Fallback Scripts', 'radio-station' ),
 		'default' => array( 'amplitude', 'howler', 'jplayer' ),
 		'options' => array(
 			'jplayer'   => __( 'jPlayer', 'radio-station' ),
-			'howler'    => __( 'Howler', 'radio-station' ),
+			// 'howler'    => __( 'Howler', 'radio-station' ),
 			'amplitude' => __( 'Amplitude', 'radio-station' ),
 		),
 		'helper'  => __( 'Enabled fallback audio scripts to try when the default Player script fails.', 'radio-station' ),
@@ -866,16 +869,18 @@ $options = array(
 
 	// --- [Pro] Combined Team Tab ---
 	// 2.4.0.7: added combined team grid option
+	// 2.5.7: updated to add option to remove team display
 	'combined_team_tab' => array(
 		'type'    => 'select',
-		'label'   => __( 'Combined Team Tab', 'radio-station' ),
+		'label'   => __( 'Team Tab Display', 'radio-station' ),
 		'default' => 'yes',
 		'options' => array(
-			''     => __( 'Do Not Combine', 'radio-station' ),
-			'yes'  => __( 'Combined List', 'radio-station' ),
-			// 'grid' => __( 'Combined Grid', 'radio-station' ),
+			'off'  => __( 'No Team Display', 'radio-station' ),
+			''     => __( 'Separate Role Tabs', 'radio-station' ),
+			'yes'  => __( 'Combined Team List', 'radio-station' ),
+			// 'grid' => __( 'Combined Team Grid', 'radio-station' ),
 		),
-		'helper'  => __( 'Combine team members (eg. hosts, producers) into a single display tab.', 'radio-station' ),
+		'helper'  => __( 'How to display Show team members (eg. hosts, producers) on a Show page.', 'radio-station' ),
 		'tab'     => 'pages',
 		'section' => 'show',
 		'pro'     => true,
