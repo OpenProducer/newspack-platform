@@ -220,9 +220,6 @@ class WooCommerce_Connection {
 		}
 
 		$customer = new \WC_Customer( $user_id );
-		$metadata = [
-			'registration_method' => 'woocommerce-order',
-		];
 
 		$metadata[ Newspack_Newsletters::get_metadata_key( 'account' ) ]           = $order->get_customer_id();
 		$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_date' ) ] = $customer->get_date_created()->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
@@ -354,6 +351,28 @@ class WooCommerce_Connection {
 		if ( ! $contact ) {
 			return;
 		}
+
+		return self::sync_contact_to_esp( $contact );
+	}
+
+	/**
+	 * Upsert reader data to the ESP connected via Newspack Newsletters.
+	 * 
+	 * @param array $contact Reader data to sync.
+	 * @return bool|WP_Error Contact data if it was added, WP_Error otherwise.
+	 */
+	public static function sync_contact_to_esp( $contact ) {
+		if ( ! method_exists( 'Newspack_Newsletters', 'service_provider' ) ) {
+			return;
+		}
+
+		// If syncing to Mailchimp, we need to use its special method to add contacts which handles transactional contacts.
+		if ( 'mailchimp' === \Newspack_Newsletters::service_provider() ) {
+			// Normalize contact data, since this won't be passed through \Newspack_Newsletters_Subscription::add_contact().
+			$contact = \Newspack\Newspack_Newsletters::normalize_contact_data( $contact );
+			return \Newspack\Data_Events\Connectors\Mailchimp::put( $contact['email'], $contact['metadata'] );
+		}
+
 		if ( ! method_exists( 'Newspack_Newsletters_Subscription', 'add_contact' ) ) {
 			return;
 		}

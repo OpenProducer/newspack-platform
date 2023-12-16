@@ -227,6 +227,10 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 	}
 
 	$block_name = apply_filters( 'newspack_blocks_block_name', 'newspack-blocks/homepage-articles' );
+	$article_query = new WP_Query( Newspack_Blocks::build_articles_query( $attributes, $block_name ) );
+	if ( ! $article_query->have_posts() ) {
+		return;
+	}
 
 	// Gather all Homepage Articles blocks on the page and output only the needed CSS.
 	// This CSS will be printed along with the first found block markup.
@@ -248,8 +252,6 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 
 	// This will let the FSE plugin know we need CSS/JS now.
 	do_action( 'newspack_blocks_render_homepage_articles' );
-
-	$article_query = new WP_Query( Newspack_Blocks::build_articles_query( $attributes, $block_name ) );
 
 	$classes = Newspack_Blocks::block_classes( 'homepage-articles', $attributes, [ 'wpnbha' ] );
 
@@ -352,55 +354,53 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 
 	ob_start();
 
-	if ( $article_query->have_posts() ) :
-		?>
-		<div
-			class="<?php echo esc_attr( $classes ); ?>"
-			style="<?php echo esc_attr( $styles ); ?>"
-			>
-			<?php echo $inline_style_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-			<div data-posts data-current-post-id="<?php the_ID(); ?>">
-				<?php if ( '' !== $attributes['sectionHeader'] ) : ?>
-					<h2 class="article-section-title">
-						<span><?php echo wp_kses_post( $attributes['sectionHeader'] ); ?></span>
-					</h2>
-				<?php endif; ?>
-				<?php
-				echo Newspack_Blocks::template_inc( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					__DIR__ . '/templates/articles-list.php',
-					[
-						'articles_rest_url' => $articles_rest_url, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						'article_query'     => $article_query, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-						'attributes'        => $attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-					]
-				);
-				?>
-			</div>
-			<?php
-
-			if ( $has_more_button ) :
-				?>
-				<button type="button" class="wp-block-button__link" data-next="<?php echo esc_url( $articles_rest_url ); ?>">
-				<?php
-				if ( ! empty( $attributes['moreButtonText'] ) ) {
-					echo esc_html( $attributes['moreButtonText'] );
-				} else {
-					esc_html_e( 'Load more posts', 'newspack-blocks' );
-				}
-				?>
-				</button>
-				<p class="loading">
-					<?php esc_html_e( 'Loading...', 'newspack-blocks' ); ?>
-				</p>
-				<p class="error">
-					<?php esc_html_e( 'Something went wrong. Please refresh the page and/or try again.', 'newspack-blocks' ); ?>
-				</p>
-
+	?>
+	<div
+		class="<?php echo esc_attr( $classes ); ?>"
+		style="<?php echo esc_attr( $styles ); ?>"
+		>
+		<?php echo $inline_style_html; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
+		<div data-posts data-current-post-id="<?php the_ID(); ?>">
+			<?php if ( '' !== $attributes['sectionHeader'] ) : ?>
+				<h2 class="article-section-title">
+					<span><?php echo wp_kses_post( $attributes['sectionHeader'] ); ?></span>
+				</h2>
 			<?php endif; ?>
-
+			<?php
+			echo Newspack_Blocks::template_inc( // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				__DIR__ . '/templates/articles-list.php',
+				[
+					'articles_rest_url' => $articles_rest_url, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'article_query'     => $article_query, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+					'attributes'        => $attributes, // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+				]
+			);
+			?>
 		</div>
 		<?php
-	endif;
+
+		if ( $has_more_button ) :
+			?>
+			<button type="button" class="wp-block-button__link" data-next="<?php echo esc_url( $articles_rest_url ); ?>">
+			<?php
+			if ( ! empty( $attributes['moreButtonText'] ) ) {
+				echo esc_html( $attributes['moreButtonText'] );
+			} else {
+				esc_html_e( 'Load more posts', 'newspack-blocks' );
+			}
+			?>
+			</button>
+			<p class="loading">
+				<?php esc_html_e( 'Loading...', 'newspack-blocks' ); ?>
+			</p>
+			<p class="error">
+				<?php esc_html_e( 'Something went wrong. Please refresh the page and/or try again.', 'newspack-blocks' ); ?>
+			</p>
+
+		<?php endif; ?>
+
+	</div>
+	<?php
 
 	$content = ob_get_clean();
 	Newspack_Blocks::enqueue_view_assets( 'homepage-articles' );

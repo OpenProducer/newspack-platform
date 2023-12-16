@@ -137,6 +137,15 @@
 		p {
 			margin-top: 0;
 		}
+		p.woocommerce-SavedPaymentMethods-saveNew,
+		p.newspack-cover-fees {
+			display: flex;
+			margin: 8px 0;
+			align-items: flex-start;
+			input[type='checkbox'] {
+				margin-right: 8px;
+			}
+		}
 	}
 	.wc-saved-payment-methods {
 		padding: 0;

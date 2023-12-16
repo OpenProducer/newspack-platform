@@ -91,7 +91,7 @@ class Perfmatters {
 			'plugins/the-events-calendar', // The Events Calendar.
 			'plugins/events-calendar-pro', // The Events Calendar Pro.
 			'/themes/newspack-', // Any Newspack theme stylesheet.
-			'cache/perfmatters', //	Perfmatters' cache.
+			'cache/perfmatters', // Perfmatters' cache.
 			'wp-includes',
 		];
 	}

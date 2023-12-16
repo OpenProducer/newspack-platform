@@ -74,6 +74,7 @@ class Donations {
 			add_filter( 'amp_skip_post', [ __CLASS__, 'should_skip_amp' ], 10, 2 );
 			add_filter( 'newspack_blocks_donate_billing_fields_keys', [ __CLASS__, 'get_billing_fields' ] );
 			add_action( 'woocommerce_checkout_create_order_line_item', [ __CLASS__, 'checkout_create_order_line_item' ], 10, 4 );
+			add_action( 'woocommerce_coupons_enabled', [ __CLASS__, 'disable_coupons' ] );
 		}
 	}
 
@@ -1035,6 +1036,24 @@ class Donations {
 	public static function update_billing_fields( $billing_fields ) {
 		update_option( self::DONATION_BILLING_FIELDS_OPTION, $billing_fields );
 		return $billing_fields;
+	}
+
+	/**
+	 * Disable coupons for donation checkouts.
+	 *
+	 * @param bool $enabled Whether coupons are enabled.
+	 *
+	 * @return bool
+	 */
+	public static function disable_coupons( $enabled ) {
+		$cart = WC()->cart;
+		if ( ! $cart ) {
+			return $enabled;
+		}
+		if ( ! self::is_donation_cart( $cart ) ) {
+			return $enabled;
+		}
+		return false;
 	}
 }
 Donations::init();

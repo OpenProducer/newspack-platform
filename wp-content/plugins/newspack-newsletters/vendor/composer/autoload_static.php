@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInite6d791f227b59d9d9b1498e085c542e9
+class ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -48,11 +48,13 @@ class ComposerStaticInite6d791f227b59d9d9b1498e085c542e9
         'Newspack_Newsletters\\Tracking\\Utils' => __DIR__ . '/../..' . '/includes/tracking/class-utils.php',
         'Newspack_Newsletters_Active_Campaign' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign.php',
         'Newspack_Newsletters_Active_Campaign_Controller' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign-controller.php',
+        'Newspack_Newsletters_Active_Campaign_Usage_Reports' => __DIR__ . '/../..' . '/includes/service-providers/active_campaign/class-newspack-newsletters-active-campaign-usage-reports.php',
         'Newspack_Newsletters_Ads' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-ads.php',
         'Newspack_Newsletters_Blocks' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-blocks.php',
         'Newspack_Newsletters_Bulk_Actions' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-bulk-actions.php',
         'Newspack_Newsletters_Campaign_Monitor' => __DIR__ . '/../..' . '/includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor.php',
         'Newspack_Newsletters_Campaign_Monitor_Controller' => __DIR__ . '/../..' . '/includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor-controller.php',
+        'Newspack_Newsletters_Campaign_Monitor_Usage_Reports' => __DIR__ . '/../..' . '/includes/service-providers/campaign_monitor/class-newspack-newsletters-campaign-monitor-usage-reports.php',
         'Newspack_Newsletters_Constant_Contact' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php',
         'Newspack_Newsletters_Constant_Contact_Controller' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-controller.php',
         'Newspack_Newsletters_Constant_Contact_SDK' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-sdk.php',
@@ -82,9 +84,9 @@ class ComposerStaticInite6d791f227b59d9d9b1498e085c542e9
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInite6d791f227b59d9d9b1498e085c542e9::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInite6d791f227b59d9d9b1498e085c542e9::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInite6d791f227b59d9d9b1498e085c542e9::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8::$classMap;
 
         }, null, ClassLoader::class);
     }

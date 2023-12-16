@@ -7,9 +7,6 @@
 
 use Automattic\WooCommerce\Blocks\Patterns\PatternsHelper;
 
-$content = PatternsHelper::get_pattern_content( 'woocommerce-blocks/hero-product-3-split' );
-$images  = PatternsHelper::get_pattern_images( 'woocommerce-blocks/hero-product-3-split' );
-
 $main_title   = $content['titles'][0]['default'] ?? '';
 $first_title  = $content['titles'][1]['default'] ?? '';
 $second_title = $content['titles'][2]['default'] ?? '';
@@ -20,8 +17,9 @@ $second_description = $content['descriptions'][1]['default'] ?? '';
 $third_description  = $content['descriptions'][2]['default'] ?? '';
 ?>
 
-<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"left":"0"}}}} -->
-<div class="wp-block-columns alignwide"><!-- wp:column -->
+<!-- wp:columns {"align":"wide","style":{"spacing":{"blockGap":{"left":"0"},"margin":{"top":"0px","bottom":"80px"}}}} -->
+<div class="wp-block-columns alignwide" style="margin-top:0px;margin-bottom:80px">
+	<!-- wp:column -->
 	<div class="wp-block-column">
 		<!-- wp:cover {"url":"<?php echo esc_url( PatternsHelper::get_image_url( $images, 0, 'images/pattern-placeholders/man-person-winter-photography-statue-coat.png' ) ); ?>","dimRatio":0,"minHeight":800,"minHeightUnit":"px","isDark":false,"layout":{"type":"constrained"}} -->
 		<div class="wp-block-cover is-light" style="min-height:800px">
@@ -58,7 +56,7 @@ $third_description  = $content['descriptions'][2]['default'] ?? '';
 					<!-- /wp:heading -->
 
 					<!-- wp:paragraph -->
-					<p><?php echo esc_html( $second_description ); ?></p>
+					<p><?php echo esc_html( $first_description ); ?></p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -74,7 +72,7 @@ $third_description  = $content['descriptions'][2]['default'] ?? '';
 					<!-- /wp:heading -->
 
 					<!-- wp:paragraph -->
-					<p><?php echo esc_html( $third_description ); ?></p>
+					<p><?php echo esc_html( $second_description ); ?></p>
 					<!-- /wp:paragraph -->
 				</div>
 				<!-- /wp:group -->
@@ -100,7 +98,7 @@ $third_description  = $content['descriptions'][2]['default'] ?? '';
 			<!-- wp:buttons -->
 			<div class="wp-block-buttons"><!-- wp:button -->
 				<div class="wp-block-button">
-					<a class="wp-block-button__link wp-element-button" href="https://store.local/shop/classic-shop/">Shop now</a>
+					<a href="<?php echo esc_url( get_permalink( wc_get_page_id( 'shop' ) ) ); ?>" class="wp-block-button__link wp-element-button"><?php esc_html_e( 'Shop now', 'woocommerce' ); ?></a>
 				</div>
 				<!-- /wp:button -->
 			</div>

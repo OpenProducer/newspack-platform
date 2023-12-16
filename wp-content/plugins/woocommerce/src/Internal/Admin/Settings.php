@@ -232,10 +232,15 @@ class Settings {
 		$settings['allowMarketplaceSuggestions']      = WC_Marketplace_Suggestions::allow_suggestions();
 		$settings['connectNonce']                     = wp_create_nonce( 'connect' );
 		$settings['wcpay_welcome_page_connect_nonce'] = wp_create_nonce( 'wcpay-connect' );
+		$settings['wc_helper_nonces']                 = array(
+			'refresh' => wp_create_nonce( 'refresh' ),
+		);
 
 		$settings['features'] = $this->get_features();
 
 		$settings['isWooPayEligible'] = WCPayPromotionInit::is_woopay_eligible();
+
+		$settings['gutenberg_version'] = defined( 'GUTENBERG_VERSION' ) ? constant( 'GUTENBERG_VERSION' ) : 0;
 
 		return $settings;
 	}

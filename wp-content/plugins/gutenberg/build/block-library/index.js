@@ -4789,6 +4789,18 @@ function getUpdatedLinkAttributes({
   };
 }
 
+;// CONCATENATED MODULE: ./packages/block-library/build-module/utils/remove-anchor-tag.js
+/**
+ * Removes anchor tags from a string.
+ *
+ * @param {string} value The value to remove anchor tags from.
+ *
+ * @return {string} The value with anchor tags removed.
+ */
+function removeAnchorTag(value) {
+  return value.replace(/<\/?a[^>]*>/g, '');
+}
+
 ;// CONCATENATED MODULE: external ["wp","keycodes"]
 var external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/link.js
@@ -4829,6 +4841,7 @@ const linkOff = (0,external_React_namespaceObject.createElement)(external_wp_pri
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -4944,12 +4957,6 @@ function ButtonEdit(props) {
     width
   } = attributes;
   const TagName = tagName || 'a';
-  function setButtonText(newText) {
-    // Remove anchor tags from button text content.
-    setAttributes({
-      text: newText.replace(/<\/?a[^>]*>/g, '')
-    });
-  }
   function onKeyDown(event) {
     if (external_wp_keycodes_namespaceObject.isKeyboardEvent.primary(event, 'k')) {
       startEditing(event);
@@ -5017,7 +5024,9 @@ function ButtonEdit(props) {
     "aria-label": (0,external_wp_i18n_namespaceObject.__)('Button text'),
     placeholder: placeholder || (0,external_wp_i18n_namespaceObject.__)('Add text…'),
     value: text,
-    onChange: value => setButtonText(value),
+    onChange: value => setAttributes({
+      text: removeAnchorTag(value)
+    }),
     withoutInteractiveFormatting: true,
     className: classnames_default()(className, 'wp-block-button__link', colorProps.className, borderProps.className, {
       [`has-text-align-${textAlign}`]: textAlign,
@@ -7081,7 +7090,7 @@ function ColumnEdit({
     value: verticalAlignment,
     controls: ['top', 'center', 'bottom', 'stretch']
   })), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.PanelBody, {
-    title: (0,external_wp_i18n_namespaceObject.__)('Column settings')
+    title: (0,external_wp_i18n_namespaceObject.__)('Settings')
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalUnitControl, {
     label: (0,external_wp_i18n_namespaceObject.__)('Width'),
     labelPosition: "edge",
@@ -14164,7 +14173,8 @@ function CoverEdit({
     template: !hasInnerBlocks ? innerBlocksTemplate : undefined,
     templateInsertUpdatesSelection: true,
     allowedBlocks,
-    templateLock
+    templateLock,
+    dropZoneElement: ref.current
   });
   const mediaElement = (0,external_wp_element_namespaceObject.useRef)();
   const currentSettings = {
@@ -17108,6 +17118,7 @@ const createActiveXObject = type => {
  */
 
 
+
 const MIN_PREVIEW_HEIGHT = 200;
 const MAX_PREVIEW_HEIGHT = 2000;
 function ClipboardToolbarButton({
@@ -17173,7 +17184,9 @@ function FileEdit({
       (0,external_wp_blob_namespaceObject.revokeBlobURL)(href);
     }
     if (downloadButtonText === undefined) {
-      changeDownloadButtonText((0,external_wp_i18n_namespaceObject._x)('Download', 'button label'));
+      setAttributes({
+        downloadButtonText: (0,external_wp_i18n_namespaceObject._x)('Download', 'button label')
+      });
     }
   }, []);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -17220,12 +17233,6 @@ function FileEdit({
   function changeShowDownloadButton(newValue) {
     setAttributes({
       showDownloadButton: newValue
-    });
-  }
-  function changeDownloadButtonText(newValue) {
-    // Remove anchor tags from button text content.
-    setAttributes({
-      downloadButtonText: newValue.replace(/<\/?a[^>]*>/g, '')
     });
   }
   function changeDisplayPreview(newValue) {
@@ -17335,7 +17342,7 @@ function FileEdit({
     placeholder: (0,external_wp_i18n_namespaceObject.__)('Write file name…'),
     withoutInteractiveFormatting: true,
     onChange: text => setAttributes({
-      fileName: text
+      fileName: removeAnchorTag(text)
     }),
     href: textLinkHref
   }), showDownloadButton && (0,external_React_namespaceObject.createElement)("div", {
@@ -17348,7 +17355,9 @@ function FileEdit({
     value: downloadButtonText,
     withoutInteractiveFormatting: true,
     placeholder: (0,external_wp_i18n_namespaceObject.__)('Add text…'),
-    onChange: text => changeDownloadButtonText(text)
+    onChange: text => setAttributes({
+      downloadButtonText: removeAnchorTag(text)
+    })
   })))));
 }
 /* harmony default export */ var file_edit = (FileEdit);
@@ -22598,8 +22607,7 @@ function GroupEdit({
   attributes,
   name,
   setAttributes,
-  clientId,
-  __unstableLayoutClassNames: layoutClassNames
+  clientId
 }) {
   const {
     hasInnerBlocks,
@@ -22629,9 +22637,7 @@ function GroupEdit({
   const layoutSupportEnabled = themeSupportsLayout || type === 'flex' || type === 'grid';
 
   // Hooks.
-  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
-    className: !layoutSupportEnabled ? layoutClassNames : null
-  });
+  const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)();
   const [showPlaceholder, setShowPlaceholder] = useShouldShowPlaceHolder({
     attributes,
     usedLayoutType: type,
@@ -22656,8 +22662,7 @@ function GroupEdit({
   }, {
     templateLock,
     allowedBlocks,
-    renderAppender,
-    __unstableDisableLayoutClassNames: !layoutSupportEnabled
+    renderAppender
   });
   const {
     selectBlock
@@ -25400,9 +25405,29 @@ const scaleOptions = [{
   label: (0,external_wp_i18n_namespaceObject._x)('Contain', 'Scale option for dimensions control'),
   help: (0,external_wp_i18n_namespaceObject.__)('Image is contained without distortion.')
 }];
-const disabledClickProps = {
-  onClick: event => event.preventDefault(),
-  'aria-disabled': true
+
+// If the image has a href, wrap in an <a /> tag to trigger any inherited link element styles.
+const ImageWrapper = ({
+  href,
+  children
+}) => {
+  if (!href) {
+    return children;
+  }
+  return (0,external_React_namespaceObject.createElement)("a", {
+    href: href,
+    onClick: event => event.preventDefault(),
+    "aria-disabled": true,
+    style: {
+      // When the Image block is linked,
+      // it's wrapped with a disabled <a /> tag.
+      // Restore cursor style so it doesn't appear 'clickable'
+      // and remove pointer events. Safari needs the display property.
+      pointerEvents: 'none',
+      cursor: 'default',
+      display: 'inline'
+    }
+  }, children);
 };
 function image_Image({
   temporaryURL,
@@ -25630,18 +25655,6 @@ function image_Image({
       }
     });
   }
-  function updateAlignment(nextAlign) {
-    const extraUpdatedAttributes = ['wide', 'full'].includes(nextAlign) ? {
-      width: undefined,
-      height: undefined,
-      aspectRatio: undefined,
-      scale: undefined
-    } : {};
-    setAttributes({
-      ...extraUpdatedAttributes,
-      align: nextAlign
-    });
-  }
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!isSelected) {
       setIsEditingImage(false);
@@ -25713,10 +25726,7 @@ function image_Image({
   }, isResizable && dimensionsControl));
   const controls = (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockControls, {
     group: "block"
-  }, hasNonContentControls && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockAlignmentControl, {
-    value: align,
-    onChange: updateAlignment
-  }), hasNonContentControls && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarButton, {
+  }, hasNonContentControls && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarButton, {
     onClick: () => {
       setShowCaption(!showCaption);
       if (showCaption && caption) {
@@ -25854,7 +25864,9 @@ function image_Image({
   // So we try using the imageRef width first and fallback to clientWidth.
   const fallbackClientWidth = imageRef.current?.width || clientWidth;
   if (canEditImage && isEditingImage) {
-    img = (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalImageEditor, {
+    img = (0,external_React_namespaceObject.createElement)(ImageWrapper, {
+      href: href
+    }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalImageEditor, {
       id: id,
       url: url,
       width: numericWidth,
@@ -25867,7 +25879,7 @@ function image_Image({
         setIsEditingImage(false);
       },
       borderProps: isRounded ? undefined : borderProps
-    });
+    }));
   } else if (!isResizable) {
     img = (0,external_React_namespaceObject.createElement)("div", {
       style: {
@@ -25875,7 +25887,9 @@ function image_Image({
         height,
         aspectRatio
       }
-    }, img);
+    }, (0,external_React_namespaceObject.createElement)(ImageWrapper, {
+      href: href
+    }, img));
   } else {
     const numericRatio = aspectRatio && evalAspectRatio(aspectRatio);
     const customRatio = numericWidth / numericHeight;
@@ -25960,15 +25974,14 @@ function image_Image({
         });
       },
       resizeRatio: align === 'center' ? 2 : 1
-    }, img);
+    }, (0,external_React_namespaceObject.createElement)(ImageWrapper, {
+      href: href
+    }, img));
   }
   if (!url && !temporaryURL) {
     return sizeControls;
   }
-  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, !temporaryURL && controls, !!href ? (0,external_React_namespaceObject.createElement)("a", {
-    href: href,
-    ...disabledClickProps
-  }, img) : img, showCaption && (!external_wp_blockEditor_namespaceObject.RichText.isEmpty(caption) || isSelected) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, !temporaryURL && controls, img, showCaption && (!external_wp_blockEditor_namespaceObject.RichText.isEmpty(caption) || isSelected) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
     identifier: "caption",
     className: (0,external_wp_blockEditor_namespaceObject.__experimentalGetElementClassName)('caption'),
     ref: captionRef,
@@ -26067,13 +26080,13 @@ function ImageEdit({
     url = '',
     alt,
     caption,
-    align,
     id,
     width,
     height,
     sizeSlug,
     aspectRatio,
-    scale
+    scale,
+    align
   } = attributes;
   const [temporaryURL, setTemporaryURL] = (0,external_wp_element_namespaceObject.useState)();
   const altRef = (0,external_wp_element_namespaceObject.useRef)();
@@ -26084,6 +26097,20 @@ function ImageEdit({
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     captionRef.current = caption;
   }, [caption]);
+  const {
+    __unstableMarkNextChangeAsNotPersistent
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (['wide', 'full'].includes(align)) {
+      __unstableMarkNextChangeAsNotPersistent();
+      setAttributes({
+        width: undefined,
+        height: undefined,
+        aspectRatio: undefined,
+        scale: undefined
+      });
+    }
+  }, [align]);
   const ref = (0,external_wp_element_namespaceObject.useRef)();
   const {
     imageDefaultSize,
@@ -26213,16 +26240,6 @@ function ImageEdit({
       });
     }
   }
-  function updateAlignment(nextAlign) {
-    const extraUpdatedAttributes = ['wide', 'full'].includes(nextAlign) ? {
-      width: undefined,
-      height: undefined
-    } : {};
-    setAttributes({
-      ...extraUpdatedAttributes,
-      align: nextAlign
-    });
-  }
   let isTemp = edit_isTemporaryImage(id, url);
 
   // Upload a temporary image on mount.
@@ -26310,12 +26327,7 @@ function ImageEdit({
     context: context,
     clientId: clientId,
     blockEditingMode: blockEditingMode
-  }), !url && blockEditingMode === 'default' && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockControls, {
-    group: "block"
-  }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockAlignmentControl, {
-    value: align,
-    onChange: updateAlignment
-  })), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.MediaPlaceholder, {
+  }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.MediaPlaceholder, {
     icon: (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockIcon, {
       icon: library_image
     }),
@@ -26617,9 +26629,6 @@ const image_metadata = {
   keywords: ["img", "photo", "picture"],
   textdomain: "default",
   attributes: {
-    align: {
-      type: "string"
-    },
     url: {
       type: "string",
       source: "attribute",
@@ -26703,6 +26712,8 @@ const image_metadata = {
     }
   },
   supports: {
+    interactivity: true,
+    align: ["left", "center", "right", "wide", "full"],
     anchor: true,
     color: {
       text: false,
@@ -36122,7 +36133,8 @@ const navigation_link_metadata = {
       __experimentalDefaultControls: {
         fontSize: true
       }
-    }
+    },
+    renaming: false
   },
   editorStyle: "wp-block-navigation-link-editor",
   style: "wp-block-navigation-link"
@@ -36922,10 +36934,8 @@ const PatternEdit = ({
   const currentThemeStylesheet = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.stylesheet, []);
   const {
     replaceBlocks,
+    setBlockEditingMode,
     __unstableMarkNextChangeAsNotPersistent
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const {
-    setBlockEditingMode
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
   const {
     getBlockRootClientId,
@@ -40934,7 +40944,7 @@ const post_featured_image_edit_ALLOWED_MEDIA_TYPES = ['image'];
 function getMediaSourceUrlBySizeSlug(media, slug) {
   return media?.media_details?.sizes?.[slug]?.source_url || media?.source_url;
 }
-const edit_disabledClickProps = {
+const disabledClickProps = {
   onClick: event => event.preventDefault(),
   'aria-disabled': true
 };
@@ -41071,7 +41081,7 @@ function PostFeaturedImageEdit({
     }, !!isLink ? (0,external_React_namespaceObject.createElement)("a", {
       href: postPermalink,
       target: linkTarget,
-      ...edit_disabledClickProps
+      ...disabledClickProps
     }, placeholder()) : placeholder(), (0,external_React_namespaceObject.createElement)(overlay, {
       attributes: attributes,
       setAttributes: setAttributes,
@@ -41149,7 +41159,7 @@ function PostFeaturedImageEdit({
   }, !!isLink ? (0,external_React_namespaceObject.createElement)("a", {
     href: postPermalink,
     target: linkTarget,
-    ...edit_disabledClickProps
+    ...disabledClickProps
   }, image) : image, (0,external_React_namespaceObject.createElement)(overlay, {
     attributes: attributes,
     setAttributes: setAttributes,
@@ -41634,7 +41644,7 @@ function PostTemplateEdit({
       slug: templateSlug.replace('category-', '')
     });
     const query = {
-      offset: perPage ? perPage + offset : 0,
+      offset: offset || 0,
       order,
       orderby: orderBy
     };
@@ -47937,20 +47947,15 @@ function ReusableBlockEdit({
     onChange,
     renderAppender: blocks?.length ? undefined : external_wp_blockEditor_namespaceObject.InnerBlocks.ButtonBlockAppender
   });
+  let children = null;
   if (hasAlreadyRendered) {
-    return (0,external_React_namespaceObject.createElement)("div", {
-      ...blockProps
-    }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.Warning, null, (0,external_wp_i18n_namespaceObject.__)('Block cannot be rendered inside itself.')));
+    children = (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.Warning, null, (0,external_wp_i18n_namespaceObject.__)('Block cannot be rendered inside itself.'));
   }
   if (isMissing) {
-    return (0,external_React_namespaceObject.createElement)("div", {
-      ...blockProps
-    }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.Warning, null, (0,external_wp_i18n_namespaceObject.__)('Block has been deleted or is unavailable.')));
+    children = (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.Warning, null, (0,external_wp_i18n_namespaceObject.__)('Block has been deleted or is unavailable.'));
   }
   if (!hasResolved) {
-    return (0,external_React_namespaceObject.createElement)("div", {
-      ...blockProps
-    }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Placeholder, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Spinner, null)));
+    children = (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Placeholder, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Spinner, null));
   }
   return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__experimentalRecursionProvider, {
     uniqueId: ref
@@ -47960,9 +47965,11 @@ function ReusableBlockEdit({
     onChange: setTitle,
     __nextHasNoMarginBottom: true,
     __next40pxDefaultSize: true
-  }))), (0,external_React_namespaceObject.createElement)("div", {
+  }))), children === null ? (0,external_React_namespaceObject.createElement)("div", {
     ...innerBlocksProps
-  }));
+  }) : (0,external_React_namespaceObject.createElement)("div", {
+    ...blockProps
+  }, children));
 }
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/block/index.js

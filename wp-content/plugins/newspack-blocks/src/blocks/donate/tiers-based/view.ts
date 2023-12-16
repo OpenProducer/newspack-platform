@@ -51,7 +51,13 @@ export default ( parentEl: HTMLElement ) => {
 			selectedAmountEls.forEach( el => ( el.style.display = 'inline' ) );
 
 			// Toggle the frequency buttons' active states.
-			frequencyButtonsEls.forEach( el => el.classList.toggle( BUTTON_ACTIVE_CLASSNAME ) );
+			frequencyButtonsEls.forEach( el => {
+				if ( selectedFrequency === el.getAttribute( 'data-frequency-slug' ) ) {
+					el.classList.add( BUTTON_ACTIVE_CLASSNAME );
+				} else {
+					el.classList.remove( BUTTON_ACTIVE_CLASSNAME );
+				}
+			} );
 
 			// Update the value attributes in the form's submit buttons.
 			const submitButtonsEls = parentEl.querySelectorAll( 'button[type="submit"]' );

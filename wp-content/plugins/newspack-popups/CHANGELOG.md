@@ -1,3 +1,26 @@
+# [2.27.0](https://github.com/Automattic/newspack-popups/compare/v2.26.1...v2.27.0) (2023-12-11)
+
+
+### Features
+
+* don't enqueue criteria if popups are disabled for post ([3fbd4b6](https://github.com/Automattic/newspack-popups/commit/3fbd4b64191419b8becf15e6f55d6bfac21e47e4))
+* **segmentation:** detect duplicated segments ([#1244](https://github.com/Automattic/newspack-popups/issues/1244)) ([3cfc89a](https://github.com/Automattic/newspack-popups/commit/3cfc89a2626c7e2c1eb6bf207301ddc7c4777d64))
+
+# [2.27.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.26.1...v2.27.0-alpha.1) (2023-11-30)
+
+
+### Features
+
+* don't enqueue criteria if popups are disabled for post ([3fbd4b6](https://github.com/Automattic/newspack-popups/commit/3fbd4b64191419b8becf15e6f55d6bfac21e47e4))
+* **segmentation:** detect duplicated segments ([#1244](https://github.com/Automattic/newspack-popups/issues/1244)) ([3cfc89a](https://github.com/Automattic/newspack-popups/commit/3cfc89a2626c7e2c1eb6bf207301ddc7c4777d64))
+
+## [2.26.1](https://github.com/Automattic/newspack-popups/compare/v2.26.0...v2.26.1) (2023-11-17)
+
+
+### Bug Fixes
+
+* **settings:** get_setting method ([#1242](https://github.com/Automattic/newspack-popups/issues/1242)) ([e058644](https://github.com/Automattic/newspack-popups/commit/e0586441515a6380dafefc366171dff189c085b9))
+
 # [2.26.0](https://github.com/Automattic/newspack-popups/compare/v2.25.0...v2.26.0) (2023-11-13)
 
 

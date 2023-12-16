@@ -32,13 +32,66 @@ final class Targeting_Keys extends Api_Object {
 		'category',
 		'post_type',
 		'template',
+		'site',
 	];
 
 	/**
-	 * Create a custom targeting key-val segmentation with optional sample values.
+	 * Sanitize URL to be used as targeting value.
 	 *
-	 * @param string   $name   The name of the key.
-	 * @param string[] $values Optional sample values.
+	 * @param string $url The URL to sanitize.
+	 *
+	 * @return string The sanitized URL.
+	 */
+	public static function sanitize_url( $url ) {
+		// Remove the protocol.
+		$url = str_replace( 'https://', '', $url );
+		$url = str_replace( 'http://', '', $url );
+		// Remove the trailing slash.
+		$url = rtrim( $url, '/' );
+		// Remove the www. subdomain.
+		$url = str_replace( 'www.', '', $url );
+		// Truncate to 40 characters.
+		$length = strlen( $url );
+		if ( $length > 40 ) {
+			$url = substr( $url, 0, 20 ) . '...' . substr( $url, $length - 17 );
+		}
+		return $url;
+	}
+
+	/**
+	 * Get config for generating a targeting key-val.
+	 *
+	 * @param string $key The key name.
+	 *
+	 * @return array[
+	 *   'type'            => string,
+	 *   'reportable_type' => string|null,
+	 *   'values'          => string[]
+	 * ]
+	 */
+	private static function get_targeting_key_config( $key ) {
+		$config = [
+			'type'            => 'FREEFORM',
+			'reportable_type' => null,
+			'values'          => [],
+		];
+		switch ( $key ) {
+			case 'site':
+				$config['type']            = 'PREDEFINED';
+				$config['reportable_type'] = 'CUSTOM_DIMENSION';
+				$config['values']          = [ self::sanitize_url( \get_bloginfo( 'url' ) ) ];
+				break;
+		}
+		return $config;
+	}
+
+	/**
+	 * Create a custom targeting key-val segmentation with optional values.
+	 *
+	 * @param string   $name            The name of the key.
+	 * @param string[] $values          Optional values.
+	 * @param string   $type            The type of the key. Defaults to 'FREEFORM'.
+	 * @param string   $reportable_type The reportable type of the key. Defaults to null.
 	 *
 	 * @return array[
 	 *  'targeting_key'  => CustomTargetingKey,
@@ -48,7 +101,7 @@ final class Targeting_Keys extends Api_Object {
 	 *
 	 * @throws \Exception If there is an error while communicating with the API.
 	 */
-	public function create_targeting_key( $name, $values = [] ) {
+	public function create_targeting_key( $name, $values = [], $type = 'FREEFORM', $reportable_type = null ) {
 		$service = ( new ServiceFactory() )->createCustomTargetingService( $this->session );
 
 		$statement = new Statement(
@@ -67,69 +120,93 @@ final class Targeting_Keys extends Api_Object {
 
 		$targeting_key = null;
 		$found_keys    = $service->getCustomTargetingKeysByStatement( $statement )->getResults();
+		$created       = false;
 		if ( empty( $found_keys ) ) {
 			$targeting_key = $service->createCustomTargetingKeys(
 				[
-					( new CustomTargetingKey() )->setName( $name )->setType( 'FREEFORM' )->setStatus( 'ACTIVE' ),
+					( new CustomTargetingKey() )
+						->setName( $name )
+						->setType( $type )
+						->setReportableType( $reportable_type )
+						->setStatus( 'ACTIVE' ),
 				]
 			)[0];
+			$created       = true;
 		} else {
 			$targeting_key = $found_keys[0];
 		}
 
 		$found_values   = [];
 		$created_values = [];
-		if ( $targeting_key && count( $values ) ) {
-			$key_id           = $targeting_key->getId();
-			$values_statement = new Statement(
-				"WHERE customTargetingKeyId = :key_id AND name = :name AND status = 'ACTIVE'",
-				[
-					new String_ValueMapEntry(
-						'key_id',
-						new SetValue(
-							[
-								new TextValue( $key_id ),
-							]
-						)
-					),
-					new String_ValueMapEntry(
-						'name',
-						new SetValue(
-							array_map(
-								function ( $key ) {
-									return new TextValue( $key );
-								},
-								$values
-							)
-						)
-					),
-				]
-			);
-			$found_values     = (array) $service->getCustomTargetingValuesByStatement( $values_statement )->getResults();
-			$values_to_create = array_values(
-				array_diff(
-					$values,
-					array_map(
-						function ( $value ) {
-							return $value->getName();
-						},
-						$found_values
-					)
-				)
-			);
-			$created_values   = $service->createCustomTargetingValues(
-				array_map(
-					function ( $value ) use ( $key_id ) {
-						return ( new CustomTargetingValue() )->setCustomTargetingKeyId( $key_id )->setName( $value );
-					},
-					$values_to_create
-				)
-			);
+		if ( $targeting_key && ! empty( $values ) ) {
+			$upsert_values_result = $this->upsert_targeting_key_values( $targeting_key, $values );
+			$found_values         = $upsert_values_result['found_values'];
+			$created_values       = $upsert_values_result['created_values'];
 		}
 		return [
+			'created'        => $created,
 			'targeting_key'  => $targeting_key,
-			'found_values'   => is_array( $found_values ) && count( $found_values ) ? $found_values : [],
-			'created_values' => is_array( $created_values ) && count( $created_values ) ? $created_values : [],
+			'found_values'   => $found_values,
+			'created_values' => $created_values,
+		];
+	}
+
+	/**
+	 * Upsert values for a custom targeting key.
+	 *
+	 * @param CustomTargetingKey $targeting_key The targeting key.
+	 * @param string[]           $values        Values to upsert.
+	 */
+	public function upsert_targeting_key_values( $targeting_key, $values ) {
+		$service          = ( new ServiceFactory() )->createCustomTargetingService( $this->session );
+		$key_id           = $targeting_key->getId();
+		$values_statement = new Statement(
+			"WHERE customTargetingKeyId = :key_id AND name = :name AND status = 'ACTIVE'",
+			[
+				new String_ValueMapEntry(
+					'key_id',
+					new SetValue(
+						[
+							new TextValue( $key_id ),
+						]
+					)
+				),
+				new String_ValueMapEntry(
+					'name',
+					new SetValue(
+						array_map(
+							function ( $key ) {
+								return new TextValue( $key );
+							},
+							$values
+						)
+					)
+				),
+			]
+		);
+		$found_values     = (array) $service->getCustomTargetingValuesByStatement( $values_statement )->getResults();
+		$values_to_create = array_values(
+			array_diff(
+				$values,
+				array_map(
+					function ( $value ) {
+						return $value->getName();
+					},
+					$found_values
+				)
+			)
+		);
+		$created_values   = $service->createCustomTargetingValues(
+			array_map(
+				function ( $value ) use ( $key_id ) {
+					return ( new CustomTargetingValue() )->setCustomTargetingKeyId( $key_id )->setName( $value );
+				},
+				$values_to_create
+			)
+		);
+		return [
+			'found_values'   => is_array( $found_values ) && ! empty( $found_values ) ? $found_values : [],
+			'created_values' => is_array( $created_values ) && ! empty( $created_values ) ? $created_values : [],
 		];
 	}
 
@@ -141,66 +218,20 @@ final class Targeting_Keys extends Api_Object {
 	 * @throws \Exception If there is an error while communicating with the API.
 	 */
 	public function update_default_targeting_keys() {
-		$service = ( new ServiceFactory() )->createCustomTargetingService( $this->session );
-
-		// Find existing keys.
-		$or_clauses = implode(
-			' OR ',
-			array_map(
-				function( $key ) {
-					return sprintf( "name LIKE '%s'", strtolower( $key ) );
-				},
-				self::$default_targeting_keys
-			)
-		);
-		$statement  = new Statement( sprintf( "WHERE ( %s ) AND status = 'ACTIVE'", $or_clauses ) );
-		try {
-			$keys = $service->getCustomTargetingKeysByStatement( $statement );
-		} catch ( \Exception $e ) {
-			$error_message = $e->getMessage();
-			/* Ignore error if it's a network error (network is not set yet). Next request will have a network set. */
-			if ( false !== strpos( $error_message, 'AuthenticationError.NETWORK_NOT_FOUND' ) ) {
-				return [];
-			} elseif ( false !== strpos( $error_message, 'NETWORK_API_ACCESS_DISABLED' ) ) {
-				throw new \Exception( __( 'API access for this GAM account is disabled.', 'newspack-ads' ) );
-			} else {
-				throw new \Exception( __( 'Unable to find existing targeting keys.', 'newspack-ads' ) );
-			}
-		}
-
-		$keys_to_create = array_values(
-			array_diff(
-				self::$default_targeting_keys,
-				array_map(
-					function ( $key ) {
-						return strtolower( $key->getName() );
-					},
-					(array) $keys->getResults()
-				)
-			)
-		);
-
-		// Create custom targeting keys.
-		if ( ! empty( $keys_to_create ) ) {
-			try {
-				$created_keys = $service->createCustomTargetingKeys(
-					array_map(
-						function ( $key ) {
-								return ( new CustomTargetingKey() )->setName( $key )->setType( 'FREEFORM' );
-						},
-						$keys_to_create
-					)
-				);
-			} catch ( \Exception $e ) {
-				throw new \Exception( __( 'Unable to create custom targeting keys', 'newspack-ads' ) );
-			}
-			return array_map(
-				function( $key ) {
-					return $key->getName();
-				},
-				$created_keys
+		$keys         = self::$default_targeting_keys;
+		$created_keys = [];
+		foreach ( $keys as $key ) {
+			$targeting_key_config = self::get_targeting_key_config( $key );
+			$targeting_key        = $this->create_targeting_key(
+				$key,
+				$targeting_key_config['values'],
+				$targeting_key_config['type'],
+				$targeting_key_config['reportable_type']
 			);
+			if ( $targeting_key['targeting_key'] && $targeting_key['created'] ) {
+				$created_keys[] = $key;
+			}
 		}
-		return [];
+		return $created_keys;
 	}
 }

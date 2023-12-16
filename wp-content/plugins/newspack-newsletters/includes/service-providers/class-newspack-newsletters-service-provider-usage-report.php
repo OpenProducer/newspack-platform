@@ -50,7 +50,7 @@ class Newspack_Newsletters_Service_Provider_Usage_Report {
 	private $subscribes = 0;
 
 	/**
-	 * The site of the contacts list.
+	 * The size of the contacts list.
 	 *
 	 * @var integer
 	 */
@@ -146,7 +146,7 @@ class Newspack_Newsletters_Service_Provider_Usage_Report {
 		if ( 1 > $this->total_contacts ) {
 			return (float) 0;
 		}
-		return ( $this->subscribes - $this->unsubscribes ) / $this->total_contacts;
+		return (float) ( $this->subscribes - $this->unsubscribes ) / $this->total_contacts;
 	}
 
 	/**

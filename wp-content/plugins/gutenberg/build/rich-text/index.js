@@ -1665,8 +1665,8 @@ function registerFormatType(name, settings) {
     window.console.error('Format class names must be a string, or null to handle bare elements.');
     return;
   }
-  if (!/^[_a-zA-Z]+[a-zA-Z0-9-]*$/.test(settings.className)) {
-    window.console.error('A class name must begin with a letter, followed by any number of hyphens, letters, or numbers.');
+  if (!/^[_a-zA-Z]+[a-zA-Z0-9_-]*$/.test(settings.className)) {
+    window.console.error('A class name must begin with a letter, followed by any number of hyphens, underscores, letters, or numbers.');
     return;
   }
   if (settings.className === null) {

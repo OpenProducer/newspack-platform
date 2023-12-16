@@ -254,12 +254,6 @@ body.admin-color-sunrise {
   align-items: center;
   justify-content: center;
 }
-.wp-block-woocommerce-product-section__heading .wp-block-woocommerce-product-section__heading-description {
-  margin: 12px 0 0;
-  font-size: 13px;
-  color: #757575;
-  line-height: 1.5;
-}
 .wp-block-woocommerce-product-section__content--block-gap-unit-30 > * + * {
   margin-top: 24px;
 }
@@ -270,4 +264,8 @@ body.admin-color-sunrise {
   margin-top: 0;
   padding-bottom: 0;
   border-bottom: none;
+}
+.wp-block-woocommerce-product-section__heading-description {
+  margin: 0;
+  max-width: 300px;
 }

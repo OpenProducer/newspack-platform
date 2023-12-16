@@ -239,10 +239,6 @@ body.admin-color-sunrise {
   margin-left: 8px;
 }
 
-.woocommerce-product-form__required-input {
-  color: #CC1818;
-}
-
 .wp-block-woocommerce-product-name-field .has-error .components-base-control .components-input-control__backdrop {
   border-color: #d63638;
 }

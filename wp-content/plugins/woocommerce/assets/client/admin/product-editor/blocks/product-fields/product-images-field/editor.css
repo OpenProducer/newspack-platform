@@ -222,11 +222,52 @@ body.admin-color-sunrise {
  */
 /* stylelint-disable block-closing-brace-newline-after */
 /* stylelint-enable */
+.woocommerce-image-placeholder__wrapper {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 40px;
+}
+.woocommerce-image-placeholder__item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 150px;
+  height: 150px;
+  padding: 16px;
+  border-radius: 2px;
+  border: 1px dashed #CCCCCC;
+  margin-right: 12px;
+  flex: 1;
+  text-align: center;
+}
+.woocommerce-image-placeholder__item svg {
+  margin-bottom: 16px;
+}
+.woocommerce-image-placeholder__item p {
+  text-align: center;
+  color: #949494;
+}
+@media (max-width: 535px) {
+  .woocommerce-image-placeholder__item {
+    display: none;
+  }
+}
+@media (min-width: 536px) and (max-width: 700px) {
+  .woocommerce-image-placeholder__item {
+    display: none;
+  }
+  .woocommerce-image-placeholder__item:nth-child(-n+3) {
+    display: flex;
+  }
+}
+
 .wp-block-woocommerce-product-images-field .woocommerce-media-uploader {
   text-align: left;
 }
 .wp-block-woocommerce-product-images-field .woocommerce-media-uploader .components-drop-zone {
-  min-height: 222px;
+  min-height: 84px;
 }
 .wp-block-woocommerce-product-images-field .woocommerce-media-uploader__label {
   display: none;

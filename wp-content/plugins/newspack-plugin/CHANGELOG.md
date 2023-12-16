@@ -1,3 +1,57 @@
+## [2.12.1](https://github.com/Automattic/newspack-plugin/compare/v2.12.0...v2.12.1) (2023-12-12)
+
+
+### Bug Fixes
+
+* **ras:** handle UTM metadata field keys with arbitrary suffixes ([#2804](https://github.com/Automattic/newspack-plugin/issues/2804)) ([98e4694](https://github.com/Automattic/newspack-plugin/commit/98e469465be828fa0a0dc0f1bd7f7be09617a5af))
+
+# [2.12.0](https://github.com/Automattic/newspack-plugin/compare/v2.11.6...v2.12.0) (2023-12-11)
+
+
+### Bug Fixes
+
+* **checkout:** move stripe's cover fee placement ([#2767](https://github.com/Automattic/newspack-plugin/issues/2767)) ([5f8b539](https://github.com/Automattic/newspack-plugin/commit/5f8b53928ed712853aba1d1838222f8271eb99fc))
+* **data-events:** no longer use ActionScheduler for dispatches ([#2755](https://github.com/Automattic/newspack-plugin/issues/2755)) ([975ab96](https://github.com/Automattic/newspack-plugin/commit/975ab96032694ff5f5c25b6f0f72f25f3cdb9ca9))
+* **metering:** restrict comments on gated content ([#2751](https://github.com/Automattic/newspack-plugin/issues/2751)) ([1bfc6f0](https://github.com/Automattic/newspack-plugin/commit/1bfc6f0cbdbb8a64fcf252a85c427a30e203b097))
+* **recaptcha:** refresh token on checkout error ([#2769](https://github.com/Automattic/newspack-plugin/issues/2769)) ([f22e8bd](https://github.com/Automattic/newspack-plugin/commit/f22e8bd0ce51b5795f9e2a6d14b2ee59496deeef))
+
+
+### Features
+
+* add filters for assets enqueueing ([#2768](https://github.com/Automattic/newspack-plugin/issues/2768)) ([fcad059](https://github.com/Automattic/newspack-plugin/commit/fcad059abbe0314ba8a6f3eaaf92d5c96350e248))
+* **authentication:** rate limit magic links and OTP generation ([#2765](https://github.com/Automattic/newspack-plugin/issues/2765)) ([1252515](https://github.com/Automattic/newspack-plugin/commit/12525151a369d3c1785bad5b3edf5a6a5eb5cfcf))
+* **campaigns:** mark duplicate segments ([cb5b527](https://github.com/Automattic/newspack-plugin/commit/cb5b5273a52546a5478d258859d893491f1e1311))
+* **data-events:** track content gate interactions ([#2740](https://github.com/Automattic/newspack-plugin/issues/2740)) ([298fd7c](https://github.com/Automattic/newspack-plugin/commit/298fd7c958450cebae8803b334394eea63de501b))
+* **donations:** disable coupons for donation checkout ([#2770](https://github.com/Automattic/newspack-plugin/issues/2770)) ([6051429](https://github.com/Automattic/newspack-plugin/commit/60514291a895d0c96ca9483cdc1dedb890f0c510))
+
+# [2.12.0-alpha.4](https://github.com/Automattic/newspack-plugin/compare/v2.12.0-alpha.3...v2.12.0-alpha.4) (2023-12-05)
+
+
+### Bug Fixes
+
+* **mailchimp:** prevent merge fields fetch throwing fatal error ([#2793](https://github.com/Automattic/newspack-plugin/issues/2793)) ([9b9d3ab](https://github.com/Automattic/newspack-plugin/commit/9b9d3abf9190fe195825b77bc33be92a602c395a))
+
+## [2.11.6](https://github.com/Automattic/newspack-plugin/compare/v2.11.5...v2.11.6) (2023-12-05)
+
+
+### Bug Fixes
+
+* **mailchimp:** prevent merge fields fetch throwing fatal error ([#2793](https://github.com/Automattic/newspack-plugin/issues/2793)) ([9b9d3ab](https://github.com/Automattic/newspack-plugin/commit/9b9d3abf9190fe195825b77bc33be92a602c395a))
+
+## [2.11.5](https://github.com/Automattic/newspack-plugin/compare/v2.11.4...v2.11.5) (2023-12-04)
+
+
+### Bug Fixes
+
+* more fixes for Mailchimp RAS data sync ([#2780](https://github.com/Automattic/newspack-plugin/issues/2780)) ([ef4bfe7](https://github.com/Automattic/newspack-plugin/commit/ef4bfe754ebd101b483f6b934b7acd60ef778770))
+
+## [2.11.4](https://github.com/Automattic/newspack-plugin/compare/v2.11.3...v2.11.4) (2023-12-01)
+
+
+### Bug Fixes
+
+* add a filter to the lists offered on register ([04192f5](https://github.com/Automattic/newspack-plugin/commit/04192f5bba185ee62269e597689db3df037fb73b))
+
 ## [2.11.3](https://github.com/Automattic/newspack-plugin/compare/v2.11.2...v2.11.3) (2023-11-28)
 
 

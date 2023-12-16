@@ -58,5 +58,4 @@ class Newspack_Newsletters_Mailchimp_Usage_Reports {
 
 		return $report;
 	}
-
 }

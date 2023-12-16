@@ -385,7 +385,7 @@ function ReusableBlockConvertButton({
     placeholder: (0,external_wp_i18n_namespaceObject.__)('My pattern')
   }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToggleControl, {
     label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'Option that makes an individual pattern synchronized'),
-    help: (0,external_wp_i18n_namespaceObject.__)('Editing the pattern will update it anywhere it is used.'),
+    help: (0,external_wp_i18n_namespaceObject.__)('Sync this pattern across multiple locations.'),
     checked: !syncType,
     onChange: () => {
       setSyncType(!syncType ? 'unsynced' : undefined);
@@ -429,7 +429,6 @@ function ReusableBlocksManageButton({
   const {
     canRemove,
     isVisible,
-    innerBlockCount,
     managePatternsUrl
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
@@ -467,7 +466,7 @@ function ReusableBlocksManageButton({
     href: managePatternsUrl
   }, (0,external_wp_i18n_namespaceObject.__)('Manage patterns')), canRemove && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
     onClick: () => convertBlockToStatic(clientId)
-  }, innerBlockCount > 1 ? (0,external_wp_i18n_namespaceObject.__)('Detach patterns') : (0,external_wp_i18n_namespaceObject.__)('Detach pattern')));
+  }, (0,external_wp_i18n_namespaceObject.__)('Detach')));
 }
 /* harmony default export */ var reusable_blocks_manage_button = (ReusableBlocksManageButton);
 

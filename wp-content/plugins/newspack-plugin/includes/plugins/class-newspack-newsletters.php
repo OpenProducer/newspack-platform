@@ -30,6 +30,11 @@ class Newspack_Newsletters {
 		'signup_page'          => 'Signup Page',
 		'signup_page_utm'      => 'Signup UTM: ',
 		'newsletter_selection' => 'Newsletter Selection',
+		'referer'              => 'Referrer Path',
+		'registration_page'    => 'Registration Page',
+		'current_page_url'     => 'Registration Page',
+		'registration_method'  => 'Registration Method',
+
 		// Payment-related.
 		'membership_status'    => 'Membership Status',
 		'payment_page'         => 'Payment Page',
@@ -49,9 +54,20 @@ class Newspack_Newsletters {
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
-		if ( Reader_Activation::is_enabled() && Reader_Activation::get_setting( 'sync_esp' ) ) {
+		\add_filter( 'newspack_newsletters_contact_data', [ __CLASS__, 'normalize_contact_data' ] );
+
+		if ( self::should_sync_ras_metadata() ) {
 			\add_filter( 'newspack_newsletters_contact_lists', [ __CLASS__, 'add_activecampaign_master_list' ], 10, 3 );
 		}
+	}
+
+	/**
+	 * Whether or not we should use the special metadata keys for RAS sites.
+	 * 
+	 * @return boolean True if a RAS sync, otherwise false.
+	 */
+	public static function should_sync_ras_metadata() {
+		return Reader_Activation::is_enabled() && Reader_Activation::get_setting( 'sync_esp' );
 	}
 
 	/**
@@ -115,6 +131,63 @@ class Newspack_Newsletters {
 		 * @param string $name The unprefixed part of the key.
 		 */
 		return apply_filters( 'newspack_ras_metadata_key', $key, $prefix, $name );
+	}
+
+	/**
+	 * Normalizes contact metadata keys before syncing to ESP. If RAS is enabled, we should favor RAS metadata keys.
+	 * 
+	 * @param array $contact Contact data.
+	 * @return array Normalized contact data.
+	 */
+	public static function normalize_contact_data( $contact ) {
+		// If syncing for RAS, ensure that metadata keys are normalized with the correct RAS metadata keys.
+		if ( isset( $contact['metadata'] ) ) {
+			$normalized_metadata = [];
+			$raw_keys            = array_values( array_flip( self::$metadata_keys ) );
+			$prefixed_keys       = array_map(
+				function( $key ) {
+					return self::get_metadata_key( $key );
+				},
+				$raw_keys
+			);
+			foreach ( $contact['metadata'] as $meta_key => $meta_value ) {
+				if ( self::should_sync_ras_metadata() ) {
+					if ( in_array( $meta_key, $raw_keys, true ) ) {
+						$normalized_metadata[ self::get_metadata_key( $meta_key ) ] = $meta_value; // If passed a raw key, map it to the prefixed key.
+					} elseif (
+						in_array( $meta_key, $prefixed_keys, true ) ||
+						( false !== strpos( $meta_key, self::get_metadata_key( 'signup_page_utm' ) ) || false !== strpos( $meta_key, self::get_metadata_key( 'payment_page_utm' ) ) ) // UTM meta keys can have arbitrary suffixes.
+					) {
+						$normalized_metadata[ $meta_key ] = $meta_value;
+					}
+				} else {
+					// If not syncing for RAS, we only want to sync email (for all ESPs) + First/Last Name (for MC only).
+					if ( in_array( $meta_key, [ 'First Name', 'Last Name' ], true ) ) {
+						$normalized_metadata[ $meta_key ] = $meta_value;
+					}
+				}
+			}
+			$contact['metadata'] = $normalized_metadata;
+		}
+
+		// Parse full name into first + last for MC, which stores these as separate merge fields.
+		if ( method_exists( 'Newspack_Newsletters', 'service_provider' ) && 'mailchimp' === \Newspack_Newsletters::service_provider() ) {
+			if ( isset( $contact['name'] ) ) {
+				if ( ! isset( $contact['metadata'] ) ) {
+					$contact['metadata'] = [];
+				}
+				$name_fragments                    = explode( ' ', $contact['name'], 2 );
+				$contact['metadata']['First Name'] = $name_fragments[0];
+				if ( isset( $name_fragments[1] ) ) {
+					$contact['metadata']['Last Name'] = $name_fragments[1];
+				}
+			}
+		}
+
+		Logger::log( 'Normalizing contact data for reader ESP sync:' );
+		Logger::log( $contact );
+
+		return $contact;
 	}
 
 	/**

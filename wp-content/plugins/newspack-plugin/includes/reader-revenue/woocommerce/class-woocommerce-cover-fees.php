@@ -25,7 +25,7 @@ class WooCommerce_Cover_Fees {
 		\add_filter( 'woocommerce_checkout_create_order', [ __CLASS__, 'set_total_with_fees' ], 1, 2 );
 		\add_action( 'woocommerce_checkout_order_processed', [ __CLASS__, 'add_order_note' ], 1, 3 );
 		\add_filter( 'wc_price', [ __CLASS__, 'amend_price_markup' ], 1, 2 );
-		\add_filter( 'wc_stripe_description', [ __CLASS__, 'add_input_to_stripe_gateway_description' ] );
+		\add_action( 'wc_stripe_payment_fields_stripe', [ __CLASS__, 'render_stripe_input' ] );
 		\add_action( 'wp_enqueue_scripts', [ __CLASS__, 'print_checkout_helper_script' ] );
 	}
 
@@ -113,25 +113,21 @@ class WooCommerce_Cover_Fees {
 	}
 
 	/**
-	 * Add "cover fees" input to Stripe checkout description.
-	 *
-	 * @param string $desc Description.
-	 *
-	 * @return string
+	 * Render the "cover fees" input for Stripe.
 	 */
-	public static function add_input_to_stripe_gateway_description( $desc ) {
+	public static function render_stripe_input() {
 		if ( ! self::should_allow_covering_fees() ) {
-			return $desc;
+			return;
 		}
-		ob_start();
 		?>
-			<p class="form-row" style="display: flex;">
+		<fieldset>
+			<p class="form-row newspack-cover-fees" style="display: flex;">
 				<input
 					id=<?php echo esc_attr( self::CUSTOM_FIELD_NAME ); ?>
 					name=<?php echo esc_attr( self::CUSTOM_FIELD_NAME ); ?>
 					type="checkbox"
 					value="true"
-					style="margin-right: 10px;"
+					style="margin-right: 8px;"
 					onchange="newspackHandleCoverFees(this)"
 					<?php if ( get_option( 'newspack_donations_allow_covering_fees_default', false ) ) : ?>
 						checked
@@ -147,7 +143,7 @@ class WooCommerce_Cover_Fees {
 							// Translators: %s is the possessive form of the site name.
 							esc_html__(
 								'I’d like to cover the %1$s transaction fee to ensure my full donation goes towards %2$s mission.',
-								'newspack-plugin' 
+								'newspack-plugin'
 							),
 							esc_html( self::get_fee_display_value() ),
 							esc_html( self::get_possessive( get_option( 'blogname' ) ) )
@@ -156,14 +152,13 @@ class WooCommerce_Cover_Fees {
 					?>
 				</label>
 			</p>
+		</fieldset>
 		<?php
-		$desc .= ob_get_clean();
-		return $desc;
 	}
 
 	/**
 	 * Get possessive form of the given string. Proper nouns ending in S should not have a trailing S.
-	 * 
+	 *
 	 * @param string $string String to modify.
 	 * @return string Modified string.
 	 */

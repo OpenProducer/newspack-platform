@@ -152,7 +152,7 @@ class Api {
 			'AuthenticationError.NETWORK_API_ACCESS_DISABLED' => sprintf(
 				'%s <a href="%s" target="_blank">%s</a>',
 				__( 'API access for this GAM account is disabled.', 'newspack-ads' ),
-				"https://admanager.google.com/${network_code}#admin/settings/network",
+				"https://admanager.google.com/{$network_code}#admin/settings/network",
 				__( 'Enable API access in your GAM settings.', 'newspack-ads' )
 			),
 			'AuthenticationError.NO_NETWORKS_TO_ACCESS' => __( 'You do not have access to any GAM networks.', 'newspack-ads' ),
