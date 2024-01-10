@@ -17791,7 +17791,7 @@ function useResolveEditedEntityAndContext({
     }
     return {
       hasLoadedAllDependencies: !!base && !!siteData,
-      homepageId: siteData?.show_on_front === 'page' ? siteData.page_on_front.toString() : null,
+      homepageId: siteData?.show_on_front === 'page' && ['number', 'string'].includes(typeof siteData.page_on_front) ? siteData.page_on_front.toString() : null,
       url: base?.home,
       frontPageTemplateId: _frontPateTemplateId
     };
