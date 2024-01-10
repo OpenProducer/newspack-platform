@@ -43,6 +43,7 @@ return array(
     'Newspack_Newsletters_Constant_Contact' => $baseDir . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php',
     'Newspack_Newsletters_Constant_Contact_Controller' => $baseDir . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-controller.php',
     'Newspack_Newsletters_Constant_Contact_SDK' => $baseDir . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-sdk.php',
+    'Newspack_Newsletters_Constant_Contact_Usage_Reports' => $baseDir . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-usage-reports.php',
     'Newspack_Newsletters_ESP_API_Interface' => $baseDir . '/includes/service-providers/interface-newspack-newsletters-esp-service.php',
     'Newspack_Newsletters_Editor' => $baseDir . '/includes/class-newspack-newsletters-editor.php',
     'Newspack_Newsletters_Embed' => $baseDir . '/includes/class-newspack-newsletters-embed.php',

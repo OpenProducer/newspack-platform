@@ -1,3 +1,17 @@
+# [2.8.0](https://github.com/Automattic/newspack-newsletters/compare/v2.7.0...v2.8.0) (2024-01-08)
+
+
+### Features
+
+* add Constant Contact usge report ([#1366](https://github.com/Automattic/newspack-newsletters/issues/1366)) ([a249b4c](https://github.com/Automattic/newspack-newsletters/commit/a249b4cc02ae1ad24860ddc4307f20ecc6bb498c))
+
+# [2.8.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v2.7.0...v2.8.0-alpha.1) (2023-12-15)
+
+
+### Features
+
+* add Constant Contact usge report ([#1366](https://github.com/Automattic/newspack-newsletters/issues/1366)) ([a249b4c](https://github.com/Automattic/newspack-newsletters/commit/a249b4cc02ae1ad24860ddc4307f20ecc6bb498c))
+
 # [2.7.0](https://github.com/Automattic/newspack-newsletters/compare/v2.6.2...v2.7.0) (2023-12-11)
 
 
