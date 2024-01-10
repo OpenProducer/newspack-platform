@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0efcfaeb36771468eb051406d87791da
+class ComposerStaticInit5f4ae8f81d6d3a5cc97a1356d62f1937
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -830,6 +830,7 @@ class ComposerStaticInit0efcfaeb36771468eb051406d87791da
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promotion_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/black-friday-promotion-notification.php',
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Sidebar_Checklist_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/black-friday-sidebar-checklist-notification.php',
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Jetpack_Boost_Pre_Publish' => __DIR__ . '/../..' . '/src/integrations/alerts/jetpack-boost-pre-publish.php',
+        'Yoast\\WP\\SEO\\Integrations\\Alerts\\Trustpilot_Review_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/trustpilot-review-notification.php',
         'Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification' => __DIR__ . '/../..' . '/src/integrations/alerts/webinar-promo-notification.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Breadcrumbs_Block' => __DIR__ . '/../..' . '/src/integrations/blocks/breadcrumbs-block.php',
         'Yoast\\WP\\SEO\\Integrations\\Blocks\\Dynamic_Block' => __DIR__ . '/../..' . '/src/integrations/blocks/abstract-dynamic-block.php',
@@ -1103,9 +1104,9 @@ class ComposerStaticInit0efcfaeb36771468eb051406d87791da
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0efcfaeb36771468eb051406d87791da::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0efcfaeb36771468eb051406d87791da::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0efcfaeb36771468eb051406d87791da::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit5f4ae8f81d6d3a5cc97a1356d62f1937::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit5f4ae8f81d6d3a5cc97a1356d62f1937::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit5f4ae8f81d6d3a5cc97a1356d62f1937::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -75,7 +75,7 @@ if ( defined( 'IS_GUTENBERG_PLUGIN' ) && IS_GUTENBERG_PLUGIN ) {
 	function gutenberg_block_core_navigation_get_inner_blocks_from_unstable_location( $attributes ) {
 		$menu_items = gutenberg_block_core_navigation_get_menu_items_at_location( $attributes['__unstableLocation'] );
 		if ( empty( $menu_items ) ) {
-			return '';
+			return new WP_Block_List( array(), $attributes );
 		}
 
 		$menu_items_by_parent_id = gutenberg_block_core_navigation_sort_menu_items_by_parent_id( $menu_items );

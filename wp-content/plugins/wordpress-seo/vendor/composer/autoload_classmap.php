@@ -815,6 +815,7 @@ return array(
     'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Promotion_Notification' => $baseDir . '/src/integrations/alerts/black-friday-promotion-notification.php',
     'Yoast\\WP\\SEO\\Integrations\\Alerts\\Black_Friday_Sidebar_Checklist_Notification' => $baseDir . '/src/integrations/alerts/black-friday-sidebar-checklist-notification.php',
     'Yoast\\WP\\SEO\\Integrations\\Alerts\\Jetpack_Boost_Pre_Publish' => $baseDir . '/src/integrations/alerts/jetpack-boost-pre-publish.php',
+    'Yoast\\WP\\SEO\\Integrations\\Alerts\\Trustpilot_Review_Notification' => $baseDir . '/src/integrations/alerts/trustpilot-review-notification.php',
     'Yoast\\WP\\SEO\\Integrations\\Alerts\\Webinar_Promo_Notification' => $baseDir . '/src/integrations/alerts/webinar-promo-notification.php',
     'Yoast\\WP\\SEO\\Integrations\\Blocks\\Breadcrumbs_Block' => $baseDir . '/src/integrations/blocks/breadcrumbs-block.php',
     'Yoast\\WP\\SEO\\Integrations\\Blocks\\Dynamic_Block' => $baseDir . '/src/integrations/blocks/abstract-dynamic-block.php',

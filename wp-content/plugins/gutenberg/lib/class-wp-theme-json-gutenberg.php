@@ -354,6 +354,7 @@ class WP_Theme_JSON_Gutenberg {
 		'useRootPaddingAwareAlignments' => null,
 		'background'                    => array(
 			'backgroundImage' => null,
+			'backgroundSize'  => null,
 		),
 		'border'                        => array(
 			'color'  => null,
@@ -431,6 +432,7 @@ class WP_Theme_JSON_Gutenberg {
 			'fontFamily' => null,
 			'name'       => null,
 			'slug'       => null,
+			'preview'    => null,
 			'fontFace'   => array(
 				array(
 					'ascentOverride'        => null,
@@ -446,6 +448,7 @@ class WP_Theme_JSON_Gutenberg {
 					'sizeAdjust'            => null,
 					'src'                   => null,
 					'unicodeRange'          => null,
+					'preview'               => null,
 				),
 			),
 		),
@@ -648,6 +651,7 @@ class WP_Theme_JSON_Gutenberg {
 	 */
 	const APPEARANCE_TOOLS_OPT_INS = array(
 		array( 'background', 'backgroundImage' ),
+		array( 'background', 'backgroundSize' ),
 		array( 'border', 'color' ),
 		array( 'border', 'radius' ),
 		array( 'border', 'style' ),

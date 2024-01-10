@@ -825,7 +825,8 @@ const directivePrefix = 'wp';
 const ignoreAttr = `data-${directivePrefix}-ignore`;
 const islandAttr = `data-${directivePrefix}-interactive`;
 const fullPrefix = `data-${directivePrefix}-`;
-let namespace = null;
+const namespaces = [];
+const currentNamespace = () => namespaces[namespaces.length - 1] ?? null;
 
 // Regular expression for directive parsing.
 const directiveParser = new RegExp(`^data-${directivePrefix}-` +
@@ -885,7 +886,7 @@ function toVdom(root) {
           } catch (e) {}
           if (n === islandAttr) {
             island = true;
-            namespace = value?.namespace ?? null;
+            namespaces.push(value?.namespace ?? null);
           } else {
             directives.push([n, ns, value]);
           }
@@ -908,7 +909,7 @@ function toVdom(root) {
         const [, prefix, suffix = 'default'] = directiveParser.exec(name);
         if (!obj[prefix]) obj[prefix] = [];
         obj[prefix].push({
-          namespace: ns ?? namespace,
+          namespace: ns ?? currentNamespace(),
           value,
           suffix
         });
@@ -924,6 +925,9 @@ function toVdom(root) {
       }
       treeWalker.parentNode();
     }
+
+    // Restore previous namespace.
+    if (island) namespaces.pop();
     return [y(node.localName, props, children)];
   }
   return walk(treeWalker.currentNode);

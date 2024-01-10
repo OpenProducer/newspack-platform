@@ -219,6 +219,13 @@ __webpack_require__.d(store_selectors_namespaceObject, {
   isSavingWidgetAreas: function() { return isSavingWidgetAreas; }
 });
 
+// NAMESPACE OBJECT: ./packages/edit-widgets/build-module/store/private-selectors.js
+var private_selectors_namespaceObject = {};
+__webpack_require__.r(private_selectors_namespaceObject);
+__webpack_require__.d(private_selectors_namespaceObject, {
+  getListViewToggleRef: function() { return getListViewToggleRef; }
+});
+
 // NAMESPACE OBJECT: ./packages/edit-widgets/build-module/blocks/widget-area/index.js
 var widget_area_namespaceObject = {};
 __webpack_require__.r(widget_area_namespaceObject);
@@ -1181,7 +1188,8 @@ function ComplementaryArea({
     label: title,
     icon: showIconLabels ? library_check : icon,
     showTooltip: !showIconLabels,
-    variant: showIconLabels ? 'tertiary' : undefined
+    variant: showIconLabels ? 'tertiary' : undefined,
+    size: "compact"
   })), name && isPinnable && (0,external_React_namespaceObject.createElement)(ComplementaryAreaMoreMenuItem, {
     target: name,
     scope: scope,
@@ -1417,7 +1425,8 @@ function MoreMenuDropdown({
     },
     toggleProps: {
       tooltipPosition: 'bottom',
-      ...toggleProps
+      ...toggleProps,
+      size: 'compact'
     }
   }, onClose => children(onClose));
 }
@@ -2270,6 +2279,330 @@ function isListViewOpened(state) {
   return state.listViewPanel;
 }
 
+;// CONCATENATED MODULE: ./node_modules/rememo/rememo.js
+
+
+/** @typedef {(...args: any[]) => *[]} GetDependants */
+
+/** @typedef {() => void} Clear */
+
+/**
+ * @typedef {{
+ *   getDependants: GetDependants,
+ *   clear: Clear
+ * }} EnhancedSelector
+ */
+
+/**
+ * Internal cache entry.
+ *
+ * @typedef CacheNode
+ *
+ * @property {?CacheNode|undefined} [prev] Previous node.
+ * @property {?CacheNode|undefined} [next] Next node.
+ * @property {*[]} args Function arguments for cache entry.
+ * @property {*} val Function result.
+ */
+
+/**
+ * @typedef Cache
+ *
+ * @property {Clear} clear Function to clear cache.
+ * @property {boolean} [isUniqueByDependants] Whether dependants are valid in
+ * considering cache uniqueness. A cache is unique if dependents are all arrays
+ * or objects.
+ * @property {CacheNode?} [head] Cache head.
+ * @property {*[]} [lastDependants] Dependants from previous invocation.
+ */
+
+/**
+ * Arbitrary value used as key for referencing cache object in WeakMap tree.
+ *
+ * @type {{}}
+ */
+var LEAF_KEY = {};
+
+/**
+ * Returns the first argument as the sole entry in an array.
+ *
+ * @template T
+ *
+ * @param {T} value Value to return.
+ *
+ * @return {[T]} Value returned as entry in array.
+ */
+function arrayOf(value) {
+	return [value];
+}
+
+/**
+ * Returns true if the value passed is object-like, or false otherwise. A value
+ * is object-like if it can support property assignment, e.g. object or array.
+ *
+ * @param {*} value Value to test.
+ *
+ * @return {boolean} Whether value is object-like.
+ */
+function isObjectLike(value) {
+	return !!value && 'object' === typeof value;
+}
+
+/**
+ * Creates and returns a new cache object.
+ *
+ * @return {Cache} Cache object.
+ */
+function createCache() {
+	/** @type {Cache} */
+	var cache = {
+		clear: function () {
+			cache.head = null;
+		},
+	};
+
+	return cache;
+}
+
+/**
+ * Returns true if entries within the two arrays are strictly equal by
+ * reference from a starting index.
+ *
+ * @param {*[]} a First array.
+ * @param {*[]} b Second array.
+ * @param {number} fromIndex Index from which to start comparison.
+ *
+ * @return {boolean} Whether arrays are shallowly equal.
+ */
+function isShallowEqual(a, b, fromIndex) {
+	var i;
+
+	if (a.length !== b.length) {
+		return false;
+	}
+
+	for (i = fromIndex; i < a.length; i++) {
+		if (a[i] !== b[i]) {
+			return false;
+		}
+	}
+
+	return true;
+}
+
+/**
+ * Returns a memoized selector function. The getDependants function argument is
+ * called before the memoized selector and is expected to return an immutable
+ * reference or array of references on which the selector depends for computing
+ * its own return value. The memoize cache is preserved only as long as those
+ * dependant references remain the same. If getDependants returns a different
+ * reference(s), the cache is cleared and the selector value regenerated.
+ *
+ * @template {(...args: *[]) => *} S
+ *
+ * @param {S} selector Selector function.
+ * @param {GetDependants=} getDependants Dependant getter returning an array of
+ * references used in cache bust consideration.
+ */
+/* harmony default export */ function rememo(selector, getDependants) {
+	/** @type {WeakMap<*,*>} */
+	var rootCache;
+
+	/** @type {GetDependants} */
+	var normalizedGetDependants = getDependants ? getDependants : arrayOf;
+
+	/**
+	 * Returns the cache for a given dependants array. When possible, a WeakMap
+	 * will be used to create a unique cache for each set of dependants. This
+	 * is feasible due to the nature of WeakMap in allowing garbage collection
+	 * to occur on entries where the key object is no longer referenced. Since
+	 * WeakMap requires the key to be an object, this is only possible when the
+	 * dependant is object-like. The root cache is created as a hierarchy where
+	 * each top-level key is the first entry in a dependants set, the value a
+	 * WeakMap where each key is the next dependant, and so on. This continues
+	 * so long as the dependants are object-like. If no dependants are object-
+	 * like, then the cache is shared across all invocations.
+	 *
+	 * @see isObjectLike
+	 *
+	 * @param {*[]} dependants Selector dependants.
+	 *
+	 * @return {Cache} Cache object.
+	 */
+	function getCache(dependants) {
+		var caches = rootCache,
+			isUniqueByDependants = true,
+			i,
+			dependant,
+			map,
+			cache;
+
+		for (i = 0; i < dependants.length; i++) {
+			dependant = dependants[i];
+
+			// Can only compose WeakMap from object-like key.
+			if (!isObjectLike(dependant)) {
+				isUniqueByDependants = false;
+				break;
+			}
+
+			// Does current segment of cache already have a WeakMap?
+			if (caches.has(dependant)) {
+				// Traverse into nested WeakMap.
+				caches = caches.get(dependant);
+			} else {
+				// Create, set, and traverse into a new one.
+				map = new WeakMap();
+				caches.set(dependant, map);
+				caches = map;
+			}
+		}
+
+		// We use an arbitrary (but consistent) object as key for the last item
+		// in the WeakMap to serve as our running cache.
+		if (!caches.has(LEAF_KEY)) {
+			cache = createCache();
+			cache.isUniqueByDependants = isUniqueByDependants;
+			caches.set(LEAF_KEY, cache);
+		}
+
+		return caches.get(LEAF_KEY);
+	}
+
+	/**
+	 * Resets root memoization cache.
+	 */
+	function clear() {
+		rootCache = new WeakMap();
+	}
+
+	/* eslint-disable jsdoc/check-param-names */
+	/**
+	 * The augmented selector call, considering first whether dependants have
+	 * changed before passing it to underlying memoize function.
+	 *
+	 * @param {*}    source    Source object for derivation.
+	 * @param {...*} extraArgs Additional arguments to pass to selector.
+	 *
+	 * @return {*} Selector result.
+	 */
+	/* eslint-enable jsdoc/check-param-names */
+	function callSelector(/* source, ...extraArgs */) {
+		var len = arguments.length,
+			cache,
+			node,
+			i,
+			args,
+			dependants;
+
+		// Create copy of arguments (avoid leaking deoptimization).
+		args = new Array(len);
+		for (i = 0; i < len; i++) {
+			args[i] = arguments[i];
+		}
+
+		dependants = normalizedGetDependants.apply(null, args);
+		cache = getCache(dependants);
+
+		// If not guaranteed uniqueness by dependants (primitive type), shallow
+		// compare against last dependants and, if references have changed,
+		// destroy cache to recalculate result.
+		if (!cache.isUniqueByDependants) {
+			if (
+				cache.lastDependants &&
+				!isShallowEqual(dependants, cache.lastDependants, 0)
+			) {
+				cache.clear();
+			}
+
+			cache.lastDependants = dependants;
+		}
+
+		node = cache.head;
+		while (node) {
+			// Check whether node arguments match arguments
+			if (!isShallowEqual(node.args, args, 1)) {
+				node = node.next;
+				continue;
+			}
+
+			// At this point we can assume we've found a match
+
+			// Surface matched node to head if not already
+			if (node !== cache.head) {
+				// Adjust siblings to point to each other.
+				/** @type {CacheNode} */ (node.prev).next = node.next;
+				if (node.next) {
+					node.next.prev = node.prev;
+				}
+
+				node.next = cache.head;
+				node.prev = null;
+				/** @type {CacheNode} */ (cache.head).prev = node;
+				cache.head = node;
+			}
+
+			// Return immediately
+			return node.val;
+		}
+
+		// No cached value found. Continue to insertion phase:
+
+		node = /** @type {CacheNode} */ ({
+			// Generate the result from original function
+			val: selector.apply(null, args),
+		});
+
+		// Avoid including the source object in the cache.
+		args[0] = null;
+		node.args = args;
+
+		// Don't need to check whether node is already head, since it would
+		// have been returned above already if it was
+
+		// Shift existing head down list
+		if (cache.head) {
+			cache.head.prev = node;
+			node.next = cache.head;
+		}
+
+		cache.head = node;
+
+		return node.val;
+	}
+
+	callSelector.getDependants = normalizedGetDependants;
+	callSelector.clear = clear;
+	clear();
+
+	return /** @type {S & EnhancedSelector} */ (callSelector);
+}
+
+;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/store/private-selectors.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+const getListViewToggleRef = rememo(() => {
+  return (0,external_wp_element_namespaceObject.createRef)();
+}, () => []);
+
+;// CONCATENATED MODULE: external ["wp","privateApis"]
+var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/edit-widgets');
+
 ;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/store/index.js
 /**
  * WordPress dependencies
@@ -2280,6 +2613,8 @@ function isListViewOpened(state) {
 /**
  * Internal dependencies
  */
+
+
 
 
 
@@ -2319,6 +2654,7 @@ external_wp_apiFetch_default().use(function (options, next) {
   }
   return next(options);
 });
+unlock(store_store).registerPrivateSelectors(private_selectors_namespaceObject);
 
 ;// CONCATENATED MODULE: external ["wp","hooks"]
 var external_wp_hooks_namespaceObject = window["wp"]["hooks"];
@@ -2610,6 +2946,7 @@ const useIsDragging = elementRef => {
  * Internal dependencies
  */
 const metadata = {
+  $schema: "https://schemas.wp.org/trunk/block.json",
   name: "core/widget-area",
   category: "widgets",
   attributes: {
@@ -2947,23 +3284,12 @@ const useLastSelectedWidgetArea = () => (0,external_wp_data_namespaceObject.useS
 const ALLOW_REUSABLE_BLOCKS = false;
 const ENABLE_EXPERIMENTAL_FSE_BLOCKS = false;
 
-;// CONCATENATED MODULE: external ["wp","privateApis"]
-var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/lock-unlock.js
-/**
- * WordPress dependencies
- */
-
-const {
-  lock,
-  unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/edit-widgets');
-
 ;// CONCATENATED MODULE: ./packages/edit-widgets/build-module/components/widget-areas-block-editor-provider/index.js
 
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -2994,6 +3320,7 @@ function WidgetAreasBlockEditorProvider({
   ...props
 }) {
   const mediaPermissions = (0,external_wp_coreData_namespaceObject.useResourcePermissions)('media');
+  const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
   const {
     reusableBlocks,
     isFixedToolbarActive,
@@ -3039,7 +3366,7 @@ function WidgetAreasBlockEditorProvider({
     return {
       ...blockEditorSettings,
       __experimentalReusableBlocks: reusableBlocks,
-      hasFixedToolbar: isFixedToolbarActive,
+      hasFixedToolbar: isFixedToolbarActive || !isLargeViewport,
       keepCaretInsideBlock,
       mediaUpload: mediaUploadBlockEditor,
       templateLock: 'all',
@@ -3047,7 +3374,7 @@ function WidgetAreasBlockEditorProvider({
       pageOnFront,
       pageForPosts
     };
-  }, [blockEditorSettings, isFixedToolbarActive, keepCaretInsideBlock, mediaPermissions.canCreate, reusableBlocks, setIsInserterOpened, pageOnFront, pageForPosts]);
+  }, [blockEditorSettings, isFixedToolbarActive, isLargeViewport, keepCaretInsideBlock, mediaPermissions.canCreate, reusableBlocks, setIsInserterOpened, pageOnFront, pageForPosts]);
   const widgetAreaId = use_last_selected_widget_area();
   const [blocks, onInput, onChange] = (0,external_wp_coreData_namespaceObject.useEntityBlockEditor)(KIND, POST_TYPE, {
     id: buildWidgetAreasPostId()
@@ -3316,7 +3643,7 @@ const plus = (0,external_React_namespaceObject.createElement)(external_wp_primit
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
 }, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M18 11.2h-5.2V6h-1.6v5.2H6v1.6h5.2V18h1.6v-5.2H18z"
+  d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z"
 }));
 /* harmony default export */ var library_plus = (plus);
 
@@ -3443,26 +3770,27 @@ function RedoButton() {
 
 
 const {
-  useShouldContextualToolbarShow
+  useCanBlockToolbarBeFocused
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
-function DocumentTools({
-  setListViewToggleElement
-}) {
+function DocumentTools() {
   const isMediumViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
   const inserterButton = (0,external_wp_element_namespaceObject.useRef)();
   const widgetAreaClientId = use_last_selected_widget_area();
   const isLastSelectedWidgetAreaOpen = (0,external_wp_data_namespaceObject.useSelect)(select => select(store_store).getIsWidgetAreaOpen(widgetAreaClientId), [widgetAreaClientId]);
   const {
     isInserterOpen,
-    isListViewOpen
+    isListViewOpen,
+    listViewToggleRef
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       isInserterOpened,
-      isListViewOpened
-    } = select(store_store);
+      isListViewOpened,
+      getListViewToggleRef
+    } = unlock(select(store_store));
     return {
       isInserterOpen: isInserterOpened(),
-      isListViewOpen: isListViewOpened()
+      isListViewOpen: isListViewOpened(),
+      listViewToggleRef: getListViewToggleRef()
     };
   }, []);
   const {
@@ -3493,14 +3821,9 @@ function DocumentTools({
     }
   };
   const toggleListView = (0,external_wp_element_namespaceObject.useCallback)(() => setIsListViewOpened(!isListViewOpen), [setIsListViewOpened, isListViewOpen]);
-  const {
-    shouldShowContextualToolbar,
-    canFocusHiddenToolbar,
-    fixedToolbarCanBeFocused
-  } = useShouldContextualToolbarShow();
+
   // If there's a block toolbar to be focused, disable the focus shortcut for the document toolbar.
-  // There's a fixed block toolbar when the fixed toolbar option is enabled or when the browser width is less than the large viewport.
-  const blockToolbarCanBeFocused = shouldShowContextualToolbar || canFocusHiddenToolbar || fixedToolbarCanBeFocused;
+  const blockToolbarCanBeFocused = useCanBlockToolbarBeFocused();
   return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.NavigableToolbar, {
     className: "edit-widgets-header-toolbar",
     "aria-label": (0,external_wp_i18n_namespaceObject.__)('Document tools'),
@@ -3527,7 +3850,7 @@ function DocumentTools({
     /* translators: button label text should, if possible, be under 16 characters. */,
     label: (0,external_wp_i18n_namespaceObject.__)('List View'),
     onClick: toggleListView,
-    ref: setListViewToggleElement
+    ref: listViewToggleRef
   })));
 }
 /* harmony default export */ var document_tools = (DocumentTools);
@@ -3972,13 +4295,7 @@ function MoreMenu() {
 
 
 
-
-const {
-  BlockContextualToolbar
-} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
-function Header({
-  setListViewToggleElement
-}) {
+function Header() {
   const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
   const blockToolbarRef = (0,external_wp_element_namespaceObject.useRef)();
   const {
@@ -3995,12 +4312,10 @@ function Header({
   }, (0,external_wp_i18n_namespaceObject.__)('Widgets')), !isLargeViewport && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.VisuallyHidden, {
     as: "h1",
     className: "edit-widgets-header__title"
-  }, (0,external_wp_i18n_namespaceObject.__)('Widgets')), (0,external_React_namespaceObject.createElement)(document_tools, {
-    setListViewToggleElement: setListViewToggleElement
-  }), hasFixedToolbar && isLargeViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
+  }, (0,external_wp_i18n_namespaceObject.__)('Widgets')), (0,external_React_namespaceObject.createElement)(document_tools, null), hasFixedToolbar && isLargeViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
     className: "selected-block-tools-wrapper"
-  }, (0,external_React_namespaceObject.createElement)(BlockContextualToolbar, {
-    isFixed: true
+  }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockToolbar, {
+    hideDragHandle: true
   })), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover.Slot, {
     ref: blockToolbarRef,
     name: "block-toolbar"
@@ -4067,6 +4382,7 @@ function Notices() {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -4076,12 +4392,15 @@ function WidgetAreasBlockEditorContent({
   blockEditorSettings
 }) {
   const hasThemeStyles = (0,external_wp_data_namespaceObject.useSelect)(select => !!select(external_wp_preferences_namespaceObject.store).get('core/edit-widgets', 'themeStyles'), []);
+  const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
   const styles = (0,external_wp_element_namespaceObject.useMemo)(() => {
     return hasThemeStyles ? blockEditorSettings.styles : [];
   }, [blockEditorSettings, hasThemeStyles]);
   return (0,external_React_namespaceObject.createElement)("div", {
     className: "edit-widgets-block-editor"
-  }, (0,external_React_namespaceObject.createElement)(notices, null), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockTools, null, (0,external_React_namespaceObject.createElement)(keyboard_shortcuts, null), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableEditorStyles, {
+  }, (0,external_React_namespaceObject.createElement)(notices, null), !isLargeViewport && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockToolbar, {
+    hideDragHandle: true
+  }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockTools, null, (0,external_React_namespaceObject.createElement)(keyboard_shortcuts, null), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.__unstableEditorStyles, {
     styles: styles,
     scope: ".editor-styles-wrapper"
   }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockSelectionClearer, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.WritingFlow, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockList, {
@@ -4237,12 +4556,14 @@ function InserterSidebar() {
  * Internal dependencies
  */
 
-function ListViewSidebar({
-  listViewToggleElement
-}) {
+
+function ListViewSidebar() {
   const {
     setIsListViewOpened
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+  const {
+    getListViewToggleRef
+  } = unlock((0,external_wp_data_namespaceObject.useSelect)(store_store));
 
   // Use internal state instead of a ref to make sure that the component
   // re-renders when the dropZoneElement updates.
@@ -4252,8 +4573,8 @@ function ListViewSidebar({
   // When closing the list view, focus should return to the toggle button.
   const closeListView = (0,external_wp_element_namespaceObject.useCallback)(() => {
     setIsListViewOpened(false);
-    listViewToggleElement?.focus();
-  }, [listViewToggleElement, setIsListViewOpened]);
+    getListViewToggleRef().current?.focus();
+  }, [getListViewToggleRef, setIsListViewOpened]);
   const closeOnEscape = (0,external_wp_element_namespaceObject.useCallback)(event => {
     if (event.keyCode === external_wp_keycodes_namespaceObject.ESCAPE && !event.defaultPrevented) {
       event.preventDefault();
@@ -4296,9 +4617,7 @@ function ListViewSidebar({
  */
 
 
-function SecondarySidebar({
-  listViewToggleElement
-}) {
+function SecondarySidebar() {
   const {
     isInserterOpen,
     isListViewOpen
@@ -4316,9 +4635,7 @@ function SecondarySidebar({
     return (0,external_React_namespaceObject.createElement)(InserterSidebar, null);
   }
   if (isListViewOpen) {
-    return (0,external_React_namespaceObject.createElement)(ListViewSidebar, {
-      listViewToggleElement: listViewToggleElement
-    });
+    return (0,external_React_namespaceObject.createElement)(ListViewSidebar, null);
   }
   return null;
 }
@@ -4379,7 +4696,6 @@ function Interface({
     previousShortcut: select(external_wp_keyboardShortcuts_namespaceObject.store).getAllShortcutKeyCombinations('core/edit-widgets/previous-region'),
     nextShortcut: select(external_wp_keyboardShortcuts_namespaceObject.store).getAllShortcutKeyCombinations('core/edit-widgets/next-region')
   }), []);
-  const [listViewToggleElement, setListViewToggleElement] = (0,external_wp_element_namespaceObject.useState)(null);
 
   // Inserter and Sidebars are mutually exclusive
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -4400,12 +4716,8 @@ function Interface({
       ...interfaceLabels,
       secondarySidebar: secondarySidebarLabel
     },
-    header: (0,external_React_namespaceObject.createElement)(header, {
-      setListViewToggleElement: setListViewToggleElement
-    }),
-    secondarySidebar: hasSecondarySidebar && (0,external_React_namespaceObject.createElement)(SecondarySidebar, {
-      listViewToggleElement: listViewToggleElement
-    }),
+    header: (0,external_React_namespaceObject.createElement)(header, null),
+    secondarySidebar: hasSecondarySidebar && (0,external_React_namespaceObject.createElement)(SecondarySidebar, null),
     sidebar: hasSidebarEnabled && (0,external_React_namespaceObject.createElement)(complementary_area.Slot, {
       scope: "core/edit-widgets"
     }),
