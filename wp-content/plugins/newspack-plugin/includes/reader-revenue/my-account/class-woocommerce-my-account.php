@@ -40,6 +40,7 @@ class WooCommerce_My_Account {
 		\add_action( 'init', [ __CLASS__, 'add_rewrite_endpoints' ] );
 		\add_action( 'woocommerce_account_' . self::BILLING_ENDPOINT . '_endpoint', [ __CLASS__, 'render_billing_template' ] );
 		\add_filter( 'woocommerce_account_menu_items', [ __CLASS__, 'my_account_menu_items' ], 1000 );
+		\add_filter( 'woocommerce_billing_fields', [ __CLASS__, 'edit_address_required_fields' ] );
 
 		// Reader Activation mods.
 		if ( Reader_Activation::is_enabled() ) {
@@ -105,7 +106,7 @@ class WooCommerce_My_Account {
 				return $items;
 			}
 
-			$default_disabled_items = array_merge( $default_disabled_items, [ 'dashboard', 'members-area', 'edit-address' ] );
+			$default_disabled_items = array_merge( $default_disabled_items, [ 'dashboard', 'members-area' ] );
 			$customer_id            = \get_current_user_id();
 			if ( function_exists( 'wcs_user_has_subscription' ) && function_exists( 'wcs_get_subscriptions' ) ) {
 				$user_subscriptions             = wcs_get_subscriptions( [ 'customer_id' => $customer_id ] );
@@ -120,6 +121,22 @@ class WooCommerce_My_Account {
 				// The Stripe-tied subscriptions will be available for management in the "Billing" section.
 				if ( ! $has_non_newspack_subscriptions ) {
 					$default_disabled_items[] = 'subscriptions';
+				}
+			}
+			if ( class_exists( 'WC_Customer' ) ) {
+				$ignored_fields   = [ 'first_name', 'last_name', 'email' ];
+				$customer         = new \WC_Customer( $customer_id );
+				$billing_address  = $customer->get_billing();
+				$shipping_address = $customer->get_shipping();
+
+				// We only want to show the Addresses menu item if the reader has address info (not first/last name or email).
+				foreach ( $ignored_fields as $ignored_field ) {
+					unset( $billing_address[ $ignored_field ] );
+					unset( $shipping_address[ $ignored_field ] );
+				}
+
+				if ( empty( array_filter( $billing_address ) ) && empty( array_filter( $billing_address ) ) ) {
+					$default_disabled_items[] = 'edit-address';
 				}
 			}
 			if ( function_exists( 'wc_get_orders' ) ) {
@@ -415,10 +432,19 @@ class WooCommerce_My_Account {
 	 * Add the necessary endpoints to rewrite rules.
 	 */
 	public static function add_rewrite_endpoints() {
+		$has_set_up_custom_billing_endpoint = \get_option( '_newspack_has_set_up_custom_billing_endpoint' );
+		if ( ! Donations::is_platform_stripe() ) {
+			if ( $has_set_up_custom_billing_endpoint ) {
+				\delete_option( '_newspack_has_set_up_custom_billing_endpoint' );
+				\flush_rewrite_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
+				Logger::log( 'Flushed rewrite rules to remove Stripe billing endpoint' );
+			}
+			return;
+		}
 		\add_rewrite_endpoint( self::BILLING_ENDPOINT, EP_PAGES );
-		if ( ! \get_option( '_newspack_has_set_up_custom_billing_endpoint' ) ) {
+		if ( ! $has_set_up_custom_billing_endpoint ) {
 			\flush_rewrite_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
-			Logger::log( 'Flushed rewrite rules to add billing endpoint' );
+			Logger::log( 'Flushed rewrite rules to add Stripe billing endpoint' );
 			\update_option( '_newspack_has_set_up_custom_billing_endpoint', true );
 		}
 	}
@@ -436,6 +462,35 @@ class WooCommerce_My_Account {
 			];
 		}
 		return [];
+	}
+
+	/**
+	 * Ensure that only billing address fields enabled in Reader Revenue settings
+	 * are required in My Account edit billing address page.
+	 *
+	 * @param array $fields Address fields.
+	 * @return array Filtered address fields.
+	 */
+	public static function edit_address_required_fields( $fields ) {
+		global $wp;
+
+		if (
+			! function_exists( 'is_account_page' ) ||
+			! \is_account_page() || // Only on My Account page.
+			! isset( $wp->query_vars['edit-address'] ) || // Only when editing address.
+			'billing' !== $wp->query_vars['edit-address'] // Only when editing billing address.
+			) {
+			return $fields;
+		}
+
+		$required_fields = Donations::get_billing_fields();
+		foreach ( $fields as $field_name => $field_config ) {
+			if ( ! in_array( $field_name, $required_fields, true ) ) {
+				$fields[ $field_name ]['required'] = false;
+			}
+		}
+
+		return $fields;
 	}
 
 	/**

@@ -297,6 +297,10 @@ class Products {
 	 * @param mixed  $new_value The new option value.
 	 */
 	public static function update_products( $option, $old_value, $new_value ) {
+		if ( ! self::is_active() ) {
+			return;
+		}
+
 		// Only if the updated option is a Newspack Listing setting.
 		$settings = Settings::get_settings();
 		if ( ! in_array( $option, array_keys( $settings ) ) ) {
@@ -341,6 +345,11 @@ class Products {
 	 * @param mixed  $meta_value Value of $meta_key.
 	 */
 	public static function update_product_option( $meta_id, $post_id, $meta_key, $meta_value ) {
+		// Only run if self-serve listings are enabled.
+		if ( ! self::is_active() ) {
+			return;
+		}
+
 		// Only run if post being updated is a product and meta field being updated is '_price'.
 		if ( 'product' !== get_post_type( $post_id ) || '_price' !== $meta_key ) {
 			return;

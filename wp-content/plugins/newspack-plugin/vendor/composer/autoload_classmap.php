@@ -56,6 +56,7 @@ return array(
     'Newspack\\Mailchimp_For_WooCommerce' => $baseDir . '/includes/plugins/class-mailchimp-for-woocommerce.php',
     'Newspack\\Major_Revision' => $baseDir . '/includes/revisions-control/class-major-revision.php',
     'Newspack\\Major_Revisions' => $baseDir . '/includes/revisions-control/class-major-revisions.php',
+    'Newspack\\Media_Partners' => $baseDir . '/includes/optional-modules/class-media-partners.php',
     'Newspack\\Memberships' => $baseDir . '/includes/plugins/wc-memberships/class-memberships.php',
     'Newspack\\Memberships\\Block_Patterns' => $baseDir . '/includes/plugins/wc-memberships/class-block-patterns.php',
     'Newspack\\Memberships\\Metering' => $baseDir . '/includes/plugins/wc-memberships/class-metering.php',

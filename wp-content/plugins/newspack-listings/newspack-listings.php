@@ -1,13 +1,13 @@
 <?php
 /**
  * Plugin Name:     Newspack Listings
- * Plugin URI:      https://newspack.pub
+ * Plugin URI:      https://newspack.com
  * Description:     Listings and directories for Newspack sites.
  * Author:          Automattic
- * Author URI:      https://newspack.pub
+ * Author URI:      https://newspack.com
  * Text Domain:     newspack-listings
  * Domain Path:     /languages
- * Version:         2.12.5
+ * Version:         2.14.1
  *
  * @package         Newspack_Listings
  */
@@ -19,7 +19,7 @@ if ( ! defined( 'NEWSPACK_LISTINGS_PLUGIN_FILE' ) ) {
 	define( 'NEWSPACK_LISTINGS_FILE', __FILE__ );
 	define( 'NEWSPACK_LISTINGS_PLUGIN_FILE', plugin_dir_path( NEWSPACK_LISTINGS_FILE ) );
 	define( 'NEWSPACK_LISTINGS_URL', plugin_dir_url( NEWSPACK_LISTINGS_FILE ) );
-	define( 'NEWSPACK_LISTINGS_VERSION', '2.12.5' );
+	define( 'NEWSPACK_LISTINGS_VERSION', '2.14.1' );
 }
 
 // Include plugin resources.

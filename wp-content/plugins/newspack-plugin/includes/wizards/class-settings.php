@@ -47,9 +47,10 @@ class Settings extends Wizard {
 	 */
 	private static function get_settings() {
 		$default_settings = [
-			self::MODULE_ENABLED_PREFIX . 'rss' => false,
+			self::MODULE_ENABLED_PREFIX . 'rss'            => false,
+			self::MODULE_ENABLED_PREFIX . 'media-partners' => false,
 		];
-		return get_option( self::SETTINGS_OPTION_NAME, $default_settings );
+		return wp_parse_args( get_option( self::SETTINGS_OPTION_NAME ), $default_settings );
 	}
 
 	/**

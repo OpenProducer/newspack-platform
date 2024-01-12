@@ -21,6 +21,26 @@
 			}
 		}
 	}
+
+	&.wpbnbd--frequency-based {
+		.wpbnbd__button {
+			border-width: 0 0 1px;
+			&--active {
+				background: #fff;
+				border-bottom: 0;
+			}
+		}
+	}
+
+	&.wpbnbd-frequencies {
+		&--2 .tab-container .freq-label:nth-of-type( 2 )  {
+			border-left-width: 1px;
+		}
+		&--3 .tab-container .freq-label:nth-of-type( 2 ) {
+			border-left-width: 1px;
+			border-right-width: 1px;
+		}
+	}
 }
 
 /* Alternate Style */
@@ -65,17 +85,12 @@
 		}
 	}
 
-	.frequencies {
-		@include mixins.media( tablet ) {
-			padding-top: calc( 1.14rem + 1.6em + 4px );
-		}
-	}
-
-	.freq-label,
+	.tab-container .freq-label,
 	.wpbnbd__tiers__selection {
 		background: colors.$color__background-screen;
 		border-color: colors.$color__background-screen;
 	}
+
 	.wpbnbd__tiers__selection {
 		width: min-content;
 		margin-left: auto;
@@ -87,32 +102,35 @@
 			padding: 0 15px;
 		}
 	}
-	.freq-label {
-		border-width: 1px;
-		padding: calc( 0.57rem + 1px ) 0.5rem;
-		@include mixins.media( mobile ) {
-			padding: calc( 0.57rem + 1px ) 0.76rem;
+
+	// Tiers-based version.
+	.wpbnbd__tiers .wpbnbd__button {
+		border: 0.19rem solid transparent;
+
+		&--active {
+			border-color: white;
 		}
 	}
 
-	.wpbnbd__button {
-		border: none;
-		border: 0.19rem solid transparent;
-	}
-
-	// Tiers-based version.
-	.wpbnbd__button--active,
+	.wpbnbd__tiers .wpbnbd__button--active,
 	// Frequency-based version.
-	.frequency input[type='radio']:checked + .freq-label::after {
+	.tab-container .freq-label.wpbnbd__button--active::after  {
 		background: white;
 		border-radius: 5px;
-		border: 0.19rem solid white;
 		box-shadow: 0 0 0 1px variables.$color__border;
 	}
 
-	.frequency {
-		input[type='radio']:checked {
-			+ .freq-label {
+	.tab-container {
+		.freq-label {
+			border-width: 1px;
+			padding: calc( 0.57rem + 1px ) 0.5rem;
+			position: relative;
+			@include mixins.media( mobile ) {
+				padding: calc( 0.57rem + 1px ) 0.76rem;
+			}
+
+			&.wpbnbd__button--active {
+				color: colors.$color__text-main;
 				&::after {
 					box-sizing: content-box;
 					content: '';
@@ -125,17 +143,19 @@
 					background: colors.$color__background-screen;
 				}
 			}
-			~ .tiers {
-				display: grid;
-				grid-gap: 0.28rem;
-				grid-template-columns: repeat( 2, 1fr );
-				margin: 1.12rem;
+		}
+	}
 
-				@include mixins.media( mobile ) {
-					grid-template-columns: repeat( 4, 1fr );
-					grid-gap: 0.56rem;
-				}
-			}
+	// Show/hide the tab content.
+	.frequencies input[type='radio']:checked ~ .tiers {
+		display: grid;
+		grid-gap: 0.28rem;
+		grid-template-columns: repeat( 2, 1fr );
+		margin: 1.12rem;
+
+		@include mixins.media( mobile ) {
+			grid-template-columns: repeat( 4, 1fr );
+			grid-gap: 0.56rem;
 		}
 	}
 
@@ -260,34 +280,33 @@
 		}
 	}
 
-	.frequencies {
-		padding-top: calc( 0.76rem + 1.6em + 4px );
-	}
+	.tab-container {
+		.freq-label {
+			background: transparent;
+			border: none;
+			box-shadow: 0 3px 0 white, 0 4px 0 0 variables.$color__border;
+			padding: 0.38rem 0;
+			transition: none;
 
-	.freq-label {
-		background: transparent;
-		border: none;
-		box-shadow: 0 3px 0 white, 0 4px 0 0 variables.$color__border;
-		padding: 0.38rem 0;
-		transition: none;
+			@include mixins.media( tablet ) {
+				padding-left: 0.76rem;
+				padding-right: 0.76rem;
+			}
 
-		@include mixins.media( tablet ) {
-			padding-left: 0.76rem;
-			padding-right: 0.76rem;
-		}
+			&::before {
+				border-width: 1px;
+				border-color: variables.$color__border;
+			}
 
-		&::before {
-			border-width: 1px;
-			border-color: variables.$color__border;
+			&.wpbnbd__button--active {
+				box-shadow: 0 4px 0 currentcolor;
+			}
+
 		}
 	}
 
 	.frequency {
 		input[type='radio']:checked {
-			+ .freq-label {
-				box-shadow: 0 4px 0 currentcolor;
-			}
-
 			~ .tiers {
 				display: flex;
 				flex-wrap: wrap;
