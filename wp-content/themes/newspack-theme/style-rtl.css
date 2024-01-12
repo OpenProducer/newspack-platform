@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.82.0-alpha.1
+Version: 1.83.0-alpha.2
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Text Domain: newspack
@@ -5195,15 +5195,19 @@ p.has-background {
   margin-left: 0.62rem;
 }
 #secondary .wpbnbd .thanks,
-#secondary .wpbnbd button,
+#secondary .wpbnbd button[type=submit],
 .desktop-sidebar .wpbnbd .thanks,
-.desktop-sidebar .wpbnbd button,
+.desktop-sidebar .wpbnbd button[type=submit],
 .mobile-sidebar .wpbnbd .thanks,
-.mobile-sidebar .wpbnbd button,
+.mobile-sidebar .wpbnbd button[type=submit],
 .subpage-sidebar .wpbnbd .thanks,
-.subpage-sidebar .wpbnbd button {
+.subpage-sidebar .wpbnbd button[type=submit] {
   margin-right: 1rem;
   margin-left: 1rem;
+}
+
+.widget .wpbnbd .freq-label {
+  font-size: 1em;
 }
 
 .site-info .widget .wpbnbd .thanks {
