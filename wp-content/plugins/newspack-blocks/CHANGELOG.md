@@ -1,3 +1,39 @@
+# [2.5.0](https://github.com/Automattic/newspack-blocks/compare/v2.4.0...v2.5.0) (2024-01-08)
+
+
+### Bug Fixes
+
+* avoid duplicity with linked guest authors ([#1632](https://github.com/Automattic/newspack-blocks/issues/1632)) ([608979c](https://github.com/Automattic/newspack-blocks/commit/608979c1e9cb63a7098da27c69c337ec233b7429))
+* **modal-checkout:** show order details table with fees ([#1633](https://github.com/Automattic/newspack-blocks/issues/1633)) ([07c0642](https://github.com/Automattic/newspack-blocks/commit/07c0642e77a075750c6f436f12af99cd3e2ef360))
+
+
+### Features
+
+* accessibility improvements to the donate block tabs ([#1622](https://github.com/Automattic/newspack-blocks/issues/1622)) ([115e9fb](https://github.com/Automattic/newspack-blocks/commit/115e9fb95c78a13f1d87f4d086e767311dc7007d))
+* **donate:** support empty value for "other" tier ([#1604](https://github.com/Automattic/newspack-blocks/issues/1604)) ([61ffdbc](https://github.com/Automattic/newspack-blocks/commit/61ffdbc57e6fda320766d4de99f097edac9e58f7))
+* **modal-checkout:** allow anonymous purchase for registered email ([#1615](https://github.com/Automattic/newspack-blocks/issues/1615)) ([a0040b4](https://github.com/Automattic/newspack-blocks/commit/a0040b43a3f97c889e5bb5b5b96f07777b52a670))
+
+# [2.5.0-alpha.2](https://github.com/Automattic/newspack-blocks/compare/v2.5.0-alpha.1...v2.5.0-alpha.2) (2023-12-22)
+
+
+### Bug Fixes
+
+* avoid duplicity with linked guest authors ([#1632](https://github.com/Automattic/newspack-blocks/issues/1632)) ([608979c](https://github.com/Automattic/newspack-blocks/commit/608979c1e9cb63a7098da27c69c337ec233b7429))
+* **modal-checkout:** show order details table with fees ([#1633](https://github.com/Automattic/newspack-blocks/issues/1633)) ([07c0642](https://github.com/Automattic/newspack-blocks/commit/07c0642e77a075750c6f436f12af99cd3e2ef360))
+
+
+### Features
+
+* **modal-checkout:** allow anonymous purchase for registered email ([#1615](https://github.com/Automattic/newspack-blocks/issues/1615)) ([a0040b4](https://github.com/Automattic/newspack-blocks/commit/a0040b43a3f97c889e5bb5b5b96f07777b52a670))
+
+# [2.5.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v2.4.0...v2.5.0-alpha.1) (2023-12-15)
+
+
+### Features
+
+* accessibility improvements to the donate block tabs ([#1622](https://github.com/Automattic/newspack-blocks/issues/1622)) ([115e9fb](https://github.com/Automattic/newspack-blocks/commit/115e9fb95c78a13f1d87f4d086e767311dc7007d))
+* **donate:** support empty value for "other" tier ([#1604](https://github.com/Automattic/newspack-blocks/issues/1604)) ([61ffdbc](https://github.com/Automattic/newspack-blocks/commit/61ffdbc57e6fda320766d4de99f097edac9e58f7))
+
 # [2.4.0](https://github.com/Automattic/newspack-blocks/compare/v2.3.0...v2.4.0) (2023-12-11)
 
 

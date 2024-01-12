@@ -3387,6 +3387,7 @@ const reducer = (0,external_wp_data_namespaceObject.combineReducers)({
  * @property {string=}     context     Command context.
  * @property {JSX.Element} icon        Command icon.
  * @property {Function}    callback    Command callback.
+ * @property {boolean}     disabled    Whether to disable the command.
  */
 
 /**
@@ -3398,9 +3399,10 @@ const reducer = (0,external_wp_data_namespaceObject.combineReducers)({
  *
  * @typedef {Object} WPCommandLoaderConfig
  *
- * @property {string}              name    Command loader name.
- * @property {string=}             context Command loader context.
- * @property {WPCommandLoaderHook} hook    Command loader hook.
+ * @property {string}              name     Command loader name.
+ * @property {string=}             context  Command loader context.
+ * @property {WPCommandLoaderHook} hook     Command loader hook.
+ * @property {boolean}             disabled Whether to disable the command loader.
  */
 
 /**
@@ -3879,8 +3881,6 @@ const STORE_NAME = 'core/commands';
 /**
  * Store definition for the commands namespace.
  *
- * See how the Commands Store is being used in components like [site-hub](https://github.com/WordPress/gutenberg/blob/HEAD/packages/edit-site/src/components/site-hub/index.js#L23) and [document-actions](https://github.com/WordPress/gutenberg/blob/HEAD/packages/edit-post/src/components/header/document-actions/index.js#L14).
- *
  * @see https://github.com/WordPress/gutenberg/blob/HEAD/packages/data/README.md#createReduxStore
  *
  * @type {Object}
@@ -4256,6 +4256,9 @@ function useCommand(command) {
     currentCallback.current = command.callback;
   }, [command.callback]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (command.disabled) {
+      return;
+    }
     registerCommand({
       name: command.name,
       context: command.context,
@@ -4267,7 +4270,7 @@ function useCommand(command) {
     return () => {
       unregisterCommand(command.name);
     };
-  }, [command.name, command.label, command.searchLabel, command.icon, command.context, registerCommand, unregisterCommand]);
+  }, [command.name, command.label, command.searchLabel, command.icon, command.context, command.disabled, registerCommand, unregisterCommand]);
 }
 
 ;// CONCATENATED MODULE: ./packages/commands/build-module/hooks/use-command-loader.js
@@ -4357,6 +4360,9 @@ function useCommandLoader(loader) {
     unregisterCommandLoader
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (loader.disabled) {
+      return;
+    }
     registerCommandLoader({
       name: loader.name,
       hook: loader.hook,
@@ -4365,7 +4371,7 @@ function useCommandLoader(loader) {
     return () => {
       unregisterCommandLoader(loader.name);
     };
-  }, [loader.name, loader.hook, loader.context, registerCommandLoader, unregisterCommandLoader]);
+  }, [loader.name, loader.hook, loader.context, loader.disabled, registerCommandLoader, unregisterCommandLoader]);
 }
 
 ;// CONCATENATED MODULE: ./packages/commands/build-module/index.js

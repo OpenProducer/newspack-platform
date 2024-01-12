@@ -2169,6 +2169,7 @@ __webpack_require__.d(__webpack_exports__, {
   useCopyOnClick: function() { return /* reexport */ useCopyOnClick; },
   useCopyToClipboard: function() { return /* reexport */ useCopyToClipboard; },
   useDebounce: function() { return /* reexport */ useDebounce; },
+  useDebouncedInput: function() { return /* reexport */ useDebouncedInput; },
   useDisabled: function() { return /* reexport */ useDisabled; },
   useFocusOnMount: function() { return /* reexport */ useFocusOnMount; },
   useFocusReturn: function() { return /* reexport */ use_focus_return; },
@@ -5379,6 +5380,33 @@ function useDebounce(fn, wait, options) {
   return debounced;
 }
 
+;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-debounced-input/index.js
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Helper hook for input fields that need to debounce the value before using it.
+ *
+ * @param {any} defaultValue The default value to use.
+ * @return {[string, Function, string]} The input value, the setter and the debounced input value.
+ */
+function useDebouncedInput(defaultValue = '') {
+  const [input, setInput] = (0,external_wp_element_namespaceObject.useState)(defaultValue);
+  const [debouncedInput, setDebouncedState] = (0,external_wp_element_namespaceObject.useState)(defaultValue);
+  const setDebouncedInput = useDebounce(setDebouncedState, 250);
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    setDebouncedInput(input);
+  }, [input]);
+  return [input, setInput, debouncedInput];
+}
+
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-throttle/index.js
 /**
  * External dependencies
@@ -5826,6 +5854,7 @@ function useFixedWindowList(elementRef, itemHeight, totalItems, options) {
 
 
 // Hooks.
+
 
 
 

@@ -423,7 +423,7 @@ const plus = (0,external_React_namespaceObject.createElement)(external_wp_primit
   xmlns: "http://www.w3.org/2000/svg",
   viewBox: "0 0 24 24"
 }, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M18 11.2h-5.2V6h-1.6v5.2H6v1.6h5.2V18h1.6v-5.2H18z"
+  d: "M11 12.5V17.5H12.5V12.5H17.5V11H12.5V6H11V11H6V12.5H11Z"
 }));
 /* harmony default export */ var library_plus = (plus);
 
@@ -709,7 +709,8 @@ function MoreMenuDropdown({
     },
     toggleProps: {
       tooltipPosition: 'bottom',
-      ...toggleProps
+      ...toggleProps,
+      size: 'compact'
     }
   }, onClose => children(onClose));
 }
@@ -1451,18 +1452,6 @@ function MoreMenu() {
   }));
 }
 
-;// CONCATENATED MODULE: external ["wp","privateApis"]
-var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
-;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/lock-unlock.js
-/**
- * WordPress dependencies
- */
-
-const {
-  lock,
-  unlock
-} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/customize-widgets');
-
 ;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/components/header/index.js
 
 /**
@@ -1480,16 +1469,11 @@ const {
 
 
 
-
 /**
  * Internal dependencies
  */
 
 
-
-const {
-  BlockContextualToolbar
-} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function Header({
   sidebar,
   inserter,
@@ -1497,8 +1481,6 @@ function Header({
   setIsInserterOpened,
   isFixedToolbarActive
 }) {
-  const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
-  const blockToolbarRef = (0,external_wp_element_namespaceObject.useRef)();
   const [[hasUndo, hasRedo], setUndoRedo] = (0,external_wp_element_namespaceObject.useState)([sidebar.hasUndo(), sidebar.hasRedo()]);
   const shortcut = (0,external_wp_keycodes_namespaceObject.isAppleOS)() ? external_wp_keycodes_namespaceObject.displayShortcut.primaryShift('z') : external_wp_keycodes_namespaceObject.displayShortcut.primary('y');
   (0,external_wp_element_namespaceObject.useEffect)(() => {
@@ -1548,14 +1530,7 @@ function Header({
     }
   }), (0,external_React_namespaceObject.createElement)(MoreMenu, null))), (0,external_wp_element_namespaceObject.createPortal)((0,external_React_namespaceObject.createElement)(components_inserter, {
     setIsOpened: setIsInserterOpened
-  }), inserter.contentContainer[0]), isFixedToolbarActive && isLargeViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
-    className: "selected-block-tools-wrapper"
-  }, (0,external_React_namespaceObject.createElement)(BlockContextualToolbar, {
-    isFixed: true
-  })), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover.Slot, {
-    ref: blockToolbarRef,
-    name: "block-toolbar"
-  })));
+  }), inserter.contentContainer[0]));
 }
 /* harmony default export */ var header = (Header);
 
@@ -1925,6 +1900,18 @@ function useBlocksFocusControl(blocks) {
   }, [focusedWidgetIdRef, selectBlock]);
 }
 
+;// CONCATENATED MODULE: external ["wp","privateApis"]
+var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/customize-widgets');
+
 ;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/components/sidebar-block-editor/sidebar-editor-provider.js
 
 /**
@@ -2188,6 +2175,7 @@ function BlockAppender(props) {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -2209,6 +2197,7 @@ function SidebarBlockEditor({
   inspector
 }) {
   const [isInserterOpened, setIsInserterOpened] = useInserter(inserter);
+  const isMediumViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('small');
   const {
     hasUploadPermissions,
     isFixedToolbarActive,
@@ -2246,11 +2235,11 @@ function SidebarBlockEditor({
       ...blockEditorSettings,
       __experimentalSetIsInserterOpened: setIsInserterOpened,
       mediaUpload: mediaUploadBlockEditor,
-      hasFixedToolbar: isFixedToolbarActive,
+      hasFixedToolbar: isFixedToolbarActive || !isMediumViewport,
       keepCaretInsideBlock,
       __unstableHasCustomAppender: true
     };
-  }, [hasUploadPermissions, blockEditorSettings, isFixedToolbarActive, keepCaretInsideBlock, setIsInserterOpened]);
+  }, [hasUploadPermissions, blockEditorSettings, isFixedToolbarActive, isMediumViewport, keepCaretInsideBlock, setIsInserterOpened]);
   if (isWelcomeGuideActive) {
     return (0,external_React_namespaceObject.createElement)(WelcomeGuide, {
       sidebar: sidebar
@@ -2268,14 +2257,16 @@ function SidebarBlockEditor({
     inserter: inserter,
     isInserterOpened: isInserterOpened,
     setIsInserterOpened: setIsInserterOpened,
-    isFixedToolbarActive: isFixedToolbarActive
-  }), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockTools, null, (0,external_React_namespaceObject.createElement)(BlockCanvas, {
+    isFixedToolbarActive: isFixedToolbarActive || !isMediumViewport
+  }), (isFixedToolbarActive || !isMediumViewport) && (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockToolbar, {
+    hideDragHandle: true
+  }), (0,external_React_namespaceObject.createElement)(BlockCanvas, {
     shouldIframe: false,
     styles: settings.defaultEditorStyles,
     height: "100%"
   }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockList, {
     renderAppender: BlockAppender
-  }))), (0,external_wp_element_namespaceObject.createPortal)(
+  })), (0,external_wp_element_namespaceObject.createPortal)(
   // This is a temporary hack to prevent button component inside <BlockInspector>
   // from submitting form when type="button" is not specified.
   (0,external_React_namespaceObject.createElement)("form", {

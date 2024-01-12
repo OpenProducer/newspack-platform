@@ -7,7 +7,7 @@ import classNames from 'classnames';
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
-import { useMemo, useEffect, useRef } from '@wordpress/element';
+import { useMemo, useEffect, useRef, useState } from '@wordpress/element';
 import { SelectControl } from '@wordpress/components';
 import { RichText } from '@wordpress/block-editor';
 
@@ -68,6 +68,8 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 	const isRenderingStripePaymentForm =
 		window.newspack_blocks_data?.is_rendering_stripe_payment_form;
 
+	const [ selectedFrequency, setSelectedFrequency ] = useState( attributes.defaultFrequency );
+
 	const renderFrequencySelect = ( frequencySlug: DonationFrequencySlug ) => (
 		<>
 			<input
@@ -75,22 +77,39 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 				value={ frequencySlug }
 				id={ `newspack-donate-${ frequencySlug }-${ uid }` }
 				name="donation_frequency"
-				defaultChecked={ frequencySlug === attributes.defaultFrequency }
+				checked={ frequencySlug === selectedFrequency }
+				onChange={ evt => setSelectedFrequency( evt.target.value as 'once' | 'month' | 'year' ) }
 			/>
-			<label
-				htmlFor={ 'newspack-donate-' + frequencySlug + '-' + uid }
-				className="wpbnbd__button freq-label"
-			>
+			<label htmlFor={ 'newspack-donate-' + frequencySlug + '-' + uid }>
 				{ FREQUENCIES[ frequencySlug ] }
 			</label>
 		</>
 	);
 
+	const renderTab = ( frequencySlug: DonationFrequencySlug ) => (
+		<button
+			key={ frequencySlug }
+			role="tab"
+			className={ classNames( 'wpbnbd__button freq-label', {
+				'wpbnbd__button--active': frequencySlug === selectedFrequency,
+			} ) }
+			id={ `tab-newspack-donate-${ frequencySlug }-${ uid }` }
+			onClick={ evt => {
+				evt.preventDefault();
+				setSelectedFrequency( frequencySlug );
+			} }
+		>
+			{ FREQUENCIES[ frequencySlug ] }
+		</button>
+	);
+
+	// This code is fired on tab select and updates aria elements, tabindex states, and radio buttons
 	const displayAmount = ( amount: number ) => amount.toFixed( 2 ).replace( /\.?0*$/, '' );
 
 	const renderUntieredForm = () => (
 		<div className="wp-block-newspack-blocks-donate__options">
 			<div className="wp-block-newspack-blocks-donate__frequencies frequencies">
+				<div className="tab-container">{ availableFrequencies.map( renderTab ) }</div>
 				{ availableFrequencies.map( frequencySlug => (
 					<div
 						className="wp-block-newspack-blocks-donate__frequency frequency"
@@ -123,6 +142,7 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 	const renderTieredForm = () => (
 		<div className="wp-block-newspack-blocks-donate__options">
 			<div className="wp-block-newspack-blocks-donate__frequencies frequencies">
+				<div className="tab-container">{ availableFrequencies.map( renderTab ) }</div>
 				{ availableFrequencies.map( frequencySlug => (
 					<div
 						className="wp-block-newspack-blocks-donate__frequency frequency"
@@ -166,12 +186,7 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 												</label>
 												<div className="wp-block-newspack-blocks-donate__money-input money-input">
 													<span className="currency">{ settings.currencySymbol }</span>
-													<AmountValueInput
-														{ ...props }
-														frequencySlug={ frequencySlug }
-														tierIndex={ index }
-														id={ `${ id }-other-input` }
-													/>
+													<input type="number" readOnly />
 												</div>
 											</>
 										) : null }

@@ -100,7 +100,7 @@ class Dashboard extends Wizard {
 				'slug'        => 'engagement',
 				'name'        => Wizards::get_name( 'engagement' ),
 				'url'         => Wizards::get_url( 'engagement' ),
-				'description' => esc_html__( 'Newsletters, commenting, social, recirculation', 'newspack' ),
+				'description' => esc_html__( 'Newsletters, social, recirculation', 'newspack' ),
 			],
 			[
 				'slug'        => 'popups',

@@ -7,5 +7,5 @@
  */
 
 return array(
-	'features' => array( 'adsenseSetupV2','enhancedMeasurement','gm3Components','keyMetrics' ),
+	'features' => array( 'gm3Components','keyMetrics' ),
 );

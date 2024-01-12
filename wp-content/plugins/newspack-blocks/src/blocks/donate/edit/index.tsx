@@ -51,7 +51,6 @@ const TIER_LABELS = [
 	__( 'Low-tier', 'newspack-blocks' ),
 	__( 'Mid-tier', 'newspack-blocks' ),
 	__( 'High-tier', 'newspack-blocks' ),
-	__( 'Other', 'newspack-blocks' ),
 ];
 
 const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
@@ -302,21 +301,27 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 																false
 															) && renderMinAmountWarning() }
 
-															{ amounts[ frequency ].map( ( suggestedAmount, tierIndex ) => (
-																<AmountValueInput
-																	ignoreMinimumAmount
-																	{ ...componentProps }
-																	key={ `amount-${ frequency }-${ tierIndex }` }
-																	frequencySlug={ frequency }
-																	tierIndex={ tierIndex }
-																	label={ TIER_LABELS[ tierIndex ] }
-																	id={ `${ frequency }-${ tierIndex }-amount` }
-																	disabled={
-																		isTierBasedLayoutEnabled &&
-																		tierIndex === DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX
-																	}
-																/>
-															) ) }
+															{ amounts[ frequency ].map( ( suggestedAmount, tierIndex ) => {
+																// The "Other" tier is no longer customizable and should always render empty for tiered layout.
+																if ( tierIndex === 3 ) {
+																	return null;
+																}
+																return (
+																	<AmountValueInput
+																		ignoreMinimumAmount
+																		{ ...componentProps }
+																		key={ `amount-${ frequency }-${ tierIndex }` }
+																		frequencySlug={ frequency }
+																		tierIndex={ tierIndex }
+																		label={ TIER_LABELS[ tierIndex ] }
+																		id={ `${ frequency }-${ tierIndex }-amount` }
+																		disabled={
+																			isTierBasedLayoutEnabled &&
+																			tierIndex === DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX
+																		}
+																	/>
+																);
+															} ) }
 														</div>
 													) }
 												</Fragment>

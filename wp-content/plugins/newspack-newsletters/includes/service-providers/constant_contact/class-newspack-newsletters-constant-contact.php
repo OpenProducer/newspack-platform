@@ -1026,4 +1026,12 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		return $contact_data['taggings'] ?? [];
 	}
 
+		/**
+		 * Get usage report.
+		 */
+	public function get_usage_report() {
+		$ac_usage_reports = new Newspack_Newsletters_Constant_Contact_Usage_Reports();
+		return $ac_usage_reports->get_usage_report();
+	}
+
 }

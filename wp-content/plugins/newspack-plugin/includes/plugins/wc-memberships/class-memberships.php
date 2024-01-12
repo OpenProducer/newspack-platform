@@ -770,24 +770,52 @@ class Memberships {
 
 		if ( ! empty( $caps ) ) {
 			foreach ( $caps as $cap ) {
-				if ( 'wc_memberships_view_restricted_post_content' === $cap ) {
-					if ( self::can_manage_woocommerce( $all_caps ) ) {
-						$all_caps[ $cap ] = true;
+
+				switch ( $cap ) {
+					case 'wc_memberships_view_restricted_post_content':
+						if ( self::can_manage_woocommerce( $all_caps ) ) {
+							$all_caps[ $cap ] = true;
+							break;
+						}
+
+						// Allow user who can edit posts (by default: editors, authors, contributors).
+						if ( isset( $all_caps['edit_posts'] ) && true === $all_caps['edit_posts'] ) {
+							$all_caps[ $cap ] = true;
+							break;
+						}
+
+						$user_id = (int) $args[1];
+						$post_id = (int) $args[2];
+
+						if ( wc_memberships()->get_restrictions_instance()->is_post_public( $post_id ) ) {
+							$all_caps[ $cap ] = true;
+							break;
+						}
+
+						$rules            = wc_memberships()->get_rules_instance()->get_post_content_restriction_rules( $post_id );
+						$all_caps[ $cap ] = self::user_has_content_access_from_rules( $user_id, $rules, $post_id );
+
 						break;
-					}
 
-					$user_id = (int) $args[1];
-					$post_id = (int) $args[2];
-
-					if ( wc_memberships()->get_restrictions_instance()->is_post_public( $post_id ) ) {
-						$all_caps[ $cap ] = true;
+					case 'wc_memberships_access_all_restricted_content':
+					case 'wc_memberships_view_restricted_product':
+					case 'wc_memberships_purchase_restricted_product':
+					case 'wc_memberships_view_restricted_product_taxonomy_term':
+					case 'wc_memberships_view_delayed_product_taxonomy_term':
+					case 'wc_memberships_view_restricted_taxonomy_term':
+					case 'wc_memberships_view_restricted_taxonomy':
+					case 'wc_memberships_view_restricted_post_type':
+					case 'wc_memberships_view_delayed_post_type':
+					case 'wc_memberships_view_delayed_taxonomy':
+					case 'wc_memberships_view_delayed_taxonomy_term':
+					case 'wc_memberships_view_delayed_post_content':
+					case 'wc_memberships_view_delayed_product':
+						// Allow user who can edit posts (by default: editors, authors, contributors).
+						if ( isset( $all_caps['edit_posts'] ) && true === $all_caps['edit_posts'] ) {
+							$all_caps[ $cap ] = true;
+							break;
+						}
 						break;
-					}
-
-					$rules            = wc_memberships()->get_rules_instance()->get_post_content_restriction_rules( $post_id );
-					$all_caps[ $cap ] = self::user_has_content_access_from_rules( $user_id, $rules, $post_id );
-
-					break;
 				}
 			}
 		}

@@ -376,6 +376,16 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 	}
 
 	/**
+	 * Get campaigns summaries
+	 *
+	 * @return object
+	 */
+	public function get_campaigns_summaries() {
+		$campaigns = $this->request( 'GET', 'reports/summary_reports/email_campaign_summaries/' );
+		return $campaigns;
+	}
+
+	/**
 	 * Get campaign activity.
 	 *
 	 * @param string $campaign_activity_id Campaign Activity ID.
@@ -498,6 +508,33 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			return false;
 		}
 		return $res->contacts[0];
+	}
+
+	/**
+	 * Get contacts count for a specific query
+	 *
+	 * @param array $params The query params to be added to the request.
+	 *
+	 * @return ?int
+	 */
+	public function get_contacts_count( $params = [] ) {
+		$res = $this->request(
+			'GET',
+			'contacts',
+			[
+				'query' => array_merge(
+					[
+						'status'        => 'all',
+						'include_count' => true,
+						'limit'         => 1,
+					],
+					$params
+				),
+
+			]
+		);
+
+		return $res->contacts_count ?? null;
 	}
 
 	/**
@@ -766,7 +803,6 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			[
 				'name'             => $name,
 				'segment_criteria' => wp_json_encode( $criteria ),
-				
 			]
 		);
 

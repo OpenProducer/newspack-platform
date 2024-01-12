@@ -1,3 +1,82 @@
+## [2.14.1](https://github.com/Automattic/newspack-listings/compare/v2.14.0...v2.14.1) (2023-10-31)
+
+
+### Bug Fixes
+
+* newspack.pub > newspack.com ([#413](https://github.com/Automattic/newspack-listings/issues/413)) ([e0ff70e](https://github.com/Automattic/newspack-listings/commit/e0ff70e5ada6585e0669fdd6990cba1269bdf36c))
+
+## [2.14.1-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.14.0...v2.14.1-alpha.1) (2023-10-16)
+
+
+### Bug Fixes
+
+* newspack.pub > newspack.com ([#413](https://github.com/Automattic/newspack-listings/issues/413)) ([e0ff70e](https://github.com/Automattic/newspack-listings/commit/e0ff70e5ada6585e0669fdd6990cba1269bdf36c))
+
+# [2.14.0](https://github.com/Automattic/newspack-listings/compare/v2.13.0...v2.14.0) (2023-09-13)
+
+
+### Features
+
+* add internationalization to event dates ([#391](https://github.com/Automattic/newspack-listings/issues/391)) ([315b68e](https://github.com/Automattic/newspack-listings/commit/315b68e2aeffbfdd2a366955ab291fe15791717d))
+* add option to change the event date/time format ([#399](https://github.com/Automattic/newspack-listings/issues/399)) ([d4fcc33](https://github.com/Automattic/newspack-listings/commit/d4fcc33b00d10a9ba6818cc381bd4d108290e217))
+
+# [2.14.0-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.13.0...v2.14.0-alpha.1) (2023-09-06)
+
+
+### Features
+
+* add internationalization to event dates ([#391](https://github.com/Automattic/newspack-listings/issues/391)) ([315b68e](https://github.com/Automattic/newspack-listings/commit/315b68e2aeffbfdd2a366955ab291fe15791717d))
+* add option to change the event date/time format ([#399](https://github.com/Automattic/newspack-listings/issues/399)) ([d4fcc33](https://github.com/Automattic/newspack-listings/commit/d4fcc33b00d10a9ba6818cc381bd4d108290e217))
+
+# [2.13.0](https://github.com/Automattic/newspack-listings/compare/v2.12.8...v2.13.0) (2023-06-19)
+
+
+### Features
+
+* add POT file to Listings plugin ([#371](https://github.com/Automattic/newspack-listings/issues/371)) ([641e61b](https://github.com/Automattic/newspack-listings/commit/641e61b1676ade685714e69c11de985379ca81e2))
+
+# [2.13.0-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.12.8...v2.13.0-alpha.1) (2023-06-08)
+
+
+### Features
+
+* add POT file to Listings plugin ([#371](https://github.com/Automattic/newspack-listings/issues/371)) ([641e61b](https://github.com/Automattic/newspack-listings/commit/641e61b1676ade685714e69c11de985379ca81e2))
+
+## [2.12.8](https://github.com/Automattic/newspack-listings/compare/v2.12.7...v2.12.8) (2023-05-08)
+
+
+### Bug Fixes
+
+* add pre push hook ([#352](https://github.com/Automattic/newspack-listings/issues/352)) ([a271f9d](https://github.com/Automattic/newspack-listings/commit/a271f9da10b1048537afd144c88c697da4bb4efc))
+
+## [2.12.8-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.12.7...v2.12.8-alpha.1) (2023-05-02)
+
+
+### Bug Fixes
+
+* add pre push hook ([#352](https://github.com/Automattic/newspack-listings/issues/352)) ([a271f9d](https://github.com/Automattic/newspack-listings/commit/a271f9da10b1048537afd144c88c697da4bb4efc))
+
+## [2.12.7](https://github.com/Automattic/newspack-listings/compare/v2.12.6...v2.12.7) (2023-05-02)
+
+
+### Bug Fixes
+
+* only run self-serve-related actions if enabled ([#364](https://github.com/Automattic/newspack-listings/issues/364)) ([560a3f7](https://github.com/Automattic/newspack-listings/commit/560a3f7efe12c06672dc38b92e6c4418a37f6bd0))
+
+## [2.12.6](https://github.com/Automattic/newspack-listings/compare/v2.12.5...v2.12.6) (2023-04-10)
+
+
+### Bug Fixes
+
+* remove unneeded editor CSS for Event Dates block ([#345](https://github.com/Automattic/newspack-listings/issues/345)) ([fb388ba](https://github.com/Automattic/newspack-listings/commit/fb388ba443bbafba793a0cc21689f3c8b1f2bac3))
+
+## [2.12.6-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.12.5...v2.12.6-alpha.1) (2023-03-31)
+
+
+### Bug Fixes
+
+* remove unneeded editor CSS for Event Dates block ([#345](https://github.com/Automattic/newspack-listings/issues/345)) ([fb388ba](https://github.com/Automattic/newspack-listings/commit/fb388ba443bbafba793a0cc21689f3c8b1f2bac3))
+
 ## [2.12.5](https://github.com/Automattic/newspack-listings/compare/v2.12.4...v2.12.5) (2023-03-01)
 
 

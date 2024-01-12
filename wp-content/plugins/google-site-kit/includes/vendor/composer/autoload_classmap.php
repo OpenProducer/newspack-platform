@@ -229,6 +229,7 @@ return array(
     'Google\\Site_Kit\\Modules\\Analytics_4\\Report\\Response' => $baseDir . '/Modules/Analytics_4/Report/Response.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\Report\\Row_Trait' => $baseDir . '/Modules/Analytics_4/Report/Row_Trait.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\Settings' => $baseDir . '/Modules/Analytics_4/Settings.php',
+    'Google\\Site_Kit\\Modules\\Analytics_4\\Synchronize_Property' => $baseDir . '/Modules/Analytics_4/Synchronize_Property.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\Tag_Guard' => $baseDir . '/Modules/Analytics_4/Tag_Guard.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\Tag_Interface' => $baseDir . '/Modules/Analytics_4/Tag_Interface.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\Web_Tag' => $baseDir . '/Modules/Analytics_4/Web_Tag.php',

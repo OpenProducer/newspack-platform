@@ -238,11 +238,17 @@ const {
         ref
       } = (0,interactivity_namespaceObject.getElement)();
       ctx.imageRef = ref;
-      ctx.lightboxTriggerRef = ref.parentElement.querySelector('.lightbox-trigger');
       if (ref.complete) {
         ctx.imageLoaded = true;
         ctx.imageCurrentSrc = ref.currentSrc;
       }
+    },
+    initTriggerButton() {
+      const ctx = (0,interactivity_namespaceObject.getContext)();
+      const {
+        ref
+      } = (0,interactivity_namespaceObject.getElement)();
+      ctx.lightboxTriggerRef = ref;
     },
     initLightbox() {
       const ctx = (0,interactivity_namespaceObject.getContext)();

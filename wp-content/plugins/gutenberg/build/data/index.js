@@ -3957,6 +3957,14 @@ function Store(registry, suspense) {
   let lastIsAsync;
   let subscriber;
   let didWarnUnstableReference;
+  const storeStatesOnMount = new Map();
+  function getStoreState(name) {
+    var _registry$stores$name;
+    // If there's no store property (custom generic store), return an empty
+    // object. When comparing the state, the empty objects will cause the
+    // equality check to fail, setting `lastMapResultValid` to false.
+    return (_registry$stores$name = registry.stores[name]?.store?.getState?.()) !== null && _registry$stores$name !== void 0 ? _registry$stores$name : {};
+  }
   const createSubscriber = stores => {
     // The set of stores the `subscribe` function is supposed to subscribe to. Here it is
     // initialized, and then the `updateStores` function can add new stores to it.
@@ -3967,12 +3975,21 @@ function Store(registry, suspense) {
     // keep a set of active subscriptions;
     const activeSubscriptions = new Set();
     function subscribe(listener) {
-      // Invalidate the value right after subscription was created. React will
-      // call `getValue` after subscribing, to detect store updates that happened
-      // in the interval between the `getValue` call during render and creating
-      // the subscription, which is slightly delayed. We need to ensure that this
-      // second `getValue` call will compute a fresh value.
-      lastMapResultValid = false;
+      // Maybe invalidate the value right after subscription was created.
+      // React will call `getValue` after subscribing, to detect store
+      // updates that happened in the interval between the `getValue` call
+      // during render and creating the subscription, which is slightly
+      // delayed. We need to ensure that this second `getValue` call will
+      // compute a fresh value only if any of the store states have
+      // changed in the meantime.
+      if (lastMapResultValid) {
+        for (const name of activeStores) {
+          if (storeStatesOnMount.get(name) !== getStoreState(name)) {
+            lastMapResultValid = false;
+          }
+        }
+      }
+      storeStatesOnMount.clear();
       const onStoreChange = () => {
         // Invalidate the value on store update, so that a fresh value is computed.
         lastMapResultValid = false;
@@ -4039,6 +4056,9 @@ function Store(registry, suspense) {
       const mapResult = registry.__unstableMarkListeningStores(() => mapSelect(select, registry), listeningStores);
       if (false) {}
       if (!subscriber) {
+        for (const name of listeningStores.current) {
+          storeStatesOnMount.set(name, getStoreState(name));
+        }
         subscriber = createSubscriber(listeningStores.current);
       } else {
         subscriber.updateStores(listeningStores.current);

@@ -1,3 +1,17 @@
+# [2.28.0](https://github.com/Automattic/newspack-popups/compare/v2.27.0...v2.28.0) (2024-01-08)
+
+
+### Features
+
+* add support for prompt revisions ([b2571a7](https://github.com/Automattic/newspack-popups/commit/b2571a7a4b4bf8bf755487683edc2a0ee5d3c8ef))
+
+# [2.28.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.27.0...v2.28.0-alpha.1) (2023-12-15)
+
+
+### Features
+
+* add support for prompt revisions ([b2571a7](https://github.com/Automattic/newspack-popups/commit/b2571a7a4b4bf8bf755487683edc2a0ee5d3c8ef))
+
 # [2.27.0](https://github.com/Automattic/newspack-popups/compare/v2.26.1...v2.27.0) (2023-12-11)
 
 

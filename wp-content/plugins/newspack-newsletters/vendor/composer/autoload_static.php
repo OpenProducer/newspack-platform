@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8
+class ComposerStaticInitab1b645eaf6bd62b3ec1abbe0c85e6af
 {
     public static $prefixLengthsPsr4 = array (
         'D' => 
@@ -58,6 +58,7 @@ class ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8
         'Newspack_Newsletters_Constant_Contact' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact.php',
         'Newspack_Newsletters_Constant_Contact_Controller' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-controller.php',
         'Newspack_Newsletters_Constant_Contact_SDK' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-sdk.php',
+        'Newspack_Newsletters_Constant_Contact_Usage_Reports' => __DIR__ . '/../..' . '/includes/service-providers/constant_contact/class-newspack-newsletters-constant-contact-usage-reports.php',
         'Newspack_Newsletters_ESP_API_Interface' => __DIR__ . '/../..' . '/includes/service-providers/interface-newspack-newsletters-esp-service.php',
         'Newspack_Newsletters_Editor' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-editor.php',
         'Newspack_Newsletters_Embed' => __DIR__ . '/../..' . '/includes/class-newspack-newsletters-embed.php',
@@ -84,9 +85,9 @@ class ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitac30dba3dd87adb3f52b8b98ec9855c8::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitab1b645eaf6bd62b3ec1abbe0c85e6af::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitab1b645eaf6bd62b3ec1abbe0c85e6af::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitab1b645eaf6bd62b3ec1abbe0c85e6af::$classMap;
 
         }, null, ClassLoader::class);
     }

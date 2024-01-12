@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7
+class ComposerStaticInite8a2a9a67b3bce8396b5fcadace59f2d
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -143,6 +143,7 @@ class ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7
         'Newspack\\Mailchimp_For_WooCommerce' => __DIR__ . '/../..' . '/includes/plugins/class-mailchimp-for-woocommerce.php',
         'Newspack\\Major_Revision' => __DIR__ . '/../..' . '/includes/revisions-control/class-major-revision.php',
         'Newspack\\Major_Revisions' => __DIR__ . '/../..' . '/includes/revisions-control/class-major-revisions.php',
+        'Newspack\\Media_Partners' => __DIR__ . '/../..' . '/includes/optional-modules/class-media-partners.php',
         'Newspack\\Memberships' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-memberships.php',
         'Newspack\\Memberships\\Block_Patterns' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-block-patterns.php',
         'Newspack\\Memberships\\Metering' => __DIR__ . '/../..' . '/includes/plugins/wc-memberships/class-metering.php',
@@ -205,9 +206,9 @@ class ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit66b23d41173a72b8a95d6d73b7f99cf7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInite8a2a9a67b3bce8396b5fcadace59f2d::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInite8a2a9a67b3bce8396b5fcadace59f2d::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInite8a2a9a67b3bce8396b5fcadace59f2d::$classMap;
 
         }, null, ClassLoader::class);
     }
