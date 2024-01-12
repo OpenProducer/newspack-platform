@@ -9,9 +9,16 @@
 	position: relative;
 	width: 100%;
 
+	// Hide some radio buttons absolutely.
 	input[type='radio'] {
-		left: -99999em;
 		position: absolute;
+		left: -99999em;
+
+		// And hide the ones being replaced by tabs completely.
+		&[name='donation_frequency'],
+		&[name='donation_frequency'] + label {
+			display: none;
+		}
 	}
 
 	input[readonly] {
@@ -42,9 +49,13 @@
 		@include mixins.media( tablet ) {
 			margin: 0 1.5rem 1.5rem;
 		}
+		&:disabled {
+			opacity: 0.5;
+		}
 	}
-	label.wpbnbd {
+	.wpbnbd {
 		&__button {
+			font-size: 16px;
 			text-transform: uppercase;
 		}
 	}
@@ -188,75 +199,34 @@
 	}
 }
 
-.wpbnbd .frequencies {
-	position: relative;
-	font-size: variables.$font__size-xs;
-	@include mixins.media( mobile ) {
-		font-size: variables.$font__size-sm;
-	}
-
-	padding-top: 2.65em;
-}
-
-.wpbnbd .frequency {
-	.freq-label {
-		position: absolute;
-		top: 0;
-		left: 0;
-		border-width: 0 0 1px;
-	}
-
-	input[type='radio'] {
-		&:checked {
-			+ .freq-label {
-				color: inherit;
-				border-bottom-color: transparent;
-
-				&:hover {
-					background: colors.$color__background-body;
-				}
-			}
-
-			~ .tiers {
-				display: flex;
-			}
-		}
-
-		&:focus + .freq-label {
-			text-decoration: underline;
-			text-decoration-style: dotted;
-			text-decoration-thickness: 1px;
+.wpbnbd {
+	.frequencies {
+		position: relative;
+		font-size: variables.$font__size-xs;
+		@include mixins.media( mobile ) {
+			font-size: variables.$font__size-sm;
 		}
 	}
 
-	&:nth-of-type( 3 ) .freq-label {
-		left: 66.66%;
+	.frequency input[type='radio']:checked ~ .tiers {
+		display: flex;
 	}
-}
 
-.wpbnbd-frequencies {
-	&--2 {
-		&.wpbnbd .frequency {
-			.freq-label {
-				width: 50%;
+	.tab-container {
+		display: flex;
+		.freq-label {
+			border-radius: 0;
+			margin: 0;
+
+			&.wpbnbd__button--active {
+				color: colors.$color__text-main;
 			}
-			&:nth-of-type( 2 ) .freq-label {
-				border-left-width: 1px;
-				left: 50%;
-				top: 0;
-			}
-		}
-	}
-	&--3 {
-		&.wpbnbd .frequency {
-			.freq-label {
-				width: 33.33%;
-			}
-			&:nth-of-type( 2 ) .freq-label {
-				border-left-width: 1px;
-				border-right-width: 1px;
-				left: 33.33%;
-				top: 0;
+
+			&:focus {
+				outline: 0;
+				text-decoration: underline;
+				text-decoration-style: dotted;
+				text-decoration-thickness: 1px;
 			}
 		}
 	}

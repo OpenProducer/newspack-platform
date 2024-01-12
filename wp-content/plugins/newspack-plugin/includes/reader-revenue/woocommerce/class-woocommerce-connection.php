@@ -43,7 +43,12 @@ class WooCommerce_Connection {
 		include_once __DIR__ . '/class-woocommerce-cover-fees.php';
 
 		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
-		\add_filter( 'option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_switching_subscription_amount' ] );
+		\add_filter( 'option_woocommerce_subscriptions_allow_switching', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
+		\add_filter( 'option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
+		\add_filter( 'option_woocommerce_subscriptions_enable_retry', [ __CLASS__, 'force_allow_failed_payment_retry' ] );
+		\add_filter( 'default_option_woocommerce_subscriptions_allow_switching', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
+		\add_filter( 'default_option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
+		\add_filter( 'default_option_woocommerce_subscriptions_enable_retry', [ __CLASS__, 'force_allow_failed_payment_retry' ] );
 		\add_filter( 'woocommerce_email_enabled_customer_completed_order', [ __CLASS__, 'send_customizable_receipt_email' ], 10, 3 );
 
 		// WooCommerce Subscriptions.
@@ -357,7 +362,7 @@ class WooCommerce_Connection {
 
 	/**
 	 * Upsert reader data to the ESP connected via Newspack Newsletters.
-	 * 
+	 *
 	 * @param array $contact Reader data to sync.
 	 * @return bool|WP_Error Contact data if it was added, WP_Error otherwise.
 	 */
@@ -477,7 +482,7 @@ class WooCommerce_Connection {
 		$order->set_billing_first_name( $order_data['name'] );
 
 		if ( isset( $order_data['subscribed'] ) && $order_data['subscribed'] ) {
-			$order->add_order_note( __( 'Donor has opted-in to your newsletter.', 'newspack' ) );
+			$order->add_order_note( __( 'Donor has opted-in to your newsletter.', 'newspack-plugin' ) );
 		}
 
 		if ( ! empty( $order_data['client_id'] ) ) {
@@ -544,7 +549,7 @@ class WooCommerce_Connection {
 		if ( isset( $metadata['payment_method_title'] ) ) {
 			$order->set_payment_method_title( $metadata['payment_method_title'] );
 		} else {
-			$order->set_payment_method_title( __( 'Stripe via Newspack', 'newspack' ) );
+			$order->set_payment_method_title( __( 'Stripe via Newspack', 'newspack-plugin' ) );
 		}
 		if ( isset( $metadata['stripe_customer_id'] ) ) {
 			$order->add_meta_data( '_stripe_customer_id', $metadata['stripe_customer_id'] );
@@ -580,10 +585,10 @@ class WooCommerce_Connection {
 
 		// Add notes to the order.
 		if ( 'once' === $frequency ) {
-			$order->add_order_note( __( 'One-time Newspack donation.', 'newspack' ) );
+			$order->add_order_note( __( 'One-time Newspack donation.', 'newspack-plugin' ) );
 		} else {
 			/* translators: %s - donation frequency */
-			$order->add_order_note( sprintf( __( 'Newspack donation with frequency: %s.', 'newspack' ), $frequency ) );
+			$order->add_order_note( sprintf( __( 'Newspack donation with frequency: %s.', 'newspack-plugin' ), $frequency ) );
 		}
 
 		$order->add_item( $item );
@@ -655,7 +660,7 @@ class WooCommerce_Connection {
 		// Match the Stripe product to WC product.
 		$item = self::get_order_item( $frequency, $order_data['amount'], $product_sku );
 		if ( false === $item ) {
-			return new \WP_Error( 'newspack_woocommerce', __( 'Missing product.', 'newspack' ) );
+			return new \WP_Error( 'newspack_woocommerce', __( 'Missing product.', 'newspack-plugin' ) );
 		}
 
 		$subscription_status = 'none';
@@ -764,10 +769,10 @@ class WooCommerce_Connection {
 					$subscription->add_item( $item );
 
 					if ( false === $stripe_subscription_id ) {
-						$subscription->add_order_note( __( 'This subscription was created via Newspack.', 'newspack' ) );
+						$subscription->add_order_note( __( 'This subscription was created via Newspack.', 'newspack-plugin' ) );
 					} else {
 						/* translators: %s - donation frequency */
-						$subscription->add_order_note( sprintf( __( 'Newspack subscription with frequency: %s. The recurring payment and the subscription will be handled in Stripe, so you\'ll see "Manual renewal" as the payment method in WooCommerce.', 'newspack' ), $frequency ) );
+						$subscription->add_order_note( sprintf( __( 'Newspack subscription with frequency: %s. The recurring payment and the subscription will be handled in Stripe, so you\'ll see "Manual renewal" as the payment method in WooCommerce.', 'newspack-plugin' ), $frequency ) );
 						$subscription->update_status( 'active' ); // Settings status via method (not in wcs_create_subscription), to make WCS recalculate dates.
 					}
 					$subscription->calculate_totals();
@@ -777,7 +782,7 @@ class WooCommerce_Connection {
 						if ( isset( $order_data['payment_method_title'] ) ) {
 							$subscription->set_payment_method_title( $order_data['payment_method_title'] );
 						} else {
-							$subscription->set_payment_method_title( __( 'Stripe', 'newspack' ) );
+							$subscription->set_payment_method_title( __( 'Stripe', 'newspack-plugin' ) );
 						}
 					} else {
 						update_post_meta( $subscription_id, self::SUBSCRIPTION_STRIPE_ID_META_KEY, $stripe_subscription_id );
@@ -1063,7 +1068,7 @@ class WooCommerce_Connection {
 		if ( $order_data['subscription_id'] ) {
 			return sprintf(
 				/* translators: %s: Product name */
-				__( 'Newspack %1$s (Order #%2$d, Subscription #%3$d)', 'newspack' ),
+				__( 'Newspack %1$s (Order #%2$d, Subscription #%3$d)', 'newspack-plugin' ),
 				Donations::get_donation_name_by_frequency( $frequency ),
 				$order_data['order_id'],
 				$order_data['subscription_id']
@@ -1071,7 +1076,7 @@ class WooCommerce_Connection {
 		} else {
 			return sprintf(
 				/* translators: %s: Product name */
-				__( 'Newspack %1$s (Order #%2$d)', 'newspack' ),
+				__( 'Newspack %1$s (Order #%2$d)', 'newspack-plugin' ),
 				Donations::get_donation_name_by_frequency( $frequency ),
 				$order_data['order_id']
 			);
@@ -1137,14 +1142,48 @@ class WooCommerce_Connection {
 	}
 
 	/**
-	 * Force allow switching the subscription amount unless the NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE constant is set
+	 * Force values for subscription switching options to ON unless the
+	 * NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE constant is set.
+	 * This affects the following "Allow Switching" options:
 	 *
-	 * @param bool $can_switch Whether the subscription amount can be switched.
+	 * - Between Subscription Variations
+	 * - Between Grouped Subscriptions
+	 * - Change Name Your Price subscription amount
+	 *
+	 * @param bool   $can_switch Whether the subscription amount can be switched.
+	 * @param string $option_name The name of the option.
+	 *
+	 * @return string Option value.
 	 */
-	public static function force_allow_switching_subscription_amount( $can_switch ) {
+	public static function force_allow_subscription_switching( $can_switch, $option_name ) {
 		if ( defined( 'NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE' ) && NEWSPACK_PREVENT_WC_SUBS_ALLOW_SWITCHING_OVERRIDE ) {
 			return $can_switch;
 		}
+
+		// Subscriptions' default switching options are combined into a single options row with possible values 'no', 'variable', 'grouped', or 'variable_grouped'.
+		if ( 'woocommerce_subscriptions_allow_switching' === $option_name ) {
+			return 'variable_grouped';
+		}
+
+		// Other options added by the woocommerce_subscriptions_allow_switching_options filter are either 'yes' or 'no'.
+		return 'yes';
+	}
+
+	/**
+	 * Force option for allowing retries for failed payments to ON unless the
+	 * NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE constant is set.
+	 * 
+	 * See: https://woo.com/document/subscriptions/failed-payment-retry/
+	 * 
+	 * @param bool $should_retry Whether WooCommerce should automatically retry failed payments.
+	 *
+	 * @return string Option value.
+	 */
+	public static function force_allow_failed_payment_retry( $should_retry ) {
+		if ( defined( 'NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE' ) && NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE ) {
+			return $should_retry;
+		}
+
 		return 'yes';
 	}
 
@@ -1163,10 +1202,19 @@ class WooCommerce_Connection {
 			return $enable;
 		}
 
-		$currency = $order->get_currency();
-		$symbol   = newspack_get_currency_symbol( $currency );
-		$total    = $order->get_total();
-		$created  = $order->get_date_created();
+		$frequencies = [
+			'month' => __( 'Monthly', 'newspack-plugin' ),
+			'year'  => __( 'Yearly', 'newspack-plugin' ),
+		];
+		$product_map = [];
+		foreach ( $frequencies as $frequency => $label ) {
+			$product_id = Donations::get_donation_product( $frequency );
+			if ( $product_id ) {
+				$product_map[ $product_id ] = $label;
+			}
+		}
+
+		$item = array_shift( $order->get_items() );
 
 		// Replace content placeholders.
 		$placeholders = [
@@ -1175,20 +1223,36 @@ class WooCommerce_Connection {
 				'value'    => trim( $order->get_billing_first_name() . ' ' . $order->get_billing_last_name() ),
 			],
 			[
+				'template' => '*BILLING_FIRST_NAME*',
+				'value'    => $order->get_billing_first_name(),
+			],
+			[
+				'template' => '*BILLING_LAST_NAME*',
+				'value'    => $order->get_billing_last_name(),
+			],
+			[
+				'template' => '*BILLING_FREQUENCY*',
+				'value'    => $product_map[ $item->get_product_id() ] ?? __( 'One-time', 'newspack-plugin' ),
+			],
+			[
+				'template' => '*PRODUCT_NAME*',
+				'value'    => $item->get_name(),
+			],
+			[
 				'template' => '*AMOUNT*',
-				'value'    => 'USD' === $currency ? $symbol . $total : $total . $symbol,
+				'value'    => \wp_strip_all_tags( $order->get_formatted_order_total() ),
 			],
 			[
 				'template' => '*DATE*',
-				'value'    => $created->date_i18n(),
+				'value'    => $order->get_date_created()->date_i18n(),
 			],
 			[
 				'template' => '*PAYMENT_METHOD*',
-				'value'    => __( 'Card', 'newspack' ) . ' – ' . $order->get_payment_method(),
+				'value'    => __( 'Card', 'newspack-plugin' ) . ' – ' . $order->get_payment_method(),
 			],
 			[
 				'template' => '*RECEIPT_URL*',
-				'value'    => sprintf( '<a href="%s">%s</a>', $order->get_view_order_url(), __( 'My Account', 'newspack' ) ),
+				'value'    => sprintf( '<a href="%s">%s</a>', $order->get_view_order_url(), __( 'My Account', 'newspack-plugin' ) ),
 			],
 		];
 

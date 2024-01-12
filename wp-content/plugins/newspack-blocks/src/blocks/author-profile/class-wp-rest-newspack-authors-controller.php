@@ -84,6 +84,8 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 		// Total number of users and guest authors.
 		$guest_author_total = 0;
 		$user_total         = 0;
+		$guest_authors = [];
+		$linked_guest_authors = [];
 
 		// Get Co-authors guest authors.
 		if ( $is_guest_author ) {
@@ -106,6 +108,14 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 
 			$guest_authors      = get_posts( $guest_author_args );
 			$guest_author_total = count( $guest_authors );
+		}
+
+		foreach ( $guest_authors as $ga ) {
+			$linked_guest_author = get_post_meta( $ga->ID, 'cap-linked_account', true );
+
+			if ( $linked_guest_author ) {
+				$linked_guest_authors[] = $linked_guest_author;
+			}
 		}
 
 		$users = [];
@@ -187,8 +197,14 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 			),
 			array_reduce(
 				$users,
-				function( $acc, $user ) use ( $fields, $avatar_hide_default ) {
+				function( $acc, $user ) use ( $fields, $avatar_hide_default, $linked_guest_authors ) {
 					if ( $user ) {
+
+						// This user is linked to a guest author already returned in the query, so skip it.
+						if ( in_array( $user->data->user_login, $linked_guest_authors, true ) ) {
+							return $acc;
+						}
+
 						$user_data = [
 							'id'         => intval( $user->data->ID ),
 							'registered' => $user->data->user_registered,

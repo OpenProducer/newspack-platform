@@ -1,5 +1,23 @@
 # Changelog
 
+## 13.6.0 - 2023-12-07
+* [#1613](https://github.com/stripe/stripe-php/pull/1613) Update generated code
+  * Add support for new values `customer_tax_location_invalid` and `financial_connections_no_successful_transaction_refresh` on enum `StripeError.code`
+  * Add support for new values `payment_network_reserve_hold` and `payment_network_reserve_release` on enum `BalanceTransaction.type`
+  * Remove support for value `various` from enum `Climate.Supplier.removal_pathway`
+  * Add support for `inactive_message` and `restrictions` on `PaymentLink`
+* [#1612](https://github.com/stripe/stripe-php/pull/1612) Report usage of .save and StripeClient
+  * Reports uses of the deprecated `.save` and of `StripeClient` in `X-Stripe-Client-Telemetry`. (You can disable telemetry via `\Stripe\Stripe::setEnableTelemetry(false);`, see the [README](https://github.com/stripe/stripe-php/blob/master/README.md#telemetry).)
+
+## 13.5.0 - 2023-11-30
+* [#1611](https://github.com/stripe/stripe-php/pull/1611) Update generated code
+  * Add support for new resources `Climate.Order`, `Climate.Product`, and `Climate.Supplier`
+  * Add support for `all`, `cancel`, `create`, `retrieve`, and `update` methods on resource `Order`
+  * Add support for `all` and `retrieve` methods on resources `Product` and `Supplier`
+  * Add support for new value `financial_connections_account_inactive` on enum `StripeError.code`
+  * Add support for new values `climate_order_purchase` and `climate_order_refund` on enum `BalanceTransaction.type`
+  * Add support for new values `climate.order.canceled`, `climate.order.created`, `climate.order.delayed`, `climate.order.delivered`, `climate.order.product_substituted`, `climate.product.created`, and `climate.product.pricing_updated` on enum `Event.type`
+
 ## 13.4.0 - 2023-11-21
 * [#1608](https://github.com/stripe/stripe-php/pull/1608) Update generated code
   Add support for `transferred_to_balance` to `CustomerCashBalanceTransaction`

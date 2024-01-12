@@ -55,41 +55,75 @@ class Reader_Revenue_Emails {
 	public static function add_email_configs( $configs ) {
 		$configs[ self::EMAIL_TYPES['RECEIPT'] ] = [
 			'name'                   => self::EMAIL_TYPES['RECEIPT'],
-			'label'                  => __( 'Receipt', 'newspack' ),
-			'description'            => __( "Email sent to the donor after they've donated.", 'newspack' ),
+			'label'                  => __( 'Receipt', 'newspack-plugin' ),
+			'description'            => __( "Email sent to the donor after they've donated.", 'newspack-plugin' ),
 			'template'               => dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/templates/reader-revenue-emails/receipt.php',
-			'editor_notice'          => __( 'This email will be sent to a reader after they contribute to your site.', 'newspack' ),
+			'editor_notice'          => __( 'This email will be sent to a reader after they contribute to your site.', 'newspack-plugin' ),
 			'from_email'             => self::get_from_email(),
 			'available_placeholders' => [
 				[
-					'label'    => __( 'the customer billing name', 'newspack' ),
+					'label'    => __( 'the customer billing name', 'newspack-plugin' ),
 					'template' => '*BILLING_NAME*',
 				],
 				[
-					'label'    => __( 'the payment amount', 'newspack' ),
+					'label'    => __( 'the customer billing first name', 'newspack-plugin' ),
+					'template' => '*BILLING_FIRST_NAME*',
+				],
+				[
+					'label'    => __( 'the customer billing last name', 'newspack-plugin' ),
+					'template' => '*BILLING_LAST_NAME*',
+				],
+				[
+					'label'    => __( 'the billing frequency (one-time, monthly or annual)', 'newspack-plugin' ),
+					'template' => '*BILLING_FREQUENCY*',
+				],
+				[
+					'label'    => __( 'the product name', 'newspack-plugin' ),
+					'template' => '*PRODUCT_NAME*',
+				],
+				[
+					'label'    => __( 'the payment amount', 'newspack-plugin' ),
 					'template' => '*AMOUNT*',
 				],
 				[
-					'label'    => __( 'payment date', 'newspack' ),
+					'label'    => __( 'payment date', 'newspack-plugin' ),
 					'template' => '*DATE*',
 				],
 				[
-					'label'    => __( 'payment method (last four digits of the card used)', 'newspack' ),
+					'label'    => __( 'payment method (last four digits of the card used)', 'newspack-plugin' ),
 					'template' => '*PAYMENT_METHOD*',
 				],
 				[
 					'label'    => __(
 						'the contact email to your site (same as the "From" email address)',
-						'newspack'
+						'newspack-plugin'
 					),
 					'template' => '*CONTACT_EMAIL*',
 				],
 				[
-					'label'    => __( 'automatically-generated receipt link', 'newspack' ),
+					'label'    => __( 'automatically-generated receipt link', 'newspack-plugin' ),
 					'template' => '*RECEIPT_URL*',
 				],
 			],
 		];
+
+		$platform = Donations::get_platform_slug();
+		// If using 'Stripe', remove unsupported placeholders.
+		$stripe_unsupported_placeholders = [
+			'*BILLING_FIRST_NAME*',
+			'*BILLING_LAST_NAME*',
+			'*BILLING_FREQUENCY*',
+			'*PRODUCT_NAME*',
+		];
+		if ( 'stripe' === $platform ) {
+			foreach ( $configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'] as $key => $placeholder ) {
+				if ( in_array( $placeholder['template'], $stripe_unsupported_placeholders ) ) {
+					unset( $configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'][ $key ] );
+				}
+			}
+			$configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'] = array_values( $configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'] );
+		}
+
 		return $configs;
 	}
 }
