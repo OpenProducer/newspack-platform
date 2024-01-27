@@ -708,17 +708,12 @@ class Newspack_Newsletters_Subscription {
 			return;
 		}
 
-		if ( isset( $metadata['lists'] ) && ! empty( $metadata['lists'] ) ) {
-			$lists = $metadata['lists'];
-			unset( $metadata['lists'] );
-		} else {
-			$lists = false;
-		}
-		/** Don't add contact if reader sync is disabled and there are no lists to subscribe to. */
-		$sync = \Newspack\Reader_Activation::get_setting( 'sync_esp' );
-		if ( ! $sync && empty( $lists ) ) {
+		if ( empty( $metadata['lists'] ) ) {
 			return;
 		}
+
+		$lists = $metadata['lists'];
+		unset( $metadata['lists'] );
 
 		$metadata['newsletters_subscription_method'] = 'reader-registration';
 

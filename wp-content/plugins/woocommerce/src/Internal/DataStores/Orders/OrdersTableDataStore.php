@@ -26,7 +26,7 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 	/**
 	 * Order IDs for which we are checking sync on read in the current request. In WooCommerce, using wc_get_order is a very common pattern, to avoid performance issues, we only sync on read once per request per order. This works because we consider out of sync orders to be an anomaly, so we don't recommend running HPOS with incompatible plugins.
 	 *
-	 * @var array.
+	 * @var array
 	 */
 	private static $reading_order_ids = array();
 
@@ -609,6 +609,15 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 			}
 		}
 		self::$backfilling_order_ids = array_diff( self::$backfilling_order_ids, array( $order->get_id() ) );
+
+		/**
+		 * Fired when the backing post record for an HPOS order is backfilled after an order update.
+		 *
+		 * @since 8.5.0
+		 *
+		 * @param \WC_Order $order The order object.
+		 */
+		do_action( 'woocommerce_hpos_post_record_backfilled', $order );
 	}
 
 	/**
@@ -969,10 +978,24 @@ WHERE
 	/**
 	 * Get unpaid orders last updated before the specified date.
 	 *
-	 * @param  int $date Timestamp.
-	 * @return array
+	 * @param  int $date This timestamp is expected in the timezone in WordPress settings for legacy reason, even though it's not a good practice.
+	 *
+	 * @return array Array of order IDs.
 	 */
 	public function get_unpaid_orders( $date ) {
+		$timezone_offset = wc_timezone_offset();
+		$gmt_timestamp   = $date - $timezone_offset;
+		return $this->get_unpaid_orders_gmt( absint( $gmt_timestamp ) );
+	}
+
+	/**
+	 * Get unpaid orders last updated before the specified GMT date.
+	 *
+	 * @param int $gmt_timestamp GMT timestamp.
+	 *
+	 * @return array Array of order IDs.
+	 */
+	public function get_unpaid_orders_gmt( $gmt_timestamp ) {
 		global $wpdb;
 
 		$orders_table    = self::get_orders_table_name();
@@ -986,7 +1009,7 @@ WHERE
 				AND {$orders_table}.status = %s
 				AND {$orders_table}.date_updated_gmt < %s",
 				'wc-pending',
-				gmdate( 'Y-m-d H:i:s', absint( $date ) )
+				gmdate( 'Y-m-d H:i:s', absint( $gmt_timestamp ) )
 			)
 		);
 		// phpcs:enable
@@ -1415,17 +1438,6 @@ WHERE
 	}
 
 	/**
-	 * Log difference between post and COT data for an order.
-	 *
-	 * @param array $diff Difference between post and COT data.
-	 *
-	 * @return void
-	 */
-	private function log_diff( array $diff ): void {
-		$this->error_logger->notice( 'Diff found: ' . wp_json_encode( $diff, JSON_PRETTY_PRINT ) );
-	}
-
-	/**
 	 * Migrate post record from a given order object.
 	 *
 	 * @param \WC_Abstract_Order $order Order object.
@@ -1434,12 +1446,22 @@ WHERE
 	 * @return void
 	 */
 	private function migrate_post_record( \WC_Abstract_Order &$order, \WC_Abstract_Order $post_order ): void {
-		$this->migrate_meta_data_from_post_order( $order, $post_order );
+		$diff                 = $this->migrate_meta_data_from_post_order( $order, $post_order );
 		$post_order_base_data = $post_order->get_base_data();
 		foreach ( $post_order_base_data as $key => $value ) {
 			$this->set_order_prop( $order, $key, $value );
 		}
 		$this->persist_updates( $order, false );
+
+		/**
+		 * Fired when an HPOS order is updated from its corresponding post record on read due to a difference in the data.
+		 *
+		 * @since 8.5.0
+		 *
+		 * @param \WC_Order $order The order object.
+		 * @param array     $diff  Difference between HPOS data and post data.
+		 */
+		do_action( 'woocommerce_hpos_post_record_migrated_on_read', $order, $diff );
 	}
 
 	/**

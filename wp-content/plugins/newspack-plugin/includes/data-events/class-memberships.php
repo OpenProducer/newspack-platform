@@ -229,7 +229,10 @@ final class Memberships {
 	 */
 	public static function woocommerce_checkout_order_processed( $order_id ) {
 		$order = \wc_get_order( $order_id );
-		$data  = self::get_order_data( $order_id, $order );
+		if ( ! \Newspack\WooCommerce_Connection::should_sync_order( $order ) ) {
+			return;
+		}
+		$data = self::get_order_data( $order_id, $order );
 		if ( empty( $data ) ) {
 			return;
 		}

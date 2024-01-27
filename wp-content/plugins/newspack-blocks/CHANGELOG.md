@@ -1,3 +1,17 @@
+# [2.6.0](https://github.com/Automattic/newspack-blocks/compare/v2.5.0...v2.6.0) (2024-01-25)
+
+
+### Features
+
+* add filter when building WP_Query arguments ([#1412](https://github.com/Automattic/newspack-blocks/issues/1412)) ([f960bd6](https://github.com/Automattic/newspack-blocks/commit/f960bd6d5b9582cc4fcdeea11cae3b7123f976ce))
+
+# [2.6.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v2.5.0...v2.6.0-alpha.1) (2024-01-11)
+
+
+### Features
+
+* add filter when building WP_Query arguments ([#1412](https://github.com/Automattic/newspack-blocks/issues/1412)) ([f960bd6](https://github.com/Automattic/newspack-blocks/commit/f960bd6d5b9582cc4fcdeea11cae3b7123f976ce))
+
 # [2.5.0](https://github.com/Automattic/newspack-blocks/compare/v2.4.0...v2.5.0) (2024-01-08)
 
 

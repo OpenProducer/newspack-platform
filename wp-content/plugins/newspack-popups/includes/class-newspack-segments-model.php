@@ -76,27 +76,37 @@ final class Newspack_Segments_Model {
 	 */
 	public static function get_meta_schema() {
 		return [
-			'priority'      => [
+			'priority'               => [
 				'name'     => 'priority',
 				'type'     => 'integer',
 				'required' => false,
 				'default'  => PHP_INT_MAX,
 			],
-			'created_at'    => [
+			'created_at'             => [
 				'name'      => 'created_at',
 				'type'      => 'string',
 				'required'  => false,
 				'maxLength' => 10,
 				'pattern'   => '^\d{4}-\d\d-\d\d$',
 			],
-			'updated_at'    => [
+			'updated_at'             => [
 				'name'      => 'created_at',
 				'type'      => 'string',
 				'required'  => false,
 				'maxLength' => 10,
 				'pattern'   => '^\d{4}-\d\d-\d\d$',
 			],
-			'criteria'      => [
+			'criteria_hash'          => [
+				'name'     => 'criteria_hash',
+				'type'     => 'string',
+				'required' => false,
+			],
+			'is_criteria_duplicated' => [
+				'name'     => 'is_criteria_duplicated',
+				'type'     => 'boolean',
+				'required' => false,
+			],
+			'criteria'               => [
 				'type'     => 'array',
 				'required' => false,
 				'default'  => [],
@@ -142,7 +152,7 @@ final class Newspack_Segments_Model {
 					],
 				],
 			],
-			'configuration' => [
+			'configuration'          => [
 				'name'                 => 'configuration',
 				'type'                 => 'object',
 				'required'             => true,

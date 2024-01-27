@@ -13,8 +13,6 @@ return array(
     'MaxMind\\Db\\' => array($vendorDir . '/maxmind-db/reader/src/MaxMind/Db'),
     'Composer\\Installers\\' => array($vendorDir . '/composer/installers/src/Composer/Installers'),
     'Automattic\\WooCommerce\\Vendor\\' => array($baseDir . '/lib/packages'),
-    'Automattic\\WooCommerce\\StoreApi\\' => array($baseDir . '/packages/woocommerce-blocks/src/StoreApi'),
-    'Automattic\\WooCommerce\\Blocks\\' => array($baseDir . '/packages/woocommerce-blocks/src'),
     'Automattic\\WooCommerce\\' => array($baseDir . '/src'),
     'Automattic\\Jetpack\\Autoloader\\' => array($vendorDir . '/automattic/jetpack-autoloader/src'),
 );

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit43ec74747c68c7396bedc0a710526d75
+class ComposerStaticInit800f142a29f4f11e48110e1c60771b66
 {
     public static $prefixLengthsPsr4 = array (
         'l' => 
@@ -21,6 +21,8 @@ class ComposerStaticInit43ec74747c68c7396bedc0a710526d75
             'StellarWP\\Telemetry\\Views_Dir\\' => 30,
             'StellarWP\\Telemetry\\Assets_Dir\\' => 31,
             'StellarWP\\Telemetry\\' => 20,
+            'StellarWP\\Schema\\' => 17,
+            'StellarWP\\Models\\' => 17,
             'StellarWP\\Installer\\Assets_JS\\' => 30,
             'StellarWP\\Installer\\Admin_Views\\' => 32,
             'StellarWP\\Installer\\' => 20,
@@ -66,6 +68,14 @@ class ComposerStaticInit43ec74747c68c7396bedc0a710526d75
         'StellarWP\\Telemetry\\' => 
         array (
             0 => __DIR__ . '/..' . '/stellarwp/telemetry/src/Telemetry',
+        ),
+        'StellarWP\\Schema\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/schema/src/Schema',
+        ),
+        'StellarWP\\Models\\' => 
+        array (
+            0 => __DIR__ . '/..' . '/stellarwp/models/src/Models',
         ),
         'StellarWP\\Installer\\Assets_JS\\' => 
         array (
@@ -228,9 +238,9 @@ class ComposerStaticInit43ec74747c68c7396bedc0a710526d75
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit43ec74747c68c7396bedc0a710526d75::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit43ec74747c68c7396bedc0a710526d75::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit43ec74747c68c7396bedc0a710526d75::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit800f142a29f4f11e48110e1c60771b66::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit800f142a29f4f11e48110e1c60771b66::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit800f142a29f4f11e48110e1c60771b66::$classMap;
 
         }, null, ClassLoader::class);
     }

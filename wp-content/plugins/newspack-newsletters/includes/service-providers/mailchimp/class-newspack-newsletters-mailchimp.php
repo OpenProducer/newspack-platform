@@ -471,7 +471,8 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			foreach ( $lists_response['lists'] as $list ) {
 
 				$lists[]        = $list;
-				$all_categories = $this->get_all_categories( $list['id'] );
+				$all_categories = Newspack_Newsletters_Mailchimp_Cached_Data::get_interest_categories( $list['id'] );
+				$all_categories = $all_categories['categories'] ?? [];
 
 				foreach ( $all_categories as $found_category ) {
 
@@ -480,7 +481,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 						continue;
 					}
 
-					$all_groups = $this->get_all_groups_in_category( $list['id'], $found_category['id'] );
+					$all_groups = $found_category['interests'] ?? [];
 
 					$groups = array_map(
 						function( $group ) use ( $list ) {
@@ -488,7 +489,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 							$group['type'] = 'mailchimp-group';
 							return $group;
 						},
-						$all_groups
+						$all_groups['interests'] ?? [] // Yes, two levels of 'interests'.
 					);
 					$lists  = array_merge( $lists, $groups );
 				}
@@ -544,7 +545,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			$mc = new Mailchimp( $this->api_key() );
 
 			$result = $this->validate(
-				$mc->get( 'verified-domains' ),
+				$mc->get( 'verified-domains', [ 'count' => 1000 ] ),
 				__( 'Error retrieving verified domains from Mailchimp.', 'newspack-newsletters' )
 			);
 
@@ -957,7 +958,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			];
 
 			// Add saved segment ID to payload if present.
-			if ( $segment_data && 'saved' === $segment_data['type'] ) {
+			if ( ! empty( $segment_data ) && 'saved' === $segment_data['type'] ) {
 				$payload['recipients']['segment_opts']['saved_segment_id'] = (int) $segment_id;
 			}
 

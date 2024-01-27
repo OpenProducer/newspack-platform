@@ -50,6 +50,12 @@ class Prompts extends Schema {
 					'type'     => 'boolean',
 					'required' => false,
 				],
+				'duplicate_of'      => [
+					'name'     => 'duplicate_of',
+					'type'     => 'integer',
+					'required' => false,
+					'default'  => 0,
+				],
 				'campaign_groups'   => [
 					'name'     => 'campaign_groups',
 					'type'     => 'array',
@@ -361,12 +367,6 @@ class Prompts extends Schema {
 									],
 								],
 							],
-						],
-						'duplicate_of'                   => [
-							'name'     => 'duplicate_of',
-							'type'     => 'integer',
-							'required' => false,
-							'default'  => 0,
 						],
 						'newspack_popups_has_disabled_popups' => [
 							'name'     => 'newspack_popups_has_disabled_popups',

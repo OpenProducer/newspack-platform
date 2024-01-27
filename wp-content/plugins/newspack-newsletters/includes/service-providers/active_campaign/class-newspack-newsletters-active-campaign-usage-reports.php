@@ -17,6 +17,11 @@ class Newspack_Newsletters_Active_Campaign_Usage_Reports {
 	const LAST_CAMPAIGNS_DATA_OPTION_NAME = 'newspack_newsletters_active_campaign_last_report';
 
 	/**
+	 * Name of the option to store the last result under.
+	 */
+	const LAST_UNSUBS_DATA_OPTION_NAME = 'newspack_newsletters_active_campaign_last_unsubs_count';
+
+	/**
 	 * Newspack_Newsletters_Active_Campaign instance.
 	 *
 	 * @var Newspack_Newsletters_Active_Campaign
@@ -36,112 +41,89 @@ class Newspack_Newsletters_Active_Campaign_Usage_Reports {
 	}
 
 	/**
-	 * Get all contacts.
-	 *
-	 * @param int   $status Status of contacts to get.
-	 * @param date  $created_after Date after which contacts were created.
-	 * @param array $contacts Array of contacts.
+	 * Get contacts data - subs and unsubs.
 	 */
-	private function get_all_contacts( $status = 1, $created_after = null, $contacts = [] ) {
+	private function get_contacts_data() {
+		$subs = $this->get_subs_count();
+		if ( \is_wp_error( $subs ) ) {
+			return $subs;
+		}
+		$unsubs = $this->get_unsubs_count();
+		if ( \is_wp_error( $unsubs ) ) {
+			return $unsubs;
+		}
+
+		return [
+			'subs'   => $subs,
+			'unsubs' => $unsubs,
+		];
+	}
+
+	/**
+	 * Gets the count of subscribers for the last day.
+	 *
+	 * @return int|WP_Error The number of subscribers for the last day, or a WP_Error object on failure.
+	 */
+	private function get_subs_count() {
 		$ac     = $this->ac_instance;
 		$params = [
 			'query' => [
-				'offset' => count( $contacts ),
-				'limit'  => 100,
-				'status' => $status,
+				'limit'   => 1,
+				'status'  => 1,
+				'filters' => [
+					'created_before' => gmdate( 'Y-m-d' ),
+					'created_after'  => gmdate( 'Y-m-d', strtotime( '-1 days' ) ),
+				],
 			],
 		];
-		if ( null !== $created_after ) {
-			$params['query']['filters'] = [
-				'created_after' => gmdate( 'Y-m-d', $created_after ),
-			];
-		}
+
 		$contacts_result = $ac->api_v3_request( 'contacts', 'GET', $params );
 		if ( \is_wp_error( $contacts_result ) ) {
 			return $contacts_result;
 		}
-		$total    = intval( $contacts_result['meta']['total'] );
-		$contacts = array_map(
-			function( $contact ) {
-				return array_intersect_key( $contact, array_flip( [ 'cdate', 'udate', 'email', 'id' ] ) );
-			},
-			array_merge( $contacts, $contacts_result['contacts'] )
-		);
-		Newspack_Newsletters_Logger::log( 'Fetched contacts with status ' . $status . ' (' . count( $contacts ) . '/' . $total . ')' );
-		if ( count( $contacts ) === $total ) {
-			return $contacts;
-		}
-		return $this->get_all_contacts( $status, $created_after, $contacts );
+
+		$total = intval( $contacts_result['meta']['total'] );
+		return $total;
 	}
 
 	/**
-	 * Update report with contact data.
+	 * Gets the count of unsubscribers for the last day.
 	 *
-	 * @param string $param Contact parameter to check.
-	 * @param string $report_key Report key to update.
-	 * @param array  $all_contacts Array of all contacts.
-	 * @param array  $report Report to update.
-	 * @param int    $last_n_days Number of last days to get the data about.
-	 */
-	private static function update_report_with_contact_data( $param, $report_key, $all_contacts, $report, $last_n_days ) {
-		$cutoff_datetime = strtotime( '-' . $last_n_days . ' days' );
-		foreach ( $all_contacts as $contact ) {
-			if ( isset( $contact[ $param ] ) ) {
-				$date        = strtotime( $contact[ $param ] );
-				$date_string = gmdate( 'Y-m-d', $date );
-				if ( $date < $cutoff_datetime ) {
-					continue;
-				}
-				if ( isset( $report[ $date_string ] ) ) {
-					if ( isset( $report[ $date_string ][ $report_key ] ) ) {
-						$report[ $date_string ][ $report_key ]++;
-					} else {
-						$report[ $date_string ][ $report_key ] = 1;
-					}
-				} else {
-					$report[ $date_string ] = [
-						$report_key => 1,
-					];
-				}
-			}
-		}
-		return $report;
-	}
-
-	/**
-	 * Get contacts data - subs and unsubs.
+	 * There's no way to filter for unsubscribes on a given day. Filtering by updated_after is also not reliable.
+	 * Let's take the total number of unsubscribes, and subtract the total number of unsubscribes from the previous day.
+	 * This is also not perfect, but it's the best alternative I've found.
 	 *
-	 * @param int $last_n_days Number of last days to get the data about.
+	 * @return int|WP_Error The number of unsubscribers for the last day, or a WP_Error object on failure.
 	 */
-	private function get_contacts_data( $last_n_days ) {
-		$report = [];
-
-		$cutoff_datetime = strtotime( '-' . $last_n_days . ' days' );
-
-		// Subscribers, with the cutoff date – only created (subscribed) afterwards.
-		$subscribed = $this->get_all_contacts( 1 );
-		if ( \is_wp_error( $subscribed ) ) {
-			return $subscribed;
+	private function get_unsubs_count() {
+		$last_count  = get_option( self::LAST_UNSUBS_DATA_OPTION_NAME );
+		$last_exists = true;
+		if ( false === $last_count ) {
+			$last_exists = false;
+			$last_count  = 0;
 		}
-		$report = self::update_report_with_contact_data( 'cdate', 'subs', $subscribed, $report, $last_n_days );
 
-		// Unsubscribed contacts, without the cutoff date. All have to be pulled because
-		// there's no way to filter by unsubscribed date.
-		$unsubscribed = $this->get_all_contacts( 2 );
-		if ( \is_wp_error( $unsubscribed ) ) {
-			return $unsubscribed;
+		$ac     = $this->ac_instance;
+		$params = [
+			'query' => [
+				'limit'  => 1,
+				'status' => 2,
+			],
+		];
+
+		$contacts_result = $ac->api_v3_request( 'contacts', 'GET', $params );
+		if ( \is_wp_error( $contacts_result ) ) {
+			return $contacts_result;
 		}
-		$report = self::update_report_with_contact_data( 'udate', 'unsubs', $unsubscribed, $report, $last_n_days );
 
-		return $report;
-	}
+		$total = intval( $contacts_result['meta']['total'] );
 
-	/**
-	 * Get default report.
-	 */
-	private static function get_default_report() {
-		$report = new Newspack_Newsletters_Service_Provider_Usage_Report();
-		return $report->to_array();
+		update_option( self::LAST_UNSUBS_DATA_OPTION_NAME, $total );
+		if ( $last_exists ) {
+			return $total - (int) $last_count;
+		} else {
+			return 0;
+		}
 	}
 
 	/**
@@ -256,7 +238,7 @@ class Newspack_Newsletters_Active_Campaign_Usage_Reports {
 		$report = new Newspack_Newsletters_Service_Provider_Usage_Report();
 
 		// Get contact data to retrieve subs and unsubs.
-		$contacts_data = $this->get_contacts_data( 1 );
+		$contacts_data = $this->get_contacts_data();
 		if ( \is_wp_error( $contacts_data ) ) {
 			return $contacts_data;
 		}
@@ -273,13 +255,8 @@ class Newspack_Newsletters_Active_Campaign_Usage_Reports {
 
 		$report->total_contacts = $this->get_total_active_contacts();
 
-		$yesterday = gmdate( 'Y-m-d', strtotime( '-1 day' ) );
-		if ( isset( $contacts_data[ $yesterday ], $contacts_data[ $yesterday ]['subs'] ) ) {
-			$report->subscribes = $contacts_data[ $yesterday ]['subs'];
-		}
-		if ( isset( $contacts_data[ $yesterday ], $contacts_data[ $yesterday ]['unsubs'] ) ) {
-			$report->unsubscribes = $contacts_data[ $yesterday ]['unsubs'];
-		}
+		$report->subscribes   = $contacts_data['subs'];
+		$report->unsubscribes = $contacts_data['unsubs'];
 
 		return $report;
 	}

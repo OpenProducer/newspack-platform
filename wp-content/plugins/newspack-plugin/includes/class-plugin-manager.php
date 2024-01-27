@@ -117,6 +117,24 @@ class Plugin_Manager {
 				'Download'    => 'https://github.com/Automattic/newspack-content-converter/releases/latest/download/newspack-content-converter.zip',
 				'Quiet'       => true,
 			],
+			'newspack-multibranded-site'  => [
+				'Name'        => esc_html__( 'Newspack Multibranded Site', 'newspack' ),
+				'Description' => esc_html__( 'Brand different content and sections of your site with unique colors and navigation.', 'newspack' ),
+				'Author'      => esc_html__( 'Automattic', 'newspack' ),
+				'PluginURI'   => esc_url( 'https://newspack.com' ),
+				'AuthorURI'   => esc_url( 'https://automattic.com' ),
+				'Download'    => 'https://github.com/Automattic/newspack-multibranded-site/releases/latest/download/newspack-multibranded-site.zip',
+				'Quiet'       => true,
+			],
+			'newspack-network'            => [
+				'Name'        => esc_html__( 'Newspack Network', 'newspack' ),
+				'Description' => esc_html__( 'Distribute content across a network of Newspack sites.', 'newspack' ),
+				'Author'      => esc_html__( 'Automattic', 'newspack' ),
+				'PluginURI'   => esc_url( 'https://newspack.com' ),
+				'AuthorURI'   => esc_url( 'https://automattic.com' ),
+				'Download'    => 'https://github.com/Automattic/newspack-network/releases/latest/download/newspack-network.zip',
+				'Quiet'       => true,
+			],
 			'newspack-newsletters'        => [
 				'Name'        => esc_html__( 'Newspack Newsletters', 'newspack' ),
 				'Description' => esc_html__( 'Newsletter authoring using the Gutenberg editor.', 'newspack' ),
@@ -263,7 +281,7 @@ class Plugin_Manager {
 				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/simple-local-avatars/' ),
 				'Download'    => 'wporg',
 			],
-			'distributor-stable'          => [
+			'distributor'                 => [
 				'Name'        => esc_html__( 'Distributor', 'newspack' ),
 				'Description' => esc_html__( 'Distributor is a WordPress plugin that makes it easy to syndicate and reuse content across your websites — whether in a single multisite or across the web.', 'newspack' ),
 				'Author'      => '10up',
@@ -403,6 +421,16 @@ class Plugin_Manager {
 			'web-stories',
 			'woocommerce-memberships',
 		];
+	}
+
+	/**
+	 * Get all managed and supported plugins' slugs.
+	 */
+	public static function get_approved_plugins_slugs() {
+		return array_merge(
+			array_keys( self::get_managed_plugins() ),
+			self::get_supported_plugins_slugs()
+		);
 	}
 
 	/**

@@ -138,6 +138,9 @@ Data_Events::register_listener(
 		if ( ! $order ) {
 			return;
 		}
+		if ( ! \Newspack\WooCommerce_Connection::should_sync_order( $order ) ) {
+			return;
+		}
 		$recurrence      = get_post_meta( $product_id, '_subscription_period', true );
 		$is_renewal      = function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order );
 		$subscription_id = null;
@@ -242,7 +245,10 @@ Data_Events::register_listener(
 Data_Events::register_listener(
 	'woocommerce_order_status_completed',
 	'donation_new',
-	function( $order_id, $order ) {
+	function ( $order_id, $order ) {
+		if ( ! \Newspack\WooCommerce_Connection::should_sync_order( $order ) ) {
+			return;
+		}
 		$product_id = Donations::get_order_donation_product_id( $order_id );
 		if ( ! $product_id ) {
 			return;

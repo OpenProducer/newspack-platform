@@ -1212,6 +1212,18 @@ const color = (0,external_React_namespaceObject.createElement)(external_wp_primi
 }));
 /* harmony default export */ var library_color = (color);
 
+;// CONCATENATED MODULE: external ["wp","privateApis"]
+var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+;// CONCATENATED MODULE: ./packages/format-library/build-module/lock-unlock.js
+/**
+ * WordPress dependencies
+ */
+
+const {
+  lock,
+  unlock
+} = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/format-library');
+
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/text-color/inline.js
 
 /**
@@ -1228,6 +1240,17 @@ const color = (0,external_React_namespaceObject.createElement)(external_wp_primi
  * Internal dependencies
  */
 
+
+const {
+  Tabs
+} = unlock(external_wp_components_namespaceObject.privateApis);
+const TABS = [{
+  name: 'color',
+  title: (0,external_wp_i18n_namespaceObject.__)('Text')
+}, {
+  name: 'backgroundColor',
+  title: (0,external_wp_i18n_namespaceObject.__)('Background')
+}];
 function parseCSS(css = '') {
   return css.split(';').reduce((accumulator, rule) => {
     if (rule) {
@@ -1341,22 +1364,21 @@ function InlineColorUI({
   popoverAnchor.getBoundingClientRect = () => cachedRect;
   return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover, {
     onClose: onClose,
-    className: "components-inline-color-popover",
+    className: "format-library__inline-color-popover",
     anchor: popoverAnchor
-  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TabPanel, {
-    tabs: [{
-      name: 'color',
-      title: (0,external_wp_i18n_namespaceObject.__)('Text')
-    }, {
-      name: 'backgroundColor',
-      title: (0,external_wp_i18n_namespaceObject.__)('Background')
-    }]
-  }, tab => (0,external_React_namespaceObject.createElement)(ColorPicker, {
+  }, (0,external_React_namespaceObject.createElement)(Tabs, null, (0,external_React_namespaceObject.createElement)(Tabs.TabList, null, TABS.map(tab => (0,external_React_namespaceObject.createElement)(Tabs.Tab, {
+    tabId: tab.name,
+    key: tab.name
+  }, tab.title))), TABS.map(tab => (0,external_React_namespaceObject.createElement)(Tabs.TabPanel, {
+    tabId: tab.name,
+    focusable: false,
+    key: tab.name
+  }, (0,external_React_namespaceObject.createElement)(ColorPicker, {
     name: name,
     property: tab.name,
     value: value,
     onChange: onChange
-  })));
+  })))));
 }
 
 ;// CONCATENATED MODULE: ./packages/format-library/build-module/text-color/index.js

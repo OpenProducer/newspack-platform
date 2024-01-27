@@ -23569,6 +23569,12 @@ function updateFootnotesFromMeta(blocks, meta) {
             html: replacement.innerHTML
           });
           countValue.text = String(index + 1);
+          countValue.formats = Array.from({
+            length: countValue.text.length
+          }, () => countValue.formats[0]);
+          countValue.replacements = Array.from({
+            length: countValue.text.length
+          }, () => countValue.replacements[0]);
           replacement.innerHTML = (0,external_wp_richText_namespaceObject.toHTMLString)({
             value: countValue
           });
@@ -24874,8 +24880,8 @@ const entityActions = rootEntitiesConfig.reduce((result, entity) => {
     kind,
     name
   } = entity;
-  result[getMethodName(kind, name, 'save')] = key => saveEntityRecord(kind, name, key);
-  result[getMethodName(kind, name, 'delete')] = (key, query) => deleteEntityRecord(kind, name, key, query);
+  result[getMethodName(kind, name, 'save')] = (record, options) => saveEntityRecord(kind, name, record, options);
+  result[getMethodName(kind, name, 'delete')] = (key, query, options) => deleteEntityRecord(kind, name, key, query, options);
   return result;
 }, {});
 const storeConfig = () => ({

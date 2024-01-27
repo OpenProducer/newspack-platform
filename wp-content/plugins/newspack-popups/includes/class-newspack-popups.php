@@ -888,6 +888,9 @@ final class Newspack_Popups {
 	 * @param WP_Post $post The prompt post object.
 	 */
 	public static function is_account_related_post( $post ) {
+		if ( ! $post instanceof WP_Post ) {
+			return false;
+		}
 		return has_shortcode( $post->post_content, 'woocommerce_my_account' );
 	}
 

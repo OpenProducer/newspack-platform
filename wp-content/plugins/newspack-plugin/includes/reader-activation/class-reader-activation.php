@@ -724,9 +724,7 @@ final class Reader_Activation {
 
 		\update_user_meta( $user->ID, self::EMAIL_VERIFIED, true );
 
-		if ( function_exists( '\wc_add_notice' ) ) {
-			\wc_add_notice( __( 'Thank you for verifying your account!', 'newspack-plugin' ), 'success' );
-		}
+		WooCommerce_Connection::add_wc_notice( __( 'Thank you for verifying your account!', 'newspack-plugin' ), 'success' );
 
 		/**
 		 * Fires after a reader's email address is verified.

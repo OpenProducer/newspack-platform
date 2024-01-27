@@ -309,7 +309,7 @@ final class Newspack_Newsletters_Editor {
 			\wp_enqueue_script(
 				'newspack-newsletters-editor',
 				plugins_url( '../dist/editor.js', __FILE__ ),
-				[],
+				[ 'lodash' ],
 				filemtime( NEWSPACK_NEWSLETTERS_PLUGIN_FILE . 'dist/editor.js' ),
 				true
 			);

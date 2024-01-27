@@ -17,19 +17,19 @@ $delete_account_form = WooCommerce_My_Account::DELETE_ACCOUNT_FORM;
 
 $nonce_value = isset( $_GET[ $delete_account_form ] ) ? \sanitize_text_field( $_GET[ $delete_account_form ] ) : '';
 if ( ! \wp_verify_nonce( $nonce_value, $delete_account_form ) ) {
-	\wc_add_notice( __( 'Invalid nonce.', 'newspack' ), 'error' );
+	WooCommerce_Connection::add_wc_notice( __( 'Invalid nonce.', 'newspack' ), 'error' );
 	return;
 }
 
 if ( ! isset( $_GET['token'] ) ) {
-	\wc_add_notice( __( 'Invalid token', 'newspack' ), 'error' );
+	WooCommerce_Connection::add_wc_notice( __( 'Invalid token', 'newspack' ), 'error' );
 	return;
 }
 
 $token           = \sanitize_text_field( $_GET['token'] );
 $transient_token = get_transient( 'np_reader_account_delete_' . \get_current_user_id() );
 if ( ! $transient_token || $transient_token !== $token ) {
-	\wc_add_notice( __( 'Invalid token', 'newspack' ), 'error' );
+	WooCommerce_Connection::add_wc_notice( __( 'Invalid token', 'newspack' ), 'error' );
 	return;
 }
 ?>
