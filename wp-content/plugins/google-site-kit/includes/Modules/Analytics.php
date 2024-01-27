@@ -38,7 +38,6 @@ use Google\Site_Kit\Core\Tags\Guards\Tag_Environment_Type_Guard;
 use Google\Site_Kit\Core\Tags\Guards\Tag_Verify_Guard;
 use Google\Site_Kit\Core\Util\Date;
 use Google\Site_Kit\Core\Util\Debug_Data;
-use Google\Site_Kit\Core\Util\Feature_Flags;
 use Google\Site_Kit\Core\Util\Method_Proxy_Trait;
 use Google\Site_Kit\Core\Util\BC_Functions;
 use Google\Site_Kit\Core\Util\Sort;
@@ -50,7 +49,6 @@ use Google\Site_Kit\Modules\Analytics\Settings;
 use Google\Site_Kit\Modules\Analytics\Tag_Guard;
 use Google\Site_Kit\Modules\Analytics\Web_Tag;
 use Google\Site_Kit\Modules\Analytics\Proxy_AccountTicket;
-use Google\Site_Kit\Modules\Analytics\Advanced_Tracking;
 use Google\Site_Kit_Dependencies\Google\Service\Analytics as Google_Service_Analytics;
 use Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting as Google_Service_AnalyticsReporting;
 use Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\GetReportsRequest as Google_Service_AnalyticsReporting_GetReportsRequest;
@@ -63,7 +61,6 @@ use Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\Metric as Goo
 use Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\OrderBy as Google_Service_AnalyticsReporting_OrderBy;
 use Google\Site_Kit_Dependencies\Google\Service\Analytics\Accounts as Google_Service_Analytics_Accounts;
 use Google\Site_Kit_Dependencies\Google\Service\Analytics\Account as Google_Service_Analytics_Account;
-use Google\Site_Kit_Dependencies\Google\Service\Analytics\Webproperties as Google_Service_Analytics_Webproperties;
 use Google\Site_Kit_Dependencies\Google\Service\Analytics\Webproperty as Google_Service_Analytics_Webproperty;
 use Google\Site_Kit_Dependencies\Google\Service\Analytics\Profile as Google_Service_Analytics_Profile;
 use Google\Site_Kit_Dependencies\Google\Service\Exception as Google_Service_Exception;
@@ -120,8 +117,6 @@ final class Analytics extends Module
 		add_action( 'wp_head', $this->get_method_proxy( 'print_tracking_opt_out' ), 0 );
 		// For Web Stories plugin.
 		add_action( 'web_stories_story_head', $this->get_method_proxy( 'print_tracking_opt_out' ), 0 );
-		// Analytics tag placement logic.
-		add_action( 'template_redirect', $this->get_method_proxy( 'register_tag' ) );
 
 		add_filter(
 			'googlesitekit_proxy_setup_mode',
@@ -132,18 +127,13 @@ final class Analytics extends Module
 			}
 		);
 
-		( new Advanced_Tracking( $this->context ) )->register();
-
 		// Ensure that the data available state is reset when the property changes.
-		add_action(
-			'update_option_googlesitekit_analytics_settings',
+		$this->get_settings()->on_change(
 			function( $old_value, $new_value ) {
 				if ( $old_value['propertyID'] !== $new_value['propertyID'] ) {
 					$this->reset_data_available();
 				}
-			},
-			10,
-			2
+			}
 		);
 
 		add_filter(
@@ -1264,6 +1254,9 @@ final class Analytics extends Module
 
 	/**
 	 * Registers the Analytics tag.
+	 *
+	 * This method is currently unused and is kept for reference until this module
+	 * is entirely removed.
 	 *
 	 * @since 1.24.0
 	 */

@@ -20,6 +20,15 @@ defined( 'ABSPATH' ) || exit;
 class Woocommerce_Memberships {
 
 	/**
+	 * The user meta key that stores the list IDs that the user is subscribed to when their memberships are deactivated.
+	 *
+	 * This is used to restore the user's subscriptions when their membership is reactivated.
+	 *
+	 * @var string
+	 */
+	const SUBSCRIBED_ON_DEACTIVATION_META_KEY = 'np_newsletters_lists_on_membership_deactivation';
+
+	/**
 	 * Holds the ID of the user in the scope of the current request.
 	 *
 	 * When a user is granted membership to a plan that requires a registration, the user is not logged in yet,
@@ -29,14 +38,21 @@ class Woocommerce_Memberships {
 	 */
 	protected static $user_id_in_scope;
 
-	/** 
+	/**
+	 * Holds the previous statuses of the memberships that is being updated in the request.
+	 *
+	 * @var array
+	 */
+	protected static $previous_statuses = [];
+
+	/**
 	 * Initialize the class
 	 */
 	public static function init() {
 		add_action( 'plugins_loaded', [ __CLASS__, 'init_hooks' ] );
 	}
-	
-	/** 
+
+	/**
 	 * Initialize the hooks after all plugins are loaded
 	 */
 	public static function init_hooks() {
@@ -47,8 +63,8 @@ class Woocommerce_Memberships {
 		add_filter( 'newspack_newsletters_subscription_block_available_lists', [ __CLASS__, 'filter_lists' ] );
 		add_filter( 'newspack_newsletters_manage_newsletters_available_lists', [ __CLASS__, 'filter_lists_objects' ] );
 		add_filter( 'newspack_auth_form_newsletters_lists', [ __CLASS__, 'filter_lists_objects' ] );
-		add_action( 'wc_memberships_user_membership_status_changed', [ __CLASS__, 'remove_user_from_list' ], 10, 3 );
-		add_action( 'wc_memberships_user_membership_saved', [ __CLASS__, 'add_user_to_list' ], 10, 2 );
+		add_action( 'wc_memberships_user_membership_status_changed', [ __CLASS__, 'handle_membership_status_change' ], 10, 3 );
+		add_action( 'wc_memberships_user_membership_saved', [ __CLASS__, 'add_user_to_lists' ], 10, 2 );
 		add_action( 'wc_memberships_user_membership_deleted', [ __CLASS__, 'deleted_membership' ] );
 	}
 
@@ -65,7 +81,7 @@ class Woocommerce_Memberships {
 		}
 		$lists = array_filter(
 			$lists,
-			function( $list ) {
+			function ( $list ) {
 				$list_object = Subscription_List::from_form_id( $list );
 				if ( ! $list_object ) {
 					return false;
@@ -80,8 +96,7 @@ class Woocommerce_Memberships {
 				$user_id = self::$user_id_in_scope ?? get_current_user_id();
 
 				return wc_memberships_user_can( $user_id, 'view', [ 'post' => $list_object->get_id() ] );
-
-			} 
+			}
 		);
 		return array_values( $lists );
 	}
@@ -101,30 +116,42 @@ class Woocommerce_Memberships {
 
 		return array_filter(
 			$lists,
-			function( $list_id ) use ( $list_ids ) {
+			function ( $list_id ) use ( $list_ids ) {
 				return in_array( $list_id, $list_ids );
 			},
 			ARRAY_FILTER_USE_KEY
 		);
-
 	}
 
 	/**
-	 * Remove lists that require a membership plan when the membership is cancelled
+	 * Handle membership status updates and remove lists that require a membership plan when the membership is cancelled
 	 *
 	 * @param WC_Memberships_User_Membership $user_membership The User Membership object.
 	 * @param string                         $old_status old status, without the `wcm-` prefix.
 	 * @param string                         $new_status new status, without the `wcm-` prefix.
 	 * @return void
 	 */
-	public static function remove_user_from_list( $user_membership, $old_status, $new_status ) {
+	public static function handle_membership_status_change( $user_membership, $old_status, $new_status ) {
 		Newspack_Newsletters_Logger::log( 'Membership status changed to ' . $new_status );
+
+		// Store the previous status so we can check it in the `add_user_to_lists` method, that runs on a later hook.
+		self::$previous_statuses[ $user_membership->get_id() ] = $old_status;
+
 		$status_considered_active = wc_memberships()->get_user_memberships_instance()->get_active_access_membership_statuses();
 
-		if ( in_array( $new_status, $status_considered_active ) ) {
-			return;
+		if ( ! in_array( $new_status, $status_considered_active ) ) {
+			self::remove_user_from_lists( $user_membership );
 		}
-		
+
+	}
+
+	/**
+	 * Removes user from premium lists associated with a membership plan
+	 *
+	 * @param \WC_Memberships_User_Membership $user_membership The User Membership object.
+	 * @return void
+	 */
+	public static function remove_user_from_lists( $user_membership ) {
 		$lists_to_remove = [];
 		$user            = $user_membership->get_user();
 		if ( ! $user ) {
@@ -147,26 +174,45 @@ class Woocommerce_Memberships {
 			}
 		}
 		$provider = Newspack_Newsletters::get_service_provider();
-		$provider->update_contact_lists_handling_local( $user_email, [], $lists_to_remove );
-		Newspack_Newsletters_Logger::log( 'Reader ' . $user_email . ' removed from the following lists: ' . implode( ', ', $lists_to_remove ) );
-		
+
+		/**
+		 * Check if the user is already in one of the lists. If they are, store it.
+		 *
+		 * If they are granted this membership again, we can resubscribe them only to the lists they were in.
+		 *
+		 * Also, during a subscription renewal, a membership can be momentarily marked as paused, causing the user to be removed from the lists
+		 * in which case we want to resubscribe them to the lists they were in.
+		 */
+		$current_user_lists = \Newspack_Newsletters_Subscription::get_contact_lists( $user_email );
+		$existing_lists     = [];
+
+		if ( is_array( $current_user_lists ) ) {
+			$existing_lists = array_values( array_intersect( $current_user_lists, $lists_to_remove ) );
+		}
+
+		self::update_user_lists_on_deactivation( $user->ID, $user_membership->get_id(), $existing_lists );
+
+		if ( ! empty( $provider ) ) {
+			$provider->update_contact_lists_handling_local( $user_email, [], $lists_to_remove );
+			Newspack_Newsletters_Logger::log( 'Reader ' . $user_email . ' removed from the following lists: ' . implode( ', ', $lists_to_remove ) );
+		}
+
 	}
 
 	/**
 	 * Adds user to premium lists when a membership is granted
 	 *
 	 * @param \WC_Memberships_Membership_Plan $plan the plan that user was granted access to.
-	 * @param array                           $args 
-	 * {
+	 * @param array                           $args {
 	 *     Array of User Membership arguments.
-	 * 
+	 *
 	 *     @type int $user_id the user ID the membership is assigned to.
 	 *     @type int $user_membership_id the user membership ID being saved.
 	 *     @type bool $is_update whether this is a post update or a newly created membership.
 	 * }
 	 * @return void
 	 */
-	public static function add_user_to_list( $plan, $args ) {
+	public static function add_user_to_lists( $plan, $args ) {
 
 		// When creating the membership via admin panel, this hook is called once before the membership is actually created.
 		if ( ! $plan instanceof \WC_Memberships_Membership_Plan ) {
@@ -178,6 +224,14 @@ class Woocommerce_Memberships {
 		$user_membership = new \WC_Memberships_User_Membership( $args['user_membership_id'] );
 
 		if ( ! in_array( $user_membership->get_status(), $status_considered_active, true ) ) {
+			return;
+		}
+
+		// Check if we have the previous status stored. If we do and it's an active status
+		// it means the membership is being updated from one active status to another active status.
+		// In this case, we don't want to add the user to the lists again.
+		if ( ! empty( self::$previous_statuses[ $user_membership->get_id() ] ) && in_array( self::$previous_statuses[ $user_membership->get_id() ], $status_considered_active, true ) ) {
+			Newspack_Newsletters_Logger::log( 'Membership ' . $user_membership->get_id() . ' was already active. No need to subscribe user to lists' );
 			return;
 		}
 
@@ -208,7 +262,15 @@ class Woocommerce_Memberships {
 				$lists_to_add[]    = $subscription_list->get_form_id();
 			}
 		}
-		
+
+		/**
+		 * In case the user was previously removed from the lists, we want to resubscribe them only to the lists they were in.
+		 */
+		$pre_existing_lists = self::get_user_lists_on_deactivation( $user_id, $user_membership->get_id() );
+		if ( ! empty( $pre_existing_lists ) ) {
+			$lists_to_add = array_intersect( $lists_to_add, $pre_existing_lists );
+		}
+
 		if ( empty( $lists_to_add ) ) {
 			return;
 		}
@@ -216,7 +278,6 @@ class Woocommerce_Memberships {
 		$provider = Newspack_Newsletters::get_service_provider();
 		$provider->update_contact_lists_handling_local( $user_email, $lists_to_add );
 		Newspack_Newsletters_Logger::log( 'Reader ' . $user_email . ' added to the following lists: ' . implode( ', ', $lists_to_add ) );
-		
 	}
 
 	/**
@@ -226,7 +287,39 @@ class Woocommerce_Memberships {
 	 * @return void
 	 */
 	public static function deleted_membership( $user_membership ) {
-		self::remove_user_from_list( $user_membership, '', 'deleted' );
+		self::remove_user_from_lists( $user_membership );
+	}
+
+	/**
+	 * Stores the lists that the user was subscribed to when their membership was deactivated.
+	 *
+	 * @param int   $user_id The user ID.
+	 * @param int   $membership_id The membership ID.
+	 * @param array $lists The lists that the user was subscribed to.
+	 * @return void
+	 */
+	private static function update_user_lists_on_deactivation( $user_id, $membership_id, $lists ) {
+		$value = get_user_meta( $user_id, self::SUBSCRIBED_ON_DEACTIVATION_META_KEY, true );
+		if ( ! $value ) {
+			$value = [];
+		}
+		$value[ $membership_id ] = $lists;
+		update_user_meta( $user_id, self::SUBSCRIBED_ON_DEACTIVATION_META_KEY, $value );
+	}
+
+	/**
+	 * Gets the lists that the user was subscribed to when their membership was deactivated.
+	 *
+	 * @param int $user_id The user ID.
+	 * @param int $membership_id The membership ID.
+	 * @return array
+	 */
+	private static function get_user_lists_on_deactivation( $user_id, $membership_id ) {
+		$value = get_user_meta( $user_id, self::SUBSCRIBED_ON_DEACTIVATION_META_KEY, true );
+		if ( ! is_array( $value ) || ! isset( $value[ $membership_id ] ) ) {
+			return [];
+		}
+		return $value[ $membership_id ];
 	}
 
 }

@@ -369,7 +369,7 @@ final class Recaptcha {
 		$token = isset( $_POST['g-recaptcha-response'] ) ? sanitize_text_field( wp_unslash( $_POST['g-recaptcha-response'] ) ) : ''; // phpcs:ignore WordPress.Security.NonceVerification.Missing
 		$check = self::verify_captcha( $token );
 		if ( \is_wp_error( $check ) ) {
-			\wc_add_notice( $check->get_error_message(), 'error' );
+			WooCommerce_Connection::add_wc_notice( $check->get_error_message(), 'error' );
 		}
 	}
 }

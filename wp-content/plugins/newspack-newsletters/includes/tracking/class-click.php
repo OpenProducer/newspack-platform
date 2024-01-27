@@ -144,6 +144,17 @@ final class Click {
 		$url           = \sanitize_text_field( \wp_unslash( $_GET['url'] ?? '' ) );
 		// phpcs:enable
 
+		/**
+		 * The ESP tracking functionality may add UTM parameters to our proxied URL,
+		 * let's pass them along to the destination URL.
+		 */
+		$utm_params = [ 'utm_source', 'utm_medium', 'utm_campaign', 'utm_term' ];
+		foreach ( $utm_params as $utm_param ) {
+			if ( isset( $_GET[ $utm_param ] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+				$url = \add_query_arg( $utm_param, \sanitize_text_field( \wp_unslash( $_GET[ $utm_param ] ) ), $url ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			}
+		}
+
 		if ( ! $url || ! \wp_http_validate_url( $url ) ) {
 			\wp_die( 'Invalid URL' );
 			exit;

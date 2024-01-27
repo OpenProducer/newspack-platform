@@ -572,8 +572,8 @@ class WooCommerce_My_Account {
 	 * Show a logout success message to readers after logging out via My Account.
 	 */
 	public static function show_message_after_logout() {
-		if ( isset( $_GET['logged_out'] ) && function_exists( 'wc_add_notice' ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-			\wc_add_notice( __( 'You have successfully logged out.', 'newspack-plugin' ), 'success' );
+		if ( isset( $_GET['logged_out'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+			WooCommerce_Connection::add_wc_notice( __( 'You have successfully logged out.', 'newspack-plugin' ), 'success' );
 		}
 	}
 }

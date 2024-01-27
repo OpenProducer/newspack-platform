@@ -12,6 +12,8 @@ return array(
     'StellarWP\\Telemetry\\Views_Dir\\' => array($vendorDir . '/stellarwp/telemetry/src/views'),
     'StellarWP\\Telemetry\\Assets_Dir\\' => array($vendorDir . '/stellarwp/telemetry/src/resources'),
     'StellarWP\\Telemetry\\' => array($vendorDir . '/stellarwp/telemetry/src/Telemetry'),
+    'StellarWP\\Schema\\' => array($vendorDir . '/stellarwp/schema/src/Schema'),
+    'StellarWP\\Models\\' => array($vendorDir . '/stellarwp/models/src/Models'),
     'StellarWP\\Installer\\Assets_JS\\' => array($vendorDir . '/stellarwp/installer/src/assets/js'),
     'StellarWP\\Installer\\Admin_Views\\' => array($vendorDir . '/stellarwp/installer/src/admin-views'),
     'StellarWP\\Installer\\' => array($vendorDir . '/stellarwp/installer/src/Installer'),

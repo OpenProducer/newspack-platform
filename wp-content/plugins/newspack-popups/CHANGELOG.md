@@ -1,3 +1,26 @@
+## [2.29.1](https://github.com/Automattic/newspack-popups/compare/v2.29.0...v2.29.1) (2024-01-25)
+
+
+### Bug Fixes
+
+* dont change global post before header ([#1258](https://github.com/Automattic/newspack-popups/issues/1258)) ([1c3d931](https://github.com/Automattic/newspack-popups/commit/1c3d931d237f4ee537c000d6d19225cb5f1087a1))
+* prompts and segments schema ([#1260](https://github.com/Automattic/newspack-popups/issues/1260)) ([21fa990](https://github.com/Automattic/newspack-popups/commit/21fa99044de730287abad7924b990ea812b6cfe8))
+
+## [2.29.1-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.29.0...v2.29.1-alpha.1) (2024-01-17)
+
+
+### Bug Fixes
+
+* dont change global post before header ([#1258](https://github.com/Automattic/newspack-popups/issues/1258)) ([1c3d931](https://github.com/Automattic/newspack-popups/commit/1c3d931d237f4ee537c000d6d19225cb5f1087a1))
+* prompts and segments schema ([#1260](https://github.com/Automattic/newspack-popups/issues/1260)) ([21fa990](https://github.com/Automattic/newspack-popups/commit/21fa99044de730287abad7924b990ea812b6cfe8))
+
+# [2.29.0](https://github.com/Automattic/newspack-popups/compare/v2.28.0...v2.29.0) (2024-01-17)
+
+
+### Features
+
+* fetch up to 1000 prompts ([#1262](https://github.com/Automattic/newspack-popups/issues/1262)) ([b6af288](https://github.com/Automattic/newspack-popups/commit/b6af2883ed1ef771eda771a9999d5018e1633064))
+
 # [2.28.0](https://github.com/Automattic/newspack-popups/compare/v2.27.0...v2.28.0) (2024-01-08)
 
 

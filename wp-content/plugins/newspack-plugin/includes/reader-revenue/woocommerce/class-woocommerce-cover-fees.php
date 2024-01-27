@@ -79,9 +79,9 @@ class WooCommerce_Cover_Fees {
 			sprintf(
 				// Translators: %s is the fee percentage.
 				__( 'Transaction fee (%s)', 'newspack-plugin' ),
-				self::get_fee_display_value()
+				self::get_cart_fee_display_value()
 			),
-			self::get_fee_value()
+			self::get_cart_fee_value()
 		);
 	}
 
@@ -175,7 +175,7 @@ class WooCommerce_Cover_Fees {
 								'I’d like to cover the %1$s transaction fee to ensure my full donation goes towards %2$s mission.',
 								'newspack-plugin'
 							),
-							esc_html( self::get_fee_display_value() ),
+							esc_html( self::get_cart_fee_display_value() ),
 							esc_html( self::get_possessive( get_option( 'blogname' ) ) )
 						);
 					}
@@ -236,10 +236,11 @@ class WooCommerce_Cover_Fees {
 
 	/**
 	 * Get the fee display value.
+	 *
+	 * @param float $subtotal The subtotal to calculate the fee for.
 	 */
-	public static function get_fee_display_value() {
-		$subtotal = WC()->cart->get_subtotal();
-		$total    = self::get_total_with_fee();
+	public static function get_fee_display_value( $subtotal ) {
+		$total = self::get_total_with_fee( $subtotal );
 		// Just one decimal place, please.
 		$flat_percentage = (float) number_format( ( ( $total - $subtotal ) * 100 ) / $subtotal, 1 );
 		return $flat_percentage . '%';
@@ -247,11 +248,12 @@ class WooCommerce_Cover_Fees {
 
 	/**
 	 * Get the fee value.
+	 *
+	 * @param float $subtotal The subtotal to calculate the fee for.
 	 */
-	public static function get_fee_value() {
+	public static function get_fee_value( $subtotal ) {
 		$fee_multiplier = self::get_stripe_fee_multiplier_value();
 		$fee_static     = self::get_stripe_fee_static_value();
-		$subtotal       = WC()->cart->get_subtotal();
 		$fee            = ( ( ( $subtotal + $fee_static ) / ( 100 - $fee_multiplier ) ) * 100 - $subtotal );
 		return $fee;
 	}
@@ -259,10 +261,38 @@ class WooCommerce_Cover_Fees {
 	/**
 	 * Calculate the adjusted total, taking the fee into account.
 	 *
+	 * @param float $subtotal The subtotal to calculate the total for.
 	 * @return float
 	 */
-	private static function get_total_with_fee() {
-		return WC()->cart->get_subtotal() + self::get_fee_value();
+	public static function get_total_with_fee( $subtotal ) {
+		return $subtotal + self::get_fee_value( $subtotal );
+	}
+
+	/**
+	 * Get the fee value for the current cart.
+	 *
+	 * @return float
+	 */
+	public static function get_cart_fee_value() {
+		return self::get_fee_value( WC()->cart->get_subtotal() );
+	}
+
+	/**
+	 * Get the fee display value for the current cart.
+	 *
+	 * @return string
+	 */
+	public static function get_cart_fee_display_value() {
+		return self::get_fee_display_value( WC()->cart->get_subtotal() );
+	}
+
+	/**
+	 * Get the total with fee for the current cart.
+	 *
+	 * @return float
+	 */
+	public static function get_cart_total_with_fee() {
+		return self::get_total_with_fee( WC()->cart->get_subtotal() );
 	}
 }
 WooCommerce_Cover_Fees::init();

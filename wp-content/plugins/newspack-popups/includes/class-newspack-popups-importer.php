@@ -241,7 +241,12 @@ class Newspack_Popups_Importer {
 				'post_status'  => $prompt['status'],
 				'post_type'    => Newspack_Popups::NEWSPACK_POPUPS_CPT,
 			];
-			$new_post  = wp_insert_post( $post_data );
+			if ( $prompt_slug ) {
+				$post_data['post_name'] = \sanitize_title( $prompt_slug );
+			}
+			$new_post = wp_insert_post( $post_data );
+			sleep( 1 ); // Pause to avoid duplicate post publish dates and unpredictable sort order.
+
 			if ( is_wp_error( $new_post ) ) {
 				$this->errors['prompts'][] = $new_post->get_error_message();
 				continue;

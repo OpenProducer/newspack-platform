@@ -120,7 +120,7 @@ class Memberships {
 				'show_ui'      => true,
 				'show_in_menu' => false,
 				'show_in_rest' => true,
-				'supports'     => [ 'editor', 'custom-fields' ],
+				'supports'     => [ 'editor', 'custom-fields', 'revisions' ],
 			]
 		);
 	}

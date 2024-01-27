@@ -41,6 +41,7 @@ class WooCommerce_Connection {
 	public static function init() {
 		include_once __DIR__ . '/class-woocommerce-order-utm.php';
 		include_once __DIR__ . '/class-woocommerce-cover-fees.php';
+		include_once __DIR__ . '/class-woocommerce-cli.php';
 
 		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
 		\add_filter( 'option_woocommerce_subscriptions_allow_switching', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
@@ -50,6 +51,7 @@ class WooCommerce_Connection {
 		\add_filter( 'default_option_woocommerce_subscriptions_allow_switching_nyp_price', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
 		\add_filter( 'default_option_woocommerce_subscriptions_enable_retry', [ __CLASS__, 'force_allow_failed_payment_retry' ] );
 		\add_filter( 'woocommerce_email_enabled_customer_completed_order', [ __CLASS__, 'send_customizable_receipt_email' ], 10, 3 );
+		\add_action( 'cli_init', [ __CLASS__, 'register_cli_commands' ] );
 
 		// WooCommerce Subscriptions.
 		\add_action( 'add_meta_boxes', [ __CLASS__, 'remove_subscriptions_schedule_meta_box' ], 45 );
@@ -70,6 +72,15 @@ class WooCommerce_Connection {
 		\add_action( 'option_woocommerce_subscriptions_failed_scheduled_actions', [ __CLASS__, 'filter_subscription_scheduled_actions_errors' ] );
 
 		\add_action( 'wp_login', [ __CLASS__, 'sync_reader_on_customer_login' ], 10, 2 );
+	}
+
+	/**
+	 * Register CLI command
+	 *
+	 * @return void
+	 */
+	public static function register_cli_commands() {
+		\WP_CLI::add_command( 'newspack-woocommerce', 'Newspack\\WooCommerce_Cli' );
 	}
 
 	/**
@@ -336,6 +347,24 @@ class WooCommerce_Connection {
 	}
 
 	/**
+	 * Should an order be synchronized with the integrations?
+	 *
+	 * @param WC_Order $order Order object.
+	 */
+	public static function should_sync_order( $order ) {
+		// $order is not a valid WC_Order object, so don't try to sync.
+		if ( ! is_a( $order, 'WC_Order' ) ) {
+			return false;
+		}
+		if ( $order->get_meta( '_subscription_switch' ) ) {
+			// This is a "switch" order, which is just recording a subscription update. It has value of 0 and
+			// should not be synced anywhere.
+			return false;
+		}
+		return true;
+	}
+
+	/**
 	 * Sync a customer to the ESP from an order.
 	 *
 	 * @param WC_Order    $order Order object.
@@ -344,6 +373,10 @@ class WooCommerce_Connection {
 	 */
 	public static function sync_reader_from_order( $order, $verify_created_via = true, $payment_page_url = false ) {
 		if ( ! self::can_sync_customers() ) {
+			return;
+		}
+
+		if ( ! self::should_sync_order( $order ) ) {
 			return;
 		}
 
@@ -1172,9 +1205,9 @@ class WooCommerce_Connection {
 	/**
 	 * Force option for allowing retries for failed payments to ON unless the
 	 * NEWSPACK_PREVENT_WC_ALLOW_FAILED_PAYMENT_RETRIES_OVERRIDE constant is set.
-	 * 
+	 *
 	 * See: https://woo.com/document/subscriptions/failed-payment-retry/
-	 * 
+	 *
 	 * @param bool $should_retry Whether WooCommerce should automatically retry failed payments.
 	 *
 	 * @return string Option value.
@@ -1289,6 +1322,22 @@ class WooCommerce_Connection {
 		}
 
 		return $product_ids;
+	}
+
+	/**
+	 * Add a WC notice.
+	 *
+	 * @param string $message Message to display.
+	 * @param string $type Type of notice.
+	 */
+	public static function add_wc_notice( $message, $type ) {
+		if ( ! function_exists( '\wc_add_notice' ) || ! function_exists( 'WC' ) ) {
+			return;
+		}
+		if ( ! WC()->session ) {
+			return;
+		}
+		\wc_add_notice( $message, $type );
 	}
 }
 

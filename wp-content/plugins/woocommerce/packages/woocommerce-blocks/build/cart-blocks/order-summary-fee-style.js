@@ -1,1 +1,0 @@
-"use strict";(self.webpackChunkwebpackWcBlocksJsonp=self.webpackChunkwebpackWcBlocksJsonp||[]).push([[6991],{95646:(c,s,e)=>{e.r(s),e.d(s,{default:()=>k});const k=e(2686).Z}}]);

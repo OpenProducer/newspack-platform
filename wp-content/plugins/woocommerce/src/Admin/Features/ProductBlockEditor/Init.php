@@ -49,6 +49,10 @@ class Init {
 			array_push( $this->supported_post_types, 'external' );
 		}
 
+		if ( Features::is_enabled( 'product-grouped' ) ) {
+			array_push( $this->supported_post_types, 'grouped' );
+		}
+
 		$this->redirection_controller = new RedirectionController( $this->supported_post_types );
 
 		if ( \Automattic\WooCommerce\Utilities\FeaturesUtil::feature_is_enabled( 'product_block_editor' ) ) {
@@ -63,8 +67,8 @@ class Init {
 
 			add_action( 'current_screen', array( $this, 'set_current_screen_to_block_editor_if_wc_admin' ) );
 
-			$block_registry = new BlockRegistry();
-			$block_registry->init();
+			// Make sure the block registry is initialized so that core blocks are registered.
+			BlockRegistry::get_instance();
 
 			$tracks = new Tracks();
 			$tracks->init();
@@ -175,7 +179,7 @@ class Init {
 			$user_data_fields,
 			array(
 				'variable_product_block_tour_shown',
-				'product_block_variable_options_notice_dismissed',
+				'local_attributes_notice_dismissed_ids',
 				'variable_items_without_price_notice_dismissed',
 			)
 		);

@@ -7,15 +7,19 @@ $baseDir   = dirname($vendorDir);
 
 return array(
 	'a4a119a56e50fbb293281d9a48007e0e' => array(
-		'version' => '1.27.0.0',
+		'version' => '1.28.0.0',
 		'path'    => $vendorDir . '/symfony/polyfill-php80/bootstrap.php'
 	),
-	'fcd5d7d87e03ff4f5b5a66c2b8968671' => array(
-		'version' => '11.6.2.0',
-		'path'    => $baseDir . '/packages/woocommerce-blocks/src/StoreApi/deprecated.php'
+	'44e8414cd27982ecf86403af6e48f123' => array(
+		'version' => '8.5.2.0',
+		'path'    => $baseDir . '/src/StoreApi/deprecated.php'
 	),
-	'd0f16a186498c2ba04f1d0064fecf9cf' => array(
-		'version' => '11.6.2.0',
-		'path'    => $baseDir . '/packages/woocommerce-blocks/src/StoreApi/functions.php'
+	'9ce98895d0a470c71998c4b530020d26' => array(
+		'version' => '8.5.2.0',
+		'path'    => $baseDir . '/src/StoreApi/functions.php'
+	),
+	'c379ea42c3f5964a973a7106b08c5ef0' => array(
+		'version' => '8.5.2.0',
+		'path'    => $baseDir . '/src/Blocks/Domain/Services/functions.php'
 	),
 );

@@ -104,9 +104,9 @@ final class Newspack_Newsletters_Renderer {
 
 	/**
 	 * Get a value for an image alt attribute.
-	 * 
+	 *
 	 * @param int $attachment_id Attachment ID of the image.
-	 * 
+	 *
 	 * @return string A value for the alt attribute.
 	 */
 	private static function get_image_alt( $attachment_id ) {
@@ -712,14 +712,14 @@ final class Newspack_Newsletters_Renderer {
 					if ( ! empty( $attrs['color'] ) ) {
 						$default_button_attrs['color'] = $attrs['color'];
 					}
-					
+
 					$column_attrs['css-class'] = 'mj-column-has-width';
 					$column_attrs['width']     = $default_width . '%';
 					if ( ! empty( $attrs['width'] ) ) {
 						$column_attrs['width']         = $attrs['width'] . '%';
 						$default_button_attrs['width'] = '100%'; // Buttons with defined width should fill their column.
 					}
-					
+
 					if ( ! empty( $attrs['padding'] ) ) {
 						$default_button_attrs['inner-padding'] = $attrs['padding'];
 					}
@@ -1127,6 +1127,13 @@ final class Newspack_Newsletters_Renderer {
 			if ( 'core/group' === $block['blockName'] ) {
 				$default_attrs = [];
 				$attrs         = self::process_attributes( $block['attrs'] );
+				$conditionals  = [];
+				if ( ! empty( $attrs['conditionalBefore'] ) && ! empty( $attrs['conditionalAfter'] ) ) {
+					$conditionals = [
+						'before' => $attrs['conditionalBefore'],
+						'after'  => $attrs['conditionalAfter'],
+					];
+				}
 				if ( isset( $attrs['color'] ) ) {
 					$default_attrs['color'] = $attrs['color'];
 				}
@@ -1136,6 +1143,9 @@ final class Newspack_Newsletters_Renderer {
 					$mjml_markup        .= $inner_block_content;
 				}
 				$block_content = $mjml_markup . '</mj-wrapper>';
+				if ( ! empty( $conditionals ) ) {
+					$block_content = '<mj-raw>' . $conditionals['before'] . '</mj-raw>' . $block_content . '<mj-raw>' . $conditionals['after'] . '</mj-raw>';
+				}
 			} else {
 				$block_content = self::render_mjml_component( $block );
 			}

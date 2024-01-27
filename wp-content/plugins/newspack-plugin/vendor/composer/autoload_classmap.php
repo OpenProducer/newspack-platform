@@ -108,6 +108,7 @@ return array(
     'Newspack\\Twitter_Pixel' => $baseDir . '/includes/tracking/class-twitter-pixel.php',
     'Newspack\\Wizard' => $baseDir . '/includes/wizards/class-wizard.php',
     'Newspack\\Wizards' => $baseDir . '/includes/class-wizards.php',
+    'Newspack\\WooCommerce_Cli' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-cli.php',
     'Newspack\\WooCommerce_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-woocommerce-configuration-manager.php',
     'Newspack\\WooCommerce_Connection' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-connection.php',
     'Newspack\\WooCommerce_Cover_Fees' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-cover-fees.php',

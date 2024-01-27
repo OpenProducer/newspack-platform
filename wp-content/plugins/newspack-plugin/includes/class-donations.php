@@ -309,6 +309,23 @@ class Donations {
 	}
 
 	/**
+	 * Get recurrence of an order.
+	 *
+	 * @param \WC_Order $order Order object.
+	 */
+	public static function get_recurrence_of_order( $order ) {
+		$donation_product_id = self::get_order_donation_product_id( $order->get_id() );
+		if ( ! $donation_product_id ) {
+			return;
+		}
+		$recurrence = get_post_meta( $donation_product_id, '_subscription_period', true );
+		if ( empty( $recurrence ) ) {
+			$recurrence = 'once';
+		}
+		return $recurrence;
+	}
+
+	/**
 	 * Get the donation settings.
 	 *
 	 * @return array|WP_Error Donation settings or WP_Error if WooCommerce is not set up.
