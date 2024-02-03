@@ -1,3 +1,10 @@
+## [1.45.1](https://github.com/Automattic/newspack-ads/compare/v1.45.0...v1.45.1) (2024-01-29)
+
+
+### Bug Fixes
+
+* **gam:** sanitize URL for "site" targeting key-val ([e711562](https://github.com/Automattic/newspack-ads/commit/e711562ba47a19b3b2941d25e193225dfa285c5c))
+
 # [1.45.0](https://github.com/Automattic/newspack-ads/compare/v1.44.7...v1.45.0) (2023-12-11)
 
 

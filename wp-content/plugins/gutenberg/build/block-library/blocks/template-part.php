@@ -281,8 +281,8 @@ function gutenberg_register_block_core_template_part() {
 	register_block_type_from_metadata(
 		__DIR__ . '/template-part',
 		array(
-			'render_callback' => 'gutenberg_render_block_core_template_part',
-			'variations'      => gutenberg_build_template_part_block_variations(),
+			'render_callback'    => 'gutenberg_render_block_core_template_part',
+			'variation_callback' => 'gutenberg_build_template_part_block_variations',
 		)
 	);
 }

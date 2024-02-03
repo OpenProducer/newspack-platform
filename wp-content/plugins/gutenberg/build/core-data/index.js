@@ -1,8 +1,8 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
 /***/ 2167:
-/***/ (function(module) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -317,7 +317,7 @@ module.exports = EquivalentKeyMap;
 /***/ }),
 
 /***/ 5619:
-/***/ (function(module) {
+/***/ ((module) => {
 
 "use strict";
 
@@ -397,7 +397,7 @@ module.exports = function equal(a, b) {
 /***/ }),
 
 /***/ 2248:
-/***/ (function(module, __unused_webpack_exports, __webpack_require__) {
+/***/ ((module, __unused_webpack_exports, __webpack_require__) => {
 
 (function(e){if(true)module.exports=e();else { var t; }})(function(){var t=Math.floor,n=Math.abs,r=Math.pow;return function(){function d(s,e,n){function t(o,i){if(!e[o]){if(!s[o]){var l=undefined;if(!i&&l)return require(o,!0);if(r)return r(o,!0);var c=new Error("Cannot find module '"+o+"'");throw c.code="MODULE_NOT_FOUND",c}var a=e[o]={exports:{}};s[o][0].call(a.exports,function(e){var r=s[o][1][e];return t(r||e)},a,a.exports,d,s,e,n)}return e[o].exports}for(var r=undefined,a=0;a<n.length;a++)t(n[a]);return t}return d}()({1:[function(e,t,n){'use strict';function r(e){var t=e.length;if(0<t%4)throw new Error("Invalid string. Length must be a multiple of 4");var n=e.indexOf("=");-1===n&&(n=t);var r=n===t?0:4-n%4;return[n,r]}function a(e,t,n){return 3*(t+n)/4-n}function o(e){var t,n,o=r(e),d=o[0],s=o[1],l=new p(a(e,d,s)),c=0,f=0<s?d-4:d;for(n=0;n<f;n+=4)t=u[e.charCodeAt(n)]<<18|u[e.charCodeAt(n+1)]<<12|u[e.charCodeAt(n+2)]<<6|u[e.charCodeAt(n+3)],l[c++]=255&t>>16,l[c++]=255&t>>8,l[c++]=255&t;return 2===s&&(t=u[e.charCodeAt(n)]<<2|u[e.charCodeAt(n+1)]>>4,l[c++]=255&t),1===s&&(t=u[e.charCodeAt(n)]<<10|u[e.charCodeAt(n+1)]<<4|u[e.charCodeAt(n+2)]>>2,l[c++]=255&t>>8,l[c++]=255&t),l}function d(e){return c[63&e>>18]+c[63&e>>12]+c[63&e>>6]+c[63&e]}function s(e,t,n){for(var r,a=[],o=t;o<n;o+=3)r=(16711680&e[o]<<16)+(65280&e[o+1]<<8)+(255&e[o+2]),a.push(d(r));return a.join("")}function l(e){for(var t,n=e.length,r=n%3,a=[],o=16383,d=0,l=n-r;d<l;d+=o)a.push(s(e,d,d+o>l?l:d+o));return 1===r?(t=e[n-1],a.push(c[t>>2]+c[63&t<<4]+"==")):2===r&&(t=(e[n-2]<<8)+e[n-1],a.push(c[t>>10]+c[63&t>>4]+c[63&t<<2]+"=")),a.join("")}n.byteLength=function(e){var t=r(e),n=t[0],a=t[1];return 3*(n+a)/4-a},n.toByteArray=o,n.fromByteArray=l;for(var c=[],u=[],p="undefined"==typeof Uint8Array?Array:Uint8Array,f="ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/",g=0,_=f.length;g<_;++g)c[g]=f[g],u[f.charCodeAt(g)]=g;u[45]=62,u[95]=63},{}],2:[function(){},{}],3:[function(e,t,n){(function(){(function(){/*!
  * The buffer module from node.js, for the browser.
@@ -436,31 +436,31 @@ module.exports = function equal(a, b) {
 /******/ 	
 /************************************************************************/
 /******/ 	/* webpack/runtime/compat get default export */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// getDefaultExport function for compatibility with non-harmony modules
-/******/ 		__webpack_require__.n = function(module) {
+/******/ 		__webpack_require__.n = (module) => {
 /******/ 			var getter = module && module.__esModule ?
-/******/ 				function() { return module['default']; } :
-/******/ 				function() { return module; };
+/******/ 				() => (module['default']) :
+/******/ 				() => (module);
 /******/ 			__webpack_require__.d(getter, { a: getter });
 /******/ 			return getter;
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/define property getters */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define getter functions for harmony exports
-/******/ 		__webpack_require__.d = function(exports, definition) {
+/******/ 		__webpack_require__.d = (exports, definition) => {
 /******/ 			for(var key in definition) {
 /******/ 				if(__webpack_require__.o(definition, key) && !__webpack_require__.o(exports, key)) {
 /******/ 					Object.defineProperty(exports, key, { enumerable: true, get: definition[key] });
 /******/ 				}
 /******/ 			}
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/global */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		__webpack_require__.g = (function() {
 /******/ 			if (typeof globalThis === 'object') return globalThis;
 /******/ 			try {
@@ -469,186 +469,187 @@ module.exports = function equal(a, b) {
 /******/ 				if (typeof window === 'object') return window;
 /******/ 			}
 /******/ 		})();
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/hasOwnProperty shorthand */
-/******/ 	!function() {
-/******/ 		__webpack_require__.o = function(obj, prop) { return Object.prototype.hasOwnProperty.call(obj, prop); }
-/******/ 	}();
+/******/ 	(() => {
+/******/ 		__webpack_require__.o = (obj, prop) => (Object.prototype.hasOwnProperty.call(obj, prop))
+/******/ 	})();
 /******/ 	
 /******/ 	/* webpack/runtime/make namespace object */
-/******/ 	!function() {
+/******/ 	(() => {
 /******/ 		// define __esModule on exports
-/******/ 		__webpack_require__.r = function(exports) {
+/******/ 		__webpack_require__.r = (exports) => {
 /******/ 			if(typeof Symbol !== 'undefined' && Symbol.toStringTag) {
 /******/ 				Object.defineProperty(exports, Symbol.toStringTag, { value: 'Module' });
 /******/ 			}
 /******/ 			Object.defineProperty(exports, '__esModule', { value: true });
 /******/ 		};
-/******/ 	}();
+/******/ 	})();
 /******/ 	
 /************************************************************************/
 var __webpack_exports__ = {};
 // This entry need to be wrapped in an IIFE because it need to be in strict mode.
-!function() {
+(() => {
 "use strict";
 // ESM COMPAT FLAG
 __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  EntityProvider: function() { return /* reexport */ EntityProvider; },
-  __experimentalFetchLinkSuggestions: function() { return /* reexport */ _experimental_fetch_link_suggestions; },
-  __experimentalFetchUrlData: function() { return /* reexport */ _experimental_fetch_url_data; },
-  __experimentalUseEntityRecord: function() { return /* reexport */ __experimentalUseEntityRecord; },
-  __experimentalUseEntityRecords: function() { return /* reexport */ __experimentalUseEntityRecords; },
-  __experimentalUseResourcePermissions: function() { return /* reexport */ __experimentalUseResourcePermissions; },
-  store: function() { return /* binding */ store; },
-  useEntityBlockEditor: function() { return /* reexport */ useEntityBlockEditor; },
-  useEntityId: function() { return /* reexport */ useEntityId; },
-  useEntityProp: function() { return /* reexport */ useEntityProp; },
-  useEntityRecord: function() { return /* reexport */ useEntityRecord; },
-  useEntityRecords: function() { return /* reexport */ useEntityRecords; },
-  useResourcePermissions: function() { return /* reexport */ useResourcePermissions; }
+  EntityProvider: () => (/* reexport */ EntityProvider),
+  __experimentalFetchLinkSuggestions: () => (/* reexport */ _experimental_fetch_link_suggestions),
+  __experimentalFetchUrlData: () => (/* reexport */ _experimental_fetch_url_data),
+  __experimentalUseEntityRecord: () => (/* reexport */ __experimentalUseEntityRecord),
+  __experimentalUseEntityRecords: () => (/* reexport */ __experimentalUseEntityRecords),
+  __experimentalUseResourcePermissions: () => (/* reexport */ __experimentalUseResourcePermissions),
+  fetchBlockPatterns: () => (/* reexport */ fetchBlockPatterns),
+  store: () => (/* binding */ store),
+  useEntityBlockEditor: () => (/* reexport */ useEntityBlockEditor),
+  useEntityId: () => (/* reexport */ useEntityId),
+  useEntityProp: () => (/* reexport */ useEntityProp),
+  useEntityRecord: () => (/* reexport */ useEntityRecord),
+  useEntityRecords: () => (/* reexport */ useEntityRecords),
+  useResourcePermissions: () => (/* reexport */ useResourcePermissions)
 });
 
 // NAMESPACE OBJECT: ./packages/core-data/build-module/actions.js
 var build_module_actions_namespaceObject = {};
 __webpack_require__.r(build_module_actions_namespaceObject);
 __webpack_require__.d(build_module_actions_namespaceObject, {
-  __experimentalBatch: function() { return __experimentalBatch; },
-  __experimentalReceiveCurrentGlobalStylesId: function() { return __experimentalReceiveCurrentGlobalStylesId; },
-  __experimentalReceiveThemeBaseGlobalStyles: function() { return __experimentalReceiveThemeBaseGlobalStyles; },
-  __experimentalReceiveThemeGlobalStyleVariations: function() { return __experimentalReceiveThemeGlobalStyleVariations; },
-  __experimentalSaveSpecifiedEntityEdits: function() { return __experimentalSaveSpecifiedEntityEdits; },
-  __unstableCreateUndoLevel: function() { return __unstableCreateUndoLevel; },
-  addEntities: function() { return addEntities; },
-  deleteEntityRecord: function() { return deleteEntityRecord; },
-  editEntityRecord: function() { return editEntityRecord; },
-  receiveAutosaves: function() { return receiveAutosaves; },
-  receiveCurrentTheme: function() { return receiveCurrentTheme; },
-  receiveCurrentUser: function() { return receiveCurrentUser; },
-  receiveDefaultTemplateId: function() { return receiveDefaultTemplateId; },
-  receiveEmbedPreview: function() { return receiveEmbedPreview; },
-  receiveEntityRecords: function() { return receiveEntityRecords; },
-  receiveNavigationFallbackId: function() { return receiveNavigationFallbackId; },
-  receiveRevisions: function() { return receiveRevisions; },
-  receiveThemeGlobalStyleRevisions: function() { return receiveThemeGlobalStyleRevisions; },
-  receiveThemeSupports: function() { return receiveThemeSupports; },
-  receiveUploadPermissions: function() { return receiveUploadPermissions; },
-  receiveUserPermission: function() { return receiveUserPermission; },
-  receiveUserQuery: function() { return receiveUserQuery; },
-  redo: function() { return redo; },
-  saveEditedEntityRecord: function() { return saveEditedEntityRecord; },
-  saveEntityRecord: function() { return saveEntityRecord; },
-  undo: function() { return undo; }
+  __experimentalBatch: () => (__experimentalBatch),
+  __experimentalReceiveCurrentGlobalStylesId: () => (__experimentalReceiveCurrentGlobalStylesId),
+  __experimentalReceiveThemeBaseGlobalStyles: () => (__experimentalReceiveThemeBaseGlobalStyles),
+  __experimentalReceiveThemeGlobalStyleVariations: () => (__experimentalReceiveThemeGlobalStyleVariations),
+  __experimentalSaveSpecifiedEntityEdits: () => (__experimentalSaveSpecifiedEntityEdits),
+  __unstableCreateUndoLevel: () => (__unstableCreateUndoLevel),
+  addEntities: () => (addEntities),
+  deleteEntityRecord: () => (deleteEntityRecord),
+  editEntityRecord: () => (editEntityRecord),
+  receiveAutosaves: () => (receiveAutosaves),
+  receiveCurrentTheme: () => (receiveCurrentTheme),
+  receiveCurrentUser: () => (receiveCurrentUser),
+  receiveDefaultTemplateId: () => (receiveDefaultTemplateId),
+  receiveEmbedPreview: () => (receiveEmbedPreview),
+  receiveEntityRecords: () => (receiveEntityRecords),
+  receiveNavigationFallbackId: () => (receiveNavigationFallbackId),
+  receiveRevisions: () => (receiveRevisions),
+  receiveThemeGlobalStyleRevisions: () => (receiveThemeGlobalStyleRevisions),
+  receiveThemeSupports: () => (receiveThemeSupports),
+  receiveUploadPermissions: () => (receiveUploadPermissions),
+  receiveUserPermission: () => (receiveUserPermission),
+  receiveUserQuery: () => (receiveUserQuery),
+  redo: () => (redo),
+  saveEditedEntityRecord: () => (saveEditedEntityRecord),
+  saveEntityRecord: () => (saveEntityRecord),
+  undo: () => (undo)
 });
 
 // NAMESPACE OBJECT: ./packages/core-data/build-module/selectors.js
 var build_module_selectors_namespaceObject = {};
 __webpack_require__.r(build_module_selectors_namespaceObject);
 __webpack_require__.d(build_module_selectors_namespaceObject, {
-  __experimentalGetCurrentGlobalStylesId: function() { return __experimentalGetCurrentGlobalStylesId; },
-  __experimentalGetCurrentThemeBaseGlobalStyles: function() { return __experimentalGetCurrentThemeBaseGlobalStyles; },
-  __experimentalGetCurrentThemeGlobalStylesVariations: function() { return __experimentalGetCurrentThemeGlobalStylesVariations; },
-  __experimentalGetDirtyEntityRecords: function() { return __experimentalGetDirtyEntityRecords; },
-  __experimentalGetEntitiesBeingSaved: function() { return __experimentalGetEntitiesBeingSaved; },
-  __experimentalGetEntityRecordNoResolver: function() { return __experimentalGetEntityRecordNoResolver; },
-  __experimentalGetTemplateForLink: function() { return __experimentalGetTemplateForLink; },
-  canUser: function() { return canUser; },
-  canUserEditEntityRecord: function() { return canUserEditEntityRecord; },
-  getAuthors: function() { return getAuthors; },
-  getAutosave: function() { return getAutosave; },
-  getAutosaves: function() { return getAutosaves; },
-  getBlockPatternCategories: function() { return getBlockPatternCategories; },
-  getBlockPatterns: function() { return getBlockPatterns; },
-  getCurrentTheme: function() { return getCurrentTheme; },
-  getCurrentThemeGlobalStylesRevisions: function() { return getCurrentThemeGlobalStylesRevisions; },
-  getCurrentUser: function() { return getCurrentUser; },
-  getDefaultTemplateId: function() { return getDefaultTemplateId; },
-  getEditedEntityRecord: function() { return getEditedEntityRecord; },
-  getEmbedPreview: function() { return getEmbedPreview; },
-  getEntitiesByKind: function() { return getEntitiesByKind; },
-  getEntitiesConfig: function() { return getEntitiesConfig; },
-  getEntity: function() { return getEntity; },
-  getEntityConfig: function() { return getEntityConfig; },
-  getEntityRecord: function() { return getEntityRecord; },
-  getEntityRecordEdits: function() { return getEntityRecordEdits; },
-  getEntityRecordNonTransientEdits: function() { return getEntityRecordNonTransientEdits; },
-  getEntityRecords: function() { return getEntityRecords; },
-  getEntityRecordsTotalItems: function() { return getEntityRecordsTotalItems; },
-  getEntityRecordsTotalPages: function() { return getEntityRecordsTotalPages; },
-  getLastEntityDeleteError: function() { return getLastEntityDeleteError; },
-  getLastEntitySaveError: function() { return getLastEntitySaveError; },
-  getRawEntityRecord: function() { return getRawEntityRecord; },
-  getRedoEdit: function() { return getRedoEdit; },
-  getReferenceByDistinctEdits: function() { return getReferenceByDistinctEdits; },
-  getRevision: function() { return getRevision; },
-  getRevisions: function() { return getRevisions; },
-  getThemeSupports: function() { return getThemeSupports; },
-  getUndoEdit: function() { return getUndoEdit; },
-  getUserPatternCategories: function() { return getUserPatternCategories; },
-  getUserQueryResults: function() { return getUserQueryResults; },
-  hasEditsForEntityRecord: function() { return hasEditsForEntityRecord; },
-  hasEntityRecords: function() { return hasEntityRecords; },
-  hasFetchedAutosaves: function() { return hasFetchedAutosaves; },
-  hasRedo: function() { return hasRedo; },
-  hasUndo: function() { return hasUndo; },
-  isAutosavingEntityRecord: function() { return isAutosavingEntityRecord; },
-  isDeletingEntityRecord: function() { return isDeletingEntityRecord; },
-  isPreviewEmbedFallback: function() { return isPreviewEmbedFallback; },
-  isRequestingEmbedPreview: function() { return isRequestingEmbedPreview; },
-  isSavingEntityRecord: function() { return isSavingEntityRecord; }
+  __experimentalGetCurrentGlobalStylesId: () => (__experimentalGetCurrentGlobalStylesId),
+  __experimentalGetCurrentThemeBaseGlobalStyles: () => (__experimentalGetCurrentThemeBaseGlobalStyles),
+  __experimentalGetCurrentThemeGlobalStylesVariations: () => (__experimentalGetCurrentThemeGlobalStylesVariations),
+  __experimentalGetDirtyEntityRecords: () => (__experimentalGetDirtyEntityRecords),
+  __experimentalGetEntitiesBeingSaved: () => (__experimentalGetEntitiesBeingSaved),
+  __experimentalGetEntityRecordNoResolver: () => (__experimentalGetEntityRecordNoResolver),
+  __experimentalGetTemplateForLink: () => (__experimentalGetTemplateForLink),
+  canUser: () => (canUser),
+  canUserEditEntityRecord: () => (canUserEditEntityRecord),
+  getAuthors: () => (getAuthors),
+  getAutosave: () => (getAutosave),
+  getAutosaves: () => (getAutosaves),
+  getBlockPatternCategories: () => (getBlockPatternCategories),
+  getBlockPatterns: () => (getBlockPatterns),
+  getCurrentTheme: () => (getCurrentTheme),
+  getCurrentThemeGlobalStylesRevisions: () => (getCurrentThemeGlobalStylesRevisions),
+  getCurrentUser: () => (getCurrentUser),
+  getDefaultTemplateId: () => (getDefaultTemplateId),
+  getEditedEntityRecord: () => (getEditedEntityRecord),
+  getEmbedPreview: () => (getEmbedPreview),
+  getEntitiesByKind: () => (getEntitiesByKind),
+  getEntitiesConfig: () => (getEntitiesConfig),
+  getEntity: () => (getEntity),
+  getEntityConfig: () => (getEntityConfig),
+  getEntityRecord: () => (getEntityRecord),
+  getEntityRecordEdits: () => (getEntityRecordEdits),
+  getEntityRecordNonTransientEdits: () => (getEntityRecordNonTransientEdits),
+  getEntityRecords: () => (getEntityRecords),
+  getEntityRecordsTotalItems: () => (getEntityRecordsTotalItems),
+  getEntityRecordsTotalPages: () => (getEntityRecordsTotalPages),
+  getLastEntityDeleteError: () => (getLastEntityDeleteError),
+  getLastEntitySaveError: () => (getLastEntitySaveError),
+  getRawEntityRecord: () => (getRawEntityRecord),
+  getRedoEdit: () => (getRedoEdit),
+  getReferenceByDistinctEdits: () => (getReferenceByDistinctEdits),
+  getRevision: () => (getRevision),
+  getRevisions: () => (getRevisions),
+  getThemeSupports: () => (getThemeSupports),
+  getUndoEdit: () => (getUndoEdit),
+  getUserPatternCategories: () => (getUserPatternCategories),
+  getUserQueryResults: () => (getUserQueryResults),
+  hasEditsForEntityRecord: () => (hasEditsForEntityRecord),
+  hasEntityRecords: () => (hasEntityRecords),
+  hasFetchedAutosaves: () => (hasFetchedAutosaves),
+  hasRedo: () => (hasRedo),
+  hasUndo: () => (hasUndo),
+  isAutosavingEntityRecord: () => (isAutosavingEntityRecord),
+  isDeletingEntityRecord: () => (isDeletingEntityRecord),
+  isPreviewEmbedFallback: () => (isPreviewEmbedFallback),
+  isRequestingEmbedPreview: () => (isRequestingEmbedPreview),
+  isSavingEntityRecord: () => (isSavingEntityRecord)
 });
 
 // NAMESPACE OBJECT: ./packages/core-data/build-module/private-selectors.js
 var private_selectors_namespaceObject = {};
 __webpack_require__.r(private_selectors_namespaceObject);
 __webpack_require__.d(private_selectors_namespaceObject, {
-  getNavigationFallbackId: function() { return getNavigationFallbackId; },
-  getUndoManager: function() { return getUndoManager; }
+  getNavigationFallbackId: () => (getNavigationFallbackId),
+  getUndoManager: () => (getUndoManager)
 });
 
 // NAMESPACE OBJECT: ./packages/core-data/build-module/resolvers.js
 var resolvers_namespaceObject = {};
 __webpack_require__.r(resolvers_namespaceObject);
 __webpack_require__.d(resolvers_namespaceObject, {
-  __experimentalGetCurrentGlobalStylesId: function() { return resolvers_experimentalGetCurrentGlobalStylesId; },
-  __experimentalGetCurrentThemeBaseGlobalStyles: function() { return resolvers_experimentalGetCurrentThemeBaseGlobalStyles; },
-  __experimentalGetCurrentThemeGlobalStylesVariations: function() { return resolvers_experimentalGetCurrentThemeGlobalStylesVariations; },
-  __experimentalGetTemplateForLink: function() { return resolvers_experimentalGetTemplateForLink; },
-  canUser: function() { return resolvers_canUser; },
-  canUserEditEntityRecord: function() { return resolvers_canUserEditEntityRecord; },
-  getAuthors: function() { return resolvers_getAuthors; },
-  getAutosave: function() { return resolvers_getAutosave; },
-  getAutosaves: function() { return resolvers_getAutosaves; },
-  getBlockPatternCategories: function() { return resolvers_getBlockPatternCategories; },
-  getBlockPatterns: function() { return resolvers_getBlockPatterns; },
-  getCurrentTheme: function() { return resolvers_getCurrentTheme; },
-  getCurrentThemeGlobalStylesRevisions: function() { return resolvers_getCurrentThemeGlobalStylesRevisions; },
-  getCurrentUser: function() { return resolvers_getCurrentUser; },
-  getDefaultTemplateId: function() { return resolvers_getDefaultTemplateId; },
-  getEditedEntityRecord: function() { return resolvers_getEditedEntityRecord; },
-  getEmbedPreview: function() { return resolvers_getEmbedPreview; },
-  getEntityRecord: function() { return resolvers_getEntityRecord; },
-  getEntityRecords: function() { return resolvers_getEntityRecords; },
-  getNavigationFallbackId: function() { return resolvers_getNavigationFallbackId; },
-  getRawEntityRecord: function() { return resolvers_getRawEntityRecord; },
-  getRevision: function() { return resolvers_getRevision; },
-  getRevisions: function() { return resolvers_getRevisions; },
-  getThemeSupports: function() { return resolvers_getThemeSupports; },
-  getUserPatternCategories: function() { return resolvers_getUserPatternCategories; }
+  __experimentalGetCurrentGlobalStylesId: () => (resolvers_experimentalGetCurrentGlobalStylesId),
+  __experimentalGetCurrentThemeBaseGlobalStyles: () => (resolvers_experimentalGetCurrentThemeBaseGlobalStyles),
+  __experimentalGetCurrentThemeGlobalStylesVariations: () => (resolvers_experimentalGetCurrentThemeGlobalStylesVariations),
+  __experimentalGetTemplateForLink: () => (resolvers_experimentalGetTemplateForLink),
+  canUser: () => (resolvers_canUser),
+  canUserEditEntityRecord: () => (resolvers_canUserEditEntityRecord),
+  getAuthors: () => (resolvers_getAuthors),
+  getAutosave: () => (resolvers_getAutosave),
+  getAutosaves: () => (resolvers_getAutosaves),
+  getBlockPatternCategories: () => (resolvers_getBlockPatternCategories),
+  getBlockPatterns: () => (resolvers_getBlockPatterns),
+  getCurrentTheme: () => (resolvers_getCurrentTheme),
+  getCurrentThemeGlobalStylesRevisions: () => (resolvers_getCurrentThemeGlobalStylesRevisions),
+  getCurrentUser: () => (resolvers_getCurrentUser),
+  getDefaultTemplateId: () => (resolvers_getDefaultTemplateId),
+  getEditedEntityRecord: () => (resolvers_getEditedEntityRecord),
+  getEmbedPreview: () => (resolvers_getEmbedPreview),
+  getEntityRecord: () => (resolvers_getEntityRecord),
+  getEntityRecords: () => (resolvers_getEntityRecords),
+  getNavigationFallbackId: () => (resolvers_getNavigationFallbackId),
+  getRawEntityRecord: () => (resolvers_getRawEntityRecord),
+  getRevision: () => (resolvers_getRevision),
+  getRevisions: () => (resolvers_getRevisions),
+  getThemeSupports: () => (resolvers_getThemeSupports),
+  getUserPatternCategories: () => (resolvers_getUserPatternCategories)
 });
 
 ;// CONCATENATED MODULE: external ["wp","data"]
-var external_wp_data_namespaceObject = window["wp"]["data"];
+const external_wp_data_namespaceObject = window["wp"]["data"];
 // EXTERNAL MODULE: ./node_modules/fast-deep-equal/es6/index.js
 var es6 = __webpack_require__(5619);
 var es6_default = /*#__PURE__*/__webpack_require__.n(es6);
 ;// CONCATENATED MODULE: external ["wp","compose"]
-var external_wp_compose_namespaceObject = window["wp"]["compose"];
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: external ["wp","isShallowEqual"]
-var external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
+const external_wp_isShallowEqual_namespaceObject = window["wp"]["isShallowEqual"];
 var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(external_wp_isShallowEqual_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/undo-manager/build-module/index.js
 /**
@@ -840,7 +841,7 @@ const ifMatchingAction = isMatch => reducer => (state, action) => {
   }
   return state;
 };
-/* harmony default export */ var if_matching_action = (ifMatchingAction);
+/* harmony default export */ const if_matching_action = (ifMatchingAction);
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/replace-action.js
 /** @typedef {import('../types').AnyFunction} AnyFunction */
@@ -856,7 +857,7 @@ const ifMatchingAction = isMatch => reducer => (state, action) => {
 const replaceAction = replacer => reducer => (state, action) => {
   return reducer(state, replacer(action));
 };
-/* harmony default export */ var replace_action = (replaceAction);
+/* harmony default export */ const replace_action = (replaceAction);
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/conservative-map-item.js
 /**
@@ -934,7 +935,7 @@ const onSubKey = actionProperty => reducer => (state = {}, action) => {
     [key]: nextKeyState
   };
 };
-/* harmony default export */ var on_sub_key = (onSubKey);
+/* harmony default export */ const on_sub_key = (onSubKey);
 
 ;// CONCATENATED MODULE: ./node_modules/tslib/tslib.es6.mjs
 /******************************************************************************
@@ -1278,7 +1279,7 @@ function __disposeResources(env) {
   return next();
 }
 
-/* harmony default export */ var tslib_es6 = ({
+/* harmony default export */ const tslib_es6 = ({
   __extends,
   __assign,
   __rest,
@@ -1429,12 +1430,12 @@ function pascalCase(input, options) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","apiFetch"]
-var external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
+const external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
 ;// CONCATENATED MODULE: external ["wp","i18n"]
-var external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","richText"]
-var external_wp_richText_namespaceObject = window["wp"]["richText"];
+const external_wp_richText_namespaceObject = window["wp"]["richText"];
 ;// CONCATENATED MODULE: ./packages/core-data/node_modules/uuid/dist/esm-browser/rng.js
 // Unique ID creation requires a high quality random # generator. In the browser we therefore
 // require the crypto API and do not support built-in fallback to lower quality random number
@@ -1456,7 +1457,7 @@ function rng() {
   return rng_getRandomValues(rnds8);
 }
 ;// CONCATENATED MODULE: ./packages/core-data/node_modules/uuid/dist/esm-browser/regex.js
-/* harmony default export */ var regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
+/* harmony default export */ const regex = (/^(?:[0-9a-f]{8}-[0-9a-f]{4}-[1-5][0-9a-f]{3}-[89ab][0-9a-f]{3}-[0-9a-f]{12}|00000000-0000-0000-0000-000000000000)$/i);
 ;// CONCATENATED MODULE: ./packages/core-data/node_modules/uuid/dist/esm-browser/validate.js
 
 
@@ -1464,7 +1465,7 @@ function validate(uuid) {
   return typeof uuid === 'string' && regex.test(uuid);
 }
 
-/* harmony default export */ var esm_browser_validate = (validate);
+/* harmony default export */ const esm_browser_validate = (validate);
 ;// CONCATENATED MODULE: ./packages/core-data/node_modules/uuid/dist/esm-browser/stringify.js
 
 /**
@@ -1495,7 +1496,7 @@ function stringify(arr) {
   return uuid;
 }
 
-/* harmony default export */ var esm_browser_stringify = (stringify);
+/* harmony default export */ const esm_browser_stringify = (stringify);
 ;// CONCATENATED MODULE: ./packages/core-data/node_modules/uuid/dist/esm-browser/v4.js
 
 
@@ -1520,11 +1521,11 @@ function v4(options, buf, offset) {
   return esm_browser_stringify(rnds);
 }
 
-/* harmony default export */ var esm_browser_v4 = (v4);
+/* harmony default export */ const esm_browser_v4 = (v4);
 ;// CONCATENATED MODULE: external ["wp","url"]
-var external_wp_url_namespaceObject = window["wp"]["url"];
+const external_wp_url_namespaceObject = window["wp"]["url"];
 ;// CONCATENATED MODULE: external ["wp","deprecated"]
-var external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
+const external_wp_deprecated_namespaceObject = window["wp"]["deprecated"];
 var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external_wp_deprecated_namespaceObject);
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/set-nested-value.js
 /**
@@ -19979,7 +19980,7 @@ function getNormalizedCommaSeparable(value) {
   }
   return null;
 }
-/* harmony default export */ var get_normalized_comma_separable = (getNormalizedCommaSeparable);
+/* harmony default export */ const get_normalized_comma_separable = (getNormalizedCommaSeparable);
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/with-weak-map-cache.js
 /**
@@ -20010,7 +20011,7 @@ function withWeakMapCache(fn) {
     return value;
   };
 }
-/* harmony default export */ var with_weak_map_cache = (withWeakMapCache);
+/* harmony default export */ const with_weak_map_cache = (withWeakMapCache);
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/queried-data/get-query-parts.js
 /**
@@ -20114,7 +20115,7 @@ function getQueryParts(query) {
   }
   return parts;
 }
-/* harmony default export */ var get_query_parts = (with_weak_map_cache(getQueryParts));
+/* harmony default export */ const get_query_parts = (with_weak_map_cache(getQueryParts));
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/queried-data/reducer.js
 /**
@@ -20346,7 +20347,7 @@ const queries = (state = {}, action) => {
       return state;
   }
 };
-/* harmony default export */ var reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
+/* harmony default export */ const reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
   items,
   itemIsComplete,
   queries
@@ -20905,7 +20906,7 @@ function defaultTemplates(state = {}, action) {
   }
   return state;
 }
-/* harmony default export */ var build_module_reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
+/* harmony default export */ const build_module_reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
   terms,
   users,
   currentTheme,
@@ -22450,7 +22451,7 @@ function camelCase(input, options) {
 }
 
 ;// CONCATENATED MODULE: external ["wp","htmlEntities"]
-var external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
+const external_wp_htmlEntities_namespaceObject = window["wp"]["htmlEntities"];
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/forward-resolver.js
 /**
  * Higher-order function which forward the resolution to another resolver with the same arguments.
@@ -22464,7 +22465,317 @@ const forwardResolver = resolverName => (...args) => async ({
 }) => {
   await resolveSelect[resolverName](...args);
 };
-/* harmony default export */ var forward_resolver = (forwardResolver);
+/* harmony default export */ const forward_resolver = (forwardResolver);
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/fetch/__experimental-fetch-link-suggestions.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Filters the search by type
+ *
+ * @typedef { 'attachment' | 'post' | 'term' | 'post-format' } WPLinkSearchType
+ */
+
+/**
+ * A link with an id may be of kind post-type or taxonomy
+ *
+ * @typedef { 'post-type' | 'taxonomy' } WPKind
+ */
+
+/**
+ * @typedef WPLinkSearchOptions
+ *
+ * @property {boolean}          [isInitialSuggestions] Displays initial search suggestions, when true.
+ * @property {WPLinkSearchType} [type]                 Filters by search type.
+ * @property {string}           [subtype]              Slug of the post-type or taxonomy.
+ * @property {number}           [page]                 Which page of results to return.
+ * @property {number}           [perPage]              Search results per page.
+ */
+
+/**
+ * @typedef WPLinkSearchResult
+ *
+ * @property {number} id     Post or term id.
+ * @property {string} url    Link url.
+ * @property {string} title  Title of the link.
+ * @property {string} type   The taxonomy or post type slug or type URL.
+ * @property {WPKind} [kind] Link kind of post-type or taxonomy
+ */
+
+/**
+ * @typedef WPLinkSearchResultAugments
+ *
+ * @property {{kind: WPKind}} [meta]    Contains kind information.
+ * @property {WPKind}         [subtype] Optional subtype if it exists.
+ */
+
+/**
+ * @typedef {WPLinkSearchResult & WPLinkSearchResultAugments} WPLinkSearchResultAugmented
+ */
+
+/**
+ * @typedef WPEditorSettings
+ *
+ * @property {boolean} [ disablePostFormats ] Disables post formats, when true.
+ */
+
+/**
+ * Fetches link suggestions from the API.
+ *
+ * @async
+ * @param {string}              search
+ * @param {WPLinkSearchOptions} [searchOptions]
+ * @param {WPEditorSettings}    [settings]
+ *
+ * @example
+ * ```js
+ * import { __experimentalFetchLinkSuggestions as fetchLinkSuggestions } from '@wordpress/core-data';
+ *
+ * //...
+ *
+ * export function initialize( id, settings ) {
+ *
+ * settings.__experimentalFetchLinkSuggestions = (
+ *     search,
+ *     searchOptions
+ * ) => fetchLinkSuggestions( search, searchOptions, settings );
+ * ```
+ * @return {Promise< WPLinkSearchResult[] >} List of search suggestions
+ */
+const fetchLinkSuggestions = async (search, searchOptions = {}, settings = {}) => {
+  const {
+    isInitialSuggestions = false,
+    initialSuggestionsSearchOptions = undefined
+  } = searchOptions;
+  const {
+    disablePostFormats = false
+  } = settings;
+  let {
+    type = undefined,
+    subtype = undefined,
+    page = undefined,
+    perPage = isInitialSuggestions ? 3 : 20
+  } = searchOptions;
+
+  /** @type {Promise<WPLinkSearchResult>[]} */
+  const queries = [];
+  if (isInitialSuggestions && initialSuggestionsSearchOptions) {
+    type = initialSuggestionsSearchOptions.type || type;
+    subtype = initialSuggestionsSearchOptions.subtype || subtype;
+    page = initialSuggestionsSearchOptions.page || page;
+    perPage = initialSuggestionsSearchOptions.perPage || perPage;
+  }
+  if (!type || type === 'post') {
+    queries.push(external_wp_apiFetch_default()({
+      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/search', {
+        search,
+        page,
+        per_page: perPage,
+        type: 'post',
+        subtype
+      })
+    }).then(results => {
+      return results.map(result => {
+        return {
+          ...result,
+          meta: {
+            kind: 'post-type',
+            subtype
+          }
+        };
+      });
+    }).catch(() => []) // Fail by returning no results.
+    );
+  }
+
+  if (!type || type === 'term') {
+    queries.push(external_wp_apiFetch_default()({
+      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/search', {
+        search,
+        page,
+        per_page: perPage,
+        type: 'term',
+        subtype
+      })
+    }).then(results => {
+      return results.map(result => {
+        return {
+          ...result,
+          meta: {
+            kind: 'taxonomy',
+            subtype
+          }
+        };
+      });
+    }).catch(() => []) // Fail by returning no results.
+    );
+  }
+
+  if (!disablePostFormats && (!type || type === 'post-format')) {
+    queries.push(external_wp_apiFetch_default()({
+      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/search', {
+        search,
+        page,
+        per_page: perPage,
+        type: 'post-format',
+        subtype
+      })
+    }).then(results => {
+      return results.map(result => {
+        return {
+          ...result,
+          meta: {
+            kind: 'taxonomy',
+            subtype
+          }
+        };
+      });
+    }).catch(() => []) // Fail by returning no results.
+    );
+  }
+
+  if (!type || type === 'attachment') {
+    queries.push(external_wp_apiFetch_default()({
+      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/media', {
+        search,
+        page,
+        per_page: perPage
+      })
+    }).then(results => {
+      return results.map(result => {
+        return {
+          ...result,
+          meta: {
+            kind: 'media'
+          }
+        };
+      });
+    }).catch(() => []) // Fail by returning no results.
+    );
+  }
+
+  return Promise.all(queries).then(results => {
+    return results.reduce(( /** @type {WPLinkSearchResult[]} */accumulator, current) => accumulator.concat(current),
+    // Flatten list.
+    []).filter(
+    /**
+     * @param {{ id: number }} result
+     */
+    result => {
+      return !!result.id;
+    }).slice(0, perPage).map(( /** @type {WPLinkSearchResultAugmented} */result) => {
+      const isMedia = result.type === 'attachment';
+      return {
+        id: result.id,
+        // @ts-ignore fix when we make this a TS file
+        url: isMedia ? result.source_url : result.url,
+        title: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(isMedia ?
+        // @ts-ignore fix when we make this a TS file
+        result.title.rendered : result.title || '') || (0,external_wp_i18n_namespaceObject.__)('(no title)'),
+        type: result.subtype || result.type,
+        kind: result?.meta?.kind
+      };
+    });
+  });
+};
+/* harmony default export */ const _experimental_fetch_link_suggestions = (fetchLinkSuggestions);
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/fetch/__experimental-fetch-url-data.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * A simple in-memory cache for requests.
+ * This avoids repeat HTTP requests which may be beneficial
+ * for those wishing to preserve low-bandwidth.
+ */
+const CACHE = new Map();
+
+/**
+ * @typedef WPRemoteUrlData
+ *
+ * @property {string} title contents of the remote URL's `<title>` tag.
+ */
+
+/**
+ * Fetches data about a remote URL.
+ * eg: <title> tag, favicon...etc.
+ *
+ * @async
+ * @param {string}  url     the URL to request details from.
+ * @param {Object?} options any options to pass to the underlying fetch.
+ * @example
+ * ```js
+ * import { __experimentalFetchUrlData as fetchUrlData } from '@wordpress/core-data';
+ *
+ * //...
+ *
+ * export function initialize( id, settings ) {
+ *
+ * settings.__experimentalFetchUrlData = (
+ * url
+ * ) => fetchUrlData( url );
+ * ```
+ * @return {Promise< WPRemoteUrlData[] >} Remote URL data.
+ */
+const fetchUrlData = async (url, options = {}) => {
+  const endpoint = '/wp-block-editor/v1/url-details';
+  const args = {
+    url: (0,external_wp_url_namespaceObject.prependHTTP)(url)
+  };
+  if (!(0,external_wp_url_namespaceObject.isURL)(url)) {
+    return Promise.reject(`${url} is not a valid URL.`);
+  }
+
+  // Test for "http" based URL as it is possible for valid
+  // yet unusable URLs such as `tel:123456` to be passed.
+  const protocol = (0,external_wp_url_namespaceObject.getProtocol)(url);
+  if (!protocol || !(0,external_wp_url_namespaceObject.isValidProtocol)(protocol) || !protocol.startsWith('http') || !/^https?:\/\/[^\/\s]/i.test(url)) {
+    return Promise.reject(`${url} does not have a valid protocol. URLs must be "http" based`);
+  }
+  if (CACHE.has(url)) {
+    return CACHE.get(url);
+  }
+  return external_wp_apiFetch_default()({
+    path: (0,external_wp_url_namespaceObject.addQueryArgs)(endpoint, args),
+    ...options
+  }).then(res => {
+    CACHE.set(url, res);
+    return res;
+  });
+};
+/* harmony default export */ const _experimental_fetch_url_data = (fetchUrlData);
+
+;// CONCATENATED MODULE: ./packages/core-data/build-module/fetch/index.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+async function fetchBlockPatterns() {
+  const restPatterns = await external_wp_apiFetch_default()({
+    path: '/wp/v2/block-patterns/patterns'
+  });
+  if (!restPatterns) {
+    return [];
+  }
+  return restPatterns.map(pattern => Object.fromEntries(Object.entries(pattern).map(([key, value]) => [camelCase(key), value])));
+}
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/resolvers.js
 /**
@@ -22482,6 +22793,7 @@ const forwardResolver = resolverName => (...args) => async ({
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -22965,10 +23277,7 @@ resolvers_getCurrentThemeGlobalStylesRevisions.shouldInvalidate = action => {
 const resolvers_getBlockPatterns = () => async ({
   dispatch
 }) => {
-  const restPatterns = await external_wp_apiFetch_default()({
-    path: '/wp/v2/block-patterns/patterns'
-  });
-  const patterns = restPatterns?.map(pattern => Object.fromEntries(Object.entries(pattern).map(([key, value]) => [camelCase(key), value])));
+  const patterns = await fetchBlockPatterns();
   dispatch({
     type: 'RECEIVE_BLOCK_PATTERNS',
     patterns
@@ -23424,7 +23733,7 @@ function createLocksActions() {
 }
 
 ;// CONCATENATED MODULE: external ["wp","privateApis"]
-var external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
+const external_wp_privateApis_namespaceObject = window["wp"]["privateApis"];
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/private-apis.js
 /**
  * WordPress dependencies
@@ -23436,13 +23745,13 @@ const {
 } = (0,external_wp_privateApis_namespaceObject.__dangerousOptInToUnstableAPIsOnlyForCoreModules)('I know using unstable features means my theme or plugin will inevitably break in the next version of WordPress.', '@wordpress/core-data');
 
 ;// CONCATENATED MODULE: external "React"
-var external_React_namespaceObject = window["React"];
+const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","element"]
-var external_wp_element_namespaceObject = window["wp"]["element"];
+const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: external ["wp","blocks"]
-var external_wp_blocks_namespaceObject = window["wp"]["blocks"];
+const external_wp_blocks_namespaceObject = window["wp"]["blocks"];
 ;// CONCATENATED MODULE: external ["wp","blockEditor"]
-var external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
+const external_wp_blockEditor_namespaceObject = window["wp"]["blockEditor"];
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/footnotes/get-rich-text-values-cached.js
 /**
  * WordPress dependencies
@@ -23845,298 +24154,6 @@ function useEntityBlockEditor(kind, name, {
   return [blocks, onInput, onChange];
 }
 
-;// CONCATENATED MODULE: ./packages/core-data/build-module/fetch/__experimental-fetch-link-suggestions.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-/**
- * Filters the search by type
- *
- * @typedef { 'attachment' | 'post' | 'term' | 'post-format' } WPLinkSearchType
- */
-
-/**
- * A link with an id may be of kind post-type or taxonomy
- *
- * @typedef { 'post-type' | 'taxonomy' } WPKind
- */
-
-/**
- * @typedef WPLinkSearchOptions
- *
- * @property {boolean}          [isInitialSuggestions] Displays initial search suggestions, when true.
- * @property {WPLinkSearchType} [type]                 Filters by search type.
- * @property {string}           [subtype]              Slug of the post-type or taxonomy.
- * @property {number}           [page]                 Which page of results to return.
- * @property {number}           [perPage]              Search results per page.
- */
-
-/**
- * @typedef WPLinkSearchResult
- *
- * @property {number} id     Post or term id.
- * @property {string} url    Link url.
- * @property {string} title  Title of the link.
- * @property {string} type   The taxonomy or post type slug or type URL.
- * @property {WPKind} [kind] Link kind of post-type or taxonomy
- */
-
-/**
- * @typedef WPLinkSearchResultAugments
- *
- * @property {{kind: WPKind}} [meta]    Contains kind information.
- * @property {WPKind}         [subtype] Optional subtype if it exists.
- */
-
-/**
- * @typedef {WPLinkSearchResult & WPLinkSearchResultAugments} WPLinkSearchResultAugmented
- */
-
-/**
- * @typedef WPEditorSettings
- *
- * @property {boolean} [ disablePostFormats ] Disables post formats, when true.
- */
-
-/**
- * Fetches link suggestions from the API.
- *
- * @async
- * @param {string}              search
- * @param {WPLinkSearchOptions} [searchOptions]
- * @param {WPEditorSettings}    [settings]
- *
- * @example
- * ```js
- * import { __experimentalFetchLinkSuggestions as fetchLinkSuggestions } from '@wordpress/core-data';
- *
- * //...
- *
- * export function initialize( id, settings ) {
- *
- * settings.__experimentalFetchLinkSuggestions = (
- *     search,
- *     searchOptions
- * ) => fetchLinkSuggestions( search, searchOptions, settings );
- * ```
- * @return {Promise< WPLinkSearchResult[] >} List of search suggestions
- */
-const fetchLinkSuggestions = async (search, searchOptions = {}, settings = {}) => {
-  const {
-    isInitialSuggestions = false,
-    initialSuggestionsSearchOptions = undefined
-  } = searchOptions;
-  const {
-    disablePostFormats = false
-  } = settings;
-  let {
-    type = undefined,
-    subtype = undefined,
-    page = undefined,
-    perPage = isInitialSuggestions ? 3 : 20
-  } = searchOptions;
-
-  /** @type {Promise<WPLinkSearchResult>[]} */
-  const queries = [];
-  if (isInitialSuggestions && initialSuggestionsSearchOptions) {
-    type = initialSuggestionsSearchOptions.type || type;
-    subtype = initialSuggestionsSearchOptions.subtype || subtype;
-    page = initialSuggestionsSearchOptions.page || page;
-    perPage = initialSuggestionsSearchOptions.perPage || perPage;
-  }
-  if (!type || type === 'post') {
-    queries.push(external_wp_apiFetch_default()({
-      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/search', {
-        search,
-        page,
-        per_page: perPage,
-        type: 'post',
-        subtype
-      })
-    }).then(results => {
-      return results.map(result => {
-        return {
-          ...result,
-          meta: {
-            kind: 'post-type',
-            subtype
-          }
-        };
-      });
-    }).catch(() => []) // Fail by returning no results.
-    );
-  }
-
-  if (!type || type === 'term') {
-    queries.push(external_wp_apiFetch_default()({
-      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/search', {
-        search,
-        page,
-        per_page: perPage,
-        type: 'term',
-        subtype
-      })
-    }).then(results => {
-      return results.map(result => {
-        return {
-          ...result,
-          meta: {
-            kind: 'taxonomy',
-            subtype
-          }
-        };
-      });
-    }).catch(() => []) // Fail by returning no results.
-    );
-  }
-
-  if (!disablePostFormats && (!type || type === 'post-format')) {
-    queries.push(external_wp_apiFetch_default()({
-      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/search', {
-        search,
-        page,
-        per_page: perPage,
-        type: 'post-format',
-        subtype
-      })
-    }).then(results => {
-      return results.map(result => {
-        return {
-          ...result,
-          meta: {
-            kind: 'taxonomy',
-            subtype
-          }
-        };
-      });
-    }).catch(() => []) // Fail by returning no results.
-    );
-  }
-
-  if (!type || type === 'attachment') {
-    queries.push(external_wp_apiFetch_default()({
-      path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/media', {
-        search,
-        page,
-        per_page: perPage
-      })
-    }).then(results => {
-      return results.map(result => {
-        return {
-          ...result,
-          meta: {
-            kind: 'media'
-          }
-        };
-      });
-    }).catch(() => []) // Fail by returning no results.
-    );
-  }
-
-  return Promise.all(queries).then(results => {
-    return results.reduce(( /** @type {WPLinkSearchResult[]} */accumulator, current) => accumulator.concat(current),
-    // Flatten list.
-    []).filter(
-    /**
-     * @param {{ id: number }} result
-     */
-    result => {
-      return !!result.id;
-    }).slice(0, perPage).map(( /** @type {WPLinkSearchResultAugmented} */result) => {
-      const isMedia = result.type === 'attachment';
-      return {
-        id: result.id,
-        // @ts-ignore fix when we make this a TS file
-        url: isMedia ? result.source_url : result.url,
-        title: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(isMedia ?
-        // @ts-ignore fix when we make this a TS file
-        result.title.rendered : result.title || '') || (0,external_wp_i18n_namespaceObject.__)('(no title)'),
-        type: result.subtype || result.type,
-        kind: result?.meta?.kind
-      };
-    });
-  });
-};
-/* harmony default export */ var _experimental_fetch_link_suggestions = (fetchLinkSuggestions);
-
-;// CONCATENATED MODULE: ./packages/core-data/build-module/fetch/__experimental-fetch-url-data.js
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * A simple in-memory cache for requests.
- * This avoids repeat HTTP requests which may be beneficial
- * for those wishing to preserve low-bandwidth.
- */
-const CACHE = new Map();
-
-/**
- * @typedef WPRemoteUrlData
- *
- * @property {string} title contents of the remote URL's `<title>` tag.
- */
-
-/**
- * Fetches data about a remote URL.
- * eg: <title> tag, favicon...etc.
- *
- * @async
- * @param {string}  url     the URL to request details from.
- * @param {Object?} options any options to pass to the underlying fetch.
- * @example
- * ```js
- * import { __experimentalFetchUrlData as fetchUrlData } from '@wordpress/core-data';
- *
- * //...
- *
- * export function initialize( id, settings ) {
- *
- * settings.__experimentalFetchUrlData = (
- * url
- * ) => fetchUrlData( url );
- * ```
- * @return {Promise< WPRemoteUrlData[] >} Remote URL data.
- */
-const fetchUrlData = async (url, options = {}) => {
-  const endpoint = '/wp-block-editor/v1/url-details';
-  const args = {
-    url: (0,external_wp_url_namespaceObject.prependHTTP)(url)
-  };
-  if (!(0,external_wp_url_namespaceObject.isURL)(url)) {
-    return Promise.reject(`${url} is not a valid URL.`);
-  }
-
-  // Test for "http" based URL as it is possible for valid
-  // yet unusable URLs such as `tel:123456` to be passed.
-  const protocol = (0,external_wp_url_namespaceObject.getProtocol)(url);
-  if (!protocol || !(0,external_wp_url_namespaceObject.isValidProtocol)(protocol) || !protocol.startsWith('http') || !/^https?:\/\/[^\/\s]/i.test(url)) {
-    return Promise.reject(`${url} does not have a valid protocol. URLs must be "http" based`);
-  }
-  if (CACHE.has(url)) {
-    return CACHE.get(url);
-  }
-  return external_wp_apiFetch_default()({
-    path: (0,external_wp_url_namespaceObject.addQueryArgs)(endpoint, args),
-    ...options
-  }).then(res => {
-    CACHE.set(url, res);
-    return res;
-  });
-};
-/* harmony default export */ var _experimental_fetch_url_data = (fetchUrlData);
-
-;// CONCATENATED MODULE: ./packages/core-data/build-module/fetch/index.js
-
-
-
 ;// CONCATENATED MODULE: ./node_modules/memize/dist/index.js
 /**
  * Memize options object.
@@ -24306,7 +24323,7 @@ function memize(fn, options) {
 
 
 // re-export due to restrictive esModuleInterop setting
-/* harmony default export */ var memoize = (memize);
+/* harmony default export */ const memoize = (memize);
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/hooks/constants.js
 let Status = /*#__PURE__*/function (Status) {
@@ -24916,7 +24933,8 @@ unlock(store).registerPrivateSelectors(private_selectors_namespaceObject);
 
 
 
-}();
+})();
+
 (window.wp = window.wp || {}).coreData = __webpack_exports__;
 /******/ })()
 ;

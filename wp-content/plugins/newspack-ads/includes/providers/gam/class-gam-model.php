@@ -1087,7 +1087,7 @@ final class GAM_Model {
 		$targeting = [];
 
 		// Add site url.
-		$targeting['site'] = \get_bloginfo( 'url' );
+		$targeting['site'] = GAM_Api\Targeting_Keys::sanitize_url( \get_bloginfo( 'url' ) );
 
 		if ( is_singular() ) {
 			// Add the post slug to targeting.
