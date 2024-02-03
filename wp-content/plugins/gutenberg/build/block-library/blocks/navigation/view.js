@@ -1,14 +1,13 @@
-/******/ (function() { // webpackBootstrap
+/******/ (() => { // webpackBootstrap
 /******/ 	"use strict";
 var __webpack_exports__ = {};
 
 ;// CONCATENATED MODULE: external ["wp","interactivity"]
-var external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
+const external_wp_interactivity_namespaceObject = window["wp"]["interactivity"];
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/navigation/constants.js
 const DEFAULT_BLOCK = {
   name: 'core/navigation-link'
 };
-const ALLOWED_BLOCKS = (/* unused pure expression or super */ null && (['core/navigation-link', 'core/search', 'core/social-links', 'core/page-list', 'core/spacer', 'core/home-link', 'core/site-title', 'core/site-logo', 'core/navigation-submenu', 'core/loginout', 'core/buttons']));
 const PRIORITIZED_INSERTER_BLOCKS = (/* unused pure expression or super */ null && (['core/navigation-link/page', 'core/navigation-link']));
 
 // These parameters must be kept aligned with those in
