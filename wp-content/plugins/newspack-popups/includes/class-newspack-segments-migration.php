@@ -423,7 +423,6 @@ final class Newspack_Segments_Migration {
 		// Update user meta so we don't run this again for this user.
 		update_user_meta( $user_id, 'newspack_popups_reader_data_migrated', true );
 	}
-
 }
 
 Newspack_Segments_Migration::init();

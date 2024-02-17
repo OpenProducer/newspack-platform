@@ -90,7 +90,6 @@ final class Customizer {
 		include_once NEWSPACK_ADS_ABSPATH . '/includes/customizer/class-placement-customize-control.php';
 
 		$placements = Placements::get_placements();
-		$capability = Settings::API_CAPABILITY;
 
 		// Register panel.
 		$wp_customize->add_panel(
@@ -114,15 +113,16 @@ final class Customizer {
 					'panel' => 'newspack-ads',
 				]
 			);
-			$wp_customize->add_setting(
-				$setting_id,
-				[
-					'type'              => 'option',
-					'capability'        => $capability,
-					'transport'         => 'postMessage',
-					'sanitize_callback' => [ __CLASS__, 'sanitize' ],
-				]
-			);
+			if ( Settings::can_current_user_manage_settings() ) {
+				$wp_customize->add_setting(
+					$setting_id,
+					[
+						'type'              => 'option',
+						'transport'         => 'postMessage',
+						'sanitize_callback' => [ __CLASS__, 'sanitize' ],
+					]
+				);
+			}
 			$wp_customize->add_control(
 				new Placement_Customize_Control(
 					$wp_customize,

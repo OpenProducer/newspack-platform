@@ -258,8 +258,12 @@ class Woocommerce_Memberships {
 			}
 			$object_ids = $rule->get_object_ids();
 			foreach ( $object_ids as $object_id ) {
-				$subscription_list = new Subscription_List( $object_id );
-				$lists_to_add[]    = $subscription_list->get_form_id();
+				try {
+					$subscription_list = new Subscription_List( $object_id );
+					$lists_to_add[]    = $subscription_list->get_form_id();
+				} catch ( \InvalidArgumentException $e ) {
+					continue;
+				}
 			}
 		}
 

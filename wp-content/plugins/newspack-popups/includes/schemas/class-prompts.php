@@ -7,7 +7,7 @@
 
 namespace Newspack\Campaigns\Schemas;
 
-use \Newspack\Campaigns\Schema;
+use Newspack\Campaigns\Schema;
 use Newspack_Popups_Model;
 
 /**

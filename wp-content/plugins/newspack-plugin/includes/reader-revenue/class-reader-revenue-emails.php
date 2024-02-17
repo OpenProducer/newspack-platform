@@ -107,23 +107,6 @@ class Reader_Revenue_Emails {
 			],
 		];
 
-		$platform = Donations::get_platform_slug();
-		// If using 'Stripe', remove unsupported placeholders.
-		$stripe_unsupported_placeholders = [
-			'*BILLING_FIRST_NAME*',
-			'*BILLING_LAST_NAME*',
-			'*BILLING_FREQUENCY*',
-			'*PRODUCT_NAME*',
-		];
-		if ( 'stripe' === $platform ) {
-			foreach ( $configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'] as $key => $placeholder ) {
-				if ( in_array( $placeholder['template'], $stripe_unsupported_placeholders ) ) {
-					unset( $configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'][ $key ] );
-				}
-			}
-			$configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'] = array_values( $configs[ self::EMAIL_TYPES['RECEIPT'] ]['available_placeholders'] );
-		}
-
 		return $configs;
 	}
 }

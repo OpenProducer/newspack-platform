@@ -3923,6 +3923,7 @@ unlock(store).registerPrivateActions(private_actions_namespaceObject);
  * Internal dependencies
  */
 
+const inputLabel = (0,external_wp_i18n_namespaceObject.__)('Search for commands');
 function CommandMenuLoader({
   name,
   search,
@@ -3943,7 +3944,7 @@ function CommandMenuLoader({
   if (!commands.length) {
     return null;
   }
-  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(Le.List, null, commands.map(command => {
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, commands.map(command => {
     var _command$searchLabel;
     return (0,external_React_namespaceObject.createElement)(Le.Item, {
       key: command.name,
@@ -3963,7 +3964,7 @@ function CommandMenuLoader({
       text: command.label,
       highlight: search
     }))));
-  })));
+  }));
 }
 function CommandMenuLoaderWrapper({
   hook,
@@ -4063,7 +4064,7 @@ function CommandInput({
     ref: commandMenuInput,
     value: search,
     onValueChange: setSearch,
-    placeholder: (0,external_wp_i18n_namespaceObject.__)('Search for commands'),
+    placeholder: inputLabel,
     "aria-activedescendant": selectedItemId,
     icon: search
   });
@@ -4083,6 +4084,7 @@ function CommandMenu() {
     close
   } = (0,external_wp_data_namespaceObject.useDispatch)(store);
   const [loaders, setLoaders] = (0,external_wp_element_namespaceObject.useState)({});
+  const commandListRef = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     registerShortcut({
       name: 'core/commands',
@@ -4094,6 +4096,13 @@ function CommandMenu() {
       }
     });
   }, [registerShortcut]);
+
+  // Temporary fix for the suggestions Listbox labeling.
+  // See https://github.com/pacocoursey/cmdk/issues/196
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    commandListRef.current?.removeAttribute('aria-labelledby');
+    commandListRef.current?.setAttribute('aria-label', (0,external_wp_i18n_namespaceObject.__)('Command suggestions'));
+  }, [commandListRef.current]);
   (0,external_wp_keyboardShortcuts_namespaceObject.useShortcut)('core/commands', /** @type {import('react').KeyboardEventHandler} */
   event => {
     // Bails to avoid obscuring the effect of the preceding handler(s).
@@ -4134,11 +4143,12 @@ function CommandMenu() {
     className: "commands-command-menu",
     overlayClassName: "commands-command-menu__overlay",
     onRequestClose: closeAndReset,
-    __experimentalHideHeader: true
+    __experimentalHideHeader: true,
+    contentLabel: (0,external_wp_i18n_namespaceObject.__)('Command palette')
   }, (0,external_React_namespaceObject.createElement)("div", {
     className: "commands-command-menu__container"
   }, (0,external_React_namespaceObject.createElement)(Le, {
-    label: (0,external_wp_i18n_namespaceObject.__)('Command palette'),
+    label: inputLabel,
     onKeyDown: onKeyDown
   }, (0,external_React_namespaceObject.createElement)("div", {
     className: "commands-command-menu__header"
@@ -4148,7 +4158,9 @@ function CommandMenu() {
     search: search,
     setSearch: setSearch,
     isOpen: isOpen
-  })), (0,external_React_namespaceObject.createElement)(Le.List, null, search && !isLoading && (0,external_React_namespaceObject.createElement)(Le.Empty, null, (0,external_wp_i18n_namespaceObject.__)('No results found.')), (0,external_React_namespaceObject.createElement)(CommandMenuGroup, {
+  })), (0,external_React_namespaceObject.createElement)(Le.List, {
+    ref: commandListRef
+  }, search && !isLoading && (0,external_React_namespaceObject.createElement)(Le.Empty, null, (0,external_wp_i18n_namespaceObject.__)('No results found.')), (0,external_React_namespaceObject.createElement)(CommandMenuGroup, {
     search: search,
     setLoader: setLoader,
     close: closeAndReset,

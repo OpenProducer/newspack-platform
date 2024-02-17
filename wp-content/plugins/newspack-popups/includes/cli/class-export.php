@@ -7,8 +7,8 @@
 
 namespace Newspack\Campaigns\CLI;
 
-use \WP_CLI;
-use \WP_CLI_Command;
+use WP_CLI;
+use WP_CLI_Command;
 use Newspack_Popups_Exporter;
 
 /**
@@ -63,6 +63,5 @@ class Export extends WP_CLI_Command {
 		// translators: %s is the name of the output file.
 		WP_CLI::success( sprintf( __( 'Exported to %s', 'newspack-popups' ), $output ) );
 		WP_CLI::success( __( 'Export complete!', 'newspack-popups' ) );
-
 	}
 }

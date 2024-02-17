@@ -337,6 +337,21 @@ final class Webhooks {
 	}
 
 	/**
+	 * Update a webhook endpoint bearer token.
+	 *
+	 * @param int    $id           Endpoint ID.
+	 * @param string $bearer_token Endpoint bearer token.
+	 *
+	 * @return void|WP_Error Error if endpoint not found.
+	 */
+	public static function update_endpoint_bearer_token( $id, $bearer_token ) {
+		if ( ! get_term( $id, self::ENDPOINT_TAXONOMY ) ) {
+			return new \WP_Error( 'newspack_webhooks_endpoint_not_found', __( 'Webhook endpoint not found.', 'newspack' ) );
+		}
+		\update_term_meta( $id, 'bearer_token', $bearer_token );
+	}
+
+	/**
 	 * Disable a webhook endpoint.
 	 *
 	 * @param int    $id    Endpoint ID.
@@ -374,6 +389,7 @@ final class Webhooks {
 			'actions'        => (array) \get_term_meta( $endpoint->term_id, 'actions', true ),
 			'global'         => (bool) \get_term_meta( $endpoint->term_id, 'global', true ),
 			'label'          => \get_term_meta( $endpoint->term_id, 'label', true ),
+			'bearer_token'   => \get_term_meta( $endpoint->term_id, 'bearer_token', true ),
 			'disabled'       => $disabled,
 			'disabled_error' => $disabled ? \get_term_meta( $endpoint->term_id, 'disabled_error', true ) : null,
 			'system'         => false,
@@ -759,6 +775,29 @@ final class Webhooks {
 			'timeout' => $timeout,
 			'body'    => $body,
 		];
+
+		if ( ! empty( $endpoint['bearer_token'] ) ) {
+			$args['headers']['Authorization'] = 'Bearer ' . $endpoint['bearer_token'];
+		}
+
+		/**
+		 * Filters the request arguments for webhook requests.
+		 *
+		 * @param array $args       Request arguments.
+		 * @param int   $request_id Request ID.
+		 * @param array $endpoint   Endpoint data.
+		 */
+		$args = apply_filters( 'newspack_webhooks_request_args', $args, $request_id, $endpoint );
+
+		/**
+		 * Filters the request URL for webhook requests.
+		 *
+		 * @param string $url        Request URL.
+		 * @param array  $args       Request arguments.
+		 * @param int    $request_id Request ID.
+		 * @param array  $endpoint   Endpoint data.
+		 */
+		$url = apply_filters( 'newspack_webhooks_request_url', $url, $args, $request_id, $endpoint );
 
 		$response = \wp_safe_remote_request( $url, $args );
 		if ( \is_wp_error( $response ) ) {

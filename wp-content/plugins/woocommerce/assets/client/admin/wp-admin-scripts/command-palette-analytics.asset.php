@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('wc-tracks', 'wp-commands', 'wp-data', 'wp-element', 'wp-html-entities', 'wp-i18n', 'wp-plugins', 'wp-primitives', 'wp-url'), 'version' => '9938b03f2571206ca6dc');
+<?php return array('dependencies' => array('wc-tracks', 'wp-commands', 'wp-data', 'wp-element', 'wp-html-entities', 'wp-i18n', 'wp-plugins', 'wp-primitives', 'wp-url'), 'version' => '31152d050316122891df');

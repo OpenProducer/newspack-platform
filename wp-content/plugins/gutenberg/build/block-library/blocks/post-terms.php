@@ -63,7 +63,7 @@ function gutenberg_render_block_core_post_terms( $attributes, $content, $block )
  *
  * @return array The available variations for the block.
  */
-function gutenberg_build_post_term_block_variations() {
+function gutenberg_block_core_post_terms_build_variations() {
 	$taxonomies = get_taxonomies(
 		array(
 			'publicly_queryable' => true,
@@ -116,7 +116,7 @@ function gutenberg_register_block_core_post_terms() {
 		__DIR__ . '/post-terms',
 		array(
 			'render_callback'    => 'gutenberg_render_block_core_post_terms',
-			'variation_callback' => 'gutenberg_build_post_term_block_variations',
+			'variation_callback' => 'gutenberg_block_core_post_terms_build_variations',
 		)
 	);
 }

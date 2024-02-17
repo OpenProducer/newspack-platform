@@ -442,11 +442,9 @@ class Newspack_Popups_Settings {
 					if ( 'publish' !== $campaign->post_status ) {
 						wp_publish_post( $campaign );
 					}
-				} else {
-					if ( 'publish' === $campaign->post_status ) {
+				} elseif ( 'publish' === $campaign->post_status ) {
 						$campaign->post_status = 'draft';
 						wp_update_post( $campaign );
-					}
 				}
 			}
 		}

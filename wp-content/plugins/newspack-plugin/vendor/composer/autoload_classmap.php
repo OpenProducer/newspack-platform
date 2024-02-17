@@ -102,7 +102,6 @@ return array(
     'Newspack\\Starter_Content_Provider' => $baseDir . '/includes/starter_content/class-starter-content-provider.php',
     'Newspack\\Starter_Content_WordPress' => $baseDir . '/includes/starter_content/class-starter-content-wordpress.php',
     'Newspack\\Stripe_Connection' => $baseDir . '/includes/reader-revenue/stripe/class-stripe-connection.php',
-    'Newspack\\Stripe_Webhooks' => $baseDir . '/includes/reader-revenue/stripe/class-stripe-webhooks.php',
     'Newspack\\Syndication_Wizard' => $baseDir . '/includes/wizards/class-syndication-wizard.php',
     'Newspack\\Theme_Manager' => $baseDir . '/includes/class-theme-manager.php',
     'Newspack\\Twitter_Pixel' => $baseDir . '/includes/tracking/class-twitter-pixel.php',

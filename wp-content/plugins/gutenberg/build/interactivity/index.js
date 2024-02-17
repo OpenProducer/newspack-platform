@@ -24,20 +24,12 @@ var __webpack_exports__ = {};
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  Tm: () => (/* reexport */ E),
-  az: () => (/* reexport */ y),
-  Aj: () => (/* reexport */ deepsignal_module_g),
-  XM: () => (/* reexport */ directive),
-  LO: () => (/* reexport */ directivePrefix),
+  iE: () => (/* reexport */ getConfig),
   fw: () => (/* reexport */ getContext),
   sb: () => (/* reexport */ getElement),
-  D_: () => (/* reexport */ getNamespace),
-  y7: () => (/* reexport */ getRegionRootFragment),
-  sY: () => (/* reexport */ q),
+  YH: () => (/* binding */ privateApis),
   h: () => (/* reexport */ store),
-  l2: () => (/* reexport */ toVdom),
   I4: () => (/* reexport */ useCallback),
-  qp: () => (/* reexport */ hooks_module_q),
   d4: () => (/* reexport */ useEffect),
   Dp: () => (/* reexport */ useInit),
   bt: () => (/* reexport */ useLayoutEffect),
@@ -65,97 +57,6 @@ var signals_module_v,signals_module_s;function signals_module_l(n,i){l[n]=i.bind
 ;// CONCATENATED MODULE: ./packages/interactivity/node_modules/deepsignal/dist/deepsignal.module.js
 var deepsignal_module_a=new WeakMap,deepsignal_module_o=new WeakMap,deepsignal_module_s=new WeakMap,deepsignal_module_u=new WeakSet,deepsignal_module_c=new WeakMap,deepsignal_module_i=/^\$/,deepsignal_module_f=Object.getOwnPropertyDescriptor,deepsignal_module_l=!1,deepsignal_module_g=function(e){if(!R(e))throw new Error("This object can't be observed.");return deepsignal_module_o.has(e)||deepsignal_module_o.set(e,deepsignal_module_h(e,deepsignal_module_w)),deepsignal_module_o.get(e)},deepsignal_module_p=function(e,t){deepsignal_module_l=!0;var r=e[t];try{deepsignal_module_l=!1}catch(e){}return r},deepsignal_module_h=function(e,t){var r=new Proxy(e,t);return deepsignal_module_u.add(r),r},deepsignal_module_y=function(){throw new Error("Don't mutate the signals directly.")},deepsignal_module_v=function(e){return function(t,u,c){var g;if(deepsignal_module_l)return Reflect.get(t,u,c);var p=e||"$"===u[0];if(!e&&p&&Array.isArray(t)){if("$"===u)return deepsignal_module_s.has(t)||deepsignal_module_s.set(t,deepsignal_module_h(t,deepsignal_module_m)),deepsignal_module_s.get(t);p="$length"===u}deepsignal_module_a.has(c)||deepsignal_module_a.set(c,new Map);var y=deepsignal_module_a.get(c),v=p?u.replace(deepsignal_module_i,""):u;if(y.has(v)||"function"!=typeof(null==(g=deepsignal_module_f(t,v))?void 0:g.get)){var d=Reflect.get(t,v,c);if(p&&"function"==typeof d)return;if("symbol"==typeof v&&deepsignal_module_b.has(v))return d;y.has(v)||(R(d)&&(deepsignal_module_o.has(d)||deepsignal_module_o.set(d,deepsignal_module_h(d,deepsignal_module_w)),d=deepsignal_module_o.get(d)),y.set(v,signals_core_module_d(d)))}else y.set(v,signals_core_module_(function(){return Reflect.get(t,v,c)}));return p?y.get(v):y.get(v).value}},deepsignal_module_w={get:deepsignal_module_v(!1),set:function(e,n,s,u){var l;if("function"==typeof(null==(l=deepsignal_module_f(e,n))?void 0:l.set))return Reflect.set(e,n,s,u);deepsignal_module_a.has(u)||deepsignal_module_a.set(u,new Map);var g=deepsignal_module_a.get(u);if("$"===n[0]){s instanceof signals_core_module_c||deepsignal_module_y();var p=n.replace(deepsignal_module_i,"");return g.set(p,s),Reflect.set(e,p,s.peek(),u)}var v=s;R(s)&&(deepsignal_module_o.has(s)||deepsignal_module_o.set(s,deepsignal_module_h(s,deepsignal_module_w)),v=deepsignal_module_o.get(s));var m=!(n in e),b=Reflect.set(e,n,s,u);return g.has(n)?g.get(n).value=v:g.set(n,signals_core_module_d(v)),m&&deepsignal_module_c.has(e)&&deepsignal_module_c.get(e).value++,Array.isArray(e)&&g.has("length")&&(g.get("length").value=e.length),b},deleteProperty:function(e,t){"$"===t[0]&&deepsignal_module_y();var r=deepsignal_module_a.get(deepsignal_module_o.get(e)),n=Reflect.deleteProperty(e,t);return r&&r.has(t)&&(r.get(t).value=void 0),deepsignal_module_c.has(e)&&deepsignal_module_c.get(e).value++,n},ownKeys:function(e){return deepsignal_module_c.has(e)||deepsignal_module_c.set(e,signals_core_module_d(0)),deepsignal_module_c._=deepsignal_module_c.get(e).value,Reflect.ownKeys(e)}},deepsignal_module_m={get:deepsignal_module_v(!0),set:deepsignal_module_y,deleteProperty:deepsignal_module_y},deepsignal_module_b=new Set(Object.getOwnPropertyNames(Symbol).map(function(e){return Symbol[e]}).filter(function(e){return"symbol"==typeof e})),deepsignal_module_d=new Set([Object,Array]),R=function(e){return"object"==typeof e&&null!==e&&(!("function"==typeof e.constructor&&e.constructor.name in globalThis&&globalThis[e.constructor.name]===e.constructor)||deepsignal_module_d.has(e.constructor))&&!deepsignal_module_u.has(e)},deepsignal_module_k=function(t){return e(function(){return deepsignal_module_g(t)},[])};//# sourceMappingURL=deepsignal.module.js.map
 
-;// CONCATENATED MODULE: ./packages/interactivity/build-module/portals.js
-/**
- * External dependencies
- */
-
-
-/**
- * @param {import('../../src/index').RenderableProps<{ context: any }>} props
- */
-function ContextProvider(props) {
-  this.getChildContext = () => props.context;
-  return props.children;
-}
-
-/**
- * Portal component
- *
- * @this {import('./internal').Component}
- * @param {object | null | undefined} props
- *
- *                                          TODO: use createRoot() instead of fake root
- */
-function Portal(props) {
-  const _this = this;
-  const container = props._container;
-  _this.componentWillUnmount = function () {
-    q(null, _this._temp);
-    _this._temp = null;
-    _this._container = null;
-  };
-
-  // When we change container we should clear our old container and
-  // indicate a new mount.
-  if (_this._container && _this._container !== container) {
-    _this.componentWillUnmount();
-  }
-
-  // When props.vnode is undefined/false/null we are dealing with some kind of
-  // conditional vnode. This should not trigger a render.
-  if (props._vnode) {
-    if (!_this._temp) {
-      _this._container = container;
-
-      // Create a fake DOM parent node that manages a subset of `container`'s children:
-      _this._temp = {
-        nodeType: 1,
-        parentNode: container,
-        childNodes: [],
-        appendChild(child) {
-          this.childNodes.push(child);
-          _this._container.appendChild(child);
-        },
-        insertBefore(child) {
-          this.childNodes.push(child);
-          _this._container.appendChild(child);
-        },
-        removeChild(child) {
-          this.childNodes.splice(
-          // eslint-disable-next-line no-bitwise
-          this.childNodes.indexOf(child) >>> 1, 1);
-          _this._container.removeChild(child);
-        }
-      };
-    }
-
-    // Render our wrapping element into temp.
-    q(y(ContextProvider, {
-      context: _this.context
-    }, props._vnode), _this._temp);
-  }
-  // When we come from a conditional render, on a mounted
-  // portal we should clear the DOM.
-  else if (_this._temp) {
-    _this.componentWillUnmount();
-  }
-}
-
-/**
- * Create a `Portal` to continue rendering the vnode tree at a different DOM node
- *
- * @param {import('./internal').VNode}         vnode     The vnode to render
- * @param {import('./internal').PreactElement} container The DOM node to continue rendering in to.
- */
-function createPortal(vnode, container) {
-  const el = y(Portal, {
-    _vnode: vnode,
-    _container: container
-  });
-  el.containerInfo = container;
-  return el;
-}
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/store.js
 /**
  * External dependencies
@@ -189,24 +90,21 @@ const deepMerge = (target, source) => {
     }
   }
 };
-const parseInitialState = () => {
+const parseInitialData = () => {
   const storeTag = document.querySelector(`script[type="application/json"]#wp-interactivity-data`);
-  if (!storeTag?.textContent) return {};
-  try {
-    const {
-      state
-    } = JSON.parse(storeTag.textContent);
-    if (isObject(state)) return state;
-    throw Error('Parsed state is not an object');
-  } catch (e) {
-    // eslint-disable-next-line no-console
-    console.log(e);
+  if (storeTag?.textContent) {
+    try {
+      return JSON.parse(storeTag.textContent);
+    } catch (e) {
+      // Do nothing.
+    }
   }
   return {};
 };
 const stores = new Map();
 const rawStores = new Map();
 const storeLocks = new Map();
+const storeConfigs = new Map();
 const objToProxy = new WeakMap();
 const proxyToNs = new WeakMap();
 const scopeToGetters = new WeakMap();
@@ -303,6 +201,14 @@ const handlers = {
     return result;
   }
 };
+
+/**
+ * Get the defined config for the store with the passed namespace.
+ *
+ * @param namespace Store's namespace from which to retrieve the config.
+ * @return Defined config for the given namespace.
+ */
+const getConfig = namespace => storeConfigs.get(namespace || getNamespace()) || {};
 const universalUnlock = 'I acknowledge that using a private store means my plugin will inevitably break on the next store release.';
 
 /**
@@ -396,12 +302,22 @@ function store(namespace, {
   return stores.get(namespace);
 }
 
-// Parse and populate the initial state.
-Object.entries(parseInitialState()).forEach(([namespace, state]) => {
-  store(namespace, {
-    state
+// Parse and populate the initial state and config.
+const data = parseInitialData();
+if (isObject(data?.state)) {
+  Object.entries(data.state).forEach(([namespace, state]) => {
+    store(namespace, {
+      state
+    }, {
+      lock: universalUnlock
+    });
   });
-});
+}
+if (isObject(data?.config)) {
+  Object.entries(data.config).forEach(([namespace, config]) => {
+    storeConfigs.set(namespace, config);
+  });
+}
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/hooks.js
 /* @jsx createElement */
 
@@ -449,7 +365,7 @@ const namespaceStack = [];
  *                  function exists is used.
  * @return The context content.
  */
-const getContext = namespace => getScope()?.context[namespace || namespaceStack.slice(-1)[0]];
+const getContext = namespace => getScope()?.context[namespace || getNamespace()];
 
 /**
  * Retrieves a representation of the element where a function from the store
@@ -917,6 +833,18 @@ const createRootFragment = (parent, replaceNode) => {
     }
   };
 };
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/utils/kebab-to-camelcase.js
+/**
+ * Transforms a kebab-case string to camelCase.
+ *
+ * @param {string} str The kebab-case string to transform to camelCase.
+ * @return {string} The transformed camelCase string.
+ */
+function kebabToCamelCase(str) {
+  return str.replace(/^-+|-+$/g, '').toLowerCase().replace(/-([a-z])/g, function (match, group1) {
+    return group1.toUpperCase();
+  });
+}
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/directives.js
 /* @jsx createElement */
 
@@ -1011,31 +939,29 @@ const getGlobalEventDirective = type => ({
     } = inheritedContext;
     const inheritedValue = hooks_module_q(inheritedContext);
     const currentValue = hooks_module_(deepsignal_module_g({}));
-    const passedValues = context.map(({
-      value
-    }) => value);
+    const defaultEntry = context.find(({
+      suffix
+    }) => suffix === 'default');
     currentValue.current = hooks_module_F(() => {
-      const newValue = context.map(c => deepsignal_module_g({
-        [c.namespace]: c.value
-      })).reduceRight(mergeDeepSignals);
+      if (!defaultEntry) return null;
+      const {
+        namespace,
+        value
+      } = defaultEntry;
+      const newValue = deepsignal_module_g({
+        [namespace]: value
+      });
       mergeDeepSignals(newValue, inheritedValue);
       mergeDeepSignals(currentValue.current, newValue, true);
       return currentValue.current;
-    }, [inheritedValue, ...passedValues]);
-    return y(Provider, {
-      value: currentValue.current
-    }, children);
+    }, [inheritedValue, defaultEntry]);
+    if (currentValue.current) {
+      return y(Provider, {
+        value: currentValue.current
+      }, children);
+    }
   }, {
     priority: 5
-  });
-
-  // data-wp-body
-  directive('body', ({
-    props: {
-      children
-    }
-  }) => {
-    return createPortal(children, document.body);
   });
 
   // data-wp-watch--[name]
@@ -1088,21 +1014,19 @@ const getGlobalEventDirective = type => ({
   // data-wp-class--[classname]
   directive('class', ({
     directives: {
-      class: className
+      class: classNames
     },
     element,
     evaluate
   }) => {
-    className.filter(({
+    classNames.filter(({
       suffix
     }) => suffix !== 'default').forEach(entry => {
-      const name = entry.suffix;
-      const result = evaluate(entry, {
-        className: name
-      });
+      const className = entry.suffix;
+      const result = evaluate(entry);
       const currentClass = element.props.class || '';
-      const classFinder = new RegExp(`(^|\\s)${name}(\\s|$)`, 'g');
-      if (!result) element.props.class = currentClass.replace(classFinder, ' ').trim();else if (!classFinder.test(currentClass)) element.props.class = currentClass ? `${currentClass} ${name}` : name;
+      const classFinder = new RegExp(`(^|\\s)${className}(\\s|$)`, 'g');
+      if (!result) element.props.class = currentClass.replace(classFinder, ' ').trim();else if (!classFinder.test(currentClass)) element.props.class = currentClass ? `${currentClass} ${className}` : className;
       useInit(() => {
         /*
          * This seems necessary because Preact doesn't change the class
@@ -1110,15 +1034,15 @@ const getGlobalEventDirective = type => ({
          * need deps because it only needs to do it the first time.
          */
         if (!result) {
-          element.ref.current.classList.remove(name);
+          element.ref.current.classList.remove(className);
         } else {
-          element.ref.current.classList.add(name);
+          element.ref.current.classList.add(className);
         }
       });
     });
   });
 
-  // data-wp-style--[style-key]
+  // data-wp-style--[style-prop]
   directive('style', ({
     directives: {
       style
@@ -1129,13 +1053,11 @@ const getGlobalEventDirective = type => ({
     style.filter(({
       suffix
     }) => suffix !== 'default').forEach(entry => {
-      const key = entry.suffix;
-      const result = evaluate(entry, {
-        key
-      });
+      const styleProp = entry.suffix;
+      const result = evaluate(entry);
       element.props.style = element.props.style || {};
       if (typeof element.props.style === 'string') element.props.style = cssStringToObject(element.props.style);
-      if (!result) delete element.props.style[key];else element.props.style[key] = result;
+      if (!result) delete element.props.style[styleProp];else element.props.style[styleProp] = result;
       useInit(() => {
         /*
          * This seems necessary because Preact doesn't change the styles on
@@ -1143,9 +1065,9 @@ const getGlobalEventDirective = type => ({
          * because it only needs to do it the first time.
          */
         if (!result) {
-          element.ref.current.style.removeProperty(key);
+          element.ref.current.style.removeProperty(styleProp);
         } else {
-          element.ref.current.style[key] = result;
+          element.ref.current.style[styleProp] = result;
         }
       });
     });
@@ -1179,7 +1101,10 @@ const getGlobalEventDirective = type => ({
          * property excluding the following special cases. We follow Preact's
          * logic: https://github.com/preactjs/preact/blob/ea49f7a0f9d1ff2c98c0bdd66aa0cbc583055246/src/diff/props.js#L110-L129
          */
-        if (attribute !== 'width' && attribute !== 'height' && attribute !== 'href' && attribute !== 'list' && attribute !== 'form' &&
+        if (attribute === 'style') {
+          if (typeof result === 'string') el.style.cssText = result;
+          return;
+        } else if (attribute !== 'width' && attribute !== 'height' && attribute !== 'href' && attribute !== 'list' && attribute !== 'form' &&
         /*
          * The value for `tabindex` follows the parsing rules for an
          * integer. If that fails, or if the attribute isn't present, then
@@ -1284,7 +1209,7 @@ const getGlobalEventDirective = type => ({
     const list = evaluate(entry);
     return list.map(item => {
       const mergedContext = deepsignal_module_g({});
-      const itemProp = suffix === 'default' ? 'item' : suffix;
+      const itemProp = suffix === 'default' ? 'item' : kebabToCamelCase(suffix);
       const newValue = deepsignal_module_g({
         [namespace]: {
           [itemProp]: item
@@ -1349,11 +1274,15 @@ const directiveParser = new RegExp(`^data-${directivePrefix}-` +
 const nsPathRegExp = /^([\w-_\/]+)::(.+)$/;
 const hydratedIslands = new WeakSet();
 
-// Recursive function that transforms a DOM tree into vDOM.
+/**
+ * Recursive function that transforms a DOM tree into vDOM.
+ *
+ * @param {Node} root The root element or node to start traversing on.
+ * @return {import('preact').VNode[]} The resulting vDOM tree.
+ */
 function toVdom(root) {
   const treeWalker = document.createTreeWalker(root, 205 // ELEMENT + TEXT + COMMENT + CDATA_SECTION + PROCESSING_INSTRUCTION
   );
-
   function walk(node) {
     const {
       attributes,
@@ -1390,7 +1319,7 @@ function toVdom(root) {
           if (n === islandAttr) {
             var _value$namespace;
             island = true;
-            namespaces.push((_value$namespace = value?.namespace) !== null && _value$namespace !== void 0 ? _value$namespace : null);
+            namespaces.push(typeof value === 'string' ? value : (_value$namespace = value?.namespace) !== null && _value$namespace !== void 0 ? _value$namespace : null);
           } else {
             directives.push([n, ns, value]);
           }
@@ -1460,18 +1389,37 @@ const getRegionRootFragment = region => {
   }
   return regionRootFragments.get(region);
 };
+function yieldToMain() {
+  return new Promise(resolve => {
+    // TODO: Use scheduler.yield() when available.
+    setTimeout(resolve, 0);
+  });
+}
+
+// Initial vDOM regions associated with its DOM element.
+const initialVdom = new WeakMap();
 
 // Initialize the router with the initial DOM.
 const init = async () => {
-  document.querySelectorAll(`[data-${directivePrefix}-interactive]`).forEach(node => {
+  const nodes = document.querySelectorAll(`[data-${directivePrefix}-interactive]`);
+  for (const node of nodes) {
     if (!hydratedIslands.has(node)) {
+      await yieldToMain();
       const fragment = getRegionRootFragment(node);
       const vdom = toVdom(node);
+      initialVdom.set(node, vdom);
+      await yieldToMain();
       B(vdom, fragment);
     }
-  });
+  }
 };
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/index.js
+/**
+ * External dependencies
+ */
+
+
+
 /**
  * Internal dependencies
  */
@@ -1484,26 +1432,34 @@ const init = async () => {
 
 
 
-
-
+const requiredConsent = 'I acknowledge that using private APIs means my theme or plugin will inevitably break in the next version of WordPress.';
+const privateApis = lock => {
+  if (lock === requiredConsent) {
+    return {
+      directivePrefix: directivePrefix,
+      getRegionRootFragment: getRegionRootFragment,
+      initialVdom: initialVdom,
+      toVdom: toVdom,
+      directive: directive,
+      getNamespace: getNamespace,
+      h: y,
+      cloneElement: E,
+      render: q,
+      deepSignal: deepsignal_module_g
+    };
+  }
+  throw new Error('Forbidden access.');
+};
 document.addEventListener('DOMContentLoaded', async () => {
   directives();
   await init();
 });
-var __webpack_exports__cloneElement = __webpack_exports__.Tm;
-var __webpack_exports__createElement = __webpack_exports__.az;
-var __webpack_exports__deepSignal = __webpack_exports__.Aj;
-var __webpack_exports__directive = __webpack_exports__.XM;
-var __webpack_exports__directivePrefix = __webpack_exports__.LO;
+var __webpack_exports__getConfig = __webpack_exports__.iE;
 var __webpack_exports__getContext = __webpack_exports__.fw;
 var __webpack_exports__getElement = __webpack_exports__.sb;
-var __webpack_exports__getNamespace = __webpack_exports__.D_;
-var __webpack_exports__getRegionRootFragment = __webpack_exports__.y7;
-var __webpack_exports__render = __webpack_exports__.sY;
+var __webpack_exports__privateApis = __webpack_exports__.YH;
 var __webpack_exports__store = __webpack_exports__.h;
-var __webpack_exports__toVdom = __webpack_exports__.l2;
 var __webpack_exports__useCallback = __webpack_exports__.I4;
-var __webpack_exports__useContext = __webpack_exports__.qp;
 var __webpack_exports__useEffect = __webpack_exports__.d4;
 var __webpack_exports__useInit = __webpack_exports__.Dp;
 var __webpack_exports__useLayoutEffect = __webpack_exports__.bt;
@@ -1512,4 +1468,4 @@ var __webpack_exports__useRef = __webpack_exports__.sO;
 var __webpack_exports__useState = __webpack_exports__.eJ;
 var __webpack_exports__useWatch = __webpack_exports__.qo;
 var __webpack_exports__withScope = __webpack_exports__.$e;
-export { __webpack_exports__cloneElement as cloneElement, __webpack_exports__createElement as createElement, __webpack_exports__deepSignal as deepSignal, __webpack_exports__directive as directive, __webpack_exports__directivePrefix as directivePrefix, __webpack_exports__getContext as getContext, __webpack_exports__getElement as getElement, __webpack_exports__getNamespace as getNamespace, __webpack_exports__getRegionRootFragment as getRegionRootFragment, __webpack_exports__render as render, __webpack_exports__store as store, __webpack_exports__toVdom as toVdom, __webpack_exports__useCallback as useCallback, __webpack_exports__useContext as useContext, __webpack_exports__useEffect as useEffect, __webpack_exports__useInit as useInit, __webpack_exports__useLayoutEffect as useLayoutEffect, __webpack_exports__useMemo as useMemo, __webpack_exports__useRef as useRef, __webpack_exports__useState as useState, __webpack_exports__useWatch as useWatch, __webpack_exports__withScope as withScope };
+export { __webpack_exports__getConfig as getConfig, __webpack_exports__getContext as getContext, __webpack_exports__getElement as getElement, __webpack_exports__privateApis as privateApis, __webpack_exports__store as store, __webpack_exports__useCallback as useCallback, __webpack_exports__useEffect as useEffect, __webpack_exports__useInit as useInit, __webpack_exports__useLayoutEffect as useLayoutEffect, __webpack_exports__useMemo as useMemo, __webpack_exports__useRef as useRef, __webpack_exports__useState as useState, __webpack_exports__useWatch as useWatch, __webpack_exports__withScope as withScope };

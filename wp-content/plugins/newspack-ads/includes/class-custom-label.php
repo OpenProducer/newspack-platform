@@ -104,6 +104,5 @@ final class Custom_Label {
 		</style>
 		<?php
 	}
-
 }
 Custom_Label::init();

@@ -32,10 +32,19 @@ class Mailchimp {
 	 * Register handlers.
 	 */
 	public static function register_handlers() {
-		if ( Reader_Activation::is_enabled() && true === Reader_Activation::get_setting( 'sync_esp' ) ) {
+		if ( ! method_exists( 'Newspack_Newsletters', 'service_provider' ) ) {
+			return;
+		}
+		if (
+			Reader_Activation::is_enabled() &&
+			true === Reader_Activation::get_setting( 'sync_esp' ) &&
+			'mailchimp' === \Newspack_Newsletters::service_provider()
+		) {
 			Data_Events::register_handler( [ __CLASS__, 'reader_registered' ], 'reader_registered' );
-			Data_Events::register_handler( [ __CLASS__, 'donation_new' ], 'donation_new' );
-			Data_Events::register_handler( [ __CLASS__, 'donation_subscription_new' ], 'donation_subscription_new' );
+			Data_Events::register_handler( [ __CLASS__, 'reader_logged_in' ], 'reader_logged_in' );
+			Data_Events::register_handler( [ __CLASS__, 'order_completed' ], 'order_completed' );
+			Data_Events::register_handler( [ __CLASS__, 'subscription_updated' ], 'donation_subscription_changed' );
+			Data_Events::register_handler( [ __CLASS__, 'subscription_updated' ], 'product_subscription_changed' );
 		}
 	}
 
@@ -165,29 +174,32 @@ class Mailchimp {
 	/**
 	 * Update a Mailchimp contact
 	 *
-	 * @param string $email Email address.
-	 * @param array  $data  Data to update.
+	 * @param array $contact Contact info to sync to ESP without lists.
 	 *
 	 * @return array|WP_Error response body or error.
 	 */
-	public static function put( $email, $data = [] ) {
+	public static function put( $contact ) {
 		$audience_id = self::get_audience_id();
 		if ( ! $audience_id ) {
 			return;
 		}
-		$hash    = md5( strtolower( $email ) );
+		$hash    = md5( strtolower( $contact['email'] ) );
 		$payload = [
-			'email_address' => $email,
+			'email_address' => $contact['email'],
 			'status_if_new' => 'transactional',
 		];
 
-		$merge_fields = self::get_merge_fields( $audience_id, $data );
-		if ( ! empty( $merge_fields ) ) {
-			$payload['merge_fields'] = $merge_fields;
+		// Normalize contact metadata.
+		$contact = Newspack_Newsletters::normalize_contact_data( $contact );
+		if ( ! empty( $contact['metadata'] ) ) {
+			$merge_fields = self::get_merge_fields( $audience_id, $contact['metadata'] );
+			if ( ! empty( $merge_fields ) ) {
+				$payload['merge_fields'] = $merge_fields;
+			}
 		}
 
 		Logger::log(
-			'Syncing contact with metadata key(s): ' . implode( ', ', array_keys( $data ) ) . '.',
+			'Syncing contact with metadata key(s): ' . implode( ', ', array_keys( $contact['metadata'] ) ) . '.',
 			Data_Events::LOGGER_HEADER
 		);
 
@@ -206,7 +218,6 @@ class Mailchimp {
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
 	public static function reader_registered( $timestamp, $data, $client_id ) {
-		$prefix                = Newspack_Newsletters::get_metadata_prefix();
 		$account_key           = Newspack_Newsletters::get_metadata_key( 'account' );
 		$registration_date_key = Newspack_Newsletters::get_metadata_key( 'registration_date' );
 		$metadata              = [
@@ -214,76 +225,96 @@ class Mailchimp {
 			$registration_date_key => gmdate( Newspack_Newsletters::METADATA_DATE_FORMAT, $timestamp ),
 		];
 		if ( isset( $data['metadata']['current_page_url'] ) ) {
-			$metadata[ $prefix . 'Registration Page' ] = $data['metadata']['current_page_url'];
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_page' ) ] = $data['metadata']['current_page_url'];
 		}
 		if ( isset( $data['metadata']['registration_method'] ) ) {
-			$metadata[ $prefix . 'Registration Method' ] = $data['metadata']['registration_method'];
+			$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_method' ) ] = $data['metadata']['registration_method'];
 		}
-		self::put( $data['email'], $metadata );
+		$contact = [
+			'email'    => $data['email'],
+			'metadata' => $metadata,
+		];
+		self::put( $contact );
 	}
 
 	/**
-	 * Handle a donation being made.
+	 * Sync reader data on login.
 	 *
 	 * @param int   $timestamp Timestamp of the event.
 	 * @param array $data      Data associated with the event.
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
-	public static function donation_new( $timestamp, $data, $client_id ) {
+	public static function reader_logged_in( $timestamp, $data, $client_id ) {
+		if ( empty( $data['email'] ) || empty( $data['user_id'] ) ) {
+			return;
+		}
+
+		$customer = new \WC_Customer( $data['user_id'] );
+
+		// If user is not a Woo customer, don't need to sync them.
+		if ( ! $customer->get_order_count() ) {
+			return;
+		}
+
+		$last_order = $customer->get_last_order();
+		$contact    = WooCommerce_Connection::get_contact_from_order( $last_order );
+
+		self::put( $contact );
+	}
+
+	/**
+	 * Handle a completed order of any type.
+	 *
+	 * @param int   $timestamp Timestamp of the event.
+	 * @param array $data      Data associated with the event.
+	 * @param int   $client_id ID of the client that triggered the event.
+	 */
+	public static function order_completed( $timestamp, $data, $client_id ) {
 		if ( ! isset( $data['platform_data']['order_id'] ) ) {
 			return;
 		}
 
 		$order_id = $data['platform_data']['order_id'];
-		$contact  = WooCommerce_Connection::get_contact_from_order( $order_id );
+		$contact  = WooCommerce_Connection::get_contact_from_order( $order_id, false, true );
 
 		if ( ! $contact ) {
 			return;
 		}
 
-		$email         = $contact['email'];
-		$metadata      = $contact['metadata'];
-		$keys          = Newspack_Newsletters::$metadata_keys;
-		$prefixed_keys = array_map(
-			function( $key ) {
-				return Newspack_Newsletters::get_metadata_key( $key );
-			},
-			array_values( array_flip( $keys ) )
-		);
-
-		// Only use metadata defined in 'Newspack_Newsletters'.
-		$metadata = array_intersect_key( $metadata, array_flip( $prefixed_keys ) );
-
-		// Remove "product name" from metadata, we'll use
-		// 'donation_subscription_new' action for this data.
-		unset( $metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] );
-
-		self::put( $email, $metadata );
+		self::put( $contact );
 	}
 
 	/**
-	 * Handle a new subscription.
+	 * Handle a change in subscription status.
 	 *
 	 * @param int   $timestamp Timestamp of the event.
 	 * @param array $data      Data associated with the event.
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
-	public static function donation_subscription_new( $timestamp, $data, $client_id ) {
-		if ( empty( $data['platform_data']['order_id'] ) ) {
+	public static function subscription_updated( $timestamp, $data, $client_id ) {
+		if ( empty( $data['subscription_id'] ) || empty( $data['status_before'] ) || empty( $data['status_after'] ) ) {
 			return;
 		}
-		$account_key  = Newspack_Newsletters::get_metadata_key( 'account' );
-		$metadata     = [
-			$account_key => $data['user_id'],
-		];
-		$order_id     = $data['platform_data']['order_id'];
-		$product_id   = Donations::get_order_donation_product_id( $order_id );
-		$product_name = get_the_title( $product_id );
 
-		$key              = Newspack_Newsletters::get_metadata_key( 'product_name' );
-		$metadata[ $key ] = $product_name;
+		/*
+		 * If the subscription is being activated after a successful first or renewal payment,
+		 * the contact will be synced when that order is completed, so no need to sync again.
+		 */
+		if (
+			( 'pending' === $data['status_before'] || 'on-hold' === $data['status_before'] ) &&
+			'active' === $data['status_after'] ) {
+			return;
+		}
 
-		self::put( $data['email'], $metadata );
+		$subscription = \wcs_get_subscription( $data['subscription_id'] );
+		$order        = $subscription->get_last_order( 'all' );
+		$contact      = WooCommerce_Connection::get_contact_from_order( $order );
+
+		if ( ! $contact ) {
+			return;
+		}
+
+		self::put( $contact );
 	}
 }
 new Mailchimp();

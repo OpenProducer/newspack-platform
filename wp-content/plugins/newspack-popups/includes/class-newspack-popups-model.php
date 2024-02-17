@@ -656,7 +656,7 @@ final class Newspack_Popups_Model {
 				default:
 					$popup['options']['trigger_blocks_count'] = 0;
 					break;
-			};
+			}
 
 			return $popup;
 		}
@@ -671,7 +671,7 @@ final class Newspack_Popups_Model {
 				default:
 					$popup['options']['trigger_scroll_progress'] = 0;
 					break;
-			};
+			}
 			if ( ! in_array( $popup['options']['placement'], self::$overlay_placements, true ) ) {
 				$popup['options']['placement'] = 'center';
 			}

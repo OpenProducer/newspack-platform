@@ -150,6 +150,42 @@ class Newspack_Newsletters {
 				},
 				$raw_keys
 			);
+
+			// Capture UTM params and signup/payment page URLs as meta for registration or payment.
+			if (
+				isset( $contact['metadata']['current_page_url'] ) ||
+				isset( $contact['metadata'][ self::get_metadata_key( 'current_page_url' ) ] ) ||
+				isset( $contact['metadata']['payment_page'] ) ||
+				isset( $contact['metadata'][ self::get_metadata_key( 'payment_page' ) ] )
+			) {
+				$is_payment = isset( $contact['metadata']['payment_page'] ) || isset( $contact['metadata'][ self::get_metadata_key( 'payment_page' ) ] );
+				$raw_url    = false;
+				if ( $is_payment ) {
+					$raw_url = isset( $contact['metadata']['payment_page'] ) ? $contact['metadata']['payment_page'] : $contact['metadata'][ self::get_metadata_key( 'payment_page' ) ];
+				} else {
+					$raw_url = isset( $contact['metadata']['current_page_url'] ) ? $contact['metadata']['current_page_url'] : $contact['metadata'][ self::get_metadata_key( 'current_page_url' ) ];
+				}
+
+				$parsed_url = \wp_parse_url( $raw_url );
+
+				// Maybe set UTM meta.
+				if ( ! empty( $parsed_url['query'] ) ) {
+					$utm_key_prefix = $is_payment ? 'payment_page_utm' : 'signup_page_utm';
+					$params         = [];
+					\wp_parse_str( $parsed_url['query'], $params );
+					foreach ( $params as $param => $value ) {
+						$param = \sanitize_text_field( $param );
+						if ( 'utm' === substr( $param, 0, 3 ) ) {
+							$param = str_replace( 'utm_', '', $param );
+							$key   = self::get_metadata_key( $utm_key_prefix ) . $param;
+							if ( ! isset( $contact['metadata'][ $key ] ) ) {
+								$contact['metadata'][ $key ] = $value;
+							}
+						}
+					}
+				}
+			}
+
 			foreach ( $contact['metadata'] as $meta_key => $meta_value ) {
 				if ( self::should_sync_ras_metadata() ) {
 					if ( in_array( $meta_key, $raw_keys, true ) ) {

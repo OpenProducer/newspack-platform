@@ -155,10 +155,9 @@ class WooCommerce_Cli {
 			];
 
 			$subscription->add_fee( $fee );
-			$subscription->legacy_set_total( $new_total );
 			$subscription->add_order_note( 'Subscription fee fixed and added via script' );
 			update_post_meta( $subscription->get_id(), '_newspack_fixed_subscription_fees', 1 );
-			// No need to save, we don't want to trigger any hooks.
+			$subscription->calculate_totals( false );
 
 			WP_CLI::success( 'Subscription #' . $subscription->get_id() . ' fixed.' );
 			WP_CLI::log( '' );

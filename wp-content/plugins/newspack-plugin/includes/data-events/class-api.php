@@ -42,7 +42,11 @@ final class Api {
 				'callback'            => [ __CLASS__, 'test_url' ],
 				'permission_callback' => [ __CLASS__, 'permission_callback' ],
 				'args'                => [
-					'url' => [
+					'url'          => [
+						'type'              => 'string',
+						'sanitize_callback' => 'sanitize_text_field',
+					],
+					'bearer_token' => [
 						'type'              => 'string',
 						'sanitize_callback' => 'sanitize_text_field',
 					],
@@ -114,24 +118,28 @@ final class Api {
 	 */
 	private static function get_endpoint_args() {
 		return [
-			'url'      => [
+			'url'          => [
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
-			'actions'  => [
+			'actions'      => [
 				'type'  => 'array',
 				'items' => [
 					'type'              => 'string',
 					'sanitize_callback' => 'sanitize_text_field',
 				],
 			],
-			'global'   => [
+			'global'       => [
 				'type' => 'boolean',
 			],
-			'disabled' => [
+			'disabled'     => [
 				'type' => 'boolean',
 			],
-			'label'    => [
+			'label'        => [
+				'type'              => 'string',
+				'sanitize_callback' => 'sanitize_text_field',
+			],
+			'bearer_token' => [
 				'type'              => 'string',
 				'sanitize_callback' => 'sanitize_text_field',
 			],
@@ -153,7 +161,8 @@ final class Api {
 	 * @param WP_REST_Request $request Request object.
 	 */
 	public static function test_url( $request ) {
-		$url = $request->get_param( 'url' );
+		$url          = $request->get_param( 'url' );
+		$bearer_token = $request->get_param( 'bearer_token' );
 		if ( empty( $url ) || \esc_url_raw( $url, [ 'https' ] ) !== $url ) {
 			return \rest_ensure_response(
 				[
@@ -163,20 +172,23 @@ final class Api {
 				]
 			);
 		}
-		$body     = [
+		$body = [
 			'request_id' => 0,
 			'timestamp'  => time(),
 			'action'     => 'test',
 			'data'       => [ 'test' => true ],
 			'client_id'  => 'test',
 		];
-		$args     = [
+		$args = [
 			'method'  => 'POST',
 			'headers' => [
 				'Content-Type' => 'application/json',
 			],
 			'body'    => \wp_json_encode( $body ),
 		];
+		if ( $bearer_token ) {
+			$args['headers']['Authorization'] = 'Bearer ' . $bearer_token;
+		}
 		$response = \wp_safe_remote_request( $url, $args );
 		$code     = \wp_remote_retrieve_response_code( $response );
 		$message  = \wp_remote_retrieve_response_message( $response );
@@ -269,6 +281,9 @@ final class Api {
 		}
 		if ( is_string( $request->get_param( 'label' ) ) ) {
 			Webhooks::update_endpoint_label( $endpoint['id'], $request->get_param( 'label' ) );
+		}
+		if ( is_string( $request->get_param( 'bearer_token' ) ) ) {
+			Webhooks::update_endpoint_bearer_token( $endpoint['id'], $request->get_param( 'bearer_token' ) );
 		}
 		if ( \is_wp_error( $endpoint ) ) {
 			return $endpoint;

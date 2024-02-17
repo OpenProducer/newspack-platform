@@ -140,6 +140,8 @@ return array(
     'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Provider' => $baseDir . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Provider.php',
     'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Template' => $baseDir . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Template.php',
     'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Provider' => $baseDir . '/src/Events/Integrations/Plugins/Event_Tickets/Provider.php',
+    'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Site_Health\\Controller' => $baseDir . '/src/Events/Integrations/Plugins/Event_Tickets/Site_Health/Controller.php',
+    'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Site_Health\\Subsection' => $baseDir . '/src/Events/Integrations/Plugins/Event_Tickets/Site_Health/Subsection.php',
     'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => $baseDir . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
     'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Controller' => $baseDir . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Controller.php',
     'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Passes\\Apple_Wallet\\Event_Modifier' => $baseDir . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Passes/Apple_Wallet/Event_Modifier.php',

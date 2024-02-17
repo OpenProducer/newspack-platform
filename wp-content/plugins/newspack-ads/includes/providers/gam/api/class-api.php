@@ -85,13 +85,13 @@ class Api {
 	public function __construct( $auth_method_or_session, $credentials = null, $network_code = null ) {
 
 		if ( false === self::is_environment_compatible() ) {
-			throw new \Exception( __( 'The environment is not compatible with the GAM API.', 'newspack-ads' ) );
+			throw new \Exception( esc_html__( 'The environment is not compatible with the GAM API.', 'newspack-ads' ) );
 		}
 
 		if ( 'string' === gettype( $auth_method_or_session ) ) {
 			$auth_method = $auth_method_or_session;
 			if ( ! in_array( $auth_method, [ 'oauth2', 'service_account' ], true ) ) {
-				throw new \Exception( __( 'Invalid authentication method.', 'newspack-ads' ) );
+				throw new \Exception( esc_html__( 'Invalid authentication method.', 'newspack-ads' ) );
 			}
 			$this->auth_method = $auth_method;
 			$this->credentials = $credentials;
@@ -275,7 +275,7 @@ class Api {
 		$networks     = $this->get_networks( $session );
 		$network_code = $this->network_code;
 		if ( empty( $networks ) ) {
-			throw new \Exception( __( 'Missing GAM Ad network.', 'newspack-ads' ) );
+			throw new \Exception( esc_html__( 'Missing GAM Ad network.', 'newspack-ads' ) );
 		}
 		if ( $network_code ) {
 			foreach ( $networks as $network ) {

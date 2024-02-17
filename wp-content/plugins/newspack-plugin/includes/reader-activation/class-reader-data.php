@@ -34,16 +34,14 @@ final class Reader_Data {
 		add_action( 'wp', [ __CLASS__, 'setup_reader_activity' ] );
 		add_action( 'wp_enqueue_scripts', [ __CLASS__, 'config_script' ] );
 
-		/* Update reader data items on event dispatches */
-		add_action( 'newspack_data_event_dispatch_newsletter_subscribed', [ __CLASS__, 'update_newsletter_subscribed_lists' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_newsletter_updated', [ __CLASS__, 'update_newsletter_subscribed_lists' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_donation_new', [ __CLASS__, 'set_is_donor' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_donation_subscription_cancelled', [ __CLASS__, 'set_is_former_donor' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_product_subscription_active', [ __CLASS__, 'update_active_subscriptions' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_product_subscription_inactive', [ __CLASS__, 'update_active_subscriptions' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_membership_status_active', [ __CLASS__, 'update_active_memberships' ], 10, 2 );
-		add_action( 'newspack_data_event_dispatch_membership_status_inactive', [ __CLASS__, 'update_active_memberships' ], 10, 2 );
-
+		/* Update reader data items on data event dispatches */
+		Data_Events::register_handler( [ __CLASS__, 'update_newsletter_subscribed_lists' ], 'newsletter_subscribed' );
+		Data_Events::register_handler( [ __CLASS__, 'update_newsletter_subscribed_lists' ], 'newsletter_updated' );
+		Data_Events::register_handler( [ __CLASS__, 'set_is_donor' ], 'donation_new' );
+		Data_Events::register_handler( [ __CLASS__, 'set_is_former_donor' ], 'donation_subscription_cancelled' );
+		Data_Events::register_handler( [ __CLASS__, 'update_active_subscriptions' ], 'product_subscription_changed' );
+		Data_Events::register_handler( [ __CLASS__, 'update_active_memberships' ], 'membership_status_active' );
+		Data_Events::register_handler( [ __CLASS__, 'update_active_memberships' ], 'membership_status_inactive' );
 		Data_Events::register_handler( [ __CLASS__, 'check_newsletter_subscription' ], 'reader_logged_in' );
 		Data_Events::register_handler( [ __CLASS__, 'check_product_subscriptions' ], 'reader_logged_in' );
 		Data_Events::register_handler( [ __CLASS__, 'check_memberships' ], 'reader_logged_in' );
@@ -397,13 +395,13 @@ final class Reader_Data {
 	 * @param array $data      Data.
 	 */
 	public static function update_active_subscriptions( $timestamp, $data ) {
-		if ( empty( $data['user_id'] ) || empty( $data['subscription_id'] ) || empty( $data['product_ids'] ) ) {
+		if ( empty( $data['user_id'] ) || empty( $data['subscription_id'] ) || empty( $data['product_ids'] ) || empty( $data['status_after'] ) ) {
 			return;
 		}
 
 		$existing_subscriptions = self::get_data( $data['user_id'], 'active_subscriptions' );
 		$active_subscriptions   = $existing_subscriptions ? json_decode( $existing_subscriptions ) : [];
-		if ( empty( $data['status_after'] ) || 'active' === $data['status_after'] ) {
+		if ( 'active' === $data['status_after'] ) {
 			$active_subscriptions = array_merge( $active_subscriptions, $data['product_ids'] );
 		} else {
 			$active_subscriptions = array_values( array_diff( $active_subscriptions, $data['product_ids'] ) );
@@ -439,10 +437,10 @@ final class Reader_Data {
 		if ( empty( $active_subscriptions ) ) {
 			return;
 		}
-		
+
 		$subscription_products = [];
 		foreach ( $active_subscriptions as $subscription ) {
-			$subscription_products = array_merge( $subscription_products, \Newspack\WooCommerce_Connection::get_products_for_subscription( $subscription->get_id() ) );
+			$subscription_products = array_merge( $subscription_products, \Newspack\WooCommerce_Connection::get_products_for_order( $subscription->get_id() ) );
 		}
 		$subscription_products = array_values( array_unique( $subscription_products ) );
 		self::update_item( $data['user_id'], 'active_subscriptions', $subscription_products );

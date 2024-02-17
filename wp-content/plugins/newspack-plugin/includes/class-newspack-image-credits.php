@@ -44,6 +44,7 @@ class Newspack_Image_Credits {
 		add_filter( 'render_block', [ __CLASS__, 'add_credit_to_image_block' ], 10, 2 );
 		add_filter( 'wp_get_attachment_image_src', [ __CLASS__, 'maybe_show_placeholder_image' ], 11, 4 );
 		add_filter( 'ajax_query_attachments_args', [ __CLASS__, 'filter_ajax_query_attachments' ] );
+		add_filter( 'wp_generate_attachment_metadata', [ __CLASS__, 'populate_credit' ], 10, 3 );
 	}
 
 	/**
@@ -476,6 +477,28 @@ class Newspack_Image_Credits {
 		$post_ids          = array_map( 'absint', $post_ids );
 		$clauses['where'] .= " OR ( {$wpdb->posts}.ID IN ( " . implode( ',', $post_ids ) . ' ) )';
 		return $clauses;
+	}
+
+	/**
+	 * When a new image is uploaded, check if it has a credit in the EXIF/IPTC data and save it.
+	 *
+	 * @param array  $metadata      An array of attachment meta data.
+	 * @param int    $attachment_id Current attachment ID.
+	 * @param string $context       Additional context. Can be 'create' when metadata was initially created for new attachment
+	 *                              or 'update' when the metadata was updated.
+	 * @return array
+	 */
+	public static function populate_credit( $metadata, $attachment_id, $context ) {
+
+		if ( 'create' !== $context ) {
+			return $metadata;
+		}
+
+		if ( ! empty( $metadata['image_meta']['credit'] ) ) {
+			update_post_meta( $attachment_id, self::MEDIA_CREDIT_META, $metadata['image_meta']['credit'] );
+		}
+
+		return $metadata;
 	}
 }
 Newspack_Image_Credits::init();

@@ -145,7 +145,7 @@ class Plugin_Manager {
 			],
 			'newspack-popups'             => [
 				'Name'        => esc_html__( 'Newspack Campaigns', 'newspack' ),
-				'Description' => esc_html__( 'AMP-compatible overlay and inline Campaigns.', 'newspack' ),
+				'Description' => esc_html__( 'Build persuasive call-to-action prompts from scratch and display them as overlays, inline with the story, or above the site header.', 'newspack-plugin' ),
 				'Author'      => esc_html__( 'Automattic', 'newspack' ),
 				'PluginURI'   => esc_url( 'https://newspack.com' ),
 				'AuthorURI'   => esc_url( 'https://automattic.com' ),

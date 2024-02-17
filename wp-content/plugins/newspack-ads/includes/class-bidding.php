@@ -85,7 +85,7 @@ final class Bidding {
 					[
 						'increment' => 0.5,
 						'max'       => 20,
-					],  
+					],
 				],
 			],
 			'dense'  => [
@@ -190,11 +190,11 @@ final class Bidding {
 			return;
 		}
 		wp_enqueue_script(
-			self::PREBID_SCRIPT_HANDLE,  
+			self::PREBID_SCRIPT_HANDLE,
 			plugins_url( '../dist/prebid.js', __FILE__ ),
 			null,
 			filemtime( dirname( NEWSPACK_ADS_PLUGIN_FILE ) . '/dist/prebid.js' ),
-			true 
+			true
 		);
 		add_filter(
 			'script_loader_tag',
@@ -502,7 +502,7 @@ final class Bidding {
 	 *
 	 * @return boolean Whether the bidder adapter is enabled.
 	 */
-	public static function is_bidder_enabled( $bidder_id ) { 
+	public static function is_bidder_enabled( $bidder_id ) {
 		$enabled_bidders = Settings::get_setting( self::SETTINGS_SECTION_NAME, 'enabled_bidders', [] );
 		return in_array( $bidder_id, $enabled_bidders );
 	}
@@ -626,7 +626,7 @@ final class Bidding {
 					];
 				},
 				array_keys( $this->bidders ),
-				array_values( $this->bidders ) 
+				array_values( $this->bidders )
 			),
 		];
 	}
@@ -707,7 +707,7 @@ final class Bidding {
  *
  * @return string[] Associative array containing a bidder key and name.
  */
-function get_bidders() {
+function get_bidders() { // phpcs:ignore Universal.Files.SeparateFunctionsFromOO.Mixed
 	return $GLOBALS['newspack_ads_bidding']->get_bidders();
 }
 

@@ -175,12 +175,6 @@ final class Recaptcha {
 				$settings['use_captcha'] = $stripe_settings['useCaptcha'];
 				$settings['site_key']    = $stripe_settings['captchaSiteKey'];
 				$settings['site_secret'] = $stripe_settings['captchaSiteSecret'];
-
-				// Delete the legacy settings from Stripe settings and apply the settings to the return value.
-				unset( $stripe_settings['useCaptcha'] );
-				unset( $stripe_settings['captchaSiteKey'] );
-				unset( $stripe_settings['captchaSiteSecret'] );
-				Stripe_Connection::update_stripe_data( $stripe_settings );
 			}
 		}
 

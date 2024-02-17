@@ -1,3 +1,36 @@
+## [2.30.1](https://github.com/Automattic/newspack-popups/compare/v2.30.0...v2.30.1) (2024-02-06)
+
+
+### Reverts
+
+* Revert "feat: use custom capability_type for the CPT (#1259)" ([9366118](https://github.com/Automattic/newspack-popups/commit/9366118c2c41c228f617d0f3bad7d10820d688db)), closes [#1259](https://github.com/Automattic/newspack-popups/issues/1259)
+
+# [2.30.0](https://github.com/Automattic/newspack-popups/compare/v2.29.1...v2.30.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* prompts and segments schema ([#1260](https://github.com/Automattic/newspack-popups/issues/1260)) ([25e02ec](https://github.com/Automattic/newspack-popups/commit/25e02ec6d90b9953aa8bbeb639844b81bc2401c8))
+
+
+### Features
+
+* use custom capability_type for the CPT ([#1259](https://github.com/Automattic/newspack-popups/issues/1259)) ([1d01212](https://github.com/Automattic/newspack-popups/commit/1d01212c54b8307ff0150242ffa0d8b787f9e9ea))
+
+# [2.30.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.29.2-alpha.1...v2.30.0-alpha.1) (2024-02-01)
+
+
+### Features
+
+* use custom capability_type for the CPT ([#1259](https://github.com/Automattic/newspack-popups/issues/1259)) ([1d01212](https://github.com/Automattic/newspack-popups/commit/1d01212c54b8307ff0150242ffa0d8b787f9e9ea))
+
+## [2.29.2-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.29.1...v2.29.2-alpha.1) (2024-01-26)
+
+
+### Bug Fixes
+
+* prompts and segments schema ([#1260](https://github.com/Automattic/newspack-popups/issues/1260)) ([25e02ec](https://github.com/Automattic/newspack-popups/commit/25e02ec6d90b9953aa8bbeb639844b81bc2401c8))
+
 ## [2.29.1](https://github.com/Automattic/newspack-popups/compare/v2.29.0...v2.29.1) (2024-01-25)
 
 

@@ -18,17 +18,11 @@ class Media_Partners {
 	 * Initialize everything.
 	 */
 	public static function init() {
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-			include_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
 		if ( ! Settings::is_optional_module_active( 'media-partners' ) ) {
 			return;
 		}
 
-		add_action( 'admin_init', [ __CLASS__, 'switch_from_standalone_plugin' ] );
 		add_action( 'init', [ __CLASS__, 'register_taxonomies' ] );
-
 		add_action( 'partner_add_form_fields', [ __CLASS__, 'add_partner_meta_fields' ] );
 		add_action( 'partner_edit_form_fields', [ __CLASS__, 'edit_partner_meta_fields' ] );
 		add_action( 'after-partner-table', [ __CLASS__, 'add_global_settings' ] );
@@ -37,16 +31,6 @@ class Media_Partners {
 		add_action( 'init', [ __CLASS__, 'add_partners_shortcode' ] );
 		add_action( 'admin_init', [ __CLASS__, 'handle_settings_update' ] );
 		add_filter( 'the_content', [ __CLASS__, 'add_content_partner_logo' ] );
-	}
-
-	/**
-	 * If the standalone plugin is active, deactivate it and activate as a module.
-	 */
-	public static function switch_from_standalone_plugin() {
-		if ( is_plugin_active( 'newspack-media-partners/newspack-media-partners.php' ) ) {
-			deactivate_plugins( 'newspack-media-partners/newspack-media-partners.php' );
-			Settings::activate_optional_module( 'media-partners' );
-		}
 	}
 
 	/**

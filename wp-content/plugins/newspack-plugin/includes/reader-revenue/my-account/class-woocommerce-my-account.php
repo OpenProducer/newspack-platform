@@ -8,7 +8,7 @@
 namespace Newspack;
 
 use Newspack\Reader_Activation;
-use \WP_Error;
+use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -16,8 +16,6 @@ defined( 'ABSPATH' ) || exit;
  * Connection with WooCommerce's "My Account" page.
  */
 class WooCommerce_My_Account {
-	const BILLING_ENDPOINT             = 'billing';
-	const STRIPE_CUSTOMER_ID_USER_META = '_newspack_stripe_customer_id';
 	const RESET_PASSWORD_URL_PARAM     = 'reset-password';
 	const DELETE_ACCOUNT_URL_PARAM     = 'delete-account';
 	const DELETE_ACCOUNT_FORM          = 'delete-account-form';
@@ -25,20 +23,11 @@ class WooCommerce_My_Account {
 	const AFTER_ACCOUNT_DELETION_PARAM = 'account-deleted';
 
 	/**
-	 * Cached Stripe customer ID of the current user.
-	 *
-	 * @var string
-	 */
-	private static $stripe_customer_id = null;
-
-	/**
 	 * Initialize.
 	 *
 	 * @codeCoverageIgnore
 	 */
 	public static function init() {
-		\add_action( 'init', [ __CLASS__, 'add_rewrite_endpoints' ] );
-		\add_action( 'woocommerce_account_' . self::BILLING_ENDPOINT . '_endpoint', [ __CLASS__, 'render_billing_template' ] );
 		\add_filter( 'woocommerce_account_menu_items', [ __CLASS__, 'my_account_menu_items' ], 1000 );
 		\add_filter( 'woocommerce_billing_fields', [ __CLASS__, 'edit_address_required_fields' ] );
 
@@ -54,6 +43,7 @@ class WooCommerce_My_Account {
 			\add_action( 'template_redirect', [ __CLASS__, 'edit_account_prevent_email_update' ] );
 			\add_action( 'init', [ __CLASS__, 'restrict_account_content' ], 100 );
 			\add_filter( 'woocommerce_save_account_details_required_fields', [ __CLASS__, 'remove_required_fields' ] );
+			\add_action( 'template_redirect', [ __CLASS__, 'verify_saved_account_details' ] );
 			\add_action( 'logout_redirect', [ __CLASS__, 'add_param_after_logout' ] );
 			\add_action( 'template_redirect', [ __CLASS__, 'show_message_after_logout' ] );
 		}
@@ -64,6 +54,22 @@ class WooCommerce_My_Account {
 	 */
 	public static function enqueue_scripts() {
 		if ( function_exists( 'is_account_page' ) && is_account_page() ) {
+			\wp_enqueue_script(
+				'my-account',
+				\Newspack\Newspack::plugin_url() . '/dist/my-account.js',
+				[],
+				NEWSPACK_PLUGIN_VERSION,
+				true
+			);
+			\wp_localize_script(
+				'my-account',
+				'newspack_my_account',
+				[
+					'labels' => [
+						'cancel_subscription_message' => __( 'Are you sure you want to cancel this subscription?', 'newspack-plugin' ),
+					],
+				]
+			);
 			\wp_enqueue_style(
 				'my-account',
 				\Newspack\Newspack::plugin_url() . '/dist/my-account.css',
@@ -74,19 +80,11 @@ class WooCommerce_My_Account {
 	}
 
 	/**
-	 * Filter "My Account" items, if Stripe is the donations platform.
+	 * Filter "My Account" items.
 	 *
 	 * @param array $items Items.
 	 */
 	public static function my_account_menu_items( $items ) {
-		// If the user has a Stripe customer ID, they're a Stripe customer (regardless of the donations platform).
-		// Add a nav item for Stripe's billing portal.
-		$stripe_customer_id = self::get_current_user_stripe_id();
-		if ( false !== $stripe_customer_id ) {
-			$custom_endpoints = [ self::BILLING_ENDPOINT => __( 'Billing', 'newspack-plugin' ) ];
-			$items            = array_slice( $items, 0, 1, true ) + $custom_endpoints + array_slice( $items, 1, null, true );
-		}
-
 		$default_disabled_items = [];
 
 		// Rename 'Logout' action to 'Log out', for grammatical reasons.
@@ -108,21 +106,6 @@ class WooCommerce_My_Account {
 
 			$default_disabled_items = array_merge( $default_disabled_items, [ 'dashboard', 'members-area' ] );
 			$customer_id            = \get_current_user_id();
-			if ( function_exists( 'wcs_user_has_subscription' ) && function_exists( 'wcs_get_subscriptions' ) ) {
-				$user_subscriptions             = wcs_get_subscriptions( [ 'customer_id' => $customer_id ] );
-				$has_non_newspack_subscriptions = false;
-				foreach ( $user_subscriptions as $subscription ) {
-					if ( ! $subscription->get_meta( WooCommerce_Connection::SUBSCRIPTION_STRIPE_ID_META_KEY ) ) {
-						$has_non_newspack_subscriptions = true;
-						break;
-					}
-				}
-				// Unless user has any subscriptions that aren't tied to a Stripe subscription by Newspack, hide the subscriptions link.
-				// The Stripe-tied subscriptions will be available for management in the "Billing" section.
-				if ( ! $has_non_newspack_subscriptions ) {
-					$default_disabled_items[] = 'subscriptions';
-				}
-			}
 			if ( class_exists( 'WC_Customer' ) ) {
 				$ignored_fields   = [ 'first_name', 'last_name', 'email' ];
 				$customer         = new \WC_Customer( $customer_id );
@@ -139,24 +122,14 @@ class WooCommerce_My_Account {
 					$default_disabled_items[] = 'edit-address';
 				}
 			}
-			if ( function_exists( 'wc_get_orders' ) ) {
-				$wc_non_newspack_orders = array_filter(
-					\wc_get_orders( [ 'customer' => $customer_id ] ),
-					function ( $order ) {
-						return WooCommerce_Connection::CREATED_VIA_NAME !== $order->get_created_via();
-					}
-				);
-				if ( empty( $wc_non_newspack_orders ) ) {
-					$default_disabled_items = array_merge( $default_disabled_items, [ 'orders', 'payment-methods' ] );
-				}
-			}
 			if ( function_exists( 'wc_get_customer_available_downloads' ) ) {
+				$customer_id           = \get_current_user_id();
 				$wc_customer_downloads = \wc_get_customer_available_downloads( $customer_id );
-
 				if ( empty( $wc_customer_downloads ) ) {
 					$default_disabled_items[] = 'downloads';
 				}
 			}
+
 			$disabled_wc_menu_items = \apply_filters( 'newspack_my_account_disabled_pages', $default_disabled_items );
 			foreach ( $disabled_wc_menu_items as $key ) {
 				if ( isset( $items[ $key ] ) ) {
@@ -377,91 +350,56 @@ class WooCommerce_My_Account {
 	}
 
 	/**
-	 * Get current user's Stripe customer ID.
-	 */
-	private static function get_current_user_stripe_id() {
-		if ( self::$stripe_customer_id ) {
-			return self::$stripe_customer_id;
-		}
-		$user_id               = \get_current_user_id();
-		$user_meta_customer_id = \get_user_meta( $user_id, Stripe_Connection::STRIPE_CUSTOMER_ID_USER_META, true );
-		if ( $user_meta_customer_id ) {
-			self::$stripe_customer_id = $user_meta_customer_id;
-			return $user_meta_customer_id;
-		}
-		$customer_orders     = \wc_get_orders(
-			[
-				'customer_id' => $user_id,
-				'created_via' => WooCommerce_Connection::CREATED_VIA_NAME,
-				'limit'       => -1,
-			]
-		);
-		$stripe_customer_ids = [];
-		foreach ( $customer_orders as $order ) {
-			$stripe_customer_id = $order->get_meta( '_stripe_customer_id' );
-			if ( $stripe_customer_id ) {
-				$stripe_customer_ids[] = $stripe_customer_id;
-			}
-		}
-		array_unique( $stripe_customer_ids );
-		if ( empty( $stripe_customer_ids ) ) {
-			self::$stripe_customer_id = false;
-		} else {
-			self::$stripe_customer_id = $stripe_customer_ids[0];
-			\update_user_meta( $user_id, Stripe_Connection::STRIPE_CUSTOMER_ID_USER_META, self::$stripe_customer_id );
-		}
-		return self::$stripe_customer_id;
-	}
-
-	/**
-	 * Render custom "My Account" page.
-	 */
-	public static function render_billing_template() {
-		$stripe_customer_id        = self::get_current_user_stripe_id();
-		$stripe_billing_portal_url = Stripe_Connection::get_billing_portal_url( $stripe_customer_id );
-		$error_message             = false;
-		if ( \is_wp_error( $stripe_billing_portal_url ) ) {
-			$error_message = $stripe_billing_portal_url->get_error_message();
-			Logger::error( 'Error getting Stripe billing portal URL: ' . \wp_json_encode( $stripe_billing_portal_url ) );
-		}
-
-		include dirname( NEWSPACK_PLUGIN_FILE ) . '/includes/reader-revenue/templates/myaccount-billing.php';
-	}
-
-	/**
-	 * Add the necessary endpoints to rewrite rules.
-	 */
-	public static function add_rewrite_endpoints() {
-		$has_set_up_custom_billing_endpoint = \get_option( '_newspack_has_set_up_custom_billing_endpoint' );
-		if ( ! Donations::is_platform_stripe() ) {
-			if ( $has_set_up_custom_billing_endpoint ) {
-				\delete_option( '_newspack_has_set_up_custom_billing_endpoint' );
-				\flush_rewrite_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
-				Logger::log( 'Flushed rewrite rules to remove Stripe billing endpoint' );
-			}
-			return;
-		}
-		\add_rewrite_endpoint( self::BILLING_ENDPOINT, EP_PAGES );
-		if ( ! $has_set_up_custom_billing_endpoint ) {
-			\flush_rewrite_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
-			Logger::log( 'Flushed rewrite rules to add Stripe billing endpoint' );
-			\update_option( '_newspack_has_set_up_custom_billing_endpoint', true );
-		}
-	}
-
-	/**
 	 * Remove WC's required fields.
 	 *
 	 * @param array $required_fields Required fields.
 	 */
 	public static function remove_required_fields( $required_fields ) {
 		if ( Donations::is_platform_wc() ) {
-			return [
-				'account_display_name' => __( 'Display name', 'newspack-plugin' ),
+			$newspack_required_fields = [
 				'account_email'        => __( 'Email address', 'newspack-plugin' ),
+				'account_display_name' => __( 'Display name', 'newspack-plugin' ),
 			];
+
+			/**
+			 * Filters the fields required when editing account details in My Account.
+			 *
+			 * @param array $newspack_required_fields Required fields, keyed by field name.
+			 */
+			return \apply_filters( 'newspack_myaccount_required_fields', $newspack_required_fields );
 		}
-		return [];
+		return $required_fields;
+	}
+
+	/**
+	 * Intercept account details saved by the reader in My Account.
+	 */
+	public static function verify_saved_account_details() {
+		$action       = filter_input( INPUT_POST, 'action', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$display_name = filter_input( INPUT_POST, 'account_display_name', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		$email        = filter_input( INPUT_POST, 'account_email', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+
+		if ( empty( $action ) || 'save_account_details' !== $action || empty( $display_name ) || empty( $email ) ) {
+			return;
+		}
+
+		$user_id = \get_current_user_id();
+		if ( $user_id <= 0 ) {
+			return;
+		}
+
+		$user = \get_user_by( 'id', $user_id );
+		if ( ! Reader_Activation::is_user_reader( $user ) || $user->data->user_email !== $email ) {
+			return false;
+		}
+
+		// If the reader has intentionally saved a display name we consider generic, mark it as such.
+		if (
+			Reader_Activation::generate_user_nicename( $email ) === $display_name || // New generated construction (URL-sanitized version of the email address minus domain).
+			Reader_Activation::strip_email_domain( $email ) === $display_name // Legacy generated construction (just the email address minus domain).
+		) {
+			\update_user_meta( $user_id, Reader_Activation::READER_SAVED_GENERIC_DISPLAY_NAME, 1 );
+		}
 	}
 
 	/**
@@ -520,6 +458,10 @@ class WooCommerce_My_Account {
 	 * Restrict account content for unverified readers.
 	 */
 	public static function restrict_account_content() {
+		if ( defined( 'NEWSPACK_ALLOW_MY_ACCOUNT_ACCESS_WITHOUT_VERIFICATION' ) && NEWSPACK_ALLOW_MY_ACCOUNT_ACCESS_WITHOUT_VERIFICATION ) {
+			return;
+		}
+
 		if ( \is_user_logged_in() && ! self::is_user_verified() ) {
 			\remove_all_actions( 'woocommerce_account_content' );
 			\add_action(
@@ -536,8 +478,7 @@ class WooCommerce_My_Account {
 	 */
 	public static function edit_account_prevent_email_update() {
 		if (
-			! Donations::is_platform_stripe()
-			|| empty( $_POST['account_email'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
+			empty( $_POST['account_email'] ) // phpcs:ignore WordPress.Security.NonceVerification.Missing
 			|| ! \is_user_logged_in()
 			|| ! Reader_Activation::is_enabled()
 		) {
