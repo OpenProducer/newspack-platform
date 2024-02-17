@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.84.0-alpha.1
+Version: 1.84.1-alpha.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -28,6 +28,10 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   --newspack-theme-color-highlight: #fed850;
   --newspack-theme-color-primary-darken-5: #1a53ff;
   --newspack-theme-color-primary-darken-10: #0040ff;
+  --newspack-theme-color-primary-against-white: var( --newspack-theme-color-primary );
+  --newspack-theme-color-secondary-against-white: var( --newspack-theme-color-secondary );
+  --newspack-theme-color-against-primary: #fff;
+  --newspack-theme-color-against-secondary: #fff;
   --newspack-theme-color-bg-body: #fff;
   --newspack-theme-color-bg-input: var( --newspack-theme-color-bg-body );
   --newspack-theme-color-bg-light: #f0f0f0;
@@ -42,7 +46,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   --newspack-theme-color-text-hover: var( --newspack-theme-color-bg-dark-lighten-5 );
   --newspack-theme-color-text-screen: #21759b;
   --newspack-theme-color-link: var( --newspack-theme-color-secondary );
-  --newspack-theme-color-link-hover: var( --newspack-theme-color-secondary-variation );
+  --newspack-theme-color-link-hover: var( --newspack-theme-color-secondary-variation-against-white );
   --newspack-theme-color-border: #ccc;
   --newspack-theme-color-border-light: #e0e0e0;
   --newspack-theme-color-alert-yellow: #f0b849;
@@ -899,7 +903,7 @@ input[type=submit],
   border-radius: 5px;
   box-sizing: border-box;
   display: inline-block;
-  color: var(--newspack-theme-color-bg-body);
+  color: var(--newspack-theme-color-against-secondary);
   font-family: var(--newspack-theme-font-heading);
   font-size: var(--newspack-theme-font-size-sm);
   font-weight: 700;
@@ -1015,7 +1019,7 @@ input[type=checkbox] {
   background: white;
   border: solid 1px var(--newspack-theme-color-border);
   border-radius: 2px;
-  color: white;
+  color: var(--newspack-theme-color-against-secondary);
   cursor: pointer;
   display: inline-grid;
   font: inherit;
@@ -1025,7 +1029,7 @@ input[type=checkbox] {
   width: 20px !important;
 }
 input[type=checkbox]::before {
-  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z' fill='white'%3E%3C/path%3E%3C/svg%3E") 100% 0 no-repeat;
+  background: transparent url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='24' height='24'%3E%3Cpath d='M16.7 7.1l-6.3 8.5-3.3-2.5-.9 1.2 4.5 3.4L17.9 8z' fill='white' %3E%3C/path%3E%3C/svg%3E") 100% 0 no-repeat;
   content: "";
   display: block;
   height: 24px;
@@ -1070,7 +1074,7 @@ input[type=checkbox]:disabled {
   top: 2px;
 }
 .search-form button:active, .search-form button:hover, .search-form button:focus {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
 }
 
 .amp-wp-default-form-message p {
@@ -1384,7 +1388,7 @@ a:focus {
 body.h-db.h-dh .site-header .nav3 .menu-highlight a {
   background-color: var(--newspack-theme-color-primary);
   border: 0;
-  color: var(--newspack-theme-color-bg-body);
+  color: var(--newspack-theme-color-against-primary);
 }
 body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   background-color: var(--newspack-theme-color-text-main);
@@ -1440,7 +1444,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin-left: 0.5rem;
 }
 .highlight-menu .menu-label {
-  color: var(--newspack-theme-color-secondary);
+  color: var(--newspack-theme-color-secondary-against-white);
   font-weight: bold;
 }
 .highlight-menu a,
@@ -1801,7 +1805,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .subpage-sidebar nav + nav,
 .subpage-sidebar nav + .widget,
 .subpage-sidebar .widget + .widget {
-  border-top: 1px solid #fff;
+  border-top: 1px solid var(--newspack-theme-color-against-primary);
 }
 .mobile-sidebar nav + nav,
 .subpage-sidebar nav + nav {
@@ -1850,11 +1854,12 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 
 .mobile-sidebar {
   background-color: var(--newspack-theme-color-primary);
-  color: #fff;
+  color: var(--newspack-theme-color-against-primary);
 }
 .mobile-sidebar a,
-.mobile-sidebar .nav1 .sub-menu > li > a {
-  color: #fff;
+.mobile-sidebar .nav1 .sub-menu > li > a,
+.mobile-sidebar .nav3 a {
+  color: var(--newspack-theme-color-against-primary);
 }
 .mobile-sidebar a:hover,
 .mobile-sidebar a:visited,
@@ -2648,7 +2653,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 .h-sb .middle-header-contain,
 .h-sb .middle-header-contain .nav1 .main-menu > li,
 .h-sb .middle-header-contain .nav1 .main-menu > li > a {
-  color: #fff;
+  color: var(--newspack-theme-color-against-primary);
 }
 .h-sb .top-header-contain {
   background-color: var(--newspack-theme-color-primary-darken-5);
@@ -2893,6 +2898,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .h-sub-cta.h-sub.single-featured-image-beside div.middle-header-contain {
     background: rgba(0, 0, 0, 0.5);
     background: linear-gradient(-180deg, rgba(0, 0, 0, 0.85) 0%, rgba(0, 0, 0, 0) 100%);
+    color: #fff;
     max-width: 100%;
     width: 100%;
   }
@@ -3043,14 +3049,14 @@ amp-script .cat-links {
   font-weight: bold;
 }
 .entry-meta .byline a {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
   text-decoration: none;
 }
 .entry-meta .byline a:visited {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
 }
 .entry-meta .byline a:hover {
-  color: var(--newspack-theme-color-primary-variation);
+  color: var(--newspack-theme-color-primary-variation-against-white);
 }
 .entry-meta .posted-on a,
 .entry-meta .posted-on a:visited {
@@ -3071,7 +3077,7 @@ amp-script .cat-links {
   margin-left: 0;
 }
 .entry-footer a {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
 }
 .entry-footer .edit-link {
   font-size: var(--newspack-theme-font-size-sm);
@@ -3110,10 +3116,14 @@ amp-script .cat-links {
   color: inherit;
   display: block;
   font-size: 0.8em;
-  transition: color 110ms ease-in-out;
   margin: 0.5em 0;
+  transition: color 110ms ease-in-out;
+}
+.entry-content .more-link:hover {
+  color: var(--newspack-theme-color-link-hover);
 }
 .entry-content a {
+  color: var(--newspack-theme-color-secondary-against-white);
   text-decoration: underline;
 }
 .entry-content a:hover, .entry-content a:active {
@@ -3150,9 +3160,10 @@ amp-script .cat-links {
 }
 
 .entry .entry-content a.button {
+  color: var(--newspack-theme-color-against-secondary);
   text-decoration: none;
 }
-.entry .entry-content a.button, .entry .entry-content a.button:hover {
+.entry .entry-content a.button:hover {
   color: var(--newspack-theme-color-bg-body);
 }
 
@@ -3368,7 +3379,7 @@ div.sharedaddy {
   margin: 0.5em 0;
 }
 .author-bio .author-link {
-  color: var(--newspack-theme-color-secondary);
+  color: var(--newspack-theme-color-secondary-against-white);
   font-size: var(--newspack-theme-font-size-sm);
   font-weight: bold;
   text-decoration: none;
@@ -3530,6 +3541,10 @@ div.sharedaddy {
   }
   .h-db .featured-image-beside {
     background-color: var(--newspack-theme-color-primary);
+    color: var(--newspack-theme-color-against-primary);
+  }
+  .h-db .featured-image-beside .entry-header {
+    color: var(--newspack-theme-color-against-primary);
   }
   .h-sb .featured-image-beside {
     background-color: #333;
@@ -3949,12 +3964,12 @@ div.sharedaddy {
   color: inherit;
 }
 .comment .comment-author .fn a:hover {
-  color: var(--newspack-theme-color-primary-variation);
+  color: var(--newspack-theme-color-primary-against-white);
 }
 .comment .comment-author .post-author-badge {
   background: var(--newspack-theme-color-primary);
   border-radius: 100%;
-  color: #fff;
+  color: var(--newspack-theme-color-against-primary);
   display: inline-block;
   height: 16px;
   line-height: 16px;
@@ -3989,7 +4004,7 @@ div.sharedaddy {
 }
 .comment .comment-metadata > a:hover,
 .comment .comment-metadata .comment-edit-link:hover {
-  color: var(--newspack-theme-color-primary-variation);
+  color: var(--newspack-theme-color-primary-against-white);
   text-decoration: none;
 }
 .comment .comment-metadata > * {
@@ -4015,7 +4030,7 @@ div.sharedaddy {
   z-index: 1;
 }
 .comment .comment-metadata .comment-edit-link:hover {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
 }
 .comment .comment-content {
   margin: 1rem 0;
@@ -4142,7 +4157,7 @@ div.sharedaddy {
 }
 .comments-toggle:hover, .comments-toggle:focus {
   background: transparent;
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
 }
 
 .comments-hide + .comments-toggle svg {
@@ -4243,7 +4258,7 @@ div.sharedaddy {
 }
 
 .archive .page-title {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
 }
 @media only screen and (min-width: 782px) {
   .archive:not(.paged).feature-latest article.has-post-thumbnail:first-of-type {
@@ -4432,6 +4447,7 @@ div.sharedaddy {
   display: block;
 }
 .site-info a:hover {
+  color: var(--newspack-theme-color-primary-against-white);
   text-decoration: none;
 }
 .site-info a,
@@ -5495,13 +5511,16 @@ p.has-background {
 .wp-block-buttons {
   --wp--style--block-gap: 0.5rem;
 }
+.wp-block-buttons .wp-block-button__link {
+  color: var(--newspack-theme-color-against-secondary);
+}
 
 .wp-block-button__link {
   background-color: var(--newspack-theme-color-secondary);
-  color: #fff;
   transition: background 150ms ease-in-out;
   border: none;
   border-radius: 5px;
+  color: var(--newspack-theme-color-against-secondary);
   font-family: var(--newspack-theme-font-heading);
   font-size: var(--newspack-theme-font-size-sm);
   line-height: var(--newspack-theme-font-line-height-heading);
@@ -5548,7 +5567,7 @@ p.has-background {
 .wp-block-button__link.is-style-outline,
 .is-style-outline > .wp-block-button__link:not(.has-text-color),
 .wp-block-button.is-style-outline > .wp-block-button__link:not(.has-text-color) {
-  color: var(--newspack-theme-color-secondary);
+  color: var(--newspack-theme-color-secondary-against-white);
 }
 
 .wp-block-button .wp-block-button__link:hover, .wp-block-button .wp-block-button__link:active, .wp-block-button .wp-block-button__link:focus, .wp-block-button.wp-block-button__link:hover, .wp-block-button.wp-block-button__link:active, .wp-block-button.wp-block-button__link:focus {
@@ -5813,7 +5832,7 @@ hr.has-background.is-style-dots::before {
   text-decoration: none;
   font-weight: bold;
   padding: 0.75rem 1rem;
-  color: #fff;
+  color: var(--newspack-theme-color-against-secondary);
   margin-right: 0;
   margin-top: calc( 0.75 * 1rem );
 }
@@ -7572,6 +7591,15 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
 .h-sb .bottom-header-contain {
   background-color: var(--newspack-theme-color-bg-dark-darken-5);
 }
+.h-sb .site-header,
+.h-sb .site-title a,
+.h-sb .site-title a:visited,
+.h-sb .site-description,
+.h-sb .middle-header-contain,
+.h-sb .middle-header-contain .nav1 .main-menu > li,
+.h-sb .middle-header-contain .nav1 .main-menu > li > a {
+  color: #fff;
+}
 
 @media only screen and (min-width: 782px) {
   .h-sub.h-sb.single-featured-image-beside .middle-header-contain {
@@ -7598,7 +7626,7 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
 #secondary .widgettitle,
 .article-section-title,
 .cat-links {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
   margin-bottom: 1rem;
   text-align: center;
 }
@@ -7694,7 +7722,7 @@ cite i {
 
 .has-drop-cap:not(:focus)::first-letter {
   background-color: var(--newspack-theme-color-primary);
-  color: #fff;
+  color: var(--newspack-theme-color-against-primary);
   font-family: var(--newspack-theme-font-heading);
   font-weight: bold;
   font-size: var(--newspack-theme-font-size-xxl);
@@ -7825,7 +7853,7 @@ cite i {
     color: var(--newspack-theme-color-text-main);
   }
   .h-sb .featured-image-beside .cat-links {
-    color: var(--newspack-theme-color-primary);
+    color: var(--newspack-theme-color-primary-against-white);
   }
   .single .featured-image-beside .entry-subhead {
     border: 0;
@@ -7838,7 +7866,7 @@ cite i {
   }
 }
 .entry .entry-footer {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
   text-align: center;
 }
 .entry .entry-footer a,
@@ -7988,7 +8016,7 @@ cite i {
 }
 .site-footer .widget .widget-title,
 .site-footer .widget .widgettitle {
-  color: var(--newspack-theme-color-primary);
+  color: var(--newspack-theme-color-primary-against-white);
   font-weight: bold;
 }
 .site-footer .widget a,
