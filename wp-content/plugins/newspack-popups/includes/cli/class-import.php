@@ -7,9 +7,9 @@
 
 namespace Newspack\Campaigns\CLI;
 
-use \WP_CLI;
-use \WP_CLI_Command;
-use \WP_Error;
+use WP_CLI;
+use WP_CLI_Command;
+use WP_Error;
 use Newspack_Popups_Importer;
 
 /**
@@ -156,7 +156,6 @@ class Import extends WP_CLI_Command {
 		// translators: %d is the number of prompts imported.
 		WP_CLI::success( sprintf( _n( '%d prompt imported', '%d prompts imported', $result['totals']['prompts'], 'newspack-popups' ), $result['totals']['prompts'] ) );
 		WP_CLI::success( __( 'Import complete!', 'newspack-popups' ) );
-
 	}
 
 	/**

@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use \DrewM\MailChimp\MailChimp;
+use DrewM\MailChimp\MailChimp;
 
 /**
  * Main Newspack Segmentation Plugin Class.

@@ -116,7 +116,11 @@ if ( ! $checkout->is_registration_enabled() && $checkout->is_registration_requir
 			</div>
 			<?php foreach ( $form_billing_fields as $key => $value ) : ?>
 				<?php if ( 'state' === $key ) : ?>
-					<?php $wc_states = WC()->countries->get_states( $form_billing_fields['country'] ); ?>
+
+					<?php
+					$country = isset( $form_billing_fields['country'] ) ? $form_billing_fields['country'] : WC()->customer->get_billing_country();
+					$wc_states = WC()->countries->get_states( $country );
+					?>
 					<select style="display:none;" id="<?php echo esc_attr( 'billing_' . $key ); ?>" name="<?php echo esc_attr( 'billing_' . $key ); ?>" value="<?php echo esc_attr( $value ); ?>" >
 						<?php foreach ( $wc_states as $key => $value ) { ?>
 							<option <?php echo $key === $form_billing_fields['state'] ? 'selected' : ''; ?> value="<?php echo esc_attr( $key ); ?>"><?php echo esc_html( $value ); ?></option>

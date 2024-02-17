@@ -228,6 +228,7 @@ return array(
     'Google\\Site_Kit\\Modules\\Analytics_4\\GoogleAnalyticsAdmin\\AccountsResource' => $baseDir . '/Modules/Analytics_4/GoogleAnalyticsAdmin/AccountsResource.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\GoogleAnalyticsAdmin\\EnhancedMeasurementSettingsModel' => $baseDir . '/Modules/Analytics_4/GoogleAnalyticsAdmin/EnhancedMeasurementSettingsModel.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\GoogleAnalyticsAdmin\\PropertiesAdSenseLinksService' => $baseDir . '/Modules/Analytics_4/GoogleAnalyticsAdmin/PropertiesAdSenseLinksService.php',
+    'Google\\Site_Kit\\Modules\\Analytics_4\\GoogleAnalyticsAdmin\\PropertiesAudiencesService' => $baseDir . '/Modules/Analytics_4/GoogleAnalyticsAdmin/PropertiesAudiencesService.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\GoogleAnalyticsAdmin\\PropertiesEnhancedMeasurementResource' => $baseDir . '/Modules/Analytics_4/GoogleAnalyticsAdmin/PropertiesEnhancedMeasurementResource.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\GoogleAnalyticsAdmin\\PropertiesEnhancedMeasurementService' => $baseDir . '/Modules/Analytics_4/GoogleAnalyticsAdmin/PropertiesEnhancedMeasurementService.php',
     'Google\\Site_Kit\\Modules\\Analytics_4\\GoogleAnalyticsAdmin\\Proxy_GoogleAnalyticsAdminProvisionAccountTicketRequest' => $baseDir . '/Modules/Analytics_4/GoogleAnalyticsAdmin/Proxy_GoogleAnalyticsAdminProvisionAccountTicketRequest.php',

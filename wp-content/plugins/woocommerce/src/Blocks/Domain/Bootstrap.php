@@ -7,6 +7,7 @@ use Automattic\WooCommerce\Blocks\AssetsController;
 use Automattic\WooCommerce\Blocks\BlockPatterns;
 use Automattic\WooCommerce\Blocks\BlockTemplatesController;
 use Automattic\WooCommerce\Blocks\BlockTypesController;
+use Automattic\WooCommerce\Blocks\QueryFilters;
 use Automattic\WooCommerce\Blocks\Domain\Services\CreateAccount;
 use Automattic\WooCommerce\Blocks\Domain\Services\Notices;
 use Automattic\WooCommerce\Blocks\Domain\Services\DraftOrders;
@@ -14,6 +15,7 @@ use Automattic\WooCommerce\Blocks\Domain\Services\FeatureGating;
 use Automattic\WooCommerce\Blocks\Domain\Services\GoogleAnalytics;
 use Automattic\WooCommerce\Blocks\Domain\Services\Hydration;
 use Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFields;
+use Automattic\WooCommerce\Blocks\Domain\Services\CheckoutFieldsAdmin;
 use Automattic\WooCommerce\Blocks\InboxNotifications;
 use Automattic\WooCommerce\Blocks\Installer;
 use Automattic\WooCommerce\Blocks\Migration;
@@ -140,6 +142,7 @@ class Bootstrap {
 			$this->container->get( Installer::class )->init();
 			$this->container->get( GoogleAnalytics::class )->init();
 			$this->container->get( CheckoutFields::class )->init();
+			$this->container->get( CheckoutFieldsAdmin::class )->init();
 		}
 
 		// Load assets unless this is a request specifically for the store API.
@@ -160,6 +163,8 @@ class Bootstrap {
 			$this->container->get( SingleProductTemplateCompatibility::class )->init();
 			$this->container->get( Notices::class )->init();
 		}
+
+		$this->container->get( QueryFilters::class )->init();
 	}
 
 	/**
@@ -351,6 +356,13 @@ class Bootstrap {
 			}
 		);
 		$this->container->register(
+			CheckoutFieldsAdmin::class,
+			function( Container $container ) {
+				$checkout_fields_controller = $container->get( CheckoutFields::class );
+				return new CheckoutFieldsAdmin( $checkout_fields_controller );
+			}
+		);
+		$this->container->register(
 			PaymentsApi::class,
 			function ( Container $container ) {
 				$payment_method_registry = $container->get( PaymentMethodRegistry::class );
@@ -411,6 +423,12 @@ class Bootstrap {
 			TasksController::class,
 			function() {
 				return new TasksController();
+			}
+		);
+		$this->container->register(
+			QueryFilters::class,
+			function() {
+				return new QueryFilters();
 			}
 		);
 	}

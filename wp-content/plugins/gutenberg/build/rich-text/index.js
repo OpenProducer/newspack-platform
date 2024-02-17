@@ -1485,15 +1485,12 @@ function toFormat({
   };
 }
 
-// Ideally we use a private property.
-const RichTextInternalData = Symbol('RichTextInternalData');
-
 /**
  * The RichTextData class is used to instantiate a wrapper around rich text
  * values, with methods that can be used to transform or manipulate the data.
  *
- * - Create an emtpy instance: `new RichTextData()`.
- * - Create one from an html string: `RichTextData.fromHTMLString(
+ * - Create an empty instance: `new RichTextData()`.
+ * - Create one from an HTML string: `RichTextData.fromHTMLString(
  *   '<em>hello</em>' )`.
  * - Create one from a wrapper HTMLElement: `RichTextData.fromHTMLElement(
  *   document.querySelector( 'p' ) )`.
@@ -1504,6 +1501,7 @@ const RichTextInternalData = Symbol('RichTextInternalData');
  * @todo Add methods to manipulate the data, such as applyFormat, slice etc.
  */
 class RichTextData {
+  #value;
   static empty() {
     return new RichTextData();
   }
@@ -1531,22 +1529,16 @@ class RichTextData {
     return richTextData;
   }
   constructor(init = createEmptyValue()) {
-    // Setting text, formats, and replacements as enumerable properties
-    // unfortunately visualises these in the e2e tests. As long as the class
-    // instance doesn't have any enumerable properties, it will be
-    // visualised as a string.
-    Object.defineProperty(this, RichTextInternalData, {
-      value: init
-    });
+    this.#value = init;
   }
   toPlainText() {
-    return getTextContent(this[RichTextInternalData]);
+    return getTextContent(this.#value);
   }
   // We could expose `toHTMLElement` at some point as well, but we'd only use
   // it internally.
   toHTMLString() {
     return this.originalHTML || toHTMLString({
-      value: this[RichTextInternalData]
+      value: this.#value
     });
   }
   valueOf() {
@@ -1562,13 +1554,13 @@ class RichTextData {
     return this.text.length;
   }
   get formats() {
-    return this[RichTextInternalData].formats;
+    return this.#value.formats;
   }
   get replacements() {
-    return this[RichTextInternalData].replacements;
+    return this.#value.replacements;
   }
   get text() {
-    return this[RichTextInternalData].text;
+    return this.#value.text;
   }
 }
 for (const name of Object.getOwnPropertyNames(String.prototype)) {
@@ -1790,13 +1782,22 @@ function collapseWhiteSpace(element, isRoot = true) {
 }
 
 /**
- * Removes reserved characters used by rich-text (zero width non breaking spaces added by `toTree` and object replacement characters).
+ * We need to normalise line breaks to `\n` so they are consistent across
+ * platforms and serialised properly. Not removing \r would cause it to
+ * linger and result in double line breaks when whitespace is preserved.
+ */
+const CARRIAGE_RETURN = '\r';
+
+/**
+ * Removes reserved characters used by rich-text (zero width non breaking spaces
+ * added by `toTree` and object replacement characters).
  *
  * @param {string} string
  */
 function removeReservedCharacters(string) {
-  // with the global flag, note that we should create a new regex each time OR reset lastIndex state.
-  return string.replace(new RegExp(`[${ZWNBSP}${OBJECT_REPLACEMENT_CHARACTER}]`, 'gu'), '');
+  // with the global flag, note that we should create a new regex each time OR
+  // reset lastIndex state.
+  return string.replace(new RegExp(`[${ZWNBSP}${OBJECT_REPLACEMENT_CHARACTER}${CARRIAGE_RETURN}]`, 'gu'), '');
 }
 
 /**
@@ -3040,10 +3041,13 @@ function useAnchorRef({
   }, [activeFormat, value.start, value.end, tagName, className]);
 }
 
+;// CONCATENATED MODULE: external ["wp","compose"]
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-anchor.js
 /**
  * WordPress dependencies
  */
+
 
 
 /** @typedef {import('../register-format-type').WPFormat} WPFormat */
@@ -3166,39 +3170,29 @@ function useAnchor({
 }) {
   const {
     tagName,
-    className
+    className,
+    isActive
   } = settings;
   const [anchor, setAnchor] = (0,external_wp_element_namespaceObject.useState)(() => getAnchor(editableContentElement, tagName, className));
+  const wasActive = (0,external_wp_compose_namespaceObject.usePrevious)(isActive);
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
     if (!editableContentElement) return;
     const {
       ownerDocument
     } = editableContentElement;
-    function callback() {
+    if (editableContentElement === ownerDocument.activeElement ||
+    // When a link is created, we need to attach the popover to the newly created anchor.
+    !wasActive && isActive ||
+    // Sometimes we're _removing_ an active anchor, such as the inline color popover.
+    // When we add the color, it switches from a virtual anchor to a `<mark>` element.
+    // When we _remove_ the color, it switches from a `<mark>` element to a virtual anchor.
+    wasActive && !isActive) {
       setAnchor(getAnchor(editableContentElement, tagName, className));
     }
-    function attach() {
-      ownerDocument.addEventListener('selectionchange', callback);
-    }
-    function detach() {
-      ownerDocument.removeEventListener('selectionchange', callback);
-    }
-    if (editableContentElement === ownerDocument.activeElement) {
-      attach();
-    }
-    editableContentElement.addEventListener('focusin', attach);
-    editableContentElement.addEventListener('focusout', detach);
-    return () => {
-      detach();
-      editableContentElement.removeEventListener('focusin', attach);
-      editableContentElement.removeEventListener('focusout', detach);
-    };
-  }, [editableContentElement, tagName, className]);
+  }, [editableContentElement, tagName, className, isActive, wasActive]);
   return anchor;
 }
 
-;// CONCATENATED MODULE: external ["wp","compose"]
-const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-default-style.js
 /**
  * WordPress dependencies
@@ -3787,7 +3781,9 @@ function useInputAndSelection(props) {
           activeFormats: use_input_and_selection_EMPTY_ACTIVE_FORMATS
         };
       } else {
-        applyRecord(record.current);
+        applyRecord(record.current, {
+          domOnly: true
+        });
       }
       onSelectionChange(record.current.start, record.current.end);
       ownerDocument.addEventListener('selectionchange', handleSelectionChange);

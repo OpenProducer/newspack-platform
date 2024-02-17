@@ -1,3 +1,105 @@
+## [3.0.5](https://github.com/Automattic/newspack-plugin/compare/v3.0.4...v3.0.5) (2024-02-15)
+
+
+### Bug Fixes
+
+* **perfmatters:** use ignore-defaults constant when applying unused CSS ([#2863](https://github.com/Automattic/newspack-plugin/issues/2863)) ([6d52be3](https://github.com/Automattic/newspack-plugin/commit/6d52be38e8266d13506676675ffc57ec509b393d))
+
+## [3.0.4](https://github.com/Automattic/newspack-plugin/compare/v3.0.3...v3.0.4) (2024-02-15)
+
+
+### Bug Fixes
+
+* **woocommerce:** fix order-pay page when using woocommerce-memberships-for-teams plugin ([#2923](https://github.com/Automattic/newspack-plugin/issues/2923)) ([e87e2dc](https://github.com/Automattic/newspack-plugin/commit/e87e2dc2192771e151dbc78c2b30a9c431a6a976))
+
+## [3.0.3](https://github.com/Automattic/newspack-plugin/compare/v3.0.2...v3.0.3) (2024-02-08)
+
+
+### Bug Fixes
+
+* turn off WooCommerce's Order Attribution ([#2911](https://github.com/Automattic/newspack-plugin/issues/2911)) ([f3387e3](https://github.com/Automattic/newspack-plugin/commit/f3387e35df946ea48e49ac0b6553d7724cb20816))
+
+## [3.0.2](https://github.com/Automattic/newspack-plugin/compare/v3.0.1...v3.0.2) (2024-02-07)
+
+
+### Bug Fixes
+
+* prevent fatal when redirecting for pixel tracking ([#2910](https://github.com/Automattic/newspack-plugin/issues/2910)) ([ef22a9b](https://github.com/Automattic/newspack-plugin/commit/ef22a9b5e236051ad8f25bd523157ce67c3d02cc))
+
+## [3.0.1](https://github.com/Automattic/newspack-plugin/compare/v3.0.0...v3.0.1) (2024-02-06)
+
+
+### Bug Fixes
+
+* remove unneeded hook ([e863a3e](https://github.com/Automattic/newspack-plugin/commit/e863a3e2477df4eb7b05fe2b444dfc09d42285f7))
+
+
+### Reverts
+
+* Revert "feat: per-wizard capabilities (#2864)" ([353d9fd](https://github.com/Automattic/newspack-plugin/commit/353d9fd36191324981725f46eb52ac97e50c7aed)), closes [#2864](https://github.com/Automattic/newspack-plugin/issues/2864)
+
+# [3.0.0](https://github.com/Automattic/newspack-plugin/compare/v2.16.1...v3.0.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* assorted tweaks ([#2857](https://github.com/Automattic/newspack-plugin/issues/2857)) ([870bf48](https://github.com/Automattic/newspack-plugin/commit/870bf48c241bebb19f1cca977d44c2e35bc0b308))
+* **auth-modal:** fatal error in auth modal with "other" ESP ([#2874](https://github.com/Automattic/newspack-plugin/issues/2874)) ([4addeec](https://github.com/Automattic/newspack-plugin/commit/4addeecc28e22b9dbfa729fb90eb2c811bf83369))
+* fixes for prod release feb 5 ([#2905](https://github.com/Automattic/newspack-plugin/issues/2905)) ([1531ac3](https://github.com/Automattic/newspack-plugin/commit/1531ac3c38436c5021a10c99313bd513940258c8))
+* make CLI comand more reliable ([#2855](https://github.com/Automattic/newspack-plugin/issues/2855)) ([bc5dd2c](https://github.com/Automattic/newspack-plugin/commit/bc5dd2c5395aefdeb09ff52a7181ef18072ce8d9))
+* **ras:** consolidate RAS <> ESP data syncs in data event connectors ([#2821](https://github.com/Automattic/newspack-plugin/issues/2821)) ([76d73eb](https://github.com/Automattic/newspack-plugin/commit/76d73eb38196e3e9c2b957c7e0d1184ab88b9358))
+
+
+### Features
+
+* automatically fill the credit meta for images ([#2858](https://github.com/Automattic/newspack-plugin/issues/2858)) ([515dfc7](https://github.com/Automattic/newspack-plugin/commit/515dfc799fd147992d04441a2c6496ef58184ab2))
+* deprecate Stripe Reader Revenue separate platform ([#2315](https://github.com/Automattic/newspack-plugin/issues/2315)) ([9db8e4b](https://github.com/Automattic/newspack-plugin/commit/9db8e4bc26a11181afc77c8bd538094fd02a4df7))
+* **fivetran:** remove FiveTran connectors other than Stripe ([#2875](https://github.com/Automattic/newspack-plugin/issues/2875)) ([9ba4dbf](https://github.com/Automattic/newspack-plugin/commit/9ba4dbf28c1f0fb4d7ee1b3ab987d362ad679aed))
+* **my-account:** require confirmation before cancelling subscription ([#2856](https://github.com/Automattic/newspack-plugin/issues/2856)) ([e970657](https://github.com/Automattic/newspack-plugin/commit/e970657f4254692a10ebc1212b8375eea4dc72d2))
+* **optional-modules:** remove switching from standalone plugin versions ([08a74b9](https://github.com/Automattic/newspack-plugin/commit/08a74b982b54b45e0a24667caf22fb2697f7655e))
+* per-wizard capabilities ([#2864](https://github.com/Automattic/newspack-plugin/issues/2864)) ([4de015e](https://github.com/Automattic/newspack-plugin/commit/4de015ec2aa474b3666e150269af85ab137ce863))
+* **ras:** better reader display/nice names ([#2845](https://github.com/Automattic/newspack-plugin/issues/2845)) ([92ce455](https://github.com/Automattic/newspack-plugin/commit/92ce455186b85327e453b46eb63deaae610f6def))
+* **webhooks:** endpoint authentication bearer token ([#2831](https://github.com/Automattic/newspack-plugin/issues/2831)) ([9df0b39](https://github.com/Automattic/newspack-plugin/commit/9df0b392ed0f9ccc7bd9ac46ab80557ccb959e95))
+
+
+### BREAKING CHANGES
+
+* Stripe will no longer be used to process recurring payments.
+
+# [3.0.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v3.0.0-alpha.1...v3.0.0-alpha.2) (2024-02-06)
+
+
+### Bug Fixes
+
+* fixes for prod release feb 5 ([#2905](https://github.com/Automattic/newspack-plugin/issues/2905)) ([1531ac3](https://github.com/Automattic/newspack-plugin/commit/1531ac3c38436c5021a10c99313bd513940258c8))
+
+# [3.0.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v2.16.1...v3.0.0-alpha.1) (2024-01-26)
+
+
+### Bug Fixes
+
+* assorted tweaks ([#2857](https://github.com/Automattic/newspack-plugin/issues/2857)) ([870bf48](https://github.com/Automattic/newspack-plugin/commit/870bf48c241bebb19f1cca977d44c2e35bc0b308))
+* **auth-modal:** fatal error in auth modal with "other" ESP ([#2874](https://github.com/Automattic/newspack-plugin/issues/2874)) ([4addeec](https://github.com/Automattic/newspack-plugin/commit/4addeecc28e22b9dbfa729fb90eb2c811bf83369))
+* make CLI comand more reliable ([#2855](https://github.com/Automattic/newspack-plugin/issues/2855)) ([bc5dd2c](https://github.com/Automattic/newspack-plugin/commit/bc5dd2c5395aefdeb09ff52a7181ef18072ce8d9))
+* **ras:** consolidate RAS <> ESP data syncs in data event connectors ([#2821](https://github.com/Automattic/newspack-plugin/issues/2821)) ([76d73eb](https://github.com/Automattic/newspack-plugin/commit/76d73eb38196e3e9c2b957c7e0d1184ab88b9358))
+
+
+### Features
+
+* automatically fill the credit meta for images ([#2858](https://github.com/Automattic/newspack-plugin/issues/2858)) ([515dfc7](https://github.com/Automattic/newspack-plugin/commit/515dfc799fd147992d04441a2c6496ef58184ab2))
+* deprecate Stripe Reader Revenue separate platform ([#2315](https://github.com/Automattic/newspack-plugin/issues/2315)) ([9db8e4b](https://github.com/Automattic/newspack-plugin/commit/9db8e4bc26a11181afc77c8bd538094fd02a4df7))
+* **fivetran:** remove FiveTran connectors other than Stripe ([#2875](https://github.com/Automattic/newspack-plugin/issues/2875)) ([9ba4dbf](https://github.com/Automattic/newspack-plugin/commit/9ba4dbf28c1f0fb4d7ee1b3ab987d362ad679aed))
+* **my-account:** require confirmation before cancelling subscription ([#2856](https://github.com/Automattic/newspack-plugin/issues/2856)) ([e970657](https://github.com/Automattic/newspack-plugin/commit/e970657f4254692a10ebc1212b8375eea4dc72d2))
+* **optional-modules:** remove switching from standalone plugin versions ([08a74b9](https://github.com/Automattic/newspack-plugin/commit/08a74b982b54b45e0a24667caf22fb2697f7655e))
+* per-wizard capabilities ([#2864](https://github.com/Automattic/newspack-plugin/issues/2864)) ([4de015e](https://github.com/Automattic/newspack-plugin/commit/4de015ec2aa474b3666e150269af85ab137ce863))
+* **ras:** better reader display/nice names ([#2845](https://github.com/Automattic/newspack-plugin/issues/2845)) ([92ce455](https://github.com/Automattic/newspack-plugin/commit/92ce455186b85327e453b46eb63deaae610f6def))
+* **webhooks:** endpoint authentication bearer token ([#2831](https://github.com/Automattic/newspack-plugin/issues/2831)) ([9df0b39](https://github.com/Automattic/newspack-plugin/commit/9df0b392ed0f9ccc7bd9ac46ab80557ccb959e95))
+
+
+### BREAKING CHANGES
+
+* Stripe will no longer be used to process recurring payments.
+
 ## [2.16.1](https://github.com/Automattic/newspack-plugin/compare/v2.16.0...v2.16.1) (2024-01-26)
 
 

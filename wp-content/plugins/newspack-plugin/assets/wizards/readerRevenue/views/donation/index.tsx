@@ -56,6 +56,9 @@ type WizardData = {
 				minimumDonation: string;
 				billingFields: string[];
 		  };
+	platform_data: {
+		platform: string;
+	};
 	donation_page: {
 		editUrl: string;
 		status: string;
@@ -75,6 +78,7 @@ type WizardData = {
 
 export const DonationAmounts = () => {
 	const wizardData = Wizard.useWizardData( 'reader-revenue' ) as WizardData;
+
 	const { updateWizardSettings } = useDispatch( Wizard.STORE_NAMESPACE );
 
 	if ( ! wizardData.donation_data || 'errors' in wizardData.donation_data ) {
@@ -250,7 +254,7 @@ const BillingFields = () => {
 		return null;
 	}
 
-	const changeHandler = path => value =>
+	const changeHandler = ( path: string[] ) => ( value: any ) =>
 		updateWizardSettings( {
 			slug: 'newspack-reader-revenue-wizard',
 			path: [ 'donation_data', ...path ],

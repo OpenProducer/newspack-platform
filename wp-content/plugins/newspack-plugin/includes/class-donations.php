@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error, \WC_Product_Simple, \WC_Product_Subscription, \WC_Name_Your_Price_Helpers;
+use WP_Error, WC_Product_Simple, WC_Product_Subscription, WC_Name_Your_Price_Helpers;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -156,9 +156,6 @@ class Donations {
 					return \get_woocommerce_currency_symbol();
 				}
 				break;
-			case 'stripe':
-				$currency = Stripe_Connection::get_stripe_data()['currency'];
-				return newspack_get_currency_symbol( $currency );
 		}
 		return '$';
 	}
@@ -586,7 +583,14 @@ class Donations {
 	 * Get donation platform slug.
 	 */
 	public static function get_platform_slug() {
-		return get_option( self::NEWSPACK_READER_REVENUE_PLATFORM, 'wc' );
+		$default_platform = 'wc';
+		$saved_slug       = get_option( self::NEWSPACK_READER_REVENUE_PLATFORM, $default_platform );
+		if ( 'stripe' === $saved_slug ) {
+			// Stripe as a Reader Revenue platform is deprecated.
+			$saved_slug = $default_platform;
+			self::set_platform_slug( $saved_slug );
+		}
+		return $saved_slug;
 	}
 
 	/**
@@ -611,13 +615,6 @@ class Donations {
 	 */
 	public static function is_platform_wc() {
 		return 'wc' === self::get_platform_slug();
-	}
-
-	/**
-	 * Is Stripe the donation platform?
-	 */
-	public static function is_platform_stripe() {
-		return 'stripe' === self::get_platform_slug();
 	}
 
 	/**
@@ -954,32 +951,6 @@ class Donations {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Can Stripe platform be used?
-	 *
-	 * @return bool True if it can.
-	 */
-	public static function can_use_stripe_platform() {
-		$is_amp_plugin_active = is_plugin_active( 'amp/amp.php' );
-		$is_using_amp_plus    = AMP_Enhancements::is_amp_plus_configured();
-		// Only if AMP plugin is not active, or site is using AMP Plus.
-		return ! $is_amp_plugin_active || $is_using_amp_plus;
-	}
-
-	/**
-	 * Can the streamlined donate block be used?
-	 *
-	 * @return bool True if it can.
-	 */
-	public static function can_use_streamlined_donate_block() {
-		if ( self::can_use_stripe_platform() ) {
-			$payment_data    = Stripe_Connection::get_stripe_data();
-			$has_stripe_keys = isset( $payment_data['usedPublishableKey'], $payment_data['usedSecretKey'] ) && $payment_data['usedPublishableKey'] && $payment_data['usedSecretKey'];
-			return $has_stripe_keys;
-		}
-		return false;
 	}
 
 	/**

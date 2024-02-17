@@ -7,8 +7,8 @@
 
 namespace Newspack\Campaigns\CLI;
 
-use \WP_CLI;
-use \WP_CLI_Command;
+use WP_CLI;
+use WP_CLI_Command;
 use Newspack_Popups_Segmentation;
 
 /**

@@ -1,3 +1,43 @@
+## [2.10.2](https://github.com/Automattic/newspack-newsletters/compare/v2.10.1...v2.10.2) (2024-02-08)
+
+
+### Bug Fixes
+
+* catch invalid subscription list errors ([#1411](https://github.com/Automattic/newspack-newsletters/issues/1411)) ([cb275c4](https://github.com/Automattic/newspack-newsletters/commit/cb275c462810e9dafb360a77eb98b17a56c6a90d))
+
+## [2.10.1](https://github.com/Automattic/newspack-newsletters/compare/v2.10.0...v2.10.1) (2024-02-06)
+
+
+### Reverts
+
+* Revert "feat: use custom capability_type for CPTs (#1398)" ([ec7d7d8](https://github.com/Automattic/newspack-newsletters/commit/ec7d7d84aa34f4e38182b1a21613216cf1416ce7)), closes [#1398](https://github.com/Automattic/newspack-newsletters/issues/1398)
+
+# [2.10.0](https://github.com/Automattic/newspack-newsletters/compare/v2.9.0...v2.10.0) (2024-02-06)
+
+
+### Bug Fixes
+
+* apply custom editor modal styles only to newspack modals ([#1404](https://github.com/Automattic/newspack-newsletters/issues/1404)) ([90633c5](https://github.com/Automattic/newspack-newsletters/commit/90633c5ef556a034a1a43b01a2fa60377835af01))
+
+
+### Features
+
+* use custom capability_type for CPTs ([#1398](https://github.com/Automattic/newspack-newsletters/issues/1398)) ([59403a9](https://github.com/Automattic/newspack-newsletters/commit/59403a92ae0ec2b14549dc9c72d8495fca1e926a))
+
+# [2.10.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v2.9.1-alpha.1...v2.10.0-alpha.1) (2024-02-01)
+
+
+### Features
+
+* use custom capability_type for CPTs ([#1398](https://github.com/Automattic/newspack-newsletters/issues/1398)) ([59403a9](https://github.com/Automattic/newspack-newsletters/commit/59403a92ae0ec2b14549dc9c72d8495fca1e926a))
+
+## [2.9.1-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v2.9.0...v2.9.1-alpha.1) (2024-01-26)
+
+
+### Bug Fixes
+
+* apply custom editor modal styles only to newspack modals ([#1404](https://github.com/Automattic/newspack-newsletters/issues/1404)) ([90633c5](https://github.com/Automattic/newspack-newsletters/commit/90633c5ef556a034a1a43b01a2fa60377835af01))
+
 # [2.9.0](https://github.com/Automattic/newspack-newsletters/compare/v2.8.3...v2.9.0) (2024-01-25)
 
 

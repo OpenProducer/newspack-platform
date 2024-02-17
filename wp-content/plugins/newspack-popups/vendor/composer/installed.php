@@ -1,9 +1,9 @@
 <?php return array(
     'root' => array(
         'name' => 'automattic/newspack-popups',
-        'pretty_version' => 'dev-master',
-        'version' => 'dev-master',
-        'reference' => '59dcb662c15cd02e37e404a479b42505b91c51ae',
+        'pretty_version' => 'dev-trunk',
+        'version' => 'dev-trunk',
+        'reference' => '5ddf2f8d916606fb537800fb517254bc329b46bd',
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
         'aliases' => array(),
@@ -11,9 +11,9 @@
     ),
     'versions' => array(
         'automattic/newspack-popups' => array(
-            'pretty_version' => 'dev-master',
-            'version' => 'dev-master',
-            'reference' => '59dcb662c15cd02e37e404a479b42505b91c51ae',
+            'pretty_version' => 'dev-trunk',
+            'version' => 'dev-trunk',
+            'reference' => '5ddf2f8d916606fb537800fb517254bc329b46bd',
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',
             'aliases' => array(),

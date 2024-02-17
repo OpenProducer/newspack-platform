@@ -5,7 +5,7 @@
  * Description:     Ad services integration.
  * Author:          Automattic
  * License:         GPL2
- * Version:         1.45.1
+ * Version:         1.46.0
  *
  * @package         Newspack
  */
@@ -25,5 +25,5 @@ if ( ! defined( 'NEWSPACK_ADS_COMPOSER_ABSPATH' ) ) {
 
 // Include the main Newspack Ads class.
 if ( ! class_exists( 'Newspack_Ads\Core' ) ) {
-	include_once dirname( __FILE__ ) . '/includes/class-core.php';
+	include_once __DIR__ . '/includes/class-core.php';
 }

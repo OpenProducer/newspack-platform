@@ -160,6 +160,8 @@ class ComposerStaticInit50298795addec7e328ecc086aec86c51
         'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Emails\\Template' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Emails/Template.php',
         'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Site_Health\\Controller' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Site_Health/Controller.php',
+        'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Site_Health\\Subsection' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Site_Health/Subsection.php',
         'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Controller' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Controller.php',
         'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Passes\\Apple_Wallet\\Event_Modifier' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Passes/Apple_Wallet/Event_Modifier.php',

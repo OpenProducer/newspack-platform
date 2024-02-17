@@ -68,18 +68,6 @@ final class Popups {
 		);
 
 		Data_Events::register_listener(
-			'newspack_stripe_handle_donation_before',
-			'prompt_interaction',
-			[ __CLASS__, 'donation_submission_stripe' ]
-		);
-
-		Data_Events::register_listener(
-			'newspack_stripe_handle_donation_error',
-			'prompt_interaction',
-			[ __CLASS__, 'donation_submission_stripe_error' ]
-		);
-
-		Data_Events::register_listener(
 			'newspack_data_event_dispatch_woocommerce_donation_order_processed',
 			'prompt_interaction',
 			[ __CLASS__, 'donation_submission_woocommerce' ]
@@ -90,7 +78,6 @@ final class Popups {
 			'prompt_interaction',
 			[ __CLASS__, 'donation_submission_woocommerce_error' ]
 		);
-
 	}
 
 	/**
@@ -243,65 +230,6 @@ final class Popups {
 	}
 
 	/**
-	 * A listener for when the stripe starts to handle a donation
-	 *
-	 * @param array $config Data about the donation.
-	 * @param array $stripe_data Data about the Stripe connection.
-	 * @return ?array
-	 */
-	public static function donation_submission_stripe( $config, $stripe_data ) {
-		$popup_id = $config['payment_metadata']['newspack_popup_id'] ?? false;
-		if ( ! $popup_id ) {
-			return;
-		}
-		$popup_data                                        = Newspack_Popups_Data_Api::get_popup_metadata( $popup_id );
-		$popup_data                                        = array_merge(
-			$popup_data,
-			[
-				'action'      => self::FORM_SUBMISSION,
-				'action_type' => 'donation',
-				'referer'     => $config['payment_metadata']['referer'],
-			]
-		);
-		$popup_data['interaction_data']['donation_amount'] = $config['amount'];
-		$popup_data['interaction_data']['donation_currency']   = $stripe_data['currency'];
-		$popup_data['interaction_data']['donation_recurrence'] = $config['frequency'];
-		$popup_data['interaction_data']['donation_platform']   = 'stripe';
-		return $popup_data;
-	}
-
-	/**
-	 * A listener for when stripe fails handle a donation
-	 *
-	 * @param array  $config Data about the donation.
-	 * @param array  $stripe_data Data about the Stripe connection.
-	 * @param string $error_message Error message.
-	 * @return ?array
-	 */
-	public static function donation_submission_stripe_error( $config, $stripe_data, $error_message ) {
-		$popup_id = $config['payment_metadata']['newspack_popup_id'] ?? false;
-		if ( ! $popup_id ) {
-			return;
-		}
-		$popup_data = Newspack_Popups_Data_Api::get_popup_metadata( $popup_id );
-		$popup_data = array_merge(
-			$popup_data,
-			[
-				'action'      => self::FORM_SUBMISSION_FAILURE,
-				'action_type' => 'donation',
-				'referer'     => $config['payment_metadata']['referer'],
-			]
-		);
-
-		$popup_data['interaction_data']['donation_amount']     = $config['amount'];
-		$popup_data['interaction_data']['donation_currency']   = $stripe_data['currency'];
-		$popup_data['interaction_data']['donation_recurrence'] = $config['frequency'];
-		$popup_data['interaction_data']['donation_platform']   = 'stripe';
-		$popup_data['interaction_data']['donation_error']      = $error_message;
-		return $popup_data;
-	}
-
-	/**
 	 * A listener for when woocommerce processes a donation
 	 *
 	 * @param int   $timestamp EventTimestamp.
@@ -360,7 +288,6 @@ final class Popups {
 		$popup_data['interaction_data']['donation_platform']   = $data['platform'];
 		return $popup_data;
 	}
-
 }
 
 Popups::init();

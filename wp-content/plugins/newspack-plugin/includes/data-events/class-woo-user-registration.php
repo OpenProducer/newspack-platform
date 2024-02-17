@@ -46,9 +46,6 @@ final class Woo_User_Registration {
 	 */
 	public static function checkout_process() {
 
-		// If a user is created later on the request by woocommerce_created_customer(), it will at least have this data.
-		self::$metadata['registration_method'] = 'woocommerce';
-
 		/**
 		 * On Newspack\Donations::process_donation_form(), we add these values to the cart.
 		 *
@@ -83,6 +80,14 @@ final class Woo_User_Registration {
 
 		if ( ! $user ) {
 			return;
+		}
+
+		// If a user is created later on the request by woocommerce_created_customer(), it will at least have this data.
+		self::$metadata['registration_method'] = 'woocommerce';
+
+		// For modal checkout, the referer is actually what we want to capture as the registration page.
+		if ( ! empty( self::$metadata['referer'] ) && method_exists( 'Newspack_Blocks\Modal_Checkout', 'is_modal_checkout' ) && \Newspack_Blocks\Modal_Checkout::is_modal_checkout() ) {
+			self::$metadata['current_page_url'] = self::$metadata['referer'];
 		}
 
 		/**

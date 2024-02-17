@@ -246,15 +246,13 @@ class Perfmatters {
 		$defaults = self::get_defaults( $options );
 
 		// Ensure our defaults remain the default, but can be overwritten.
-		if ( defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS ) {
-
+		if ( self::should_ignore_defaults() ) {
 			// Ensure all keys from $defaults are present in $options.
 			// The $options will not contain keys set to false, so these would be otherwise overwritten by
 			// the array_merge call.
 			foreach ( array_keys( $defaults ) as $key ) {
 				$options[ $key ] = $options[ $key ] ?? false;
 			}
-
 			return array_merge( $defaults, $options );
 		}
 
@@ -262,13 +260,20 @@ class Perfmatters {
 	}
 
 	/**
+	 * Should defaults be ignored and not applied?
+	 */
+	private static function should_ignore_defaults() {
+		return defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS;
+	}
+
+	/**
 	 * Add an admin notice.
 	 */
 	public static function admin_notice() {
-		if ( 'settings_page_perfmatters' !== get_current_screen()->id ) {
-			return;
-		}
-		if ( defined( 'NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS' ) && NEWSPACK_IGNORE_PERFMATTERS_DEFAULTS ) {
+		if (
+			'settings_page_perfmatters' !== get_current_screen()->id
+			|| self::should_ignore_defaults()
+		) {
 			return;
 		}
 		echo '<div class="notice notice-warning"><p>'
@@ -282,6 +287,9 @@ class Perfmatters {
 	 * @param string $resolution Resolution.
 	 */
 	public static function maybe_serve_high_res_youtube_thumbs( $resolution ) {
+		if ( self::should_ignore_defaults() ) {
+			return $resolution;
+		}
 		// Use standard-res thumbnails if the constant is not set.
 		if ( ! defined( 'NEWSPACK_PERFMATTERS_USE_HIGH_RES_YOUTUBE_IMAGES' ) || ! NEWSPACK_PERFMATTERS_USE_HIGH_RES_YOUTUBE_IMAGES ) {
 			return $resolution;
@@ -305,6 +313,9 @@ class Perfmatters {
 	 * @param array $stylesheet_exclusions Existing stylesheet exclusions.
 	 */
 	public static function add_rucss_excluded_stylesheets( $stylesheet_exclusions ) {
+		if ( self::should_ignore_defaults() ) {
+			return $stylesheet_exclusions;
+		}
 		return array_unique( array_merge( $stylesheet_exclusions, self::unused_css_excluded_stylesheets() ) );
 	}
 }

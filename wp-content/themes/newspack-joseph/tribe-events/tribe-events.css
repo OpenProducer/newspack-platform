@@ -6,6 +6,10 @@
   --newspack-theme-color-highlight: #fed850;
   --newspack-theme-color-primary-darken-5: #1a53ff;
   --newspack-theme-color-primary-darken-10: #0040ff;
+  --newspack-theme-color-primary-against-white: var( --newspack-theme-color-primary );
+  --newspack-theme-color-secondary-against-white: var( --newspack-theme-color-secondary );
+  --newspack-theme-color-against-primary: #fff;
+  --newspack-theme-color-against-secondary: #fff;
   --newspack-theme-color-bg-body: #fff;
   --newspack-theme-color-bg-input: var( --newspack-theme-color-bg-body );
   --newspack-theme-color-bg-light: #f0f0f0;
@@ -20,7 +24,7 @@
   --newspack-theme-color-text-hover: var( --newspack-theme-color-bg-dark-lighten-5 );
   --newspack-theme-color-text-screen: #21759b;
   --newspack-theme-color-link: var( --newspack-theme-color-secondary );
-  --newspack-theme-color-link-hover: var( --newspack-theme-color-secondary-variation );
+  --newspack-theme-color-link-hover: var( --newspack-theme-color-secondary-variation-against-white );
   --newspack-theme-color-border: #ccc;
   --newspack-theme-color-border-light: #e0e0e0;
   --newspack-theme-color-alert-yellow: #f0b849;

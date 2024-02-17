@@ -206,7 +206,6 @@ class Newspack_Popups_Exporter {
 		}
 
 		return $prompt;
-
 	}
 
 	/**
@@ -277,12 +276,10 @@ class Newspack_Popups_Exporter {
 					'id'   => $term->term_id,
 					'name' => $term->name,
 				];
-			} else {
-				if ( ! isset( $this->errors['terms'][ $taxonomy ] ) ) {
+			} elseif ( ! isset( $this->errors['terms'][ $taxonomy ] ) ) {
 					$this->errors['terms'][ $taxonomy ] = [];
-					if ( is_wp_error( $term ) ) {
-						$this->errors['terms'][ $taxonomy ][] = $term->get_error_message();
-					}
+				if ( is_wp_error( $term ) ) {
+					$this->errors['terms'][ $taxonomy ][] = $term->get_error_message();
 				}
 			}
 		}

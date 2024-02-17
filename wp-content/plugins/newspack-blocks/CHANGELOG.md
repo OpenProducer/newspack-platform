@@ -1,3 +1,10 @@
+## [2.6.2](https://github.com/Automattic/newspack-blocks/compare/v2.6.1...v2.6.2) (2024-02-08)
+
+
+### Bug Fixes
+
+* properly handle states when Country field is disabled ([#1667](https://github.com/Automattic/newspack-blocks/issues/1667)) ([eecce3b](https://github.com/Automattic/newspack-blocks/commit/eecce3bca1f1ace6da63bb4aba83425f3adb4586))
+
 ## [2.6.1](https://github.com/Automattic/newspack-blocks/compare/v2.6.0...v2.6.1) (2024-01-31)
 
 

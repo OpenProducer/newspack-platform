@@ -49,7 +49,6 @@ class GA4 {
 	public static function init() {
 		Data_Events::register_handler( [ __CLASS__, 'global_handler' ] );
 		add_filter( 'newspack_data_events_dispatch_body', [ __CLASS__, 'filter_event_body' ], 10, 2 );
-		add_filter( 'newspack_stripe_handle_donation_payment_metadata', [ __CLASS__, 'filter_donation_metadata' ], 10, 2 );
 
 		add_filter( 'newspack_data_events_dispatch_body', [ __CLASS__, 'filter_donation_new_event_body' ], 20, 2 );
 	}
@@ -158,7 +157,6 @@ class GA4 {
 		} else {
 			throw new \Exception( 'Event handler method not found' );
 		}
-
 	}
 
 	/**
@@ -196,14 +194,9 @@ class GA4 {
 		}
 
 		return $body;
-
 	}
 
 	/**
-	 * When the donation_new event is dispatched from the Stripe webhook, it can't catch GA client ID from Cookies.
-	 *
-	 * In those cases, we rely on the metadata added to the order/subscription via the `newspack_stripe_handle_donation_payment_metadata` filter.
-	 *
 	 * This filter fixes both the donation_new event and the prompt_interaction with action form_submission_success that relies on this event.
 	 *
 	 * @param array  $body The event body.
@@ -249,7 +242,6 @@ class GA4 {
 		}
 
 		return $body;
-
 	}
 
 	/**
@@ -494,7 +486,6 @@ class GA4 {
 			self::log( sprintf( 'Event sent to %s - %s - Client ID: %s', $property['measurement_id'], $event->get_name(), $client_id ) );
 			self::log( sprintf( 'Event payload: %s', wp_json_encode( $payload ) ) );
 		}
-
 	}
 
 	/**
@@ -530,25 +521,6 @@ class GA4 {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Adds additional information about the current user and session to the payment metadata sent to Stripe
-	 *
-	 * @param array $payment_metadata The payment metadata.
-	 * @param array $config The donation configuration.
-	 * @return array
-	 */
-	public static function filter_donation_metadata( $payment_metadata, $config ) {
-		$payment_metadata['newspack_ga_session_id'] = self::extract_sid_from_cookies();
-		$payment_metadata['newspack_ga_client_id']  = self::extract_cid_from_cookies();
-		$payment_metadata['newspack_logged_in']     = is_user_logged_in() ? 'yes' : 'no';
-		$payment_metadata['newspack_is_reader']     = 'no';
-		if ( is_user_logged_in() ) {
-			$current_user                           = wp_get_current_user();
-			$payment_metadata['newspack_is_reader'] = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
-		}
-		return $payment_metadata;
 	}
 
 	/**

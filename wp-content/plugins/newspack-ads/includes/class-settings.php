@@ -15,7 +15,6 @@ defined( 'ABSPATH' ) || exit;
 final class Settings {
 
 	const API_NAMESPACE      = 'newspack-ads/v1';
-	const API_CAPABILITY     = 'manage_options';
 	const OPTION_NAME_PREFIX = '_newspack_ads_';
 
 	/**
@@ -29,7 +28,6 @@ final class Settings {
 	 * Register the endpoints needed to fetch and update settings.
 	 */
 	public static function register_api_endpoints() {
-
 		register_rest_route(
 			self::API_NAMESPACE,
 			'/settings',
@@ -62,12 +60,19 @@ final class Settings {
 	}
 
 	/**
+	 * Can current user manage the settings?
+	 */
+	public static function can_current_user_manage_settings() {
+		return apply_filters( 'newspack_ads_can_current_user_manage_settings', current_user_can( 'manage_options' ) );
+	}
+
+	/**
 	 * Check capabilities for using API.
 	 *
 	 * @return bool|\WP_Error True or error object.
 	 */
 	public static function api_permissions_check() {
-		if ( ! current_user_can( self::API_CAPABILITY ) ) {
+		if ( ! self::can_current_user_manage_settings() ) {
 			return new \WP_Error(
 				'newspack_ads_rest_forbidden',
 				esc_html__( 'You cannot use this resource.', 'newspack-ads' ),

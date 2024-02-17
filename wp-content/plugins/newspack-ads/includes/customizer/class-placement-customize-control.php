@@ -63,7 +63,7 @@ final class Placement_Customize_Control extends \WP_Customize_Control {
 			$placements      = Placements::get_placements();
 			$this->placement = $placements[ $args['placement'] ];
 		} else {
-			return new \WP_Error( 'newspack_ads_placement_customize_control_no_placement', __( 'No placement specified.', 'newspack-ads' ) );
+			return new \WP_Error( 'newspack_ads_placement_customize_control_no_placement', __( 'No placement specified.', 'newspack-ads' ) ); // phpcs:ignore Universal.CodeAnalysis.ConstructorDestructorReturn.ReturnValueFound
 		}
 
 		parent::__construct( $manager, $id, $args );

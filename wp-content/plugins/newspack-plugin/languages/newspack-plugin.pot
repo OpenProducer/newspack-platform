@@ -713,12 +713,6 @@ msgstr ""
 msgid "You have successfully logged out."
 msgstr ""
 
-#. Translators: %s is the customer's full name.
-#: includes/reader-revenue/stripe/class-stripe-connection.php:721
-#: release/newspack-plugin/includes/reader-revenue/stripe/class-stripe-connection.php:721
-msgid "Name: %s, Description: Newspack Donor"
-msgstr ""
-
 #: includes/reader-revenue/templates/myaccount-edit-account.php:65
 #: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:65
 msgid "Save changes"

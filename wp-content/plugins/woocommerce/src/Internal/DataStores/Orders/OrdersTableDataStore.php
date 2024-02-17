@@ -98,6 +98,15 @@ class OrdersTableDataStore extends \Abstract_WC_Order_Data_Store_CPT implements 
 	);
 
 	/**
+	 * Meta keys that are considered ephemereal and do not trigger a full save (updating modified date) when changed.
+	 *
+	 * @var string[]
+	 */
+	protected $ephemeral_meta_keys = array(
+		EditLock::META_KEY_NAME,
+	);
+
+	/**
 	 * Handles custom metadata in the wc_orders_meta table.
 	 *
 	 * @var OrdersTableDataStoreMeta
@@ -1253,12 +1262,10 @@ WHERE
 		$post_order_modified_date = is_null( $post_order_modified_date ) ? 0 : $post_order_modified_date->getTimestamp();
 
 		/**
-		 * We are here because there was difference in posts and order data, although the sync is enabled.
-		 * When order modified date is more recent than post modified date, it can only mean that COT definitely has more updated version of the order.
-		 *
-		 * In a case where post meta was updated (without updating post_modified date), post_modified would be equal to order_modified date.
-		 *
-		 * So we write back to the order table when order modified date is more recent than post modified date. Otherwise, we write to the post table.
+		 * We are here because there was difference in the post and order data even though sync is enabled. If the modified date in
+		 * the post is the same or more recent than the modified date in the order object, we update the order object with the data
+		 * from the post. The opposite case is handled in 'backfill_post_record'. This mitigates the case where other plugins write
+		 * to the post or postmeta directly.
 		 */
 		if ( $post_order_modified_date >= $order_modified_date ) {
 			$this->migrate_post_record( $order, $post_order );
@@ -1547,7 +1554,7 @@ WHERE
 	 *
 	 * @param array $ids List of order IDs.
 	 *
-	 * @return \stdClass[]|object|null DB Order objects or error.
+	 * @return \stdClass[] DB Order objects or error.
 	 */
 	protected function get_order_data_for_ids( $ids ) {
 		global $wpdb;
@@ -2978,9 +2985,7 @@ CREATE TABLE $meta_table (
 	private function should_save_after_meta_change( $order, $meta = null ) {
 		$current_time      = $this->legacy_proxy->call_function( 'current_time', 'mysql', 1 );
 		$current_date_time = new \WC_DateTime( $current_time, new \DateTimeZone( 'GMT' ) );
-		$skip_for          = array(
-			EditLock::META_KEY_NAME,
-		);
-		return $order->get_date_modified() < $current_date_time && empty( $order->get_changes() ) && ( ! is_object( $meta ) || ! in_array( $meta->key, $skip_for, true ) );
+
+		return $order->get_date_modified() < $current_date_time && empty( $order->get_changes() ) && ( ! is_object( $meta ) || ! in_array( $meta->key, $this->ephemeral_meta_keys, true ) );
 	}
 }

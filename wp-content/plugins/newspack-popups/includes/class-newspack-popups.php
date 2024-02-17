@@ -1068,7 +1068,7 @@ final class Newspack_Popups {
 	 * @return WP_Term[] An array of WP_Term objects.
 	 */
 	public static function get_groups() {
-		$terms = get_terms(
+		$terms = get_terms( // phpcs:ignore WordPress.WP.DeprecatedParameters.Get_termsParam2Found
 			self::NEWSPACK_POPUPS_TAXONOMY,
 			[
 				'hide_empty' => false,

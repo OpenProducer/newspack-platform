@@ -18,26 +18,9 @@ class RSS {
 	const FEED_SETTINGS_META = 'partner_feed_settings';
 
 	/**
-	 * Hooks and filters.
-	 */
-	public static function maybe_init() {
-		add_action( 'init', [ __CLASS__, 'init' ] );
-	}
-
-	/**
 	 * Initialise.
 	 */
 	public static function init() {
-		if ( ! function_exists( 'is_plugin_active' ) ) {
-			include_once ABSPATH . 'wp-admin/includes/plugin.php';
-		}
-
-		// If the standalone plugin is active, deactivate it and activate as a module.
-		if ( is_plugin_active( 'newspack-rss-enhancements/newspack-rss-enhancements.php' ) ) {
-			deactivate_plugins( 'newspack-rss-enhancements/newspack-rss-enhancements.php' );
-			Settings::activate_optional_module( 'rss' );
-		}
-
 		if ( ! Settings::is_optional_module_active( 'rss' ) ) {
 			return;
 		}
@@ -651,4 +634,4 @@ xmlns:media="http://search.yahoo.com/mrss/"
 		}
 	}
 }
-RSS::maybe_init();
+RSS::init();

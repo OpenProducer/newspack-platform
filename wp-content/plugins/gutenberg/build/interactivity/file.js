@@ -88,4 +88,6 @@ const createActiveXObject = type => {
       return browserSupportsPdfs();
     }
   }
+}, {
+  lock: true
 });

@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit6a1169d85bf3616f899aff196f7928f7
+class ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -16,10 +16,6 @@ class ComposerStaticInit6a1169d85bf3616f899aff196f7928f7
         'j' => 
         array (
             'joshtronic\\' => 11,
-        ),
-        'S' => 
-        array (
-            'Stripe\\' => 7,
         ),
         'P' => 
         array (
@@ -48,10 +44,6 @@ class ComposerStaticInit6a1169d85bf3616f899aff196f7928f7
         'joshtronic\\' => 
         array (
             0 => __DIR__ . '/..' . '/joshtronic/php-loremipsum/src',
-        ),
-        'Stripe\\' => 
-        array (
-            0 => __DIR__ . '/..' . '/stripe/stripe-php/lib',
         ),
         'Psr\\Http\\Message\\' => 
         array (
@@ -189,7 +181,6 @@ class ComposerStaticInit6a1169d85bf3616f899aff196f7928f7
         'Newspack\\Starter_Content_Provider' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-provider.php',
         'Newspack\\Starter_Content_WordPress' => __DIR__ . '/../..' . '/includes/starter_content/class-starter-content-wordpress.php',
         'Newspack\\Stripe_Connection' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-connection.php',
-        'Newspack\\Stripe_Webhooks' => __DIR__ . '/../..' . '/includes/reader-revenue/stripe/class-stripe-webhooks.php',
         'Newspack\\Syndication_Wizard' => __DIR__ . '/../..' . '/includes/wizards/class-syndication-wizard.php',
         'Newspack\\Theme_Manager' => __DIR__ . '/../..' . '/includes/class-theme-manager.php',
         'Newspack\\Twitter_Pixel' => __DIR__ . '/../..' . '/includes/tracking/class-twitter-pixel.php',
@@ -207,9 +198,9 @@ class ComposerStaticInit6a1169d85bf3616f899aff196f7928f7
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit6a1169d85bf3616f899aff196f7928f7::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit6a1169d85bf3616f899aff196f7928f7::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit6a1169d85bf3616f899aff196f7928f7::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0::$classMap;
 
         }, null, ClassLoader::class);
     }
