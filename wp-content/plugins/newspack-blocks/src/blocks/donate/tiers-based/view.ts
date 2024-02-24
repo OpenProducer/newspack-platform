@@ -26,7 +26,6 @@ export default ( parentEl: HTMLElement ) => {
 	setupSlider( parentEl, config );
 
 	let selectedFrequency: SelectedFrequency = config.initialFrequency;
-	let selectedTierIndex = 0;
 
 	// Frequency choosing interaction.
 	frequencyButtonsEls.forEach( buttonEl => {
@@ -93,7 +92,6 @@ export default ( parentEl: HTMLElement ) => {
 	tierSelectionButtonsEls.forEach( buttonEl => {
 		buttonEl.addEventListener( 'click', () => {
 			const tierIndex = parseInt( buttonEl.getAttribute( 'data-tier-index' ) || '' );
-			selectedTierIndex = tierIndex;
 			const tierHeadingEl: HTMLElement | null = parentEl.querySelector(
 				'.wpbnbd__tiers__tier-tile h2'
 			);
@@ -128,37 +126,6 @@ export default ( parentEl: HTMLElement ) => {
 			toggleView();
 		} );
 	} );
-
-	if ( config.isRenderingStripePaymentForm ) {
-		initFormEl.addEventListener( 'submit', e => {
-			e.preventDefault();
-
-			// Update values for the payment form.
-			const paymentFormEl = parentEl.querySelector( 'form[data-is-streamlined-form]' );
-			if ( ! paymentFormEl ) {
-				return;
-			}
-			const paymentFormAmountInputEl = paymentFormEl.querySelector(
-				'input[data-is-streamlined-input-amount]'
-			);
-			const paymentFormFrequencyInputEl = paymentFormEl.querySelector(
-				`input[name="${ config.params.frequency }"]`
-			);
-			if ( ! paymentFormAmountInputEl || ! paymentFormFrequencyInputEl ) {
-				return;
-			}
-			const amount = config.amounts[ selectedFrequency ][ selectedTierIndex ];
-			paymentFormAmountInputEl.setAttribute( 'value', amount );
-			paymentFormAmountInputEl.setAttribute(
-				'name',
-				`${ config.params.tierPrefix }${ selectedFrequency }`
-			);
-			paymentFormFrequencyInputEl.setAttribute( 'value', selectedFrequency );
-			// Trigger a change event, so the UI updates.
-			paymentFormEl.dispatchEvent( new Event( 'change' ) );
-		} );
-		backButton?.addEventListener( 'click', toggleView );
-	}
 
 	window.addEventListener( `newspackPaymentFlowComplete-${ parentEl.id }`, () => {
 		if ( backButton ) {

@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error;
+use WP_Error;
 use Google\Auth\OAuth2;
 use Google\Auth\Credentials\UserRefreshCredentials;
 

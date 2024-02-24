@@ -9,7 +9,7 @@ namespace Newspack;
 
 require_once NEWSPACK_COMPOSER_ABSPATH . 'autoload.php';
 
-use \WP_Error, \WP_Query, Newspack\Theme_Manager, Newspack\Starter_Content_Generated, Newspack\Starter_Content_WordPress;
+use WP_Error, WP_Query, Newspack\Theme_Manager, Newspack\Starter_Content_Generated, Newspack\Starter_Content_WordPress;
 
 defined( 'ABSPATH' ) || exit;
 

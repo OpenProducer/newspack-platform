@@ -71,7 +71,7 @@ class Admin_Plugins_Screen {
 			return $plugins;
 		}
 
-		$orderby = 'NewspackOrderIndex'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Override.Prohibited
+		$orderby = 'NewspackOrderIndex'; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Override.Prohibited, WordPress.WP.GlobalVariablesOverride.Prohibited
 
 		$managed_plugins = Plugin_Manager::get_managed_plugins();
 

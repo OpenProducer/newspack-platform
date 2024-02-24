@@ -1,7 +1,7 @@
 /**
  * WordPress dependencies
  */
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { Component } from '@wordpress/element';
 import { Button, QueryControls as BasicQueryControls, ToggleControl } from '@wordpress/components';
 import apiFetch from '@wordpress/api-fetch';
@@ -233,20 +233,22 @@ class QueryControls extends Component {
 			onTagExclusionsChange,
 			categoryExclusions,
 			onCategoryExclusionsChange,
+			customTaxonomyExclusions,
+			onCustomTaxonomyExclusionsChange,
 			enableSpecific,
 		} = this.props;
 		const { showAdvancedFilters } = this.state;
 
 		const registeredCustomTaxonomies = window.newspack_blocks_data?.custom_taxonomies;
 
-		const customTaxonomiesPrepareChange = ( taxSlug, value ) => {
-			let newValue = customTaxonomies.filter( tax => tax.slug !== taxSlug );
+		const customTaxonomiesPrepareChange = ( taxArr, taxHandler, taxSlug, value ) => {
+			let newValue = taxArr.filter( tax => tax.slug !== taxSlug );
 			newValue = [ ...newValue, { slug: taxSlug, terms: value } ];
-			onCustomTaxonomiesChange( newValue );
+			taxHandler( newValue );
 		};
 
-		const getTermsOfCustomTaxonomy = taxSlug => {
-			const tax = customTaxonomies.find( taxObj => taxObj.slug === taxSlug );
+		const getTermsOfCustomTaxonomy = ( taxArr, taxSlug ) => {
+			const tax = taxArr.find( taxObj => taxObj.slug === taxSlug );
 			return tax ? tax.terms : [];
 		};
 
@@ -312,9 +314,14 @@ class QueryControls extends Component {
 							registeredCustomTaxonomies.map( tax => (
 								<AutocompleteTokenField
 									key={ `${ customTaxonomies[ tax.slug ] }-selector` }
-									tokens={ getTermsOfCustomTaxonomy( tax.slug ) }
+									tokens={ getTermsOfCustomTaxonomy( customTaxonomies, tax.slug ) }
 									onChange={ value => {
-										customTaxonomiesPrepareChange( tax.slug, value );
+										customTaxonomiesPrepareChange(
+											customTaxonomies,
+											onCustomTaxonomiesChange,
+											tax.slug,
+											value
+										);
 									} }
 									fetchSuggestions={ search =>
 										this.fetchCustomTaxonomiesSuggestions( tax.slug, search )
@@ -355,6 +362,31 @@ class QueryControls extends Component {
 										label={ __( 'Excluded Categories', 'newspack-blocks' ) }
 									/>
 								) }
+								{ registeredCustomTaxonomies &&
+									onCustomTaxonomyExclusionsChange &&
+									registeredCustomTaxonomies.map( ( { label, slug } ) => (
+										<AutocompleteTokenField
+											fetchSavedInfo={ termIds => this.fetchSavedCustomTaxonomies( slug, termIds ) }
+											fetchSuggestions={ search =>
+												this.fetchCustomTaxonomiesSuggestions( slug, search )
+											}
+											key={ `${ slug }-exclusions-selector` }
+											label={ sprintf(
+												// translators: %s is the custom taxonomy label.
+												__( 'Excluded %s', 'newspack-blocks' ),
+												label
+											) }
+											onChange={ value =>
+												customTaxonomiesPrepareChange(
+													customTaxonomyExclusions,
+													onCustomTaxonomyExclusionsChange,
+													slug,
+													value
+												)
+											}
+											tokens={ getTermsOfCustomTaxonomy( customTaxonomyExclusions, slug ) }
+										/>
+									) ) }
 							</>
 						) }
 					</>
@@ -372,6 +404,7 @@ QueryControls.defaultProps = {
 	tags: [],
 	customTaxonomies: [],
 	tagExclusions: [],
+	customTaxonomyExclusions: [],
 };
 
 export default QueryControls;

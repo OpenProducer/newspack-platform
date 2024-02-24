@@ -33,7 +33,7 @@
 	}
 
 	&.wpbnbd-frequencies {
-		&--2 .tab-container .freq-label:nth-of-type( 2 )  {
+		&--2 .tab-container .freq-label:nth-of-type( 2 ) {
 			border-left-width: 1px;
 		}
 		&--3 .tab-container .freq-label:nth-of-type( 2 ) {
@@ -114,7 +114,7 @@
 
 	.wpbnbd__tiers .wpbnbd__button--active,
 	// Frequency-based version.
-	.tab-container .freq-label.wpbnbd__button--active::after  {
+	.tab-container .freq-label.wpbnbd__button--active::after {
 		background: white;
 		border-radius: 5px;
 		box-shadow: 0 0 0 1px variables.$color__border;
@@ -167,6 +167,12 @@
 			width: calc( 100% + 2px );
 		}
 	}
+
+	@include mixins.media( mobile ) {
+		&.wpbnbd--nyp-disabled .frequencies input[type='radio']:checked ~ .tiers {
+			grid-template-columns: repeat( 3, 1fr );
+		}
+	}
 }
 
 /* Minimal Style */
@@ -174,7 +180,7 @@
 .wpbnbd.is-style-minimal {
 	border: none;
 
-	form:not( [data-is-streamlined-form] ) {
+	form {
 		text-align: center;
 	}
 
@@ -301,7 +307,6 @@
 			&.wpbnbd__button--active {
 				box-shadow: 0 4px 0 currentcolor;
 			}
-
 		}
 	}
 
@@ -322,10 +327,14 @@
 			}
 		}
 	}
-	&:not( .wpbnbd--platform-stripe ) {
-		button[type='submit'] {
-			margin: 0 auto;
-			min-width: 50%;
+	button[type='submit'] {
+		margin: 0 auto;
+		min-width: 50%;
+	}
+
+	@include mixins.media( mobile ) {
+		&.wpbnbd--nyp-disabled .frequency input[type='radio']:checked ~ .tiers {
+			grid-template-columns: repeat( 3, 1fr );
 		}
 	}
 }

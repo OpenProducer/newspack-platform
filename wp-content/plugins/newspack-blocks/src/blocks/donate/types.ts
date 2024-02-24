@@ -33,8 +33,6 @@ export type DonationSettings = {
 	availableFrequencies: typeof FREQUENCY_SLUGS;
 	feeMultiplier: number;
 	feeStatic: number;
-	stripePublishableKey: string;
-	paymentRequestType: string;
 	captchaSiteKey: string;
 	minimumDonation: number;
 	amounts: DonationAmounts;
@@ -71,21 +69,8 @@ export type TierBasedOptionValue = {
 	recommendLabel: string;
 };
 
-export type AdditionalField = {
-	type: 'text';
-	name: string;
-	label: string;
-	isRequired: boolean;
-	width: number;
-	isNew?: boolean;
-	fieldIndex?: number;
-};
-
 export type DonateBlockAttributes = OverridableConfiguration & {
 	buttonText: string;
-	buttonWithCCText: string;
-	// https://stripe.com/docs/stripe-js/elements/payment-request-button
-	paymentRequestType: 'donate' | 'default' | 'book' | 'buy';
 	buttonColor: string;
 	thanksText: string;
 	defaultFrequency: DonationFrequencySlug;
@@ -104,7 +89,6 @@ export type DonateBlockAttributes = OverridableConfiguration & {
 	suggestedAmounts?: [ number, number, number ];
 	suggestedAmountUntiered?: number;
 	minimumDonation: number;
-	additionalFields: AdditionalField[];
 };
 
 export type ComponentProps = {

@@ -39,7 +39,7 @@ function newspack_string_to_bool( $string ) {
 
 /**
  * Currencies options, copied from WooCommerce.
- * https://github.com/woocommerce/woocommerce/blob/master/includes/wc-core-functions.php
+ * https://github.com/woocommerce/woocommerce/blob/trunk/includes/wc-core-functions.php
  */
 function newspack_get_currencies_options() {
 	$currencies       = [

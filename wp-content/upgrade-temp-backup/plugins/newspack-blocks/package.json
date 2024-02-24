@@ -1,0 +1,67 @@
+{
+	"name": "@automattic/newspack-blocks",
+	"version": "2.6.2",
+	"author": "Automattic",
+	"devDependencies": {
+		"@rushstack/eslint-patch": "^1.5.1",
+		"@testing-library/dom": "^9.3.3",
+		"@testing-library/user-event": "^14.5.1",
+		"@types/lodash": "^4.14.202",
+		"@types/lodash.debounce": "^4.0.9",
+		"eslint": "^7.32.0",
+		"fetch-mock-jest": "^1.5.1",
+		"html-entities": "^2.4.0",
+		"identity-obj-proxy": "^3.0.0",
+		"lint-staged": "^13.2.3",
+		"newspack-scripts": "^5.1.0",
+		"postcss-scss": "^4.0.9",
+		"prettier": "npm:wp-prettier@^2.6.2-beta-1",
+		"stylelint": "^15.11.0"
+	},
+	"description": "=== Newspack Blocks === Contributors: (this should be a list of wordpress.org userid's) Donate link: https://example.com/ Tags: comments, spam Requires at least: 4.5 Tested up to: 5.1.1 Stable tag: 0.1.0 License: GPLv2 or later License URI: https://www.gnu.org/licenses/gpl-2.0.html",
+	"dependencies": {
+		"@stripe/stripe-js": "^2.2.0",
+		"classnames": "^2.3.2",
+		"lodash": "^4.17.21",
+		"newspack-components": "^2.1.0",
+		"react": "^17.0.2",
+		"redux": "^4.2.1",
+		"redux-saga": "^1.2.3",
+		"regenerator-runtime": "^0.14.0",
+		"swiper": "10.3.1"
+	},
+	"scripts": {
+		"cm": "newspack-scripts commit",
+		"semantic-release": "newspack-scripts release --files=newspack-blocks.php",
+		"build": "newspack-scripts build",
+		"start": "npm ci && newspack-scripts watch",
+		"watch": "newspack-scripts watch",
+		"test": "newspack-scripts test",
+		"lint": "npm run lint:scss && npm run lint:js",
+		"lint:js": "eslint 'src/**/*.{js,jsx,ts,tsx}'",
+		"lint:js:staged": "eslint --ext .js,.jsx,.ts,.tsx",
+		"lint:php:staged": "./vendor/bin/phpcs --filter=GitStaged",
+		"format:js": "prettier 'src/**/*.{js,jsx,ts,tsx}' --write",
+		"lint:scss": "stylelint '**/*.scss' --customSyntax postcss-scss --config=./node_modules/newspack-scripts/config/stylelint.config.js",
+		"format:scss": "prettier --write 'src/**/*.scss'",
+		"lint:scss:staged": "stylelint --customSyntax postcss-scss --config=./node_modules/newspack-scripts/config/stylelint.config.js",
+		"i18n": "NODE_ENV=production npm run build; bash ./bin/update-translations.sh",
+		"typescript:check": "newspack-scripts typescript-check",
+		"release": "npm run build && npm run semantic-release",
+		"release:archive": "rm -rf release && mkdir -p release && rsync -r . ./release/newspack-blocks --exclude-from='./.distignore' && cd release && zip -r newspack-blocks.zip newspack-blocks",
+		"postinstall": "rm -rf node_modules/newspack-scripts/node_modules/prettier"
+	},
+	"lint-staged": {
+		"*.scss": "npm run lint:scss:staged",
+		"*.(js|jsx)": "npm run lint:js:staged",
+		"*.php": "npm run lint:php:staged"
+	},
+	"repository": {
+		"type": "git",
+		"url": "git+https://github.com/Automattic/newspack-blocks.git"
+	},
+	"license": "GPL-3.0-or-later",
+	"bugs": {
+		"url": "https://github.com/Automattic/newspack-blocks/issues"
+	}
+}

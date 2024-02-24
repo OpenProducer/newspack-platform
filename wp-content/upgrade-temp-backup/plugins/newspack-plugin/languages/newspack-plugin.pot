@@ -1,0 +1,806 @@
+# Copyright (C) 2023 Automattic
+# This file is distributed under the GPL2.
+msgid ""
+msgstr ""
+"Project-Id-Version: Newspack 2.6.0\n"
+"Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/newspack-plugin\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: 8bit\n"
+"POT-Creation-Date: 2023-09-15T15:55:53+00:00\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"X-Generator: WP-CLI 2.8.1\n"
+"X-Domain: newspack-plugin\n"
+
+#. Plugin Name of the plugin
+msgid "Newspack"
+msgstr ""
+
+#. Description of the plugin
+msgid "An advanced open-source publishing and revenue-generating platform for news organizations."
+msgstr ""
+
+#. Author of the plugin
+msgid "Automattic"
+msgstr ""
+
+#. Author URI of the plugin
+msgid "https://newspack.com/"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:39
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:39
+msgid "Stacked"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:47
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:47
+msgid "Columns (newsletter subscription)"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:110
+#: assets/blocks/reader-registration/index.php:343
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:110
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:343
+msgid "Thank you for registering!"
+msgstr ""
+
+#. Translators: %s is a link to My Account.
+#: assets/blocks/reader-registration/index.php:115
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:115
+msgid "Please visit %s to verify and manage your account."
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:116
+#: includes/reader-activation/class-reader-activation.php:928
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:116
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:928
+msgid "My Account"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:123
+#: includes/reader-activation/class-reader-activation.php:1144
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:123
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1144
+msgid "Sign up"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:124
+#: includes/reader-activation/class-reader-activation.php:1220
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:124
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1220
+msgid "Subscribe to our newsletter"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:125
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:125
+msgid "Already have an account?"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:126
+#: includes/reader-activation/class-reader-activation.php:1108
+#: includes/reader-activation/class-reader-activation.php:1121
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:126
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1108
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1121
+msgid "Sign in"
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:127
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:127
+msgid "An account was already registered with this email. Please check your inbox for an authentication link."
+msgstr ""
+
+#: assets/blocks/reader-registration/index.php:410
+#: includes/reader-activation/class-reader-activation.php:1390
+#: release/newspack-plugin/assets/blocks/reader-registration/index.php:410
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1390
+msgid "You must enter a valid email address."
+msgstr ""
+
+#: includes/class-patches.php:297
+#: release/newspack-plugin/includes/class-patches.php:297
+msgid "Please choose a new homepage before attempting to unpublish this page."
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:122
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:122
+msgctxt "post type general name"
+msgid "RSS Feeds"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:123
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:123
+msgctxt "post type singular name"
+msgid "RSS Feed"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:124
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:124
+msgctxt "admin menu"
+msgid "RSS Feeds"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:125
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:125
+msgctxt "add new on admin bar"
+msgid "RSS Feed"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:126
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:126
+msgctxt "rss feed"
+msgid "Add New"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:127
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:127
+msgid "Add New RSS Feed"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:128
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:128
+msgid "New RSS Feed"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:129
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:129
+msgid "Edit RSS Feed"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:130
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:130
+msgid "View RSS Feed"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:131
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:131
+msgid "All RSS Feeds"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:132
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:132
+msgid "Search RSS Feeds"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:133
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:133
+msgid "Parent RSS Feeds:"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:134
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:134
+msgid "No RSS feeds found."
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:135
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:135
+msgid "No RSS seeds found in Trash."
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:136
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:136
+msgid "RSS Feed published"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:137
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:137
+msgid "RSS Feed updated"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:142
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:142
+msgid "RSS feeds customized for third-party services."
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:170
+#: includes/optional-modules/class-rss.php:199
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:170
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:199
+msgid "Feed URL"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:205
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:205
+msgid "Content Settings"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:211
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:211
+msgid "Technical Settings"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:254
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:254
+msgid "A URL will be generated for this feed once published"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:283
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:283
+msgid "Number of posts to display in feed:"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:289
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:289
+msgid "Offset posts by:"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:295
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:295
+msgid "Limit timeframe to last # of hours:"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:301
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:301
+msgid "Use post full content or excerpt:"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:304
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:304
+msgid "Full content"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:305
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:305
+msgid "Excerpt"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:310
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:310
+msgid "Include only posts from these categories:"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:320
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:320
+msgid "Exclude posts from these categories:"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:352
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:352
+msgid "Add post featured images in <image> tags"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:359
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:359
+msgid "Add post featured images in <media:> tags"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:366
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:366
+msgid "Add post updated time in <updated> tags"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:373
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:373
+msgid "Add categories and tags in <tags> element"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:380
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:380
+msgid "Add featured image at the top of feed content"
+msgstr ""
+
+#: includes/optional-modules/class-rss.php:387
+#: release/newspack-plugin/includes/optional-modules/class-rss.php:387
+msgid "Add Yahoo namespace to RSS namespace: xmlns:media=\"http://search.yahoo.com/mrss/\""
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:148
+#: includes/reader-activation/class-reader-activation.php:1522
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:148
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1522
+msgid "Please enter a valid email address."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:149
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:149
+msgid "Please enter a password."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:150
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:150
+msgid "The popup has been blocked. Allow popups for the site and try again."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:173
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:173
+msgid "Subscribe to our newsletters:"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:260
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:260
+msgid "Newspack Campaigns plugin is required to activate Reader Activation features."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:376
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:376
+msgid "Legal Pages"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:377
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:377
+msgid "Displaying legal pages like Privacy Policy and Terms of Service on your site is recommended for allowing readers to register and access their account."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:379
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:379
+msgid "Privacy policies that tell users how you collect and use their data are essential for running a  trustworthy website. While rules and regulations can differ by country, certain legal pages might be required by law."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:382
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:382
+msgid "Legal Pages Disclaimer Text"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:383
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:383
+msgid "Legal pages disclaimer text to display on registration."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:386
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:386
+msgid "Legal Pages URL"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:387
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:387
+msgid "URL to the page containing the privacy policy or terms of service."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:396
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:396
+msgid "Email Service Provider (ESP)"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:397
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:397
+msgid "Connect to your ESP to register readers with their email addresses and send newsletters."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:398
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:398
+msgid "Connect to your email service provider (ESP) and enable at least one subscription list."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:405
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:405
+msgid "Transactional Emails"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:406
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:406
+msgid "Your sender name and email address determines how readers find emails related to their account in their inbox. To customize the content of these emails, visit Advanced Settings below."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:410
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:410
+msgid "Sender Name"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:411
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:411
+msgid "Name to use as the sender of transactional emails."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:414
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:414
+msgid "Sender Email Address"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:415
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:415
+msgid "Email address to use as the sender of transactional emails."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:418
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:418
+msgid "Contact Email Address"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:419
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:419
+msgid "This email will be used as \"Reply-To\" for transactional emails as well."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:425
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:425
+msgid "reCAPTCHA v3"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:426
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:426
+msgid "Connecting to a Google reCAPTCHA v3 account enables enhanced anti-spam for all Newspack sign-up blocks."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:427
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:427
+msgid "Enable reCAPTCHA v3 and enter your account credentials."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:440
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:440
+msgid "Reader Revenue"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:441
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:441
+msgid "Setting suggested donation amounts is required for enabling a streamlined donation experience."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:442
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:442
+msgid "Set platform to \"Newspack\" or \"News Revenue Hub\" and configure your default donation settings. If using News Revenue Hub, set an Organization ID and a Donor Landing Page in News Revenue Hub Settings."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:452
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:452
+msgid "Reader Activation Campaign"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:453
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:453
+msgid "Building a set of prompts with default segments and settings allows for an improved experience optimized for Reader Activation."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:457
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:457
+msgid "Reader Activation campaign"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:458
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:458
+msgid "Waiting for all settings to be ready"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:510
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:435
+#: includes/reader-revenue/templates/myaccount-edit-account.php:56
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:510
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:435
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:56
+msgid "Email address"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:684
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:684
+msgid "Thank you for verifying your account!"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:734
+#: includes/reader-activation/class-reader-activation.php:1483
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:734
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1483
+msgid "Invalid user."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:929
+#: includes/reader-activation/class-reader-activation.php:981
+#: includes/reader-activation/class-reader-activation.php:1028
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:929
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:981
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1028
+msgid "Sign In"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:957
+#: includes/reader-activation/class-reader-activation.php:1097
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:957
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1097
+msgid "Enter your email address"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:982
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:982
+msgid "Sign Up"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1013
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1013
+msgid "Close Authentication Form"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1024
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1024
+msgid "I don't have an account"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1025
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1025
+msgid "I already have an account"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1044
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1044
+msgid "We've recently sent you an authentication link. Please, check your inbox!"
+msgstr ""
+
+#. Translators: %s is the link to sign in via magic link instead.
+#: includes/reader-activation/class-reader-activation.php:1051
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1051
+msgid "Sign in with a password below, or %s."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1052
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1052
+msgid "sign in using your email"
+msgstr ""
+
+#. Translators: %s is the link to sign in via password instead.
+#: includes/reader-activation/class-reader-activation.php:1062
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1062
+msgid "Get a code sent to your email to sign in, or %s."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1063
+#: includes/reader-activation/class-reader-activation.php:1074
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1063
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1074
+msgid "sign in using a password"
+msgstr ""
+
+#. Translators: %s is the link to sign in via password instead.
+#: includes/reader-activation/class-reader-activation.php:1073
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1073
+msgid "Enter the code you received via email to sign in, or %s."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1101
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1101
+msgid "6-digit code"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1104
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1104
+msgid "Enter your password"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1112
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1112
+msgid "Sign in with your email"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1115
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1115
+msgid "Lost your password?"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1125
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1125
+msgid "Try a different email"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1128
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1128
+msgid "Send another code"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1134
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1134
+msgid "Send authorization code"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1138
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1138
+msgid "Sign in with a password"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1176
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1176
+msgid "Login successful!"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1310
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1310
+msgid "OR"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1317
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1317
+msgid "Sign in with Google"
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1382
+#: includes/reader-activation/class-reader-activation.php:1386
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:261
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:281
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1382
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1386
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:261
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:281
+msgid "Invalid request."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1397
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1397
+msgid "We couldn't find a reader account registered to this email address. Please confirm that you entered the correct email, or sign up for a new account."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1408
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1408
+msgid "You must enter a valid password."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1412
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1412
+msgid "Invalid credentials."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1420
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1420
+msgid "We encountered an error sending an authentication link. Please try again."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1422
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1422
+msgid "Please check your inbox for an authentication link."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1431
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1431
+msgid "An account was already registered with this email."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1436
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1436
+msgid "Unable to register your account. Try a different email."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1512
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1512
+msgid "Registration is disabled."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1516
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1516
+msgid "Cannot register while logged in."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1637
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1637
+msgid "Please wait before requesting another verification email."
+msgstr ""
+
+#: includes/reader-activation/class-reader-activation.php:1743
+#: release/newspack-plugin/includes/reader-activation/class-reader-activation.php:1743
+msgid "Please wait a moment before requesting another password reset email."
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:85
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:85
+msgid "Billing"
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:93
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:93
+msgid "Log out"
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:170
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:170
+msgid "Please check your email inbox for instructions on how to set a new password."
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:177
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:238
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:310
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:177
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:238
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:310
+msgid "Something went wrong."
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:238
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:238
+msgid "Please check your email inbox for instructions on how to delete your account."
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:303
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:303
+msgid "Please check your email inbox for a link to verify your account."
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:434
+#: includes/reader-revenue/templates/myaccount-edit-account.php:51
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:434
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:51
+msgid "Display name"
+msgstr ""
+
+#: includes/reader-revenue/my-account/class-woocommerce-my-account.php:521
+#: release/newspack-plugin/includes/reader-revenue/my-account/class-woocommerce-my-account.php:521
+msgid "You have successfully logged out."
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:65
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:65
+msgid "Save changes"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:80
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:80
+msgid "Create a Password"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:82
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:82
+msgid "Reset Password"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:89
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:89
+msgid "Email me a link to set my password"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:91
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:91
+msgid "Email me a password reset link"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:107
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:107
+msgid "Delete Account"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:110
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:110
+msgid "Request account deletion"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-edit-account.php:115
+#: release/newspack-plugin/includes/reader-revenue/templates/myaccount-edit-account.php:115
+msgid "Deleting your account will also cancel any newsletter subscriptions and recurring payments."
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-verify.php:56
+msgid "You must verify your account before you can manage account settings. Verify with a link or by setting a password."
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-verify.php:60
+msgid "Send me a link"
+msgstr ""
+
+#: includes/reader-revenue/templates/myaccount-verify.php:63
+msgid "Set a new password"
+msgstr ""
+
+#: includes/templates/reader-activation-emails/verification.php:11
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:11
+msgid "Your verification link"
+msgstr ""
+
+#: includes/templates/reader-activation-emails/verification.php:15
+#: includes/templates/reader-activation-emails/verification.php:173
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:15
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:173
+msgid "Hi there!"
+msgstr ""
+
+#: includes/templates/reader-activation-emails/verification.php:19
+#: includes/templates/reader-activation-emails/verification.php:173
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:19
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:173
+msgid "To manage your account, please verify your email address by clicking the link below:"
+msgstr ""
+
+#: includes/templates/reader-activation-emails/verification.php:24
+#: includes/templates/reader-activation-emails/verification.php:173
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:24
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:173
+msgid "Verify my email"
+msgstr ""
+
+#: includes/templates/reader-activation-emails/verification.php:29
+#: includes/templates/reader-activation-emails/verification.php:173
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:29
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:173
+msgid "Or copy and paste the link in your browser:"
+msgstr ""
+
+#: includes/templates/reader-activation-emails/verification.php:33
+#: includes/templates/reader-activation-emails/verification.php:173
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:33
+#: release/newspack-plugin/includes/templates/reader-activation-emails/verification.php:173
+msgid "Once verified, you'll be able to edit your profile, set a password for easier access, and manage your newsletter subscriptions and billing information."
+msgstr ""

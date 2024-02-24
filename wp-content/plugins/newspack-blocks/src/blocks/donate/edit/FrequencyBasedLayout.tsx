@@ -8,26 +8,15 @@ import classNames from 'classnames';
  */
 import { __ } from '@wordpress/i18n';
 import { useMemo, useEffect, useRef, useState } from '@wordpress/element';
-import { SelectControl } from '@wordpress/components';
 import { RichText } from '@wordpress/block-editor';
 
 /**
  * Internal dependencies
  */
 import { AmountValueInput } from './components';
-import { getColorForContrast } from '../utils';
+import { getColorForContrast, getFrequencyLabel } from '../utils';
 import { FREQUENCIES } from '../consts';
-import type { DonateBlockAttributes, ComponentProps, DonationFrequencySlug } from '../types';
-
-const PAYMENT_REQUEST_BUTTON_TYPE_OPTIONS: {
-	label: string;
-	value: DonateBlockAttributes[ 'paymentRequestType' ];
-}[] = [
-	{ label: __( 'Donate', 'newspack-blocks' ), value: 'donate' },
-	{ label: __( 'Pay', 'newspack-blocks' ), value: 'default' },
-	{ label: __( 'Book', 'newspack-blocks' ), value: 'book' },
-	{ label: __( 'Buy', 'newspack-blocks' ), value: 'buy' },
-];
+import type { ComponentProps, DonationFrequencySlug } from '../types';
 
 const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) => {
 	// Unique identifier to prevent collisions with other Donate blocks' labels.
@@ -65,11 +54,8 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 		}
 	}, [ attributes.defaultFrequency ] );
 
-	const isRenderingStripePaymentForm =
-		window.newspack_blocks_data?.is_rendering_stripe_payment_form;
-
 	const [ selectedFrequency, setSelectedFrequency ] = useState( attributes.defaultFrequency );
-
+	const canUseNameYourPrice = window.newspack_blocks_data?.can_use_name_your_price;
 	const renderFrequencySelect = ( frequencySlug: DonationFrequencySlug ) => (
 		<>
 			<input
@@ -110,31 +96,59 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 		<div className="wp-block-newspack-blocks-donate__options">
 			<div className="wp-block-newspack-blocks-donate__frequencies frequencies">
 				<div className="tab-container">{ availableFrequencies.map( renderTab ) }</div>
-				{ availableFrequencies.map( frequencySlug => (
-					<div
-						className="wp-block-newspack-blocks-donate__frequency frequency"
-						key={ frequencySlug }
-					>
-						{ renderFrequencySelect( frequencySlug ) }
-						<div className="input-container">
-							<label
-								className="donate-label"
-								htmlFor={ 'newspack-' + frequencySlug + '-' + uid + '-untiered-input' }
-							>
-								{ __( 'Donation amount', 'newspack-blocks' ) }
-							</label>
-							<div className="wp-block-newspack-blocks-donate__money-input money-input">
-								<span className="currency">{ settings.currencySymbol }</span>
-								<AmountValueInput
-									{ ...props }
-									frequencySlug={ frequencySlug }
-									tierIndex={ 3 }
-									id={ `newspack-${ frequencySlug }-${ uid }-untiered-input` }
-								/>
+				{ availableFrequencies.map( frequencySlug => {
+					const untieredAmount = amounts[ frequencySlug ][ 3 ];
+					return (
+						<div
+							className="wp-block-newspack-blocks-donate__frequency frequency"
+							key={ frequencySlug }
+						>
+							{ renderFrequencySelect( frequencySlug ) }
+							<div className="input-container">
+								{ canUseNameYourPrice ? (
+									<>
+										<label
+											className="donate-label"
+											htmlFor={ 'newspack-' + frequencySlug + '-' + uid + '-untiered-input' }
+										>
+											{ __( 'Donation amount', 'newspack-blocks' ) }
+										</label>
+										<div className="wp-block-newspack-blocks-donate__money-input money-input">
+											<span className="currency">{ settings.currencySymbol }</span>
+											<AmountValueInput
+												{ ...props }
+												frequencySlug={ frequencySlug }
+												tierIndex={ 3 }
+												id={ `newspack-${ frequencySlug }-${ uid }-untiered-input` }
+											/>
+										</div>
+									</>
+								) : (
+									<>
+										<input
+											type="radio"
+											value={ untieredAmount }
+											className={ 'frequency-input' }
+											id={ `newspack-${ frequencySlug }-${ uid }-untiered-input` }
+											name={ `donation_value_${ frequencySlug }` }
+											defaultChecked={ true }
+										/>
+										<label
+											className="tier-select-label tier-label"
+											htmlFor={ `newspack-${ frequencySlug }-${ uid }-untiered-input` }
+										>
+											<div
+												dangerouslySetInnerHTML={ {
+													__html: getFrequencyLabel( untieredAmount, frequencySlug ),
+												} }
+											/>
+										</label>
+									</>
+								) }
 							</div>
 						</div>
-					</div>
-				) ) }
+					);
+				} ) }
 			</div>
 		</div>
 	);
@@ -208,30 +222,14 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 				color: getColorForContrast( attributes.buttonColor ),
 			} }
 		>
-			{ isRenderingStripePaymentForm ? (
-				<RichText
-					onChange={ ( value: string ) => setAttributes( { buttonWithCCText: value } ) }
-					placeholder={ __( 'Button text…', 'newspack-blocks' ) }
-					value={ attributes.buttonWithCCText }
-					tagName="span"
-				/>
-			) : (
-				<RichText
-					onChange={ ( value: string ) => setAttributes( { buttonText: value } ) }
-					placeholder={ __( 'Button text…', 'newspack-blocks' ) }
-					value={ attributes.buttonText }
-					tagName="span"
-				/>
-			) }
+			<RichText
+				onChange={ ( value: string ) => setAttributes( { buttonText: value } ) }
+				placeholder={ __( 'Button text…', 'newspack-blocks' ) }
+				value={ attributes.buttonText }
+				tagName="span"
+			/>
 		</div>
 	);
-
-	const selectedPaymentRequestTypeOption = PAYMENT_REQUEST_BUTTON_TYPE_OPTIONS.find(
-		option => option.value === attributes.paymentRequestType
-	);
-	const selectedPaymentRequestType = selectedPaymentRequestTypeOption
-		? selectedPaymentRequestTypeOption.value
-		: 'donate';
 
 	const renderFooter = () => (
 		<>
@@ -243,50 +241,7 @@ const FrequencyBasedLayout = ( props: { isTiered: boolean } & ComponentProps ) =
 					tagName="span"
 				/>
 			</p>
-			{ isRenderingStripePaymentForm ? (
-				<div className="wp-block-newspack-blocks-donate__stripe stripe-payment">
-					<div className="stripe-payment__inputs">
-						<input
-							className="stripe-payment__element stripe-payment__card"
-							type="text"
-							placeholder={ __( 'Card number', 'newspack-blocks' ) }
-						/>
-						<div className="stripe-payment__row stripe-payment__row--flex">
-							<input required placeholder="Email" type="email" name="email" />
-							<input required placeholder="Full Name" type="text" name="full_name" />
-						</div>
-						<div className="stripe-payment__row stripe-payment__row--additional-fields">
-							{ attributes.additionalFields.map( ( field, index ) => (
-								<input
-									key={ index }
-									type="text"
-									name={ field.name }
-									placeholder={ field.label }
-									style={ { width: `calc(${ field.width }% - 0.5rem)` } }
-								/>
-							) ) }
-						</div>
-					</div>
-
-					<div className="stripe-payment__row stripe-payment__row--flex stripe-payment__footer">
-						<div className="stripe-payment__methods">
-							<div className="stripe-payment__request-button">
-								<SelectControl
-									options={ PAYMENT_REQUEST_BUTTON_TYPE_OPTIONS }
-									value={ selectedPaymentRequestType }
-									onChange={ (
-										paymentRequestType: DonateBlockAttributes[ 'paymentRequestType' ]
-									) => setAttributes( { paymentRequestType } ) }
-								/>
-								{ __( 'with Apple/Google Pay', 'newspack-blocks' ) }
-							</div>
-							{ renderButton() }
-						</div>
-					</div>
-				</div>
-			) : (
-				renderButton()
-			) }
+			{ renderButton() }
 		</>
 	);
 

@@ -1,3 +1,53 @@
+## [3.0.1](https://github.com/Automattic/newspack-blocks/compare/v3.0.0...v3.0.1) (2024-02-20)
+
+
+### Bug Fixes
+
+* handle inactive woocommerce ([36a61a2](https://github.com/Automattic/newspack-blocks/commit/36a61a2384002ded40d7ec75f5c9c3f2854a4418))
+* **hpp:** filter invalid autocomplete tokens ([#1671](https://github.com/Automattic/newspack-blocks/issues/1671)) ([b1f9f39](https://github.com/Automattic/newspack-blocks/commit/b1f9f3996aadadf3afd093fac5157e7a04708f3c))
+
+# [3.0.0](https://github.com/Automattic/newspack-blocks/compare/v2.6.2...v3.0.0) (2024-02-20)
+
+
+### Bug Fixes
+
+* **homepage-articles:** use map_deep to construct articles_rest_url and resolve PHP 8.1 warnings ([#1655](https://github.com/Automattic/newspack-blocks/issues/1655)) ([24085d8](https://github.com/Automattic/newspack-blocks/commit/24085d82c6eacf5b31956d3e07303badeaccbe6d))
+* prevent error in modal-checkout check ([7e2a6c7](https://github.com/Automattic/newspack-blocks/commit/7e2a6c75a28b5a1a6316e45151dbe51c5ae8f72b))
+
+
+### Features
+
+* **ci:** add `epic/*` release workflow and rename `master` to `trunk` ([#1656](https://github.com/Automattic/newspack-blocks/issues/1656)) ([c788e55](https://github.com/Automattic/newspack-blocks/commit/c788e55d58cd7c72310f65d83f14f9e0960c6871))
+* deprecate streamlined (Stripe) Donate block version ([#1638](https://github.com/Automattic/newspack-blocks/issues/1638)) ([11bd0d6](https://github.com/Automattic/newspack-blocks/commit/11bd0d620d882a72f631dfe08f808ddde3308665))
+* **homepage-posts:** add custom taxonomy exclusions filter ([#1641](https://github.com/Automattic/newspack-blocks/issues/1641)) ([b140a99](https://github.com/Automattic/newspack-blocks/commit/b140a99c86cd1a3e825bb0a585225a95652ef331))
+* **reader-revenue:** make NYP and Stripe Gateway optional ([#1645](https://github.com/Automattic/newspack-blocks/issues/1645)) ([1322d7c](https://github.com/Automattic/newspack-blocks/commit/1322d7c4c9c1bab175a2c48ab2d359555d459eea))
+
+
+### BREAKING CHANGES
+
+* streamlined (Stripe) Donate block version is no more
+
+# [3.0.0-alpha.1](https://github.com/Automattic/newspack-blocks/compare/v2.6.2...v3.0.0-alpha.1) (2024-02-08)
+
+
+### Bug Fixes
+
+* **homepage-articles:** use map_deep to construct articles_rest_url and resolve PHP 8.1 warnings ([#1655](https://github.com/Automattic/newspack-blocks/issues/1655)) ([24085d8](https://github.com/Automattic/newspack-blocks/commit/24085d82c6eacf5b31956d3e07303badeaccbe6d))
+* prevent error in modal-checkout check ([7e2a6c7](https://github.com/Automattic/newspack-blocks/commit/7e2a6c75a28b5a1a6316e45151dbe51c5ae8f72b))
+
+
+### Features
+
+* **ci:** add `epic/*` release workflow and rename `master` to `trunk` ([#1656](https://github.com/Automattic/newspack-blocks/issues/1656)) ([c788e55](https://github.com/Automattic/newspack-blocks/commit/c788e55d58cd7c72310f65d83f14f9e0960c6871))
+* deprecate streamlined (Stripe) Donate block version ([#1638](https://github.com/Automattic/newspack-blocks/issues/1638)) ([11bd0d6](https://github.com/Automattic/newspack-blocks/commit/11bd0d620d882a72f631dfe08f808ddde3308665))
+* **homepage-posts:** add custom taxonomy exclusions filter ([#1641](https://github.com/Automattic/newspack-blocks/issues/1641)) ([b140a99](https://github.com/Automattic/newspack-blocks/commit/b140a99c86cd1a3e825bb0a585225a95652ef331))
+* **reader-revenue:** make NYP and Stripe Gateway optional ([#1645](https://github.com/Automattic/newspack-blocks/issues/1645)) ([1322d7c](https://github.com/Automattic/newspack-blocks/commit/1322d7c4c9c1bab175a2c48ab2d359555d459eea))
+
+
+### BREAKING CHANGES
+
+* streamlined (Stripe) Donate block version is no more
+
 ## [2.6.2](https://github.com/Automattic/newspack-blocks/compare/v2.6.1...v2.6.2) (2024-02-08)
 
 

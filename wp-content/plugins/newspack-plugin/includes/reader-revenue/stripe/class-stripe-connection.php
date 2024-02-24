@@ -32,6 +32,9 @@ class Stripe_Connection {
 	public static function get_stripe_data() {
 		$wc_configuration_manager = Configuration_Managers::configuration_manager_class_for_plugin_slug( 'woocommerce' );
 		$stripe_data              = $wc_configuration_manager->stripe_data();
+		if ( ! $stripe_data ) {
+			return $stripe_data;
+		}
 
 		$location_code = 'US';
 		$currency      = 'USD';

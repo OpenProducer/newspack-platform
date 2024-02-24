@@ -320,11 +320,11 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 
 	$articles_rest_url = add_query_arg(
 		array_merge(
-			array_map(
+			map_deep(
+				$attributes,
 				function( $attribute ) {
-					return false === $attribute ? '0' : str_replace( '#', '%23', $attribute );
-				},
-				$attributes
+					return false === $attribute ? '0' : $attribute;
+				}
 			),
 			[
 				'page' => 2,

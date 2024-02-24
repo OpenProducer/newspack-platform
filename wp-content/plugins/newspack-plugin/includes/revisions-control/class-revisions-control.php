@@ -160,9 +160,7 @@ class Revisions_Control {
 		$help_tab['content'] .= $help_text;
 
 		get_current_screen()->add_help_tab( $help_tab );
-
 	}
-
 }
 
 Revisions_Control::init();

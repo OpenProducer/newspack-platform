@@ -47,7 +47,6 @@ class WooCommerce_Cli {
 
 		WP_CLI::success( 'Subscriptions missing fees:' );
 		$this->output_subscriptions( $subscriptions, $format );
-
 	}
 
 	/**
@@ -81,7 +80,6 @@ class WooCommerce_Cli {
 
 		WP_CLI::success( 'Fixed subscriptions that had missing fees:' );
 		$this->output_subscriptions( $subscriptions, $format );
-
 	}
 
 	/**
@@ -162,7 +160,6 @@ class WooCommerce_Cli {
 			WP_CLI::success( 'Subscription #' . $subscription->get_id() . ' fixed.' );
 			WP_CLI::log( '' );
 		}
-
 	}
 
 	/**
@@ -221,8 +218,5 @@ class WooCommerce_Cli {
 		}
 
 		return $subscriptions;
-
 	}
-
-
 }

@@ -282,6 +282,5 @@ class Profile {
 		}
 		return true;
 	}
-
 }
 new Profile();

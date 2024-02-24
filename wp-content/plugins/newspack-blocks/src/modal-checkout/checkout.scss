@@ -1,6 +1,7 @@
 @use '../shared/sass/colors';
 
-#newspack_modal_checkout { /* stylelint-disable-line */
+/* stylelint-disable-next-line */
+#newspack_modal_checkout {
 	padding: 32px;
 	font-size: 1rem;
 	.order-details-summary {
@@ -81,9 +82,6 @@
 
 	form {
 		margin: 0;
-		#wc-stripe-payment-request-button-separator {
-			margin: 0;
-		}
 		.woocommerce-terms-and-conditions-wrapper {
 			margin: 16px 0;
 		}
@@ -97,7 +95,8 @@
 		.select2-container .select2-selection--single {
 			margin: 0;
 		}
-		#payment button#place_order { /* stylelint-disable-line */
+		/* stylelint-disable-next-line */
+		#payment button#place_order {
 			margin-bottom: 0;
 		}
 		.checkout-billing button[type='submit'],

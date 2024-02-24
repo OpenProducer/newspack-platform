@@ -149,6 +149,11 @@
 }
 
 .wpbnbd.untiered {
+	&.wpbnbd--nyp-disabled .tier-label {
+		border: none;
+		font-size: 1.25rem;
+		padding: 0;
+	}
 	.input-container {
 		margin: 0.76rem;
 		display: none;

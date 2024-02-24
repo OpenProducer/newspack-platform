@@ -2,14 +2,14 @@
 # This file is distributed under the same license as the WooCommerce plugin.
 msgid ""
 msgstr ""
-"Project-Id-Version: WooCommerce 8.6.0\n"
+"Project-Id-Version: WooCommerce 8.6.1\n"
 "Report-Msgid-Bugs-To: https://wordpress.org/support/plugin/woocommerce\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"POT-Creation-Date: 2024-02-14T13:23:53+00:00\n"
+"POT-Creation-Date: 2024-02-16T21:22:16+00:00\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "X-Generator: WP-CLI 2.9.0\n"
 "X-Domain: woocommerce\n"
@@ -8904,7 +8904,7 @@ msgstr ""
 #: includes/admin/reports/class-wc-report-downloads.php:221
 #: includes/gateways/paypal/includes/class-wc-gateway-paypal-request.php:310
 #: includes/wc-account-functions.php:202
-#: src/Internal/Admin/Orders/Edit.php:153
+#: src/Internal/Admin/Orders/Edit.php:154
 #: src/Internal/Admin/Orders/ListTable.php:858
 #: templates/myaccount/my-orders.php:14
 #: assets/client/admin/chunks/analytics-report-categories.js:1
@@ -9021,7 +9021,7 @@ msgid "Select none"
 msgstr ""
 
 #: includes/abstracts/abstract-wc-shipping-method.php:347
-#: src/Internal/Admin/Orders/Edit.php:78
+#: src/Internal/Admin/Orders/Edit.php:79
 msgid "Items"
 msgstr ""
 
@@ -35146,7 +35146,7 @@ msgid "Failed to fetch AI responses for products."
 msgstr ""
 
 #. translators: %s file handle name.
-#: src/Blocks/Assets/Api.php:246
+#: src/Blocks/Assets/Api.php:257
 msgid "Script with handle %s had a dependency on itself which has been removed. This is an indicator that your JS code has a circular dependency that can cause bugs."
 msgstr ""
 
@@ -37079,38 +37079,38 @@ msgid "Customizable products"
 msgstr ""
 
 #. Translators: %s order type name.
-#: src/Internal/Admin/Orders/Edit.php:77
+#: src/Internal/Admin/Orders/Edit.php:78
 msgid "%s data"
 msgstr ""
 
 #. Translators: %s order type name.
-#: src/Internal/Admin/Orders/Edit.php:80
+#: src/Internal/Admin/Orders/Edit.php:81
 msgid "%s notes"
 msgstr ""
 
-#: src/Internal/Admin/Orders/Edit.php:81
+#: src/Internal/Admin/Orders/Edit.php:82
 msgid "Downloadable product permissions"
 msgstr ""
 
-#: src/Internal/Admin/Orders/Edit.php:81
+#: src/Internal/Admin/Orders/Edit.php:82
 msgid "Note: Permissions for order items will automatically be granted when the order status changes to processing/completed."
 msgstr ""
 
 #. Translators: %s order type name.
-#: src/Internal/Admin/Orders/Edit.php:83
+#: src/Internal/Admin/Orders/Edit.php:84
 msgid "%s actions"
 msgstr ""
 
-#: src/Internal/Admin/Orders/Edit.php:194
+#: src/Internal/Admin/Orders/Edit.php:195
 msgid "Custom Fields"
 msgstr ""
 
 #. Translators: %s order type name.
-#: src/Internal/Admin/Orders/Edit.php:241
+#: src/Internal/Admin/Orders/Edit.php:242
 msgid "%s attribution"
 msgstr ""
 
-#: src/Internal/Admin/Orders/Edit.php:267
+#: src/Internal/Admin/Orders/Edit.php:272
 msgid "Customer history"
 msgstr ""
 

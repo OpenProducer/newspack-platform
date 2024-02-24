@@ -152,7 +152,6 @@ final class Magic_Link {
 			// phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.cookies_setcookie
 			setcookie( self::OTP_HASH_COOKIE, ' ', time() - YEAR_IN_SECONDS, COOKIEPATH, COOKIE_DOMAIN );
 		}
-
 	}
 
 	/**

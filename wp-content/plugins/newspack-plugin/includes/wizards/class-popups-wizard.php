@@ -7,8 +7,8 @@
 
 namespace Newspack;
 
-use \WP_Error, \WP_Query;
-use \Newspack\Donations;
+use WP_Error, WP_Query;
+use Newspack\Donations;
 
 defined( 'ABSPATH' ) || exit;
 

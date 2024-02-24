@@ -5,10 +5,11 @@ declare global {
 		};
 		newspack_blocks_data: {
 			assets_path: string;
-			is_rendering_stripe_payment_form?: boolean;
 			supports_recaptcha: boolean;
 			has_recaptcha: boolean;
 			recaptcha_url: string;
+			can_use_name_your_price: boolean;
+			tier_amounts_template: string;
 		};
 		grecaptcha: any;
 		newspackReaderActivation: {
@@ -44,7 +45,7 @@ declare global {
 		clientId: string;
 		attributes: {
 			// eslint-disable-next-line @typescript-eslint/no-explicit-any
-			[ key: string ]: any;
+			[key: string]: any;
 		};
 		innerBlocks: Block[];
 	};
@@ -54,4 +55,4 @@ declare global {
 	};
 }
 
-export {};
+export { };

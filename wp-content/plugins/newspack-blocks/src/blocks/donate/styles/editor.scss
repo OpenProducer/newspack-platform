@@ -2,7 +2,6 @@
 @use '../../../shared/sass/colors';
 @use '../../../shared/sass/variables';
 
-@use '../streamlined/style' as streamlined;
 @use '../frequency-based/style' as frequency-based;
 @use '../tiers-based/style' as tiers-based;
 
@@ -41,7 +40,7 @@
 		font-weight: bold;
 		outline: none;
 
-		&[type="submit"] {
+		&[type='submit'] {
 			border: none;
 		}
 	}
@@ -53,27 +52,6 @@
 		line-height: 3;
 		padding-left: 20px;
 		padding-right: 20px;
-	}
-	.stripe-payment {
-		&__methods {
-			> * {
-				line-height: 46px !important;
-			}
-		}
-		&__request-button {
-			display: flex;
-			align-items: center;
-			gap: 0.8em;
-			font-size: 0.8em;
-			border-radius: 5px;
-			color: colors.$color__secondary;
-			border: colors.$color__secondary 1px dashed;
-			padding: 0 20px;
-			opacity: 0.5;
-			.components-base-control__field {
-				margin: 0;
-			}
-		}
 	}
 }
 
@@ -97,11 +75,11 @@
 }
 
 .block-editor-block-list__layout
-.block-editor-block-list__block
-.wp-block-newspack-blocks-donate.tiered.is-style-minimal
-.wp-block-newspack-blocks-donate__tiers
-input[type='radio']:checked
-+ .tier-select-label {
+	.block-editor-block-list__block
+	.wp-block-newspack-blocks-donate.tiered.is-style-minimal
+	.wp-block-newspack-blocks-donate__tiers
+	input[type='radio']:checked
+	+ .tier-select-label {
 	background: transparent;
 	color: colors.$color__text-main;
 }

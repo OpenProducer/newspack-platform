@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error;
+use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -83,7 +83,7 @@ class Starter_Content_Generated extends Starter_Content_Provider {
 
 		if ( Starter_Content::is_e2e() ) {
 			$post_data['post_date'] = '2020-03-03 10:00:00';
-		};
+		}
 
 		$post_id = wp_insert_post( $post_data );
 

@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error;
+use WP_Error;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -395,7 +395,7 @@ class Plugin_Manager {
 		if ( 'wordpress-seo' === $plugin_slug && 'active' !== $status && isset( $installed_plugins['wordpress-seo-premium'] ) && $installed_plugins['wordpress-seo-premium'] ) {
 			if ( is_plugin_active( $installed_plugins['wordpress-seo-premium'] ) ) {
 				$status = 'active';
-			};
+			}
 		}
 
 		return $status;
@@ -831,7 +831,7 @@ class Plugin_Manager {
 		$path   = explode( '/', $key );
 		$folder = current( $path );
 
-		// Strip version info from key. (e.g. 'woocommerce-stripe-gateway-4.1.2' should just be 'woocommerce-stripe-gateway').
+		// Strip version info from key. (e.g. 'woocommerce-gateway-stripe-4.1.2' should just be 'woocommerce-gateway-stripe').
 		$folder = preg_replace( '/[\-0-9\.]+$/', '', $folder );
 
 		$plugins[ $folder ] = $key;

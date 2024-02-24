@@ -1,0 +1,10 @@
+{
+	"extends": "newspack-scripts/config/tsconfig.json",
+	"compilerOptions": {
+		"rootDir": "assets"
+	},
+	"include": [
+		"assets",
+		"assets/**/*.json"
+	]
+}

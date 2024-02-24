@@ -160,6 +160,10 @@ final class Targeting_Keys extends Api_Object {
 	public function upsert_targeting_key_values( $targeting_key, $values ) {
 		$service          = ( new ServiceFactory() )->createCustomTargetingService( $this->session );
 		$key_id           = $targeting_key->getId();
+
+		// Discard empty values.
+		$values = array_values( array_filter( $values ) );
+
 		$values_statement = new Statement(
 			"WHERE customTargetingKeyId = :key_id AND name = :name AND status = 'ACTIVE'",
 			[

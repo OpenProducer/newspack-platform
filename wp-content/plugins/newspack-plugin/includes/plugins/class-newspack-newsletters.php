@@ -63,7 +63,7 @@ class Newspack_Newsletters {
 
 	/**
 	 * Whether or not we should use the special metadata keys for RAS sites.
-	 * 
+	 *
 	 * @return boolean True if a RAS sync, otherwise false.
 	 */
 	public static function should_sync_ras_metadata() {
@@ -135,7 +135,7 @@ class Newspack_Newsletters {
 
 	/**
 	 * Normalizes contact metadata keys before syncing to ESP. If RAS is enabled, we should favor RAS metadata keys.
-	 * 
+	 *
 	 * @param array $contact Contact data.
 	 * @return array Normalized contact data.
 	 */
@@ -196,7 +196,7 @@ class Newspack_Newsletters {
 					) {
 						$normalized_metadata[ $meta_key ] = $meta_value;
 					}
-				} else {
+				} else { // phpcs:ignore Universal.ControlStructures.DisallowLonelyIf.Found
 					// If not syncing for RAS, we only want to sync email (for all ESPs) + First/Last Name (for MC only).
 					if ( in_array( $meta_key, [ 'First Name', 'Last Name' ], true ) ) {
 						$normalized_metadata[ $meta_key ] = $meta_value;

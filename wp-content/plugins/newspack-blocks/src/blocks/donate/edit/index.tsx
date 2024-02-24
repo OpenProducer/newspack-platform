@@ -38,7 +38,7 @@ import type {
 } from '../types';
 import TierBasedLayout from './TierBasedLayout';
 import FrequencyBasedLayout from './FrequencyBasedLayout';
-import { AmountValueInput, AdditionalFields } from './components';
+import { AmountValueInput } from './components';
 import {
 	FREQUENCIES,
 	FREQUENCY_SLUGS,
@@ -141,19 +141,23 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 		return <Placeholder icon={ <Spinner /> } className="component-placeholder__align-center" />;
 	}
 
-	const isTiered = attributes.manual ? attributes.tiered : settings.tiered;
+	const canUseNameYourPrice = window.newspack_blocks_data?.can_use_name_your_price;
+	const isManual = attributes.manual && canUseNameYourPrice;
+	const isTiered = isManual ? attributes.tiered : settings.tiered;
 	const isTierBasedLayoutEnabled = isTiered && attributes.layoutOption === 'tiers';
 
-	const amounts = attributes.manual ? attributes.amounts : settings.amounts;
+	const amounts = isManual ? attributes.amounts : settings.amounts;
+
 	const availableFrequencies = FREQUENCY_SLUGS.filter( slug =>
-		attributes.manual
-			? ! attributes.disabledFrequencies[ slug ]
-			: ! settings.disabledFrequencies[ slug ]
+		isManual ? ! attributes.disabledFrequencies[ slug ] : ! settings.disabledFrequencies[ slug ]
 	);
 
 	// Editor bug – initially, the default style is selected, but the class not applied.
 	if ( className.indexOf( 'is-style' ) === -1 ) {
-		className = className + ' is-style-default';
+		className += ' is-style-default';
+	}
+	if ( ! canUseNameYourPrice ) {
+		className += ' wpbnbd--nyp-disabled';
 	}
 	const getWrapperClassNames = ( classes: string[] = [] ) =>
 		classNames(
@@ -165,7 +169,7 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 			`wpbnbd-frequencies--${ availableFrequencies.length }`
 		);
 
-	const minimumDonation = attributes.manual ? attributes.minimumDonation : settings.minimumDonation;
+	const minimumDonation = isManual ? attributes.minimumDonation : settings.minimumDonation;
 	const displayedAmounts = { ...amounts };
 	Object.keys( amounts ).forEach( frequency => {
 		const amountsWithMinimum = amounts[ frequency ].map( amount =>
@@ -215,25 +219,27 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 
 			<InspectorControls>
 				<PanelBody title={ __( 'Layout', 'newspack-blocks' ) }>
-					<div className="newspack-blocks-donate__layout-selector">
-						{ LAYOUT_OPTIONS.map( ( { label, key } ) => {
-							const isSelected =
-								key === 'tiers' ? isTierBasedLayoutEnabled : ! isTierBasedLayoutEnabled;
-							return (
-								<Button
-									key={ key }
-									variant={ isSelected ? 'primary' : 'secondary' }
-									isPressed={ isSelected }
-									onClick={ () => setAttributes( { layoutOption: key } ) }
-									aria-current={ isSelected }
-									disabled={ key === 'tiers' && ! isTiered }
-								>
-									{ label }
-								</Button>
-							);
-						} ) }
-					</div>
-					{ ! isTiered && (
+					{ canUseNameYourPrice && (
+						<div className="newspack-blocks-donate__layout-selector">
+							{ LAYOUT_OPTIONS.map( ( { label, key } ) => {
+								const isSelected =
+									key === 'tiers' ? isTierBasedLayoutEnabled : ! isTierBasedLayoutEnabled;
+								return (
+									<Button
+										key={ key }
+										variant={ isSelected ? 'primary' : 'secondary' }
+										isPressed={ isSelected }
+										onClick={ () => setAttributes( { layoutOption: key } ) }
+										aria-current={ isSelected }
+										disabled={ key === 'tiers' && ! isTiered }
+									>
+										{ label }
+									</Button>
+								);
+							} ) }
+						</div>
+					) }
+					{ canUseNameYourPrice && ! isTiered && (
 						<Notice isDismissible={ false } className="newspack-blocks-donate__notice">
 							{ __(
 								'Tiers layout is disabled if the block is set to render untiered.',
@@ -255,126 +261,133 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 						/>
 					) }
 				</PanelBody>
-				<PanelBody title={ __( 'Suggested Donations', 'newspack-blocks' ) }>
-					<ToggleControl
-						checked={ Boolean( attributes.manual ) }
-						onChange={ () => setAttributes( { manual: ! attributes.manual } ) }
-						label={ __( 'Configure manually', 'newspack-blocks' ) }
-					/>
-					{ attributes.manual ? (
-						<>
-							<ToggleControl
-								checked={ Boolean( attributes.tiered ) }
-								onChange={ () => setAttributes( { tiered: ! attributes.tiered } ) }
-								label={ __( 'Tiered', 'newspack-blocks' ) }
-							/>
-							{ attributes.tiered ? (
-								<>
+				{ canUseNameYourPrice && (
+					<PanelBody title={ __( 'Suggested Donations', 'newspack-blocks' ) }>
+						<ToggleControl
+							checked={ Boolean( isManual ) }
+							onChange={ () => setAttributes( { manual: ! attributes.manual } ) }
+							label={ __( 'Configure manually', 'newspack-blocks' ) }
+						/>
+						{ isManual ? (
+							<>
+								<ToggleControl
+									checked={ Boolean( isTiered ) }
+									onChange={ () => setAttributes( { tiered: ! attributes.tiered } ) }
+									label={ __( 'Tiered', 'newspack-blocks' ) }
+								/>
+								{ isTiered ? (
+									<>
+										<div className="components-frequency-donations">
+											{ FREQUENCY_SLUGS.map( ( frequency: DonationFrequencySlug ) => {
+												const isFrequencyDisabled = attributes.disabledFrequencies[ frequency ];
+												const disabledDisplayedFrequencyCount = Object.values(
+													pick( attributes.disabledFrequencies, FREQUENCY_SLUGS )
+												).filter( Boolean ).length;
+												const isOnlyOneFrequencyActive =
+													FREQUENCY_SLUGS.length - disabledDisplayedFrequencyCount === 1;
+												return (
+													<Fragment key={ frequency }>
+														<CheckboxControl
+															label={ FREQUENCIES[ frequency ] }
+															checked={ ! isFrequencyDisabled }
+															disabled={ ! isFrequencyDisabled && isOnlyOneFrequencyActive }
+															onChange={ () => {
+																setAttributes( {
+																	disabledFrequencies: {
+																		...attributes.disabledFrequencies,
+																		[ frequency ]: ! isFrequencyDisabled,
+																	},
+																} );
+															} }
+														/>
+														{ ! isFrequencyDisabled && (
+															<div className="wp-block-newspack-blocks-donate__panel-inputs">
+																{ amounts[ frequency ].reduce(
+																	( acc: boolean, suggestedAmount: number ) =>
+																		! suggestedAmount || suggestedAmount < minimumDonation
+																			? true
+																			: acc,
+																	false
+																) && renderMinAmountWarning() }
+
+																{ amounts[ frequency ].map( ( suggestedAmount, tierIndex ) => {
+																	// The "Other" tier is no longer customizable and should always render empty for tiered layout.
+																	if ( tierIndex === 3 ) {
+																		return null;
+																	}
+																	return (
+																		<AmountValueInput
+																			ignoreMinimumAmount
+																			{ ...componentProps }
+																			key={ `amount-${ frequency }-${ tierIndex }` }
+																			frequencySlug={ frequency }
+																			tierIndex={ tierIndex }
+																			label={ TIER_LABELS[ tierIndex ] }
+																			id={ `${ frequency }-${ tierIndex }-amount` }
+																			disabled={
+																				isTierBasedLayoutEnabled &&
+																				tierIndex === DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX
+																			}
+																		/>
+																	);
+																} ) }
+															</div>
+														) }
+													</Fragment>
+												);
+											} ) }
+										</div>
+									</>
+								) : (
 									<div className="components-frequency-donations">
-										{ FREQUENCY_SLUGS.map( ( frequency: DonationFrequencySlug ) => {
-											const isFrequencyDisabled = attributes.disabledFrequencies[ frequency ];
-											const disabledDisplayedFrequencyCount = Object.values(
-												pick( attributes.disabledFrequencies, FREQUENCY_SLUGS )
-											).filter( Boolean ).length;
-											const isOnlyOneFrequencyActive =
-												FREQUENCY_SLUGS.length - disabledDisplayedFrequencyCount === 1;
-											return (
-												<Fragment key={ frequency }>
-													<CheckboxControl
-														label={ FREQUENCIES[ frequency ] }
-														checked={ ! isFrequencyDisabled }
-														disabled={ ! isFrequencyDisabled && isOnlyOneFrequencyActive }
-														onChange={ () => {
-															setAttributes( {
-																disabledFrequencies: {
-																	...attributes.disabledFrequencies,
-																	[ frequency ]: ! isFrequencyDisabled,
-																},
-															} );
-														} }
-													/>
-													{ ! isFrequencyDisabled && (
-														<div className="wp-block-newspack-blocks-donate__panel-inputs">
-															{ amounts[ frequency ].reduce(
-																( acc: boolean, suggestedAmount: number ) =>
-																	suggestedAmount < minimumDonation ? true : acc,
-																false
-															) && renderMinAmountWarning() }
+										<div className="wp-block-newspack-blocks-donate__panel-inputs">
+											{ FREQUENCY_SLUGS.reduce(
+												( acc: boolean, frequencySlug: DonationFrequencySlug ) =>
+													! amounts[ frequencySlug ][ 3 ] ||
+													amounts[ frequencySlug ][ 3 ] < attributes.minimumDonation
+														? true
+														: acc,
+												false
+											) && renderMinAmountWarning() }
 
-															{ amounts[ frequency ].map( ( suggestedAmount, tierIndex ) => {
-																// The "Other" tier is no longer customizable and should always render empty for tiered layout.
-																if ( tierIndex === 3 ) {
-																	return null;
-																}
-																return (
-																	<AmountValueInput
-																		ignoreMinimumAmount
-																		{ ...componentProps }
-																		key={ `amount-${ frequency }-${ tierIndex }` }
-																		frequencySlug={ frequency }
-																		tierIndex={ tierIndex }
-																		label={ TIER_LABELS[ tierIndex ] }
-																		id={ `${ frequency }-${ tierIndex }-amount` }
-																		disabled={
-																			isTierBasedLayoutEnabled &&
-																			tierIndex === DISABLED_IN_TIERS_BASED_LAYOUT_TIER_INDEX
-																		}
-																	/>
-																);
-															} ) }
-														</div>
-													) }
-												</Fragment>
-											);
-										} ) }
+											{ FREQUENCY_SLUGS.map( ( frequencySlug: DonationFrequencySlug ) => (
+												<AmountValueInput
+													ignoreMinimumAmount
+													{ ...componentProps }
+													key={ frequencySlug }
+													frequencySlug={ frequencySlug }
+													tierIndex={ 3 }
+													label={ FREQUENCIES[ frequencySlug ] }
+													id={ `${ frequencySlug }-${ 3 }-amount` }
+												/>
+											) ) }
+										</div>
 									</div>
-								</>
-							) : (
-								<div className="components-frequency-donations">
-									<div className="wp-block-newspack-blocks-donate__panel-inputs">
-										{ FREQUENCY_SLUGS.reduce(
-											( acc: boolean, frequencySlug: DonationFrequencySlug ) =>
-												amounts[ frequencySlug ][ 3 ] < attributes.minimumDonation ? true : acc,
-											false
-										) && renderMinAmountWarning() }
-
-										{ FREQUENCY_SLUGS.map( ( frequencySlug: DonationFrequencySlug ) => (
-											<AmountValueInput
-												ignoreMinimumAmount
-												{ ...componentProps }
-												key={ frequencySlug }
-												frequencySlug={ frequencySlug }
-												tierIndex={ 3 }
-												label={ FREQUENCIES[ frequencySlug ] }
-												id={ `${ frequencySlug }-${ 3 }-amount` }
-											/>
-										) ) }
-									</div>
-								</div>
-							) }
-							<TextControl
-								className="components-frequency-donations__minimum-donation"
-								type="number"
-								label={ __( 'Minimum donation', 'newspack-blocks' ) }
-								min={ 1 }
-								onChange={ ( value: number ) => setAttributes( { minimumDonation: value } ) }
-								value={ attributes.minimumDonation }
-							/>
-						</>
-					) : (
-						<p>
-							{ __(
-								'The Donate Block allows you to collect donations from readers. The fields are automatically defined based on your donation settings.',
-								'newspack-blocks'
-							) }
-							<br />
-							<br />
-							<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
-								{ __( 'Edit donation settings', 'newspack-blocks' ) }
-							</ExternalLink>
-						</p>
-					) }
-				</PanelBody>
+								) }
+								<TextControl
+									className="components-frequency-donations__minimum-donation"
+									type="number"
+									label={ __( 'Minimum donation', 'newspack-blocks' ) }
+									min={ 1 }
+									onChange={ ( value: number ) => setAttributes( { minimumDonation: value } ) }
+									value={ attributes.minimumDonation }
+								/>
+							</>
+						) : (
+							<p>
+								{ __(
+									'The Donate Block allows you to collect donations from readers. The fields are automatically defined based on your donation settings.',
+									'newspack-blocks'
+								) }
+								<br />
+								<br />
+								<ExternalLink href="/wp-admin/admin.php?page=newspack-reader-revenue-wizard#/donations">
+									{ __( 'Edit donation settings', 'newspack-blocks' ) }
+								</ExternalLink>
+							</p>
+						) }
+					</PanelBody>
+				) }
 				<PanelBody title={ __( 'Styling', 'newspack-blocks' ) } initialOpen={ false }>
 					<ColorPaletteControl
 						value={ attributes.buttonColor }
@@ -382,14 +395,6 @@ const Edit = ( { attributes, setAttributes, className }: EditProps ) => {
 						label={ __( 'Button Color', 'newspack-blocks' ) }
 					/>
 				</PanelBody>
-				{ 'stripe' === settings.platform && (
-					<PanelBody
-						title={ __( 'Additional data fields', 'newspack-blocks' ) }
-						initialOpen={ false }
-					>
-						<AdditionalFields attributes={ attributes } setAttributes={ setAttributes } />
-					</PanelBody>
-				) }
 				<PanelBody title={ __( 'Campaign', 'newspack-blocks' ) } initialOpen={ false }>
 					<TextControl
 						label={ __( 'Campaign ID', 'newspack-blocks' ) }
