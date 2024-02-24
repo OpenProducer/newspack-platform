@@ -759,28 +759,6 @@ msgstr ""
 msgid "Paused"
 msgstr ""
 
-#: dist/donateStreamlined.js:1
-#: release/newspack-blocks/dist/donateStreamlined.js:72
-msgid "Email address is invalid."
-msgstr ""
-
-#. Translators: %d is minimum donation amount set in Reader Revenue wizard or block attributes.
-#: dist/donateStreamlined.js:1
-#: release/newspack-blocks/dist/donateStreamlined.js:72
-msgid "Amount must be at least %d."
-msgstr ""
-
-#: dist/donateStreamlined.js:1
-#: release/newspack-blocks/dist/donateStreamlined.js:72
-msgid "Full name should be provided."
-msgstr ""
-
-#. Translators: %s is the email address of the current user.
-#: dist/donateStreamlined.js:1
-#: release/newspack-blocks/dist/donateStreamlined.js:72
-msgid "Your payment has been processed. Thank you for your contribution! You will receive a confirmation email at %s."
-msgstr ""
-
 #: dist/editor.js:41
 #: release/newspack-blocks/dist/editor.js:2541
 #: release/newspack-blocks/src/blocks/author-list/edit.js:105
@@ -2083,22 +2061,6 @@ msgstr ""
 #: release/newspack-blocks/src/setup/placeholder-blocks.js:52
 #: src/setup/placeholder-blocks.js:52
 msgid "Remove Block"
-msgstr ""
-
-#: release/newspack-blocks/dist/donateStreamlined.js:61
-msgid "Error loading the reCaptcha library."
-msgstr ""
-
-#: release/newspack-blocks/dist/donateStreamlined.js:61
-msgid "Error processing captcha request."
-msgstr ""
-
-#: release/newspack-blocks/dist/donateStreamlined.js:61
-msgid "Something went wrong with the payment. Please try again later."
-msgstr ""
-
-#: release/newspack-blocks/dist/donateStreamlined.js:61
-msgid "Processing payment…"
 msgstr ""
 
 #: release/newspack-blocks/dist/editor.js:2541

@@ -75,17 +75,8 @@ class Newspack_Blocks_Donate_Renderer {
 	 * @param array  $dependencies The dependencies of the script to enqueue.
 	 */
 	private static function enqueue_scripts( $handle_slug, $dependencies = [ 'wp-i18n' ] ) {
-		if ( 'streamlined' === $handle_slug ) {
-			if ( method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha() ) {
-				$dependencies[] = \Newspack\Recaptcha::SCRIPT_HANDLE;
-			}
-		}
-
 		$has_css = true;
 		switch ( $handle_slug ) {
-			case 'streamlined':
-				$filename = 'donateStreamlined';
-				break;
 			case 'frequency-based':
 				$filename = 'frequencyBased';
 				break;
@@ -140,14 +131,10 @@ class Newspack_Blocks_Donate_Renderer {
 			return '';
 		}
 
-		if ( $configuration['is_rendering_stripe_payment_form'] ) {
-			self::enqueue_scripts( 'streamlined' );
-		}
-
 		Newspack_Blocks::enqueue_view_assets( 'donate' );
 		wp_script_add_data( 'newspack-blocks-donate', 'async', true );
 
-		if ( true === $attributes['useModalCheckout'] && ! $configuration['is_rendering_stripe_payment_form'] ) {
+		if ( true === $attributes['useModalCheckout'] ) {
 			\Newspack_Blocks\Modal_Checkout::enqueue_modal();
 		}
 

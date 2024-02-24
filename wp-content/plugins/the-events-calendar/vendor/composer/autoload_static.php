@@ -27,7 +27,13 @@ class ComposerStaticInit50298795addec7e328ecc086aec86c51
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TEC\\Events\\Block_Templates\\Archive_Events\\Archive_Block_Template' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Archive_Events/Archive_Block_Template.php',
+        'TEC\\Events\\Block_Templates\\Block_Template_Contract' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Block_Template_Contract.php',
+        'TEC\\Events\\Block_Templates\\Controller' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Controller.php',
+        'TEC\\Events\\Block_Templates\\Single_Event\\Single_Block_Template' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Single_Event/Single_Block_Template.php',
+        'TEC\\Events\\Blocks\\Archive_Events\\Block' => __DIR__ . '/../..' . '/src/Events/Blocks/Archive_Events/Block.php',
         'TEC\\Events\\Blocks\\Controller' => __DIR__ . '/../..' . '/src/Events/Blocks/Controller.php',
+        'TEC\\Events\\Blocks\\Single_Event\\Block' => __DIR__ . '/../..' . '/src/Events/Blocks/Single_Event/Block.php',
         'TEC\\Events\\Configuration\\Provider' => __DIR__ . '/../..' . '/src/Events/Configuration/Provider.php',
         'TEC\\Events\\Custom_Tables\\V1\\Activation' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Activation.php',
         'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Event_Cleaner' => __DIR__ . '/../..' . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Event_Cleaner.php',

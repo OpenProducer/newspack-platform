@@ -21,6 +21,7 @@ return array(
     'Newspack\\CLI\\Initializer' => $baseDir . '/includes/cli/class-initializer.php',
     'Newspack\\CLI\\RAS' => $baseDir . '/includes/cli/class-ras.php',
     'Newspack\\CLI\\Setup' => $baseDir . '/includes/cli/class-setup.php',
+    'Newspack\\Category_Pager' => $baseDir . '/includes/class-category-pager.php',
     'Newspack\\Components_Demo' => $baseDir . '/includes/wizards/class-components-demo.php',
     'Newspack\\Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-configuration-manager.php',
     'Newspack\\Configuration_Managers' => $baseDir . '/includes/configuration_managers/class-configuration-managers.php',

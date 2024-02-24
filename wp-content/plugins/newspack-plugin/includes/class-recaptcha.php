@@ -82,12 +82,12 @@ final class Recaptcha {
 	 */
 	public static function register_script() {
 		if ( self::can_use_captcha() ) {
-			// phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
+			// Note: version arg Must be null to avoid the &ver param being read as part of the reCAPTCHA site key .
 			\wp_register_script(
 				self::SCRIPT_HANDLE,
 				\esc_url( self::get_script_url() ),
 				null,
-				null,
+				null, // phpcs:ignore WordPress.WP.EnqueuedResourceParameters.MissingVersion
 				true
 			);
 			\wp_script_add_data( self::SCRIPT_HANDLE, 'async', true );

@@ -482,10 +482,9 @@ final class Reader_Activation {
 			'reader_revenue'   => [
 				'active'       => self::is_reader_revenue_ready(),
 				'plugins'      => [
-					'newspack-blocks'             => class_exists( '\Newspack_Blocks' ),
-					'woocommerce'                 => function_exists( 'WC' ),
-					'woocommerce-subscriptions'   => class_exists( 'WC_Subscriptions_Product' ),
-					'woocommerce-name-your-price' => class_exists( 'WC_Name_Your_Price_Helpers' ),
+					'newspack-blocks'           => class_exists( '\Newspack_Blocks' ),
+					'woocommerce'               => function_exists( 'WC' ),
+					'woocommerce-subscriptions' => class_exists( 'WC_Subscriptions_Product' ),
 				],
 				'label'        => __( 'Reader Revenue', 'newspack-plugin' ),
 				'description'  => __( 'Setting suggested donation amounts is required for enabling a streamlined donation experience.', 'newspack-plugin' ),
@@ -1436,6 +1435,10 @@ final class Reader_Activation {
 		$captcha_token    = isset( $_POST['captcha_token'] ) ? \sanitize_text_field( $_POST['captcha_token'] ) : '';
 		// phpcs:enable
 
+		if ( ! empty( $current_page_url['path'] ) ) {
+			$current_page_url = \esc_url( \home_url( $current_page_url['path'] ) );
+		}
+
 		// Honeypot trap.
 		if ( ! empty( $honeypot ) ) {
 			return self::send_auth_form_response(
@@ -1491,7 +1494,7 @@ final class Reader_Activation {
 				$payload['authenticated'] = \is_wp_error( $authenticated ) ? 0 : 1;
 				return self::send_auth_form_response( $payload, false, $redirect );
 			case 'link':
-				$sent = Magic_Link::send_email( $user );
+				$sent = Magic_Link::send_email( $user, $current_page_url );
 				if ( true !== $sent ) {
 					return self::send_auth_form_response( new \WP_Error( 'unauthorized', \is_wp_error( $sent ) ? $sent->get_error_message() : __( 'We encountered an error sending an authentication link. Please try again.', 'newspack-plugin' ) ) );
 				}
@@ -1504,8 +1507,8 @@ final class Reader_Activation {
 				if ( ! empty( $referer ) ) {
 					$metadata['referer'] = \esc_url( $referer );
 				}
-				if ( ! empty( $current_page_url['path'] ) ) {
-					$metadata['current_page_url'] = \esc_url( \home_url( $current_page_url['path'] ) );
+				if ( ! empty( $current_page_url ) ) {
+					$metadata['current_page_url'] = $current_page_url;
 				}
 				$user_id = self::register_reader( $email, '', true, $metadata );
 				if ( false === $user_id ) {
@@ -1617,7 +1620,8 @@ final class Reader_Activation {
 			// Don't send OTP email for newsletter signup.
 			if ( ! isset( $metadata['registration_method'] ) || false === strpos( $metadata['registration_method'], 'newsletters-subscription' ) ) {
 				Logger::log( "User with $email already exists. Sending magic link." );
-				Magic_Link::send_email( $existing_user );
+				$redirect = isset( $metadata['current_page_url'] ) ? $metadata['current_page_url'] : '';
+				Magic_Link::send_email( $existing_user, $redirect );
 			}
 		} else {
 			/**

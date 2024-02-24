@@ -66,7 +66,6 @@ class Major_Revisions {
 				add_action( 'admin_notices', array( __CLASS__, 'admin_notices' ) );
 			}
 		}
-
 	}
 
 	/**
@@ -295,7 +294,6 @@ class Major_Revisions {
 		);
 		register_post_type( self::BKP_POST_TYPE, $args );
 	}
-
 }
 
 Major_Revisions::init();

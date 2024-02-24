@@ -343,8 +343,10 @@ class Reader_Revenue_Wizard extends Wizard {
 	 * @return WP_REST_Response with the latest settings.
 	 */
 	public function update_stripe_settings( $settings ) {
-		// Stripe has to be enabled explicitly.
-		if ( $settings['enabled'] ) {
+		if ( ! empty( $settings['activate'] ) ) {
+			// If activating the Stripe Gateway plugin, let's enable it.
+			$settings = [ 'enabled' => true ];
+		} elseif ( $settings['enabled'] ) {
 			if ( $settings['testMode'] && ( ! $this->api_validate_not_empty( $settings['testPublishableKey'] ) || ! $this->api_validate_not_empty( $settings['testSecretKey'] ) ) ) {
 				return new WP_Error(
 					'newspack_missing_required_field',
@@ -380,6 +382,7 @@ class Reader_Revenue_Wizard extends Wizard {
 		if ( \is_wp_error( $result ) ) {
 			return $result;
 		}
+
 		return $this->fetch_all_data();
 	}
 
@@ -473,8 +476,6 @@ class Reader_Revenue_Wizard extends Wizard {
 			$managed_plugins  = Plugin_Manager::get_managed_plugins();
 			$required_plugins = [
 				'woocommerce',
-				'woocommerce-gateway-stripe',
-				'woocommerce-name-your-price',
 				'woocommerce-subscriptions',
 			];
 			foreach ( $required_plugins as $required_plugin ) {
@@ -555,6 +556,7 @@ class Reader_Revenue_Wizard extends Wizard {
 				'emails'                  => Emails::get_emails( [ Reader_Revenue_Emails::EMAIL_TYPES['RECEIPT'] ], false ),
 				'email_cpt'               => Emails::POST_TYPE,
 				'salesforce_redirect_url' => Salesforce::get_redirect_url(),
+				'can_use_name_your_price' => Donations::can_use_name_your_price(),
 			]
 		);
 		\wp_enqueue_script( 'newspack-reader-revenue-wizard' );

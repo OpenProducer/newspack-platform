@@ -419,7 +419,12 @@ final class Webhooks {
 	 * @return array Array of endpoints.
 	 */
 	public static function get_endpoints() {
-		$terms     = \get_terms( self::ENDPOINT_TAXONOMY, [ 'hide_empty' => false ] );
+		$terms     = \get_terms(
+			[
+				'taxonomy'   => self::ENDPOINT_TAXONOMY,
+				'hide_empty' => false,
+			] 
+		);
 		$endpoints = array_map( [ __CLASS__, 'get_endpoint_by_term' ], $terms );
 
 		return array_values( array_merge( $endpoints, self::$system_endpoints ) );

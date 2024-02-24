@@ -137,6 +137,24 @@
 			"default": [],
 			"items": { "type": "integer" }
 		},
+		"customTaxonomyExclusions": {
+			"type": "array",
+			"default": [],
+			"items": {
+				"type": "object",
+				"properties": {
+					"slug": {
+						"type": "string"
+					},
+					"terms": {
+						"type": "array",
+						"items": {
+							"type": "integer"
+						}
+					}
+				}
+			}
+		},
 		"specificPosts": {
 			"type": "array",
 			"default": [],

@@ -7,8 +7,8 @@
 
 namespace Newspack\Memberships;
 
-use \Newspack\Newspack;
-use \Newspack\Memberships;
+use Newspack\Newspack;
+use Newspack\Memberships;
 
 /**
  * WooCommerce Memberships Metering class.

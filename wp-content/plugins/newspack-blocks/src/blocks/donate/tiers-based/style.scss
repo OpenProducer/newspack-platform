@@ -18,10 +18,6 @@
 				&--hidden {
 					display: none;
 				}
-				.wp-block-newspack-blocks-donate__stripe,
-				.stripe-payment__messages > div {
-					margin: 0 !important;
-				}
 			}
 			&__selection {
 				display: flex;
@@ -103,13 +99,6 @@
 			}
 			&__amount {
 				margin-bottom: 16px;
-				&__number {
-					display: inline;
-					font-size: 29px;
-				}
-				&__frequency {
-					font-size: 13px;
-				}
 			}
 			button[type='submit'],
 			.submit-button {

@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error, WP_REST_Server;
+use WP_Error, WP_REST_Server;
 defined( 'ABSPATH' ) || exit;
 require_once NEWSPACK_ABSPATH . '/includes/wizards/class-wizard.php';
 

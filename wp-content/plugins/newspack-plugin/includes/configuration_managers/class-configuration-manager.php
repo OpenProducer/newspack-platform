@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error;
+use WP_Error;
 defined( 'ABSPATH' ) || exit;
 
 /**
@@ -107,5 +107,4 @@ abstract class Configuration_Manager {
 	 * @return void
 	 */
 	abstract public function configure();
-
 }

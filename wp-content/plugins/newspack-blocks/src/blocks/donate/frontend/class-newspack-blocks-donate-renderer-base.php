@@ -17,6 +17,25 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 	private static $configurations_cache = []; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 
 	/**
+	 * Get translatable frequency label.
+	 *
+	 * @param string $frequency_slug Frequency slug.
+	 * @param bool   $hide_once_label Whether to hide the "once" label.
+	 *
+	 * @return string
+	 */
+	public static function get_frequency_label( $frequency_slug, $hide_once_label = false ) {
+		switch ( $frequency_slug ) {
+			case 'once':
+				return $hide_once_label ? '' : ' ' . __( 'once', 'newspack-blocks' );
+			case 'month':
+				return ' ' . __( 'per month', 'newspack-blocks' );
+			case 'year':
+				return ' ' . __( 'per year', 'newspack-blocks' );
+		}
+	}
+
+	/**
 	 * Get configuration, based on block attributes and global settings.
 	 *
 	 * @param array $attributes Block attributes.
@@ -34,7 +53,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 		$configuration['defaultFrequency'] = $attributes['defaultFrequency'];
 
 		/* If block is in "manual" mode, override certain state properties with values stored in attributes */
-		if ( $attributes['manual'] ?? false ) {
+		if ( Newspack_Blocks::can_use_name_your_price() && ! empty( $attributes['manual'] ) ) {
 			// Migrate old attributes.
 			if ( empty( $attributes['amounts'] ) && isset( $attributes['suggestedAmounts'] ) ) {
 				$other_amount = $configuration['amounts']['month'][3];
@@ -59,9 +78,7 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 					'year'  => $multiplied_amounts,
 				];
 			}
-			if ( isset( $attributes['tiered'] ) ) {
-				$configuration['tiered'] = $attributes['tiered'];
-			}
+			$configuration['tiered'] = $attributes['tiered'] && Newspack_Blocks::can_use_name_your_price();
 			if ( isset( $attributes['amounts'] ) && ! empty( $attributes['amounts'] ) ) {
 				$configuration['amounts'] = $attributes['amounts'];
 			}
@@ -112,50 +129,20 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 			$classname = 'is-style-default';
 		}
 
-		$layout_version                        = ( $is_tiers_based ? 'tiers' : 'frequency' );
-		$container_classnames                  = implode(
-			' ',
-			[
-				'wp-block-newspack-blocks-donate',
-				'wpbnbd',
-				'wpbnbd--' . $layout_version . '-based',
-				'wpbnbd--platform-' . $configuration['platform'],
-				$classname,
-				'wpbnbd-frequencies--' . count( $configuration['frequencies'] ),
-			]
-		);
-		$configuration['container_classnames'] = $container_classnames;
+		$layout_version = ( $is_tiers_based ? 'tiers' : 'frequency' );
+		$class_names    = [
+			'wp-block-newspack-blocks-donate',
+			'wpbnbd',
+			'wpbnbd--' . $layout_version . '-based',
+			'wpbnbd--platform-' . $configuration['platform'],
+			$classname,
+			'wpbnbd-frequencies--' . count( $configuration['frequencies'] ),
+		];
 
-		$configuration['is_rendering_stripe_payment_form'] = false;
-
-		if ( Newspack_Blocks::is_rendering_stripe_payment_form() ) {
-			$stripe_data      = \Newspack\Stripe_Connection::get_stripe_data();
-			$currency         = $stripe_data['currency'];
-			$captcha_site_key = null;
-
-			if ( method_exists( '\Newspack\Recaptcha', 'can_use_captcha' ) && \Newspack\Recaptcha::can_use_captcha() ) {
-				$captcha_site_key = \Newspack\Recaptcha::get_setting( 'site_key' );
-			}
-
-			$configuration_for_streamlined                     = [
-				$currency,
-				$configuration['currencySymbol'],
-				get_bloginfo( 'name' ),
-				Newspack\Stripe_Connection::is_currency_zero_decimal( $currency ),
-				$stripe_data['location_code'],
-				$configuration['frequencies'],
-				$stripe_data['fee_multiplier'],
-				$stripe_data['fee_static'],
-				$stripe_data['usedPublishableKey'],
-				$attributes['paymentRequestType'],
-				$captcha_site_key,
-				$configuration['minimumDonation'],
-			];
-			$configuration['is_rendering_stripe_payment_form'] = true;
-		} else {
-			$configuration_for_streamlined = [];
+		if ( ! Newspack_Blocks::can_use_name_your_price() ) {
+			$class_names[] = 'wpbnbd--nyp-disabled';
 		}
-		$configuration['configuration_for_streamlined'] = $configuration_for_streamlined;
+		$configuration['container_classnames'] = implode( ' ', $class_names );
 
 		if ( isset( $configuration['minimumDonation'] ) ) {
 			foreach ( $configuration['amounts'] as $frequency => $amounts ) {
@@ -186,107 +173,6 @@ abstract class Newspack_Blocks_Donate_Renderer_Base {
 		} else {
 			return 'border-color: ' . esc_attr( $button_color ) . '; background-color: ' . esc_attr( $button_color ) . '; color: ' . esc_attr( $button_text_color ) . ';';
 		}
-	}
-
-	/**
-	 * Render hidden form input indentifying a donate form submission.
-	 *
-	 * @param array $attributes The block attributes.
-	 *
-	 * @return string
-	 */
-	protected static function render_streamlined_payment_ui( $attributes ) {
-		$is_rendering_newsletter_list_opt_in = false;
-		$user_email                          = '';
-		$user_display_name                   = '';
-
-		$stripe_data               = \Newspack\Stripe_Connection::get_stripe_data();
-		$is_rendering_fee_checkbox = 0 < (float) $stripe_data['fee_multiplier'] + (float) $stripe_data['fee_static'];
-		if ( class_exists( 'Newspack_Newsletters' ) ) {
-			$is_rendering_newsletter_list_opt_in = isset( $stripe_data['newsletter_list_id'] ) && ! empty( $stripe_data['newsletter_list_id'] );
-		}
-
-		$current_user = wp_get_current_user();
-		if ( 0 !== $current_user->ID ) {
-			$user_email        = $current_user->user_email;
-			$user_display_name = trim( $current_user->first_name . ' ' . $current_user->last_name );
-		}
-
-		$button_style_attr = 'style="' . self::get_button_style( $attributes ) . '"';
-
-		ob_start();
-		?>
-			<div class="wp-block-newspack-blocks-donate__stripe stripe-payment stripe-payment--invisible stripe-payment--disabled">
-				<div class="stripe-payment__inputs stripe-payment--hidden">
-					<div class="stripe-payment__row">
-						<div class="stripe-payment__element stripe-payment__card"></div>
-					</div>
-					<div class="stripe-payment__row stripe-payment__row--flex">
-						<input
-							required
-							placeholder="<?php echo esc_html__( 'Email', 'newspack-blocks' ); ?>"
-							type="email"
-							name="email"
-							value="<?php echo esc_attr( $user_email ); ?>"
-							<?php if ( '' !== $user_email ) : ?>
-								readonly
-							<?php endif; ?>
-						>
-						<input
-							required
-							placeholder="<?php echo esc_html__( 'Full Name', 'newspack-blocks' ); ?>"
-							type="text"
-							name="full_name"
-							value="<?php echo esc_attr( $user_display_name ); ?>"
-						>
-					</div>
-					<div class="stripe-payment__row stripe-payment__row--additional-fields">
-						<?php foreach ( $attributes['additionalFields'] as $field ) : ?>
-							<input
-								data-is-additional-field
-								type="<?php echo esc_attr( $field['type'] ); ?>"
-								name="<?php echo esc_attr( $field['name'] ); ?>"
-								placeholder="<?php echo esc_attr( $field['label'] ); ?>"
-								style="width: calc(<?php echo esc_attr( $field['width'] ); ?>% - 0.5rem);"
-								<?php if ( $field['isRequired'] ) : ?>
-									required
-								<?php endif; ?>
-							>
-						<?php endforeach; ?>
-					</div>
-				</div>
-				<?php if ( $is_rendering_fee_checkbox ) : ?>
-					<div class="stripe-payment__row stripe-payment__row--small" id="stripe-fees-amount-container">
-						<label class="stripe-payment__checkbox">
-							<input type="checkbox" name="agree_to_pay_fees" checked value="true"><?php echo esc_html__( 'Agree to pay fees?', 'newspack-blocks' ); ?>
-							<span id="stripe-fees-amount">($0)</span>
-						</label>
-						<div class="stripe-payment__info"><?php echo esc_html__( 'Paying the transaction fee is not required, but it directs more money in support of our mission.', 'newspack-blocks' ); ?></div>
-					</div>
-				<?php endif; ?>
-				<?php if ( $is_rendering_newsletter_list_opt_in ) : ?>
-					<div class="stripe-payment__row stripe-payment__row--small">
-						<label class="stripe-payment__checkbox">
-							<input type="checkbox" name="newsletter_opt_in" checked value="true"><?php echo esc_html__( 'Sign up for our newsletter', 'newspack-blocks' ); ?>
-						</label>
-					</div>
-				<?php endif; ?>
-				<div class="stripe-payment__messages">
-					<div class="type-error"></div>
-					<div class="type-success"></div>
-					<div class="type-info"></div>
-				</div>
-				<div class="stripe-payment__row stripe-payment__row--flex stripe-payment__footer">
-					<div class="stripe-payment__methods">
-						<div class="stripe-payment__request-button stripe-payment--hidden stripe-payment__request-button--invisible stripe-payment--transition"></div>
-						<button type='submit' <?php echo $button_style_attr; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>>
-							<?php echo esc_html( $attributes['buttonWithCCText'] ); ?>
-						</button>
-					</div>
-				</div>
-			</div>
-		<?php
-		return ob_get_clean();
 	}
 
 	/**

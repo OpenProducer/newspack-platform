@@ -10,7 +10,7 @@ namespace Newspack;
 use Google\Site_Kit_Dependencies\Google\Service\Analytics as Google_Service_Analytics;
 use Google\Site_Kit_Dependencies\Google\Service\Analytics\CustomDimension as Google_Service_Analytics_CustomDimension;
 
-use \WP_Error, \WP_Query;
+use WP_Error, WP_Query;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -41,7 +41,6 @@ class Analytics_Wizard extends Wizard {
 	public function __construct() {
 		parent::__construct();
 		add_action( 'rest_api_init', [ $this, 'register_api_endpoints' ] );
-
 	}
 
 	/**
@@ -157,5 +156,4 @@ class Analytics_Wizard extends Wizard {
 		\wp_style_add_data( 'newspack-analytics-wizard', 'rtl', 'replace' );
 		\wp_enqueue_style( 'newspack-analytics-wizard' );
 	}
-
 }

@@ -88,7 +88,7 @@ export const DonationAmounts = () => {
 	const { amounts, currencySymbol, tiered, disabledFrequencies, minimumDonation } =
 		wizardData.donation_data;
 
-	const changeHandler = path => value =>
+	const changeHandler = ( path: ( string | number )[] ) => ( value: any ) =>
 		updateWizardSettings( {
 			slug: 'newspack-reader-revenue-wizard',
 			path: [ 'donation_data', ...path ],
@@ -103,6 +103,9 @@ export const DonationAmounts = () => {
 	// Minimum donation is returned by the REST API as a string.
 	const minimumDonationFloat = parseFloat( minimumDonation );
 
+	// Whether we can use the Name Your Price extension. If not, layout is forced to Tiered.
+	const canUseNameYourPrice = window.newspack_reader_revenue?.can_use_name_your_price;
+
 	return (
 		<>
 			<Card headerActions noBorder>
@@ -114,17 +117,19 @@ export const DonationAmounts = () => {
 					) }
 					noMargin
 				/>
-				<SelectControl
-					label={ __( 'Donation Type', 'newspack' ) }
-					onChange={ () => changeHandler( [ 'tiered' ] )( ! tiered ) }
-					buttonOptions={ [
-						{ value: true, label: __( 'Tiered', 'newspack' ) },
-						{ value: false, label: __( 'Untiered', 'newspack' ) },
-					] }
-					buttonSmall
-					value={ tiered }
-					hideLabelFromVision
-				/>
+				{ canUseNameYourPrice && (
+					<SelectControl
+						label={ __( 'Donation Type', 'newspack' ) }
+						onChange={ () => changeHandler( [ 'tiered' ] )( ! tiered ) }
+						buttonOptions={ [
+							{ value: true, label: __( 'Tiered', 'newspack' ) },
+							{ value: false, label: __( 'Untiered', 'newspack' ) },
+						] }
+						buttonSmall
+						value={ tiered }
+						hideLabelFromVision
+					/>
+				) }
 			</Card>
 			{ tiered ? (
 				<Grid columns={ 1 } gutter={ 16 }>
@@ -203,24 +208,44 @@ export const DonationAmounts = () => {
 			) : (
 				<Card isMedium>
 					<Grid columns={ 3 } rowGap={ 16 }>
-						{ availableFrequencies.map( section => (
-							<MoneyInput
-								currencySymbol={ currencySymbol }
-								label={ section.staticLabel }
-								value={ amounts[ section.key ][ 3 ] }
-								min={ minimumDonationFloat }
-								error={
-									amounts[ section.key ][ 3 ] < minimumDonationFloat
-										? __(
-												'Warning: suggested donations should be at least the minimum donation amount.',
-												'newspack'
-										  )
-										: null
-								}
-								onChange={ changeHandler( [ 'amounts', section.key, 3 ] ) }
-								key={ section.key }
-							/>
-						) ) }
+						{ availableFrequencies.map( section => {
+							const isFrequencyDisabled = disabledFrequencies[ section.key ];
+							const isOneFrequencyActive =
+								Object.values( disabledFrequencies ).filter( Boolean ).length ===
+								FREQUENCY_SLUGS.length - 1;
+							return (
+								<Grid columns={ 1 } gutter={ 16 } key={ section.key }>
+									<ToggleControl
+										checked={ ! isFrequencyDisabled }
+										onChange={ () =>
+											changeHandler( [ 'disabledFrequencies', section.key ] )(
+												! isFrequencyDisabled
+											)
+										}
+										label={ section.tieredLabel }
+										disabled={ ! isFrequencyDisabled && isOneFrequencyActive }
+									/>
+									{ ! isFrequencyDisabled && (
+										<MoneyInput
+											currencySymbol={ currencySymbol }
+											label={ section.staticLabel }
+											value={ amounts[ section.key ][ 3 ] }
+											min={ minimumDonationFloat }
+											error={
+												amounts[ section.key ][ 3 ] < minimumDonationFloat
+													? __(
+															'Warning: suggested donations should be at least the minimum donation amount.',
+															'newspack'
+													  )
+													: null
+											}
+											onChange={ changeHandler( [ 'amounts', section.key, 3 ] ) }
+											key={ section.key }
+										/>
+									) }
+								</Grid>
+							);
+						} ) }
 					</Grid>
 				</Card>
 			) }
@@ -238,7 +263,7 @@ export const DonationAmounts = () => {
 					type="number"
 					min={ 1 }
 					value={ minimumDonationFloat }
-					onChange={ value => changeHandler( [ 'minimumDonation' ] )( value ) }
+					onChange={ ( value: string ) => changeHandler( [ 'minimumDonation' ] )( value ) }
 				/>
 			</Card>
 		</>

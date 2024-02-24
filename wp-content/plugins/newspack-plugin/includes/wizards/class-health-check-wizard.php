@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error, \WP_Query;
+use WP_Error, WP_Query;
 use Newspack\Plugin_Manager;
 
 defined( 'ABSPATH' ) || exit;

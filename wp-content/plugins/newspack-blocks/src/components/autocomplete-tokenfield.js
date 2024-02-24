@@ -88,8 +88,12 @@ class AutocompleteTokenField extends Component {
 	 */
 	getValuesForLabels( labels ) {
 		const { validValues } = this.state;
-		return labels.map( label =>
-			Object.keys( validValues ).find( key => validValues[ key ] === label )
+
+		return (
+			labels
+				.map( label => Object.keys( validValues ).find( key => validValues[ key ] === label ) )
+				// It's possible the submitted label doesn't have a corresponding value, so we filter out any undefined values.
+				.filter( value => !! value )
 		);
 	}
 

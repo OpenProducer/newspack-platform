@@ -16,7 +16,6 @@ class Newspack_Blocks {
 	const SCRIPT_HANDLES = [
 		'modal-checkout'       => 'newspack-blocks-donate-modal-checkout',
 		'modal-checkout-block' => 'newspack-blocks-donate-modal-checkout-block',
-		'streamlined'          => 'newspack-blocks-donate-streamlined',
 		'frequency-based'      => 'newspack-blocks-donate-frequency-based',
 		'tiers-based'          => 'newspack-blocks-donate-tiers-based',
 	];
@@ -232,6 +231,15 @@ class Newspack_Blocks {
 	}
 
 	/**
+	 * Check if the Name Your Price extension is available.
+	 *
+	 * @return bool True if available, false if not.
+	 */
+	public static function can_use_name_your_price() {
+		return class_exists( 'WC_Name_Your_Price_Helpers' );
+	}
+
+	/**
 	 * Enqueue block scripts and styles for editor.
 	 */
 	public static function enqueue_block_editor_assets() {
@@ -247,18 +255,19 @@ class Newspack_Blocks {
 			);
 
 			$localized_data = [
-				'patterns'                         => self::get_patterns_for_post_type( get_post_type() ),
-				'posts_rest_url'                   => rest_url( 'newspack-blocks/v1/newspack-blocks-posts' ),
-				'specific_posts_rest_url'          => rest_url( 'newspack-blocks/v1/newspack-blocks-specific-posts' ),
-				'authors_rest_url'                 => rest_url( 'newspack-blocks/v1/authors' ),
-				'assets_path'                      => plugins_url( '/src/assets', NEWSPACK_BLOCKS__PLUGIN_FILE ),
-				'post_subtitle'                    => get_theme_support( 'post-subtitle' ),
-				'is_rendering_stripe_payment_form' => self::is_rendering_stripe_payment_form(),
-				'iframe_accepted_file_mimes'       => self::iframe_accepted_file_mimes(),
-				'supports_recaptcha'               => class_exists( 'Newspack\Recaptcha' ),
-				'has_recaptcha'                    => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),
-				'recaptcha_url'                    => admin_url( 'admin.php?page=newspack-connections-wizard' ),
-				'custom_taxonomies'                => self::get_custom_taxonomies(),
+				'patterns'                   => self::get_patterns_for_post_type( get_post_type() ),
+				'posts_rest_url'             => rest_url( 'newspack-blocks/v1/newspack-blocks-posts' ),
+				'specific_posts_rest_url'    => rest_url( 'newspack-blocks/v1/newspack-blocks-specific-posts' ),
+				'authors_rest_url'           => rest_url( 'newspack-blocks/v1/authors' ),
+				'assets_path'                => plugins_url( '/src/assets', NEWSPACK_BLOCKS__PLUGIN_FILE ),
+				'post_subtitle'              => get_theme_support( 'post-subtitle' ),
+				'iframe_accepted_file_mimes' => self::iframe_accepted_file_mimes(),
+				'supports_recaptcha'         => class_exists( 'Newspack\Recaptcha' ),
+				'has_recaptcha'              => class_exists( 'Newspack\Recaptcha' ) && \Newspack\Recaptcha::can_use_captcha(),
+				'recaptcha_url'              => admin_url( 'admin.php?page=newspack-connections-wizard' ),
+				'custom_taxonomies'          => self::get_custom_taxonomies(),
+				'can_use_name_your_price'    => self::can_use_name_your_price(),
+				'tier_amounts_template'      => self::get_formatted_amount(),
 			];
 
 			if ( class_exists( 'WP_REST_Newspack_Author_List_Controller' ) ) {
@@ -292,22 +301,6 @@ class Newspack_Blocks {
 			array(),
 			NEWSPACK_BLOCKS__VERSION
 		);
-	}
-
-	/**
-	 * Should the Donate block be a "streamlined" block?
-	 *
-	 * @return bool True if it can.
-	 */
-	public static function is_rendering_stripe_payment_form() {
-		if (
-			class_exists( 'Newspack\Donations' )
-			&& method_exists( 'Newspack\Donations', 'can_use_streamlined_donate_block' )
-			&& method_exists( 'Newspack\Donations', 'is_platform_stripe' )
-		) {
-			return \Newspack\Donations::can_use_streamlined_donate_block() && \Newspack\Donations::is_platform_stripe();
-		}
-		return false;
 	}
 
 	/**
@@ -625,17 +618,18 @@ class Newspack_Blocks {
 		if ( current_user_can( 'edit_others_posts' ) && isset( $attributes['includedPostStatuses'] ) ) {
 			$included_post_statuses = $attributes['includedPostStatuses'];
 		}
-		$authors               = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
-		$categories            = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
-		$include_subcategories = isset( $attributes['includeSubcategories'] ) ? intval( $attributes['includeSubcategories'] ) : false;
-		$tags                  = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
-		$custom_taxonomies     = isset( $attributes['customTaxonomies'] ) ? $attributes['customTaxonomies'] : array();
-		$tag_exclusions        = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
-		$category_exclusions   = isset( $attributes['categoryExclusions'] ) ? $attributes['categoryExclusions'] : array();
-		$specific_posts        = isset( $attributes['specificPosts'] ) ? $attributes['specificPosts'] : array();
-		$posts_to_show         = intval( $attributes['postsToShow'] );
-		$specific_mode         = isset( $attributes['specificMode'] ) ? intval( $attributes['specificMode'] ) : false;
-		$args                  = array(
+		$authors                    = isset( $attributes['authors'] ) ? $attributes['authors'] : array();
+		$categories                 = isset( $attributes['categories'] ) ? $attributes['categories'] : array();
+		$include_subcategories      = isset( $attributes['includeSubcategories'] ) ? intval( $attributes['includeSubcategories'] ) : false;
+		$tags                       = isset( $attributes['tags'] ) ? $attributes['tags'] : array();
+		$custom_taxonomies          = isset( $attributes['customTaxonomies'] ) ? $attributes['customTaxonomies'] : array();
+		$tag_exclusions             = isset( $attributes['tagExclusions'] ) ? $attributes['tagExclusions'] : array();
+		$category_exclusions        = isset( $attributes['categoryExclusions'] ) ? $attributes['categoryExclusions'] : array();
+		$custom_taxonomy_exclusions = isset( $attributes['customTaxonomyExclusions'] ) ? $attributes['customTaxonomyExclusions'] : array();
+		$specific_posts             = isset( $attributes['specificPosts'] ) ? $attributes['specificPosts'] : array();
+		$posts_to_show              = intval( $attributes['postsToShow'] );
+		$specific_mode              = isset( $attributes['specificMode'] ) ? intval( $attributes['specificMode'] ) : false;
+		$args                       = array(
 			'post_type'           => $post_type,
 			'post_status'         => $included_post_statuses,
 			'suppress_filters'    => false,
@@ -692,6 +686,17 @@ class Newspack_Blocks {
 							'include_children' => false,
 						];
 					}
+				}
+			}
+			if ( $custom_taxonomy_exclusions && count( $custom_taxonomy_exclusions ) ) {
+				foreach ( $custom_taxonomy_exclusions as $exclusion ) {
+					$args['tax_query'][] = [
+						'field'            => 'term_id',
+						'include_children' => false,
+						'operator'         => 'NOT IN',
+						'taxonomy'         => $exclusion['slug'],
+						'terms'            => $exclusion['terms'],
+					];
 				}
 			}
 
@@ -790,9 +795,9 @@ class Newspack_Blocks {
 		 * The filter is called after the build_articles_query() function is called by a Newspack block to
 		 * build the WP_Query arguments based on the given attributes and block requesting the query.
 		 *
-		 * @param array  $args       WP_Query arguments as created by build_articles_query()
-		 * @param array  $attributes The attributes initial passed to build_articles_query()
-		 * @param string $block_name The name of the requesting block to create the query args for
+		 * @param array     $args       WP_Query arguments as created by build_articles_query()
+		 * @param array     $attributes The attributes initial passed to build_articles_query()
+		 * @param string    $block_name The name of the requesting block to create the query args for
 		 */
 		return apply_filters( 'newspack_blocks_build_articles_query', $args, $attributes, $block_name );
 	}
@@ -1533,6 +1538,48 @@ class Newspack_Blocks {
 				'href' => true,
 			],
 		];
+	}
+
+	/**
+	 * Get a formatted HTML string containing amount and frequency of a donation.
+	 *
+	 * @param float  $amount Amount.
+	 * @param string $frequency Frequency.
+	 * @param bool   $hide_once_label Whether to hide the "once" label.
+	 *
+	 * @return string
+	 */
+	public static function get_formatted_amount( $amount = 0, $frequency = 'day', $hide_once_label = false ) {
+		if ( ! function_exists( 'wc_price' ) ) {
+			return $amount;
+		}
+		if ( ! function_exists( 'wcs_price_string' ) ) {
+			return \wc_price( $amount );
+		}
+		$price_args          = [
+			'recurring_amount'    => $amount,
+			'subscription_period' => 'once' === $frequency ? 'day' : $frequency,
+		];
+		$wc_formatted_amount = \wcs_price_string( $price_args );
+
+		// A '0' value means we want a placeholder string to replace in the editor.
+		if ( 0 === $amount ) {
+			preg_match( '/<\/span>(.*)<\/bdi>/', $wc_formatted_amount, $matches );
+			if ( ! empty( $matches[1] ) ) {
+				$wc_formatted_amount = str_replace( $matches[1], 'AMOUNT_PLACEHOLDER', $wc_formatted_amount );
+			}
+		}
+
+		// A 'day' frequency means we want a placeholder string to replace in the editor.
+		if ( 'day' === $frequency ) {
+			$wc_formatted_amount = preg_replace( '/ \/ ?.*/', 'FREQUENCY_PLACEHOLDER', $wc_formatted_amount );
+		} elseif ( 'once' === $frequency ) {
+			$once_label          = $hide_once_label ? '' : __( ' once', 'newspack-blocks' );
+			$wc_formatted_amount = preg_replace( '/ \/ ?.*/', $once_label, $wc_formatted_amount );
+		}
+		$wc_formatted_amount = str_replace( ' / ', __( ' per ', 'newspack-blocks' ), $wc_formatted_amount );
+
+		return '<span class="wpbnbd__tiers__amount__value">' . $wc_formatted_amount . '</span>';
 	}
 }
 Newspack_Blocks::init();

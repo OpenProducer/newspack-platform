@@ -7,8 +7,8 @@
 
 namespace Newspack\API;
 
-use \WP_REST_Controller;
-use \WP_Error;
+use WP_REST_Controller;
+use WP_Error;
 use Newspack\Plugin_Manager;
 use Newspack\Handoff_Banner;
 use Newspack\Configuration_Managers;

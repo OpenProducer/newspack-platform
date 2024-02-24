@@ -200,5 +200,4 @@ class Major_Revision {
 		$new_revision = new Major_Revision( $this->post_id, $restore );
 		$new_revision->mark_as_major();
 	}
-
 }

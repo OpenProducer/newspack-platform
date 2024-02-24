@@ -7,7 +7,13 @@ $baseDir = dirname($vendorDir);
 
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
+    'TEC\\Events\\Block_Templates\\Archive_Events\\Archive_Block_Template' => $baseDir . '/src/Events/Block_Templates/Archive_Events/Archive_Block_Template.php',
+    'TEC\\Events\\Block_Templates\\Block_Template_Contract' => $baseDir . '/src/Events/Block_Templates/Block_Template_Contract.php',
+    'TEC\\Events\\Block_Templates\\Controller' => $baseDir . '/src/Events/Block_Templates/Controller.php',
+    'TEC\\Events\\Block_Templates\\Single_Event\\Single_Block_Template' => $baseDir . '/src/Events/Block_Templates/Single_Event/Single_Block_Template.php',
+    'TEC\\Events\\Blocks\\Archive_Events\\Block' => $baseDir . '/src/Events/Blocks/Archive_Events/Block.php',
     'TEC\\Events\\Blocks\\Controller' => $baseDir . '/src/Events/Blocks/Controller.php',
+    'TEC\\Events\\Blocks\\Single_Event\\Block' => $baseDir . '/src/Events/Blocks/Single_Event/Block.php',
     'TEC\\Events\\Configuration\\Provider' => $baseDir . '/src/Events/Configuration/Provider.php',
     'TEC\\Events\\Custom_Tables\\V1\\Activation' => $baseDir . '/src/Events/Custom_Tables/V1/Activation.php',
     'TEC\\Events\\Custom_Tables\\V1\\Events\\Event_Cleaner\\Event_Cleaner' => $baseDir . '/src/Events/Custom_Tables/V1/Events/Event_Cleaner/Event_Cleaner.php',

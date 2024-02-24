@@ -219,20 +219,17 @@ final class Modal_Checkout {
 		}
 
 		/** Apply NYP custom price */
-		if ( class_exists( 'WC_Name_Your_Price_Helpers' ) ) {
-			$is_product_nyp = \WC_Name_Your_Price_Helpers::is_nyp( $product_id );
-			$price          = filter_input( INPUT_GET, 'price', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
-			if ( $is_product_nyp ) {
-				if ( empty( $price ) ) {
-					$price = \WC_Name_Your_Price_Helpers::get_suggested_price( $product_id );
-				}
-				$min_price = \WC_Name_Your_Price_Helpers::get_minimum_price( $product_id );
-				$max_price = \WC_Name_Your_Price_Helpers::get_maximum_price( $product_id );
-				$price     = ! empty( $max_price ) ? min( $price, $max_price ) : $price;
-				$price     = ! empty( $min_price ) ? max( $price, $min_price ) : $price;
-
-				$cart_item_data['nyp'] = (float) \WC_Name_Your_Price_Helpers::standardize_number( $price );
+		$price = filter_input( INPUT_GET, 'price', FILTER_SANITIZE_FULL_SPECIAL_CHARS );
+		if ( \Newspack_Blocks::can_use_name_your_price() ? \WC_Name_Your_Price_Helpers::is_nyp( $product_id ) : false ) {
+			if ( empty( $price ) ) {
+				$price = \WC_Name_Your_Price_Helpers::get_suggested_price( $product_id );
 			}
+			$min_price = \WC_Name_Your_Price_Helpers::get_minimum_price( $product_id );
+			$max_price = \WC_Name_Your_Price_Helpers::get_maximum_price( $product_id );
+			$price     = ! empty( $max_price ) ? min( $price, $max_price ) : $price;
+			$price     = ! empty( $min_price ) ? max( $price, $min_price ) : $price;
+
+			$cart_item_data['nyp'] = (float) \WC_Name_Your_Price_Helpers::standardize_number( $price );
 		}
 
 		/**
@@ -962,7 +959,7 @@ final class Modal_Checkout {
 	 */
 	public static function is_modal_checkout() {
 		$is_modal_checkout = isset( $_REQUEST['modal_checkout'] ); // phpcs:ignore WordPress.Security.NonceVerification.Recommended
-		if ( ! $is_modal_checkout && isset( $_REQUEST['post_data'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		if ( ! $is_modal_checkout && isset( $_REQUEST['post_data'] ) && is_string( $_REQUEST['post_data'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			$is_modal_checkout = strpos( $_REQUEST['post_data'], 'modal_checkout=1' ) !== false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended, WordPress.Security.ValidatedSanitizedInput.MissingUnslash, WordPress.Security.ValidatedSanitizedInput.InputNotSanitized
 		}
 

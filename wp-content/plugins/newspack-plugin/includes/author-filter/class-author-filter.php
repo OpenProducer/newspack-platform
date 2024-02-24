@@ -119,7 +119,6 @@ class Author_Filter {
 		printf( '<select id="author_filter" name="%s">', esc_attr( $select_name ) );
 		echo implode( "\n", $options ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 		echo '</select>';
-
 	}
 
 	/**
@@ -150,7 +149,6 @@ class Author_Filter {
 		global $coauthors_plus;
 		return $coauthors_plus->search_authors();
 	}
-
 }
 
 if ( ! defined( 'NEWSPACK_DISABLE_AUTHORS_FILTER' ) || ! NEWSPACK_DISABLE_AUTHORS_FILTER ) {

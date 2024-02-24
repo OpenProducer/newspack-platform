@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0
+class ComposerStaticInitf23529b7558203d255513ec05fe6526a
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -100,6 +100,7 @@ class ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0
         'Newspack\\CLI\\Initializer' => __DIR__ . '/../..' . '/includes/cli/class-initializer.php',
         'Newspack\\CLI\\RAS' => __DIR__ . '/../..' . '/includes/cli/class-ras.php',
         'Newspack\\CLI\\Setup' => __DIR__ . '/../..' . '/includes/cli/class-setup.php',
+        'Newspack\\Category_Pager' => __DIR__ . '/../..' . '/includes/class-category-pager.php',
         'Newspack\\Components_Demo' => __DIR__ . '/../..' . '/includes/wizards/class-components-demo.php',
         'Newspack\\Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-manager.php',
         'Newspack\\Configuration_Managers' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-managers.php',
@@ -198,9 +199,9 @@ class ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit8f4702fa64fa82f4abd21663edbcbae0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitf23529b7558203d255513ec05fe6526a::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitf23529b7558203d255513ec05fe6526a::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitf23529b7558203d255513ec05fe6526a::$classMap;
 
         }, null, ClassLoader::class);
     }

@@ -1,4 +1,6 @@
 /* eslint-disable @wordpress/no-unsafe-wp-apis */
+/* globals newspack_blocks_data */
+
 /**
  * External dependencies
  */
@@ -47,7 +49,9 @@ function getVariationName( variation ) {
 
 function getNYP( product ) {
 	return {
-		isNYP: product?.meta_data?.some( meta => meta.key === '_nyp' && meta.value === 'yes' ),
+		isNYP:
+			newspack_blocks_data?.can_use_name_your_price &&
+			product?.meta_data?.some( meta => meta.key === '_nyp' && meta.value === 'yes' ),
 		suggestedPrice: product?.meta_data?.find( meta => meta.key === '_suggested_price' )?.value,
 		minPrice: product?.meta_data?.find( meta => meta.key === '_min_price' )?.value,
 		maxPrice: product?.meta_data?.find( meta => meta.key === '_maximum_price' )?.value,

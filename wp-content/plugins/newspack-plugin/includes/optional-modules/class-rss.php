@@ -377,7 +377,7 @@ class RSS {
 				<tr>
 					<th>
 						<?php
-						echo sprintf(
+						printf(
 						/* translators: %s: URL to Yoast settings */
 							__( 'Suppress <a href="%s">Yoast RSS content at the top and bottom of feed posts</a>' ), // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 							admin_url( 'admin.php?page=wpseo_titles#top#rss' ) // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

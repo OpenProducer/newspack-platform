@@ -14,22 +14,6 @@ require_once NEWSPACK_BLOCKS__PLUGIN_DIR . 'src/blocks/donate/frontend/class-new
  */
 class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate_Renderer_Base {
 	/**
-	 * Get frequency label.
-	 *
-	 * @param string $frequency_slug Frequency slug.
-	 */
-	private static function get_frequency_label( $frequency_slug ) {
-		switch ( $frequency_slug ) {
-			case 'once':
-				return ' ' . __( 'once', 'newspack-blocks' );
-			case 'month':
-				return ' ' . __( 'per month', 'newspack-blocks' );
-			case 'year':
-				return ' ' . __( 'per year', 'newspack-blocks' );
-		}
-	}
-
-	/**
 	 * Get displayed amounts.
 	 *
 	 * @param array $amounts Amounts.
@@ -77,8 +61,7 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 							data-amount="<?php echo esc_attr( $configuration['amounts'][ $frequency_slug ][ $index ] ); ?>"
 							data-tier-index="<?php echo esc_attr( $index ); ?>"
 						>
-							<h3 class="wpbnbd__tiers__amount__number"><?php echo esc_html( $configuration['currencySymbol'] ); ?><?php echo esc_html( $configuration['amounts'][ $frequency_slug ][ $index ] ); ?></h3>
-							<span class="wpbnbd__tiers__amount__frequency"><?php echo esc_html( self::get_frequency_label( $frequency_slug ) ); ?></span>
+							<?php echo wp_kses_post( Newspack_Blocks::get_formatted_amount( $configuration['amounts'][ $frequency_slug ][ $index ], $frequency_slug ) ); ?>
 						</span>
 					<?php endforeach; ?>
 				</span>
@@ -111,7 +94,6 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 		$displayed_frequencies     = array_keys( $configuration['frequencies'] );
 		$intial_selected_frequency = $displayed_frequencies[0];
 
-		$intial_selected_tier_index = 0;
 		$displayed_amounts          = self::get_displayed_amounts( $configuration['amounts'][ $intial_selected_frequency ] );
 		$config_related_attributes  = array_map(
 			function ( $option ) {
@@ -128,7 +110,6 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 			$configuration['amounts'],
 			( new DateTime() )->modify( '+1 month' )->format( 'F d, Y' ),
 			( new DateTime() )->modify( '+1 year' )->format( 'F d, Y' ),
-			$configuration['is_rendering_stripe_payment_form'],
 			$attributes['buttonColor'],
 		];
 
@@ -145,10 +126,9 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 		<div
 			class="<?php echo esc_html( $configuration['container_classnames'] ); ?>"
 			id="<?php echo esc_html( $configuration['uid'] ); ?>"
-			data-streamlined-config="<?php echo esc_html( htmlspecialchars( wp_json_encode( $configuration['configuration_for_streamlined'] ), ENT_QUOTES, 'UTF-8' ) ); ?>"
 			data-tiers-based-config="<?php echo esc_html( htmlspecialchars( wp_json_encode( $configuration_for_tiers_based ), ENT_QUOTES, 'UTF-8' ) ); ?>"
 		>
-			<form data-is-init-form <?php echo 'stripe' === $configuration['platform'] ? 'onsubmit="return false;"' : ''; ?>>
+			<form data-is-init-form>
 				<div class="wpbnbd__tiers__view">
 					<?php echo self::render_hidden_form_inputs( $attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
 					<input type="hidden" name="<?php echo esc_attr( self::FREQUENCY_PARAM ); ?>" value="<?php echo esc_attr( $intial_selected_frequency ); ?>">
@@ -166,7 +146,7 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 						<div class="wpbnbd__tiers__options">
 							<?php foreach ( $displayed_amounts as $index => $amount ) : ?>
 								<?php
-									echo self::render_single_tier( $attributes, $index, $amount, $intial_selected_frequency, $is_any_recommended ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
+									echo self::render_single_tier( $attributes, $index, $configuration['amounts'][ $frequency_slug ][ $index ], $intial_selected_frequency, $is_any_recommended ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 								?>
 							<?php endforeach; ?>
 						</div>
@@ -179,33 +159,6 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 				</div>
 
 			</form>
-			<?php if ( $configuration['is_rendering_stripe_payment_form'] ) : ?>
-				<div class="wpbnbd__tiers__view wpbnbd__tiers__view--hidden">
-				<form data-is-streamlined-form onsubmit="return false;">
-					<button class="wpbnbd__tiers__back-button">← <span><?php echo esc_html( __( 'Back', 'newspack-blocks' ) ); ?></span></button>
-					<div class="wpbnbd__tiers__tier-tile">
-						<h2>
-							<?php echo esc_html( $attributes['tiersBasedOptions'][ $intial_selected_tier_index ]['heading'] ); ?>
-						</h2>
-						<div>
-							<div>
-								<h3>
-									<span><?php echo esc_html( $configuration['currencySymbol'] ); ?></span>
-									<span data-amount><?php echo esc_html( $configuration['amounts'][ $intial_selected_frequency ][ $intial_selected_tier_index ] ); ?></span>
-								</h3>
-								<span data-frequency><?php echo esc_html( self::get_frequency_label( $intial_selected_frequency ) ); ?></span>
-							</div>
-							<div class="wpbnbd__tiers__tier-tile__note">
-								<?php echo esc_html( __( 'Renews on', 'newspack-blocks' ) ); ?> <span data-renews-date>-</span>
-							</div>
-						</div>
-					</div>
-					<?php echo self::render_streamlined_payment_ui( $attributes ); // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped ?>
-					<input data-is-streamlined-input-amount type="hidden" name="" value="0">
-					<input type="hidden" name="<?php echo esc_attr( self::FREQUENCY_PARAM ); ?>" value="<?php echo esc_attr( $intial_selected_frequency ); ?>">
-				</div>
-				</form>
-			<?php endif; ?>
 		</div>
 
 		<?php

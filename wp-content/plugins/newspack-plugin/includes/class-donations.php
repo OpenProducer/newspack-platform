@@ -107,7 +107,7 @@ class Donations {
 	 * @return bool|WP_Error True if active. WP_Error if not.
 	 */
 	public static function is_woocommerce_suite_active() {
-		if ( ! function_exists( 'WC' ) || ! class_exists( 'WC_Subscriptions_Product' ) || ! class_exists( 'WC_Name_Your_Price_Helpers' ) ) {
+		if ( ! function_exists( 'WC' ) || ! class_exists( 'WC_Subscriptions_Product' ) ) {
 			return new WP_Error(
 				'newspack_missing_required_plugin',
 				esc_html__( 'The required plugins are not installed and activated. Install and/or activate them to access this feature.', 'newspack' ),
@@ -119,6 +119,15 @@ class Donations {
 		}
 
 		return true;
+	}
+
+	/**
+	 * Check if the Name Your Price extension is available.
+	 *
+	 * @return bool True if available, false if not.
+	 */
+	public static function can_use_name_your_price() {
+		return class_exists( 'WC_Name_Your_Price_Helpers' );
 	}
 
 	/**
@@ -238,7 +247,7 @@ class Donations {
 			// Add the product IDs for each frequency.
 			foreach ( $product->get_children() as $child_id ) {
 				$child_product = wc_get_product( $child_id );
-				if ( ! $child_product || 'trash' === $child_product->get_status() || ! (bool) WC_Name_Your_Price_Helpers::is_nyp( $child_id ) ) {
+				if ( ! $child_product || 'trash' === $child_product->get_status() ) {
 					continue;
 				}
 				if ( 'subscription' === $child_product->get_type() ) {
@@ -422,6 +431,11 @@ class Donations {
 		$parsed_settings['platform']      = self::get_platform_slug();
 		$parsed_settings['billingFields'] = self::get_billing_fields();
 
+		// If NYP isn't available, force untiered config.
+		if ( ! self::can_use_name_your_price() ) {
+			$parsed_settings['tiered'] = false;
+		}
+
 		return $parsed_settings;
 	}
 
@@ -536,6 +550,7 @@ class Donations {
 			}
 
 			$child_product->set_name( $product_name );
+			$child_product->set_price( $price );
 			$child_product->set_regular_price( $price );
 			$child_product->update_meta_data( '_suggested_price', $price );
 			$child_product->update_meta_data( '_min_price', wc_format_decimal( $configuration['minimumDonation'] ) );
@@ -705,7 +720,7 @@ class Donations {
 			$cart_item_data = apply_filters(
 				'newspack_donations_cart_item_data',
 				[
-					'nyp'               => (float) \WC_Name_Your_Price_Helpers::standardize_number( $donation_value ),
+					'nyp'               => class_exists( 'WC_Name_Your_Price_Helpers' ) ? (float) \WC_Name_Your_Price_Helpers::standardize_number( $donation_value ) : null,
 					'referer'           => $referer,
 					'newspack_popup_id' => filter_input( INPUT_GET, 'newspack_popup_id', FILTER_SANITIZE_NUMBER_INT ),
 				]

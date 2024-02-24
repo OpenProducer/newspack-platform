@@ -13,8 +13,7 @@ export const parseTiersBasedConfig = ( rawConfig = '' ) => {
 				month: items[ 5 ] as string,
 				year: items[ 6 ] as string,
 			},
-			isRenderingStripePaymentForm: items[ 7 ],
-			buttonColor: items[ 8 ],
+			buttonColor: items[ 7 ],
 		};
 	} catch ( error ) {
 		return false;

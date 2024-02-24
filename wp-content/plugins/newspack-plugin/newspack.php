@@ -2,7 +2,7 @@
 /**
  * Plugin Name: Newspack
  * Description: An advanced open-source publishing and revenue-generating platform for news organizations.
- * Version: 3.0.5
+ * Version: 3.1.1
  * Author: Automattic
  * Author URI: https://newspack.com/
  * License: GPL2
@@ -14,7 +14,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-define( 'NEWSPACK_PLUGIN_VERSION', '3.0.5' );
+define( 'NEWSPACK_PLUGIN_VERSION', '3.1.1' );
 
 // Load language files.
 load_plugin_textdomain( 'newspack-plugin', false, dirname( plugin_basename( __FILE__ ) ) . '/languages' );
@@ -28,5 +28,5 @@ require_once 'vendor/autoload.php';
 
 // Include the main Newspack class.
 if ( ! class_exists( 'Newspack' ) ) {
-	include_once dirname( __FILE__ ) . '/includes/class-newspack.php';
+	include_once __DIR__ . '/includes/class-newspack.php';
 }

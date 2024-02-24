@@ -1,0 +1,40 @@
+.newspack-checkout-button {
+	&__product-field {
+		&__selected {
+			.components-button {
+				display: block;
+				width: 100%;
+				text-align: left;
+			}
+		}
+		/* Workaround for hard-coded help text in FormTokenField. */
+		.components-form-token-field__help {
+			display: none;
+		}
+		&__tokenfield {
+			position: relative;
+			.components-spinner {
+				position: absolute;
+				top: 2em;
+				right: 0;
+			}
+		}
+	}
+}
+
+.wp-block-newspack-blocks-checkout-button {
+	[data-align='center'] & {
+		display: flex;
+		flex-direction: column;
+	}
+	&__button {
+		[data-align='full'] &,
+		[data-align='wide'] & {
+			width: 100%;
+		}
+		[data-align='center'] & {
+			margin-left: auto;
+			margin-right: auto;
+		}
+	}
+}

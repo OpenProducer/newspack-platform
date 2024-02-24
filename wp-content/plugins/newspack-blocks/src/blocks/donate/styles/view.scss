@@ -19,6 +19,15 @@
 		}
 	}
 
+	&__tiers__amount__value {
+		font-size: 13px;
+		.woocommerce-Price-amount {
+			display: inline;
+			font-size: 29px;
+			font-weight: 700;
+		}
+	}
+
 	mark {
 		background-color: transparent;
 	}

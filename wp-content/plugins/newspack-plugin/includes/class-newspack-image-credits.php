@@ -110,7 +110,7 @@ class Newspack_Image_Credits {
 		}
 
 		if ( $credit_info['credit_url'] ) {
-			$credit = '<a href="' . $credit_info['credit_url'] . '" target="_blank">' . $credit . '</a>';
+			$credit = '<a href="' . $credit_info['credit_url'] . '">' . $credit . '</a>';
 		}
 
 		$class_name    = self::get_settings( 'newspack_image_credits_class_name' );
@@ -254,7 +254,7 @@ class Newspack_Image_Credits {
 			$block_output = preg_replace_callback(
 				'/<figure>(.*?)<\/figure>/',
 				function( $matches ) use ( &$credit_strings, &$index ) {
-					$index       ++;
+					$index++;
 					$replacement = $matches[0];
 
 					if ( empty( $credit_strings[ $index ] ) ) {
@@ -301,7 +301,6 @@ class Newspack_Image_Credits {
 						$img_src = $placeholder_src;
 					}
 					return 'src="' . $img_src . '"';
-
 				},
 				$block_output
 			);

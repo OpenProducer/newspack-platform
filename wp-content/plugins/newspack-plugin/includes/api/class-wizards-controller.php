@@ -7,8 +7,8 @@
 
 namespace Newspack\API;
 
-use \WP_REST_Controller;
-use \WP_Error;
+use WP_REST_Controller;
+use WP_Error;
 use Newspack\Wizards;
 
 defined( 'ABSPATH' ) || exit;

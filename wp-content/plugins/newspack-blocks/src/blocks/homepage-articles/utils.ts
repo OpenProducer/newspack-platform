@@ -1,7 +1,7 @@
 /**
  * External dependencies
  */
-import { times, isEqual, isUndefined, pick, pickBy } from 'lodash';
+import { times, isEqual, isNull, isUndefined, pick, pickBy } from 'lodash';
 
 /**
  * WordPress dependencies
@@ -36,6 +36,7 @@ const POST_QUERY_ATTRIBUTES = [
 	'specificMode',
 	'tagExclusions',
 	'categoryExclusions',
+	'customTaxonomyExclusions',
 	'postType',
 	'includedPostStatuses',
 	'deduplicate',
@@ -55,6 +56,7 @@ type HomepageArticlesAttributes = {
 	specificMode: boolean;
 	tagExclusions: TagId[];
 	categoryExclusions: CategoryId[];
+	customTaxonomyExclusions: Taxonomy[];
 };
 
 type HomepageArticlesProps = {
@@ -100,6 +102,7 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 		specificMode,
 		tagExclusions,
 		categoryExclusions,
+		customTaxonomyExclusions,
 		includedPostStatuses,
 	} = pick( attributes, POST_QUERY_ATTRIBUTES );
 
@@ -114,12 +117,13 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 			  }
 			: {
 					postsToShow,
-					categories,
+					categories: validateAttributeCollection( categories ),
 					includeSubcategories,
-					authors,
-					tags,
-					tagExclusions,
-					categoryExclusions,
+					authors: validateAttributeCollection( authors ),
+					tags: validateAttributeCollection( tags ),
+					tagExclusions: validateAttributeCollection( tagExclusions ),
+					categoryExclusions: validateAttributeCollection( categoryExclusions ),
+					customTaxonomyExclusions,
 					customTaxonomies,
 					postType,
 					includedPostStatuses,
@@ -133,6 +137,9 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 
 export const sanitizePostList = ( postList: HomepageArticlesAttributes[ 'specificPosts' ] ) =>
 	postList.map( id => parseInt( id ) ).filter( id => id > 0 );
+
+export const validateAttributeCollection = ( attr: Array< number > ) =>
+	pickBy( attr, ( value: unknown ) => ! isUndefined( value ) && ! isNull( value ) );
 
 /**
  * Each eligible block's attributes can be used to create a posts query.

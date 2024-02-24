@@ -187,7 +187,7 @@ class WP_REST_Newspack_Articles_Controller extends WP_REST_Controller {
 				array_merge(
 					array_map(
 						function( $attribute ) {
-							return false === $attribute ? '0' : str_replace( '#', '%23', $attribute );
+							return false === $attribute ? '0' : $attribute;
 						},
 						$attributes
 					),

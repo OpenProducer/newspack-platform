@@ -7,7 +7,7 @@
 
 namespace Newspack;
 
-use \WP_Error, \WP_Query;
+use WP_Error, WP_Query;
 
 defined( 'ABSPATH' ) || exit;
 

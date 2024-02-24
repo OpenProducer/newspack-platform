@@ -30,6 +30,7 @@ import {
 	PromptOptions,
 	PromptProps,
 	PromptType,
+	PromptOptionsBaseKey,
 } from './types';
 import {
 	ActionCard,
@@ -42,7 +43,7 @@ import {
 	hooks,
 } from '../../../components/src';
 
-// Note: Schema and types for the `prompt` prop is defined in Newspack Campaigns: https://github.com/Automattic/newspack-popups/blob/master/includes/schemas/class-prompts.php
+// Note: Schema and types for the `prompt` prop is defined in Newspack Campaigns: https://github.com/Automattic/newspack-popups/blob/trunk/includes/schemas/class-prompts.php
 export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: PromptProps ) {
 	const [ values, setValues ] = useState< InputValues | Record< string, never > >( {} );
 	const [ error, setError ] = useState< false | { message: string } >( false );
@@ -97,8 +98,10 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 		const { placement, trigger_type: triggerType } = options;
 		const previewQueryKeys = window.newspack_engagement_wizard.preview_query_keys;
 		const abbreviatedKeys = { preset: slug, values };
-		Object.keys( options ).forEach( ( key: string ) => {
+		const optionsKeys = Object.keys( options ) as Array< PromptOptionsBaseKey >;
+		optionsKeys.forEach( key => {
 			if ( previewQueryKeys.hasOwnProperty( key ) ) {
+				// @ts-ignore To be fixed in the future perhaps.
 				abbreviatedKeys[ previewQueryKeys[ key ] ] = options[ key ];
 			}
 		} );
@@ -194,16 +197,22 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 													disabled={ inFlight }
 													label={ option.label }
 													value={ option.id }
+													// @ts-ignore To be fixed in the future perhaps.
 													checked={ values[ field.name ]?.indexOf( option.id ) > -1 }
 													onChange={ ( value: boolean ) => {
 														const toUpdate = { ...values };
+														// @ts-ignore To be fixed in the future perhaps.
 														if ( ! value && toUpdate[ field.name ].indexOf( option.id ) > -1 ) {
+															// @ts-ignore To be fixed in the future perhaps.
 															toUpdate[ field.name ].value = toUpdate[ field.name ].splice(
+																// @ts-ignore To be fixed in the future perhaps.
 																toUpdate[ field.name ].indexOf( option.id ),
 																1
 															);
 														}
+														// @ts-ignore To be fixed in the future perhaps.
 														if ( value && toUpdate[ field.name ].indexOf( option.id ) === -1 ) {
+															// @ts-ignore To be fixed in the future perhaps.
 															toUpdate[ field.name ].push( option.id );
 														}
 														setValues( toUpdate );
@@ -219,8 +228,10 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 										className="newspack-textarea-control"
 										label={ field.label }
 										disabled={ inFlight }
+										// @ts-ignore To be fixed in the future perhaps.
 										help={ `${ values[ field.name ]?.length || 0 } / ${ field.max_length }` }
 										onChange={ ( value: string ) => {
+											// @ts-ignore There's a check for max_length above.
 											if ( value.length > field.max_length ) {
 												return;
 											}
@@ -230,17 +241,20 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 											setValues( toUpdate );
 											setIsDirty( true );
 										} }
-										placeholder={ field.default }
+										placeholder={ typeof field.default === 'string' ? field.default : '' }
 										rows={ 10 }
-										value={ values[ field.name ] || '' }
+										// @ts-ignore TS still does not see it as a string.
+										value={ typeof values[ field.name ] === 'string' ? values[ field.name ] : '' }
 									/>
 								) }
 								{ 'string' === field.type && field.max_length && 150 >= field.max_length && (
 									<TextControl
 										label={ field.label }
 										disabled={ inFlight }
+										// @ts-ignore To be fixed in the future perhaps.
 										help={ `${ values[ field.name ]?.length || 0 } / ${ field.max_length }` }
 										onChange={ ( value: string ) => {
+											// @ts-ignore There's a check for max_length above.
 											if ( value.length > field.max_length ) {
 												return;
 											}
