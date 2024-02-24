@@ -1,4 +1,8 @@
 @charset "UTF-8";
+/*!
+Newspack Theme Editor Styles
+*/
+/** === Includes === */
 body {
   --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
   --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
@@ -6,6 +10,7 @@ body {
   --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
+/** === Includes === */
 /* If we add the border using a regular CSS border, it won't look good on non-retina devices,
  * since its edges can look jagged due to lack of antialiasing. In this case, we are several
  * layers of box-shadow to add the border visually, which will render the border smoother. */
@@ -76,7 +81,6 @@ body {
   --newspack-theme-font-line-height-heading: 1.2;
 }
 
-/** === Includes === */
 /** === Editor Frame === */
 body {
   background-color: var(--newspack-theme-color-bg-body);
@@ -337,7 +341,7 @@ h1.wp-block-post-title {
 .wp-block[data-type="core/cover"][data-align=left] .wp-block-cover,
 .wp-block[data-type="core/cover"][data-align=right] .wp-block-cover {
   min-height: 250px;
-  padding: calc( 1.375 * 1rem );
+  padding: calc(1.375 * 1rem);
 }
 @media only screen and (min-width: 782px) {
   .wp-block[data-type="core/cover"][data-align=left] .wp-block-cover,
@@ -353,7 +357,7 @@ h1.wp-block-post-title {
 @media only screen and (min-width: 782px) {
   .wp-block[data-type="core/cover"][data-align=left] .wp-block-cover,
   .wp-block[data-type="core/cover"][data-align=right] .wp-block-cover {
-    padding: calc( 2 * 1rem );
+    padding: calc(2 * 1rem);
   }
 }
 .wp-block[data-type="core/cover"][data-align=left] .wp-block-cover .wp-block-cover__inner-container,
@@ -667,7 +671,7 @@ div[data-align=full] > .wp-block-image figcaption {
 }
 .wp-block-file .wp-block-file__button-richtext-wrapper {
   display: block;
-  margin-top: calc( 0.75 * 1rem );
+  margin-top: calc(0.75 * 1rem);
   margin-left: 0;
 }
 
@@ -752,8 +756,8 @@ div[data-align=full] > .wp-block-image figcaption {
 .wp-block-separator.is-style-dots::before {
   color: var(--newspack-theme-color-text-light);
   font-size: var(--newspack-theme-font-size-lg);
-  letter-spacing: calc( 2 * 1rem );
-  padding-left: calc( 2 * 1rem );
+  letter-spacing: calc(2 * 1rem);
+  padding-left: calc(2 * 1rem);
 }
 .wp-block-separator.has-background, .wp-block-separator.has-text-color {
   border-color: currentcolor;
@@ -1549,8 +1553,3 @@ ul.wp-block-archives li,
   margin-bottom: 0.75rem;
   padding: 0 0 0.33rem;
 }
-
-/*!
-Newspack Theme Editor Styles
-*/
-/** === Includes === */

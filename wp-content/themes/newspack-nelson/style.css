@@ -6,7 +6,7 @@ Author: Automattic
 Author URI: https://newspack.com
 Description:
 Requires at least: WordPress 4.9.6
-Version: 1.84.1
+Version: 1.85.1
 License: GNU General Public License v2 or later
 License URI: LICENSE
 Template: newspack-theme
@@ -108,6 +108,7 @@ Nicolas Gallagher and Jonathan Neal https://necolas.github.io/normalize.css/
   	"Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue", sans-serif;
 }
 
+/* Mixins */
 body {
   --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
   --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
@@ -128,6 +129,7 @@ body {
   --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
+/* Normalize */
 /*! normalize.css v8.0.0 | MIT License | github.com/necolas/normalize.css */
 /* Document
 	 ========================================================================== */
@@ -432,6 +434,8 @@ template {
   display: none;
 }
 
+/* Typography */
+/* Mixins */
 html {
   font-size: var(--newspack-theme-font-size-base-sm);
 }
@@ -469,6 +473,7 @@ textarea {
   font-family: var(--newspack-theme-font-body);
 }
 
+/* Mixins */
 body {
   --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
   --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
@@ -784,6 +789,7 @@ a:focus {
   text-decoration: underline;
 }
 
+/* Elements */
 html {
   box-sizing: border-box;
 }
@@ -892,6 +898,7 @@ table th {
   word-break: break-all;
 }
 
+/* Forms */
 .button,
 button,
 input[type=button],
@@ -1091,6 +1098,10 @@ input[type=checkbox]:disabled {
   background: #a1e789;
 }
 
+/* Navigation */
+/* --------------------------------------------------------------
+## Links
+-------------------------------------------------------------- */
 a {
   transition: color 110ms ease-in-out;
   color: var(--newspack-theme-color-text-light);
@@ -1108,6 +1119,9 @@ a:focus {
   text-decoration: underline;
 }
 
+/* --------------------------------------------------------------
+## Menus
+-------------------------------------------------------------- */
 /** === Dropdown menus === */
 .dd-menu button {
   display: inline-block;
@@ -1151,11 +1165,11 @@ a:focus {
 }
 .dd-menu .sub-menu > li.menu-item-has-children .submenu-expand {
   position: absolute;
-  width: calc( 24px + 1rem );
+  width: calc(24px + 1rem);
   bottom: 0;
   color: white;
   line-height: 1;
-  padding: calc( 0.5 * 1rem );
+  padding: calc(0.5 * 1rem);
   margin-right: 0;
 }
 .dd-menu .sub-menu > li.menu-item-has-children .submenu-expand svg {
@@ -1234,7 +1248,7 @@ a:focus {
   color: var(--newspack-theme-color-bg-body);
   display: block;
   line-height: var(--newspack-theme-font-line-height-heading);
-  padding: calc( 0.75 * 1rem ) calc( 24px + 1rem ) calc( 0.75 * 1rem ) 1rem;
+  padding: calc(0.75 * 1rem) calc(24px + 1rem) calc(0.75 * 1rem) 1rem;
 }
 .site-header .dd-menu .sub-menu a:hover, .site-header .dd-menu .sub-menu a:focus {
   background-color: #020202;
@@ -1314,7 +1328,7 @@ a:focus {
 }
 
 .h-dh .site-header .nav1 .main-menu > li {
-  padding: calc( 1rem * 0.5 ) 0;
+  padding: calc(1rem * 0.5) 0;
 }
 
 .h-sh .site-header .nav1 .main-menu > li {
@@ -1934,6 +1948,9 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   z-index: 999998;
 }
 
+/* --------------------------------------------------------------
+## Next / Previous
+-------------------------------------------------------------- */
 .pagination {
   margin: 3rem 0;
 }
@@ -2056,6 +2073,9 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   text-align: right;
 }
 
+/* --------------------------------------------------------------
+## Infinite Scroll
+-------------------------------------------------------------- */
 /* Infinite scroll */
 /* Globally hidden elements when Infinite Scroll is supported and in use. */
 .infinite-scroll .pagination,
@@ -2115,18 +2135,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   outline-offset: -4px;
 }
 
-/* --------------------------------------------------------------
-## Links
--------------------------------------------------------------- */
-/* --------------------------------------------------------------
-## Menus
--------------------------------------------------------------- */
-/* --------------------------------------------------------------
-## Next / Previous
--------------------------------------------------------------- */
-/* --------------------------------------------------------------
-## Infinite Scroll
--------------------------------------------------------------- */
+/* Accessibility */
+/* Mixins */
 /* Text meant only for screen readers. */
 .screen-reader-text {
   border: 0;
@@ -2166,6 +2176,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   outline: 0;
 }
 
+/* Alignments */
+/* Mixins */
 .alignleft {
   /* rtl:ignore */
   float: left;
@@ -2175,7 +2187,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 @media only screen and (min-width: 782px) {
   .alignleft {
     /* rtl:ignore */
-    margin-right: calc( 2 * 1rem );
+    margin-right: calc(2 * 1rem);
   }
 }
 
@@ -2188,7 +2200,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 @media only screen and (min-width: 782px) {
   .alignright {
     /* rtl:ignore */
-    margin-left: calc( 2 * 1rem );
+    margin-left: calc(2 * 1rem);
   }
 }
 
@@ -2199,6 +2211,8 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin-right: auto;
 }
 
+/* Clearings */
+/* Mixins */
 .clear::before,
 .clear::after,
 .entry-content::before,
@@ -2225,6 +2239,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   clear: both;
 }
 
+/* Layout */
 /** === Layout === */
 #page {
   display: flex;
@@ -2326,7 +2341,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .search #secondary,
   .page #secondary,
   .single #secondary {
-    width: calc( 35% - 2rem );
+    width: calc(35% - 2rem);
   }
 }
 @media only screen and (min-width: 1168px) {
@@ -2335,7 +2350,7 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   .search #secondary,
   .page #secondary,
   .single #secondary {
-    width: calc( 35% - 3rem );
+    width: calc(35% - 3rem);
   }
 }
 
@@ -2394,6 +2409,10 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
   margin-top: 1rem;
 }
 
+/* Content */
+/* --------------------------------------------------------------
+## Header
+-------------------------------------------------------------- */
 .site-branding {
   align-items: center;
   color: var(--newspack-theme-color-text-light);
@@ -2932,6 +2951,9 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
     display: inherit;
   }
 }
+/* --------------------------------------------------------------
+## Posts and pages
+-------------------------------------------------------------- */
 .sticky {
   display: block;
 }
@@ -2946,11 +2968,11 @@ body.h-db.h-dh .site-header .nav3 .menu-highlight a:hover {
 
 .page-links {
   clear: both;
-  margin: 0 0 calc( 1.5 * 1rem );
+  margin: 0 0 calc(1.5 * 1rem);
 }
 
 .entry {
-  margin-top: calc( 6 * 1rem );
+  margin-top: calc(6 * 1rem);
 }
 .entry:first-of-type {
   margin-top: 0;
@@ -3159,11 +3181,11 @@ amp-script .cat-links {
   max-width: 100% !important;
 }
 .entry-content .page-links a {
-  margin: calc( 0.5 * 1rem );
+  margin: calc(0.5 * 1rem);
   text-decoration: none;
 }
 .entry-content .wp-audio-shortcode {
-  max-width: calc(100vw - ( 2 * 1rem ));
+  max-width: calc(100vw - 2 * 1rem);
 }
 
 .entry .entry-content a.button {
@@ -3289,7 +3311,7 @@ div.sharedaddy {
   .post-navigation .nav-previous,
   .post-navigation .nav-next {
     margin: 2rem 0;
-    width: calc( 50% - 2rem );
+    width: calc(50% - 2rem);
   }
   .post-navigation .nav-next {
     text-align: right;
@@ -3334,7 +3356,7 @@ div.sharedaddy {
 /* Author description */
 .author-bio {
   display: flex;
-  margin: calc( 2 * 1rem ) auto 1rem;
+  margin: calc(2 * 1rem) auto 1rem;
 }
 .author-bio .avatar {
   height: 60px;
@@ -3789,6 +3811,10 @@ div.sharedaddy {
   }
 }
 
+/* --------------------------------------------------------------
+## Comments
+-------------------------------------------------------------- */
+/* Mixins */
 .comment-content a {
   word-wrap: break-word;
 }
@@ -3798,22 +3824,22 @@ div.sharedaddy {
 }
 
 .comments-area {
-  margin: calc( 2 * 1rem ) 0;
+  margin: calc(2 * 1rem) 0;
   /* Add extra margin when the comments section is located immediately after the
    * post itself (this happens on pages).
    */
 }
 @media only screen and (min-width: 782px) {
   .comments-area {
-    margin: calc( 3 * 1rem ) 0;
+    margin: calc(3 * 1rem) 0;
   }
 }
 .comments-area > * {
-  margin-top: calc( 2 * 1rem );
-  margin-bottom: calc( 2 * 1rem );
+  margin-top: calc(2 * 1rem);
+  margin-bottom: calc(2 * 1rem);
 }
 .entry + .comments-area {
-  margin-top: calc( 3 * 1rem );
+  margin-top: calc(3 * 1rem);
 }
 @media only screen and (min-width: 782px) {
   .comments-area .comments-title-wrap {
@@ -3945,7 +3971,7 @@ div.sharedaddy {
 }
 @media only screen and (min-width: 782px) {
   .comment {
-    padding-left: calc(0.5 * ( 1rem + calc( 100vw / 12 ) ));
+    padding-left: calc(0.5 * (1rem + 8.3333333333vw));
   }
   .comment.depth-1,
   .comment .children {
@@ -3953,7 +3979,7 @@ div.sharedaddy {
   }
 }
 .comment .comment-body {
-  margin: calc( 2 * 1rem ) 0 0;
+  margin: calc(2 * 1rem) 0 0;
 }
 .comment .comment-meta {
   position: relative;
@@ -4094,8 +4120,8 @@ div.sharedaddy {
   float: left;
 }
 .discussion-avatar-list .comment-user-avatar img {
-  height: calc( 1.5 * 1rem );
-  width: calc( 1.5 * 1rem );
+  height: calc(1.5 * 1rem);
+  width: calc(1.5 * 1rem);
 }
 
 .discussion-meta .discussion-meta-info {
@@ -4117,7 +4143,7 @@ div.sharedaddy {
 @media only screen and (min-width: 782px) {
   .comment-form .comment-form-author,
   .comment-form .comment-form-email {
-    width: calc( 50% - 0.5rem );
+    width: calc(50% - 0.5rem);
     float: left;
   }
 }
@@ -4181,6 +4207,9 @@ div.sharedaddy {
   z-index: 2;
 }
 
+/* --------------------------------------------------------------
+## Archives
+-------------------------------------------------------------- */
 .archive .page-header,
 .blog .page-header,
 .search .page-header {
@@ -4205,7 +4234,7 @@ div.sharedaddy {
 .archive .entry,
 .blog .entry,
 .search .entry {
-  margin-top: calc( 3 * 1rem );
+  margin-top: calc(3 * 1rem);
 }
 .archive .entry:first-of-type,
 .blog .entry:first-of-type,
@@ -4341,6 +4370,9 @@ div.sharedaddy {
   }
 }
 
+/* --------------------------------------------------------------
+## Footer
+-------------------------------------------------------------- */
 /* Site footer */
 .site-footer {
   margin: 2rem 0 0;
@@ -4363,12 +4395,12 @@ div.sharedaddy {
   .site-footer .footer-widgets .widget {
     flex: 1 0 0;
     margin-right: 2rem;
-    min-width: calc( 50% - 2rem );
+    min-width: calc(50% - 2rem);
   }
 }
 @media only screen and (min-width: 782px) {
   .site-footer .footer-widgets .widget {
-    min-width: calc( 25% - 2rem );
+    min-width: calc(25% - 2rem);
   }
 }
 .site-footer .footer-widgets .widget:last-child {
@@ -4536,21 +4568,8 @@ div.sharedaddy {
   font-size: 1em;
 }
 
-/* --------------------------------------------------------------
-## Header
--------------------------------------------------------------- */
-/* --------------------------------------------------------------
-## Posts and pages
--------------------------------------------------------------- */
-/* --------------------------------------------------------------
-## Comments
--------------------------------------------------------------- */
-/* --------------------------------------------------------------
-## Archives
--------------------------------------------------------------- */
-/* --------------------------------------------------------------
-## Footer
--------------------------------------------------------------- */
+/* Widgets */
+/* Mixins */
 .widget {
   font-family: var(--newspack-theme-font-heading);
   font-size: var(--newspack-theme-font-size-sm);
@@ -4786,7 +4805,7 @@ div.sharedaddy {
 }
 
 .single #secondary {
-  padding-top: calc( 1rem * 1.5 );
+  padding-top: calc(1rem * 1.5);
 }
 
 .page #secondary {
@@ -4840,6 +4859,8 @@ div.sharedaddy {
   display: none;
 }
 
+/* Blocks */
+/* Mixins */
 /* !Block styles */
 .entry .entry-content > *,
 .newspack-inline-popup > *,
@@ -5298,7 +5319,7 @@ p.has-background {
   .wp-block-cover-image.alignleft, .wp-block-cover-image.alignright,
   .wp-block-cover.alignleft,
   .wp-block-cover.alignright {
-    padding: 1rem calc( 2 * 1rem );
+    padding: 1rem calc(2 * 1rem);
   }
 }
 .wp-block-cover-image.alignleft blockquote,
@@ -5335,7 +5356,7 @@ p.has-background {
 }
 .wp-block-pullquote blockquote {
   border: none;
-  margin: 1rem 0 calc( 1.25 * 1rem );
+  margin: 1rem 0 calc(1.25 * 1rem);
   padding-left: 0;
 }
 .wp-block-pullquote blockquote p, .wp-block-pullquote.is-style-solid-color blockquote p {
@@ -5435,7 +5456,7 @@ p.has-background {
 }
 @media only screen and (min-width: 782px) {
   .wp-block-pullquote.is-style-solid-color.alignright, .wp-block-pullquote.is-style-solid-color.alignleft {
-    padding: 1rem calc( 2 * 1rem );
+    padding: 1rem calc(2 * 1rem);
   }
 }
 @media only screen and (min-width: 782px) {
@@ -5542,7 +5563,7 @@ p.has-background {
   outline: none;
 }
 .wp-block-button__link:visited {
-  color: #fff;
+  color: var(--newspack-theme-color-against-secondary);
 }
 
 .wp-block-jetpack-button button.wp-block-button__link {
@@ -5845,7 +5866,7 @@ hr.has-background.is-style-dots::before {
   padding: 0.75rem 1rem;
   color: var(--newspack-theme-color-against-secondary);
   margin-left: 0;
-  margin-top: calc( 0.75 * 1rem );
+  margin-top: calc(0.75 * 1rem);
 }
 .wp-block-file .wp-block-file__button:hover, .wp-block-file .wp-block-file__button:focus {
   background: var(--newspack-theme-color-bg-button-hover);
@@ -5953,9 +5974,7 @@ hr.has-background.is-style-dots::before {
 @media only screen and (min-width: 782px) {
   .newspack-front-page.hide-homepage-title .entry-content > .wp-block-group.alignfull:first-child,
   .newspack-front-page.hide-homepage-title [id=pico] > .wp-block-group.alignfull:first-child {
-    margin-top: calc(
-			-0.5rem - 1px
-		);
+    margin-top: calc(-0.5rem - 1px);
   }
 }
 
@@ -6421,7 +6440,7 @@ hr.has-background.is-style-dots::before {
   .page-template-no-header-footer [id=pico] > *.alignleft,
   .page-template-no-header-footer [id=pico] > *.wp-block-image .alignleft {
     /* rtl:ignore */
-    margin-right: calc( 2 * 1rem );
+    margin-right: calc(2 * 1rem);
   }
 }
 @media only screen and (min-width: 782px) {
@@ -6469,7 +6488,7 @@ hr.has-background.is-style-dots::before {
   .page-template-no-header-footer [id=pico] > *.alignright,
   .page-template-no-header-footer [id=pico] > *.wp-block-image .alignright {
     /* rtl:ignore */
-    margin-left: calc( 2 * 1rem );
+    margin-left: calc(2 * 1rem);
   }
 }
 @media only screen and (min-width: 782px) {
@@ -6766,6 +6785,7 @@ hr.has-background.is-style-dots::before {
 /* --------------------------------------------------------------
 ## Patterns
 -------------------------------------------------------------- */
+/* Mixins */
 body {
   --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
   --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
@@ -7164,6 +7184,7 @@ body {
   height: 100%;
 }
 
+/* Media */
 .page-content .wp-smiley,
 .entry-content .wp-smiley,
 .comment-content .wp-smiley {
@@ -7190,9 +7211,9 @@ iframe {
 .avatar {
   border-radius: 100%;
   display: block;
-  height: calc( 2.25 * 1rem );
+  height: calc(2.25 * 1rem);
   min-height: inherit;
-  width: calc( 2.25 * 1rem );
+  width: calc(2.25 * 1rem);
 }
 
 svg {
@@ -7211,7 +7232,7 @@ body {
 }
 
 .wp-caption {
-  margin-bottom: calc( 1.5 * 1rem );
+  margin-bottom: calc(1.5 * 1rem);
 }
 
 .wp-caption img[class*=wp-image-] {
@@ -7311,7 +7332,7 @@ body {
   display: flex;
   flex-flow: row wrap;
   justify-content: center;
-  margin-bottom: calc( 1.5 * 1rem );
+  margin-bottom: calc(1.5 * 1rem);
 }
 
 .gallery-item {
@@ -7324,7 +7345,7 @@ body {
 }
 
 .gallery-columns-2 .gallery-item {
-  max-width: calc( ( 100% - 16px * 1 ) / 2 );
+  max-width: calc((100% - 16px * 1) / 2);
 }
 
 .gallery-columns-2 .gallery-item:nth-of-type(2n + 2) {
@@ -7332,7 +7353,7 @@ body {
 }
 
 .gallery-columns-3 .gallery-item {
-  max-width: calc( ( 100% - 16px * 2 ) / 3 );
+  max-width: calc((100% - 16px * 2) / 3);
 }
 
 .gallery-columns-3 .gallery-item:nth-of-type(3n + 3) {
@@ -7340,7 +7361,7 @@ body {
 }
 
 .gallery-columns-4 .gallery-item {
-  max-width: calc( ( 100% - 16px * 3 ) / 4 );
+  max-width: calc((100% - 16px * 3) / 4);
 }
 
 .gallery-columns-4 .gallery-item:nth-of-type(4n + 4) {
@@ -7348,7 +7369,7 @@ body {
 }
 
 .gallery-columns-5 .gallery-item {
-  max-width: calc( ( 100% - 16px * 4 ) / 5 );
+  max-width: calc((100% - 16px * 4) / 5);
 }
 
 .gallery-columns-5 .gallery-item:nth-of-type(5n + 5) {
@@ -7356,7 +7377,7 @@ body {
 }
 
 .gallery-columns-6 .gallery-item {
-  max-width: calc( ( 100% - 16px * 5 ) / 6 );
+  max-width: calc((100% - 16px * 5) / 6);
 }
 
 .gallery-columns-6 .gallery-item:nth-of-type(6n + 6) {
@@ -7364,7 +7385,7 @@ body {
 }
 
 .gallery-columns-7 .gallery-item {
-  max-width: calc( ( 100% - 16px * 6 ) / 7 );
+  max-width: calc((100% - 16px * 6) / 7);
 }
 
 .gallery-columns-7 .gallery-item:nth-of-type(7n + 7) {
@@ -7372,7 +7393,7 @@ body {
 }
 
 .gallery-columns-8 .gallery-item {
-  max-width: calc( ( 100% - 16px * 7 ) / 8 );
+  max-width: calc((100% - 16px * 7) / 8);
 }
 
 .gallery-columns-8 .gallery-item:nth-of-type(8n + 8) {
@@ -7380,7 +7401,7 @@ body {
 }
 
 .gallery-columns-9 .gallery-item {
-  max-width: calc( ( 100% - 16px * 8 ) / 9 );
+  max-width: calc((100% - 16px * 8) / 9);
 }
 
 .gallery-columns-9 .gallery-item:nth-of-type(9n + 9) {
@@ -7410,6 +7431,8 @@ body {
   box-shadow: 0 0 0 2px rgba(var(--newspack-theme-color-primary), 1);
 }
 
+/* Newspack Ads support */
+/* Mixins */
 .newspack_global_ad {
   display: flex;
   justify-content: center;
@@ -7534,6 +7557,7 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   padding: 8px;
 }
 
+/* Yoast Breadcrumb support */
 .site-breadcrumb {
   color: var(--newspack-theme-color-text-light);
 }
@@ -7558,6 +7582,7 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   border-top: 1px solid var(--newspack-theme-color-border);
 }
 
+/* Newspack Listings support */
 .newspack-listings.hide-date.hide-author .entry-subhead {
   padding: 0;
 }
@@ -7581,23 +7606,6 @@ body:not(.newspack-front-page) .newspack_global_ad.global_below_header + .site-c
   width: 0.5em;
 }
 
-/* Mixins */
-/* Normalize */
-/* Typography */
-/* Elements */
-/* Forms */
-/* Navigation */
-/* Accessibility */
-/* Alignments */
-/* Clearings */
-/* Layout */
-/* Content */
-/* Widgets */
-/* Blocks */
-/* Media */
-/* Newspack Ads support */
-/* Yoast Breadcrumb support */
-/* Newspack Listings support */
 .h-sb .site-header {
   background-color: var(--newspack-theme-color-primary);
 }
@@ -7773,9 +7781,7 @@ body:not(.h-sb) .site-header {
 @media only screen and (min-width: 782px) {
   .newspack-front-page.hide-homepage-title .entry-content > .wp-block-group.alignfull:first-child,
   .newspack-front-page.hide-homepage-title [id=pico] > .wp-block-group.alignfull:first-child {
-    margin-top: calc(
-					-1rem - 4px
-				);
+    margin-top: calc(-1rem - 4px);
   }
 }
 
@@ -7839,7 +7845,7 @@ div.wpnbha.is-grid .article-section-title {
 }
 @media only screen and (min-width: 782px) {
   div.wpnbha.is-grid .article-section-title {
-    margin-bottom: calc( 1.5rem - var( --wpnbha-col-gap, 32px ) );
+    margin-bottom: calc(1.5rem - var(--wpnbha-col-gap, 32px));
   }
 }
 

@@ -84,7 +84,7 @@ main#tribe-events-pg-template {
   }
   .tec-wrapper #secondary {
     margin-top: 2rem;
-    width: calc( 35% - 2rem );
+    width: calc(35% - 2rem);
   }
   .tec-sidebar #tribe-events-pg-template {
     margin: 0;
@@ -99,7 +99,7 @@ main#tribe-events-pg-template {
 }
 @media only screen and (min-width: 1168px) {
   .tec-wrapper #secondary {
-    width: calc( 35% - 3rem );
+    width: calc(35% - 3rem);
   }
 }
 .entry .entry-content .entry.tribe-events-pro-photo__event {

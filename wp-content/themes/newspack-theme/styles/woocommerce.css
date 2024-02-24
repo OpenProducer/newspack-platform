@@ -1,4 +1,7 @@
 @charset "UTF-8";
+/**
+ * Sass variables
+ */
 body {
   --wp--preset--spacing--50: clamp( 1.25rem, 1rem + 0.8333vw, 1.5rem );
   --wp--preset--spacing--60: clamp( 1.5rem, 0.75rem + 2.5vw, 2.25rem);
@@ -19,9 +22,6 @@ body {
   --wp--preset--spacing--80: clamp( 2rem, -1.06rem + 10.2vw, 5.06rem);
 }
 
-/**
- * Sass variables
- */
 /**
  * Fonts
  */
@@ -73,6 +73,9 @@ a.button:hover, a.button:visited {
 }
 .woocommerce form .form-row.form-row-first:last-child {
   width: 100%;
+}
+.woocommerce form .form-row.form-row-first + .form-row:not(.form-row-first):not(.form-row-last) {
+  clear: left;
 }
 
 .woocommerce-breadcrumb {
@@ -1656,5 +1659,9 @@ table.woocommerce-table--order-details.shop_table .cart-subtotal.recurring-total
   .logged-in.page-template-single-feature.woocommerce-account .woocommerce-MyAccount-content .woocommerce-account-my-memberships :first-child,
   .logged-in.page-template-single-feature.woocommerce-account .woocommerce-MyAccount-content .woocommerce_account_subscriptions :first-child {
     margin-top: 0;
+  }
+  .logged-in.page-template-single-wide.woocommerce-account .wcs-gifting-recipient-details-content,
+  .logged-in.page-template-single-feature.woocommerce-account .wcs-gifting-recipient-details-content {
+    grid-column: 1/-1;
   }
 }
