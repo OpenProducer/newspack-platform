@@ -884,7 +884,7 @@ const ComplementaryAreaHeader = ({
   });
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
     className: "components-panel__header interface-complementary-area-header__small"
-  }, smallScreenTitle && (0,external_React_namespaceObject.createElement)("span", {
+  }, smallScreenTitle && (0,external_React_namespaceObject.createElement)("h2", {
     className: "interface-complementary-area-header__small-title"
   }, smallScreenTitle), toggleButton), (0,external_React_namespaceObject.createElement)("div", {
     className: classnames_default()('components-panel__header', 'interface-complementary-area-header', className),
@@ -1227,7 +1227,9 @@ function ComplementaryArea({
       scope,
       identifier
     }
-  }, header || (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("strong", null, title), isPinnable && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+  }, header || (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("h2", {
+    className: "interface-complementary-area-header__title"
+  }, title), isPinnable && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     className: "interface-complementary-area__pin-unpin-item",
     icon: isPinned ? star_filled : star_empty,
     label: isPinned ? (0,external_wp_i18n_namespaceObject.__)('Unpin from toolbar') : (0,external_wp_i18n_namespaceObject.__)('Pin to toolbar'),

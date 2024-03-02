@@ -1,3 +1,10 @@
+## [3.1.2](https://github.com/Automattic/newspack-plugin/compare/v3.1.1...v3.1.2) (2024-02-29)
+
+
+### Bug Fixes
+
+* donate block layout for NRH ([#2954](https://github.com/Automattic/newspack-plugin/issues/2954)) ([8595985](https://github.com/Automattic/newspack-plugin/commit/8595985d6ce1273a5484d2f3ede1ee9596bd53b9))
+
 ## [3.1.1](https://github.com/Automattic/newspack-plugin/compare/v3.1.0...v3.1.1) (2024-02-21)
 
 

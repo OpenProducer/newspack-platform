@@ -236,6 +236,10 @@ class Newspack_Blocks {
 	 * @return bool True if available, false if not.
 	 */
 	public static function can_use_name_your_price() {
+		// If the donation platform is NRH, the Donate block should behave as if Name Your Price is available.
+		if ( method_exists( 'Newspack\Donations', 'is_platform_nrh' ) && \Newspack\Donations::is_platform_nrh() ) {
+			return true;
+		}
 		return class_exists( 'WC_Name_Your_Price_Helpers' );
 	}
 
@@ -1550,8 +1554,16 @@ class Newspack_Blocks {
 	 * @return string
 	 */
 	public static function get_formatted_amount( $amount = 0, $frequency = 'day', $hide_once_label = false ) {
-		if ( ! function_exists( 'wc_price' ) ) {
-			return $amount;
+		if ( ! function_exists( 'wc_price' ) || ( method_exists( 'Newspack\Donations', 'is_platform_wc' ) && ! \Newspack\Donations::is_platform_wc() ) ) {
+			if ( 0 === $amount ) {
+				return false;
+			}
+
+			// Translators: %s is the %s is the frequency.
+			$frequency_string = 'once' === $frequency ? $frequency : sprintf( __( 'per %s', 'newspack-blocks' ), $frequency );
+			$formatter        = new NumberFormatter( \get_locale(), NumberFormatter::CURRENCY );
+			$formatted_price  = '<span class="price-amount">' . $formatter->formatCurrency( $amount, 'USD' ) . '</span> <span class="tier-frequency">' . $frequency_string . '</span>';
+			return str_replace( '.00', '', $formatted_price );
 		}
 		if ( ! function_exists( 'wcs_price_string' ) ) {
 			return \wc_price( $amount );

@@ -141,7 +141,8 @@ final class Click {
 		// phpcs:disable WordPress.Security.NonceVerification.Recommended
 		$newsletter_id = \intval( $_GET['id'] ?? 0 );
 		$email_address = \sanitize_email( $_GET['em'] ?? '' );
-		$url           = \sanitize_text_field( \wp_unslash( $_GET['url'] ?? '' ) );
+		// We need to decode the URL before redirecting, as it may contain encoded characters.
+		$url = html_entity_decode( esc_url_raw( \wp_unslash( $_GET['url'] ?? '' ) ) );
 		// phpcs:enable
 
 		/**

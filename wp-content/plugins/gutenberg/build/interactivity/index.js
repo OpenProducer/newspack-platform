@@ -68,7 +68,7 @@ var deepsignal_module_a=new WeakMap,deepsignal_module_o=new WeakMap,deepsignal_m
  * Internal dependencies
  */
 
-const isObject = item => !!item && typeof item === 'object' && !Array.isArray(item);
+const isObject = item => item && typeof item === 'object' && item.constructor === Object;
 const deepMerge = (target, source) => {
   if (isObject(target) && isObject(source)) {
     for (const key in source) {
@@ -241,7 +241,7 @@ const universalUnlock = 'I acknowledge that using a private store means my plugi
  * the store by using directives in the HTML, e.g.:
  *
  * ```html
- * <div data-wp-interactive='{ "namespace": "counter" }'>
+ * <div data-wp-interactive="counter">
  *   <button
  *     data-wp-text="state.double"
  *     data-wp-on--click="actions.increment"
@@ -428,7 +428,7 @@ const directivePriorities = {};
  * the `data-wp-alert` directive will have the `onclick` event handler, e.g.,
  *
  * ```html
- * <div data-wp-interactive='{ "namespace": "messages" }'>
+ * <div data-wp-interactive="messages">
  *   <button data-wp-alert="state.alert">Click me!</button>
  * </div>
  * ```
@@ -438,7 +438,7 @@ const directivePriorities = {};
  * attribute, followed by the suffix, like in the following HTML snippet:
  *
  * ```html
- * <div data-wp-interactive='{ "namespace": "myblock" }'>
+ * <div data-wp-interactive="myblock">
  *   <button
  *     data-wp-color--text="state.text"
  *     data-wp-color--background="state.background"

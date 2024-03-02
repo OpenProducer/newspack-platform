@@ -297,6 +297,10 @@ final class Modal_Checkout {
 	 * Render variation selection modal for variable products.
 	 */
 	public static function render_variation_selection() {
+		if ( ! function_exists( 'WC' ) ) {
+			return;
+		}
+
 		$products = array_keys( self::$products );
 		foreach ( $products as $product_id ) {
 			$product = wc_get_product( $product_id );
