@@ -211,7 +211,7 @@
 				position: relative;
 				border: none;
 				padding: 8px;
-				min-width: 50%;
+				flex-basis: 100%;
 				&::after {
 					position: absolute;
 					content: '';

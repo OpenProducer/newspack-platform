@@ -127,6 +127,11 @@ class Donations {
 	 * @return bool True if available, false if not.
 	 */
 	public static function can_use_name_your_price() {
+		// If the donation platform is NRH, the Donate block should behave as if Name Your Price is available.
+		if ( self::is_platform_nrh() ) {
+			return true;
+		}
+
 		return class_exists( 'WC_Name_Your_Price_Helpers' );
 	}
 

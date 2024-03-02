@@ -5074,11 +5074,9 @@ function ButtonEdit(props) {
     if (!isSelected) {
       return {};
     }
-    const {
-      getBlockBindingsSource
-    } = unlock(select(external_wp_blockEditor_namespaceObject.store));
+    const blockBindingsSource = unlock(select(external_wp_blockEditor_namespaceObject.store)).getBlockBindingsSource(metadata?.bindings?.url?.source);
     return {
-      lockUrlControls: !!metadata?.bindings?.url && getBlockBindingsSource(metadata?.bindings?.url?.source)?.lockAttributesEditing
+      lockUrlControls: !!metadata?.bindings?.url && (!blockBindingsSource || blockBindingsSource?.lockAttributesEditing)
     };
   }, [isSelected]);
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
@@ -5280,7 +5278,6 @@ const button_metadata = {
   description: "Prompt visitors to take action with a button-style link.",
   keywords: ["link"],
   textdomain: "default",
-  usesContext: ["pattern/overrides"],
   attributes: {
     tagName: {
       type: "string",
@@ -5647,13 +5644,10 @@ function ButtonsEdit({
     })
   });
   const {
-    preferredStyle,
     hasButtonVariations
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const preferredStyleVariations = select(external_wp_blockEditor_namespaceObject.store).getSettings().__experimentalPreferredStyleVariations;
     const buttonVariations = select(external_wp_blocks_namespaceObject.store).getBlockVariations('core/button', 'inserter');
     return {
-      preferredStyle: preferredStyleVariations?.value?.['core/button'],
       hasButtonVariations: buttonVariations.length > 0
     };
   }, []);
@@ -5661,9 +5655,7 @@ function ButtonsEdit({
     defaultBlock: DEFAULT_BLOCK,
     // This check should be handled by the `Inserter` internally to be consistent across all blocks that use it.
     directInsert: !hasButtonVariations,
-    template: [['core/button', {
-      className: preferredStyle && `is-style-${preferredStyle}`
-    }]],
+    template: [['core/button']],
     templateInsertUpdatesSelection: true,
     orientation: (_layout$orientation = layout?.orientation) !== null && _layout$orientation !== void 0 ? _layout$orientation : 'horizontal'
   });
@@ -7737,6 +7729,9 @@ function isPercentageUnit(unit) {
  * Internal dependencies
  */
 
+const edit_DEFAULT_BLOCK = {
+  name: 'core/column'
+};
 function ColumnsEditContainer({
   attributes,
   setAttributes,
@@ -7791,6 +7786,8 @@ function ColumnsEditContainer({
     className: classes
   });
   const innerBlocksProps = (0,external_wp_blockEditor_namespaceObject.useInnerBlocksProps)(blockProps, {
+    defaultBlock: edit_DEFAULT_BLOCK,
+    directInsert: true,
     orientation: 'horizontal',
     renderAppender: false,
     templateLock
@@ -13151,7 +13148,7 @@ function CoverInspectorControls({
     isShownByDefault: true,
     panelId: clientId
   }, (0,external_React_namespaceObject.createElement)(CoverHeightInput, {
-    value: minHeight,
+    value: attributes?.style?.dimensions?.aspectRatio ? '' : minHeight,
     unit: minHeightUnit,
     onChange: newMinHeight => setAttributes({
       minHeight: newMinHeight,
@@ -15193,6 +15190,7 @@ const details_metadata = {
     }
   },
   supports: {
+    __experimentalOnEnter: true,
     align: ["wide", "full"],
     color: {
       gradients: true,
@@ -20448,6 +20446,9 @@ const PLACEHOLDER_TEXT = external_wp_element_namespaceObject.Platform.isNative ?
 const MOBILE_CONTROL_PROPS_RANGE_CONTROL = external_wp_element_namespaceObject.Platform.isNative ? {
   type: 'stepper'
 } : {};
+const gallery_edit_DEFAULT_BLOCK = {
+  name: 'core/image'
+};
 const EMPTY_ARRAY = [];
 function GalleryEdit(props) {
   const {
@@ -20481,7 +20482,6 @@ function GalleryEdit(props) {
   const {
     getBlock,
     getSettings,
-    preferredStyle,
     innerBlockImages,
     blockWasJustInserted,
     multiGallerySelection
@@ -20494,12 +20494,10 @@ function GalleryEdit(props) {
       getBlock: _getBlock,
       wasBlockJustInserted
     } = select(external_wp_blockEditor_namespaceObject.store);
-    const preferredStyleVariations = _getSettings().__experimentalPreferredStyleVariations;
     const multiSelectedClientIds = getMultiSelectedBlockClientIds();
     return {
       getBlock: _getBlock,
       getSettings: _getSettings,
-      preferredStyle: preferredStyleVariations?.value?.['core/image'],
       innerBlockImages: (_getBlock$innerBlocks = _getBlock(clientId)?.innerBlocks) !== null && _getBlock$innerBlocks !== void 0 ? _getBlock$innerBlocks : EMPTY_ARRAY,
       blockWasJustInserted: wasBlockJustInserted(clientId, 'inserter_menu'),
       multiGallerySelection: multiSelectedClientIds.length && multiSelectedClientIds.every(_clientId => getBlockName(_clientId) === 'core/gallery')
@@ -20546,8 +20544,6 @@ function GalleryEdit(props) {
     let newClassName;
     if (imageAttributes.className && imageAttributes.className !== '') {
       newClassName = imageAttributes.className;
-    } else {
-      newClassName = preferredStyle ? `is-style-${preferredStyle}` : undefined;
     }
     let newLinkTarget;
     if (imageAttributes.linkTarget || imageAttributes.rel) {
@@ -20755,6 +20751,8 @@ function GalleryEdit(props) {
     marginVertical: 0
   };
   const innerBlocksProps = (0,external_wp_blockEditor_namespaceObject.useInnerBlocksProps)(blockProps, {
+    defaultBlock: gallery_edit_DEFAULT_BLOCK,
+    directInsert: true,
     orientation: 'horizontal',
     renderAppender: false,
     ...nativeInnerBlockProps
@@ -23027,22 +23025,19 @@ const group_variations_variations = [{
   scope: ['block', 'inserter', 'transform'],
   isActive: blockAttributes => blockAttributes.layout?.type === 'flex' && blockAttributes.layout?.orientation === 'vertical',
   icon: library_stack
+}, {
+  name: 'group-grid',
+  title: (0,external_wp_i18n_namespaceObject.__)('Grid'),
+  description: (0,external_wp_i18n_namespaceObject.__)('Arrange blocks in a grid.'),
+  attributes: {
+    layout: {
+      type: 'grid'
+    }
+  },
+  scope: ['block', 'inserter', 'transform'],
+  isActive: blockAttributes => blockAttributes.layout?.type === 'grid',
+  icon: library_grid
 }];
-if (window?.__experimentalEnableGroupGridVariation) {
-  group_variations_variations.push({
-    name: 'group-grid',
-    title: (0,external_wp_i18n_namespaceObject.__)('Grid'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Arrange blocks in a grid.'),
-    attributes: {
-      layout: {
-        type: 'grid'
-      }
-    },
-    scope: ['block', 'inserter', 'transform'],
-    isActive: blockAttributes => blockAttributes.layout?.type === 'grid',
-    icon: library_grid
-  });
-}
 /* harmony default export */ const group_variations = (group_variations_variations);
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/group/index.js
@@ -23915,7 +23910,6 @@ const heading_metadata = {
   description: "Introduce new sections and organize content to help visitors (and search engines) understand the structure of your content.",
   keywords: ["title", "subtitle"],
   textdomain: "default",
-  usesContext: ["pattern/overrides"],
   attributes: {
     textAlign: {
       type: "string"
@@ -25621,6 +25615,7 @@ const TOOLSPANEL_DROPDOWNMENU_PROPS = {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -25759,6 +25754,7 @@ function image_Image({
   const [externalBlob, setExternalBlob] = (0,external_wp_element_namespaceObject.useState)();
   const clientWidth = useClientWidth(containerRef, [align]);
   const hasNonContentControls = blockEditingMode === 'default';
+  const isContentOnlyMode = blockEditingMode === 'contentOnly';
   const isResizable = allowResize && hasNonContentControls && !isWideAligned && isLargeViewport;
   const imageSizeOptions = imageSizes.filter(({
     slug
@@ -25974,14 +25970,17 @@ function image_Image({
       title: titleBinding
     } = metadata?.bindings || {};
     const hasParentPattern = getBlockParentsByBlockName(clientId, 'core/block').length > 0;
+    const urlBindingSource = getBlockBindingsSource(urlBinding?.source);
+    const altBindingSource = getBlockBindingsSource(altBinding?.source);
+    const titleBindingSource = getBlockBindingsSource(titleBinding?.source);
     return {
-      lockUrlControls: !!urlBinding && getBlockBindingsSource(urlBinding?.source)?.lockAttributesEditing,
+      lockUrlControls: !!urlBinding && (!urlBindingSource || urlBindingSource?.lockAttributesEditing),
       lockHrefControls:
       // Disable editing the link of the URL if the image is inside a pattern instance.
       // This is a temporary solution until we support overriding the link on the frontend.
       hasParentPattern,
-      lockAltControls: !!altBinding && getBlockBindingsSource(altBinding?.source)?.lockAttributesEditing,
-      lockTitleControls: !!titleBinding && getBlockBindingsSource(titleBinding?.source)?.lockAttributesEditing
+      lockAltControls: !!altBinding && (!altBindingSource || altBindingSource?.lockAttributesEditing),
+      lockTitleControls: !!titleBinding && (!titleBindingSource || titleBindingSource?.lockAttributesEditing)
     };
   }, [clientId, isSingleSelected, metadata?.bindings]);
   const controls = (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockControls, {
@@ -26020,7 +26019,71 @@ function image_Image({
     onClick: uploadExternal,
     icon: library_upload,
     label: (0,external_wp_i18n_namespaceObject.__)('Upload to Media Library')
-  }))), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalToolsPanel, {
+  }))), isContentOnlyMode &&
+  // Add some extra controls for content attributes when content only mode is active.
+  // With content only mode active, the inspector is hidden, so users need another way
+  // to edit these attributes.
+  (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockControls, {
+    group: "other"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Dropdown, {
+    popoverProps: {
+      position: 'bottom right'
+    },
+    renderToggle: ({
+      isOpen,
+      onToggle
+    }) => (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarButton, {
+      onClick: onToggle,
+      "aria-haspopup": "true",
+      "aria-expanded": isOpen,
+      onKeyDown: event => {
+        if (!isOpen && event.keyCode === external_wp_keycodes_namespaceObject.DOWN) {
+          event.preventDefault();
+          onToggle();
+        }
+      }
+    }, (0,external_wp_i18n_namespaceObject._x)('Alt', 'Alternative text for an image. Block toolbar label, a low character count is preferred.')),
+    renderContent: () => (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextareaControl, {
+      className: "wp-block-image__toolbar_content_textarea",
+      label: (0,external_wp_i18n_namespaceObject.__)('Alternative text'),
+      value: alt || '',
+      onChange: updateAlt,
+      disabled: lockAltControls,
+      help: lockAltControls ? (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_wp_i18n_namespaceObject.__)('Connected to a custom field')) : (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ExternalLink, {
+        href: "https://www.w3.org/WAI/tutorials/images/decision-tree"
+      }, (0,external_wp_i18n_namespaceObject.__)('Describe the purpose of the image.')), (0,external_React_namespaceObject.createElement)("br", null), (0,external_wp_i18n_namespaceObject.__)('Leave empty if decorative.')),
+      __nextHasNoMarginBottom: true
+    })
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Dropdown, {
+    popoverProps: {
+      position: 'bottom right'
+    },
+    renderToggle: ({
+      isOpen,
+      onToggle
+    }) => (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarButton, {
+      onClick: onToggle,
+      "aria-haspopup": "true",
+      "aria-expanded": isOpen,
+      onKeyDown: event => {
+        if (!isOpen && event.keyCode === external_wp_keycodes_namespaceObject.DOWN) {
+          event.preventDefault();
+          onToggle();
+        }
+      }
+    }, (0,external_wp_i18n_namespaceObject.__)('Title')),
+    renderContent: () => (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+      className: "wp-block-image__toolbar_content_textarea",
+      __nextHasNoMarginBottom: true,
+      label: (0,external_wp_i18n_namespaceObject.__)('Title attribute'),
+      value: title || '',
+      onChange: onSetTitle,
+      disabled: lockTitleControls,
+      help: lockTitleControls ? (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_wp_i18n_namespaceObject.__)('Connected to a custom field')) : (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_wp_i18n_namespaceObject.__)('Describe the role of this image on the page.'), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ExternalLink, {
+        href: "https://www.w3.org/TR/html52/dom.html#the-title-attribute"
+      }, (0,external_wp_i18n_namespaceObject.__)('(Note: many devices and browsers do not display this text.)')))
+    })
+  })), (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalToolsPanel, {
     label: (0,external_wp_i18n_namespaceObject.__)('Settings'),
     resetAll: resetAll,
     dropdownMenuProps: TOOLSPANEL_DROPDOWNMENU_PROPS
@@ -26035,7 +26098,7 @@ function image_Image({
     label: (0,external_wp_i18n_namespaceObject.__)('Alternative text'),
     value: alt || '',
     onChange: updateAlt,
-    disabled: lockAltControls,
+    readOnly: lockAltControls,
     help: lockAltControls ? (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_wp_i18n_namespaceObject.__)('Connected to a custom field')) : (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ExternalLink, {
       href: "https://www.w3.org/WAI/tutorials/images/decision-tree"
     }, (0,external_wp_i18n_namespaceObject.__)('Describe the purpose of the image.')), (0,external_React_namespaceObject.createElement)("br", null), (0,external_wp_i18n_namespaceObject.__)('Leave empty if decorative.')),
@@ -26051,7 +26114,7 @@ function image_Image({
     label: (0,external_wp_i18n_namespaceObject.__)('Title attribute'),
     value: title || '',
     onChange: onSetTitle,
-    disabled: lockTitleControls,
+    readOnly: lockTitleControls,
     help: lockTitleControls ? (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_wp_i18n_namespaceObject.__)('Connected to a custom field')) : (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_wp_i18n_namespaceObject.__)('Describe the role of this image on the page.'), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ExternalLink, {
       href: "https://www.w3.org/TR/html52/dom.html#the-title-attribute"
     }, (0,external_wp_i18n_namespaceObject.__)('(Note: many devices and browsers do not display this text.)')))
@@ -26531,11 +26594,9 @@ function ImageEdit({
     if (!isSingleSelected) {
       return {};
     }
-    const {
-      getBlockBindingsSource
-    } = unlock(select(external_wp_blockEditor_namespaceObject.store));
+    const blockBindingsSource = unlock(select(external_wp_blockEditor_namespaceObject.store)).getBlockBindingsSource(metadata?.bindings?.url?.source);
     return {
-      lockUrlControls: !!metadata?.bindings?.url && getBlockBindingsSource(metadata?.bindings?.url?.source)?.lockAttributesEditing
+      lockUrlControls: !!metadata?.bindings?.url && (!blockBindingsSource || blockBindingsSource?.lockAttributesEditing)
     };
   }, [isSingleSelected]);
   const placeholder = content => {
@@ -26876,7 +26937,7 @@ const image_metadata = {
   name: "core/image",
   title: "Image",
   category: "media",
-  usesContext: ["allowResize", "imageCrop", "fixedHeight", "pattern/overrides"],
+  usesContext: ["allowResize", "imageCrop", "fixedHeight"],
   description: "Insert an image to make a visual statement.",
   keywords: ["img", "photo", "picture"],
   textdomain: "default",
@@ -28523,6 +28584,9 @@ function TagName(props, ref) {
 
 
 
+const list_edit_DEFAULT_BLOCK = {
+  name: 'core/list-item'
+};
 const list_edit_TEMPLATE = [['core/list-item']];
 const NATIVE_MARGIN_SPACING = 8;
 
@@ -28621,6 +28685,8 @@ function list_edit_Edit({
     }
   });
   const innerBlocksProps = (0,external_wp_blockEditor_namespaceObject.useInnerBlocksProps)(blockProps, {
+    defaultBlock: list_edit_DEFAULT_BLOCK,
+    directInsert: true,
     template: list_edit_TEMPLATE,
     templateLock: false,
     templateInsertUpdatesSelection: true,
@@ -32072,7 +32138,6 @@ const PRELOADED_NAVIGATION_MENUS_QUERY = {
   orderby: 'date'
 };
 const SELECT_NAVIGATION_MENUS_ARGS = ['postType', 'wp_navigation', PRELOADED_NAVIGATION_MENUS_QUERY];
-const NAVIGATION_MOBILE_COLLAPSE = '600px';
 
 ;// CONCATENATED MODULE: ./packages/block-library/build-module/navigation/use-navigation-menu.js
 /**
@@ -34459,7 +34524,6 @@ function AccessibleMenuDescription({
 
 
 
-
 function Navigation({
   attributes,
   setAttributes,
@@ -34626,8 +34690,6 @@ function Navigation({
   const textDecoration = attributes.style?.typography?.textDecoration;
   const hasBlockOverlay = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_blockEditor_namespaceObject.store).__unstableHasActiveBlockOverlayActive(clientId), [clientId]);
   const isResponsive = 'never' !== overlayMenu;
-  const isMobileBreakPoint = (0,external_wp_compose_namespaceObject.useMediaQuery)(`(max-width: ${NAVIGATION_MOBILE_COLLAPSE})`);
-  const isCollapsed = 'mobile' === overlayMenu && isMobileBreakPoint || 'always' === overlayMenu;
   const blockProps = (0,external_wp_blockEditor_namespaceObject.useBlockProps)({
     ref: navRef,
     className: classnames_default()(className, {
@@ -34638,7 +34700,6 @@ function Navigation({
       'is-vertical': orientation === 'vertical',
       'no-wrap': flexWrap === 'nowrap',
       'is-responsive': isResponsive,
-      'is-collapsed': isCollapsed,
       'has-text-color': !!textColor.color || !!textColor?.class,
       [(0,external_wp_blockEditor_namespaceObject.getColorClassName)('color', textColor?.slug)]: !!textColor?.slug,
       'has-background': !!backgroundColor.color || backgroundColor.class,
@@ -35804,7 +35865,7 @@ const customLink = (0,external_React_namespaceObject.createElement)(external_wp_
 
 
 
-const edit_DEFAULT_BLOCK = {
+const navigation_link_edit_DEFAULT_BLOCK = {
   name: 'core/navigation-link'
 };
 
@@ -36092,7 +36153,7 @@ function NavigationLinkEdit({
     ...blockProps,
     className: 'remove-outline' // Remove the outline from the inner blocks container.
   }, {
-    defaultBlock: edit_DEFAULT_BLOCK,
+    defaultBlock: navigation_link_edit_DEFAULT_BLOCK,
     directInsert: true,
     renderAppender: false
   });
@@ -37491,6 +37552,7 @@ const PatternEdit = ({
   attributes,
   clientId
 }) => {
+  const registry = (0,external_wp_data_namespaceObject.useRegistry)();
   const selectedPattern = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_blockEditor_namespaceObject.store).__experimentalGetParsedPattern(attributes.slug), [attributes.slug]);
   const currentThemeStylesheet = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_coreData_namespaceObject.store).getCurrentTheme()?.stylesheet, []);
   const {
@@ -37545,15 +37607,17 @@ const PatternEdit = ({
         // distinct client ids. See https://github.com/WordPress/gutenberg/issues/50628.
         const clonedBlocks = selectedPattern.blocks.map(block => (0,external_wp_blocks_namespaceObject.cloneBlock)(injectThemeAttributeInBlockTemplateContent(block)));
         const rootEditingMode = getBlockEditingMode(rootClientId);
-        // Temporarily set the root block to default mode to allow replacing the pattern.
-        // This could happen when the page is disabling edits of non-content blocks.
-        __unstableMarkNextChangeAsNotPersistent();
-        setBlockEditingMode(rootClientId, 'default');
-        __unstableMarkNextChangeAsNotPersistent();
-        replaceBlocks(clientId, clonedBlocks);
-        // Restore the root block's original mode.
-        __unstableMarkNextChangeAsNotPersistent();
-        setBlockEditingMode(rootClientId, rootEditingMode);
+        registry.batch(() => {
+          // Temporarily set the root block to default mode to allow replacing the pattern.
+          // This could happen when the page is disabling edits of non-content blocks.
+          __unstableMarkNextChangeAsNotPersistent();
+          setBlockEditingMode(rootClientId, 'default');
+          __unstableMarkNextChangeAsNotPersistent();
+          replaceBlocks(clientId, clonedBlocks);
+          // Restore the root block's original mode.
+          __unstableMarkNextChangeAsNotPersistent();
+          setBlockEditingMode(rootClientId, rootEditingMode);
+        });
       });
     }
   }, [clientId, hasRecursionError, selectedPattern, __unstableMarkNextChangeAsNotPersistent, replaceBlocks, getBlockEditingMode, setBlockEditingMode, getBlockRootClientId]);
@@ -38991,7 +39055,7 @@ const {
   description: "Start with the basic building block of all narrative.",
   keywords: ["text"],
   textdomain: "default",
-  usesContext: ["postId", "pattern/overrides"],
+  usesContext: ["postId"],
   attributes: {
     align: {
       type: "string"
@@ -39107,7 +39171,7 @@ const paragraph_metadata = {
   description: "Start with the basic building block of all narrative.",
   keywords: ["text"],
   textdomain: "default",
-  usesContext: ["postId", "pattern/overrides"],
+  usesContext: ["postId"],
   attributes: {
     align: {
       type: "string"

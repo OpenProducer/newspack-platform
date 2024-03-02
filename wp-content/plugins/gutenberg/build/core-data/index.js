@@ -606,6 +606,7 @@ __webpack_require__.d(build_module_selectors_namespaceObject, {
 var private_selectors_namespaceObject = {};
 __webpack_require__.r(private_selectors_namespaceObject);
 __webpack_require__.d(private_selectors_namespaceObject, {
+  getBlockPatternsForPostType: () => (getBlockPatternsForPostType),
   getNavigationFallbackId: () => (getNavigationFallbackId),
   getUndoManager: () => (getUndoManager)
 });
@@ -22404,8 +22405,19 @@ const getRevision = rememo((state, kind, name, recordKey, revisionKey, query) =>
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/private-selectors.js
 /**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
  * Internal dependencies
  */
+
 
 /**
  * Returns the previous edit from the current undo offset
@@ -22428,6 +22440,9 @@ function getUndoManager(state) {
 function getNavigationFallbackId(state) {
   return state.navigationFallbackId;
 }
+const getBlockPatternsForPostType = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => rememo((state, postType) => select(STORE_NAME).getBlockPatterns().filter(({
+  postTypes
+}) => !postTypes || Array.isArray(postTypes) && postTypes.includes(postType)), () => [select(STORE_NAME).getBlockPatterns()]));
 
 ;// CONCATENATED MODULE: ./node_modules/camel-case/dist.es2015/index.js
 
@@ -23307,27 +23322,12 @@ const resolvers_getUserPatternCategories = () => async ({
   });
 };
 const resolvers_getNavigationFallbackId = () => async ({
-  dispatch,
-  select
+  dispatch
 }) => {
   const fallback = await external_wp_apiFetch_default()({
-    path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp-block-editor/v1/navigation-fallback', {
-      _embed: true
-    })
+    path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp-block-editor/v1/navigation-fallback')
   });
-  const record = fallback?._embedded?.self;
   dispatch.receiveNavigationFallbackId(fallback?.id);
-  if (record) {
-    // If the fallback is already in the store, don't invalidate navigation queries.
-    // Otherwise, invalidate the cache for the scenario where there were no Navigation
-    // posts in the state and the fallback created one.
-    const existingFallbackEntityRecord = select.getEntityRecord('postType', 'wp_navigation', fallback?.id);
-    const invalidateNavigationQueries = !existingFallbackEntityRecord;
-    dispatch.receiveEntityRecords('postType', 'wp_navigation', record, undefined, invalidateNavigationQueries);
-
-    // Resolve to avoid further network requests.
-    dispatch.finishResolution('getEntityRecord', ['postType', 'wp_navigation', fallback?.id]);
-  }
 };
 const resolvers_getDefaultTemplateId = query => async ({
   dispatch
@@ -24106,7 +24106,7 @@ function useEntityBlockEditor(kind, name, {
     if (editedBlocks) {
       return editedBlocks;
     }
-    if (!content || typeof content === 'function') {
+    if (!content || typeof content !== 'string') {
       return EMPTY_ARRAY;
     }
 

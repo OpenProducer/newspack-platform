@@ -19,13 +19,17 @@
 		}
 	}
 
-	&__tiers__amount__value {
+	&__tiers__amount__value,
+	.tier-frequency {
 		font-size: 13px;
-		.woocommerce-Price-amount {
-			display: inline;
-			font-size: 29px;
-			font-weight: 700;
-		}
+	}
+
+	.woocommerce-Price-amount,
+	.price-amount {
+		display: inline;
+		font-family: var(--newspack-theme-font-heading, sans-serif );
+		font-size: 29px;
+		font-weight: 700;
 	}
 
 	mark {

@@ -1,3 +1,17 @@
+## [2.10.4](https://github.com/Automattic/newspack-newsletters/compare/v2.10.3...v2.10.4) (2024-02-29)
+
+
+### Bug Fixes
+
+* activate newsletter subscribers if needed ([#1421](https://github.com/Automattic/newspack-newsletters/issues/1421)) ([#1445](https://github.com/Automattic/newspack-newsletters/issues/1445)) ([cac7bae](https://github.com/Automattic/newspack-newsletters/commit/cac7baeb545bf342a59be428b8314970d7c79037))
+
+## [2.10.3](https://github.com/Automattic/newspack-newsletters/compare/v2.10.2...v2.10.3) (2024-02-26)
+
+
+### Bug Fixes
+
+* decode newletter tracked link before redirect ([#1440](https://github.com/Automattic/newspack-newsletters/issues/1440)) ([0368546](https://github.com/Automattic/newspack-newsletters/commit/03685469559d34a833cf6510637596bea0d3fd54))
+
 ## [2.10.2](https://github.com/Automattic/newspack-newsletters/compare/v2.10.1...v2.10.2) (2024-02-08)
 
 

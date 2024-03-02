@@ -58,7 +58,29 @@ export const getFrequencyLabel = (
 	const template = window.newspack_blocks_data?.tier_amounts_template;
 
 	if ( ! template ) {
-		return '';
+		try {
+			const formatter = new Intl.NumberFormat( navigator?.language || 'en-US', {
+				style: 'currency',
+				currency: 'USD',
+			} );
+
+			const frequencyString =
+				frequencySlug === 'once'
+					? frequencySlug
+					: // Translators: %s is the %s is the frequency.
+					  sprintf( __( 'per %s', 'newspack-blocks' ), frequencySlug );
+
+			const formattedPrice =
+				'<span class="price-amount">' +
+				formatter.format( amount ) +
+				'</span> <span class="tier-frequency">' +
+				frequencyString +
+				'</span>';
+
+			return formattedPrice.replace( '.00', '' );
+		} catch ( e ) {
+			return '<span class="price-amount">' + amount + '</span>';
+		}
 	}
 
 	const formattedAmount = ( amount || 0 ).toFixed( 2 ).replace( /\.?0*$/, '' );
