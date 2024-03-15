@@ -117,7 +117,7 @@ class GA4 {
 		$client_id = $data['ga_client_id'];
 
 		if ( empty( $client_id ) ) {
-			throw new \Exception( 'Missing client ID' );
+			$client_id = 'AnonymousUser-' . md5( $user_id );
 		}
 
 		if ( method_exists( __CLASS__, 'handle_' . $event_name ) ) {

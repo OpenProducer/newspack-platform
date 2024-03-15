@@ -40,6 +40,7 @@ final class Newspack_Popups {
 		'archive_insertion_posts_count'  => 'n_ac',
 		'archive_insertion_is_repeating' => 'n_ar',
 		'utm_suppression'                => 'n_ut',
+		'additional_classes'             => 'n_acl',
 	];
 
 	/**

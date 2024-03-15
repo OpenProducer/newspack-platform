@@ -38,7 +38,7 @@ const TextControl = ( {
 		}
 		const labelEl = wrapperRef.current.querySelector( 'label' );
 		if ( labelEl ) {
-			labelEl.setAttribute( 'data-required-text', __( '(required)', 'newspack' ) );
+			labelEl.setAttribute( 'data-required-text', __( '(required)', 'newspack-plugin' ) );
 		}
 	}, [ wrapperRef.current ] );
 	const classes = classNames(

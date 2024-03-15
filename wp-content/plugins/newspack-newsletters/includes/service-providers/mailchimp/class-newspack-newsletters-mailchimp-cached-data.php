@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use \DrewM\MailChimp\MailChimp;
+use DrewM\MailChimp\MailChimp;
 
 /**
  * Mailchimp cached class data
@@ -90,7 +90,6 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 		}
 
 		add_action( 'admin_notices', [ __CLASS__, 'maybe_show_error' ] );
-
 	}
 
 	/**
@@ -351,7 +350,6 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 		self::dispatch_refresh( $list_id );
 
 		return [];
-
 	}
 
 	/**
@@ -388,7 +386,6 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 				'cookies'   => $_COOKIE, // phpcs:ignore
 			]
 		);
-
 	}
 
 	/**
@@ -469,7 +466,6 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 			Newspack_Newsletters_Logger::log( 'Mailchimp cache: Dispatching request to refresh cache for list ' . $list['id'] );
 			self::dispatch_refresh( $list['id'] );
 		}
-
 	}
 
 	/**

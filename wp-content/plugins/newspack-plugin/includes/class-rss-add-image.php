@@ -55,13 +55,13 @@ class RSS_Add_Image {
 		);
 
 		register_setting(
-			'rss_image_sizes',
+			'media',
 			self::OPTION_RSS_IMAGE_WIDTH,
 			[ __CLASS__, 'sanitize_rss_image_size_value' ]
 		);
 
 		register_setting(
-			'rss_image_sizes',
+			'media',
 			self::OPTION_RSS_IMAGE_HEIGHT,
 			[ __CLASS__, 'sanitize_rss_image_size_value' ]
 		);
@@ -119,7 +119,7 @@ class RSS_Add_Image {
 		?>
 		<fieldset style="margin-bottom: -40px;">
 			<label for="<?php echo esc_attr( self::OPTION_RSS_IMAGE_WIDTH ); ?>">
-				<?php esc_html_e( 'Max Width', 'newspack' ); ?>
+				<?php esc_html_e( 'Max Width', 'newspack-plugin' ); ?>
 			</label>
 			<input name="<?php echo esc_attr( self::OPTION_RSS_IMAGE_WIDTH ); ?>" type="number" step="1" min="0" id="<?php echo esc_attr( self::OPTION_RSS_IMAGE_WIDTH ); ?>" value="<?php echo esc_attr( $saved_width ); ?>" class="small-text" />
 		</fieldset>
@@ -134,7 +134,7 @@ class RSS_Add_Image {
 		?>
 		<fieldset>
 			<label for="<?php echo esc_attr( self::OPTION_RSS_IMAGE_HEIGHT ); ?>">
-				<?php esc_html_e( 'Max Height', 'newspack' ); ?>
+				<?php esc_html_e( 'Max Height', 'newspack-plugin' ); ?>
 			</label>
 			<input name="<?php echo esc_attr( self::OPTION_RSS_IMAGE_HEIGHT ); ?>" type="number" step="1" min="0" id="<?php echo esc_attr( self::OPTION_RSS_IMAGE_HEIGHT ); ?>" value="<?php echo esc_attr( $saved_height ); ?>" class="small-text" />
 		</fieldset>
@@ -145,8 +145,7 @@ class RSS_Add_Image {
 	 * Render the size fields on the media settings page.
 	 */
 	public static function add_image_size_fields() {
-		settings_fields( 'rss_image_sizes' );
-		do_settings_sections( 'newspack-rss-image-settings' );
+		echo '<p>' . esc_html__( 'Customize the featured image sizes used in the RSS feed', 'newspack-plugin' ) . '</p>';
 	}
 
 	/**

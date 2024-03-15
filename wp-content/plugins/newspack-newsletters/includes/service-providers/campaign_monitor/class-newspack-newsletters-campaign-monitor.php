@@ -488,41 +488,41 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 		if ( ! $data ) {
 			if ( $preferred_error ) {
 				// If passed an error, throw that.
-				throw new Exception( $preferred_error );
+				throw new Exception( esc_html( $preferred_error ) );
 			} else {
 				// Otherwise, throw the generic error.
-				throw new Exception( __( 'Campaign Monitor error: Missing required campaign data.', 'newspack-newsletters' ) );
+				throw new Exception( esc_html__( 'Campaign Monitor error: Missing required campaign data.', 'newspack-newsletters' ) );
 			}
 		}
 
 		if ( empty( $data['send_mode'] ) || empty( $data['from_name'] ) || empty( $data['from_email'] ) ) {
 			// If passed an error, throw that.
 			if ( $preferred_error && ! Newspack_Newsletters::debug_mode() ) {
-				throw new Exception( $preferred_error );
+				throw new Exception( esc_html( $preferred_error ) );
 			}
 
 			// Otherwise, throw the generic error.
-			throw new Exception( __( 'Campaign Monitor error: Missing campaign sender data.', 'newspack-newsletters' ) );
+			throw new Exception( esc_html__( 'Campaign Monitor error: Missing campaign sender data.', 'newspack-newsletters' ) );
 		}
 
 		if ( 'list' === $data['send_mode'] && empty( $data['list_id'] ) ) {
 			// If passed an error, throw that.
 			if ( $preferred_error && ! Newspack_Newsletters::debug_mode() ) {
-				throw new Exception( $preferred_error );
+				throw new Exception( esc_html( $preferred_error ) );
 			}
 
 			// Otherwise, throw the generic error.
-			throw new Exception( __( 'Campaign Monitor error: Must select a list if sending in list mode.', 'newspack-newsletters' ) );
+			throw new Exception( esc_html__( 'Campaign Monitor error: Must select a list if sending in list mode.', 'newspack-newsletters' ) );
 		}
 
 		if ( 'segment' === $data['send_mode'] && empty( $data['segment_id'] ) ) {
 			// If passed an error, throw that.
 			if ( $preferred_error && ! Newspack_Newsletters::debug_mode() ) {
-				throw new Exception( $preferred_error );
+				throw new Exception( esc_html( $preferred_error ) );
 			}
 
 			// Otherwise, throw the generic error.
-			throw new Exception( __( 'Campaign Monitor error: Must select a segment if sending in segment mode.', 'newspack-newsletters' ) );
+			throw new Exception( esc_html__( 'Campaign Monitor error: Must select a segment if sending in segment mode.', 'newspack-newsletters' ) );
 		}
 
 		return $data;
@@ -621,7 +621,7 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 				// Get custom fields (metadata) to create them if needed.
 				$cm_list            = new CS_REST_Lists( $list_id, [ 'api_key' => $api_key ] );
 				$custom_fields_keys = array_map(
-					function( $field ) {
+					function ( $field ) {
 						return $field->FieldName; // phpcs:ignore WordPress.NamingConventions.ValidVariableName.UsedPropertyNotSnakeCase
 					},
 					$cm_list->get_custom_fields()->response
@@ -647,7 +647,7 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 					$result = $cm_subscribers->update( $email_address, $update_payload );
 				} else {
 					$result = $cm_subscribers->add( $update_payload );
-				};
+				}
 				return $result;
 			}
 		} catch ( \Exception $e ) {

@@ -86,6 +86,14 @@ export const settings = {
 			type: 'boolean',
 			default: true,
 		},
+		showCaption: {
+			type: 'boolean',
+			default: false,
+		},
+		showCredit: {
+			type: 'boolean',
+			default: false,
+		},
 		showCategory: {
 			type: 'boolean',
 			default: false,

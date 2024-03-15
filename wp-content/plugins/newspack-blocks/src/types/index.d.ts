@@ -38,6 +38,8 @@ declare global {
 		include?: PostId[];
 		excerptLength?: number;
 		showExcerpt?: boolean;
+		showCaption?: boolean,
+		showCredit?: boolean,
 	};
 
 	type Block = {

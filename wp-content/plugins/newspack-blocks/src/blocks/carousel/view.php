@@ -68,6 +68,8 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 			$hide_publish_date = apply_filters( 'newspack_listings_hide_publish_date', false ); // phpcs:ignore WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			$show_author       = $attributes['showAuthor'] && ! $hide_author;
 			$show_date         = $attributes['showDate'] && ! $hide_publish_date;
+			$show_caption      = $attributes['showCaption'];
+			$show_credit       = $attributes['showCredit'];
 
 			// Validate the value of the "image fit" attribute.
 			$image_fits = [ 'cover', 'contain' ];
@@ -100,7 +102,7 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 					<?php endif; ?>
 				</figure>
 
-				<?php if ( ! empty( $sponsors ) || $attributes['showCategory'] || $attributes['showTitle'] || $show_author || $show_date ) : ?>
+				<?php if ( ! empty( $sponsors ) || $attributes['showCategory'] || $attributes['showTitle'] || $show_author || $show_date || $show_caption || $show_credit ) : ?>
 					<div class="entry-wrapper">
 						<?php if ( ! empty( $sponsors ) || $attributes['showCategory'] ) : ?>
 							<div class="cat-links <?php if ( ! empty( $sponsors ) ) : ?>sponsor-label<?php endif; // phpcs:ignore Squiz.ControlStructures.ControlSignature.NewlineAfterOpenBrace ?>">
@@ -192,6 +194,15 @@ function newspack_blocks_render_block_carousel( $attributes ) {
 									esc_attr( get_the_date( DATE_W3C ) ),
 									esc_html( get_the_date() )
 								);
+							endif;
+							if ( $show_caption || $show_credit ) :
+								$full_caption = Newspack_Blocks::get_image_caption( get_post_thumbnail_id(), $show_caption, $show_credit );
+								if ( $full_caption ) :
+									?>
+									<div class="entry-caption">
+										<?php echo wp_kses_post( $full_caption ); ?>
+									<?php
+								endif;
 							endif;
 							?>
 						</div><!-- .entry-meta -->
@@ -349,6 +360,14 @@ function newspack_blocks_register_carousel() {
 					'showAvatar'       => array(
 						'type'    => 'boolean',
 						'default' => true,
+					),
+					'showCaption'      => array(
+						'type'    => 'boolean',
+						'default' => false,
+					),
+					'showCredit'       => array(
+						'type'    => 'boolean',
+						'default' => false,
 					),
 					'showCategory'     => array(
 						'type'    => 'boolean',

@@ -74,6 +74,8 @@ class RSS {
 			'content_featured_image' => false,
 			'suppress_yoast'         => false,
 			'yahoo_namespace'        => false,
+			'update_frequency'       => false,
+			'use_post_id_as_guid'    => false,
 		];
 
 		if ( ! $feed_post ) {
@@ -261,6 +263,14 @@ class RSS {
 		$categories = get_categories();
 		wp_nonce_field( 'newspack_rss_enhancements_nonce', 'newspack_rss_enhancements_nonce' );
 		?>
+		<style>
+			table {
+				text-align: left;
+			}
+			table th, table td {
+				padding-bottom: 10px;
+			}
+		</style>
 		<table>
 			<tr>
 				<th><?php esc_html_e( 'Number of posts to display in feed:', 'newspack-plugin' ); ?></th>
@@ -309,6 +319,24 @@ class RSS {
 					</select>
 				</td>
 			</tr>
+			<tr>
+				<th><?php esc_html_e( 'Update frequency:', 'newspack-plugin' ); ?></th>
+				<td>
+					<select name="update_frequency">
+						<option value="hourly-1" <?php selected( $settings['update_frequency'], 'hourly-1' ); ?> ><?php esc_html_e( 'Every hour', 'newspack-plugin' ); ?></option>
+						<option value="hourly-12" <?php selected( $settings['update_frequency'], 'hourly-12' ); ?> ><?php esc_html_e( 'Every 5 minutes', 'newspack-plugin' ); ?></option>
+						<option value="daily-8" <?php selected( $settings['update_frequency'], 'daily-8' ); ?> ><?php esc_html_e( 'Every 3 hours', 'newspack-plugin' ); ?></option>
+						<option value="daily-1" <?php selected( $settings['update_frequency'], 'daily' ); ?> ><?php esc_html_e( 'Daily', 'newspack-plugin' ); ?></option>
+					</select>
+				</td>
+			</tr>
+			<tr>
+				<th><?php esc_html_e( 'Use post ID as the guid instead of post URL:', 'newspack-plugin' ); ?></th>
+				<td>
+					<input type="hidden" name="use_post_id_as_guid" value="0" />
+					<input type="checkbox" name="use_post_id_as_guid" value="1" <?php checked( $settings['use_post_id_as_guid'] ); ?> />
+				</td>
+			</tr>
 		</table>
 
 		<script>
@@ -328,7 +356,7 @@ class RSS {
 	public static function render_technical_settings_metabox( $feed_post ) {
 		$settings = self::get_feed_settings( $feed_post );
 		?>
-		<p><strong>Note:</strong> These settings are for modifying a feed to make it compatible with various integrations (SmartNews, PugPig, etc.). They should only be used if a specific integration requires a non-standard RSS feed. Consult the integration's documentation or support for information about which elements are required.</p>
+		<p><strong>Note:</strong> These settings are for modifying a feed to make it compatible with various integrations (SmartNews, Pugpig, etc.). They should only be used if a specific integration requires a non-standard RSS feed. Consult the integration's documentation or support for information about which elements are required.</p>
 
 		<table>
 			<tr>
@@ -444,6 +472,12 @@ class RSS {
 		$yahoo_namespace             = filter_input( INPUT_POST, 'yahoo_namespace', FILTER_SANITIZE_NUMBER_INT );
 		$settings['yahoo_namespace'] = (bool) $yahoo_namespace;
 
+		$update_frequency             = filter_input( INPUT_POST, 'update_frequency', FILTER_SANITIZE_SPECIAL_CHARS );
+		$settings['update_frequency'] = $update_frequency;
+
+		$use_post_id_as_guid             = filter_input( INPUT_POST, 'use_post_id_as_guid', FILTER_SANITIZE_NUMBER_INT );
+		$settings['use_post_id_as_guid'] = (bool) $use_post_id_as_guid;
+
 		$category_settings = filter_input_array(
 			INPUT_POST,
 			[
@@ -504,6 +538,34 @@ class RSS {
 
 		if ( ! empty( $settings['category_exclude'] ) ) {
 			$query->set( 'category__not_in', array_map( 'absint', $settings['category_exclude'] ) );
+		}
+
+		if ( ! empty( $settings['update_frequency'] ) ) {
+			// Split the string on the hyphen to get the update frequency and the number of times to update.
+			$settings['update_frequency'] = explode( '-', $settings['update_frequency'] );
+			add_filter(
+				'rss_update_period',
+				function() use ( $settings ) {
+					return $settings['update_frequency'][0];
+				}
+			);
+			add_filter(
+				'rss_update_frequency',
+				function() use ( $settings ) {
+					return $settings['update_frequency'][1];
+				}
+			);
+		}
+
+		if ( $settings['use_post_id_as_guid'] ) {
+			add_filter(
+				'the_guid',
+				function( $post_guid, $post_id ) {
+					return $post_id;
+				},
+				10,
+				2
+			);
 		}
 	}
 

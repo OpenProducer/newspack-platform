@@ -40,6 +40,13 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	private static $contacts_added = [];
 
 	/**
+	 * Controller.
+	 *
+	 * @var Newspack_Newsletters_Mailchimp_Controller
+	 */
+	public $controller;
+
+	/**
 	 * Class constructor.
 	 */
 	public function __construct() {
@@ -484,7 +491,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 					$all_groups = $found_category['interests'] ?? [];
 
 					$groups = array_map(
-						function( $group ) use ( $list ) {
+						function ( $group ) use ( $list ) {
 							$group['id']   = $this->create_group_list_id( $group['id'], $list['id'] );
 							$group['type'] = 'mailchimp-group';
 							return $group;
@@ -551,12 +558,12 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 			$verified_domains = array_filter(
 				array_map(
-					function( $domain ) {
+					function ( $domain ) {
 						return $domain['verified'] ? strtolower( trim( $domain['domain'] ) ) : null;
 					},
 					$result['domains']
 				),
-				function( $domain ) {
+				function ( $domain ) {
 					return ! empty( $domain );
 				}
 			);
@@ -990,9 +997,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	public function validate( $result, $preferred_error = null ) {
 		if ( ! $result ) {
 			if ( $preferred_error ) {
-				throw new Exception( $preferred_error );
+				throw new Exception( esc_html( $preferred_error ) );
 			} else {
-				throw new Exception( __( 'A Mailchimp error has occurred.', 'newspack-newsletters' ) );
+				throw new Exception( esc_html__( 'A Mailchimp error has occurred.', 'newspack-newsletters' ) );
 			}
 		}
 		if ( ! empty( $result['status'] ) && in_array( $result['status'], [ 400, 404 ] ) ) {
@@ -1000,7 +1007,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				if ( ! empty( $result['detail'] ) ) {
 					$preferred_error .= ' ' . $result['detail'];
 				}
-				throw new Exception( $preferred_error );
+				throw new Exception( esc_html( $preferred_error ) );
 			}
 			$messages = [];
 			if ( ! empty( $result['errors'] ) ) {
@@ -1016,7 +1023,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			if ( ! count( $messages ) ) {
 				$message[] = __( 'A Mailchimp error has occurred.', 'newspack-newsletters' );
 			}
-			throw new Exception( implode( ' ', $messages ) );
+			throw new Exception( esc_html( implode( ' ', $messages ) ) );
 		}
 		return $result;
 	}
@@ -1097,7 +1104,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				$existing_merge_fields = $merge_fields_res['merge_fields'];
 				usort(
 					$existing_merge_fields,
-					function( $a, $b ) {
+					function ( $a, $b ) {
 						return $a['merge_id'] - $b['merge_id'];
 					}
 				);
@@ -1235,7 +1242,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		$audience_lists = array_keys(
 			array_filter(
 				$contact['lists'],
-				function( $list ) {
+				function ( $list ) {
 					return 'subscribed' === $list['status'];
 				}
 			)
@@ -1368,7 +1375,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 		foreach ( $contact_data['tags'] as $list_id => $tags ) {
 			$contact_tags[ $list_id ] = array_map(
-				function( $tag ) {
+				function ( $tag ) {
 					return (int) $tag['id'];
 				},
 				$tags

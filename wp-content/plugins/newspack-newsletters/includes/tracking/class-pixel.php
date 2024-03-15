@@ -14,6 +14,11 @@ final class Pixel {
 	const QUERY_VAR = 'np_newsletters_pixel';
 
 	/**
+	 * Maximum number of lines to process from the log file at a time.
+	 */
+	const MAX_LINES = 100;
+
+	/**
 	 * Store whether the tracking pixel has been added to the newsletter.
 	 *
 	 * @var bool[] Whether the tracking pixel has been by newsletter ID.
@@ -261,36 +266,82 @@ final class Pixel {
 	}
 
 	/**
+	 * Sanitize and track an item from the log.
+	 *
+	 * @param string $item The item to sanitize and track.
+	 */
+	public static function sanitize_and_track_item( $item ) {
+		$item = explode( '|', $item );
+		if ( 3 !== count( $item ) ) {
+			return;
+		}
+
+		// Values must be sanitized as they are stored in the logs without sanitization.
+		$newsletter_id = isset( $item[0] ) ? intval( $item[0] ) : 0;
+		$tracking_id   = isset( $item[1] ) ? \sanitize_text_field( $item[1] ) : 0;
+		$email_address = isset( $item[2] ) ? \sanitize_email( $item[2] ) : '';
+		if ( ! $newsletter_id || ! $tracking_id || ! $email_address ) {
+			return;
+		}
+
+		self::track_seen( $newsletter_id, $tracking_id, $email_address );
+	}
+
+	/**
 	 * Process logs.
 	 */
 	public static function process_logs() {
 		$current_log_file = \get_option( 'newspack_newsletters_tracking_pixel_log_file' );
 
 		if ( $current_log_file && file_exists( $current_log_file ) ) {
-			// Read the tracking data from the log file.
-			$data = file_get_contents( $current_log_file ); // phpcs:ignore WordPressVIPMinimum.Performance.FetchingRemoteData.FileGetContentsUnknown
+			// Read the tracking data from the log file. Process in batches to avoid memory issues.
+			$handle    = fopen( $current_log_file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+			$file_end  = false;
+			$pos       = 0;
 
-			// Process the tracking data.
-			$tracking_data = explode( PHP_EOL, $data );
-			foreach ( $tracking_data as $item ) {
-				if ( ! $item ) {
-					continue;
+			while ( ! $file_end ) {
+				$file_size = filesize( $current_log_file );
+				$lines     = 0;
+
+				// Process a chunk of lines from the file.
+				while ( $lines < self::MAX_LINES ) {
+					// Process the tracking data.
+					$item = trim( fgets( $handle ) );
+
+					// If we've reached the end of the chunk or file, stop the loop.
+					if ( ! $item || feof( $handle ) ) {
+						break;
+					}
+
+					self::sanitize_and_track_item( $item );
+					$lines++;
 				}
-				$item = explode( '|', $item );
-				if ( 3 !== count( $item ) ) {
-					continue;
+
+				// If we've reached the end of the file, stop the loop.
+				if ( feof( $handle ) ) {
+					$file_end = true;
+					break;
 				}
-				// Values must be sanitized as they are stored in the logs without sanitization.
-				$newsletter_id = isset( $item[0] ) ? intval( $item[0] ) : 0;
-				$tracking_id   = isset( $item[1] ) ? \sanitize_text_field( $item[1] ) : 0;
-				$email_address = isset( $item[2] ) ? \sanitize_email( $item[2] ) : '';
-				if ( ! $newsletter_id || ! $tracking_id || ! $email_address ) {
-					continue;
-				}
-				self::track_seen( $newsletter_id, $tracking_id, $email_address );
+
+				// Get the current position in the file after processing the chunk.
+				$pos = ftell( $handle );
+
+				// If there are more lines to process, truncate the file for the next chunk.
+				$truncated_contents = fread( $handle, $file_size - $pos ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fread
+
+				// Reopen the file in write mode.
+				fclose( $handle );
+				$handle = fopen( $current_log_file, 'w' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+				fputs( $handle, $truncated_contents ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_fputs
+
+				// Close and reopen truncated file in read mode.
+				fclose( $handle );
+				$handle = fopen( $current_log_file, 'r' ); // phpcs:ignore WordPress.WP.AlternativeFunctions.file_system_operations_fopen
+				rewind( $handle );
 			}
 
 			// Remove the log file after processing.
+			fclose( $handle );
 			unlink( $current_log_file, null ); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.file_ops_unlink
 		}
 

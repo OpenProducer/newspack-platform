@@ -282,6 +282,9 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 	if ( $attributes['showCaption'] ) {
 		$classes .= ' show-caption';
 	}
+	if ( $attributes['showCredit'] ) {
+		$classes .= ' show-credit';
+	}
 	if ( $attributes['showCategory'] ) {
 		$classes .= ' show-category';
 	}

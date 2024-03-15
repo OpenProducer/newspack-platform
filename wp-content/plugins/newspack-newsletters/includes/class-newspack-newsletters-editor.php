@@ -119,7 +119,7 @@ final class Newspack_Newsletters_Editor {
 		if ( $container_selector ) {
 			$container_selector = esc_html( $container_selector );
 			$rules              = array_map(
-				function( $rule ) use ( $container_selector ) {
+				function ( $rule ) use ( $container_selector ) {
 					return $container_selector . ' ' . $rule;
 				},
 				$rules
@@ -516,7 +516,7 @@ final class Newspack_Newsletters_Editor {
 		if ( is_int( $excerpt_length ) ) {
 			self::$newspack_newsletters_excerpt_length_filter = add_filter(
 				'excerpt_length',
-				function() use ( $excerpt_length ) {
+				function () use ( $excerpt_length ) {
 					return $excerpt_length;
 				},
 				999

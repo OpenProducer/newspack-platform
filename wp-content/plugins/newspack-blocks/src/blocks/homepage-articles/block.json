@@ -34,6 +34,10 @@
 			"type": "boolean",
 			"default": false
 		},
+		"showCredit": {
+			"type": "boolean",
+			"default": false
+		},
 		"disableImageLazyLoad": {
 			"type": "boolean",
 			"default": false
@@ -93,12 +97,16 @@
 		"authors": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "integer" }
+			"items": {
+				"type": "integer"
+			}
 		},
 		"categories": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "integer" }
+			"items": {
+				"type": "integer"
+			}
 		},
 		"includeSubcategories": {
 			"type": "boolean",
@@ -107,7 +115,9 @@
 		"tags": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "integer" }
+			"items": {
+				"type": "integer"
+			}
 		},
 		"customTaxonomies": {
 			"type": "array",
@@ -130,12 +140,16 @@
 		"tagExclusions": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "integer" }
+			"items": {
+				"type": "integer"
+			}
 		},
 		"categoryExclusions": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "integer" }
+			"items": {
+				"type": "integer"
+			}
 		},
 		"customTaxonomyExclusions": {
 			"type": "array",
@@ -158,7 +172,9 @@
 		"specificPosts": {
 			"type": "array",
 			"default": [],
-			"items": { "type": "integer" }
+			"items": {
+				"type": "integer"
+			}
 		},
 		"typeScale": {
 			"type": "integer",
@@ -198,8 +214,12 @@
 		},
 		"postType": {
 			"type": "array",
-			"default": [ "post" ],
-			"items": { "type": "string" }
+			"default": [
+				"post"
+			],
+			"items": {
+				"type": "string"
+			}
 		},
 		"textAlign": {
 			"type": "string",
@@ -207,8 +227,12 @@
 		},
 		"includedPostStatuses": {
 			"type": "array",
-			"default": [ "publish" ],
-			"items": { "type": "string" }
+			"default": [
+				"publish"
+			],
+			"items": {
+				"type": "string"
+			}
 		},
 		"deduplicate": {
 			"type": "boolean",

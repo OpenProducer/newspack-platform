@@ -5,7 +5,7 @@
 	"title": "Reader Registration",
 	"category": "newspack",
 	"description": "Register a reader with their email.",
-	"textdomain": "newspack",
+	"textdomain": "newspack-plugin",
 	"attributes": {
 		"title": {
 			"type": "string"

@@ -293,7 +293,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 
 		return array_values(
 			array_map(
-				function( $tag ) {
+				function ( $tag ) {
 					return (int) $tag['tag'];
 				},
 				$result['contactTags']
@@ -1269,7 +1269,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			}
 			$fields_perstag_by_id = array_reduce(
 				$contact_fields,
-				function( $acc, $field ) {
+				function ( $acc, $field ) {
 					$acc[ $field['id'] ] = $field['perstag'];
 					return $acc;
 				},
@@ -1281,7 +1281,7 @@ final class Newspack_Newsletters_Active_Campaign extends \Newspack_Newsletters_S
 			}
 			$contact_fields           = array_reduce(
 				$contact_result['fieldValues'],
-				function( $acc, $field ) use ( $fields_perstag_by_id ) {
+				function ( $acc, $field ) use ( $fields_perstag_by_id ) {
 					if ( isset( $field['value'] ) && isset( $fields_perstag_by_id[ $field['field'] ] ) ) {
 						$acc[ $fields_perstag_by_id[ $field['field'] ] ] = $field['value'];
 					}

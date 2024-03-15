@@ -114,7 +114,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			}
 			return $body;
 		} catch ( Exception $e ) {
-			throw new Exception( 'Constant Contact: ' . $e->getMessage() );
+			throw new Exception( 'Constant Contact: ' . esc_html( $e->getMessage() ) );
 		}
 	}
 
@@ -241,7 +241,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			}
 			return json_decode( $response['body'] );
 		} catch ( Exception $e ) {
-			throw new Exception( 'Constant Contact: ' . $e->getMessage() );
+			throw new Exception( 'Constant Contact: ' . esc_html( $e->getMessage() ) );
 		}
 	}
 
@@ -274,7 +274,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 			}
 			return json_decode( $response['body'] );
 		} catch ( Exception $e ) {
-			throw new Exception( 'Constant Contact: ' . $e->getMessage() );
+			throw new Exception( 'Constant Contact: ' . esc_html( $e->getMessage() ) );
 		}
 	}
 
@@ -364,7 +364,7 @@ final class Newspack_Newsletters_Constant_Contact_SDK {
 		$activities         = array_values(
 			array_filter(
 				$campaign->campaign_activities,
-				function( $activity ) {
+				function ( $activity ) {
 					return 'primary_email' === $activity->role;
 				}
 			)

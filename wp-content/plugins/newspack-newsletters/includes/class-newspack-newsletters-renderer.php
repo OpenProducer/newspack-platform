@@ -87,7 +87,7 @@ final class Newspack_Newsletters_Renderer {
 		return join(
 			' ',
 			array_map(
-				function( $key ) use ( $attributes ) {
+				function ( $key ) use ( $attributes ) {
 					if (
 						isset( $attributes[ $key ] ) &&
 						( is_string( $attributes[ $key ] ) || is_numeric( $attributes[ $key ] ) ) // Don't convert values that can't be expressed as a string.
@@ -648,7 +648,7 @@ final class Newspack_Newsletters_Renderer {
 				// Total percentage of button colunns with defined widths.
 				$total_defined_width = array_reduce(
 					$inner_blocks,
-					function( $acc, $block ) {
+					function ( $acc, $block ) {
 						if ( isset( $block['attrs']['width'] ) ) {
 							$acc .= intval( $block['attrs']['width'] );
 						}
@@ -661,7 +661,7 @@ final class Newspack_Newsletters_Renderer {
 				$no_widths = count(
 					array_filter(
 						$inner_blocks,
-						function( $block ) {
+						function ( $block ) {
 							return empty( $block['attrs']['width'] );
 						}
 					)
@@ -795,7 +795,7 @@ final class Newspack_Newsletters_Renderer {
 						if ( ! empty( $social_icon ) ) {
 							$img_attrs = array(
 								'href'             => $url,
-								'src'              => plugins_url( 'assets/' . $social_icon['icon'], dirname( __FILE__ ) ),
+								'src'              => plugins_url( 'assets/' . $social_icon['icon'], __DIR__ ),
 								'background-color' => $social_icon['color'],
 								'css-class'        => 'social-element',
 							);
@@ -845,10 +845,10 @@ final class Newspack_Newsletters_Renderer {
 					} else {
 						array_push( $no_width_cols_indexes, $i );
 					}
-				};
+				}
 				foreach ( $no_width_cols_indexes as $no_width_cols_index ) {
 					$inner_blocks[ $no_width_cols_index ]['attrs']['width'] = ( 100 - $widths_sum ) / count( $no_width_cols_indexes ) . '%';
-				};
+				}
 
 				if ( isset( $attrs['color'] ) ) {
 					$default_attrs['color'] = $attrs['color'];
@@ -1193,7 +1193,7 @@ final class Newspack_Newsletters_Renderer {
 		}
 
 		ob_start();
-		include dirname( __FILE__ ) . '/email-template.mjml.php';
+		include __DIR__ . '/email-template.mjml.php';
 		return ob_get_clean();
 	}
 

@@ -32,5 +32,4 @@ interface Newspack_Newsletters_WP_Hookable_Interface {
 	 * @param string $post_id Numeric ID of the campaign.
 	 */
 	public function trash( $post_id );
-
 }
