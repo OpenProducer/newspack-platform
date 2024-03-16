@@ -4,6 +4,8 @@
  * WordPress dependencies
  */
 import { __ } from '@wordpress/i18n';
+import { RawHTML } from '@wordpress/element';
+import { autop } from '@wordpress/autop';
 
 /**
  * External dependencies
@@ -91,7 +93,7 @@ export const SingleAuthor = ( { author, attributes } ) => {
 				) }
 				{ showBio && author.bio && (
 					<p>
-						{ author.bio }{ ' ' }
+						<RawHTML>{ autop( author.bio ) } </RawHTML>
 						{ showArchiveLink && (
 							<a href="#" className="no-op">
 								{ __( 'More by', 'newspack-blocks' ) + ' ' + author.name }

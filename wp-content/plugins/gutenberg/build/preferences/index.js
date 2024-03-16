@@ -652,7 +652,7 @@ function PreferencesModalTabs({
     modalContent = (0,external_React_namespaceObject.createElement)("div", {
       className: "preferences__tabs"
     }, (0,external_React_namespaceObject.createElement)(Tabs, {
-      initialTabId: activeMenu !== PREFERENCES_MENU ? activeMenu : undefined,
+      defaultTabId: activeMenu !== PREFERENCES_MENU ? activeMenu : undefined,
       onSelect: setActiveMenu,
       orientation: "vertical"
     }, (0,external_React_namespaceObject.createElement)(Tabs.TabList, {

@@ -83,6 +83,19 @@ class Web_Tag extends Module_Web_Tag implements Tag_Interface {
 	}
 
 	/**
+	 * Gets args to use if blocked_on_consent is deprecated.
+	 *
+	 * @since 1.122.0
+	 *
+	 * @return array args to pass to apply_filters_deprecated if deprecated ($version, $replacement, $message)
+	 */
+	protected function get_tag_blocked_on_consent_deprecated_args() {
+		return array(
+			'1.122.0', // Deprecated in this version.
+		);
+	}
+
+	/**
 	 * Registers tag hooks.
 	 *
 	 * @since 1.31.0
@@ -148,9 +161,7 @@ class Web_Tag extends Module_Web_Tag implements Tag_Interface {
 		$this->add_inline_config( $this->tag_id, $gtag_opt );
 		$this->add_inline_ads_conversion_id_config();
 
-		$block_on_consent_attrs = $this->get_tag_blocked_on_consent_attribute();
-
-		$filter_google_gtagjs = function ( $tag, $handle ) use ( $block_on_consent_attrs, $gtag_src ) {
+		$filter_google_gtagjs = function ( $tag, $handle ) use ( $gtag_src ) {
 			if ( 'google_gtagjs' !== $handle ) {
 				return $tag;
 			}
@@ -158,23 +169,10 @@ class Web_Tag extends Module_Web_Tag implements Tag_Interface {
 			$snippet_comment_begin = sprintf( "\n<!-- %s -->\n", esc_html__( 'Google Analytics snippet added by Site Kit', 'google-site-kit' ) );
 			$snippet_comment_end   = sprintf( "\n<!-- %s -->\n", esc_html__( 'End Google Analytics snippet added by Site Kit', 'google-site-kit' ) );
 
-			if ( $block_on_consent_attrs ) {
-				$tag = str_replace(
-					array(
-						"<script src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-						"<script src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-						"<script type='text/javascript' src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-						"<script type=\"text/javascript\" src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-					),
-					array( // `type` attribute intentionally excluded in replacements.
-						"<script{$block_on_consent_attrs} src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-						"<script{$block_on_consent_attrs} src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-						"<script{$block_on_consent_attrs} src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-						"<script{$block_on_consent_attrs} src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
-					),
-					$tag
-				);
+			$block_on_consent_attrs = $this->get_tag_blocked_on_consent_attribute();
 
+			if ( $block_on_consent_attrs ) {
+				$tag = $this->add_legacy_block_on_consent_attributes( $tag, $gtag_src, $block_on_consent_attrs );
 			}
 
 			return $snippet_comment_begin . $tag . $snippet_comment_end;
@@ -229,5 +227,35 @@ class Web_Tag extends Module_Web_Tag implements Tag_Interface {
 		}
 
 		return $config;
+	}
+
+	/**
+	 * Adds HTML attributes to the gtag script tag to block it until user consent is granted.
+	 *
+	 * This mechanism for blocking the tag is deprecated and the Consent Mode feature should be used instead.
+	 *
+	 * @since 1.122.0
+	 *
+	 * @param string $tag     The script tag.
+	 * @param string $gtag_src The gtag script source URL.
+	 * @param string $block_on_consent_attrs The attributes to add to the script tag to block it until user consent is granted.
+	 * @return string The script tag with the added attributes.
+	 */
+	protected function add_legacy_block_on_consent_attributes( $tag, $gtag_src, $block_on_consent_attrs ) {
+		return str_replace(
+			array(
+				"<script src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+					"<script src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+					"<script type='text/javascript' src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+					"<script type=\"text/javascript\" src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+			),
+			array( // `type` attribute intentionally excluded in replacements.
+				"<script{$block_on_consent_attrs} src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+					"<script{$block_on_consent_attrs} src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+					"<script{$block_on_consent_attrs} src='$gtag_src'", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+					"<script{$block_on_consent_attrs} src=\"$gtag_src\"", // phpcs:ignore WordPress.WP.EnqueuedResources.NonEnqueuedScript
+			),
+			$tag
+		);
 	}
 }

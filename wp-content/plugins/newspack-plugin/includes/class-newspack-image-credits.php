@@ -344,10 +344,12 @@ class Newspack_Image_Credits {
 	/**
 	 * Default values for site-wide settings.
 	 *
+	 * @param string|null $key (Optional) Key name of a single setting to get. If not given, will return all settings.
+	 *
 	 * @return array Array of default settings.
 	 */
-	public static function get_default_settings() {
-		return [
+	public static function get_default_settings( $key = null ) {
+		$default_settings = [
 			[
 				'description' => __( 'A CSS class name to be applied to all image credit elements. Leave blank to display no class name.', 'newspack-image-credits' ),
 				'key'         => 'newspack_image_credits_class_name',
@@ -369,7 +371,26 @@ class Newspack_Image_Credits {
 				'type'        => 'image',
 				'value'       => null,
 			],
+			[
+				'description' => __( 'Automatically populate image credits from EXIF or IPTC metadata when uploading new images.', 'newspack-image-credits' ),
+				'key'         => 'newspack_image_credits_auto_populate',
+				'label'       => __( 'Auto-populate image credits', 'newspack-image-credits' ),
+				'type'        => 'boolean',
+				'value'       => false,
+			],
 		];
+
+		if ( $key ) {
+			$setting = array_filter(
+				$default_settings,
+				function( $setting ) use ( $key ) {
+					return $setting['key'] === $key;
+				}
+			);
+			return reset( array_values( $setting ) );
+		}
+
+		return $default_settings;
 	}
 
 	/**
@@ -387,7 +408,7 @@ class Newspack_Image_Credits {
 			$defaults,
 			function( $acc, $setting ) use ( $get_default ) {
 				$key         = $setting['key'];
-				$value       = $get_default ? $setting['value'] : get_option( $key, $setting['value'] );
+				$value       = $get_default ? $setting['value'] : get_theme_mod( $key, $setting['value'] );
 				$acc[ $key ] = $value;
 				return $acc;
 			},
@@ -410,11 +431,12 @@ class Newspack_Image_Credits {
 	 * @param mixed  $value Updated value.
 	 */
 	public static function update_setting( $key, $value ) {
-		$defaults = self::get_default_settings();
-
-		if ( in_array( $key, array_keys( $defaults ) ) ) {
-			update_option( $key, $value );
+		$default_setting = self::get_default_settings( $key );
+		if ( ! isset( $default_setting['value'] ) ) {
+			return;
 		}
+
+		set_theme_mod( $key, self::sanitize_option_value( $value ) );
 	}
 
 	/**
@@ -488,8 +510,7 @@ class Newspack_Image_Credits {
 	 * @return array
 	 */
 	public static function populate_credit( $metadata, $attachment_id, $context ) {
-
-		if ( 'create' !== $context ) {
+		if ( 'create' !== $context || ! self::get_settings( 'newspack_image_credits_auto_populate' ) ) {
 			return $metadata;
 		}
 

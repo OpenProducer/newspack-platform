@@ -344,7 +344,12 @@
 			right: 0;
 			text-align: right;
 			text-overflow: ellipsis;
-			z-index: 2;
+			z-index: 3;
+			
+			a,
+			a:visited {
+			    color: #fff;
+			}
 
 			@include mixins.media( desktop ) {
 				padding: 0 1.5rem;

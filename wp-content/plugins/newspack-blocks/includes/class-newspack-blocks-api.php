@@ -74,16 +74,6 @@ class Newspack_Blocks_API {
 	}
 
 	/**
-	 * Get thumbnail featured image captions for the rest field.
-	 *
-	 * @param array $object_info The object info.
-	 * @return string|null Image caption on success, null on failure.
-	 */
-	public static function newspack_blocks_get_image_caption( $object_info ) {
-		return (int) $object_info['featured_media'] > 0 ? trim( wp_get_attachment_caption( $object_info['featured_media'] ) ) : null;
-	}
-
-	/**
 	 * Get author info for the rest field.
 	 *
 	 * @param array $object_info The object info.
@@ -320,7 +310,7 @@ class Newspack_Blocks_API {
 				'newspack_article_classes'          => Newspack_Blocks::get_term_classes( $data['id'] ),
 				'newspack_author_info'              => self::newspack_blocks_get_author_info( $data ),
 				'newspack_category_info'            => self::newspack_blocks_get_primary_category( $data ),
-				'newspack_featured_image_caption'   => self::newspack_blocks_get_image_caption( $data ),
+				'newspack_featured_image_caption'   => Newspack_Blocks::get_image_caption( $data['featured_media'], $attributes['showCaption'], $attributes['showCredit'] ),
 				'newspack_featured_image_src'       => self::newspack_blocks_get_image_src( $data ),
 				'newspack_has_custom_excerpt'       => self::newspack_blocks_has_custom_excerpt( $data ),
 				'newspack_post_sponsors'            => self::newspack_blocks_sponsor_info( $data ),

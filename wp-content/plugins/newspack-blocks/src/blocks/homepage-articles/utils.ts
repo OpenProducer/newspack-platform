@@ -40,6 +40,8 @@ const POST_QUERY_ATTRIBUTES = [
 	'postType',
 	'includedPostStatuses',
 	'deduplicate',
+	'showCaption',
+	'showCredit',
 ];
 
 type HomepageArticlesAttributes = {
@@ -57,6 +59,8 @@ type HomepageArticlesAttributes = {
 	tagExclusions: TagId[];
 	categoryExclusions: CategoryId[];
 	customTaxonomyExclusions: Taxonomy[];
+	showCaption: boolean;
+	showCredit: boolean;
 };
 
 type HomepageArticlesProps = {
@@ -96,6 +100,8 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 		excerptLength,
 		postType,
 		showExcerpt,
+		showCaption,
+		showCredit,
 		tags,
 		customTaxonomies,
 		specificPosts = [],
@@ -132,6 +138,8 @@ export const queryCriteriaFromAttributes = ( attributes: Block[ 'attributes' ] )
 	);
 	criteria.excerptLength = excerptLength;
 	criteria.showExcerpt = showExcerpt;
+	criteria.showCaption = showCaption;
+	criteria.showCredit = showCredit;
 	return criteria;
 };
 

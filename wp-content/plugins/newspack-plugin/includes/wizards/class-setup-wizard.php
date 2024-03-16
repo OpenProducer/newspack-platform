@@ -488,7 +488,7 @@ class Setup_Wizard extends Wizard {
 			$homepage_pattern       = $this->get_homepage_patterns( $homepage_pattern_index );
 			if ( false !== $homepage_pattern ) {
 				$homepage_id = get_option( 'page_on_front', false );
-				if ( $homepage_id ) {
+				if ( $homepage_id && ! get_option( NEWSPACK_SETUP_COMPLETE ) ) {
 					wp_update_post(
 						[
 							'ID'           => $homepage_id,

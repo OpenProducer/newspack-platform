@@ -374,7 +374,7 @@ final class Newspack_Newsletters_Ads {
 			'manageUrlRel'    => $ads_manage_url_rel,
 			'manageUrlTarget' => $ads_manage_url_target,
 			'ads'             => array_map(
-				function( $ad ) {
+				function ( $ad ) {
 					return [
 						'id'    => $ad->ID,
 						'title' => $ad->post_title,
@@ -748,7 +748,7 @@ final class Newspack_Newsletters_Ads {
 			// Filter out empty blocks.
 			array_filter(
 				$parsed_blocks,
-				function( $block ) use ( $blocks_to_skip_empty ) {
+				function ( $block ) use ( $blocks_to_skip_empty ) {
 					$null_block_name     = null === $block['blockName'];
 					$is_skip_empty_block = in_array( $block['blockName'], $blocks_to_skip_empty, true );
 					$is_empty            = empty( trim( $block['innerHTML'] ) );
@@ -782,7 +782,7 @@ final class Newspack_Newsletters_Ads {
 					$next_block               = $parsed_blocks[ $next_index ];
 					$group_blocks[]           = $next_block;
 					$grouped_blocks_indexes[] = $next_index;
-					$next_index ++;
+					$next_index++;
 					$index_in_group++;
 				}
 				// Always insert the initial block in the group (if the index in group was not incremented, this is the initial block).

@@ -79,8 +79,8 @@ call_user_func(
 				</a>
 				<?php endif; ?>
 
-				<?php if ( $attributes['showCaption'] && '' !== get_the_post_thumbnail_caption() ) : ?>
-					<figcaption><?php the_post_thumbnail_caption(); ?></figcaption>
+				<?php if ( $attributes['showCaption'] || $attributes['showCredit'] ) : ?>
+					<?php echo wp_kses_post( Newspack_Blocks::get_image_caption( get_post_thumbnail_id(), $attributes['showCaption'], $attributes['showCredit'] ) ); ?>
 				<?php endif; ?>
 			</figure><!-- .featured-image -->
 		<?php endif; ?>

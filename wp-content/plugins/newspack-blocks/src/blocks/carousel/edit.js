@@ -161,6 +161,8 @@ class Edit extends Component {
 			showDate,
 			showAuthor,
 			showAvatar,
+			showCaption,
+			showCredit,
 			showTitle,
 			slidesPerView,
 			specificMode,
@@ -280,7 +282,9 @@ class Edit extends Component {
 											showCategory ||
 											showTitle ||
 											showAuthor ||
-											showDate ) && (
+											showDate ||
+											showCaption ||
+											showCredit ) && (
 											<div className="entry-wrapper">
 												{ ( post.newspack_post_sponsors ||
 													( showCategory && 0 < post.newspack_category_info.length ) ) && (
@@ -331,6 +335,14 @@ class Edit extends Component {
 															{ dateI18n( dateFormat, post.date ) }
 														</time>
 													) }
+													{ ( showCaption || showCredit ) && post.newspack_featured_image_caption && (
+														<div
+															className="entry-caption"
+															dangerouslySetInnerHTML={ {
+																__html: post.newspack_featured_image_caption,
+															} }
+														/>
+													) }
 												</div>
 											</div>
 										) }
@@ -339,8 +351,8 @@ class Edit extends Component {
 							</div>
 							{ ! hasNoPosts && ! hasOnePost && (
 								<>
-									<button className="swiper-button-prev" ref={ this.btnPrevRef } />
-									<button className="swiper-button-next" ref={ this.btnNextRef } />
+									<button className="swiper-button swiper-button-prev" ref={ this.btnPrevRef } />
+									<button className="swiper-button swiper-button-next" ref={ this.btnNextRef } />
 									<div
 										className="swiper-pagination swiper-pagination-bullets"
 										ref={ this.paginationRef }
@@ -534,6 +546,20 @@ class Edit extends Component {
 								/>
 							</PanelRow>
 						) }
+						<PanelRow>
+							<ToggleControl
+								label={ __( 'Show Featured Image Caption', 'newspack-blocks' ) }
+								checked={ showCaption }
+								onChange={ () => setAttributes( { showCaption: ! showCaption } ) }
+							/>
+						</PanelRow>
+						<PanelRow>
+							<ToggleControl
+								label={ __( 'Show Featured Image Credit', 'newspack-blocks' ) }
+								checked={ showCredit }
+								onChange={ () => setAttributes( { showCredit: ! showCredit } ) }
+							/>
+						</PanelRow>
 					</PanelBody>
 					<PostTypesPanel attributes={ attributes } setAttributes={ setAttributes } />
 					<PostStatusesPanel attributes={ attributes } setAttributes={ setAttributes } />

@@ -77,6 +77,22 @@
 				}
 			}
 		}
+
+		.entry-caption {
+			margin-top: var( --wp--preset--spacing--00, var( --wp--preset--spacing--20, 0.5rem ) );
+			width: 100%;
+
+			figcaption {
+				color: #fff;
+				font-size: var( --wp--preset--font-size--x-small, var( --newspack-theme-font-size-sm, 0.8em ) );
+				line-height: var( --wp--custom--line-height--x-small, var( --newspack-theme-font-line-height-body, 1.6 ) );
+
+				a {
+					font-weight: 400;
+					text-decoration: underline;
+				}
+			}
+		}
 	}
 	.post-thumbnail {
 		margin: 0;

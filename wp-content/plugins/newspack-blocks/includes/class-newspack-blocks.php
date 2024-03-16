@@ -1593,5 +1593,40 @@ class Newspack_Blocks {
 
 		return '<span class="wpbnbd__tiers__amount__value">' . $wc_formatted_amount . '</span>';
 	}
+
+	/**
+	 * Get an image caption, optionally with credit appended.
+	 *
+	 * @param int  $attachment_id Attachment ID of the image.
+	 * @param bool $include_caption Whether to include the caption.
+	 * @param bool $include_credit Whether to include the credit.
+	 *
+	 * @return string
+	 */
+	public static function get_image_caption( $attachment_id = null, $include_caption = true, $include_credit = false ) {
+		if ( ! $attachment_id || ( ! $include_caption && ! $include_credit ) ) {
+			return '';
+		}
+
+		$caption = $include_caption ? wp_get_attachment_caption( $attachment_id ) : '';
+		$credit  = '';
+
+		if ( $include_credit && method_exists( 'Newspack\Newspack_Image_Credits', 'get_media_credit_string' ) ) {
+			$credit = \Newspack\Newspack_Image_Credits::get_media_credit_string( $attachment_id );
+		}
+
+		$full_caption = trim( $caption . ' ' . $credit );
+		if ( empty( $full_caption ) ) {
+			return '';
+		}
+
+		$combined_caption = sprintf(
+			'<figcaption%1$s>%2$s</figcaption>',
+			! empty( $credit ) ? ' class="has-credit"' : '',
+			$full_caption
+		);
+
+		return $combined_caption;
+	}
 }
 Newspack_Blocks::init();

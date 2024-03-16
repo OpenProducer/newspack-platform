@@ -417,7 +417,6 @@ class Subscription_List {
 	 */
 	public function has_other_configured_providers() {
 		return ! empty( $this->get_other_configured_providers() );
-
 	}
 
 	/**
@@ -501,5 +500,4 @@ class Subscription_List {
 			'active'      => $this->is_active(),
 		];
 	}
-
 }

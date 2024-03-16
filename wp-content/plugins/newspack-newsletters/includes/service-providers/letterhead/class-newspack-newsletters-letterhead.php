@@ -131,7 +131,7 @@ final class Newspack_Newsletters_Letterhead extends \Newspack_Newsletters_Servic
 		 * @var array Newspack_Newsletters_Letterhead_Promotion_Dto[]
 		 */
 		$array_of_promotion_dtos = array_map(
-			function( \stdClass $promotion_object ) {
+			function ( \stdClass $promotion_object ) {
 				return new Newspack_Newsletters_Letterhead_Promotion_Dto( $promotion_object );
 			},
 			$promotion_response_array
@@ -143,7 +143,7 @@ final class Newspack_Newsletters_Letterhead extends \Newspack_Newsletters_Servic
 		 * @var array Newspack_Newsletters_Letterhead_Promotion[]
 		 */
 		$array_of_promotions = array_map(
-			function( Newspack_Newsletters_Letterhead_Promotion_Dto $dto ) {
+			function ( Newspack_Newsletters_Letterhead_Promotion_Dto $dto ) {
 				return new Newspack_Newsletters_Letterhead_Promotion( $dto );
 			},
 			$array_of_promotion_dtos
@@ -250,4 +250,3 @@ final class Newspack_Newsletters_Letterhead extends \Newspack_Newsletters_Servic
 	 */
 	public function trash( $post_id ) {}
 }
-

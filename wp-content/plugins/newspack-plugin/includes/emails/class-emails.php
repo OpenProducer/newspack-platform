@@ -545,13 +545,17 @@ class Emails {
 	 * @param string  $key Reset key.
 	 */
 	public static function get_password_reset_url( $user, $key ) {
-		return add_query_arg(
-			[
-				'key' => $key,
-				'id'  => $user->ID,
-			],
-			wc_get_account_endpoint_url( 'lost-password' )
-		);
+		if ( function_exists( 'wc_get_account_endpoint_url' ) ) {
+			return add_query_arg(
+				[
+					'key' => $key,
+					'id'  => $user->ID,
+				],
+				wc_get_account_endpoint_url( 'lost-password' )
+			);
+		}
+
+		return wp_lostpassword_url();
 	}
 }
 Emails::init();

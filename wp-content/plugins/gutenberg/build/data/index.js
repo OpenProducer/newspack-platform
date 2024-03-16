@@ -2559,10 +2559,13 @@ const trimUndefinedValues = array => {
  */
 const mapValues = (obj, callback) => Object.fromEntries(Object.entries(obj !== null && obj !== void 0 ? obj : {}).map(([key, value]) => [key, callback(value, key)]));
 
-// Convert Map objects to plain objects
-const mapToObject = (key, state) => {
+// Convert  non serializable types to plain objects
+const devToolsReplacer = (key, state) => {
   if (state instanceof Map) {
     return Object.fromEntries(state);
+  }
+  if (state instanceof window.HTMLElement) {
+    return null;
   }
   return state;
 };
@@ -2839,7 +2842,7 @@ function instantiateReduxStore(key, options, registry, thunkArgs) {
       name: key,
       instanceId: key,
       serialize: {
-        replacer: mapToObject
+        replacer: devToolsReplacer
       }
     }));
   }

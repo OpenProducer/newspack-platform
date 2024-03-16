@@ -7,7 +7,7 @@
 
 defined( 'ABSPATH' ) || exit;
 
-use \DrewM\MailChimp\MailChimp;
+use DrewM\MailChimp\MailChimp;
 
 /**
  * This trait adds the Mailchimp Groups implementation to the Mailchimp Service Provider.
@@ -322,7 +322,6 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 			'newspack_newsletter_error_adding_group_to_contact',
 			! empty( $added['errors'] ) && ! empty( $added['errors'][0]['error'] ) ? $added['errors'][0]['error'] : ''
 		);
-
 	}
 
 	/**
@@ -355,7 +354,6 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 			'newspack_newsletter_error_adding_group_to_contact',
 			! empty( $added['errors'] ) && ! empty( $added['errors'][0]['error'] ) ? $added['errors'][0]['error'] : ''
 		);
-
 	}
 
 	/**
@@ -383,5 +381,4 @@ trait Newspack_Newsletters_Mailchimp_Groups {
 
 		return $groups;
 	}
-
 }

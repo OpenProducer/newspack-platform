@@ -78,28 +78,18 @@ const deepMerge = (target, source) => {
           get: getter
         });
       } else if (isObject(source[key])) {
-        if (!target[key]) Object.assign(target, {
-          [key]: {}
-        });
+        if (!target[key]) target[key] = {};
         deepMerge(target[key], source[key]);
       } else {
-        Object.assign(target, {
-          [key]: source[key]
-        });
+        try {
+          target[key] = source[key];
+        } catch (e) {
+          // Assignemnts fail for properties that are only getters.
+          // When that's the case, the assignment is simply ignored.
+        }
       }
     }
   }
-};
-const parseInitialData = () => {
-  const storeTag = document.querySelector(`script[type="application/json"]#wp-interactivity-data`);
-  if (storeTag?.textContent) {
-    try {
-      return JSON.parse(storeTag.textContent);
-    } catch (e) {
-      // Do nothing.
-    }
-  }
-  return {};
 };
 const stores = new Map();
 const rawStores = new Map();
@@ -143,13 +133,13 @@ const handlers = {
         return getters.get(getter).value;
       }
     }
-    const result = Reflect.get(target, key, receiver);
+    const result = Reflect.get(target, key);
 
     // Check if the proxy is the store root and no key with that name exist. In
     // that case, return an empty object for the requested key.
     if (typeof result === 'undefined' && receiver === stores.get(ns)) {
       const obj = {};
-      Reflect.set(target, key, obj, receiver);
+      Reflect.set(target, key, obj);
       return proxify(obj, ns);
     }
 
@@ -199,6 +189,10 @@ const handlers = {
     // Check if the property is an object. If it is, proxyify it.
     if (isObject(result)) return proxify(result, ns);
     return result;
+  },
+  // Prevents passing the current proxy as the receiver to the deepSignal.
+  set(target, key, value) {
+    return Reflect.set(target, key, value);
   }
 };
 
@@ -301,23 +295,37 @@ function store(namespace, {
   }
   return stores.get(namespace);
 }
+const parseInitialData = (dom = document) => {
+  const storeTag = dom.querySelector(`script[type="application/json"]#wp-interactivity-data`);
+  if (storeTag?.textContent) {
+    try {
+      return JSON.parse(storeTag.textContent);
+    } catch (e) {
+      // Do nothing.
+    }
+  }
+  return {};
+};
+const populateInitialData = data => {
+  if (isObject(data?.state)) {
+    Object.entries(data.state).forEach(([namespace, state]) => {
+      store(namespace, {
+        state
+      }, {
+        lock: universalUnlock
+      });
+    });
+  }
+  if (isObject(data?.config)) {
+    Object.entries(data.config).forEach(([namespace, config]) => {
+      storeConfigs.set(namespace, config);
+    });
+  }
+};
 
 // Parse and populate the initial state and config.
 const data = parseInitialData();
-if (isObject(data?.state)) {
-  Object.entries(data.state).forEach(([namespace, state]) => {
-    store(namespace, {
-      state
-    }, {
-      lock: universalUnlock
-    });
-  });
-}
-if (isObject(data?.config)) {
-  Object.entries(data.config).forEach(([namespace, config]) => {
-    storeConfigs.set(namespace, config);
-  });
-}
+populateInitialData(data);
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/hooks.js
 /* @jsx createElement */
 
@@ -861,15 +869,130 @@ function kebabToCamelCase(str) {
 
 
 
-const directives_isObject = item => item && typeof item === 'object' && !Array.isArray(item);
-const mergeDeepSignals = (target, source, overwrite) => {
+
+// Assigned objects should be ignore during proxification.
+const contextAssignedObjects = new WeakMap();
+
+// Store the context proxy and fallback for each object in the context.
+const contextObjectToProxy = new WeakMap();
+const contextProxyToObject = new WeakMap();
+const contextObjectToFallback = new WeakMap();
+const isPlainObject = item => item && typeof item === 'object' && item.constructor === Object;
+const descriptor = Reflect.getOwnPropertyDescriptor;
+
+/**
+ * Wrap a context object with a proxy to reproduce the context stack. The proxy
+ * uses the passed `inherited` context as a fallback to look up for properties
+ * that don't exist in the given context. Also, updated properties are modified
+ * where they are defined, or added to the main context when they don't exist.
+ *
+ * By default, all plain objects inside the context are wrapped, unless it is
+ * listed in the `ignore` option.
+ *
+ * @param {Object} current   Current context.
+ * @param {Object} inherited Inherited context, used as fallback.
+ *
+ * @return {Object} The wrapped context object.
+ */
+const proxifyContext = (current, inherited = {}) => {
+  // Update the fallback object reference when it changes.
+  contextObjectToFallback.set(current, inherited);
+  if (!contextObjectToProxy.has(current)) {
+    const proxy = new Proxy(current, {
+      get: (target, k) => {
+        const fallback = contextObjectToFallback.get(current);
+        // Always subscribe to prop changes in the current context.
+        const currentProp = target[k];
+
+        // Return the inherited prop when missing in target.
+        if (!(k in target) && k in fallback) {
+          return fallback[k];
+        }
+
+        // Proxify plain objects that were not directly assigned.
+        if (k in target && !contextAssignedObjects.get(target)?.has(k) && isPlainObject(deepsignal_module_p(target, k))) {
+          return proxifyContext(currentProp, fallback[k]);
+        }
+
+        // Return the stored proxy for `currentProp` when it exists.
+        if (contextObjectToProxy.has(currentProp)) {
+          return contextObjectToProxy.get(currentProp);
+        }
+
+        /*
+         * For other cases, return the value from target, also
+         * subscribing to changes in the parent context when the current
+         * prop is not defined.
+         */
+        return k in target ? currentProp : fallback[k];
+      },
+      set: (target, k, value) => {
+        const fallback = contextObjectToFallback.get(current);
+        const obj = k in target || !(k in fallback) ? target : fallback;
+
+        /*
+         * Assigned object values should not be proxified so they point
+         * to the original object and don't inherit unexpected
+         * properties.
+         */
+        if (value && typeof value === 'object') {
+          if (!contextAssignedObjects.has(obj)) {
+            contextAssignedObjects.set(obj, new Set());
+          }
+          contextAssignedObjects.get(obj).add(k);
+        }
+
+        /*
+         * When the value is a proxy, it's because it comes from the
+         * context, so the inner value is assigned instead.
+         */
+        if (contextProxyToObject.has(value)) {
+          const innerValue = contextProxyToObject.get(value);
+          obj[k] = innerValue;
+        } else {
+          obj[k] = value;
+        }
+        return true;
+      },
+      ownKeys: target => [...new Set([...Object.keys(contextObjectToFallback.get(current)), ...Object.keys(target)])],
+      getOwnPropertyDescriptor: (target, k) => descriptor(target, k) || descriptor(contextObjectToFallback.get(current), k)
+    });
+    contextObjectToProxy.set(current, proxy);
+    contextProxyToObject.set(proxy, current);
+  }
+  return contextObjectToProxy.get(current);
+};
+
+/**
+ * Recursively update values within a deepSignal object.
+ *
+ * @param {Object} target A deepSignal instance.
+ * @param {Object} source Object with properties to update in `target`
+ */
+const updateSignals = (target, source) => {
   for (const k in source) {
-    if (directives_isObject(deepsignal_module_p(target, k)) && directives_isObject(deepsignal_module_p(source, k))) {
-      mergeDeepSignals(target[`$${k}`].peek(), source[`$${k}`].peek(), overwrite);
-    } else if (overwrite || typeof deepsignal_module_p(target, k) === 'undefined') {
-      target[`$${k}`] = source[`$${k}`];
+    if (isPlainObject(deepsignal_module_p(target, k)) && isPlainObject(deepsignal_module_p(source, k))) {
+      updateSignals(target[`$${k}`].peek(), source[k]);
+    } else {
+      target[k] = source[k];
     }
   }
+};
+
+/**
+ * Recursively clone the passed object.
+ *
+ * @param {Object} source Source object.
+ * @return {Object} Cloned object.
+ */
+const deepClone = source => {
+  if (isPlainObject(source)) {
+    return Object.fromEntries(Object.entries(source).map(([key, value]) => [key, deepClone(value)]));
+  }
+  if (Array.isArray(source)) {
+    return source.map(i => deepClone(i));
+  }
+  return source;
 };
 const newRule = /(?:([\u0080-\uFFFF\w-%@]+) *:? *([^{;]+?);|([^;}{]*?) *{)|(}\s*)/g;
 const ruleClean = /\/\*[^]*?\*\/|  +/g;
@@ -942,24 +1065,23 @@ const getGlobalEventDirective = type => ({
     const defaultEntry = context.find(({
       suffix
     }) => suffix === 'default');
-    currentValue.current = hooks_module_F(() => {
-      if (!defaultEntry) return null;
-      const {
-        namespace,
-        value
-      } = defaultEntry;
-      const newValue = deepsignal_module_g({
-        [namespace]: value
-      });
-      mergeDeepSignals(newValue, inheritedValue);
-      mergeDeepSignals(currentValue.current, newValue, true);
-      return currentValue.current;
-    }, [inheritedValue, defaultEntry]);
-    if (currentValue.current) {
-      return y(Provider, {
-        value: currentValue.current
-      }, children);
-    }
+
+    // No change should be made if `defaultEntry` does not exist.
+    const contextStack = hooks_module_F(() => {
+      if (defaultEntry) {
+        const {
+          namespace,
+          value
+        } = defaultEntry;
+        updateSignals(currentValue.current, {
+          [namespace]: deepClone(value)
+        });
+      }
+      return proxifyContext(currentValue.current, inheritedValue);
+    }, [defaultEntry, inheritedValue]);
+    return y(Provider, {
+      value: contextStack
+    }, children);
   }, {
     priority: 5
   });
@@ -1208,15 +1330,14 @@ const getGlobalEventDirective = type => ({
     } = entry;
     const list = evaluate(entry);
     return list.map(item => {
-      const mergedContext = deepsignal_module_g({});
       const itemProp = suffix === 'default' ? 'item' : kebabToCamelCase(suffix);
-      const newValue = deepsignal_module_g({
-        [namespace]: {
-          [itemProp]: item
-        }
+      const itemContext = deepsignal_module_g({
+        [namespace]: {}
       });
-      mergeDeepSignals(newValue, inheritedValue);
-      mergeDeepSignals(mergedContext, newValue, true);
+      const mergedContext = proxifyContext(itemContext, inheritedValue);
+
+      // Set the item after proxifying the context.
+      mergedContext[namespace][itemProp] = item;
       const scope = {
         ...getScope(),
         context: mergedContext
@@ -1420,9 +1541,11 @@ const init = async () => {
 
 
 
+
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -1445,7 +1568,10 @@ const privateApis = lock => {
       h: y,
       cloneElement: E,
       render: q,
-      deepSignal: deepsignal_module_g
+      deepSignal: deepsignal_module_g,
+      parseInitialData: parseInitialData,
+      populateInitialData: populateInitialData,
+      batch: signals_core_module_r
     };
   }
   throw new Error('Forbidden access.');

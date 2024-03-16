@@ -1563,62 +1563,7 @@ function InterfaceSkeleton({
 }
 /* harmony default export */ const interface_skeleton = ((0,external_wp_element_namespaceObject.forwardRef)(InterfaceSkeleton));
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/more-vertical.js
-
-/**
- * WordPress dependencies
- */
-
-const moreVertical = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24"
-}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z"
-}));
-/* harmony default export */ const more_vertical = (moreVertical);
-
-;// CONCATENATED MODULE: ./packages/interface/build-module/components/more-menu-dropdown/index.js
-
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-
-
-function MoreMenuDropdown({
-  as: DropdownComponent = external_wp_components_namespaceObject.DropdownMenu,
-  className,
-  /* translators: button label text should, if possible, be under 16 characters. */
-  label = (0,external_wp_i18n_namespaceObject.__)('Options'),
-  popoverProps,
-  toggleProps,
-  children
-}) {
-  return (0,external_React_namespaceObject.createElement)(DropdownComponent, {
-    className: classnames_default()('interface-more-menu-dropdown', className),
-    icon: more_vertical,
-    label: label,
-    popoverProps: {
-      placement: 'bottom-end',
-      ...popoverProps,
-      className: classnames_default()('interface-more-menu-dropdown__content', popoverProps?.className)
-    },
-    toggleProps: {
-      tooltipPosition: 'bottom',
-      ...toggleProps,
-      size: 'compact'
-    }
-  }, onClose => children(onClose));
-}
-
 ;// CONCATENATED MODULE: ./packages/interface/build-module/components/index.js
-
-
 
 
 
@@ -3404,7 +3349,7 @@ const isEditingTemplate = (0,external_wp_data_namespaceObject.createRegistrySele
     since: '6.5',
     alternative: `select( 'core/editor' ).getRenderingMode`
   });
-  return select(external_wp_editor_namespaceObject.store).getCurrentPostType() !== 'post-only';
+  return select(external_wp_editor_namespaceObject.store).getCurrentPostType() === 'wp_template';
 });
 
 /**
@@ -4327,6 +4272,20 @@ function FullscreenModeClose({
 }
 /* harmony default export */ const fullscreen_mode_close = (FullscreenModeClose);
 
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/more-vertical.js
+
+/**
+ * WordPress dependencies
+ */
+
+const moreVertical = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M13 19h-2v-2h2v2zm0-6h-2v-2h2v2zm0-6h-2V5h2v2z"
+}));
+/* harmony default export */ const more_vertical = (moreVertical);
+
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/header/preferences-menu-item/index.js
 
 /**
@@ -4428,6 +4387,7 @@ function WritingMenu() {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -4442,12 +4402,19 @@ const MoreMenu = ({
   showIconLabels
 }) => {
   const isLargeViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('large');
-  return (0,external_React_namespaceObject.createElement)(MoreMenuDropdown, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.DropdownMenu, {
+    icon: more_vertical,
+    label: (0,external_wp_i18n_namespaceObject.__)('Options'),
+    popoverProps: {
+      placement: 'bottom-end',
+      className: 'more-menu-dropdown__content'
+    },
     toggleProps: {
-      showTooltip: !showIconLabels,
       ...(showIconLabels && {
         variant: 'tertiary'
       }),
+      tooltipPosition: 'bottom',
+      showTooltip: !showIconLabels,
       size: 'compact'
     }
   }, ({
@@ -4617,6 +4584,9 @@ MainDashboardButton.Slot = main_dashboard_button_Slot;
 
 
 const {
+  useShowBlockTools
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
+const {
   DocumentTools,
   PostViewLink,
   PreviewDropdown
@@ -4660,9 +4630,8 @@ function Header({
   const blockToolbarRef = (0,external_wp_element_namespaceObject.useRef)();
   const {
     isTextEditor,
-    hasBlockSelection,
+    blockSelectionStart,
     hasActiveMetaboxes,
-    hasFixedToolbar,
     isPublishSidebarOpened,
     showIconLabels,
     hasHistory
@@ -4675,21 +4644,25 @@ function Header({
     } = select(external_wp_editor_namespaceObject.store);
     return {
       isTextEditor: getEditorMode() === 'text',
-      hasBlockSelection: !!select(external_wp_blockEditor_namespaceObject.store).getBlockSelectionStart(),
+      blockSelectionStart: select(external_wp_blockEditor_namespaceObject.store).getBlockSelectionStart(),
       hasActiveMetaboxes: select(store_store).hasMetaBoxes(),
       hasHistory: !!select(external_wp_editor_namespaceObject.store).getEditorSettings().onNavigateToPreviousEntityRecord,
       isPublishSidebarOpened: select(store_store).isPublishSidebarOpened(),
-      hasFixedToolbar: getPreference('core', 'fixedToolbar'),
       showIconLabels: getPreference('core', 'showIconLabels')
     };
   }, []);
+  const {
+    showFixedToolbar
+  } = useShowBlockTools();
+  const showTopToolbar = isLargeViewport && showFixedToolbar;
   const [isBlockToolsCollapsed, setIsBlockToolsCollapsed] = (0,external_wp_element_namespaceObject.useState)(true);
+  const hasBlockSelection = !!blockSelectionStart;
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     // If we have a new block selection, show the block tools
-    if (hasBlockSelection) {
+    if (blockSelectionStart) {
       setIsBlockToolsCollapsed(false);
     }
-  }, [hasBlockSelection]);
+  }, [blockSelectionStart]);
   return (0,external_React_namespaceObject.createElement)("div", {
     className: "edit-post-header"
   }, (0,external_React_namespaceObject.createElement)(main_dashboard_button.Slot, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__unstableMotion.div, {
@@ -4710,25 +4683,26 @@ function Header({
     className: "edit-post-header__toolbar"
   }, (0,external_React_namespaceObject.createElement)(DocumentTools, {
     disableBlockTools: isTextEditor
-  }), hasFixedToolbar && isLargeViewport && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
+  }), showTopToolbar && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)("div", {
     className: classnames_default()('selected-block-tools-wrapper', {
-      'is-collapsed': isBlockToolsCollapsed
+      'is-collapsed': isBlockToolsCollapsed || !hasBlockSelection
     })
   }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockToolbar, {
     hideDragHandle: true
   })), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Popover.Slot, {
     ref: blockToolbarRef,
     name: "block-toolbar"
-  }), hasBlockSelection && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
     className: "edit-post-header__block-tools-toggle",
     icon: isBlockToolsCollapsed ? library_next : library_previous,
     onClick: () => {
       setIsBlockToolsCollapsed(collapsed => !collapsed);
     },
-    label: isBlockToolsCollapsed ? (0,external_wp_i18n_namespaceObject.__)('Show block tools') : (0,external_wp_i18n_namespaceObject.__)('Hide block tools')
+    label: isBlockToolsCollapsed ? (0,external_wp_i18n_namespaceObject.__)('Show block tools') : (0,external_wp_i18n_namespaceObject.__)('Hide block tools'),
+    size: "compact"
   })), (0,external_React_namespaceObject.createElement)("div", {
     className: classnames_default()('edit-post-header__center', {
-      'is-collapsed': hasHistory && hasBlockSelection && !isBlockToolsCollapsed && hasFixedToolbar && isLargeViewport
+      'is-collapsed': hasHistory && !isBlockToolsCollapsed && showTopToolbar
     })
   }, hasHistory && (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.DocumentBar, null))), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__unstableMotion.div, {
     variants: slideY,
@@ -6733,10 +6707,8 @@ function Layout({
 /**
  * This listener hook monitors for block selection and triggers the appropriate
  * sidebar state.
- *
- * @param {number} postId The current post id.
  */
-const useBlockSelectionListener = postId => {
+const useBlockSelectionListener = () => {
   const {
     hasBlockSelection,
     isEditorSidebarOpened,
@@ -6750,7 +6722,7 @@ const useBlockSelectionListener = postId => {
       isEditorSidebarOpened: select(constants_STORE_NAME).isEditorSidebarOpened(),
       isDistractionFree: get('core', 'distractionFree')
     };
-  }, [postId]);
+  }, []);
   const {
     openGeneralSidebar
   } = (0,external_wp_data_namespaceObject.useDispatch)(constants_STORE_NAME);
@@ -6763,25 +6735,23 @@ const useBlockSelectionListener = postId => {
     } else {
       openGeneralSidebar('edit-post/document');
     }
-  }, [hasBlockSelection, isEditorSidebarOpened]);
+  }, [hasBlockSelection, isDistractionFree, isEditorSidebarOpened, openGeneralSidebar]);
 };
 
 /**
  * This listener hook monitors any change in permalink and updates the view
  * post link in the admin bar.
- *
- * @param {number} postId
  */
-const useUpdatePostLinkListener = postId => {
+const useUpdatePostLinkListener = () => {
   const {
     newPermalink
   } = (0,external_wp_data_namespaceObject.useSelect)(select => ({
     newPermalink: select(external_wp_editor_namespaceObject.store).getCurrentPost().link
-  }), [postId]);
+  }), []);
   const nodeToUpdate = (0,external_wp_element_namespaceObject.useRef)();
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     nodeToUpdate.current = document.querySelector(VIEW_AS_PREVIEW_LINK_SELECTOR) || document.querySelector(VIEW_AS_LINK_SELECTOR);
-  }, [postId]);
+  }, []);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!newPermalink || !nodeToUpdate.current) {
       return;
@@ -6800,14 +6770,11 @@ const useUpdatePostLinkListener = postId => {
  * Data component used for initializing the editor and re-initializes
  * when postId changes or on unmount.
  *
- * @param {number} postId The id of the post.
  * @return {null} This is a data component so does not render any ui.
  */
-function EditorInitialization({
-  postId
-}) {
-  useBlockSelectionListener(postId);
-  useUpdatePostLinkListener(postId);
+function EditorInitialization() {
+  useBlockSelectionListener();
+  useUpdatePostLinkListener();
   return null;
 }
 
@@ -6891,8 +6858,6 @@ function useNavigateToEntityRecord(initialPostId, initialPostType) {
 
 
 
-
-
 /**
  * Internal dependencies
  */
@@ -6904,14 +6869,6 @@ function useNavigateToEntityRecord(initialPostId, initialPostType) {
 const {
   ExperimentalEditorProvider
 } = unlock(external_wp_editor_namespaceObject.privateApis);
-const {
-  BlockRemovalWarningModal
-} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
-// Prevent accidental removal of certain blocks, asking the user for
-// confirmation.
-const blockRemovalRules = {
-  'bindings/core/pattern-overrides': (0,external_wp_i18n_namespaceObject.__)('Blocks from synced patterns that can have overriden content.')
-};
 function Editor({
   postId: initialPostId,
   postType: initialPostType,
@@ -6966,12 +6923,8 @@ function Editor({
     useSubRegistry: false,
     __unstableTemplate: template,
     ...props
-  }, (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.ErrorBoundary, null, (0,external_React_namespaceObject.createElement)(external_wp_commands_namespaceObject.CommandMenu, null), (0,external_React_namespaceObject.createElement)(EditorInitialization, {
-    postId: currentPost.postId
-  }), (0,external_React_namespaceObject.createElement)(components_layout, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.ErrorBoundary, null, (0,external_React_namespaceObject.createElement)(external_wp_commands_namespaceObject.CommandMenu, null), (0,external_React_namespaceObject.createElement)(EditorInitialization, null), (0,external_React_namespaceObject.createElement)(components_layout, {
     initialPost: initialPost
-  }), (0,external_React_namespaceObject.createElement)(BlockRemovalWarningModal, {
-    rules: blockRemovalRules
   })), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostLockedModal, null)));
 }
 /* harmony default export */ const editor = (Editor);

@@ -280,7 +280,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	private function set_access_token( $access_token = '', $refresh_token = '' ) {
 		if ( empty( $access_token ) ) {
 			throw new Exception(
-				__( 'Access token is required.', 'newspack-newsletter' )
+				esc_html__( 'Access token is required.', 'newspack-newsletter' )
 			);
 		}
 		$update_access_token  = update_option( 'newspack_newsletters_constant_contact_api_access_token', $access_token );
@@ -793,7 +793,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 	public function retrieve_campaign_id( $post_id ) {
 		$cc_campaign_id = get_post_meta( $post_id, 'cc_campaign_id', true );
 		if ( ! $cc_campaign_id ) {
-			throw new Exception( __( 'Constant Contact campaign ID not found.', 'newspack-newsletters' ) );
+			throw new Exception( esc_html__( 'Constant Contact campaign ID not found.', 'newspack-newsletters' ) );
 		}
 		return $cc_campaign_id;
 	}
@@ -814,7 +814,7 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 			return new WP_Error( 'newspack_newsletters_error', $e->getMessage() );
 		}
 		return array_map(
-			function( $list ) {
+			function ( $list ) {
 				return [
 					'id'   => $list->list_id,
 					'name' => $list->name,
@@ -1033,5 +1033,4 @@ final class Newspack_Newsletters_Constant_Contact extends \Newspack_Newsletters_
 		$ac_usage_reports = new Newspack_Newsletters_Constant_Contact_Usage_Reports();
 		return $ac_usage_reports->get_usage_report();
 	}
-
 }

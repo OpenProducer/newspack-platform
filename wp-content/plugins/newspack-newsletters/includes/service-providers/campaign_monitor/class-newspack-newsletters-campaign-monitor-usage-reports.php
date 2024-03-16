@@ -112,7 +112,6 @@ class Newspack_Newsletters_Campaign_Monitor_Usage_Reports {
 		}
 
 		return $summed_results;
-
 	}
 
 	/**
@@ -197,7 +196,6 @@ class Newspack_Newsletters_Campaign_Monitor_Usage_Reports {
 			'subscribes'     => $response->response->NewActiveSubscribersYesterday,
 			'unsubscribes'   => $response->response->UnsubscribesYesterday,
 		];
-
 	}
 
 	/**
@@ -248,7 +246,5 @@ class Newspack_Newsletters_Campaign_Monitor_Usage_Reports {
 			'opens'  => $campaign_data['opens'] - $campaign_last_data['opens'],
 			'clicks' => $campaign_data['clicks'] - $campaign_last_data['clicks'],
 		];
-
 	}
-
 }

@@ -181,7 +181,7 @@ class Newspack_Newsletters_Subscription {
 			 * Only remote lists that still exist in the ESP will be returned.
 			 */
 			$return_lists = array_map(
-				function( $list ) {
+				function ( $list ) {
 					if ( ! isset( $list['id'], $list['name'] ) || empty( $list['id'] ) || empty( $list['name'] ) ) {
 						return;
 					}
@@ -978,7 +978,7 @@ class Newspack_Newsletters_Subscription {
 		$email = [
 			'to'      => $user->user_email,
 			/* translators: %s Site title. */
-			'subject' => __( '[%s] Verify your email', 'newspack' ),
+			'subject' => __( '[%s] Verify your email', 'newspack-newsletters' ),
 			'message' => $message,
 			'headers' => $headers,
 		];
@@ -1137,7 +1137,7 @@ class Newspack_Newsletters_Subscription {
 					<ul class="woocommerce-error" role="alert">
 						<li>
 							<?php
-							echo sprintf(
+							printf(
 								// translators: %s: Error message.
 								esc_html__( 'Error while attempting to subscribe: %s', 'newspack-newsletters' ),
 								esc_html( $intent_error )

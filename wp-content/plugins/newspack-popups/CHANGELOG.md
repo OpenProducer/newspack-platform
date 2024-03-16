@@ -1,3 +1,29 @@
+# [2.31.0](https://github.com/Automattic/newspack-popups/compare/v2.30.1...v2.31.0) (2024-03-04)
+
+
+### Bug Fixes
+
+* **preview:** handle additional_classes ([c201f43](https://github.com/Automattic/newspack-popups/commit/c201f43809e0cec227f63fdfa9a3c69dbcabb827))
+
+
+### Features
+
+* **ci:** add epic/* release workflow and rename `master` to `trunk` ([#1271](https://github.com/Automattic/newspack-popups/issues/1271)) ([ed459fe](https://github.com/Automattic/newspack-popups/commit/ed459fe97a2183e22aab10d4a9047494c5e001ed))
+
+# [2.31.0-alpha.2](https://github.com/Automattic/newspack-popups/compare/v2.31.0-alpha.1...v2.31.0-alpha.2) (2024-02-23)
+
+
+### Bug Fixes
+
+* **preview:** handle additional_classes ([c201f43](https://github.com/Automattic/newspack-popups/commit/c201f43809e0cec227f63fdfa9a3c69dbcabb827))
+
+# [2.31.0-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.30.1...v2.31.0-alpha.1) (2024-02-08)
+
+
+### Features
+
+* **ci:** add epic/* release workflow and rename `master` to `trunk` ([#1271](https://github.com/Automattic/newspack-popups/issues/1271)) ([ed459fe](https://github.com/Automattic/newspack-popups/commit/ed459fe97a2183e22aab10d4a9047494c5e001ed))
+
 ## [2.30.1](https://github.com/Automattic/newspack-popups/compare/v2.30.0...v2.30.1) (2024-02-06)
 
 
