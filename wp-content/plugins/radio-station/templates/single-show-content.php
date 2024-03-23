@@ -267,8 +267,22 @@ if ( $show_file ) {
 	if ( $label && ( '' != $label ) ) {
 		$image_blocks['player'] .= '<span class="show-player-label show-label">' . esc_html( $label ) . '</span><br>';
 	}
-	$shortcode = '[audio src="' . $show_file . '" preload="metadata"]';
-	$player_embed = do_shortcode( $shortcode );
+	
+	// 2.5.8: run embed shortcode to embed external audio URLs
+	$wp_embed = $GLOBALS['wp_embed'];
+	$embed = '[embed]' . $show_file . '[/embed]';
+	add_filter( 'embed_maybe_make_link', '__return_false' );
+	$player_embed = $wp_embed->run_shortcode( $embed );
+	remove_filter( 'embed_maybe_make_link', '__return_false' );
+
+	$embedded = false;
+	if ( $player_embed && !stristr( $player_embed, '[audio' ) ) {
+		$embedded = true;
+	} else {
+		$shortcode = '[audio src="' . $show_file . '" preload="metadata"]';
+		$player_embed = do_shortcode( $shortcode );
+	}
+
 	$image_blocks['player'] .= '<div class="show-embed">' . "\n";
 		$image_blocks['player'] .= $player_embed . "\n";
 	$image_blocks['player'] .= '</div>' . "\n";
@@ -287,6 +301,11 @@ if ( $show_file ) {
 	}
 
 	$image_blocks['player'] .= '</div>' . "\n";
+
+	// 2.5.8: full width and height fix for embeds
+	if ( $embedded ) {
+		$image_blocks['player'] .= '<style>.show-embed iframe {width: 100%; height: 100%;</style>' . "\n";
+	}
 }
 
 // 2.3.3.6: allow subblock order to be changed
@@ -671,7 +690,8 @@ if ( $overrides && is_array( $overrides ) && ( count( $overrides ) > 0 ) ) {
 	}
 	$now = radio_station_get_now();
 	foreach ( $overrides as $override ) {
-		if ( 'yes' != $override['disabled'] ) {
+		// 2.5.8: added isset check for override disabled key
+		if ( !isset( $override['disabled'] ) || ( 'yes' != $override['disabled'] ) ) {
 			// 2.5.6: added check that override keys are not empty
 			if ( !empty( $override['date'] ) && !empty( $override['start_hour'] ) && !empty( $override['start_min'] ) && !empty( $override['start_meridian'] ) && !empty( $override['end_hour'] ) && !empty( $override['end_min'] ) && !empty( $override['end_meridian'] ) ) {
 

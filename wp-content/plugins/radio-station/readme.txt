@@ -1,10 +1,10 @@
 === Radio Station by netmix® - Manage and play your Show Schedule in WordPress! ===
 Contributors: tonyzeoli, majick
 Donate link: https://netmix.co/donate
-Tags: dj, music, playlist, radio, shows, scheduling, broadcasting
+Tags: radio station, radio shows, radio station schedule, radio broadcasting, streaming radio player
 Requires at least: 3.3.1
-Tested up to: 6.4.1
-Stable tag: 2.5.7
+Tested up to: 6.4.3
+Stable tag: 2.5.9
 License: GPLv2 or later
 License URI: http://www.gnu.org/licenses/gpl-2.0.html
 
@@ -221,6 +221,10 @@ The latest documentation [can be found online here](https://radiostation.pro/doc
 
 For Radio Station customers using the free, open-source version of our plugin, you can contact us via [our support channel in the WordPress support forums here](https://wordpress.org/plugins/support/radio-station). If you have any bug reports or feature suggestions please [open an issue on our Github repository](https://github.com/netmix/radio-station/) For Radio Station PRO subscribers, you can email us at support@radiostation.pro and someone will respond to your inquiry within 12 to 124 hours. All support inquiries will be handled in the order they are received. Before contacting support or opening an issue, make sure you check for conflicts by disabling all of your plugins and re-enabling them one at a time to ascertain which plugin is conflicting with Radio Station. Note that Radio Station PRO works as an addon to Radio Station, so deactivating it will disable the PRO features until you reactivate it.
 
+= How can I report security bugs?
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/radio-station)
+
 = Can I try Radio Station PRO before I purchase the plugin? =
 
 Yes, you can trial Radio Station PRO for up to 14 days. You are required to set a credit or debit card when you sign up for the free trial and can cancel any time before the trial ends. The credit or debit card on file will be charged automatically once the trial expires 14 days from the date your free trial began. [Click here to start your trial.](https://radiostation.pro/pricing)
@@ -399,6 +403,23 @@ We recommend you test these on a Staging site (or a development copy of your liv
 8. Show Conflict Display
 
 == Changelog ==
+
+= 2.5.9 =
+* Fixed: Missing use of prepare method on some database queries
+* Fixed: Show time conversion on Data API (for current_show/next_show)
+* Added: Vulnerability disclosure program link to FAQ
+* Added: Edit Host/Producer link to admin Show List column
+
+= 2.5.8 =
+* Fixed: Template display for themes showing excerpts on singular pages
+* Fixed: Possible next show duplicates current show in Data API
+* Fixed: Save multiple Show related post values
+* Fixed: Count bug on Override Archive shortcode
+* Fixed: Date/time display on Override Archive shortcode
+* Fixed: Show file Disable Download checkbox saving
+* Added: Use automatic Embeds on external Show file URLs
+* Added: Nonce check to notice dismissal AJAX
+* Changed: Removed player state saving iframe
 
 = 2.5.7 =
 * Updated: Freemius SDK (2.6.0)

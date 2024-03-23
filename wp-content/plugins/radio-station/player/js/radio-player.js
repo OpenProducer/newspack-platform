@@ -686,8 +686,13 @@ function radio_player_save_user_state() {
 			url = radio_player.settings.ajaxurl+'?action=radio_player_state';
 			/* ? TODO: instance ? */
 			url += '&playing='+playing+'&station='+station+'&volume='+volume+'&mute='+mute+'&timestamp='+timestamp;
-			document.getElementById('radio-player-state-iframe').src = url;
+			if (radio_player.debug) {url += '&debug=1';}
+			/* document.getElementById('radio-player-state-iframe').src = url; */
 			radio_data.state.saving = true;
+			jQuery.get(url, function(data) {
+				if (radio_player.debug) {console.log(data);}
+				radio_data.state.saving = false;
+			});
 		}
 	}
 	radio_data.state.changed = false;

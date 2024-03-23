@@ -843,10 +843,11 @@ function radio_player_shortcode( $atts ) {
 	radio_player_enqueue_styles( $atts['script'], false ); // $atts['skin']
 
 	// --- add update iframe to footer ---
+	// 2.5.8: removed iframe in favour of using jquery get
 	// (for saving WordPress logged in user states)
-	if ( function_exists( 'add_action' ) ) {
-		add_action( 'wp_footer', 'radio_player_iframe', 20 );
-	}
+	// if ( function_exists( 'add_action' ) ) {
+	//	add_action( 'wp_footer', 'radio_player_iframe', 20 );
+	// }
 
 	return $player;
 }
@@ -2005,13 +2006,14 @@ function radio_player_get_player_settings( $echo = false ) {
 // -----------------
 // User State Iframe
 // -----------------
+// 2.5.8: removed iframe in favour of using jquery get
 // note: only triggered for WordPress logged in users
-function radio_player_iframe() {
+// function radio_player_iframe() {
 	// echo '<span style="display:none;">FRAME TEST</span>';
-	if ( function_exists( 'is_user_logged_in') && is_user_logged_in() ) {
-		echo "<iframe src='about:blank' id='radio-player-state-iframe' name='radio-player-state-iframe' style='display:none;'></iframe>" . "\n";
-	}
-}
+	// if ( function_exists( 'is_user_logged_in') && is_user_logged_in() ) {
+		// echo "<iframe src='about:blank' id='radio-player-state-iframe' name='radio-player-state-iframe' style='display:none;'></iframe>" . "\n";
+	// }
+// }
 
 // ----------------------
 // AJAX Update User State
@@ -2025,7 +2027,8 @@ if ( function_exists( 'add_action' ) ) {
 function radio_player_state() {
 
 	// --- reset saving state in parent frame ---
-	echo "<script>parent.radio_data.state.saving = false;</script>" . "\n";
+	// 2.5.8: not necessary to do this here
+	// echo "<script>parent.radio_data.state.saving = false;</script>" . "\n";
 
 	if ( !function_exists( 'get_current_user_id' ) || !function_exists( 'update_user_meta' ) ) {
 		exit;
@@ -2061,6 +2064,10 @@ function radio_player_state() {
 		'mute'		=> $mute,
 	);
 	update_user_meta( $user_id, 'radio_player_state', $state );
+	
+	if ( isset( $_REQUEST['debug'] ) && ( '1' == sanitize_text_field( $_REQUEST['debug'] ) ) ) {
+		echo 'User state saved.';
+	}
 	exit;
 }
 

@@ -32,10 +32,20 @@ $playlist = get_post_meta( $post_id, 'playlist', true );
 if ( $playlist ) {
 
 	// 2.4.0.3: added check for played tracks
-	$found = false;
+	$found = $found_album = $found_label = $found_comments = false;
 	foreach ( $playlist as $i => $track ) {
 		if ( 'played' == $track['playlist_entry_status'] ) {
 			$found = true;
+		}
+		// 2.5.8: add check for album, label and comments columns
+		if ( '' != $track['playlist_entry_label'] ) {
+			$found_album = true;
+		}	
+		if ( '' != $track['playlist_entry_label'] ) {
+			$found_label = true;
+		}
+		if ( '' != $track['playlist_entry_comments'] ) {
+			$found_comments = true;
 		}
 	}
 
@@ -47,9 +57,15 @@ if ( $playlist ) {
 				echo '<th>#</th>' . "\n";
 				echo '<th>' . esc_html( __( 'Artist', 'radio-station' ) ) . '</th>' . "\n";
 				echo '<th>' . esc_html( __( 'Song', 'radio-station' ) ) . '</th>' . "\n";
-				echo '<th>' . esc_html( __( 'Album', 'radio-station' ) ) . '</th>' . "\n";
-				echo '<th>' . esc_html( __( 'Label', 'radio-station' ) ) . '</th>' . "\n";
-				echo '<th>' . esc_html( __( 'Comments', 'radio-station' ) ) . '</th>' . "\n";
+				if ( $found_album ) {
+					echo '<th>' . esc_html( __( 'Album', 'radio-station' ) ) . '</th>' . "\n";
+				}
+				if ( $found_label ) {
+					echo '<th>' . esc_html( __( 'Label', 'radio-station' ) ) . '</th>' . "\n";
+				}
+				if ( $found_comments ) {
+					echo '<th>' . esc_html( __( 'Comments', 'radio-station' ) ) . '</th>' . "\n";
+				}
 			echo '</tr>' . "\n";
 
 			$count = 1;
@@ -66,9 +82,15 @@ if ( $playlist ) {
 						echo '<td>' . esc_attr( $count ) . '</td>' . "\n";
 						echo '<td>' . esc_html( $entry['playlist_entry_artist'] ) . '</td>' . "\n";
 						echo '<td>' . esc_html( $entry['playlist_entry_song'] ) . '</td>' . "\n";
-						echo '<td>' . esc_html( $entry['playlist_entry_album'] ) . '</td>' . "\n";
-						echo '<td>' . esc_html( $entry['playlist_entry_label'] ) . '</td>' . "\n";
-						echo '<td>' . esc_html( $entry['playlist_entry_comments'] ) . '</td>' . "\n";
+						if ( $found_album ) {
+							echo '<td>' . esc_html( $entry['playlist_entry_album'] ) . '</td>' . "\n";
+						}
+						if ( $found_label ) {
+							echo '<td>' . esc_html( $entry['playlist_entry_label'] ) . '</td>' . "\n";
+						}
+						if ( $found_comments ) {
+							echo '<td>' . esc_html( $entry['playlist_entry_comments'] ) . '</td>' . "\n";
+						}
 					echo '</tr>' . "\n";
 					$count++;
 				}

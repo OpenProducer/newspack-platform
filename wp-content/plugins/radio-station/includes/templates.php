@@ -490,10 +490,40 @@ function radio_station_override_linked_show_data( $post, $post_type ) {
 // 2.3.0: standalone filter name to allow for replacement
 add_filter( 'the_content', 'radio_station_show_content_template', 11 );
 function radio_station_show_content_template( $content ) {
+	// 2.5.8: added early bypass for non-show pages
+	if ( !is_singular( RADIO_STATION_SHOW_SLUG ) ) {
+		return $content;
+	}
 	remove_filter( 'the_content', 'radio_station_show_content_template', 11 );
 	$output = radio_station_single_content_template( $content, RADIO_STATION_SHOW_SLUG );
 	// 2.3.1: re-add filter so the_content can be processed multuple times
 	add_filter( 'the_content', 'radio_station_show_content_template', 11 );
+	return $output;
+}
+
+// ----------------------------
+// Show Excerpt Template Filter
+// ----------------------------
+// 2.5.8: added fix for themes showing only the excerpt on single show pages
+add_filter( 'the_excerpt', 'radio_station_show_content_template_excerpt', 11 );
+function radio_station_show_content_template_excerpt( $content ) {
+	if ( !is_singular( RADIO_STATION_SHOW_SLUG ) ) {
+		return $content;
+	}
+
+	// 2.5.8: pass unprocesed content as description to content template
+	remove_filter( 'the_content', 'radio_station_show_content_template', 11 );
+	ob_start();
+	the_content();
+	$content = ob_get_contents();
+	ob_end_clean();
+	add_filter( 'the_content', 'radio_station_show_content_template', 11 );
+	
+	remove_filter( 'the_excerpt', 'radio_station_show_content_template', 11 );
+	$output = radio_station_single_content_template( $content, RADIO_STATION_SHOW_SLUG );
+	add_filter( 'the_excerpt', 'radio_station_show_content_template', 11 );
+	// add_filter( 'the_content', 'radio_station_deduplicate_content', 99 );
+
 	return $output;
 }
 
@@ -503,6 +533,10 @@ function radio_station_show_content_template( $content ) {
 // 2.3.0: standalone filter name to allow for replacement
 add_filter( 'the_content', 'radio_station_playlist_content_template', 11 );
 function radio_station_playlist_content_template( $content ) {
+	// 2.5.8: added early bypass for non-playlist pages
+	if ( !is_singular( RADIO_STATION_PLAYLIST_SLUG ) ) {
+		return $content;
+	}
 	remove_filter( 'the_content', 'radio_station_playlist_content_template', 11 );
 	$output = radio_station_single_content_template( $content, RADIO_STATION_PLAYLIST_SLUG );
 	// 2.3.1: re-add filter so the_content can be processed multuple times
@@ -511,15 +545,68 @@ function radio_station_playlist_content_template( $content ) {
 }
 
 // --------------------------------
+// Playlist Excerpt Template Filter
+// --------------------------------
+// 2.5.8: added fix for themes showing only the excerpt on single show pages
+add_filter( 'the_excerpt', 'radio_station_playlist_content_template_excerpt', 11 );
+function radio_station_playlist_content_template_excerpt( $content ) {
+	if ( !is_singular( RADIO_STATION_PLAYLIST_SLUG ) ) {
+		return $content;
+	}
+	remove_filter( 'the_excerpt', 'radio_station_playlist_content_template_excerpt', 11 );
+	remove_filter( 'the_content', 'radio_station_playlist_content_template', 11 );
+	$output = radio_station_single_content_template( $content, RADIO_STATION_PLAYLIST_SLUG );
+	add_filter( 'the_excerpt', 'radio_station_playlist_content_template_excerpt', 11 );
+	// add_filter( 'the_content', 'radio_station_deduplicate_content', 99 );
+	return $output;
+}
+
+// --------------------------
+// Deduplicate Content Filter
+// --------------------------
+function radio_station_deduplicate_content( $content ) {
+	return '';
+}
+
+// --------------------------------
 // Override Content Template Filter
 // --------------------------------
 // 2.3.0: standalone filter name to allow for replacement
 add_filter( 'the_content', 'radio_station_override_content_template', 11 );
 function radio_station_override_content_template( $content ) {
+	// 2.5.8: added early bypass for non-override pages
+	if ( !is_singular( RADIO_STATION_OVERRIDE_SLUG ) ) {
+		return $content;
+	}
 	remove_filter( 'the_content', 'radio_station_override_content_template', 11 );
 	$output = radio_station_single_content_template( $content, RADIO_STATION_OVERRIDE_SLUG );
 	// 2.3.1: re-add filter so the_content can be processed multiple times
 	add_filter( 'the_content', 'radio_station_override_content_template', 11 );
+	return $output;
+}
+
+// --------------------------------
+// Override Excerpt Template Filter
+// --------------------------------
+// 2.5.8: added fix for themes showing only the excerpt on single pages
+add_filter( 'the_excerpt', 'radio_station_override_content_template_excerpt', 11 );
+function radio_station_override_content_template_excerpt( $content ) {
+	if ( !is_singular( RADIO_STATION_OVERRIDE_SLUG ) ) {
+		return $content;
+	}
+
+	// 2.5.8: pass unprocesed content as description to content template
+	remove_filter( 'the_content', 'radio_station_override_content_template', 11 );
+	ob_start();
+	the_content();
+	$content = ob_get_contents();
+	ob_end_clean();
+	add_filter( 'the_content', 'radio_station_override_content_template', 11 );
+
+	remove_filter( 'the_excerpt', 'radio_station_override_content_template_excerpt', 11 );
+	$output = radio_station_single_content_template( $content, RADIO_STATION_OVERRIDE_SLUG );
+	add_filter( 'the_excerpt', 'radio_station_override_content_template_excerpt', 11 );
+	// add_filter( 'the_content', 'radio_station_deduplicate_content', 99 );
 	return $output;
 }
 
@@ -1106,19 +1193,23 @@ function radio_station_get_show_post_link( $output, $format, $link, $adjacent_po
 		// --- get more Shows related to this related Post ---
 		// 2.3.3.6: allow for multiple related posts
 		// 2.3.3.9: added 'i:' prefix to LIKE value matches
-		// TODO: test prepare method on like placeholders
+		// 2.5.9: use wpdb prepare with LIKE statements
 		global $wpdb;
-		$query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta"
-				. " WHERE meta_key = 'post_showblog_id' AND meta_value LIKE '%i:" . $related_shows[0] . "%'";
+		$likes = array( 'i:' . $wpdb->esc_like(  $related_shows[0] ) );
+		$query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta WHERE meta_key = 'post_showblog_id' AND meta_value LIKE '%%%s%%'";
 		if ( count( $related_shows ) > 1 ) {
 			// 2.5.0: fix to loop related_shows (plural)
 			foreach ( $related_shows as $i => $show_id ) {
 				if ( $i > 0 ) {
-					$query .= " OR meta_key = 'post_showblog_id' AND meta_value LIKE '%i:" . $show_id . "%'";
+					$likes[] = 'i:' . $wpdb->esc_like(  $show_id );
+					$query .= " OR meta_key = 'post_showblog_id' AND meta_value LIKE '%%%s%%'";
 				}
 			}
 		}
-		$results = $wpdb->get_results( $query, ARRAY_A );
+		// 2.5.9: fix to use prepare with multiple LIKE strings
+		// $results = $wpdb->get_results( $query, ARRAY_A );
+		$results = $wpdb->get_results( $wpdb->prepare( $query, $likes ), ARRAY_A );
+		
 		if ( RADIO_STATION_DEBUG ) {
 			echo '<span style="display:none;">Related Shows B: ' . esc_html( print_r( $results, true ) ) . '</span>';
 		}

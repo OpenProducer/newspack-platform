@@ -335,9 +335,9 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 		// $query = $wpdb->prepare( $query, $metakey );
 		// $query .= "AND meta_value LIKE '%i:" . $show_id . "%'";
 		// 2.5.6: then use wpdb prepare method for LIKE statement
-		$query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta WHERE meta_key = %s AND meta_value LIKE %s";
-		$query = $wpdb->prepare( $query, array( $metakey, "%i:" . $show_id . "%" ) );
-		$results = $wpdb->get_results( $query, ARRAY_A );
+		// 2.5.9: improve LIKE statement code with prepare method
+		$query = "SELECT post_id,meta_value FROM " . $wpdb->prefix . "postmeta WHERE meta_key = %s AND meta_value LIKE '%%%s%%'";
+		$results = $wpdb->get_results( $wpdb->prepare( $query, array( $metakey, 'i:' . $wpdb->esc_like( $show_id ) ) ), ARRAY_A );
 		if ( RADIO_STATION_DEBUG ) {
 			echo '<span style="display:none;">Related Query: ' . esc_html( $query ) . '</span>';
 			echo '<span style="display:none;">Related Results: ' . esc_html( print_r( $results, true ) ) . '</span>';
@@ -406,9 +406,20 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 	}
 
 	// --- get posts from post IDs ---
-	$post_id_list = implode( ',', $post_ids );
-	$query = "SELECT " . $columns . " FROM " . $wpdb->prefix . "posts";
-	$query .= " WHERE ID IN(" . $post_id_list . ") AND post_status = 'publish'";
+	// 2.5.9: create decimal placeholder list and values array for wpdb prepare
+	$id_list_string = '';
+	$values = array();
+	foreach ( $post_ids as $i => $post_id ) {
+		$id_list_string .= '%d';
+		if ( ( $i + 1 ) != count( $post_ids ) ) {
+			$id_list_string .= ',';
+		}
+		$values[] = $post_id;
+	}
+	// $post_id_list = implode( ',', $post_ids );
+	// $query = "SELECT " . $columns . " FROM " . $wpdb->prefix . "posts WHERE ID IN(" . $post_id_list . ") AND post_status = 'publish'";
+	$query = "SELECT " . $columns . " FROM " . $wpdb->prefix . "posts WHERE ID IN(" . $id_list_string . ") AND post_status = 'publish'";
+	
 	// 2.5.6: allow for alternative ordering attributes
 	if ( !isset( $atts['orderby'] ) || ( 'date' == strtolower( $atts['orderby'] ) ) ) {
 		$query .= " ORDER BY post_date";
@@ -425,9 +436,13 @@ function radio_station_get_show_data( $datatype, $show_id, $args = array(), $att
 	// 2.5.6: add filter to allow for modification of query
 	$query = apply_filters( 'radio_station_show_' . $datatype . '_query', $query, $show_id, $args, $atts );
 	if ( $args['limit'] ) {
-		$query .= $wpdb->prepare( " LIMIT %d", $args['limit'] );
+		$query .= " LIMIT %d";
+		$values[] = $args['limit'];
 	}
-	$results = $wpdb->get_results( $query, ARRAY_A );
+	
+	// 2.5.9: use wpdb prepare with post ID list placeholder string
+	// $results = $wpdb->get_results( $query, ARRAY_A );
+	$results = $wpdb->get_results( $wpdb->prepare( $query, $values ), ARRAY_A );
 	$results = apply_filters( 'radio_station_show_' . $datatype, $results, $show_id, $args, $atts );
 
 	if ( RADIO_STATION_DEBUG ) {
@@ -1542,6 +1557,16 @@ function radio_station_get_host_url( $host_id ) {
 	return $host_url;
 }
 
+// ------------------------------
+// Get DJ / Host Profile Edit URL
+// ------------------------------
+// 2.5.9: added get host edit URL function
+function radio_station_get_host_edit_url( $host_id ) {
+	$host_edit_url = add_query_arg( 'user_id', $host_id, admin_url( 'user-edit.php' ) );
+	$host_edit_url = apply_filters( 'radio_station_host_edit_url', $host_edit_url, $host_id );
+	return $host_edit_url;
+}
+
 // ------------------------
 // Get Producer Profile URL
 // ------------------------
@@ -1551,6 +1576,16 @@ function radio_station_get_producer_url( $producer_id ) {
 	$producer_url = get_author_posts_url( $producer_id );
 	$producer_url = apply_filters( 'radio_station_producer_url', $producer_url, $producer_id );
 	return $producer_url;
+}
+
+// -----------------------------
+// Get Producer Profile Edit URL
+// -----------------------------
+// 2.5.9: added get producer edit URL function
+function radio_station_get_producer_edit_url( $producer_id ) {
+	$producer_edit_url = add_query_arg( 'user_id', $producer_id, admin_url( 'user-edit.php' ) );
+	$producer_edit_url = apply_filters( 'radio_station_producer_edit_url', $producer_edit_url, $producer_id );
+	return $producer_edit_url;
 }
 
 // ---------------
@@ -1904,13 +1939,14 @@ function radio_station_trim_excerpt( $content, $length = false, $more = false, $
 
 		$content = strip_shortcodes( $content );
 
+		// TODO: check for Gutenberg plugin-only equivalent ?
+		// if ( function_exists( 'gutenberg_remove_blocks' ) {
+		//	$content = gutenberg_remove_blocks( $content );
+		// } elseif ( function_exists( 'excerpt_remove_blocks' ) ) {
 		if ( function_exists( 'excerpt_remove_blocks' ) ) {
 			$content = excerpt_remove_blocks( $content );
 		}
-		// TODO: check for Gutenberg plugin-only equivalent ?
-		// elseif ( function_exists( 'gutenberg_remove_blocks' ) {
-		//	$content = gutenberg_remove_blocks( $content );
-		// }
+
 		$content = apply_filters( 'the_content', $content );
 		$content = str_replace( ']]>', ']]&gt;', $content );
 

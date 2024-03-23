@@ -219,11 +219,19 @@ function radio_station_get_broadcast_data() {
 
 	// 2.3.3.5: just in case transients are the same
 	// 2.5.6: added check for empty next_show array
-	if ( !is_array( $next_show ) || ( $current_show == $next_show ) ) {
-		// 2.5.0: change from radio_station_get_time
-		$now = radio_station_get_now();
-		$next_show = radio_station_get_next_show( $now );
-		$next_show = radio_station_convert_show_shift( $next_show );
+	if ( !is_array( $next_show ) || ( is_array( $current_show ) && ( $current_show['ID'] == $next_show['ID'] ) ) ) {
+		// 2.5.8: loop through next shows to prevent duplicate
+		$next_show = false;
+		$next_shows = radio_station_get_next_shows();
+		if ( is_array( $next_shows ) ) {
+			$found = false;
+			foreach ( $next_shows as $show ) {
+				if ( !$found && ( $current_show['ID'] != $show['ID'] ) ) {
+					$next_show = radio_station_convert_show_shift( $show );
+					$found = true;
+				}
+			}
+		}
 	}
 
 	// 2.3.3.5: added current playlist to broadcast data
@@ -1503,11 +1511,12 @@ function radio_station_feed_item_node_producers() {
 function radio_station_convert_show_shift( $shift ) {
 
 	// 2.5.6: use radio_station_get_time instead of date
+	// 2.5.9: revert back to date to prevent incorrect timezone conversions
 	if ( isset( $shift['start'] ) ) {
-		$shift['start'] = radio_station_get_time( 'H:i', strtotime( $shift['start'] ) );
+		$shift['start'] = date( 'H:i', strtotime( $shift['start'] ) );
 	}
 	if ( isset( $shift['end'] ) ) {
-		$shift['end'] = radio_station_get_time( 'H:i', strtotime( $shift['end'] ) );
+		$shift['end'] = date( 'H:i', strtotime( $shift['end'] ) );
 	}
 	return $shift;
 }

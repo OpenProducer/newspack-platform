@@ -586,7 +586,8 @@ function radio_station_archive_list_shortcode( $post_type, $atts ) {
 							$enabled--;
 						}					
 					}
-					if ( 0 == count( $enabled ) ) {
+					// 2.5.8 : fix to double count bug
+					if ( 0 == $enabled ) {
 						unset( $archive_posts[$i] );
 					}
 				}
@@ -614,7 +615,7 @@ function radio_station_archive_list_shortcode( $post_type, $atts ) {
 	} else {
 		$start_data_format = $end_data_format = 'g' . $time_separator . 'i a';
 	}
-	$start_data_format = 'j, ' . $start_data_format;
+	$start_data_format = 'j F, ' . $start_data_format;
 	$start_data_format = apply_filters( 'radio_station_time_format_start', $start_data_format, $post_type . '-archive', $atts );
 	$end_data_format = apply_filters( 'radio_station_time_format_end', $end_data_format, $post_type . '-archive', $atts );
 
@@ -796,15 +797,16 @@ function radio_station_archive_list_shortcode( $post_type, $atts ) {
 						// --- convert date info ---
 						// 2.3.2: replace strtotime with to_time for timezones
 						// 2.3.2: fix to convert to 24 hour format first
+						$date_time = radio_station_to_time( $override_time['date'] );
 						// $day = radio_station_get_time( 'day', $date_time );
 						// $display_day = radio_station_translate_weekday( $day );
-						$date_time = radio_station_to_time( $override_time['date'] );
 						$start = $override_time['start_hour'] . ':' . $override_time['start_min'] . ' ' . $override_time['start_meridian'];
 						$end = $override_time['end_hour'] . ':' . $override_time['end_min'] . ' ' . $override_time['end_meridian'];
 						$start_time = radio_station_convert_shift_time( $start );
 						$end_time = radio_station_convert_shift_time( $end );
-						$shift_start_time = radio_station_to_time( $override_time['day'] . ' ' . $start_time );
-						$shift_end_time = radio_station_to_time( $override_time['day'] . ' ' . $end_time );
+						// 2.5.8: fix to use date instead of day key
+						$shift_start_time = radio_station_to_time( $override_time['date'] . ' ' . $start_time );
+						$shift_end_time = radio_station_to_time( $override_time['date'] . ' ' . $end_time );
 						// 2.3.3.9: added or equals to operator
 						if ( $shift_end_time <= $shift_start_time ) {
 							$shift_end_time = $shift_end_time + ( 24 * 60 * 60 );

@@ -12,7 +12,7 @@ Tags: dj, music, playlist, radio, shows, scheduling, broadcasting
 
 Requires at least: 3.3.1
 
-Tested up to: 6.4.1
+Tested up to: 6.4.2
 
 Stable tag: 2.5.7
 
@@ -234,6 +234,10 @@ The latest documentation [can be found online here](https://radiostation.pro/doc
 
 For Radio Station customers using the free, open-source version of our plugin, you can contact us via [our support channel in the WordPress support forums here](https://wordpress.org/plugins/support/radio-station). If you have any bug reports or feature suggestions please [open an issue on our Github repository](https://github.com/netmix/radio-station/) For Radio Station PRO subscribers, you can email us at support@radiostation.pro and someone will respond to your inquiry within 12 to 124 hours. All support inquiries will be handled in the order they are received. Before contacting support or opening an issue, make sure you check for conflicts by disabling all of your plugins and re-enabling them one at a time to ascertain which plugin is conflicting with Radio Station. Note that Radio Station PRO works as an addon to Radio Station, so deactivating it will disable the PRO features until you reactivate it.
 
+#####  How can I report security bugs?
+
+You can report security bugs through the Patchstack Vulnerability Disclosure Program. The Patchstack team help validate, triage and handle any security vulnerabilities. [Report a security vulnerability.](https://patchstack.com/database/vdp/radio-station)
+
 ##### Can I try Radio Station PRO before I purchase the plugin?
 
 Yes, you can trial Radio Station PRO for up to 14 days. You are required to set a credit or debit card when you sign up for the free trial and can cancel any time before the trial ends. The credit or debit card on file will be charged automatically once the trial expires 14 days from the date your free trial began. [Click here to start your trial.](https://radiostation.pro/pricing)
@@ -423,7 +427,6 @@ We are constantly improving and adding new features to [Radio Station Pro](https
 **Important Note**: As we are developing the Free and Pro versions in tandem, the latest Pro Beta may require you to install a development version of the Free plugin for it to work. Please see the previous section for how you can install the development version from Github (if the required version is not yet available via the WordPress repository.)
 
 We recommend you test these on a Staging site (or a development copy of your live site.) This way you can make sure there are no significant bugs before using it on a production site. Of course, please be willing to [report any bugs](https://github.com/netmix/radio-station/issues) that you do find so we can ensure they are not present in the next official release.
-
 
 ## Changelog
 

@@ -6,7 +6,7 @@ Plugin Name: Radio Station
 Plugin URI: https://radiostation.pro/radio-station
 Description: Adds Show pages, DJ role, playlist and on-air programming functionality to your site.
 Author: Tony Zeoli, Tony Hayes
-Version: 2.5.7
+Version: 2.5.9
 Requires at least: 3.3.1
 Text Domain: radio-station
 Domain Path: /languages
@@ -1103,12 +1103,12 @@ function radio_station_delete_transients_with_prefix( $prefix ) {
 	$prefix = $wpdb->esc_like( '_transient_' . $prefix . '_' );
 
 	// 2.3.3.9: fix to LIKE match
-	// TODO: use wpdb_prepare on LIKE statement ?
-	// $like = '%' . $prefix . '%';
-	// $query = "SELECT `option_name` FROM " . $wpdb->prefix . "options WHERE `option_name` LIKE '%s'";
-	// $results = $wpdb->get_results( $wpdb->prepare( $query, $like ), ARRAY_A );
-	$query = "SELECT `option_name` FROM " . $wpdb->prefix . "options WHERE `option_name` LIKE '%" . $prefix . "%'";
-	$results = $wpdb->get_results( $query, ARRAY_A );
+	// $query = "SELECT `option_name` FROM " . $wpdb->prefix . "options WHERE `option_name` LIKE '%" . $prefix . "%'";
+	// $results = $wpdb->get_results( $query, ARRAY_A );
+	// 2.5.9: use wpdb_prepare on LIKE statement
+	// ref: https://wordpress.stackexchange.com/a/8834/76440
+	$query = "SELECT `option_name` FROM " . $wpdb->prefix . "options WHERE `option_name` LIKE '%%%s%%'";
+	$results = $wpdb->get_results( $wpdb->prepare( $query, $prefix ), ARRAY_A );
 
 	// if ( RADIO_STATION_DEBUG ) {
 	//	echo $query . PHP_EOL . '<br>';

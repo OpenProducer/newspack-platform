@@ -954,6 +954,17 @@ $options = array(
 		'pro'     => true,
 	),
 
+	// --- [Pro] Use Latest Episode ---
+	'episode_use_latest' => array(
+		'type'    => 'checkbox',
+		'label'   => __( 'Use Latest Episode', 'radio-station' ),
+		'value'   => 'yes',
+		'default' => 'yes',
+		'helper'  => __( 'Automatically use the latest Episode URL for the player embed on the Show page.', 'radio-station' ),
+		'tab'     => 'pages',
+		'section' => 'episode',
+		'pro'     => true,
+	),
 
 	// ==== Post Type Archives ===
 	// 2.4.0.6: move archives to separate tab
@@ -1057,6 +1068,32 @@ $options = array(
 	// 	'tab'     => 'archives',
 	// 	'section' => 'posttypes',
 	// ),
+
+	// --- [Pro] Episodes Archive Page ---
+	// 2.5.8: added episodes archive page option
+	'episode_archive_page' => array(
+		'label'   => __( 'Episodes Archive Page', 'radio-station' ),
+		'type'    => 'select',
+		'options' => 'PAGEID',
+		'default' => '',
+		'helper'  => __( 'Select the Page for displaying the Episode archive list.', 'radio-station' ),
+		'tab'     => 'archives',
+		'section' => 'posttypes',
+		'pro'     => true,
+	),
+
+	// --- [Pro] Automatic Display ---
+	// 2.5.8: added episodes archive automatic display option
+	'episode_archive_auto' => array(
+		'label'   => __( 'Automatic Display', 'radio-station' ),
+		'type'    => 'checkbox',
+		'value'   => 'yes',
+		'default' => 'yes',
+		'helper'  => __( 'Replaces selected page content with default Episode Archive. Alternatively customize display using the shortcode:', 'radio-station' ) . ' [episodes-archive]',
+		'tab'     => 'archives',
+		'section' => 'posttypes',
+		'pro'     => true,
+	),
 
 	// --- [Pro] Team Archive Page ---
 	// 2.4.0.6: added option for team archive page
