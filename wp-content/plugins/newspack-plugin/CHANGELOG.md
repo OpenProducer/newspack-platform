@@ -1,3 +1,10 @@
+## [3.3.4](https://github.com/Automattic/newspack-plugin/compare/v3.3.3...v3.3.4) (2024-03-20)
+
+
+### Bug Fixes
+
+* **memberships-gate:** handle no comments ([#2999](https://github.com/Automattic/newspack-plugin/issues/2999)) ([7973c8e](https://github.com/Automattic/newspack-plugin/commit/7973c8ea85faea4fcfb50a69a9ad8d03324a09f9))
+
 ## [3.3.3](https://github.com/Automattic/newspack-plugin/compare/v3.3.2...v3.3.3) (2024-03-12)
 
 
