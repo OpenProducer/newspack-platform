@@ -8,6 +8,8 @@
 /**
  * Renders the `core/post-featured-image` block on the server.
  *
+ * @since 5.8.0
+ *
  * @param array    $attributes Block attributes.
  * @param string   $content    Block default content.
  * @param WP_Block $block      Block instance.
@@ -47,6 +49,13 @@ function gutenberg_render_block_core_post_featured_image( $attributes, $content,
 
 	if ( ! empty( $attributes['scale'] ) ) {
 		$extra_styles .= "object-fit:{$attributes['scale']};";
+	}
+	if ( ! empty( $attributes['style']['shadow'] ) ) {
+		$shadow_styles = gutenberg_style_engine_get_styles( array( 'shadow' => $attributes['style']['shadow'] ) );
+
+		if ( ! empty( $shadow_styles['css'] ) ) {
+			$extra_styles .= $shadow_styles['css'];
+		}
 	}
 
 	if ( ! empty( $extra_styles ) ) {
@@ -125,6 +134,8 @@ function gutenberg_render_block_core_post_featured_image( $attributes, $content,
 /**
  * Generate markup for the HTML element that will be used for the overlay.
  *
+ * @since 6.1.0
+ *
  * @param array $attributes Block attributes.
  *
  * @return string HTML markup in string format.
@@ -191,6 +202,8 @@ function gutenberg_get_block_core_post_featured_image_overlay_element_markup( $a
  * Generates class names and styles to apply the border support styles for
  * the Post Featured Image block.
  *
+ * @since 6.1.0
+ *
  * @param array $attributes The block attributes.
  * @return array The border-related classnames and styles for the block.
  */
@@ -241,6 +254,8 @@ function gutenberg_get_block_core_post_featured_image_border_attributes( $attrib
 
 /**
  * Registers the `core/post-featured-image` block on the server.
+ *
+ * @since 5.8.0
  */
 function gutenberg_register_block_core_post_featured_image() {
 	register_block_type_from_metadata(

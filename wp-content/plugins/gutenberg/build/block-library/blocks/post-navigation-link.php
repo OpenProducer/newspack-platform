@@ -8,6 +8,8 @@
 /**
  * Renders the `core/post-navigation-link` block on the server.
  *
+ * @since 5.9.0
+ *
  * @param array  $attributes Block attributes.
  * @param string $content    Block default content.
  *
@@ -123,6 +125,8 @@ function gutenberg_render_block_core_post_navigation_link( $attributes, $content
 
 /**
  * Registers the `core/post-navigation-link` block on the server.
+ *
+ * @since 5.9.0
  */
 function gutenberg_register_block_core_post_navigation_link() {
 	register_block_type_from_metadata(

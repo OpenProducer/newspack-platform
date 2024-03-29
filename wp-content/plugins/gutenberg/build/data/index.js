@@ -2169,6 +2169,11 @@ function isShallowEqual(a, b, fromIndex) {
 
 
 /**
+ * WordPress dependencies
+ */
+
+
+/**
  * Internal dependencies
  */
 
@@ -2198,10 +2203,16 @@ function getResolutionState(state, selectorName, args) {
 }
 
 /**
- * Returns the raw `isResolving` value for a given selector name,
- * and arguments set. May be undefined if the selector has never been resolved
- * or not resolved for the given set of arguments, otherwise true or false for
- * resolution started and completed respectively.
+ * Returns an `isResolving`-like value for a given selector name and arguments set.
+ * Its value is either `undefined` if the selector has never been resolved or has been
+ * invalidated, or a `true`/`false` boolean value if the resolution is in progress or
+ * has finished, respectively.
+ *
+ * This is a legacy selector that was implemented when the "raw" internal data had
+ * this `undefined | boolean` format. Nowadays the internal value is an object that
+ * can be retrieved with `getResolutionState`.
+ *
+ * @deprecated
  *
  * @param {State}      state        Data state.
  * @param {string}     selectorName Selector name.
@@ -2210,6 +2221,11 @@ function getResolutionState(state, selectorName, args) {
  * @return {boolean | undefined} isResolving value.
  */
 function getIsResolving(state, selectorName, args) {
+  external_wp_deprecated_default()('wp.data.select( store ).getIsResolving', {
+    since: '6.6',
+    version: '6.8',
+    alternative: 'wp.data.select( store ).getResolutionState'
+  });
   const resolutionState = getResolutionState(state, selectorName, args);
   return resolutionState && resolutionState.status === 'resolving';
 }

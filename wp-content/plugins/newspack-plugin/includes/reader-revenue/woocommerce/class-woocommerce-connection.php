@@ -150,7 +150,7 @@ class WooCommerce_Connection {
 	 */
 	public static function get_contact_order_metadata( $order, $payment_page_url = false, $is_new = false ) {
 		if ( ! is_a( $order, 'WC_Order' ) ) {
-			$order = new \WC_Order( $order );
+			$order = \wc_get_order( $order );
 		}
 
 		if ( ! self::should_sync_order( $order ) ) {
@@ -177,13 +177,20 @@ class WooCommerce_Connection {
 			}
 		}
 
-		$order_subscriptions = \wcs_get_subscriptions_for_order( $order->get_id(), [ 'order_type' => 'any' ] );
+		$order_subscriptions = \wcs_is_subscription( $order ) ? [ $order ] : \wcs_get_subscriptions_for_order( $order->get_id(), [ 'order_type' => 'any' ] );
 		$is_donation_order   = Donations::is_donation_order( $order );
 
 		// One-time transaction.
 		if ( empty( $order_subscriptions ) ) {
+
+			/**
+			 * For donation-type products, use donation membership status as defined by BlueLena.
+			 * For non-donation-type products, we just need to know that the reader is a customer.
+			 */
 			if ( $is_donation_order ) {
 				$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'Donor';
+			} else {
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = 'customer';
 			}
 
 			$metadata[ Newspack_Newsletters::get_metadata_key( 'product_name' ) ] = '';
@@ -201,6 +208,10 @@ class WooCommerce_Connection {
 		} else {
 			$current_subscription = reset( $order_subscriptions );
 
+			/**
+			 * For donation-type products, use donation membership status as defined by BlueLena.
+			 * For non-donation-type products, use the subscription's current status.
+			 */
 			if ( $is_donation_order ) {
 				$donor_status = 'Donor';
 				if ( 'month' === $current_subscription->get_billing_period() ) {
@@ -215,6 +226,8 @@ class WooCommerce_Connection {
 					$donor_status = 'Ex-' . $donor_status;
 				}
 				$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = $donor_status;
+			} else {
+				$metadata[ Newspack_Newsletters::get_metadata_key( 'membership_status' ) ] = $current_subscription->get_status();
 			}
 
 			$metadata[ Newspack_Newsletters::get_metadata_key( 'sub_start_date' ) ]    = $current_subscription->get_date( 'start' );
@@ -305,7 +318,7 @@ class WooCommerce_Connection {
 	 */
 	public static function get_contact_from_order( $order, $payment_page_url = false, $is_new = false ) {
 		if ( ! is_a( $order, 'WC_Order' ) ) {
-			$order = new \WC_Order( $order );
+			$order = \wc_get_order( $order );
 		}
 
 		if ( ! self::should_sync_order( $order ) ) {

@@ -1545,6 +1545,51 @@ class Newspack_Blocks {
 	}
 
 	/**
+	 * Get post date to be displayed.
+	 *
+	 * @param WP_Post $post Post object.
+	 * @return string Date string.
+	 */
+	public static function get_displayed_post_date( $post = null ) {
+		if ( $post === null ) {
+			$post = get_post();
+		}
+		return apply_filters( 'newspack_blocks_displayed_post_date', mysql_to_rfc3339( $post->post_date ), $post );
+	}
+
+	/**
+	 * Get post date to be displayed, formatted.
+	 *
+	 * @param WP_Post $post Post object.
+	 * @return string Formatted date.
+	 */
+	public static function get_formatted_displayed_post_date( $post = null ) {
+		if ( $post === null ) {
+			$post = get_post();
+		}
+		$date           = self::get_displayed_post_date( $post );
+		$date           = new DateTime( $date );
+		$date_format    = get_option( 'date_format' );
+		$date_formatted = date_i18n( $date_format, $date->getTimestamp() );
+		return apply_filters( 'newspack_blocks_formatted_displayed_post_date', $date_formatted, $post );
+	}
+
+	/**
+	 * Get article meta footer.
+	 *
+	 * @param WP_Post $post Post object.
+	 */
+	public static function get_article_meta_footer( $post = null ) {
+		if ( $post === null ) {
+			$post = get_post();
+		}
+		$meta_footer = apply_filters( 'newspack_blocks_article_meta_footer', '', $post );
+		if ( strlen( $meta_footer ) > 0 ) {
+			return '<span style="margin: 0 6px;" class="newspack_blocks__article-meta-footer__separator">|</span>' . $meta_footer;
+		}
+	}
+
+	/**
 	 * Get a formatted HTML string containing amount and frequency of a donation.
 	 *
 	 * @param float  $amount Amount.

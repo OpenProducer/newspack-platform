@@ -69,6 +69,7 @@ export type Config = {
 	sync_esp_delete?: boolean;
 	active_campaign_master_list?: number;
 	mailchimp_audience_id?: string;
+	mailchimp_reader_default_status?: string;
 	emails?: {
 		[ key in EmailSlugs ]: {
 			label: string;

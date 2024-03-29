@@ -1160,7 +1160,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				];
 			}
 
-			// If we're subscribing the contact to a newsletter, they should have some status 
+			// If we're subscribing the contact to a newsletter, they should have some status
 			// because 'non-subscriber' status can't receive newsletters.
 			if ( ! empty( $group_id ) || ! empty( $list_id ) ) {
 				$update_payload['status_if_new'] = $new_contact_status ?? 'subscribed';
@@ -1179,6 +1179,8 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			if (
 				! $result ||
 				! isset( $result['status'] ) ||
+				// See Mailchimp error code glossary: https://mailchimp.com/developer/marketing/docs/errors/#error-glossary.
+				(int) $result['status'] >= 400 ||
 				( isset( $result['errors'] ) && count( $result['errors'] ) )
 			) {
 				return new WP_Error(

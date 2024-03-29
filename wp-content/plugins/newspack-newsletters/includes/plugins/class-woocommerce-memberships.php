@@ -56,7 +56,7 @@ class Woocommerce_Memberships {
 	 * Initialize the hooks after all plugins are loaded
 	 */
 	public static function init_hooks() {
-		if ( ! class_exists( 'WC_Memberships_Loader' ) ) {
+		if ( ! class_exists( 'WC_Memberships_Loader' ) || ! function_exists( 'wc_memberships_is_post_content_restricted' ) ) {
 			return;
 		}
 		add_filter( 'newspack_newsletters_contact_lists', [ __CLASS__, 'filter_lists' ] );
@@ -87,7 +87,7 @@ class Woocommerce_Memberships {
 					return false;
 				}
 
-				$is_post_restricted = wc_memberships_is_post_content_restricted( $list_object->get_id() );
+				$is_post_restricted = \wc_memberships_is_post_content_restricted( $list_object->get_id() );
 
 				if ( ! $is_post_restricted ) {
 					return true;
@@ -95,7 +95,7 @@ class Woocommerce_Memberships {
 
 				$user_id = self::$user_id_in_scope ?? get_current_user_id();
 
-				return wc_memberships_user_can( $user_id, 'view', [ 'post' => $list_object->get_id() ] );
+				return \wc_memberships_user_can( $user_id, 'view', [ 'post' => $list_object->get_id() ] );
 			}
 		);
 		return array_values( $lists );
@@ -312,7 +312,13 @@ class Woocommerce_Memberships {
 		}
 
 		$provider = Newspack_Newsletters::get_service_provider();
-		$provider->update_contact_lists_handling_local( $user_email, $lists_to_add );
+		$result = $provider->update_contact_lists_handling_local( $user_email, $lists_to_add );
+
+		if ( is_wp_error( $result ) ) {
+			Newspack_Newsletters_Logger::log( 'An error occured while updating lists for ' . $user_email . ': ' . $result->get_error_message() );
+			return;
+		}
+
 		Newspack_Newsletters_Logger::log( 'Reader ' . $user_email . ' added to the following lists: ' . implode( ', ', $lists_to_add ) );
 	}
 

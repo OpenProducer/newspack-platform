@@ -77,6 +77,8 @@ function gutenberg_render_block_core_query( $attributes, $content, $block ) {
 
 /**
  * Registers the `core/query` block on the server.
+ *
+ * @since 5.8.0
  */
 function gutenberg_register_block_core_query() {
 	register_block_type_from_metadata(

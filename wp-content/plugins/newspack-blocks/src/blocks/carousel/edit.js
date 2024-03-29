@@ -252,8 +252,8 @@ class Edit extends Component {
 						<Fragment>
 							{ autoplay && (
 								<Fragment>
-									<button ref={ this.btnPauseRef } />
-									<button ref={ this.btnPlayRef } />
+									<button className="swiper-button swiper-button-pause" ref={ this.btnPauseRef } />
+									<button className="swiper-button swiper-button-play" ref={ this.btnPlayRef } />
 								</Fragment>
 							) }
 							<div className="swiper-wrapper">

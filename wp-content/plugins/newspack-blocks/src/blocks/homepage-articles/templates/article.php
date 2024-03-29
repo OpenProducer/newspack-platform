@@ -235,12 +235,13 @@ call_user_func(
 									),
 								)
 							),
-							esc_attr( get_the_date( DATE_W3C ) ),
-							esc_html( get_the_date() ),
+							esc_attr( Newspack_Blocks::get_displayed_post_date() ),
+							esc_html( Newspack_Blocks::get_formatted_displayed_post_date() ),
 							esc_attr( get_the_modified_date( DATE_W3C ) ),
 							esc_html( get_the_modified_date() )
 						);
 					endif;
+					echo Newspack_Blocks::get_article_meta_footer();  // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
 					?>
 				</div><!-- .entry-meta -->
 			<?php endif; ?>

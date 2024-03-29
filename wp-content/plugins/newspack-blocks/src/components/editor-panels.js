@@ -31,10 +31,21 @@ const CheckboxesGroup = ( { options, values, onChange } ) => {
 export const PostTypesPanel = ( { attributes, setAttributes } ) => {
 	const { availablePostTypes } = useSelect( select => {
 		const { getPostTypes } = select( 'core' );
+		const listingsLabel = __( 'Listings', 'newspack-blocks' );
 		return {
-			availablePostTypes: getPostTypes( { per_page: -1 } )?.filter(
-				( { supports: { newspack_blocks: newspackBlocks } } ) => newspackBlocks
-			),
+			availablePostTypes: getPostTypes( { per_page: -1 } )
+				?.filter( ( { supports: { newspack_blocks: newspackBlocks } } ) => newspackBlocks )
+				?.map( postType => {
+					// Disambiguate the "Listings" post types.
+					if (
+						postType.slug.indexOf( 'newspack_lst' ) === 0 &&
+						postType.slug !== 'newspack_lst_generic' &&
+						postType.name.indexOf( listingsLabel ) === -1
+					) {
+						postType.name = `${ postType.name } ${ listingsLabel }`;
+					}
+					return postType;
+				} ),
 		};
 	} );
 

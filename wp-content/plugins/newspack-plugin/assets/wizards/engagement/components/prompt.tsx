@@ -122,7 +122,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 
 	const unblock = hooks.usePrompt(
 		isDirty,
-		__( 'You have unsaved changes. Discard changes?', 'newspack' )
+		__( 'You have unsaved changes. Discard changes?', 'newspack-plugin' )
 	);
 
 	const savePrompt = ( slug: string, data: InputValues ) => {
@@ -143,7 +143,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 			} )
 				.then( ( fetchedPrompts: Array< PromptType > ) => {
 					setPrompts( fetchedPrompts );
-					setSuccess( __( 'Prompt saved.', 'newspack' ) );
+					setSuccess( __( 'Prompt saved.', 'newspack-plugin' ) );
 					setIsDirty( false );
 					res();
 				} )
@@ -167,12 +167,12 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 			title={ prompt.title }
 			description={ sprintf(
 				// Translators: Status of the prompt.
-				__( 'Status: %s', 'newspack' ),
+				__( 'Status: %s', 'newspack-plugin' ),
 				isDirty
-					? __( 'Unsaved changes', 'newspack' )
+					? __( 'Unsaved changes', 'newspack-plugin' )
 					: prompt.ready
-					? __( 'Ready', 'newspack' )
-					: __( 'Pending', 'newspack' )
+					? __( 'Ready', 'newspack-plugin' )
+					: __( 'Pending', 'newspack-plugin' )
 			) }
 			checkbox={ prompt.ready && ! isDirty ? 'checked' : 'unchecked' }
 		>
@@ -274,7 +274,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 										label={ field.label }
 									>
 										<ImageUpload
-											buttonLabel={ __( 'Select file', 'newspack' ) }
+											buttonLabel={ __( 'Select file', 'newspack-plugin' ) }
 											disabled={ inFlight }
 											image={ image }
 											onChange={ ( attachment: Attachment ) => {
@@ -297,7 +297,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 						) ) }
 						{ error && (
 							<Notice
-								noticeText={ error?.message || __( 'Something went wrong.', 'newspack' ) }
+								noticeText={ error?.message || __( 'Something went wrong.', 'newspack-plugin' ) }
 								isError
 							/>
 						) }
@@ -312,11 +312,13 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 								disabled={ inFlight }
 							>
 								{ inFlight
-									? __( 'Saving…', 'newspack' )
+									? __( 'Saving…', 'newspack-plugin' )
 									: sprintf(
 											// Translators: Save or Update settings.
-											__( '%s prompt settings', 'newspack' ),
-											prompt.ready ? __( 'Update', 'newspack' ) : __( 'Save', 'newspack' )
+											__( '%s prompt settings', 'newspack-plugin' ),
+											prompt.ready
+												? __( 'Update', 'newspack-plugin' )
+												: __( 'Save', 'newspack-plugin' )
 									  ) }
 							</Button>
 							<WebPreview
@@ -328,7 +330,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 										isSecondary
 										onClick={ async () => showPreview() }
 									>
-										{ __( 'Preview prompt', 'newspack' ) }
+										{ __( 'Preview prompt', 'newspack-plugin' ) }
 									</Button>
 								) }
 							/>
@@ -342,7 +344,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 									<span dangerouslySetInnerHTML={ { __html: helpInfo.description } } />{ ' ' }
 									{ helpInfo.url && (
 										<ExternalLink href={ helpInfo.url }>
-											{ __( 'Learn more', 'newspack' ) }
+											{ __( 'Learn more', 'newspack-plugin' ) }
 										</ExternalLink>
 									) }
 								</p>
@@ -350,7 +352,7 @@ export default function Prompt( { inFlight, prompt, setInFlight, setPrompts }: P
 							{ helpInfo.recommendations && (
 								<>
 									<h4 className="newspack-ras-campaign__recommendation-heading">
-										{ __( 'We recommend', 'newspack' ) }
+										{ __( 'We recommend', 'newspack-plugin' ) }
 									</h4>
 									<ul>
 										{ helpInfo.recommendations.map( ( recommendation, index ) => (

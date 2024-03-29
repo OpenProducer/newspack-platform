@@ -18,6 +18,8 @@ $block_core_latest_posts_excerpt_length = 0;
  * Callback for the excerpt_length filter used by
  * the Latest Posts block at render time.
  *
+ * @since 5.4.0
+ *
  * @return int Returns the global $block_core_latest_posts_excerpt_length variable
  *             to allow the excerpt_length filter respect the Latest Block setting.
  */
@@ -28,6 +30,8 @@ function gutenberg_block_core_latest_posts_get_excerpt_length() {
 
 /**
  * Renders the `core/latest-posts` block on server.
+ *
+ * @since 5.0.0
  *
  * @param array $attributes The block attributes.
  *
@@ -218,6 +222,8 @@ function gutenberg_render_block_core_latest_posts( $attributes ) {
 
 /**
  * Registers the `core/latest-posts` block on server.
+ *
+ * @since 5.0.0
  */
 function gutenberg_register_block_core_latest_posts() {
 	register_block_type_from_metadata(
@@ -240,6 +246,8 @@ add_action( 'init', 'gutenberg_register_block_core_latest_posts', 20 );
  *
  * TODO: Remove when and if the bottom client-side deprecation for this block
  * is removed.
+ *
+ * @since 5.5.0
  *
  * @param array $block A single parsed block object.
  *

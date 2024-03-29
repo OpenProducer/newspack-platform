@@ -53,12 +53,12 @@ class ActiveCampaign {
 	 *
 	 * @param array $contact Contact info to sync to ESP.
 	 */
-	private static function put( $contact ) {
+	public static function put( $contact ) {
 		$master_list_id = Reader_Activation::get_setting( 'active_campaign_master_list' );
 		if ( ! $master_list_id ) {
 			return;
 		}
-		\Newspack_Newsletters_Subscription::add_contact( $contact, $master_list_id );
+		return \Newspack_Newsletters_Subscription::add_contact( $contact, $master_list_id );
 	}
 
 	/**
@@ -142,22 +142,11 @@ class ActiveCampaign {
 	 * @param int   $client_id ID of the client that triggered the event.
 	 */
 	public static function subscription_updated( $timestamp, $data, $client_id ) {
-		if ( empty( $data['status_before'] ) || empty( $data['status_after'] ) || empty( $data['user_id'] ) ) {
+		if ( empty( $data['status_before'] ) || empty( $data['status_after'] ) || empty( $data['subscription_id'] ) ) {
 			return;
 		}
 
-		/*
-		 * If the subscription is being activated after a successful first or renewal payment,
-		 * the contact will be synced when that order is completed, so no need to sync again.
-		 */
-		if (
-			( 'pending' === $data['status_before'] || 'on-hold' === $data['status_before'] ) &&
-			'active' === $data['status_after'] ) {
-			return;
-		}
-
-		$customer = new \WC_Customer( $data['user_id'] );
-		$contact  = WooCommerce_Connection::get_contact_from_customer( $customer );
+		$contact = WooCommerce_Connection::get_contact_from_order( $data['subscription_id'] );
 
 		if ( ! $contact ) {
 			return;

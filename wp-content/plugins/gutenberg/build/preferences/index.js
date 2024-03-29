@@ -701,7 +701,7 @@ function PreferencesModalTabs({
         gap: "6"
       }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalNavigatorBackButton, {
         icon: (0,external_wp_i18n_namespaceObject.isRTL)() ? chevron_right : chevron_left,
-        "aria-label": (0,external_wp_i18n_namespaceObject.__)('Navigate to the previous view')
+        label: (0,external_wp_i18n_namespaceObject.__)('Back')
       }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalText, {
         size: "16"
       }, section.tabLabel)), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.CardBody, null, section.content)));

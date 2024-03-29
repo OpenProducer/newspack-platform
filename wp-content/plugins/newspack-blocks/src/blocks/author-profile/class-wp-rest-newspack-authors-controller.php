@@ -84,12 +84,13 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 		// Total number of users and guest authors.
 		$guest_author_total = 0;
 		$user_total         = 0;
-		$guest_authors = [];
-		$linked_guest_authors = [];
+		$guest_authors      = [];
+		$users              = [];
 
 		// Get Co-authors guest authors.
 		if ( $is_guest_author ) {
-			$guest_author_args = [
+			$unlinked_guest_authors = [];
+			$guest_author_args      = [
 				'post_type'      => 'guest-author',
 				'posts_per_page' => $per_page,
 				'offset'         => $offset,
@@ -98,44 +99,44 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 			if ( $search && ! $author_id ) {
 				$guest_author_args['s'] = $search;
 			}
+
 			if ( $author_id ) {
 				$guest_author_args['p'] = $author_id;
 			}
+
 			if ( $include ) {
 				$guest_author_args['post__in']            = $include;
 				$guest_author_args['ignore_sticky_posts'] = true;
 			}
 
-			$guest_authors      = get_posts( $guest_author_args );
+			$guest_authors = get_posts( $guest_author_args );
+
+			// If we are searching for a specific ID we want to return the guest author regardless of if it is linked or not.
+			if ( ! $author_id ) {
+				foreach ( $guest_authors as $ga ) {
+					$linked_guest_author = get_post_meta( $ga->ID, 'cap-linked_account', true );
+
+					if ( $linked_guest_author ) {
+						continue;
+					}
+
+					$unlinked_guest_authors[] = $ga;
+				}
+
+				$guest_authors = $unlinked_guest_authors;
+			}
+
 			$guest_author_total = count( $guest_authors );
 		}
 
-		foreach ( $guest_authors as $ga ) {
-			$linked_guest_author = get_post_meta( $ga->ID, 'cap-linked_account', true );
-
-			if ( $linked_guest_author ) {
-				$linked_guest_authors[] = $linked_guest_author;
-			}
-		}
-
-		$users = [];
-
-		// If passed an author ID.
+		// If we are searching for a specific ID we just want to return the specific user.
 		if ( $author_id ) {
+			// Unless we've already identified a guest author.
 			if ( 0 === $guest_author_total ) {
 				$user = get_user_by( 'id', $author_id ); // Get the WP user.
 
-				// We have a WP user, let's use it.
 				if ( $user ) {
-					// But wait, there's more! Let's see if this user is linked to a guest author.
-					$linked_guest_author = self::get_linked_guest_author( $user->user_login );
-
-					// If it is, let's use that instead.
-					if ( $linked_guest_author ) {
-						$guest_authors = [ $linked_guest_author ];
-					} else {
-						$users = [ $user ];
-					}
+					$users = [ $user ];
 				}
 			}
 		} else {
@@ -160,6 +161,23 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 			$user_query = new \WP_User_Query( $user_args );
 			$users      = $user_query->get_results();
 			$user_total = $user_query->get_total();
+		}
+
+		if ( 0 < $user_total ) {
+			// But wait, there's more! Let's see if this user is linked to a guest author.
+			$unlinked_users = [];
+			foreach ( $users as $user ) {
+				$linked_guest_author = self::get_linked_guest_author( $user->user_login );
+
+				// If it is, let's use that instead.
+				if ( $linked_guest_author ) {
+					$guest_authors[] = $linked_guest_author;
+				} else {
+					$unlinked_users[] = $user;
+				}
+			}
+
+			$users = $unlinked_users;
 		}
 
 		// Format and combine results.
@@ -197,14 +215,8 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 			),
 			array_reduce(
 				$users,
-				function( $acc, $user ) use ( $fields, $avatar_hide_default, $linked_guest_authors ) {
+				function( $acc, $user ) use ( $fields, $avatar_hide_default ) {
 					if ( $user ) {
-
-						// This user is linked to a guest author already returned in the query, so skip it.
-						if ( in_array( $user->data->user_login, $linked_guest_authors, true ) ) {
-							return $acc;
-						}
-
 						$user_data = [
 							'id'         => intval( $user->data->ID ),
 							'registered' => $user->data->user_registered,

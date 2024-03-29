@@ -134,37 +134,7 @@ Data_Events::register_listener(
 	'newspack_donation_order_processed',
 	'woocommerce_donation_order_processed',
 	function( $order_id, $product_id ) {
-		$order = \wc_get_order( $order_id );
-		if ( ! $order ) {
-			return;
-		}
-		if ( ! \Newspack\WooCommerce_Connection::should_sync_order( $order ) ) {
-			return;
-		}
-		$recurrence      = get_post_meta( $product_id, '_subscription_period', true );
-		$is_renewal      = function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order );
-		$subscription_id = null;
-		if ( function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
-			$subscriptions   = array_values( wcs_get_subscriptions_for_renewal_order( $order ) );
-			$subscription_id = is_array( $subscriptions ) && ! empty( $subscriptions ) && is_a( $subscriptions[0], 'WC_Subscription' ) ? $subscriptions[0]->get_id() : null;
-		}
-
-		return [
-			'user_id'         => $order->get_customer_id(),
-			'email'           => $order->get_billing_email(),
-			'amount'          => (float) $order->get_total(),
-			'currency'        => $order->get_currency(),
-			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
-			'platform'        => 'wc',
-			'referer'         => $order->get_meta( '_newspack_referer' ),
-			'popup_id'        => $order->get_meta( '_newspack_popup_id' ),
-			'is_renewal'      => $is_renewal,
-			'subscription_id' => $subscription_id,
-			'platform_data'   => [
-				'order_id'   => $order_id,
-				'product_id' => $product_id,
-			],
-		];
+		return \Newspack\Data_Events\Utils::get_order_data( $order_id, true );
 	}
 );
 
@@ -178,35 +148,7 @@ Data_Events::register_listener(
 	'woocommerce_order_status_failed',
 	'woocommerce_order_failed',
 	function( $order_id, $order ) {
-		$product_id = Donations::get_order_donation_product_id( $order_id );
-		if ( ! $product_id ) {
-			return;
-		}
-		$recurrence      = get_post_meta( $product_id, '_subscription_period', true );
-		$is_renewal      = function_exists( 'wcs_order_contains_renewal' ) && wcs_order_contains_renewal( $order );
-		$subscription_id = null;
-		if ( function_exists( 'wcs_get_subscriptions_for_renewal_order' ) ) {
-			$subscriptions   = array_values( wcs_get_subscriptions_for_renewal_order( $order ) );
-			$subscription_id = is_array( $subscriptions ) && ! empty( $subscriptions ) && is_a( $subscriptions[0], 'WC_Subscription' ) ? $subscriptions[0]->get_id() : null;
-		}
-
-		return [
-			'user_id'         => $order->get_customer_id(),
-			'email'           => $order->get_billing_email(),
-			'amount'          => (float) $order->get_total(),
-			'currency'        => $order->get_currency(),
-			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
-			'platform'        => Donations::get_platform_slug(),
-			'referer'         => $order->get_meta( '_newspack_referer' ),
-			'popup_id'        => $order->get_meta( '_newspack_popup_id' ),
-			'is_renewal'      => $is_renewal,
-			'subscription_id' => $subscription_id,
-			'platform_data'   => [
-				'order_id'   => $order_id,
-				'product_id' => $product_id,
-				'client_id'  => $order->get_meta( NEWSPACK_CLIENT_ID_COOKIE_NAME ),
-			],
-		];
+		return \Newspack\Data_Events\Utils::get_order_data( $order_id, true );
 	}
 );
 
@@ -246,36 +188,7 @@ Data_Events::register_listener(
 	'woocommerce_order_status_completed',
 	'donation_new',
 	function ( $order_id, $order ) {
-		if ( ! \Newspack\WooCommerce_Connection::should_sync_order( $order ) ) {
-			return;
-		}
-		$product_id = Donations::get_order_donation_product_id( $order_id );
-		if ( ! $product_id ) {
-			return;
-		}
-		$recurrence       = \get_post_meta( $product_id, '_subscription_period', true );
-		$wcs_is_available = function_exists( 'wcs_is_subscription' ) && function_exists( 'wcs_get_subscriptions_for_order' ) && function_exists( 'wcs_order_contains_renewal' );
-		$subscriptions    = $wcs_is_available ? array_values( \wcs_get_subscriptions_for_order( $order, [ 'order_type' => 'any' ] ) ) : null;
-		$is_renewal       = $wcs_is_available && \wcs_order_contains_renewal( $order );
-		$subscription_id  = ! empty( $subscriptions ) ? $subscriptions[0]->get_id() : null;
-
-		return [
-			'user_id'         => $order->get_customer_id(),
-			'email'           => $order->get_billing_email(),
-			'amount'          => (float) $order->get_total(),
-			'currency'        => $order->get_currency(),
-			'recurrence'      => ! empty( $recurrence ) ? $recurrence : 'once',
-			'platform'        => Donations::get_platform_slug(),
-			'referer'         => $order->get_meta( '_newspack_referer' ),
-			'popup_id'        => $order->get_meta( '_newspack_popup_id' ),
-			'is_renewal'      => $is_renewal,
-			'subscription_id' => $subscription_id,
-			'platform_data'   => [
-				'order_id'   => $order_id,
-				'product_id' => $product_id,
-				'client_id'  => $order->get_meta( NEWSPACK_CLIENT_ID_COOKIE_NAME ),
-			],
-		];
+		return \Newspack\Data_Events\Utils::get_order_data( $order_id, true );
 	}
 );
 
@@ -286,32 +199,7 @@ Data_Events::register_listener(
 	'woocommerce_order_status_completed',
 	'order_completed',
 	function( $order_id, $order ) {
-		// Donation orders always have just a single product, but other orders can have more than one.
-		$product_id = Donations::get_order_donation_product_id( $order_id ) ?? array_values( \Newspack\WooCommerce_Connection::get_products_for_order( $order_id ) );
-		if ( empty( $product_id ) ) {
-			return;
-		}
-
-		$wcs_is_available = function_exists( 'wcs_get_subscriptions_for_order' ) && function_exists( 'wcs_order_contains_renewal' );
-		$subscriptions    = $wcs_is_available ? array_values( \wcs_get_subscriptions_for_order( $order, [ 'order_type' => 'any' ] ) ) : null;
-		$is_renewal       = $wcs_is_available && \wcs_order_contains_renewal( $order );
-		$subscription_id  = ! empty( $subscriptions ) ? $subscriptions[0]->get_id() : null;
-
-		return [
-			'user_id'         => $order->get_customer_id(),
-			'email'           => $order->get_billing_email(),
-			'amount'          => (float) $order->get_total(),
-			'currency'        => $order->get_currency(),
-			'referer'         => $order->get_meta( '_newspack_referer' ),
-			'popup_id'        => $order->get_meta( '_newspack_popup_id' ),
-			'is_renewal'      => $is_renewal,
-			'subscription_id' => $subscription_id,
-			'platform_data'   => [
-				'order_id'   => $order_id,
-				'product_id' => $product_id,
-				'client_id'  => $order->get_meta( NEWSPACK_CLIENT_ID_COOKIE_NAME ),
-			],
-		];
+		return \Newspack\Data_Events\Utils::get_order_data( $order_id );
 	}
 );
 
@@ -325,20 +213,7 @@ Data_Events::register_listener(
 		if ( 'cancelled' !== $status_to ) {
 			return;
 		}
-		$product_id = Donations::get_order_donation_product_id( $subscription->get_id() );
-		if ( ! $product_id ) {
-			return;
-		}
-		$recurrence = get_post_meta( $product_id, '_subscription_period', true );
-		return [
-			'user_id'         => $subscription->get_customer_id(),
-			'email'           => $subscription->get_billing_email(),
-			'subscription_id' => $subscription->get_id(),
-			'amount'          => (float) $subscription->get_total(),
-			'currency'        => $subscription->get_currency(),
-			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
-			'platform'        => Donations::get_platform_slug(),
-		];
+		return \Newspack\Data_Events\Utils::get_recurring_donation_data( $subscription );
 	}
 );
 
@@ -349,22 +224,17 @@ Data_Events::register_listener(
 	'woocommerce_subscription_status_updated',
 	'donation_subscription_changed',
 	function( $subscription, $status_to, $status_from ) {
-		$product_id = Donations::get_order_donation_product_id( $subscription->get_id() );
-		if ( ! $product_id ) {
+		$data = \Newspack\Data_Events\Utils::get_recurring_donation_data( $subscription );
+		if ( ! is_array( $data ) ) {
 			return;
 		}
-		$recurrence = get_post_meta( $product_id, '_subscription_period', true );
-		return [
-			'user_id'         => $subscription->get_customer_id(),
-			'email'           => $subscription->get_billing_email(),
-			'subscription_id' => $subscription->get_id(),
-			'status_before'   => $status_from,
-			'status_after'    => $status_to,
-			'amount'          => (float) $subscription->get_total(),
-			'currency'        => $subscription->get_currency(),
-			'recurrence'      => empty( $recurrence ) ? 'once' : $recurrence,
-			'platform'        => Donations::get_platform_slug(),
-		];
+		return array_merge(
+			$data,
+			[
+				'status_before' => $status_from,
+				'status_after'  => $status_to,
+			]
+		);
 	}
 );
 

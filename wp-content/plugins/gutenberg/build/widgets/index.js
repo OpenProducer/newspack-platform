@@ -1433,6 +1433,7 @@ function PreviewContent({
   var _attributes$title;
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichText, {
     tagName: "h2",
+    identifier: "title",
     className: "widget-title",
     allowedFormats: [],
     placeholder: (0,external_wp_i18n_namespaceObject.__)('Title'),

@@ -80,6 +80,7 @@ final class Newspack_Newsletters {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
 		add_action( 'init', [ __CLASS__, 'register_editor_only_meta' ] );
 		add_action( 'init', [ __CLASS__, 'register_blocks' ] );
+		add_action( 'init', [ __CLASS__, 'load_textdomain' ] );
 		add_action( 'rest_api_init', [ __CLASS__, 'rest_api_init' ] );
 		add_action( 'default_title', [ __CLASS__, 'default_title' ], 10, 2 );
 		add_action( 'wp_head', [ __CLASS__, 'public_newsletter_custom_style' ], 10, 2 );
@@ -465,6 +466,13 @@ final class Newspack_Newsletters {
 				'render_callback' => [ __CLASS__, 'render_share_block' ],
 			]
 		);
+	}
+
+	/**
+	 * Set text domain.
+	 */
+	public static function load_textdomain() {
+		load_plugin_textdomain( 'newspack-newsletters', false, NEWSPACK_NEWSLETTERS_PLUGIN_FILE . '/languages/' );
 	}
 
 	/**

@@ -49,7 +49,7 @@ export default function Prerequisite( {
 						<>
 							{ ' ' }
 							<ExternalLink href={ prerequisite.help_url }>
-								{ __( 'Learn more', 'newspack' ) }
+								{ __( 'Learn more', 'newspack-plugin' ) }
 							</ExternalLink>
 						</>
 					) }
@@ -89,11 +89,13 @@ export default function Prerequisite( {
 								disabled={ inFlight }
 							>
 								{ inFlight
-									? __( 'Saving…', 'newspack' )
+									? __( 'Saving…', 'newspack-plugin' )
 									: sprintf(
 											// Translators: Save or Update settings.
-											__( '%s settings', 'newspack' ),
-											prerequisite.active ? __( 'Update', 'newspack' ) : __( 'Save', 'newspack' )
+											__( '%s settings', 'newspack-plugin' ),
+											prerequisite.active
+												? __( 'Update', 'newspack-plugin' )
+												: __( 'Save', 'newspack-plugin' )
 									  ) }
 							</Button>
 						</div>
@@ -119,7 +121,7 @@ export default function Prerequisite( {
 														// Translators: %s is specific instructions for satisfying the prerequisite.
 														__(
 															'%1$s%2$sReturn to the Reader Activation page to complete the settings and activate%3$s.',
-															'newspack'
+															'newspack-plugin'
 														),
 														prerequisite.instructions + ' ',
 														window.newspack_engagement_wizard?.reader_activation_url
@@ -137,10 +139,10 @@ export default function Prerequisite( {
 								>
 									{ /* eslint-disable no-nested-ternary */ }
 									{ ( prerequisite.active
-										? __( 'Update ', 'newspack' )
+										? __( 'Update ', 'newspack-plugin' )
 										: prerequisite.fields
-										? __( 'Save ', 'newspack' )
-										: __( 'Configure ', 'newspack' ) ) + prerequisite.action_text }
+										? __( 'Save ', 'newspack-plugin' )
+										: __( 'Configure ', 'newspack-plugin' ) ) + prerequisite.action_text }
 								</Button>
 							) }
 							{ prerequisite.hasOwnProperty( 'action_enabled' ) && ! prerequisite.action_enabled && (
@@ -155,12 +157,12 @@ export default function Prerequisite( {
 		</>
 	);
 
-	let status = __( 'Pending', 'newspack' );
+	let status = __( 'Pending', 'newspack-plugin' );
 	if ( prerequisite.active ) {
-		status = __( 'Ready', 'newspack' );
+		status = __( 'Ready', 'newspack-plugin' );
 	}
 	if ( prerequisite.is_unavailable ) {
-		status = __( 'Unavailable', 'newspack' );
+		status = __( 'Unavailable', 'newspack-plugin' );
 	}
 
 	return (
@@ -172,7 +174,7 @@ export default function Prerequisite( {
 			title={ prerequisite.label }
 			description={ sprintf(
 				/* translators: %s: Prerequisite status */
-				__( 'Status: %s', 'newspack' ),
+				__( 'Status: %s', 'newspack-plugin' ),
 				status
 			) }
 			checkbox={ prerequisite.active ? 'checked' : 'unchecked' }

@@ -1377,6 +1377,7 @@ __webpack_require__.d(__webpack_exports__, {
   PageTemplate: () => (/* reexport */ classic_theme),
   PanelColorSettings: () => (/* reexport */ PanelColorSettings),
   PlainText: () => (/* reexport */ PlainText),
+  PluginDocumentSettingPanel: () => (/* reexport */ plugin_document_setting_panel),
   PostAuthor: () => (/* reexport */ post_author),
   PostAuthorCheck: () => (/* reexport */ PostAuthorCheck),
   PostAuthorPanel: () => (/* reexport */ post_author_panel),
@@ -1387,7 +1388,7 @@ __webpack_require__.d(__webpack_exports__, {
   PostExcerptPanel: () => (/* reexport */ PostExcerptPanel),
   PostFeaturedImage: () => (/* reexport */ post_featured_image),
   PostFeaturedImageCheck: () => (/* reexport */ post_featured_image_check),
-  PostFeaturedImagePanel: () => (/* reexport */ post_featured_image_panel),
+  PostFeaturedImagePanel: () => (/* reexport */ PostFeaturedImagePanel),
   PostFormat: () => (/* reexport */ PostFormat),
   PostFormatCheck: () => (/* reexport */ post_format_check),
   PostLastRevision: () => (/* reexport */ post_last_revision),
@@ -1412,7 +1413,6 @@ __webpack_require__.d(__webpack_exports__, {
   PostStickyCheck: () => (/* reexport */ PostStickyCheck),
   PostSwitchToDraftButton: () => (/* reexport */ PostSwitchToDraftButton),
   PostSyncStatus: () => (/* reexport */ PostSyncStatus),
-  PostSyncStatusModal: () => (/* reexport */ PostSyncStatusModal),
   PostTaxonomies: () => (/* reexport */ post_taxonomies),
   PostTaxonomiesCheck: () => (/* reexport */ PostTaxonomiesCheck),
   PostTaxonomiesFlatTermSelector: () => (/* reexport */ FlatTermSelector),
@@ -5409,8 +5409,10 @@ unlock(store_store).registerPrivateSelectors(private_selectors_namespaceObject);
 const {
   registerBlockBindingsSource
 } = unlock((0,external_wp_data_namespaceObject.dispatch)(external_wp_blocks_namespaceObject.store));
-registerBlockBindingsSource(pattern_overrides);
 registerBlockBindingsSource(post_meta);
+if (true) {
+  registerBlockBindingsSource(pattern_overrides);
+}
 
 ;// CONCATENATED MODULE: external ["wp","compose"]
 const external_wp_compose_namespaceObject = window["wp"]["compose"];
@@ -5988,7 +5990,7 @@ function DocumentBar() {
     } = select(store_store);
     const {
       getEditedEntityRecord,
-      getIsResolving
+      isResolving: isResolvingSelector
     } = select(external_wp_coreData_namespaceObject.store);
     const _postType = getCurrentPostType();
     const _postId = getCurrentPostId();
@@ -5997,7 +5999,7 @@ function DocumentBar() {
     return {
       postType: _postType,
       document: _document,
-      isResolving: getIsResolving('getEditedEntityRecord', 'postType', _postType, _postId),
+      isResolving: isResolvingSelector('getEditedEntityRecord', 'postType', _postType, _postId),
       templateIcon: _templateInfo.icon,
       templateTitle: _templateInfo.title,
       onNavigateToPreviousEntityRecord: getEditorSettings().onNavigateToPreviousEntityRecord
@@ -6249,7 +6251,7 @@ const computeOutlineHeadings = (blocks = []) => {
     return computeOutlineHeadings(block.innerBlocks);
   });
 };
-const isEmptyHeading = heading => !heading.attributes.content || heading.attributes.content.length === 0;
+const isEmptyHeading = heading => !heading.attributes.content || heading.attributes.content.trim().length === 0;
 function DocumentOutline({
   onSelect,
   isTitleSupported,
@@ -6794,45 +6796,39 @@ function EntityTypeList({
 
 
 
-
-const TRANSLATED_SITE_PROPERTIES = {
-  title: (0,external_wp_i18n_namespaceObject.__)('Title'),
-  description: (0,external_wp_i18n_namespaceObject.__)('Tagline'),
-  site_logo: (0,external_wp_i18n_namespaceObject.__)('Logo'),
-  site_icon: (0,external_wp_i18n_namespaceObject.__)('Icon'),
-  show_on_front: (0,external_wp_i18n_namespaceObject.__)('Show on front'),
-  page_on_front: (0,external_wp_i18n_namespaceObject.__)('Page on front'),
-  posts_per_page: (0,external_wp_i18n_namespaceObject.__)('Maximum posts per page'),
-  default_comment_status: (0,external_wp_i18n_namespaceObject.__)('Allow comments on new posts')
-};
 const useIsDirty = () => {
   const {
     editedEntities,
-    siteEdits
+    siteEdits,
+    siteEntityConfig
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       __experimentalGetDirtyEntityRecords,
-      getEntityRecordEdits
+      getEntityRecordEdits,
+      getEntityConfig
     } = select(external_wp_coreData_namespaceObject.store);
     return {
       editedEntities: __experimentalGetDirtyEntityRecords(),
-      siteEdits: getEntityRecordEdits('root', 'site')
+      siteEdits: getEntityRecordEdits('root', 'site'),
+      siteEntityConfig: getEntityConfig('root', 'site')
     };
   }, []);
   const dirtyEntityRecords = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    var _siteEntityConfig$met;
     // Remove site object and decouple into its edited pieces.
     const editedEntitiesWithoutSite = editedEntities.filter(record => !(record.kind === 'root' && record.name === 'site'));
+    const siteEntityLabels = (_siteEntityConfig$met = siteEntityConfig?.meta?.labels) !== null && _siteEntityConfig$met !== void 0 ? _siteEntityConfig$met : {};
     const editedSiteEntities = [];
     for (const property in siteEdits) {
       editedSiteEntities.push({
         kind: 'root',
         name: 'site',
-        title: TRANSLATED_SITE_PROPERTIES[property] || property,
+        title: siteEntityLabels[property] || property,
         property
       });
     }
     return [...editedEntitiesWithoutSite, ...editedSiteEntities];
-  }, [editedEntities, siteEdits]);
+  }, [editedEntities, siteEdits, siteEntityConfig]);
 
   // Unchecked entities to be ignored by save function.
   const [unselectedEntities, _setUnselectedEntities] = (0,external_wp_element_namespaceObject.useState)([]);
@@ -6889,11 +6885,13 @@ function identity(values) {
   return values;
 }
 function EntitiesSavedStates({
-  close
+  close,
+  renderDialog = undefined
 }) {
   const isDirtyProps = useIsDirty();
   return (0,external_React_.createElement)(EntitiesSavedStatesExtensible, {
     close: close,
+    renderDialog: renderDialog,
     ...isDirtyProps
   });
 }
@@ -6903,6 +6901,7 @@ function EntitiesSavedStatesExtensible({
   onSave = identity,
   saveEnabled: saveEnabledProp = undefined,
   saveLabel = (0,external_wp_i18n_namespaceObject.__)('Save'),
+  renderDialog = undefined,
   dirtyEntityRecords,
   isDirty,
   setUnselectedEntities,
@@ -7013,10 +7012,15 @@ function EntitiesSavedStatesExtensible({
   const [saveDialogRef, saveDialogProps] = (0,external_wp_compose_namespaceObject.__experimentalUseDialog)({
     onClose: () => dismissPanel()
   });
+  const dialogLabel = (0,external_wp_compose_namespaceObject.useInstanceId)(EntitiesSavedStatesExtensible, 'label');
+  const dialogDescription = (0,external_wp_compose_namespaceObject.useInstanceId)(EntitiesSavedStatesExtensible, 'description');
   return (0,external_React_.createElement)("div", {
     ref: saveDialogRef,
     ...saveDialogProps,
-    className: "entities-saved-states__panel"
+    className: "entities-saved-states__panel",
+    role: renderDialog ? 'dialog' : undefined,
+    "aria-labelledby": renderDialog ? dialogLabel : undefined,
+    "aria-describedby": renderDialog ? dialogDescription : undefined
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Flex, {
     className: "entities-saved-states__panel-header",
     gap: 2
@@ -7026,6 +7030,7 @@ function EntitiesSavedStatesExtensible({
     ref: saveButtonRef,
     variant: "primary",
     disabled: !saveEnabled,
+    __experimentalIsFocusable: true,
     onClick: saveCheckedEntities,
     className: "editor-entities-saved-states__save-button"
   }, saveLabel), (0,external_React_.createElement)(external_wp_components_namespaceObject.FlexItem, {
@@ -7035,9 +7040,14 @@ function EntitiesSavedStatesExtensible({
     onClick: dismissPanel
   }, (0,external_wp_i18n_namespaceObject.__)('Cancel'))), (0,external_React_.createElement)("div", {
     className: "entities-saved-states__text-prompt"
+  }, (0,external_React_.createElement)("div", {
+    className: "entities-saved-states__text-prompt--header-wrapper",
+    id: renderDialog ? dialogLabel : undefined
   }, (0,external_React_.createElement)("strong", {
     className: "entities-saved-states__text-prompt--header"
-  }, (0,external_wp_i18n_namespaceObject.__)('Are you ready to save?')), additionalPrompt, (0,external_React_.createElement)("p", null, isDirty ? (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %d: number of site changes waiting to be saved. */
+  }, (0,external_wp_i18n_namespaceObject.__)('Are you ready to save?')), additionalPrompt), (0,external_React_.createElement)("p", {
+    id: renderDialog ? dialogDescription : undefined
+  }, isDirty ? (0,external_wp_element_namespaceObject.createInterpolateElement)((0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %d: number of site changes waiting to be saved. */
   (0,external_wp_i18n_namespaceObject._n)('There is <strong>%d site change</strong> waiting to be saved.', 'There are <strong>%d site changes</strong> waiting to be saved.', sortedPartitionedSavables.length), sortedPartitionedSavables.length), {
     strong: (0,external_React_.createElement)("strong", null)
   }) : (0,external_wp_i18n_namespaceObject.__)('Select the items you want to save.'))), sortedPartitionedSavables.map(list => {
@@ -8099,6 +8109,186 @@ function ClassicThemeControl() {
 }
 /* harmony default export */ const classic_theme = (ClassicThemeControl);
 
+;// CONCATENATED MODULE: external ["wp","plugins"]
+const external_wp_plugins_namespaceObject = window["wp"]["plugins"];
+;// CONCATENATED MODULE: external ["wp","warning"]
+const external_wp_warning_namespaceObject = window["wp"]["warning"];
+;// CONCATENATED MODULE: ./packages/editor/build-module/components/preferences-modal/enable-panel.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const {
+  PreferenceBaseOption
+} = unlock(external_wp_preferences_namespaceObject.privateApis);
+/* harmony default export */ const enable_panel = ((0,external_wp_compose_namespaceObject.compose)((0,external_wp_data_namespaceObject.withSelect)((select, {
+  panelName
+}) => {
+  const {
+    isEditorPanelEnabled,
+    isEditorPanelRemoved
+  } = select(store_store);
+  return {
+    isRemoved: isEditorPanelRemoved(panelName),
+    isChecked: isEditorPanelEnabled(panelName)
+  };
+}), (0,external_wp_compose_namespaceObject.ifCondition)(({
+  isRemoved
+}) => !isRemoved), (0,external_wp_data_namespaceObject.withDispatch)((dispatch, {
+  panelName
+}) => ({
+  onChange: () => dispatch(store_store).toggleEditorPanelEnabled(panelName)
+})))(PreferenceBaseOption));
+
+;// CONCATENATED MODULE: ./packages/editor/build-module/components/preferences-modal/enable-plugin-document-setting-panel.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+const {
+  Fill,
+  Slot
+} = (0,external_wp_components_namespaceObject.createSlotFill)('EnablePluginDocumentSettingPanelOption');
+const EnablePluginDocumentSettingPanelOption = ({
+  label,
+  panelName
+}) => (0,external_React_.createElement)(Fill, null, (0,external_React_.createElement)(enable_panel, {
+  label: label,
+  panelName: panelName
+}));
+EnablePluginDocumentSettingPanelOption.Slot = Slot;
+/* harmony default export */ const enable_plugin_document_setting_panel = (EnablePluginDocumentSettingPanelOption);
+
+;// CONCATENATED MODULE: ./packages/editor/build-module/components/plugin-document-setting-panel/index.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const {
+  Fill: plugin_document_setting_panel_Fill,
+  Slot: plugin_document_setting_panel_Slot
+} = (0,external_wp_components_namespaceObject.createSlotFill)('PluginDocumentSettingPanel');
+
+/**
+ * Renders items below the Status & Availability panel in the Document Sidebar.
+ *
+ * @param {Object}                props                                 Component properties.
+ * @param {string}                props.name                            Required. A machine-friendly name for the panel.
+ * @param {string}                [props.className]                     An optional class name added to the row.
+ * @param {string}                [props.title]                         The title of the panel
+ * @param {WPBlockTypeIconRender} [props.icon=inherits from the plugin] The [Dashicon](https://developer.wordpress.org/resource/dashicons/) icon slug string, or an SVG WP element, to be rendered when the sidebar is pinned to toolbar.
+ * @param {Element}               props.children                        Children to be rendered
+ *
+ * @example
+ * ```js
+ * // Using ES5 syntax
+ * var el = React.createElement;
+ * var __ = wp.i18n.__;
+ * var registerPlugin = wp.plugins.registerPlugin;
+ * var PluginDocumentSettingPanel = wp.editor.PluginDocumentSettingPanel;
+ *
+ * function MyDocumentSettingPlugin() {
+ * 	return el(
+ * 		PluginDocumentSettingPanel,
+ * 		{
+ * 			className: 'my-document-setting-plugin',
+ * 			title: 'My Panel',
+ * 			name: 'my-panel',
+ * 		},
+ * 		__( 'My Document Setting Panel' )
+ * 	);
+ * }
+ *
+ * registerPlugin( 'my-document-setting-plugin', {
+ * 		render: MyDocumentSettingPlugin
+ * } );
+ * ```
+ *
+ * @example
+ * ```jsx
+ * // Using ESNext syntax
+ * import { registerPlugin } from '@wordpress/plugins';
+ * import { PluginDocumentSettingPanel } from '@wordpress/editor';
+ *
+ * const MyDocumentSettingTest = () => (
+ * 		<PluginDocumentSettingPanel className="my-document-setting-plugin" title="My Panel" name="my-panel">
+ *			<p>My Document Setting Panel</p>
+ *		</PluginDocumentSettingPanel>
+ *	);
+ *
+ *  registerPlugin( 'document-setting-test', { render: MyDocumentSettingTest } );
+ * ```
+ *
+ * @return {Component} The component to be rendered.
+ */
+const PluginDocumentSettingPanel = ({
+  name,
+  className,
+  title,
+  icon,
+  children
+}) => {
+  const {
+    name: pluginName
+  } = (0,external_wp_plugins_namespaceObject.usePluginContext)();
+  const panelName = `${pluginName}/${name}`;
+  const {
+    opened,
+    isEnabled
+  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      isEditorPanelOpened,
+      isEditorPanelEnabled
+    } = select(store_store);
+    return {
+      opened: isEditorPanelOpened(panelName),
+      isEnabled: isEditorPanelEnabled(panelName)
+    };
+  }, [panelName]);
+  const {
+    toggleEditorPanelOpened
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+  if (undefined === name) {
+     false ? 0 : void 0;
+  }
+  return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(enable_plugin_document_setting_panel, {
+    label: title,
+    panelName: panelName
+  }), (0,external_React_.createElement)(plugin_document_setting_panel_Fill, null, isEnabled && (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, {
+    className: className,
+    title: title,
+    icon: icon,
+    opened: opened,
+    onToggle: () => toggleEditorPanelOpened(panelName)
+  }, children)));
+};
+PluginDocumentSettingPanel.Slot = plugin_document_setting_panel_Slot;
+/* harmony default export */ const plugin_document_setting_panel = (PluginDocumentSettingPanel);
+
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/check.js
 
 /**
@@ -8935,8 +9125,8 @@ function PostExcerptCheck({
  */
 
 const {
-  Fill,
-  Slot
+  Fill: plugin_Fill,
+  Slot: plugin_Slot
 } = (0,external_wp_components_namespaceObject.createSlotFill)('PluginPostExcerpt');
 
 /**
@@ -8982,11 +9172,11 @@ const PluginPostExcerpt = ({
   children,
   className
 }) => {
-  return (0,external_React_.createElement)(Fill, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelRow, {
+  return (0,external_React_.createElement)(plugin_Fill, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelRow, {
     className: className
   }, children));
 };
-PluginPostExcerpt.Slot = Slot;
+PluginPostExcerpt.Slot = plugin_Slot;
 /* harmony default export */ const post_excerpt_plugin = (PluginPostExcerpt);
 
 ;// CONCATENATED MODULE: ./packages/editor/build-module/components/post-excerpt/panel.js
@@ -9178,8 +9368,6 @@ function PostFeaturedImage({
     getSettings
   } = (0,external_wp_data_namespaceObject.useSelect)(external_wp_blockEditor_namespaceObject.store);
   const {
-    mediaWidth,
-    mediaHeight,
     mediaSourceUrl
   } = getMediaDetails(media, currentPostId);
   function onDropFiles(filesList) {
@@ -9229,14 +9417,11 @@ function PostFeaturedImage({
       onClick: open,
       "aria-label": !featuredImageId ? null : (0,external_wp_i18n_namespaceObject.__)('Edit or replace the image'),
       "aria-describedby": !featuredImageId ? null : `editor-post-featured-image-${featuredImageId}-describedby`
-    }, !!featuredImageId && media && (0,external_React_.createElement)(external_wp_components_namespaceObject.ResponsiveWrapper, {
-      naturalWidth: mediaWidth,
-      naturalHeight: mediaHeight,
-      isInline: true
-    }, (0,external_React_.createElement)("img", {
+    }, !!featuredImageId && media && (0,external_React_.createElement)("img", {
+      className: "editor-post-featured-image__preview-image",
       src: mediaSourceUrl,
       alt: ""
-    })), isLoading && (0,external_React_.createElement)(external_wp_components_namespaceObject.Spinner, null), !featuredImageId && !isLoading && (postType?.labels?.set_featured_image || DEFAULT_SET_FEATURE_IMAGE_LABEL)), !!featuredImageId && (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    }), isLoading && (0,external_React_.createElement)(external_wp_components_namespaceObject.Spinner, null), !featuredImageId && !isLoading && (postType?.labels?.set_featured_image || DEFAULT_SET_FEATURE_IMAGE_LABEL)), !!featuredImageId && (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
       className: "editor-post-featured-image__actions"
     }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
       className: "editor-post-featured-image__action",
@@ -9327,7 +9512,9 @@ const applyWithDispatch = (0,external_wp_data_namespaceObject.withDispatch)((dis
 
 
 const post_featured_image_panel_PANEL_NAME = 'featured-image';
-function FeaturedImage() {
+function PostFeaturedImagePanel({
+  withPanelBody = true
+}) {
   var _postType$labels$feat;
   const {
     postType,
@@ -9354,13 +9541,15 @@ function FeaturedImage() {
   if (!isEnabled) {
     return null;
   }
+  if (!withPanelBody) {
+    return (0,external_React_.createElement)(post_featured_image_check, null, (0,external_React_.createElement)(post_featured_image, null));
+  }
   return (0,external_React_.createElement)(post_featured_image_check, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, {
     title: (_postType$labels$feat = postType?.labels?.featured_image) !== null && _postType$labels$feat !== void 0 ? _postType$labels$feat : (0,external_wp_i18n_namespaceObject.__)('Featured image'),
     opened: isOpened,
     onToggle: () => toggleEditorPanelOpened(post_featured_image_panel_PANEL_NAME)
   }, (0,external_React_.createElement)(post_featured_image, null)));
 }
-/* harmony default export */ const post_featured_image_panel = (FeaturedImage);
 
 ;// CONCATENATED MODULE: ./packages/editor/build-module/components/post-format/check.js
 
@@ -11351,7 +11540,7 @@ const flat_term_selector_DEFAULT_QUERY = {
 };
 const isSameTermName = (termA, termB) => unescapeString(termA).toLowerCase() === unescapeString(termB).toLowerCase();
 const termNamesToIds = (names, terms) => {
-  return names.map(termName => terms.find(term => isSameTermName(term.name, termName)).id);
+  return names.map(termName => terms.find(term => isSameTermName(term.name, termName))?.id).filter(id => id !== undefined);
 };
 function FlatTermSelector({
   slug
@@ -11468,7 +11657,8 @@ function FlatTermSelector({
     // The selector will always re-fetch terms later.
     setValues(uniqueTerms);
     if (newTermNames.length === 0) {
-      return onUpdateTerms(termNamesToIds(uniqueTerms, availableTerms));
+      onUpdateTerms(termNamesToIds(uniqueTerms, availableTerms));
+      return;
     }
     if (!hasCreateAction) {
       return;
@@ -11477,11 +11667,14 @@ function FlatTermSelector({
       name: termName
     }))).then(newTerms => {
       const newAvailableTerms = availableTerms.concat(newTerms);
-      return onUpdateTerms(termNamesToIds(uniqueTerms, newAvailableTerms));
+      onUpdateTerms(termNamesToIds(uniqueTerms, newAvailableTerms));
     }).catch(error => {
       createErrorNotice(error.message, {
         type: 'snackbar'
       });
+      // In case of a failure, try assigning available terms.
+      // This will invalidate the optimistic update.
+      onUpdateTerms(termNamesToIds(uniqueTerms, availableTerms));
     });
   }
   function appendTerm(newTerm) {
@@ -13159,18 +13352,11 @@ function PostSwitchToDraftButton() {
 
 
 
-
-
-
 /**
  * Internal dependencies
  */
 
 
-
-const {
-  ReusableBlocksRenameHint
-} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function PostSyncStatus() {
   const {
     syncStatus,
@@ -13196,70 +13382,6 @@ function PostSyncStatus() {
   }, (0,external_React_.createElement)("div", {
     className: "editor-post-sync-status__value"
   }, syncStatus === 'unsynced' ? (0,external_wp_i18n_namespaceObject._x)('Not synced', 'Text that indicates that the pattern is not synchronized') : (0,external_wp_i18n_namespaceObject._x)('Synced', 'Text that indicates that the pattern is synchronized')));
-}
-function PostSyncStatusModal() {
-  const {
-    editPost
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
-  const [isModalOpen, setIsModalOpen] = (0,external_wp_element_namespaceObject.useState)(false);
-  const [syncType, setSyncType] = (0,external_wp_element_namespaceObject.useState)(undefined);
-  const {
-    postType,
-    isNewPost
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getEditedPostAttribute,
-      isCleanNewPost
-    } = select(store_store);
-    return {
-      postType: getEditedPostAttribute('type'),
-      isNewPost: isCleanNewPost()
-    };
-  }, []);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (isNewPost && postType === 'wp_block') {
-      setIsModalOpen(true);
-    }
-    // We only want the modal to open when the page is first loaded.
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const setSyncStatus = () => {
-    editPost({
-      meta: {
-        wp_pattern_sync_status: syncType
-      }
-    });
-  };
-  if (postType !== 'wp_block' || !isNewPost) {
-    return null;
-  }
-  return (0,external_React_.createElement)(external_React_.Fragment, null, isModalOpen && (0,external_React_.createElement)(external_wp_components_namespaceObject.Modal, {
-    title: (0,external_wp_i18n_namespaceObject.__)('Set pattern sync status'),
-    onRequestClose: () => {
-      setIsModalOpen(false);
-    },
-    overlayClassName: "reusable-blocks-menu-items__convert-modal"
-  }, (0,external_React_.createElement)("form", {
-    onSubmit: event => {
-      event.preventDefault();
-      setIsModalOpen(false);
-      setSyncStatus();
-    }
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: "5"
-  }, (0,external_React_.createElement)(ReusableBlocksRenameHint, null), (0,external_React_.createElement)(external_wp_components_namespaceObject.ToggleControl, {
-    label: (0,external_wp_i18n_namespaceObject._x)('Synced', 'Option that makes an individual pattern synchronized'),
-    help: (0,external_wp_i18n_namespaceObject.__)('Sync this pattern across multiple locations.'),
-    checked: !syncType,
-    onChange: () => {
-      setSyncType(!syncType ? 'unsynced' : undefined);
-    }
-  }), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
-    justify: "right"
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-    variant: "primary",
-    type: "submit"
-  }, (0,external_wp_i18n_namespaceObject.__)('Create')))))));
 }
 
 ;// CONCATENATED MODULE: ./packages/editor/build-module/components/post-taxonomies/index.js
@@ -15049,14 +15171,15 @@ const POST_TYPES_ALLOWING_POST_CONTENT_TEMPLATE_PART = ['wp_block', 'wp_template
  * the template part and post content blocks need to be hidden.
  *
  * @param {string} postType Post Type
+ * @param {string} mode     Rendering mode
  */
-function useHideBlocksFromInserter(postType) {
+function useHideBlocksFromInserter(postType, mode) {
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     /*
      * Prevent adding template part in the editor.
      */
     (0,external_wp_hooks_namespaceObject.addFilter)('blockEditor.__unstableCanInsertBlockType', 'removeTemplatePartsFromInserter', (canInsert, blockType) => {
-      if (!POST_TYPES_ALLOWING_POST_CONTENT_TEMPLATE_PART.includes(postType) && blockType.name === 'core/template-part') {
+      if (!POST_TYPES_ALLOWING_POST_CONTENT_TEMPLATE_PART.includes(postType) && blockType.name === 'core/template-part' && mode === 'post-only') {
         return false;
       }
       return canInsert;
@@ -15077,7 +15200,7 @@ function useHideBlocksFromInserter(postType) {
       (0,external_wp_hooks_namespaceObject.removeFilter)('blockEditor.__unstableCanInsertBlockType', 'removeTemplatePartsFromInserter');
       (0,external_wp_hooks_namespaceObject.removeFilter)('blockEditor.__unstableCanInsertBlockType', 'removePostContentFromInserter');
     };
-  }, [postType]);
+  }, [postType, mode]);
 }
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/list-view.js
@@ -15577,7 +15700,7 @@ const ExperimentalEditorProvider = with_registry_provider(({
     var _settings$defaultRend;
     setRenderingMode((_settings$defaultRend = settings.defaultRenderingMode) !== null && _settings$defaultRend !== void 0 ? _settings$defaultRend : 'post-only');
   }, [settings.defaultRenderingMode, setRenderingMode]);
-  useHideBlocksFromInserter(post.type);
+  useHideBlocksFromInserter(post.type, mode);
 
   // Register the editor commands.
   useCommands();
@@ -15715,6 +15838,7 @@ const withFontSizes = deprecateFunction('withFontSizes', external_wp_blockEditor
 
 
 // Post Related Components.
+
 
 
 
@@ -16254,66 +16378,6 @@ function EditorCanvas({
   })), children);
 }
 /* harmony default export */ const editor_canvas = (EditorCanvas);
-
-;// CONCATENATED MODULE: ./packages/editor/build-module/components/preferences-modal/enable-panel.js
-/**
- * WordPress dependencies
- */
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-const {
-  PreferenceBaseOption
-} = unlock(external_wp_preferences_namespaceObject.privateApis);
-/* harmony default export */ const enable_panel = ((0,external_wp_compose_namespaceObject.compose)((0,external_wp_data_namespaceObject.withSelect)((select, {
-  panelName
-}) => {
-  const {
-    isEditorPanelEnabled,
-    isEditorPanelRemoved
-  } = select(store_store);
-  return {
-    isRemoved: isEditorPanelRemoved(panelName),
-    isChecked: isEditorPanelEnabled(panelName)
-  };
-}), (0,external_wp_compose_namespaceObject.ifCondition)(({
-  isRemoved
-}) => !isRemoved), (0,external_wp_data_namespaceObject.withDispatch)((dispatch, {
-  panelName
-}) => ({
-  onChange: () => dispatch(store_store).toggleEditorPanelEnabled(panelName)
-})))(PreferenceBaseOption));
-
-;// CONCATENATED MODULE: ./packages/editor/build-module/components/preferences-modal/enable-plugin-document-setting-panel.js
-
-/**
- * WordPress dependencies
- */
-
-
-/**
- * Internal dependencies
- */
-
-const {
-  Fill: enable_plugin_document_setting_panel_Fill,
-  Slot: enable_plugin_document_setting_panel_Slot
-} = (0,external_wp_components_namespaceObject.createSlotFill)('EnablePluginDocumentSettingPanelOption');
-const EnablePluginDocumentSettingPanelOption = ({
-  label,
-  panelName
-}) => (0,external_React_.createElement)(enable_plugin_document_setting_panel_Fill, null, (0,external_React_.createElement)(enable_panel, {
-  label: label,
-  panelName: panelName
-}));
-EnablePluginDocumentSettingPanelOption.Slot = enable_plugin_document_setting_panel_Slot;
-/* harmony default export */ const enable_plugin_document_setting_panel = (EnablePluginDocumentSettingPanelOption);
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/plus.js
 
@@ -17479,13 +17543,11 @@ function EditorPreferencesModal({
 
 
 
-
 const privateApis = {};
 lock(privateApis, {
   DocumentTools: document_tools,
   EditorCanvas: editor_canvas,
   ExperimentalEditorProvider: ExperimentalEditorProvider,
-  EnablePluginDocumentSettingPanelOption: enable_plugin_document_setting_panel,
   EntitiesSavedStatesExtensible: EntitiesSavedStatesExtensible,
   InserterSidebar: InserterSidebar,
   ListViewSidebar: ListViewSidebar,
