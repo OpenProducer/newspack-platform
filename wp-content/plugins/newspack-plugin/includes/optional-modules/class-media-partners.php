@@ -13,6 +13,7 @@ defined( 'ABSPATH' ) || exit;
  * Media partners.
  */
 class Media_Partners {
+	private static $is_apple_news_exporting = false; // phpcs:ignore Squiz.Commenting.VariableComment.Missing
 
 	/**
 	 * Initialize everything.
@@ -31,6 +32,7 @@ class Media_Partners {
 		add_action( 'init', [ __CLASS__, 'add_partners_shortcode' ] );
 		add_action( 'admin_init', [ __CLASS__, 'handle_settings_update' ] );
 		add_filter( 'the_content', [ __CLASS__, 'add_content_partner_logo' ] );
+		add_action( 'apple_news_do_fetch_exporter', [ __CLASS__, 'apple_news_do_fetch_exporter' ] );
 	}
 
 	/**
@@ -370,6 +372,12 @@ class Media_Partners {
 	 * @return string Modified $content.
 	 */
 	public static function add_content_partner_logo( $content ) {
+		// Skip partners in RSS feed.
+		$settings = self::get_settings();
+		if ( $settings['skip_in_feeds'] && ( is_feed() || self::$is_apple_news_exporting ) ) {
+			return $content;
+		}
+
 		$id       = get_the_ID();
 		$partners = get_the_terms( $id, 'partner' );
 		if ( ! $partners ) {
@@ -409,12 +417,6 @@ class Media_Partners {
 		}
 
 		$partner_settings = self::get_partner_config( $partner );
-
-		// Skip partners in RSS feed.
-		$settings = self::get_settings();
-		if ( $settings['skip_in_feeds'] && is_feed() ) {
-			return $content;
-		}
 
 		ob_start();
 		?>
@@ -467,8 +469,8 @@ class Media_Partners {
 					<div class="form-field">
 						<label>
 							<input type="checkbox" name="skip_in_feeds" <?php echo ( $settings['skip_in_feeds'] ? 'checked' : '' ); ?>>
-							<span class="checkbox-title"><?php echo esc_html__( 'Skip in RSS feeds', 'newspack-plugin' ); ?></span>
-							<p><?php echo esc_html__( 'If checked, the media partner markup will be skipped in RSS feeds.', 'newspack-plugin' ); ?></p>
+							<span class="checkbox-title"><?php echo esc_html__( 'Skip in RSS feeds and Apple News', 'newspack-plugin' ); ?></span>
+							<p><?php echo esc_html__( 'If checked, the media partner markup will be skipped in RSS feeds and Apple News.', 'newspack-plugin' ); ?></p>
 						</label>
 					</div>
 					<p class="submit">
@@ -505,6 +507,13 @@ class Media_Partners {
 
 		wp_safe_redirect( admin_url( 'edit-tags.php?taxonomy=partner' ) );
 		exit;
+	}
+
+	/**
+	 * Mark this request as an Apple News exporter request.
+	 */
+	public static function apple_news_do_fetch_exporter() {
+		self::$is_apple_news_exporting = true;
 	}
 }
 Media_Partners::init();

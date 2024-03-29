@@ -7632,6 +7632,9 @@ function getBlockLabel(blockType, attributes, context = 'visual') {
   if (!label) {
     return title;
   }
+  if (label.toPlainText) {
+    return label.toPlainText();
+  }
 
   // Strip any HTML (i.e. RichText formatting) before returning.
   return (0,external_wp_dom_namespaceObject.__unstableStripHTML)(label);
@@ -15262,6 +15265,28 @@ function doBlocksMatchTemplate(blocks = [], template = []) {
     return name === block.name && doBlocksMatchTemplate(block.innerBlocks, innerBlocksTemplate);
   });
 }
+const isHTMLAttribute = attributeDefinition => attributeDefinition?.source === 'html';
+const isQueryAttribute = attributeDefinition => attributeDefinition?.source === 'query';
+function normalizeAttributes(schema, values) {
+  if (!values) {
+    return {};
+  }
+  return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, normalizeAttribute(schema[key], value)]));
+}
+function normalizeAttribute(definition, value) {
+  if (isHTMLAttribute(definition) && Array.isArray(value)) {
+    // Introduce a deprecated call at this point
+    // When we're confident that "children" format should be removed from the templates.
+
+    return (0,external_wp_element_namespaceObject.renderToString)(value);
+  }
+  if (isQueryAttribute(definition) && value) {
+    return value.map(subValues => {
+      return normalizeAttributes(definition.query, subValues);
+    });
+  }
+  return value;
+}
 
 /**
  * Synchronize a block list with a block template.
@@ -15297,28 +15322,6 @@ function synchronizeBlocksWithTemplate(blocks = [], template) {
     // before creating the blocks.
 
     const blockType = getBlockType(name);
-    const isHTMLAttribute = attributeDefinition => attributeDefinition?.source === 'html';
-    const isQueryAttribute = attributeDefinition => attributeDefinition?.source === 'query';
-    const normalizeAttributes = (schema, values) => {
-      if (!values) {
-        return {};
-      }
-      return Object.fromEntries(Object.entries(values).map(([key, value]) => [key, normalizeAttribute(schema[key], value)]));
-    };
-    const normalizeAttribute = (definition, value) => {
-      if (isHTMLAttribute(definition) && Array.isArray(value)) {
-        // Introduce a deprecated call at this point
-        // When we're confident that "children" format should be removed from the templates.
-
-        return (0,external_wp_element_namespaceObject.renderToString)(value);
-      }
-      if (isQueryAttribute(definition) && value) {
-        return value.map(subValues => {
-          return normalizeAttributes(definition.query, subValues);
-        });
-      }
-      return value;
-    };
     const normalizedAttributes = normalizeAttributes((_blockType$attributes = blockType?.attributes) !== null && _blockType$attributes !== void 0 ? _blockType$attributes : {}, attributes);
     let [blockName, blockAttributes] = convertLegacyBlockNameAndAttributes(name, normalizedAttributes);
 

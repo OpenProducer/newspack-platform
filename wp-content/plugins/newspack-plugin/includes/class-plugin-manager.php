@@ -573,7 +573,7 @@ class Plugin_Manager {
 		}
 
 		$plugins = array_reduce( array_keys( get_plugins() ), array( __CLASS__, 'reduce_plugin_info' ) );
-		$themes  = array_reduce( array_keys( wp_get_themes() ), array( __CLASS__, 'reduce_plugin_info' ) );
+		$themes  = array_reduce( array_keys( wp_get_themes() ), array( __CLASS__, 'reduce_plugin_info' ) ) ?? [];
 		return array_merge( $plugins, $themes );
 	}
 

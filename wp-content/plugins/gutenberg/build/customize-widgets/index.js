@@ -713,6 +713,12 @@ const textFormattingShortcuts = [{
     character: '1-6'
   },
   description: (0,external_wp_i18n_namespaceObject.__)('Convert the current paragraph or heading to a heading of level 1 to 6.')
+}, {
+  keyCombination: {
+    modifier: 'primaryShift',
+    character: 'SPACE'
+  },
+  description: (0,external_wp_i18n_namespaceObject.__)('Add non breaking space.')
 }];
 
 ;// CONCATENATED MODULE: ./packages/customize-widgets/build-module/components/keyboard-shortcut-help-modal/shortcut.js

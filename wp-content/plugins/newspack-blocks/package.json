@@ -1,6 +1,6 @@
 {
 	"name": "@automattic/newspack-blocks",
-	"version": "3.0.4",
+	"version": "3.0.6",
 	"author": "Automattic",
 	"devDependencies": {
 		"@rushstack/eslint-patch": "^1.7.2",
@@ -10,7 +10,7 @@
 		"@types/lodash.debounce": "^4.0.9",
 		"eslint": "^7.32.0",
 		"fetch-mock-jest": "^1.5.1",
-		"html-entities": "^2.4.0",
+		"html-entities": "^2.5.2",
 		"identity-obj-proxy": "^3.0.0",
 		"lint-staged": "^15.2.2",
 		"newspack-scripts": "^5.3.0",

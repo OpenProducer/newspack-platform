@@ -413,7 +413,7 @@ class Patches {
 	public static function restrict_media_library_access_ajax( $query_args ) {
 		$current_user_id = get_current_user_id();
 
-		if ( $current_user_id && ! current_user_can( 'edit_others_posts' ) ) {
+		if ( $current_user_id && ! current_user_can( 'edit_others_posts' ) && ! current_user_can( 'edit_files' ) ) {
 			$query_args['author'] = $current_user_id;
 		}
 

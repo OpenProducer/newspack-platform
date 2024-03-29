@@ -51,6 +51,8 @@ final class Modal_Checkout {
 		add_filter( 'wcs_place_subscription_order_text', [ __CLASS__, 'order_button_text' ], 1 );
 		add_filter( 'woocommerce_order_button_text', [ __CLASS__, 'order_button_text' ] );
 		add_filter( 'option_woocommerce_subscriptions_order_button_text', [ __CLASS__, 'order_button_text' ] );
+		add_action( 'option_woocommerce_default_customer_address', [ __CLASS__, 'ensure_base_default_customer_address' ] );
+		add_action( 'default_option_woocommerce_default_customer_address', [ __CLASS__, 'ensure_base_default_customer_address' ] );
 
 		/** Custom handling for registered users. */
 		add_filter( 'woocommerce_checkout_customer_id', [ __CLASS__, 'associate_existing_user' ] );
@@ -994,6 +996,46 @@ final class Modal_Checkout {
 			return __( 'Donate now', 'newspack-blocks' );
 		}
 		return $text;
+	}
+
+	/**
+	 * Force option for base country for new customers if unset and billing country optional while state is required
+	 * unless the NEWSPACK_PREVENT_FORCE_BASE_DEFAULT_CUSTOMER_ADDRESS constant is set.
+	 *
+	 * If this option is empty AND billing state is set as a required field AND billing country is not,
+	 * validation of the state value will fail during modal checkout.
+	 *
+	 * See Default Customer Location in: https://woo.com/document/configuring-woocommerce-settings/#general-options
+	 *
+	 * @param string $option_value The value of the default customer address option.
+	 *
+	 * @return string Option value.
+	 */
+	public static function ensure_base_default_customer_address( $option_value ) {
+		// If the option is set, we're good.
+		if ( ! empty( $option_value ) ) {
+			return $option_value;
+		}
+
+		// Only in modal checkout.
+		if ( ! self::is_modal_checkout() ) {
+			return $option_value;
+		}
+
+		// Escape hatch in case we want the standard behavior even in modal checkout.
+		if ( defined( 'NEWSPACK_PREVENT_FORCE_BASE_DEFAULT_CUSTOMER_ADDRESS' ) && NEWSPACK_PREVENT_FORCE_BASE_DEFAULT_CUSTOMER_ADDRESS ) {
+			return $option_value;
+		}
+
+		// If billing state is required but billing country is not, we need to ensure a default location is set.
+		if ( defined( '\Newspack\Donations::DONATION_BILLING_FIELDS_OPTION' ) ) {
+			$billing_fields = get_option( \Newspack\Donations::DONATION_BILLING_FIELDS_OPTION, [] );
+			if ( ! in_array( 'billing_country', $billing_fields, true ) && in_array( 'billing_state', $billing_fields, true ) ) {
+				return 'base';
+			}
+		}
+
+		return $option_value;
 	}
 
 	/**

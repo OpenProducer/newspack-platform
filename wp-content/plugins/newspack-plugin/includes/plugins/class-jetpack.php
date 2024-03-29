@@ -26,6 +26,122 @@ class Jetpack {
 	];
 
 	/**
+	 * Default modules
+	 *
+	 * @var string[]
+	 */
+	public static $default_active_modules = [
+		/** 
+		 * Assets CDN
+		 *
+		 * @link https://jetpack.com/support/site-accelerator/
+		 */
+		'photon-cdn',
+		/** 
+		 * Image CDN
+		 *
+		 * @link https://jetpack.com/support/site-accelerator/
+		 */
+		'photon',
+		/** 
+		 * Contact Form
+		 *
+		 * @link https://jetpack.com/support/contact-form/
+		 */
+		'contact-form',
+		/** 
+		 * Brute Force Protection. 
+		 *
+		 * @link https://jetpack.com/support/protect/
+		 */
+		'protect',
+		/** 
+		 * JSON API 
+		 *
+		 * @link https://jetpack.com/support/json-api/
+		 */
+		'json-api',
+		/** 
+		 * Notifications
+		 *
+		 * @link https://jetpack.com/support/notifications/
+		 */
+		'notes',
+		/**
+		 * Stats
+		 *
+		 * @link https://jetpack.com/support/jetpack-stats/
+		 */
+		'stats',
+		/**
+		 * Site Verification
+		 *
+		 * @link https://jetpack.com/support/site-verification-tools/
+		 */
+		'verification-tools',
+		/**
+		 * Carousel
+		 *
+		 * @link https://jetpack.com/support/carousel/
+		 */
+		'carousel',
+		/**
+		 * Copy Post
+		 *
+		 * @link https://jetpack.com/support/copy-post/
+		 */
+		'copy-post',
+		/**
+		 * Extra Sidebar Widgets
+		 *
+		 * @link https://jetpack.com/support/extra-sidebar-widgets/
+		 */
+		'widgets',
+		/**
+		 * Gravatar Hovercards
+		 *
+		 * @link https://jetpack.com/support/gravatar-hovercards
+		 */
+		'gravatar-hovercards',
+		/**
+		 * Social
+		 *
+		 * @link https://jetpack.com/support/jetpack-social/
+		 */
+		'publicize',
+		/**
+		 * Related Posts
+		 *
+		 * @link https://jetpack.com/support/related-posts/
+		 */
+		'related-posts',
+		/**
+		 * Sharing
+		 *
+		 * @link https://jetpack.com/support/sharing/
+		 */
+		'sharedaddy',
+		/**
+		 * Sitemaps
+		 *
+		 * @link https://jetpack.com/support/sitemaps
+		 */
+		'sitemaps',
+		/**
+		 * Tiled Gallery
+		 *
+		 * @link https://jetpack.com/support/jetpack-blocks/tiled-galleries/
+		 */
+		'tiled-gallery',
+		/**
+		 * Widget Visibility
+		 *
+		 * @link https://jetpack.com/support/widget-visibility/
+		 */
+		'widget-visibility',
+	];
+
+	/**
 	 * Initialize hooks and filters.
 	 */
 	public static function init() {
@@ -36,8 +152,12 @@ class Jetpack {
 		add_filter( 'wp_calculate_image_srcset', [ __CLASS__, 'filter_srcset_array' ], 100, 5 );
 
 		// Disables Google Analytics.
-		add_filter( 'jetpack_active_modules', array( __CLASS__, 'remove_google_analytics_from_active' ), 10, 2 );
-		add_filter( 'jetpack_get_available_modules', array( __CLASS__, 'remove_google_analytics_from_available' ) );
+		add_filter( 'jetpack_active_modules', [ __CLASS__, 'remove_google_analytics_from_active' ], 10, 2 );
+		add_filter( 'jetpack_get_available_modules', [ __CLASS__, 'remove_google_analytics_from_available' ] );
+
+		// Set Jetpack default modules on Newspack setup.
+		add_action( 'add_option_newspack_setup_complete', [ __CLASS__, 'set_default_modules' ], 10, 2 );
+		add_action( 'update_option_newspack_setup_complete', [ __CLASS__, 'set_default_modules' ], 10, 2 );
 	}
 
 	/**
@@ -180,6 +300,19 @@ class Jetpack {
 			unset( $modules['google-analytics'] );
 		}
 		return $modules;
+	}
+
+	/**
+	 * Set Jetpack Default Modules on newspack setup complete.
+	 *
+	 * @param string $old_val_or_opt_name If adding will be opt name. If updating will be old value.
+	 * @param string $new_val Value correlated to update/add.
+	 * @return void 
+	 */
+	public static function set_default_modules( string $old_val_or_opt_name, string $new_val ) {
+		if ( $new_val === '1' ) {
+			update_option( 'jetpack_active_modules', static::$default_active_modules );
+		}
 	}
 }
 Jetpack::init();

@@ -18936,7 +18936,7 @@ const deleteEntityRecord = (kind, name, recordId, query, {
 } = {}) => async ({
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.kind === kind && config.name === name);
   let error;
   let deletedRecord = false;
@@ -19126,7 +19126,7 @@ const saveEntityRecord = (kind, name, record, {
   resolveSelect,
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.kind === kind && config.name === name);
   if (!entityConfig || entityConfig?.__experimentalNoFetch) {
     return;
@@ -19323,7 +19323,7 @@ const saveEditedEntityRecord = (kind, name, recordId, options) => async ({
   if (!select.hasEditsForEntityRecord(kind, name, recordId)) {
     return;
   }
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.kind === kind && config.name === name);
   if (!entityConfig) {
     return;
@@ -19358,7 +19358,7 @@ const __experimentalSaveSpecifiedEntityEdits = (kind, name, recordId, itemsToSav
   for (const item of itemsToSave) {
     setNestedValue(editsToSave, item, getNestedValue(edits, item));
   }
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.kind === kind && config.name === name);
   const entityIdKey = entityConfig?.key || DEFAULT_ENTITY_KEY;
 
@@ -19473,7 +19473,7 @@ function receiveDefaultTemplateId(query, templateId) {
 const receiveRevisions = (kind, name, recordKey, records, query, invalidateCache = false, meta) => async ({
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.kind === kind && config.name === name);
   const key = entityConfig && entityConfig?.revisionKey ? entityConfig.revisionKey : DEFAULT_ENTITY_KEY;
   dispatch({
@@ -19517,6 +19517,9 @@ const rootEntitiesConfig = [{
   baseURLParams: {
     _fields: ['description', 'gmt_offset', 'home', 'name', 'site_icon', 'site_icon_url', 'site_logo', 'timezone_string', 'url'].join(',')
   },
+  // The entity doesn't support selecting multiple records.
+  // The property is maintained for backward compatibility.
+  plural: '__unstableBases',
   syncConfig: {
     fetch: async () => {
       return external_wp_apiFetch_default()({
@@ -19538,35 +19541,6 @@ const rootEntitiesConfig = [{
   syncObjectType: 'root/base',
   getSyncObjectId: () => 'index'
 }, {
-  label: (0,external_wp_i18n_namespaceObject.__)('Site'),
-  name: 'site',
-  kind: 'root',
-  baseURL: '/wp/v2/settings',
-  getTitle: record => {
-    var _record$title;
-    return (_record$title = record?.title) !== null && _record$title !== void 0 ? _record$title : (0,external_wp_i18n_namespaceObject.__)('Site Title');
-  },
-  syncConfig: {
-    fetch: async () => {
-      return external_wp_apiFetch_default()({
-        path: '/wp/v2/settings'
-      });
-    },
-    applyChangesToDoc: (doc, changes) => {
-      const document = doc.getMap('document');
-      Object.entries(changes).forEach(([key, value]) => {
-        if (document.get(key) !== value) {
-          document.set(key, value);
-        }
-      });
-    },
-    fromCRDTDoc: doc => {
-      return doc.getMap('document').toJSON();
-    }
-  },
-  syncObjectType: 'root/site',
-  getSyncObjectId: () => 'index'
-}, {
   label: (0,external_wp_i18n_namespaceObject.__)('Post Type'),
   name: 'postType',
   kind: 'root',
@@ -19575,6 +19549,7 @@ const rootEntitiesConfig = [{
   baseURLParams: {
     context: 'edit'
   },
+  plural: 'postTypes',
   syncConfig: {
     fetch: async id => {
       return external_wp_apiFetch_default()({
@@ -19717,6 +19692,7 @@ const rootEntitiesConfig = [{
   baseURLParams: {
     context: 'edit'
   },
+  plural: 'themes',
   key: 'stylesheet'
 }, {
   label: (0,external_wp_i18n_namespaceObject.__)('Plugins'),
@@ -19726,6 +19702,7 @@ const rootEntitiesConfig = [{
   baseURLParams: {
     context: 'edit'
   },
+  plural: 'plugins',
   key: 'plugin'
 }, {
   label: (0,external_wp_i18n_namespaceObject.__)('Status'),
@@ -19744,6 +19721,11 @@ const additionalEntityConfigLoaders = [{
 }, {
   kind: 'taxonomy',
   loadEntities: loadTaxonomyEntities
+}, {
+  kind: 'root',
+  name: 'site',
+  plural: 'sites',
+  loadEntities: loadSiteEntity
 }];
 
 /**
@@ -19890,29 +19872,79 @@ async function loadTaxonomyEntities() {
 }
 
 /**
- * Returns the entity's getter method name given its kind and name.
+ * Returns the Site entity.
+ *
+ * @return {Promise} Entity promise
+ */
+async function loadSiteEntity() {
+  var _site$schema$properti;
+  const entity = {
+    label: (0,external_wp_i18n_namespaceObject.__)('Site'),
+    name: 'site',
+    kind: 'root',
+    baseURL: '/wp/v2/settings',
+    syncConfig: {
+      fetch: async () => {
+        return external_wp_apiFetch_default()({
+          path: '/wp/v2/settings'
+        });
+      },
+      applyChangesToDoc: (doc, changes) => {
+        const document = doc.getMap('document');
+        Object.entries(changes).forEach(([key, value]) => {
+          if (document.get(key) !== value) {
+            document.set(key, value);
+          }
+        });
+      },
+      fromCRDTDoc: doc => {
+        return doc.getMap('document').toJSON();
+      }
+    },
+    syncObjectType: 'root/site',
+    getSyncObjectId: () => 'index',
+    meta: {}
+  };
+  const site = await external_wp_apiFetch_default()({
+    path: entity.baseURL,
+    method: 'OPTIONS'
+  });
+  const labels = {};
+  Object.entries((_site$schema$properti = site?.schema?.properties) !== null && _site$schema$properti !== void 0 ? _site$schema$properti : {}).forEach(([key, value]) => {
+    // Ignore properties `title` and `type` keys.
+    if (typeof value === 'object' && value.title) {
+      labels[key] = value.title;
+    }
+  });
+  return [{
+    ...entity,
+    meta: {
+      labels
+    }
+  }];
+}
+
+/**
+ * Returns the entity's getter method name given its kind and name or plural name.
  *
  * @example
  * ```js
  * const nameSingular = getMethodName( 'root', 'theme', 'get' );
  * // nameSingular is getRootTheme
  *
- * const namePlural = getMethodName( 'root', 'theme', 'set' );
+ * const namePlural = getMethodName( 'root', 'themes', 'set' );
  * // namePlural is setRootThemes
  * ```
  *
- * @param {string}  kind      Entity kind.
- * @param {string}  name      Entity name.
- * @param {string}  prefix    Function prefix.
- * @param {boolean} usePlural Whether to use the plural form or not.
+ * @param {string} kind   Entity kind.
+ * @param {string} name   Entity name or plural name.
+ * @param {string} prefix Function prefix.
  *
  * @return {string} Method name
  */
-const getMethodName = (kind, name, prefix = 'get', usePlural = false) => {
-  const entityConfig = rootEntitiesConfig.find(config => config.kind === kind && config.name === name);
+const getMethodName = (kind, name, prefix = 'get') => {
   const kindPrefix = kind === 'root' ? '' : pascalCase(kind);
-  const nameSuffix = pascalCase(name) + (usePlural ? 's' : '');
-  const suffix = usePlural && 'plural' in entityConfig && entityConfig?.plural ? pascalCase(entityConfig.plural) : nameSuffix;
+  const suffix = pascalCase(name);
   return `${prefix}${kindPrefix}${suffix}`;
 };
 function registerSyncConfigs(configs) {
@@ -19930,18 +19962,21 @@ function registerSyncConfigs(configs) {
 }
 
 /**
- * Loads the kind entities into the store.
+ * Loads the entities into the store.
+ *
+ * Note: The `name` argument is used for `root` entities requiring additional server data.
  *
  * @param {string} kind Kind
- *
+ * @param {string} name Name
  * @return {(thunkArgs: object) => Promise<Array>} Entities
  */
-const getOrLoadEntitiesConfig = kind => async ({
+const getOrLoadEntitiesConfig = (kind, name) => async ({
   select,
   dispatch
 }) => {
   let configs = select.getEntitiesConfig(kind);
-  if (configs && configs.length !== 0) {
+  const hasConfig = !!select.getEntityConfig(kind, name);
+  if (configs?.length > 0 && hasConfig) {
     if (window.__experimentalEnableSync) {
       if (true) {
         registerSyncConfigs(configs);
@@ -19949,7 +19984,12 @@ const getOrLoadEntitiesConfig = kind => async ({
     }
     return configs;
   }
-  const loader = additionalEntityConfigLoaders.find(l => l.kind === kind);
+  const loader = additionalEntityConfigLoaders.find(l => {
+    if (!name || !l.name) {
+      return l.kind === kind;
+    }
+    return l.kind === kind && l.name === name;
+  });
   if (!loader) {
     return [];
   }
@@ -21353,6 +21393,14 @@ function getQueriedTotalItems(state, query = {}) {
   } = get_query_parts(query);
   return (_state$queries$contex = state.queries?.[context]?.[stableKey]?.meta?.totalItems) !== null && _state$queries$contex !== void 0 ? _state$queries$contex : null;
 }
+function getQueriedTotalPages(state, query = {}) {
+  var _state$queries$contex2;
+  const {
+    stableKey,
+    context
+  } = get_query_parts(query);
+  return (_state$queries$contex2 = state.queries?.[context]?.[stableKey]?.meta?.totalPages) !== null && _state$queries$contex2 !== void 0 ? _state$queries$contex2 : null;
+}
 
 ;// CONCATENATED MODULE: ./packages/core-data/build-module/utils/is-numeric-id.js
 /**
@@ -21744,6 +21792,11 @@ const getEntityRecordsTotalPages = (state, kind, name, query) => {
   if (query.per_page === -1) return 1;
   const totalItems = getQueriedTotalItems(queriedState, query);
   if (!totalItems) return totalItems;
+  // If `per_page` is not set and the query relies on the defaults of the
+  // REST endpoint, get the info from query's meta.
+  if (!query.per_page) {
+    return getQueriedTotalPages(queriedState, query);
+  }
   return Math.ceil(totalItems / query.per_page);
 };
 /**
@@ -22849,7 +22902,7 @@ const resolvers_getEntityRecord = (kind, name, key = '', query) => async ({
   select,
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
   if (!entityConfig || entityConfig?.__experimentalNoFetch) {
     return;
@@ -22950,7 +23003,7 @@ const resolvers_getEditedEntityRecord = forward_resolver('getEntityRecord');
 const resolvers_getEntityRecords = (kind, name, query = {}) => async ({
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
   if (!entityConfig || entityConfig?.__experimentalNoFetch) {
     return;
@@ -22980,7 +23033,8 @@ const resolvers_getEntityRecords = (kind, name, query = {}) => async ({
       });
       records = Object.values(await response.json());
       meta = {
-        totalItems: parseInt(response.headers.get('X-WP-Total'))
+        totalItems: parseInt(response.headers.get('X-WP-Total')),
+        totalPages: parseInt(response.headers.get('X-WP-TotalPages'))
       };
     } else {
       records = Object.values(await external_wp_apiFetch_default()({
@@ -23143,7 +23197,7 @@ const resolvers_canUser = (requestedAction, resource, id) => async ({
 const resolvers_canUserEditEntityRecord = (kind, name, recordId) => async ({
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
   if (!entityConfig) {
     return;
@@ -23368,7 +23422,7 @@ const resolvers_getDefaultTemplateId = query => async ({
 const resolvers_getRevisions = (kind, name, recordKey, query = {}) => async ({
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
   if (!entityConfig || entityConfig?.__experimentalNoFetch) {
     return;
@@ -23454,7 +23508,7 @@ resolvers_getRevisions.shouldInvalidate = (action, kind, name, recordKey) => act
 const resolvers_getRevision = (kind, name, recordKey, revisionKey, query) => async ({
   dispatch
 }) => {
-  const configs = await dispatch(getOrLoadEntitiesConfig(kind));
+  const configs = await dispatch(getOrLoadEntitiesConfig(kind, name));
   const entityConfig = configs.find(config => config.name === name && config.kind === kind);
   if (!entityConfig || entityConfig?.__experimentalNoFetch) {
     return;
@@ -24437,30 +24491,29 @@ const enrichSelectors = memoize(selectors => {
     }
     Object.defineProperty(resolvers, selectorName, {
       get: () => (...args) => {
-        const {
-          getIsResolving,
-          hasFinishedResolution
-        } = selectors;
-        const isResolving = !!getIsResolving(selectorName, args);
-        const hasResolved = !isResolving && hasFinishedResolution(selectorName, args);
         const data = selectors[selectorName](...args);
+        const resolutionStatus = selectors.getResolutionState(selectorName, args)?.status;
         let status;
-        if (isResolving) {
-          status = Status.Resolving;
-        } else if (hasResolved) {
-          if (data) {
+        switch (resolutionStatus) {
+          case 'resolving':
+            status = Status.Resolving;
+            break;
+          case 'finished':
             status = Status.Success;
-          } else {
+            break;
+          case 'error':
             status = Status.Error;
-          }
-        } else {
-          status = Status.Idle;
+            break;
+          case undefined:
+            status = Status.Idle;
+            break;
         }
         return {
           data,
           status,
-          isResolving,
-          hasResolved
+          isResolving: status === Status.Resolving,
+          hasStarted: status !== Status.Idle,
+          hasResolved: status === Status.Success || status === Status.Error
         };
       }
     });
@@ -24898,28 +24951,34 @@ function __experimentalUseResourcePermissions(resource, id) {
 // (getEntityRecord, getEntityRecords, updateEntityRecord, updateEntityRecords)
 // Instead of getEntityRecord, the consumer could use more user-friendly named selector: getPostType, getTaxonomy...
 // The "kind" and the "name" of the entity are combined to generate these shortcuts.
-
-const entitySelectors = rootEntitiesConfig.reduce((result, entity) => {
+const build_module_entitiesConfig = [...rootEntitiesConfig, ...additionalEntityConfigLoaders.filter(config => !!config.name)];
+const entitySelectors = build_module_entitiesConfig.reduce((result, entity) => {
   const {
     kind,
-    name
+    name,
+    plural
   } = entity;
   result[getMethodName(kind, name)] = (state, key, query) => getEntityRecord(state, kind, name, key, query);
-  result[getMethodName(kind, name, 'get', true)] = (state, query) => getEntityRecords(state, kind, name, query);
+  if (plural) {
+    result[getMethodName(kind, plural, 'get')] = (state, query) => getEntityRecords(state, kind, name, query);
+  }
   return result;
 }, {});
-const entityResolvers = rootEntitiesConfig.reduce((result, entity) => {
+const entityResolvers = build_module_entitiesConfig.reduce((result, entity) => {
   const {
     kind,
-    name
+    name,
+    plural
   } = entity;
   result[getMethodName(kind, name)] = (key, query) => resolvers_getEntityRecord(kind, name, key, query);
-  const pluralMethodName = getMethodName(kind, name, 'get', true);
-  result[pluralMethodName] = (...args) => resolvers_getEntityRecords(kind, name, ...args);
-  result[pluralMethodName].shouldInvalidate = action => resolvers_getEntityRecords.shouldInvalidate(action, kind, name);
+  if (plural) {
+    const pluralMethodName = getMethodName(kind, plural, 'get');
+    result[pluralMethodName] = (...args) => resolvers_getEntityRecords(kind, name, ...args);
+    result[pluralMethodName].shouldInvalidate = action => resolvers_getEntityRecords.shouldInvalidate(action, kind, name);
+  }
   return result;
 }, {});
-const entityActions = rootEntitiesConfig.reduce((result, entity) => {
+const entityActions = build_module_entitiesConfig.reduce((result, entity) => {
   const {
     kind,
     name

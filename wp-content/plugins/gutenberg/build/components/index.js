@@ -13744,7 +13744,7 @@ function emotion_memoize_esm_memoize(fn) {
 ;// CONCATENATED MODULE: ./node_modules/@emotion/styled/node_modules/@emotion/is-prop-valid/dist/emotion-is-prop-valid.esm.js
 
 
-var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
+var reactPropsRegex = /^((children|dangerouslySetInnerHTML|key|ref|autoFocus|defaultValue|defaultChecked|innerHTML|suppressContentEditableWarning|suppressHydrationWarning|valueLink|abbr|accept|acceptCharset|accessKey|action|allow|allowUserMedia|allowPaymentRequest|allowFullScreen|allowTransparency|alt|async|autoComplete|autoPlay|capture|cellPadding|cellSpacing|challenge|charSet|checked|cite|classID|className|cols|colSpan|content|contentEditable|contextMenu|controls|controlsList|coords|crossOrigin|data|dateTime|decoding|default|defer|dir|disabled|disablePictureInPicture|disableRemotePlayback|download|draggable|encType|enterKeyHint|form|formAction|formEncType|formMethod|formNoValidate|formTarget|frameBorder|headers|height|hidden|high|href|hrefLang|htmlFor|httpEquiv|id|inputMode|integrity|is|keyParams|keyType|kind|label|lang|list|loading|loop|low|marginHeight|marginWidth|max|maxLength|media|mediaGroup|method|min|minLength|multiple|muted|name|nonce|noValidate|open|optimum|pattern|placeholder|playsInline|poster|preload|profile|radioGroup|readOnly|referrerPolicy|rel|required|reversed|role|rows|rowSpan|sandbox|scope|scoped|scrolling|seamless|selected|shape|size|sizes|slot|span|spellCheck|src|srcDoc|srcLang|srcSet|start|step|style|summary|tabIndex|target|title|translate|type|useMap|value|width|wmode|wrap|about|datatype|inlist|prefix|property|resource|typeof|vocab|autoCapitalize|autoCorrect|autoSave|color|incremental|fallback|inert|itemProp|itemScope|itemType|itemID|itemRef|on|option|results|security|unselectable|accentHeight|accumulate|additive|alignmentBaseline|allowReorder|alphabetic|amplitude|arabicForm|ascent|attributeName|attributeType|autoReverse|azimuth|baseFrequency|baselineShift|baseProfile|bbox|begin|bias|by|calcMode|capHeight|clip|clipPathUnits|clipPath|clipRule|colorInterpolation|colorInterpolationFilters|colorProfile|colorRendering|contentScriptType|contentStyleType|cursor|cx|cy|d|decelerate|descent|diffuseConstant|direction|display|divisor|dominantBaseline|dur|dx|dy|edgeMode|elevation|enableBackground|end|exponent|externalResourcesRequired|fill|fillOpacity|fillRule|filter|filterRes|filterUnits|floodColor|floodOpacity|focusable|fontFamily|fontSize|fontSizeAdjust|fontStretch|fontStyle|fontVariant|fontWeight|format|from|fr|fx|fy|g1|g2|glyphName|glyphOrientationHorizontal|glyphOrientationVertical|glyphRef|gradientTransform|gradientUnits|hanging|horizAdvX|horizOriginX|ideographic|imageRendering|in|in2|intercept|k|k1|k2|k3|k4|kernelMatrix|kernelUnitLength|kerning|keyPoints|keySplines|keyTimes|lengthAdjust|letterSpacing|lightingColor|limitingConeAngle|local|markerEnd|markerMid|markerStart|markerHeight|markerUnits|markerWidth|mask|maskContentUnits|maskUnits|mathematical|mode|numOctaves|offset|opacity|operator|order|orient|orientation|origin|overflow|overlinePosition|overlineThickness|panose1|paintOrder|pathLength|patternContentUnits|patternTransform|patternUnits|pointerEvents|points|pointsAtX|pointsAtY|pointsAtZ|preserveAlpha|preserveAspectRatio|primitiveUnits|r|radius|refX|refY|renderingIntent|repeatCount|repeatDur|requiredExtensions|requiredFeatures|restart|result|rotate|rx|ry|scale|seed|shapeRendering|slope|spacing|specularConstant|specularExponent|speed|spreadMethod|startOffset|stdDeviation|stemh|stemv|stitchTiles|stopColor|stopOpacity|strikethroughPosition|strikethroughThickness|string|stroke|strokeDasharray|strokeDashoffset|strokeLinecap|strokeLinejoin|strokeMiterlimit|strokeOpacity|strokeWidth|surfaceScale|systemLanguage|tableValues|targetX|targetY|textAnchor|textDecoration|textRendering|textLength|to|transform|u1|u2|underlinePosition|underlineThickness|unicode|unicodeBidi|unicodeRange|unitsPerEm|vAlphabetic|vHanging|vIdeographic|vMathematical|values|vectorEffect|version|vertAdvY|vertOriginX|vertOriginY|viewBox|viewTarget|visibility|widths|wordSpacing|writingMode|x|xHeight|x1|x2|xChannelSelector|xlinkActuate|xlinkArcrole|xlinkHref|xlinkRole|xlinkShow|xlinkTitle|xlinkType|xmlBase|xmlns|xmlnsXlink|xmlLang|xmlSpace|y|y1|y2|yChannelSelector|z|zoomAndPan|for|class|autofocus)|(([Dd][Aa][Tt][Aa]|[Aa][Rr][Ii][Aa]|x)-.*))$/; // https://esbench.com/bench/5bfee68a4cd7e6009ef61d23
 
 var isPropValid = /* #__PURE__ */emotion_memoize_esm_memoize(function (prop) {
   return reactPropsRegex.test(prop) || prop.charCodeAt(0) === 111
@@ -27236,7 +27236,7 @@ const TOGGLE_GROUP_CONTROL_PROPS = {
   fontSizeMobile: '15px',
   fontSizeSmall: 'calc(0.92 * 13px)',
   fontSizeXSmall: 'calc(0.75 * 13px)',
-  fontLineHeightBase: '1.2',
+  fontLineHeightBase: '1.4',
   fontWeight: 'normal',
   fontWeightHeading: '600',
   gridBase: '4px',
@@ -30784,7 +30784,7 @@ function UnforwardedInputControl(props, ref) {
  *
  * ```jsx
  * import { __experimentalInputControl as InputControl } from '@wordpress/components';
- * import { useState } from '@wordpress/compose';
+ * import { useState } from 'react';
  *
  * const Example = () => {
  *   const [ value, setValue ] = useState( '' );
@@ -30962,10 +30962,9 @@ function button_useDeprecatedProps({
   }
   if (isDefault) {
     var _computedVariant4;
-    external_wp_deprecated_default()('Button isDefault prop', {
+    external_wp_deprecated_default()('wp.components.Button `isDefault` prop', {
       since: '5.4',
-      alternative: 'variant="secondary"',
-      version: '6.2'
+      alternative: 'variant="secondary"'
     });
     (_computedVariant4 = computedVariant) !== null && _computedVariant4 !== void 0 ? _computedVariant4 : computedVariant = 'secondary';
   }
@@ -36296,11 +36295,14 @@ function ToggleGroupControlOptionBase(props, forwardedRef) {
     }),
     value: value
   }, (0,external_React_.createElement)(component_ButtonContentView, null, children))), isPressed ? (0,external_React_.createElement)(motion.div, {
+    layout: true,
+    layoutRoot: true
+  }, (0,external_React_.createElement)(motion.div, {
     className: backdropClasses,
     transition: shouldReduceMotion ? REDUCED_MOTION_TRANSITION_CONFIG : undefined,
     role: "presentation",
     layoutId: LAYOUT_ID
-  }) : null);
+  })) : null);
 }
 
 /**
@@ -45888,7 +45890,7 @@ function NameInput({
 }
 
 /**
- * Returns a name for a palette item in the format "Color + id".
+ * Returns a name and slug for a palette item. The name takes the format "Color + id".
  * To ensure there are no duplicate ids, this function checks all slugs.
  * It expects slugs to be in the format: slugPrefix + color- + number.
  * It then sets the id component of the new name based on the incremented id of the highest existing slug id.
@@ -45896,9 +45898,9 @@ function NameInput({
  * @param elements   An array of color palette items.
  * @param slugPrefix The slug prefix used to match the element slug.
  *
- * @return A unique name for a palette item.
+ * @return A name and slug for the new palette item.
  */
-function getNameForPosition(elements, slugPrefix) {
+function getNameAndSlugForPosition(elements, slugPrefix) {
   const nameRegex = new RegExp(`^${slugPrefix}color-([\\d]+)$`);
   const position = elements.reduce((previousValue, currentValue) => {
     if (typeof currentValue?.slug === 'string') {
@@ -45912,8 +45914,11 @@ function getNameForPosition(elements, slugPrefix) {
     }
     return previousValue;
   }, 1);
-  return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: is an id for a custom color */
-  (0,external_wp_i18n_namespaceObject.__)('Color %s'), position);
+  return {
+    name: (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: is an id for a custom color */
+    (0,external_wp_i18n_namespaceObject.__)('Color %s'), position),
+    slug: `${slugPrefix}color-${position}`
+  };
 }
 function ColorPickerPopover({
   isGradient,
@@ -46141,18 +46146,21 @@ function PaletteEdit({
     icon: library_plus,
     label: isGradient ? (0,external_wp_i18n_namespaceObject.__)('Add gradient') : (0,external_wp_i18n_namespaceObject.__)('Add color'),
     onClick: () => {
-      const optionName = getNameForPosition(elements, slugPrefix);
+      const {
+        name,
+        slug
+      } = getNameAndSlugForPosition(elements, slugPrefix);
       if (!!gradients) {
         onChange([...gradients, {
           gradient: DEFAULT_GRADIENT,
-          name: optionName,
-          slug: slugPrefix + kebabCase(optionName)
+          name,
+          slug
         }]);
       } else {
         onChange([...colors, {
           color: DEFAULT_COLOR,
-          name: optionName,
-          slug: slugPrefix + kebabCase(optionName)
+          name,
+          slug
         }]);
       }
       setIsEditing(true);
@@ -46162,7 +46170,7 @@ function PaletteEdit({
     icon: more_vertical,
     label: isGradient ? (0,external_wp_i18n_namespaceObject.__)('Gradient options') : (0,external_wp_i18n_namespaceObject.__)('Color options'),
     toggleProps: {
-      isSmall: true
+      size: 'small'
     }
   }, ({
     onClose
@@ -55605,7 +55613,7 @@ const DayButton = /*#__PURE__*/emotion_styled_base_browser_esm(build_module_butt
 		justify-self: end;
 		`, " ", props => props.disabled && `
 		pointer-events: none;
-		`, " &&&{border-radius:100%;height:", space(8), ";width:", space(8), ";", props => props.isSelected && `
+		`, " &&&{border-radius:100%;height:", space(7), ";width:", space(7), ";", props => props.isSelected && `
 			background: ${COLORS.theme.accent};
 			color: ${COLORS.white};
 			`, " ", props => !props.isSelected && props.isToday && `
@@ -59147,7 +59155,7 @@ const form_token_field_identity = value => value;
  * Tokens are separated by the "," character. Suggestions can be selected with the up or down arrows and added with the tab or enter key.
  *
  * The `value` property is handled in a manner similar to controlled form components.
- * See [Forms](http://facebook.github.io/react/docs/forms.html) in the React Documentation for more information.
+ * See [Forms](https://react.dev/reference/react-dom/components#form-components) in the React Documentation for more information.
  */
 function FormTokenField(props) {
   const {
@@ -66554,7 +66562,7 @@ const TextControl = (0,external_wp_element_namespaceObject.forwardRef)(Unforward
 
 
 
-const inputStyleNeutral = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:0 0 0 transparent;transition:box-shadow 0.1s linear;border-radius:", config_values.radiusBlockUi, ";border:", config_values.borderWidth, " solid ", COLORS.ui.border, ";" + ( true ? "" : 0),  true ? "" : 0);
+const inputStyleNeutral = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:0 0 0 transparent;transition:box-shadow 0.1s linear;border-radius:", config_values.radiusBlockUi, ";border:", config_values.borderWidth, " solid ", COLORS.ui.border, ";", reduceMotion('transition'), ";" + ( true ? "" : 0),  true ? "" : 0);
 const inputStyleFocus = /*#__PURE__*/emotion_react_browser_esm_css("border-color:", COLORS.theme.accent, ";box-shadow:0 0 0 calc( ", config_values.borderWidthFocus, " - ", config_values.borderWidth, " ) ", COLORS.theme.accent, ";outline:2px solid transparent;" + ( true ? "" : 0),  true ? "" : 0);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/utils/breakpoint-values.js
@@ -67790,7 +67798,7 @@ const component_ToolsPanelHeader = (props, forwardedRef) => {
       className: dropdownMenuClassName
     },
     toggleProps: {
-      isSmall: true,
+      size: 'small',
       describedBy: dropdownMenuDescriptionText
     }
   }, () => (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(menu_group, {

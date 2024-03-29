@@ -8,6 +8,7 @@
 namespace Newspack;
 
 use Google\Site_Kit\Context;
+use Google\Site_Kit\Modules\Analytics_4\Settings;
 
 defined( 'ABSPATH' ) || exit;
 
@@ -91,8 +92,8 @@ class GoogleSiteKit {
 	 * Get the name of the option under which Site Kit's GA4 settings are stored.
 	 */
 	private static function get_sitekit_ga4_settings_option_name() {
-		if ( class_exists( '\Google\Site_Kit\Modules\Analytics_4\Settings' ) ) {
-			return \Google\Site_Kit\Modules\Analytics_4\Settings::OPTION;
+		if ( class_exists( 'Google\Site_Kit\Modules\Analytics_4\Settings' ) ) {
+			return Settings::OPTION;
 		}
 		return false;
 	}
@@ -133,10 +134,11 @@ class GoogleSiteKit {
 			return;
 		}
 
-		$sitekit_ga_settings = get_option( \Google\Site_Kit\Modules\Analytics\Settings::OPTION, false );
+		$sitekit_ga_settings = get_option( Settings::OPTION, false );
 		if ( false === $sitekit_ga_settings || ! isset( $sitekit_ga_settings['accountID'] ) ) {
 			return;
 		}
+
 		$account_id = $sitekit_ga_settings['accountID'];
 
 		try {

@@ -4,7 +4,7 @@
  * Based on woocommerce/templates/myaccount/form-edit-account.php.
  *
  * @package Newspack
- * @version 7.0.1
+ * @version 8.7.0
  */
 
 namespace Newspack;
@@ -67,7 +67,23 @@ endif;
 		<input type="hidden" class="woocommerce-Input woocommerce-Input--email input-text" name="account_email" id="account_email" autocomplete="email" value="<?php echo \esc_attr( $user->user_email ); ?>" />
 	</p>
 
-	<?php \do_action( 'newspack_woocommerce_edit_account_form' ); ?>
+	<?php
+		/**
+		 * Hook where additional fields should be rendered.
+		 *
+		 * Newspack equivalent of do_action( 'woocommerce_edit_account_form_fields' );
+		 */
+		do_action( 'newspack_woocommerce_edit_account_form_fields' );
+	?>
+
+	<?php
+		/**
+		 * My Account edit account form.
+		 *
+		 * Newspack equivalent of do_action( 'woocommerce_edit_account_form' );
+		 */
+		\do_action( 'newspack_woocommerce_edit_account_form' );
+	?>
 
 	<p class="woocommerce-buttons-card">
 		<?php \wp_nonce_field( 'save_account_details', 'save-account-details-nonce' ); ?>

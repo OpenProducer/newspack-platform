@@ -1,3 +1,69 @@
+## [3.5.3](https://github.com/Automattic/newspack-plugin/compare/v3.5.2...v3.5.3) (2024-03-28)
+
+
+### Bug Fixes
+
+* **sitekit:** use analytics 4 module ([#3022](https://github.com/Automattic/newspack-plugin/issues/3022)) ([94dbc18](https://github.com/Automattic/newspack-plugin/commit/94dbc18dc3ac523847727c6a4263442b12c26185))
+
+## [3.5.2](https://github.com/Automattic/newspack-plugin/compare/v3.5.1...v3.5.2) (2024-03-27)
+
+
+### Bug Fixes
+
+* update template for woo 8.7.0 ([#3001](https://github.com/Automattic/newspack-plugin/issues/3001)) ([76b205b](https://github.com/Automattic/newspack-plugin/commit/76b205bf795026c94ccefc949005aed7dfa440f8))
+
+## [3.5.1](https://github.com/Automattic/newspack-plugin/compare/v3.5.0...v3.5.1) (2024-03-26)
+
+
+### Bug Fixes
+
+* cherry-pick new features for Network sites ([#3011](https://github.com/Automattic/newspack-plugin/issues/3011)) ([7316d62](https://github.com/Automattic/newspack-plugin/commit/7316d622d7d19787f7e275bfc439c079e645aa20)), closes [#2989](https://github.com/Automattic/newspack-plugin/issues/2989)
+
+# [3.5.0](https://github.com/Automattic/newspack-plugin/compare/v3.4.0...v3.5.0) (2024-03-25)
+
+
+### Features
+
+* **ras:** updates to metadata fields synced to ESP ([#2993](https://github.com/Automattic/newspack-plugin/issues/2993)) ([f28f436](https://github.com/Automattic/newspack-plugin/commit/f28f436ad64026b2d012ac9f0990e7381c90ded4))
+
+# [3.4.0](https://github.com/Automattic/newspack-plugin/compare/v3.3.5...v3.4.0) (2024-03-25)
+
+
+### Bug Fixes
+
+* allow media lib access if explicitly set ([63ba98c](https://github.com/Automattic/newspack-plugin/commit/63ba98c10456954d07b2fb64455a79d00e40ff33))
+* correct text domains for handoff, healthcheck wizards ([#2961](https://github.com/Automattic/newspack-plugin/issues/2961)) ([a8f5de3](https://github.com/Automattic/newspack-plugin/commit/a8f5de30d22a8a9062409579727340ced31d706d))
+* correct text domains for popup wizard ([#2962](https://github.com/Automattic/newspack-plugin/issues/2962)) ([dba7f6c](https://github.com/Automattic/newspack-plugin/commit/dba7f6c9a4fd22ccbfa63d589d29b1d9a5092730))
+* correct text domains in wizards/engagement ([#2957](https://github.com/Automattic/newspack-plugin/issues/2957)) ([4db61b0](https://github.com/Automattic/newspack-plugin/commit/4db61b03e407cb1298df7391355ce91f320a42b6))
+* data-events tweaks ([#2935](https://github.com/Automattic/newspack-plugin/issues/2935)) ([828f5f2](https://github.com/Automattic/newspack-plugin/commit/828f5f24c11affcea1cd7433062bd70dbe2eff7b))
+* fix fallback logic in get_order_data() util method ([0ac5b35](https://github.com/Automattic/newspack-plugin/commit/0ac5b35f127540e1a16fe972405256fcb677dd44))
+* **GA:** update spelling of referrer param ([#2917](https://github.com/Automattic/newspack-plugin/issues/2917)) ([fc2bd26](https://github.com/Automattic/newspack-plugin/commit/fc2bd26280abc62992e18315ce7b95864986783a))
+* handle no themes are available ([#2967](https://github.com/Automattic/newspack-plugin/issues/2967)) ([6ae6c7c](https://github.com/Automattic/newspack-plugin/commit/6ae6c7cea2059835cd7de87369303f3b7ddfbc48))
+* **image-credits:** handle errors when fetching metadata ([#2968](https://github.com/Automattic/newspack-plugin/issues/2968)) ([6e9459f](https://github.com/Automattic/newspack-plugin/commit/6e9459f7bf4bf08a0b4c259677162fcdba6276eb))
+* **media-partners:** handle skip-in-feeds when exporting to apple news ([7226e42](https://github.com/Automattic/newspack-plugin/commit/7226e4223ea1c98bca57f22319a86c9e285d487a))
+* **memberships-gate:** handle no comments ([#2999](https://github.com/Automattic/newspack-plugin/issues/2999)) ([1791ca4](https://github.com/Automattic/newspack-plugin/commit/1791ca4afcec087b095eb1d4903cf24aa253f995))
+* **newsletters:** handle status metadata ([1c8e069](https://github.com/Automattic/newspack-plugin/commit/1c8e069051b191899bd232a97ef5669c50f221c7))
+* **ras:** check for auth status before updating my account label ([#2970](https://github.com/Automattic/newspack-plugin/issues/2970)) ([3a0fb8b](https://github.com/Automattic/newspack-plugin/commit/3a0fb8b9a748fa2b67cbc43f9cf334788d8c4d57))
+* revert credits display when editing image block ([#2994](https://github.com/Automattic/newspack-plugin/issues/2994)) ([54ca247](https://github.com/Automattic/newspack-plugin/commit/54ca24705300353d13d504a3bd3d688d46e29d73)), closes [#2936](https://github.com/Automattic/newspack-plugin/issues/2936)
+* update text domain in wizards/connections directory ([#2956](https://github.com/Automattic/newspack-plugin/issues/2956)) ([2acb12d](https://github.com/Automattic/newspack-plugin/commit/2acb12dcd0a60d38390c950872ee4bdd073e7e37))
+* update text domains for the advertising wizard ([#2952](https://github.com/Automattic/newspack-plugin/issues/2952)) ([cb45da2](https://github.com/Automattic/newspack-plugin/commit/cb45da20d409ec92b5deb521d27261e27f6dc330))
+* update text domains for the analytics, components ([#2953](https://github.com/Automattic/newspack-plugin/issues/2953)) ([04ff6a9](https://github.com/Automattic/newspack-plugin/commit/04ff6a9a49908c0276d8fad828e60e86ed0fb769))
+
+
+### Features
+
+* add a filter to esp normalized contact ([#2940](https://github.com/Automattic/newspack-plugin/issues/2940)) ([6ce05be](https://github.com/Automattic/newspack-plugin/commit/6ce05beb8ab40000a0560d1e1ec59abfdd035d09))
+* **core-image-block:** display media credit in editor; handle distributed posts ([#2936](https://github.com/Automattic/newspack-plugin/issues/2936)) ([6c8d9ff](https://github.com/Automattic/newspack-plugin/commit/6c8d9ff0e1059f41c90819c6ef5537d0930cc55e))
+* jetpack default modules ([#2959](https://github.com/Automattic/newspack-plugin/issues/2959)) ([90e918e](https://github.com/Automattic/newspack-plugin/commit/90e918e7db5a4b55b5778989831a8ea4590d8b41))
+* **webhooks:** add `newspack_webhooks_process_request_errors` action ([#2955](https://github.com/Automattic/newspack-plugin/issues/2955)) ([20c6b29](https://github.com/Automattic/newspack-plugin/commit/20c6b299f5bf518bcf6e5e120ab5e38d14501bd9))
+
+## [3.3.5](https://github.com/Automattic/newspack-plugin/compare/v3.3.4...v3.3.5) (2024-03-25)
+
+
+### Bug Fixes
+
+* update WC's required fields if using other RR platforms ([#2997](https://github.com/Automattic/newspack-plugin/issues/2997)) ([a0d6632](https://github.com/Automattic/newspack-plugin/commit/a0d6632ddd76fc55a6f4b6ef0dd1387c31f8e90a))
+
 ## [3.3.4](https://github.com/Automattic/newspack-plugin/compare/v3.3.3...v3.3.4) (2024-03-20)
 
 
@@ -11,6 +77,35 @@
 ### Bug Fixes
 
 * add a check for setup complete before adding homepage pattern ([#2987](https://github.com/Automattic/newspack-plugin/issues/2987)) ([36238e9](https://github.com/Automattic/newspack-plugin/commit/36238e96a863723720979520400a9afc65dd0cfa))
+
+## [3.3.3](https://github.com/Automattic/newspack-plugin/compare/v3.3.2...v3.3.3) (2024-03-12)
+
+
+### Bug Fixes
+
+* allow media lib access if explicitly set ([63ba98c](https://github.com/Automattic/newspack-plugin/commit/63ba98c10456954d07b2fb64455a79d00e40ff33))
+* correct text domains for handoff, healthcheck wizards ([#2961](https://github.com/Automattic/newspack-plugin/issues/2961)) ([a8f5de3](https://github.com/Automattic/newspack-plugin/commit/a8f5de30d22a8a9062409579727340ced31d706d))
+* correct text domains for popup wizard ([#2962](https://github.com/Automattic/newspack-plugin/issues/2962)) ([dba7f6c](https://github.com/Automattic/newspack-plugin/commit/dba7f6c9a4fd22ccbfa63d589d29b1d9a5092730))
+* correct text domains in wizards/engagement ([#2957](https://github.com/Automattic/newspack-plugin/issues/2957)) ([4db61b0](https://github.com/Automattic/newspack-plugin/commit/4db61b03e407cb1298df7391355ce91f320a42b6))
+* data-events tweaks ([#2935](https://github.com/Automattic/newspack-plugin/issues/2935)) ([828f5f2](https://github.com/Automattic/newspack-plugin/commit/828f5f24c11affcea1cd7433062bd70dbe2eff7b))
+* **GA:** update spelling of referrer param ([#2917](https://github.com/Automattic/newspack-plugin/issues/2917)) ([fc2bd26](https://github.com/Automattic/newspack-plugin/commit/fc2bd26280abc62992e18315ce7b95864986783a))
+* handle no themes are available ([#2967](https://github.com/Automattic/newspack-plugin/issues/2967)) ([6ae6c7c](https://github.com/Automattic/newspack-plugin/commit/6ae6c7cea2059835cd7de87369303f3b7ddfbc48))
+* **image-credits:** handle errors when fetching metadata ([#2968](https://github.com/Automattic/newspack-plugin/issues/2968)) ([6e9459f](https://github.com/Automattic/newspack-plugin/commit/6e9459f7bf4bf08a0b4c259677162fcdba6276eb))
+* **media-partners:** handle skip-in-feeds when exporting to apple news ([7226e42](https://github.com/Automattic/newspack-plugin/commit/7226e4223ea1c98bca57f22319a86c9e285d487a))
+* **newsletters:** handle status metadata ([1c8e069](https://github.com/Automattic/newspack-plugin/commit/1c8e069051b191899bd232a97ef5669c50f221c7))
+* **ras:** check for auth status before updating my account label ([#2970](https://github.com/Automattic/newspack-plugin/issues/2970)) ([3a0fb8b](https://github.com/Automattic/newspack-plugin/commit/3a0fb8b9a748fa2b67cbc43f9cf334788d8c4d57))
+* update text domain in wizards/connections directory ([#2956](https://github.com/Automattic/newspack-plugin/issues/2956)) ([2acb12d](https://github.com/Automattic/newspack-plugin/commit/2acb12dcd0a60d38390c950872ee4bdd073e7e37))
+* update text domains for the advertising wizard ([#2952](https://github.com/Automattic/newspack-plugin/issues/2952)) ([cb45da2](https://github.com/Automattic/newspack-plugin/commit/cb45da20d409ec92b5deb521d27261e27f6dc330))
+* update text domains for the analytics, components ([#2953](https://github.com/Automattic/newspack-plugin/issues/2953)) ([04ff6a9](https://github.com/Automattic/newspack-plugin/commit/04ff6a9a49908c0276d8fad828e60e86ed0fb769))
+* add a check for setup complete before adding homepage pattern ([#2987](https://github.com/Automattic/newspack-plugin/issues/2987)) ([36238e9](https://github.com/Automattic/newspack-plugin/commit/36238e96a863723720979520400a9afc65dd0cfa))
+
+
+### Features
+
+* add a filter to esp normalized contact ([#2940](https://github.com/Automattic/newspack-plugin/issues/2940)) ([6ce05be](https://github.com/Automattic/newspack-plugin/commit/6ce05beb8ab40000a0560d1e1ec59abfdd035d09))
+* **core-image-block:** display media credit in editor; handle distributed posts ([#2936](https://github.com/Automattic/newspack-plugin/issues/2936)) ([6c8d9ff](https://github.com/Automattic/newspack-plugin/commit/6c8d9ff0e1059f41c90819c6ef5537d0930cc55e))
+* jetpack default modules ([#2959](https://github.com/Automattic/newspack-plugin/issues/2959)) ([90e918e](https://github.com/Automattic/newspack-plugin/commit/90e918e7db5a4b55b5778989831a8ea4590d8b41))
+* **webhooks:** add `newspack_webhooks_process_request_errors` action ([#2955](https://github.com/Automattic/newspack-plugin/issues/2955)) ([20c6b29](https://github.com/Automattic/newspack-plugin/commit/20c6b299f5bf518bcf6e5e120ab5e38d14501bd9))
 
 ## [3.3.2](https://github.com/Automattic/newspack-plugin/compare/v3.3.1...v3.3.2) (2024-03-07)
 

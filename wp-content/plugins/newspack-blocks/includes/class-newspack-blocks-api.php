@@ -278,8 +278,6 @@ class Newspack_Blocks_API {
 			$GLOBALS['post'] = $post; // phpcs:ignore WordPress.WP.GlobalVariablesOverride.Prohibited
 			setup_postdata( $post );
 
-			$post_date_gmt = '0000-00-00 00:00:00' === $post->post_date_gmt ? get_gmt_from_date( $post->post_date ) : $post->post_date_gmt;
-
 			// phpcs:disable WordPress.NamingConventions.PrefixAllGlobals.NonPrefixedHooknameFound
 			$excerpt = apply_filters( 'get_the_excerpt', $post->post_excerpt, $post );
 			$excerpt = apply_filters( 'the_excerpt', $excerpt );
@@ -288,19 +286,20 @@ class Newspack_Blocks_API {
 
 			$meta = new WP_REST_Post_Meta_Fields( 'post' );
 			$data = [
-				'author'         => (int) $post->post_author,
-				'content'        => [
+				'author'              => (int) $post->post_author,
+				'content'             => [
 					'rendered' => post_password_required( $post ) ? '' : $content,
 				],
-				'date_gmt'       => mysql_to_rfc3339( $post_date_gmt ),
-				'date'           => mysql_to_rfc3339( $post->post_date ),
-				'excerpt'        => [
+				'date'                => Newspack_Blocks::get_displayed_post_date( $post ),
+				'date_formatted'      => Newspack_Blocks::get_formatted_displayed_post_date( $post ),
+				'article_meta_footer' => Newspack_Blocks::get_article_meta_footer( $post ),
+				'excerpt'             => [
 					'rendered' => post_password_required( $post ) ? '' : $excerpt,
 				],
-				'featured_media' => (int) get_post_thumbnail_id( $post->ID ),
-				'id'             => $post->ID,
-				'meta'           => $meta->get_value( $post->ID, $request ),
-				'title'          => [
+				'featured_media'      => (int) get_post_thumbnail_id( $post->ID ),
+				'id'                  => $post->ID,
+				'meta'                => $meta->get_value( $post->ID, $request ),
+				'title'               => [
 					'rendered' => get_the_title( $post->ID ),
 				],
 			];
