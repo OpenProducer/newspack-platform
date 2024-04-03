@@ -81,7 +81,16 @@ class ActiveCampaign {
 		if ( isset( $data['metadata']['registration_method'] ) ) {
 			$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_method' ) ] = $data['metadata']['registration_method'];
 		}
-		$contact = [
+		/**
+		 * Filters the contact metadata sent to the ESP when a reader account is registered for the first time.
+		 *
+		 * @param array $metadata The contact metadata.
+		 * @param int   $user_id The ID of the user.
+		 *
+		 * @return array The modified contact metadata.
+		 */
+		$metadata = \apply_filters( 'newspack_data_events_reader_registered_metadata', $metadata, $data['user_id'] );
+		$contact  = [
 			'email'    => $data['email'],
 			'metadata' => $metadata,
 		];

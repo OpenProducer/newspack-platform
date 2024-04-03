@@ -1,3 +1,10 @@
+## [3.5.4](https://github.com/Automattic/newspack-plugin/compare/v3.5.3...v3.5.4) (2024-04-02)
+
+
+### Bug Fixes
+
+* add filters for Data Events reader_registered handlers ([#3030](https://github.com/Automattic/newspack-plugin/issues/3030)) ([a27bf90](https://github.com/Automattic/newspack-plugin/commit/a27bf901197492a1bae583896f2122cfbf8a067f))
+
 ## [3.5.3](https://github.com/Automattic/newspack-plugin/compare/v3.5.2...v3.5.3) (2024-03-28)
 
 
