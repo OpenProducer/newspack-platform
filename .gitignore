@@ -14,6 +14,7 @@ wp-content/backupwordpress-*/
 wp-content/managewp/backups/
 wp-content/advanced-cache.php
 wp-content/wp-cache-config.php
+wp-content/plugins/newspack-plugin/includes/class-plugin-manager.php
 sitemap.xml
 sitemap.xml.gz
 
