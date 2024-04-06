@@ -143,6 +143,14 @@ class Plugin_Manager {
 				'AuthorURI'   => esc_url( 'https://automattic.com' ),
 				'Download'    => 'https://github.com/Automattic/newspack-newsletters/releases/latest/download/newspack-newsletters.zip',
 			],
+			'newspack-plugin-update-checker'        => [
+				'Name'        => esc_html__( 'Newspack Plugin Update Checker', 'newspack' ),
+				'Description' => esc_html__( 'Keep tabs on updates to Newspack plugins that are only available on Github.', 'newspack' ),
+				'Author'      => esc_html__( 'Media Toybox', 'newspack' ),
+				'PluginURI'   => esc_url( 'https://newspack.com' ),
+				'AuthorURI'   => esc_url( 'https://mediatoybox.com/' ),
+				'Download'    => 'https://github.com/aschweigert/newspack-plugin-update-checker/archive/refs/tags/v0.1.zip',
+			],
 			'newspack-popups'             => [
 				'Name'        => esc_html__( 'Newspack Campaigns', 'newspack' ),
 				'Description' => esc_html__( 'Build persuasive call-to-action prompts from scratch and display them as overlays, inline with the story, or above the site header.', 'newspack-plugin' ),
@@ -328,6 +336,22 @@ class Plugin_Manager {
 				'Author'      => 'Broadstreet',
 				'AuthorURI'   => esc_url( 'https://broadstreetads.com/' ),
 				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/broadstreet/' ),
+				'Download'    => 'wporg',
+			],
+			'radio-station' => [
+				'Name'        => esc_html__( 'Radio Station', 'newspack' ),
+				'Description' => esc_html__( 'Radio Station lets you build and manage a Show Schedule for a radio station or Internet broadcasters WordPress website.', 'newspack' ),
+				'Author'      => esc_html__( 'tonyzeoli, majick', 'newspack' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/radio-station/' ),
+				'AuthorURI'   => esc_url( 'https://netmix.com/' ),
+				'Download'    => 'wporg',
+			],
+			'the-events-calendar' => [
+				'Name'        => esc_html__( 'The Events Calendar', 'newspack' ),
+				'Description' => esc_html__( 'The Events Calendar is a carefully crafted, extensible plugin that lets you easily share your events. Beautiful. Solid. Awesome.', 'newspack' ),
+				'Author'      => esc_html__( 'The Events Calendar', 'newspack' ),
+				'PluginURI'   => esc_url( 'https://wordpress.org/plugins/the-events-calendar/' ),
+				'AuthorURI'   => esc_url( 'https://evnt.is/1x' ),
 				'Download'    => 'wporg',
 			],
 		];
