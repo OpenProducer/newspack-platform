@@ -1,9 +1,108 @@
+## [3.6.9](https://github.com/Automattic/newspack-plugin/compare/v3.6.8...v3.6.9) (2024-04-12)
+
+
+### Bug Fixes
+
+* revert 3057 ([#3063](https://github.com/Automattic/newspack-plugin/issues/3063)) ([25eea61](https://github.com/Automattic/newspack-plugin/commit/25eea61980422f3f684429b57cdc3ca42234bd10))
+
+## [3.6.8](https://github.com/Automattic/newspack-plugin/compare/v3.6.7...v3.6.8) (2024-04-11)
+
+
+### Bug Fixes
+
+* hourly cron job to check for prematurely expired memberships ([#3060](https://github.com/Automattic/newspack-plugin/issues/3060)) ([77eeee3](https://github.com/Automattic/newspack-plugin/commit/77eeee374723a2780ace91669f848b2d24a436c4))
+
+## [3.6.7](https://github.com/Automattic/newspack-plugin/compare/v3.6.6...v3.6.7) (2024-04-11)
+
+
+### Bug Fixes
+
+* fallback to subscription for sync data when customer has no orders ([#3053](https://github.com/Automattic/newspack-plugin/issues/3053)) ([df4d1b0](https://github.com/Automattic/newspack-plugin/commit/df4d1b06ac77356cf6cfdfb45a5f8234aac0888f))
+
+## [3.6.6](https://github.com/Automattic/newspack-plugin/compare/v3.6.5...v3.6.6) (2024-04-11)
+
+
+### Bug Fixes
+
+* force release ([d9ee12a](https://github.com/Automattic/newspack-plugin/commit/d9ee12afe2e862485dcb1376f749c71c74ae86df))
+
+## [3.6.5](https://github.com/Automattic/newspack-plugin/compare/v3.6.4...v3.6.5) (2024-04-11)
+
+
+### Bug Fixes
+
+* revert [#3050](https://github.com/Automattic/newspack-plugin/issues/3050) due to performance issues ([#3059](https://github.com/Automattic/newspack-plugin/issues/3059)) ([1d45d9e](https://github.com/Automattic/newspack-plugin/commit/1d45d9ee34b72b17dee41332389d890cd8f96423))
+
+## [3.6.4](https://github.com/Automattic/newspack-plugin/compare/v3.6.3...v3.6.4) (2024-04-10)
+
+
+### Bug Fixes
+
+* dont hide comments on metered paywall posts ([#3057](https://github.com/Automattic/newspack-plugin/issues/3057)) ([f06e86f](https://github.com/Automattic/newspack-plugin/commit/f06e86f01aef0b794a3c18684abc5333690a5362))
+
+## [3.6.3](https://github.com/Automattic/newspack-plugin/compare/v3.6.2...v3.6.3) (2024-04-10)
+
+
+### Bug Fixes
+
+* fatal error when checking memberships for users with no memberships ([#3055](https://github.com/Automattic/newspack-plugin/issues/3055)) ([65024d1](https://github.com/Automattic/newspack-plugin/commit/65024d1813fe9bd5bc88e73cd93ca23c1bb51619))
+
+## [3.6.2](https://github.com/Automattic/newspack-plugin/compare/v3.6.1...v3.6.2) (2024-04-10)
+
+
+### Bug Fixes
+
+* **ras:** email to login conversion ([#3031](https://github.com/Automattic/newspack-plugin/issues/3031)) ([075d7f1](https://github.com/Automattic/newspack-plugin/commit/075d7f147427b536903c29f0349c249a314f1e2a))
+
+## [3.6.1](https://github.com/Automattic/newspack-plugin/compare/v3.6.0...v3.6.1) (2024-04-09)
+
+
+### Bug Fixes
+
+* ensure active status for memberships tied to active subs ([#3050](https://github.com/Automattic/newspack-plugin/issues/3050)) ([b74a06d](https://github.com/Automattic/newspack-plugin/commit/b74a06dac95b3f635795285ab38c6e4ceb1b40ee))
+
+# [3.6.0](https://github.com/Automattic/newspack-plugin/compare/v3.5.4...v3.6.0) (2024-04-08)
+
+
+### Bug Fixes
+
+* allow + character in reader account email ([#2980](https://github.com/Automattic/newspack-plugin/issues/2980)) ([2a8530c](https://github.com/Automattic/newspack-plugin/commit/2a8530c9e89cb56b3a7fdf47d558c8dbb542f0c6))
+* fix fallback logic in get_order_data() util method ([6de9b0f](https://github.com/Automattic/newspack-plugin/commit/6de9b0f6942ecd6cf7d2db80e60e935d1ceedc07))
+* **health-check:** fix call to undefined function get_plugins() ([#2998](https://github.com/Automattic/newspack-plugin/issues/2998)) ([ff9ccb3](https://github.com/Automattic/newspack-plugin/commit/ff9ccb315973ff7809078f9d38ef487800e65b3e))
+* **ras:** reset otp inputs when switching login actions ([#2971](https://github.com/Automattic/newspack-plugin/issues/2971)) ([538d00b](https://github.com/Automattic/newspack-plugin/commit/538d00b71c66b59b36eafe081466cc4545b3e9d5))
+* render correct gam onboarding flow and update service account support link ([#2986](https://github.com/Automattic/newspack-plugin/issues/2986)) ([b6a643f](https://github.com/Automattic/newspack-plugin/commit/b6a643ffafe75940de2d80492c23c3291bdd9cf5))
+
+
+### Features
+
+* add ID to ad unit dropdown labels ([#2988](https://github.com/Automattic/newspack-plugin/issues/2988)) ([44a5048](https://github.com/Automattic/newspack-plugin/commit/44a5048f7e038d4336a71c9c635938ac6c1427e2))
+* add option to choose which RAS meta fields to sync ([#2989](https://github.com/Automattic/newspack-plugin/issues/2989)) ([f920115](https://github.com/Automattic/newspack-plugin/commit/f920115ddf8173b6cb069dbf270e1dd83efeb367))
+
+# [3.6.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v3.5.2...v3.6.0-alpha.1) (2024-03-28)
+
+
+### Bug Fixes
+
+* allow + character in reader account email ([#2980](https://github.com/Automattic/newspack-plugin/issues/2980)) ([2a8530c](https://github.com/Automattic/newspack-plugin/commit/2a8530c9e89cb56b3a7fdf47d558c8dbb542f0c6))
+* fix fallback logic in get_order_data() util method ([6de9b0f](https://github.com/Automattic/newspack-plugin/commit/6de9b0f6942ecd6cf7d2db80e60e935d1ceedc07))
+* **health-check:** fix call to undefined function get_plugins() ([#2998](https://github.com/Automattic/newspack-plugin/issues/2998)) ([ff9ccb3](https://github.com/Automattic/newspack-plugin/commit/ff9ccb315973ff7809078f9d38ef487800e65b3e))
+* **ras:** reset otp inputs when switching login actions ([#2971](https://github.com/Automattic/newspack-plugin/issues/2971)) ([538d00b](https://github.com/Automattic/newspack-plugin/commit/538d00b71c66b59b36eafe081466cc4545b3e9d5))
+* render correct gam onboarding flow and update service account support link ([#2986](https://github.com/Automattic/newspack-plugin/issues/2986)) ([b6a643f](https://github.com/Automattic/newspack-plugin/commit/b6a643ffafe75940de2d80492c23c3291bdd9cf5))
+
+
+### Features
+
+* add ID to ad unit dropdown labels ([#2988](https://github.com/Automattic/newspack-plugin/issues/2988)) ([44a5048](https://github.com/Automattic/newspack-plugin/commit/44a5048f7e038d4336a71c9c635938ac6c1427e2))
+* add option to choose which RAS meta fields to sync ([#2989](https://github.com/Automattic/newspack-plugin/issues/2989)) ([f920115](https://github.com/Automattic/newspack-plugin/commit/f920115ddf8173b6cb069dbf270e1dd83efeb367))
+
+
 ## [3.5.4](https://github.com/Automattic/newspack-plugin/compare/v3.5.3...v3.5.4) (2024-04-02)
 
 
 ### Bug Fixes
 
 * add filters for Data Events reader_registered handlers ([#3030](https://github.com/Automattic/newspack-plugin/issues/3030)) ([a27bf90](https://github.com/Automattic/newspack-plugin/commit/a27bf901197492a1bae583896f2122cfbf8a067f))
+
 
 ## [3.5.3](https://github.com/Automattic/newspack-plugin/compare/v3.5.2...v3.5.3) (2024-03-28)
 

@@ -1,3 +1,17 @@
+# [2.15.0](https://github.com/Automattic/newspack-listings/compare/v2.14.1...v2.15.0) (2024-04-08)
+
+
+### Features
+
+* **ci:** add epic/* release workflow and rename `master` to `trunk` ([#431](https://github.com/Automattic/newspack-listings/issues/431)) ([c404365](https://github.com/Automattic/newspack-listings/commit/c404365c7038538ccf802fcb802013b795927fed))
+
+# [2.15.0-alpha.1](https://github.com/Automattic/newspack-listings/compare/v2.14.1...v2.15.0-alpha.1) (2024-02-08)
+
+
+### Features
+
+* **ci:** add epic/* release workflow and rename `master` to `trunk` ([#431](https://github.com/Automattic/newspack-listings/issues/431)) ([c404365](https://github.com/Automattic/newspack-listings/commit/c404365c7038538ccf802fcb802013b795927fed))
+
 ## [2.14.1](https://github.com/Automattic/newspack-listings/compare/v2.14.0...v2.14.1) (2023-10-31)
 
 

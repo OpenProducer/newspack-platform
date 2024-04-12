@@ -83,7 +83,7 @@ add_action( 'init', 'gutenberg_register_block_core_footnotes', 20 );
  *
  * @since 6.5.0
  */
-function gutenberg_gutenberg_register_block_core_footnotes_post_meta() {
+function gutenberg_register_block_core_footnotes_post_meta() {
 	$post_types = get_post_types( array( 'show_in_rest' => true ) );
 	foreach ( $post_types as $post_type ) {
 		// Only register the meta field if the post type supports the editor, custom fields, and revisions.
@@ -109,7 +109,7 @@ function gutenberg_gutenberg_register_block_core_footnotes_post_meta() {
  * Most post types are registered at priority 10, so use priority 20 here in
  * order to catch them.
 */
-add_action( 'init', 'gutenberg_gutenberg_register_block_core_footnotes_post_meta', 20 );
+add_action( 'init', 'gutenberg_register_block_core_footnotes_post_meta', 20 );
 
 /**
  * Adds the footnotes field to the revisions display.

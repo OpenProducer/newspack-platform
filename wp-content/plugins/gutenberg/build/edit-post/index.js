@@ -142,12 +142,12 @@ __webpack_require__.r(__webpack_exports__);
 
 // EXPORTS
 __webpack_require__.d(__webpack_exports__, {
-  PluginBlockSettingsMenuItem: () => (/* reexport */ plugin_block_settings_menu_item),
+  PluginBlockSettingsMenuItem: () => (/* reexport */ external_wp_editor_namespaceObject.PluginBlockSettingsMenuItem),
   PluginDocumentSettingPanel: () => (/* reexport */ external_wp_editor_namespaceObject.PluginDocumentSettingPanel),
   PluginMoreMenuItem: () => (/* reexport */ plugin_more_menu_item),
-  PluginPostPublishPanel: () => (/* reexport */ plugin_post_publish_panel),
+  PluginPostPublishPanel: () => (/* reexport */ EditPostPluginPostPublishPanel),
   PluginPostStatusInfo: () => (/* reexport */ plugin_post_status_info),
-  PluginPrePublishPanel: () => (/* reexport */ plugin_pre_publish_panel),
+  PluginPrePublishPanel: () => (/* reexport */ EditPostPluginPrePublishPanel),
   PluginSidebar: () => (/* reexport */ PluginSidebarEditPost),
   PluginSidebarMoreMenuItem: () => (/* reexport */ PluginSidebarMoreMenuItem),
   __experimentalFullscreenModeClose: () => (/* reexport */ fullscreen_mode_close),
@@ -1845,6 +1845,9 @@ function KeyboardShortcutHelpModal({
   }), (0,external_React_namespaceObject.createElement)(ShortcutSection, {
     title: (0,external_wp_i18n_namespaceObject.__)('Text formatting'),
     shortcuts: textFormattingShortcuts
+  }), (0,external_React_namespaceObject.createElement)(ShortcutCategorySection, {
+    title: (0,external_wp_i18n_namespaceObject.__)('List View shortcuts'),
+    categoryName: "list-view"
   }));
 }
 /* harmony default export */ const keyboard_shortcut_help_modal = ((0,external_wp_compose_namespaceObject.compose)([(0,external_wp_data_namespaceObject.withSelect)(select => ({
@@ -2008,17 +2011,6 @@ const external_wp_coreCommands_namespaceObject = window["wp"]["coreCommands"];
  * WordPress dependencies
  */
 
-function publishSidebarActive(state = false, action) {
-  switch (action.type) {
-    case 'OPEN_PUBLISH_SIDEBAR':
-      return true;
-    case 'CLOSE_PUBLISH_SIDEBAR':
-      return false;
-    case 'TOGGLE_PUBLISH_SIDEBAR':
-      return !state;
-  }
-  return state;
-}
 
 /**
  * Reducer keeping track of the meta boxes isSaving state.
@@ -2099,8 +2091,7 @@ const metaBoxes = (0,external_wp_data_namespaceObject.combineReducers)({
   initialized: metaBoxesInitialized
 });
 /* harmony default export */ const store_reducer = ((0,external_wp_data_namespaceObject.combineReducers)({
-  metaBoxes,
-  publishSidebarActive
+  metaBoxes
 }));
 
 ;// CONCATENATED MODULE: external ["wp","apiFetch"]
@@ -2212,37 +2203,52 @@ const actions_closeModal = () => ({
 /**
  * Returns an action object used in signalling that the user opened the publish
  * sidebar.
+ * @deprecated
  *
  * @return {Object} Action object
  */
-function openPublishSidebar() {
-  return {
-    type: 'OPEN_PUBLISH_SIDEBAR'
-  };
-}
+const openPublishSidebar = () => ({
+  registry
+}) => {
+  external_wp_deprecated_default()("dispatch( 'core/edit-post' ).openPublishSidebar", {
+    since: '6.6',
+    alternative: "dispatch( 'core/editor').openPublishSidebar"
+  });
+  registry.dispatch(external_wp_editor_namespaceObject.store).openPublishSidebar();
+};
 
 /**
  * Returns an action object used in signalling that the user closed the
  * publish sidebar.
+ * @deprecated
  *
  * @return {Object} Action object.
  */
-function closePublishSidebar() {
-  return {
-    type: 'CLOSE_PUBLISH_SIDEBAR'
-  };
-}
+const closePublishSidebar = () => ({
+  registry
+}) => {
+  external_wp_deprecated_default()("dispatch( 'core/edit-post' ).closePublishSidebar", {
+    since: '6.6',
+    alternative: "dispatch( 'core/editor').closePublishSidebar"
+  });
+  registry.dispatch(external_wp_editor_namespaceObject.store).closePublishSidebar();
+};
 
 /**
  * Returns an action object used in signalling that the user toggles the publish sidebar.
+ * @deprecated
  *
  * @return {Object} Action object
  */
-function togglePublishSidebar() {
-  return {
-    type: 'TOGGLE_PUBLISH_SIDEBAR'
-  };
-}
+const togglePublishSidebar = () => ({
+  registry
+}) => {
+  external_wp_deprecated_default()("dispatch( 'core/edit-post' ).togglePublishSidebar", {
+    since: '6.6',
+    alternative: "dispatch( 'core/editor').togglePublishSidebar"
+  });
+  registry.dispatch(external_wp_editor_namespaceObject.store).togglePublishSidebar();
+};
 
 /**
  * Returns an action object used to enable or disable a panel in the editor.
@@ -3084,13 +3090,19 @@ const getHiddenBlockTypes = (0,external_wp_data_namespaceObject.createRegistrySe
 /**
  * Returns true if the publish sidebar is opened.
  *
+ * @deprecated
+ *
  * @param {Object} state Global application state
  *
  * @return {boolean} Whether the publish sidebar is open.
  */
-function isPublishSidebarOpened(state) {
-  return state.publishSidebarActive;
-}
+const isPublishSidebarOpened = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => () => {
+  external_wp_deprecated_default()(`select( 'core/edit-post' ).isPublishSidebarOpened`, {
+    since: '6.6',
+    alternative: `select( 'core/editor' ).isPublishSidebarOpened`
+  });
+  return select(external_wp_editor_namespaceObject.store).isPublishSidebarOpened();
+});
 
 /**
  * Returns true if the given panel was programmatically removed, or false otherwise.
@@ -4545,11 +4557,6 @@ const MoreMenu = ({
 
 
 
-
-/**
- * Internal dependencies
- */
-
 function PostPublishButtonOrToggle({
   forceIsDirty,
   hasPublishAction,
@@ -4614,13 +4621,13 @@ function PostPublishButtonOrToggle({
     isPending: select(external_wp_editor_namespaceObject.store).isCurrentPostPending(),
     isPublished: select(external_wp_editor_namespaceObject.store).isCurrentPostPublished(),
     isPublishSidebarEnabled: select(external_wp_editor_namespaceObject.store).isPublishSidebarEnabled(),
-    isPublishSidebarOpened: select(store_store).isPublishSidebarOpened(),
+    isPublishSidebarOpened: select(external_wp_editor_namespaceObject.store).isPublishSidebarOpened(),
     isScheduled: select(external_wp_editor_namespaceObject.store).isCurrentPostScheduled()
   };
 }), (0,external_wp_data_namespaceObject.withDispatch)(dispatch => {
   const {
     togglePublishSidebar
-  } = dispatch(store_store);
+  } = dispatch(external_wp_editor_namespaceObject.store);
   return {
     togglePublishSidebar
   };
@@ -4747,7 +4754,7 @@ function Header({
       blockSelectionStart: select(external_wp_blockEditor_namespaceObject.store).getBlockSelectionStart(),
       hasActiveMetaboxes: select(store_store).hasMetaBoxes(),
       hasHistory: !!select(external_wp_editor_namespaceObject.store).getEditorSettings().onNavigateToPreviousEntityRecord,
-      isPublishSidebarOpened: select(store_store).isPublishSidebarOpened(),
+      isPublishSidebarOpened: select(external_wp_editor_namespaceObject.store).isPublishSidebarOpened(),
       showIconLabels: getPreference('core', 'showIconLabels')
     };
   }, []);
@@ -5454,82 +5461,6 @@ function PluginSidebarEditPost({
   });
 }
 
-;// CONCATENATED MODULE: ./packages/icons/build-module/icon/index.js
-/**
- * WordPress dependencies
- */
-
-
-/** @typedef {{icon: JSX.Element, size?: number} & import('@wordpress/primitives').SVGProps} IconProps */
-
-/**
- * Return an SVG icon.
- *
- * @param {IconProps}                                 props icon is the SVG component to render
- *                                                          size is a number specifiying the icon size in pixels
- *                                                          Other props will be passed to wrapped SVG component
- * @param {import('react').ForwardedRef<HTMLElement>} ref   The forwarded ref to the SVG element.
- *
- * @return {JSX.Element}  Icon component
- */
-function Icon({
-  icon,
-  size = 24,
-  ...props
-}, ref) {
-  return (0,external_wp_element_namespaceObject.cloneElement)(icon, {
-    width: size,
-    height: size,
-    ...props,
-    ref
-  });
-}
-/* harmony default export */ const icon = ((0,external_wp_element_namespaceObject.forwardRef)(Icon));
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/layout.js
-
-/**
- * WordPress dependencies
- */
-
-const layout = (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24"
-}, (0,external_React_namespaceObject.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M18 5.5H6a.5.5 0 00-.5.5v3h13V6a.5.5 0 00-.5-.5zm.5 5H10v8h8a.5.5 0 00.5-.5v-7.5zm-10 0h-3V18a.5.5 0 00.5.5h2.5v-8zM6 4h12a2 2 0 012 2v12a2 2 0 01-2 2H6a2 2 0 01-2-2V6a2 2 0 012-2z"
-}));
-/* harmony default export */ const library_layout = (layout);
-
-;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/sidebar/template-summary/index.js
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-function TemplateSummary() {
-  const template = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getCurrentPost
-    } = select(external_wp_editor_namespaceObject.store);
-    return getCurrentPost();
-  }, []);
-  if (!template) {
-    return null;
-  }
-  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.PanelBody, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Flex, {
-    align: "flex-start",
-    gap: "3"
-  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.FlexItem, null, (0,external_React_namespaceObject.createElement)(icon, {
-    icon: library_layout
-  })), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.FlexBlock, null, (0,external_React_namespaceObject.createElement)("h2", {
-    className: "edit-post-template-summary__title"
-  }, template?.title || template?.slug), (0,external_React_namespaceObject.createElement)("p", null, template?.description))));
-}
-/* harmony default export */ const template_summary = (TemplateSummary);
-
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/sidebar/settings-sidebar/index.js
 
 /**
@@ -5554,10 +5485,15 @@ function TemplateSummary() {
 
 
 
-
+const {
+  PostCardPanel
+} = unlock(external_wp_editor_namespaceObject.privateApis);
 const {
   Tabs: settings_sidebar_Tabs
 } = unlock(external_wp_components_namespaceObject.privateApis);
+const {
+  PatternOverridesPanel
+} = unlock(external_wp_editor_namespaceObject.privateApis);
 const SIDEBAR_ACTIVE_BY_DEFAULT = external_wp_element_namespaceObject.Platform.select({
   web: true,
   native: false
@@ -5620,9 +5556,9 @@ const SidebarContent = ({
   }, (0,external_React_namespaceObject.createElement)(settings_sidebar_Tabs.TabPanel, {
     tabId: sidebars.document,
     focusable: false
-  }, !isEditingTemplate && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(PostStatus, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PluginDocumentSettingPanel.Slot, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostLastRevisionPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostTaxonomiesPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostExcerptPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostDiscussionPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PageAttributesPanel, null), (0,external_React_namespaceObject.createElement)(MetaBoxes, {
+  }, (0,external_React_namespaceObject.createElement)(PostCardPanel, null), !isEditingTemplate && (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(PostStatus, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PluginDocumentSettingPanel.Slot, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostLastRevisionPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostTaxonomiesPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostExcerptPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostDiscussionPanel, null), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PageAttributesPanel, null), (0,external_React_namespaceObject.createElement)(PatternOverridesPanel, null), (0,external_React_namespaceObject.createElement)(MetaBoxes, {
     location: "side"
-  })), isEditingTemplate && (0,external_React_namespaceObject.createElement)(template_summary, null)), (0,external_React_namespaceObject.createElement)(settings_sidebar_Tabs.TabPanel, {
+  }))), (0,external_React_namespaceObject.createElement)(settings_sidebar_Tabs.TabPanel, {
     tabId: sidebars.block,
     focusable: false
   }, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockInspector, null))));
@@ -5853,171 +5789,6 @@ function WelcomeGuide() {
   return isEditingTemplate ? (0,external_React_namespaceObject.createElement)(WelcomeGuideTemplate, null) : (0,external_React_namespaceObject.createElement)(WelcomeGuideDefault, null);
 }
 
-;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/sidebar/plugin-post-publish-panel/index.js
-
-/**
- * WordPress dependencies
- */
-
-
-const {
-  Fill: plugin_post_publish_panel_Fill,
-  Slot: plugin_post_publish_panel_Slot
-} = (0,external_wp_components_namespaceObject.createSlotFill)('PluginPostPublishPanel');
-
-/**
- * Renders provided content to the post-publish panel in the publish flow
- * (side panel that opens after a user publishes the post).
- *
- * @param {Object}                props                                 Component properties.
- * @param {string}                [props.className]                     An optional class name added to the panel.
- * @param {string}                [props.title]                         Title displayed at the top of the panel.
- * @param {boolean}               [props.initialOpen=false]             Whether to have the panel initially opened. When no title is provided it is always opened.
- * @param {WPBlockTypeIconRender} [props.icon=inherits from the plugin] The [Dashicon](https://developer.wordpress.org/resource/dashicons/) icon slug string, or an SVG WP element, to be rendered when the sidebar is pinned to toolbar.
- * @param {Element}               props.children                        Children to be rendered
- *
- * @example
- * ```js
- * // Using ES5 syntax
- * var __ = wp.i18n.__;
- * var PluginPostPublishPanel = wp.editPost.PluginPostPublishPanel;
- *
- * function MyPluginPostPublishPanel() {
- * 	return React.createElement(
- * 		PluginPostPublishPanel,
- * 		{
- * 			className: 'my-plugin-post-publish-panel',
- * 			title: __( 'My panel title' ),
- * 			initialOpen: true,
- * 		},
- * 		__( 'My panel content' )
- * 	);
- * }
- * ```
- *
- * @example
- * ```jsx
- * // Using ESNext syntax
- * import { __ } from '@wordpress/i18n';
- * import { PluginPostPublishPanel } from '@wordpress/edit-post';
- *
- * const MyPluginPostPublishPanel = () => (
- * 	<PluginPostPublishPanel
- * 		className="my-plugin-post-publish-panel"
- * 		title={ __( 'My panel title' ) }
- * 		initialOpen={ true }
- * 	>
- *         { __( 'My panel content' ) }
- * 	</PluginPostPublishPanel>
- * );
- * ```
- *
- * @return {Component} The component to be rendered.
- */
-const PluginPostPublishPanel = ({
-  children,
-  className,
-  title,
-  initialOpen = false,
-  icon
-}) => {
-  const {
-    icon: pluginIcon
-  } = (0,external_wp_plugins_namespaceObject.usePluginContext)();
-  return (0,external_React_namespaceObject.createElement)(plugin_post_publish_panel_Fill, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.PanelBody, {
-    className: className,
-    initialOpen: initialOpen || !title,
-    title: title,
-    icon: icon !== null && icon !== void 0 ? icon : pluginIcon
-  }, children));
-};
-PluginPostPublishPanel.Slot = plugin_post_publish_panel_Slot;
-/* harmony default export */ const plugin_post_publish_panel = (PluginPostPublishPanel);
-
-;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/sidebar/plugin-pre-publish-panel/index.js
-
-/**
- * WordPress dependencies
- */
-
-
-const {
-  Fill: plugin_pre_publish_panel_Fill,
-  Slot: plugin_pre_publish_panel_Slot
-} = (0,external_wp_components_namespaceObject.createSlotFill)('PluginPrePublishPanel');
-
-/**
- * Renders provided content to the pre-publish side panel in the publish flow
- * (side panel that opens when a user first pushes "Publish" from the main editor).
- *
- * @param {Object}                props                                 Component props.
- * @param {string}                [props.className]                     An optional class name added to the panel.
- * @param {string}                [props.title]                         Title displayed at the top of the panel.
- * @param {boolean}               [props.initialOpen=false]             Whether to have the panel initially opened.
- *                                                                      When no title is provided it is always opened.
- * @param {WPBlockTypeIconRender} [props.icon=inherits from the plugin] The [Dashicon](https://developer.wordpress.org/resource/dashicons/)
- *                                                                      icon slug string, or an SVG WP element, to be rendered when
- *                                                                      the sidebar is pinned to toolbar.
- * @param {Element}               props.children                        Children to be rendered
- *
- * @example
- * ```js
- * // Using ES5 syntax
- * var __ = wp.i18n.__;
- * var PluginPrePublishPanel = wp.editPost.PluginPrePublishPanel;
- *
- * function MyPluginPrePublishPanel() {
- * 	return React.createElement(
- * 		PluginPrePublishPanel,
- * 		{
- * 			className: 'my-plugin-pre-publish-panel',
- * 			title: __( 'My panel title' ),
- * 			initialOpen: true,
- * 		},
- * 		__( 'My panel content' )
- * 	);
- * }
- * ```
- *
- * @example
- * ```jsx
- * // Using ESNext syntax
- * import { __ } from '@wordpress/i18n';
- * import { PluginPrePublishPanel } from '@wordpress/edit-post';
- *
- * const MyPluginPrePublishPanel = () => (
- * 	<PluginPrePublishPanel
- * 		className="my-plugin-pre-publish-panel"
- * 		title={ __( 'My panel title' ) }
- * 		initialOpen={ true }
- * 	>
- * 	    { __( 'My panel content' ) }
- * 	</PluginPrePublishPanel>
- * );
- * ```
- *
- * @return {Component} The component to be rendered.
- */
-const PluginPrePublishPanel = ({
-  children,
-  className,
-  title,
-  initialOpen = false,
-  icon
-}) => {
-  const {
-    icon: pluginIcon
-  } = (0,external_wp_plugins_namespaceObject.usePluginContext)();
-  return (0,external_React_namespaceObject.createElement)(plugin_pre_publish_panel_Fill, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.PanelBody, {
-    className: className,
-    initialOpen: initialOpen || !title,
-    title: title,
-    icon: icon !== null && icon !== void 0 ? icon : pluginIcon
-  }, children));
-};
-PluginPrePublishPanel.Slot = plugin_pre_publish_panel_Slot;
-/* harmony default export */ const plugin_pre_publish_panel = (PluginPrePublishPanel);
-
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/layout/actions-panel.js
 
 /**
@@ -6028,11 +5799,10 @@ PluginPrePublishPanel.Slot = plugin_pre_publish_panel_Slot;
 
 
 
+
 /**
  * Internal dependencies
  */
-
-
 
 const {
   Fill: actions_panel_Fill,
@@ -6047,13 +5817,13 @@ function ActionsPanel({
   const {
     closePublishSidebar,
     togglePublishSidebar
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_editor_namespaceObject.store);
   const {
     publishSidebarOpened,
     hasActiveMetaboxes,
     hasNonPostEntityChanges
   } = (0,external_wp_data_namespaceObject.useSelect)(select => ({
-    publishSidebarOpened: select(store_store).isPublishSidebarOpened(),
+    publishSidebarOpened: select(external_wp_editor_namespaceObject.store).isPublishSidebarOpened(),
     hasActiveMetaboxes: select(store_store).hasMetaBoxes(),
     hasNonPostEntityChanges: select(external_wp_editor_namespaceObject.store).hasNonPostEntityChanges()
   }), []);
@@ -6066,8 +5836,8 @@ function ActionsPanel({
     unmountableContent = (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostPublishPanel, {
       onClose: closePublishSidebar,
       forceIsDirty: hasActiveMetaboxes,
-      PrePublishExtension: plugin_pre_publish_panel.Slot,
-      PostPublishExtension: plugin_post_publish_panel.Slot
+      PrePublishExtension: external_wp_editor_namespaceObject.PluginPrePublishPanel.Slot,
+      PostPublishExtension: external_wp_editor_namespaceObject.PluginPostPublishPanel.Slot
     });
   } else if (hasNonPostEntityChanges) {
     unmountableContent = (0,external_React_namespaceObject.createElement)("div", {
@@ -6378,9 +6148,9 @@ function useCommonCommands() {
       close
     }) => {
       close();
-      toggle('core/edit-post', 'isPublishSidebarEnabled');
+      toggle('core', 'isPublishSidebarEnabled');
       createInfoNotice(isPublishSidebarEnabled ? (0,external_wp_i18n_namespaceObject.__)('Pre-publish checks disabled.') : (0,external_wp_i18n_namespaceObject.__)('Pre-publish checks enabled.'), {
-        id: 'core/edit-post/publish-sidebar/notice',
+        id: 'core/editor/publish-sidebar/notice',
         type: 'snackbar'
       });
     }
@@ -6538,7 +6308,7 @@ function Layout({
     const postTypeLabel = getPostTypeLabel();
     return {
       showMetaBoxes: select(external_wp_editor_namespaceObject.store).getRenderingMode() === 'post-only',
-      sidebarIsOpened: !!(select(store).getActiveComplementaryArea(store_store.name) || select(store_store).isPublishSidebarOpened()),
+      sidebarIsOpened: !!(select(store).getActiveComplementaryArea(store_store.name) || select(external_wp_editor_namespaceObject.store).isPublishSidebarOpened()),
       isFullscreenActive: select(store_store).isFeatureActive('fullscreenMode'),
       isInserterOpened: select(external_wp_editor_namespaceObject.store).isInserterOpened(),
       isListViewOpened: select(external_wp_editor_namespaceObject.store).isListViewOpened(),
@@ -6600,7 +6370,10 @@ function Layout({
   const secondarySidebarLabel = isListViewOpened ? (0,external_wp_i18n_namespaceObject.__)('Document Overview') : (0,external_wp_i18n_namespaceObject.__)('Block Library');
   const secondarySidebar = () => {
     if (mode === 'visual' && isInserterOpened) {
-      return (0,external_React_namespaceObject.createElement)(InserterSidebar, null);
+      return (0,external_React_namespaceObject.createElement)(InserterSidebar, {
+        closeGeneralSidebar: closeGeneralSidebar,
+        isRightSidebarOpen: sidebarIsOpened
+      });
     }
     if (mode === 'visual' && isListViewOpened) {
       return (0,external_React_namespaceObject.createElement)(ListViewSidebar, null);
@@ -6668,7 +6441,7 @@ function Layout({
     onError: onPluginAreaError
   }), !isDistractionFree && (0,external_React_namespaceObject.createElement)(settings_sidebar, null));
 }
-/* harmony default export */ const components_layout = (Layout);
+/* harmony default export */ const layout = (Layout);
 
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/editor-initialization/listener-hooks.js
 /**
@@ -6765,6 +6538,8 @@ function EditorInitialization() {
  */
 
 
+
+
 /**
  * A hook that records the 'entity' history in the post editor as a user
  * navigates between editing a post and editing the post template or patterns.
@@ -6773,19 +6548,24 @@ function EditorInitialization() {
  *
  * Used to control displaying UI elements like the back button.
  *
- * @param {number} initialPostId   The post id of the post when the editor loaded.
- * @param {string} initialPostType The post type of the post when the editor loaded.
+ * @param {number} initialPostId        The post id of the post when the editor loaded.
+ * @param {string} initialPostType      The post type of the post when the editor loaded.
+ * @param {string} defaultRenderingMode The rendering mode to switch to when navigating.
  *
  * @return {Object} An object containing the `currentPost` variable and
  *                 `onNavigateToEntityRecord` and `onNavigateToPreviousEntityRecord` functions.
  */
-function useNavigateToEntityRecord(initialPostId, initialPostType) {
+function useNavigateToEntityRecord(initialPostId, initialPostType, defaultRenderingMode) {
   const [postHistory, dispatch] = (0,external_wp_element_namespaceObject.useReducer)((historyState, {
     type,
-    post
+    post,
+    previousRenderingMode
   }) => {
     if (type === 'push') {
-      return [...historyState, post];
+      return [...historyState, {
+        post,
+        previousRenderingMode
+      }];
     }
     if (type === 'pop') {
       // Try to leave one item in the history.
@@ -6795,33 +6575,43 @@ function useNavigateToEntityRecord(initialPostId, initialPostType) {
     }
     return historyState;
   }, [{
-    postId: initialPostId,
-    postType: initialPostType
+    post: {
+      postId: initialPostId,
+      postType: initialPostType
+    }
   }]);
-  const initialPost = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    return {
-      type: initialPostType,
-      id: initialPostId
-    };
-  }, [initialPostType, initialPostId]);
+  const {
+    post,
+    previousRenderingMode
+  } = postHistory[postHistory.length - 1];
+  const {
+    getRenderingMode
+  } = (0,external_wp_data_namespaceObject.useSelect)(external_wp_editor_namespaceObject.store);
+  const {
+    setRenderingMode
+  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_editor_namespaceObject.store);
   const onNavigateToEntityRecord = (0,external_wp_element_namespaceObject.useCallback)(params => {
     dispatch({
       type: 'push',
       post: {
         postId: params.postId,
         postType: params.postType
-      }
+      },
+      // Save the current rendering mode so we can restore it when navigating back.
+      previousRenderingMode: getRenderingMode()
     });
-  }, []);
+    setRenderingMode(defaultRenderingMode);
+  }, [getRenderingMode, setRenderingMode, defaultRenderingMode]);
   const onNavigateToPreviousEntityRecord = (0,external_wp_element_namespaceObject.useCallback)(() => {
     dispatch({
       type: 'pop'
     });
-  }, []);
-  const currentPost = postHistory[postHistory.length - 1];
+    if (previousRenderingMode) {
+      setRenderingMode(previousRenderingMode);
+    }
+  }, [setRenderingMode, previousRenderingMode]);
   return {
-    currentPost,
-    initialPost,
+    currentPost: post,
     onNavigateToEntityRecord,
     onNavigateToPreviousEntityRecord: postHistory.length > 1 ? onNavigateToPreviousEntityRecord : undefined
   };
@@ -6858,11 +6648,10 @@ function Editor({
   ...props
 }) {
   const {
-    initialPost,
     currentPost,
     onNavigateToEntityRecord,
     onNavigateToPreviousEntityRecord
-  } = useNavigateToEntityRecord(initialPostId, initialPostType);
+  } = useNavigateToEntityRecord(initialPostId, initialPostType, 'post-only');
   const {
     post,
     template
@@ -6894,6 +6683,12 @@ function Editor({
     onNavigateToPreviousEntityRecord,
     defaultRenderingMode: 'post-only'
   }), [settings, onNavigateToEntityRecord, onNavigateToPreviousEntityRecord]);
+  const initialPost = (0,external_wp_element_namespaceObject.useMemo)(() => {
+    return {
+      type: initialPostType,
+      id: initialPostId
+    };
+  }, [initialPostType, initialPostId]);
   if (!post) {
     return null;
   }
@@ -6904,112 +6699,11 @@ function Editor({
     useSubRegistry: false,
     __unstableTemplate: template,
     ...props
-  }, (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.ErrorBoundary, null, (0,external_React_namespaceObject.createElement)(external_wp_commands_namespaceObject.CommandMenu, null), (0,external_React_namespaceObject.createElement)(EditorInitialization, null), (0,external_React_namespaceObject.createElement)(components_layout, {
+  }, (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.ErrorBoundary, null, (0,external_React_namespaceObject.createElement)(external_wp_commands_namespaceObject.CommandMenu, null), (0,external_React_namespaceObject.createElement)(EditorInitialization, null), (0,external_React_namespaceObject.createElement)(layout, {
     initialPost: initialPost
   })), (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PostLockedModal, null)));
 }
 /* harmony default export */ const editor = (Editor);
-
-;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/block-settings-menu/plugin-block-settings-menu-item.js
-
-/**
- * WordPress dependencies
- */
-
-
-
-const isEverySelectedBlockAllowed = (selected, allowed) => selected.filter(id => !allowed.includes(id)).length === 0;
-
-/**
- * Plugins may want to add an item to the menu either for every block
- * or only for the specific ones provided in the `allowedBlocks` component property.
- *
- * If there are multiple blocks selected the item will be rendered if every block
- * is of one allowed type (not necessarily the same).
- *
- * @param {string[]} selectedBlocks Array containing the names of the blocks selected
- * @param {string[]} allowedBlocks  Array containing the names of the blocks allowed
- * @return {boolean} Whether the item will be rendered or not.
- */
-const shouldRenderItem = (selectedBlocks, allowedBlocks) => !Array.isArray(allowedBlocks) || isEverySelectedBlockAllowed(selectedBlocks, allowedBlocks);
-
-/**
- * Renders a new item in the block settings menu.
- *
- * @param {Object}                props                 Component props.
- * @param {Array}                 [props.allowedBlocks] An array containing a list of block names for which the item should be shown. If not present, it'll be rendered for any block. If multiple blocks are selected, it'll be shown if and only if all of them are in the allowed list.
- * @param {WPBlockTypeIconRender} [props.icon]          The [Dashicon](https://developer.wordpress.org/resource/dashicons/) icon slug string, or an SVG WP element.
- * @param {string}                props.label           The menu item text.
- * @param {Function}              props.onClick         Callback function to be executed when the user click the menu item.
- * @param {boolean}               [props.small]         Whether to render the label or not.
- * @param {string}                [props.role]          The ARIA role for the menu item.
- *
- * @example
- * ```js
- * // Using ES5 syntax
- * var __ = wp.i18n.__;
- * var PluginBlockSettingsMenuItem = wp.editPost.PluginBlockSettingsMenuItem;
- *
- * function doOnClick(){
- * 	// To be called when the user clicks the menu item.
- * }
- *
- * function MyPluginBlockSettingsMenuItem() {
- * 	return React.createElement(
- * 		PluginBlockSettingsMenuItem,
- * 		{
- * 			allowedBlocks: [ 'core/paragraph' ],
- * 			icon: 'dashicon-name',
- * 			label: __( 'Menu item text' ),
- * 			onClick: doOnClick,
- * 		}
- * 	);
- * }
- * ```
- *
- * @example
- * ```jsx
- * // Using ESNext syntax
- * import { __ } from '@wordpress/i18n';
- * import { PluginBlockSettingsMenuItem } from '@wordpress/edit-post';
- *
- * const doOnClick = ( ) => {
- *     // To be called when the user clicks the menu item.
- * };
- *
- * const MyPluginBlockSettingsMenuItem = () => (
- *     <PluginBlockSettingsMenuItem
- * 		allowedBlocks={ [ 'core/paragraph' ] }
- * 		icon='dashicon-name'
- * 		label={ __( 'Menu item text' ) }
- * 		onClick={ doOnClick } />
- * );
- * ```
- *
- * @return {Component} The component to be rendered.
- */
-const PluginBlockSettingsMenuItem = ({
-  allowedBlocks,
-  icon,
-  label,
-  onClick,
-  small,
-  role
-}) => (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockSettingsMenuControls, null, ({
-  selectedBlocks,
-  onClose
-}) => {
-  if (!shouldRenderItem(selectedBlocks, allowedBlocks)) {
-    return null;
-  }
-  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.MenuItem, {
-    onClick: (0,external_wp_compose_namespaceObject.compose)(onClick, onClose),
-    icon: icon,
-    label: small ? label : undefined,
-    role: role
-  }, !small && label);
-});
-/* harmony default export */ const plugin_block_settings_menu_item = (PluginBlockSettingsMenuItem);
 
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/header/plugin-more-menu-item/index.js
 /**
@@ -7084,6 +6778,76 @@ const PluginBlockSettingsMenuItem = ({
     name: 'core/edit-post/plugin-more-menu'
   };
 }))(action_item));
+
+;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/sidebar/plugin-post-publish-panel/index.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Renders provided content to the post-publish panel in the publish flow
+ * (side panel that opens after a user publishes the post).
+ *
+ * @deprecated since 6.6, use `wp.editor.PluginPostPublishPanel` instead.
+ *
+ * @param {Object}                props                                 Component properties.
+ * @param {string}                [props.className]                     An optional class name added to the panel.
+ * @param {string}                [props.title]                         Title displayed at the top of the panel.
+ * @param {boolean}               [props.initialOpen=false]             Whether to have the panel initially opened. When no title is provided it is always opened.
+ * @param {WPBlockTypeIconRender} [props.icon=inherits from the plugin] The [Dashicon](https://developer.wordpress.org/resource/dashicons/) icon slug string, or an SVG WP element, to be rendered when the sidebar is pinned to toolbar.
+ * @param {Element}               props.children                        Children to be rendered
+ * @return {Component} The component to be rendered.
+ */
+function EditPostPluginPostPublishPanel(props) {
+  external_wp_deprecated_default()('wp.editPost.PluginPostPublishPanel', {
+    since: '6.6',
+    version: '6.8',
+    alternative: 'wp.editor.PluginPostPublishPanel'
+  });
+  return (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PluginPostPublishPanel, {
+    ...props
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/sidebar/plugin-pre-publish-panel/index.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Renders provided content to the pre-publish side panel in the publish flow
+ * (side panel that opens when a user first pushes "Publish" from the main editor).
+ *
+ * @deprecated since 6.6, use `wp.editor.PluginPrePublishPanel` instead.
+ *
+ * @param {Object}                props                                 Component props.
+ * @param {string}                [props.className]                     An optional class name added to the panel.
+ * @param {string}                [props.title]                         Title displayed at the top of the panel.
+ * @param {boolean}               [props.initialOpen=false]             Whether to have the panel initially opened.
+ *                                                                      When no title is provided it is always opened.
+ * @param {WPBlockTypeIconRender} [props.icon=inherits from the plugin] The [Dashicon](https://developer.wordpress.org/resource/dashicons/)
+ *                                                                      icon slug string, or an SVG WP element, to be rendered when
+ *                                                                      the sidebar is pinned to toolbar.
+ * @param {Element}               props.children                        Children to be rendered
+ *
+ * @return {Component} The component to be rendered.
+ */
+function EditPostPluginPrePublishPanel(props) {
+  external_wp_deprecated_default()('wp.editPost.PluginPrePublishPanel', {
+    since: '6.6',
+    version: '6.8',
+    alternative: 'wp.editor.PluginPrePublishPanel'
+  });
+  return (0,external_React_namespaceObject.createElement)(external_wp_editor_namespaceObject.PluginPrePublishPanel, {
+    ...props
+  });
+}
 
 ;// CONCATENATED MODULE: ./packages/edit-post/build-module/components/header/plugin-sidebar-more-menu-item/index.js
 
@@ -7193,7 +6957,6 @@ function initializeEditor(id, postType, postId, settings, initialEdits) {
   const root = (0,external_wp_element_namespaceObject.createRoot)(target);
   (0,external_wp_data_namespaceObject.dispatch)(external_wp_preferences_namespaceObject.store).setDefaults('core/edit-post', {
     fullscreenMode: true,
-    isPublishSidebarEnabled: true,
     themeStyles: true,
     welcomeGuide: true,
     welcomeGuideTemplate: true
@@ -7207,7 +6970,8 @@ function initializeEditor(id, postType, postId, settings, initialEdits) {
     openPanels: ['post-status'],
     showBlockBreadcrumbs: true,
     showIconLabels: false,
-    showListViewByDefault: false
+    showListViewByDefault: false,
+    isPublishSidebarEnabled: true
   });
   (0,external_wp_data_namespaceObject.dispatch)(external_wp_blocks_namespaceObject.store).reapplyBlockTypeFilters();
 

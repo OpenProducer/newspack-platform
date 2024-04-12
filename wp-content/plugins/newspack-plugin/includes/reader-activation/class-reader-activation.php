@@ -1721,7 +1721,7 @@ final class Reader_Activation {
 			return $user_data;
 		}
 
-		$user_login      = \sanitize_user( $user_data['user_email'] ); // Matches the email address.
+		$user_login      = str_replace( '+', '_', \sanitize_user( $user_data['user_email'], true ) ); // Matches the email address, but replace + with _ to allow for Gmail aliases.
 		$random_password = \wp_generate_password();
 		$user_nicename   = self::generate_user_nicename( ! empty( $user_data['display_name'] ) ? $user_data['display_name'] : $user_data['user_email'] );
 

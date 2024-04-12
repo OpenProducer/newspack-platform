@@ -65,7 +65,7 @@ function gutenberg_render_block_core_site_logo( $attributes ) {
  *
  * @since 5.8.0
  */
-function gutenberg_gutenberg_register_block_core_site_logo_setting() {
+function gutenberg_register_block_core_site_logo_setting() {
 	register_setting(
 		'general',
 		'site_logo',
@@ -79,7 +79,7 @@ function gutenberg_gutenberg_register_block_core_site_logo_setting() {
 	);
 }
 
-add_action( 'rest_api_init', 'gutenberg_gutenberg_register_block_core_site_logo_setting', 10 );
+add_action( 'rest_api_init', 'gutenberg_register_block_core_site_logo_setting', 10 );
 
 /**
  * Register a core site setting for a site icon
@@ -198,12 +198,12 @@ function gutenberg__delete_site_logo_on_remove_theme_mods() {
  *
  * @since 5.8.0
  */
-function gutenberg_gutenberg__delete_site_logo_on_remove_custom_logo_on_setup_theme() {
+function gutenberg__delete_site_logo_on_remove_custom_logo_on_setup_theme() {
 	$theme = get_option( 'stylesheet' );
 	add_action( "update_option_theme_mods_$theme", 'gutenberg__delete_site_logo_on_remove_custom_logo', 10, 2 );
 	add_action( "delete_option_theme_mods_$theme", 'gutenberg__delete_site_logo_on_remove_theme_mods' );
 }
-add_action( 'setup_theme', 'gutenberg_gutenberg__delete_site_logo_on_remove_custom_logo_on_setup_theme', 11 );
+add_action( 'setup_theme', 'gutenberg__delete_site_logo_on_remove_custom_logo_on_setup_theme', 11 );
 
 /**
  * Removes the custom_logo theme-mod when the site_logo option gets deleted.

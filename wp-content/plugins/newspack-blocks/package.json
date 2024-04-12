@@ -1,12 +1,12 @@
 {
 	"name": "@automattic/newspack-blocks",
-	"version": "3.0.6",
+	"version": "3.0.7",
 	"author": "Automattic",
 	"devDependencies": {
-		"@rushstack/eslint-patch": "^1.7.2",
+		"@rushstack/eslint-patch": "^1.8.0",
 		"@testing-library/dom": "^9.3.4",
 		"@testing-library/user-event": "^14.5.2",
-		"@types/lodash": "^4.14.202",
+		"@types/lodash": "^4.17.0",
 		"@types/lodash.debounce": "^4.0.9",
 		"eslint": "^7.32.0",
 		"fetch-mock-jest": "^1.5.1",

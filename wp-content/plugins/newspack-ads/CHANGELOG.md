@@ -1,3 +1,19 @@
+## [1.47.1](https://github.com/Automattic/newspack-ads/compare/v1.47.0...v1.47.1) (2024-04-08)
+
+
+### Bug Fixes
+
+* address dynamic prop warnings in gam api class ([3adb903](https://github.com/Automattic/newspack-ads/commit/3adb9031506923561e14b2151cd292fa1932b076))
+* address dynamic prop warnings in gam api class ([beb54c8](https://github.com/Automattic/newspack-ads/commit/beb54c864dccc2ea34ef27be85e0ea175e16ee14))
+
+## [1.47.1-alpha.1](https://github.com/Automattic/newspack-ads/compare/v1.47.0...v1.47.1-alpha.1) (2024-03-28)
+
+
+### Bug Fixes
+
+* address dynamic prop warnings in gam api class ([3adb903](https://github.com/Automattic/newspack-ads/commit/3adb9031506923561e14b2151cd292fa1932b076))
+* address dynamic prop warnings in gam api class ([beb54c8](https://github.com/Automattic/newspack-ads/commit/beb54c864dccc2ea34ef27be85e0ea175e16ee14))
+
 # [1.47.0](https://github.com/Automattic/newspack-ads/compare/v1.46.0...v1.47.0) (2024-02-20)
 
 

@@ -582,16 +582,17 @@ class Subscription_Lists {
 	 *
 	 * @param array  $existing_ids The list of IDs that exist in the ESP. All other remote lists will be deleted.
 	 * @param string $provider_slug The provider slug to clean up lists for. Default is the current configured provider.
+	 * @param bool   $delete_local If true, delete all local lists as well.
 	 * @return void
 	 */
-	public static function garbage_collector( $existing_ids, $provider_slug = null ) {
+	public static function garbage_collector( $existing_ids, $provider_slug = null, $delete_local = false ) {
 		if ( is_null( $provider_slug ) ) {
 			$provider      = Newspack_Newsletters::get_service_provider();
 			$provider_slug = $provider->service;
 		}
 		$all_lists = self::get_all();
 		foreach ( $all_lists as $list ) {
-			if ( ! $list->is_local() && $provider_slug === $list->get_provider() && ! in_array( $list->get_id(), $existing_ids ) ) {
+			if ( ( $delete_local || ! $list->is_local() ) && $provider_slug === $list->get_provider() && ! in_array( $list->get_id(), $existing_ids ) ) {
 				self::delete_list( $list );
 			}
 		}
@@ -616,7 +617,7 @@ class Subscription_Lists {
 			printf( '<h2>%s</h2>', esc_html__( 'Description', 'newspack-newsletters' ) );
 		}
 	}
-	
+
 	/**
 	 * Outputs a link back to the Settings page above the title in the post editor.
 	 */
@@ -652,7 +653,7 @@ class Subscription_Lists {
 			}
 
 			foreach ( $lists as $list_id => $list ) {
-				
+
 				if ( Subscription_List::is_local_form_id( $list_id ) ) {
 					continue;
 				}

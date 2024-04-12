@@ -10370,219 +10370,10 @@ const withPushChangesToGlobalStyles = (0,external_wp_compose_namespaceObject.cre
 })));
 (0,external_wp_hooks_namespaceObject.addFilter)('editor.BlockEdit', 'core/edit-site/push-changes-to-global-styles', withPushChangesToGlobalStyles);
 
-;// CONCATENATED MODULE: external ["wp","router"]
-const external_wp_router_namespaceObject = window["wp"]["router"];
-;// CONCATENATED MODULE: external ["wp","url"]
-const external_wp_url_namespaceObject = window["wp"]["url"];
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/utils/is-previewing-theme.js
-/**
- * WordPress dependencies
- */
-
-function isPreviewingTheme() {
-  return (0,external_wp_url_namespaceObject.getQueryArg)(window.location.href, 'wp_theme_preview') !== undefined;
-}
-function currentlyPreviewingTheme() {
-  if (isPreviewingTheme()) {
-    return (0,external_wp_url_namespaceObject.getQueryArg)(window.location.href, 'wp_theme_preview');
-  }
-  return null;
-}
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/routes/link.js
-
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-const {
-  useHistory
-} = unlock(external_wp_router_namespaceObject.privateApis);
-function useLink(params, state, shouldReplace = false) {
-  const history = useHistory();
-  function onClick(event) {
-    event?.preventDefault();
-    if (shouldReplace) {
-      history.replace(params, state);
-    } else {
-      history.push(params, state);
-    }
-  }
-  const currentArgs = (0,external_wp_url_namespaceObject.getQueryArgs)(window.location.href);
-  const currentUrlWithoutArgs = (0,external_wp_url_namespaceObject.removeQueryArgs)(window.location.href, ...Object.keys(currentArgs));
-  if (isPreviewingTheme()) {
-    params = {
-      ...params,
-      wp_theme_preview: currentlyPreviewingTheme()
-    };
-  }
-  const newUrl = (0,external_wp_url_namespaceObject.addQueryArgs)(currentUrlWithoutArgs, params);
-  return {
-    href: newUrl,
-    onClick
-  };
-}
-function Link({
-  params = {},
-  state,
-  replace: shouldReplace = false,
-  children,
-  ...props
-}) {
-  const {
-    href,
-    onClick
-  } = useLink(params, state, shouldReplace);
-  return (0,external_React_.createElement)("a", {
-    href: href,
-    onClick: onClick,
-    ...props
-  }, children);
-}
-
-;// CONCATENATED MODULE: external ["wp","patterns"]
-const external_wp_patterns_namespaceObject = window["wp"]["patterns"];
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/utils/constants.js
-/**
- * WordPress dependencies
- */
-
-
-
-/**
- * Internal dependencies
- */
-
-
-// Navigation
-const NAVIGATION_POST_TYPE = 'wp_navigation';
-
-// Templates.
-const TEMPLATE_POST_TYPE = 'wp_template';
-const TEMPLATE_PART_POST_TYPE = 'wp_template_part';
-const TEMPLATE_ORIGINS = {
-  custom: 'custom',
-  theme: 'theme',
-  plugin: 'plugin'
-};
-const TEMPLATE_PART_AREA_DEFAULT_CATEGORY = 'uncategorized';
-
-// Patterns.
-const {
-  PATTERN_TYPES,
-  PATTERN_DEFAULT_CATEGORY,
-  PATTERN_USER_CATEGORY,
-  EXCLUDED_PATTERN_SOURCES,
-  PATTERN_SYNC_TYPES
-} = unlock(external_wp_patterns_namespaceObject.privateApis);
-
-// Entities that are editable in focus mode.
-const FOCUSABLE_ENTITIES = [TEMPLATE_PART_POST_TYPE, NAVIGATION_POST_TYPE, PATTERN_TYPES.user];
-const POST_TYPE_LABELS = {
-  [TEMPLATE_POST_TYPE]: (0,external_wp_i18n_namespaceObject.__)('Template'),
-  [TEMPLATE_PART_POST_TYPE]: (0,external_wp_i18n_namespaceObject.__)('Template part'),
-  [PATTERN_TYPES.user]: (0,external_wp_i18n_namespaceObject.__)('Pattern'),
-  [NAVIGATION_POST_TYPE]: (0,external_wp_i18n_namespaceObject.__)('Navigation')
-};
-
-// DataViews constants
-const LAYOUT_GRID = 'grid';
-const LAYOUT_TABLE = 'table';
-const LAYOUT_LIST = 'list';
-const ENUMERATION_TYPE = 'enumeration';
-const OPERATOR_IS = 'is';
-const OPERATOR_IS_NOT = 'isNot';
-const OPERATOR_IS_ANY = 'isAny';
-const OPERATOR_IS_NONE = 'isNone';
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/hooks/template-part-edit.js
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-const {
-  useLocation
-} = unlock(external_wp_router_namespaceObject.privateApis);
-function EditTemplatePartMenuItem({
-  attributes
-}) {
-  const {
-    theme,
-    slug
-  } = attributes;
-  const {
-    params
-  } = useLocation();
-  const templatePart = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getCurrentTheme,
-      getEntityRecord
-    } = select(external_wp_coreData_namespaceObject.store);
-    return getEntityRecord('postType', TEMPLATE_PART_POST_TYPE,
-    // Ideally this should be an official public API.
-    `${theme || getCurrentTheme()?.stylesheet}//${slug}`);
-  }, [theme, slug]);
-  const linkProps = useLink({
-    postId: templatePart?.id,
-    postType: templatePart?.type,
-    canvas: 'edit'
-  }, {
-    fromTemplateId: params.postId || templatePart?.id
-  });
-  if (!templatePart) {
-    return null;
-  }
-  return (0,external_React_.createElement)(external_wp_components_namespaceObject.ToolbarButton, {
-    ...linkProps,
-    onClick: event => {
-      linkProps.onClick(event);
-    }
-  }, (0,external_wp_i18n_namespaceObject.__)('Edit'));
-}
-const withEditBlockControls = (0,external_wp_compose_namespaceObject.createHigherOrderComponent)(BlockEdit => props => {
-  const {
-    attributes,
-    name
-  } = props;
-  const isDisplayed = name === 'core/template-part' && attributes.slug;
-  return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(BlockEdit, {
-    key: "edit",
-    ...props
-  }), isDisplayed && (0,external_React_.createElement)(external_wp_blockEditor_namespaceObject.BlockControls, {
-    group: "other"
-  }, (0,external_React_.createElement)(EditTemplatePartMenuItem, {
-    attributes: attributes
-  })));
-}, 'withEditBlockControls');
-(0,external_wp_hooks_namespaceObject.addFilter)('editor.BlockEdit', 'core/edit-site/template-part-edit-button', withEditBlockControls);
-
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/hooks/index.js
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -10693,6 +10484,8 @@ function editorCanvasContainerView(state = undefined, action) {
 ;// CONCATENATED MODULE: external ["wp","apiFetch"]
 const external_wp_apiFetch_namespaceObject = window["wp"]["apiFetch"];
 var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_wp_apiFetch_namespaceObject);
+;// CONCATENATED MODULE: external ["wp","url"]
+const external_wp_url_namespaceObject = window["wp"]["url"];
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/store/constants.js
 /**
  * The identifier for the data store.
@@ -10700,6 +10493,61 @@ var external_wp_apiFetch_default = /*#__PURE__*/__webpack_require__.n(external_w
  * @type {string}
  */
 const constants_STORE_NAME = 'core/edit-site';
+
+;// CONCATENATED MODULE: external ["wp","patterns"]
+const external_wp_patterns_namespaceObject = window["wp"]["patterns"];
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/utils/constants.js
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+// Navigation
+const NAVIGATION_POST_TYPE = 'wp_navigation';
+
+// Templates.
+const TEMPLATE_POST_TYPE = 'wp_template';
+const TEMPLATE_PART_POST_TYPE = 'wp_template_part';
+const TEMPLATE_ORIGINS = {
+  custom: 'custom',
+  theme: 'theme',
+  plugin: 'plugin'
+};
+const TEMPLATE_PART_AREA_DEFAULT_CATEGORY = 'uncategorized';
+
+// Patterns.
+const {
+  PATTERN_TYPES,
+  PATTERN_DEFAULT_CATEGORY,
+  PATTERN_USER_CATEGORY,
+  EXCLUDED_PATTERN_SOURCES,
+  PATTERN_SYNC_TYPES
+} = unlock(external_wp_patterns_namespaceObject.privateApis);
+
+// Entities that are editable in focus mode.
+const FOCUSABLE_ENTITIES = [TEMPLATE_PART_POST_TYPE, NAVIGATION_POST_TYPE, PATTERN_TYPES.user];
+const POST_TYPE_LABELS = {
+  [TEMPLATE_POST_TYPE]: (0,external_wp_i18n_namespaceObject.__)('Template'),
+  [TEMPLATE_PART_POST_TYPE]: (0,external_wp_i18n_namespaceObject.__)('Template part'),
+  [PATTERN_TYPES.user]: (0,external_wp_i18n_namespaceObject.__)('Pattern'),
+  [NAVIGATION_POST_TYPE]: (0,external_wp_i18n_namespaceObject.__)('Navigation')
+};
+
+// DataViews constants
+const LAYOUT_GRID = 'grid';
+const LAYOUT_TABLE = 'table';
+const LAYOUT_LIST = 'list';
+const ENUMERATION_TYPE = 'enumeration';
+const OPERATOR_IS = 'is';
+const OPERATOR_IS_NOT = 'isNot';
+const OPERATOR_IS_ANY = 'isAny';
+const OPERATOR_IS_NONE = 'isNone';
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/utils/is-template-revertable.js
 /**
@@ -11341,233 +11189,6 @@ const toggleDistractionFree = () => ({
   registry.dispatch(external_wp_editor_namespaceObject.store).toggleDistractionFree();
 };
 
-;// CONCATENATED MODULE: ./node_modules/memize/dist/index.js
-/**
- * Memize options object.
- *
- * @typedef MemizeOptions
- *
- * @property {number} [maxSize] Maximum size of the cache.
- */
-
-/**
- * Internal cache entry.
- *
- * @typedef MemizeCacheNode
- *
- * @property {?MemizeCacheNode|undefined} [prev] Previous node.
- * @property {?MemizeCacheNode|undefined} [next] Next node.
- * @property {Array<*>}                   args   Function arguments for cache
- *                                               entry.
- * @property {*}                          val    Function result.
- */
-
-/**
- * Properties of the enhanced function for controlling cache.
- *
- * @typedef MemizeMemoizedFunction
- *
- * @property {()=>void} clear Clear the cache.
- */
-
-/**
- * Accepts a function to be memoized, and returns a new memoized function, with
- * optional options.
- *
- * @template {(...args: any[]) => any} F
- *
- * @param {F}             fn        Function to memoize.
- * @param {MemizeOptions} [options] Options object.
- *
- * @return {((...args: Parameters<F>) => ReturnType<F>) & MemizeMemoizedFunction} Memoized function.
- */
-function memize(fn, options) {
-	var size = 0;
-
-	/** @type {?MemizeCacheNode|undefined} */
-	var head;
-
-	/** @type {?MemizeCacheNode|undefined} */
-	var tail;
-
-	options = options || {};
-
-	function memoized(/* ...args */) {
-		var node = head,
-			len = arguments.length,
-			args,
-			i;
-
-		searchCache: while (node) {
-			// Perform a shallow equality test to confirm that whether the node
-			// under test is a candidate for the arguments passed. Two arrays
-			// are shallowly equal if their length matches and each entry is
-			// strictly equal between the two sets. Avoid abstracting to a
-			// function which could incur an arguments leaking deoptimization.
-
-			// Check whether node arguments match arguments length
-			if (node.args.length !== arguments.length) {
-				node = node.next;
-				continue;
-			}
-
-			// Check whether node arguments match arguments values
-			for (i = 0; i < len; i++) {
-				if (node.args[i] !== arguments[i]) {
-					node = node.next;
-					continue searchCache;
-				}
-			}
-
-			// At this point we can assume we've found a match
-
-			// Surface matched node to head if not already
-			if (node !== head) {
-				// As tail, shift to previous. Must only shift if not also
-				// head, since if both head and tail, there is no previous.
-				if (node === tail) {
-					tail = node.prev;
-				}
-
-				// Adjust siblings to point to each other. If node was tail,
-				// this also handles new tail's empty `next` assignment.
-				/** @type {MemizeCacheNode} */ (node.prev).next = node.next;
-				if (node.next) {
-					node.next.prev = node.prev;
-				}
-
-				node.next = head;
-				node.prev = null;
-				/** @type {MemizeCacheNode} */ (head).prev = node;
-				head = node;
-			}
-
-			// Return immediately
-			return node.val;
-		}
-
-		// No cached value found. Continue to insertion phase:
-
-		// Create a copy of arguments (avoid leaking deoptimization)
-		args = new Array(len);
-		for (i = 0; i < len; i++) {
-			args[i] = arguments[i];
-		}
-
-		node = {
-			args: args,
-
-			// Generate the result from original function
-			val: fn.apply(null, args),
-		};
-
-		// Don't need to check whether node is already head, since it would
-		// have been returned above already if it was
-
-		// Shift existing head down list
-		if (head) {
-			head.prev = node;
-			node.next = head;
-		} else {
-			// If no head, follows that there's no tail (at initial or reset)
-			tail = node;
-		}
-
-		// Trim tail if we're reached max size and are pending cache insertion
-		if (size === /** @type {MemizeOptions} */ (options).maxSize) {
-			tail = /** @type {MemizeCacheNode} */ (tail).prev;
-			/** @type {MemizeCacheNode} */ (tail).next = null;
-		} else {
-			size++;
-		}
-
-		head = node;
-
-		return node.val;
-	}
-
-	memoized.clear = function () {
-		head = null;
-		tail = null;
-		size = 0;
-	};
-
-	// Ignore reason: There's not a clear solution to create an intersection of
-	// the function with additional properties, where the goal is to retain the
-	// function signature of the incoming argument and add control properties
-	// on the return value.
-
-	// @ts-ignore
-	return memoized;
-}
-
-
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/store/utils.js
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-const EMPTY_ARRAY = [];
-
-/**
- * Get a flattened and filtered list of template parts and the matching block for that template part.
- *
- * Takes a list of blocks defined within a template, and a list of template parts, and returns a
- * flattened list of template parts and the matching block for that template part.
- *
- * @param {Array}  blocks        Blocks to flatten.
- * @param {?Array} templateParts Available template parts.
- * @return {Array} An array of template parts and their blocks.
- */
-function getFilteredTemplatePartBlocks(blocks = EMPTY_ARRAY, templateParts) {
-  const templatePartsById = templateParts ?
-  // Key template parts by their ID.
-  templateParts.reduce((newTemplateParts, part) => ({
-    ...newTemplateParts,
-    [part.id]: part
-  }), {}) : {};
-  const result = [];
-
-  // Iterate over all blocks, recursing into inner blocks.
-  // Output will be based on a depth-first traversal.
-  const stack = [...blocks];
-  while (stack.length) {
-    const {
-      innerBlocks,
-      ...block
-    } = stack.shift();
-    // Place inner blocks at the beginning of the stack to preserve order.
-    stack.unshift(...innerBlocks);
-    if ((0,external_wp_blocks_namespaceObject.isTemplatePart)(block)) {
-      const {
-        attributes: {
-          theme,
-          slug
-        }
-      } = block;
-      const templatePartId = `${theme}//${slug}`;
-      const templatePart = templatePartsById[templatePartId];
-
-      // Only add to output if the found template part block is in the list of available template parts.
-      if (templatePart) {
-        result.push({
-          templatePart,
-          block
-        });
-      }
-    }
-  }
-  return result;
-}
-const memoizedGetFilteredTemplatePartBlocks = memize(getFilteredTemplatePartBlocks);
-
-
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/store/selectors.js
 /**
  * WordPress dependencies
@@ -11579,12 +11200,9 @@ const memoizedGetFilteredTemplatePartBlocks = memize(getFilteredTemplatePartBloc
 
 
 
-
 /**
  * Internal dependencies
  */
-
-
 
 
 /**
@@ -11792,12 +11410,7 @@ function isSaveViewOpened(state) {
  * @return {Array} Template parts and their blocks in an array.
  */
 const getCurrentTemplateTemplateParts = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => () => {
-  const templateParts = select(external_wp_coreData_namespaceObject.store).getEntityRecords('postType', TEMPLATE_PART_POST_TYPE, {
-    per_page: -1
-  });
-  const clientIds = select(external_wp_blockEditor_namespaceObject.store).getBlocksByName('core/template-part');
-  const blocks = select(external_wp_blockEditor_namespaceObject.store).getBlocksByClientId(clientIds);
-  return memoizedGetFilteredTemplatePartBlocks(blocks, templateParts);
+  return unlock(select(external_wp_editor_namespaceObject.store)).getCurrentTemplateTemplateParts();
 });
 
 /**
@@ -11917,6 +11530,8 @@ const store_store = (0,external_wp_data_namespaceObject.createReduxStore)(consta
 unlock(store_store).registerPrivateSelectors(private_selectors_namespaceObject);
 unlock(store_store).registerPrivateActions(private_actions_namespaceObject);
 
+;// CONCATENATED MODULE: external ["wp","router"]
+const external_wp_router_namespaceObject = window["wp"]["router"];
 ;// CONCATENATED MODULE: external ["wp","keyboardShortcuts"]
 const external_wp_keyboardShortcuts_namespaceObject = window["wp"]["keyboardShortcuts"];
 ;// CONCATENATED MODULE: external ["wp","commands"]
@@ -12041,6 +11656,21 @@ function SidebarButton(props) {
   });
 }
 
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/utils/is-previewing-theme.js
+/**
+ * WordPress dependencies
+ */
+
+function isPreviewingTheme() {
+  return (0,external_wp_url_namespaceObject.getQueryArg)(window.location.href, 'wp_theme_preview') !== undefined;
+}
+function currentlyPreviewingTheme() {
+  if (isPreviewingTheme()) {
+    return (0,external_wp_url_namespaceObject.getQueryArg)(window.location.href, 'wp_theme_preview');
+  }
+  return null;
+}
+
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-navigation-screen/index.js
 
 /**
@@ -12066,7 +11696,7 @@ function SidebarButton(props) {
 
 
 const {
-  useLocation: sidebar_navigation_screen_useLocation
+  useLocation
 } = unlock(external_wp_router_namespaceObject.privateApis);
 function SidebarNavigationScreen({
   isRoot,
@@ -12095,7 +11725,7 @@ function SidebarNavigationScreen({
       previewingThemeName: currentlyPreviewingThemeId ? select(external_wp_coreData_namespaceObject.store).getTheme(currentlyPreviewingThemeId)?.name?.rendered : undefined
     };
   }, []);
-  const location = sidebar_navigation_screen_useLocation();
+  const location = useLocation();
   const navigator = (0,external_wp_components_namespaceObject.__experimentalUseNavigator)();
   const icon = (0,external_wp_i18n_namespaceObject.isRTL)() ? chevron_right : chevron_left;
   return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
@@ -12895,7 +12525,9 @@ function Variation({
  */
 
 
-function StyleVariationsContainer() {
+function StyleVariationsContainer({
+  gap = 2
+}) {
   const variations = (0,external_wp_data_namespaceObject.useSelect)(select => {
     return select(external_wp_coreData_namespaceObject.store).__experimentalGetCurrentThemeGlobalStylesVariations();
   }, []);
@@ -12915,7 +12547,8 @@ function StyleVariationsContainer() {
   }, [variations]);
   return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalGrid, {
     columns: 2,
-    className: "edit-site-global-styles-style-variations-container"
+    className: "edit-site-global-styles-style-variations-container",
+    gap: gap
   }, withEmptyVariation.map((variation, index) => (0,external_React_.createElement)(Variation, {
     key: index,
     variation: variation
@@ -13155,8 +12788,7 @@ function EditorCanvasContainer({
     className: "edit-site-editor-canvas-container__close-button",
     icon: close_small,
     label: closeButtonLabel || (0,external_wp_i18n_namespaceObject.__)('Close'),
-    onClick: onCloseContainer,
-    showTooltip: false
+    onClick: onCloseContainer
   }), childrenWithProps)));
 }
 function useHasEditorCanvasContainer() {
@@ -13359,7 +12991,7 @@ function StyleBook({
   return (0,external_React_.createElement)(editor_canvas_container, {
     onClose: onClose,
     enableResizing: enableResizing,
-    closeButtonLabel: showCloseButton ? (0,external_wp_i18n_namespaceObject.__)('Close Style Book') : null
+    closeButtonLabel: showCloseButton ? (0,external_wp_i18n_namespaceObject.__)('Close') : null
   }, (0,external_React_.createElement)("div", {
     className: classnames_default()('edit-site-style-book', {
       'is-wide': sizes.width > 600,
@@ -13563,7 +13195,7 @@ const DEFAULT_QUERY = {
   per_page: 100,
   page: 1
 };
-const use_global_styles_revisions_EMPTY_ARRAY = [];
+const EMPTY_ARRAY = [];
 const {
   GlobalStylesContext: use_global_styles_revisions_GlobalStylesContext
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
@@ -13601,8 +13233,8 @@ function useGlobalStylesRevisions({
     const globalStylesId = __experimentalGetCurrentGlobalStylesId();
     const globalStyles = globalStylesId ? getEntityRecord('root', 'globalStyles', globalStylesId) : undefined;
     const _revisionsCount = (_globalStyles$_links$ = globalStyles?._links?.['version-history']?.[0]?.count) !== null && _globalStyles$_links$ !== void 0 ? _globalStyles$_links$ : 0;
-    const globalStylesRevisions = getRevisions('root', 'globalStyles', globalStylesId, _query) || use_global_styles_revisions_EMPTY_ARRAY;
-    const _authors = getUsers(SITE_EDITOR_AUTHORS_QUERY) || use_global_styles_revisions_EMPTY_ARRAY;
+    const globalStylesRevisions = getRevisions('root', 'globalStyles', globalStylesId, _query) || EMPTY_ARRAY;
+    const _authors = getUsers(SITE_EDITOR_AUTHORS_QUERY) || EMPTY_ARRAY;
     const _isResolving = isResolving('getRevisions', ['root', 'globalStyles', globalStylesId, _query]);
     return {
       authors: _authors,
@@ -13616,7 +13248,7 @@ function useGlobalStylesRevisions({
   return (0,external_wp_element_namespaceObject.useMemo)(() => {
     if (!authors.length || isLoadingGlobalStylesRevisions) {
       return {
-        revisions: use_global_styles_revisions_EMPTY_ARRAY,
+        revisions: EMPTY_ARRAY,
         hasUnsavedChanges: isDirty,
         isLoading: true,
         revisionsCount
@@ -13788,6 +13420,7 @@ function SidebarNavigationScreenDetailsFooter({
   record,
   ...otherProps
 }) {
+  var _record$_links$predec, _record$_links$versio;
   /*
    * There might be other items in the future,
    * but for now it's just modified date.
@@ -13795,7 +13428,10 @@ function SidebarNavigationScreenDetailsFooter({
    * the following logic.
    */
   const hrefProps = {};
-  if (record?._links?.['predecessor-version']?.[0]?.id) {
+  const lastRevisionId = (_record$_links$predec = record?._links?.['predecessor-version']?.[0]?.id) !== null && _record$_links$predec !== void 0 ? _record$_links$predec : null;
+  const revisionsCount = (_record$_links$versio = record?._links?.['version-history']?.[0]?.count) !== null && _record$_links$versio !== void 0 ? _record$_links$versio : 0;
+  // Enable the revisions link if there is a last revision and there are more than one revisions.
+  if (lastRevisionId && revisionsCount > 1) {
     hrefProps.href = (0,external_wp_url_namespaceObject.addQueryArgs)('revision.php', {
       revision: record?._links['predecessor-version'][0].id
     });
@@ -13862,18 +13498,35 @@ const StylesPreviewColors = ({
       overflow: 'hidden'
     }
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
-    spacing: 10 * ratio,
+    spacing: 5 * ratio,
     justify: "center",
     style: {
       height: '100%',
       overflow: 'hidden'
     }
   }, (0,external_React_.createElement)(HighlightedColors, {
-    normalizedColorSwatchSize: 66,
+    normalizedColorSwatchSize: 56,
     ratio: ratio
   }))));
 };
 /* harmony default export */ const preview_colors = (StylesPreviewColors);
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/subtitle.js
+
+/**
+ * WordPress dependencies
+ */
+
+function Subtitle({
+  children,
+  level
+}) {
+  return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHeading, {
+    className: "edit-site-global-styles-subtitle",
+    level: level !== null && level !== void 0 ? level : 2
+  }, children);
+}
+/* harmony default export */ const subtitle = (Subtitle);
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/variations/variations-color.js
 
@@ -13888,15 +13541,22 @@ const StylesPreviewColors = ({
 
 
 
-function ColorVariations() {
+
+function ColorVariations({
+  title,
+  gap = 2
+}) {
   const colorVariations = useColorVariations();
   if (!colorVariations?.length) {
     return null;
   }
   return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
     spacing: 3
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalGrid, {
-    columns: 3
+  }, title && (0,external_React_.createElement)(subtitle, {
+    level: 3
+  }, title), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalGrid, {
+    columns: 3,
+    gap: gap
   }, colorVariations.map((variation, index) => (0,external_React_.createElement)(Variation, {
     key: index,
     variation: variation
@@ -13917,15 +13577,22 @@ function ColorVariations() {
 
 
 
-function TypographyVariations() {
+
+function TypographyVariations({
+  title,
+  gap = 2
+}) {
   const typographyVariations = useTypographyVariations();
   if (!typographyVariations?.length) {
     return null;
   }
   return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
     spacing: 3
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalGrid, {
+  }, title && (0,external_React_.createElement)(subtitle, {
+    level: 3
+  }, title), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalGrid, {
     columns: 3,
+    gap: gap,
     className: "edit-site-global-styles-style-variations-container"
   }, typographyVariations && typographyVariations.length && typographyVariations.map((variation, index) => (0,external_React_.createElement)(Variation, {
     key: index,
@@ -14020,6 +13687,7 @@ function SidebarNavigationScreenGlobalStylesContent() {
   }, []);
   const colorVariations = useColorVariations();
   const typographyVariations = useTypographyVariations();
+  const gap = 3;
 
   // Wrap in a BlockEditorProvider to ensure that the Iframe's dependencies are
   // loaded. This is necessary because the Iframe component waits until
@@ -14033,11 +13701,15 @@ function SidebarNavigationScreenGlobalStylesContent() {
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
     spacing: 10,
     className: "edit-site-global-styles-variation-container"
-  }, (0,external_React_.createElement)(StyleVariationsContainer, null), colorVariations?.length && (0,external_React_.createElement)("div", null, (0,external_React_.createElement)("h3", {
-    className: "edit-site-global-styles-variation-title"
-  }, (0,external_wp_i18n_namespaceObject.__)('Colors')), (0,external_React_.createElement)(ColorVariations, null)), typographyVariations?.length && (0,external_React_.createElement)("div", null, (0,external_React_.createElement)("h3", {
-    className: "edit-site-global-styles-variation-title"
-  }, (0,external_wp_i18n_namespaceObject.__)('Typography')), (0,external_React_.createElement)(TypographyVariations, null))));
+  }, (0,external_React_.createElement)(StyleVariationsContainer, {
+    gap: gap
+  }), colorVariations?.length && (0,external_React_.createElement)(ColorVariations, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Colors'),
+    gap: gap
+  }), typographyVariations?.length && (0,external_React_.createElement)(TypographyVariations, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Typography'),
+    gap: gap
+  })));
 }
 function SidebarNavigationScreenGlobalStyles() {
   const {
@@ -14194,6 +13866,64 @@ function SidebarNavigationScreenMain() {
       icon: library_symbol
     }, (0,external_wp_i18n_namespaceObject.__)('Patterns'))))
   });
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/routes/link.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const {
+  useHistory
+} = unlock(external_wp_router_namespaceObject.privateApis);
+function useLink(params, state, shouldReplace = false) {
+  const history = useHistory();
+  function onClick(event) {
+    event?.preventDefault();
+    if (shouldReplace) {
+      history.replace(params, state);
+    } else {
+      history.push(params, state);
+    }
+  }
+  const currentArgs = (0,external_wp_url_namespaceObject.getQueryArgs)(window.location.href);
+  const currentUrlWithoutArgs = (0,external_wp_url_namespaceObject.removeQueryArgs)(window.location.href, ...Object.keys(currentArgs));
+  if (isPreviewingTheme()) {
+    params = {
+      ...params,
+      wp_theme_preview: currentlyPreviewingTheme()
+    };
+  }
+  const newUrl = (0,external_wp_url_namespaceObject.addQueryArgs)(currentUrlWithoutArgs, params);
+  return {
+    href: newUrl,
+    onClick
+  };
+}
+function Link({
+  params = {},
+  state,
+  replace: shouldReplace = false,
+  children,
+  ...props
+}) {
+  const {
+    href,
+    onClick
+  } = useLink(params, state, shouldReplace);
+  return (0,external_React_.createElement)("a", {
+    href: href,
+    onClick: onClick,
+    ...props
+  }, children);
 }
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-navigation-screen-template/template-areas.js
@@ -16230,15 +15960,21 @@ function isShallowEqual(a, b, fromIndex) {
 	return /** @type {S & EnhancedSelector} */ (callSelector);
 }
 
-// EXTERNAL MODULE: ./node_modules/remove-accents/index.js
-var remove_accents = __webpack_require__(4793);
-var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/page-patterns/search-items.js
 /**
- * External dependencies
+ * WordPress dependencies
  */
 
 
+/**
+ * Internal dependencies
+ */
+
+const {
+  extractWords,
+  getNormalizedSearchTerms,
+  normalizeString
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 
 /**
  * Internal dependencies
@@ -16251,56 +15987,6 @@ const defaultGetTitle = item => item.title;
 const defaultGetDescription = item => item.description || '';
 const defaultGetKeywords = item => item.keywords || [];
 const defaultHasCategory = () => false;
-
-/**
- * Extracts words from an input string.
- *
- * @param {string} input The input string.
- *
- * @return {Array} Words, extracted from the input string.
- */
-function extractWords(input = '') {
-  return noCase(input, {
-    splitRegexp: [/([\p{Ll}\p{Lo}\p{N}])([\p{Lu}\p{Lt}])/gu,
-    // One lowercase or digit, followed by one uppercase.
-    /([\p{Lu}\p{Lt}])([\p{Lu}\p{Lt}][\p{Ll}\p{Lo}])/gu // One uppercase followed by one uppercase and one lowercase.
-    ],
-    stripRegexp: /(\p{C}|\p{P}|\p{S})+/giu // Anything that's not a punctuation, symbol or control/format character.
-  }).split(' ').filter(Boolean);
-}
-
-/**
- * Sanitizes the search input string.
- *
- * @param {string} input The search input to normalize.
- *
- * @return {string} The normalized search input.
- */
-function normalizeSearchInput(input = '') {
-  // Disregard diacritics.
-  //  Input: "média"
-  input = remove_accents_default()(input);
-
-  // Accommodate leading slash, matching autocomplete expectations.
-  //  Input: "/media"
-  input = input.replace(/^\//, '');
-
-  // Lowercase.
-  //  Input: "MEDIA"
-  input = input.toLowerCase();
-  return input;
-}
-
-/**
- * Converts the search term into a list of normalized terms.
- *
- * @param {string} input The search term to normalize.
- *
- * @return {string[]} The normalized list of search terms.
- */
-const getNormalizedSearchTerms = (input = '') => {
-  return extractWords(normalizeSearchInput(input));
-};
 const removeMatchingTerms = (unmatchedTerms, unprocessedTerms) => {
   return unmatchedTerms.filter(term => !getNormalizedSearchTerms(unprocessedTerms).some(unprocessedTerm => unprocessedTerm.includes(term)));
 };
@@ -16370,8 +16056,8 @@ function getItemSearchRank(item, searchTerm, config) {
   const title = getTitle(item);
   const description = getDescription(item);
   const keywords = getKeywords(item);
-  const normalizedSearchInput = normalizeSearchInput(searchTerm);
-  const normalizedTitle = normalizeSearchInput(title);
+  const normalizedSearchInput = normalizeString(searchTerm);
+  const normalizedTitle = normalizeString(title);
 
   // Prefers exact matches
   // Then prefers if the beginning of the title matches the search term
@@ -16848,11 +16534,7 @@ function SidebarNavigationScreenPatterns() {
     // the Patterns page directly, preserve that state in the URL.
     didAccessPatternsPage: !isBlockBasedTheme && isTemplatePartsMode ? 1 : undefined
   });
-  const footer = !isMobileViewport ? (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalItemGroup, null, (0,external_React_.createElement)(SidebarNavigationItem, {
-    as: "a",
-    href: "edit.php?post_type=wp_block",
-    withChevron: true
-  }, (0,external_wp_i18n_namespaceObject.__)('Manage all of my patterns')), (isBlockBasedTheme || isTemplatePartsMode) && (0,external_React_.createElement)(SidebarNavigationItem, {
+  const footer = !isMobileViewport ? (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalItemGroup, null, (isBlockBasedTheme || isTemplatePartsMode) && (0,external_React_.createElement)(SidebarNavigationItem, {
     withChevron: true,
     ...templatePartsLink
   }, (0,external_wp_i18n_namespaceObject.__)('Manage all template parts'))) : undefined;
@@ -17000,7 +16682,7 @@ function useResolveEditedEntityAndContext({
     }
 
     // Some URLs in list views are different
-    if (path === '/pages' && postId) {
+    if (path === '/page' && postId) {
       return resolveTemplateForPostTypeAndId('page', postId);
     }
 
@@ -17027,7 +16709,7 @@ function useResolveEditedEntityAndContext({
     }
 
     // Some URLs in list views are different
-    if (path === '/pages' && postId) {
+    if (path === '/page' && postId) {
       return {
         postType: 'page',
         postId
@@ -17241,7 +16923,7 @@ function useSyncPathWithURL() {
     } else if (
     // These sidebar paths are special in the sense that the url in these pages may or may not have a postId and we need to retain it if it has.
     // The "type" property should be kept as well.
-    navigatorLocation.path === '/pages' || navigatorLocation.path === '/wp_template' || navigatorLocation.path === '/wp_template_part/all') {
+    navigatorLocation.path === '/page' || navigatorLocation.path === '/wp_template' || navigatorLocation.path === '/wp_template_part/all') {
       updateUrlParams({
         postType: undefined,
         categoryType: undefined,
@@ -18829,69 +18511,6 @@ function CompactItemActions({
  * Internal dependencies
  */
 
-
-/**
- * Helper util to sort data by text fields, when sorting is done client side.
- *
- * @param {Object}   params            Function params.
- * @param {Object[]} params.data       Data to sort.
- * @param {Object}   params.view       Current view object.
- * @param {Object[]} params.fields     Array of available fields.
- * @param {string[]} params.textFields Array of the field ids to sort.
- *
- * @return {Object[]} Sorted data.
- */
-const sortByTextFields = ({
-  data,
-  view,
-  fields,
-  textFields
-}) => {
-  const sortedData = [...data];
-  const fieldId = view.sort.field;
-  if (textFields.includes(fieldId)) {
-    const fieldToSort = fields.find(field => {
-      return field.id === fieldId;
-    });
-    sortedData.sort((a, b) => {
-      var _fieldToSort$getValue, _fieldToSort$getValue2;
-      const valueA = (_fieldToSort$getValue = fieldToSort.getValue({
-        item: a
-      })) !== null && _fieldToSort$getValue !== void 0 ? _fieldToSort$getValue : '';
-      const valueB = (_fieldToSort$getValue2 = fieldToSort.getValue({
-        item: b
-      })) !== null && _fieldToSort$getValue2 !== void 0 ? _fieldToSort$getValue2 : '';
-      return view.sort.direction === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
-    });
-  }
-  return sortedData;
-};
-
-/**
- * Helper util to get the paginated data and the paginateInfo needed,
- * when pagination is done client side.
- *
- * @param {Object}   params      Function params.
- * @param {Object[]} params.data Available data.
- * @param {Object}   params.view Current view object.
- *
- * @return {Object} Paginated data and paginationInfo.
- */
-function getPaginationResults({
-  data,
-  view
-}) {
-  const start = (view.page - 1) * view.perPage;
-  const totalItems = data?.length || 0;
-  data = data?.slice(start, start + view.perPage);
-  return {
-    data,
-    paginationInfo: {
-      totalItems,
-      totalPages: Math.ceil(totalItems / view.perPage)
-    }
-  };
-}
 const sanitizeOperators = field => {
   let operators = field.filterBy?.operators;
 
@@ -19154,7 +18773,7 @@ const HeaderMenu = (0,external_wp_element_namespaceObject.forwardRef)(function H
   // 1. If the field is not already part of a view's filters.
   // 2. If the field meets the type and operator requirements.
   // 3. If it's not primary. If it is, it should be already visible.
-  const canAddFilter = !view.filters?.some(_filter => field.id === _filter.field) && field.type === constants_ENUMERATION_TYPE && !!operators.length && !field.filterBy?.isPrimary;
+  const canAddFilter = !view.filters?.some(_filter => field.id === _filter.field) && !!field.elements?.length && !!operators.length && !field.filterBy?.isPrimary;
   if (!isSortable && !isHidable && !canAddFilter) {
     return field.header;
   }
@@ -19272,20 +18891,24 @@ function TableRow({
   const handleMouseLeave = () => {
     setIsHovered(false);
   };
+
+  // Will be set to true if `onTouchStart` fires. This happens before
+  // `onClick` and can be used to exclude touchscreen devices from certain
+  // behaviours.
+  const isTouchDevice = (0,external_wp_element_namespaceObject.useRef)(false);
   return (0,external_React_.createElement)("tr", {
     className: classnames_default()('dataviews-view-table__row', {
-      'is-selected': hasPossibleBulkAction && selection.includes(id),
-      'is-hovered': isHovered
+      'is-selected': hasPossibleBulkAction && isSelected,
+      'is-hovered': isHovered,
+      'has-bulk-actions': hasPossibleBulkAction
     }),
     onMouseEnter: handleMouseEnter,
     onMouseLeave: handleMouseLeave,
-    onClickCapture: event => {
-      if (event.ctrlKey || event.metaKey) {
-        event.stopPropagation();
-        event.preventDefault();
-        if (!hasPossibleBulkAction) {
-          return;
-        }
+    onTouchStart: () => {
+      isTouchDevice.current = true;
+    },
+    onClick: () => {
+      if (!isTouchDevice.current && document.getSelection().type !== 'Range') {
         if (!isSelected) {
           onSelectionChange(data.filter(_item => {
             const itemId = getItemId?.(_item);
@@ -19329,12 +18952,22 @@ function TableRow({
     })
   }, field.render({
     item
-  })))), !!actions?.length && (0,external_React_.createElement)("td", {
-    className: "dataviews-view-table__actions-column"
+  })))), !!actions?.length &&
+  // Disable reason: we are not making the element interactive,
+  // but preventing any click events from bubbling up to the
+  // table row. This allows us to add a click handler to the row
+  // itself (to toggle row selection) without erroneously
+  // intercepting click events from ItemActions.
+
+  /* eslint-disable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events */
+  (0,external_React_.createElement)("td", {
+    className: "dataviews-view-table__actions-column",
+    onClick: e => e.stopPropagation()
   }, (0,external_React_.createElement)(ItemActions, {
     item: item,
     actions: actions
-  })));
+  }))
+  /* eslint-enable jsx-a11y/no-noninteractive-element-interactions, jsx-a11y/click-events-have-key-events */);
 }
 function ViewTable({
   view,
@@ -19484,7 +19117,8 @@ function GridItem({
   actions,
   mediaField,
   primaryField,
-  visibleFields
+  visibleFields,
+  displayAsColumnFields
 }) {
   const hasBulkAction = useHasAPossibleBulkAction(actions, item);
   const id = getItemId(item);
@@ -19549,16 +19183,24 @@ function GridItem({
     if (!renderedValue) {
       return null;
     }
-    return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-      className: "dataviews-view-grid__field",
+    return (0,external_React_.createElement)(external_wp_components_namespaceObject.Flex, {
+      className: classnames_default()('dataviews-view-grid__field', displayAsColumnFields?.includes(field.id) ? 'is-column' : 'is-row'),
       key: field.id,
-      spacing: 1
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Tooltip, {
-      text: field.header,
-      placement: "left"
-    }, (0,external_React_.createElement)("div", {
-      className: "dataviews-view-grid__field-value"
-    }, renderedValue)));
+      gap: 1,
+      justify: "flex-start",
+      expanded: true,
+      style: {
+        height: 'auto'
+      },
+      direction: displayAsColumnFields?.includes(field.id) ? 'column' : 'row'
+    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.FlexItem, {
+      className: "dataviews-view-grid__field-name"
+    }, field.header), (0,external_React_.createElement)(external_wp_components_namespaceObject.FlexItem, {
+      className: "dataviews-view-grid__field-value",
+      style: {
+        maxHeight: 'none'
+      }
+    }, renderedValue));
   })));
 }
 function ViewGrid({
@@ -19597,7 +19239,8 @@ function ViewGrid({
       actions: actions,
       mediaField: mediaField,
       primaryField: primaryField,
-      visibleFields: visibleFields
+      visibleFields: visibleFields,
+      displayAsColumnFields: view.layout.displayAsColumnFields
     });
   })), !hasData && (0,external_React_.createElement)("div", {
     className: classnames_default()({
@@ -19636,6 +19279,100 @@ const info = (0,external_React_.createElement)(external_wp_primitives_namespaceO
 
 
 
+
+/**
+ * Internal dependencies
+ */
+
+const {
+  useCompositeStoreV2: view_list_useCompositeStore,
+  CompositeV2: view_list_Composite,
+  CompositeItemV2: view_list_CompositeItem,
+  CompositeRowV2: CompositeRow
+} = lock_unlock_unlock(external_wp_components_namespaceObject.privateApis);
+function ListItem({
+  id,
+  item,
+  isSelected,
+  onSelect,
+  onDetailsChange,
+  mediaField,
+  primaryField,
+  visibleFields
+}) {
+  const itemRef = (0,external_wp_element_namespaceObject.useRef)(null);
+  const labelId = `${id}-label`;
+  const descriptionId = `${id}-description`;
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    if (isSelected) {
+      itemRef.current?.scrollIntoView({
+        behavior: 'auto',
+        block: 'nearest',
+        inline: 'nearest'
+      });
+    }
+  }, [isSelected]);
+  return (0,external_React_.createElement)(CompositeRow, {
+    ref: itemRef,
+    render: (0,external_React_.createElement)("li", null),
+    role: "row",
+    className: classnames_default()({
+      'is-selected': isSelected
+    })
+  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    className: "dataviews-view-list__item-wrapper"
+  }, (0,external_React_.createElement)("div", {
+    role: "gridcell"
+  }, (0,external_React_.createElement)(view_list_CompositeItem, {
+    render: (0,external_React_.createElement)("div", null),
+    role: "button",
+    id: id,
+    "aria-pressed": isSelected,
+    "aria-labelledby": labelId,
+    "aria-describedby": descriptionId,
+    className: "dataviews-view-list__item",
+    onClick: () => onSelect(item)
+  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    spacing: 3,
+    justify: "start",
+    alignment: "flex-start"
+  }, (0,external_React_.createElement)("div", {
+    className: "dataviews-view-list__media-wrapper"
+  }, mediaField?.render({
+    item
+  }) || (0,external_React_.createElement)("div", {
+    className: "dataviews-view-list__media-placeholder"
+  })), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: 1
+  }, (0,external_React_.createElement)("span", {
+    className: "dataviews-view-list__primary-field",
+    id: labelId
+  }, primaryField?.render({
+    item
+  })), (0,external_React_.createElement)("div", {
+    className: "dataviews-view-list__fields",
+    id: descriptionId
+  }, visibleFields.map(field => (0,external_React_.createElement)("div", {
+    key: field.id,
+    className: "dataviews-view-list__field"
+  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.VisuallyHidden, {
+    as: "span",
+    className: "dataviews-view-list__field-label"
+  }, field.header), (0,external_React_.createElement)("span", {
+    className: "dataviews-view-list__field-value"
+  }, field.render({
+    item
+  }))))))))), onDetailsChange && (0,external_React_.createElement)("div", {
+    role: "gridcell"
+  }, (0,external_React_.createElement)(view_list_CompositeItem, {
+    render: (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, null),
+    className: "dataviews-view-list__details-button",
+    onClick: () => onDetailsChange([item]),
+    icon: library_info,
+    label: (0,external_wp_i18n_namespaceObject.__)('View details'),
+    size: "compact"
+  }))));
+}
 function ViewList({
   view,
   fields,
@@ -19645,23 +19382,23 @@ function ViewList({
   onSelectionChange,
   onDetailsChange,
   selection,
-  deferredRendering
+  deferredRendering,
+  id: preferredId
 }) {
+  const baseId = (0,external_wp_compose_namespaceObject.useInstanceId)(ViewList, 'view-list', preferredId);
   const shownData = (0,external_wp_compose_namespaceObject.useAsyncList)(data, {
     step: 3
   });
   const usedData = deferredRendering ? shownData : data;
+  const selectedItem = usedData?.findLast(item => selection.includes(item.id));
   const mediaField = fields.find(field => field.id === view.layout.mediaField);
   const primaryField = fields.find(field => field.id === view.layout.primaryField);
   const visibleFields = fields.filter(field => !view.hiddenFields.includes(field.id) && ![view.layout.primaryField, view.layout.mediaField].includes(field.id));
-  const onEnter = item => event => {
-    const {
-      keyCode
-    } = event;
-    if ([external_wp_keycodes_namespaceObject.ENTER, external_wp_keycodes_namespaceObject.SPACE].includes(keyCode)) {
-      onSelectionChange([item]);
-    }
-  };
+  const onSelect = (0,external_wp_element_namespaceObject.useCallback)(item => onSelectionChange([item]), [onSelectionChange]);
+  const getItemDomId = (0,external_wp_element_namespaceObject.useCallback)(item => item ? `${baseId}-${getItemId(item)}` : undefined, [baseId, getItemId]);
+  const store = view_list_useCompositeStore({
+    defaultActiveId: getItemDomId(selectedItem)
+  });
   const hasData = usedData?.length;
   if (!hasData) {
     return (0,external_React_.createElement)("div", {
@@ -19671,55 +19408,25 @@ function ViewList({
       })
     }, !hasData && (0,external_React_.createElement)("p", null, isLoading ? (0,external_React_.createElement)(external_wp_components_namespaceObject.Spinner, null) : (0,external_wp_i18n_namespaceObject.__)('No results')));
   }
-  return (0,external_React_.createElement)("ul", {
-    className: "dataviews-view-list"
+  return (0,external_React_.createElement)(view_list_Composite, {
+    id: baseId,
+    render: (0,external_React_.createElement)("ul", null),
+    className: "dataviews-view-list",
+    role: "grid",
+    store: store
   }, usedData.map(item => {
-    return (0,external_React_.createElement)("li", {
-      key: getItemId(item),
-      className: classnames_default()({
-        'is-selected': selection.includes(item.id)
-      })
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
-      className: "dataviews-view-list__item-wrapper"
-    }, (0,external_React_.createElement)("div", {
-      role: "button",
-      tabIndex: 0,
-      "aria-pressed": selection.includes(item.id),
-      onKeyDown: onEnter(item),
-      className: "dataviews-view-list__item",
-      onClick: () => onSelectionChange([item])
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
-      spacing: 3,
-      justify: "start",
-      alignment: "flex-start"
-    }, (0,external_React_.createElement)("div", {
-      className: "dataviews-view-list__media-wrapper"
-    }, mediaField?.render({
-      item
-    }) || (0,external_React_.createElement)("div", {
-      className: "dataviews-view-list__media-placeholder"
-    })), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-      spacing: 1
-    }, (0,external_React_.createElement)("span", {
-      className: "dataviews-view-list__primary-field"
-    }, primaryField?.render({
-      item
-    })), (0,external_React_.createElement)("div", {
-      className: "dataviews-view-list__fields"
-    }, visibleFields.map(field => {
-      return (0,external_React_.createElement)("span", {
-        key: field.id,
-        className: "dataviews-view-list__field"
-      }, field.render({
-        item
-      }));
-    }))))), onDetailsChange && (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-      className: "dataviews-view-list__details-button",
-      onClick: () => onDetailsChange([item]),
-      icon: library_info,
-      label: (0,external_wp_i18n_namespaceObject.__)('View details'),
-      size: "compact"
-    })));
+    const id = getItemDomId(item);
+    return (0,external_React_.createElement)(ListItem, {
+      key: id,
+      id: id,
+      item: item,
+      isSelected: item === selectedItem,
+      onSelect: onSelect,
+      onDetailsChange: onDetailsChange,
+      mediaField: mediaField,
+      primaryField: primaryField,
+      visibleFields: visibleFields
+    });
   }));
 }
 
@@ -19736,9 +19443,6 @@ function ViewList({
 
 
 
-
-// Field types.
-const constants_ENUMERATION_TYPE = 'enumeration';
 
 // Filter operators.
 const constants_OPERATOR_IS = 'is';
@@ -20009,51 +19713,73 @@ function SidebarNavigationScreenTemplatesBrowse() {
 
 
 
+
+
 /**
  * Internal dependencies
  */
 
 
+
+const {
+  useLocation: save_button_useLocation
+} = unlock(external_wp_router_namespaceObject.privateApis);
 function SaveButton({
   className = 'edit-site-save-button__button',
   variant = 'primary',
   showTooltip = true,
-  defaultLabel,
+  showReviewMessage,
   icon,
   size,
   __next40pxDefaultSize = false
 }) {
   const {
-    isDirty,
+    params
+  } = save_button_useLocation();
+  const {
+    setIsSaveViewOpened
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+  const {
+    saveDirtyEntities
+  } = unlock((0,external_wp_data_namespaceObject.useDispatch)(external_wp_editor_namespaceObject.store));
+  const {
+    dirtyEntityRecords
+  } = (0,external_wp_editor_namespaceObject.useEntitiesSavedStatesIsDirty)();
+  const {
     isSaving,
     isSaveViewOpen,
     previewingThemeName
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
-      __experimentalGetDirtyEntityRecords,
       isSavingEntityRecord,
       isResolving
     } = select(external_wp_coreData_namespaceObject.store);
-    const dirtyEntityRecords = __experimentalGetDirtyEntityRecords();
     const {
       isSaveViewOpened
     } = select(store_store);
     const isActivatingTheme = isResolving('activateTheme');
     const currentlyPreviewingThemeId = currentlyPreviewingTheme();
     return {
-      isDirty: dirtyEntityRecords.length > 0,
       isSaving: dirtyEntityRecords.some(record => isSavingEntityRecord(record.kind, record.name, record.key)) || isActivatingTheme,
       isSaveViewOpen: isSaveViewOpened(),
       // Do not call `getTheme` with null, it will cause a request to
       // the server.
       previewingThemeName: currentlyPreviewingThemeId ? select(external_wp_coreData_namespaceObject.store).getTheme(currentlyPreviewingThemeId)?.name?.rendered : undefined
     };
-  }, []);
-  const {
-    setIsSaveViewOpened
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
-  const activateSaveEnabled = isPreviewingTheme() || isDirty;
-  const disabled = isSaving || !activateSaveEnabled;
+  }, [dirtyEntityRecords]);
+  const hasDirtyEntities = !!dirtyEntityRecords.length;
+  let isOnlyCurrentEntityDirty;
+  // Check if the current entity is the only entity with changes.
+  // We have some extra logic for `wp_global_styles` for now, that
+  // is used in navigation sidebar.
+  if (dirtyEntityRecords.length === 1) {
+    if (params.postId) {
+      isOnlyCurrentEntityDirty = `${dirtyEntityRecords[0].key}` === params.postId && dirtyEntityRecords[0].name === params.postType;
+    } else if (params.path?.includes('wp_global_styles')) {
+      isOnlyCurrentEntityDirty = dirtyEntityRecords[0].name === 'globalStyles';
+    }
+  }
+  const disabled = isSaving || !hasDirtyEntities && !isPreviewingTheme();
   const getLabel = () => {
     if (isPreviewingTheme()) {
       if (isSaving) {
@@ -20061,7 +19787,7 @@ function SaveButton({
         (0,external_wp_i18n_namespaceObject.__)('Activating %s'), previewingThemeName);
       } else if (disabled) {
         return (0,external_wp_i18n_namespaceObject.__)('Saved');
-      } else if (isDirty) {
+      } else if (hasDirtyEntities) {
         return (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: The name of theme to be activated. */
         (0,external_wp_i18n_namespaceObject.__)('Activate %s & Save'), previewingThemeName);
       }
@@ -20070,21 +19796,28 @@ function SaveButton({
     }
     if (isSaving) {
       return (0,external_wp_i18n_namespaceObject.__)('Saving');
-    } else if (disabled) {
+    }
+    if (disabled) {
       return (0,external_wp_i18n_namespaceObject.__)('Saved');
-    } else if (defaultLabel) {
-      return defaultLabel;
+    }
+    if (!isOnlyCurrentEntityDirty && showReviewMessage) {
+      return (0,external_wp_i18n_namespaceObject.sprintf)(
+      // translators: %d: number of unsaved changes (number).
+      (0,external_wp_i18n_namespaceObject._n)('Review %d change…', 'Review %d changes…', dirtyEntityRecords.length), dirtyEntityRecords.length);
     }
     return (0,external_wp_i18n_namespaceObject.__)('Save');
   };
   const label = getLabel();
+  const onClick = isOnlyCurrentEntityDirty ? () => saveDirtyEntities({
+    dirtyEntityRecords
+  }) : () => setIsSaveViewOpened(true);
   return (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
     variant: variant,
     className: className,
     "aria-disabled": disabled,
     "aria-expanded": isSaveViewOpen,
     isBusy: isSaving,
-    onClick: disabled ? undefined : () => setIsSaveViewOpened(true),
+    onClick: disabled ? undefined : onClick,
     label: label
     /*
      * We want the tooltip to show the keyboard shortcut only when the
@@ -20114,41 +19847,14 @@ function SaveButton({
 
 
 
-
-
-
-
 /**
  * Internal dependencies
  */
 
 
-
-
-const {
-  useLocation: save_hub_useLocation
-} = unlock(external_wp_router_namespaceObject.privateApis);
-const PUBLISH_ON_SAVE_ENTITIES = [{
-  kind: 'postType',
-  name: NAVIGATION_POST_TYPE
-}];
 function SaveHub() {
-  const saveNoticeId = 'site-edit-save-notice';
   const {
-    params
-  } = save_hub_useLocation();
-  const {
-    __unstableMarkLastChangeAsPersistent
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const {
-    createSuccessNotice,
-    createErrorNotice,
-    removeNotice
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  const {
-    dirtyCurrentEntity,
-    countUnsavedChanges,
-    isDirty,
+    isDisabled,
     isSaving
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
@@ -20156,375 +19862,23 @@ function SaveHub() {
       isSavingEntityRecord
     } = select(external_wp_coreData_namespaceObject.store);
     const dirtyEntityRecords = __experimentalGetDirtyEntityRecords();
-    let calcDirtyCurrentEntity = null;
-    if (dirtyEntityRecords.length === 1) {
-      // if we are on global styles
-      if (params.path?.includes('wp_global_styles')) {
-        calcDirtyCurrentEntity = dirtyEntityRecords.find(record => record.name === 'globalStyles');
-      }
-      // if we are on pages
-      else if (params.postId) {
-        calcDirtyCurrentEntity = dirtyEntityRecords.find(record => record.name === params.postType && String(record.key) === params.postId);
-      }
-    }
+    const _isSaving = dirtyEntityRecords.some(record => isSavingEntityRecord(record.kind, record.name, record.key));
     return {
-      dirtyCurrentEntity: calcDirtyCurrentEntity,
-      isDirty: dirtyEntityRecords.length > 0,
-      isSaving: dirtyEntityRecords.some(record => isSavingEntityRecord(record.kind, record.name, record.key)),
-      countUnsavedChanges: dirtyEntityRecords.length
-    };
-  }, [params.path, params.postType, params.postId]);
-  const {
-    editEntityRecord,
-    saveEditedEntityRecord,
-    __experimentalSaveSpecifiedEntityEdits: saveSpecifiedEntityEdits
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
-  const disabled = isSaving || !isDirty && !isPreviewingTheme();
-
-  // if we have only one unsaved change and it matches current context, we can show a more specific label
-  let label = dirtyCurrentEntity ? (0,external_wp_i18n_namespaceObject.__)('Save') : (0,external_wp_i18n_namespaceObject.sprintf)(
-  // translators: %d: number of unsaved changes (number).
-  (0,external_wp_i18n_namespaceObject._n)('Review %d change…', 'Review %d changes…', countUnsavedChanges), countUnsavedChanges);
-  if (isSaving) {
-    label = (0,external_wp_i18n_namespaceObject.__)('Saving');
-  }
-  const {
-    homeUrl
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getUnstableBase // Site index.
-    } = select(external_wp_coreData_namespaceObject.store);
-    return {
-      homeUrl: getUnstableBase()?.home
+      isSaving: _isSaving,
+      isDisabled: _isSaving || !dirtyEntityRecords.length && !isPreviewingTheme()
     };
   }, []);
-  const saveCurrentEntity = async () => {
-    if (!dirtyCurrentEntity) return;
-    removeNotice(saveNoticeId);
-    const {
-      kind,
-      name,
-      key,
-      property
-    } = dirtyCurrentEntity;
-    try {
-      if ('root' === dirtyCurrentEntity.kind && 'site' === name) {
-        await saveSpecifiedEntityEdits('root', 'site', undefined, [property]);
-      } else {
-        if (PUBLISH_ON_SAVE_ENTITIES.some(typeToPublish => typeToPublish.kind === kind && typeToPublish.name === name)) {
-          editEntityRecord(kind, name, key, {
-            status: 'publish'
-          });
-        }
-        await saveEditedEntityRecord(kind, name, key);
-      }
-      __unstableMarkLastChangeAsPersistent();
-      createSuccessNotice((0,external_wp_i18n_namespaceObject.__)('Site updated.'), {
-        type: 'snackbar',
-        actions: [{
-          label: (0,external_wp_i18n_namespaceObject.__)('View site'),
-          url: homeUrl
-        }],
-        id: saveNoticeId
-      });
-    } catch (error) {
-      createErrorNotice(`${(0,external_wp_i18n_namespaceObject.__)('Saving failed.')} ${error}`);
-    }
-  };
   return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
     className: "edit-site-save-hub",
     alignment: "right",
     spacing: 4
-  }, dirtyCurrentEntity ? (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-    variant: "primary",
-    onClick: saveCurrentEntity,
-    isBusy: isSaving,
-    disabled: isSaving,
-    "aria-disabled": isSaving,
+  }, (0,external_React_.createElement)(SaveButton, {
     className: "edit-site-save-hub__button",
-    __next40pxDefaultSize: true
-  }, label) : (0,external_React_.createElement)(SaveButton, {
-    className: "edit-site-save-hub__button",
-    variant: disabled ? null : 'primary',
+    variant: isDisabled ? null : 'primary',
     showTooltip: false,
-    icon: disabled && !isSaving ? library_check : null,
-    defaultLabel: label,
+    icon: isDisabled && !isSaving ? library_check : null,
+    showReviewMessage: true,
     __next40pxDefaultSize: true
-  }));
-}
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/home.js
-
-/**
- * WordPress dependencies
- */
-
-const home = (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
-  xmlns: "http://www.w3.org/2000/svg",
-  viewBox: "0 0 24 24"
-}, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M12 4L4 7.9V20h16V7.9L12 4zm6.5 14.5H14V13h-4v5.5H5.5V8.8L12 5.7l6.5 3.1v9.7z"
-}));
-/* harmony default export */ const library_home = (home);
-
-;// CONCATENATED MODULE: ./packages/icons/build-module/library/verse.js
-
-/**
- * WordPress dependencies
- */
-
-const verse = (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
-  viewBox: "0 0 24 24",
-  xmlns: "http://www.w3.org/2000/svg"
-}, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.Path, {
-  d: "M17.8 2l-.9.3c-.1 0-3.6 1-5.2 2.1C10 5.5 9.3 6.5 8.9 7.1c-.6.9-1.7 4.7-1.7 6.3l-.9 2.3c-.2.4 0 .8.4 1 .1 0 .2.1.3.1.3 0 .6-.2.7-.5l.6-1.5c.3 0 .7-.1 1.2-.2.7-.1 1.4-.3 2.2-.5.8-.2 1.6-.5 2.4-.8.7-.3 1.4-.7 1.9-1.2s.8-1.2 1-1.9c.2-.7.3-1.6.4-2.4.1-.8.1-1.7.2-2.5 0-.8.1-1.5.2-2.1V2zm-1.9 5.6c-.1.8-.2 1.5-.3 2.1-.2.6-.4 1-.6 1.3-.3.3-.8.6-1.4.9-.7.3-1.4.5-2.2.8-.6.2-1.3.3-1.8.4L15 7.5c.3-.3.6-.7 1-1.1 0 .4 0 .8-.1 1.2zM6 20h8v-1.5H6V20z"
-}));
-/* harmony default export */ const library_verse = (verse);
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/add-new-page/index.js
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-function AddNewPageModal({
-  onSave,
-  onClose
-}) {
-  const [isCreatingPage, setIsCreatingPage] = (0,external_wp_element_namespaceObject.useState)(false);
-  const [title, setTitle] = (0,external_wp_element_namespaceObject.useState)('');
-  const {
-    saveEntityRecord
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
-  const {
-    createErrorNotice,
-    createSuccessNotice
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  async function createPage(event) {
-    event.preventDefault();
-    if (isCreatingPage) {
-      return;
-    }
-    setIsCreatingPage(true);
-    try {
-      const newPage = await saveEntityRecord('postType', 'page', {
-        status: 'draft',
-        title,
-        slug: title || (0,external_wp_i18n_namespaceObject.__)('No title')
-      }, {
-        throwOnError: true
-      });
-      onSave(newPage);
-      createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(
-      // translators: %s: Title of the created template e.g: "Category".
-      (0,external_wp_i18n_namespaceObject.__)('"%s" successfully created.'), newPage.title?.rendered || title), {
-        type: 'snackbar'
-      });
-    } catch (error) {
-      const errorMessage = error.message && error.code !== 'unknown_error' ? error.message : (0,external_wp_i18n_namespaceObject.__)('An error occurred while creating the page.');
-      createErrorNotice(errorMessage, {
-        type: 'snackbar'
-      });
-    } finally {
-      setIsCreatingPage(false);
-    }
-  }
-  return (0,external_React_.createElement)(external_wp_components_namespaceObject.Modal, {
-    title: (0,external_wp_i18n_namespaceObject.__)('Draft a new page'),
-    onRequestClose: onClose
-  }, (0,external_React_.createElement)("form", {
-    onSubmit: createPage
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: 3
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.TextControl, {
-    label: (0,external_wp_i18n_namespaceObject.__)('Page title'),
-    onChange: setTitle,
-    placeholder: (0,external_wp_i18n_namespaceObject.__)('No title'),
-    value: title
-  }), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
-    spacing: 2,
-    justify: "end"
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-    variant: "tertiary",
-    onClick: onClose
-  }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-    variant: "primary",
-    type: "submit",
-    isBusy: isCreatingPage,
-    "aria-disabled": isCreatingPage
-  }, (0,external_wp_i18n_namespaceObject.__)('Create draft'))))));
-}
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-navigation-screen-pages/index.js
-
-/**
- * WordPress dependencies
- */
-
-
-
-
-
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-
-
-
-
-
-
-const {
-  useHistory: sidebar_navigation_screen_pages_useHistory
-} = unlock(external_wp_router_namespaceObject.privateApis);
-const PageItem = ({
-  postType = 'page',
-  postId,
-  ...props
-}) => {
-  const linkInfo = useLink({
-    postType,
-    postId
-  }, {
-    backPath: '/page'
-  });
-  return (0,external_React_.createElement)(SidebarNavigationItem, {
-    ...linkInfo,
-    ...props
-  });
-};
-function SidebarNavigationScreenPages() {
-  const isMobileViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium', '<');
-  const {
-    records: pages,
-    isResolving: isLoadingPages
-  } = (0,external_wp_coreData_namespaceObject.useEntityRecords)('postType', 'page', {
-    status: 'any',
-    per_page: -1
-  });
-  const {
-    records: templates,
-    isResolving: isLoadingTemplates
-  } = (0,external_wp_coreData_namespaceObject.useEntityRecords)('postType', TEMPLATE_POST_TYPE, {
-    per_page: -1
-  });
-  const dynamicPageTemplates = templates?.filter(({
-    slug
-  }) => ['404', 'search'].includes(slug));
-  const homeTemplate = templates?.find(template => template.slug === 'front-page') || templates?.find(template => template.slug === 'home') || templates?.find(template => template.slug === 'index');
-  const getPostsPageTemplate = () => templates?.find(template => template.slug === 'home') || templates?.find(template => template.slug === 'index');
-  const pagesAndTemplates = pages?.concat(dynamicPageTemplates, [homeTemplate]);
-  const {
-    frontPage,
-    postsPage
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getEntityRecord
-    } = select(external_wp_coreData_namespaceObject.store);
-    const siteSettings = getEntityRecord('root', 'site');
-    return {
-      frontPage: siteSettings?.page_on_front,
-      postsPage: siteSettings?.page_for_posts
-    };
-  }, []);
-  const isHomePageBlog = frontPage === postsPage;
-  const reorderedPages = pages && [...pages];
-  if (!isHomePageBlog && reorderedPages?.length) {
-    const homePageIndex = reorderedPages.findIndex(item => item.id === frontPage);
-    const homePage = reorderedPages.splice(homePageIndex, 1);
-    reorderedPages?.splice(0, 0, ...homePage);
-    const postsPageIndex = reorderedPages.findIndex(item => item.id === postsPage);
-    const blogPage = reorderedPages.splice(postsPageIndex, 1);
-    reorderedPages.splice(1, 0, ...blogPage);
-  }
-  const [showAddPage, setShowAddPage] = (0,external_wp_element_namespaceObject.useState)(false);
-  const history = sidebar_navigation_screen_pages_useHistory();
-  const handleNewPage = ({
-    type,
-    id
-  }) => {
-    // Navigate to the created template editor.
-    history.push({
-      postId: id,
-      postType: type,
-      canvas: 'edit'
-    });
-    setShowAddPage(false);
-  };
-  const getPageProps = id => {
-    let itemIcon = library_page;
-    const postsPageTemplateId = postsPage && postsPage === id ? getPostsPageTemplate()?.id : null;
-    switch (id) {
-      case frontPage:
-        itemIcon = library_home;
-        break;
-      case postsPage:
-        itemIcon = library_verse;
-        break;
-    }
-    return {
-      icon: itemIcon,
-      postType: postsPageTemplateId ? TEMPLATE_POST_TYPE : 'page',
-      postId: postsPageTemplateId || id
-    };
-  };
-  const pagesLink = useLink({
-    path: '/pages'
-  });
-  return (0,external_React_.createElement)(external_React_.Fragment, null, showAddPage && (0,external_React_.createElement)(AddNewPageModal, {
-    onSave: handleNewPage,
-    onClose: () => setShowAddPage(false)
-  }), (0,external_React_.createElement)(SidebarNavigationScreen, {
-    title: (0,external_wp_i18n_namespaceObject.__)('Pages'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Browse and manage pages.'),
-    actions: (0,external_React_.createElement)(SidebarButton, {
-      icon: library_plus,
-      label: (0,external_wp_i18n_namespaceObject.__)('Draft a new page'),
-      onClick: () => setShowAddPage(true)
-    }),
-    content: (0,external_React_.createElement)(external_React_.Fragment, null, (isLoadingPages || isLoadingTemplates) && (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalItemGroup, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalItem, null, (0,external_wp_i18n_namespaceObject.__)('Loading pages…'))), !(isLoadingPages || isLoadingTemplates) && (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalItemGroup, null, !pagesAndTemplates?.length && (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalItem, null, (0,external_wp_i18n_namespaceObject.__)('No page found')), isHomePageBlog && homeTemplate && (0,external_React_.createElement)(PageItem, {
-      postType: TEMPLATE_POST_TYPE,
-      postId: homeTemplate.id,
-      key: homeTemplate.id,
-      icon: library_home,
-      withChevron: true
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalTruncate, {
-      numberOfLines: 1
-    }, (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(homeTemplate.title?.rendered || (0,external_wp_i18n_namespaceObject.__)('(no title)')))), reorderedPages?.map(({
-      id,
-      title
-    }) => (0,external_React_.createElement)(PageItem, {
-      ...getPageProps(id),
-      key: id,
-      withChevron: true
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalTruncate, {
-      numberOfLines: 1
-    }, (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title?.rendered || (0,external_wp_i18n_namespaceObject.__)('(no title)'))))))),
-    footer: (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-      spacing: 0
-    }, dynamicPageTemplates?.map(item => (0,external_React_.createElement)(PageItem, {
-      postType: TEMPLATE_POST_TYPE,
-      postId: item.id,
-      key: item.id,
-      icon: library_layout,
-      withChevron: true
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalTruncate, {
-      numberOfLines: 1
-    }, (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(item.title?.rendered || (0,external_wp_i18n_namespaceObject.__)('(no title)'))))), !isMobileViewport && (0,external_React_.createElement)(SidebarNavigationItem, {
-      className: "edit-site-sidebar-navigation-screen-pages__see-all",
-      ...pagesLink
-    }, (0,external_wp_i18n_namespaceObject.__)('Manage all pages')))
   }));
 }
 
@@ -20603,7 +19957,7 @@ const DEFAULT_CONFIG_PER_VIEW_TYPE = {
   }
 };
 const DEFAULT_PAGE_BASE = {
-  type: LAYOUT_TABLE,
+  type: LAYOUT_LIST,
   search: '',
   filters: [],
   page: 1,
@@ -20971,7 +20325,7 @@ const {
 
 
 const PATH_TO_TYPE = {
-  '/pages': 'page'
+  '/page': 'page'
 };
 function DataViewsSidebarContent() {
   const {
@@ -21412,7 +20766,6 @@ function SidebarNavigationScreenPage({
 
 
 
-
 const {
   useLocation: sidebar_useLocation
 } = unlock(external_wp_router_namespaceObject.privateApis);
@@ -21438,12 +20791,9 @@ function SidebarScreens() {
     path: "/wp_global_styles"
   }, (0,external_React_.createElement)(SidebarNavigationScreenGlobalStyles, null)), (0,external_React_.createElement)(SidebarScreenWrapper, {
     path: "/page"
-  }, (0,external_React_.createElement)(SidebarNavigationScreenPages, null)), (0,external_React_.createElement)(SidebarScreenWrapper, {
-    path: "/pages"
   }, (0,external_React_.createElement)(SidebarNavigationScreen, {
     title: (0,external_wp_i18n_namespaceObject.__)('Manage pages'),
-    content: (0,external_React_.createElement)(DataViewsSidebarContent, null),
-    backPath: "/page"
+    content: (0,external_React_.createElement)(DataViewsSidebarContent, null)
   })), (0,external_React_.createElement)(SidebarScreenWrapper, {
     path: "/page/:postId"
   }, (0,external_React_.createElement)(SidebarNavigationScreenPage, null)), (0,external_React_.createElement)(SidebarScreenWrapper, {
@@ -21850,6 +21200,9 @@ function KeyboardShortcutHelpModal() {
   }), (0,external_React_.createElement)(ShortcutSection, {
     title: (0,external_wp_i18n_namespaceObject.__)('Text formatting'),
     shortcuts: textFormattingShortcuts
+  }), (0,external_React_.createElement)(ShortcutCategorySection, {
+    title: (0,external_wp_i18n_namespaceObject.__)('List View shortcuts'),
+    categoryName: "list-view"
   }));
 }
 
@@ -24373,6 +23726,20 @@ const color = (0,external_React_.createElement)(external_wp_primitives_namespace
 }));
 /* harmony default export */ const library_color = (color);
 
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/image.js
+
+/**
+ * WordPress dependencies
+ */
+
+const image_image = (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg"
+}, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M19 3H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zM5 4.5h14c.3 0 .5.2.5.5v8.4l-3-2.9c-.3-.3-.8-.3-1 0L11.9 14 9 12c-.3-.2-.6-.2-.8 0l-3.6 2.6V5c-.1-.3.1-.5.4-.5zm14 15H5c-.3 0-.5-.2-.5-.5v-2.4l4.1-3 3 1.9c.3.2.7.2.9-.1L16 12l3.5 3.4V19c0 .3-.2.5-.5.5z"
+}));
+/* harmony default export */ const library_image = (image_image);
+
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/root-menu.js
 
 /**
@@ -24393,7 +23760,8 @@ const {
   useHasTypographyPanel,
   useHasColorPanel,
   useGlobalSetting: root_menu_useGlobalSetting,
-  useSettingsForBlockElement
+  useSettingsForBlockElement,
+  useHasBackgroundPanel
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function RootMenu() {
   const [rawSettings] = root_menu_useGlobalSetting('');
@@ -24402,6 +23770,7 @@ function RootMenu() {
   const hasColorPanel = useHasColorPanel(settings);
   const hasDimensionsPanel = useHasDimensionsPanel(settings);
   const hasLayoutPanel = hasDimensionsPanel;
+  const hasBackgroundPanel = useHasBackgroundPanel(settings);
   return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalItemGroup, null, hasTypographyPanel && (0,external_React_.createElement)(NavigationButtonAsItem, {
     icon: library_typography,
     path: "/typography",
@@ -24414,7 +23783,11 @@ function RootMenu() {
     icon: library_layout,
     path: "/layout",
     "aria-label": (0,external_wp_i18n_namespaceObject.__)('Layout styles')
-  }, (0,external_wp_i18n_namespaceObject.__)('Layout'))));
+  }, (0,external_wp_i18n_namespaceObject.__)('Layout')), hasBackgroundPanel && (0,external_React_.createElement)(NavigationButtonAsItem, {
+    icon: library_image,
+    path: "/background",
+    "aria-label": (0,external_wp_i18n_namespaceObject.__)('Background styles')
+  }, (0,external_wp_i18n_namespaceObject.__)('Background'))));
 }
 /* harmony default export */ const root_menu = (RootMenu);
 
@@ -24796,23 +24169,6 @@ const BlockPreviewPanel = ({
   })));
 };
 /* harmony default export */ const block_preview_panel = (BlockPreviewPanel);
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/subtitle.js
-
-/**
- * WordPress dependencies
- */
-
-function Subtitle({
-  children,
-  level
-}) {
-  return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHeading, {
-    className: "edit-site-global-styles-subtitle",
-    level: level !== null && level !== void 0 ? level : 2
-  }, children);
-}
-/* harmony default export */ const subtitle = (Subtitle);
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/screen-block.js
 
@@ -31212,7 +30568,7 @@ function FontFamilies() {
     onRequestClose: () => toggleModal(),
     defaultTabId: modalTabOpen
   }), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: 3
+    spacing: 2
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
     justify: "space-between"
   }, (0,external_React_.createElement)(subtitle, {
@@ -31268,14 +30624,14 @@ function ScreenTypography() {
   const fontLibraryEnabled = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_editor_namespaceObject.store).getEditorSettings().fontLibraryEnabled, []);
   return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(header, {
     title: (0,external_wp_i18n_namespaceObject.__)('Typography'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Manage the typography settings for different elements.')
+    description: (0,external_wp_i18n_namespaceObject.__)('Typography styles and the application of those styles on site elements.')
   }), (0,external_React_.createElement)("div", {
-    className: "edit-site-global-styles-screen-typography"
+    className: "edit-site-global-styles-screen"
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: 6
-  }, (0,external_React_.createElement)(TypographyVariations, null), !window.__experimentalDisableFontLibrary && (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: 3
-  }, fontLibraryEnabled && (0,external_React_.createElement)(font_families, null)), (0,external_React_.createElement)(typography_elements, null))));
+    spacing: 7
+  }, (0,external_React_.createElement)(TypographyVariations, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Presets')
+  }), !window.__experimentalDisableFontLibrary && fontLibraryEnabled && (0,external_React_.createElement)(font_families, null), (0,external_React_.createElement)(typography_elements, null))));
 }
 /* harmony default export */ const screen_typography = (ScreenTypography);
 
@@ -31558,7 +30914,9 @@ function Palette({
     key: `${color}-${index}`
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.ColorIndicator, {
     colorValue: color
-  })))), (0,external_React_.createElement)(external_wp_components_namespaceObject.FlexItem, null, paletteButtonText)))), window.__experimentalEnableColorRandomizer && themeColors?.length > 0 && (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
+  })))), (0,external_React_.createElement)(external_wp_components_namespaceObject.FlexItem, {
+    className: "edit-site-global-styles-screen-colors__palette-count"
+  }, paletteButtonText)))), window.__experimentalEnableColorRandomizer && themeColors?.length > 0 && (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
     variant: "secondary",
     icon: library_shuffle,
     onClick: randomizeThemeColors
@@ -31599,12 +30957,14 @@ function ScreenColors() {
   const settings = screen_colors_useSettingsForBlockElement(rawSettings);
   return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(header, {
     title: (0,external_wp_i18n_namespaceObject.__)('Colors'),
-    description: (0,external_wp_i18n_namespaceObject.__)('Manage palettes and the default color of different global elements on the site.')
+    description: (0,external_wp_i18n_namespaceObject.__)('Palette colors and the application of those colors on site elements.')
   }), (0,external_React_.createElement)("div", {
-    className: "edit-site-global-styles-screen-colors"
+    className: "edit-site-global-styles-screen"
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-    spacing: 6
-  }, (0,external_React_.createElement)(ColorVariations, null), (0,external_React_.createElement)(palette, null), (0,external_React_.createElement)(screen_colors_StylesColorPanel, {
+    spacing: 7
+  }, (0,external_React_.createElement)(ColorVariations, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Presets')
+  }), (0,external_React_.createElement)(palette, null), (0,external_React_.createElement)(screen_colors_StylesColorPanel, {
     inheritedValue: inheritedStyle,
     value: style,
     onChange: setStyle,
@@ -31780,9 +31140,9 @@ function ScreenColorPalette({
     description: (0,external_wp_i18n_namespaceObject.__)('Palettes are used to provide default color options for blocks and various design tools. Here you can edit the colors with their labels.')
   }), (0,external_React_.createElement)(screen_color_palette_Tabs, null, (0,external_React_.createElement)(screen_color_palette_Tabs.TabList, null, (0,external_React_.createElement)(screen_color_palette_Tabs.Tab, {
     tabId: "solid"
-  }, "Solid"), (0,external_React_.createElement)(screen_color_palette_Tabs.Tab, {
+  }, (0,external_wp_i18n_namespaceObject.__)('Solid')), (0,external_React_.createElement)(screen_color_palette_Tabs.Tab, {
     tabId: "gradient"
-  }, "Gradient")), (0,external_React_.createElement)(screen_color_palette_Tabs.TabPanel, {
+  }, (0,external_wp_i18n_namespaceObject.__)('Gradient'))), (0,external_React_.createElement)(screen_color_palette_Tabs.TabPanel, {
     tabId: "solid",
     focusable: false
   }, (0,external_React_.createElement)(ColorPalettePanel, {
@@ -31915,50 +31275,16 @@ function ScreenLayout() {
 
 
 
-
-
 /**
  * Internal dependencies
  */
 
 
 function ScreenStyleVariations() {
-  const {
-    mode
-  } = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    return {
-      mode: select(external_wp_blockEditor_namespaceObject.store).__unstableGetEditorMode()
-    };
-  }, []);
-  const shouldRevertInitialMode = (0,external_wp_element_namespaceObject.useRef)(null);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // ignore changes to zoom-out mode as we explictily change to it on mount.
-    if (mode !== 'zoom-out') {
-      shouldRevertInitialMode.current = false;
-    }
-  }, [mode]);
-
-  // Intentionality left without any dependency.
-  // This effect should only run the first time the component is rendered.
-  // The effect opens the zoom-out view if it is not open before when applying a style variation.
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    if (mode !== 'zoom-out') {
-      __unstableSetEditorMode('zoom-out');
-      shouldRevertInitialMode.current = true;
-      return () => {
-        // if there were not mode changes revert to the initial mode when unmounting.
-        if (shouldRevertInitialMode.current) {
-          __unstableSetEditorMode(mode);
-        }
-      };
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
-  const {
-    __unstableSetEditorMode
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
+  // Move to zoom out mode when this component is mounted
+  // and back to the previous mode when unmounted.
+  (0,external_wp_blockEditor_namespaceObject.useZoomOut)();
   return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(header, {
-    back: "/",
     title: (0,external_wp_i18n_namespaceObject.__)('Browse styles'),
     description: (0,external_wp_i18n_namespaceObject.__)('Choose a variation to change the look of the site.')
   }), (0,external_React_.createElement)(external_wp_components_namespaceObject.Card, {
@@ -32482,6 +31808,65 @@ function ScreenRevisions() {
 }
 /* harmony default export */ const screen_revisions = (ScreenRevisions);
 
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/background-panel.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+const {
+  useGlobalStyle: background_panel_useGlobalStyle,
+  useGlobalSetting: background_panel_useGlobalSetting,
+  BackgroundPanel: StylesBackgroundPanel
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
+function BackgroundPanel() {
+  const [style] = background_panel_useGlobalStyle('', undefined, 'user', {
+    shouldDecodeEncode: false
+  });
+  const [inheritedStyle, setStyle] = background_panel_useGlobalStyle('', undefined, 'all', {
+    shouldDecodeEncode: false
+  });
+  const [settings] = background_panel_useGlobalSetting('');
+  return (0,external_React_.createElement)(StylesBackgroundPanel, {
+    inheritedValue: inheritedStyle,
+    value: style,
+    onChange: setStyle,
+    settings: settings
+  });
+}
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/screen-background.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+
+const {
+  useHasBackgroundPanel: screen_background_useHasBackgroundPanel,
+  useGlobalSetting: screen_background_useGlobalSetting
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
+function ScreenBackground() {
+  const [settings] = screen_background_useGlobalSetting('');
+  const hasBackgroundPanel = screen_background_useHasBackgroundPanel(settings);
+  return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(header, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Background')
+  }), hasBackgroundPanel && (0,external_React_.createElement)(BackgroundPanel, null));
+}
+/* harmony default export */ const screen_background = (ScreenBackground);
+
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/global-styles/ui.js
 
 /**
@@ -32500,6 +31885,7 @@ function ScreenRevisions() {
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -32756,7 +32142,9 @@ function GlobalStylesUI() {
     path: "/css"
   }, (0,external_React_.createElement)(screen_css, null)), (0,external_React_.createElement)(GlobalStylesNavigationScreen, {
     path: '/revisions'
-  }, (0,external_React_.createElement)(screen_revisions, null)), blocks.map(block => (0,external_React_.createElement)(GlobalStylesNavigationScreen, {
+  }, (0,external_React_.createElement)(screen_revisions, null)), (0,external_React_.createElement)(GlobalStylesNavigationScreen, {
+    path: '/background'
+  }, (0,external_React_.createElement)(screen_background, null)), blocks.map(block => (0,external_React_.createElement)(GlobalStylesNavigationScreen, {
     key: 'menu-block-' + block.name,
     path: '/blocks/' + encodeURIComponent(block.name)
   }, (0,external_React_.createElement)(screen_block, {
@@ -32948,53 +32336,11 @@ const SettingsHeader = (_, ref) => {
 };
 /* harmony default export */ const settings_header = ((0,external_wp_element_namespaceObject.forwardRef)(SettingsHeader));
 
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-edit-mode/sidebar-card/index.js
-
-/**
- * External dependencies
- */
-
-
-/**
- * WordPress dependencies
- */
-
-function SidebarCard({
-  className,
-  title,
-  icon,
-  description,
-  actions,
-  children
-}) {
-  return (0,external_React_.createElement)("div", {
-    className: classnames_default()('edit-site-sidebar-card', className)
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
-    spacing: 2,
-    className: "edit-site-sidebar-card__header",
-    align: "flex-start"
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Icon, {
-    className: "edit-site-sidebar-card__icon",
-    icon: icon
-  }), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalText, {
-    numberOfLines: 2,
-    truncate: true,
-    className: "edit-site-sidebar-card__title",
-    weight: 500,
-    as: "h2"
-  }, title), actions), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-    className: "edit-site-sidebar-card__content"
-  }, description && (0,external_React_.createElement)("div", {
-    className: "edit-site-sidebar-card__description"
-  }, description), children));
-}
-
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-edit-mode/page-panels/page-content.js
 
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -33005,11 +32351,14 @@ function SidebarCard({
 const {
   BlockQuickNavigation
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
+const PAGE_CONTENT_BLOCKS = ['core/post-content', 'core/post-featured-image', 'core/post-title'];
 function PageContent() {
-  const clientIdsTree = (0,external_wp_data_namespaceObject.useSelect)(select => unlock(select(external_wp_blockEditor_namespaceObject.store)).getEnabledClientIdsTree(), []);
-  const clientIds = (0,external_wp_element_namespaceObject.useMemo)(() => clientIdsTree.map(({
-    clientId
-  }) => clientId), [clientIdsTree]);
+  const clientIds = (0,external_wp_data_namespaceObject.useSelect)(select => {
+    const {
+      getBlocksByName
+    } = select(external_wp_blockEditor_namespaceObject.store);
+    return getBlocksByName(PAGE_CONTENT_BLOCKS);
+  }, []);
   return (0,external_React_.createElement)(BlockQuickNavigation, {
     clientIds: clientIds
   });
@@ -33239,9 +32588,6 @@ function PageSummary({
 
 
 
-
-
-
 /**
  * Internal dependencies
  */
@@ -33249,6 +32595,9 @@ function PageSummary({
 
 
 
+const {
+  PostCardPanel
+} = unlock(external_wp_editor_namespaceObject.privateApis);
 function PagePanels() {
   const {
     id,
@@ -33257,8 +32606,6 @@ function PagePanels() {
     status,
     date,
     password,
-    title,
-    modified,
     renderingMode
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
@@ -33276,26 +32623,18 @@ function PagePanels() {
     const page = getEditedEntityRecord(...queryArgs);
     return {
       hasResolved: hasFinishedResolution('getEditedEntityRecord', queryArgs),
-      title: page?.title,
       id: page?.id,
       type: page?.type,
       status: page?.status,
       date: page?.date,
       password: page?.password,
-      modified: page?.modified,
       renderingMode: getRenderingMode()
     };
   }, []);
   if (!hasResolved) {
     return null;
   }
-  return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, null, (0,external_React_.createElement)(SidebarCard, {
-    title: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title),
-    icon: library_page,
-    description: (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalText, null, (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: %s: Human-readable time difference, e.g. "2 days ago".
-    (0,external_wp_i18n_namespaceObject.__)('Last edited %s'), (0,external_wp_date_namespaceObject.humanTimeDiff)(modified))))
-  })), (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, {
+  return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(PostCardPanel, null), (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, {
     title: (0,external_wp_i18n_namespaceObject.__)('Summary')
   }, (0,external_React_.createElement)(PageSummary, {
     status: status,
@@ -33308,7 +32647,11 @@ function PagePanels() {
   }, (0,external_React_.createElement)(PageContent, null)), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostLastRevisionPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostTaxonomiesPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostExcerptPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostDiscussionPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PageAttributesPanel, null));
 }
 
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-edit-mode/template-panel/template-areas.js
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/plugin-template-setting-panel/index.js
+
+/**
+ * Defines an extensibility slot for the Template sidebar.
+ */
 
 /**
  * WordPress dependencies
@@ -33316,61 +32659,40 @@ function PagePanels() {
 
 
 
-
-
-
-/**
- * Internal dependencies
- */
-
-function TemplateAreaItem({
-  area,
-  clientId
-}) {
-  const {
-    selectBlock,
-    toggleBlockHighlight
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const templatePartArea = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const defaultAreas = select(external_wp_editor_namespaceObject.store).__experimentalGetDefaultTemplatePartAreas();
-    return defaultAreas.find(defaultArea => defaultArea.area === area);
-  }, [area]);
-  const highlightBlock = () => toggleBlockHighlight(clientId, true);
-  const cancelHighlightBlock = () => toggleBlockHighlight(clientId, false);
-  return (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-    className: "edit-site-template-card__template-areas-item",
-    icon: templatePartArea?.icon,
-    onMouseOver: highlightBlock,
-    onMouseLeave: cancelHighlightBlock,
-    onFocus: highlightBlock,
-    onBlur: cancelHighlightBlock,
-    onClick: () => {
-      selectBlock(clientId);
-    }
-  }, templatePartArea?.label);
-}
-function template_areas_TemplateAreas() {
-  const templateParts = (0,external_wp_data_namespaceObject.useSelect)(select => select(store_store).getCurrentTemplateTemplateParts(), []);
-  if (!templateParts.length) {
+const {
+  Fill,
+  Slot: plugin_template_setting_panel_Slot
+} = (0,external_wp_components_namespaceObject.createSlotFill)('PluginTemplateSettingPanel');
+const PluginTemplateSettingPanel = ({
+  children
+}) => {
+  const isCurrentEntityTemplate = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_editor_namespaceObject.store).getCurrentPostType() === 'wp_template', []);
+  if (!isCurrentEntityTemplate) {
     return null;
   }
-  return (0,external_React_.createElement)("section", {
-    className: "edit-site-template-card__template-areas"
-  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHeading, {
-    level: 3,
-    className: "edit-site-template-card__template-areas-title"
-  }, (0,external_wp_i18n_namespaceObject.__)('Areas')), (0,external_React_.createElement)("ul", {
-    className: "edit-site-template-card__template-areas-list"
-  }, templateParts.map(({
-    templatePart,
-    block
-  }) => (0,external_React_.createElement)("li", {
-    key: block.clientId
-  }, (0,external_React_.createElement)(TemplateAreaItem, {
-    area: templatePart.area,
-    clientId: block.clientId
-  })))));
-}
+  return (0,external_React_.createElement)(Fill, null, children);
+};
+PluginTemplateSettingPanel.Slot = plugin_template_setting_panel_Slot;
+
+/**
+ * Renders items in the Template Sidebar below the main information
+ * like the Template Card.
+ *
+ * @example
+ * ```jsx
+ * // Using ESNext syntax
+ * import { PluginTemplateSettingPanel } from '@wordpress/edit-site';
+ *
+ * const MyTemplateSettingTest = () => (
+ * 		<PluginTemplateSettingPanel>
+ *			<p>Hello, World!</p>
+ *		</PluginTemplateSettingPanel>
+ *	);
+ * ```
+ *
+ * @return {Component} The component to be rendered.
+ */
+/* harmony default export */ const plugin_template_setting_panel = (PluginTemplateSettingPanel);
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-edit-mode/template-panel/hooks.js
 /**
@@ -33467,8 +32789,6 @@ function useAvailablePatterns(template) {
 
 
 
-
-
 /**
  * Internal dependencies
  */
@@ -33478,14 +32798,15 @@ function useAvailablePatterns(template) {
 
 
 
-
+const {
+  PostCardPanel: template_panel_PostCardPanel
+} = unlock(external_wp_editor_namespaceObject.privateApis);
+const {
+  PatternOverridesPanel
+} = unlock(external_wp_editor_namespaceObject.privateApis);
 const {
   useHistory: template_panel_useHistory
 } = unlock(external_wp_router_namespaceObject.privateApis);
-const CARD_ICONS = {
-  wp_block: library_symbol,
-  wp_navigation: library_navigation
-};
 function TemplatesList({
   availableTemplates,
   onSelect
@@ -33507,11 +32828,9 @@ const template_panel_POST_TYPE_PATH = {
   wp_template_part: '/wp_template_part/all'
 };
 function TemplatePanel() {
-  var _CARD_ICONS$record$ty;
   const {
     title,
     description,
-    icon,
     record,
     postType,
     postId
@@ -33553,11 +32872,8 @@ function TemplatePanel() {
       content: (0,external_wp_blocks_namespaceObject.serialize)(selectedTemplate.blocks)
     });
   };
-  return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, null, (0,external_React_.createElement)(SidebarCard, {
+  return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(template_panel_PostCardPanel, {
     className: "edit-site-template-card",
-    title: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(title),
-    icon: (_CARD_ICONS$record$ty = CARD_ICONS[record?.type]) !== null && _CARD_ICONS$record$ty !== void 0 ? _CARD_ICONS$record$ty : icon,
-    description: (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(description),
     actions: (0,external_React_.createElement)(TemplateActions, {
       postType: postType,
       postId: postId,
@@ -33571,51 +32887,15 @@ function TemplatePanel() {
         });
       }
     })
-  }, (0,external_React_.createElement)(template_areas_TemplateAreas, null))), availablePatterns?.length > 0 && (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, {
+  }), (0,external_React_.createElement)(plugin_template_setting_panel.Slot, null), availablePatterns?.length > 0 && (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelBody, {
     title: (0,external_wp_i18n_namespaceObject.__)('Transform into:'),
     initialOpen: postType === TEMPLATE_PART_POST_TYPE
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.PanelRow, null, (0,external_React_.createElement)("p", null, (0,external_wp_i18n_namespaceObject.__)('Choose a predefined pattern to switch up the look of your template.' // TODO - make this dynamic?
   ))), (0,external_React_.createElement)(TemplatesList, {
     availableTemplates: availablePatterns,
     onSelect: onTemplateSelect
-  })), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostLastRevisionPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostTaxonomiesPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostExcerptPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostDiscussionPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PageAttributesPanel, null));
+  })), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostLastRevisionPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostTaxonomiesPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostExcerptPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PostDiscussionPanel, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.PageAttributesPanel, null), (0,external_React_.createElement)(PatternOverridesPanel, null));
 }
-
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/plugin-template-setting-panel/index.js
-/**
- * Defines an extensibility slot for the Template sidebar.
- */
-
-/**
- * WordPress dependencies
- */
-
-const {
-  Fill,
-  Slot: plugin_template_setting_panel_Slot
-} = (0,external_wp_components_namespaceObject.createSlotFill)('PluginTemplateSettingPanel');
-const PluginTemplateSettingPanel = Fill;
-PluginTemplateSettingPanel.Slot = plugin_template_setting_panel_Slot;
-
-/**
- * Renders items in the Template Sidebar below the main information
- * like the Template Card.
- *
- * @example
- * ```jsx
- * // Using ESNext syntax
- * import { PluginTemplateSettingPanel } from '@wordpress/edit-site';
- *
- * const MyTemplateSettingTest = () => (
- * 		<PluginTemplateSettingPanel>
- *			<p>Hello, World!</p>
- *		</PluginTemplateSettingPanel>
- *	);
- * ```
- *
- * @return {Component} The component to be rendered.
- */
-/* harmony default export */ const plugin_template_setting_panel = (PluginTemplateSettingPanel);
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/sidebar-edit-mode/index.js
 
@@ -33634,7 +32914,6 @@ PluginTemplateSettingPanel.Slot = plugin_template_setting_panel_Slot;
 /**
  * Internal dependencies
  */
-
 
 
 
@@ -33703,7 +32982,7 @@ const FillContents = ({
   }, (0,external_React_.createElement)(sidebar_edit_mode_Tabs.TabPanel, {
     tabId: SIDEBAR_TEMPLATE,
     focusable: false
-  }, isEditingPage ? (0,external_React_.createElement)(PagePanels, null) : (0,external_React_.createElement)(TemplatePanel, null), (0,external_React_.createElement)(plugin_template_setting_panel.Slot, null)), (0,external_React_.createElement)(sidebar_edit_mode_Tabs.TabPanel, {
+  }, isEditingPage ? (0,external_React_.createElement)(PagePanels, null) : (0,external_React_.createElement)(TemplatePanel, null)), (0,external_React_.createElement)(sidebar_edit_mode_Tabs.TabPanel, {
     tabId: SIDEBAR_BLOCK,
     focusable: false
   }, (0,external_React_.createElement)(InspectorSlot, {
@@ -34703,6 +33982,7 @@ function EditorCanvas({
   enableResizing,
   settings,
   children,
+  onClick,
   ...props
 }) {
   const {
@@ -34757,7 +34037,13 @@ function EditorCanvas({
         setCanvasMode('edit');
       }
     },
-    onClick: () => setCanvasMode('edit'),
+    onClick: () => {
+      if (!!onClick) {
+        onClick();
+      } else {
+        setCanvasMode('edit');
+      }
+    },
     readonly: true
   };
   const isTemplateTypeNavigation = templateType === NAVIGATION_POST_TYPE;
@@ -35016,6 +34302,7 @@ function useSiteEditorSettings() {
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -35030,22 +34317,29 @@ function useSiteEditorSettings() {
 const {
   useLocation: site_editor_canvas_useLocation
 } = unlock(external_wp_router_namespaceObject.privateApis);
-function SiteEditorCanvas() {
+function SiteEditorCanvas({
+  onClick
+}) {
   const location = site_editor_canvas_useLocation();
   const {
     templateType,
     isFocusableEntity,
-    isViewMode
+    isViewMode,
+    isZoomOutMode
   } = (0,external_wp_data_namespaceObject.useSelect)(select => {
     const {
       getEditedPostType,
       getCanvasMode
     } = unlock(select(store_store));
+    const {
+      __unstableGetEditorMode
+    } = select(external_wp_blockEditor_namespaceObject.store);
     const _templateType = getEditedPostType();
     return {
       templateType: _templateType,
       isFocusableEntity: FOCUSABLE_ENTITIES.includes(_templateType),
-      isViewMode: getCanvasMode() === 'view'
+      isViewMode: getCanvasMode() === 'view',
+      isZoomOutMode: __unstableGetEditorMode() === 'zoom-out'
     };
   }, []);
   const isFocusMode = location.params.focusMode || isFocusableEntity;
@@ -35055,6 +34349,8 @@ function SiteEditorCanvas() {
   const enableResizing = isFocusMode && !isViewMode &&
   // Disable resizing in mobile viewport.
   !isMobileViewport &&
+  // Dsiable resizing in zoomed-out mode.
+  !isZoomOutMode &&
   // Disable resizing when editing a template in focus mode.
   templateType !== TEMPLATE_POST_TYPE;
   const isTemplateTypeNavigation = templateType === NAVIGATION_POST_TYPE;
@@ -35072,7 +34368,8 @@ function SiteEditorCanvas() {
     height: sizes.height && !forceFullHeight ? sizes.height : '100%'
   }, (0,external_React_.createElement)(editor_canvas, {
     enableResizing: enableResizing,
-    settings: settings
+    settings: settings,
+    onClick: onClick
   }, resizeObserver))));
 }
 
@@ -35274,7 +34571,8 @@ const interfaceLabels = {
   footer: (0,external_wp_i18n_namespaceObject.__)('Editor footer')
 };
 function Editor({
-  isLoading
+  isLoading,
+  onClick
 }) {
   const {
     record: editedPost,
@@ -35360,6 +34658,9 @@ function Editor({
   // action in <URLQueryController> from double-announcing.
   useTitle(hasLoadedPost && title);
   const loadingProgressId = (0,external_wp_compose_namespaceObject.useInstanceId)(CanvasLoader, 'edit-site-editor__loading-progress');
+  const {
+    closeGeneralSidebar
+  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
   const settings = useSpecificEditorSettings();
   const isReady = !isLoading && (postWithTemplate && !!contextPost && !!editedPost || !postWithTemplate && !!editedPost);
   return (0,external_React_.createElement)(external_React_.Fragment, null, !isReady ? (0,external_React_.createElement)(CanvasLoader, {
@@ -35381,8 +34682,13 @@ function Editor({
     notices: (0,external_React_.createElement)(external_wp_editor_namespaceObject.EditorSnackbars, null),
     content: (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(GlobalStylesRenderer, null), isEditMode && (0,external_React_.createElement)(external_wp_editor_namespaceObject.EditorNotices, null), showVisualEditor && (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(TemplatePartConverter, null), (0,external_React_.createElement)(SidebarInspectorFill, null, (0,external_React_.createElement)(external_wp_blockEditor_namespaceObject.BlockInspector, null)), !isLargeViewport && (0,external_React_.createElement)(external_wp_blockEditor_namespaceObject.BlockToolbar, {
       hideDragHandle: true
-    }), (0,external_React_.createElement)(SiteEditorCanvas, null), (0,external_React_.createElement)(PatternModal, null)), editorMode === 'text' && isEditMode && (0,external_React_.createElement)(CodeEditor, null), isEditMode && (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(edit_mode, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.EditorKeyboardShortcutsRegister, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.EditorKeyboardShortcuts, null))),
-    secondarySidebar: isEditMode && (shouldShowInserter && (0,external_React_.createElement)(InserterSidebar, null) || shouldShowListView && (0,external_React_.createElement)(ListViewSidebar, null)),
+    }), (0,external_React_.createElement)(SiteEditorCanvas, {
+      onClick: onClick
+    }), (0,external_React_.createElement)(PatternModal, null)), editorMode === 'text' && isEditMode && (0,external_React_.createElement)(CodeEditor, null), isEditMode && (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)(edit_mode, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.EditorKeyboardShortcutsRegister, null), (0,external_React_.createElement)(external_wp_editor_namespaceObject.EditorKeyboardShortcuts, null))),
+    secondarySidebar: isEditMode && (shouldShowInserter && (0,external_React_.createElement)(InserterSidebar, {
+      closeGeneralSidebar: closeGeneralSidebar,
+      isRightSidebarOpen: isRightSidebarOpen
+    }) || shouldShowListView && (0,external_React_.createElement)(ListViewSidebar, null)),
     sidebar: !isDistractionFree && isEditMode && isRightSidebarOpen && !isDistractionFree && (0,external_React_.createElement)(complementary_area.Slot, {
       scope: "core/edit-site"
     }),
@@ -35907,7 +35213,7 @@ function chain(...fns) {
 function cx(...args) {
   return args.filter(Boolean).join(" ") || void 0;
 }
-function normalizeString(str) {
+function _22HHDS5F_normalizeString(str) {
   return str.normalize("NFD").replace(/[\u0300-\u036f]/g, "");
 }
 function omit(object, keys) {
@@ -36546,7 +35852,7 @@ function defineSetNextState(arg) {
     Object.defineProperty(arg, SET_NEXT_STATE, { value: true });
   }
 }
-function useForceUpdate() {
+function _6O5OEQGF_useForceUpdate() {
   return (0,external_React_.useReducer)(() => [], []);
 }
 function useBooleanEvent(booleanOrCallback) {
@@ -36780,7 +36086,7 @@ function itemTextStartsWith(item, text) {
   const itemText = ((_a = item.element) == null ? void 0 : _a.textContent) || item.children;
   if (!itemText)
     return false;
-  return normalizeString(itemText).trim().toLowerCase().startsWith(text.toLowerCase());
+  return _22HHDS5F_normalizeString(itemText).trim().toLowerCase().startsWith(text.toLowerCase());
 }
 function getSameInitialItems(items, char, activeId) {
   if (!activeId)
@@ -37934,7 +37240,7 @@ function createCollectionStore(props = {}) {
 "use client";
 
 // src/utils/array.ts
-function toArray(arg) {
+function _7PRQYBBV_toArray(arg) {
   if (Array.isArray(arg)) {
     return arg;
   }
@@ -39311,7 +38617,7 @@ function hasCompletionString(value, activeValue) {
     return false;
   if (value == null)
     return false;
-  value = normalizeString(value);
+  value = _22HHDS5F_normalizeString(value);
   return activeValue.length > value.length && activeValue.toLowerCase().indexOf(value.toLowerCase()) === 0;
 }
 function isInputEvent(event) {
@@ -39360,7 +38666,7 @@ var useCombobox = createHook(
        false && 0
     );
     const ref = (0,external_React_.useRef)(null);
-    const [valueUpdated, forceValueUpdate] = useForceUpdate();
+    const [valueUpdated, forceValueUpdate] = _6O5OEQGF_useForceUpdate();
     const canAutoSelectRef = (0,external_React_.useRef)(false);
     const composingRef = (0,external_React_.useRef)(false);
     const autoSelect = store.useState(
@@ -40702,7 +40008,7 @@ var ComboboxItem = memo2(
 
 var combobox_item_value_TagName = "span";
 function normalizeValue(value) {
-  return normalizeString(value).toLowerCase();
+  return _22HHDS5F_normalizeString(value).toLowerCase();
 }
 function splitValue(itemValue, userValue) {
   userValue = normalizeValue(userValue);
@@ -40755,6 +40061,9 @@ var ComboboxItemValue = forwardRef2(function ComboboxItemValue2(props) {
 });
 
 
+// EXTERNAL MODULE: ./node_modules/remove-accents/index.js
+var remove_accents = __webpack_require__(4793);
+var remove_accents_default = /*#__PURE__*/__webpack_require__.n(remove_accents);
 ;// CONCATENATED MODULE: ./packages/dataviews/build-module/search-widget.js
 
 /**
@@ -40790,7 +40099,7 @@ const radioCheck = (0,external_React_.createElement)(external_wp_primitives_name
   cy: 12,
   r: 3
 }));
-function search_widget_normalizeSearchInput(input = '') {
+function normalizeSearchInput(input = '') {
   return remove_accents_default()(input.trim().toLowerCase());
 }
 const getCurrentValue = (filterDefinition, currentFilter) => {
@@ -40894,8 +40203,8 @@ function search_widget_ComboboxList({
   const currentFilter = view.filters.find(_filter => _filter.field === filter.field);
   const currentValue = getCurrentValue(filter, currentFilter);
   const matches = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    const normalizedSearch = search_widget_normalizeSearchInput(deferredSearchValue);
-    return filter.elements.filter(item => search_widget_normalizeSearchInput(item.label).includes(normalizedSearch));
+    const normalizedSearch = normalizeSearchInput(deferredSearchValue);
+    return filter.elements.filter(item => normalizeSearchInput(item.label).includes(normalizedSearch));
   }, [filter.elements, deferredSearchValue]);
   return (0,external_React_.createElement)(ComboboxProvider, {
     value: searchValue,
@@ -41290,29 +40599,23 @@ const Filters = (0,external_wp_element_namespaceObject.memo)(function Filters({
   const addFilterRef = (0,external_wp_element_namespaceObject.useRef)();
   const filters = [];
   fields.forEach(field => {
-    if (!field.type) {
+    if (!field.elements?.length) {
       return;
     }
     const operators = sanitizeOperators(field);
     if (operators.length === 0) {
       return;
     }
-    switch (field.type) {
-      case constants_ENUMERATION_TYPE:
-        if (!field.elements?.length) {
-          return;
-        }
-        const isPrimary = !!field.filterBy?.isPrimary;
-        filters.push({
-          field: field.id,
-          name: field.header,
-          elements: field.elements,
-          singleSelection: operators.some(op => [constants_OPERATOR_IS, constants_OPERATOR_IS_NOT].includes(op)),
-          operators,
-          isVisible: isPrimary || view.filters.some(f => f.field === field.id && ALL_OPERATORS.includes(f.operator)),
-          isPrimary
-        });
-    }
+    const isPrimary = !!field.filterBy?.isPrimary;
+    filters.push({
+      field: field.id,
+      name: field.header,
+      elements: field.elements,
+      singleSelection: operators.some(op => [constants_OPERATOR_IS, constants_OPERATOR_IS_NOT].includes(op)),
+      operators,
+      isVisible: isPrimary || view.filters.some(f => f.field === field.id && ALL_OPERATORS.includes(f.operator)),
+      isPrimary
+    });
   });
   // Sort filters by primary property. We need the primary filters to be first.
   // Then we sort by name.
@@ -41405,6 +40708,26 @@ const Search = (0,external_wp_element_namespaceObject.memo)(function Search({
 });
 /* harmony default export */ const build_module_search = (Search);
 
+;// CONCATENATED MODULE: ./packages/dataviews/build-module/normalize-fields.js
+/**
+ * Apply default values and normalize the fields config.
+ *
+ * @param {Object[]} fields Raw Fields.
+ * @return {Object[]} Normalized fields.
+ */
+function normalizeFields(fields) {
+  return fields.map(field => {
+    const getValue = field.getValue || (({
+      item
+    }) => item[field.id]);
+    return {
+      ...field,
+      getValue,
+      render: field.render || getValue
+    };
+  });
+}
+
 ;// CONCATENATED MODULE: ./packages/dataviews/build-module/dataviews.js
 
 /**
@@ -41416,6 +40739,7 @@ const Search = (0,external_wp_element_namespaceObject.memo)(function Search({
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -41463,18 +40787,7 @@ function DataViews({
     onSelectionChange(items);
   }, [setSelection, getItemId, onSelectionChange]);
   const ViewComponent = VIEW_LAYOUTS.find(v => v.type === view.type).component;
-  const _fields = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    return fields.map(field => {
-      const getValue = field.getValue || (({
-        item
-      }) => item[field.id]);
-      return {
-        ...field,
-        getValue,
-        render: field.render || getValue
-      };
-    });
-  }, [fields]);
+  const _fields = (0,external_wp_element_namespaceObject.useMemo)(() => normalizeFields(fields), [fields]);
   const hasPossibleBulkAction = dataviews_useSomeItemHasAPossibleBulkAction(actions, data);
   return (0,external_React_.createElement)("div", {
     className: "dataviews-wrapper"
@@ -41600,7 +40913,7 @@ function Page({
   }), children), (0,external_React_.createElement)(external_wp_editor_namespaceObject.EditorSnackbars, null));
 }
 
-;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/actions/index.js
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/add-new-page/index.js
 
 /**
  * WordPress dependencies
@@ -41611,303 +40924,73 @@ function Page({
 
 
 
-
-
-
-
-
-/**
- * Internal dependencies
- */
-
-const {
-  useHistory: actions_useHistory
-} = unlock(external_wp_router_namespaceObject.privateApis);
-const trashPostAction = {
-  id: 'move-to-trash',
-  label: (0,external_wp_i18n_namespaceObject.__)('Move to Trash'),
-  isEligible({
-    status
-  }) {
-    return status !== 'trash';
-  },
-  supportsBulk: true,
-  hideModalHeader: true,
-  RenderModal: ({
-    items: posts,
-    closeModal,
-    onPerform
-  }) => {
-    const {
-      createSuccessNotice,
-      createErrorNotice
-    } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-    const {
-      deleteEntityRecord
-    } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
-    return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
-      spacing: "5"
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalText, null, posts.length === 1 ? (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: %s: The page's title.
-    (0,external_wp_i18n_namespaceObject.__)('Are you sure you want to delete "%s"?'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(posts[0].title.rendered)) : (0,external_wp_i18n_namespaceObject.sprintf)(
-    // translators: %d: The number of pages (2 or more).
-    (0,external_wp_i18n_namespaceObject.__)('Are you sure you want to delete %d pages?'), posts.length)), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
-      justify: "right"
-    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-      variant: "tertiary",
-      onClick: closeModal
-    }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
-      variant: "primary",
-      onClick: async () => {
-        const promiseResult = await Promise.allSettled(posts.map(post => {
-          return deleteEntityRecord('postType', post.type, post.id, {}, {
-            throwOnError: true
-          });
-        }));
-        // If all the promises were fulfilled with success.
-        if (promiseResult.every(({
-          status
-        }) => status === 'fulfilled')) {
-          let successMessage;
-          if (promiseResult.length === 1) {
-            successMessage = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The posts's title. */
-            (0,external_wp_i18n_namespaceObject.__)('"%s" moved to the Trash.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(posts[0].title.rendered));
-          } else {
-            successMessage = (0,external_wp_i18n_namespaceObject.__)('Pages moved to the Trash.');
-          }
-          createSuccessNotice(successMessage, {
-            type: 'snackbar',
-            id: 'edit-site-page-trashed'
-          });
-        } else {
-          // If there was at lease one failure.
-          let errorMessage;
-          // If we were trying to move a single post to the trash.
-          if (promiseResult.length === 1) {
-            if (promiseResult[0].reason?.message) {
-              errorMessage = promiseResult[0].reason.message;
-            } else {
-              errorMessage = (0,external_wp_i18n_namespaceObject.__)('An error occurred while moving the post to the trash.');
-            }
-            // If we were trying to move multiple posts to the trash
-          } else {
-            const errorMessages = new Set();
-            const failedPromises = promiseResult.filter(({
-              status
-            }) => status === 'rejected');
-            for (const failedPromise of failedPromises) {
-              if (failedPromise.reason?.message) {
-                errorMessages.add(failedPromise.reason.message);
-              }
-            }
-            if (errorMessages.size === 0) {
-              errorMessage = (0,external_wp_i18n_namespaceObject.__)('An error occurred while moving the posts to the trash.');
-            } else if (errorMessages.size === 1) {
-              errorMessage = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: an error message */
-              (0,external_wp_i18n_namespaceObject.__)('An error occurred while moving the posts to the trash: %s'), [...errorMessages][0]);
-            } else {
-              errorMessage = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: a list of comma separated error messages */
-              (0,external_wp_i18n_namespaceObject.__)('Some errors occurred while moving the pages to the trash: %s'), [...errorMessages].join(','));
-            }
-            createErrorNotice(errorMessage, {
-              type: 'snackbar'
-            });
-          }
-        }
-        if (onPerform) {
-          onPerform();
-        }
-        closeModal();
-      }
-    }, (0,external_wp_i18n_namespaceObject.__)('Delete'))));
-  }
-};
-function usePermanentlyDeletePostAction() {
+function AddNewPageModal({
+  onSave,
+  onClose
+}) {
+  const [isCreatingPage, setIsCreatingPage] = (0,external_wp_element_namespaceObject.useState)(false);
+  const [title, setTitle] = (0,external_wp_element_namespaceObject.useState)('');
   const {
-    createSuccessNotice,
-    createErrorNotice
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  const {
-    deleteEntityRecord
+    saveEntityRecord
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
-  return (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    id: 'permanently-delete',
-    label: (0,external_wp_i18n_namespaceObject.__)('Permanently delete'),
-    supportsBulk: true,
-    isEligible({
-      status
-    }) {
-      return status === 'trash';
-    },
-    async callback(posts) {
-      const promiseResult = await Promise.allSettled(posts.map(post => {
-        return deleteEntityRecord('postType', post.type, post.id, {
-          force: true
-        }, {
-          throwOnError: true
-        });
-      }));
-      // If all the promises were fulfilled with success.
-      if (promiseResult.every(({
-        status
-      }) => status === 'fulfilled')) {
-        let successMessage;
-        if (promiseResult.length === 1) {
-          successMessage = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The posts's title. */
-          (0,external_wp_i18n_namespaceObject.__)('"%s" permanently deleted.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(posts[0].title.rendered));
-        } else {
-          successMessage = (0,external_wp_i18n_namespaceObject.__)('The posts were permanently deleted.');
-        }
-        createSuccessNotice(successMessage, {
-          type: 'snackbar',
-          id: 'edit-site-post-permanently-deleted'
-        });
-      } else {
-        // If there was at lease one failure.
-        let errorMessage;
-        // If we were trying to permanently delete a single post.
-        if (promiseResult.length === 1) {
-          if (promiseResult[0].reason?.message) {
-            errorMessage = promiseResult[0].reason.message;
-          } else {
-            errorMessage = (0,external_wp_i18n_namespaceObject.__)('An error occurred while permanently deleting the post.');
-          }
-          // If we were trying to permanently delete multiple posts
-        } else {
-          const errorMessages = new Set();
-          const failedPromises = promiseResult.filter(({
-            status
-          }) => status === 'rejected');
-          for (const failedPromise of failedPromises) {
-            if (failedPromise.reason?.message) {
-              errorMessages.add(failedPromise.reason.message);
-            }
-          }
-          if (errorMessages.size === 0) {
-            errorMessage = (0,external_wp_i18n_namespaceObject.__)('An error occurred while permanently deleting the posts.');
-          } else if (errorMessages.size === 1) {
-            errorMessage = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: an error message */
-            (0,external_wp_i18n_namespaceObject.__)('An error occurred while permanently deleting the posts: %s'), [...errorMessages][0]);
-          } else {
-            errorMessage = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: a list of comma separated error messages */
-            (0,external_wp_i18n_namespaceObject.__)('Some errors occurred while permanently deleting the posts: %s'), [...errorMessages].join(','));
-          }
-          createErrorNotice(errorMessage, {
-            type: 'snackbar'
-          });
-        }
-      }
-    }
-  }), [createSuccessNotice, createErrorNotice, deleteEntityRecord]);
-}
-function useRestorePostAction() {
   const {
-    createSuccessNotice,
-    createErrorNotice
+    createErrorNotice,
+    createSuccessNotice
   } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  const {
-    editEntityRecord,
-    saveEditedEntityRecord
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
-  return (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    id: 'restore',
-    label: (0,external_wp_i18n_namespaceObject.__)('Restore'),
-    isPrimary: true,
-    icon: library_backup,
-    supportsBulk: true,
-    isEligible({
-      status
-    }) {
-      return status === 'trash';
-    },
-    async callback(posts) {
-      try {
-        for (const post of posts) {
-          await editEntityRecord('postType', post.type, post.id, {
-            status: 'draft'
-          });
-          await saveEditedEntityRecord('postType', post.type, post.id, {
-            throwOnError: true
-          });
-        }
-        createSuccessNotice(posts.length > 1 ? (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The number of posts. */
-        (0,external_wp_i18n_namespaceObject.__)('%d posts have been restored.'), posts.length) : (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The number of posts. */
-        (0,external_wp_i18n_namespaceObject.__)('"%s" has been restored.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(posts[0].title.rendered)), {
-          type: 'snackbar',
-          id: 'edit-site-post-restored'
-        });
-      } catch (error) {
-        let errorMessage;
-        if (error.message && error.code !== 'unknown_error' && error.message) {
-          errorMessage = error.message;
-        } else if (posts.length > 1) {
-          errorMessage = (0,external_wp_i18n_namespaceObject.__)('An error occurred while restoring the posts.');
-        } else {
-          errorMessage = (0,external_wp_i18n_namespaceObject.__)('An error occurred while restoring the post.');
-        }
-        createErrorNotice(errorMessage, {
-          type: 'snackbar'
-        });
-      }
+  async function createPage(event) {
+    event.preventDefault();
+    if (isCreatingPage) {
+      return;
     }
-  }), [createSuccessNotice, createErrorNotice, editEntityRecord, saveEditedEntityRecord]);
-}
-const viewPostAction = {
-  id: 'view-post',
-  label: (0,external_wp_i18n_namespaceObject.__)('View'),
-  isPrimary: true,
-  icon: library_external,
-  isEligible(post) {
-    return post.status !== 'trash';
-  },
-  callback(posts) {
-    const post = posts[0];
-    window.open(post.link, '_blank');
-  }
-};
-function useEditPostAction() {
-  const history = actions_useHistory();
-  return (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    id: 'edit-post',
-    label: (0,external_wp_i18n_namespaceObject.__)('Edit'),
-    isPrimary: true,
-    icon: edit,
-    isEligible({
-      status
-    }) {
-      return status !== 'trash';
-    },
-    callback(posts) {
-      const post = posts[0];
-      history.push({
-        postId: post.id,
-        postType: post.type,
-        canvas: 'edit'
+    setIsCreatingPage(true);
+    try {
+      const newPage = await saveEntityRecord('postType', 'page', {
+        status: 'draft',
+        title,
+        slug: title || (0,external_wp_i18n_namespaceObject.__)('No title')
+      }, {
+        throwOnError: true
       });
+      onSave(newPage);
+      createSuccessNotice((0,external_wp_i18n_namespaceObject.sprintf)(
+      // translators: %s: Title of the created template e.g: "Category".
+      (0,external_wp_i18n_namespaceObject.__)('"%s" successfully created.'), newPage.title?.rendered || title), {
+        type: 'snackbar'
+      });
+    } catch (error) {
+      const errorMessage = error.message && error.code !== 'unknown_error' ? error.message : (0,external_wp_i18n_namespaceObject.__)('An error occurred while creating the page.');
+      createErrorNotice(errorMessage, {
+        type: 'snackbar'
+      });
+    } finally {
+      setIsCreatingPage(false);
     }
-  }), [history]);
-}
-const postRevisionsAction = {
-  id: 'view-post-revisions',
-  label: (0,external_wp_i18n_namespaceObject.__)('View revisions'),
-  isPrimary: false,
-  isEligible: post => {
-    var _post$_links$predeces, _post$_links$version;
-    if (post.status === 'trash') {
-      return false;
-    }
-    const lastRevisionId = (_post$_links$predeces = post?._links?.['predecessor-version']?.[0]?.id) !== null && _post$_links$predeces !== void 0 ? _post$_links$predeces : null;
-    const revisionsCount = (_post$_links$version = post?._links?.['version-history']?.[0]?.count) !== null && _post$_links$version !== void 0 ? _post$_links$version : 0;
-    return lastRevisionId && revisionsCount > 1;
-  },
-  callback(posts) {
-    const post = posts[0];
-    const href = (0,external_wp_url_namespaceObject.addQueryArgs)('revision.php', {
-      revision: post?._links?.['predecessor-version']?.[0]?.id
-    });
-    document.location.href = href;
   }
-};
+  return (0,external_React_.createElement)(external_wp_components_namespaceObject.Modal, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Draft a new page'),
+    onRequestClose: onClose
+  }, (0,external_React_.createElement)("form", {
+    onSubmit: createPage
+  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: 3
+  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.TextControl, {
+    label: (0,external_wp_i18n_namespaceObject.__)('Page title'),
+    onChange: setTitle,
+    placeholder: (0,external_wp_i18n_namespaceObject.__)('No title'),
+    value: title
+  }), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    spacing: 2,
+    justify: "end"
+  }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "tertiary",
+    onClick: onClose
+  }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
+    variant: "primary",
+    type: "submit",
+    isBusy: isCreatingPage,
+    "aria-disabled": isCreatingPage
+  }, (0,external_wp_i18n_namespaceObject.__)('Create draft'))))));
+}
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/media/index.js
 
@@ -41956,6 +41039,7 @@ function Media({
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -41966,7 +41050,9 @@ function Media({
 
 
 
-
+const {
+  usePostActions
+} = unlock(external_wp_editor_namespaceObject.privateApis);
 const {
   useLocation: page_pages_useLocation,
   useHistory: page_pages_useHistory
@@ -42237,10 +41323,17 @@ function PagePages() {
       return (0,external_React_.createElement)("time", null, formattedDate);
     }
   }], [authors, view.type]);
-  const permanentlyDeletePostAction = usePermanentlyDeletePostAction();
-  const restorePostAction = useRestorePostAction();
-  const editPostAction = useEditPostAction();
-  const actions = (0,external_wp_element_namespaceObject.useMemo)(() => [editPostAction, viewPostAction, restorePostAction, permanentlyDeletePostAction, postRevisionsAction, trashPostAction], [permanentlyDeletePostAction, restorePostAction, editPostAction]);
+  const onActionPerformed = (0,external_wp_element_namespaceObject.useCallback)((actionId, items) => {
+    if (actionId === 'edit-post') {
+      const post = items[0];
+      history.push({
+        postId: post.id,
+        postType: post.type,
+        canvas: 'edit'
+      });
+    }
+  }, [history]);
+  const actions = usePostActions(onActionPerformed);
   const onChangeView = (0,external_wp_element_namespaceObject.useCallback)(newView => {
     if (newView.type !== view.type) {
       newView = {
@@ -42253,17 +41346,9 @@ function PagePages() {
     setView(newView);
   }, [view.type, setView]);
   const [showAddPageModal, setShowAddPageModal] = (0,external_wp_element_namespaceObject.useState)(false);
-  const openModal = (0,external_wp_element_namespaceObject.useCallback)(() => {
-    if (!showAddPageModal) {
-      setShowAddPageModal(true);
-    }
-  }, [showAddPageModal]);
-  const closeModal = (0,external_wp_element_namespaceObject.useCallback)(() => {
-    if (showAddPageModal) {
-      setShowAddPageModal(false);
-    }
-  }, [showAddPageModal]);
-  const handleNewPage = (0,external_wp_element_namespaceObject.useCallback)(({
+  const openModal = () => setShowAddPageModal(true);
+  const closeModal = () => setShowAddPageModal(false);
+  const handleNewPage = ({
     type,
     id
   }) => {
@@ -42273,7 +41358,7 @@ function PagePages() {
       canvas: 'edit'
     });
     closeModal();
-  }, [history]);
+  };
 
   // TODO: we need to handle properly `data={ data || EMPTY_ARRAY }` for when `isLoading`.
   return (0,external_React_.createElement)(Page, {
@@ -42295,6 +41380,146 @@ function PagePages() {
     onChangeView: onChangeView,
     onSelectionChange: onSelectionChange
   }));
+}
+
+;// CONCATENATED MODULE: ./packages/dataviews/build-module/filter-and-sort-data-view.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * Internal dependencies
+ */
+
+
+function filter_and_sort_data_view_normalizeSearchInput(input = '') {
+  return remove_accents_default()(input.trim().toLowerCase());
+}
+const filter_and_sort_data_view_EMPTY_ARRAY = [];
+
+/**
+ * Applies the filtering, sorting and pagination to the raw data based on the view configuration.
+ *
+ * @param {any[]}    data   Raw data.
+ * @param {Object}   view   View config.
+ * @param {Object[]} fields Fields config.
+ *
+ * @return {Object} { data: any[], paginationInfo: { totalItems: number, totalPages: number } }
+ */
+function filterSortAndPaginate(data, view, fields) {
+  if (!data) {
+    return {
+      data: filter_and_sort_data_view_EMPTY_ARRAY,
+      paginationInfo: {
+        totalItems: 0,
+        totalPages: 0
+      }
+    };
+  }
+  const _fields = normalizeFields(fields);
+  let filteredData = [...data];
+  // Handle global search.
+  if (view.search) {
+    const normalizedSearch = filter_and_sort_data_view_normalizeSearchInput(view.search);
+    filteredData = filteredData.filter(item => {
+      return _fields.filter(field => field.enableGlobalSearch).map(field => {
+        return filter_and_sort_data_view_normalizeSearchInput(field.getValue({
+          item
+        }));
+      }).some(field => field.includes(normalizedSearch));
+    });
+  }
+  if (view.filters.length > 0) {
+    view.filters.forEach(filter => {
+      const field = _fields.find(_field => _field.id === filter.field);
+      if (filter.operator === constants_OPERATOR_IS_ANY && filter?.value?.length > 0) {
+        filteredData = filteredData.filter(item => {
+          const fieldValue = field.getValue({
+            item
+          });
+          if (Array.isArray(fieldValue)) {
+            return filter.value.some(filterValue => fieldValue.includes(filterValue));
+          } else if (typeof fieldValue === 'string') {
+            return filter.value.includes(fieldValue);
+          }
+          return false;
+        });
+      } else if (filter.operator === constants_OPERATOR_IS_NONE && filter?.value?.length > 0) {
+        filteredData = filteredData.filter(item => {
+          const fieldValue = field.getValue({
+            item
+          });
+          if (Array.isArray(fieldValue)) {
+            return !filter.value.some(filterValue => fieldValue.includes(filterValue));
+          } else if (typeof fieldValue === 'string') {
+            return !filter.value.includes(fieldValue);
+          }
+          return false;
+        });
+      } else if (filter.operator === OPERATOR_IS_ALL && filter?.value?.length > 0) {
+        filteredData = filteredData.filter(item => {
+          return filter.value.every(value => {
+            return field.getValue({
+              item
+            }).includes(value);
+          });
+        });
+      } else if (filter.operator === OPERATOR_IS_NOT_ALL && filter?.value?.length > 0) {
+        filteredData = filteredData.filter(item => {
+          return filter.value.every(value => {
+            return !field.getValue({
+              item
+            }).includes(value);
+          });
+        });
+      } else if (filter.operator === constants_OPERATOR_IS) {
+        filteredData = filteredData.filter(item => {
+          return filter.value === field.getValue({
+            item
+          });
+        });
+      } else if (filter.operator === constants_OPERATOR_IS_NOT) {
+        filteredData = filteredData.filter(item => {
+          return filter.value !== field.getValue({
+            item
+          });
+        });
+      }
+    });
+  }
+
+  // Handle sorting.
+  if (view.sort) {
+    const fieldId = view.sort.field;
+    const fieldToSort = _fields.find(field => {
+      return field.id === fieldId;
+    });
+    filteredData.sort((a, b) => {
+      var _fieldToSort$getValue, _fieldToSort$getValue2;
+      const valueA = (_fieldToSort$getValue = fieldToSort.getValue({
+        item: a
+      })) !== null && _fieldToSort$getValue !== void 0 ? _fieldToSort$getValue : '';
+      const valueB = (_fieldToSort$getValue2 = fieldToSort.getValue({
+        item: b
+      })) !== null && _fieldToSort$getValue2 !== void 0 ? _fieldToSort$getValue2 : '';
+      return view.sort.direction === 'asc' ? valueA.localeCompare(valueB) : valueB.localeCompare(valueA);
+    });
+  }
+
+  // Handle pagination.
+  const hasPagination = view.page && view.perPage;
+  const start = hasPagination ? (view.page - 1) * view.perPage : 0;
+  const totalItems = filteredData?.length || 0;
+  const totalPages = hasPagination ? Math.ceil(totalItems / view.perPage) : 1;
+  filteredData = hasPagination ? filteredData?.slice(start, start + view.perPage) : filteredData;
+  return {
+    data: filteredData,
+    paginationInfo: {
+      totalItems,
+      totalPages
+    }
+  };
 }
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/header.js
@@ -43018,6 +42243,9 @@ const templatePartIcons = {
 };
 const page_patterns_EMPTY_ARRAY = [];
 const defaultConfigPerViewType = {
+  [LAYOUT_TABLE]: {
+    primaryField: 'title'
+  },
   [LAYOUT_GRID]: {
     mediaField: 'preview',
     primaryField: 'title'
@@ -43089,7 +42317,8 @@ function Preview({
     postType: item.type,
     postId: isUserPattern ? item.id : item.name,
     categoryId,
-    categoryType: isTemplatePart ? item.type : PATTERN_TYPES.theme
+    categoryType: isTemplatePart ? item.type : PATTERN_TYPES.theme,
+    canvas: 'edit'
   });
   return (0,external_React_.createElement)(external_React_.Fragment, null, (0,external_React_.createElement)("div", {
     className: `page-patterns-preview-field is-viewtype-${viewType}`,
@@ -43101,7 +42330,8 @@ function Preview({
     onClick: onClick,
     ariaDescribedBy: ariaDescriptions.length ? ariaDescriptions.map((_, index) => `${descriptionId}-${index}`).join(' ') : undefined
   }, isEmpty && isTemplatePart && (0,external_wp_i18n_namespaceObject.__)('Empty template part'), isEmpty && !isTemplatePart && (0,external_wp_i18n_namespaceObject.__)('Empty pattern'), !isEmpty && (0,external_React_.createElement)(external_wp_blockEditor_namespaceObject.BlockPreview, {
-    blocks: item.blocks
+    blocks: item.blocks,
+    viewportWidth: item.viewportWidth
   }))), ariaDescriptions.map((ariaDescription, index) => (0,external_React_.createElement)("div", {
     key: index,
     hidden: true,
@@ -43122,7 +42352,8 @@ function Title({
     postType: item.type,
     postId: isUserPattern ? item.id : item.name,
     categoryId,
-    categoryType: isTemplatePart ? item.type : PATTERN_TYPES.theme
+    categoryType: isTemplatePart ? item.type : PATTERN_TYPES.theme,
+    canvas: 'edit'
   });
   if (!isUserPattern && templatePartIcons[categoryId]) {
     itemIcon = templatePartIcons[categoryId];
@@ -43239,30 +42470,14 @@ function DataviewsPatterns() {
     data,
     paginationInfo
   } = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (!patterns) {
-      return {
-        data: page_patterns_EMPTY_ARRAY,
-        paginationInfo: {
-          totalItems: 0,
-          totalPages: 0
-        }
-      };
-    }
-    let filteredData = [...patterns];
-    // Handle sorting.
-    if (view.sort) {
-      filteredData = sortByTextFields({
-        data: filteredData,
-        view,
-        fields,
-        textFields: ['title', 'author']
-      });
-    }
-    // Handle pagination.
-    return getPaginationResults({
-      data: filteredData,
-      view
-    });
+    // Since filters are applied server-side,
+    // we need to remove them from the view
+    const viewWithoutFilters = {
+      ...view
+    };
+    delete viewWithoutFilters.search;
+    viewWithoutFilters.filters = [];
+    return filterSortAndPaginate(patterns, viewWithoutFilters, fields);
   }, [patterns, view, fields]);
   const actions = (0,external_wp_element_namespaceObject.useMemo)(() => [renameAction, duplicatePatternAction, duplicateTemplatePartAction, exportJSONaction, resetAction, deleteAction], []);
   const onChangeView = (0,external_wp_element_namespaceObject.useCallback)(newView => {
@@ -43302,9 +42517,37 @@ function DataviewsPatterns() {
     view: view,
     onChangeView: onChangeView,
     deferredRendering: true,
-    supportedLayouts: [LAYOUT_GRID]
+    supportedLayouts: [LAYOUT_GRID, LAYOUT_TABLE]
   })));
 }
+
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/home.js
+
+/**
+ * WordPress dependencies
+ */
+
+const home = (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  xmlns: "http://www.w3.org/2000/svg",
+  viewBox: "0 0 24 24"
+}, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M12 4L4 7.9V20h16V7.9L12 4zm6.5 14.5H14V13h-4v5.5H5.5V8.8L12 5.7l6.5 3.1v9.7z"
+}));
+/* harmony default export */ const library_home = (home);
+
+;// CONCATENATED MODULE: ./packages/icons/build-module/library/verse.js
+
+/**
+ * WordPress dependencies
+ */
+
+const verse = (0,external_React_.createElement)(external_wp_primitives_namespaceObject.SVG, {
+  viewBox: "0 0 24 24",
+  xmlns: "http://www.w3.org/2000/svg"
+}, (0,external_React_.createElement)(external_wp_primitives_namespaceObject.Path, {
+  d: "M17.8 2l-.9.3c-.1 0-3.6 1-5.2 2.1C10 5.5 9.3 6.5 8.9 7.1c-.6.9-1.7 4.7-1.7 6.3l-.9 2.3c-.2.4 0 .8.4 1 .1 0 .2.1.3.1.3 0 .6-.2.7-.5l.6-1.5c.3 0 .7-.1 1.2-.2.7-.1 1.4-.3 2.2-.5.8-.2 1.6-.5 2.4-.8.7-.3 1.4-.7 1.9-1.2s.8-1.2 1-1.9c.2-.7.3-1.6.4-2.4.1-.8.1-1.7.2-2.5 0-.8.1-1.5.2-2.1V2zm-1.9 5.6c-.1.8-.2 1.5-.3 2.1-.2.6-.4 1-.6 1.3-.3.3-.8.6-1.4.9-.7.3-1.4.5-2.2.8-.6.2-1.3.3-1.8.4L15 7.5c.3-.3.6-.7 1-1.1 0 .4 0 .8-.1 1.2zM6 20h8v-1.5H6V20z"
+}));
+/* harmony default export */ const library_verse = (verse);
 
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/pin.js
 
@@ -44587,7 +43830,6 @@ function AddNewTemplate({
 
 
 
-
 /**
  * Internal dependencies
  */
@@ -44596,58 +43838,74 @@ function AddNewTemplate({
 
 
 
-function useResetTemplateAction() {
-  const {
-    revertTemplate
-  } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
-  const {
-    saveEditedEntityRecord
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
-  const {
-    createSuccessNotice,
-    createErrorNotice
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
-  return (0,external_wp_element_namespaceObject.useMemo)(() => ({
-    id: 'reset-template',
-    label: (0,external_wp_i18n_namespaceObject.__)('Reset'),
-    isPrimary: true,
-    icon: library_backup,
-    isEligible: isTemplateRevertable,
-    supportsBulk: true,
-    async callback(templates) {
+const resetTemplateAction = {
+  id: 'reset-template',
+  label: (0,external_wp_i18n_namespaceObject.__)('Clear customizations'),
+  isEligible: isTemplateRevertable,
+  supportsBulk: true,
+  hideModalHeader: true,
+  RenderModal: ({
+    items,
+    closeModal,
+    onPerform
+  }) => {
+    const {
+      revertTemplate
+    } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
+    const {
+      saveEditedEntityRecord
+    } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_coreData_namespaceObject.store);
+    const {
+      createSuccessNotice,
+      createErrorNotice
+    } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_notices_namespaceObject.store);
+    const onConfirm = async () => {
       try {
-        for (const template of templates) {
+        for (const template of items) {
           await revertTemplate(template, {
             allowUndo: false
           });
           await saveEditedEntityRecord('postType', template.type, template.id);
         }
-        createSuccessNotice(templates.length > 1 ? (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The number of items. */
-        (0,external_wp_i18n_namespaceObject.__)('%s items reverted.'), templates.length) : (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The template/part's name. */
-        (0,external_wp_i18n_namespaceObject.__)('"%s" reverted.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(templates[0].title.rendered)), {
+        createSuccessNotice(items.length > 1 ? (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The number of items. */
+        (0,external_wp_i18n_namespaceObject.__)('%s items reverted.'), items.length) : (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: The template/part's name. */
+        (0,external_wp_i18n_namespaceObject.__)('"%s" reverted.'), (0,external_wp_htmlEntities_namespaceObject.decodeEntities)(items[0].title.rendered)), {
           type: 'snackbar',
           id: 'edit-site-template-reverted'
         });
       } catch (error) {
         let fallbackErrorMessage;
-        if (templates[0].type === TEMPLATE_POST_TYPE) {
-          fallbackErrorMessage = templates.length === 1 ? (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the template.') : (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the templates.');
+        if (items[0].type === TEMPLATE_POST_TYPE) {
+          fallbackErrorMessage = items.length === 1 ? (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the template.') : (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the templates.');
         } else {
-          fallbackErrorMessage = templates.length === 1 ? (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the template part.') : (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the template parts.');
+          fallbackErrorMessage = items.length === 1 ? (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the template part.') : (0,external_wp_i18n_namespaceObject.__)('An error occurred while reverting the template parts.');
         }
         const errorMessage = error.message && error.code !== 'unknown_error' ? error.message : fallbackErrorMessage;
         createErrorNotice(errorMessage, {
           type: 'snackbar'
         });
       }
-    }
-  }), [createErrorNotice, createSuccessNotice, revertTemplate, saveEditedEntityRecord]);
-}
+    };
+    return (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+      spacing: "5"
+    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalText, null, (0,external_wp_i18n_namespaceObject.__)('Are you sure you want to clear these customizations?')), (0,external_React_.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+      justify: "right"
+    }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
+      variant: "tertiary",
+      onClick: closeModal
+    }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
+      variant: "primary",
+      onClick: async () => {
+        await onConfirm(items);
+        onPerform?.();
+        closeModal();
+      }
+    }, (0,external_wp_i18n_namespaceObject.__)('Clear'))));
+  }
+};
 const deleteTemplateAction = {
   id: 'delete-template',
   label: (0,external_wp_i18n_namespaceObject.__)('Delete'),
-  isPrimary: true,
-  icon: library_trash,
   isEligible: isTemplateRemovable,
   supportsBulk: true,
   hideModalHeader: true,
@@ -44676,9 +43934,7 @@ const deleteTemplateAction = {
         await removeTemplates(templates, {
           allowUndo: false
         });
-        if (onPerform) {
-          onPerform();
-        }
+        onPerform?.();
         closeModal();
       }
     }, (0,external_wp_i18n_namespaceObject.__)('Delete'))));
@@ -44725,8 +43981,6 @@ const renameTemplateAction = {
         {
           throwOnError: true
         });
-        // TODO: this action will be reused in template parts list, so
-        // let's keep this for a bit, even it's always a `template` now.
         createSuccessNotice(template.type === TEMPLATE_POST_TYPE ? (0,external_wp_i18n_namespaceObject.__)('Template renamed.') : (0,external_wp_i18n_namespaceObject.__)('Template part renamed.'), {
           type: 'snackbar'
         });
@@ -44744,6 +43998,7 @@ const renameTemplateAction = {
       spacing: "5"
     }, (0,external_React_.createElement)(external_wp_components_namespaceObject.TextControl, {
       __nextHasNoMarginBottom: true,
+      __next40pxDefaultSize: true,
       label: (0,external_wp_i18n_namespaceObject.__)('Name'),
       value: editedTitle,
       onChange: setEditedTitle,
@@ -44752,10 +44007,12 @@ const renameTemplateAction = {
       justify: "right"
     }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
       variant: "tertiary",
-      onClick: closeModal
+      onClick: closeModal,
+      __next40pxDefaultSize: true
     }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_.createElement)(external_wp_components_namespaceObject.Button, {
       variant: "primary",
-      type: "submit"
+      type: "submit",
+      __next40pxDefaultSize: true
     }, (0,external_wp_i18n_namespaceObject.__)('Save')))));
   }
 };
@@ -44824,10 +44081,10 @@ function AddNewTemplatePart() {
  */
 
 
-
 /**
  * WordPress dependencies
  */
+
 
 
 
@@ -44850,7 +44107,9 @@ function AddNewTemplatePart() {
 
 
 
-
+const {
+  usePostActions: page_templates_template_parts_usePostActions
+} = unlock(external_wp_editor_namespaceObject.privateApis);
 const {
   ExperimentalBlockEditorProvider: page_templates_template_parts_ExperimentalBlockEditorProvider,
   useGlobalStyle: page_templates_template_parts_useGlobalStyle
@@ -44866,7 +44125,8 @@ const page_templates_template_parts_defaultConfigPerViewType = {
   },
   [LAYOUT_GRID]: {
     mediaField: 'preview',
-    primaryField: 'title'
+    primaryField: 'title',
+    displayAsColumnFields: ['description']
   },
   [LAYOUT_LIST]: {
     primaryField: 'title',
@@ -44888,9 +44148,6 @@ const page_templates_template_parts_DEFAULT_VIEW = {
   layout: page_templates_template_parts_defaultConfigPerViewType[LAYOUT_TABLE],
   filters: []
 };
-function page_templates_template_parts_normalizeSearchInput(input = '') {
-  return remove_accents_default()(input.trim().toLowerCase());
-}
 function page_templates_template_parts_Title({
   item,
   viewType
@@ -44940,7 +44197,9 @@ function AuthorField({
     className: "page-templates-author-field__icon"
   }, (0,external_React_.createElement)(external_wp_components_namespaceObject.Icon, {
     icon: icon
-  })), (0,external_React_.createElement)("span", null, text));
+  })), (0,external_React_.createElement)("span", {
+    className: "page-templates-author-field__name"
+  }, text));
 }
 function page_templates_template_parts_Preview({
   item,
@@ -45074,7 +44333,8 @@ function PageTemplatesTemplateParts({
         viewType: view.type
       }),
       maxWidth: 400,
-      enableHiding: false
+      enableHiding: false,
+      enableGlobalSearch: true
     }];
     if (postType === TEMPLATE_POST_TYPE) {
       _fields.push({
@@ -45092,7 +44352,8 @@ function PageTemplatesTemplateParts({
         },
         maxWidth: 400,
         minWidth: 320,
-        enableSorting: false
+        enableSorting: false,
+        enableGlobalSearch: true
       });
     }
     // TODO: The plan is to support fields reordering, which would require an API like `order` or something
@@ -45121,57 +44382,20 @@ function PageTemplatesTemplateParts({
     data,
     paginationInfo
   } = (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (!records) {
-      return {
-        data: page_templates_template_parts_EMPTY_ARRAY,
-        paginationInfo: {
-          totalItems: 0,
-          totalPages: 0
-        }
-      };
-    }
-    let filteredData = [...records];
-    // Handle global search.
-    if (view.search) {
-      const normalizedSearch = page_templates_template_parts_normalizeSearchInput(view.search);
-      filteredData = filteredData.filter(item => {
-        const title = item.title?.rendered || item.slug;
-        return page_templates_template_parts_normalizeSearchInput(title).includes(normalizedSearch) || page_templates_template_parts_normalizeSearchInput(item.description).includes(normalizedSearch);
-      });
-    }
-
-    // Handle filters.
-    if (view.filters.length > 0) {
-      view.filters.forEach(filter => {
-        if (filter.field === 'author' && filter.operator === OPERATOR_IS_ANY && filter?.value?.length > 0) {
-          filteredData = filteredData.filter(item => {
-            return filter.value.includes(item.author_text);
-          });
-        } else if (filter.field === 'author' && filter.operator === OPERATOR_IS_NONE && filter?.value?.length > 0) {
-          filteredData = filteredData.filter(item => {
-            return !filter.value.includes(item.author_text);
-          });
-        }
-      });
-    }
-
-    // Handle sorting.
-    if (view.sort) {
-      filteredData = sortByTextFields({
-        data: filteredData,
-        view,
-        fields,
-        textFields: ['title', 'author']
-      });
-    }
-    // Handle pagination.
-    return getPaginationResults({
-      data: filteredData,
-      view
-    });
+    return filterSortAndPaginate(records, view, fields);
   }, [records, view, fields]);
-  const resetTemplateAction = useResetTemplateAction();
-  const actions = (0,external_wp_element_namespaceObject.useMemo)(() => [resetTemplateAction, renameTemplateAction, postRevisionsAction, deleteTemplateAction], [resetTemplateAction]);
+  const onActionPerformed = (0,external_wp_element_namespaceObject.useCallback)((actionId, items) => {
+    if (actionId === 'edit-post') {
+      const post = items[0];
+      history.push({
+        postId: post.id,
+        postType: post.type,
+        canvas: 'edit'
+      });
+    }
+  }, [history]);
+  const [editAction, viewRevisionsAction] = page_templates_template_parts_usePostActions(onActionPerformed, ['edit-post', 'view-post-revisions']);
+  const actions = (0,external_wp_element_namespaceObject.useMemo)(() => [editAction, resetTemplateAction, renameTemplateAction, viewRevisionsAction, deleteTemplateAction], [editAction, viewRevisionsAction]);
   const onChangeView = (0,external_wp_element_namespaceObject.useCallback)(newView => {
     if (newView.type !== view.type) {
       newView = {
@@ -45206,7 +44430,7 @@ function PageTemplatesTemplateParts({
     view: view,
     onChangeView: onChangeView,
     onSelectionChange: onSelectionChange,
-    deferredRendering: !view.hiddenFields?.includes('preview')
+    deferredRendering: view.type === LAYOUT_GRID || !view.hiddenFields?.includes('preview')
   }));
 }
 
@@ -45228,10 +44452,12 @@ function PageTemplatesTemplateParts({
 
 
 const {
-  useLocation: router_useLocation
+  useLocation: router_useLocation,
+  useHistory: router_useHistory
 } = unlock(external_wp_router_namespaceObject.privateApis);
 function useLayoutAreas() {
   const isSiteEditorLoading = useIsSiteEditorLoading();
+  const history = router_useHistory();
   const {
     params
   } = router_useLocation();
@@ -45249,29 +44475,23 @@ function useLayoutAreas() {
 
   // Regular page
   if (path === '/page') {
+    const isListLayout = layout === 'list' || !layout;
     return {
+      key: 'pages-list',
       areas: {
-        content: undefined,
-        preview: (0,external_React_.createElement)(Editor, {
-          isLoading: isSiteEditorLoading
+        content: (0,external_React_.createElement)(PagePages, null),
+        preview: isListLayout && (0,external_React_.createElement)(Editor, {
+          isLoading: isSiteEditorLoading,
+          onClick: () => history.push({
+            path,
+            postType: 'page',
+            postId,
+            canvas: 'edit'
+          })
         }),
         mobile: canvas === 'edit' ? (0,external_React_.createElement)(Editor, {
           isLoading: isSiteEditorLoading
         }) : undefined
-      },
-      widths: {
-        content: undefined
-      }
-    };
-  }
-  const isListLayout = isCustom !== 'true' && layout === 'list';
-  if (path === '/pages') {
-    return {
-      areas: {
-        content: (0,external_React_.createElement)(PagePages, null),
-        preview: isListLayout && (0,external_React_.createElement)(Editor, {
-          isLoading: isSiteEditorLoading
-        })
       },
       widths: {
         content: isListLayout ? 380 : undefined
@@ -45282,6 +44502,7 @@ function useLayoutAreas() {
   // Regular other post types
   if (postType && postId) {
     return {
+      key: 'page',
       areas: {
         preview: (0,external_React_.createElement)(Editor, {
           isLoading: isSiteEditorLoading
@@ -45295,7 +44516,9 @@ function useLayoutAreas() {
 
   // Templates
   if (path === '/wp_template') {
+    const isListLayout = isCustom !== 'true' && layout === 'list';
     return {
+      key: 'templates-list',
       areas: {
         content: (0,external_React_.createElement)(PageTemplatesTemplateParts, {
           postType: TEMPLATE_POST_TYPE
@@ -45315,7 +44538,9 @@ function useLayoutAreas() {
 
   // Template parts
   if (path === '/wp_template_part/all') {
+    const isListLayout = isCustom !== 'true' && layout === 'list';
     return {
+      key: 'template-parts',
       areas: {
         content: (0,external_React_.createElement)(PageTemplatesTemplateParts, {
           postType: TEMPLATE_PART_POST_TYPE
@@ -45336,6 +44561,7 @@ function useLayoutAreas() {
   // Patterns
   if (path === '/patterns') {
     return {
+      key: 'patterns',
       areas: {
         content: (0,external_React_.createElement)(DataviewsPatterns, null),
         mobile: (0,external_React_.createElement)(DataviewsPatterns, null)
@@ -45345,6 +44571,7 @@ function useLayoutAreas() {
 
   // Fallback shows the home page preview
   return {
+    key: 'default',
     areas: {
       preview: (0,external_React_.createElement)(Editor, {
         isLoading: isSiteEditorLoading
@@ -45355,6 +44582,4347 @@ function useLayoutAreas() {
     }
   };
 }
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/rafz/dist/react-spring-rafz.esm.js
+let updateQueue = makeQueue();
+const raf = fn => schedule(fn, updateQueue);
+let writeQueue = makeQueue();
+
+raf.write = fn => schedule(fn, writeQueue);
+
+let onStartQueue = makeQueue();
+
+raf.onStart = fn => schedule(fn, onStartQueue);
+
+let onFrameQueue = makeQueue();
+
+raf.onFrame = fn => schedule(fn, onFrameQueue);
+
+let onFinishQueue = makeQueue();
+
+raf.onFinish = fn => schedule(fn, onFinishQueue);
+
+let timeouts = [];
+
+raf.setTimeout = (handler, ms) => {
+  let time = raf.now() + ms;
+
+  let cancel = () => {
+    let i = timeouts.findIndex(t => t.cancel == cancel);
+    if (~i) timeouts.splice(i, 1);
+    pendingCount -= ~i ? 1 : 0;
+  };
+
+  let timeout = {
+    time,
+    handler,
+    cancel
+  };
+  timeouts.splice(findTimeout(time), 0, timeout);
+  pendingCount += 1;
+  start();
+  return timeout;
+};
+
+let findTimeout = time => ~(~timeouts.findIndex(t => t.time > time) || ~timeouts.length);
+
+raf.cancel = fn => {
+  onStartQueue.delete(fn);
+  onFrameQueue.delete(fn);
+  onFinishQueue.delete(fn);
+  updateQueue.delete(fn);
+  writeQueue.delete(fn);
+};
+
+raf.sync = fn => {
+  react_spring_rafz_esm_sync = true;
+  raf.batchedUpdates(fn);
+  react_spring_rafz_esm_sync = false;
+};
+
+raf.throttle = fn => {
+  let lastArgs;
+
+  function queuedFn() {
+    try {
+      fn(...lastArgs);
+    } finally {
+      lastArgs = null;
+    }
+  }
+
+  function throttled(...args) {
+    lastArgs = args;
+    raf.onStart(queuedFn);
+  }
+
+  throttled.handler = fn;
+
+  throttled.cancel = () => {
+    onStartQueue.delete(queuedFn);
+    lastArgs = null;
+  };
+
+  return throttled;
+};
+
+let nativeRaf = typeof window != 'undefined' ? window.requestAnimationFrame : () => {};
+
+raf.use = impl => nativeRaf = impl;
+
+raf.now = typeof performance != 'undefined' ? () => performance.now() : Date.now;
+
+raf.batchedUpdates = fn => fn();
+
+raf.catch = console.error;
+raf.frameLoop = 'always';
+
+raf.advance = () => {
+  if (raf.frameLoop !== 'demand') {
+    console.warn('Cannot call the manual advancement of rafz whilst frameLoop is not set as demand');
+  } else {
+    update();
+  }
+};
+
+let ts = -1;
+let pendingCount = 0;
+let react_spring_rafz_esm_sync = false;
+
+function schedule(fn, queue) {
+  if (react_spring_rafz_esm_sync) {
+    queue.delete(fn);
+    fn(0);
+  } else {
+    queue.add(fn);
+    start();
+  }
+}
+
+function start() {
+  if (ts < 0) {
+    ts = 0;
+
+    if (raf.frameLoop !== 'demand') {
+      nativeRaf(loop);
+    }
+  }
+}
+
+function stop() {
+  ts = -1;
+}
+
+function loop() {
+  if (~ts) {
+    nativeRaf(loop);
+    raf.batchedUpdates(update);
+  }
+}
+
+function update() {
+  let prevTs = ts;
+  ts = raf.now();
+  let count = findTimeout(ts);
+
+  if (count) {
+    eachSafely(timeouts.splice(0, count), t => t.handler());
+    pendingCount -= count;
+  }
+
+  if (!pendingCount) {
+    stop();
+    return;
+  }
+
+  onStartQueue.flush();
+  updateQueue.flush(prevTs ? Math.min(64, ts - prevTs) : 16.667);
+  onFrameQueue.flush();
+  writeQueue.flush();
+  onFinishQueue.flush();
+}
+
+function makeQueue() {
+  let next = new Set();
+  let current = next;
+  return {
+    add(fn) {
+      pendingCount += current == next && !next.has(fn) ? 1 : 0;
+      next.add(fn);
+    },
+
+    delete(fn) {
+      pendingCount -= current == next && next.has(fn) ? 1 : 0;
+      return next.delete(fn);
+    },
+
+    flush(arg) {
+      if (current.size) {
+        next = new Set();
+        pendingCount -= current.size;
+        eachSafely(current, fn => fn(arg) && next.add(fn));
+        pendingCount += next.size;
+        current = next;
+      }
+    }
+
+  };
+}
+
+function eachSafely(values, each) {
+  values.forEach(value => {
+    try {
+      each(value);
+    } catch (e) {
+      raf.catch(e);
+    }
+  });
+}
+
+const __raf = {
+  count() {
+    return pendingCount;
+  },
+
+  isRunning() {
+    return ts >= 0;
+  },
+
+  clear() {
+    ts = -1;
+    timeouts = [];
+    onStartQueue = makeQueue();
+    updateQueue = makeQueue();
+    onFrameQueue = makeQueue();
+    writeQueue = makeQueue();
+    onFinishQueue = makeQueue();
+    pendingCount = 0;
+  }
+
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/shared/dist/react-spring-shared.esm.js
+
+
+
+
+function react_spring_shared_esm_noop() {}
+const defineHidden = (obj, key, value) => Object.defineProperty(obj, key, {
+  value,
+  writable: true,
+  configurable: true
+});
+const react_spring_shared_esm_is = {
+  arr: Array.isArray,
+  obj: a => !!a && a.constructor.name === 'Object',
+  fun: a => typeof a === 'function',
+  str: a => typeof a === 'string',
+  num: a => typeof a === 'number',
+  und: a => a === undefined
+};
+function isEqual(a, b) {
+  if (react_spring_shared_esm_is.arr(a)) {
+    if (!react_spring_shared_esm_is.arr(b) || a.length !== b.length) return false;
+
+    for (let i = 0; i < a.length; i++) {
+      if (a[i] !== b[i]) return false;
+    }
+
+    return true;
+  }
+
+  return a === b;
+}
+const react_spring_shared_esm_each = (obj, fn) => obj.forEach(fn);
+function react_spring_shared_esm_eachProp(obj, fn, ctx) {
+  if (react_spring_shared_esm_is.arr(obj)) {
+    for (let i = 0; i < obj.length; i++) {
+      fn.call(ctx, obj[i], `${i}`);
+    }
+
+    return;
+  }
+
+  for (const key in obj) {
+    if (obj.hasOwnProperty(key)) {
+      fn.call(ctx, obj[key], key);
+    }
+  }
+}
+const react_spring_shared_esm_toArray = a => react_spring_shared_esm_is.und(a) ? [] : react_spring_shared_esm_is.arr(a) ? a : [a];
+function flush(queue, iterator) {
+  if (queue.size) {
+    const items = Array.from(queue);
+    queue.clear();
+    react_spring_shared_esm_each(items, iterator);
+  }
+}
+const flushCalls = (queue, ...args) => flush(queue, fn => fn(...args));
+const isSSR = () => typeof window === 'undefined' || !window.navigator || /ServerSideRendering|^Deno\//.test(window.navigator.userAgent);
+
+let createStringInterpolator$1;
+let to;
+let colors$1 = null;
+let skipAnimation = false;
+let willAdvance = react_spring_shared_esm_noop;
+const react_spring_shared_esm_assign = globals => {
+  if (globals.to) to = globals.to;
+  if (globals.now) raf.now = globals.now;
+  if (globals.colors !== undefined) colors$1 = globals.colors;
+  if (globals.skipAnimation != null) skipAnimation = globals.skipAnimation;
+  if (globals.createStringInterpolator) createStringInterpolator$1 = globals.createStringInterpolator;
+  if (globals.requestAnimationFrame) raf.use(globals.requestAnimationFrame);
+  if (globals.batchedUpdates) raf.batchedUpdates = globals.batchedUpdates;
+  if (globals.willAdvance) willAdvance = globals.willAdvance;
+  if (globals.frameLoop) raf.frameLoop = globals.frameLoop;
+};
+
+var globals = /*#__PURE__*/Object.freeze({
+  __proto__: null,
+  get createStringInterpolator () { return createStringInterpolator$1; },
+  get to () { return to; },
+  get colors () { return colors$1; },
+  get skipAnimation () { return skipAnimation; },
+  get willAdvance () { return willAdvance; },
+  assign: react_spring_shared_esm_assign
+});
+
+const startQueue = new Set();
+let currentFrame = [];
+let prevFrame = [];
+let priority = 0;
+const frameLoop = {
+  get idle() {
+    return !startQueue.size && !currentFrame.length;
+  },
+
+  start(animation) {
+    if (priority > animation.priority) {
+      startQueue.add(animation);
+      raf.onStart(flushStartQueue);
+    } else {
+      startSafely(animation);
+      raf(advance);
+    }
+  },
+
+  advance,
+
+  sort(animation) {
+    if (priority) {
+      raf.onFrame(() => frameLoop.sort(animation));
+    } else {
+      const prevIndex = currentFrame.indexOf(animation);
+
+      if (~prevIndex) {
+        currentFrame.splice(prevIndex, 1);
+        startUnsafely(animation);
+      }
+    }
+  },
+
+  clear() {
+    currentFrame = [];
+    startQueue.clear();
+  }
+
+};
+
+function flushStartQueue() {
+  startQueue.forEach(startSafely);
+  startQueue.clear();
+  raf(advance);
+}
+
+function startSafely(animation) {
+  if (!currentFrame.includes(animation)) startUnsafely(animation);
+}
+
+function startUnsafely(animation) {
+  currentFrame.splice(findIndex(currentFrame, other => other.priority > animation.priority), 0, animation);
+}
+
+function advance(dt) {
+  const nextFrame = prevFrame;
+
+  for (let i = 0; i < currentFrame.length; i++) {
+    const animation = currentFrame[i];
+    priority = animation.priority;
+
+    if (!animation.idle) {
+      willAdvance(animation);
+      animation.advance(dt);
+
+      if (!animation.idle) {
+        nextFrame.push(animation);
+      }
+    }
+  }
+
+  priority = 0;
+  prevFrame = currentFrame;
+  prevFrame.length = 0;
+  currentFrame = nextFrame;
+  return currentFrame.length > 0;
+}
+
+function findIndex(arr, test) {
+  const index = arr.findIndex(test);
+  return index < 0 ? arr.length : index;
+}
+
+const colors = {
+  transparent: 0x00000000,
+  aliceblue: 0xf0f8ffff,
+  antiquewhite: 0xfaebd7ff,
+  aqua: 0x00ffffff,
+  aquamarine: 0x7fffd4ff,
+  azure: 0xf0ffffff,
+  beige: 0xf5f5dcff,
+  bisque: 0xffe4c4ff,
+  black: 0x000000ff,
+  blanchedalmond: 0xffebcdff,
+  blue: 0x0000ffff,
+  blueviolet: 0x8a2be2ff,
+  brown: 0xa52a2aff,
+  burlywood: 0xdeb887ff,
+  burntsienna: 0xea7e5dff,
+  cadetblue: 0x5f9ea0ff,
+  chartreuse: 0x7fff00ff,
+  chocolate: 0xd2691eff,
+  coral: 0xff7f50ff,
+  cornflowerblue: 0x6495edff,
+  cornsilk: 0xfff8dcff,
+  crimson: 0xdc143cff,
+  cyan: 0x00ffffff,
+  darkblue: 0x00008bff,
+  darkcyan: 0x008b8bff,
+  darkgoldenrod: 0xb8860bff,
+  darkgray: 0xa9a9a9ff,
+  darkgreen: 0x006400ff,
+  darkgrey: 0xa9a9a9ff,
+  darkkhaki: 0xbdb76bff,
+  darkmagenta: 0x8b008bff,
+  darkolivegreen: 0x556b2fff,
+  darkorange: 0xff8c00ff,
+  darkorchid: 0x9932ccff,
+  darkred: 0x8b0000ff,
+  darksalmon: 0xe9967aff,
+  darkseagreen: 0x8fbc8fff,
+  darkslateblue: 0x483d8bff,
+  darkslategray: 0x2f4f4fff,
+  darkslategrey: 0x2f4f4fff,
+  darkturquoise: 0x00ced1ff,
+  darkviolet: 0x9400d3ff,
+  deeppink: 0xff1493ff,
+  deepskyblue: 0x00bfffff,
+  dimgray: 0x696969ff,
+  dimgrey: 0x696969ff,
+  dodgerblue: 0x1e90ffff,
+  firebrick: 0xb22222ff,
+  floralwhite: 0xfffaf0ff,
+  forestgreen: 0x228b22ff,
+  fuchsia: 0xff00ffff,
+  gainsboro: 0xdcdcdcff,
+  ghostwhite: 0xf8f8ffff,
+  gold: 0xffd700ff,
+  goldenrod: 0xdaa520ff,
+  gray: 0x808080ff,
+  green: 0x008000ff,
+  greenyellow: 0xadff2fff,
+  grey: 0x808080ff,
+  honeydew: 0xf0fff0ff,
+  hotpink: 0xff69b4ff,
+  indianred: 0xcd5c5cff,
+  indigo: 0x4b0082ff,
+  ivory: 0xfffff0ff,
+  khaki: 0xf0e68cff,
+  lavender: 0xe6e6faff,
+  lavenderblush: 0xfff0f5ff,
+  lawngreen: 0x7cfc00ff,
+  lemonchiffon: 0xfffacdff,
+  lightblue: 0xadd8e6ff,
+  lightcoral: 0xf08080ff,
+  lightcyan: 0xe0ffffff,
+  lightgoldenrodyellow: 0xfafad2ff,
+  lightgray: 0xd3d3d3ff,
+  lightgreen: 0x90ee90ff,
+  lightgrey: 0xd3d3d3ff,
+  lightpink: 0xffb6c1ff,
+  lightsalmon: 0xffa07aff,
+  lightseagreen: 0x20b2aaff,
+  lightskyblue: 0x87cefaff,
+  lightslategray: 0x778899ff,
+  lightslategrey: 0x778899ff,
+  lightsteelblue: 0xb0c4deff,
+  lightyellow: 0xffffe0ff,
+  lime: 0x00ff00ff,
+  limegreen: 0x32cd32ff,
+  linen: 0xfaf0e6ff,
+  magenta: 0xff00ffff,
+  maroon: 0x800000ff,
+  mediumaquamarine: 0x66cdaaff,
+  mediumblue: 0x0000cdff,
+  mediumorchid: 0xba55d3ff,
+  mediumpurple: 0x9370dbff,
+  mediumseagreen: 0x3cb371ff,
+  mediumslateblue: 0x7b68eeff,
+  mediumspringgreen: 0x00fa9aff,
+  mediumturquoise: 0x48d1ccff,
+  mediumvioletred: 0xc71585ff,
+  midnightblue: 0x191970ff,
+  mintcream: 0xf5fffaff,
+  mistyrose: 0xffe4e1ff,
+  moccasin: 0xffe4b5ff,
+  navajowhite: 0xffdeadff,
+  navy: 0x000080ff,
+  oldlace: 0xfdf5e6ff,
+  olive: 0x808000ff,
+  olivedrab: 0x6b8e23ff,
+  orange: 0xffa500ff,
+  orangered: 0xff4500ff,
+  orchid: 0xda70d6ff,
+  palegoldenrod: 0xeee8aaff,
+  palegreen: 0x98fb98ff,
+  paleturquoise: 0xafeeeeff,
+  palevioletred: 0xdb7093ff,
+  papayawhip: 0xffefd5ff,
+  peachpuff: 0xffdab9ff,
+  peru: 0xcd853fff,
+  pink: 0xffc0cbff,
+  plum: 0xdda0ddff,
+  powderblue: 0xb0e0e6ff,
+  purple: 0x800080ff,
+  rebeccapurple: 0x663399ff,
+  red: 0xff0000ff,
+  rosybrown: 0xbc8f8fff,
+  royalblue: 0x4169e1ff,
+  saddlebrown: 0x8b4513ff,
+  salmon: 0xfa8072ff,
+  sandybrown: 0xf4a460ff,
+  seagreen: 0x2e8b57ff,
+  seashell: 0xfff5eeff,
+  sienna: 0xa0522dff,
+  silver: 0xc0c0c0ff,
+  skyblue: 0x87ceebff,
+  slateblue: 0x6a5acdff,
+  slategray: 0x708090ff,
+  slategrey: 0x708090ff,
+  snow: 0xfffafaff,
+  springgreen: 0x00ff7fff,
+  steelblue: 0x4682b4ff,
+  tan: 0xd2b48cff,
+  teal: 0x008080ff,
+  thistle: 0xd8bfd8ff,
+  tomato: 0xff6347ff,
+  turquoise: 0x40e0d0ff,
+  violet: 0xee82eeff,
+  wheat: 0xf5deb3ff,
+  white: 0xffffffff,
+  whitesmoke: 0xf5f5f5ff,
+  yellow: 0xffff00ff,
+  yellowgreen: 0x9acd32ff
+};
+
+const NUMBER = '[-+]?\\d*\\.?\\d+';
+const PERCENTAGE = NUMBER + '%';
+
+function call(...parts) {
+  return '\\(\\s*(' + parts.join(')\\s*,\\s*(') + ')\\s*\\)';
+}
+
+const rgb = new RegExp('rgb' + call(NUMBER, NUMBER, NUMBER));
+const rgba = new RegExp('rgba' + call(NUMBER, NUMBER, NUMBER, NUMBER));
+const hsl = new RegExp('hsl' + call(NUMBER, PERCENTAGE, PERCENTAGE));
+const hsla = new RegExp('hsla' + call(NUMBER, PERCENTAGE, PERCENTAGE, NUMBER));
+const hex3 = /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
+const hex4 = /^#([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})([0-9a-fA-F]{1})$/;
+const hex6 = /^#([0-9a-fA-F]{6})$/;
+const hex8 = /^#([0-9a-fA-F]{8})$/;
+
+function normalizeColor(color) {
+  let match;
+
+  if (typeof color === 'number') {
+    return color >>> 0 === color && color >= 0 && color <= 0xffffffff ? color : null;
+  }
+
+  if (match = hex6.exec(color)) return parseInt(match[1] + 'ff', 16) >>> 0;
+
+  if (colors$1 && colors$1[color] !== undefined) {
+    return colors$1[color];
+  }
+
+  if (match = rgb.exec(color)) {
+    return (parse255(match[1]) << 24 | parse255(match[2]) << 16 | parse255(match[3]) << 8 | 0x000000ff) >>> 0;
+  }
+
+  if (match = rgba.exec(color)) {
+    return (parse255(match[1]) << 24 | parse255(match[2]) << 16 | parse255(match[3]) << 8 | parse1(match[4])) >>> 0;
+  }
+
+  if (match = hex3.exec(color)) {
+    return parseInt(match[1] + match[1] + match[2] + match[2] + match[3] + match[3] + 'ff', 16) >>> 0;
+  }
+
+  if (match = hex8.exec(color)) return parseInt(match[1], 16) >>> 0;
+
+  if (match = hex4.exec(color)) {
+    return parseInt(match[1] + match[1] + match[2] + match[2] + match[3] + match[3] + match[4] + match[4], 16) >>> 0;
+  }
+
+  if (match = hsl.exec(color)) {
+    return (hslToRgb(parse360(match[1]), parsePercentage(match[2]), parsePercentage(match[3])) | 0x000000ff) >>> 0;
+  }
+
+  if (match = hsla.exec(color)) {
+    return (hslToRgb(parse360(match[1]), parsePercentage(match[2]), parsePercentage(match[3])) | parse1(match[4])) >>> 0;
+  }
+
+  return null;
+}
+
+function hue2rgb(p, q, t) {
+  if (t < 0) t += 1;
+  if (t > 1) t -= 1;
+  if (t < 1 / 6) return p + (q - p) * 6 * t;
+  if (t < 1 / 2) return q;
+  if (t < 2 / 3) return p + (q - p) * (2 / 3 - t) * 6;
+  return p;
+}
+
+function hslToRgb(h, s, l) {
+  const q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+  const p = 2 * l - q;
+  const r = hue2rgb(p, q, h + 1 / 3);
+  const g = hue2rgb(p, q, h);
+  const b = hue2rgb(p, q, h - 1 / 3);
+  return Math.round(r * 255) << 24 | Math.round(g * 255) << 16 | Math.round(b * 255) << 8;
+}
+
+function parse255(str) {
+  const int = parseInt(str, 10);
+  if (int < 0) return 0;
+  if (int > 255) return 255;
+  return int;
+}
+
+function parse360(str) {
+  const int = parseFloat(str);
+  return (int % 360 + 360) % 360 / 360;
+}
+
+function parse1(str) {
+  const num = parseFloat(str);
+  if (num < 0) return 0;
+  if (num > 1) return 255;
+  return Math.round(num * 255);
+}
+
+function parsePercentage(str) {
+  const int = parseFloat(str);
+  if (int < 0) return 0;
+  if (int > 100) return 1;
+  return int / 100;
+}
+
+function colorToRgba(input) {
+  let int32Color = normalizeColor(input);
+  if (int32Color === null) return input;
+  int32Color = int32Color || 0;
+  let r = (int32Color & 0xff000000) >>> 24;
+  let g = (int32Color & 0x00ff0000) >>> 16;
+  let b = (int32Color & 0x0000ff00) >>> 8;
+  let a = (int32Color & 0x000000ff) / 255;
+  return `rgba(${r}, ${g}, ${b}, ${a})`;
+}
+
+const createInterpolator = (range, output, extrapolate) => {
+  if (react_spring_shared_esm_is.fun(range)) {
+    return range;
+  }
+
+  if (react_spring_shared_esm_is.arr(range)) {
+    return createInterpolator({
+      range,
+      output: output,
+      extrapolate
+    });
+  }
+
+  if (react_spring_shared_esm_is.str(range.output[0])) {
+    return createStringInterpolator$1(range);
+  }
+
+  const config = range;
+  const outputRange = config.output;
+  const inputRange = config.range || [0, 1];
+  const extrapolateLeft = config.extrapolateLeft || config.extrapolate || 'extend';
+  const extrapolateRight = config.extrapolateRight || config.extrapolate || 'extend';
+
+  const easing = config.easing || (t => t);
+
+  return input => {
+    const range = findRange(input, inputRange);
+    return interpolate(input, inputRange[range], inputRange[range + 1], outputRange[range], outputRange[range + 1], easing, extrapolateLeft, extrapolateRight, config.map);
+  };
+};
+
+function interpolate(input, inputMin, inputMax, outputMin, outputMax, easing, extrapolateLeft, extrapolateRight, map) {
+  let result = map ? map(input) : input;
+
+  if (result < inputMin) {
+    if (extrapolateLeft === 'identity') return result;else if (extrapolateLeft === 'clamp') result = inputMin;
+  }
+
+  if (result > inputMax) {
+    if (extrapolateRight === 'identity') return result;else if (extrapolateRight === 'clamp') result = inputMax;
+  }
+
+  if (outputMin === outputMax) return outputMin;
+  if (inputMin === inputMax) return input <= inputMin ? outputMin : outputMax;
+  if (inputMin === -Infinity) result = -result;else if (inputMax === Infinity) result = result - inputMin;else result = (result - inputMin) / (inputMax - inputMin);
+  result = easing(result);
+  if (outputMin === -Infinity) result = -result;else if (outputMax === Infinity) result = result + outputMin;else result = result * (outputMax - outputMin) + outputMin;
+  return result;
+}
+
+function findRange(input, inputRange) {
+  for (var i = 1; i < inputRange.length - 1; ++i) if (inputRange[i] >= input) break;
+
+  return i - 1;
+}
+
+function _extends() {
+  _extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+  return _extends.apply(this, arguments);
+}
+
+const $get = Symbol.for('FluidValue.get');
+const $observers = Symbol.for('FluidValue.observers');
+
+const hasFluidValue = arg => Boolean(arg && arg[$get]);
+
+const getFluidValue = arg => arg && arg[$get] ? arg[$get]() : arg;
+
+const getFluidObservers = target => target[$observers] || null;
+
+function callFluidObserver(observer, event) {
+  if (observer.eventObserved) {
+    observer.eventObserved(event);
+  } else {
+    observer(event);
+  }
+}
+
+function callFluidObservers(target, event) {
+  let observers = target[$observers];
+
+  if (observers) {
+    observers.forEach(observer => {
+      callFluidObserver(observer, event);
+    });
+  }
+}
+
+class FluidValue {
+  constructor(get) {
+    this[$get] = void 0;
+    this[$observers] = void 0;
+
+    if (!get && !(get = this.get)) {
+      throw Error('Unknown getter');
+    }
+
+    setFluidGetter(this, get);
+  }
+
+}
+
+const setFluidGetter = (target, get) => setHidden(target, $get, get);
+
+function react_spring_shared_esm_addFluidObserver(target, observer) {
+  if (target[$get]) {
+    let observers = target[$observers];
+
+    if (!observers) {
+      setHidden(target, $observers, observers = new Set());
+    }
+
+    if (!observers.has(observer)) {
+      observers.add(observer);
+
+      if (target.observerAdded) {
+        target.observerAdded(observers.size, observer);
+      }
+    }
+  }
+
+  return observer;
+}
+
+function removeFluidObserver(target, observer) {
+  let observers = target[$observers];
+
+  if (observers && observers.has(observer)) {
+    const count = observers.size - 1;
+
+    if (count) {
+      observers.delete(observer);
+    } else {
+      target[$observers] = null;
+    }
+
+    if (target.observerRemoved) {
+      target.observerRemoved(count, observer);
+    }
+  }
+}
+
+const setHidden = (target, key, value) => Object.defineProperty(target, key, {
+  value,
+  writable: true,
+  configurable: true
+});
+
+const numberRegex = /[+\-]?(?:0|[1-9]\d*)(?:\.\d*)?(?:[eE][+\-]?\d+)?/g;
+const colorRegex = /(#(?:[0-9a-f]{2}){2,4}|(#[0-9a-f]{3})|(rgb|hsl)a?\((-?\d+%?[,\s]+){2,3}\s*[\d\.]+%?\))/gi;
+const unitRegex = new RegExp(`(${numberRegex.source})(%|[a-z]+)`, 'i');
+const rgbaRegex = /rgba\(([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+), ([0-9\.-]+)\)/gi;
+const cssVariableRegex = /var\((--[a-zA-Z0-9-_]+),? ?([a-zA-Z0-9 ()%#.,-]+)?\)/;
+
+const variableToRgba = input => {
+  const [token, fallback] = parseCSSVariable(input);
+
+  if (!token || isSSR()) {
+    return input;
+  }
+
+  const value = window.getComputedStyle(document.documentElement).getPropertyValue(token);
+
+  if (value) {
+    return value.trim();
+  } else if (fallback && fallback.startsWith('--')) {
+    const _value = window.getComputedStyle(document.documentElement).getPropertyValue(fallback);
+
+    if (_value) {
+      return _value;
+    } else {
+      return input;
+    }
+  } else if (fallback && cssVariableRegex.test(fallback)) {
+    return variableToRgba(fallback);
+  } else if (fallback) {
+    return fallback;
+  }
+
+  return input;
+};
+
+const parseCSSVariable = current => {
+  const match = cssVariableRegex.exec(current);
+  if (!match) return [,];
+  const [, token, fallback] = match;
+  return [token, fallback];
+};
+
+let namedColorRegex;
+
+const rgbaRound = (_, p1, p2, p3, p4) => `rgba(${Math.round(p1)}, ${Math.round(p2)}, ${Math.round(p3)}, ${p4})`;
+
+const createStringInterpolator = config => {
+  if (!namedColorRegex) namedColorRegex = colors$1 ? new RegExp(`(${Object.keys(colors$1).join('|')})(?!\\w)`, 'g') : /^\b$/;
+  const output = config.output.map(value => {
+    return getFluidValue(value).replace(cssVariableRegex, variableToRgba).replace(colorRegex, colorToRgba).replace(namedColorRegex, colorToRgba);
+  });
+  const keyframes = output.map(value => value.match(numberRegex).map(Number));
+  const outputRanges = keyframes[0].map((_, i) => keyframes.map(values => {
+    if (!(i in values)) {
+      throw Error('The arity of each "output" value must be equal');
+    }
+
+    return values[i];
+  }));
+  const interpolators = outputRanges.map(output => createInterpolator(_extends({}, config, {
+    output
+  })));
+  return input => {
+    var _output$find;
+
+    const missingUnit = !unitRegex.test(output[0]) && ((_output$find = output.find(value => unitRegex.test(value))) == null ? void 0 : _output$find.replace(numberRegex, ''));
+    let i = 0;
+    return output[0].replace(numberRegex, () => `${interpolators[i++](input)}${missingUnit || ''}`).replace(rgbaRegex, rgbaRound);
+  };
+};
+
+const prefix = 'react-spring: ';
+
+const once = fn => {
+  const func = fn;
+  let called = false;
+
+  if (typeof func != 'function') {
+    throw new TypeError(`${prefix}once requires a function parameter`);
+  }
+
+  return (...args) => {
+    if (!called) {
+      func(...args);
+      called = true;
+    }
+  };
+};
+
+const warnInterpolate = once(console.warn);
+function react_spring_shared_esm_deprecateInterpolate() {
+  warnInterpolate(`${prefix}The "interpolate" function is deprecated in v9 (use "to" instead)`);
+}
+const warnDirectCall = once(console.warn);
+function react_spring_shared_esm_deprecateDirectCall() {
+  warnDirectCall(`${prefix}Directly calling start instead of using the api object is deprecated in v9 (use ".start" instead), this will be removed in later 0.X.0 versions`);
+}
+
+function isAnimatedString(value) {
+  return react_spring_shared_esm_is.str(value) && (value[0] == '#' || /\d/.test(value) || !isSSR() && cssVariableRegex.test(value) || value in (colors$1 || {}));
+}
+
+const react_spring_shared_esm_useIsomorphicLayoutEffect = isSSR() ? external_React_.useEffect : external_React_.useLayoutEffect;
+
+const useIsMounted = () => {
+  const isMounted = (0,external_React_.useRef)(false);
+  react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
+    isMounted.current = true;
+    return () => {
+      isMounted.current = false;
+    };
+  }, []);
+  return isMounted;
+};
+
+function react_spring_shared_esm_useForceUpdate() {
+  const update = (0,external_React_.useState)()[1];
+  const isMounted = useIsMounted();
+  return () => {
+    if (isMounted.current) {
+      update(Math.random());
+    }
+  };
+}
+
+function useMemoOne(getResult, inputs) {
+  const [initial] = (0,external_React_.useState)(() => ({
+    inputs,
+    result: getResult()
+  }));
+  const committed = (0,external_React_.useRef)();
+  const prevCache = committed.current;
+  let cache = prevCache;
+
+  if (cache) {
+    const useCache = Boolean(inputs && cache.inputs && areInputsEqual(inputs, cache.inputs));
+
+    if (!useCache) {
+      cache = {
+        inputs,
+        result: getResult()
+      };
+    }
+  } else {
+    cache = initial;
+  }
+
+  (0,external_React_.useEffect)(() => {
+    committed.current = cache;
+
+    if (prevCache == initial) {
+      initial.inputs = initial.result = undefined;
+    }
+  }, [cache]);
+  return cache.result;
+}
+
+function areInputsEqual(next, prev) {
+  if (next.length !== prev.length) {
+    return false;
+  }
+
+  for (let i = 0; i < next.length; i++) {
+    if (next[i] !== prev[i]) {
+      return false;
+    }
+  }
+
+  return true;
+}
+
+const react_spring_shared_esm_useOnce = effect => (0,external_React_.useEffect)(effect, emptyDeps);
+const emptyDeps = [];
+
+function react_spring_shared_esm_usePrev(value) {
+  const prevRef = useRef();
+  useEffect(() => {
+    prevRef.current = value;
+  });
+  return prevRef.current;
+}
+
+const useReducedMotion = () => {
+  const [reducedMotion, setReducedMotion] = useState(null);
+  react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
+    const mql = window.matchMedia('(prefers-reduced-motion)');
+
+    const handleMediaChange = e => {
+      setReducedMotion(e.matches);
+      react_spring_shared_esm_assign({
+        skipAnimation: e.matches
+      });
+    };
+
+    handleMediaChange(mql);
+    mql.addEventListener('change', handleMediaChange);
+    return () => {
+      mql.removeEventListener('change', handleMediaChange);
+    };
+  }, []);
+  return reducedMotion;
+};
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/animated/dist/react-spring-animated.esm.js
+
+
+
+
+const $node = Symbol.for('Animated:node');
+const isAnimated = value => !!value && value[$node] === value;
+const getAnimated = owner => owner && owner[$node];
+const setAnimated = (owner, node) => defineHidden(owner, $node, node);
+const getPayload = owner => owner && owner[$node] && owner[$node].getPayload();
+class Animated {
+  constructor() {
+    this.payload = void 0;
+    setAnimated(this, this);
+  }
+
+  getPayload() {
+    return this.payload || [];
+  }
+
+}
+
+class AnimatedValue extends Animated {
+  constructor(_value) {
+    super();
+    this.done = true;
+    this.elapsedTime = void 0;
+    this.lastPosition = void 0;
+    this.lastVelocity = void 0;
+    this.v0 = void 0;
+    this.durationProgress = 0;
+    this._value = _value;
+
+    if (react_spring_shared_esm_is.num(this._value)) {
+      this.lastPosition = this._value;
+    }
+  }
+
+  static create(value) {
+    return new AnimatedValue(value);
+  }
+
+  getPayload() {
+    return [this];
+  }
+
+  getValue() {
+    return this._value;
+  }
+
+  setValue(value, step) {
+    if (react_spring_shared_esm_is.num(value)) {
+      this.lastPosition = value;
+
+      if (step) {
+        value = Math.round(value / step) * step;
+
+        if (this.done) {
+          this.lastPosition = value;
+        }
+      }
+    }
+
+    if (this._value === value) {
+      return false;
+    }
+
+    this._value = value;
+    return true;
+  }
+
+  reset() {
+    const {
+      done
+    } = this;
+    this.done = false;
+
+    if (react_spring_shared_esm_is.num(this._value)) {
+      this.elapsedTime = 0;
+      this.durationProgress = 0;
+      this.lastPosition = this._value;
+      if (done) this.lastVelocity = null;
+      this.v0 = null;
+    }
+  }
+
+}
+
+class AnimatedString extends AnimatedValue {
+  constructor(value) {
+    super(0);
+    this._string = null;
+    this._toString = void 0;
+    this._toString = createInterpolator({
+      output: [value, value]
+    });
+  }
+
+  static create(value) {
+    return new AnimatedString(value);
+  }
+
+  getValue() {
+    let value = this._string;
+    return value == null ? this._string = this._toString(this._value) : value;
+  }
+
+  setValue(value) {
+    if (react_spring_shared_esm_is.str(value)) {
+      if (value == this._string) {
+        return false;
+      }
+
+      this._string = value;
+      this._value = 1;
+    } else if (super.setValue(value)) {
+      this._string = null;
+    } else {
+      return false;
+    }
+
+    return true;
+  }
+
+  reset(goal) {
+    if (goal) {
+      this._toString = createInterpolator({
+        output: [this.getValue(), goal]
+      });
+    }
+
+    this._value = 0;
+    super.reset();
+  }
+
+}
+
+const TreeContext = {
+  dependencies: null
+};
+
+class AnimatedObject extends Animated {
+  constructor(source) {
+    super();
+    this.source = source;
+    this.setValue(source);
+  }
+
+  getValue(animated) {
+    const values = {};
+    react_spring_shared_esm_eachProp(this.source, (source, key) => {
+      if (isAnimated(source)) {
+        values[key] = source.getValue(animated);
+      } else if (hasFluidValue(source)) {
+        values[key] = getFluidValue(source);
+      } else if (!animated) {
+        values[key] = source;
+      }
+    });
+    return values;
+  }
+
+  setValue(source) {
+    this.source = source;
+    this.payload = this._makePayload(source);
+  }
+
+  reset() {
+    if (this.payload) {
+      react_spring_shared_esm_each(this.payload, node => node.reset());
+    }
+  }
+
+  _makePayload(source) {
+    if (source) {
+      const payload = new Set();
+      react_spring_shared_esm_eachProp(source, this._addToPayload, payload);
+      return Array.from(payload);
+    }
+  }
+
+  _addToPayload(source) {
+    if (TreeContext.dependencies && hasFluidValue(source)) {
+      TreeContext.dependencies.add(source);
+    }
+
+    const payload = getPayload(source);
+
+    if (payload) {
+      react_spring_shared_esm_each(payload, node => this.add(node));
+    }
+  }
+
+}
+
+class AnimatedArray extends AnimatedObject {
+  constructor(source) {
+    super(source);
+  }
+
+  static create(source) {
+    return new AnimatedArray(source);
+  }
+
+  getValue() {
+    return this.source.map(node => node.getValue());
+  }
+
+  setValue(source) {
+    const payload = this.getPayload();
+
+    if (source.length == payload.length) {
+      return payload.map((node, i) => node.setValue(source[i])).some(Boolean);
+    }
+
+    super.setValue(source.map(makeAnimated));
+    return true;
+  }
+
+}
+
+function makeAnimated(value) {
+  const nodeType = isAnimatedString(value) ? AnimatedString : AnimatedValue;
+  return nodeType.create(value);
+}
+
+function getAnimatedType(value) {
+  const parentNode = getAnimated(value);
+  return parentNode ? parentNode.constructor : react_spring_shared_esm_is.arr(value) ? AnimatedArray : isAnimatedString(value) ? AnimatedString : AnimatedValue;
+}
+
+function react_spring_animated_esm_extends() {
+  react_spring_animated_esm_extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+  return react_spring_animated_esm_extends.apply(this, arguments);
+}
+
+const withAnimated = (Component, host) => {
+  const hasInstance = !react_spring_shared_esm_is.fun(Component) || Component.prototype && Component.prototype.isReactComponent;
+  return (0,external_React_.forwardRef)((givenProps, givenRef) => {
+    const instanceRef = (0,external_React_.useRef)(null);
+    const ref = hasInstance && (0,external_React_.useCallback)(value => {
+      instanceRef.current = updateRef(givenRef, value);
+    }, [givenRef]);
+    const [props, deps] = getAnimatedState(givenProps, host);
+    const forceUpdate = react_spring_shared_esm_useForceUpdate();
+
+    const callback = () => {
+      const instance = instanceRef.current;
+
+      if (hasInstance && !instance) {
+        return;
+      }
+
+      const didUpdate = instance ? host.applyAnimatedValues(instance, props.getValue(true)) : false;
+
+      if (didUpdate === false) {
+        forceUpdate();
+      }
+    };
+
+    const observer = new PropsObserver(callback, deps);
+    const observerRef = (0,external_React_.useRef)();
+    react_spring_shared_esm_useIsomorphicLayoutEffect(() => {
+      observerRef.current = observer;
+      react_spring_shared_esm_each(deps, dep => react_spring_shared_esm_addFluidObserver(dep, observer));
+      return () => {
+        if (observerRef.current) {
+          react_spring_shared_esm_each(observerRef.current.deps, dep => removeFluidObserver(dep, observerRef.current));
+          raf.cancel(observerRef.current.update);
+        }
+      };
+    });
+    (0,external_React_.useEffect)(callback, []);
+    react_spring_shared_esm_useOnce(() => () => {
+      const observer = observerRef.current;
+      react_spring_shared_esm_each(observer.deps, dep => removeFluidObserver(dep, observer));
+    });
+    const usedProps = host.getComponentProps(props.getValue());
+    return external_React_.createElement(Component, react_spring_animated_esm_extends({}, usedProps, {
+      ref: ref
+    }));
+  });
+};
+
+class PropsObserver {
+  constructor(update, deps) {
+    this.update = update;
+    this.deps = deps;
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      raf.write(this.update);
+    }
+  }
+
+}
+
+function getAnimatedState(props, host) {
+  const dependencies = new Set();
+  TreeContext.dependencies = dependencies;
+  if (props.style) props = react_spring_animated_esm_extends({}, props, {
+    style: host.createAnimatedStyle(props.style)
+  });
+  props = new AnimatedObject(props);
+  TreeContext.dependencies = null;
+  return [props, dependencies];
+}
+
+function updateRef(ref, value) {
+  if (ref) {
+    if (react_spring_shared_esm_is.fun(ref)) ref(value);else ref.current = value;
+  }
+
+  return value;
+}
+
+const cacheKey = Symbol.for('AnimatedComponent');
+const createHost = (components, {
+  applyAnimatedValues: _applyAnimatedValues = () => false,
+  createAnimatedStyle: _createAnimatedStyle = style => new AnimatedObject(style),
+  getComponentProps: _getComponentProps = props => props
+} = {}) => {
+  const hostConfig = {
+    applyAnimatedValues: _applyAnimatedValues,
+    createAnimatedStyle: _createAnimatedStyle,
+    getComponentProps: _getComponentProps
+  };
+
+  const animated = Component => {
+    const displayName = getDisplayName(Component) || 'Anonymous';
+
+    if (react_spring_shared_esm_is.str(Component)) {
+      Component = animated[Component] || (animated[Component] = withAnimated(Component, hostConfig));
+    } else {
+      Component = Component[cacheKey] || (Component[cacheKey] = withAnimated(Component, hostConfig));
+    }
+
+    Component.displayName = `Animated(${displayName})`;
+    return Component;
+  };
+
+  react_spring_shared_esm_eachProp(components, (Component, key) => {
+    if (react_spring_shared_esm_is.arr(components)) {
+      key = getDisplayName(Component);
+    }
+
+    animated[key] = animated(Component);
+  });
+  return {
+    animated
+  };
+};
+
+const getDisplayName = arg => react_spring_shared_esm_is.str(arg) ? arg : arg && react_spring_shared_esm_is.str(arg.displayName) ? arg.displayName : react_spring_shared_esm_is.fun(arg) && arg.name || null;
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/core/dist/react-spring-core.esm.js
+
+
+
+
+
+
+
+
+function react_spring_core_esm_extends() {
+  react_spring_core_esm_extends = Object.assign ? Object.assign.bind() : function (target) {
+    for (var i = 1; i < arguments.length; i++) {
+      var source = arguments[i];
+
+      for (var key in source) {
+        if (Object.prototype.hasOwnProperty.call(source, key)) {
+          target[key] = source[key];
+        }
+      }
+    }
+
+    return target;
+  };
+  return react_spring_core_esm_extends.apply(this, arguments);
+}
+
+function callProp(value, ...args) {
+  return react_spring_shared_esm_is.fun(value) ? value(...args) : value;
+}
+const matchProp = (value, key) => value === true || !!(key && value && (react_spring_shared_esm_is.fun(value) ? value(key) : react_spring_shared_esm_toArray(value).includes(key)));
+const resolveProp = (prop, key) => react_spring_shared_esm_is.obj(prop) ? key && prop[key] : prop;
+const getDefaultProp = (props, key) => props.default === true ? props[key] : props.default ? props.default[key] : undefined;
+
+const noopTransform = value => value;
+
+const getDefaultProps = (props, transform = noopTransform) => {
+  let keys = DEFAULT_PROPS;
+
+  if (props.default && props.default !== true) {
+    props = props.default;
+    keys = Object.keys(props);
+  }
+
+  const defaults = {};
+
+  for (const key of keys) {
+    const value = transform(props[key], key);
+
+    if (!react_spring_shared_esm_is.und(value)) {
+      defaults[key] = value;
+    }
+  }
+
+  return defaults;
+};
+const DEFAULT_PROPS = ['config', 'onProps', 'onStart', 'onChange', 'onPause', 'onResume', 'onRest'];
+const RESERVED_PROPS = {
+  config: 1,
+  from: 1,
+  to: 1,
+  ref: 1,
+  loop: 1,
+  reset: 1,
+  pause: 1,
+  cancel: 1,
+  reverse: 1,
+  immediate: 1,
+  default: 1,
+  delay: 1,
+  onProps: 1,
+  onStart: 1,
+  onChange: 1,
+  onPause: 1,
+  onResume: 1,
+  onRest: 1,
+  onResolve: 1,
+  items: 1,
+  trail: 1,
+  sort: 1,
+  expires: 1,
+  initial: 1,
+  enter: 1,
+  update: 1,
+  leave: 1,
+  children: 1,
+  onDestroyed: 1,
+  keys: 1,
+  callId: 1,
+  parentId: 1
+};
+
+function getForwardProps(props) {
+  const forward = {};
+  let count = 0;
+  react_spring_shared_esm_eachProp(props, (value, prop) => {
+    if (!RESERVED_PROPS[prop]) {
+      forward[prop] = value;
+      count++;
+    }
+  });
+
+  if (count) {
+    return forward;
+  }
+}
+
+function inferTo(props) {
+  const to = getForwardProps(props);
+
+  if (to) {
+    const out = {
+      to
+    };
+    react_spring_shared_esm_eachProp(props, (val, key) => key in to || (out[key] = val));
+    return out;
+  }
+
+  return react_spring_core_esm_extends({}, props);
+}
+function computeGoal(value) {
+  value = getFluidValue(value);
+  return react_spring_shared_esm_is.arr(value) ? value.map(computeGoal) : isAnimatedString(value) ? globals.createStringInterpolator({
+    range: [0, 1],
+    output: [value, value]
+  })(1) : value;
+}
+function hasProps(props) {
+  for (const _ in props) return true;
+
+  return false;
+}
+function isAsyncTo(to) {
+  return react_spring_shared_esm_is.fun(to) || react_spring_shared_esm_is.arr(to) && react_spring_shared_esm_is.obj(to[0]);
+}
+function detachRefs(ctrl, ref) {
+  var _ctrl$ref;
+
+  (_ctrl$ref = ctrl.ref) == null ? void 0 : _ctrl$ref.delete(ctrl);
+  ref == null ? void 0 : ref.delete(ctrl);
+}
+function replaceRef(ctrl, ref) {
+  if (ref && ctrl.ref !== ref) {
+    var _ctrl$ref2;
+
+    (_ctrl$ref2 = ctrl.ref) == null ? void 0 : _ctrl$ref2.delete(ctrl);
+    ref.add(ctrl);
+    ctrl.ref = ref;
+  }
+}
+
+function useChain(refs, timeSteps, timeFrame = 1000) {
+  useIsomorphicLayoutEffect(() => {
+    if (timeSteps) {
+      let prevDelay = 0;
+      each(refs, (ref, i) => {
+        const controllers = ref.current;
+
+        if (controllers.length) {
+          let delay = timeFrame * timeSteps[i];
+          if (isNaN(delay)) delay = prevDelay;else prevDelay = delay;
+          each(controllers, ctrl => {
+            each(ctrl.queue, props => {
+              const memoizedDelayProp = props.delay;
+
+              props.delay = key => delay + callProp(memoizedDelayProp || 0, key);
+            });
+          });
+          ref.start();
+        }
+      });
+    } else {
+      let p = Promise.resolve();
+      each(refs, ref => {
+        const controllers = ref.current;
+
+        if (controllers.length) {
+          const queues = controllers.map(ctrl => {
+            const q = ctrl.queue;
+            ctrl.queue = [];
+            return q;
+          });
+          p = p.then(() => {
+            each(controllers, (ctrl, i) => each(queues[i] || [], update => ctrl.queue.push(update)));
+            return Promise.all(ref.start());
+          });
+        }
+      });
+    }
+  });
+}
+
+const react_spring_core_esm_config = {
+  default: {
+    tension: 170,
+    friction: 26
+  },
+  gentle: {
+    tension: 120,
+    friction: 14
+  },
+  wobbly: {
+    tension: 180,
+    friction: 12
+  },
+  stiff: {
+    tension: 210,
+    friction: 20
+  },
+  slow: {
+    tension: 280,
+    friction: 60
+  },
+  molasses: {
+    tension: 280,
+    friction: 120
+  }
+};
+const c1 = 1.70158;
+const c2 = c1 * 1.525;
+const c3 = c1 + 1;
+const c4 = 2 * Math.PI / 3;
+const c5 = 2 * Math.PI / 4.5;
+
+const bounceOut = x => {
+  const n1 = 7.5625;
+  const d1 = 2.75;
+
+  if (x < 1 / d1) {
+    return n1 * x * x;
+  } else if (x < 2 / d1) {
+    return n1 * (x -= 1.5 / d1) * x + 0.75;
+  } else if (x < 2.5 / d1) {
+    return n1 * (x -= 2.25 / d1) * x + 0.9375;
+  } else {
+    return n1 * (x -= 2.625 / d1) * x + 0.984375;
+  }
+};
+
+const easings = {
+  linear: x => x,
+  easeInQuad: x => x * x,
+  easeOutQuad: x => 1 - (1 - x) * (1 - x),
+  easeInOutQuad: x => x < 0.5 ? 2 * x * x : 1 - Math.pow(-2 * x + 2, 2) / 2,
+  easeInCubic: x => x * x * x,
+  easeOutCubic: x => 1 - Math.pow(1 - x, 3),
+  easeInOutCubic: x => x < 0.5 ? 4 * x * x * x : 1 - Math.pow(-2 * x + 2, 3) / 2,
+  easeInQuart: x => x * x * x * x,
+  easeOutQuart: x => 1 - Math.pow(1 - x, 4),
+  easeInOutQuart: x => x < 0.5 ? 8 * x * x * x * x : 1 - Math.pow(-2 * x + 2, 4) / 2,
+  easeInQuint: x => x * x * x * x * x,
+  easeOutQuint: x => 1 - Math.pow(1 - x, 5),
+  easeInOutQuint: x => x < 0.5 ? 16 * x * x * x * x * x : 1 - Math.pow(-2 * x + 2, 5) / 2,
+  easeInSine: x => 1 - Math.cos(x * Math.PI / 2),
+  easeOutSine: x => Math.sin(x * Math.PI / 2),
+  easeInOutSine: x => -(Math.cos(Math.PI * x) - 1) / 2,
+  easeInExpo: x => x === 0 ? 0 : Math.pow(2, 10 * x - 10),
+  easeOutExpo: x => x === 1 ? 1 : 1 - Math.pow(2, -10 * x),
+  easeInOutExpo: x => x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? Math.pow(2, 20 * x - 10) / 2 : (2 - Math.pow(2, -20 * x + 10)) / 2,
+  easeInCirc: x => 1 - Math.sqrt(1 - Math.pow(x, 2)),
+  easeOutCirc: x => Math.sqrt(1 - Math.pow(x - 1, 2)),
+  easeInOutCirc: x => x < 0.5 ? (1 - Math.sqrt(1 - Math.pow(2 * x, 2))) / 2 : (Math.sqrt(1 - Math.pow(-2 * x + 2, 2)) + 1) / 2,
+  easeInBack: x => c3 * x * x * x - c1 * x * x,
+  easeOutBack: x => 1 + c3 * Math.pow(x - 1, 3) + c1 * Math.pow(x - 1, 2),
+  easeInOutBack: x => x < 0.5 ? Math.pow(2 * x, 2) * ((c2 + 1) * 2 * x - c2) / 2 : (Math.pow(2 * x - 2, 2) * ((c2 + 1) * (x * 2 - 2) + c2) + 2) / 2,
+  easeInElastic: x => x === 0 ? 0 : x === 1 ? 1 : -Math.pow(2, 10 * x - 10) * Math.sin((x * 10 - 10.75) * c4),
+  easeOutElastic: x => x === 0 ? 0 : x === 1 ? 1 : Math.pow(2, -10 * x) * Math.sin((x * 10 - 0.75) * c4) + 1,
+  easeInOutElastic: x => x === 0 ? 0 : x === 1 ? 1 : x < 0.5 ? -(Math.pow(2, 20 * x - 10) * Math.sin((20 * x - 11.125) * c5)) / 2 : Math.pow(2, -20 * x + 10) * Math.sin((20 * x - 11.125) * c5) / 2 + 1,
+  easeInBounce: x => 1 - bounceOut(1 - x),
+  easeOutBounce: bounceOut,
+  easeInOutBounce: x => x < 0.5 ? (1 - bounceOut(1 - 2 * x)) / 2 : (1 + bounceOut(2 * x - 1)) / 2
+};
+
+const defaults = react_spring_core_esm_extends({}, react_spring_core_esm_config.default, {
+  mass: 1,
+  damping: 1,
+  easing: easings.linear,
+  clamp: false
+});
+
+class AnimationConfig {
+  constructor() {
+    this.tension = void 0;
+    this.friction = void 0;
+    this.frequency = void 0;
+    this.damping = void 0;
+    this.mass = void 0;
+    this.velocity = 0;
+    this.restVelocity = void 0;
+    this.precision = void 0;
+    this.progress = void 0;
+    this.duration = void 0;
+    this.easing = void 0;
+    this.clamp = void 0;
+    this.bounce = void 0;
+    this.decay = void 0;
+    this.round = void 0;
+    Object.assign(this, defaults);
+  }
+
+}
+function mergeConfig(config, newConfig, defaultConfig) {
+  if (defaultConfig) {
+    defaultConfig = react_spring_core_esm_extends({}, defaultConfig);
+    sanitizeConfig(defaultConfig, newConfig);
+    newConfig = react_spring_core_esm_extends({}, defaultConfig, newConfig);
+  }
+
+  sanitizeConfig(config, newConfig);
+  Object.assign(config, newConfig);
+
+  for (const key in defaults) {
+    if (config[key] == null) {
+      config[key] = defaults[key];
+    }
+  }
+
+  let {
+    mass,
+    frequency,
+    damping
+  } = config;
+
+  if (!react_spring_shared_esm_is.und(frequency)) {
+    if (frequency < 0.01) frequency = 0.01;
+    if (damping < 0) damping = 0;
+    config.tension = Math.pow(2 * Math.PI / frequency, 2) * mass;
+    config.friction = 4 * Math.PI * damping * mass / frequency;
+  }
+
+  return config;
+}
+
+function sanitizeConfig(config, props) {
+  if (!react_spring_shared_esm_is.und(props.decay)) {
+    config.duration = undefined;
+  } else {
+    const isTensionConfig = !react_spring_shared_esm_is.und(props.tension) || !react_spring_shared_esm_is.und(props.friction);
+
+    if (isTensionConfig || !react_spring_shared_esm_is.und(props.frequency) || !react_spring_shared_esm_is.und(props.damping) || !react_spring_shared_esm_is.und(props.mass)) {
+      config.duration = undefined;
+      config.decay = undefined;
+    }
+
+    if (isTensionConfig) {
+      config.frequency = undefined;
+    }
+  }
+}
+
+const emptyArray = [];
+class Animation {
+  constructor() {
+    this.changed = false;
+    this.values = emptyArray;
+    this.toValues = null;
+    this.fromValues = emptyArray;
+    this.to = void 0;
+    this.from = void 0;
+    this.config = new AnimationConfig();
+    this.immediate = false;
+  }
+
+}
+
+function scheduleProps(callId, {
+  key,
+  props,
+  defaultProps,
+  state,
+  actions
+}) {
+  return new Promise((resolve, reject) => {
+    var _props$cancel;
+
+    let delay;
+    let timeout;
+    let cancel = matchProp((_props$cancel = props.cancel) != null ? _props$cancel : defaultProps == null ? void 0 : defaultProps.cancel, key);
+
+    if (cancel) {
+      onStart();
+    } else {
+      if (!react_spring_shared_esm_is.und(props.pause)) {
+        state.paused = matchProp(props.pause, key);
+      }
+
+      let pause = defaultProps == null ? void 0 : defaultProps.pause;
+
+      if (pause !== true) {
+        pause = state.paused || matchProp(pause, key);
+      }
+
+      delay = callProp(props.delay || 0, key);
+
+      if (pause) {
+        state.resumeQueue.add(onResume);
+        actions.pause();
+      } else {
+        actions.resume();
+        onResume();
+      }
+    }
+
+    function onPause() {
+      state.resumeQueue.add(onResume);
+      state.timeouts.delete(timeout);
+      timeout.cancel();
+      delay = timeout.time - raf.now();
+    }
+
+    function onResume() {
+      if (delay > 0 && !globals.skipAnimation) {
+        state.delayed = true;
+        timeout = raf.setTimeout(onStart, delay);
+        state.pauseQueue.add(onPause);
+        state.timeouts.add(timeout);
+      } else {
+        onStart();
+      }
+    }
+
+    function onStart() {
+      if (state.delayed) {
+        state.delayed = false;
+      }
+
+      state.pauseQueue.delete(onPause);
+      state.timeouts.delete(timeout);
+
+      if (callId <= (state.cancelId || 0)) {
+        cancel = true;
+      }
+
+      try {
+        actions.start(react_spring_core_esm_extends({}, props, {
+          callId,
+          cancel
+        }), resolve);
+      } catch (err) {
+        reject(err);
+      }
+    }
+  });
+}
+
+const getCombinedResult = (target, results) => results.length == 1 ? results[0] : results.some(result => result.cancelled) ? getCancelledResult(target.get()) : results.every(result => result.noop) ? getNoopResult(target.get()) : getFinishedResult(target.get(), results.every(result => result.finished));
+const getNoopResult = value => ({
+  value,
+  noop: true,
+  finished: true,
+  cancelled: false
+});
+const getFinishedResult = (value, finished, cancelled = false) => ({
+  value,
+  finished,
+  cancelled
+});
+const getCancelledResult = value => ({
+  value,
+  cancelled: true,
+  finished: false
+});
+
+function runAsync(to, props, state, target) {
+  const {
+    callId,
+    parentId,
+    onRest
+  } = props;
+  const {
+    asyncTo: prevTo,
+    promise: prevPromise
+  } = state;
+
+  if (!parentId && to === prevTo && !props.reset) {
+    return prevPromise;
+  }
+
+  return state.promise = (async () => {
+    state.asyncId = callId;
+    state.asyncTo = to;
+    const defaultProps = getDefaultProps(props, (value, key) => key === 'onRest' ? undefined : value);
+    let preventBail;
+    let bail;
+    const bailPromise = new Promise((resolve, reject) => (preventBail = resolve, bail = reject));
+
+    const bailIfEnded = bailSignal => {
+      const bailResult = callId <= (state.cancelId || 0) && getCancelledResult(target) || callId !== state.asyncId && getFinishedResult(target, false);
+
+      if (bailResult) {
+        bailSignal.result = bailResult;
+        bail(bailSignal);
+        throw bailSignal;
+      }
+    };
+
+    const animate = (arg1, arg2) => {
+      const bailSignal = new BailSignal();
+      const skipAnimationSignal = new SkipAniamtionSignal();
+      return (async () => {
+        if (globals.skipAnimation) {
+          stopAsync(state);
+          skipAnimationSignal.result = getFinishedResult(target, false);
+          bail(skipAnimationSignal);
+          throw skipAnimationSignal;
+        }
+
+        bailIfEnded(bailSignal);
+        const props = react_spring_shared_esm_is.obj(arg1) ? react_spring_core_esm_extends({}, arg1) : react_spring_core_esm_extends({}, arg2, {
+          to: arg1
+        });
+        props.parentId = callId;
+        react_spring_shared_esm_eachProp(defaultProps, (value, key) => {
+          if (react_spring_shared_esm_is.und(props[key])) {
+            props[key] = value;
+          }
+        });
+        const result = await target.start(props);
+        bailIfEnded(bailSignal);
+
+        if (state.paused) {
+          await new Promise(resume => {
+            state.resumeQueue.add(resume);
+          });
+        }
+
+        return result;
+      })();
+    };
+
+    let result;
+
+    if (globals.skipAnimation) {
+      stopAsync(state);
+      return getFinishedResult(target, false);
+    }
+
+    try {
+      let animating;
+
+      if (react_spring_shared_esm_is.arr(to)) {
+        animating = (async queue => {
+          for (const props of queue) {
+            await animate(props);
+          }
+        })(to);
+      } else {
+        animating = Promise.resolve(to(animate, target.stop.bind(target)));
+      }
+
+      await Promise.all([animating.then(preventBail), bailPromise]);
+      result = getFinishedResult(target.get(), true, false);
+    } catch (err) {
+      if (err instanceof BailSignal) {
+        result = err.result;
+      } else if (err instanceof SkipAniamtionSignal) {
+        result = err.result;
+      } else {
+        throw err;
+      }
+    } finally {
+      if (callId == state.asyncId) {
+        state.asyncId = parentId;
+        state.asyncTo = parentId ? prevTo : undefined;
+        state.promise = parentId ? prevPromise : undefined;
+      }
+    }
+
+    if (react_spring_shared_esm_is.fun(onRest)) {
+      raf.batchedUpdates(() => {
+        onRest(result, target, target.item);
+      });
+    }
+
+    return result;
+  })();
+}
+function stopAsync(state, cancelId) {
+  flush(state.timeouts, t => t.cancel());
+  state.pauseQueue.clear();
+  state.resumeQueue.clear();
+  state.asyncId = state.asyncTo = state.promise = undefined;
+  if (cancelId) state.cancelId = cancelId;
+}
+class BailSignal extends Error {
+  constructor() {
+    super('An async animation has been interrupted. You see this error because you ' + 'forgot to use `await` or `.catch(...)` on its returned promise.');
+    this.result = void 0;
+  }
+
+}
+class SkipAniamtionSignal extends Error {
+  constructor() {
+    super('SkipAnimationSignal');
+    this.result = void 0;
+  }
+
+}
+
+const isFrameValue = value => value instanceof FrameValue;
+let nextId$1 = 1;
+class FrameValue extends FluidValue {
+  constructor(...args) {
+    super(...args);
+    this.id = nextId$1++;
+    this.key = void 0;
+    this._priority = 0;
+  }
+
+  get priority() {
+    return this._priority;
+  }
+
+  set priority(priority) {
+    if (this._priority != priority) {
+      this._priority = priority;
+
+      this._onPriorityChange(priority);
+    }
+  }
+
+  get() {
+    const node = getAnimated(this);
+    return node && node.getValue();
+  }
+
+  to(...args) {
+    return globals.to(this, args);
+  }
+
+  interpolate(...args) {
+    react_spring_shared_esm_deprecateInterpolate();
+    return globals.to(this, args);
+  }
+
+  toJSON() {
+    return this.get();
+  }
+
+  observerAdded(count) {
+    if (count == 1) this._attach();
+  }
+
+  observerRemoved(count) {
+    if (count == 0) this._detach();
+  }
+
+  _attach() {}
+
+  _detach() {}
+
+  _onChange(value, idle = false) {
+    callFluidObservers(this, {
+      type: 'change',
+      parent: this,
+      value,
+      idle
+    });
+  }
+
+  _onPriorityChange(priority) {
+    if (!this.idle) {
+      frameLoop.sort(this);
+    }
+
+    callFluidObservers(this, {
+      type: 'priority',
+      parent: this,
+      priority
+    });
+  }
+
+}
+
+const $P = Symbol.for('SpringPhase');
+const HAS_ANIMATED = 1;
+const IS_ANIMATING = 2;
+const IS_PAUSED = 4;
+const hasAnimated = target => (target[$P] & HAS_ANIMATED) > 0;
+const isAnimating = target => (target[$P] & IS_ANIMATING) > 0;
+const isPaused = target => (target[$P] & IS_PAUSED) > 0;
+const setActiveBit = (target, active) => active ? target[$P] |= IS_ANIMATING | HAS_ANIMATED : target[$P] &= ~IS_ANIMATING;
+const setPausedBit = (target, paused) => paused ? target[$P] |= IS_PAUSED : target[$P] &= ~IS_PAUSED;
+
+class SpringValue extends FrameValue {
+  constructor(arg1, arg2) {
+    super();
+    this.key = void 0;
+    this.animation = new Animation();
+    this.queue = void 0;
+    this.defaultProps = {};
+    this._state = {
+      paused: false,
+      delayed: false,
+      pauseQueue: new Set(),
+      resumeQueue: new Set(),
+      timeouts: new Set()
+    };
+    this._pendingCalls = new Set();
+    this._lastCallId = 0;
+    this._lastToId = 0;
+    this._memoizedDuration = 0;
+
+    if (!react_spring_shared_esm_is.und(arg1) || !react_spring_shared_esm_is.und(arg2)) {
+      const props = react_spring_shared_esm_is.obj(arg1) ? react_spring_core_esm_extends({}, arg1) : react_spring_core_esm_extends({}, arg2, {
+        from: arg1
+      });
+
+      if (react_spring_shared_esm_is.und(props.default)) {
+        props.default = true;
+      }
+
+      this.start(props);
+    }
+  }
+
+  get idle() {
+    return !(isAnimating(this) || this._state.asyncTo) || isPaused(this);
+  }
+
+  get goal() {
+    return getFluidValue(this.animation.to);
+  }
+
+  get velocity() {
+    const node = getAnimated(this);
+    return node instanceof AnimatedValue ? node.lastVelocity || 0 : node.getPayload().map(node => node.lastVelocity || 0);
+  }
+
+  get hasAnimated() {
+    return hasAnimated(this);
+  }
+
+  get isAnimating() {
+    return isAnimating(this);
+  }
+
+  get isPaused() {
+    return isPaused(this);
+  }
+
+  get isDelayed() {
+    return this._state.delayed;
+  }
+
+  advance(dt) {
+    let idle = true;
+    let changed = false;
+    const anim = this.animation;
+    let {
+      config,
+      toValues
+    } = anim;
+    const payload = getPayload(anim.to);
+
+    if (!payload && hasFluidValue(anim.to)) {
+      toValues = react_spring_shared_esm_toArray(getFluidValue(anim.to));
+    }
+
+    anim.values.forEach((node, i) => {
+      if (node.done) return;
+      const to = node.constructor == AnimatedString ? 1 : payload ? payload[i].lastPosition : toValues[i];
+      let finished = anim.immediate;
+      let position = to;
+
+      if (!finished) {
+        position = node.lastPosition;
+
+        if (config.tension <= 0) {
+          node.done = true;
+          return;
+        }
+
+        let elapsed = node.elapsedTime += dt;
+        const from = anim.fromValues[i];
+        const v0 = node.v0 != null ? node.v0 : node.v0 = react_spring_shared_esm_is.arr(config.velocity) ? config.velocity[i] : config.velocity;
+        let velocity;
+        const precision = config.precision || (from == to ? 0.005 : Math.min(1, Math.abs(to - from) * 0.001));
+
+        if (!react_spring_shared_esm_is.und(config.duration)) {
+          let p = 1;
+
+          if (config.duration > 0) {
+            if (this._memoizedDuration !== config.duration) {
+              this._memoizedDuration = config.duration;
+
+              if (node.durationProgress > 0) {
+                node.elapsedTime = config.duration * node.durationProgress;
+                elapsed = node.elapsedTime += dt;
+              }
+            }
+
+            p = (config.progress || 0) + elapsed / this._memoizedDuration;
+            p = p > 1 ? 1 : p < 0 ? 0 : p;
+            node.durationProgress = p;
+          }
+
+          position = from + config.easing(p) * (to - from);
+          velocity = (position - node.lastPosition) / dt;
+          finished = p == 1;
+        } else if (config.decay) {
+          const decay = config.decay === true ? 0.998 : config.decay;
+          const e = Math.exp(-(1 - decay) * elapsed);
+          position = from + v0 / (1 - decay) * (1 - e);
+          finished = Math.abs(node.lastPosition - position) <= precision;
+          velocity = v0 * e;
+        } else {
+          velocity = node.lastVelocity == null ? v0 : node.lastVelocity;
+          const restVelocity = config.restVelocity || precision / 10;
+          const bounceFactor = config.clamp ? 0 : config.bounce;
+          const canBounce = !react_spring_shared_esm_is.und(bounceFactor);
+          const isGrowing = from == to ? node.v0 > 0 : from < to;
+          let isMoving;
+          let isBouncing = false;
+          const step = 1;
+          const numSteps = Math.ceil(dt / step);
+
+          for (let n = 0; n < numSteps; ++n) {
+            isMoving = Math.abs(velocity) > restVelocity;
+
+            if (!isMoving) {
+              finished = Math.abs(to - position) <= precision;
+
+              if (finished) {
+                break;
+              }
+            }
+
+            if (canBounce) {
+              isBouncing = position == to || position > to == isGrowing;
+
+              if (isBouncing) {
+                velocity = -velocity * bounceFactor;
+                position = to;
+              }
+            }
+
+            const springForce = -config.tension * 0.000001 * (position - to);
+            const dampingForce = -config.friction * 0.001 * velocity;
+            const acceleration = (springForce + dampingForce) / config.mass;
+            velocity = velocity + acceleration * step;
+            position = position + velocity * step;
+          }
+        }
+
+        node.lastVelocity = velocity;
+
+        if (Number.isNaN(position)) {
+          console.warn(`Got NaN while animating:`, this);
+          finished = true;
+        }
+      }
+
+      if (payload && !payload[i].done) {
+        finished = false;
+      }
+
+      if (finished) {
+        node.done = true;
+      } else {
+        idle = false;
+      }
+
+      if (node.setValue(position, config.round)) {
+        changed = true;
+      }
+    });
+    const node = getAnimated(this);
+    const currVal = node.getValue();
+
+    if (idle) {
+      const finalVal = getFluidValue(anim.to);
+
+      if ((currVal !== finalVal || changed) && !config.decay) {
+        node.setValue(finalVal);
+
+        this._onChange(finalVal);
+      } else if (changed && config.decay) {
+        this._onChange(currVal);
+      }
+
+      this._stop();
+    } else if (changed) {
+      this._onChange(currVal);
+    }
+  }
+
+  set(value) {
+    raf.batchedUpdates(() => {
+      this._stop();
+
+      this._focus(value);
+
+      this._set(value);
+    });
+    return this;
+  }
+
+  pause() {
+    this._update({
+      pause: true
+    });
+  }
+
+  resume() {
+    this._update({
+      pause: false
+    });
+  }
+
+  finish() {
+    if (isAnimating(this)) {
+      const {
+        to,
+        config
+      } = this.animation;
+      raf.batchedUpdates(() => {
+        this._onStart();
+
+        if (!config.decay) {
+          this._set(to, false);
+        }
+
+        this._stop();
+      });
+    }
+
+    return this;
+  }
+
+  update(props) {
+    const queue = this.queue || (this.queue = []);
+    queue.push(props);
+    return this;
+  }
+
+  start(to, arg2) {
+    let queue;
+
+    if (!react_spring_shared_esm_is.und(to)) {
+      queue = [react_spring_shared_esm_is.obj(to) ? to : react_spring_core_esm_extends({}, arg2, {
+        to
+      })];
+    } else {
+      queue = this.queue || [];
+      this.queue = [];
+    }
+
+    return Promise.all(queue.map(props => {
+      const up = this._update(props);
+
+      return up;
+    })).then(results => getCombinedResult(this, results));
+  }
+
+  stop(cancel) {
+    const {
+      to
+    } = this.animation;
+
+    this._focus(this.get());
+
+    stopAsync(this._state, cancel && this._lastCallId);
+    raf.batchedUpdates(() => this._stop(to, cancel));
+    return this;
+  }
+
+  reset() {
+    this._update({
+      reset: true
+    });
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      this._start();
+    } else if (event.type == 'priority') {
+      this.priority = event.priority + 1;
+    }
+  }
+
+  _prepareNode(props) {
+    const key = this.key || '';
+    let {
+      to,
+      from
+    } = props;
+    to = react_spring_shared_esm_is.obj(to) ? to[key] : to;
+
+    if (to == null || isAsyncTo(to)) {
+      to = undefined;
+    }
+
+    from = react_spring_shared_esm_is.obj(from) ? from[key] : from;
+
+    if (from == null) {
+      from = undefined;
+    }
+
+    const range = {
+      to,
+      from
+    };
+
+    if (!hasAnimated(this)) {
+      if (props.reverse) [to, from] = [from, to];
+      from = getFluidValue(from);
+
+      if (!react_spring_shared_esm_is.und(from)) {
+        this._set(from);
+      } else if (!getAnimated(this)) {
+        this._set(to);
+      }
+    }
+
+    return range;
+  }
+
+  _update(_ref, isLoop) {
+    let props = react_spring_core_esm_extends({}, _ref);
+
+    const {
+      key,
+      defaultProps
+    } = this;
+    if (props.default) Object.assign(defaultProps, getDefaultProps(props, (value, prop) => /^on/.test(prop) ? resolveProp(value, key) : value));
+    mergeActiveFn(this, props, 'onProps');
+    sendEvent(this, 'onProps', props, this);
+
+    const range = this._prepareNode(props);
+
+    if (Object.isFrozen(this)) {
+      throw Error('Cannot animate a `SpringValue` object that is frozen. ' + 'Did you forget to pass your component to `animated(...)` before animating its props?');
+    }
+
+    const state = this._state;
+    return scheduleProps(++this._lastCallId, {
+      key,
+      props,
+      defaultProps,
+      state,
+      actions: {
+        pause: () => {
+          if (!isPaused(this)) {
+            setPausedBit(this, true);
+            flushCalls(state.pauseQueue);
+            sendEvent(this, 'onPause', getFinishedResult(this, checkFinished(this, this.animation.to)), this);
+          }
+        },
+        resume: () => {
+          if (isPaused(this)) {
+            setPausedBit(this, false);
+
+            if (isAnimating(this)) {
+              this._resume();
+            }
+
+            flushCalls(state.resumeQueue);
+            sendEvent(this, 'onResume', getFinishedResult(this, checkFinished(this, this.animation.to)), this);
+          }
+        },
+        start: this._merge.bind(this, range)
+      }
+    }).then(result => {
+      if (props.loop && result.finished && !(isLoop && result.noop)) {
+        const nextProps = createLoopUpdate(props);
+
+        if (nextProps) {
+          return this._update(nextProps, true);
+        }
+      }
+
+      return result;
+    });
+  }
+
+  _merge(range, props, resolve) {
+    if (props.cancel) {
+      this.stop(true);
+      return resolve(getCancelledResult(this));
+    }
+
+    const hasToProp = !react_spring_shared_esm_is.und(range.to);
+    const hasFromProp = !react_spring_shared_esm_is.und(range.from);
+
+    if (hasToProp || hasFromProp) {
+      if (props.callId > this._lastToId) {
+        this._lastToId = props.callId;
+      } else {
+        return resolve(getCancelledResult(this));
+      }
+    }
+
+    const {
+      key,
+      defaultProps,
+      animation: anim
+    } = this;
+    const {
+      to: prevTo,
+      from: prevFrom
+    } = anim;
+    let {
+      to = prevTo,
+      from = prevFrom
+    } = range;
+
+    if (hasFromProp && !hasToProp && (!props.default || react_spring_shared_esm_is.und(to))) {
+      to = from;
+    }
+
+    if (props.reverse) [to, from] = [from, to];
+    const hasFromChanged = !isEqual(from, prevFrom);
+
+    if (hasFromChanged) {
+      anim.from = from;
+    }
+
+    from = getFluidValue(from);
+    const hasToChanged = !isEqual(to, prevTo);
+
+    if (hasToChanged) {
+      this._focus(to);
+    }
+
+    const hasAsyncTo = isAsyncTo(props.to);
+    const {
+      config
+    } = anim;
+    const {
+      decay,
+      velocity
+    } = config;
+
+    if (hasToProp || hasFromProp) {
+      config.velocity = 0;
+    }
+
+    if (props.config && !hasAsyncTo) {
+      mergeConfig(config, callProp(props.config, key), props.config !== defaultProps.config ? callProp(defaultProps.config, key) : void 0);
+    }
+
+    let node = getAnimated(this);
+
+    if (!node || react_spring_shared_esm_is.und(to)) {
+      return resolve(getFinishedResult(this, true));
+    }
+
+    const reset = react_spring_shared_esm_is.und(props.reset) ? hasFromProp && !props.default : !react_spring_shared_esm_is.und(from) && matchProp(props.reset, key);
+    const value = reset ? from : this.get();
+    const goal = computeGoal(to);
+    const isAnimatable = react_spring_shared_esm_is.num(goal) || react_spring_shared_esm_is.arr(goal) || isAnimatedString(goal);
+    const immediate = !hasAsyncTo && (!isAnimatable || matchProp(defaultProps.immediate || props.immediate, key));
+
+    if (hasToChanged) {
+      const nodeType = getAnimatedType(to);
+
+      if (nodeType !== node.constructor) {
+        if (immediate) {
+          node = this._set(goal);
+        } else throw Error(`Cannot animate between ${node.constructor.name} and ${nodeType.name}, as the "to" prop suggests`);
+      }
+    }
+
+    const goalType = node.constructor;
+    let started = hasFluidValue(to);
+    let finished = false;
+
+    if (!started) {
+      const hasValueChanged = reset || !hasAnimated(this) && hasFromChanged;
+
+      if (hasToChanged || hasValueChanged) {
+        finished = isEqual(computeGoal(value), goal);
+        started = !finished;
+      }
+
+      if (!isEqual(anim.immediate, immediate) && !immediate || !isEqual(config.decay, decay) || !isEqual(config.velocity, velocity)) {
+        started = true;
+      }
+    }
+
+    if (finished && isAnimating(this)) {
+      if (anim.changed && !reset) {
+        started = true;
+      } else if (!started) {
+        this._stop(prevTo);
+      }
+    }
+
+    if (!hasAsyncTo) {
+      if (started || hasFluidValue(prevTo)) {
+        anim.values = node.getPayload();
+        anim.toValues = hasFluidValue(to) ? null : goalType == AnimatedString ? [1] : react_spring_shared_esm_toArray(goal);
+      }
+
+      if (anim.immediate != immediate) {
+        anim.immediate = immediate;
+
+        if (!immediate && !reset) {
+          this._set(prevTo);
+        }
+      }
+
+      if (started) {
+        const {
+          onRest
+        } = anim;
+        react_spring_shared_esm_each(ACTIVE_EVENTS, type => mergeActiveFn(this, props, type));
+        const result = getFinishedResult(this, checkFinished(this, prevTo));
+        flushCalls(this._pendingCalls, result);
+
+        this._pendingCalls.add(resolve);
+
+        if (anim.changed) raf.batchedUpdates(() => {
+          anim.changed = !reset;
+          onRest == null ? void 0 : onRest(result, this);
+
+          if (reset) {
+            callProp(defaultProps.onRest, result);
+          } else {
+            anim.onStart == null ? void 0 : anim.onStart(result, this);
+          }
+        });
+      }
+    }
+
+    if (reset) {
+      this._set(value);
+    }
+
+    if (hasAsyncTo) {
+      resolve(runAsync(props.to, props, this._state, this));
+    } else if (started) {
+      this._start();
+    } else if (isAnimating(this) && !hasToChanged) {
+      this._pendingCalls.add(resolve);
+    } else {
+      resolve(getNoopResult(value));
+    }
+  }
+
+  _focus(value) {
+    const anim = this.animation;
+
+    if (value !== anim.to) {
+      if (getFluidObservers(this)) {
+        this._detach();
+      }
+
+      anim.to = value;
+
+      if (getFluidObservers(this)) {
+        this._attach();
+      }
+    }
+  }
+
+  _attach() {
+    let priority = 0;
+    const {
+      to
+    } = this.animation;
+
+    if (hasFluidValue(to)) {
+      react_spring_shared_esm_addFluidObserver(to, this);
+
+      if (isFrameValue(to)) {
+        priority = to.priority + 1;
+      }
+    }
+
+    this.priority = priority;
+  }
+
+  _detach() {
+    const {
+      to
+    } = this.animation;
+
+    if (hasFluidValue(to)) {
+      removeFluidObserver(to, this);
+    }
+  }
+
+  _set(arg, idle = true) {
+    const value = getFluidValue(arg);
+
+    if (!react_spring_shared_esm_is.und(value)) {
+      const oldNode = getAnimated(this);
+
+      if (!oldNode || !isEqual(value, oldNode.getValue())) {
+        const nodeType = getAnimatedType(value);
+
+        if (!oldNode || oldNode.constructor != nodeType) {
+          setAnimated(this, nodeType.create(value));
+        } else {
+          oldNode.setValue(value);
+        }
+
+        if (oldNode) {
+          raf.batchedUpdates(() => {
+            this._onChange(value, idle);
+          });
+        }
+      }
+    }
+
+    return getAnimated(this);
+  }
+
+  _onStart() {
+    const anim = this.animation;
+
+    if (!anim.changed) {
+      anim.changed = true;
+      sendEvent(this, 'onStart', getFinishedResult(this, checkFinished(this, anim.to)), this);
+    }
+  }
+
+  _onChange(value, idle) {
+    if (!idle) {
+      this._onStart();
+
+      callProp(this.animation.onChange, value, this);
+    }
+
+    callProp(this.defaultProps.onChange, value, this);
+
+    super._onChange(value, idle);
+  }
+
+  _start() {
+    const anim = this.animation;
+    getAnimated(this).reset(getFluidValue(anim.to));
+
+    if (!anim.immediate) {
+      anim.fromValues = anim.values.map(node => node.lastPosition);
+    }
+
+    if (!isAnimating(this)) {
+      setActiveBit(this, true);
+
+      if (!isPaused(this)) {
+        this._resume();
+      }
+    }
+  }
+
+  _resume() {
+    if (globals.skipAnimation) {
+      this.finish();
+    } else {
+      frameLoop.start(this);
+    }
+  }
+
+  _stop(goal, cancel) {
+    if (isAnimating(this)) {
+      setActiveBit(this, false);
+      const anim = this.animation;
+      react_spring_shared_esm_each(anim.values, node => {
+        node.done = true;
+      });
+
+      if (anim.toValues) {
+        anim.onChange = anim.onPause = anim.onResume = undefined;
+      }
+
+      callFluidObservers(this, {
+        type: 'idle',
+        parent: this
+      });
+      const result = cancel ? getCancelledResult(this.get()) : getFinishedResult(this.get(), checkFinished(this, goal != null ? goal : anim.to));
+      flushCalls(this._pendingCalls, result);
+
+      if (anim.changed) {
+        anim.changed = false;
+        sendEvent(this, 'onRest', result, this);
+      }
+    }
+  }
+
+}
+
+function checkFinished(target, to) {
+  const goal = computeGoal(to);
+  const value = computeGoal(target.get());
+  return isEqual(value, goal);
+}
+
+function createLoopUpdate(props, loop = props.loop, to = props.to) {
+  let loopRet = callProp(loop);
+
+  if (loopRet) {
+    const overrides = loopRet !== true && inferTo(loopRet);
+    const reverse = (overrides || props).reverse;
+    const reset = !overrides || overrides.reset;
+    return createUpdate(react_spring_core_esm_extends({}, props, {
+      loop,
+      default: false,
+      pause: undefined,
+      to: !reverse || isAsyncTo(to) ? to : undefined,
+      from: reset ? props.from : undefined,
+      reset
+    }, overrides));
+  }
+}
+function createUpdate(props) {
+  const {
+    to,
+    from
+  } = props = inferTo(props);
+  const keys = new Set();
+  if (react_spring_shared_esm_is.obj(to)) findDefined(to, keys);
+  if (react_spring_shared_esm_is.obj(from)) findDefined(from, keys);
+  props.keys = keys.size ? Array.from(keys) : null;
+  return props;
+}
+function declareUpdate(props) {
+  const update = createUpdate(props);
+
+  if (is.und(update.default)) {
+    update.default = getDefaultProps(update);
+  }
+
+  return update;
+}
+
+function findDefined(values, keys) {
+  react_spring_shared_esm_eachProp(values, (value, key) => value != null && keys.add(key));
+}
+
+const ACTIVE_EVENTS = ['onStart', 'onRest', 'onChange', 'onPause', 'onResume'];
+
+function mergeActiveFn(target, props, type) {
+  target.animation[type] = props[type] !== getDefaultProp(props, type) ? resolveProp(props[type], target.key) : undefined;
+}
+
+function sendEvent(target, type, ...args) {
+  var _target$animation$typ, _target$animation, _target$defaultProps$, _target$defaultProps;
+
+  (_target$animation$typ = (_target$animation = target.animation)[type]) == null ? void 0 : _target$animation$typ.call(_target$animation, ...args);
+  (_target$defaultProps$ = (_target$defaultProps = target.defaultProps)[type]) == null ? void 0 : _target$defaultProps$.call(_target$defaultProps, ...args);
+}
+
+const BATCHED_EVENTS = ['onStart', 'onChange', 'onRest'];
+let nextId = 1;
+class Controller {
+  constructor(props, flush) {
+    this.id = nextId++;
+    this.springs = {};
+    this.queue = [];
+    this.ref = void 0;
+    this._flush = void 0;
+    this._initialProps = void 0;
+    this._lastAsyncId = 0;
+    this._active = new Set();
+    this._changed = new Set();
+    this._started = false;
+    this._item = void 0;
+    this._state = {
+      paused: false,
+      pauseQueue: new Set(),
+      resumeQueue: new Set(),
+      timeouts: new Set()
+    };
+    this._events = {
+      onStart: new Map(),
+      onChange: new Map(),
+      onRest: new Map()
+    };
+    this._onFrame = this._onFrame.bind(this);
+
+    if (flush) {
+      this._flush = flush;
+    }
+
+    if (props) {
+      this.start(react_spring_core_esm_extends({
+        default: true
+      }, props));
+    }
+  }
+
+  get idle() {
+    return !this._state.asyncTo && Object.values(this.springs).every(spring => {
+      return spring.idle && !spring.isDelayed && !spring.isPaused;
+    });
+  }
+
+  get item() {
+    return this._item;
+  }
+
+  set item(item) {
+    this._item = item;
+  }
+
+  get() {
+    const values = {};
+    this.each((spring, key) => values[key] = spring.get());
+    return values;
+  }
+
+  set(values) {
+    for (const key in values) {
+      const value = values[key];
+
+      if (!react_spring_shared_esm_is.und(value)) {
+        this.springs[key].set(value);
+      }
+    }
+  }
+
+  update(props) {
+    if (props) {
+      this.queue.push(createUpdate(props));
+    }
+
+    return this;
+  }
+
+  start(props) {
+    let {
+      queue
+    } = this;
+
+    if (props) {
+      queue = react_spring_shared_esm_toArray(props).map(createUpdate);
+    } else {
+      this.queue = [];
+    }
+
+    if (this._flush) {
+      return this._flush(this, queue);
+    }
+
+    prepareKeys(this, queue);
+    return flushUpdateQueue(this, queue);
+  }
+
+  stop(arg, keys) {
+    if (arg !== !!arg) {
+      keys = arg;
+    }
+
+    if (keys) {
+      const springs = this.springs;
+      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].stop(!!arg));
+    } else {
+      stopAsync(this._state, this._lastAsyncId);
+      this.each(spring => spring.stop(!!arg));
+    }
+
+    return this;
+  }
+
+  pause(keys) {
+    if (react_spring_shared_esm_is.und(keys)) {
+      this.start({
+        pause: true
+      });
+    } else {
+      const springs = this.springs;
+      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].pause());
+    }
+
+    return this;
+  }
+
+  resume(keys) {
+    if (react_spring_shared_esm_is.und(keys)) {
+      this.start({
+        pause: false
+      });
+    } else {
+      const springs = this.springs;
+      react_spring_shared_esm_each(react_spring_shared_esm_toArray(keys), key => springs[key].resume());
+    }
+
+    return this;
+  }
+
+  each(iterator) {
+    react_spring_shared_esm_eachProp(this.springs, iterator);
+  }
+
+  _onFrame() {
+    const {
+      onStart,
+      onChange,
+      onRest
+    } = this._events;
+    const active = this._active.size > 0;
+    const changed = this._changed.size > 0;
+
+    if (active && !this._started || changed && !this._started) {
+      this._started = true;
+      flush(onStart, ([onStart, result]) => {
+        result.value = this.get();
+        onStart(result, this, this._item);
+      });
+    }
+
+    const idle = !active && this._started;
+    const values = changed || idle && onRest.size ? this.get() : null;
+
+    if (changed && onChange.size) {
+      flush(onChange, ([onChange, result]) => {
+        result.value = values;
+        onChange(result, this, this._item);
+      });
+    }
+
+    if (idle) {
+      this._started = false;
+      flush(onRest, ([onRest, result]) => {
+        result.value = values;
+        onRest(result, this, this._item);
+      });
+    }
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      this._changed.add(event.parent);
+
+      if (!event.idle) {
+        this._active.add(event.parent);
+      }
+    } else if (event.type == 'idle') {
+      this._active.delete(event.parent);
+    } else return;
+
+    raf.onFrame(this._onFrame);
+  }
+
+}
+function flushUpdateQueue(ctrl, queue) {
+  return Promise.all(queue.map(props => flushUpdate(ctrl, props))).then(results => getCombinedResult(ctrl, results));
+}
+async function flushUpdate(ctrl, props, isLoop) {
+  const {
+    keys,
+    to,
+    from,
+    loop,
+    onRest,
+    onResolve
+  } = props;
+  const defaults = react_spring_shared_esm_is.obj(props.default) && props.default;
+
+  if (loop) {
+    props.loop = false;
+  }
+
+  if (to === false) props.to = null;
+  if (from === false) props.from = null;
+  const asyncTo = react_spring_shared_esm_is.arr(to) || react_spring_shared_esm_is.fun(to) ? to : undefined;
+
+  if (asyncTo) {
+    props.to = undefined;
+    props.onRest = undefined;
+
+    if (defaults) {
+      defaults.onRest = undefined;
+    }
+  } else {
+    react_spring_shared_esm_each(BATCHED_EVENTS, key => {
+      const handler = props[key];
+
+      if (react_spring_shared_esm_is.fun(handler)) {
+        const queue = ctrl['_events'][key];
+
+        props[key] = ({
+          finished,
+          cancelled
+        }) => {
+          const result = queue.get(handler);
+
+          if (result) {
+            if (!finished) result.finished = false;
+            if (cancelled) result.cancelled = true;
+          } else {
+            queue.set(handler, {
+              value: null,
+              finished: finished || false,
+              cancelled: cancelled || false
+            });
+          }
+        };
+
+        if (defaults) {
+          defaults[key] = props[key];
+        }
+      }
+    });
+  }
+
+  const state = ctrl['_state'];
+
+  if (props.pause === !state.paused) {
+    state.paused = props.pause;
+    flushCalls(props.pause ? state.pauseQueue : state.resumeQueue);
+  } else if (state.paused) {
+    props.pause = true;
+  }
+
+  const promises = (keys || Object.keys(ctrl.springs)).map(key => ctrl.springs[key].start(props));
+  const cancel = props.cancel === true || getDefaultProp(props, 'cancel') === true;
+
+  if (asyncTo || cancel && state.asyncId) {
+    promises.push(scheduleProps(++ctrl['_lastAsyncId'], {
+      props,
+      state,
+      actions: {
+        pause: react_spring_shared_esm_noop,
+        resume: react_spring_shared_esm_noop,
+
+        start(props, resolve) {
+          if (cancel) {
+            stopAsync(state, ctrl['_lastAsyncId']);
+            resolve(getCancelledResult(ctrl));
+          } else {
+            props.onRest = onRest;
+            resolve(runAsync(asyncTo, props, state, ctrl));
+          }
+        }
+
+      }
+    }));
+  }
+
+  if (state.paused) {
+    await new Promise(resume => {
+      state.resumeQueue.add(resume);
+    });
+  }
+
+  const result = getCombinedResult(ctrl, await Promise.all(promises));
+
+  if (loop && result.finished && !(isLoop && result.noop)) {
+    const nextProps = createLoopUpdate(props, loop, to);
+
+    if (nextProps) {
+      prepareKeys(ctrl, [nextProps]);
+      return flushUpdate(ctrl, nextProps, true);
+    }
+  }
+
+  if (onResolve) {
+    raf.batchedUpdates(() => onResolve(result, ctrl, ctrl.item));
+  }
+
+  return result;
+}
+function getSprings(ctrl, props) {
+  const springs = react_spring_core_esm_extends({}, ctrl.springs);
+
+  if (props) {
+    each(toArray(props), props => {
+      if (is.und(props.keys)) {
+        props = createUpdate(props);
+      }
+
+      if (!is.obj(props.to)) {
+        props = react_spring_core_esm_extends({}, props, {
+          to: undefined
+        });
+      }
+
+      prepareSprings(springs, props, key => {
+        return createSpring(key);
+      });
+    });
+  }
+
+  setSprings(ctrl, springs);
+  return springs;
+}
+function setSprings(ctrl, springs) {
+  eachProp(springs, (spring, key) => {
+    if (!ctrl.springs[key]) {
+      ctrl.springs[key] = spring;
+      addFluidObserver(spring, ctrl);
+    }
+  });
+}
+
+function createSpring(key, observer) {
+  const spring = new SpringValue();
+  spring.key = key;
+
+  if (observer) {
+    react_spring_shared_esm_addFluidObserver(spring, observer);
+  }
+
+  return spring;
+}
+
+function prepareSprings(springs, props, create) {
+  if (props.keys) {
+    react_spring_shared_esm_each(props.keys, key => {
+      const spring = springs[key] || (springs[key] = create(key));
+      spring['_prepareNode'](props);
+    });
+  }
+}
+
+function prepareKeys(ctrl, queue) {
+  react_spring_shared_esm_each(queue, props => {
+    prepareSprings(ctrl.springs, props, key => {
+      return createSpring(key, ctrl);
+    });
+  });
+}
+
+function _objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+const _excluded$3 = ["children"];
+const SpringContext = _ref => {
+  let {
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded$3);
+
+  const inherited = (0,external_React_.useContext)(react_spring_core_esm_ctx);
+  const pause = props.pause || !!inherited.pause,
+        immediate = props.immediate || !!inherited.immediate;
+  props = useMemoOne(() => ({
+    pause,
+    immediate
+  }), [pause, immediate]);
+  const {
+    Provider
+  } = react_spring_core_esm_ctx;
+  return external_React_.createElement(Provider, {
+    value: props
+  }, children);
+};
+const react_spring_core_esm_ctx = makeContext(SpringContext, {});
+SpringContext.Provider = react_spring_core_esm_ctx.Provider;
+SpringContext.Consumer = react_spring_core_esm_ctx.Consumer;
+
+function makeContext(target, init) {
+  Object.assign(target, external_React_.createContext(init));
+  target.Provider._context = target;
+  target.Consumer._context = target;
+  return target;
+}
+
+const SpringRef = () => {
+  const current = [];
+
+  const SpringRef = function SpringRef(props) {
+    deprecateDirectCall();
+    const results = [];
+    each(current, (ctrl, i) => {
+      if (is.und(props)) {
+        results.push(ctrl.start());
+      } else {
+        const update = _getProps(props, ctrl, i);
+
+        if (update) {
+          results.push(ctrl.start(update));
+        }
+      }
+    });
+    return results;
+  };
+
+  SpringRef.current = current;
+
+  SpringRef.add = function (ctrl) {
+    if (!current.includes(ctrl)) {
+      current.push(ctrl);
+    }
+  };
+
+  SpringRef.delete = function (ctrl) {
+    const i = current.indexOf(ctrl);
+    if (~i) current.splice(i, 1);
+  };
+
+  SpringRef.pause = function () {
+    each(current, ctrl => ctrl.pause(...arguments));
+    return this;
+  };
+
+  SpringRef.resume = function () {
+    each(current, ctrl => ctrl.resume(...arguments));
+    return this;
+  };
+
+  SpringRef.set = function (values) {
+    each(current, ctrl => ctrl.set(values));
+  };
+
+  SpringRef.start = function (props) {
+    const results = [];
+    each(current, (ctrl, i) => {
+      if (is.und(props)) {
+        results.push(ctrl.start());
+      } else {
+        const update = this._getProps(props, ctrl, i);
+
+        if (update) {
+          results.push(ctrl.start(update));
+        }
+      }
+    });
+    return results;
+  };
+
+  SpringRef.stop = function () {
+    each(current, ctrl => ctrl.stop(...arguments));
+    return this;
+  };
+
+  SpringRef.update = function (props) {
+    each(current, (ctrl, i) => ctrl.update(this._getProps(props, ctrl, i)));
+    return this;
+  };
+
+  const _getProps = function _getProps(arg, ctrl, index) {
+    return is.fun(arg) ? arg(index, ctrl) : arg;
+  };
+
+  SpringRef._getProps = _getProps;
+  return SpringRef;
+};
+
+function useSprings(length, props, deps) {
+  const propsFn = is.fun(props) && props;
+  if (propsFn && !deps) deps = [];
+  const ref = useMemo(() => propsFn || arguments.length == 3 ? SpringRef() : void 0, []);
+  const layoutId = useRef(0);
+  const forceUpdate = useForceUpdate();
+  const state = useMemo(() => ({
+    ctrls: [],
+    queue: [],
+
+    flush(ctrl, updates) {
+      const springs = getSprings(ctrl, updates);
+      const canFlushSync = layoutId.current > 0 && !state.queue.length && !Object.keys(springs).some(key => !ctrl.springs[key]);
+      return canFlushSync ? flushUpdateQueue(ctrl, updates) : new Promise(resolve => {
+        setSprings(ctrl, springs);
+        state.queue.push(() => {
+          resolve(flushUpdateQueue(ctrl, updates));
+        });
+        forceUpdate();
+      });
+    }
+
+  }), []);
+  const ctrls = useRef([...state.ctrls]);
+  const updates = [];
+  const prevLength = usePrev(length) || 0;
+  useMemo(() => {
+    each(ctrls.current.slice(length, prevLength), ctrl => {
+      detachRefs(ctrl, ref);
+      ctrl.stop(true);
+    });
+    ctrls.current.length = length;
+    declareUpdates(prevLength, length);
+  }, [length]);
+  useMemo(() => {
+    declareUpdates(0, Math.min(prevLength, length));
+  }, deps);
+
+  function declareUpdates(startIndex, endIndex) {
+    for (let i = startIndex; i < endIndex; i++) {
+      const ctrl = ctrls.current[i] || (ctrls.current[i] = new Controller(null, state.flush));
+      const update = propsFn ? propsFn(i, ctrl) : props[i];
+
+      if (update) {
+        updates[i] = declareUpdate(update);
+      }
+    }
+  }
+
+  const springs = ctrls.current.map((ctrl, i) => getSprings(ctrl, updates[i]));
+  const context = useContext(SpringContext);
+  const prevContext = usePrev(context);
+  const hasContext = context !== prevContext && hasProps(context);
+  useIsomorphicLayoutEffect(() => {
+    layoutId.current++;
+    state.ctrls = ctrls.current;
+    const {
+      queue
+    } = state;
+
+    if (queue.length) {
+      state.queue = [];
+      each(queue, cb => cb());
+    }
+
+    each(ctrls.current, (ctrl, i) => {
+      ref == null ? void 0 : ref.add(ctrl);
+
+      if (hasContext) {
+        ctrl.start({
+          default: context
+        });
+      }
+
+      const update = updates[i];
+
+      if (update) {
+        replaceRef(ctrl, update.ref);
+
+        if (ctrl.ref) {
+          ctrl.queue.push(update);
+        } else {
+          ctrl.start(update);
+        }
+      }
+    });
+  });
+  useOnce(() => () => {
+    each(state.ctrls, ctrl => ctrl.stop(true));
+  });
+  const values = springs.map(x => react_spring_core_esm_extends({}, x));
+  return ref ? [values, ref] : values;
+}
+
+function useSpring(props, deps) {
+  const isFn = is.fun(props);
+  const [[values], ref] = useSprings(1, isFn ? props : [props], isFn ? deps || [] : deps);
+  return isFn || arguments.length == 2 ? [values, ref] : values;
+}
+
+const initSpringRef = () => SpringRef();
+
+const useSpringRef = () => useState(initSpringRef)[0];
+
+function useTrail(length, propsArg, deps) {
+  var _passedRef;
+
+  const propsFn = is.fun(propsArg) && propsArg;
+  if (propsFn && !deps) deps = [];
+  let reverse = true;
+  let passedRef = undefined;
+  const result = useSprings(length, (i, ctrl) => {
+    const props = propsFn ? propsFn(i, ctrl) : propsArg;
+    passedRef = props.ref;
+    reverse = reverse && props.reverse;
+    return props;
+  }, deps || [{}]);
+  const ref = (_passedRef = passedRef) != null ? _passedRef : result[1];
+  useIsomorphicLayoutEffect(() => {
+    each(ref.current, (ctrl, i) => {
+      const parent = ref.current[i + (reverse ? 1 : -1)];
+
+      if (parent) {
+        ctrl.start({
+          to: parent.springs
+        });
+      } else {
+        ctrl.start();
+      }
+    });
+  }, deps);
+
+  if (propsFn || arguments.length == 3) {
+    ref['_getProps'] = (propsArg, ctrl, i) => {
+      const props = is.fun(propsArg) ? propsArg(i, ctrl) : propsArg;
+
+      if (props) {
+        const parent = ref.current[i + (props.reverse ? 1 : -1)];
+        if (parent) props.to = parent.springs;
+        return props;
+      }
+    };
+
+    return result;
+  }
+
+  ref['start'] = propsArg => {
+    const results = [];
+    each(ref.current, (ctrl, i) => {
+      const props = is.fun(propsArg) ? propsArg(i, ctrl) : propsArg;
+      const parent = ref.current[i + (reverse ? 1 : -1)];
+
+      if (parent) {
+        results.push(ctrl.start(react_spring_core_esm_extends({}, props, {
+          to: parent.springs
+        })));
+      } else {
+        results.push(ctrl.start(react_spring_core_esm_extends({}, props)));
+      }
+    });
+    return results;
+  };
+
+  return result[0];
+}
+
+let TransitionPhase;
+
+(function (TransitionPhase) {
+  TransitionPhase["MOUNT"] = "mount";
+  TransitionPhase["ENTER"] = "enter";
+  TransitionPhase["UPDATE"] = "update";
+  TransitionPhase["LEAVE"] = "leave";
+})(TransitionPhase || (TransitionPhase = {}));
+
+function useTransition(data, props, deps) {
+  const propsFn = is.fun(props) && props;
+  const {
+    reset,
+    sort,
+    trail = 0,
+    expires = true,
+    exitBeforeEnter = false,
+    onDestroyed,
+    ref: propsRef,
+    config: propsConfig
+  } = propsFn ? propsFn() : props;
+  const ref = useMemo(() => propsFn || arguments.length == 3 ? SpringRef() : void 0, []);
+  const items = toArray(data);
+  const transitions = [];
+  const usedTransitions = useRef(null);
+  const prevTransitions = reset ? null : usedTransitions.current;
+  useIsomorphicLayoutEffect(() => {
+    usedTransitions.current = transitions;
+  });
+  useOnce(() => {
+    each(transitions, t => {
+      ref == null ? void 0 : ref.add(t.ctrl);
+      t.ctrl.ref = ref;
+    });
+    return () => {
+      each(usedTransitions.current, t => {
+        if (t.expired) {
+          clearTimeout(t.expirationId);
+        }
+
+        detachRefs(t.ctrl, ref);
+        t.ctrl.stop(true);
+      });
+    };
+  });
+  const keys = react_spring_core_esm_getKeys(items, propsFn ? propsFn() : props, prevTransitions);
+  const expired = reset && usedTransitions.current || [];
+  useIsomorphicLayoutEffect(() => each(expired, ({
+    ctrl,
+    item,
+    key
+  }) => {
+    detachRefs(ctrl, ref);
+    callProp(onDestroyed, item, key);
+  }));
+  const reused = [];
+  if (prevTransitions) each(prevTransitions, (t, i) => {
+    if (t.expired) {
+      clearTimeout(t.expirationId);
+      expired.push(t);
+    } else {
+      i = reused[i] = keys.indexOf(t.key);
+      if (~i) transitions[i] = t;
+    }
+  });
+  each(items, (item, i) => {
+    if (!transitions[i]) {
+      transitions[i] = {
+        key: keys[i],
+        item,
+        phase: TransitionPhase.MOUNT,
+        ctrl: new Controller()
+      };
+      transitions[i].ctrl.item = item;
+    }
+  });
+
+  if (reused.length) {
+    let i = -1;
+    const {
+      leave
+    } = propsFn ? propsFn() : props;
+    each(reused, (keyIndex, prevIndex) => {
+      const t = prevTransitions[prevIndex];
+
+      if (~keyIndex) {
+        i = transitions.indexOf(t);
+        transitions[i] = react_spring_core_esm_extends({}, t, {
+          item: items[keyIndex]
+        });
+      } else if (leave) {
+        transitions.splice(++i, 0, t);
+      }
+    });
+  }
+
+  if (is.fun(sort)) {
+    transitions.sort((a, b) => sort(a.item, b.item));
+  }
+
+  let delay = -trail;
+  const forceUpdate = useForceUpdate();
+  const defaultProps = getDefaultProps(props);
+  const changes = new Map();
+  const exitingTransitions = useRef(new Map());
+  const forceChange = useRef(false);
+  each(transitions, (t, i) => {
+    const key = t.key;
+    const prevPhase = t.phase;
+    const p = propsFn ? propsFn() : props;
+    let to;
+    let phase;
+    let propsDelay = callProp(p.delay || 0, key);
+
+    if (prevPhase == TransitionPhase.MOUNT) {
+      to = p.enter;
+      phase = TransitionPhase.ENTER;
+    } else {
+      const isLeave = keys.indexOf(key) < 0;
+
+      if (prevPhase != TransitionPhase.LEAVE) {
+        if (isLeave) {
+          to = p.leave;
+          phase = TransitionPhase.LEAVE;
+        } else if (to = p.update) {
+          phase = TransitionPhase.UPDATE;
+        } else return;
+      } else if (!isLeave) {
+        to = p.enter;
+        phase = TransitionPhase.ENTER;
+      } else return;
+    }
+
+    to = callProp(to, t.item, i);
+    to = is.obj(to) ? inferTo(to) : {
+      to
+    };
+
+    if (!to.config) {
+      const config = propsConfig || defaultProps.config;
+      to.config = callProp(config, t.item, i, phase);
+    }
+
+    delay += trail;
+
+    const payload = react_spring_core_esm_extends({}, defaultProps, {
+      delay: propsDelay + delay,
+      ref: propsRef,
+      immediate: p.immediate,
+      reset: false
+    }, to);
+
+    if (phase == TransitionPhase.ENTER && is.und(payload.from)) {
+      const _p = propsFn ? propsFn() : props;
+
+      const from = is.und(_p.initial) || prevTransitions ? _p.from : _p.initial;
+      payload.from = callProp(from, t.item, i);
+    }
+
+    const {
+      onResolve
+    } = payload;
+
+    payload.onResolve = result => {
+      callProp(onResolve, result);
+      const transitions = usedTransitions.current;
+      const t = transitions.find(t => t.key === key);
+      if (!t) return;
+
+      if (result.cancelled && t.phase != TransitionPhase.UPDATE) {
+        return;
+      }
+
+      if (t.ctrl.idle) {
+        const idle = transitions.every(t => t.ctrl.idle);
+
+        if (t.phase == TransitionPhase.LEAVE) {
+          const expiry = callProp(expires, t.item);
+
+          if (expiry !== false) {
+            const expiryMs = expiry === true ? 0 : expiry;
+            t.expired = true;
+
+            if (!idle && expiryMs > 0) {
+              if (expiryMs <= 0x7fffffff) t.expirationId = setTimeout(forceUpdate, expiryMs);
+              return;
+            }
+          }
+        }
+
+        if (idle && transitions.some(t => t.expired)) {
+          exitingTransitions.current.delete(t);
+
+          if (exitBeforeEnter) {
+            forceChange.current = true;
+          }
+
+          forceUpdate();
+        }
+      }
+    };
+
+    const springs = getSprings(t.ctrl, payload);
+
+    if (phase === TransitionPhase.LEAVE && exitBeforeEnter) {
+      exitingTransitions.current.set(t, {
+        phase,
+        springs,
+        payload
+      });
+    } else {
+      changes.set(t, {
+        phase,
+        springs,
+        payload
+      });
+    }
+  });
+  const context = useContext(SpringContext);
+  const prevContext = usePrev(context);
+  const hasContext = context !== prevContext && hasProps(context);
+  useIsomorphicLayoutEffect(() => {
+    if (hasContext) {
+      each(transitions, t => {
+        t.ctrl.start({
+          default: context
+        });
+      });
+    }
+  }, [context]);
+  each(changes, (_, t) => {
+    if (exitingTransitions.current.size) {
+      const ind = transitions.findIndex(state => state.key === t.key);
+      transitions.splice(ind, 1);
+    }
+  });
+  useIsomorphicLayoutEffect(() => {
+    each(exitingTransitions.current.size ? exitingTransitions.current : changes, ({
+      phase,
+      payload
+    }, t) => {
+      const {
+        ctrl
+      } = t;
+      t.phase = phase;
+      ref == null ? void 0 : ref.add(ctrl);
+
+      if (hasContext && phase == TransitionPhase.ENTER) {
+        ctrl.start({
+          default: context
+        });
+      }
+
+      if (payload) {
+        replaceRef(ctrl, payload.ref);
+
+        if ((ctrl.ref || ref) && !forceChange.current) {
+          ctrl.update(payload);
+        } else {
+          ctrl.start(payload);
+
+          if (forceChange.current) {
+            forceChange.current = false;
+          }
+        }
+      }
+    });
+  }, reset ? void 0 : deps);
+
+  const renderTransitions = render => React.createElement(React.Fragment, null, transitions.map((t, i) => {
+    const {
+      springs
+    } = changes.get(t) || t.ctrl;
+    const elem = render(react_spring_core_esm_extends({}, springs), t.item, t, i);
+    return elem && elem.type ? React.createElement(elem.type, react_spring_core_esm_extends({}, elem.props, {
+      key: is.str(t.key) || is.num(t.key) ? t.key : t.ctrl.id,
+      ref: elem.ref
+    })) : elem;
+  }));
+
+  return ref ? [renderTransitions, ref] : renderTransitions;
+}
+let nextKey = 1;
+
+function react_spring_core_esm_getKeys(items, {
+  key,
+  keys = key
+}, prevTransitions) {
+  if (keys === null) {
+    const reused = new Set();
+    return items.map(item => {
+      const t = prevTransitions && prevTransitions.find(t => t.item === item && t.phase !== TransitionPhase.LEAVE && !reused.has(t));
+
+      if (t) {
+        reused.add(t);
+        return t.key;
+      }
+
+      return nextKey++;
+    });
+  }
+
+  return is.und(keys) ? items : is.fun(keys) ? items.map(keys) : toArray(keys);
+}
+
+const _excluded$2 = (/* unused pure expression or super */ null && (["children"]));
+function Spring(_ref) {
+  let {
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded$2);
+
+  return children(useSpring(props));
+}
+
+const _excluded$1 = (/* unused pure expression or super */ null && (["items", "children"]));
+function Trail(_ref) {
+  let {
+    items,
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded$1);
+
+  const trails = useTrail(items.length, props);
+  return items.map((item, index) => {
+    const result = children(item, index);
+    return is.fun(result) ? result(trails[index]) : result;
+  });
+}
+
+const _excluded = (/* unused pure expression or super */ null && (["items", "children"]));
+function Transition(_ref) {
+  let {
+    items,
+    children
+  } = _ref,
+      props = _objectWithoutPropertiesLoose(_ref, _excluded);
+
+  return useTransition(items, props)(children);
+}
+
+class Interpolation extends FrameValue {
+  constructor(source, args) {
+    super();
+    this.key = void 0;
+    this.idle = true;
+    this.calc = void 0;
+    this._active = new Set();
+    this.source = source;
+    this.calc = createInterpolator(...args);
+
+    const value = this._get();
+
+    const nodeType = getAnimatedType(value);
+    setAnimated(this, nodeType.create(value));
+  }
+
+  advance(_dt) {
+    const value = this._get();
+
+    const oldValue = this.get();
+
+    if (!isEqual(value, oldValue)) {
+      getAnimated(this).setValue(value);
+
+      this._onChange(value, this.idle);
+    }
+
+    if (!this.idle && checkIdle(this._active)) {
+      becomeIdle(this);
+    }
+  }
+
+  _get() {
+    const inputs = react_spring_shared_esm_is.arr(this.source) ? this.source.map(getFluidValue) : react_spring_shared_esm_toArray(getFluidValue(this.source));
+    return this.calc(...inputs);
+  }
+
+  _start() {
+    if (this.idle && !checkIdle(this._active)) {
+      this.idle = false;
+      react_spring_shared_esm_each(getPayload(this), node => {
+        node.done = false;
+      });
+
+      if (globals.skipAnimation) {
+        raf.batchedUpdates(() => this.advance());
+        becomeIdle(this);
+      } else {
+        frameLoop.start(this);
+      }
+    }
+  }
+
+  _attach() {
+    let priority = 1;
+    react_spring_shared_esm_each(react_spring_shared_esm_toArray(this.source), source => {
+      if (hasFluidValue(source)) {
+        react_spring_shared_esm_addFluidObserver(source, this);
+      }
+
+      if (isFrameValue(source)) {
+        if (!source.idle) {
+          this._active.add(source);
+        }
+
+        priority = Math.max(priority, source.priority + 1);
+      }
+    });
+    this.priority = priority;
+
+    this._start();
+  }
+
+  _detach() {
+    react_spring_shared_esm_each(react_spring_shared_esm_toArray(this.source), source => {
+      if (hasFluidValue(source)) {
+        removeFluidObserver(source, this);
+      }
+    });
+
+    this._active.clear();
+
+    becomeIdle(this);
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      if (event.idle) {
+        this.advance();
+      } else {
+        this._active.add(event.parent);
+
+        this._start();
+      }
+    } else if (event.type == 'idle') {
+      this._active.delete(event.parent);
+    } else if (event.type == 'priority') {
+      this.priority = react_spring_shared_esm_toArray(this.source).reduce((highest, parent) => Math.max(highest, (isFrameValue(parent) ? parent.priority : 0) + 1), 0);
+    }
+  }
+
+}
+
+function isIdle(source) {
+  return source.idle !== false;
+}
+
+function checkIdle(active) {
+  return !active.size || Array.from(active).every(isIdle);
+}
+
+function becomeIdle(self) {
+  if (!self.idle) {
+    self.idle = true;
+    react_spring_shared_esm_each(getPayload(self), node => {
+      node.done = true;
+    });
+    callFluidObservers(self, {
+      type: 'idle',
+      parent: self
+    });
+  }
+}
+
+const react_spring_core_esm_to = (source, ...args) => new Interpolation(source, args);
+const react_spring_core_esm_interpolate = (source, ...args) => (deprecateInterpolate(), new Interpolation(source, args));
+
+globals.assign({
+  createStringInterpolator: createStringInterpolator,
+  to: (source, args) => new Interpolation(source, args)
+});
+const react_spring_core_esm_update = frameLoop.advance;
+
+
+
+;// CONCATENATED MODULE: ./node_modules/@react-spring/web/dist/react-spring-web.esm.js
+
+
+
+
+
+
+function react_spring_web_esm_objectWithoutPropertiesLoose(source, excluded) {
+  if (source == null) return {};
+  var target = {};
+  var sourceKeys = Object.keys(source);
+  var key, i;
+
+  for (i = 0; i < sourceKeys.length; i++) {
+    key = sourceKeys[i];
+    if (excluded.indexOf(key) >= 0) continue;
+    target[key] = source[key];
+  }
+
+  return target;
+}
+
+const react_spring_web_esm_excluded$2 = ["style", "children", "scrollTop", "scrollLeft"];
+const isCustomPropRE = /^--/;
+
+function dangerousStyleValue(name, value) {
+  if (value == null || typeof value === 'boolean' || value === '') return '';
+  if (typeof value === 'number' && value !== 0 && !isCustomPropRE.test(name) && !(isUnitlessNumber.hasOwnProperty(name) && isUnitlessNumber[name])) return value + 'px';
+  return ('' + value).trim();
+}
+
+const attributeCache = {};
+function applyAnimatedValues(instance, props) {
+  if (!instance.nodeType || !instance.setAttribute) {
+    return false;
+  }
+
+  const isFilterElement = instance.nodeName === 'filter' || instance.parentNode && instance.parentNode.nodeName === 'filter';
+
+  const _ref = props,
+        {
+    style,
+    children,
+    scrollTop,
+    scrollLeft
+  } = _ref,
+        attributes = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded$2);
+
+  const values = Object.values(attributes);
+  const names = Object.keys(attributes).map(name => isFilterElement || instance.hasAttribute(name) ? name : attributeCache[name] || (attributeCache[name] = name.replace(/([A-Z])/g, n => '-' + n.toLowerCase())));
+
+  if (children !== void 0) {
+    instance.textContent = children;
+  }
+
+  for (let name in style) {
+    if (style.hasOwnProperty(name)) {
+      const value = dangerousStyleValue(name, style[name]);
+
+      if (isCustomPropRE.test(name)) {
+        instance.style.setProperty(name, value);
+      } else {
+        instance.style[name] = value;
+      }
+    }
+  }
+
+  names.forEach((name, i) => {
+    instance.setAttribute(name, values[i]);
+  });
+
+  if (scrollTop !== void 0) {
+    instance.scrollTop = scrollTop;
+  }
+
+  if (scrollLeft !== void 0) {
+    instance.scrollLeft = scrollLeft;
+  }
+}
+let isUnitlessNumber = {
+  animationIterationCount: true,
+  borderImageOutset: true,
+  borderImageSlice: true,
+  borderImageWidth: true,
+  boxFlex: true,
+  boxFlexGroup: true,
+  boxOrdinalGroup: true,
+  columnCount: true,
+  columns: true,
+  flex: true,
+  flexGrow: true,
+  flexPositive: true,
+  flexShrink: true,
+  flexNegative: true,
+  flexOrder: true,
+  gridRow: true,
+  gridRowEnd: true,
+  gridRowSpan: true,
+  gridRowStart: true,
+  gridColumn: true,
+  gridColumnEnd: true,
+  gridColumnSpan: true,
+  gridColumnStart: true,
+  fontWeight: true,
+  lineClamp: true,
+  lineHeight: true,
+  opacity: true,
+  order: true,
+  orphans: true,
+  tabSize: true,
+  widows: true,
+  zIndex: true,
+  zoom: true,
+  fillOpacity: true,
+  floodOpacity: true,
+  stopOpacity: true,
+  strokeDasharray: true,
+  strokeDashoffset: true,
+  strokeMiterlimit: true,
+  strokeOpacity: true,
+  strokeWidth: true
+};
+
+const prefixKey = (prefix, key) => prefix + key.charAt(0).toUpperCase() + key.substring(1);
+
+const prefixes = ['Webkit', 'Ms', 'Moz', 'O'];
+isUnitlessNumber = Object.keys(isUnitlessNumber).reduce((acc, prop) => {
+  prefixes.forEach(prefix => acc[prefixKey(prefix, prop)] = acc[prop]);
+  return acc;
+}, isUnitlessNumber);
+
+const react_spring_web_esm_excluded$1 = ["x", "y", "z"];
+const domTransforms = /^(matrix|translate|scale|rotate|skew)/;
+const pxTransforms = /^(translate)/;
+const degTransforms = /^(rotate|skew)/;
+
+const addUnit = (value, unit) => react_spring_shared_esm_is.num(value) && value !== 0 ? value + unit : value;
+
+const isValueIdentity = (value, id) => react_spring_shared_esm_is.arr(value) ? value.every(v => isValueIdentity(v, id)) : react_spring_shared_esm_is.num(value) ? value === id : parseFloat(value) === id;
+
+class AnimatedStyle extends AnimatedObject {
+  constructor(_ref) {
+    let {
+      x,
+      y,
+      z
+    } = _ref,
+        style = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded$1);
+
+    const inputs = [];
+    const transforms = [];
+
+    if (x || y || z) {
+      inputs.push([x || 0, y || 0, z || 0]);
+      transforms.push(xyz => [`translate3d(${xyz.map(v => addUnit(v, 'px')).join(',')})`, isValueIdentity(xyz, 0)]);
+    }
+
+    react_spring_shared_esm_eachProp(style, (value, key) => {
+      if (key === 'transform') {
+        inputs.push([value || '']);
+        transforms.push(transform => [transform, transform === '']);
+      } else if (domTransforms.test(key)) {
+        delete style[key];
+        if (react_spring_shared_esm_is.und(value)) return;
+        const unit = pxTransforms.test(key) ? 'px' : degTransforms.test(key) ? 'deg' : '';
+        inputs.push(react_spring_shared_esm_toArray(value));
+        transforms.push(key === 'rotate3d' ? ([x, y, z, deg]) => [`rotate3d(${x},${y},${z},${addUnit(deg, unit)})`, isValueIdentity(deg, 0)] : input => [`${key}(${input.map(v => addUnit(v, unit)).join(',')})`, isValueIdentity(input, key.startsWith('scale') ? 1 : 0)]);
+      }
+    });
+
+    if (inputs.length) {
+      style.transform = new FluidTransform(inputs, transforms);
+    }
+
+    super(style);
+  }
+
+}
+
+class FluidTransform extends FluidValue {
+  constructor(inputs, transforms) {
+    super();
+    this._value = null;
+    this.inputs = inputs;
+    this.transforms = transforms;
+  }
+
+  get() {
+    return this._value || (this._value = this._get());
+  }
+
+  _get() {
+    let transform = '';
+    let identity = true;
+    react_spring_shared_esm_each(this.inputs, (input, i) => {
+      const arg1 = getFluidValue(input[0]);
+      const [t, id] = this.transforms[i](react_spring_shared_esm_is.arr(arg1) ? arg1 : input.map(getFluidValue));
+      transform += ' ' + t;
+      identity = identity && id;
+    });
+    return identity ? 'none' : transform;
+  }
+
+  observerAdded(count) {
+    if (count == 1) react_spring_shared_esm_each(this.inputs, input => react_spring_shared_esm_each(input, value => hasFluidValue(value) && react_spring_shared_esm_addFluidObserver(value, this)));
+  }
+
+  observerRemoved(count) {
+    if (count == 0) react_spring_shared_esm_each(this.inputs, input => react_spring_shared_esm_each(input, value => hasFluidValue(value) && removeFluidObserver(value, this)));
+  }
+
+  eventObserved(event) {
+    if (event.type == 'change') {
+      this._value = null;
+    }
+
+    callFluidObservers(this, event);
+  }
+
+}
+
+const primitives = ['a', 'abbr', 'address', 'area', 'article', 'aside', 'audio', 'b', 'base', 'bdi', 'bdo', 'big', 'blockquote', 'body', 'br', 'button', 'canvas', 'caption', 'cite', 'code', 'col', 'colgroup', 'data', 'datalist', 'dd', 'del', 'details', 'dfn', 'dialog', 'div', 'dl', 'dt', 'em', 'embed', 'fieldset', 'figcaption', 'figure', 'footer', 'form', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6', 'head', 'header', 'hgroup', 'hr', 'html', 'i', 'iframe', 'img', 'input', 'ins', 'kbd', 'keygen', 'label', 'legend', 'li', 'link', 'main', 'map', 'mark', 'menu', 'menuitem', 'meta', 'meter', 'nav', 'noscript', 'object', 'ol', 'optgroup', 'option', 'output', 'p', 'param', 'picture', 'pre', 'progress', 'q', 'rp', 'rt', 'ruby', 's', 'samp', 'script', 'section', 'select', 'small', 'source', 'span', 'strong', 'style', 'sub', 'summary', 'sup', 'table', 'tbody', 'td', 'textarea', 'tfoot', 'th', 'thead', 'time', 'title', 'tr', 'track', 'u', 'ul', 'var', 'video', 'wbr', 'circle', 'clipPath', 'defs', 'ellipse', 'foreignObject', 'g', 'image', 'line', 'linearGradient', 'mask', 'path', 'pattern', 'polygon', 'polyline', 'radialGradient', 'rect', 'stop', 'svg', 'text', 'tspan'];
+
+const react_spring_web_esm_excluded = ["scrollTop", "scrollLeft"];
+globals.assign({
+  batchedUpdates: external_ReactDOM_namespaceObject.unstable_batchedUpdates,
+  createStringInterpolator: createStringInterpolator,
+  colors: colors
+});
+const host = createHost(primitives, {
+  applyAnimatedValues,
+  createAnimatedStyle: style => new AnimatedStyle(style),
+  getComponentProps: _ref => {
+    let props = react_spring_web_esm_objectWithoutPropertiesLoose(_ref, react_spring_web_esm_excluded);
+
+    return props;
+  }
+});
+const animated = host.animated;
+
+
+
+;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/animation.js
+/**
+ * External dependencies
+ */
+
+
+/**
+ * WordPress dependencies
+ */
+
+function getAbsolutePosition(element) {
+  return {
+    top: element.offsetTop,
+    left: element.offsetLeft
+  };
+}
+const ANIMATION_DURATION = 300;
+
+/**
+ * Hook used to compute the styles required to move a div into a new position.
+ *
+ * The way this animation works is the following:
+ *  - It first renders the element as if there was no animation.
+ *  - It takes a snapshot of the position of the block to use it
+ *    as a destination point for the animation.
+ *  - It restores the element to the previous position using a CSS transform
+ *  - It uses the "resetAnimation" flag to reset the animation
+ *    from the beginning in order to animate to the new destination point.
+ *
+ * @param {Object} $1                          Options
+ * @param {*}      $1.triggerAnimationOnChange Variable used to trigger the animation if it changes.
+ */
+function useMovingAnimation({
+  triggerAnimationOnChange
+}) {
+  const ref = (0,external_wp_element_namespaceObject.useRef)();
+
+  // Whenever the trigger changes, we need to take a snapshot of the current
+  // position of the block to use it as a destination point for the animation.
+  const {
+    previous,
+    prevRect
+  } = (0,external_wp_element_namespaceObject.useMemo)(() => ({
+    previous: ref.current && getAbsolutePosition(ref.current),
+    prevRect: ref.current && ref.current.getBoundingClientRect()
+  }),
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  [triggerAnimationOnChange]);
+  (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
+    if (!previous || !ref.current) {
+      return;
+    }
+
+    // We disable the animation if the user has a preference for reduced
+    // motion.
+    const disableAnimation = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (disableAnimation) {
+      return;
+    }
+    const controller = new Controller({
+      x: 0,
+      y: 0,
+      width: prevRect.width,
+      height: prevRect.height,
+      config: {
+        duration: ANIMATION_DURATION
+      },
+      onChange({
+        value
+      }) {
+        if (!ref.current) {
+          return;
+        }
+        let {
+          x,
+          y,
+          width,
+          height
+        } = value;
+        x = Math.round(x);
+        y = Math.round(y);
+        width = Math.round(width);
+        height = Math.round(height);
+        const finishedMoving = x === 0 && y === 0;
+        ref.current.style.transformOrigin = 'center center';
+        ref.current.style.transform = finishedMoving ? null // Set to `null` to explicitly remove the transform.
+        : `translate3d(${x}px,${y}px,0)`;
+        ref.current.style.width = finishedMoving ? null : `${width}px`;
+        ref.current.style.height = finishedMoving ? null : `${height}px`;
+      }
+    });
+    ref.current.style.transform = undefined;
+    const destination = ref.current.getBoundingClientRect();
+    const x = Math.round(prevRect.left - destination.left);
+    const y = Math.round(prevRect.top - destination.top);
+    const width = destination.width;
+    const height = destination.height;
+    controller.start({
+      x: 0,
+      y: 0,
+      width,
+      height,
+      from: {
+        x,
+        y,
+        width: prevRect.width,
+        height: prevRect.height
+      }
+    });
+    return () => {
+      controller.stop();
+      controller.set({
+        x: 0,
+        y: 0,
+        width: prevRect.width,
+        height: prevRect.height
+      });
+    };
+  }, [previous, prevRect]);
+  return ref;
+}
+/* harmony default export */ const animation = (useMovingAnimation);
 
 ;// CONCATENATED MODULE: ./packages/edit-site/build-module/components/layout/index.js
 
@@ -45397,6 +48965,7 @@ function useLayoutAreas() {
 
 
 
+
 const {
   useCommands
 } = unlock(external_wp_coreCommands_namespaceObject.privateApis);
@@ -45406,7 +48975,7 @@ const {
 const {
   useGlobalStyle: layout_useGlobalStyle
 } = unlock(external_wp_blockEditor_namespaceObject.privateApis);
-const ANIMATION_DURATION = 0.5;
+const layout_ANIMATION_DURATION = 0.3;
 function Layout() {
   // This ensures the edited entity id and type are initialized properly.
   useInitEditedEntityFromURL();
@@ -45450,9 +49019,13 @@ function Layout() {
   const isEditorLoading = useIsSiteEditorLoading();
   const [isResizableFrameOversized, setIsResizableFrameOversized] = (0,external_wp_element_namespaceObject.useState)(false);
   const {
+    key: routeKey,
     areas,
     widths
   } = useLayoutAreas();
+  const animationRef = animation({
+    triggerAnimationOnChange: canvasMode + '__' + routeKey
+  });
 
   // This determines which animation variant should apply to the header.
   // There is also a `isDistractionFreeHovering` state that gets priority
@@ -45567,7 +49140,7 @@ function Layout() {
     },
     transition: {
       type: 'tween',
-      duration: disableMotion ? 0 : 0.2,
+      duration: disableMotion ? 0 : layout_ANIMATION_DURATION,
       ease: 'easeOut'
     }
   }, (0,external_React_.createElement)(HeaderEditMode, null)))), (0,external_React_.createElement)("div", {
@@ -45589,7 +49162,7 @@ function Layout() {
       type: 'tween',
       duration:
       // Disable transition in mobile to emulate a full page transition.
-      disableMotion || isMobileViewport ? 0 : ANIMATION_DURATION,
+      disableMotion || isMobileViewport ? 0 : layout_ANIMATION_DURATION,
       ease: 'easeOut'
     },
     className: "edit-site-layout__sidebar"
@@ -45605,24 +49178,11 @@ function Layout() {
     }
   }, areas.content), !isMobileViewport && areas.preview && (0,external_React_.createElement)("div", {
     className: "edit-site-layout__canvas-container"
-  }, canvasResizer, !!canvasSize.width && (0,external_React_.createElement)(external_wp_components_namespaceObject.__unstableMotion.div, {
-    whileHover: canvasMode === 'view' ? {
-      scale: 1.005,
-      transition: {
-        duration: disableMotion ? 0 : 0.5,
-        ease: 'easeOut'
-      }
-    } : {},
-    initial: false,
-    layout: "position",
+  }, canvasResizer, !!canvasSize.width && (0,external_React_.createElement)("div", {
     className: classnames_default()('edit-site-layout__canvas', {
       'is-right-aligned': isResizableFrameOversized
     }),
-    transition: {
-      type: 'tween',
-      duration: disableMotion ? 0 : ANIMATION_DURATION,
-      ease: 'easeOut'
-    }
+    ref: animationRef
   }, (0,external_React_.createElement)(ErrorBoundary, null, (0,external_React_.createElement)(resizable_frame, {
     isReady: !isEditorLoading,
     isFullWidth: canvasMode === 'edit',

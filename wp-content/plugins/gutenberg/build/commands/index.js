@@ -3923,7 +3923,7 @@ unlock(store).registerPrivateActions(private_actions_namespaceObject);
  * Internal dependencies
  */
 
-const inputLabel = (0,external_wp_i18n_namespaceObject.__)('Search for commands');
+const inputLabel = (0,external_wp_i18n_namespaceObject.__)('Search commands and settings');
 function CommandMenuLoader({
   name,
   search,
@@ -4152,12 +4152,12 @@ function CommandMenu() {
     onKeyDown: onKeyDown
   }, (0,external_React_namespaceObject.createElement)("div", {
     className: "commands-command-menu__header"
-  }, (0,external_React_namespaceObject.createElement)(icon, {
-    icon: library_search
-  }), (0,external_React_namespaceObject.createElement)(CommandInput, {
+  }, (0,external_React_namespaceObject.createElement)(CommandInput, {
     search: search,
     setSearch: setSearch,
     isOpen: isOpen
+  }), (0,external_React_namespaceObject.createElement)(icon, {
+    icon: library_search
   })), (0,external_React_namespaceObject.createElement)(Le.List, {
     ref: commandListRef
   }, search && !isLoading && (0,external_React_namespaceObject.createElement)(Le.Empty, null, (0,external_wp_i18n_namespaceObject.__)('No results found.')), (0,external_React_namespaceObject.createElement)(CommandMenuGroup, {

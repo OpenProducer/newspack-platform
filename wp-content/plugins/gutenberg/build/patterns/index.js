@@ -285,10 +285,65 @@ unlock(store).registerPrivateSelectors(selectors_namespaceObject);
 const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: external ["wp","components"]
 const external_wp_components_namespaceObject = window["wp"]["components"];
-;// CONCATENATED MODULE: external ["wp","i18n"]
-const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
 ;// CONCATENATED MODULE: external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
+;// CONCATENATED MODULE: external ["wp","i18n"]
+const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
+;// CONCATENATED MODULE: ./packages/patterns/build-module/api/index.js
+/**
+ * Internal dependencies
+ */
+
+
+/**
+ * Determines whether a block is overridable.
+ *
+ * @param {WPBlock} block The block to test.
+ *
+ * @return {boolean} `true` if a block is overridable, `false` otherwise.
+ */
+function isOverridableBlock(block) {
+  return Object.keys(PARTIAL_SYNCING_SUPPORTED_BLOCKS).includes(block.name) && !!block.attributes.metadata?.bindings && Object.values(block.attributes.metadata.bindings).some(binding => binding.source === 'core/pattern-overrides');
+}
+
+;// CONCATENATED MODULE: ./packages/patterns/build-module/components/overrides-panel.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+
+
+/**
+ * Internal dependencies
+ */
+
+
+const {
+  BlockQuickNavigation
+} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
+function OverridesPanel() {
+  const allClientIds = (0,external_wp_data_namespaceObject.useSelect)(select => select(external_wp_blockEditor_namespaceObject.store).getClientIdsWithDescendants(), []);
+  const {
+    getBlock
+  } = (0,external_wp_data_namespaceObject.useSelect)(external_wp_blockEditor_namespaceObject.store);
+  const clientIdsWithOverrides = (0,external_wp_element_namespaceObject.useMemo)(() => allClientIds.filter(clientId => {
+    const block = getBlock(clientId);
+    return isOverridableBlock(block);
+  }), [allClientIds, getBlock]);
+  if (!clientIdsWithOverrides?.length) {
+    return null;
+  }
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.PanelBody, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Overrides')
+  }, (0,external_React_namespaceObject.createElement)(BlockQuickNavigation, {
+    clientIds: clientIdsWithOverrides
+  }));
+}
+
 ;// CONCATENATED MODULE: external ["wp","notices"]
 const external_wp_notices_namespaceObject = window["wp"]["notices"];
 ;// CONCATENATED MODULE: external ["wp","compose"]
@@ -1296,11 +1351,15 @@ function ResetOverridesControl(props) {
 
 
 
+
+
 const privateApis = {};
 lock(privateApis, {
+  OverridesPanel: OverridesPanel,
   CreatePatternModal: CreatePatternModal,
   CreatePatternModalContents: CreatePatternModalContents,
   DuplicatePatternModal: DuplicatePatternModal,
+  isOverridableBlock: isOverridableBlock,
   useDuplicatePatternProps: useDuplicatePatternProps,
   RenamePatternModal: RenamePatternModal,
   PatternsMenuItems: PatternsMenuItems,

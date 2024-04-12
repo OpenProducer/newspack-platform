@@ -326,7 +326,7 @@ function newspack_blocks_render_block_homepage_articles( $attributes ) {
 			map_deep(
 				$attributes,
 				function( $attribute ) {
-					return false === $attribute ? '0' : $attribute;
+					return false === $attribute ? '0' : rawurlencode( $attribute );
 				}
 			),
 			[

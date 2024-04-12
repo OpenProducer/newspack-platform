@@ -324,7 +324,7 @@ function gutenberg_apply_block_core_search_border_style( $attributes, $property,
  * @param array  $button_styles  Current collection of button styles.
  * @param array  $input_styles   Current collection of input styles.
  */
-function gutenberg_gutenberg_apply_block_core_search_border_styles( $attributes, $property, &$wrapper_styles, &$button_styles, &$input_styles ) {
+function gutenberg_apply_block_core_search_border_styles( $attributes, $property, &$wrapper_styles, &$button_styles, &$input_styles ) {
 	gutenberg_apply_block_core_search_border_style( $attributes, $property, null, $wrapper_styles, $button_styles, $input_styles );
 	gutenberg_apply_block_core_search_border_style( $attributes, $property, 'top', $wrapper_styles, $button_styles, $input_styles );
 	gutenberg_apply_block_core_search_border_style( $attributes, $property, 'right', $wrapper_styles, $button_styles, $input_styles );
@@ -366,9 +366,9 @@ function gutenberg_styles_for_block_core_search( $attributes ) {
 	}
 
 	// Add border width and color styles.
-	gutenberg_gutenberg_apply_block_core_search_border_styles( $attributes, 'width', $wrapper_styles, $button_styles, $input_styles );
-	gutenberg_gutenberg_apply_block_core_search_border_styles( $attributes, 'color', $wrapper_styles, $button_styles, $input_styles );
-	gutenberg_gutenberg_apply_block_core_search_border_styles( $attributes, 'style', $wrapper_styles, $button_styles, $input_styles );
+	gutenberg_apply_block_core_search_border_styles( $attributes, 'width', $wrapper_styles, $button_styles, $input_styles );
+	gutenberg_apply_block_core_search_border_styles( $attributes, 'color', $wrapper_styles, $button_styles, $input_styles );
+	gutenberg_apply_block_core_search_border_styles( $attributes, 'style', $wrapper_styles, $button_styles, $input_styles );
 
 	// Add border radius styles.
 	$has_border_radius = ! empty( $attributes['style']['border']['radius'] );

@@ -508,8 +508,9 @@ class Advertising_Wizard extends Wizard {
 			'newspack-advertising-wizard',
 			'newspack_ads_wizard',
 			array(
-				'iab_sizes'         => function_exists( '\Newspack_Ads\get_iab_sizes' ) ? \Newspack_Ads\get_iab_sizes() : [],
-				'mediakit_edit_url' => get_option( 'pmk-page' ) ? get_edit_post_link( get_option( 'pmk-page' ) ) : '',
+				'iab_sizes'          => function_exists( '\Newspack_Ads\get_iab_sizes' ) ? \Newspack_Ads\get_iab_sizes() : [],
+				'mediakit_edit_url'  => get_option( 'pmk-page' ) ? get_edit_post_link( get_option( 'pmk-page' ) ) : '',
+				'can_connect_google' => OAuth::is_proxy_configured( 'google' ),
 			)
 		);
 	}

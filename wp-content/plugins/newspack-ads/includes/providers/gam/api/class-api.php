@@ -73,6 +73,48 @@ class Api {
 	private $credentials = null;
 
 	/**
+	 * Advertisers
+	 *
+	 * @var Api\Advertisers
+	 */
+	public $advertisers = null;
+
+	/**
+	 * Creatives
+	 *
+	 * @var Api\Creatives
+	 */
+	public $creatives = null;
+
+	/**
+	 * Targeting Keys
+	 *
+	 * @var Api\Targeting_Keys
+	 */
+	public $targeting_keys = null;
+
+	/**
+	 * Ad Units
+	 *
+	 * @var Api\Ad_Units
+	 */
+	public $ad_units = null;
+
+	/**
+	 * Line Items
+	 *
+	 * @var Api\Line_Items
+	 */
+	public $line_items = null;
+
+	/**
+	 * Orders
+	 *
+	 * @var Api\Orders
+	 */
+	public $orders = null;
+
+	/**
 	 * Constructor.
 	 *
 	 * @param string|AdManagerSession $auth_method_or_session Authentication method or session.

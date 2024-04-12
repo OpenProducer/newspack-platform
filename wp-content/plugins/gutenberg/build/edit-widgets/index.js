@@ -3893,6 +3893,9 @@ function KeyboardShortcutHelpModal({
   }), (0,external_React_namespaceObject.createElement)(ShortcutSection, {
     title: (0,external_wp_i18n_namespaceObject.__)('Text formatting'),
     shortcuts: textFormattingShortcuts
+  }), (0,external_React_namespaceObject.createElement)(ShortcutCategorySection, {
+    title: (0,external_wp_i18n_namespaceObject.__)('List View shortcuts'),
+    categoryName: "list-view"
   }));
 }
 

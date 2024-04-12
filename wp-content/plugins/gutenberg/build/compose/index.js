@@ -3515,7 +3515,6 @@ function useConstrainedTabbing() {
       // See https://github.com/WordPress/gutenberg/issues/46041.
       if ( /** @type {HTMLElement} */target.contains(nextElement)) {
         event.preventDefault();
-        /** @type {HTMLElement} */
         nextElement?.focus();
         return;
       }
@@ -3768,7 +3767,7 @@ function useFocusOnMount(focusOnMount = 'firstElement') {
       timerId.current = setTimeout(() => {
         const firstTabbable = external_wp_dom_namespaceObject.focus.tabbable.find(node)[0];
         if (firstTabbable) {
-          setFocus( /** @type {HTMLElement} */firstTabbable);
+          setFocus(firstTabbable);
         }
       }, 0);
       return;
