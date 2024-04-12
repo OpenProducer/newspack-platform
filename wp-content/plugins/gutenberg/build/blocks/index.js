@@ -13798,7 +13798,11 @@ function htmlToBlocks(html, handler) {
       blockName
     } = rawTransform;
     if (transform) {
-      return transform(node, handler);
+      const block = transform(node, handler);
+      if (node.hasAttribute('class')) {
+        block.attributes.className = node.getAttribute('class');
+      }
+      return block;
     }
     return createBlock(blockName, getBlockAttributes(blockName, node.outerHTML));
   });
@@ -13809,7 +13813,7 @@ function htmlToBlocks(html, handler) {
  * WordPress dependencies
  */
 
-function normaliseBlocks(HTML) {
+function normaliseBlocks(HTML, options = {}) {
   const decuDoc = document.implementation.createHTMLDocument('');
   const accuDoc = document.implementation.createHTMLDocument('');
   const decu = decuDoc.body;
@@ -13845,7 +13849,7 @@ function normaliseBlocks(HTML) {
         }
       } else if (node.nodeName === 'P') {
         // Only append non-empty paragraph nodes.
-        if ((0,external_wp_dom_namespaceObject.isEmpty)(node)) {
+        if ((0,external_wp_dom_namespaceObject.isEmpty)(node) && !options.raw) {
           decu.removeChild(node);
         } else {
           accu.appendChild(node);
@@ -13890,49 +13894,18 @@ function specialCommentConverter(node, doc) {
   if (node.nodeType !== node.COMMENT_NODE) {
     return;
   }
-  if (node.nodeValue === 'nextpage') {
-    (0,external_wp_dom_namespaceObject.replace)(node, createNextpage(doc));
+  if (node.nodeValue !== 'nextpage' && node.nodeValue.indexOf('more') !== 0) {
     return;
   }
-  if (node.nodeValue.indexOf('more') === 0) {
-    moreCommentConverter(node, doc);
-  }
-}
-
-/**
- * Convert `<!--more-->` as well as the `<!--more Some text-->` variant
- * and its `<!--noteaser-->` companion into the custom element
- * described in `specialCommentConverter()`.
- *
- * @param {Node}     node The node to be processed.
- * @param {Document} doc  The document of the node.
- * @return {void}
- */
-function moreCommentConverter(node, doc) {
-  // Grab any custom text in the comment.
-  const customText = node.nodeValue.slice(4).trim();
-
-  /*
-   * When a `<!--more-->` comment is found, we need to look for any
-   * `<!--noteaser-->` sibling, but it may not be a direct sibling
-   * (whitespace typically lies in between)
-   */
-  let sibling = node;
-  let noTeaser = false;
-  while (sibling = sibling.nextSibling) {
-    if (sibling.nodeType === sibling.COMMENT_NODE && sibling.nodeValue === 'noteaser') {
-      noTeaser = true;
-      (0,external_wp_dom_namespaceObject.remove)(sibling);
-      break;
-    }
-  }
-  const moreBlock = createMore(customText, noTeaser, doc);
+  const block = special_comment_converter_createBlock(node, doc);
 
   // If our `<!--more-->` comment is in the middle of a paragraph, we should
-  // split the paragraph in two and insert the more block in between. If not,
-  // the more block will eventually end up being inserted after the paragraph.
-  if (!node.parentNode || node.parentNode.nodeName !== 'P' || node.parentNode.childNodes.length === 1) {
-    (0,external_wp_dom_namespaceObject.replace)(node, moreBlock);
+  // split the paragraph in two and insert the more block in between. If it's
+  // inside an empty paragraph, we should still move it out of the paragraph
+  // and remove the paragraph. If there's no paragraph, fall back to simply
+  // replacing the comment.
+  if (!node.parentNode || node.parentNode.nodeName !== 'P') {
+    (0,external_wp_dom_namespaceObject.replace)(node, block);
   } else {
     const childNodes = Array.from(node.parentNode.childNodes);
     const nodeIndex = childNodes.indexOf(node);
@@ -13946,11 +13919,35 @@ function moreCommentConverter(node, doc) {
     };
 
     // Split the original parent node and insert our more block
-    [childNodes.slice(0, nodeIndex).reduce(paragraphBuilder, null), moreBlock, childNodes.slice(nodeIndex + 1).reduce(paragraphBuilder, null)].forEach(element => element && wrapperNode.insertBefore(element, node.parentNode));
+    [childNodes.slice(0, nodeIndex).reduce(paragraphBuilder, null), block, childNodes.slice(nodeIndex + 1).reduce(paragraphBuilder, null)].forEach(element => element && wrapperNode.insertBefore(element, node.parentNode));
 
     // Remove the old parent paragraph
     (0,external_wp_dom_namespaceObject.remove)(node.parentNode);
   }
+}
+function special_comment_converter_createBlock(commentNode, doc) {
+  if (commentNode.nodeValue === 'nextpage') {
+    return createNextpage(doc);
+  }
+
+  // Grab any custom text in the comment.
+  const customText = commentNode.nodeValue.slice(4).trim();
+
+  /*
+   * When a `<!--more-->` comment is found, we need to look for any
+   * `<!--noteaser-->` sibling, but it may not be a direct sibling
+   * (whitespace typically lies in between)
+   */
+  let sibling = commentNode;
+  let noTeaser = false;
+  while (sibling = sibling.nextSibling) {
+    if (sibling.nodeType === sibling.COMMENT_NODE && sibling.nodeValue === 'noteaser') {
+      noTeaser = true;
+      (0,external_wp_dom_namespaceObject.remove)(sibling);
+      break;
+    }
+  }
+  return createMore(customText, noTeaser, doc);
 }
 function createMore(customText, noTeaser, doc) {
   const node = doc.createElement('wp-block');
@@ -14032,11 +14029,13 @@ function listReducer(node) {
  * Internal dependencies
  */
 
-function blockquoteNormaliser(node) {
-  if (node.nodeName !== 'BLOCKQUOTE') {
-    return;
-  }
-  node.innerHTML = normaliseBlocks(node.innerHTML);
+function blockquoteNormaliser(options) {
+  return node => {
+    if (node.nodeName !== 'BLOCKQUOTE') {
+      return;
+    }
+    node.innerHTML = normaliseBlocks(node.innerHTML, options);
+  };
 }
 
 ;// CONCATENATED MODULE: ./packages/blocks/build-module/api/raw-handling/figure-content-reducer.js
@@ -14147,6 +14146,8 @@ const external_wp_shortcode_namespaceObject = window["wp"]["shortcode"];
 
 
 const castArray = maybeArray => Array.isArray(maybeArray) ? maybeArray : [maybeArray];
+const beforeLineRegexp = /(\n|<p>)\s*$/;
+const afterLineRegexp = /^\s*(\n|<\/p>)/;
 function segmentHTMLToShortcodeBlock(HTML, lastIndex = 0, excludedBlockNames = []) {
   // Get all matches.
   const transformsFrom = getBlockTransforms('from');
@@ -14167,7 +14168,7 @@ function segmentHTMLToShortcodeBlock(HTML, lastIndex = 0, excludedBlockNames = [
     // not on a new line (or in paragraph from Markdown converter),
     // consider the shortcode as inline text, and thus skip conversion for
     // this segment.
-    if (!match.shortcode.content?.includes('<') && !(/(\n|<p>)\s*$/.test(beforeHTML) && /^\s*(\n|<\/p>)/.test(afterHTML))) {
+    if (!match.shortcode.content?.includes('<') && !(beforeLineRegexp.test(beforeHTML) && afterLineRegexp.test(afterHTML))) {
       return segmentHTMLToShortcodeBlock(HTML, lastIndex);
     }
 
@@ -14217,7 +14218,7 @@ function segmentHTMLToShortcodeBlock(HTML, lastIndex = 0, excludedBlockNames = [
       block = applyBuiltInValidationFixes(block, transformationBlockType);
       blocks = [block];
     }
-    return [...segmentHTMLToShortcodeBlock(beforeHTML), ...blocks, ...segmentHTMLToShortcodeBlock(afterHTML)];
+    return [...segmentHTMLToShortcodeBlock(beforeHTML.replace(beforeLineRegexp, '')), ...blocks, ...segmentHTMLToShortcodeBlock(afterHTML.replace(afterLineRegexp, ''))];
   }
   return [HTML];
 }
@@ -14474,9 +14475,13 @@ function rawHandler({
     figureContentReducer,
     // Needed to create the quote block, which cannot handle text
     // without wrapper paragraphs.
-    blockquoteNormaliser];
+    blockquoteNormaliser({
+      raw: true
+    })];
     piece = deepFilterHTML(piece, filters, blockContentSchema);
-    piece = normaliseBlocks(piece);
+    piece = normaliseBlocks(piece, {
+      raw: true
+    });
     return htmlToBlocks(piece, rawHandler);
   }).flat().filter(Boolean);
 }
@@ -15114,7 +15119,7 @@ function pasteHandler({
     if (typeof piece !== 'string') {
       return piece;
     }
-    const filters = [googleDocsUIdRemover, msListConverter, headRemover, listReducer, imageCorrector, phrasingContentReducer, specialCommentConverter, commentRemover, iframeRemover, figureContentReducer, blockquoteNormaliser, divNormaliser];
+    const filters = [googleDocsUIdRemover, msListConverter, headRemover, listReducer, imageCorrector, phrasingContentReducer, specialCommentConverter, commentRemover, iframeRemover, figureContentReducer, blockquoteNormaliser(), divNormaliser];
     const schema = {
       ...blockContentSchema,
       // Keep top-level phrasing content, normalised by `normaliseBlocks`.

@@ -1,3 +1,17 @@
+## [2.31.1](https://github.com/Automattic/newspack-popups/compare/v2.31.0...v2.31.1) (2024-04-08)
+
+
+### Bug Fixes
+
+* ga4 events ([11ca3b8](https://github.com/Automattic/newspack-popups/commit/11ca3b8a0e8e5b586d76a6a27659d33b0246683c))
+
+## [2.31.1-alpha.1](https://github.com/Automattic/newspack-popups/compare/v2.31.0...v2.31.1-alpha.1) (2024-03-28)
+
+
+### Bug Fixes
+
+* ga4 events ([11ca3b8](https://github.com/Automattic/newspack-popups/commit/11ca3b8a0e8e5b586d76a6a27659d33b0246683c))
+
 # [2.31.0](https://github.com/Automattic/newspack-popups/compare/v2.30.1...v2.31.0) (2024-03-04)
 
 

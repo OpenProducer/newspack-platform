@@ -753,7 +753,11 @@ function convertLegacyData(data) {
   }, 'panels', convertEditPostPanels);
   data = moveIndividualPreferenceToPreferences(data, {
     from: 'core/editor',
-    to: 'core/edit-post'
+    to: 'core'
+  }, 'isPublishSidebarEnabled');
+  data = moveIndividualPreferenceToPreferences(data, {
+    from: 'core/edit-post',
+    to: 'core'
   }, 'isPublishSidebarEnabled');
   data = moveIndividualPreferenceToPreferences(data, {
     from: 'core/edit-site',
@@ -806,7 +810,7 @@ function convertComplementaryAreas(state) {
 function convertEditorSettings(data) {
   var _newData$coreEditPo, _newData$coreEditSi;
   let newData = data;
-  const settingsToMoveToCore = ['allowRightClickOverrides', 'distractionFree', 'editorMode', 'fixedToolbar', 'focusMode', 'hiddenBlockTypes', 'inactivePanels', 'keepCaretInsideBlock', 'mostUsedBlocks', 'openPanels', 'showBlockBreadcrumbs', 'showIconLabels', 'showListViewByDefault'];
+  const settingsToMoveToCore = ['allowRightClickOverrides', 'distractionFree', 'editorMode', 'fixedToolbar', 'focusMode', 'hiddenBlockTypes', 'inactivePanels', 'keepCaretInsideBlock', 'mostUsedBlocks', 'openPanels', 'showBlockBreadcrumbs', 'showIconLabels', 'showListViewByDefault', 'isPublishSidebarEnabled'];
   settingsToMoveToCore.forEach(setting => {
     if (data?.['core/edit-post']?.[setting] !== undefined) {
       newData = {

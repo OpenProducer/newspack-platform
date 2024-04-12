@@ -1282,7 +1282,7 @@ function gutenberg_block_core_navigation_get_classic_menu_fallback() {
  * @param  object $classic_nav_menu WP_Term The classic navigation object to convert.
  * @return array the normalized parsed blocks.
  */
-function gutenberg_gutenberg_block_core_navigation_get_classic_menu_fallback_blocks( $classic_nav_menu ) {
+function gutenberg_block_core_navigation_get_classic_menu_fallback_blocks( $classic_nav_menu ) {
 
 	_deprecated_function( __FUNCTION__, '6.3.0', 'WP_Navigation_Fallback::get_classic_menu_fallback_blocks' );
 
@@ -1337,7 +1337,7 @@ function gutenberg_block_core_navigation_maybe_use_classic_menu_fallback() {
 	}
 
 	// If we have a classic menu then convert it to blocks.
-	$classic_nav_menu_blocks = gutenberg_gutenberg_block_core_navigation_get_classic_menu_fallback_blocks( $classic_nav_menu );
+	$classic_nav_menu_blocks = gutenberg_block_core_navigation_get_classic_menu_fallback_blocks( $classic_nav_menu );
 
 	if ( empty( $classic_nav_menu_blocks ) ) {
 		return;
@@ -1593,7 +1593,7 @@ if ( has_filter( 'rest_insert_wp_navigation', $rest_insert_wp_navigation_core_ca
  * @param WP_Post          $post     Post object.
  * @return WP_REST_Response The response object.
  */
-function gutenberg_gutenberg_block_core_navigation_insert_hooked_blocks_into_rest_response( $response, $post ) {
+function gutenberg_block_core_navigation_insert_hooked_blocks_into_rest_response( $response, $post ) {
 	if ( ! isset( $response->data['content']['raw'] ) || ! isset( $response->data['content']['rendered'] ) ) {
 		return $response;
 	}
@@ -1621,5 +1621,5 @@ $rest_prepare_wp_navigation_core_callback = 'block_core_navigation_' . 'insert_h
  * that are not present in Gutenberg's WP 6.5 compatibility layer.
  */
 if ( function_exists( 'set_ignored_hooked_blocks_metadata' ) && ! has_filter( 'rest_prepare_wp_navigation', $rest_prepare_wp_navigation_core_callback ) ) {
-	add_filter( 'rest_prepare_wp_navigation', 'gutenberg_gutenberg_block_core_navigation_insert_hooked_blocks_into_rest_response', 10, 3 );
+	add_filter( 'rest_prepare_wp_navigation', 'gutenberg_block_core_navigation_insert_hooked_blocks_into_rest_response', 10, 3 );
 }

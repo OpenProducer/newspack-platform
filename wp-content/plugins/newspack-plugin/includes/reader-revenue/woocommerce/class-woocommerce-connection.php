@@ -109,6 +109,30 @@ class WooCommerce_Connection {
 	}
 
 	/**
+	 * Get a batch of active Woo Subscriptions.
+	 *
+	 * @param int $batch_size Max number of subscriptions to get.
+	 * @param int $offset     Number to skip.
+	 *
+	 * @return array|false Array of subscription objects, or false if no more to fetch.
+	 */
+	public static function get_batch_of_active_subscriptions( $batch_size = 100, $offset = 0 ) {
+		if ( ! function_exists( 'wcs_get_subscriptions' ) ) {
+			return false;
+		}
+
+		$subscriptions = \wcs_get_subscriptions(
+			[
+				'status'                 => [ 'active', 'pending', 'pending-cancel' ],
+				'subscriptions_per_page' => $batch_size,
+				'offset'                 => $offset,
+			]
+		);
+
+		return ! empty( $subscriptions ) ? array_values( $subscriptions ) : false;
+	}
+
+	/**
 	 * Get the last successful order for a given customer.
 	 *
 	 * @param \WC_Customer $customer Customer object.
@@ -283,6 +307,14 @@ class WooCommerce_Connection {
 
 		if ( ! $order ) {
 			$order = self::get_last_successful_order( $customer );
+
+			// If customer has no order, they might still have a Subscription.
+			if ( ! $order ) {
+				$user_subscriptions = wcs_get_users_subscriptions( $customer->get_id() );
+				if ( $user_subscriptions ) {
+					$order = reset( $user_subscriptions );
+				}
+			}
 		}
 
 		if ( $order ) {

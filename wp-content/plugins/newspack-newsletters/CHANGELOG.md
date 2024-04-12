@@ -1,3 +1,17 @@
+# [2.13.0](https://github.com/Automattic/newspack-newsletters/compare/v2.12.0...v2.13.0) (2024-04-08)
+
+
+### Features
+
+* flag to delete all local lists ([#1453](https://github.com/Automattic/newspack-newsletters/issues/1453)) ([d83be0d](https://github.com/Automattic/newspack-newsletters/commit/d83be0d06fbc32c854c9f8aa84df695b94d2d715))
+
+# [2.13.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v2.12.0...v2.13.0-alpha.1) (2024-03-28)
+
+
+### Features
+
+* flag to delete all local lists ([#1453](https://github.com/Automattic/newspack-newsletters/issues/1453)) ([d83be0d](https://github.com/Automattic/newspack-newsletters/commit/d83be0d06fbc32c854c9f8aa84df695b94d2d715))
+
 # [2.12.0](https://github.com/Automattic/newspack-newsletters/compare/v2.11.2...v2.12.0) (2024-03-25)
 
 

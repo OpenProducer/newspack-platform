@@ -1722,6 +1722,15 @@ const help = (0,external_React_namespaceObject.createElement)(external_wp_primit
 
 const unknown_name = 'core/unknown';
 const unknown_title = (0,external_wp_i18n_namespaceObject.__)('Clear Unknown Formatting');
+function selectionContainsUnknownFormats(value) {
+  if ((0,external_wp_richText_namespaceObject.isCollapsed)(value)) {
+    return false;
+  }
+  const selectedValue = (0,external_wp_richText_namespaceObject.slice)(value);
+  return selectedValue.formats.some(formats => {
+    return formats.some(format => format.type === unknown_name);
+  });
+}
 const unknown = {
   name: unknown_name,
   title: unknown_title,
@@ -1733,16 +1742,12 @@ const unknown = {
     onChange,
     onFocus
   }) {
+    if (!isActive && !selectionContainsUnknownFormats(value)) {
+      return null;
+    }
     function onClick() {
       onChange((0,external_wp_richText_namespaceObject.removeFormat)(value, unknown_name));
       onFocus();
-    }
-    const selectedValue = (0,external_wp_richText_namespaceObject.slice)(value);
-    const hasUnknownFormats = selectedValue.formats.some(formats => {
-      return formats.some(format => format.type === unknown_name);
-    });
-    if (!isActive && !hasUnknownFormats) {
-      return null;
     }
     return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.RichTextToolbarButton, {
       name: "unknown",

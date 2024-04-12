@@ -10,6 +10,8 @@
  *
  * @since 5.9.0
  *
+ * @global WP_Embed $wp_embed WordPress Embed object.
+ *
  * @param array $attributes The block attributes.
  *
  * @return string The render.
@@ -60,7 +62,7 @@ function gutenberg_render_block_core_template_part( $attributes ) {
 			 * @param WP_Post $template_part_post The template part post object.
 			 * @param string  $content            The template part content.
 			 */
-			do_action( 'gutenberg_render_block_core_template_part_post', $template_part_id, $attributes, $template_part_post, $content );
+			do_action( 'render_block_core_template_part_post', $template_part_id, $attributes, $template_part_post, $content );
 		} else {
 			$template_part_file_path = '';
 			// Else, if the template part was provided by the active theme,
@@ -73,7 +75,7 @@ function gutenberg_render_block_core_template_part( $attributes ) {
 					$area = $block_template->area;
 				}
 
-				// Needed for the `gutenberg_render_block_core_template_part_file` and `gutenberg_render_block_core_template_part_none` actions below.
+				// Needed for the `render_block_core_template_part_file` and `render_block_core_template_part_none` actions below.
 				$block_template_file = _get_block_template_file( 'wp_template_part', $attributes['slug'] );
 				if ( $block_template_file ) {
 					$template_part_file_path = $block_template_file['path'];
@@ -91,7 +93,7 @@ function gutenberg_render_block_core_template_part( $attributes ) {
 				 * @param string $template_part_file_path Absolute path to the template path.
 				 * @param string $content                 The template part content.
 				 */
-				do_action( 'gutenberg_render_block_core_template_part_file', $template_part_id, $attributes, $template_part_file_path, $content );
+				do_action( 'render_block_core_template_part_file', $template_part_id, $attributes, $template_part_file_path, $content );
 			} else {
 				/**
 				 * Fires when a requested block template part does not exist in the database nor in the theme.
@@ -102,7 +104,7 @@ function gutenberg_render_block_core_template_part( $attributes ) {
 				 * @param array  $attributes              The block attributes.
 				 * @param string $template_part_file_path Absolute path to the not found template path.
 				 */
-				do_action( 'gutenberg_render_block_core_template_part_none', $template_part_id, $attributes, $template_part_file_path );
+				do_action( 'render_block_core_template_part_none', $template_part_id, $attributes, $template_part_file_path );
 			}
 		}
 	}
