@@ -1,3 +1,17 @@
+## [3.6.11](https://github.com/Automattic/newspack-plugin/compare/v3.6.10...v3.6.11) (2024-04-19)
+
+
+### Bug Fixes
+
+* minor bugs in reCAPTCHA + Campaigns admin UIs ([#3073](https://github.com/Automattic/newspack-plugin/issues/3073)) ([876d0a9](https://github.com/Automattic/newspack-plugin/commit/876d0a9a1baa26480e399d52199d62d8a8f6bed5))
+
+## [3.6.10](https://github.com/Automattic/newspack-plugin/compare/v3.6.9...v3.6.10) (2024-04-15)
+
+
+### Bug Fixes
+
+* safer approach to comment metering fix ([#3067](https://github.com/Automattic/newspack-plugin/issues/3067)) ([e73657d](https://github.com/Automattic/newspack-plugin/commit/e73657d75fabf2bd56943d4c556f40abf4ba0aef))
+
 ## [3.6.9](https://github.com/Automattic/newspack-plugin/compare/v3.6.8...v3.6.9) (2024-04-12)
 
 

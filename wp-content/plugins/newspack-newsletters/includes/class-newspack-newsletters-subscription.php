@@ -614,29 +614,38 @@ class Newspack_Newsletters_Subscription {
 	 *
 	 * @return array|WP_Error Contact data if it was added, or error otherwise.
 	 */
-	private static function add_contact_to_provider( $contact, $lists, $is_updating = false ) {
+	private static function add_contact_to_provider( $contact, $lists = [], $is_updating = false ) {
 		$provider = Newspack_Newsletters::get_service_provider();
 		$errors   = new WP_Error();
 		$result   = [];
 
-		if ( empty( $lists ) ) {
-			try {
+		try {
+			if ( method_exists( $provider, 'add_contact_with_groups' ) ) {
+				$result = $provider->add_contact_with_groups( $contact, $lists );
+			} elseif ( empty( $lists ) ) {
 				$result = $provider->add_contact( $contact );
-			} catch ( \Exception $e ) {
-				$errors->add( 'newspack_newsletters_subscription_add_contact', $e->getMessage() );
-			}
-		} else {
-			foreach ( $lists as $list_id ) {
-				try {
-					$result = $provider->add_contact_handling_local_list( $contact, $list_id );
-				} catch ( \Exception $e ) {
-					$errors->add( 'newspack_newsletters_subscription_add_contact', $e->getMessage() );
+			} else {
+				foreach ( $lists as $list_id ) {
+					$result = $provider->add_contact( $contact, $list_id );
 				}
 			}
+		} catch ( \Exception $e ) {
+			$errors->add( 'newspack_newsletters_subscription_add_contact', $e->getMessage() );
 		}
+
 		if ( is_wp_error( $result ) ) {
 			$errors->add( $result->get_error_code(), $result->get_error_message() );
 		}
+
+		// Handle local lists feature.
+		foreach ( $lists as $list_id ) {
+			try {
+				$provider->add_contact_handling_local_list( $contact, $list_id );
+			} catch ( \Exception $e ) {
+				$errors->add( 'newspack_newsletters_subscription_handling_local_list', $e->getMessage() );
+			}
+		}
+
 		$result = $errors->has_errors() ? $errors : $result;
 
 		/**

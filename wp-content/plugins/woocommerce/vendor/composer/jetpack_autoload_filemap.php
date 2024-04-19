@@ -11,15 +11,15 @@ return array(
 		'path'    => $vendorDir . '/symfony/polyfill-php80/bootstrap.php'
 	),
 	'44e8414cd27982ecf86403af6e48f123' => array(
-		'version' => '8.7.0.0',
+		'version' => '8.8.2.0',
 		'path'    => $baseDir . '/src/StoreApi/deprecated.php'
 	),
 	'9ce98895d0a470c71998c4b530020d26' => array(
-		'version' => '8.7.0.0',
+		'version' => '8.8.2.0',
 		'path'    => $baseDir . '/src/StoreApi/functions.php'
 	),
 	'c379ea42c3f5964a973a7106b08c5ef0' => array(
-		'version' => '8.7.0.0',
+		'version' => '8.8.2.0',
 		'path'    => $baseDir . '/src/Blocks/Domain/Services/functions.php'
 	),
 );

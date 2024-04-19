@@ -1,3 +1,10 @@
+## [3.0.8](https://github.com/Automattic/newspack-blocks/compare/v3.0.7...v3.0.8) (2024-04-19)
+
+
+### Bug Fixes
+
+* fix wrapping issue happening in Firefox ([#1712](https://github.com/Automattic/newspack-blocks/issues/1712)) ([82c676e](https://github.com/Automattic/newspack-blocks/commit/82c676e62f6832d5ca38c8b149377c45701ffb86))
+
 ## [3.0.7](https://github.com/Automattic/newspack-blocks/compare/v3.0.6...v3.0.7) (2024-04-08)
 
 

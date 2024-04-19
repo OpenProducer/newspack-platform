@@ -57,12 +57,11 @@ class ShippingController {
 				'countryStates',
 				function() {
 					return WC()->countries->get_states();
-				},
-				true
+				}
 			);
 		}
 
-		$this->asset_data_registry->add( 'collectableMethodIds', array( 'Automattic\WooCommerce\StoreApi\Utilities\LocalPickupUtils', 'get_local_pickup_method_ids' ), true );
+		$this->asset_data_registry->add( 'collectableMethodIds', array( 'Automattic\WooCommerce\StoreApi\Utilities\LocalPickupUtils', 'get_local_pickup_method_ids' ) );
 		$this->asset_data_registry->add( 'shippingCostRequiresAddress', get_option( 'woocommerce_shipping_cost_requires_address', false ) === 'yes' );
 		add_action( 'rest_api_init', [ $this, 'register_settings' ] );
 		add_action( 'admin_enqueue_scripts', [ $this, 'admin_scripts' ] );
@@ -159,7 +158,11 @@ class ShippingController {
 		if ( CartCheckoutUtils::is_checkout_block_default() && $this->local_pickup_enabled ) {
 			foreach ( $settings as $index => $setting ) {
 				if ( 'woocommerce_shipping_cost_requires_address' === $setting['id'] ) {
-					$settings[ $index ]['desc']    .= ' (' . __( 'Not available when using WooCommerce Blocks Local Pickup', 'woocommerce' ) . ')';
+					$settings[ $index ]['desc'] = sprintf(
+						/* translators: %s: URL to the documentation. */
+						__( 'Not available when using the <a href="%s">Local pickup options powered by the Checkout block</a>.', 'woocommerce' ),
+						'https://woocommerce.com/document/woocommerce-blocks-local-pickup/'
+					);
 					$settings[ $index ]['disabled'] = true;
 					$settings[ $index ]['value']    = 'no';
 					break;
@@ -487,5 +490,30 @@ class ShippingController {
 		WC_Tracks::record_event( $event_name, $data );
 
 		return $served;
+	}
+
+	/**
+	 * Check if legacy local pickup is activated in any of the shipping zones or in the Rest of the World zone.
+	 *
+	 * @since 8.8.0
+	 *
+	 * @return bool
+	 */
+	public static function is_legacy_local_pickup_active() {
+		$rest_of_the_world                          = \WC_Shipping_Zones::get_zone_by( 'zone_id', 0 );
+		$shipping_zones                             = \WC_Shipping_Zones::get_zones();
+		$rest_of_the_world_data                     = $rest_of_the_world->get_data();
+		$rest_of_the_world_data['shipping_methods'] = $rest_of_the_world->get_shipping_methods();
+		array_unshift( $shipping_zones, $rest_of_the_world_data );
+
+		foreach ( $shipping_zones as $zone ) {
+			foreach ( $zone['shipping_methods'] as $method ) {
+				if ( 'local_pickup' === $method->id && $method->is_enabled() ) {
+					return true;
+				}
+			}
+		}
+
+		return false;
 	}
 }

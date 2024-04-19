@@ -36,7 +36,7 @@ class Metering {
 	 */
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_meta' ] );
-		add_action( 'wp', [ __CLASS__, 'handle_restriction' ], 11 );
+		add_action( 'wp', [ __CLASS__, 'handle_restriction' ], 9 );
 		add_action( 'wp_footer', [ __CLASS__, 'enqueue_scripts' ] );
 		add_filter( 'newspack_reader_activity_article_view', [ __CLASS__, 'get_article_view' ], 20 );
 	}
@@ -131,7 +131,8 @@ class Metering {
 		// Remove the default restriction handler from 'SkyVerge\WooCommerce\Memberships\Restrictions\Posts::restrict_post'.
 		if ( self::is_metering() ) {
 			$restriction_instance = \wc_memberships()->get_restrictions_instance()->get_posts_restrictions_instance();
-			\remove_action( 'the_post', spl_object_hash( $restriction_instance ) . 'restrict_post', 0 );
+			\remove_action( 'wp', spl_object_hash( $restriction_instance ) . 'handle_restriction_modes' );
+			\add_filter( 'wc_memberships_restrictable_comment_types', '__return_empty_array' );
 		}
 
 		// Add inline gate to the footer so it can be handled by the frontend.

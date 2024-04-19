@@ -558,7 +558,7 @@ class WC_REST_System_Status_V2_Controller extends WC_REST_Controller {
 							),
 						),
 						'wccom_connected'                => array(
-							'description' => __( 'Is store connected to Woo.com?', 'woocommerce' ),
+							'description' => __( 'Is store connected to WooCommerce.com?', 'woocommerce' ),
 							'type'        => 'string',
 							'context'     => array( 'view' ),
 							'readonly'    => true,
@@ -855,7 +855,7 @@ class WC_REST_System_Status_V2_Controller extends WC_REST_Controller {
 
 			if ( false === $get_response_code || is_wp_error( $get_response_code ) ) {
 				$response = wp_safe_remote_get(
-					'https://woo.com/wc-api/product-key-api?request=ping&network=' . ( is_multisite() ? '1' : '0' ),
+					'https://woocommerce.com/wc-api/product-key-api?request=ping&network=' . ( is_multisite() ? '1' : '0' ),
 					array(
 						'user-agent' => 'WooCommerce/' . WC()->version . '; ' . get_bloginfo( 'url' ),
 					)
@@ -870,6 +870,7 @@ class WC_REST_System_Status_V2_Controller extends WC_REST_Controller {
 		}
 
 		$database_version = wc_get_server_database_version();
+		$log_directory    = LoggingUtil::get_log_directory();
 
 		// Return all environment info. Described by JSON Schema.
 		return array(
@@ -877,8 +878,8 @@ class WC_REST_System_Status_V2_Controller extends WC_REST_Controller {
 			'site_url'                  => get_option( 'siteurl' ),
 			'store_id'                  => get_option( \WC_Install::STORE_ID_OPTION, null ),
 			'version'                   => WC()->version,
-			'log_directory'             => WC_LOG_DIR,
-			'log_directory_writable'    => (bool) @fopen( WC_LOG_DIR . 'test-log.log', 'a' ), // phpcs:ignore WordPress.PHP.NoSilencedErrors.Discouraged, WordPress.WP.AlternativeFunctions.file_system_read_fopen
+			'log_directory'             => $log_directory,
+			'log_directory_writable'    => wp_is_writable( $log_directory ),
 			'wp_version'                => get_bloginfo( 'version' ),
 			'wp_multisite'              => is_multisite(),
 			'wp_memory_limit'           => $wp_memory_limit,
@@ -1069,7 +1070,7 @@ class WC_REST_System_Status_V2_Controller extends WC_REST_Controller {
 	}
 
 	/**
-	 * Get a list of inplugins active on the site.
+	 * Get a list of inactive plugins.
 	 *
 	 * @return array
 	 */

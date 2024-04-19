@@ -8,6 +8,7 @@
 defined( 'ABSPATH' ) || exit;
 
 use DrewM\MailChimp\MailChimp;
+use Newspack\Newsletters\Subscription_List;
 use Newspack\Newsletters\Subscription_Lists;
 
 /**
@@ -1048,6 +1049,51 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	}
 
 	/**
+	 * Add contact to a list with multiple groups.
+	 *
+	 * @param array $contact The contact, as for the add_contact method.
+	 * @param array $lists List IDs to add the contact to.
+	 */
+	public function add_contact_with_groups( $contact, $lists ) {
+		$results = [];
+		$by_list = [];
+		foreach ( $lists as $list_id ) {
+			$list = $this->maybe_extract_group_list( $list_id );
+			if ( ! $list ) {
+				// It might be a local list – the list id has to be extracted from the DB.
+				$list = Subscription_List::from_form_id( $list_id );
+				if ( ! $list ) {
+					return new WP_Error( 'List not found.' );
+				}
+				if ( ! $list->is_configured_for_provider( $this->service ) ) {
+					return new WP_Error( 'List not properly configured for the provider.' );
+				}
+				$list_settings = $list->get_provider_settings( $this->service );
+				if ( $list_settings !== null ) {
+					// Empty groups – just add to the list.
+					$group_ids = [];
+					$by_list[ $list_settings['list'] ] = $group_ids;
+				}
+				continue;
+			}
+			$list_id  = $list['list_id'];
+			$group_id = $list['group_id'];
+			if ( ! isset( $contact['interests'] ) ) {
+				$contact['interests'] = [];
+			}
+			if ( isset( $by_list[ $list_id ] ) ) {
+				$by_list[ $list_id ][] = $group_id;
+			} else {
+				$by_list[ $list_id ] = [ $group_id ];
+			}
+		}
+		foreach ( $by_list as $list_id => $group_ids ) {
+			$results[] = $this->add_contact( $contact, $list_id, $group_ids );
+		}
+		return $results;
+	}
+
+	/**
 	 * Add contact to a list.
 	 *
 	 * @param array  $contact      {
@@ -1058,10 +1104,11 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 	 *    @type string[] $metadata Contact additional metadata. Optional.
 	 * }
 	 * @param string $list_id      List to add the contact to.
+	 * @param string $group_ids    Group IDs within the list to add the contact to.
 	 *
 	 * @return array|WP_Error Contact data if it was added, or error otherwise.
 	 */
-	public function add_contact( $contact, $list_id = false ) {
+	public function add_contact( $contact, $list_id = false, $group_ids = [] ) {
 		if ( false === $list_id ) {
 			return new WP_Error( 'newspack_newsletters_mailchimp_list_id', __( 'Missing list id.' ) );
 		}
@@ -1158,6 +1205,12 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				$update_payload['interests'] = [
 					$group_id => true,
 				];
+			}
+			if ( ! empty( $group_ids ) ) {
+				$update_payload['interests'] = [];
+				foreach ( $group_ids as $group_id ) {
+					$update_payload['interests'][ $group_id ] = true;
+				}
 			}
 
 			// If we're subscribing the contact to a newsletter, they should have some status
