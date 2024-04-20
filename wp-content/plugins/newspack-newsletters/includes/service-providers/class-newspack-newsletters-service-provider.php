@@ -438,11 +438,8 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	}
 
 	/**
-	 * Add or update contact to a list, but handling local Subscription Lists
-	 *
-	 * The difference between this method and add_contact is that this method will identify and handle local lists
-	 *
-	 * If the $list_id informed is a local list, it will read its settings and call add_contact with the list associated and also add the tag to the contact
+	 * Handle adding to local lists.
+	 * If the $list_id is a local list, a tag will be added to the contact.
 	 *
 	 * @param array  $contact      {
 	 *    Contact data.
@@ -453,35 +450,24 @@ abstract class Newspack_Newsletters_Service_Provider implements Newspack_Newslet
 	 * }
 	 * @param string $list_id      List to add the contact to.
 	 *
-	 * @return array|WP_Error Contact data if it was added, or error otherwise.
+	 * @return true|WP_Error True or error.
 	 */
 	public function add_contact_handling_local_list( $contact, $list_id ) {
+		if ( ! static::$support_local_lists ) {
+			return true;
+		}
 		if ( Subscription_List::is_local_form_id( $list_id ) ) {
 			try {
 				$list = Subscription_List::from_form_id( $list_id );
-
 				if ( ! $list->is_configured_for_provider( $this->service ) ) {
 					return new WP_Error( 'List not properly configured for the provider' );
 				}
 				$list_settings = $list->get_provider_settings( $this->service );
-
-				$added_contact = $this->add_contact( $contact, $list_settings['list'] );
-
-				if ( is_wp_error( $added_contact ) ) {
-					return $added_contact;
-				}
-
-				if ( static::$support_local_lists ) {
-					$this->add_esp_local_list_to_contact( $contact['email'], $list_settings['tag_id'], $list_settings['list'] );
-				}
-
-				return $added_contact;
-
+				return $this->add_esp_local_list_to_contact( $contact['email'], $list_settings['tag_id'], $list_settings['list'] );
 			} catch ( \InvalidArgumentException $e ) {
 				return new WP_Error( 'List not found' );
 			}
 		}
-		return $this->add_contact( $contact, $list_id );
 	}
 
 	/**

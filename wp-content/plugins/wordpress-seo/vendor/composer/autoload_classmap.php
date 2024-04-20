@@ -1064,6 +1064,7 @@ return array(
     'Yoast\\WP\\SEO\\Values\\Robots\\Directive' => $baseDir . '/src/values/robots/directive.php',
     'Yoast\\WP\\SEO\\Values\\Robots\\User_Agent' => $baseDir . '/src/values/robots/user-agent.php',
     'Yoast\\WP\\SEO\\Values\\Robots\\User_Agent_List' => $baseDir . '/src/values/robots/user-agent-list.php',
+    'Yoast\\WP\\SEO\\Values\\Twitter\\Images' => $baseDir . '/src/values/twitter/images.php',
     'Yoast\\WP\\SEO\\WordPress\\Wrapper' => $baseDir . '/src/wordpress/wrapper.php',
     'Yoast\\WP\\SEO\\Wrappers\\WP_Query_Wrapper' => $baseDir . '/src/wrappers/wp-query-wrapper.php',
     'Yoast\\WP\\SEO\\Wrappers\\WP_Remote_Handler' => $baseDir . '/src/wrappers/wp-remote-handler.php',

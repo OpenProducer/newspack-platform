@@ -1,3 +1,18 @@
+## [2.13.2](https://github.com/Automattic/newspack-newsletters/compare/v2.13.1...v2.13.2) (2024-04-17)
+
+
+### Bug Fixes
+
+* **mailchimp:** handle not found list ([3fdfc01](https://github.com/Automattic/newspack-newsletters/commit/3fdfc01bc9e5144a942765f577311c6b6fb81597))
+* multiple lists handling ([5722b07](https://github.com/Automattic/newspack-newsletters/commit/5722b0753e2a76a344557834845563e16266b97b)), closes [#1460](https://github.com/Automattic/newspack-newsletters/issues/1460)
+
+## [2.13.1](https://github.com/Automattic/newspack-newsletters/compare/v2.13.0...v2.13.1) (2024-04-15)
+
+
+### Bug Fixes
+
+* adding contact to multiple groups within a list ([#1460](https://github.com/Automattic/newspack-newsletters/issues/1460)) ([90408b3](https://github.com/Automattic/newspack-newsletters/commit/90408b30d68abad02b11ca7f9976fdbf259faa89))
+
 # [2.13.0](https://github.com/Automattic/newspack-newsletters/compare/v2.12.0...v2.13.0) (2024-04-08)
 
 

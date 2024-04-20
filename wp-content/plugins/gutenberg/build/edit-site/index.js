@@ -9729,7 +9729,7 @@ function removePropertyFromObject(object, property) {
   if (!property || typeof property !== 'string') {
     return object;
   }
-  if (typeof object !== 'object' || !Object.keys(object).length) {
+  if (typeof object !== 'object' || !object || !Object.keys(object).length) {
     return object;
   }
   for (const key in object) {

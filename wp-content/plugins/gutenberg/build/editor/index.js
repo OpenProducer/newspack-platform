@@ -5360,9 +5360,6 @@ const saveDirtyEntities = ({
   }) => {
     return !entitiesToSkip.some(elt => elt.kind === kind && elt.name === name && elt.key === key && elt.property === property);
   });
-  if (!entitiesToSave.length) {
-    return;
-  }
   close?.(entitiesToSave);
   const siteItemsToSave = [];
   const pendingSavedRecords = [];

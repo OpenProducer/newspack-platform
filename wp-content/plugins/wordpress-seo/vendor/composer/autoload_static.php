@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit4c5f0ad1e3eeafcdf3ad6d61fd422bc0
+class ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede
 {
     public static $prefixLengthsPsr4 = array (
         'C' => 
@@ -1079,6 +1079,7 @@ class ComposerStaticInit4c5f0ad1e3eeafcdf3ad6d61fd422bc0
         'Yoast\\WP\\SEO\\Values\\Robots\\Directive' => __DIR__ . '/../..' . '/src/values/robots/directive.php',
         'Yoast\\WP\\SEO\\Values\\Robots\\User_Agent' => __DIR__ . '/../..' . '/src/values/robots/user-agent.php',
         'Yoast\\WP\\SEO\\Values\\Robots\\User_Agent_List' => __DIR__ . '/../..' . '/src/values/robots/user-agent-list.php',
+        'Yoast\\WP\\SEO\\Values\\Twitter\\Images' => __DIR__ . '/../..' . '/src/values/twitter/images.php',
         'Yoast\\WP\\SEO\\WordPress\\Wrapper' => __DIR__ . '/../..' . '/src/wordpress/wrapper.php',
         'Yoast\\WP\\SEO\\Wrappers\\WP_Query_Wrapper' => __DIR__ . '/../..' . '/src/wrappers/wp-query-wrapper.php',
         'Yoast\\WP\\SEO\\Wrappers\\WP_Remote_Handler' => __DIR__ . '/../..' . '/src/wrappers/wp-remote-handler.php',
@@ -1106,9 +1107,9 @@ class ComposerStaticInit4c5f0ad1e3eeafcdf3ad6d61fd422bc0
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit4c5f0ad1e3eeafcdf3ad6d61fd422bc0::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit4c5f0ad1e3eeafcdf3ad6d61fd422bc0::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit4c5f0ad1e3eeafcdf3ad6d61fd422bc0::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInit6650a0496bf9e7ce57139eeab0fbdede::$classMap;
 
         }, null, ClassLoader::class);
     }

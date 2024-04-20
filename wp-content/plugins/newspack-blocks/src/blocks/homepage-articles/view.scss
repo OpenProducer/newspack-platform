@@ -81,24 +81,24 @@
 		// width of column - ( column gap / number of columns * number of gaps )
 		&.columns-3 article,
 		&.columns-6 article {
-			flex-basis: calc( 33.33% - ( var( --wpnbha-col-gap ) / 3 * 2 ) );
+			flex-basis: calc( 33.33% - ( var( --wpnbha-col-gap ) / 3 * 2 ) - 0.1px );
 		}
 
 		&.is-style-borders.columns-3 article,
 		&.is-style-borders.columns-6 article {
-			flex-basis: calc( 33.33% - ( 2 * var( --wpnbha-col-gap ) / 3 * 2 ) - 1px );
+			flex-basis: calc( 33.33% - ( 2 * var( --wpnbha-col-gap ) / 3 * 2 ) - 1.1px );
 		}
 
 		&.columns-2 article,
 		&.columns-4 article,
 		&.columns-5 article {
-			flex-basis: calc( 50% - ( var( --wpnbha-col-gap ) / 2 ) );
+			flex-basis: calc( 50% - ( var( --wpnbha-col-gap ) / 2 ) - 0.1px );
 		}
 
 		&.is-style-borders.columns-2 article,
 		&.is-style-borders.columns-4 article,
 		&.is-style-borders.columns-5 article {
-			flex-basis: calc( 50% - ( 2 * var( --wpnbha-col-gap ) / 2 ) - 1px );
+			flex-basis: calc( 50% - ( 2 * var( --wpnbha-col-gap ) / 2 ) - 1.1px );
 		}
 
 		&.columns-5 article:last-of-type,
@@ -109,29 +109,29 @@
 
 	@include mixins.media( tablet ) {
 		&.columns-4 article {
-			flex-basis: calc( 25% - ( var( --wpnbha-col-gap ) / 4 * 3 ) );
+			flex-basis: calc( 25% - ( var( --wpnbha-col-gap ) / 4 * 3 ) - 0.1px );
 		}
 
 		&.is-style-borders.columns-4 article {
-			flex-basis: calc( 25% - ( 2 * var( --wpnbha-col-gap ) / 4 * 3 ) - 1px );
+			flex-basis: calc( 25% - ( 2 * var( --wpnbha-col-gap ) / 4 * 3 ) - 1.1px );
 		}
 
 		&.columns-5 article,
 		&.columns-5 article:last-of-type {
-			flex-basis: calc( 20% - ( var( --wpnbha-col-gap ) / 5 * 4 ) );
+			flex-basis: calc( 20% - ( var( --wpnbha-col-gap ) / 5 * 4 ) - 0.1px );
 		}
 
 		&.is-style-borders.columns-5 article,
 		&.is-style-borders.columns-5 article:last-of-type {
-			flex-basis: calc( 20% - ( 2 * var( --wpnbha-col-gap ) / 5 * 4 ) - 1px );
+			flex-basis: calc( 20% - ( 2 * var( --wpnbha-col-gap ) / 5 * 4 ) - 1.1px );
 		}
 
 		&.columns-6 article {
-			flex-basis: calc( 16.6666% - ( var( --wpnbha-col-gap ) / 6 * 5 ) );
+			flex-basis: calc( 16.6666% - ( var( --wpnbha-col-gap ) / 6 * 5 ) - 0.1px );
 		}
 
 		&.is-style-borders.columns-6 article {
-			flex-basis: calc( 16.6666% - ( 2 * var( --wpnbha-col-gap ) / 6 * 5 ) - 1px );
+			flex-basis: calc( 16.6666% - ( 2 * var( --wpnbha-col-gap ) / 6 * 5 ) - 1.1px );
 		}
 	}
 
@@ -345,7 +345,7 @@
 			text-align: right;
 			text-overflow: ellipsis;
 			z-index: 3;
-			
+
 			a,
 			a:visited {
 			    color: #fff;

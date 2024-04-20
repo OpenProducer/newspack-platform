@@ -194,10 +194,15 @@ final class Recaptcha {
 			return null;
 		}
 		$value = \get_option( self::OPTIONS_PREFIX . $key, $config[ $key ] );
+
 		// Use default value type for casting bool option value.
 		if ( is_bool( $config[ $key ] ) ) {
 			$value = (bool) $value;
+		} elseif ( empty( $value ) ) {
+			// If the stored value is empty, use the default value.
+			$value = $config[ $key ];
 		}
+
 		return $value;
 	}
 
