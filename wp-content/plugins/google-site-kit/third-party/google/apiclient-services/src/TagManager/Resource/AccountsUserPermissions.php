@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission;
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $user_permissions = $tagmanagerService->user_permissions;
+ *   $user_permissions = $tagmanagerService->accounts_user_permissions;
  *  </code>
  */
 class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -37,6 +37,7 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param UserPermission $postBody
      * @param array $optParams Optional parameters.
      * @return UserPermission
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission $postBody, $optParams = [])
     {
@@ -51,6 +52,7 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param string $path GTM UserPermission's API relative path. Example:
      * accounts/{account_id}/user_permissions/{user_permission_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -65,6 +67,7 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
      * accounts/{account_id}/user_permissions/{user_permission_id}
      * @param array $optParams Optional parameters.
      * @return UserPermission
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -84,6 +87,7 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListUserPermissionsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsUserPermissions($parent, $optParams = [])
     {
@@ -99,6 +103,7 @@ class AccountsUserPermissions extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param UserPermission $postBody
      * @param array $optParams Optional parameters.
      * @return UserPermission
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\UserPermission $postBody, $optParams = [])
     {

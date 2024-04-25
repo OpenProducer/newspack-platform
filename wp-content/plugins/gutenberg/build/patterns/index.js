@@ -106,6 +106,7 @@ const PARTIAL_SYNCING_SUPPORTED_BLOCKS = {
   'core/button': ['text', 'url', 'linkTarget', 'rel'],
   'core/image': ['id', 'url', 'title', 'alt']
 };
+const PATTERN_OVERRIDES_BINDING_SOURCE = 'core/pattern-overrides';
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/store/actions.js
 /**
@@ -303,7 +304,7 @@ const external_wp_i18n_namespaceObject = window["wp"]["i18n"];
  * @return {boolean} `true` if a block is overridable, `false` otherwise.
  */
 function isOverridableBlock(block) {
-  return Object.keys(PARTIAL_SYNCING_SUPPORTED_BLOCKS).includes(block.name) && !!block.attributes.metadata?.bindings && Object.values(block.attributes.metadata.bindings).some(binding => binding.source === 'core/pattern-overrides');
+  return Object.keys(PARTIAL_SYNCING_SUPPORTED_BLOCKS).includes(block.name) && !!block.attributes.metadata?.name && !!block.attributes.metadata?.bindings && Object.values(block.attributes.metadata.bindings).some(binding => binding.source === 'core/pattern-overrides');
 }
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/components/overrides-panel.js
@@ -1180,7 +1181,115 @@ function RenamePatternCategoryModal({
   }, (0,external_wp_i18n_namespaceObject.__)('Save'))))));
 }
 
-;// CONCATENATED MODULE: ./packages/patterns/build-module/components/use-set-pattern-bindings.js
+;// CONCATENATED MODULE: ./packages/patterns/build-module/components/allow-overrides-modal.js
+
+/**
+ * WordPress dependencies
+ */
+
+
+
+
+function AllowOverridesModal({
+  placeholder,
+  initialName = '',
+  onClose,
+  onSave
+}) {
+  const [editedBlockName, setEditedBlockName] = (0,external_wp_element_namespaceObject.useState)(initialName);
+  const descriptionId = (0,external_wp_element_namespaceObject.useId)();
+  const isNameValid = !!editedBlockName.trim();
+  const handleSubmit = () => {
+    if (editedBlockName !== initialName) {
+      const message = (0,external_wp_i18n_namespaceObject.sprintf)( /* translators: %s: new name/label for the block */
+      (0,external_wp_i18n_namespaceObject.__)('Block name changed to: "%s".'), editedBlockName);
+
+      // Must be assertive to immediately announce change.
+      (0,external_wp_a11y_namespaceObject.speak)(message, 'assertive');
+    }
+    onSave(editedBlockName);
+
+    // Immediate close avoids ability to hit save multiple times.
+    onClose();
+  };
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Enable overrides'),
+    onRequestClose: onClose,
+    focusOnMount: "firstContentElement",
+    aria: {
+      describedby: descriptionId
+    },
+    size: "small"
+  }, (0,external_React_namespaceObject.createElement)("form", {
+    onSubmit: event => {
+      event.preventDefault();
+      if (!isNameValid) {
+        return;
+      }
+      handleSubmit();
+    }
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: "6"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalText, {
+    id: descriptionId
+  }, (0,external_wp_i18n_namespaceObject.__)('Overrides are changes you make to a block within a synced pattern instance. Use overrides to customize a synced pattern instance to suit its new context. Name this block to specify an override.')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.TextControl, {
+    __nextHasNoMarginBottom: true,
+    __next40pxDefaultSize: true,
+    value: editedBlockName,
+    label: (0,external_wp_i18n_namespaceObject.__)('Name'),
+    help: (0,external_wp_i18n_namespaceObject.__)('For example, if you are creating a recipe pattern, you use "Recipe Title", "Recipe Description", etc.'),
+    placeholder: placeholder,
+    onChange: setEditedBlockName
+  }), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    justify: "right"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
+    variant: "tertiary",
+    onClick: onClose
+  }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
+    "aria-disabled": !isNameValid,
+    variant: "primary",
+    type: "submit"
+  }, (0,external_wp_i18n_namespaceObject.__)('Enable'))))));
+}
+function DisallowOverridesModal({
+  onClose,
+  onSave
+}) {
+  const descriptionId = (0,external_wp_element_namespaceObject.useId)();
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Modal, {
+    title: (0,external_wp_i18n_namespaceObject.__)('Disable overrides'),
+    onRequestClose: onClose,
+    aria: {
+      describedby: descriptionId
+    },
+    size: "small"
+  }, (0,external_React_namespaceObject.createElement)("form", {
+    onSubmit: event => {
+      event.preventDefault();
+      onSave();
+      onClose();
+    }
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalVStack, {
+    spacing: "6"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalText, {
+    id: descriptionId
+  }, (0,external_wp_i18n_namespaceObject.__)('Are you sure you want to disable overrides? Disabling overrides will revert all applied overrides for this block throughout instances of this pattern.')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__experimentalHStack, {
+    justify: "right"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
+    variant: "tertiary",
+    onClick: onClose
+  }, (0,external_wp_i18n_namespaceObject.__)('Cancel')), (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
+    variant: "primary",
+    type: "submit"
+  }, (0,external_wp_i18n_namespaceObject.__)('Disable'))))));
+}
+
+;// CONCATENATED MODULE: ./packages/patterns/build-module/components/pattern-overrides-controls.js
+
 /**
  * WordPress dependencies
  */
@@ -1197,8 +1306,8 @@ function RenamePatternCategoryModal({
 function removeBindings(bindings, syncedAttributes) {
   let updatedBindings = {};
   for (const attributeName of syncedAttributes) {
-    // Omit any pattern override bindings from the `updatedBindings` object.
-    if (bindings?.[attributeName]?.source !== 'core/pattern-overrides' && bindings?.[attributeName]?.source !== undefined) {
+    // Omit any bindings that's not the same source from the `updatedBindings` object.
+    if (bindings?.[attributeName]?.source !== PATTERN_OVERRIDES_BINDING_SOURCE && bindings?.[attributeName]?.source !== undefined) {
       updatedBindings[attributeName] = bindings[attributeName];
     }
   }
@@ -1214,68 +1323,71 @@ function addBindings(bindings, syncedAttributes) {
   for (const attributeName of syncedAttributes) {
     if (!bindings?.[attributeName]) {
       updatedBindings[attributeName] = {
-        source: 'core/pattern-overrides'
+        source: PATTERN_OVERRIDES_BINDING_SOURCE
       };
     }
   }
   return updatedBindings;
 }
-function useSetPatternBindings({
-  name,
+function PatternOverridesControls({
   attributes,
+  name,
   setAttributes
-}, currentPostType) {
-  var _attributes$metadata$, _usePrevious;
-  const hasPatternOverridesSource = (0,external_wp_data_namespaceObject.useSelect)(select => {
-    const {
-      getBlockBindingsSource
-    } = unlock(select(external_wp_blocks_namespaceObject.store));
-
-    // For editing link to the site editor if the theme and user permissions support it.
-    return !!getBlockBindingsSource('core/pattern-overrides');
-  }, []);
-  const metadataName = (_attributes$metadata$ = attributes?.metadata?.name) !== null && _attributes$metadata$ !== void 0 ? _attributes$metadata$ : '';
-  const prevMetadataName = (_usePrevious = (0,external_wp_compose_namespaceObject.usePrevious)(metadataName)) !== null && _usePrevious !== void 0 ? _usePrevious : '';
-  const bindings = attributes?.metadata?.bindings;
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    // Bindings should only be created when editing a wp_block post type,
-    // and also when there's a change to the user-given name for the block.
-    // Also check that the pattern overrides source is registered.
-    if (!hasPatternOverridesSource || currentPostType !== 'wp_block' || metadataName === prevMetadataName) {
-      return;
+}) {
+  const controlId = (0,external_wp_element_namespaceObject.useId)();
+  const [showAllowOverridesModal, setShowAllowOverridesModal] = (0,external_wp_element_namespaceObject.useState)(false);
+  const [showDisallowOverridesModal, setShowDisallowOverridesModal] = (0,external_wp_element_namespaceObject.useState)(false);
+  const syncedAttributes = PARTIAL_SYNCING_SUPPORTED_BLOCKS[name];
+  const attributeSources = syncedAttributes.map(attributeName => attributes.metadata?.bindings?.[attributeName]?.source);
+  const isConnectedToOtherSources = attributeSources.every(source => source && source !== 'core/pattern-overrides');
+  function updateBindings(isChecked, customName) {
+    const prevBindings = attributes?.metadata?.bindings;
+    const updatedBindings = isChecked ? addBindings(prevBindings, syncedAttributes) : removeBindings(prevBindings, syncedAttributes);
+    const updatedMetadata = {
+      ...attributes.metadata,
+      bindings: updatedBindings
+    };
+    if (customName) {
+      updatedMetadata.name = customName;
     }
-    const syncedAttributes = PARTIAL_SYNCING_SUPPORTED_BLOCKS[name];
-    const attributeSources = syncedAttributes.map(attributeName => attributes.metadata?.bindings?.[attributeName]?.source);
-    const isConnectedToOtherSources = attributeSources.every(source => source && source !== 'core/pattern-overrides');
+    setAttributes({
+      metadata: updatedMetadata
+    });
+  }
 
-    // Avoid overwriting other (e.g. meta) bindings.
-    if (isConnectedToOtherSources) {
-      return;
+  // Avoid overwriting other (e.g. meta) bindings.
+  if (isConnectedToOtherSources) return null;
+  const hasName = !!attributes.metadata?.name;
+  const allowOverrides = hasName && attributeSources.some(source => source === PATTERN_OVERRIDES_BINDING_SOURCE);
+  return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, {
+    group: "advanced"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.BaseControl, {
+    id: controlId,
+    label: (0,external_wp_i18n_namespaceObject.__)('Overrides'),
+    help: (0,external_wp_i18n_namespaceObject.__)('Allow changes to this block throughout instances of this pattern.')
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Button, {
+    __next40pxDefaultSize: true,
+    className: "pattern-overrides-control__allow-overrides-button",
+    variant: "secondary",
+    onClick: () => {
+      if (allowOverrides) {
+        setShowDisallowOverridesModal(true);
+      } else {
+        setShowAllowOverridesModal(true);
+      }
     }
-
-    // The user-given name for the block was deleted, remove the bindings.
-    if (!metadataName?.length && prevMetadataName?.length) {
-      const updatedBindings = removeBindings(bindings, syncedAttributes);
-      setAttributes({
-        metadata: {
-          ...attributes.metadata,
-          bindings: updatedBindings
-        }
-      });
+  }, allowOverrides ? (0,external_wp_i18n_namespaceObject.__)('Disable overrides') : (0,external_wp_i18n_namespaceObject.__)('Enable overrides')))), showAllowOverridesModal && (0,external_React_namespaceObject.createElement)(AllowOverridesModal, {
+    initialName: attributes.metadata?.name,
+    onClose: () => setShowAllowOverridesModal(false),
+    onSave: newName => {
+      updateBindings(true, newName);
     }
-
-    // The user-given name for the block was set, set the bindings.
-    if (!prevMetadataName?.length && metadataName.length) {
-      const updatedBindings = addBindings(bindings, syncedAttributes);
-      setAttributes({
-        metadata: {
-          ...attributes.metadata,
-          bindings: updatedBindings
-        }
-      });
-    }
-  }, [hasPatternOverridesSource, bindings, prevMetadataName, metadataName, currentPostType, name, attributes.metadata, setAttributes]);
+  }), showDisallowOverridesModal && (0,external_React_namespaceObject.createElement)(DisallowOverridesModal, {
+    onClose: () => setShowDisallowOverridesModal(false),
+    onSave: () => updateBindings(false)
+  }));
 }
+/* harmony default export */ const pattern_overrides_controls = (PatternOverridesControls);
 
 ;// CONCATENATED MODULE: ./packages/patterns/build-module/components/reset-overrides-control.js
 
@@ -1364,7 +1476,7 @@ lock(privateApis, {
   RenamePatternModal: RenamePatternModal,
   PatternsMenuItems: PatternsMenuItems,
   RenamePatternCategoryModal: RenamePatternCategoryModal,
-  useSetPatternBindings: useSetPatternBindings,
+  PatternOverridesControls: pattern_overrides_controls,
   ResetOverridesControl: ResetOverridesControl,
   useAddPatternCategory: useAddPatternCategory,
   PATTERN_TYPES: PATTERN_TYPES,

@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Analytics\CustomDataSources;
  * Typical usage is:
  *  <code>
  *   $analyticsService = new Google\Service\Analytics(...);
- *   $customDataSources = $analyticsService->customDataSources;
+ *   $customDataSources = $analyticsService->management_customDataSources;
  *  </code>
  */
 class ManagementCustomDataSources extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -43,6 +43,7 @@ class ManagementCustomDataSources extends \Google\Site_Kit_Dependencies\Google\S
      * retrieve. Use this parameter as a pagination mechanism along with the max-
      * results parameter.
      * @return CustomDataSources
+     * @throws \Google\Service\Exception
      */
     public function listManagementCustomDataSources($accountId, $webPropertyId, $optParams = [])
     {

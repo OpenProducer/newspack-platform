@@ -638,6 +638,12 @@ l.vnode = vnode => {
  * Internal dependencies
  */
 
+/**
+ * Executes a callback function after the next frame is rendered.
+ *
+ * @param callback The callback function to be executed.
+ * @return A promise that resolves after the callback function is executed.
+ */
 const afterNextFrame = callback => {
   return new Promise(resolve => {
     const done = () => {
@@ -653,10 +659,18 @@ const afterNextFrame = callback => {
   });
 };
 
-// Using the mangled properties:
-// this.c: this._callback
-// this.x: this._compute
-// https://github.com/preactjs/signals/blob/main/mangle.json
+/**
+ * Creates a Flusher object that can be used to flush computed values and notify listeners.
+ *
+ * Using the mangled properties:
+ * this.c: this._callback
+ * this.x: this._compute
+ * https://github.com/preactjs/signals/blob/main/mangle.json
+ *
+ * @param compute The function that computes the value to be flushed.
+ * @param notify  The function that notifies listeners when the value is flushed.
+ * @return The Flusher object with `flush` and `dispose` properties.
+ */
 function createFlusher(compute, notify) {
   let flush;
   const dispose = signals_core_module_E(function () {
@@ -671,9 +685,14 @@ function createFlusher(compute, notify) {
   };
 }
 
-// Version of `useSignalEffect` with a `useEffect`-like execution. This hook
-// implementation comes from this PR, but we added short-cirtuiting to avoid
-// infinite loops: https://github.com/preactjs/signals/pull/290
+/**
+ * Custom hook that executes a callback function whenever a signal is triggered.
+ * Version of `useSignalEffect` with a `useEffect`-like execution. This hook
+ * implementation comes from this PR, but we added short-cirtuiting to avoid
+ * infinite loops: https://github.com/preactjs/signals/pull/290
+ *
+ * @param callback The callback function to be executed.
+ */
 function utils_useSignalEffect(callback) {
   hooks_module_p(() => {
     let eff = null;
@@ -695,10 +714,14 @@ function utils_useSignalEffect(callback) {
  * accessible whenever the function runs. This is primarily to make the scope
  * available inside hook callbacks.
  *
- * @param {Function} func The passed function.
- * @return {Function} The wrapped function.
+ * Asyncronous functions should use generators that yield promises instead of awaiting them.
+ * See the documentation for details: https://developer.wordpress.org/block-editor/reference-guides/packages/packages-interactivity/packages-interactivity-api-reference/#the-store
+ *
+ * @param func The passed function.
+ * @return The wrapped function.
  */
-const withScope = func => {
+
+function withScope(func) {
   const scope = getScope();
   const ns = getNamespace();
   if (func?.constructor?.name === 'GeneratorFunction') {
@@ -735,7 +758,7 @@ const withScope = func => {
       resetScope();
     }
   };
-};
+}
 
 /**
  * Accepts a function that contains imperative code which runs whenever any of
@@ -745,7 +768,7 @@ const withScope = func => {
  * This hook makes the element's scope available so functions like
  * `getElement()` and `getContext()` can be used inside the passed callback.
  *
- * @param {Function} callback The hook callback.
+ * @param callback The hook callback.
  */
 function useWatch(callback) {
   utils_useSignalEffect(withScope(callback));
@@ -758,7 +781,7 @@ function useWatch(callback) {
  * This hook makes the element's scope available so functions like
  * `getElement()` and `getContext()` can be used inside the passed callback.
  *
- * @param {Function} callback The hook callback.
+ * @param callback The hook callback.
  */
 function useInit(callback) {
   hooks_module_p(withScope(callback), []);
@@ -772,10 +795,10 @@ function useInit(callback) {
  * available so functions like `getElement()` and `getContext()` can be used
  * inside the passed callback.
  *
- * @param {Function} callback Imperative function that can return a cleanup
- *                            function.
- * @param {any[]}    inputs   If present, effect will only activate if the
- *                            values in the list change (using `===`).
+ * @param callback Imperative function that can return a cleanup
+ *                 function.
+ * @param inputs   If present, effect will only activate if the
+ *                 values in the list change (using `===`).
  */
 function useEffect(callback, inputs) {
   hooks_module_p(withScope(callback), inputs);
@@ -789,10 +812,10 @@ function useEffect(callback, inputs) {
  * scope available so functions like `getElement()` and `getContext()` can be
  * used inside the passed callback.
  *
- * @param {Function} callback Imperative function that can return a cleanup
- *                            function.
- * @param {any[]}    inputs   If present, effect will only activate if the
- *                            values in the list change (using `===`).
+ * @param callback Imperative function that can return a cleanup
+ *                 function.
+ * @param inputs   If present, effect will only activate if the
+ *                 values in the list change (using `===`).
  */
 function useLayoutEffect(callback, inputs) {
   hooks_module_y(withScope(callback), inputs);
@@ -806,13 +829,14 @@ function useLayoutEffect(callback, inputs) {
  * scope available so functions like `getElement()` and `getContext()` can be
  * used inside the passed callback.
  *
- * @param {Function} callback Imperative function that can return a cleanup
- *                            function.
- * @param {any[]}    inputs   If present, effect will only activate if the
- *                            values in the list change (using `===`).
+ * @param callback Callback function.
+ * @param inputs   If present, the callback will only be updated if the
+ *                 values in the list change (using `===`).
+ *
+ * @return The callback function.
  */
 function useCallback(callback, inputs) {
-  hooks_module_T(withScope(callback), inputs);
+  return hooks_module_T(withScope(callback), inputs);
 }
 
 /**
@@ -823,22 +847,30 @@ function useCallback(callback, inputs) {
  * available so functions like `getElement()` and `getContext()` can be used
  * inside the passed factory function.
  *
- * @param {Function} factory Imperative function that can return a cleanup
- *                           function.
- * @param {any[]}    inputs  If present, effect will only activate if the
- *                           values in the list change (using `===`).
+ * @param factory Factory function that returns that value for memoization.
+ * @param inputs  If present, the factory will only be run to recompute if
+ *                the values in the list change (using `===`).
+ *
+ * @return The memoized value.
  */
 function useMemo(factory, inputs) {
-  hooks_module_F(withScope(factory), inputs);
+  return hooks_module_F(withScope(factory), inputs);
 }
 
-// For wrapperless hydration.
-// See https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
+/**
+ * Creates a root fragment by replacing a node or an array of nodes in a parent element.
+ * For wrapperless hydration.
+ * See https://gist.github.com/developit/f4c67a2ede71dc2fab7f357f39cff28c
+ *
+ * @param parent      The parent element where the nodes will be replaced.
+ * @param replaceNode The node or array of nodes to replace in the parent element.
+ * @return The created root fragment.
+ */
 const createRootFragment = (parent, replaceNode) => {
   replaceNode = [].concat(replaceNode);
-  const s = replaceNode[replaceNode.length - 1].nextSibling;
-  function insert(c, r) {
-    parent.insertBefore(c, r || s);
+  const sibling = replaceNode[replaceNode.length - 1].nextSibling;
+  function insert(child, root) {
+    parent.insertBefore(child, root || sibling);
   }
   return parent.__k = {
     nodeType: 1,
@@ -856,11 +888,11 @@ const createRootFragment = (parent, replaceNode) => {
 /**
  * Transforms a kebab-case string to camelCase.
  *
- * @param {string} str The kebab-case string to transform to camelCase.
- * @return {string} The transformed camelCase string.
+ * @param str The kebab-case string to transform to camelCase.
+ * @return The transformed camelCase string.
  */
 function kebabToCamelCase(str) {
-  return str.replace(/^-+|-+$/g, '').toLowerCase().replace(/-([a-z])/g, function (match, group1) {
+  return str.replace(/^-+|-+$/g, '').toLowerCase().replace(/-([a-z])/g, function (_match, group1) {
     return group1.toUpperCase();
   });
 }
@@ -1130,11 +1162,19 @@ const getGlobalEventDirective = type => ({
     element,
     evaluate
   }) => {
+    const events = new Map();
     on.filter(({
       suffix
     }) => suffix !== 'default').forEach(entry => {
-      element.props[`on${entry.suffix}`] = event => {
-        evaluate(entry, event);
+      const event = entry.suffix.split('--')[0];
+      if (!events.has(event)) events.set(event, new Set());
+      events.get(event).add(entry);
+    });
+    events.forEach((entries, eventType) => {
+      element.props[`on${eventType}`] = event => {
+        entries.forEach(entry => {
+          evaluate(entry, event);
+        });
       };
     });
   });

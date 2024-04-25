@@ -28,6 +28,8 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
     protected $categoryGroupsDataType = 'map';
     protected $configSettingsType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\ConfigSettings::class;
     protected $configSettingsDataType = '';
+    protected $entitiesType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\LhrEntity::class;
+    protected $entitiesDataType = 'array';
     protected $environmentType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Environment::class;
     protected $environmentDataType = '';
     /**
@@ -37,13 +39,25 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
     /**
      * @var string
      */
+    public $finalDisplayedUrl;
+    /**
+     * @var string
+     */
     public $finalUrl;
+    /**
+     * @var array
+     */
+    public $fullPageScreenshot;
     protected $i18nType = \Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\I18n::class;
     protected $i18nDataType = '';
     /**
      * @var string
      */
     public $lighthouseVersion;
+    /**
+     * @var string
+     */
+    public $mainDocumentUrl;
     /**
      * @var string
      */
@@ -119,6 +133,20 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
         return $this->configSettings;
     }
     /**
+     * @param LhrEntity[]
+     */
+    public function setEntities($entities)
+    {
+        $this->entities = $entities;
+    }
+    /**
+     * @return LhrEntity[]
+     */
+    public function getEntities()
+    {
+        return $this->entities;
+    }
+    /**
      * @param Environment
      */
     public function setEnvironment(\Google\Site_Kit_Dependencies\Google\Service\PagespeedInsights\Environment $environment)
@@ -149,6 +177,20 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
     /**
      * @param string
      */
+    public function setFinalDisplayedUrl($finalDisplayedUrl)
+    {
+        $this->finalDisplayedUrl = $finalDisplayedUrl;
+    }
+    /**
+     * @return string
+     */
+    public function getFinalDisplayedUrl()
+    {
+        return $this->finalDisplayedUrl;
+    }
+    /**
+     * @param string
+     */
     public function setFinalUrl($finalUrl)
     {
         $this->finalUrl = $finalUrl;
@@ -159,6 +201,20 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getFinalUrl()
     {
         return $this->finalUrl;
+    }
+    /**
+     * @param array
+     */
+    public function setFullPageScreenshot($fullPageScreenshot)
+    {
+        $this->fullPageScreenshot = $fullPageScreenshot;
+    }
+    /**
+     * @return array
+     */
+    public function getFullPageScreenshot()
+    {
+        return $this->fullPageScreenshot;
     }
     /**
      * @param I18n
@@ -187,6 +243,20 @@ class LighthouseResultV5 extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getLighthouseVersion()
     {
         return $this->lighthouseVersion;
+    }
+    /**
+     * @param string
+     */
+    public function setMainDocumentUrl($mainDocumentUrl)
+    {
+        $this->mainDocumentUrl = $mainDocumentUrl;
+    }
+    /**
+     * @return string
+     */
+    public function getMainDocumentUrl()
+    {
+        return $this->mainDocumentUrl;
     }
     /**
      * @param string

@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -12,6 +13,7 @@ namespace Google\Site_Kit_Dependencies\Monolog\Handler;
 
 use Google\Site_Kit_Dependencies\Aws\Sdk;
 use Google\Site_Kit_Dependencies\Aws\DynamoDb\DynamoDbClient;
+use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
 use Google\Site_Kit_Dependencies\Aws\DynamoDb\Marshaler;
 use Google\Site_Kit_Dependencies\Monolog\Formatter\ScalarFormatter;
 use Google\Site_Kit_Dependencies\Monolog\Logger;
@@ -23,7 +25,7 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
  */
 class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
 {
-    const DATE_FORMAT = 'Y-m-d\\TH:i:s.uO';
+    public const DATE_FORMAT = 'Y-m-d\\TH:i:s.uO';
     /**
      * @var DynamoDbClient
      */
@@ -40,14 +42,9 @@ class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
      * @var Marshaler
      */
     protected $marshaler;
-    /**
-     * @param DynamoDbClient $client
-     * @param string         $table
-     * @param int            $level
-     * @param bool           $bubble
-     */
-    public function __construct(\Google\Site_Kit_Dependencies\Aws\DynamoDb\DynamoDbClient $client, $table, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(\Google\Site_Kit_Dependencies\Aws\DynamoDb\DynamoDbClient $client, string $table, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
+        /** @phpstan-ignore-next-line */
         if (\defined('Aws\\Sdk::VERSION') && \version_compare(\Google\Site_Kit_Dependencies\Aws\Sdk::VERSION, '3.0', '>=')) {
             $this->version = 3;
             $this->marshaler = new \Google\Site_Kit_Dependencies\Aws\DynamoDb\Marshaler();
@@ -59,9 +56,9 @@ class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
         parent::__construct($level, $bubble);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         $filtered = $this->filterEmptyFields($record['formatted']);
         if ($this->version === 3) {
@@ -70,22 +67,22 @@ class DynamoDbHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abst
             /** @phpstan-ignore-next-line */
             $formatted = $this->client->formatAttributes($filtered);
         }
-        $this->client->putItem(array('TableName' => $this->table, 'Item' => $formatted));
+        $this->client->putItem(['TableName' => $this->table, 'Item' => $formatted]);
     }
     /**
-     * @param  array $record
-     * @return array
+     * @param  mixed[] $record
+     * @return mixed[]
      */
-    protected function filterEmptyFields(array $record)
+    protected function filterEmptyFields(array $record) : array
     {
         return \array_filter($record, function ($value) {
             return !empty($value) || \false === $value || 0 === $value;
         });
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
     {
         return new \Google\Site_Kit_Dependencies\Monolog\Formatter\ScalarFormatter(self::DATE_FORMAT);
     }

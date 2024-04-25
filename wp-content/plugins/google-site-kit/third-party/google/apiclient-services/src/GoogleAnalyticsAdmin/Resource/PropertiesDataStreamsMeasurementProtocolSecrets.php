@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProto
  * Typical usage is:
  *  <code>
  *   $analyticsadminService = new Google\Service\GoogleAnalyticsAdmin(...);
- *   $measurementProtocolSecrets = $analyticsadminService->measurementProtocolSecrets;
+ *   $measurementProtocolSecrets = $analyticsadminService->properties_dataStreams_measurementProtocolSecrets;
  *  </code>
  */
 class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -38,6 +38,7 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * @param GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaMeasurementProtocolSecret
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody, $optParams = [])
     {
@@ -53,6 +54,7 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * tocolSecrets/{measurementProtocolSecret}
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function delete($name, $optParams = [])
     {
@@ -69,6 +71,7 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * tocolSecrets/{measurementProtocolSecret}
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaMeasurementProtocolSecret
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -95,6 +98,7 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * `ListMeasurementProtocolSecrets` must match the call that provided the page
      * token.
      * @return GoogleAnalyticsAdminV1betaListMeasurementProtocolSecretsResponse
+     * @throws \Google\Service\Exception
      */
     public function listPropertiesDataStreamsMeasurementProtocolSecrets($parent, $optParams = [])
     {
@@ -111,9 +115,10 @@ class PropertiesDataStreamsMeasurementProtocolSecrets extends \Google\Site_Kit_D
      * @param GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody
      * @param array $optParams Optional parameters.
      *
-     * @opt_param string updateMask The list of fields to be updated. Omitted fields
-     * will not be updated.
+     * @opt_param string updateMask Required. The list of fields to be updated.
+     * Omitted fields will not be updated.
      * @return GoogleAnalyticsAdminV1betaMeasurementProtocolSecret
+     * @throws \Google\Service\Exception
      */
     public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaMeasurementProtocolSecret $postBody, $optParams = [])
     {

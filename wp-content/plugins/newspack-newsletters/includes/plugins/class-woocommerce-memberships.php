@@ -56,9 +56,6 @@ class Woocommerce_Memberships {
 	 * Initialize the hooks after all plugins are loaded
 	 */
 	public static function init_hooks() {
-		if ( ! class_exists( 'WC_Memberships_Loader' ) || ! function_exists( 'wc_memberships_is_post_content_restricted' ) ) {
-			return;
-		}
 		add_filter( 'newspack_newsletters_contact_lists', [ __CLASS__, 'filter_lists' ] );
 		add_filter( 'newspack_newsletters_subscription_block_available_lists', [ __CLASS__, 'filter_lists' ] );
 		add_filter( 'newspack_newsletters_manage_newsletters_available_lists', [ __CLASS__, 'filter_lists_objects' ] );
@@ -69,6 +66,19 @@ class Woocommerce_Memberships {
 	}
 
 	/**
+	 * Is WC Memberships enabled?
+	 *
+	 * @return bool
+	 */
+	public static function is_enabled() {
+		if ( class_exists( 'WC_Memberships_Loader' ) && function_exists( 'wc_memberships_is_post_content_restricted' ) ) {
+			return true;
+		}
+
+		return false;
+	}
+
+	/**
 	 * Keep users from being added to lists that require a membership plan they dont have
 	 * Also filters lists that require a membership plan to be displayed in the subscription block and in the Manage Newsletters page in My Account
 	 *
@@ -76,7 +86,7 @@ class Woocommerce_Memberships {
 	 * @return array
 	 */
 	public static function filter_lists( $lists ) {
-		if ( ! is_array( $lists ) || empty( $lists ) ) {
+		if ( ! self::is_enabled() || ! is_array( $lists ) || empty( $lists ) ) {
 			return $lists;
 		}
 		$lists = array_filter(
@@ -108,7 +118,7 @@ class Woocommerce_Memberships {
 	 * @return array
 	 */
 	public static function filter_lists_objects( $lists ) {
-		if ( ! is_array( $lists ) || empty( $lists ) ) {
+		if ( ! self::is_enabled() || ! is_array( $lists ) || empty( $lists ) ) {
 			return $lists;
 		}
 
@@ -150,9 +160,9 @@ class Woocommerce_Memberships {
 		// Store the previous status so we can check it in the `add_user_to_lists` method, that runs on a later hook.
 		self::$previous_statuses[ $user_membership->get_id() ] = $old_status;
 
-		$status_considered_active = wc_memberships()->get_user_memberships_instance()->get_active_access_membership_statuses();
+		$active_statuses = wc_memberships()->get_user_memberships_instance()->get_active_access_membership_statuses();
 
-		if ( ! in_array( $new_status, $status_considered_active ) ) {
+		if ( ! in_array( $new_status, $active_statuses ) ) {
 			self::remove_user_from_lists( $user_membership );
 		}
 	}
@@ -235,25 +245,38 @@ class Woocommerce_Memberships {
 	 * @return void
 	 */
 	public static function add_user_to_lists( $plan, $args ) {
-
 		// When creating the membership via admin panel, this hook is called once before the membership is actually created.
 		if ( ! $plan instanceof \WC_Memberships_Membership_Plan ) {
 			return;
 		}
 
-		$status_considered_active = wc_memberships()->get_user_memberships_instance()->get_active_access_membership_statuses();
-
+		$active_statuses = wc_memberships()->get_user_memberships_instance()->get_active_access_membership_statuses();
 		$user_membership = new \WC_Memberships_User_Membership( $args['user_membership_id'] );
+		$previous_status = ! empty( self::$previous_statuses[ $user_membership->get_id() ] ) ? self::$previous_statuses[ $user_membership->get_id() ] : false;
+		$current_status  = $user_membership->get_status();
+		$previous_lists  = get_user_meta( $user_membership->get_user_id(), self::SUBSCRIBED_ON_DEACTIVATION_META_KEY, true );
 
-		if ( ! in_array( $user_membership->get_status(), $status_considered_active, true ) ) {
+		// If the membership is no longer active, no need to proceed.
+		if ( ! in_array( $current_status, $active_statuses, true ) ) {
 			return;
 		}
 
 		// Check if we have the previous status stored. If we do and it's an active status
 		// it means the membership is being updated from one active status to another active status.
 		// In this case, we don't want to add the user to the lists again.
-		if ( ! empty( self::$previous_statuses[ $user_membership->get_id() ] ) && in_array( self::$previous_statuses[ $user_membership->get_id() ], $status_considered_active, true ) ) {
+		if ( $previous_status && in_array( $previous_status, $active_statuses, true ) ) {
 			Newspack_Newsletters_Logger::log( 'Membership ' . $user_membership->get_id() . ' was already active. No need to subscribe user to lists' );
+			return;
+		}
+
+		// If post-checkout newsletter signup is enabled, we only want to add the reader to premium lists if:
+		// - The membership is going from `paused` to `active` status (when a prior subscription is renewed).
+		// - The reader was already subscribed to the list(s).
+		$post_checkout_newsletter_signup_enabled = defined( 'NEWSPACK_ENABLE_POST_CHECKOUT_NEWSLETTER_SIGNUP' ) && NEWSPACK_ENABLE_POST_CHECKOUT_NEWSLETTER_SIGNUP;
+		if (
+			$post_checkout_newsletter_signup_enabled &&
+			( 'paused' !== $previous_status || ! $args['is_update'] || empty( $previous_lists[ $args['user_membership_id'] ] ) )
+		) {
 			return;
 		}
 
@@ -282,7 +305,9 @@ class Woocommerce_Memberships {
 			foreach ( $object_ids as $object_id ) {
 				try {
 					$subscription_list = new Subscription_List( $object_id );
-					$lists_to_add[]    = $subscription_list->get_form_id();
+					$list_id           = $subscription_list->get_form_id();
+
+					$lists_to_add[] = $list_id;
 				} catch ( \InvalidArgumentException $e ) {
 					continue;
 				}
@@ -294,7 +319,7 @@ class Woocommerce_Memberships {
 
 		// No need to re-add the user to the lists they are already subscribed to.
 		$current_user_lists = \Newspack_Newsletters_Subscription::get_contact_lists( $user_email );
-		$lists_to_add      = array_diff( $lists_to_add, $current_user_lists );
+		$lists_to_add = array_diff( $lists_to_add, $current_user_lists );
 		if ( empty( $lists_to_add ) ) {
 			return;
 		}

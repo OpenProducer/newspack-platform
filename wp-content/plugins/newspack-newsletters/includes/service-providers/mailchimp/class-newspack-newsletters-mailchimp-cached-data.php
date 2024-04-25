@@ -108,11 +108,11 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	}
 
 	/**
-	 * Get segments of a given list
+	 * Get segments of a given audience (list)
 	 *
-	 * @param string $list_id The List ID.
+	 * @param string $list_id The audience (list) ID.
 	 * @throws Exception In case of errors while fetching data from the server.
-	 * @return array The list segments
+	 * @return array The audience segments
 	 */
 	public static function get_segments( $list_id ) {
 		$data = self::get_data( $list_id );
@@ -120,15 +120,27 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	}
 
 	/**
-	 * Get Interest Categories (aka Groups) of a given list
+	 * Get Interest Categories (aka Groups) of a given audience
 	 *
-	 * @param string $list_id The List ID.
+	 * @param string $list_id The audience (list) ID.
 	 * @throws Exception In case of errors while fetching data from the server.
-	 * @return array The list interest categories
+	 * @return array The audience interest categories
 	 */
 	public static function get_interest_categories( $list_id ) {
 		$data = self::get_data( $list_id );
 		return $data['interest_categories'] ?? null;
+	}
+
+	/**
+	 * Get tags for a given audience
+	 *
+	 * @param string $list_id The audience (list) ID.
+	 * @throws Exception In case of errors while fetching data from the server.
+	 * @return array The audience tags
+	 */
+	public static function get_tags( $list_id ) {
+		$data = self::get_data( $list_id );
+		return $data['tags'] ?? null;
 	}
 
 	/**
@@ -147,7 +159,7 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	/**
 	 * Get merge_fields of a given list
 	 *
-	 * @param string $list_id The List ID.
+	 * @param string $list_id The audience (list) ID.
 	 * @throws Exception In case of errors while fetching data from the server.
 	 * @return array The list merge_fields
 	 */
@@ -421,11 +433,13 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 		try {
 			$segments            = self::fetch_segments( $list_id );
 			$interest_categories = self::fetch_interest_categories( $list_id );
+			$tags                = self::fetch_tags( $list_id );
 			$folders             = self::fetch_folders();
 			$merge_fields        = self::fetch_merge_fields( $list_id );
 			$list_data           = [
 				'segments'            => $segments,
 				'interest_categories' => $interest_categories,
+				'tags'                => $tags,
 				'folders'             => $folders,
 				'merge_fields'        => $merge_fields,
 			];
@@ -471,11 +485,11 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	/**
 	 * Fetches the segments for a given List from the Mailchimp server
 	 *
-	 * @param string $list_id The List ID.
+	 * @param string $list_id The audience (list) ID.
 	 * @throws Exception In case of errors while fetching data from the server.
-	 * @return array The list segments
+	 * @return array The audience segments
 	 */
-	private static function fetch_segments( $list_id ) {
+	public static function fetch_segments( $list_id ) {
 		$mc       = new Mailchimp( ( self::get_mc_instance() )->api_key() );
 		$segments = [];
 
@@ -483,25 +497,14 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 			$mc->get(
 				"lists/$list_id/segments",
 				[
-					'type'  => 'saved',
+					'type'  => 'saved', // 'saved' or 'static' segments. 'static' segments are actually the same thing as tags, so we can exclude them from this request as we fetch tags separately.
 					'count' => 1000,
 				],
 				60
 			),
 			__( 'Error retrieving Mailchimp segments.', 'newspack_newsletters' )
 		);
-		$static_segments_response = ( self::get_mc_instance() )->validate(
-			$mc->get(
-				"lists/$list_id/segments",
-				[
-					'type'  => 'static',
-					'count' => 1000,
-				],
-				60
-			),
-			__( 'Error retrieving Mailchimp segments.', 'newspack_newsletters' )
-		);
-		$segments                 = array_merge( $saved_segments_response['segments'], $static_segments_response['segments'] );
+		$segments = $saved_segments_response['segments'];
 
 		return $segments;
 	}
@@ -509,9 +512,9 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 	/**
 	 * Fetches the interest_categories (aka Groups) for a given List from the Mailchimp server
 	 *
-	 * @param string $list_id The List ID.
+	 * @param string $list_id The audience (list) ID.
 	 * @throws Exception In case of errors while fetching data from the server.
-	 * @return array The list interest_categories
+	 * @return array The audience interest_categories
 	 */
 	private static function fetch_interest_categories( $list_id ) {
 		$mc                  = new Mailchimp( ( self::get_mc_instance() )->api_key() );
@@ -531,6 +534,34 @@ final class Newspack_Newsletters_Mailchimp_Cached_Data {
 		}
 
 		return $interest_categories;
+	}
+
+	/**
+	 * Fetches the tags for a given audience (list) from the Mailchimp server
+	 *
+	 * @param string $list_id The audience (list) ID.
+	 * @throws Exception In case of errors while fetching data from the server.
+	 * @return array The audience tags
+	 */
+	public static function fetch_tags( $list_id ) {
+		$mc   = new Mailchimp( ( self::get_mc_instance() )->api_key() );
+		$tags = $list_id ? ( self::get_mc_instance() )->validate(
+			$mc->get(
+				"lists/$list_id/segments",
+				[
+					'type'  => 'static', // 'saved' or 'static' segments. Tags are called 'static' segments in Mailchimp's API.
+					'count' => 1000,
+				],
+				60
+			),
+			__( 'Error retrieving Mailchimp tags.', 'newspack_newsletters' )
+		) : null;
+
+		if ( $tags && count( $tags['segments'] ) ) {
+			return $tags['segments'];
+		}
+
+		return [];
 	}
 
 	/**

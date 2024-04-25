@@ -26,16 +26,18 @@ use Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedCustomChannels
  * Typical usage is:
  *  <code>
  *   $adsenseService = new Google\Service\Adsense(...);
- *   $adunits = $adsenseService->adunits;
+ *   $adunits = $adsenseService->accounts_adclients_adunits;
  *  </code>
  */
 class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Service\Resource
 {
     /**
-     * Creates an ad unit. This method can only be used by projects enabled for the
-     * [AdSense for Platforms](https://developers.google.com/adsense/platforms/)
-     * product. Note that ad units can only be created for ad clients with an "AFC"
-     * product code. For more info see the [AdClient
+     * Creates an ad unit. This method can be called only by a restricted set of
+     * projects, which are usually owned by [AdSense for
+     * Platforms](https://developers.google.com/adsense/platforms/) publishers.
+     * Contact your account manager if you need to use this method. Note that ad
+     * units can only be created for ad clients with an "AFC" product code. For more
+     * info see the [AdClient
      * resource](/adsense/management/reference/rest/v2/accounts.adclients). For now,
      * this method can only be used to create `DISPLAY` ad units. See:
      * https://support.google.com/adsense/answer/9183566 (adunits.create)
@@ -45,6 +47,7 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * @param AdUnit $postBody
      * @param array $optParams Optional parameters.
      * @return AdUnit
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit $postBody, $optParams = [])
     {
@@ -59,6 +62,7 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * accounts/{account}/adclients/{adclient}/adunits/{adunit}
      * @param array $optParams Optional parameters.
      * @return AdUnit
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -76,6 +80,7 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * Format: accounts/{account}/adclients/{adclient}/adunits/{adunit}
      * @param array $optParams Optional parameters.
      * @return AdUnitAdCode
+     * @throws \Google\Service\Exception
      */
     public function getAdcode($name, $optParams = [])
     {
@@ -100,6 +105,7 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * paginating, all other parameters provided to `ListAdUnits` must match the
      * call that provided the page token.
      * @return ListAdUnitsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsAdclientsAdunits($parent, $optParams = [])
     {
@@ -125,6 +131,7 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * page. When paginating, all other parameters provided to
      * `ListLinkedCustomChannels` must match the call that provided the page token.
      * @return ListLinkedCustomChannelsResponse
+     * @throws \Google\Service\Exception
      */
     public function listLinkedCustomChannels($parent, $optParams = [])
     {
@@ -133,10 +140,12 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
         return $this->call('listLinkedCustomChannels', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedCustomChannelsResponse::class);
     }
     /**
-     * Updates an ad unit. This method can only be used by projects enabled for the
-     * [AdSense for Platforms](https://developers.google.com/adsense/platforms/)
-     * product. For now, this method can only be used to update `DISPLAY` ad units.
-     * See: https://support.google.com/adsense/answer/9183566 (adunits.patch)
+     * Updates an ad unit. This method can be called only by a restricted set of
+     * projects, which are usually owned by [AdSense for
+     * Platforms](https://developers.google.com/adsense/platforms/) publishers.
+     * Contact your account manager if you need to use this method. For now, this
+     * method can only be used to update `DISPLAY` ad units. See:
+     * https://support.google.com/adsense/answer/9183566 (adunits.patch)
      *
      * @param string $name Output only. Resource name of the ad unit. Format:
      * accounts/{account}/adclients/{adclient}/adunits/{adunit}
@@ -146,6 +155,7 @@ class AccountsAdclientsAdunits extends \Google\Site_Kit_Dependencies\Google\Serv
      * @opt_param string updateMask The list of fields to update. If empty, a full
      * update is performed.
      * @return AdUnit
+     * @throws \Google\Service\Exception
      */
     public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\Adsense\AdUnit $postBody, $optParams = [])
     {

@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag;
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $tags = $tagmanagerService->tags;
+ *   $tags = $tagmanagerService->accounts_containers_workspaces_tags;
  *  </code>
  */
 class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -38,6 +38,7 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * @param Tag $postBody
      * @param array $optParams Optional parameters.
      * @return Tag
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag $postBody, $optParams = [])
     {
@@ -51,6 +52,7 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * @param string $path GTM Tag's API relative path. Example: accounts/{account_i
      * d}/containers/{container_id}/workspaces/{workspace_id}/tags/{tag_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -65,6 +67,7 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * d}/containers/{container_id}/workspaces/{workspace_id}/tags/{tag_id}
      * @param array $optParams Optional parameters.
      * @return Tag
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -83,6 +86,7 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListTagsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersWorkspacesTags($parent, $optParams = [])
     {
@@ -100,6 +104,7 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of thetag in storage.
      * @return RevertTagResponse
+     * @throws \Google\Service\Exception
      */
     public function revert($path, $optParams = [])
     {
@@ -118,6 +123,7 @@ class AccountsContainersWorkspacesTags extends \Google\Site_Kit_Dependencies\Goo
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the tag in storage.
      * @return Tag
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Tag $postBody, $optParams = [])
     {

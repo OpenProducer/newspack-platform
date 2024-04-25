@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -10,12 +11,12 @@
  */
 namespace Google\Site_Kit_Dependencies\Monolog\Handler;
 
-use Exception;
 use Google\Site_Kit_Dependencies\Monolog\Formatter\LineFormatter;
+use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
 use Google\Site_Kit_Dependencies\Monolog\Logger;
 use Google\Site_Kit_Dependencies\Monolog\Utils;
 use Google\Site_Kit_Dependencies\PhpConsole\Connector;
-use Google\Site_Kit_Dependencies\PhpConsole\Handler;
+use Google\Site_Kit_Dependencies\PhpConsole\Handler as VendorPhpConsoleHandler;
 use Google\Site_Kit_Dependencies\PhpConsole\Helper;
 /**
  * Monolog handler for Google Chrome extension "PHP Console"
@@ -23,7 +24,7 @@ use Google\Site_Kit_Dependencies\PhpConsole\Helper;
  * Display PHP error/debug log messages in Google Chrome console and notification popups, executes PHP code remotely
  *
  * Usage:
- * 1. Install Google Chrome extension https://chrome.google.com/webstore/detail/php-console/nfhmhhlpfleoednkpnnnkolmclajemef
+ * 1. Install Google Chrome extension [now dead and removed from the chrome store]
  * 2. See overview https://github.com/barbushin/php-console#overview
  * 3. Install PHP Console library https://github.com/barbushin/php-console#installation
  * 4. Example (result will looks like http://i.hizliresim.com/vg3Pz4.png)
@@ -31,19 +32,23 @@ use Google\Site_Kit_Dependencies\PhpConsole\Helper;
  *      $logger = new \Monolog\Logger('all', array(new \Monolog\Handler\PHPConsoleHandler()));
  *      \Monolog\ErrorHandler::register($logger);
  *      echo $undefinedVar;
- *      $logger->addDebug('SELECT * FROM users', array('db', 'time' => 0.012));
+ *      $logger->debug('SELECT * FROM users', array('db', 'time' => 0.012));
  *      PC::debug($_SERVER); // PHP Console debugger for any type of vars
  *
  * @author Sergey Barbushin https://www.linkedin.com/in/barbushin
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
+ * @deprecated Since 2.8.0 and 3.2.0, PHPConsole is abandoned and thus we will drop this handler in Monolog 4
  */
 class PHPConsoleHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
 {
-    private $options = array(
+    /** @var array<string, mixed> */
+    private $options = [
         'enabled' => \true,
         // bool Is PHP Console server enabled
-        'classesPartialsTraceIgnore' => array('Monolog\\'),
+        'classesPartialsTraceIgnore' => ['Monolog\\'],
         // array Hide calls of classes started with...
-        'debugTagsKeysInContext' => array(0, 'tag'),
+        'debugTagsKeysInContext' => [0, 'tag'],
         // bool Is PHP Console server enabled
         'useOwnErrorsHandler' => \false,
         // bool Enable errors handling
@@ -61,7 +66,7 @@ class PHPConsoleHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Ab
         // string|null Protect PHP Console connection by password
         'enableSslOnlyMode' => \false,
         // bool Force connection by SSL for clients with PHP Console installed
-        'ipMasks' => array(),
+        'ipMasks' => [],
         // array Set IP masks of clients that will be allowed to connect to PHP Console: array('192.168.*.*', '127.0.0.1')
         'enableEvalListener' => \false,
         // bool Enable eval request to be handled by eval dispatcher(if enabled, 'password' option is also required)
@@ -78,34 +83,37 @@ class PHPConsoleHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Ab
         'detectDumpTraceAndSource' => \false,
         // bool Autodetect and append trace data to debug
         'dataStorage' => null,
-    );
+    ];
     /** @var Connector */
     private $connector;
     /**
-     * @param  array          $options   See \Monolog\Handler\PHPConsoleHandler::$options for more details
-     * @param  Connector|null $connector Instance of \PhpConsole\Connector class (optional)
-     * @param  int            $level
-     * @param  bool           $bubble
-     * @throws Exception
+     * @param  array<string, mixed> $options   See \Monolog\Handler\PHPConsoleHandler::$options for more details
+     * @param  Connector|null       $connector Instance of \PhpConsole\Connector class (optional)
+     * @throws \RuntimeException
      */
-    public function __construct(array $options = array(), \Google\Site_Kit_Dependencies\PhpConsole\Connector $connector = null, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(array $options = [], ?\Google\Site_Kit_Dependencies\PhpConsole\Connector $connector = null, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
         if (!\class_exists('Google\\Site_Kit_Dependencies\\PhpConsole\\Connector')) {
-            throw new \Exception('PHP Console library not found. See https://github.com/barbushin/php-console#installation');
+            throw new \RuntimeException('PHP Console library not found. See https://github.com/barbushin/php-console#installation');
         }
         parent::__construct($level, $bubble);
         $this->options = $this->initOptions($options);
         $this->connector = $this->initConnector($connector);
     }
-    private function initOptions(array $options)
+    /**
+     * @param array<string, mixed> $options
+     *
+     * @return array<string, mixed>
+     */
+    private function initOptions(array $options) : array
     {
         $wrongOptions = \array_diff(\array_keys($options), \array_keys($this->options));
         if ($wrongOptions) {
-            throw new \Exception('Unknown options: ' . \implode(', ', $wrongOptions));
+            throw new \RuntimeException('Unknown options: ' . \implode(', ', $wrongOptions));
         }
         return \array_replace($this->options, $options);
     }
-    private function initConnector(\Google\Site_Kit_Dependencies\PhpConsole\Connector $connector = null)
+    private function initConnector(?\Google\Site_Kit_Dependencies\PhpConsole\Connector $connector = null) : \Google\Site_Kit_Dependencies\PhpConsole\Connector
     {
         if (!$connector) {
             if ($this->options['dataStorage']) {
@@ -156,15 +164,18 @@ class PHPConsoleHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Ab
         }
         return $connector;
     }
-    public function getConnector()
+    public function getConnector() : \Google\Site_Kit_Dependencies\PhpConsole\Connector
     {
         return $this->connector;
     }
-    public function getOptions()
+    /**
+     * @return array<string, mixed>
+     */
+    public function getOptions() : array
     {
         return $this->options;
     }
-    public function handle(array $record)
+    public function handle(array $record) : bool
     {
         if ($this->options['enabled'] && $this->connector->isActiveClient()) {
             return parent::handle($record);
@@ -173,21 +184,21 @@ class PHPConsoleHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Ab
     }
     /**
      * Writes the record down to the log of the implementing handler
-     *
-     * @param  array $record
-     * @return void
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         if ($record['level'] < \Google\Site_Kit_Dependencies\Monolog\Logger::NOTICE) {
             $this->handleDebugRecord($record);
-        } elseif (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Exception) {
+        } elseif (isset($record['context']['exception']) && $record['context']['exception'] instanceof \Throwable) {
             $this->handleExceptionRecord($record);
         } else {
             $this->handleErrorRecord($record);
         }
     }
-    private function handleDebugRecord(array $record)
+    /**
+     * @phpstan-param Record $record
+     */
+    private function handleDebugRecord(array $record) : void
     {
         $tags = $this->getRecordTags($record);
         $message = $record['message'];
@@ -196,15 +207,25 @@ class PHPConsoleHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Ab
         }
         $this->connector->getDebugDispatcher()->dispatchDebug($message, $tags, $this->options['classesPartialsTraceIgnore']);
     }
-    private function handleExceptionRecord(array $record)
+    /**
+     * @phpstan-param Record $record
+     */
+    private function handleExceptionRecord(array $record) : void
     {
         $this->connector->getErrorsDispatcher()->dispatchException($record['context']['exception']);
     }
-    private function handleErrorRecord(array $record)
+    /**
+     * @phpstan-param Record $record
+     */
+    private function handleErrorRecord(array $record) : void
     {
         $context = $record['context'];
-        $this->connector->getErrorsDispatcher()->dispatchError(isset($context['code']) ? $context['code'] : null, isset($context['message']) ? $context['message'] : $record['message'], isset($context['file']) ? $context['file'] : null, isset($context['line']) ? $context['line'] : null, $this->options['classesPartialsTraceIgnore']);
+        $this->connector->getErrorsDispatcher()->dispatchError($context['code'] ?? null, $context['message'] ?? $record['message'], $context['file'] ?? null, $context['line'] ?? null, $this->options['classesPartialsTraceIgnore']);
     }
+    /**
+     * @phpstan-param Record $record
+     * @return string
+     */
     private function getRecordTags(array &$record)
     {
         $tags = null;
@@ -227,7 +248,7 @@ class PHPConsoleHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Ab
     /**
      * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
     {
         return new \Google\Site_Kit_Dependencies\Monolog\Formatter\LineFormatter('%message%');
     }

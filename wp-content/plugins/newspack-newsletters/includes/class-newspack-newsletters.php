@@ -16,6 +16,7 @@ final class Newspack_Newsletters {
 
 	const NEWSPACK_NEWSLETTERS_CPT = 'newspack_nl_cpt';
 	const EMAIL_HTML_META          = 'newspack_email_html';
+	const PUBLIC_POST_ID_META      = 'newspack_nl_public_post_id';
 
 	/**
 	 * Supported fonts.
@@ -366,8 +367,7 @@ final class Newspack_Newsletters {
 	}
 
 	/**
-	 * Set default layout.
-	 * This can be removed once WP 5.5 adoption is sufficient.
+	 * Set post meta on post creation/save.
 	 *
 	 * @param string  $post_id Numeric ID of the campaign.
 	 * @param WP_Post $post The complete post object.
@@ -375,7 +375,8 @@ final class Newspack_Newsletters {
 	 */
 	public static function save( $post_id, $post, $update ) {
 		if ( ! $update ) {
-			update_post_meta( $post_id, 'template_id', -1 );
+			update_post_meta( $post_id, 'template_id', -1 ); // Set default layout. This can be removed once WP 5.5 adoption is sufficient.
+			update_post_meta( $post_id, self::PUBLIC_POST_ID_META, wp_generate_password( 20, false, false ) ); // Generate a token that can be used to identify this post publicly.
 		}
 	}
 

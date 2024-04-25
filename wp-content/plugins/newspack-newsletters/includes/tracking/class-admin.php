@@ -17,6 +17,10 @@ final class Admin {
 	public static function init() {
 		add_action( 'admin_menu', [ __CLASS__, 'add_settings_page' ] );
 		add_action( 'admin_init', [ __CLASS__, 'register_settings' ] );
+		add_action( 'add_option_newspack_newsletters_use_tracking_pixel', [ __CLASS__, 'updated_option' ] );
+		add_action( 'add_option_newspack_newsletters_use_click_tracking', [ __CLASS__, 'updated_option' ] );
+		add_action( 'update_option_newspack_newsletters_use_tracking_pixel', [ __CLASS__, 'updated_option' ] );
+		add_action( 'update_option_newspack_newsletters_use_click_tracking', [ __CLASS__, 'updated_option' ] );
 
 		// Newsletters columns.
 		add_action( 'manage_' . \Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT . '_posts_columns', [ __CLASS__, 'manage_columns' ] );
@@ -51,6 +55,13 @@ final class Admin {
 	}
 
 	/**
+	 * Flush rewrite rules upon successful update of tracking options.
+	 */
+	public static function updated_option() {
+		\flush_rewrite_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
+	}
+
+	/**
 	 * Add settings page submenu.
 	 */
 	public static function add_settings_page() {
@@ -68,10 +79,6 @@ final class Admin {
 	 * Create settings page.
 	 */
 	public static function render_settings_page() {
-		// Flush rewrite rules on save.
-		if ( isset( $_GET['settings-updated'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification
-			\flush_rewrite_rules(); // phpcs:ignore WordPressVIPMinimum.Functions.RestrictedFunctions.flush_rewrite_rules_flush_rewrite_rules
-		}
 		?>
 		<div class="wrap">
 			<h1><?php esc_html_e( 'Newsletters Tracking Options', 'newspack-newsletters' ); ?></h1>
@@ -87,6 +94,32 @@ final class Admin {
 	}
 
 	/**
+	 * Get config for all availbable settings.
+	 *
+	 * @return array
+	 */
+	public static function get_settings_config() {
+		return [
+			[
+				'name'              => 'newspack_newsletters_use_tracking_pixel',
+				'type'              => 'boolean',
+				'label_for'         => 'use_tracking_pixel',
+				'description'       => __( 'Enable tracking pixel', 'newspack-newsletters' ),
+				'sanitize_callback' => [ __CLASS__, 'sanitize_boolean' ],
+				'default'           => true,
+			],
+			[
+				'name'              => 'newspack_newsletters_use_click_tracking',
+				'type'              => 'boolean',
+				'label_for'         => 'use_click_tracking',
+				'description'       => __( 'Enable click-tracking', 'newspack-newsletters' ),
+				'sanitize_callback' => [ __CLASS__, 'sanitize_boolean' ],
+				'default'           => true,
+			],
+		];
+	}
+
+	/**
 	 * Register and add settings
 	 */
 	public static function register_settings() {
@@ -96,24 +129,7 @@ final class Admin {
 			null,
 			'newspack-newsletters-tracking'
 		);
-		$config = [
-			[
-				'name'              => 'newspack_newsletters_use_tracking_pixel',
-				'type'              => 'boolean',
-				'label_for'         => 'use_tracking_pixel',
-				'description'       => __( 'Enable tracking pixel', 'newspack-newsletters' ),
-				'sanitize_callback' => 'boolval',
-				'default'           => true,
-			],
-			[
-				'name'              => 'newspack_newsletters_use_click_tracking',
-				'type'              => 'boolean',
-				'label_for'         => 'use_click_tracking',
-				'description'       => __( 'Enable click-tracking', 'newspack-newsletters' ),
-				'sanitize_callback' => 'boolval',
-				'default'           => true,
-			],
-		];
+		$config = self::get_settings_config();
 		foreach ( $config as $setting ) {
 			\register_setting(
 				'newspack_newsletters_tracking',
@@ -137,13 +153,26 @@ final class Admin {
 	}
 
 	/**
+	 * Sanitize a value for storage in the options table.
+	 * Forces a boolean value that's then converted to an int, otherwise update_option will fail if passing `false`.
+	 *
+	 * @param mixed $value Value to sanitize.
+	 *
+	 * @return int
+	 */
+	public static function sanitize_boolean( $value ) {
+		return (int) boolval( $value );
+	}
+
+	/**
 	 * Settings callback.
 	 *
 	 * @param array $setting Setting config.
 	 */
 	public static function field_callback( $setting ) {
-		$type = $setting['type'] ?? '';
-		switch ( $setting['type'] ) {
+		$type    = $setting['type'] ?? '';
+		$default = $setting['default'] ?? false;
+		switch ( $type ) {
 			case 'boolean':
 				?>
 				<input
@@ -151,18 +180,27 @@ final class Admin {
 					type="checkbox"
 					name="<?php echo esc_attr( $setting['name'] ); ?>"
 					value="1"
-					<?php checked( 1, get_option( $setting['name'] ) ); ?>
+					<?php checked( 1, get_option( $setting['name'], $default ) ); ?>
 				/>
 				<?php
 				break;
 			case 'text':
-			default:
 				?>
 				<input
 					id="<?php echo esc_attr( $setting['label_for'] ); ?>"
 					type="text"
 					name="<?php echo esc_attr( $setting['name'] ); ?>"
-					value="<?php echo esc_attr( get_option( $setting['name'] ) ); ?>"
+					value="<?php echo esc_attr( get_option( $setting['name'], $default ) ); ?>"
+				/>
+				<?php
+				break;
+			default:
+				?>
+				<input
+					id="<?php echo esc_attr( $setting['label_for'] ); ?>"
+					type="hidden"
+					name="<?php echo esc_attr( $setting['name'] ); ?>"
+					value="<?php echo esc_attr( get_option( $setting['name'], $default ) ); ?>"
 				/>
 				<?php
 				break;

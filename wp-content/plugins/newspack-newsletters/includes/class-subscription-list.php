@@ -53,6 +53,16 @@ class Subscription_List {
 	const REMOTE_ID_META = '_remote_id';
 
 	/**
+	 * The name of the meta key used to store the list's remote name, only present for remote lists
+	 */
+	const REMOTE_NAME_META = '_remote_name';
+
+	/**
+	 * The post meta key used to store the list's subscriber count, only present for Group-based lists.
+	 */
+	const SUBSCRIBER_COUNT_META = '_subscriber_count';
+
+	/**
 	 * Checks if a string $id is in the format of a local Subscription List Form ID
 	 *
 	 * @see self::get_form_id
@@ -288,6 +298,44 @@ class Subscription_List {
 	}
 
 	/**
+	 * Gets the subscriber count, only present for Group-based lists
+	 *
+	 * @return string
+	 */
+	public function get_subscriber_count() {
+		$count = get_post_meta( $this->get_id(), self::SUBSCRIBER_COUNT_META, true );
+		return empty( $count ) ? 0 : (int) $count;
+	}
+
+	/**
+	 * Sets the subscriber count, only present for Group-based lists
+	 *
+	 * @param int $count The subscriber count.
+	 * @return boolean
+	 */
+	public function set_subscriber_count( $count ) {
+		return update_post_meta( $this->get_id(), self::SUBSCRIBER_COUNT_META, (int) $count );
+	}
+
+	/**
+	 * Gets the list's remote name. Only present for remote lists.
+	 */
+	public function get_remote_name() {
+		$remote_name = get_post_meta( $this->get_id(), self::REMOTE_NAME_META, true );
+		return ( empty( $remote_name ) ) ? $this->get_title() : $remote_name;
+	}
+
+	/**
+	 * Sets the list's remote name. Only present for remote lists.
+	 *
+	 * @param string $remote_name The remote name.
+	 * @return boolean
+	 */
+	public function set_remote_name( $remote_name ) {
+		return update_post_meta( $this->get_id(), self::REMOTE_NAME_META, $remote_name );
+	}
+
+	/**
 	 * Generate the tag name that will be added to the ESP based on the post title
 	 *
 	 * @param string $prefix The prefix to be added to the tag name.
@@ -443,7 +491,7 @@ class Subscription_List {
 				'tag_name' => $tag_name,
 			];
 		}
-		
+
 		return update_post_meta( $this->get_id(), self::META_KEY, $settings );
 	}
 

@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -11,27 +12,32 @@
 namespace Google\Site_Kit_Dependencies\Monolog\Handler;
 
 use Google\Site_Kit_Dependencies\Monolog\Logger;
+use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
 use Google\Site_Kit_Dependencies\Monolog\Formatter\LineFormatter;
 /**
  * Common syslog functionality
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
  */
 abstract class AbstractSyslogHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
 {
+    /** @var int */
     protected $facility;
     /**
      * Translates Monolog log levels to syslog log priorities.
+     * @var array
+     * @phpstan-var array<Level, int>
      */
-    protected $logLevels = array(\Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG => \LOG_DEBUG, \Google\Site_Kit_Dependencies\Monolog\Logger::INFO => \LOG_INFO, \Google\Site_Kit_Dependencies\Monolog\Logger::NOTICE => \LOG_NOTICE, \Google\Site_Kit_Dependencies\Monolog\Logger::WARNING => \LOG_WARNING, \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR => \LOG_ERR, \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL => \LOG_CRIT, \Google\Site_Kit_Dependencies\Monolog\Logger::ALERT => \LOG_ALERT, \Google\Site_Kit_Dependencies\Monolog\Logger::EMERGENCY => \LOG_EMERG);
+    protected $logLevels = [\Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG => \LOG_DEBUG, \Google\Site_Kit_Dependencies\Monolog\Logger::INFO => \LOG_INFO, \Google\Site_Kit_Dependencies\Monolog\Logger::NOTICE => \LOG_NOTICE, \Google\Site_Kit_Dependencies\Monolog\Logger::WARNING => \LOG_WARNING, \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR => \LOG_ERR, \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL => \LOG_CRIT, \Google\Site_Kit_Dependencies\Monolog\Logger::ALERT => \LOG_ALERT, \Google\Site_Kit_Dependencies\Monolog\Logger::EMERGENCY => \LOG_EMERG];
     /**
      * List of valid log facility names.
+     * @var array<string, int>
      */
-    protected $facilities = array('auth' => \LOG_AUTH, 'authpriv' => \LOG_AUTHPRIV, 'cron' => \LOG_CRON, 'daemon' => \LOG_DAEMON, 'kern' => \LOG_KERN, 'lpr' => \LOG_LPR, 'mail' => \LOG_MAIL, 'news' => \LOG_NEWS, 'syslog' => \LOG_SYSLOG, 'user' => \LOG_USER, 'uucp' => \LOG_UUCP);
+    protected $facilities = ['auth' => \LOG_AUTH, 'authpriv' => \LOG_AUTHPRIV, 'cron' => \LOG_CRON, 'daemon' => \LOG_DAEMON, 'kern' => \LOG_KERN, 'lpr' => \LOG_LPR, 'mail' => \LOG_MAIL, 'news' => \LOG_NEWS, 'syslog' => \LOG_SYSLOG, 'user' => \LOG_USER, 'uucp' => \LOG_UUCP];
     /**
-     * @param mixed $facility
-     * @param int   $level The minimum logging level at which this handler will be triggered
-     * @param bool  $bubble Whether the messages that are handled can bubble up the stack or not
+     * @param string|int $facility Either one of the names of the keys in $this->facilities, or a LOG_* facility constant
      */
-    public function __construct($facility = \LOG_USER, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct($facility = \LOG_USER, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
         parent::__construct($level, $bubble);
         if (!\defined('PHP_WINDOWS_VERSION_BUILD')) {
@@ -62,7 +68,7 @@ abstract class AbstractSyslogHandler extends \Google\Site_Kit_Dependencies\Monol
             // LOG_LOCAL7
         }
         // convert textual description of facility to syslog constant
-        if (\array_key_exists(\strtolower($facility), $this->facilities)) {
+        if (\is_string($facility) && \array_key_exists(\strtolower($facility), $this->facilities)) {
             $facility = $this->facilities[\strtolower($facility)];
         } elseif (!\in_array($facility, \array_values($this->facilities), \true)) {
             throw new \UnexpectedValueException('Unknown facility value "' . $facility . '" given');
@@ -70,9 +76,9 @@ abstract class AbstractSyslogHandler extends \Google\Site_Kit_Dependencies\Monol
         $this->facility = $facility;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
     {
         return new \Google\Site_Kit_Dependencies\Monolog\Formatter\LineFormatter('%channel%.%level_name%: %message% %context% %extra%');
     }

@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Analytics\ProfileFilterLinks;
  * Typical usage is:
  *  <code>
  *   $analyticsService = new Google\Service\Analytics(...);
- *   $profileFilterLinks = $analyticsService->profileFilterLinks;
+ *   $profileFilterLinks = $analyticsService->management_profileFilterLinks;
  *  </code>
  */
 class ManagementProfileFilterLinks extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -38,6 +38,7 @@ class ManagementProfileFilterLinks extends \Google\Site_Kit_Dependencies\Google\
      * @param string $profileId Profile ID to which the filter link belongs.
      * @param string $linkId ID of the profile filter link to delete.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($accountId, $webPropertyId, $profileId, $linkId, $optParams = [])
     {
@@ -55,6 +56,7 @@ class ManagementProfileFilterLinks extends \Google\Site_Kit_Dependencies\Google\
      * @param string $linkId ID of the profile filter link.
      * @param array $optParams Optional parameters.
      * @return ProfileFilterLink
+     * @throws \Google\Service\Exception
      */
     public function get($accountId, $webPropertyId, $profileId, $linkId, $optParams = [])
     {
@@ -72,6 +74,7 @@ class ManagementProfileFilterLinks extends \Google\Site_Kit_Dependencies\Google\
      * @param ProfileFilterLink $postBody
      * @param array $optParams Optional parameters.
      * @return ProfileFilterLink
+     * @throws \Google\Service\Exception
      */
     public function insert($accountId, $webPropertyId, $profileId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\ProfileFilterLink $postBody, $optParams = [])
     {
@@ -97,6 +100,7 @@ class ManagementProfileFilterLinks extends \Google\Site_Kit_Dependencies\Google\
      * @opt_param int start-index An index of the first entity to retrieve. Use this
      * parameter as a pagination mechanism along with the max-results parameter.
      * @return ProfileFilterLinks
+     * @throws \Google\Service\Exception
      */
     public function listManagementProfileFilterLinks($accountId, $webPropertyId, $profileId, $optParams = [])
     {
@@ -116,6 +120,7 @@ class ManagementProfileFilterLinks extends \Google\Site_Kit_Dependencies\Google\
      * @param ProfileFilterLink $postBody
      * @param array $optParams Optional parameters.
      * @return ProfileFilterLink
+     * @throws \Google\Service\Exception
      */
     public function patch($accountId, $webPropertyId, $profileId, $linkId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\ProfileFilterLink $postBody, $optParams = [])
     {
@@ -134,6 +139,7 @@ class ManagementProfileFilterLinks extends \Google\Site_Kit_Dependencies\Google\
      * @param ProfileFilterLink $postBody
      * @param array $optParams Optional parameters.
      * @return ProfileFilterLink
+     * @throws \Google\Service\Exception
      */
     public function update($accountId, $webPropertyId, $profileId, $linkId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\ProfileFilterLink $postBody, $optParams = [])
     {

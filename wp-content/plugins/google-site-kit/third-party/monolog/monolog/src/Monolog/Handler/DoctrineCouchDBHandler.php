@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -12,6 +13,7 @@ namespace Google\Site_Kit_Dependencies\Monolog\Handler;
 
 use Google\Site_Kit_Dependencies\Monolog\Logger;
 use Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter;
+use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
 use Google\Site_Kit_Dependencies\Doctrine\CouchDB\CouchDBClient;
 /**
  * CouchDB handler for Doctrine CouchDB ODM
@@ -20,8 +22,9 @@ use Google\Site_Kit_Dependencies\Doctrine\CouchDB\CouchDBClient;
  */
 class DoctrineCouchDBHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
 {
+    /** @var CouchDBClient */
     private $client;
-    public function __construct(\Google\Site_Kit_Dependencies\Doctrine\CouchDB\CouchDBClient $client, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(\Google\Site_Kit_Dependencies\Doctrine\CouchDB\CouchDBClient $client, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true)
     {
         $this->client = $client;
         parent::__construct($level, $bubble);
@@ -29,11 +32,11 @@ class DoctrineCouchDBHandler extends \Google\Site_Kit_Dependencies\Monolog\Handl
     /**
      * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         $this->client->postDocument($record['formatted']);
     }
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
     {
         return new \Google\Site_Kit_Dependencies\Monolog\Formatter\NormalizerFormatter();
     }

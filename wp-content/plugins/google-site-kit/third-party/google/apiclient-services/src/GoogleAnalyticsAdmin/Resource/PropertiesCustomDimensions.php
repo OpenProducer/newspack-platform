@@ -26,7 +26,7 @@ use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProto
  * Typical usage is:
  *  <code>
  *   $analyticsadminService = new Google\Service\GoogleAnalyticsAdmin(...);
- *   $customDimensions = $analyticsadminService->customDimensions;
+ *   $customDimensions = $analyticsadminService->properties_customDimensions;
  *  </code>
  */
 class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -39,6 +39,7 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * @param GoogleAnalyticsAdminV1betaArchiveCustomDimensionRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function archive($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaArchiveCustomDimensionRequest $postBody, $optParams = [])
     {
@@ -53,6 +54,7 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * @param GoogleAnalyticsAdminV1betaCustomDimension $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaCustomDimension
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension $postBody, $optParams = [])
     {
@@ -67,6 +69,7 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * format: properties/1234/customDimensions/5678
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaCustomDimension
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -89,6 +92,7 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * When paginating, all other parameters provided to `ListCustomDimensions` must
      * match the call that provided the page token.
      * @return GoogleAnalyticsAdminV1betaListCustomDimensionsResponse
+     * @throws \Google\Service\Exception
      */
     public function listPropertiesCustomDimensions($parent, $optParams = [])
     {
@@ -108,6 +112,7 @@ class PropertiesCustomDimensions extends \Google\Site_Kit_Dependencies\Google\Se
      * Omitted fields will not be updated. To replace the entire entity, use one
      * path with the string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaCustomDimension
+     * @throws \Google\Service\Exception
      */
     public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomDimension $postBody, $optParams = [])
     {

@@ -411,6 +411,8 @@ const starEmpty = (0,external_React_namespaceObject.createElement)(external_wp_p
 
 ;// CONCATENATED MODULE: external ["wp","viewport"]
 const external_wp_viewport_namespaceObject = window["wp"]["viewport"];
+;// CONCATENATED MODULE: external ["wp","compose"]
+const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/icons/build-module/library/close-small.js
 
 /**
@@ -425,11 +427,50 @@ const closeSmall = (0,external_React_namespaceObject.createElement)(external_wp_
 }));
 /* harmony default export */ const close_small = (closeSmall);
 
+;// CONCATENATED MODULE: ./packages/interface/build-module/store/deprecated.js
+/**
+ * WordPress dependencies
+ */
+
+function normalizeComplementaryAreaScope(scope) {
+  if (['core/edit-post', 'core/edit-site'].includes(scope)) {
+    external_wp_deprecated_default()(`${scope} interface scope`, {
+      alternative: 'core interface scope',
+      hint: 'core/edit-post and core/edit-site are merging.',
+      version: '6.6'
+    });
+    return 'core';
+  }
+  return scope;
+}
+function normalizeComplementaryAreaName(scope, name) {
+  if (scope === 'core' && name === 'edit-site/template') {
+    external_wp_deprecated_default()(`edit-site/template sidebar`, {
+      alternative: 'edit-post/document',
+      version: '6.6'
+    });
+    return 'edit-post/document';
+  }
+  if (scope === 'core' && name === 'edit-site/block-inspector') {
+    external_wp_deprecated_default()(`edit-site/block-inspector sidebar`, {
+      alternative: 'edit-post/block',
+      version: '6.6'
+    });
+    return 'edit-post/block';
+  }
+  return name;
+}
+
 ;// CONCATENATED MODULE: ./packages/interface/build-module/store/actions.js
 /**
  * WordPress dependencies
  */
 
+
+
+/**
+ * Internal dependencies
+ */
 
 
 /**
@@ -440,11 +481,15 @@ const closeSmall = (0,external_React_namespaceObject.createElement)(external_wp_
  *
  * @return {Object} Action object.
  */
-const setDefaultComplementaryArea = (scope, area) => ({
-  type: 'SET_DEFAULT_COMPLEMENTARY_AREA',
-  scope,
-  area
-});
+const setDefaultComplementaryArea = (scope, area) => {
+  scope = normalizeComplementaryAreaScope(scope);
+  area = normalizeComplementaryAreaName(scope, area);
+  return {
+    type: 'SET_DEFAULT_COMPLEMENTARY_AREA',
+    scope,
+    area
+  };
+};
 
 /**
  * Enable the complementary area.
@@ -460,6 +505,8 @@ const enableComplementaryArea = (scope, area) => ({
   if (!area) {
     return;
   }
+  scope = normalizeComplementaryAreaScope(scope);
+  area = normalizeComplementaryAreaName(scope, area);
   const isComplementaryAreaVisible = registry.select(external_wp_preferences_namespaceObject.store).get(scope, 'isComplementaryAreaVisible');
   if (!isComplementaryAreaVisible) {
     registry.dispatch(external_wp_preferences_namespaceObject.store).set(scope, 'isComplementaryAreaVisible', true);
@@ -479,6 +526,7 @@ const enableComplementaryArea = (scope, area) => ({
 const disableComplementaryArea = scope => ({
   registry
 }) => {
+  scope = normalizeComplementaryAreaScope(scope);
   const isComplementaryAreaVisible = registry.select(external_wp_preferences_namespaceObject.store).get(scope, 'isComplementaryAreaVisible');
   if (isComplementaryAreaVisible) {
     registry.dispatch(external_wp_preferences_namespaceObject.store).set(scope, 'isComplementaryAreaVisible', false);
@@ -500,6 +548,8 @@ const pinItem = (scope, item) => ({
   if (!item) {
     return;
   }
+  scope = normalizeComplementaryAreaScope(scope);
+  item = normalizeComplementaryAreaName(scope, item);
   const pinnedItems = registry.select(external_wp_preferences_namespaceObject.store).get(scope, 'pinnedItems');
 
   // The item is already pinned, there's nothing to do.
@@ -525,6 +575,8 @@ const unpinItem = (scope, item) => ({
   if (!item) {
     return;
   }
+  scope = normalizeComplementaryAreaScope(scope);
+  item = normalizeComplementaryAreaName(scope, item);
   const pinnedItems = registry.select(external_wp_preferences_namespaceObject.store).get(scope, 'pinnedItems');
   registry.dispatch(external_wp_preferences_namespaceObject.store).set(scope, 'pinnedItems', {
     ...pinnedItems,
@@ -626,6 +678,11 @@ function closeModal() {
 
 
 /**
+ * Internal dependencies
+ */
+
+
+/**
  * Returns the complementary area that is active in a given scope.
  *
  * @param {Object} state Global application state.
@@ -634,6 +691,7 @@ function closeModal() {
  * @return {string | null | undefined} The complementary area that is active in the given scope.
  */
 const getActiveComplementaryArea = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (state, scope) => {
+  scope = normalizeComplementaryAreaScope(scope);
   const isComplementaryAreaVisible = select(external_wp_preferences_namespaceObject.store).get(scope, 'isComplementaryAreaVisible');
 
   // Return `undefined` to indicate that the user has never toggled
@@ -650,6 +708,7 @@ const getActiveComplementaryArea = (0,external_wp_data_namespaceObject.createReg
   return state?.complementaryAreas?.[scope];
 });
 const isComplementaryAreaLoading = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (state, scope) => {
+  scope = normalizeComplementaryAreaScope(scope);
   const isVisible = select(external_wp_preferences_namespaceObject.store).get(scope, 'isComplementaryAreaVisible');
   const identifier = state?.complementaryAreas?.[scope];
   return isVisible && identifier === undefined;
@@ -666,6 +725,8 @@ const isComplementaryAreaLoading = (0,external_wp_data_namespaceObject.createReg
  */
 const isItemPinned = (0,external_wp_data_namespaceObject.createRegistrySelector)(select => (state, scope, item) => {
   var _pinnedItems$item;
+  scope = normalizeComplementaryAreaScope(scope);
+  item = normalizeComplementaryAreaName(scope, item);
   const pinnedItems = select(external_wp_preferences_namespaceObject.store).get(scope, 'pinnedItems');
   return (_pinnedItems$item = pinnedItems?.[item]) !== null && _pinnedItems$item !== void 0 ? _pinnedItems$item : true;
 });
@@ -1067,6 +1128,7 @@ PinnedItems.Slot = PinnedItemsSlot;
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -1076,6 +1138,7 @@ PinnedItems.Slot = PinnedItemsSlot;
 
 
 
+const ANIMATION_DURATION = 0.3;
 function ComplementaryAreaSlot({
   scope,
   ...props
@@ -1085,18 +1148,60 @@ function ComplementaryAreaSlot({
     ...props
   });
 }
+const SIDEBAR_WIDTH = 280;
+const variants = {
+  open: {
+    width: SIDEBAR_WIDTH
+  },
+  closed: {
+    width: 0
+  },
+  mobileOpen: {
+    width: '100vw'
+  }
+};
 function ComplementaryAreaFill({
+  activeArea,
+  isActive,
   scope,
   children,
   className,
   id
 }) {
+  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
+  const isMobileViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium', '<');
+  // This is used to delay the exit animation to the next tick.
+  // The reason this is done is to allow us to apply the right transition properties
+  // When we switch from an open sidebar to another open sidebar.
+  // we don't want to animate in this case.
+  const previousActiveArea = (0,external_wp_compose_namespaceObject.usePrevious)(activeArea);
+  const previousIsActive = (0,external_wp_compose_namespaceObject.usePrevious)(isActive);
+  const [, setState] = (0,external_wp_element_namespaceObject.useState)({});
+  (0,external_wp_element_namespaceObject.useEffect)(() => {
+    setState({});
+  }, [isActive]);
+  const transition = {
+    type: 'tween',
+    duration: disableMotion || isMobileViewport || !!previousActiveArea && !!activeArea && activeArea !== previousActiveArea ? 0 : ANIMATION_DURATION,
+    ease: [0.6, 0, 0.4, 1]
+  };
   return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.Fill, {
     name: `ComplementaryArea/${scope}`
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__unstableAnimatePresence, {
+    initial: false
+  }, (previousIsActive || isActive) && (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__unstableMotion.div, {
+    variants: variants,
+    initial: "closed",
+    animate: isMobileViewport ? 'mobileOpen' : 'open',
+    exit: "closed",
+    transition: transition
   }, (0,external_React_namespaceObject.createElement)("div", {
     id: id,
-    className: className
-  }, children));
+    className: className,
+    style: {
+      width: isMobileViewport ? '100vw' : SIDEBAR_WIDTH
+    }
+  }, children))));
 }
 function useAdjustComplementaryListener(scope, identifier, activeArea, isActive, isSmall) {
   const previousIsSmall = (0,external_wp_element_namespaceObject.useRef)(false);
@@ -1151,6 +1256,11 @@ function ComplementaryArea({
   toggleShortcut,
   isActiveByDefault
 }) {
+  // This state is used to delay the rendering of the Fill
+  // until the initial effect runs.
+  // This prevents the animation from running on mount if
+  // the complementary area is active by default.
+  const [isReady, setIsReady] = (0,external_wp_element_namespaceObject.useState)(false);
   const {
     isLoading,
     isActive,
@@ -1194,7 +1304,11 @@ function ComplementaryArea({
     } else if (activeArea === undefined && isSmall) {
       disableComplementaryArea(scope, identifier);
     }
+    setIsReady(true);
   }, [activeArea, isActiveByDefault, scope, identifier, isSmall, enableComplementaryArea, disableComplementaryArea]);
+  if (!isReady) {
+    return;
+  }
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, isPinnable && (0,external_React_namespaceObject.createElement)(pinned_items, {
     scope: scope
   }, isPinned && (0,external_React_namespaceObject.createElement)(complementary_area_toggle, {
@@ -1212,7 +1326,9 @@ function ComplementaryArea({
     target: name,
     scope: scope,
     icon: icon
-  }, title), isActive && (0,external_React_namespaceObject.createElement)(ComplementaryAreaFill, {
+  }, title), (0,external_React_namespaceObject.createElement)(ComplementaryAreaFill, {
+    activeArea: activeArea,
+    isActive: isActive,
     className: classnames_default()('interface-complementary-area', className),
     scope: scope,
     id: identifier.replace('/', ':')
@@ -1244,8 +1360,6 @@ const ComplementaryAreaWrapped = complementary_area_context(ComplementaryArea);
 ComplementaryAreaWrapped.Slot = ComplementaryAreaSlot;
 /* harmony default export */ const complementary_area = (ComplementaryAreaWrapped);
 
-;// CONCATENATED MODULE: external ["wp","compose"]
-const external_wp_compose_namespaceObject = window["wp"]["compose"];
 ;// CONCATENATED MODULE: ./packages/interface/build-module/components/navigable-region/index.js
 
 /**
@@ -1287,6 +1401,7 @@ function NavigableRegion({
  * Internal dependencies
  */
 
+const interface_skeleton_ANIMATION_DURATION = 0.25;
 function useHTMLClass(className) {
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     const element = document && document.querySelector(`html:not(.${className})`);
@@ -1335,6 +1450,14 @@ function InterfaceSkeleton({
   // Can we use a dependency to keyboard-shortcuts directly?
   shortcuts
 }, ref) {
+  const [secondarySidebarResizeListener, secondarySidebarSize] = (0,external_wp_compose_namespaceObject.useResizeObserver)();
+  const isMobileViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium', '<');
+  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
+  const defaultTransition = {
+    type: 'tween',
+    duration: disableMotion ? 0 : interface_skeleton_ANIMATION_DURATION,
+    ease: [0.6, 0, 0.4, 1]
+  };
   const navigateRegionsProps = (0,external_wp_components_namespaceObject.__unstableUseNavigateRegions)(shortcuts);
   useHTMLClass('interface-interface-skeleton__html-container');
   const defaultLabels = {
@@ -1377,10 +1500,35 @@ function InterfaceSkeleton({
     className: "interface-interface-skeleton__header"
   }, editorNotices), (0,external_React_namespaceObject.createElement)("div", {
     className: "interface-interface-skeleton__body"
+  }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.__unstableAnimatePresence, {
+    initial: false
   }, !!secondarySidebar && (0,external_React_namespaceObject.createElement)(NavigableRegion, {
     className: "interface-interface-skeleton__secondary-sidebar",
-    ariaLabel: mergedLabels.secondarySidebar
-  }, secondarySidebar), !!notices && (0,external_React_namespaceObject.createElement)("div", {
+    ariaLabel: mergedLabels.secondarySidebar,
+    as: external_wp_components_namespaceObject.__unstableMotion.div,
+    initial: "closed",
+    animate: isMobileViewport ? 'mobileOpen' : 'open',
+    exit: "closed",
+    variants: {
+      open: {
+        width: secondarySidebarSize.width
+      },
+      closed: {
+        width: 0
+      },
+      mobileOpen: {
+        width: '100vw'
+      }
+    },
+    transition: defaultTransition
+  }, (0,external_React_namespaceObject.createElement)("div", {
+    style: {
+      position: 'absolute',
+      width: 'fit-content',
+      height: '100%',
+      right: 0
+    }
+  }, secondarySidebarResizeListener, secondarySidebar))), !!notices && (0,external_React_namespaceObject.createElement)("div", {
     className: "interface-interface-skeleton__notices"
   }, notices), (0,external_React_namespaceObject.createElement)(NavigableRegion, {
     className: "interface-interface-skeleton__content",
@@ -2601,6 +2749,7 @@ const useIsDragging = elementRef => {
 const metadata = {
   $schema: "https://schemas.wp.org/trunk/block.json",
   name: "core/widget-area",
+  title: "Widget Area",
   category: "widgets",
   attributes: {
     id: {
@@ -4457,7 +4606,7 @@ function Interface({
     },
     header: (0,external_React_namespaceObject.createElement)(header, null),
     secondarySidebar: hasSecondarySidebar && (0,external_React_namespaceObject.createElement)(SecondarySidebar, null),
-    sidebar: hasSidebarEnabled && (0,external_React_namespaceObject.createElement)(complementary_area.Slot, {
+    sidebar: (0,external_React_namespaceObject.createElement)(complementary_area.Slot, {
       scope: "core/edit-widgets"
     }),
     content: (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(WidgetAreasBlockEditorContent, {

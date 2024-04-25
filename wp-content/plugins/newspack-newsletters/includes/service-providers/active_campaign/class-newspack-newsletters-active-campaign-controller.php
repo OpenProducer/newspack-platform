@@ -115,15 +115,6 @@ class Newspack_Newsletters_Active_Campaign_Controller extends Newspack_Newslette
 		);
 		\register_rest_route(
 			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/content',
-			[
-				'methods'             => \WP_REST_Server::READABLE,
-				'callback'            => [ $this, 'api_content' ],
-				'permission_callback' => '__return_true',
-			]
-		);
-		\register_rest_route(
-			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
 			'(?P<id>[\a-z]+)/test',
 			[
 				'methods'             => \WP_REST_Server::EDITABLE,
@@ -170,21 +161,5 @@ class Newspack_Newsletters_Active_Campaign_Controller extends Newspack_Newslette
 			$emails
 		);
 		return self::get_api_response( $response );
-	}
-
-	/**
-	 * Get raw HTML for a campaign. Required for the ActiveCampaign API.
-	 *
-	 * @param WP_REST_Request $request API request object.
-	 * @return void
-	 */
-	public function api_content( $request ) {
-		$response = $this->service_provider->content(
-			$request['id']
-		);
-		header( 'Content-Type: text/html; charset=UTF-8' );
-
-		echo $response; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped
-		exit();
 	}
 }

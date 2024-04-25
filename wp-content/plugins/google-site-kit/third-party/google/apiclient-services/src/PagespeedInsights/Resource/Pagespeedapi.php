@@ -46,6 +46,7 @@ class Pagespeedapi extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @opt_param string utm_campaign Campaign name for analytics.
      * @opt_param string utm_source Campaign source for analytics.
      * @return PagespeedApiPagespeedResponseV5
+     * @throws \Google\Service\Exception
      */
     public function runpagespeed($url, $optParams = [])
     {

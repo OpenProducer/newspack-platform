@@ -17,9 +17,8 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\AuthHandler;
 
-use Google\Site_Kit_Dependencies\GuzzleHttp\Client;
-use Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface;
 use Exception;
+use Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface;
 class AuthHandlerFactory
 {
     /**

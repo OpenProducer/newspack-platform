@@ -59,7 +59,9 @@ class WP_REST_Newspack_Authors_Controller extends WP_REST_Controller {
 							'sanitize_callback' => 'sanitize_text_field',
 						],
 					],
-					'permission_callback' => '__return_true',
+					'permission_callback' => function() {
+						return current_user_can( 'edit_posts' );
+					},
 				],
 			]
 		);

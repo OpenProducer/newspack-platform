@@ -15,24 +15,28 @@ use Google\Site_Kit_Dependencies\Monolog\Processor\ProcessorInterface;
 /**
  * Interface to describe loggers that have processors
  *
- * This interface is present in monolog 1.x to ease forward compatibility.
- *
  * @author Jordi Boggiano <j.boggiano@seld.be>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
 interface ProcessableHandlerInterface
 {
     /**
      * Adds a processor in the stack.
      *
+     * @psalm-param ProcessorInterface|callable(Record): Record $callback
+     *
      * @param  ProcessorInterface|callable $callback
      * @return HandlerInterface            self
      */
-    public function pushProcessor($callback) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface;
+    public function pushProcessor(callable $callback) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface;
     /**
      * Removes the processor on top of the stack and returns it.
      *
-     * @throws \LogicException In case the processor stack is empty
-     * @return callable
+     * @psalm-return ProcessorInterface|callable(Record): Record $callback
+     *
+     * @throws \LogicException             In case the processor stack is empty
+     * @return callable|ProcessorInterface
      */
     public function popProcessor() : callable;
 }

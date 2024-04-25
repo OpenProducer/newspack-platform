@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -11,19 +12,31 @@
 namespace Google\Site_Kit_Dependencies\Monolog\Handler\FingersCrossed;
 
 use Google\Site_Kit_Dependencies\Monolog\Logger;
+use Google\Site_Kit_Dependencies\Psr\Log\LogLevel;
 /**
  * Error level based activation strategy.
  *
  * @author Johannes M. Schmitt <schmittjoh@gmail.com>
+ *
+ * @phpstan-import-type Level from \Monolog\Logger
+ * @phpstan-import-type LevelName from \Monolog\Logger
  */
 class ErrorLevelActivationStrategy implements \Google\Site_Kit_Dependencies\Monolog\Handler\FingersCrossed\ActivationStrategyInterface
 {
+    /**
+     * @var Level
+     */
     private $actionLevel;
+    /**
+     * @param int|string $actionLevel Level or name or value
+     *
+     * @phpstan-param Level|LevelName|LogLevel::* $actionLevel
+     */
     public function __construct($actionLevel)
     {
         $this->actionLevel = \Google\Site_Kit_Dependencies\Monolog\Logger::toMonologLevel($actionLevel);
     }
-    public function isHandlerActivated(array $record)
+    public function isHandlerActivated(array $record) : bool
     {
         return $record['level'] >= $this->actionLevel;
     }

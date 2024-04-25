@@ -379,6 +379,27 @@ class Memberships {
 	}
 
 	/**
+	 * Get the current setting of the "Display memberships on the subscriptions tab" option.
+	 *
+	 * @return boolean
+	 */
+	public static function get_show_on_subscription_tab_setting() {
+		return \get_option( 'newspack_memberships_show_on_subscription_tab', false );
+	}
+
+	/**
+	 * Set the "Display memberships on the subscriptions tab" option.
+	 *
+	 * @param boolean $show False to show memberships without subscriptions on the subscriptions tab (default)
+	 *                      or true to display those memberships on the subscriptions tab..
+	 *
+	 * @return boolean
+	 */
+	public static function set_show_on_subscription_tab_setting( $show = false ) {
+		return \update_option( 'newspack_memberships_show_on_subscription_tab', $show );
+	}
+
+	/**
 	 * Whether the current user is a member of the given plan.
 	 *
 	 * @param int $plan_id Plan ID.

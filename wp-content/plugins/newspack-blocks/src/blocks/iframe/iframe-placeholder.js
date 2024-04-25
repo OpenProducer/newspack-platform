@@ -1,10 +1,12 @@
+/* global newspack_blocks_data */
+
 /**
  * WordPress dependencies
  */
 import { useState } from '@wordpress/element';
-import { __ } from '@wordpress/i18n';
+import { __, sprintf } from '@wordpress/i18n';
 import { Button, Placeholder, FormFileUpload, Spinner, Notice } from '@wordpress/components';
-import { BlockIcon, URLPopover, MediaUpload } from '@wordpress/block-editor';
+import { BlockIcon, URLPopover, MediaUpload, MediaUploadCheck } from '@wordpress/block-editor';
 import { keyboardReturn } from '@wordpress/icons';
 
 /**
@@ -12,7 +14,7 @@ import { keyboardReturn } from '@wordpress/icons';
  */
 import classnames from 'classnames';
 
-const allowedTypes = window.newspack_blocks_data?.iframe_accepted_file_mimes || [];
+const allowedTypes = newspack_blocks_data?.iframe_accepted_file_mimes || [];
 
 const InsertFromURLPopover = ( { src, onChange, onSubmit, onClose } ) => (
 	<URLPopover onClose={ onClose }>
@@ -83,17 +85,19 @@ const IframePlaceholder = ( {
 
 	const renderMediaLibraryButton = onSelect => {
 		return (
-			<MediaUpload
-				onSelect={ onSelect }
-				allowedTypes={ allowedTypes }
-				render={ ( { open } ) => {
-					return (
-						<Button variant="tertiary" onClick={ open }>
-							{ __( 'Media Library', 'newspack-blocks' ) }
-						</Button>
-					);
-				} }
-			/>
+			<MediaUploadCheck>
+				<MediaUpload
+					onSelect={ onSelect }
+					allowedTypes={ Object.keys( allowedTypes ) }
+					render={ ( { open } ) => {
+						return (
+							<Button variant="tertiary" onClick={ open }>
+								{ __( 'Media Library', 'newspack-blocks' ) }
+							</Button>
+						);
+					} }
+				/>
+			</MediaUploadCheck>
 		);
 	};
 
@@ -129,9 +133,18 @@ const IframePlaceholder = ( {
 			icon={ <BlockIcon icon={ icon } showColors /> }
 			label={ label }
 			className="wp-block-newspack-blocks-iframe"
-			instructions={ __(
-				'Upload an asset folder (.zip), a document (PDF, Word, Excel sheet, or a PPT), pick one from your media library, or add one with a URL.',
-				'newspack-blocks'
+			instructions={ sprintf(
+				// Translators: %s: describes what kinds of files/embeds the current user can use.
+				__(
+					'Upload a document file (PDF, Word, Excel sheet, or a PPT), choose one from the media library, %s.',
+					'newspack-blocks'
+				),
+				newspack_blocks_data?.iframe_can_upload_archives || false
+					? __(
+							'embed from a URL, or upload a .zip archive containing HTML assets',
+							'newspack-blocks'
+					  )
+					: __( 'or embed from a URL', 'newspack-blocks' )
 			) }
 		>
 			{ error && (
@@ -149,7 +162,9 @@ const IframePlaceholder = ( {
 					<Spinner />
 				) : (
 					<FormFileUpload
-						accept={ allowedTypes.join( ',' ) }
+						accept={ Object.keys( allowedTypes )
+							.map( mime => '.' + allowedTypes[ mime ] )
+							.join( ',' ) }
 						onChange={ onUpload }
 						multiple={ false }
 						render={ ( { openFileDialog } ) => (

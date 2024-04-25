@@ -16,19 +16,16 @@ use Google\Site_Kit_Dependencies\Monolog\Formatter\LineFormatter;
 /**
  * Helper trait for implementing FormattableInterface
  *
- * This trait is present in monolog 1.x to ease forward compatibility.
- *
  * @author Jordi Boggiano <j.boggiano@seld.be>
  */
 trait FormattableHandlerTrait
 {
     /**
-     * @var FormatterInterface
+     * @var ?FormatterInterface
      */
     protected $formatter;
     /**
-     * {@inheritdoc}
-     * @suppress PhanTypeMismatchReturn
+     * {@inheritDoc}
      */
     public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
     {
@@ -36,7 +33,7 @@ trait FormattableHandlerTrait
         return $this;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function getFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
     {

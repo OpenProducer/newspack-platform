@@ -4949,6 +4949,10 @@ function useResolvedElement(subscriber, refOrElement) {
     callSubscriber();
   }, [callSubscriber]);
 }
+
+// Declaring my own type here instead of using the one provided by TS (available since 4.2.2), because this way I'm not
+// forcing consumers to use a specific TS version.
+
 // We're only using the first element of the size sequences, until future versions of the spec solidify on how
 // exactly it'll be used for fragments in multi-column scenarios:
 // From the spec:

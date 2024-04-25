@@ -70,6 +70,8 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
      * @var string
      */
     public $tagManagerUrl;
+    protected $transformationType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Transformation::class;
+    protected $transformationDataType = 'array';
     protected $triggerType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger::class;
     protected $triggerDataType = 'array';
     protected $variableType = \Google\Site_Kit_Dependencies\Google\Service\TagManager\Variable::class;
@@ -299,6 +301,20 @@ class ContainerVersion extends \Google\Site_Kit_Dependencies\Google\Collection
     public function getTagManagerUrl()
     {
         return $this->tagManagerUrl;
+    }
+    /**
+     * @param Transformation[]
+     */
+    public function setTransformation($transformation)
+    {
+        $this->transformation = $transformation;
+    }
+    /**
+     * @return Transformation[]
+     */
+    public function getTransformation()
+    {
+        return $this->transformation;
     }
     /**
      * @param Trigger[]

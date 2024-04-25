@@ -3,8 +3,8 @@
 namespace Google\Site_Kit_Dependencies\Google\AuthHandler;
 
 use Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader;
-use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenCache;
+use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Site_Kit_Dependencies\Google\Auth\Middleware\AuthTokenMiddleware;
 use Google\Site_Kit_Dependencies\Google\Auth\Middleware\ScopedAccessTokenMiddleware;
 use Google\Site_Kit_Dependencies\Google\Auth\Middleware\SimpleMiddleware;
@@ -12,8 +12,8 @@ use Google\Site_Kit_Dependencies\GuzzleHttp\Client;
 use Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface;
 use Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface;
 /**
-* This supports Guzzle 6
-*/
+ * This supports Guzzle 6
+ */
 class Guzzle6AuthHandler
 {
     protected $cache;
@@ -71,6 +71,6 @@ class Guzzle6AuthHandler
     }
     private function createAuthHttp(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $http)
     {
-        return new \Google\Site_Kit_Dependencies\GuzzleHttp\Client(['base_uri' => $http->getConfig('base_uri'), 'http_errors' => \true, 'verify' => $http->getConfig('verify'), 'proxy' => $http->getConfig('proxy')]);
+        return new \Google\Site_Kit_Dependencies\GuzzleHttp\Client(['http_errors' => \true] + $http->getConfig());
     }
 }

@@ -140,7 +140,12 @@ final class Blocks {
 		if ( empty( $content ) ) {
 			return '';
 		}
-		return sprintf( '<div class="%1$s" style="text-align:%2$s">%3$s</div>', $classes, $align, $content );
+		return sprintf(
+			'<div class="%1$s" style="text-align:%2$s">%3$s</div>',
+			esc_attr( $classes ),
+			esc_attr( $align ),
+			$content
+		);
 	}
 
 	/**

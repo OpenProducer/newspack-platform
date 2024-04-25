@@ -1,5 +1,72 @@
+# [3.7.0](https://github.com/Automattic/newspack-plugin/compare/v3.6.13...v3.7.0) (2024-04-24)
+
+
+### Bug Fixes
+
+* prevent multiple inputs from resetting in autocompletetokenfield component ([#3023](https://github.com/Automattic/newspack-plugin/issues/3023)) ([7f30d79](https://github.com/Automattic/newspack-plugin/commit/7f30d79bb4385f1a6bc28c275fda3bca2772fc71))
+* **reader-reg-block:** respect newsletter subscription checkbox state ([#3024](https://github.com/Automattic/newspack-plugin/issues/3024)) ([02728d3](https://github.com/Automattic/newspack-plugin/commit/02728d3cbd4355d8f09db7a44cb42c99f08d9da6))
+* revert [#3050](https://github.com/Automattic/newspack-plugin/issues/3050) due to performance issues ([#3059](https://github.com/Automattic/newspack-plugin/issues/3059)) ([a986c17](https://github.com/Automattic/newspack-plugin/commit/a986c174dc6e815bd72f15a51ea37d245266996b))
+
+
+### Features
+
+* support for MC tags as subscription lists ([#3035](https://github.com/Automattic/newspack-plugin/issues/3035)) ([c363630](https://github.com/Automattic/newspack-plugin/commit/c363630971464f2023c3fe9cd67e58707d68931b))
+
+# [3.7.0-alpha.7](https://github.com/Automattic/newspack-plugin/compare/v3.7.0-alpha.6...v3.7.0-alpha.7) (2024-04-22)
+
+
+### Bug Fixes
+
+* add option to display subscriptionless memberships ([#3058](https://github.com/Automattic/newspack-plugin/issues/3058)) ([aa493c9](https://github.com/Automattic/newspack-plugin/commit/aa493c95e609853c8380830c72faf39c69713759))
+
+## [3.6.13](https://github.com/Automattic/newspack-plugin/compare/v3.6.12...v3.6.13) (2024-04-22)
+
+
+### Bug Fixes
+
+* add option to display subscriptionless memberships ([#3058](https://github.com/Automattic/newspack-plugin/issues/3058)) ([aa493c9](https://github.com/Automattic/newspack-plugin/commit/aa493c95e609853c8380830c72faf39c69713759))
+
+# [3.7.0-alpha.6](https://github.com/Automattic/newspack-plugin/compare/v3.7.0-alpha.5...v3.7.0-alpha.6) (2024-04-22)
+
+
+### Bug Fixes
+
+* **woo:** include all active statuses ([#3074](https://github.com/Automattic/newspack-plugin/issues/3074)) ([b9b622f](https://github.com/Automattic/newspack-plugin/commit/b9b622fc4aae68843b4bf4ecc0ae6783f00d426f))
+
+## [3.6.12](https://github.com/Automattic/newspack-plugin/compare/v3.6.11...v3.6.12) (2024-04-22)
+
+
+### Bug Fixes
+
+* **woo:** include all active statuses ([#3074](https://github.com/Automattic/newspack-plugin/issues/3074)) ([b9b622f](https://github.com/Automattic/newspack-plugin/commit/b9b622fc4aae68843b4bf4ecc0ae6783f00d426f))
+
+# [3.7.0-alpha.5](https://github.com/Automattic/newspack-plugin/compare/v3.7.0-alpha.4...v3.7.0-alpha.5) (2024-04-19)
+
+
+### Bug Fixes
+
+* minor bugs in reCAPTCHA + Campaigns admin UIs ([#3073](https://github.com/Automattic/newspack-plugin/issues/3073)) ([876d0a9](https://github.com/Automattic/newspack-plugin/commit/876d0a9a1baa26480e399d52199d62d8a8f6bed5))
+
+
+## [3.6.12](https://github.com/Automattic/newspack-plugin/compare/v3.6.11...v3.6.12) (2024-04-22)
+
+### Bug Fixes
+
 ## [3.6.11](https://github.com/Automattic/newspack-plugin/compare/v3.6.10...v3.6.11) (2024-04-19)
 
+
+### Bug Fixes
+
+* minor bugs in reCAPTCHA + Campaigns admin UIs ([#3073](https://github.com/Automattic/newspack-plugin/issues/3073)) ([876d0a9](https://github.com/Automattic/newspack-plugin/commit/876d0a9a1baa26480e399d52199d62d8a8f6bed5))
+
+# [3.7.0-alpha.4](https://github.com/Automattic/newspack-plugin/compare/v3.7.0-alpha.3...v3.7.0-alpha.4) (2024-04-18)
+
+### Bug Fixes
+
+* safer approach to comment metering fix ([#3067](https://github.com/Automattic/newspack-plugin/issues/3067)) ([e73657d](https://github.com/Automattic/newspack-plugin/commit/e73657d75fabf2bd56943d4c556f40abf4ba0aef))
+
+
+## [3.6.11](https://github.com/Automattic/newspack-plugin/compare/v3.6.10...v3.6.11) (2024-04-19)
 
 ### Bug Fixes
 
@@ -12,6 +79,13 @@
 
 * safer approach to comment metering fix ([#3067](https://github.com/Automattic/newspack-plugin/issues/3067)) ([e73657d](https://github.com/Automattic/newspack-plugin/commit/e73657d75fabf2bd56943d4c556f40abf4ba0aef))
 
+# [3.7.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v3.7.0-alpha.2...v3.7.0-alpha.3) (2024-04-12)
+
+
+### Bug Fixes
+
+* revert 3057 ([#3063](https://github.com/Automattic/newspack-plugin/issues/3063)) ([25eea61](https://github.com/Automattic/newspack-plugin/commit/25eea61980422f3f684429b57cdc3ca42234bd10))
+
 ## [3.6.9](https://github.com/Automattic/newspack-plugin/compare/v3.6.8...v3.6.9) (2024-04-12)
 
 
@@ -19,8 +93,28 @@
 
 * revert 3057 ([#3063](https://github.com/Automattic/newspack-plugin/issues/3063)) ([25eea61](https://github.com/Automattic/newspack-plugin/commit/25eea61980422f3f684429b57cdc3ca42234bd10))
 
-## [3.6.8](https://github.com/Automattic/newspack-plugin/compare/v3.6.7...v3.6.8) (2024-04-11)
+# [3.7.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v3.7.0-alpha.1...v3.7.0-alpha.2) (2024-04-11)
 
+### Bug Fixes
+
+* revert 3057 ([#3063](https://github.com/Automattic/newspack-plugin/issues/3063)) ([25eea61](https://github.com/Automattic/newspack-plugin/commit/25eea61980422f3f684429b57cdc3ca42234bd10))
+
+* hourly cron job to check for prematurely expired memberships ([#3060](https://github.com/Automattic/newspack-plugin/issues/3060)) ([77eeee3](https://github.com/Automattic/newspack-plugin/commit/77eeee374723a2780ace91669f848b2d24a436c4))
+
+# [3.7.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v3.6.7...v3.7.0-alpha.1) (2024-04-11)
+
+### Bug Fixes
+
+* prevent multiple inputs from resetting in autocompletetokenfield component ([#3023](https://github.com/Automattic/newspack-plugin/issues/3023)) ([7f30d79](https://github.com/Automattic/newspack-plugin/commit/7f30d79bb4385f1a6bc28c275fda3bca2772fc71))
+* **reader-reg-block:** respect newsletter subscription checkbox state ([#3024](https://github.com/Automattic/newspack-plugin/issues/3024)) ([02728d3](https://github.com/Automattic/newspack-plugin/commit/02728d3cbd4355d8f09db7a44cb42c99f08d9da6))
+* revert [#3050](https://github.com/Automattic/newspack-plugin/issues/3050) due to performance issues ([#3059](https://github.com/Automattic/newspack-plugin/issues/3059)) ([a986c17](https://github.com/Automattic/newspack-plugin/commit/a986c174dc6e815bd72f15a51ea37d245266996b))
+
+
+### Features
+
+* support for MC tags as subscription lists ([#3035](https://github.com/Automattic/newspack-plugin/issues/3035)) ([c363630](https://github.com/Automattic/newspack-plugin/commit/c363630971464f2023c3fe9cd67e58707d68931b))
+
+## [3.6.8](https://github.com/Automattic/newspack-plugin/compare/v3.6.7...v3.6.8) (2024-04-11)
 
 ### Bug Fixes
 

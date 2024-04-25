@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\ListEnvironmentsRespo
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $environments = $tagmanagerService->environments;
+ *   $environments = $tagmanagerService->accounts_containers_environments;
  *  </code>
  */
 class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -37,6 +37,7 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @param Environment $postBody
      * @param array $optParams Optional parameters.
      * @return Environment
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment $postBody, $optParams = [])
     {
@@ -50,6 +51,7 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @param string $path GTM Environment's API relative path. Example:
      * accounts/{account_id}/containers/{container_id}/environments/{environment_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -64,6 +66,7 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * accounts/{account_id}/containers/{container_id}/environments/{environment_id}
      * @param array $optParams Optional parameters.
      * @return Environment
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -82,6 +85,7 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListEnvironmentsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersEnvironments($parent, $optParams = [])
     {
@@ -98,6 +102,7 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @param Environment $postBody
      * @param array $optParams Optional parameters.
      * @return Environment
+     * @throws \Google\Service\Exception
      */
     public function reauthorize($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment $postBody, $optParams = [])
     {
@@ -116,6 +121,7 @@ class AccountsContainersEnvironments extends \Google\Site_Kit_Dependencies\Googl
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the environment in storage.
      * @return Environment
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Environment $postBody, $optParams = [])
     {

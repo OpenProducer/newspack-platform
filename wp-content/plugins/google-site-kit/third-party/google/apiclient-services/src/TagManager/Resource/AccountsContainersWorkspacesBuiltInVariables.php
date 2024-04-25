@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertBuiltInVariable
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $built_in_variables = $tagmanagerService->built_in_variables;
+ *   $built_in_variables = $tagmanagerService->accounts_containers_workspaces_built_in_variables;
  *  </code>
  */
 class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -39,6 +39,7 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
      *
      * @opt_param string type The types of built-in variables to enable.
      * @return CreateBuiltInVariableResponse
+     * @throws \Google\Service\Exception
      */
     public function create($parent, $optParams = [])
     {
@@ -55,6 +56,7 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
      * @param array $optParams Optional parameters.
      *
      * @opt_param string type The types of built-in variables to delete.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -73,6 +75,7 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListEnabledBuiltInVariablesResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersWorkspacesBuiltInVariables($parent, $optParams = [])
     {
@@ -91,6 +94,7 @@ class AccountsContainersWorkspacesBuiltInVariables extends \Google\Site_Kit_Depe
      *
      * @opt_param string type The type of built-in variable to revert.
      * @return RevertBuiltInVariableResponse
+     * @throws \Google\Service\Exception
      */
     public function revert($path, $optParams = [])
     {

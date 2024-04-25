@@ -17,8 +17,9 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Service\AnalyticsData;
 
-class ResponseMetaData extends \Google\Site_Kit_Dependencies\Google\Model
+class ResponseMetaData extends \Google\Site_Kit_Dependencies\Google\Collection
 {
+    protected $collection_key = 'samplingMetadatas';
     /**
      * @var string
      */
@@ -31,6 +32,8 @@ class ResponseMetaData extends \Google\Site_Kit_Dependencies\Google\Model
      * @var string
      */
     public $emptyReason;
+    protected $samplingMetadatasType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\SamplingMetadata::class;
+    protected $samplingMetadatasDataType = 'array';
     protected $schemaRestrictionResponseType = \Google\Site_Kit_Dependencies\Google\Service\AnalyticsData\SchemaRestrictionResponse::class;
     protected $schemaRestrictionResponseDataType = '';
     /**
@@ -82,6 +85,20 @@ class ResponseMetaData extends \Google\Site_Kit_Dependencies\Google\Model
     public function getEmptyReason()
     {
         return $this->emptyReason;
+    }
+    /**
+     * @param SamplingMetadata[]
+     */
+    public function setSamplingMetadatas($samplingMetadatas)
+    {
+        $this->samplingMetadatas = $samplingMetadatas;
+    }
+    /**
+     * @return SamplingMetadata[]
+     */
+    public function getSamplingMetadatas()
+    {
+        return $this->samplingMetadatas;
     }
     /**
      * @param SchemaRestrictionResponse

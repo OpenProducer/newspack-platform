@@ -43,6 +43,7 @@ class AccountSummaries extends \Google\Site_Kit_Dependencies\Google\Service\Reso
      * When paginating, all other parameters provided to `ListAccountSummaries` must
      * match the call that provided the page token.
      * @return GoogleAnalyticsAdminV1betaListAccountSummariesResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountSummaries($optParams = [])
     {

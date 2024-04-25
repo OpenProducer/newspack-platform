@@ -7,14 +7,19 @@
 
 namespace Newspack;
 
-use WP_Error;
-
 defined( 'ABSPATH' ) || exit;
 
 /**
  * Connection with WooCommerce's features.
  */
 class WooCommerce_Connection {
+	/**
+	 * Statuses considered active subscriptions.
+	 *
+	 * @var array
+	 */
+	public static $active_subscription_statuses = [ 'active', 'pending', 'pending-cancel' ];
+
 	/**
 	 * Initialize.
 	 *
@@ -49,6 +54,18 @@ class WooCommerce_Connection {
 
 		\add_filter( 'page_template', [ __CLASS__, 'page_template' ] );
 		\add_filter( 'get_post_metadata', [ __CLASS__, 'get_post_metadata' ], 10, 3 );
+	}
+
+	/**
+	 * Check if the given status is considered active in Woo Subscriptions.
+	 *
+	 * @param string $status Subscription status.
+	 *
+	 * @return boolean
+	 */
+	public static function is_subscription_active( $status ) {
+		$status = str_replace( 'wc-', '', $status ); // Normalize status strings.
+		return in_array( $status, self::$active_subscription_statuses, true );
 	}
 
 	/**
@@ -123,7 +140,7 @@ class WooCommerce_Connection {
 
 		$subscriptions = \wcs_get_subscriptions(
 			[
-				'status'                 => [ 'active', 'pending', 'pending-cancel' ],
+				'status'                 => self::$active_subscription_statuses,
 				'subscriptions_per_page' => $batch_size,
 				'offset'                 => $offset,
 			]

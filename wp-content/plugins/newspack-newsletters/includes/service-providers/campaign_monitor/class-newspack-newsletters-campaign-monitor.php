@@ -305,7 +305,15 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 	 * @return object Args for sending a campaign or campaign preview.
 	 */
 	public function format_campaign_args( $post_id ) {
-		$data = $this->validate( $this->retrieve( $post_id, true ) );
+		$data      = $this->validate( $this->retrieve( $post_id, true ) );
+		$public_id = get_post_meta( $post_id, Newspack_Newsletters::PUBLIC_POST_ID_META, true );
+
+		// If we don't have a public ID, generate one and save it.
+		if ( empty( $public_id ) ) {
+			$public_id = wp_generate_password( 20, false, false );
+			update_post_meta( $post_id, Newspack_Newsletters::PUBLIC_POST_ID_META, $public_id );
+		}
+
 		$args = [
 			'Subject'   => get_the_title( $post_id ),
 			'Name'      => get_the_title( $post_id ) . ' ' . gmdate( 'h:i:s A' ), // Name must be unique.
@@ -313,7 +321,7 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 			'FromEmail' => $data['from_email'],
 			'ReplyTo'   => $data['from_email'],
 			'HtmlUrl'   => rest_url(
-				$this::BASE_NAMESPACE . $this->service . '/' . $post_id . '/content'
+				$this::BASE_NAMESPACE . $this->service . '/' . $public_id . '/content'
 			),
 		];
 
@@ -329,14 +337,24 @@ final class Newspack_Newsletters_Campaign_Monitor extends \Newspack_Newsletters_
 	/**
 	 * Get rendered HTML content of post for the campaign.
 	 *
-	 * @param string $post_id Numeric ID of the campaign.
+	 * @param string $public_id Alphanumeric public ID for the newseltter post.
 	 * @return object|WP_Error API Response or error.
 	 */
-	public function content( $post_id ) {
-		if ( ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
+	public function content( $public_id ) {
+		$posts  = get_posts(
+			[
+				'fields'      => 'ID',
+				'post_type'   => Newspack_Newsletters::NEWSPACK_NEWSLETTERS_CPT,
+				'meta_key'    => Newspack_Newsletters::PUBLIC_POST_ID_META,
+				'meta_value'  => $public_id, // phpcs:ignore WordPress.DB.SlowDBQuery.slow_db_query_meta_value
+				'post_status' => 'any',
+			]
+		);
+		$post_id = reset( $posts );
+		if ( ! $post_id || ! Newspack_Newsletters::validate_newsletter_id( $post_id ) ) {
 			return new WP_Error(
-				'newspack_newsletters_incorrect_post_type',
-				__( 'Post is not a Newsletter.', 'newspack-newsletters' )
+				'newspack_newsletters_not_found',
+				__( 'Newsletter not found.', 'newspack-newsletters' )
 			);
 		}
 

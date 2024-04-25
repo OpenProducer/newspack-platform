@@ -25,15 +25,15 @@ final class Php72
         $len = \strlen($s);
         for ($i = $len >> 1, $j = 0; $i < $len; ++$i, ++$j) {
             switch (\true) {
-                case $s[$i] < "€":
+                case $s[$i] < "\x80":
                     $s[$j] = $s[$i];
                     break;
-                case $s[$i] < "À":
-                    $s[$j] = "Â";
+                case $s[$i] < "\xc0":
+                    $s[$j] = "\xc2";
                     $s[++$j] = $s[$i];
                     break;
                 default:
-                    $s[$j] = "Ã";
+                    $s[$j] = "\xc3";
                     $s[++$j] = \chr(\ord($s[$i]) - 64);
                     break;
             }
@@ -45,16 +45,16 @@ final class Php72
         $s = (string) $s;
         $len = \strlen($s);
         for ($i = 0, $j = 0; $i < $len; ++$i, ++$j) {
-            switch ($s[$i] & "ð") {
-                case "À":
-                case "Ð":
-                    $c = \ord($s[$i] & "\37") << 6 | \ord($s[++$i] & "?");
+            switch ($s[$i] & "\xf0") {
+                case "\xc0":
+                case "\xd0":
+                    $c = \ord($s[$i] & "\x1f") << 6 | \ord($s[++$i] & "?");
                     $s[$j] = $c < 256 ? \chr($c) : '?';
                     break;
-                case "ð":
+                case "\xf0":
                     ++$i;
                 // no break
-                case "à":
+                case "\xe0":
                     $s[$j] = '?';
                     $i += 2;
                     break;
@@ -69,8 +69,8 @@ final class Php72
         if ('\\' === \DIRECTORY_SEPARATOR) {
             return 'Windows';
         }
-        $map = array('Darwin' => 'Darwin', 'DragonFly' => 'BSD', 'FreeBSD' => 'BSD', 'NetBSD' => 'BSD', 'OpenBSD' => 'BSD', 'Linux' => 'Linux', 'SunOS' => 'Solaris');
-        return isset($map[\PHP_OS]) ? $map[\PHP_OS] : 'Unknown';
+        $map = ['Darwin' => 'Darwin', 'DragonFly' => 'BSD', 'FreeBSD' => 'BSD', 'NetBSD' => 'BSD', 'OpenBSD' => 'BSD', 'Linux' => 'Linux', 'SunOS' => 'Solaris'];
+        return $map[\PHP_OS] ?? 'Unknown';
     }
     public static function spl_object_id($object)
     {
@@ -118,10 +118,10 @@ final class Php72
     }
     private static function initHashMask()
     {
-        $obj = (object) array();
+        $obj = (object) [];
         self::$hashMask = -1;
         // check if we are nested in an output buffering handler to prevent a fatal error with ob_start() below
-        $obFuncs = array('ob_clean', 'ob_end_clean', 'ob_flush', 'ob_end_flush', 'ob_get_contents', 'ob_get_flush');
+        $obFuncs = ['ob_clean', 'ob_end_clean', 'ob_flush', 'ob_end_flush', 'ob_get_contents', 'ob_get_flush'];
         foreach (\debug_backtrace(\PHP_VERSION_ID >= 50400 ? \DEBUG_BACKTRACE_IGNORE_ARGS : \false) as $frame) {
             if (isset($frame['function'][0]) && !isset($frame['class']) && 'o' === $frame['function'][0] && \in_array($frame['function'], $obFuncs)) {
                 $frame['line'] = 0;
@@ -146,7 +146,7 @@ final class Php72
         } else {
             $s = \chr(0xf0 | $code >> 18) . \chr(0x80 | $code >> 12 & 0x3f) . \chr(0x80 | $code >> 6 & 0x3f) . \chr(0x80 | $code & 0x3f);
         }
-        if ('UTF-8' !== $encoding) {
+        if ('UTF-8' !== ($encoding = $encoding ?? \mb_internal_encoding())) {
             $s = \mb_convert_encoding($s, $encoding, 'UTF-8');
         }
         return $s;

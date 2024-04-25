@@ -1507,6 +1507,7 @@ const widget_group_metadata = {
   $schema: "https://schemas.wp.org/trunk/block.json",
   apiVersion: 3,
   name: "core/widget-group",
+  title: "Widget Group",
   category: "widgets",
   attributes: {
     title: {

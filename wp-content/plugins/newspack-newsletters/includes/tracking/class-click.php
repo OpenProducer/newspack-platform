@@ -145,6 +145,14 @@ final class Click {
 		$url = html_entity_decode( esc_url_raw( \wp_unslash( $_GET['url'] ?? '' ) ) );
 		// phpcs:enable
 
+		// Double-check and make sure the URL is actually a URL within the email.
+		$url_without_query_args = untrailingslashit( strtok( $url, '?' ) );
+		$newsletter_content     = get_post_field( 'post_content', $newsletter_id, 'raw' );
+		if ( '' === $newsletter_content || false === stripos( $newsletter_content, $url_without_query_args ) ) {
+			\wp_die( 'Invalid URL' );
+			exit;
+		}
+
 		/**
 		 * The ESP tracking functionality may add UTM parameters to our proxied URL,
 		 * let's pass them along to the destination URL.

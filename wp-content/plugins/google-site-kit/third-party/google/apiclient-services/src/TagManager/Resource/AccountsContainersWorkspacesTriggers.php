@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger;
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $triggers = $tagmanagerService->triggers;
+ *   $triggers = $tagmanagerService->accounts_containers_workspaces_triggers;
  *  </code>
  */
 class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -38,6 +38,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * @param Trigger $postBody
      * @param array $optParams Optional parameters.
      * @return Trigger
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger $postBody, $optParams = [])
     {
@@ -52,6 +53,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * nt_id}/containers/{container_id}/workspaces/{workspace_id}/triggers/{trigger_
      * id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -67,6 +69,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * id}
      * @param array $optParams Optional parameters.
      * @return Trigger
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -85,6 +88,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListTriggersResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersWorkspacesTriggers($parent, $optParams = [])
     {
@@ -103,6 +107,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the trigger in storage.
      * @return RevertTriggerResponse
+     * @throws \Google\Service\Exception
      */
     public function revert($path, $optParams = [])
     {
@@ -122,6 +127,7 @@ class AccountsContainersWorkspacesTriggers extends \Google\Site_Kit_Dependencies
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the trigger in storage.
      * @return Trigger
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Trigger $postBody, $optParams = [])
     {

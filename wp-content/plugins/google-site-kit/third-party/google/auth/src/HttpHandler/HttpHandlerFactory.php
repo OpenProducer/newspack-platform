@@ -17,8 +17,11 @@
  */
 namespace Google\Site_Kit_Dependencies\Google\Auth\HttpHandler;
 
+use Google\Site_Kit_Dependencies\GuzzleHttp\BodySummarizer;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Client;
 use Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface;
+use Google\Site_Kit_Dependencies\GuzzleHttp\HandlerStack;
+use Google\Site_Kit_Dependencies\GuzzleHttp\Middleware;
 class HttpHandlerFactory
 {
     /**
@@ -30,7 +33,17 @@ class HttpHandlerFactory
      */
     public static function build(\Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface $client = null)
     {
-        $client = $client ?: new \Google\Site_Kit_Dependencies\GuzzleHttp\Client();
+        if (\is_null($client)) {
+            $stack = null;
+            if (\class_exists(\Google\Site_Kit_Dependencies\GuzzleHttp\BodySummarizer::class)) {
+                // double the # of characters before truncation by default
+                $bodySummarizer = new \Google\Site_Kit_Dependencies\GuzzleHttp\BodySummarizer(240);
+                $stack = \Google\Site_Kit_Dependencies\GuzzleHttp\HandlerStack::create();
+                $stack->remove('http_errors');
+                $stack->unshift(\Google\Site_Kit_Dependencies\GuzzleHttp\Middleware::httpErrors($bodySummarizer), 'http_errors');
+            }
+            $client = new \Google\Site_Kit_Dependencies\GuzzleHttp\Client(['handler' => $stack]);
+        }
         $version = null;
         if (\defined('Google\\Site_Kit_Dependencies\\GuzzleHttp\\ClientInterface::MAJOR_VERSION')) {
             $version = \Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface::MAJOR_VERSION;

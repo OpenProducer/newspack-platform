@@ -204,10 +204,11 @@ class Engagement_Wizard extends Wizard {
 	 */
 	private static function get_memberships_settings() {
 		return [
-			'edit_gate_url'     => Memberships::get_edit_gate_url(),
-			'gate_status'       => get_post_status( Memberships::get_gate_post_id() ),
-			'plans'             => Memberships::get_plans(),
-			'require_all_plans' => Memberships::get_require_all_plans_setting(),
+			'edit_gate_url'            => Memberships::get_edit_gate_url(),
+			'gate_status'              => \get_post_status( Memberships::get_gate_post_id() ),
+			'plans'                    => Memberships::get_plans(),
+			'require_all_plans'        => Memberships::get_require_all_plans_setting(),
+			'show_on_subscription_tab' => Memberships::get_show_on_subscription_tab_setting(),
 		];
 	}
 
@@ -242,6 +243,11 @@ class Engagement_Wizard extends Wizard {
 		// Update Memberships options.
 		if ( isset( $args['memberships_require_all_plans'] ) ) {
 			Memberships::set_require_all_plans_setting( (bool) $args['memberships_require_all_plans'] );
+		}
+
+		// Update Memberships options.
+		if ( isset( $args['memberships_show_on_subscription_tab'] ) ) {
+			Memberships::set_show_on_subscription_tab_setting( (bool) $args['memberships_show_on_subscription_tab'] );
 		}
 
 		return rest_ensure_response(

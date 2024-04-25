@@ -1556,6 +1556,10 @@ final class Reader_Activation {
 			return null;
 		}
 
+		if ( defined( 'NEWSPACK_ALLOW_MY_ACCOUNT_ACCESS_WITHOUT_VERIFICATION' ) && NEWSPACK_ALLOW_MY_ACCOUNT_ACCESS_WITHOUT_VERIFICATION ) {
+			return true;
+		}
+
 		return (bool) \get_user_meta( $user->ID, self::EMAIL_VERIFIED, true );
 	}
 

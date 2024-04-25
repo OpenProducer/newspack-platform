@@ -101,6 +101,7 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 				src: iframeArchiveSrc,
 				archiveFolder: iframeArchiveFolder,
 			} );
+
 			setShowPreview( true );
 		} catch ( e ) {
 			setError(
@@ -193,8 +194,9 @@ const IframeEdit = ( { attributes, setAttributes } ) => {
 						style={ {
 							width: isFullScreen ? '100vw' : width,
 							height: isFullScreen ? '100vh' : height,
-							'max-width': '100%',
-							'max-height': '100%',
+							maxWidth: '100%',
+							maxHeight: '100%',
+							pointerEvents: 'none',
 						} }
 					/>
 				</div>

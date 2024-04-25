@@ -3,8 +3,8 @@
 namespace Google\Site_Kit_Dependencies\Google\AuthHandler;
 
 use Google\Site_Kit_Dependencies\Google\Auth\CredentialsLoader;
-use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Site_Kit_Dependencies\Google\Auth\FetchAuthTokenCache;
+use Google\Site_Kit_Dependencies\Google\Auth\HttpHandler\HttpHandlerFactory;
 use Google\Site_Kit_Dependencies\Google\Auth\Subscriber\AuthTokenSubscriber;
 use Google\Site_Kit_Dependencies\Google\Auth\Subscriber\ScopedAccessTokenSubscriber;
 use Google\Site_Kit_Dependencies\Google\Auth\Subscriber\SimpleSubscriber;
@@ -12,8 +12,8 @@ use Google\Site_Kit_Dependencies\GuzzleHttp\Client;
 use Google\Site_Kit_Dependencies\GuzzleHttp\ClientInterface;
 use Google\Site_Kit_Dependencies\Psr\Cache\CacheItemPoolInterface;
 /**
-*
-*/
+ * This supports Guzzle 5
+ */
 class Guzzle5AuthHandler
 {
     protected $cache;

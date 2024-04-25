@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Analytics\Goals;
  * Typical usage is:
  *  <code>
  *   $analyticsService = new Google\Service\Analytics(...);
- *   $goals = $analyticsService->goals;
+ *   $goals = $analyticsService->management_goals;
  *  </code>
  */
 class ManagementGoals extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -38,6 +38,7 @@ class ManagementGoals extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @param string $goalId Goal ID to retrieve the goal for.
      * @param array $optParams Optional parameters.
      * @return Goal
+     * @throws \Google\Service\Exception
      */
     public function get($accountId, $webPropertyId, $profileId, $goalId, $optParams = [])
     {
@@ -54,6 +55,7 @@ class ManagementGoals extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @param Goal $postBody
      * @param array $optParams Optional parameters.
      * @return Goal
+     * @throws \Google\Service\Exception
      */
     public function insert($accountId, $webPropertyId, $profileId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\Goal $postBody, $optParams = [])
     {
@@ -80,6 +82,7 @@ class ManagementGoals extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @opt_param int start-index An index of the first goal to retrieve. Use this
      * parameter as a pagination mechanism along with the max-results parameter.
      * @return Goals
+     * @throws \Google\Service\Exception
      */
     public function listManagementGoals($accountId, $webPropertyId, $profileId, $optParams = [])
     {
@@ -97,6 +100,7 @@ class ManagementGoals extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @param Goal $postBody
      * @param array $optParams Optional parameters.
      * @return Goal
+     * @throws \Google\Service\Exception
      */
     public function patch($accountId, $webPropertyId, $profileId, $goalId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\Goal $postBody, $optParams = [])
     {
@@ -114,6 +118,7 @@ class ManagementGoals extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @param Goal $postBody
      * @param array $optParams Optional parameters.
      * @return Goal
+     * @throws \Google\Service\Exception
      */
     public function update($accountId, $webPropertyId, $profileId, $goalId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\Goal $postBody, $optParams = [])
     {

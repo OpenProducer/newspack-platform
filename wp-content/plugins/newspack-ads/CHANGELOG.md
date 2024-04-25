@@ -1,3 +1,10 @@
+## [1.47.2](https://github.com/Automattic/newspack-ads/compare/v1.47.1...v1.47.2) (2024-04-23)
+
+
+### Bug Fixes
+
+* esc attributes in block render ([#836](https://github.com/Automattic/newspack-ads/issues/836)) ([d0ec19d](https://github.com/Automattic/newspack-ads/commit/d0ec19d014ae9d4af669c1f39b57335c2d7d0bd2))
+
 ## [1.47.1](https://github.com/Automattic/newspack-ads/compare/v1.47.0...v1.47.1) (2024-04-08)
 
 
