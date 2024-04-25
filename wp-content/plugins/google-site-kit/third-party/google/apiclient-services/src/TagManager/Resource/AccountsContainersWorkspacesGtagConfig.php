@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\ListGtagConfigRespons
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $gtag_config = $tagmanagerService->gtag_config;
+ *   $gtag_config = $tagmanagerService->accounts_containers_workspaces_gtag_config;
  *  </code>
  */
 class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -37,6 +37,7 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
      * @param GtagConfig $postBody
      * @param array $optParams Optional parameters.
      * @return GtagConfig
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig $postBody, $optParams = [])
     {
@@ -51,6 +52,7 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
      * {account_id}/containers/{container_id}/workspaces/{workspace_id}/gtag_config/
      * {gtag_config_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -66,6 +68,7 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
      * {gtag_config_id}
      * @param array $optParams Optional parameters.
      * @return GtagConfig
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -84,6 +87,7 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListGtagConfigResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersWorkspacesGtagConfig($parent, $optParams = [])
     {
@@ -103,6 +107,7 @@ class AccountsContainersWorkspacesGtagConfig extends \Google\Site_Kit_Dependenci
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the config in storage.
      * @return GtagConfig
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\GtagConfig $postBody, $optParams = [])
     {

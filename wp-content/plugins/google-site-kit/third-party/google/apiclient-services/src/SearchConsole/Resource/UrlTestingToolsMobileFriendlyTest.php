@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RunMobileFriendlyT
  * Typical usage is:
  *  <code>
  *   $searchconsoleService = new Google\Service\SearchConsole(...);
- *   $mobileFriendlyTest = $searchconsoleService->mobileFriendlyTest;
+ *   $mobileFriendlyTest = $searchconsoleService->urlTestingTools_mobileFriendlyTest;
  *  </code>
  */
 class UrlTestingToolsMobileFriendlyTest extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -35,6 +35,7 @@ class UrlTestingToolsMobileFriendlyTest extends \Google\Site_Kit_Dependencies\Go
      * @param RunMobileFriendlyTestRequest $postBody
      * @param array $optParams Optional parameters.
      * @return RunMobileFriendlyTestResponse
+     * @throws \Google\Service\Exception
      */
     public function run(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\RunMobileFriendlyTestRequest $postBody, $optParams = [])
     {

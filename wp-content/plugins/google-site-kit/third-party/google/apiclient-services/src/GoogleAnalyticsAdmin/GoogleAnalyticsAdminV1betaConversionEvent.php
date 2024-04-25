@@ -22,11 +22,17 @@ class GoogleAnalyticsAdminV1betaConversionEvent extends \Google\Site_Kit_Depende
     /**
      * @var string
      */
+    public $countingMethod;
+    /**
+     * @var string
+     */
     public $createTime;
     /**
      * @var bool
      */
     public $custom;
+    protected $defaultConversionValueType = \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue::class;
+    protected $defaultConversionValueDataType = '';
     /**
      * @var bool
      */
@@ -39,6 +45,20 @@ class GoogleAnalyticsAdminV1betaConversionEvent extends \Google\Site_Kit_Depende
      * @var string
      */
     public $name;
+    /**
+     * @param string
+     */
+    public function setCountingMethod($countingMethod)
+    {
+        $this->countingMethod = $countingMethod;
+    }
+    /**
+     * @return string
+     */
+    public function getCountingMethod()
+    {
+        return $this->countingMethod;
+    }
     /**
      * @param string
      */
@@ -66,6 +86,20 @@ class GoogleAnalyticsAdminV1betaConversionEvent extends \Google\Site_Kit_Depende
     public function getCustom()
     {
         return $this->custom;
+    }
+    /**
+     * @param GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue
+     */
+    public function setDefaultConversionValue(\Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue $defaultConversionValue)
+    {
+        $this->defaultConversionValue = $defaultConversionValue;
+    }
+    /**
+     * @return GoogleAnalyticsAdminV1betaConversionEventDefaultConversionValue
+     */
+    public function getDefaultConversionValue()
+    {
+        return $this->defaultConversionValue;
     }
     /**
      * @param bool

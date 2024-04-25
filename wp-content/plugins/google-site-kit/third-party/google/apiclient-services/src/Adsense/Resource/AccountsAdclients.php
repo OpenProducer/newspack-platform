@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Adsense\ListAdClientsResponse;
  * Typical usage is:
  *  <code>
  *   $adsenseService = new Google\Service\Adsense(...);
- *   $adclients = $adsenseService->adclients;
+ *   $adclients = $adsenseService->accounts_adclients;
  *  </code>
  */
 class AccountsAdclients extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -37,6 +37,7 @@ class AccountsAdclients extends \Google\Site_Kit_Dependencies\Google\Service\Res
      * accounts/{account}/adclients/{adclient}
      * @param array $optParams Optional parameters.
      * @return AdClient
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -55,6 +56,7 @@ class AccountsAdclients extends \Google\Site_Kit_Dependencies\Google\Service\Res
      * adcode. Format: accounts/{account}/adclients/{adclient}
      * @param array $optParams Optional parameters.
      * @return AdClientAdCode
+     * @throws \Google\Service\Exception
      */
     public function getAdcode($name, $optParams = [])
     {
@@ -79,6 +81,7 @@ class AccountsAdclients extends \Google\Site_Kit_Dependencies\Google\Service\Res
      * paginating, all other parameters provided to `ListAdClients` must match the
      * call that provided the page token.
      * @return ListAdClientsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsAdclients($parent, $optParams = [])
     {

@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -24,30 +25,25 @@ class InsightOpsHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\So
      */
     protected $logToken;
     /**
-     * @param string $token  Log token supplied by InsightOps
-     * @param string $region Region where InsightOps account is hosted. Could be 'us' or 'eu'.
-     * @param bool   $useSSL Whether or not SSL encryption should be used
-     * @param int    $level  The minimum logging level to trigger this handler
-     * @param bool   $bubble Whether or not messages that are handled should bubble up the stack.
+     * @param string     $token  Log token supplied by InsightOps
+     * @param string     $region Region where InsightOps account is hosted. Could be 'us' or 'eu'.
+     * @param bool       $useSSL Whether or not SSL encryption should be used
      *
      * @throws MissingExtensionException If SSL encryption is set to true and OpenSSL is missing
      */
-    public function __construct($token, $region = 'us', $useSSL = \true, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(string $token, string $region = 'us', bool $useSSL = \true, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
         if ($useSSL && !\extension_loaded('openssl')) {
             throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The OpenSSL PHP plugin is required to use SSL encrypted connection for InsightOpsHandler');
         }
         $endpoint = $useSSL ? 'ssl://' . $region . '.data.logs.insight.rapid7.com:443' : $region . '.data.logs.insight.rapid7.com:80';
-        parent::__construct($endpoint, $level, $bubble);
+        parent::__construct($endpoint, $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
         $this->logToken = $token;
     }
     /**
-     * {@inheritdoc}
-     *
-     * @param  array  $record
-     * @return string
+     * {@inheritDoc}
      */
-    protected function generateDataStream($record)
+    protected function generateDataStream(array $record) : string
     {
         return $this->logToken . ' ' . $record['formatted'];
     }

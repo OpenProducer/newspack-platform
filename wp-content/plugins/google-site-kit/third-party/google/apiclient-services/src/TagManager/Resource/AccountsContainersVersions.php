@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\PublishContainerVersi
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $versions = $tagmanagerService->versions;
+ *   $versions = $tagmanagerService->accounts_containers_versions;
  *  </code>
  */
 class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -35,6 +35,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * @param string $path GTM ContainerVersion's API relative path. Example:
      * accounts/{account_id}/containers/{container_id}/versions/{version_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -52,6 +53,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * @opt_param string containerVersionId The GTM ContainerVersion ID. Specify
      * published to retrieve the currently published version.
      * @return ContainerVersion
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -66,6 +68,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * accounts/{account_id}/containers/{container_id}
      * @param array $optParams Optional parameters.
      * @return ContainerVersion
+     * @throws \Google\Service\Exception
      */
     public function live($parent, $optParams = [])
     {
@@ -83,6 +86,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the container version in storage.
      * @return PublishContainerVersionResponse
+     * @throws \Google\Service\Exception
      */
     public function publish($path, $optParams = [])
     {
@@ -98,6 +102,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * accounts/{account_id}/containers/{container_id}/versions/{version_id}
      * @param array $optParams Optional parameters.
      * @return ContainerVersion
+     * @throws \Google\Service\Exception
      */
     public function set_latest($path, $optParams = [])
     {
@@ -112,6 +117,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * accounts/{account_id}/containers/{container_id}/versions/{version_id}
      * @param array $optParams Optional parameters.
      * @return ContainerVersion
+     * @throws \Google\Service\Exception
      */
     public function undelete($path, $optParams = [])
     {
@@ -130,6 +136,7 @@ class AccountsContainersVersions extends \Google\Site_Kit_Dependencies\Google\Se
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the container version in storage.
      * @return ContainerVersion
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\ContainerVersion $postBody, $optParams = [])
     {

@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\PeopleService\ModifyContactGroup
  * Typical usage is:
  *  <code>
  *   $peopleService = new Google\Service\PeopleService(...);
- *   $members = $peopleService->members;
+ *   $members = $peopleService->contactGroups_members;
  *  </code>
  */
 class ContactGroupsMembers extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -40,6 +40,7 @@ class ContactGroupsMembers extends \Google\Site_Kit_Dependencies\Google\Service\
      * @param ModifyContactGroupMembersRequest $postBody
      * @param array $optParams Optional parameters.
      * @return ModifyContactGroupMembersResponse
+     * @throws \Google\Service\Exception
      */
     public function modify($resourceName, \Google\Site_Kit_Dependencies\Google\Service\PeopleService\ModifyContactGroupMembersRequest $postBody, $optParams = [])
     {

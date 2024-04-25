@@ -39,6 +39,7 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param string $feedpath The URL of the actual sitemap. For example:
      * `http://www.example.com/sitemap.xml`.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($siteUrl, $feedpath, $optParams = [])
     {
@@ -55,6 +56,7 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * `http://www.example.com/sitemap.xml`.
      * @param array $optParams Optional parameters.
      * @return WmxSitemap
+     * @throws \Google\Service\Exception
      */
     public function get($siteUrl, $feedpath, $optParams = [])
     {
@@ -74,6 +76,7 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @opt_param string sitemapIndex A URL of a site's sitemap index. For example:
      * `http://www.example.com/sitemapindex.xml`.
      * @return SitemapsListResponse
+     * @throws \Google\Service\Exception
      */
     public function listSitemaps($siteUrl, $optParams = [])
     {
@@ -89,6 +92,7 @@ class Sitemaps extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param string $feedpath The URL of the actual sitemap. For example:
      * `http://www.example.com/sitemap.xml`.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function submit($siteUrl, $feedpath, $optParams = [])
     {

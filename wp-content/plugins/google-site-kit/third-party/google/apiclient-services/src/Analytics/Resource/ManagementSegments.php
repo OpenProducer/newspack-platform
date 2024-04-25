@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Analytics\Segments;
  * Typical usage is:
  *  <code>
  *   $analyticsService = new Google\Service\Analytics(...);
- *   $segments = $analyticsService->segments;
+ *   $segments = $analyticsService->management_segments;
  *  </code>
  */
 class ManagementSegments extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -40,6 +40,7 @@ class ManagementSegments extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * this parameter as a pagination mechanism along with the max-results
      * parameter.
      * @return Segments
+     * @throws \Google\Service\Exception
      */
     public function listManagementSegments($optParams = [])
     {

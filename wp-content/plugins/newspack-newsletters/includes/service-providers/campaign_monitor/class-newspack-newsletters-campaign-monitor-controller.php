@@ -145,7 +145,7 @@ class Newspack_Newsletters_Campaign_Monitor_Controller extends Newspack_Newslett
 		);
 		\register_rest_route(
 			$this->service_provider::BASE_NAMESPACE . $this->service_provider->service,
-			'(?P<id>[\a-z]+)/content',
+			'(?P<public_id>[\a-z]+)/content',
 			[
 				'methods'             => \WP_REST_Server::READABLE,
 				'callback'            => [ $this, 'api_content' ],
@@ -206,12 +206,17 @@ class Newspack_Newsletters_Campaign_Monitor_Controller extends Newspack_Newslett
 	 * Get raw HTML for a campaign. Required for the Campaign Monitor API.
 	 *
 	 * @param WP_REST_Request $request API request object.
-	 * @return void
+	 * @return void|WP_Error
 	 */
 	public function api_content( $request ) {
 		$response = $this->service_provider->content(
-			$request['id']
+			$request['public_id']
 		);
+
+		if ( is_wp_error( $response ) ) {
+			return self::get_api_response( $response );
+		}
+
 		header( 'Content-Type: text/html; charset=UTF-8' );
 
 		echo $response; // phpcs:ignore WordPress.Security.EscapeOutput.OutputNotEscaped

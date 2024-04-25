@@ -25,6 +25,9 @@ use Google\Site_Kit_Dependencies\GuzzleHttp\Promise\RejectedPromise;
 use Google\Site_Kit_Dependencies\GuzzleHttp\Psr7\Response;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\RequestInterface;
 use Google\Site_Kit_Dependencies\Psr\Http\Message\ResponseInterface;
+/**
+ * @deprecated
+ */
 class Guzzle5HttpHandler
 {
     /**

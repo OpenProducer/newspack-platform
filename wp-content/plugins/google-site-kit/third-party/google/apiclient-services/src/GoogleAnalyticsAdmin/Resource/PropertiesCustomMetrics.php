@@ -26,7 +26,7 @@ use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProto
  * Typical usage is:
  *  <code>
  *   $analyticsadminService = new Google\Service\GoogleAnalyticsAdmin(...);
- *   $customMetrics = $analyticsadminService->customMetrics;
+ *   $customMetrics = $analyticsadminService->properties_customMetrics;
  *  </code>
  */
 class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -39,6 +39,7 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param GoogleAnalyticsAdminV1betaArchiveCustomMetricRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function archive($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaArchiveCustomMetricRequest $postBody, $optParams = [])
     {
@@ -53,6 +54,7 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param GoogleAnalyticsAdminV1betaCustomMetric $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaCustomMetric
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomMetric $postBody, $optParams = [])
     {
@@ -67,6 +69,7 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * format: properties/1234/customMetrics/5678
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaCustomMetric
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -89,6 +92,7 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * paginating, all other parameters provided to `ListCustomMetrics` must match
      * the call that provided the page token.
      * @return GoogleAnalyticsAdminV1betaListCustomMetricsResponse
+     * @throws \Google\Service\Exception
      */
     public function listPropertiesCustomMetrics($parent, $optParams = [])
     {
@@ -108,6 +112,7 @@ class PropertiesCustomMetrics extends \Google\Site_Kit_Dependencies\Google\Servi
      * Omitted fields will not be updated. To replace the entire entity, use one
      * path with the string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaCustomMetric
+     * @throws \Google\Service\Exception
      */
     public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaCustomMetric $postBody, $optParams = [])
     {

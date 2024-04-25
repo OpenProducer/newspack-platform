@@ -26,7 +26,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertFolderResponse;
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $folders = $tagmanagerService->folders;
+ *   $folders = $tagmanagerService->accounts_containers_workspaces_folders;
  *  </code>
  */
 class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -39,6 +39,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @param Folder $postBody
      * @param array $optParams Optional parameters.
      * @return Folder
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $postBody, $optParams = [])
     {
@@ -52,6 +53,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @param string $path GTM Folder's API relative path. Example: accounts/{accoun
      * t_id}/containers/{container_id}/workspaces/{workspace_id}/folders/{folder_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -69,6 +71,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return FolderEntities
+     * @throws \Google\Service\Exception
      */
     public function entities($path, $optParams = [])
     {
@@ -83,6 +86,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * t_id}/containers/{container_id}/workspaces/{workspace_id}/folders/{folder_id}
      * @param array $optParams Optional parameters.
      * @return Folder
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -101,6 +105,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListFoldersResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersWorkspacesFolders($parent, $optParams = [])
     {
@@ -109,7 +114,9 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
         return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\TagManager\ListFoldersResponse::class);
     }
     /**
-     * Moves entities to a GTM Folder. (folders.move_entities_to_folder)
+     * Moves entities to a GTM Folder. If {folder_id} in the request path equals 0,
+     * this will instead move entities out of the folder they currently belong to.
+     * (folders.move_entities_to_folder)
      *
      * @param string $path GTM Folder's API relative path. Example: accounts/{accoun
      * t_id}/containers/{container_id}/workspaces/{workspace_id}/folders/{folder_id}
@@ -119,6 +126,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @opt_param string tagId The tags to be moved to the folder.
      * @opt_param string triggerId The triggers to be moved to the folder.
      * @opt_param string variableId The variables to be moved to the folder.
+     * @throws \Google\Service\Exception
      */
     public function move_entities_to_folder($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $postBody, $optParams = [])
     {
@@ -136,6 +144,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the tag in storage.
      * @return RevertFolderResponse
+     * @throws \Google\Service\Exception
      */
     public function revert($path, $optParams = [])
     {
@@ -154,6 +163,7 @@ class AccountsContainersWorkspacesFolders extends \Google\Site_Kit_Dependencies\
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the folder in storage.
      * @return Folder
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Folder $postBody, $optParams = [])
     {

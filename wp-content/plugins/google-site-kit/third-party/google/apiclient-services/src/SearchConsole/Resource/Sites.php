@@ -34,6 +34,7 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      *
      * @param string $siteUrl The URL of the site to add.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function add($siteUrl, $optParams = [])
     {
@@ -48,6 +49,7 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param string $siteUrl The URI of the property as defined in Search Console.
      * **Examples:** `http://www.example.com/` or `sc-domain:example.com`.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($siteUrl, $optParams = [])
     {
@@ -62,6 +64,7 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * **Examples:** `http://www.example.com/` or `sc-domain:example.com`.
      * @param array $optParams Optional parameters.
      * @return WmxSite
+     * @throws \Google\Service\Exception
      */
     public function get($siteUrl, $optParams = [])
     {
@@ -74,6 +77,7 @@ class Sites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      *
      * @param array $optParams Optional parameters.
      * @return SitesListResponse
+     * @throws \Google\Service\Exception
      */
     public function listSites($optParams = [])
     {

@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Adsense\Site;
  * Typical usage is:
  *  <code>
  *   $adsenseService = new Google\Service\Adsense(...);
- *   $sites = $adsenseService->sites;
+ *   $sites = $adsenseService->accounts_sites;
  *  </code>
  */
 class AccountsSites extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -36,6 +36,7 @@ class AccountsSites extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * accounts/{account}/sites/{site}
      * @param array $optParams Optional parameters.
      * @return Site
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -59,6 +60,7 @@ class AccountsSites extends \Google\Site_Kit_Dependencies\Google\Service\Resourc
      * paginating, all other parameters provided to `ListSites` must match the call
      * that provided the page token.
      * @return ListSitesResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsSites($parent, $optParams = [])
     {

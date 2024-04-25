@@ -290,7 +290,7 @@ var external_wp_deprecated_default = /*#__PURE__*/__webpack_require__.n(external
  */
 
 const withDeprecatedKeys = originalGet => (state, scope, name) => {
-  const settingsToMoveToCore = ['allowRightClickOverrides', 'distractionFree', 'editorMode', 'fixedToolbar', 'focusMode', 'hiddenBlockTypes', 'inactivePanels', 'keepCaretInsideBlock', 'mostUsedBlocks', 'openPanels', 'showBlockBreadcrumbs', 'showIconLabels', 'showListViewByDefault', 'isPublishSidebarEnabled'];
+  const settingsToMoveToCore = ['allowRightClickOverrides', 'distractionFree', 'editorMode', 'fixedToolbar', 'focusMode', 'hiddenBlockTypes', 'inactivePanels', 'keepCaretInsideBlock', 'mostUsedBlocks', 'openPanels', 'showBlockBreadcrumbs', 'showIconLabels', 'showListViewByDefault', 'isPublishSidebarEnabled', 'isComplementaryAreaVisible', 'pinnedItems'];
   if (settingsToMoveToCore.includes(name) && ['core/edit-post', 'core/edit-site'].includes(scope)) {
     external_wp_deprecated_default()(`wp.data.select( 'core/preferences' ).get( '${scope}', '${name}' )`, {
       since: '6.5',

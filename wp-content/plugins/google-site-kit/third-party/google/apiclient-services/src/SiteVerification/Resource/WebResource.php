@@ -36,6 +36,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      *
      * @param string $id The id of a verified site or domain.
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($id, $optParams = [])
     {
@@ -49,6 +50,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param string $id The id of a verified site or domain.
      * @param array $optParams Optional parameters.
      * @return SiteVerificationWebResourceResource
+     * @throws \Google\Service\Exception
      */
     public function get($id, $optParams = [])
     {
@@ -63,6 +65,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param SiteVerificationWebResourceGettokenRequest $postBody
      * @param array $optParams Optional parameters.
      * @return SiteVerificationWebResourceGettokenResponse
+     * @throws \Google\Service\Exception
      */
     public function getToken(\Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceGettokenRequest $postBody, $optParams = [])
     {
@@ -78,6 +81,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param SiteVerificationWebResourceResource $postBody
      * @param array $optParams Optional parameters.
      * @return SiteVerificationWebResourceResource
+     * @throws \Google\Service\Exception
      */
     public function insert($verificationMethod, \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource $postBody, $optParams = [])
     {
@@ -91,6 +95,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      *
      * @param array $optParams Optional parameters.
      * @return SiteVerificationWebResourceListResponse
+     * @throws \Google\Service\Exception
      */
     public function listWebResource($optParams = [])
     {
@@ -106,6 +111,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param SiteVerificationWebResourceResource $postBody
      * @param array $optParams Optional parameters.
      * @return SiteVerificationWebResourceResource
+     * @throws \Google\Service\Exception
      */
     public function patch($id, \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource $postBody, $optParams = [])
     {
@@ -120,6 +126,7 @@ class WebResource extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param SiteVerificationWebResourceResource $postBody
      * @param array $optParams Optional parameters.
      * @return SiteVerificationWebResourceResource
+     * @throws \Google\Service\Exception
      */
     public function update($id, \Google\Site_Kit_Dependencies\Google\Service\SiteVerification\SiteVerificationWebResourceResource $postBody, $optParams = [])
     {

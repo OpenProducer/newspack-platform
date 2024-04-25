@@ -1,3 +1,17 @@
+## [3.0.10](https://github.com/Automattic/newspack-blocks/compare/v3.0.9...v3.0.10) (2024-04-24)
+
+
+### Bug Fixes
+
+* make sure image scale CSS class is applied in editor ([#1717](https://github.com/Automattic/newspack-blocks/issues/1717)) ([1f5c3e2](https://github.com/Automattic/newspack-blocks/commit/1f5c3e263a3aae1149dd200e88399595b75379fe))
+
+## [3.0.9](https://github.com/Automattic/newspack-blocks/compare/v3.0.8...v3.0.9) (2024-04-24)
+
+
+### Bug Fixes
+
+* assorted hotfixes ([eb9b6e5](https://github.com/Automattic/newspack-blocks/commit/eb9b6e5f13ecd055113baa2c53620775f930b2da))
+
 ## [3.0.8](https://github.com/Automattic/newspack-blocks/compare/v3.0.7...v3.0.8) (2024-04-19)
 
 

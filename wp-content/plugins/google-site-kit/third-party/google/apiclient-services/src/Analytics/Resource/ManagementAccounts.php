@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Analytics\Accounts;
  * Typical usage is:
  *  <code>
  *   $analyticsService = new Google\Service\Analytics(...);
- *   $accounts = $analyticsService->accounts;
+ *   $accounts = $analyticsService->management_accounts;
  *  </code>
  */
 class ManagementAccounts extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -40,6 +40,7 @@ class ManagementAccounts extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * this parameter as a pagination mechanism along with the max-results
      * parameter.
      * @return Accounts
+     * @throws \Google\Service\Exception
      */
     public function listManagementAccounts($optParams = [])
     {

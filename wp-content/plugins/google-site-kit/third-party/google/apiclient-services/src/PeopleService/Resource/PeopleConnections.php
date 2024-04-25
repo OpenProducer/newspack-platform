@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Google\Service\PeopleService\ListConnectionsRes
  * Typical usage is:
  *  <code>
  *   $peopleService = new Google\Service\PeopleService(...);
- *   $connections = $peopleService->connections;
+ *   $connections = $peopleService->people_connections;
  *  </code>
  */
 class PeopleConnections extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -82,6 +82,7 @@ class PeopleConnections extends \Google\Site_Kit_Dependencies\Google\Service\Res
      * to `people.connections.list` must match the first call that provided the sync
      * token. More details about sync behavior at `people.connections.list`.
      * @return ListConnectionsResponse
+     * @throws \Google\Service\Exception
      */
     public function listPeopleConnections($resourceName, $optParams = [])
     {

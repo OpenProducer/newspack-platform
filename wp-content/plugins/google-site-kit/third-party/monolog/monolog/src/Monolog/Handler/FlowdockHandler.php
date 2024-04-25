@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -24,6 +25,9 @@ use Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface;
  *
  * @author Dominik Liebler <liebler.dominik@gmail.com>
  * @see https://www.flowdock.com/api/push
+ *
+ * @phpstan-import-type FormattedRecord from AbstractProcessingHandler
+ * @deprecated Since 2.9.0 and 3.3.0, Flowdock was shutdown we will thus drop this handler in Monolog 4
  */
 class FlowdockHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\SocketHandler
 {
@@ -32,24 +36,20 @@ class FlowdockHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
      */
     protected $apiToken;
     /**
-     * @param string   $apiToken
-     * @param bool|int $level    The minimum logging level at which this handler will be triggered
-     * @param bool     $bubble   Whether the messages that are handled can bubble up the stack or not
-     *
      * @throws MissingExtensionException if OpenSSL is missing
      */
-    public function __construct($apiToken, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, $bubble = \true)
+    public function __construct(string $apiToken, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG, bool $bubble = \true, bool $persistent = \false, float $timeout = 0.0, float $writingTimeout = 10.0, ?float $connectionTimeout = null, ?int $chunkSize = null)
     {
         if (!\extension_loaded('openssl')) {
             throw new \Google\Site_Kit_Dependencies\Monolog\Handler\MissingExtensionException('The OpenSSL PHP extension is required to use the FlowdockHandler');
         }
-        parent::__construct('ssl://api.flowdock.com:443', $level, $bubble);
+        parent::__construct('ssl://api.flowdock.com:443', $level, $bubble, $persistent, $timeout, $writingTimeout, $connectionTimeout, $chunkSize);
         $this->apiToken = $apiToken;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
     {
         if (!$formatter instanceof \Google\Site_Kit_Dependencies\Monolog\Formatter\FlowdockFormatter) {
             throw new \InvalidArgumentException('The FlowdockHandler requires an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
@@ -58,30 +58,23 @@ class FlowdockHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
     }
     /**
      * Gets the default formatter.
-     *
-     * @return FormatterInterface
      */
-    protected function getDefaultFormatter()
+    protected function getDefaultFormatter() : \Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface
     {
         throw new \InvalidArgumentException('The FlowdockHandler must be configured (via setFormatter) with an instance of Monolog\\Formatter\\FlowdockFormatter to function correctly');
     }
     /**
-     * {@inheritdoc}
-     *
-     * @param array $record
+     * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         parent::write($record);
         $this->closeSocket();
     }
     /**
-     * {@inheritdoc}
-     *
-     * @param  array  $record
-     * @return string
+     * {@inheritDoc}
      */
-    protected function generateDataStream($record)
+    protected function generateDataStream(array $record) : string
     {
         $content = $this->buildContent($record);
         return $this->buildHeader($content) . $content;
@@ -89,20 +82,16 @@ class FlowdockHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Sock
     /**
      * Builds the body of API call
      *
-     * @param  array  $record
-     * @return string
+     * @phpstan-param FormattedRecord $record
      */
-    private function buildContent($record)
+    private function buildContent(array $record) : string
     {
         return \Google\Site_Kit_Dependencies\Monolog\Utils::jsonEncode($record['formatted']['flowdock']);
     }
     /**
      * Builds the header of the API Call
-     *
-     * @param  string $content
-     * @return string
      */
-    private function buildHeader($content)
+    private function buildHeader(string $content) : string
     {
         $header = "POST /v1/messages/team_inbox/" . $this->apiToken . " HTTP/1.1\r\n";
         $header .= "Host: api.flowdock.com\r\n";

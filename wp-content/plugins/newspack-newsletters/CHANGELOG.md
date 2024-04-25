@@ -1,3 +1,40 @@
+## [2.14.1](https://github.com/Automattic/newspack-newsletters/compare/v2.14.0...v2.14.1) (2024-04-24)
+
+
+### Bug Fixes
+
+* **mc:** handle multiple groups and multiple tags per API request ([#1490](https://github.com/Automattic/newspack-newsletters/issues/1490)) ([c66cbcf](https://github.com/Automattic/newspack-newsletters/commit/c66cbcf4b01bc568b31c273ac04605e92c4b142e))
+
+# [2.14.0](https://github.com/Automattic/newspack-newsletters/compare/v2.13.3...v2.14.0) (2024-04-24)
+
+
+### Bug Fixes
+
+* bad auto-merge ([1093bb5](https://github.com/Automattic/newspack-newsletters/commit/1093bb575d5e78accf82898c9d0e7f2406a4d1dd))
+* improve URL tracking validation ([#1472](https://github.com/Automattic/newspack-newsletters/issues/1472)) ([fe73d19](https://github.com/Automattic/newspack-newsletters/commit/fe73d1924fe4ffb8e107b1eb55de895e55592de4))
+
+
+### Features
+
+* **mailchimp:** support tags as subscription lists ([#1471](https://github.com/Automattic/newspack-newsletters/issues/1471)) ([3777737](https://github.com/Automattic/newspack-newsletters/commit/3777737067d00ea5f8b214949f27c15e15e2c60d))
+
+## [2.13.3](https://github.com/Automattic/newspack-newsletters/compare/v2.13.2...v2.13.3) (2024-04-24)
+
+
+### Bug Fixes
+
+* flush rewrite rules only after verified option update ([fb2ea15](https://github.com/Automattic/newspack-newsletters/commit/fb2ea1553cec859c1abc778215d39f8f10f37a0f))
+* obfuscate post ID when fetching HTML content ([e300b5a](https://github.com/Automattic/newspack-newsletters/commit/e300b5a0d2527ecbd5a1033688864bab901c0bd9))
+
+
+# [2.14.0-alpha.3](https://github.com/Automattic/newspack-newsletters/compare/v2.14.0-alpha.2...v2.14.0-alpha.3) (2024-04-18)
+
+
+### Bug Fixes
+
+* **mailchimp:** handle not found list ([3fdfc01](https://github.com/Automattic/newspack-newsletters/commit/3fdfc01bc9e5144a942765f577311c6b6fb81597))
+* multiple lists handling ([5722b07](https://github.com/Automattic/newspack-newsletters/commit/5722b0753e2a76a344557834845563e16266b97b)), closes [#1460](https://github.com/Automattic/newspack-newsletters/issues/1460)
+
 ## [2.13.2](https://github.com/Automattic/newspack-newsletters/compare/v2.13.1...v2.13.2) (2024-04-17)
 
 
@@ -12,6 +49,19 @@
 ### Bug Fixes
 
 * adding contact to multiple groups within a list ([#1460](https://github.com/Automattic/newspack-newsletters/issues/1460)) ([90408b3](https://github.com/Automattic/newspack-newsletters/commit/90408b30d68abad02b11ca7f9976fdbf259faa89))
+* bad auto-merge ([1093bb5](https://github.com/Automattic/newspack-newsletters/commit/1093bb575d5e78accf82898c9d0e7f2406a4d1dd))
+
+# [2.14.0-alpha.1](https://github.com/Automattic/newspack-newsletters/compare/v2.13.0...v2.14.0-alpha.1) (2024-04-11)
+
+
+### Bug Fixes
+
+* improve URL tracking validation ([#1472](https://github.com/Automattic/newspack-newsletters/issues/1472)) ([fe73d19](https://github.com/Automattic/newspack-newsletters/commit/fe73d1924fe4ffb8e107b1eb55de895e55592de4))
+
+
+### Features
+
+* **mailchimp:** support tags as subscription lists ([#1471](https://github.com/Automattic/newspack-newsletters/issues/1471)) ([3777737](https://github.com/Automattic/newspack-newsletters/commit/3777737067d00ea5f8b214949f27c15e15e2c60d))
 
 # [2.13.0](https://github.com/Automattic/newspack-newsletters/compare/v2.12.0...v2.13.0) (2024-04-08)
 

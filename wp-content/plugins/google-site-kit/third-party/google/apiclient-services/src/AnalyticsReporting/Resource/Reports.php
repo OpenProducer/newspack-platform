@@ -35,6 +35,7 @@ class Reports extends \Google\Site_Kit_Dependencies\Google\Service\Resource
      * @param GetReportsRequest $postBody
      * @param array $optParams Optional parameters.
      * @return GetReportsResponse
+     * @throws \Google\Service\Exception
      */
     public function batchGet(\Google\Site_Kit_Dependencies\Google\Service\AnalyticsReporting\GetReportsRequest $postBody, $optParams = [])
     {

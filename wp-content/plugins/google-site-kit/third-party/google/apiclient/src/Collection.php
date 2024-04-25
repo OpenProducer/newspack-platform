@@ -35,7 +35,7 @@ class Collection extends \Google\Site_Kit_Dependencies\Google\Model implements \
             return \key($this->{$this->collection_key});
         }
     }
-    /** @return void */
+    /** @return mixed */
     #[\ReturnTypeWillChange]
     public function next()
     {
@@ -58,6 +58,7 @@ class Collection extends \Google\Site_Kit_Dependencies\Google\Model implements \
         return \count($this->{$this->collection_key});
     }
     /** @return bool */
+    #[\ReturnTypeWillChange]
     public function offsetExists($offset)
     {
         if (!\is_numeric($offset)) {
@@ -75,6 +76,7 @@ class Collection extends \Google\Site_Kit_Dependencies\Google\Model implements \
         return $this->{$this->collection_key}[$offset];
     }
     /** @return void */
+    #[\ReturnTypeWillChange]
     public function offsetSet($offset, $value)
     {
         if (!\is_numeric($offset)) {
@@ -83,6 +85,7 @@ class Collection extends \Google\Site_Kit_Dependencies\Google\Model implements \
         $this->{$this->collection_key}[$offset] = $value;
     }
     /** @return void */
+    #[\ReturnTypeWillChange]
     public function offsetUnset($offset)
     {
         if (!\is_numeric($offset)) {

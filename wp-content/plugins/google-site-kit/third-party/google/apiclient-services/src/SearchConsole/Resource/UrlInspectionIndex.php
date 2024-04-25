@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\SearchConsole\InspectUrlIndexRes
  * Typical usage is:
  *  <code>
  *   $searchconsoleService = new Google\Service\SearchConsole(...);
- *   $index = $searchconsoleService->index;
+ *   $index = $searchconsoleService->urlInspection_index;
  *  </code>
  */
 class UrlInspectionIndex extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -35,6 +35,7 @@ class UrlInspectionIndex extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @param InspectUrlIndexRequest $postBody
      * @param array $optParams Optional parameters.
      * @return InspectUrlIndexResponse
+     * @throws \Google\Service\Exception
      */
     public function inspect(\Google\Site_Kit_Dependencies\Google\Service\SearchConsole\InspectUrlIndexRequest $postBody, $optParams = [])
     {

@@ -46,6 +46,12 @@ class WooCommerce_My_Account {
 			\add_action( 'template_redirect', [ __CLASS__, 'verify_saved_account_details' ] );
 			\add_action( 'logout_redirect', [ __CLASS__, 'add_param_after_logout' ] );
 			\add_action( 'template_redirect', [ __CLASS__, 'show_message_after_logout' ] );
+			\add_action( 'woocommerce_account_subscriptions_endpoint', [ __CLASS__, 'append_membership_table' ], 11 );
+			\add_filter( 'wc_memberships_general_settings', [ __CLASS__, 'option_display_memberships_without_subs' ] );
+			\add_filter( 'wcs_my_account_redirect_to_single_subscription', [ __CLASS__, 'redirect_to_single_subscription' ] );
+			\add_filter( 'wc_memberships_members_area_my-memberships_actions', [ __CLASS__, 'hide_cancel_button_from_memberships_table' ] );
+			\add_filter( 'wc_memberships_my_memberships_column_names', [ __CLASS__, 'remove_next_bill_on' ], 21 );
+
 		}
 	}
 
@@ -333,11 +339,13 @@ class WooCommerce_My_Account {
 	 * Redirect to "Account details" if accessing "My Account" directly.
 	 * Do not redirect if the request is a resubscribe request, as resubscribe
 	 * requests do their own redirect to the cart/checkout page.
+	 * Do not redirect if this request is a membership cancellation.
 	 */
 	public static function redirect_to_account_details() {
-		$resubscribe_request = isset( $_REQUEST['resubscribe'] ) ? 'shop_subscription' === get_post_type( absint( $_REQUEST['resubscribe'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$resubscribe_request       = isset( $_REQUEST['resubscribe'] ) ? 'shop_subscription' === \get_post_type( absint( $_REQUEST['resubscribe'] ) ) : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
+		$cancel_membership_request = isset( $_REQUEST['cancel_membership'] ) ? true : false; // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 
-		if ( \is_user_logged_in() && Reader_Activation::is_enabled() && function_exists( 'wc_get_page_permalink' ) && ! $resubscribe_request ) {
+		if ( \is_user_logged_in() && Reader_Activation::is_enabled() && function_exists( 'wc_get_page_permalink' ) && ! $resubscribe_request && ! $cancel_membership_request ) {
 			global $wp;
 			$current_url               = \home_url( $wp->request );
 			$my_account_page_permalink = \wc_get_page_permalink( 'myaccount' );
@@ -513,6 +521,104 @@ class WooCommerce_My_Account {
 		if ( isset( $_GET['logged_out'] ) ) { // phpcs:ignore WordPress.Security.NonceVerification.Recommended
 			WooCommerce_Connection::add_wc_notice( __( 'You have successfully logged out.', 'newspack-plugin' ), 'success' );
 		}
+	}
+
+	/**
+	 * Check if a reader has memberships that aren't associated with subscriptions.
+	 *
+	 * @return array
+	 */
+	public static function get_memberships_without_subs() {
+		if ( function_exists( 'wc_memberships_get_user_active_memberships' ) ) {
+			$customer_id              = \get_current_user_id();
+			$memberships_info         = \wc_memberships_get_user_active_memberships( $customer_id );
+			$memberships_without_subs = [];
+
+			// Create an array of active memberships without active subscriptions.
+			if ( function_exists( 'wc_memberships_has_subscription_product_granted_access' ) ) {
+				foreach ( $memberships_info as $membership ) {
+					if ( ! \wc_memberships_has_subscription_product_granted_access( $membership ) ) {
+						$memberships_without_subs[] = $membership;
+					}
+				}
+			}
+
+			return $memberships_without_subs;
+		}
+	}
+
+	/**
+	 * Optionally append a table of active memberships without subscriptions on the My Account Subscriptions tab.
+	 */
+	public static function append_membership_table() {
+		// If this option is not enabled, stop.
+		if ( ! Memberships::get_show_on_subscription_tab_setting() ) {
+			return;
+		}
+
+		$memberships_without_subs = self::get_memberships_without_subs();
+
+		// If there are active memberships without subscriptions, present them in a table.
+		if ( $memberships_without_subs ) {
+			echo '<div class="woocommerce-memberships-without-subs">';
+			echo '<h2>' . esc_html__( 'Active Memberships', 'newspack-plugin' ) . '</h2>';
+			echo '<p>' . esc_html__( 'These memberships are active, but don\'t have an associated subscription. They will need to be manually renewed when they expire.', 'newspack-plugin' ) . '</p>';
+			wc_get_template(
+				'myaccount/my-memberships.php',
+				array(
+					'customer_memberships' => $memberships_without_subs,
+					'user_id'              => \get_current_user_id(),
+				)
+			);
+			echo '</div>';
+		}
+	}
+
+	/**
+	 * Returns whether or not to redirect the Subscriptions link to a single subscription, or to the main Subscriptions screen.
+	 *
+	 * @return bool
+	 */
+	public static function redirect_to_single_subscription() {
+		// If this option is not enabled, stop.
+		if ( ! Memberships::get_show_on_subscription_tab_setting() ) {
+			return true;
+		}
+
+		$memberships_without_subs = self::get_memberships_without_subs();
+
+		// If there are memberships without subs, we want to remove the redirect and go to Subscriptions; otherwise, return true.
+		if ( $memberships_without_subs ) {
+			return false;
+		} else {
+			return true;
+		}
+	}
+
+	/**
+	 * Hides 'Cancel' button on main Memberships table to tidy it up.
+	 *
+	 * @param array $actions WooCommerce Memberships available actions.
+	 * @return array
+	 */
+	public static function hide_cancel_button_from_memberships_table( $actions ) {
+		if ( ! empty( $actions['cancel'] ) ) {
+			unset( $actions['cancel'] );
+		}
+		return $actions;
+	}
+
+	/**
+	 * Removes the 'Next Bill On' column in the main Memberships table to tidy it up.
+	 *
+	 * @param array $columns WooCommerce Memberships table columns.
+	 * @return array
+	 */
+	public static function remove_next_bill_on( $columns ) {
+		if ( ! empty( $columns['membership-next-bill-on'] ) ) {
+			unset( $columns['membership-next-bill-on'] );
+		}
+		return $columns;
 	}
 }
 

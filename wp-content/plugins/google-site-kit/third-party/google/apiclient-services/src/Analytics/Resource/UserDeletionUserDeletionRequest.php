@@ -23,7 +23,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Analytics\UserDeletionRequest;
  * Typical usage is:
  *  <code>
  *   $analyticsService = new Google\Service\Analytics(...);
- *   $userDeletionRequest = $analyticsService->userDeletionRequest;
+ *   $userDeletionRequest = $analyticsService->userDeletion_userDeletionRequest;
  *  </code>
  */
 class UserDeletionUserDeletionRequest extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -34,6 +34,7 @@ class UserDeletionUserDeletionRequest extends \Google\Site_Kit_Dependencies\Goog
      * @param UserDeletionRequest $postBody
      * @param array $optParams Optional parameters.
      * @return UserDeletionRequest
+     * @throws \Google\Service\Exception
      */
     public function upsert(\Google\Site_Kit_Dependencies\Google\Service\Analytics\UserDeletionRequest $postBody, $optParams = [])
     {

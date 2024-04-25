@@ -30,7 +30,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace;
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $workspaces = $tagmanagerService->workspaces;
+ *   $workspaces = $tagmanagerService->accounts_containers_workspaces;
  *  </code>
  */
 class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -43,6 +43,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @param Workspace $postBody
      * @param array $optParams Optional parameters.
      * @return Workspace
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace $postBody, $optParams = [])
     {
@@ -60,6 +61,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @param CreateContainerVersionRequestVersionOptions $postBody
      * @param array $optParams Optional parameters.
      * @return CreateContainerVersionResponse
+     * @throws \Google\Service\Exception
      */
     public function create_version($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\CreateContainerVersionRequestVersionOptions $postBody, $optParams = [])
     {
@@ -73,6 +75,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @param string $path GTM Workspace's API relative path. Example:
      * accounts/{account_id}/containers/{container_id}/workspaces/{workspace_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -87,6 +90,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * accounts/{account_id}/containers/{container_id}/workspaces/{workspace_id}
      * @param array $optParams Optional parameters.
      * @return Workspace
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -102,6 +106,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * accounts/{account_id}/containers/{container_id}/workspaces/{workspace_id}
      * @param array $optParams Optional parameters.
      * @return GetWorkspaceStatusResponse
+     * @throws \Google\Service\Exception
      */
     public function getStatus($path, $optParams = [])
     {
@@ -120,6 +125,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListWorkspacesResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersWorkspaces($parent, $optParams = [])
     {
@@ -135,6 +141,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * accounts/{account_id}/containers/{container_id}/workspaces/{workspace_id}
      * @param array $optParams Optional parameters.
      * @return QuickPreviewResponse
+     * @throws \Google\Service\Exception
      */
     public function quick_preview($path, $optParams = [])
     {
@@ -153,6 +160,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      *
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the entity_in_workspace in the merge conflict.
+     * @throws \Google\Service\Exception
      */
     public function resolve_conflict($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Entity $postBody, $optParams = [])
     {
@@ -169,6 +177,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * accounts/{account_id}/containers/{container_id}/workspaces/{workspace_id}
      * @param array $optParams Optional parameters.
      * @return SyncWorkspaceResponse
+     * @throws \Google\Service\Exception
      */
     public function sync($path, $optParams = [])
     {
@@ -187,6 +196,7 @@ class AccountsContainersWorkspaces extends \Google\Site_Kit_Dependencies\Google\
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the workspace in storage.
      * @return Workspace
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Workspace $postBody, $optParams = [])
     {

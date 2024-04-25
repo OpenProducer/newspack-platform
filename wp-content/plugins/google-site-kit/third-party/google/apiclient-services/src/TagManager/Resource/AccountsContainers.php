@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\ListContainersRespons
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $containers = $tagmanagerService->containers;
+ *   $containers = $tagmanagerService->accounts_containers;
  *  </code>
  */
 class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -45,6 +45,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @opt_param string settingSource Specify the source of config setting after
      * combine
      * @return Container
+     * @throws \Google\Service\Exception
      */
     public function combine($path, $optParams = [])
     {
@@ -60,6 +61,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @param Container $postBody
      * @param array $optParams Optional parameters.
      * @return Container
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container $postBody, $optParams = [])
     {
@@ -73,6 +75,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @param string $path GTM Container's API relative path. Example:
      * accounts/{account_id}/containers/{container_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -87,6 +90,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * accounts/{account_id}/containers/{container_id}
      * @param array $optParams Optional parameters.
      * @return Container
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -105,6 +109,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListContainersResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainers($parent, $optParams = [])
     {
@@ -121,6 +126,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * e.g. AW-123456789. Example:
      * accounts/containers:lookup?destination_id={destination_id}.
      * @return Container
+     * @throws \Google\Service\Exception
      */
     public function lookup($optParams = [])
     {
@@ -148,6 +154,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @opt_param string tagId Tag ID to be removed from the current Container.
      * @opt_param string tagName The name for the newly created tag.
      * @return Container
+     * @throws \Google\Service\Exception
      */
     public function move_tag_id($path, $optParams = [])
     {
@@ -162,6 +169,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * accounts/{account_id}/containers/{container_id}:snippet
      * @param array $optParams Optional parameters.
      * @return GetContainerSnippetResponse
+     * @throws \Google\Service\Exception
      */
     public function snippet($path, $optParams = [])
     {
@@ -180,6 +188,7 @@ class AccountsContainers extends \Google\Site_Kit_Dependencies\Google\Service\Re
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the container in storage.
      * @return Container
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Container $postBody, $optParams = [])
     {

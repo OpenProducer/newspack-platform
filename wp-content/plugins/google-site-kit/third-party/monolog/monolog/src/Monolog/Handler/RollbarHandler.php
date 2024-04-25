@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -10,14 +11,14 @@
  */
 namespace Google\Site_Kit_Dependencies\Monolog\Handler;
 
-use Google\Site_Kit_Dependencies\RollbarNotifier;
-use Exception;
+use Google\Site_Kit_Dependencies\Rollbar\RollbarLogger;
+use Throwable;
 use Google\Site_Kit_Dependencies\Monolog\Logger;
 /**
  * Sends errors to Rollbar
  *
  * If the context data contains a `payload` key, that is used as an array
- * of payload options to RollbarNotifier's report_message/report_exception methods.
+ * of payload options to RollbarLogger's log method.
  *
  * Rollbar's context info will contain the context + extra keys from the log record
  * merged, and then on top of that a few keys:
@@ -32,33 +33,31 @@ use Google\Site_Kit_Dependencies\Monolog\Logger;
 class RollbarHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractProcessingHandler
 {
     /**
-     * Rollbar notifier
-     *
-     * @var RollbarNotifier
+     * @var RollbarLogger
      */
-    protected $rollbarNotifier;
-    protected $levelMap = array(\Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG => 'debug', \Google\Site_Kit_Dependencies\Monolog\Logger::INFO => 'info', \Google\Site_Kit_Dependencies\Monolog\Logger::NOTICE => 'info', \Google\Site_Kit_Dependencies\Monolog\Logger::WARNING => 'warning', \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR => 'error', \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL => 'critical', \Google\Site_Kit_Dependencies\Monolog\Logger::ALERT => 'critical', \Google\Site_Kit_Dependencies\Monolog\Logger::EMERGENCY => 'critical');
+    protected $rollbarLogger;
+    /** @var string[] */
+    protected $levelMap = [\Google\Site_Kit_Dependencies\Monolog\Logger::DEBUG => 'debug', \Google\Site_Kit_Dependencies\Monolog\Logger::INFO => 'info', \Google\Site_Kit_Dependencies\Monolog\Logger::NOTICE => 'info', \Google\Site_Kit_Dependencies\Monolog\Logger::WARNING => 'warning', \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR => 'error', \Google\Site_Kit_Dependencies\Monolog\Logger::CRITICAL => 'critical', \Google\Site_Kit_Dependencies\Monolog\Logger::ALERT => 'critical', \Google\Site_Kit_Dependencies\Monolog\Logger::EMERGENCY => 'critical'];
     /**
      * Records whether any log records have been added since the last flush of the rollbar notifier
      *
      * @var bool
      */
     private $hasRecords = \false;
+    /** @var bool */
     protected $initialized = \false;
     /**
-     * @param RollbarNotifier $rollbarNotifier RollbarNotifier object constructed with valid token
-     * @param int             $level           The minimum logging level at which this handler will be triggered
-     * @param bool            $bubble          Whether the messages that are handled can bubble up the stack or not
+     * @param RollbarLogger $rollbarLogger RollbarLogger object constructed with valid token
      */
-    public function __construct(\Google\Site_Kit_Dependencies\RollbarNotifier $rollbarNotifier, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR, $bubble = \true)
+    public function __construct(\Google\Site_Kit_Dependencies\Rollbar\RollbarLogger $rollbarLogger, $level = \Google\Site_Kit_Dependencies\Monolog\Logger::ERROR, bool $bubble = \true)
     {
-        $this->rollbarNotifier = $rollbarNotifier;
+        $this->rollbarLogger = $rollbarLogger;
         parent::__construct($level, $bubble);
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    protected function write(array $record)
+    protected function write(array $record) : void
     {
         if (!$this->initialized) {
             // __destructor() doesn't get called on Fatal errors
@@ -66,38 +65,34 @@ class RollbarHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstr
             $this->initialized = \true;
         }
         $context = $record['context'];
-        $payload = array();
-        if (isset($context['payload'])) {
-            $payload = $context['payload'];
-            unset($context['payload']);
-        }
-        $context = \array_merge($context, $record['extra'], array('level' => $this->levelMap[$record['level']], 'monolog_level' => $record['level_name'], 'channel' => $record['channel'], 'datetime' => $record['datetime']->format('U')));
-        if (isset($context['exception']) && $context['exception'] instanceof \Exception) {
-            $payload['level'] = $context['level'];
+        $context = \array_merge($context, $record['extra'], ['level' => $this->levelMap[$record['level']], 'monolog_level' => $record['level_name'], 'channel' => $record['channel'], 'datetime' => $record['datetime']->format('U')]);
+        if (isset($context['exception']) && $context['exception'] instanceof \Throwable) {
             $exception = $context['exception'];
             unset($context['exception']);
-            $this->rollbarNotifier->report_exception($exception, $context, $payload);
+            $toLog = $exception;
         } else {
-            $this->rollbarNotifier->report_message($record['message'], $context['level'], $context, $payload);
+            $toLog = $record['message'];
         }
+        // @phpstan-ignore-next-line
+        $this->rollbarLogger->log($context['level'], $toLog, $context);
         $this->hasRecords = \true;
     }
-    public function flush()
+    public function flush() : void
     {
         if ($this->hasRecords) {
-            $this->rollbarNotifier->flush();
+            $this->rollbarLogger->flush();
             $this->hasRecords = \false;
         }
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function close()
+    public function close() : void
     {
         $this->flush();
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
     public function reset()
     {

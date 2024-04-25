@@ -541,6 +541,7 @@ __webpack_require__.d(__webpack_exports__, {
   createRegistry: () => (/* reexport */ createRegistry),
   createRegistryControl: () => (/* reexport */ createRegistryControl),
   createRegistrySelector: () => (/* reexport */ createRegistrySelector),
+  createSelector: () => (/* reexport */ rememo),
   dispatch: () => (/* reexport */ dispatch_dispatch),
   plugins: () => (/* reexport */ plugins_namespaceObject),
   register: () => (/* binding */ register),
@@ -628,7 +629,7 @@ function toPrimitive(t, r) {
 
 function toPropertyKey(t) {
   var i = toPrimitive(t, "string");
-  return "symbol" == _typeof(i) ? i : String(i);
+  return "symbol" == _typeof(i) ? i : i + "";
 }
 ;// CONCATENATED MODULE: ./node_modules/@babel/runtime/helpers/esm/defineProperty.js
 
@@ -2164,11 +2165,6 @@ function isShallowEqual(a, b, fromIndex) {
 
 ;// CONCATENATED MODULE: ./packages/data/build-module/redux-store/metadata/selectors.js
 /**
- * External dependencies
- */
-
-
-/**
  * WordPress dependencies
  */
 
@@ -2176,6 +2172,7 @@ function isShallowEqual(a, b, fromIndex) {
 /**
  * Internal dependencies
  */
+
 
 
 /** @typedef {Record<string, import('./reducer').State>} State */
@@ -4235,19 +4232,23 @@ function useSelect(mapSelect, deps) {
 }
 
 /**
- * A variant of the `useSelect` hook that has the same API, but will throw a
- * suspense Promise if any of the called selectors is in an unresolved state.
+ * A variant of the `useSelect` hook that has the same API, but is a compatible
+ * Suspense-enabled data source.
  *
- * @param {Function} mapSelect Function called on every state change. The
- *                             returned value is exposed to the component
- *                             using this hook. The function receives the
- *                             `registry.suspendSelect` method as the first
- *                             argument and the `registry` as the second one.
- * @param {Array}    deps      A dependency array used to memoize the `mapSelect`
- *                             so that the same `mapSelect` is invoked on every
- *                             state change unless the dependencies change.
+ * @template {MapSelect} T
+ * @param {T}     mapSelect Function called on every state change. The
+ *                          returned value is exposed to the component
+ *                          using this hook. The function receives the
+ *                          `registry.suspendSelect` method as the first
+ *                          argument and the `registry` as the second one.
+ * @param {Array} deps      A dependency array used to memoize the `mapSelect`
+ *                          so that the same `mapSelect` is invoked on every
+ *                          state change unless the dependencies change.
  *
- * @return {Object} Data object returned by the `mapSelect` function.
+ * @throws {Promise} A suspense Promise that is thrown if any of the called
+ * selectors is in an unresolved state.
+ *
+ * @return {ReturnType<T>} Data object returned by the `mapSelect` function.
  */
 function useSuspenseSelect(mapSelect, deps) {
   return useMappingSelect(true, mapSelect, deps);
@@ -4631,6 +4632,7 @@ function select_select(storeNameOrDescriptor) {
 
 
 /** @typedef {import('./types').StoreDescriptor} StoreDescriptor */
+
 
 
 

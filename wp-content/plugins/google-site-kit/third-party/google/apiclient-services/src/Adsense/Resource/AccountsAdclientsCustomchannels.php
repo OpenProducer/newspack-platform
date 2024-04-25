@@ -26,15 +26,16 @@ use Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedAdUnitsRespons
  * Typical usage is:
  *  <code>
  *   $adsenseService = new Google\Service\Adsense(...);
- *   $customchannels = $adsenseService->customchannels;
+ *   $customchannels = $adsenseService->accounts_adclients_customchannels;
  *  </code>
  */
 class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Google\Service\Resource
 {
     /**
-     * Creates a custom channel. This method can only be used by projects enabled
-     * for the [AdSense for
-     * Platforms](https://developers.google.com/adsense/platforms/) product.
+     * Creates a custom channel. This method can be called only by a restricted set
+     * of projects, which are usually owned by [AdSense for
+     * Platforms](https://developers.google.com/adsense/platforms/) publishers.
+     * Contact your account manager if you need to use this method.
      * (customchannels.create)
      *
      * @param string $parent Required. The ad client to create a custom channel
@@ -42,6 +43,7 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
      * @param CustomChannel $postBody
      * @param array $optParams Optional parameters.
      * @return CustomChannel
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel $postBody, $optParams = [])
     {
@@ -50,15 +52,17 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
         return $this->call('create', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel::class);
     }
     /**
-     * Deletes a custom channel. This method can only be used by projects enabled
-     * for the [AdSense for
-     * Platforms](https://developers.google.com/adsense/platforms/) product.
+     * Deletes a custom channel. This method can be called only by a restricted set
+     * of projects, which are usually owned by [AdSense for
+     * Platforms](https://developers.google.com/adsense/platforms/) publishers.
+     * Contact your account manager if you need to use this method.
      * (customchannels.delete)
      *
      * @param string $name Required. Name of the custom channel to delete. Format:
      * accounts/{account}/adclients/{adclient}/customchannels/{customchannel}
      * @param array $optParams Optional parameters.
      * @return AdsenseEmpty
+     * @throws \Google\Service\Exception
      */
     public function delete($name, $optParams = [])
     {
@@ -73,6 +77,7 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
      * accounts/{account}/adclients/{adclient}/customchannels/{customchannel}
      * @param array $optParams Optional parameters.
      * @return CustomChannel
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -97,6 +102,7 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
      * paginating, all other parameters provided to `ListCustomChannels` must match
      * the call that provided the page token.
      * @return ListCustomChannelsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsAdclientsCustomchannels($parent, $optParams = [])
     {
@@ -122,6 +128,7 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
      * paginating, all other parameters provided to `ListLinkedAdUnits` must match
      * the call that provided the page token.
      * @return ListLinkedAdUnitsResponse
+     * @throws \Google\Service\Exception
      */
     public function listLinkedAdUnits($parent, $optParams = [])
     {
@@ -130,9 +137,10 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
         return $this->call('listLinkedAdUnits', [$params], \Google\Site_Kit_Dependencies\Google\Service\Adsense\ListLinkedAdUnitsResponse::class);
     }
     /**
-     * Updates a custom channel. This method can only be used by projects enabled
-     * for the [AdSense for
-     * Platforms](https://developers.google.com/adsense/platforms/) product.
+     * Updates a custom channel. This method can be called only by a restricted set
+     * of projects, which are usually owned by [AdSense for
+     * Platforms](https://developers.google.com/adsense/platforms/) publishers.
+     * Contact your account manager if you need to use this method.
      * (customchannels.patch)
      *
      * @param string $name Output only. Resource name of the custom channel. Format:
@@ -143,6 +151,7 @@ class AccountsAdclientsCustomchannels extends \Google\Site_Kit_Dependencies\Goog
      * @opt_param string updateMask The list of fields to update. If empty, a full
      * update is performed.
      * @return CustomChannel
+     * @throws \Google\Service\Exception
      */
     public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\Adsense\CustomChannel $postBody, $optParams = [])
     {

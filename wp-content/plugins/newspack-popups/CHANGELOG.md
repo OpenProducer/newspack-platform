@@ -1,3 +1,10 @@
+## [2.31.2](https://github.com/Automattic/newspack-popups/compare/v2.31.1...v2.31.2) (2024-04-23)
+
+
+### Bug Fixes
+
+* improved attribute handling ([b53415a](https://github.com/Automattic/newspack-popups/commit/b53415a95b8f7c65ecd421117d656c8e5effc3da))
+
 ## [2.31.1](https://github.com/Automattic/newspack-popups/compare/v2.31.0...v2.31.1) (2024-04-08)
 
 

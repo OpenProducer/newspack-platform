@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProto
  * Typical usage is:
  *  <code>
  *   $analyticsadminService = new Google\Service\GoogleAnalyticsAdmin(...);
- *   $dataStreams = $analyticsadminService->dataStreams;
+ *   $dataStreams = $analyticsadminService->properties_dataStreams;
  *  </code>
  */
 class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -37,6 +37,7 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * @param GoogleAnalyticsAdminV1betaDataStream $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaDataStream
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
     {
@@ -51,6 +52,7 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * format: properties/1234/dataStreams/5678
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function delete($name, $optParams = [])
     {
@@ -65,6 +67,7 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * format: properties/1234/dataStreams/5678
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaDataStream
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -86,6 +89,7 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * paginating, all other parameters provided to `ListDataStreams` must match the
      * call that provided the page token.
      * @return GoogleAnalyticsAdminV1betaListDataStreamsResponse
+     * @throws \Google\Service\Exception
      */
     public function listPropertiesDataStreams($parent, $optParams = [])
     {
@@ -106,6 +110,7 @@ class PropertiesDataStreams extends \Google\Site_Kit_Dependencies\Google\Service
      * Omitted fields will not be updated. To replace the entire entity, use one
      * path with the string "*" to match all fields.
      * @return GoogleAnalyticsAdminV1betaDataStream
+     * @throws \Google\Service\Exception
      */
     public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaDataStream $postBody, $optParams = [])
     {

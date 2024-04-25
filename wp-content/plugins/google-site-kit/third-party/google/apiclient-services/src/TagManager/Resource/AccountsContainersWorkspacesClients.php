@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\TagManager\RevertClientResponse;
  * Typical usage is:
  *  <code>
  *   $tagmanagerService = new Google\Service\TagManager(...);
- *   $clients = $tagmanagerService->clients;
+ *   $clients = $tagmanagerService->accounts_containers_workspaces_clients;
  *  </code>
  */
 class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -38,6 +38,7 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * @param Client $postBody
      * @param array $optParams Optional parameters.
      * @return Client
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client $postBody, $optParams = [])
     {
@@ -51,6 +52,7 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * @param string $path GTM Client's API relative path. Example: accounts/{accoun
      * t_id}/containers/{container_id}/workspaces/{workspace_id}/clients/{client_id}
      * @param array $optParams Optional parameters.
+     * @throws \Google\Service\Exception
      */
     public function delete($path, $optParams = [])
     {
@@ -65,6 +67,7 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * t_id}/containers/{container_id}/workspaces/{workspace_id}/clients/{client_id}
      * @param array $optParams Optional parameters.
      * @return Client
+     * @throws \Google\Service\Exception
      */
     public function get($path, $optParams = [])
     {
@@ -83,6 +86,7 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * @opt_param string pageToken Continuation token for fetching the next page of
      * results.
      * @return ListClientsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsContainersWorkspacesClients($parent, $optParams = [])
     {
@@ -100,6 +104,7 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the client in storage.
      * @return RevertClientResponse
+     * @throws \Google\Service\Exception
      */
     public function revert($path, $optParams = [])
     {
@@ -118,6 +123,7 @@ class AccountsContainersWorkspacesClients extends \Google\Site_Kit_Dependencies\
      * @opt_param string fingerprint When provided, this fingerprint must match the
      * fingerprint of the client in storage.
      * @return Client
+     * @throws \Google\Service\Exception
      */
     public function update($path, \Google\Site_Kit_Dependencies\Google\Service\TagManager\Client $postBody, $optParams = [])
     {

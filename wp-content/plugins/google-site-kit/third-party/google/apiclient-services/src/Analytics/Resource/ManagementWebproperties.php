@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Analytics\Webproperty;
  * Typical usage is:
  *  <code>
  *   $analyticsService = new Google\Service\Analytics(...);
- *   $webproperties = $analyticsService->webproperties;
+ *   $webproperties = $analyticsService->management_webproperties;
  *  </code>
  */
 class ManagementWebproperties extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -36,6 +36,7 @@ class ManagementWebproperties extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param string $webPropertyId ID to retrieve the web property for.
      * @param array $optParams Optional parameters.
      * @return Webproperty
+     * @throws \Google\Service\Exception
      */
     public function get($accountId, $webPropertyId, $optParams = [])
     {
@@ -52,6 +53,7 @@ class ManagementWebproperties extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param Webproperty $postBody
      * @param array $optParams Optional parameters.
      * @return Webproperty
+     * @throws \Google\Service\Exception
      */
     public function insert($accountId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\Webproperty $postBody, $optParams = [])
     {
@@ -73,6 +75,7 @@ class ManagementWebproperties extends \Google\Site_Kit_Dependencies\Google\Servi
      * @opt_param int start-index An index of the first entity to retrieve. Use this
      * parameter as a pagination mechanism along with the max-results parameter.
      * @return Webproperties
+     * @throws \Google\Service\Exception
      */
     public function listManagementWebproperties($accountId, $optParams = [])
     {
@@ -89,6 +92,7 @@ class ManagementWebproperties extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param Webproperty $postBody
      * @param array $optParams Optional parameters.
      * @return Webproperty
+     * @throws \Google\Service\Exception
      */
     public function patch($accountId, $webPropertyId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\Webproperty $postBody, $optParams = [])
     {
@@ -104,6 +108,7 @@ class ManagementWebproperties extends \Google\Site_Kit_Dependencies\Google\Servi
      * @param Webproperty $postBody
      * @param array $optParams Optional parameters.
      * @return Webproperty
+     * @throws \Google\Service\Exception
      */
     public function update($accountId, $webPropertyId, \Google\Site_Kit_Dependencies\Google\Service\Analytics\Webproperty $postBody, $optParams = [])
     {

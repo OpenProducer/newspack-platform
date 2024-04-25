@@ -1,5 +1,6 @@
 <?php
 
+declare (strict_types=1);
 /*
  * This file is part of the Monolog package.
  *
@@ -16,15 +17,21 @@ use Google\Site_Kit_Dependencies\Monolog\ResettableInterface;
  * Forwards records to multiple handlers
  *
  * @author Lenar Lõhmus <lenar@city.ee>
+ *
+ * @phpstan-import-type Record from \Monolog\Logger
  */
-class GroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\AbstractHandler
+class GroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Handler implements \Google\Site_Kit_Dependencies\Monolog\Handler\ProcessableHandlerInterface, \Google\Site_Kit_Dependencies\Monolog\ResettableInterface
 {
+    use ProcessableHandlerTrait;
+    /** @var HandlerInterface[] */
     protected $handlers;
+    /** @var bool */
+    protected $bubble;
     /**
-     * @param array $handlers Array of Handlers.
-     * @param bool  $bubble   Whether the messages that are handled can bubble up the stack or not
+     * @param HandlerInterface[] $handlers Array of Handlers.
+     * @param bool               $bubble   Whether the messages that are handled can bubble up the stack or not
      */
-    public function __construct(array $handlers, $bubble = \true)
+    public function __construct(array $handlers, bool $bubble = \true)
     {
         foreach ($handlers as $handler) {
             if (!$handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface) {
@@ -35,9 +42,9 @@ class GroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
         $this->bubble = $bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function isHandling(array $record)
+    public function isHandling(array $record) : bool
     {
         foreach ($this->handlers as $handler) {
             if ($handler->isHandling($record)) {
@@ -47,14 +54,13 @@ class GroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
         return \false;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handle(array $record)
+    public function handle(array $record) : bool
     {
         if ($this->processors) {
-            foreach ($this->processors as $processor) {
-                $record = \call_user_func($processor, $record);
-            }
+            /** @var Record $record */
+            $record = $this->processRecord($record);
         }
         foreach ($this->handlers as $handler) {
             $handler->handle($record);
@@ -62,18 +68,16 @@ class GroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
         return \false === $this->bubble;
     }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function handleBatch(array $records)
+    public function handleBatch(array $records) : void
     {
         if ($this->processors) {
-            $processed = array();
+            $processed = [];
             foreach ($records as $record) {
-                foreach ($this->processors as $processor) {
-                    $record = \call_user_func($processor, $record);
-                }
-                $processed[] = $record;
+                $processed[] = $this->processRecord($record);
             }
+            /** @var Record[] $records */
             $records = $processed;
         }
         foreach ($this->handlers as $handler) {
@@ -82,20 +86,29 @@ class GroupHandler extends \Google\Site_Kit_Dependencies\Monolog\Handler\Abstrac
     }
     public function reset()
     {
-        parent::reset();
+        $this->resetProcessors();
         foreach ($this->handlers as $handler) {
             if ($handler instanceof \Google\Site_Kit_Dependencies\Monolog\ResettableInterface) {
                 $handler->reset();
             }
         }
     }
+    public function close() : void
+    {
+        parent::close();
+        foreach ($this->handlers as $handler) {
+            $handler->close();
+        }
+    }
     /**
-     * {@inheritdoc}
+     * {@inheritDoc}
      */
-    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter)
+    public function setFormatter(\Google\Site_Kit_Dependencies\Monolog\Formatter\FormatterInterface $formatter) : \Google\Site_Kit_Dependencies\Monolog\Handler\HandlerInterface
     {
         foreach ($this->handlers as $handler) {
-            $handler->setFormatter($formatter);
+            if ($handler instanceof \Google\Site_Kit_Dependencies\Monolog\Handler\FormattableHandlerInterface) {
+                $handler->setFormatter($formatter);
+            }
         }
         return $this;
     }

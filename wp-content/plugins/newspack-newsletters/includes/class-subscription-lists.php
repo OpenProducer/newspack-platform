@@ -462,13 +462,21 @@ class Subscription_Lists {
 			throw new \Exception( 'Invalid list' );
 		}
 
-		$saved = Subscription_List::from_form_id( $list['id'] );
+		$subscriber_count = ! empty( $list['subscriber_count'] ) ? (int) $list['subscriber_count'] : 0;
+		$subscriber_count = ! empty( $list['member_count'] ) ? (int) $list['member_count'] : 0; // Tags have member_count instead of subscriber_count.
+		$saved_list       = Subscription_List::from_form_id( $list['id'] );
+		if ( $saved_list ) {
+			// Update remote name, in case it's changed in the ESP.
+			$saved_list->set_remote_name( $list['title'] );
 
-		if ( $saved ) {
-			return $saved;
+			// Update subscriber count, if available.
+			if ( 0 > $subscriber_count ) {
+				$saved_list->set_subscriber_count( $subscriber_count );
+			}
+			return $saved_list;
 		}
 
-		return self::create_remote_list( $list['id'], $list['title'] );
+		return self::create_remote_list( $list['id'], $list['title'], null, $subscriber_count );
 	}
 
 	/**
@@ -477,9 +485,10 @@ class Subscription_Lists {
 	 * @param string $remote_id The ID of the list in the ESP.
 	 * @param string $name The name of the list.
 	 * @param string $provider_slug The provider slug to create the list for. Default is the current configured provider.
+	 * @param int    $subscriber_count The number of subscribers in the list, if available.
 	 * @return Subscription_List|WP_Error
 	 */
-	public static function create_remote_list( $remote_id, $name, $provider_slug = null ) {
+	public static function create_remote_list( $remote_id, $name, $provider_slug = null, $subscriber_count = 0 ) {
 		$post_id = wp_insert_post(
 			[
 				'post_type'   => self::CPT,
@@ -494,6 +503,7 @@ class Subscription_Lists {
 
 		$list = new Subscription_List( $post_id );
 		$list->set_remote_id( $remote_id );
+		$list->set_remote_name( $name );
 		$list->set_type( 'remote' );
 		if ( is_null( $provider_slug ) ) {
 			$provider = Newspack_Newsletters::get_service_provider();
@@ -502,6 +512,9 @@ class Subscription_Lists {
 		}
 		if ( ! empty( $provider ) ) {
 			$list->set_provider( $provider->service );
+		}
+		if ( 0 > $subscriber_count ) {
+			$list->set_subscriber_count( $subscriber_count );
 		}
 		return $list;
 	}

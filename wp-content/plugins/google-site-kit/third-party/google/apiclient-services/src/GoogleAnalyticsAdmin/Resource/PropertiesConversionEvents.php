@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleProto
  * Typical usage is:
  *  <code>
  *   $analyticsadminService = new Google\Service\GoogleAnalyticsAdmin(...);
- *   $conversionEvents = $analyticsadminService->conversionEvents;
+ *   $conversionEvents = $analyticsadminService->properties_conversionEvents;
  *  </code>
  */
 class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -39,6 +39,7 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
      * @param GoogleAnalyticsAdminV1betaConversionEvent $postBody
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaConversionEvent
+     * @throws \Google\Service\Exception
      */
     public function create($parent, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEvent $postBody, $optParams = [])
     {
@@ -54,6 +55,7 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
      * Example: "properties/123/conversionEvents/456"
      * @param array $optParams Optional parameters.
      * @return GoogleProtobufEmpty
+     * @throws \Google\Service\Exception
      */
     public function delete($name, $optParams = [])
     {
@@ -69,6 +71,7 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
      * Example: "properties/123/conversionEvents/456"
      * @param array $optParams Optional parameters.
      * @return GoogleAnalyticsAdminV1betaConversionEvent
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -93,12 +96,35 @@ class PropertiesConversionEvents extends \Google\Site_Kit_Dependencies\Google\Se
      * When paginating, all other parameters provided to `ListConversionEvents` must
      * match the call that provided the page token.
      * @return GoogleAnalyticsAdminV1betaListConversionEventsResponse
+     * @throws \Google\Service\Exception
      */
     public function listPropertiesConversionEvents($parent, $optParams = [])
     {
         $params = ['parent' => $parent];
         $params = \array_merge($params, $optParams);
         return $this->call('list', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaListConversionEventsResponse::class);
+    }
+    /**
+     * Updates a conversion event with the specified attributes.
+     * (conversionEvents.patch)
+     *
+     * @param string $name Output only. Resource name of this conversion event.
+     * Format: properties/{property}/conversionEvents/{conversion_event}
+     * @param GoogleAnalyticsAdminV1betaConversionEvent $postBody
+     * @param array $optParams Optional parameters.
+     *
+     * @opt_param string updateMask Required. The list of fields to be updated.
+     * Field names must be in snake case (e.g., "field_to_update"). Omitted fields
+     * will not be updated. To replace the entire entity, use one path with the
+     * string "*" to match all fields.
+     * @return GoogleAnalyticsAdminV1betaConversionEvent
+     * @throws \Google\Service\Exception
+     */
+    public function patch($name, \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEvent $postBody, $optParams = [])
+    {
+        $params = ['name' => $name, 'postBody' => $postBody];
+        $params = \array_merge($params, $optParams);
+        return $this->call('patch', [$params], \Google\Site_Kit_Dependencies\Google\Service\GoogleAnalyticsAdmin\GoogleAnalyticsAdminV1betaConversionEvent::class);
     }
 }
 // Adding a class alias for backwards compatibility with the previous class name.

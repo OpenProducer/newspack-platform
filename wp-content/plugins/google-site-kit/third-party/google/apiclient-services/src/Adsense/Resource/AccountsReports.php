@@ -25,7 +25,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Adsense\SavedReport;
  * Typical usage is:
  *  <code>
  *   $adsenseService = new Google\Service\Adsense(...);
- *   $reports = $adsenseService->reports;
+ *   $reports = $adsenseService->accounts_reports;
  *  </code>
  */
 class AccountsReports extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -82,6 +82,7 @@ class AccountsReports extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @opt_param int startDate.year Year of the date. Must be from 1 to 9999, or 0
      * to specify a date without a year.
      * @return ReportResult
+     * @throws \Google\Service\Exception
      */
     public function generate($account, $optParams = [])
     {
@@ -141,6 +142,7 @@ class AccountsReports extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * @opt_param int startDate.year Year of the date. Must be from 1 to 9999, or 0
      * to specify a date without a year.
      * @return HttpBody
+     * @throws \Google\Service\Exception
      */
     public function generateCsv($account, $optParams = [])
     {
@@ -155,6 +157,7 @@ class AccountsReports extends \Google\Site_Kit_Dependencies\Google\Service\Resou
      * Format: accounts/{account}/reports/{report}
      * @param array $optParams Optional parameters.
      * @return SavedReport
+     * @throws \Google\Service\Exception
      */
     public function getSaved($name, $optParams = [])
     {

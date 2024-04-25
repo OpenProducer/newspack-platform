@@ -24,7 +24,7 @@ use Google\Site_Kit_Dependencies\Google\Service\Adsense\UrlChannel;
  * Typical usage is:
  *  <code>
  *   $adsenseService = new Google\Service\Adsense(...);
- *   $urlchannels = $adsenseService->urlchannels;
+ *   $urlchannels = $adsenseService->accounts_adclients_urlchannels;
  *  </code>
  */
 class AccountsAdclientsUrlchannels extends \Google\Site_Kit_Dependencies\Google\Service\Resource
@@ -36,6 +36,7 @@ class AccountsAdclientsUrlchannels extends \Google\Site_Kit_Dependencies\Google\
      * Format: accounts/{account}/adclients/{adclient}/urlchannels/{urlchannel}
      * @param array $optParams Optional parameters.
      * @return UrlChannel
+     * @throws \Google\Service\Exception
      */
     public function get($name, $optParams = [])
     {
@@ -59,6 +60,7 @@ class AccountsAdclientsUrlchannels extends \Google\Site_Kit_Dependencies\Google\
      * paginating, all other parameters provided to `ListUrlChannels` must match the
      * call that provided the page token.
      * @return ListUrlChannelsResponse
+     * @throws \Google\Service\Exception
      */
     public function listAccountsAdclientsUrlchannels($parent, $optParams = [])
     {
