@@ -909,8 +909,12 @@ class Memberships {
 	public static function cron_init() {
 		\register_deactivation_hook( NEWSPACK_PLUGIN_FILE, [ __CLASS__, 'cron_deactivate' ] );
 
-		if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
-			\wp_schedule_event( time(), 'hourly', self::CRON_HOOK );
+		if ( defined( 'NEWSPACK_ENABLE_MEMBERSHIPS_FIX_CRON' ) && NEWSPACK_ENABLE_MEMBERSHIPS_FIX_CRON ) {
+			if ( ! wp_next_scheduled( self::CRON_HOOK ) ) {
+				\wp_schedule_event( time(), 'hourly', self::CRON_HOOK );
+			}
+		} else {
+			self::cron_deactivate();
 		}
 	}
 

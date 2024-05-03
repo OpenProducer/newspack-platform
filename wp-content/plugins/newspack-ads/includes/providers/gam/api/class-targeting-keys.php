@@ -33,6 +33,7 @@ final class Targeting_Keys extends Api_Object {
 		'post_type',
 		'template',
 		'site',
+		'reader_status',
 	];
 
 	/**

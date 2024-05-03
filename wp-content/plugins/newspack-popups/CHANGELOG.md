@@ -1,3 +1,10 @@
+## [2.31.3](https://github.com/Automattic/newspack-popups/compare/v2.31.2...v2.31.3) (2024-04-26)
+
+
+### Bug Fixes
+
+* disable manual & custom placement prompts when prompts are disabled ([#1299](https://github.com/Automattic/newspack-popups/issues/1299)) ([aff5777](https://github.com/Automattic/newspack-popups/commit/aff5777873785055ce3e24a03ad7f549bf48feb3))
+
 ## [2.31.2](https://github.com/Automattic/newspack-popups/compare/v2.31.1...v2.31.2) (2024-04-23)
 
 

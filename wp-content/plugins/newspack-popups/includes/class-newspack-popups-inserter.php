@@ -721,6 +721,10 @@ final class Newspack_Popups_Inserter {
 	 * @return HTML
 	 */
 	public static function popup_shortcode( $atts = array() ) {
+		if ( self::assess_has_disabled_popups() ) {
+			return;
+		}
+
 		$default_atts = [
 			'id'    => 0,
 			'class' => '',
