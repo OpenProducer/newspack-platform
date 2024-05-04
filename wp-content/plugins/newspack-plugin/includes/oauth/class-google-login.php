@@ -74,10 +74,10 @@ class Google_Login {
 	 */
 	public static function api_check_if_oauth_configured() {
 		if ( ! Google_OAuth::is_oauth_configured() ) {
-			Logger::log( 'OAuth not configured.' );
+			self::handle_error( __( 'Google OAuth is not configured.', 'newspack-plugin' ) );
 			return new \WP_Error(
 				'newspack_rest_forbidden',
-				esc_html__( 'You cannot use this resource.', 'newspack' ),
+				esc_html__( 'You cannot use this resource.', 'newspack-plugin' ),
 				[
 					'status' => 403,
 				]
@@ -100,6 +100,8 @@ class Google_Login {
 			]
 		);
 		if ( is_wp_error( $url ) ) {
+			/* translators: %s is the error message */
+			self::handle_error( sprintf( __( 'Failed to get Google OAuth URL: %s', 'newspack-plugin' ), $url->get_error_message() ) );
 			return $url;
 		}
 		return rest_ensure_response( $url );
@@ -114,32 +116,41 @@ class Google_Login {
 		}
 
 		if ( ! wp_verify_nonce( sanitize_text_field( $_GET[ self::AUTH_CALLBACK ] ), self::AUTH_CALLBACK ) ) {
-			wp_die( esc_html__( 'Invalid nonce.', 'newspack' ) );
+			self::handle_error( __( 'Nonce verification failed.', 'newspack-plugin' ) );
+			wp_die( esc_html__( 'Invalid nonce.', 'newspack-plugin' ) );
 			return;
 		}
 
 		if ( ! isset( $_REQUEST['csrf_token'] ) || ! isset( $_REQUEST['access_token'] ) ) {
-			wp_die( esc_html__( 'Invalid request', 'newspack' ) );
+			self::handle_error( __( 'CSRF token or access token missing.', 'newspack-plugin' ) );
+			wp_die( esc_html__( 'Invalid request', 'newspack-plugin' ) );
 			return;
 		}
 
 		$saved_csrf_token = OAuth::retrieve_csrf_token( self::CSRF_TOKEN_NAMESPACE );
 
 		if ( $_REQUEST['csrf_token'] !== $saved_csrf_token ) {
-			Logger::error( 'Failed saving email - CSRF token mismatch.' );
-			\wp_die( \esc_html__( 'Authentication failed.', 'newspack' ) );
+			self::handle_error( __( 'CSRF token verification failed.', 'newspack-plugin' ) );
+			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
 		}
 
 		$user_email = Google_OAuth::validate_token_and_get_email_address( sanitize_text_field( $_REQUEST['access_token'] ), self::REQUIRED_SCOPES );
 		if ( is_wp_error( $user_email ) ) {
-			Logger::error( 'Failed validating user: ' . $user_email->get_error_message() );
-			\wp_die( \esc_html__( 'Authentication failed.', 'newspack' ) );
+			/* translators: %s is the error message */
+			self::handle_error( sprintf( __( 'Failed validating user: %s', 'newspack-plugin' ), $user_email->get_error_message() ) );
+			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
 		}
 
 		Logger::log( 'Got user email from Google: ' . $user_email );
 
 		// Associate the email address with the a unique ID for later retrieval.
-		set_transient( self::EMAIL_TRANSIENT_PREFIX . OAuth::get_unique_id(), $user_email, 20 );
+		$transient_expiration_time = 60 * 5; // 5 minutes.
+		$has_set_transient = set_transient( self::EMAIL_TRANSIENT_PREFIX . OAuth::get_unique_id(), $user_email, $transient_expiration_time );
+		// If transient setting failed, the email address will not be available for the registration endpoint.
+		if ( ! $has_set_transient ) {
+			self::handle_error( __( 'Failed setting transient.', 'newspack-plugin' ) );
+			\wp_die( \esc_html__( 'Authentication failed.', 'newspack-plugin' ) );
+		}
 
 		/** Close window if it's a popup. */
 		?>
@@ -147,6 +158,16 @@ class Google_Login {
 			if ( window.opener ) { window.close(); }
 		</script>
 		<?php
+	}
+
+	/**
+	 * Handle issue.
+	 *
+	 * @param string $message The message to log.
+	 */
+	private static function handle_error( $message ) {
+		Logger::error( $message );
+		do_action( 'newspack_google_login_error', new WP_Error( 'newspack_google_login', $message ) );
 	}
 
 	/**
@@ -170,7 +191,7 @@ class Google_Login {
 		$metadata['registration_method'] = 'google';
 		if ( $email ) {
 			$existing_user = \get_user_by( 'email', $email );
-			$message       = __( 'Thank you for registering!', 'newspack' );
+			$message       = __( 'Thank you for registering!', 'newspack-plugin' );
 			$data          = [
 				'email'         => $email,
 				'authenticated' => true,
@@ -181,7 +202,7 @@ class Google_Login {
 			if ( $existing_user ) {
 				// Log the user in.
 				$result  = Reader_Activation::set_current_reader( $existing_user->ID );
-				$message = __( 'Thank you for signing in!', 'newspack' );
+				$message = __( 'Thank you for signing in!', 'newspack-plugin' );
 			} else {
 				$result = Reader_Activation::register_reader( $email, '', true, $metadata );
 				// At this point the user will be logged in.
@@ -197,8 +218,9 @@ class Google_Login {
 				]
 			);
 		} else {
-			Logger::error( 'Missing email for unique id ' . $uid );
-			return new \WP_Error( 'newspack_google_login', __( 'Failed to retrieve email address. Please try again.', 'newspack' ) );
+			/* translators: %s is a unique user id */
+			self::handle_error( sprintf( __( 'Missing email for unique id: %s', 'newspack-plugin' ), $uid ) );
+			return new \WP_Error( 'newspack_google_login', __( 'Failed to retrieve email address. Please try again.', 'newspack-plugin' ) );
 		}
 	}
 }

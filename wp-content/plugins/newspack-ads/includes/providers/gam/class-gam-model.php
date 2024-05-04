@@ -1089,6 +1089,30 @@ final class GAM_Model {
 		// Add site url.
 		$targeting['site'] = GAM_Api\Targeting_Keys::sanitize_url( \get_bloginfo( 'url' ) );
 
+		// Add current reader status.
+		$targeting['reader_status'] = []; // Empty value indicates that the current user is not logged in or is not a reader-type user.
+		if ( \is_user_logged_in() && method_exists( 'Newspack\Reader_Activation', 'is_user_reader' ) && \Newspack\Reader_Activation::is_user_reader( \wp_get_current_user() ) ) {
+			$targeting['reader_status'][] = 'logged_in'; // The currently logged-in user is a reader.
+			if ( method_exists( 'Newspack\Reader_Data', 'get_data' ) ) {
+				$reader_data = \Newspack\Reader_Data::get_data( get_current_user_id() );
+
+				// If the reader is signed up for any newsletters.
+				if ( ! empty( $reader_data['is_newsletter_subscriber'] ) ) {
+					$targeting['reader_status'][] = 'newsletter_subscriber';
+				}
+
+				// If reader has donated.
+				if ( ! empty( $reader_data['is_donor'] ) ) {
+					$targeting['reader_status'][] = 'donor';
+				}
+
+				// If reader has any currently active non-donation subscriptions.
+				if ( ! empty( $reader_data['active_subscriptions'] ) ) {
+					$targeting['reader_status'][] = 'subscriber';
+				}
+			}
+		}
+
 		if ( is_singular() ) {
 			// Add the post slug to targeting.
 			$slug = get_post_field( 'post_name' );

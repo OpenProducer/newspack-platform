@@ -1,3 +1,24 @@
+## [3.8.2](https://github.com/Automattic/newspack-plugin/compare/v3.8.1...v3.8.2) (2024-04-26)
+
+
+### Bug Fixes
+
+* enable Memberships fix cron job only when environment constant is defined ([#3087](https://github.com/Automattic/newspack-plugin/issues/3087)) ([5d40297](https://github.com/Automattic/newspack-plugin/commit/5d40297252a9022bb9b63b72cf805a08c37eb553))
+
+## [3.8.1](https://github.com/Automattic/newspack-plugin/compare/v3.8.0...v3.8.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* remove deprecated filter callback ([#3090](https://github.com/Automattic/newspack-plugin/issues/3090)) ([5d7d0bf](https://github.com/Automattic/newspack-plugin/commit/5d7d0bf71d16907d3aa98def372a7d9ede8949c6))
+
+# [3.8.0](https://github.com/Automattic/newspack-plugin/compare/v3.7.0...v3.8.0) (2024-04-25)
+
+
+### Features
+
+* **google-login:** add action for reporting issues; increase transient time ([#3084](https://github.com/Automattic/newspack-plugin/issues/3084)) ([4875040](https://github.com/Automattic/newspack-plugin/commit/487504053ba44ab91b8624bd11e9bc9c71f7e56a))
+
 # [3.7.0](https://github.com/Automattic/newspack-plugin/compare/v3.6.13...v3.7.0) (2024-04-24)
 
 

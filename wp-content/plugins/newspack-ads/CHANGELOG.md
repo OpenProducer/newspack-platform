@@ -1,3 +1,10 @@
+# [1.48.0](https://github.com/Automattic/newspack-ads/compare/v1.47.2...v1.48.0) (2024-04-25)
+
+
+### Features
+
+* add reader_status key-val targeting ([#832](https://github.com/Automattic/newspack-ads/issues/832)) ([8a3a020](https://github.com/Automattic/newspack-ads/commit/8a3a020ec18432478ba3226735e1f69d7f633a13))
+
 ## [1.47.2](https://github.com/Automattic/newspack-ads/compare/v1.47.1...v1.47.2) (2024-04-23)
 
 
