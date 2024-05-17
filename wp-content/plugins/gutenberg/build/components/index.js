@@ -13662,7 +13662,9 @@ function _contextConnect(Component, namespace, options) {
  * @return The connected namespaces.
  */
 function getConnectNamespace(Component) {
-  if (!Component) return [];
+  if (!Component) {
+    return [];
+  }
   let namespaces = [];
 
   // @ts-ignore internal property
@@ -13686,7 +13688,9 @@ function getConnectNamespace(Component) {
  * @param match     The namespace to check.
  */
 function hasConnectNamespace(Component, match) {
-  if (!Component) return false;
+  if (!Component) {
+    return false;
+  }
   if (typeof match === 'string') {
     return getConnectNamespace(Component).includes(match);
   }
@@ -13921,13 +13925,33 @@ var createStyled = function createStyled(tag, options) {
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/view/component.js
 
+
 /**
  * External dependencies
  */
 
 /**
+ * WordPress dependencies
+ */
+
+
+/**
  * Internal dependencies
  */
+
+const PolymorphicDiv = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
+  target: "e19lxcc00"
+} : 0)( true ? "" : 0);
+function UnforwardedView({
+  as,
+  ...restProps
+}, ref) {
+  return (0,external_React_.createElement)(PolymorphicDiv, {
+    as: as,
+    ref: ref,
+    ...restProps
+  });
+}
 
 /**
  * `View` is a core component that renders everything in the library.
@@ -13945,11 +13969,9 @@ var createStyled = function createStyled(tag, options) {
  * }
  * ```
  */
-const View = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
-  target: "e19lxcc00"
-} : 0)( true ? "" : 0);
-View.selector = '.components-view';
-View.displayName = 'View';
+const View = Object.assign((0,external_wp_element_namespaceObject.forwardRef)(UnforwardedView), {
+  selector: '.components-view'
+});
 /* harmony default export */ const component = (View);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/visually-hidden/component.js
@@ -14055,7 +14077,9 @@ function normalize(value) {
  */
 function getItemId(prefixId, value) {
   const normalized = normalize(value);
-  if (!normalized) return;
+  if (!normalized) {
+    return;
+  }
   const id = normalized.replace(' ', '-');
   return `${prefixId}-${id}`;
 }
@@ -14081,7 +14105,9 @@ function getItemValue(prefixId, id) {
  */
 function getAlignmentIndex(alignment = 'center') {
   const normalized = normalize(alignment);
-  if (!normalized) return undefined;
+  if (!normalized) {
+    return undefined;
+  }
   const index = ALIGNMENTS.indexOf(normalized);
   return index > -1 ? index : undefined;
 }
@@ -14492,39 +14518,6 @@ const COLORS = Object.freeze({
 });
 /* harmony default export */ const colors_values = ((/* unused pure expression or super */ null && (COLORS)));
 
-;// CONCATENATED MODULE: ./packages/components/build-module/utils/reduce-motion.js
-/**
- * Allows users to opt-out of animations via OS-level preferences.
- *
- * @param {'transition' | 'animation' | string} [prop='transition'] CSS Property name
- * @return {string} Generated CSS code for the reduced style
- *
- * @deprecated Write your own media query instead,
- * e.g. `@media not ( prefers-reduced-motion ) { ...some animation... }` or
- * `@media ( prefers-reduced-motion ) { ...reduced animation... }`.
- */
-function reduceMotion(prop = 'transition') {
-  let style;
-  switch (prop) {
-    case 'transition':
-      style = 'transition-duration: 0ms;';
-      break;
-    case 'animation':
-      style = 'animation-duration: 1ms;';
-      break;
-    default:
-      style = `
-				animation-duration: 1ms;
-				transition-duration: 0ms;
-			`;
-  }
-  return `
-		@media ( prefers-reduced-motion: reduce ) {
-			${style};
-		}
-	`;
-}
-
 ;// CONCATENATED MODULE: ./packages/components/build-module/alignment-matrix-control/styles/alignment-matrix-control-styles.js
 
 function _EMOTION_STRINGIFIED_CSS_ERROR__() { return "You have tried to stringify object returned from `css` function. It isn't supposed to be used directly (e.g. as value of the `className` prop), but rather handed to emotion so it can handle it (e.g. as value of `css` prop)."; }
@@ -14568,7 +14561,7 @@ const pointActive = ({
   return /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:", boxShadow, ";color:", pointColor, ";*:hover>&{color:", pointColorHover, ";}" + ( true ? "" : 0),  true ? "" : 0);
 };
 const pointBase = props => {
-  return /*#__PURE__*/emotion_react_browser_esm_css("background:currentColor;box-sizing:border-box;display:grid;margin:auto;transition:all 120ms linear;", reduceMotion('transition'), " ", pointActive(props), ";" + ( true ? "" : 0),  true ? "" : 0);
+  return /*#__PURE__*/emotion_react_browser_esm_css("background:currentColor;box-sizing:border-box;display:grid;margin:auto;@media not ( prefers-reduced-motion ){transition:all 120ms linear;}", pointActive(props), ";" + ( true ? "" : 0),  true ? "" : 0);
 };
 const Point = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "ecapk1j1"
@@ -15693,7 +15686,9 @@ function AlignmentMatrixControl({
     activeId: getItemId(baseId, value),
     setActiveId: nextActiveId => {
       const nextValue = getItemValue(baseId, nextActiveId);
-      if (nextValue) onChange?.(nextValue);
+      if (nextValue) {
+        onChange?.(nextValue);
+      }
     },
     rtl: (0,external_wp_i18n_namespaceObject.isRTL)()
   });
@@ -26300,7 +26295,9 @@ function useResponsiveValue(values, options = {}) {
   const index = useBreakpointIndex(options);
 
   // Allow calling the function with a "normal" value without having to check on the outside.
-  if (!Array.isArray(values) && typeof values !== 'function') return values;
+  if (!Array.isArray(values) && typeof values !== 'function') {
+    return values;
+  }
   const array = values || [];
 
   /* eslint-disable jsdoc/no-undefined-types */
@@ -27117,7 +27114,9 @@ function colors_rgba(hexValue = '', alpha = 1) {
  * @return {HTMLDivElement | undefined} The HTML element for color computation.
  */
 function getColorComputationNode() {
-  if (typeof document === 'undefined') return;
+  if (typeof document === 'undefined') {
+    return;
+  }
   if (!colorComputationNode) {
     // Create a temporary element for style computation.
     const el = document.createElement('div');
@@ -27135,7 +27134,9 @@ function getColorComputationNode() {
  * @return {boolean} Whether the value is a valid color.
  */
 function isColor(value) {
-  if (typeof value !== 'string') return false;
+  if (typeof value !== 'string') {
+    return false;
+  }
   const test = w(value);
   return test.isValid();
 }
@@ -27149,14 +27150,24 @@ function isColor(value) {
  * @return {string} The computed background color.
  */
 function _getComputedBackgroundColor(backgroundColor) {
-  if (typeof backgroundColor !== 'string') return '';
-  if (isColor(backgroundColor)) return backgroundColor;
-  if (!backgroundColor.includes('var(')) return '';
-  if (typeof document === 'undefined') return '';
+  if (typeof backgroundColor !== 'string') {
+    return '';
+  }
+  if (isColor(backgroundColor)) {
+    return backgroundColor;
+  }
+  if (!backgroundColor.includes('var(')) {
+    return '';
+  }
+  if (typeof document === 'undefined') {
+    return '';
+  }
 
   // Attempts to gracefully handle CSS variables color values.
   const el = getColorComputationNode();
-  if (!el) return '';
+  if (!el) {
+    return '';
+  }
   el.style.background = backgroundColor;
   // Grab the style.
   const computedColor = window?.getComputedStyle(el).background;
@@ -27383,8 +27394,12 @@ function createHighlighterText({
   unhighlightClassName = '',
   unhighlightStyle
 }) {
-  if (!children) return null;
-  if (typeof children !== 'string') return children;
+  if (!children) {
+    return null;
+  }
+  if (typeof children !== 'string') {
+    return children;
+  }
   const textToHighlight = children;
   const chunks = (0,dist.findAll)({
     autoEscape,
@@ -27465,7 +27480,9 @@ function getFontSize(size = BASE_FONT_SIZE) {
   }
   if (typeof size !== 'number') {
     const parsed = parseFloat(size);
-    if (Number.isNaN(parsed)) return size;
+    if (Number.isNaN(parsed)) {
+      return size;
+    }
     size = parsed;
   }
   const ratio = `(${size} / ${BASE_FONT_SIZE})`;
@@ -27491,8 +27508,12 @@ function getHeadingFontSize(size = 3) {
 
 
 function getLineHeight(adjustLineHeightForInnerControls, lineHeight) {
-  if (lineHeight) return lineHeight;
-  if (!adjustLineHeightForInnerControls) return;
+  if (lineHeight) {
+    return lineHeight;
+  }
+  if (!adjustLineHeightForInnerControls) {
+    return;
+  }
   let value = `calc(${config_values.controlHeight} + ${space(2)})`;
   switch (adjustLineHeightForInnerControls) {
     case 'large':
@@ -27766,8 +27787,12 @@ const containerWidthStyles = ({
   __unstableInputWidth,
   labelPosition
 }) => {
-  if (!__unstableInputWidth) return input_control_styles_ref;
-  if (labelPosition === 'side') return '';
+  if (!__unstableInputWidth) {
+    return input_control_styles_ref;
+  }
+  if (labelPosition === 'side') {
+    return '';
+  }
   if (labelPosition === 'edge') {
     return /*#__PURE__*/emotion_react_browser_esm_css({
       flex: `0 0 ${__unstableInputWidth}`
@@ -27783,7 +27808,9 @@ const Container = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
 const disabledStyles = ({
   disabled
 }) => {
-  if (!disabled) return '';
+  if (!disabled) {
+    return '';
+  }
   return /*#__PURE__*/emotion_react_browser_esm_css({
     color: COLORS.ui.textDisabled
   },  true ? "" : 0,  true ? "" : 0);
@@ -27799,7 +27826,9 @@ const fontSizeStyles = ({
   };
   const fontSize = sizes[size] || sizes.default;
   const fontSizeMobile = '16px';
-  if (!fontSize) return '';
+  if (!fontSize) {
+    return '';
+  }
   return /*#__PURE__*/emotion_react_browser_esm_css("font-size:", fontSizeMobile, ";@media ( min-width: 600px ){font-size:", fontSize, ";}" + ( true ? "" : 0),  true ? "" : 0);
 };
 const getSizeConfig = ({
@@ -27926,7 +27955,9 @@ function label_Label({
   htmlFor,
   ...props
 }) {
-  if (!children) return null;
+  if (!children) {
+    return null;
+  }
   if (hideLabelFromVision) {
     return (0,external_React_.createElement)(visually_hidden_component, {
       as: "label",
@@ -29971,10 +30002,14 @@ function useDraft(props) {
       current: previousValue
     } = refPreviousValue;
     refPreviousValue.current = props.value;
-    if (draft.value !== undefined && !draft.isStale) setDraft({
-      ...draft,
-      isStale: true
-    });else if (draft.isStale && props.value !== previousValue) setDraft({});
+    if (draft.value !== undefined && !draft.isStale) {
+      setDraft({
+        ...draft,
+        isStale: true
+      });
+    } else if (draft.isStale && props.value !== previousValue) {
+      setDraft({});
+    }
   }, [props.value, draft]);
   const onChange = (nextValue, extra) => {
     // Mutates the draft value to avoid an extra effect run.
@@ -30431,7 +30466,9 @@ function InputField({
       ...dragProps.event,
       target
     };
-    if (!distance) return;
+    if (!distance) {
+      return;
+    }
     event.stopPropagation();
 
     /**
@@ -31386,7 +31423,9 @@ function getAlignmentProps(alignment, direction = 'row') {
  * @return An array of available children.
  */
 function getValidChildren(children) {
-  if (typeof children === 'string') return [children];
+  if (typeof children === 'string') {
+    return [children];
+  }
   return external_wp_element_namespaceObject.Children.toArray(children).filter(child => (0,external_wp_element_namespaceObject.isValidElement)(child));
 }
 
@@ -31934,63 +31973,18 @@ const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
  */
 
 
-const ALL_UNICODE_DASH_CHARACTERS = new RegExp(`[${[
-// - (hyphen-minus)
-'\u002d',
-// ~ (tilde)
-'\u007e',
-// ­ (soft hyphen)
-'\u00ad',
-// ֊ (armenian hyphen)
-'\u058a',
-// ־ (hebrew punctuation maqaf)
-'\u05be',
-// ᐀ (canadian syllabics hyphen)
-'\u1400',
-// ᠆ (mongolian todo soft hyphen)
-'\u1806',
-// ‐ (hyphen)
-'\u2010',
-// non-breaking hyphen)
-'\u2011',
-// ‒ (figure dash)
-'\u2012',
-// – (en dash)
-'\u2013',
-// — (em dash)
-'\u2014',
-// ― (horizontal bar)
-'\u2015',
-// ⁓ (swung dash)
-'\u2053',
-// superscript minus)
-'\u207b',
-// subscript minus)
-'\u208b',
-// − (minus sign)
-'\u2212',
-// ⸗ (double oblique hyphen)
-'\u2e17',
-// ⸺ (two-em dash)
-'\u2e3a',
-// ⸻ (three-em dash)
-'\u2e3b',
-// 〜 (wave dash)
-'\u301c',
-// 〰 (wavy dash)
-'\u3030',
-// ゠ (katakana-hiragana double hyphen)
-'\u30a0',
-// ︱ (presentation form for vertical em dash)
-'\ufe31',
-// ︲ (presentation form for vertical en dash)
-'\ufe32',
-// ﹘ (small em dash)
-'\ufe58',
-// ﹣ (small hyphen-minus)
-'\ufe63',
-// － (fullwidth hyphen-minus)
-'\uff0d'].join('')}]`, 'g');
+
+/**
+ * All unicode characters that we consider "dash-like":
+ * - `\u007e`: ~ (tilde)
+ * - `\u00ad`: ­ (soft hyphen)
+ * - `\u2053`: ⁓ (swung dash)
+ * - `\u207b`: ⁻ (superscript minus)
+ * - `\u208b`: ₋ (subscript minus)
+ * - `\u2212`: − (minus sign)
+ * - `\\p{Pd}`: any other Unicode dash character
+ */
+const ALL_UNICODE_DASH_CHARACTERS = new RegExp(/[\u007e\u00ad\u2053\u207b\u208b\u2212\p{Pd}]/gu);
 const normalizeTextString = value => {
   return remove_accents_default()(value).toLocaleLowerCase().replace(ALL_UNICODE_DASH_CHARACTERS, '-');
 };
@@ -32488,81 +32482,21 @@ function ScrollLock() {
 }
 /* harmony default export */ const scroll_lock = (ScrollLock);
 
-;// CONCATENATED MODULE: ./packages/components/build-module/slot-fill/bubbles-virtually/observable-map.js
-/**
- * WordPress dependencies
- */
-
-/**
- * A key/value map where the individual entries are observable by subscribing to them
- * with the `subscribe` methods.
- */
-function observableMap() {
-  const map = new Map();
-  const listeners = new Map();
-  function callListeners(name) {
-    const list = listeners.get(name);
-    if (!list) {
-      return;
-    }
-    for (const listener of list) {
-      listener();
-    }
-  }
-  return {
-    get(name) {
-      return map.get(name);
-    },
-    set(name, value) {
-      map.set(name, value);
-      callListeners(name);
-    },
-    delete(name) {
-      map.delete(name);
-      callListeners(name);
-    },
-    subscribe(name, listener) {
-      let list = listeners.get(name);
-      if (!list) {
-        list = new Set();
-        listeners.set(name, list);
-      }
-      list.add(listener);
-      return () => {
-        list.delete(listener);
-        if (list.size === 0) {
-          listeners.delete(name);
-        }
-      };
-    }
-  };
-}
-
-/**
- * React hook that lets you observe an individual entry in an `ObservableMap`.
- *
- * @param map  The `ObservableMap` to observe.
- * @param name The map key to observe.
- */
-function useObservableValue(map, name) {
-  const [subscribe, getValue] = (0,external_wp_element_namespaceObject.useMemo)(() => [listener => map.subscribe(name, listener), () => map.get(name)], [map, name]);
-  return (0,external_wp_element_namespaceObject.useSyncExternalStore)(subscribe, getValue);
-}
-
 ;// CONCATENATED MODULE: ./packages/components/build-module/slot-fill/bubbles-virtually/slot-fill-context.js
 /**
  * WordPress dependencies
  */
 
 
+
+
 /**
  * Internal dependencies
  */
 
-
 const initialContextValue = {
-  slots: observableMap(),
-  fills: observableMap(),
+  slots: (0,external_wp_compose_namespaceObject.observableMap)(),
+  fills: (0,external_wp_compose_namespaceObject.observableMap)(),
   registerSlot: () => {
      false ? 0 : void 0;
   },
@@ -32582,14 +32516,14 @@ const SlotFillContext = (0,external_wp_element_namespaceObject.createContext)(in
  */
 
 
+
 /**
  * Internal dependencies
  */
 
-
 function useSlot(name) {
   const registry = (0,external_wp_element_namespaceObject.useContext)(slot_fill_context);
-  const slot = useObservableValue(registry.slots, name);
+  const slot = (0,external_wp_compose_namespaceObject.useObservableValue)(registry.slots, name);
   const api = (0,external_wp_element_namespaceObject.useMemo)(() => ({
     updateSlot: fillProps => registry.updateSlot(name, fillProps),
     unregisterSlot: ref => registry.unregisterSlot(name, ref),
@@ -33077,14 +33011,14 @@ var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(exte
 
 
 
+
 /**
  * Internal dependencies
  */
 
-
 function createSlotRegistry() {
-  const slots = observableMap();
-  const fills = observableMap();
+  const slots = (0,external_wp_compose_namespaceObject.observableMap)();
+  const fills = (0,external_wp_compose_namespaceObject.observableMap)();
   const registerSlot = (name, ref, fillProps) => {
     const slot = slots.get(name);
     slots.set(name, {
@@ -33353,7 +33287,9 @@ function overlayMiddlewares() {
       } = (_elements$floating = elements.floating) !== null && _elements$floating !== void 0 ? _elements$floating : {};
 
       // Only HTMLElement instances have the `style` property.
-      if (!(firstElementChild instanceof HTMLElement)) return;
+      if (!(firstElementChild instanceof HTMLElement)) {
+        return;
+      }
 
       // Reduce the height of the popover to the available space.
       Object.assign(firstElementChild.style, {
@@ -33519,7 +33455,9 @@ const UnforwardedPopover = (props, forwardedRef) => {
       } = (_refs$floating$curren = refs.floating.current) !== null && _refs$floating$curren !== void 0 ? _refs$floating$curren : {};
 
       // Only HTMLElement instances have the `style` property.
-      if (!(firstElementChild instanceof HTMLElement)) return;
+      if (!(firstElementChild instanceof HTMLElement)) {
+        return;
+      }
 
       // Reduce the height of the popover to the available space.
       Object.assign(firstElementChild.style, {
@@ -33768,7 +33706,9 @@ function getAutoCompleterUI(autocompleter) {
     const [needsA11yCompat, setNeedsA11yCompat] = (0,external_wp_element_namespaceObject.useState)(false);
     const popoverRef = (0,external_wp_element_namespaceObject.useRef)(null);
     const popoverRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([popoverRef, (0,external_wp_compose_namespaceObject.useRefEffect)(node => {
-      if (!contentRef.current) return;
+      if (!contentRef.current) {
+        return;
+      }
 
       // If the popover is rendered in a different document than
       // the content, we need to duplicate the options list in the
@@ -34040,7 +33980,9 @@ function useAutocomplete({
   }, [record]);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     if (!textContent) {
-      if (autocompleter) reset();
+      if (autocompleter) {
+        reset();
+      }
       return;
     }
 
@@ -34052,7 +33994,9 @@ function useAutocomplete({
       return triggerIndex > lastTriggerIndex ? currentCompleter : lastTrigger;
     }, null);
     if (!completer) {
-      if (autocompleter) reset();
+      if (autocompleter) {
+        reset();
+      }
       return;
     }
     const {
@@ -34067,7 +34011,9 @@ function useAutocomplete({
     // significantly. This could happen, for example, if `matchingWhileBackspacing`
     // is true and one of the "words" end up being too long. If that's the case,
     // it will be caught by this guard.
-    if (tooDistantFromTrigger) return;
+    if (tooDistantFromTrigger) {
+      return;
+    }
     const mismatch = filteredOptions.length === 0;
     const wordsFromTrigger = textWithoutTrigger.split(/\s/);
     // We need to allow the effect to run when not backspacing and if there
@@ -34089,20 +34035,28 @@ function useAutocomplete({
     // if the user presses backspace here, it will show the completion popup again.
     const matchingWhileBackspacing = backspacing.current && wordsFromTrigger.length <= 3;
     if (mismatch && !(matchingWhileBackspacing || hasOneTriggerWord)) {
-      if (autocompleter) reset();
+      if (autocompleter) {
+        reset();
+      }
       return;
     }
     const textAfterSelection = (0,external_wp_richText_namespaceObject.getTextContent)((0,external_wp_richText_namespaceObject.slice)(record, undefined, (0,external_wp_richText_namespaceObject.getTextContent)(record).length));
     if (allowContext && !allowContext(textContent.slice(0, triggerIndex), textAfterSelection)) {
-      if (autocompleter) reset();
+      if (autocompleter) {
+        reset();
+      }
       return;
     }
     if (/^\s/.test(textWithoutTrigger) || /\s\s+$/.test(textWithoutTrigger)) {
-      if (autocompleter) reset();
+      if (autocompleter) {
+        reset();
+      }
       return;
     }
     if (!/[\u0000-\uFFFF]*$/.test(textWithoutTrigger)) {
-      if (autocompleter) reset();
+      if (autocompleter) {
+        reset();
+      }
       return;
     }
     const safeTrigger = escapeRegExp(completer.triggerPrefix);
@@ -35241,7 +35195,7 @@ const buttonView = ({
   isIcon,
   isPressed,
   size
-}) => /*#__PURE__*/emotion_react_browser_esm_css("align-items:center;appearance:none;background:transparent;border:none;border-radius:", config_values.controlBorderRadius, ";color:", COLORS.gray[700], ";fill:currentColor;cursor:pointer;display:flex;font-family:inherit;height:100%;justify-content:center;line-height:100%;outline:none;padding:0 12px;position:relative;text-align:center;transition:background ", config_values.transitionDurationFast, " linear,color ", config_values.transitionDurationFast, " linear,font-weight 60ms linear;", reduceMotion('transition'), " user-select:none;width:100%;z-index:2;&::-moz-focus-inner{border:0;}&:active{background:", config_values.toggleGroupControlBackgroundColor, ";}", isDeselectable && deselectable, " ", isIcon && isIconStyles({
+}) => /*#__PURE__*/emotion_react_browser_esm_css("align-items:center;appearance:none;background:transparent;border:none;border-radius:", config_values.controlBorderRadius, ";color:", COLORS.gray[700], ";fill:currentColor;cursor:pointer;display:flex;font-family:inherit;height:100%;justify-content:center;line-height:100%;outline:none;padding:0 12px;position:relative;text-align:center;@media not ( prefers-reduced-motion ){transition:background ", config_values.transitionDurationFast, " linear,color ", config_values.transitionDurationFast, " linear,font-weight 60ms linear;}user-select:none;width:100%;z-index:2;&::-moz-focus-inner{border:0;}&:active{background:", config_values.toggleGroupControlBackgroundColor, ";}", isDeselectable && deselectable, " ", isIcon && isIconStyles({
   size
 }), " ", isPressed && pressed, ";" + ( true ? "" : 0),  true ? "" : 0);
 const pressed = /*#__PURE__*/emotion_react_browser_esm_css("color:", COLORS.white, ";&:active{background:transparent;}" + ( true ? "" : 0),  true ? "" : 0);
@@ -35369,7 +35323,9 @@ function ToggleGroupControlOptionBase(props, forwardedRef) {
       ...commonProps,
       onFocus: event => {
         onFocusProp?.(event);
-        if (event.defaultPrevented) return;
+        if (event.defaultPrevented) {
+          return;
+        }
         toggleGroupControlContext.setValue(value);
       }
     }),
@@ -35770,7 +35726,9 @@ const InputControlSuffixWrapper = contextConnect(UnconnectedInputControlSuffixWr
 const select_control_styles_disabledStyles = ({
   disabled
 }) => {
-  if (!disabled) return '';
+  if (!disabled) {
+    return '';
+  }
   return /*#__PURE__*/emotion_react_browser_esm_css({
     color: COLORS.ui.textDisabled
   },  true ? "" : 0,  true ? "" : 0);
@@ -35981,7 +35939,9 @@ function UnforwardedSelectControl(props, ref) {
   const helpId = help ? `${id}__help` : undefined;
 
   // Disable reason: A select with an onchange throws a warning.
-  if (!options?.length && !children) return null;
+  if (!options?.length && !children) {
+    return null;
+  }
   const handleOnChange = event => {
     if (props.multiple) {
       const selectedOptions = Array.from(event.target.options).filter(({
@@ -36376,7 +36336,7 @@ const tooltipPosition = ({
 };
 const range_control_styles_Tooltip = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "e1epgpqk2"
-} : 0)("background:rgba( 0, 0, 0, 0.8 );border-radius:2px;color:white;display:inline-block;font-size:12px;min-width:32px;opacity:0;padding:4px 8px;pointer-events:none;position:absolute;text-align:center;transition:opacity 120ms ease;user-select:none;line-height:1.4;", tooltipShow, ";", tooltipPosition, ";", reduceMotion('transition'), ";", rtl({
+} : 0)("background:rgba( 0, 0, 0, 0.8 );border-radius:2px;color:white;display:inline-block;font-size:12px;min-width:32px;opacity:0;padding:4px 8px;pointer-events:none;position:absolute;text-align:center;user-select:none;line-height:1.4;@media not ( prefers-reduced-motion ){transition:opacity 120ms ease;}", tooltipShow, ";", tooltipPosition, ";", rtl({
   transform: 'translateX(-50%)'
 }, {
   transform: 'translateX(50%)'
@@ -36539,7 +36499,7 @@ function useMarks({
     const count = 1 + Math.round(range / step);
     while (count > marks.push({
       value: step * marks.length + min
-    }));
+    })) {}
   }
   const placedMarks = [];
   marks.forEach((mark, index) => {
@@ -37313,7 +37273,9 @@ const HexInput = ({
   enableAlpha
 }) => {
   const handleChange = nextValue => {
-    if (!nextValue) return;
+    if (!nextValue) {
+      return;
+    }
     const hexValue = nextValue.startsWith('#') ? nextValue : '#' + nextValue;
     onChange(w(hexValue));
   };
@@ -37556,9 +37518,15 @@ function isLegacyProps(props) {
   return typeof props.onChangeComplete !== 'undefined' || typeof props.disableAlpha !== 'undefined' || typeof props.color?.hex === 'string';
 }
 function getColorFromLegacyProps(color) {
-  if (color === undefined) return;
-  if (typeof color === 'string') return color;
-  if (color.hex) return color.hex;
+  if (color === undefined) {
+    return;
+  }
+  if (typeof color === 'string') {
+    return color;
+  }
+  if (color.hex) {
+    return color.hex;
+  }
   return undefined;
 }
 const transformColorStringToLegacyColor = memize(color => {
@@ -38170,7 +38138,9 @@ const ColorHeading = /*#__PURE__*/emotion_styled_base_browser_esm(heading_compon
 const padding = ({
   paddingSize = 'small'
 }) => {
-  if (paddingSize === 'none') return;
+  if (paddingSize === 'none') {
+    return;
+  }
   const paddingValues = {
     small: space(2),
     medium: space(4)
@@ -39547,7 +39517,9 @@ function UnforwardedUnitControl(unitControlProps, forwardedRef) {
       // Unless the meta key was pressed (to avoid interfering with
       // shortcuts, e.g. pastes), moves focus to the unit select if a key
       // matches the first character of a unit.
-      if (!event.metaKey && reFirstCharacterOfUnits.test(event.key)) refInputSuffix.current?.focus();
+      if (!event.metaKey && reFirstCharacterOfUnits.test(event.key)) {
+        refInputSuffix.current?.focus();
+      }
     };
   }
   const refInputSuffix = (0,external_wp_element_namespaceObject.useRef)(null);
@@ -41755,9 +41727,8 @@ function useElevation(props) {
       opacity: config_values.elevationIntensity,
       left: offset,
       right: offset,
-      top: offset,
-      transition
-    }, reduceMotion('transition'),  true ? "" : 0,  true ? "" : 0);
+      top: offset
+    }, /*#__PURE__*/emotion_react_browser_esm_css("@media not ( prefers-reduced-motion ){transition:", transition, ";}" + ( true ? "" : 0),  true ? "" : 0),  true ? "" : 0,  true ? "" : 0);
     if (isValueDefined(hoverValue)) {
       sx.hover = /*#__PURE__*/emotion_react_browser_esm_css("*:hover>&{box-shadow:", getBoxShadow(hoverValue), ";}" + ( true ? "" : 0),  true ? "" : 0);
     }
@@ -42768,6 +42739,7 @@ const CardMedia = contextConnect(UnconnectedCardMedia, 'CardMedia');
  * Internal dependencies
  */
 
+
 /**
  * Checkboxes allow the user to select one or more items from a set.
  *
@@ -42828,8 +42800,14 @@ function CheckboxControl(props) {
     __nextHasNoMarginBottom: __nextHasNoMarginBottom,
     label: heading,
     id: id,
-    help: help,
+    help: help && (0,external_React_.createElement)("span", {
+      className: "components-checkbox-control__help"
+    }, help),
     className: classnames_default()('components-checkbox-control', className)
+  }, (0,external_React_.createElement)(h_stack_component, {
+    spacing: 0,
+    justify: "start",
+    alignment: "top"
   }, (0,external_React_.createElement)("span", {
     className: "components-checkbox-control__input-container"
   }, (0,external_React_.createElement)("input", {
@@ -42853,7 +42831,7 @@ function CheckboxControl(props) {
   }) : null), label && (0,external_React_.createElement)("label", {
     className: "components-checkbox-control__label",
     htmlFor: id
-  }, label));
+  }, label)));
 }
 /* harmony default export */ const checkbox_control = (CheckboxControl);
 
@@ -45957,7 +45935,9 @@ function modalize(modalElement) {
   const hiddenElements = [];
   hiddenElementsByDepth.push(hiddenElements);
   for (const element of elements) {
-    if (element === modalElement) continue;
+    if (element === modalElement) {
+      continue;
+    }
     if (elementShouldBeHidden(element)) {
       element.setAttribute('aria-hidden', 'true');
       hiddenElements.push(element);
@@ -45982,8 +45962,12 @@ function elementShouldBeHidden(element) {
  */
 function unmodalize() {
   const hiddenElements = hiddenElementsByDepth.pop();
-  if (!hiddenElements) return;
-  for (const element of hiddenElements) element.removeAttribute('aria-hidden');
+  if (!hiddenElements) {
+    return;
+  }
+  for (const element of hiddenElements) {
+    element.removeAttribute('aria-hidden');
+  }
 }
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/modal/index.js
@@ -46104,7 +46088,9 @@ function UnforwardedModal(props, forwardedRef) {
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     dismissers.push(refOnRequestClose);
     const [first, second] = dismissers;
-    if (second) first?.current?.();
+    if (second) {
+      first?.current?.();
+    }
     const nested = nestedDismissers.current;
     return () => {
       nested[0]?.current?.();
@@ -46180,7 +46166,9 @@ function UnforwardedModal(props, forwardedRef) {
     }) => {
       const isSameTarget = target === pressTarget;
       pressTarget = null;
-      if (button === 0 && isSameTarget) onRequestClose();
+      if (button === 0 && isSameTarget) {
+        onRequestClose();
+      }
     }
   };
   const modal =
@@ -56840,6 +56828,75 @@ const upload = (0,external_React_.createElement)(external_wp_primitives_namespac
  * Internal dependencies
  */
 
+const drop_zone_backdrop = {
+  hidden: {
+    opacity: 0
+  },
+  show: {
+    opacity: 1,
+    transition: {
+      type: 'tween',
+      duration: 0.2,
+      delay: 0,
+      delayChildren: 0.1
+    }
+  },
+  exit: {
+    opacity: 0,
+    transition: {
+      duration: 0.2,
+      delayChildren: 0
+    }
+  }
+};
+const foreground = {
+  hidden: {
+    opacity: 0,
+    scale: 0.9
+  },
+  show: {
+    opacity: 1,
+    scale: 1,
+    transition: {
+      duration: 0.1
+    }
+  },
+  exit: {
+    opacity: 0,
+    scale: 0.9
+  }
+};
+function DropIndicator({
+  label
+}) {
+  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
+  const children = (0,external_React_.createElement)(motion.div, {
+    variants: drop_zone_backdrop,
+    initial: disableMotion ? 'show' : 'hidden',
+    animate: "show",
+    exit: disableMotion ? 'show' : 'exit',
+    className: "components-drop-zone__content"
+    // Without this, when this div is shown,
+    // Safari calls a onDropZoneLeave causing a loop because of this bug
+    // https://bugs.webkit.org/show_bug.cgi?id=66547
+    ,
+    style: {
+      pointerEvents: 'none'
+    }
+  }, (0,external_React_.createElement)(motion.div, {
+    variants: foreground
+  }, (0,external_React_.createElement)(icons_build_module_icon, {
+    icon: library_upload,
+    className: "components-drop-zone__content-icon"
+  }), (0,external_React_.createElement)("span", {
+    className: "components-drop-zone__content-text"
+  }, label ? label : (0,external_wp_i18n_namespaceObject.__)('Drop files to upload'))));
+  if (disableMotion) {
+    return children;
+  }
+  return (0,external_React_.createElement)(AnimatePresence, null, children);
+}
+
 /**
  * `DropZone` is a component creating a drop zone area taking the full size of its parent element. It supports dropping files, HTML content or any other HTML drop event.
  *
@@ -56920,69 +56977,6 @@ function DropZoneComponent({
       setIsDraggingOverElement(false);
     }
   });
-  const disableMotion = (0,external_wp_compose_namespaceObject.useReducedMotion)();
-  let children;
-  const backdrop = {
-    hidden: {
-      opacity: 0
-    },
-    show: {
-      opacity: 1,
-      transition: {
-        type: 'tween',
-        duration: 0.2,
-        delay: 0,
-        delayChildren: 0.1
-      }
-    },
-    exit: {
-      opacity: 0,
-      transition: {
-        duration: 0.2,
-        delayChildren: 0
-      }
-    }
-  };
-  const foreground = {
-    hidden: {
-      opacity: 0,
-      scale: 0.9
-    },
-    show: {
-      opacity: 1,
-      scale: 1,
-      transition: {
-        duration: 0.1
-      }
-    },
-    exit: {
-      opacity: 0,
-      scale: 0.9
-    }
-  };
-  if (isDraggingOverElement) {
-    children = (0,external_React_.createElement)(motion.div, {
-      variants: backdrop,
-      initial: disableMotion ? 'show' : 'hidden',
-      animate: "show",
-      exit: disableMotion ? 'show' : 'exit',
-      className: "components-drop-zone__content"
-      // Without this, when this div is shown,
-      // Safari calls a onDropZoneLeave causing a loop because of this bug
-      // https://bugs.webkit.org/show_bug.cgi?id=66547
-      ,
-      style: {
-        pointerEvents: 'none'
-      }
-    }, (0,external_React_.createElement)(motion.div, {
-      variants: foreground
-    }, (0,external_React_.createElement)(icons_build_module_icon, {
-      icon: library_upload,
-      className: "components-drop-zone__content-icon"
-    }), (0,external_React_.createElement)("span", {
-      className: "components-drop-zone__content-text"
-    }, label ? label : (0,external_wp_i18n_namespaceObject.__)('Drop files to upload'))));
-  }
   const classes = classnames_default()('components-drop-zone', className, {
     'is-active': (isDraggingOverDocument || isDraggingOverElement) && (type === 'file' && onFilesDrop || type === 'html' && onHTMLDrop || type === 'default' && onDrop),
     'is-dragging-over-document': isDraggingOverDocument,
@@ -56993,7 +56987,9 @@ function DropZoneComponent({
     ...restProps,
     ref: ref,
     className: classes
-  }, disableMotion ? children : (0,external_React_.createElement)(AnimatePresence, null, children));
+  }, isDraggingOverElement && (0,external_React_.createElement)(DropIndicator, {
+    label: label
+  }));
 }
 /* harmony default export */ const drop_zone = (DropZoneComponent);
 
@@ -57057,7 +57053,9 @@ k([names]);
  */
 function getDefaultColors(palette) {
   // A default dark and light color are required.
-  if (!palette || palette.length < 2) return ['#000', '#fff'];
+  if (!palette || palette.length < 2) {
+    return ['#000', '#fff'];
+  }
   return palette.map(({
     color
   }) => ({
@@ -57530,7 +57528,9 @@ function getExtension(filename = '') {
  * @return Whether the file is a video.
  */
 function isVideoType(filename = '') {
-  if (!filename) return false;
+  if (!filename) {
+    return false;
+  }
   return filename.startsWith('data:video/') || VIDEO_EXTENSIONS.includes(getExtension(filename));
 }
 
@@ -57599,7 +57599,7 @@ const ControlWrapper = /*#__PURE__*/emotion_styled_base_browser_esm(flex_compone
 } : 0)("max-width:320px;padding-top:1em;", extraHelpTextMargin, " ", deprecatedBottomMargin, ";" + ( true ? "" : 0));
 const GridView = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
   target: "eeew7dm3"
-} : 0)("left:50%;overflow:hidden;pointer-events:none;position:absolute;top:50%;transform:translate3d( -50%, -50%, 0 );transition:opacity 100ms linear;z-index:1;", reduceMotion('transition'), " opacity:", ({
+} : 0)("left:50%;overflow:hidden;pointer-events:none;position:absolute;top:50%;transform:translate3d( -50%, -50%, 0 );z-index:1;@media not ( prefers-reduced-motion ){transition:opacity 100ms linear;}opacity:", ({
   showOverlay
 }) => showOverlay ? 1 : 0, ";" + ( true ? "" : 0));
 const GridLine = /*#__PURE__*/emotion_styled_base_browser_esm("div",  true ? {
@@ -57649,7 +57649,9 @@ function FocalPointPickerControls({
   const valueX = fractionToPercentage(point.x);
   const valueY = fractionToPercentage(point.y);
   const handleChange = (value, axis) => {
-    if (value === undefined) return;
+    if (value === undefined) {
+      return;
+    }
     const num = parseInt(value, 10);
     if (!isNaN(num)) {
       onChange({
@@ -57691,6 +57693,39 @@ function FocalPointUnitControl(props) {
     }],
     ...props
   });
+}
+
+;// CONCATENATED MODULE: ./packages/components/build-module/utils/reduce-motion.js
+/**
+ * Allows users to opt-out of animations via OS-level preferences.
+ *
+ * @param {'transition' | 'animation' | string} [prop='transition'] CSS Property name
+ * @return {string} Generated CSS code for the reduced style
+ *
+ * @deprecated Write your own media query instead,
+ * e.g. `@media not ( prefers-reduced-motion ) { ...some animation... }` or
+ * `@media ( prefers-reduced-motion ) { ...reduced animation... }`.
+ */
+function reduceMotion(prop = 'transition') {
+  let style;
+  switch (prop) {
+    case 'transition':
+      style = 'transition-duration: 0ms;';
+      break;
+    case 'animation':
+      style = 'animation-duration: 1ms;';
+      break;
+    default:
+      style = `
+				animation-duration: 1ms;
+				transition-duration: 0ms;
+			`;
+  }
+  return `
+		@media ( prefers-reduced-motion: reduce ) {
+			${style};
+		}
+	`;
 }
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/focal-point-picker/styles/focal-point-style.js
@@ -57930,7 +57965,9 @@ function FocalPointPicker({
 
       // `value` can technically be undefined if getValueWithinDragArea() is
       // called before dragAreaRef is set, but this shouldn't happen in reality.
-      if (!value) return;
+      if (!value) {
+        return;
+      }
       onDragStart?.(value, event);
       setPoint(value);
     },
@@ -57938,7 +57975,9 @@ function FocalPointPicker({
       // Prevents text-selection when dragging.
       event.preventDefault();
       const value = getValueWithinDragArea(event);
-      if (!value) return;
+      if (!value) {
+        return;
+      }
       onDrag?.(value, event);
       setPoint(value);
     },
@@ -57956,7 +57995,9 @@ function FocalPointPicker({
   const dragAreaRef = (0,external_wp_element_namespaceObject.useRef)(null);
   const [bounds, setBounds] = (0,external_wp_element_namespaceObject.useState)(INITIAL_BOUNDS);
   const refUpdateBounds = (0,external_wp_element_namespaceObject.useRef)(() => {
-    if (!dragAreaRef.current) return;
+    if (!dragAreaRef.current) {
+      return;
+    }
     const {
       clientWidth: width,
       clientHeight: height
@@ -57973,7 +58014,9 @@ function FocalPointPicker({
   });
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     const updateBounds = refUpdateBounds.current;
-    if (!dragAreaRef.current) return;
+    if (!dragAreaRef.current) {
+      return;
+    }
     const {
       defaultView
     } = dragAreaRef.current.ownerDocument;
@@ -57991,7 +58034,9 @@ function FocalPointPicker({
     clientY,
     shiftKey
   }) => {
-    if (!dragAreaRef.current) return;
+    if (!dragAreaRef.current) {
+      return;
+    }
     const {
       top,
       left
@@ -58024,7 +58069,9 @@ function FocalPointPicker({
       code,
       shiftKey
     } = event;
-    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(code)) return;
+    if (!['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight'].includes(code)) {
+      return;
+    }
     event.preventDefault();
     const value = {
       x,
@@ -58064,7 +58111,9 @@ function FocalPointPicker({
     onKeyDown: arrowKeyStep,
     onMouseDown: startDrag,
     onBlur: () => {
-      if (isDragging) endDrag();
+      if (isDragging) {
+        endDrag();
+      }
     },
     ref: dragAreaRef,
     role: "button",
@@ -58440,6 +58489,7 @@ const FontSizePickerToggleGroup = props => {
 
 
 
+const DEFAULT_UNITS = ['px', 'em', 'rem'];
 const UnforwardedFontSizePicker = (props, ref) => {
   const {
     __next40pxDefaultSize = false,
@@ -58448,13 +58498,13 @@ const UnforwardedFontSizePicker = (props, ref) => {
     disableCustomFontSizes = false,
     onChange,
     size = 'default',
-    units: unitsProp,
+    units: unitsProp = DEFAULT_UNITS,
     value,
     withSlider = false,
     withReset = true
   } = props;
   const units = useCustomUnits({
-    availableUnits: unitsProp || ['px', 'em', 'rem']
+    availableUnits: unitsProp
   });
   const shouldUseSelectControl = fontSizes.length > 5;
   const selectedFontSize = fontSizes.find(fontSize => fontSize.size === value);
@@ -59626,10 +59676,6 @@ function UnforwardedIconButton({
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/item-group/item/hook.js
 /**
- * External dependencies
- */
-
-/**
  * WordPress dependencies
  */
 
@@ -60267,7 +60313,7 @@ const ItemIconUI = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? 
 } : 0)("display:flex;margin-right:", space(2), ";" + ( true ? "" : 0));
 const ItemBadgeUI = /*#__PURE__*/emotion_styled_base_browser_esm("span",  true ? {
   target: "eeiismy1"
-} : 0)("margin-left:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? '0' : space(2), ";margin-right:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? space(2) : '0', ";display:inline-flex;padding:", space(1), " ", space(3), ";border-radius:2px;animation:fade-in 250ms ease-out;@keyframes fade-in{from{opacity:0;}to{opacity:1;}}", reduceMotion('animation'), ";" + ( true ? "" : 0));
+} : 0)("margin-left:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? '0' : space(2), ";margin-right:", () => (0,external_wp_i18n_namespaceObject.isRTL)() ? space(2) : '0', ";display:inline-flex;padding:", space(1), " ", space(3), ";border-radius:2px;@keyframes fade-in{from{opacity:0;}to{opacity:1;}}@media not ( prefers-reduced-motion ){animation:fade-in 250ms ease-out;}" + ( true ? "" : 0));
 const ItemTitleUI = /*#__PURE__*/emotion_styled_base_browser_esm(text_component,  true ? {
   target: "eeiismy0"
 } : 0)(() => (0,external_wp_i18n_namespaceObject.isRTL)() ? 'margin-left: auto;' : 'margin-right: auto;', " font-size:14px;line-height:20px;color:inherit;" + ( true ? "" : 0));
@@ -62966,7 +63012,9 @@ const PanelBodyTitle = (0,external_wp_element_namespaceObject.forwardRef)(({
   title,
   ...props
 }, ref) => {
-  if (!title) return null;
+  if (!title) {
+    return null;
+  }
   return (0,external_React_.createElement)("h2", {
     className: "components-panel__body-title"
   }, (0,external_React_.createElement)(build_module_button, {
@@ -63276,7 +63324,9 @@ function AuthorSelect({
   selectedAuthorId,
   onChange: onChangeProp
 }) {
-  if (!authorList) return null;
+  if (!authorList) {
+    return null;
+  }
   const termsTree = buildTermsTree(authorList);
   return (0,external_React_.createElement)(tree_select, {
     label,
@@ -64625,7 +64675,9 @@ function useResizeLabel({
        * If axis is controlled, we will avoid resetting the moveX and moveY values.
        * This will allow for the preferred axis values to persist in the label.
        */
-      if (isAxisControlled) return;
+      if (isAxisControlled) {
+        return;
+      }
       setMoveX(false);
       setMoveY(false);
     };
@@ -64640,10 +64692,14 @@ function useResizeLabel({
      * null. They are calculated then set using via an internal useEffect hook.
      */
     const isRendered = width !== null || height !== null;
-    if (!isRendered) return;
+    if (!isRendered) {
+      return;
+    }
     const didWidthChange = width !== widthRef.current;
     const didHeightChange = height !== heightRef.current;
-    if (!didWidthChange && !didHeightChange) return;
+    if (!didWidthChange && !didHeightChange) {
+      return;
+    }
 
     /*
      * After the initial render, the useResizeAware will set the first
@@ -64711,7 +64767,9 @@ function getSizeLabel({
   showPx = false,
   width
 }) {
-  if (!moveX && !moveY) return undefined;
+  if (!moveX && !moveY) {
+    return undefined;
+  }
 
   /*
    * Corner position...
@@ -64814,7 +64872,9 @@ function resize_tooltip_label_Label({
   const showLabel = !!label;
   const isBottom = position === POSITIONS.bottom;
   const isCorner = position === POSITIONS.corner;
-  if (!showLabel) return null;
+  if (!showLabel) {
+    return null;
+  }
   let style = {
     opacity: showLabel ? 1 : undefined,
     zIndex
@@ -64897,7 +64957,9 @@ function ResizeTooltip({
     showPx,
     position
   });
-  if (!isVisible) return null;
+  if (!isVisible) {
+    return null;
+  }
   const classes = classnames_default()('components-resize-tooltip', className);
   return (0,external_React_.createElement)(resize_tooltip_styles_Root, {
     "aria-hidden": "true",
@@ -66326,8 +66388,7 @@ const TextControl = (0,external_wp_element_namespaceObject.forwardRef)(Unforward
  */
 
 
-
-const inputStyleNeutral = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:0 0 0 transparent;transition:box-shadow 0.1s linear;border-radius:", config_values.radiusBlockUi, ";border:", config_values.borderWidth, " solid ", COLORS.ui.border, ";", reduceMotion('transition'), ";" + ( true ? "" : 0),  true ? "" : 0);
+const inputStyleNeutral = /*#__PURE__*/emotion_react_browser_esm_css("box-shadow:0 0 0 transparent;border-radius:", config_values.radiusBlockUi, ";border:", config_values.borderWidth, " solid ", COLORS.ui.border, ";@media not ( prefers-reduced-motion ){transition:box-shadow 0.1s linear;}" + ( true ? "" : 0),  true ? "" : 0);
 const inputStyleFocus = /*#__PURE__*/emotion_react_browser_esm_css("border-color:", COLORS.theme.accent, ";box-shadow:0 0 0 calc( ", config_values.borderWidthFocus, " - ", config_values.borderWidth, " ) ", COLORS.theme.accent, ";outline:2px solid transparent;" + ( true ? "" : 0),  true ? "" : 0);
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/utils/breakpoint-values.js
@@ -68573,7 +68634,9 @@ const RovingTabIndexItem = (0,external_wp_element_namespaceObject.forwardRef)(fu
   if (typeof children === 'function') {
     return children(allProps);
   }
-  if (!Component) return null;
+  if (!Component) {
+    return null;
+  }
   return (0,external_React_.createElement)(Component, {
     ...allProps
   }, children);
@@ -68682,14 +68745,14 @@ const IsolatedEventContainer = (0,external_wp_element_namespaceObject.forwardRef
  */
 
 
+
 /**
  * Internal dependencies
  */
 
-
 function useSlotFills(name) {
   const registry = (0,external_wp_element_namespaceObject.useContext)(slot_fill_context);
-  return useObservableValue(registry.fills, name);
+  return (0,external_wp_compose_namespaceObject.useObservableValue)(registry.fills, name);
 }
 
 ;// CONCATENATED MODULE: ./packages/components/build-module/z-stack/styles.js
@@ -71901,7 +71964,9 @@ function warnContrastIssues(issues) {
   }
 }
 function generateAccentDependentColors(accent) {
-  if (!accent) return {};
+  if (!accent) {
+    return {};
+  }
   return {
     accent,
     accentDarker10: w(accent).darken(0.1).toHex(),
@@ -71910,7 +71975,9 @@ function generateAccentDependentColors(accent) {
   };
 }
 function generateBackgroundDependentColors(background) {
-  if (!background) return {};
+  if (!background) {
+    return {};
+  }
   const foreground = getForegroundForColor(background);
   return {
     background,

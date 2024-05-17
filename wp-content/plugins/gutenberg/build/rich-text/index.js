@@ -887,7 +887,9 @@ function toTree({
     }
     if (character === OBJECT_REPLACEMENT_CHARACTER) {
       const replacement = replacements[i];
-      if (!replacement) continue;
+      if (!replacement) {
+        continue;
+      }
       const {
         type,
         attributes,
@@ -1604,7 +1606,9 @@ function createFromElement({
       });
       continue;
     }
-    if (format) delete format.formatType;
+    if (format) {
+      delete format.formatType;
+    }
     const value = createFromElement({
       element: node,
       range,
@@ -2726,7 +2730,9 @@ function useAnchorRef({
   } = settings;
   const activeFormat = name ? getActiveFormat(value, name) : undefined;
   return (0,external_wp_element_namespaceObject.useMemo)(() => {
-    if (!ref.current) return;
+    if (!ref.current) {
+      return;
+    }
     const {
       ownerDocument: {
         defaultView
@@ -2790,9 +2796,15 @@ function getFormatElement(range, editableContentElement, tagName, className) {
   if (element.nodeType !== element.ELEMENT_NODE) {
     element = element.parentElement;
   }
-  if (!element) return;
-  if (element === editableContentElement) return;
-  if (!editableContentElement.contains(element)) return;
+  if (!element) {
+    return;
+  }
+  if (element === editableContentElement) {
+    return;
+  }
+  if (!editableContentElement.contains(element)) {
+    return;
+  }
   const selector = tagName + (className ? '.' + className : '');
 
   // .closest( selector ), but with a boundary. Check if the element matches
@@ -2845,7 +2857,9 @@ function createVirtualAnchorElement(range, editableContentElement) {
  * @return {HTMLElement|VirtualAnchorElement|undefined} The anchor.
  */
 function getAnchor(editableContentElement, tagName, className) {
-  if (!editableContentElement) return;
+  if (!editableContentElement) {
+    return;
+  }
   const {
     ownerDocument
   } = editableContentElement;
@@ -2853,12 +2867,20 @@ function getAnchor(editableContentElement, tagName, className) {
     defaultView
   } = ownerDocument;
   const selection = defaultView.getSelection();
-  if (!selection) return;
-  if (!selection.rangeCount) return;
+  if (!selection) {
+    return;
+  }
+  if (!selection.rangeCount) {
+    return;
+  }
   const range = selection.getRangeAt(0);
-  if (!range || !range.startContainer) return;
+  if (!range || !range.startContainer) {
+    return;
+  }
   const formatElement = getFormatElement(range, editableContentElement, tagName, className);
-  if (formatElement) return formatElement;
+  if (formatElement) {
+    return formatElement;
+  }
   return createVirtualAnchorElement(range, editableContentElement);
 }
 
@@ -2886,7 +2908,9 @@ function useAnchor({
   const [anchor, setAnchor] = (0,external_wp_element_namespaceObject.useState)(() => getAnchor(editableContentElement, tagName, className));
   const wasActive = (0,external_wp_compose_namespaceObject.usePrevious)(isActive);
   (0,external_wp_element_namespaceObject.useLayoutEffect)(() => {
-    if (!editableContentElement) return;
+    if (!editableContentElement) {
+      return;
+    }
     function callback() {
       setAnchor(getAnchor(editableContentElement, tagName, className));
     }
@@ -2955,7 +2979,9 @@ const whiteSpace = 'pre-wrap';
 const minWidth = '1px';
 function useDefaultStyle() {
   return (0,external_wp_element_namespaceObject.useCallback)(element => {
-    if (!element) return;
+    if (!element) {
+      return;
+    }
     element.style.whiteSpace = whiteSpace;
     element.style.minWidth = minWidth;
   }, []);
@@ -3017,13 +3043,7 @@ function useBoundaryStyle({
   return ref;
 }
 
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-copy-handler.js
-/**
- * WordPress dependencies
- */
-
-
-
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/event-listeners/copy-handler.js
 /**
  * Internal dependencies
  */
@@ -3031,50 +3051,91 @@ function useBoundaryStyle({
 
 
 
-function useCopyHandler(props) {
-  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
-  propsRef.current = props;
-  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
-    function onCopy(event) {
-      const {
-        record
-      } = propsRef.current;
-      const {
-        ownerDocument
-      } = element;
-      if (isCollapsed(record.current) || !element.contains(ownerDocument.activeElement)) {
-        return;
-      }
-      const selectedRecord = slice(record.current);
-      const plainText = getTextContent(selectedRecord);
-      const html = toHTMLString({
-        value: selectedRecord
-      });
-      event.clipboardData.setData('text/plain', plainText);
-      event.clipboardData.setData('text/html', html);
-      event.clipboardData.setData('rich-text', 'true');
-      event.preventDefault();
-      if (event.type === 'cut') {
-        ownerDocument.execCommand('delete');
-      }
+/* harmony default export */ const copy_handler = (props => element => {
+  function onCopy(event) {
+    const {
+      record
+    } = props.current;
+    const {
+      ownerDocument
+    } = element;
+    if (isCollapsed(record.current) || !element.contains(ownerDocument.activeElement)) {
+      return;
     }
-    element.addEventListener('copy', onCopy);
-    element.addEventListener('cut', onCopy);
-    return () => {
-      element.removeEventListener('copy', onCopy);
-      element.removeEventListener('cut', onCopy);
-    };
-  }, []);
-}
+    const selectedRecord = slice(record.current);
+    const plainText = getTextContent(selectedRecord);
+    const html = toHTMLString({
+      value: selectedRecord
+    });
+    event.clipboardData.setData('text/plain', plainText);
+    event.clipboardData.setData('text/html', html);
+    event.clipboardData.setData('rich-text', 'true');
+    event.preventDefault();
+    if (event.type === 'cut') {
+      ownerDocument.execCommand('delete');
+    }
+  }
+  element.addEventListener('copy', onCopy);
+  element.addEventListener('cut', onCopy);
+  return () => {
+    element.removeEventListener('copy', onCopy);
+    element.removeEventListener('cut', onCopy);
+  };
+});
+
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/event-listeners/select-object.js
+/* harmony default export */ const select_object = (() => element => {
+  function onClick(event) {
+    const {
+      target
+    } = event;
+
+    // If the child element has no text content, it must be an object.
+    if (target === element || target.textContent && target.isContentEditable) {
+      return;
+    }
+    const {
+      ownerDocument
+    } = target;
+    const {
+      defaultView
+    } = ownerDocument;
+    const selection = defaultView.getSelection();
+
+    // If it's already selected, do nothing and let default behavior happen.
+    // This means it's "click-through".
+    if (selection.containsNode(target)) {
+      return;
+    }
+    const range = ownerDocument.createRange();
+    // If the target is within a non editable element, select the non
+    // editable element.
+    const nodeToSelect = target.isContentEditable ? target : target.closest('[contenteditable]');
+    range.selectNode(nodeToSelect);
+    selection.removeAllRanges();
+    selection.addRange(range);
+    event.preventDefault();
+  }
+  function onFocusIn(event) {
+    // When there is incoming focus from a link, select the object.
+    if (event.relatedTarget && !element.contains(event.relatedTarget) && event.relatedTarget.tagName === 'A') {
+      onClick(event);
+    }
+  }
+  element.addEventListener('click', onClick);
+  element.addEventListener('focusin', onFocusIn);
+  return () => {
+    element.removeEventListener('click', onClick);
+    element.removeEventListener('focusin', onFocusIn);
+  };
+});
 
 ;// CONCATENATED MODULE: external ["wp","keycodes"]
 const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-format-boundaries.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/event-listeners/format-boundaries.js
 /**
  * WordPress dependencies
  */
-
-
 
 
 /**
@@ -3082,151 +3143,140 @@ const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
  */
 
 const EMPTY_ACTIVE_FORMATS = [];
-function useFormatBoundaries(props) {
-  const [, forceRender] = (0,external_wp_element_namespaceObject.useReducer)(() => ({}));
-  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
-  propsRef.current = props;
-  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
-    function onKeyDown(event) {
-      const {
-        keyCode,
-        shiftKey,
-        altKey,
-        metaKey,
-        ctrlKey
-      } = event;
-      if (
-      // Only override left and right keys without modifiers pressed.
-      shiftKey || altKey || metaKey || ctrlKey || keyCode !== external_wp_keycodes_namespaceObject.LEFT && keyCode !== external_wp_keycodes_namespaceObject.RIGHT) {
-        return;
-      }
-      const {
-        record,
-        applyRecord
-      } = propsRef.current;
-      const {
-        text,
-        formats,
-        start,
-        end,
-        activeFormats: currentActiveFormats = []
-      } = record.current;
-      const collapsed = isCollapsed(record.current);
-      const {
-        ownerDocument
-      } = element;
-      const {
-        defaultView
-      } = ownerDocument;
-      // To do: ideally, we should look at visual position instead.
-      const {
-        direction
-      } = defaultView.getComputedStyle(element);
-      const reverseKey = direction === 'rtl' ? external_wp_keycodes_namespaceObject.RIGHT : external_wp_keycodes_namespaceObject.LEFT;
-      const isReverse = event.keyCode === reverseKey;
-
-      // If the selection is collapsed and at the very start, do nothing if
-      // navigating backward.
-      // If the selection is collapsed and at the very end, do nothing if
-      // navigating forward.
-      if (collapsed && currentActiveFormats.length === 0) {
-        if (start === 0 && isReverse) {
-          return;
-        }
-        if (end === text.length && !isReverse) {
-          return;
-        }
-      }
-
-      // If the selection is not collapsed, let the browser handle collapsing
-      // the selection for now. Later we could expand this logic to set
-      // boundary positions if needed.
-      if (!collapsed) {
-        return;
-      }
-      const formatsBefore = formats[start - 1] || EMPTY_ACTIVE_FORMATS;
-      const formatsAfter = formats[start] || EMPTY_ACTIVE_FORMATS;
-      const destination = isReverse ? formatsBefore : formatsAfter;
-      const isIncreasing = currentActiveFormats.every((format, index) => format === destination[index]);
-      let newActiveFormatsLength = currentActiveFormats.length;
-      if (!isIncreasing) {
-        newActiveFormatsLength--;
-      } else if (newActiveFormatsLength < destination.length) {
-        newActiveFormatsLength++;
-      }
-      if (newActiveFormatsLength === currentActiveFormats.length) {
-        record.current._newActiveFormats = destination;
-        return;
-      }
-      event.preventDefault();
-      const origin = isReverse ? formatsAfter : formatsBefore;
-      const source = isIncreasing ? destination : origin;
-      const newActiveFormats = source.slice(0, newActiveFormatsLength);
-      const newValue = {
-        ...record.current,
-        activeFormats: newActiveFormats
-      };
-      record.current = newValue;
-      applyRecord(newValue);
-      forceRender();
+/* harmony default export */ const format_boundaries = (props => element => {
+  function onKeyDown(event) {
+    const {
+      keyCode,
+      shiftKey,
+      altKey,
+      metaKey,
+      ctrlKey
+    } = event;
+    if (
+    // Only override left and right keys without modifiers pressed.
+    shiftKey || altKey || metaKey || ctrlKey || keyCode !== external_wp_keycodes_namespaceObject.LEFT && keyCode !== external_wp_keycodes_namespaceObject.RIGHT) {
+      return;
     }
-    element.addEventListener('keydown', onKeyDown);
-    return () => {
-      element.removeEventListener('keydown', onKeyDown);
-    };
-  }, []);
-}
+    const {
+      record,
+      applyRecord,
+      forceRender
+    } = props.current;
+    const {
+      text,
+      formats,
+      start,
+      end,
+      activeFormats: currentActiveFormats = []
+    } = record.current;
+    const collapsed = isCollapsed(record.current);
+    const {
+      ownerDocument
+    } = element;
+    const {
+      defaultView
+    } = ownerDocument;
+    // To do: ideally, we should look at visual position instead.
+    const {
+      direction
+    } = defaultView.getComputedStyle(element);
+    const reverseKey = direction === 'rtl' ? external_wp_keycodes_namespaceObject.RIGHT : external_wp_keycodes_namespaceObject.LEFT;
+    const isReverse = event.keyCode === reverseKey;
 
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-select-object.js
+    // If the selection is collapsed and at the very start, do nothing if
+    // navigating backward.
+    // If the selection is collapsed and at the very end, do nothing if
+    // navigating forward.
+    if (collapsed && currentActiveFormats.length === 0) {
+      if (start === 0 && isReverse) {
+        return;
+      }
+      if (end === text.length && !isReverse) {
+        return;
+      }
+    }
+
+    // If the selection is not collapsed, let the browser handle collapsing
+    // the selection for now. Later we could expand this logic to set
+    // boundary positions if needed.
+    if (!collapsed) {
+      return;
+    }
+    const formatsBefore = formats[start - 1] || EMPTY_ACTIVE_FORMATS;
+    const formatsAfter = formats[start] || EMPTY_ACTIVE_FORMATS;
+    const destination = isReverse ? formatsBefore : formatsAfter;
+    const isIncreasing = currentActiveFormats.every((format, index) => format === destination[index]);
+    let newActiveFormatsLength = currentActiveFormats.length;
+    if (!isIncreasing) {
+      newActiveFormatsLength--;
+    } else if (newActiveFormatsLength < destination.length) {
+      newActiveFormatsLength++;
+    }
+    if (newActiveFormatsLength === currentActiveFormats.length) {
+      record.current._newActiveFormats = destination;
+      return;
+    }
+    event.preventDefault();
+    const origin = isReverse ? formatsAfter : formatsBefore;
+    const source = isIncreasing ? destination : origin;
+    const newActiveFormats = source.slice(0, newActiveFormatsLength);
+    const newValue = {
+      ...record.current,
+      activeFormats: newActiveFormats
+    };
+    record.current = newValue;
+    applyRecord(newValue);
+    forceRender();
+  }
+  element.addEventListener('keydown', onKeyDown);
+  return () => {
+    element.removeEventListener('keydown', onKeyDown);
+  };
+});
+
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/event-listeners/delete.js
 /**
  * WordPress dependencies
  */
 
-function useSelectObject() {
-  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
-    function onClick(event) {
-      const {
-        target
-      } = event;
 
-      // If the child element has no text content, it must be an object.
-      if (target === element || target.textContent && target.isContentEditable) {
-        return;
-      }
-      const {
-        ownerDocument
-      } = target;
-      const {
-        defaultView
-      } = ownerDocument;
-      const selection = defaultView.getSelection();
+/**
+ * Internal dependencies
+ */
 
-      // If it's already selected, do nothing and let default behavior
-      // happen. This means it's "click-through".
-      if (selection.containsNode(target)) return;
-      const range = ownerDocument.createRange();
-      // If the target is within a non editable element, select the non
-      // editable element.
-      const nodeToSelect = target.isContentEditable ? target : target.closest('[contenteditable]');
-      range.selectNode(nodeToSelect);
-      selection.removeAllRanges();
-      selection.addRange(range);
+/* harmony default export */ const event_listeners_delete = (props => element => {
+  function onKeyDown(event) {
+    const {
+      keyCode
+    } = event;
+    const {
+      createRecord,
+      handleChange
+    } = props.current;
+    if (event.defaultPrevented) {
+      return;
+    }
+    if (keyCode !== external_wp_keycodes_namespaceObject.DELETE && keyCode !== external_wp_keycodes_namespaceObject.BACKSPACE) {
+      return;
+    }
+    const currentValue = createRecord();
+    const {
+      start,
+      end,
+      text
+    } = currentValue;
+
+    // Always handle full content deletion ourselves.
+    if (start === 0 && end !== 0 && end === text.length) {
+      handleChange(remove_remove(currentValue));
       event.preventDefault();
     }
-    function onFocusIn(event) {
-      // When there is incoming focus from a link, select the object.
-      if (event.relatedTarget && !element.contains(event.relatedTarget) && event.relatedTarget.tagName === 'A') {
-        onClick(event);
-      }
-    }
-    element.addEventListener('click', onClick);
-    element.addEventListener('focusin', onFocusIn);
-    return () => {
-      element.removeEventListener('click', onClick);
-      element.removeEventListener('focusin', onFocusIn);
-    };
-  }, []);
-}
+  }
+  element.addEventListener('keydown', onKeyDown);
+  return () => {
+    element.removeEventListener('keydown', onKeyDown);
+  };
+});
 
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/update-formats.js
 /**
@@ -3285,13 +3335,7 @@ function updateFormats({
   return value;
 }
 
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-input-and-selection.js
-/**
- * WordPress dependencies
- */
-
-
-
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/event-listeners/input-and-selection.js
 /**
  * Internal dependencies
  */
@@ -3306,7 +3350,7 @@ function updateFormats({
  * @type {Set}
  */
 const INSERTION_INPUT_TYPES_TO_IGNORE = new Set(['insertParagraph', 'insertOrderedList', 'insertUnorderedList', 'insertHorizontalRule', 'insertLink']);
-const use_input_and_selection_EMPTY_ACTIVE_FORMATS = [];
+const input_and_selection_EMPTY_ACTIVE_FORMATS = [];
 const PLACEHOLDER_ATTR_NAME = 'data-rich-text-placeholder';
 
 /**
@@ -3330,210 +3374,199 @@ function fixPlaceholderSelection(defaultView) {
   }
   selection.collapseToStart();
 }
-function useInputAndSelection(props) {
-  const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
-  propsRef.current = props;
-  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
+/* harmony default export */ const input_and_selection = (props => element => {
+  const {
+    ownerDocument
+  } = element;
+  const {
+    defaultView
+  } = ownerDocument;
+  let isComposing = false;
+  function onInput(event) {
+    // Do not trigger a change if characters are being composed. Browsers
+    // will usually emit a final `input` event when the characters are
+    // composed. As of December 2019, Safari doesn't support
+    // nativeEvent.isComposing.
+    if (isComposing) {
+      return;
+    }
+    let inputType;
+    if (event) {
+      inputType = event.inputType;
+    }
     const {
-      ownerDocument
-    } = element;
+      record,
+      applyRecord,
+      createRecord,
+      handleChange
+    } = props.current;
+
+    // The browser formatted something or tried to insert HTML. Overwrite
+    // it. It will be handled later by the format library if needed.
+    if (inputType && (inputType.indexOf('format') === 0 || INSERTION_INPUT_TYPES_TO_IGNORE.has(inputType))) {
+      applyRecord(record.current);
+      return;
+    }
+    const currentValue = createRecord();
     const {
-      defaultView
-    } = ownerDocument;
-    let isComposing = false;
-    function onInput(event) {
-      // Do not trigger a change if characters are being composed.
-      // Browsers  will usually emit a final `input` event when the
-      // characters are composed.
-      // As of December 2019, Safari doesn't support
-      // nativeEvent.isComposing.
-      if (isComposing) {
-        return;
-      }
-      let inputType;
-      if (event) {
-        inputType = event.inputType;
-      }
-      const {
-        record,
-        applyRecord,
-        createRecord,
-        handleChange
-      } = propsRef.current;
+      start,
+      activeFormats: oldActiveFormats = []
+    } = record.current;
 
-      // The browser formatted something or tried to insert HTML.
-      // Overwrite it. It will be handled later by the format library if
-      // needed.
-      if (inputType && (inputType.indexOf('format') === 0 || INSERTION_INPUT_TYPES_TO_IGNORE.has(inputType))) {
-        applyRecord(record.current);
-        return;
-      }
-      const currentValue = createRecord();
-      const {
-        start,
-        activeFormats: oldActiveFormats = []
-      } = record.current;
+    // Update the formats between the last and new caret position.
+    const change = updateFormats({
+      value: currentValue,
+      start,
+      end: currentValue.start,
+      formats: oldActiveFormats
+    });
+    handleChange(change);
+  }
 
-      // Update the formats between the last and new caret position.
-      const change = updateFormats({
-        value: currentValue,
-        start,
-        end: currentValue.start,
-        formats: oldActiveFormats
-      });
-      handleChange(change);
+  /**
+   * Syncs the selection to local state. A callback for the `selectionchange`
+   * event.
+   */
+  function handleSelectionChange() {
+    const {
+      record,
+      applyRecord,
+      createRecord,
+      onSelectionChange
+    } = props.current;
+
+    // Check if the implementor disabled editing. `contentEditable` does
+    // disable input, but not text selection, so we must ignore selection
+    // changes.
+    if (element.contentEditable !== 'true') {
+      return;
     }
 
-    /**
-     * Syncs the selection to local state. A callback for the
-     * `selectionchange` event.
-     */
-    function handleSelectionChange() {
-      const {
-        record,
-        applyRecord,
-        createRecord,
-        onSelectionChange
-      } = propsRef.current;
+    // Ensure the active element is the rich text element.
+    if (ownerDocument.activeElement !== element) {
+      // If it is not, we can stop listening for selection changes. We
+      // resume listening when the element is focused.
+      ownerDocument.removeEventListener('selectionchange', handleSelectionChange);
+      return;
+    }
 
-      // Check if the implementor disabled editing. `contentEditable`
-      // does disable input, but not text selection, so we must ignore
-      // selection changes.
-      if (element.contentEditable !== 'true') {
-        return;
-      }
+    // In case of a keyboard event, ignore selection changes during
+    // composition.
+    if (isComposing) {
+      return;
+    }
+    const {
+      start,
+      end,
+      text
+    } = createRecord();
+    const oldRecord = record.current;
 
-      // Ensure the active element is the rich text element.
-      if (ownerDocument.activeElement !== element) {
-        // If it is not, we can stop listening for selection changes.
-        // We resume listening when the element is focused.
-        ownerDocument.removeEventListener('selectionchange', handleSelectionChange);
-        return;
+    // Fallback mechanism for IE11, which doesn't support the input event.
+    // Any input results in a selection change.
+    if (text !== oldRecord.text) {
+      onInput();
+      return;
+    }
+    if (start === oldRecord.start && end === oldRecord.end) {
+      // Sometimes the browser may set the selection on the placeholder
+      // element, in which case the caret is not visible. We need to set
+      // the caret before the placeholder if that's the case.
+      if (oldRecord.text.length === 0 && start === 0) {
+        fixPlaceholderSelection(defaultView);
       }
+      return;
+    }
+    const newValue = {
+      ...oldRecord,
+      start,
+      end,
+      // _newActiveFormats may be set on arrow key navigation to control
+      // the right boundary position. If undefined, getActiveFormats will
+      // give the active formats according to the browser.
+      activeFormats: oldRecord._newActiveFormats,
+      _newActiveFormats: undefined
+    };
+    const newActiveFormats = getActiveFormats(newValue, input_and_selection_EMPTY_ACTIVE_FORMATS);
 
-      // In case of a keyboard event, ignore selection changes during
-      // composition.
-      if (isComposing) {
-        return;
-      }
-      const {
-        start,
-        end,
-        text
-      } = createRecord();
-      const oldRecord = record.current;
+    // Update the value with the new active formats.
+    newValue.activeFormats = newActiveFormats;
 
-      // Fallback mechanism for IE11, which doesn't support the input event.
-      // Any input results in a selection change.
-      if (text !== oldRecord.text) {
-        onInput();
-        return;
-      }
-      if (start === oldRecord.start && end === oldRecord.end) {
-        // Sometimes the browser may set the selection on the placeholder
-        // element, in which case the caret is not visible. We need to set
-        // the caret before the placeholder if that's the case.
-        if (oldRecord.text.length === 0 && start === 0) {
-          fixPlaceholderSelection(defaultView);
-        }
-        return;
-      }
-      const newValue = {
-        ...oldRecord,
-        start,
-        end,
-        // _newActiveFormats may be set on arrow key navigation to control
-        // the right boundary position. If undefined, getActiveFormats will
-        // give the active formats according to the browser.
-        activeFormats: oldRecord._newActiveFormats,
-        _newActiveFormats: undefined
+    // It is important that the internal value is updated first,
+    // otherwise the value will be wrong on render!
+    record.current = newValue;
+    applyRecord(newValue, {
+      domOnly: true
+    });
+    onSelectionChange(start, end);
+  }
+  function onCompositionStart() {
+    isComposing = true;
+    // Do not update the selection when characters are being composed as
+    // this rerenders the component and might destroy internal browser
+    // editing state.
+    ownerDocument.removeEventListener('selectionchange', handleSelectionChange);
+    // Remove the placeholder. Since the rich text value doesn't update
+    // during composition, the placeholder doesn't get removed. There's no
+    // need to re-add it, when the value is updated on compositionend it
+    // will be re-added when the value is empty.
+    element.querySelector(`[${PLACEHOLDER_ATTR_NAME}]`)?.remove();
+  }
+  function onCompositionEnd() {
+    isComposing = false;
+    // Ensure the value is up-to-date for browsers that don't emit a final
+    // input event after composition.
+    onInput({
+      inputType: 'insertText'
+    });
+    // Tracking selection changes can be resumed.
+    ownerDocument.addEventListener('selectionchange', handleSelectionChange);
+  }
+  function onFocus() {
+    const {
+      record,
+      isSelected,
+      onSelectionChange,
+      applyRecord
+    } = props.current;
+
+    // When the whole editor is editable, let writing flow handle
+    // selection.
+    if (element.parentElement.closest('[contenteditable="true"]')) {
+      return;
+    }
+    if (!isSelected) {
+      // We know for certain that on focus, the old selection is invalid.
+      // It will be recalculated on the next mouseup, keyup, or touchend
+      // event.
+      const index = undefined;
+      record.current = {
+        ...record.current,
+        start: index,
+        end: index,
+        activeFormats: input_and_selection_EMPTY_ACTIVE_FORMATS
       };
-      const newActiveFormats = getActiveFormats(newValue, use_input_and_selection_EMPTY_ACTIVE_FORMATS);
-
-      // Update the value with the new active formats.
-      newValue.activeFormats = newActiveFormats;
-
-      // It is important that the internal value is updated first,
-      // otherwise the value will be wrong on render!
-      record.current = newValue;
-      applyRecord(newValue, {
+    } else {
+      applyRecord(record.current, {
         domOnly: true
       });
-      onSelectionChange(start, end);
     }
-    function onCompositionStart() {
-      isComposing = true;
-      // Do not update the selection when characters are being composed as
-      // this rerenders the component and might destroy internal browser
-      // editing state.
-      ownerDocument.removeEventListener('selectionchange', handleSelectionChange);
-      // Remove the placeholder. Since the rich text value doesn't update
-      // during composition, the placeholder doesn't get removed. There's
-      // no need to re-add it, when the value is updated on compositionend
-      // it will be re-added when the value is empty.
-      element.querySelector(`[${PLACEHOLDER_ATTR_NAME}]`)?.remove();
-    }
-    function onCompositionEnd() {
-      isComposing = false;
-      // Ensure the value is up-to-date for browsers that don't emit a final
-      // input event after composition.
-      onInput({
-        inputType: 'insertText'
-      });
-      // Tracking selection changes can be resumed.
-      ownerDocument.addEventListener('selectionchange', handleSelectionChange);
-    }
-    function onFocus() {
-      const {
-        record,
-        isSelected,
-        onSelectionChange,
-        applyRecord
-      } = propsRef.current;
+    onSelectionChange(record.current.start, record.current.end);
+    ownerDocument.addEventListener('selectionchange', handleSelectionChange);
+  }
+  element.addEventListener('input', onInput);
+  element.addEventListener('compositionstart', onCompositionStart);
+  element.addEventListener('compositionend', onCompositionEnd);
+  element.addEventListener('focus', onFocus);
+  return () => {
+    element.removeEventListener('input', onInput);
+    element.removeEventListener('compositionstart', onCompositionStart);
+    element.removeEventListener('compositionend', onCompositionEnd);
+    element.removeEventListener('focus', onFocus);
+  };
+});
 
-      // When the whole editor is editable, let writing flow handle
-      // selection.
-      if (element.parentElement.closest('[contenteditable="true"]')) {
-        return;
-      }
-      if (!isSelected) {
-        // We know for certain that on focus, the old selection is invalid.
-        // It will be recalculated on the next mouseup, keyup, or touchend
-        // event.
-        const index = undefined;
-        record.current = {
-          ...record.current,
-          start: index,
-          end: index,
-          activeFormats: use_input_and_selection_EMPTY_ACTIVE_FORMATS
-        };
-      } else {
-        applyRecord(record.current, {
-          domOnly: true
-        });
-      }
-      onSelectionChange(record.current.start, record.current.end);
-      ownerDocument.addEventListener('selectionchange', handleSelectionChange);
-    }
-    element.addEventListener('input', onInput);
-    element.addEventListener('compositionstart', onCompositionStart);
-    element.addEventListener('compositionend', onCompositionEnd);
-    element.addEventListener('focus', onFocus);
-    return () => {
-      element.removeEventListener('input', onInput);
-      element.removeEventListener('compositionstart', onCompositionStart);
-      element.removeEventListener('compositionend', onCompositionEnd);
-      element.removeEventListener('focus', onFocus);
-    };
-  }, []);
-}
-
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-selection-change-compat.js
-/**
- * WordPress dependencies
- */
-
-
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/event-listeners/selection-change-compat.js
 /**
  * Internal dependencies
  */
@@ -3544,54 +3577,50 @@ function useInputAndSelection(props) {
  * changing the selection by mouse or keyboard. This hook makes sure that, if we
  * detect no `selectionchange` or `input` event between the up and down events,
  * we fire a `selectionchange` event.
- *
- * @return {import('@wordpress/compose').RefEffect} A ref effect attaching the
- *                                                  listeners.
  */
-function useSelectionChangeCompat() {
-  return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
-    const {
-      ownerDocument
-    } = element;
-    const {
-      defaultView
-    } = ownerDocument;
-    const selection = defaultView?.getSelection();
-    let range;
-    function getRange() {
-      return selection.rangeCount ? selection.getRangeAt(0) : null;
+/* harmony default export */ const selection_change_compat = (() => element => {
+  const {
+    ownerDocument
+  } = element;
+  const {
+    defaultView
+  } = ownerDocument;
+  const selection = defaultView?.getSelection();
+  let range;
+  function getRange() {
+    return selection.rangeCount ? selection.getRangeAt(0) : null;
+  }
+  function onDown(event) {
+    const type = event.type === 'keydown' ? 'keyup' : 'pointerup';
+    function onCancel() {
+      ownerDocument.removeEventListener(type, onUp);
+      ownerDocument.removeEventListener('selectionchange', onCancel);
+      ownerDocument.removeEventListener('input', onCancel);
     }
-    function onDown(event) {
-      const type = event.type === 'keydown' ? 'keyup' : 'pointerup';
-      function onCancel() {
-        ownerDocument.removeEventListener(type, onUp);
-        ownerDocument.removeEventListener('selectionchange', onCancel);
-        ownerDocument.removeEventListener('input', onCancel);
+    function onUp() {
+      onCancel();
+      if (isRangeEqual(range, getRange())) {
+        return;
       }
-      function onUp() {
-        onCancel();
-        if (isRangeEqual(range, getRange())) return;
-        ownerDocument.dispatchEvent(new Event('selectionchange'));
-      }
-      ownerDocument.addEventListener(type, onUp);
-      ownerDocument.addEventListener('selectionchange', onCancel);
-      ownerDocument.addEventListener('input', onCancel);
-      range = getRange();
+      ownerDocument.dispatchEvent(new Event('selectionchange'));
     }
-    element.addEventListener('pointerdown', onDown);
-    element.addEventListener('keydown', onDown);
-    return () => {
-      element.removeEventListener('pointerdown', onDown);
-      element.removeEventListener('keydown', onDown);
-    };
-  }, []);
-}
+    ownerDocument.addEventListener(type, onUp);
+    ownerDocument.addEventListener('selectionchange', onCancel);
+    ownerDocument.addEventListener('input', onCancel);
+    range = getRange();
+  }
+  element.addEventListener('pointerdown', onDown);
+  element.addEventListener('keydown', onDown);
+  return () => {
+    element.removeEventListener('pointerdown', onDown);
+    element.removeEventListener('keydown', onDown);
+  };
+});
 
-;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/use-delete.js
+;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/event-listeners/index.js
 /**
  * WordPress dependencies
  */
-
 
 
 
@@ -3599,42 +3628,22 @@ function useSelectionChangeCompat() {
  * Internal dependencies
  */
 
-function useDelete(props) {
+
+
+
+
+
+const allEventListeners = [copy_handler, select_object, format_boundaries, event_listeners_delete, input_and_selection, selection_change_compat];
+function useEventListeners(props) {
   const propsRef = (0,external_wp_element_namespaceObject.useRef)(props);
   propsRef.current = props;
+  const refEffects = (0,external_wp_element_namespaceObject.useMemo)(() => allEventListeners.map(refEffect => refEffect(propsRef)), [propsRef]);
   return (0,external_wp_compose_namespaceObject.useRefEffect)(element => {
-    function onKeyDown(event) {
-      const {
-        keyCode
-      } = event;
-      const {
-        createRecord,
-        handleChange
-      } = propsRef.current;
-      if (event.defaultPrevented) {
-        return;
-      }
-      if (keyCode !== external_wp_keycodes_namespaceObject.DELETE && keyCode !== external_wp_keycodes_namespaceObject.BACKSPACE) {
-        return;
-      }
-      const currentValue = createRecord();
-      const {
-        start,
-        end,
-        text
-      } = currentValue;
-
-      // Always handle full content deletion ourselves.
-      if (start === 0 && end !== 0 && end === text.length) {
-        handleChange(remove_remove(currentValue));
-        event.preventDefault();
-      }
-    }
-    element.addEventListener('keydown', onKeyDown);
+    const cleanups = refEffects.map(effect => effect(element));
     return () => {
-      element.removeEventListener('keydown', onKeyDown);
+      cleanups.forEach(cleanup => cleanup());
     };
-  }, []);
+  }, [refEffects]);
 }
 
 ;// CONCATENATED MODULE: ./packages/rich-text/build-module/component/index.js
@@ -3648,11 +3657,6 @@ function useDelete(props) {
 /**
  * Internal dependencies
  */
-
-
-
-
-
 
 
 
@@ -3816,22 +3820,15 @@ function useRichText({
   }, [hadSelectionUpdate.current]);
   const mergedRefs = (0,external_wp_compose_namespaceObject.useMergeRefs)([ref, useDefaultStyle(), useBoundaryStyle({
     record
-  }), useCopyHandler({
-    record
-  }), useSelectObject(), useFormatBoundaries({
+  }), useEventListeners({
     record,
-    applyRecord
-  }), useDelete({
-    createRecord,
-    handleChange
-  }), useInputAndSelection({
-    record,
+    handleChange,
     applyRecord,
     createRecord,
-    handleChange,
     isSelected,
-    onSelectionChange
-  }), useSelectionChangeCompat(), (0,external_wp_compose_namespaceObject.useRefEffect)(() => {
+    onSelectionChange,
+    forceRender
+  }), (0,external_wp_compose_namespaceObject.useRefEffect)(() => {
     applyFromProps();
     didMount.current = true;
   }, [placeholder, ...__unstableDependencies])]);

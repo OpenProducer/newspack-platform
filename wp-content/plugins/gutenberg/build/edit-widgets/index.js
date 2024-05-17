@@ -1194,7 +1194,8 @@ function ComplementaryAreaFill({
     initial: "closed",
     animate: isMobileViewport ? 'mobileOpen' : 'open',
     exit: "closed",
-    transition: transition
+    transition: transition,
+    className: "interface-complementary-area__fill"
   }, (0,external_React_namespaceObject.createElement)("div", {
     id: id,
     className: className,
@@ -1524,7 +1525,7 @@ function InterfaceSkeleton({
   }, (0,external_React_namespaceObject.createElement)("div", {
     style: {
       position: 'absolute',
-      width: 'fit-content',
+      width: isMobileViewport ? '100vw' : 'fit-content',
       height: '100%',
       right: 0
     }
@@ -2862,8 +2863,6 @@ const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 
 
 
-
-
 /**
  * Internal dependencies
  */
@@ -2876,36 +2875,6 @@ function KeyboardShortcuts() {
   const {
     saveEditedWidgetAreas
   } = (0,external_wp_data_namespaceObject.useDispatch)(store_store);
-  const {
-    replaceBlocks
-  } = (0,external_wp_data_namespaceObject.useDispatch)(external_wp_blockEditor_namespaceObject.store);
-  const {
-    getBlockName,
-    getSelectedBlockClientId,
-    getBlockAttributes
-  } = (0,external_wp_data_namespaceObject.useSelect)(external_wp_blockEditor_namespaceObject.store);
-  const handleTextLevelShortcut = (event, level) => {
-    event.preventDefault();
-    const destinationBlockName = level === 0 ? 'core/paragraph' : 'core/heading';
-    const currentClientId = getSelectedBlockClientId();
-    if (currentClientId === null) {
-      return;
-    }
-    const blockName = getBlockName(currentClientId);
-    if (blockName !== 'core/paragraph' && blockName !== 'core/heading') {
-      return;
-    }
-    const attributes = getBlockAttributes(currentClientId);
-    const textAlign = blockName === 'core/paragraph' ? 'align' : 'textAlign';
-    const destinationTextAlign = destinationBlockName === 'core/paragraph' ? 'align' : 'textAlign';
-    replaceBlocks(currentClientId, (0,external_wp_blocks_namespaceObject.createBlock)(destinationBlockName, {
-      level,
-      content: attributes.content,
-      ...{
-        [destinationTextAlign]: attributes[textAlign]
-      }
-    }));
-  };
   (0,external_wp_keyboardShortcuts_namespaceObject.useShortcut)('core/edit-widgets/undo', event => {
     undo();
     event.preventDefault();
@@ -2917,13 +2886,6 @@ function KeyboardShortcuts() {
   (0,external_wp_keyboardShortcuts_namespaceObject.useShortcut)('core/edit-widgets/save', event => {
     event.preventDefault();
     saveEditedWidgetAreas();
-  });
-  (0,external_wp_keyboardShortcuts_namespaceObject.useShortcut)('core/edit-widgets/transform-heading-to-paragraph', event => handleTextLevelShortcut(event, 0));
-  [1, 2, 3, 4, 5, 6].forEach(level => {
-    //the loop is based off on a constant therefore
-    //the hook will execute the same way every time
-    //eslint-disable-next-line react-hooks/rules-of-hooks
-    (0,external_wp_keyboardShortcuts_namespaceObject.useShortcut)(`core/edit-widgets/transform-paragraph-to-heading-${level}`, event => handleTextLevelShortcut(event, level));
   });
   return null;
 }
@@ -3006,26 +2968,6 @@ function KeyboardShortcutsRegister() {
         character: '~'
       }]
     });
-    registerShortcut({
-      name: 'core/edit-widgets/transform-heading-to-paragraph',
-      category: 'block-library',
-      description: (0,external_wp_i18n_namespaceObject.__)('Transform heading to paragraph.'),
-      keyCombination: {
-        modifier: 'access',
-        character: `0`
-      }
-    });
-    [1, 2, 3, 4, 5, 6].forEach(level => {
-      registerShortcut({
-        name: `core/edit-widgets/transform-paragraph-to-heading-${level}`,
-        category: 'block-library',
-        description: (0,external_wp_i18n_namespaceObject.__)('Transform paragraph to heading.'),
-        keyCombination: {
-          modifier: 'access',
-          character: `${level}`
-        }
-      });
-    });
   }, [registerShortcut]);
   return null;
 }
@@ -3101,6 +3043,7 @@ const ENABLE_EXPERIMENTAL_FSE_BLOCKS = false;
 
 
 
+
 /**
  * Internal dependencies
  */
@@ -3116,6 +3059,9 @@ const {
 const {
   PatternsMenuItems
 } = unlock(external_wp_patterns_namespaceObject.privateApis);
+const {
+  BlockKeyboardShortcuts
+} = unlock(external_wp_blockLibrary_namespaceObject.privateApis);
 function WidgetAreasBlockEditorProvider({
   blockEditorSettings,
   children,
@@ -3181,7 +3127,7 @@ function WidgetAreasBlockEditorProvider({
   const [blocks, onInput, onChange] = (0,external_wp_coreData_namespaceObject.useEntityBlockEditor)(KIND, POST_TYPE, {
     id: buildWidgetAreasPostId()
   });
-  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.SlotFillProvider, null, (0,external_React_namespaceObject.createElement)(keyboard_shortcuts.Register, null), (0,external_React_namespaceObject.createElement)(ExperimentalBlockEditorProvider, {
+  return (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.SlotFillProvider, null, (0,external_React_namespaceObject.createElement)(keyboard_shortcuts.Register, null), (0,external_React_namespaceObject.createElement)(BlockKeyboardShortcuts, null), (0,external_React_namespaceObject.createElement)(ExperimentalBlockEditorProvider, {
     value: blocks,
     onInput: onInput,
     onChange: onChange,
@@ -3612,9 +3558,6 @@ function RedoButton(props, ref) {
 
 
 
-const {
-  useShowBlockTools
-} = unlock(external_wp_blockEditor_namespaceObject.privateApis);
 function DocumentTools() {
   const isMediumViewport = (0,external_wp_compose_namespaceObject.useViewportMatch)('medium');
   const inserterButton = (0,external_wp_element_namespaceObject.useRef)();
@@ -3664,15 +3607,9 @@ function DocumentTools() {
     }
   };
   const toggleListView = (0,external_wp_element_namespaceObject.useCallback)(() => setIsListViewOpened(!isListViewOpen), [setIsListViewOpened, isListViewOpen]);
-
-  // If there's a block toolbar to be focused, disable the focus shortcut for the document toolbar.
-  const {
-    showFixedToolbar
-  } = useShowBlockTools();
   return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.NavigableToolbar, {
     className: "edit-widgets-header-toolbar",
     "aria-label": (0,external_wp_i18n_namespaceObject.__)('Document tools'),
-    shouldUseKeyboardFocusShortcut: !showFixedToolbar,
     variant: "unstyled"
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarItem, {
     ref: inserterButton,
@@ -3833,6 +3770,10 @@ const textFormattingShortcuts = [{
     modifier: 'access',
     character: '0'
   },
+  aliases: [{
+    modifier: 'access',
+    character: '7'
+  }],
   description: (0,external_wp_i18n_namespaceObject.__)('Convert the current heading to a paragraph.')
 }, {
   keyCombination: {
@@ -4399,12 +4340,9 @@ function InserterSidebar() {
   const TagName = !isMobileViewport ? external_wp_components_namespaceObject.VisuallyHidden : 'div';
   const [inserterDialogRef, inserterDialogProps] = (0,external_wp_compose_namespaceObject.__experimentalUseDialog)({
     onClose: closeInserter,
-    focusOnMount: null
+    focusOnMount: true
   });
   const libraryRef = (0,external_wp_element_namespaceObject.useRef)();
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    libraryRef.current.focusSearch();
-  }, []);
   return (0,external_React_namespaceObject.createElement)("div", {
     ref: inserterDialogRef,
     ...inserterDialogProps,

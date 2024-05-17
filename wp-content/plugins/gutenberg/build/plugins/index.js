@@ -620,7 +620,7 @@ function PluginArea({
       }
     };
   }, [scope]);
-  const plugins = (0,external_wp_element_namespaceObject.useSyncExternalStore)(store.subscribe, store.getValue);
+  const plugins = (0,external_wp_element_namespaceObject.useSyncExternalStore)(store.subscribe, store.getValue, store.getValue);
   return (0,external_React_namespaceObject.createElement)("div", {
     style: {
       display: 'none'

@@ -8,6 +8,7 @@ $baseDir = dirname($vendorDir);
 return array(
     'Composer\\InstalledVersions' => $vendorDir . '/composer/InstalledVersions.php',
     'Google\\Site_Kit\\Context' => $baseDir . '/Context.php',
+    'Google\\Site_Kit\\Core\\Admin\\Authorize_Application' => $baseDir . '/Core/Admin/Authorize_Application.php',
     'Google\\Site_Kit\\Core\\Admin\\Available_Tools' => $baseDir . '/Core/Admin/Available_Tools.php',
     'Google\\Site_Kit\\Core\\Admin\\Dashboard' => $baseDir . '/Core/Admin/Dashboard.php',
     'Google\\Site_Kit\\Core\\Admin\\Notice' => $baseDir . '/Core/Admin/Notice.php',
@@ -63,6 +64,7 @@ return array(
     'Google\\Site_Kit\\Core\\Consent_Mode\\Regions' => $baseDir . '/Core/Consent_Mode/Regions.php',
     'Google\\Site_Kit\\Core\\Contracts\\WP_Errorable' => $baseDir . '/Core/Contracts/WP_Errorable.php',
     'Google\\Site_Kit\\Core\\Conversion_Tracking\\Conversion_Events_Provider' => $baseDir . '/Core/Conversion_Tracking/Conversion_Events_Provider.php',
+    'Google\\Site_Kit\\Core\\Conversion_Tracking\\Conversion_Tracking' => $baseDir . '/Core/Conversion_Tracking/Conversion_Tracking.php',
     'Google\\Site_Kit\\Core\\Dashboard_Sharing\\Activity_Metrics\\Active_Consumers' => $baseDir . '/Core/Dashboard_Sharing/Activity_Metrics/Active_Consumers.php',
     'Google\\Site_Kit\\Core\\Dashboard_Sharing\\Activity_Metrics\\Activity_Metrics' => $baseDir . '/Core/Dashboard_Sharing/Activity_Metrics/Activity_Metrics.php',
     'Google\\Site_Kit\\Core\\Dashboard_Sharing\\Dashboard_Sharing' => $baseDir . '/Core/Dashboard_Sharing/Dashboard_Sharing.php',

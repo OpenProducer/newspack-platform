@@ -322,6 +322,7 @@ class Google_OAuth {
 	 *
 	 * @param array $access_token Authentication token.
 	 * @param array $required_scopes Required scopes.
+	 * @return string|WP_Error User's email address or error.
 	 */
 	public static function validate_token_and_get_email_address( $access_token, $required_scopes ) {
 		// Validate access token.
@@ -348,16 +349,17 @@ class Google_OAuth {
 				return new \WP_Error( 'newspack_google_oauth', __( 'Newspack can’t access all necessary data because you haven’t granted all permissions requested during setup. Please reconnect your Google account.', 'newspack' ) );
 			}
 
-			$user_info_response = wp_safe_remote_get(
-				add_query_arg(
-					'access_token',
-					$access_token,
-					'https://www.googleapis.com/oauth2/v2/userinfo'
-				)
-			);
-			if ( 200 === wp_remote_retrieve_response_code( $user_info_response ) ) {
-				$user_info = json_decode( $user_info_response['body'] );
-				return $user_info->email;
+			// The /tokeninfo response will contain the email address, as long as the email scope is present in the request.
+			// We always request the email scope. Otherwise, the https://www.googleapis.com/oauth2/v2/userinfo endpoint can be used
+			// to retrieve the user email.
+			if ( isset( $token_info->email ) ) {
+				return $token_info->email;
+			} else {
+				Logger::error( 'User email missing in the response.' );
+				return new \WP_Error(
+					'newspack_google_oauth',
+					__( 'User email missing in the response.', 'newspack' )
+				);
 			}
 		} else {
 			Logger::error( 'Failed retrieving user info – invalid credentials.' );

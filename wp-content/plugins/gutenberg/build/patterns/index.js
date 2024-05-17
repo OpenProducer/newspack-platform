@@ -971,14 +971,12 @@ function PatternsManageButton({
     const {
       getBlock,
       canRemoveBlock,
-      getBlockCount,
-      getSettings
+      getBlockCount
     } = select(external_wp_blockEditor_namespaceObject.store);
     const {
       canUser
     } = select(external_wp_coreData_namespaceObject.store);
     const reusableBlock = getBlock(clientId);
-    const isBlockTheme = getSettings().__unstableIsBlockBasedTheme;
     return {
       canRemove: canRemoveBlock(clientId),
       isVisible: !!reusableBlock && (0,external_wp_blocks_namespaceObject.isReusableBlock)(reusableBlock) && !!canUser('update', 'blocks', reusableBlock.attributes.ref),
@@ -986,7 +984,7 @@ function PatternsManageButton({
       // The site editor and templates both check whether the user
       // has edit_theme_options capabilities. We can leverage that here
       // and omit the manage patterns link if the user can't access it.
-      managePatternsUrl: isBlockTheme && canUser('read', 'templates') ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+      managePatternsUrl: canUser('read', 'templates') ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
         path: '/patterns'
       }) : (0,external_wp_url_namespaceObject.addQueryArgs)('edit.php', {
         post_type: 'wp_block'
@@ -1356,7 +1354,9 @@ function PatternOverridesControls({
   }
 
   // Avoid overwriting other (e.g. meta) bindings.
-  if (isConnectedToOtherSources) return null;
+  if (isConnectedToOtherSources) {
+    return null;
+  }
   const hasName = !!attributes.metadata?.name;
   const allowOverrides = hasName && attributeSources.some(source => source === PATTERN_OVERRIDES_BINDING_SOURCE);
   return (0,external_React_namespaceObject.createElement)(external_React_namespaceObject.Fragment, null, (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.InspectorControls, {
@@ -1369,6 +1369,7 @@ function PatternOverridesControls({
     __next40pxDefaultSize: true,
     className: "pattern-overrides-control__allow-overrides-button",
     variant: "secondary",
+    "aria-haspopup": "dialog",
     onClick: () => {
       if (allowOverrides) {
         setShowDisallowOverridesModal(true);

@@ -4,7 +4,9 @@
 import { ToneProp } from '../../components/tone-dropdown-control';
 import {
 	buildInitialMessageForBackendPrompt,
+	buildMessageContextForUserPrompt,
 	buildMessagesForBackendPrompt,
+	buildRelevantContentMessageForBackendPrompt,
 } from './backend-prompt';
 /**
  * Types & consts
@@ -46,67 +48,6 @@ export type PromptItemProps = {
 };
 
 export const delimiter = '````';
-
-/**
- * Helper function to get the initial system prompt.
- * It defines the `context` value in case it isn't provided.
- *
- * @param {object} options - The options for the prompt.
- * @param {string} options.context - The context of the prompt.
- * @param {Array<string>} options.rules - The rules to follow.
- * @param {boolean} options.useGutenbergSyntax - Enable prompts focused on layout building.
- * @param {boolean} options.useMarkdown - Enable answer to be in markdown.
- * @param {string} options.customSystemPrompt - Provide a custom system prompt that will override system.
- * @returns {PromptItemProps} The initial system prompt.
- */
-export function getInitialSystemPrompt( {
-	context = 'You are an advanced polyglot ghostwriter. Your task is to generate and modify content based on user requests. This functionality is integrated into the Jetpack product developed by Automattic. Users interact with you through a Gutenberg block, you are inside the WordPress editor',
-	rules,
-	useGutenbergSyntax = false,
-	useMarkdown = true,
-	customSystemPrompt,
-}: {
-	context?: string;
-	rules?: Array< string >;
-	useGutenbergSyntax?: boolean;
-	useMarkdown?: boolean;
-	customSystemPrompt?: string;
-} ): PromptItemProps {
-	// Rules
-	let extraRules = '';
-
-	if ( rules?.length ) {
-		extraRules = rules.map( rule => `- ${ rule }.` ).join( '\n' ) + '\n';
-	}
-
-	let prompt = `${ context }. Strictly follow these rules:
-
-${ extraRules }${
-		useMarkdown ? '- Format your responses in Markdown syntax, ready to be published.' : ''
-	}
-- Execute the request without any acknowledgement to the user.
-- Avoid sensitive or controversial topics and ensure your responses are grammatically correct and coherent.
-- If you cannot generate a meaningful response to a user's request, reply with “__JETPACK_AI_ERROR__“. This term should only be used in this context, it is used to generate user facing errors.
-`;
-
-	// POC for layout prompts:
-	if ( useGutenbergSyntax ) {
-		prompt = `${ context }. Strictly follow these rules:
-	
-${ extraRules }- Format your responses in Gutenberg HTML format including HTML comments for WordPress blocks. All responses must be valid Gutenberg HTML.
-- Use only WordPress core blocks
-- Execute the request without any acknowledgement to the user.
-- Avoid sensitive or controversial topics and ensure your responses are grammatically correct and coherent.
-- If you cannot generate a meaningful response to a user's request, reply with “__JETPACK_AI_ERROR__“. This term should only be used in this context, it is used to generate user facing errors.
-`;
-	}
-
-	if ( customSystemPrompt ) {
-		prompt = customSystemPrompt;
-	}
-
-	return { role: 'system', content: prompt };
-}
 
 type PromptOptionsProps = {
 	/*
@@ -169,15 +110,13 @@ export type BuildPromptOptionsProps = {
 };
 
 export type BuildPromptProps = {
-	generatedContent: string;
+	generatedContent?: string;
 	allPostContent?: string;
 	postContentAbove?: string;
 	currentPostTitle?: string;
 	type: PromptTypeProp;
 	userPrompt?: string;
 	isGeneratingTitle?: boolean;
-	useGutenbergSyntax?: boolean;
-	customSystemPrompt?: string;
 	options: BuildPromptOptionsProps;
 };
 
@@ -198,10 +137,9 @@ export function buildPromptForBlock( {
 	type,
 	userPrompt,
 	isGeneratingTitle,
-	customSystemPrompt,
 }: BuildPromptProps ): Array< PromptItemProps > {
 	// Get the initial message to build the system prompt.
-	const initialMessage = buildInitialMessageForBackendPrompt( type, customSystemPrompt );
+	const initialMessage = buildInitialMessageForBackendPrompt( type );
 
 	// Get the user messages to complete the prompt.
 	const userMessages = buildMessagesForBackendPrompt( {
@@ -216,4 +154,45 @@ export function buildPromptForBlock( {
 	} );
 
 	return [ initialMessage, ...userMessages ];
+}
+
+export type BuildExtensionPromptProps = {
+	blockContent: string;
+	options: BuildPromptOptionsProps;
+	type: PromptTypeProp;
+	userPrompt?: string;
+};
+
+/**
+ * Builds a prompt based on the type of prompt.
+ * Meant for use by the extensions.
+ *
+ * @param {BuildPromptProps} options - The prompt options.
+ * @returns {Array< PromptItemProps >} The prompt.
+ * @throws {Error} If the type is not recognized.
+ */
+export function buildPromptForExtensions( {
+	blockContent,
+	options,
+	type,
+	userPrompt,
+}: BuildExtensionPromptProps ): Array< PromptItemProps > {
+	const messages = [ buildInitialMessageForBackendPrompt( type ) ];
+
+	const relevantContentMessage = buildRelevantContentMessageForBackendPrompt( false, blockContent );
+
+	if ( relevantContentMessage ) {
+		messages.push( relevantContentMessage );
+	}
+
+	messages.push( {
+		role: 'jetpack-ai' as const,
+		context: buildMessageContextForUserPrompt( {
+			options,
+			type,
+			userPrompt,
+		} ),
+	} );
+
+	return messages;
 }

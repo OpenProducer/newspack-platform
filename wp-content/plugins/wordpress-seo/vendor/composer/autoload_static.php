@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInitd16de6b5161f9f86a18182b9a2f4be94
+class ComposerStaticInitdde61db2dc32a7876d16ff8608905779
 {
     public static $files = array (
         '81db02b30f563b92907e271b66bd7559' => __DIR__ . '/..' . '/yoast/whip/src/Facades/wordpress.php',
@@ -721,11 +721,17 @@ class ComposerStaticInitd16de6b5161f9f86a18182b9a2f4be94
         'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route' => __DIR__ . '/../..' . '/src/content-type-visibility/user-interface/content-type-visibility-dismiss-new-route.php',
         'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => __DIR__ . '/../..' . '/src/context/meta-tags-context.php',
         'Yoast\\WP\\SEO\\Editors\\Application\\Analysis_Features\\Enabled_Analysis_Features_Repository' => __DIR__ . '/../..' . '/src/editors/application/analysis-features/enabled-analysis-features-repository.php',
+        'Yoast\\WP\\SEO\\Editors\\Application\\Integrations\\Integration_Information_Repository' => __DIR__ . '/../..' . '/src/editors/application/integrations/integration-information-repository.php',
         'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Feature' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-feature.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Feature_Interface' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-feature-interface.php',
         'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Features_List' => __DIR__ . '/../..' . '/src/editors/domain/analysis-features/analysis-features-list.php',
-        'Yoast\\WP\\SEO\\Editors\\Framework\\Analysis_Feature_Interface' => __DIR__ . '/../..' . '/src/editors/framework/analysis-feature-interface.php',
+        'Yoast\\WP\\SEO\\Editors\\Domain\\Integrations\\Integration_Data_Provider_Interface' => __DIR__ . '/../..' . '/src/editors/domain/integrations/integration-data-provider-interface.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Cornerstone_Content' => __DIR__ . '/../..' . '/src/editors/framework/cornerstone-content.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Inclusive_Language_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/inclusive-language-analysis.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Jetpack_Markdown' => __DIR__ . '/../..' . '/src/editors/framework/integrations/jetpack-markdown.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Multilingual' => __DIR__ . '/../..' . '/src/editors/framework/integrations/multilingual.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Semrush' => __DIR__ . '/../..' . '/src/editors/framework/integrations/semrush.php',
+        'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Wincher' => __DIR__ . '/../..' . '/src/editors/framework/integrations/wincher.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Keyphrase_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/keyphrase-analysis.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Previously_Used_Keyphrase' => __DIR__ . '/../..' . '/src/editors/framework/previously-used-keyphrase.php',
         'Yoast\\WP\\SEO\\Editors\\Framework\\Readability_Analysis' => __DIR__ . '/../..' . '/src/editors/framework/readability-analysis.php',
@@ -1172,9 +1178,9 @@ class ComposerStaticInitd16de6b5161f9f86a18182b9a2f4be94
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInitd16de6b5161f9f86a18182b9a2f4be94::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInitd16de6b5161f9f86a18182b9a2f4be94::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInitd16de6b5161f9f86a18182b9a2f4be94::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitdde61db2dc32a7876d16ff8608905779::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitdde61db2dc32a7876d16ff8608905779::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitdde61db2dc32a7876d16ff8608905779::$classMap;
 
         }, null, ClassLoader::class);
     }

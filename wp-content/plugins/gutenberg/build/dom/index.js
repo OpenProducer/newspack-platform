@@ -432,10 +432,18 @@ function getRectangleFromRange(range) {
       left,
       right
     } of filteredRects) {
-      if (top < furthestTop) furthestTop = top;
-      if (bottom > furthestBottom) furthestBottom = bottom;
-      if (left < furthestLeft) furthestLeft = left;
-      if (right > furthestRight) furthestRight = right;
+      if (top < furthestTop) {
+        furthestTop = top;
+      }
+      if (bottom > furthestBottom) {
+        furthestBottom = bottom;
+      }
+      if (left < furthestLeft) {
+        furthestLeft = left;
+      }
+      if (right > furthestRight) {
+        furthestRight = right;
+      }
     }
     return new window.DOMRect(furthestLeft, furthestTop, furthestRight - furthestLeft, furthestBottom - furthestTop);
   }
@@ -1309,7 +1317,9 @@ function placeCaretAtEdge(container, isReverse, x) {
     return;
   }
   const range = scrollIfNoRange(container, isReverse, () => getRange(container, isReverse, x));
-  if (!range) return;
+  if (!range) {
+    return;
+  }
   const {
     ownerDocument
   } = container;

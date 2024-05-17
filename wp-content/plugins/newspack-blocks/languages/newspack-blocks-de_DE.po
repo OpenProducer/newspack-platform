@@ -549,18 +549,13 @@ msgstr ""
 msgid "Renews on"
 msgstr ""
 
-#: release/newspack-blocks/src/blocks/homepage-articles/view.php:387
+#: release/newspack-blocks/src/blocks/homepage-articles/view.php:393
 #: src/blocks/homepage-articles/view.php:389 dist/editor.js:41
 #: release/newspack-blocks/dist/editor.js:2816
 #: release/newspack-blocks/src/blocks/homepage-articles/edit.js:782
 #: src/blocks/homepage-articles/edit.js:785
 msgid "Load more posts"
 msgstr "Mehr Beiträge laden"
-
-#: release/newspack-blocks/src/blocks/homepage-articles/view.php:392
-#: src/blocks/homepage-articles/view.php:394
-msgid "Loading..."
-msgstr "Lade..."
 
 #: release/newspack-blocks/src/blocks/homepage-articles/view.php:395
 #: src/blocks/homepage-articles/view.php:397

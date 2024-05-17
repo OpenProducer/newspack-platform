@@ -78,7 +78,9 @@ const deepMerge = (target, source) => {
           get: getter
         });
       } else if (isObject(source[key])) {
-        if (!target[key]) target[key] = {};
+        if (!target[key]) {
+          target[key] = {};
+        }
         deepMerge(target[key], source[key]);
       } else {
         try {
@@ -171,7 +173,9 @@ const handlers = {
             resetScope();
             resetNamespace();
           }
-          if (it.done) break;
+          if (it.done) {
+            break;
+          }
         }
         return value;
       };
@@ -192,7 +196,9 @@ const handlers = {
     }
 
     // Check if the property is an object. If it is, proxyify it.
-    if (isObject(result)) return proxify(result, ns);
+    if (isObject(result)) {
+      return proxify(result, ns);
+    }
     return result;
   },
   // Prevents passing the current proxy as the receiver to the deepSignal.
@@ -360,7 +366,9 @@ const immutableHandlers = {
   deleteProperty: immutableError
 };
 const deepImmutable = target => {
-  if (!immutableMap.has(target)) immutableMap.set(target, new Proxy(target, immutableHandlers));
+  if (!immutableMap.has(target)) {
+    immutableMap.set(target, new Proxy(target, immutableHandlers));
+  }
   return immutableMap.get(target);
 };
 
@@ -596,7 +604,9 @@ const Directives = ({
   setScope(scope);
   for (const directiveName of currentPriorityLevel) {
     const wrapper = directiveCallbacks[directiveName]?.(directiveArgs);
-    if (wrapper !== undefined) props.children = wrapper;
+    if (wrapper !== undefined) {
+      props.children = wrapper;
+    }
   }
   resetScope();
   return props.children;
@@ -608,9 +618,11 @@ l.vnode = vnode => {
   if (vnode.props.__directives) {
     const props = vnode.props;
     const directives = props.__directives;
-    if (directives.key) vnode.key = directives.key.find(({
-      suffix
-    }) => suffix === 'default').value;
+    if (directives.key) {
+      vnode.key = directives.key.find(({
+        suffix
+      }) => suffix === 'default').value;
+    }
     delete props.__directives;
     const priorityLevels = getPriorityLevels(directives);
     if (priorityLevels.length > 0) {
@@ -625,7 +637,9 @@ l.vnode = vnode => {
       vnode.type = Directives;
     }
   }
-  if (old) old(vnode);
+  if (old) {
+    old(vnode);
+  }
 };
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/utils.js
 /**
@@ -743,7 +757,9 @@ function withScope(func) {
         } catch (e) {
           gen.throw(e);
         }
-        if (it.done) break;
+        if (it.done) {
+          break;
+        }
       }
       return value;
     };
@@ -1116,6 +1132,8 @@ const getGlobalEventDirective = type => ({
           namespace,
           value
         } = defaultEntry;
+        // Check that the value is a JSON object. Send a console warning if not.
+        if (false) {}
         updateSignals(currentValue.current, {
           [namespace]: deepClone(value)
         });
@@ -1167,7 +1185,9 @@ const getGlobalEventDirective = type => ({
       suffix
     }) => suffix !== 'default').forEach(entry => {
       const event = entry.suffix.split('--')[0];
-      if (!events.has(event)) events.set(event, new Set());
+      if (!events.has(event)) {
+        events.set(event, new Set());
+      }
       events.get(event).add(entry);
     });
     events.forEach((entries, eventType) => {
@@ -1199,7 +1219,11 @@ const getGlobalEventDirective = type => ({
       const result = evaluate(entry);
       const currentClass = element.props.class || '';
       const classFinder = new RegExp(`(^|\\s)${className}(\\s|$)`, 'g');
-      if (!result) element.props.class = currentClass.replace(classFinder, ' ').trim();else if (!classFinder.test(currentClass)) element.props.class = currentClass ? `${currentClass} ${className}` : className;
+      if (!result) {
+        element.props.class = currentClass.replace(classFinder, ' ').trim();
+      } else if (!classFinder.test(currentClass)) {
+        element.props.class = currentClass ? `${currentClass} ${className}` : className;
+      }
       useInit(() => {
         /*
          * This seems necessary because Preact doesn't change the class
@@ -1229,8 +1253,14 @@ const getGlobalEventDirective = type => ({
       const styleProp = entry.suffix;
       const result = evaluate(entry);
       element.props.style = element.props.style || {};
-      if (typeof element.props.style === 'string') element.props.style = cssStringToObject(element.props.style);
-      if (!result) delete element.props.style[styleProp];else element.props.style[styleProp] = result;
+      if (typeof element.props.style === 'string') {
+        element.props.style = cssStringToObject(element.props.style);
+      }
+      if (!result) {
+        delete element.props.style[styleProp];
+      } else {
+        element.props.style[styleProp] = result;
+      }
       useInit(() => {
         /*
          * This seems necessary because Preact doesn't change the styles on
@@ -1275,7 +1305,9 @@ const getGlobalEventDirective = type => ({
          * logic: https://github.com/preactjs/preact/blob/ea49f7a0f9d1ff2c98c0bdd66aa0cbc583055246/src/diff/props.js#L110-L129
          */
         if (attribute === 'style') {
-          if (typeof result === 'string') el.style.cssText = result;
+          if (typeof result === 'string') {
+            el.style.cssText = result;
+          }
           return;
         } else if (attribute !== 'width' && attribute !== 'height' && attribute !== 'href' && attribute !== 'list' && attribute !== 'form' &&
         /*
@@ -1369,7 +1401,9 @@ const getGlobalEventDirective = type => ({
     element,
     evaluate
   }) => {
-    if (element.type !== 'template') return;
+    if (element.type !== 'template') {
+      return;
+    }
     const {
       Provider
     } = inheritedContext;
@@ -1461,7 +1495,9 @@ function toVdom(root) {
       nodeType,
       localName
     } = node;
-    if (nodeType === 3) return [node.data];
+    if (nodeType === 3) {
+      return [node.data];
+    }
     if (nodeType === 4) {
       const next = treeWalker.nextSibling();
       node.replaceWith(new window.Text(node.nodeValue));
@@ -1501,18 +1537,24 @@ function toVdom(root) {
       }
       props[n] = attributes[i].value;
     }
-    if (ignore && !island) return [y(localName, {
-      ...props,
-      innerHTML: node.innerHTML,
-      __directives: {
-        ignore: true
-      }
-    })];
-    if (island) hydratedIslands.add(node);
+    if (ignore && !island) {
+      return [y(localName, {
+        ...props,
+        innerHTML: node.innerHTML,
+        __directives: {
+          ignore: true
+        }
+      })];
+    }
+    if (island) {
+      hydratedIslands.add(node);
+    }
     if (directives.length) {
       props.__directives = directives.reduce((obj, [name, ns, value]) => {
         const [, prefix, suffix = 'default'] = directiveParser.exec(name);
-        if (!obj[prefix]) obj[prefix] = [];
+        if (!obj[prefix]) {
+          obj[prefix] = [];
+        }
         obj[prefix].push({
           namespace: ns !== null && ns !== void 0 ? ns : currentNamespace(),
           value,
@@ -1528,7 +1570,9 @@ function toVdom(root) {
       if (child) {
         while (child) {
           const [vnode, nextChild] = walk(child);
-          if (vnode) children.push(vnode);
+          if (vnode) {
+            children.push(vnode);
+          }
           child = nextChild || treeWalker.nextSibling();
         }
         treeWalker.parentNode();
@@ -1536,7 +1580,9 @@ function toVdom(root) {
     }
 
     // Restore previous namespace.
-    if (island) namespaces.pop();
+    if (island) {
+      namespaces.pop();
+    }
     return [y(localName, props, children)];
   }
   return walk(treeWalker.currentNode);

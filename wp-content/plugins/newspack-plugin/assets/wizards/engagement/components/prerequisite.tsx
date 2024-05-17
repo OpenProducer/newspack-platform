@@ -23,10 +23,11 @@ export default function Prerequisite( {
 	saveConfig,
 }: PrequisiteProps ) {
 	const { href } = prerequisite;
+	const isValid = Boolean( prerequisite.active || prerequisite.is_skipped );
 
 	// If the prerequisite is active but has empty fields, show a warning.
 	const hasEmptyFields = () => {
-		if ( prerequisite.active && prerequisite.fields && prerequisite.warning ) {
+		if ( isValid && prerequisite.fields && prerequisite.warning ) {
 			const emptyValues = Object.keys( prerequisite.fields ).filter(
 				fieldName => '' === config[ fieldName as keyof Config ]
 			);
@@ -93,9 +94,7 @@ export default function Prerequisite( {
 									: sprintf(
 											// Translators: Save or Update settings.
 											__( '%s settings', 'newspack-plugin' ),
-											prerequisite.active
-												? __( 'Update', 'newspack-plugin' )
-												: __( 'Save', 'newspack-plugin' )
+											isValid ? __( 'Update', 'newspack-plugin' ) : __( 'Save', 'newspack-plugin' )
 									  ) }
 							</Button>
 						</div>
@@ -138,7 +137,7 @@ export default function Prerequisite( {
 									} }
 								>
 									{ /* eslint-disable no-nested-ternary */ }
-									{ ( prerequisite.active
+									{ ( isValid
 										? __( 'Update ', 'newspack-plugin' )
 										: prerequisite.fields
 										? __( 'Save ', 'newspack-plugin' )
@@ -158,8 +157,10 @@ export default function Prerequisite( {
 	);
 
 	let status = __( 'Pending', 'newspack-plugin' );
-	if ( prerequisite.active ) {
-		status = __( 'Ready', 'newspack-plugin' );
+	if ( isValid ) {
+		status = `${ __( 'Ready', 'newspack-plugin' ) } ${
+			prerequisite.is_skipped ? `(${ __( 'Skipped', 'newspack-plugin' ) })` : ''
+		}`;
 	}
 	if ( prerequisite.is_unavailable ) {
 		status = __( 'Unavailable', 'newspack-plugin' );
@@ -170,14 +171,14 @@ export default function Prerequisite( {
 			className="newspack-ras-wizard__prerequisite"
 			isMedium
 			expandable={ ! prerequisite.is_unavailable }
-			collapse={ prerequisite.active }
+			collapse={ isValid }
 			title={ prerequisite.label }
 			description={ sprintf(
 				/* translators: %s: Prerequisite status */
 				__( 'Status: %s', 'newspack-plugin' ),
 				status
 			) }
-			checkbox={ prerequisite.active ? 'checked' : 'unchecked' }
+			checkbox={ isValid ? 'checked' : 'unchecked' }
 			notificationLevel="info"
 			notification={ hasEmptyFields() }
 		>

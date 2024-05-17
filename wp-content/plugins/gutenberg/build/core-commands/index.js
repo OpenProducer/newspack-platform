@@ -132,7 +132,6 @@ const {
 function useAdminNavigationCommands() {
   const history = useHistory();
   const isTemplatesAccessible = useIsTemplatesAccessible();
-  const isBlockBasedTheme = useIsBlockBasedTheme();
   const isSiteEditor = (0,external_wp_url_namespaceObject.getPath)(window.location.href)?.includes('site-editor.php');
   (0,external_wp_commands_namespaceObject.useCommand)({
     name: 'core/add-new-post',
@@ -157,7 +156,11 @@ function useAdminNavigationCommands() {
     callback: ({
       close
     }) => {
-      if (isTemplatesAccessible && isBlockBasedTheme) {
+      // The site editor and templates both check whether the user
+      // can read templates. We can leverage that here and this
+      // command links to the classic dashboard manage patterns page
+      // if the user can't access it.
+      if (isTemplatesAccessible) {
         const args = {
           path: '/patterns'
         };

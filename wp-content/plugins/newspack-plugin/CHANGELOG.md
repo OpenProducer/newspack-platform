@@ -1,9 +1,24 @@
-## [3.8.2](https://github.com/Automattic/newspack-plugin/compare/v3.8.1...v3.8.2) (2024-04-26)
+## [3.8.7](https://github.com/Automattic/newspack-plugin/compare/v3.8.6...v3.8.7) (2024-05-17)
+
+
+### Bug Fixes
+
+* **google-login:** use wp_generate_password for CSRF; handle CSRF saving failure ([37bab22](https://github.com/Automattic/newspack-plugin/commit/37bab2256a02a1a473c8cbcf2ec7b35309b283f3))
+* **oauth:** prevent false warning when opening Google OAuth ([22723f2](https://github.com/Automattic/newspack-plugin/commit/22723f256c1a8687fdb3d5fec3ed444be6f75c00))
+
+# [4.0.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v4.0.0-alpha.2...v4.0.0-alpha.3) (2024-04-26)
 
 
 ### Bug Fixes
 
 * enable Memberships fix cron job only when environment constant is defined ([#3087](https://github.com/Automattic/newspack-plugin/issues/3087)) ([5d40297](https://github.com/Automattic/newspack-plugin/commit/5d40297252a9022bb9b63b72cf805a08c37eb553))
+
+# [4.0.0-alpha.2](https://github.com/Automattic/newspack-plugin/compare/v4.0.0-alpha.1...v4.0.0-alpha.2) (2024-04-25)
+
+
+### Bug Fixes
+
+* remove deprecated filter callback ([#3090](https://github.com/Automattic/newspack-plugin/issues/3090)) ([5d7d0bf](https://github.com/Automattic/newspack-plugin/commit/5d7d0bf71d16907d3aa98def372a7d9ede8949c6))
 
 ## [3.8.1](https://github.com/Automattic/newspack-plugin/compare/v3.8.0...v3.8.1) (2024-04-25)
 
@@ -11,6 +26,29 @@
 ### Bug Fixes
 
 * remove deprecated filter callback ([#3090](https://github.com/Automattic/newspack-plugin/issues/3090)) ([5d7d0bf](https://github.com/Automattic/newspack-plugin/commit/5d7d0bf71d16907d3aa98def372a7d9ede8949c6))
+
+
+# [4.0.0-alpha.1](https://github.com/Automattic/newspack-plugin/compare/v3.8.0...v4.0.0-alpha.1) (2024-04-25)
+
+
+### Bug Fixes
+
+* ensure only admins can reset starter content and newspack options ([#3081](https://github.com/Automattic/newspack-plugin/issues/3081)) ([4606721](https://github.com/Automattic/newspack-plugin/commit/46067217985f904286ddb2c952ba0e1deb954e56))
+
+
+### Features
+
+* add product option to autocomplete orders ([#3072](https://github.com/Automattic/newspack-plugin/issues/3072)) ([4a2859b](https://github.com/Automattic/newspack-plugin/commit/4a2859b894eab499e194102b0636dc20466e0c22))
+* **ras:** skip campaign setup ([#3051](https://github.com/Automattic/newspack-plugin/issues/3051)) ([9ef0e6d](https://github.com/Automattic/newspack-plugin/commit/9ef0e6d1de8d4dafda4d2af1304206d0f8190b15))
+
+
+### BREAKING CHANGES
+
+* Changes order autocompletion behavior for existing products!
+
+* feat: add product option to autocomplete orders
+
+* chore: update outdated docblock description
 
 # [3.8.0](https://github.com/Automattic/newspack-plugin/compare/v3.7.0...v3.8.0) (2024-04-25)
 

@@ -421,12 +421,17 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 			);
 			$list_id = $campaign && isset( $campaign['recipients']['list_id'] ) ? $campaign['recipients']['list_id'] : null;
 
+			$lists = $this->get_lists( true );
+			if ( \is_wp_error( $lists ) ) {
+				return $lists;
+			}
+
 			$newsletter_data = [
 				'campaign'            => $campaign,
 				'campaign_id'         => $mc_campaign_id,
 				'folders'             => Newspack_Newsletters_Mailchimp_Cached_Data::get_folders(),
 				'interest_categories' => $this->get_interest_categories( $list_id ),
-				'lists'               => $this->get_lists( true ),
+				'lists'               => $lists,
 				'merge_fields'        => $list_id ? Newspack_Newsletters_Mailchimp_Cached_Data::get_merge_fields( $list_id ) : [],
 				'segments'            => $list_id ? Newspack_Newsletters_Mailchimp_Cached_Data::get_segments( $list_id ) : [],
 				'tags'                => $this->get_tags( $list_id ),
@@ -1150,34 +1155,46 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 		$results = [];
 		$by_list = [];
 		foreach ( $lists as $list_id ) {
-			$list = $this->maybe_extract_group_or_tag_list( $list_id );
-			if ( $list && isset( $list['type'] ) ) {
-				$list_id = $list['list_id'];
-				if ( 'group' === $list['type'] && ! isset( $contact['interests'] ) ) {
+			$group_or_tag_list = $this->maybe_extract_group_or_tag_list( $list_id );
+			if ( $group_or_tag_list && isset( $group_or_tag_list['type'] ) ) {
+				$list_id = $group_or_tag_list['list_id'];
+				if ( 'group' === $group_or_tag_list['type'] && ! isset( $contact['interests'] ) ) {
 					$contact['interests'] = [];
 				}
 				if ( isset( $by_list[ $list_id ] ) ) {
-					$by_list[ $list_id ][] = $list;
+					$by_list[ $list_id ][] = $group_or_tag_list;
 				} else {
-					$by_list[ $list_id ] = [ $list ];
+					$by_list[ $list_id ] = [ $group_or_tag_list ];
 				}
 			} else {
 				// It might be a local list – the list id has to be extracted from the DB.
-				$list = Subscription_List::from_form_id( $list_id );
-				if ( ! $list ) {
-					return new WP_Error( 'List not found.' );
+				$local_list = Subscription_List::from_form_id( $list_id );
+				if ( $local_list && $local_list->is_configured_for_provider( $this->service ) ) {
+					$list_settings = $local_list->get_provider_settings( $this->service );
+					if ( $list_settings !== null ) {
+						$list_id = $list_settings['list'];
+						$sublist = [
+							'id'      => $list_settings['tag_id'],
+							'list_id' => $list_id,
+							'type'    => 'tag',
+						];
+						if ( isset( $by_list[ $list_id ] ) ) {
+							$by_list[ $list_id ][] = $sublist;
+						} else {
+							$by_list[ $list_id ] = [ $sublist ];
+						}
+					}
 				}
-				if ( ! $list->is_configured_for_provider( $this->service ) ) {
-					return new WP_Error( 'List not properly configured for the provider.' );
-				}
-				$list_settings = $list->get_provider_settings( $this->service );
-				if ( $list_settings !== null ) {
-					// Empty sublists – just add to the list.
-					$by_list[ $list_settings['list'] ] = [];
-				}
-				continue;
+			}
+			if ( ! isset( $by_list[ $list_id ] ) ) {
+				// If this is not a group-or-tag list, nor a local list, treat the list ID as a regular list.
+				$by_list[ $list_id ] = [];
 			}
 		}
+		if ( empty( $by_list ) ) {
+			return new WP_Error( 'No lists found.' );
+		}
+
 		foreach ( $by_list as $list_id => $sublists ) {
 			$results[] = $this->add_contact( $contact, $list_id, $sublists );
 		}
@@ -1207,8 +1224,9 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 
 		// If contact was added in this execution, we can return the previous
 		// result and bail.
-		if ( ! empty( self::$contacts_added[ $list_id . $email_address ] ) ) {
-			return self::$contacts_added[ $list_id . $email_address ];
+		$cache_key = $list_id . $email_address . wp_json_encode( $sublists );
+		if ( ! empty( self::$contacts_added[ $cache_key ] ) ) {
+			return self::$contacts_added[ $cache_key ];
 		}
 
 		$new_contact_status = 'subscribed';
@@ -1287,23 +1305,39 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				}
 			}
 
+			$all_tags = [];
+			// If the sublists contain any tags, fetch all tags.
+			// This is needed because MC API expects tag names in the contact update payload, not ids.
+			if ( array_filter(
+				$sublists,
+				function( $sublist ) {
+					return 'tag' === $sublist['type']; }
+			) ) {
+				$all_tags = array_reduce(
+					$mc->get( "lists/$list_id/tag-search" )['tags'],
+					function( $tags, $tag ) {
+						$tags[ $tag['id'] ] = $tag['name'];
+						return $tags;
+					},
+					[]
+				);
+			}
+
 			// Add groups and tags, if any.
-			if ( ! empty( $sublists ) ) {
-				foreach ( $sublists as $sublist ) {
-					$sublist_id   = $sublist['id'];
-					$sublist_type = $sublist['type'];
-					if ( 'group' === $sublist_type ) {
-						if ( ! isset( $update_payload['interests'] ) ) {
-							$update_payload['interests'] = [];
-						}
-						$update_payload['interests'][ $sublist['id'] ] = true;
-					} elseif ( 'tag' === $sublist_type ) {
-						if ( ! isset( $update_payload['tags'] ) ) {
-							$update_payload['tags'] = [];
-						}
-						$subscription_list = Subscription_List::from_remote_id( "$sublist_type-$sublist_id-$list_id" );
-						$remote_tag_name   = $subscription_list->get_remote_name();
-						$update_payload['tags'][] = $remote_tag_name;
+			foreach ( $sublists as $sublist ) {
+				$sublist_id   = $sublist['id'];
+				$sublist_type = $sublist['type'];
+				if ( 'group' === $sublist_type ) {
+					if ( ! isset( $update_payload['interests'] ) ) {
+						$update_payload['interests'] = [];
+					}
+					$update_payload['interests'][ $sublist['id'] ] = true;
+				} elseif ( 'tag' === $sublist_type ) {
+					if ( ! isset( $update_payload['tags'] ) ) {
+						$update_payload['tags'] = [];
+					}
+					if ( isset( $all_tags[ $sublist_id ] ) ) {
+						$update_payload['tags'][] = $all_tags[ $sublist_id ];
 					}
 				}
 			}
@@ -1346,7 +1380,7 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 				$e->getMessage()
 			);
 		}
-		self::$contacts_added[ $list_id . $email_address ] = $result;
+		self::$contacts_added[ $cache_key ] = $result;
 		return $result;
 	}
 

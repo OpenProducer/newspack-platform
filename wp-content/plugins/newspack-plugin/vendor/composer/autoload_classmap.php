@@ -30,6 +30,7 @@ return array(
     'Newspack\\Data_Events' => $baseDir . '/includes/data-events/class-data-events.php',
     'Newspack\\Data_Events\\Api' => $baseDir . '/includes/data-events/class-api.php',
     'Newspack\\Data_Events\\Connectors\\ActiveCampaign' => $baseDir . '/includes/data-events/connectors/class-activecampaign.php',
+    'Newspack\\Data_Events\\Connectors\\Connector' => $baseDir . '/includes/data-events/connectors/class-connector.php',
     'Newspack\\Data_Events\\Connectors\\GA4' => $baseDir . '/includes/data-events/connectors/ga4/class-ga4.php',
     'Newspack\\Data_Events\\Connectors\\GA4\\Event' => $baseDir . '/includes/data-events/connectors/ga4/class-event.php',
     'Newspack\\Data_Events\\Connectors\\Mailchimp' => $baseDir . '/includes/data-events/connectors/class-mailchimp.php',
@@ -72,6 +73,7 @@ return array(
     'Newspack\\Newspack_Popups_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-newspack-popups-configuration-manager.php',
     'Newspack\\Newspack_Theme_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-newspack-theme-configuration-manager.php',
     'Newspack\\OAuth' => $baseDir . '/includes/oauth/class-oauth.php',
+    'Newspack\\OAuth_Transients' => $baseDir . '/includes/oauth/class-oauth-transients.php',
     'Newspack\\OneSignal' => $baseDir . '/includes/plugins/class-onesignal.php',
     'Newspack\\Organic_Profile_Block' => $baseDir . '/includes/plugins/class-organic-profile-block.php',
     'Newspack\\PWA' => $baseDir . '/includes/class-pwa.php',
@@ -115,5 +117,6 @@ return array(
     'Newspack\\WooCommerce_Cover_Fees' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-cover-fees.php',
     'Newspack\\WooCommerce_My_Account' => $baseDir . '/includes/reader-revenue/my-account/class-woocommerce-my-account.php',
     'Newspack\\WooCommerce_Order_UTM' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-order-utm.php',
+    'Newspack\\WooCommerce_Products' => $baseDir . '/includes/reader-revenue/woocommerce/class-woocommerce-products.php',
     'Newspack\\WordPress_SEO_Configuration_Manager' => $baseDir . '/includes/configuration_managers/class-wordpress-seo-configuration-manager.php',
 );

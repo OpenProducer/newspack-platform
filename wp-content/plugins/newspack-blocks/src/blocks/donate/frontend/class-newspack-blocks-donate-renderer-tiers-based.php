@@ -116,7 +116,7 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 		$is_any_recommended = array_reduce(
 			$attributes['tiersBasedOptions'],
 			function ( $carry, $item ) {
-				return $carry || isset( $item['recommendLabel'] ) && ! empty( $item['recommendLabel'] );
+				return ( $carry || ( isset( $item['recommendLabel'] ) && ! empty( $item['recommendLabel'] ) ) );
 			},
 			false
 		);

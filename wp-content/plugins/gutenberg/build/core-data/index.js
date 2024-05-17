@@ -21504,9 +21504,13 @@ const getEntityRecordsTotalPages = (state, kind, name, query) => {
   if (!queriedState) {
     return null;
   }
-  if (query.per_page === -1) return 1;
+  if (query.per_page === -1) {
+    return 1;
+  }
   const totalItems = getQueriedTotalItems(queriedState, query);
-  if (!totalItems) return totalItems;
+  if (!totalItems) {
+    return totalItems;
+  }
   // If `per_page` is not set and the query relies on the defaults of the
   // REST endpoint, get the info from query's meta.
   if (!query.per_page) {
@@ -21658,10 +21662,21 @@ function hasEditsForEntityRecord(state, kind, name, recordId) {
  *
  * @return The entity record, merged with its edits.
  */
-const getEditedEntityRecord = (0,external_wp_data_namespaceObject.createSelector)((state, kind, name, recordId) => ({
-  ...getRawEntityRecord(state, kind, name, recordId),
-  ...getEntityRecordEdits(state, kind, name, recordId)
-}), (state, kind, name, recordId, query) => {
+const getEditedEntityRecord = (0,external_wp_data_namespaceObject.createSelector)((state, kind, name, recordId) => {
+  const raw = getRawEntityRecord(state, kind, name, recordId);
+  const edited = getEntityRecordEdits(state, kind, name, recordId);
+  // Never return a non-falsy empty object. Unfortunately we can't return
+  // undefined or null because we were previously returning an empty
+  // object, so trying to read properties from the result would throw.
+  // Using false here is a workaround to avoid breaking changes.
+  if (!raw && !edited) {
+    return false;
+  }
+  return {
+    ...raw,
+    ...edited
+  };
+}, (state, kind, name, recordId, query) => {
   var _query$context4;
   const context = (_query$context4 = query?.context) !== null && _query$context4 !== void 0 ? _query$context4 : 'default';
   return [state.entities.config, state.entities.records?.[kind]?.[name]?.queriedData.items[context]?.[recordId], state.entities.records?.[kind]?.[name]?.queriedData.itemIsComplete[context]?.[recordId], state.entities.records?.[kind]?.[name]?.edits?.[recordId]];
@@ -23613,14 +23628,20 @@ function updateFootnotesFromMeta(blocks, meta) {
   const output = {
     blocks
   };
-  if (!meta) return output;
+  if (!meta) {
+    return output;
+  }
 
   // If meta.footnotes is empty, it means the meta is not registered.
-  if (meta.footnotes === undefined) return output;
+  if (meta.footnotes === undefined) {
+    return output;
+  }
   const newOrder = getFootnotesOrder(blocks);
   const footnotes = meta.footnotes ? JSON.parse(meta.footnotes) : [];
   const currentOrder = footnotes.map(fn => fn.id);
-  if (currentOrder.join('') === newOrder.join('')) return output;
+  if (currentOrder.join('') === newOrder.join('')) {
+    return output;
+  }
   const newFootnotes = newOrder.map(fnId => footnotes.find(fn => fn.id === fnId) || oldFootnotes[fnId] || {
     id: fnId,
     content: ''

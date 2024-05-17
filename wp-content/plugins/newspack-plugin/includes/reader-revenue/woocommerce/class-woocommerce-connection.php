@@ -26,9 +26,10 @@ class WooCommerce_Connection {
 	 * @codeCoverageIgnore
 	 */
 	public static function init() {
-		include_once __DIR__ . '/class-woocommerce-order-utm.php';
-		include_once __DIR__ . '/class-woocommerce-cover-fees.php';
 		include_once __DIR__ . '/class-woocommerce-cli.php';
+		include_once __DIR__ . '/class-woocommerce-cover-fees.php';
+		include_once __DIR__ . '/class-woocommerce-order-utm.php';
+		include_once __DIR__ . '/class-woocommerce-products.php';
 
 		\add_action( 'admin_init', [ __CLASS__, 'disable_woocommerce_setup' ] );
 		\add_filter( 'option_woocommerce_subscriptions_allow_switching', [ __CLASS__, 'force_allow_subscription_switching' ], 10, 2 );
@@ -203,13 +204,15 @@ class WooCommerce_Connection {
 
 		$metadata = [];
 
-		$referer_from_order = $order->get_meta( '_newspack_referer' );
-		if ( empty( $referer_from_order ) ) {
-			$payment_page_url = \wc_get_checkout_url();
-		} else {
-			$payment_page_url = $referer_from_order;
+		if ( empty( $payment_page_url ) ) {
+			$referer_from_order = $order->get_meta( '_newspack_referer' );
+			if ( empty( $referer_from_order ) ) {
+				$payment_page_url = \wc_get_checkout_url();
+			} else {
+				$payment_page_url = $referer_from_order;
+			}
 		}
-		$metadata['payment_page'] = $payment_page_url;
+		$metadata[ Newspack_Newsletters::get_metadata_key( 'payment_page' ) ] = $payment_page_url;
 
 		$utm = $order->get_meta( 'utm' );
 		if ( ! empty( $utm ) ) {
@@ -297,6 +300,21 @@ class WooCommerce_Connection {
 			}
 		}
 
+		// Clear out any payment-related fields that don't relate to the current order.
+		$payment_fields = array_keys( Newspack_Newsletters::get_payment_metadata_fields() );
+		foreach ( $payment_fields as $meta_key ) {
+			$meta_field = Newspack_Newsletters::get_metadata_key( $meta_key );
+			if ( ! isset( $metadata[ $meta_field ] ) ) {
+				if ( 'payment_page_utm' === $meta_key ) {
+					foreach ( WooCommerce_Order_UTM::$params as $param ) {
+						$metadata[ $meta_field . $param ] = '';
+					}
+				} else {
+					$metadata[ $meta_field ] = '';
+				}
+			}
+		}
+
 		return $metadata;
 	}
 
@@ -317,43 +335,49 @@ class WooCommerce_Connection {
 
 		$metadata       = [];
 		$order_metadata = [];
+		$last_order     = self::get_last_successful_order( $customer );
 
 		$metadata[ Newspack_Newsletters::get_metadata_key( 'account' ) ]           = $customer->get_id();
 		$metadata[ Newspack_Newsletters::get_metadata_key( 'registration_date' ) ] = $customer->get_date_created()->date( Newspack_Newsletters::METADATA_DATE_FORMAT );
 		$metadata[ Newspack_Newsletters::get_metadata_key( 'total_paid' ) ]        = \wc_format_localized_price( $customer->get_total_spent() );
 
-		if ( ! $order ) {
-			$order = self::get_last_successful_order( $customer );
+		// If a more recent order exists, use it to sync.
+		if ( ! $order || ( $last_order && $order->get_id() !== $last_order->get_id() ) ) {
+			$order = $last_order;
+		}
 
-			// If customer has no order, they might still have a Subscription.
-			if ( ! $order ) {
-				$user_subscriptions = wcs_get_users_subscriptions( $customer->get_id() );
-				if ( $user_subscriptions ) {
-					$order = reset( $user_subscriptions );
-				}
+		// If customer has no order, they might still have a Subscription.
+		if ( ! $order ) {
+			$user_subscriptions = \wcs_get_users_subscriptions( $customer->get_id() );
+			if ( $user_subscriptions ) {
+				$order = reset( $user_subscriptions );
 			}
 		}
 
+		// Get the order metadata.
 		if ( $order ) {
 			$order_metadata = self::get_contact_order_metadata( $order, $payment_page_url, $is_new );
 		} else {
-			// If the customer has no successful orders, ensure their spend totals are correct.
-			$order_metadata[ Newspack_Newsletters::get_metadata_key( 'last_payment_amount' ) ] = \wc_format_localized_price( '0.00' );
+			// If the customer has no successful orders, clear out subscription-related fields.
+			$payment_fields = array_keys( Newspack_Newsletters::get_payment_metadata_fields() );
+			foreach ( $payment_fields as $meta_key ) {
+				$metadata[ Newspack_Newsletters::get_metadata_key( $meta_key ) ] = '';
+			}
 		}
 
-		$metadata = array_merge( $metadata, $order_metadata );
+		$metadata = array_merge( $order_metadata, $metadata );
 
 		$first_name = $customer->get_billing_first_name();
 		$last_name  = $customer->get_billing_last_name();
 		$full_name  = trim( "$first_name $last_name" );
 		$contact    = [
 			'email'    => $customer->get_billing_email(),
-			'metadata' => array_filter( $metadata ),
+			'metadata' => $metadata,
 		];
 		if ( ! empty( $full_name ) ) {
 			$contact['name'] = $full_name;
 		}
-		return array_filter( $contact );
+		return $contact;
 	}
 
 	/**

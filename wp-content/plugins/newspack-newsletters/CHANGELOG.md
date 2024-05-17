@@ -1,3 +1,17 @@
+## [2.14.3](https://github.com/Automattic/newspack-newsletters/compare/v2.14.2...v2.14.3) (2024-05-09)
+
+
+### Bug Fixes
+
+* **mailchimp:** handle lists error gracefully ([3f64323](https://github.com/Automattic/newspack-newsletters/commit/3f6432382a68a3f9238754d5475b083d5197277a))
+
+## [2.14.2](https://github.com/Automattic/newspack-newsletters/compare/v2.14.1...v2.14.2) (2024-05-08)
+
+
+### Bug Fixes
+
+* **mailchimp:** adding to list(s) ([dcae035](https://github.com/Automattic/newspack-newsletters/commit/dcae0359cff3b60bbcd3fce7a6927d2174482558))
+
 ## [2.14.1](https://github.com/Automattic/newspack-newsletters/compare/v2.14.0...v2.14.1) (2024-04-24)
 
 

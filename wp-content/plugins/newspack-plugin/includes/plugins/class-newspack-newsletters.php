@@ -29,32 +29,7 @@ class Newspack_Newsletters {
 	 *
 	 * @var array
 	 */
-	public static $metadata_keys = [
-		'account'              => 'Account',
-		'registration_date'    => 'Registration Date',
-		'connected_account'    => 'Connected Account',
-		'signup_page'          => 'Signup Page',
-		'signup_page_utm'      => 'Signup UTM: ',
-		'newsletter_selection' => 'Newsletter Selection',
-		'referer'              => 'Referrer Path',
-		'registration_page'    => 'Registration Page',
-		'current_page_url'     => 'Registration Page',
-		'registration_method'  => 'Registration Method',
-
-		// Payment-related.
-		'membership_status'    => 'Membership Status',
-		'payment_page'         => 'Payment Page',
-		'payment_page_utm'     => 'Payment UTM: ',
-		'sub_start_date'       => 'Current Subscription Start Date',
-		'sub_end_date'         => 'Current Subscription End Date',
-		'billing_cycle'        => 'Billing Cycle',
-		'recurring_payment'    => 'Recurring Payment',
-		'last_payment_date'    => 'Last Payment Date',
-		'last_payment_amount'  => 'Last Payment Amount',
-		'product_name'         => 'Product Name',
-		'next_payment_date'    => 'Next Payment Date',
-		'total_paid'           => 'Total Paid',
-	];
+	public static $metadata_keys = [];
 
 	/**
 	 * Initialize hooks and filters.
@@ -65,13 +40,64 @@ class Newspack_Newsletters {
 		 *
 		 * @param array $metadata_keys The list of key/value pairs for metadata fields to be synced to the connected ESP.
 		 */
-		self::$metadata_keys = \apply_filters( 'newspack_ras_metadata_keys', self::$metadata_keys );
+		self::$metadata_keys = \apply_filters( 'newspack_ras_metadata_keys', self::get_all_metadata_fields() );
 
 		\add_filter( 'newspack_newsletters_contact_data', [ __CLASS__, 'normalize_contact_data' ] );
 
 		if ( self::should_sync_ras_metadata() ) {
 			\add_filter( 'newspack_newsletters_contact_lists', [ __CLASS__, 'add_activecampaign_master_list' ], 10, 3 );
 		}
+	}
+
+	/**
+	 * Get basic contact metadata fields.
+	 *
+	 * @return array List of fields.
+	 */
+	public static function get_basic_metadata_fields() {
+		return [
+			'account'              => 'Account',
+			'registration_date'    => 'Registration Date',
+			'connected_account'    => 'Connected Account',
+			'signup_page'          => 'Signup Page',
+			'signup_page_utm'      => 'Signup UTM: ',
+			'newsletter_selection' => 'Newsletter Selection',
+			'referer'              => 'Referrer Path',
+			'registration_page'    => 'Registration Page',
+			'current_page_url'     => 'Registration Page',
+			'registration_method'  => 'Registration Method',
+		];
+	}
+
+	/**
+	 * Get payment-related metadata fields.
+	 *
+	 * @return array List of fields.
+	 */
+	public static function get_payment_metadata_fields() {
+		return [
+			'membership_status'   => 'Membership Status',
+			'payment_page'        => 'Payment Page',
+			'payment_page_utm'    => 'Payment UTM: ',
+			'sub_start_date'      => 'Current Subscription Start Date',
+			'sub_end_date'        => 'Current Subscription End Date',
+			'billing_cycle'       => 'Billing Cycle',
+			'recurring_payment'   => 'Recurring Payment',
+			'last_payment_date'   => 'Last Payment Date',
+			'last_payment_amount' => 'Last Payment Amount',
+			'product_name'        => 'Product Name',
+			'next_payment_date'   => 'Next Payment Date',
+			'total_paid'          => 'Total Paid',
+		];
+	}
+
+	/**
+	 * Get all metdata fields.
+	 *
+	 * @return array List of fields.
+	 */
+	public static function get_all_metadata_fields() {
+		return array_merge( self::get_basic_metadata_fields(), self::get_payment_metadata_fields() );
 	}
 
 	/**

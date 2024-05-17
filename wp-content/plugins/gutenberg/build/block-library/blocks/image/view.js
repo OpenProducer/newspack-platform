@@ -172,7 +172,9 @@ const {
   },
   callbacks: {
     setOverlayStyles() {
-      if (!imageRef) return;
+      if (!imageRef) {
+        return;
+      }
       let {
         naturalWidth,
         naturalHeight,

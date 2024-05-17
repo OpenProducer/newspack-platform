@@ -27,6 +27,8 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
 
     public static $classMap = array (
         'Composer\\InstalledVersions' => __DIR__ . '/..' . '/composer/InstalledVersions.php',
+        'TEC\\Events\\Admin\\Notice\\Provider' => __DIR__ . '/../..' . '/src/Events/Admin/Notice/Provider.php',
+        'TEC\\Events\\Admin\\Notice\\Rest_Api' => __DIR__ . '/../..' . '/src/Events/Admin/Notice/Rest_Api.php',
         'TEC\\Events\\Block_Templates\\Archive_Events\\Archive_Block_Template' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Archive_Events/Archive_Block_Template.php',
         'TEC\\Events\\Block_Templates\\Block_Template_Contract' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Block_Template_Contract.php',
         'TEC\\Events\\Block_Templates\\Controller' => __DIR__ . '/../..' . '/src/Events/Block_Templates/Controller.php',
@@ -198,6 +200,7 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
         'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Site_Health\\Controller' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Site_Health/Controller.php',
         'TEC\\Events\\Integrations\\Plugins\\Event_Tickets\\Site_Health\\Subsection' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Event_Tickets/Site_Health/Subsection.php',
         'TEC\\Events\\Integrations\\Plugins\\Rank_Math\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Rank_Math/Provider.php',
+        'TEC\\Events\\Integrations\\Plugins\\TEC_Tweaks_Extension\\Provider' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/TEC_Tweaks_Extension/Provider.php',
         'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Controller' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Controller.php',
         'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Passes\\Apple_Wallet\\Event_Modifier' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Passes/Apple_Wallet/Event_Modifier.php',
         'TEC\\Events\\Integrations\\Plugins\\Tickets_Wallet_Plus\\Passes\\Pdf' => __DIR__ . '/../..' . '/src/Events/Integrations/Plugins/Tickets_Wallet_Plus/Passes/Pdf.php',
@@ -210,6 +213,8 @@ class ComposerStaticInit3c5fd55f01fcf4db43b1dd867a9e7636
         'TEC\\Events\\Site_Health\\Provider' => __DIR__ . '/../..' . '/src/Events/Site_Health/Provider.php',
         'TEC\\Events\\Telemetry\\Provider' => __DIR__ . '/../..' . '/src/Events/Telemetry/Provider.php',
         'TEC\\Events\\Telemetry\\Telemetry' => __DIR__ . '/../..' . '/src/Events/Telemetry/Telemetry.php',
+        'TEC\\Events\\Views\\Modifiers\\Hide_End_Time_Modifier' => __DIR__ . '/../..' . '/src/Events/Views/Modifiers/Hide_End_Time_Modifier.php',
+        'TEC\\Events\\Views\\Modifiers\\Visibility_Modifier_Abstract' => __DIR__ . '/../..' . '/src/Events/Views/Modifiers/Visibility_Modifier_Abstract.php',
         'Tribe\\Events\\Admin\\Filter_Bar\\Provider' => __DIR__ . '/../..' . '/src/Tribe/Admin/Filter_Bar/Provider.php',
         'Tribe\\Events\\Admin\\Notice\\Full_Site_Editor' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Full_Site_Editor.php',
         'Tribe\\Events\\Admin\\Notice\\Install_Event_Tickets' => __DIR__ . '/../..' . '/src/Tribe/Admin/Notice/Install_Event_Tickets.php',

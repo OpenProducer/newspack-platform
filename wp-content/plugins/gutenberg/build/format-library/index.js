@@ -515,8 +515,12 @@ function createLinkFormat({
       url
     }
   };
-  if (type) format.attributes.type = type;
-  if (id) format.attributes.id = id;
+  if (type) {
+    format.attributes.type = type;
+  }
+  if (id) {
+    format.attributes.id = id;
+  }
   if (opensInNewWindow) {
     format.attributes.target = '_blank';
     format.attributes.rel = format.attributes.rel ? format.attributes.rel + ' noreferrer noopener' : 'noreferrer noopener';
@@ -1296,8 +1300,12 @@ function parseCSS(css = '') {
   return css.split(';').reduce((accumulator, rule) => {
     if (rule) {
       const [property, value] = rule.split(':');
-      if (property === 'color') accumulator.color = value;
-      if (property === 'background-color' && value !== transparentValue) accumulator.backgroundColor = value;
+      if (property === 'color') {
+        accumulator.color = value;
+      }
+      if (property === 'background-color' && value !== transparentValue) {
+        accumulator.backgroundColor = value;
+      }
     }
     return accumulator;
   }, {});
@@ -1351,8 +1359,12 @@ function setColors(value, name, colorSettings, colors) {
       styles.push(['color', color].join(':'));
     }
   }
-  if (styles.length) attributes.style = styles.join(';');
-  if (classNames.length) attributes.class = classNames.join(' ');
+  if (styles.length) {
+    attributes.style = styles.join(';');
+  }
+  if (classNames.length) {
+    attributes.class = classNames.join(' ');
+  }
   return (0,external_wp_richText_namespaceObject.applyFormat)(value, {
     type: name,
     attributes

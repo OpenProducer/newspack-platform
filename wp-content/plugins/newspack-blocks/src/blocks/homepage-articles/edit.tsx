@@ -676,7 +676,7 @@ class Edit extends Component< HomepageArticlesProps > {
 			'show-image': showImage,
 			[ `columns-${ columns }` ]: postLayout === 'grid',
 			[ `colgap-${ colGap }` ]: postLayout === 'grid',
-			[ `ts-${ typeScale }` ]: typeScale !== 5,
+			[ `ts-${ typeScale }` ]: typeScale,
 			[ `image-align${ mediaPosition }` ]: showImage,
 			[ `is-${ imageScale }` ]: showImage,
 			'mobile-stack': mobileStack,

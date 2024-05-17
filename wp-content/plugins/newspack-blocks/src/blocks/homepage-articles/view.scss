@@ -366,6 +366,7 @@
 
 	> button {
 		margin-top: 1em;
+		position: relative;
 	}
 
 	&.has-more-button {
@@ -376,11 +377,30 @@
 
 	&.has-more-button.is-loading {
 		button {
-			display: none;
+			pointer-events: none;
+		}
+		.label {
+			visibility: hidden;
 		}
 		.loading {
 			display: block;
 		}
+	}
+
+	.loading {
+		animation: linear 900ms infinite wpnbha-loading-animation;
+		border-color: currentcolor currentcolor transparent transparent;
+		border-radius: 50%;
+		border-style: solid;
+		border-width: 1.5px;
+		height: 18px;
+		left: 50%;
+		margin-left: -9px;
+		margin-top: -9px;
+		position: absolute;
+		top: 50%;
+		transform: rotate(0deg);
+		width: 18px;
 	}
 
 	&.has-more-button.is-error {
@@ -726,5 +746,14 @@
 			border: 0;
 			padding-right: 0;
 		}
+	}
+}
+
+@keyframes wpnbha-loading-animation {
+	from {
+		transform: rotate( 0deg );
+	}
+	to {
+		transform: rotate( 360deg );
 	}
 }

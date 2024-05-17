@@ -687,8 +687,7 @@ class Jetpack_Gutenberg {
 		}
 		// AI Assistant
 		$ai_assistant_state = array(
-			'is-enabled'            => apply_filters( 'jetpack_ai_enabled', true ),
-			'is-playground-visible' => Constants::is_true( 'JETPACK_AI_ASSISTANT_PLAYGROUND' ),
+			'is-enabled' => apply_filters( 'jetpack_ai_enabled', true ),
 		);
 
 		$screen_base = null;
@@ -726,11 +725,6 @@ class Jetpack_Gutenberg {
 				 * @param bool true Enable the RePublicize UI in the block editor context. Defaults to true.
 				 */
 				'republicize_enabled'           => apply_filters( 'jetpack_block_editor_republicize_feature', true ),
-				/**
-				 * Prevent the registration of the blocks from extensions/blocks/contact-form
-				 * if the Forms package is enabled.
-				 */
-				'is_form_package_enabled'       => apply_filters( 'jetpack_contact_form_use_package', true ),
 			),
 			'siteFragment'     => $status->get_site_suffix(),
 			'adminUrl'         => esc_url( admin_url() ),
@@ -758,6 +752,7 @@ class Jetpack_Gutenberg {
 				'supportedAdditionalConnections'  => $publicize->get_supported_additional_connections(),
 				'autoConversionSettings'          => $settings['autoConversionSettings'],
 				'jetpackSharingSettingsUrl'       => esc_url_raw( admin_url( 'admin.php?page=jetpack#/sharing' ) ),
+				'userConnectionUrl'               => esc_url_raw( admin_url( 'admin.php?page=my-jetpack#/connection' ) ),
 			);
 		}
 
@@ -928,7 +923,7 @@ class Jetpack_Gutenberg {
 	 *
 	 * @since 8.1.0
 	 *
-	 * @param obj    $preset_extensions_manifest List of extensions available in Jetpack.
+	 * @param object $preset_extensions_manifest List of extensions available in Jetpack.
 	 * @param string $blocks_variation           Subset of blocks. production|beta|experimental.
 	 *
 	 * @return array $preset_extensions Array of extensions for that variation

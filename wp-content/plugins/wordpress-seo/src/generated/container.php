@@ -182,6 +182,7 @@ class Cached_Container extends Container
             'yoast\\wp\\seo\\content_type_visibility\\user_interface\\content_type_visibility_dismiss_new_route' => 'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route',
             'yoast\\wp\\seo\\context\\meta_tags_context' => 'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context',
             'yoast\\wp\\seo\\editors\\application\\analysis_features\\enabled_analysis_features_repository' => 'Yoast\\WP\\SEO\\Editors\\Application\\Analysis_Features\\Enabled_Analysis_Features_Repository',
+            'yoast\\wp\\seo\\editors\\application\\integrations\\integration_information_repository' => 'Yoast\\WP\\SEO\\Editors\\Application\\Integrations\\Integration_Information_Repository',
             'yoast\\wp\\seo\\generators\\breadcrumbs_generator' => 'Yoast\\WP\\SEO\\Generators\\Breadcrumbs_Generator',
             'yoast\\wp\\seo\\generators\\open_graph_image_generator' => 'Yoast\\WP\\SEO\\Generators\\Open_Graph_Image_Generator',
             'yoast\\wp\\seo\\generators\\open_graph_locale_generator' => 'Yoast\\WP\\SEO\\Generators\\Open_Graph_Locale_Generator',
@@ -616,6 +617,7 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Content_Type_Visibility\\User_Interface\\Content_Type_Visibility_Dismiss_New_Route' => 'getContentTypeVisibilityDismissNewRouteService',
             'Yoast\\WP\\SEO\\Context\\Meta_Tags_Context' => 'getMetaTagsContextService',
             'Yoast\\WP\\SEO\\Editors\\Application\\Analysis_Features\\Enabled_Analysis_Features_Repository' => 'getEnabledAnalysisFeaturesRepositoryService',
+            'Yoast\\WP\\SEO\\Editors\\Application\\Integrations\\Integration_Information_Repository' => 'getIntegrationInformationRepositoryService',
             'Yoast\\WP\\SEO\\Generators\\Breadcrumbs_Generator' => 'getBreadcrumbsGeneratorService',
             'Yoast\\WP\\SEO\\Generators\\Open_Graph_Image_Generator' => 'getOpenGraphImageGeneratorService',
             'Yoast\\WP\\SEO\\Generators\\Open_Graph_Locale_Generator' => 'getOpenGraphLocaleGeneratorService',
@@ -917,6 +919,10 @@ class Cached_Container extends Container
             'Yoast\\WP\\SEO\\Editors\\Domain\\Analysis_Features\\Analysis_Features_List' => true,
             'Yoast\\WP\\SEO\\Editors\\Framework\\Cornerstone_Content' => true,
             'Yoast\\WP\\SEO\\Editors\\Framework\\Inclusive_Language_Analysis' => true,
+            'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Jetpack_Markdown' => true,
+            'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Multilingual' => true,
+            'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Semrush' => true,
+            'Yoast\\WP\\SEO\\Editors\\Framework\\Integrations\\Wincher' => true,
             'Yoast\\WP\\SEO\\Editors\\Framework\\Keyphrase_Analysis' => true,
             'Yoast\\WP\\SEO\\Editors\\Framework\\Previously_Used_Keyphrase' => true,
             'Yoast\\WP\\SEO\\Editors\\Framework\\Readability_Analysis' => true,
@@ -2766,6 +2772,18 @@ class Cached_Container extends Container
         $b = ${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Language_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Language_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Language_Helper'] = new \Yoast\WP\SEO\Helpers\Language_Helper())) && false ?: '_'};
 
         return $this->services['Yoast\\WP\\SEO\\Editors\\Application\\Analysis_Features\\Enabled_Analysis_Features_Repository'] = new \Yoast\WP\SEO\Editors\Application\Analysis_Features\Enabled_Analysis_Features_Repository(new \Yoast\WP\SEO\Editors\Framework\Cornerstone_Content($a), new \Yoast\WP\SEO\Editors\Framework\Inclusive_Language_Analysis($a, $b, ${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Product_Helper'] = new \Yoast\WP\SEO\Helpers\Product_Helper())) && false ?: '_'}), new \Yoast\WP\SEO\Editors\Framework\Keyphrase_Analysis($a), new \Yoast\WP\SEO\Editors\Framework\Previously_Used_Keyphrase(), new \Yoast\WP\SEO\Editors\Framework\Readability_Analysis($a), new \Yoast\WP\SEO\Editors\Framework\Word_Form_Recognition($b));
+    }
+
+    /**
+     * Gets the public 'Yoast\WP\SEO\Editors\Application\Integrations\Integration_Information_Repository' shared autowired service.
+     *
+     * @return \Yoast\WP\SEO\Editors\Application\Integrations\Integration_Information_Repository
+     */
+    protected function getIntegrationInformationRepositoryService()
+    {
+        $a = ${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] : ($this->services['Yoast\\WP\\SEO\\Helpers\\Options_Helper'] = new \Yoast\WP\SEO\Helpers\Options_Helper())) && false ?: '_'};
+
+        return $this->services['Yoast\\WP\\SEO\\Editors\\Application\\Integrations\\Integration_Information_Repository'] = new \Yoast\WP\SEO\Editors\Application\Integrations\Integration_Information_Repository(new \Yoast\WP\SEO\Editors\Framework\Integrations\Jetpack_Markdown(), new \Yoast\WP\SEO\Editors\Framework\Integrations\Multilingual(${($_ = isset($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\WPML_Conditional']) ? $this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\WPML_Conditional'] : ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\WPML_Conditional'] = new \Yoast\WP\SEO\Conditionals\Third_Party\WPML_Conditional())) && false ?: '_'}, ${($_ = isset($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Polylang_Conditional']) ? $this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Polylang_Conditional'] : ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\Polylang_Conditional'] = new \Yoast\WP\SEO\Conditionals\Third_Party\Polylang_Conditional())) && false ?: '_'}, ${($_ = isset($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\TranslatePress_Conditional']) ? $this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\TranslatePress_Conditional'] : ($this->services['Yoast\\WP\\SEO\\Conditionals\\Third_Party\\TranslatePress_Conditional'] = new \Yoast\WP\SEO\Conditionals\Third_Party\TranslatePress_Conditional())) && false ?: '_'}), new \Yoast\WP\SEO\Editors\Framework\Integrations\Semrush($a), new \Yoast\WP\SEO\Editors\Framework\Integrations\Wincher(${($_ = isset($this->services['Yoast\\WP\\SEO\\Helpers\\Wincher_Helper']) ? $this->services['Yoast\\WP\\SEO\\Helpers\\Wincher_Helper'] : $this->getWincherHelperService()) && false ?: '_'}, $a));
     }
 
     /**

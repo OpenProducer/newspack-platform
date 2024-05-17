@@ -7452,6 +7452,9 @@ const getBlockVariations = (blockName, scope) => {
  * ```
  */
 const registerBlockVariation = (blockName, variation) => {
+  if (typeof variation.name !== 'string') {
+    console.warn('Variation names must be unique strings.');
+  }
   (0,external_wp_data_namespaceObject.dispatch)(store).addBlockVariations(blockName, variation);
 };
 
@@ -7756,9 +7759,13 @@ function __experimentalSanitizeBlockAttributes(name, attributes) {
  */
 function __experimentalGetBlockAttributesNamesByRole(name, role) {
   const attributes = getBlockType(name)?.attributes;
-  if (!attributes) return [];
+  if (!attributes) {
+    return [];
+  }
   const attributesNames = Object.keys(attributes);
-  if (!role) return attributesNames;
+  if (!role) {
+    return attributesNames;
+  }
   return attributesNames.filter(attributeName => attributes[attributeName]?.__experimentalRole === role);
 }
 
@@ -9131,6 +9138,31 @@ const LEGACY_CATEGORY_MAPPING = {
 };
 
 /**
+ * Merge block variations bootstrapped from the server and client.
+ *
+ * When a variation is registered in both places, its properties are merged.
+ *
+ * @param {Array} bootstrappedVariations - A block type variations from the server.
+ * @param {Array} clientVariations       - A block type variations from the client.
+ * @return {Array} The merged array of block variations.
+ */
+function mergeBlockVariations(bootstrappedVariations = [], clientVariations = []) {
+  const result = [...bootstrappedVariations];
+  clientVariations.forEach(clientVariation => {
+    const index = result.findIndex(bootstrappedVariation => bootstrappedVariation.name === clientVariation.name);
+    if (index !== -1) {
+      result[index] = {
+        ...result[index],
+        ...clientVariation
+      };
+    } else {
+      result.push(clientVariation);
+    }
+  });
+  return result;
+}
+
+/**
  * Takes the unprocessed block type settings, merges them with block type metadata
  * and applies all the existing filters for the registered block type.
  * Next, it validates all the settings and performs additional processing to the block type definition.
@@ -9143,6 +9175,7 @@ const LEGACY_CATEGORY_MAPPING = {
 const processBlockType = (name, blockSettings) => ({
   select
 }) => {
+  const bootstrappedBlockType = select.getBootstrappedBlockType(name);
   const blockType = {
     name,
     icon: BLOCK_ICON_DEFAULT,
@@ -9153,11 +9186,11 @@ const processBlockType = (name, blockSettings) => ({
     selectors: {},
     supports: {},
     styles: [],
-    variations: [],
     blockHooks: {},
     save: () => null,
-    ...select.getBootstrappedBlockType(name),
-    ...blockSettings
+    ...bootstrappedBlockType,
+    ...blockSettings,
+    variations: mergeBlockVariations(bootstrappedBlockType?.variations, blockSettings?.variations)
   };
   const settings = (0,external_wp_hooks_namespaceObject.applyFilters)('blocks.registerBlockType', blockType, name, null);
   if (settings.description && typeof settings.description !== 'string') {
@@ -10333,7 +10366,9 @@ function getInnerBlocksProps(props = {}) {
  */
 function getSaveElement(blockTypeOrName, attributes, innerBlocks = []) {
   const blockType = normalizeBlockType(blockTypeOrName);
-  if (!blockType?.save) return null;
+  if (!blockType?.save) {
+    return null;
+  }
   let {
     save
   } = blockType;
