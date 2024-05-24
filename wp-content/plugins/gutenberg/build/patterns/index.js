@@ -179,6 +179,7 @@ const convertSyncedPatternToStatic = clientId => ({
   registry
 }) => {
   const patternBlock = registry.select(external_wp_blockEditor_namespaceObject.store).getBlock(clientId);
+  const existingOverrides = patternBlock.attributes?.content;
   function cloneBlocksAndRemoveBindings(blocks) {
     return blocks.map(block => {
       let metadata = block.attributes.metadata;
@@ -188,13 +189,26 @@ const convertSyncedPatternToStatic = clientId => ({
         };
         delete metadata.id;
         delete metadata.bindings;
+        // Use overriden values of the pattern block if they exist.
+        if (existingOverrides[metadata.name]) {
+          // Iterate over each overriden attribute.
+          for (const [attributeName, value] of Object.entries(existingOverrides[metadata.name])) {
+            // Skip if the attribute does not exist in the block type.
+            if (!(0,external_wp_blocks_namespaceObject.getBlockType)(block.name)?.attributes[attributeName]) {
+              continue;
+            }
+            // Update the block attribute with the override value.
+            block.attributes[attributeName] = value;
+          }
+        }
       }
       return (0,external_wp_blocks_namespaceObject.cloneBlock)(block, {
         metadata: metadata && Object.keys(metadata).length > 0 ? metadata : undefined
       }, cloneBlocksAndRemoveBindings(block.innerBlocks));
     });
   }
-  registry.dispatch(external_wp_blockEditor_namespaceObject.store).replaceBlocks(patternBlock.clientId, cloneBlocksAndRemoveBindings(patternBlock.innerBlocks));
+  const patternInnerBlocks = registry.select(external_wp_blockEditor_namespaceObject.store).getBlocks(patternBlock.clientId);
+  registry.dispatch(external_wp_blockEditor_namespaceObject.store).replaceBlocks(patternBlock.clientId, cloneBlocksAndRemoveBindings(patternInnerBlocks));
 };
 
 /**
@@ -984,7 +998,7 @@ function PatternsManageButton({
       // The site editor and templates both check whether the user
       // has edit_theme_options capabilities. We can leverage that here
       // and omit the manage patterns link if the user can't access it.
-      managePatternsUrl: canUser('read', 'templates') ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
+      managePatternsUrl: canUser('create', 'templates') ? (0,external_wp_url_namespaceObject.addQueryArgs)('site-editor.php', {
         path: '/patterns'
       }) : (0,external_wp_url_namespaceObject.addQueryArgs)('edit.php', {
         post_type: 'wp_block'
@@ -1399,53 +1413,62 @@ function PatternOverridesControls({
 
 
 
-
-
-function recursivelyFindBlockWithName(blocks, name) {
-  for (const block of blocks) {
-    if (block.attributes.metadata?.name === name) {
-      return block;
-    }
-    const found = recursivelyFindBlockWithName(block.innerBlocks, name);
-    if (found) {
-      return found;
-    }
-  }
-}
+const CONTENT = 'content';
 function ResetOverridesControl(props) {
-  const registry = (0,external_wp_data_namespaceObject.useRegistry)();
   const name = props.attributes.metadata?.name;
-  const patternWithOverrides = (0,external_wp_data_namespaceObject.useSelect)(select => {
+  const registry = (0,external_wp_data_namespaceObject.useRegistry)();
+  const isOverriden = (0,external_wp_data_namespaceObject.useSelect)(select => {
     if (!name) {
-      return undefined;
+      return;
     }
     const {
-      getBlockParentsByBlockName,
-      getBlocksByClientId
+      getBlockAttributes,
+      getBlockParentsByBlockName
     } = select(external_wp_blockEditor_namespaceObject.store);
-    const patternBlock = getBlocksByClientId(getBlockParentsByBlockName(props.clientId, 'core/block'))[0];
-    if (!patternBlock?.attributes.content?.[name]) {
-      return undefined;
+    const [patternClientId] = getBlockParentsByBlockName(props.clientId, 'core/block', true);
+    if (!patternClientId) {
+      return;
     }
-    return patternBlock;
+    const overrides = getBlockAttributes(patternClientId)[CONTENT];
+    if (!overrides) {
+      return;
+    }
+    return overrides.hasOwnProperty(name);
   }, [props.clientId, name]);
-  const resetOverrides = async () => {
-    var _editedRecord$blocks;
-    const editedRecord = await registry.resolveSelect(external_wp_coreData_namespaceObject.store).getEditedEntityRecord('postType', 'wp_block', patternWithOverrides.attributes.ref);
-    const blocks = (_editedRecord$blocks = editedRecord.blocks) !== null && _editedRecord$blocks !== void 0 ? _editedRecord$blocks : (0,external_wp_blocks_namespaceObject.parse)(editedRecord.content);
-    const block = recursivelyFindBlockWithName(blocks, name);
-    const newAttributes = Object.assign(
-    // Reset every existing attribute to undefined.
-    Object.fromEntries(Object.keys(props.attributes).map(key => [key, undefined])),
-    // Then assign the original attributes.
-    block.attributes);
-    props.setAttributes(newAttributes);
-  };
+  function onClick() {
+    const {
+      getBlockAttributes,
+      getBlockParentsByBlockName
+    } = registry.select(external_wp_blockEditor_namespaceObject.store);
+    const [patternClientId] = getBlockParentsByBlockName(props.clientId, 'core/block', true);
+    if (!patternClientId) {
+      return;
+    }
+    const overrides = getBlockAttributes(patternClientId)[CONTENT];
+    if (!overrides.hasOwnProperty(name)) {
+      return;
+    }
+    const {
+      updateBlockAttributes,
+      __unstableMarkLastChangeAsPersistent
+    } = registry.dispatch(external_wp_blockEditor_namespaceObject.store);
+    __unstableMarkLastChangeAsPersistent();
+    let newOverrides = {
+      ...overrides
+    };
+    delete newOverrides[name];
+    if (!Object.keys(newOverrides).length) {
+      newOverrides = undefined;
+    }
+    updateBlockAttributes(patternClientId, {
+      [CONTENT]: newOverrides
+    });
+  }
   return (0,external_React_namespaceObject.createElement)(external_wp_blockEditor_namespaceObject.BlockControls, {
     group: "other"
   }, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarGroup, null, (0,external_React_namespaceObject.createElement)(external_wp_components_namespaceObject.ToolbarButton, {
-    onClick: resetOverrides,
-    disabled: !patternWithOverrides,
+    onClick: onClick,
+    disabled: !isOverriden,
     __experimentalIsFocusable: true
   }, (0,external_wp_i18n_namespaceObject.__)('Reset'))));
 }

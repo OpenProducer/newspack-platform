@@ -13,7 +13,6 @@ import * as __WEBPACK_EXTERNAL_MODULE__wordpress_interactivity_8e89b257__ from "
  *
  * @async
  * @param {Array} newHead The head elements of the new page.
- *
  */
 const updateHead = async newHead => {
   // Helper to get the tag id store in the cache.

@@ -8,6 +8,8 @@
 /**
  * Renders the 'core/widget-group' block.
  *
+ * @since 5.9.0
+ *
  * @global array      $wp_registered_sidebars
  * @global int|string $_sidebar_being_rendered
  *
@@ -45,6 +47,8 @@ function gutenberg_render_block_core_widget_group( $attributes, $content, $block
 
 /**
  * Registers the 'core/widget-group' block.
+ *
+ * @since 5.9.0
  */
 function gutenberg_register_block_core_widget_group() {
 	register_block_type_from_metadata(
@@ -62,6 +66,8 @@ add_action( 'init', 'gutenberg_register_block_core_widget_group', 20 );
  * it. This lets us get to the current sidebar in
  * gutenberg_render_block_core_widget_group().
  *
+ * @since 5.9.0
+ *
  * @global int|string $_sidebar_being_rendered
  *
  * @param int|string $index       Index, name, or ID of the dynamic sidebar.
@@ -75,6 +81,8 @@ add_action( 'dynamic_sidebar_before', 'gutenberg_note_sidebar_being_rendered' );
 /**
  * Clear whatever we set in gutenberg_note_sidebar_being_rendered() after WordPress
  * finishes rendering a sidebar.
+ *
+ * @since 5.9.0
  *
  * @global int|string $_sidebar_being_rendered
  */

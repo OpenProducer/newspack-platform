@@ -1,8 +1,8 @@
 <?php return array(
     'root' => array(
         'name' => 'woocommerce/woocommerce',
-        'pretty_version' => '8.8.3',
-        'version' => '8.8.3.0',
+        'pretty_version' => '8.9.1',
+        'version' => '8.9.1.0',
         'reference' => null,
         'type' => 'wordpress-plugin',
         'install_path' => __DIR__ . '/../../',
@@ -167,8 +167,8 @@
             'dev_requirement' => false,
         ),
         'woocommerce/woocommerce' => array(
-            'pretty_version' => '8.8.3',
-            'version' => '8.8.3.0',
+            'pretty_version' => '8.9.1',
+            'version' => '8.9.1.0',
             'reference' => null,
             'type' => 'wordpress-plugin',
             'install_path' => __DIR__ . '/../../',

@@ -215,6 +215,16 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 				'attributes' => array(
 					'name'      => 'Product name',
 					'autoFocus' => true,
+					'metadata'  => array(
+						'bindings' => array(
+							'value' => array(
+								'source' => 'woocommerce/entity-product',
+								'args'   => array(
+									'prop' => 'name',
+								),
+							),
+						),
+					),
 				),
 			)
 		);
@@ -529,8 +539,8 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 						'title'       => __( 'Custom fields', 'woocommerce' ),
 						'description' => sprintf(
 							/* translators: %1$s: Custom fields guide link opening tag. %2$s: Custom fields guide link closing tag. */
-							__( 'Custom fields can be used in a variety of ways, such as sharing more detailed product information, showing more input fields, or internal inventory organization. %1$sRead more about custom fields%2$s', 'woocommerce' ),
-							'<a href="https://wordpress.org/documentation/article/assign-custom-fields/" target="_blank" rel="noreferrer">',
+							__( 'Custom fields can be used in a variety of ways, such as sharing more detailed product information, showing more input fields, or for internal inventory organization. %1$sRead more about custom fields%2$s', 'woocommerce' ),
+							'<a href="https://woocommerce.com/document/custom-product-fields/" target="_blank" rel="noreferrer">',
 							'</a>'
 						),
 					),
@@ -600,10 +610,10 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 		);
 		$pricing_column_1->add_block(
 			array(
-				'id'         => 'product-pricing-regular-price',
-				'blockName'  => 'woocommerce/product-regular-price-field',
-				'order'      => 10,
-				'attributes' => array(
+				'id'                => 'product-pricing-regular-price',
+				'blockName'         => 'woocommerce/product-regular-price-field',
+				'order'             => 10,
+				'attributes'        => array(
 					'name'  => 'regular_price',
 					'label' => __( 'List price', 'woocommerce' ),
 					'help'  => $is_calc_taxes_enabled ? null : sprintf(
@@ -611,6 +621,11 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 						__( 'Per your %1$sstore settings%2$s, taxes are not enabled.', 'woocommerce' ),
 						'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=general' ) . '" target="_blank" rel="noreferrer">',
 						'</a>'
+					),
+				),
+				'disableConditions' => array(
+					array(
+						'expression' => 'editedProduct.type === "variable"',
 					),
 				),
 			)
@@ -627,11 +642,16 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 		);
 		$pricing_column_2->add_block(
 			array(
-				'id'         => 'product-pricing-sale-price',
-				'blockName'  => 'woocommerce/product-sale-price-field',
-				'order'      => 10,
-				'attributes' => array(
+				'id'                => 'product-pricing-sale-price',
+				'blockName'         => 'woocommerce/product-sale-price-field',
+				'order'             => 10,
+				'attributes'        => array(
 					'label' => __( 'Sale price', 'woocommerce' ),
+				),
+				'disableConditions' => array(
+					array(
+						'expression' => 'editedProduct.type === "variable"',
+					),
 				),
 			)
 		);
@@ -778,32 +798,44 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 		);
 		$product_inventory_inner_section->add_block(
 			array(
-				'id'        => 'product-sku-field',
-				'blockName' => 'woocommerce/product-sku-field',
-				'order'     => 10,
+				'id'                => 'product-sku-field',
+				'blockName'         => 'woocommerce/product-sku-field',
+				'order'             => 10,
+				'disableConditions' => array(
+					array(
+						'expression' => 'editedProduct.type === "variable"',
+					),
+				),
 			)
 		);
+
+		$manage_stock = 'yes' === get_option( 'woocommerce_manage_stock' );
 		$product_inventory_inner_section->add_block(
 			array(
-				'id'             => 'product-track-stock',
-				'blockName'      => 'woocommerce/product-toggle-field',
-				'order'          => 20,
-				'attributes'     => array(
-					'label'        => __( 'Track stock quantity for this product', 'woocommerce' ),
+				'id'                => 'product-track-stock',
+				'blockName'         => 'woocommerce/product-toggle-field',
+				'order'             => 20,
+				'attributes'        => array(
+					'label'        => __( 'Track inventory', 'woocommerce' ),
 					'property'     => 'manage_stock',
-					'disabled'     => 'yes' !== get_option( 'woocommerce_manage_stock' ),
-					'disabledCopy' => sprintf(
+					'disabled'     => ! $manage_stock,
+					'disabledCopy' => ! $manage_stock ? sprintf(
 						/* translators: %1$s: Learn more link opening tag. %2$s: Learn more link closing tag.*/
 						__( 'Per your %1$sstore settings%2$s, inventory management is <strong>disabled</strong>.', 'woocommerce' ),
 						'<a href="' . admin_url( 'admin.php?page=wc-settings&tab=products&section=inventory' ) . '" target="_blank" rel="noreferrer">',
 						'</a>'
-					),
+					) : null,
 				),
-				'hideConditions' => Features::is_enabled( 'product-external-affiliate' ) || Features::is_enabled( 'product-grouped' ) ? array(
+				'hideConditions'    => Features::is_enabled( 'product-external-affiliate' ) || Features::is_enabled( 'product-grouped' ) ? array(
 					array(
 						'expression' => 'editedProduct.type === "external" || editedProduct.type === "grouped"',
 					),
 				) : null,
+				'disableConditions' => array(
+					array(
+						'expression' => 'editedProduct.type === "variable"',
+					),
+				),
 			)
 		);
 		$product_inventory_quantity_hide_conditions = array(
@@ -836,10 +868,10 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 		}
 		$product_inventory_section->add_block(
 			array(
-				'id'             => 'product-stock-status',
-				'blockName'      => 'woocommerce/product-radio-field',
-				'order'          => 10,
-				'attributes'     => array(
+				'id'                => 'product-stock-status',
+				'blockName'         => 'woocommerce/product-radio-field',
+				'order'             => 10,
+				'attributes'        => array(
 					'title'    => __( 'Stock status', 'woocommerce' ),
 					'property' => 'stock_status',
 					'options'  => array(
@@ -857,7 +889,12 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 						),
 					),
 				),
-				'hideConditions' => $product_stock_status_hide_conditions,
+				'hideConditions'    => $product_stock_status_hide_conditions,
+				'disableConditions' => array(
+					array(
+						'expression' => 'editedProduct.type === "variable"',
+					),
+				),
 			)
 		);
 
@@ -1023,7 +1060,7 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 					'title'       => __( 'Fees & dimensions', 'woocommerce' ),
 					'description' => sprintf(
 					/* translators: %1$s: How to get started? link opening tag. %2$s: How to get started? link closing tag.*/
-						__( 'Set up shipping costs and enter dimensions used for accurate rate calculations. %1$sHow to get started?%2$s.', 'woocommerce' ),
+						__( 'Set up shipping costs and enter dimensions used for accurate rate calculations. %1$sHow to get started?%2$s', 'woocommerce' ),
 						'<a href="https://woocommerce.com/posts/how-to-calculate-shipping-costs-for-your-woocommerce-store/" target="_blank" rel="noreferrer">',
 						'</a>'
 					),
@@ -1032,16 +1069,26 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 		);
 		$product_fee_and_dimensions_section->add_block(
 			array(
-				'id'        => 'product-shipping-class',
-				'blockName' => 'woocommerce/product-shipping-class-field',
-				'order'     => 10,
+				'id'                => 'product-shipping-class',
+				'blockName'         => 'woocommerce/product-shipping-class-field',
+				'order'             => 10,
+				'disableConditions' => array(
+					array(
+						'expression' => 'editedProduct.type === "variable"',
+					),
+				),
 			)
 		);
 		$product_fee_and_dimensions_section->add_block(
 			array(
-				'id'        => 'product-shipping-dimensions',
-				'blockName' => 'woocommerce/product-shipping-dimensions-fields',
-				'order'     => 20,
+				'id'                => 'product-shipping-dimensions',
+				'blockName'         => 'woocommerce/product-shipping-dimensions-fields',
+				'order'             => 20,
+				'disableConditions' => array(
+					array(
+						'expression' => 'editedProduct.type === "variable"',
+					),
+				),
 			)
 		);
 	}
@@ -1106,8 +1153,8 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 				'attributes' => array(
 					'title'       => __( 'Upsells', 'woocommerce' ),
 					'description' => sprintf(
-						/* translators: %1$s: Learn more about linked products. %2$s: Learn more about linked products.*/
-						__( 'Upsells are typically products that are extra profitable or better quality or more expensive. Experiment with combinations to boost sales. %1$sLearn more about linked products.%2$s', 'woocommerce' ),
+						/* translators: %1$s: "Learn more about linked products" link opening tag. %2$s: "Learn more about linked products" link closing tag. */
+						__( 'Upsells are typically products that are extra profitable or better quality or more expensive. Experiment with combinations to boost sales. %1$sLearn more about linked products%2$s', 'woocommerce' ),
 						'<br /><a href="https://woocommerce.com/document/related-products-up-sells-and-cross-sells/" target="_blank" rel="noreferrer">',
 						'</a>'
 					),
@@ -1139,8 +1186,8 @@ class SimpleProductTemplate extends AbstractProductFormTemplate implements Produ
 				'attributes'     => array(
 					'title'       => __( 'Cross-sells', 'woocommerce' ),
 					'description' => sprintf(
-						/* translators: %1$s: Learn more about linked products. %2$s: Learn more about linked products.*/
-						__( 'By suggesting complementary products in the cart using cross-sells, you can significantly increase the average order value. %1$sLearn more about linked products.%2$s', 'woocommerce' ),
+						/* translators: %1$s: "Learn more about linked products" link opening tag. %2$s: "Learn more about linked products" link closing tag. */
+						__( 'By suggesting complementary products in the cart using cross-sells, you can significantly increase the average order value. %1$sLearn more about linked products%2$s', 'woocommerce' ),
 						'<br /><a href="https://woocommerce.com/document/related-products-up-sells-and-cross-sells/" target="_blank" rel="noreferrer">',
 						'</a>'
 					),

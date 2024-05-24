@@ -68,7 +68,7 @@ var deepsignal_module_a=new WeakMap,deepsignal_module_o=new WeakMap,deepsignal_m
  * Internal dependencies
  */
 
-const isObject = item => item && typeof item === 'object' && item.constructor === Object;
+const isObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 const deepMerge = (target, source) => {
   if (isObject(target) && isObject(source)) {
     for (const key in source) {
@@ -337,8 +337,17 @@ const populateInitialData = data => {
 // Parse and populate the initial state and config.
 const data = parseInitialData();
 populateInitialData(data);
+;// CONCATENATED MODULE: ./packages/interactivity/build-module/utils/warn.js
+const logged = new Set();
+const warn = message => {
+  // @ts-expect-error
+  if (false) {}
+};
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/hooks.js
 /* @jsx createElement */
+
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react-hooks/exhaustive-deps */
 
 /**
  * External dependencies
@@ -348,6 +357,7 @@ populateInitialData(data);
 /**
  * Internal dependencies
  */
+
 
 // Main context.
 const context = F({});
@@ -508,18 +518,24 @@ const directive = (name, callback, {
 
 // Resolve the path to some property of the store object.
 const resolve = (path, namespace) => {
+  if (!namespace) {
+    warn(`The "namespace" cannot be "{}", "null" or an empty string. Path: ${path}`);
+    return;
+  }
   let resolvedStore = stores.get(namespace);
   if (typeof resolvedStore === 'undefined') {
     resolvedStore = store(namespace, undefined, {
       lock: universalUnlock
     });
   }
-  let current = {
+  const current = {
     ...resolvedStore,
     context: getScope().context[namespace]
   };
-  path.split('.').forEach(p => current = current[p]);
-  return current;
+  try {
+    // TODO: Support lazy/dynamically initialized stores
+    return path.split('.').reduce((acc, key) => acc[key], current);
+  } catch (e) {}
 };
 
 // Generate the evaluate function.
@@ -686,7 +702,7 @@ const afterNextFrame = callback => {
  * @return The Flusher object with `flush` and `dispose` properties.
  */
 function createFlusher(compute, notify) {
-  let flush;
+  let flush = () => undefined;
   const dispose = signals_core_module_E(function () {
     flush = this.c.bind(this);
     this.x = compute;
@@ -913,6 +929,9 @@ function kebabToCamelCase(str) {
   });
 }
 ;// CONCATENATED MODULE: ./packages/interactivity/build-module/directives.js
+// eslint-disable-next-line eslint-comments/disable-enable-pair
+/* eslint-disable react-hooks/exhaustive-deps */
+
 /* @jsx createElement */
 
 /**
@@ -929,6 +948,7 @@ function kebabToCamelCase(str) {
 
 
 
+
 // Assigned objects should be ignore during proxification.
 const contextAssignedObjects = new WeakMap();
 
@@ -936,7 +956,7 @@ const contextAssignedObjects = new WeakMap();
 const contextObjectToProxy = new WeakMap();
 const contextProxyToObject = new WeakMap();
 const contextObjectToFallback = new WeakMap();
-const isPlainObject = item => item && typeof item === 'object' && item.constructor === Object;
+const isPlainObject = item => Boolean(item && typeof item === 'object' && item.constructor === Object);
 const descriptor = Reflect.getOwnPropertyDescriptor;
 
 /**
@@ -948,10 +968,10 @@ const descriptor = Reflect.getOwnPropertyDescriptor;
  * By default, all plain objects inside the context are wrapped, unless it is
  * listed in the `ignore` option.
  *
- * @param {Object} current   Current context.
- * @param {Object} inherited Inherited context, used as fallback.
+ * @param current   Current context.
+ * @param inherited Inherited context, used as fallback.
  *
- * @return {Object} The wrapped context object.
+ * @return The wrapped context object.
  */
 const proxifyContext = (current, inherited = {}) => {
   // Update the fallback object reference when it changes.
@@ -1025,8 +1045,8 @@ const proxifyContext = (current, inherited = {}) => {
 /**
  * Recursively update values within a deepSignal object.
  *
- * @param {Object} target A deepSignal instance.
- * @param {Object} source Object with properties to update in `target`
+ * @param target A deepSignal instance.
+ * @param source Object with properties to update in `target`.
  */
 const updateSignals = (target, source) => {
   for (const k in source) {
@@ -1041,10 +1061,10 @@ const updateSignals = (target, source) => {
 /**
  * Recursively clone the passed object.
  *
- * @param {Object} source Source object.
- * @return {Object} Cloned object.
+ * @param source Source object.
+ * @return Cloned object.
  */
-const deepClone = source => {
+function deepClone(source) {
   if (isPlainObject(source)) {
     return Object.fromEntries(Object.entries(source).map(([key, value]) => [key, deepClone(value)]));
   }
@@ -1052,7 +1072,7 @@ const deepClone = source => {
     return source.map(i => deepClone(i));
   }
   return source;
-};
+}
 const newRule = /(?:([\u0080-\uFFFF\w-%@]+) *:? *([^{;]+?);|([^;}{]*?) *{)|(}\s*)/g;
 const ruleClean = /\/\*[^]*?\*\/|  +/g;
 const ruleNewline = /\n+/g;
@@ -1064,8 +1084,8 @@ const empty = ' ';
  * Made by Cristian Bote (@cristianbote) for Goober.
  * https://unpkg.com/browse/goober@2.1.13/src/core/astish.js
  *
- * @param {string} val CSS string.
- * @return {Object} CSS object.
+ * @param val CSS string.
+ * @return CSS object.
  */
 const cssStringToObject = val => {
   const tree = [{}];
@@ -1087,23 +1107,25 @@ const cssStringToObject = val => {
  * Creates a directive that adds an event listener to the global window or
  * document object.
  *
- * @param {string} type 'window' or 'document'
- * @return {void}
+ * @param type 'window' or 'document'
  */
-const getGlobalEventDirective = type => ({
-  directives,
-  evaluate
-}) => {
-  directives[`on-${type}`].filter(({
-    suffix
-  }) => suffix !== 'default').forEach(entry => {
-    useInit(() => {
-      const cb = event => evaluate(entry, event);
-      const globalVar = type === 'window' ? window : document;
-      globalVar.addEventListener(entry.suffix, cb);
-      return () => globalVar.removeEventListener(entry.suffix, cb);
-    }, []);
-  });
+const getGlobalEventDirective = type => {
+  return ({
+    directives,
+    evaluate
+  }) => {
+    directives[`on-${type}`].filter(({
+      suffix
+    }) => suffix !== 'default').forEach(entry => {
+      const eventName = entry.suffix.split('--', 1)[0];
+      useInit(() => {
+        const cb = event => evaluate(entry, event);
+        const globalVar = type === 'window' ? window : document;
+        globalVar.addEventListener(eventName, cb);
+        return () => globalVar.removeEventListener(eventName, cb);
+      });
+    });
+  };
 };
 /* harmony default export */ const directives = (() => {
   // data-wp-context
@@ -1133,7 +1155,9 @@ const getGlobalEventDirective = type => ({
           value
         } = defaultEntry;
         // Check that the value is a JSON object. Send a console warning if not.
-        if (false) {}
+        if (!isPlainObject(value)) {
+          warn(`The value of data-wp-context in "${namespace}" store must be a valid stringified JSON object.`);
+        }
         updateSignals(currentValue.current, {
           [namespace]: deepClone(value)
         });
@@ -1373,6 +1397,10 @@ const getGlobalEventDirective = type => ({
     const entry = text.find(({
       suffix
     }) => suffix === 'default');
+    if (!entry) {
+      element.props.children = null;
+      return;
+    }
     try {
       const result = evaluate(entry);
       element.props.children = typeof result === 'object' ? null : result.toString();
@@ -1451,6 +1479,7 @@ const directivePrefix = 'wp';
  * Internal dependencies
  */
 
+
 const ignoreAttr = `data-${directivePrefix}-ignore`;
 const islandAttr = `data-${directivePrefix}-interactive`;
 const fullPrefix = `data-${directivePrefix}-`;
@@ -1477,84 +1506,102 @@ const directiveParser = new RegExp(`^data-${directivePrefix}-` +
 // the reference, separated by `::`, like `some-namespace::state.somePath`.
 // Namespaces can contain any alphanumeric characters, hyphens, underscores or
 // forward slashes. References don't have any restrictions.
-const nsPathRegExp = /^([\w-_\/]+)::(.+)$/;
+const nsPathRegExp = /^(?<namespace>[\w_\/-]+)::(?<value>.+)$/;
 const hydratedIslands = new WeakSet();
 
 /**
  * Recursive function that transforms a DOM tree into vDOM.
  *
- * @param {Node} root The root element or node to start traversing on.
- * @return {import('preact').VNode[]} The resulting vDOM tree.
+ * @param root The root element or node to start traversing on.
+ * @return The resulting vDOM tree.
  */
 function toVdom(root) {
-  const treeWalker = document.createTreeWalker(root, 205 // ELEMENT + TEXT + COMMENT + CDATA_SECTION + PROCESSING_INSTRUCTION
+  const treeWalker = document.createTreeWalker(root, 205 // TEXT + CDATA_SECTION + COMMENT + PROCESSING_INSTRUCTION + ELEMENT
   );
   function walk(node) {
     const {
-      attributes,
-      nodeType,
-      localName
+      nodeType
     } = node;
+
+    // TEXT_NODE (3)
     if (nodeType === 3) {
       return [node.data];
     }
+
+    // CDATA_SECTION_NODE (4)
     if (nodeType === 4) {
+      var _nodeValue;
       const next = treeWalker.nextSibling();
-      node.replaceWith(new window.Text(node.nodeValue));
+      node.replaceWith(new window.Text((_nodeValue = node.nodeValue) !== null && _nodeValue !== void 0 ? _nodeValue : ''));
       return [node.nodeValue, next];
     }
+
+    // COMMENT_NODE (8) || PROCESSING_INSTRUCTION_NODE (7)
     if (nodeType === 8 || nodeType === 7) {
       const next = treeWalker.nextSibling();
       node.remove();
       return [null, next];
     }
+    const elementNode = node;
+    const {
+      attributes
+    } = elementNode;
+    const localName = elementNode.localName;
     const props = {};
     const children = [];
     const directives = [];
     let ignore = false;
     let island = false;
     for (let i = 0; i < attributes.length; i++) {
-      const n = attributes[i].name;
-      if (n[fullPrefix.length] && n.slice(0, fullPrefix.length) === fullPrefix) {
-        if (n === ignoreAttr) {
+      const attributeName = attributes[i].name;
+      if (attributeName[fullPrefix.length] && attributeName.slice(0, fullPrefix.length) === fullPrefix) {
+        if (attributeName === ignoreAttr) {
           ignore = true;
         } else {
-          var _nsPathRegExp$exec$sl;
-          let [ns, value] = (_nsPathRegExp$exec$sl = nsPathRegExp.exec(attributes[i].value)?.slice(1)) !== null && _nsPathRegExp$exec$sl !== void 0 ? _nsPathRegExp$exec$sl : [null, attributes[i].value];
+          var _regexCaptureGroups$n, _regexCaptureGroups$v;
+          const regexCaptureGroups = nsPathRegExp.exec(attributes[i].value)?.groups;
+          const namespace = (_regexCaptureGroups$n = regexCaptureGroups?.namespace) !== null && _regexCaptureGroups$n !== void 0 ? _regexCaptureGroups$n : null;
+          let value = (_regexCaptureGroups$v = regexCaptureGroups?.value) !== null && _regexCaptureGroups$v !== void 0 ? _regexCaptureGroups$v : attributes[i].value;
           try {
-            value = JSON.parse(value);
+            value = value && JSON.parse(value);
           } catch (e) {}
-          if (n === islandAttr) {
-            var _value$namespace;
+          if (attributeName === islandAttr) {
             island = true;
-            namespaces.push(typeof value === 'string' ? value : (_value$namespace = value?.namespace) !== null && _value$namespace !== void 0 ? _value$namespace : null);
+            const islandNamespace =
+            // eslint-disable-next-line no-nested-ternary
+            typeof value === 'string' ? value : typeof value?.namespace === 'string' ? value.namespace : null;
+            namespaces.push(islandNamespace);
           } else {
-            directives.push([n, ns, value]);
+            directives.push([attributeName, namespace, value]);
           }
         }
-      } else if (n === 'ref') {
+      } else if (attributeName === 'ref') {
         continue;
       }
-      props[n] = attributes[i].value;
+      props[attributeName] = attributes[i].value;
     }
     if (ignore && !island) {
       return [y(localName, {
         ...props,
-        innerHTML: node.innerHTML,
+        innerHTML: elementNode.innerHTML,
         __directives: {
           ignore: true
         }
       })];
     }
     if (island) {
-      hydratedIslands.add(node);
+      hydratedIslands.add(elementNode);
     }
     if (directives.length) {
       props.__directives = directives.reduce((obj, [name, ns, value]) => {
-        const [, prefix, suffix = 'default'] = directiveParser.exec(name);
-        if (!obj[prefix]) {
-          obj[prefix] = [];
+        const directiveMatch = directiveParser.exec(name);
+        if (directiveMatch === null) {
+          warn(`Invalid directive: ${name}.`);
+          return obj;
         }
+        const prefix = directiveMatch[1] || '';
+        const suffix = directiveMatch[2] || 'default';
+        obj[prefix] = obj[prefix] || [];
         obj[prefix].push({
           namespace: ns !== null && ns !== void 0 ? ns : currentNamespace(),
           value,
@@ -1563,8 +1610,10 @@ function toVdom(root) {
         return obj;
       }, {});
     }
+
+    // @ts-expect-error Fixed in upcoming preact release https://github.com/preactjs/preact/pull/4334
     if (localName === 'template') {
-      props.content = [...node.content.childNodes].map(childNode => toVdom(childNode));
+      props.content = [...elementNode.content.childNodes].map(childNode => toVdom(childNode));
     } else {
       let child = treeWalker.firstChild();
       if (child) {

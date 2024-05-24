@@ -23133,7 +23133,8 @@ const resolvers_getDefaultTemplateId = query => async ({
   const template = await external_wp_apiFetch_default()({
     path: (0,external_wp_url_namespaceObject.addQueryArgs)('/wp/v2/templates/lookup', query)
   });
-  if (template) {
+  // Endpoint may return an empty object if no template is found.
+  if (template?.id) {
     dispatch.receiveDefaultTemplateId(query, template.id);
   }
 };

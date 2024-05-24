@@ -1524,9 +1524,13 @@ final class Newspack_Newsletters_Mailchimp extends \Newspack_Newsletters_Service
 					$data[ $key ] = $contact[ $key ];
 				}
 			}
-			$data['tags'][ $contact['list_id'] ]      = $contact['tags'];
-			$data['interests'][ $contact['list_id'] ] = $contact['interests'];
-			$data['lists'][ $contact['list_id'] ]     = [
+			if ( isset( $contact['tags'] ) ) {
+				$data['tags'][ $contact['list_id'] ] = $contact['tags'];
+			}
+			if ( isset( $contact['interests'] ) ) {
+				$data['interests'][ $contact['list_id'] ] = $contact['interests'];
+			}
+			$data['lists'][ $contact['list_id'] ] = [
 				'id'         => $contact['id'], // md5 hash of email.
 				'contact_id' => $contact['contact_id'],
 				'status'     => $contact['status'],

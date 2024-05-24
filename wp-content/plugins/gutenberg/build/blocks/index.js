@@ -6524,6 +6524,11 @@ const __EXPERIMENTAL_STYLE_PROPERTY = {
     support: ['background', 'backgroundSize'],
     useEngine: true
   },
+  backgroundPosition: {
+    value: ['background', 'backgroundPosition'],
+    support: ['background', 'backgroundPosition'],
+    useEngine: true
+  },
   borderColor: {
     value: ['border', 'color'],
     support: ['__experimentalBorder', 'color'],
@@ -6759,6 +6764,7 @@ const __EXPERIMENTAL_PATHS_WITH_OVERRIDE = {
   'color.duotone': true,
   'color.gradients': true,
   'color.palette': true,
+  'dimensions.aspectRatios': true,
   'typography.fontSizes': true,
   'spacing.spacingSizes': true
 };
@@ -7340,13 +7346,13 @@ const hasChildBlocksWithInserterSupport = blockName => {
 };
 
 /**
- * Registers a new block style for the given block.
+ * Registers a new block style for the given block types.
  *
  * For more information on connecting the styles with CSS
  * [the official documentation](https://developer.wordpress.org/block-editor/reference-guides/block-api/block-styles/#styles).
  *
- * @param {string} blockName      Name of block (example: “core/latest-posts”).
- * @param {Object} styleVariation Object containing `name` which is the class name applied to the block and `label` which identifies the variation to the user.
+ * @param {string|Array} blockNames     Name of blocks e.g. “core/latest-posts” or `["core/group", "core/columns"]`.
+ * @param {Object}       styleVariation Object containing `name` which is the class name applied to the block and `label` which identifies the variation to the user.
  *
  * @example
  * ```js
@@ -7371,8 +7377,8 @@ const hasChildBlocksWithInserterSupport = blockName => {
  * };
  * ```
  */
-const registerBlockStyle = (blockName, styleVariation) => {
-  (0,external_wp_data_namespaceObject.dispatch)(store).addBlockStyles(blockName, styleVariation);
+const registerBlockStyle = (blockNames, styleVariation) => {
+  (0,external_wp_data_namespaceObject.dispatch)(store).addBlockStyles(blockNames, styleVariation);
 };
 
 /**
@@ -7954,7 +7960,7 @@ function blockTypes(state = {}, action) {
  * @return {Object} Updated state.
  */
 function blockStyles(state = {}, action) {
-  var _state$action$blockNa, _state$action$blockNa2;
+  var _state$action$blockNa;
   switch (action.type) {
     case 'ADD_BLOCK_TYPES':
       return {
@@ -7970,14 +7976,19 @@ function blockStyles(state = {}, action) {
         }))
       };
     case 'ADD_BLOCK_STYLES':
+      const updatedStyles = {};
+      action.blockNames.forEach(blockName => {
+        var _state$blockName;
+        updatedStyles[blockName] = getUniqueItemsByName([...((_state$blockName = state[blockName]) !== null && _state$blockName !== void 0 ? _state$blockName : []), ...action.styles]);
+      });
       return {
         ...state,
-        [action.blockName]: getUniqueItemsByName([...((_state$action$blockNa = state[action.blockName]) !== null && _state$action$blockNa !== void 0 ? _state$action$blockNa : []), ...action.styles])
+        ...updatedStyles
       };
     case 'REMOVE_BLOCK_STYLES':
       return {
         ...state,
-        [action.blockName]: ((_state$action$blockNa2 = state[action.blockName]) !== null && _state$action$blockNa2 !== void 0 ? _state$action$blockNa2 : []).filter(style => action.styleNames.indexOf(style.name) === -1)
+        [action.blockName]: ((_state$action$blockNa = state[action.blockName]) !== null && _state$action$blockNa !== void 0 ? _state$action$blockNa : []).filter(style => action.styleNames.indexOf(style.name) === -1)
       };
   }
   return state;
@@ -7992,7 +8003,7 @@ function blockStyles(state = {}, action) {
  * @return {Object} Updated state.
  */
 function blockVariations(state = {}, action) {
-  var _state$action$blockNa3, _state$action$blockNa4;
+  var _state$action$blockNa2, _state$action$blockNa3;
   switch (action.type) {
     case 'ADD_BLOCK_TYPES':
       return {
@@ -8010,12 +8021,12 @@ function blockVariations(state = {}, action) {
     case 'ADD_BLOCK_VARIATIONS':
       return {
         ...state,
-        [action.blockName]: getUniqueItemsByName([...((_state$action$blockNa3 = state[action.blockName]) !== null && _state$action$blockNa3 !== void 0 ? _state$action$blockNa3 : []), ...action.variations])
+        [action.blockName]: getUniqueItemsByName([...((_state$action$blockNa2 = state[action.blockName]) !== null && _state$action$blockNa2 !== void 0 ? _state$action$blockNa2 : []), ...action.variations])
       };
     case 'REMOVE_BLOCK_VARIATIONS':
       return {
         ...state,
-        [action.blockName]: ((_state$action$blockNa4 = state[action.blockName]) !== null && _state$action$blockNa4 !== void 0 ? _state$action$blockNa4 : []).filter(variation => action.variationNames.indexOf(variation.name) === -1)
+        [action.blockName]: ((_state$action$blockNa3 = state[action.blockName]) !== null && _state$action$blockNa3 !== void 0 ? _state$action$blockNa3 : []).filter(variation => action.variationNames.indexOf(variation.name) === -1)
       };
   }
   return state;
@@ -8106,6 +8117,7 @@ function blockBindingsSources(state = {}, action) {
         label: action.sourceLabel,
         getValue: action.getValue,
         setValue: action.setValue,
+        setValues: action.setValues,
         getPlaceholder: action.getPlaceholder,
         lockAttributesEditing: (_action$lockAttribute = action.lockAttributesEditing) !== null && _action$lockAttribute !== void 0 ? _action$lockAttribute : true
       }
@@ -9346,18 +9358,18 @@ function removeBlockTypes(names) {
  * Returns an action object used in signalling that new block styles have been added.
  * Ignored from documentation as the recommended usage for this action through registerBlockStyle from @wordpress/blocks.
  *
- * @param {string}       blockName Block name.
- * @param {Array|Object} styles    Block style object or array of block style objects.
+ * @param {string|Array} blockNames Block names to register new styles for.
+ * @param {Array|Object} styles     Block style object or array of block style objects.
  *
  * @ignore
  *
  * @return {Object} Action object.
  */
-function addBlockStyles(blockName, styles) {
+function addBlockStyles(blockNames, styles) {
   return {
     type: 'ADD_BLOCK_STYLES',
     styles: Array.isArray(styles) ? styles : [styles],
-    blockName
+    blockNames: Array.isArray(blockNames) ? blockNames : [blockNames]
   };
 }
 
@@ -9624,6 +9636,7 @@ function registerBlockBindingsSource(source) {
     sourceLabel: source.label,
     getValue: source.getValue,
     setValue: source.setValue,
+    setValues: source.setValues,
     getPlaceholder: source.getPlaceholder,
     lockAttributesEditing: source.lockAttributesEditing
   };

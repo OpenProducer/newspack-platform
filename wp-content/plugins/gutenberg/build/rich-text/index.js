@@ -3075,11 +3075,14 @@ function useBoundaryStyle({
       ownerDocument.execCommand('delete');
     }
   }
-  element.addEventListener('copy', onCopy);
-  element.addEventListener('cut', onCopy);
+  const {
+    defaultView
+  } = element.ownerDocument;
+  defaultView.addEventListener('copy', onCopy);
+  defaultView.addEventListener('cut', onCopy);
   return () => {
-    element.removeEventListener('copy', onCopy);
-    element.removeEventListener('cut', onCopy);
+    defaultView.removeEventListener('copy', onCopy);
+    defaultView.removeEventListener('cut', onCopy);
   };
 });
 
@@ -3552,6 +3555,11 @@ function fixPlaceholderSelection(defaultView) {
       });
     }
     onSelectionChange(record.current.start, record.current.end);
+
+    // There is no selection change event when the element is focused, so
+    // we need to manually trigger it. The selection is also not available
+    // yet in this call stack.
+    window.queueMicrotask(handleSelectionChange);
     ownerDocument.addEventListener('selectionchange', handleSelectionChange);
   }
   element.addEventListener('input', onInput);
