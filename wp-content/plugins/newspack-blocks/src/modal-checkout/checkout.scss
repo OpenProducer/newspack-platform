@@ -1,9 +1,19 @@
 @use '../shared/sass/colors';
 
 /* stylelint-disable-next-line */
-#newspack_modal_checkout {
+.newspack-modal-checkout {
 	padding: 32px;
 	font-size: 1rem;
+	&.cart {
+		.button-container {
+			text-align: center;
+		}
+		.woocommerce-error {
+			background: none;
+			color: colors.$color__error;
+			padding: 0;
+		}
+	}
 	.order-details-summary {
 		border: 2px solid;
 		border-radius: 3px;

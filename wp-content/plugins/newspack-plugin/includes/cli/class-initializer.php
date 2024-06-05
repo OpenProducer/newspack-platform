@@ -24,6 +24,7 @@ class Initializer {
 	public static function init() {
 		add_action( 'init', [ __CLASS__, 'register_comands' ] );
 		include_once NEWSPACK_ABSPATH . 'includes/cli/class-ras.php';
+		include_once NEWSPACK_ABSPATH . 'includes/cli/class-co-authors-plus.php';
 	}
 
 	/**
@@ -60,5 +61,7 @@ class Initializer {
 				],
 			]
 		);
+
+		WP_CLI::add_command( 'newspack migrate-co-authors-guest-authors', [ 'Newspack\CLI\Co_Authors_Plus', 'migrate_guest_authors' ] );
 	}
 }

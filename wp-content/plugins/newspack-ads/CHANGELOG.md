@@ -1,3 +1,31 @@
+# [2.0.0](https://github.com/Automattic/newspack-ads/compare/v1.48.0...v2.0.0) (2024-05-28)
+
+
+* Merge pull request #852 from Automattic/alpha ([39c447e](https://github.com/Automattic/newspack-ads/commit/39c447ef2ef1627bc60287f630551ff8c7c2bf19)), closes [#852](https://github.com/Automattic/newspack-ads/issues/852)
+
+
+### Features
+
+* add 1x1 to all size maps; deprecate AMP ([#837](https://github.com/Automattic/newspack-ads/issues/837)) ([adcdcff](https://github.com/Automattic/newspack-ads/commit/adcdcff4f5e812b26b103e2cfe963b063de479d5))
+
+
+### BREAKING CHANGES
+
+* Deprecates `amp-ad` support
+
+Release May 28
+* Deprecates AMP support.
+
+* feat: add 1x1 to all size maps
+
+* test: fix failing test
+
+* test: fix failing test
+
+* refactor: deprecate AMP support
+
+* fix: composer.lock error
+
 # [1.48.0](https://github.com/Automattic/newspack-ads/compare/v1.47.2...v1.48.0) (2024-04-25)
 
 

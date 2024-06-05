@@ -15,10 +15,8 @@ defined( 'ABSPATH' ) || exit;
 class WooCommerce_Connection {
 	/**
 	 * Statuses considered active subscriptions.
-	 *
-	 * @var array
 	 */
-	public static $active_subscription_statuses = [ 'active', 'pending', 'pending-cancel' ];
+	const ACTIVE_SUBSCRIPTION_STATUSES = [ 'active', 'pending', 'pending-cancel' ];
 
 	/**
 	 * Initialize.
@@ -66,7 +64,7 @@ class WooCommerce_Connection {
 	 */
 	public static function is_subscription_active( $status ) {
 		$status = str_replace( 'wc-', '', $status ); // Normalize status strings.
-		return in_array( $status, self::$active_subscription_statuses, true );
+		return in_array( $status, self::ACTIVE_SUBSCRIPTION_STATUSES, true );
 	}
 
 	/**
@@ -141,7 +139,7 @@ class WooCommerce_Connection {
 
 		$subscriptions = \wcs_get_subscriptions(
 			[
-				'status'                 => self::$active_subscription_statuses,
+				'status'                 => self::ACTIVE_SUBSCRIPTION_STATUSES,
 				'subscriptions_per_page' => $batch_size,
 				'offset'                 => $offset,
 			]
@@ -151,7 +149,7 @@ class WooCommerce_Connection {
 	}
 
 	/**
-	 * Get the last successful order for a given customer.
+	 * Get the most recent active subscription, or the last successful order for a given customer.
 	 *
 	 * @param \WC_Customer $customer Customer object.
 	 *
@@ -162,6 +160,17 @@ class WooCommerce_Connection {
 			return false;
 		}
 
+		// Prioritize any currently active subscriptions.
+		$user_subscriptions = \wcs_get_users_subscriptions( $customer->get_id() );
+		if ( ! empty( $user_subscriptions ) ) {
+			foreach ( $user_subscriptions as $subscription ) {
+				if ( $subscription->has_status( self::ACTIVE_SUBSCRIPTION_STATUSES ) ) {
+					return $subscription;
+				}
+			}
+		}
+
+		// If no active subscriptions, get the most recent completed order.
 		// See https://github.com/woocommerce/woocommerce/wiki/wc_get_orders-and-WC_Order_Query for query args.
 		$args = [
 			'customer_id' => $customer->get_id(),
@@ -172,10 +181,15 @@ class WooCommerce_Connection {
 			'return'      => 'objects',
 		];
 
-		$orders = wc_get_orders( $args );
-
+		// Return the most recent completed order.
+		$orders = \wc_get_orders( $args );
 		if ( ! empty( $orders ) ) {
 			return reset( $orders );
+		}
+
+		// If no completed orders or active subscriptions, they might still have an inactive subscription.
+		if ( ! empty( $user_subscriptions ) ) {
+			return reset( $user_subscriptions );
 		}
 
 		return false;
@@ -344,14 +358,6 @@ class WooCommerce_Connection {
 		// If a more recent order exists, use it to sync.
 		if ( ! $order || ( $last_order && $order->get_id() !== $last_order->get_id() ) ) {
 			$order = $last_order;
-		}
-
-		// If customer has no order, they might still have a Subscription.
-		if ( ! $order ) {
-			$user_subscriptions = \wcs_get_users_subscriptions( $customer->get_id() );
-			if ( $user_subscriptions ) {
-				$order = reset( $user_subscriptions );
-			}
 		}
 
 		// Get the order metadata.

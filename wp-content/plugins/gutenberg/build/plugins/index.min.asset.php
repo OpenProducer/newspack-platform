@@ -1,1 +1,1 @@
-<?php return array('dependencies' => array('react', 'wp-compose', 'wp-element', 'wp-hooks', 'wp-is-shallow-equal', 'wp-polyfill', 'wp-primitives'), 'version' => 'ee0e8438f092d8b6407a');
+<?php return array('dependencies' => array('react-jsx-runtime', 'wp-compose', 'wp-element', 'wp-hooks', 'wp-is-shallow-equal', 'wp-polyfill', 'wp-primitives'), 'version' => '1beb98250668f1489afa');

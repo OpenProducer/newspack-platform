@@ -200,7 +200,7 @@ domReady( () => {
 					innerButtons.forEach( innerButton => {
 						innerButton.addEventListener( 'click', () => ( spinner.style.display = 'flex' ) );
 					} );
-					const innerForm = iframe.contentDocument.querySelector( '.checkout' );
+					const innerForm = iframe.contentDocument.querySelector( 'form.checkout' );
 					if ( innerForm ) {
 						const innerBillingFields = [
 							...innerForm.querySelectorAll( '.woocommerce-billing-fields input' ),

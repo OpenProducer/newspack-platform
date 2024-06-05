@@ -14,9 +14,10 @@ use DrewM\MailChimp\MailChimp;
  */
 final class Newspack_Newsletters {
 
-	const NEWSPACK_NEWSLETTERS_CPT = 'newspack_nl_cpt';
-	const EMAIL_HTML_META          = 'newspack_email_html';
-	const PUBLIC_POST_ID_META      = 'newspack_nl_public_post_id';
+	const NEWSPACK_NEWSLETTERS_CPT          = 'newspack_nl_cpt';
+	const EMAIL_HTML_META                   = 'newspack_email_html';
+	const NEWSPACK_NEWSLETTERS_PALETTE_META = 'newspack_newsletters_color_palette';
+	const PUBLIC_POST_ID_META               = 'newspack_nl_public_post_id';
 
 	/**
 	 * Supported fonts.
@@ -142,6 +143,14 @@ final class Newspack_Newsletters {
 	 * These have to be registered so the updates are handles correctly.
 	 */
 	public static function register_editor_only_meta() {
+		$default_register_meta_args = [
+			'show_in_rest' => [
+				'schema' => [
+					'context' => [ 'edit' ],
+				],
+			],
+			'type'         => 'string',
+		];
 		$fields = [
 			[
 				'name'               => 'newsletterData',
@@ -159,25 +168,15 @@ final class Newspack_Newsletters {
 			],
 			[
 				'name'               => 'senderName',
-				'register_meta_args' => [
-					'show_in_rest' => [
-						'schema' => [
-							'context' => [ 'edit' ],
-						],
-					],
-					'type'         => 'string',
-				],
+				'register_meta_args' => $default_register_meta_args,
 			],
 			[
 				'name'               => 'senderEmail',
-				'register_meta_args' => [
-					'show_in_rest' => [
-						'schema' => [
-							'context' => [ 'edit' ],
-						],
-					],
-					'type'         => 'string',
-				],
+				'register_meta_args' => $default_register_meta_args,
+			],
+			[
+				'name'               => 'stringifiedLayoutDefaults',
+				'register_meta_args' => $default_register_meta_args,
 			],
 			[
 				'name'               => 'newsletter_send_errors',
@@ -680,15 +679,8 @@ final class Newspack_Newsletters {
 	 * @param WP_REST_Request $request API request object.
 	 */
 	public static function api_set_color_palette( $request ) {
-		update_option(
-			'newspack_newsletters_color_palette',
-			wp_json_encode(
-				array_merge(
-					json_decode( (string) get_option( 'newspack_newsletters_color_palette', '{}' ), true ) ?? [],
-					json_decode( $request->get_body(), true )
-				)
-			)
-		);
+		self::update_color_palette( json_decode( $request->get_body(), true ) );
+
 		return \rest_ensure_response( [] );
 	}
 
@@ -751,6 +743,7 @@ final class Newspack_Newsletters {
 					'font_body'        => get_post_meta( $post->ID, 'font_body', true ),
 					'font_header'      => get_post_meta( $post->ID, 'font_header', true ),
 					'custom_css'       => get_post_meta( $post->ID, 'custom_css', true ),
+					'layout_defaults'  => get_post_meta( $post->ID, 'layout_defaults', true ),
 				];
 				return $post;
 			},
@@ -1220,6 +1213,25 @@ final class Newspack_Newsletters {
 				exit;
 			}
 		}
+	}
+
+	/**
+	 * Updates the default newsletters color palette option.
+	 *
+	 * @param array $palette The updated color palette.
+	 *
+	 * @return bool True if the option was updated, false otherwise.
+	 */
+	public static function update_color_palette( $palette ) {
+		return update_option(
+			self::NEWSPACK_NEWSLETTERS_PALETTE_META,
+			wp_json_encode(
+				array_merge(
+					json_decode( (string) get_option( self::NEWSPACK_NEWSLETTERS_PALETTE_META, '{}' ), true ) ?? [],
+					$palette
+				)
+			)
+		);
 	}
 }
 Newspack_Newsletters::instance();

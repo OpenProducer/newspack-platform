@@ -36,6 +36,7 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 		$configuration = self::get_configuration( $attributes );
 
 		$has_recommend_label = isset( $attributes['tiersBasedOptions'][ $index ]['recommendLabel'] ) && ! empty( $attributes['tiersBasedOptions'][ $index ]['recommendLabel'] );
+		$has_description     = isset( $attributes['tiersBasedOptions'][ $index ]['description'] ) && ! empty( $attributes['tiersBasedOptions'][ $index ]['description'] );
 		$is_reverse_style    = ! $has_recommend_label && $is_any_recommended;
 		$button_style_attr   = 'style="' . self::get_button_style( $attributes, $is_reverse_style ) . '"';
 
@@ -75,9 +76,11 @@ class Newspack_Blocks_Donate_Renderer_Tiers_Based extends Newspack_Blocks_Donate
 			>
 				<?php echo esc_html( $attributes['tiersBasedOptions'][ $index ]['buttonText'] ); ?>
 			</button>
+			<?php if ( $has_description ) : ?>
 			<div class="wpbnbd__tiers__description">
 				<?php echo wp_kses_post( $attributes['tiersBasedOptions'][ $index ]['description'] ); ?>
 			</div>
+			<?php endif; ?>
 		</div>
 
 		<?php

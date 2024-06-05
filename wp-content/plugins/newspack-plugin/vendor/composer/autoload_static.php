@@ -4,7 +4,7 @@
 
 namespace Composer\Autoload;
 
-class ComposerStaticInit0e78ec33dd9095cabcf4a4b6a6c3f828
+class ComposerStaticInitd1deacb3244a2bf7d8712b61e261113b
 {
     public static $files = array (
         '7b11c4dc42b3b3023073cb14e519683c' => __DIR__ . '/..' . '/ralouphie/getallheaders/src/getallheaders.php',
@@ -97,10 +97,12 @@ class ComposerStaticInit0e78ec33dd9095cabcf4a4b6a6c3f828
         'Newspack\\Author_Filter' => __DIR__ . '/../..' . '/includes/author-filter/class-author-filter.php',
         'Newspack\\Authors_Custom_Fields' => __DIR__ . '/../..' . '/includes/authors/class-authors-custom-fields.php',
         'Newspack\\Blocks' => __DIR__ . '/../..' . '/includes/class-blocks.php',
+        'Newspack\\CLI\\Co_Authors_Plus' => __DIR__ . '/../..' . '/includes/cli/class-co-authors-plus.php',
         'Newspack\\CLI\\Initializer' => __DIR__ . '/../..' . '/includes/cli/class-initializer.php',
         'Newspack\\CLI\\RAS' => __DIR__ . '/../..' . '/includes/cli/class-ras.php',
         'Newspack\\CLI\\Setup' => __DIR__ . '/../..' . '/includes/cli/class-setup.php',
         'Newspack\\Category_Pager' => __DIR__ . '/../..' . '/includes/class-category-pager.php',
+        'Newspack\\Co_Authors_Plus' => __DIR__ . '/../..' . '/includes/plugins/class-co-authors-plus.php',
         'Newspack\\Components_Demo' => __DIR__ . '/../..' . '/includes/wizards/class-components-demo.php',
         'Newspack\\Configuration_Manager' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-manager.php',
         'Newspack\\Configuration_Managers' => __DIR__ . '/../..' . '/includes/configuration_managers/class-configuration-managers.php',
@@ -203,9 +205,9 @@ class ComposerStaticInit0e78ec33dd9095cabcf4a4b6a6c3f828
     public static function getInitializer(ClassLoader $loader)
     {
         return \Closure::bind(function () use ($loader) {
-            $loader->prefixLengthsPsr4 = ComposerStaticInit0e78ec33dd9095cabcf4a4b6a6c3f828::$prefixLengthsPsr4;
-            $loader->prefixDirsPsr4 = ComposerStaticInit0e78ec33dd9095cabcf4a4b6a6c3f828::$prefixDirsPsr4;
-            $loader->classMap = ComposerStaticInit0e78ec33dd9095cabcf4a4b6a6c3f828::$classMap;
+            $loader->prefixLengthsPsr4 = ComposerStaticInitd1deacb3244a2bf7d8712b61e261113b::$prefixLengthsPsr4;
+            $loader->prefixDirsPsr4 = ComposerStaticInitd1deacb3244a2bf7d8712b61e261113b::$prefixDirsPsr4;
+            $loader->classMap = ComposerStaticInitd1deacb3244a2bf7d8712b61e261113b::$classMap;
 
         }, null, ClassLoader::class);
     }

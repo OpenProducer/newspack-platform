@@ -40,6 +40,7 @@ class RSS {
 		add_filter( 'the_content_feed', [ __CLASS__, 'maybe_remove_content_featured_image' ], 1 );
 		add_filter( 'wpseo_include_rss_footer', [ __CLASS__, 'maybe_suppress_yoast' ] );
 		add_action( 'rss2_ns', [ __CLASS__, 'maybe_inject_yahoo_namespace' ] );
+		add_filter( 'the_title_rss', [ __CLASS__, 'maybe_wrap_titles_in_cdata' ] );
 	}
 
 	/**
@@ -76,6 +77,7 @@ class RSS {
 			'yahoo_namespace'        => false,
 			'update_frequency'       => false,
 			'use_post_id_as_guid'    => false,
+			'cdata_titles'           => false,
 		];
 
 		if ( ! $feed_post ) {
@@ -401,6 +403,13 @@ class RSS {
 					<input type="checkbox" name="yahoo_namespace" value="1" <?php checked( $settings['yahoo_namespace'] ); ?> />
 				</td>
 			</tr>
+			<tr>
+				<th><?php esc_html_e( 'Wrap the content of <title> elements in CDATA tags', 'newspack-plugin' ); ?></th>
+				<td>
+					<input type="hidden" name="cdata_titles" value="0" />
+					<input type="checkbox" name="cdata_titles" value="1" <?php checked( $settings['cdata_titles'] ); ?> />
+				</td>
+			</tr>
 			<?php if ( defined( 'WPSEO_VERSION' ) && WPSEO_VERSION ) : ?>
 				<tr>
 					<th>
@@ -477,6 +486,9 @@ class RSS {
 
 		$use_post_id_as_guid             = filter_input( INPUT_POST, 'use_post_id_as_guid', FILTER_SANITIZE_NUMBER_INT );
 		$settings['use_post_id_as_guid'] = (bool) $use_post_id_as_guid;
+
+		$cdata_titles             = filter_input( INPUT_POST, 'cdata_titles', FILTER_SANITIZE_NUMBER_INT );
+		$settings['cdata_titles'] = (bool) $cdata_titles;
 
 		$category_settings = filter_input_array(
 			INPUT_POST,
@@ -694,6 +706,26 @@ class RSS {
 xmlns:media="http://search.yahoo.com/mrss/"
 			<?php
 		}
+	}
+
+	/**
+	 * Wrap titles in CDATA tags if checked e.g. "<title><![CDATA[Post title]]></title>".
+	 * This is useful for certain parsers that don't support titles with special characters in them.
+	 *
+	 * @param string $title Post title for RSS feed.
+	 * @return string Modified $title.
+	 */
+	public static function maybe_wrap_titles_in_cdata( $title ) {
+		$settings = self::get_feed_settings();
+		if ( ! $settings ) {
+			return $title;
+		}
+
+		if ( $settings['cdata_titles'] ) {
+			$title = '<![CDATA[' . $title . ']]>';
+		}
+
+		return $title;
 	}
 }
 RSS::init();

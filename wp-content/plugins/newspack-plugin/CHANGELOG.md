@@ -1,3 +1,60 @@
+# [4.1.0](https://github.com/Automattic/newspack-plugin/compare/v4.0.1...v4.1.0) (2024-05-30)
+
+
+### Features
+
+* **ga4-events:** add author name(s), category, RAS statuses to event payload ([#3129](https://github.com/Automattic/newspack-plugin/issues/3129)) ([d1af9bb](https://github.com/Automattic/newspack-plugin/commit/d1af9bbc3d57f4460f1e9d4fb4dee74f5ffb77a4))
+
+## [4.0.1](https://github.com/Automattic/newspack-plugin/compare/v4.0.0...v4.0.1) (2024-05-29)
+
+
+### Bug Fixes
+
+* **ras-sync:** allow active subscription to take precendence over orders ([#3141](https://github.com/Automattic/newspack-plugin/issues/3141)) ([eef6dfb](https://github.com/Automattic/newspack-plugin/commit/eef6dfb18448c036f45ac4246664a752d8e4388e))
+
+# [4.0.0](https://github.com/Automattic/newspack-plugin/compare/v3.8.8...v4.0.0) (2024-05-28)
+
+
+### Bug Fixes
+
+* autocomplete orders only for virtual products ([#3111](https://github.com/Automattic/newspack-plugin/issues/3111)) ([bfbe554](https://github.com/Automattic/newspack-plugin/commit/bfbe5541c7dcee270a6c2116344ffaa18742f612))
+* **data-events:** handle no ga_client_id in data ([fc4fc9f](https://github.com/Automattic/newspack-plugin/commit/fc4fc9f5241cc8a9a316ae4d7e62f8f63f528b72))
+* ensure only admins can reset starter content and newspack options ([#3081](https://github.com/Automattic/newspack-plugin/issues/3081)) ([4606721](https://github.com/Automattic/newspack-plugin/commit/46067217985f904286ddb2c952ba0e1deb954e56))
+* **registration-block:** prevent undefined variable warning ([8af9d89](https://github.com/Automattic/newspack-plugin/commit/8af9d898a3f81059599b00fcd18e5e5ec01423f2))
+* **starter-content:** make the starter content generation idempotent ([d5e10ff](https://github.com/Automattic/newspack-plugin/commit/d5e10ff1c3935f921677f7f3bacb8d35c9709cb0))
+
+
+### Features
+
+* add product option to autocomplete orders ([#3072](https://github.com/Automattic/newspack-plugin/issues/3072)) ([4a2859b](https://github.com/Automattic/newspack-plugin/commit/4a2859b894eab499e194102b0636dc20466e0c22))
+* **cli:** command to migrate CAP guest authors to WP users ([#3068](https://github.com/Automattic/newspack-plugin/issues/3068)) ([7ea8273](https://github.com/Automattic/newspack-plugin/commit/7ea8273fceaccf4109c0de5dd4620eaf4d907520))
+* custom role for assignable authors who don't edit posts ([#3066](https://github.com/Automattic/newspack-plugin/issues/3066)) ([7b89053](https://github.com/Automattic/newspack-plugin/commit/7b89053aa8a828abbfd1220e194758c766e27ca1))
+* **ras:** skip campaign setup ([#3051](https://github.com/Automattic/newspack-plugin/issues/3051)) ([9ef0e6d](https://github.com/Automattic/newspack-plugin/commit/9ef0e6d1de8d4dafda4d2af1304206d0f8190b15))
+* support for wrapping rss titles in cdata ([#3104](https://github.com/Automattic/newspack-plugin/issues/3104)) ([8b3a3be](https://github.com/Automattic/newspack-plugin/commit/8b3a3be48cf4ab0150f6e141be41460c0acfbb48))
+
+
+### BREAKING CHANGES
+
+* Changes order autocompletion behavior for existing products!
+
+* feat: add product option to autocomplete orders
+
+* chore: update outdated docblock description
+
+# [4.0.0-alpha.7](https://github.com/Automattic/newspack-plugin/compare/v4.0.0-alpha.6...v4.0.0-alpha.7) (2024-05-27)
+
+
+### Bug Fixes
+
+* **ras:** handle newsletters subscribe form selector ([5699466](https://github.com/Automattic/newspack-plugin/commit/5699466252fdbd4ea551506f3c9f26a71f964a66))
+
+## [3.8.8](https://github.com/Automattic/newspack-plugin/compare/v3.8.7...v3.8.8) (2024-05-27)
+
+
+### Bug Fixes
+
+* **ras:** handle newsletters subscribe form selector ([5699466](https://github.com/Automattic/newspack-plugin/commit/5699466252fdbd4ea551506f3c9f26a71f964a66))
+
 ## [3.8.7](https://github.com/Automattic/newspack-plugin/compare/v3.8.6...v3.8.7) (2024-05-17)
 
 
@@ -5,6 +62,17 @@
 
 * **google-login:** use wp_generate_password for CSRF; handle CSRF saving failure ([37bab22](https://github.com/Automattic/newspack-plugin/commit/37bab2256a02a1a473c8cbcf2ec7b35309b283f3))
 * **oauth:** prevent false warning when opening Google OAuth ([22723f2](https://github.com/Automattic/newspack-plugin/commit/22723f256c1a8687fdb3d5fec3ed444be6f75c00))
+
+# [4.0.0-alpha.4](https://github.com/Automattic/newspack-plugin/compare/v4.0.0-alpha.3...v4.0.0-alpha.4) (2024-05-15)
+
+
+### Bug Fixes
+
+* autocomplete orders only for virtual products ([#3111](https://github.com/Automattic/newspack-plugin/issues/3111)) ([bfbe554](https://github.com/Automattic/newspack-plugin/commit/bfbe5541c7dcee270a6c2116344ffaa18742f612))
+* **google-login:** get the email from the /tokeninfo endpoint ([#3117](https://github.com/Automattic/newspack-plugin/issues/3117)) ([3296f1a](https://github.com/Automattic/newspack-plugin/commit/3296f1a0b36c7992749d6209bce3ed3ef2ea5ec5))
+* **google-oauth:** use a custom table for transients ([#3106](https://github.com/Automattic/newspack-plugin/issues/3106)) ([d4a2f5c](https://github.com/Automattic/newspack-plugin/commit/d4a2f5ce8ff6931b98593dafe759eab8b59d7ab2))
+* **oauth-transients:** remove redundant cleanup ([#3112](https://github.com/Automattic/newspack-plugin/issues/3112)) ([c123c02](https://github.com/Automattic/newspack-plugin/commit/c123c0248ecf9aab8f16e5ab63e84f9900b3d6f5))
+* **ras:** sync purchase data only for most recent order/subscription ([#3086](https://github.com/Automattic/newspack-plugin/issues/3086)) ([2c7763a](https://github.com/Automattic/newspack-plugin/commit/2c7763a53894e5c350d6ce76e0f4ab3b1e768bc5))
 
 # [4.0.0-alpha.3](https://github.com/Automattic/newspack-plugin/compare/v4.0.0-alpha.2...v4.0.0-alpha.3) (2024-04-26)
 

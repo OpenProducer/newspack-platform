@@ -90,30 +90,9 @@ final class GAM_Provider extends Provider {
 		if ( \is_wp_error( $ad_unit ) ) {
 			return '';
 		}
-		$is_amp = Core::is_amp();
-		$code   = $is_amp ? $ad_unit['amp_ad_code'] : $ad_unit['ad_code'];
+		$code = $ad_unit['ad_code'];
 		if ( empty( $code ) ) {
 			return '';
-		}
-		if ( 'sticky' === $placement_key && true === $is_amp ) {
-			$sticky_attrs = [
-				'class'  => 'newspack_amp_sticky_ad',
-				'layout' => 'nodisplay',
-			];
-			$code         = sprintf(
-				'<amp-sticky-ad %s>%s</amp-sticky-ad>',
-				implode(
-					' ',
-					array_map(
-						function( $key, $value ) {
-							return sprintf( "%s='%s'", $key, $value );
-						},
-						array_keys( $sticky_attrs ),
-						array_values( $sticky_attrs )
-					)
-				),
-				$code
-			);
 		}
 		return $code;
 	}

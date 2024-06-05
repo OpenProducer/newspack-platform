@@ -3021,7 +3021,7 @@ function observableMap() {
  *
  * Allows to choose whether to perform left-to-right or right-to-left composition.
  *
- * @see https://docs-lodash.com/v4/flow/
+ * @see https://lodash.com/docs/4#flow
  *
  * @param {boolean} reverse True if right-to-left, false for left-to-right composition.
  */
@@ -3039,7 +3039,7 @@ const basePipe = (reverse = false) => (...funcs) => (...args) => {
  *
  * This is inspired by `lodash`'s `flow` function.
  *
- * @see https://docs-lodash.com/v4/flow/
+ * @see https://lodash.com/docs/4#flow
  */
 const pipe = basePipe();
 
@@ -3057,15 +3057,14 @@ const pipe = basePipe();
  *
  * This is inspired by `lodash`'s `flowRight` function.
  *
- * @see https://docs-lodash.com/v4/flow-right/
+ * @see https://lodash.com/docs/4#flow-right
  */
 const compose = basePipe(true);
 /* harmony default export */ const higher_order_compose = (compose);
 
-;// CONCATENATED MODULE: external "React"
-const external_React_namespaceObject = window["React"];
+;// CONCATENATED MODULE: external "ReactJSXRuntime"
+const external_ReactJSXRuntime_namespaceObject = window["ReactJSXRuntime"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/if-condition/index.js
-
 /**
  * External dependencies
  */
@@ -3092,12 +3091,13 @@ const external_React_namespaceObject = window["React"];
  *
  * @return Higher-order component.
  */
+
 function ifCondition(predicate) {
   return createHigherOrderComponent(WrappedComponent => props => {
     if (!predicate(props)) {
       return null;
     }
-    return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
       ...props
     });
   }, 'ifCondition');
@@ -3110,7 +3110,6 @@ var external_wp_isShallowEqual_default = /*#__PURE__*/__webpack_require__.n(exte
 ;// CONCATENATED MODULE: external ["wp","element"]
 const external_wp_element_namespaceObject = window["wp"]["element"];
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/pure/index.js
-
 /**
  * External dependencies
  */
@@ -3132,6 +3131,7 @@ const external_wp_element_namespaceObject = window["wp"]["element"];
  *
  * @deprecated Use `memo` or `PureComponent` instead.
  */
+
 const pure = createHigherOrderComponent(function (WrappedComponent) {
   if (WrappedComponent.prototype instanceof external_wp_element_namespaceObject.Component) {
     return class extends WrappedComponent {
@@ -3145,7 +3145,7 @@ const pure = createHigherOrderComponent(function (WrappedComponent) {
       return !external_wp_isShallowEqual_default()(nextProps, this.props);
     }
     render() {
-      return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
         ...this.props
       });
     }
@@ -3196,7 +3196,6 @@ class Listener {
 /* harmony default export */ const listener = (Listener);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-global-events/index.js
-
 /**
  * WordPress dependencies
  */
@@ -3212,6 +3211,7 @@ class Listener {
 /**
  * Listener instance responsible for managing document event handling.
  */
+
 const with_global_events_listener = new listener();
 
 /* eslint-disable jsdoc/no-undefined-types */
@@ -3277,14 +3277,14 @@ function withGlobalEvents(eventTypesToHandlers) {
         }
       }
       render() {
-        return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
           ...this.props.ownProps,
           ref: this.handleRef
         });
       }
     }
     return (0,external_wp_element_namespaceObject.forwardRef)((props, ref) => {
-      return (0,external_React_namespaceObject.createElement)(Wrapper, {
+      return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(Wrapper, {
         ownProps: props,
         forwardedRef: ref
       });
@@ -3344,10 +3344,10 @@ function useInstanceId(object, prefix, preferredId) {
 /* harmony default export */ const use_instance_id = (useInstanceId);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-instance-id/index.js
-
 /**
  * Internal dependencies
  */
+
 
 
 
@@ -3359,7 +3359,7 @@ const withInstanceId = createHigherOrderComponent(WrappedComponent => {
   return props => {
     const instanceId = use_instance_id(WrappedComponent);
     // @ts-ignore
-    return (0,external_React_namespaceObject.createElement)(WrappedComponent, {
+    return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(WrappedComponent, {
       ...props,
       instanceId: instanceId
     });
@@ -3368,7 +3368,6 @@ const withInstanceId = createHigherOrderComponent(WrappedComponent => {
 /* harmony default export */ const with_instance_id = (withInstanceId);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-safe-timeout/index.js
-
 /**
  * WordPress dependencies
  */
@@ -3418,8 +3417,9 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
     }
     render() {
       return (
+        /*#__PURE__*/
         // @ts-ignore
-        (0,external_React_namespaceObject.createElement)(OriginalComponent, {
+        (0,external_ReactJSXRuntime_namespaceObject.jsx)(OriginalComponent, {
           ...this.props,
           setTimeout: this.setTimeout,
           clearTimeout: this.clearTimeout
@@ -3431,7 +3431,6 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
 /* harmony default export */ const with_safe_timeout = (withSafeTimeout);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/higher-order/with-state/index.js
-
 /**
  * WordPress dependencies
  */
@@ -3453,6 +3452,7 @@ const withSafeTimeout = createHigherOrderComponent(OriginalComponent => {
  *
  * @return {any} A higher order component wrapper accepting a component that takes the state props + its own props + `setState` and returning a component that only accepts the own props.
  */
+
 function withState(initialState = {}) {
   external_wp_deprecated_default()('wp.compose.withState', {
     since: '5.8',
@@ -3466,7 +3466,7 @@ function withState(initialState = {}) {
         this.state = initialState;
       }
       render() {
-        return (0,external_React_namespaceObject.createElement)(OriginalComponent, {
+        return /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)(OriginalComponent, {
           ...this.props,
           ...this.state,
           setState: this.setState
@@ -3762,6 +3762,11 @@ const external_wp_keycodes_namespaceObject = window["wp"]["keycodes"];
 
 
 /**
+ * Internal dependencies
+ */
+
+
+/**
  * Hook used to focus the first tabbable element on mount.
  *
  * @param {boolean | 'firstElement'} focusOnMount Focus on mount mode.
@@ -3805,14 +3810,7 @@ function useFocusOnMount(focusOnMount = 'firstElement') {
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     focusOnMountRef.current = focusOnMount;
   }, [focusOnMount]);
-  (0,external_wp_element_namespaceObject.useEffect)(() => {
-    return () => {
-      if (timerId.current) {
-        clearTimeout(timerId.current);
-      }
-    };
-  }, []);
-  return (0,external_wp_element_namespaceObject.useCallback)(node => {
+  return useRefEffect(node => {
     var _node$ownerDocument$a;
     if (!node || focusOnMountRef.current === false) {
       return;
@@ -3830,6 +3828,11 @@ function useFocusOnMount(focusOnMount = 'firstElement') {
       return;
     }
     setFocus(node);
+    return () => {
+      if (timerId.current) {
+        clearTimeout(timerId.current);
+      }
+    };
   }, []);
 }
 
@@ -4955,7 +4958,6 @@ useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provide
 /* harmony default export */ const use_viewport_match = (useViewportMatch);
 
 ;// CONCATENATED MODULE: ./packages/compose/build-module/hooks/use-resize-observer/index.js
-
 /**
  * External dependencies
  */
@@ -4963,6 +4965,7 @@ useViewportMatch.__experimentalWidthProvider = ViewportMatchWidthContext.Provide
 /**
  * WordPress dependencies
  */
+
 
 // This of course could've been more streamlined with internal state instead of
 // refs, but then host hooks / components could not opt out of renders.
@@ -5182,7 +5185,7 @@ function useResizeAware() {
       height: height !== null && height !== void 0 ? height : null
     };
   }, [width, height]);
-  const resizeListener = (0,external_React_namespaceObject.createElement)("div", {
+  const resizeListener = /*#__PURE__*/(0,external_ReactJSXRuntime_namespaceObject.jsx)("div", {
     style: {
       position: 'absolute',
       top: 0,
@@ -5303,6 +5306,8 @@ function useWarnOnChange(object, prefix = 'Change detection') {
 }
 /* harmony default export */ const use_warn_on_change = (useWarnOnChange);
 
+;// CONCATENATED MODULE: external "React"
+const external_React_namespaceObject = window["React"];
 ;// CONCATENATED MODULE: ./node_modules/use-memo-one/dist/use-memo-one.esm.js
 
 
@@ -5370,7 +5375,7 @@ var useCallback = (/* unused pure expression or super */ null && (useCallbackOne
  * including the function to debounce, so please wrap functions created on
  * render in components in `useCallback`.
  *
- * @see https://docs-lodash.com/v4/debounce/
+ * @see https://lodash.com/docs/4#debounce
  *
  * @template {(...args: any[]) => void} TFunc
  *
@@ -5399,8 +5404,8 @@ function useDebounce(fn, wait, options) {
 /**
  * Helper hook for input fields that need to debounce the value before using it.
  *
- * @param {any} defaultValue The default value to use.
- * @return {[string, Function, string]} The input value, the setter and the debounced input value.
+ * @param defaultValue The default value to use.
+ * @return The input value, the setter and the debounced input value.
  */
 function useDebouncedInput(defaultValue = '') {
   const [input, setInput] = (0,external_wp_element_namespaceObject.useState)(defaultValue);
@@ -5408,7 +5413,7 @@ function useDebouncedInput(defaultValue = '') {
   const setDebouncedInput = useDebounce(setDebouncedState, 250);
   (0,external_wp_element_namespaceObject.useEffect)(() => {
     setDebouncedInput(input);
-  }, [input]);
+  }, [input, setDebouncedInput]);
   return [input, setInput, debouncedInput];
 }
 
@@ -5434,7 +5439,7 @@ function useDebouncedInput(defaultValue = '') {
  * including the function to throttle, so please wrap functions created on
  * render in components in `useCallback`.
  *
- * @see https://docs-lodash.com/v4/throttle/
+ * @see https://lodash.com/docs/4#throttle
  *
  * @template {(...args: any[]) => void} TFunc
  *

@@ -66,50 +66,18 @@ final class Newspack_Newsletters_Layouts {
 	 * Register custom fields.
 	 */
 	public static function register_meta() {
-		\register_meta(
-			'post',
-			'font_header',
-			[
-				'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
-				'show_in_rest'   => true,
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'font_body',
-			[
-				'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
-				'show_in_rest'   => true,
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'background_color',
-			[
-				'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
-				'show_in_rest'   => true,
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
-		\register_meta(
-			'post',
-			'custom_css',
-			[
-				'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
-				'show_in_rest'   => true,
-				'type'           => 'string',
-				'single'         => true,
-				'auth_callback'  => '__return_true',
-			]
-		);
+		$meta_default_params = [
+			'object_subtype' => self::NEWSPACK_NEWSLETTERS_LAYOUT_CPT,
+			'show_in_rest'   => true,
+			'type'           => 'string',
+			'single'         => true,
+			'auth_callback'  => '__return_true',
+		];
+		\register_meta( 'post', 'font_header', $meta_default_params );
+		\register_meta( 'post', 'font_body', $meta_default_params );
+		\register_meta( 'post', 'background_color', $meta_default_params );
+		\register_meta( 'post', 'custom_css', $meta_default_params );
+		\register_meta( 'post', 'layout_defaults', $meta_default_params );
 	}
 
 	/**

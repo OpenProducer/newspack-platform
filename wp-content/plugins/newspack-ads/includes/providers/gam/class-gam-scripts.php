@@ -40,12 +40,9 @@ final class GAM_Scripts {
 		if ( ! Providers::is_provider_active( 'gam' ) ) {
 			return;
 		}
-		if ( Core::is_amp() ) {
-			return;
-		}
 		?>
-		<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js" data-amp-plus-allowed></script>
-		<script data-amp-plus-allowed>
+		<script async src="https://securepubads.g.doubleclick.net/tag/js/gpt.js"></script>
+		<script>
 			window.googletag = window.googletag || { cmd: [] };
 		</script>
 		<?php
@@ -59,9 +56,6 @@ final class GAM_Scripts {
 			return;
 		}
 		if ( ! Providers::is_provider_active( 'gam' ) ) {
-			return;
-		}
-		if ( Core::is_amp() ) {
 			return;
 		}
 
@@ -177,7 +171,7 @@ final class GAM_Scripts {
 	 */
 	private static function print_gpt_script( $ad_config, $prepared_unit_data, $common_targeting ) {
 		?>
-		<script data-amp-plus-allowed>
+		<script>
 			( function() {
 				var ad_config = <?php echo wp_json_encode( $ad_config ); ?>;
 				var all_ad_units = <?php echo wp_json_encode( $prepared_unit_data ); ?>;
@@ -470,10 +464,6 @@ final class GAM_Scripts {
 		if ( ! Providers::is_provider_active( 'gam' ) ) {
 			return;
 		}
-		if ( Core::is_amp() ) {
-			return;
-		}
-
 		if ( 'gam' !== $placement_data['provider'] ) {
 			return;
 		}

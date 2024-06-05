@@ -255,9 +255,7 @@ final class GAM_Model {
 
 		$ad_unit['placement'] = $placement;
 		$ad_unit['context']   = $context;
-
-		$ad_unit['ad_code']     = self::get_ad_unit_code( $ad_unit, $unique_id );
-		$ad_unit['amp_ad_code'] = self::get_ad_unit_amp_code( $ad_unit, $unique_id );
+		$ad_unit['ad_code']   = self::get_ad_unit_code( $ad_unit, $unique_id );
 		return $ad_unit;
 	}
 
@@ -798,100 +796,6 @@ final class GAM_Model {
 	}
 
 	/**
-	 * AMP code for ad unit.
-	 *
-	 * @param array  $ad_unit   The ad unit to generate AMP code for.
-	 * @param string $unique_id Optional pre-defined unique ID for this ad displayment.
-	 */
-	public static function get_ad_unit_amp_code( $ad_unit, $unique_id = '' ) {
-		$code         = $ad_unit['code'];
-		$network_code = self::get_active_network_code();
-		$targeting    = self::get_ad_targeting( $ad_unit );
-		$unique_id    = $unique_id ?? uniqid();
-
-		if ( ! is_array( $ad_unit['sizes'] ) ) {
-			$ad_unit['sizes'] = [];
-		}
-
-		// Remove all ad sizes greater than 600px wide for sticky ads.
-		if ( self::is_sticky( $ad_unit ) ) {
-			$ad_unit['sizes'] = array_filter(
-				$ad_unit['sizes'],
-				function( $size ) {
-					return $size[0] < 600;
-				}
-			);
-		}
-
-		$sizes = $ad_unit['sizes'];
-
-		$size_map = self::get_ad_unit_size_map( $ad_unit, $sizes );
-
-		/**
-		 * Legacy filter for custom size map.
-		 */
-		$size_map = apply_filters( 'newspack_ads_multisize_ad_sizes', $size_map, $ad_unit );
-
-		// Do not use responsive strategy if the size map only results in one viewport or the ad unit is fluid.
-		if ( 1 < count( $size_map ) && false === $ad_unit['fluid'] ) {
-			return self::get_ad_unit_responsive_amp_code( $unique_id, $ad_unit, $size_map );
-		}
-
-		$attrs      = [];
-		$multisizes = [];
-
-		if ( isset( $ad_unit['fluid'] ) && true === $ad_unit['fluid'] ) {
-			$attrs['height'] = 'fluid';
-			$attrs['layout'] = 'fluid';
-			$multisizes[]    = 'fluid';
-		}
-
-		if ( count( $sizes ) ) {
-			// Sort sizes by squareness.
-			usort(
-				$sizes,
-				function( $a, $b ) {
-					return $a[0] * $a[1] < $b[0] * $b[1] ? 1 : -1;
-				}
-			);
-			if ( ! isset( $attrs['layout'] ) ) {
-				$attrs['width']  = max( array_column( $sizes, 0 ) );
-				$attrs['height'] = max( array_column( $sizes, 1 ) );
-				$attrs['layout'] = 'fixed';
-			}
-			foreach ( $sizes as $size ) {
-				$multisizes[] = $size[0] . 'x' . $size[1];
-			}
-		}
-
-		if ( 1 < count( $multisizes ) ) {
-			$attrs['data-multi-size']            = implode( ',', $multisizes );
-			$attrs['data-multi-size-validation'] = 'false';
-		}
-
-		$attrs['type']                  = 'doubleclick';
-		$attrs['data-slot']             = sprintf( '/%s/%s', $network_code, $code );
-		$attrs['data-loading-strategy'] = 'prefer-viewability-over-views';
-		$attrs['json']                  = sprintf( '{"targeting": %s}', wp_json_encode( $targeting ) );
-
-		$code = sprintf(
-			'<amp-ad %s></amp-ad>',
-			implode(
-				' ',
-				array_map(
-					function( $key, $value ) {
-						return sprintf( "%s='%s'", $key, $value );
-					},
-					array_keys( $attrs ),
-					array_values( $attrs )
-				)
-			)
-		);
-
-		return $code;
-	}
-
-	/**
 	 * Get size map for responsive ads.
 	 *
 	 * Gather up all of the ad sizes which should be displayed on the same
@@ -951,6 +855,11 @@ final class GAM_Model {
 			$sizes = $ad_unit['sizes'];
 		}
 
+		// Ensure that 1x1 is always available.
+		if ( ! in_array( [ 1, 1 ], $sizes, true ) ) {
+			$sizes[] = [ 1, 1 ];
+		}
+
 		/**
 		 * Filters the ad unit size map difference ratio.
 		 *
@@ -984,97 +893,6 @@ final class GAM_Model {
 		);
 
 		return $size_map;
-	}
-
-	/**
-	 * Generate responsive AMP ads for a series of ad sizes.
-	 *
-	 * @param string $unique_id Unique ID for this ad unit instance.
-	 * @param array  $ad_unit   The ad unit to generate code for.
-	 * @param array  $size_map  The size map.
-	 */
-	public static function get_ad_unit_responsive_amp_code( $unique_id, $ad_unit, $size_map ) {
-		$network_code = self::get_active_network_code();
-		$code         = $ad_unit['code'];
-		$sizes        = $ad_unit['sizes'];
-		$targeting    = self::get_ad_targeting( $ad_unit );
-
-		$markup = [];
-		$styles = [];
-
-		// Build the amp-ad units according to size map.
-		foreach ( $size_map as $viewport_width => $ad_sizes ) {
-
-			// The size of the ad container should be equal to the largest width and height among all the sizes available.
-			$width  = $viewport_width;
-			$height = absint( max( array_column( $ad_sizes, 1 ) ) );
-
-			$multisizes = array_map( '\Newspack_Ads\get_size_string', $ad_sizes );
-
-			// If there is a multisize that's equal to the width and height of the container, remove it from the multisizes.
-			// The container size is included by default, and should not also be included in the multisize.
-			$container_multisize           = $width . 'x' . $height;
-			$container_multisize_locations = array_keys( $multisizes, $container_multisize );
-			foreach ( $container_multisize_locations as $container_multisize_location ) {
-				unset( $multisizes[ $container_multisize_location ] );
-			}
-
-			$multisize_attribute = '';
-			if ( count( $multisizes ) ) {
-				$multisize_attribute = sprintf(
-					'data-multi-size=\'%s\' data-multi-size-validation=\'false\'',
-					implode( ',', $multisizes )
-				);
-			}
-
-			$div_prefix = 'div-gpt-amp-';
-			$div_id     = sprintf(
-				'%s%s-%s-%dx%d',
-				$div_prefix,
-				sanitize_title( $ad_unit['code'] ),
-				$unique_id,
-				$width,
-				$height
-			);
-
-			$markup[] = sprintf(
-				'<div id="%s"><amp-ad width="%dpx" height="%dpx" type="doubleclick" data-slot="/%s/%s" data-loading-strategy="prefer-viewability-over-views" json=\'{"targeting":%s}\' %s></amp-ad></div>',
-				$div_id,
-				$width,
-				$height,
-				$network_code,
-				$code,
-				wp_json_encode( $targeting ),
-				$multisize_attribute
-			);
-
-			// Generate styles for hiding/showing ads at different viewports out of the media queries.
-			$media_query_elements   = [];
-			$media_query_elements[] = sprintf( '(min-width:%dpx)', $viewport_width );
-			$index                  = array_search( $viewport_width, array_keys( $size_map ) );
-			// If there are ad sizes larger than the current size, the max_width is 1 less than the next ad's size.
-			// If it's the largest ad size, there is no max width.
-			if ( count( $size_map ) > $index + 1 ) {
-				$max_width              = absint( array_keys( $size_map )[ $index + 1 ] ) - 1;
-				$media_query_elements[] = sprintf( '(max-width:%dpx)', $max_width );
-			}
-			$styles[] = sprintf(
-				'#%s{ display: none; }',
-				$div_id
-			);
-			if ( count( $media_query_elements ) > 0 ) {
-				$styles[] = sprintf(
-					'@media %s {#%s{ display: block; } }',
-					implode( ' and ', $media_query_elements ),
-					$div_id
-				);
-			}
-		}
-		return sprintf(
-			'<style>%s</style>%s',
-			implode( ' ', $styles ),
-			implode( ' ', $markup )
-		);
 	}
 
 	/**

@@ -114,7 +114,7 @@ class GA4 {
 		}
 
 		$params    = $data['ga_params'];
-		$client_id = $data['ga_client_id'];
+		$client_id = isset( $data['ga_client_id'] ) ? $data['ga_client_id'] : null;
 
 		if ( empty( $client_id ) ) {
 			$client_id = 'AnonymousUser-' . md5( $user_id );
@@ -186,11 +186,55 @@ class GA4 {
 			$body['data']['ga_params']['ga_session_id'] = $session_id;
 		}
 
+		// Get current post author name.
+		$author_name = '';
+		if ( function_exists( 'get_coauthors' ) ) {
+			$author_name = implode(
+				', ',
+				array_map(
+					function( $author ) {
+						return $author->display_name;
+					},
+					get_coauthors()
+				)
+			);
+		} else {
+			// For some reason, get_the_author() does not work here.
+			$author_user = get_user_by( 'ID', get_post()->post_author );
+			if ( $author_user ) {
+				$author_name = $author_user->display_name;
+			}
+		}
+		if ( ! empty( $author_name ) ) {
+			$body['data']['ga_params']['author'] = $author_name;
+		}
+
+		// Get current post categories.
+		$category_names = array_map(
+			function( $category ) {
+				return $category->name;
+			},
+			get_the_category()
+		);
+		if ( ! empty( $category_names ) ) {
+			$body['data']['ga_params']['categories'] = implode( ', ', $category_names );
+		}
+
 		$body['data']['ga_params']['is_reader'] = 'no';
 		if ( is_user_logged_in() ) {
 			$current_user                            = wp_get_current_user();
 			$body['data']['ga_params']['is_reader']  = Reader_Activation::is_user_reader( $current_user ) ? 'yes' : 'no';
 			$body['data']['ga_params']['email_hash'] = md5( $current_user->user_email );
+
+			if ( method_exists( 'Newspack\Reader_Data', 'get_data' ) ) {
+				$reader_data = \Newspack\Reader_Data::get_data( get_current_user_id() );
+				// If the reader is signed up for any newsletters.
+				$body['data']['ga_params']['is_newsletter_subscriber'] = empty( $reader_data['is_newsletter_subscriber'] ) ? 'no' : 'yes';
+				// If reader has donated.
+				$body['data']['ga_params']['is_donor'] = empty( $reader_data['is_donor'] ) ? 'no' : 'yes';
+				// If reader has any currently active non-donation subscriptions.
+				$body['data']['ga_params']['is_subscriber'] = empty( $reader_data['active_subscriptions'] ) ? 'no' : 'yes';
+			}
 		}
 
 		return $body;

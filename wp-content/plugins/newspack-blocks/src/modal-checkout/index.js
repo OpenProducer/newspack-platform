@@ -29,7 +29,7 @@ domReady( () => {
 	const continueButton = document.querySelector( '.modal-continue' );
 	if ( continueButton ) {
 		continueButton.addEventListener( 'click', () => {
-			const form = document.querySelector( '.checkout' );
+			const form = document.querySelector( 'form.checkout' );
 			form.submit();
 		} );
 	}

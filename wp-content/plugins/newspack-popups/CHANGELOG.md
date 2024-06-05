@@ -1,3 +1,20 @@
+# [2.32.0](https://github.com/Automattic/newspack-popups/compare/v2.31.3...v2.32.0) (2024-05-28)
+
+
+### Bug Fixes
+
+* improved attribute handling ([f3eb1ae](https://github.com/Automattic/newspack-popups/commit/f3eb1ae6007ed2ca3d76319c894f9d1830bfd740))
+
+
+### Features
+
+* update header hook to a more standard one ([#1302](https://github.com/Automattic/newspack-popups/issues/1302)) ([fe756a4](https://github.com/Automattic/newspack-popups/commit/fe756a4e00dd8fe74373df5d97bf001737a80b5c))
+
+
+### Reverts
+
+* automated file updates [skip ci] ([b59282c](https://github.com/Automattic/newspack-popups/commit/b59282cffa7284319ee85ee1d41cf8723086c4ea))
+
 ## [2.31.3](https://github.com/Automattic/newspack-popups/compare/v2.31.2...v2.31.3) (2024-04-26)
 
 

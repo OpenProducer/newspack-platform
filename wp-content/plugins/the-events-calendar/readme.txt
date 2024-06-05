@@ -4,7 +4,7 @@ Contributors: theeventscalendar, borkweb, bordoni, brianjessee, aguseo, camwynsp
 Tags: events, calendar, event, schedule, organizer
 Donate link: https://evnt.is/29
 Requires at least: 6.3
-Stable tag: 6.5.0
+Stable tag: 6.5.0.1
 Tested up to: 6.5.3
 Requires PHP: 7.4
 License: GPLv2 or later
@@ -232,6 +232,11 @@ Remember to always make a backup of your database and files before updating!
 
 == Changelog ==
 
+= [6.5.0.1] 2024-06-04 =
+
+* Fix - Ensure REST API notice only checks on Events admin pages and once every 48 hours regardless of transients rules. [TECTRIA-43]
+* Security - Ensure the Events REST API respects the individual post access restrictions. [TECTRIA-49]
+
 = [6.5.0] 2024-05-14 =
 
 * Version - The Events Calendar 6.5.0 is only compatible with Event Tickets 5.10.0 and higher
@@ -252,9 +257,9 @@ Remember to always make a backup of your database and files before updating!
 = [6.4.0.1] 2024-05-06 =
 
 * Fix - Prevent the Status widget from potentially running undefined methods. [ECP-1797]
-* Fix - Ensure JSON response of Reflector View class is sanitized, to avoid potential security issues. [SVUL-2]
 * Tweak - Add action to signal activation of TEC Elementor compatibility. [ECP-1789]
 * Tweak - Added actions: `tec_events_elementor_loaded`
+* Security - Ensure JSON response of Reflector View class is sanitized, to avoid potential security issues. [SVUL-2]
 * Security - Correct a user permissions check.
 * Language - 0 new strings added, 27 updated, 0 fuzzied, and 0 obsoleted
 
