@@ -1,0 +1,118 @@
+{
+	"title": "Paul",
+	"settings": {
+		"color": {
+			"palette": [
+				{
+					"color": "#F2F0EA",
+					"name": "Base",
+					"slug": "base"
+				},
+				{
+					"color": "#E4E2DC",
+					"name": "Base / Two",
+					"slug": "base-2"
+				},
+				{
+					"color": "#D3D1CC",
+					"name": "Base / Three",
+					"slug": "base-3"
+				},
+				{
+					"color": "#000000",
+					"name": "Contrast",
+					"slug": "contrast"
+				},
+				{
+					"color": "#383734",
+					"name": "Contrast / Two",
+					"slug": "contrast-2"
+				},
+				{
+					"color": "#6E6D6A",
+					"name": "Contrast / Three",
+					"slug": "contrast-3"
+				},
+				{
+					"color": "#C93A00",
+					"name": "Accent",
+					"slug": "accent"
+				},
+				{
+					"color": "#297373",
+					"name": "Accent / Two",
+					"slug": "accent-2"
+				}
+			]
+		},
+        "typography": {
+            "fluid": true,
+            "fontFamilies": [
+                {
+                    "fontFace": [
+						{
+							"fontFamily": "Jost",
+							"fontStretch": "normal",
+							"fontStyle": "normal",
+							"fontWeight": "200 900",
+							"src": [
+								"file:./assets/fonts/jost/Jost-VariableFont_wght.ttf"
+							]
+						},
+                        {
+							"fontFamily": "Jost",
+							"fontStretch": "normal",
+							"fontStyle": "italic",
+							"fontWeight": "200 900",
+							"src": [
+								"file:./assets/fonts/jost/Jost-Italic-VariableFont_wght.ttf"
+							]
+						}
+					],
+                    "fontFamily": "\"Jost\", sans-serif",
+                    "name": "Jost",
+                    "slug": "jost"
+                },
+                {
+					"fontFace": [
+						{
+							"fontFamily": "Newsreader",
+							"fontStretch": "normal",
+							"fontStyle": "normal",
+							"fontWeight": "200 900",
+							"src": [
+								"file:./assets/fonts/newsreader/Newsreader-VariableFont_opsz,wght.ttf"
+							]
+						},
+                        {
+							"fontFamily": "Newsreader",
+							"fontStretch": "normal",
+							"fontStyle": "italic",
+							"fontWeight": "200 900",
+							"src": [
+								"file:./assets/fonts/newsreader/Newsreader-Italic-VariableFont_opsz,wght.ttf"
+							]
+						}
+					],
+					"fontFamily": "\"Newsreader\", serif",
+					"name": "Newsreader",
+					"slug": "newsreader"
+				}
+            ]
+        }
+	},
+    "styles": {
+        "typography": {
+			"fontFamily": "var( --wp--preset--font-family--newsreader )"
+		},
+		"elements": {
+			"heading": {
+				"typography": {
+					"fontFamily": "var( --wp--preset--font-family--jost )"
+				}
+			}
+		}
+    },
+    "version": 2,
+	"$schema": "https://schemas.wp.org/wp/6.2/theme.json"
+}
